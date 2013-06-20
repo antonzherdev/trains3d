@@ -17,6 +17,9 @@
 		0214B1481773394500C03C71 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0214B1281773394400C03C71 /* Cocoa.framework */; };
 		0214B1501773394500C03C71 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0214B14E1773394500C03C71 /* InfoPlist.strings */; };
 		0214B1531773394500C03C71 /* Trains3DTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0214B1521773394500C03C71 /* Trains3DTests.m */; };
+		02CFE91317733A780048420F /* TROpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CFE91217733A780048420F /* TROpenGLView.m */; };
+		02CFE91517733AC60048420F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02CFE91417733AC60048420F /* OpenGL.framework */; };
+		02CFE91717733ACC0048420F /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02CFE91617733ACC0048420F /* GLUT.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +52,10 @@
 		0214B14F1773394500C03C71 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0214B1511773394500C03C71 /* Trains3DTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Trains3DTests.h; sourceTree = "<group>"; };
 		0214B1521773394500C03C71 /* Trains3DTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Trains3DTests.m; sourceTree = "<group>"; };
+		02CFE91117733A780048420F /* TROpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TROpenGLView.h; sourceTree = "<group>"; };
+		02CFE91217733A780048420F /* TROpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TROpenGLView.m; sourceTree = "<group>"; };
+		02CFE91417733AC60048420F /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		02CFE91617733ACC0048420F /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +63,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02CFE91717733ACC0048420F /* GLUT.framework in Frameworks */,
+				02CFE91517733AC60048420F /* OpenGL.framework in Frameworks */,
 				0214B1291773394400C03C71 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -75,6 +84,8 @@
 		0214B11C1773394400C03C71 = {
 			isa = PBXGroup;
 			children = (
+				02CFE91617733ACC0048420F /* GLUT.framework */,
+				02CFE91417733AC60048420F /* OpenGL.framework */,
 				0214B12E1773394400C03C71 /* Trains3D */,
 				0214B14B1773394500C03C71 /* Trains3DTests */,
 				0214B1271773394400C03C71 /* Frameworks */,
@@ -118,6 +129,8 @@
 				0214B13B1773394400C03C71 /* TRAppDelegate.m */,
 				0214B13D1773394400C03C71 /* MainMenu.xib */,
 				0214B12F1773394400C03C71 /* Supporting Files */,
+				02CFE91117733A780048420F /* TROpenGLView.h */,
+				02CFE91217733A780048420F /* TROpenGLView.m */,
 			);
 			path = Trains3D;
 			sourceTree = "<group>";
@@ -264,6 +277,7 @@
 			files = (
 				0214B1351773394400C03C71 /* main.m in Sources */,
 				0214B13C1773394400C03C71 /* TRAppDelegate.m in Sources */,
+				02CFE91317733A780048420F /* TROpenGLView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -453,6 +467,7 @@
 				0214B1581773394500C03C71 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0214B1591773394500C03C71 /* Build configuration list for PBXNativeTarget "Trains3DTests" */ = {
 			isa = XCConfigurationList;
@@ -461,6 +476,7 @@
 				0214B15B1773394500C03C71 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
