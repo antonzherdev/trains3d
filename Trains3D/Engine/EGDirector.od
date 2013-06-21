@@ -1,0 +1,20 @@
+import "EGScene.h"
+
+stub EGScene {
+    def reshapeWith(size : CGSize)
+    def draw
+}
+
+stub struct CGSize(width : float, height : float)
+
+class EGDirector {
+    var scene : EGScene
+
+    def draw {
+        scene.draw
+    }
+
+    def reshapeWith(size : CGSize) {
+        scene.reshapeWith(size)
+    }
+}

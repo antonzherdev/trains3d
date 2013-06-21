@@ -11,15 +11,23 @@
 		0214B1331773394400C03C71 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0214B1311773394400C03C71 /* InfoPlist.strings */; };
 		0214B1351773394400C03C71 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0214B1341773394400C03C71 /* main.m */; };
 		0214B1391773394400C03C71 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 0214B1371773394400C03C71 /* Credits.rtf */; };
-		0214B13C1773394400C03C71 /* TRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0214B13B1773394400C03C71 /* TRAppDelegate.m */; };
-		0214B13F1773394400C03C71 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0214B13D1773394400C03C71 /* MainMenu.xib */; };
 		0214B1471773394500C03C71 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0214B1461773394500C03C71 /* SenTestingKit.framework */; };
 		0214B1481773394500C03C71 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0214B1281773394400C03C71 /* Cocoa.framework */; };
 		0214B1501773394500C03C71 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0214B14E1773394500C03C71 /* InfoPlist.strings */; };
 		0214B1531773394500C03C71 /* Trains3DTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0214B1521773394500C03C71 /* Trains3DTests.m */; };
-		02CFE91317733A780048420F /* TROpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CFE91217733A780048420F /* TROpenGLView.m */; };
-		02CFE91517733AC60048420F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02CFE91417733AC60048420F /* OpenGL.framework */; };
-		02CFE91717733ACC0048420F /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02CFE91617733ACC0048420F /* GLUT.framework */; };
+		6F3DF08D40683321E30A801E /* TRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF980D0476B0472119D26 /* TRAppDelegate.m */; };
+		6F3DF1EA784B0CF29B2CA273 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF3C68061209BBC632F6E /* MainMenu.xib */; };
+		6F3DF3B03AB24320C2EF87F7 /* EGDirector.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF35551990032E9C9359F /* EGDirector.od */; };
+		6F3DF5C63790425F8F8EB5CD /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F3DF60FCB04B7E52FECB861 /* GLUT.framework */; };
+		6F3DF62875FC6AA9A1C16B02 /* EGCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF442E195CEABE2FEEE4F /* EGCamera.m */; };
+		6F3DF9157E102D6AFDDE715D /* EGScene.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFD9868ADE5A5DDACC9D9 /* EGScene.od */; };
+		6F3DF9434A258FF2AC0B6548 /* EGDirector.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0EDDE0E9BD7A9F948BE /* EGDirector.m */; };
+		6F3DF970C938C0513041D305 /* EGTexture.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFEB61E6469F152002495 /* EGTexture.m */; };
+		6F3DF9D4A7F987AED827130A /* EGOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA3414CC30A8B005B9C0 /* EGOpenGLView.m */; };
+		6F3DFA06DD08EAF323F21E52 /* EGTexture.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF595E3C0D7506F2F2638 /* EGTexture.od */; };
+		6F3DFB7610D3B97263DC6E0A /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F3DF8BE3569365CA633DF43 /* OpenGL.framework */; };
+		6F3DFC4DFD5AA78EE14631E6 /* EGCamera.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFFFCB36B857C7756A470 /* EGCamera.od */; };
+		6F3DFEC7F85F7D181702969E /* EGScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE2F83716C1EBC4E347D /* EGScene.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,19 +51,31 @@
 		0214B1341773394400C03C71 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		0214B1361773394400C03C71 /* Trains3D-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Trains3D-Prefix.pch"; sourceTree = "<group>"; };
 		0214B1381773394400C03C71 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
-		0214B13A1773394400C03C71 /* TRAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TRAppDelegate.h; sourceTree = "<group>"; };
-		0214B13B1773394400C03C71 /* TRAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TRAppDelegate.m; sourceTree = "<group>"; };
-		0214B13E1773394400C03C71 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		0214B1451773394500C03C71 /* Trains3DTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Trains3DTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0214B1461773394500C03C71 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		0214B14D1773394500C03C71 /* Trains3DTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Trains3DTests-Info.plist"; sourceTree = "<group>"; };
 		0214B14F1773394500C03C71 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0214B1511773394500C03C71 /* Trains3DTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Trains3DTests.h; sourceTree = "<group>"; };
 		0214B1521773394500C03C71 /* Trains3DTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Trains3DTests.m; sourceTree = "<group>"; };
-		02CFE91117733A780048420F /* TROpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TROpenGLView.h; sourceTree = "<group>"; };
-		02CFE91217733A780048420F /* TROpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TROpenGLView.m; sourceTree = "<group>"; };
-		02CFE91417733AC60048420F /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		02CFE91617733ACC0048420F /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		6F3DF0EDDE0E9BD7A9F948BE /* EGDirector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGDirector.m; sourceTree = "<group>"; };
+		6F3DF11FFF9D42B73312F055 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		6F3DF1CFEFCFD9A9F41392EF /* EGCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGCamera.h; sourceTree = "<group>"; };
+		6F3DF35551990032E9C9359F /* EGDirector.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGDirector.od; sourceTree = "<group>"; };
+		6F3DF3E279A6BB92EAA800FC /* EGOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOpenGLView.h; sourceTree = "<group>"; };
+		6F3DF442E195CEABE2FEEE4F /* EGCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGCamera.m; sourceTree = "<group>"; };
+		6F3DF595E3C0D7506F2F2638 /* EGTexture.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGTexture.od; sourceTree = "<group>"; };
+		6F3DF5F168AA005DD585BCFB /* TRAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRAppDelegate.h; sourceTree = "<group>"; };
+		6F3DF60FCB04B7E52FECB861 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../../../Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/GLUT.framework; sourceTree = "<group>"; };
+		6F3DF835E144EA628BC9D1C1 /* EGDirector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGDirector.h; sourceTree = "<group>"; };
+		6F3DF8BE3569365CA633DF43 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = ../../../../../Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = "<group>"; };
+		6F3DF980D0476B0472119D26 /* TRAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRAppDelegate.m; sourceTree = "<group>"; };
+		6F3DFA3414CC30A8B005B9C0 /* EGOpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOpenGLView.m; sourceTree = "<group>"; };
+		6F3DFAF06E197A6FA6BCD7EB /* EGScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGScene.h; sourceTree = "<group>"; };
+		6F3DFC606C1908AFC8A72228 /* EGTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGTexture.h; sourceTree = "<group>"; };
+		6F3DFD9868ADE5A5DDACC9D9 /* EGScene.od */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.od; path = EGScene.od; sourceTree = "<group>"; };
+		6F3DFE2F83716C1EBC4E347D /* EGScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGScene.m; sourceTree = "<group>"; };
+		6F3DFEB61E6469F152002495 /* EGTexture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGTexture.m; sourceTree = "<group>"; };
+		6F3DFFFCB36B857C7756A470 /* EGCamera.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGCamera.od; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,9 +83,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02CFE91717733ACC0048420F /* GLUT.framework in Frameworks */,
-				02CFE91517733AC60048420F /* OpenGL.framework in Frameworks */,
 				0214B1291773394400C03C71 /* Cocoa.framework in Frameworks */,
+				6F3DF5C63790425F8F8EB5CD /* GLUT.framework in Frameworks */,
+				6F3DFB7610D3B97263DC6E0A /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,12 +104,11 @@
 		0214B11C1773394400C03C71 = {
 			isa = PBXGroup;
 			children = (
-				02CFE91617733ACC0048420F /* GLUT.framework */,
-				02CFE91417733AC60048420F /* OpenGL.framework */,
 				0214B12E1773394400C03C71 /* Trains3D */,
 				0214B14B1773394500C03C71 /* Trains3DTests */,
 				0214B1271773394400C03C71 /* Frameworks */,
 				0214B1261773394400C03C71 /* Products */,
+				6F3DF59FFFDE7F8B42964292 /* Engine */,
 			);
 			sourceTree = "<group>";
 		};
@@ -108,6 +127,8 @@
 				0214B1281773394400C03C71 /* Cocoa.framework */,
 				0214B1461773394500C03C71 /* SenTestingKit.framework */,
 				0214B12A1773394400C03C71 /* Other Frameworks */,
+				6F3DF60FCB04B7E52FECB861 /* GLUT.framework */,
+				6F3DF8BE3569365CA633DF43 /* OpenGL.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -125,12 +146,7 @@
 		0214B12E1773394400C03C71 /* Trains3D */ = {
 			isa = PBXGroup;
 			children = (
-				0214B13A1773394400C03C71 /* TRAppDelegate.h */,
-				0214B13B1773394400C03C71 /* TRAppDelegate.m */,
-				0214B13D1773394400C03C71 /* MainMenu.xib */,
 				0214B12F1773394400C03C71 /* Supporting Files */,
-				02CFE91117733A780048420F /* TROpenGLView.h */,
-				02CFE91217733A780048420F /* TROpenGLView.m */,
 			);
 			path = Trains3D;
 			sourceTree = "<group>";
@@ -143,6 +159,9 @@
 				0214B1341773394400C03C71 /* main.m */,
 				0214B1361773394400C03C71 /* Trains3D-Prefix.pch */,
 				0214B1371773394400C03C71 /* Credits.rtf */,
+				6F3DF980D0476B0472119D26 /* TRAppDelegate.m */,
+				6F3DF3C68061209BBC632F6E /* MainMenu.xib */,
+				6F3DF5F168AA005DD585BCFB /* TRAppDelegate.h */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -164,6 +183,43 @@
 				0214B14E1773394500C03C71 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		6F3DF0F9A59C9CB59A62D4A3 /* Mac */ = {
+			isa = PBXGroup;
+			children = (
+				6F3DFA3414CC30A8B005B9C0 /* EGOpenGLView.m */,
+				6F3DF3E279A6BB92EAA800FC /* EGOpenGLView.h */,
+			);
+			path = Mac;
+			sourceTree = "<group>";
+		};
+		6F3DF59FFFDE7F8B42964292 /* Engine */ = {
+			isa = PBXGroup;
+			children = (
+				6F3DF595E3C0D7506F2F2638 /* EGTexture.od */,
+				6F3DFC606C1908AFC8A72228 /* EGTexture.h */,
+				6F3DFEB61E6469F152002495 /* EGTexture.m */,
+				6F3DFFFCB36B857C7756A470 /* EGCamera.od */,
+				6F3DF35551990032E9C9359F /* EGDirector.od */,
+				6F3DFD9868ADE5A5DDACC9D9 /* EGScene.od */,
+				6F3DFF74F30CEEC9C44EF9F5 /* Platform */,
+				6F3DF835E144EA628BC9D1C1 /* EGDirector.h */,
+				6F3DF0EDDE0E9BD7A9F948BE /* EGDirector.m */,
+				6F3DF1CFEFCFD9A9F41392EF /* EGCamera.h */,
+				6F3DF442E195CEABE2FEEE4F /* EGCamera.m */,
+				6F3DFE2F83716C1EBC4E347D /* EGScene.m */,
+				6F3DFAF06E197A6FA6BCD7EB /* EGScene.h */,
+			);
+			path = Engine;
+			sourceTree = "<group>";
+		};
+		6F3DFF74F30CEEC9C44EF9F5 /* Platform */ = {
+			isa = PBXGroup;
+			children = (
+				6F3DF0F9A59C9CB59A62D4A3 /* Mac */,
+			);
+			path = Platform;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -240,7 +296,11 @@
 			files = (
 				0214B1331773394400C03C71 /* InfoPlist.strings in Resources */,
 				0214B1391773394400C03C71 /* Credits.rtf in Resources */,
-				0214B13F1773394400C03C71 /* MainMenu.xib in Resources */,
+				6F3DF1EA784B0CF29B2CA273 /* MainMenu.xib in Resources */,
+				6F3DFA06DD08EAF323F21E52 /* EGTexture.od in Resources */,
+				6F3DFC4DFD5AA78EE14631E6 /* EGCamera.od in Resources */,
+				6F3DF3B03AB24320C2EF87F7 /* EGDirector.od in Resources */,
+				6F3DF9157E102D6AFDDE715D /* EGScene.od in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,8 +336,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				0214B1351773394400C03C71 /* main.m in Sources */,
-				0214B13C1773394400C03C71 /* TRAppDelegate.m in Sources */,
-				02CFE91317733A780048420F /* TROpenGLView.m in Sources */,
+				6F3DF08D40683321E30A801E /* TRAppDelegate.m in Sources */,
+				6F3DF970C938C0513041D305 /* EGTexture.m in Sources */,
+				6F3DF9D4A7F987AED827130A /* EGOpenGLView.m in Sources */,
+				6F3DF9434A258FF2AC0B6548 /* EGDirector.m in Sources */,
+				6F3DF62875FC6AA9A1C16B02 /* EGCamera.m in Sources */,
+				6F3DFEC7F85F7D181702969E /* EGScene.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,20 +380,20 @@
 			name = Credits.rtf;
 			sourceTree = "<group>";
 		};
-		0214B13D1773394400C03C71 /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				0214B13E1773394400C03C71 /* en */,
-			);
-			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
 		0214B14E1773394500C03C71 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				0214B14F1773394500C03C71 /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		6F3DF3C68061209BBC632F6E /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6F3DF11FFF9D42B73312F055 /* en */,
+			);
+			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

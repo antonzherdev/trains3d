@@ -1,0 +1,14 @@
+stub struct CGSize(width : float, height : float)
+stub struct CGPoint(x : float, y : float)
+
+class EGCamera {
+    def startDraw
+
+    def reshapeWith(size : CGSize)
+}
+
+class EGIsometricCamera(center : CGPoint, tilesOnScreen : CGSize) extends EGCamera {
+    def startDraw {}
+
+    def reshapeWith(size : CGSize) {}
+}

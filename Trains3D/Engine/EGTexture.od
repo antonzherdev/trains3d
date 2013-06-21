@@ -1,0 +1,8 @@
+
+stub struct GLuint
+
+stub struct CGSize(width : float, height : float)
+
+class EGTexture(id : GLuint, size : CGSize)  {
+    def static loadFrom(file : string) : EGTexture = 0
+}

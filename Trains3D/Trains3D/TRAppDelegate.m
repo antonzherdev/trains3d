@@ -12,7 +12,11 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    // Insert code here to initialize your application
+    EGScene *scene = [EGScene scene];
+    _view.director.scene = scene;
+    scene.camera = [EGIsometricCamera isometricCameraWithCenter:CGPointMake(0, 0) tilesOnScreen:CGSizeMake(3, 3)];
+    [_view reshape];
+    [_view update];
 }
 
 @end
