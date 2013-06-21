@@ -1,7 +1,9 @@
 #import "EGScene.h"
+#import "EGTexture.h"
 
 @implementation EGScene{
     EGCamera* _camera;
+    EGTexture* _t;
 }
 @synthesize camera = _camera;
 
@@ -11,7 +13,9 @@
 
 - (id)init {
     self = [super init];
-    
+    if(self) {
+
+    }
     return self;
 }
 
@@ -21,18 +25,24 @@
 
 - (void)draw {
     glClearColor(0.0, 0.0, 0.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT);
-
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    if(_t == nil) {
+        _t = [EGTexture loadFromFile:@"Grass.png"];
+    }
     [_camera startDraw];
 
-    glBegin(GL_QUADS);
     glColor3d(1.0, 1.0, 1.0);
-    float w = 0.5;
-    glVertex3f(w, 0, w);
-    glVertex3f(-w, 0, w);
-    glVertex3f(-w, 0, -w);
-    glVertex3f(w, 0, -w);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+    [_t bind];
+    glEnable( GL_TEXTURE_2D );
+    glBegin(GL_QUADS);
+        float w = 0.5;
+        glTexCoord2d(0.0, 0.0); glVertex3f(w, 0, w);
+        glTexCoord2d(1.0, 0.0); glVertex3f(-w, 0, w);
+        glTexCoord2d(1.0, 1.0); glVertex3f(-w, 0, -w);
+        glTexCoord2d(0.0, 1.0); glVertex3f(w, 0, -w);
     glEnd();
+    glDisable(GL_TEXTURE_2D);
 
 
     glBegin(GL_LINES);

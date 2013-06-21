@@ -7,6 +7,8 @@
 + (id)textureWithId:(GLuint)id size:(CGSize)size;
 - (id)initWithId:(GLuint)id size:(CGSize)size;
 + (EGTexture*)loadFromFile:(NSString*)file;
+
+- (void)bind;
 @end
 
 

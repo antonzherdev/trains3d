@@ -1,4 +1,5 @@
 #import "EGTexture.h"
+#import <OpenGL/glu.h>
 
 @implementation EGTexture{
     GLuint _id;
@@ -21,7 +22,14 @@
     return self;
 }
 
+- (void)dealloc {
+    glDeleteTextures(1, &_id);
+}
+
+
 + (EGTexture*)loadFromFile:(NSString*)file {
+    file = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent: file];
+
     CFURLRef url = (__bridge CFURLRef)[NSURL fileURLWithPath:file];
     CGImageSourceRef myImageSourceRef = CGImageSourceCreateWithURL(url, NULL);
     CGImageRef myImageRef = CGImageSourceCreateImageAtIndex (myImageSourceRef, 0, NULL);
@@ -34,8 +42,7 @@
     CGContextRef myBitmapContext = CGBitmapContextCreate (myData,
             width, height, 8,
             width*4, space,
-            kCGBitmapByteOrder32Host |
-                    kCGImageAlphaPremultipliedFirst);
+            kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst);
     CGContextSetBlendMode(myBitmapContext, kCGBlendModeCopy);
     CGContextDrawImage(myBitmapContext, rect, myImageRef);
     CGContextRelease(myBitmapContext);
@@ -43,12 +50,16 @@
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glGenTextures(1, &id);
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, id);
-    glTexParameteri(GL_TEXTURE_RECTANGLE_ARB,
-            GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA8, width, height,
-            0, GL_BGRA_EXT, GL_UNSIGNED_INT_8_8_8_8_REV, myData);
+    gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, width, height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, myData);
+    glTexParameteri   ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    glTexParameteri   ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+
     free(myData);
     return [EGTexture textureWithId:id size:CGSizeMake(width, height)];
+}
+
+- (void)bind {
+    glBindTexture( GL_TEXTURE_2D, _id);
 }
 
 @end

@@ -18,6 +18,7 @@
 		6F3DF08D40683321E30A801E /* TRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF980D0476B0472119D26 /* TRAppDelegate.m */; };
 		6F3DF1EA784B0CF29B2CA273 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF3C68061209BBC632F6E /* MainMenu.xib */; };
 		6F3DF3B03AB24320C2EF87F7 /* EGDirector.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF35551990032E9C9359F /* EGDirector.od */; };
+		6F3DF3E9BD0716446C89045C /* Grass.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFF5622ACCF4AEB7EE617 /* Grass.png */; };
 		6F3DF5C63790425F8F8EB5CD /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F3DF60FCB04B7E52FECB861 /* GLUT.framework */; };
 		6F3DF62875FC6AA9A1C16B02 /* EGCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF442E195CEABE2FEEE4F /* EGCamera.m */; };
 		6F3DF9157E102D6AFDDE715D /* EGScene.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFD9868ADE5A5DDACC9D9 /* EGScene.od */; };
@@ -75,6 +76,7 @@
 		6F3DFD9868ADE5A5DDACC9D9 /* EGScene.od */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.od; path = EGScene.od; sourceTree = "<group>"; };
 		6F3DFE2F83716C1EBC4E347D /* EGScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGScene.m; sourceTree = "<group>"; };
 		6F3DFEB61E6469F152002495 /* EGTexture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGTexture.m; sourceTree = "<group>"; };
+		6F3DFF5622ACCF4AEB7EE617 /* Grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Grass.png; sourceTree = "<group>"; };
 		6F3DFFFCB36B857C7756A470 /* EGCamera.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGCamera.od; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -109,6 +111,7 @@
 				0214B1271773394400C03C71 /* Frameworks */,
 				0214B1261773394400C03C71 /* Products */,
 				6F3DF59FFFDE7F8B42964292 /* Engine */,
+				6F3DFCBF8D4DDB6C5BC3FB8A /* Resources */,
 			);
 			sourceTree = "<group>";
 		};
@@ -214,6 +217,14 @@
 			path = Engine;
 			sourceTree = "<group>";
 		};
+		6F3DFCBF8D4DDB6C5BC3FB8A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				6F3DFF5622ACCF4AEB7EE617 /* Grass.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		6F3DFF74F30CEEC9C44EF9F5 /* Platform */ = {
 			isa = PBXGroup;
 			children = (
@@ -301,6 +312,7 @@
 				6F3DFC4DFD5AA78EE14631E6 /* EGCamera.od in Resources */,
 				6F3DF3B03AB24320C2EF87F7 /* EGDirector.od in Resources */,
 				6F3DF9157E102D6AFDDE715D /* EGScene.od in Resources */,
+				6F3DF3E9BD0716446C89045C /* Grass.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
