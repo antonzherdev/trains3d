@@ -3,7 +3,9 @@
 
 @implementation EGScene{
     EGCamera* _camera;
-    EGTexture* _t;
+    CGSize _lastSize;
+    EGTexture * _t;
+    CGFloat _r;
 }
 @synthesize camera = _camera;
 
@@ -13,18 +15,19 @@
 
 - (id)init {
     self = [super init];
-    if(self) {
-
-    }
+    
     return self;
 }
 
 - (void)reshapeWithSize:(CGSize)size {
+    _lastSize = size;
     [_camera reshapeWithSize:size];
 }
 
 - (void)draw {
-    glClearColor(0.0, 0.0, 0.0, 1.0);
+    _r += 0.01; if(_r > 0.5) _r = 0.0;
+    glClearColor(_r, 0.0, 0.0, 1.0);
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     if(_t == nil) {
         _t = [EGTexture loadFromFile:@"Grass.png"];
@@ -61,6 +64,11 @@
     glVertex3d(0.0, 0.0, ww);
 
     glEnd();
+}
+
+- (void)setCamera:(EGCamera*)camera {
+    _camera = camera;
+    [camera reshapeWithSize:_lastSize];
 }
 
 @end

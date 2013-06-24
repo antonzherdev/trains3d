@@ -1,0 +1,16 @@
+class EGStat {
+    private var accumDelta = 0.0
+    private var framesCount = 0
+    private var frameRate = 0.0
+
+    def draw {
+
+    }
+    def tickWith(delta : float) {
+        accumDelta += delta
+        framesCount++
+        if(accumDelta > 0.1) {
+            frameRate = framesCount/accumDelta
+        }
+    }
+}

@@ -1,0 +1,4 @@
+stub EGTime {
+    def delta : float
+    def start
+}

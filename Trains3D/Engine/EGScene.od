@@ -2,16 +2,22 @@ import "EGCamera.h"
 
 stub struct CGSize(width : float, height : float)
 
-stub EGCamera {
+stub class EGCamera {
     def startDraw
 
     def reshapeWith(size : CGSize)
 }
 
 class EGScene {
-    var camera : EGCamera
+    var camera : EGCamera |
+        set = {
+            self.camera = camera
+            camera.reshapeWith(lastSize)
+        }
+    private var lastSize : CGSize
 
     def reshapeWith(size : CGSize) {
+        lastSize = size
         camera.reshapeWith(size)
     }
 

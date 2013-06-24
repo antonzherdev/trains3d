@@ -1,20 +1,75 @@
 import "EGScene.h"
+import "EGTime.h"
+import "EGStat.h"
 
-stub EGScene {
+stub class EGScene {
     def reshapeWith(size : CGSize)
     def draw
+}
+
+stub class EGTime {
+    var delta : float | private set
+    def start
+    def tick
+}
+stub class EGStat {
+    def draw
+    def tickWith(delta : float)
 }
 
 stub struct CGSize(width : float, height : float)
 
 class EGDirector {
-    var scene : EGScene
+    var scene : EGScene |
+        set = {
+            self.scene = scene
+            scene.reshapeWith(size = lastSize)
+        }
+    var started = false | private set
+    var paused = false | private set
+    val time : EGTime = EGTime
+
 
     def draw {
         scene.draw
+        stat.draw
     }
 
+    private var lastSize : CGSize
     def reshapeWith(size : CGSize) {
         scene.reshapeWith(size)
+        lastSize = size
     }
+
+    def start {
+        started = true
+        time.start
+    }
+
+    def stop {
+        started = false
+    }
+
+    def pause {
+        paused = true
+    }
+
+    def resume {
+        if(paused) {
+            paused = false
+            time.start
+        }
+    }
+
+    def tick {
+        time.tick
+        stat.tickWith(delta = time.delta)
+    }
+
+    var stat : EGStat | private set
+    var displayStats : bool |
+        get = stat == nil
+        set = {
+            stat = if(displayStats) EGStat else nil
+        }
 }
