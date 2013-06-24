@@ -14,6 +14,7 @@
 {
     EGScene *scene = [EGScene scene];
     _view.director.scene = scene;
+    _view.director.displayStats = YES;
     scene.camera = [EGIsometricCamera isometricCameraWithCenter:CGPointMake(0, 0) tilesOnScreen:CGSizeMake(3, 3)];
 }
 
