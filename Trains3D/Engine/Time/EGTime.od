@@ -1,4 +1,4 @@
-stub EGTime {
+stub class EGTime {
     def delta : float
     def start
 }

@@ -1,0 +1,3 @@
+struct EGColor(r : float, g : float, b : float, a : float)
+
+struct EGTilePoint(x : int, y : int)

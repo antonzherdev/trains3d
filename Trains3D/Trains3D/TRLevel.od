@@ -1,0 +1,5 @@
+import TRCity
+
+class TRLevel {
+    var cities : [TRCity] | private set
+}

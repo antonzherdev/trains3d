@@ -8,7 +8,7 @@ stub class EGCamera {
     def reshapeWith(size : CGSize)
 }
 
-class EGScene {
+stub class EGScene {
     var camera : EGCamera |
         set = {
             self.camera = camera

@@ -1,0 +1,6 @@
+import EGTypes
+
+enum TRColor() {
+    orange()
+    green()
+}

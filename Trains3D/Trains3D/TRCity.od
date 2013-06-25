@@ -1,0 +1,5 @@
+import TRColor
+import TRTypes
+import EGTypes
+
+class TRCity(color : TRColor, tile : EGTilePoint)
