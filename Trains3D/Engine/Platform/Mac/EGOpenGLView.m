@@ -57,16 +57,16 @@
     // Add a mutex around to avoid the threads accessing the context simultaneously when resizing
 
     [self lockOpenGLContext];
+    @try {
+        NSRect rect = [self bounds];
 
-    NSRect rect = [self bounds];
+        [_director reshapeWithSize:NSSizeToCGSize(rect.size)];
+        [_director draw];
 
-    [_director reshapeWithSize:NSSizeToCGSize(rect.size)];
-
-    // avoid flicker
-    [_director draw];
-//	[self setNeedsDisplay:YES];
-
-    [self unlockOpenGLContext];
+        [self.openGLContext flushBuffer];
+    } @finally {
+        [self unlockOpenGLContext];
+    }
 }
 
 - (void) prepareOpenGL {
@@ -105,12 +105,6 @@
     NSAssert( glContext, @"FATAL: could not get openGL context");
 
     CGLUnlockContext([glContext CGLContextObj]);
-}
-
-- (void)drawRect:(NSRect)dirtyRect {
-    [super drawRect:dirtyRect];
-    [_director draw];
-    glFlush();
 }
 
 

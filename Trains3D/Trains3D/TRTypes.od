@@ -1,6 +1,6 @@
 import EGTypes
 
-enum TRColor() {
-    orange()
-    green()
+enum TRColor(color : EGColor) {
+    orange(EGColor(1.0, 0.5, 0.0, 1.0))
+    green(EGColor(0.0, 0.5, 0.0, 1.0))
 }

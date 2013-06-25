@@ -1,5 +1,4 @@
 #import "EGDirectorMac.h"
-#import "EGDirector.h"
 #import "EGOpenGLView.h"
 
 
