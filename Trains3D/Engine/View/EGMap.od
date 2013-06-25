@@ -1,8 +1,16 @@
 import EGTypes
 
-stub struct EGTilePoint(x : int, y : int)
+stub struct EGMapPoint(x : int, y : int)
 stub struct EGMapSize(width : int, height : int)
+stub struct EGMapRect(left : int, top : int, right : int, bottom : int)
 
 stub class EGMap {
     def static drawLayoutWith(size: EGMapSize)
+    def static drawAxis
+}
+
+stub class EGSquareIsoMap {
+    def static drawLayoutWith(size: EGMapSize)
+    def static isFull(tile : EGTilePoint, size : EGMapSize) : bool
+    def static limitsFor(size : EGMapSize) : EGMapRect
 }

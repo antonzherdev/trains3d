@@ -1,7 +1,5 @@
 #import "EGCamera.h"
 
-static const double ISO = 0.70710676908493;
-
 @implementation EGCamera
 
 + (id)camera {

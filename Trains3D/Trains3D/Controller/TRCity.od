@@ -3,4 +3,4 @@ import TRTypes
 import EGTypes
 import EGMap
 
-class TRCity(color : TRColor, tile : EGTilePoint)
+class TRCity(color : TRColor, tile : EGMapPoint)

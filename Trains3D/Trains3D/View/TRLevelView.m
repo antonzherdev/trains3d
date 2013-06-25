@@ -40,7 +40,7 @@
 
 
     glColor3d(1.0, 1.0, 1.0);
-    [EGMap drawLayoutWithSize:EGMapSizeMake(3, 3)];
+    [EGSquareIsoMap drawLayoutWithSize:EGMapSizeMake(3, 3)];
 }
 
 @end
