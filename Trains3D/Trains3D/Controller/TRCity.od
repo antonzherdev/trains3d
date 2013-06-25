@@ -1,5 +1,6 @@
 import TRColor
 import TRTypes
 import EGTypes
+import EGMap
 
 class TRCity(color : TRColor, tile : EGTilePoint)

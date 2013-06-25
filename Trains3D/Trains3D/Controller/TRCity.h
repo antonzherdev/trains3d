@@ -1,6 +1,7 @@
 #import <Foundation/Foundation.h>
 #import "TRTypes.h"
 #import "EGTypes.h"
+#import "EGMap.h"
 
 @interface TRCity : NSObject
 @property (nonatomic, readonly) TRColor* color;

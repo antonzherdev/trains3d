@@ -16,18 +16,6 @@ static inline EGColor EGColorMake(CGFloat r, CGFloat g, CGFloat b, CGFloat a) {
     return ret;
 }
 
-struct EGTilePoint {
-    NSInteger x;
-    NSInteger y;
-};
-typedef struct EGTilePoint EGTilePoint;
-static inline EGTilePoint EGTilePointMake(NSInteger x, NSInteger y) {
-    EGTilePoint ret;
-    ret.x = x;
-    ret.y = y;
-    return ret;
-}
-
 @protocol EGController
 - (void)updateWithDelta:(CGFloat)delta;
 @end

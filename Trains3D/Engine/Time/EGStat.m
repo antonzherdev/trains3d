@@ -1,5 +1,6 @@
 #import <GLUT/glut.h>
 #import "EGStat.h"
+#import "EGText.h"
 
 @implementation EGStat{
     CGFloat _accumDelta;
@@ -36,13 +37,7 @@
     NSString *string = [[NSString alloc] initWithFormat:@"%.1f", _frameRate];
     
     glColor3f(1.0, 1.0, 1.0);
-    glRasterPos2f(-0.99, -0.99);
-    int len, i;
-    len = (int)[string length];
-    char const *s = [string UTF8String];
-    for (i = 0; i < len; i++) {
-        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, s[i]);
-    }
+    [EGText glutDrawText:string font:GLUT_BITMAP_HELVETICA_18 position:CGPointMake(-0.99, -0.99)];
 
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();

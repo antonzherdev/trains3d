@@ -1,0 +1,8 @@
+import EGTypes
+
+stub struct EGTilePoint(x : int, y : int)
+stub struct EGMapSize(width : int, height : int)
+
+stub class EGMap {
+    def static drawLayoutWith(size: EGMapSize)
+}
