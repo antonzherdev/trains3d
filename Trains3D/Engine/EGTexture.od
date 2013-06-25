@@ -1,4 +1,3 @@
-
 stub struct GLuint
 
 stub struct CGSize(width : float, height : float)

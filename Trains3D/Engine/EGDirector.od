@@ -1,23 +1,6 @@
-import "EGScene.h"
-import "EGTime.h"
-import "EGStat.h"
-
-stub class EGScene {
-    def reshapeWith(size : CGSize)
-    def draw
-}
-
-stub class EGTime {
-    var delta : float | private set
-    def start
-    def tick
-}
-stub class EGStat {
-    def draw
-    def tickWith(delta : float)
-}
-
-stub struct CGSize(width : float, height : float)
+import EGScene
+import EGTime
+import EGStat
 
 class EGDirector {
     var scene : EGScene |

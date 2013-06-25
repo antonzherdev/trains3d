@@ -1,4 +1,5 @@
 stub class EGTime {
-    def delta : float
+    val delta : float
+    def tick
     def start
 }

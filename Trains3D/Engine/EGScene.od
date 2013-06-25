@@ -1,4 +1,4 @@
-import "EGCamera.h"
+import EGCamera
 
 stub struct CGSize(width : float, height : float)
 
