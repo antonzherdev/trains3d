@@ -5,7 +5,6 @@
     BOOL _started;
     BOOL _paused;
     EGTime* _time;
-    CGSize _lastSize;
     EGStat* _stat;
 }
 @synthesize scene = _scene;
@@ -29,14 +28,9 @@
     return self;
 }
 
-- (void)draw {
-    [_scene draw];
+- (void)drawWithSize:(CGSize)size {
+    [_scene drawWithViewSize:size];
     [_stat draw];
-}
-
-- (void)reshapeWithSize:(CGSize)size {
-    [_scene reshapeWithSize:size];
-    _lastSize = size;
 }
 
 - (void)start {
@@ -62,11 +56,6 @@
 - (void)tick {
     [_time tick];
     [_stat tickWithDelta:_time.delta];
-}
-
-- (void)setScene:(EGScene*)scene {
-    _scene = scene;
-    [scene reshapeWithSize:_lastSize];
 }
 
 - (BOOL)displayStats {

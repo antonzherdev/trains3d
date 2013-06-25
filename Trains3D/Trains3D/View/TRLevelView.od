@@ -1,0 +1,7 @@
+import EGTypes
+
+stub class TRLevelView {
+    def draw(controller : EGController, viewSize : CGSize) {
+
+    }
+}

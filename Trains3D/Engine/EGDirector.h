@@ -14,8 +14,7 @@
 
 + (id)director;
 - (id)init;
-- (void)draw;
-- (void)reshapeWithSize:(CGSize)size;
+- (void)drawWithSize:(CGSize)size;
 - (void)start;
 - (void)stop;
 - (void)pause;

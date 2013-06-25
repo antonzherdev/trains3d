@@ -4,25 +4,14 @@ import EGStat
 import EGTypes
 
 class EGDirector {
-    var scene : EGScene |
-        set = {
-            self.scene = scene
-            scene.reshapeWith(size = lastSize)
-        }
+    var scene : EGScene
     var started = false | private set
     var paused = false | private set
     val time : EGTime = EGTime
 
-
-    def draw {
-        scene.draw
+    def drawWith(size : CGSize) {
+        scene.drawWith(size)
         stat.draw
-    }
-
-    private var lastSize : CGSize
-    def reshapeWith(size : CGSize) {
-        scene.reshapeWith(size)
-        lastSize = size
     }
 
     def start {

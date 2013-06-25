@@ -1,9 +1,5 @@
 import EGTypes
 
-stub class EGCamera {
-    def startDraw
-
-    def reshapeWith(size : CGSize)
+stub  class EGCamera {
+    def static isometricFocusWith(viewSize : CGSize, tilesOnScreen : CGSize, center : CGPoint)
 }
-
-stub class EGIsometricCamera(center : CGPoint, tilesOnScreen : CGSize) extends EGCamera

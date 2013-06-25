@@ -28,3 +28,13 @@ static inline EGTilePoint EGTilePointMake(NSInteger x, NSInteger y) {
     return ret;
 }
 
+@protocol EGController
+- (void)updateWithDelta:(CGFloat)delta;
+@end
+
+
+@protocol EGView
+- (void)drawController:(id)controller viewSize:(CGSize)viewSize;
+@end
+
+

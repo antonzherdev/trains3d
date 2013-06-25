@@ -17,11 +17,12 @@
 		0214B1531773394500C03C71 /* Trains3DTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0214B1521773394500C03C71 /* Trains3DTests.m */; };
 		024F434E1774A5C3005B6F82 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 024F434D1774A5C3005B6F82 /* CoreVideo.framework */; };
 		6F3DF08D40683321E30A801E /* TRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF980D0476B0472119D26 /* TRAppDelegate.m */; };
-		6F3DF0D73FFF8EBDF63389DB /* TRCity.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC7EA0ABA65E1BF91FF0 /* TRCity.m */; };
 		6F3DF194C56638A08F95D03C /* EGStat.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF418927B90E9B8FD285D /* EGStat.m */; };
+		6F3DF1C850AAB251C258F49F /* TRCity.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFD410477E6DC3F8E31F6 /* TRCity.od */; };
 		6F3DF1EA784B0CF29B2CA273 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF3C68061209BBC632F6E /* MainMenu.xib */; };
-		6F3DF3178C81E81D309A8F46 /* TRTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA1D9FD529C6DE18D3D5 /* TRTypes.m */; };
-		6F3DF36DDB5017608A0CD51B /* TRTypes.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF4B478F8335A7A043118 /* TRTypes.od */; };
+		6F3DF1F9E3D8120F7DDAC028 /* TRTypes.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFAAA8BCA08342560E85F /* TRTypes.od */; };
+		6F3DF2977A38FE7940E5CE35 /* TRLevel.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF124FA3EDCF67ED63F3B /* TRLevel.od */; };
+		6F3DF33843BA1EB1B7FA6567 /* TRTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC2DDFDCE501F8C44D93 /* TRTypes.m */; };
 		6F3DF3B03AB24320C2EF87F7 /* EGDirector.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF35551990032E9C9359F /* EGDirector.od */; };
 		6F3DF3E9BD0716446C89045C /* Grass.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFF5622ACCF4AEB7EE617 /* Grass.png */; };
 		6F3DF5C63790425F8F8EB5CD /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F3DF60FCB04B7E52FECB861 /* GLUT.framework */; };
@@ -31,16 +32,17 @@
 		6F3DF9434A258FF2AC0B6548 /* EGDirector.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0EDDE0E9BD7A9F948BE /* EGDirector.m */; };
 		6F3DF970C938C0513041D305 /* EGTexture.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFEB61E6469F152002495 /* EGTexture.m */; };
 		6F3DF9D4A7F987AED827130A /* EGOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA3414CC30A8B005B9C0 /* EGOpenGLView.m */; };
-		6F3DF9DB61C7A5476CA7A2F1 /* TRCity.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF433FD87F82292F36055 /* TRCity.od */; };
 		6F3DFA06DD08EAF323F21E52 /* EGTexture.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF595E3C0D7506F2F2638 /* EGTexture.od */; };
-		6F3DFA8E7A526C995CD40513 /* TRLevel.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFB22ECD177B0436EC68F /* TRLevel.od */; };
+		6F3DFAB18856CAC46CB32D6A /* TRLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF86CCB044E060A70A002 /* TRLevel.m */; };
 		6F3DFB7610D3B97263DC6E0A /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F3DF8BE3569365CA633DF43 /* OpenGL.framework */; };
+		6F3DFBA2932A90E513AAE640 /* TRCity.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF28F5B178DD178B8F487 /* TRCity.m */; };
 		6F3DFC4DFD5AA78EE14631E6 /* EGCamera.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFFFCB36B857C7756A470 /* EGCamera.od */; };
 		6F3DFCC28C26DAF6DF429B57 /* EGDirectorMac.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF65460A5DBAC04BC37F7 /* EGDirectorMac.m */; };
-		6F3DFDBD0F43888518DDEDF3 /* TRLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF875137C7B67B18FC219 /* TRLevel.m */; };
+		6F3DFE35119E60FF97850D85 /* TRLevelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2D7959BB1DD32921832 /* TRLevelView.m */; };
 		6F3DFEC7F85F7D181702969E /* EGScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE2F83716C1EBC4E347D /* EGScene.m */; };
 		6F3DFEEE81BBC0A5966D9E2E /* EGTime.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFC2DF92415D6518A84C5 /* EGTime.od */; };
 		6F3DFF3DA644565063716763 /* EGStat.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF7E5BB71171CADC27363 /* EGStat.od */; };
+		6F3DFF653F46CAFCE76D4578 /* TRLevelView.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFF02EA4AFE6016AEF487 /* TRLevelView.od */; };
 		6F3DFFB915F38AEF416608D0 /* EGTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF40B7EA21CBF17B28F8C /* EGTime.m */; };
 /* End PBXBuildFile section */
 
@@ -73,17 +75,18 @@
 		0214B1521773394500C03C71 /* Trains3DTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Trains3DTests.m; sourceTree = "<group>"; };
 		024F434D1774A5C3005B6F82 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		6F3DF0EDDE0E9BD7A9F948BE /* EGDirector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGDirector.m; sourceTree = "<group>"; };
-		6F3DF0F7A1C9A6172BE15D40 /* TRTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRTypes.h; sourceTree = "<group>"; };
 		6F3DF11FFF9D42B73312F055 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		6F3DF124FA3EDCF67ED63F3B /* TRLevel.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TRLevel.od; sourceTree = "<group>"; };
 		6F3DF1CFEFCFD9A9F41392EF /* EGCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGCamera.h; sourceTree = "<group>"; };
 		6F3DF1D6F2C26D4498CECD7C /* EGTypes.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGTypes.od; sourceTree = "<group>"; };
+		6F3DF28F5B178DD178B8F487 /* TRCity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRCity.m; sourceTree = "<group>"; };
+		6F3DF2BC697520CCC28FBBF2 /* TRLevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRLevel.h; sourceTree = "<group>"; };
+		6F3DF2D7959BB1DD32921832 /* TRLevelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRLevelView.m; sourceTree = "<group>"; };
 		6F3DF35551990032E9C9359F /* EGDirector.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGDirector.od; sourceTree = "<group>"; };
 		6F3DF3E279A6BB92EAA800FC /* EGOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOpenGLView.h; sourceTree = "<group>"; };
 		6F3DF40B7EA21CBF17B28F8C /* EGTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGTime.m; sourceTree = "<group>"; };
 		6F3DF418927B90E9B8FD285D /* EGStat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGStat.m; sourceTree = "<group>"; };
-		6F3DF433FD87F82292F36055 /* TRCity.od */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.od; path = TRCity.od; sourceTree = "<group>"; };
 		6F3DF442E195CEABE2FEEE4F /* EGCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGCamera.m; sourceTree = "<group>"; };
-		6F3DF4B478F8335A7A043118 /* TRTypes.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TRTypes.od; sourceTree = "<group>"; };
 		6F3DF4FAA15963195E4F8796 /* EGTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGTime.h; sourceTree = "<group>"; };
 		6F3DF595E3C0D7506F2F2638 /* EGTexture.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGTexture.od; sourceTree = "<group>"; };
 		6F3DF5B9F4E0A19BA7B96BFC /* EGStat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGStat.h; sourceTree = "<group>"; };
@@ -92,25 +95,27 @@
 		6F3DF65460A5DBAC04BC37F7 /* EGDirectorMac.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGDirectorMac.m; sourceTree = "<group>"; };
 		6F3DF7E5BB71171CADC27363 /* EGStat.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGStat.od; sourceTree = "<group>"; };
 		6F3DF835E144EA628BC9D1C1 /* EGDirector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGDirector.h; sourceTree = "<group>"; };
-		6F3DF875137C7B67B18FC219 /* TRLevel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRLevel.m; sourceTree = "<group>"; };
+		6F3DF86CCB044E060A70A002 /* TRLevel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRLevel.m; sourceTree = "<group>"; };
 		6F3DF8BE3569365CA633DF43 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = ../../../../../Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = "<group>"; };
-		6F3DF9443F81DFE6EB6C1D2C /* TRCity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRCity.h; sourceTree = "<group>"; };
 		6F3DF980D0476B0472119D26 /* TRAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRAppDelegate.m; sourceTree = "<group>"; };
-		6F3DFA1D9FD529C6DE18D3D5 /* TRTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRTypes.m; sourceTree = "<group>"; };
 		6F3DFA3414CC30A8B005B9C0 /* EGOpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOpenGLView.m; sourceTree = "<group>"; };
+		6F3DFAAA8BCA08342560E85F /* TRTypes.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TRTypes.od; sourceTree = "<group>"; };
 		6F3DFAF06E197A6FA6BCD7EB /* EGScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGScene.h; sourceTree = "<group>"; };
-		6F3DFB22ECD177B0436EC68F /* TRLevel.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TRLevel.od; sourceTree = "<group>"; };
+		6F3DFB597301FEB371F1F6E6 /* TRCity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRCity.h; sourceTree = "<group>"; };
+		6F3DFC2DDFDCE501F8C44D93 /* TRTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRTypes.m; sourceTree = "<group>"; };
 		6F3DFC2DF92415D6518A84C5 /* EGTime.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGTime.od; sourceTree = "<group>"; };
 		6F3DFC606C1908AFC8A72228 /* EGTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGTexture.h; sourceTree = "<group>"; };
-		6F3DFC7EA0ABA65E1BF91FF0 /* TRCity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRCity.m; sourceTree = "<group>"; };
+		6F3DFD410477E6DC3F8E31F6 /* TRCity.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TRCity.od; sourceTree = "<group>"; };
+		6F3DFD7B5168ED7D91B4FF54 /* TRTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRTypes.h; sourceTree = "<group>"; };
 		6F3DFD9868ADE5A5DDACC9D9 /* EGScene.od */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.od; path = EGScene.od; sourceTree = "<group>"; };
 		6F3DFE2F83716C1EBC4E347D /* EGScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGScene.m; sourceTree = "<group>"; };
 		6F3DFEB61E6469F152002495 /* EGTexture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGTexture.m; sourceTree = "<group>"; };
+		6F3DFECE9FC4291325531D0F /* TRLevelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRLevelView.h; sourceTree = "<group>"; };
 		6F3DFEE6C9005C4CA2D8FF99 /* EGTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGTypes.h; sourceTree = "<group>"; };
+		6F3DFF02EA4AFE6016AEF487 /* TRLevelView.od */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.od; path = TRLevelView.od; sourceTree = "<group>"; };
 		6F3DFF28C729F025D705445D /* EGDirectorMac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGDirectorMac.h; sourceTree = "<group>"; };
 		6F3DFF5622ACCF4AEB7EE617 /* Grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Grass.png; sourceTree = "<group>"; };
 		6F3DFFFCB36B857C7756A470 /* EGCamera.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGCamera.od; sourceTree = "<group>"; };
-		6F3DFFFEB312B8172D46F4C4 /* TRLevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRLevel.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,15 +190,8 @@
 			isa = PBXGroup;
 			children = (
 				0214B12F1773394400C03C71 /* Supporting Files */,
-				6F3DFB22ECD177B0436EC68F /* TRLevel.od */,
-				6F3DF433FD87F82292F36055 /* TRCity.od */,
-				6F3DF4B478F8335A7A043118 /* TRTypes.od */,
-				6F3DF9443F81DFE6EB6C1D2C /* TRCity.h */,
-				6F3DFC7EA0ABA65E1BF91FF0 /* TRCity.m */,
-				6F3DFFFEB312B8172D46F4C4 /* TRLevel.h */,
-				6F3DF875137C7B67B18FC219 /* TRLevel.m */,
-				6F3DF0F7A1C9A6172BE15D40 /* TRTypes.h */,
-				6F3DFA1D9FD529C6DE18D3D5 /* TRTypes.m */,
+				6F3DFE36FCF7A5D743EE00C9 /* Controller */,
+				6F3DF7AC80CA8D95B421C8DC /* View */,
 			);
 			path = Trains3D;
 			sourceTree = "<group>";
@@ -266,6 +264,16 @@
 			path = Engine;
 			sourceTree = "<group>";
 		};
+		6F3DF7AC80CA8D95B421C8DC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6F3DFF02EA4AFE6016AEF487 /* TRLevelView.od */,
+				6F3DFECE9FC4291325531D0F /* TRLevelView.h */,
+				6F3DF2D7959BB1DD32921832 /* TRLevelView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		6F3DFCBF8D4DDB6C5BC3FB8A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -285,6 +293,22 @@
 				6F3DF418927B90E9B8FD285D /* EGStat.m */,
 			);
 			path = Time;
+			sourceTree = "<group>";
+		};
+		6F3DFE36FCF7A5D743EE00C9 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				6F3DF28F5B178DD178B8F487 /* TRCity.m */,
+				6F3DF86CCB044E060A70A002 /* TRLevel.m */,
+				6F3DFB597301FEB371F1F6E6 /* TRCity.h */,
+				6F3DFD7B5168ED7D91B4FF54 /* TRTypes.h */,
+				6F3DFC2DDFDCE501F8C44D93 /* TRTypes.m */,
+				6F3DFD410477E6DC3F8E31F6 /* TRCity.od */,
+				6F3DF2BC697520CCC28FBBF2 /* TRLevel.h */,
+				6F3DF124FA3EDCF67ED63F3B /* TRLevel.od */,
+				6F3DFAAA8BCA08342560E85F /* TRTypes.od */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		6F3DFF74F30CEEC9C44EF9F5 /* Platform */ = {
@@ -377,10 +401,11 @@
 				6F3DF3E9BD0716446C89045C /* Grass.png in Resources */,
 				6F3DFF3DA644565063716763 /* EGStat.od in Resources */,
 				6F3DFEEE81BBC0A5966D9E2E /* EGTime.od in Resources */,
-				6F3DFA8E7A526C995CD40513 /* TRLevel.od in Resources */,
-				6F3DF9DB61C7A5476CA7A2F1 /* TRCity.od in Resources */,
-				6F3DF36DDB5017608A0CD51B /* TRTypes.od in Resources */,
 				6F3DF692073FADE1779485F1 /* EGTypes.od in Resources */,
+				6F3DF1C850AAB251C258F49F /* TRCity.od in Resources */,
+				6F3DF2977A38FE7940E5CE35 /* TRLevel.od in Resources */,
+				6F3DF1F9E3D8120F7DDAC028 /* TRTypes.od in Resources */,
+				6F3DFF653F46CAFCE76D4578 /* TRLevelView.od in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -425,9 +450,10 @@
 				6F3DFCC28C26DAF6DF429B57 /* EGDirectorMac.m in Sources */,
 				6F3DFFB915F38AEF416608D0 /* EGTime.m in Sources */,
 				6F3DF194C56638A08F95D03C /* EGStat.m in Sources */,
-				6F3DF0D73FFF8EBDF63389DB /* TRCity.m in Sources */,
-				6F3DFDBD0F43888518DDEDF3 /* TRLevel.m in Sources */,
-				6F3DF3178C81E81D309A8F46 /* TRTypes.m in Sources */,
+				6F3DFBA2932A90E513AAE640 /* TRCity.m in Sources */,
+				6F3DFAB18856CAC46CB32D6A /* TRLevel.m in Sources */,
+				6F3DF33843BA1EB1B7FA6567 /* TRTypes.m in Sources */,
+				6F3DFE35119E60FF97850D85 /* TRLevelView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

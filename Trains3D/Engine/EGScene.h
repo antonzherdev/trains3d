@@ -1,13 +1,14 @@
 #import <Foundation/Foundation.h>
-#import "EGCamera.h"
+#import "EGTypes.h"
 
 @interface EGScene : NSObject
-@property (nonatomic, retain) EGCamera* camera;
+@property (nonatomic, readonly) id controller;
+@property (nonatomic, readonly) id view;
 
-+ (id)scene;
-- (id)init;
-- (void)reshapeWithSize:(CGSize)size;
-- (void)draw;
++ (id)sceneWithController:(id)controller view:(id)view;
+- (id)initWithController:(id)controller view:(id)view;
+- (void)drawWithViewSize:(CGSize)viewSize;
+- (void)updateWithDelta:(CGFloat)delta;
 @end
 
 

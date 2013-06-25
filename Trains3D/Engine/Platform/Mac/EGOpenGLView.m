@@ -58,10 +58,7 @@
 
     [self lockOpenGLContext];
     @try {
-        NSRect rect = [self bounds];
-
-        [_director reshapeWithSize:NSSizeToCGSize(rect.size)];
-        [_director draw];
+        [_director drawWithSize:NSSizeToCGSize(self.bounds.size)];
 
         [self.openGLContext flushBuffer];
     } @finally {

@@ -1,20 +1,12 @@
-import EGCamera
 import EGTypes
 
-stub class EGScene {
-    var camera : EGCamera |
-        set = {
-            self.camera = camera
-            camera.reshapeWith(lastSize)
-        }
-    private var lastSize : CGSize
 
-    def reshapeWith(size : CGSize) {
-        lastSize = size
-        camera.reshapeWith(size)
+class EGScene(val controller : EGController, val view : EGView) {
+    def drawWith(viewSize : CGSize) {
+        view.draw(controller, viewSize)
     }
 
-    def draw {
-        camera.startDraw
+    def updateWith(delta : float) {
+        controller.updateWith(delta)
     }
 }
