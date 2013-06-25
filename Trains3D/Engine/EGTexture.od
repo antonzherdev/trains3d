@@ -1,6 +1,4 @@
-stub struct GLuint
-
-stub struct CGSize(width : float, height : float)
+import EGTypes
 
 stub class EGTexture(id : GLuint, size : CGSize)  {
     def static loadFrom(file : string) : EGTexture

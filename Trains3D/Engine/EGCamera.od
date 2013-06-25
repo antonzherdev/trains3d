@@ -1,5 +1,4 @@
-stub struct CGSize(width : float, height : float)
-stub struct CGPoint(x : float, y : float)
+import EGTypes
 
 stub class EGCamera {
     def startDraw

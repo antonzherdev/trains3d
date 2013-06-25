@@ -1,12 +1,5 @@
 import EGCamera
-
-stub struct CGSize(width : float, height : float)
-
-stub class EGCamera {
-    def startDraw
-
-    def reshapeWith(size : CGSize)
-}
+import EGTypes
 
 stub class EGScene {
     var camera : EGCamera |

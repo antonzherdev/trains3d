@@ -1,6 +1,7 @@
 import EGScene
 import EGTime
 import EGStat
+import EGTypes
 
 class EGDirector {
     var scene : EGScene |
