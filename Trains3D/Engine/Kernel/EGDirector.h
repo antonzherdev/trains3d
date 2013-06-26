@@ -1,4 +1,4 @@
-#import <Foundation/Foundation.h>
+#import "objd.h"
 #import "EGScene.h"
 #import "EGTime.h"
 #import "EGStat.h"

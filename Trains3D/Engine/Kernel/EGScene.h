@@ -1,4 +1,4 @@
-#import <Foundation/Foundation.h>
+#import "objd.h"
 #import "EGTypes.h"
 
 @interface EGScene : NSObject

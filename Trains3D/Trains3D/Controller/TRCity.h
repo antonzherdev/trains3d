@@ -1,4 +1,4 @@
-#import <Foundation/Foundation.h>
+#import "objd.h"
 #import "TRTypes.h"
 #import "EGTypes.h"
 #import "EGMap.h"

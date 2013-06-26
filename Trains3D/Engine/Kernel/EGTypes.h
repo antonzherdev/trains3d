@@ -1,4 +1,4 @@
-#import <Foundation/Foundation.h>
+#import "objd.h"
 
 struct EGColor {
     CGFloat r;

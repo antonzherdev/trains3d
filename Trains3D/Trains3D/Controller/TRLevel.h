@@ -1,4 +1,4 @@
-#import <Foundation/Foundation.h>
+#import "objd.h"
 #import "TRCity.h"
 #import "EGMap.h"
 
@@ -8,6 +8,7 @@
 
 + (id)levelWithMapSize:(EGMapSize)mapSize;
 - (id)initWithMapSize:(EGMapSize)mapSize;
+- (void)addNextCity;
 @end
 
 

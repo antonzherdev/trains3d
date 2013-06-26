@@ -3,4 +3,8 @@ import EGMap
 
 class TRLevel(mapSize : EGMapSize) {
     var cities : [TRCity] | private set
+
+    def addNextCity {
+
+    }
 }

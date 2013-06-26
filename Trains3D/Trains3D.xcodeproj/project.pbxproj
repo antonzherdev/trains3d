@@ -99,6 +99,7 @@
 		6F3DF60FCB04B7E52FECB861 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../../../Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/GLUT.framework; sourceTree = "<group>"; };
 		6F3DF65460A5DBAC04BC37F7 /* EGDirectorMac.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGDirectorMac.m; sourceTree = "<group>"; };
 		6F3DF6633D52B4401D6A62D6 /* EGTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGTypes.h; sourceTree = "<group>"; };
+		6F3DF6660E7BC79B636C9948 /* objd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objd.h; sourceTree = "<group>"; };
 		6F3DF7386C7FDAEC32527DA1 /* EGText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGText.m; sourceTree = "<group>"; };
 		6F3DF7D4EF5D9B263D45A42F /* EGCamera.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGCamera.od; sourceTree = "<group>"; };
 		6F3DF7E5BB71171CADC27363 /* EGStat.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGStat.od; sourceTree = "<group>"; };
@@ -162,6 +163,7 @@
 				0214B1261773394400C03C71 /* Products */,
 				6F3DF59FFFDE7F8B42964292 /* Engine */,
 				6F3DFCBF8D4DDB6C5BC3FB8A /* Resources */,
+				6F3DF49CD6FEFE257FEB0E81 /* ObjD */,
 			);
 			sourceTree = "<group>";
 		};
@@ -249,6 +251,14 @@
 				6F3DFF28C729F025D705445D /* EGDirectorMac.h */,
 			);
 			path = Mac;
+			sourceTree = "<group>";
+		};
+		6F3DF49CD6FEFE257FEB0E81 /* ObjD */ = {
+			isa = PBXGroup;
+			children = (
+				6F3DF6660E7BC79B636C9948 /* objd.h */,
+			);
+			path = ObjD;
 			sourceTree = "<group>";
 		};
 		6F3DF59FFFDE7F8B42964292 /* Engine */ = {

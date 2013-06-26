@@ -20,6 +20,9 @@
     return self;
 }
 
+- (void)addNextCity {
+}
+
 @end
 
 
