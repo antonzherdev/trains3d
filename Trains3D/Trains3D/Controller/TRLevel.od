@@ -1,5 +1,6 @@
 import TRCity
+import EGMap
 
-class TRLevel {
+class TRLevel(mapSize : EGMapSize) {
     var cities : [TRCity] | private set
 }

@@ -1,6 +1,7 @@
 #import "TRLevelView.h"
 #import "EGTexture.h"
 #import "EGCamera.h"
+#import "TRLevel.h"
 
 @implementation TRLevelView{
     EGTexture * _t;
@@ -15,8 +16,8 @@
     return self;
 }
 
-- (void)drawController:(id)controller viewSize:(CGSize)viewSize {
-    EGMapSize mapSize = EGMapSizeMake(4, 3);
+- (void)drawController:(TRLevel*)controller viewSize:(CGSize)viewSize {
+    EGMapSize mapSize = controller.mapSize;
     glClearColor(0.0, 0.0, 0.0, 1.0);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

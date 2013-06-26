@@ -1,10 +1,12 @@
 #import <Foundation/Foundation.h>
 #import "EGTypes.h"
 
+@class TRLevel;
+
 @interface TRLevelView : NSObject
 + (id)levelView;
 - (id)init;
-- (void)drawController:(id)controller viewSize:(CGSize)viewSize;
+- (void)drawController:(TRLevel*)controller viewSize:(CGSize)viewSize;
 @end
 
 

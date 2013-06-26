@@ -1,16 +1,21 @@
 #import "TRLevel.h"
 
 @implementation TRLevel{
+    EGMapSize _mapSize;
     NSArray* _cities;
 }
+@synthesize mapSize = _mapSize;
 @synthesize cities = _cities;
 
-+ (id)level {
-    return [[TRLevel alloc] init];
++ (id)levelWithMapSize:(EGMapSize)mapSize {
+    return [[TRLevel alloc] initWithMapSize:mapSize];
 }
 
-- (id)init {
+- (id)initWithMapSize:(EGMapSize)mapSize {
     self = [super init];
+    if(self) {
+        _mapSize = mapSize;
+    }
     
     return self;
 }
