@@ -10,9 +10,7 @@ void egCameraIsoFocus(CGSize viewSize, EGMapSize mapSize, CGPoint center) {
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    double ow = ISO * ww;
-    double oh = (ISO * ww)/4;
-    glOrtho(-ISO, ow - ISO, -oh, oh, 0.0f, 1000.0f);
+    glOrtho(-ISO, ISO*ww - ISO, -ISO*mapSize.width/2, ISO*mapSize.height/2, 0.0f, 1000.0f);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
