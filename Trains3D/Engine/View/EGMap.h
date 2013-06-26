@@ -1,6 +1,8 @@
 #import <Foundation/Foundation.h>
 #import "EGTypes.h"
 
+static const double ISO = 0.70710676908493;
+
 struct EGMapPoint {
     NSInteger x;
     NSInteger y;
@@ -46,6 +48,7 @@ extern void egMapDrawLayout(EGMapSize size);
 extern void egMapDrawAxis();
 
 extern void egMapSsoDrawLayout(EGMapSize size);
+extern void egMapSsoDrawPlane(EGMapSize size);
 inline static BOOL egMapSsoIsFullTile(EGMapSize size, int x, int y) {
     return y + x >= 0 //left
             && y - x <= size.height - 1 //top

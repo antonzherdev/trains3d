@@ -1,6 +1,5 @@
 #import <Foundation/Foundation.h>
 #import "EGTypes.h"
+#import "EGMap.h"
 
-static const double ISO = 0.70710676908493;
-
-extern void egCameraIsometricFocus(CGSize viewSize, CGSize tilesOnScreen, CGPoint center);
+extern void egCameraIsoFocus(CGSize viewSize, EGMapSize mapSize, CGPoint center);

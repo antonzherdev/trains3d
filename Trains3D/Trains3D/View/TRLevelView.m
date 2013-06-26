@@ -1,7 +1,6 @@
 #import "TRLevelView.h"
 #import "EGTexture.h"
 #import "EGCamera.h"
-#import "EGMap.h"
 
 @implementation TRLevelView{
     EGTexture * _t;
@@ -17,10 +16,11 @@
 }
 
 - (void)drawController:(id)controller viewSize:(CGSize)viewSize {
+    EGMapSize mapSize = EGMapSizeMake(4, 4);
     glClearColor(0.0, 0.0, 0.0, 1.0);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    egCameraIsometricFocus(viewSize, CGSizeMake(3, 3), CGPointMake(0, 0));
+    egCameraIsoFocus(viewSize, mapSize, CGPointMake(0, 0));
 
     glColor3d(1.0, 1.0, 1.0);
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
@@ -28,19 +28,11 @@
     if(_t == nil) _t = [EGTexture loadFromFile:@"Grass.png"];
     [_t bind];
     glEnable( GL_TEXTURE_2D );
-    glBegin(GL_QUADS);
-    {
-        glTexCoord2d(0.0, 0.0); glVertex3f(-0.5, -0.5, 0);
-        glTexCoord2d(1.0, 0.0); glVertex3f(-0.5, 2.5, 0);
-        glTexCoord2d(1.0, 1.0); glVertex3f(2.5, 2.5, 0);
-        glTexCoord2d(0.0, 1.0); glVertex3f(2.5, -0.5, 0);
-    }
-    glEnd();
+    egMapSsoDrawPlane(mapSize);
     glDisable(GL_TEXTURE_2D);
 
-
     glColor3d(1.0, 1.0, 1.0);
-    egMapSsoDrawLayout(EGMapSizeMake(3, 3));
+    egMapSsoDrawLayout(mapSize);
 }
 
 @end

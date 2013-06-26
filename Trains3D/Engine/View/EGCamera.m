@@ -1,7 +1,7 @@
 #import "EGCamera.h"
 
-void egCameraIsometricFocus(CGSize viewSize, CGSize tilesOnScreen, CGPoint center) {
-    CGFloat ww = tilesOnScreen.width + tilesOnScreen.height;
+void egCameraIsoFocus(CGSize viewSize, EGMapSize mapSize, CGPoint center) {
+    CGFloat ww = mapSize.width + mapSize.height;
     CGFloat tileSize = MIN(viewSize.width / ww, 2*viewSize.height/ ww);
     CGFloat viewportWidth = tileSize * ww;
     CGFloat viewportHeight = tileSize * ww / 2;
