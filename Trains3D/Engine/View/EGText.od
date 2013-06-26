@@ -1,5 +1,3 @@
 import EGTypes
 
-stub class EGText {
-    def static glutDraw(text : string, font : void, position : CGPoint)
-}
+stub def egTextGlutDraw(text : string, font : void, position : CGPoint)

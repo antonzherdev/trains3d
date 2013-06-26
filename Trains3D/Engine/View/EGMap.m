@@ -1,19 +1,7 @@
 #import "EGMap.h"
 #import "EGCamera.h"
 
-@implementation EGMap
-
-+ (id)map {
-    return [[EGMap alloc] init];
-}
-
-- (id)init {
-    self = [super init];
-    
-    return self;
-}
-
-+ (void)drawLayoutWithSize:(EGMapSize)size {
+void egMapDrawLayout(EGMapSize size) {
     glBegin(GL_LINES);
     {
         for(int x = -1; x < size.width; x++) {
@@ -27,10 +15,10 @@
     }
     glEnd();
 
-    [self drawAxis];
+    egMapDrawAxis();
 }
 
-+ (void)drawAxis {
+void egMapDrawAxis() {
     glBegin(GL_LINES);
     {
         glColor3f(1, 0, 0);
@@ -47,23 +35,9 @@
     }
     glEnd();
 }
-@end
 
-
-@implementation EGSquareIsoMap
-
-+ (id)squareIsoMap {
-    return [[EGSquareIsoMap alloc] init];
-}
-
-- (id)init {
-    self = [super init];
-    
-    return self;
-}
-
-+ (void)drawLayoutWithSize:(EGMapSize)size {
-    EGMapRect limits = [self limitsForSize:size];
+void egMapSsoDrawLayout(EGMapSize size) {
+    EGMapRect limits = egMapSsoLimits(size);
 
     glPushMatrix();
     glRotatef(45, 0, 0, 1);
@@ -93,7 +67,7 @@
     {
         for(int x = limits.left; x <= limits.right; x++) {
             for(int y = limits.top; y <= limits.bottom; y++) {
-                if([self isFullTile:EGMapPointMake(x, y) size:size]) {
+                if(egMapSsoIsFullTile(size, x, y)) {
                     glVertex3d(x - 0.5, y - 0.5, 0.0);
                     glVertex3d(x + 0.5, y - 0.5, 0.0);
 
@@ -111,25 +85,15 @@
     }
     glEnd();
 
-    [EGMap drawAxis];
+    egMapDrawAxis();
 }
 
-+ (BOOL)isFullTile:(EGMapPoint)tile size:(EGMapSize)size {
-    return tile.y + tile.x >= 0 //left
-            && tile.y - tile.x <= size.height - 1 //top
-            && tile.y + tile.x <= size.width + size.height - 2 //right
-            && tile.y - tile.x >= -size.width + 1; //bottom
-}
-
-+ (EGMapRect)limitsForSize:(EGMapSize)size {
+EGMapRect egMapSsoLimits(EGMapSize size) {
     return EGMapRectMake(
             (1 - size.height)/2,
             (1 - size.width)/2, 
             (2*size.width + size.height - 3)/2,
             (size.width + 2*size.height - 3)/2);
 }
-
-
-@end
 
 

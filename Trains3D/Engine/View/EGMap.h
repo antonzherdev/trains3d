@@ -41,20 +41,15 @@ static inline EGMapRect EGMapRectMake(NSInteger left, NSInteger top, NSInteger r
     return ret;
 }
 
-@interface EGMap : NSObject
-+ (id)map;
-- (id)init;
-+ (void)drawLayoutWithSize:(EGMapSize)size;
-+ (void)drawAxis;
-@end
 
+extern void egMapDrawLayout(EGMapSize size);
+extern void egMapDrawAxis();
 
-@interface EGSquareIsoMap : NSObject
-+ (id)squareIsoMap;
-- (id)init;
-+ (void)drawLayoutWithSize:(EGMapSize)size;
-+ (BOOL)isFullTile:(EGMapPoint)tile size:(EGMapSize)size;
-+ (EGMapRect)limitsForSize:(EGMapSize)size;
-@end
-
-
+extern void egMapSsoDrawLayout(EGMapSize size);
+inline static BOOL egMapSsoIsFullTile(EGMapSize size, int x, int y) {
+    return y + x >= 0 //left
+            && y - x <= size.height - 1 //top
+            && y + x <= size.width + size.height - 2 //right
+            && y - x >= -size.width + 1; //bottom
+}
+extern EGMapRect egMapSsoLimits(EGMapSize size);

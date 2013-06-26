@@ -20,7 +20,7 @@
     glClearColor(0.0, 0.0, 0.0, 1.0);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    [EGCamera isometricFocusWithViewSize:viewSize tilesOnScreen:CGSizeMake(3, 3) center:CGPointMake(0, 0)];
+    egCameraIsometricFocus(viewSize, CGSizeMake(3, 3), CGPointMake(0, 0));
 
     glColor3d(1.0, 1.0, 1.0);
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
@@ -40,7 +40,7 @@
 
 
     glColor3d(1.0, 1.0, 1.0);
-    [EGSquareIsoMap drawLayoutWithSize:EGMapSizeMake(3, 3)];
+    egMapSsoDrawLayout(EGMapSizeMake(3, 3));
 }
 
 @end

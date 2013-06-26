@@ -1,5 +1,3 @@
 import EGTypes
 
-stub class EGCamera {
-    def static isometricFocusWith(viewSize : CGSize, tilesOnScreen : CGSize, center : CGPoint)
-}
+stub def egCameraIsometricFocus(viewSize : CGSize, tilesOnScreen : CGSize, center : CGPoint)

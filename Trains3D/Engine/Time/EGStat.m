@@ -37,7 +37,7 @@
     NSString *string = [[NSString alloc] initWithFormat:@"%.1f", _frameRate];
     
     glColor3f(1.0, 1.0, 1.0);
-    [EGText glutDrawText:string font:GLUT_BITMAP_HELVETICA_18 position:CGPointMake(-0.99, -0.99)];
+    egTextGlutDraw(string, GLUT_BITMAP_HELVETICA_18, CGPointMake(-0.99, -0.99));
 
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();

@@ -1,18 +1,6 @@
 #import "EGCamera.h"
 
-@implementation EGCamera
-
-+ (id)camera {
-    return [[EGCamera alloc] init];
-}
-
-- (id)init {
-    self = [super init];
-    
-    return self;
-}
-
-+ (void)isometricFocusWithViewSize:(CGSize)viewSize tilesOnScreen:(CGSize)tilesOnScreen center:(CGPoint)center {
+void egCameraIsometricFocus(CGSize viewSize, CGSize tilesOnScreen, CGPoint center) {
     CGFloat ww = tilesOnScreen.width + tilesOnScreen.height;
     CGFloat tileSize = MIN(viewSize.width / ww, 2*viewSize.height/ ww);
     CGFloat viewportWidth = tileSize * ww;
@@ -34,9 +22,5 @@
     glRotatef(-45.0f, 0, 1, 0);
     glRotatef(-90, 1, 0, 0);
     glTranslatef((GLfloat) -center.x,0, (GLfloat) -center.y);
-
 }
-
-@end
-
 
