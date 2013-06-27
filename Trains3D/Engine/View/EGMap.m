@@ -36,8 +36,6 @@ void egMapDrawAxis() {
 }
 
 void egMapSsoDrawLayout(EGMapSize size) {
-    EGMapRect limits = egMapSsoLimits(size);
-
     glPushMatrix();
     glRotatef(45, 0, 0, 1);
     glBegin(GL_LINES);
@@ -64,6 +62,7 @@ void egMapSsoDrawLayout(EGMapSize size) {
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_LINES);
     {
+        EGMapRect limits = egMapSsoLimits(size);
         for(int x = limits.left; x <= limits.right; x++) {
             for(int y = limits.top; y <= limits.bottom; y++) {
                 if(egMapSsoIsFullTile(size, x, y)) {

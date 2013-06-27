@@ -1,4 +1,4 @@
-#import <Foundation/Foundation.h>
+#import "objd.h"
 #import "EGTypes.h"
 
 static const double ISO = 0.70710676908493;
