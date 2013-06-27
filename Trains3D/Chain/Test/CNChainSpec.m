@@ -29,11 +29,12 @@ SPEC_BEGIN(CNChainSpec)
                    array];
           [[r should] equal:@[@2, @4]];
       });
-      it(@".first should return first value or none", ^{
-          [[[[s filter:LESS_THAN_3] first] should] equal:@1];
-          [[[[s filter:^BOOL(id x) {
-              return NO;
-          }] first] should] equal:[CNOption none]];
+      it(@".head should return first value or nil", ^{
+          [[[[s filter:LESS_THAN_3] head] should] equal:@1];
+          BOOL isNil = [[s filter:^BOOL(id x) {
+                    return NO;
+                }] head] == nil;
+          [[theValue(isNil) should] beTrue];
       });
       it(@".set should return set", ^{
           NSSet *set = [[[NSArray arrayWithObjects:@2, @3, @2, nil] chain] set];
@@ -80,6 +81,11 @@ SPEC_BEGIN(CNChainSpec)
       it(@".intersect should filter elements containing in two collecions", ^{
           NSArray *r = [[[s chain] intersect:@[@1, @2]] array];
           [[r should] equal: @[@1, @2]];
+      });
+      it(@".randomItem should return one random item", ^{
+          int i = [[s randomItem] intValue];
+          BOOL b = i == 1 || i == 2 || i == 3;
+          [[theValue(b) should] beTrue];
       });
   });
 

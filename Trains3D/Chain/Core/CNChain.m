@@ -3,12 +3,10 @@
 #import "CNChainItem.h"
 #import "CNFilterLink.h"
 #import "CNMapLink.h"
-#import "CNOption.h"
 #import "CNAppendLink.h"
 #import "CNPrependLink.h"
 #import "CNRangeLink.h"
 #import "CNMulLink.h"
-#import "KWContainMatcher.h"
 
 
 @implementation CNChain {
@@ -108,13 +106,22 @@
     return [self link:[CNMulLink linkWithCollection:collection]];
 }
 
-- (id)first {
-    __block id ret = [CNOption none];
+- (id)head {
+    __block id ret = nil;
     [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
         ret = item;
         return cnYieldBreak;
     } end:nil all:nil]];
     return ret;
+}
+
+- (id)randomItem {
+    NSArray *array = [self array];
+    if(array.count == 0) {
+        return nil;
+    }
+    u_int32_t n = arc4random_uniform(array.count);
+    return [array objectAtIndex:n];
 }
 
 

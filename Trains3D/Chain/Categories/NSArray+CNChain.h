@@ -10,4 +10,13 @@
 - (CNChain*)filter:(cnPredicate)predicate;
 - (CNChain*)filter:(cnPredicate)predicate selectivity:(double)selectivity;
 - (CNChain*)map:(cnF)f;
+
+- (CNChain*)append:(id)collection;
+- (CNChain*)prepend:(id)collection;
+- (CNChain*)exclude:(id)collection;
+- (CNChain*)intersect:(id)collection;
+- (CNChain*) mul :(id)collection;
+
+- (id) head;
+- (id) randomItem;
 @end

@@ -22,5 +22,6 @@
 
 - (CNChain*) mul :(id)collection;
 
-- (id) first;
+- (id)head;
+- (id)randomItem;
 @end

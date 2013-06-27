@@ -25,5 +25,34 @@
     return [[self chain] map:f];
 }
 
+- (CNChain *)append:(id)collection {
+    return [[self chain] append:collection];
+}
+
+- (CNChain *)prepend:(id)collection {
+    return [[self chain] prepend:collection];
+}
+
+- (CNChain *)exclude:(id)collection {
+    return [[self chain] exclude:collection];
+}
+
+- (CNChain *)intersect:(id)collection {
+    return [[self chain] intersect:collection];
+}
+
+- (CNChain *)mul:(id)collection {
+    return [[self chain] mul:collection];
+}
+
+- (id)head {
+    if(self.count == 0) return nil;
+    return [self objectAtIndex : 0];
+}
+
+- (id)randomItem {
+    return [[self chain] randomItem];
+}
+
 
 @end

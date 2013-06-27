@@ -21,9 +21,9 @@
 }
 
 - (void)addNextCity {
-    [_cities map:^id(TRCity* a) {
+    _cities = [_cities arrayByAddingObject:[TRCity cityWithColor:[TRColor values][[_cities count]] tile:uval(EGMapPoint, [[egMapSsoPartialTiles(_mapSize) exclude:[_cities map:^id(TRCity* a) {
         return val(a.tile);
-    }];
+    }]] randomItem])]];
 }
 
 @end

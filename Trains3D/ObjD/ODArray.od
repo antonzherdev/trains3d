@@ -10,4 +10,7 @@ stub class ODArray<A> {
     def append(: ODArray<A>) : ODArray<A>
     def exclude(: ODArray<A>) : ODArray<A>
     def intersect(: ODArray<A>) : ODArray<A>
+
+    def head : A
+    def randomItem : A
 }
