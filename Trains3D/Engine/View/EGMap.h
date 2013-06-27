@@ -55,5 +55,18 @@ inline static BOOL egMapSsoIsFullTile(EGMapSize size, int x, int y) {
             && y + x <= size.width + size.height - 2 //right
             && y - x >= -size.width + 1; //bottom
 }
+inline static BOOL egMapSsoIsPartialTile(EGMapSize size, int x, int y) {
+    return y + x >= -1 //left
+            && y - x <= size.height //top
+            && y + x <= size.width + size.height - 1 //right
+            && y - x >= -size.width && (
+                y + x == -1 //left
+                || y - x == size.height //top
+                || y + x == size.width + size.height - 1 //right
+                || y - x == -size.width //bottom
+            );
+}
+
 extern EGMapRect egMapSsoLimits(EGMapSize size);
 extern NSArray * egMapSsoFullTiles(EGMapSize size);
+extern NSArray * egMapSsoPartialTiles(EGMapSize size);

@@ -5,6 +5,8 @@
 #import "NSObject+CNOption.h"
 #import "NSArray+CNChain.h"
 
+#define numi(expr) [NSNumber numberWithInt:expr]
+
 #define val(expr) \
         ({ \
             __typeof__(expr) chainReservedPrefix_lVar = expr; \

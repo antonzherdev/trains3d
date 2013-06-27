@@ -1,5 +1,7 @@
 #import "EGMap.h"
 
+NSArray *egMapSsoPickTiles(EGMapSize size, BOOL (^predicate)(id));
+
 void egMapDrawLayout(EGMapSize size) {
     glBegin(GL_LINES);
     {
@@ -62,23 +64,19 @@ void egMapSsoDrawLayout(EGMapSize size) {
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_LINES);
     {
-        EGMapRect limits = egMapSsoLimits(size);
-        for(int x = limits.left; x <= limits.right; x++) {
-            for(int y = limits.top; y <= limits.bottom; y++) {
-                if(egMapSsoIsFullTile(size, x, y)) {
-                    glVertex3d(x - 0.5, y - 0.5, 0.0);
-                    glVertex3d(x + 0.5, y - 0.5, 0.0);
+        for(id tile in egMapSsoFullTiles(size)) {
+            EGMapPoint p = uval(EGMapPoint, tile);
+            glVertex3d(p.x - 0.5, p.y - 0.5, 0.0);
+            glVertex3d(p.x + 0.5, p.y - 0.5, 0.0);
 
-                    glVertex3d(x + 0.5, y - 0.5, 0.0);
-                    glVertex3d(x + 0.5, y + 0.5, 0.0);
+            glVertex3d(p.x + 0.5, p.y - 0.5, 0.0);
+            glVertex3d(p.x + 0.5, p.y + 0.5, 0.0);
 
-                    glVertex3d(x + 0.5, y + 0.5, 0.0);
-                    glVertex3d(x - 0.5, y + 0.5, 0.0);
+            glVertex3d(p.x + 0.5, p.y + 0.5, 0.0);
+            glVertex3d(p.x - 0.5, p.y + 0.5, 0.0);
 
-                    glVertex3d(x - 0.5, y + 0.5, 0.0);
-                    glVertex3d(x - 0.5, y - 0.5, 0.0);
-                }
-            }
+            glVertex3d(p.x - 0.5, p.y + 0.5, 0.0);
+            glVertex3d(p.x - 0.5, p.y - 0.5, 0.0);
         }
     }
     glEnd();
@@ -107,19 +105,29 @@ void egMapSsoDrawPlane(EGMapSize size) {
 
 EGMapRect egMapSsoLimits(EGMapSize size) {
     return EGMapRectMake(
-            (1 - size.height)/2,
-            (1 - size.width)/2, 
-            (2*size.width + size.height - 3)/2,
-            (size.width + 2*size.height - 3)/2);
+            (1 - size.height)/2 - 1,
+            (1 - size.width)/2 - 1,
+            (2*size.width + size.height - 3)/2 + 1,
+            (size.width + 2*size.height - 3)/2 + 1);
 }
 
 extern NSArray * egMapSsoFullTiles(EGMapSize size) {
+    return egMapSsoPickTiles(size, ^BOOL(id t) {
+        return egMapSsoIsFullTile(size, [[t a] intValue], [[t b] intValue]);
+    });
+}
+
+extern NSArray * egMapSsoPartialTiles(EGMapSize size) {
+    return egMapSsoPickTiles(size, ^BOOL(id t) {
+        return egMapSsoIsPartialTile(size, [[t a] intValue], [[t b] intValue]);
+    });
+}
+
+NSArray *egMapSsoPickTiles(EGMapSize size, BOOL (^predicate)(id)) {
     EGMapRect limits = egMapSsoLimits(size);
     return [[[[[CNChain chainWithStart:limits.left end:limits.right step:1]
             mul:[CNChain chainWithStart:limits.top end:limits.bottom step:1]]
-            filter:^BOOL(id t) {
-                return egMapSsoIsFullTile(size, [[t a] intValue], [[t b] intValue]);
-            }]
+            filter:predicate]
             map:^id(id t) {
                 return val(EGMapPointMake([[t a] intValue], [[t b] intValue]));
             }]
