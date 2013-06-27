@@ -56,3 +56,4 @@ inline static BOOL egMapSsoIsFullTile(EGMapSize size, int x, int y) {
             && y - x >= -size.width + 1; //bottom
 }
 extern EGMapRect egMapSsoLimits(EGMapSize size);
+extern NSArray * egMapSsoFullTiles(EGMapSize size);

@@ -1,7 +1,8 @@
-#import "CNPrependLink.h"
+#import "CNMulLink.h"
+#import "CNTuple.h"
 
 
-@implementation CNPrependLink {
+@implementation CNMulLink {
     id _collection;
 }
 - (id)initWithCollection:(id)collection {
@@ -15,12 +16,15 @@
 
 - (CNYield *)buildYield:(CNYield *)yield {
     return [CNYield decorateYield: yield begin:^CNYieldResult(NSUInteger size) {
-        if([yield beginYieldWithSize:size + [_collection count]] == cnYieldBreak) return cnYieldBreak;
-        for(id item in _collection) {
+        return [yield beginYieldWithSize:size*[_collection count]];
+
+    } yield:^CNYieldResult(id a) {
+        for(id b in _collection) {
+            CNTuple *item = [CNTuple tupleWithA:a b: b];
             if([yield yieldItem:item] == cnYieldBreak) return cnYieldBreak;
         }
         return cnYieldContinue;
-    } yield:nil end:nil all:nil];
+    } end:nil all:nil];
 }
 
 + (id)linkWithCollection:(id)collection {

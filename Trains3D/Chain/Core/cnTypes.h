@@ -11,4 +11,5 @@ typedef void (^cnP)(id x);
 - (CNYield *)buildYield:(CNYield *)yield;
 @end
 
+extern id cnResolveCollection(id collection);
 

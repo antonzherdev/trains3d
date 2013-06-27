@@ -1,6 +1,7 @@
 #import "cnTypes.h"
 #import "CNChain.h"
 #import "CNOption.h"
+#import "CNTuple.h"
 #import "NSObject+CNOption.h"
 #import "NSArray+CNChain.h"
 

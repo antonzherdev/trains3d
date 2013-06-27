@@ -113,4 +113,17 @@ EGMapRect egMapSsoLimits(EGMapSize size) {
             (size.width + 2*size.height - 3)/2);
 }
 
+extern NSArray * egMapSsoFullTiles(EGMapSize size) {
+    EGMapRect limits = egMapSsoLimits(size);
+    return [[[[[CNChain chainWithStart:limits.left end:limits.right step:1]
+            mul:[CNChain chainWithStart:limits.top end:limits.bottom step:1]]
+            filter:^BOOL(id t) {
+                return egMapSsoIsFullTile(size, [[t a] intValue], [[t b] intValue]);
+            }]
+            map:^id(id t) {
+                return val(EGMapPointMake([[t a] intValue], [[t b] intValue]));
+            }]
+            array];
+}
+
 

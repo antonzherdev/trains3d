@@ -3,6 +3,7 @@
 
 @interface CNChain : NSObject
 + (CNChain*)chainWithCollection:(id)collection;
++ (CNChain*)chainWithStart:(NSInteger)aStart end:(NSInteger)anEnd step:(NSInteger)aStep;
 
 - (NSArray*)array;
 - (NSSet*)set;
@@ -15,6 +16,8 @@
 
 - (CNChain*)append:(id)collection;
 - (CNChain*)prepend:(id)collection;
+
+- (CNChain*) mul :(id)collection;
 
 - (id) first;
 @end

@@ -6,6 +6,8 @@
 #import "CNOption.h"
 #import "CNAppendLink.h"
 #import "CNPrependLink.h"
+#import "CNRangeLink.h"
+#import "CNMulLink.h"
 
 
 @implementation CNChain {
@@ -17,6 +19,13 @@
     [chain link:[CNSourceLink linkWithCollection:collection]];
     return chain;
 }
+
++ (CNChain *)chainWithStart:(NSInteger)aStart end:(NSInteger)anEnd step:(NSInteger)aStep {
+    CNChain *chain = [[CNChain alloc] init];
+    [chain link:[CNRangeLink linkWithStart:aStart end:anEnd step:aStep]];
+    return chain;
+}
+
 
 - (NSArray *)array {
     __block id ret;
@@ -80,6 +89,10 @@
 }
 
 
+- (CNChain *)mul:(id)collection {
+    return [self link:[CNMulLink linkWithCollection:collection]];
+}
+
 - (id)first {
     __block id ret = [CNOption none];
     [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
@@ -109,3 +122,8 @@
 }
 
 @end
+
+id cnResolveCollection(id collection) {
+    if([collection isKindOfClass:[CNChain class]]) return [collection array];
+    return collection;
+}

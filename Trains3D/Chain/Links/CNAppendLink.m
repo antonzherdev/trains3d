@@ -7,7 +7,7 @@
 - (id)initWithCollection:(id)collection {
     self = [super init];
     if (self) {
-        _collection = collection;
+        _collection = cnResolveCollection(collection);
     }
 
     return self;

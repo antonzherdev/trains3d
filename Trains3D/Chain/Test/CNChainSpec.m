@@ -39,13 +39,38 @@ SPEC_BEGIN(CNChainSpec)
           NSSet *set = [[[NSArray arrayWithObjects:@2, @3, @2, nil] chain] set];
           [[set should] equal:[NSSet setWithObjects:@2, @3, nil]];
       });
-      it(@".append should append collection", ^{
-          NSArray *r = [[[s chain] append:@[@3, @1]] array];
-          [[r should] equal:@[@1, @3, @2, @3, @1]];
+      describe(@"should add elements", ^{
+          it(@"to beggining from an array", ^{
+              NSArray *r = [[[s chain] append:@[@3, @1]] array];
+              [[r should] equal:@[@1, @3, @2, @3, @1]];
+          });
+          it(@"to beggining from a chain", ^{
+              NSArray *r = [[[s chain] append:[CNChain chainWithCollection:@[@3, @1]]] array];
+              [[r should] equal:@[@1, @3, @2, @3, @1]];
+          });
+          it(@"to ending from an array", ^{
+              NSArray *r = [[[s chain] prepend:@[@3, @1]] array];
+              [[r should] equal:@[@3, @1, @1, @3, @2]];
+          });
       });
-      it(@".prepend should append collection", ^{
-          NSArray *r = [[[s chain] prepend:@[@3, @1]] array];
-          [[r should] equal:@[@3, @1, @1, @3, @2]];
+      describe(@"should generate a range", ^{
+          it(@"with positive direction", ^{
+              NSArray *r = [[CNChain chainWithStart:1 end:6 step:2] array];
+              [[r should] equal:@[@1, @3, @5]];
+          });
+          it(@"with negative direction", ^{
+              NSArray *r = [[CNChain chainWithStart:6 end:2 step:2] array];
+              [[r should] equal:@[@6, @4, @2]];
+          });
+      });
+
+      it(@".mul should multiply the chain by a collection", ^{
+          NSArray *r = [[[s chain] mul:@[@"a", @"b"]] array];
+          [[r should] equal: @[
+                  tuple(@1, @"a"), tuple(@1, @"b"),
+                  tuple(@3, @"a"), tuple(@3, @"b"),
+                  tuple(@2, @"a"), tuple(@2, @"b"),
+          ]];
       });
   });
 
