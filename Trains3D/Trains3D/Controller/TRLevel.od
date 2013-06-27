@@ -1,10 +1,12 @@
-import TRCity
 import EGMap
+import TRCity
+import TRTypes
 
 class TRLevel(mapSize : EGMapSize) {
     var cities : [TRCity] | private set
 
     def addNextCity {
-
+        cities.map(a : TRCity -> a.tile)
+        //cities += TRCity(TRColor[cities.count], egMapSsoPartialTiles().exclude(cities.map(_.tile))
     }
 }

@@ -73,7 +73,6 @@
 		6F3DF6DABCF4BAA03AFFA443 /* NSObject+KiwiStubAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1F8CF0334439242AFDD /* NSObject+KiwiStubAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF73395C7BC938B9203C3 /* KWRespondToSelectorMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB70C0BD284828666E8A /* KWRespondToSelectorMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF73560C202C9FD110A0B /* NSMethodSignature+KiwiAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9E2876BBD24E6090B7B /* NSMethodSignature+KiwiAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		6F3DF74087DC061E42B645DE /* ODLazy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF978E43F1D7D507B8D20 /* ODLazy.m */; };
 		6F3DF74B216F97957505EA5B /* CNOptionSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFBE0D8CB2B59FCEB8C9 /* CNOptionSpec.m */; };
 		6F3DF766BC84D14674CC4A96 /* KWWorkarounds.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4BE94FAAAEBE75F6F80 /* KWWorkarounds.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF7723DA38768D2C7916B /* KWGenericMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9731A8A3019A891CB25 /* KWGenericMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -98,6 +97,7 @@
 		6F3DF9721AF89321346B1510 /* CNAppendLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF79E56B52EA90418C91B /* CNAppendLink.m */; };
 		6F3DF9834349037206F09FF0 /* KWGenericMatchingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF86380D22134BDA3632A /* KWGenericMatchingAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF983507754694AE2DF31 /* CNOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4CD415833BCBD7CE745 /* CNOption.m */; };
+		6F3DF98CB761E018A114E016 /* ODLazy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8DBF0E4ACAA99BB000D /* ODLazy.m */; };
 		6F3DF991E5C2C2F55FD92AAE /* KWBeKindOfClassMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1ACEB276707BD41C0F4 /* KWBeKindOfClassMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF99A722D497C3B16CBE2 /* KWBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE02F110F1C05CADBCB0 /* KWBlock.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF9D3BFFED72CBC5C57D4 /* EGText.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF7386C7FDAEC32527DA1 /* EGText.m */; };
@@ -230,6 +230,7 @@
 		6F3DF3AA0BD46B8102F64FBA /* KWProbePoller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWProbePoller.h; sourceTree = "<group>"; };
 		6F3DF3B28EDF7690F0C5A980 /* KWMatchVerifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWMatchVerifier.m; sourceTree = "<group>"; };
 		6F3DF3CEC55E17541228C78B /* KWBeKindOfClassMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeKindOfClassMatcher.h; sourceTree = "<group>"; };
+		6F3DF3DE3A981B4A1861E078 /* ODLazy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ODLazy.h; sourceTree = "<group>"; };
 		6F3DF3E279A6BB92EAA800FC /* EGOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOpenGLView.h; sourceTree = "<group>"; };
 		6F3DF3F307B27012CE433C3D /* KWAsyncVerifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWAsyncVerifier.h; sourceTree = "<group>"; };
 		6F3DF3FC25C8C2A06927BD7A /* NSArray+CNChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+CNChain.h"; sourceTree = "<group>"; };
@@ -303,10 +304,12 @@
 		6F3DF86380D22134BDA3632A /* KWGenericMatchingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWGenericMatchingAdditions.m; sourceTree = "<group>"; };
 		6F3DF86689B5D7E4BE83874F /* EGText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGText.h; sourceTree = "<group>"; };
 		6F3DF86CCB044E060A70A002 /* TRLevel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRLevel.m; sourceTree = "<group>"; };
+		6F3DF887F6F040A50A6CB634 /* ODArray.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = ODArray.od; sourceTree = "<group>"; };
 		6F3DF889BD028F8810B44B1B /* NSNumber+KiwiAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumber+KiwiAdditions.m"; sourceTree = "<group>"; };
 		6F3DF8B0B304346D910A7B2B /* NSObject+KiwiMockAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+KiwiMockAdditions.m"; sourceTree = "<group>"; };
 		6F3DF8BE3569365CA633DF43 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = ../../../../../Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = "<group>"; };
 		6F3DF8C8F9A44885DD267FD8 /* CNRangeLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNRangeLink.m; sourceTree = "<group>"; };
+		6F3DF8DBF0E4ACAA99BB000D /* ODLazy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ODLazy.m; sourceTree = "<group>"; };
 		6F3DF8E1B27E102FE0A3B412 /* KWBeforeAllNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeforeAllNode.h; sourceTree = "<group>"; };
 		6F3DF8E69EF7B469E1914894 /* KWBeEmptyMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWBeEmptyMatcher.m; sourceTree = "<group>"; };
 		6F3DF8F6A14F39B3B21325E8 /* KWBeMemberOfClassMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWBeMemberOfClassMatcher.m; sourceTree = "<group>"; };
@@ -315,14 +318,12 @@
 		6F3DF906737AA84029289ADC /* KWPendingNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWPendingNode.h; sourceTree = "<group>"; };
 		6F3DF92CB6763A29CE4AEE55 /* KWExistVerifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWExistVerifier.m; sourceTree = "<group>"; };
 		6F3DF9326AEED29A07D1AD9A /* KWBeforeEachNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWBeforeEachNode.m; sourceTree = "<group>"; };
-		6F3DF9364A00B3CA006556F4 /* ODLazy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ODLazy.h; sourceTree = "<group>"; };
 		6F3DF93E50A4EFBCDEB40111 /* NSNull+CNOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNull+CNOption.m"; sourceTree = "<group>"; };
 		6F3DF941611C64E76051A4FC /* KWInvocationCapturer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWInvocationCapturer.h; sourceTree = "<group>"; };
 		6F3DF946F8CAA27604FD5220 /* CNPrependLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNPrependLink.h; sourceTree = "<group>"; };
 		6F3DF950BB57EDC892ED20E6 /* CNRangeLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNRangeLink.h; sourceTree = "<group>"; };
 		6F3DF9689D60A7CCDAB6D105 /* KWHaveMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWHaveMatcher.h; sourceTree = "<group>"; };
 		6F3DF9731A8A3019A891CB25 /* KWGenericMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWGenericMatcher.m; sourceTree = "<group>"; };
-		6F3DF978E43F1D7D507B8D20 /* ODLazy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ODLazy.m; sourceTree = "<group>"; };
 		6F3DF97EFDFE8180872930A9 /* KWExample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWExample.h; sourceTree = "<group>"; };
 		6F3DF980D0476B0472119D26 /* TRAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRAppDelegate.m; sourceTree = "<group>"; };
 		6F3DF98E9B2374642D900DFA /* KWGenericMatchEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWGenericMatchEvaluator.h; sourceTree = "<group>"; };
@@ -776,7 +777,9 @@
 			isa = PBXGroup;
 			children = (
 				6F3DF6660E7BC79B636C9948 /* objd.h */,
-				6F3DFCA2EDB48648A75CBA2C /* Collection */,
+				6F3DF8DBF0E4ACAA99BB000D /* ODLazy.m */,
+				6F3DF3DE3A981B4A1861E078 /* ODLazy.h */,
+				6F3DF887F6F040A50A6CB634 /* ODArray.od */,
 			);
 			path = ObjD;
 			sourceTree = "<group>";
@@ -860,15 +863,6 @@
 				6F3DF7386C7FDAEC32527DA1 /* EGText.m */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		6F3DFCA2EDB48648A75CBA2C /* Collection */ = {
-			isa = PBXGroup;
-			children = (
-				6F3DF978E43F1D7D507B8D20 /* ODLazy.m */,
-				6F3DF9364A00B3CA006556F4 /* ODLazy.h */,
-			);
-			path = Collection;
 			sourceTree = "<group>";
 		};
 		6F3DFCBF8D4DDB6C5BC3FB8A /* Resources */ = {
@@ -1093,7 +1087,6 @@
 				6F3DF96C656936557219F5A6 /* EGTexture.m in Sources */,
 				6F3DFC514C270517872D22C9 /* EGMap.m in Sources */,
 				6F3DF9D3BFFED72CBC5C57D4 /* EGText.m in Sources */,
-				6F3DF74087DC061E42B645DE /* ODLazy.m in Sources */,
 				6F3DFECFE9453BA8B6ADAA6C /* CNChain.m in Sources */,
 				6F3DF4C5C874D3EF6E10D71C /* CNYield.m in Sources */,
 				6F3DF785AF5B8A170979F3BD /* CNChainItem.m in Sources */,
@@ -1109,6 +1102,7 @@
 				6F3DF831BB05E5C065C8A442 /* CNRangeLink.m in Sources */,
 				6F3DF5E41526169A9A167F40 /* CNMulLink.m in Sources */,
 				6F3DF19066F1E5F2E8D964F5 /* CNTuple.m in Sources */,
+				6F3DF98CB761E018A114E016 /* ODLazy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,3 +10,5 @@ stub def egMapDrawAxis
 stub def egMapSsoDrawLayout(size: EGMapSize)
 stub def egMapSsoIsFullTile(size : EGMapSize, x : int, y : int) : bool
 stub def egMapSsoLimits(size : EGMapSize) : EGMapRect
+stub def egMapSsoFullTiles(size : EGMapSize) : [EGMapPoint]
+stub def egMapSsoPartialTiles(size : EGMapSize) : [EGMapPoint]

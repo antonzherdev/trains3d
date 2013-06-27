@@ -1,7 +1,7 @@
 #import "Kiwi.h"
 #import "EGMap.h"
 
-#define p(x, y) tuple(@x, @y)
+#define p(x, y) tuple(numi(x), numi(y))
 NSArray * pointToTuples(NSArray * arr) {
     return [[arr map:^id(id x) {
         EGMapPoint p = uval(EGMapPoint, x);

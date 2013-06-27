@@ -21,6 +21,9 @@
 }
 
 - (void)addNextCity {
+    [_cities map:^id(TRCity* a) {
+        return val(a.tile);
+    }];
 }
 
 @end

@@ -7,6 +7,7 @@
 }
 static TRColor* orange;
 static TRColor* green;
+static NSArray* values;
 @synthesize ordinal = _ordinal;
 @synthesize name = _name;
 @synthesize color = _color;
@@ -30,6 +31,7 @@ static TRColor* green;
     [super initialize];
     orange = [TRColor colorWithOrdinal:0 name:@"orange" color:EGColorMake(1.0, 0.5, 0.0, 1.0)];
     green = [TRColor colorWithOrdinal:1 name:@"green" color:EGColorMake(0.0, 0.5, 0.0, 1.0)];
+    values = @[orange, green];
 }
 
 + (TRColor*)orange {
@@ -38,6 +40,10 @@ static TRColor* green;
 
 + (TRColor*)green {
     return green;
+}
+
++ (NSArray*)values {
+    return values;
 }
 
 @end

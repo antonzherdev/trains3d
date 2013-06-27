@@ -72,6 +72,15 @@ SPEC_BEGIN(CNChainSpec)
                   tuple(@2, @"a"), tuple(@2, @"b"),
           ]];
       });
+      
+      it(@".exclude should exclude element containing in another collection", ^{
+          NSArray *r = [[[s chain] exclude:@[@1, @2]] array];
+          [[r should] equal: @[@3]];
+      });
+      it(@".intersect should filter elements containing in two collecions", ^{
+          NSArray *r = [[[s chain] intersect:@[@1, @2]] array];
+          [[r should] equal: @[@1, @2]];
+      });
   });
 
 SPEC_END

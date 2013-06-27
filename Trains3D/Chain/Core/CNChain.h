@@ -16,6 +16,9 @@
 
 - (CNChain*)append:(id)collection;
 - (CNChain*)prepend:(id)collection;
+- (CNChain*)exclude:(id)collection;
+- (CNChain*)intersect:(id)collection;
+
 
 - (CNChain*) mul :(id)collection;
 

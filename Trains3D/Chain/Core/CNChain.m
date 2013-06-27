@@ -8,6 +8,7 @@
 #import "CNPrependLink.h"
 #import "CNRangeLink.h"
 #import "CNMulLink.h"
+#import "KWContainMatcher.h"
 
 
 @implementation CNChain {
@@ -86,6 +87,20 @@
 
 - (CNChain *)prepend:(id)collection {
     return [self link:[CNPrependLink linkWithCollection:collection]];
+}
+
+- (CNChain *)exclude:(id)collection {
+    id col = cnResolveCollection(collection);
+    return [self filter:^BOOL(id x) {
+        return ![col containsObject:x];
+    }];
+}
+
+- (CNChain *)intersect:(id)collection {
+    id col = cnResolveCollection(collection);
+    return [self filter:^BOOL(id x) {
+        return [col containsObject:x];
+    }];
 }
 
 

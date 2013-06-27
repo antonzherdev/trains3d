@@ -1,6 +1,7 @@
 #import "objd.h"
-#import "TRCity.h"
 #import "EGMap.h"
+#import "TRCity.h"
+#import "TRTypes.h"
 
 @interface TRLevel : NSObject
 @property (nonatomic, readonly) EGMapSize mapSize;
