@@ -3,6 +3,7 @@
 #import "EGTime.h"
 #import "EGStat.h"
 #import "EGTypes.h"
+#import "EGGL.h"
 
 @interface EGDirector : NSObject
 @property (nonatomic, retain) EGScene* scene;

@@ -15,15 +15,21 @@
     self = [super init];
     if(self) {
         _mapSize = mapSize;
+        _cities = [self appendNextCityToCities:[self appendNextCityToCities:@[]]];
     }
     
     return self;
 }
 
+- (NSArray*)appendNextCityToCities:(NSArray*)cities {
+    EGMapPoint tile = uval(EGMapPoint, [[egMapSsoPartialTiles(_mapSize) exclude:[cities map:^id(TRCity* _) {
+        return val(_.tile);
+    }]] randomItem]);
+    return [cities arrayByAddingObject:[TRCity cityWithColor:[TRColor values][[cities count]] tile:tile]];
+}
+
 - (void)addNextCity {
-    _cities = [_cities arrayByAddingObject:[TRCity cityWithColor:[TRColor values][[_cities count]] tile:uval(EGMapPoint, [[egMapSsoPartialTiles(_mapSize) exclude:[_cities map:^id(TRCity* a) {
-        return val(a.tile);
-    }]] randomItem])]];
+    _cities = [self appendNextCityToCities:_cities];
 }
 
 @end

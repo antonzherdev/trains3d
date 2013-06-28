@@ -29,6 +29,7 @@
 }
 
 - (void)drawWithSize:(CGSize)size {
+    egClear();
     [_scene drawWithViewSize:size];
     [_stat draw];
 }

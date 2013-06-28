@@ -3,9 +3,14 @@ import TRCity
 import TRTypes
 
 class TRLevel(mapSize : EGMapSize) {
-    var cities : [TRCity] | private set
+    var cities : [TRCity] = appendNextCityTo(appendNextCityTo([])) | private set
+
+    private def appendNextCityTo(cities : [TRCity]) =  {
+        val tile = egMapSsoPartialTiles(mapSize).exclude(cities.map(_.tile)).randomItem
+        cities + TRCity(TRColor[cities.count], tile)
+    }
 
     def addNextCity {
-        cities += TRCity(TRColor[cities.count], egMapSsoPartialTiles(mapSize).exclude(cities.map(a : TRCity -> a.tile)).randomItem)
+        cities = appendNextCityTo(cities)
     }
 }

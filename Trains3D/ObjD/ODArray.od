@@ -1,15 +1,15 @@
 stub class ODArray<A> {
     def count : int
 
-    def filter(: A -> bool) : ODArray<A>
-    def map<B>(: A -> B) : ODArray<B>
+    def filter(: A -> bool) : [A]
+    def map<B>(: A -> B) : [B]
 
-    def mul<B>(: ODArray<B>) : ODArray<(A,B)>
+    def mul<B>(: [B]) : [(A,B)]
 
-    def prepend(: ODArray<A>) : ODArray<A>
-    def append(: ODArray<A>) : ODArray<A>
-    def exclude(: ODArray<A>) : ODArray<A>
-    def intersect(: ODArray<A>) : ODArray<A>
+    def prepend(: [A]) : [A]
+    def append(: [A]) : [A]
+    def exclude(: [A]) : [A]
+    def intersect(: [A]) : [A]
 
     def head : A
     def randomItem : A

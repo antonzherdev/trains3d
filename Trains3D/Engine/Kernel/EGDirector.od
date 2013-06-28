@@ -2,6 +2,7 @@ import EGScene
 import EGTime
 import EGStat
 import EGTypes
+import EGGL
 
 class EGDirector {
     var scene : EGScene
@@ -10,6 +11,7 @@ class EGDirector {
     val time : EGTime = EGTime
 
     def drawWith(size : CGSize) {
+        egClear()
         scene.drawWith(size)
         stat.draw
     }
