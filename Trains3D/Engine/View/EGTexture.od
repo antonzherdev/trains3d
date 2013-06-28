@@ -1,6 +1,7 @@
 import EGTypes
 
-stub class EGTexture(id : GLuint, size : CGSize)  {
-    def static loadFrom(file : string) : EGTexture
+stub class EGTexture(file : string)  {
+    def size : CGSize
     def bind
+    def with(: () -> void)
 }

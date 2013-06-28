@@ -2,38 +2,40 @@
 #import <OpenGL/glu.h>
 
 @implementation EGTexture{
+    BOOL _loaded;
     GLuint _id;
     CGSize _size;
+    NSString * _file;
 }
-@synthesize id = _id;
-@synthesize size = _size;
+@synthesize file = _file;
 
-+ (id)textureWithId:(GLuint)id size:(CGSize)size {
-    return [[EGTexture alloc] initWithId:id size:size];
-}
-
-- (id)initWithId:(GLuint)id size:(CGSize)size {
+- (id)initWithFile:(NSString *)file {
     self = [super init];
-    if(self) {
-        _id = id;
-        _size = size;
+    if (self) {
+        _file = file;
+        _loaded = NO;
     }
-    
+
     return self;
 }
+
++ (id)textureWithFile:(NSString *)file {
+    return [[self alloc] initWithFile:file];
+}
+
 
 - (void)dealloc {
     glDeleteTextures(1, &_id);
 }
 
 
-+ (EGTexture*)loadFromFile:(NSString*)file {
-    file = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent: file];
+- (void)load {
+    NSString* file = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent: _file];
 
     CFURLRef url = (__bridge CFURLRef)[NSURL fileURLWithPath:file];
     CGImageSourceRef myImageSourceRef = CGImageSourceCreateWithURL(url, NULL);
     CGImageRef myImageRef = CGImageSourceCreateImageAtIndex (myImageSourceRef, 0, NULL);
-    GLuint id;
+
     size_t width = CGImageGetWidth(myImageRef);
     size_t height = CGImageGetHeight(myImageRef);
     CGRect rect = {{0, 0}, {width, height}};
@@ -48,18 +50,37 @@
     CGContextRelease(myBitmapContext);
     glPixelStorei(GL_UNPACK_ROW_LENGTH, width);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glGenTextures(1, &id);
-    glBindTexture(GL_TEXTURE_RECTANGLE_ARB, id);
+    glGenTextures(1, &_id);
+    glBindTexture(GL_TEXTURE_RECTANGLE_ARB, _id);
     gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, width, height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, myData);
     glTexParameteri   ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     glTexParameteri   ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
 
+    _size = CGSizeMake(width, height);
+
     free(myData);
-    return [EGTexture textureWithId:id size:CGSizeMake(width, height)];
 }
 
 - (void)bind {
+    if(!_loaded) [self load];
     glBindTexture( GL_TEXTURE_2D, _id);
+}
+
+- (void)with:(void (^)())f {
+    if(!_loaded) [self load];
+    glBindTexture( GL_TEXTURE_2D, _id);
+    glEnable( GL_TEXTURE_2D );
+    @try {
+        f();
+    } @finally {
+        glDisable(GL_TEXTURE_2D);
+    }
+}
+
+
+- (CGSize) size {
+    if(!_loaded) [self load];
+    return _size;
 }
 
 @end

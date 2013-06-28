@@ -1,14 +1,13 @@
 #import <Foundation/Foundation.h>
 
 @interface EGTexture : NSObject
-@property (readonly, nonatomic) GLuint id;
+@property (readonly, nonatomic) NSString * file;
 @property (readonly, nonatomic) CGSize size;
 
-+ (id)textureWithId:(GLuint)id size:(CGSize)size;
-- (id)initWithId:(GLuint)id size:(CGSize)size;
-+ (EGTexture*)loadFromFile:(NSString*)file;
-
+- (id)initWithFile:(NSString *)file;
++ (id)textureWithFile:(NSString *)file;
 - (void)bind;
+- (void)with:(void (^)())f;
 @end
 
 
