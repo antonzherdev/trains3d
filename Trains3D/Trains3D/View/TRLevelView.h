@@ -1,7 +1,10 @@
-#import <Foundation/Foundation.h>
+#import "objd.h"
 #import "EGTypes.h"
-
-@class TRLevel;
+#import "EGCamera.h"
+#import "EGGL.h"
+#import "EGMap.h"
+#import "TRLevel.h"
+#import "TRLevelBackgroundView.h"
 
 @interface TRLevelView : NSObject
 + (id)levelView;

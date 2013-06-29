@@ -1,8 +1,21 @@
 import EGTypes
+import EGCamera
+import EGGL
+import EGMap
+
 import TRLevel
+import TRLevelBackgroundView
 
-stub class TRLevelView {
+class TRLevelView {
+    private val backgroundView = TRLevelBackgroundView
+
     def draw(controller : TRLevel, viewSize : CGSize) {
+        val mapSize = controller.mapSize
+        egCameraIsoFocus(viewSize, mapSize, CGPoint(0, 0))
 
+        backgroundView.draw(controller)
+
+        glColor3f(1.0, 1.0, 1.0)
+        egMapSsoDrawLayout(mapSize)
     }
 }
