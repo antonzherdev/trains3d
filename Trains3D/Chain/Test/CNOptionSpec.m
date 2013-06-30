@@ -7,13 +7,13 @@ SPEC_BEGIN(CNOpionSpec)
         id none = [CNOption none];
         it(@"should execute foreach one time for not null object and no one for null", ^{
             __block int ex = 0;
-            [some foreach:^(id o) {
+            [some forEach:^(id o) {
                 ex++;
                 [[o should] equal:@"test"];
             }];
             [[theValue(ex) should] equal:theValue(1)];
             ex = 0;
-            [none foreach:^(id o) {
+            [none forEach:^(id o) {
                 ex++;
             }];
             [[theValue(ex) should] equal:theValue(0)];
@@ -30,12 +30,12 @@ SPEC_BEGIN(CNOpionSpec)
             [[[CNOption opt:nil] should] equal:none];
         });
         it(@".orValue and .or should return self if it's some or value if it's none", ^{
-            [[[some orValue:@"def"] should] equal:@"test"];
-            [[[none orValue:@"def"] should] equal:@"def"];
-            [[[some or:^id {
+            [[[some getOrValue:@"def"] should] equal:@"test"];
+            [[[none getOrValue:@"def"] should] equal:@"def"];
+            [[[some getOrElse:^id {
                 return @"def";
             }] should] equal:@"test"];
-            [[[none or:^id {
+            [[[none getOrElse:^id {
                 return @"def";
             }] should] equal:@"def"];
         });

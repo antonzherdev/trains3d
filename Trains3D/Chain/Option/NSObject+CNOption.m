@@ -2,15 +2,15 @@
 
 
 @implementation NSObject (CNOption)
-- (void)foreach:(void (^)(id))f {
+- (void)forEach:(cnP)f {
     f(self);
 }
 
-- (id)or:(cnF0)f {
+- (id)getOrElse:(cnF0)f {
     return self;
 }
 
-- (id)orValue:(id)value {
+- (id)getOrValue:(id)value {
     return self;
 }
 

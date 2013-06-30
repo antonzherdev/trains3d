@@ -1,0 +1,6 @@
+import EGTexture
+
+stub class EGContext {
+    def static current : EGContext
+    def textureFor(file : string) : EGTexture
+}

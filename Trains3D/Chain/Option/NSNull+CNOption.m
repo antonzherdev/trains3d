@@ -2,13 +2,13 @@
 
 
 @implementation NSNull (CNOption)
-- (void)foreach:(void (^)(id))f {}
+- (void)forEach:(cnP)f {}
 
-- (id)or:(cnF0)f {
+- (id)getOrElse:(cnF0)f {
     return f();
 }
 
-- (id)orValue:(id)value {
+- (id)getOrValue:(id)value {
     return value;
 }
 

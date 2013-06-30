@@ -2,9 +2,9 @@
 #import "cnTypes.h"
 
 @interface NSNull (CNOption)
-- (void) foreach:(cnP)f;
-- (id) or:(cnF0)f;
-- (id) orValue:(id)value;
+- (void)forEach:(cnP)f;
+- (id)getOrElse:(cnF0)f;
+- (id)getOrValue:(id)value;
 - (BOOL) isEmpty;
 - (BOOL) isDefined;
 - (id) map:(cnF)f;

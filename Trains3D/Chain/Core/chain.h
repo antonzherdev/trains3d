@@ -4,6 +4,7 @@
 #import "CNTuple.h"
 #import "NSObject+CNOption.h"
 #import "NSArray+CNChain.h"
+#import "NSDictionary+CNMap.h"
 
 #define numi(expr) [NSNumber numberWithInt:expr]
 

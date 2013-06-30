@@ -1,0 +1,8 @@
+stub class ODOption<V> {
+    def getOr(else: () -> V) : V
+    def getOr(value: V) : V
+    def for(each : V -> void)
+    def map<B>(:V -> B) : B?
+    def isEmpty : bool
+    def isDefined : bool
+}

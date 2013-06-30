@@ -1,0 +1,15 @@
+class CNCache<K, V> {
+    private val map : [K : V] = []
+
+    def lookupWith(key : K, value : () -> V) : V = map[key].getOr(updateWith(key, value))
+
+    def updateWith(key : K, value : V) : V = {
+        map += (key, value)
+        value
+    }
+
+    def clear {
+        map = []
+    }
+
+}
