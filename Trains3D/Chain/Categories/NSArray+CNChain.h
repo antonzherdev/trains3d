@@ -19,4 +19,5 @@
 
 - (id) head;
 - (id) randomItem;
+- (void) forEach:(cnP)p;
 @end

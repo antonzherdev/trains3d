@@ -35,7 +35,9 @@ static EGDirector* _current;
 
 - (void)drawWithSize:(CGSize)size {
     egClear();
+    glEnable(GL_DEPTH_TEST);
     [_scene drawWithViewSize:size];
+    glDisable(GL_DEPTH_TEST);
     [_stat draw];
 }
 

@@ -1,6 +1,7 @@
 stub class ODArray<A> {
     def count : int
 
+    def for(each: A -> void)
     def filter(: A -> bool) : [A]
     def map<B>(: A -> B) : [B]
 

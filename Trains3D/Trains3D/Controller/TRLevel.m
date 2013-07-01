@@ -28,7 +28,7 @@
     return [cities arrayByAddingObject:[TRCity cityWithColor:[TRColor values][[cities count]] tile:tile]];
 }
 
-- (void)addNextCity {
+- (void)createNewCity {
     _cities = [self appendNextCityToCities:_cities];
 }
 

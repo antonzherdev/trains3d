@@ -54,5 +54,11 @@
     return [[self chain] randomItem];
 }
 
+- (void)forEach:(cnP)p {
+    for(id item in self)  {
+        p(item);
+    }
+}
+
 
 @end

@@ -9,7 +9,7 @@
 
 + (id)levelWithMapSize:(EGMapSize)mapSize;
 - (id)initWithMapSize:(EGMapSize)mapSize;
-- (void)addNextCity;
+- (void)createNewCity;
 @end
 
 

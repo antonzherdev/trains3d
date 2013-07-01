@@ -8,6 +8,7 @@
 
 + (TRColor*)orange;
 + (TRColor*)green;
++ (TRColor*)purple;
 + (NSArray*)values;
 @end
 

@@ -1,0 +1,14 @@
+import EGGL
+
+import TRCity
+
+class TRCityView {
+    def draw(city : TRCity) {
+        glPushMatrix
+        glTranslatef(city.tile.x, city.tile.y, 0)
+        val col = city.color.color
+        glColor3f(col.r, col.g, col.b)
+        glutSolidCube(1.0)
+        glPopMatrix
+    }
+}

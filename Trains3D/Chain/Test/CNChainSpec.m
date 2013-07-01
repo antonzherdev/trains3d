@@ -87,6 +87,18 @@ SPEC_BEGIN(CNChainSpec)
           BOOL b = i == 1 || i == 2 || i == 3;
           [[theValue(b) should] beTrue];
       });
+      it(@".forEach should enumerate all items", ^{
+          __block int sum = 0;
+          [s forEach:^(id x) {
+              sum += [x intValue];
+          }];
+          [[theValue(sum) should] equal:@6];
+          sum = 0;
+          [[s chain] forEach:^(id x) {
+              sum += [x intValue];
+          }];
+          [[theValue(sum) should] equal:@6];
+      });
   });
 
 SPEC_END

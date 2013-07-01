@@ -6,6 +6,7 @@
 #import "EGMap.h"
 #import "TRLevel.h"
 #import "TRLevelBackgroundView.h"
+#import "TRCityView.h"
 
 @interface TRLevelView : NSObject
 + (id)levelView;

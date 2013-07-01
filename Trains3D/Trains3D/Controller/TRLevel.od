@@ -10,7 +10,7 @@ class TRLevel(mapSize : EGMapSize) {
         cities + TRCity(TRColor[cities.count], tile)
     }
 
-    def addNextCity {
+    def createNewCity {
         cities = appendNextCityTo(cities)
     }
 }

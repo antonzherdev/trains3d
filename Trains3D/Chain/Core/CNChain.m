@@ -106,6 +106,13 @@
     return [self link:[CNMulLink linkWithCollection:collection]];
 }
 
+- (void)forEach:(cnP)p {
+    [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
+        p(item);
+        return cnYieldContinue;
+    } end:nil all:nil]];
+}
+
 - (id)head {
     __block id ret = nil;
     [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {

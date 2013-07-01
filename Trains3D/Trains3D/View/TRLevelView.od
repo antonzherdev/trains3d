@@ -6,15 +6,18 @@ import EGMap
 
 import TRLevel
 import TRLevelBackgroundView
+import TRCityView
 
 class TRLevelView {
     private val backgroundView = TRLevelBackgroundView
+    private val cityView = TRCityView
 
     def draw(controller : TRLevel, viewSize : CGSize) {
         val mapSize = controller.mapSize
         egCameraIsoFocus(viewSize, mapSize, CGPoint(0, 0))
 
         backgroundView.draw(controller)
+        controller.cities.for(city -> cityView.draw(city))
 
         glColor3f(1.0, 1.0, 1.0)
         egMapSsoDrawLayout(mapSize)

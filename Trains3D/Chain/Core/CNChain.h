@@ -22,6 +22,7 @@
 
 - (CNChain*) mul :(id)collection;
 
+- (void) forEach:(cnP)p;
 - (id)head;
 - (id)randomItem;
 @end
