@@ -134,4 +134,15 @@ NSArray *egMapSsoPickTiles(EGMapSize size, BOOL (^predicate)(id)) {
             array];
 }
 
+static inline int egMapSsoTileCutAxis(NSInteger less, NSInteger more) {
+    return less == more ? 1 : ( less < more ? 0 : 2);
+}
+
+EGMapRect egMapSsoTileCut(EGMapSize size, EGMapPoint p) {
+    return EGMapRectMake(
+            egMapSsoTileCutAxis(0, p.x + p.y),
+            egMapSsoTileCutAxis(p.y - p.x, size.height - 1),
+            egMapSsoTileCutAxis(p.x + p.y, size.width + size.height - 2),
+            egMapSsoTileCutAxis(-size.width + 1, p.y - p.x));
+}
 

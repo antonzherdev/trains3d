@@ -70,3 +70,10 @@ inline static BOOL egMapSsoIsPartialTile(EGMapSize size, int x, int y) {
 extern EGMapRect egMapSsoLimits(EGMapSize size);
 extern NSArray * egMapSsoFullTiles(EGMapSize size);
 extern NSArray * egMapSsoPartialTiles(EGMapSize size);
+
+/*
+ * Возвращает как плитка обрезана.
+ * Если left - 0 - значит не обрезано, 1 - обрезано слева, 2 - не видно
+ * Остальные значения прямоугольника по такому же принципу
+ */
+extern EGMapRect egMapSsoTileCut(EGMapSize size, EGMapPoint point);

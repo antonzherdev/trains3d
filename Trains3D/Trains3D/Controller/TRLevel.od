@@ -7,7 +7,17 @@ class TRLevel(mapSize : EGMapSize) {
 
     private def appendNextCityTo(cities : [TRCity]) =  {
         val tile = egMapSsoPartialTiles(mapSize).exclude(cities.map(_.tile)).randomItem
-        cities + TRCity(TRColor[cities.count], tile)
+        cities + TRCity(TRColor[cities.count], tile, randomCityDirectionFor(tile))
+    }
+
+    private def randomCityDirectionFor(tile : EGMapPoint) = {
+        val cut = egMapSsoTileCut(mapSize, tile)
+        [0, 90, 180, 270].filter(angle ->
+            (angle == 0 && cut.right == 0 && cut.bottom == 0)
+            || (angle == 90 && cut.left == 0 && cut.bottom == 0)
+            || (angle == 180 && cut.left == 0 && cut.top == 0)
+            || (angle == 270 && cut.right == 0 && cut.top == 0)
+        ).randomItem
     }
 
     def createNewCity {

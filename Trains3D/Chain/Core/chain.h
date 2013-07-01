@@ -6,7 +6,8 @@
 #import "NSArray+CNChain.h"
 #import "NSDictionary+CNMap.h"
 
-#define numi(expr) [NSNumber numberWithInt:expr]
+#define numi(expr) [NSNumber numberWithLong:expr]
+#define unumi(expr) [expr longValue]
 
 #define val(expr) \
         ({ \

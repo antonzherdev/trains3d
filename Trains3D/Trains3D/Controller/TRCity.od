@@ -3,4 +3,7 @@ import TRTypes
 import EGTypes
 import EGMap
 
-class TRCity(color : TRColor, tile : EGMapPoint)
+/*
+ * angle - поворот по часовой стрелке. При 0 город направлен по оси x в положительном направлении
+ */
+class TRCity(color : TRColor, tile : EGMapPoint, angle : int)
