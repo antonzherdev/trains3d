@@ -1,6 +1,8 @@
 import EGTexture
+import CNCache
 
-stub class EGContext {
-    def static current : EGContext
-    def textureFor(file : string) : EGTexture
+class EGContext {
+    private val textureCache = CNCache<string, EGTexture>
+
+    def textureFor(file : string) : EGTexture = textureCache.lookupWith(def = EGTexture(file), forKey = file)
 }

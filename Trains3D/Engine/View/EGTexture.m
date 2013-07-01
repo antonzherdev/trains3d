@@ -59,6 +59,7 @@
     _size = CGSizeMake(width, height);
 
     free(myData);
+    _loaded = YES;
 }
 
 - (void)bind {

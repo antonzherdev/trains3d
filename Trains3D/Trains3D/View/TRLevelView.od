@@ -1,5 +1,6 @@
 import EGTypes
 import EGCamera
+import EG
 import EGGL
 import EGMap
 

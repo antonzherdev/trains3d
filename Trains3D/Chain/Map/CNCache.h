@@ -3,8 +3,8 @@
 @interface CNCache : NSObject
 + (id)cache;
 - (id)init;
-- (id)lookupWithKey:(id)key value:(id(^)())value;
-- (id)updateWithKey:(id)key value:(id)value;
+- (id)lookupWithDef:(id(^)())def forKey:(id)forKey;
+- (id)setObject:(id)object forKey:(id)forKey;
 - (void)clear;
 @end
 

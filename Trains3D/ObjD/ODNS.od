@@ -1,17 +1,1 @@
-stub class NSDictionary <K, V> {
-    def count : uint
-    def objectFor(key : K) : V
 
-    def allKeys : [K]
-    def allValues : [V]
-    def allKeysFor(object : V) : [K]
-
-    def static dictionary<K, V> : self<K, V>
-    def static dictionaryWith<K, V>(object : V, forKey : V) : self<K, V>
-    def static dictionaryWith<K, V>(objects : [V], forKeys : [V]) : self<K, V>
-}
-
-stub class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
-    def removeObjectFor(key : K)
-    def set(object : V, forKey : K)
-}

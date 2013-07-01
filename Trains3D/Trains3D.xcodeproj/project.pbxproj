@@ -288,6 +288,7 @@
 		6F3DF60DD11ED509F2372DA8 /* CNSourceLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSourceLink.h; sourceTree = "<group>"; };
 		6F3DF60FCB04B7E52FECB861 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../../../Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/GLUT.framework; sourceTree = "<group>"; };
 		6F3DF6144A9964C632AD02EA /* KWMessageSpying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWMessageSpying.h; sourceTree = "<group>"; };
+		6F3DF634978B49A8B5BC2288 /* EGGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGGL.h; sourceTree = "<group>"; };
 		6F3DF65460A5DBAC04BC37F7 /* EGDirectorMac.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGDirectorMac.m; sourceTree = "<group>"; };
 		6F3DF65614649C256027E3AF /* KWIntercept.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWIntercept.m; sourceTree = "<group>"; };
 		6F3DF6633D52B4401D6A62D6 /* EGTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGTypes.h; sourceTree = "<group>"; };
@@ -320,6 +321,7 @@
 		6F3DF887F6F040A50A6CB634 /* ODArray.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = ODArray.od; sourceTree = "<group>"; };
 		6F3DF889BD028F8810B44B1B /* NSNumber+KiwiAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumber+KiwiAdditions.m"; sourceTree = "<group>"; };
 		6F3DF8B0B304346D910A7B2B /* NSObject+KiwiMockAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+KiwiMockAdditions.m"; sourceTree = "<group>"; };
+		6F3DF8B9D6CCCF0FB32F4E4F /* EGGL.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGGL.od; sourceTree = "<group>"; };
 		6F3DF8BE3569365CA633DF43 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = ../../../../../Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = "<group>"; };
 		6F3DF8C8F9A44885DD267FD8 /* CNRangeLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNRangeLink.m; sourceTree = "<group>"; };
 		6F3DF8DBF0E4ACAA99BB000D /* ODLazy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ODLazy.m; sourceTree = "<group>"; };
@@ -386,7 +388,7 @@
 		6F3DFC0D21FEC5A694BED172 /* CNChainSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNChainSpec.m; sourceTree = "<group>"; };
 		6F3DFC152BE07B6C9DCFD92D /* KWBeWithinMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeWithinMatcher.h; sourceTree = "<group>"; };
 		6F3DFC15E1D0FCF2036B6E7E /* KWMessageTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWMessageTracker.h; sourceTree = "<group>"; };
-		6F3DFC180D7EC00938BC166B /* EGGL.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGGL.od; sourceTree = "<group>"; };
+		6F3DFC180D7EC00938BC166B /* EG.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EG.od; sourceTree = "<group>"; };
 		6F3DFC1EA5E595C9632E5574 /* KWBeSubclassOfClassMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWBeSubclassOfClassMatcher.m; sourceTree = "<group>"; };
 		6F3DFC2DDFDCE501F8C44D93 /* TRTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRTypes.m; sourceTree = "<group>"; };
 		6F3DFC2DF92415D6518A84C5 /* EGTime.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGTime.od; sourceTree = "<group>"; };
@@ -403,7 +405,7 @@
 		6F3DFCECCF05DF9E06646C06 /* CNCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNCache.h; sourceTree = "<group>"; };
 		6F3DFD01B5B4C094CD13EB3F /* CNTuple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNTuple.h; sourceTree = "<group>"; };
 		6F3DFD3D4C186302DCCB0952 /* KWStringContainsMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWStringContainsMatcher.m; sourceTree = "<group>"; };
-		6F3DFD40C8973D4B8C44B59D /* EGGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGGL.h; sourceTree = "<group>"; };
+		6F3DFD40C8973D4B8C44B59D /* EG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EG.h; sourceTree = "<group>"; };
 		6F3DFD410477E6DC3F8E31F6 /* TRCity.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TRCity.od; sourceTree = "<group>"; };
 		6F3DFD4D74AA767A8268C8C6 /* EGScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGScene.m; sourceTree = "<group>"; };
 		6F3DFD6827964283DDF670E2 /* KWBeIdenticalToMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeIdenticalToMatcher.h; sourceTree = "<group>"; };
@@ -874,11 +876,13 @@
 				6F3DFACF90AEDEC71A116F83 /* EGDirector.od */,
 				6F3DF1133AEE9DB43A613D5E /* EGTypes.od */,
 				6F3DF6633D52B4401D6A62D6 /* EGTypes.h */,
-				6F3DFC180D7EC00938BC166B /* EGGL.od */,
-				6F3DFD40C8973D4B8C44B59D /* EGGL.h */,
+				6F3DFC180D7EC00938BC166B /* EG.od */,
+				6F3DFD40C8973D4B8C44B59D /* EG.h */,
 				6F3DFA793B804F962C1A6597 /* EGContext.od */,
 				6F3DF0F4BD527A62A6AAF7E0 /* EGContext.h */,
 				6F3DF22420F4E0719407F8D7 /* EGContext.m */,
+				6F3DF8B9D6CCCF0FB32F4E4F /* EGGL.od */,
+				6F3DF634978B49A8B5BC2288 /* EGGL.h */,
 			);
 			path = Kernel;
 			sourceTree = "<group>";

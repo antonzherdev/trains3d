@@ -1,11 +1,10 @@
+import EG
 import EGTexture
 import TRLevel
 import EGMap
 
 class TRLevelBackgroundView {
-    private val texture = EGTexture("Grass.png")
-
     def draw(level : TRLevel) {
-        texture.with(egMapSsoDrawPlane(level.mapSize))
+        egTexture("Grass.png").with(egMapSsoDrawPlane(level.mapSize))
     }
 }

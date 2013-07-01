@@ -4,12 +4,14 @@
 #import "EGStat.h"
 #import "EGTypes.h"
 #import "EGGL.h"
+#import "EGContext.h"
 
 @interface EGDirector : NSObject
 @property (nonatomic, retain) EGScene* scene;
 @property (nonatomic, readonly) BOOL started;
 @property (nonatomic, readonly) BOOL paused;
 @property (nonatomic, readonly) EGTime* time;
+@property (nonatomic, readonly) EGContext* context;
 @property (nonatomic, readonly) EGStat* stat;
 @property (nonatomic) BOOL displayStats;
 
@@ -21,6 +23,7 @@
 - (void)pause;
 - (void)resume;
 - (void)tick;
++ (EGDirector*)current;
 @end
 
 

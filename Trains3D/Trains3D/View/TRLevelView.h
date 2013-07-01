@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "EGTypes.h"
 #import "EGCamera.h"
+#import "EG.h"
 #import "EGGL.h"
 #import "EGMap.h"
 #import "TRLevel.h"

@@ -92,8 +92,8 @@ void egMapSsoDrawPlane(EGMapSize size) {
         float r = limits.right + 1.5;
         float t = limits.top - 1.5;
         float b = limits.bottom + 1.5;
-        int w = limits.right - limits.left + 3;
-        int h = limits.bottom - limits.top + 3;
+        NSInteger w = limits.right - limits.left + 3;
+        NSInteger h = limits.bottom - limits.top + 3;
         glTexCoord2f(0.0, 0.0); glVertex3f(l, b, 0);
         glTexCoord2f(w, 0.0); glVertex3f(r, b, 0);
         glTexCoord2f(w, h); glVertex3f(r, t, 0);

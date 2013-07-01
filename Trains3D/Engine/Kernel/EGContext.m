@@ -1,28 +1,26 @@
 #import "EGContext.h"
 
-@implementation EGContext
-static EGContext* _current;
+@implementation EGContext{
+    CNCache* _textureCache;
+}
+
 + (id)context {
     return [[EGContext alloc] init];
 }
 
 - (id)init {
     self = [super init];
+    if(self) {
+        _textureCache = [CNCache cache];
+    }
     
     return self;
 }
 
-+ (void)initialize {
-    [super initialize];
-    _current = [EGContext context];
-}
-
-+ (EGContext*)current {
-    return _current;
-}
-
 - (EGTexture*)textureForFile:(NSString*)file {
-    @throw @"Method textureFor is abstact";
+    return [_textureCache lookupWithDef:^id() {
+        return [EGTexture textureWithFile:file];
+    } forKey:file];
 }
 
 @end

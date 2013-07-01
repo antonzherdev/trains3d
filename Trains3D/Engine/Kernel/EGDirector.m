@@ -5,12 +5,15 @@
     BOOL _started;
     BOOL _paused;
     EGTime* _time;
+    EGContext* _context;
     EGStat* _stat;
 }
+static EGDirector* _current;
 @synthesize scene = _scene;
 @synthesize started = _started;
 @synthesize paused = _paused;
 @synthesize time = _time;
+@synthesize context = _context;
 @synthesize stat = _stat;
 
 + (id)director {
@@ -23,6 +26,8 @@
         _started = NO;
         _paused = NO;
         _time = [EGTime time];
+        _current = self;
+        _context = [EGContext context];
     }
     
     return self;
@@ -65,6 +70,10 @@
 
 - (void)setDisplayStats:(BOOL)displayStats {
     _stat = displayStats ? [EGStat stat] : nil;
+}
+
++ (EGDirector*)current {
+    return _current;
 }
 
 @end

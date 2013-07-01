@@ -3,15 +3,18 @@ import EGTime
 import EGStat
 import EGTypes
 import EGGL
+import EGContext
 
 class EGDirector {
     var scene : EGScene
     var started = false | private set
     var paused = false | private set
     val time : EGTime = EGTime
+    static var current : EGDirector = self
+    val context = EGContext
 
     def drawWith(size : CGSize) {
-        egClear()
+        egClear
         scene.drawWith(size)
         stat.draw
     }

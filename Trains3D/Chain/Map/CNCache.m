@@ -1,7 +1,7 @@
 #import "CNCache.h"
 
 @implementation CNCache{
-    NSDictionary* _map;
+    NSMutableDictionary* _map;
 }
 
 + (id)cache {
@@ -11,25 +11,27 @@
 - (id)init {
     self = [super init];
     if(self) {
-        _map = @{};
+        _map = [NSMutableDictionary dictionary];
     }
     
     return self;
 }
 
-- (id)lookupWithKey:(id)key value:(id(^)())value {
-    return [[_map optionObjectForKey:key] getOrElse:^id() {
-        return [self updateWithKey:key value:value];
-    }];
+- (id)lookupWithDef:(id(^)())def forKey:(id)forKey {
+    id v = [_map objectForKey:forKey];
+    if(v == nil) {
+        v = [self setObject:def() forKey:forKey];
+    }
+    return v;
 }
 
-- (id)updateWithKey:(id)key value:(id)value {
-    _map = [_map dictionaryByAddingValue:value forKey:key];
-    return value;
+- (id)setObject:(id)object forKey:(id)forKey {
+    [_map setObject:object forKey:forKey];
+    return object;
 }
 
 - (void)clear {
-    _map = @{};
+    [_map removeAllObjects];
 }
 
 @end

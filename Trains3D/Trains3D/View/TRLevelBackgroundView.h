@@ -1,4 +1,5 @@
 #import "objd.h"
+#import "EG.h"
 #import "EGTexture.h"
 #import "TRLevel.h"
 #import "EGMap.h"
