@@ -15,7 +15,7 @@
 - (void)drawCity:(TRCity*)city {
     glPushMatrix();
     glTranslatef(city.tile.x, city.tile.y, 0);
-    glRotatef(city.angle, 0, 0, 1);
+    glRotatef(city.angle, 0, 0, -1);
     glTranslatef(0, 0, 0.001);
     glColor3f(0.2, 0.2, 0.2);
     glBegin(GL_QUADS);
