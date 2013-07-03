@@ -1,0 +1,1 @@
+#define CGPointEq(p1, p2) CGPointEqualToPoint(p1, p2)

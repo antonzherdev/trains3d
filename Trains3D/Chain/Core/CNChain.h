@@ -20,9 +20,10 @@
 - (CNChain*)intersect:(id)collection;
 
 
-- (CNChain*) mul :(id)collection;
+- (CNChain*)mul :(id)collection;
 
-- (void) forEach:(cnP)p;
+- (void)forEach:(cnP)p;
 - (id)head;
 - (id)randomItem;
+- (NSUInteger)count;
 @end

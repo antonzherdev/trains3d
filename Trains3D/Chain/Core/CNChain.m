@@ -131,6 +131,15 @@
     return [array objectAtIndex:n];
 }
 
+- (NSUInteger)count {
+    __block NSUInteger ret = 0;
+    [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
+        ret++;
+        return cnYieldContinue;
+    } end:nil all:nil]];
+    return ret;
+}
+
 
 - (CNYieldResult)apply:(CNYield *)yield {
     CNYield *y = [_first buildYield:yield];

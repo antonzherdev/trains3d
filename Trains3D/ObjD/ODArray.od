@@ -1,17 +1,21 @@
-stub class ODArray<A> {
-    def count : int
+stub class CNChain<A> {
+    def filter(: A -> bool) : CNChain<A>
+    def map<B>(: A -> B) : CNChain<B>
 
+    def mul<B>(: [B]) : CNChain<(A,B)>
+
+    def prepend(: [A]) : CNChain<A>
+    def append(: [A]) : CNChain<A>
+    def exclude(: [A]) : CNChain<A>
+    def intersect(: [A]) : CNChain<A>
+
+    def array : [A]
+    def count : uint
     def for(each: A -> void)
-    def filter(: A -> bool) : [A]
-    def map<B>(: A -> B) : [B]
-
-    def mul<B>(: [B]) : [(A,B)]
-
-    def prepend(: [A]) : [A]
-    def append(: [A]) : [A]
-    def exclude(: [A]) : [A]
-    def intersect(: [A]) : [A]
-
     def head : A
     def randomItem : A
+}
+
+stub class ODArray<A> extends CNChain<A> {
+
 }

@@ -1,6 +1,9 @@
+import EGTypes
 import EGMap
+
 import TRCity
 import TRTypes
+
 
 class TRLevel(mapSize : EGMapSize) {
     var cities : [TRCity] = appendNextCityTo(appendNextCityTo([])) | private set

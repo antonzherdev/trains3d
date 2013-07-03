@@ -1,9 +1,5 @@
 import EGTypes
 
-stub struct EGMapPoint(x : int, y : int)
-stub struct EGMapSize(width : int, height : int)
-stub struct EGMapRect(left : int, top : int, right : int, bottom : int)
-
 stub def egMapDrawLayout(size: EGMapSize)
 stub def egMapDrawAxis
 

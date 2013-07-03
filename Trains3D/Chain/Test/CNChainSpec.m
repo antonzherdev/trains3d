@@ -99,6 +99,12 @@ SPEC_BEGIN(CNChainSpec)
           }];
           [[theValue(sum) should] equal:@6];
       });
+      it(@".count should return count items in chain", ^{
+          NSUInteger count = [[s filter:^BOOL(id x) {
+              return [x intValue] < 3;
+          }] count];
+          [[theValue(count) should] equal:@2];
+      });
   });
 
 SPEC_END

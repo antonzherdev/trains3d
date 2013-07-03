@@ -18,7 +18,7 @@
 }
 
 - (EGTexture*)textureForFile:(NSString*)file {
-    return [_textureCache lookupWithDef:^id() {
+    return [_textureCache lookupWithDef:^EGTexture*() {
         return [EGTexture textureWithFile:file];
     } forKey:file];
 }
