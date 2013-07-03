@@ -1,0 +1,23 @@
+import EGTypes
+
+trait EGProcessor {
+    def process(event : EGEvent)
+}
+
+trait EGMouseProcessor {
+    def down(event : EGEvent) {}
+    def drag(event : EGEvent) {}
+    def up(event : EGEvent) {}
+}
+
+class EGEvent(viewSize : CGSize) {
+    def isLeftMouseDown : bool
+    def isLeftMouseDrag : bool
+    def isLeftMouseUp : bool
+    def leftMouse(processor : EGMouseProcessor) {
+        if(isLeftMouseDown) processor.down(self)
+        else if(isLeftMouseDrag) processor.drag(self)
+        else if(isLeftMouseUp) processor.up(self)
+    }
+}
+

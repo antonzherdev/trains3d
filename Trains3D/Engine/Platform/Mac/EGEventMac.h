@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-#import "EGTypes.h"
+#import "EGProcessor.h"
 
 
 @interface EGEventMac : EGEvent

@@ -1,13 +1,14 @@
 import EGTypes
+import EGProcessor
 
 
-class EGScene(val controller : EGController, val view : EGView) {
+class EGScene(val controller : EGController, val view : EGView, val processor : EGProcessor) {
     def drawWith(viewSize : CGSize) {
         view.draw(controller, viewSize)
     }
 
     def process(event : EGEvent) {
-        view.process(controller, event)
+        processor.process(event)
     }
 
     def updateWith(delta : float) {

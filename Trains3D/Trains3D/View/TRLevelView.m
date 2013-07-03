@@ -33,9 +33,6 @@
     egMapSsoDrawLayout(mapSize);
 }
 
-- (void)processController:(TRLevel*)controller event:(EGEvent*)event {
-}
-
 @end
 
 

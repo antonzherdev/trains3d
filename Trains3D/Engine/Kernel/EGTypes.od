@@ -10,15 +10,11 @@ struct EGMapPoint(x : int, y : int)
 struct EGMapSize(width : int, height : int)
 struct EGMapRect(left : int, top : int, right : int, bottom : int)
 
-class EGEvent(viewSize : CGSize) {
-}
-
 trait EGController {
     def updateWith(delta : float)
 }
 
 trait EGView {
     def draw(controller : EGController, viewSize : CGSize)
-
-    def process(controller : EGController, event : EGEvent)
 }
+

@@ -3,19 +3,22 @@
 @implementation EGScene{
     id _controller;
     id _view;
+    id _processor;
 }
 @synthesize controller = _controller;
 @synthesize view = _view;
+@synthesize processor = _processor;
 
-+ (id)sceneWithController:(id)controller view:(id)view {
-    return [[EGScene alloc] initWithController:controller view:view];
++ (id)sceneWithController:(id)controller view:(id)view processor:(id)processor {
+    return [[EGScene alloc] initWithController:controller view:view processor:processor];
 }
 
-- (id)initWithController:(id)controller view:(id)view {
+- (id)initWithController:(id)controller view:(id)view processor:(id)processor {
     self = [super init];
     if(self) {
         _controller = controller;
         _view = view;
+        _processor = processor;
     }
     
     return self;
@@ -26,7 +29,7 @@
 }
 
 - (void)processEvent:(EGEvent*)event {
-    [_view processController:_controller event:event];
+    [_processor processEvent:event];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

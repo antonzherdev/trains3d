@@ -1,0 +1,15 @@
+import EGTypes
+import EGProcessor
+
+import TRRailroadBuilderProcessor
+import TRLevel
+import TRLevelView
+
+
+class TRLevelProcessor(level : TRLevel) {
+    private val railroadBuilderProcessor = TRRailroadBuilderProcessor(level.railroad.builder)
+
+    def process(event : EGEvent) {
+        railroadBuilderProcessor.process(event)
+    }
+}

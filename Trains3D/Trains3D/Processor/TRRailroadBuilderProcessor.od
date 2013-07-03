@@ -1,0 +1,26 @@
+import EGTypes
+import EGProcessor
+
+import TRRailroad
+
+class TRRailroadBuilderProcessor(builder : TRRailroadBuilder) {
+    private val mouseProcessor = TRRailroadBuilderMouseProcessor(builder)
+
+    def process(event : EGEvent) {
+        event.leftMouse(mouseProcessor)
+    }
+}
+
+class TRRailroadBuilderMouseProcessor(builder : TRRailroadBuilder) {
+    private var downing = false
+
+    def down(event : EGEvent) {
+        downing = true
+    }
+    def drag(event : EGEvent) = if(downing) {
+
+    }
+    def up(event : EGEvent) = if(downing) {
+        downing = true
+    }
+}

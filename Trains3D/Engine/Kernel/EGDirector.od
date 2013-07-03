@@ -4,6 +4,7 @@ import EGStat
 import EGTypes
 import EGGL
 import EGContext
+import EGProcessor
 
 class EGDirector {
     var scene : EGScene

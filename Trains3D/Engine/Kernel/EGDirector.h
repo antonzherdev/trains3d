@@ -5,6 +5,7 @@
 #import "EGTypes.h"
 #import "EGGL.h"
 #import "EGContext.h"
+#import "EGProcessor.h"
 
 @class EGDirector;
 

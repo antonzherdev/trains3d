@@ -66,8 +66,8 @@
 		6F3DF4E6C4B3E309B20B07F3 /* KWBeSubclassOfClassMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC1EA5E595C9632E5574 /* KWBeSubclassOfClassMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF4F373C7AEB81B0BBF8F /* KWAfterEachNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9A2807799E9A7261FAC /* KWAfterEachNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF532E3E3C3B36E3390A0 /* KWEqualMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF16B343577D6355460C0 /* KWEqualMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		6F3DF56665089F2E0FACABDC /* EGTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8B6BF65455A01F78193 /* EGTypes.m */; };
 		6F3DF5928B9B4445494A9BDF /* KWValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFACC20BF8698A6F56017 /* KWValue.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		6F3DF5B8922AE637B43642E1 /* TRRailroadBuilderProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF37F737A3145F69F8298 /* TRRailroadBuilderProcessor.m */; };
 		6F3DF5C63790425F8F8EB5CD /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F3DF60FCB04B7E52FECB861 /* GLUT.framework */; };
 		6F3DF5E339F62A69A94FE894 /* TRRailroad.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8F8C931223990326F81 /* TRRailroad.m */; };
 		6F3DF5E41526169A9A167F40 /* CNMulLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF5FAC9B2E4F3B36621BC /* CNMulLink.m */; };
@@ -82,6 +82,7 @@
 		6F3DF73560C202C9FD110A0B /* NSMethodSignature+KiwiAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9E2876BBD24E6090B7B /* NSMethodSignature+KiwiAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF74B216F97957505EA5B /* CNOptionSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFBE0D8CB2B59FCEB8C9 /* CNOptionSpec.m */; };
 		6F3DF766BC84D14674CC4A96 /* KWWorkarounds.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4BE94FAAAEBE75F6F80 /* KWWorkarounds.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		6F3DF7706B34B91B058B7C18 /* TRLevelProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF044DCC34A9E6DED83D6 /* TRLevelProcessor.m */; };
 		6F3DF7723DA38768D2C7916B /* KWGenericMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9731A8A3019A891CB25 /* KWGenericMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF77668014239CBE1F301 /* KWFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF52DB655D7E02221C43E /* KWFormatter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF785AF5B8A170979F3BD /* CNChainItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDF0603FE9EB6C1C888A /* CNChainItem.m */; };
@@ -113,11 +114,13 @@
 		6F3DF9D4A7F987AED827130A /* EGOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA3414CC30A8B005B9C0 /* EGOpenGLView.m */; };
 		6F3DFA5C1871BB43A168E94B /* CNChainSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC0D21FEC5A694BED172 /* CNChainSpec.m */; };
 		6F3DFA8070B05D0FB3572F5B /* KWHaveValueMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF7F89B5A6EF02A239D3 /* KWHaveValueMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		6F3DFA80C3820CDDC638868D /* EGProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE9A3F96D53892227C68 /* EGProcessor.m */; };
 		6F3DFA90B96B104CC80AEAB3 /* KWInequalityMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2CF65133C9FBDF79736 /* KWInequalityMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DFAB18856CAC46CB32D6A /* TRLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF86CCB044E060A70A002 /* TRLevel.m */; };
 		6F3DFAD0E94BE150BF5D0C70 /* NSObject+KiwiVerifierAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0CC00FD6CE31C2CE2D0 /* NSObject+KiwiVerifierAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DFAD59CAE7C6195B56A4E /* KWExampleGroupBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF378E4FB14B379FE9EC5 /* KWExampleGroupBuilder.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DFADB53AE883EC4D6291D /* ODNS.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF5F5C37E39222A4935B6 /* ODNS.od */; };
+		6F3DFAEB6B8EC20A5224593C /* TRLevelProcessor.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFCD25609BB4D99A4CB41 /* TRLevelProcessor.od */; };
 		6F3DFB12D27D50FA671E2D3A /* EGTexture.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFF0C5251475D6FA8EB46 /* EGTexture.od */; };
 		6F3DFB341C983D97DE241217 /* KWFailure.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF37F650CDF0EBEF47CD8 /* KWFailure.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DFB5B57E47C603E3FE71F /* KWBeforeEachNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9326AEED29A07D1AD9A /* KWBeforeEachNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -188,6 +191,7 @@
 		6F3DF00AC03B6A58770FAAE6 /* EGMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGMap.m; sourceTree = "<group>"; };
 		6F3DF0255D0634FEBC03437A /* KWProbePoller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWProbePoller.m; sourceTree = "<group>"; };
 		6F3DF032FA1C5FDEC691E129 /* KWMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWMatcher.h; sourceTree = "<group>"; };
+		6F3DF044DCC34A9E6DED83D6 /* TRLevelProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRLevelProcessor.m; sourceTree = "<group>"; };
 		6F3DF050FAF0DAC7AE7C7141 /* KWGenericMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWGenericMatcher.h; sourceTree = "<group>"; };
 		6F3DF05612621A3BF235D2F1 /* KWExampleSuite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWExampleSuite.m; sourceTree = "<group>"; };
 		6F3DF06063B5F1A002BF4352 /* TRLevelSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRLevelSpec.m; sourceTree = "<group>"; };
@@ -242,6 +246,7 @@
 		6F3DF37708111DAEB77D185F /* EGTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGTexture.h; sourceTree = "<group>"; };
 		6F3DF378E4FB14B379FE9EC5 /* KWExampleGroupBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWExampleGroupBuilder.m; sourceTree = "<group>"; };
 		6F3DF37F650CDF0EBEF47CD8 /* KWFailure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWFailure.m; sourceTree = "<group>"; };
+		6F3DF37F737A3145F69F8298 /* TRRailroadBuilderProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRRailroadBuilderProcessor.m; sourceTree = "<group>"; };
 		6F3DF392B38092398EEE2AD5 /* NSObject+CNOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+CNOption.h"; sourceTree = "<group>"; };
 		6F3DF3970B2897173003B852 /* KWRaiseMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWRaiseMatcher.m; sourceTree = "<group>"; };
 		6F3DF3AA0BD46B8102F64FBA /* KWProbePoller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWProbePoller.h; sourceTree = "<group>"; };
@@ -263,6 +268,8 @@
 		6F3DF4416D9CDAE2101320B7 /* KWObjCUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWObjCUtilities.h; sourceTree = "<group>"; };
 		6F3DF44906FDDD60CD1A7450 /* CNOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNOption.h; sourceTree = "<group>"; };
 		6F3DF45FB9685A6094637BEC /* KWBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBlock.h; sourceTree = "<group>"; };
+		6F3DF46F92130F54E5505192 /* TRRailroadBuilderProcessor.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TRRailroadBuilderProcessor.od; sourceTree = "<group>"; };
+		6F3DF48FD77E8105CFDF72F2 /* TRRailroadBuilderProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRRailroadBuilderProcessor.h; sourceTree = "<group>"; };
 		6F3DF490C879944EB9301307 /* KWExpectationType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWExpectationType.h; sourceTree = "<group>"; };
 		6F3DF491611169DED36A60F0 /* KWReceiveMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWReceiveMatcher.h; sourceTree = "<group>"; };
 		6F3DF4999E676ADD43976479 /* EGScene.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGScene.od; sourceTree = "<group>"; };
@@ -331,7 +338,6 @@
 		6F3DF887F6F040A50A6CB634 /* ODArray.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = ODArray.od; sourceTree = "<group>"; };
 		6F3DF889BD028F8810B44B1B /* NSNumber+KiwiAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumber+KiwiAdditions.m"; sourceTree = "<group>"; };
 		6F3DF8B0B304346D910A7B2B /* NSObject+KiwiMockAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+KiwiMockAdditions.m"; sourceTree = "<group>"; };
-		6F3DF8B6BF65455A01F78193 /* EGTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGTypes.m; sourceTree = "<group>"; };
 		6F3DF8B9D6CCCF0FB32F4E4F /* EGGL.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGGL.od; sourceTree = "<group>"; };
 		6F3DF8BE3569365CA633DF43 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = ../../../../../Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = "<group>"; };
 		6F3DF8C8F9A44885DD267FD8 /* CNRangeLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNRangeLink.m; sourceTree = "<group>"; };
@@ -416,6 +422,7 @@
 		6F3DFC7B3085F8A807BFB401 /* KWExampleNodeVisitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWExampleNodeVisitor.h; sourceTree = "<group>"; };
 		6F3DFCC4599C7D1A631371CA /* TRRailroadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRRailroadView.h; sourceTree = "<group>"; };
 		6F3DFCD0CB7B57497EE5DE31 /* KWStringUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWStringUtilities.m; sourceTree = "<group>"; };
+		6F3DFCD25609BB4D99A4CB41 /* TRLevelProcessor.od */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.od; path = TRLevelProcessor.od; sourceTree = "<group>"; };
 		6F3DFCE02BB002CBFE0A06DC /* KWRespondToSelectorMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWRespondToSelectorMatcher.h; sourceTree = "<group>"; };
 		6F3DFCE254CB5CB57AFCFD3F /* KiwiMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KiwiMacros.h; sourceTree = "<group>"; };
 		6F3DFCEBA634AC4B5285ABFA /* KWChangeMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWChangeMatcher.m; sourceTree = "<group>"; };
@@ -436,12 +443,14 @@
 		6F3DFDB2A3B90A2A00EEBEAB /* NSInvocation+OCMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSInvocation+OCMAdditions.h"; sourceTree = "<group>"; };
 		6F3DFDC2BA898F749E5C2E9A /* KiwiBlockMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KiwiBlockMacros.h; sourceTree = "<group>"; };
 		6F3DFDC338E423A7A5AAB4FE /* NSObject+KiwiMockAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+KiwiMockAdditions.h"; sourceTree = "<group>"; };
+		6F3DFDC9D08945B86C1E9F69 /* EGProcessor.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGProcessor.od; sourceTree = "<group>"; };
 		6F3DFDF0603FE9EB6C1C888A /* CNChainItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNChainItem.m; sourceTree = "<group>"; };
 		6F3DFDFB7CC11E02423EBA48 /* KWReceiveMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWReceiveMatcher.m; sourceTree = "<group>"; };
 		6F3DFE02F110F1C05CADBCB0 /* KWBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWBlock.m; sourceTree = "<group>"; };
 		6F3DFE0C9C6321DE1FF7B682 /* ODOption.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = ODOption.od; sourceTree = "<group>"; };
 		6F3DFE391859DEBFE15A7D75 /* KWCountType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWCountType.h; sourceTree = "<group>"; };
 		6F3DFE3FABFD4857ACBC4432 /* NSObject+KiwiSpyAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+KiwiSpyAdditions.h"; sourceTree = "<group>"; };
+		6F3DFE51EF70DAA7841B050F /* EGProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGProcessor.h; sourceTree = "<group>"; };
 		6F3DFE539400E899D77BEF39 /* KWMatchers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWMatchers.m; sourceTree = "<group>"; };
 		6F3DFE59D850C66DF6ACF2FB /* KWAny.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWAny.h; sourceTree = "<group>"; };
 		6F3DFE5F7A1FB6E37B3BF7A9 /* KWBeMemberOfClassMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeMemberOfClassMatcher.h; sourceTree = "<group>"; };
@@ -449,6 +458,7 @@
 		6F3DFE6E93BDB3DCD2C17930 /* NSProxy+KiwiVerifierAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSProxy+KiwiVerifierAdditions.m"; sourceTree = "<group>"; };
 		6F3DFE8BAF08EF786F6070B5 /* TRRailroadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRRailroadView.m; sourceTree = "<group>"; };
 		6F3DFE8FAD17ADDCFA0D069D /* EGScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGScene.h; sourceTree = "<group>"; };
+		6F3DFE9A3F96D53892227C68 /* EGProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGProcessor.m; sourceTree = "<group>"; };
 		6F3DFEAEF336912A5D856EAD /* KWPendingNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWPendingNode.m; sourceTree = "<group>"; };
 		6F3DFECE9FC4291325531D0F /* TRLevelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRLevelView.h; sourceTree = "<group>"; };
 		6F3DFED79BC6B57461236AA6 /* KWDeviceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWDeviceInfo.h; sourceTree = "<group>"; };
@@ -460,6 +470,7 @@
 		6F3DFF2CCB900460C0B163CC /* KWMessageTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWMessageTracker.m; sourceTree = "<group>"; };
 		6F3DFF2F6C0E8C792B3BD88E /* KWBeTrueMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWBeTrueMatcher.m; sourceTree = "<group>"; };
 		6F3DFF5622ACCF4AEB7EE617 /* Grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Grass.png; sourceTree = "<group>"; };
+		6F3DFF75175AB0115FEE865E /* TRLevelProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRLevelProcessor.h; sourceTree = "<group>"; };
 		6F3DFF7AF059F1441452CCC1 /* KWAfterEachNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWAfterEachNode.h; sourceTree = "<group>"; };
 		6F3DFF7F89B5A6EF02A239D3 /* KWHaveValueMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWHaveValueMatcher.m; sourceTree = "<group>"; };
 		6F3DFF8BEFC837FAB00BBD99 /* NSInvocation+KiwiAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSInvocation+KiwiAdditions.h"; sourceTree = "<group>"; };
@@ -555,6 +566,7 @@
 				6F3DFE36FCF7A5D743EE00C9 /* Controller */,
 				6F3DF7AC80CA8D95B421C8DC /* View */,
 				6F3DFCBDBB6AEBC710C44B0F /* Test */,
+				6F3DF96A23DE11EF31BB04A6 /* Processor */,
 			);
 			path = Trains3D;
 			sourceTree = "<group>";
@@ -851,6 +863,7 @@
 				6F3DF88E67C2EE892EA384B4 /* Kernel */,
 				6F3DFB70B9B51BF1A63167BA /* View */,
 				6F3DF62995D490FAAE20646F /* Test */,
+				6F3DFCB6E4C3AACFF0D292ED /* Processor */,
 			);
 			path = Engine;
 			sourceTree = "<group>";
@@ -909,9 +922,21 @@
 				6F3DF8B9D6CCCF0FB32F4E4F /* EGGL.od */,
 				6F3DF634978B49A8B5BC2288 /* EGGL.h */,
 				6F3DFA6A73D3B31CBD1DE536 /* EGTypesAdd.h */,
-				6F3DF8B6BF65455A01F78193 /* EGTypes.m */,
 			);
 			path = Kernel;
+			sourceTree = "<group>";
+		};
+		6F3DF96A23DE11EF31BB04A6 /* Processor */ = {
+			isa = PBXGroup;
+			children = (
+				6F3DF46F92130F54E5505192 /* TRRailroadBuilderProcessor.od */,
+				6F3DFCD25609BB4D99A4CB41 /* TRLevelProcessor.od */,
+				6F3DFF75175AB0115FEE865E /* TRLevelProcessor.h */,
+				6F3DF044DCC34A9E6DED83D6 /* TRLevelProcessor.m */,
+				6F3DF48FD77E8105CFDF72F2 /* TRRailroadBuilderProcessor.h */,
+				6F3DF37F737A3145F69F8298 /* TRRailroadBuilderProcessor.m */,
+			);
+			path = Processor;
 			sourceTree = "<group>";
 		};
 		6F3DFA981C6B44F51354D273 /* Test */ = {
@@ -940,6 +965,16 @@
 				6F3DF7386C7FDAEC32527DA1 /* EGText.m */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		6F3DFCB6E4C3AACFF0D292ED /* Processor */ = {
+			isa = PBXGroup;
+			children = (
+				6F3DFDC9D08945B86C1E9F69 /* EGProcessor.od */,
+				6F3DFE51EF70DAA7841B050F /* EGProcessor.h */,
+				6F3DFE9A3F96D53892227C68 /* EGProcessor.m */,
+			);
+			path = Processor;
 			sourceTree = "<group>";
 		};
 		6F3DFCBDBB6AEBC710C44B0F /* Test */ = {
@@ -1128,6 +1163,7 @@
 				6F3DFD859DAA510EEB91B5F8 /* ODMap.od in Resources */,
 				6F3DFADB53AE883EC4D6291D /* ODNS.od in Resources */,
 				6F3DF62090C875D98E734CB9 /* TRRailroadView.od in Resources */,
+				6F3DFAEB6B8EC20A5224593C /* TRLevelProcessor.od in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1200,9 +1236,11 @@
 				6F3DF434473429476809FCDF /* NSDictionary+CNMap.m in Sources */,
 				6F3DF646D777473E0B8F0AA6 /* TRCityView.m in Sources */,
 				6F3DF5E339F62A69A94FE894 /* TRRailroad.m in Sources */,
-				6F3DF56665089F2E0FACABDC /* EGTypes.m in Sources */,
 				6F3DF38B6359289D123A28F9 /* EGEventMac.m in Sources */,
 				6F3DF7C872B6D29436FA9988 /* TRRailroadView.m in Sources */,
+				6F3DF7706B34B91B058B7C18 /* TRLevelProcessor.m in Sources */,
+				6F3DF5B8922AE637B43642E1 /* TRRailroadBuilderProcessor.m in Sources */,
+				6F3DFA80C3820CDDC638868D /* EGProcessor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
