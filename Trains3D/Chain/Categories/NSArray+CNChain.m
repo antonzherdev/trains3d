@@ -13,6 +13,11 @@
     return [CNChain chainWithCollection:self];
 }
 
+- (CNChain *)reverse {
+    return [[self chain] reverse];
+}
+
+
 - (CNChain *)filter:(cnPredicate)predicate {
     return [[self chain] filter:predicate];
 }
@@ -60,5 +65,8 @@
     }
 }
 
+- (id)fold:(cnF2)f withStart:(id)start {
+    return [[self chain] fold:f withStart:start];
+}
 
 @end

@@ -5,9 +5,6 @@
 + (CNChain*)chainWithCollection:(id)collection;
 + (CNChain*)chainWithStart:(NSInteger)aStart end:(NSInteger)anEnd step:(NSInteger)aStep;
 
-- (NSArray*)array;
-- (NSSet*)set;
-
 - (CNChain*)link:(id<CNChainLink>)link;
 - (CNChain*)filter:(cnPredicate)predicate;
 - (CNChain*)filter:(cnPredicate)predicate selectivity:(double)selectivity;
@@ -19,11 +16,15 @@
 - (CNChain*)exclude:(id)collection;
 - (CNChain*)intersect:(id)collection;
 
-
 - (CNChain*)mul :(id)collection;
+
+- (CNChain*)reverse;
 
 - (void)forEach:(cnP)p;
 - (id)head;
 - (id)randomItem;
 - (NSUInteger)count;
+- (NSArray*)array;
+- (NSSet*)set;
+- (id)fold:(cnF2)f withStart:(id)start;
 @end

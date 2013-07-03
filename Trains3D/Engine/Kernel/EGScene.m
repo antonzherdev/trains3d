@@ -2,34 +2,36 @@
 
 @implementation EGScene{
     id _controller;
-    id _view;
-    id _processor;
+    NSArray* _layers;
 }
 @synthesize controller = _controller;
-@synthesize view = _view;
-@synthesize processor = _processor;
+@synthesize layers = _layers;
 
-+ (id)sceneWithController:(id)controller view:(id)view processor:(id)processor {
-    return [[EGScene alloc] initWithController:controller view:view processor:processor];
++ (id)sceneWithController:(id)controller layers:(NSArray*)layers {
+    return [[EGScene alloc] initWithController:controller layers:layers];
 }
 
-- (id)initWithController:(id)controller view:(id)view processor:(id)processor {
+- (id)initWithController:(id)controller layers:(NSArray*)layers {
     self = [super init];
     if(self) {
         _controller = controller;
-        _view = view;
-        _processor = processor;
+        _layers = layers;
     }
     
     return self;
 }
 
 - (void)drawWithViewSize:(CGSize)viewSize {
-    [_view drawController:_controller viewSize:viewSize];
+    [_layers forEach:^void(EGLayer* _) {
+        [_ drawWithViewSize:viewSize];
+    }];
 }
 
-- (void)processEvent:(EGEvent*)event {
-    [_processor processEvent:event];
+- (BOOL)processEvent:(EGEvent*)event {
+    return unumb([[_layers reverse] fold:^id(id r_, EGLayer* layer) {
+        BOOL r = unumb(r_);
+        return numb(r || [layer processEvent:event]);
+    } withStart:@NO]);
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

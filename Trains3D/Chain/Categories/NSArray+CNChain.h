@@ -7,6 +7,7 @@
 @interface NSArray (CNChain)
 - (id) chain:(cnChainBuildBlock)block;
 - (CNChain*) chain;
+- (CNChain*)reverse;
 - (CNChain*)filter:(cnPredicate)predicate;
 - (CNChain*)filter:(cnPredicate)predicate selectivity:(double)selectivity;
 - (CNChain*)map:(cnF)f;
@@ -20,4 +21,5 @@
 - (id) head;
 - (id) randomItem;
 - (void) forEach:(cnP)p;
+- (id)fold:(cnF2)f withStart:(id)start;
 @end

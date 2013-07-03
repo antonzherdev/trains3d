@@ -75,8 +75,14 @@ static inline BOOL EGMapRectEq(EGMapRect s1, EGMapRect s2) {
 @end
 
 
+@protocol EGCamera
+- (void)focusForViewSize:(CGSize)viewSize;
+@end
+
+
 @protocol EGView
-- (void)drawController:(id)controller viewSize:(CGSize)viewSize;
+- (id)camera;
+- (void)drawView;
 @end
 
 

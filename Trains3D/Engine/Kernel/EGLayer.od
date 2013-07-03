@@ -1,0 +1,11 @@
+import EGTypes
+import EGProcessor
+
+class EGLayer(view : EGView, processor : EGProcessor?) {
+    def drawWith(viewSize : CGSize) {
+        view.camera.focusFor(viewSize)
+        view.drawView
+    }
+
+    def process(event : EGEvent) : bool = processor.map(_.process(event)).getOr(false)
+}

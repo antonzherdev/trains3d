@@ -9,6 +9,9 @@ stub class CNChain<A> {
     def exclude(: [A]) : CNChain<A>
     def intersect(: [A]) : CNChain<A>
 
+    def reverse : CNChain<A>
+
+    def fold<B>( : (B, A) -> B, withStart : B) : B
     def array : [A]
     def count : uint
     def for(each: A -> void)

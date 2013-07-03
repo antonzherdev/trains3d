@@ -14,7 +14,13 @@ trait EGController {
     def updateWith(delta : float)
 }
 
+trait EGCamera {
+    def focusFor(viewSize : CGSize)
+}
+
 trait EGView {
-    def draw(controller : EGController, viewSize : CGSize)
+    def camera : EGCamera
+
+    def drawView
 }
 

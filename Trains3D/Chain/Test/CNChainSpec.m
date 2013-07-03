@@ -105,6 +105,16 @@ SPEC_BEGIN(CNChainSpec)
           }] count];
           [[theValue(count) should] equal:@2];
       });
+      it(@".reverse shoude reverse collection", ^{
+          [[[[s reverse] array] should] equal:@[@2, @3, @1]];
+          [[[[[s chain] reverse] array] should] equal:@[@2, @3, @1]];
+      });
+      it(@".fold should make fold", ^{
+          id r = [s fold:^id(id x, id y) {
+              return numi(unumi(x) + unumi(y));
+          } withStart:@0];
+          [[r should] equal:@6];
+      });
   });
 
 SPEC_END

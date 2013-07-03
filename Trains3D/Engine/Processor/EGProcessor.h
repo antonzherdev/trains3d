@@ -4,7 +4,7 @@
 @class EGEvent;
 
 @protocol EGProcessor
-- (void)processEvent:(EGEvent*)event;
+- (BOOL)processEvent:(EGEvent*)event;
 @end
 
 

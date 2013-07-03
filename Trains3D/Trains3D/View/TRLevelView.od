@@ -9,20 +9,19 @@ import TRLevelBackgroundView
 import TRCityView
 import TRRailroadView
 
-class TRLevelView {
+class TRLevelView(level : TRLevel) {
     private val backgroundView = TRLevelBackgroundView
     private val cityView = TRCityView
     private val railroadView = TRRailroadView
 
-    def draw(controller : TRLevel, viewSize : CGSize) {
-        val mapSize = controller.mapSize
-        egCameraIsoFocus(viewSize, mapSize, CGPoint(0, 0))
-
-        backgroundView.draw(controller)
-        controller.cities.for(city -> cityView.draw(city))
-        railroadView.draw(controller.railroad)
+    def drawView {
+        backgroundView.draw(level)
+        level.cities.for(city -> cityView.draw(city))
+        railroadView.draw(level.railroad)
 
         glColor3f(1.0, 1.0, 1.0)
-        egMapSsoDrawLayout(mapSize)
+        egMapSsoDrawLayout(level.mapSize)
     }
+
+    val camera = EGCameraIso(level.mapSize, CGPoint(0, 0))
 }

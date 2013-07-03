@@ -7,6 +7,7 @@
 #import "CNPrependLink.h"
 #import "CNRangeLink.h"
 #import "CNMulLink.h"
+#import "CNReverseLink.h"
 
 
 @implementation CNChain {
@@ -66,6 +67,17 @@
     return ret;
 }
 
+- (id)fold:(cnF2)f withStart:(id)start {
+    __block id ret = start;
+    CNYield *yield = [CNYield alloc];
+    yield = [yield initWithBegin:nil yield:^CNYieldResult(id item) {
+        ret = f(ret, item);
+        return cnYieldContinue;
+    } end:nil all:nil];
+    [self apply:yield];
+    return ret;
+}
+
 
 - (CNChain *)filter:(cnPredicate)predicate {
     return [self link:[CNFilterLink linkWithPredicate:predicate selectivity:0]];
@@ -104,6 +116,10 @@
 
 - (CNChain *)mul:(id)collection {
     return [self link:[CNMulLink linkWithCollection:collection]];
+}
+
+- (CNChain *)reverse {
+    return [self link:[CNReverseLink link]];
 }
 
 - (void)forEach:(cnP)p {

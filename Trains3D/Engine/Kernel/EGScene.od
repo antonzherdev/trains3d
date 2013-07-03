@@ -1,15 +1,14 @@
 import EGTypes
 import EGProcessor
+import EGLayer
 
 
-class EGScene(val controller : EGController, val view : EGView, val processor : EGProcessor) {
+class EGScene(val controller : EGController, val layers : [EGLayer]) {
     def drawWith(viewSize : CGSize) {
-        view.draw(controller, viewSize)
+        layers.for(_.drawWith(viewSize))
     }
 
-    def process(event : EGEvent) {
-        processor.process(event)
-    }
+    def process(event : EGEvent) = layers.reverse.fold((r, layer) -> r || layer.process(event), false)
 
     def updateWith(delta : float) {
         controller.updateWith(delta)

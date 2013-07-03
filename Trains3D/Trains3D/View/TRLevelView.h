@@ -12,9 +12,12 @@
 @class TRLevelView;
 
 @interface TRLevelView : NSObject
-+ (id)levelView;
-- (id)init;
-- (void)drawController:(TRLevel*)controller viewSize:(CGSize)viewSize;
+@property (nonatomic, readonly) TRLevel* level;
+@property (nonatomic, readonly) EGCameraIso* camera;
+
++ (id)levelViewWithLevel:(TRLevel*)level;
+- (id)initWithLevel:(TRLevel*)level;
+- (void)drawView;
 @end
 
 
