@@ -1,0 +1,38 @@
+import EGGL
+import TRRailroad
+
+class TRRailroadView {
+    private val railView = TRRailView
+
+    def draw(railroad : TRRailroad) {
+        railroad.rails.for(railView.draw(_))
+        railroad.builder.rail.for(railView.draw(_))
+    }
+}
+
+class TRRailView {
+    def draw(rail : TRRail) {
+        glPushMatrix
+        glTranslatef(rail.tile.x, rail.tile.y, 0.001)
+
+        glColor3f(0.2, 0.2, 0.2)
+        glBegin(GL_QUADS)
+            if(rail.start.y == 0) {
+                glVertex2f(rail.start.x, -0.05)
+                glVertex2f(rail.start.x, 0.05)
+            } else {
+                glVertex2f(-0.05, rail.start.y)
+                glVertex2f(0.05, rail.start.y)
+            }
+            if(rail.end.y == 0) {
+                glVertex2f(rail.end.x, 0.05)
+                glVertex2f(rail.end.x, -0.05)
+            } else {
+                glVertex2f(0.05, rail.end.y)
+                glVertex2f(-0.05, rail.end.y)
+            }
+        glEnd
+
+        glPopMatrix
+    }
+}

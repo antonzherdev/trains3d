@@ -72,6 +72,7 @@
 		6F3DF5E339F62A69A94FE894 /* TRRailroad.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8F8C931223990326F81 /* TRRailroad.m */; };
 		6F3DF5E41526169A9A167F40 /* CNMulLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF5FAC9B2E4F3B36621BC /* CNMulLink.m */; };
 		6F3DF5EDE671302F365CE75B /* KWReceiveMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDFB7CC11E02423EBA48 /* KWReceiveMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		6F3DF62090C875D98E734CB9 /* TRRailroadView.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF84A9246F0144995CA8F /* TRRailroadView.od */; };
 		6F3DF646D777473E0B8F0AA6 /* TRCityView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF43AE13D170644E2F651 /* TRCityView.m */; };
 		6F3DF668187E1F8A51E3D2BB /* KWBeBetweenMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFCF082FA9814878ABC9 /* KWBeBetweenMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF675B1663D2738344895 /* NSObject+KiwiMockAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8B0B304346D910A7B2B /* NSObject+KiwiMockAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -85,6 +86,7 @@
 		6F3DF77668014239CBE1F301 /* KWFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF52DB655D7E02221C43E /* KWFormatter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF785AF5B8A170979F3BD /* CNChainItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDF0603FE9EB6C1C888A /* CNChainItem.m */; };
 		6F3DF7BA1CF5CA82CB9B4053 /* EGCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD7F1336D0F930E740C5 /* EGCamera.m */; };
+		6F3DF7C872B6D29436FA9988 /* TRRailroadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE8BAF08EF786F6070B5 /* TRRailroadView.m */; };
 		6F3DF7F9EC57CC3F7E906D30 /* KWContainMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9FD6CEAF67D95F93A08 /* KWContainMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF803F5D6DCCA4B91979F /* KWInvocationCapturer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB9DA8F713DA214EC16E /* KWInvocationCapturer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF809F7D3562C204E9AA3 /* KWNull.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF81BB6C3BC2858EF6253 /* KWNull.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -321,6 +323,7 @@
 		6F3DF82B10CE71BE7ED229F8 /* KWContainMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWContainMatcher.h; sourceTree = "<group>"; };
 		6F3DF83148CBA40C2E7F5BDA /* KWUserDefinedMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWUserDefinedMatcher.h; sourceTree = "<group>"; };
 		6F3DF83859B81D93F4F25B10 /* KWContextNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWContextNode.m; sourceTree = "<group>"; };
+		6F3DF84A9246F0144995CA8F /* TRRailroadView.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TRRailroadView.od; sourceTree = "<group>"; };
 		6F3DF8511B988BF5EF27411C /* KWMessagePattern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWMessagePattern.m; sourceTree = "<group>"; };
 		6F3DF86380D22134BDA3632A /* KWGenericMatchingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWGenericMatchingAdditions.m; sourceTree = "<group>"; };
 		6F3DF86689B5D7E4BE83874F /* EGText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGText.h; sourceTree = "<group>"; };
@@ -411,6 +414,7 @@
 		6F3DFC6A1C0E2F6DFE3D2A5F /* KWFailure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWFailure.h; sourceTree = "<group>"; };
 		6F3DFC7949AE36A333A09765 /* KWRegisterMatchersNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWRegisterMatchersNode.h; sourceTree = "<group>"; };
 		6F3DFC7B3085F8A807BFB401 /* KWExampleNodeVisitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWExampleNodeVisitor.h; sourceTree = "<group>"; };
+		6F3DFCC4599C7D1A631371CA /* TRRailroadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRRailroadView.h; sourceTree = "<group>"; };
 		6F3DFCD0CB7B57497EE5DE31 /* KWStringUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWStringUtilities.m; sourceTree = "<group>"; };
 		6F3DFCE02BB002CBFE0A06DC /* KWRespondToSelectorMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWRespondToSelectorMatcher.h; sourceTree = "<group>"; };
 		6F3DFCE254CB5CB57AFCFD3F /* KiwiMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KiwiMacros.h; sourceTree = "<group>"; };
@@ -443,6 +447,7 @@
 		6F3DFE5F7A1FB6E37B3BF7A9 /* KWBeMemberOfClassMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeMemberOfClassMatcher.h; sourceTree = "<group>"; };
 		6F3DFE60129120401C6F896E /* NSNumber+KiwiAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumber+KiwiAdditions.h"; sourceTree = "<group>"; };
 		6F3DFE6E93BDB3DCD2C17930 /* NSProxy+KiwiVerifierAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSProxy+KiwiVerifierAdditions.m"; sourceTree = "<group>"; };
+		6F3DFE8BAF08EF786F6070B5 /* TRRailroadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRRailroadView.m; sourceTree = "<group>"; };
 		6F3DFE8FAD17ADDCFA0D069D /* EGScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGScene.h; sourceTree = "<group>"; };
 		6F3DFEAEF336912A5D856EAD /* KWPendingNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWPendingNode.m; sourceTree = "<group>"; };
 		6F3DFECE9FC4291325531D0F /* TRLevelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRLevelView.h; sourceTree = "<group>"; };
@@ -870,6 +875,9 @@
 				6F3DFB440B974454D02406F0 /* TRCityView.od */,
 				6F3DF1F233D7AEE1B3A6678A /* TRCityView.h */,
 				6F3DF43AE13D170644E2F651 /* TRCityView.m */,
+				6F3DF84A9246F0144995CA8F /* TRRailroadView.od */,
+				6F3DFCC4599C7D1A631371CA /* TRRailroadView.h */,
+				6F3DFE8BAF08EF786F6070B5 /* TRRailroadView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1119,6 +1127,7 @@
 				6F3DF88D48BDBB5132575C47 /* EGText.od in Resources */,
 				6F3DFD859DAA510EEB91B5F8 /* ODMap.od in Resources */,
 				6F3DFADB53AE883EC4D6291D /* ODNS.od in Resources */,
+				6F3DF62090C875D98E734CB9 /* TRRailroadView.od in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1193,6 +1202,7 @@
 				6F3DF5E339F62A69A94FE894 /* TRRailroad.m in Sources */,
 				6F3DF56665089F2E0FACABDC /* EGTypes.m in Sources */,
 				6F3DF38B6359289D123A28F9 /* EGEventMac.m in Sources */,
+				6F3DF7C872B6D29436FA9988 /* TRRailroadView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

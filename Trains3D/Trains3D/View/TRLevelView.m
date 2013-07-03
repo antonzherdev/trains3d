@@ -3,6 +3,7 @@
 @implementation TRLevelView{
     TRLevelBackgroundView* _backgroundView;
     TRCityView* _cityView;
+    TRRailroadView* _railroadView;
 }
 
 + (id)levelView {
@@ -14,6 +15,7 @@
     if(self) {
         _backgroundView = [TRLevelBackgroundView levelBackgroundView];
         _cityView = [TRCityView cityView];
+        _railroadView = [TRRailroadView railroadView];
     }
     
     return self;
@@ -26,6 +28,7 @@
     [controller.cities forEach:^void(TRCity* city) {
         [_cityView drawCity:city];
     }];
+    [_railroadView drawRailroad:controller.railroad];
     glColor3f(1.0, 1.0, 1.0);
     egMapSsoDrawLayout(mapSize);
 }

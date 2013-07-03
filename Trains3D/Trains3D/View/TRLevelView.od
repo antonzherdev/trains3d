@@ -7,10 +7,12 @@ import EGMap
 import TRLevel
 import TRLevelBackgroundView
 import TRCityView
+import TRRailroadView
 
 class TRLevelView {
     private val backgroundView = TRLevelBackgroundView
     private val cityView = TRCityView
+    private val railroadView = TRRailroadView
 
     def draw(controller : TRLevel, viewSize : CGSize) {
         val mapSize = controller.mapSize
@@ -18,6 +20,7 @@ class TRLevelView {
 
         backgroundView.draw(controller)
         controller.cities.for(city -> cityView.draw(city))
+        railroadView.draw(controller.railroad)
 
         glColor3f(1.0, 1.0, 1.0)
         egMapSsoDrawLayout(mapSize)

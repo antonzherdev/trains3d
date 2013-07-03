@@ -82,6 +82,7 @@
     TRRail* _rail;
 }
 @synthesize railroad = _railroad;
+@synthesize rail = _rail;
 
 + (id)railroadBuilderWithRailroad:(TRRailroad*)railroad {
     return [[TRRailroadBuilder alloc] initWithRailroad:railroad];

@@ -30,7 +30,7 @@ class TRRailroad(mapSize : EGMapSize) {
 }
 
 class TRRailroadBuilder(weak railroad : TRRailroad) {
-    private var rail : TRRail? = nil
+    var rail : TRRail? = nil | private set
 
     def tryBuild(rail : TRRail) : bool = {
         if(railroad.canAdd(rail)) {

@@ -30,6 +30,7 @@
 
 @interface TRRailroadBuilder : NSObject
 @property (nonatomic, readonly, weak) TRRailroad* railroad;
+@property (nonatomic, readonly) TRRail* rail;
 
 + (id)railroadBuilderWithRailroad:(TRRailroad*)railroad;
 - (id)initWithRailroad:(TRRailroad*)railroad;
