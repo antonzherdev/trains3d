@@ -3,10 +3,12 @@ import EGMap
 
 import TRCity
 import TRTypes
+import TRRailroad
 
 
 class TRLevel(mapSize : EGMapSize) {
     var cities : [TRCity] = appendNextCityTo(appendNextCityTo([])) | private set
+    val railroad = TRRailroad(mapSize)
 
     private def appendNextCityTo(cities : [TRCity]) =  {
         val tile = egMapSsoPartialTiles(mapSize).exclude(cities.map(_.tile)).randomItem

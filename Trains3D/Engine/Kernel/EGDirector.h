@@ -6,6 +6,8 @@
 #import "EGGL.h"
 #import "EGContext.h"
 
+@class EGDirector;
+
 @interface EGDirector : NSObject
 @property (nonatomic, retain) EGScene* scene;
 @property (nonatomic, readonly) BOOL started;
@@ -18,6 +20,7 @@
 + (id)director;
 - (id)init;
 - (void)drawWithSize:(CGSize)size;
+- (void)processEvent:(EGEvent*)event;
 - (void)start;
 - (void)stop;
 - (void)pause;

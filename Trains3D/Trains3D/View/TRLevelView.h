@@ -8,10 +8,13 @@
 #import "TRLevelBackgroundView.h"
 #import "TRCityView.h"
 
+@class TRLevelView;
+
 @interface TRLevelView : NSObject
 + (id)levelView;
 - (id)init;
 - (void)drawController:(TRLevel*)controller viewSize:(CGSize)viewSize;
+- (void)processController:(TRLevel*)controller event:(EGEvent*)event;
 @end
 
 

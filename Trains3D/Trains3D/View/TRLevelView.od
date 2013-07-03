@@ -22,4 +22,8 @@ class TRLevelView {
         glColor3f(1.0, 1.0, 1.0)
         egMapSsoDrawLayout(mapSize)
     }
+
+    def process(controller : TRLevel, event : EGEvent) {
+
+    }
 }

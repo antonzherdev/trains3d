@@ -25,6 +25,10 @@
     [_view drawController:_controller viewSize:viewSize];
 }
 
+- (void)processEvent:(EGEvent*)event {
+    [_view processController:_controller event:event];
+}
+
 - (void)updateWithDelta:(CGFloat)delta {
     [_controller updateWithDelta:delta];
 }

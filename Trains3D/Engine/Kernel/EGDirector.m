@@ -41,6 +41,10 @@ static EGDirector* _current;
     [_stat draw];
 }
 
+- (void)processEvent:(EGEvent*)event {
+    [_scene processEvent:event];
+}
+
 - (void)start {
     _started = YES;
     [_time start];

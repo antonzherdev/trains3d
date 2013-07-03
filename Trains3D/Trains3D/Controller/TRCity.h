@@ -3,6 +3,8 @@
 #import "EGTypes.h"
 #import "EGMap.h"
 
+@class TRCity;
+
 @interface TRCity : NSObject
 @property (nonatomic, readonly) TRColor* color;
 @property (nonatomic, readonly) EGMapPoint tile;

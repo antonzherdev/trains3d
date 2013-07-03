@@ -6,6 +6,10 @@ class EGScene(val controller : EGController, val view : EGView) {
         view.draw(controller, viewSize)
     }
 
+    def process(event : EGEvent) {
+        view.process(controller, event)
+    }
+
     def updateWith(delta : float) {
         controller.updateWith(delta)
     }

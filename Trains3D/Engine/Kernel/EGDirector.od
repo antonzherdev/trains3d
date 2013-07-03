@@ -21,6 +21,10 @@ class EGDirector {
         stat.draw
     }
 
+    def process(event : EGEvent) {
+        scene.process(event)
+    }
+
     def start {
         started = true
         time.start

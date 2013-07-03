@@ -30,7 +30,7 @@
         [self.view lockOpenGLContext];
         @try {
             [self tick];
-            [self drawWithSize:NSSizeToCGSize(_view.bounds.size)];
+            [self drawWithSize:_view.viewSize];
             [self.view.openGLContext flushBuffer];
             glFlush();
 

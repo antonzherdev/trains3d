@@ -30,9 +30,11 @@
 @implementation TRRailroad{
     EGMapSize _mapSize;
     NSArray* _rails;
+    TRRailroadBuilder* _builder;
 }
 @synthesize mapSize = _mapSize;
 @synthesize rails = _rails;
+@synthesize builder = _builder;
 
 + (id)railroadWithMapSize:(EGMapSize)mapSize {
     return [[TRRailroad alloc] initWithMapSize:mapSize];
@@ -43,6 +45,7 @@
     if(self) {
         _mapSize = mapSize;
         _rails = (@[]);
+        _builder = [TRRailroadBuilder railroadBuilderWithRailroad:self];
     }
     
     return self;
@@ -69,6 +72,48 @@
     else {
         return NO;
     }
+}
+
+@end
+
+
+@implementation TRRailroadBuilder{
+    __weak TRRailroad* _railroad;
+    TRRail* _rail;
+}
+@synthesize railroad = _railroad;
+
++ (id)railroadBuilderWithRailroad:(TRRailroad*)railroad {
+    return [[TRRailroadBuilder alloc] initWithRailroad:railroad];
+}
+
+- (id)initWithRailroad:(TRRailroad*)railroad {
+    self = [super init];
+    if(self) {
+        _railroad = railroad;
+        _rail = [CNOption none];
+    }
+    
+    return self;
+}
+
+- (BOOL)tryBuildRail:(TRRail*)rail {
+    if([_railroad canAddRail:rail]) {
+        _rail = [CNOption opt:rail];
+        return YES;
+    }
+    else {
+        return NO;
+    }
+}
+
+- (void)clear {
+    _rail = [CNOption none];
+}
+
+- (void)fix {
+    [_railroad tryAddRail:_rail];
+    _rail = [CNOption none];
 }
 
 @end

@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "EGTypes.h"
 
+
 @interface TRColor : NSObject
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) NSInteger ordinal;

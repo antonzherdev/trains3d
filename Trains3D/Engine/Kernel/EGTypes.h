@@ -1,6 +1,8 @@
 #import "objd.h"
 #import "EGTypesAdd.h"
 
+@class EGEvent;
+
 struct EGColor {
     CGFloat r;
     CGFloat g;
@@ -76,6 +78,15 @@ static inline BOOL EGMapRectEq(EGMapRect s1, EGMapRect s2) {
 
 @protocol EGView
 - (void)drawController:(id)controller viewSize:(CGSize)viewSize;
+- (void)processController:(id)controller event:(EGEvent*)event;
+@end
+
+
+@interface EGEvent : NSObject
+@property (nonatomic, readonly) CGSize viewSize;
+
++ (id)eventWithViewSize:(CGSize)viewSize;
+- (id)initWithViewSize:(CGSize)viewSize;
 @end
 
 

@@ -3,9 +3,11 @@
 @implementation TRLevel{
     EGMapSize _mapSize;
     NSArray* _cities;
+    TRRailroad* _railroad;
 }
 @synthesize mapSize = _mapSize;
 @synthesize cities = _cities;
+@synthesize railroad = _railroad;
 
 + (id)levelWithMapSize:(EGMapSize)mapSize {
     return [[TRLevel alloc] initWithMapSize:mapSize];
@@ -16,6 +18,7 @@
     if(self) {
         _mapSize = mapSize;
         _cities = [self appendNextCityToCities:[self appendNextCityToCities:(@[])]];
+        _railroad = [TRRailroad railroadWithMapSize:_mapSize];
     }
     
     return self;

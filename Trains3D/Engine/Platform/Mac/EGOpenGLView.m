@@ -1,14 +1,18 @@
 #import "EGOpenGLView.h"
 #import "EGDirectorMac.h"
+#import "EGEventMac.h"
 
 
 @implementation EGOpenGLView {
 
 @private
     EGDirector *_director;
+    CGSize _viewSize;
 }
 
 @synthesize director = _director;
+
+@synthesize viewSize = _viewSize;
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -58,7 +62,8 @@
 
     [self lockOpenGLContext];
     @try {
-        [_director drawWithSize:NSSizeToCGSize(self.bounds.size)];
+        _viewSize = NSSizeToCGSize(self.bounds.size);
+        [_director drawWithSize:_viewSize];
 
         [self.openGLContext flushBuffer];
     } @finally {
@@ -102,6 +107,119 @@
     NSAssert( glContext, @"FATAL: could not get openGL context");
 
     CGLUnlockContext([glContext CGLContextObj]);
+}
+
+#define DISPATCH_EVENT(theEvent, cmd) [_director processEvent:[EGEventMac eventMacWithEvent: theEvent viewSize:_viewSize]]
+
+#pragma mark CCGLView - Mouse events
+
+- (void)mouseDown:(NSEvent *)theEvent
+{
+    DISPATCH_EVENT(theEvent, _cmd);
+}
+
+- (void)mouseMoved:(NSEvent *)theEvent
+{
+    DISPATCH_EVENT(theEvent, _cmd);
+}
+
+- (void)mouseDragged:(NSEvent *)theEvent
+{
+    DISPATCH_EVENT(theEvent, _cmd);
+}
+
+- (void)mouseUp:(NSEvent *)theEvent
+{
+    DISPATCH_EVENT(theEvent, _cmd);
+}
+
+- (void)rightMouseDown:(NSEvent *)theEvent {
+    DISPATCH_EVENT(theEvent, _cmd);
+}
+
+- (void)rightMouseDragged:(NSEvent *)theEvent {
+    DISPATCH_EVENT(theEvent, _cmd);
+}
+
+- (void)rightMouseUp:(NSEvent *)theEvent {
+    DISPATCH_EVENT(theEvent, _cmd);
+}
+
+- (void)otherMouseDown:(NSEvent *)theEvent {
+    DISPATCH_EVENT(theEvent, _cmd);
+}
+
+- (void)otherMouseDragged:(NSEvent *)theEvent {
+    DISPATCH_EVENT(theEvent, _cmd);
+}
+
+- (void)otherMouseUp:(NSEvent *)theEvent {
+    DISPATCH_EVENT(theEvent, _cmd);
+}
+
+- (void)mouseEntered:(NSEvent *)theEvent {
+    DISPATCH_EVENT(theEvent, _cmd);
+}
+
+- (void)mouseExited:(NSEvent *)theEvent {
+    DISPATCH_EVENT(theEvent, _cmd);
+}
+
+-(void) scrollWheel:(NSEvent *)theEvent {
+    DISPATCH_EVENT(theEvent, _cmd);
+}
+
+#pragma mark CCGLView - Key events
+
+-(BOOL) becomeFirstResponder
+{
+    return YES;
+}
+
+-(BOOL) acceptsFirstResponder
+{
+    return YES;
+}
+
+-(BOOL) resignFirstResponder
+{
+    return YES;
+}
+
+- (void)keyDown:(NSEvent *)theEvent
+{
+    DISPATCH_EVENT(theEvent, _cmd);
+}
+
+- (void)keyUp:(NSEvent *)theEvent
+{
+    DISPATCH_EVENT(theEvent, _cmd);
+}
+
+- (void)flagsChanged:(NSEvent *)theEvent
+{
+    DISPATCH_EVENT(theEvent, _cmd);
+}
+
+#pragma mark CCGLView - Touch events
+- (void)touchesBeganWithEvent:(NSEvent *)theEvent
+{
+    DISPATCH_EVENT(theEvent, _cmd);
+}
+
+- (void)touchesMovedWithEvent:(NSEvent *)theEvent
+{
+    DISPATCH_EVENT(theEvent, _cmd);
+}
+
+- (void)touchesEndedWithEvent:(NSEvent *)theEvent
+{
+    DISPATCH_EVENT(theEvent, _cmd);
+}
+
+- (void)touchesCancelledWithEvent:(NSEvent *)theEvent
+{
+    DISPATCH_EVENT(theEvent, _cmd);
 }
 
 
