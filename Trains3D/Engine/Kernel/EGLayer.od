@@ -7,5 +7,8 @@ class EGLayer(view : EGView, processor : EGProcessor?) {
         view.drawView
     }
 
-    def process(event : EGEvent) : bool = processor.map(_.process(event)).getOr(false)
+    def process(event : EGEvent) : bool = {
+        val cameraEvent = event.set(camera = view.camera)
+        processor.map(_.process(cameraEvent)).getOr(false)
+    }
 }

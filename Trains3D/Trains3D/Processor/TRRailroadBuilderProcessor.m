@@ -49,6 +49,8 @@
 
 - (void)downEvent:(EGEvent*)event {
     _downing = YES;
+    CGPoint point = [event location];
+    NSLog(@"%f, %f", point.x, point.y);
 }
 
 - (void)dragEvent:(EGEvent*)event {

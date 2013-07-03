@@ -16,6 +16,8 @@ trait EGController {
 
 trait EGCamera {
     def focusFor(viewSize : CGSize)
+
+    def translate(viewPoint : CGPoint, withViewSize : CGSize) : CGPoint
 }
 
 trait EGView {

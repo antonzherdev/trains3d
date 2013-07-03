@@ -44,6 +44,11 @@
     glTranslatef((GLfloat) -_center.x,0, (GLfloat) -_center.y);
 }
 
+- (CGPoint)translateViewPoint:(CGPoint)viewPoint withViewSize:(CGSize)withViewSize {
+    return viewPoint;
+}
+
+
 @end
 
 

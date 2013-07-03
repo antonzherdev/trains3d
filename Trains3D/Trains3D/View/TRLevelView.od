@@ -23,5 +23,5 @@ class TRLevelView(level : TRLevel) {
         egMapSsoDrawLayout(level.mapSize)
     }
 
-    val camera = EGCameraIso(level.mapSize, CGPoint(0, 0))
+    val camera : EGCamera = EGCameraIso(level.mapSize, CGPoint(0, 0))
 }

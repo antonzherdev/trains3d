@@ -10,7 +10,15 @@ trait EGMouseProcessor {
     def up(event : EGEvent) {}
 }
 
-class EGEvent(viewSize : CGSize) {
+class EGEvent(viewSize : CGSize, camera : EGCamera?) {
+    def set(camera : EGCamera) : EGEvent
+
+    def locationInView : CGPoint
+    def location = locationFor(0)
+    def locationFor(depth : float) : CGPoint =
+        if(camera.isEmpty) locationInView
+        else camera.get.translate(locationInView, viewSize)
+
     def isLeftMouseDown : bool
     def isLeftMouseDrag : bool
     def isLeftMouseUp : bool

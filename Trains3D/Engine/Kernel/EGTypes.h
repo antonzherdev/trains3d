@@ -77,6 +77,7 @@ static inline BOOL EGMapRectEq(EGMapRect s1, EGMapRect s2) {
 
 @protocol EGCamera
 - (void)focusForViewSize:(CGSize)viewSize;
+- (CGPoint)translateViewPoint:(CGPoint)viewPoint withViewSize:(CGSize)withViewSize;
 @end
 
 

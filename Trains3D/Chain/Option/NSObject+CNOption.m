@@ -26,5 +26,9 @@
     return f(self);
 }
 
+- (id)get {
+    return self;
+}
+
 
 @end

@@ -13,7 +13,7 @@
 
 @interface TRLevelView : NSObject
 @property (nonatomic, readonly) TRLevel* level;
-@property (nonatomic, readonly) EGCameraIso* camera;
+@property (nonatomic, readonly) id camera;
 
 + (id)levelViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;

@@ -5,7 +5,7 @@
     TRLevelBackgroundView* _backgroundView;
     TRCityView* _cityView;
     TRRailroadView* _railroadView;
-    EGCameraIso* _camera;
+    id _camera;
 }
 @synthesize level = _level;
 @synthesize camera = _camera;

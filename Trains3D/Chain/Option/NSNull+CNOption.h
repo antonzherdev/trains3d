@@ -8,4 +8,5 @@
 - (BOOL) isEmpty;
 - (BOOL) isDefined;
 - (id) map:(cnF)f;
+- (id) get;
 @end

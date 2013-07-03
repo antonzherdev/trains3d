@@ -17,9 +17,14 @@
 
 @interface EGEvent : NSObject
 @property (nonatomic, readonly) CGSize viewSize;
+@property (nonatomic, readonly) id camera;
 
-+ (id)eventWithViewSize:(CGSize)viewSize;
-- (id)initWithViewSize:(CGSize)viewSize;
++ (id)eventWithViewSize:(CGSize)viewSize camera:(id)camera;
+- (id)initWithViewSize:(CGSize)viewSize camera:(id)camera;
+- (EGEvent*)setCamera:(id)camera;
+- (CGPoint)locationInView;
+- (CGPoint)location;
+- (CGPoint)locationForDepth:(CGFloat)depth;
 - (BOOL)isLeftMouseDown;
 - (BOOL)isLeftMouseDrag;
 - (BOOL)isLeftMouseUp;

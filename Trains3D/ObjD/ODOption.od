@@ -1,4 +1,5 @@
 stub class ODOption<V> {
+    def get : V
     def getOr(else: () -> V) : V
     def getOr(value: V) : V
     def for(each : V -> void)

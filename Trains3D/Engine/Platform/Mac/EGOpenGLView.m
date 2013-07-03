@@ -109,7 +109,11 @@
     CGLUnlockContext([glContext CGLContextObj]);
 }
 
-#define DISPATCH_EVENT(theEvent, cmd) [_director processEvent:[EGEventMac eventMacWithEvent: theEvent viewSize:_viewSize]]
+#define DISPATCH_EVENT(theEvent, cmd) [_director processEvent:\
+    [EGEventMac eventMacWithEvent:theEvent\
+                   locationInView:NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil])\
+                         viewSize:_viewSize\
+                           camera:[CNOption none]]];
 
 #pragma mark CCGLView - Mouse events
 

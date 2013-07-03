@@ -16,6 +16,7 @@ class TRRailroadBuilderMouseProcessor(builder : TRRailroadBuilder) {
 
     def down(event : EGEvent) {
         downing = true
+        val point = event.location
     }
     def drag(event : EGEvent) = if(downing) {
 

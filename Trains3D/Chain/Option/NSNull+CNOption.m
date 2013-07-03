@@ -24,6 +24,10 @@
     return self;
 }
 
+- (id)get {
+    @throw @"Get from empty";
+}
+
 
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector {
     NSMethodSignature *signature = [super methodSignatureForSelector:aSelector];
