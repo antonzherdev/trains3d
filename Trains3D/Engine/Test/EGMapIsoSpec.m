@@ -1,5 +1,6 @@
 #import "Kiwi.h"
 #import "EGMap.h"
+#import "EGMapIso.h"
 
 #define p(x, y) tuple(numi(x), numi(y))
 NSArray * pointToTuples(NSArray * arr) {
@@ -8,7 +9,7 @@ NSArray * pointToTuples(NSArray * arr) {
         return tuple(numi(p.x), numi(p.y));
     }] array];
 }
-SPEC_BEGIN(EGMapSpec)
+SPEC_BEGIN(EGMapIsoSpec)
     describe(@"Square isometric(Sso)", ^{
         describe(@"should determine full and partial tiles. ", ^{
             describe(@"For map size 2x3", ^{

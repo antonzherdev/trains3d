@@ -1,8 +1,8 @@
 import EGTypes
-import EGCamera
+import EGCameraIso
 import EG
 import EGGL
-import EGMap
+import EGMapIso
 
 import TRLevel
 import TRLevelBackgroundView

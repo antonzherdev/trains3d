@@ -2,7 +2,7 @@
 #import "EG.h"
 #import "EGTexture.h"
 #import "TRLevel.h"
-#import "EGMap.h"
+#import "EGMapIso.h"
 
 @class TRLevelBackgroundView;
 

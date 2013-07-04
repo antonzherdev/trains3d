@@ -1,6 +1,6 @@
 #import "objd.h"
 #import "EGTypes.h"
-#import "EGMap.h"
+#import "EGMapIso.h"
 #import "TRCity.h"
 #import "TRTypes.h"
 #import "TRRailroad.h"

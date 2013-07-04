@@ -1,5 +1,5 @@
 import EGTypes
-import EGMap
+import EGMapIso
 
 import TRCity
 import TRTypes

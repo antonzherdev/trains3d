@@ -1,7 +1,7 @@
 import EG
 import EGTexture
 import TRLevel
-import EGMap
+import EGMapIso
 
 class TRLevelBackgroundView {
     def draw(level : TRLevel) {
