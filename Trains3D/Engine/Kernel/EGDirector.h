@@ -1,11 +1,13 @@
 #import "objd.h"
-#import "EGScene.h"
-#import "EGTime.h"
-#import "EGStat.h"
+@class EGScene;
+@class EGTime;
+@class EGStat;
 #import "EGTypes.h"
-#import "EGGL.h"
-#import "EGContext.h"
-#import "EGProcessor.h"
+@class EGContext;
+@class EGProcessor;
+@class EGMouseProcessor;
+@class EGTouchProcessor;
+@class EGEvent;
 
 @class EGDirector;
 

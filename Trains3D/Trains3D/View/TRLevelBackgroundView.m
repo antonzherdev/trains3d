@@ -1,5 +1,9 @@
 #import "TRLevelBackgroundView.h"
 
+#import "EG.h"
+#import "EGTexture.h"
+#import "TRLevel.h"
+#import "EGMapIso.h"
 @implementation TRLevelBackgroundView
 
 + (id)levelBackgroundView {

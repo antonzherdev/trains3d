@@ -8,16 +8,19 @@ import TRLevel
 import TRLevelBackgroundView
 import TRCityView
 import TRRailroadView
+import TRTrainView
 
 class TRLevelView(level : TRLevel) {
     private val backgroundView = TRLevelBackgroundView
     private val cityView = TRCityView
     private val railroadView = TRRailroadView
+    private val trainView = TRTrainView
 
     def drawView {
         backgroundView.draw(level)
         level.cities.for(city -> cityView.draw(city))
         railroadView.draw(level.railroad)
+        level.trains.for(train -> trainView.draw(train))
 
         glColor3f(1.0, 1.0, 1.0)
         egMapSsoDrawLayout(level.mapSize)

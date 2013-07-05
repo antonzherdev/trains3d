@@ -1,5 +1,8 @@
 #import "TRRailroadBuilderProcessor.h"
 
+#import "EGProcessor.h"
+#import "EGTwoFingerTouchToMouse.h"
+#import "TRRailroad.h"
 @implementation TRRailroadBuilderProcessor{
     TRRailroadBuilder* _builder;
     TRRailroadBuilderMouseProcessor* _mouseProcessor;
@@ -55,12 +58,11 @@
 }
 
 - (id)mouseDragEvent:(EGEvent*)event {
-    return [[_startedPoint map:^id(id sp_) {
-        CGPoint sp = uval(CGPoint, sp_);
-        CGPoint deltaVector = egpSub([event location], sp);
+    return [[_startedPoint map:^id(id sp) {
+        CGPoint deltaVector = egpSub([event location], uval(CGPoint, sp));
         if(egpLengthSQ(deltaVector) > 0.25) {
-            EGIPoint spTile = egpRound(sp);
-            EGIPoint start = [self normPoint:egpSub(sp, egipFloat(spTile))];
+            EGIPoint spTile = egpRound(uval(CGPoint, sp));
+            EGIPoint start = [self normPoint:egpSub(uval(CGPoint, sp), egipFloat(spTile))];
             EGIPoint end = egipAdd(start, [self normPoint:egpSetLength(deltaVector, 0.7)]);
             [_builder tryBuildRail:[self correctRail:[TRRail railWithTile:spTile start:start end:end]]];
         }
@@ -69,8 +71,7 @@
 }
 
 - (id)mouseUpEvent:(EGEvent*)event {
-    return [[_startedPoint map:^id(id point_) {
-        CGPoint point = uval(CGPoint, point_);
+    return [[_startedPoint map:^id(id point) {
         [_builder fix];
         _startedPoint = [CNOption none];
         return @YES;

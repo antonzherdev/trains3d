@@ -1,4 +1,7 @@
 #import "EGDirector.h"
+#import "EGContext.h"
+
+@class EGTexture;
 
 static inline EGDirector * egDirector() {
     return [EGDirector current];

@@ -1,0 +1,33 @@
+import EGTypes
+
+import TRTypes
+import TRCity
+import TRLevel
+
+class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : float) {
+    var head : CGPoint = CGPoint(0, 0)
+
+    def startFrom(city : TRCity) {
+        head = egipFloat(city.tile)
+        calculateCarPositions
+    }
+
+    private def calculateCarPositions {
+        cars.fold((hl, car) -> {
+            car.head = hl
+            val next = move(hl, car.length)
+            car.tail = next
+            move(next, 0.1)
+        }, head)
+    }
+
+    private def move(point : CGPoint, length : float) = CGPoint(point.x, point.y + length)
+}
+
+
+class TRCar {
+    var head : CGPoint = CGPoint(0, 0)
+    var tail : CGPoint = CGPoint(0, 0)
+
+    def length : float = 0.6
+}

@@ -7,6 +7,7 @@
 @property (nonatomic, readonly) NSInteger ordinal;
 @property (nonatomic, readonly) EGColor color;
 
+- (void)gl;
 + (TRColor*)orange;
 + (TRColor*)green;
 + (TRColor*)purple;

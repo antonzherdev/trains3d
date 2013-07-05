@@ -1,5 +1,4 @@
 #import "objd.h"
-#import "EGMap.h"
 #import "EGTypes.h"
 
 @class TRRail;

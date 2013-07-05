@@ -36,25 +36,6 @@ static inline BOOL EGIRectEq(EGIRect s1, EGIRect s2) {
     return s1.left == s2.left && s1.top == s2.top && s1.right == s2.right && s1.bottom == s2.bottom;
 }
 
-struct EGColor {
-    CGFloat r;
-    CGFloat g;
-    CGFloat b;
-    CGFloat a;
-};
-typedef struct EGColor EGColor;
-static inline EGColor EGColorMake(CGFloat r, CGFloat g, CGFloat b, CGFloat a) {
-    EGColor ret;
-    ret.r = r;
-    ret.g = g;
-    ret.b = b;
-    ret.a = a;
-    return ret;
-}
-static inline BOOL EGColorEq(EGColor s1, EGColor s2) {
-    return s1.r == s2.r && s1.g == s2.g && s1.b == s2.b && s1.a == s2.a;
-}
-
 @protocol EGController
 - (void)updateWithDelta:(CGFloat)delta;
 @end

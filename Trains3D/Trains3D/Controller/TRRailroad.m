@@ -1,5 +1,6 @@
 #import "TRRailroad.h"
 
+#import "EGMap.h"
 @implementation TRRail{
     EGIPoint _tile;
     EGIPoint _start;

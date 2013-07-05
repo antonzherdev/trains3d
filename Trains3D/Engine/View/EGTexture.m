@@ -1,4 +1,5 @@
 #import "EGTexture.h"
+#import "EGContext.h"
 #import <OpenGL/glu.h>
 
 @implementation EGTexture{

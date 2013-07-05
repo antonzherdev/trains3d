@@ -1,10 +1,18 @@
 #import "TRLevelView.h"
 
+#import "EGCameraIso.h"
+#import "EG.h"
+#import "EGGL.h"
+#import "EGMapIso.h"
+#import "TRLevel.h"
+#import "TRLevelBackgroundView.h"
+#import "TRCityView.h"
 @implementation TRLevelView{
     TRLevel* _level;
     TRLevelBackgroundView* _backgroundView;
     TRCityView* _cityView;
     TRRailroadView* _railroadView;
+    TRTrainView* _trainView;
     id _camera;
 }
 @synthesize level = _level;
@@ -21,6 +29,7 @@
         _backgroundView = [TRLevelBackgroundView levelBackgroundView];
         _cityView = [TRCityView cityView];
         _railroadView = [TRRailroadView railroadView];
+        _trainView = [TRTrainView trainView];
         _camera = [EGCameraIso cameraIsoWithTilesOnScreen:_level.mapSize center:CGPointMake(0, 0)];
     }
     
@@ -33,6 +42,9 @@
         [_cityView drawCity:city];
     }];
     [_railroadView drawRailroad:_level.railroad];
+    [_level.trains forEach:^void(TRTrain* train) {
+        [_trainView drawTrain:train];
+    }];
     glColor3f(1.0, 1.0, 1.0);
     egMapSsoDrawLayout(_level.mapSize);
 }

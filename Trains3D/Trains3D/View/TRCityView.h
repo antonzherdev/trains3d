@@ -1,6 +1,6 @@
 #import "objd.h"
-#import "EGGL.h"
-#import "TRCity.h"
+@class TRCity;
+@class TRColor;
 
 @class TRCityView;
 

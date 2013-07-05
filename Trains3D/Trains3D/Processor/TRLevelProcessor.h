@@ -1,9 +1,16 @@
 #import "objd.h"
 #import "EGTypes.h"
-#import "EGProcessor.h"
-#import "TRRailroadBuilderProcessor.h"
-#import "TRLevel.h"
-#import "TRLevelView.h"
+@class EGProcessor;
+@class EGMouseProcessor;
+@class EGTouchProcessor;
+@class EGEvent;
+@class TRRailroadBuilderProcessor;
+@class TRRailroadBuilderMouseProcessor;
+@class TRLevel;
+@class TRLevelView;
+@class TRRail;
+@class TRRailroad;
+@class TRRailroadBuilder;
 
 @class TRLevelProcessor;
 

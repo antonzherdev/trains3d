@@ -1,8 +1,6 @@
 #import "objd.h"
-#import "EG.h"
-#import "EGTexture.h"
-#import "TRLevel.h"
-#import "EGMapIso.h"
+@class EGTexture;
+@class TRLevel;
 
 @class TRLevelBackgroundView;
 

@@ -1,5 +1,10 @@
 #import "TRLevelProcessor.h"
 
+#import "EGProcessor.h"
+#import "TRRailroadBuilderProcessor.h"
+#import "TRLevel.h"
+#import "TRLevelView.h"
+#import "TRRailroad.h"
 @implementation TRLevelProcessor{
     TRLevel* _level;
     TRRailroadBuilderProcessor* _railroadBuilderProcessor;

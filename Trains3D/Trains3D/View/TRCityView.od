@@ -1,6 +1,7 @@
 import EGGL
 
 import TRCity
+import TRTypes
 
 class TRCityView {
     def draw(city : TRCity) {
@@ -21,9 +22,7 @@ class TRCityView {
         }
 
         {
-            val col = city.color.color
-            glColor3f(col.r, col.g, col.b)
-
+            city.color.gl
             glTranslatef(0.3, -0.3, 0)
             glutSolidCube(0.15)
 

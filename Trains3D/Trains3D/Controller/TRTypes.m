@@ -36,6 +36,10 @@ static NSArray* values;
     values = (@[orange, green, purple]);
 }
 
+- (void)gl {
+    egColor(_color);
+}
+
 + (TRColor*)orange {
     return orange;
 }

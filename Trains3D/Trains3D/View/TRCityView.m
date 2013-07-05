@@ -1,5 +1,8 @@
 #import "TRCityView.h"
 
+#import "EGGL.h"
+#import "TRCity.h"
+#import "TRTypes.h"
 @implementation TRCityView
 
 + (id)cityView {
@@ -25,8 +28,7 @@
     glVertex2f(0, -0.05);
     glEnd();
     glTranslatef(0, 0, -0.001);
-    EGColor col = city.color.color;
-    glColor3f(col.r, col.g, col.b);
+    [city.color gl];
     glTranslatef(0.3, -0.3, 0);
     glutSolidCube(0.15);
     glTranslatef(-0.3, 0, 0);

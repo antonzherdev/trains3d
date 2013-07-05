@@ -1,5 +1,8 @@
 #import "TRRailroadView.h"
 
+#import "EGGL.h"
+#import "TRRailroad.h"
+#import "EGModel.h"
 @implementation TRRailroadView{
     TRRailView* _railView;
 }

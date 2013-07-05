@@ -1,5 +1,6 @@
 #import "EGLayer.h"
 
+#import "EGProcessor.h"
 @implementation EGLayer{
     id _view;
     id _processor;

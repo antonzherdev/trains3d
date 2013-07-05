@@ -4,6 +4,7 @@ import EGProcessor
 import TRRailroadBuilderProcessor
 import TRLevel
 import TRLevelView
+import TRRailroad
 
 
 class TRLevelProcessor(level : TRLevel) {

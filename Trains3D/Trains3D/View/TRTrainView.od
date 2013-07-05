@@ -1,0 +1,26 @@
+import EGGL
+import EGTypes
+import EGModel
+
+import TRTrain
+import TRTypes
+import "TR3DCar.h"
+
+stub val Car : string
+
+class TRTrainView {
+    def draw(train : TRTrain) {
+        train.color.gl
+        train.cars.for(car -> {
+            glPushMatrix
+
+            val mid = egpMidpoint(car.head, car.tail)
+            glTranslatef(mid.x, mid.y, 0)
+
+            glRotatef(90, 1, 0, 0)
+            egDrawJasModel(Car)
+            glPopMatrix
+        })
+    }
+
+}

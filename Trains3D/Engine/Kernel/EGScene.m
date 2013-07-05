@@ -1,5 +1,7 @@
 #import "EGScene.h"
 
+#import "EGProcessor.h"
+#import "EGLayer.h"
 @implementation EGScene{
     id _controller;
     NSArray* _layers;
@@ -28,8 +30,7 @@
 }
 
 - (BOOL)processEvent:(EGEvent*)event {
-    return unumb([[_layers reverse] fold:^id(id r_, EGLayer* layer) {
-        BOOL r = unumb(r_);
+    return unumb([[_layers reverse] fold:^id(id r, EGLayer* layer) {
         return numb(r || [layer processEvent:event]);
     } withStart:@NO]);
 }

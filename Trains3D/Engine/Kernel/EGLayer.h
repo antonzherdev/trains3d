@@ -1,6 +1,9 @@
 #import "objd.h"
 #import "EGTypes.h"
-#import "EGProcessor.h"
+@class EGProcessor;
+@class EGMouseProcessor;
+@class EGTouchProcessor;
+@class EGEvent;
 
 @class EGLayer;
 

@@ -1,9 +1,9 @@
 #import "objd.h"
 #import "TR3DRail.h"
 #import "TR3DRailTurn.h"
-#import "EGGL.h"
-#import "TRRailroad.h"
-#import "EGModel.h"
+@class TRRail;
+@class TRRailroad;
+@class TRRailroadBuilder;
 
 @class TRRailroadView;
 @class TRRailView;
