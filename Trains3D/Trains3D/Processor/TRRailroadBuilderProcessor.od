@@ -46,6 +46,8 @@ class TRRailroadBuilderMouseProcessor(builder : TRRailroadBuilder) {
         else if(rail.end.y < -1) move(rail, 0, -1)
         else if(rail.start.x == 0 && rail.start.y == 0) correct(TRRail(rail.tile, egipNeg(rail.end), rail.end))
         else if(rail.end.x == 0 && rail.end.y == 0) correct(TRRail(rail.tile, rail.start, egipNeg(rail.start)))
+        else if(rail.start.x > rail.end.x) correct(TRRail(rail.tile, rail.end, rail.start))
+        else if(rail.start.x == rail.end.x && rail.start.y > rail.end.y) correct(TRRail(rail.tile, rail.end, rail.start))
         else rail
 
     private def move(rail : TRRail, x : int, y : int) = correct(TRRail(

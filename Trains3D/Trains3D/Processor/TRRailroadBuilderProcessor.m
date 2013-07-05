@@ -92,6 +92,8 @@
     else if(rail.end.y < -1) return [self moveRail:rail x:0 y:-1];
     else if(rail.start.x == 0 && rail.start.y == 0) return [self correctRail:[TRRail railWithTile:rail.tile start:egipNeg(rail.end) end:rail.end]];
     else if(rail.end.x == 0 && rail.end.y == 0) return [self correctRail:[TRRail railWithTile:rail.tile start:rail.start end:egipNeg(rail.start)]];
+    else if(rail.start.x > rail.end.x) return [self correctRail:[TRRail railWithTile:rail.tile start:rail.end end:rail.start]];
+    else if(rail.start.x == rail.end.x && rail.start.y > rail.end.y) return [self correctRail:[TRRail railWithTile:rail.tile start:rail.end end:rail.start]];
     else return rail;
 }
 
