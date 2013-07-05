@@ -6,10 +6,10 @@ import EGTypes
  * start - начальная позиция на клетке
  * start - конечная позиция на клетке
  */
-class TRRail(tile : EGMapPoint, start : CGPoint, end : CGPoint)
+class TRRail(tile : EGIPoint, start : EGIPoint, end : EGIPoint)
 
 
-class TRRailroad(mapSize : EGMapSize) {
+class TRRailroad(mapSize : EGISize) {
     var rails : [TRRail] = [] | private set
     val builder = TRRailroadBuilder(self)
 
@@ -44,7 +44,7 @@ class TRRailroadBuilder(weak railroad : TRRailroad) {
     }
 
     def fix {
-        railroad.tryAdd(rail)
+        rail.for(r -> railroad.tryAdd(r))
         rail = nil
     }
 }

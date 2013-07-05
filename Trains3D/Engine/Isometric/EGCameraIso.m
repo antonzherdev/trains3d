@@ -1,7 +1,7 @@
 #import "EGCameraIso.h"
 #import "EGMapIso.h"
 
-static inline CGRect calculateViewportSize(EGMapSize tilesOnScreen, CGSize viewSize) {
+static inline CGRect calculateViewportSize(EGISize tilesOnScreen, CGSize viewSize) {
     CGFloat ww = tilesOnScreen.width + tilesOnScreen.height;
     CGFloat tileSize = MIN(viewSize.width / ww, 2*viewSize.height/ ww);
     CGFloat viewportWidth = tileSize * ww;
@@ -11,17 +11,17 @@ static inline CGRect calculateViewportSize(EGMapSize tilesOnScreen, CGSize viewS
 }
 
 @implementation EGCameraIso{
-    EGMapSize _tilesOnScreen;
+    EGISize _tilesOnScreen;
     CGPoint _center;
 }
 @synthesize tilesOnScreen = _tilesOnScreen;
 @synthesize center = _center;
 
-+ (id)cameraIsoWithTilesOnScreen:(EGMapSize)tilesOnScreen center:(CGPoint)center {
++ (id)cameraIsoWithTilesOnScreen:(EGISize)tilesOnScreen center:(CGPoint)center {
     return [[EGCameraIso alloc] initWithTilesOnScreen:tilesOnScreen center:center];
 }
 
-- (id)initWithTilesOnScreen:(EGMapSize)tilesOnScreen center:(CGPoint)center {
+- (id)initWithTilesOnScreen:(EGISize)tilesOnScreen center:(CGPoint)center {
     self = [super init];
     if(self) {
         _tilesOnScreen = tilesOnScreen;

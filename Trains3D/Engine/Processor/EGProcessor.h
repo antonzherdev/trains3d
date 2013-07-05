@@ -9,9 +9,9 @@
 
 
 @protocol EGMouseProcessor
-- (void)downEvent:(EGEvent*)event;
-- (void)dragEvent:(EGEvent*)event;
-- (void)upEvent:(EGEvent*)event;
+- (BOOL)downEvent:(EGEvent*)event;
+- (BOOL)dragEvent:(EGEvent*)event;
+- (BOOL)upEvent:(EGEvent*)event;
 @end
 
 
@@ -28,7 +28,7 @@
 - (BOOL)isLeftMouseDown;
 - (BOOL)isLeftMouseDrag;
 - (BOOL)isLeftMouseUp;
-- (void)leftMouseProcessor:(id)processor;
+- (BOOL)leftMouseProcessor:(id)processor;
 @end
 
 

@@ -11,7 +11,7 @@
 
 + (id)railroadBuilderProcessorWithBuilder:(TRRailroadBuilder*)builder;
 - (id)initWithBuilder:(TRRailroadBuilder*)builder;
-- (void)processEvent:(EGEvent*)event;
+- (BOOL)processEvent:(EGEvent*)event;
 @end
 
 
@@ -20,9 +20,9 @@
 
 + (id)railroadBuilderMouseProcessorWithBuilder:(TRRailroadBuilder*)builder;
 - (id)initWithBuilder:(TRRailroadBuilder*)builder;
-- (void)downEvent:(EGEvent*)event;
-- (void)dragEvent:(EGEvent*)event;
-- (void)upEvent:(EGEvent*)event;
+- (BOOL)downEvent:(EGEvent*)event;
+- (id)dragEvent:(EGEvent*)event;
+- (id)upEvent:(EGEvent*)event;
 @end
 
 

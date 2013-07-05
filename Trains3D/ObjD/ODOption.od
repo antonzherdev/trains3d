@@ -1,7 +1,7 @@
 stub class ODOption<V> {
     def get : V
-    def getOr(else: () -> V) : V
-    def getOr(value: V) : V
+    def getOrElse(: () -> V) : V
+    def getOr(: V) : V
     def for(each : V -> void)
     def map<B>(:V -> B) : B?
     def isEmpty : bool

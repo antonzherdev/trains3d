@@ -1,9 +1,9 @@
 import EGTypes
 
-stub def egMapSsoDrawLayout(size: EGMapSize)
-stub def egMapSsoDrawPlane(size: EGMapSize)
-stub def egMapSsoIsFullTile(size : EGMapSize, x : int, y : int) : bool
-stub def egMapSsoLimits(size : EGMapSize) : EGMapRect
-stub def egMapSsoFullTiles(size : EGMapSize) : [EGMapPoint]
-stub def egMapSsoPartialTiles(size : EGMapSize) : [EGMapPoint]
-stub def egMapSsoTileCut(size : EGMapSize, tile :EGMapPoint) : EGMapRect
+stub def egMapSsoDrawLayout(size: EGISize)
+stub def egMapSsoDrawPlane(size: EGISize)
+stub def egMapSsoIsFullTile(size : EGISize, x : int, y : int) : bool
+stub def egMapSsoLimits(size : EGISize) : EGIRect
+stub def egMapSsoFullTiles(size : EGISize) : [EGIPoint]
+stub def egMapSsoPartialTiles(size : EGISize) : [EGIPoint]
+stub def egMapSsoTileCut(size : EGISize, tile :EGIPoint) : EGIRect

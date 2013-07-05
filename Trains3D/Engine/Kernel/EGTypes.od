@@ -4,11 +4,32 @@ stub struct CGPoint(x : float, y : float)
 stub struct CGSize(width : float, height : float)
 stub struct GLuint
 
-struct EGColor(r : float, g : float, b : float, a : float)
+stub val M_PI : float
+stub def round(: float) : float
+stub def lround(: float) : int
 
-struct EGMapPoint(x : int, y : int)
-struct EGMapSize(width : int, height : int)
-struct EGMapRect(left : int, top : int, right : int, bottom : int)
+stub def egpAdd(v1 : CGPoint, v2 : CGPoint) : CGPoint
+stub def egpSub(v1 : CGPoint, v2 : CGPoint) : CGPoint
+stub def egpToAngle(v : CGPoint) : float
+stub def egpLength(v : CGPoint) : float
+stub def egpLengthSQ(v : CGPoint) : float
+stub def egpDistance(v1 : CGPoint, v2 : CGPoint) : float
+stub def egpMult(v : CGPoint, f : float) : float
+stub def egpNormalize(v : CGPoint) : CGPoint
+stub def egpSetLength(v : CGPoint, l : float) : CGPoint
+
+stub struct EGIPoint(x : int, y : int)
+stub def egip(x : int, y : int) : EGIPoint
+stub def egpRound(p : CGPoint) : EGIPoint
+stub def egipFloat(p : EGIPoint) : CGPoint
+stub def egipAdd(v1 : EGIPoint, v2 : EGIPoint) : EGIPoint
+stub def egipSub(v1 : EGIPoint, v2 : EGIPoint) : EGIPoint
+stub def egipNeg(v : EGIPoint) : EGIPoint
+
+struct EGISize(width : int, height : int)
+struct EGIRect(left : int, top : int, right : int, bottom : int)
+
+struct EGColor(r : float, g : float, b : float, a : float)
 
 trait EGController {
     def updateWith(delta : float)

@@ -1,7 +1,7 @@
 #import "TRLevel.h"
 
 @implementation TRLevel{
-    EGMapSize _mapSize;
+    EGISize _mapSize;
     NSArray* _cities;
     TRRailroad* _railroad;
 }
@@ -9,11 +9,11 @@
 @synthesize cities = _cities;
 @synthesize railroad = _railroad;
 
-+ (id)levelWithMapSize:(EGMapSize)mapSize {
++ (id)levelWithMapSize:(EGISize)mapSize {
     return [[TRLevel alloc] initWithMapSize:mapSize];
 }
 
-- (id)initWithMapSize:(EGMapSize)mapSize {
+- (id)initWithMapSize:(EGISize)mapSize {
     self = [super init];
     if(self) {
         _mapSize = mapSize;
@@ -25,14 +25,14 @@
 }
 
 - (NSArray*)appendNextCityToCities:(NSArray*)cities {
-    EGMapPoint tile = uval(EGMapPoint, [[egMapSsoPartialTiles(_mapSize) exclude:[cities map:^id(TRCity* _) {
+    EGIPoint tile = uval(EGIPoint, [[egMapSsoPartialTiles(_mapSize) exclude:[cities map:^id(TRCity* _) {
         return val(_.tile);
     }]] randomItem]);
     return [cities arrayByAddingObject:[TRCity cityWithColor:[TRColor values][[cities count]] tile:tile angle:[self randomCityDirectionForTile:tile]]];
 }
 
-- (NSInteger)randomCityDirectionForTile:(EGMapPoint)tile {
-    EGMapRect cut = egMapSsoTileCut(_mapSize, tile);
+- (NSInteger)randomCityDirectionForTile:(EGIPoint)tile {
+    EGIRect cut = egMapSsoTileCut(_mapSize, tile);
     return unumi([[(@[@0, @90, @180, @270]) filter:^BOOL(id angle_) {
         NSInteger angle = unumi(angle_);
         return angle == 0 && cut.right == 0 && cut.bottom == 0 || angle == 90 && cut.left == 0 && cut.bottom == 0 || angle == 180 && cut.left == 0 && cut.top == 0 || angle == 270 && cut.right == 0 && cut.top == 0;

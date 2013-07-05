@@ -7,22 +7,22 @@
 @class TRRailroadBuilder;
 
 @interface TRRail : NSObject
-@property (nonatomic, readonly) EGMapPoint tile;
-@property (nonatomic, readonly) CGPoint start;
-@property (nonatomic, readonly) CGPoint end;
+@property (nonatomic, readonly) EGIPoint tile;
+@property (nonatomic, readonly) EGIPoint start;
+@property (nonatomic, readonly) EGIPoint end;
 
-+ (id)railWithTile:(EGMapPoint)tile start:(CGPoint)start end:(CGPoint)end;
-- (id)initWithTile:(EGMapPoint)tile start:(CGPoint)start end:(CGPoint)end;
++ (id)railWithTile:(EGIPoint)tile start:(EGIPoint)start end:(EGIPoint)end;
+- (id)initWithTile:(EGIPoint)tile start:(EGIPoint)start end:(EGIPoint)end;
 @end
 
 
 @interface TRRailroad : NSObject
-@property (nonatomic, readonly) EGMapSize mapSize;
+@property (nonatomic, readonly) EGISize mapSize;
 @property (nonatomic, readonly) NSArray* rails;
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
 
-+ (id)railroadWithMapSize:(EGMapSize)mapSize;
-- (id)initWithMapSize:(EGMapSize)mapSize;
++ (id)railroadWithMapSize:(EGISize)mapSize;
+- (id)initWithMapSize:(EGISize)mapSize;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (BOOL)tryAddRail:(TRRail*)rail;
 @end

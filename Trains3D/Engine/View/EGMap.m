@@ -1,6 +1,6 @@
 #import "EGMap.h"
 
-void egMapDrawLayout(EGMapSize size) {
+void egMapDrawLayout(EGISize size) {
     glBegin(GL_LINES);
     {
         for(int x = -1; x < size.width; x++) {

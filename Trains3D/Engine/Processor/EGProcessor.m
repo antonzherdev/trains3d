@@ -34,12 +34,8 @@
 }
 
 - (CGPoint)locationForDepth:(CGFloat)depth {
-    if([_camera isEmpty]) {
-        return [self locationInView];
-    }
-    else {
-        return [[_camera get] translateViewPoint:[self locationInView] withViewSize:_viewSize];
-    }
+    if([_camera isEmpty]) return [self locationInView];
+    else return [[_camera get] translateViewPoint:[self locationInView] withViewSize:_viewSize];
 }
 
 - (BOOL)isLeftMouseDown {
@@ -54,20 +50,11 @@
     @throw @"Method isLeftMouseUp is abstact";
 }
 
-- (void)leftMouseProcessor:(id)processor {
-    if([self isLeftMouseDown]) {
-        [processor downEvent:self];
-    }
-    else {
-        if([self isLeftMouseDrag]) {
-            [processor dragEvent:self];
-        }
-        else {
-            if([self isLeftMouseUp]) {
-                [processor upEvent:self];
-            }
-        }
-    }
+- (BOOL)leftMouseProcessor:(id)processor {
+    if([self isLeftMouseDown]) return [processor downEvent:self];
+    else if([self isLeftMouseDrag]) return [processor dragEvent:self];
+    else if([self isLeftMouseUp]) return [processor upEvent:self];
+    else return NO;
 }
 
 @end

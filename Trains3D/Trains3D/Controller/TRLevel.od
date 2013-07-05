@@ -6,7 +6,7 @@ import TRTypes
 import TRRailroad
 
 
-class TRLevel(mapSize : EGMapSize) {
+class TRLevel(mapSize : EGISize) {
     var cities : [TRCity] = appendNextCityTo(appendNextCityTo([])) | private set
     val railroad = TRRailroad(mapSize)
 
@@ -15,7 +15,7 @@ class TRLevel(mapSize : EGMapSize) {
         cities + TRCity(TRColor[cities.count], tile, randomCityDirectionFor(tile))
     }
 
-    private def randomCityDirectionFor(tile : EGMapPoint) = {
+    private def randomCityDirectionFor(tile : EGIPoint) = {
         val cut = egMapSsoTileCut(mapSize, tile)
         [0, 90, 180, 270].filter(angle ->
             (angle == 0 && cut.right == 0 && cut.bottom == 0)

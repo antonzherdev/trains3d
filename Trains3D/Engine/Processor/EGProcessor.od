@@ -5,9 +5,9 @@ trait EGProcessor {
 }
 
 trait EGMouseProcessor {
-    def down(event : EGEvent) {}
-    def drag(event : EGEvent) {}
-    def up(event : EGEvent) {}
+    def down(event : EGEvent) : bool = false
+    def drag(event : EGEvent)  : bool = false
+    def up(event : EGEvent) : bool = false
 }
 
 class EGEvent(viewSize : CGSize, camera : EGCamera?) {
@@ -22,10 +22,11 @@ class EGEvent(viewSize : CGSize, camera : EGCamera?) {
     def isLeftMouseDown : bool
     def isLeftMouseDrag : bool
     def isLeftMouseUp : bool
-    def leftMouse(processor : EGMouseProcessor) {
+    def leftMouse(processor : EGMouseProcessor) : bool = {
         if(isLeftMouseDown) processor.down(self)
         else if(isLeftMouseDrag) processor.drag(self)
         else if(isLeftMouseUp) processor.up(self)
+        else false
     }
 }
 

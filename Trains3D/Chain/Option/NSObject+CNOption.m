@@ -10,7 +10,7 @@
     return self;
 }
 
-- (id)getOrValue:(id)value {
+- (id)getOr:(id)value {
     return self;
 }
 

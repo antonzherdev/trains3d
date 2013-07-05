@@ -6,22 +6,49 @@ import TRRailroad
 class TRRailroadBuilderProcessor(builder : TRRailroadBuilder) {
     private val mouseProcessor = TRRailroadBuilderMouseProcessor(builder)
 
-    def process(event : EGEvent) {
-        event.leftMouse(mouseProcessor)
-    }
+    def process(event : EGEvent) = event.leftMouse(mouseProcessor)
 }
 
 class TRRailroadBuilderMouseProcessor(builder : TRRailroadBuilder) {
-    private var downing = false
+    private var startedPoint : CGPoint? = nil
 
-    def down(event : EGEvent) {
-        downing = true
-        val point = event.location
+    def down(event : EGEvent) = {
+        startedPoint = event.location
+        true
     }
-    def drag(event : EGEvent) = if(downing) {
 
-    }
-    def up(event : EGEvent) = if(downing) {
-        downing = true
-    }
+    def drag(event : EGEvent) = startedPoint.map(sp -> {
+        val deltaVector = egpSub(event.location, sp)
+        if(egpLengthSQ(deltaVector) > 0.25) {
+            val spTile = egpRound(sp)
+            val start = norm(egpSub(sp, egipFloat(spTile)))
+            val end = egipAdd(start, norm(egpSetLength(deltaVector, 0.7)))
+            builder.tryBuild(correct(TRRail(spTile, start, end)))
+        }
+        true
+    }).getOr(false)
+
+    def up(event : EGEvent) = startedPoint.map(point -> {
+        builder.fix
+        startedPoint = nil
+        true
+    }).getOr(false)
+
+    private def norm(point : CGPoint) = EGIPoint(n(point.x), n(point.y))
+    private def n(x : float) : int = round(x*2)
+
+    private def correct(rail : TRRail) : TRRail =
+        if(rail.end.x > 1) move(rail, 1, 0)
+        else if(rail.end.x < -1) move(rail,-1, 0)
+        else if(rail.end.y > 1) move(rail, 0, 1)
+        else if(rail.end.y < -1) move(rail, 0, -1)
+        else if(rail.start.x == 0 && rail.start.y == 0) correct(TRRail(rail.tile, egipNeg(rail.end), rail.end))
+        else if(rail.end.x == 0 && rail.end.y == 0) correct(TRRail(rail.tile, rail.start, egipNeg(rail.start)))
+        else rail
+
+    private def move(rail : TRRail, x : int, y : int) = correct(TRRail(
+        egip(rail.tile.x + x, rail.tile.y + y),
+        egip(rail.start.x - 2*x, rail.start.y - 2*y),
+        egip(rail.end.x - 2*x, rail.end.y - 2*y)))
+
 }

@@ -1,19 +1,19 @@
 #import "TRRailroad.h"
 
 @implementation TRRail{
-    EGMapPoint _tile;
-    CGPoint _start;
-    CGPoint _end;
+    EGIPoint _tile;
+    EGIPoint _start;
+    EGIPoint _end;
 }
 @synthesize tile = _tile;
 @synthesize start = _start;
 @synthesize end = _end;
 
-+ (id)railWithTile:(EGMapPoint)tile start:(CGPoint)start end:(CGPoint)end {
++ (id)railWithTile:(EGIPoint)tile start:(EGIPoint)start end:(EGIPoint)end {
     return [[TRRail alloc] initWithTile:tile start:start end:end];
 }
 
-- (id)initWithTile:(EGMapPoint)tile start:(CGPoint)start end:(CGPoint)end {
+- (id)initWithTile:(EGIPoint)tile start:(EGIPoint)start end:(EGIPoint)end {
     self = [super init];
     if(self) {
         _tile = tile;
@@ -28,7 +28,7 @@
 
 
 @implementation TRRailroad{
-    EGMapSize _mapSize;
+    EGISize _mapSize;
     NSArray* _rails;
     TRRailroadBuilder* _builder;
 }
@@ -36,11 +36,11 @@
 @synthesize rails = _rails;
 @synthesize builder = _builder;
 
-+ (id)railroadWithMapSize:(EGMapSize)mapSize {
++ (id)railroadWithMapSize:(EGISize)mapSize {
     return [[TRRailroad alloc] initWithMapSize:mapSize];
 }
 
-- (id)initWithMapSize:(EGMapSize)mapSize {
+- (id)initWithMapSize:(EGISize)mapSize {
     self = [super init];
     if(self) {
         _mapSize = mapSize;
@@ -53,13 +53,13 @@
 
 - (BOOL)canAddRail:(TRRail*)rail {
     NSArray* railsInTile = [[_rails filter:^BOOL(TRRail* _) {
-        return EGMapPointEq(_.tile, rail.tile);
+        return EGIPointEq(_.tile, rail.tile);
     }] array];
     NSUInteger countsAtStart = [[railsInTile filter:^BOOL(TRRail* _) {
-        return CGPointEq(_.start, rail.start) || CGPointEq(_.end, rail.start);
+        return EGIPointEq(_.start, rail.start) || EGIPointEq(_.end, rail.start);
     }] count];
     NSUInteger countsAtEnd = [[railsInTile filter:^BOOL(TRRail* _) {
-        return CGPointEq(_.start, rail.end) || CGPointEq(_.end, rail.end);
+        return EGIPointEq(_.start, rail.end) || EGIPointEq(_.end, rail.end);
     }] count];
     return countsAtStart < 2 && countsAtEnd < 2;
 }
@@ -68,10 +68,7 @@
     if([self canAddRail:rail]) {
         _rails = [_rails arrayByAddingObject:rail];
         return YES;
-    }
-    else {
-        return NO;
-    }
+    } else return NO;
 }
 
 @end
@@ -102,10 +99,7 @@
     if([_railroad canAddRail:rail]) {
         _rail = [CNOption opt:rail];
         return YES;
-    }
-    else {
-        return NO;
-    }
+    } else return NO;
 }
 
 - (void)clear {
@@ -113,7 +107,9 @@
 }
 
 - (void)fix {
-    [_railroad tryAddRail:_rail];
+    [_rail forEach:^void(TRRail* r) {
+        [_railroad tryAddRail:r];
+    }];
     _rail = [CNOption none];
 }
 

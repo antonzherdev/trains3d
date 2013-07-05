@@ -1,9 +1,9 @@
 #import "EGMapIso.h"
 #import "EGMap.h"
 
-NSArray *egMapSsoPickTiles(EGMapSize size, BOOL (^predicate)(id));
+NSArray *egMapSsoPickTiles(EGISize size, BOOL (^predicate)(id));
 
-void egMapSsoDrawLayout(EGMapSize size) {
+void egMapSsoDrawLayout(EGISize size) {
     glPushMatrix();
     glRotatef(45, 0, 0, 1);
     glBegin(GL_LINES);
@@ -31,7 +31,7 @@ void egMapSsoDrawLayout(EGMapSize size) {
     glBegin(GL_LINES);
     {
         for(id tile in egMapSsoFullTiles(size)) {
-            EGMapPoint p = uval(EGMapPoint, tile);
+            EGIPoint p = uval(EGIPoint, tile);
             glVertex3d(p.x - 0.5, p.y - 0.5, 0.0);
             glVertex3d(p.x + 0.5, p.y - 0.5, 0.0);
 
@@ -50,10 +50,10 @@ void egMapSsoDrawLayout(EGMapSize size) {
     egMapDrawAxis();
 }
 
-void egMapSsoDrawPlane(EGMapSize size) {
+void egMapSsoDrawPlane(EGISize size) {
     glBegin(GL_QUADS);
     {
-        EGMapRect limits = egMapSsoLimits(size);
+        EGIRect limits = egMapSsoLimits(size);
         float l = limits.left - 1.5;
         float r = limits.right + 1.5;
         float t = limits.top - 1.5;
@@ -69,33 +69,33 @@ void egMapSsoDrawPlane(EGMapSize size) {
     glPopMatrix();
 }
 
-EGMapRect egMapSsoLimits(EGMapSize size) {
-    return EGMapRectMake(
+EGIRect egMapSsoLimits(EGISize size) {
+    return EGIRectMake(
             (1 - size.height)/2 - 1,
             (1 - size.width)/2 - 1,
             (2*size.width + size.height - 3)/2 + 1,
             (size.width + 2*size.height - 3)/2 + 1);
 }
 
-extern NSArray * egMapSsoFullTiles(EGMapSize size) {
+extern NSArray * egMapSsoFullTiles(EGISize size) {
     return egMapSsoPickTiles(size, ^BOOL(id t) {
         return egMapSsoIsFullTile(size, [[t a] intValue], [[t b] intValue]);
     });
 }
 
-extern NSArray * egMapSsoPartialTiles(EGMapSize size) {
+extern NSArray * egMapSsoPartialTiles(EGISize size) {
     return egMapSsoPickTiles(size, ^BOOL(id t) {
         return egMapSsoIsPartialTile(size, [[t a] intValue], [[t b] intValue]);
     });
 }
 
-NSArray *egMapSsoPickTiles(EGMapSize size, BOOL (^predicate)(id)) {
-    EGMapRect limits = egMapSsoLimits(size);
+NSArray *egMapSsoPickTiles(EGISize size, BOOL (^predicate)(id)) {
+    EGIRect limits = egMapSsoLimits(size);
     return [[[[[CNChain chainWithStart:limits.left end:limits.right step:1]
             mul:[CNChain chainWithStart:limits.top end:limits.bottom step:1]]
             filter:predicate]
             map:^id(id t) {
-                return val(EGMapPointMake([[t a] intValue], [[t b] intValue]));
+                return val(EGIPointMake([[t a] intValue], [[t b] intValue]));
             }]
             array];
 }
@@ -104,8 +104,8 @@ static inline int egMapSsoTileCutAxis(NSInteger less, NSInteger more) {
     return less == more ? 1 : ( less < more ? 0 : 2);
 }
 
-EGMapRect egMapSsoTileCut(EGMapSize size, EGMapPoint p) {
-    return EGMapRectMake(
+EGIRect egMapSsoTileCut(EGISize size, EGIPoint p) {
+    return EGIRectMake(
             egMapSsoTileCutAxis(0, p.x + p.y),
             egMapSsoTileCutAxis(p.y - p.x, size.height - 1),
             egMapSsoTileCutAxis(p.x + p.y, size.width + size.height - 2),

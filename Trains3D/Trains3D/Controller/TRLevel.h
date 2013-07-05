@@ -8,12 +8,12 @@
 @class TRLevel;
 
 @interface TRLevel : NSObject
-@property (nonatomic, readonly) EGMapSize mapSize;
+@property (nonatomic, readonly) EGISize mapSize;
 @property (nonatomic, readonly) NSArray* cities;
 @property (nonatomic, readonly) TRRailroad* railroad;
 
-+ (id)levelWithMapSize:(EGMapSize)mapSize;
-- (id)initWithMapSize:(EGMapSize)mapSize;
++ (id)levelWithMapSize:(EGISize)mapSize;
+- (id)initWithMapSize:(EGISize)mapSize;
 - (void)createNewCity;
 @end
 

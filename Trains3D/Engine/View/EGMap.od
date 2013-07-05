@@ -1,2 +1,2 @@
-stub def egMapDrawLayout(size: EGMapSize)
+stub def egMapDrawLayout(size: EGISize)
 stub def egMapDrawAxis

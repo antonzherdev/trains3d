@@ -30,9 +30,7 @@
     EGEvent* cameraEvent = [event setCamera:[_view camera]];
     return unumb([[_processor map:^id(id _) {
         return numb([_ processEvent:cameraEvent]);
-    }] getOrElse:^id() {
-        return @NO;
-    }]);
+    }] getOr:@NO]);
 }
 
 @end

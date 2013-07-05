@@ -4,7 +4,7 @@
 @interface NSObject (CNOption)
 - (void)forEach:(cnP)f;
 - (id)getOrElse:(cnF0)f;
-- (id)getOrValue:(id)value;
+- (id)getOr:(id)value;
 - (BOOL) isEmpty;
 - (BOOL) isDefined;
 - (id) map:(cnF)f;

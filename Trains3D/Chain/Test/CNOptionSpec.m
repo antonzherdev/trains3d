@@ -30,8 +30,8 @@ SPEC_BEGIN(CNOpionSpec)
             [[[CNOption opt:nil] should] equal:none];
         });
         it(@".orValue and .or should return self if it's some or value if it's none", ^{
-            [[[some getOrValue:@"def"] should] equal:@"test"];
-            [[[none getOrValue:@"def"] should] equal:@"def"];
+            [[[some getOr:@"def"] should] equal:@"test"];
+            [[[none getOr:@"def"] should] equal:@"def"];
             [[[some getOrElse:^id {
                 return @"def";
             }] should] equal:@"test"];

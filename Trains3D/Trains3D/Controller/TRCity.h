@@ -7,11 +7,11 @@
 
 @interface TRCity : NSObject
 @property (nonatomic, readonly) TRColor* color;
-@property (nonatomic, readonly) EGMapPoint tile;
+@property (nonatomic, readonly) EGIPoint tile;
 @property (nonatomic, readonly) NSInteger angle;
 
-+ (id)cityWithColor:(TRColor*)color tile:(EGMapPoint)tile angle:(NSInteger)angle;
-- (id)initWithColor:(TRColor*)color tile:(EGMapPoint)tile angle:(NSInteger)angle;
++ (id)cityWithColor:(TRColor*)color tile:(EGIPoint)tile angle:(NSInteger)angle;
+- (id)initWithColor:(TRColor*)color tile:(EGIPoint)tile angle:(NSInteger)angle;
 @end
 
 

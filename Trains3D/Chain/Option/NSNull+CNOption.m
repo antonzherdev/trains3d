@@ -8,7 +8,7 @@
     return f();
 }
 
-- (id)getOrValue:(id)value {
+- (id)getOr:(id)value {
     return value;
 }
 

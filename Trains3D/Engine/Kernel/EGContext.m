@@ -10,9 +10,7 @@
 
 - (id)init {
     self = [super init];
-    if(self) {
-        _textureCache = [CNCache cache];
-    }
+    if(self) _textureCache = [CNCache cache];
     
     return self;
 }

@@ -20,8 +20,8 @@
     return self;
 }
 
-- (void)processEvent:(EGEvent*)event {
-    [event leftMouseProcessor:_mouseProcessor];
+- (BOOL)processEvent:(EGEvent*)event {
+    return [event leftMouseProcessor:_mouseProcessor];
 }
 
 @end
@@ -29,7 +29,7 @@
 
 @implementation TRRailroadBuilderMouseProcessor{
     TRRailroadBuilder* _builder;
-    BOOL _downing;
+    id _startedPoint;
 }
 @synthesize builder = _builder;
 
@@ -41,27 +41,60 @@
     self = [super init];
     if(self) {
         _builder = builder;
-        _downing = NO;
+        _startedPoint = [CNOption none];
     }
     
     return self;
 }
 
-- (void)downEvent:(EGEvent*)event {
-    _downing = YES;
-    CGPoint point = [event location];
-    NSLog(@"%f, %f", point.x, point.y);
+- (BOOL)downEvent:(EGEvent*)event {
+    _startedPoint = [CNOption opt:val([event location])];
+    return YES;
 }
 
-- (void)dragEvent:(EGEvent*)event {
-    if(_downing) {
-    }
+- (id)dragEvent:(EGEvent*)event {
+    return [[_startedPoint map:^id(id sp_) {
+        CGPoint sp = uval(CGPoint, sp_);
+        CGPoint deltaVector = egpSub([event location], sp);
+        if(egpLengthSQ(deltaVector) > 0.25) {
+            EGIPoint spTile = egpRound(sp);
+            EGIPoint start = [self normPoint:egpSub(sp, egipFloat(spTile))];
+            EGIPoint end = egipAdd(start, [self normPoint:egpSetLength(deltaVector, 0.7)]);
+            [_builder tryBuildRail:[self correctRail:[TRRail railWithTile:spTile start:start end:end]]];
+        }
+        return @YES;
+    }] getOr:@NO];
 }
 
-- (void)upEvent:(EGEvent*)event {
-    if(_downing) {
-        _downing = YES;
-    }
+- (id)upEvent:(EGEvent*)event {
+    return [[_startedPoint map:^id(id point_) {
+        CGPoint point = uval(CGPoint, point_);
+        [_builder fix];
+        _startedPoint = [CNOption none];
+        return @YES;
+    }] getOr:@NO];
+}
+
+- (EGIPoint)normPoint:(CGPoint)point {
+    return EGIPointMake([self nX:point.x], [self nX:point.y]);
+}
+
+- (NSInteger)nX:(CGFloat)x {
+    return round(x * 2);
+}
+
+- (TRRail*)correctRail:(TRRail*)rail {
+    if(rail.end.x > 1) return [self moveRail:rail x:1 y:0];
+    else if(rail.end.x < -1) return [self moveRail:rail x:-1 y:0];
+    else if(rail.end.y > 1) return [self moveRail:rail x:0 y:1];
+    else if(rail.end.y < -1) return [self moveRail:rail x:0 y:-1];
+    else if(rail.start.x == 0 && rail.start.y == 0) return [self correctRail:[TRRail railWithTile:rail.tile start:egipNeg(rail.end) end:rail.end]];
+    else if(rail.end.x == 0 && rail.end.y == 0) return [self correctRail:[TRRail railWithTile:rail.tile start:rail.start end:egipNeg(rail.start)]];
+    else return rail;
+}
+
+- (TRRail*)moveRail:(TRRail*)rail x:(NSInteger)x y:(NSInteger)y {
+    return [self correctRail:[TRRail railWithTile:egip(rail.tile.x + x, rail.tile.y + y) start:egip(rail.start.x - 2 * x, rail.start.y - 2 * y) end:egip(rail.end.x - 2 * x, rail.end.y - 2 * y)]];
 }
 
 @end
