@@ -5,7 +5,7 @@
 #define p(x, y) tuple(numi(x), numi(y))
 NSArray * pointToTuples(NSArray * arr) {
     return [[arr map:^id(id x) {
-        EGMapPoint p = uval(EGMapPoint, x);
+        EGIPoint p = uval(EGIPoint, x);
         return tuple(numi(p.x), numi(p.y));
     }] array];
 }
@@ -13,7 +13,7 @@ SPEC_BEGIN(EGMapIsoSpec)
     describe(@"Square isometric(Sso)", ^{
         describe(@"should determine full and partial tiles. ", ^{
             describe(@"For map size 2x3", ^{
-                EGMapSize s = EGMapSizeMake(2, 3);
+                EGISize s = EGISizeMake(2, 3);
                 it(@"the tile 0:2 should be full", ^{
                     [[theValue(egMapSsoIsFullTile(s, 0, 2)) should] beTrue];
                 });

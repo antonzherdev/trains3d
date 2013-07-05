@@ -5,7 +5,7 @@
 
 SPEC_BEGIN(TRLevelSpec)
     describe(@"TRLevel", ^{
-        EGMapSize mapSize = EGMapSizeMake(1, 3);
+        EGISize mapSize = EGISizeMake(1, 3);
         it(@"should generare two cities in a time of starting.\n"
                 "These cities should be generated on an edge of the map.\n"
                 "These cities should be generated in different tiles.\n"
@@ -18,7 +18,7 @@ SPEC_BEGIN(TRLevelSpec)
 
                     //This cities should be generated on an edge of the map.
                     [[level cities] forEach:^(TRCity* x) {
-                        EGMapPoint tile = x.tile;
+                        EGIPoint tile = x.tile;
                         BOOL isPartial = egMapSsoIsPartialTile(mapSize, tile.x, tile.y);
                         [[theValue(isPartial) should] beTrue];
                     }];

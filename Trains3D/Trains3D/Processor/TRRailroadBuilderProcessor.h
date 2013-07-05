@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "EGTypes.h"
 #import "EGProcessor.h"
+#import "EGTwoFingerTouchToMouse.h"
 #import "TRRailroad.h"
 
 @class TRRailroadBuilderProcessor;
@@ -20,9 +21,9 @@
 
 + (id)railroadBuilderMouseProcessorWithBuilder:(TRRailroadBuilder*)builder;
 - (id)initWithBuilder:(TRRailroadBuilder*)builder;
-- (BOOL)downEvent:(EGEvent*)event;
-- (id)dragEvent:(EGEvent*)event;
-- (id)upEvent:(EGEvent*)event;
+- (BOOL)mouseDownEvent:(EGEvent*)event;
+- (id)mouseDragEvent:(EGEvent*)event;
+- (id)mouseUpEvent:(EGEvent*)event;
 @end
 
 

@@ -1,23 +1,25 @@
 import EGTypes
 import EGProcessor
+import EGTwoFingerTouchToMouse
 
 import TRRailroad
 
 class TRRailroadBuilderProcessor(builder : TRRailroadBuilder) {
     private val mouseProcessor = TRRailroadBuilderMouseProcessor(builder)
+    private val touchProcessor = EGTwoFingerTouchToMouse(mouseProcessor)
 
-    def process(event : EGEvent) = event.leftMouse(mouseProcessor)
+    def process(event : EGEvent) = event.leftMouse(mouseProcessor) || event.touch(touchProcessor)
 }
 
 class TRRailroadBuilderMouseProcessor(builder : TRRailroadBuilder) {
     private var startedPoint : CGPoint? = nil
 
-    def down(event : EGEvent) = {
+    def mouseDown(event : EGEvent) = {
         startedPoint = event.location
         true
     }
 
-    def drag(event : EGEvent) = startedPoint.map(sp -> {
+    def mouseDrag(event : EGEvent) = startedPoint.map(sp -> {
         val deltaVector = egpSub(event.location, sp)
         if(egpLengthSQ(deltaVector) > 0.25) {
             val spTile = egpRound(sp)
@@ -28,7 +30,7 @@ class TRRailroadBuilderMouseProcessor(builder : TRRailroadBuilder) {
         true
     }).getOr(false)
 
-    def up(event : EGEvent) = startedPoint.map(point -> {
+    def mouseUp(event : EGEvent) = startedPoint.map(point -> {
         builder.fix
         startedPoint = nil
         true

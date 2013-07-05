@@ -3,6 +3,7 @@
 @implementation TRRailroadBuilderProcessor{
     TRRailroadBuilder* _builder;
     TRRailroadBuilderMouseProcessor* _mouseProcessor;
+    EGTwoFingerTouchToMouse* _touchProcessor;
 }
 @synthesize builder = _builder;
 
@@ -15,13 +16,14 @@
     if(self) {
         _builder = builder;
         _mouseProcessor = [TRRailroadBuilderMouseProcessor railroadBuilderMouseProcessorWithBuilder:_builder];
+        _touchProcessor = [EGTwoFingerTouchToMouse twoFingerTouchToMouseWithProcessor:_mouseProcessor];
     }
     
     return self;
 }
 
 - (BOOL)processEvent:(EGEvent*)event {
-    return [event leftMouseProcessor:_mouseProcessor];
+    return [event leftMouseProcessor:_mouseProcessor] || [event touchProcessor:_touchProcessor];
 }
 
 @end
@@ -47,12 +49,12 @@
     return self;
 }
 
-- (BOOL)downEvent:(EGEvent*)event {
+- (BOOL)mouseDownEvent:(EGEvent*)event {
     _startedPoint = [CNOption opt:val([event location])];
     return YES;
 }
 
-- (id)dragEvent:(EGEvent*)event {
+- (id)mouseDragEvent:(EGEvent*)event {
     return [[_startedPoint map:^id(id sp_) {
         CGPoint sp = uval(CGPoint, sp_);
         CGPoint deltaVector = egpSub([event location], sp);
@@ -66,7 +68,7 @@
     }] getOr:@NO];
 }
 
-- (id)upEvent:(EGEvent*)event {
+- (id)mouseUpEvent:(EGEvent*)event {
     return [[_startedPoint map:^id(id point_) {
         CGPoint point = uval(CGPoint, point_);
         [_builder fix];

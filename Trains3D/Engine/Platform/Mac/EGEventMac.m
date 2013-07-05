@@ -1,24 +1,29 @@
 #import "EGEventMac.h"
+#import "EGOpenGLView.h"
 
 
 @implementation EGEventMac {
     NSEvent* _event;
     NSEventType _type;
-    CGPoint _locationInView;
+    __weak EGOpenGLView* _view;
 }
-- (id)initWithEvent:(NSEvent *)event locationInView:(CGPoint)locationInView viewSize:(CGSize)viewSize camera:(id)camera {
-    self = [super initWithViewSize:viewSize camera: camera];
+
+@synthesize event = _event;
+@synthesize view = _view;
+
+- (id)initWithEvent:(NSEvent *)event type:(NSUInteger)type view:(EGOpenGLView *)view camera:(id)camera {
+    self = [super initWithViewSize:[view viewSize] camera: camera];
     if (self) {
         _event = event;
-        _type = [event type];
-        _locationInView = locationInView;
+        _type=type;
+        _view = view;
     }
 
     return self;
 }
 
-+ (id)eventMacWithEvent:(NSEvent *)event locationInView:(CGPoint)locationInWindow viewSize:(CGSize)viewSize camera:(id)camera {
-    return [[self alloc] initWithEvent:event locationInView:locationInWindow viewSize:viewSize camera:camera];
++ (id)eventMacWithEvent:(NSEvent *)event type:(NSUInteger)type view:(EGOpenGLView *)view camera:(id)camera {
+    return [[self alloc] initWithEvent:event type:type view:view camera:camera];
 }
 
 - (BOOL)isLeftMouseDown {
@@ -33,12 +38,28 @@
     return _type == NSLeftMouseUp;
 }
 
-- (EGEvent *)setCamera:(id)camera {
-    return [EGEventMac eventMacWithEvent:_event locationInView:_locationInView viewSize:self.viewSize camera:camera];
+- (BOOL)isTouchBegan {
+    return _type == EGEventTouchBegan;
+}
+
+- (BOOL)isTouchMoved {
+    return _type == EGEventTouchMoved;
+}
+
+- (BOOL)isTouchEnded {
+    return _type == EGEventTouchEnded;
+}
+
+- (BOOL)isTouchCanceled {
+    return _type == EGEventTouchCanceled;
 }
 
 - (CGPoint)locationInView {
-    return _locationInView;
+    return NSPointToCGPoint([_view convertPoint:[_event locationInWindow] fromView:nil]);
+}
+
+- (EGEvent *)setCamera:(id)camera {
+    return [EGEventMac eventMacWithEvent:_event type:_type view:_view camera:camera];
 }
 
 

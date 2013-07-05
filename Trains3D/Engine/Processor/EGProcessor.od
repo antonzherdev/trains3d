@@ -5,9 +5,16 @@ trait EGProcessor {
 }
 
 trait EGMouseProcessor {
-    def down(event : EGEvent) : bool = false
-    def drag(event : EGEvent)  : bool = false
-    def up(event : EGEvent) : bool = false
+    def mouseDown(event : EGEvent) : bool = false
+    def mouseDrag(event : EGEvent)  : bool = false
+    def mouseUp(event : EGEvent) : bool = false
+}
+
+trait EGTouchProcessor {
+    def touchBegan(event : EGEvent) : bool = false
+    def touchMoved(event : EGEvent) : bool = false
+    def touchEnded(event : EGEvent) : bool = false
+    def touchCanceled(event : EGEvent) : bool = false
 }
 
 class EGEvent(viewSize : CGSize, camera : EGCamera?) {
@@ -22,11 +29,21 @@ class EGEvent(viewSize : CGSize, camera : EGCamera?) {
     def isLeftMouseDown : bool
     def isLeftMouseDrag : bool
     def isLeftMouseUp : bool
-    def leftMouse(processor : EGMouseProcessor) : bool = {
-        if(isLeftMouseDown) processor.down(self)
-        else if(isLeftMouseDrag) processor.drag(self)
-        else if(isLeftMouseUp) processor.up(self)
+    def leftMouse(processor : EGMouseProcessor) : bool =
+        if(isLeftMouseDown) processor.mouseDown(self)
+        else if(isLeftMouseDrag) processor.mouseDrag(self)
+        else if(isLeftMouseUp) processor.mouseUp(self)
         else false
-    }
-}
 
+
+    def isTouchBegan : bool
+    def isTouchMoved : bool
+    def isTouchEnded : bool
+    def isTouchCanceled : bool
+    def touch(processor : EGTouchProcessor) : bool =
+        if(isTouchBegan) processor.touchBegan(self)
+        else if(isTouchMoved) processor.touchMoved(self)
+        else if(isTouchEnded) processor.touchEnded(self)
+        else if(isTouchCanceled) processor.touchCanceled(self)
+        else false
+}

@@ -9,9 +9,17 @@
 
 
 @protocol EGMouseProcessor
-- (BOOL)downEvent:(EGEvent*)event;
-- (BOOL)dragEvent:(EGEvent*)event;
-- (BOOL)upEvent:(EGEvent*)event;
+- (BOOL)mouseDownEvent:(EGEvent*)event;
+- (BOOL)mouseDragEvent:(EGEvent*)event;
+- (BOOL)mouseUpEvent:(EGEvent*)event;
+@end
+
+
+@protocol EGTouchProcessor
+- (BOOL)touchBeganEvent:(EGEvent*)event;
+- (BOOL)touchMovedEvent:(EGEvent*)event;
+- (BOOL)touchEndedEvent:(EGEvent*)event;
+- (BOOL)touchCanceledEvent:(EGEvent*)event;
 @end
 
 
@@ -29,6 +37,11 @@
 - (BOOL)isLeftMouseDrag;
 - (BOOL)isLeftMouseUp;
 - (BOOL)leftMouseProcessor:(id)processor;
+- (BOOL)isTouchBegan;
+- (BOOL)isTouchMoved;
+- (BOOL)isTouchEnded;
+- (BOOL)isTouchCanceled;
+- (BOOL)touchProcessor:(id)processor;
 @end
 
 

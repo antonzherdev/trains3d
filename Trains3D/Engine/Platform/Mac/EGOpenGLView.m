@@ -38,6 +38,7 @@
 
     _director = [[EGDirectorMac alloc] initWithView:self];
     [_director start];
+    [self setAcceptsTouchEvents:YES];
 }
 
 - (id)init {
@@ -109,68 +110,65 @@
     CGLUnlockContext([glContext CGLContextObj]);
 }
 
-#define DISPATCH_EVENT(theEvent, cmd) [_director processEvent:\
-    [EGEventMac eventMacWithEvent:theEvent\
-                   locationInView:NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil])\
-                         viewSize:_viewSize\
-                           camera:[CNOption none]]];
+#define DISPATCH_EVENT(theEvent, tp) [_director processEvent:\
+    [EGEventMac eventMacWithEvent:theEvent type:tp view:self camera:[CNOption none]]];
 
 #pragma mark CCGLView - Mouse events
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
-    DISPATCH_EVENT(theEvent, _cmd);
+    DISPATCH_EVENT(theEvent, NSLeftMouseDown);
 }
 
 - (void)mouseMoved:(NSEvent *)theEvent
 {
-    DISPATCH_EVENT(theEvent, _cmd);
+    DISPATCH_EVENT(theEvent, NSMouseMoved);
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent
 {
-    DISPATCH_EVENT(theEvent, _cmd);
+    DISPATCH_EVENT(theEvent, NSLeftMouseDragged);
 }
 
 - (void)mouseUp:(NSEvent *)theEvent
 {
-    DISPATCH_EVENT(theEvent, _cmd);
+    DISPATCH_EVENT(theEvent, NSLeftMouseUp);
 }
 
 - (void)rightMouseDown:(NSEvent *)theEvent {
-    DISPATCH_EVENT(theEvent, _cmd);
+    DISPATCH_EVENT(theEvent, NSRightMouseDown);
 }
 
 - (void)rightMouseDragged:(NSEvent *)theEvent {
-    DISPATCH_EVENT(theEvent, _cmd);
+    DISPATCH_EVENT(theEvent, NSRightMouseDragged);
 }
 
 - (void)rightMouseUp:(NSEvent *)theEvent {
-    DISPATCH_EVENT(theEvent, _cmd);
+    DISPATCH_EVENT(theEvent, NSRightMouseUp);
 }
 
 - (void)otherMouseDown:(NSEvent *)theEvent {
-    DISPATCH_EVENT(theEvent, _cmd);
+    DISPATCH_EVENT(theEvent, NSOtherMouseDown);
 }
 
 - (void)otherMouseDragged:(NSEvent *)theEvent {
-    DISPATCH_EVENT(theEvent, _cmd);
+    DISPATCH_EVENT(theEvent, NSOtherMouseDragged);
 }
 
 - (void)otherMouseUp:(NSEvent *)theEvent {
-    DISPATCH_EVENT(theEvent, _cmd);
+    DISPATCH_EVENT(theEvent, NSOtherMouseUp);
 }
 
 - (void)mouseEntered:(NSEvent *)theEvent {
-    DISPATCH_EVENT(theEvent, _cmd);
+    DISPATCH_EVENT(theEvent, NSMouseEntered);
 }
 
 - (void)mouseExited:(NSEvent *)theEvent {
-    DISPATCH_EVENT(theEvent, _cmd);
+    DISPATCH_EVENT(theEvent, NSMouseExited);
 }
 
 -(void) scrollWheel:(NSEvent *)theEvent {
-    DISPATCH_EVENT(theEvent, _cmd);
+    DISPATCH_EVENT(theEvent, NSScrollWheel);
 }
 
 #pragma mark CCGLView - Key events
@@ -192,38 +190,38 @@
 
 - (void)keyDown:(NSEvent *)theEvent
 {
-    DISPATCH_EVENT(theEvent, _cmd);
+    DISPATCH_EVENT(theEvent, NSKeyDown);
 }
 
 - (void)keyUp:(NSEvent *)theEvent
 {
-    DISPATCH_EVENT(theEvent, _cmd);
+    DISPATCH_EVENT(theEvent, NSKeyUp);
 }
 
 - (void)flagsChanged:(NSEvent *)theEvent
 {
-    DISPATCH_EVENT(theEvent, _cmd);
+    DISPATCH_EVENT(theEvent, NSFlagsChanged);
 }
 
 #pragma mark CCGLView - Touch events
 - (void)touchesBeganWithEvent:(NSEvent *)theEvent
 {
-    DISPATCH_EVENT(theEvent, _cmd);
+    DISPATCH_EVENT(theEvent, EGEventTouchBegan);
 }
 
 - (void)touchesMovedWithEvent:(NSEvent *)theEvent
 {
-    DISPATCH_EVENT(theEvent, _cmd);
+    DISPATCH_EVENT(theEvent, EGEventTouchMoved);
 }
 
 - (void)touchesEndedWithEvent:(NSEvent *)theEvent
 {
-    DISPATCH_EVENT(theEvent, _cmd);
+    DISPATCH_EVENT(theEvent, EGEventTouchEnded);
 }
 
 - (void)touchesCancelledWithEvent:(NSEvent *)theEvent
 {
-    DISPATCH_EVENT(theEvent, _cmd);
+    DISPATCH_EVENT(theEvent, EGEventTouchCanceled);
 }
 
 

@@ -1,0 +1,8 @@
+import EGProcessor
+
+stub class EGTwoFingerTouchToMouse(processor : EGMouseProcessor) extends EGTouchProcessor {
+    def touchBegan(event : EGEvent) : bool = false
+    def touchMoved(event : EGEvent) : bool = false
+    def touchEnded(event : EGEvent) : bool = false
+    def touchCanceled(event : EGEvent) : bool = false
+}

@@ -7,7 +7,7 @@ SPEC_BEGIN(EGCameraIsoSpec)
     describe(@"Isometric camera", ^{
         describe(@"Should translate view points into map point", ^{
             describe(@"For map size 2x3 and view size 100x90", ^{
-                EGMapSize ms = EGMapSizeMake(2, 3);
+                EGISize ms = EGISizeMake(2, 3);
                 EGCameraIso *camera = [EGCameraIso cameraIsoWithTilesOnScreen:ms center:CGPointMake(0, 0)];
                 CGSize viewSize = CGSizeMake(100, 90);
                 it(@"(0, 20) -> (0.5, -1.5)", ^{
@@ -32,7 +32,7 @@ SPEC_BEGIN(EGCameraIsoSpec)
                 });
             });
             describe(@"For map size 5x3 and view size 160x100", ^{
-                EGMapSize ms = EGMapSizeMake(5, 3);
+                EGISize ms = EGISizeMake(5, 3);
                 EGCameraIso *camera = [EGCameraIso cameraIsoWithTilesOnScreen:ms center:CGPointMake(0, 0)];
                 CGSize viewSize = CGSizeMake(160, 100);
                 it(@"(0, 10) -> (2, -3)", ^{
