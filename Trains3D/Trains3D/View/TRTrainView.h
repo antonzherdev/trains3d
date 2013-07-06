@@ -3,7 +3,7 @@
 #import "EGTypes.h"
 @class TRTrain;
 @class TRCar;
-@class TRColor;
+#import "TRTypes.h"
 
 @class TRTrainView;
 

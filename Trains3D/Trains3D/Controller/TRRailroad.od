@@ -1,12 +1,9 @@
 import EGMap
 import EGTypes
 
-/*
- * tile - плитка на карте
- * start - начальная позиция на клетке
- * start - конечная позиция на клетке
- */
-class TRRail(tile : EGIPoint, start : EGIPoint, end : EGIPoint)
+import TRTypes
+
+class TRRail(tile : EGIPoint, form : TRRailForm)
 
 
 class TRRailroad(mapSize : EGISize) {
@@ -15,8 +12,8 @@ class TRRailroad(mapSize : EGISize) {
 
     def canAdd(rail : TRRail) : bool = {
         val railsInTile = rails.filter(_.tile == rail.tile).array
-        val countsAtStart = railsInTile.filter(_.start == rail.start || _.end == rail.start).count
-        val countsAtEnd = railsInTile.filter(_.start == rail.end || _.end == rail.end).count
+        val countsAtStart = railsInTile.filter(_.form.start == rail.form.start || _.form.end == rail.form.start).count
+        val countsAtEnd = railsInTile.filter(_.form.start == rail.form.end || _.form.end == rail.form.end).count
 
         countsAtStart < 2 &&  countsAtEnd < 2
     }

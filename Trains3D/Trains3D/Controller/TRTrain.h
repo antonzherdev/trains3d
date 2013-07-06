@@ -1,6 +1,6 @@
 #import "objd.h"
 #import "EGTypes.h"
-@class TRColor;
+#import "TRTypes.h"
 @class TRCity;
 @class TRLevel;
 

@@ -1,5 +1,6 @@
 #import "objd.h"
 #import "EGTypes.h"
+#import "TRTypes.h"
 
 @class TRRail;
 @class TRRailroad;
@@ -7,11 +8,10 @@
 
 @interface TRRail : NSObject
 @property (nonatomic, readonly) EGIPoint tile;
-@property (nonatomic, readonly) EGIPoint start;
-@property (nonatomic, readonly) EGIPoint end;
+@property (nonatomic, readonly) TRRailForm* form;
 
-+ (id)railWithTile:(EGIPoint)tile start:(EGIPoint)start end:(EGIPoint)end;
-- (id)initWithTile:(EGIPoint)tile start:(EGIPoint)start end:(EGIPoint)end;
++ (id)railWithTile:(EGIPoint)tile form:(TRRailForm*)form;
+- (id)initWithTile:(EGIPoint)tile form:(TRRailForm*)form;
 @end
 
 

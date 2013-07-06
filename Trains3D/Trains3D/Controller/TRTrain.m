@@ -1,6 +1,5 @@
 #import "TRTrain.h"
 
-#import "TRTypes.h"
 #import "TRCity.h"
 #import "TRLevel.h"
 @implementation TRTrain{

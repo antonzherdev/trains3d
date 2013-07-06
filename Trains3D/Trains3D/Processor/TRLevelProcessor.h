@@ -4,8 +4,7 @@
 @class EGMouseProcessor;
 @class EGTouchProcessor;
 @class EGEvent;
-@class TRRailroadBuilderProcessor;
-@class TRRailroadBuilderMouseProcessor;
+#import "TRRailroadBuilderProcessor.h"
 @class TRLevel;
 @class TRLevelView;
 @class TRRail;

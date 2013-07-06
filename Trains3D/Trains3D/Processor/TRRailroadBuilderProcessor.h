@@ -8,6 +8,7 @@
 @class TRRail;
 @class TRRailroad;
 @class TRRailroadBuilder;
+#import "TRTypes.h"
 
 @class TRRailroadBuilderProcessor;
 @class TRRailroadBuilderMouseProcessor;
@@ -20,6 +21,23 @@
 - (BOOL)processEvent:(EGEvent*)event;
 @end
 
+
+struct TRRailCorrection {
+    EGIPoint tile;
+    EGIPoint start;
+    EGIPoint end;
+};
+typedef struct TRRailCorrection TRRailCorrection;
+static inline TRRailCorrection TRRailCorrectionMake(EGIPoint tile, EGIPoint start, EGIPoint end) {
+    TRRailCorrection ret;
+    ret.tile = tile;
+    ret.start = start;
+    ret.end = end;
+    return ret;
+}
+static inline BOOL TRRailCorrectionEq(TRRailCorrection s1, TRRailCorrection s2) {
+    return EGIPointEq(s1.tile, s2.tile) && EGIPointEq(s1.start, s2.start) && EGIPointEq(s1.end, s2.end);
+}
 
 @interface TRRailroadBuilderMouseProcessor : NSObject
 @property (nonatomic, readonly) TRRailroadBuilder* builder;

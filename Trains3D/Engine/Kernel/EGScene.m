@@ -31,7 +31,7 @@
 
 - (BOOL)processEvent:(EGEvent*)event {
     return unumb([[_layers reverse] fold:^id(id r, EGLayer* layer) {
-        return numb(r || [layer processEvent:event]);
+        return numb(unumb(r) || [layer processEvent:event]);
     } withStart:@NO]);
 }
 

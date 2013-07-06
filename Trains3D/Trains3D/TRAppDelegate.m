@@ -11,7 +11,6 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     TRLevel *level = [TRLevel levelWithMapSize:EGISizeMake(5, 3)];
-    [level.railroad tryAddRail:[TRRail railWithTile:EGIPointMake(1, 3) start:EGIPointMake(-1, 0) end:EGIPointMake(1, 0)]];
     [level runSample];
     EGScene *scene = [EGScene
             sceneWithController:level

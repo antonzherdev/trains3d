@@ -3,7 +3,6 @@
 #import "EGGL.h"
 #import "EGModel.h"
 #import "TRTrain.h"
-#import "TRTypes.h"
 @implementation TRTrainView
 
 + (id)trainView {

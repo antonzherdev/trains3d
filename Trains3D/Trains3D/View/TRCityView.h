@@ -1,6 +1,6 @@
 #import "objd.h"
 @class TRCity;
-@class TRColor;
+#import "TRTypes.h"
 
 @class TRCityView;
 

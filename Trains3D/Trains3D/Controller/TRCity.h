@@ -1,5 +1,5 @@
 #import "objd.h"
-@class TRColor;
+#import "TRTypes.h"
 #import "EGTypes.h"
 
 @class TRCity;

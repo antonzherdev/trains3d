@@ -3,6 +3,7 @@ import EGProcessor
 import EGTwoFingerTouchToMouse
 
 import TRRailroad
+import TRTypes
 
 class TRRailroadBuilderProcessor(builder : TRRailroadBuilder) {
     private val mouseProcessor = TRRailroadBuilderMouseProcessor(builder)
@@ -10,6 +11,8 @@ class TRRailroadBuilderProcessor(builder : TRRailroadBuilder) {
 
     def process(event : EGEvent) = event.leftMouse(mouseProcessor) || event.touch(touchProcessor)
 }
+
+struct TRRailCorrection (tile : EGIPoint, start : EGIPoint, end : EGIPoint)
 
 class TRRailroadBuilderMouseProcessor(builder : TRRailroadBuilder) {
     private var startedPoint : CGPoint? = nil
@@ -25,7 +28,7 @@ class TRRailroadBuilderMouseProcessor(builder : TRRailroadBuilder) {
             val spTile = egpRound(sp)
             val start = norm(egpSub(sp, egipFloat(spTile)))
             val end = egipAdd(start, norm(egpSetLength(deltaVector, 0.7)))
-            builder.tryBuild(correct(TRRail(spTile, start, end)))
+            builder.tryBuild(convert(correct(TRRailCorrection(spTile, start, end))))
         }
         true
     }).getOr(false)
@@ -39,20 +42,23 @@ class TRRailroadBuilderMouseProcessor(builder : TRRailroadBuilder) {
     private def norm(point : CGPoint) = EGIPoint(n(point.x), n(point.y))
     private def n(x : float) : int = round(x*2)
 
-    private def correct(rail : TRRail) : TRRail =
+    private def correct(rail : TRRailCorrection) : TRRailCorrection =
         if(rail.end.x > 1) move(rail, 1, 0)
         else if(rail.end.x < -1) move(rail,-1, 0)
         else if(rail.end.y > 1) move(rail, 0, 1)
         else if(rail.end.y < -1) move(rail, 0, -1)
-        else if(rail.start.x == 0 && rail.start.y == 0) correct(TRRail(rail.tile, egipNeg(rail.end), rail.end))
-        else if(rail.end.x == 0 && rail.end.y == 0) correct(TRRail(rail.tile, rail.start, egipNeg(rail.start)))
-        else if(rail.start.x > rail.end.x) correct(TRRail(rail.tile, rail.end, rail.start))
-        else if(rail.start.x == rail.end.x && rail.start.y > rail.end.y) correct(TRRail(rail.tile, rail.end, rail.start))
+        else if(rail.start.x == 0 && rail.start.y == 0) correct(TRRailCorrection(rail.tile, egipNeg(rail.end), rail.end))
+        else if(rail.end.x == 0 && rail.end.y == 0) correct(TRRailCorrection(rail.tile, rail.start, egipNeg(rail.start)))
+        else if(rail.start.x > rail.end.x) correct(TRRailCorrection(rail.tile, rail.end, rail.start))
+        else if(rail.start.x == rail.end.x && rail.start.y > rail.end.y) correct(TRRailCorrection(rail.tile, rail.end, rail.start))
         else rail
 
-    private def move(rail : TRRail, x : int, y : int) = correct(TRRail(
+    private def move(rail : TRRailCorrection, x : int, y : int) = correct(TRRailCorrection(
         egip(rail.tile.x + x, rail.tile.y + y),
         egip(rail.start.x - 2*x, rail.start.y - 2*y),
         egip(rail.end.x - 2*x, rail.end.y - 2*y)))
 
+    private def convert(rail : TRRailCorrection) = TRRail(rail.tile, TRRailForm.formFor(
+        TRRailConnector.connectorFor(rail.start.x, rail.start.y),
+        TRRailConnector.connectorFor(rail.end.x, rail.end.y)) )
 }

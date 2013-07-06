@@ -64,7 +64,7 @@
             EGIPoint spTile = egpRound(uval(CGPoint, sp));
             EGIPoint start = [self normPoint:egpSub(uval(CGPoint, sp), egipFloat(spTile))];
             EGIPoint end = egipAdd(start, [self normPoint:egpSetLength(deltaVector, 0.7)]);
-            [_builder tryBuildRail:[self correctRail:[TRRail railWithTile:spTile start:start end:end]]];
+            [_builder tryBuildRail:[self convertRail:[self correctRail:TRRailCorrectionMake(spTile, start, end)]]];
         }
         return @YES;
     }] getOr:@NO];
@@ -86,20 +86,24 @@
     return round(x * 2);
 }
 
-- (TRRail*)correctRail:(TRRail*)rail {
+- (TRRailCorrection)correctRail:(TRRailCorrection)rail {
     if(rail.end.x > 1) return [self moveRail:rail x:1 y:0];
     else if(rail.end.x < -1) return [self moveRail:rail x:-1 y:0];
     else if(rail.end.y > 1) return [self moveRail:rail x:0 y:1];
     else if(rail.end.y < -1) return [self moveRail:rail x:0 y:-1];
-    else if(rail.start.x == 0 && rail.start.y == 0) return [self correctRail:[TRRail railWithTile:rail.tile start:egipNeg(rail.end) end:rail.end]];
-    else if(rail.end.x == 0 && rail.end.y == 0) return [self correctRail:[TRRail railWithTile:rail.tile start:rail.start end:egipNeg(rail.start)]];
-    else if(rail.start.x > rail.end.x) return [self correctRail:[TRRail railWithTile:rail.tile start:rail.end end:rail.start]];
-    else if(rail.start.x == rail.end.x && rail.start.y > rail.end.y) return [self correctRail:[TRRail railWithTile:rail.tile start:rail.end end:rail.start]];
+    else if(rail.start.x == 0 && rail.start.y == 0) return [self correctRail:TRRailCorrectionMake(rail.tile, egipNeg(rail.end), rail.end)];
+    else if(rail.end.x == 0 && rail.end.y == 0) return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, egipNeg(rail.start))];
+    else if(rail.start.x > rail.end.x) return [self correctRail:TRRailCorrectionMake(rail.tile, rail.end, rail.start)];
+    else if(rail.start.x == rail.end.x && rail.start.y > rail.end.y) return [self correctRail:TRRailCorrectionMake(rail.tile, rail.end, rail.start)];
     else return rail;
 }
 
-- (TRRail*)moveRail:(TRRail*)rail x:(NSInteger)x y:(NSInteger)y {
-    return [self correctRail:[TRRail railWithTile:egip(rail.tile.x + x, rail.tile.y + y) start:egip(rail.start.x - 2 * x, rail.start.y - 2 * y) end:egip(rail.end.x - 2 * x, rail.end.y - 2 * y)]];
+- (TRRailCorrection)moveRail:(TRRailCorrection)rail x:(NSInteger)x y:(NSInteger)y {
+    return [self correctRail:TRRailCorrectionMake(egip(rail.tile.x + x, rail.tile.y + y), egip(rail.start.x - 2 * x, rail.start.y - 2 * y), egip(rail.end.x - 2 * x, rail.end.y - 2 * y))];
+}
+
+- (TRRail*)convertRail:(TRRailCorrection)rail {
+    return [TRRail railWithTile:rail.tile form:[TRRailForm formForConnector1:[TRRailConnector connectorForX:rail.start.x y:rail.start.y] connector2:[TRRailConnector connectorForX:rail.end.x y:rail.end.y]]];
 }
 
 @end

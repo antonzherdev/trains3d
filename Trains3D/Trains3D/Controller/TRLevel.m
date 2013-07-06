@@ -2,7 +2,6 @@
 
 #import "EGMapIso.h"
 #import "TRCity.h"
-#import "TRTypes.h"
 #import "TRRailroad.h"
 #import "TRTrain.h"
 @implementation TRLevel{

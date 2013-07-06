@@ -3,23 +3,20 @@
 #import "EGMap.h"
 @implementation TRRail{
     EGIPoint _tile;
-    EGIPoint _start;
-    EGIPoint _end;
+    TRRailForm* _form;
 }
 @synthesize tile = _tile;
-@synthesize start = _start;
-@synthesize end = _end;
+@synthesize form = _form;
 
-+ (id)railWithTile:(EGIPoint)tile start:(EGIPoint)start end:(EGIPoint)end {
-    return [[TRRail alloc] initWithTile:tile start:start end:end];
++ (id)railWithTile:(EGIPoint)tile form:(TRRailForm*)form {
+    return [[TRRail alloc] initWithTile:tile form:form];
 }
 
-- (id)initWithTile:(EGIPoint)tile start:(EGIPoint)start end:(EGIPoint)end {
+- (id)initWithTile:(EGIPoint)tile form:(TRRailForm*)form {
     self = [super init];
     if(self) {
         _tile = tile;
-        _start = start;
-        _end = end;
+        _form = form;
     }
     
     return self;
@@ -57,10 +54,10 @@
         return EGIPointEq(_.tile, rail.tile);
     }] array];
     NSUInteger countsAtStart = [[railsInTile filter:^BOOL(TRRail* _) {
-        return EGIPointEq(_.start, rail.start) || EGIPointEq(_.end, rail.start);
+        return _.form.start == rail.form.start || _.form.end == rail.form.start;
     }] count];
     NSUInteger countsAtEnd = [[railsInTile filter:^BOOL(TRRail* _) {
-        return EGIPointEq(_.start, rail.end) || EGIPointEq(_.end, rail.end);
+        return _.form.start == rail.form.end || _.form.end == rail.form.end;
     }] count];
     return countsAtStart < 2 && countsAtEnd < 2;
 }
