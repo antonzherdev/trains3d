@@ -39,11 +39,12 @@
     return [cities arrayByAddingObject:[TRCity cityWithColor:[TRColor values][[cities count]] tile:tile angle:[self randomCityDirectionForTile:tile]]];
 }
 
-- (NSInteger)randomCityDirectionForTile:(EGIPoint)tile {
+- (TRCityAngle*)randomCityDirectionForTile:(EGIPoint)tile {
     EGIRect cut = egMapSsoTileCut(_mapSize, tile);
-    return unumi([[(@[@0, @90, @180, @270]) filter:^BOOL(id angle) {
-        return unumi(angle) == 0 && cut.right == 0 && cut.bottom == 0 || unumi(angle) == 90 && cut.left == 0 && cut.bottom == 0 || unumi(angle) == 180 && cut.left == 0 && cut.top == 0 || unumi(angle) == 270 && cut.right == 0 && cut.top == 0;
-    }] randomItem]);
+    return [[[TRCityAngle values] filter:^BOOL(TRCityAngle* a) {
+        NSInteger angle = a.angle;
+        return angle == 0 && cut.right == 0 && cut.bottom == 0 || angle == 90 && cut.left == 0 && cut.bottom == 0 || angle == 180 && cut.left == 0 && cut.top == 0 || angle == 270 && cut.right == 0 && cut.top == 0;
+    }] randomItem];
 }
 
 - (void)createNewCity {

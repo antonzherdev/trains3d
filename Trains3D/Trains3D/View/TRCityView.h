@@ -1,4 +1,5 @@
 #import "objd.h"
+@class TRCityAngle;
 @class TRCity;
 @class TRColor;
 

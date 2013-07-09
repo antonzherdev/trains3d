@@ -1,9 +1,20 @@
-import TRColor
-import TRTypes
 import EGTypes
 import EGMap
+
+import TRColor
+import TRTypes
+import TRRailPoint
+
+enum TRCityAngle(angle : int, railForm : TRRailForm, back : bool) {
+    angle0(0, TRRailForm.leftRight, false)
+    angle90(90, TRRailForm.bottomTop, true)
+    angle180(180, TRRailForm.leftRight, true)
+    angle270(270, TRRailForm.bottomTop, false)
+}
 
 /*
  * angle - поворот по часовой стрелке. При 0 город направлен по оси x в положительном направлении
  */
-class TRCity(color : TRColor, tile : EGIPoint, angle : int)
+class TRCity(color : TRColor, tile : EGIPoint, angle : TRCityAngle) {
+    def startPoint = TRRailPoint(tile, angle.railForm.ordinal, 0, angle.back)
+}

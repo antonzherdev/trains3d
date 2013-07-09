@@ -1,5 +1,6 @@
 #import "objd.h"
 #import "EGTypes.h"
+@class TRCityAngle;
 @class TRCity;
 @class TRColor;
 @class TRRail;
