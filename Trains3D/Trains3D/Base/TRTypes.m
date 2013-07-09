@@ -1,16 +1,12 @@
 #import "TRTypes.h"
 
 @implementation TRColor{
-    NSUInteger _ordinal;
-    NSString* _name;
     EGColor _color;
 }
 static TRColor* _orange;
 static TRColor* _green;
 static TRColor* _purple;
 static NSArray* values;
-@synthesize ordinal = _ordinal;
-@synthesize name = _name;
 @synthesize color = _color;
 
 + (id)colorWithOrdinal:(NSUInteger)ordinal name:(NSString*)name color:(EGColor)color {
@@ -18,12 +14,8 @@ static NSArray* values;
 }
 
 - (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name color:(EGColor)color {
-    self = [super init];
-    if(self) {
-        _ordinal = ordinal;
-        _name = name;
-        _color = color;
-    }
+    self = [super initWithOrdinal:ordinal name:name];
+    if(self) _color = color;
     
     return self;
 }

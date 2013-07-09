@@ -22,13 +22,13 @@ enum TRRailConnector(x : int, y : int) {
     def next(tile : EGIPoint) = EGIPoint(tile.x + x, tile.y + y)
 }
 
-enum TRRailForm(start : TRRailConnector, end : TRRailConnector, length : float) {
-    leftRight(TRRailConnector.left, TRRailConnector.right, 1)
-    leftBottom(TRRailConnector.left, TRRailConnector.bottom, M_PI_4)
-    leftTop(TRRailConnector.left, TRRailConnector.top, M_PI_4)
-    bottomTop(TRRailConnector.bottom, TRRailConnector.top, 1)
-    bottomRight(TRRailConnector.bottom, TRRailConnector.right, M_PI_4)
-    topRight(TRRailConnector.top, TRRailConnector.right, M_PI_4)
+enum TRRailForm(start : TRRailConnector, end : TRRailConnector, length : float, pointFun : float -> CGPoint) {
+    leftBottom(TRRailConnector.left, TRRailConnector.bottom, M_PI_4, x -> CGPoint(-0.5 + 0.5*sin(x*2), -0.5 + 0.5*cos(x*2)))
+    leftRight(TRRailConnector.left, TRRailConnector.right, 1, x -> CGPoint(x - 0.5, 0))
+    leftTop(TRRailConnector.left, TRRailConnector.top, M_PI_4, x -> CGPoint(-0.5 + 0.5*sin(x*2), 0.5 - 0.5*cos(x*2)))
+    bottomTop(TRRailConnector.bottom, TRRailConnector.top, 1, x -> CGPoint(0, x - 0.5))
+    bottomRight(TRRailConnector.bottom, TRRailConnector.right, M_PI_4, x -> CGPoint(0.5 - 0.5*cos(x*2), -0.5 + 0.5*sin(x*2)))
+    topRight(TRRailConnector.top, TRRailConnector.right, M_PI_4, x -> CGPoint(0.5 - 0.5*cos(x*2), 0.5 - 0.5*sin(x*2)))
 
     static def formFor(connector1 : TRRailConnector, connector2 : TRRailConnector) : TRRailForm =
         if(connector1.ordinal > connector2.ordinal) formFor(connector2, connector1)
@@ -60,6 +60,13 @@ struct TRRailPoint(tile : EGIPoint, form : uint, x : float, back : bool) {
             if(self.x > length) TRRailPointCorrection(TRRailPoint(self.tile, self.form, length, self.back), self.x - length)
             else TRRailPointCorrection(self, 0)
         }
+
+    def point : CGPoint = {
+        val form = getForm
+        val x = if(back) form.length - self.x else self.x
+        val f = form.pointFun
+        f(x)
+    }
 }
 
 struct TRRailPointCorrection(point : TRRailPoint, error : float)

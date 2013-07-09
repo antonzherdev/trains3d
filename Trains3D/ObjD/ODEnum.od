@@ -1,0 +1,3 @@
+class ODEnum<A>(ordinal : uint, name : string) {
+    static def values : [A]
+}

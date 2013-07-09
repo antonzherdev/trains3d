@@ -9,6 +9,8 @@ stub val M_PI_2 : float
 stub val M_PI_4 : float
 stub def round(: float) : float
 stub def lround(: float) : int
+stub def sin(:float) : float
+stub def cos(:float) : float
 
 stub def egpAdd(v1 : CGPoint, v2 : CGPoint) : CGPoint
 stub def egpSub(v1 : CGPoint, v2 : CGPoint) : CGPoint

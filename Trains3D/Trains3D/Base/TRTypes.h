@@ -3,9 +3,7 @@
 
 @class TRColor;
 
-@interface TRColor : NSObject
-@property (nonatomic, readonly) NSString* name;
-@property (nonatomic, readonly) NSUInteger ordinal;
+@interface TRColor : ODEnum
 @property (nonatomic, readonly) EGColor color;
 
 - (void)gl;

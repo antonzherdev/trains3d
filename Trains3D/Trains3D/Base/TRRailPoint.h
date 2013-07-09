@@ -6,9 +6,7 @@
 typedef struct TRRailPoint TRRailPoint;
 typedef struct TRRailPointCorrection TRRailPointCorrection;
 
-@interface TRRailConnector : NSObject
-@property (nonatomic, readonly) NSString* name;
-@property (nonatomic, readonly) NSUInteger ordinal;
+@interface TRRailConnector : ODEnum
 @property (nonatomic, readonly) NSInteger x;
 @property (nonatomic, readonly) NSInteger y;
 
@@ -23,16 +21,15 @@ typedef struct TRRailPointCorrection TRRailPointCorrection;
 @end
 
 
-@interface TRRailForm : NSObject
-@property (nonatomic, readonly) NSString* name;
-@property (nonatomic, readonly) NSUInteger ordinal;
+@interface TRRailForm : ODEnum
 @property (nonatomic, readonly) TRRailConnector* start;
 @property (nonatomic, readonly) TRRailConnector* end;
 @property (nonatomic, readonly) CGFloat length;
+@property (nonatomic, readonly) CGPoint(^pointFun)(CGFloat);
 
 + (TRRailForm*)formForConnector1:(TRRailConnector*)connector1 connector2:(TRRailConnector*)connector2;
-+ (TRRailForm*)leftRight;
 + (TRRailForm*)leftBottom;
++ (TRRailForm*)leftRight;
 + (TRRailForm*)leftTop;
 + (TRRailForm*)bottomTop;
 + (TRRailForm*)bottomRight;
@@ -64,6 +61,7 @@ TRRailConnector* trRailPointStartConnector(TRRailPoint self);
 TRRailConnector* trRailPointEndConnector(TRRailPoint self);
 BOOL trRailPointIsValid(TRRailPoint self);
 TRRailPointCorrection trRailPointCorrect(TRRailPoint self);
+CGPoint trRailPointPoint(TRRailPoint self);
 
 struct TRRailPointCorrection {
     TRRailPoint point;

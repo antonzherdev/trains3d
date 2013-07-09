@@ -1,6 +1,8 @@
 #import <math.h>
 
-#define CGPointEq(p1, p2) CGPointEqualToPoint(p1, p2)
+static inline BOOL CGPointEq(CGPoint p1, CGPoint p2) {
+    return eqf(p1.x, p2.x) && eqf(p1.y, p2.y);
+}
 
 static inline CGPoint egp( CGFloat x, CGFloat y ) {
     return CGPointMake(x, y);

@@ -46,10 +46,10 @@
     glPushMatrix();
     glTranslatef(rail.tile.x, rail.tile.y, 0.001);
     glColor3f(0.2, 0.2, 0.2);
-    if(rail.form == TRRailForm.bottomTop) {
+    if(rail.form == [TRRailForm bottomTop]) {
         glRotatef(90, 1, 0, 0);
         egDrawJasModel(Rail);
-    } else if(rail.form == TRRailForm.leftRight) {
+    } else if(rail.form == [TRRailForm leftRight]) {
         glRotatef(90, 0, 0, 1);
         glRotatef(90, 1, 0, 0);
         egDrawJasModel(Rail);
