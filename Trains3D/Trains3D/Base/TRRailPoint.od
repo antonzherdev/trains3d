@@ -1,0 +1,65 @@
+import EGTypes
+
+enum TRRailConnector(x : int, y : int) {
+    left(-1, 0)
+    bottom(0, -1)
+    top(0, 1)
+    right(1, 0)
+
+    static def connectorFor(x : int, y : int) : TRRailConnector =
+        if(x == -1 && y == 0) left
+        else if(x == 0 && y == -1) bottom
+        else if(x == 0 && y == 1) top
+        else if(x == 1 && y == 0) right
+        else throw "No rail connector"
+
+    def otherSideConnector =
+        if(self == left) right
+        else if(self == right) left
+        else if(self == top) bottom
+        else top
+
+    def next(tile : EGIPoint) = EGIPoint(tile.x + x, tile.y + y)
+}
+
+enum TRRailForm(start : TRRailConnector, end : TRRailConnector, length : float) {
+    leftRight(TRRailConnector.left, TRRailConnector.right, 1)
+    leftBottom(TRRailConnector.left, TRRailConnector.bottom, M_PI_4)
+    leftTop(TRRailConnector.left, TRRailConnector.top, M_PI_4)
+    bottomTop(TRRailConnector.bottom, TRRailConnector.top, 1)
+    bottomRight(TRRailConnector.bottom, TRRailConnector.right, M_PI_4)
+    topRight(TRRailConnector.top, TRRailConnector.right, M_PI_4)
+
+    static def formFor(connector1 : TRRailConnector, connector2 : TRRailConnector) : TRRailForm =
+        if(connector1.ordinal > connector2.ordinal) formFor(connector2, connector1)
+        else if(connector1 == TRRailConnector.left && connector2 == TRRailConnector.right) leftRight
+        else if(connector1 == TRRailConnector.left && connector2 == TRRailConnector.bottom) leftBottom
+        else if(connector1 == TRRailConnector.left && connector2 == TRRailConnector.top) leftTop
+        else if(connector1 == TRRailConnector.bottom && connector2 == TRRailConnector.top) bottomTop
+        else if(connector1 == TRRailConnector.bottom && connector2 == TRRailConnector.right) bottomRight
+        else if(connector1 == TRRailConnector.top && connector2 == TRRailConnector.right) topRight
+        else throw "No form for connectors"
+
+}
+
+struct TRRailPoint(tile : EGIPoint, form : uint, x : float, back : bool) {
+    def add(x : float) = TRRailPoint(tile, form, self.x + x, back)
+
+    def getForm : TRRailForm = TRRailForm.values[form]
+
+    def startConnector = if(back) getForm.end else getForm.start
+
+    def endConnector = if(back) getForm.start else getForm.end
+
+    def isValid = x >= 0 && x <= getForm.length
+
+    def correct : TRRailPointCorrection =
+        if(self.x < 0) TRRailPointCorrection(TRRailPoint(self.tile, self.form, 0, self.back), self.x)
+        else {
+            val length = self.getForm.length
+            if(self.x > length) TRRailPointCorrection(TRRailPoint(self.tile, self.form, length, self.back), self.x - length)
+            else TRRailPointCorrection(self, 0)
+        }
+}
+
+struct TRRailPointCorrection(point : TRRailPoint, error : float)

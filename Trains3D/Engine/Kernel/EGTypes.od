@@ -5,6 +5,8 @@ stub struct CGSize(width : float, height : float)
 stub struct GLuint
 
 stub val M_PI : float
+stub val M_PI_2 : float
+stub val M_PI_4 : float
 stub def round(: float) : float
 stub def lround(: float) : int
 

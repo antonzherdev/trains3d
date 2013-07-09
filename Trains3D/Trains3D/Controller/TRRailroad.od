@@ -1,7 +1,7 @@
 import EGMap
 import EGTypes
 
-import TRTypes
+import TRRailPoint
 
 class TRRail(tile : EGIPoint, form : TRRailForm)
 
@@ -11,18 +11,44 @@ class TRRailroad(mapSize : EGISize) {
     val builder = TRRailroadBuilder(self)
 
     def canAdd(rail : TRRail) : bool = {
-        val railsInTile = rails.filter(_.tile == rail.tile).array
+        val railsInTile = railsIn(rail.tile).array
         val countsAtStart = railsInTile.filter(_.form.start == rail.form.start || _.form.end == rail.form.start).count
         val countsAtEnd = railsInTile.filter(_.form.start == rail.form.end || _.form.end == rail.form.end).count
 
         countsAtStart < 2 &&  countsAtEnd < 2
     }
 
+    private def railsIn(tile : EGIPoint) = rails.filter(_.tile == tile)
+
     def tryAdd(rail : TRRail) : bool = {
         if(canAdd(rail)) {
             rails += rail
             true
         } else false
+    }
+
+    def moveFor(length : float, point : TRRailPoint) : TRRailPointCorrection = correct(point.add(length))
+
+
+    def correct(point : TRRailPoint) : TRRailPointCorrection = {
+        val correction = point.correct
+
+        if(correction.error == 0) correction
+        else {
+            val connector = point.endConnector
+            val nextTile = connector.next(point.tile)
+            val otherSideConnector = connector.otherSideConnector
+            val nextRails = railsIn(nextTile)
+                .filter(_.form.start == otherSideConnector || _.form.end == otherSideConnector)
+                .array
+
+            if(nextRails.count == 0) correction
+            else {
+                val rail = nextRails.head
+                val form = rail.form
+                correct(TRRailPoint(nextTile, form.ordinal, correction.error, form.end == otherSideConnector))
+            }
+        }
     }
 }
 

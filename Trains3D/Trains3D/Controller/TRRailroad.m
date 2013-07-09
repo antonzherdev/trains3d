@@ -50,9 +50,7 @@
 }
 
 - (BOOL)canAddRail:(TRRail*)rail {
-    NSArray* railsInTile = [[_rails filter:^BOOL(TRRail* _) {
-        return EGIPointEq(_.tile, rail.tile);
-    }] array];
+    NSArray* railsInTile = [[self railsInTile:rail.tile] array];
     NSUInteger countsAtStart = [[railsInTile filter:^BOOL(TRRail* _) {
         return _.form.start == rail.form.start || _.form.end == rail.form.start;
     }] count];
@@ -62,11 +60,40 @@
     return countsAtStart < 2 && countsAtEnd < 2;
 }
 
+- (CNChain*)railsInTile:(EGIPoint)tile {
+    return [_rails filter:^BOOL(TRRail* _) {
+        return EGIPointEq(_.tile, tile);
+    }];
+}
+
 - (BOOL)tryAddRail:(TRRail*)rail {
     if([self canAddRail:rail]) {
         _rails = [_rails arrayByAddingObject:rail];
         return YES;
     } else return NO;
+}
+
+- (TRRailPointCorrection)moveForLength:(CGFloat)length point:(TRRailPoint)point {
+    return [self correctPoint:trRailPointAdd(point, length)];
+}
+
+- (TRRailPointCorrection)correctPoint:(TRRailPoint)point {
+    TRRailPointCorrection correction = trRailPointCorrect(point);
+    if(correction.error == 0) return correction;
+    else {
+        TRRailConnector* connector = trRailPointEndConnector(point);
+        EGIPoint nextTile = [connector nextTile:point.tile];
+        TRRailConnector* otherSideConnector = [connector otherSideConnector];
+        NSArray* nextRails = [[[self railsInTile:nextTile] filter:^BOOL(TRRail* _) {
+            return _.form.start == otherSideConnector || _.form.end == otherSideConnector;
+        }] array];
+        if([nextRails count] == 0) return correction;
+        else {
+            TRRail* rail = [nextRails head];
+            TRRailForm* form = rail.form;
+            return [self correctPoint:TRRailPointMake(nextTile, form.ordinal, correction.error, form.end == otherSideConnector)];
+        }
+    }
 }
 
 @end

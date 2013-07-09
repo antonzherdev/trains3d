@@ -4,7 +4,7 @@
 @class TRRail;
 @class TRRailroad;
 @class TRRailroadBuilder;
-#import "TRTypes.h"
+#import "TRRailPoint.h"
 
 @class TRRailroadView;
 @class TRRailView;

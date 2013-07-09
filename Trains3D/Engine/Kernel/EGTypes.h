@@ -1,12 +1,13 @@
 #import "objd.h"
 #import "EGTypesAdd.h"
 
+typedef struct EGISize EGISize;
+typedef struct EGIRect EGIRect;
 
 struct EGISize {
     NSInteger width;
     NSInteger height;
 };
-typedef struct EGISize EGISize;
 static inline EGISize EGISizeMake(NSInteger width, NSInteger height) {
     EGISize ret;
     ret.width = width;
@@ -23,7 +24,6 @@ struct EGIRect {
     NSInteger right;
     NSInteger bottom;
 };
-typedef struct EGIRect EGIRect;
 static inline EGIRect EGIRectMake(NSInteger left, NSInteger top, NSInteger right, NSInteger bottom) {
     EGIRect ret;
     ret.left = left;

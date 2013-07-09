@@ -2,6 +2,7 @@
 
 #import "EGGL.h"
 #import "TRCity.h"
+#import "TRTypes.h"
 @implementation TRCityView
 
 + (id)cityView {

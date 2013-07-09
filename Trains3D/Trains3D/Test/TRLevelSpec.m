@@ -1,5 +1,7 @@
 #import "Kiwi.h"
 #import "TRLevel.h"
+#import "TRCity.h"
+#import "EGMapIso.h"
 
 #define CHECK_ANGLE(xx, yy, a1, a2) if(x == xx && y == yy) [[theValue(angle == a1 || angle == a2) should] beTrue];
 

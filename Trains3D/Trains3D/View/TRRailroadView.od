@@ -3,7 +3,7 @@ import TRRailroad
 import EGModel
 import "TR3DRail.h"
 import "TR3DRailTurn.h"
-import TRTypes
+import TRRailPoint
 
 class TRRailroadView {
     private val railView = TRRailView

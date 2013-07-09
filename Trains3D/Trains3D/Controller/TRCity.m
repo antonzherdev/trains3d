@@ -1,5 +1,6 @@
 #import "TRCity.h"
 
+#import "TRTypes.h"
 #import "EGMap.h"
 @implementation TRCity{
     TRColor* _color;

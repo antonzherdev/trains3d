@@ -8,10 +8,11 @@
 @class TRRail;
 @class TRRailroad;
 @class TRRailroadBuilder;
-#import "TRTypes.h"
+#import "TRRailPoint.h"
 
 @class TRRailroadBuilderProcessor;
 @class TRRailroadBuilderMouseProcessor;
+typedef struct TRRailCorrection TRRailCorrection;
 
 @interface TRRailroadBuilderProcessor : NSObject
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
@@ -27,7 +28,6 @@ struct TRRailCorrection {
     EGIPoint start;
     EGIPoint end;
 };
-typedef struct TRRailCorrection TRRailCorrection;
 static inline TRRailCorrection TRRailCorrectionMake(EGIPoint tile, EGIPoint start, EGIPoint end) {
     TRRailCorrection ret;
     ret.tile = tile;
