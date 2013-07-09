@@ -8,7 +8,6 @@
 
 + (id)enumWithOrdinal:(NSUInteger)ordinal name:(NSString*)name;
 - (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name;
-+ (NSArray*)values;
 @end
 
 

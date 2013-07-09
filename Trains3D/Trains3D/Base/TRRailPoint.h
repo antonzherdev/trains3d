@@ -13,11 +13,11 @@ typedef struct TRRailPointCorrection TRRailPointCorrection;
 + (TRRailConnector*)connectorForX:(NSInteger)x y:(NSInteger)y;
 - (TRRailConnector*)otherSideConnector;
 - (EGIPoint)nextTile:(EGIPoint)tile;
++ (NSArray*)values;
 + (TRRailConnector*)left;
 + (TRRailConnector*)bottom;
 + (TRRailConnector*)top;
 + (TRRailConnector*)right;
-+ (NSArray*)values;
 @end
 
 
@@ -28,13 +28,13 @@ typedef struct TRRailPointCorrection TRRailPointCorrection;
 @property (nonatomic, readonly) CGPoint(^pointFun)(CGFloat);
 
 + (TRRailForm*)formForConnector1:(TRRailConnector*)connector1 connector2:(TRRailConnector*)connector2;
++ (NSArray*)values;
 + (TRRailForm*)leftBottom;
 + (TRRailForm*)leftRight;
 + (TRRailForm*)leftTop;
 + (TRRailForm*)bottomTop;
 + (TRRailForm*)bottomRight;
 + (TRRailForm*)topRight;
-+ (NSArray*)values;
 @end
 
 

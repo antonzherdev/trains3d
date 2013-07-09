@@ -21,10 +21,6 @@
     return self;
 }
 
-+ (NSArray*)values {
-    @throw @"Method values is abstract";
-}
-
 @end
 
 

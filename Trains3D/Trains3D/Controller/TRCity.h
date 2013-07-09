@@ -11,11 +11,11 @@
 @property (nonatomic, readonly) TRRailForm* railForm;
 @property (nonatomic, readonly) BOOL back;
 
++ (NSArray*)values;
 + (TRCityAngle*)angle0;
 + (TRCityAngle*)angle90;
 + (TRCityAngle*)angle180;
 + (TRCityAngle*)angle270;
-+ (NSArray*)values;
 @end
 
 

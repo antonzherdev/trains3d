@@ -17,9 +17,9 @@ class TRLevel(mapSize : EGISize) {
         cities + TRCity(TRColor[cities.count], tile, randomCityDirectionFor(tile))
     }
 
-    private def randomCityDirectionFor(tile : EGIPoint) : TRCityAngle = {
+    private def randomCityDirectionFor(tile : EGIPoint) = {
         val cut = egMapSsoTileCut(mapSize, tile)
-        TRCityAngle.values.filter(a : TRCityAngle -> {
+        TRCityAngle.values.filter(a -> {
             val angle = a.angle
             {(angle == 0 && cut.right == 0 && cut.bottom == 0)
             || (angle == 90 && cut.left == 0 && cut.bottom == 0)
