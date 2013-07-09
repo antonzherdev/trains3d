@@ -62,7 +62,7 @@
     TRCity* city0 = _cities[0];
     TRCity* city1 = _cities[1];
     [self runTrain:[TRTrain trainWithLevel:self color:city1.color cars:(@[[TRCar car], [TRCar car]]) speed:0.3] fromCity:city0];
-    [self runTrain:[TRTrain trainWithLevel:self color:city0.color cars:(@[[TRCar car]]) speed:0.3] fromCity:city1];
+    [self runTrain:[TRTrain trainWithLevel:self color:city0.color cars:(@[[TRCar car]]) speed:0.6] fromCity:city1];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

@@ -51,6 +51,10 @@ class TRRailroadBuilderMouseProcessor(builder : TRRailroadBuilder) {
         else if(rail.end.x == 0 && rail.end.y == 0) correct(TRRailCorrection(rail.tile, rail.start, egipNeg(rail.start)))
         else if(rail.start.x > rail.end.x) correct(TRRailCorrection(rail.tile, rail.end, rail.start))
         else if(rail.start.x == rail.end.x && rail.start.y > rail.end.y) correct(TRRailCorrection(rail.tile, rail.end, rail.start))
+        else if(fabs(rail.start.x) == 1 && fabs(rail.start.y) == 1 && rail.start.x != rail.end.x) correct(TRRailCorrection(rail.tile, egip(rail.start.x, 0), rail.end))
+        else if(fabs(rail.start.x) == 1 && fabs(rail.start.y) == 1) correct(TRRailCorrection(rail.tile, egip(0, rail.start.y), rail.end))
+        else if(fabs(rail.end.x) == 1 && fabs(rail.end.y) == 1 && rail.start.x != rail.end.x) correct(TRRailCorrection(rail.tile, rail.start, egip(rail.end.x, 0)))
+        else if(fabs(rail.end.x) == 1 && fabs(rail.end.y) == 1) correct(TRRailCorrection(rail.tile, rail.start, egip(0, rail.end.y)))
         else rail
 
     private def move(rail : TRRailCorrection, x : int, y : int) = correct(TRRailCorrection(

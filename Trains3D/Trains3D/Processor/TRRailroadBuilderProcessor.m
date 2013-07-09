@@ -95,6 +95,10 @@
     else if(rail.end.x == 0 && rail.end.y == 0) return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, egipNeg(rail.start))];
     else if(rail.start.x > rail.end.x) return [self correctRail:TRRailCorrectionMake(rail.tile, rail.end, rail.start)];
     else if(rail.start.x == rail.end.x && rail.start.y > rail.end.y) return [self correctRail:TRRailCorrectionMake(rail.tile, rail.end, rail.start)];
+    else if(fabs(rail.start.x) == 1 && fabs(rail.start.y) == 1 && rail.start.x != rail.end.x) return [self correctRail:TRRailCorrectionMake(rail.tile, egip(rail.start.x, 0), rail.end)];
+    else if(fabs(rail.start.x) == 1 && fabs(rail.start.y) == 1) return [self correctRail:TRRailCorrectionMake(rail.tile, egip(0, rail.start.y), rail.end)];
+    else if(fabs(rail.end.x) == 1 && fabs(rail.end.y) == 1 && rail.start.x != rail.end.x) return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, egip(rail.end.x, 0))];
+    else if(fabs(rail.end.x) == 1 && fabs(rail.end.y) == 1) return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, egip(0, rail.end.y))];
     else return rail;
 }
 

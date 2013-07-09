@@ -43,7 +43,7 @@ class TRLevel(mapSize : EGISize) {
         val city0 = cities[0]
         val city1 = cities[1]
         run(TRTrain(self, city1.color, [TRCar, TRCar], 0.3), city0)
-        run(TRTrain(self, city0.color, [TRCar], 0.3), city1)
+        run(TRTrain(self, city0.color, [TRCar], 0.6), city1)
     }
 
     def updateWith(delta : float) {
