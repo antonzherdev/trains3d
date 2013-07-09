@@ -8,6 +8,7 @@ import TRRailroad
 
 class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : float) {
     private var head : TRRailPoint
+    private var back = false
 
     def startFrom(city : TRCity) {
         head = city.startPoint
@@ -15,7 +16,7 @@ class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : flo
     }
 
     private def calculateCarPositions {
-        cars.fold((hl, car) -> {
+        directedCars.fold((hl, car) -> {
             car.head = hl
             val next = level.railroad.moveFor(car.length, hl).point
             car.tail = next
@@ -26,8 +27,20 @@ class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : flo
     private def move(point : CGPoint, length : float) = CGPoint(point.x, point.y + length)
 
     def updateWith(delta : float) {
-        head = level.railroad.moveFor(delta*speed, head).point
+        correct(level.railroad.moveFor(delta*speed, head))
+    }
+
+    private def directedCars = if(back) cars.reverse else cars
+
+    private def correct(correction : TRRailPointCorrection) = {
+        head = correction.point
         calculateCarPositions
+
+        if(correction.error != 0.0) {
+            back = !back
+            val lastCar = directedCars.head
+            head = lastCar.tail
+        }
     }
 }
 

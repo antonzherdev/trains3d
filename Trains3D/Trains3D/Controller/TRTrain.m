@@ -10,6 +10,7 @@
     NSArray* _cars;
     CGFloat _speed;
     TRRailPoint _head;
+    BOOL _back;
 }
 @synthesize level = _level;
 @synthesize color = _color;
@@ -27,6 +28,7 @@
         _color = color;
         _cars = cars;
         _speed = speed;
+        _back = NO;
     }
     
     return self;
@@ -38,7 +40,7 @@
 }
 
 - (void)calculateCarPositions {
-    [_cars fold:^id(id hl, TRCar* car) {
+    [[self directedCars] fold:^id(id hl, TRCar* car) {
         car.head = uval(TRRailPoint, hl);
         TRRailPoint next = [_level.railroad moveForLength:[car length] point:uval(TRRailPoint, hl)].point;
         car.tail = next;
@@ -51,8 +53,22 @@
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    _head = [_level.railroad moveForLength:delta * _speed point:_head].point;
+    [self correctCorrection:[_level.railroad moveForLength:delta * _speed point:_head]];
+}
+
+- (CNChain*)directedCars {
+    if(_back) return [_cars reverse];
+    else return _cars;
+}
+
+- (void)correctCorrection:(TRRailPointCorrection)correction {
+    _head = correction.point;
     [self calculateCarPositions];
+    if(!(eqf(correction.error, 0.0))) {
+        _back = !(_back);
+        TRCar* lastCar = [[self directedCars] head];
+        _head = lastCar.tail;
+    }
 }
 
 @end
