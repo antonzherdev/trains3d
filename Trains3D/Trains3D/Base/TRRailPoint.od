@@ -68,6 +68,8 @@ struct TRRailPoint(tile : EGIPoint, form : uint, x : float, back : bool) {
         val p : CGPoint = f(x)
         CGPoint(p.x + tile.x, p.y + tile.y)
     }
+
+    def invert = TRRailPoint(tile, form, getForm.length - x, !back)
 }
 
 struct TRRailPointCorrection(point : TRRailPoint, error : float)

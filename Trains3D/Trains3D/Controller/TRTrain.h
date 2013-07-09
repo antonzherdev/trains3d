@@ -21,6 +21,7 @@
 + (id)trainWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(CGFloat)speed;
 - (id)initWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(CGFloat)speed;
 - (void)startFromCity:(TRCity*)city;
+- (void)updateWithDelta:(CGFloat)delta;
 @end
 
 

@@ -45,4 +45,8 @@ class TRLevel(mapSize : EGISize) {
         run(TRTrain(self, city1.color, [TRCar, TRCar], 0.3), city0)
         run(TRTrain(self, city0.color, [TRCar], 0.3), city1)
     }
+
+    def updateWith(delta : float) {
+        trains.for(_.updateWith(delta))
+    }
 }

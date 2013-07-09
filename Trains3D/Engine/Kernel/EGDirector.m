@@ -73,6 +73,7 @@ static EGDirector* _current;
 
 - (void)tick {
     [_time tick];
+    [_scene updateWithDelta:_time.delta];
     [_stat tickWithDelta:_time.delta];
 }
 

@@ -62,6 +62,7 @@ TRRailConnector* trRailPointEndConnector(TRRailPoint self);
 BOOL trRailPointIsValid(TRRailPoint self);
 TRRailPointCorrection trRailPointCorrect(TRRailPoint self);
 CGPoint trRailPointPoint(TRRailPoint self);
+TRRailPoint trRailPointInvert(TRRailPoint self);
 
 struct TRRailPointCorrection {
     TRRailPoint point;

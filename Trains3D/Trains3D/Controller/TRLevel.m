@@ -65,6 +65,12 @@
     [self runTrain:[TRTrain trainWithLevel:self color:city0.color cars:(@[[TRCar car]]) speed:0.3] fromCity:city1];
 }
 
+- (void)updateWithDelta:(CGFloat)delta {
+    [_trains forEach:^void(TRTrain* _) {
+        [_ updateWithDelta:delta];
+    }];
+}
+
 @end
 
 

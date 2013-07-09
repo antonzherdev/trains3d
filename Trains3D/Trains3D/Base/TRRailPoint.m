@@ -208,3 +208,6 @@ CGPoint trRailPointPoint(TRRailPoint self) {
     CGPoint p = f(x);
     return CGPointMake(p.x + self.tile.x, p.y + self.tile.y);
 }
+TRRailPoint trRailPointInvert(TRRailPoint self) {
+    return TRRailPointMake(self.tile, self.form, trRailPointGetForm(self).length - self.x, !(self.back));
+}

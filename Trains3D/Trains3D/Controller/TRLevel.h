@@ -21,6 +21,7 @@
 - (id)initWithMapSize:(EGISize)mapSize;
 - (void)createNewCity;
 - (void)runSample;
+- (void)updateWithDelta:(CGFloat)delta;
 @end
 
 

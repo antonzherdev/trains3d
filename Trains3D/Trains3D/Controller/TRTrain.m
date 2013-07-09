@@ -43,11 +43,16 @@
         TRRailPoint next = [_level.railroad moveForLength:[car length] point:uval(TRRailPoint, hl)].point;
         car.tail = next;
         return val([_level.railroad moveForLength:0.1 point:next].point);
-    } withStart:val(_head)];
+    } withStart:val(trRailPointInvert(_head))];
 }
 
 - (CGPoint)movePoint:(CGPoint)point length:(CGFloat)length {
     return CGPointMake(point.x, point.y + length);
+}
+
+- (void)updateWithDelta:(CGFloat)delta {
+    _head = [_level.railroad moveForLength:delta * _speed point:_head].point;
+    [self calculateCarPositions];
 }
 
 @end
