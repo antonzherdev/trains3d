@@ -8,7 +8,7 @@
 
 @interface TRCityAngle : ODEnum
 @property (nonatomic, readonly) NSInteger angle;
-@property (nonatomic, readonly) TRRailForm* railForm;
+@property (nonatomic, readonly) TRRailForm* form;
 @property (nonatomic, readonly) BOOL back;
 
 + (NSArray*)values;

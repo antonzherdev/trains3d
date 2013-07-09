@@ -3,18 +3,18 @@
 #import "TRTypes.h"
 #import "TRCity.h"
 #import "TRLevel.h"
+#import "TRRailroad.h"
 @implementation TRTrain{
     __weak TRLevel* _level;
     TRColor* _color;
     NSArray* _cars;
     CGFloat _speed;
-    CGPoint _head;
+    TRRailPoint _head;
 }
 @synthesize level = _level;
 @synthesize color = _color;
 @synthesize cars = _cars;
 @synthesize speed = _speed;
-@synthesize head = _head;
 
 + (id)trainWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(CGFloat)speed {
     return [[TRTrain alloc] initWithLevel:level color:color cars:cars speed:speed];
@@ -27,23 +27,22 @@
         _color = color;
         _cars = cars;
         _speed = speed;
-        _head = CGPointMake(0, 0);
     }
     
     return self;
 }
 
 - (void)startFromCity:(TRCity*)city {
-    _head = egipFloat(city.tile);
+    _head = [city startPoint];
     [self calculateCarPositions];
 }
 
 - (void)calculateCarPositions {
     [_cars fold:^id(id hl, TRCar* car) {
-        car.head = uval(CGPoint, hl);
-        CGPoint next = [self movePoint:uval(CGPoint, hl) length:[car length]];
+        car.head = uval(TRRailPoint, hl);
+        TRRailPoint next = [_level.railroad moveForLength:[car length] point:uval(TRRailPoint, hl)].point;
         car.tail = next;
-        return val([self movePoint:next length:0.1]);
+        return val([_level.railroad moveForLength:0.1 point:next].point);
     } withStart:val(_head)];
 }
 
@@ -55,8 +54,8 @@
 
 
 @implementation TRCar{
-    CGPoint _head;
-    CGPoint _tail;
+    TRRailPoint _head;
+    TRRailPoint _tail;
 }
 @synthesize head = _head;
 @synthesize tail = _tail;
@@ -67,10 +66,6 @@
 
 - (id)init {
     self = [super init];
-    if(self) {
-        _head = CGPointMake(0, 0);
-        _tail = CGPointMake(0, 0);
-    }
     
     return self;
 }

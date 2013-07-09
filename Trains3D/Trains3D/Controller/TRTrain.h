@@ -4,6 +4,10 @@
 @class TRCityAngle;
 @class TRCity;
 @class TRLevel;
+#import "TRRailPoint.h"
+@class TRRail;
+@class TRRailroad;
+@class TRRailroadBuilder;
 
 @class TRTrain;
 @class TRCar;
@@ -13,7 +17,6 @@
 @property (nonatomic, readonly) TRColor* color;
 @property (nonatomic, readonly) NSArray* cars;
 @property (nonatomic, readonly) CGFloat speed;
-@property (nonatomic) CGPoint head;
 
 + (id)trainWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(CGFloat)speed;
 - (id)initWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(CGFloat)speed;
@@ -22,8 +25,8 @@
 
 
 @interface TRCar : NSObject
-@property (nonatomic) CGPoint head;
-@property (nonatomic) CGPoint tail;
+@property (nonatomic) TRRailPoint head;
+@property (nonatomic) TRRailPoint tail;
 
 + (id)car;
 - (id)init;

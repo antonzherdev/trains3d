@@ -65,7 +65,8 @@ struct TRRailPoint(tile : EGIPoint, form : uint, x : float, back : bool) {
         val form = getForm
         val x = if(back) form.length - self.x else self.x
         val f = form.pointFun
-        f(x)
+        val p : CGPoint = f(x)
+        CGPoint(p.x + tile.x, p.y + tile.y)
     }
 }
 

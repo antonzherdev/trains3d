@@ -7,13 +7,13 @@
 #import "TRTrain.h"
 @implementation TRLevel{
     EGISize _mapSize;
-    NSArray* _cities;
     TRRailroad* _railroad;
+    NSArray* _cities;
     NSArray* _trains;
 }
 @synthesize mapSize = _mapSize;
-@synthesize cities = _cities;
 @synthesize railroad = _railroad;
+@synthesize cities = _cities;
 @synthesize trains = _trains;
 
 + (id)levelWithMapSize:(EGISize)mapSize {
@@ -24,8 +24,8 @@
     self = [super init];
     if(self) {
         _mapSize = mapSize;
-        _cities = [self appendNextCityToCities:[self appendNextCityToCities:(@[])]];
         _railroad = [TRRailroad railroadWithMapSize:_mapSize];
+        _cities = [self appendNextCityToCities:[self appendNextCityToCities:(@[])]];
         _trains = (@[]);
     }
     
@@ -36,7 +36,9 @@
     EGIPoint tile = uval(EGIPoint, [[egMapSsoPartialTiles(_mapSize) exclude:[cities map:^id(TRCity* _) {
         return val(_.tile);
     }]] randomItem]);
-    return [cities arrayByAddingObject:[TRCity cityWithColor:[TRColor values][[cities count]] tile:tile angle:[self randomCityDirectionForTile:tile]]];
+    TRCity* city = [TRCity cityWithColor:[TRColor values][[cities count]] tile:tile angle:[self randomCityDirectionForTile:tile]];
+    [_railroad tryAddRail:[TRRail railWithTile:tile form:city.angle.form]];
+    return [cities arrayByAddingObject:city];
 }
 
 - (TRCityAngle*)randomCityDirectionForTile:(EGIPoint)tile {

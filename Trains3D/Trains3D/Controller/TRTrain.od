@@ -3,21 +3,23 @@ import EGTypes
 import TRTypes
 import TRCity
 import TRLevel
+import TRRailPoint
+import TRRailroad
 
 class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : float) {
-    var head : CGPoint = CGPoint(0, 0)
+    private var head : TRRailPoint
 
     def startFrom(city : TRCity) {
-        head = egipFloat(city.tile)
+        head = city.startPoint
         calculateCarPositions
     }
 
     private def calculateCarPositions {
         cars.fold((hl, car) -> {
             car.head = hl
-            val next = move(hl, car.length)
+            val next = level.railroad.moveFor(car.length, hl).point
             car.tail = next
-            move(next, 0.1)
+            level.railroad.moveFor(0.1, next).point
         }, head)
     }
 
@@ -26,8 +28,8 @@ class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : flo
 
 
 class TRCar {
-    var head : CGPoint = CGPoint(0, 0)
-    var tail : CGPoint = CGPoint(0, 0)
+    var head : TRRailPoint
+    var tail : TRRailPoint
 
     def length : float = 0.6
 }

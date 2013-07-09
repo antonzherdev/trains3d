@@ -4,7 +4,7 @@
 #import "TRTypes.h"
 @implementation TRCityAngle{
     NSInteger _angle;
-    TRRailForm* _railForm;
+    TRRailForm* _form;
     BOOL _back;
 }
 static TRCityAngle* _angle0;
@@ -13,18 +13,18 @@ static TRCityAngle* _angle180;
 static TRCityAngle* _angle270;
 static NSArray* values;
 @synthesize angle = _angle;
-@synthesize railForm = _railForm;
+@synthesize form = _form;
 @synthesize back = _back;
 
-+ (id)cityAngleWithOrdinal:(NSUInteger)ordinal name:(NSString*)name angle:(NSInteger)angle railForm:(TRRailForm*)railForm back:(BOOL)back {
-    return [[TRCityAngle alloc] initWithOrdinal:ordinal name:name angle:angle railForm:railForm back:back];
++ (id)cityAngleWithOrdinal:(NSUInteger)ordinal name:(NSString*)name angle:(NSInteger)angle form:(TRRailForm*)form back:(BOOL)back {
+    return [[TRCityAngle alloc] initWithOrdinal:ordinal name:name angle:angle form:form back:back];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name angle:(NSInteger)angle railForm:(TRRailForm*)railForm back:(BOOL)back {
+- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name angle:(NSInteger)angle form:(TRRailForm*)form back:(BOOL)back {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
         _angle = angle;
-        _railForm = railForm;
+        _form = form;
         _back = back;
     }
     
@@ -33,10 +33,10 @@ static NSArray* values;
 
 + (void)initialize {
     [super initialize];
-    _angle0 = [TRCityAngle cityAngleWithOrdinal:0 name:@"angle0" angle:0 railForm:[TRRailForm leftRight] back:NO];
-    _angle90 = [TRCityAngle cityAngleWithOrdinal:1 name:@"angle90" angle:90 railForm:[TRRailForm bottomTop] back:YES];
-    _angle180 = [TRCityAngle cityAngleWithOrdinal:2 name:@"angle180" angle:180 railForm:[TRRailForm leftRight] back:YES];
-    _angle270 = [TRCityAngle cityAngleWithOrdinal:3 name:@"angle270" angle:270 railForm:[TRRailForm bottomTop] back:NO];
+    _angle0 = [TRCityAngle cityAngleWithOrdinal:0 name:@"angle0" angle:0 form:[TRRailForm leftRight] back:NO];
+    _angle90 = [TRCityAngle cityAngleWithOrdinal:1 name:@"angle90" angle:90 form:[TRRailForm bottomTop] back:YES];
+    _angle180 = [TRCityAngle cityAngleWithOrdinal:2 name:@"angle180" angle:180 form:[TRRailForm leftRight] back:YES];
+    _angle270 = [TRCityAngle cityAngleWithOrdinal:3 name:@"angle270" angle:270 form:[TRRailForm bottomTop] back:NO];
     values = (@[_angle0, _angle90, _angle180, _angle270]);
 }
 
@@ -88,7 +88,7 @@ static NSArray* values;
 }
 
 - (TRRailPoint)startPoint {
-    return TRRailPointMake(_tile, _angle.railForm.ordinal, 0, _angle.back);
+    return TRRailPointMake(_tile, _angle.form.ordinal, 0, _angle.back);
 }
 
 @end

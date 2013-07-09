@@ -13,8 +13,8 @@
 
 @interface TRLevel : NSObject
 @property (nonatomic, readonly) EGISize mapSize;
-@property (nonatomic, readonly) NSArray* cities;
 @property (nonatomic, readonly) TRRailroad* railroad;
+@property (nonatomic, readonly) NSArray* cities;
 @property (nonatomic, readonly) NSArray* trains;
 
 + (id)levelWithMapSize:(EGISize)mapSize;

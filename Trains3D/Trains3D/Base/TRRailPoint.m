@@ -205,5 +205,6 @@ CGPoint trRailPointPoint(TRRailPoint self) {
     TRRailForm* form = trRailPointGetForm(self);
     CGFloat x = self.back ? form.length - self.x : self.x;
     CGPoint(^f)(CGFloat) = form.pointFun;
-    return f(x);
+    CGPoint p = f(x);
+    return CGPointMake(p.x + self.tile.x, p.y + self.tile.y);
 }
