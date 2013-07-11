@@ -70,7 +70,9 @@
     if([self canAddRail:rail]) {
         _rails = [_rails arrayByAddingObject:rail];
         return YES;
-    } else return NO;
+    } else {
+        return NO;
+    }
 }
 
 - (TRRailPointCorrection)moveForLength:(CGFloat)length point:(TRRailPoint)point {
@@ -79,16 +81,18 @@
 
 - (TRRailPointCorrection)correctPoint:(TRRailPoint)point {
     TRRailPointCorrection correction = trRailPointCorrect(point);
-    if(correction.error == 0) return correction;
-    else {
+    if(correction.error == 0) {
+        return correction;
+    } else {
         TRRailConnector* connector = trRailPointEndConnector(point);
         EGIPoint nextTile = [connector nextTile:point.tile];
         TRRailConnector* otherSideConnector = [connector otherSideConnector];
         NSArray* nextRails = [[[self railsInTile:nextTile] filter:^BOOL(TRRail* _) {
             return _.form.start == otherSideConnector || _.form.end == otherSideConnector;
         }] array];
-        if([nextRails count] == 0) return correction;
-        else {
+        if([nextRails count] == 0) {
+            return correction;
+        } else {
             TRRail* rail = [nextRails head];
             TRRailForm* form = rail.form;
             return [self correctPoint:TRRailPointMake(nextTile, form.ordinal, correction.error, form.end == otherSideConnector)];
@@ -124,7 +128,9 @@
     if([_railroad canAddRail:rail]) {
         _rail = [CNOption opt:rail];
         return YES;
-    } else return NO;
+    } else {
+        return NO;
+    }
 }
 
 - (void)clear {

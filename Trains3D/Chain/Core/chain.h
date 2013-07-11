@@ -8,6 +8,8 @@
 
 #define numi(expr) [NSNumber numberWithLong:expr]
 #define unumi(expr) [expr longValue]
+#define numf(expr) [NSNumber numberWithDouble:expr]
+#define unumf(expr) [expr doubleValue]
 #define numb(expr) [NSNumber numberWithBool:expr]
 #define unumb(expr) [expr boolValue]
 

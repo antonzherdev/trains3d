@@ -1,5 +1,6 @@
 #import "TRTrain.h"
 
+#import "EGMapIso.h"
 #import "TRTypes.h"
 #import "TRCity.h"
 #import "TRLevel.h"
@@ -11,6 +12,8 @@
     CGFloat _speed;
     TRRailPoint _head;
     BOOL _back;
+    CGFloat _carsDelta;
+    CGFloat _length;
 }
 @synthesize level = _level;
 @synthesize color = _color;
@@ -29,6 +32,10 @@
         _cars = cars;
         _speed = speed;
         _back = NO;
+        _carsDelta = 0.1;
+        _length = unumf([_cars fold:^id(id r, TRCar* car) {
+            return numf([car length] + unumf(r) + _carsDelta);
+        } withStart:numf(-1.0 * _carsDelta)]);
     }
     
     return self;
@@ -42,9 +49,9 @@
 - (void)calculateCarPositions {
     [[self directedCars] fold:^id(id hl, TRCar* car) {
         car.head = uval(TRRailPoint, hl);
-        TRRailPoint next = [_level.railroad moveForLength:[car length] point:uval(TRRailPoint, hl)].point;
+        TRRailPoint next = trRailPointCorrectionAddErrorToPoint([_level.railroad moveForLength:[car length] point:uval(TRRailPoint, hl)]);
         car.tail = next;
-        return val([_level.railroad moveForLength:0.1 point:next].point);
+        return val(trRailPointCorrectionAddErrorToPoint([_level.railroad moveForLength:_carsDelta point:next]));
     } withStart:val(trRailPointInvert(_head))];
 }
 
@@ -56,19 +63,28 @@
     [self correctCorrection:[_level.railroad moveForLength:delta * _speed point:_head]];
 }
 
-- (CNChain*)directedCars {
-    if(_back) return [_cars reverse];
+- (NSArray*)directedCars {
+    if(_back) return [[_cars reverse] array];
     else return _cars;
 }
 
 - (void)correctCorrection:(TRRailPointCorrection)correction {
-    _head = correction.point;
-    [self calculateCarPositions];
     if(!(eqf(correction.error, 0.0))) {
-        _back = !(_back);
-        TRCar* lastCar = [[self directedCars] head];
-        _head = lastCar.tail;
+        if(!([self isMoveToCityForPoint:correction.point]) || correction.error >= _length) {
+            _back = !(_back);
+            TRCar* lastCar = [[self directedCars] head];
+            _head = lastCar.tail;
+        } else {
+            _head = trRailPointCorrectionAddErrorToPoint(correction);
+        }
+    } else {
+        _head = correction.point;
     }
+    [self calculateCarPositions];
+}
+
+- (BOOL)isMoveToCityForPoint:(TRRailPoint)point {
+    return !(egMapSsoIsFullTileP(_level.mapSize, point.tile)) && !(egMapSsoIsFullTileP(_level.mapSize, trRailPointNextTile(point)));
 }
 
 @end

@@ -49,16 +49,24 @@
     if(rail.form == [TRRailForm bottomTop]) {
         glRotatef(90, 1, 0, 0);
         egDrawJasModel(Rail);
-    } else if(rail.form == [TRRailForm leftRight]) {
-        glRotatef(90, 0, 0, 1);
-        glRotatef(90, 1, 0, 0);
-        egDrawJasModel(Rail);
     } else {
-        if(rail.form.start.x == 0 && rail.form.start.y == 1) glRotatef(90, 0, 0, 1);
-        else if(rail.form.start.x == -1 && rail.form.end.y == 1) glRotatef(180, 0, 0, 1);
-        else if(rail.form.start.x == -1 && rail.form.end.y == -1) glRotatef(270, 0, 0, 1);
-        glRotatef(90, 1, 0, 0);
-        egDrawJasModel(RailTurn);
+        if(rail.form == [TRRailForm leftRight]) {
+            glRotatef(90, 0, 0, 1);
+            glRotatef(90, 1, 0, 0);
+            egDrawJasModel(Rail);
+        } else {
+            if(rail.form.start.x == 0 && rail.form.start.y == 1) {
+                glRotatef(90, 0, 0, 1);
+            } else {
+                if(rail.form.start.x == -1 && rail.form.end.y == 1) {
+                    glRotatef(180, 0, 0, 1);
+                } else {
+                    if(rail.form.start.x == -1 && rail.form.end.y == -1) glRotatef(270, 0, 0, 1);
+                }
+            }
+            glRotatef(90, 1, 0, 0);
+            egDrawJasModel(RailTurn);
+        }
     }
     glPopMatrix();
 }

@@ -36,18 +36,33 @@ static NSArray* values;
 }
 
 + (TRRailConnector*)connectorForX:(NSInteger)x y:(NSInteger)y {
-    if(x == -1 && y == 0) return [TRRailConnector left];
-    else if(x == 0 && y == -1) return [TRRailConnector bottom];
-    else if(x == 0 && y == 1) return [TRRailConnector top];
-    else if(x == 1 && y == 0) return [TRRailConnector right];
-    else @throw @"No rail connector";
+    if(x == -1 && y == 0) {
+        return [TRRailConnector left];
+    } else {
+        if(x == 0 && y == -1) {
+            return [TRRailConnector bottom];
+        } else {
+            if(x == 0 && y == 1) {
+                return [TRRailConnector top];
+            } else {
+                if(x == 1 && y == 0) return [TRRailConnector right];
+                else @throw @"No rail connector";
+            }
+        }
+    }
 }
 
 - (TRRailConnector*)otherSideConnector {
-    if(self == [TRRailConnector left]) return [TRRailConnector right];
-    else if(self == [TRRailConnector right]) return [TRRailConnector left];
-    else if(self == [TRRailConnector top]) return [TRRailConnector bottom];
-    else return [TRRailConnector top];
+    if(self == [TRRailConnector left]) {
+        return [TRRailConnector right];
+    } else {
+        if(self == [TRRailConnector right]) {
+            return [TRRailConnector left];
+        } else {
+            if(self == [TRRailConnector top]) return [TRRailConnector bottom];
+            else return [TRRailConnector top];
+        }
+    }
 }
 
 - (EGIPoint)nextTile:(EGIPoint)tile {
@@ -135,14 +150,32 @@ static NSArray* values;
 }
 
 + (TRRailForm*)formForConnector1:(TRRailConnector*)connector1 connector2:(TRRailConnector*)connector2 {
-    if(connector1.ordinal > connector2.ordinal) return [TRRailForm formForConnector1:connector2 connector2:connector1];
-    else if(connector1 == [TRRailConnector left] && connector2 == [TRRailConnector right]) return [TRRailForm leftRight];
-    else if(connector1 == [TRRailConnector left] && connector2 == [TRRailConnector bottom]) return [TRRailForm leftBottom];
-    else if(connector1 == [TRRailConnector left] && connector2 == [TRRailConnector top]) return [TRRailForm leftTop];
-    else if(connector1 == [TRRailConnector bottom] && connector2 == [TRRailConnector top]) return [TRRailForm bottomTop];
-    else if(connector1 == [TRRailConnector bottom] && connector2 == [TRRailConnector right]) return [TRRailForm bottomRight];
-    else if(connector1 == [TRRailConnector top] && connector2 == [TRRailConnector right]) return [TRRailForm topRight];
-    else @throw @"No form for connectors";
+    if(connector1.ordinal > connector2.ordinal) {
+        return [TRRailForm formForConnector1:connector2 connector2:connector1];
+    } else {
+        if(connector1 == [TRRailConnector left] && connector2 == [TRRailConnector right]) {
+            return [TRRailForm leftRight];
+        } else {
+            if(connector1 == [TRRailConnector left] && connector2 == [TRRailConnector bottom]) {
+                return [TRRailForm leftBottom];
+            } else {
+                if(connector1 == [TRRailConnector left] && connector2 == [TRRailConnector top]) {
+                    return [TRRailForm leftTop];
+                } else {
+                    if(connector1 == [TRRailConnector bottom] && connector2 == [TRRailConnector top]) {
+                        return [TRRailForm bottomTop];
+                    } else {
+                        if(connector1 == [TRRailConnector bottom] && connector2 == [TRRailConnector right]) {
+                            return [TRRailForm bottomRight];
+                        } else {
+                            if(connector1 == [TRRailConnector top] && connector2 == [TRRailConnector right]) return [TRRailForm topRight];
+                            else @throw @"No form for connectors";
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 + (TRRailForm*)leftBottom {
@@ -194,8 +227,9 @@ BOOL trRailPointIsValid(TRRailPoint self) {
     return self.x >= 0 && self.x <= trRailPointGetForm(self).length;
 }
 TRRailPointCorrection trRailPointCorrect(TRRailPoint self) {
-    if(self.x < 0) return TRRailPointCorrectionMake(TRRailPointMake(self.tile, self.form, 0, self.back), self.x);
-    else {
+    if(self.x < 0) {
+        return TRRailPointCorrectionMake(TRRailPointMake(self.tile, self.form, 0, self.back), self.x);
+    } else {
         CGFloat length = trRailPointGetForm(self).length;
         if(self.x > length) return TRRailPointCorrectionMake(TRRailPointMake(self.tile, self.form, length, self.back), self.x - length);
         else return TRRailPointCorrectionMake(self, 0);
@@ -210,4 +244,11 @@ CGPoint trRailPointPoint(TRRailPoint self) {
 }
 TRRailPoint trRailPointInvert(TRRailPoint self) {
     return TRRailPointMake(self.tile, self.form, trRailPointGetForm(self).length - self.x, !(self.back));
+}
+EGIPoint trRailPointNextTile(TRRailPoint self) {
+    return [trRailPointEndConnector(self) nextTile:self.tile];
+}
+TRRailPoint trRailPointCorrectionAddErrorToPoint(TRRailPointCorrection self) {
+    if(self.error == 0) return self.point;
+    else return trRailPointAdd(self.point, self.error);
 }

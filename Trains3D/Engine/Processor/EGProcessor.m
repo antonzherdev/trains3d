@@ -51,10 +51,16 @@
 }
 
 - (BOOL)leftMouseProcessor:(id)processor {
-    if([self isLeftMouseDown]) return [processor mouseDownEvent:self];
-    else if([self isLeftMouseDrag]) return [processor mouseDragEvent:self];
-    else if([self isLeftMouseUp]) return [processor mouseUpEvent:self];
-    else return NO;
+    if([self isLeftMouseDown]) {
+        return [processor mouseDownEvent:self];
+    } else {
+        if([self isLeftMouseDrag]) {
+            return [processor mouseDragEvent:self];
+        } else {
+            if([self isLeftMouseUp]) return [processor mouseUpEvent:self];
+            else return NO;
+        }
+    }
 }
 
 - (BOOL)isTouchBegan {
@@ -74,11 +80,20 @@
 }
 
 - (BOOL)touchProcessor:(id)processor {
-    if([self isTouchBegan]) return [processor touchBeganEvent:self];
-    else if([self isTouchMoved]) return [processor touchMovedEvent:self];
-    else if([self isTouchEnded]) return [processor touchEndedEvent:self];
-    else if([self isTouchCanceled]) return [processor touchCanceledEvent:self];
-    else return NO;
+    if([self isTouchBegan]) {
+        return [processor touchBeganEvent:self];
+    } else {
+        if([self isTouchMoved]) {
+            return [processor touchMovedEvent:self];
+        } else {
+            if([self isTouchEnded]) {
+                return [processor touchEndedEvent:self];
+            } else {
+                if([self isTouchCanceled]) return [processor touchCanceledEvent:self];
+                else return NO;
+            }
+        }
+    }
 }
 
 @end

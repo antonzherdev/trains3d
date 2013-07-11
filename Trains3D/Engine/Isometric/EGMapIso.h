@@ -11,6 +11,10 @@ inline static BOOL egMapSsoIsFullTile(EGISize size, NSInteger x, NSInteger y) {
             && y + x <= size.width + size.height - 2 //right
             && y - x >= -size.width + 1; //bottom
 }
+inline static BOOL egMapSsoIsFullTileP(EGISize size, EGIPoint point) {
+    return egMapSsoIsFullTile(size, point.x, point.y);
+}
+
 inline static BOOL egMapSsoIsPartialTile(EGISize size, NSInteger x, NSInteger y) {
     return y + x >= -1 //left
             && y - x <= size.height //top

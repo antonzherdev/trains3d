@@ -63,6 +63,7 @@ BOOL trRailPointIsValid(TRRailPoint self);
 TRRailPointCorrection trRailPointCorrect(TRRailPoint self);
 CGPoint trRailPointPoint(TRRailPoint self);
 TRRailPoint trRailPointInvert(TRRailPoint self);
+EGIPoint trRailPointNextTile(TRRailPoint self);
 
 struct TRRailPointCorrection {
     TRRailPoint point;
@@ -77,4 +78,5 @@ static inline TRRailPointCorrection TRRailPointCorrectionMake(TRRailPoint point,
 static inline BOOL TRRailPointCorrectionEq(TRRailPointCorrection s1, TRRailPointCorrection s2) {
     return TRRailPointEq(s1.point, s2.point) && eqf(s1.error, s2.error);
 }
+TRRailPoint trRailPointCorrectionAddErrorToPoint(TRRailPointCorrection self);
 

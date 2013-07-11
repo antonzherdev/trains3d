@@ -1,4 +1,5 @@
 import EGTypes
+import EGMapIso
 
 import TRTypes
 import TRCity
@@ -9,6 +10,8 @@ import TRRailroad
 class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : float) {
     private var head : TRRailPoint
     private var back = false
+    private val carsDelta : float = 0.1
+    private val length : float = cars.fold(((r, car) -> car.length + r + carsDelta), -1.0 * carsDelta)
 
     def startFrom(city : TRCity) {
         head = city.startPoint
@@ -18,9 +21,9 @@ class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : flo
     private def calculateCarPositions {
         directedCars.fold((hl, car) -> {
             car.head = hl
-            val next = level.railroad.moveFor(car.length, hl).point
+            val next = level.railroad.moveFor(car.length, hl).addErrorToPoint
             car.tail = next
-            level.railroad.moveFor(0.1, next).point
+            level.railroad.moveFor(carsDelta, next).addErrorToPoint
         }, head.invert)
     }
 
@@ -30,18 +33,26 @@ class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : flo
         correct(level.railroad.moveFor(delta*speed, head))
     }
 
-    private def directedCars = if(back) cars.reverse else cars
+    private def directedCars = if(back) cars.reverse.array else cars
 
-    private def correct(correction : TRRailPointCorrection) = {
-        head = correction.point
-        calculateCarPositions
-
+    private def correct(correction : TRRailPointCorrection) {
         if(correction.error != 0.0) {
-            back = !back
-            val lastCar = directedCars.head
-            head = lastCar.tail
+            if(!isMoveToCityFor(correction.point) || correction.error >= length) {
+                back = !back
+                val lastCar = directedCars.head
+                head = lastCar.tail
+            } else {
+                head = correction.addErrorToPoint
+            }
+        } else {
+            head = correction.point
         }
+        calculateCarPositions
     }
+
+    private def isMoveToCityFor(point : TRRailPoint) =
+        !egMapSsoIsFullTileP(level.mapSize, point.tile) &&
+        !egMapSsoIsFullTileP(level.mapSize, point.nextTile)
 }
 
 

@@ -3,6 +3,7 @@ import EGTypes
 stub def egMapSsoDrawLayout(size: EGISize)
 stub def egMapSsoDrawPlane(size: EGISize)
 stub def egMapSsoIsFullTile(size : EGISize, x : int, y : int) : bool
+stub def egMapSsoIsFullTileP(size : EGISize, tile: EGIPoint) : bool
 stub def egMapSsoLimits(size : EGISize) : EGIRect
 stub def egMapSsoFullTiles(size : EGISize) : [EGIPoint]
 stub def egMapSsoPartialTiles(size : EGISize) : [EGIPoint]

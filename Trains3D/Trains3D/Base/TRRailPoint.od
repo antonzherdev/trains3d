@@ -70,6 +70,10 @@ struct TRRailPoint(tile : EGIPoint, form : uint, x : float, back : bool) {
     }
 
     def invert = TRRailPoint(tile, form, getForm.length - x, !back)
+
+    def nextTile : EGIPoint = endConnector.next(tile)
 }
 
-struct TRRailPointCorrection(point : TRRailPoint, error : float)
+struct TRRailPointCorrection(point : TRRailPoint, error : float) {
+    def addErrorToPoint : TRRailPoint = if(error == 0) point else point.add(error)
+}
