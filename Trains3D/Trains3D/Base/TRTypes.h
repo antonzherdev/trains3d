@@ -7,10 +7,10 @@
 @property (nonatomic, readonly) EGColor color;
 
 - (void)gl;
-+ (NSArray*)values;
 + (TRColor*)orange;
 + (TRColor*)green;
 + (TRColor*)purple;
++ (NSArray*)values;
 @end
 
 
