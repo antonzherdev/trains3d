@@ -53,6 +53,8 @@
     _framesCount++;
     if(_accumDelta > 0.1) {
         _frameRate = _framesCount / _accumDelta;
+        _accumDelta = 0;
+        _framesCount = 0;
     }
 }
 
