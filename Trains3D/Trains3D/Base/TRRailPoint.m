@@ -230,13 +230,9 @@ BOOL trRailPointIsValid(TRRailPoint self) {
     return self.x >= 0 && self.x <= trRailPointGetForm(self).length;
 }
 TRRailPointCorrection trRailPointCorrect(TRRailPoint self) {
-    if(self.x < 0) {
-        return TRRailPointCorrectionMake(TRRailPointMake(self.tile, self.form, 0, self.back), self.x);
-    } else {
-        CGFloat length = trRailPointGetForm(self).length;
-        if(self.x > length) return TRRailPointCorrectionMake(TRRailPointMake(self.tile, self.form, length, self.back), self.x - length);
-        else return TRRailPointCorrectionMake(self, 0);
-    }
+    CGFloat length = trRailPointGetForm(self).length;
+    if(self.x > length) return TRRailPointCorrectionMake(TRRailPointMake(self.tile, self.form, length, self.back), self.x - length);
+    else return TRRailPointCorrectionMake(self, 0);
 }
 CGPoint trRailPointPoint(TRRailPoint self) {
     TRRailForm* form = trRailPointGetForm(self);

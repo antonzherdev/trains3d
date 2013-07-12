@@ -53,13 +53,11 @@ struct TRRailPoint(tile : EGIPoint, form : uint, x : float, back : bool) {
 
     def isValid = x >= 0 && x <= getForm.length
 
-    def correct : TRRailPointCorrection =
-        if(self.x < 0) TRRailPointCorrection(TRRailPoint(self.tile, self.form, 0, self.back), self.x)
-        else {
-            val length = self.getForm.length
-            if(self.x > length) TRRailPointCorrection(TRRailPoint(self.tile, self.form, length, self.back), self.x - length)
-            else TRRailPointCorrection(self, 0)
-        }
+    def correct : TRRailPointCorrection = {
+        val length = self.getForm.length
+        if(self.x > length) TRRailPointCorrection(TRRailPoint(self.tile, self.form, length, self.back), self.x - length)
+        else TRRailPointCorrection(self, 0)
+    }
 
     def point : CGPoint = {
         val form = getForm
