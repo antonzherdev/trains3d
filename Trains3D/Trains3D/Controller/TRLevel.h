@@ -4,6 +4,7 @@
 @class TRCity;
 @class TRColor;
 @class TRRail;
+@class TRSwitch;
 @class TRRailroad;
 @class TRRailroadBuilder;
 @class TRTrain;

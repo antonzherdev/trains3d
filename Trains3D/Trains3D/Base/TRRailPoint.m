@@ -3,6 +3,7 @@
 @implementation TRRailConnector{
     NSInteger _x;
     NSInteger _y;
+    NSInteger _angle;
 }
 static TRRailConnector* _left;
 static TRRailConnector* _bottom;
@@ -11,16 +12,18 @@ static TRRailConnector* _right;
 static NSArray* values;
 @synthesize x = _x;
 @synthesize y = _y;
+@synthesize angle = _angle;
 
-+ (id)railConnectorWithOrdinal:(NSUInteger)ordinal name:(NSString*)name x:(NSInteger)x y:(NSInteger)y {
-    return [[TRRailConnector alloc] initWithOrdinal:ordinal name:name x:x y:y];
++ (id)railConnectorWithOrdinal:(NSUInteger)ordinal name:(NSString*)name x:(NSInteger)x y:(NSInteger)y angle:(NSInteger)angle {
+    return [[TRRailConnector alloc] initWithOrdinal:ordinal name:name x:x y:y angle:angle];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name x:(NSInteger)x y:(NSInteger)y {
+- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name x:(NSInteger)x y:(NSInteger)y angle:(NSInteger)angle {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
         _x = x;
         _y = y;
+        _angle = angle;
     }
     
     return self;
@@ -28,10 +31,10 @@ static NSArray* values;
 
 + (void)initialize {
     [super initialize];
-    _left = [TRRailConnector railConnectorWithOrdinal:0 name:@"left" x:-1 y:0];
-    _bottom = [TRRailConnector railConnectorWithOrdinal:1 name:@"bottom" x:0 y:-1];
-    _top = [TRRailConnector railConnectorWithOrdinal:2 name:@"top" x:0 y:1];
-    _right = [TRRailConnector railConnectorWithOrdinal:3 name:@"right" x:1 y:0];
+    _left = [TRRailConnector railConnectorWithOrdinal:0 name:@"left" x:-1 y:0 angle:0];
+    _bottom = [TRRailConnector railConnectorWithOrdinal:1 name:@"bottom" x:0 y:-1 angle:90];
+    _top = [TRRailConnector railConnectorWithOrdinal:2 name:@"top" x:0 y:1 angle:270];
+    _right = [TRRailConnector railConnectorWithOrdinal:3 name:@"right" x:1 y:0 angle:180];
     values = (@[_left, _bottom, _top, _right]);
 }
 

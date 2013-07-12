@@ -1,10 +1,10 @@
 import EGTypes
 
-enum TRRailConnector(x : int, y : int) {
-    left(-1, 0)
-    bottom(0, -1)
-    top(0, 1)
-    right(1, 0)
+enum TRRailConnector(x : int, y : int, angle : int) {
+    left(-1, 0, 0)
+    bottom(0, -1, 90)
+    top(0, 1, 270)
+    right(1, 0, 180)
 
     static def connectorFor(x : int, y : int) : TRRailConnector =
         if(x == -1 && y == 0) left

@@ -1,6 +1,7 @@
 #import "TRRailroad.h"
 
 #import "EGMap.h"
+#import "EGMapIsoTileIndex.h"
 @implementation TRRail{
     EGIPoint _tile;
     TRRailForm* _form;
@@ -22,16 +23,60 @@
     return self;
 }
 
+- (BOOL)hasConnector:(TRRailConnector*)connector {
+    return _form.start == connector || _form.end == connector;
+}
+
+@end
+
+
+@implementation TRSwitch{
+    EGIPoint _tile;
+    TRRailConnector* _connector;
+    TRRail* _rail1;
+    TRRail* _rail2;
+    BOOL _firstActive;
+}
+@synthesize tile = _tile;
+@synthesize connector = _connector;
+@synthesize rail1 = _rail1;
+@synthesize rail2 = _rail2;
+@synthesize firstActive = _firstActive;
+
++ (id)switchWithTile:(EGIPoint)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2 {
+    return [[TRSwitch alloc] initWithTile:tile connector:connector rail1:rail1 rail2:rail2];
+}
+
+- (id)initWithTile:(EGIPoint)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2 {
+    self = [super init];
+    if(self) {
+        _tile = tile;
+        _connector = connector;
+        _rail1 = rail1;
+        _rail2 = rail2;
+        _firstActive = YES;
+    }
+    
+    return self;
+}
+
+- (TRRail*)activeRail {
+    if(_firstActive) return _rail1;
+    else return _rail2;
+}
+
 @end
 
 
 @implementation TRRailroad{
     EGISize _mapSize;
     NSArray* _rails;
+    NSArray* _switches;
     TRRailroadBuilder* _builder;
 }
 @synthesize mapSize = _mapSize;
 @synthesize rails = _rails;
+@synthesize switches = _switches;
 @synthesize builder = _builder;
 
 + (id)railroadWithMapSize:(EGISize)mapSize {
@@ -43,6 +88,7 @@
     if(self) {
         _mapSize = mapSize;
         _rails = (@[]);
+        _switches = (@[]);
         _builder = [TRRailroadBuilder railroadBuilderWithRailroad:self];
     }
     
@@ -52,10 +98,10 @@
 - (BOOL)canAddRail:(TRRail*)rail {
     NSArray* railsInTile = [[self railsInTile:rail.tile] array];
     NSUInteger countsAtStart = [[railsInTile filter:^BOOL(TRRail* _) {
-        return _.form.start == rail.form.start || _.form.end == rail.form.start;
+        return [_ hasConnector:rail.form.start];
     }] count];
     NSUInteger countsAtEnd = [[railsInTile filter:^BOOL(TRRail* _) {
-        return _.form.start == rail.form.end || _.form.end == rail.form.end;
+        return [_ hasConnector:rail.form.end];
     }] count];
     return countsAtStart < 2 && countsAtEnd < 2;
 }
@@ -66,13 +112,29 @@
     }];
 }
 
+- (CNChain*)switchesInTile:(EGIPoint)tile {
+    return [_switches filter:^BOOL(TRSwitch* _) {
+        return EGIPointEq(_.tile, tile);
+    }];
+}
+
 - (BOOL)tryAddRail:(TRRail*)rail {
     if([self canAddRail:rail]) {
+        [self maybeBuildSwitchForRail:rail connector:rail.form.start];
+        [self maybeBuildSwitchForRail:rail connector:rail.form.end];
         _rails = [_rails arrayByAddingObject:rail];
         return YES;
     } else {
         return NO;
     }
+}
+
+- (void)maybeBuildSwitchForRail:(TRRail*)rail connector:(TRRailConnector*)connector {
+    [[[self railsInTile:rail.tile] filter:^BOOL(TRRail* _) {
+        return [_ hasConnector:connector];
+    }] forEach:^void(TRRail* otherRail) {
+        _switches = [_switches arrayByAddingObject:[TRSwitch switchWithTile:rail.tile connector:connector rail1:otherRail rail2:rail]];
+    }];
 }
 
 - (TRRailPointCorrection)moveForLength:(CGFloat)length point:(TRRailPoint)point {

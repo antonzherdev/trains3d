@@ -1,8 +1,10 @@
 #import "objd.h"
 #import "EGTypes.h"
+@class EGMapSsoTileIndex;
 #import "TRRailPoint.h"
 
 @class TRRail;
+@class TRSwitch;
 @class TRRailroad;
 @class TRRailroadBuilder;
 
@@ -12,12 +14,27 @@
 
 + (id)railWithTile:(EGIPoint)tile form:(TRRailForm*)form;
 - (id)initWithTile:(EGIPoint)tile form:(TRRailForm*)form;
+- (BOOL)hasConnector:(TRRailConnector*)connector;
+@end
+
+
+@interface TRSwitch : NSObject
+@property (nonatomic, readonly) EGIPoint tile;
+@property (nonatomic, readonly) TRRailConnector* connector;
+@property (nonatomic, readonly) TRRail* rail1;
+@property (nonatomic, readonly) TRRail* rail2;
+@property (nonatomic) BOOL firstActive;
+
++ (id)switchWithTile:(EGIPoint)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
+- (id)initWithTile:(EGIPoint)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
+- (TRRail*)activeRail;
 @end
 
 
 @interface TRRailroad : NSObject
 @property (nonatomic, readonly) EGISize mapSize;
 @property (nonatomic, readonly) NSArray* rails;
+@property (nonatomic, readonly) NSArray* switches;
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
 
 + (id)railroadWithMapSize:(EGISize)mapSize;

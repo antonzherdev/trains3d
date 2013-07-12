@@ -45,7 +45,7 @@
     EGIRect cut = egMapSsoTileCut(_mapSize, tile);
     return [[[TRCityAngle values] filter:^BOOL(TRCityAngle* a) {
         NSInteger angle = a.angle;
-        return angle == 0 && cut.right == 0 && cut.bottom == 0 || angle == 90 && cut.left == 0 && cut.bottom == 0 || angle == 180 && cut.left == 0 && cut.top == 0 || angle == 270 && cut.right == 0 && cut.top == 0;
+        return (angle == 0 && cut.right == 0 && cut.bottom == 0) || (angle == 90 && cut.left == 0 && cut.bottom == 0) || (angle == 180 && cut.left == 0 && cut.top == 0) || (angle == 270 && cut.right == 0 && cut.top == 0);
     }] randomItem];
 }
 

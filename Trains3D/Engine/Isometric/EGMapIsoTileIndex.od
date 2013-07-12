@@ -1,0 +1,9 @@
+import EGTypes
+
+stub class EGMapSsoTileIndex<T>(mapSize : EGISize) {
+    def lookupFor(tile : EGIPoint) : T?
+    def lookupWith(def : () -> T, forTile : EGIPoint) : T
+    def set(object : T, forTile : EGIPoint) : T
+    def values : [T]
+    def clear
+}

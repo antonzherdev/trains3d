@@ -6,6 +6,7 @@
 @class EGEvent;
 @class EGTwoFingerTouchToMouse;
 @class TRRail;
+@class TRSwitch;
 @class TRRailroad;
 @class TRRailroadBuilder;
 #import "TRRailPoint.h"

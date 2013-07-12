@@ -6,6 +6,7 @@
 @class TRLevel;
 #import "TRRailPoint.h"
 @class TRRail;
+@class TRSwitch;
 @class TRRailroad;
 @class TRRailroadBuilder;
 

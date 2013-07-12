@@ -8,6 +8,7 @@
 @class TRLevel;
 @class TRLevelView;
 @class TRRail;
+@class TRSwitch;
 @class TRRailroad;
 @class TRRailroadBuilder;
 

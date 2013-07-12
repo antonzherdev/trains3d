@@ -1,30 +1,48 @@
 import EGMap
 import EGTypes
+import EGMapIsoTileIndex
 
 import TRRailPoint
 
-class TRRail(tile : EGIPoint, form : TRRailForm)
+class TRRail(tile : EGIPoint, form : TRRailForm) {
+    def has(connector : TRRailConnector) : bool = form.start == connector || form.end == connector
+}
 
+class TRSwitch(tile : EGIPoint, connector : TRRailConnector, rail1 : TRRail, rail2 : TRRail) {
+    var firstActive = true
+
+    def activeRail : TRRail = if(firstActive) rail1 else rail2
+}
 
 class TRRailroad(mapSize : EGISize) {
     var rails : [TRRail] = [] | private set
+    var switches : [TRSwitch] = [] | private set
     val builder = TRRailroadBuilder(self)
 
     def canAdd(rail : TRRail) : bool = {
         val railsInTile = railsIn(rail.tile).array
-        val countsAtStart = railsInTile.filter(_.form.start == rail.form.start || _.form.end == rail.form.start).count
-        val countsAtEnd = railsInTile.filter(_.form.start == rail.form.end || _.form.end == rail.form.end).count
+        val countsAtStart = railsInTile.filter(_.has(rail.form.start)).count
+        val countsAtEnd = railsInTile.filter(_.has(rail.form.end)).count
 
         countsAtStart < 2 &&  countsAtEnd < 2
     }
 
     private def railsIn(tile : EGIPoint) = rails.filter(_.tile == tile)
+    private def switchesIn(tile : EGIPoint) = switches.filter(_.tile == tile)
 
     def tryAdd(rail : TRRail) : bool = {
         if(canAdd(rail)) {
+            maybeBuildSwitchFor(rail, rail.form.start)
+            maybeBuildSwitchFor(rail, rail.form.end)
             rails += rail
             true
         } else false
+    }
+
+    private def maybeBuildSwitchFor(rail : TRRail, connector : TRRailConnector) {
+        railsIn(rail.tile).filter(_.has(connector)).for(otherRail ->
+            switches += TRSwitch(rail.tile, connector, otherRail, rail)
+        )
     }
 
     def moveFor(length : float, point : TRRailPoint) : TRRailPointCorrection = correct(point.add(length))

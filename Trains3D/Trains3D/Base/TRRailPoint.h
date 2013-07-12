@@ -9,6 +9,7 @@ typedef struct TRRailPointCorrection TRRailPointCorrection;
 @interface TRRailConnector : ODEnum
 @property (nonatomic, readonly) NSInteger x;
 @property (nonatomic, readonly) NSInteger y;
+@property (nonatomic, readonly) NSInteger angle;
 
 + (TRRailConnector*)connectorForX:(NSInteger)x y:(NSInteger)y;
 - (TRRailConnector*)otherSideConnector;

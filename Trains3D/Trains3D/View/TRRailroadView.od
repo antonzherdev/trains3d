@@ -1,15 +1,19 @@
 import EGGL
-import TRRailroad
 import EGModel
+
+import TRRailroad
+import TRRailPoint
+
 import "TR3DRail.h"
 import "TR3DRailTurn.h"
-import TRRailPoint
 
 class TRRailroadView {
     private val railView = TRRailView
+    private val switchView = TRSwitchView
 
     def draw(railroad : TRRailroad) {
         railroad.rails.for(railView.draw(_))
+        railroad.switches.for(switchView.draw(_))
         railroad.builder.rail.for(railView.draw(_))
     }
 }
@@ -38,6 +42,43 @@ class TRRailView {
             glRotatef(90, 1, 0, 0)
             egDrawJasModel(RailTurn)
         }
+        glPopMatrix
+    }
+}
+
+class TRSwitchView {
+    def draw(theSwitch : TRSwitch) {
+        val connector = theSwitch.connector
+        glPushMatrix
+        glTranslatef(theSwitch.tile.x, theSwitch.tile.y, 0.01)
+        glRotatef(connector.angle, 0, 0, 1)
+
+        val rail = theSwitch.activeRail
+        val form = rail.form
+
+        glColor3f(0.2, 0.8, 0.2)
+        if(form.start.x + form.end.x == 0) {
+            glBegin(GL_QUADS)
+            glVertex2f(-0.5, 0.05)
+            glVertex2f(-0.5, -0.05)
+            glVertex2f(-0.25, -0.02)
+            glVertex2f(-0.25, 0.02)
+            glEnd
+        } else {
+            val otherConnector = if(form.start == connector) form.end else form.start
+            val x = connector.x val y = connector.y
+            val ox = otherConnector.x val oy = otherConnector.y
+            if(x == -1 && oy == -1 || y == 1 && ox == 1 || y == -1 && ox == 1 || x == 1 && oy == 1) {
+                glScalef(1, -1, 1)
+            }
+            glBegin(GL_QUADS)
+            glVertex2f(-0.5, 0.05)
+            glVertex2f(-0.5, -0.05)
+            glVertex2f(-0.25, 0.1)
+            glVertex2f(-0.25, 0.15)
+            glEnd
+        }
+
         glPopMatrix
     }
 }

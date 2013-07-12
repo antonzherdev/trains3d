@@ -15,7 +15,7 @@ stub def glDisable(: uint)
 stub val GL_DEPTH_TEST : uint
 
 stub def glBegin(: uint)
-stub def glEnd()
+stub def glEnd
 stub val GL_QUADS : uint
 stub def glVertex2f(x : float, y : float)
 stub def glVertex3f(x : float, y : float, z : float)
