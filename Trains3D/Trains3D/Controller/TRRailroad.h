@@ -42,7 +42,6 @@
 - (BOOL)canAddRail:(TRRail*)rail;
 - (BOOL)tryAddRail:(TRRail*)rail;
 - (TRRailPointCorrection)moveForLength:(CGFloat)length point:(TRRailPoint)point;
-- (TRRailPointCorrection)correctPoint:(TRRailPoint)point;
 @end
 
 

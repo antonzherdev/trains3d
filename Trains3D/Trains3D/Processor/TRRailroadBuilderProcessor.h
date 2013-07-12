@@ -46,8 +46,8 @@ static inline BOOL TRRailCorrectionEq(TRRailCorrection s1, TRRailCorrection s2) 
 + (id)railroadBuilderMouseProcessorWithBuilder:(TRRailroadBuilder*)builder;
 - (id)initWithBuilder:(TRRailroadBuilder*)builder;
 - (BOOL)mouseDownEvent:(EGEvent*)event;
-- (id)mouseDragEvent:(EGEvent*)event;
-- (id)mouseUpEvent:(EGEvent*)event;
+- (BOOL)mouseDragEvent:(EGEvent*)event;
+- (BOOL)mouseUpEvent:(EGEvent*)event;
 @end
 
 

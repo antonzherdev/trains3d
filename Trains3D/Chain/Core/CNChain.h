@@ -27,4 +27,5 @@
 - (NSArray*)array;
 - (NSSet*)set;
 - (id)fold:(cnF2)f withStart:(id)start;
+- (id)find:(cnPredicate)predicate;
 @end

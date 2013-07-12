@@ -22,4 +22,5 @@
 - (id) randomItem;
 - (void) forEach:(cnP)p;
 - (id)fold:(cnF2)f withStart:(id)start;
+- (id)find:(cnPredicate)predicate;
 @end

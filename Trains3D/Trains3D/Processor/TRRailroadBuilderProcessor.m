@@ -57,8 +57,8 @@
     return YES;
 }
 
-- (id)mouseDragEvent:(EGEvent*)event {
-    return [[_startedPoint map:^id(id sp) {
+- (BOOL)mouseDragEvent:(EGEvent*)event {
+    return unumb([[_startedPoint map:^id(id sp) {
         CGPoint deltaVector = egpSub([event location], uval(CGPoint, sp));
         if(egpLengthSQ(deltaVector) > 0.25) {
             EGIPoint spTile = egpRound(uval(CGPoint, sp));
@@ -67,15 +67,15 @@
             [_builder tryBuildRail:[self convertRail:[self correctRail:TRRailCorrectionMake(spTile, start, end)]]];
         }
         return @YES;
-    }] getOr:@NO];
+    }] getOr:@NO]);
 }
 
-- (id)mouseUpEvent:(EGEvent*)event {
-    return [[_startedPoint map:^id(id point) {
+- (BOOL)mouseUpEvent:(EGEvent*)event {
+    return unumb([[_startedPoint map:^id(id point) {
         [_builder fix];
         _startedPoint = [CNOption none];
         return @YES;
-    }] getOr:@NO];
+    }] getOr:@NO]);
 }
 
 - (EGIPoint)normPoint:(CGPoint)point {

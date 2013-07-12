@@ -33,9 +33,9 @@
 }
 
 - (NSArray*)appendNextCityToCities:(NSArray*)cities {
-    EGIPoint tile = uval(EGIPoint, [[egMapSsoPartialTiles(_mapSize) exclude:[cities map:^id(TRCity* _) {
+    EGIPoint tile = uval(EGIPoint, [[[egMapSsoPartialTiles(_mapSize) exclude:[cities map:^id(TRCity* _) {
         return val(_.tile);
-    }]] randomItem]);
+    }]] randomItem] get]);
     TRCity* city = [TRCity cityWithColor:[TRColor values][[cities count]] tile:tile angle:[self randomCityDirectionForTile:tile]];
     [_railroad tryAddRail:[TRRail railWithTile:tile form:city.angle.form]];
     return [cities arrayByAddingObject:city];
@@ -43,10 +43,10 @@
 
 - (TRCityAngle*)randomCityDirectionForTile:(EGIPoint)tile {
     EGIRect cut = egMapSsoTileCut(_mapSize, tile);
-    return [[[TRCityAngle values] filter:^BOOL(TRCityAngle* a) {
+    return [[[[TRCityAngle values] filter:^BOOL(TRCityAngle* a) {
         NSInteger angle = a.angle;
         return (angle == 0 && cut.right == 0 && cut.bottom == 0) || (angle == 90 && cut.left == 0 && cut.bottom == 0) || (angle == 180 && cut.left == 0 && cut.top == 0) || (angle == 270 && cut.right == 0 && cut.top == 0);
-    }] randomItem];
+    }] randomItem] get];
 }
 
 - (void)createNewCity {

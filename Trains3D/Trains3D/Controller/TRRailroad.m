@@ -141,23 +141,38 @@
     return [self correctPoint:trRailPointAdd(point, length)];
 }
 
+- (TRRail*)activeRailForTile:(EGIPoint)tile connector:(TRRailConnector*)connector {
+    return [[[[self switchesInTile:tile] find:^BOOL(TRSwitch* _) {
+        return _.connector == connector;
+    }] map:^TRRail*(TRSwitch* _) {
+        return [_ activeRail];
+    }] getOrElse:^TRRail*() {
+        return [[[self railsInTile:tile] filter:^BOOL(TRRail* _) {
+            return [_ hasConnector:connector];
+        }] head];
+    }];
+}
+
 - (TRRailPointCorrection)correctPoint:(TRRailPoint)point {
     TRRailPointCorrection correction = trRailPointCorrect(point);
     if(correction.error == 0) {
         return correction;
     } else {
         TRRailConnector* connector = trRailPointEndConnector(point);
-        EGIPoint nextTile = [connector nextTile:point.tile];
-        TRRailConnector* otherSideConnector = [connector otherSideConnector];
-        NSArray* nextRails = [[[self railsInTile:nextTile] filter:^BOOL(TRRail* _) {
-            return _.form.start == otherSideConnector || _.form.end == otherSideConnector;
-        }] array];
-        if([nextRails count] == 0) {
+        TRRail* activeRail = [[self activeRailForTile:point.tile connector:connector] get];
+        if(activeRail.form.ordinal != point.form) {
             return correction;
         } else {
-            TRRail* rail = [nextRails head];
-            TRRailForm* form = rail.form;
-            return [self correctPoint:TRRailPointMake(nextTile, form.ordinal, correction.error, form.end == otherSideConnector)];
+            EGIPoint nextTile = [connector nextTile:point.tile];
+            TRRailConnector* otherSideConnector = [connector otherSideConnector];
+            TRRail* nextRail = [self activeRailForTile:nextTile connector:otherSideConnector];
+            if([nextRail isEmpty]) {
+                return correction;
+            } else {
+                TRRail* nextActiveRail = [nextRail get];
+                TRRailForm* form = nextActiveRail.form;
+                return [self correctPoint:TRRailPointMake(nextTile, form.ordinal, correction.error, form.end == otherSideConnector)];
+            }
         }
     }
 }

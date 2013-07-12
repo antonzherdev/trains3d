@@ -69,4 +69,9 @@
     return [[self chain] fold:f withStart:start];
 }
 
+- (id)find:(cnPredicate)predicate {
+    return [[self chain] find:predicate];
+}
+
+
 @end

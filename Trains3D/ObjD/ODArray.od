@@ -15,8 +15,9 @@ stub class CNChain<A> {
     def array : [A]
     def count : uint
     def for(each: A -> void)
-    def head : A
-    def randomItem : A
+    def head : A?
+    def randomItem : A?
+    def find(: A -> bool) : A?
 }
 
 stub class ODArray<A> extends CNChain<A> {

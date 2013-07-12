@@ -72,5 +72,29 @@ SPEC_BEGIN(TRRailroadSpec)
             [[theSwitch.rail1 should] equal:yRail];
             [[theSwitch.rail2 should] equal:turnRail];
         });
+        it(@"should choose active switch and should lock moving through closing switch", ^{
+            TRRailroad * railroad = [TRRailroad railroadWithMapSize:EGISizeMake(10, 7)];
+            [railroad tryAddRail:[TRRail railWithTile:egip(2, 0) form:[TRRailForm leftRight]]];
+            [railroad tryAddRail:[TRRail railWithTile:egip(3, 0) form:[TRRailForm leftTop]]];
+            [railroad tryAddRail:[TRRail railWithTile:egip(3, 0) form:[TRRailForm leftRight]]];
+
+            TRRailPoint p0 = rpm(2, 0, leftRight, 0, NO);
+            TRRailPointCorrection r = [railroad moveForLength:1.2 point:p0];
+            TRRailPointCorrection e = zrpm(3, 0, leftTop, 0.2, NO);
+            checkCorrection;
+
+            TRSwitch * theSwitch = railroad.switches[0];
+            theSwitch.firstActive = NO;
+
+            r = [railroad moveForLength:1.2 point:p0];
+            e = zrpm(3, 0, leftRight, 0.2, NO);
+            checkCorrection;
+
+            theSwitch.firstActive = YES;
+            p0 = rpm(3, 0, leftRight, 0, YES);
+            r = [railroad moveForLength:1.2 point:p0];
+            e = cor(rpm(3, 0, leftRight, 1.0, YES), 0.2);
+            checkCorrection;
+        });
     });
 SPEC_END

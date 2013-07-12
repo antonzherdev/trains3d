@@ -13,7 +13,7 @@ class TRLevel(mapSize : EGISize) {
     var trains : [TRTrain] = [] | private set
 
     private def appendNextCityTo(cities : [TRCity]) =  {
-        val tile = egMapSsoPartialTiles(mapSize).exclude(cities.map(_.tile)).randomItem
+        val tile = egMapSsoPartialTiles(mapSize).exclude(cities.map(_.tile)).randomItem.get
         val city = TRCity(TRColor[cities.count], tile, randomCityDirectionFor(tile))
         railroad.tryAdd(TRRail(tile, city.angle.form))
         cities + city
@@ -27,7 +27,7 @@ class TRLevel(mapSize : EGISize) {
             || (angle == 90 && cut.left == 0 && cut.bottom == 0)
             || (angle == 180 && cut.left == 0 && cut.top == 0)
             || (angle == 270 && cut.right == 0 && cut.top == 0)}
-        }).randomItem
+        }).randomItem.get
     }
 
     def createNewCity {

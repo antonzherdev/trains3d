@@ -8,6 +8,7 @@
 #import "CNRangeLink.h"
 #import "CNMulLink.h"
 #import "CNReverseLink.h"
+#import "CNOption.h"
 
 
 @implementation CNChain {
@@ -78,6 +79,20 @@
     return ret;
 }
 
+- (id )find:(cnPredicate)predicate {
+    __block id ret = [CNOption none];
+    CNYield *yield = [CNYield alloc];
+    yield = [yield initWithBegin:nil yield:^CNYieldResult(id item) {
+        if(predicate(item)) {
+            ret = item;
+            return cnYieldBreak;
+        }
+        return cnYieldContinue;
+    } end:nil all:nil];
+    [self apply:yield];
+    return ret;
+}
+
 
 - (CNChain *)filter:(cnPredicate)predicate {
     return [self link:[CNFilterLink linkWithPredicate:predicate selectivity:0]];
@@ -130,7 +145,7 @@
 }
 
 - (id)head {
-    __block id ret = nil;
+    __block id ret = [CNOption none];
     [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
         ret = item;
         return cnYieldBreak;
@@ -141,7 +156,7 @@
 - (id)randomItem {
     NSArray *array = [self array];
     if(array.count == 0) {
-        return nil;
+        return [CNOption none];
     }
     u_int32_t n = arc4random_uniform(array.count);
     return [array objectAtIndex:n];

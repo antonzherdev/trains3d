@@ -47,24 +47,33 @@ class TRRailroad(mapSize : EGISize) {
 
     def moveFor(length : float, point : TRRailPoint) : TRRailPointCorrection = correct(point.add(length))
 
+    private def activeRailFor(tile : EGIPoint, connector : TRRailConnector) : TRRail? =
+        switchesIn(tile)
+            .find(_.connector == connector)
+            .map(_.activeRail)
+            .getOrElse(
+                railsIn(tile).filter(_.has(connector)).head
+            )
 
-    def correct(point : TRRailPoint) : TRRailPointCorrection = {
+    private def correct(point : TRRailPoint) : TRRailPointCorrection = {
         val correction = point.correct
 
         if(correction.error == 0) correction
         else {
             val connector = point.endConnector
-            val nextTile = connector.next(point.tile)
-            val otherSideConnector = connector.otherSideConnector
-            val nextRails = railsIn(nextTile)
-                .filter(_.form.start == otherSideConnector || _.form.end == otherSideConnector)
-                .array
-
-            if(nextRails.count == 0) correction
+            val activeRail = activeRailFor(point.tile, connector).get
+            if(activeRail.form.ordinal != point.form) correction
             else {
-                val rail = nextRails.head
-                val form = rail.form
-                correct(TRRailPoint(nextTile, form.ordinal, correction.error, form.end == otherSideConnector))
+                val nextTile = connector.next(point.tile)
+                val otherSideConnector = connector.otherSideConnector
+                val nextRail = activeRailFor(nextTile, otherSideConnector)
+
+                if(nextRail.isEmpty) correction
+                else {
+                    val nextActiveRail = nextRail.get
+                    val form = nextActiveRail.form
+                    correct(TRRailPoint(nextTile, form.ordinal, correction.error, form.end == otherSideConnector))
+                }
             }
         }
     }

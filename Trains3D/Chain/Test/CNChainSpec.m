@@ -31,9 +31,9 @@ SPEC_BEGIN(CNChainSpec)
       });
       it(@".head should return first value or nil", ^{
           [[[[s filter:LESS_THAN_3] head] should] equal:@1];
-          BOOL isNil = [[s filter:^BOOL(id x) {
-                    return NO;
-                }] head] == nil;
+          BOOL isNil = [[[s filter:^BOOL(id x) {
+              return NO;
+          }] head] isEmpty];
           [[theValue(isNil) should] beTrue];
       });
       it(@".set should return set", ^{
@@ -114,6 +114,13 @@ SPEC_BEGIN(CNChainSpec)
               return numi(unumi(x) + unumi(y));
           } withStart:@0];
           [[r should] equal:@6];
+      });
+      it(@".find should find first compatilable items or none", ^{
+          [[[s find:LESS_THAN_3] should] equal:@1];
+          BOOL isNil = [[s find:^BOOL(id x) {
+              return NO;
+          }] isEmpty];
+          [[theValue(isNil) should] beTrue];
       });
   });
 
