@@ -65,6 +65,10 @@
     else return _rail2;
 }
 
+- (void)turn {
+    _firstActive = !(_firstActive);
+}
+
 @end
 
 
@@ -112,9 +116,11 @@
     }];
 }
 
-- (CNChain*)switchesInTile:(EGIPoint)tile {
-    return [_switches filter:^BOOL(TRSwitch* _) {
+- (TRSwitch*)switchInTile:(EGIPoint)tile connector:(TRRailConnector*)connector {
+    return [[_switches filter:^BOOL(TRSwitch* _) {
         return EGIPointEq(_.tile, tile);
+    }] find:^BOOL(TRSwitch* _) {
+        return _.connector == connector;
     }];
 }
 
@@ -142,9 +148,7 @@
 }
 
 - (TRRail*)activeRailForTile:(EGIPoint)tile connector:(TRRailConnector*)connector {
-    return [[[[self switchesInTile:tile] find:^BOOL(TRSwitch* _) {
-        return _.connector == connector;
-    }] map:^TRRail*(TRSwitch* _) {
+    return [[[self switchInTile:tile connector:connector] map:^TRRail*(TRSwitch* _) {
         return [_ activeRail];
     }] getOrElse:^TRRail*() {
         return [[[self railsInTile:tile] filter:^BOOL(TRRail* _) {

@@ -4,6 +4,7 @@ stub class ODOption<V> {
     def getOr(: V) : V
     def for(each : V -> void)
     def map<B>(:V -> B) : B?
+    def flatMap<B>(:V -> B?) : B?
     def isEmpty : bool
     def isDefined : bool
 }

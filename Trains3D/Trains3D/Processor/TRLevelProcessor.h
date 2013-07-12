@@ -5,6 +5,7 @@
 @class EGTouchProcessor;
 @class EGEvent;
 #import "TRRailroadBuilderProcessor.h"
+@class TRSwitchProcessor;
 @class TRLevel;
 @class TRLevelView;
 @class TRRail;
@@ -19,7 +20,7 @@
 
 + (id)levelProcessorWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
-- (void)processEvent:(EGEvent*)event;
+- (BOOL)processEvent:(EGEvent*)event;
 @end
 
 

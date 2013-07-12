@@ -1,0 +1,38 @@
+import EGTypes
+import EGProcessor
+
+import TRRailPoint
+import TRRailroad
+
+class TRSwitchProcessor(railroad : TRRailroad) {
+    def process(event : EGEvent) : bool = event.leftMouse(self)
+
+    private var downedSwitch : TRSwitch? = nil
+
+    def mouseDown(event : EGEvent) = {
+        val location = event.location
+        val tile = egpRound(location)
+        val relPoint = egpSub(location, egipFloat(tile))
+        downedSwitch = connectorFor(relPoint).flatMap(railroad.switchIn(tile, _))
+        downedSwitch.isDefined
+    }
+
+    private def connectorFor(point : CGPoint) : TRRailConnector? =
+        if(-0.1 < point.x && point.x < 0.1)
+            if(point.y < -0.3) TRRailConnector.bottom
+            else if(0.3 < point.y) TRRailConnector.top
+            else nil
+        else if(-0.1 < point.y && point.y < 0.1)
+            if(point.x < -0.3) TRRailConnector.left
+            else if(0.3 < point.x) TRRailConnector.right
+            else nil
+        else nil
+
+    def mouseDrag(event : EGEvent) = downedSwitch.isDefined
+
+    def mouseUp(event : EGEvent) =
+        if(downedSwitch.isDefined) {
+           downedSwitch.get.turn
+           true
+        } else false
+}

@@ -12,6 +12,10 @@ class TRSwitch(tile : EGIPoint, connector : TRRailConnector, rail1 : TRRail, rai
     var firstActive = true
 
     def activeRail : TRRail = if(firstActive) rail1 else rail2
+
+    def turn {
+        firstActive = !firstActive
+    }
 }
 
 class TRRailroad(mapSize : EGISize) {
@@ -28,7 +32,8 @@ class TRRailroad(mapSize : EGISize) {
     }
 
     private def railsIn(tile : EGIPoint) = rails.filter(_.tile == tile)
-    private def switchesIn(tile : EGIPoint) = switches.filter(_.tile == tile)
+    def switchIn(tile : EGIPoint, connector : TRRailConnector) =
+        switches.filter(_.tile == tile).find(_.connector == connector)
 
     def tryAdd(rail : TRRail) : bool = {
         if(canAdd(rail)) {
@@ -48,8 +53,7 @@ class TRRailroad(mapSize : EGISize) {
     def moveFor(length : float, point : TRRailPoint) : TRRailPointCorrection = correct(point.add(length))
 
     private def activeRailFor(tile : EGIPoint, connector : TRRailConnector) : TRRail? =
-        switchesIn(tile)
-            .find(_.connector == connector)
+        switchIn(tile, connector)
             .map(_.activeRail)
             .getOrElse(
                 railsIn(tile).filter(_.has(connector)).head

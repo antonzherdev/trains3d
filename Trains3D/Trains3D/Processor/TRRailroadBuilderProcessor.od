@@ -9,7 +9,7 @@ class TRRailroadBuilderProcessor(builder : TRRailroadBuilder) {
     private val mouseProcessor = TRRailroadBuilderMouseProcessor(builder)
     private val touchProcessor = EGTwoFingerTouchToMouse(mouseProcessor)
 
-    def process(event : EGEvent) = event.leftMouse(mouseProcessor) || event.touch(touchProcessor)
+    def process(event : EGEvent) : bool = event.leftMouse(mouseProcessor) || event.touch(touchProcessor)
 }
 
 struct TRRailCorrection (tile : EGIPoint, start : EGIPoint, end : EGIPoint)

@@ -1,12 +1,14 @@
 #import "TRLevelProcessor.h"
 
 #import "EGProcessor.h"
+#import "TRSwitchProcessor.h"
 #import "TRLevel.h"
 #import "TRLevelView.h"
 #import "TRRailroad.h"
 @implementation TRLevelProcessor{
     TRLevel* _level;
     TRRailroadBuilderProcessor* _railroadBuilderProcessor;
+    TRSwitchProcessor* _switchProcessor;
 }
 @synthesize level = _level;
 
@@ -19,13 +21,14 @@
     if(self) {
         _level = level;
         _railroadBuilderProcessor = [TRRailroadBuilderProcessor railroadBuilderProcessorWithBuilder:_level.railroad.builder];
+        _switchProcessor = [TRSwitchProcessor switchProcessorWithRailroad:_level.railroad];
     }
     
     return self;
 }
 
-- (void)processEvent:(EGEvent*)event {
-    [_railroadBuilderProcessor processEvent:event];
+- (BOOL)processEvent:(EGEvent*)event {
+    return [_switchProcessor processEvent:event] || [_railroadBuilderProcessor processEvent:event];
 }
 
 @end

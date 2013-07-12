@@ -24,6 +24,11 @@
     return self;
 }
 
+- (id)flatMap:(cnF)f {
+    return self;
+}
+
+
 - (id)get {
     @throw @"Get from empty";
 }

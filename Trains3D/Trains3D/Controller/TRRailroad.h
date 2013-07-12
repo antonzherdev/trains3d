@@ -28,6 +28,7 @@
 + (id)switchWithTile:(EGIPoint)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
 - (id)initWithTile:(EGIPoint)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
 - (TRRail*)activeRail;
+- (void)turn;
 @end
 
 
@@ -40,6 +41,7 @@
 + (id)railroadWithMapSize:(EGISize)mapSize;
 - (id)initWithMapSize:(EGISize)mapSize;
 - (BOOL)canAddRail:(TRRail*)rail;
+- (TRSwitch*)switchInTile:(EGIPoint)tile connector:(TRRailConnector*)connector;
 - (BOOL)tryAddRail:(TRRail*)rail;
 - (TRRailPointCorrection)moveForLength:(CGFloat)length point:(TRRailPoint)point;
 @end

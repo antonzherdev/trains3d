@@ -143,6 +143,7 @@
 		6F3DFBCB7E337B01532FF4B3 /* TRLevelBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF7DC7A8F30BA00B889D0 /* TRLevelBackgroundView.m */; };
 		6F3DFC4B1AC4F964D6F56006 /* KWProbePoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0255D0634FEBC03437A /* KWProbePoller.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DFC514C270517872D22C9 /* EGMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF00AC03B6A58770FAAE6 /* EGMap.m */; };
+		6F3DFC7067586699D3679403 /* TRSwitchProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF7BC684B734FD9A3AF81 /* TRSwitchProcessor.m */; };
 		6F3DFC71DAC854726FDA05E2 /* NSNull+CNOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF93E50A4EFBCDEB40111 /* NSNull+CNOption.m */; };
 		6F3DFCA4A98B7961C952D096 /* KWTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF51A20B0FF1195E6859B /* KWTestCase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DFCC28C26DAF6DF429B57 /* EGDirectorMac.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF65460A5DBAC04BC37F7 /* EGDirectorMac.m */; };
@@ -322,6 +323,7 @@
 		6F3DF5F571B2B940C1C176E2 /* KWStub.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWStub.m; sourceTree = "<group>"; };
 		6F3DF5F5C37E39222A4935B6 /* ODNS.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = ODNS.od; sourceTree = "<group>"; };
 		6F3DF5FAC9B2E4F3B36621BC /* CNMulLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNMulLink.m; sourceTree = "<group>"; };
+		6F3DF602639404BE7006B0C2 /* TRSwitchProcessor.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TRSwitchProcessor.od; sourceTree = "<group>"; };
 		6F3DF60DD11ED509F2372DA8 /* CNSourceLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSourceLink.h; sourceTree = "<group>"; };
 		6F3DF60FCB04B7E52FECB861 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../../../Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/GLUT.framework; sourceTree = "<group>"; };
 		6F3DF6144A9964C632AD02EA /* KWMessageSpying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWMessageSpying.h; sourceTree = "<group>"; };
@@ -347,6 +349,7 @@
 		6F3DF776CBFEBA54B9A1303F /* KWBeSubclassOfClassMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeSubclassOfClassMatcher.h; sourceTree = "<group>"; };
 		6F3DF784ED37D5A77ED749F9 /* EGCameraIso.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGCameraIso.h; sourceTree = "<group>"; };
 		6F3DF79E56B52EA90418C91B /* CNAppendLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNAppendLink.m; sourceTree = "<group>"; };
+		6F3DF7BC684B734FD9A3AF81 /* TRSwitchProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRSwitchProcessor.m; sourceTree = "<group>"; };
 		6F3DF7CB665E3AE89BFF3B97 /* Kiwi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Kiwi.h; sourceTree = "<group>"; };
 		6F3DF7DC7A8F30BA00B889D0 /* TRLevelBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRLevelBackgroundView.m; sourceTree = "<group>"; };
 		6F3DF7E5BB71171CADC27363 /* EGStat.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGStat.od; sourceTree = "<group>"; };
@@ -370,6 +373,7 @@
 		6F3DF8B0B304346D910A7B2B /* NSObject+KiwiMockAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+KiwiMockAdditions.m"; sourceTree = "<group>"; };
 		6F3DF8B9D6CCCF0FB32F4E4F /* EGGL.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGGL.od; sourceTree = "<group>"; };
 		6F3DF8BE3569365CA633DF43 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = ../../../../../Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = "<group>"; };
+		6F3DF8C84130E5F56AE7050C /* TRSwitchProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRSwitchProcessor.h; sourceTree = "<group>"; };
 		6F3DF8C8F9A44885DD267FD8 /* CNRangeLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNRangeLink.m; sourceTree = "<group>"; };
 		6F3DF8DBF0E4ACAA99BB000D /* ODLazy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ODLazy.m; sourceTree = "<group>"; };
 		6F3DF8E1B27E102FE0A3B412 /* KWBeforeAllNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeforeAllNode.h; sourceTree = "<group>"; };
@@ -1040,6 +1044,9 @@
 				6F3DF044DCC34A9E6DED83D6 /* TRLevelProcessor.m */,
 				6F3DF48FD77E8105CFDF72F2 /* TRRailroadBuilderProcessor.h */,
 				6F3DF37F737A3145F69F8298 /* TRRailroadBuilderProcessor.m */,
+				6F3DF602639404BE7006B0C2 /* TRSwitchProcessor.od */,
+				6F3DF8C84130E5F56AE7050C /* TRSwitchProcessor.h */,
+				6F3DF7BC684B734FD9A3AF81 /* TRSwitchProcessor.m */,
 			);
 			path = Processor;
 			sourceTree = "<group>";
@@ -1360,6 +1367,7 @@
 				6F3DFFA5AE377882684AB133 /* TRRailPoint.m in Sources */,
 				6F3DF2203AE3479DF0789BF7 /* ODEnum.m in Sources */,
 				6F3DF4DCD4A053E249248DAD /* EGMapIsoTileIndex.m in Sources */,
+				6F3DFC7067586699D3679403 /* TRSwitchProcessor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

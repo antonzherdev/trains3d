@@ -35,7 +35,7 @@ SPEC_BEGIN(TRLevelSpec)
                     [[level cities] forEach:^(TRCity* city) {
                         NSInteger x = city.tile.x;
                         NSInteger y = city.tile.y;
-                        NSInteger angle = city.angle;
+                        NSInteger angle = city.angle.angle;
 
                         CHECK_ANGLE(-2, 1, 0, -1)
                         else CHECK_ANGLE(-1, 0, 0, 270)

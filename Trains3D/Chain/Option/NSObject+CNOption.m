@@ -26,6 +26,11 @@
     return f(self);
 }
 
+- (id)flatMap:(cnF)f {
+    return f(self);
+}
+
+
 - (id)get {
     return self;
 }
