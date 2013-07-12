@@ -4,6 +4,7 @@ import EGMapIso
 import TRCity
 import TRTypes
 import TRRailroad
+import TRRailPoint
 import TRTrain
 
 
@@ -49,4 +50,12 @@ class TRLevel(mapSize : EGISize) {
     def updateWith(delta : float) {
         trains.for(_.updateWith(delta))
     }
+
+    def tryTurn(theSwitch : TRSwitch) {
+        if(!isLocked(theSwitch)){
+            theSwitch.turn
+        }
+    }
+
+    private def isLocked(theSwitch : TRSwitch) : bool = trains.find(_.isLocked(theSwitch)).isDefined
 }

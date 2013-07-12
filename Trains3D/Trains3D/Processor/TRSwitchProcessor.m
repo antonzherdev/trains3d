@@ -2,20 +2,21 @@
 
 #import "EGProcessor.h"
 #import "TRRailroad.h"
+#import "TRLevel.h"
 @implementation TRSwitchProcessor{
-    TRRailroad* _railroad;
+    TRLevel* _level;
     TRSwitch* _downedSwitch;
 }
-@synthesize railroad = _railroad;
+@synthesize level = _level;
 
-+ (id)switchProcessorWithRailroad:(TRRailroad*)railroad {
-    return [[TRSwitchProcessor alloc] initWithRailroad:railroad];
++ (id)switchProcessorWithLevel:(TRLevel*)level {
+    return [[TRSwitchProcessor alloc] initWithLevel:level];
 }
 
-- (id)initWithRailroad:(TRRailroad*)railroad {
+- (id)initWithLevel:(TRLevel*)level {
     self = [super init];
     if(self) {
-        _railroad = railroad;
+        _level = level;
         _downedSwitch = [CNOption none];
     }
     
@@ -31,7 +32,7 @@
     EGIPoint tile = egpRound(location);
     CGPoint relPoint = egpSub(location, egipFloat(tile));
     _downedSwitch = [[self connectorForPoint:relPoint] flatMap:^id(TRRailConnector* _) {
-        return [_railroad switchInTile:tile connector:_];
+        return [_level.railroad switchInTile:tile connector:_];
     }];
     return [_downedSwitch isDefined];
 }
@@ -64,7 +65,7 @@
 
 - (BOOL)mouseUpEvent:(EGEvent*)event {
     if([_downedSwitch isDefined]) {
-        [[_downedSwitch get] turn];
+        [_level tryTurnTheSwitch:[_downedSwitch get]];
         return YES;
     } else {
         return NO;

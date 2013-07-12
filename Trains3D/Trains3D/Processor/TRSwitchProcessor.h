@@ -9,14 +9,15 @@
 @class TRSwitch;
 @class TRRailroad;
 @class TRRailroadBuilder;
+@class TRLevel;
 
 @class TRSwitchProcessor;
 
 @interface TRSwitchProcessor : NSObject
-@property (nonatomic, readonly) TRRailroad* railroad;
+@property (nonatomic, readonly) TRLevel* level;
 
-+ (id)switchProcessorWithRailroad:(TRRailroad*)railroad;
-- (id)initWithRailroad:(TRRailroad*)railroad;
++ (id)switchProcessorWithLevel:(TRLevel*)level;
+- (id)initWithLevel:(TRLevel*)level;
 - (BOOL)processEvent:(EGEvent*)event;
 - (BOOL)mouseDownEvent:(EGEvent*)event;
 - (BOOL)mouseDragEvent:(EGEvent*)event;

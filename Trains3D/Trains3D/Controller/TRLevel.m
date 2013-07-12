@@ -71,6 +71,16 @@
     }];
 }
 
+- (void)tryTurnTheSwitch:(TRSwitch*)theSwitch {
+    if(!([self isLockedTheSwitch:theSwitch])) [theSwitch turn];
+}
+
+- (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch {
+    return [[_trains find:^BOOL(TRTrain* _) {
+        return [_ isLockedTheSwitch:theSwitch];
+    }] isDefined];
+}
+
 @end
 
 

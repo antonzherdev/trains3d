@@ -51,7 +51,8 @@
         car.head = uval(TRRailPoint, hl);
         TRRailPoint next = trRailPointCorrectionAddErrorToPoint([_level.railroad moveForLength:[car length] point:uval(TRRailPoint, hl)]);
         car.tail = next;
-        return val(trRailPointCorrectionAddErrorToPoint([_level.railroad moveForLength:_carsDelta point:next]));
+        car.nextHead = trRailPointCorrectionAddErrorToPoint([_level.railroad moveForLength:_carsDelta point:next]);
+        return val(car.nextHead);
     } withStart:val(trRailPointInvert(_head))];
 }
 
@@ -87,15 +88,25 @@
     return !(egMapSsoIsFullTileP(_level.mapSize, point.tile)) && !(egMapSsoIsFullTileP(_level.mapSize, trRailPointNextTile(point)));
 }
 
+- (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch {
+    EGIPoint tile = theSwitch.tile;
+    EGIPoint nextTile = [theSwitch.connector nextTile:tile];
+    return [[_cars find:^BOOL(TRCar* _) {
+        return (EGIPointEq(_.head.tile, tile) && EGIPointEq(_.nextHead.tile, nextTile)) || (EGIPointEq(_.head.tile, nextTile) && EGIPointEq(_.nextHead.tile, tile));
+    }] isDefined];
+}
+
 @end
 
 
 @implementation TRCar{
     TRRailPoint _head;
     TRRailPoint _tail;
+    TRRailPoint _nextHead;
 }
 @synthesize head = _head;
 @synthesize tail = _tail;
+@synthesize nextHead = _nextHead;
 
 + (id)car {
     return [[TRCar alloc] init];

@@ -23,7 +23,8 @@ class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : flo
             car.head = hl
             val next = level.railroad.moveFor(car.length, hl).addErrorToPoint
             car.tail = next
-            level.railroad.moveFor(carsDelta, next).addErrorToPoint
+            car.nextHead = level.railroad.moveFor(carsDelta, next).addErrorToPoint
+            car.nextHead
         }, head.invert)
     }
 
@@ -53,12 +54,22 @@ class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : flo
     private def isMoveToCityFor(point : TRRailPoint) =
         !egMapSsoIsFullTileP(level.mapSize, point.tile) &&
         !egMapSsoIsFullTileP(level.mapSize, point.nextTile)
+
+    def isLocked(theSwitch : TRSwitch) : bool = {
+        val tile = theSwitch.tile
+        val nextTile = theSwitch.connector.next(tile)
+        cars.find(
+            _.head.tile == tile && _.nextHead.tile == nextTile
+            || _.head.tile == nextTile && _.nextHead.tile == tile
+        ).isDefined
+    }
 }
 
 
 class TRCar {
     var head : TRRailPoint
     var tail : TRRailPoint
+    var nextHead : TRRailPoint
 
     def length : float = 0.6
 }

@@ -23,12 +23,14 @@
 - (id)initWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(CGFloat)speed;
 - (void)startFromCity:(TRCity*)city;
 - (void)updateWithDelta:(CGFloat)delta;
+- (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch;
 @end
 
 
 @interface TRCar : NSObject
 @property (nonatomic) TRRailPoint head;
 @property (nonatomic) TRRailPoint tail;
+@property (nonatomic) TRRailPoint nextHead;
 
 + (id)car;
 - (id)init;

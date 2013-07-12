@@ -10,7 +10,7 @@ import TRRailroad
 
 class TRLevelProcessor(level : TRLevel) {
     private val railroadBuilderProcessor = TRRailroadBuilderProcessor(level.railroad.builder)
-    private val switchProcessor = TRSwitchProcessor(level.railroad)
+    private val switchProcessor = TRSwitchProcessor(level)
 
     def process(event : EGEvent) : bool =
         switchProcessor.process(event)

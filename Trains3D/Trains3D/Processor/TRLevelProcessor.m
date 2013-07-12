@@ -21,7 +21,7 @@
     if(self) {
         _level = level;
         _railroadBuilderProcessor = [TRRailroadBuilderProcessor railroadBuilderProcessorWithBuilder:_level.railroad.builder];
-        _switchProcessor = [TRSwitchProcessor switchProcessorWithRailroad:_level.railroad];
+        _switchProcessor = [TRSwitchProcessor switchProcessorWithLevel:_level];
     }
     
     return self;

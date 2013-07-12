@@ -7,6 +7,7 @@
 @class TRSwitch;
 @class TRRailroad;
 @class TRRailroadBuilder;
+#import "TRRailPoint.h"
 @class TRTrain;
 @class TRCar;
 
@@ -23,6 +24,7 @@
 - (void)createNewCity;
 - (void)runSample;
 - (void)updateWithDelta:(CGFloat)delta;
+- (void)tryTurnTheSwitch:(TRSwitch*)theSwitch;
 @end
 
 
