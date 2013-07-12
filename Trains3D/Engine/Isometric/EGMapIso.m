@@ -1,114 +1,120 @@
 #import "EGMapIso.h"
+
+#import "EGGL.h"
 #import "EGMap.h"
+@implementation EGMapSso{
+    EGISize _size;
+    EGIRect _limits;
+    NSArray* _fullTiles;
+    NSArray* _partialTiles;
+}
+@synthesize size = _size;
+@synthesize limits = _limits;
+@synthesize fullTiles = _fullTiles;
+@synthesize partialTiles = _partialTiles;
 
-NSArray *egMapSsoPickTiles(EGISize size, BOOL (^predicate)(id));
++ (id)mapSsoWithSize:(EGISize)size {
+    return [[EGMapSso alloc] initWithSize:size];
+}
 
-void egMapSsoDrawLayout(EGISize size) {
-    glPushMatrix();
-    glRotatef(45, 0, 0, 1);
-    glBegin(GL_LINES);
-    {
-        double const left = -ISO;
-        double const top = size.height*ISO;
-        double const bottom = -size.width*ISO;
-        double const right = (size.width + size.height - 1)*ISO;
-        glVertex3d(left, top, 0.0);
-        glVertex3d(left, bottom, 0.0);
-
-        glVertex3d(left, bottom, 0.0);
-        glVertex3d(right, bottom, 0.0);
-
-        glVertex3d(right, bottom, 0.0);
-        glVertex3d(right, top, 0.0);
-
-        glVertex3d(right, top, 0.0);
-        glVertex3d(left, top, 0.0);
+- (id)initWithSize:(EGISize)size {
+    self = [super init];
+    if(self) {
+        _size = size;
+        _limits = EGIRectMake((1 - _size.height) / 2 - 1, (1 - _size.width) / 2 - 1, (2 * _size.width + _size.height - 3) / 2 + 1, (_size.width + 2 * _size.height - 3) / 2 + 1);
+        _fullTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
+            return [self isFullTile:uval(EGIPoint, _)];
+        }] array];
+        _partialTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
+            return [self isPartialTile:uval(EGIPoint, _)];
+        }] array];
     }
+    
+    return self;
+}
+
+- (BOOL)isFullTile:(EGIPoint)tile {
+    return tile.y + tile.x >= 0 && tile.y - tile.x <= _size.height - 1 && tile.y + tile.x <= _size.width + _size.height - 2 && tile.y - tile.x >= -_size.width + 1;
+}
+
+- (BOOL)isPartialTile:(EGIPoint)tile {
+    return tile.y + tile.x >= -1 && tile.y - tile.x <= _size.height && tile.y + tile.x <= _size.width + _size.height - 1 && tile.y - tile.x >= -_size.width && (tile.y + tile.x == -1 || tile.y - tile.x == _size.height || tile.y + tile.x == _size.width + _size.height - 1 || tile.y - tile.x == -_size.width);
+}
+
+- (void)drawLayout {
+    glPushMatrix();
+    egRotate(45, 0, 0, 1);
+    glBegin(GL_LINES);
+    CGFloat left = -ISO;
+    CGFloat top = ISO * _size.height;
+    CGFloat bottom = ISO * -_size.width;
+    CGFloat right = ISO * _size.width + _size.height - 1;
+    egVertex3(left, top, 0.0);
+    egVertex3(left, bottom, 0.0);
+    egVertex3(left, bottom, 0.0);
+    egVertex3(right, bottom, 0.0);
+    egVertex3(right, bottom, 0.0);
+    egVertex3(right, top, 0.0);
+    egVertex3(right, top, 0.0);
+    egVertex3(left, top, 0.0);
     glEnd();
     glPopMatrix();
-
-    glColor3f(1.0, 1.0, 1.0);
+    egColor3(1.0, 1.0, 1.0);
     glBegin(GL_LINES);
-    {
-        for(id tile in egMapSsoFullTiles(size)) {
-            EGIPoint p = uval(EGIPoint, tile);
-            glVertex3d(p.x - 0.5, p.y - 0.5, 0.0);
-            glVertex3d(p.x + 0.5, p.y - 0.5, 0.0);
-
-            glVertex3d(p.x + 0.5, p.y - 0.5, 0.0);
-            glVertex3d(p.x + 0.5, p.y + 0.5, 0.0);
-
-            glVertex3d(p.x + 0.5, p.y + 0.5, 0.0);
-            glVertex3d(p.x - 0.5, p.y + 0.5, 0.0);
-
-            glVertex3d(p.x - 0.5, p.y + 0.5, 0.0);
-            glVertex3d(p.x - 0.5, p.y - 0.5, 0.0);
-        }
-    }
+    [_fullTiles forEach:^void(id tile) {
+        EGIPoint p = uval(EGIPoint, tile);
+        egVertex3(p.x - 0.5, p.y - 0.5, 0.0);
+        egVertex3(p.x + 0.5, p.y - 0.5, 0.0);
+        egVertex3(p.x + 0.5, p.y - 0.5, 0.0);
+        egVertex3(p.x + 0.5, p.y + 0.5, 0.0);
+        egVertex3(p.x + 0.5, p.y + 0.5, 0.0);
+        egVertex3(p.x - 0.5, p.y + 0.5, 0.0);
+        egVertex3(p.x - 0.5, p.y + 0.5, 0.0);
+        egVertex3(p.x - 0.5, p.y - 0.5, 0.0);
+    }];
     glEnd();
-
     egMapDrawAxis();
 }
 
-void egMapSsoDrawPlane(EGISize size) {
+- (void)drawPlane {
     glBegin(GL_QUADS);
-    {
-        EGIRect limits = egMapSsoLimits(size);
-        float l = limits.left - 1.5;
-        float r = limits.right + 1.5;
-        float t = limits.top - 1.5;
-        float b = limits.bottom + 1.5;
-        NSInteger w = limits.right - limits.left + 3;
-        NSInteger h = limits.bottom - limits.top + 3;
-        glTexCoord2f(0.0, 0.0); glVertex3f(l, b, 0);
-        glTexCoord2f(w, 0.0); glVertex3f(r, b, 0);
-        glTexCoord2f(w, h); glVertex3f(r, t, 0);
-        glTexCoord2f(0.0, h); glVertex3f(l, t, 0);
-    }
+    CGFloat l = _limits.left - 1.5;
+    CGFloat r = _limits.right + 1.5;
+    CGFloat t = _limits.top - 1.5;
+    CGFloat b = _limits.bottom + 1.5;
+    NSInteger w = _limits.right - _limits.left + 3;
+    NSInteger h = _limits.bottom - _limits.top + 3;
+    egTexCoord2(0.0, 0.0);
+    egVertex3(l, b, 0);
+    egTexCoord2(w, 0.0);
+    egVertex3(r, b, 0);
+    egTexCoord2(w, h);
+    egVertex3(r, t, 0);
+    egTexCoord2(0.0, h);
+    egVertex3(l, t, 0);
     glEnd();
     glPopMatrix();
 }
 
-EGIRect egMapSsoLimits(EGISize size) {
-    return EGIRectMake(
-            (1 - size.height)/2 - 1,
-            (1 - size.width)/2 - 1,
-            (2*size.width + size.height - 3)/2 + 1,
-            (size.width + 2*size.height - 3)/2 + 1);
+- (CNChain*)allPosibleTiles {
+    return [[[CNChain chainWithStart:_limits.left end:_limits.right step:1] mul:[CNChain chainWithStart:_limits.top end:_limits.bottom step:1]] map:^id(CNTuple* _) {
+        return val(EGIPointMake(unumi(_.a), unumi(_.b)));
+    }];
 }
 
-extern NSArray * egMapSsoFullTiles(EGISize size) {
-    return egMapSsoPickTiles(size, ^BOOL(id t) {
-        return egMapSsoIsFullTile(size, [[t a] intValue], [[t b] intValue]);
-    });
+- (NSInteger)tileCutAxisLess:(NSInteger)less more:(NSInteger)more {
+    if(less == more) {
+        return 1;
+    } else {
+        if(less < more) return 0;
+        else return 2;
+    }
 }
 
-extern NSArray * egMapSsoPartialTiles(EGISize size) {
-    return egMapSsoPickTiles(size, ^BOOL(id t) {
-        return egMapSsoIsPartialTile(size, [[t a] intValue], [[t b] intValue]);
-    });
+- (EGIRect)cutRectForTile:(EGIPoint)tile {
+    return EGIRectMake([self tileCutAxisLess:0 more:tile.x + tile.y], [self tileCutAxisLess:tile.y - tile.x more:_size.height - 1], [self tileCutAxisLess:tile.x + tile.y more:_size.width + _size.height - 2], [self tileCutAxisLess:-_size.width + 1 more:tile.y - tile.x]);
 }
 
-NSArray *egMapSsoPickTiles(EGISize size, BOOL (^predicate)(id)) {
-    EGIRect limits = egMapSsoLimits(size);
-    return [[[[[CNChain chainWithStart:limits.left end:limits.right step:1]
-            mul:[CNChain chainWithStart:limits.top end:limits.bottom step:1]]
-            filter:predicate]
-            map:^id(id t) {
-                return val(EGIPointMake([[t a] intValue], [[t b] intValue]));
-            }]
-            array];
-}
+@end
 
-static inline int egMapSsoTileCutAxis(NSInteger less, NSInteger more) {
-    return less == more ? 1 : ( less < more ? 0 : 2);
-}
-
-EGIRect egMapSsoTileCut(EGISize size, EGIPoint p) {
-    return EGIRectMake(
-            egMapSsoTileCutAxis(0, p.x + p.y),
-            egMapSsoTileCutAxis(p.y - p.x, size.height - 1),
-            egMapSsoTileCutAxis(p.x + p.y, size.width + size.height - 2),
-            egMapSsoTileCutAxis(-size.width + 1, p.y - p.x));
-}
 

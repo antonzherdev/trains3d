@@ -1,7 +1,7 @@
 #import "Kiwi.h"
+#import "EGMapIso.h"
 #import "TRLevel.h"
 #import "TRCity.h"
-#import "EGMapIso.h"
 
 #define CHECK_ANGLE(xx, yy, a1, a2) if(x == xx && y == yy) [[theValue(angle == a1 || angle == a2) should] beTrue];
 
@@ -15,13 +15,14 @@ SPEC_BEGIN(TRLevelSpec)
 
             for(int i = 0; i < 500; i++) {
                 @autoreleasepool {
-                    TRLevel* level = [TRLevel levelWithMapSize:mapSize];
+                    EGMapSso *map = [EGMapSso mapSsoWithSize:mapSize];
+                    TRLevel* level = [TRLevel levelWithMap:map];
                     [[[level cities] should] haveCountOf:2];
 
                     //This cities should be generated on an edge of the map.
                     [[level cities] forEach:^(TRCity* x) {
                         EGIPoint tile = x.tile;
-                        BOOL isPartial = egMapSsoIsPartialTile(mapSize, tile.x, tile.y);
+                        BOOL isPartial = [map isPartialTile:tile];
                         [[theValue(isPartial) should] beTrue];
                     }];
 
@@ -53,7 +54,7 @@ SPEC_BEGIN(TRLevelSpec)
         });
 
         it(@".createNewCity should create third city on the first call", ^{
-            TRLevel* level = [TRLevel levelWithMapSize:mapSize];
+            TRLevel* level = [TRLevel levelWithMap:[EGMapSso mapSsoWithSize:mapSize]];
             [level createNewCity];
         });
     });

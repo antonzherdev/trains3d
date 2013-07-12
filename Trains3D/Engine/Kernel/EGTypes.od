@@ -1,5 +1,7 @@
 import "EGTypesAdd.h"
 
+stub val ISO : float
+
 stub struct CGPoint(x : float, y : float)
 stub struct CGSize(width : float, height : float)
 stub struct GLuint

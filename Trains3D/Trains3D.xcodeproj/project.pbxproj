@@ -272,6 +272,7 @@
 		6F3DF3C7B0EE49FD496C5709 /* EGCameraIso.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGCameraIso.od; sourceTree = "<group>"; };
 		6F3DF3CEC55E17541228C78B /* KWBeKindOfClassMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeKindOfClassMatcher.h; sourceTree = "<group>"; };
 		6F3DF3DE3A981B4A1861E078 /* ODLazy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ODLazy.h; sourceTree = "<group>"; };
+		6F3DF3DF19CB29D3F4109DCE /* ODTuple.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = ODTuple.od; sourceTree = "<group>"; };
 		6F3DF3E279A6BB92EAA800FC /* EGOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOpenGLView.h; sourceTree = "<group>"; };
 		6F3DF3F307B27012CE433C3D /* KWAsyncVerifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWAsyncVerifier.h; sourceTree = "<group>"; };
 		6F3DF3FC25C8C2A06927BD7A /* NSArray+CNChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+CNChain.h"; sourceTree = "<group>"; };
@@ -912,6 +913,7 @@
 				6F3DF8174F7C7F92F73D6F20 /* ODEnum.od */,
 				6F3DFD4FAE535115779EAE8F /* ODEnum.h */,
 				6F3DF2B5F56E42A6B83F3EBD /* ODEnum.m */,
+				6F3DF3DF19CB29D3F4109DCE /* ODTuple.od */,
 			);
 			path = ObjD;
 			sourceTree = "<group>";

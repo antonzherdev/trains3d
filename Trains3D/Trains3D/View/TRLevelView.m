@@ -30,7 +30,7 @@
         _cityView = [TRCityView cityView];
         _railroadView = [TRRailroadView railroadView];
         _trainView = [TRTrainView trainView];
-        _camera = [EGCameraIso cameraIsoWithTilesOnScreen:_level.mapSize center:CGPointMake(0, 0)];
+        _camera = [EGCameraIso cameraIsoWithTilesOnScreen:_level.map.size center:CGPointMake(0, 0)];
     }
     
     return self;
@@ -45,8 +45,8 @@
     [_level.trains forEach:^void(TRTrain* train) {
         [_trainView drawTrain:train];
     }];
-    glColor3f(1.0, 1.0, 1.0);
-    egMapSsoDrawLayout(_level.mapSize);
+    egColor3(1.0, 1.0, 1.0);
+    [_level.map drawLayout];
 }
 
 @end

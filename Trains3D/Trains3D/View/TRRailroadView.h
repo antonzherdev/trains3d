@@ -3,6 +3,7 @@
 #import "TR3DRailTurn.h"
 @class TRRail;
 @class TRSwitch;
+@class TRLight;
 @class TRRailroad;
 @class TRRailroadBuilder;
 #import "TRRailPoint.h"

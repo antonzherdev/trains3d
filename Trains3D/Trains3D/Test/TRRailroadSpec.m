@@ -1,6 +1,7 @@
 #import "Kiwi.h"
 #import "TRLevel.h"
 #import "TRRailroad.h"
+#import "EGMapIso.h"
 
 #define checkCorrection [[theValue(TRRailPointCorrectionEq(r, e)) should] beTrue]
 #define rpm(tx, ty, form, x, back) TRRailPointMake(EGIPointMake(tx, ty), [TRRailForm form].ordinal, x, back)
@@ -11,7 +12,8 @@
 SPEC_BEGIN(TRRailroadSpec)
     describe(@"TRRailroad", ^{
         it(@"should move point", ^{
-            TRRailroad * railroad = [TRRailroad railroadWithMapSize:EGISizeMake(10, 7)];
+            EGMapSso *map = [EGMapSso mapSsoWithSize:EGISizeMake(10, 7)];
+            TRRailroad * railroad = [TRRailroad railroadWithMap:map];
 
             [railroad tryAddRail:[TRRail railWithTile:egip(0, 0) form:[TRRailForm leftRight]]];
             [railroad tryAddRail:[TRRail railWithTile:egip(1, 0) form:[TRRailForm leftBottom]]];
@@ -46,7 +48,8 @@ SPEC_BEGIN(TRRailroadSpec)
             checkCorrection;
         });
         it(@"should add switches", ^{
-            TRRailroad * railroad = [TRRailroad railroadWithMapSize:EGISizeMake(10, 7)];
+            EGMapSso *map = [EGMapSso mapSsoWithSize:EGISizeMake(10, 7)];
+            TRRailroad * railroad = [TRRailroad railroadWithMap:map];
 
             TRRail *xRail = [TRRail railWithTile:egip(2, 0) form:[TRRailForm leftRight]];
             [railroad tryAddRail:xRail];
@@ -73,7 +76,8 @@ SPEC_BEGIN(TRRailroadSpec)
             [[theSwitch.rail2 should] equal:turnRail];
         });
         it(@"should choose active switch and should lock moving through closing switch", ^{
-            TRRailroad * railroad = [TRRailroad railroadWithMapSize:EGISizeMake(10, 7)];
+            EGMapSso *map = [EGMapSso mapSsoWithSize:EGISizeMake(10, 7)];
+            TRRailroad * railroad = [TRRailroad railroadWithMap:map];
             [railroad tryAddRail:[TRRail railWithTile:egip(2, 0) form:[TRRailForm leftRight]]];
             [railroad tryAddRail:[TRRail railWithTile:egip(3, 0) form:[TRRailForm leftTop]]];
             [railroad tryAddRail:[TRRail railWithTile:egip(3, 0) form:[TRRailForm leftRight]]];

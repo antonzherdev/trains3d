@@ -1,39 +1,21 @@
 #import "objd.h"
 #import "EGTypes.h"
 
-static const double ISO = 0.70710676908493;
+@class EGMapSso;
 
-extern void egMapSsoDrawLayout(EGISize size);
-extern void egMapSsoDrawPlane(EGISize size);
-inline static BOOL egMapSsoIsFullTile(EGISize size, NSInteger x, NSInteger y) {
-    return y + x >= 0 //left
-            && y - x <= size.height - 1 //top
-            && y + x <= size.width + size.height - 2 //right
-            && y - x >= -size.width + 1; //bottom
-}
-inline static BOOL egMapSsoIsFullTileP(EGISize size, EGIPoint point) {
-    return egMapSsoIsFullTile(size, point.x, point.y);
-}
+@interface EGMapSso : NSObject
+@property (nonatomic, readonly) EGISize size;
+@property (nonatomic, readonly) EGIRect limits;
+@property (nonatomic, readonly) NSArray* fullTiles;
+@property (nonatomic, readonly) NSArray* partialTiles;
 
-inline static BOOL egMapSsoIsPartialTile(EGISize size, NSInteger x, NSInteger y) {
-    return y + x >= -1 //left
-            && y - x <= size.height //top
-            && y + x <= size.width + size.height - 1 //right
-            && y - x >= -size.width && (
-                y + x == -1 //left
-                || y - x == size.height //top
-                || y + x == size.width + size.height - 1 //right
-                || y - x == -size.width //bottom
-            );
-}
++ (id)mapSsoWithSize:(EGISize)size;
+- (id)initWithSize:(EGISize)size;
+- (BOOL)isFullTile:(EGIPoint)tile;
+- (BOOL)isPartialTile:(EGIPoint)tile;
+- (void)drawLayout;
+- (void)drawPlane;
+- (EGIRect)cutRectForTile:(EGIPoint)tile;
+@end
 
-extern EGIRect egMapSsoLimits(EGISize size);
-extern NSArray * egMapSsoFullTiles(EGISize size);
-extern NSArray * egMapSsoPartialTiles(EGISize size);
 
-/*
- * Возвращает как плитка обрезана.
- * Если left - 0 - значит не обрезано, 1 - обрезано слева, 2 - не видно
- * Остальные значения прямоугольника по такому же принципу
- */
-extern EGIRect egMapSsoTileCut(EGISize size, EGIPoint point);

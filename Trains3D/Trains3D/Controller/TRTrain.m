@@ -85,7 +85,7 @@
 }
 
 - (BOOL)isMoveToCityForPoint:(TRRailPoint)point {
-    return !(egMapSsoIsFullTileP(_level.mapSize, point.tile)) && !(egMapSsoIsFullTileP(_level.mapSize, trRailPointNextTile(point)));
+    return !([_level.map isFullTile:point.tile]) && !([_level.map isFullTile:trRailPointNextTile(point)]);
 }
 
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch {

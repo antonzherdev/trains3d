@@ -22,9 +22,9 @@ class TRLevelView(level : TRLevel) {
         railroadView.draw(level.railroad)
         level.trains.for(train -> trainView.draw(train))
 
-        glColor3f(1.0, 1.0, 1.0)
-        egMapSsoDrawLayout(level.mapSize)
+        egColor3(1.0, 1.0, 1.0)
+        level.map.drawLayout
     }
 
-    val camera : EGCamera = EGCameraIso(level.mapSize, CGPoint(0, 0))
+    val camera : EGCamera = EGCameraIso(level.map.size, CGPoint(0, 0))
 }

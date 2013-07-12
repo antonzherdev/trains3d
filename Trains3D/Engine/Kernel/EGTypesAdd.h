@@ -120,3 +120,5 @@ static inline BOOL EGColorEq(EGColor s1, EGColor s2) {
 static inline void egColor(EGColor color) {
     glColor4f(color.r, color.g, color.b, color.a);
 }
+
+static const CGFloat ISO = 0.70710676908493;

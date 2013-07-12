@@ -1,10 +1,11 @@
 #import "objd.h"
+@class EGMapSso;
 #import "EGTypes.h"
-@class EGMapSsoTileIndex;
 #import "TRRailPoint.h"
 
 @class TRRail;
 @class TRSwitch;
+@class TRLight;
 @class TRRailroad;
 @class TRRailroadBuilder;
 
@@ -32,14 +33,26 @@
 @end
 
 
+@interface TRLight : NSObject
+@property (nonatomic, readonly) EGIPoint tile;
+@property (nonatomic, readonly) TRRailConnector* connector;
+@property (nonatomic) BOOL isGreen;
+
++ (id)lightWithTile:(EGIPoint)tile connector:(TRRailConnector*)connector;
+- (id)initWithTile:(EGIPoint)tile connector:(TRRailConnector*)connector;
+- (void)turn;
+@end
+
+
 @interface TRRailroad : NSObject
-@property (nonatomic, readonly) EGISize mapSize;
+@property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) NSArray* rails;
 @property (nonatomic, readonly) NSArray* switches;
+@property (nonatomic, readonly) NSArray* lights;
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
 
-+ (id)railroadWithMapSize:(EGISize)mapSize;
-- (id)initWithMapSize:(EGISize)mapSize;
++ (id)railroadWithMap:(EGMapSso*)map;
+- (id)initWithMap:(EGMapSso*)map;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRSwitch*)switchInTile:(EGIPoint)tile connector:(TRRailConnector*)connector;
 - (BOOL)tryAddRail:(TRRail*)rail;

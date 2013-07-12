@@ -6,39 +6,39 @@ import TRTypes
 class TRCityView {
     def draw(city : TRCity) {
         glPushMatrix
-        glTranslatef(city.tile.x, city.tile.y, 0)
-        glRotatef(city.angle.angle, 0, 0, -1)
+        egTranslate(city.tile.x, city.tile.y, 0)
+        egRotate(city.angle.angle, 0, 0, -1)
 
         {
-            glTranslatef(0, 0, 0.001)
-            glColor3f(0.2, 0.2, 0.2)
+            egTranslate(0, 0, 0.001)
+            egColor3(0.2, 0.2, 0.2)
             glBegin(GL_QUADS)
-            glVertex2f(0, 0.05)
-            glVertex2f(0.5, 0.05)
-            glVertex2f(0.5, -0.05)
-            glVertex2f(0, -0.05)
+            egVertex2(0, 0.05)
+            egVertex2(0.5, 0.05)
+            egVertex2(0.5, -0.05)
+            egVertex2(0, -0.05)
             glEnd
-            glTranslatef(0, 0, -0.001)
+            egTranslate(0, 0, -0.001)
         }
 
         {
             city.color.gl
-            glTranslatef(0.3, -0.3, 0)
+            egTranslate(0.3, -0.3, 0)
             glutSolidCube(0.15)
 
-            glTranslatef(-0.3, 0, 0)
+            egTranslate(-0.3, 0, 0)
             glutSolidCube(0.15)
 
-            glTranslatef(-0.3, 0, 0)
+            egTranslate(-0.3, 0, 0)
             glutSolidCube(0.15)
 
-            glTranslatef(0, 0.6, 0)
+            egTranslate(0, 0.6, 0)
             glutSolidCube(0.15)
 
-            glTranslatef(0.3, 0, 0)
+            egTranslate(0.3, 0, 0)
             glutSolidCube(0.15)
 
-            glTranslatef(0.3, 0, 0)
+            egTranslate(0.3, 0, 0)
             glutSolidCube(0.15)
         }
 

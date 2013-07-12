@@ -8,20 +8,20 @@ import TRRailPoint
 import TRTrain
 
 
-class TRLevel(mapSize : EGISize) {
-    val railroad = TRRailroad(mapSize)
+class TRLevel(map : EGMapSso) {
+    val railroad = TRRailroad(map)
     var cities : [TRCity] = appendNextCityTo(appendNextCityTo([])) | private set
     var trains : [TRTrain] = [] | private set
 
     private def appendNextCityTo(cities : [TRCity]) =  {
-        val tile = egMapSsoPartialTiles(mapSize).exclude(cities.map(_.tile)).randomItem.get
+        val tile = map.partialTiles.exclude(cities.map(_.tile)).randomItem.get
         val city = TRCity(TRColor[cities.count], tile, randomCityDirectionFor(tile))
         railroad.tryAdd(TRRail(tile, city.angle.form))
         cities + city
     }
 
     private def randomCityDirectionFor(tile : EGIPoint) = {
-        val cut = egMapSsoTileCut(mapSize, tile)
+        val cut = map.cutRectFor(tile)
         TRCityAngle.values.filter(a -> {
             val angle = a.angle
             {(angle == 0 && cut.right == 0 && cut.bottom == 0)

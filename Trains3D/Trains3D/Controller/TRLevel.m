@@ -6,25 +6,25 @@
 #import "TRRailroad.h"
 #import "TRTrain.h"
 @implementation TRLevel{
-    EGISize _mapSize;
+    EGMapSso* _map;
     TRRailroad* _railroad;
     NSArray* _cities;
     NSArray* _trains;
 }
-@synthesize mapSize = _mapSize;
+@synthesize map = _map;
 @synthesize railroad = _railroad;
 @synthesize cities = _cities;
 @synthesize trains = _trains;
 
-+ (id)levelWithMapSize:(EGISize)mapSize {
-    return [[TRLevel alloc] initWithMapSize:mapSize];
++ (id)levelWithMap:(EGMapSso*)map {
+    return [[TRLevel alloc] initWithMap:map];
 }
 
-- (id)initWithMapSize:(EGISize)mapSize {
+- (id)initWithMap:(EGMapSso*)map {
     self = [super init];
     if(self) {
-        _mapSize = mapSize;
-        _railroad = [TRRailroad railroadWithMapSize:_mapSize];
+        _map = map;
+        _railroad = [TRRailroad railroadWithMap:_map];
         _cities = [self appendNextCityToCities:[self appendNextCityToCities:(@[])]];
         _trains = (@[]);
     }
@@ -33,7 +33,7 @@
 }
 
 - (NSArray*)appendNextCityToCities:(NSArray*)cities {
-    EGIPoint tile = uval(EGIPoint, [[[egMapSsoPartialTiles(_mapSize) exclude:[cities map:^id(TRCity* _) {
+    EGIPoint tile = uval(EGIPoint, [[[_map.partialTiles exclude:[cities map:^id(TRCity* _) {
         return val(_.tile);
     }]] randomItem] get]);
     TRCity* city = [TRCity cityWithColor:[TRColor values][[cities count]] tile:tile angle:[self randomCityDirectionForTile:tile]];
@@ -42,7 +42,7 @@
 }
 
 - (TRCityAngle*)randomCityDirectionForTile:(EGIPoint)tile {
-    EGIRect cut = egMapSsoTileCut(_mapSize, tile);
+    EGIRect cut = [_map cutRectForTile:tile];
     return [[[[TRCityAngle values] filter:^BOOL(TRCityAngle* a) {
         NSInteger angle = a.angle;
         return (angle == 0 && cut.right == 0 && cut.bottom == 0) || (angle == 90 && cut.left == 0 && cut.bottom == 0) || (angle == 180 && cut.left == 0 && cut.top == 0) || (angle == 270 && cut.right == 0 && cut.top == 0);

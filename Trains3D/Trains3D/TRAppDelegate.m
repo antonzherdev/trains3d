@@ -5,12 +5,14 @@
 #import "TRRailroad.h"
 #import "EGScene.h"
 #import "EGLayer.h"
+#import "EGMapIso.h"
 
 @implementation TRAppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    TRLevel *level = [TRLevel levelWithMapSize:EGISizeMake(5, 3)];
+    EGMapSso *map = [EGMapSso mapSsoWithSize: EGISizeMake(5, 3)];
+    TRLevel *level = [TRLevel levelWithMap: map];
     [level runSample];
     EGScene *scene = [EGScene
             sceneWithController:level

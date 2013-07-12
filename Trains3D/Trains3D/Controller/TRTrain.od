@@ -51,9 +51,8 @@ class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : flo
         calculateCarPositions
     }
 
-    private def isMoveToCityFor(point : TRRailPoint) =
-        !egMapSsoIsFullTileP(level.mapSize, point.tile) &&
-        !egMapSsoIsFullTileP(level.mapSize, point.nextTile)
+    private def isMoveToCityFor(point : TRRailPoint) : bool =
+        !(level.map.isFull(point.tile)) && !(level.map.isFull(point.nextTile))
 
     def isLocked(theSwitch : TRSwitch) : bool = {
         val tile = theSwitch.tile

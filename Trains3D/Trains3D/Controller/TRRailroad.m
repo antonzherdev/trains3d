@@ -1,7 +1,7 @@
 #import "TRRailroad.h"
 
 #import "EGMap.h"
-#import "EGMapIsoTileIndex.h"
+#import "EGMapIso.h"
 @implementation TRRail{
     EGIPoint _tile;
     TRRailForm* _form;
@@ -72,27 +72,61 @@
 @end
 
 
-@implementation TRRailroad{
-    EGISize _mapSize;
-    NSArray* _rails;
-    NSArray* _switches;
-    TRRailroadBuilder* _builder;
+@implementation TRLight{
+    EGIPoint _tile;
+    TRRailConnector* _connector;
+    BOOL _isGreen;
 }
-@synthesize mapSize = _mapSize;
-@synthesize rails = _rails;
-@synthesize switches = _switches;
-@synthesize builder = _builder;
+@synthesize tile = _tile;
+@synthesize connector = _connector;
+@synthesize isGreen = _isGreen;
 
-+ (id)railroadWithMapSize:(EGISize)mapSize {
-    return [[TRRailroad alloc] initWithMapSize:mapSize];
++ (id)lightWithTile:(EGIPoint)tile connector:(TRRailConnector*)connector {
+    return [[TRLight alloc] initWithTile:tile connector:connector];
 }
 
-- (id)initWithMapSize:(EGISize)mapSize {
+- (id)initWithTile:(EGIPoint)tile connector:(TRRailConnector*)connector {
     self = [super init];
     if(self) {
-        _mapSize = mapSize;
+        _tile = tile;
+        _connector = connector;
+        _isGreen = YES;
+    }
+    
+    return self;
+}
+
+- (void)turn {
+    _isGreen = !(_isGreen);
+}
+
+@end
+
+
+@implementation TRRailroad{
+    EGMapSso* _map;
+    NSArray* _rails;
+    NSArray* _switches;
+    NSArray* _lights;
+    TRRailroadBuilder* _builder;
+}
+@synthesize map = _map;
+@synthesize rails = _rails;
+@synthesize switches = _switches;
+@synthesize lights = _lights;
+@synthesize builder = _builder;
+
++ (id)railroadWithMap:(EGMapSso*)map {
+    return [[TRRailroad alloc] initWithMap:map];
+}
+
+- (id)initWithMap:(EGMapSso*)map {
+    self = [super init];
+    if(self) {
+        _map = map;
         _rails = (@[]);
         _switches = (@[]);
+        _lights = (@[]);
         _builder = [TRRailroadBuilder railroadBuilderWithRailroad:self];
     }
     
@@ -128,6 +162,8 @@
     if([self canAddRail:rail]) {
         [self maybeBuildSwitchForRail:rail connector:rail.form.start];
         [self maybeBuildSwitchForRail:rail connector:rail.form.end];
+        [self maybeBuildLightForRail:rail connector:rail.form.start];
+        [self maybeBuildLightForRail:rail connector:rail.form.end];
         _rails = [_rails arrayByAddingObject:rail];
         return YES;
     } else {
@@ -141,6 +177,9 @@
     }] forEach:^void(TRRail* otherRail) {
         _switches = [_switches arrayByAddingObject:[TRSwitch switchWithTile:rail.tile connector:connector rail1:otherRail rail2:rail]];
     }];
+}
+
+- (void)maybeBuildLightForRail:(TRRail*)rail connector:(TRRailConnector*)connector {
 }
 
 - (TRRailPointCorrection)moveForLength:(CGFloat)length point:(TRRailPoint)point {

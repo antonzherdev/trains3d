@@ -1,14 +1,14 @@
 stub def egClear
 
-stub def glColor3f(r : float, g : float, b : float)
+stub def egColor3(r : float, g : float, b : float)
 
 stub def glutSolidCube(size :float)
 
 stub def glPushMatrix
 stub def glPopMatrix
-stub def glRotatef(angle : float, x : float, y : float, z : float)
-stub def glScalef(x : float, y : float, z : float)
-stub def glTranslatef(x : float, y : float, z : float)
+stub def egRotate(angle : float, x : float, y : float, z : float)
+stub def egScale(x : float, y : float, z : float)
+stub def egTranslate(x : float, y : float, z : float)
 
 stub def glEnable(: uint)
 stub def glDisable(: uint)
@@ -17,5 +17,7 @@ stub val GL_DEPTH_TEST : uint
 stub def glBegin(: uint)
 stub def glEnd
 stub val GL_QUADS : uint
-stub def glVertex2f(x : float, y : float)
-stub def glVertex3f(x : float, y : float, z : float)
+stub val GL_LINES : uint
+stub def egVertex2(x : float, y : float)
+stub def egVertex3(x : float, y : float, z : float)
+stub def egTexCoord2(x : float, y : float)

@@ -1,6 +1,6 @@
 import EGMap
+import EGMapIso
 import EGTypes
-import EGMapIsoTileIndex
 
 import TRRailPoint
 
@@ -18,9 +18,18 @@ class TRSwitch(tile : EGIPoint, connector : TRRailConnector, rail1 : TRRail, rai
     }
 }
 
-class TRRailroad(mapSize : EGISize) {
+class TRLight(tile : EGIPoint, connector : TRRailConnector) {
+    var isGreen = true
+
+    def turn {
+        isGreen = !isGreen
+    }
+}
+
+class TRRailroad(map : EGMapSso) {
     var rails : [TRRail] = [] | private set
     var switches : [TRSwitch] = [] | private set
+    var lights : [TRLight] = [] | private set
     val builder = TRRailroadBuilder(self)
 
     def canAdd(rail : TRRail) : bool = {
@@ -39,6 +48,8 @@ class TRRailroad(mapSize : EGISize) {
         if(canAdd(rail)) {
             maybeBuildSwitchFor(rail, rail.form.start)
             maybeBuildSwitchFor(rail, rail.form.end)
+            maybeBuildLightFor(rail, rail.form.start)
+            maybeBuildLightFor(rail, rail.form.end)
             rails += rail
             true
         } else false
@@ -48,6 +59,10 @@ class TRRailroad(mapSize : EGISize) {
         railsIn(rail.tile).filter(_.has(connector)).for(otherRail ->
             switches += TRSwitch(rail.tile, connector, otherRail, rail)
         )
+    }
+
+    private def maybeBuildLightFor(rail : TRRail, connector : TRRailConnector) {
+
     }
 
     def moveFor(length : float, point : TRRailPoint) : TRRailPointCorrection = correct(point.add(length))

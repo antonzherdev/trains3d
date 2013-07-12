@@ -1,10 +1,109 @@
 import EGTypes
+import EGGL
+import EGMap
 
-stub def egMapSsoDrawLayout(size: EGISize)
-stub def egMapSsoDrawPlane(size: EGISize)
-stub def egMapSsoIsFullTile(size : EGISize, x : int, y : int) : bool
-stub def egMapSsoIsFullTileP(size : EGISize, tile: EGIPoint) : bool
-stub def egMapSsoLimits(size : EGISize) : EGIRect
-stub def egMapSsoFullTiles(size : EGISize) : [EGIPoint]
-stub def egMapSsoPartialTiles(size : EGISize) : [EGIPoint]
-stub def egMapSsoTileCut(size : EGISize, tile :EGIPoint) : EGIRect
+class EGMapSso(size : EGISize) {
+    val limits = EGIRect((1 - size.height)/2 - 1,
+                         (1 - size.width)/2 - 1,
+                         (2*size.width + size.height - 3)/2 + 1,
+                         (size.width + 2*size.height - 3)/2 + 1)
+    val fullTiles : [EGIPoint] = allPosibleTiles.filter(isFull(_)).array
+    val partialTiles : [EGIPoint] = allPosibleTiles.filter(isPartial(_)).array
+
+    def isFull(tile : EGIPoint) : bool =
+        tile.y + tile.x >= 0 //left
+        && tile.y - tile.x <= size.height - 1 //top
+        && tile.y + tile.x <= size.width + size.height - 2 //right
+        && tile.y - tile.x >= -size.width + 1
+
+    def isPartial(tile : EGIPoint) : bool =
+        tile.y + tile.x >= -1 //left
+        && tile.y - tile.x <= size.height //top
+        && tile.y + tile.x <= size.width + size.height - 1 //right
+        && tile.y - tile.x >= -size.width && (
+            tile.y + tile.x == -1 //left
+            || tile.y - tile.x == size.height //top
+            || tile.y + tile.x == size.width + size.height - 1 //right
+            || tile.y - tile.x == -size.width //bottom
+        )
+
+    def drawLayout {
+        glPushMatrix
+        egRotate(45, 0, 0, 1)
+        glBegin(GL_LINES)
+        {
+            val left = -ISO
+            val top = ISO*size.height
+            val bottom = ISO*(-size.width)
+            val right = ISO*(size.width + size.height - 1)
+            egVertex3(left, top, 0.0)
+            egVertex3(left, bottom, 0.0)
+
+            egVertex3(left, bottom, 0.0)
+            egVertex3(right, bottom, 0.0)
+
+            egVertex3(right, bottom, 0.0)
+            egVertex3(right, top, 0.0)
+
+            egVertex3(right, top, 0.0)
+            egVertex3(left, top, 0.0)
+        }
+        glEnd
+        glPopMatrix
+
+        egColor3(1.0, 1.0, 1.0)
+        glBegin(GL_LINES)
+        {
+            fullTiles.for(tile -> {
+                val p = tile
+                egVertex3(p.x - 0.5, p.y - 0.5, 0.0)
+                egVertex3(p.x + 0.5, p.y - 0.5, 0.0)
+
+                egVertex3(p.x + 0.5, p.y - 0.5, 0.0)
+                egVertex3(p.x + 0.5, p.y + 0.5, 0.0)
+
+                egVertex3(p.x + 0.5, p.y + 0.5, 0.0)
+                egVertex3(p.x - 0.5, p.y + 0.5, 0.0)
+
+                egVertex3(p.x - 0.5, p.y + 0.5, 0.0)
+                egVertex3(p.x - 0.5, p.y - 0.5, 0.0)
+            })
+        }
+        glEnd
+        egMapDrawAxis
+    }
+
+    def drawPlane {
+        glBegin(GL_QUADS)
+        {
+            val l = limits.left - 1.5
+            val r = limits.right + 1.5
+            val t = limits.top - 1.5
+            val b = limits.bottom + 1.5
+            val w = limits.right - limits.left + 3
+            val h = limits.bottom - limits.top + 3
+            egTexCoord2(0.0, 0.0) egVertex3(l, b, 0)
+            egTexCoord2(w, 0.0) egVertex3(r, b, 0)
+            egTexCoord2(w, h) egVertex3(r, t, 0)
+            egTexCoord2(0.0, h) egVertex3(l, t, 0)
+        }
+        glEnd
+        glPopMatrix
+    }
+
+    private def allPosibleTiles : CNChain<EGIPoint> =
+        CNChain.chainWith(start = limits.left, end = limits.right, step = 1)
+            .mul(CNChain.chainWith(start = limits.top, end = limits.bottom, step = 1))
+            .map(EGIPoint(_.a, _.b))
+
+    private def tileCutAxis(less : int, more : int) : int =
+        if(less == more) 1
+        else if(less < more) 0
+        else 2
+
+    def cutRectFor(tile : EGIPoint) = EGIRect(
+        tileCutAxis(0, tile.x + tile.y),
+        tileCutAxis(tile.y - tile.x, size.height - 1),
+        tileCutAxis(tile.x + tile.y, size.width + size.height - 2),
+        tileCutAxis(-size.width + 1, tile.y - tile.x))
+}
