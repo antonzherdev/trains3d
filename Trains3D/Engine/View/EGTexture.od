@@ -1,7 +1,7 @@
 import EGTypes
 
 stub class EGTexture(file : string)  {
-    def size : CGSize
+    def size : EGSize
     def bind
     def with(: () -> void)
 }

@@ -22,7 +22,7 @@
 
 + (id)director;
 - (id)init;
-- (void)drawWithSize:(CGSize)size;
+- (void)drawWithSize:(EGSize)size;
 - (void)processEvent:(EGEvent*)event;
 - (void)start;
 - (void)stop;

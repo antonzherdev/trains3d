@@ -4,7 +4,7 @@ import EGLayer
 
 
 class EGScene(val controller : EGController, val layers : [EGLayer]) {
-    def drawWith(viewSize : CGSize) {
+    def drawWith(viewSize : EGSize) {
         layers.for(_.drawWith(viewSize))
     }
 

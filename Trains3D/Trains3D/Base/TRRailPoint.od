@@ -19,16 +19,16 @@ enum TRRailConnector(x : int, y : int, angle : int) {
         else if(self == top) bottom
         else top
 
-    def next(tile : EGIPoint) = EGIPoint(tile.x + x, tile.y + y)
+    def next(tile : EGPointI) = EGPointI(tile.x + x, tile.y + y)
 }
 
-enum TRRailForm(start : TRRailConnector, end : TRRailConnector, length : float, pointFun : float -> CGPoint) {
-    leftBottom(TRRailConnector.left, TRRailConnector.bottom, M_PI_4, x -> CGPoint(-0.5 + 0.5*sin(x*2), -0.5 + 0.5*cos(x*2)))
-    leftRight(TRRailConnector.left, TRRailConnector.right, 1, x -> CGPoint(x - 0.5, 0))
-    leftTop(TRRailConnector.left, TRRailConnector.top, M_PI_4, x -> CGPoint(-0.5 + 0.5*sin(x*2), 0.5 - 0.5*cos(x*2)))
-    bottomTop(TRRailConnector.bottom, TRRailConnector.top, 1, x -> CGPoint(0, x - 0.5))
-    bottomRight(TRRailConnector.bottom, TRRailConnector.right, M_PI_4, x -> CGPoint(0.5 - 0.5*cos(x*2), -0.5 + 0.5*sin(x*2)))
-    topRight(TRRailConnector.top, TRRailConnector.right, M_PI_4, x -> CGPoint(0.5 - 0.5*cos(x*2), 0.5 - 0.5*sin(x*2)))
+enum TRRailForm(start : TRRailConnector, end : TRRailConnector, length : float, pointFun : float -> EGPoint) {
+    leftBottom(TRRailConnector.left, TRRailConnector.bottom, M_PI_4, x -> EGPoint(-0.5 + 0.5*sin(x*2), -0.5 + 0.5*cos(x*2)))
+    leftRight(TRRailConnector.left, TRRailConnector.right, 1, x -> EGPoint(x - 0.5, 0))
+    leftTop(TRRailConnector.left, TRRailConnector.top, M_PI_4, x -> EGPoint(-0.5 + 0.5*sin(x*2), 0.5 - 0.5*cos(x*2)))
+    bottomTop(TRRailConnector.bottom, TRRailConnector.top, 1, x -> EGPoint(0, x - 0.5))
+    bottomRight(TRRailConnector.bottom, TRRailConnector.right, M_PI_4, x -> EGPoint(0.5 - 0.5*cos(x*2), -0.5 + 0.5*sin(x*2)))
+    topRight(TRRailConnector.top, TRRailConnector.right, M_PI_4, x -> EGPoint(0.5 - 0.5*cos(x*2), 0.5 - 0.5*sin(x*2)))
 
     static def formFor(connector1 : TRRailConnector, connector2 : TRRailConnector) : TRRailForm =
         if(connector1.ordinal > connector2.ordinal) formFor(connector2, connector1)
@@ -42,7 +42,7 @@ enum TRRailForm(start : TRRailConnector, end : TRRailConnector, length : float, 
 
 }
 
-struct TRRailPoint(tile : EGIPoint, form : uint, x : float, back : bool) {
+struct TRRailPoint(tile : EGPointI, form : uint, x : float, back : bool) {
     def add(x : float) = TRRailPoint(tile, form, self.x + x, back)
 
     def getForm : TRRailForm = TRRailForm.values[form]
@@ -59,17 +59,17 @@ struct TRRailPoint(tile : EGIPoint, form : uint, x : float, back : bool) {
         else TRRailPointCorrection(self, 0)
     }
 
-    def point : CGPoint = {
+    def point : EGPoint = {
         val form = getForm
         val x = if(back) form.length - self.x else self.x
         val f = form.pointFun
-        val p : CGPoint = f(x)
-        CGPoint(p.x + tile.x, p.y + tile.y)
+        val p : EGPoint = f(x)
+        EGPoint(p.x + tile.x, p.y + tile.y)
     }
 
     def invert = TRRailPoint(tile, form, getForm.length - x, !back)
 
-    def nextTile : EGIPoint = endConnector.next(tile)
+    def nextTile : EGPointI = endConnector.next(tile)
 }
 
 struct TRRailPointCorrection(point : TRRailPoint, error : float) {

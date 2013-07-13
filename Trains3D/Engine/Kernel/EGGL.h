@@ -17,6 +17,10 @@ static inline void egColor3(CGFloat red, CGFloat green, CGFloat blue) {
     glColor3d(red, green, blue);
 }
 
+static inline void egColor4(CGFloat red, CGFloat green, CGFloat blue, CGFloat alpha) {
+    glColor4d(red, green, blue, alpha);
+}
+
 static inline void egVertex2(CGFloat x, CGFloat y) {
     glVertex2d(x, y);
 }

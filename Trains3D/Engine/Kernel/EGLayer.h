@@ -13,7 +13,7 @@
 
 + (id)layerWithView:(id)view processor:(id)processor;
 - (id)initWithView:(id)view processor:(id)processor;
-- (void)drawWithViewSize:(CGSize)viewSize;
+- (void)drawWithViewSize:(EGSize)viewSize;
 - (BOOL)processEvent:(EGEvent*)event;
 @end
 

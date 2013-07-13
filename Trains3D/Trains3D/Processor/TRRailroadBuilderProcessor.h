@@ -26,11 +26,11 @@ typedef struct TRRailCorrection TRRailCorrection;
 
 
 struct TRRailCorrection {
-    EGIPoint tile;
-    EGIPoint start;
-    EGIPoint end;
+    EGPointI tile;
+    EGPointI start;
+    EGPointI end;
 };
-static inline TRRailCorrection TRRailCorrectionMake(EGIPoint tile, EGIPoint start, EGIPoint end) {
+static inline TRRailCorrection TRRailCorrectionMake(EGPointI tile, EGPointI start, EGPointI end) {
     TRRailCorrection ret;
     ret.tile = tile;
     ret.start = start;
@@ -38,7 +38,7 @@ static inline TRRailCorrection TRRailCorrectionMake(EGIPoint tile, EGIPoint star
     return ret;
 }
 static inline BOOL TRRailCorrectionEq(TRRailCorrection s1, TRRailCorrection s2) {
-    return EGIPointEq(s1.tile, s2.tile) && EGIPointEq(s1.start, s2.start) && EGIPointEq(s1.end, s2.end);
+    return EGPointIEq(s1.tile, s2.tile) && EGPointIEq(s1.start, s2.start) && EGPointIEq(s1.end, s2.end);
 }
 
 @interface TRRailroadBuilderMouseProcessor : NSObject

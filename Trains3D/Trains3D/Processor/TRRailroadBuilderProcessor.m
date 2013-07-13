@@ -59,11 +59,11 @@
 
 - (BOOL)mouseDragEvent:(EGEvent*)event {
     return unumb([[_startedPoint map:^id(id sp) {
-        CGPoint deltaVector = egpSub([event location], uval(CGPoint, sp));
-        if(egpLengthSQ(deltaVector) > 0.25) {
-            EGIPoint spTile = egpRound(uval(CGPoint, sp));
-            EGIPoint start = [self normPoint:egpSub(uval(CGPoint, sp), egipFloat(spTile))];
-            EGIPoint end = egipAdd(start, [self normPoint:egpSetLength(deltaVector, 0.7)]);
+        EGPoint deltaVector = egPointSub([event location], uval(EGPoint, sp));
+        if(egPointLengthSquare(deltaVector) > 0.25) {
+            EGPointI spTile = egPointIApply(uval(EGPoint, sp));
+            EGPointI start = [self normPoint:egPointSub(uval(EGPoint, sp), egPointApply(spTile))];
+            EGPointI end = egPointIAdd(start, [self normPoint:egPointSet(deltaVector, 0.7)]);
             [_builder tryBuildRail:[self convertRail:[self correctRail:TRRailCorrectionMake(spTile, start, end)]]];
         }
         return @YES;
@@ -78,12 +78,12 @@
     }] getOr:@NO]);
 }
 
-- (EGIPoint)normPoint:(CGPoint)point {
-    return EGIPointMake([self nX:point.x], [self nX:point.y]);
+- (EGPointI)normPoint:(EGPoint)point {
+    return EGPointIMake([self nX:point.x], [self nX:point.y]);
 }
 
-- (NSInteger)nX:(CGFloat)x {
-    return round(x * 2);
+- (NSInteger)nX:(double)x {
+    return lround(x * 2);
 }
 
 - (TRRailCorrection)correctRail:(TRRailCorrection)rail {
@@ -100,10 +100,10 @@
                     return [self moveRail:rail x:0 y:-1];
                 } else {
                     if(rail.start.x == 0 && rail.start.y == 0) {
-                        return [self correctRail:TRRailCorrectionMake(rail.tile, egipNeg(rail.end), rail.end)];
+                        return [self correctRail:TRRailCorrectionMake(rail.tile, egPointINegate(rail.end), rail.end)];
                     } else {
                         if(rail.end.x == 0 && rail.end.y == 0) {
-                            return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, egipNeg(rail.start))];
+                            return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, egPointINegate(rail.start))];
                         } else {
                             if(rail.start.x > rail.end.x) {
                                 return [self correctRail:TRRailCorrectionMake(rail.tile, rail.end, rail.start)];
@@ -112,15 +112,15 @@
                                     return [self correctRail:TRRailCorrectionMake(rail.tile, rail.end, rail.start)];
                                 } else {
                                     if(fabs(rail.start.x) == 1 && fabs(rail.start.y) == 1 && rail.start.x != rail.end.x) {
-                                        return [self correctRail:TRRailCorrectionMake(rail.tile, egip(rail.start.x, 0), rail.end)];
+                                        return [self correctRail:TRRailCorrectionMake(rail.tile, EGPointIMake(rail.start.x, 0), rail.end)];
                                     } else {
                                         if(fabs(rail.start.x) == 1 && fabs(rail.start.y) == 1) {
-                                            return [self correctRail:TRRailCorrectionMake(rail.tile, egip(0, rail.start.y), rail.end)];
+                                            return [self correctRail:TRRailCorrectionMake(rail.tile, EGPointIMake(0, rail.start.y), rail.end)];
                                         } else {
                                             if(fabs(rail.end.x) == 1 && fabs(rail.end.y) == 1 && rail.start.x != rail.end.x) {
-                                                return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, egip(rail.end.x, 0))];
+                                                return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, EGPointIMake(rail.end.x, 0))];
                                             } else {
-                                                if(fabs(rail.end.x) == 1 && fabs(rail.end.y) == 1) return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, egip(0, rail.end.y))];
+                                                if(fabs(rail.end.x) == 1 && fabs(rail.end.y) == 1) return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, EGPointIMake(0, rail.end.y))];
                                                 else return rail;
                                             }
                                         }
@@ -136,7 +136,7 @@
 }
 
 - (TRRailCorrection)moveRail:(TRRailCorrection)rail x:(NSInteger)x y:(NSInteger)y {
-    return [self correctRail:TRRailCorrectionMake(egip(rail.tile.x + x, rail.tile.y + y), egip(rail.start.x - 2 * x, rail.start.y - 2 * y), egip(rail.end.x - 2 * x, rail.end.y - 2 * y))];
+    return [self correctRail:TRRailCorrectionMake(EGPointIMake(rail.tile.x + x, rail.tile.y + y), EGPointIMake(rail.start.x - 2 * x, rail.start.y - 2 * y), EGPointIMake(rail.end.x - 2 * x, rail.end.y - 2 * y))];
 }
 
 - (TRRail*)convertRail:(TRRailCorrection)rail {

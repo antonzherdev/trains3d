@@ -4,13 +4,13 @@
 @class EGCameraIso;
 
 @interface EGCameraIso : NSObject
-@property (nonatomic, readonly) EGISize tilesOnScreen;
-@property (nonatomic, readonly) CGPoint center;
+@property (nonatomic, readonly) EGSizeI tilesOnScreen;
+@property (nonatomic, readonly) EGPoint center;
 
-+ (id)cameraIsoWithTilesOnScreen:(EGISize)tilesOnScreen center:(CGPoint)center;
-- (id)initWithTilesOnScreen:(EGISize)tilesOnScreen center:(CGPoint)center;
-- (void)focusForViewSize:(CGSize)viewSize;
-- (CGPoint)translateViewPoint:(CGPoint)viewPoint withViewSize:(CGSize)withViewSize;
++ (id)cameraIsoWithTilesOnScreen:(EGSizeI)tilesOnScreen center:(EGPoint)center;
+- (id)initWithTilesOnScreen:(EGSizeI)tilesOnScreen center:(EGPoint)center;
+- (void)focusForViewSize:(EGSize)viewSize;
+- (EGPoint)translateViewPoint:(EGPoint)viewPoint withViewSize:(EGSize)withViewSize;
 @end
 
 

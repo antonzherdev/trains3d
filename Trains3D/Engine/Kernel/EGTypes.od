@@ -1,11 +1,41 @@
 import "EGTypesAdd.h"
+import EGGL
+
+struct EGPoint(x : float, y : float) {
+    static def apply(point : EGPointI) = EGPoint(point.x, point.y)
+
+    def add(point : EGPoint) = EGPoint(x + point.x, y + point.y)
+    def sub(point : EGPoint) = EGPoint(x - point.x, y - point.y)
+    def negate = EGPoint(-x, -y)
+    def angle : float = atan2(y, x)
+    def dot(point : EGPoint) : float = x*point.x + y*point.y
+    def lengthSquare : float = dot(self)
+    def length = sqrt(lengthSquare)
+    def mul(value : float) = EGPoint(x*value, y*value)
+    def mid(point : EGPoint) = add(point).mul(0.5)
+    def distanceTo(point : EGPoint) = sub(point).length
+    def set(length : float) = mul(length/self.length)
+    def normalize = set(length = 1.0)
+}
+
+struct EGPointI(x : int, y : int) {
+    static def apply(point : EGPoint) = EGPointI(lround(point.x), lround(point.y))
+
+    def add(point : EGPointI) = EGPointI(x + point.x, y + point.y)
+    def sub(point : EGPointI) = EGPointI(x - point.x, y - point.y)
+    def negate = EGPointI(-x, -y)
+}
+
+struct EGSize(width : float, height : float)
+struct EGSizeI(width : int, height : int)
+struct EGRect(left : float, top : float, right : float, bottom : float)
+struct EGRectI(left : int, top : int, right : int, bottom : int)
+
+struct EGColor(r : float, g : float, b : float, a : float) {
+    def set = egColor4(r, g, b, a)
+}
 
 stub val ISO : float
-
-stub struct CGPoint(x : float, y : float)
-stub struct CGSize(width : float, height : float)
-stub struct GLuint
-
 stub val M_PI : float
 stub val M_PI_2 : float
 stub val M_PI_4 : float
@@ -14,40 +44,17 @@ stub def lround(: float) : int
 stub def sin(:float) : float
 stub def cos(:float) : float
 stub def fabs(:float) : float
-
-stub def egpAdd(v1 : CGPoint, v2 : CGPoint) : CGPoint
-stub def egpSub(v1 : CGPoint, v2 : CGPoint) : CGPoint
-stub def egpToAngle(v : CGPoint) : float
-stub def egpLength(v : CGPoint) : float
-stub def egpLengthSQ(v : CGPoint) : float
-stub def egpDistance(v1 : CGPoint, v2 : CGPoint) : float
-stub def egpMidpoint(v1 : CGPoint, v2 : CGPoint) : CGPoint
-stub def egpMult(v : CGPoint, f : float) : float
-stub def egpNormalize(v : CGPoint) : CGPoint
-stub def egpSetLength(v : CGPoint, l : float) : CGPoint
-
-stub struct EGIPoint(x : int, y : int)
-stub def egip(x : int, y : int) : EGIPoint
-stub def egpRound(p : CGPoint) : EGIPoint
-stub def egipFloat(p : EGIPoint) : CGPoint
-stub def egipAdd(v1 : EGIPoint, v2 : EGIPoint) : EGIPoint
-stub def egipSub(v1 : EGIPoint, v2 : EGIPoint) : EGIPoint
-stub def egipNeg(v : EGIPoint) : EGIPoint
-
-struct EGISize(width : int, height : int)
-struct EGIRect(left : int, top : int, right : int, bottom : int)
-
-stub struct EGColor(r : float, g : float, b : float, a : float)
-stub def egColor(color : EGColor)
+stub def atan2(:float, :float) : float
+stub def sqrt(:float) : float
 
 trait EGController {
     def updateWith(delta : float)
 }
 
 trait EGCamera {
-    def focusFor(viewSize : CGSize)
+    def focusFor(viewSize : EGSize)
 
-    def translate(viewPoint : CGPoint, withViewSize : CGSize) : CGPoint
+    def translate(viewPoint : EGPoint, withViewSize : EGSize) : EGPoint
 }
 
 trait EGView {

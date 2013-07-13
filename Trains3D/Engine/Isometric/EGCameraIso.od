@@ -1,7 +1,7 @@
 import EGTypes
 
-stub class EGCameraIso(tilesOnScreen : EGISize, center : CGPoint) {
-    def focusFor(viewSize : CGSize) {
+stub class EGCameraIso(tilesOnScreen : EGSizeI, center : EGPoint) {
+    def focusFor(viewSize : EGSize) {
     }
 }
 

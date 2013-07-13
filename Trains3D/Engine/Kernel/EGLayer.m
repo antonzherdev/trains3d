@@ -22,7 +22,7 @@
     return self;
 }
 
-- (void)drawWithViewSize:(CGSize)viewSize {
+- (void)drawWithViewSize:(EGSize)viewSize {
     [[_view camera] focusForViewSize:viewSize];
     [_view drawView];
 }

@@ -20,7 +20,7 @@ class TRLevel(map : EGMapSso) {
         cities + city
     }
 
-    private def randomCityDirectionFor(tile : EGIPoint) = {
+    private def randomCityDirectionFor(tile : EGPointI) = {
         val cut = map.cutRectFor(tile)
         TRCityAngle.values.filter(a -> {
             val angle = a.angle

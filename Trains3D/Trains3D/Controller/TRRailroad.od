@@ -4,11 +4,11 @@ import EGTypes
 
 import TRRailPoint
 
-class TRRail(tile : EGIPoint, form : TRRailForm) {
+class TRRail(tile : EGPointI, form : TRRailForm) {
     def has(connector : TRRailConnector) : bool = form.start == connector || form.end == connector
 }
 
-class TRSwitch(tile : EGIPoint, connector : TRRailConnector, rail1 : TRRail, rail2 : TRRail) {
+class TRSwitch(tile : EGPointI, connector : TRRailConnector, rail1 : TRRail, rail2 : TRRail) {
     var firstActive = true
 
     def activeRail : TRRail = if(firstActive) rail1 else rail2
@@ -18,7 +18,7 @@ class TRSwitch(tile : EGIPoint, connector : TRRailConnector, rail1 : TRRail, rai
     }
 }
 
-class TRLight(tile : EGIPoint, connector : TRRailConnector) {
+class TRLight(tile : EGPointI, connector : TRRailConnector) {
     var isGreen = true
 
     def turn {
@@ -40,8 +40,8 @@ class TRRailroad(map : EGMapSso) {
         countsAtStart < 2 &&  countsAtEnd < 2
     }
 
-    private def railsIn(tile : EGIPoint) = rails.filter(_.tile == tile)
-    def switchIn(tile : EGIPoint, connector : TRRailConnector) =
+    private def railsIn(tile : EGPointI) = rails.filter(_.tile == tile)
+    def switchIn(tile : EGPointI, connector : TRRailConnector) =
         switches.filter(_.tile == tile).find(_.connector == connector)
 
     def tryAdd(rail : TRRail) : bool = {
@@ -67,7 +67,7 @@ class TRRailroad(map : EGMapSso) {
 
     def moveFor(length : float, point : TRRailPoint) : TRRailPointCorrection = correct(point.add(length))
 
-    private def activeRailFor(tile : EGIPoint, connector : TRRailConnector) : TRRail? =
+    private def activeRailFor(tile : EGPointI, connector : TRRailConnector) : TRRail? =
         switchIn(tile, connector)
             .map(_.activeRail)
             .getOrElse(

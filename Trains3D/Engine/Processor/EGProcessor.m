@@ -1,17 +1,17 @@
 #import "EGProcessor.h"
 
 @implementation EGEvent{
-    CGSize _viewSize;
+    EGSize _viewSize;
     id _camera;
 }
 @synthesize viewSize = _viewSize;
 @synthesize camera = _camera;
 
-+ (id)eventWithViewSize:(CGSize)viewSize camera:(id)camera {
++ (id)eventWithViewSize:(EGSize)viewSize camera:(id)camera {
     return [[EGEvent alloc] initWithViewSize:viewSize camera:camera];
 }
 
-- (id)initWithViewSize:(CGSize)viewSize camera:(id)camera {
+- (id)initWithViewSize:(EGSize)viewSize camera:(id)camera {
     self = [super init];
     if(self) {
         _viewSize = viewSize;
@@ -25,15 +25,15 @@
     @throw @"Method set is abstract";
 }
 
-- (CGPoint)locationInView {
+- (EGPoint)locationInView {
     @throw @"Method locationInView is abstract";
 }
 
-- (CGPoint)location {
+- (EGPoint)location {
     return [self locationForDepth:0];
 }
 
-- (CGPoint)locationForDepth:(CGFloat)depth {
+- (EGPoint)locationForDepth:(double)depth {
     if([_camera isEmpty]) return [self locationInView];
     else return [[_camera get] translateViewPoint:[self locationInView] withViewSize:_viewSize];
 }

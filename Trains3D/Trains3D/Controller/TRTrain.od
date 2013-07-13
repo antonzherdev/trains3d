@@ -28,7 +28,7 @@ class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : flo
         }, head.invert)
     }
 
-    private def move(point : CGPoint, length : float) = CGPoint(point.x, point.y + length)
+    private def move(point : EGPoint, length : float) = EGPoint(point.x, point.y + length)
 
     def updateWith(delta : float) {
         correct(level.railroad.moveFor(delta*speed, head))

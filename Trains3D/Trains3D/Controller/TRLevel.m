@@ -33,7 +33,7 @@
 }
 
 - (NSArray*)appendNextCityToCities:(NSArray*)cities {
-    EGIPoint tile = uval(EGIPoint, [[[_map.partialTiles exclude:[cities map:^id(TRCity* _) {
+    EGPointI tile = uval(EGPointI, [[[_map.partialTiles exclude:[cities map:^id(TRCity* _) {
         return val(_.tile);
     }]] randomItem] get]);
     TRCity* city = [TRCity cityWithColor:[TRColor values][[cities count]] tile:tile angle:[self randomCityDirectionForTile:tile]];
@@ -41,8 +41,8 @@
     return [cities arrayByAddingObject:city];
 }
 
-- (TRCityAngle*)randomCityDirectionForTile:(EGIPoint)tile {
-    EGIRect cut = [_map cutRectForTile:tile];
+- (TRCityAngle*)randomCityDirectionForTile:(EGPointI)tile {
+    EGRectI cut = [_map cutRectForTile:tile];
     return [[[[TRCityAngle values] filter:^BOOL(TRCityAngle* a) {
         NSInteger angle = a.angle;
         return (angle == 0 && cut.right == 0 && cut.bottom == 0) || (angle == 90 && cut.left == 0 && cut.bottom == 0) || (angle == 180 && cut.left == 0 && cut.top == 0) || (angle == 270 && cut.right == 0 && cut.top == 0);
@@ -65,7 +65,7 @@
     [self runTrain:[TRTrain trainWithLevel:self color:city0.color cars:(@[[TRCar car]]) speed:0.6] fromCity:city1];
 }
 
-- (void)updateWithDelta:(CGFloat)delta {
+- (void)updateWithDelta:(double)delta {
     [_trains forEach:^void(TRTrain* _) {
         [_ updateWithDelta:delta];
     }];

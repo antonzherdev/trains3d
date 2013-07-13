@@ -1,3 +1,3 @@
 import EGTypes
 
-stub def egTextGlutDraw(text : string, font : void, position : CGPoint)
+stub def egTextGlutDraw(text : string, font : void, position : EGPoint)

@@ -19,12 +19,12 @@
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) TRColor* color;
 @property (nonatomic, readonly) NSArray* cars;
-@property (nonatomic, readonly) CGFloat speed;
+@property (nonatomic, readonly) double speed;
 
-+ (id)trainWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(CGFloat)speed;
-- (id)initWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(CGFloat)speed;
++ (id)trainWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(double)speed;
+- (id)initWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(double)speed;
 - (void)startFromCity:(TRCity*)city;
-- (void)updateWithDelta:(CGFloat)delta;
+- (void)updateWithDelta:(double)delta;
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch;
 @end
 
@@ -36,7 +36,7 @@
 
 + (id)car;
 - (id)init;
-- (CGFloat)length;
+- (double)length;
 @end
 
 

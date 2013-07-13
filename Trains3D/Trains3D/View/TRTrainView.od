@@ -10,17 +10,17 @@ stub val Car : string
 
 class TRTrainView {
     def draw(train : TRTrain) {
-        train.color.gl
+        train.color.set
         train.cars.for(car -> {
             glPushMatrix
 
             val h = car.head.point
             val t = car.tail.point
 
-            val mid = egpMidpoint(h, t)
+            val mid = h.mid(point = t)
             egTranslate(mid.x, mid.y, 0)
 
-            val angle = 90 + (180.0 / M_PI * egpToAngle(egpSub(t, h)))
+            val angle = 90 + (180.0 / M_PI * t.sub(h).angle)
             egRotate(angle, 0, 0, 1)
 
             egRotate(90, 1, 0, 0)

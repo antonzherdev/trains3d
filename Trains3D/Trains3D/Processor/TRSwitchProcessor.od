@@ -12,13 +12,13 @@ class TRSwitchProcessor(level : TRLevel) {
 
     def mouseDown(event : EGEvent) = {
         val location = event.location
-        val tile = egpRound(location)
-        val relPoint = egpSub(location, egipFloat(tile))
+        val tile : EGPointI = location
+        val relPoint = location.sub(tile)
         downedSwitch = connectorFor(relPoint).flatMap(level.railroad.switchIn(tile, _))
         downedSwitch.isDefined
     }
 
-    private def connectorFor(point : CGPoint) : TRRailConnector? =
+    private def connectorFor(point : EGPoint) : TRRailConnector? =
         if(-0.1 < point.x && point.x < 0.1)
             if(point.y < -0.3) TRRailConnector.bottom
             else if(0.3 < point.y) TRRailConnector.top

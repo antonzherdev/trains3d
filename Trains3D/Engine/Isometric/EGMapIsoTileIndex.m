@@ -1,16 +1,16 @@
 #import "EGMapIsoTileIndex.h"
 
 @implementation EGMapSsoTileIndex{
-    EGISize _mapSize;
+    EGSizeI _mapSize;
     NSMutableDictionary* _map;
 }
 @synthesize mapSize = _mapSize;
 
-+ (id)mapSsoTileIndexWithMapSize:(EGISize)mapSize {
++ (id)mapSsoTileIndexWithMapSize:(EGSizeI)mapSize {
     return [[EGMapSsoTileIndex alloc] initWithMapSize:mapSize];
 }
 
-- (id)initWithMapSize:(EGISize)mapSize {
+- (id)initWithMapSize:(EGSizeI)mapSize {
     self = [super init];
     if(self) {
         _mapSize = mapSize;
@@ -20,7 +20,7 @@
     return self;
 }
 
-- (id)lookupWithDef:(id(^)())def forTile:(EGIPoint)forTile {
+- (id)lookupWithDef:(id(^)())def forTile:(EGPointI)forTile {
     NSNumber * forKey = [self getNumberForTile:forTile];
     id v = [_map objectForKey:forKey];
     if(v == nil) {
@@ -30,17 +30,17 @@
     return v;
 }
 
-- (NSNumber *)getNumberForTile:(EGIPoint)tile {
+- (NSNumber *)getNumberForTile:(EGPointI)tile {
     return numi((tile.x + tile.y)*(_mapSize.width + _mapSize.height + 1) + tile.y - tile.x);
 }
 
-- (id)lookupForTile:(EGIPoint)forTile {
+- (id)lookupForTile:(EGPointI)forTile {
     NSNumber * forKey = [self getNumberForTile:forTile];
     id v = [_map objectForKey:forKey];
     return v == nil ? [CNOption none] : v;
 }
 
-- (id)setObject:(id)object forTile:(EGIPoint)forTile {
+- (id)setObject:(id)object forTile:(EGPointI)forTile {
     [_map setObject:object forKey:[self getNumberForTile:forTile]];
     return object;
 }

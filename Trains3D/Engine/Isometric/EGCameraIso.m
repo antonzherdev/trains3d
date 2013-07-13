@@ -1,7 +1,7 @@
 #import "EGCameraIso.h"
 #import "EGMapIso.h"
 
-static inline CGRect calculateViewportSize(EGISize tilesOnScreen, CGSize viewSize) {
+static inline CGRect calculateViewportSize(EGSizeI tilesOnScreen, EGSize viewSize) {
     CGFloat ww = tilesOnScreen.width + tilesOnScreen.height;
     CGFloat tileSize = MIN(viewSize.width / ww, 2*viewSize.height/ ww);
     CGFloat viewportWidth = tileSize * ww;
@@ -11,17 +11,17 @@ static inline CGRect calculateViewportSize(EGISize tilesOnScreen, CGSize viewSiz
 }
 
 @implementation EGCameraIso{
-    EGISize _tilesOnScreen;
-    CGPoint _center;
+    EGSizeI _tilesOnScreen;
+    EGPoint _center;
 }
 @synthesize tilesOnScreen = _tilesOnScreen;
 @synthesize center = _center;
 
-+ (id)cameraIsoWithTilesOnScreen:(EGISize)tilesOnScreen center:(CGPoint)center {
++ (id)cameraIsoWithTilesOnScreen:(EGSizeI)tilesOnScreen center:(EGPoint)center {
     return [[EGCameraIso alloc] initWithTilesOnScreen:tilesOnScreen center:center];
 }
 
-- (id)initWithTilesOnScreen:(EGISize)tilesOnScreen center:(CGPoint)center {
+- (id)initWithTilesOnScreen:(EGSizeI)tilesOnScreen center:(EGPoint)center {
     self = [super init];
     if(self) {
         _tilesOnScreen = tilesOnScreen;
@@ -31,7 +31,7 @@ static inline CGRect calculateViewportSize(EGISize tilesOnScreen, CGSize viewSiz
     return self;
 }
 
-- (void)focusForViewSize:(CGSize)viewSize {
+- (void)focusForViewSize:(EGSize)viewSize {
     CGRect vps = calculateViewportSize(_tilesOnScreen, viewSize);
     glViewport(vps.origin.x, vps.origin.y, vps.size.width, vps.size.height);
 
@@ -50,7 +50,7 @@ static inline CGRect calculateViewportSize(EGISize tilesOnScreen, CGSize viewSiz
     glTranslatef((GLfloat) -_center.x,0, (GLfloat) -_center.y);
 }
 
-- (CGPoint)translateViewPoint:(CGPoint)viewPoint withViewSize:(CGSize)viewSize {
+- (EGPoint)translateViewPoint:(EGPoint)viewPoint withViewSize:(EGSize)viewSize {
     CGRect vps = calculateViewportSize(_tilesOnScreen, viewSize);
     CGFloat x = viewPoint.x - vps.origin.x;
     CGFloat y = viewPoint.y - vps.origin.y;
@@ -58,7 +58,7 @@ static inline CGRect calculateViewportSize(EGISize tilesOnScreen, CGSize viewSiz
     CGFloat vh = vps.size.height;
     CGFloat ww2 = ((CGFloat)_tilesOnScreen.width + _tilesOnScreen.height)/2;
     CGFloat tw = _tilesOnScreen.width;
-    return CGPointMake((x/vw - y/vh)*ww2 + tw/2 - 0.5 + _center.x, (x/vw + y/vh)*ww2 - tw/2 - 0.5 + _center.y);
+    return EGPointMake((x/vw - y/vh)*ww2 + tw/2 - 0.5 + _center.x, (x/vw + y/vh)*ww2 - tw/2 - 0.5 + _center.y);
 }
 
 

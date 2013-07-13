@@ -3,17 +3,17 @@
 #import "EGMap.h"
 #import "EGMapIso.h"
 @implementation TRRail{
-    EGIPoint _tile;
+    EGPointI _tile;
     TRRailForm* _form;
 }
 @synthesize tile = _tile;
 @synthesize form = _form;
 
-+ (id)railWithTile:(EGIPoint)tile form:(TRRailForm*)form {
++ (id)railWithTile:(EGPointI)tile form:(TRRailForm*)form {
     return [[TRRail alloc] initWithTile:tile form:form];
 }
 
-- (id)initWithTile:(EGIPoint)tile form:(TRRailForm*)form {
+- (id)initWithTile:(EGPointI)tile form:(TRRailForm*)form {
     self = [super init];
     if(self) {
         _tile = tile;
@@ -31,7 +31,7 @@
 
 
 @implementation TRSwitch{
-    EGIPoint _tile;
+    EGPointI _tile;
     TRRailConnector* _connector;
     TRRail* _rail1;
     TRRail* _rail2;
@@ -43,11 +43,11 @@
 @synthesize rail2 = _rail2;
 @synthesize firstActive = _firstActive;
 
-+ (id)switchWithTile:(EGIPoint)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2 {
++ (id)switchWithTile:(EGPointI)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2 {
     return [[TRSwitch alloc] initWithTile:tile connector:connector rail1:rail1 rail2:rail2];
 }
 
-- (id)initWithTile:(EGIPoint)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2 {
+- (id)initWithTile:(EGPointI)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2 {
     self = [super init];
     if(self) {
         _tile = tile;
@@ -73,7 +73,7 @@
 
 
 @implementation TRLight{
-    EGIPoint _tile;
+    EGPointI _tile;
     TRRailConnector* _connector;
     BOOL _isGreen;
 }
@@ -81,11 +81,11 @@
 @synthesize connector = _connector;
 @synthesize isGreen = _isGreen;
 
-+ (id)lightWithTile:(EGIPoint)tile connector:(TRRailConnector*)connector {
++ (id)lightWithTile:(EGPointI)tile connector:(TRRailConnector*)connector {
     return [[TRLight alloc] initWithTile:tile connector:connector];
 }
 
-- (id)initWithTile:(EGIPoint)tile connector:(TRRailConnector*)connector {
+- (id)initWithTile:(EGPointI)tile connector:(TRRailConnector*)connector {
     self = [super init];
     if(self) {
         _tile = tile;
@@ -144,15 +144,15 @@
     return countsAtStart < 2 && countsAtEnd < 2;
 }
 
-- (CNChain*)railsInTile:(EGIPoint)tile {
+- (CNChain*)railsInTile:(EGPointI)tile {
     return [_rails filter:^BOOL(TRRail* _) {
-        return EGIPointEq(_.tile, tile);
+        return EGPointIEq(_.tile, tile);
     }];
 }
 
-- (TRSwitch*)switchInTile:(EGIPoint)tile connector:(TRRailConnector*)connector {
+- (TRSwitch*)switchInTile:(EGPointI)tile connector:(TRRailConnector*)connector {
     return [[_switches filter:^BOOL(TRSwitch* _) {
-        return EGIPointEq(_.tile, tile);
+        return EGPointIEq(_.tile, tile);
     }] find:^BOOL(TRSwitch* _) {
         return _.connector == connector;
     }];
@@ -182,11 +182,11 @@
 - (void)maybeBuildLightForRail:(TRRail*)rail connector:(TRRailConnector*)connector {
 }
 
-- (TRRailPointCorrection)moveForLength:(CGFloat)length point:(TRRailPoint)point {
+- (TRRailPointCorrection)moveForLength:(double)length point:(TRRailPoint)point {
     return [self correctPoint:trRailPointAdd(point, length)];
 }
 
-- (TRRail*)activeRailForTile:(EGIPoint)tile connector:(TRRailConnector*)connector {
+- (TRRail*)activeRailForTile:(EGPointI)tile connector:(TRRailConnector*)connector {
     return [[[self switchInTile:tile connector:connector] map:^TRRail*(TRSwitch* _) {
         return [_ activeRail];
     }] getOrElse:^TRRail*() {
@@ -206,7 +206,7 @@
         if(activeRail.form.ordinal != point.form) {
             return correction;
         } else {
-            EGIPoint nextTile = [connector nextTile:point.tile];
+            EGPointI nextTile = [connector nextTile:point.tile];
             TRRailConnector* otherSideConnector = [connector otherSideConnector];
             TRRail* nextRail = [self activeRailForTile:nextTile connector:otherSideConnector];
             if([nextRail isEmpty]) {

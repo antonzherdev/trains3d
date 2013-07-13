@@ -23,7 +23,7 @@
     return self;
 }
 
-- (void)drawWithViewSize:(CGSize)viewSize {
+- (void)drawWithViewSize:(EGSize)viewSize {
     [_layers forEach:^void(EGLayer* _) {
         [_ drawWithViewSize:viewSize];
     }];
@@ -35,7 +35,7 @@
     } withStart:@NO]);
 }
 
-- (void)updateWithDelta:(CGFloat)delta {
+- (void)updateWithDelta:(double)delta {
     [_controller updateWithDelta:delta];
 }
 

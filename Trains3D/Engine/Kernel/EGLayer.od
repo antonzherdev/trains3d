@@ -2,7 +2,7 @@ import EGTypes
 import EGProcessor
 
 class EGLayer(view : EGView, processor : EGProcessor?) {
-    def drawWith(viewSize : CGSize) {
+    def drawWith(viewSize : EGSize) {
         view.camera.focusFor(viewSize)
         view.drawView
     }

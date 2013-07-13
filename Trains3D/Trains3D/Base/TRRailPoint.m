@@ -68,8 +68,8 @@ static NSArray* values;
     }
 }
 
-- (EGIPoint)nextTile:(EGIPoint)tile {
-    return EGIPointMake(tile.x + _x, tile.y + _y);
+- (EGPointI)nextTile:(EGPointI)tile {
+    return EGPointIMake(tile.x + _x, tile.y + _y);
 }
 
 + (TRRailConnector*)left {
@@ -98,8 +98,8 @@ static NSArray* values;
 @implementation TRRailForm{
     TRRailConnector* _start;
     TRRailConnector* _end;
-    CGFloat _length;
-    CGPoint(^_pointFun)(CGFloat);
+    double _length;
+    EGPoint(^_pointFun)(double);
 }
 static TRRailForm* _leftBottom;
 static TRRailForm* _leftRight;
@@ -113,11 +113,11 @@ static NSArray* values;
 @synthesize length = _length;
 @synthesize pointFun = _pointFun;
 
-+ (id)railFormWithOrdinal:(NSUInteger)ordinal name:(NSString*)name start:(TRRailConnector*)start end:(TRRailConnector*)end length:(CGFloat)length pointFun:(CGPoint(^)(CGFloat))pointFun {
++ (id)railFormWithOrdinal:(NSUInteger)ordinal name:(NSString*)name start:(TRRailConnector*)start end:(TRRailConnector*)end length:(double)length pointFun:(EGPoint(^)(double))pointFun {
     return [[TRRailForm alloc] initWithOrdinal:ordinal name:name start:start end:end length:length pointFun:pointFun];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name start:(TRRailConnector*)start end:(TRRailConnector*)end length:(CGFloat)length pointFun:(CGPoint(^)(CGFloat))pointFun {
+- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name start:(TRRailConnector*)start end:(TRRailConnector*)end length:(double)length pointFun:(EGPoint(^)(double))pointFun {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
         _start = start;
@@ -131,23 +131,23 @@ static NSArray* values;
 
 + (void)initialize {
     [super initialize];
-    _leftBottom = [TRRailForm railFormWithOrdinal:0 name:@"leftBottom" start:[TRRailConnector left] end:[TRRailConnector bottom] length:M_PI_4 pointFun:^CGPoint(CGFloat x) {
-        return CGPointMake(-0.5 + 0.5 * sin(x * 2), -0.5 + 0.5 * cos(x * 2));
+    _leftBottom = [TRRailForm railFormWithOrdinal:0 name:@"leftBottom" start:[TRRailConnector left] end:[TRRailConnector bottom] length:M_PI_4 pointFun:^EGPoint(double x) {
+        return EGPointMake(-0.5 + 0.5 * sin(x * 2), -0.5 + 0.5 * cos(x * 2));
     }];
-    _leftRight = [TRRailForm railFormWithOrdinal:1 name:@"leftRight" start:[TRRailConnector left] end:[TRRailConnector right] length:1 pointFun:^CGPoint(CGFloat x) {
-        return CGPointMake(x - 0.5, 0);
+    _leftRight = [TRRailForm railFormWithOrdinal:1 name:@"leftRight" start:[TRRailConnector left] end:[TRRailConnector right] length:1 pointFun:^EGPoint(double x) {
+        return EGPointMake(x - 0.5, 0);
     }];
-    _leftTop = [TRRailForm railFormWithOrdinal:2 name:@"leftTop" start:[TRRailConnector left] end:[TRRailConnector top] length:M_PI_4 pointFun:^CGPoint(CGFloat x) {
-        return CGPointMake(-0.5 + 0.5 * sin(x * 2), 0.5 - 0.5 * cos(x * 2));
+    _leftTop = [TRRailForm railFormWithOrdinal:2 name:@"leftTop" start:[TRRailConnector left] end:[TRRailConnector top] length:M_PI_4 pointFun:^EGPoint(double x) {
+        return EGPointMake(-0.5 + 0.5 * sin(x * 2), 0.5 - 0.5 * cos(x * 2));
     }];
-    _bottomTop = [TRRailForm railFormWithOrdinal:3 name:@"bottomTop" start:[TRRailConnector bottom] end:[TRRailConnector top] length:1 pointFun:^CGPoint(CGFloat x) {
-        return CGPointMake(0, x - 0.5);
+    _bottomTop = [TRRailForm railFormWithOrdinal:3 name:@"bottomTop" start:[TRRailConnector bottom] end:[TRRailConnector top] length:1 pointFun:^EGPoint(double x) {
+        return EGPointMake(0, x - 0.5);
     }];
-    _bottomRight = [TRRailForm railFormWithOrdinal:4 name:@"bottomRight" start:[TRRailConnector bottom] end:[TRRailConnector right] length:M_PI_4 pointFun:^CGPoint(CGFloat x) {
-        return CGPointMake(0.5 - 0.5 * cos(x * 2), -0.5 + 0.5 * sin(x * 2));
+    _bottomRight = [TRRailForm railFormWithOrdinal:4 name:@"bottomRight" start:[TRRailConnector bottom] end:[TRRailConnector right] length:M_PI_4 pointFun:^EGPoint(double x) {
+        return EGPointMake(0.5 - 0.5 * cos(x * 2), -0.5 + 0.5 * sin(x * 2));
     }];
-    _topRight = [TRRailForm railFormWithOrdinal:5 name:@"topRight" start:[TRRailConnector top] end:[TRRailConnector right] length:M_PI_4 pointFun:^CGPoint(CGFloat x) {
-        return CGPointMake(0.5 - 0.5 * cos(x * 2), 0.5 - 0.5 * sin(x * 2));
+    _topRight = [TRRailForm railFormWithOrdinal:5 name:@"topRight" start:[TRRailConnector top] end:[TRRailConnector right] length:M_PI_4 pointFun:^EGPoint(double x) {
+        return EGPointMake(0.5 - 0.5 * cos(x * 2), 0.5 - 0.5 * sin(x * 2));
     }];
     values = (@[_leftBottom, _leftRight, _leftTop, _bottomTop, _bottomRight, _topRight]);
 }
@@ -212,7 +212,7 @@ static NSArray* values;
 @end
 
 
-TRRailPoint trRailPointAdd(TRRailPoint self, CGFloat x) {
+TRRailPoint trRailPointAdd(TRRailPoint self, double x) {
     return TRRailPointMake(self.tile, self.form, self.x + x, self.back);
 }
 TRRailForm* trRailPointGetForm(TRRailPoint self) {
@@ -230,21 +230,21 @@ BOOL trRailPointIsValid(TRRailPoint self) {
     return self.x >= 0 && self.x <= trRailPointGetForm(self).length;
 }
 TRRailPointCorrection trRailPointCorrect(TRRailPoint self) {
-    CGFloat length = trRailPointGetForm(self).length;
+    double length = trRailPointGetForm(self).length;
     if(self.x > length) return TRRailPointCorrectionMake(TRRailPointMake(self.tile, self.form, length, self.back), self.x - length);
     else return TRRailPointCorrectionMake(self, 0);
 }
-CGPoint trRailPointPoint(TRRailPoint self) {
+EGPoint trRailPointPoint(TRRailPoint self) {
     TRRailForm* form = trRailPointGetForm(self);
-    CGFloat x = self.back ? form.length - self.x : self.x;
-    CGPoint(^f)(CGFloat) = form.pointFun;
-    CGPoint p = f(x);
-    return CGPointMake(p.x + self.tile.x, p.y + self.tile.y);
+    double x = self.back ? form.length - self.x : self.x;
+    EGPoint(^f)(double) = form.pointFun;
+    EGPoint p = f(x);
+    return EGPointMake(p.x + self.tile.x, p.y + self.tile.y);
 }
 TRRailPoint trRailPointInvert(TRRailPoint self) {
     return TRRailPointMake(self.tile, self.form, trRailPointGetForm(self).length - self.x, !(self.back));
 }
-EGIPoint trRailPointNextTile(TRRailPoint self) {
+EGPointI trRailPointNextTile(TRRailPoint self) {
     return [trRailPointEndConnector(self) nextTile:self.tile];
 }
 TRRailPoint trRailPointCorrectionAddErrorToPoint(TRRailPointCorrection self) {

@@ -28,16 +28,16 @@
 }
 
 - (BOOL)mouseDownEvent:(EGEvent*)event {
-    CGPoint location = [event location];
-    EGIPoint tile = egpRound(location);
-    CGPoint relPoint = egpSub(location, egipFloat(tile));
+    EGPoint location = [event location];
+    EGPointI tile = egPointIApply(location);
+    EGPoint relPoint = egPointSub(location, egPointApply(tile));
     _downedSwitch = [[self connectorForPoint:relPoint] flatMap:^id(TRRailConnector* _) {
         return [_level.railroad switchInTile:tile connector:_];
     }];
     return [_downedSwitch isDefined];
 }
 
-- (TRRailConnector*)connectorForPoint:(CGPoint)point {
+- (TRRailConnector*)connectorForPoint:(EGPoint)point {
     if(-0.1 < point.x && point.x < 0.1) {
         if(point.y < -0.3) {
             return [TRRailConnector bottom];

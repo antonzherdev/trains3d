@@ -17,14 +17,14 @@
 }
 
 - (void)drawTrain:(TRTrain*)train {
-    [train.color gl];
+    [train.color set];
     [train.cars forEach:^void(TRCar* car) {
         glPushMatrix();
-        CGPoint h = trRailPointPoint(car.head);
-        CGPoint t = trRailPointPoint(car.tail);
-        CGPoint mid = egpMidpoint(h, t);
+        EGPoint h = trRailPointPoint(car.head);
+        EGPoint t = trRailPointPoint(car.tail);
+        EGPoint mid = egPointMid(h, t);
         egTranslate(mid.x, mid.y, 0);
-        CGFloat angle = 90 + 180.0 / M_PI * egpToAngle(egpSub(t, h));
+        double angle = 90 + 180.0 / M_PI * egPointAngle(egPointSub(t, h));
         egRotate(angle, 0, 0, 1);
         egRotate(90, 1, 0, 0);
         egDrawJasModel(Car);

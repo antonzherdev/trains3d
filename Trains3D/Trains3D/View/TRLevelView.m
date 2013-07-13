@@ -30,7 +30,7 @@
         _cityView = [TRCityView cityView];
         _railroadView = [TRRailroadView railroadView];
         _trainView = [TRTrainView trainView];
-        _camera = [EGCameraIso cameraIsoWithTilesOnScreen:_level.map.size center:CGPointMake(0, 0)];
+        _camera = [EGCameraIso cameraIsoWithTilesOnScreen:_level.map.size center:EGPointMake(0, 0)];
     }
     
     return self;

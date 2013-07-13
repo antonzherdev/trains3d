@@ -28,8 +28,8 @@ static NSArray* values;
     values = (@[_orange, _green, _purple]);
 }
 
-- (void)gl {
-    egColor(_color);
+- (void)set {
+    egColorSet(_color);
 }
 
 + (TRColor*)orange {

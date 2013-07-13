@@ -10,36 +10,36 @@
 @class TRRailroadBuilder;
 
 @interface TRRail : NSObject
-@property (nonatomic, readonly) EGIPoint tile;
+@property (nonatomic, readonly) EGPointI tile;
 @property (nonatomic, readonly) TRRailForm* form;
 
-+ (id)railWithTile:(EGIPoint)tile form:(TRRailForm*)form;
-- (id)initWithTile:(EGIPoint)tile form:(TRRailForm*)form;
++ (id)railWithTile:(EGPointI)tile form:(TRRailForm*)form;
+- (id)initWithTile:(EGPointI)tile form:(TRRailForm*)form;
 - (BOOL)hasConnector:(TRRailConnector*)connector;
 @end
 
 
 @interface TRSwitch : NSObject
-@property (nonatomic, readonly) EGIPoint tile;
+@property (nonatomic, readonly) EGPointI tile;
 @property (nonatomic, readonly) TRRailConnector* connector;
 @property (nonatomic, readonly) TRRail* rail1;
 @property (nonatomic, readonly) TRRail* rail2;
 @property (nonatomic) BOOL firstActive;
 
-+ (id)switchWithTile:(EGIPoint)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
-- (id)initWithTile:(EGIPoint)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
++ (id)switchWithTile:(EGPointI)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
+- (id)initWithTile:(EGPointI)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
 - (TRRail*)activeRail;
 - (void)turn;
 @end
 
 
 @interface TRLight : NSObject
-@property (nonatomic, readonly) EGIPoint tile;
+@property (nonatomic, readonly) EGPointI tile;
 @property (nonatomic, readonly) TRRailConnector* connector;
 @property (nonatomic) BOOL isGreen;
 
-+ (id)lightWithTile:(EGIPoint)tile connector:(TRRailConnector*)connector;
-- (id)initWithTile:(EGIPoint)tile connector:(TRRailConnector*)connector;
++ (id)lightWithTile:(EGPointI)tile connector:(TRRailConnector*)connector;
+- (id)initWithTile:(EGPointI)tile connector:(TRRailConnector*)connector;
 - (void)turn;
 @end
 
@@ -54,9 +54,9 @@
 + (id)railroadWithMap:(EGMapSso*)map;
 - (id)initWithMap:(EGMapSso*)map;
 - (BOOL)canAddRail:(TRRail*)rail;
-- (TRSwitch*)switchInTile:(EGIPoint)tile connector:(TRRailConnector*)connector;
+- (TRSwitch*)switchInTile:(EGPointI)tile connector:(TRRailConnector*)connector;
 - (BOOL)tryAddRail:(TRRail*)rail;
-- (TRRailPointCorrection)moveForLength:(CGFloat)length point:(TRRailPoint)point;
+- (TRRailPointCorrection)moveForLength:(double)length point:(TRRailPoint)point;
 @end
 
 

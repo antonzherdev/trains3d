@@ -28,7 +28,7 @@
     egVertex2(0, -0.05);
     glEnd();
     egTranslate(0, 0, -0.001);
-    [city.color gl];
+    [city.color set];
     egTranslate(0.3, -0.3, 0);
     glutSolidCube(0.15);
     egTranslate(-0.3, 0, 0);

@@ -6,7 +6,7 @@
 @interface TRColor : ODEnum
 @property (nonatomic, readonly) EGColor color;
 
-- (void)gl;
+- (void)set;
 + (TRColor*)orange;
 + (TRColor*)green;
 + (TRColor*)purple;

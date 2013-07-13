@@ -25,7 +25,7 @@
 - (id)initWithMap:(EGMapSso*)map;
 - (void)createNewCity;
 - (void)runSample;
-- (void)updateWithDelta:(CGFloat)delta;
+- (void)updateWithDelta:(double)delta;
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch;
 @end
 

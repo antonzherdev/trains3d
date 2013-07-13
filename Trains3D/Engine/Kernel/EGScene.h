@@ -14,9 +14,9 @@
 
 + (id)sceneWithController:(id)controller layers:(NSArray*)layers;
 - (id)initWithController:(id)controller layers:(NSArray*)layers;
-- (void)drawWithViewSize:(CGSize)viewSize;
+- (void)drawWithViewSize:(EGSize)viewSize;
 - (BOOL)processEvent:(EGEvent*)event;
-- (void)updateWithDelta:(CGFloat)delta;
+- (void)updateWithDelta:(double)delta;
 @end
 
 

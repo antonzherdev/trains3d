@@ -4,7 +4,7 @@
 
 @interface EGOpenGLView : NSOpenGLView
 @property (readonly, nonatomic) EGDirector * director;
-@property (readonly, nonatomic) CGSize viewSize;
+@property (readonly, nonatomic) EGSize viewSize;
 
 - (void)lockOpenGLContext;
 

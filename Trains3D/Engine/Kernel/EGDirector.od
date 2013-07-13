@@ -14,7 +14,7 @@ class EGDirector {
     static var current : EGDirector = self
     val context = EGContext
 
-    def drawWith(size : CGSize) {
+    def drawWith(size : EGSize) {
         egClear
         glEnable(GL_DEPTH_TEST)
         scene.drawWith(size)

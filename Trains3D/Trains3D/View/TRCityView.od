@@ -22,7 +22,7 @@ class TRCityView {
         }
 
         {
-            city.color.gl
+            city.color.set
             egTranslate(0.3, -0.3, 0)
             glutSolidCube(0.15)
 

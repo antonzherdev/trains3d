@@ -13,7 +13,7 @@ typedef struct TRRailPointCorrection TRRailPointCorrection;
 
 + (TRRailConnector*)connectorForX:(NSInteger)x y:(NSInteger)y;
 - (TRRailConnector*)otherSideConnector;
-- (EGIPoint)nextTile:(EGIPoint)tile;
+- (EGPointI)nextTile:(EGPointI)tile;
 + (TRRailConnector*)left;
 + (TRRailConnector*)bottom;
 + (TRRailConnector*)top;
@@ -25,8 +25,8 @@ typedef struct TRRailPointCorrection TRRailPointCorrection;
 @interface TRRailForm : ODEnum
 @property (nonatomic, readonly) TRRailConnector* start;
 @property (nonatomic, readonly) TRRailConnector* end;
-@property (nonatomic, readonly) CGFloat length;
-@property (nonatomic, readonly) CGPoint(^pointFun)(CGFloat);
+@property (nonatomic, readonly) double length;
+@property (nonatomic, readonly) EGPoint(^pointFun)(double);
 
 + (TRRailForm*)formForConnector1:(TRRailConnector*)connector1 connector2:(TRRailConnector*)connector2;
 + (TRRailForm*)leftBottom;
@@ -40,12 +40,12 @@ typedef struct TRRailPointCorrection TRRailPointCorrection;
 
 
 struct TRRailPoint {
-    EGIPoint tile;
+    EGPointI tile;
     NSUInteger form;
-    CGFloat x;
+    double x;
     BOOL back;
 };
-static inline TRRailPoint TRRailPointMake(EGIPoint tile, NSUInteger form, CGFloat x, BOOL back) {
+static inline TRRailPoint TRRailPointMake(EGPointI tile, NSUInteger form, double x, BOOL back) {
     TRRailPoint ret;
     ret.tile = tile;
     ret.form = form;
@@ -54,23 +54,23 @@ static inline TRRailPoint TRRailPointMake(EGIPoint tile, NSUInteger form, CGFloa
     return ret;
 }
 static inline BOOL TRRailPointEq(TRRailPoint s1, TRRailPoint s2) {
-    return EGIPointEq(s1.tile, s2.tile) && s1.form == s2.form && eqf(s1.x, s2.x) && s1.back == s2.back;
+    return EGPointIEq(s1.tile, s2.tile) && s1.form == s2.form && eqf(s1.x, s2.x) && s1.back == s2.back;
 }
-TRRailPoint trRailPointAdd(TRRailPoint self, CGFloat x);
+TRRailPoint trRailPointAdd(TRRailPoint self, double x);
 TRRailForm* trRailPointGetForm(TRRailPoint self);
 TRRailConnector* trRailPointStartConnector(TRRailPoint self);
 TRRailConnector* trRailPointEndConnector(TRRailPoint self);
 BOOL trRailPointIsValid(TRRailPoint self);
 TRRailPointCorrection trRailPointCorrect(TRRailPoint self);
-CGPoint trRailPointPoint(TRRailPoint self);
+EGPoint trRailPointPoint(TRRailPoint self);
 TRRailPoint trRailPointInvert(TRRailPoint self);
-EGIPoint trRailPointNextTile(TRRailPoint self);
+EGPointI trRailPointNextTile(TRRailPoint self);
 
 struct TRRailPointCorrection {
     TRRailPoint point;
-    CGFloat error;
+    double error;
 };
-static inline TRRailPointCorrection TRRailPointCorrectionMake(TRRailPoint point, CGFloat error) {
+static inline TRRailPointCorrection TRRailPointCorrectionMake(TRRailPoint point, double error) {
     TRRailPointCorrection ret;
     ret.point = point;
     ret.error = error;

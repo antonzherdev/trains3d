@@ -9,22 +9,22 @@
     __weak TRLevel* _level;
     TRColor* _color;
     NSArray* _cars;
-    CGFloat _speed;
+    double _speed;
     TRRailPoint _head;
     BOOL _back;
-    CGFloat _carsDelta;
-    CGFloat _length;
+    double _carsDelta;
+    double _length;
 }
 @synthesize level = _level;
 @synthesize color = _color;
 @synthesize cars = _cars;
 @synthesize speed = _speed;
 
-+ (id)trainWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(CGFloat)speed {
++ (id)trainWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(double)speed {
     return [[TRTrain alloc] initWithLevel:level color:color cars:cars speed:speed];
 }
 
-- (id)initWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(CGFloat)speed {
+- (id)initWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(double)speed {
     self = [super init];
     if(self) {
         _level = level;
@@ -56,11 +56,11 @@
     } withStart:val(trRailPointInvert(_head))];
 }
 
-- (CGPoint)movePoint:(CGPoint)point length:(CGFloat)length {
-    return CGPointMake(point.x, point.y + length);
+- (EGPoint)movePoint:(EGPoint)point length:(double)length {
+    return EGPointMake(point.x, point.y + length);
 }
 
-- (void)updateWithDelta:(CGFloat)delta {
+- (void)updateWithDelta:(double)delta {
     [self correctCorrection:[_level.railroad moveForLength:delta * _speed point:_head]];
 }
 
@@ -89,10 +89,10 @@
 }
 
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch {
-    EGIPoint tile = theSwitch.tile;
-    EGIPoint nextTile = [theSwitch.connector nextTile:tile];
+    EGPointI tile = theSwitch.tile;
+    EGPointI nextTile = [theSwitch.connector nextTile:tile];
     return [[_cars find:^BOOL(TRCar* _) {
-        return (EGIPointEq(_.head.tile, tile) && EGIPointEq(_.nextHead.tile, nextTile)) || (EGIPointEq(_.head.tile, nextTile) && EGIPointEq(_.nextHead.tile, tile));
+        return (EGPointIEq(_.head.tile, tile) && EGPointIEq(_.nextHead.tile, nextTile)) || (EGPointIEq(_.head.tile, nextTile) && EGPointIEq(_.nextHead.tile, tile));
     }] isDefined];
 }
 
@@ -118,7 +118,7 @@
     return self;
 }
 
-- (CGFloat)length {
+- (double)length {
     return 0.6;
 }
 

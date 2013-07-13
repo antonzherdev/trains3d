@@ -4,26 +4,26 @@
 #import "EGMapIso.h"
 
 #define checkCorrection [[theValue(TRRailPointCorrectionEq(r, e)) should] beTrue]
-#define rpm(tx, ty, form, x, back) TRRailPointMake(EGIPointMake(tx, ty), [TRRailForm form].ordinal, x, back)
+#define rpm(tx, ty, form, x, back) TRRailPointMake(EGPointIMake(tx, ty), [TRRailForm form].ordinal, x, back)
 #define cor(p, e) TRRailPointCorrectionMake(p, e)
 #define zcor(p) TRRailPointCorrectionMake(p, 0)
-#define zrpm(tx, ty, form, x, back) zcor(TRRailPointMake(EGIPointMake(tx, ty), [TRRailForm form].ordinal, x, back))
+#define zrpm(tx, ty, form, x, back) zcor(TRRailPointMake(EGPointIMake(tx, ty), [TRRailForm form].ordinal, x, back))
 
 SPEC_BEGIN(TRRailroadSpec)
     describe(@"TRRailroad", ^{
         it(@"should move point", ^{
-            EGMapSso *map = [EGMapSso mapSsoWithSize:EGISizeMake(10, 7)];
+            EGMapSso *map = [EGMapSso mapSsoWithSize:EGSizeIMake(10, 7)];
             TRRailroad * railroad = [TRRailroad railroadWithMap:map];
 
-            [railroad tryAddRail:[TRRail railWithTile:egip(0, 0) form:[TRRailForm leftRight]]];
-            [railroad tryAddRail:[TRRail railWithTile:egip(1, 0) form:[TRRailForm leftBottom]]];
-            [railroad tryAddRail:[TRRail railWithTile:egip(1, -1) form:[TRRailForm topRight]]];
-            [railroad tryAddRail:[TRRail railWithTile:egip(2, -1) form:[TRRailForm leftTop]]];
-            [railroad tryAddRail:[TRRail railWithTile:egip(2, 0) form:[TRRailForm bottomTop]]];
-            [railroad tryAddRail:[TRRail railWithTile:egip(2, 1) form:[TRRailForm bottomRight]]];
-            [railroad tryAddRail:[TRRail railWithTile:egip(3, 1) form:[TRRailForm leftTop]]];
-            [railroad tryAddRail:[TRRail railWithTile:egip(3, 2) form:[TRRailForm leftBottom]]];
-            [railroad tryAddRail:[TRRail railWithTile:egip(2, 2) form:[TRRailForm leftRight]]];
+            [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(0, 0) form:[TRRailForm leftRight]]];
+            [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(1, 0) form:[TRRailForm leftBottom]]];
+            [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(1, -1) form:[TRRailForm topRight]]];
+            [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(2, -1) form:[TRRailForm leftTop]]];
+            [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(2, 0) form:[TRRailForm bottomTop]]];
+            [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(2, 1) form:[TRRailForm bottomRight]]];
+            [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(3, 1) form:[TRRailForm leftTop]]];
+            [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(3, 2) form:[TRRailForm leftBottom]]];
+            [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(2, 2) form:[TRRailForm leftRight]]];
 
             TRRailPoint p0 = rpm(0, 0, leftRight, 0, NO);
             TRRailPointCorrection r = [railroad moveForLength:0.5 point:p0];
@@ -48,39 +48,39 @@ SPEC_BEGIN(TRRailroadSpec)
             checkCorrection;
         });
         it(@"should add switches", ^{
-            EGMapSso *map = [EGMapSso mapSsoWithSize:EGISizeMake(10, 7)];
+            EGMapSso *map = [EGMapSso mapSsoWithSize:EGSizeIMake(10, 7)];
             TRRailroad * railroad = [TRRailroad railroadWithMap:map];
 
-            TRRail *xRail = [TRRail railWithTile:egip(2, 0) form:[TRRailForm leftRight]];
+            TRRail *xRail = [TRRail railWithTile:EGPointIMake(2, 0) form:[TRRailForm leftRight]];
             [railroad tryAddRail:xRail];
-            TRRail *yRail = [TRRail railWithTile:egip(2, 0) form:[TRRailForm bottomTop]];
+            TRRail *yRail = [TRRail railWithTile:EGPointIMake(2, 0) form:[TRRailForm bottomTop]];
             [railroad tryAddRail:yRail];
             [[theValue([[railroad rails] count]) should] equal:@2];
             [[theValue([[railroad switches] count]) should] equal:@0];
 
-            TRRail *turnRail = [TRRail railWithTile:egip(2, 0) form:[TRRailForm leftTop]];
+            TRRail *turnRail = [TRRail railWithTile:EGPointIMake(2, 0) form:[TRRailForm leftTop]];
             [railroad tryAddRail:turnRail];
             [[theValue([[railroad rails] count]) should] equal:@3];
             [[theValue([[railroad switches] count]) should] equal:@2];
             
             TRSwitch * theSwitch = railroad.switches[0];
-            [[theValue(EGIPointEq(theSwitch.tile, egip(2, 0))) should] beTrue];
+            [[theValue(EGPointIEq(theSwitch.tile, EGPointIMake(2, 0))) should] beTrue];
             [[theSwitch.connector should] equal:[TRRailConnector left]];
             [[theSwitch.rail1 should] equal:xRail];
             [[theSwitch.rail2 should] equal:turnRail];
 
             theSwitch = railroad.switches[1];
-            [[theValue(EGIPointEq(theSwitch.tile, egip(2, 0))) should] beTrue];
+            [[theValue(EGPointIEq(theSwitch.tile, EGPointIMake(2, 0))) should] beTrue];
             [[theSwitch.connector should] equal:[TRRailConnector top]];
             [[theSwitch.rail1 should] equal:yRail];
             [[theSwitch.rail2 should] equal:turnRail];
         });
         it(@"should choose active switch and should lock moving through closing switch", ^{
-            EGMapSso *map = [EGMapSso mapSsoWithSize:EGISizeMake(10, 7)];
+            EGMapSso *map = [EGMapSso mapSsoWithSize:EGSizeIMake(10, 7)];
             TRRailroad * railroad = [TRRailroad railroadWithMap:map];
-            [railroad tryAddRail:[TRRail railWithTile:egip(2, 0) form:[TRRailForm leftRight]]];
-            [railroad tryAddRail:[TRRail railWithTile:egip(3, 0) form:[TRRailForm leftTop]]];
-            [railroad tryAddRail:[TRRail railWithTile:egip(3, 0) form:[TRRailForm leftRight]]];
+            [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(2, 0) form:[TRRailForm leftRight]]];
+            [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(3, 0) form:[TRRailForm leftTop]]];
+            [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(3, 0) form:[TRRailForm leftRight]]];
 
             TRRailPoint p0 = rpm(2, 0, leftRight, 0, NO);
             TRRailPointCorrection r = [railroad moveForLength:1.2 point:p0];

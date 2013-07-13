@@ -1,9 +1,9 @@
 import EGTypes
 
-stub class EGMapSsoTileIndex<T>(mapSize : EGISize) {
-    def lookupFor(tile : EGIPoint) : T?
-    def lookupWith(def : () -> T, forTile : EGIPoint) : T
-    def set(object : T, forTile : EGIPoint) : T
+stub class EGMapSsoTileIndex<T>(mapSize : EGSizeI) {
+    def lookupFor(tile : EGPointI) : T?
+    def lookupWith(def : () -> T, forTile : EGPointI) : T
+    def set(object : T, forTile : EGPointI) : T
     def values : [T]
     def clear
 }

@@ -4,13 +4,13 @@
 @class EGMapSsoTileIndex;
 
 @interface EGMapSsoTileIndex : NSObject
-@property (nonatomic, readonly) EGISize mapSize;
+@property (nonatomic, readonly) EGSizeI mapSize;
 
-+ (id)mapSsoTileIndexWithMapSize:(EGISize)mapSize;
-- (id)initWithMapSize:(EGISize)mapSize;
-- (id)lookupWithDef:(id(^)())def forTile:(EGIPoint)forTile;
-- (id)lookupForTile:(EGIPoint)forTile;
-- (id)setObject:(id)object forTile:(EGIPoint)forTile;
++ (id)mapSsoTileIndexWithMapSize:(EGSizeI)mapSize;
+- (id)initWithMapSize:(EGSizeI)mapSize;
+- (id)lookupWithDef:(id(^)())def forTile:(EGPointI)forTile;
+- (id)lookupForTile:(EGPointI)forTile;
+- (id)setObject:(id)object forTile:(EGPointI)forTile;
 - (NSArray*)values;
 - (void)clear;
 @end

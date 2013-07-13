@@ -4,18 +4,18 @@
 @class EGMapSso;
 
 @interface EGMapSso : NSObject
-@property (nonatomic, readonly) EGISize size;
-@property (nonatomic, readonly) EGIRect limits;
+@property (nonatomic, readonly) EGSizeI size;
+@property (nonatomic, readonly) EGRectI limits;
 @property (nonatomic, readonly) NSArray* fullTiles;
 @property (nonatomic, readonly) NSArray* partialTiles;
 
-+ (id)mapSsoWithSize:(EGISize)size;
-- (id)initWithSize:(EGISize)size;
-- (BOOL)isFullTile:(EGIPoint)tile;
-- (BOOL)isPartialTile:(EGIPoint)tile;
++ (id)mapSsoWithSize:(EGSizeI)size;
+- (id)initWithSize:(EGSizeI)size;
+- (BOOL)isFullTile:(EGPointI)tile;
+- (BOOL)isPartialTile:(EGPointI)tile;
 - (void)drawLayout;
 - (void)drawPlane;
-- (EGIRect)cutRectForTile:(EGIPoint)tile;
+- (EGRectI)cutRectForTile:(EGPointI)tile;
 @end
 
 
