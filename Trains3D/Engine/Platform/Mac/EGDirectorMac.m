@@ -50,7 +50,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 }
 
 - (void)start {
-    if(self.started) return;
+    if(self.isStarted) return;
 
     // Create a display link capable of being used with all active displays
     CVDisplayLinkCreateWithActiveCGDisplays(&_displayLink);
@@ -71,7 +71,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 }
 
 - (void)stop {
-    if(!self.started) return;
+    if(!self.isStarted) return;
 
 
     if( _displayLink ) {

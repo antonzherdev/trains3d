@@ -8,8 +8,8 @@ import EGProcessor
 
 class EGDirector {
     var scene : EGScene
-    var started = false | private set
-    var paused = false | private set
+    private var _isStarted = false
+    private var _isPaused = false
     val time : EGTime = EGTime
     static var current : EGDirector = self
     val context = EGContext
@@ -19,29 +19,30 @@ class EGDirector {
         glEnable(GL_DEPTH_TEST)
         scene.drawWith(size)
         glDisable(GL_DEPTH_TEST)
-        stat.draw
+        _stat.for(_.draw)
     }
 
     def process(event : EGEvent) {
         scene.process(event)
     }
 
+    def isStarted = _isStarted
     def start {
-        started = true
+        _isStarted = true
         time.start
     }
-
     def stop {
-        started = false
+        _isStarted = false
     }
 
+    def isPaused = _isPaused
     def pause {
-        paused = true
+        _isPaused = true
     }
 
     def resume {
-        if(paused) {
-            paused = false
+        if(_isPaused) {
+            _isPaused = false
             time.start
         }
     }
@@ -49,13 +50,12 @@ class EGDirector {
     def tick {
         time.tick
         scene.updateWith(time.delta)
-        stat.tickWith(delta = time.delta)
+        _stat.for(_.tickWith(time.delta))
     }
 
-    var stat : EGStat | private set
-    var displayStats : bool |
-        get = stat == nil
-        set = {
-            stat = if(displayStats) EGStat else nil
-        }
+    private var _stat : EGStat? = nil
+    def stat = _stat
+    def isDisplayingStats = _stat.isDefined
+    def displayStats {_stat = EGStat}
+    def cancelDisplayingStats {_stat = nil}
 }

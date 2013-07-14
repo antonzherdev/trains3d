@@ -18,11 +18,11 @@
 @interface TRLevel : NSObject
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRRailroad* railroad;
-@property (nonatomic, readonly) NSArray* cities;
-@property (nonatomic, readonly) NSArray* trains;
 
 + (id)levelWithMap:(EGMapSso*)map;
 - (id)initWithMap:(EGMapSso*)map;
+- (NSArray*)cities;
+- (NSArray*)trains;
 - (void)createNewCity;
 - (void)runSample;
 - (void)updateWithDelta:(double)delta;

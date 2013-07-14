@@ -46,13 +46,13 @@
 
 @interface TRRailroad : NSObject
 @property (nonatomic, readonly) EGMapSso* map;
-@property (nonatomic, readonly) NSArray* rails;
-@property (nonatomic, readonly) NSArray* switches;
-@property (nonatomic, readonly) NSArray* lights;
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
 
 + (id)railroadWithMap:(EGMapSso*)map;
 - (id)initWithMap:(EGMapSso*)map;
+- (NSArray*)rails;
+- (NSArray*)switches;
+- (NSArray*)lights;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRSwitch*)switchInTile:(EGPointI)tile connector:(TRRailConnector*)connector;
 - (BOOL)tryAddRail:(TRRail*)rail;
@@ -62,10 +62,10 @@
 
 @interface TRRailroadBuilder : NSObject
 @property (nonatomic, readonly, weak) TRRailroad* railroad;
-@property (nonatomic, readonly) TRRail* rail;
 
 + (id)railroadBuilderWithRailroad:(TRRailroad*)railroad;
 - (id)initWithRailroad:(TRRailroad*)railroad;
+- (TRRail*)rail;
 - (BOOL)tryBuildRail:(TRRail*)rail;
 - (void)clear;
 - (void)fix;

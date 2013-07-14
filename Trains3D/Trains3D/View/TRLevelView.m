@@ -38,11 +38,11 @@
 
 - (void)drawView {
     [_backgroundView drawLevel:_level];
-    [_level.cities forEach:^void(TRCity* city) {
+    [[_level cities] forEach:^void(TRCity* city) {
         [_cityView drawCity:city];
     }];
     [_railroadView drawRailroad:_level.railroad];
-    [_level.trains forEach:^void(TRTrain* train) {
+    [[_level trains] forEach:^void(TRTrain* train) {
         [_trainView drawTrain:train];
     }];
     egColor3(1.0, 1.0, 1.0);

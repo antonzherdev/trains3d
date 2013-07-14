@@ -105,15 +105,12 @@
 
 @implementation TRRailroad{
     EGMapSso* _map;
-    NSArray* _rails;
-    NSArray* _switches;
-    NSArray* _lights;
+    NSArray* __rails;
+    NSArray* __switches;
+    NSArray* __lights;
     TRRailroadBuilder* _builder;
 }
 @synthesize map = _map;
-@synthesize rails = _rails;
-@synthesize switches = _switches;
-@synthesize lights = _lights;
 @synthesize builder = _builder;
 
 + (id)railroadWithMap:(EGMapSso*)map {
@@ -124,13 +121,25 @@
     self = [super init];
     if(self) {
         _map = map;
-        _rails = (@[]);
-        _switches = (@[]);
-        _lights = (@[]);
+        __rails = (@[]);
+        __switches = (@[]);
+        __lights = (@[]);
         _builder = [TRRailroadBuilder railroadBuilderWithRailroad:self];
     }
     
     return self;
+}
+
+- (NSArray*)rails {
+    return __rails;
+}
+
+- (NSArray*)switches {
+    return __switches;
+}
+
+- (NSArray*)lights {
+    return __lights;
 }
 
 - (BOOL)canAddRail:(TRRail*)rail {
@@ -145,13 +154,13 @@
 }
 
 - (CNChain*)railsInTile:(EGPointI)tile {
-    return [_rails filter:^BOOL(TRRail* _) {
+    return [__rails filter:^BOOL(TRRail* _) {
         return EGPointIEq(_.tile, tile);
     }];
 }
 
 - (TRSwitch*)switchInTile:(EGPointI)tile connector:(TRRailConnector*)connector {
-    return [[_switches filter:^BOOL(TRSwitch* _) {
+    return [[__switches filter:^BOOL(TRSwitch* _) {
         return EGPointIEq(_.tile, tile);
     }] find:^BOOL(TRSwitch* _) {
         return _.connector == connector;
@@ -164,7 +173,7 @@
         [self maybeBuildSwitchForRail:rail connector:rail.form.end];
         [self maybeBuildLightForRail:rail connector:rail.form.start];
         [self maybeBuildLightForRail:rail connector:rail.form.end];
-        _rails = [_rails arrayByAddingObject:rail];
+        __rails = [__rails arrayByAddingObject:rail];
         return YES;
     } else {
         return NO;
@@ -175,7 +184,7 @@
     [[[self railsInTile:rail.tile] filter:^BOOL(TRRail* _) {
         return [_ hasConnector:connector];
     }] forEach:^void(TRRail* otherRail) {
-        _switches = [_switches arrayByAddingObject:[TRSwitch switchWithTile:rail.tile connector:connector rail1:otherRail rail2:rail]];
+        __switches = [__switches arrayByAddingObject:[TRSwitch switchWithTile:rail.tile connector:connector rail1:otherRail rail2:rail]];
     }];
 }
 
@@ -225,10 +234,9 @@
 
 @implementation TRRailroadBuilder{
     __weak TRRailroad* _railroad;
-    TRRail* _rail;
+    TRRail* __rail;
 }
 @synthesize railroad = _railroad;
-@synthesize rail = _rail;
 
 + (id)railroadBuilderWithRailroad:(TRRailroad*)railroad {
     return [[TRRailroadBuilder alloc] initWithRailroad:railroad];
@@ -238,15 +246,19 @@
     self = [super init];
     if(self) {
         _railroad = railroad;
-        _rail = [CNOption none];
+        __rail = [CNOption none];
     }
     
     return self;
 }
 
+- (TRRail*)rail {
+    return __rail;
+}
+
 - (BOOL)tryBuildRail:(TRRail*)rail {
     if([_railroad canAddRail:rail]) {
-        _rail = [CNOption opt:rail];
+        __rail = [CNOption opt:rail];
         return YES;
     } else {
         return NO;
@@ -254,14 +266,14 @@
 }
 
 - (void)clear {
-    _rail = [CNOption none];
+    __rail = [CNOption none];
 }
 
 - (void)fix {
-    [_rail forEach:^void(TRRail* r) {
+    [__rail forEach:^void(TRRail* r) {
         [_railroad tryAddRail:r];
     }];
-    _rail = [CNOption none];
+    __rail = [CNOption none];
 }
 
 @end

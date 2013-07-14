@@ -8,19 +8,16 @@
 #import "EGProcessor.h"
 @implementation EGDirector{
     EGScene* _scene;
-    BOOL _started;
-    BOOL _paused;
+    BOOL __isStarted;
+    BOOL __isPaused;
     EGTime* _time;
     EGContext* _context;
-    EGStat* _stat;
+    EGStat* __stat;
 }
 static EGDirector* _current;
 @synthesize scene = _scene;
-@synthesize started = _started;
-@synthesize paused = _paused;
 @synthesize time = _time;
 @synthesize context = _context;
-@synthesize stat = _stat;
 
 + (id)director {
     return [[EGDirector alloc] init];
@@ -29,11 +26,12 @@ static EGDirector* _current;
 - (id)init {
     self = [super init];
     if(self) {
-        _started = NO;
-        _paused = NO;
+        __isStarted = NO;
+        __isPaused = NO;
         _time = [EGTime time];
         _current = self;
         _context = [EGContext context];
+        __stat = [CNOption none];
     }
     
     return self;
@@ -44,29 +42,39 @@ static EGDirector* _current;
     glEnable(GL_DEPTH_TEST);
     [_scene drawWithViewSize:size];
     glDisable(GL_DEPTH_TEST);
-    [_stat draw];
+    [__stat forEach:^void(EGStat* _) {
+        [_ draw];
+    }];
 }
 
 - (void)processEvent:(EGEvent*)event {
     [_scene processEvent:event];
 }
 
+- (BOOL)isStarted {
+    return __isStarted;
+}
+
 - (void)start {
-    _started = YES;
+    __isStarted = YES;
     [_time start];
 }
 
 - (void)stop {
-    _started = NO;
+    __isStarted = NO;
+}
+
+- (BOOL)isPaused {
+    return __isPaused;
 }
 
 - (void)pause {
-    _paused = YES;
+    __isPaused = YES;
 }
 
 - (void)resume {
-    if(_paused) {
-        _paused = NO;
+    if(__isPaused) {
+        __isPaused = NO;
         [_time start];
     }
 }
@@ -74,15 +82,25 @@ static EGDirector* _current;
 - (void)tick {
     [_time tick];
     [_scene updateWithDelta:_time.delta];
-    [_stat tickWithDelta:_time.delta];
+    [__stat forEach:^void(EGStat* _) {
+        [_ tickWithDelta:_time.delta];
+    }];
 }
 
-- (BOOL)displayStats {
-    return _stat == nil;
+- (EGStat*)stat {
+    return __stat;
 }
 
-- (void)setDisplayStats:(BOOL)displayStats {
-    _stat = displayStats ? [EGStat stat] : nil;
+- (BOOL)isDisplayingStats {
+    return [__stat isDefined];
+}
+
+- (void)displayStats {
+    __stat = [CNOption opt:[EGStat stat]];
+}
+
+- (void)cancelDisplayingStats {
+    __stat = [CNOption none];
 }
 
 + (EGDirector*)current {

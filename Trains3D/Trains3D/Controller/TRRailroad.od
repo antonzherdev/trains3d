@@ -27,9 +27,12 @@ class TRLight(tile : EGPointI, connector : TRRailConnector) {
 }
 
 class TRRailroad(map : EGMapSso) {
-    var rails : [TRRail] = [] | private set
-    var switches : [TRSwitch] = [] | private set
-    var lights : [TRLight] = [] | private set
+    private var _rails : [TRRail] = []
+    def rails = _rails
+    private var _switches : [TRSwitch] = []
+    def switches = _switches
+    private var _lights : [TRLight] = []
+    def lights = _lights
     val builder = TRRailroadBuilder(self)
 
     def canAdd(rail : TRRail) : bool = {
@@ -40,9 +43,9 @@ class TRRailroad(map : EGMapSso) {
         countsAtStart < 2 &&  countsAtEnd < 2
     }
 
-    private def railsIn(tile : EGPointI) = rails.filter(_.tile == tile)
+    private def railsIn(tile : EGPointI) = _rails.filter(_.tile == tile)
     def switchIn(tile : EGPointI, connector : TRRailConnector) =
-        switches.filter(_.tile == tile).find(_.connector == connector)
+        _switches.filter(_.tile == tile).find(_.connector == connector)
 
     def tryAdd(rail : TRRail) : bool = {
         if(canAdd(rail)) {
@@ -50,14 +53,14 @@ class TRRailroad(map : EGMapSso) {
             maybeBuildSwitchFor(rail, rail.form.end)
             maybeBuildLightFor(rail, rail.form.start)
             maybeBuildLightFor(rail, rail.form.end)
-            rails += rail
+            _rails += rail
             true
         } else false
     }
 
     private def maybeBuildSwitchFor(rail : TRRail, connector : TRRailConnector) {
         railsIn(rail.tile).filter(_.has(connector)).for(otherRail ->
-            switches += TRSwitch(rail.tile, connector, otherRail, rail)
+            _switches += TRSwitch(rail.tile, connector, otherRail, rail)
         )
     }
 
@@ -99,22 +102,23 @@ class TRRailroad(map : EGMapSso) {
 }
 
 class TRRailroadBuilder(weak railroad : TRRailroad) {
-    var rail : TRRail? = nil | private set
+    private var _rail : TRRail? = nil
+    def rail = _rail
 
     def tryBuild(rail : TRRail) : bool = {
         if(railroad.canAdd(rail)) {
-            self.rail = rail
+            _rail = rail
             true
         } else false
     }
 
     def clear {
-        rail = nil
+        _rail = nil
     }
 
     def fix {
-        rail.for(r -> railroad.tryAdd(r))
-        rail = nil
+        _rail.for(r -> railroad.tryAdd(r))
+        _rail = nil
     }
 }
 

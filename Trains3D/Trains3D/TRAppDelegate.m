@@ -30,7 +30,7 @@
     [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(3, 1) form:[TRRailForm leftTop]]];
     [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(3, 2) form:[TRRailForm leftBottom]]];
     _view.director.scene = scene;
-    _view.director.displayStats = YES;
+    [_view.director displayStats];
 }
 
 

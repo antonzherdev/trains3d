@@ -23,13 +23,13 @@
 }
 
 - (void)drawRailroad:(TRRailroad*)railroad {
-    [railroad.rails forEach:^void(TRRail* _) {
+    [[railroad rails] forEach:^void(TRRail* _) {
         [_railView drawRail:_];
     }];
-    [railroad.switches forEach:^void(TRSwitch* _) {
+    [[railroad switches] forEach:^void(TRSwitch* _) {
         [_switchView drawTheSwitch:_];
     }];
-    [railroad.builder.rail forEach:^void(TRRail* _) {
+    [[railroad.builder rail] forEach:^void(TRRail* _) {
         [_railView drawRail:_];
     }];
 }

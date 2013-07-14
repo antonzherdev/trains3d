@@ -13,22 +13,24 @@
 
 @interface EGDirector : NSObject
 @property (nonatomic, retain) EGScene* scene;
-@property (nonatomic, readonly) BOOL started;
-@property (nonatomic, readonly) BOOL paused;
 @property (nonatomic, readonly) EGTime* time;
 @property (nonatomic, readonly) EGContext* context;
-@property (nonatomic, readonly) EGStat* stat;
-@property (nonatomic) BOOL displayStats;
 
 + (id)director;
 - (id)init;
 - (void)drawWithSize:(EGSize)size;
 - (void)processEvent:(EGEvent*)event;
+- (BOOL)isStarted;
 - (void)start;
 - (void)stop;
+- (BOOL)isPaused;
 - (void)pause;
 - (void)resume;
 - (void)tick;
+- (EGStat*)stat;
+- (BOOL)isDisplayingStats;
+- (void)displayStats;
+- (void)cancelDisplayingStats;
 + (EGDirector*)current;
 @end
 
