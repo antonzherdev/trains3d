@@ -189,6 +189,7 @@
 }
 
 - (void)maybeBuildLightForRail:(TRRail*)rail connector:(TRRailConnector*)connector {
+    if([_map isPartialTile:rail.tile] && [_map isFullTile:[connector nextTile:rail.tile]]) __lights = [__lights arrayByAddingObject:[TRLight lightWithTile:rail.tile connector:connector]];
 }
 
 - (TRRailPointCorrection)moveForLength:(double)length point:(TRRailPoint)point {

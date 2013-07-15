@@ -100,5 +100,15 @@ SPEC_BEGIN(TRRailroadSpec)
             e = cor(rpm(3, 0, leftRight, 1.0, YES), 0.2);
             checkCorrection;
         });
+        it(@"should create light near a city", ^{
+            EGMapSso *map = [EGMapSso mapSsoWithSize:EGSizeIMake(1, 1)];
+            TRRailroad * railroad = [TRRailroad railroadWithMap:map];
+            [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(-1, 0) form:[TRRailForm leftRight]]];
+
+            [[railroad.lights should] haveCountOf:1];
+            TRLight * light = railroad.lights[0];
+            [[theValue(EGPointIEq(light.tile, EGPointIMake(-1, 0))) should] beTrue];
+            [[light.connector should] equal:[TRRailConnector right]];
+        });
     });
 SPEC_END

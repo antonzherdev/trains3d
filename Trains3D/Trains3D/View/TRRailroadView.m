@@ -6,6 +6,7 @@
 @implementation TRRailroadView{
     TRRailView* _railView;
     TRSwitchView* _switchView;
+    TRLightView* _lightView;
 }
 
 + (id)railroadView {
@@ -17,6 +18,7 @@
     if(self) {
         _railView = [TRRailView railView];
         _switchView = [TRSwitchView switchView];
+        _lightView = [TRLightView lightView];
     }
     
     return self;
@@ -28,6 +30,9 @@
     }];
     [[railroad switches] forEach:^void(TRSwitch* _) {
         [_switchView drawTheSwitch:_];
+    }];
+    [[railroad lights] forEach:^void(TRLight* _) {
+        [_lightView drawLight:_];
     }];
     [[railroad.builder rail] forEach:^void(TRRail* _) {
         [_railView drawRail:_];
@@ -122,6 +127,32 @@
         egVertex2(-0.25, 0.15);
         glEnd();
     }
+    glPopMatrix();
+}
+
+@end
+
+
+@implementation TRLightView
+
++ (id)lightView {
+    return [[TRLightView alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
+
+- (void)drawLight:(TRLight*)light {
+    glPushMatrix();
+    egTranslate(light.tile.x, light.tile.y, 0);
+    egRotate(light.connector.angle, 0, 0, 1);
+    egTranslate(-0.45, 0.2, 0);
+    if(light.isGreen) egColor3(0, 1, 0);
+    else egColor3(1, 0, 0);
+    glutSolidCube(0.1);
     glPopMatrix();
 }
 

@@ -65,7 +65,9 @@ class TRRailroad(map : EGMapSso) {
     }
 
     private def maybeBuildLightFor(rail : TRRail, connector : TRRailConnector) {
-
+        if(map.isPartial(rail.tile) && map.isFull(connector.next(rail.tile))) {
+            _lights += TRLight(rail.tile, connector)
+        }
     }
 
     def moveFor(length : float, point : TRRailPoint) : TRRailPointCorrection = correct(point.add(length))

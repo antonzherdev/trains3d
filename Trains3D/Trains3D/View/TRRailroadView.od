@@ -10,10 +10,12 @@ import "TR3DRailTurn.h"
 class TRRailroadView {
     private val railView = TRRailView
     private val switchView = TRSwitchView
+    private val lightView = TRLightView
 
     def draw(railroad : TRRailroad) {
         railroad.rails.for(railView.draw(_))
         railroad.switches.for(switchView.draw(_))
+        railroad.lights.for(lightView.draw(_))
         railroad.builder.rail.for(railView.draw(_))
     }
 }
@@ -78,6 +80,20 @@ class TRSwitchView {
             egVertex2(-0.25, 0.15)
             glEnd
         }
+
+        glPopMatrix
+    }
+}
+
+class TRLightView {
+    def draw(light : TRLight) {
+        glPushMatrix
+        egTranslate(light.tile.x, light.tile.y, 0)
+        egRotate(light.connector.angle, 0, 0, 1)
+
+        egTranslate(-0.45, 0.2, 0)
+        if(light.isGreen) egColor3(0, 1, 0) else egColor3(1, 0, 0)
+        glutSolidCube(0.1)
 
         glPopMatrix
     }

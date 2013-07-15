@@ -11,6 +11,7 @@
 @class TRRailroadView;
 @class TRRailView;
 @class TRSwitchView;
+@class TRLightView;
 
 @interface TRRailroadView : NSObject
 + (id)railroadView;
@@ -30,6 +31,13 @@
 + (id)switchView;
 - (id)init;
 - (void)drawTheSwitch:(TRSwitch*)theSwitch;
+@end
+
+
+@interface TRLightView : NSObject
++ (id)lightView;
+- (id)init;
+- (void)drawLight:(TRLight*)light;
 @end
 
 
