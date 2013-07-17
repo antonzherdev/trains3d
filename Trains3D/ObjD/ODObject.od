@@ -1,0 +1,10 @@
+stub class ODObject {
+    def is<T> : bool
+    def as<T> : T?
+
+    def class : ODClass<self>
+}
+
+stub class ODClass<T> {
+    static def apply(object : ODObject) = object.class
+}

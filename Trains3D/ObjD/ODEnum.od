@@ -1,1 +1,5 @@
-class ODEnum(ordinal : uint, name : string)
+stub class ODEnum(ordinal : uint, name : string) {
+    def description = name
+
+    def hash = ordinal
+}

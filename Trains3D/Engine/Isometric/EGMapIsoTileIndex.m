@@ -1,56 +1,45 @@
 #import "EGMapIsoTileIndex.h"
 
+#import "EGMapIso.h"
 @implementation EGMapSsoTileIndex{
-    EGSizeI _mapSize;
-    NSMutableDictionary* _map;
+    EGMapSso* _map;
+    id(^_initial)();
+    NSMutableDictionary* _index;
+    NSInteger _wh;
 }
-@synthesize mapSize = _mapSize;
+@synthesize map = _map;
+@synthesize initial = _initial;
 
-+ (id)mapSsoTileIndexWithMapSize:(EGSizeI)mapSize {
-    return [[EGMapSsoTileIndex alloc] initWithMapSize:mapSize];
++ (id)mapSsoTileIndexWithMap:(EGMapSso*)map initial:(id(^)())initial {
+    return [[EGMapSsoTileIndex alloc] initWithMap:map initial:initial];
 }
 
-- (id)initWithMapSize:(EGSizeI)mapSize {
+- (id)initWithMap:(EGMapSso*)map initial:(id(^)())initial {
     self = [super init];
     if(self) {
-        _mapSize = mapSize;
-        _map = [NSMutableDictionary dictionary];
+        _map = map;
+        _initial = initial;
+        _index = [(@{}) mutableCopy];
+        _wh = _map.size.width + _map.size.height + 1;
     }
     
     return self;
 }
 
-- (id)lookupWithDef:(id(^)())def forTile:(EGPointI)forTile {
-    NSNumber * forKey = [self getNumberForTile:forTile];
-    id v = [_map objectForKey:forKey];
-    if(v == nil) {
-        v = def();
-        [_map setObject:v forKey:forKey];
-    }
-    return v;
+- (NSInteger)numberForTile:(EGPointI)tile {
+    return (tile.x + tile.y) * _wh + tile.y - tile.x;
 }
 
-- (NSNumber *)getNumberForTile:(EGPointI)tile {
-    return numi((tile.x + tile.y)*(_mapSize.width + _mapSize.height + 1) + tile.y - tile.x);
-}
-
-- (id)lookupForTile:(EGPointI)forTile {
-    NSNumber * forKey = [self getNumberForTile:forTile];
-    id v = [_map objectForKey:forKey];
-    return v == nil ? [CNOption none] : v;
-}
-
-- (id)setObject:(id)object forTile:(EGPointI)forTile {
-    [_map setObject:object forKey:[self getNumberForTile:forTile]];
-    return object;
+- (id)objectForTile:(EGPointI)tile {
+    return [_index objectForKey:numi([self numberForTile:tile]) orUpdateWith:_initial];
 }
 
 - (NSArray*)values {
-    return [[_map objectEnumerator] allObjects];
+    return [_index values];
 }
 
-- (void)clear {
-    [_map removeAllObjects];
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end

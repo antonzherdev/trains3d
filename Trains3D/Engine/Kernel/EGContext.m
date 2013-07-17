@@ -12,7 +12,7 @@
 
 - (id)init {
     self = [super init];
-    if(self) _textureCache = [CNCache cache];
+    if(self) _textureCache = [CNCache new];
     
     return self;
 }
@@ -21,6 +21,10 @@
     return [_textureCache lookupWithDef:^EGTexture*() {
         return [EGTexture textureWithFile:file];
     } forKey:file];
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end

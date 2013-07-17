@@ -1,10 +1,9 @@
 #import "objd.h"
 #import "EGTypes.h"
-@class EGProcessor;
-@class EGMouseProcessor;
-@class EGTouchProcessor;
-@class EGEvent;
+#import "EGProcessor.h"
 @class EGTwoFingerTouchToMouse;
+@class TRRailroadConnectorContent;
+@class TREmptyConnector;
 @class TRRail;
 @class TRSwitch;
 @class TRLight;
@@ -16,7 +15,7 @@
 @class TRRailroadBuilderMouseProcessor;
 typedef struct TRRailCorrection TRRailCorrection;
 
-@interface TRRailroadBuilderProcessor : NSObject
+@interface TRRailroadBuilderProcessor : NSObject<EGProcessor>
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
 
 + (id)railroadBuilderProcessorWithBuilder:(TRRailroadBuilder*)builder;
@@ -41,7 +40,7 @@ static inline BOOL TRRailCorrectionEq(TRRailCorrection s1, TRRailCorrection s2) 
     return EGPointIEq(s1.tile, s2.tile) && EGPointIEq(s1.start, s2.start) && EGPointIEq(s1.end, s2.end);
 }
 
-@interface TRRailroadBuilderMouseProcessor : NSObject
+@interface TRRailroadBuilderMouseProcessor : NSObject<EGMouseProcessor>
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
 
 + (id)railroadBuilderMouseProcessorWithBuilder:(TRRailroadBuilder*)builder;

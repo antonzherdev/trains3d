@@ -1,7 +1,10 @@
-#import "NSDictionary+CNMap.h"
+#import "NSDictionary+CNChain.h"
 
 
-@implementation NSDictionary (CNMap)
+@implementation NSDictionary (CNChain)
+- (NSArray *)values {
+    return [self allValues];
+}
 - (NSDictionary *)dictionaryByAddingValue:(id)value forKey:(id)key {
     NSMutableDictionary * ret = [NSMutableDictionary dictionaryWithDictionary:self];
     [ret setObject:key forKey:key];
@@ -12,6 +15,4 @@
     id ret = self[key];
     return ret == nil ? [NSNull null] : ret;
 }
-
-
 @end

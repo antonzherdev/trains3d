@@ -11,7 +11,7 @@ static TRCityAngle* _angle0;
 static TRCityAngle* _angle90;
 static TRCityAngle* _angle180;
 static TRCityAngle* _angle270;
-static NSArray* values;
+static NSArray* _TRCityAngle_values;
 @synthesize angle = _angle;
 @synthesize form = _form;
 @synthesize back = _back;
@@ -37,7 +37,7 @@ static NSArray* values;
     _angle90 = [TRCityAngle cityAngleWithOrdinal:1 name:@"angle90" angle:90 form:[TRRailForm bottomTop] back:YES];
     _angle180 = [TRCityAngle cityAngleWithOrdinal:2 name:@"angle180" angle:180 form:[TRRailForm leftRight] back:YES];
     _angle270 = [TRCityAngle cityAngleWithOrdinal:3 name:@"angle270" angle:270 form:[TRRailForm bottomTop] back:NO];
-    values = (@[_angle0, _angle90, _angle180, _angle270]);
+    _TRCityAngle_values = (@[_angle0, _angle90, _angle180, _angle270]);
 }
 
 + (TRCityAngle*)angle0 {
@@ -57,7 +57,7 @@ static NSArray* values;
 }
 
 + (NSArray*)values {
-    return values;
+    return _TRCityAngle_values;
 }
 
 @end
@@ -89,6 +89,10 @@ static NSArray* values;
 
 - (TRRailPoint)startPoint {
     return TRRailPointMake(_tile, _angle.form.ordinal, 0, _angle.back);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end

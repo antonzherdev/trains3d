@@ -1,12 +1,13 @@
 #import "NSArray+CNChain.h"
 #import "CNChain.h"
+#import "CNOption.h"
 
 
 @implementation NSArray (CNChain)
 - (id)chain:(void (^)(CNChain *))block {
     CNChain *chain = [CNChain chainWithCollection:self];
     block(chain);
-    return [chain array];
+    return [chain toArray];
 }
 
 - (CNChain *)chain {
@@ -30,6 +31,11 @@
     return [[self chain] map:f];
 }
 
+- (CNChain *)flatMap:(cnF)f {
+    return [[self chain] flatMap:f];
+}
+
+
 - (CNChain *)append:(id)collection {
     return [[self chain] append:collection];
 }
@@ -51,7 +57,7 @@
 }
 
 - (id)head {
-    if(self.count == 0) return nil;
+    if(self.count == 0) return [CNOption none];
     return [self objectAtIndex : 0];
 }
 
@@ -74,4 +80,7 @@
 }
 
 
+- (CNChain *)distinct {
+    return [[self chain] distinct];
+}
 @end

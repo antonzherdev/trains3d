@@ -12,9 +12,9 @@
     BOOL __isPaused;
     EGTime* _time;
     EGContext* _context;
-    EGStat* __stat;
+    id __stat;
 }
-static EGDirector* _current;
+static EGDirector* __current;
 @synthesize scene = _scene;
 @synthesize time = _time;
 @synthesize context = _context;
@@ -29,7 +29,6 @@ static EGDirector* _current;
         __isStarted = NO;
         __isPaused = NO;
         _time = [EGTime time];
-        _current = self;
         _context = [EGContext context];
         __stat = [CNOption none];
     }
@@ -37,7 +36,12 @@ static EGDirector* _current;
     return self;
 }
 
++ (EGDirector*)current {
+    return __current;
+}
+
 - (void)drawWithSize:(EGSize)size {
+    __current = self;
     egClear();
     glEnable(GL_DEPTH_TEST);
     [_scene drawWithViewSize:size];
@@ -87,7 +91,7 @@ static EGDirector* _current;
     }];
 }
 
-- (EGStat*)stat {
+- (id)stat {
     return __stat;
 }
 
@@ -103,8 +107,8 @@ static EGDirector* _current;
     __stat = [CNOption none];
 }
 
-+ (EGDirector*)current {
-    return _current;
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end

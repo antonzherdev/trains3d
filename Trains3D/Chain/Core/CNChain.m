@@ -1,6 +1,5 @@
 #import "CNChain.h"
 #import "CNSourceLink.h"
-#import "CNChainItem.h"
 #import "CNFilterLink.h"
 #import "CNMapLink.h"
 #import "CNAppendLink.h"
@@ -9,26 +8,46 @@
 #import "CNMulLink.h"
 #import "CNReverseLink.h"
 #import "CNOption.h"
+#import "CNTuple.h"
+#import "CNFlatMapLink.h"
+#import "CNDistinctLink.h"
 
 
 @implementation CNChain {
-    CNChainItem* _first;
-    CNChainItem* _last;
+    id<CNChainLink> _link;
+    CNChain* _previous;
 }
+
+- (id)initWithLink:(id <CNChainLink>)link previous:(CNChain *)previous {
+    self = [super init];
+    if (self) {
+        _link = link;
+        _previous = previous;
+    }
+
+    return self;
+}
+
++ (id)chainWithLink:(id <CNChainLink>)link previous:(CNChain *)previous {
+    return [[self alloc] initWithLink:link previous:previous];
+}
+
+- (CNYield *)buildYield:(CNYield *)yield {
+    if(_previous == nil ) return [_link buildYield:yield];
+    return [_previous buildYield:[_link buildYield:yield]];
+}
+
+
 + (CNChain*)chainWithCollection:(id)collection {
-    CNChain *chain = [[CNChain alloc] init];
-    [chain link:[CNSourceLink linkWithCollection:collection]];
-    return chain;
+    return [CNChain chainWithLink:[CNSourceLink linkWithCollection:collection] previous:nil];
 }
 
 + (CNChain *)chainWithStart:(NSInteger)aStart end:(NSInteger)anEnd step:(NSInteger)aStep {
-    CNChain *chain = [[CNChain alloc] init];
-    [chain link:[CNRangeLink linkWithStart:aStart end:anEnd step:aStep]];
-    return chain;
+    return [CNChain chainWithLink:[CNRangeLink linkWithStart:aStart end:anEnd step:aStep] previous:nil];
 }
 
 
-- (NSArray *)array {
+- (NSArray *)toArray {
     __block id ret;
     CNYield *yield = [CNYield alloc];
     yield = [yield initWithBegin:^CNYieldResult(NSUInteger size) {
@@ -106,6 +125,15 @@
     return [self link:[CNMapLink linkWithF:f]];
 }
 
+- (CNChain *)flatMap:(cnF)f {
+    return [self link:[CNFlatMapLink linkWithF:f factor:2]];
+}
+
+- (CNChain *)flatMap:(cnF)f factor:(double)factor {
+    return [self link:[CNFlatMapLink linkWithF:f factor:factor]];
+}
+
+
 - (CNChain *)append:(id)collection {
     return [self link:[CNAppendLink linkWithCollection:collection]];
 }
@@ -154,11 +182,11 @@
 }
 
 - (id)randomItem {
-    NSArray *array = [self array];
+    NSArray *array = [self toArray];
     if(array.count == 0) {
         return [CNOption none];
     }
-    u_int32_t n = arc4random_uniform(array.count);
+    u_int32_t n = arc4random_uniform((u_int32_t)array.count);
     return [array objectAtIndex:n];
 }
 
@@ -173,26 +201,44 @@
 
 
 - (CNYieldResult)apply:(CNYield *)yield {
-    CNYield *y = [_first buildYield:yield];
+    CNYield *y = [self buildYield:yield];
     CNYieldResult result = [y beginYieldWithSize:0];
     return [y endYieldWithResult:result];
 }
 
 - (CNChain*)link:(id <CNChainLink>)link {
-    CNChainItem *next = [CNChainItem itemWithLink:link];
-    if(_first == nil) {
-        _first = next;
-        _last = _first;
-    } else {
-        _last.next = next;
-        _last = next;
-    }
-    return self;
+    return [CNChain chainWithLink:link previous:_link == nil ? nil : self];
+}
+
+- (NSDictionary *)toMap {
+    return [self toMutableMap];
+}
+
+- (NSMutableDictionary *)toMutableMap {
+    __block NSMutableDictionary* ret;
+    CNYield *yield = [CNYield alloc];
+    yield = [yield initWithBegin:^CNYieldResult(NSUInteger size) {
+        ret = [NSMutableDictionary dictionaryWithCapacity:size];
+        return cnYieldContinue;
+    } yield:^CNYieldResult(CNTuple* item) {
+        [ret setObject:item.b forKey:item.a];
+        return cnYieldContinue;
+    } end:nil all:nil];
+    [self apply:yield];
+    return ret;
+}
+
+- (CNChain *)distinct {
+    return [self link:[CNDistinctLink linkWithSelectivity:1.0]];
+}
+
+- (CNChain *)distinctWithSelectivity:(double)selectivity {
+    return [self link:[CNDistinctLink linkWithSelectivity:selectivity]];
 }
 
 @end
 
 id cnResolveCollection(id collection) {
-    if([collection isKindOfClass:[CNChain class]]) return [collection array];
+    if([collection isKindOfClass:[CNChain class]]) return [collection toArray];
     return collection;
 }

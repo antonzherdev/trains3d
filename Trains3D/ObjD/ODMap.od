@@ -1,22 +1,21 @@
 stub class ODMap<K, V> {
+    def count : uint
+    def objectFor(key : K) : V
+    def keys : [K]
+    def values : [V]
+}
 
+stub class ODMutableMap<K, V> extends ODMap<K, V> {
+    def set(object : V, forKey : K)
+    def removeObjectFor(key : K)
+    def objectFor(key: K, orUpdateWith: () -> V) : V
+    def modify(with : V? -> V?, forKey : K) : V?
 }
 
 stub class NSDictionary <K, V> extends ODMap<K, V> {
-    def count : uint
-    def object(forKey : K) : V
-
-    def allKeys : [K]
-    def allValues : [V]
     def allKeysFor(object : V) : [K]
-
-    static def dictionary<K, V> : self<K, V>
-    static def dictionaryWith<K, V>(object : V, forKey : V) : self<K, V>
-    static def dictionaryWith<K, V>(objects : [V], forKeys : [V]) : self<K, V>
 }
 
-stub class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
-    def removeObjectFor(key : K)
-    def set(object : V, forKey : K)
+stub class NSMutableDictionary<K, V> extends ODMutableMap<K, V> {
     def removeAllObjects
 }

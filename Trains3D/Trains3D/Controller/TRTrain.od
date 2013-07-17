@@ -21,9 +21,9 @@ class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : flo
     private def calculateCarPositions {
         directedCars.fold((hl, car) -> {
             car.head = hl
-            val next = level.railroad.moveFor(car.length, hl).addErrorToPoint
+            val next = level.railroad.move(consideringLights = false, forLength = car.length, point = hl).addErrorToPoint
             car.tail = next
-            car.nextHead = level.railroad.moveFor(carsDelta, next).addErrorToPoint
+            car.nextHead = level.railroad.move(consideringLights = false, forLength = carsDelta, point = next).addErrorToPoint
             car.nextHead
         }, head.invert)
     }
@@ -31,10 +31,10 @@ class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : flo
     private def move(point : EGPoint, length : float) = EGPoint(point.x, point.y + length)
 
     def updateWith(delta : float) {
-        correct(level.railroad.moveFor(delta*speed, head))
+        correct(level.railroad.move(consideringLights = true, forLength = delta*speed, point = head))
     }
 
-    private def directedCars = if(back) cars.reverse.array else cars
+    private def directedCars = if(back) cars.reverse.toArray else cars
 
     private def correct(correction : TRRailPointCorrection) {
         if(correction.error != 0.0) {

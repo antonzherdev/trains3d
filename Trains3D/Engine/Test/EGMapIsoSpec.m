@@ -6,7 +6,7 @@ NSArray * pointToTuples(NSArray * arr) {
     return [[arr map:^id(id x) {
         EGPointI p = uval(EGPointI, x);
         return tuple(numi(p.x), numi(p.y));
-    }] array];
+    }] toArray];
 }
 SPEC_BEGIN(EGMapIsoSpec)
     describe(@"Square isometric(Sso)", ^{

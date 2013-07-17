@@ -11,6 +11,7 @@
 - (CNChain*)filter:(cnPredicate)predicate;
 - (CNChain*)filter:(cnPredicate)predicate selectivity:(double)selectivity;
 - (CNChain*)map:(cnF)f;
+- (CNChain*)flatMap:(cnF)f;
 
 - (CNChain*)append:(id)collection;
 - (CNChain*)prepend:(id)collection;
@@ -23,4 +24,6 @@
 - (void) forEach:(cnP)p;
 - (id)fold:(cnF2)f withStart:(id)start;
 - (id)find:(cnPredicate)predicate;
+
+- (CNChain *)distinct;
 @end

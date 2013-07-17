@@ -53,5 +53,8 @@
     return [NSString stringWithFormat:@"(%@, %@)", _a, _b];
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+    return self;
+}
 
 @end

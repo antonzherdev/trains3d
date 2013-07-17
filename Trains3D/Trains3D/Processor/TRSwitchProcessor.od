@@ -5,7 +5,7 @@ import TRRailPoint
 import TRRailroad
 import TRLevel
 
-class TRSwitchProcessor(level : TRLevel) {
+class TRSwitchProcessor(level : TRLevel) extends EGMouseProcessor {
     def process(event : EGEvent) : bool = event.leftMouse(self)
 
     private var downedSwitch : TRSwitch? = nil

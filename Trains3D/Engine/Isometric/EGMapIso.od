@@ -7,8 +7,9 @@ class EGMapSso(size : EGSizeI) {
                          (1 - size.width)/2 - 1,
                          (2*size.width + size.height - 3)/2 + 1,
                          (size.width + 2*size.height - 3)/2 + 1)
-    val fullTiles : [EGPointI] = allPosibleTiles.filter(isFull(_)).array
-    val partialTiles : [EGPointI] = allPosibleTiles.filter(isPartial(_)).array
+    val fullTiles : [EGPointI] = allPosibleTiles.filter(isFull(_)).toArray
+    val partialTiles : [EGPointI] = allPosibleTiles.filter(isPartial(_)).toArray
+    val allTiles : [EGPointI] = fullTiles + partialTiles
 
     def isFull(tile : EGPointI) : bool =
         tile.y + tile.x >= 0 //left

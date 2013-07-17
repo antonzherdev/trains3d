@@ -1,6 +1,5 @@
 #import "TRRailroadBuilderProcessor.h"
 
-#import "EGProcessor.h"
 #import "EGTwoFingerTouchToMouse.h"
 #import "TRRailroad.h"
 @implementation TRRailroadBuilderProcessor{
@@ -27,6 +26,10 @@
 
 - (BOOL)processEvent:(EGEvent*)event {
     return [event leftMouseProcessor:_mouseProcessor] || [event touchProcessor:_touchProcessor];
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end
@@ -141,6 +144,10 @@
 
 - (TRRail*)convertRail:(TRRailCorrection)rail {
     return [TRRail railWithTile:rail.tile form:[TRRailForm formForConnector1:[TRRailConnector connectorForX:rail.start.x y:rail.start.y] connector2:[TRRailConnector connectorForX:rail.end.x y:rail.end.y]]];
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end

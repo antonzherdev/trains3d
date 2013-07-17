@@ -3,8 +3,10 @@
 #import "CNOption.h"
 #import "CNTuple.h"
 #import "NSObject+CNOption.h"
+#import "NSNull+CNOption.h"
 #import "NSArray+CNChain.h"
-#import "NSDictionary+CNMap.h"
+#import "NSMutableDictionary+CNChain.h"
+#import "NSDictionary+CNChain.h"
 
 #define numi(expr) [NSNumber numberWithLong:expr]
 #define unumi(expr) [expr longValue]

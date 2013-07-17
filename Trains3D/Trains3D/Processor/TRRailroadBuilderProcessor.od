@@ -5,7 +5,7 @@ import EGTwoFingerTouchToMouse
 import TRRailroad
 import TRRailPoint
 
-class TRRailroadBuilderProcessor(builder : TRRailroadBuilder) {
+class TRRailroadBuilderProcessor(builder : TRRailroadBuilder) extends EGProcessor {
     private val mouseProcessor = TRRailroadBuilderMouseProcessor(builder)
     private val touchProcessor = EGTwoFingerTouchToMouse(mouseProcessor)
 
@@ -14,7 +14,7 @@ class TRRailroadBuilderProcessor(builder : TRRailroadBuilder) {
 
 struct TRRailCorrection (tile : EGPointI, start : EGPointI, end : EGPointI)
 
-class TRRailroadBuilderMouseProcessor(builder : TRRailroadBuilder) {
+class TRRailroadBuilderMouseProcessor(builder : TRRailroadBuilder) extends EGMouseProcessor {
     private var startedPoint : EGPoint? = nil
 
     def mouseDown(event : EGEvent) = {

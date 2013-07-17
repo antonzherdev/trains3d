@@ -3,17 +3,17 @@
 #import "EGProcessor.h"
 #import "EGLayer.h"
 @implementation EGScene{
-    id _controller;
+    id<EGController> _controller;
     NSArray* _layers;
 }
 @synthesize controller = _controller;
 @synthesize layers = _layers;
 
-+ (id)sceneWithController:(id)controller layers:(NSArray*)layers {
++ (id)sceneWithController:(id<EGController>)controller layers:(NSArray*)layers {
     return [[EGScene alloc] initWithController:controller layers:layers];
 }
 
-- (id)initWithController:(id)controller layers:(NSArray*)layers {
+- (id)initWithController:(id<EGController>)controller layers:(NSArray*)layers {
     self = [super init];
     if(self) {
         _controller = controller;
@@ -37,6 +37,10 @@
 
 - (void)updateWithDelta:(double)delta {
     [_controller updateWithDelta:delta];
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end

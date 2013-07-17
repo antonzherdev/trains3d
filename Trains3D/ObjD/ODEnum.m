@@ -21,6 +21,22 @@
     return self;
 }
 
+- (NSString*)description {
+    return _name;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    return other == self;
+}
+
+- (NSUInteger)hash {
+    return _ordinal;
+}
+
 @end
 
 

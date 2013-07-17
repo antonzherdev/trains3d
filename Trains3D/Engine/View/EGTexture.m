@@ -49,11 +49,11 @@
     CGContextSetBlendMode(myBitmapContext, kCGBlendModeCopy);
     CGContextDrawImage(myBitmapContext, rect, myImageRef);
     CGContextRelease(myBitmapContext);
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, width);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, (GLint)width);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glGenTextures(1, &_id);
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, _id);
-    gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, width, height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, myData);
+    gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, (GLsizei)width, (GLsizei)height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, myData);
     glTexParameteri   ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     glTexParameteri   ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
 

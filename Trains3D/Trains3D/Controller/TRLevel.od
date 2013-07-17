@@ -8,7 +8,7 @@ import TRRailPoint
 import TRTrain
 
 
-class TRLevel(map : EGMapSso) {
+class TRLevel(map : EGMapSso) extends EGController {
     val railroad = TRRailroad(map)
     private var _cities : [TRCity] = appendNextCityTo(appendNextCityTo([]))
     def cities = _cities

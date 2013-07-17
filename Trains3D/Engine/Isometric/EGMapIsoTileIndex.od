@@ -1,9 +1,12 @@
 import EGTypes
+import EGMapIso
 
-stub class EGMapSsoTileIndex<T>(mapSize : EGSizeI) {
-    def lookupFor(tile : EGPointI) : T?
-    def lookupWith(def : () -> T, forTile : EGPointI) : T
-    def set(object : T, forTile : EGPointI) : T
-    def values : [T]
-    def clear
+class EGMapSsoTileIndex<T>(map : EGMapSso, initial : () -> T) {
+    private val index : [var int : T] = []
+    private val wh = map.size.width + map.size.height + 1
+
+    private def numberFor(tile : EGPointI) : int = (tile.x + tile.y)*wh + tile.y - tile.x
+
+    def objectFor(tile : EGPointI) : T = index.objectFor(numberFor(tile), orUpdateWith = initial)
+    def values : [T] = index.values
 }

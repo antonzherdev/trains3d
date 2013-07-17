@@ -1,4 +1,5 @@
 #import "NSObject+CNOption.h"
+#import "TRRailroad.h"
 
 
 @implementation NSObject (CNOption)
@@ -36,4 +37,7 @@
 }
 
 
+- (id)asKindOfClass:(Class)pClass {
+    return [self isKindOfClass:pClass] ? self : [CNOption none];
+}
 @end

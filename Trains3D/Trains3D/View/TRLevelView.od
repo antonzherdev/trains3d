@@ -10,11 +10,11 @@ import TRCityView
 import TRRailroadView
 import TRTrainView
 
-class TRLevelView(level : TRLevel) {
+class TRLevelView(level : TRLevel) extends EGView {
     private val backgroundView = TRLevelBackgroundView
-    private val cityView = TRCityView
-    private val railroadView = TRRailroadView
-    private val trainView = TRTrainView
+    private val cityView = TRCityView.new
+    private val railroadView = TRRailroadView.new
+    private val trainView = TRTrainView.new
 
     def drawView {
         backgroundView.draw(level)

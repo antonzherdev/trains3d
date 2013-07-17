@@ -8,7 +8,7 @@ import TRLevelView
 import TRRailroad
 
 
-class TRLevelProcessor(level : TRLevel) {
+class TRLevelProcessor(level : TRLevel) extends EGProcessor {
     private val railroadBuilderProcessor = TRRailroadBuilderProcessor(level.railroad.builder)
     private val switchProcessor = TRSwitchProcessor(level)
 

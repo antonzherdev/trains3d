@@ -2,7 +2,7 @@ import EGTexture
 import CNCache
 
 class EGContext {
-    private val textureCache = CNCache<string, EGTexture>
+    private val textureCache = CNCache.new<string, EGTexture>
 
     def textureFor(file : string) : EGTexture = textureCache.lookupWith(def = EGTexture(file), forKey = file)
 }

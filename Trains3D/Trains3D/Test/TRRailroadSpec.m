@@ -8,7 +8,7 @@
 #define cor(p, e) TRRailPointCorrectionMake(p, e)
 #define zcor(p) TRRailPointCorrectionMake(p, 0)
 #define zrpm(tx, ty, form, x, back) zcor(TRRailPointMake(EGPointIMake(tx, ty), [TRRailForm form].ordinal, x, back))
-
+#define move(p, len) [railroad moveConsideringLights:YES forLength:len point:p]
 SPEC_BEGIN(TRRailroadSpec)
     describe(@"TRRailroad", ^{
         it(@"should move point", ^{
@@ -26,24 +26,24 @@ SPEC_BEGIN(TRRailroadSpec)
             [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(2, 2) form:[TRRailForm leftRight]]];
 
             TRRailPoint p0 = rpm(0, 0, leftRight, 0, NO);
-            TRRailPointCorrection r = [railroad moveForLength:0.5 point:p0];
+            TRRailPointCorrection r = move(p0, 0.5);
             TRRailPointCorrection e = zcor(trRailPointAdd(p0, 0.5));
             checkCorrection;
 
-            r = [railroad moveForLength:1.2 point:p0];
+            r = move(p0, 1.2);
             e = zrpm(1, 0, leftBottom, 0.2, NO);
             checkCorrection;
 
-            r = [railroad moveForLength:1.0 + 3*M_PI_4 + 1.0 + 3*M_PI_4 + 0.2 point:p0];
+            r = move(p0, 1.0 + 3*M_PI_4 + 1.0 + 3*M_PI_4 + 0.2);
             e = zrpm(2, 2, leftRight, 0.2, YES);
             checkCorrection;
 
-            r = [railroad moveForLength:1.0 point:r.point];
+            r = move(r.point, 1.0);
             e = cor(rpm(2, 2, leftRight, 1.0, YES), 0.2);
             checkCorrection;
 
             p0 = rpm(2, 2, leftRight, 0, NO);
-            r = [railroad moveForLength:1.0 + 3*M_PI_4 + 1.0 + 3*M_PI_4 + 1.2 point:p0];
+            r = move(p0, 1.0 + 3*M_PI_4 + 1.0 + 3*M_PI_4 + 1.2);
             e = cor(rpm(0, 0, leftRight, 1.0, YES), 0.2);
             checkCorrection;
         });
@@ -83,20 +83,20 @@ SPEC_BEGIN(TRRailroadSpec)
             [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(3, 0) form:[TRRailForm leftRight]]];
 
             TRRailPoint p0 = rpm(2, 0, leftRight, 0, NO);
-            TRRailPointCorrection r = [railroad moveForLength:1.2 point:p0];
+            TRRailPointCorrection r = move(p0, 1.2);
             TRRailPointCorrection e = zrpm(3, 0, leftTop, 0.2, NO);
             checkCorrection;
 
             TRSwitch * theSwitch = railroad.switches[0];
             theSwitch.firstActive = NO;
 
-            r = [railroad moveForLength:1.2 point:p0];
+            r = move(p0, 1.2);
             e = zrpm(3, 0, leftRight, 0.2, NO);
             checkCorrection;
 
             theSwitch.firstActive = YES;
             p0 = rpm(3, 0, leftRight, 0, YES);
-            r = [railroad moveForLength:1.2 point:p0];
+            r = move(p0, 1.2);
             e = cor(rpm(3, 0, leftRight, 1.0, YES), 0.2);
             checkCorrection;
         });
@@ -104,6 +104,9 @@ SPEC_BEGIN(TRRailroadSpec)
             EGMapSso *map = [EGMapSso mapSsoWithSize:EGSizeIMake(1, 1)];
             TRRailroad * railroad = [TRRailroad railroadWithMap:map];
             [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(-1, 0) form:[TRRailForm leftRight]]];
+
+            [[railroad.lights should] haveCountOf:0];
+            [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(0, 0) form:[TRRailForm leftRight]]];
 
             [[railroad.lights should] haveCountOf:1];
             TRLight * light = railroad.lights[0];

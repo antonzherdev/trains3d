@@ -10,4 +10,5 @@
 - (id) map:(cnF)f;
 - (id) flatMap:(cnF)f;
 - (id) get;
+- (id)asKindOfClass:(Class)pClass;
 @end

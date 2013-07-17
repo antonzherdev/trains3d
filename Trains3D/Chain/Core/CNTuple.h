@@ -3,7 +3,7 @@
 
 #define tuple(anA, aB) [CNTuple tupleWithA:anA b: aB]
 
-@interface CNTuple : NSObject
+@interface CNTuple : NSObject <NSCopying>
 @property (readonly, nonatomic) id a;
 @property (readonly, nonatomic) id b;
 
@@ -18,4 +18,6 @@
 - (NSUInteger)hash;
 
 - (NSString *)description;
+
+- (id)copyWithZone:(NSZone *)zone;
 @end

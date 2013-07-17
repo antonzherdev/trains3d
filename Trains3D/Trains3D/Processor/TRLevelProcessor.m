@@ -1,6 +1,5 @@
 #import "TRLevelProcessor.h"
 
-#import "EGProcessor.h"
 #import "TRSwitchProcessor.h"
 #import "TRLevel.h"
 #import "TRLevelView.h"
@@ -29,6 +28,10 @@
 
 - (BOOL)processEvent:(EGEvent*)event {
     return [_switchProcessor processEvent:event] || [_railroadBuilderProcessor processEvent:event];
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end

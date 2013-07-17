@@ -7,11 +7,13 @@
     EGRectI _limits;
     NSArray* _fullTiles;
     NSArray* _partialTiles;
+    NSArray* _allTiles;
 }
 @synthesize size = _size;
 @synthesize limits = _limits;
 @synthesize fullTiles = _fullTiles;
 @synthesize partialTiles = _partialTiles;
+@synthesize allTiles = _allTiles;
 
 + (id)mapSsoWithSize:(EGSizeI)size {
     return [[EGMapSso alloc] initWithSize:size];
@@ -24,10 +26,11 @@
         _limits = EGRectIMake((1 - _size.height) / 2 - 1, (1 - _size.width) / 2 - 1, (2 * _size.width + _size.height - 3) / 2 + 1, (_size.width + 2 * _size.height - 3) / 2 + 1);
         _fullTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
             return [self isFullTile:uval(EGPointI, _)];
-        }] array];
+        }] toArray];
         _partialTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
             return [self isPartialTile:uval(EGPointI, _)];
-        }] array];
+        }] toArray];
+        _allTiles = [_fullTiles arrayByAddingObject:_partialTiles];
     }
     
     return self;
@@ -113,6 +116,10 @@
 
 - (EGRectI)cutRectForTile:(EGPointI)tile {
     return EGRectIMake([self tileCutAxisLess:0 more:tile.x + tile.y], [self tileCutAxisLess:tile.y - tile.x more:_size.height - 1], [self tileCutAxisLess:tile.x + tile.y more:_size.width + _size.height - 2], [self tileCutAxisLess:-_size.width + 1 more:tile.y - tile.x]);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end

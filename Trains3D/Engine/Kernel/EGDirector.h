@@ -4,9 +4,9 @@
 @class EGStat;
 #import "EGTypes.h"
 @class EGContext;
-@class EGProcessor;
-@class EGMouseProcessor;
-@class EGTouchProcessor;
+@protocol EGProcessor;
+@protocol EGMouseProcessor;
+@protocol EGTouchProcessor;
 @class EGEvent;
 
 @class EGDirector;
@@ -18,6 +18,7 @@
 
 + (id)director;
 - (id)init;
++ (EGDirector*)current;
 - (void)drawWithSize:(EGSize)size;
 - (void)processEvent:(EGEvent*)event;
 - (BOOL)isStarted;
@@ -27,11 +28,10 @@
 - (void)pause;
 - (void)resume;
 - (void)tick;
-- (EGStat*)stat;
+- (id)stat;
 - (BOOL)isDisplayingStats;
 - (void)displayStats;
 - (void)cancelDisplayingStats;
-+ (EGDirector*)current;
 @end
 
 

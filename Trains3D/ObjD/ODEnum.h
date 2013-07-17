@@ -8,6 +8,9 @@
 
 + (id)enumWithOrdinal:(NSUInteger)ordinal name:(NSString*)name;
 - (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name;
+- (NSString*)description;
+- (BOOL)isEqual:(id)other;
+- (NSUInteger)hash;
 @end
 
 

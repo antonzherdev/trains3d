@@ -8,6 +8,7 @@
 @property (nonatomic, readonly) EGRectI limits;
 @property (nonatomic, readonly) NSArray* fullTiles;
 @property (nonatomic, readonly) NSArray* partialTiles;
+@property (nonatomic, readonly) NSArray* allTiles;
 
 + (id)mapSsoWithSize:(EGSizeI)size;
 - (id)initWithSize:(EGSizeI)size;

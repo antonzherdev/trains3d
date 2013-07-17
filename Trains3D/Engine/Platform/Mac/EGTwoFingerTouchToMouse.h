@@ -3,7 +3,7 @@
 
 @class EGTwoFingerTouchToMouse;
 
-@interface EGTwoFingerTouchToMouse : NSObject
+@interface EGTwoFingerTouchToMouse : NSObject<EGTouchProcessor>
 @property (nonatomic, readonly) id processor;
 
 + (id)twoFingerTouchToMouseWithProcessor:(id)processor;

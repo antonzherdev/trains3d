@@ -1,18 +1,17 @@
 #import "objd.h"
 #import "EGTypes.h"
+@class EGMapSso;
 
 @class EGMapSsoTileIndex;
 
 @interface EGMapSsoTileIndex : NSObject
-@property (nonatomic, readonly) EGSizeI mapSize;
+@property (nonatomic, readonly) EGMapSso* map;
+@property (nonatomic, readonly) id(^initial)();
 
-+ (id)mapSsoTileIndexWithMapSize:(EGSizeI)mapSize;
-- (id)initWithMapSize:(EGSizeI)mapSize;
-- (id)lookupWithDef:(id(^)())def forTile:(EGPointI)forTile;
-- (id)lookupForTile:(EGPointI)forTile;
-- (id)setObject:(id)object forTile:(EGPointI)forTile;
++ (id)mapSsoTileIndexWithMap:(EGMapSso*)map initial:(id(^)())initial;
+- (id)initWithMap:(EGMapSso*)map initial:(id(^)())initial;
+- (id)objectForTile:(EGPointI)tile;
 - (NSArray*)values;
-- (void)clear;
 @end
 
 

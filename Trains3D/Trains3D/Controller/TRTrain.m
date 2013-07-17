@@ -49,9 +49,9 @@
 - (void)calculateCarPositions {
     [[self directedCars] fold:^id(id hl, TRCar* car) {
         car.head = uval(TRRailPoint, hl);
-        TRRailPoint next = trRailPointCorrectionAddErrorToPoint([_level.railroad moveForLength:[car length] point:uval(TRRailPoint, hl)]);
+        TRRailPoint next = trRailPointCorrectionAddErrorToPoint([_level.railroad moveConsideringLights:NO forLength:[car length] point:uval(TRRailPoint, hl)]);
         car.tail = next;
-        car.nextHead = trRailPointCorrectionAddErrorToPoint([_level.railroad moveForLength:_carsDelta point:next]);
+        car.nextHead = trRailPointCorrectionAddErrorToPoint([_level.railroad moveConsideringLights:NO forLength:_carsDelta point:next]);
         return val(car.nextHead);
     } withStart:val(trRailPointInvert(_head))];
 }
@@ -61,11 +61,11 @@
 }
 
 - (void)updateWithDelta:(double)delta {
-    [self correctCorrection:[_level.railroad moveForLength:delta * _speed point:_head]];
+    [self correctCorrection:[_level.railroad moveConsideringLights:YES forLength:delta * _speed point:_head]];
 }
 
 - (NSArray*)directedCars {
-    if(_back) return [[_cars reverse] array];
+    if(_back) return [[_cars reverse] toArray];
     else return _cars;
 }
 
@@ -96,6 +96,10 @@
     }] isDefined];
 }
 
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
 @end
 
 
@@ -120,6 +124,10 @@
 
 - (double)length {
     return 0.6;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end

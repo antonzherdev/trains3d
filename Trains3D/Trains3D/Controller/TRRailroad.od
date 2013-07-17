@@ -1,29 +1,48 @@
 import EGMap
 import EGMapIso
 import EGTypes
+import EGMapIsoTileIndex
 
 import TRRailPoint
 
-class TRRail(tile : EGPointI, form : TRRailForm) {
+class TRRailroadConnectorContent {
+    def canAddRail : bool = true
+    def connect(rail : TRRail, to : TRRailConnector) : TRRailroadConnectorContent
+    def buildLightIn(connector : TRRailConnector) : TRRailroadConnectorContent = self
+    def rails : [TRRail]
+    def isGreen : bool = true
+}
+
+class TREmptyConnector extends TRRailroadConnectorContent {
+    static val instance : TRRailroadConnectorContent = TREmptyConnector
+    def rails : [TRRail] = []
+    def connect(rail : TRRail, to : TRRailConnector) : TRRailroadConnectorContent = rail
+}
+
+class TRRail(tile : EGPointI, form : TRRailForm) extends TRRailroadConnectorContent {
     def has(connector : TRRailConnector) : bool = form.start == connector || form.end == connector
+    def connect(rail : TRRail, to : TRRailConnector) : TRRailroadConnectorContent = TRSwitch(rail.tile, to, self, rail)
+    def rails : [TRRail] = [self]
+    def buildLightIn(connector : TRRailConnector) : TRRailroadConnectorContent = TRLight(tile, connector, self)
 }
 
-class TRSwitch(tile : EGPointI, connector : TRRailConnector, rail1 : TRRail, rail2 : TRRail) {
+class TRSwitch(tile : EGPointI, connector : TRRailConnector, rail1 : TRRail, rail2 : TRRail) extends TRRailroadConnectorContent {
     var firstActive = true
-
     def activeRail : TRRail = if(firstActive) rail1 else rail2
-
-    def turn {
-        firstActive = !firstActive
-    }
+    def turn { firstActive = !firstActive }
+    def canAddRail = false
+    def connect(rail : TRRail, to : TRRailConnector) : TRRailroadConnectorContent = throw "Couldn't add rail to switch"
+    def rails : [TRRail] = if(firstActive) [rail1, rail2] else [rail2, rail1]
+    def buildLightIn(connector : TRRailConnector) : TRRailroadConnectorContent = self
 }
 
-class TRLight(tile : EGPointI, connector : TRRailConnector) {
+class TRLight(tile : EGPointI, connector : TRRailConnector, rail : TRRail) extends TRRailroadConnectorContent {
     var isGreen = true
-
-    def turn {
-        isGreen = !isGreen
-    }
+    def turn { isGreen = !isGreen }
+    def canAddRail = true
+    def connect(rail : TRRail, to : TRRailConnector) : TRRailroadConnectorContent = TRSwitch(tile, to, self.rail, rail)
+    def rails : [TRRail] = [rail]
+    def buildLightIn(connector : TRRailConnector) : TRRailroadConnectorContent = self
 }
 
 class TRRailroad(map : EGMapSso) {
@@ -34,69 +53,80 @@ class TRRailroad(map : EGMapSso) {
     private var _lights : [TRLight] = []
     def lights = _lights
     val builder = TRRailroadBuilder(self)
+    private val connectorIndex = EGMapSsoTileIndex(map,
+        TRRailConnector.values.map( (_, TREmptyConnector.instance) ).toMutableMap)
 
     def canAdd(rail : TRRail) : bool = {
-        val railsInTile = railsIn(rail.tile).array
-        val countsAtStart = railsInTile.filter(_.has(rail.form.start)).count
-        val countsAtEnd = railsInTile.filter(_.has(rail.form.end)).count
-
-        countsAtStart < 2 &&  countsAtEnd < 2
+        val tileIndex = connectorIndex[rail.tile]
+        tileIndex[rail.form.start].get.canAddRail && tileIndex[rail.form.end].get.canAddRail
     }
-
-    private def railsIn(tile : EGPointI) = _rails.filter(_.tile == tile)
-    def switchIn(tile : EGPointI, connector : TRRailConnector) =
-        _switches.filter(_.tile == tile).find(_.connector == connector)
 
     def tryAdd(rail : TRRail) : bool = {
         if(canAdd(rail)) {
-            maybeBuildSwitchFor(rail, rail.form.start)
-            maybeBuildSwitchFor(rail, rail.form.end)
-            maybeBuildLightFor(rail, rail.form.start)
-            maybeBuildLightFor(rail, rail.form.end)
-            _rails += rail
+            connect(rail, rail.form.start)
+            connect(rail, rail.form.end)
+            maybeBuildLightFor(rail.tile, rail.form.start)
+            maybeBuildLightFor(rail.tile, rail.form.end)
+            rebuildArrays
             true
         } else false
     }
 
-    private def maybeBuildSwitchFor(rail : TRRail, connector : TRRailConnector) {
-        railsIn(rail.tile).filter(_.has(connector)).for(otherRail ->
-            _switches += TRSwitch(rail.tile, connector, otherRail, rail)
-        )
+    def switchIn(tile : EGPointI, connector : TRRailConnector) : TRSwitch? =
+        connectorIndex[tile][connector].get.as<TRSwitch>
+
+    private def connect(rail : TRRail, to : TRRailConnector) {
+        connectorIndex[rail.tile].modify(with = old -> {
+            val o = old.get
+            o.connect(rail, to)
+        }, to)
     }
 
-    private def maybeBuildLightFor(rail : TRRail, connector : TRRailConnector) {
-        if(map.isPartial(rail.tile) && map.isFull(connector.next(rail.tile))) {
-            _lights += TRLight(rail.tile, connector)
+    private def maybeBuildLightFor(tile : EGPointI, connector : TRRailConnector) {
+        val nextTile = connector.next(tile)
+
+        if(map.isFull(tile) && map.isPartial(nextTile)) {
+            val otherSideConnector = connector.otherSideConnector
+            connectorIndex[nextTile].modify(with = _.get.buildLightIn(otherSideConnector), otherSideConnector)
         }
     }
 
-    def moveFor(length : float, point : TRRailPoint) : TRRailPointCorrection = correct(point.add(length))
+    private def rebuildArrays {
+        val allObjects = connectorIndex.values.flatMap(_.values)
+        _rails = allObjects.flatMap(_.rails).distinct.toArray
+        _switches = allObjects.filter(_.is<TRSwitch>).toArray
+        _lights = allObjects.filter(_.is<TRLight>).toArray
+    }
+
+    def move(consideringLights : bool, forLength : float, point : TRRailPoint) : TRRailPointCorrection =
+        correct(consideringLights, point.add(forLength))
 
     private def activeRailFor(tile : EGPointI, connector : TRRailConnector) : TRRail? =
-        switchIn(tile, connector)
-            .map(_.activeRail)
-            .getOrElse(
-                railsIn(tile).filter(_.has(connector)).head
-            )
+        connectorIndex[tile][connector].get.rails.head
 
-    private def correct(point : TRRailPoint) : TRRailPointCorrection = {
+    private def correct(consideringLights : bool, point : TRRailPoint) : TRRailPointCorrection = {
         val correction = point.correct
 
         if(correction.error == 0) correction
         else {
             val connector = point.endConnector
-            val activeRail = activeRailFor(point.tile, connector).get
-            if(activeRail.form.ordinal != point.form) correction
+            val connectorDesc = connectorIndex[point.tile][connector].get
+            val activeRailOpt = connectorDesc.rails.head
+            if(activeRailOpt.isEmpty || (consideringLights && !(connectorDesc.isGreen))) correction
             else {
-                val nextTile = connector.next(point.tile)
-                val otherSideConnector = connector.otherSideConnector
-                val nextRail = activeRailFor(nextTile, otherSideConnector)
-
-                if(nextRail.isEmpty) correction
+                val activeRail = activeRailOpt.get
+                if(activeRail.form.ordinal != point.form) correction
                 else {
-                    val nextActiveRail = nextRail.get
-                    val form = nextActiveRail.form
-                    correct(TRRailPoint(nextTile, form.ordinal, correction.error, form.end == otherSideConnector))
+                    val nextTile = connector.next(point.tile)
+                    val otherSideConnector = connector.otherSideConnector
+                    val nextRail = activeRailFor(nextTile, otherSideConnector)
+
+                    if(nextRail.isEmpty) correction
+                    else {
+                        val nextActiveRail = nextRail.get
+                        val form = nextActiveRail.form
+                        correct(consideringLights, TRRailPoint(nextTile, form.ordinal, correction.error, form.end == otherSideConnector))
+                    }
                 }
             }
         }

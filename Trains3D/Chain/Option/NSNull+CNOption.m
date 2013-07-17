@@ -33,6 +33,10 @@
     @throw @"Get from empty";
 }
 
+- (id)asKindOfClass:(Class)pClass1 {
+    return self;
+}
+
 
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector {
     NSMethodSignature *signature = [super methodSignatureForSelector:aSelector];

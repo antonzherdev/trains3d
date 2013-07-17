@@ -137,19 +137,19 @@ static inline BOOL EGColorEq(EGColor s1, EGColor s2) {
 }
 void egColorSet(EGColor self);
 
-@protocol EGController
+@protocol EGController<NSObject>
 - (void)updateWithDelta:(double)delta;
 @end
 
 
-@protocol EGCamera
+@protocol EGCamera<NSObject>
 - (void)focusForViewSize:(EGSize)viewSize;
 - (EGPoint)translateViewPoint:(EGPoint)viewPoint withViewSize:(EGSize)withViewSize;
 @end
 
 
-@protocol EGView
-- (id)camera;
+@protocol EGView<NSObject>
+- (id<EGCamera>)camera;
 - (void)drawView;
 @end
 

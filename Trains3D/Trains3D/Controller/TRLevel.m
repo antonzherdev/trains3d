@@ -87,6 +87,10 @@
     }] isDefined];
 }
 
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
 @end
 
 

@@ -50,7 +50,7 @@
     @throw @"Method isLeftMouseUp is abstract";
 }
 
-- (BOOL)leftMouseProcessor:(id)processor {
+- (BOOL)leftMouseProcessor:(id<EGMouseProcessor>)processor {
     if([self isLeftMouseDown]) {
         return [processor mouseDownEvent:self];
     } else {
@@ -79,7 +79,7 @@
     @throw @"Method isTouchCanceled is abstract";
 }
 
-- (BOOL)touchProcessor:(id)processor {
+- (BOOL)touchProcessor:(id<EGTouchProcessor>)processor {
     if([self isTouchBegan]) {
         return [processor touchBeganEvent:self];
     } else {
@@ -94,6 +94,10 @@
             }
         }
     }
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end

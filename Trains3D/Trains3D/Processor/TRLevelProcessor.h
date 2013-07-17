@@ -1,13 +1,12 @@
 #import "objd.h"
 #import "EGTypes.h"
-@class EGProcessor;
-@class EGMouseProcessor;
-@class EGTouchProcessor;
-@class EGEvent;
+#import "EGProcessor.h"
 #import "TRRailroadBuilderProcessor.h"
 @class TRSwitchProcessor;
 @class TRLevel;
 @class TRLevelView;
+@class TRRailroadConnectorContent;
+@class TREmptyConnector;
 @class TRRail;
 @class TRSwitch;
 @class TRLight;
@@ -16,7 +15,7 @@
 
 @class TRLevelProcessor;
 
-@interface TRLevelProcessor : NSObject
+@interface TRLevelProcessor : NSObject<EGProcessor>
 @property (nonatomic, readonly) TRLevel* level;
 
 + (id)levelProcessorWithLevel:(TRLevel*)level;

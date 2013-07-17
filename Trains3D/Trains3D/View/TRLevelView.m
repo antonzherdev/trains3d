@@ -13,7 +13,7 @@
     TRCityView* _cityView;
     TRRailroadView* _railroadView;
     TRTrainView* _trainView;
-    id _camera;
+    id<EGCamera> _camera;
 }
 @synthesize level = _level;
 @synthesize camera = _camera;
@@ -27,9 +27,9 @@
     if(self) {
         _level = level;
         _backgroundView = [TRLevelBackgroundView levelBackgroundView];
-        _cityView = [TRCityView cityView];
-        _railroadView = [TRRailroadView railroadView];
-        _trainView = [TRTrainView trainView];
+        _cityView = [TRCityView new];
+        _railroadView = [TRRailroadView new];
+        _trainView = [TRTrainView new];
         _camera = [EGCameraIso cameraIsoWithTilesOnScreen:_level.map.size center:EGPointMake(0, 0)];
     }
     
@@ -47,6 +47,10 @@
     }];
     egColor3(1.0, 1.0, 1.0);
     [_level.map drawLayout];
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end

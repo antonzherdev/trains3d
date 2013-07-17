@@ -16,9 +16,9 @@
 - (id)init {
     self = [super init];
     if(self) {
-        _railView = [TRRailView railView];
-        _switchView = [TRSwitchView switchView];
-        _lightView = [TRLightView lightView];
+        _railView = [TRRailView new];
+        _switchView = [TRSwitchView new];
+        _lightView = [TRLightView new];
     }
     
     return self;
@@ -37,6 +37,10 @@
     [[railroad.builder rail] forEach:^void(TRRail* _) {
         [_railView drawRail:_];
     }];
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end
@@ -81,6 +85,10 @@
         }
     }
     glPopMatrix();
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end
@@ -130,6 +138,10 @@
     glPopMatrix();
 }
 
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
 @end
 
 
@@ -154,6 +166,10 @@
     else egColor3(1, 0, 0);
     glutSolidCube(0.1);
     glPopMatrix();
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end

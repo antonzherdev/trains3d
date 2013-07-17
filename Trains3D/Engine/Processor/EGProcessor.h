@@ -3,19 +3,19 @@
 
 @class EGEvent;
 
-@protocol EGProcessor
+@protocol EGProcessor<NSObject>
 - (BOOL)processEvent:(EGEvent*)event;
 @end
 
 
-@protocol EGMouseProcessor
+@protocol EGMouseProcessor<NSObject>
 - (BOOL)mouseDownEvent:(EGEvent*)event;
 - (BOOL)mouseDragEvent:(EGEvent*)event;
 - (BOOL)mouseUpEvent:(EGEvent*)event;
 @end
 
 
-@protocol EGTouchProcessor
+@protocol EGTouchProcessor<NSObject>
 - (BOOL)touchBeganEvent:(EGEvent*)event;
 - (BOOL)touchMovedEvent:(EGEvent*)event;
 - (BOOL)touchEndedEvent:(EGEvent*)event;
@@ -36,12 +36,12 @@
 - (BOOL)isLeftMouseDown;
 - (BOOL)isLeftMouseDrag;
 - (BOOL)isLeftMouseUp;
-- (BOOL)leftMouseProcessor:(id)processor;
+- (BOOL)leftMouseProcessor:(id<EGMouseProcessor>)processor;
 - (BOOL)isTouchBegan;
 - (BOOL)isTouchMoved;
 - (BOOL)isTouchEnded;
 - (BOOL)isTouchCanceled;
-- (BOOL)touchProcessor:(id)processor;
+- (BOOL)touchProcessor:(id<EGTouchProcessor>)processor;
 @end
 
 

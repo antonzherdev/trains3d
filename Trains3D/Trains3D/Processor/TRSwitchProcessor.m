@@ -1,11 +1,10 @@
 #import "TRSwitchProcessor.h"
 
-#import "EGProcessor.h"
 #import "TRRailroad.h"
 #import "TRLevel.h"
 @implementation TRSwitchProcessor{
     TRLevel* _level;
-    TRSwitch* _downedSwitch;
+    id _downedSwitch;
 }
 @synthesize level = _level;
 
@@ -37,7 +36,7 @@
     return [_downedSwitch isDefined];
 }
 
-- (TRRailConnector*)connectorForPoint:(EGPoint)point {
+- (id)connectorForPoint:(EGPoint)point {
     if(-0.1 < point.x && point.x < 0.1) {
         if(point.y < -0.3) {
             return [TRRailConnector bottom];
@@ -70,6 +69,10 @@
     } else {
         return NO;
     }
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end

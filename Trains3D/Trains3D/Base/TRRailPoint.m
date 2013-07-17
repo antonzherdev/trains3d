@@ -9,7 +9,7 @@ static TRRailConnector* _left;
 static TRRailConnector* _bottom;
 static TRRailConnector* _top;
 static TRRailConnector* _right;
-static NSArray* values;
+static NSArray* _TRRailConnector_values;
 @synthesize x = _x;
 @synthesize y = _y;
 @synthesize angle = _angle;
@@ -35,7 +35,7 @@ static NSArray* values;
     _bottom = [TRRailConnector railConnectorWithOrdinal:1 name:@"bottom" x:0 y:-1 angle:90];
     _top = [TRRailConnector railConnectorWithOrdinal:2 name:@"top" x:0 y:1 angle:270];
     _right = [TRRailConnector railConnectorWithOrdinal:3 name:@"right" x:1 y:0 angle:180];
-    values = (@[_left, _bottom, _top, _right]);
+    _TRRailConnector_values = (@[_left, _bottom, _top, _right]);
 }
 
 + (TRRailConnector*)connectorForX:(NSInteger)x y:(NSInteger)y {
@@ -89,7 +89,7 @@ static NSArray* values;
 }
 
 + (NSArray*)values {
-    return values;
+    return _TRRailConnector_values;
 }
 
 @end
@@ -107,7 +107,7 @@ static TRRailForm* _leftTop;
 static TRRailForm* _bottomTop;
 static TRRailForm* _bottomRight;
 static TRRailForm* _topRight;
-static NSArray* values;
+static NSArray* _TRRailForm_values;
 @synthesize start = _start;
 @synthesize end = _end;
 @synthesize length = _length;
@@ -149,7 +149,7 @@ static NSArray* values;
     _topRight = [TRRailForm railFormWithOrdinal:5 name:@"topRight" start:[TRRailConnector top] end:[TRRailConnector right] length:M_PI_4 pointFun:^EGPoint(double x) {
         return EGPointMake(0.5 - 0.5 * cos(x * 2), 0.5 - 0.5 * sin(x * 2));
     }];
-    values = (@[_leftBottom, _leftRight, _leftTop, _bottomTop, _bottomRight, _topRight]);
+    _TRRailForm_values = (@[_leftBottom, _leftRight, _leftTop, _bottomTop, _bottomRight, _topRight]);
 }
 
 + (TRRailForm*)formForConnector1:(TRRailConnector*)connector1 connector2:(TRRailConnector*)connector2 {
@@ -206,7 +206,7 @@ static NSArray* values;
 }
 
 + (NSArray*)values {
-    return values;
+    return _TRRailForm_values;
 }
 
 @end
