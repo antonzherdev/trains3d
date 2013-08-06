@@ -76,10 +76,7 @@ class TRRailroad(map : EGMapSso) {
         connectorIndex[tile][connector].get.as<TRSwitch>
 
     private def connect(rail : TRRail, to : TRRailConnector) {
-        connectorIndex[rail.tile].modify(with = old -> {
-            val o = old.get
-            o.connect(rail, to)
-        }, to)
+        connectorIndex[rail.tile].modify(with = _.get.connect(rail, to), to)
     }
 
     private def maybeBuildLightFor(tile : EGPointI, connector : TRRailConnector) {
@@ -114,8 +111,7 @@ class TRRailroad(map : EGMapSso) {
             val activeRailOpt = connectorDesc.rails.head
             if(activeRailOpt.isEmpty || (consideringLights && !(connectorDesc.isGreen))) correction
             else {
-                val activeRail = activeRailOpt.get
-                if(activeRail.form.ordinal != point.form) correction
+                if(activeRailOpt.get.form.ordinal != point.form) correction
                 else {
                     val nextTile = connector.next(point.tile)
                     val otherSideConnector = connector.otherSideConnector

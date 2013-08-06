@@ -308,9 +308,8 @@ static TRRailroadConnectorContent* _instance;
 }
 
 - (void)connectRail:(TRRail*)rail to:(TRRailConnector*)to {
-    [[_connectorIndex objectForTile:rail.tile] modifyWith:^TRRailroadConnectorContent*(id old) {
-        TRRailroadConnectorContent* o = [old get];
-        return [o connectRail:rail to:to];
+    [[_connectorIndex objectForTile:rail.tile] modifyWith:^TRRailroadConnectorContent*(id _) {
+        return [((TRRailroadConnectorContent*)[_ get]) connectRail:rail to:to];
     } forKey:to];
 }
 
@@ -358,8 +357,7 @@ static TRRailroadConnectorContent* _instance;
         if([activeRailOpt isEmpty] || (consideringLights && !([connectorDesc isGreen]))) {
             return correction;
         } else {
-            TRRail* activeRail = [activeRailOpt get];
-            if(activeRail.form.ordinal != point.form) {
+            if([[activeRailOpt get] form].ordinal != point.form) {
                 return correction;
             } else {
                 EGPointI nextTile = [connector nextTile:point.tile];
