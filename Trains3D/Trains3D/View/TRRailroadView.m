@@ -127,7 +127,7 @@
         NSInteger y = connector.y;
         NSInteger ox = otherConnector.x;
         NSInteger oy = otherConnector.y;
-        if((x == -1 && oy == -1) || (y == 1 && ox == 1) || (y == -1 && ox == 1) || (x == 1 && oy == 1)) egScale(1, -1, 1);
+        if((x == -1 && oy == -1) || (y == 1 && ox == -1) || (y == -1 && ox == 1) || (x == 1 && oy == 1)) egScale(1, -1, 1);
         glBegin(GL_QUADS);
         egVertex2(-0.5, 0.05);
         egVertex2(-0.5, -0.05);

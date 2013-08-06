@@ -294,8 +294,8 @@ static TRRailroadConnectorContent* _instance;
     if([self canAddRail:rail]) {
         [self connectRail:rail to:rail.form.start];
         [self connectRail:rail to:rail.form.end];
-        [self maybeBuildLightForTile:rail.tile connector:rail.form.start];
-        [self maybeBuildLightForTile:rail.tile connector:rail.form.end];
+        [self buildLightsForTile:rail.tile connector:rail.form.start];
+        [self buildLightsForTile:rail.tile connector:rail.form.end];
         [self rebuildArrays];
         return YES;
     } else {
@@ -313,14 +313,26 @@ static TRRailroadConnectorContent* _instance;
     } forKey:to];
 }
 
-- (void)maybeBuildLightForTile:(EGPointI)tile connector:(TRRailConnector*)connector {
+- (void)buildLightsForTile:(EGPointI)tile connector:(TRRailConnector*)connector {
     EGPointI nextTile = [connector nextTile:tile];
+    TRRailConnector* otherSideConnector = [connector otherSideConnector];
     if([_map isFullTile:tile] && [_map isPartialTile:nextTile]) {
-        TRRailConnector* otherSideConnector = [connector otherSideConnector];
-        [[_connectorIndex objectForTile:nextTile] modifyWith:^TRRailroadConnectorContent*(id _) {
-            return [((TRRailroadConnectorContent*)[_ get]) buildLightInConnector:otherSideConnector];
-        } forKey:otherSideConnector];
+        [self buildLightInTile:nextTile connector:otherSideConnector];
+    } else {
+        if([self isTurnRailInTile:nextTile connector:otherSideConnector]) [self buildLightInTile:nextTile connector:otherSideConnector];
     }
+    if([self isTurnRailInTile:tile connector:connector] && [[((TRRailroadConnectorContent*)[[_connectorIndex objectForTile:nextTile][otherSideConnector] get]) rails] count] == 1) [self buildLightInTile:tile connector:connector];
+}
+
+- (BOOL)isTurnRailInTile:(EGPointI)tile connector:(TRRailConnector*)connector {
+    NSArray* rails = [((TRRailroadConnectorContent*)[[_connectorIndex objectForTile:tile][connector] get]) rails];
+    return [rails count] == 1 && ((TRRail*)rails[0]).form.isTurn;
+}
+
+- (void)buildLightInTile:(EGPointI)tile connector:(TRRailConnector*)connector {
+    [[_connectorIndex objectForTile:tile] modifyWith:^TRRailroadConnectorContent*(id _) {
+        return [((TRRailroadConnectorContent*)[_ get]) buildLightInConnector:connector];
+    } forKey:connector];
 }
 
 - (void)rebuildArrays {

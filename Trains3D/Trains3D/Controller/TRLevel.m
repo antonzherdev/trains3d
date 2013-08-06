@@ -65,8 +65,8 @@
 }
 
 - (void)runSample {
-    TRCity* city0 = __cities[0];
-    TRCity* city1 = __cities[1];
+    TRCity* city0 = ((TRCity*)__cities[0]);
+    TRCity* city1 = ((TRCity*)__cities[1]);
     [self runTrain:[TRTrain trainWithLevel:self color:city1.color cars:(@[[TRCar car], [TRCar car]]) speed:0.3] fromCity:city0];
     [self runTrain:[TRTrain trainWithLevel:self color:city0.color cars:(@[[TRCar car]]) speed:0.6] fromCity:city1];
 }

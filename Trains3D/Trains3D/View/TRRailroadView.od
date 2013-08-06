@@ -68,9 +68,11 @@ class TRSwitchView {
             glEnd
         } else {
             val otherConnector = if(form.start == connector) form.end else form.start
-            val x = connector.x val y = connector.y
-            val ox = otherConnector.x val oy = otherConnector.y
-            if(x == -1 && oy == -1 || y == 1 && ox == 1 || y == -1 && ox == 1 || x == 1 && oy == 1) {
+            val x = connector.x
+            val y = connector.y
+            val ox = otherConnector.x
+            val oy = otherConnector.y
+            if(x == -1 && oy == -1 || y == 1 && ox == -1 || y == -1 && ox == 1 || x == 1 && oy == 1) {
                 egScale(1, -1, 1)
             }
             glBegin(GL_QUADS)

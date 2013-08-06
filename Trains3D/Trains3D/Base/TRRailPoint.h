@@ -25,6 +25,7 @@ typedef struct TRRailPointCorrection TRRailPointCorrection;
 @interface TRRailForm : ODEnum
 @property (nonatomic, readonly) TRRailConnector* start;
 @property (nonatomic, readonly) TRRailConnector* end;
+@property (nonatomic, readonly) BOOL isTurn;
 @property (nonatomic, readonly) double length;
 @property (nonatomic, readonly) EGPoint(^pointFun)(double);
 

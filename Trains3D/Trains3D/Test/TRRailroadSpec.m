@@ -106,12 +106,22 @@ SPEC_BEGIN(TRRailroadSpec)
             [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(-1, 0) form:[TRRailForm leftRight]]];
 
             [[railroad.lights should] haveCountOf:0];
-            [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(0, 0) form:[TRRailForm leftRight]]];
 
+            [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(0, 0) form:[TRRailForm leftRight]]];
             [[railroad.lights should] haveCountOf:1];
             TRLight * light = railroad.lights[0];
             [[theValue(EGPointIEq(light.tile, EGPointIMake(-1, 0))) should] beTrue];
             [[light.connector should] equal:[TRRailConnector right]];
+        });
+        it(@"should create lights near turn rails", ^{
+            EGMapSso *map = [EGMapSso mapSsoWithSize:EGSizeIMake(3, 3)];
+            TRRailroad * railroad = [TRRailroad railroadWithMap:map];
+            [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(1, 2) form:[TRRailForm bottomTop]]];
+            [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(0, 1) form:[TRRailForm bottomRight]]];
+            [[railroad.lights should] haveCountOf:0];
+
+            [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(1, 1) form:[TRRailForm leftTop]]];
+            [[railroad.lights should] haveCountOf:3];
         });
     });
 SPEC_END

@@ -65,8 +65,8 @@ class TRRailroad(map : EGMapSso) {
         if(canAdd(rail)) {
             connect(rail, rail.form.start)
             connect(rail, rail.form.end)
-            maybeBuildLightFor(rail.tile, rail.form.start)
-            maybeBuildLightFor(rail.tile, rail.form.end)
+            buildLightsFor(rail.tile, rail.form.start)
+            buildLightsFor(rail.tile, rail.form.end)
             rebuildArrays
             true
         } else false
@@ -79,14 +79,30 @@ class TRRailroad(map : EGMapSso) {
         connectorIndex[rail.tile].modify(with = _.get.connect(rail, to), to)
     }
 
-    private def maybeBuildLightFor(tile : EGPointI, connector : TRRailConnector) {
+    private def buildLightsFor(tile : EGPointI, connector : TRRailConnector) {
         val nextTile = connector.next(tile)
+        val otherSideConnector = connector.otherSideConnector
 
         if(map.isFull(tile) && map.isPartial(nextTile)) {
-            val otherSideConnector = connector.otherSideConnector
-            connectorIndex[nextTile].modify(with = _.get.buildLightIn(otherSideConnector), otherSideConnector)
+            buildLightIn(nextTile, otherSideConnector)
+        } else if (isTurnRailIn(nextTile, otherSideConnector)) {
+            buildLightIn(nextTile, otherSideConnector)
+        }
+
+        if(isTurnRailIn(tile, connector) && connectorIndex[nextTile][otherSideConnector].get.rails.count == 1) {
+            buildLightIn(tile, connector)
         }
     }
+
+    private def isTurnRailIn(tile : EGPointI, connector : TRRailConnector) : bool = {
+        val rails = connectorIndex[tile][connector].get.rails
+        rails.count == 1 && rails[0].form.isTurn
+    }
+
+    private def buildLightIn(tile : EGPointI, connector : TRRailConnector) {
+        connectorIndex[tile].modify(with = _.get.buildLightIn(connector), connector)
+    }
+
 
     private def rebuildArrays {
         val allObjects = connectorIndex.values.flatMap(_.values)
