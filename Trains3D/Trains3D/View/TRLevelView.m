@@ -27,9 +27,9 @@
     if(self) {
         _level = level;
         _backgroundView = [TRLevelBackgroundView levelBackgroundView];
-        _cityView = [TRCityView new];
-        _railroadView = [TRRailroadView new];
-        _trainView = [TRTrainView new];
+        _cityView = [TRCityView cityView];
+        _railroadView = [TRRailroadView railroadView];
+        _trainView = [TRTrainView trainView];
         _camera = [EGCameraIso cameraIsoWithTilesOnScreen:_level.map.size center:EGPointMake(0, 0)];
     }
     

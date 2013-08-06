@@ -3,7 +3,7 @@
 
 @class EGCameraIso;
 
-@interface EGCameraIso : NSObject
+@interface EGCameraIso : NSObject<EGCamera>
 @property (nonatomic, readonly) EGSizeI tilesOnScreen;
 @property (nonatomic, readonly) EGPoint center;
 

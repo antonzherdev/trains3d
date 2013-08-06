@@ -16,9 +16,9 @@
 - (id)init {
     self = [super init];
     if(self) {
-        _railView = [TRRailView new];
-        _switchView = [TRSwitchView new];
-        _lightView = [TRLightView new];
+        _railView = [TRRailView railView];
+        _switchView = [TRSwitchView switchView];
+        _lightView = [TRLightView lightView];
     }
     
     return self;

@@ -14,7 +14,7 @@ class TRRailroadConnectorContent {
 }
 
 class TREmptyConnector extends TRRailroadConnectorContent {
-    static val instance : TRRailroadConnectorContent = TREmptyConnector
+    static val instance : TRRailroadConnectorContent = TREmptyConnector.new
     def rails : [TRRail] = []
     def connect(rail : TRRail, to : TRRailConnector) : TRRailroadConnectorContent = rail
 }

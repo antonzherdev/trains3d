@@ -58,6 +58,6 @@ class EGDirector {
     private var _stat : EGStat? = nil
     def stat = _stat
     def isDisplayingStats = _stat.isDefined
-    def displayStats {_stat = EGStat}
+    def displayStats {_stat = EGStat.new}
     def cancelDisplayingStats {_stat = nil}
 }

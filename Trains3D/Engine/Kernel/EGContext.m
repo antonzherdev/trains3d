@@ -12,15 +12,15 @@
 
 - (id)init {
     self = [super init];
-    if(self) _textureCache = [CNCache new];
+    if(self) _textureCache = [CNCache cache];
     
     return self;
 }
 
 - (EGTexture*)textureForFile:(NSString*)file {
-    return [_textureCache lookupWithInit:^EGTexture *() {
+    return [_textureCache lookupWithInit:^EGTexture*() {
         return [EGTexture textureWithFile:file];
-    }                             forKey:file];
+    } forKey:file];
 }
 
 - (id)copyWithZone:(NSZone*)zone {

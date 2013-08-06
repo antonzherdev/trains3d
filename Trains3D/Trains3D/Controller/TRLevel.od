@@ -45,8 +45,8 @@ class TRLevel(map : EGMapSso) extends EGController {
     def runSample {
         val city0 = _cities[0]
         val city1 = _cities[1]
-        run(TRTrain(self, city1.color, [TRCar, TRCar], 0.3), city0)
-        run(TRTrain(self, city0.color, [TRCar], 0.6), city1)
+        run(TRTrain(self, city1.color, [TRCar.new, TRCar.new], 0.3), city0)
+        run(TRTrain(self, city0.color, [TRCar.new], 0.6), city1)
     }
 
     def updateWith(delta : float) {
