@@ -17,10 +17,10 @@
     return self;
 }
 
-- (id)lookupWithDef:(id(^)())def forKey:(id)forKey {
+- (id)lookupWithInit:(id(^)())init forKey:(id)forKey {
     id v = [_map objectForKey:forKey];
     if(v == nil) {
-        v = [self setObject:def() forKey:forKey];
+        v = [self setObject:init() forKey:forKey];
     }
     return v;
 }

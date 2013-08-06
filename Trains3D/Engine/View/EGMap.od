@@ -1,2 +1,4 @@
+import EGTypes
+
 stub def egMapDrawLayout(size: EGSizeI)
 stub def egMapDrawAxis

@@ -18,9 +18,9 @@
 }
 
 - (EGTexture*)textureForFile:(NSString*)file {
-    return [_textureCache lookupWithDef:^EGTexture*() {
+    return [_textureCache lookupWithInit:^EGTexture *() {
         return [EGTexture textureWithFile:file];
-    } forKey:file];
+    }                             forKey:file];
 }
 
 - (id)copyWithZone:(NSZone*)zone {

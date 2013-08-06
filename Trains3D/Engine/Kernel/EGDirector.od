@@ -10,10 +10,10 @@ class EGDirector {
     var scene : EGScene
     private var _isStarted = false
     private var _isPaused = false
-    val time : EGTime = EGTime
+    val time : EGTime = EGTime.new
     private static var _current : EGDirector
     static def current = _current
-    val context = EGContext
+    val context = EGContext.new
 
     def drawWith(size : EGSize) {
         _current = self
