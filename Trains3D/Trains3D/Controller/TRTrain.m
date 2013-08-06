@@ -73,7 +73,7 @@
     if(!(eqf(correction.error, 0.0))) {
         if(!([self isMoveToCityForPoint:correction.point]) || correction.error >= _length) {
             _back = !(_back);
-            TRCar* lastCar = [[[self directedCars] head] get];
+            TRCar* lastCar = ((TRCar*)[[[self directedCars] head] get]);
             _head = lastCar.tail;
         } else {
             _head = trRailPointCorrectionAddErrorToPoint(correction);

@@ -287,7 +287,7 @@ static TRRailroadConnectorContent* _instance;
 
 - (BOOL)canAddRail:(TRRail*)rail {
     NSMutableDictionary* tileIndex = [_connectorIndex objectForTile:rail.tile];
-    return [[[tileIndex optionObjectForKey:rail.form.start] get] canAddRail] && [[[tileIndex optionObjectForKey:rail.form.end] get] canAddRail];
+    return [((TRRailroadConnectorContent*)[[tileIndex optionObjectForKey:rail.form.start] get]) canAddRail] && [((TRRailroadConnectorContent*)[[tileIndex optionObjectForKey:rail.form.end] get]) canAddRail];
 }
 
 - (BOOL)tryAddRail:(TRRail*)rail {
@@ -304,7 +304,7 @@ static TRRailroadConnectorContent* _instance;
 }
 
 - (id)switchInTile:(EGPointI)tile connector:(TRRailConnector*)connector {
-    return [[[_connectorIndex objectForTile:tile][connector] get] asKindOfClass:[TRSwitch class]];
+    return [((TRRailroadConnectorContent*)[[_connectorIndex objectForTile:tile][connector] get]) asKindOfClass:[TRSwitch class]];
 }
 
 - (void)connectRail:(TRRail*)rail to:(TRRailConnector*)to {
@@ -318,7 +318,7 @@ static TRRailroadConnectorContent* _instance;
     if([_map isFullTile:tile] && [_map isPartialTile:nextTile]) {
         TRRailConnector* otherSideConnector = [connector otherSideConnector];
         [[_connectorIndex objectForTile:nextTile] modifyWith:^TRRailroadConnectorContent*(id _) {
-            return [[_ get] buildLightInConnector:otherSideConnector];
+            return [((TRRailroadConnectorContent*)[_ get]) buildLightInConnector:otherSideConnector];
         } forKey:otherSideConnector];
     }
 }
@@ -343,7 +343,7 @@ static TRRailroadConnectorContent* _instance;
 }
 
 - (id)activeRailForTile:(EGPointI)tile connector:(TRRailConnector*)connector {
-    return [[[[_connectorIndex objectForTile:tile][connector] get] rails] head];
+    return [[((TRRailroadConnectorContent*)[[_connectorIndex objectForTile:tile][connector] get]) rails] head];
 }
 
 - (TRRailPointCorrection)correctConsideringLights:(BOOL)consideringLights point:(TRRailPoint)point {
@@ -352,12 +352,12 @@ static TRRailroadConnectorContent* _instance;
         return correction;
     } else {
         TRRailConnector* connector = trRailPointEndConnector(point);
-        TRRailroadConnectorContent* connectorDesc = [[_connectorIndex objectForTile:point.tile][connector] get];
+        TRRailroadConnectorContent* connectorDesc = ((TRRailroadConnectorContent*)[[_connectorIndex objectForTile:point.tile][connector] get]);
         id activeRailOpt = [[connectorDesc rails] head];
         if([activeRailOpt isEmpty] || (consideringLights && !([connectorDesc isGreen]))) {
             return correction;
         } else {
-            if([[activeRailOpt get] form].ordinal != point.form) {
+            if(((TRRail*)[activeRailOpt get]).form.ordinal != point.form) {
                 return correction;
             } else {
                 EGPointI nextTile = [connector nextTile:point.tile];
@@ -366,7 +366,7 @@ static TRRailroadConnectorContent* _instance;
                 if([nextRail isEmpty]) {
                     return correction;
                 } else {
-                    TRRail* nextActiveRail = [nextRail get];
+                    TRRail* nextActiveRail = ((TRRail*)[nextRail get]);
                     TRRailForm* form = nextActiveRail.form;
                     return [self correctConsideringLights:consideringLights point:TRRailPointMake(nextTile, form.ordinal, correction.error, form.end == otherSideConnector)];
                 }

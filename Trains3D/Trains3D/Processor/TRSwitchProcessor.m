@@ -64,7 +64,7 @@
 
 - (BOOL)mouseUpEvent:(EGEvent*)event {
     if([_downedSwitch isDefined]) {
-        [_level tryTurnTheSwitch:[_downedSwitch get]];
+        [_level tryTurnTheSwitch:((TRSwitch*)[_downedSwitch get])];
         return YES;
     } else {
         return NO;
