@@ -3,6 +3,9 @@
 @class EGCamera2D;
 @class TRLevelRules;
 @class TRLevel;
+@class TRScoreRules;
+@class TRScore;
+@class TRTrainScore;
 
 @class TRLevelMenuView;
 

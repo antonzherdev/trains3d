@@ -8,6 +8,7 @@
 @class TRLevelRules;
 @class TRLevel;
 @class TRLevelView;
+@class TRLevelMenuView;
 @class TRLevelProcessor;
 @class TRScoreRules;
 @class TRScore;

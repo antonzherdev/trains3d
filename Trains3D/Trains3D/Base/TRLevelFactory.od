@@ -6,13 +6,15 @@ import EGMapIso
 import TRTrain
 import TRLevel
 import TRLevelView
+import TRLevelMenuView
 import TRLevelProcessor
 import TRScore
 import TRRailroad
 
 class TRLevelFactory {
     static def sceneFor(level : TRLevel) = EGScene(level, [
-        EGLayer(TRLevelView(level), TRLevelProcessor(level))
+        EGLayer(TRLevelView(level), TRLevelProcessor(level)),
+        EGLayer(TRLevelMenuView(level), nil)
     ])
 
     static val scoreRules = TRScoreRules(

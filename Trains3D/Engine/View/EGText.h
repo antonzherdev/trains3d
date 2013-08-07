@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 #import "EGTypes.h"
+#import "EGGL.h"
 
 
-extern void egTextGlutDraw(NSString* text, void* font, CGPoint position);
+extern void egTextGlutDraw(NSString* text, void* font, EGPoint position);

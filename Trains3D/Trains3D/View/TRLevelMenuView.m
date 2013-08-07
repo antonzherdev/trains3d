@@ -1,7 +1,10 @@
 #import "TRLevelMenuView.h"
 
 #import "EGCamera2D.h"
+#import "EGText.h"
+#import "EGGL.h"
 #import "TRLevel.h"
+#import "TRScore.h"
 @implementation TRLevelMenuView{
     TRLevel* _level;
     id<EGCamera> _camera;
@@ -24,6 +27,8 @@
 }
 
 - (void)drawView {
+    egColor3(1, 1, 1);
+    egTextGlutDraw([NSString stringWithFormat:@"%li", [_level.score score]], GLUT_BITMAP_HELVETICA_18, EGPointMake(1, 1));
 }
 
 - (id)copyWithZone:(NSZone*)zone {

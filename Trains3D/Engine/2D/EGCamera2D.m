@@ -18,7 +18,7 @@
 }
 
 - (double)factorForViewSize:(EGSize)viewSize {
-    return unumf(max(numf(viewSize.width / _size.width), numf(viewSize.height / _size.height)));
+    return min(viewSize.width / _size.width, viewSize.height / _size.height);
 }
 
 - (EGRect)viewportRectForViewSize:(EGSize)viewSize {
@@ -33,7 +33,7 @@
     egViewport(egRectIApply([self viewportRectForViewSize:viewSize]));
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0, _size.width, 0, _size.height, -1, 1);
+    glOrtho(0, _size.width, 0, _size.height, 0, 1);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }

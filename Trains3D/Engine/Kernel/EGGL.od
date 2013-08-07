@@ -25,6 +25,8 @@ stub def egVertex2(x : float, y : float)
 stub def egVertex3(x : float, y : float, z : float)
 stub def egTexCoord2(x : float, y : float)
 
+stub def egRect(x1 : float, y1 : float, x2 : float, y2 : float)
+
 stub def egViewport(rect : EGRectI)
 stub def glViewport (x : int, y : int, width : int, height : int)
 stub def glMatrixMode(: uint)

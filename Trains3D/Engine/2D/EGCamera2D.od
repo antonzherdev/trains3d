@@ -2,7 +2,7 @@ import EGTypes
 import EGGL
 
 class EGCamera2D(size : EGSize) extends EGCamera {
-    private def factorFor(viewSize : EGSize) : float = max(viewSize.width/size.width, viewSize.height/size.height)
+    private def factorFor(viewSize : EGSize) : float = min(viewSize.width/size.width, viewSize.height/size.height)
     private def viewportRectFor(viewSize : EGSize) : EGRect = viewportRectFor(viewSize, factorFor(viewSize))
     private def viewportRectFor(viewSize : EGSize, factor : float) : EGRect =
         EGRect(0, size.width*factor, 0, size.height*factor).moveToCenterFor(viewSize)
@@ -12,7 +12,7 @@ class EGCamera2D(size : EGSize) extends EGCamera {
 
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity
-        glOrtho(0, size.width, 0, size.height, -1, 1)
+        glOrtho(0, size.width, 0, size.height, 0, 1)
 
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity

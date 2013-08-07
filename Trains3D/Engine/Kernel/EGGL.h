@@ -40,3 +40,7 @@ static inline void egClear() {
 static inline void egViewport(EGRectI rect) {
     glViewport(rect.x, rect.y, rect.width, rect.height);
 }
+
+static inline void egRect (CGFloat x1, CGFloat y1, CGFloat x2, CGFloat y2) {
+    glRectd(x1, y1, x2, y2);
+}

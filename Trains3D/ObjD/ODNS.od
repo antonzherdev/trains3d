@@ -1,2 +1,2 @@
-stub def max<T>(a : T, b : T) : T
-stub def min<T>(a : T, b : T) : T
+stub def max(a : float, b : float) : float
+stub def min(a : float, b : float) : float

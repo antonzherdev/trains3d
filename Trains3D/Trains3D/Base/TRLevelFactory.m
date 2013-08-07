@@ -6,6 +6,7 @@
 #import "TRTrain.h"
 #import "TRLevel.h"
 #import "TRLevelView.h"
+#import "TRLevelMenuView.h"
 #import "TRLevelProcessor.h"
 #import "TRScore.h"
 #import "TRRailroad.h"
@@ -36,7 +37,7 @@ static NSArray* _rules;
 }
 
 + (EGScene*)sceneForLevel:(TRLevel*)level {
-    return [EGScene sceneWithController:level layers:(@[[EGLayer layerWithView:[TRLevelView levelViewWithLevel:level] processor:[CNOption opt:[TRLevelProcessor levelProcessorWithLevel:level]]]])];
+    return [EGScene sceneWithController:level layers:(@[[EGLayer layerWithView:[TRLevelView levelViewWithLevel:level] processor:[CNOption opt:[TRLevelProcessor levelProcessorWithLevel:level]]], [EGLayer layerWithView:[TRLevelMenuView levelMenuViewWithLevel:level] processor:[CNOption none]]])];
 }
 
 + (TRLevel*)levelWithNumber:(NSUInteger)number {
