@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "EGTypes.h"
 #import "EGProcessor.h"
+@class EGRectIndex;
 #import "TRRailPoint.h"
 @class TRRailroadConnectorContent;
 @class TREmptyConnector;

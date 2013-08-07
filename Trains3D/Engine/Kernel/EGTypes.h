@@ -84,38 +84,39 @@ static inline BOOL EGSizeIEq(EGSizeI s1, EGSizeI s2) {
 
 struct EGRect {
     double left;
-    double top;
     double right;
+    double top;
     double bottom;
 };
-static inline EGRect EGRectMake(double left, double top, double right, double bottom) {
+static inline EGRect EGRectMake(double left, double right, double top, double bottom) {
     EGRect ret;
     ret.left = left;
-    ret.top = top;
     ret.right = right;
+    ret.top = top;
     ret.bottom = bottom;
     return ret;
 }
 static inline BOOL EGRectEq(EGRect s1, EGRect s2) {
-    return eqf(s1.left, s2.left) && eqf(s1.top, s2.top) && eqf(s1.right, s2.right) && eqf(s1.bottom, s2.bottom);
+    return eqf(s1.left, s2.left) && eqf(s1.right, s2.right) && eqf(s1.top, s2.top) && eqf(s1.bottom, s2.bottom);
 }
+BOOL egRectContains(EGRect self, EGPoint point);
 
 struct EGRectI {
     NSInteger left;
-    NSInteger top;
     NSInteger right;
+    NSInteger top;
     NSInteger bottom;
 };
-static inline EGRectI EGRectIMake(NSInteger left, NSInteger top, NSInteger right, NSInteger bottom) {
+static inline EGRectI EGRectIMake(NSInteger left, NSInteger right, NSInteger top, NSInteger bottom) {
     EGRectI ret;
     ret.left = left;
-    ret.top = top;
     ret.right = right;
+    ret.top = top;
     ret.bottom = bottom;
     return ret;
 }
 static inline BOOL EGRectIEq(EGRectI s1, EGRectI s2) {
-    return s1.left == s2.left && s1.top == s2.top && s1.right == s2.right && s1.bottom == s2.bottom;
+    return s1.left == s2.left && s1.right == s2.right && s1.top == s2.top && s1.bottom == s2.bottom;
 }
 
 struct EGColor {

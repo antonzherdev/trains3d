@@ -1,5 +1,6 @@
 import EGTypes
 import EGProcessor
+import EGRectIndex
 
 import TRRailPoint
 import TRRailroad
@@ -8,32 +9,30 @@ import TRLevel
 class TRSwitchProcessor(level : TRLevel) extends EGMouseProcessor {
     def process(event : EGEvent) : bool = event.leftMouse(self)
 
-    private var downedSwitch : TRSwitch? = nil
+    private val index : EGRectIndex<(TRRailConnector, bool)> = EGRectIndex(
+        [
+            (EGRect(-0.1, 0.1, 0.3, 0.5), (TRRailConnector.top, false)),
+            (EGRect(-0.1, 0.1, -0.5, -0.3), (TRRailConnector.bottom, false)),
+            (EGRect(-0.5, -0.3, -0.1, 0.1), (TRRailConnector.left, false)),
+            (EGRect(0.3, 0.5, -0.1, 0.1), (TRRailConnector.right, false))
+        ]
+    )
+    private var downed : TRRailroadConnectorContent? = nil
 
     def mouseDown(event : EGEvent) = {
         val location = event.location
         val tile : EGPointI = location
         val relPoint = location.sub(tile)
-        downedSwitch = connectorFor(relPoint).flatMap(level.railroad.switchIn(tile, _))
-        downedSwitch.isDefined
+        downed = index[relPoint].map(level.railroad.contentIn(tile, _.a))
+        downed.isDefined
     }
 
-    private def connectorFor(point : EGPoint) : TRRailConnector? =
-        if(-0.1 < point.x && point.x < 0.1)
-            if(point.y < -0.3) TRRailConnector.bottom
-            else if(0.3 < point.y) TRRailConnector.top
-            else nil
-        else if(-0.1 < point.y && point.y < 0.1)
-            if(point.x < -0.3) TRRailConnector.left
-            else if(0.3 < point.x) TRRailConnector.right
-            else nil
-        else nil
-
-    def mouseDrag(event : EGEvent) = downedSwitch.isDefined
+    def mouseDrag(event : EGEvent) = downed.isDefined
 
     def mouseUp(event : EGEvent) =
-        if(downedSwitch.isDefined) {
-           level.tryTurn(downedSwitch.get)
-           true
+        if(downed.isDefined) {
+            downed.get.as<TRSwitch>.for(level.tryTurn(theSwitch = _ ))
+
+            true
         } else false
 }

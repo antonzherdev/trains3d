@@ -90,7 +90,7 @@
 - (NSArray*)lights;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (BOOL)tryAddRail:(TRRail*)rail;
-- (id)switchInTile:(EGPointI)tile connector:(TRRailConnector*)connector;
+- (id)contentInTile:(EGPointI)tile connector:(TRRailConnector*)connector;
 - (TRRailPointCorrection)moveConsideringLights:(BOOL)consideringLights forLength:(double)forLength point:(TRRailPoint)point;
 @end
 

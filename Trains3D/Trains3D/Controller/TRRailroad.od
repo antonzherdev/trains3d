@@ -72,8 +72,8 @@ class TRRailroad(map : EGMapSso) {
         } else false
     }
 
-    def switchIn(tile : EGPointI, connector : TRRailConnector) : TRSwitch? =
-        connectorIndex[tile][connector].get.as<TRSwitch>
+    def contentIn(tile : EGPointI, connector : TRRailConnector) : TRRailroadConnectorContent? =
+        connectorIndex[tile][connector].get
 
     private def connect(rail : TRRail, to : TRRailConnector) {
         connectorIndex[rail.tile].modify(with = _.get.connect(rail, to), to)

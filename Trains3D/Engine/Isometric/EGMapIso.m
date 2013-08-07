@@ -23,7 +23,7 @@
     self = [super init];
     if(self) {
         _size = size;
-        _limits = EGRectIMake((1 - _size.height) / 2 - 1, (1 - _size.width) / 2 - 1, (2 * _size.width + _size.height - 3) / 2 + 1, (_size.width + 2 * _size.height - 3) / 2 + 1);
+        _limits = EGRectIMake((1 - _size.height) / 2 - 1, (2 * _size.width + _size.height - 3) / 2 + 1, (1 - _size.width) / 2 - 1, (_size.width + 2 * _size.height - 3) / 2 + 1);
         _fullTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
             return [self isFullTile:uval(EGPointI, _)];
         }] toArray];
@@ -115,7 +115,7 @@
 }
 
 - (EGRectI)cutRectForTile:(EGPointI)tile {
-    return EGRectIMake([self tileCutAxisLess:0 more:tile.x + tile.y], [self tileCutAxisLess:tile.y - tile.x more:_size.height - 1], [self tileCutAxisLess:tile.x + tile.y more:_size.width + _size.height - 2], [self tileCutAxisLess:-_size.width + 1 more:tile.y - tile.x]);
+    return EGRectIMake([self tileCutAxisLess:0 more:tile.x + tile.y], [self tileCutAxisLess:tile.x + tile.y more:_size.width + _size.height - 2], [self tileCutAxisLess:tile.y - tile.x more:_size.height - 1], [self tileCutAxisLess:-_size.width + 1 more:tile.y - tile.x]);
 }
 
 - (id)copyWithZone:(NSZone*)zone {

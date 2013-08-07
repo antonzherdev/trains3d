@@ -28,8 +28,10 @@ struct EGPointI(x : int, y : int) {
 
 struct EGSize(width : float, height : float)
 struct EGSizeI(width : int, height : int)
-struct EGRect(left : float, top : float, right : float, bottom : float)
-struct EGRectI(left : int, top : int, right : int, bottom : int)
+struct EGRect(left : float, right : float, top : float, bottom : float) {
+    def contains(point : EGPoint) : bool = left <= point.x && point.x <= right && top <= point.y && point.y <= bottom
+}
+struct EGRectI(left : int, right : int, top : int, bottom : int)
 
 struct EGColor(r : float, g : float, b : float, a : float) {
     def set = egColor4(r, g, b, a)

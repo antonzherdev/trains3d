@@ -1,10 +1,12 @@
 #import "TRSwitchProcessor.h"
 
+#import "EGRectIndex.h"
 #import "TRRailroad.h"
 #import "TRLevel.h"
 @implementation TRSwitchProcessor{
     TRLevel* _level;
-    id _downedSwitch;
+    EGRectIndex* _index;
+    id _downed;
 }
 @synthesize level = _level;
 
@@ -16,7 +18,8 @@
     self = [super init];
     if(self) {
         _level = level;
-        _downedSwitch = [CNOption none];
+        _index = [EGRectIndex rectIndexWithRects:(@[tuple(val(EGRectMake(-0.1, 0.1, 0.3, 0.5)), tuple([TRRailConnector top], @NO)), tuple(val(EGRectMake(-0.1, 0.1, -0.5, -0.3)), tuple([TRRailConnector bottom], @NO)), tuple(val(EGRectMake(-0.5, -0.3, -0.1, 0.1)), tuple([TRRailConnector left], @NO)), tuple(val(EGRectMake(0.3, 0.5, -0.1, 0.1)), tuple([TRRailConnector right], @NO))])];
+        _downed = [CNOption none];
     }
     
     return self;
@@ -30,41 +33,21 @@
     EGPoint location = [event location];
     EGPointI tile = egPointIApply(location);
     EGPoint relPoint = egPointSub(location, egPointApply(tile));
-    _downedSwitch = [[self connectorForPoint:relPoint] flatMap:^id(TRRailConnector* _) {
-        return [_level.railroad switchInTile:tile connector:_];
+    _downed = [[_index objectForPoint:relPoint] map:^id(CNTuple* _) {
+        return [_level.railroad contentInTile:tile connector:((TRRailConnector*)_.a)];
     }];
-    return [_downedSwitch isDefined];
-}
-
-- (id)connectorForPoint:(EGPoint)point {
-    if(-0.1 < point.x && point.x < 0.1) {
-        if(point.y < -0.3) {
-            return [TRRailConnector bottom];
-        } else {
-            if(0.3 < point.y) return [TRRailConnector top];
-            else return nil;
-        }
-    } else {
-        if(-0.1 < point.y && point.y < 0.1) {
-            if(point.x < -0.3) {
-                return [TRRailConnector left];
-            } else {
-                if(0.3 < point.x) return [TRRailConnector right];
-                else return nil;
-            }
-        } else {
-            return nil;
-        }
-    }
+    return [_downed isDefined];
 }
 
 - (BOOL)mouseDragEvent:(EGEvent*)event {
-    return [_downedSwitch isDefined];
+    return [_downed isDefined];
 }
 
 - (BOOL)mouseUpEvent:(EGEvent*)event {
-    if([_downedSwitch isDefined]) {
-        [_level tryTurnTheSwitch:((TRSwitch*)[_downedSwitch get])];
+    if([_downed isDefined]) {
+        [[((TRRailroadConnectorContent*)[_downed get]) asKindOfClass:[TRSwitch class]] forEach:^void(TRSwitch* _) {
+            [_level tryTurnTheSwitch:_];
+        }];
         return YES;
     } else {
         return NO;

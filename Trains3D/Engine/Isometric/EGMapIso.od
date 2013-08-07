@@ -4,8 +4,8 @@ import EGMap
 
 class EGMapSso(size : EGSizeI) {
     val limits = EGRectI((1 - size.height)/2 - 1,
-                         (1 - size.width)/2 - 1,
                          (2*size.width + size.height - 3)/2 + 1,
+                         (1 - size.width)/2 - 1,
                          (size.width + 2*size.height - 3)/2 + 1)
     val fullTiles : [EGPointI] = allPosibleTiles.filter(isFull(_)).toArray
     val partialTiles : [EGPointI] = allPosibleTiles.filter(isPartial(_)).toArray
@@ -104,7 +104,7 @@ class EGMapSso(size : EGSizeI) {
 
     def cutRectFor(tile : EGPointI) = EGRectI(
         tileCutAxis(0, tile.x + tile.y),
-        tileCutAxis(tile.y - tile.x, size.height - 1),
         tileCutAxis(tile.x + tile.y, size.width + size.height - 2),
+        tileCutAxis(tile.y - tile.x, size.height - 1),
         tileCutAxis(-size.width + 1, tile.y - tile.x))
 }

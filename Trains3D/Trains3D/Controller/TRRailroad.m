@@ -303,8 +303,8 @@ static TRRailroadConnectorContent* _instance;
     }
 }
 
-- (id)switchInTile:(EGPointI)tile connector:(TRRailConnector*)connector {
-    return [((TRRailroadConnectorContent*)[[_connectorIndex objectForTile:tile][connector] get]) asKindOfClass:[TRSwitch class]];
+- (id)contentInTile:(EGPointI)tile connector:(TRRailConnector*)connector {
+    return ((TRRailroadConnectorContent*)[[_connectorIndex objectForTile:tile][connector] get]);
 }
 
 - (void)connectRail:(TRRail*)rail to:(TRRailConnector*)to {

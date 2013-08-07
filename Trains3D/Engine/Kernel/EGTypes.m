@@ -52,6 +52,9 @@ EGPointI egPointISub(EGPointI self, EGPointI point) {
 EGPointI egPointINegate(EGPointI self) {
     return EGPointIMake(-self.x, -self.y);
 }
+BOOL egRectContains(EGRect self, EGPoint point) {
+    return self.left <= point.x && point.x <= self.right && self.top <= point.y && point.y <= self.bottom;
+}
 void egColorSet(EGColor self) {
     egColor4(self.r, self.g, self.b, self.a);
 }
