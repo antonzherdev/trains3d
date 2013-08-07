@@ -3,6 +3,7 @@
 #import "EGMap.h"
 #import "EGMapIso.h"
 #import "EGMapIsoTileIndex.h"
+#import "TRScore.h"
 @implementation TRRailroadConnectorContent
 
 + (id)railroadConnectorContent {
@@ -242,6 +243,7 @@ static TRRailroadConnectorContent* _instance;
 
 @implementation TRRailroad{
     EGMapSso* _map;
+    TRScore* _score;
     NSArray* __rails;
     NSArray* __switches;
     NSArray* __lights;
@@ -249,16 +251,18 @@ static TRRailroadConnectorContent* _instance;
     EGMapSsoTileIndex* _connectorIndex;
 }
 @synthesize map = _map;
+@synthesize score = _score;
 @synthesize builder = _builder;
 
-+ (id)railroadWithMap:(EGMapSso*)map {
-    return [[TRRailroad alloc] initWithMap:map];
++ (id)railroadWithMap:(EGMapSso*)map score:(TRScore*)score {
+    return [[TRRailroad alloc] initWithMap:map score:score];
 }
 
-- (id)initWithMap:(EGMapSso*)map {
+- (id)initWithMap:(EGMapSso*)map score:(TRScore*)score {
     self = [super init];
     if(self) {
         _map = map;
+        _score = score;
         __rails = (@[]);
         __switches = (@[]);
         __lights = (@[]);
@@ -297,6 +301,7 @@ static TRRailroadConnectorContent* _instance;
         [self buildLightsForTile:rail.tile connector:rail.form.start];
         [self buildLightsForTile:rail.tile connector:rail.form.end];
         [self rebuildArrays];
+        [_score railBuilt];
         return YES;
     } else {
         return NO;

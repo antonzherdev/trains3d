@@ -10,6 +10,7 @@
 @class TRLight;
 @class TRRailroad;
 @class TRRailroadBuilder;
+@class TRLevelRules;
 @class TRLevel;
 
 @class TRSwitchProcessor;

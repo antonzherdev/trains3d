@@ -6,20 +6,17 @@
 #import "EGScene.h"
 #import "EGLayer.h"
 #import "EGMapIso.h"
+#import "TRScore.h"
+#import "TRTrain.h"
+#import "TRLevelFactory.h"
 
 @implementation TRAppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    EGMapSso *map = [EGMapSso mapSsoWithSize: EGSizeIMake(5, 3)];
-    TRLevel *level = [TRLevel levelWithMap: map];
+    TRLevel *level = [TRLevelFactory levelWithNumber:1];
     [level runSample];
-    EGScene *scene = [EGScene
-            sceneWithController:level
-                         layers:@[[EGLayer
-                                 layerWithView:[TRLevelView levelViewWithLevel:level]
-                                     processor:[TRLevelProcessor levelProcessorWithLevel:level]]]
-    ];
+    EGScene *scene = [TRLevelFactory sceneForLevel:level];
     TRRailroad *railroad = level.railroad;
     [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(0, 0) form:[TRRailForm leftRight]]];
     [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(1, 0) form:[TRRailForm leftBottom]]];

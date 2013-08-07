@@ -4,6 +4,7 @@
 @class TRColor;
 @class TRCityAngle;
 @class TRCity;
+@class TRLevelRules;
 @class TRLevel;
 #import "TRRailPoint.h"
 @class TRRailroadConnectorContent;

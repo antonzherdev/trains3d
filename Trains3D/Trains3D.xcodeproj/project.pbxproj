@@ -127,12 +127,14 @@
 		6F3DF9DCB7489ECEF7C332C5 /* EGRectIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF5B1E2F21ED213CE1BFE /* EGRectIndex.m */; };
 		6F3DFA5C1871BB43A168E94B /* CNChainSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC0D21FEC5A694BED172 /* CNChainSpec.m */; };
 		6F3DFA63FAACBA1EF8AB1471 /* EGRectIndex.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFC3642B7CBBE15E213D2 /* EGRectIndex.od */; };
+		6F3DFA7B8B28D3325401DA52 /* TRLevelFactory.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF8C1105FDF3EFEFAA522 /* TRLevelFactory.od */; };
 		6F3DFA8070B05D0FB3572F5B /* KWHaveValueMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF7F89B5A6EF02A239D3 /* KWHaveValueMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DFA80C3820CDDC638868D /* EGProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE9A3F96D53892227C68 /* EGProcessor.m */; };
 		6F3DFA90B96B104CC80AEAB3 /* KWInequalityMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2CF65133C9FBDF79736 /* KWInequalityMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DFAB18856CAC46CB32D6A /* TRLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF86CCB044E060A70A002 /* TRLevel.m */; };
 		6F3DFAD0E94BE150BF5D0C70 /* NSObject+KiwiVerifierAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0CC00FD6CE31C2CE2D0 /* NSObject+KiwiVerifierAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DFAD59CAE7C6195B56A4E /* KWExampleGroupBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF378E4FB14B379FE9EC5 /* KWExampleGroupBuilder.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		6F3DFAD9A108CB29563896FE /* TRScore.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF26E551E0914BC2C9F69 /* TRScore.m */; };
 		6F3DFADB53AE883EC4D6291D /* ODNS.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF5F5C37E39222A4935B6 /* ODNS.od */; };
 		6F3DFAEB6B8EC20A5224593C /* TRLevelProcessor.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFCD25609BB4D99A4CB41 /* TRLevelProcessor.od */; };
 		6F3DFB0AF1B58C42C6CCC932 /* EGLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDF61D0A66694D5D75C4 /* EGLayer.m */; };
@@ -173,6 +175,7 @@
 		6F3DFECFE9453BA8B6ADAA6C /* CNChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA93D8D19D1214BDEC32 /* CNChain.m */; };
 		6F3DFEDBDFE918183120AE27 /* KWHaveMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1980207A49D9BD33C71 /* KWHaveMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DFEEE81BBC0A5966D9E2E /* EGTime.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFC2DF92415D6518A84C5 /* EGTime.od */; };
+		6F3DFF0300690C4A49063271 /* TRLevelFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9AF54A0CAE5E3EB6282 /* TRLevelFactory.m */; };
 		6F3DFF3DA644565063716763 /* EGStat.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF7E5BB71171CADC27363 /* EGStat.od */; };
 		6F3DFF653F46CAFCE76D4578 /* TRLevelView.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFF02EA4AFE6016AEF487 /* TRLevelView.od */; };
 		6F3DFF6611B0FBC5A79DE770 /* NSProxy+KiwiVerifierAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE6E93BDB3DCD2C17930 /* NSProxy+KiwiVerifierAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -233,6 +236,7 @@
 		6F3DF11FFF9D42B73312F055 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6F3DF124FA3EDCF67ED63F3B /* TRLevel.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TRLevel.od; sourceTree = "<group>"; };
 		6F3DF16B343577D6355460C0 /* KWEqualMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWEqualMatcher.m; sourceTree = "<group>"; };
+		6F3DF16E2A3D4510896A1C8A /* TRScore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRScore.h; sourceTree = "<group>"; };
 		6F3DF17E9A9BCC1473ABED81 /* KWItNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWItNode.h; sourceTree = "<group>"; };
 		6F3DF1980207A49D9BD33C71 /* KWHaveMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWHaveMatcher.m; sourceTree = "<group>"; };
 		6F3DF1997138C42914C3DD51 /* NSObject+CNOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+CNOption.m"; sourceTree = "<group>"; };
@@ -252,6 +256,7 @@
 		6F3DF2620D66CE3A0192D17E /* CNAppendLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNAppendLink.h; sourceTree = "<group>"; };
 		6F3DF26649F6AD92A7426456 /* KWBeNonNilMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWBeNonNilMatcher.m; sourceTree = "<group>"; };
 		6F3DF26AB236CEE01439363D /* NSDictionary+CNChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+CNChain.m"; sourceTree = "<group>"; };
+		6F3DF26E551E0914BC2C9F69 /* TRScore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRScore.m; sourceTree = "<group>"; };
 		6F3DF28F5B178DD178B8F487 /* TRCity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRCity.m; sourceTree = "<group>"; };
 		6F3DF29C8B9B2D47B5533436 /* CNDistinctLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNDistinctLink.h; sourceTree = "<group>"; };
 		6F3DF2B5F56E42A6B83F3EBD /* ODEnum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ODEnum.m; sourceTree = "<group>"; };
@@ -373,6 +378,7 @@
 		6F3DF81BB6C3BC2858EF6253 /* KWNull.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWNull.m; sourceTree = "<group>"; };
 		6F3DF82B10CE71BE7ED229F8 /* KWContainMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWContainMatcher.h; sourceTree = "<group>"; };
 		6F3DF83148CBA40C2E7F5BDA /* KWUserDefinedMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWUserDefinedMatcher.h; sourceTree = "<group>"; };
+		6F3DF83611A12F17B71FACB3 /* TRScore.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TRScore.od; sourceTree = "<group>"; };
 		6F3DF83859B81D93F4F25B10 /* KWContextNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWContextNode.m; sourceTree = "<group>"; };
 		6F3DF84A9246F0144995CA8F /* TRRailroadView.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TRRailroadView.od; sourceTree = "<group>"; };
 		6F3DF8511B988BF5EF27411C /* KWMessagePattern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWMessagePattern.m; sourceTree = "<group>"; };
@@ -385,11 +391,13 @@
 		6F3DF8B0B304346D910A7B2B /* NSObject+KiwiMockAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+KiwiMockAdditions.m"; sourceTree = "<group>"; };
 		6F3DF8B9D6CCCF0FB32F4E4F /* EGGL.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGGL.od; sourceTree = "<group>"; };
 		6F3DF8BE3569365CA633DF43 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = ../../../../../Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = "<group>"; };
+		6F3DF8C1105FDF3EFEFAA522 /* TRLevelFactory.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TRLevelFactory.od; sourceTree = "<group>"; };
 		6F3DF8C84130E5F56AE7050C /* TRSwitchProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRSwitchProcessor.h; sourceTree = "<group>"; };
 		6F3DF8C8F9A44885DD267FD8 /* CNRangeLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNRangeLink.m; sourceTree = "<group>"; };
 		6F3DF8DBF0E4ACAA99BB000D /* ODLazy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ODLazy.m; sourceTree = "<group>"; };
 		6F3DF8E1B27E102FE0A3B412 /* KWBeforeAllNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeforeAllNode.h; sourceTree = "<group>"; };
 		6F3DF8E69EF7B469E1914894 /* KWBeEmptyMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWBeEmptyMatcher.m; sourceTree = "<group>"; };
+		6F3DF8EBC857530D729CF354 /* TRLevelFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRLevelFactory.h; sourceTree = "<group>"; };
 		6F3DF8F6A14F39B3B21325E8 /* KWBeMemberOfClassMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWBeMemberOfClassMatcher.m; sourceTree = "<group>"; };
 		6F3DF8F8C931223990326F81 /* TRRailroad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRRailroad.m; sourceTree = "<group>"; };
 		6F3DF8FF4641F4C52AF14DA5 /* NSObject+KiwiStubAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+KiwiStubAdditions.h"; sourceTree = "<group>"; };
@@ -409,6 +417,7 @@
 		6F3DF980D0476B0472119D26 /* TRAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRAppDelegate.m; sourceTree = "<group>"; };
 		6F3DF98E9B2374642D900DFA /* KWGenericMatchEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWGenericMatchEvaluator.h; sourceTree = "<group>"; };
 		6F3DF9A2807799E9A7261FAC /* KWAfterEachNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWAfterEachNode.m; sourceTree = "<group>"; };
+		6F3DF9AF54A0CAE5E3EB6282 /* TRLevelFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRLevelFactory.m; sourceTree = "<group>"; };
 		6F3DF9B278CDB3BCD10C073B /* KWInequalityMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWInequalityMatcher.h; sourceTree = "<group>"; };
 		6F3DF9B37B463BDA38324C29 /* KiwiConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KiwiConfiguration.h; sourceTree = "<group>"; };
 		6F3DF9B58395D7F6CA5DE892 /* KWMock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWMock.m; sourceTree = "<group>"; };
@@ -1051,6 +1060,9 @@
 				6F3DFF0B38C7A443AAEE3805 /* TRRailPoint.od */,
 				6F3DF4EE86B9FB7E6A32D957 /* TRRailPoint.h */,
 				6F3DFC10AAF2EA07B7086A8D /* TRRailPoint.m */,
+				6F3DF8EBC857530D729CF354 /* TRLevelFactory.h */,
+				6F3DF9AF54A0CAE5E3EB6282 /* TRLevelFactory.m */,
+				6F3DF8C1105FDF3EFEFAA522 /* TRLevelFactory.od */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -1184,6 +1196,9 @@
 				6F3DFEF62D691FF6C2A194BD /* TRTrain.od */,
 				6F3DFDFD69012B2F9BD1EEEA /* TRTrain.h */,
 				6F3DFB08F20E2FD32E0CA79A /* TRTrain.m */,
+				6F3DF83611A12F17B71FACB3 /* TRScore.od */,
+				6F3DF16E2A3D4510896A1C8A /* TRScore.h */,
+				6F3DF26E551E0914BC2C9F69 /* TRScore.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1307,6 +1322,7 @@
 				6F3DF437E087F4F298F40C45 /* TRTypes.od in Resources */,
 				6F3DF73438F4EBB9AAA9366B /* ODEnum.od in Resources */,
 				6F3DFA63FAACBA1EF8AB1471 /* EGRectIndex.od in Resources */,
+				6F3DFA7B8B28D3325401DA52 /* TRLevelFactory.od in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1398,6 +1414,8 @@
 				6F3DF81E33776FFC651A6BAE /* CNFlatMapLink.m in Sources */,
 				6F3DF5E5E76EA3D7E67A6445 /* CNDistinctLink.m in Sources */,
 				6F3DF9DCB7489ECEF7C332C5 /* EGRectIndex.m in Sources */,
+				6F3DFAD9A108CB29563896FE /* TRScore.m in Sources */,
+				6F3DFF0300690C4A49063271 /* TRLevelFactory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

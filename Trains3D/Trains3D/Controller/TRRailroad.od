@@ -4,6 +4,7 @@ import EGTypes
 import EGMapIsoTileIndex
 
 import TRRailPoint
+import TRScore
 
 class TRRailroadConnectorContent {
     def canAddRail : bool = true
@@ -45,7 +46,7 @@ class TRLight(tile : EGPointI, connector : TRRailConnector, rail : TRRail) exten
     def buildLightIn(connector : TRRailConnector) : TRRailroadConnectorContent = self
 }
 
-class TRRailroad(map : EGMapSso) {
+class TRRailroad(map : EGMapSso, score : TRScore) {
     private var _rails : [TRRail] = []
     def rails = _rails
     private var _switches : [TRSwitch] = []
@@ -68,6 +69,7 @@ class TRRailroad(map : EGMapSso) {
             buildLightsFor(rail.tile, rail.form.start)
             buildLightsFor(rail.tile, rail.form.end)
             rebuildArrays
+            score.railBuilt
             true
         } else false
     }

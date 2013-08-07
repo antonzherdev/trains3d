@@ -1,0 +1,54 @@
+import EGTypes
+
+import TRTrain
+
+class TRScoreRules(initialScore : int, railCost : int,
+    arrivedPrize : TRTrain -> int, destructionFine : TRTrain -> int,
+    delayPeriod : float, delayFine : (TRTrain, int) -> int,
+    repairCost : int)
+
+class TRScore(rules : TRScoreRules) extends EGController {
+    private var _score : int = rules.initialScore
+    def score : int = _score
+
+    def railBuilt {
+        _score -= rules.railCost
+    }
+
+    private var trains : [TRTrainScore] = []
+    def run(train : TRTrain) {
+        trains += TRTrainScore(train)
+    }
+    def arrived(train : TRTrain) {
+        _score += rules.arrivedPrize(train)
+        trains = trains.filter(_.train != train).toArray
+    }
+    def destroyed(train : TRTrain) {
+        _score -= rules.destructionFine(train)
+    }
+    def updateWith(delta : float) {
+        trains.for(train -> {
+            train.updateWith(delta)
+            if(train.needFineWith(rules.delayPeriod)) {
+                _score -= train.fineWith(rule = rules.delayFine)
+            }
+        })
+    }
+}
+
+class TRTrainScore(train : TRTrain) extends EGController {
+    private var delayTime = 0.0
+    private var fineCount = 0
+
+    def updateWith(delta : float) {
+        delayTime += delta
+    }
+
+    def needFineWith(delayPeriod : float) : bool = delayTime >= delayPeriod
+
+    def fineWith(rule : (TRTrain, int) -> int) : int = {
+        fineCount++
+        delayTime = 0
+        rule(train, fineCount)
+    }
+}

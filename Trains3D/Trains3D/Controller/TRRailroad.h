@@ -3,6 +3,9 @@
 #import "EGTypes.h"
 @class EGMapSsoTileIndex;
 #import "TRRailPoint.h"
+@class TRScoreRules;
+@class TRScore;
+@class TRTrainScore;
 
 @class TRRailroadConnectorContent;
 @class TREmptyConnector;
@@ -81,10 +84,11 @@
 
 @interface TRRailroad : NSObject
 @property (nonatomic, readonly) EGMapSso* map;
+@property (nonatomic, readonly) TRScore* score;
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
 
-+ (id)railroadWithMap:(EGMapSso*)map;
-- (id)initWithMap:(EGMapSso*)map;
++ (id)railroadWithMap:(EGMapSso*)map score:(TRScore*)score;
+- (id)initWithMap:(EGMapSso*)map score:(TRScore*)score;
 - (NSArray*)rails;
 - (NSArray*)switches;
 - (NSArray*)lights;

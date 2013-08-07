@@ -6,10 +6,14 @@ import TRTypes
 import TRRailroad
 import TRRailPoint
 import TRTrain
+import TRScore
 
+class TRLevelRules(mapSize : EGSizeI, scoreRules : TRScoreRules)
 
-class TRLevel(map : EGMapSso) extends EGController {
-    val railroad : TRRailroad = TRRailroad(map)
+class TRLevel(rules : TRLevelRules) extends EGController {
+    val map : EGMapSso = EGMapSso(rules.mapSize)
+    val score : TRScore = TRScore(rules.scoreRules)
+    val railroad : TRRailroad = TRRailroad(map, score)
     private var _cities : [TRCity] = appendNextCityTo(appendNextCityTo([]))
     def cities = _cities
     private var _trains : [TRTrain] = []
@@ -40,6 +44,7 @@ class TRLevel(map : EGMapSso) extends EGController {
     private def run(train : TRTrain, fromCity : TRCity) {
         train.startFrom(fromCity)
         _trains += train
+        score.run(train)
     }
 
     def runSample {
@@ -51,6 +56,7 @@ class TRLevel(map : EGMapSso) extends EGController {
 
     def updateWith(delta : float) {
         _trains.for(_.updateWith(delta))
+        score.updateWith(delta)
     }
 
     def tryTurn(theSwitch : TRSwitch) {

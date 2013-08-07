@@ -5,24 +5,59 @@
 #import "TRTypes.h"
 #import "TRRailroad.h"
 #import "TRTrain.h"
+#import "TRScore.h"
+@implementation TRLevelRules{
+    EGSizeI _mapSize;
+    TRScoreRules* _scoreRules;
+}
+@synthesize mapSize = _mapSize;
+@synthesize scoreRules = _scoreRules;
+
++ (id)levelRulesWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules {
+    return [[TRLevelRules alloc] initWithMapSize:mapSize scoreRules:scoreRules];
+}
+
+- (id)initWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules {
+    self = [super init];
+    if(self) {
+        _mapSize = mapSize;
+        _scoreRules = scoreRules;
+    }
+    
+    return self;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
+
 @implementation TRLevel{
+    TRLevelRules* _rules;
     EGMapSso* _map;
+    TRScore* _score;
     TRRailroad* _railroad;
     NSArray* __cities;
     NSArray* __trains;
 }
+@synthesize rules = _rules;
 @synthesize map = _map;
+@synthesize score = _score;
 @synthesize railroad = _railroad;
 
-+ (id)levelWithMap:(EGMapSso*)map {
-    return [[TRLevel alloc] initWithMap:map];
++ (id)levelWithRules:(TRLevelRules*)rules {
+    return [[TRLevel alloc] initWithRules:rules];
 }
 
-- (id)initWithMap:(EGMapSso*)map {
+- (id)initWithRules:(TRLevelRules*)rules {
     self = [super init];
     if(self) {
-        _map = map;
-        _railroad = [TRRailroad railroadWithMap:_map];
+        _rules = rules;
+        _map = [EGMapSso mapSsoWithSize:_rules.mapSize];
+        _score = [TRScore scoreWithRules:_rules.scoreRules];
+        _railroad = [TRRailroad railroadWithMap:_map score:_score];
         __cities = [self appendNextCityToCities:[self appendNextCityToCities:(@[])]];
         __trains = (@[]);
     }
@@ -62,6 +97,7 @@
 - (void)runTrain:(TRTrain*)train fromCity:(TRCity*)fromCity {
     [train startFromCity:fromCity];
     __trains = [__trains arrayByAddingObject:train];
+    [_score runTrain:train];
 }
 
 - (void)runSample {
@@ -75,6 +111,7 @@
     [__trains forEach:^void(TRTrain* _) {
         [_ updateWithDelta:delta];
     }];
+    [_score updateWithDelta:delta];
 }
 
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch {

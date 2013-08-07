@@ -3,6 +3,7 @@
 #import "EGProcessor.h"
 #import "TRRailroadBuilderProcessor.h"
 @class TRSwitchProcessor;
+@class TRLevelRules;
 @class TRLevel;
 @class TRLevelView;
 @class TRRailroadConnectorContent;

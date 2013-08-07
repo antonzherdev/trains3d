@@ -1,0 +1,29 @@
+import EGTypes
+import EGScene
+import EGLayer
+
+import TRTrain
+import TRLevel
+import TRLevelView
+import TRLevelProcessor
+import TRScore
+
+class TRLevelFactory {
+    static def sceneFor(level : TRLevel) = EGScene(level, [
+        EGLayer(TRLevelView(level), TRLevelProcessor(level))
+    ])
+
+    private static val rules = [TRLevelRules(
+        mapSize = EGSizeI(5, 3),
+        scoreRules = TRScoreRules(
+            initialScore = 100000,
+            railCost = 1000,
+            arrivedPrize = train -> train.cars.count * 2000,
+            destructionFine = train -> train.cars.count * 3000,
+            delayPeriod = 10,
+            delayFine = (train, i) -> i*1000,
+            repairCost = 2000
+        ))]
+    static def levelWith(number : uint) = TRLevel(rules[number - 1])
+    static def sceneForLevelWith(number : uint) = sceneFor(levelWith(number))
+}
