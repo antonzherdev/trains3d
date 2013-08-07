@@ -1,0 +1,26 @@
+import EGTypes
+import EGGL
+
+class EGCamera2D(size : EGSize) extends EGCamera {
+    private def factorFor(viewSize : EGSize) : float = max(viewSize.width/size.width, viewSize.height/size.height)
+    private def viewportRectFor(viewSize : EGSize) : EGRect = viewportRectFor(viewSize, factorFor(viewSize))
+    private def viewportRectFor(viewSize : EGSize, factor : float) : EGRect =
+        EGRect(0, size.width*factor, 0, size.height*factor).moveToCenterFor(viewSize)
+
+    def focusFor(viewSize : EGSize) {
+        egViewport(viewportRectFor(viewSize))
+
+        glMatrixMode(GL_PROJECTION)
+        glLoadIdentity
+        glOrtho(0, size.width, 0, size.height, -1, 1)
+
+        glMatrixMode(GL_MODELVIEW)
+        glLoadIdentity
+    }
+
+    def translateWith(viewSize : EGSize, viewPoint : EGPoint) : EGPoint = {
+        val factor = factorFor(viewSize)
+        val viewport = viewportRectFor(viewSize, factor)
+        viewPoint.sub(viewport.point).div(factor)
+    }
+}

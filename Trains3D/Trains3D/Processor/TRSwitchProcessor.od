@@ -11,15 +11,15 @@ class TRSwitchProcessor(level : TRLevel) extends EGMouseProcessor {
 
     private val index : EGRectIndex<(TRRailConnector, bool)> = EGRectIndex(
         [
-            (EGRect(-0.1, 0.1, 0.3, 0.5), (TRRailConnector.top, false)),
-            (EGRect(-0.1, 0.1, -0.5, -0.3), (TRRailConnector.bottom, false)),
-            (EGRect(-0.5, -0.3, -0.1, 0.1), (TRRailConnector.left, false)),
-            (EGRect(0.3, 0.5, -0.1, 0.1), (TRRailConnector.right, false)),
+            (EGRect(-0.1, 0.2, 0.3, 0.2), (TRRailConnector.top, false)),
+            (EGRect(-0.1, 0.2, -0.5, 0.2), (TRRailConnector.bottom, false)),
+            (EGRect(-0.5, 0.2, -0.1, 0.2), (TRRailConnector.left, false)),
+            (EGRect(0.3, 0.2, -0.1, 0.2), (TRRailConnector.right, false)),
 
-            (EGRect(0.15, 0.25, 0.4, 0.5), (TRRailConnector.top, true)),
-            (EGRect(-0.25, -0.15, -0.5, -0.3), (TRRailConnector.bottom, true)),
-            (EGRect(-0.5, -0.4, 0.15, 0.25), (TRRailConnector.left, true)),
-            (EGRect(0.4, 0.5, -0.25, -0.15), (TRRailConnector.right, true))
+            (EGRect(0.15, 0.1, 0.4, 0.1), (TRRailConnector.top, true)),
+            (EGRect(-0.25, 0.1, -0.5, 0.1), (TRRailConnector.bottom, true)),
+            (EGRect(-0.5, 0.1, 0.15, 0.1), (TRRailConnector.left, true)),
+            (EGRect(0.4, 0.1, -0.25, 0.1), (TRRailConnector.right, true))
         ]
     )
     private var downed : TRRailroadConnectorContent? = nil

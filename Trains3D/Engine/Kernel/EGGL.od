@@ -24,3 +24,11 @@ stub val GL_LINES : uint
 stub def egVertex2(x : float, y : float)
 stub def egVertex3(x : float, y : float, z : float)
 stub def egTexCoord2(x : float, y : float)
+
+stub def egViewport(rect : EGRectI)
+stub def glViewport (x : int, y : int, width : int, height : int)
+stub def glMatrixMode(: uint)
+stub val GL_PROJECTION : uint
+stub val GL_MODELVIEW : uint
+stub def glLoadIdentity
+stub def glOrtho(left : float, right : float, bottom : float, top : float, zNear : float, zFar : float)

@@ -50,7 +50,7 @@ static inline CGRect calculateViewportSize(EGSizeI tilesOnScreen, EGSize viewSiz
     glTranslatef((GLfloat) -_center.x,0, (GLfloat) -_center.y);
 }
 
-- (EGPoint)translateViewPoint:(EGPoint)viewPoint withViewSize:(EGSize)viewSize {
+- (EGPoint)translateWithViewSize:(EGSize)viewSize viewPoint:(EGPoint)viewPoint {
     CGRect vps = calculateViewportSize(_tilesOnScreen, viewSize);
     CGFloat x = viewPoint.x - vps.origin.x;
     CGFloat y = viewPoint.y - vps.origin.y;

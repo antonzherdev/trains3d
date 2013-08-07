@@ -10,7 +10,8 @@
 + (id)cameraIsoWithTilesOnScreen:(EGSizeI)tilesOnScreen center:(EGPoint)center;
 - (id)initWithTilesOnScreen:(EGSizeI)tilesOnScreen center:(EGPoint)center;
 - (void)focusForViewSize:(EGSize)viewSize;
-- (EGPoint)translateViewPoint:(EGPoint)viewPoint withViewSize:(EGSize)withViewSize;
+
+- (EGPoint)translateWithViewSize:(EGSize)viewSize viewPoint:(EGPoint)viewPoint;
 @end
 
 

@@ -2,6 +2,7 @@
 #import "TRLevel.h"
 #import "TRRailroad.h"
 #import "EGMapIso.h"
+#import "TRLevelFactory.h"
 
 #define checkCorrection [[theValue(TRRailPointCorrectionEq(r, e)) should] beTrue]
 #define rpm(tx, ty, form, x, back) TRRailPointMake(EGPointIMake(tx, ty), [TRRailForm form].ordinal, x, back)
@@ -12,8 +13,7 @@
 SPEC_BEGIN(TRRailroadSpec)
     describe(@"TRRailroad", ^{
         it(@"should move point", ^{
-            EGMapSso *map = [EGMapSso mapSsoWithSize:EGSizeIMake(10, 7)];
-            TRRailroad * railroad = [TRRailroad railroadWithMap:map];
+            TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:EGSizeIMake(10, 7)];
 
             [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(0, 0) form:[TRRailForm leftRight]]];
             [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(1, 0) form:[TRRailForm leftBottom]]];
@@ -48,8 +48,7 @@ SPEC_BEGIN(TRRailroadSpec)
             checkCorrection;
         });
         it(@"should add switches", ^{
-            EGMapSso *map = [EGMapSso mapSsoWithSize:EGSizeIMake(10, 7)];
-            TRRailroad * railroad = [TRRailroad railroadWithMap:map];
+            TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:EGSizeIMake(10, 7)];
 
             TRRail *xRail = [TRRail railWithTile:EGPointIMake(2, 0) form:[TRRailForm leftRight]];
             [railroad tryAddRail:xRail];
@@ -76,8 +75,7 @@ SPEC_BEGIN(TRRailroadSpec)
             [[theSwitch.rail2 should] equal:turnRail];
         });
         it(@"should choose active switch and should lock moving through closing switch", ^{
-            EGMapSso *map = [EGMapSso mapSsoWithSize:EGSizeIMake(10, 7)];
-            TRRailroad * railroad = [TRRailroad railroadWithMap:map];
+            TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:EGSizeIMake(10, 7)];
             [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(2, 0) form:[TRRailForm leftRight]]];
             [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(3, 0) form:[TRRailForm leftTop]]];
             [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(3, 0) form:[TRRailForm leftRight]]];
@@ -101,8 +99,7 @@ SPEC_BEGIN(TRRailroadSpec)
             checkCorrection;
         });
         it(@"should create light near a city", ^{
-            EGMapSso *map = [EGMapSso mapSsoWithSize:EGSizeIMake(1, 1)];
-            TRRailroad * railroad = [TRRailroad railroadWithMap:map];
+            TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:EGSizeIMake(1, 1)];
             [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(-1, 0) form:[TRRailForm leftRight]]];
 
             [[railroad.lights should] haveCountOf:0];
@@ -114,8 +111,7 @@ SPEC_BEGIN(TRRailroadSpec)
             [[light.connector should] equal:[TRRailConnector right]];
         });
         it(@"should create lights near turn rails", ^{
-            EGMapSso *map = [EGMapSso mapSsoWithSize:EGSizeIMake(3, 3)];
-            TRRailroad * railroad = [TRRailroad railroadWithMap:map];
+            TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:EGSizeIMake(3, 3)];
             [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(1, 2) form:[TRRailForm bottomTop]]];
             [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(0, 1) form:[TRRailForm bottomRight]]];
             [[railroad.lights should] haveCountOf:0];

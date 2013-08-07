@@ -30,10 +30,10 @@ class TRLevel(rules : TRLevelRules) extends EGController {
         val cut = map.cutRectFor(tile)
         TRCityAngle.values.filter(a -> {
             val angle = a.angle
-            {(angle == 0 && cut.right == 0 && cut.bottom == 0)
-            || (angle == 90 && cut.left == 0 && cut.bottom == 0)
-            || (angle == 180 && cut.left == 0 && cut.top == 0)
-            || (angle == 270 && cut.right == 0 && cut.top == 0)}
+            {(angle == 0 && cut.x2 == 0 && cut.y2 == 0)
+            || (angle == 90 && cut.x == 0 && cut.y2 == 0)
+            || (angle == 180 && cut.x == 0 && cut.y == 0)
+            || (angle == 270 && cut.x2 == 0 && cut.y == 0)}
         }).randomItem.get
     }
 

@@ -11,22 +11,22 @@ SPEC_BEGIN(EGCameraIsoSpec)
                 EGCameraIso *camera = [EGCameraIso cameraIsoWithTilesOnScreen:ms center:EGPointMake(0, 0)];
                 EGSize viewSize = EGSizeMake(100, 90);
                 it(@"(0, 20) -> (0.5, -1.5)", ^{
-                    EGPoint p = [camera translateViewPoint:EGPointMake(0, 20) withViewSize:viewSize];
+                    EGPoint p = [camera translateWithViewSize:viewSize viewPoint:EGPointMake(0, 20)];
                     [[theValue(p.x) should] equal:0.5 withDelta:0.00001];
                     [[theValue(p.y) should] equal:-1.5 withDelta:0.00001];
                 });
                 it(@"(100, 70) -> (0.5, 3.5)", ^{
-                    EGPoint p = [camera translateViewPoint:EGPointMake(100, 70) withViewSize:viewSize];
+                    EGPoint p = [camera translateWithViewSize:viewSize viewPoint:EGPointMake(100, 70)];
                     [[theValue(p.x) should] equal:0.5 withDelta:0.00001];
                     [[theValue(p.y) should] equal:3.5 withDelta:0.00001];
                 });
                 it(@"(100, 50) -> (1.5, 2.5)", ^{
-                    EGPoint p = [camera translateViewPoint:EGPointMake(100, 50) withViewSize:viewSize];
+                    EGPoint p = [camera translateWithViewSize:viewSize viewPoint:EGPointMake(100, 50)];
                     [[theValue(p.x) should] equal:1.5 withDelta:0.00001];
                     [[theValue(p.y) should] equal:2.5 withDelta:0.00001];
                 });
                 it(@"(60, 70) -> (-0.5, 2.5)", ^{
-                    EGPoint p = [camera translateViewPoint:EGPointMake(60, 70) withViewSize:viewSize];
+                    EGPoint p = [camera translateWithViewSize:viewSize viewPoint:EGPointMake(60, 70)];
                     [[theValue(p.x) should] equal:-0.5 withDelta:0.00001];
                     [[theValue(p.y) should] equal:2.5 withDelta:0.00001];
                 });
@@ -36,7 +36,7 @@ SPEC_BEGIN(EGCameraIsoSpec)
                 EGCameraIso *camera = [EGCameraIso cameraIsoWithTilesOnScreen:ms center:EGPointMake(0, 0)];
                 EGSize viewSize = EGSizeMake(160, 100);
                 it(@"(0, 10) -> (2, -3)", ^{
-                    EGPoint p = [camera translateViewPoint:EGPointMake(0, 10) withViewSize:viewSize];
+                    EGPoint p = [camera translateWithViewSize:viewSize viewPoint:EGPointMake(0, 10)];
                     [[theValue(p.x) should] equal:2 withDelta:0.00001];
                     [[theValue(p.y) should] equal:-3 withDelta:0.00001];
                 });

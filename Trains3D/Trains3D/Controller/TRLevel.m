@@ -86,7 +86,7 @@
     EGRectI cut = [_map cutRectForTile:tile];
     return [[[[TRCityAngle values] filter:^BOOL(TRCityAngle* a) {
         NSInteger angle = a.angle;
-        return (angle == 0 && cut.right == 0 && cut.bottom == 0) || (angle == 90 && cut.left == 0 && cut.bottom == 0) || (angle == 180 && cut.left == 0 && cut.top == 0) || (angle == 270 && cut.right == 0 && cut.top == 0);
+        return (angle == 0 && egRectIX2(cut) == 0 && egRectIY2(cut) == 0) || (angle == 90 && cut.x == 0 && egRectIY2(cut) == 0) || (angle == 180 && cut.x == 0 && cut.y == 0) || (angle == 270 && egRectIX2(cut) == 0 && cut.y == 0);
     }] randomItem] get];
 }
 

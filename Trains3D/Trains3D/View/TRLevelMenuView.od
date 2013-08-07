@@ -1,0 +1,12 @@
+import EGTypes
+import EGCamera2D
+
+import TRLevel
+
+class TRLevelMenuView(level : TRLevel) extends EGView {
+    val camera : EGCamera = EGCamera2D(EGSize(2, 1))
+
+    def drawView {
+
+    }
+}

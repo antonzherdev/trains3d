@@ -28,6 +28,9 @@ double egPointLength(EGPoint self) {
 EGPoint egPointMul(EGPoint self, double value) {
     return EGPointMake(self.x * value, self.y * value);
 }
+EGPoint egPointDiv(EGPoint self, double value) {
+    return EGPointMake(self.x / value, self.y / value);
+}
 EGPoint egPointMid(EGPoint self, EGPoint point) {
     return egPointMul(egPointAdd(self, point), 0.5);
 }
@@ -53,7 +56,40 @@ EGPointI egPointINegate(EGPointI self) {
     return EGPointIMake(-self.x, -self.y);
 }
 BOOL egRectContains(EGRect self, EGPoint point) {
-    return self.left <= point.x && point.x <= self.right && self.top <= point.y && point.y <= self.bottom;
+    return self.x <= point.x && point.x <= self.x + self.width && self.y <= point.y && point.y <= self.y + self.height;
+}
+double egRectX2(EGRect self) {
+    return self.x + self.width;
+}
+double egRectY2(EGRect self) {
+    return self.y + self.height;
+}
+EGRect egRectNewXY(double x, double x2, double y, double y2) {
+    return EGRectMake(x, x2 - x, y, y2 - y);
+}
+EGRect egRectMove(EGRect self, double x, double y) {
+    return EGRectMake(self.x + x, self.width, self.y + y, self.height);
+}
+EGRect egRectMoveToCenterFor(EGRect self, EGSize size) {
+    return EGRectMake((size.width - self.width) / 2, self.width, (size.height - self.height) / 2, self.height);
+}
+EGPoint egRectPoint(EGRect self) {
+    return EGPointMake(self.x, self.y);
+}
+EGSize egRectSize(EGRect self) {
+    return EGSizeMake(self.width, self.height);
+}
+EGRectI egRectIApply(EGRect rect) {
+    return EGRectIMake(lround(rect.x), lround(rect.width), lround(rect.y), lround(rect.height));
+}
+EGRectI egRectINewXY(double x, double x2, double y, double y2) {
+    return EGRectIMake(x, x2 - x, y, y2 - y);
+}
+NSInteger egRectIX2(EGRectI self) {
+    return self.x + self.width;
+}
+NSInteger egRectIY2(EGRectI self) {
+    return self.y + self.height;
 }
 void egColorSet(EGColor self) {
     egColor4(self.r, self.g, self.b, self.a);

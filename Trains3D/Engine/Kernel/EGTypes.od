@@ -12,6 +12,7 @@ struct EGPoint(x : float, y : float) {
     def lengthSquare : float = dot(self)
     def length = sqrt(lengthSquare)
     def mul(value : float) = EGPoint(x*value, y*value)
+    def div(value : float) = EGPoint(x/value, y/value)
     def mid(point : EGPoint) = add(point).mul(0.5)
     def distanceTo(point : EGPoint) = sub(point).length
     def set(length : float) = mul(length/self.length)
@@ -28,10 +29,24 @@ struct EGPointI(x : int, y : int) {
 
 struct EGSize(width : float, height : float)
 struct EGSizeI(width : int, height : int)
-struct EGRect(left : float, right : float, top : float, bottom : float) {
-    def contains(point : EGPoint) : bool = left <= point.x && point.x <= right && top <= point.y && point.y <= bottom
+struct EGRect(x : float, width : float, y : float, height : float) {
+    def contains(point : EGPoint) : bool = x <= point.x && point.x <= x + width && y <= point.y && point.y <= y + height
+    def x2 : float = x + width
+    def y2 : float = y + height
+
+    static def newXY(x : float, x2: float, y : float, y2 : float) : EGRect = EGRect(x, x2 - x, y, y2 - y)
+
+    def move(x : float, y : float) = EGRect(self.x + x, width, self.y + y, height)
+    def moveToCenterFor(size : EGSize) = EGRect((size.width - width)/2, width, (size.height - height)/2, height)
+    def point : EGPoint = EGPoint(x, y)
+    def size : EGSize = EGSize(width, height)
 }
-struct EGRectI(left : int, right : int, top : int, bottom : int)
+struct EGRectI(x : int, width : int, y : int, height : int) {
+    static def apply(rect : EGRect) = EGRectI(lround(rect.x), lround(rect.width), lround(rect.y), lround(rect.height))
+    static def newXY(x : float, x2: float, y : float, y2 : float) : EGRectI = EGRectI(x, x2 - x, y, y2 - y)
+    def x2 : int = x + width
+    def y2 : int  = y + height
+}
 
 struct EGColor(r : float, g : float, b : float, a : float) {
     def set = egColor4(r, g, b, a)
@@ -56,7 +71,7 @@ trait EGController {
 trait EGCamera {
     def focusFor(viewSize : EGSize)
 
-    def translate(viewPoint : EGPoint, withViewSize : EGSize) : EGPoint
+    def translateWith(viewSize : EGSize, viewPoint : EGPoint) : EGPoint
 }
 
 trait EGView {

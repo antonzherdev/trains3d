@@ -35,7 +35,7 @@
 
 - (EGPoint)locationForDepth:(double)depth {
     if([_camera isEmpty]) return [self locationInView];
-    else return [[_camera get] translateViewPoint:[self locationInView] withViewSize:_viewSize];
+    else return [[_camera get] translateWithViewSize:_viewSize viewPoint:[self locationInView]];
 }
 
 - (BOOL)isLeftMouseDown {

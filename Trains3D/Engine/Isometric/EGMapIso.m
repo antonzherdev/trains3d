@@ -23,7 +23,7 @@
     self = [super init];
     if(self) {
         _size = size;
-        _limits = EGRectIMake((1 - _size.height) / 2 - 1, (2 * _size.width + _size.height - 3) / 2 + 1, (1 - _size.width) / 2 - 1, (_size.width + 2 * _size.height - 3) / 2 + 1);
+        _limits = egRectINewXY((1 - _size.height) / 2 - 1, (2 * _size.width + _size.height - 3) / 2 + 1, (1 - _size.width) / 2 - 1, (_size.width + 2 * _size.height - 3) / 2 + 1);
         _fullTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
             return [self isFullTile:uval(EGPointI, _)];
         }] toArray];
@@ -81,12 +81,12 @@
 
 - (void)drawPlane {
     glBegin(GL_QUADS);
-    double l = _limits.left - 1.5;
-    double r = _limits.right + 1.5;
-    double t = _limits.top - 1.5;
-    double b = _limits.bottom + 1.5;
-    NSInteger w = _limits.right - _limits.left + 3;
-    NSInteger h = _limits.bottom - _limits.top + 3;
+    double l = _limits.x - 1.5;
+    double r = egRectIX2(_limits) + 1.5;
+    double t = _limits.y - 1.5;
+    double b = egRectIY2(_limits) + 1.5;
+    NSInteger w = _limits.width + 3;
+    NSInteger h = _limits.height + 3;
     egTexCoord2(0.0, 0.0);
     egVertex3(l, b, 0);
     egTexCoord2(w, 0.0);
@@ -100,7 +100,7 @@
 }
 
 - (CNChain*)allPosibleTiles {
-    return [[[CNChain chainWithStart:_limits.left end:_limits.right step:1] mul:[CNChain chainWithStart:_limits.top end:_limits.bottom step:1]] map:^id(CNTuple* _) {
+    return [[[CNChain chainWithStart:_limits.x end:egRectIX2(_limits) step:1] mul:[CNChain chainWithStart:_limits.y end:egRectIY2(_limits) step:1]] map:^id(CNTuple* _) {
         return val(EGPointIMake(unumi(_.a), unumi(_.b)));
     }];
 }
@@ -115,7 +115,7 @@
 }
 
 - (EGRectI)cutRectForTile:(EGPointI)tile {
-    return EGRectIMake([self tileCutAxisLess:0 more:tile.x + tile.y], [self tileCutAxisLess:tile.x + tile.y more:_size.width + _size.height - 2], [self tileCutAxisLess:tile.y - tile.x more:_size.height - 1], [self tileCutAxisLess:-_size.width + 1 more:tile.y - tile.x]);
+    return egRectINewXY([self tileCutAxisLess:0 more:tile.x + tile.y], [self tileCutAxisLess:tile.x + tile.y more:_size.width + _size.height - 2], [self tileCutAxisLess:tile.y - tile.x more:_size.height - 1], [self tileCutAxisLess:-_size.width + 1 more:tile.y - tile.x]);
 }
 
 - (id)copyWithZone:(NSZone*)zone {
