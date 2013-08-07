@@ -71,10 +71,15 @@
 
 - (void)correctCorrection:(TRRailPointCorrection)correction {
     if(!(eqf(correction.error, 0.0))) {
-        if(!([self isMoveToCityForPoint:correction.point]) || correction.error >= _length) {
-            _back = !(_back);
-            TRCar* lastCar = ((TRCar*)[[[self directedCars] head] get]);
-            _head = lastCar.tail;
+        BOOL isMoveToCity = [self isMoveToCityForPoint:correction.point];
+        if(!(isMoveToCity) || correction.error >= _length) {
+            if(isMoveToCity && ((TRCity*)[[_level cityForTile:correction.point.tile] get]).color == _color) {
+                [_level arrivedTrain:self];
+            } else {
+                _back = !(_back);
+                TRCar* lastCar = ((TRCar*)[[[self directedCars] head] get]);
+                _head = lastCar.tail;
+            }
         } else {
             _head = trRailPointCorrectionAddErrorToPoint(correction);
         }

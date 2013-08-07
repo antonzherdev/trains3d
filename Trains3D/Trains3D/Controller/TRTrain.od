@@ -38,10 +38,15 @@ class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : flo
 
     private def correct(correction : TRRailPointCorrection) {
         if(correction.error != 0.0) {
-            if(!isMoveToCityFor(correction.point) || correction.error >= length) {
-                back = !back
-                val lastCar = directedCars.head.get
-                head = lastCar.tail
+            val isMoveToCity = isMoveToCityFor(correction.point)
+            if(!isMoveToCity || correction.error >= length) {
+                if(isMoveToCity && level.cityFor(correction.point.tile).get.color == color) {
+                    level.arrived(self)
+                } else {
+                    back = !back
+                    val lastCar = directedCars.head.get
+                    head = lastCar.tail
+                }
             } else {
                 head = correction.addErrorToPoint
             }

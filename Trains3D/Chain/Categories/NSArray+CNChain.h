@@ -26,4 +26,6 @@
 - (id)find:(cnPredicate)predicate;
 
 - (CNChain *)distinct;
+
+- (NSArray *)arrayByRemovingObject:(id)object;
 @end

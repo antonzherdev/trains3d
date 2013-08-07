@@ -124,6 +124,17 @@
     }] isDefined];
 }
 
+- (id)cityForTile:(EGPointI)tile {
+    return [__cities find:^BOOL(TRCity* _) {
+        return EGPointIEq(_.tile, tile);
+    }];
+}
+
+- (void)arrivedTrain:(TRTrain*)train {
+    __trains = [__trains arrayByRemovingObject:train];
+    [_score arrivedTrain:train];
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }

@@ -44,6 +44,8 @@
 - (void)runSample;
 - (void)updateWithDelta:(double)delta;
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch;
+- (id)cityForTile:(EGPointI)tile;
+- (void)arrivedTrain:(TRTrain*)train;
 @end
 
 

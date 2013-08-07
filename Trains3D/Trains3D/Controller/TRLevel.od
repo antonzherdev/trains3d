@@ -66,4 +66,11 @@ class TRLevel(rules : TRLevelRules) extends EGController {
     }
 
     private def isLocked(theSwitch : TRSwitch) : bool = _trains.find(_.isLocked(theSwitch)).isDefined
+
+    def cityFor(tile : EGPointI) : TRCity? = _cities.find(_.tile == tile)
+
+    def arrived(train : TRTrain) {
+        _trains -= train
+        score.arrived(train)
+    }
 }

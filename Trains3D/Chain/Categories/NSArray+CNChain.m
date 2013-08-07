@@ -83,4 +83,10 @@
 - (CNChain *)distinct {
     return [[self chain] distinct];
 }
+
+- (NSArray *)arrayByRemovingObject:(id)object {
+    return [[self filter:^BOOL(id x) {
+        return ![x isEqual:object];
+    }] toArray];
+}
 @end
