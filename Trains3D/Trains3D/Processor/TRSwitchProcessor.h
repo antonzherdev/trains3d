@@ -2,7 +2,10 @@
 #import "EGTypes.h"
 #import "EGProcessor.h"
 @class EGRectIndex;
-#import "TRRailPoint.h"
+@class TRRailConnector;
+@class TRRailForm;
+@class TRRailPoint;
+@class TRRailPointCorrection;
 @class TRRailroadConnectorContent;
 @class TREmptyConnector;
 @class TRRail;

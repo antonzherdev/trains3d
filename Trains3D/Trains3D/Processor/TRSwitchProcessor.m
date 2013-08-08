@@ -1,6 +1,7 @@
 #import "TRSwitchProcessor.h"
 
 #import "EGRectIndex.h"
+#import "TRRailPoint.h"
 #import "TRRailroad.h"
 #import "TRLevel.h"
 @implementation TRSwitchProcessor{
@@ -61,6 +62,13 @@
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"level=%@", self.level];
+    [description appendString:@">"];
+    return description;
 }
 
 @end

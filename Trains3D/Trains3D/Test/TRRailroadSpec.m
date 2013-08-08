@@ -3,12 +3,13 @@
 #import "TRRailroad.h"
 #import "EGMapIso.h"
 #import "TRLevelFactory.h"
+#import "TRRailPoint.h"
 
-#define checkCorrection [[theValue(TRRailPointCorrectionEq(r, e)) should] beTrue]
-#define rpm(tx, ty, form, x, back) TRRailPointMake(EGPointIMake(tx, ty), [TRRailForm form].ordinal, x, back)
-#define cor(p, e) TRRailPointCorrectionMake(p, e)
-#define zcor(p) TRRailPointCorrectionMake(p, 0)
-#define zrpm(tx, ty, form, x, back) zcor(TRRailPointMake(EGPointIMake(tx, ty), [TRRailForm form].ordinal, x, back))
+#define checkCorrection [[r should] equal:e]
+#define rpm(tx, ty, fform, xx, bback) [[TRRailPoint alloc] initWithTile:EGPointIMake(tx, ty) form:[TRRailForm fform] x:xx back:bback]
+#define cor(p, e) [TRRailPointCorrection railPointCorrectionWithPoint:p error:e]
+#define zcor(p) [TRRailPointCorrection railPointCorrectionWithPoint:p error:0]
+#define zrpm(tx, ty, fform, xx, bback) zcor([[TRRailPoint alloc] initWithTile:EGPointIMake(tx, ty) form:[TRRailForm fform] x:xx back:bback])
 #define move(p, len) [railroad moveConsideringLights:YES forLength:len point:p]
 SPEC_BEGIN(TRRailroadSpec)
     describe(@"TRRailroad", ^{
@@ -25,9 +26,9 @@ SPEC_BEGIN(TRRailroadSpec)
             [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(3, 2) form:[TRRailForm leftBottom]]];
             [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(2, 2) form:[TRRailForm leftRight]]];
 
-            TRRailPoint p0 = rpm(0, 0, leftRight, 0, NO);
-            TRRailPointCorrection r = move(p0, 0.5);
-            TRRailPointCorrection e = zcor(trRailPointAdd(p0, 0.5));
+            TRRailPoint* p0 = rpm(0, 0, leftRight, 0, NO);
+            TRRailPointCorrection* r = move(p0, 0.5);
+            TRRailPointCorrection* e = zcor([p0 addX:0.5]);
             checkCorrection;
 
             r = move(p0, 1.2);
@@ -80,9 +81,9 @@ SPEC_BEGIN(TRRailroadSpec)
             [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(3, 0) form:[TRRailForm leftTop]]];
             [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(3, 0) form:[TRRailForm leftRight]]];
 
-            TRRailPoint p0 = rpm(2, 0, leftRight, 0, NO);
-            TRRailPointCorrection r = move(p0, 1.2);
-            TRRailPointCorrection e = zrpm(3, 0, leftTop, 0.2, NO);
+            TRRailPoint* p0 = rpm(2, 0, leftRight, 0, NO);
+            TRRailPointCorrection* r = move(p0, 1.2);
+            TRRailPointCorrection* e = zrpm(3, 0, leftTop, 0.2, NO);
             checkCorrection;
 
             TRSwitch * theSwitch = railroad.switches[0];

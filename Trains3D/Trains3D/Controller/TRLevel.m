@@ -4,6 +4,7 @@
 #import "TRCity.h"
 #import "TRTypes.h"
 #import "TRRailroad.h"
+#import "TRRailPoint.h"
 #import "TRTrain.h"
 #import "TRScore.h"
 @implementation TRLevelRules{
@@ -29,6 +30,28 @@
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRLevelRules* o = ((TRLevelRules*)other);
+    return EGSizeIEq(self.mapSize, o.mapSize) && [self.scoreRules isEqual:o.scoreRules];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + EGSizeIHash(self.mapSize);
+    hash = hash * 31 + [self.scoreRules hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"mapSize=%@", EGSizeIDescription(self.mapSize)];
+    [description appendFormat:@", scoreRules=%@", self.scoreRules];
+    [description appendString:@">"];
+    return description;
 }
 
 @end
@@ -108,10 +131,11 @@
 }
 
 - (void)updateWithDelta:(double)delta {
+    [_score updateWithDelta:delta];
     [__trains forEach:^void(TRTrain* _) {
         [_ updateWithDelta:delta];
     }];
-    [_score updateWithDelta:delta];
+    [self detectCollisions];
 }
 
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch {
@@ -135,8 +159,18 @@
     [_score arrivedTrain:train];
 }
 
+- (void)detectCollisions {
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"rules=%@", self.rules];
+    [description appendString:@">"];
+    return description;
 }
 
 @end

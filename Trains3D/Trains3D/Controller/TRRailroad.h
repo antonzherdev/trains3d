@@ -2,7 +2,10 @@
 @class EGMapSso;
 #import "EGTypes.h"
 @class EGMapSsoTileIndex;
-#import "TRRailPoint.h"
+@class TRRailConnector;
+@class TRRailForm;
+@class TRRailPoint;
+@class TRRailPointCorrection;
 @class TRScoreRules;
 @class TRScore;
 @class TRTrainScore;
@@ -95,7 +98,7 @@
 - (BOOL)canAddRail:(TRRail*)rail;
 - (BOOL)tryAddRail:(TRRail*)rail;
 - (id)contentInTile:(EGPointI)tile connector:(TRRailConnector*)connector;
-- (TRRailPointCorrection)moveConsideringLights:(BOOL)consideringLights forLength:(double)forLength point:(TRRailPoint)point;
+- (TRRailPointCorrection*)moveConsideringLights:(BOOL)consideringLights forLength:(double)forLength point:(TRRailPoint*)point;
 @end
 
 

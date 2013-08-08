@@ -2,6 +2,7 @@
 
 #import "EGMap.h"
 #import "TRTypes.h"
+#import "TRRailPoint.h"
 @implementation TRCityAngle{
     NSInteger _angle;
     TRRailForm* _form;
@@ -87,12 +88,36 @@ static NSArray* _TRCityAngle_values;
     return self;
 }
 
-- (TRRailPoint)startPoint {
-    return TRRailPointMake(_tile, _angle.form.ordinal, 0, _angle.back);
+- (TRRailPoint*)startPoint {
+    return [TRRailPoint railPointWithTile:_tile form:_angle.form x:0 back:_angle.back];
 }
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRCity* o = ((TRCity*)other);
+    return self.color == o.color && EGPointIEq(self.tile, o.tile) && self.angle == o.angle;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.color ordinal];
+    hash = hash * 31 + EGPointIHash(self.tile);
+    hash = hash * 31 + [self.angle ordinal];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"color=%@", self.color];
+    [description appendFormat:@", tile=%@", EGPointIDescription(self.tile)];
+    [description appendFormat:@", angle=%@", self.angle];
+    [description appendString:@">"];
+    return description;
 }
 
 @end

@@ -4,6 +4,7 @@ import EGModel
 
 import TRTrain
 import TRTypes
+import TRRailPoint
 import "TR3DCar.h"
 
 stub val Car : string

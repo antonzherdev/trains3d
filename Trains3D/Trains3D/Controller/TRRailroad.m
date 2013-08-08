@@ -3,6 +3,7 @@
 #import "EGMap.h"
 #import "EGMapIso.h"
 #import "EGMapIsoTileIndex.h"
+#import "TRRailPoint.h"
 #import "TRScore.h"
 @implementation TRRailroadConnectorContent
 
@@ -40,6 +41,23 @@
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRailroadConnectorContent* o = ((TRRailroadConnectorContent*)other);
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
 @end
 
 
@@ -75,6 +93,23 @@ static TRRailroadConnectorContent* _instance;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TREmptyConnector* o = ((TREmptyConnector*)other);
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
 }
 
 @end
@@ -119,6 +154,28 @@ static TRRailroadConnectorContent* _instance;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRail* o = ((TRRail*)other);
+    return EGPointIEq(self.tile, o.tile) && self.form == o.form;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + EGPointIHash(self.tile);
+    hash = hash * 31 + [self.form ordinal];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"tile=%@", EGPointIDescription(self.tile)];
+    [description appendFormat:@", form=%@", self.form];
+    [description appendString:@">"];
+    return description;
 }
 
 @end
@@ -184,6 +241,16 @@ static TRRailroadConnectorContent* _instance;
     return self;
 }
 
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"tile=%@", EGPointIDescription(self.tile)];
+    [description appendFormat:@", connector=%@", self.connector];
+    [description appendFormat:@", rail1=%@", self.rail1];
+    [description appendFormat:@", rail2=%@", self.rail2];
+    [description appendString:@">"];
+    return description;
+}
+
 @end
 
 
@@ -236,6 +303,15 @@ static TRRailroadConnectorContent* _instance;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"tile=%@", EGPointIDescription(self.tile)];
+    [description appendFormat:@", connector=%@", self.connector];
+    [description appendFormat:@", rail=%@", self.rail];
+    [description appendString:@">"];
+    return description;
 }
 
 @end
@@ -355,26 +431,26 @@ static TRRailroadConnectorContent* _instance;
     }] toArray];
 }
 
-- (TRRailPointCorrection)moveConsideringLights:(BOOL)consideringLights forLength:(double)forLength point:(TRRailPoint)point {
-    return [self correctConsideringLights:consideringLights point:trRailPointAdd(point, forLength)];
+- (TRRailPointCorrection*)moveConsideringLights:(BOOL)consideringLights forLength:(double)forLength point:(TRRailPoint*)point {
+    return [self correctConsideringLights:consideringLights point:[point addX:forLength]];
 }
 
 - (id)activeRailForTile:(EGPointI)tile connector:(TRRailConnector*)connector {
     return [[((TRRailroadConnectorContent*)[[_connectorIndex objectForTile:tile][connector] get]) rails] head];
 }
 
-- (TRRailPointCorrection)correctConsideringLights:(BOOL)consideringLights point:(TRRailPoint)point {
-    TRRailPointCorrection correction = trRailPointCorrect(point);
-    if(correction.error == 0) {
+- (TRRailPointCorrection*)correctConsideringLights:(BOOL)consideringLights point:(TRRailPoint*)point {
+    TRRailPointCorrection* correction = [point correct];
+    if(eqf(correction.error, 0)) {
         return correction;
     } else {
-        TRRailConnector* connector = trRailPointEndConnector(point);
+        TRRailConnector* connector = [point endConnector];
         TRRailroadConnectorContent* connectorDesc = ((TRRailroadConnectorContent*)[[_connectorIndex objectForTile:point.tile][connector] get]);
         id activeRailOpt = [[connectorDesc rails] head];
         if([activeRailOpt isEmpty] || (consideringLights && !([connectorDesc isGreen]))) {
             return correction;
         } else {
-            if(((TRRail*)[activeRailOpt get]).form.ordinal != point.form) {
+            if(((TRRail*)[activeRailOpt get]).form != point.form) {
                 return correction;
             } else {
                 EGPointI nextTile = [connector nextTile:point.tile];
@@ -385,7 +461,7 @@ static TRRailroadConnectorContent* _instance;
                 } else {
                     TRRail* nextActiveRail = ((TRRail*)[nextRail get]);
                     TRRailForm* form = nextActiveRail.form;
-                    return [self correctConsideringLights:consideringLights point:TRRailPointMake(nextTile, form.ordinal, correction.error, form.end == otherSideConnector)];
+                    return [self correctConsideringLights:consideringLights point:[TRRailPoint railPointWithTile:nextTile form:form x:correction.error back:form.end == otherSideConnector]];
                 }
             }
         }
@@ -394,6 +470,14 @@ static TRRailroadConnectorContent* _instance;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"map=%@", self.map];
+    [description appendFormat:@", score=%@", self.score];
+    [description appendString:@">"];
+    return description;
 }
 
 @end
@@ -445,6 +529,13 @@ static TRRailroadConnectorContent* _instance;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"railroad=%@", self.railroad];
+    [description appendString:@">"];
+    return description;
 }
 
 @end

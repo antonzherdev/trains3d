@@ -111,6 +111,12 @@ static EGDirector* __current;
     return self;
 }
 
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
 @end
 
 

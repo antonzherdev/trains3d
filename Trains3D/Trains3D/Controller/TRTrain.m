@@ -4,13 +4,14 @@
 #import "TRTypes.h"
 #import "TRCity.h"
 #import "TRLevel.h"
+#import "TRRailPoint.h"
 #import "TRRailroad.h"
 @implementation TRTrain{
     __weak TRLevel* _level;
     TRColor* _color;
     NSArray* _cars;
     double _speed;
-    TRRailPoint _head;
+    TRRailPoint* _head;
     BOOL _back;
     double _carsDelta;
     double _length;
@@ -47,13 +48,13 @@
 }
 
 - (void)calculateCarPositions {
-    [[self directedCars] fold:^id(id hl, TRCar* car) {
-        car.head = uval(TRRailPoint, hl);
-        TRRailPoint next = trRailPointCorrectionAddErrorToPoint([_level.railroad moveConsideringLights:NO forLength:[car length] point:uval(TRRailPoint, hl)]);
+    ((TRRailPoint*)[[self directedCars] fold:^TRRailPoint*(TRRailPoint* hl, TRCar* car) {
+        car.head = hl;
+        TRRailPoint* next = [[_level.railroad moveConsideringLights:NO forLength:[car length] point:hl] addErrorToPoint];
         car.tail = next;
-        car.nextHead = trRailPointCorrectionAddErrorToPoint([_level.railroad moveConsideringLights:NO forLength:_carsDelta point:next]);
-        return val(car.nextHead);
-    } withStart:val(trRailPointInvert(_head))];
+        car.nextHead = [[_level.railroad moveConsideringLights:NO forLength:_carsDelta point:next] addErrorToPoint];
+        return car.nextHead;
+    } withStart:[_head invert]]);
 }
 
 - (EGPoint)movePoint:(EGPoint)point length:(double)length {
@@ -69,7 +70,7 @@
     else return _cars;
 }
 
-- (void)correctCorrection:(TRRailPointCorrection)correction {
+- (void)correctCorrection:(TRRailPointCorrection*)correction {
     if(!(eqf(correction.error, 0.0))) {
         BOOL isMoveToCity = [self isMoveToCityForPoint:correction.point];
         if(!(isMoveToCity) || correction.error >= _length) {
@@ -81,7 +82,7 @@
                 _head = lastCar.tail;
             }
         } else {
-            _head = trRailPointCorrectionAddErrorToPoint(correction);
+            _head = [correction addErrorToPoint];
         }
     } else {
         _head = correction.point;
@@ -89,8 +90,8 @@
     [self calculateCarPositions];
 }
 
-- (BOOL)isMoveToCityForPoint:(TRRailPoint)point {
-    return !([_level.map isFullTile:point.tile]) && !([_level.map isFullTile:trRailPointNextTile(point)]);
+- (BOOL)isMoveToCityForPoint:(TRRailPoint*)point {
+    return !([_level.map isFullTile:point.tile]) && !([_level.map isFullTile:[point nextTile]]);
 }
 
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch {
@@ -105,13 +106,23 @@
     return self;
 }
 
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"level=%@", self.level];
+    [description appendFormat:@", color=%@", self.color];
+    [description appendFormat:@", cars=%@", self.cars];
+    [description appendFormat:@", speed=%f", self.speed];
+    [description appendString:@">"];
+    return description;
+}
+
 @end
 
 
 @implementation TRCar{
-    TRRailPoint _head;
-    TRRailPoint _tail;
-    TRRailPoint _nextHead;
+    TRRailPoint* _head;
+    TRRailPoint* _tail;
+    TRRailPoint* _nextHead;
 }
 @synthesize head = _head;
 @synthesize tail = _tail;
@@ -133,6 +144,12 @@
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
 }
 
 @end

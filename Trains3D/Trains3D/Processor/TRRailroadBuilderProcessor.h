@@ -9,7 +9,10 @@
 @class TRLight;
 @class TRRailroad;
 @class TRRailroadBuilder;
-#import "TRRailPoint.h"
+@class TRRailConnector;
+@class TRRailForm;
+@class TRRailPoint;
+@class TRRailPointCorrection;
 
 @class TRRailroadBuilderProcessor;
 @class TRRailroadBuilderMouseProcessor;
@@ -38,6 +41,21 @@ static inline TRRailCorrection TRRailCorrectionMake(EGPointI tile, EGPointI star
 }
 static inline BOOL TRRailCorrectionEq(TRRailCorrection s1, TRRailCorrection s2) {
     return EGPointIEq(s1.tile, s2.tile) && EGPointIEq(s1.start, s2.start) && EGPointIEq(s1.end, s2.end);
+}
+static inline NSUInteger TRRailCorrectionHash(TRRailCorrection self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + EGPointIHash(self.tile);
+    hash = hash * 31 + EGPointIHash(self.start);
+    hash = hash * 31 + EGPointIHash(self.end);
+    return hash;
+}
+static inline NSString* TRRailCorrectionDescription(TRRailCorrection self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<TRRailCorrection: "];
+    [description appendFormat:@"tile=%@", EGPointIDescription(self.tile)];
+    [description appendFormat:@", start=%@", EGPointIDescription(self.start)];
+    [description appendFormat:@", end=%@", EGPointIDescription(self.end)];
+    [description appendString:@">"];
+    return description;
 }
 
 @interface TRRailroadBuilderMouseProcessor : NSObject<EGMouseProcessor>

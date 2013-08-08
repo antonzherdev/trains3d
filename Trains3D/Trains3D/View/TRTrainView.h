@@ -4,6 +4,10 @@
 @class TRTrain;
 @class TRCar;
 @class TRColor;
+@class TRRailConnector;
+@class TRRailForm;
+@class TRRailPoint;
+@class TRRailPointCorrection;
 
 @class TRTrainView;
 

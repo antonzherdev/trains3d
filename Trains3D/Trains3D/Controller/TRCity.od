@@ -16,5 +16,5 @@ enum TRCityAngle(angle : int, form : TRRailForm, back : bool) {
  * angle - поворот по часовой стрелке. При 0 город направлен по оси x в положительном направлении
  */
 class TRCity(color : TRColor, tile : EGPointI, angle : TRCityAngle) {
-    def startPoint = TRRailPoint(tile, angle.form.ordinal, 0, angle.back)
+    def startPoint = TRRailPoint(tile, angle.form, 0, angle.back)
 }

@@ -41,6 +41,38 @@
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRScoreRules* o = ((TRScoreRules*)other);
+    return self.initialScore == o.initialScore && self.railCost == o.railCost && [self.arrivedPrize isEqual:o.arrivedPrize] && [self.destructionFine isEqual:o.destructionFine] && eqf(self.delayPeriod, o.delayPeriod) && [self.delayFine isEqual:o.delayFine] && self.repairCost == o.repairCost;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.initialScore;
+    hash = hash * 31 + self.railCost;
+    hash = hash * 31 + [self.arrivedPrize hash];
+    hash = hash * 31 + [self.destructionFine hash];
+    hash = hash * 31 + [[NSNumber numberWithDouble:self.delayPeriod] hash];
+    hash = hash * 31 + [self.delayFine hash];
+    hash = hash * 31 + self.repairCost;
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"initialScore=%li", self.initialScore];
+    [description appendFormat:@", railCost=%li", self.railCost];
+    [description appendFormat:@", arrivedPrize=%@", self.arrivedPrize];
+    [description appendFormat:@", destructionFine=%@", self.destructionFine];
+    [description appendFormat:@", delayPeriod=%f", self.delayPeriod];
+    [description appendFormat:@", delayFine=%@", self.delayFine];
+    [description appendFormat:@", repairCost=%li", self.repairCost];
+    [description appendString:@">"];
+    return description;
+}
+
 @end
 
 
@@ -100,6 +132,13 @@
     return self;
 }
 
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"rules=%@", self.rules];
+    [description appendString:@">"];
+    return description;
+}
+
 @end
 
 
@@ -141,6 +180,13 @@
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"train=%@", self.train];
+    [description appendString:@">"];
+    return description;
 }
 
 @end

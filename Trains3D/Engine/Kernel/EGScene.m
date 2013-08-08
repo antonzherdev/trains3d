@@ -43,6 +43,28 @@
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGScene* o = ((EGScene*)other);
+    return [self.controller isEqual:o.controller] && [self.layers isEqual:o.layers];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.controller hash];
+    hash = hash * 31 + [self.layers hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"controller=%@", self.controller];
+    [description appendFormat:@", layers=%@", self.layers];
+    [description appendString:@">"];
+    return description;
+}
+
 @end
 
 

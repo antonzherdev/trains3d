@@ -9,6 +9,7 @@
 #import "TRScore.h"
 #import "TRTrain.h"
 #import "TRLevelFactory.h"
+#import "TRRailPoint.h"
 
 @implementation TRAppDelegate
 

@@ -1,7 +1,10 @@
 #import "objd.h"
 #import "EGTypes.h"
 @class TRColor;
-#import "TRRailPoint.h"
+@class TRRailConnector;
+@class TRRailForm;
+@class TRRailPoint;
+@class TRRailPointCorrection;
 
 @class TRCity;
 @class TRCityAngle;
@@ -26,7 +29,7 @@
 
 + (id)cityWithColor:(TRColor*)color tile:(EGPointI)tile angle:(TRCityAngle*)angle;
 - (id)initWithColor:(TRColor*)color tile:(EGPointI)tile angle:(TRCityAngle*)angle;
-- (TRRailPoint)startPoint;
+- (TRRailPoint*)startPoint;
 @end
 
 

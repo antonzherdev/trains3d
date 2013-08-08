@@ -100,6 +100,28 @@
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGEvent* o = ((EGEvent*)other);
+    return EGSizeEq(self.viewSize, o.viewSize) && [self.camera isEqual:o.camera];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + EGSizeHash(self.viewSize);
+    hash = hash * 31 + [self.camera hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"viewSize=%@", EGSizeDescription(self.viewSize)];
+    [description appendFormat:@", camera=%@", self.camera];
+    [description appendString:@">"];
+    return description;
+}
+
 @end
 
 

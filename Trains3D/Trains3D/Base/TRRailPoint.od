@@ -42,36 +42,34 @@ enum TRRailForm(start : TRRailConnector, end : TRRailConnector, isTurn : bool, l
 
 }
 
-struct TRRailPoint(tile : EGPointI, form : uint, x : float, back : bool) {
+class TRRailPoint(tile : EGPointI, form : TRRailForm, x : float, back : bool) {
     def add(x : float) = TRRailPoint(tile, form, self.x + x, back)
 
-    def getForm : TRRailForm = TRRailForm.values[form]
+    def startConnector = if(back) form.end else form.start
 
-    def startConnector = if(back) getForm.end else getForm.start
+    def endConnector = if(back) form.start else form.end
 
-    def endConnector = if(back) getForm.start else getForm.end
-
-    def isValid = x >= 0 && x <= getForm.length
+    def isValid = x >= 0 && x <= form.length
 
     def correct : TRRailPointCorrection = {
-        val length = self.getForm.length
+        val length = self.form.length
         if(self.x > length) TRRailPointCorrection(TRRailPoint(self.tile, self.form, length, self.back), self.x - length)
         else TRRailPointCorrection(self, 0)
     }
 
-    def point : EGPoint = {
-        val form = getForm
+    val point : EGPoint = calculatePoint
+    private def calculatePoint : EGPoint = {
         val x = if(back) form.length - self.x else self.x
         val f = form.pointFun
         val p : EGPoint = f(x)
         EGPoint(p.x + tile.x, p.y + tile.y)
     }
 
-    def invert = TRRailPoint(tile, form, getForm.length - x, !back)
+    def invert = TRRailPoint(tile, form, form.length - x, !back)
 
     def nextTile : EGPointI = endConnector.next(tile)
 }
 
-struct TRRailPointCorrection(point : TRRailPoint, error : float) {
+class TRRailPointCorrection(point : TRRailPoint, error : float) {
     def addErrorToPoint : TRRailPoint = if(error == 0) point else point.add(error)
 }

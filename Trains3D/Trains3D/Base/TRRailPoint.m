@@ -215,42 +215,160 @@ static NSArray* _TRRailForm_values;
 @end
 
 
-TRRailPoint trRailPointAdd(TRRailPoint self, double x) {
-    return TRRailPointMake(self.tile, self.form, self.x + x, self.back);
+@implementation TRRailPoint{
+    EGPointI _tile;
+    TRRailForm* _form;
+    double _x;
+    BOOL _back;
+    EGPoint _point;
 }
-TRRailForm* trRailPointGetForm(TRRailPoint self) {
-    return [TRRailForm values][self.form];
+@synthesize tile = _tile;
+@synthesize form = _form;
+@synthesize x = _x;
+@synthesize back = _back;
+@synthesize point = _point;
+
++ (id)railPointWithTile:(EGPointI)tile form:(TRRailForm*)form x:(double)x back:(BOOL)back {
+    return [[TRRailPoint alloc] initWithTile:tile form:form x:x back:back];
 }
-TRRailConnector* trRailPointStartConnector(TRRailPoint self) {
-    if(self.back) return trRailPointGetForm(self).end;
-    else return trRailPointGetForm(self).start;
+
+- (id)initWithTile:(EGPointI)tile form:(TRRailForm*)form x:(double)x back:(BOOL)back {
+    self = [super init];
+    if(self) {
+        _tile = tile;
+        _form = form;
+        _x = x;
+        _back = back;
+        _point = [self calculatePoint];
+    }
+    
+    return self;
 }
-TRRailConnector* trRailPointEndConnector(TRRailPoint self) {
-    if(self.back) return trRailPointGetForm(self).start;
-    else return trRailPointGetForm(self).end;
+
+- (TRRailPoint*)addX:(double)x {
+    return [TRRailPoint railPointWithTile:_tile form:_form x:_x + x back:_back];
 }
-BOOL trRailPointIsValid(TRRailPoint self) {
-    return self.x >= 0 && self.x <= trRailPointGetForm(self).length;
+
+- (TRRailConnector*)startConnector {
+    if(_back) return _form.end;
+    else return _form.start;
 }
-TRRailPointCorrection trRailPointCorrect(TRRailPoint self) {
-    double length = trRailPointGetForm(self).length;
-    if(self.x > length) return TRRailPointCorrectionMake(TRRailPointMake(self.tile, self.form, length, self.back), self.x - length);
-    else return TRRailPointCorrectionMake(self, 0);
+
+- (TRRailConnector*)endConnector {
+    if(_back) return _form.start;
+    else return _form.end;
 }
-EGPoint trRailPointPoint(TRRailPoint self) {
-    TRRailForm* form = trRailPointGetForm(self);
-    double x = self.back ? form.length - self.x : self.x;
-    EGPoint(^f)(double) = form.pointFun;
+
+- (BOOL)isValid {
+    return _x >= 0 && _x <= _form.length;
+}
+
+- (TRRailPointCorrection*)correct {
+    double length = _form.length;
+    if(_x > length) return [TRRailPointCorrection railPointCorrectionWithPoint:[TRRailPoint railPointWithTile:_tile form:_form x:length back:_back] error:_x - length];
+    else return [TRRailPointCorrection railPointCorrectionWithPoint:self error:0];
+}
+
+- (EGPoint)calculatePoint {
+    double x = _back ? _form.length - _x : _x;
+    EGPoint(^f)(double) = _form.pointFun;
     EGPoint p = f(x);
-    return EGPointMake(p.x + self.tile.x, p.y + self.tile.y);
+    return EGPointMake(p.x + _tile.x, p.y + _tile.y);
 }
-TRRailPoint trRailPointInvert(TRRailPoint self) {
-    return TRRailPointMake(self.tile, self.form, trRailPointGetForm(self).length - self.x, !(self.back));
+
+- (TRRailPoint*)invert {
+    return [TRRailPoint railPointWithTile:_tile form:_form x:_form.length - _x back:!(_back)];
 }
-EGPointI trRailPointNextTile(TRRailPoint self) {
-    return [trRailPointEndConnector(self) nextTile:self.tile];
+
+- (EGPointI)nextTile {
+    return [[self endConnector] nextTile:_tile];
 }
-TRRailPoint trRailPointCorrectionAddErrorToPoint(TRRailPointCorrection self) {
-    if(self.error == 0) return self.point;
-    else return trRailPointAdd(self.point, self.error);
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRailPoint* o = ((TRRailPoint*)other);
+    return EGPointIEq(self.tile, o.tile) && self.form == o.form && eqf(self.x, o.x) && self.back == o.back;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + EGPointIHash(self.tile);
+    hash = hash * 31 + [self.form ordinal];
+    hash = hash * 31 + [[NSNumber numberWithDouble:self.x] hash];
+    hash = hash * 31 + self.back;
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"tile=%@", EGPointIDescription(self.tile)];
+    [description appendFormat:@", form=%@", self.form];
+    [description appendFormat:@", x=%f", self.x];
+    [description appendFormat:@", back=%d", self.back];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRRailPointCorrection{
+    TRRailPoint* _point;
+    double _error;
+}
+@synthesize point = _point;
+@synthesize error = _error;
+
++ (id)railPointCorrectionWithPoint:(TRRailPoint*)point error:(double)error {
+    return [[TRRailPointCorrection alloc] initWithPoint:point error:error];
+}
+
+- (id)initWithPoint:(TRRailPoint*)point error:(double)error {
+    self = [super init];
+    if(self) {
+        _point = point;
+        _error = error;
+    }
+    
+    return self;
+}
+
+- (TRRailPoint*)addErrorToPoint {
+    if(eqf(_error, 0)) return _point;
+    else return [_point addX:_error];
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRailPointCorrection* o = ((TRRailPointCorrection*)other);
+    return [self.point isEqual:o.point] && eqf(self.error, o.error);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.point hash];
+    hash = hash * 31 + [[NSNumber numberWithDouble:self.error] hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"point=%@", self.point];
+    [description appendFormat:@", error=%f", self.error];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+

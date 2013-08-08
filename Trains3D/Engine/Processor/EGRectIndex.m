@@ -28,6 +28,26 @@
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGRectIndex* o = ((EGRectIndex*)other);
+    return [self.rects isEqual:o.rects];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.rects hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"rects=%@", self.rects];
+    [description appendString:@">"];
+    return description;
+}
+
 @end
 
 

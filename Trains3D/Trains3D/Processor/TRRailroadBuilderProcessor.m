@@ -2,6 +2,7 @@
 
 #import "EGTwoFingerTouchToMouse.h"
 #import "TRRailroad.h"
+#import "TRRailPoint.h"
 @implementation TRRailroadBuilderProcessor{
     TRRailroadBuilder* _builder;
     TRRailroadBuilderMouseProcessor* _mouseProcessor;
@@ -30,6 +31,26 @@
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRailroadBuilderProcessor* o = ((TRRailroadBuilderProcessor*)other);
+    return [self.builder isEqual:o.builder];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.builder hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"builder=%@", self.builder];
+    [description appendString:@">"];
+    return description;
 }
 
 @end
@@ -114,16 +135,16 @@
                                 if(rail.start.x == rail.end.x && rail.start.y > rail.end.y) {
                                     return [self correctRail:TRRailCorrectionMake(rail.tile, rail.end, rail.start)];
                                 } else {
-                                    if(fabs(rail.start.x) == 1 && fabs(rail.start.y) == 1 && rail.start.x != rail.end.x) {
+                                    if(eqf(fabs(rail.start.x), 1) && eqf(fabs(rail.start.y), 1) && rail.start.x != rail.end.x) {
                                         return [self correctRail:TRRailCorrectionMake(rail.tile, EGPointIMake(rail.start.x, 0), rail.end)];
                                     } else {
-                                        if(fabs(rail.start.x) == 1 && fabs(rail.start.y) == 1) {
+                                        if(eqf(fabs(rail.start.x), 1) && eqf(fabs(rail.start.y), 1)) {
                                             return [self correctRail:TRRailCorrectionMake(rail.tile, EGPointIMake(0, rail.start.y), rail.end)];
                                         } else {
-                                            if(fabs(rail.end.x) == 1 && fabs(rail.end.y) == 1 && rail.start.x != rail.end.x) {
+                                            if(eqf(fabs(rail.end.x), 1) && eqf(fabs(rail.end.y), 1) && rail.start.x != rail.end.x) {
                                                 return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, EGPointIMake(rail.end.x, 0))];
                                             } else {
-                                                if(fabs(rail.end.x) == 1 && fabs(rail.end.y) == 1) return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, EGPointIMake(0, rail.end.y))];
+                                                if(eqf(fabs(rail.end.x), 1) && eqf(fabs(rail.end.y), 1)) return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, EGPointIMake(0, rail.end.y))];
                                                 else return rail;
                                             }
                                         }
@@ -148,6 +169,13 @@
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"builder=%@", self.builder];
+    [description appendString:@">"];
+    return description;
 }
 
 @end

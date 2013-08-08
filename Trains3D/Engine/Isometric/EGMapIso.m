@@ -122,6 +122,26 @@
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGMapSso* o = ((EGMapSso*)other);
+    return EGSizeIEq(self.size, o.size);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + EGSizeIHash(self.size);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"size=%@", EGSizeIDescription(self.size)];
+    [description appendString:@">"];
+    return description;
+}
+
 @end
 
 

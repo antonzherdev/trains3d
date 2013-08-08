@@ -1,10 +1,10 @@
 #import "objd.h"
 #import "EGTypes.h"
 
+@class TRRailPoint;
+@class TRRailPointCorrection;
 @class TRRailConnector;
 @class TRRailForm;
-typedef struct TRRailPoint TRRailPoint;
-typedef struct TRRailPointCorrection TRRailPointCorrection;
 
 @interface TRRailConnector : ODEnum
 @property (nonatomic, readonly) NSInteger x;
@@ -40,45 +40,32 @@ typedef struct TRRailPointCorrection TRRailPointCorrection;
 @end
 
 
-struct TRRailPoint {
-    EGPointI tile;
-    NSUInteger form;
-    double x;
-    BOOL back;
-};
-static inline TRRailPoint TRRailPointMake(EGPointI tile, NSUInteger form, double x, BOOL back) {
-    TRRailPoint ret;
-    ret.tile = tile;
-    ret.form = form;
-    ret.x = x;
-    ret.back = back;
-    return ret;
-}
-static inline BOOL TRRailPointEq(TRRailPoint s1, TRRailPoint s2) {
-    return EGPointIEq(s1.tile, s2.tile) && s1.form == s2.form && eqf(s1.x, s2.x) && s1.back == s2.back;
-}
-TRRailPoint trRailPointAdd(TRRailPoint self, double x);
-TRRailForm* trRailPointGetForm(TRRailPoint self);
-TRRailConnector* trRailPointStartConnector(TRRailPoint self);
-TRRailConnector* trRailPointEndConnector(TRRailPoint self);
-BOOL trRailPointIsValid(TRRailPoint self);
-TRRailPointCorrection trRailPointCorrect(TRRailPoint self);
-EGPoint trRailPointPoint(TRRailPoint self);
-TRRailPoint trRailPointInvert(TRRailPoint self);
-EGPointI trRailPointNextTile(TRRailPoint self);
+@interface TRRailPoint : NSObject
+@property (nonatomic, readonly) EGPointI tile;
+@property (nonatomic, readonly) TRRailForm* form;
+@property (nonatomic, readonly) double x;
+@property (nonatomic, readonly) BOOL back;
+@property (nonatomic, readonly) EGPoint point;
 
-struct TRRailPointCorrection {
-    TRRailPoint point;
-    double error;
-};
-static inline TRRailPointCorrection TRRailPointCorrectionMake(TRRailPoint point, double error) {
-    TRRailPointCorrection ret;
-    ret.point = point;
-    ret.error = error;
-    return ret;
-}
-static inline BOOL TRRailPointCorrectionEq(TRRailPointCorrection s1, TRRailPointCorrection s2) {
-    return TRRailPointEq(s1.point, s2.point) && eqf(s1.error, s2.error);
-}
-TRRailPoint trRailPointCorrectionAddErrorToPoint(TRRailPointCorrection self);
++ (id)railPointWithTile:(EGPointI)tile form:(TRRailForm*)form x:(double)x back:(BOOL)back;
+- (id)initWithTile:(EGPointI)tile form:(TRRailForm*)form x:(double)x back:(BOOL)back;
+- (TRRailPoint*)addX:(double)x;
+- (TRRailConnector*)startConnector;
+- (TRRailConnector*)endConnector;
+- (BOOL)isValid;
+- (TRRailPointCorrection*)correct;
+- (TRRailPoint*)invert;
+- (EGPointI)nextTile;
+@end
+
+
+@interface TRRailPointCorrection : NSObject
+@property (nonatomic, readonly) TRRailPoint* point;
+@property (nonatomic, readonly) double error;
+
++ (id)railPointCorrectionWithPoint:(TRRailPoint*)point error:(double)error;
+- (id)initWithPoint:(TRRailPoint*)point error:(double)error;
+- (TRRailPoint*)addErrorToPoint;
+@end
+
 

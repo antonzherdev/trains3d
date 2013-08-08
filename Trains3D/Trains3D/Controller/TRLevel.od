@@ -55,8 +55,9 @@ class TRLevel(rules : TRLevelRules) extends EGController {
     }
 
     def updateWith(delta : float) {
-        _trains.for(_.updateWith(delta))
         score.updateWith(delta)
+        _trains.for(_.updateWith(delta))
+        detectCollisions
     }
 
     def tryTurn(theSwitch : TRSwitch) {
@@ -72,5 +73,9 @@ class TRLevel(rules : TRLevelRules) extends EGController {
     def arrived(train : TRTrain) {
         _trains -= train
         score.arrived(train)
+    }
+
+    private def detectCollisions {
+
     }
 }

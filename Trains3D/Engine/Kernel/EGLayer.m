@@ -38,6 +38,28 @@
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGLayer* o = ((EGLayer*)other);
+    return [self.view isEqual:o.view] && [self.processor isEqual:o.processor];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.view hash];
+    hash = hash * 31 + [self.processor hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"view=%@", self.view];
+    [description appendFormat:@", processor=%@", self.processor];
+    [description appendString:@">"];
+    return description;
+}
+
 @end
 
 

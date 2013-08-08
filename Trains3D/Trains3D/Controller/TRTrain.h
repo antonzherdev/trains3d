@@ -6,7 +6,10 @@
 @class TRCity;
 @class TRLevelRules;
 @class TRLevel;
-#import "TRRailPoint.h"
+@class TRRailConnector;
+@class TRRailForm;
+@class TRRailPoint;
+@class TRRailPointCorrection;
 @class TRRailroadConnectorContent;
 @class TREmptyConnector;
 @class TRRail;
@@ -33,9 +36,9 @@
 
 
 @interface TRCar : NSObject
-@property (nonatomic) TRRailPoint head;
-@property (nonatomic) TRRailPoint tail;
-@property (nonatomic) TRRailPoint nextHead;
+@property (nonatomic, retain) TRRailPoint* head;
+@property (nonatomic, retain) TRRailPoint* tail;
+@property (nonatomic, retain) TRRailPoint* nextHead;
 
 + (id)car;
 - (id)init;

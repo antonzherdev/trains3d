@@ -2,8 +2,8 @@
 #import "TRLevel.h"
 #import "TRRailPoint.h"
 
-#define p(form, x) trRailPointPoint(TRRailPointMake(t0, [[TRRailForm form] ordinal], x, NO))
-#define pb(form, x) trRailPointPoint(TRRailPointMake(t0, [[TRRailForm form] ordinal], x, YES))
+#define p(fform, xx) [((TRRailPoint*)[TRRailPoint railPointWithTile:t0 form:[TRRailForm fform] x:xx back:NO]) point]
+#define pb(fform, xx) [((TRRailPoint*)[TRRailPoint railPointWithTile:t0 form:[TRRailForm fform] x:xx back:YES]) point]
 #define chechPoints(p1, p2) [[theValue(EGPointEq(p1, p2)) should] beTrue]
 #define egp(x, y) EGPointMake(x, y)
 

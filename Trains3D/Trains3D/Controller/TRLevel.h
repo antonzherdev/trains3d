@@ -11,7 +11,10 @@
 @class TRLight;
 @class TRRailroad;
 @class TRRailroadBuilder;
-#import "TRRailPoint.h"
+@class TRRailConnector;
+@class TRRailForm;
+@class TRRailPoint;
+@class TRRailPointCorrection;
 @class TRTrain;
 @class TRCar;
 @class TRScoreRules;
