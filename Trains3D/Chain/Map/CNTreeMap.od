@@ -1,0 +1,134 @@
+class CNTreeMap<K, V>(comparator : (K, K) -> int) {
+    private var root : CNTreeMapEntry<K, V> = nil
+    private var _size : uint = 0
+
+    def count = _size
+    def objectFor(key : K) : V? = entryFor(key).object
+
+    private def entryFor(key : K) : CNTreeMapEntry<K, V> = {
+        val p = root
+        while (p != nil) {
+            val cmp = comparator(key, p.key)
+            if (cmp < 0) p = p.left
+            else if (cmp > 0) p = p.right
+            else break
+        }
+        p
+    }
+
+    static val BLACK = 0
+    static val RED = 1
+
+    def set(object : V, forKey : K) : V = {
+        val t = root
+        if (t == nil) {
+            root = CNTreeMapEntry.newWith<K,V>(forKey, object, parent = nil)
+            _size = 1
+        } else {
+            val cmp : int = 0
+            val parent : CNTreeMapEntry<K, V> = nil
+
+            do {
+                parent = t
+                cmp = comparator(forKey, t.key)
+                if (cmp < 0) t = t.left
+                else if (cmp > 0) t = t.right
+                else {
+                    t.object = object
+                    return object
+                }
+            } while (t != nil)
+
+            val e =  CNTreeMapEntry.newWith<K,V>(forKey, object, parent)
+            if (cmp < 0) parent.left = e
+            else parent.right = e
+            fixAfterInsertion(e)
+            _size++
+        }
+        object
+    }
+
+    private def fixAfterInsertion(xx : CNTreeMapEntry<K, V>) {
+        var x = xx
+        x.color = RED
+        while (x != nil && x != root && x.parent.color == RED) {
+            if (x.parent == x.parent.parent.left) {
+                val y = x.parent.parent.right
+                if (y.color == RED) {
+                    x.parent.color = BLACK
+                    y.color = BLACK
+                    x.parent.parent.color = RED
+                    x = x.parent.parent
+                } else {
+                    if (x == x.parent.right) {
+                        x = x.parent
+                        rotateLeft(x)
+                    }
+                    x.parent.color = BLACK
+                    x.parent.parent.color = RED
+                    rotateRight(x.parent.parent)
+                }
+            } else {
+                val y = x.parent.parent.left
+                if (y.color == RED) {
+                    x.parent.color = BLACK
+                    y.color = BLACK
+                    x.parent.parent.color = RED
+                    x = x.parent.parent
+                } else {
+                    if (x == x.parent.left) {
+                        x = x.parent
+                        rotateRight(x)
+                    }
+                    x.parent.color = BLACK
+                    x.parent.parent.color = RED
+                    rotateLeft(x.parent.parent)
+                }
+            }
+        }
+        root.color = BLACK
+    }
+
+    private def rotateLeft(p : CNTreeMapEntry<K, V>) {
+        if (p != nil) {
+            val r = p.right
+            p.right = r.left
+            if (r.left != nil) r.left.parent = p
+            r.parent = p.parent
+            if (p.parent == nil) root = r
+            else if (p.parent.left == p) p.parent.left = r
+            else p.parent.right = r
+            r.left = p
+            p.parent = r
+        }
+    }
+
+    private def rotateRight(p : CNTreeMapEntry<K, V>) {
+        if (p != nil) {
+            val l = p.left
+            p.left = l.right
+            if (l.right != nil) l.right.parent = p
+            l.parent = p.parent
+            if (p.parent == nil) root = l
+            else if (p.parent.right == p) p.parent.right = l
+            else p.parent.left = l
+            l.right = p
+            p.parent = l
+        }
+    }
+}
+
+class CNTreeMapEntry<K, V>(key : K) {
+    var object : V
+    var left : CNTreeMapEntry<K, V> = nil
+    var right : CNTreeMapEntry<K, V> = nil
+    var color : int
+    var parent : CNTreeMapEntry<K, V>
+
+    static def newWith<K, V>(key : K, object : V, parent : CNTreeMapEntry<K, V>) : CNTreeMapEntry<K, V> = {
+        val r = CNTreeMapEntry(key)
+        r.object = object
+        r.parent = parent
+        r
+    }
+}

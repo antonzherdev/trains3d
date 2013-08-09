@@ -1,0 +1,108 @@
+import EGTypes
+
+//trait EGFigure {
+//    def boxingRect : EGRect
+//    def xs : [float]
+//    def gapsFor(x : float) : [EGGap]
+//    def includes(x : float) : bool
+//}
+//
+//class EGGap(start : float, end : float) {
+//    static def newWith(a : float, b : float) = if(a < b) EGGap(a, b) else EGGap(b, a)
+//
+//    def compare(with : EGGap) : int =
+//        if(start < with.start) -1
+//        else if(start > with.start) 1
+//        else
+//            if(end < with.end) -1
+//            else if(end > with.end) 1
+//            else 0
+//    def crossWith(gap : EGGap) : bool = (start <= gap.start && gap.start <= end) || (start <= gap.end && gap.end <= end)
+//}
+//
+//class EGLine(p1 : EGPoint, p2 : EGPoint) extends EGFigure {
+//    private static def newWith(p1 : EGPoint, p2 : EGPoint, k : float, b : float) : EGLine = {
+//        val line = EGLine(p1, p2)
+//        line.k = k
+//        line.b = b
+//        line
+//    }
+//    def isVertical : bool = p1.x == p2.x
+//    def includes(x : float) : bool = (p1.x <= x && x <= p2.x) || (p2.x <= x && x <= p1.x)
+//
+//    lazy val boxingRect : EGRect = EGRect(min(p1.x, p2.x), fabs(p2.x - p1.x), min(p1.y, p2.y), fabs(p2.y - p1.y))
+//    def mayIntersect(line : EGLine) : bool = boxingRect.intersects(line.boxingRect)
+//
+//    lazy val k : float = (p2.y - p1.y)/(p2.x - p1.x)
+//    lazy val b : float = p1.y - k*p1.x
+//
+//    def f(x : float) =
+//        if(x == p1.x) p1.y
+//        else if(x == p2.x) p2.y
+//        else k*x + b
+//
+//    def xs : [float] = [p1.x, p2.x]
+//    def gapsFor(x : float) : [EGGap] =
+//        if(p1.x == p2.x)
+//            if(p1.x == x) [EGGap.newWith(p1.y, p2.y)]
+//            else []
+//        else {
+//            val y = f(x)
+//            [EGGap.newWith(y, y)]
+//        }
+//
+//    def move(point : EGPoint) : EGLine = move(point.x, point.y)
+//    def move(x : float, y : float) : EGLine = EGLine.newWith(p1.add(x, y), p2.add(x, y), k, b)
+//}
+//
+//
+//class EGThickLine(line : EGLine, thickness : float) extends EGFigure {
+//    lazy val boxingRect : EGRect = line.boxingRect.thicken(x = thickness, y = thickness)
+//    private var _wasInit = false
+//    private var _lines : [EGLine]
+//    private var _xs : [float]
+//    private var _minX : float
+//    private var _maxX : float
+//    private def initLines {
+//        if(!_wasInit) {
+//            val dx : float
+//            val dy : float
+//            if(line.isVertical) {
+//                dx = thickness/2
+//                dy = 0
+//            } else {
+//                val k = line.k
+//                dx = thickness/sqrt(1 + k)/2
+//                dy = k * dx
+//            }
+//            val line1 = line.move(-dx, dy)
+//            val line2 = line.move(dx, -dy)
+//            val line3 = EGLine(line1.p1, line2.p1)
+//            _lines = [line1, line2, line3, line3.move(line.p2.sub(line.p1))]
+//            _wasInit = true
+//            _xs = [lines[0].p1.x, lines[0].p2.x, lines[1].p1.x, lines[1].p2.x]
+//            val gap = _xs.gap
+//            _minX = gap.a
+//            _maxX = gap.b
+//        }
+//    }
+//
+//    def lines : [EGLine] = {
+//        initLines
+//        _lines
+//    }
+//    def xs : [float] = {
+//        initLines
+//        _xs
+//    }
+//
+//    def gapsFor(x : float) : [EGGap] = {
+//        val linesForX : [EGLine] = lines.filter(_.includes(x)).toArray
+//        if(linesForX.count == 2) [EGGap(linesForX[0].f(x), linesForX[1].f(x))]
+//        else []
+//    }
+//    def includes(x : float) : bool = {
+//        initLines
+//        _minX <= x && x <= _maxX
+//    }
+//}

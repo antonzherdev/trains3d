@@ -1,0 +1,17 @@
+import EGFigure
+
+//class EGCollision<T>(body : EGBody<T>, otherBody : EGBody<T>)
+//
+//class EGGeometry<T>(bodies : [EGBody<T>]) {
+//    def collisions : [EGCollision<T>] = {
+//        val bodies : [EGBody<T>] = self.bodies
+//            .combination
+//            .filter(pair -> _.figure.boxingRect.intersects(_.figure.boxingRect))
+//            .uncombination
+//            .toArray
+//        if(bodies.isEmpty ) []
+//        else {
+//
+//        }
+//    }
+//}

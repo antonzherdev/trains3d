@@ -79,6 +79,12 @@ EGPoint egRectPoint(EGRect self) {
 EGSize egRectSize(EGRect self) {
     return EGSizeMake(self.width, self.height);
 }
+BOOL egRectIntersects(EGRect self, EGRect rect) {
+    return self.x <= egRectX2(rect) && egRectX2(self) >= rect.x && self.y <= egRectY2(rect) && egRectY2(self) >= rect.y;
+}
+EGRect egRectThicken(EGRect self, double x, double y) {
+    return EGRectMake(self.x - x / 2, self.width + x, self.y - y / 2, self.height + y);
+}
 EGRectI egRectIApply(EGRect rect) {
     return EGRectIMake(lround(rect.x), lround(rect.width), lround(rect.y), lround(rect.height));
 }

@@ -37,7 +37,7 @@
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRRailroadBuilderProcessor* o = ((TRRailroadBuilderProcessor*)other);
-    return [self.builder isEqual:o.builder];
+    return self.builder == o.builder;
 }
 
 - (NSUInteger)hash {

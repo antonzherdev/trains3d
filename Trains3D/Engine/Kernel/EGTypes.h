@@ -177,6 +177,8 @@ EGRect egRectMove(EGRect self, double x, double y);
 EGRect egRectMoveToCenterFor(EGRect self, EGSize size);
 EGPoint egRectPoint(EGRect self);
 EGSize egRectSize(EGRect self);
+BOOL egRectIntersects(EGRect self, EGRect rect);
+EGRect egRectThicken(EGRect self, double x, double y);
 
 struct EGRectI {
     NSInteger x;

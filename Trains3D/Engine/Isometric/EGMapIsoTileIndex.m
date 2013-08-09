@@ -59,7 +59,6 @@
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"map=%@", self.map];
-    [description appendFormat:@", initial=%@", self.initial];
     [description appendString:@">"];
     return description;
 }

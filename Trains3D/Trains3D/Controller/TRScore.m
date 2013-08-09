@@ -64,10 +64,7 @@
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"initialScore=%li", self.initialScore];
     [description appendFormat:@", railCost=%li", self.railCost];
-    [description appendFormat:@", arrivedPrize=%@", self.arrivedPrize];
-    [description appendFormat:@", destructionFine=%@", self.destructionFine];
     [description appendFormat:@", delayPeriod=%f", self.delayPeriod];
-    [description appendFormat:@", delayFine=%@", self.delayFine];
     [description appendFormat:@", repairCost=%li", self.repairCost];
     [description appendString:@">"];
     return description;
@@ -113,7 +110,7 @@
 - (void)arrivedTrain:(TRTrain*)train {
     __score += _rules.arrivedPrize(train);
     _trains = [[_trains filter:^BOOL(TRTrainScore* _) {
-        return !([_.train isEqual:train]);
+        return _.train != train;
     }] toArray];
 }
 

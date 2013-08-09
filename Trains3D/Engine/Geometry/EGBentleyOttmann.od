@@ -1,0 +1,27 @@
+import EGTypes
+import EGFigure
+
+//class EGLineData<T>(data : T, figure : EGLine)
+//class EGIntersection
+//
+//class GGBentleyOttmann {
+//    static def intersections(lines : [EGLineData]) : NSSet<EGIntersection> = intersectionsMap(lines).values
+//
+//    static def intersectionsMap(lines : [EGLineData]) : [EGPoint : NSSet<EGIntersection>] =
+//        if(lines.count < 2) []
+//        else {
+//            val sweepLine = EGSweepLine.new
+//            val queue = EGEventQueue(lines, sweepLine)
+//
+//            while(!queue.isEmpty()) {
+//                val events = queue.poll
+//                sweepLine.handle(events)
+//            }
+//            sweepLine.intersections
+//        }
+//
+//}
+//
+//class EGEventQueue {
+//    val
+//}
