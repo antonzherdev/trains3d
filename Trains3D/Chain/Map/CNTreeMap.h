@@ -11,21 +11,22 @@
 - (NSUInteger)count;
 - (id)objectForKey:(id)key;
 - (id)setObject:(id)object forKey:(id)forKey;
+- (id)removeObjectForKey:(id)key;
 + (NSInteger)BLACK;
 + (NSInteger)RED;
 @end
 
 
 @interface CNTreeMapEntry : NSObject
-@property (nonatomic, readonly) id key;
+@property (nonatomic) id key;
 @property (nonatomic) id object;
 @property (nonatomic, retain) CNTreeMapEntry* left;
 @property (nonatomic, retain) CNTreeMapEntry* right;
 @property (nonatomic) NSInteger color;
-@property (nonatomic, retain) CNTreeMapEntry* parent;
+@property (nonatomic, weak) CNTreeMapEntry* parent;
 
-+ (id)treeMapEntryWithKey:(id)key;
-- (id)initWithKey:(id)key;
++ (id)treeMapEntry;
+- (id)init;
 + (CNTreeMapEntry*)newWithKey:(id)key object:(id)object parent:(CNTreeMapEntry*)parent;
 @end
 

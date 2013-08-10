@@ -48,8 +48,72 @@ class CNTreeMap<K, V>(comparator : (K, K) -> int) {
         object
     }
 
-    private def fixAfterInsertion(xx : CNTreeMapEntry<K, V>) {
-        var x = xx
+    def removeObjectFor(key : K) : V? = {
+        val entry = entryFor(key)
+        if(entry != nil) delete(entry)
+        else nil
+    }
+
+    private def delete(entry : CNTreeMapEntry<K, V>) : V = {
+        val p = entry
+        _size--
+
+        // If strictly internal, copy successor's element to p and then make p
+        // point to successor.
+        if (p.left != nil && p.right != nil) {
+            val s = successor(p)
+            p.key = s.key
+            p.object = s.object
+            p = s
+        } // p has 2 children
+
+        // Start fixup at replacement node, if it exists.
+        val replacement = if(p.left != nil) p.left else p.right
+        if (replacement != nil) {
+            // Link replacement to parent
+            replacement.parent = p.parent
+            if (p.parent == nil) root = replacement
+            else if (p == p.parent.left) p.parent.left  = replacement
+            else p.parent.right = replacement
+
+            // Null out links so they are OK to use by fixAfterDeletion.
+            p.left = nil
+            p.right = nil
+            p.parent = nil
+
+            // Fix replacement
+            if (p.color == BLACK) fixAfterDeletion(replacement)
+        } else if (p.parent == nil) { // return if we are the only node.
+            root = nil
+        } else { //  No children. Use self as phantom replacement and unlink.
+            if (p.color == BLACK) fixAfterDeletion(p)
+            if (p.parent != nil) {
+                if (p == p.parent.left) p.parent.left = nil
+                else if (p == p.parent.right) p.parent.right = nil
+                p.parent = nil
+            }
+        }
+        entry.object
+    }
+    private def successor(t : CNTreeMapEntry<K, V>) : CNTreeMapEntry<K, V> = {
+        if (t == nil) nil
+        else if (t.right != nil) {
+            val p = t.right
+            while (p.left != nil) p = p.left
+            p
+        } else {
+            val p = t.parent
+            val ch = t
+            while (p != nil && ch == p.right) {
+                ch = p
+                p = p.parent
+            }
+            p
+        }
+    }
+
+    private def fixAfterInsertion(entry : CNTreeMapEntry<K, V>) {
+        var x = entry
         x.color = RED
         while (x != nil && x != root && x.parent.color == RED) {
             if (x.parent == x.parent.parent.left) {
@@ -89,6 +153,65 @@ class CNTreeMap<K, V>(comparator : (K, K) -> int) {
         root.color = BLACK
     }
 
+    private def fixAfterDeletion(entry : CNTreeMapEntry<K, V>) {
+        var x = entry
+        while (x != root && x.color == BLACK) {
+            if (x == x.parent.left) {
+                val sib = x.parent.right
+                if (sib.color == RED) {
+                    sib.color = BLACK
+                    x.parent.color = RED
+                    rotateLeft(x.parent)
+                    sib = x.parent.right
+                }
+                if (sib.left.color == BLACK && sib.right.color == BLACK) {
+                    sib.color = RED
+                    x = x.parent
+                } else {
+                    if (sib.right.color == BLACK) {
+                        sib.left.color = BLACK
+                        sib.color = RED
+                        rotateRight(sib)
+                        sib = x.parent.right
+                    }
+                    sib.color = x.parent.color
+                    x.parent.color = BLACK
+                    sib.right.color = BLACK
+                    rotateLeft(x.parent)
+                    x = root
+                }
+            } else { // symmetric
+                var sib = x.parent.left
+
+                if (sib.color == RED) {
+                    sib.color = BLACK
+                    x.parent.color = RED
+                    rotateRight(x.parent)
+                    sib = x.parent.left
+                }
+
+                if (sib.right.color == BLACK && sib.left.color == BLACK) {
+                    sib.color = RED
+                    x = x.parent
+                } else {
+                    if (sib.left.color == BLACK) {
+                        sib.right.color = BLACK
+                        sib.color = RED
+                        rotateLeft(sib)
+                        sib = x.parent.left
+                    }
+                    sib.color = x.parent.color
+                    x.parent.color = BLACK
+                    sib.left.color = BLACK
+                    rotateRight(x.parent)
+                    x = root
+                }
+            }
+        }
+        x.color = BLACK
+    }
+
+
     private def rotateLeft(p : CNTreeMapEntry<K, V>) {
         if (p != nil) {
             val r = p.right
@@ -118,15 +241,17 @@ class CNTreeMap<K, V>(comparator : (K, K) -> int) {
     }
 }
 
-class CNTreeMapEntry<K, V>(key : K) {
+class CNTreeMapEntry<K, V> {
+    var key : K
     var object : V
     var left : CNTreeMapEntry<K, V> = nil
     var right : CNTreeMapEntry<K, V> = nil
     var color : int
-    var parent : CNTreeMapEntry<K, V>
+    weak var parent : CNTreeMapEntry<K, V>
 
     static def newWith<K, V>(key : K, object : V, parent : CNTreeMapEntry<K, V>) : CNTreeMapEntry<K, V> = {
-        val r = CNTreeMapEntry(key)
+        val r = CNTreeMapEntry.new<K, V>
+        r.key = key
         r.object = object
         r.parent = parent
         r

@@ -38,6 +38,12 @@
     [[tests distinct] forEach:^void(id i) {
         [self assertEqualsA:[@"test" stringByAppendingFormat:@"%li", unumi(i)] b:[[map objectForKey:i] get]];
     }];
+    [[tests distinct] forEach:^void(id i) {
+        [self assertEqualsA:[@"test" stringByAppendingFormat:@"%li", unumi(i)] b:[[map objectForKey:i] get]];
+        [map removeObjectForKey:i];
+        [self assertTrueValue:[[map objectForKey:i] isEmpty]];
+    }];
+    [self assertEqualsA:@0 b:numi([map count])];
 }
 
 - (id)copyWithZone:(NSZone*)zone {

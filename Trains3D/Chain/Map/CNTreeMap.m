@@ -77,14 +77,82 @@ static NSInteger _RED;
         CNTreeMapEntry* e = [CNTreeMapEntry newWithKey:forKey object:object parent:parent];
         if(cmp < 0) parent.left = e;
         else parent.right = e;
-        [self fixAfterInsertionXx:e];
+        [self fixAfterInsertionEntry:e];
         __size++;
     }
     return object;
 }
 
-- (void)fixAfterInsertionXx:(CNTreeMapEntry*)xx {
-    CNTreeMapEntry* x = xx;
+- (id)removeObjectForKey:(id)key {
+    CNTreeMapEntry* entry = [self entryForKey:key];
+    if(entry != nil) return [CNOption opt:[self deleteEntry:entry]];
+    else return [CNOption none];
+}
+
+- (id)deleteEntry:(CNTreeMapEntry*)entry {
+    CNTreeMapEntry* p = entry;
+    __size--;
+    if(p.left != nil && p.right != nil) {
+        CNTreeMapEntry* s = [self successorT:p];
+        p.key = s.key;
+        p.object = s.object;
+        p = s;
+    }
+    CNTreeMapEntry* replacement = p.left != nil ? p.left : p.right;
+    if(replacement != nil) {
+        replacement.parent = p.parent;
+        if(p.parent == nil) {
+            _root = replacement;
+        } else {
+            if(p == p.parent.left) p.parent.left = replacement;
+            else p.parent.right = replacement;
+        }
+        p.left = nil;
+        p.right = nil;
+        p.parent = nil;
+        if(p.color == _BLACK) [self fixAfterDeletionEntry:replacement];
+    } else {
+        if(p.parent == nil) {
+            _root = nil;
+        } else {
+            if(p.color == _BLACK) [self fixAfterDeletionEntry:p];
+            if(p.parent != nil) {
+                if(p == p.parent.left) {
+                    p.parent.left = nil;
+                } else {
+                    if(p == p.parent.right) p.parent.right = nil;
+                }
+                p.parent = nil;
+            }
+        }
+    }
+    return entry.object;
+}
+
+- (CNTreeMapEntry*)successorT:(CNTreeMapEntry*)t {
+    if(t == nil) {
+        return nil;
+    } else {
+        if(t.right != nil) {
+            CNTreeMapEntry* p = t.right;
+            while(p.left != nil) {
+                p = p.left;
+            }
+            return p;
+        } else {
+            CNTreeMapEntry* p = t.parent;
+            CNTreeMapEntry* ch = t;
+            while(p != nil && ch == p.right) {
+                ch = p;
+                p = p.parent;
+            }
+            return p;
+        }
+    }
+}
+
+- (void)fixAfterInsertionEntry:(CNTreeMapEntry*)entry {
+    CNTreeMapEntry* x = entry;
     x.color = _RED;
     while(x != nil && x != _root && x.parent.color == _RED) {
         if(x.parent == x.parent.parent.left) {
@@ -122,6 +190,62 @@ static NSInteger _RED;
         }
     }
     _root.color = _BLACK;
+}
+
+- (void)fixAfterDeletionEntry:(CNTreeMapEntry*)entry {
+    CNTreeMapEntry* x = entry;
+    while(x != _root && x.color == _BLACK) {
+        if(x == x.parent.left) {
+            CNTreeMapEntry* sib = x.parent.right;
+            if(sib.color == _RED) {
+                sib.color = _BLACK;
+                x.parent.color = _RED;
+                [self rotateLeftP:x.parent];
+                sib = x.parent.right;
+            }
+            if(sib.left.color == _BLACK && sib.right.color == _BLACK) {
+                sib.color = _RED;
+                x = x.parent;
+            } else {
+                if(sib.right.color == _BLACK) {
+                    sib.left.color = _BLACK;
+                    sib.color = _RED;
+                    [self rotateRightP:sib];
+                    sib = x.parent.right;
+                }
+                sib.color = x.parent.color;
+                x.parent.color = _BLACK;
+                sib.right.color = _BLACK;
+                [self rotateLeftP:x.parent];
+                x = _root;
+            }
+        } else {
+            CNTreeMapEntry* sib = x.parent.left;
+            if(sib.color == _RED) {
+                sib.color = _BLACK;
+                x.parent.color = _RED;
+                [self rotateRightP:x.parent];
+                sib = x.parent.left;
+            }
+            if(sib.right.color == _BLACK && sib.left.color == _BLACK) {
+                sib.color = _RED;
+                x = x.parent;
+            } else {
+                if(sib.left.color == _BLACK) {
+                    sib.right.color = _BLACK;
+                    sib.color = _RED;
+                    [self rotateLeftP:sib];
+                    sib = x.parent.left;
+                }
+                sib.color = x.parent.color;
+                x.parent.color = _BLACK;
+                sib.left.color = _BLACK;
+                [self rotateRightP:x.parent];
+                x = _root;
+            }
+        }
+    }
+    x.color = _BLACK;
 }
 
 - (void)rotateLeftP:(CNTreeMapEntry*)p {
@@ -185,7 +309,7 @@ static NSInteger _RED;
     CNTreeMapEntry* _left;
     CNTreeMapEntry* _right;
     NSInteger _color;
-    CNTreeMapEntry* _parent;
+    __weak CNTreeMapEntry* _parent;
 }
 @synthesize key = _key;
 @synthesize object = _object;
@@ -194,14 +318,13 @@ static NSInteger _RED;
 @synthesize color = _color;
 @synthesize parent = _parent;
 
-+ (id)treeMapEntryWithKey:(id)key {
-    return [[CNTreeMapEntry alloc] initWithKey:key];
++ (id)treeMapEntry {
+    return [[CNTreeMapEntry alloc] init];
 }
 
-- (id)initWithKey:(id)key {
+- (id)init {
     self = [super init];
     if(self) {
-        _key = key;
         _left = nil;
         _right = nil;
     }
@@ -210,7 +333,8 @@ static NSInteger _RED;
 }
 
 + (CNTreeMapEntry*)newWithKey:(id)key object:(id)object parent:(CNTreeMapEntry*)parent {
-    CNTreeMapEntry* r = [CNTreeMapEntry treeMapEntryWithKey:key];
+    CNTreeMapEntry* r = [CNTreeMapEntry treeMapEntry];
+    r.key = key;
     r.object = object;
     r.parent = parent;
     return r;
@@ -222,7 +346,6 @@ static NSInteger _RED;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"key=%@", self.key];
     [description appendString:@">"];
     return description;
 }
