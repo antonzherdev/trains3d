@@ -1,8 +1,5 @@
-#import "objd.h"
-@class CNTreeMap;
-@class CNTreeMapEntry;
-@class CNTreeMapKeySet;
-@class CNTreeMapKeyIterator;
+#import <Foundation/Foundation.h>
+#import "CNTreeMap.h"
 
 @class CNTreeSet;
 

@@ -1,9 +1,6 @@
 #import "objd.h"
 #import "CNTest.h"
-@class CNTreeMap;
-@class CNTreeMapEntry;
-@class CNTreeMapKeySet;
-@class CNTreeMapKeyIterator;
+#import "CNTreeMap.h"
 
 @class CNTreeMapTest;
 

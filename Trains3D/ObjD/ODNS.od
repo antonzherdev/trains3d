@@ -1,2 +1,4 @@
+package core
+
 stub def max(a : float, b : float) : float
 stub def min(a : float, b : float) : float

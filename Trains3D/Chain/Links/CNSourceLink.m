@@ -2,9 +2,9 @@
 
 
 @implementation CNSourceLink {
-    NSObject<NSFastEnumeration>* _collection;
+    id _collection;
 }
-- (id)initWithCollection:(NSObject<NSFastEnumeration>*)collection {
+- (id)initWithCollection:(id)collection {
     self = [super init];
     if (self) {
         _collection = collection;
@@ -22,7 +22,7 @@
     } all:nil];
 }
 
-+ (id)linkWithCollection:(NSObject<NSFastEnumeration>*)collection {
++ (id)linkWithCollection:(id)collection {
     return [[self alloc] initWithCollection:collection];
 }
 

@@ -1,4 +1,5 @@
 #import "CNPrependLink.h"
+#import "CNCollection.h"
 
 
 @implementation CNPrependLink {
@@ -16,10 +17,9 @@
 - (CNYield *)buildYield:(CNYield *)yield {
     return [CNYield decorateYield: yield begin:^CNYieldResult(NSUInteger size) {
         if([yield beginYieldWithSize:size + [_collection count]] == cnYieldBreak) return cnYieldBreak;
-        for(id item in _collection) {
-            if([yield yieldItem:item] == cnYieldBreak) return cnYieldBreak;
-        }
-        return cnYieldContinue;
+        return [_collection goOn:^BOOL(id item) {
+            return [yield yieldItem:item] == cnYieldContinue;
+        }] ? cnYieldContinue : cnYieldBreak;
     } yield:nil end:nil all:nil];
 }
 

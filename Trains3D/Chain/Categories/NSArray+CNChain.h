@@ -22,6 +22,7 @@
 - (id) head;
 - (id) randomItem;
 - (void) forEach:(cnP)p;
+- (BOOL) goOn:(BOOL(^)(id))on;
 - (id)fold:(cnF2)f withStart:(id)start;
 - (id)find:(cnPredicate)predicate;
 

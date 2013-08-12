@@ -1,3 +1,5 @@
+package core
+
 stub class ODMap<K, V> {
     def count : uint
     def objectFor(key : K) : V

@@ -1,6 +1,5 @@
 #import "CNTreeMapTest.h"
 
-#import "CNTreeMap.h"
 @implementation CNTreeMapTest
 
 + (id)treeMapTest {

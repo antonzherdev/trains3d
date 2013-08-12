@@ -1,3 +1,5 @@
+package core
+
 stub class ODEnum(ordinal : uint, name : string) {
     def description = name
 

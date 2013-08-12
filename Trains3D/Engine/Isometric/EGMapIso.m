@@ -3,7 +3,6 @@
 #import "EGGL.h"
 #import "EGMap.h"
 #import "CNChain.h"
-#import "CNRange.h"
 @implementation EGMapSso{
     EGSizeI _size;
     EGRectI _limits;

@@ -1,4 +1,5 @@
 #import "CNYield.h"
+#import "CNCollection.h"
 
 
 @implementation CNYield {
@@ -46,12 +47,13 @@
 
 + (CNYieldResult)yieldAll:(id)collection byItemsTo:(CNYield *)yield {
     NSUInteger size = [collection count];
-    CNYieldResult result = [yield beginYieldWithSize:size];
+    __block CNYieldResult result = [yield beginYieldWithSize:size];
     if (result == cnYieldContinue) {
-        for (id item in collection) {
+        [collection goOn:^BOOL(id item) {
             result = [yield yieldItem:item];
-            if (result == cnYieldBreak) break;
-        }
+            if(result == cnYieldBreak) return NO;
+            return YES;
+        }];
     }
     return [yield endYieldWithResult:result];
 }

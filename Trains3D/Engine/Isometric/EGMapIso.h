@@ -1,8 +1,7 @@
 #import "objd.h"
 #import "EGTypes.h"
 @class CNChain;
-@class CNRange;
-@class CNRangeIterator;
+#import "CNRange.h"
 
 @class EGMapSso;
 

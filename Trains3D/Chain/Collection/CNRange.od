@@ -1,6 +1,10 @@
-import CNCollection
+package core.chain
 
-class CNRange(start : int, end : int, step : int) extends CNCollection<int> {
+import CNCollection
+import "CNOption.h"
+import "cnTypes.h"
+
+class CNRange(start : int, end : int, step : int) extends CNIterable<int> {
     def count : uint = (end - start)/step
 
     def iterator : CNIterator<int> = CNRangeIterator(start, end, step)

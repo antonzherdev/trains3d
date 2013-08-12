@@ -1,13 +1,48 @@
+package core.chain
+
 import CNChain
 
-stub trait CNIterator<T> {
+trait CNIterator<T> {
    def next : T?
 }
 
-stub class CNCollection<T> {
+trait CNTraversable<T> {
+    def for(each : T -> void) {
+        go(item -> {
+            each(item)
+            true
+        })
+    }
+
+    def go(on : T -> bool) : bool
+
+    def chain : CNChain<T> = {
+        CNChain.chainWith<T>(self)
+    }
+}
+
+class CNIterable<T> extends CNTraversable<T> {
     def count : uint
     def iterator : CNIterator<T>
 
-    def chain : CNChain<T>
-    def for(each : T -> void)
+    def chain : CNChain<T> = {
+        CNChain.chainWith<T>(self)
+    }
+    def for(each : T -> void) {
+        val i = iterator
+        while(true) {
+            val object = i.next
+            if(object.isEmpty) break
+            each(object)
+        }
+    }
+    def go(on : T -> bool) : bool = {
+        val i = iterator
+        while(true) {
+            val object = i.next
+            if(object.isEmpty) return true
+            if(!on(object)) return false
+        }
+        false
+    }
 }

@@ -71,6 +71,14 @@
     }
 }
 
+- (BOOL)goOn:(BOOL (^)(id))on {
+    for(id item in self)  {
+        if(!on(item)) return NO;
+    }
+    return YES;
+}
+
+
 - (id)fold:(cnF2)f withStart:(id)start {
     return [[self chain] fold:f withStart:start];
 }

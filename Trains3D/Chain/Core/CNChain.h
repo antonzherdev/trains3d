@@ -1,13 +1,13 @@
 #import <Foundation/Foundation.h>
 #import "cnTypes.h"
+#import "CNCollection.h"
 
-@interface CNChain : NSObject
+@interface CNChain : NSObject <CNTraversable>
 - (id)initWithLink:(id <CNChainLink>)link previous:(CNChain *)previous;
 
 + (id)chainWithLink:(id <CNChainLink>)link previous:(CNChain *)previous;
 
 + (CNChain*)chainWithCollection:(id)collection;
-+ (CNChain*)chainWithStart:(NSInteger)aStart end:(NSInteger)anEnd step:(NSInteger)aStep;
 
 - (CNChain*)link:(id<CNChainLink>)link;
 - (CNChain*)filter:(cnPredicate)predicate;

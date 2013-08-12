@@ -1,10 +1,12 @@
-#import "objd.h"
+#import <Foundation/Foundation.h>
+#import "CNOption.h"
+#import "cnTypes.h"
 #import "CNCollection.h"
 
 @class CNRange;
 @class CNRangeIterator;
 
-@interface CNRange : CNCollection
+@interface CNRange : CNIterable
 @property (nonatomic, readonly) NSInteger start;
 @property (nonatomic, readonly) NSInteger end;
 @property (nonatomic, readonly) NSInteger step;

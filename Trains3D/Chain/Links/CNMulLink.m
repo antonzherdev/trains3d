@@ -1,5 +1,6 @@
 #import "CNMulLink.h"
 #import "CNTuple.h"
+#import "CNCollection.h"
 
 
 @implementation CNMulLink {
@@ -19,11 +20,10 @@
         return [yield beginYieldWithSize:size*[_collection count]];
 
     } yield:^CNYieldResult(id a) {
-        for(id b in _collection) {
+        return [_collection goOn:^BOOL(id b) {
             CNTuple *item = [CNTuple tupleWithA:a b: b];
-            if([yield yieldItem:item] == cnYieldBreak) return cnYieldBreak;
-        }
-        return cnYieldContinue;
+            return [yield yieldItem:item] == cnYieldContinue;
+        }] ? cnYieldContinue : cnYieldBreak;
     } end:nil all:nil];
 }
 

@@ -1,6 +1,5 @@
 #import "CNTreeSet.h"
 
-#import "CNTreeMap.h"
 @implementation CNTreeSet{
     CNTreeMap* _map;
 }

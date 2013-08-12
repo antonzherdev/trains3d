@@ -1,3 +1,5 @@
+package core
+
 import CNChain
 
 stub class ODArray<A> extends CNChain<A> {

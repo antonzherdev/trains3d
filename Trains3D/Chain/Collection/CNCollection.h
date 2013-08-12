@@ -1,20 +1,28 @@
-#import "objd.h"
+#import <Foundation/Foundation.h>
 @class CNChain;
 
-@class CNCollection;
+@class CNIterable;
 
 @protocol CNIterator<NSObject>
 - (id)next;
 @end
 
 
-@interface CNCollection : NSObject<NSFastEnumeration>
-+ (id)collection;
+@protocol CNTraversable<NSObject>
+- (void)forEach:(void(^)(id))each;
+- (BOOL)goOn:(BOOL(^)(id))on;
+- (CNChain*)chain;
+@end
+
+
+@interface CNIterable : NSObject<CNTraversable>
++ (id)iterable;
 - (id)init;
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
 - (CNChain*)chain;
-- (void)forEach:(cnP)p;
+- (void)forEach:(void(^)(id))each;
+- (BOOL)goOn:(BOOL(^)(id))on;
 @end
 
 

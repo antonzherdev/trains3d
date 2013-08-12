@@ -1,4 +1,5 @@
 #import "CNAppendLink.h"
+#import "CNCollection.h"
 
 
 @implementation CNAppendLink {
@@ -17,12 +18,14 @@
     return [CNYield decorateYield: yield begin:^CNYieldResult(NSUInteger size) {
         return [yield beginYieldWithSize:size + [_collection count]];
 
-    } yield:nil end:^CNYieldResult(CNYieldResult result) {
+    } yield:nil end:^CNYieldResult(CNYieldResult r) {
+        __block CNYieldResult result = r;
         if(result != cnYieldBreak) {
-            for(id item in _collection) {
+            [_collection goOn:^BOOL(id item) {
                 result = [yield yieldItem:item];
-                if(result == cnYieldBreak) break;
-            }
+                if(result == cnYieldBreak) return NO;
+                return YES;
+            }];
         }
         return [yield endYieldWithResult:result];
     } all:nil];

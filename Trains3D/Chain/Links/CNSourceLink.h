@@ -3,8 +3,8 @@
 
 
 @interface CNSourceLink : NSObject <CNChainLink>
-- (id)initWithCollection:(NSObject<NSFastEnumeration>*)collection;
+- (id)initWithCollection:(id)collection;
 
-+ (id)linkWithCollection:(NSObject<NSFastEnumeration>*)collection;
++ (id)linkWithCollection:(id)collection;
 
 @end

@@ -1,4 +1,6 @@
-#import "objd.h"
+#import <Foundation/Foundation.h>
+#import "CNOption.h"
+#import "ODObject.h"
 #import "CNCollection.h"
 
 @class CNTreeMap;
@@ -14,7 +16,7 @@
 + (CNTreeMap*)new;
 - (NSUInteger)count;
 - (id)objectForKey:(id)key;
-- (CNCollection*)keys;
+- (CNIterable*)keys;
 - (id)setObject:(id)object forKey:(id)forKey;
 - (id)removeObjectForKey:(id)key;
 + (NSInteger)BLACK;
@@ -37,7 +39,7 @@
 @end
 
 
-@interface CNTreeMapKeySet : CNCollection
+@interface CNTreeMapKeySet : CNIterable
 @property (nonatomic, readonly) CNTreeMap* map;
 
 + (id)treeMapKeySetWithMap:(CNTreeMap*)map;

@@ -4,7 +4,6 @@
 #import "CNMapLink.h"
 #import "CNAppendLink.h"
 #import "CNPrependLink.h"
-#import "CNRangeLink.h"
 #import "CNMulLink.h"
 #import "CNReverseLink.h"
 #import "CNOption.h"
@@ -42,11 +41,6 @@
 + (CNChain*)chainWithCollection:(id)collection {
     return [CNChain chainWithLink:[CNSourceLink linkWithCollection:collection] previous:nil];
 }
-
-+ (CNChain *)chainWithStart:(NSInteger)aStart end:(NSInteger)anEnd step:(NSInteger)aStep {
-    return [CNChain chainWithLink:[CNRangeLink linkWithStart:aStart end:anEnd step:aStep] previous:nil];
-}
-
 
 - (NSArray *)toArray {
     __block id ret;
@@ -173,6 +167,17 @@
     } end:nil all:nil]];
 }
 
+- (BOOL)goOn:(BOOL(^)(id))on {
+    return [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
+        return on(item) ? cnYieldContinue : cnYieldBreak;
+    } end:nil all:nil]] == cnYieldContinue;
+}
+
+- (CNChain *)chain {
+    return self;
+}
+
+
 - (id)head {
     __block id ret = [CNOption none];
     [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
@@ -236,7 +241,6 @@
 - (CNChain *)distinctWithSelectivity:(double)selectivity {
     return [self link:[CNDistinctLink linkWithSelectivity:selectivity]];
 }
-
 @end
 
 id cnResolveCollection(id collection) {

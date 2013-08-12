@@ -1,5 +1,10 @@
+package core.chain
 
-stub class CNChain<A> {
+import CNCollection
+
+stub class CNChain<A> extends CNIterable<A> {
+    static def chainWith<T>(collection:CNTraversable<T>) : CNChain<T>
+
     def filter(: A -> bool) : CNChain<A>
     def map<B>(: A -> B) : CNChain<B>
     def flatMap<B>(: A -> [B]) : CNChain<B>

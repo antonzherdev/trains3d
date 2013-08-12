@@ -1,5 +1,6 @@
 #import "chain.h"
 #import "Kiwi.h"
+#import "CNRange.h"
 
 static BOOL (^const LESS_THAN_3)(id) = ^BOOL(id x) {return [x intValue] < 3;};
 
@@ -62,11 +63,11 @@ SPEC_BEGIN(CNChainSpec)
       });
       describe(@"should generate a range", ^{
           it(@"with positive direction", ^{
-              NSArray *r = [[CNChain chainWithStart:1 end:6 step:2] toArray];
+              NSArray *r = [[[CNRange rangeWithStart:1 end:6 step:2] chain] toArray];
               [[r should] equal:@[@1, @3, @5]];
           });
           it(@"with negative direction", ^{
-              NSArray *r = [[CNChain chainWithStart:6 end:2 step:2] toArray];
+              NSArray *r = [[[CNRange rangeWithStart:6 end:2 step:-2] chain] toArray];
               [[r should] equal:@[@6, @4, @2]];
           });
       });

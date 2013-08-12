@@ -1,4 +1,8 @@
+package core.chain
+
+import ODObject
 import CNCollection
+import "CNOption.h"
 
 class CNTreeMap<K, V>(comparator : (K, K) -> int) {
     static def new<K extends ODComparable<K>, V> = CNTreeMap<K, V>((a : K, b : K) -> a.compare(b))
@@ -9,7 +13,7 @@ class CNTreeMap<K, V>(comparator : (K, K) -> int) {
     def count = _size
     def objectFor(key : K) : V? = entryFor(key).object
 
-    def keys : CNCollection<K> = CNTreeMapKeySet<K>(self)
+    def keys : CNIterable<K> = CNTreeMapKeySet<K>(self)
 
     private def entryFor(key : K) : CNTreeMapEntry<K, V> = {
         val p = root
@@ -270,7 +274,7 @@ class CNTreeMapEntry<K, V> {
     }
 }
 
-class CNTreeMapKeySet<K>(map : CNTreeMap<K, _>) extends CNCollection<K> {
+class CNTreeMapKeySet<K>(map : CNTreeMap<K, _>) extends CNIterable<K> {
     def count : uint = map.count
 
     def iterator : CNIterator<K> = CNTreeMapKeyIterator<K>.new(map, map.firstEntry)

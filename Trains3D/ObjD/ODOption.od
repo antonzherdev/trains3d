@@ -1,3 +1,5 @@
+package core
+
 stub class ODOption<V> {
     def get : V
     def getOrElse(: () -> V) : V

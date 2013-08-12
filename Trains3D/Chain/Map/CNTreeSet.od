@@ -1,3 +1,5 @@
+package core.chain
+
 import CNTreeMap
 
 class CNTreeSet<T>(map : CNTreeMap<T, ODObject>) {
