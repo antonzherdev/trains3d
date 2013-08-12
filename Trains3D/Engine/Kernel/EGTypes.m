@@ -43,6 +43,11 @@ EGPoint egPointSet(EGPoint self, double length) {
 EGPoint egPointNormalize(EGPoint self) {
     return egPointSet(self, 1.0);
 }
+NSInteger egPointCompare(EGPoint self, EGPoint to) {
+    NSInteger dX = floatCompare(self.x, to.x);
+    if(dX != 0) return dX;
+    else return floatCompare(self.y, to.y);
+}
 EGPointI egPointIApply(EGPoint point) {
     return EGPointIMake(lround(point.x), lround(point.y));
 }

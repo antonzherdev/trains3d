@@ -11,8 +11,14 @@ class CNTreeSet<T>(map : CNTreeMap<T, ODObject>) extends CNIterable<T> {
     static def new<T> = CNTreeSet<T>(CNTreeMap.new<T, ODObject>)
 
     def add(object : T) {
-        map.set(object = nil, key = object)
+        map.set(object = nil, forKey = object)
     }
+
+    def remove(object : T) : bool = map.removeObjectFor(key = object).isDefined
+
+
+    def higherThan(object : T) : T? = map.higherKeyThan(object)
+    def lowerThan(object : T) : T? = map.lowerKeyThan(object)
 
     def count : uint = map.count
     def iterator = map.keys.iterator

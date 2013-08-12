@@ -17,6 +17,7 @@
 - (id)initWithComparator:(NSInteger(^)(id, id))comparator;
 + (CNTreeMap*)new;
 - (NSUInteger)count;
+- (BOOL)isEmpty;
 - (id)objectForKey:(id)key;
 - (CNIterable*)keys;
 - (id)setObject:(id)object forKey:(id)forKey;
@@ -24,6 +25,8 @@
 - (id)pollFirst;
 - (id)firstKey;
 - (id)lastKey;
+- (id)lowerKeyThanKey:(id)key;
+- (id)higherKeyThanKey:(id)key;
 + (NSInteger)BLACK;
 + (NSInteger)RED;
 @end

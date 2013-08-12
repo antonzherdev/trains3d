@@ -22,6 +22,7 @@
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
 - (id)head;
+- (BOOL)isEmpty;
 - (CNChain*)chain;
 - (void)forEach:(void(^)(id))each;
 - (BOOL)goOn:(BOOL(^)(id))on;

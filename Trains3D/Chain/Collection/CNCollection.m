@@ -25,6 +25,10 @@
     return [[self iterator] next];
 }
 
+- (BOOL)isEmpty {
+    return [[[self iterator] next] isEmpty];
+}
+
 - (CNChain*)chain {
     return [CNChain chainWithCollection:self];
 }

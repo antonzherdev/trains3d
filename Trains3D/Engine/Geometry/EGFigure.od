@@ -1,6 +1,90 @@
 import EGTypes
 
-class EGLine(p1 : EGPoint, p2 : EGPoint)
+class EGLine {
+    static def newWith(slope : float, point : EGPoint) : EGLine = EGSlopeLine(slope, calculateConstantWith(slope, point))
+    static def newWith(p1 : EGPoint, p2 : EGPoint) : EGLine =
+        if(p1.x == p2.x) EGVerticalLine(p1.x)
+        else {
+            val slope = calculateSlopeWith(p1, p2)
+            EGSlopeLine(slope, calculateConstantWith(slope, p1))
+        }
+
+    static def calculateSlopeWith(p1 : EGPoint, p2 : EGPoint) : float = (p2.y - p1.y)/(p2.x - p1.x)
+    static def calculateConstantWith(slope : float, point : EGPoint) : float = point.y - slope*point.x
+
+    def contains(point : EGPoint) : bool
+    def isVertical : bool
+    def isHorizontal : bool
+
+    def yFor(x : float) : float
+
+    def intersectionWith(line : EGLine) : EGPoint?
+    def xIntersectionWith(line : EGLine) : float
+
+    def isRight(point : EGPoint) : bool
+}
+
+class EGSlopeLine(slope : float, constant : float) extends EGLine {
+    def contains(point : EGPoint) : bool = point.y == slope*point.x + constant
+    def isVertical : bool = false
+    def isHorizontal : bool = slope == 0
+    def xIntersectionWith(line : EGLine) : float =
+        if(line.isVertical) line.xIntersectionWith(self)
+        else {
+            val that = line.as<EGSlopeLine>.get
+            return (that.constant - self.constant)/(self.slope - that.slope)
+        }
+    def yFor(x : float) : float = {
+        return slope*x + constant
+    }
+    def intersectionWith(line : EGLine) : EGPoint? =
+        if (!line.isVertical && line.as<EGSlopeLine>.get.slope == slope) nil
+        else {
+            val xInt = xIntersectionWith(line)
+            EGPoint(xInt, yFor(xInt))
+        }
+
+    def isRight(point : EGPoint) : bool =
+        if(contains(point)) false
+        else point.y < yFor(point.x)
+
+}
+
+class EGVerticalLine(x : float) extends EGLine {
+    def contains(point : EGPoint) : bool = point.x == x
+    def isVertical : bool = true
+    def isHorizontal : bool = false
+    def xIntersectionWith(line : EGLine) : float = x
+    def intersectionWith(line : EGLine) : EGPoint? =
+        if(line.isVertical) nil
+        else line.intersectionWith(self)
+
+    def isRight(point : EGPoint) : bool = point.x > x
+}
+
+class EGLineSegment(p1 : EGPoint, p2 : EGPoint) {
+    val line = EGLine.newWith(p1 = p1, p2 = p2)
+    val minX = min(p1.x, p1.x)
+    val maxX = max(p1.x, p1.x)
+    val minY = min(p1.y, p1.y)
+    val maxY = max(p1.y, p1.y)
+
+    def contains(point : EGPoint) : bool = {
+        p1 == point || p2 == point ||
+        (line.contains(point) &&
+            (point.x >= minX && point.x <= maxX &&
+            point.y >= minY && point.y <= maxY))
+    }
+
+    def intersectionWith(segment : EGLineSegment) : EGPoint? =
+        if (p1 == segment.p2) p1
+        else if (p2 == segment.p1) p2
+        else if(p1 == segment.p1) if(line == segment.line) nil else p1
+        else if(p2 == segment.p2) if(line == segment.line) nil else p2
+        else line.intersectionWith(segment.line).filter(p -> contains(p) && segment.contains(p))
+
+    def endingsContain(point :EGPoint) : bool = p1 == point || p2 == point
+}
 //trait EGFigure {
 //    def boxingRect : EGRect
 //    def xs : [float]

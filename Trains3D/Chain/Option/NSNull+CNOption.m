@@ -24,6 +24,11 @@
     return self;
 }
 
+- (id)filter:(cnPredicate)f {
+    return self;
+}
+
+
 - (id)flatMap:(cnF)f {
     return self;
 }

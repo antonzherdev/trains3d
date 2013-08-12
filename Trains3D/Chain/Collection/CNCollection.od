@@ -28,6 +28,7 @@ class CNIterable<T> extends CNTraversable<T> {
     def iterator : CNIterator<T>
 
     def head : T? = iterator.next
+    def isEmpty : bool = iterator.next.isEmpty
 
     def chain : CNChain<T> = {
         CNChain.chainWith<T>(self)

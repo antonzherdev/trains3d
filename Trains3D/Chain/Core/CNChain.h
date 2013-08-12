@@ -16,6 +16,7 @@
 - (CNChain*)map:(cnF)f;
 - (CNChain*)flatMap:(cnF)f;
 - (CNChain*)flatMap:(cnF)f factor:(double) factor;
+- (CNChain*)neighbors;
 
 - (CNChain*)append:(id)collection;
 - (CNChain*)prepend:(id)collection;
@@ -36,6 +37,8 @@
 - (NSSet*)set;
 - (id)fold:(cnF2)f withStart:(id)start;
 - (id)find:(cnPredicate)predicate;
+- (id)min;
+- (id)max;
 - (NSDictionary *)toMap;
 - (NSMutableDictionary *)toMutableMap;
 - (CNYieldResult)apply:(CNYield *)yield;

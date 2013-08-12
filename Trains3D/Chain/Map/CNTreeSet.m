@@ -28,6 +28,18 @@
     ((NSObject*)[_map setObject:nil forKey:object]);
 }
 
+- (BOOL)removeObject:(id)object {
+    return [[_map removeObjectForKey:object] isDefined];
+}
+
+- (id)higherThanObject:(id)object {
+    return [_map higherKeyThanKey:object];
+}
+
+- (id)lowerThanObject:(id)object {
+    return [_map lowerKeyThanKey:object];
+}
+
 - (NSUInteger)count {
     return [_map count];
 }

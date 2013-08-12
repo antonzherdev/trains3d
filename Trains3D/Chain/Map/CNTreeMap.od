@@ -13,6 +13,7 @@ class CNTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K, V> {
     private var _size : uint = 0
 
     def count = _size
+    def isEmpty : bool = root == nil
     def objectFor(key : K) : V? = entryFor(key).object
 
     def keys : CNIterable<K> = CNTreeMapKeySet<K>(self)
@@ -259,6 +260,57 @@ class CNTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K, V> {
 
     def firstKey : K? = if(root == nil) nil else firstEntry.key
     def lastKey : K? = if(root == nil) nil else lastEntry.key
+
+    def lowerKeyThan(key : K) : K? = lowerEntryThan(key).map(_.key)
+    def higherKeyThan(key : K) : K? = higherEntryThan(key).map(_.key)
+
+    private def lowerEntryThan(key : K) : CNTreeMapEntry<K, V>? = {
+        val p = root
+        while (p != nil) {
+            val cmp = comparator(key, p.key)
+            if (cmp > 0) {
+                if (p.right != nil) p = p.right
+                else return p
+            } else {
+                if (p.left != nil) {
+                    p = p.left
+                } else {
+                    val parent = p.parent
+                    val ch = p
+                    while (parent != nil && ch == parent.left) {
+                        ch = parent
+                        parent = parent.parent
+                    }
+                    return parent
+                }
+            }
+        }
+        nil
+    }
+
+    private def higherEntryThan(key : K) : CNTreeMapEntry<K, V>? = {
+        val p = root
+        while (p != nil) {
+            val cmp = comparator(key, p.key)
+            if (cmp < 0) {
+                if (p.left != nil) p = p.left
+                else return p
+            } else {
+                if (p.right != nil) {
+                    p = p.right
+                } else {
+                    val parent = p.parent
+                    val ch = p
+                    while (parent != nil && ch == parent.right) {
+                        ch = parent
+                        parent = parent.parent
+                    }
+                    return parent
+                }
+            }
+        }
+        nil
+    }
 }
 
 class CNTreeMapEntry<K, V> {

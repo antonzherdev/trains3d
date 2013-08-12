@@ -11,6 +11,7 @@
 #import "CNFlatMapLink.h"
 #import "CNDistinctLink.h"
 #import "CNTreeMap.h"
+#import "CNNeighboursLink.h"
 
 
 @implementation CNChain {
@@ -129,6 +130,10 @@
 }
 
 
+- (CNChain *)neighbors {
+    return [self link:[CNNeighboursLink link]];
+}
+
 - (CNChain *)append:(id)collection {
     return [self link:[CNAppendLink linkWithCollection:collection]];
 }
@@ -214,6 +219,20 @@
 
 - (CNChain*)link:(id <CNChainLink>)link {
     return [CNChain chainWithLink:link previous:_link == nil ? nil : self];
+}
+
+- (id)min {
+    return [self fold:^id(id r, id x) {
+        if([r isEmpty]) return x;
+        return [x compareTo:r] < 0 ? x : r;
+    } withStart:[CNOption none]];
+}
+
+- (id)max {
+    return [self fold:^id(id r, id x) {
+        if([r isEmpty]) return x;
+        return [x compareTo:r] > 0 ? x : r;
+    } withStart:[CNOption none]];
 }
 
 - (NSDictionary *)toMap {

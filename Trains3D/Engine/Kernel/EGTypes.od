@@ -17,6 +17,11 @@ struct EGPoint(x : float, y : float) {
     def distanceTo(point : EGPoint) = sub(point).length
     def set(length : float) = mul(length/self.length)
     def normalize = set(length = 1.0)
+
+    def compare(to : EGPoint) : int = {
+        val dX = x.compare(to.x)
+        if(dX != 0) dX else y.compare(to.y)
+    }
 }
 
 struct EGPointI(x : int, y : int) {

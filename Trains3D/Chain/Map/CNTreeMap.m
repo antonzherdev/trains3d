@@ -40,6 +40,10 @@ static NSInteger _RED;
     return __size;
 }
 
+- (BOOL)isEmpty {
+    return _root == nil;
+}
+
 - (id)objectForKey:(id)key {
     return [CNOption opt:[self entryForKey:key].object];
 }
@@ -304,6 +308,66 @@ static NSInteger _RED;
 - (id)lastKey {
     if(_root == nil) return [CNOption none];
     else return [CNOption opt:[self lastEntry].key];
+}
+
+- (id)lowerKeyThanKey:(id)key {
+    return [[self lowerEntryThanKey:key] map:^id(CNTreeMapEntry* _) {
+        return _.key;
+    }];
+}
+
+- (id)higherKeyThanKey:(id)key {
+    return [[self higherEntryThanKey:key] map:^id(CNTreeMapEntry* _) {
+        return _.key;
+    }];
+}
+
+- (id)lowerEntryThanKey:(id)key {
+    CNTreeMapEntry* p = _root;
+    while(p != nil) {
+        NSInteger cmp = _comparator(key, p.key);
+        if(cmp > 0) {
+            if(p.right != nil) p = p.right;
+            else return p;
+        } else {
+            if(p.left != nil) {
+                p = p.left;
+            } else {
+                CNTreeMapEntry* parent = p.parent;
+                CNTreeMapEntry* ch = p;
+                while(parent != nil && ch == parent.left) {
+                    ch = parent;
+                    parent = parent.parent;
+                }
+                return parent;
+            }
+        }
+    }
+    return [CNOption none];
+}
+
+- (id)higherEntryThanKey:(id)key {
+    CNTreeMapEntry* p = _root;
+    while(p != nil) {
+        NSInteger cmp = _comparator(key, p.key);
+        if(cmp < 0) {
+            if(p.left != nil) p = p.left;
+            else return p;
+        } else {
+            if(p.right != nil) {
+                p = p.right;
+            } else {
+                CNTreeMapEntry* parent = p.parent;
+                CNTreeMapEntry* ch = p;
+                while(parent != nil && ch == parent.right) {
+                    ch = parent;
+                    parent = parent.parent;
+                }
+                return parent;
+            }
+        }
+    }
+    return [CNOption none];
 }
 
 + (NSInteger)BLACK {

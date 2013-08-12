@@ -148,6 +148,20 @@ SPEC_BEGIN(CNChainSpec)
 
           [[r should] equal:@[@1, @3, @2, @0]];
       });
+      it(@".min should return min value", ^{
+          id r = [[s chain] min];
+          [[r should] equal:@1];
+      });
+      it(@".max should return max value", ^{
+          id r = [[s chain] max];
+          [[r should] equal:@3];
+      });
+      it(@".neighbours should neighbours", ^{
+          id r = [[[[s chain] neighbors] map:^id(CNTuple * x) {
+              return numi(unumi(x.a) + unumi(x.b));
+          }] toArray];
+          [[r should] equal:@[@4, @5]];
+      });
   });
 
 SPEC_END

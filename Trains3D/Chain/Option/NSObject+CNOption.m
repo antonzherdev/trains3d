@@ -27,6 +27,11 @@
     return f(self);
 }
 
+- (id)filter:(cnPredicate)f {
+    return f(self) ? self : [CNOption none];
+}
+
+
 - (id)flatMap:(cnF)f {
     return f(self);
 }

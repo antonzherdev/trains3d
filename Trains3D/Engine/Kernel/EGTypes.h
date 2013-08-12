@@ -49,6 +49,7 @@ EGPoint egPointMid(EGPoint self, EGPoint point);
 double egPointDistanceTo(EGPoint self, EGPoint point);
 EGPoint egPointSet(EGPoint self, double length);
 EGPoint egPointNormalize(EGPoint self);
+NSInteger egPointCompare(EGPoint self, EGPoint to);
 
 struct EGPointI {
     NSInteger x;
