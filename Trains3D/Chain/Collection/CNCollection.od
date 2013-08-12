@@ -1,0 +1,13 @@
+import CNChain
+
+stub trait CNIterator<T> {
+   def next : T?
+}
+
+stub class CNCollection<T> {
+    def count : uint
+    def iterator : CNIterator<T>
+
+    def chain : CNChain<T>
+    def for(each : T -> void)
+}

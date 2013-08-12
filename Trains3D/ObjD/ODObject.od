@@ -3,3 +3,15 @@ stub class ODObject {
     def as<T> : T?
     def description : string
 }
+
+stub trait ODComparable<T> {
+    def compare(to : T) : int
+}
+
+stub struct ODInt extends ODComparable<int> {
+    def compare(to : int) : int
+}
+
+stub struct ODUInt extends ODComparable<uint> {
+    def compare(to : uint) : int
+}

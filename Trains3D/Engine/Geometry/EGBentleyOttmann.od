@@ -1,17 +1,19 @@
 import EGTypes
 import EGFigure
+import CNTreeMap
+import CNTreeSet
 
-//class EGLineData<T>(data : T, figure : EGLine)
+class EGLineData<T>(data : T, figure : EGLine)
 //class EGIntersection
 //
-//class GGBentleyOttmann {
+class EGBentleyOttmann {
 //    static def intersections(lines : [EGLineData]) : NSSet<EGIntersection> = intersectionsMap(lines).values
 //
 //    static def intersectionsMap(lines : [EGLineData]) : [EGPoint : NSSet<EGIntersection>] =
 //        if(lines.count < 2) []
 //        else {
 //            val sweepLine = EGSweepLine.new
-//            val queue = EGEventQueue(lines, sweepLine)
+//            val queue = EGBentleyOttmannEventQueue(lines, sweepLine)
 //
 //            while(!queue.isEmpty()) {
 //                val events = queue.poll
@@ -19,9 +21,45 @@ import EGFigure
 //            }
 //            sweepLine.intersections
 //        }
+
+}
+
+class EGBentleyOttmannEventQueue {
+//    val events = CNTreeMap<EGPoint, [EGBentleyOttmannEvent]>((a, b) -> {
+//        val dX = a.x.compare(b.x)
+//        if(dX != 0) dX else a.y.compare(b.y)
+//    })
 //
-//}
+//    static def newWith(segments : [EGLine], sweepLine : EGSweepLine) : EGBentleyOttmannEventQueue {
+//        Rational minY = Rational.POSITIVE_INFINITY;
+//        Rational maxY = Rational.NEGATIVE_INFINITY;
+//        Rational minDeltaX = Rational.POSITIVE_INFINITY;
+//        xs = CNTreeSet<float>.new
 //
-//class EGEventQueue {
-//    val
-//}
+//        for (RLineSegment2D s : segments) {
+//        xs.add(s.p1.x);
+//        xs.add(s.p2.x);
+//        if(s.minY.isLessThan(minY)) minY = s.minY;
+//        if(s.maxY.isMoreThan(maxY)) maxY = s.maxY;
+//        offer(s.p1, new Event(Event.Type.START, s.p1, s, line));
+//        offer(s.p2, new Event(Event.Type.END, s.p2, s, line));
+//        }
+//
+//        Rational[] xsArray = xs.toArray(new Rational[xs.size()]);
+//        for(int i = 1; i < xsArray.length; i++) {
+//        Rational tempDeltaX = xsArray[i].subtract(xsArray[i-1]);
+//        if(tempDeltaX.isLessThan(minDeltaX)) {
+//        minDeltaX = tempDeltaX;
+//        }
+//        }
+//
+//        Rational deltaY = maxY.subtract(minY);
+//        Rational slope = deltaY.divide(minDeltaX).multiply(Rational.THOUSAND).negate();
+//
+//        line.setLine(new RLine2D(slope, RPoint2D.ORIGIN));
+//        line.setQueue(this);
+//    }
+
+}
+
+//class EGBentleyOttmannEvent(type : int, point : EGPoint, line : EGLine, weak sweepLine : EGSweepLine)

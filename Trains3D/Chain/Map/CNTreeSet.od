@@ -1,0 +1,16 @@
+import CNTreeMap
+
+class CNTreeSet<T>(map : CNTreeMap<T, ODObject>) {
+    static def newWith<T>(comparator : (T, T) -> int) : CNTreeSet<T> = {
+        CNTreeSet<T>(CNTreeMap<T, ODObject>(comparator))
+    }
+
+    static def new<T> = CNTreeSet<T>(CNTreeMap.new<T, ODObject>)
+
+    def add(object : T) {
+        map.set(object = nil, key = object)
+    }
+
+    def count : uint = map.count
+
+}

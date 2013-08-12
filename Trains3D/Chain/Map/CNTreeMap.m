@@ -30,12 +30,22 @@ static NSInteger _RED;
     _RED = 1;
 }
 
++ (CNTreeMap*)new {
+    return [CNTreeMap treeMapWithComparator:^NSInteger(id a, id b) {
+        return [a compareTo:b];
+    }];
+}
+
 - (NSUInteger)count {
     return __size;
 }
 
 - (id)objectForKey:(id)key {
     return [CNOption opt:[self entryForKey:key].object];
+}
+
+- (CNCollection*)keys {
+    return [CNTreeMapKeySet treeMapKeySetWithMap:self];
 }
 
 - (CNTreeMapEntry*)entryForKey:(id)key {
@@ -93,7 +103,7 @@ static NSInteger _RED;
     CNTreeMapEntry* p = entry;
     __size--;
     if(p.left != nil && p.right != nil) {
-        CNTreeMapEntry* s = [self successorT:p];
+        CNTreeMapEntry* s = [p next];
         p.key = s.key;
         p.object = s.object;
         p = s;
@@ -127,28 +137,6 @@ static NSInteger _RED;
         }
     }
     return entry.object;
-}
-
-- (CNTreeMapEntry*)successorT:(CNTreeMapEntry*)t {
-    if(t == nil) {
-        return nil;
-    } else {
-        if(t.right != nil) {
-            CNTreeMapEntry* p = t.right;
-            while(p.left != nil) {
-                p = p.left;
-            }
-            return p;
-        } else {
-            CNTreeMapEntry* p = t.parent;
-            CNTreeMapEntry* ch = t;
-            while(p != nil && ch == p.right) {
-                ch = p;
-                p = p.parent;
-            }
-            return p;
-        }
-    }
 }
 
 - (void)fixAfterInsertionEntry:(CNTreeMapEntry*)entry {
@@ -282,6 +270,14 @@ static NSInteger _RED;
     }
 }
 
+- (CNTreeMapEntry*)firstEntry {
+    CNTreeMapEntry* p = _root;
+    if(p != nil) while(p.left != nil) {
+        p = p.left;
+    }
+    return p;
+}
+
 + (NSInteger)BLACK {
     return _BLACK;
 }
@@ -340,12 +336,129 @@ static NSInteger _RED;
     return r;
 }
 
+- (CNTreeMapEntry*)next {
+    if(_right != nil) {
+        CNTreeMapEntry* p = _right;
+        while(p.left != nil) {
+            p = p.left;
+        }
+        return p;
+    } else {
+        CNTreeMapEntry* p = _parent;
+        CNTreeMapEntry* ch = self;
+        while(p != nil && ch == p.right) {
+            ch = p;
+            p = p.parent;
+        }
+        return p;
+    }
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation CNTreeMapKeySet{
+    CNTreeMap* _map;
+}
+@synthesize map = _map;
+
++ (id)treeMapKeySetWithMap:(CNTreeMap*)map {
+    return [[CNTreeMapKeySet alloc] initWithMap:map];
+}
+
+- (id)initWithMap:(CNTreeMap*)map {
+    self = [super init];
+    if(self) _map = map;
+    
+    return self;
+}
+
+- (NSUInteger)count {
+    return [_map count];
+}
+
+- (id<CNIterator>)iterator {
+    return [CNTreeMapKeyIterator newMap:_map entry:[_map firstEntry]];
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    CNTreeMapKeySet* o = ((CNTreeMapKeySet*)other);
+    return self.map == o.map;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.map hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"map=%@", self.map];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation CNTreeMapKeyIterator{
+    CNTreeMap* _map;
+    CNTreeMapEntry* _entry;
+}
+@synthesize map = _map;
+@synthesize entry = _entry;
+
++ (id)treeMapKeyIteratorWithMap:(CNTreeMap*)map {
+    return [[CNTreeMapKeyIterator alloc] initWithMap:map];
+}
+
+- (id)initWithMap:(CNTreeMap*)map {
+    self = [super init];
+    if(self) _map = map;
+    
+    return self;
+}
+
++ (CNTreeMapKeyIterator*)newMap:(CNTreeMap*)map entry:(CNTreeMapEntry*)entry {
+    CNTreeMapKeyIterator* ret = [CNTreeMapKeyIterator treeMapKeyIteratorWithMap:map];
+    ret.entry = entry;
+    return ret;
+}
+
+- (id)next {
+    if(_entry == nil) {
+        return [CNOption none];
+    } else {
+        id key = _entry.key;
+        _entry = [_entry next];
+        return [CNOption opt:key];
+    }
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"map=%@", self.map];
     [description appendString:@">"];
     return description;
 }

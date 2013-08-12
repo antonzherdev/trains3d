@@ -1,0 +1,18 @@
+import CNCollection
+
+class CNRange(start : int, end : int, step : int) extends CNCollection<int> {
+    def count : uint = (end - start)/step
+
+    def iterator : CNIterator<int> = CNRangeIterator(start, end, step)
+}
+
+class CNRangeIterator(start : int, end : int, step : int) extends CNIterator<int> {
+    private var i = start
+    def next : int? =
+        if((step >0 && i > end) || (step < 0 && i < end)) nil
+        else {
+            val ret = i
+            i += step
+            ret
+        }
+}

@@ -1,5 +1,6 @@
 import EGTypes
 
+class EGLine(p1 : EGPoint, p2 : EGPoint)
 //trait EGFigure {
 //    def boxingRect : EGRect
 //    def xs : [float]

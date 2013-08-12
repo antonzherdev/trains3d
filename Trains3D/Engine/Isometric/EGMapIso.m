@@ -2,6 +2,8 @@
 
 #import "EGGL.h"
 #import "EGMap.h"
+#import "CNChain.h"
+#import "CNRange.h"
 @implementation EGMapSso{
     EGSizeI _size;
     EGRectI _limits;
@@ -100,7 +102,7 @@
 }
 
 - (CNChain*)allPosibleTiles {
-    return [[[CNChain chainWithStart:_limits.x end:egRectIX2(_limits) step:1] mul:[CNChain chainWithStart:_limits.y end:egRectIY2(_limits) step:1]] map:^id(CNTuple* _) {
+    return [[[[CNRange rangeWithStart:_limits.x end:egRectIX2(_limits) step:1] chain] mul:[CNRange rangeWithStart:_limits.y end:egRectIY2(_limits) step:1]] map:^id(CNTuple* _) {
         return val(EGPointIMake(unumi(_.a), unumi(_.b)));
     }];
 }

@@ -11,6 +11,7 @@
 #import "CNTuple.h"
 #import "CNFlatMapLink.h"
 #import "CNDistinctLink.h"
+#import "CNTreeMap.h"
 
 
 @implementation CNChain {

@@ -2,6 +2,7 @@
 #import "ODLazy.h"
 #import "chain.h"
 #import "ODEnum.h"
+#import "ODObject.h"
 #import <math.h>
 
 static inline BOOL eqf(CGFloat a, CGFloat b) {

@@ -40,15 +40,15 @@ static NSArray* _TRRailConnector_values;
 
 + (TRRailConnector*)connectorForX:(NSInteger)x y:(NSInteger)y {
     if(x == -1 && y == 0) {
-        return [TRRailConnector left];
+        return _left;
     } else {
         if(x == 0 && y == -1) {
-            return [TRRailConnector bottom];
+            return _bottom;
         } else {
             if(x == 0 && y == 1) {
-                return [TRRailConnector top];
+                return _top;
             } else {
-                if(x == 1 && y == 0) return [TRRailConnector right];
+                if(x == 1 && y == 0) return _right;
                 else @throw @"No rail connector";
             }
         }
@@ -56,14 +56,14 @@ static NSArray* _TRRailConnector_values;
 }
 
 - (TRRailConnector*)otherSideConnector {
-    if(self == [TRRailConnector left]) {
-        return [TRRailConnector right];
+    if(self == _left) {
+        return _right;
     } else {
-        if(self == [TRRailConnector right]) {
-            return [TRRailConnector left];
+        if(self == _right) {
+            return _left;
         } else {
-            if(self == [TRRailConnector top]) return [TRRailConnector bottom];
-            else return [TRRailConnector top];
+            if(self == _top) return _bottom;
+            else return _top;
         }
     }
 }
@@ -134,22 +134,22 @@ static NSArray* _TRRailForm_values;
 
 + (void)initialize {
     [super initialize];
-    _leftBottom = [TRRailForm railFormWithOrdinal:0 name:@"leftBottom" start:[TRRailConnector left] end:[TRRailConnector bottom] isTurn:YES length:M_PI_4 pointFun:^EGPoint(double x) {
+    _leftBottom = [TRRailForm railFormWithOrdinal:0 name:@"leftBottom" start:TRRailConnector.left end:TRRailConnector.bottom isTurn:YES length:M_PI_4 pointFun:^EGPoint(double x) {
         return EGPointMake(-0.5 + 0.5 * sin(x * 2), -0.5 + 0.5 * cos(x * 2));
     }];
-    _leftRight = [TRRailForm railFormWithOrdinal:1 name:@"leftRight" start:[TRRailConnector left] end:[TRRailConnector right] isTurn:NO length:1 pointFun:^EGPoint(double x) {
+    _leftRight = [TRRailForm railFormWithOrdinal:1 name:@"leftRight" start:TRRailConnector.left end:TRRailConnector.right isTurn:NO length:1 pointFun:^EGPoint(double x) {
         return EGPointMake(x - 0.5, 0);
     }];
-    _leftTop = [TRRailForm railFormWithOrdinal:2 name:@"leftTop" start:[TRRailConnector left] end:[TRRailConnector top] isTurn:YES length:M_PI_4 pointFun:^EGPoint(double x) {
+    _leftTop = [TRRailForm railFormWithOrdinal:2 name:@"leftTop" start:TRRailConnector.left end:TRRailConnector.top isTurn:YES length:M_PI_4 pointFun:^EGPoint(double x) {
         return EGPointMake(-0.5 + 0.5 * sin(x * 2), 0.5 - 0.5 * cos(x * 2));
     }];
-    _bottomTop = [TRRailForm railFormWithOrdinal:3 name:@"bottomTop" start:[TRRailConnector bottom] end:[TRRailConnector top] isTurn:NO length:1 pointFun:^EGPoint(double x) {
+    _bottomTop = [TRRailForm railFormWithOrdinal:3 name:@"bottomTop" start:TRRailConnector.bottom end:TRRailConnector.top isTurn:NO length:1 pointFun:^EGPoint(double x) {
         return EGPointMake(0, x - 0.5);
     }];
-    _bottomRight = [TRRailForm railFormWithOrdinal:4 name:@"bottomRight" start:[TRRailConnector bottom] end:[TRRailConnector right] isTurn:YES length:M_PI_4 pointFun:^EGPoint(double x) {
+    _bottomRight = [TRRailForm railFormWithOrdinal:4 name:@"bottomRight" start:TRRailConnector.bottom end:TRRailConnector.right isTurn:YES length:M_PI_4 pointFun:^EGPoint(double x) {
         return EGPointMake(0.5 - 0.5 * cos(x * 2), -0.5 + 0.5 * sin(x * 2));
     }];
-    _topRight = [TRRailForm railFormWithOrdinal:5 name:@"topRight" start:[TRRailConnector top] end:[TRRailConnector right] isTurn:YES length:M_PI_4 pointFun:^EGPoint(double x) {
+    _topRight = [TRRailForm railFormWithOrdinal:5 name:@"topRight" start:TRRailConnector.top end:TRRailConnector.right isTurn:YES length:M_PI_4 pointFun:^EGPoint(double x) {
         return EGPointMake(0.5 - 0.5 * cos(x * 2), 0.5 - 0.5 * sin(x * 2));
     }];
     _TRRailForm_values = (@[_leftBottom, _leftRight, _leftTop, _bottomTop, _bottomRight, _topRight]);
@@ -159,22 +159,22 @@ static NSArray* _TRRailForm_values;
     if(connector1.ordinal > connector2.ordinal) {
         return [TRRailForm formForConnector1:connector2 connector2:connector1];
     } else {
-        if(connector1 == [TRRailConnector left] && connector2 == [TRRailConnector right]) {
-            return [TRRailForm leftRight];
+        if(connector1 == TRRailConnector.left && connector2 == TRRailConnector.right) {
+            return _leftRight;
         } else {
-            if(connector1 == [TRRailConnector left] && connector2 == [TRRailConnector bottom]) {
-                return [TRRailForm leftBottom];
+            if(connector1 == TRRailConnector.left && connector2 == TRRailConnector.bottom) {
+                return _leftBottom;
             } else {
-                if(connector1 == [TRRailConnector left] && connector2 == [TRRailConnector top]) {
-                    return [TRRailForm leftTop];
+                if(connector1 == TRRailConnector.left && connector2 == TRRailConnector.top) {
+                    return _leftTop;
                 } else {
-                    if(connector1 == [TRRailConnector bottom] && connector2 == [TRRailConnector top]) {
-                        return [TRRailForm bottomTop];
+                    if(connector1 == TRRailConnector.bottom && connector2 == TRRailConnector.top) {
+                        return _bottomTop;
                     } else {
-                        if(connector1 == [TRRailConnector bottom] && connector2 == [TRRailConnector right]) {
-                            return [TRRailForm bottomRight];
+                        if(connector1 == TRRailConnector.bottom && connector2 == TRRailConnector.right) {
+                            return _bottomRight;
                         } else {
-                            if(connector1 == [TRRailConnector top] && connector2 == [TRRailConnector right]) return [TRRailForm topRight];
+                            if(connector1 == TRRailConnector.top && connector2 == TRRailConnector.right) return _topRight;
                             else @throw @"No form for connectors";
                         }
                     }

@@ -1,9 +1,15 @@
+import CNCollection
+
 class CNTreeMap<K, V>(comparator : (K, K) -> int) {
+    static def new<K extends ODComparable<K>, V> = CNTreeMap<K, V>((a : K, b : K) -> a.compare(b))
+
     private var root : CNTreeMapEntry<K, V> = nil
     private var _size : uint = 0
 
     def count = _size
     def objectFor(key : K) : V? = entryFor(key).object
+
+    def keys : CNCollection<K> = CNTreeMapKeySet<K>(self)
 
     private def entryFor(key : K) : CNTreeMapEntry<K, V> = {
         val p = root
@@ -61,7 +67,7 @@ class CNTreeMap<K, V>(comparator : (K, K) -> int) {
         // If strictly internal, copy successor's element to p and then make p
         // point to successor.
         if (p.left != nil && p.right != nil) {
-            val s = successor(p)
+            val s = p.next
             p.key = s.key
             p.object = s.object
             p = s
@@ -94,22 +100,6 @@ class CNTreeMap<K, V>(comparator : (K, K) -> int) {
             }
         }
         entry.object
-    }
-    private def successor(t : CNTreeMapEntry<K, V>) : CNTreeMapEntry<K, V> = {
-        if (t == nil) nil
-        else if (t.right != nil) {
-            val p = t.right
-            while (p.left != nil) p = p.left
-            p
-        } else {
-            val p = t.parent
-            val ch = t
-            while (p != nil && ch == p.right) {
-                ch = p
-                p = p.parent
-            }
-            p
-        }
     }
 
     private def fixAfterInsertion(entry : CNTreeMapEntry<K, V>) {
@@ -239,6 +229,12 @@ class CNTreeMap<K, V>(comparator : (K, K) -> int) {
             p.parent = l
         }
     }
+
+    private def firstEntry : CNTreeMapEntry<K, V> = {
+        val p = root
+        if (p != nil) while (p.left != nil) p = p.left
+        p
+    }
 }
 
 class CNTreeMapEntry<K, V> {
@@ -256,4 +252,42 @@ class CNTreeMapEntry<K, V> {
         r.parent = parent
         r
     }
+
+    def next : CNTreeMapEntry<K, V> = {
+        if (right != nil) {
+            var p = right
+            while (p.left != nil) p = p.left
+            p
+        } else {
+            var p = parent
+            var ch = self
+            while (p != nil && ch == p.right) {
+                ch = p
+                p = p.parent
+            }
+            p
+        }
+    }
+}
+
+class CNTreeMapKeySet<K>(map : CNTreeMap<K, _>) extends CNCollection<K> {
+    def count : uint = map.count
+
+    def iterator : CNIterator<K> = CNTreeMapKeyIterator<K>.new(map, map.firstEntry)
+}
+
+class CNTreeMapKeyIterator<K>(map : CNTreeMap<K, _>) extends CNIterator<K> {
+   static def new<K>(map : CNTreeMap<K, _>, entry : CNTreeMapEntry<K, _>) : CNTreeMapKeyIterator<K> = {
+       val ret = CNTreeMapKeyIterator<K>(map)
+       ret.entry = entry
+       ret
+   }
+   var entry : CNTreeMapEntry<K, _>
+   def next : K? =
+        if(entry == nil) nil
+        else {
+            val key = entry.key
+            entry = entry.next
+            key
+        }
 }

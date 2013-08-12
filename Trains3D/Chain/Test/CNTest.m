@@ -13,7 +13,7 @@
 }
 
 - (void)assertEqualsA:(id)a b:(id)b {
-    STAssertEqualObjects(a, b, [NSString stringWithFormat:@"%@ != %@", a, b]);
+    STAssertEqualObjects(a, b, @"!=");
 }
 
 - (void)assertTrueValue:(BOOL)value {

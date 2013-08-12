@@ -13,19 +13,8 @@
     return self;
 }
 
-- (NSInteger)compA:(NSInteger)a b:(NSInteger)b {
-    if(a < b) {
-        return 1;
-    } else {
-        if(a > b) return -1;
-        else return 0;
-    }
-}
-
 - (void)testMain {
-    CNTreeMap* map = [CNTreeMap treeMapWithComparator:^NSInteger(id a, id b) {
-        return [self compA:unumi(a) b:unumi(b)];
-    }];
+    CNTreeMap* map = [CNTreeMap new];
     [self assertEqualsA:@0 b:numi([map count])];
     [self assertTrueValue:[[map objectForKey:@0] isEmpty]];
     [map setObject:@"test" forKey:@0];
@@ -38,6 +27,7 @@
     [[tests distinct] forEach:^void(id i) {
         [self assertEqualsA:[@"test" stringByAppendingFormat:@"%li", unumi(i)] b:[[map objectForKey:i] get]];
     }];
+    [self assertEqualsA:(@[@-30, @-20, @-18, @-15, @-10, @0, @10, @11, @13, @20]) b:[[[map keys] chain] toArray]];
     [[tests distinct] forEach:^void(id i) {
         [self assertEqualsA:[@"test" stringByAppendingFormat:@"%li", unumi(i)] b:[[map objectForKey:i] get]];
         [map removeObjectForKey:i];

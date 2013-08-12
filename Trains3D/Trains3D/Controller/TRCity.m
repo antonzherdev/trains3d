@@ -34,10 +34,10 @@ static NSArray* _TRCityAngle_values;
 
 + (void)initialize {
     [super initialize];
-    _angle0 = [TRCityAngle cityAngleWithOrdinal:0 name:@"angle0" angle:0 form:[TRRailForm leftRight] back:NO];
-    _angle90 = [TRCityAngle cityAngleWithOrdinal:1 name:@"angle90" angle:90 form:[TRRailForm bottomTop] back:YES];
-    _angle180 = [TRCityAngle cityAngleWithOrdinal:2 name:@"angle180" angle:180 form:[TRRailForm leftRight] back:YES];
-    _angle270 = [TRCityAngle cityAngleWithOrdinal:3 name:@"angle270" angle:270 form:[TRRailForm bottomTop] back:NO];
+    _angle0 = [TRCityAngle cityAngleWithOrdinal:0 name:@"angle0" angle:0 form:TRRailForm.leftRight back:NO];
+    _angle90 = [TRCityAngle cityAngleWithOrdinal:1 name:@"angle90" angle:90 form:TRRailForm.bottomTop back:YES];
+    _angle180 = [TRCityAngle cityAngleWithOrdinal:2 name:@"angle180" angle:180 form:TRRailForm.leftRight back:YES];
+    _angle270 = [TRCityAngle cityAngleWithOrdinal:3 name:@"angle270" angle:270 form:TRRailForm.bottomTop back:NO];
     _TRCityAngle_values = (@[_angle0, _angle90, _angle180, _angle270]);
 }
 

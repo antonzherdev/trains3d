@@ -1,6 +1,8 @@
 import EGTypes
 import EGGL
 import EGMap
+import CNChain
+import CNRange
 
 class EGMapSso(size : EGSizeI) {
     val limits = EGRectI.newXY((1 - size.height)/2 - 1,
@@ -93,8 +95,8 @@ class EGMapSso(size : EGSizeI) {
     }
 
     private def allPosibleTiles : CNChain<EGPointI> =
-        CNChain.chainWith(start = limits.x, end = limits.x2, step = 1)
-            .mul(CNChain.chainWith(start = limits.y, end = limits.y2, step = 1))
+        CNRange(start = limits.x, end = limits.x2, step = 1).chain
+            .mul<int>(CNRange(start = limits.y, end = limits.y2, step = 1))
             .map(EGPointI(_.a, _.b))
 
     private def tileCutAxis(less : int, more : int) : int =

@@ -1,41 +1,4 @@
-stub class CNChain<A> {
-    static def chainWith(start : int, end : int, step : int) : CNChain<int>
-
-    def filter(: A -> bool) : CNChain<A>
-    def map<B>(: A -> B) : CNChain<B>
-    def flatMap<B>(: A -> [B]) : CNChain<B>
-
-    def combination : CNChain<(A, A)>
-    def neighbors : CNChain<(A, A)>
-    def uncombination<B>(self : CNChain<(B, B)>) : CNChain<B>
-    def mul<B>(: CNChain<B>) : CNChain<(A,B)>
-
-    def join<K, V1, V2>(self : CNChain<(K, V1)>, chain : CNChain<(K, V2)>) : CNChain<K, (V1, V2)>
-
-    def prepend(: CNChain<A>) : CNChain<A>
-    def append(: CNChain<A>) : CNChain<A>
-    def exclude(: CNChain<A>) : CNChain<A>
-    def intersect(: CNChain<A>) : CNChain<A>
-
-    def reverse : CNChain<A>
-    def distinct : CNChain<A>
-    def sort : CNChain<A>
-    def sort(:(A, A) -> int) : CNChain<A>
-
-    def fold<B>( : (B, A) -> B, withStart : B) : B
-    def count : uint
-    def for(each: A -> void)
-    def head : A?
-    def randomItem : A?
-    def find(: A -> bool) : A?
-    def isEmpty : bool
-    def gap : (A, A)
-
-    def toArray : [A]
-    def toSet : NSSet<A>
-    def toMap<K, V>(self : CNChain<(K, V)>) : [K : V]
-    def toMutableMap<K, V>(self : CNChain<(K, V)>) : [var K : V]
-}
+import CNChain
 
 stub class ODArray<A> extends CNChain<A> {
 
