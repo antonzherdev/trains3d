@@ -21,6 +21,10 @@
     @throw @"Method iterator is abstract";
 }
 
+- (id)head {
+    return [[self iterator] next];
+}
+
 - (CNChain*)chain {
     return [CNChain chainWithCollection:self];
 }

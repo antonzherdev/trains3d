@@ -2,9 +2,11 @@ package core.chain
 
 import ODObject
 import CNCollection
+import CNMap
 import "CNOption.h"
+import "CNTuple.h"
 
-class CNTreeMap<K, V>(comparator : (K, K) -> int) {
+class CNTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K, V> {
     static def new<K extends ODComparable<K>, V> = CNTreeMap<K, V>((a : K, b : K) -> a.compare(b))
 
     private var root : CNTreeMapEntry<K, V> = nil
@@ -239,6 +241,24 @@ class CNTreeMap<K, V>(comparator : (K, K) -> int) {
         if (p != nil) while (p.left != nil) p = p.left
         p
     }
+
+    private def lastEntry : CNTreeMapEntry<K, V> = {
+        val p = root
+        if (p != nil) while (p.right != nil) p = p.right
+        p
+    }
+
+    def pollFirst : (K, V)? = {
+        val entry = firstEntry
+        if(entry == nil) nil
+        else {
+            delete(entry)
+            (entry.key, entry.object)
+        }
+    }
+
+    def firstKey : K? = if(root == nil) nil else firstEntry.key
+    def lastKey : K? = if(root == nil) nil else lastEntry.key
 }
 
 class CNTreeMapEntry<K, V> {

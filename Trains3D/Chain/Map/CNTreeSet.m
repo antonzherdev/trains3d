@@ -32,6 +32,18 @@
     return [_map count];
 }
 
+- (id<CNIterator>)iterator {
+    return [[_map keys] iterator];
+}
+
+- (id)head {
+    return [_map firstKey];
+}
+
+- (id)last {
+    return [_map lastKey];
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }

@@ -6,6 +6,10 @@ stub class ODArray<A> extends CNChain<A> {
 
 }
 
+stub class ODMutableArray<A> extends ODArray<A> {
+    def add(object : A)
+}
+
 stub class NSSet<A> extends CNChain<A> {
     def contains(object : A) : bool
 }

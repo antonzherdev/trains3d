@@ -278,6 +278,34 @@ static NSInteger _RED;
     return p;
 }
 
+- (CNTreeMapEntry*)lastEntry {
+    CNTreeMapEntry* p = _root;
+    if(p != nil) while(p.right != nil) {
+        p = p.right;
+    }
+    return p;
+}
+
+- (id)pollFirst {
+    CNTreeMapEntry* entry = [self firstEntry];
+    if(entry == nil) {
+        return [CNOption none];
+    } else {
+        [self deleteEntry:entry];
+        return [CNOption opt:tuple(entry.key, entry.object)];
+    }
+}
+
+- (id)firstKey {
+    if(_root == nil) return [CNOption none];
+    else return [CNOption opt:[self firstEntry].key];
+}
+
+- (id)lastKey {
+    if(_root == nil) return [CNOption none];
+    else return [CNOption opt:[self lastEntry].key];
+}
+
 + (NSInteger)BLACK {
     return _BLACK;
 }

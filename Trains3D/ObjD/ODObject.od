@@ -17,3 +17,6 @@ stub struct ODInt extends ODComparable<int> {
 stub struct ODUInt extends ODComparable<uint> {
     def compare(to : uint) : int
 }
+
+stub val DBL_MAX : float
+stub val DBL_MIN : float

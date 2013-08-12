@@ -12,6 +12,7 @@
 - (void)forEach:(void(^)(id))each;
 - (BOOL)goOn:(BOOL(^)(id))on;
 - (CNChain*)chain;
+- (id)head;
 @end
 
 
@@ -20,6 +21,7 @@
 - (id)init;
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
+- (id)head;
 - (CNChain*)chain;
 - (void)forEach:(void(^)(id))each;
 - (BOOL)goOn:(BOOL(^)(id))on;

@@ -1,0 +1,30 @@
+package core.chain
+
+import CNCollection
+import "CNOption.h"
+
+class CNMap<K, V> extends CNIterable<(K, V)> {
+    def objectFor(key : K) : V?
+    def keys : [K]
+    def values : [V]
+}
+
+class CNMutableMap<K, V> extends CNMap<K, V> {
+    def set(object : V, forKey : K) : V
+    def removeObjectFor(key : K) : V?
+    def objectFor(key: K, orUpdateWith: () -> V) : V = {
+        val o = objectFor(key)
+        if(o.isDefined) o.get
+        else {
+            val init : V = orUpdateWith
+            set(init, forKey = key)
+            init
+        }
+    }
+    def modify(with : V? -> V?, forKey : K) : V? = {
+        val newObject = with(objectFor(forKey))
+        if(newObject.isEmpty) removeObjectFor(forKey)
+        else set(newObject, forKey)
+        newObject
+    }
+}

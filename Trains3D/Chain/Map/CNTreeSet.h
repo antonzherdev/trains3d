@@ -1,9 +1,10 @@
 #import <Foundation/Foundation.h>
 #import "CNTreeMap.h"
+#import "CNCollection.h"
 
 @class CNTreeSet;
 
-@interface CNTreeSet : NSObject
+@interface CNTreeSet : CNIterable
 @property (nonatomic, readonly) CNTreeMap* map;
 
 + (id)treeSetWithMap:(CNTreeMap*)map;
@@ -12,6 +13,9 @@
 + (CNTreeSet*)new;
 - (void)addObject:(id)object;
 - (NSUInteger)count;
+- (id<CNIterator>)iterator;
+- (id)head;
+- (id)last;
 @end
 
 

@@ -25,41 +25,44 @@ class EGBentleyOttmann {
 }
 
 class EGBentleyOttmannEventQueue {
-//    val events = CNTreeMap<EGPoint, [EGBentleyOttmannEvent]>((a, b) -> {
+//    val events = CNTreeMap<EGPoint, [var EGBentleyOttmannEvent]>((a, b) -> {
 //        val dX = a.x.compare(b.x)
 //        if(dX != 0) dX else a.y.compare(b.y)
 //    })
 //
-//    static def newWith(segments : [EGLine], sweepLine : EGSweepLine) : EGBentleyOttmannEventQueue {
-//        Rational minY = Rational.POSITIVE_INFINITY;
-//        Rational maxY = Rational.NEGATIVE_INFINITY;
-//        Rational minDeltaX = Rational.POSITIVE_INFINITY;
-//        xs = CNTreeSet<float>.new
+//     def initWith(segments : [EGLine], sweepLine : EGSweepLine) {
+//        if(!segments.isEmpty) {
+//            val xs = CNTreeSet<float>.new
+//            segments.for(s -> {
+//                xs.add(s.p1.x)
+//                xs.add(s.p2.x)
+//                offer(s.p1, EGBentleyOttmannEvent(EGBentleyOttmannEventType.start, s.p1, s, sweepLine))
+//                offer(s.p2, EGBentleyOttmannEvent(EGBentleyOttmannEventType.end, s.p2, s, sweepLine))
+//            })
 //
-//        for (RLineSegment2D s : segments) {
-//        xs.add(s.p1.x);
-//        xs.add(s.p2.x);
-//        if(s.minY.isLessThan(minY)) minY = s.minY;
-//        if(s.maxY.isMoreThan(maxY)) maxY = s.maxY;
-//        offer(s.p1, new Event(Event.Type.START, s.p1, s, line));
-//        offer(s.p2, new Event(Event.Type.END, s.p2, s, line));
+//            val minY = xs.head.get
+//            val maxY = xs.last.get
+//            val minDeltaX = xs.chain.neighbors.map(pair -> pair.b - pair.a).min.get
+//            val slope = (minY - maxY)/minDeltaX*1000
+//            sweepLine.setLine(RLine2D(slope, RPoint2D.ORIGIN))
+//            sweepLine.setQueue(self)
 //        }
-//
-//        Rational[] xsArray = xs.toArray(new Rational[xs.size()]);
-//        for(int i = 1; i < xsArray.length; i++) {
-//        Rational tempDeltaX = xsArray[i].subtract(xsArray[i-1]);
-//        if(tempDeltaX.isLessThan(minDeltaX)) {
-//        minDeltaX = tempDeltaX;
-//        }
-//        }
-//
-//        Rational deltaY = maxY.subtract(minY);
-//        Rational slope = deltaY.divide(minDeltaX).multiply(Rational.THOUSAND).negate();
-//
-//        line.setLine(new RLine2D(slope, RPoint2D.ORIGIN));
-//        line.setQueue(this);
 //    }
-
+//
+//    def offer(p : EGPoint, e : EGBentleyOttmannEvent) {
+//        events.objectFor(key = p, orUpdate = []).for(_.add(e))
+//    }
+//
+//    def poll : [EGBentleyOttmannEvent] {
+//        events.pollFirst.get.b
+//    }
 }
 
-//class EGBentleyOttmannEvent(type : int, point : EGPoint, line : EGLine, weak sweepLine : EGSweepLine)
+enum EGBentleyOttmannEventType {
+    start()
+    end()
+}
+
+//class EGBentleyOttmannEvent(type : int, point : EGPoint, line : EGLine, weak sweepLine : EGSweepLine) {
+//
+//}

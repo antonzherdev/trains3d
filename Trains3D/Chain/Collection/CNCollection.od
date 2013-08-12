@@ -19,11 +19,15 @@ trait CNTraversable<T> {
     def chain : CNChain<T> = {
         CNChain.chainWith<T>(self)
     }
+
+    def head : T?
 }
 
 class CNIterable<T> extends CNTraversable<T> {
     def count : uint
     def iterator : CNIterator<T>
+
+    def head : T? = iterator.next
 
     def chain : CNChain<T> = {
         CNChain.chainWith<T>(self)

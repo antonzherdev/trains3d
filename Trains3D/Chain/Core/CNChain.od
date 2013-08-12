@@ -33,7 +33,9 @@ stub class CNChain<A> extends CNIterable<A> {
     def randomItem : A?
     def find(: A -> bool) : A?
     def isEmpty : bool
-    def gap : (A, A)
+    def gap<B extends ODComparable<B>> (self : CNChain<B>) : (A, A)?
+    def min<B extends ODComparable<B>> (self : CNChain<B>) : A?
+    def max<B extends ODComparable<B>> (self : CNChain<B>) : A?
 
     def toArray : [A]
     def toSet : NSSet<A>

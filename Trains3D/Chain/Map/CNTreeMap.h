@@ -1,14 +1,16 @@
 #import <Foundation/Foundation.h>
 #import "CNOption.h"
+#import "CNTuple.h"
 #import "ODObject.h"
 #import "CNCollection.h"
+#import "CNMap.h"
 
 @class CNTreeMap;
 @class CNTreeMapEntry;
 @class CNTreeMapKeySet;
 @class CNTreeMapKeyIterator;
 
-@interface CNTreeMap : NSObject
+@interface CNTreeMap : CNMutableMap
 @property (nonatomic, readonly) NSInteger(^comparator)(id, id);
 
 + (id)treeMapWithComparator:(NSInteger(^)(id, id))comparator;
@@ -19,6 +21,9 @@
 - (CNIterable*)keys;
 - (id)setObject:(id)object forKey:(id)forKey;
 - (id)removeObjectForKey:(id)key;
+- (id)pollFirst;
+- (id)firstKey;
+- (id)lastKey;
 + (NSInteger)BLACK;
 + (NSInteger)RED;
 @end
