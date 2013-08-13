@@ -5,7 +5,7 @@ import CNTreeSet
 
 
 class EGBentleyOttmann {
-    static def intersections<T>(segments : [(T, EGLineSegment)]) : [EGBentleyOttmannIntersection] =
+    static def intersectionsFor<T>(segments : [(T, EGLineSegment)]) : [EGBentleyOttmannIntersection] =
         intersectionsMap(segments).values
 
     static private def intersectionsMap<T>(segments : [(T, EGLineSegment)]) : [EGPoint : [EGBentleyOttmannIntersection]] =
@@ -14,7 +14,7 @@ class EGBentleyOttmann {
             val sweepLine = EGSweepLine.new
             val queue = EGBentleyOttmannEventQueue.newWith(segments, sweepLine)
 
-            while(!(queue.isEmpty)) {
+            while(!queue.isEmpty) {
                 val events = queue.poll
                 sweepLine.handle(events)
             }
@@ -22,11 +22,21 @@ class EGBentleyOttmann {
         }
 }
 
-trait EGBentleyOttmannEvent<T> {
+class EGBentleyOttmannEvent<T> {
     def point : EGPoint
-    def data : T
-    def segment : EGLineSegment
+    def isIntersection : bool
+    def isStart : bool
+    def isEnd : bool = !isStart && !isIntersection
 }
+
+class EGBentleyOttmannPointEvent<T>(isStart : bool, data : T, segment : EGLineSegment, point : EGPoint) extends EGBentleyOttmannEvent<T> {
+    def isIntersection = false
+}
+class EGBentleyOttmannIntersection<T>(data1 : T, data2 : T, point : EGPoint) extends EGBentleyOttmannEvent<T> {
+    def isIntersection = true
+    def isStart = false
+}
+
 
 class EGBentleyOttmannEventQueue<T> {
     val events = CNTreeMap<EGPoint, [var EGBentleyOttmannEvent<T>]>((a, b) -> a.compare(b))
@@ -41,8 +51,8 @@ class EGBentleyOttmannEventQueue<T> {
                 val segment : EGLineSegment = s.b
                 xs.add(segment.p1.x)
                 xs.add(segment.p2.x)
-                ret.offer(segment.p1, EGBentleyOttmannEventStart(s.a, s, segment.p1))
-                ret.offer(segment.p2, EGBentleyOttmannEventEnd(s.a, s, segment.p2))
+                ret.offer(segment.p1, EGBentleyOttmannPointEvent(true, s.a, s, segment.p1))
+                ret.offer(segment.p2, EGBentleyOttmannPointEvent(false, s.a, s, segment.p2))
             })
 
             val minY = xs.head.get
@@ -64,10 +74,6 @@ class EGBentleyOttmannEventQueue<T> {
     }
 }
 
-class EGBentleyOttmannEventStart<T>(data : T, segment : EGLineSegment, point : EGPoint) extends EGBentleyOttmannEvent<T>
-class EGBentleyOttmannEventEnd<T>(data : T, segment : EGLineSegment, point : EGPoint) extends EGBentleyOttmannEvent<T>
-class EGBentleyOttmannIntersection<T>(data1 : T, data2 : T, point : EGPoint) extends EGBentleyOttmannEvent<T>
-
 class EGSweepLine<T>
     /**
     * Whether to ignore intersections of line segments when both
@@ -75,7 +81,7 @@ class EGSweepLine<T>
     */
 //    ignoreSegmentEndings : bool
 {
-    private var events = CNTreeSet.new<EGBentleyOttmannEvent<T>>
+    private var events = CNTreeSet.newWith<EGBentleyOttmannEvent<T>>((a, b) -> compareEvents(a, b))
 
     /**
     * A map holding all intersection points mapped to the Events
@@ -86,7 +92,7 @@ class EGSweepLine<T>
     /**
     * The line sweeping from left to right.
     */
-    var sweepLine : EGLine = nil
+    var sweepLine : EGSlopeLine = nil
 
     /**
     * The point of the current Event.
@@ -104,35 +110,25 @@ class EGSweepLine<T>
     var queue : EGBentleyOttmannEventQueue = nil
 
     def handle(events : [EGBentleyOttmannEvent<T>]) {
+        sweepTo(events[0])
         events.for(handleOne(event = _))
-//        if(!events.isEmpty) {
-//            sweepTo(events[0])
+    }
 
-            // If we shouldn't ignore segment endings, and there are more than
-            // one events in the set, these events must intersect with each other.
-//            if(!ignoreSegmentEndings && events.size() > 1) {
-//                for(int i = 0; i < array.length-1; i++) {
-//                    for(int j = i+1; j < array.length; j++) {
-//                        checkIntersection(array[i], array[j]);
-//                    }
-//                }
-//            }
-
-            // Handle each individual event from the set.
-//        events.for(handleOne(event = _))
-//        }
+    private def sweepTo(event : EGBentleyOttmannEvent<T>) {
+        currentEventPoint = event.point
+        sweepLine = EGSlopeLine(sweepLine.slope, currentEventPoint)
     }
 
     private def handleOne(event : EGBentleyOttmannEvent<T>) {
-        if(event.is<EGBentleyOttmannEventStart>) {
+        if(event.isStart) {
             before = false
             events.add(event)
-            checkIntersection(event, above(event))
-            checkIntersection(event, below(event))
-        } else if(event.is<EGBentleyOttmannEventEnd>) {
+            above(event).for(checkIntersection(event, _))
+            below(event).for(checkIntersection(event, _))
+        } else if(event.isEnd) {
             before = true
             events.remove(event)
-            checkIntersection(above(event), below(event))
+            above(event).for(a ->  below(event).for(b -> checkIntersection(a, b)))
         } else {
             before = true
             val set = intersections[event.point].get
@@ -140,32 +136,26 @@ class EGSweepLine<T>
             before = false
             toInsert.for(e -> {
                 events.add(e)
-                checkIntersection(e, above(e))
-                checkIntersection(e, below(e))
+                above(e).for(checkIntersection(e, _))
+                below(e).for(checkIntersection(e, _))
             })
         }
     }
 
-    private def above(event : EGBentleyOttmannEvent<T>) : EGBentleyOttmannEvent<T> {
-        return events.higherThan(event).getOr(nil)
+    private def above(event : EGBentleyOttmannEvent<T>) : EGBentleyOttmannEvent<T>? {
+        return events.higherThan(event)
     }
 
-    private def below(event : EGBentleyOttmannEvent<T>) : EGBentleyOttmannEvent<T> {
-        return events.lowerThan(event).getOr(nil)
+    private def below(event : EGBentleyOttmannEvent<T>) : EGBentleyOttmannEvent<T>? {
+        return events.lowerThan(event)
     }
 
-    private def checkIntersection(a : EGBentleyOttmannEvent<T>, b : EGBentleyOttmannEvent<T>) {
-    // Return immediately in case either of the events is null, or
-    // if one of them is an INTERSECTION event.
-    if(a != nil && b != nil
-        && !a.is<EGBentleyOttmannIntersection> && !b.is<EGBentleyOttmannIntersection>)
-    {
-
+    private def checkIntersection(a : EGBentleyOttmannPointEvent<T>, b : EGBentleyOttmannPointEvent<T>) {
         // Get the intersection point between 'a' and 'b'.
         a.segment.intersectionWith(b.segment).for(p -> {
             // If the intersection is formed by both the segment endings AND
             // ignoreSegmentEndings is true, return from this method.
-            if(!a.segment.endingsContain(p) || !b.segment.endingsContain(p)/* && ignoreSegmentEndings*/) {
+            if(!a.segment.endingsContain(p) && !b.segment.endingsContain(p)/* && ignoreSegmentEndings*/) {
 
                 // Add the intersection.
                 val existing = intersections.objectFor(key = p, orUpdateWith = [])
@@ -181,5 +171,52 @@ class EGSweepLine<T>
                 }
             }
         })
-    }}
+    }
+
+    private def compareEvents(a : EGBentleyOttmannEvent<T>, b : EGBentleyOttmannEvent<T>) : int = {
+        // Equal Events.
+        if (a == b) return 0
+        // Get both intersection points.
+        val ipA = a.intersectionWith(sweepLine)
+        val ipB = b.intersectionWith(sweepLine)
+
+        // Get the difference between the Event's locations (y coordinate)
+        // they pass through the sweep line.
+        val deltaY = ipA.y - ipB.y
+
+        if (!deltaY.equals(Rational.ZERO)) {
+        // The intersect the sweep line at different points, let the
+        // Event with the lower intersection come before the other.
+            if(deltaY < 0) -1 else 1
+        }
+        else {
+            val thisSlope = a.segment.line.slope
+            val thatSlope = b.segment.line.slope
+
+            // If the slopes differ, let the one with the Event with the least
+            // slope become before the other
+            if(thisSlope != thatSlope) {
+                if(sweepLine.isBefore()) {
+                    if(thisSlope > thatSlope) -1 else 1
+                } else {
+                    if(thisSlope > thatSlope) 1 else -1
+                }
+            } else {
+
+                // Equal slopes and going through the same point in the sweep
+                // line: find an arbitrary attribute that differs 'this' from that.
+
+                // Check if the first (left most) point differ.
+                val deltaXP1 = a.segment.p1.x - b.segment.p1.x
+                if(deltaXP1 != 0) {
+                    if(deltaXP1 < 0) -1 else 1
+                } else {
+                    // Their left most points are the same, then their right most
+                    // points must be different.
+                    val deltaXP2 = a.segment.p2.x - that.segment.p2.x
+                    if(deltaXP2 < 0) -1 else 1
+                }
+            }
+        }
+    }
 }

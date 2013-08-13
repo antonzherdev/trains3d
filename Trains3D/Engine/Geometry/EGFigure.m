@@ -278,6 +278,15 @@
     return self;
 }
 
++ (EGLineSegment*)newWithP1:(EGPoint)p1 p2:(EGPoint)p2 {
+    if(egPointCompare(p1, p2) < 0) return [EGLineSegment lineSegmentWithP1:p1 p2:p2];
+    else return [EGLineSegment lineSegmentWithP1:p2 p2:p1];
+}
+
++ (EGLineSegment*)newWithX1:(double)x1 y1:(double)y1 x2:(double)x2 y2:(double)y2 {
+    return [EGLineSegment newWithP1:EGPointMake(x1, y1) p2:EGPointMake(x2, y2)];
+}
+
 - (BOOL)containsPoint:(EGPoint)point {
     return EGPointEq(_p1, point) || EGPointEq(_p2, point) || ([_line containsPoint:point] && point.x >= _minX && point.x <= _maxX && point.y >= _minY && point.y <= _maxY);
 }

@@ -17,7 +17,7 @@
 @interface EGBentleyOttmann : NSObject
 + (id)bentleyOttmann;
 - (id)init;
-+ (NSArray*)intersectionsSegments:(NSArray*)segments;
++ (NSArray*)intersectionsForSegments:(NSArray*)segments;
 @end
 
 

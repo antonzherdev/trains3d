@@ -14,7 +14,7 @@
     return self;
 }
 
-+ (NSArray*)intersectionsSegments:(NSArray*)segments {
++ (NSArray*)intersectionsForSegments:(NSArray*)segments {
     return [[EGBentleyOttmann intersectionsMapSegments:segments] values];
 }
 
@@ -102,8 +102,8 @@
 }
 
 - (void)offerPoint:(EGPoint)point event:(id<EGBentleyOttmannEvent>)event {
-    [[_events objectForKey:val(point) orUpdateWith:^NSArray*() {
-        return (@[]);
+    [[_events objectForKey:val(point) orUpdateWith:^NSMutableArray*() {
+        return [(@[]) mutableCopy];
     }] addObject:event];
 }
 
@@ -373,8 +373,8 @@
 - (void)checkIntersectionA:(id<EGBentleyOttmannEvent>)a b:(id<EGBentleyOttmannEvent>)b {
     if(a != nil && b != nil && !([a isKindOfClass:[EGBentleyOttmannIntersection class]]) && !([b isKindOfClass:[EGBentleyOttmannIntersection class]])) [[[a segment] intersectionWithSegment:[b segment]] forEach:^void(id p) {
         if(!([[a segment] endingsContainPoint:uval(EGPoint, p)]) || !([[b segment] endingsContainPoint:uval(EGPoint, p)])) {
-            NSMutableArray* existing = [_intersections objectForKey:p orUpdateWith:^NSArray*() {
-                return (@[]);
+            NSMutableArray* existing = [_intersections objectForKey:p orUpdateWith:^NSMutableArray*() {
+                return [(@[]) mutableCopy];
             }];
             [existing addObject:a];
             [existing addObject:b];

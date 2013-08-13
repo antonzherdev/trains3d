@@ -73,7 +73,7 @@
     if([o isDefined]) {
         return [o get];
     } else {
-        id init = orUpdateWith;
+        id init = orUpdateWith();
         [self setObject:init forKey:key];
         return init;
     }
