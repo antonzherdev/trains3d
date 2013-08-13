@@ -3,6 +3,7 @@ package core.chain
 import CNCollection
 import "CNOption.h"
 import "cnTypes.h"
+import CNChain
 
 class CNRange(start : int, end : int, step : int) extends CNIterable<int> {
     def count : uint = (end - start)/step

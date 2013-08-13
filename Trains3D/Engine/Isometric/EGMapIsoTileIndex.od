@@ -1,5 +1,6 @@
 import EGTypes
 import EGMapIso
+import CNCollection
 
 class EGMapSsoTileIndex<T>(map : EGMapSso, initial : () -> T) {
     private val index : [var int : T] = []
@@ -8,5 +9,5 @@ class EGMapSsoTileIndex<T>(map : EGMapSso, initial : () -> T) {
     private def numberFor(tile : EGPointI) : int = (tile.x + tile.y)*wh + tile.y - tile.x
 
     def objectFor(tile : EGPointI) : T = index.objectFor(numberFor(tile), orUpdateWith = initial)
-    def values : [T] = index.values
+    def values : CNIterable<T> = index.values
 }

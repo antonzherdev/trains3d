@@ -7,7 +7,7 @@ stub class CNChain<A> extends CNIterable<A> {
 
     def filter(: A -> bool) : CNChain<A>
     def map<B>(: A -> B) : CNChain<B>
-    def flatMap<B>(: A -> [B]) : CNChain<B>
+    def flatMap<B>(: A -> CNTraversable<B>) : CNChain<B>
 
     def combination : CNChain<(A, A)>
     def neighbors : CNChain<(A, A)>

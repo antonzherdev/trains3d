@@ -1,6 +1,10 @@
 #import "objd.h"
 #import "EGTypes.h"
 @class EGMapSso;
+@protocol CNIterator;
+@protocol CNTraversable;
+@protocol CNIterable;
+@protocol CNSet;
 
 @class EGMapSsoTileIndex;
 
@@ -11,7 +15,7 @@
 + (id)mapSsoTileIndexWithMap:(EGMapSso*)map initial:(id(^)())initial;
 - (id)initWithMap:(EGMapSso*)map initial:(id(^)())initial;
 - (id)objectForTile:(EGPointI)tile;
-- (NSArray*)values;
+- (id<CNIterable>)values;
 @end
 
 

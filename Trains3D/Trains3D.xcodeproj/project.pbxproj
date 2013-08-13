@@ -108,8 +108,6 @@
 		6F3DF809F7D3562C204E9AA3 /* KWNull.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF81BB6C3BC2858EF6253 /* KWNull.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF80A3B1822ED2F667E9E /* KWChangeMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFCEBA634AC4B5285ABFA /* KWChangeMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF81E33776FFC651A6BAE /* CNFlatMapLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9B9CFB60AC2B50B34FE /* CNFlatMapLink.m */; };
-		6F3DF82BE64B2B97D3525143 /* CNCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF24DA08AFAA1131B9FBD /* CNCollection.m */; };
-		6F3DF837B5F518DBC9BACFEF /* CNMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF712ACDD506DE168F1A /* CNMap.m */; };
 		6F3DF844B1B29FA809B4EA43 /* EGMapIso.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFCCA0B3E842E18E2F103 /* EGMapIso.od */; };
 		6F3DF850F9BD7D4C5B8854D3 /* EGDirector.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFD9B09C75E2AD614620 /* EGDirector.m */; };
 		6F3DF853FA57B8BEE900DA27 /* KWMatcherFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFFB07075D0B621DA115 /* KWMatcherFactory.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -275,7 +273,6 @@
 		6F3DF22482B9AD91E5D8FA8C /* KWMatchers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWMatchers.h; sourceTree = "<group>"; };
 		6F3DF224D7CEE332AD4861C9 /* CNMulLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNMulLink.h; sourceTree = "<group>"; };
 		6F3DF230674EDAD926358B6E /* chain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = chain.h; sourceTree = "<group>"; };
-		6F3DF24DA08AFAA1131B9FBD /* CNCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNCollection.m; sourceTree = "<group>"; };
 		6F3DF24FD77E74F7D5D423D0 /* KWExampleGroupDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWExampleGroupDelegate.h; sourceTree = "<group>"; };
 		6F3DF2553AC2153642D7D41B /* KWChangeMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWChangeMatcher.h; sourceTree = "<group>"; };
 		6F3DF2620D66CE3A0192D17E /* CNAppendLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNAppendLink.h; sourceTree = "<group>"; };
@@ -600,7 +597,6 @@
 		6F3DFF2CCB900460C0B163CC /* KWMessageTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWMessageTracker.m; sourceTree = "<group>"; };
 		6F3DFF2F6C0E8C792B3BD88E /* KWBeTrueMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWBeTrueMatcher.m; sourceTree = "<group>"; };
 		6F3DFF5622ACCF4AEB7EE617 /* Grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Grass.png; sourceTree = "<group>"; };
-		6F3DFF712ACDD506DE168F1A /* CNMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNMap.m; sourceTree = "<group>"; };
 		6F3DFF75175AB0115FEE865E /* TRLevelProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRLevelProcessor.h; sourceTree = "<group>"; };
 		6F3DFF7AF059F1441452CCC1 /* KWAfterEachNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWAfterEachNode.h; sourceTree = "<group>"; };
 		6F3DFF7F89B5A6EF02A239D3 /* KWHaveValueMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWHaveValueMatcher.m; sourceTree = "<group>"; };
@@ -805,7 +801,6 @@
 				6F3DF9D85F51265CB10F8CFB /* CNTreeSet.m */,
 				6F3DF977B1BF4876AC99AED7 /* CNMap.od */,
 				6F3DFEC18617F545F2EF268A /* CNMap.h */,
-				6F3DFF712ACDD506DE168F1A /* CNMap.m */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -1191,7 +1186,6 @@
 				6F3DF52888D18E5875412F76 /* CNRange.od */,
 				6F3DF09DD2CAFF22CD1D3886 /* CNRange.h */,
 				6F3DFAEFEDDA6B4024D4F163 /* CNRange.m */,
-				6F3DF24DA08AFAA1131B9FBD /* CNCollection.m */,
 			);
 			path = Collection;
 			sourceTree = "<group>";
@@ -1543,9 +1537,7 @@
 				6F3DF5BF04BE2B8C12922BA6 /* CNTreeMap.m in Sources */,
 				6F3DFF22B19BA085EEF13266 /* CNTreeSet.m in Sources */,
 				6F3DF585FFFF1B1653801B12 /* CNRange.m in Sources */,
-				6F3DF82BE64B2B97D3525143 /* CNCollection.m in Sources */,
 				6F3DFD42297F886FCEFD9B89 /* ODObject.m in Sources */,
-				6F3DF837B5F518DBC9BACFEF /* CNMap.m in Sources */,
 				6F3DF432E05ED0088DACBB7C /* EGBentleyOttmann.m in Sources */,
 				6F3DFB352B20E3545AD34CF5 /* EGFigure.m in Sources */,
 				6F3DFCD4964E9AF9F1AF6151 /* CNNeighboursLink.m in Sources */,

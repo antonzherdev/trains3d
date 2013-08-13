@@ -4,7 +4,7 @@
 @class CNChain;
 
 
-@interface NSArray (CNChain)
+@interface NSArray (CNChain)<CNIterable>
 - (id) chain:(cnChainBuildBlock)block;
 - (CNChain*) chain;
 - (CNChain*)reverse;

@@ -1,5 +1,6 @@
 #import "CNRange.h"
 
+#import "CNChain.h"
 @implementation CNRange{
     NSInteger _start;
     NSInteger _end;
@@ -30,6 +31,37 @@
 
 - (id<CNIterator>)iterator {
     return [CNRangeIterator rangeIteratorWithStart:_start end:_end step:_step];
+}
+
+- (id)head {
+    return [[self iterator] next];
+}
+
+- (BOOL)isEmpty {
+    return [[[self iterator] next] isEmpty];
+}
+
+- (CNChain*)chain {
+    return [CNChain chainWithCollection:self];
+}
+
+- (void)forEach:(void(^)(id))each {
+    id<CNIterator> i = [self iterator];
+    while(YES) {
+        id object = [i next];
+        if([object isEmpty]) break;
+        each(object);
+    }
+}
+
+- (BOOL)goOn:(BOOL(^)(id))on {
+    id<CNIterator> i = [self iterator];
+    while(YES) {
+        id object = [i next];
+        if([object isEmpty]) return YES;
+        if(!(on(object))) return NO;
+    }
+    return NO;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

@@ -2,6 +2,7 @@ package core.chain
 
 import CNTreeMap
 import CNCollection
+import CNChain
 
 class CNTreeSet<T>(map : CNTreeMap<T, ODObject>) extends CNSet<T> {
     static def newWith<T>(comparator : (T, T) -> int) : CNTreeSet<T> = {
@@ -25,4 +26,5 @@ class CNTreeSet<T>(map : CNTreeMap<T, ODObject>) extends CNSet<T> {
 
     def head : T? = map.firstKey
     def last : T? = map.lastKey
+    def contains(object : T) : bool = map.contains(key = object)
 }

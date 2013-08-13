@@ -1,6 +1,7 @@
 #import "EGMapIsoTileIndex.h"
 
 #import "EGMapIso.h"
+#import "CNCollection.h"
 @implementation EGMapSsoTileIndex{
     EGMapSso* _map;
     id(^_initial)();
@@ -34,7 +35,7 @@
     return [_index objectForKey:numi([self numberForTile:tile]) orUpdateWith:_initial];
 }
 
-- (NSArray*)values {
+- (id<CNIterable>)values {
     return [_index values];
 }
 

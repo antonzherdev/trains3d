@@ -5,6 +5,7 @@ import CNCollection
 import CNMap
 import "CNOption.h"
 import "CNTuple.h"
+import CNChain
 
 class CNTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K, V> {
     static def new<K extends ODComparable<K>, V> = CNTreeMap<K, V>((a : K, b : K) -> a.compare(b))
@@ -17,6 +18,8 @@ class CNTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K, V> {
     def objectFor(key : K) : V? = entryFor(key).object
 
     def keys : CNIterable<K> = CNTreeMapKeySet<K>(self)
+    def values : CNIterable<V> = CNTreeMapValues<V>(self)
+    def iterator : CNIterator<(K, V)> = CNTreeMapIterator<K, V>.new(self, firstEntry)
 
     private def entryFor(key : K) : CNTreeMapEntry<K, V> = {
         val p = root
@@ -362,8 +365,48 @@ class CNTreeMapKeyIterator<K>(map : CNTreeMap<K, _>) extends CNIterator<K> {
    def next : K? =
         if(entry == nil) nil
         else {
-            val key = entry.key
+            val ret = entry.key
             entry = entry.next
-            key
+            ret
         }
+}
+
+class CNTreeMapValues<V>(map : CNTreeMap<_, V>) extends CNIterable<V> {
+    def count : uint = map.count
+
+    def iterator : CNIterator<V> = CNTreeMapValuesIterator<V>.new(map, map.firstEntry)
+}
+
+class CNTreeMapValuesIterator<V>(map : CNTreeMap<_, V>) extends CNIterator<V> {
+    static def new<V>(map : CNTreeMap<_, V>, entry : CNTreeMapEntry<_, V>) : CNTreeMapValuesIterator<V> = {
+        val ret = CNTreeMapValuesIterator<V>(map)
+        ret.entry = entry
+        ret
+    }
+    var entry : CNTreeMapEntry<_, V>
+
+    def next : V? =
+        if(entry == nil) nil
+        else {
+            val ret = entry.object
+            entry = entry.next
+            ret
+        }
+}
+
+class CNTreeMapIterator<K, V>(map : CNTreeMap<K, V>) extends CNIterator<(K, V)> {
+    static def new<K, V>(map : CNTreeMap<K, V>, entry : CNTreeMapEntry<K, V>) : CNTreeMapIterator<K, V> = {
+        val ret = CNTreeMapIterator<K, V>(map)
+        ret.entry = entry
+        ret
+    }
+    var entry : CNTreeMapEntry<K, V>
+
+    def next : V? =
+    if(entry == nil) nil
+    else {
+        val ret = (entry.key, entry.object)
+        entry = entry.next
+        ret
+    }
 }

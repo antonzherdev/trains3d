@@ -1,3 +1,4 @@
+#import "CNCollection.h"
 #import "NSArray+CNChain.h"
 #import "CNChain.h"
 #import "CNOption.h"
@@ -54,6 +55,14 @@
 
 - (CNChain *)mul:(id)collection {
     return [[self chain] mul:collection];
+}
+
+- (id <CNIterator>)iterator {
+    return nil;
+}
+
+- (BOOL)isEmpty {
+    return self.count == 0;
 }
 
 - (id)head {

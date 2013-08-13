@@ -3,13 +3,14 @@ package core.chain
 import CNCollection
 import "CNOption.h"
 
-class CNMap<K, V> extends CNIterable<(K, V)> {
+trait CNMap<K, V> extends CNIterable<(K, V)> {
     def objectFor(key : K) : V?
-    def keys : [K]
-    def values : [V]
+    def keys : CNIterable<K>
+    def values : CNIterable<V>
+    def contains(key : K) : bool = objectFor(key).isDefined
 }
 
-class CNMutableMap<K, V> extends CNMap<K, V> {
+trait CNMutableMap<K, V> extends CNMap<K, V> {
     def set(object : V, forKey : K) : V
     def removeObjectFor(key : K) : V?
     def objectFor(key: K, orUpdateWith: () -> V) : V = {

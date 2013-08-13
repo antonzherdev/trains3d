@@ -23,7 +23,7 @@ trait CNTraversable<T> {
     def head : T?
 }
 
-class CNIterable<T> extends CNTraversable<T> {
+trait CNIterable<T> extends CNTraversable<T> {
     def count : uint
     def iterator : CNIterator<T>
 
@@ -52,6 +52,6 @@ class CNIterable<T> extends CNTraversable<T> {
     }
 }
 
-class CNSet<T> extends CNIterable<T> {
+trait CNSet<T> extends CNIterable<T> {
     def contains(object : T) : bool
 }

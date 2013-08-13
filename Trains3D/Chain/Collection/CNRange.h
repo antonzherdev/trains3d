@@ -2,11 +2,12 @@
 #import "CNOption.h"
 #import "cnTypes.h"
 #import "CNCollection.h"
+@class CNChain;
 
 @class CNRange;
 @class CNRangeIterator;
 
-@interface CNRange : CNIterable
+@interface CNRange : NSObject<CNIterable>
 @property (nonatomic, readonly) NSInteger start;
 @property (nonatomic, readonly) NSInteger end;
 @property (nonatomic, readonly) NSInteger step;

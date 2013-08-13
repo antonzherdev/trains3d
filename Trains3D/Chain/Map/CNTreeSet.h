@@ -1,10 +1,11 @@
 #import <Foundation/Foundation.h>
 #import "CNTreeMap.h"
 #import "CNCollection.h"
+@class CNChain;
 
 @class CNTreeSet;
 
-@interface CNTreeSet : CNSet
+@interface CNTreeSet : NSObject<CNSet>
 @property (nonatomic, readonly) CNTreeMap* map;
 
 + (id)treeSetWithMap:(CNTreeMap*)map;
@@ -19,6 +20,7 @@
 - (id<CNIterator>)iterator;
 - (id)head;
 - (id)last;
+- (BOOL)containsObject:(id)object;
 @end
 
 

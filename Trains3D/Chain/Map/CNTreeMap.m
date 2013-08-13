@@ -1,5 +1,6 @@
 #import "CNTreeMap.h"
 
+#import "CNChain.h"
 @implementation CNTreeMap{
     NSInteger(^_comparator)(id, id);
     CNTreeMapEntry* _root;
@@ -48,8 +49,16 @@ static NSInteger _RED;
     return [CNOption opt:[self entryForKey:key].object];
 }
 
-- (CNIterable*)keys {
+- (id<CNIterable>)keys {
     return [CNTreeMapKeySet treeMapKeySetWithMap:self];
+}
+
+- (id<CNIterable>)values {
+    return [CNTreeMapValues treeMapValuesWithMap:self];
+}
+
+- (id<CNIterator>)iterator {
+    return [CNTreeMapIterator newMap:self entry:[self firstEntry]];
 }
 
 - (CNTreeMapEntry*)entryForKey:(id)key {
@@ -370,6 +379,55 @@ static NSInteger _RED;
     return [CNOption none];
 }
 
+- (id)objectForKey:(id)key orUpdateWith:(id(^)())orUpdateWith {
+    id o = [self objectForKey:key];
+    if([o isDefined]) {
+        return [o get];
+    } else {
+        id init = orUpdateWith();
+        [self setObject:init forKey:key];
+        return init;
+    }
+}
+
+- (id)modifyWith:(id(^)(id))with forKey:(id)forKey {
+    id newObject = with([self objectForKey:forKey]);
+    if([newObject isEmpty]) [self removeObjectForKey:forKey];
+    else [self setObject:newObject forKey:forKey];
+    return newObject;
+}
+
+- (BOOL)containsKey:(id)key {
+    return [[self objectForKey:key] isDefined];
+}
+
+- (id)head {
+    return [[self iterator] next];
+}
+
+- (CNChain*)chain {
+    return [CNChain chainWithCollection:self];
+}
+
+- (void)forEach:(void(^)(id))each {
+    id<CNIterator> i = [self iterator];
+    while(YES) {
+        id object = [i next];
+        if([object isEmpty]) break;
+        each(object);
+    }
+}
+
+- (BOOL)goOn:(BOOL(^)(id))on {
+    id<CNIterator> i = [self iterator];
+    while(YES) {
+        id object = [i next];
+        if([object isEmpty]) return YES;
+        if(!(on(object))) return NO;
+    }
+    return NO;
+}
+
 + (NSInteger)BLACK {
     return _BLACK;
 }
@@ -483,6 +541,37 @@ static NSInteger _RED;
     return [CNTreeMapKeyIterator newMap:_map entry:[_map firstEntry]];
 }
 
+- (id)head {
+    return [[self iterator] next];
+}
+
+- (BOOL)isEmpty {
+    return [[[self iterator] next] isEmpty];
+}
+
+- (CNChain*)chain {
+    return [CNChain chainWithCollection:self];
+}
+
+- (void)forEach:(void(^)(id))each {
+    id<CNIterator> i = [self iterator];
+    while(YES) {
+        id object = [i next];
+        if([object isEmpty]) break;
+        each(object);
+    }
+}
+
+- (BOOL)goOn:(BOOL(^)(id))on {
+    id<CNIterator> i = [self iterator];
+    while(YES) {
+        id object = [i next];
+        if([object isEmpty]) return YES;
+        if(!(on(object))) return NO;
+    }
+    return NO;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -538,9 +627,187 @@ static NSInteger _RED;
     if(_entry == nil) {
         return [CNOption none];
     } else {
-        id key = _entry.key;
+        id ret = _entry.key;
         _entry = [_entry next];
-        return [CNOption opt:key];
+        return [CNOption opt:ret];
+    }
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"map=%@", self.map];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation CNTreeMapValues{
+    CNTreeMap* _map;
+}
+@synthesize map = _map;
+
++ (id)treeMapValuesWithMap:(CNTreeMap*)map {
+    return [[CNTreeMapValues alloc] initWithMap:map];
+}
+
+- (id)initWithMap:(CNTreeMap*)map {
+    self = [super init];
+    if(self) _map = map;
+    
+    return self;
+}
+
+- (NSUInteger)count {
+    return [_map count];
+}
+
+- (id<CNIterator>)iterator {
+    return [CNTreeMapValuesIterator newMap:_map entry:[_map firstEntry]];
+}
+
+- (id)head {
+    return [[self iterator] next];
+}
+
+- (BOOL)isEmpty {
+    return [[[self iterator] next] isEmpty];
+}
+
+- (CNChain*)chain {
+    return [CNChain chainWithCollection:self];
+}
+
+- (void)forEach:(void(^)(id))each {
+    id<CNIterator> i = [self iterator];
+    while(YES) {
+        id object = [i next];
+        if([object isEmpty]) break;
+        each(object);
+    }
+}
+
+- (BOOL)goOn:(BOOL(^)(id))on {
+    id<CNIterator> i = [self iterator];
+    while(YES) {
+        id object = [i next];
+        if([object isEmpty]) return YES;
+        if(!(on(object))) return NO;
+    }
+    return NO;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    CNTreeMapValues* o = ((CNTreeMapValues*)other);
+    return self.map == o.map;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.map hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"map=%@", self.map];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation CNTreeMapValuesIterator{
+    CNTreeMap* _map;
+    CNTreeMapEntry* _entry;
+}
+@synthesize map = _map;
+@synthesize entry = _entry;
+
++ (id)treeMapValuesIteratorWithMap:(CNTreeMap*)map {
+    return [[CNTreeMapValuesIterator alloc] initWithMap:map];
+}
+
+- (id)initWithMap:(CNTreeMap*)map {
+    self = [super init];
+    if(self) _map = map;
+    
+    return self;
+}
+
++ (CNTreeMapValuesIterator*)newMap:(CNTreeMap*)map entry:(CNTreeMapEntry*)entry {
+    CNTreeMapValuesIterator* ret = [CNTreeMapValuesIterator treeMapValuesIteratorWithMap:map];
+    ret.entry = entry;
+    return ret;
+}
+
+- (id)next {
+    if(_entry == nil) {
+        return [CNOption none];
+    } else {
+        id ret = _entry.object;
+        _entry = [_entry next];
+        return [CNOption opt:ret];
+    }
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"map=%@", self.map];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation CNTreeMapIterator{
+    CNTreeMap* _map;
+    CNTreeMapEntry* _entry;
+}
+@synthesize map = _map;
+@synthesize entry = _entry;
+
++ (id)treeMapIteratorWithMap:(CNTreeMap*)map {
+    return [[CNTreeMapIterator alloc] initWithMap:map];
+}
+
+- (id)initWithMap:(CNTreeMap*)map {
+    self = [super init];
+    if(self) _map = map;
+    
+    return self;
+}
+
++ (CNTreeMapIterator*)newMap:(CNTreeMap*)map entry:(CNTreeMapEntry*)entry {
+    CNTreeMapIterator* ret = [CNTreeMapIterator treeMapIteratorWithMap:map];
+    ret.entry = entry;
+    return ret;
+}
+
+- (id)next {
+    if(_entry == nil) {
+        return [CNOption none];
+    } else {
+        CNTuple* ret = tuple(_entry.key, _entry.object);
+        _entry = [_entry next];
+        return [CNOption opt:ret];
     }
 }
 

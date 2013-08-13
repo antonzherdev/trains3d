@@ -4,13 +4,17 @@
 #import "ODObject.h"
 #import "CNCollection.h"
 #import "CNMap.h"
+@class CNChain;
 
 @class CNTreeMap;
 @class CNTreeMapEntry;
 @class CNTreeMapKeySet;
 @class CNTreeMapKeyIterator;
+@class CNTreeMapValues;
+@class CNTreeMapValuesIterator;
+@class CNTreeMapIterator;
 
-@interface CNTreeMap : CNMutableMap
+@interface CNTreeMap : NSObject<CNMutableMap>
 @property (nonatomic, readonly) NSInteger(^comparator)(id, id);
 
 + (id)treeMapWithComparator:(NSInteger(^)(id, id))comparator;
@@ -19,7 +23,9 @@
 - (NSUInteger)count;
 - (BOOL)isEmpty;
 - (id)objectForKey:(id)key;
-- (CNIterable*)keys;
+- (id<CNIterable>)keys;
+- (id<CNIterable>)values;
+- (id<CNIterator>)iterator;
 - (id)setObject:(id)object forKey:(id)forKey;
 - (id)removeObjectForKey:(id)key;
 - (id)pollFirst;
@@ -47,7 +53,7 @@
 @end
 
 
-@interface CNTreeMapKeySet : CNIterable
+@interface CNTreeMapKeySet : NSObject<CNIterable>
 @property (nonatomic, readonly) CNTreeMap* map;
 
 + (id)treeMapKeySetWithMap:(CNTreeMap*)map;
@@ -64,6 +70,38 @@
 + (id)treeMapKeyIteratorWithMap:(CNTreeMap*)map;
 - (id)initWithMap:(CNTreeMap*)map;
 + (CNTreeMapKeyIterator*)newMap:(CNTreeMap*)map entry:(CNTreeMapEntry*)entry;
+- (id)next;
+@end
+
+
+@interface CNTreeMapValues : NSObject<CNIterable>
+@property (nonatomic, readonly) CNTreeMap* map;
+
++ (id)treeMapValuesWithMap:(CNTreeMap*)map;
+- (id)initWithMap:(CNTreeMap*)map;
+- (NSUInteger)count;
+- (id<CNIterator>)iterator;
+@end
+
+
+@interface CNTreeMapValuesIterator : NSObject<CNIterator>
+@property (nonatomic, readonly) CNTreeMap* map;
+@property (nonatomic, retain) CNTreeMapEntry* entry;
+
++ (id)treeMapValuesIteratorWithMap:(CNTreeMap*)map;
+- (id)initWithMap:(CNTreeMap*)map;
++ (CNTreeMapValuesIterator*)newMap:(CNTreeMap*)map entry:(CNTreeMapEntry*)entry;
+- (id)next;
+@end
+
+
+@interface CNTreeMapIterator : NSObject<CNIterator>
+@property (nonatomic, readonly) CNTreeMap* map;
+@property (nonatomic, retain) CNTreeMapEntry* entry;
+
++ (id)treeMapIteratorWithMap:(CNTreeMap*)map;
+- (id)initWithMap:(CNTreeMap*)map;
++ (CNTreeMapIterator*)newMap:(CNTreeMap*)map entry:(CNTreeMapEntry*)entry;
 - (id)next;
 @end
 

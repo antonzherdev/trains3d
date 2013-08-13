@@ -1,8 +1,6 @@
 #import <Foundation/Foundation.h>
 @class CNChain;
 
-@class CNIterable;
-@class CNSet;
 
 @protocol CNIterator<NSObject>
 - (id)next;
@@ -17,9 +15,7 @@
 @end
 
 
-@interface CNIterable : NSObject<CNTraversable>
-+ (id)iterable;
-- (id)init;
+@protocol CNIterable<CNTraversable>
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
 - (id)head;
@@ -30,9 +26,7 @@
 @end
 
 
-@interface CNSet : CNIterable
-+ (id)set;
-- (id)init;
+@protocol CNSet<CNIterable>
 - (BOOL)containsObject:(id)object;
 @end
 

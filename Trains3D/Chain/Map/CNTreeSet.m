@@ -1,5 +1,6 @@
 #import "CNTreeSet.h"
 
+#import "CNChain.h"
 @implementation CNTreeSet{
     CNTreeMap* _map;
 }
@@ -54,6 +55,37 @@
 
 - (id)last {
     return [_map lastKey];
+}
+
+- (BOOL)containsObject:(id)object {
+    return [_map containsKey:object];
+}
+
+- (BOOL)isEmpty {
+    return [[[self iterator] next] isEmpty];
+}
+
+- (CNChain*)chain {
+    return [CNChain chainWithCollection:self];
+}
+
+- (void)forEach:(void(^)(id))each {
+    id<CNIterator> i = [self iterator];
+    while(YES) {
+        id object = [i next];
+        if([object isEmpty]) break;
+        each(object);
+    }
+}
+
+- (BOOL)goOn:(BOOL(^)(id))on {
+    id<CNIterator> i = [self iterator];
+    while(YES) {
+        id object = [i next];
+        if([object isEmpty]) return YES;
+        if(!(on(object))) return NO;
+    }
+    return NO;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

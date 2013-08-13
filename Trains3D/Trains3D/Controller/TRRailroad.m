@@ -417,9 +417,9 @@ static TRRailroadConnectorContent* _instance;
 }
 
 - (void)rebuildArrays {
-    CNChain* allObjects = [[_connectorIndex values] flatMap:^NSArray*(NSMutableDictionary* _) {
+    NSArray* allObjects = [[[[_connectorIndex values] chain] flatMap:^id<CNIterable>(NSMutableDictionary* _) {
         return [_ values];
-    }];
+    }] toArray];
     __rails = [[[allObjects flatMap:^NSArray*(TRRailroadConnectorContent* _) {
         return [_ rails];
     }] distinct] toArray];
