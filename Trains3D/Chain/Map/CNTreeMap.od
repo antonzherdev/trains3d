@@ -16,6 +16,10 @@ class CNTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K, V> {
     def count = _size
     def isEmpty : bool = root == nil
     def objectFor(key : K) : V? = entryFor(key).object
+    def clear {
+        _size = 0
+        root = nil
+    }
 
     def keys : CNIterable<K> = CNTreeMapKeySet<K>(self)
     def values : CNIterable<V> = CNTreeMapValues<V>(self)

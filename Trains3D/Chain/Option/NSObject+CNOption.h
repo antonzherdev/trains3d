@@ -11,5 +11,6 @@
 - (id) filter:(cnPredicate)f;
 - (id) flatMap:(cnF)f;
 - (id) get;
-- (id)asKindOfClass:(Class)pClass;
+- (id) asKindOfClass:(Class)pClass;
++ (id) object;
 @end

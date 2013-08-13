@@ -21,6 +21,9 @@
 - (id)head;
 - (id)last;
 - (BOOL)containsObject:(id)object;
+- (void)clear;
+- (void)addAllObjects:(id<CNTraversable>)objects;
+- (CNTreeSet*)reorder;
 @end
 
 

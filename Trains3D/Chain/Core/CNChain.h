@@ -34,7 +34,7 @@
 - (id)randomItem;
 - (NSUInteger)count;
 - (NSArray*)toArray;
-- (NSSet*)set;
+- (NSSet*)toSet;
 - (id)fold:(cnF2)f withStart:(id)start;
 - (id)find:(cnPredicate)predicate;
 - (id)min;
@@ -42,5 +42,4 @@
 - (NSDictionary *)toMap;
 - (NSMutableDictionary *)toMutableMap;
 - (CNYieldResult)apply:(CNYield *)yield;
-
 @end

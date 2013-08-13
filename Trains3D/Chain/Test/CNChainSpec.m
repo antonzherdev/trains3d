@@ -44,7 +44,7 @@ SPEC_BEGIN(CNChainSpec)
           [[theValue(isNil) should] beTrue];
       });
       it(@".set should return set", ^{
-          NSSet *set = [[[NSArray arrayWithObjects:@2, @3, @2, nil] chain] set];
+          NSSet *set = [[[NSArray arrayWithObjects:@2, @3, @2, nil] chain] toSet];
           [[set should] equal:[NSSet setWithObjects:@2, @3, nil]];
       });
       describe(@"should add elements", ^{

@@ -12,10 +12,10 @@ class EGBentleyOttmannTest extends CNTestCase {
             (3, EGLineSegment.newWith(-2, 2, 1, -1))
         ])
         val e = [
-            EGIntersection(EGPoint(1, 1), [1, 2]),
-            EGIntersection(EGPoint(0, 0), [1, 3]),
-            EGIntersection(EGPoint(-1, 1), [2, 3])
-        ]
+            EGIntersection(EGPoint(1, 1), [1, 2].toSet),
+            EGIntersection(EGPoint(0, 0), [1, 3].toSet),
+            EGIntersection(EGPoint(-1, 1), [2, 3].toSet)
+        ].toSet
         assertEquals(e, r)
     }
 
@@ -24,7 +24,7 @@ class EGBentleyOttmannTest extends CNTestCase {
             (1, EGLineSegment.newWith(-1, -1, 2, 2)),
             (3, EGLineSegment.newWith(-2, 2, 0, 0))
         ])
-        assertEquals([], r)
+        assertEquals([].toSet, r)
     }
 
     def testVertical {
@@ -33,21 +33,21 @@ class EGBentleyOttmannTest extends CNTestCase {
             (2, EGLineSegment.newWith(1, -2, 1, 2))
         ])
         val e = [
-            EGIntersection(EGPoint(1, 1), [1, 2])
-        ]
+            EGIntersection(EGPoint(1, 1), [1, 2].toSet)
+        ].toSet
         assertEquals(e, r)
     }
 
     def testOneStart {
         var r = EGBentleyOttmann.intersectionsFor([
             (1, EGLineSegment.newWith(-1, 1, 1, -1)),
-            (2, EGLineSegment.newWith(-1, 1, 1, 1)),
+            (2, EGLineSegment.newWith(-1, 1, 2, 1)),
             (3, EGLineSegment.newWith(-1, -1, 2, 2))
         ])
         val e = [
-            EGIntersection(EGPoint(0, 0), [1, 3]),
-            EGIntersection(EGPoint(1, 1), [2, 3])
-        ]
+            EGIntersection(EGPoint(0, 0), [1, 3].toSet),
+            EGIntersection(EGPoint(1, 1), [2, 3].toSet)
+        ].toSet
         assertEquals(e, r)
     }
 
@@ -58,9 +58,9 @@ class EGBentleyOttmannTest extends CNTestCase {
             (3, EGLineSegment.newWith(-2, 2, 2, -2))
         ])
         val e = [
-            EGIntersection(EGPoint(-1, 1), [1, 3]),
-            EGIntersection(EGPoint(0, 0), [2, 3])
-        ]
+            EGIntersection(EGPoint(-1, 1), [1, 3].toSet),
+            EGIntersection(EGPoint(0, 0), [2, 3].toSet)
+        ].toSet
         assertEquals(e, r)
     }
 
@@ -71,9 +71,8 @@ class EGBentleyOttmannTest extends CNTestCase {
             (3, EGLineSegment.newWith(-1, -1, 2, 2))
         ])
         val e = [
-            EGIntersection(EGPoint(0, 0), [1, 3]),
-            EGIntersection(EGPoint(0, 0), [2, 3])
-        ]
+            EGIntersection(EGPoint(0, 0), [1, 2, 3].toSet)
+        ].toSet
         assertEquals(e, r)
     }
 }

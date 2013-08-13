@@ -106,4 +106,8 @@
         return ![x isEqual:object];
     }] toArray];
 }
+
+- (NSSet *)toSet {
+    return [NSSet setWithArray:self];
+}
 @end

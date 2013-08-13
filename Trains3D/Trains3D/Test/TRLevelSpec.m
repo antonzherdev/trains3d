@@ -29,7 +29,7 @@ SPEC_BEGIN(TRLevelSpec)
                     //This cities should be generated in different tiles.
                     NSSet *tilesSet = [[[level cities] map:^id(TRCity *x) {
                         return val(x.tile);
-                    }] set];
+                    }] toSet];
                     [[tilesSet should] haveCountOf:2];
 
                     //These cities should have a correct angle

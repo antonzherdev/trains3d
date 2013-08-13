@@ -29,4 +29,6 @@
 - (CNChain *)distinct;
 
 - (NSArray *)arrayByRemovingObject:(id)object;
+
+- (NSSet *)toSet;
 @end

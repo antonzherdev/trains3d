@@ -4,6 +4,7 @@
 @implementation CNTreeSet{
     CNTreeMap* _map;
 }
+static NSObject* _obj;
 @synthesize map = _map;
 
 + (id)treeSetWithMap:(CNTreeMap*)map {
@@ -17,6 +18,11 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _obj = [NSObject object];
+}
+
 + (CNTreeSet*)newWithComparator:(NSInteger(^)(id, id))comparator {
     return [CNTreeSet treeSetWithMap:[CNTreeMap treeMapWithComparator:comparator]];
 }
@@ -26,7 +32,7 @@
 }
 
 - (void)addObject:(id)object {
-    ((NSObject*)[_map setObject:nil forKey:object]);
+    ((NSObject*)[_map setObject:_obj forKey:object]);
 }
 
 - (BOOL)removeObject:(id)object {
@@ -59,6 +65,22 @@
 
 - (BOOL)containsObject:(id)object {
     return [_map containsKey:object];
+}
+
+- (void)clear {
+    [_map clear];
+}
+
+- (void)addAllObjects:(id<CNTraversable>)objects {
+    [objects forEach:^void(id _) {
+        [self addObject:_];
+    }];
+}
+
+- (CNTreeSet*)reorder {
+    CNTreeSet* ret = [CNTreeSet treeSetWithMap:[CNTreeMap treeMapWithComparator:_map.comparator]];
+    [ret addAllObjects:self];
+    return ret;
 }
 
 - (BOOL)isEmpty {

@@ -45,4 +45,9 @@
 - (id)asKindOfClass:(Class)pClass {
     return [self isKindOfClass:pClass] ? self : [CNOption none];
 }
+
++ (id)object {
+    return [NSObject new] ;
+}
+
 @end

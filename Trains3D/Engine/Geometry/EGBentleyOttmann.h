@@ -6,6 +6,10 @@
 @class EGLineSegment;
 #import "CNTreeMap.h"
 @class CNTreeSet;
+@protocol CNIterator;
+@protocol CNTraversable;
+@protocol CNIterable;
+@protocol CNSet;
 
 @class EGBentleyOttmann;
 @class EGIntersection;
@@ -13,21 +17,22 @@
 @class EGBentleyOttmannPointEvent;
 @class EGBentleyOttmannIntersectionEvent;
 @class EGBentleyOttmannEventQueue;
+@class EGPointClass;
 @class EGSweepLine;
 
 @interface EGBentleyOttmann : NSObject
 + (id)bentleyOttmann;
 - (id)init;
-+ (NSArray*)intersectionsForSegments:(NSArray*)segments;
++ (NSSet*)intersectionsForSegments:(NSArray*)segments;
 @end
 
 
 @interface EGIntersection : NSObject
 @property (nonatomic, readonly) EGPoint point;
-@property (nonatomic, readonly) NSArray* data;
+@property (nonatomic, readonly) NSSet* data;
 
-+ (id)intersectionWithPoint:(EGPoint)point data:(NSArray*)data;
-- (id)initWithPoint:(EGPoint)point data:(NSArray*)data;
++ (id)intersectionWithPoint:(EGPoint)point data:(NSSet*)data;
+- (id)initWithPoint:(EGPoint)point data:(NSSet*)data;
 @end
 
 
@@ -81,7 +86,16 @@
 @end
 
 
+@interface EGPointClass : NSObject
+@property (nonatomic, readonly) EGPoint point;
+
++ (id)pointClassWithPoint:(EGPoint)point;
+- (id)initWithPoint:(EGPoint)point;
+@end
+
+
 @interface EGSweepLine : NSObject
+@property (nonatomic, retain) CNTreeSet* events;
 @property (nonatomic, readonly) NSMutableDictionary* intersections;
 @property (nonatomic, retain) EGBentleyOttmannEventQueue* queue;
 

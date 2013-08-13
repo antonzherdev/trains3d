@@ -5,6 +5,7 @@
 @class EGBentleyOttmannPointEvent;
 @class EGBentleyOttmannIntersectionEvent;
 @class EGBentleyOttmannEventQueue;
+@class EGPointClass;
 @class EGSweepLine;
 #import "CNTest.h"
 @class EGLine;

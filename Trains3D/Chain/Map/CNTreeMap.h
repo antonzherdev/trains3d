@@ -23,6 +23,7 @@
 - (NSUInteger)count;
 - (BOOL)isEmpty;
 - (id)objectForKey:(id)key;
+- (void)clear;
 - (id<CNIterable>)keys;
 - (id<CNIterable>)values;
 - (id<CNIterator>)iterator;

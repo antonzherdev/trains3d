@@ -4,4 +4,6 @@
 #import "CNTuple.h"
 #import "NSArray+CNChain.h"
 #import "NSMutableDictionary+CNChain.h"
+#import "NSSet+CNChain.h"
 #import "NSDictionary+CNChain.h"
+#import "NSMutableSet+CNChain.h"

@@ -63,7 +63,7 @@
     return ret;
 }
 
-- (NSSet *)set {
+- (NSSet *)toSet {
     __block id ret;
     CNYield *yield = [CNYield alloc];
     yield = [yield initWithBegin:^CNYieldResult(NSUInteger size) {
@@ -260,6 +260,7 @@
 - (CNChain *)distinctWithSelectivity:(double)selectivity {
     return [self link:[CNDistinctLink linkWithSelectivity:selectivity]];
 }
+
 @end
 
 id cnResolveCollection(id collection) {

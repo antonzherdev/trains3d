@@ -10,9 +10,10 @@ class CNTreeSet<T>(map : CNTreeMap<T, ODObject>) extends CNSet<T> {
     }
 
     static def new<T> = CNTreeSet<T>(CNTreeMap.new<T, ODObject>)
+    private static val obj = NSObject.new
 
     def add(object : T) {
-        map.set(object = nil, forKey = object)
+        map.set(object = obj, forKey = object)
     }
 
     def remove(object : T) : bool = map.removeObjectFor(key = object).isDefined
@@ -27,4 +28,18 @@ class CNTreeSet<T>(map : CNTreeMap<T, ODObject>) extends CNSet<T> {
     def head : T? = map.firstKey
     def last : T? = map.lastKey
     def contains(object : T) : bool = map.contains(key = object)
+
+    def clear {
+        map.clear
+    }
+
+    def addAll(objects : CNTraversable<T>) {
+        objects.for(add(object = _))
+    }
+
+    def reorder : CNTreeSet<T> = {
+        val ret = CNTreeSet<T>(CNTreeMap<T, ODObject>(map.comparator))
+        ret.addAll(self)
+        ret
+    }
 }

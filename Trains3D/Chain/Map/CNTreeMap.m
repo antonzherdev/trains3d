@@ -49,6 +49,11 @@ static NSInteger _RED;
     return [CNOption opt:[self entryForKey:key].object];
 }
 
+- (void)clear {
+    __size = 0;
+    _root = nil;
+}
+
 - (id<CNIterable>)keys {
     return [CNTreeMapKeySet treeMapKeySetWithMap:self];
 }

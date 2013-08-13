@@ -2,11 +2,12 @@ import EGTypes
 import EGFigure
 import CNTreeMap
 import CNTreeSet
+import CNCollection
 
 
 class EGBentleyOttmann {
-    static def intersectionsFor<T>(segments : [(T, EGLineSegment)]) : [EGIntersection] =
-        if(segments.count < 2) []
+    static def intersectionsFor<T>(segments : [(T, EGLineSegment)]) : NSSet<EGIntersection> =
+        if(segments.count < 2) NSSet.new<T>
         else {
             val sweepLine = EGSweepLine.new
             val queue = EGBentleyOttmannEventQueue.newWith(segments, sweepLine)
@@ -15,11 +16,11 @@ class EGBentleyOttmann {
                 val events = queue.poll
                 sweepLine.handle(events)
             }
-            sweepLine.intersections.chain.map(p -> EGIntersection<T>(p.a, p.b.map(_.data).toArray)).toArray
+            sweepLine.intersections.chain.map(p -> EGIntersection<T>(p.a.point, p.b.chain.map(_.data).toSet)).toSet
         }
 }
 
-class EGIntersection<T>(point : EGPoint, data : [T])
+class EGIntersection<T>(point : EGPoint, data : NSSet<T>)
 
 class EGBentleyOttmannEvent<T> {
     def point : EGPoint
@@ -72,6 +73,9 @@ class EGBentleyOttmannEventQueue<T> {
     }
 }
 
+class EGPointClass(point : EGPoint) {}
+
+
 class EGSweepLine<T>
     /**
     * Whether to ignore intersections of line segments when both
@@ -79,13 +83,13 @@ class EGSweepLine<T>
     */
 //    ignoreSegmentEndings : bool
 {
-    private var events = CNTreeSet.newWith<EGBentleyOttmannEvent<T>>((a, b) -> compareEvents(a, b))
+    var events = CNTreeSet.newWith<EGBentleyOttmannEvent<T>>((a, b) -> compareEvents(a, b))
 
     /**
     * A map holding all intersection points mapped to the Events
     * that form these intersections.
     */
-    val intersections : [var EGPoint : [var EGBentleyOttmannPointEvent<T>]] = []
+    val intersections : [var EGPointClass : NSMutableSet<EGBentleyOttmannPointEvent<T>>] = []
 
 
     /**
@@ -99,7 +103,6 @@ class EGSweepLine<T>
     var queue : EGBentleyOttmannEventQueue = nil
 
     def handle(events : [EGBentleyOttmannEvent<T>]) {
-        sweepTo(events[0])
         events.for(handleOne(event = _))
     }
 
@@ -109,15 +112,18 @@ class EGSweepLine<T>
 
     private def handleOne(event : EGBentleyOttmannEvent<T>) {
         if(event.isStart) {
+            sweepTo(event)
             events.add(event)
             checkIntersection(event, above(event))
             checkIntersection(event, below(event))
         } else if(event.isEnd) {
+            sweepTo(event)
             events.remove(event)
             checkIntersection(above(event), below(event))
         } else {
-            val set = intersections[event.point].get
-            val toInsert = set.filter(events.remove(_)).reverse.toArray
+            val set = intersections[EGPointClass(event.point)].get
+            val toInsert = set.chain.filter(events.remove(_)).toArray
+            sweepTo(event)
             toInsert.for(e -> {
                 events.add(e)
                 checkIntersection(e, above(e))
@@ -146,7 +152,7 @@ class EGSweepLine<T>
                 if(!aa.segment.endingsContain(p) && !bb.segment.endingsContain(p)/* && ignoreSegmentEndings*/) {
 
                     // Add the intersection.
-                    val existing = intersections.objectFor(key = pp, orUpdateWith = [])
+                    val existing = intersections.objectFor(key = EGPointClass(p), orUpdateWith = NSMutableSet.new<EGBentleyOttmannPointEvent<T>>)
                     existing.add(aa)
                     existing.add(bb)
 
@@ -172,6 +178,7 @@ class EGSweepLine<T>
         var c = ay.compare(by)
         if(c == 0) {
             c = a.slope.compare(b.slope)
+            if(ay > currentEventPoint.y) c = -c
             if(c == 0) {
                 c = a.point.x.compare(b.point.x)
             }

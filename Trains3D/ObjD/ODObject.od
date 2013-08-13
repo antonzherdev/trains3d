@@ -6,6 +6,8 @@ stub class ODObject {
     def cast<T> : T
     def description : string
 }
+stub class NSObject {
+}
 
 stub trait ODComparable<T> {
     def compare(to : T) : int
