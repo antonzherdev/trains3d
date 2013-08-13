@@ -4,7 +4,7 @@
 
 @class CNTreeSet;
 
-@interface CNTreeSet : CNIterable
+@interface CNTreeSet : CNSet
 @property (nonatomic, readonly) CNTreeMap* map;
 
 + (id)treeSetWithMap:(CNTreeMap*)map;

@@ -1,6 +1,7 @@
 package core
 
 import CNChain
+import CNCollection
 
 stub class ODArray<A> extends CNChain<A> {
 
@@ -10,10 +11,8 @@ stub class ODMutableArray<A> extends ODArray<A> {
     def add(object : A)
 }
 
-stub class NSSet<A> extends CNChain<A> {
-    def contains(object : A) : bool
-}
+stub class NSSet<T> extends CNSet<T>
 
-stub class NSMutableSet<A> extends NSSet<A> {
-    def add(object : A) : void
+stub class NSMutableSet<T> extends NSSet<T> {
+    def add(object : T) : void
 }

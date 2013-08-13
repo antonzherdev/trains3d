@@ -1,18 +1,10 @@
 package core
 
-stub class ODMap<K, V> {
-    def count : uint
-    def objectFor(key : K) : V
-    def keys : [K]
-    def values : [V]
-}
+import CNMap
 
-stub class ODMutableMap<K, V> extends ODMap<K, V> {
-    def set(object : V, forKey : K)
-    def removeObjectFor(key : K)
-    def objectFor(key: K, orUpdateWith: () -> V) : V
-    def modify(with : V? -> V?, forKey : K) : V?
-}
+stub class ODMap<K, V> extends CNMap<K, V>
+
+stub class ODMutableMap<K, V> extends CNMutableMap<K, V>
 
 stub class NSDictionary <K, V> extends ODMap<K, V> {
     def allKeysFor(object : V) : [K]

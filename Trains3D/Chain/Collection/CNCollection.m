@@ -76,3 +76,43 @@
 @end
 
 
+@implementation CNSet
+
++ (id)set {
+    return [[CNSet alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
+
+- (BOOL)containsObject:(id)object {
+    @throw @"Method contains is abstract";
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    CNSet* o = ((CNSet*)other);
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+

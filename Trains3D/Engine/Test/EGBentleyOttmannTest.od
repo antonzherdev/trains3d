@@ -12,9 +12,9 @@ class EGBentleyOttmannTest extends CNTestCase {
             (3, EGLineSegment.newWith(-2, 2, 1, -1))
         ])
         val e = [
-            EGBentleyOttmannIntersection(1, 2, EGPoint(1, 1)),
-            EGBentleyOttmannIntersection(1, 3, EGPoint(0, 0)),
-            EGBentleyOttmannIntersection(2, 3, EGPoint(-1, 1))
+            EGIntersection(EGPoint(1, 1), [1, 2]),
+            EGIntersection(EGPoint(0, 0), [1, 3]),
+            EGIntersection(EGPoint(-1, 1), [2, 3])
         ]
         assertEquals(e, r)
     }
@@ -33,7 +33,46 @@ class EGBentleyOttmannTest extends CNTestCase {
             (2, EGLineSegment.newWith(1, -2, 1, 2))
         ])
         val e = [
-            EGBentleyOttmannIntersection(1, 2, EGPoint(1, 1))
+            EGIntersection(EGPoint(1, 1), [1, 2])
+        ]
+        assertEquals(e, r)
+    }
+
+    def testOneStart {
+        var r = EGBentleyOttmann.intersectionsFor([
+            (1, EGLineSegment.newWith(-1, 1, 1, -1)),
+            (2, EGLineSegment.newWith(-1, 1, 1, 1)),
+            (3, EGLineSegment.newWith(-1, -1, 2, 2))
+        ])
+        val e = [
+            EGIntersection(EGPoint(0, 0), [1, 3]),
+            EGIntersection(EGPoint(1, 1), [2, 3])
+        ]
+        assertEquals(e, r)
+    }
+
+    def testOneEnd {
+        var r = EGBentleyOttmann.intersectionsFor([
+            (1, EGLineSegment.newWith(-2, 1, 1, 1)),
+            (2, EGLineSegment.newWith(-1, -1, 1, 1)),
+            (3, EGLineSegment.newWith(-2, 2, 2, -2))
+        ])
+        val e = [
+            EGIntersection(EGPoint(-1, 1), [1, 3]),
+            EGIntersection(EGPoint(0, 0), [2, 3])
+        ]
+        assertEquals(e, r)
+    }
+
+    def testSameLines {
+        var r = EGBentleyOttmann.intersectionsFor([
+            (1, EGLineSegment.newWith(-1, 1, 1, -1)),
+            (2, EGLineSegment.newWith(-1, 1, 1, -1)),
+            (3, EGLineSegment.newWith(-1, -1, 2, 2))
+        ])
+        val e = [
+            EGIntersection(EGPoint(0, 0), [1, 3]),
+            EGIntersection(EGPoint(0, 0), [2, 3])
         ]
         assertEquals(e, r)
     }

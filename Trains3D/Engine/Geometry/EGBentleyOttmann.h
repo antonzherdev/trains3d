@@ -8,10 +8,11 @@
 @class CNTreeSet;
 
 @class EGBentleyOttmann;
+@class EGIntersection;
+@class EGBentleyOttmannEvent;
+@class EGBentleyOttmannPointEvent;
+@class EGBentleyOttmannIntersectionEvent;
 @class EGBentleyOttmannEventQueue;
-@class EGBentleyOttmannEventStart;
-@class EGBentleyOttmannEventEnd;
-@class EGBentleyOttmannIntersection;
 @class EGSweepLine;
 
 @interface EGBentleyOttmann : NSObject
@@ -21,10 +22,50 @@
 @end
 
 
-@protocol EGBentleyOttmannEvent<NSObject>
+@interface EGIntersection : NSObject
+@property (nonatomic, readonly) EGPoint point;
+@property (nonatomic, readonly) NSArray* data;
+
++ (id)intersectionWithPoint:(EGPoint)point data:(NSArray*)data;
+- (id)initWithPoint:(EGPoint)point data:(NSArray*)data;
+@end
+
+
+@interface EGBentleyOttmannEvent : NSObject
++ (id)bentleyOttmannEvent;
+- (id)init;
 - (EGPoint)point;
-- (id)data;
-- (EGLineSegment*)segment;
+- (BOOL)isIntersection;
+- (BOOL)isStart;
+- (BOOL)isEnd;
+- (double)yForX:(double)x;
+- (double)slope;
+@end
+
+
+@interface EGBentleyOttmannPointEvent : EGBentleyOttmannEvent
+@property (nonatomic, readonly) BOOL isStart;
+@property (nonatomic, readonly) id data;
+@property (nonatomic, readonly) EGLineSegment* segment;
+@property (nonatomic, readonly) EGPoint point;
+
++ (id)bentleyOttmannPointEventWithIsStart:(BOOL)isStart data:(id)data segment:(EGLineSegment*)segment point:(EGPoint)point;
+- (id)initWithIsStart:(BOOL)isStart data:(id)data segment:(EGLineSegment*)segment point:(EGPoint)point;
+- (BOOL)isIntersection;
+- (double)yForX:(double)x;
+- (double)slope;
+@end
+
+
+@interface EGBentleyOttmannIntersectionEvent : EGBentleyOttmannEvent
+@property (nonatomic, readonly) EGPoint point;
+
++ (id)bentleyOttmannIntersectionEventWithPoint:(EGPoint)point;
+- (id)initWithPoint:(EGPoint)point;
+- (BOOL)isIntersection;
+- (BOOL)isStart;
+- (double)yForX:(double)x;
+- (double)slope;
 @end
 
 
@@ -35,44 +76,13 @@
 - (id)init;
 - (BOOL)isEmpty;
 + (EGBentleyOttmannEventQueue*)newWithSegments:(NSArray*)segments sweepLine:(EGSweepLine*)sweepLine;
-- (void)offerPoint:(EGPoint)point event:(id<EGBentleyOttmannEvent>)event;
+- (void)offerPoint:(EGPoint)point event:(EGBentleyOttmannEvent*)event;
 - (NSArray*)poll;
-@end
-
-
-@interface EGBentleyOttmannEventStart : NSObject<EGBentleyOttmannEvent>
-@property (nonatomic, readonly) id data;
-@property (nonatomic, readonly) EGLineSegment* segment;
-@property (nonatomic, readonly) EGPoint point;
-
-+ (id)bentleyOttmannEventStartWithData:(id)data segment:(EGLineSegment*)segment point:(EGPoint)point;
-- (id)initWithData:(id)data segment:(EGLineSegment*)segment point:(EGPoint)point;
-@end
-
-
-@interface EGBentleyOttmannEventEnd : NSObject<EGBentleyOttmannEvent>
-@property (nonatomic, readonly) id data;
-@property (nonatomic, readonly) EGLineSegment* segment;
-@property (nonatomic, readonly) EGPoint point;
-
-+ (id)bentleyOttmannEventEndWithData:(id)data segment:(EGLineSegment*)segment point:(EGPoint)point;
-- (id)initWithData:(id)data segment:(EGLineSegment*)segment point:(EGPoint)point;
-@end
-
-
-@interface EGBentleyOttmannIntersection : NSObject<EGBentleyOttmannEvent>
-@property (nonatomic, readonly) id data1;
-@property (nonatomic, readonly) id data2;
-@property (nonatomic, readonly) EGPoint point;
-
-+ (id)bentleyOttmannIntersectionWithData1:(id)data1 data2:(id)data2 point:(EGPoint)point;
-- (id)initWithData1:(id)data1 data2:(id)data2 point:(EGPoint)point;
 @end
 
 
 @interface EGSweepLine : NSObject
 @property (nonatomic, readonly) NSMutableDictionary* intersections;
-@property (nonatomic, retain) EGLine* sweepLine;
 @property (nonatomic, retain) EGBentleyOttmannEventQueue* queue;
 
 + (id)sweepLine;

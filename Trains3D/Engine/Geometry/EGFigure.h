@@ -16,10 +16,10 @@
 - (BOOL)containsPoint:(EGPoint)point;
 - (BOOL)isVertical;
 - (BOOL)isHorizontal;
-- (double)yForX:(double)x;
 - (id)intersectionWithLine:(EGLine*)line;
 - (double)xIntersectionWithLine:(EGLine*)line;
 - (BOOL)isRightPoint:(EGPoint)point;
+- (double)slope;
 @end
 
 
@@ -50,6 +50,7 @@
 - (double)xIntersectionWithLine:(EGLine*)line;
 - (id)intersectionWithLine:(EGLine*)line;
 - (BOOL)isRightPoint:(EGPoint)point;
+- (double)slope;
 @end
 
 
@@ -57,16 +58,14 @@
 @property (nonatomic, readonly) EGPoint p1;
 @property (nonatomic, readonly) EGPoint p2;
 @property (nonatomic, readonly) EGLine* line;
-@property (nonatomic, readonly) double minX;
-@property (nonatomic, readonly) double maxX;
-@property (nonatomic, readonly) double minY;
-@property (nonatomic, readonly) double maxY;
+@property (nonatomic, readonly) EGRect boundingRect;
 
 + (id)lineSegmentWithP1:(EGPoint)p1 p2:(EGPoint)p2;
 - (id)initWithP1:(EGPoint)p1 p2:(EGPoint)p2;
 + (EGLineSegment*)newWithP1:(EGPoint)p1 p2:(EGPoint)p2;
 + (EGLineSegment*)newWithX1:(double)x1 y1:(double)y1 x2:(double)x2 y2:(double)y2;
 - (BOOL)containsPoint:(EGPoint)point;
+- (BOOL)containsInBoundingRectPoint:(EGPoint)point;
 - (id)intersectionWithSegment:(EGLineSegment*)segment;
 - (BOOL)endingsContainPoint:(EGPoint)point;
 @end

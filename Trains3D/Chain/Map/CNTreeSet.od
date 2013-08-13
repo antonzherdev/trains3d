@@ -3,7 +3,7 @@ package core.chain
 import CNTreeMap
 import CNCollection
 
-class CNTreeSet<T>(map : CNTreeMap<T, ODObject>) extends CNIterable<T> {
+class CNTreeSet<T>(map : CNTreeMap<T, ODObject>) extends CNSet<T> {
     static def newWith<T>(comparator : (T, T) -> int) : CNTreeSet<T> = {
         CNTreeSet<T>(CNTreeMap<T, ODObject>(comparator))
     }

@@ -1,10 +1,10 @@
 #import "objd.h"
 @class EGBentleyOttmann;
-@protocol EGBentleyOttmannEvent;
+@class EGIntersection;
+@class EGBentleyOttmannEvent;
+@class EGBentleyOttmannPointEvent;
+@class EGBentleyOttmannIntersectionEvent;
 @class EGBentleyOttmannEventQueue;
-@class EGBentleyOttmannEventStart;
-@class EGBentleyOttmannEventEnd;
-@class EGBentleyOttmannIntersection;
 @class EGSweepLine;
 #import "CNTest.h"
 @class EGLine;
@@ -21,6 +21,9 @@
 - (void)testMain;
 - (void)testNoCross;
 - (void)testVertical;
+- (void)testOneStart;
+- (void)testOneEnd;
+- (void)testSameLines;
 @end
 
 

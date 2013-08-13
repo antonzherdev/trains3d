@@ -51,3 +51,7 @@ class CNIterable<T> extends CNTraversable<T> {
         false
     }
 }
+
+class CNSet<T> extends CNIterable<T> {
+    def contains(object : T) : bool
+}

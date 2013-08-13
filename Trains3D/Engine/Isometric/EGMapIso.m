@@ -102,7 +102,7 @@
 
 - (CNChain*)allPosibleTiles {
     return [[[[CNRange rangeWithStart:_limits.x end:egRectIX2(_limits) step:1] chain] mul:[CNRange rangeWithStart:_limits.y end:egRectIY2(_limits) step:1]] map:^id(CNTuple* _) {
-        return val(EGPointIMake(unumi(_.a), unumi(_.b)));
+        return val(EGPointIMake(_.a, unumi(_.b)));
     }];
 }
 

@@ -16,12 +16,11 @@ class EGLine {
     def isVertical : bool
     def isHorizontal : bool
 
-    def yFor(x : float) : float
-
     def intersectionWith(line : EGLine) : EGPoint?
     def xIntersectionWith(line : EGLine) : float
 
     def isRight(point : EGPoint) : bool
+    def slope : float
 }
 
 class EGSlopeLine(slope : float, constant : float) extends EGLine {
@@ -31,14 +30,14 @@ class EGSlopeLine(slope : float, constant : float) extends EGLine {
     def xIntersectionWith(line : EGLine) : float =
         if(line.isVertical) line.xIntersectionWith(self)
         else {
-            val that = line.as<EGSlopeLine>.get
+            val that = line.cast<EGSlopeLine>
             return (that.constant - self.constant)/(self.slope - that.slope)
         }
     def yFor(x : float) : float = {
         return slope*x + constant
     }
     def intersectionWith(line : EGLine) : EGPoint? =
-        if (!line.isVertical && line.as<EGSlopeLine>.get.slope == slope) nil
+        if (!line.isVertical && line.cast<EGSlopeLine>.slope == slope) nil
         else {
             val xInt = xIntersectionWith(line)
             EGPoint(xInt, yFor(xInt))
@@ -60,6 +59,7 @@ class EGVerticalLine(x : float) extends EGLine {
         else line.intersectionWith(self)
 
     def isRight(point : EGPoint) : bool = point.x > x
+    def slope : float = DBL_MAX
 }
 
 class EGLineSegment(p1 : EGPoint, p2 : EGPoint) {
@@ -69,24 +69,21 @@ class EGLineSegment(p1 : EGPoint, p2 : EGPoint) {
         EGLineSegment.newWith(EGPoint(x1, y1), EGPoint(x2, y2))
 
     val line = EGLine.newWith(p1 = p1, p2 = p2)
-    val minX = min(p1.x, p1.x)
-    val maxX = max(p1.x, p1.x)
-    val minY = min(p1.y, p1.y)
-    val maxY = max(p1.y, p1.y)
+    val boundingRect : EGRect = EGRect.newXY(min(p1.x, p2.x), max(p1.x, p2.x), min(p1.y, p2.y), max(p1.y, p2.y))
 
     def contains(point : EGPoint) : bool = {
         p1 == point || p2 == point ||
-        (line.contains(point) &&
-            (point.x >= minX && point.x <= maxX &&
-            point.y >= minY && point.y <= maxY))
+        (line.contains(point) && boundingRect.contains(point))
     }
+
+    def containsInBoundingRect(point : EGPoint) : bool = boundingRect.contains(point)
 
     def intersectionWith(segment : EGLineSegment) : EGPoint? =
         if (p1 == segment.p2) p1
         else if (p2 == segment.p1) p2
         else if(p1 == segment.p1) if(line == segment.line) nil else p1
         else if(p2 == segment.p2) if(line == segment.line) nil else p2
-        else line.intersectionWith(segment.line).filter(p -> contains(p) && segment.contains(p))
+        else line.intersectionWith(segment.line).filter(p -> containsInBoundingRect(p) && segment.containsInBoundingRect(p))
 
     def endingsContain(point :EGPoint) : bool = p1 == point || p2 == point
 }

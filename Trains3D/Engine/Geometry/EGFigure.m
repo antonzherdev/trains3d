@@ -45,10 +45,6 @@
     @throw @"Method isHorizontal is abstract";
 }
 
-- (double)yForX:(double)x {
-    @throw @"Method yFor is abstract";
-}
-
 - (id)intersectionWithLine:(EGLine*)line {
     @throw @"Method intersectionWith is abstract";
 }
@@ -59,6 +55,10 @@
 
 - (BOOL)isRightPoint:(EGPoint)point {
     @throw @"Method isRight is abstract";
+}
+
+- (double)slope {
+    @throw @"Method slope is abstract";
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -122,7 +122,7 @@
     if([line isVertical]) {
         return [line xIntersectionWithLine:self];
     } else {
-        EGSlopeLine* that = ((EGSlopeLine*)[[line asKindOfClass:[EGSlopeLine class]] get]);
+        EGSlopeLine* that = ((EGSlopeLine*)line);
         return (that.constant - _constant) / (_slope - that.slope);
     }
 }
@@ -132,7 +132,7 @@
 }
 
 - (id)intersectionWithLine:(EGLine*)line {
-    if(!([line isVertical]) && eqf(((EGSlopeLine*)[[line asKindOfClass:[EGSlopeLine class]] get]).slope, _slope)) {
+    if(!([line isVertical]) && eqf(((EGSlopeLine*)line).slope, _slope)) {
         return [CNOption none];
     } else {
         double xInt = [self xIntersectionWithLine:line];
@@ -215,6 +215,10 @@
     return point.x > _x;
 }
 
+- (double)slope {
+    return DBL_MAX;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -246,18 +250,12 @@
     EGPoint _p1;
     EGPoint _p2;
     EGLine* _line;
-    double _minX;
-    double _maxX;
-    double _minY;
-    double _maxY;
+    EGRect _boundingRect;
 }
 @synthesize p1 = _p1;
 @synthesize p2 = _p2;
 @synthesize line = _line;
-@synthesize minX = _minX;
-@synthesize maxX = _maxX;
-@synthesize minY = _minY;
-@synthesize maxY = _maxY;
+@synthesize boundingRect = _boundingRect;
 
 + (id)lineSegmentWithP1:(EGPoint)p1 p2:(EGPoint)p2 {
     return [[EGLineSegment alloc] initWithP1:p1 p2:p2];
@@ -269,10 +267,7 @@
         _p1 = p1;
         _p2 = p2;
         _line = [EGLine newWithP1:_p1 p2:_p2];
-        _minX = min(_p1.x, _p1.x);
-        _maxX = max(_p1.x, _p1.x);
-        _minY = min(_p1.y, _p1.y);
-        _maxY = max(_p1.y, _p1.y);
+        _boundingRect = egRectNewXY(min(_p1.x, _p2.x), max(_p1.x, _p2.x), min(_p1.y, _p2.y), max(_p1.y, _p2.y));
     }
     
     return self;
@@ -288,7 +283,11 @@
 }
 
 - (BOOL)containsPoint:(EGPoint)point {
-    return EGPointEq(_p1, point) || EGPointEq(_p2, point) || ([_line containsPoint:point] && point.x >= _minX && point.x <= _maxX && point.y >= _minY && point.y <= _maxY);
+    return EGPointEq(_p1, point) || EGPointEq(_p2, point) || ([_line containsPoint:point] && egRectContains(_boundingRect, point));
+}
+
+- (BOOL)containsInBoundingRectPoint:(EGPoint)point {
+    return egRectContains(_boundingRect, point);
 }
 
 - (id)intersectionWithSegment:(EGLineSegment*)segment {
@@ -307,7 +306,7 @@
                     else return [CNOption opt:val(_p2)];
                 } else {
                     return [[_line intersectionWithLine:segment.line] filter:^BOOL(id p) {
-                        return [self containsPoint:uval(EGPoint, p)] && [segment containsPoint:uval(EGPoint, p)];
+                        return [self containsInBoundingRectPoint:uval(EGPoint, p)] && [segment containsInBoundingRectPoint:uval(EGPoint, p)];
                     }];
                 }
             }

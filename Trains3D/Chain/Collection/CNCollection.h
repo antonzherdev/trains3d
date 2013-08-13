@@ -2,6 +2,7 @@
 @class CNChain;
 
 @class CNIterable;
+@class CNSet;
 
 @protocol CNIterator<NSObject>
 - (id)next;
@@ -26,6 +27,13 @@
 - (CNChain*)chain;
 - (void)forEach:(void(^)(id))each;
 - (BOOL)goOn:(BOOL(^)(id))on;
+@end
+
+
+@interface CNSet : CNIterable
++ (id)set;
+- (id)init;
+- (BOOL)containsObject:(id)object;
 @end
 
 
