@@ -74,6 +74,7 @@ stub def sin(:float) : float
 stub def cos(:float) : float
 stub def fabs(:float) : float
 stub def atan2(:float, :float) : float
+stub def atan(:float) : float
 stub def sqrt(:float) : float
 
 trait EGController {

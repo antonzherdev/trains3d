@@ -61,6 +61,22 @@
     @throw @"Method slope is abstract";
 }
 
+- (id)moveWithDistance:(double)distance {
+    @throw @"Method moveWith is abstract";
+}
+
+- (double)angle {
+    @throw @"Method angle is abstract";
+}
+
+- (double)degreeAngle {
+    return [self angle] * 180 / M_PI;
+}
+
+- (EGLine*)perpendicularWithPoint:(EGPoint)point {
+    @throw @"Method perpendicularWith is abstract";
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -145,6 +161,21 @@
     else return point.y < [self yForX:point.x];
 }
 
+- (id)moveWithDistance:(double)distance {
+    return [EGSlopeLine slopeLineWithSlope:_slope constant:_constant + distance];
+}
+
+- (double)angle {
+    double a = atan(_slope);
+    if(a < 0) return M_PI + a;
+    else return a;
+}
+
+- (EGLine*)perpendicularWithPoint:(EGPoint)point {
+    if(eqf(_slope, 0)) return [EGVerticalLine verticalLineWithX:point.x];
+    else return [EGLine newWithSlope:-_slope point:point];
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -219,6 +250,18 @@
     return DBL_MAX;
 }
 
+- (id)moveWithDistance:(double)distance {
+    return [EGVerticalLine verticalLineWithX:_x + distance];
+}
+
+- (double)angle {
+    return M_PI_2;
+}
+
+- (EGLine*)perpendicularWithPoint:(EGPoint)point {
+    return [EGSlopeLine slopeLineWithSlope:0 constant:point.y];
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -249,12 +292,11 @@
 @implementation EGLineSegment{
     EGPoint _p1;
     EGPoint _p2;
-    EGLine* _line;
+    EGLine* __line;
     EGRect _boundingRect;
 }
 @synthesize p1 = _p1;
 @synthesize p2 = _p2;
-@synthesize line = _line;
 @synthesize boundingRect = _boundingRect;
 
 + (id)lineSegmentWithP1:(EGPoint)p1 p2:(EGPoint)p2 {
@@ -266,7 +308,6 @@
     if(self) {
         _p1 = p1;
         _p2 = p2;
-        _line = [EGLine newWithP1:_p1 p2:_p2];
         _boundingRect = egRectNewXY(min(_p1.x, _p2.x), max(_p1.x, _p2.x), min(_p1.y, _p2.y), max(_p1.y, _p2.y));
     }
     
@@ -282,8 +323,13 @@
     return [EGLineSegment newWithP1:EGPointMake(x1, y1) p2:EGPointMake(x2, y2)];
 }
 
+- (EGLine*)line {
+    if(__line == nil) __line = [EGLine newWithP1:_p1 p2:_p2];
+    return __line;
+}
+
 - (BOOL)containsPoint:(EGPoint)point {
-    return EGPointEq(_p1, point) || EGPointEq(_p2, point) || ([_line containsPoint:point] && egRectContains(_boundingRect, point));
+    return EGPointEq(_p1, point) || EGPointEq(_p2, point) || ([[self line] containsPoint:point] && egRectContains(_boundingRect, point));
 }
 
 - (BOOL)containsInBoundingRectPoint:(EGPoint)point {
@@ -298,14 +344,14 @@
             return [CNOption opt:val(_p2)];
         } else {
             if(EGPointEq(_p1, segment.p1)) {
-                if([_line isEqual:segment.line]) return [CNOption none];
+                if([[self line] isEqual:[segment line]]) return [CNOption none];
                 else return [CNOption opt:val(_p1)];
             } else {
                 if(EGPointEq(_p2, segment.p2)) {
-                    if([_line isEqual:segment.line]) return [CNOption none];
+                    if([[self line] isEqual:[segment line]]) return [CNOption none];
                     else return [CNOption opt:val(_p2)];
                 } else {
-                    return [[_line intersectionWithLine:segment.line] filter:^BOOL(id p) {
+                    return [[[self line] intersectionWithLine:[segment line]] filter:^BOOL(id p) {
                         return [self containsInBoundingRectPoint:uval(EGPoint, p)] && [segment containsInBoundingRectPoint:uval(EGPoint, p)];
                     }];
                 }
@@ -318,28 +364,93 @@
     return EGPointEq(_p1, point) || EGPointEq(_p2, point);
 }
 
+- (NSArray*)segments {
+    return (@[self]);
+}
+
+- (EGLineSegment*)moveWithPoint:(EGPoint)point {
+    return [self moveWithX:point.x y:point.y];
+}
+
+- (EGLineSegment*)moveWithX:(double)x y:(double)y {
+    EGLineSegment* ret = [EGLineSegment lineSegmentWithP1:EGPointMake(_p1.x + x, _p1.y + y) p2:EGPointMake(_p2.x + x, _p2.y + y)];
+    if(__line != nil) [ret setLine:[__line moveWithDistance:x + y]];
+    return ret;
+}
+
+- (void)setLine:(EGLine*)line {
+    __line = line;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGLineSegment* o = ((EGLineSegment*)other);
-    return EGPointEq(self.p1, o.p1) && EGPointEq(self.p2, o.p2);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + EGPointHash(self.p1);
-    hash = hash * 31 + EGPointHash(self.p2);
-    return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"p1=%@", EGPointDescription(self.p1)];
     [description appendFormat:@", p2=%@", EGPointDescription(self.p2)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGThickLineSegment{
+    EGLineSegment* _segment;
+    double _thickness;
+    NSArray* __segments;
+}
+@synthesize segment = _segment;
+@synthesize thickness = _thickness;
+
++ (id)thickLineSegmentWithSegment:(EGLineSegment*)segment thickness:(double)thickness {
+    return [[EGThickLineSegment alloc] initWithSegment:segment thickness:thickness];
+}
+
+- (id)initWithSegment:(EGLineSegment*)segment thickness:(double)thickness {
+    self = [super init];
+    if(self) {
+        _segment = segment;
+        _thickness = thickness;
+    }
+    
+    return self;
+}
+
+- (EGRect)boxingRect {
+    return egRectThicken([_segment boxingRect], _thickness, _thickness);
+}
+
+- (NSArray*)segments {
+    if(__segments == nil) {
+        double dx = 0;
+        double dy = 0;
+        if([[_segment line] isVertical]) {
+            dx = _thickness / 2;
+            dy = 0;
+        } else {
+            double k = [[_segment line] slope];
+            dx = _thickness / sqrt(1 + k) / 2;
+            dy = k * dx;
+        }
+        EGLineSegment* line1 = [_segment moveWithX:-dx y:dy];
+        EGLineSegment* line2 = [_segment moveWithX:dx y:-dy];
+        EGLineSegment* line3 = [EGLineSegment lineSegmentWithP1:line1.p1 p2:line2.p1];
+        __segments = (@[line1, line2, line3, [line3 moveWithPoint:egPointSub(_segment.p2, _segment.p1)]]);
+    }
+    return __segments;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"segment=%@", self.segment];
+    [description appendFormat:@", thickness=%f", self.thickness];
     [description appendString:@">"];
     return description;
 }

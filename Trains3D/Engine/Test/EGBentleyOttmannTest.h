@@ -11,7 +11,9 @@
 @class EGLine;
 @class EGSlopeLine;
 @class EGVerticalLine;
+@protocol EGFigure;
 @class EGLineSegment;
+@class EGThickLineSegment;
 #import "EGTypes.h"
 
 @class EGBentleyOttmannTest;

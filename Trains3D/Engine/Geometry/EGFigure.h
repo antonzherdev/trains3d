@@ -5,6 +5,7 @@
 @class EGSlopeLine;
 @class EGVerticalLine;
 @class EGLineSegment;
+@class EGThickLineSegment;
 
 @interface EGLine : NSObject
 + (id)line;
@@ -20,6 +21,10 @@
 - (double)xIntersectionWithLine:(EGLine*)line;
 - (BOOL)isRightPoint:(EGPoint)point;
 - (double)slope;
+- (id)moveWithDistance:(double)distance;
+- (double)angle;
+- (double)degreeAngle;
+- (EGLine*)perpendicularWithPoint:(EGPoint)point;
 @end
 
 
@@ -36,6 +41,9 @@
 - (double)yForX:(double)x;
 - (id)intersectionWithLine:(EGLine*)line;
 - (BOOL)isRightPoint:(EGPoint)point;
+- (id)moveWithDistance:(double)distance;
+- (double)angle;
+- (EGLine*)perpendicularWithPoint:(EGPoint)point;
 @end
 
 
@@ -51,23 +59,46 @@
 - (id)intersectionWithLine:(EGLine*)line;
 - (BOOL)isRightPoint:(EGPoint)point;
 - (double)slope;
+- (id)moveWithDistance:(double)distance;
+- (double)angle;
+- (EGLine*)perpendicularWithPoint:(EGPoint)point;
 @end
 
 
-@interface EGLineSegment : NSObject
+@protocol EGFigure<NSObject>
+- (EGRect)boxingRect;
+- (NSArray*)segments;
+@end
+
+
+@interface EGLineSegment : NSObject<EGFigure>
 @property (nonatomic, readonly) EGPoint p1;
 @property (nonatomic, readonly) EGPoint p2;
-@property (nonatomic, readonly) EGLine* line;
 @property (nonatomic, readonly) EGRect boundingRect;
 
 + (id)lineSegmentWithP1:(EGPoint)p1 p2:(EGPoint)p2;
 - (id)initWithP1:(EGPoint)p1 p2:(EGPoint)p2;
 + (EGLineSegment*)newWithP1:(EGPoint)p1 p2:(EGPoint)p2;
 + (EGLineSegment*)newWithX1:(double)x1 y1:(double)y1 x2:(double)x2 y2:(double)y2;
+- (EGLine*)line;
 - (BOOL)containsPoint:(EGPoint)point;
 - (BOOL)containsInBoundingRectPoint:(EGPoint)point;
 - (id)intersectionWithSegment:(EGLineSegment*)segment;
 - (BOOL)endingsContainPoint:(EGPoint)point;
+- (NSArray*)segments;
+- (EGLineSegment*)moveWithPoint:(EGPoint)point;
+- (EGLineSegment*)moveWithX:(double)x y:(double)y;
+@end
+
+
+@interface EGThickLineSegment : NSObject<EGFigure>
+@property (nonatomic, readonly) EGLineSegment* segment;
+@property (nonatomic, readonly) double thickness;
+
++ (id)thickLineSegmentWithSegment:(EGLineSegment*)segment thickness:(double)thickness;
+- (id)initWithSegment:(EGLineSegment*)segment thickness:(double)thickness;
+- (EGRect)boxingRect;
+- (NSArray*)segments;
 @end
 
 

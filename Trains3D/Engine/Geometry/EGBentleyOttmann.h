@@ -3,7 +3,9 @@
 @class EGLine;
 @class EGSlopeLine;
 @class EGVerticalLine;
+@protocol EGFigure;
 @class EGLineSegment;
+@class EGThickLineSegment;
 #import "CNTreeMap.h"
 @class CNTreeSet;
 @protocol CNIterator;

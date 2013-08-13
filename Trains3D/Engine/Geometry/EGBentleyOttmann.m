@@ -199,12 +199,12 @@
 }
 
 - (double)yForX:(double)x {
-    if([_segment.line isVertical]) return _segment.p1.y;
-    else return [((EGSlopeLine*)_segment.line) yForX:x];
+    if([[_segment line] isVertical]) return _segment.p1.y;
+    else return [((EGSlopeLine*)[_segment line]) yForX:x];
 }
 
 - (double)slope {
-    return [_segment.line slope];
+    return [[_segment line] slope];
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -215,7 +215,7 @@
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGBentleyOttmannPointEvent* o = ((EGBentleyOttmannPointEvent*)other);
-    return self.isStart == o.isStart && [self.data isEqual:o.data] && [self.segment isEqual:o.segment] && EGPointEq(self.point, o.point);
+    return self.isStart == o.isStart && [self.data isEqual:o.data] && self.segment == o.segment && EGPointEq(self.point, o.point);
 }
 
 - (NSUInteger)hash {
