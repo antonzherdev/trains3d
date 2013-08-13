@@ -162,6 +162,12 @@ SPEC_BEGIN(CNChainSpec)
           }] toArray];
           [[r should] equal:@[@4, @5]];
       });
+      it(@".neighboursRing should neighbours + (last, first)", ^{
+          id r = [[[[s chain] neighborsRing] map:^id(CNTuple * x) {
+              return numi(unumi(x.a) + unumi(x.b));
+          }] toArray];
+          [[r should] equal:@[@4, @5, @3]];
+      });
   });
 
 SPEC_END

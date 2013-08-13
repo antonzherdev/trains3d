@@ -128,6 +128,24 @@ class EGLineSegment(p1 : EGPoint, p2 : EGPoint) extends EGFigure {
     }
 }
 
+class EGPolygon(points : [EGPoint]) extends EGFigure {
+    def boxingRect : EGRect = {
+        var minX = DBL_MAX
+        var maxX = DBL_MIN
+        var minY = DBL_MAX
+        var maxY = DBL_MIN
+        points.for(p -> {
+            if(p.x < minX) minX = p.x
+            if(p.x > maxX) maxX = p.x
+            if(p.y < minY) minY = p.y
+            if(p.y > maxY) maxY = p.y
+        })
+        EGRect.newXY(minX, maxX, minY, maxY)
+    }
+
+    val segments : [EGLineSegment] = points.chain.neighborsRing.map(ps -> EGLineSegment(ps.a, ps.b)).toArray
+}
+
 class EGThickLineSegment(segment : EGLineSegment, thickness : float) extends EGFigure {
     def boxingRect : EGRect = segment.boxingRect.thicken(x = thickness, y = thickness)
     private var _segments : [EGLineSegment]

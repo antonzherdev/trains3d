@@ -397,6 +397,70 @@
 @end
 
 
+@implementation EGPolygon{
+    NSArray* _points;
+    NSArray* _segments;
+}
+@synthesize points = _points;
+@synthesize segments = _segments;
+
++ (id)polygonWithPoints:(NSArray*)points {
+    return [[EGPolygon alloc] initWithPoints:points];
+}
+
+- (id)initWithPoints:(NSArray*)points {
+    self = [super init];
+    if(self) {
+        _points = points;
+        _segments = [[[[_points chain] neighborsRing] map:^EGLineSegment*(CNTuple* ps) {
+            return [EGLineSegment lineSegmentWithP1:uval(EGPoint, ps.a) p2:uval(EGPoint, ps.b)];
+        }] toArray];
+    }
+    
+    return self;
+}
+
+- (EGRect)boxingRect {
+    __block double minX = DBL_MAX;
+    __block double maxX = DBL_MIN;
+    __block double minY = DBL_MAX;
+    __block double maxY = DBL_MIN;
+    [_points forEach:^void(id p) {
+        if(uval(EGPoint, p).x < minX) minX = uval(EGPoint, p).x;
+        if(uval(EGPoint, p).x > maxX) maxX = uval(EGPoint, p).x;
+        if(uval(EGPoint, p).y < minY) minY = uval(EGPoint, p).y;
+        if(uval(EGPoint, p).y > maxY) maxY = uval(EGPoint, p).y;
+    }];
+    return egRectNewXY(minX, maxX, minY, maxY);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGPolygon* o = ((EGPolygon*)other);
+    return [self.points isEqual:o.points];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.points hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"points=%@", self.points];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation EGThickLineSegment{
     EGLineSegment* _segment;
     double _thickness;

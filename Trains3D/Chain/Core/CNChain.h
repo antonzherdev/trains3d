@@ -17,6 +17,7 @@
 - (CNChain*)flatMap:(cnF)f;
 - (CNChain*)flatMap:(cnF)f factor:(double) factor;
 - (CNChain*)neighbors;
+- (CNChain*)neighborsRing;
 
 - (CNChain*)append:(id)collection;
 - (CNChain*)prepend:(id)collection;

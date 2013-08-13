@@ -131,8 +131,13 @@
 
 
 - (CNChain *)neighbors {
-    return [self link:[CNNeighboursLink link]];
+    return [self link:[CNNeighboursLink linkWithRing:NO]];
 }
+
+- (CNChain *)neighborsRing {
+    return [self link:[CNNeighboursLink linkWithRing:YES]];
+}
+
 
 - (CNChain *)append:(id)collection {
     return [self link:[CNAppendLink linkWithCollection:collection]];

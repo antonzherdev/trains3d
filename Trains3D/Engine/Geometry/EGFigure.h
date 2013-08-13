@@ -5,6 +5,7 @@
 @class EGSlopeLine;
 @class EGVerticalLine;
 @class EGLineSegment;
+@class EGPolygon;
 @class EGThickLineSegment;
 
 @interface EGLine : NSObject
@@ -88,6 +89,16 @@
 - (NSArray*)segments;
 - (EGLineSegment*)moveWithPoint:(EGPoint)point;
 - (EGLineSegment*)moveWithX:(double)x y:(double)y;
+@end
+
+
+@interface EGPolygon : NSObject<EGFigure>
+@property (nonatomic, readonly) NSArray* points;
+@property (nonatomic, readonly) NSArray* segments;
+
++ (id)polygonWithPoints:(NSArray*)points;
+- (id)initWithPoints:(NSArray*)points;
+- (EGRect)boxingRect;
 @end
 
 

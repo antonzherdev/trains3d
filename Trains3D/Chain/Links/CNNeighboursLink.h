@@ -3,7 +3,7 @@
 
 
 @interface CNNeighboursLink : NSObject <CNChainLink>
-- (id)init;
+- (id)initWithRing:(BOOL)ring;
 
-+ (id)link;
++ (id)linkWithRing:(BOOL)ring;
 @end

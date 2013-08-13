@@ -5,6 +5,7 @@
 @class EGVerticalLine;
 @protocol EGFigure;
 @class EGLineSegment;
+@class EGPolygon;
 @class EGThickLineSegment;
 #import "CNTreeMap.h"
 @class CNTreeSet;

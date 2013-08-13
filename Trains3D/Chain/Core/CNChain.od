@@ -11,6 +11,7 @@ stub class CNChain<A> extends CNIterable<A> {
 
     def combination : CNChain<(A, A)>
     def neighbors : CNChain<(A, A)>
+    def neighborsRing : CNChain<(A, A)>
     def uncombination<B>(self : CNChain<(B, B)>) : CNChain<B>
     def mul<B>(: CNChain<B>) : CNChain<(A,B)>
 
