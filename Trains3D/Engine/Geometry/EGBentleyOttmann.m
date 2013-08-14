@@ -43,7 +43,6 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGBentleyOttmann* o = ((EGBentleyOttmann*)other);
     return YES;
 }
 
@@ -145,7 +144,6 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGBentleyOttmannEvent* o = ((EGBentleyOttmannEvent*)other);
     return YES;
 }
 
@@ -302,7 +300,7 @@
 - (id)init {
     self = [super init];
     if(self) _events = [CNTreeMap treeMapWithComparator:^NSInteger(id a, id b) {
-        return egPointCompare(uval(EGPoint, a), uval(EGPoint, b));
+        return egPointCompare(uwrap(EGPoint, a), uwrap(EGPoint, b));
     }];
     
     return self;
@@ -326,7 +324,7 @@
 }
 
 - (void)offerPoint:(EGPoint)point event:(EGBentleyOttmannEvent*)event {
-    [[_events objectForKey:val(point) orUpdateWith:^NSMutableArray*() {
+    [[_events objectForKey:wrap(EGPoint, point) orUpdateWith:^NSMutableArray*() {
         return [(@[]) mutableCopy];
     }] addObject:event];
 }
@@ -342,7 +340,6 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGBentleyOttmannEventQueue* o = ((EGBentleyOttmannEventQueue*)other);
     return YES;
 }
 
@@ -497,7 +494,7 @@
         EGBentleyOttmannPointEvent* aa = ((EGBentleyOttmannPointEvent*)((EGBentleyOttmannEvent*)[a get]));
         EGBentleyOttmannPointEvent* bb = ((EGBentleyOttmannPointEvent*)((EGBentleyOttmannEvent*)[b get]));
         [[aa.segment intersectionWithSegment:bb.segment] forEach:^void(id _) {
-            [self registerIntersectionA:aa b:bb point:uval(EGPoint, _)];
+            [self registerIntersectionA:aa b:bb point:uwrap(EGPoint, _)];
         }];
     }
 }

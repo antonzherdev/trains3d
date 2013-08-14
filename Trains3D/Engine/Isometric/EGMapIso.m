@@ -26,10 +26,10 @@
         _size = size;
         _limits = egRectINewXY((1 - _size.height) / 2 - 1, (2 * _size.width + _size.height - 3) / 2 + 1, (1 - _size.width) / 2 - 1, (_size.width + 2 * _size.height - 3) / 2 + 1);
         _fullTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
-            return [self isFullTile:uval(EGPointI, _)];
+            return [self isFullTile:uwrap(EGPointI, _)];
         }] toArray];
         _partialTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
-            return [self isPartialTile:uval(EGPointI, _)];
+            return [self isPartialTile:uwrap(EGPointI, _)];
         }] toArray];
         _allTiles = [_fullTiles arrayByAddingObject:_partialTiles];
     }
@@ -66,7 +66,7 @@
     egColor3(1.0, 1.0, 1.0);
     glBegin(GL_LINES);
     [_fullTiles forEach:^void(id tile) {
-        EGPointI p = uval(EGPointI, tile);
+        EGPointI p = uwrap(EGPointI, tile);
         egVertex3(p.x - 0.5, p.y - 0.5, 0.0);
         egVertex3(p.x + 0.5, p.y - 0.5, 0.0);
         egVertex3(p.x + 0.5, p.y - 0.5, 0.0);
@@ -102,7 +102,7 @@
 
 - (CNChain*)allPosibleTiles {
     return [[[[CNRange rangeWithStart:_limits.x end:egRectIX2(_limits) step:1] chain] mul:[CNRange rangeWithStart:_limits.y end:egRectIY2(_limits) step:1]] map:^id(CNTuple* _) {
-        return val(EGPointIMake(unumi(_.a), unumi(_.b)));
+        return wrap(EGPointI, EGPointIMake(unumi(_.a), unumi(_.b)));
     }];
 }
 

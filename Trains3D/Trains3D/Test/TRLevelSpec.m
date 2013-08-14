@@ -28,7 +28,7 @@ SPEC_BEGIN(TRLevelSpec)
 
                     //This cities should be generated in different tiles.
                     NSSet *tilesSet = [[[level cities] map:^id(TRCity *x) {
-                        return val(x.tile);
+                        return wrap(EGPointI, x.tile);
                     }] toSet];
                     [[tilesSet should] haveCountOf:2];
 

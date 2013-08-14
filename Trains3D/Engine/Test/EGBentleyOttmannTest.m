@@ -57,7 +57,6 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGBentleyOttmannTest* o = ((EGBentleyOttmannTest*)other);
     return YES;
 }
 

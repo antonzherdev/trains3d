@@ -44,7 +44,6 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRailroadConnectorContent* o = ((TRRailroadConnectorContent*)other);
     return YES;
 }
 
@@ -98,7 +97,6 @@ static TRRailroadConnectorContent* _instance;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TREmptyConnector* o = ((TREmptyConnector*)other);
     return YES;
 }
 

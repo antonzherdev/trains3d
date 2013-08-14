@@ -47,7 +47,6 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRailroadView* o = ((TRRailroadView*)other);
     return YES;
 }
 
@@ -112,7 +111,6 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRailView* o = ((TRRailView*)other);
     return YES;
 }
 
@@ -180,7 +178,6 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRSwitchView* o = ((TRSwitchView*)other);
     return YES;
 }
 
@@ -227,7 +224,6 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRLightView* o = ((TRLightView*)other);
     return YES;
 }
 

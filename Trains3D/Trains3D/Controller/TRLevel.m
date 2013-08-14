@@ -97,8 +97,8 @@
 }
 
 - (NSArray*)appendNextCityToCities:(NSArray*)cities {
-    EGPointI tile = uval(EGPointI, [[[_map.partialTiles exclude:[cities map:^id(TRCity* _) {
-        return val(_.tile);
+    EGPointI tile = uwrap(EGPointI, [[[_map.partialTiles exclude:[cities map:^id(TRCity* _) {
+        return wrap(EGPointI, _.tile);
     }]] randomItem] get]);
     TRCity* city = [TRCity cityWithColor:[TRColor values][[cities count]] tile:tile angle:[self randomCityDirectionForTile:tile]];
     [_railroad tryAddRail:[TRRail railWithTile:tile form:city.angle.form]];

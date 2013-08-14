@@ -56,6 +56,44 @@
 @end
 
 
+@implementation TRRailCorrectionWrap{
+    TRRailCorrection _value;
+}
+@synthesize value = _value;
+
++ (id)wrapWithValue:(TRRailCorrection)value {
+    return [[TRRailCorrectionWrap alloc] initWithValue:value];
+}
+
+- (id)initWithValue:(TRRailCorrection)value {
+    self = [super init];
+    if(self) _value = value;
+    return self;
+}
+
+- (NSString*)description {
+    return TRRailCorrectionDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRailCorrectionWrap* o = ((TRRailCorrectionWrap*)other);
+    return TRRailCorrectionEq(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return TRRailCorrectionHash(_value);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
+
+
 @implementation TRRailroadBuilderMouseProcessor{
     TRRailroadBuilder* _builder;
     id _startedPoint;
@@ -77,16 +115,16 @@
 }
 
 - (BOOL)mouseDownEvent:(EGEvent*)event {
-    _startedPoint = [CNOption opt:val([event location])];
+    _startedPoint = [CNOption opt:wrap(EGPoint, [event location])];
     return YES;
 }
 
 - (BOOL)mouseDragEvent:(EGEvent*)event {
     return unumb([[_startedPoint map:^id(id sp) {
-        EGPoint deltaVector = egPointSub([event location], uval(EGPoint, sp));
+        EGPoint deltaVector = egPointSub([event location], uwrap(EGPoint, sp));
         if(egPointLengthSquare(deltaVector) > 0.25) {
-            EGPointI spTile = egPointIApply(uval(EGPoint, sp));
-            EGPointI start = [self normPoint:egPointSub(uval(EGPoint, sp), egPointApply(spTile))];
+            EGPointI spTile = egPointIApply(uwrap(EGPoint, sp));
+            EGPointI start = [self normPoint:egPointSub(uwrap(EGPoint, sp), egPointApply(spTile))];
             EGPointI end = egPointIAdd(start, [self normPoint:egPointSet(deltaVector, 0.7)]);
             [_builder tryBuildRail:[self convertRail:[self correctRail:TRRailCorrectionMake(spTile, start, end)]]];
         }

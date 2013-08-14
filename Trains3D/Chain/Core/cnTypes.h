@@ -34,3 +34,8 @@ extern id cnResolveCollection(id collection);
             [expr getValue:&chainReservedPrefix_uval]; \
             chainReservedPrefix_uval; \
         })
+
+#define wrap(tp, expr) [tp ## Wrap wrapWithValue:expr]
+
+#define uwrap(tp, expr) [((tp ## Wrap*)expr) value]
+

@@ -30,7 +30,6 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGContext* o = ((EGContext*)other);
     return YES;
 }
 

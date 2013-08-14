@@ -84,7 +84,6 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGLine* o = ((EGLine*)other);
     return YES;
 }
 
@@ -152,7 +151,7 @@
         return [CNOption none];
     } else {
         double xInt = [self xIntersectionWithLine:line];
-        return [CNOption opt:val(EGPointMake(xInt, [self yForX:xInt]))];
+        return [CNOption opt:wrap(EGPoint, EGPointMake(xInt, [self yForX:xInt]))];
     }
 }
 
@@ -338,21 +337,21 @@
 
 - (id)intersectionWithSegment:(EGLineSegment*)segment {
     if(EGPointEq(_p1, segment.p2)) {
-        return [CNOption opt:val(_p1)];
+        return [CNOption opt:wrap(EGPoint, _p1)];
     } else {
         if(EGPointEq(_p2, segment.p1)) {
-            return [CNOption opt:val(_p2)];
+            return [CNOption opt:wrap(EGPoint, _p2)];
         } else {
             if(EGPointEq(_p1, segment.p1)) {
                 if([[self line] isEqual:[segment line]]) return [CNOption none];
-                else return [CNOption opt:val(_p1)];
+                else return [CNOption opt:wrap(EGPoint, _p1)];
             } else {
                 if(EGPointEq(_p2, segment.p2)) {
                     if([[self line] isEqual:[segment line]]) return [CNOption none];
-                    else return [CNOption opt:val(_p2)];
+                    else return [CNOption opt:wrap(EGPoint, _p2)];
                 } else {
                     return [[[self line] intersectionWithLine:[segment line]] filter:^BOOL(id p) {
-                        return [self containsInBoundingRectPoint:uval(EGPoint, p)] && [segment containsInBoundingRectPoint:uval(EGPoint, p)];
+                        return [self containsInBoundingRectPoint:uwrap(EGPoint, p)] && [segment containsInBoundingRectPoint:uwrap(EGPoint, p)];
                     }];
                 }
             }
@@ -413,7 +412,7 @@
     if(self) {
         _points = points;
         _segments = [[[[_points chain] neighborsRing] map:^EGLineSegment*(CNTuple* ps) {
-            return [EGLineSegment lineSegmentWithP1:uval(EGPoint, ps.a) p2:uval(EGPoint, ps.b)];
+            return [EGLineSegment lineSegmentWithP1:uwrap(EGPoint, ps.a) p2:uwrap(EGPoint, ps.b)];
         }] toArray];
     }
     
@@ -426,10 +425,10 @@
     __block double minY = DBL_MAX;
     __block double maxY = DBL_MIN;
     [_points forEach:^void(id p) {
-        if(uval(EGPoint, p).x < minX) minX = uval(EGPoint, p).x;
-        if(uval(EGPoint, p).x > maxX) maxX = uval(EGPoint, p).x;
-        if(uval(EGPoint, p).y < minY) minY = uval(EGPoint, p).y;
-        if(uval(EGPoint, p).y > maxY) maxY = uval(EGPoint, p).y;
+        if(uwrap(EGPoint, p).x < minX) minX = uwrap(EGPoint, p).x;
+        if(uwrap(EGPoint, p).x > maxX) maxX = uwrap(EGPoint, p).x;
+        if(uwrap(EGPoint, p).y < minY) minY = uwrap(EGPoint, p).y;
+        if(uwrap(EGPoint, p).y > maxY) maxY = uwrap(EGPoint, p).y;
     }];
     return egRectNewXY(minX, maxX, minY, maxY);
 }

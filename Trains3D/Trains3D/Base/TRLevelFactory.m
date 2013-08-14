@@ -71,7 +71,6 @@ static NSArray* _rules;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRLevelFactory* o = ((TRLevelFactory*)other);
     return YES;
 }
 

@@ -57,6 +57,14 @@ static inline NSString* TRRailCorrectionDescription(TRRailCorrection self) {
     [description appendString:@">"];
     return description;
 }
+@interface TRRailCorrectionWrap : NSObject
+@property (readonly, nonatomic) TRRailCorrection value;
+
++ (id)wrapWithValue:(TRRailCorrection)value;
+- (id)initWithValue:(TRRailCorrection)value;
+@end
+
+
 
 @interface TRRailroadBuilderMouseProcessor : NSObject<EGMouseProcessor>
 @property (nonatomic, readonly) TRRailroadBuilder* builder;

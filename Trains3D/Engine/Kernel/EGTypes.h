@@ -50,6 +50,14 @@ double egPointDistanceTo(EGPoint self, EGPoint point);
 EGPoint egPointSet(EGPoint self, double length);
 EGPoint egPointNormalize(EGPoint self);
 NSInteger egPointCompare(EGPoint self, EGPoint to);
+@interface EGPointWrap : NSObject
+@property (readonly, nonatomic) EGPoint value;
+
++ (id)wrapWithValue:(EGPoint)value;
+- (id)initWithValue:(EGPoint)value;
+@end
+
+
 
 struct EGPointI {
     NSInteger x;
@@ -81,6 +89,14 @@ EGPointI egPointIApply(EGPoint point);
 EGPointI egPointIAdd(EGPointI self, EGPointI point);
 EGPointI egPointISub(EGPointI self, EGPointI point);
 EGPointI egPointINegate(EGPointI self);
+@interface EGPointIWrap : NSObject
+@property (readonly, nonatomic) EGPointI value;
+
++ (id)wrapWithValue:(EGPointI)value;
+- (id)initWithValue:(EGPointI)value;
+@end
+
+
 
 struct EGSize {
     double width;
@@ -108,6 +124,14 @@ static inline NSString* EGSizeDescription(EGSize self) {
     [description appendString:@">"];
     return description;
 }
+@interface EGSizeWrap : NSObject
+@property (readonly, nonatomic) EGSize value;
+
++ (id)wrapWithValue:(EGSize)value;
+- (id)initWithValue:(EGSize)value;
+@end
+
+
 
 struct EGSizeI {
     NSInteger width;
@@ -135,6 +159,14 @@ static inline NSString* EGSizeIDescription(EGSizeI self) {
     [description appendString:@">"];
     return description;
 }
+@interface EGSizeIWrap : NSObject
+@property (readonly, nonatomic) EGSizeI value;
+
++ (id)wrapWithValue:(EGSizeI)value;
+- (id)initWithValue:(EGSizeI)value;
+@end
+
+
 
 struct EGRect {
     double x;
@@ -180,6 +212,14 @@ EGPoint egRectPoint(EGRect self);
 EGSize egRectSize(EGRect self);
 BOOL egRectIntersects(EGRect self, EGRect rect);
 EGRect egRectThicken(EGRect self, double x, double y);
+@interface EGRectWrap : NSObject
+@property (readonly, nonatomic) EGRect value;
+
++ (id)wrapWithValue:(EGRect)value;
+- (id)initWithValue:(EGRect)value;
+@end
+
+
 
 struct EGRectI {
     NSInteger x;
@@ -219,6 +259,14 @@ EGRectI egRectIApply(EGRect rect);
 EGRectI egRectINewXY(double x, double x2, double y, double y2);
 NSInteger egRectIX2(EGRectI self);
 NSInteger egRectIY2(EGRectI self);
+@interface EGRectIWrap : NSObject
+@property (readonly, nonatomic) EGRectI value;
+
++ (id)wrapWithValue:(EGRectI)value;
+- (id)initWithValue:(EGRectI)value;
+@end
+
+
 
 struct EGColor {
     double r;
@@ -255,6 +303,14 @@ static inline NSString* EGColorDescription(EGColor self) {
     return description;
 }
 void egColorSet(EGColor self);
+@interface EGColorWrap : NSObject
+@property (readonly, nonatomic) EGColor value;
+
++ (id)wrapWithValue:(EGColor)value;
+- (id)initWithValue:(EGColor)value;
+@end
+
+
 
 @protocol EGController<NSObject>
 - (void)updateWithDelta:(double)delta;

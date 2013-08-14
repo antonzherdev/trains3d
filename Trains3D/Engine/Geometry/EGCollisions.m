@@ -26,7 +26,7 @@
     return [[[[[EGBentleyOttmann intersectionsForSegments:segments] chain] groupBy:^CNPair*(EGIntersection* _) {
         return _.items;
     } map:^id(EGIntersection* _) {
-        return val(_.point);
+        return wrap(EGPoint, _.point);
     } withBuilder:^NSSetBuilder*() {
         return [NSSetBuilder setBuilder];
     }] map:^EGCollision*(CNTuple* p) {
@@ -41,7 +41,6 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGCollisions* o = ((EGCollisions*)other);
     return YES;
 }
 
