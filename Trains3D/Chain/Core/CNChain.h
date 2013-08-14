@@ -23,6 +23,8 @@
 
 - (CNChain*)groupBy:(cnF)by fold:(cnF2)fold withStart:(cnF0)start;
 - (CNChain*)groupBy:(cnF)by withBuilder:(cnF0)builder;
+- (CNChain*)groupBy:(cnF)by map:(cnF)f withBuilder:(cnF0)builder;
+- (CNChain*)groupBy:(cnF)by map:(cnF)f;
 - (CNChain*)groupBy:(cnF)by;
 
 

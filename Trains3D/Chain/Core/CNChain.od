@@ -15,8 +15,11 @@ stub class CNChain<A> extends CNIterable<A> {
     def neighbors : CNChain<(A, A)>
     def neighborsRing : CNChain<(A, A)>
     def mul<B>(: CNChain<B>) : CNChain<(A,B)>
+
     def group<K>(by : A -> K) : CNChain<(K, [A])>
-    def group<K, C extends CNTraversable<K>>(by : A -> K, withBuilder : () -> CNBuilder<K, C>) : CNChain<(K, C<K>)>
+    def group<K, B>(by : A -> K, map : A -> B) : CNChain<(K, [B])>
+    def group<K, C extends CNTraversable<K>>(by : A -> K, withBuilder : () -> CNBuilder<A, C>) : CNChain<(K, C<A>)>
+    def group<B, K, C extends CNTraversable<K>>(by : A -> K, map : A -> B, withBuilder : () -> CNBuilder<B, C>) : CNChain<(K, C<B>)>
     def group<K, V>(by : A -> K, fold : (V, A) -> V, withStart : () -> V) : CNChain<(K, V)>
 
     def join<K, V1, V2>(self : CNChain<(K, V1)>, chain : CNChain<(K, V2)>) : CNChain<K, (V1, V2)>

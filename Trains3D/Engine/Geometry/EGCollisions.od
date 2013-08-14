@@ -13,8 +13,9 @@ class EGCollisions {
             .flatMap(f -> f.b.segments.map(segment -> (f.a, segment)))
             .toArray
         EGBentleyOttmann.intersectionsFor(segments).chain
-            .group<CNPair<T>, NSSet<EGPoint>>(
+            .group<CNPair<T>, EGPoint, NSSet<EGPoint>>(
                 by = _.items,
+                map = _.point,
                 withBuilder = NSSetBuilder.new<EGPoint>)
             .map(p -> EGCollision(p.a, p.b))
             .toSet

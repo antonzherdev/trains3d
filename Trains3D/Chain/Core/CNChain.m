@@ -164,6 +164,21 @@
     }]];
 }
 
+- (CNChain *)groupBy:(cnF)by map:(cnF)f withBuilder:(cnF0)builder {
+    return [self link:[CNGroupByLink linkWithBy:by fold:^id(id r, id x) {
+        [r addObject:f(x)];
+        return r;
+    } withStart:builder factor:0.5 mutableMode:YES mapAfter:^id(id x) {
+        return [x build];
+    }]];
+}
+
+
+- (CNChain *)groupBy:(cnF)by map:(cnF)f {
+    return [self groupBy:by map: f withBuilder:^id {
+        return [NSArrayBuilder arrayBuilder];
+    }];
+}
 
 - (CNChain *)groupBy:(cnF)by {
     return [self groupBy:by withBuilder:^id {

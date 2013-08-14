@@ -25,10 +25,12 @@
     }] toArray];
     return [[[[[EGBentleyOttmann intersectionsForSegments:segments] chain] groupBy:^CNPair*(EGIntersection* _) {
         return _.items;
+    } map:^id(EGIntersection* _) {
+        return val(_.point);
     } withBuilder:^NSSetBuilder*() {
         return [NSSetBuilder setBuilder];
     }] map:^EGCollision*(CNTuple* p) {
-        return [EGCollision collisionWithItems:((CNPair*)p.a) points:((NSSet*)p.b)];
+        return [EGCollision collisionWithItems:p.a points:((NSSet*)p.b)];
     }] toSet];
 }
 
