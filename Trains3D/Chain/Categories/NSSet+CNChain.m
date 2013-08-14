@@ -12,7 +12,7 @@
 }
 
 - (BOOL)isEmpty {
-    return self.count != 0;
+    return self.count == 0;
 }
 
 - (CNChain *)chain {
@@ -31,5 +31,4 @@
     }
     return YES;
 }
-
 @end

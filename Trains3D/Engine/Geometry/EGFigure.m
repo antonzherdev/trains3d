@@ -322,6 +322,14 @@
     return [EGLineSegment newWithP1:EGPointMake(x1, y1) p2:EGPointMake(x2, y2)];
 }
 
+- (BOOL)isVertical {
+    return eqf(_p1.x, _p2.x);
+}
+
+- (BOOL)isHorizontal {
+    return eqf(_p1.y, _p2.y);
+}
+
 - (EGLine*)line {
     if(__line == nil) __line = [EGLine newWithP1:_p1 p2:_p2];
     return __line;
@@ -383,6 +391,20 @@
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGLineSegment* o = ((EGLineSegment*)other);
+    return EGPointEq(self.p1, o.p1) && EGPointEq(self.p2, o.p2);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + EGPointHash(self.p1);
+    hash = hash * 31 + EGPointHash(self.p2);
+    return hash;
 }
 
 - (NSString*)description {
@@ -463,10 +485,12 @@
 @implementation EGThickLineSegment{
     EGLineSegment* _segment;
     double _thickness;
+    double _thickness_2;
     NSArray* __segments;
 }
 @synthesize segment = _segment;
 @synthesize thickness = _thickness;
+@synthesize thickness_2 = _thickness_2;
 
 + (id)thickLineSegmentWithSegment:(EGLineSegment*)segment thickness:(double)thickness {
     return [[EGThickLineSegment alloc] initWithSegment:segment thickness:thickness];
@@ -477,30 +501,36 @@
     if(self) {
         _segment = segment;
         _thickness = thickness;
+        _thickness_2 = _thickness / 2;
     }
     
     return self;
 }
 
 - (EGRect)boundingRect {
-    return egRectThicken(_segment.boundingRect, _thickness, _thickness);
+    return egRectThicken(_segment.boundingRect, [_segment isHorizontal] ? 0 : _thickness_2, [_segment isVertical] ? 0 : _thickness_2);
 }
 
 - (NSArray*)segments {
     if(__segments == nil) {
         double dx = 0;
         double dy = 0;
-        if([[_segment line] isVertical]) {
-            dx = _thickness / 2;
+        if([_segment isVertical]) {
+            dx = _thickness_2;
             dy = 0;
         } else {
-            double k = [[_segment line] slope];
-            dx = _thickness / sqrt(1 + k) / 2;
-            dy = k * dx;
+            if([_segment isHorizontal]) {
+                dx = 0;
+                dy = _thickness_2;
+            } else {
+                double k = [[_segment line] slope];
+                dy = _thickness_2 / sqrt(1 + k);
+                dx = k * dy;
+            }
         }
         EGLineSegment* line1 = [_segment moveWithX:-dx y:dy];
         EGLineSegment* line2 = [_segment moveWithX:dx y:-dy];
-        EGLineSegment* line3 = [EGLineSegment lineSegmentWithP1:line1.p1 p2:line2.p1];
+        EGLineSegment* line3 = [EGLineSegment newWithP1:line1.p1 p2:line2.p1];
         __segments = (@[line1, line2, line3, [line3 moveWithPoint:egPointSub(_segment.p2, _segment.p1)]]);
     }
     return __segments;
@@ -508,6 +538,20 @@
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGThickLineSegment* o = ((EGThickLineSegment*)other);
+    return [self.segment isEqual:o.segment] && eqf(self.thickness, o.thickness);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.segment hash];
+    hash = hash * 31 + [[NSNumber numberWithDouble:self.thickness] hash];
+    return hash;
 }
 
 - (NSString*)description {

@@ -37,8 +37,10 @@
 + (id)trainWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(double)speed;
 - (id)initWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(double)speed;
 - (void)startFromCity:(TRCity*)city;
+- (void)setHead:(TRRailPoint*)head;
 - (void)updateWithDelta:(double)delta;
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch;
++ (double)carsDelta;
 @end
 
 

@@ -14,9 +14,9 @@
     double _speed;
     TRRailPoint* _head;
     BOOL _back;
-    double _carsDelta;
     double _length;
 }
+static double _carsDelta;
 @synthesize level = _level;
 @synthesize color = _color;
 @synthesize cars = _cars;
@@ -34,7 +34,6 @@
         _cars = cars;
         _speed = speed;
         _back = NO;
-        _carsDelta = 0.1;
         _length = unumf([_cars fold:^id(id r, TRCar* car) {
             return numf([car length] + unumf(r) + _carsDelta);
         } withStart:numf(-1.0 * _carsDelta)]);
@@ -43,8 +42,18 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _carsDelta = 0.1;
+}
+
 - (void)startFromCity:(TRCity*)city {
     _head = [city startPoint];
+    [self calculateCarPositions];
+}
+
+- (void)setHead:(TRRailPoint*)head {
+    _head = head;
     [self calculateCarPositions];
 }
 
@@ -103,8 +112,28 @@
     }] isDefined];
 }
 
++ (double)carsDelta {
+    return _carsDelta;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRTrain* o = ((TRTrain*)other);
+    return [self.level isEqual:o.level] && self.color == o.color && [self.cars isEqual:o.cars] && eqf(self.speed, o.speed);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.level hash];
+    hash = hash * 31 + [self.color ordinal];
+    hash = hash * 31 + [self.cars hash];
+    hash = hash * 31 + [[NSNumber numberWithDouble:self.speed] hash];
+    return hash;
 }
 
 - (NSString*)description {

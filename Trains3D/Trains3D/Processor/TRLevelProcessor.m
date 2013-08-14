@@ -38,7 +38,7 @@
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRLevelProcessor* o = ((TRLevelProcessor*)other);
-    return self.level == o.level;
+    return [self.level isEqual:o.level];
 }
 
 - (NSUInteger)hash {

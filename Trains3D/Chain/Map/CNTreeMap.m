@@ -451,6 +451,19 @@ static NSInteger _RED;
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    CNTreeMap* o = ((CNTreeMap*)other);
+    return [self.comparator isEqual:o.comparator];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.comparator hash];
+    return hash;
+}
+
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -599,7 +612,7 @@ static NSInteger _RED;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     CNTreeMapKeySet* o = ((CNTreeMapKeySet*)other);
-    return self.map == o.map;
+    return [self.map isEqual:o.map];
 }
 
 - (NSUInteger)hash {
@@ -654,6 +667,19 @@ static NSInteger _RED;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    CNTreeMapKeyIterator* o = ((CNTreeMapKeyIterator*)other);
+    return [self.map isEqual:o.map];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.map hash];
+    return hash;
 }
 
 - (NSString*)description {
@@ -733,7 +759,7 @@ static NSInteger _RED;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     CNTreeMapValues* o = ((CNTreeMapValues*)other);
-    return self.map == o.map;
+    return [self.map isEqual:o.map];
 }
 
 - (NSUInteger)hash {
@@ -790,6 +816,19 @@ static NSInteger _RED;
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    CNTreeMapValuesIterator* o = ((CNTreeMapValuesIterator*)other);
+    return [self.map isEqual:o.map];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.map hash];
+    return hash;
+}
+
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"map=%@", self.map];
@@ -836,6 +875,19 @@ static NSInteger _RED;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    CNTreeMapIterator* o = ((CNTreeMapIterator*)other);
+    return [self.map isEqual:o.map];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.map hash];
+    return hash;
 }
 
 - (NSString*)description {

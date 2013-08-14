@@ -11,11 +11,16 @@ import TRRailroad
 class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : float) {
     private var head : TRRailPoint
     private var back = false
-    private val carsDelta : float = 0.1
+    static val carsDelta : float = 0.1
     private val length : float = cars.fold(((r, car) -> car.length + r + carsDelta), -1.0 * carsDelta)
 
     def startFrom(city : TRCity) {
         head = city.startPoint
+        calculateCarPositions
+    }
+
+    def set(head : TRRailPoint) {
+        self.head = head
         calculateCarPositions
     }
 

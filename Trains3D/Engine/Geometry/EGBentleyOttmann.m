@@ -216,7 +216,7 @@
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGBentleyOttmannPointEvent* o = ((EGBentleyOttmannPointEvent*)other);
-    return self.isStart == o.isStart && [self.data isEqual:o.data] && self.segment == o.segment && EGPointEq(self.point, o.point);
+    return self.isStart == o.isStart && [self.data isEqual:o.data] && [self.segment isEqual:o.segment] && EGPointEq(self.point, o.point);
 }
 
 - (NSUInteger)hash {
@@ -448,8 +448,8 @@
                 EGBentleyOttmannPointEvent* e = ((EGBentleyOttmannPointEvent*)[i next]);
                 if(!([e isVertical])) {
                     double y = [e yForX:_currentEventPoint.x];
-                    if(y >= maxY) break;
-                    if(y > minY) [self registerIntersectionA:pe b:e point:EGPointMake(_currentEventPoint.x, y)];
+                    if(y > maxY) break;
+                    if(y >= minY) [self registerIntersectionA:pe b:e point:EGPointMake(_currentEventPoint.x, y)];
                 }
             }
         } else {
@@ -500,7 +500,7 @@
 }
 
 - (void)registerIntersectionA:(EGBentleyOttmannPointEvent*)a b:(EGBentleyOttmannPointEvent*)b point:(EGPoint)point {
-    if(!([a.segment endingsContainPoint:point]) && !([b.segment endingsContainPoint:point])) {
+    if(!([a.segment endingsContainPoint:point]) || !([b.segment endingsContainPoint:point])) {
         NSMutableSet* existing = ((NSMutableSet*)[_intersections objectForKey:[EGPointClass pointClassWithPoint:point] orUpdateWith:^NSMutableSet*() {
             return [NSMutableSet mutableSet];
         }]);
@@ -518,16 +518,32 @@
     double ay = [a yForX:_currentEventPoint.x];
     double by = [b yForX:_currentEventPoint.x];
     NSInteger c = floatCompare(ay, by);
-    if(c == 0) {
-        c = floatCompare([a slope], [b slope]);
-        if(ay > _currentEventPoint.y) c = -c;
-        if(c == 0) c = floatCompare(a.point.x, b.point.x);
+    if(c == 0) if([a isVertical]) {
+        c = -1;
+    } else {
+        if([b isVertical]) {
+            c = 1;
+        } else {
+            c = floatCompare([a slope], [b slope]);
+            if(ay > _currentEventPoint.y) c = -c;
+            if(c == 0) c = floatCompare(a.point.x, b.point.x);
+        }
     }
     return c;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
 }
 
 - (NSString*)description {

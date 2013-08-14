@@ -26,8 +26,10 @@
 + (id)bentleyOttmannTest;
 - (id)init;
 - (void)testMain;
+- (void)testInPoint;
 - (void)testNoCross;
 - (void)testVertical;
+- (void)testVerticalInPoint;
 - (void)testOneStart;
 - (void)testOneEnd;
 - (void)testSameLines;

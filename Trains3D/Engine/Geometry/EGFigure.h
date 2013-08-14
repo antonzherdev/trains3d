@@ -81,6 +81,8 @@
 - (id)initWithP1:(EGPoint)p1 p2:(EGPoint)p2;
 + (EGLineSegment*)newWithP1:(EGPoint)p1 p2:(EGPoint)p2;
 + (EGLineSegment*)newWithX1:(double)x1 y1:(double)y1 x2:(double)x2 y2:(double)y2;
+- (BOOL)isVertical;
+- (BOOL)isHorizontal;
 - (EGLine*)line;
 - (BOOL)containsPoint:(EGPoint)point;
 - (BOOL)containsInBoundingRectPoint:(EGPoint)point;
@@ -105,6 +107,7 @@
 @interface EGThickLineSegment : NSObject<EGFigure>
 @property (nonatomic, readonly) EGLineSegment* segment;
 @property (nonatomic, readonly) double thickness;
+@property (nonatomic, readonly) double thickness_2;
 
 + (id)thickLineSegmentWithSegment:(EGLineSegment*)segment thickness:(double)thickness;
 - (id)initWithSegment:(EGLineSegment*)segment thickness:(double)thickness;

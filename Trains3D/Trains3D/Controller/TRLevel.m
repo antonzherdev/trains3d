@@ -1,5 +1,6 @@
 #import "TRLevel.h"
 
+#import "CNChain.h"
 #import "EGMapIso.h"
 #import "EGCollisions.h"
 #import "TRCity.h"
@@ -124,6 +125,12 @@
     [_score runTrain:train];
 }
 
+- (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint {
+    [train setHead:fromPoint];
+    __trains = [__trains arrayByAddingObject:train];
+    [_score runTrain:train];
+}
+
 - (void)runSample {
     TRCity* city0 = ((TRCity*)__cities[0]);
     TRCity* city1 = ((TRCity*)__cities[1]);
@@ -136,7 +143,7 @@
     [__trains forEach:^void(TRTrain* _) {
         [_ updateWithDelta:delta];
     }];
-    [self detectCollisions];
+    [self processCollisions];
 }
 
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch {
@@ -160,17 +167,21 @@
     [_score arrivedTrain:train];
 }
 
-- (void)detectCollisions {
+- (void)processCollisions {
+    [[self detectCollisions] forEach:^void(EGCollision* collision) {
+        [collision.items forEach:^void(TRTrain* _) {
+            [self destroyTrain:_];
+        }];
+    }];
+}
+
+- (NSSet*)detectCollisions {
     NSArray* carFigures = [[__trains flatMap:^CNChain*(TRTrain* train) {
         return [train.cars map:^CNTuple*(TRCar* car) {
             return tuple(train, [car figure]);
         }];
     }] toArray];
-    [[EGCollisions collisionsForFigures:carFigures] forEach:^void(EGCollision* collision) {
-        [collision.items forEach:^void(TRTrain* _) {
-            [self destroyTrain:_];
-        }];
-    }];
+    return [EGCollisions collisionsForFigures:carFigures];
 }
 
 - (void)destroyTrain:(TRTrain*)train {
@@ -182,6 +193,19 @@
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRLevel* o = ((TRLevel*)other);
+    return [self.rules isEqual:o.rules];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.rules hash];
+    return hash;
 }
 
 - (NSString*)description {

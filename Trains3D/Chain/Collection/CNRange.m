@@ -139,6 +139,21 @@
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    CNRangeIterator* o = ((CNRangeIterator*)other);
+    return self.start == o.start && self.end == o.end && self.step == o.step;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.start;
+    hash = hash * 31 + self.end;
+    hash = hash * 31 + self.step;
+    return hash;
+}
+
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"start=%li", self.start];

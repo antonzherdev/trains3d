@@ -240,7 +240,7 @@ BOOL egRectIntersects(EGRect self, EGRect rect) {
     return self.x <= egRectX2(rect) && egRectX2(self) >= rect.x && self.y <= egRectY2(rect) && egRectY2(self) >= rect.y;
 }
 EGRect egRectThicken(EGRect self, double x, double y) {
-    return EGRectMake(self.x - x / 2, self.width + x, self.y - y / 2, self.height + y);
+    return EGRectMake(self.x - x, self.width + 2 * x, self.y - y, self.height + 2 * y);
 }
 @implementation EGRectWrap{
     EGRect _value;

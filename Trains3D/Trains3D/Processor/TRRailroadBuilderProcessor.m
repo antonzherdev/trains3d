@@ -37,7 +37,7 @@
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRRailroadBuilderProcessor* o = ((TRRailroadBuilderProcessor*)other);
-    return self.builder == o.builder;
+    return [self.builder isEqual:o.builder];
 }
 
 - (NSUInteger)hash {
@@ -207,6 +207,19 @@
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRailroadBuilderMouseProcessor* o = ((TRRailroadBuilderMouseProcessor*)other);
+    return [self.builder isEqual:o.builder];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.builder hash];
+    return hash;
 }
 
 - (NSString*)description {

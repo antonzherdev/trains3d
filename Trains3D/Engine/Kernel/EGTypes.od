@@ -50,7 +50,7 @@ struct EGRect(x : float, width : float, y : float, height : float) {
         x <= rect.x2 && x2 >= rect.x &&
         y <= rect.y2 && y2 >= rect.y
 
-    def thicken(x : float, y : float) = EGRect(self.x - x/2, width + x, self.y - y/2, height + y)
+    def thicken(x : float, y : float) = EGRect(self.x - x, width + 2*x, self.y - y, height + 2*y)
 
 }
 struct EGRectI(x : int, width : int, y : int, height : int) {

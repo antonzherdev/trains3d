@@ -239,6 +239,22 @@ static TRRailroadConnectorContent* _instance;
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRSwitch* o = ((TRSwitch*)other);
+    return EGPointIEq(self.tile, o.tile) && self.connector == o.connector && [self.rail1 isEqual:o.rail1] && [self.rail2 isEqual:o.rail2];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + EGPointIHash(self.tile);
+    hash = hash * 31 + [self.connector ordinal];
+    hash = hash * 31 + [self.rail1 hash];
+    hash = hash * 31 + [self.rail2 hash];
+    return hash;
+}
+
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"tile=%@", EGPointIDescription(self.tile)];
@@ -301,6 +317,21 @@ static TRRailroadConnectorContent* _instance;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRLight* o = ((TRLight*)other);
+    return EGPointIEq(self.tile, o.tile) && self.connector == o.connector && [self.rail isEqual:o.rail];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + EGPointIHash(self.tile);
+    hash = hash * 31 + [self.connector ordinal];
+    hash = hash * 31 + [self.rail hash];
+    return hash;
 }
 
 - (NSString*)description {
@@ -470,6 +501,20 @@ static TRRailroadConnectorContent* _instance;
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRailroad* o = ((TRRailroad*)other);
+    return [self.map isEqual:o.map] && [self.score isEqual:o.score];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.map hash];
+    hash = hash * 31 + [self.score hash];
+    return hash;
+}
+
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"map=%@", self.map];
@@ -527,6 +572,19 @@ static TRRailroadConnectorContent* _instance;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRailroadBuilder* o = ((TRRailroadBuilder*)other);
+    return [self.railroad isEqual:o.railroad];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.railroad hash];
+    return hash;
 }
 
 - (NSString*)description {

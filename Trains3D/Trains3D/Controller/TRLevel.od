@@ -1,3 +1,6 @@
+import CNChain
+import CNSet
+
 import EGTypes
 import EGMapIso
 import EGCollisions
@@ -48,6 +51,12 @@ class TRLevel(rules : TRLevelRules) extends EGController {
         score.run(train)
     }
 
+    def testRun(train : TRTrain, fromPoint : TRRailPoint) {
+        train.set(head = fromPoint)
+        _trains += train
+        score.run(train)
+    }
+
     def runSample {
         val city0 = _cities[0]
         val city1 = _cities[1]
@@ -58,7 +67,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
     def updateWith(delta : float) {
         score.updateWith(delta)
         _trains.for(_.updateWith(delta))
-        detectCollisions
+        processCollisions
     }
 
     def tryTurn(theSwitch : TRSwitch) {
@@ -76,11 +85,15 @@ class TRLevel(rules : TRLevelRules) extends EGController {
         score.arrived(train)
     }
 
-    private def detectCollisions {
-        val carFigures = _trains.flatMap(train -> train.cars.map(car -> (train, car.figure))).toArray
-        EGCollisions.collisionsFor(carFigures).for(collision ->
+    private def processCollisions {
+        detectCollisions.for(collision ->
             collision.items.for(destroy(_))
         )
+    }
+
+    def detectCollisions : NSSet<EGCollision<TRTrain>> = {
+        val carFigures = _trains.flatMap(train -> train.cars.map(car -> (train, car.figure))).toArray
+        EGCollisions.collisionsFor(carFigures)
     }
 
     def destroy(train : TRTrain) {

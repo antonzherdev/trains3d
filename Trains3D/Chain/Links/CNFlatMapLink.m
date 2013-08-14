@@ -35,10 +35,13 @@
             } end:nil all:nil]];
             return ret;
         } else {
-            for(id x in o) {
-                if([yield yieldItem:x] == cnYieldBreak) return cnYieldBreak;
-            }
-            return cnYieldContinue;
+            __block CNYieldResult result = cnYieldContinue;
+            [o goOn:^BOOL(id x) {
+                result = [yield yieldItem:x];
+                if(result == cnYieldBreak) return NO;
+                return YES;
+            }];
+            return result;
         }
 
     } end:nil all:nil];

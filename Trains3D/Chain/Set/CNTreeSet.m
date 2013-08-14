@@ -123,7 +123,7 @@ static NSObject* _obj;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     CNTreeSet* o = ((CNTreeSet*)other);
-    return self.map == o.map;
+    return [self.map isEqual:o.map];
 }
 
 - (NSUInteger)hash {

@@ -1,4 +1,6 @@
 #import "objd.h"
+@class CNChain;
+#import "CNSet.h"
 #import "EGTypes.h"
 @class EGMapSso;
 @class EGCollisions;
@@ -46,11 +48,13 @@
 - (NSArray*)cities;
 - (NSArray*)trains;
 - (void)createNewCity;
+- (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint;
 - (void)runSample;
 - (void)updateWithDelta:(double)delta;
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch;
 - (id)cityForTile:(EGPointI)tile;
 - (void)arrivedTrain:(TRTrain*)train;
+- (NSSet*)detectCollisions;
 - (void)destroyTrain:(TRTrain*)train;
 @end
 
