@@ -4,7 +4,6 @@ import CNCollection
 import "NSMutableSet+CNChain.h"
 
 trait CNSet<T> extends CNIterable<T> {
-    def contains(object : T) : bool
 }
 
 class NSSetBuilder<T> extends CNBuilder<T, NSSet<T>> {

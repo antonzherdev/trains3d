@@ -83,7 +83,7 @@ class EGVerticalLine(x : float) extends EGLine {
 }
 
 trait EGFigure {
-    def boxingRect : EGRect
+    def boundingRect : EGRect
     def segments : [EGLineSegment]
 }
 
@@ -129,7 +129,7 @@ class EGLineSegment(p1 : EGPoint, p2 : EGPoint) extends EGFigure {
 }
 
 class EGPolygon(points : [EGPoint]) extends EGFigure {
-    def boxingRect : EGRect = {
+    def boundingRect : EGRect = {
         var minX = DBL_MAX
         var maxX = DBL_MIN
         var minY = DBL_MAX
@@ -147,7 +147,7 @@ class EGPolygon(points : [EGPoint]) extends EGFigure {
 }
 
 class EGThickLineSegment(segment : EGLineSegment, thickness : float) extends EGFigure {
-    def boxingRect : EGRect = segment.boxingRect.thicken(x = thickness, y = thickness)
+    def boundingRect : EGRect = segment.boundingRect.thicken(x = thickness, y = thickness)
     private var _segments : [EGLineSegment]
 
     def segments : [EGLineSegment] = {

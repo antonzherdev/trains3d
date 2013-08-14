@@ -1,6 +1,7 @@
 #import "TRTrain.h"
 
 #import "EGMapIso.h"
+#import "EGFigure.h"
 #import "TRTypes.h"
 #import "TRCity.h"
 #import "TRLevel.h"
@@ -140,6 +141,14 @@
 
 - (double)length {
     return 0.6;
+}
+
+- (double)width {
+    return 0.2;
+}
+
+- (EGThickLineSegment*)figure {
+    return [EGThickLineSegment thickLineSegmentWithSegment:[EGLineSegment newWithP1:_head.point p2:_tail.point] thickness:[self width]];
 }
 
 - (id)copyWithZone:(NSZone*)zone {

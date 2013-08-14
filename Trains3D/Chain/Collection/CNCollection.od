@@ -43,6 +43,12 @@ trait CNIterable<T> extends CNTraversable<T> {
         while(i.hasNext) if(!on(i.next)) return false
         true
     }
+
+    def contains(object : T) : bool = {
+        val i = iterator
+        while(i.hasNext) if(i.next == i) return true
+        false
+    }
 }
 
 trait CNBuilder<T, C extends CNTraversable<T>> {

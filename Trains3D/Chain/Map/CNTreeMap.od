@@ -358,7 +358,7 @@ class CNTreeMapKeySet<K>(map : CNTreeMap<K, _>) extends CNIterable<K> {
     def count : uint = map.count
 
     def iterator : CNIterator<K> = CNTreeMapKeyIterator<K>.new(map, map.firstEntry)
-    def iteratorHigherThan(key : K) : CNIterator<K> = CNTreeMapKeyIterator<K>.new(map, map.higherEntryThan(key))
+    def iteratorHigherThan(key : K) : CNIterator<K> = CNTreeMapKeyIterator<K>.new(map, map.higherEntryThan(key).getOr(nil))
 }
 
 class CNTreeMapKeyIterator<K>(map : CNTreeMap<K, _>) extends CNIterator<K> {

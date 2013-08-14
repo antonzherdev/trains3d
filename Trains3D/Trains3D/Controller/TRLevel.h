@@ -1,6 +1,8 @@
 #import "objd.h"
 #import "EGTypes.h"
 @class EGMapSso;
+@class EGCollisions;
+@class EGCollision;
 @class TRCityAngle;
 @class TRCity;
 @class TRColor;
@@ -49,6 +51,7 @@
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch;
 - (id)cityForTile:(EGPointI)tile;
 - (void)arrivedTrain:(TRTrain*)train;
+- (void)destroyTrain:(TRTrain*)train;
 @end
 
 

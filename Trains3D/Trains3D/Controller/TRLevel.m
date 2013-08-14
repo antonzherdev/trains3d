@@ -1,6 +1,7 @@
 #import "TRLevel.h"
 
 #import "EGMapIso.h"
+#import "EGCollisions.h"
 #import "TRCity.h"
 #import "TRTypes.h"
 #import "TRRailroad.h"
@@ -160,6 +161,23 @@
 }
 
 - (void)detectCollisions {
+    NSArray* carFigures = [[__trains flatMap:^CNChain*(TRTrain* train) {
+        return [train.cars map:^CNTuple*(TRCar* car) {
+            return tuple(train, [car figure]);
+        }];
+    }] toArray];
+    [[EGCollisions collisionsForFigures:carFigures] forEach:^void(EGCollision* collision) {
+        [collision.items forEach:^void(TRTrain* _) {
+            [self destroyTrain:_];
+        }];
+    }];
+}
+
+- (void)destroyTrain:(TRTrain*)train {
+    if([__trains containsObject:train]) {
+        __trains = [__trains arrayByRemovingObject:train];
+        [_score destroyedTrain:train];
+    }
 }
 
 - (id)copyWithZone:(NSZone*)zone {

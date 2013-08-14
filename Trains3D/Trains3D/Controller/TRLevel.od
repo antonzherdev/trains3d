@@ -1,5 +1,6 @@
 import EGTypes
 import EGMapIso
+import EGCollisions
 
 import TRCity
 import TRTypes
@@ -76,6 +77,16 @@ class TRLevel(rules : TRLevelRules) extends EGController {
     }
 
     private def detectCollisions {
+        val carFigures = _trains.flatMap(train -> train.cars.map(car -> (train, car.figure))).toArray
+        EGCollisions.collisionsFor(carFigures).for(collision ->
+            collision.items.for(destroy(_))
+        )
+    }
 
+    def destroy(train : TRTrain) {
+        if(_trains.contains(train)) {
+            _trains -= train
+            score.destroyed(train)
+        }
     }
 }

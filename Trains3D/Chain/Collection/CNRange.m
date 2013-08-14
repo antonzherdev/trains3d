@@ -60,6 +60,14 @@
     return YES;
 }
 
+- (BOOL)containsObject:(id)object {
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        if([[i next] isEqual:i]) return YES;
+    }
+    return NO;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }

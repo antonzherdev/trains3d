@@ -24,6 +24,7 @@
 - (CNChain*)chain;
 - (void)forEach:(void(^)(id))each;
 - (BOOL)goOn:(BOOL(^)(id))on;
+- (BOOL)containsObject:(id)object;
 @end
 
 

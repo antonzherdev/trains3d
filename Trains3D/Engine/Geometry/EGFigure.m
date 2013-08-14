@@ -419,7 +419,7 @@
     return self;
 }
 
-- (EGRect)boxingRect {
+- (EGRect)boundingRect {
     __block double minX = DBL_MAX;
     __block double maxX = DBL_MIN;
     __block double minY = DBL_MAX;
@@ -482,8 +482,8 @@
     return self;
 }
 
-- (EGRect)boxingRect {
-    return egRectThicken([_segment boxingRect], _thickness, _thickness);
+- (EGRect)boundingRect {
+    return egRectThicken(_segment.boundingRect, _thickness, _thickness);
 }
 
 - (NSArray*)segments {

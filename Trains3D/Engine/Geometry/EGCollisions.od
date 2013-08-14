@@ -5,10 +5,10 @@ import CNPair
 import CNSet
 
 class EGCollisions {
-    static def collisionsFor<T>(figures : [(T, EGFigure)]) : NSSet<EGCollision> = {
+    static def collisionsFor<T>(figures : [(T, EGFigure)]) : NSSet<EGCollision<T>> = {
         val segments = figures.chain
             .combinations
-            .filter(p -> p.a.b.boxingRect.intersects(p.b.b.boxingRect))
+            .filter(p -> p.a.a != p.b.a && p.a.b.boundingRect.intersects(p.b.b.boundingRect))
             .uncombinations
             .flatMap(f -> f.b.segments.map(segment -> (f.a, segment)))
             .toArray

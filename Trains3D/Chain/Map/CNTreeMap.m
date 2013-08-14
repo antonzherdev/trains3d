@@ -431,6 +431,14 @@ static NSInteger _RED;
     return YES;
 }
 
+- (BOOL)containsObject:(id)object {
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        if([[i next] isEqual:i]) return YES;
+    }
+    return NO;
+}
+
 + (NSInteger)BLACK {
     return _BLACK;
 }
@@ -545,7 +553,7 @@ static NSInteger _RED;
 }
 
 - (id<CNIterator>)iteratorHigherThanKey:(id)key {
-    return [CNTreeMapKeyIterator newMap:_map entry:[_map higherEntryThanKey:key]];
+    return [CNTreeMapKeyIterator newMap:_map entry:((CNTreeMapEntry*)[[_map higherEntryThanKey:key] getOr:nil])];
 }
 
 - (id)head {
@@ -573,6 +581,14 @@ static NSInteger _RED;
         if(!(on([i next]))) return NO;
     }
     return YES;
+}
+
+- (BOOL)containsObject:(id)object {
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        if([[i next] isEqual:i]) return YES;
+    }
+    return NO;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -699,6 +715,14 @@ static NSInteger _RED;
         if(!(on([i next]))) return NO;
     }
     return YES;
+}
+
+- (BOOL)containsObject:(id)object {
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        if([[i next] isEqual:i]) return YES;
+    }
+    return NO;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

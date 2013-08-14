@@ -17,7 +17,7 @@
 
 + (NSSet*)collisionsForFigures:(NSArray*)figures {
     NSArray* segments = [[[[[[figures chain] combinations] filter:^BOOL(CNTuple* p) {
-        return egRectIntersects([((CNTuple*)p.a).b boxingRect], [((CNTuple*)p.b).b boxingRect]);
+        return !([((CNTuple*)p.a).a isEqual:((CNTuple*)p.b).a]) && egRectIntersects([((CNTuple*)p.a).b boundingRect], [((CNTuple*)p.b).b boundingRect]);
     }] uncombinations] flatMap:^CNChain*(CNTuple* f) {
         return [[f.b segments] map:^CNTuple*(EGLineSegment* segment) {
             return tuple(f.a, segment);

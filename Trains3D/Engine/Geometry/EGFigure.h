@@ -67,7 +67,7 @@
 
 
 @protocol EGFigure<NSObject>
-- (EGRect)boxingRect;
+- (EGRect)boundingRect;
 - (NSArray*)segments;
 @end
 
@@ -98,7 +98,7 @@
 
 + (id)polygonWithPoints:(NSArray*)points;
 - (id)initWithPoints:(NSArray*)points;
-- (EGRect)boxingRect;
+- (EGRect)boundingRect;
 @end
 
 
@@ -108,7 +108,7 @@
 
 + (id)thickLineSegmentWithSegment:(EGLineSegment*)segment thickness:(double)thickness;
 - (id)initWithSegment:(EGLineSegment*)segment thickness:(double)thickness;
-- (EGRect)boxingRect;
+- (EGRect)boundingRect;
 - (NSArray*)segments;
 @end
 

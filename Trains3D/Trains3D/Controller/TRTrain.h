@@ -1,6 +1,13 @@
 #import "objd.h"
 #import "EGTypes.h"
 @class EGMapSso;
+@class EGLine;
+@class EGSlopeLine;
+@class EGVerticalLine;
+@protocol EGFigure;
+@class EGLineSegment;
+@class EGPolygon;
+@class EGThickLineSegment;
 @class TRColor;
 @class TRCityAngle;
 @class TRCity;
@@ -43,6 +50,8 @@
 + (id)car;
 - (id)init;
 - (double)length;
+- (double)width;
+- (EGThickLineSegment*)figure;
 @end
 
 

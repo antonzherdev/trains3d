@@ -5,7 +5,6 @@
 @class NSSetBuilder;
 
 @protocol CNSet<CNIterable>
-- (BOOL)containsObject:(id)object;
 @end
 
 
