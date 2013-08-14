@@ -15,7 +15,7 @@ class TRCollisionsTest extends CNTestCase {
     static val carLen = 0.6
     static val carWidth = 0.2
     static val carsDelta = 0.1
-    def newLevel = TRLevel(TRLevelRules(EGSizeI(5, 3), TRLevelFactory.scoreRules))
+    def newLevel = TRLevel(TRLevelRules(EGSizeI(5, 3), TRLevelFactory.scoreRules, []))
 
 
     def check(level : TRLevel) : NSSet<TRTrain> = level.detectCollisions.chain.flatMap(_.items).toSet

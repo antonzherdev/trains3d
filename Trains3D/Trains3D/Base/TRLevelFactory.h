@@ -3,6 +3,7 @@
 @class EGScene;
 @class EGLayer;
 @class EGMapSso;
+@class EGSchedule;
 @class TRTrain;
 @class TRCar;
 @class TRLevelRules;

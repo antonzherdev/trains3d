@@ -3,6 +3,7 @@
 #import "EGScene.h"
 #import "EGLayer.h"
 #import "EGMapIso.h"
+#import "EGSchedule.h"
 #import "TRTrain.h"
 #import "TRLevel.h"
 #import "TRLevelView.h"
@@ -33,7 +34,7 @@ static NSArray* _rules;
     } delayPeriod:10 delayFine:^NSInteger(TRTrain* train, NSInteger i) {
         return i * 1000;
     } repairCost:2000];
-    _rules = (@[[TRLevelRules levelRulesWithMapSize:EGSizeIMake(5, 3) scoreRules:_scoreRules]]);
+    _rules = (@[[TRLevelRules levelRulesWithMapSize:EGSizeIMake(5, 3) scoreRules:_scoreRules events:(@[])]]);
 }
 
 + (EGScene*)sceneForLevel:(TRLevel*)level {
@@ -45,7 +46,7 @@ static NSArray* _rules;
 }
 
 + (TRLevel*)levelWithMapSize:(EGSizeI)mapSize {
-    return [TRLevel levelWithRules:[TRLevelRules levelRulesWithMapSize:mapSize scoreRules:_scoreRules]];
+    return [TRLevel levelWithRules:[TRLevelRules levelRulesWithMapSize:mapSize scoreRules:_scoreRules events:(@[])]];
 }
 
 + (EGScene*)sceneForLevelWithNumber:(NSUInteger)number {

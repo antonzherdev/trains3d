@@ -5,6 +5,7 @@
 @class EGMapSso;
 @class EGCollisions;
 @class EGCollision;
+@class EGSchedule;
 @class TRCityAngle;
 @class TRCity;
 @class TRColor;
@@ -31,9 +32,10 @@
 @interface TRLevelRules : NSObject
 @property (nonatomic, readonly) EGSizeI mapSize;
 @property (nonatomic, readonly) TRScoreRules* scoreRules;
+@property (nonatomic, readonly) NSArray* events;
 
-+ (id)levelRulesWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules;
-- (id)initWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules;
++ (id)levelRulesWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules events:(NSArray*)events;
+- (id)initWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules events:(NSArray*)events;
 @end
 
 
@@ -42,12 +44,12 @@
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRScore* score;
 @property (nonatomic, readonly) TRRailroad* railroad;
+@property (nonatomic, readonly) EGSchedule* schedule;
 
 + (id)levelWithRules:(TRLevelRules*)rules;
 - (id)initWithRules:(TRLevelRules*)rules;
 - (NSArray*)cities;
 - (NSArray*)trains;
-- (void)createNewCity;
 - (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint;
 - (void)runSample;
 - (void)updateWithDelta:(double)delta;

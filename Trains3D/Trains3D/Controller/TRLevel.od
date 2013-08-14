@@ -4,6 +4,7 @@ import CNSet
 import EGTypes
 import EGMapIso
 import EGCollisions
+import EGSchedule
 
 import TRCity
 import TRTypes
@@ -12,22 +13,34 @@ import TRRailPoint
 import TRTrain
 import TRScore
 
-class TRLevelRules(mapSize : EGSizeI, scoreRules : TRScoreRules)
+class TRLevelRules(mapSize : EGSizeI, scoreRules : TRScoreRules, events : [(float, (TRLevel) -> void)])
 
 class TRLevel(rules : TRLevelRules) extends EGController {
     val map : EGMapSso = EGMapSso(rules.mapSize)
     val score : TRScore = TRScore(rules.scoreRules)
     val railroad : TRRailroad = TRRailroad(map, score)
-    private var _cities : [TRCity] = appendNextCityTo(appendNextCityTo([]))
-    def cities = _cities
+    private var _cities : [var TRCity] = []
+    val schedule : EGSchedule = createSchedule
+    def cities : [TRCity] = _cities
     private var _trains : [TRTrain] = []
     def trains = _trains
 
-    private def appendNextCityTo(cities : [TRCity]) =  {
+    private def createSchedule : EGSchedule = {
+        val schedule = EGSchedule.new
+        createNewCity
+        createNewCity
+        rules.events.for(t -> {
+            val f = t.b
+            schedule.schedule(event = f(self), after = t.a )
+        })
+        schedule
+    }
+
+    private def createNewCity {
         val tile = map.partialTiles.exclude(cities.map(_.tile)).randomItem.get
         val city = TRCity(TRColor[cities.count], tile, randomCityDirectionFor(tile))
         railroad.tryAdd(TRRail(tile, city.angle.form))
-        cities + city
+        _cities.add(city)
     }
 
     private def randomCityDirectionFor(tile : EGPointI) = {
@@ -39,10 +52,6 @@ class TRLevel(rules : TRLevelRules) extends EGController {
             || (angle == 180 && cut.x == 0 && cut.y == 0)
             || (angle == 270 && cut.x2 == 0 && cut.y == 0)}
         }).randomItem.get
-    }
-
-    def createNewCity {
-        _cities = appendNextCityTo(_cities)
     }
 
     private def run(train : TRTrain, fromCity : TRCity) {
@@ -68,6 +77,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
         score.updateWith(delta)
         _trains.for(_.updateWith(delta))
         processCollisions
+        schedule.updateWith(delta)
     }
 
     def tryTurn(theSwitch : TRSwitch) {

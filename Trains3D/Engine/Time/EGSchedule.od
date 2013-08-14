@@ -1,0 +1,21 @@
+import CNTreeMap
+import EGTypes
+
+class EGSchedule extends EGController {
+    private var _map = CNTreeMap.new<float, () -> void>
+    private var _current = 0.0
+    private var _next = -1.0
+
+    def schedule(event : () -> void, after : float) {
+        _map.set(event, after)
+        _next = _map.firstKey.get
+    }
+
+    def updateWith(delta : float) {
+        _current += delta
+        while(_next > 0 && _current > _next) {
+            _map.pollFirst.get.b()
+            _next = _map.firstKey.getOr(-1.0)
+        }
+    }
+}

@@ -3,6 +3,7 @@
 #import "CNChain.h"
 #import "EGMapIso.h"
 #import "EGCollisions.h"
+#import "EGSchedule.h"
 #import "TRCity.h"
 #import "TRTypes.h"
 #import "TRRailroad.h"
@@ -12,19 +13,22 @@
 @implementation TRLevelRules{
     EGSizeI _mapSize;
     TRScoreRules* _scoreRules;
+    NSArray* _events;
 }
 @synthesize mapSize = _mapSize;
 @synthesize scoreRules = _scoreRules;
+@synthesize events = _events;
 
-+ (id)levelRulesWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules {
-    return [[TRLevelRules alloc] initWithMapSize:mapSize scoreRules:scoreRules];
++ (id)levelRulesWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules events:(NSArray*)events {
+    return [[TRLevelRules alloc] initWithMapSize:mapSize scoreRules:scoreRules events:events];
 }
 
-- (id)initWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules {
+- (id)initWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules events:(NSArray*)events {
     self = [super init];
     if(self) {
         _mapSize = mapSize;
         _scoreRules = scoreRules;
+        _events = events;
     }
     
     return self;
@@ -38,13 +42,14 @@
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRLevelRules* o = ((TRLevelRules*)other);
-    return EGSizeIEq(self.mapSize, o.mapSize) && [self.scoreRules isEqual:o.scoreRules];
+    return EGSizeIEq(self.mapSize, o.mapSize) && [self.scoreRules isEqual:o.scoreRules] && [self.events isEqual:o.events];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + EGSizeIHash(self.mapSize);
     hash = hash * 31 + [self.scoreRules hash];
+    hash = hash * 31 + [self.events hash];
     return hash;
 }
 
@@ -52,6 +57,7 @@
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"mapSize=%@", EGSizeIDescription(self.mapSize)];
     [description appendFormat:@", scoreRules=%@", self.scoreRules];
+    [description appendFormat:@", events=%@", self.events];
     [description appendString:@">"];
     return description;
 }
@@ -64,13 +70,15 @@
     EGMapSso* _map;
     TRScore* _score;
     TRRailroad* _railroad;
-    NSArray* __cities;
+    NSMutableArray* __cities;
+    EGSchedule* _schedule;
     NSArray* __trains;
 }
 @synthesize rules = _rules;
 @synthesize map = _map;
 @synthesize score = _score;
 @synthesize railroad = _railroad;
+@synthesize schedule = _schedule;
 
 + (id)levelWithRules:(TRLevelRules*)rules {
     return [[TRLevel alloc] initWithRules:rules];
@@ -83,7 +91,8 @@
         _map = [EGMapSso mapSsoWithSize:_rules.mapSize];
         _score = [TRScore scoreWithRules:_rules.scoreRules];
         _railroad = [TRRailroad railroadWithMap:_map score:_score];
-        __cities = [self appendNextCityToCities:[self appendNextCityToCities:(@[])]];
+        __cities = [(@[]) mutableCopy];
+        _schedule = [self createSchedule];
         __trains = (@[]);
     }
     
@@ -98,13 +107,26 @@
     return __trains;
 }
 
-- (NSArray*)appendNextCityToCities:(NSArray*)cities {
-    EGPointI tile = uwrap(EGPointI, [[[_map.partialTiles exclude:[cities map:^id(TRCity* _) {
+- (EGSchedule*)createSchedule {
+    EGSchedule* schedule = [EGSchedule schedule];
+    [self createNewCity];
+    [self createNewCity];
+    [_rules.events forEach:^void(CNTuple* t) {
+        void(^f)(TRLevel*) = t.b;
+        [schedule scheduleEvent:^void() {
+            f(self);
+        } after:unumf(t.a)];
+    }];
+    return schedule;
+}
+
+- (void)createNewCity {
+    EGPointI tile = uwrap(EGPointI, [[[_map.partialTiles exclude:[[self cities] map:^id(TRCity* _) {
         return wrap(EGPointI, _.tile);
     }]] randomItem] get]);
-    TRCity* city = [TRCity cityWithColor:[TRColor values][[cities count]] tile:tile angle:[self randomCityDirectionForTile:tile]];
+    TRCity* city = [TRCity cityWithColor:[TRColor values][[[self cities] count]] tile:tile angle:[self randomCityDirectionForTile:tile]];
     [_railroad tryAddRail:[TRRail railWithTile:tile form:city.angle.form]];
-    return [cities arrayByAddingObject:city];
+    [__cities addObject:city];
 }
 
 - (TRCityAngle*)randomCityDirectionForTile:(EGPointI)tile {
@@ -113,10 +135,6 @@
         NSInteger angle = a.angle;
         return (angle == 0 && egRectIX2(cut) == 0 && egRectIY2(cut) == 0) || (angle == 90 && cut.x == 0 && egRectIY2(cut) == 0) || (angle == 180 && cut.x == 0 && cut.y == 0) || (angle == 270 && egRectIX2(cut) == 0 && cut.y == 0);
     }] randomItem] get];
-}
-
-- (void)createNewCity {
-    __cities = [self appendNextCityToCities:__cities];
 }
 
 - (void)runTrain:(TRTrain*)train fromCity:(TRCity*)fromCity {
@@ -144,6 +162,7 @@
         [_ updateWithDelta:delta];
     }];
     [self processCollisions];
+    [_schedule updateWithDelta:delta];
 }
 
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch {

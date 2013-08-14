@@ -30,7 +30,7 @@ static double _carsDelta;
 }
 
 - (TRLevel*)newLevel {
-    return [TRLevel levelWithRules:[TRLevelRules levelRulesWithMapSize:EGSizeIMake(5, 3) scoreRules:TRLevelFactory.scoreRules]];
+    return [TRLevel levelWithRules:[TRLevelRules levelRulesWithMapSize:EGSizeIMake(5, 3) scoreRules:TRLevelFactory.scoreRules events:(@[])]];
 }
 
 - (NSSet*)checkLevel:(TRLevel*)level {

@@ -2,6 +2,7 @@ import EGTypes
 import EGScene
 import EGLayer
 import EGMapIso
+import EGSchedule
 
 import TRTrain
 import TRLevel
@@ -27,10 +28,10 @@ class TRLevelFactory {
         repairCost = 2000
         )
     private static val rules = [
-        TRLevelRules(EGSizeI(5, 3), scoreRules)
+        TRLevelRules(EGSizeI(5, 3), scoreRules, [])
     ]
     static def levelWith(number : uint) = TRLevel(rules[number - 1])
-    static def levelWith(mapSize : EGSizeI) = TRLevel(TRLevelRules(mapSize, scoreRules))
+    static def levelWith(mapSize : EGSizeI) = TRLevel(TRLevelRules(mapSize, scoreRules, []))
     static def sceneForLevelWith(number : uint) = sceneFor(levelWith(number))
     static def score = TRScore(scoreRules)
     static def railroadWith(mapSize : EGSizeI) = TRRailroad(EGMapSso(mapSize), score)
