@@ -17,10 +17,7 @@
 #import "EGTypes.h"
 @class CNPair;
 @class CNPairIterator;
-@protocol CNSet;
-@class NSSetBuilder;
-@class NSSet;
-@class NSMutableSet;
+#import "CNSet.h"
 
 @class EGCollisions;
 @class EGCollision;

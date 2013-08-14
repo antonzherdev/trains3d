@@ -34,11 +34,11 @@
 }
 
 - (id)head {
-    return [[self iterator] next];
+    return [CNOption opt:[[self iterator] next]];
 }
 
 - (BOOL)isEmpty {
-    return [[[self iterator] next] isEmpty];
+    return [[self iterator] hasNext];
 }
 
 - (CNChain*)chain {
@@ -47,21 +47,17 @@
 
 - (void)forEach:(void(^)(id))each {
     id<CNIterator> i = [self iterator];
-    while(YES) {
-        id object = [i next];
-        if([object isEmpty]) break;
-        each(object);
+    while([i hasNext]) {
+        each([i next]);
     }
 }
 
 - (BOOL)goOn:(BOOL(^)(id))on {
     id<CNIterator> i = [self iterator];
-    while(YES) {
-        id object = [i next];
-        if([object isEmpty]) return YES;
-        if(!(on(object))) return NO;
+    while([i hasNext]) {
+        if(!(on([i next]))) return NO;
     }
-    return NO;
+    return YES;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -121,14 +117,14 @@
     return self;
 }
 
+- (BOOL)hasNext {
+    return (_step > 0 && _i <= _end) || (_step < 0 && _i >= _end);
+}
+
 - (id)next {
-    if((_step > 0 && _i > _end) || (_step < 0 && _i < _end)) {
-        return [CNOption none];
-    } else {
-        NSInteger ret = _i;
-        _i += _step;
-        return [CNOption opt:numi(ret)];
-    }
+    NSInteger ret = _i;
+    _i += _step;
+    return numi(ret);
 }
 
 - (id)copyWithZone:(NSZone*)zone {

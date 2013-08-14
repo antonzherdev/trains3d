@@ -1,5 +1,4 @@
 #import "CNSet.h"
-#import "NSMutableSet+CNChain.h"
 
 @implementation NSSetBuilder{
     NSMutableSet* _set;

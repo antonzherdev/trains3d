@@ -18,10 +18,7 @@
 @class EGPolygon;
 @class EGThickLineSegment;
 #import "EGTypes.h"
-@protocol CNSet;
-@class NSSetBuilder;
-@class NSSet;
-@class NSMutableSet;
+#import "CNSet.h"
 
 @class EGBentleyOttmannTest;
 

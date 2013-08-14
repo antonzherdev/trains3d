@@ -5,10 +5,14 @@
     NSInteger(^_comparator)(id, id);
     CNTreeMapEntry* _root;
     NSUInteger __size;
+    CNTreeMapKeySet* _keys;
+    CNTreeMapValues* _values;
 }
 static NSInteger _BLACK;
 static NSInteger _RED;
 @synthesize comparator = _comparator;
+@synthesize keys = _keys;
+@synthesize values = _values;
 
 + (id)treeMapWithComparator:(NSInteger(^)(id, id))comparator {
     return [[CNTreeMap alloc] initWithComparator:comparator];
@@ -20,6 +24,8 @@ static NSInteger _RED;
         _comparator = comparator;
         _root = nil;
         __size = 0;
+        _keys = [CNTreeMapKeySet treeMapKeySetWithMap:self];
+        _values = [CNTreeMapValues treeMapValuesWithMap:self];
     }
     
     return self;
@@ -54,16 +60,12 @@ static NSInteger _RED;
     _root = nil;
 }
 
-- (id<CNIterable>)keys {
-    return [CNTreeMapKeySet treeMapKeySetWithMap:self];
-}
-
-- (id<CNIterable>)values {
-    return [CNTreeMapValues treeMapValuesWithMap:self];
-}
-
 - (id<CNIterator>)iterator {
     return [CNTreeMapIterator newMap:self entry:[self firstEntry]];
+}
+
+- (CNTreeMapIterator*)iteratorHigherThanKey:(id)key {
+    return [CNTreeMapIterator newMap:self entry:((CNTreeMapEntry*)[[self higherEntryThanKey:key] getOr:nil])];
 }
 
 - (CNTreeMapEntry*)entryForKey:(id)key {
@@ -407,7 +409,7 @@ static NSInteger _RED;
 }
 
 - (id)head {
-    return [[self iterator] next];
+    return [CNOption opt:[[self iterator] next]];
 }
 
 - (CNChain*)chain {
@@ -416,21 +418,17 @@ static NSInteger _RED;
 
 - (void)forEach:(void(^)(id))each {
     id<CNIterator> i = [self iterator];
-    while(YES) {
-        id object = [i next];
-        if([object isEmpty]) break;
-        each(object);
+    while([i hasNext]) {
+        each([i next]);
     }
 }
 
 - (BOOL)goOn:(BOOL(^)(id))on {
     id<CNIterator> i = [self iterator];
-    while(YES) {
-        id object = [i next];
-        if([object isEmpty]) return YES;
-        if(!(on(object))) return NO;
+    while([i hasNext]) {
+        if(!(on([i next]))) return NO;
     }
-    return NO;
+    return YES;
 }
 
 + (NSInteger)BLACK {
@@ -546,12 +544,16 @@ static NSInteger _RED;
     return [CNTreeMapKeyIterator newMap:_map entry:[_map firstEntry]];
 }
 
+- (id<CNIterator>)iteratorHigherThanKey:(id)key {
+    return [CNTreeMapKeyIterator newMap:_map entry:[_map higherEntryThanKey:key]];
+}
+
 - (id)head {
-    return [[self iterator] next];
+    return [CNOption opt:[[self iterator] next]];
 }
 
 - (BOOL)isEmpty {
-    return [[[self iterator] next] isEmpty];
+    return [[self iterator] hasNext];
 }
 
 - (CNChain*)chain {
@@ -560,21 +562,17 @@ static NSInteger _RED;
 
 - (void)forEach:(void(^)(id))each {
     id<CNIterator> i = [self iterator];
-    while(YES) {
-        id object = [i next];
-        if([object isEmpty]) break;
-        each(object);
+    while([i hasNext]) {
+        each([i next]);
     }
 }
 
 - (BOOL)goOn:(BOOL(^)(id))on {
     id<CNIterator> i = [self iterator];
-    while(YES) {
-        id object = [i next];
-        if([object isEmpty]) return YES;
-        if(!(on(object))) return NO;
+    while([i hasNext]) {
+        if(!(on([i next]))) return NO;
     }
-    return NO;
+    return YES;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -628,14 +626,14 @@ static NSInteger _RED;
     return ret;
 }
 
+- (BOOL)hasNext {
+    return _entry != nil;
+}
+
 - (id)next {
-    if(_entry == nil) {
-        return [CNOption none];
-    } else {
-        id ret = _entry.key;
-        _entry = [_entry next];
-        return [CNOption opt:ret];
-    }
+    id ret = _entry.key;
+    _entry = [_entry next];
+    return ret;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -677,11 +675,11 @@ static NSInteger _RED;
 }
 
 - (id)head {
-    return [[self iterator] next];
+    return [CNOption opt:[[self iterator] next]];
 }
 
 - (BOOL)isEmpty {
-    return [[[self iterator] next] isEmpty];
+    return [[self iterator] hasNext];
 }
 
 - (CNChain*)chain {
@@ -690,21 +688,17 @@ static NSInteger _RED;
 
 - (void)forEach:(void(^)(id))each {
     id<CNIterator> i = [self iterator];
-    while(YES) {
-        id object = [i next];
-        if([object isEmpty]) break;
-        each(object);
+    while([i hasNext]) {
+        each([i next]);
     }
 }
 
 - (BOOL)goOn:(BOOL(^)(id))on {
     id<CNIterator> i = [self iterator];
-    while(YES) {
-        id object = [i next];
-        if([object isEmpty]) return YES;
-        if(!(on(object))) return NO;
+    while([i hasNext]) {
+        if(!(on([i next]))) return NO;
     }
-    return NO;
+    return YES;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -758,14 +752,14 @@ static NSInteger _RED;
     return ret;
 }
 
+- (BOOL)hasNext {
+    return _entry != nil;
+}
+
 - (id)next {
-    if(_entry == nil) {
-        return [CNOption none];
-    } else {
-        id ret = _entry.object;
-        _entry = [_entry next];
-        return [CNOption opt:ret];
-    }
+    id ret = _entry.object;
+    _entry = [_entry next];
+    return ret;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -806,14 +800,14 @@ static NSInteger _RED;
     return ret;
 }
 
+- (BOOL)hasNext {
+    return _entry != nil;
+}
+
 - (id)next {
-    if(_entry == nil) {
-        return [CNOption none];
-    } else {
-        CNTuple* ret = tuple(_entry.key, _entry.object);
-        _entry = [_entry next];
-        return [CNOption opt:ret];
-    }
+    CNTuple* ret = tuple(_entry.key, _entry.object);
+    _entry = [_entry next];
+    return ret;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

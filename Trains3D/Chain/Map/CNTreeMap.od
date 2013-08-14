@@ -21,9 +21,10 @@ class CNTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K, V> {
         root = nil
     }
 
-    def keys : CNIterable<K> = CNTreeMapKeySet<K>(self)
-    def values : CNIterable<V> = CNTreeMapValues<V>(self)
+    val keys : CNTreeMapKeySet<K> = CNTreeMapKeySet<K>(self)
+    val values : CNTreeMapValues<V> = CNTreeMapValues<V>(self)
     def iterator : CNIterator<(K, V)> = CNTreeMapIterator<K, V>.new(self, firstEntry)
+    def iteratorHigherThan(key : K) = CNTreeMapIterator<K, V>.new(self, higherEntryThan(key).getOr(nil))
 
     private def entryFor(key : K) : CNTreeMapEntry<K, V> = {
         val p = root
@@ -357,6 +358,7 @@ class CNTreeMapKeySet<K>(map : CNTreeMap<K, _>) extends CNIterable<K> {
     def count : uint = map.count
 
     def iterator : CNIterator<K> = CNTreeMapKeyIterator<K>.new(map, map.firstEntry)
+    def iteratorHigherThan(key : K) : CNIterator<K> = CNTreeMapKeyIterator<K>.new(map, map.higherEntryThan(key))
 }
 
 class CNTreeMapKeyIterator<K>(map : CNTreeMap<K, _>) extends CNIterator<K> {
@@ -366,13 +368,12 @@ class CNTreeMapKeyIterator<K>(map : CNTreeMap<K, _>) extends CNIterator<K> {
        ret
    }
    var entry : CNTreeMapEntry<K, _>
-   def next : K? =
-        if(entry == nil) nil
-        else {
-            val ret = entry.key
-            entry = entry.next
-            ret
-        }
+   def hasNext : bool = entry != nil
+   def next : K = {
+        val ret = entry.key
+        entry = entry.next
+        ret
+   }
 }
 
 class CNTreeMapValues<V>(map : CNTreeMap<_, V>) extends CNIterable<V> {
@@ -388,14 +389,12 @@ class CNTreeMapValuesIterator<V>(map : CNTreeMap<_, V>) extends CNIterator<V> {
         ret
     }
     var entry : CNTreeMapEntry<_, V>
-
-    def next : V? =
-        if(entry == nil) nil
-        else {
-            val ret = entry.object
-            entry = entry.next
-            ret
-        }
+    def hasNext : bool = entry != nil
+    def next : V = {
+        val ret = entry.object
+        entry = entry.next
+        ret
+    }
 }
 
 class CNTreeMapIterator<K, V>(map : CNTreeMap<K, V>) extends CNIterator<(K, V)> {
@@ -404,11 +403,10 @@ class CNTreeMapIterator<K, V>(map : CNTreeMap<K, V>) extends CNIterator<(K, V)> 
         ret.entry = entry
         ret
     }
+    def hasNext : bool = entry != nil
     var entry : CNTreeMapEntry<K, V>
 
-    def next : V? =
-    if(entry == nil) nil
-    else {
+    def next : V = {
         val ret = (entry.key, entry.object)
         entry = entry.next
         ret

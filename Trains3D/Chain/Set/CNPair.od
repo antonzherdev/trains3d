@@ -13,11 +13,10 @@ class CNPair<T>(a : T, b : T) extends CNSet<T> {
 
 class CNPairIterator<T>(pair : CNPair<T>) extends CNIterator<T> {
     private var state : int = 0
-    def next : T? =
-        if(state > 1) nil
-        else{
-            state++
-            if(state == 1) pair.a
-            else pair.b
-        }
+    def hasNext : bool = state < 2
+    def next : T = {
+        state++
+        if(state == 1) pair.a
+        else pair.b
+    }
 }

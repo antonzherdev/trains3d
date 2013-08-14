@@ -3,7 +3,8 @@ package core.chain
 import CNChain
 
 trait CNIterator<T> {
-   def next : T?
+   def hasNext : bool
+   def next : T
 }
 
 trait CNTraversable<T> {
@@ -28,27 +29,19 @@ trait CNIterable<T> extends CNTraversable<T> {
     def iterator : CNIterator<T>
 
     def head : T? = iterator.next
-    def isEmpty : bool = iterator.next.isEmpty
+    def isEmpty : bool = iterator.hasNext
 
     def chain : CNChain<T> = {
         CNChain.chainWith<T>(self)
     }
     def for(each : T -> void) {
         val i = iterator
-        while(true) {
-            val object = i.next
-            if(object.isEmpty) break
-            each(object)
-        }
+        while(i.hasNext) each(i.next)
     }
     def go(on : T -> bool) : bool = {
         val i = iterator
-        while(true) {
-            val object = i.next
-            if(object.isEmpty) return true
-            if(!on(object)) return false
-        }
-        false
+        while(i.hasNext) if(!on(i.next)) return false
+        true
     }
 }
 

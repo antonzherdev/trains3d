@@ -13,11 +13,10 @@ class CNRange(start : int, end : int, step : int) extends CNIterable<int> {
 
 class CNRangeIterator(start : int, end : int, step : int) extends CNIterator<int> {
     private var i = start
-    def next : int? =
-        if((step >0 && i > end) || (step < 0 && i < end)) nil
-        else {
-            val ret = i
-            i += step
-            ret
-        }
+    def hasNext = (step > 0 && i <= end) || (step < 0 && i >= end)
+    def next : int = {
+        val ret = i
+        i += step
+        ret
+    }
 }

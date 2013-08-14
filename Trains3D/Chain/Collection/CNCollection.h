@@ -3,6 +3,7 @@
 
 
 @protocol CNIterator<NSObject>
+- (BOOL)hasNext;
 - (id)next;
 @end
 

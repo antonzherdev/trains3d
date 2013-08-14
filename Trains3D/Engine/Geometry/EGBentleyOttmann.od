@@ -19,9 +19,9 @@ class EGBentleyOttmann {
                 sweepLine.handle(events)
             }
             sweepLine.intersections.chain.flatMap(p ->
-                p.b.chain.map(_.data).combinations.map(comb ->
-                    EGIntersection<T>(CNPair<T>.newWith(comb.a, comb.b), p.a.point)
-                )
+                p.b.chain.combinations
+                    .filter(comb -> !comb.a.isVertical || !comb.b.isVertical)
+                    .map(comb -> EGIntersection<T>(CNPair<T>.newWith(comb.a.data, comb.b.data), p.a.point))
             ).toSet
         }
 }
@@ -30,25 +30,21 @@ class EGIntersection<T>(items : CNPair<T>, point : EGPoint)
 
 class EGBentleyOttmannEvent<T> {
     def point : EGPoint
-    def isIntersection : bool
-    def isStart : bool
-    def isEnd : bool = !isStart && !isIntersection
-    def yFor(x : float) : float
-    def slope : float
+    def isIntersection : bool = false
+    def isStart : bool = false
+    def isEnd : bool = false
 }
 
 class EGBentleyOttmannPointEvent<T>(isStart : bool, data : T, segment : EGLineSegment, point : EGPoint) extends EGBentleyOttmannEvent<T> {
-    def isIntersection = false
     def yFor(x : float) : float =
-        if(segment.line.isVertical) segment.p1.y
+        if(segment.line.isVertical) if(isStart) segment.p1.y else segment.p2.y
         else segment.line.cast<EGSlopeLine>.yFor(x)
     def slope : float = segment.line.slope
+    def isVertical : bool = segment.line.isVertical
+    def isEnd : bool = !isStart
 }
 class EGBentleyOttmannIntersectionEvent<T>(point : EGPoint) extends EGBentleyOttmannEvent<T> {
     def isIntersection = true
-    def isStart = false
-    def yFor(x : float) : float = point.y
-    def slope : float = 0
 }
 
 
@@ -89,7 +85,7 @@ class EGSweepLine<T>
     */
 //    ignoreSegmentEndings : bool
 {
-    var events = CNTreeSet.newWith<EGBentleyOttmannEvent<T>>((a, b) -> compareEvents(a, b))
+    var events = CNTreeSet.newWith<EGBentleyOttmannPointEvent<T>>((a, b) -> compareEvents(a, b))
 
     /**
     * A map holding all intersection points mapped to the Events
@@ -119,13 +115,34 @@ class EGSweepLine<T>
     private def handleOne(event : EGBentleyOttmannEvent<T>) {
         if(event.isStart) {
             sweepTo(event)
-            events.add(event)
-            checkIntersection(event, above(event))
-            checkIntersection(event, below(event))
+            val pe = event.cast<EGBentleyOttmannPointEvent<T>>
+            if(pe.isVertical) {
+                val minY = pe.segment.p1.y
+                val maxY = pe.segment.p2.y
+                val i = events.iteratorHigherThan(event)
+                while(i.hasNext) {
+                    val e = i.next
+                    if(!e.isVertical) {
+                        val y = e.yFor(currentEventPoint.x)
+                        if(y >= maxY) break
+                        if(y > minY) {
+                            registerIntersection(pe, e, EGPoint(currentEventPoint.x, y))
+                        }
+                    }
+                }
+            } else {
+                events.add(event)
+                checkIntersection(event, above(event))
+                checkIntersection(event, below(event))
+            }
         } else if(event.isEnd) {
-            sweepTo(event)
-            events.remove(event)
-            checkIntersection(above(event), below(event))
+            if(!event.cast<EGBentleyOttmannPointEvent<T>>.isVertical) {
+                val a = above(event)
+                val b = below(event)
+                events.remove(event)
+                sweepTo(event)
+                checkIntersection(a, b)
+            }
         } else {
             val set = intersections[EGPointClass(event.point)].get
             val toInsert = set.chain.filter(events.remove(_)).toArray
@@ -151,30 +168,29 @@ class EGSweepLine<T>
             val aa = a.get.cast<EGBentleyOttmannPointEvent<T>>
             val bb = b.get.cast<EGBentleyOttmannPointEvent<T>>
             // Get the intersection point between 'a' and 'b'.
-            aa.segment.intersectionWith(bb.segment).for(pp -> {
-                val p : EGPoint = pp
-                // If the intersection is formed by both the segment endings AND
-                // ignoreSegmentEndings is true, return from this method.
-                if(!aa.segment.endingsContain(p) && !bb.segment.endingsContain(p)/* && ignoreSegmentEndings*/) {
-
-                    // Add the intersection.
-                    val existing = intersections.objectFor(key = EGPointClass(p), orUpdateWith = NSMutableSet.new<EGBentleyOttmannPointEvent<T>>)
-                    existing.add(aa)
-                    existing.add(bb)
-
-                    // If the intersection occurs to the right of the sweep line, OR
-                    // if the intersection is on the sweep line and it's above the
-                    // current event-point, add it as a new Event to the queue.
-                    if(p.x > currentEventPoint.x || (p.x == currentEventPoint.x && p.y > currentEventPoint.y)) {
-                        val intersection = EGBentleyOttmannIntersectionEvent<T>(p)
-                        queue.offer(p, intersection)
-                    }
-                }
-            })
+            aa.segment.intersectionWith(bb.segment).for(registerIntersection(aa, bb, _))
         }
     }
 
-    private def compareEvents(a : EGBentleyOttmannEvent<T>, b : EGBentleyOttmannEvent<T>) : int = {
+    private def registerIntersection(a : EGBentleyOttmannPointEvent<T>, b : EGBentleyOttmannPointEvent<T>, point : EGPoint) {
+        if(!a.segment.endingsContain(point) && !b.segment.endingsContain(point)/* && ignoreSegmentEndings*/) {
+
+            // Add the intersection.
+            val existing = intersections.objectFor(key = EGPointClass(point), orUpdateWith = NSMutableSet.new<EGBentleyOttmannPointEvent<T>>)
+            existing.add(a)
+            existing.add(b)
+
+            // If the intersection occurs to the right of the sweep line, OR
+            // if the intersection is on the sweep line and it's above the
+            // current event-point, add it as a new Event to the queue.
+            if(point.x > currentEventPoint.x || (point.x == currentEventPoint.x && point.y > currentEventPoint.y)) {
+                val intersection = EGBentleyOttmannIntersectionEvent<T>(point)
+                queue.offer(point, intersection)
+            }
+        }
+    }
+
+    private def compareEvents(a : EGBentleyOttmannPointEvent<T>, b : EGBentleyOttmannPointEvent<T>) : int = {
         // Equal Events.
         if (a == b) return 0
 

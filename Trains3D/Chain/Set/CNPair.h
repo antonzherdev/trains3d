@@ -24,6 +24,7 @@
 
 + (id)pairIteratorWithPair:(CNPair*)pair;
 - (id)initWithPair:(CNPair*)pair;
+- (BOOL)hasNext;
 - (id)next;
 @end
 

@@ -26,6 +26,7 @@
 
 + (id)rangeIteratorWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step;
 - (id)initWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step;
+- (BOOL)hasNext;
 - (id)next;
 @end
 

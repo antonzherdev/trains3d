@@ -3,7 +3,6 @@
 #import "EGBentleyOttmann.h"
 #import "CNPair.h"
 #import "EGFigure.h"
-#import "CNSet.h"
 @implementation EGBentleyOttmannTest
 
 + (id)bentleyOttmannTest {
@@ -28,8 +27,8 @@
 }
 
 - (void)testVertical {
-    NSSet* r = [EGBentleyOttmann intersectionsForSegments:(@[tuple(@1, [EGLineSegment newWithX1:-1 y1:-1 x2:2 y2:2]), tuple(@2, [EGLineSegment newWithX1:1 y1:-2 x2:1 y2:2])])];
-    NSSet* e = [(@[[EGIntersection intersectionWithItems:[CNPair newWithA:@1 b:@2] point:EGPointMake(1, 1)]]) toSet];
+    NSSet* r = [EGBentleyOttmann intersectionsForSegments:(@[tuple(@1, [EGLineSegment newWithX1:-1 y1:-1 x2:2 y2:2]), tuple(@2, [EGLineSegment newWithX1:1 y1:-2 x2:1 y2:2]), tuple(@3, [EGLineSegment newWithX1:1 y1:-4 x2:1 y2:0]), tuple(@4, [EGLineSegment newWithX1:-1 y1:-1 x2:2 y2:-4]), tuple(@5, [EGLineSegment newWithX1:-1 y1:-1 x2:2 y2:-1])])];
+    NSSet* e = [(@[[EGIntersection intersectionWithItems:[CNPair newWithA:@3 b:@4] point:EGPointMake(1, -3)], [EGIntersection intersectionWithItems:[CNPair newWithA:@2 b:@5] point:EGPointMake(1, -1)], [EGIntersection intersectionWithItems:[CNPair newWithA:@1 b:@2] point:EGPointMake(1, 1)], [EGIntersection intersectionWithItems:[CNPair newWithA:@3 b:@5] point:EGPointMake(1, -1)]]) toSet];
     [self assertEqualsA:e b:r];
 }
 

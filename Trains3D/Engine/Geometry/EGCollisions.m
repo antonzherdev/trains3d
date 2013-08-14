@@ -3,7 +3,6 @@
 #import "EGFigure.h"
 #import "EGBentleyOttmann.h"
 #import "CNPair.h"
-#import "CNSet.h"
 @implementation EGCollisions
 
 + (id)collisions {

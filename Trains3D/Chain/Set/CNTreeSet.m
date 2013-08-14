@@ -32,6 +32,10 @@ static NSObject* _obj;
     return [CNTreeSet treeSetWithMap:[CNTreeMap new]];
 }
 
+- (NSArray*)betweenA:(id)a b:(id)b {
+    @throw @"Method between is abstract";
+}
+
 - (void)addObject:(id)object {
     ((NSObject*)[_map setObject:_obj forKey:object]);
 }
@@ -53,7 +57,11 @@ static NSObject* _obj;
 }
 
 - (id<CNIterator>)iterator {
-    return [[_map keys] iterator];
+    return [_map.keys iterator];
+}
+
+- (id<CNIterator>)iteratorHigherThanObject:(id)object {
+    return [_map.keys iteratorHigherThanKey:object];
 }
 
 - (id)head {
@@ -85,7 +93,7 @@ static NSObject* _obj;
 }
 
 - (BOOL)isEmpty {
-    return [[[self iterator] next] isEmpty];
+    return [[self iterator] hasNext];
 }
 
 - (CNChain*)chain {
@@ -94,21 +102,17 @@ static NSObject* _obj;
 
 - (void)forEach:(void(^)(id))each {
     id<CNIterator> i = [self iterator];
-    while(YES) {
-        id object = [i next];
-        if([object isEmpty]) break;
-        each(object);
+    while([i hasNext]) {
+        each([i next]);
     }
 }
 
 - (BOOL)goOn:(BOOL(^)(id))on {
     id<CNIterator> i = [self iterator];
-    while(YES) {
-        id object = [i next];
-        if([object isEmpty]) return YES;
-        if(!(on(object))) return NO;
+    while([i hasNext]) {
+        if(!(on([i next]))) return NO;
     }
-    return NO;
+    return YES;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

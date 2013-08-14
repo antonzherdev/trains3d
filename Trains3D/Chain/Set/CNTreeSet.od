@@ -13,6 +13,8 @@ class CNTreeSet<T>(map : CNTreeMap<T, ODObject>) extends CNSet<T> {
     static def new<T> = CNTreeSet<T>(CNTreeMap.new<T, ODObject>)
     private static val obj = NSObject.new
 
+    def between(a : T, b : T) : [T]
+
     def add(object : T) {
         map.set(object = obj, forKey = object)
     }
@@ -25,6 +27,7 @@ class CNTreeSet<T>(map : CNTreeMap<T, ODObject>) extends CNSet<T> {
 
     def count : uint = map.count
     def iterator = map.keys.iterator
+    def iteratorHigherThan(object : T) = map.keys.iteratorHigherThan(object)
 
     def head : T? = map.firstKey
     def last : T? = map.lastKey

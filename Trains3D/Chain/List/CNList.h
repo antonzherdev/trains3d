@@ -1,4 +1,5 @@
 #import <Foundation/Foundation.h>
+#import "NSMutableArray+CNChain.h"
 #import "CNCollection.h"
 
 @class NSArrayBuilder;

@@ -15,10 +15,7 @@
 @protocol CNBuilder;
 @class CNPair;
 @class CNPairIterator;
-@protocol CNSet;
-@class NSSetBuilder;
-@class NSSet;
-@class NSMutableSet;
+#import "CNSet.h"
 
 @class EGBentleyOttmann;
 @class EGIntersection;
@@ -52,8 +49,6 @@
 - (BOOL)isIntersection;
 - (BOOL)isStart;
 - (BOOL)isEnd;
-- (double)yForX:(double)x;
-- (double)slope;
 @end
 
 
@@ -65,9 +60,10 @@
 
 + (id)bentleyOttmannPointEventWithIsStart:(BOOL)isStart data:(id)data segment:(EGLineSegment*)segment point:(EGPoint)point;
 - (id)initWithIsStart:(BOOL)isStart data:(id)data segment:(EGLineSegment*)segment point:(EGPoint)point;
-- (BOOL)isIntersection;
 - (double)yForX:(double)x;
 - (double)slope;
+- (BOOL)isVertical;
+- (BOOL)isEnd;
 @end
 
 
@@ -77,9 +73,6 @@
 + (id)bentleyOttmannIntersectionEventWithPoint:(EGPoint)point;
 - (id)initWithPoint:(EGPoint)point;
 - (BOOL)isIntersection;
-- (BOOL)isStart;
-- (double)yForX:(double)x;
-- (double)slope;
 @end
 
 

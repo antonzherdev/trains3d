@@ -43,7 +43,7 @@
 }
 
 - (BOOL)isEmpty {
-    return [[[self iterator] next] isEmpty];
+    return [[self iterator] hasNext];
 }
 
 - (CNChain*)chain {
@@ -52,21 +52,17 @@
 
 - (void)forEach:(void(^)(id))each {
     id<CNIterator> i = [self iterator];
-    while(YES) {
-        id object = [i next];
-        if([object isEmpty]) break;
-        each(object);
+    while([i hasNext]) {
+        each([i next]);
     }
 }
 
 - (BOOL)goOn:(BOOL(^)(id))on {
     id<CNIterator> i = [self iterator];
-    while(YES) {
-        id object = [i next];
-        if([object isEmpty]) return YES;
-        if(!(on(object))) return NO;
+    while([i hasNext]) {
+        if(!(on([i next]))) return NO;
     }
-    return NO;
+    return YES;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -118,14 +114,14 @@
     return self;
 }
 
+- (BOOL)hasNext {
+    return _state < 2;
+}
+
 - (id)next {
-    if(_state > 1) {
-        return [CNOption none];
-    } else {
-        _state++;
-        if(_state == 1) return [CNOption opt:_pair.a];
-        else return [CNOption opt:_pair.b];
-    }
+    _state++;
+    if(_state == 1) return _pair.a;
+    else return _pair.b;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

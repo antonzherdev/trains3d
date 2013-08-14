@@ -1,4 +1,5 @@
 #import <Foundation/Foundation.h>
+#import "NSMutableSet+CNChain.h"
 #import "CNCollection.h"
 
 @class NSSetBuilder;
