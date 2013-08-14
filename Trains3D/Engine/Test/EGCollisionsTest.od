@@ -17,4 +17,22 @@ class EGCollisionsTest extends CNTestCase {
             EGPoint(4.5, 0.5), EGPoint(4, 0), EGPoint(4, 1)
         ].toSet)].toSet)
     }
+
+    def testEmptyWithCrossedBoundingRects {
+        val figures = [
+            (1, EGPolygon([EGPoint(1, 0), EGPoint(3, 2), EGPoint(5, 0)])),
+            (3, EGPolygon([EGPoint(4, -1), EGPoint(4.5, -0.5), EGPoint(5, -1)]))
+        ]
+        val collisions = EGCollisions.collisionsFor(figures)
+        assertEquals(collisions, [].toSet)
+    }
+
+    def testEmptyWithoutCrossedBoundingRects {
+        val figures = [
+            (1, EGPolygon([EGPoint(1, 0), EGPoint(3, 2), EGPoint(5, 0)])),
+            (3, EGPolygon([EGPoint(6, -1), EGPoint(6.5, -0.5), EGPoint(7, -1)]))
+        ]
+        val collisions = EGCollisions.collisionsFor(figures)
+        assertEquals(collisions, [].toSet)
+    }
 }

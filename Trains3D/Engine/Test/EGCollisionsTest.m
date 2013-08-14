@@ -21,6 +21,18 @@
     [self assertEqualsA:collisions b:[(@[[EGCollision collisionWithItems:[CNPair pairWithA:@1 b:@2] points:[(@[wrap(EGPoint, EGPointMake(1.5, 0.5)), wrap(EGPoint, EGPointMake(2, 0)), wrap(EGPoint, EGPointMake(2, 1)), wrap(EGPoint, EGPointMake(4.5, 0.5)), wrap(EGPoint, EGPointMake(4, 0)), wrap(EGPoint, EGPointMake(4, 1))]) toSet]]]) toSet]];
 }
 
+- (void)testEmptyWithCrossedBoundingRects {
+    NSArray* figures = (@[tuple(@1, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(1, 0)), wrap(EGPoint, EGPointMake(3, 2)), wrap(EGPoint, EGPointMake(5, 0))])]), tuple(@3, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(4, -1)), wrap(EGPoint, EGPointMake(4.5, -0.5)), wrap(EGPoint, EGPointMake(5, -1))])])]);
+    NSSet* collisions = [EGCollisions collisionsForFigures:figures];
+    [self assertEqualsA:collisions b:[(@[]) toSet]];
+}
+
+- (void)testEmptyWithoutCrossedBoundingRects {
+    NSArray* figures = (@[tuple(@1, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(1, 0)), wrap(EGPoint, EGPointMake(3, 2)), wrap(EGPoint, EGPointMake(5, 0))])]), tuple(@3, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(6, -1)), wrap(EGPoint, EGPointMake(6.5, -0.5)), wrap(EGPoint, EGPointMake(7, -1))])])]);
+    NSSet* collisions = [EGCollisions collisionsForFigures:figures];
+    [self assertEqualsA:collisions b:[(@[]) toSet]];
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }

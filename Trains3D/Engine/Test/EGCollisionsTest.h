@@ -19,6 +19,8 @@
 + (id)collisionsTest;
 - (id)init;
 - (void)testDavidsStar;
+- (void)testEmptyWithCrossedBoundingRects;
+- (void)testEmptyWithoutCrossedBoundingRects;
 @end
 
 

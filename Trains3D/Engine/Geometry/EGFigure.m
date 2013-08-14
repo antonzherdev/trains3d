@@ -412,7 +412,7 @@
     if(self) {
         _points = points;
         _segments = [[[[_points chain] neighborsRing] map:^EGLineSegment*(CNTuple* ps) {
-            return [EGLineSegment lineSegmentWithP1:uwrap(EGPoint, ps.a) p2:uwrap(EGPoint, ps.b)];
+            return [EGLineSegment newWithP1:uwrap(EGPoint, ps.a) p2:uwrap(EGPoint, ps.b)];
         }] toArray];
     }
     

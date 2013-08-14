@@ -143,7 +143,7 @@ class EGPolygon(points : [EGPoint]) extends EGFigure {
         EGRect.newXY(minX, maxX, minY, maxY)
     }
 
-    val segments : [EGLineSegment] = points.chain.neighborsRing.map(ps -> EGLineSegment(ps.a, ps.b)).toArray
+    val segments : [EGLineSegment] = points.chain.neighborsRing.map(ps -> EGLineSegment.newWith(ps.a, ps.b)).toArray
 }
 
 class EGThickLineSegment(segment : EGLineSegment, thickness : float) extends EGFigure {

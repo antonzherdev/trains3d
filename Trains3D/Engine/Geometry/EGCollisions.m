@@ -23,7 +23,9 @@
             return tuple(f.a, segment);
         }];
     }] toArray];
-    return [[[[[EGBentleyOttmann intersectionsForSegments:segments] chain] groupBy:^CNPair*(EGIntersection* _) {
+    if([segments isEmpty]) return [NSSet set];
+    NSSet* intersections = [EGBentleyOttmann intersectionsForSegments:segments];
+    return [[[[intersections chain] groupBy:^CNPair*(EGIntersection* _) {
         return _.items;
     } map:^id(EGIntersection* _) {
         return wrap(EGPoint, _.point);
