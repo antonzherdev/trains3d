@@ -10,11 +10,3 @@ stub class ODArray<A> extends CNChain<A> {
 stub class ODMutableArray<A> extends ODArray<A> {
     def add(object : A)
 }
-
-stub class NSSet<T> extends CNSet<T> {
-    static def apply<A>(array : [A]) : NSSet<A>
-}
-
-stub class NSMutableSet<T> extends NSSet<T> {
-    def add(object : T) : void
-}

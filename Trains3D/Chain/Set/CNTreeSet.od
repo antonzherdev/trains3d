@@ -2,6 +2,7 @@ package core.chain
 
 import CNTreeMap
 import CNCollection
+import CNSet
 import CNChain
 
 class CNTreeSet<T>(map : CNTreeMap<T, ODObject>) extends CNSet<T> {

@@ -4,7 +4,7 @@
 @protocol CNIterator;
 @protocol CNTraversable;
 @protocol CNIterable;
-@protocol CNSet;
+@protocol CNBuilder;
 
 @class EGMapSsoTileIndex;
 

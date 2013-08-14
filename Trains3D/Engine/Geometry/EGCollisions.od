@@ -1,0 +1,24 @@
+import EGFigure
+import EGBentleyOttmann
+import EGTypes
+import CNPair
+import CNSet
+
+class EGCollisions {
+    static def collisionsFor<T>(figures : [(T, EGFigure)]) : NSSet<EGCollision> = {
+        val segments = figures.chain
+            .combinations
+            .filter(p -> p.a.b.boxingRect.intersects(p.b.b.boxingRect))
+            .uncombinations
+            .flatMap(f -> f.b.segments.map(segment -> (f.a, segment)))
+            .toArray
+        EGBentleyOttmann.intersectionsFor(segments).chain
+            .group<CNPair<T>, NSSet<EGPoint>>(
+                by = _.items,
+                withBuilder = NSSetBuilder.new<EGPoint>)
+            .map(p -> EGCollision(p.a, p.b))
+            .toSet
+    }
+}
+
+class EGCollision<T>(items : CNPair<T>, points : NSSet<EGPoint>)

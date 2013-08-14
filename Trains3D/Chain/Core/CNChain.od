@@ -1,6 +1,7 @@
 package core.chain
 
 import CNCollection
+import CNSet
 
 stub class CNChain<A> extends CNIterable<A> {
     static def chainWith<T>(collection:CNTraversable<T>) : CNChain<T>
@@ -9,11 +10,14 @@ stub class CNChain<A> extends CNIterable<A> {
     def map<B>(: A -> B) : CNChain<B>
     def flatMap<B>(: A -> CNTraversable<B>) : CNChain<B>
 
-    def combination : CNChain<(A, A)>
+    def combinations : CNChain<(A, A)>
+    def uncombinations<B>(self : CNChain<(B, B)>) : CNChain<B>
     def neighbors : CNChain<(A, A)>
     def neighborsRing : CNChain<(A, A)>
-    def uncombination<B>(self : CNChain<(B, B)>) : CNChain<B>
     def mul<B>(: CNChain<B>) : CNChain<(A,B)>
+    def group<K>(by : A -> K) : CNChain<(K, [A])>
+    def group<K, C extends CNTraversable<K>>(by : A -> K, withBuilder : () -> CNBuilder<K, C>) : CNChain<(K, C<K>)>
+    def group<K, V>(by : A -> K, fold : (V, A) -> V, withStart : () -> V) : CNChain<(K, V)>
 
     def join<K, V1, V2>(self : CNChain<(K, V1)>, chain : CNChain<(K, V2)>) : CNChain<K, (V1, V2)>
 

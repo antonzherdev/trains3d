@@ -1,10 +1,11 @@
 #import <Foundation/Foundation.h>
 #import "cnTypes.h"
+#import "CNList.h"
 
 @class CNChain;
 
 
-@interface NSArray (CNChain)<CNIterable>
+@interface NSArray (CNChain)<CNList>
 - (id) chain:(cnChainBuildBlock)block;
 - (CNChain*) chain;
 - (CNChain*)reverse;

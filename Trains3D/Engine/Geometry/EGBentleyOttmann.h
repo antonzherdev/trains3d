@@ -12,7 +12,13 @@
 @protocol CNIterator;
 @protocol CNTraversable;
 @protocol CNIterable;
+@protocol CNBuilder;
+@class CNPair;
+@class CNPairIterator;
 @protocol CNSet;
+@class NSSetBuilder;
+@class NSSet;
+@class NSMutableSet;
 
 @class EGBentleyOttmann;
 @class EGIntersection;
@@ -31,11 +37,11 @@
 
 
 @interface EGIntersection : NSObject
+@property (nonatomic, readonly) CNPair* items;
 @property (nonatomic, readonly) EGPoint point;
-@property (nonatomic, readonly) NSSet* data;
 
-+ (id)intersectionWithPoint:(EGPoint)point data:(NSSet*)data;
-- (id)initWithPoint:(EGPoint)point data:(NSSet*)data;
++ (id)intersectionWithItems:(CNPair*)items point:(EGPoint)point;
+- (id)initWithItems:(CNPair*)items point:(EGPoint)point;
 @end
 
 

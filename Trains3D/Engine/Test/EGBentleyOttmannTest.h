@@ -8,6 +8,8 @@
 @class EGPointClass;
 @class EGSweepLine;
 #import "CNTest.h"
+@class CNPair;
+@class CNPairIterator;
 @class EGLine;
 @class EGSlopeLine;
 @class EGVerticalLine;
@@ -16,6 +18,10 @@
 @class EGPolygon;
 @class EGThickLineSegment;
 #import "EGTypes.h"
+@protocol CNSet;
+@class NSSetBuilder;
+@class NSSet;
+@class NSMutableSet;
 
 @class EGBentleyOttmannTest;
 

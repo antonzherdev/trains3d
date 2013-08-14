@@ -18,6 +18,13 @@
 - (CNChain*)flatMap:(cnF)f factor:(double) factor;
 - (CNChain*)neighbors;
 - (CNChain*)neighborsRing;
+- (CNChain*)combinations;
+- (CNChain*)uncombinations;
+
+- (CNChain*)groupBy:(cnF)by fold:(cnF2)fold withStart:(cnF0)start;
+- (CNChain*)groupBy:(cnF)by withBuilder:(cnF0)builder;
+- (CNChain*)groupBy:(cnF)by;
+
 
 - (CNChain*)append:(id)collection;
 - (CNChain*)prepend:(id)collection;
@@ -43,4 +50,6 @@
 - (NSDictionary *)toMap;
 - (NSMutableDictionary *)toMutableMap;
 - (CNYieldResult)apply:(CNYield *)yield;
+
+
 @end

@@ -1,0 +1,23 @@
+package core.chain
+
+import CNCollection
+import "NSMutableArray+CNChain.h"
+
+trait CNList<T> extends CNIterable<T> {
+    def at(index : uint) : T?
+}
+
+stub class NSArray<T> extends CNList<T> {}
+stub class NSMutableArray<T> extends NSArray<T> {
+    def add(object : T)
+}
+
+class NSArrayBuilder<T> extends CNBuilder<T, NSArray<T>> {
+    val array = NSMutableArray.new<T>
+
+    def add(object : T) {
+        array.add(object)
+    }
+
+    def build : NSArray<T> = array
+}

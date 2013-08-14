@@ -12,6 +12,10 @@
 #import "CNDistinctLink.h"
 #import "CNTreeMap.h"
 #import "CNNeighboursLink.h"
+#import "CNCombinationsLink.h"
+#import "CNUncombinationsLink.h"
+#import "CNGroupByLink.h"
+#import "CNList.h"
 
 
 @implementation CNChain {
@@ -138,6 +142,34 @@
     return [self link:[CNNeighboursLink linkWithRing:YES]];
 }
 
+
+- (CNChain *)combinations {
+    return [self link:[CNCombinationsLink link]];
+}
+
+- (CNChain *)uncombinations {
+    return [self link:[CNUncombinationsLink link]];
+}
+
+- (CNChain *)groupBy:(cnF)by fold:(cnF2)fold withStart:(cnF0)start {
+    return [self link:[CNGroupByLink linkWithBy:by fold:fold withStart:start factor:0.5 mutableMode:NO mapAfter:nil]];
+}
+
+- (CNChain *)groupBy:(cnF)by withBuilder:(cnF0)builder {
+    return [self link:[CNGroupByLink linkWithBy:by fold:^id(id r, id x) {
+        [r addObject:x];
+        return r;
+    } withStart:builder factor:0.5 mutableMode:YES mapAfter:^id(id x) {
+        return [x build];
+    }]];
+}
+
+
+- (CNChain *)groupBy:(cnF)by {
+    return [self groupBy:by withBuilder:^id {
+        return [NSArrayBuilder arrayBuilder];
+    }];
+}
 
 - (CNChain *)append:(id)collection {
     return [self link:[CNAppendLink linkWithCollection:collection]];

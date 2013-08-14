@@ -1,5 +1,6 @@
 #import "CNTreeSet.h"
 
+#import "CNCollection.h"
 #import "CNChain.h"
 @implementation CNTreeSet{
     CNTreeMap* _map;

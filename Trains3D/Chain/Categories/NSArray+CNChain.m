@@ -110,4 +110,9 @@
 - (NSSet *)toSet {
     return [NSSet setWithArray:self];
 }
+
+- (id)atIndex:(NSUInteger)index {
+    return [self objectAtIndex:index];
+}
+
 @end

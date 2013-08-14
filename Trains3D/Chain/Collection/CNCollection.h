@@ -26,8 +26,9 @@
 @end
 
 
-@protocol CNSet<CNIterable>
-- (BOOL)containsObject:(id)object;
+@protocol CNBuilder<NSObject>
+- (void)addObject:(id)object;
+- (id)build;
 @end
 
 

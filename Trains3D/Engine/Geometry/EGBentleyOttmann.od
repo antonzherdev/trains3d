@@ -3,10 +3,12 @@ import EGFigure
 import CNTreeMap
 import CNTreeSet
 import CNCollection
+import CNPair
+import CNSet
 
 
 class EGBentleyOttmann {
-    static def intersectionsFor<T>(segments : [(T, EGLineSegment)]) : NSSet<EGIntersection> =
+    static def intersectionsFor<T>(segments : [(T, EGLineSegment)]) : NSSet<EGIntersection<T>> =
         if(segments.count < 2) NSSet.new<T>
         else {
             val sweepLine = EGSweepLine.new
@@ -16,11 +18,15 @@ class EGBentleyOttmann {
                 val events = queue.poll
                 sweepLine.handle(events)
             }
-            sweepLine.intersections.chain.map(p -> EGIntersection<T>(p.a.point, p.b.chain.map(_.data).toSet)).toSet
+            sweepLine.intersections.chain.flatMap(p ->
+                p.b.chain.map(_.data).combinations.map(comb ->
+                    EGIntersection<T>(CNPair<T>.newWith(comb.a, comb.b), p.a.point)
+                )
+            ).toSet
         }
 }
 
-class EGIntersection<T>(point : EGPoint, data : NSSet<T>)
+class EGIntersection<T>(items : CNPair<T>, point : EGPoint)
 
 class EGBentleyOttmannEvent<T> {
     def point : EGPoint

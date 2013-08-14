@@ -168,6 +168,30 @@ SPEC_BEGIN(CNChainSpec)
           }] toArray];
           [[r should] equal:@[@4, @5, @3]];
       });
+      it(@".combinations should all posible combinations", ^{
+          id r = [[[s chain] combinations] toSet];
+          [[r should] equal:[@[tuple(@1, @3), tuple(@1, @2), tuple(@3, @2)] toSet]];
+      });
+      it(@".uncombinations should all revert combinations", ^{
+          id r = [[[[s chain] combinations] uncombinations] toArray];
+          [[r should] equal:s];
+      });
+      it(@".groupBy fold", ^{
+          NSSet * set =[[[@[@1, @2, @1, @3, @3] chain] groupBy:^id(id x) {
+              return numi(unumi(x)*unumi(x));
+          } fold:^id(id r, id x) {
+              return numi(unumi(r) + 1);
+          } withStart:^id {
+              return @0;
+          }] toSet];
+          [[set should] equal:[@[tuple(@1, @2), tuple(@4, @1), tuple(@9, @2)] toSet] ];
+      });
+      it(@".groupBy", ^{
+          NSSet * set = [[[@[@1, @-1, @2, @1, @-3] chain] groupBy:^id(id x) {
+              return numi(abs(unumi(x)));
+          }] toSet];
+          [[set should] equal:[@[tuple(@1, (@[@1, @-1, @1]) ), tuple(@2, @[@2]), tuple(@3, @[@-3])] toSet] ];
+      });
   });
 
 SPEC_END

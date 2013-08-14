@@ -1,0 +1,25 @@
+package core.chain
+
+import CNCollection
+import "NSMutableSet+CNChain.h"
+
+trait CNSet<T> extends CNIterable<T> {
+    def contains(object : T) : bool
+}
+
+class NSSetBuilder<T> extends CNBuilder<T, NSSet<T>> {
+    val set = NSMutableSet.new<T>
+
+    def add(object : T) {
+        set.add(object)
+    }
+    def build : NSSet<T> = set
+}
+
+stub class NSSet<T> extends CNSet<T> {
+    static def apply<A>(array : [A]) : NSSet<A>
+}
+
+stub class NSMutableSet<T> extends NSSet<T> {
+    def add(object : T) : void
+}

@@ -3,6 +3,8 @@
 #import "EGFigure.h"
 #import "CNTreeSet.h"
 #import "CNCollection.h"
+#import "CNPair.h"
+#import "CNSet.h"
 @implementation EGBentleyOttmann
 
 + (id)bentleyOttmann {
@@ -25,10 +27,12 @@
             NSArray* events = [queue poll];
             [sweepLine handleEvents:events];
         }
-        return [[[sweepLine.intersections chain] map:^EGIntersection*(CNTuple* p) {
-            return [EGIntersection intersectionWithPoint:((EGPointClass*)p.a).point data:[[[((NSMutableSet*)p.b) chain] map:^EGSweepLine*(EGBentleyOttmannPointEvent* _) {
+        return [[[sweepLine.intersections chain] flatMap:^CNChain*(CNTuple* p) {
+            return [[[[((NSMutableSet*)p.b) chain] map:^EGSweepLine*(EGBentleyOttmannPointEvent* _) {
                 return ((EGSweepLine*)_.data);
-            }] toSet]];
+            }] combinations] map:^EGIntersection*(CNTuple* comb) {
+                return [EGIntersection intersectionWithItems:[CNPair newWithA:((EGSweepLine*)comb.a) b:((EGSweepLine*)comb.b)] point:((EGPointClass*)p.a).point];
+            }];
         }] toSet];
     }
 }
@@ -58,21 +62,21 @@
 
 
 @implementation EGIntersection{
+    CNPair* _items;
     EGPoint _point;
-    NSSet* _data;
 }
+@synthesize items = _items;
 @synthesize point = _point;
-@synthesize data = _data;
 
-+ (id)intersectionWithPoint:(EGPoint)point data:(NSSet*)data {
-    return [[EGIntersection alloc] initWithPoint:point data:data];
++ (id)intersectionWithItems:(CNPair*)items point:(EGPoint)point {
+    return [[EGIntersection alloc] initWithItems:items point:point];
 }
 
-- (id)initWithPoint:(EGPoint)point data:(NSSet*)data {
+- (id)initWithItems:(CNPair*)items point:(EGPoint)point {
     self = [super init];
     if(self) {
+        _items = items;
         _point = point;
-        _data = data;
     }
     
     return self;
@@ -86,20 +90,20 @@
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGIntersection* o = ((EGIntersection*)other);
-    return EGPointEq(self.point, o.point) && [self.data isEqual:o.data];
+    return [self.items isEqual:o.items] && EGPointEq(self.point, o.point);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
+    hash = hash * 31 + [self.items hash];
     hash = hash * 31 + EGPointHash(self.point);
-    hash = hash * 31 + [self.data hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"point=%@", EGPointDescription(self.point)];
-    [description appendFormat:@", data=%@", self.data];
+    [description appendFormat:@"items=%@", self.items];
+    [description appendFormat:@", point=%@", EGPointDescription(self.point)];
     [description appendString:@">"];
     return description;
 }

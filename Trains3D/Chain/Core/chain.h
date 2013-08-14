@@ -7,3 +7,4 @@
 #import "NSSet+CNChain.h"
 #import "NSDictionary+CNChain.h"
 #import "NSMutableSet+CNChain.h"
+#import "NSMutableArray+CNChain.h"
