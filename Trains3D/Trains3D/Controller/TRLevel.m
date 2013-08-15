@@ -138,9 +138,12 @@
 }
 
 - (void)runTrain:(TRTrain*)train fromCity:(TRCity*)fromCity {
-    [train startFromCity:fromCity];
-    __trains = [__trains arrayByAddingObject:train];
-    [_score runTrain:train];
+    fromCity.expectedTrainAnimation = [CNOption opt:[EGAnimation animationWithLength:3 finish:^void() {
+        fromCity.expectedTrainAnimation = [CNOption none];
+        [train startFromCity:fromCity];
+        __trains = [__trains arrayByAddingObject:train];
+        [_score runTrain:train];
+    }]];
 }
 
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator {
@@ -166,6 +169,9 @@
 - (void)updateWithDelta:(double)delta {
     [_score updateWithDelta:delta];
     [__trains forEach:^void(TRTrain* _) {
+        [_ updateWithDelta:delta];
+    }];
+    [__cities forEach:^void(TRCity* _) {
         [_ updateWithDelta:delta];
     }];
     [self processCollisions];

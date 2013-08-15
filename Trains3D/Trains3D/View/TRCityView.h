@@ -1,4 +1,6 @@
 #import "objd.h"
+@class EGSchedule;
+@class EGAnimation;
 @class TRCityAngle;
 @class TRCity;
 @class TRColor;

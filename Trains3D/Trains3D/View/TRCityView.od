@@ -1,4 +1,5 @@
 import EGGL
+import EGSchedule
 
 import TRCity
 import TRTypes
@@ -22,6 +23,7 @@ class TRCityView {
         }
 
         {
+            glPushMatrix
             city.color.set
             egTranslate(0.3, -0.3, 0)
             glutSolidCube(0.15)
@@ -40,7 +42,15 @@ class TRCityView {
 
             egTranslate(0.3, 0, 0)
             glutSolidCube(0.15)
+            glPopMatrix
         }
+
+        city.expectedTrainAnimation.for(a -> {
+            egTranslate(0, 0, 0.001)
+            val x = -a.time/2
+            egColor3(1.0, 0.5 - x, 0.5 - x)
+            egRect(-0.5, -0.5, 0.5, 0.5)
+        })
 
         glPopMatrix
     }

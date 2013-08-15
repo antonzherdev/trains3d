@@ -1,5 +1,7 @@
 #import "objd.h"
 #import "EGTypes.h"
+@class EGSchedule;
+@class EGAnimation;
 @class TRColor;
 @class TRRailConnector;
 @class TRRailForm;
@@ -22,14 +24,16 @@
 @end
 
 
-@interface TRCity : NSObject
+@interface TRCity : NSObject<EGController>
 @property (nonatomic, readonly) TRColor* color;
 @property (nonatomic, readonly) EGPointI tile;
 @property (nonatomic, readonly) TRCityAngle* angle;
+@property (nonatomic) id expectedTrainAnimation;
 
 + (id)cityWithColor:(TRColor*)color tile:(EGPointI)tile angle:(TRCityAngle*)angle;
 - (id)initWithColor:(TRColor*)color tile:(EGPointI)tile angle:(TRCityAngle*)angle;
 - (TRRailPoint*)startPoint;
+- (void)updateWithDelta:(double)delta;
 @end
 
 

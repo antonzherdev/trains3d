@@ -249,7 +249,7 @@
     if(array.count == 0) {
         return [CNOption none];
     }
-    u_int32_t n = arc4random_uniform((u_int32_t)array.count - 1);
+    u_int32_t n = randomWith((u_int32_t)array.count - 1);
     return [array objectAtIndex:n];
 }
 

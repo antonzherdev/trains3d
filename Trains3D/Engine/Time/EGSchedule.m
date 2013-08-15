@@ -51,3 +51,79 @@
 @end
 
 
+@implementation EGAnimation{
+    double _length;
+    void(^_finish)();
+    double __time;
+    BOOL __run;
+}
+@synthesize length = _length;
+@synthesize finish = _finish;
+
++ (id)animationWithLength:(double)length finish:(void(^)())finish {
+    return [[EGAnimation alloc] initWithLength:length finish:finish];
+}
+
+- (id)initWithLength:(double)length finish:(void(^)())finish {
+    self = [super init];
+    if(self) {
+        _length = length;
+        _finish = finish;
+        __time = 0.0;
+        __run = YES;
+    }
+    
+    return self;
+}
+
+- (double)time {
+    return __time;
+}
+
+- (BOOL)isRun {
+    return __run;
+}
+
+- (BOOL)isStopped {
+    return !(__run);
+}
+
+- (void)updateWithDelta:(double)delta {
+    if(__run) {
+        __time += delta / _length;
+        if(__time >= 1.0) {
+            __time = 1.0;
+            __run = NO;
+            ((void(^)())_finish)();
+        }
+    }
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGAnimation* o = ((EGAnimation*)other);
+    return eqf(self.length, o.length) && [self.finish isEqual:o.finish];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [[NSNumber numberWithDouble:self.length] hash];
+    hash = hash * 31 + [self.finish hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"length=%f", self.length];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+

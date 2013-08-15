@@ -2,6 +2,7 @@
 #import "EGTypes.h"
 @class EGCamera2D;
 @class EGSchedule;
+@class EGAnimation;
 @class TRLevelRules;
 @class TRLevel;
 @class TRScoreRules;

@@ -1,6 +1,7 @@
 #import "TRCity.h"
 
 #import "EGMap.h"
+#import "EGSchedule.h"
 #import "TRTypes.h"
 #import "TRRailPoint.h"
 @implementation TRCityAngle{
@@ -68,10 +69,12 @@ static NSArray* _TRCityAngle_values;
     TRColor* _color;
     EGPointI _tile;
     TRCityAngle* _angle;
+    id _expectedTrainAnimation;
 }
 @synthesize color = _color;
 @synthesize tile = _tile;
 @synthesize angle = _angle;
+@synthesize expectedTrainAnimation = _expectedTrainAnimation;
 
 + (id)cityWithColor:(TRColor*)color tile:(EGPointI)tile angle:(TRCityAngle*)angle {
     return [[TRCity alloc] initWithColor:color tile:tile angle:angle];
@@ -90,6 +93,12 @@ static NSArray* _TRCityAngle_values;
 
 - (TRRailPoint*)startPoint {
     return [TRRailPoint railPointWithTile:_tile form:_angle.form x:0 back:_angle.back];
+}
+
+- (void)updateWithDelta:(double)delta {
+    [_expectedTrainAnimation forEach:^void(EGAnimation* _) {
+        [_ updateWithDelta:delta];
+    }];
 }
 
 - (id)copyWithZone:(NSZone*)zone {

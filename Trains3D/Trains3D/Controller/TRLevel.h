@@ -6,6 +6,7 @@
 @class EGCollisions;
 @class EGCollision;
 @class EGSchedule;
+@class EGAnimation;
 @class TRCityAngle;
 @class TRCity;
 @class TRColor;

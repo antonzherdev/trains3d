@@ -55,9 +55,12 @@ class TRLevel(rules : TRLevelRules) extends EGController {
     }
 
     private def run(train : TRTrain, fromCity : TRCity) {
-        train.startFrom(fromCity)
-        _trains += train
-        score.run(train)
+        fromCity.expectedTrainAnimation = EGAnimation(3, {
+            fromCity.expectedTrainAnimation = nil
+            train.startFrom(fromCity)
+            _trains += train
+            score.run(train)
+        })
     }
 
     def runTrainWith(generator : TRTrainGenerator) {
@@ -83,6 +86,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
     def updateWith(delta : float) {
         score.updateWith(delta)
         _trains.for(_.updateWith(delta))
+        _cities.for(_.updateWith(delta))
         processCollisions
         schedule.updateWith(delta)
     }

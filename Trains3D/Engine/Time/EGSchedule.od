@@ -21,3 +21,23 @@ class EGSchedule extends EGController {
 
     def time : float = _current
 }
+
+class EGAnimation(length : float, finish : void -> void) extends EGController {
+    private var _time : float = 0.0
+    private var _run : bool = true
+    def time : float = _time
+    def isRun : bool = _run
+    def isStopped : bool = !_run
+
+    def updateWith(delta : float) {
+        if(_run) {
+            _time += delta/length
+            if(_time >= 1.0) {
+                _time = 1.0
+                _run = false
+                finish()
+            }
+        }
+
+    }
+}
