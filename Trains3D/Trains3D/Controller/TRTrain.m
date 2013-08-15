@@ -11,10 +11,11 @@
     __weak TRLevel* _level;
     TRColor* _color;
     NSArray* _cars;
-    double _speed;
+    NSUInteger _speed;
     TRRailPoint* _head;
     BOOL _back;
     double _length;
+    double __speedF;
 }
 static double _carsDelta;
 @synthesize level = _level;
@@ -22,11 +23,11 @@ static double _carsDelta;
 @synthesize cars = _cars;
 @synthesize speed = _speed;
 
-+ (id)trainWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(double)speed {
++ (id)trainWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(NSUInteger)speed {
     return [[TRTrain alloc] initWithLevel:level color:color cars:cars speed:speed];
 }
 
-- (id)initWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(double)speed {
+- (id)initWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(NSUInteger)speed {
     self = [super init];
     if(self) {
         _level = level;
@@ -34,9 +35,10 @@ static double _carsDelta;
         _cars = cars;
         _speed = speed;
         _back = NO;
-        _length = unumf([_cars fold:^id(id r, TRCar* car) {
+        _length = unumf([[_cars chain] fold:^id(id r, TRCar* car) {
             return numf([car length] + unumf(r) + _carsDelta);
         } withStart:numf(-1.0 * _carsDelta)]);
+        __speedF = _speed / 100;
     }
     
     return self;
@@ -58,7 +60,7 @@ static double _carsDelta;
 }
 
 - (void)calculateCarPositions {
-    ((TRRailPoint*)[[self directedCars] fold:^TRRailPoint*(TRRailPoint* hl, TRCar* car) {
+    ((TRRailPoint*)[[[self directedCars] chain] fold:^TRRailPoint*(TRRailPoint* hl, TRCar* car) {
         car.head = hl;
         TRRailPoint* next = [[_level.railroad moveConsideringLights:NO forLength:[car length] point:hl] addErrorToPoint];
         car.tail = next;
@@ -72,11 +74,11 @@ static double _carsDelta;
 }
 
 - (void)updateWithDelta:(double)delta {
-    [self correctCorrection:[_level.railroad moveConsideringLights:YES forLength:delta * _speed point:_head]];
+    [self correctCorrection:[_level.railroad moveConsideringLights:YES forLength:delta * __speedF point:_head]];
 }
 
 - (NSArray*)directedCars {
-    if(_back) return [[_cars reverse] toArray];
+    if(_back) return [[[_cars chain] reverse] toArray];
     else return _cars;
 }
 
@@ -107,7 +109,7 @@ static double _carsDelta;
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch {
     EGPointI tile = theSwitch.tile;
     EGPointI nextTile = [theSwitch.connector nextTile:tile];
-    return [[_cars find:^BOOL(TRCar* _) {
+    return [[_cars findWhere:^BOOL(TRCar* _) {
         return (EGPointIEq(_.head.tile, tile) && EGPointIEq(_.nextHead.tile, nextTile)) || (EGPointIEq(_.head.tile, nextTile) && EGPointIEq(_.nextHead.tile, tile));
     }] isDefined];
 }
@@ -124,7 +126,7 @@ static double _carsDelta;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRTrain* o = ((TRTrain*)other);
-    return [self.level isEqual:o.level] && self.color == o.color && [self.cars isEqual:o.cars] && eqf(self.speed, o.speed);
+    return [self.level isEqual:o.level] && self.color == o.color && [self.cars isEqual:o.cars] && self.speed == o.speed;
 }
 
 - (NSUInteger)hash {
@@ -132,7 +134,7 @@ static double _carsDelta;
     hash = hash * 31 + [self.level hash];
     hash = hash * 31 + [self.color ordinal];
     hash = hash * 31 + [self.cars hash];
-    hash = hash * 31 + [[NSNumber numberWithDouble:self.speed] hash];
+    hash = hash * 31 + self.speed;
     return hash;
 }
 
@@ -141,7 +143,7 @@ static double _carsDelta;
     [description appendFormat:@"level=%@", self.level];
     [description appendFormat:@", color=%@", self.color];
     [description appendFormat:@", cars=%@", self.cars];
-    [description appendFormat:@", speed=%f", self.speed];
+    [description appendFormat:@", speed=%li", self.speed];
     [description appendString:@">"];
     return description;
 }
@@ -186,6 +188,66 @@ static double _carsDelta;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRTrainGenerator{
+    id<CNList> _carsCount;
+    id<CNList> _speed;
+}
+@synthesize carsCount = _carsCount;
+@synthesize speed = _speed;
+
++ (id)trainGeneratorWithCarsCount:(id<CNList>)carsCount speed:(id<CNList>)speed {
+    return [[TRTrainGenerator alloc] initWithCarsCount:carsCount speed:speed];
+}
+
+- (id)initWithCarsCount:(id<CNList>)carsCount speed:(id<CNList>)speed {
+    self = [super init];
+    if(self) {
+        _carsCount = carsCount;
+        _speed = speed;
+    }
+    
+    return self;
+}
+
+- (NSArray*)generateCars {
+    return [[[uintRange(unumi([[_carsCount randomItem] get])) chain] map:^TRCar*(id _) {
+        return [TRCar car];
+    }] toArray];
+}
+
+- (NSUInteger)generateSpeed {
+    return unumi([[_speed randomItem] get]);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRTrainGenerator* o = ((TRTrainGenerator*)other);
+    return [self.carsCount isEqual:o.carsCount] && [self.speed isEqual:o.speed];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.carsCount hash];
+    hash = hash * 31 + [self.speed hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"carsCount=%@", self.carsCount];
+    [description appendFormat:@", speed=%@", self.speed];
     [description appendString:@">"];
     return description;
 }

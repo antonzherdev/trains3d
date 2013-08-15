@@ -39,3 +39,6 @@ extern id cnResolveCollection(id collection);
 
 #define uwrap(tp, expr) [((tp ## Wrap*)expr) value]
 
+static inline NSUInteger randomWith(NSUInteger max) {
+    return arc4random_uniform((u_int32_t)max);
+}

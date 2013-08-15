@@ -1,10 +1,19 @@
 package core.chain
 
 import CNCollection
+import CNChain
+import CNSet
+import "cnTypes.h"
 import "NSMutableArray+CNChain.h"
 
 trait CNList<T> extends CNIterable<T> {
     def at(index : uint) : T?
+
+    def randomItem : T? =
+        if(isEmpty) nil
+        else at(randomWith(count - 1))
+
+    def toSet : CNSet<T> = convertWith<NSSet<T>>(NSSetBuilder.new<T>)
 }
 
 stub class NSArray<T> extends CNList<T> {}

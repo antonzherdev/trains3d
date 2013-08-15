@@ -1,13 +1,16 @@
 package core.chain
 
 import CNCollection
+import CNList
 import "CNOption.h"
 import "cnTypes.h"
 import CNChain
 
-class CNRange(start : int, end : int, step : int) extends CNIterable<int> {
-    def count : uint = (end - start)/step
-
+class CNRange(start : int, end : int, step : int) extends CNList<int> {
+    val count : uint = (end - start)/step
+    def at(index : uint) : int? =
+        if(index >= count) nil
+        else start + step*index
     def iterator : CNIterator<int> = CNRangeIterator(start, end, step)
 }
 

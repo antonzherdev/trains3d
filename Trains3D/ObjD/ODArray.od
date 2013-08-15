@@ -1,13 +1,13 @@
 package core
 
-import CNChain
+import CNList
 import CNCollection
 
-stub class ODArray<A> extends CNChain<A> {
+stub class ODArray<T> extends CNList<T> {
 
 }
 
-stub class ODMutableArray<A> extends ODArray<A> {
-    def add(object : A)
-    def remove(object : A)
+stub class ODMutableArray<T> extends ODArray<T> {
+    def add(object : T)
+    def remove(object : T)
 }

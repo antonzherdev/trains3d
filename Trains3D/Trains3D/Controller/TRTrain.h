@@ -1,4 +1,5 @@
 #import "objd.h"
+#import "CNList.h"
 #import "EGTypes.h"
 @class EGMapSso;
 @class EGLine;
@@ -27,15 +28,16 @@
 
 @class TRTrain;
 @class TRCar;
+@class TRTrainGenerator;
 
 @interface TRTrain : NSObject
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) TRColor* color;
 @property (nonatomic, readonly) NSArray* cars;
-@property (nonatomic, readonly) double speed;
+@property (nonatomic, readonly) NSUInteger speed;
 
-+ (id)trainWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(double)speed;
-- (id)initWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(double)speed;
++ (id)trainWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(NSUInteger)speed;
+- (id)initWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(NSUInteger)speed;
 - (void)startFromCity:(TRCity*)city;
 - (void)setHead:(TRRailPoint*)head;
 - (void)updateWithDelta:(double)delta;
@@ -54,6 +56,17 @@
 - (double)length;
 - (double)width;
 - (EGThickLineSegment*)figure;
+@end
+
+
+@interface TRTrainGenerator : NSObject
+@property (nonatomic, readonly) id<CNList> carsCount;
+@property (nonatomic, readonly) id<CNList> speed;
+
++ (id)trainGeneratorWithCarsCount:(id<CNList>)carsCount speed:(id<CNList>)speed;
+- (id)initWithCarsCount:(id<CNList>)carsCount speed:(id<CNList>)speed;
+- (NSArray*)generateCars;
+- (NSUInteger)generateSpeed;
 @end
 
 

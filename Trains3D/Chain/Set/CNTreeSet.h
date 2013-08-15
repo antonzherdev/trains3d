@@ -1,9 +1,9 @@
 #import <Foundation/Foundation.h>
 #import "CNTreeMap.h"
 @protocol CNIterator;
+@protocol CNBuilder;
 @protocol CNTraversable;
 @protocol CNIterable;
-@protocol CNBuilder;
 #import "CNSet.h"
 @class CNChain;
 

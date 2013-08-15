@@ -1,6 +1,8 @@
 #import <Foundation/Foundation.h>
 #import <math.h>
 
+@class CNRange;
+
 static inline BOOL eqf(CGFloat a, CGFloat b) {
     return fabs(a - b) <= DBL_EPSILON;
 }
@@ -27,3 +29,6 @@ static inline NSInteger intCompare(NSInteger a, NSInteger b) {
 static inline NSInteger uintCompare(NSUInteger a, NSUInteger b) {
     return a < b ? -1 : (a > b ? 1 : 0);
 }
+
+CNRange* intRange(NSInteger x) ;
+CNRange* uintRange(NSUInteger x) ;

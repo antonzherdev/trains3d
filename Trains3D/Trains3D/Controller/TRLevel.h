@@ -22,6 +22,7 @@
 @class TRRailPointCorrection;
 @class TRTrain;
 @class TRCar;
+@class TRTrainGenerator;
 @class TRScoreRules;
 @class TRScore;
 @class TRTrainScore;
@@ -50,6 +51,8 @@
 - (id)initWithRules:(TRLevelRules*)rules;
 - (NSArray*)cities;
 - (NSArray*)trains;
+- (void)createNewCity;
+- (void)runTrainWithGenerator:(TRTrainGenerator*)generator;
 - (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint;
 - (void)runSample;
 - (void)updateWithDelta:(double)delta;

@@ -8,7 +8,7 @@ class EGScene(val controller : EGController, val layers : [EGLayer]) {
         layers.for(_.drawWith(viewSize))
     }
 
-    def process(event : EGEvent) = layers.reverse.fold((r, layer) -> r || layer.process(event), false)
+    def process(event : EGEvent) = layers.chain.reverse.fold((r, layer) -> r || layer.process(event), false)
 
     def updateWith(delta : float) {
         controller.updateWith(delta)

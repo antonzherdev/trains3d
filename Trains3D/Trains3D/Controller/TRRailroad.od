@@ -55,7 +55,7 @@ class TRRailroad(map : EGMapSso, score : TRScore) {
     def lights = _lights
     val builder = TRRailroadBuilder(self)
     private val connectorIndex = EGMapSsoTileIndex(map,
-        TRRailConnector.values.map( (_, TREmptyConnector.instance) ).toMutableMap)
+        TRRailConnector.values.chain.map( (_, TREmptyConnector.instance) ).toMutableMap)
 
     def canAdd(rail : TRRail) : bool = {
         val tileIndex = connectorIndex[rail.tile]
@@ -108,9 +108,9 @@ class TRRailroad(map : EGMapSso, score : TRScore) {
 
     private def rebuildArrays {
         val allObjects = connectorIndex.values.chain.flatMap(_.values).toArray
-        _rails = allObjects.flatMap(_.rails).distinct.toArray
-        _switches = allObjects.filter(_.is<TRSwitch>).toArray
-        _lights = allObjects.filter(_.is<TRLight>).toArray
+        _rails = allObjects.chain.flatMap(_.rails).distinct.toArray
+        _switches = allObjects.chain.filter(_.is<TRSwitch>).toArray
+        _lights = allObjects.chain.filter(_.is<TRLight>).toArray
     }
 
     def move(consideringLights : bool, forLength : float, point : TRRailPoint) : TRRailPointCorrection =

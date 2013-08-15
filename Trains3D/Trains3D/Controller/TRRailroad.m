@@ -373,7 +373,7 @@ static TRRailroadConnectorContent* _instance;
         __lights = (@[]);
         _builder = [TRRailroadBuilder railroadBuilderWithRailroad:self];
         _connectorIndex = [EGMapSsoTileIndex mapSsoTileIndexWithMap:_map initial:^NSMutableDictionary*() {
-            return [[[TRRailConnector values] map:^CNTuple*(TRRailConnector* _) {
+            return [[[[TRRailConnector values] chain] map:^CNTuple*(TRRailConnector* _) {
                 return tuple(_, TREmptyConnector.instance);
             }] toMutableMap];
         }];
@@ -449,13 +449,13 @@ static TRRailroadConnectorContent* _instance;
     NSArray* allObjects = [[[[_connectorIndex values] chain] flatMap:^id<CNIterable>(NSMutableDictionary* _) {
         return [_ values];
     }] toArray];
-    __rails = [[[allObjects flatMap:^NSArray*(TRRailroadConnectorContent* _) {
+    __rails = [[[[allObjects chain] flatMap:^NSArray*(TRRailroadConnectorContent* _) {
         return [_ rails];
     }] distinct] toArray];
-    __switches = [[allObjects filter:^BOOL(TRRailroadConnectorContent* _) {
+    __switches = [[[allObjects chain] filter:^BOOL(TRRailroadConnectorContent* _) {
         return [_ isKindOfClass:[TRSwitch class]];
     }] toArray];
-    __lights = [[allObjects filter:^BOOL(TRRailroadConnectorContent* _) {
+    __lights = [[[allObjects chain] filter:^BOOL(TRRailroadConnectorContent* _) {
         return [_ isKindOfClass:[TRLight class]];
     }] toArray];
 }

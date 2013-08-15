@@ -2,9 +2,9 @@
 #import "EGTypes.h"
 @class EGMapSso;
 @protocol CNIterator;
+@protocol CNBuilder;
 @protocol CNTraversable;
 @protocol CNIterable;
-@protocol CNBuilder;
 
 @class EGMapSsoTileIndex;
 

@@ -17,7 +17,7 @@
 }
 
 - (id)objectForPoint:(EGPoint)point {
-    return [[_rects find:^BOOL(CNTuple* _) {
+    return [[_rects findWhere:^BOOL(CNTuple* _) {
         return egRectContains(uwrap(EGRect, _.a), point);
     }] map:^id(CNTuple* _) {
         return _.b;

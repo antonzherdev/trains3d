@@ -115,6 +115,25 @@ static NSObject* _obj;
     return YES;
 }
 
+- (id)findWhere:(BOOL(^)(id))where {
+    __block id ret = [CNOption none];
+    [self goOn:^BOOL(id x) {
+        if(where(ret)) {
+            ret = [CNOption opt:x];
+            NO;
+        }
+        return YES;
+    }];
+    return ret;
+}
+
+- (id)convertWithBuilder:(id<CNBuilder>)builder {
+    [self forEach:^void(id x) {
+        [builder addObject:x];
+    }];
+    return [builder build];
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }

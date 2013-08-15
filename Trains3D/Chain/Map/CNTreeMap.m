@@ -439,6 +439,25 @@ static NSInteger _RED;
     return NO;
 }
 
+- (id)findWhere:(BOOL(^)(id))where {
+    __block id ret = [CNOption none];
+    [self goOn:^BOOL(id x) {
+        if(where(ret)) {
+            ret = [CNOption opt:x];
+            NO;
+        }
+        return YES;
+    }];
+    return ret;
+}
+
+- (id)convertWithBuilder:(id<CNBuilder>)builder {
+    [self forEach:^void(id x) {
+        [builder addObject:x];
+    }];
+    return [builder build];
+}
+
 + (NSInteger)BLACK {
     return _BLACK;
 }
@@ -604,6 +623,25 @@ static NSInteger _RED;
     return NO;
 }
 
+- (id)findWhere:(BOOL(^)(id))where {
+    __block id ret = [CNOption none];
+    [self goOn:^BOOL(id x) {
+        if(where(ret)) {
+            ret = [CNOption opt:x];
+            NO;
+        }
+        return YES;
+    }];
+    return ret;
+}
+
+- (id)convertWithBuilder:(id<CNBuilder>)builder {
+    [self forEach:^void(id x) {
+        [builder addObject:x];
+    }];
+    return [builder build];
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -749,6 +787,25 @@ static NSInteger _RED;
         if([[i next] isEqual:i]) return YES;
     }
     return NO;
+}
+
+- (id)findWhere:(BOOL(^)(id))where {
+    __block id ret = [CNOption none];
+    [self goOn:^BOOL(id x) {
+        if(where(ret)) {
+            ret = [CNOption opt:x];
+            NO;
+        }
+        return YES;
+    }];
+    return ret;
+}
+
+- (id)convertWithBuilder:(id<CNBuilder>)builder {
+    [self forEach:^void(id x) {
+        [builder addObject:x];
+    }];
+    return [builder build];
 }
 
 - (id)copyWithZone:(NSZone*)zone {

@@ -6,6 +6,7 @@
 @class EGSchedule;
 @class TRTrain;
 @class TRCar;
+@class TRTrainGenerator;
 @class TRLevelRules;
 @class TRLevel;
 @class TRLevelView;

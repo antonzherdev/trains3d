@@ -10,9 +10,9 @@
 #import "CNTreeMap.h"
 @class CNTreeSet;
 @protocol CNIterator;
+@protocol CNBuilder;
 @protocol CNTraversable;
 @protocol CNIterable;
-@protocol CNBuilder;
 @class CNPair;
 @class CNPairIterator;
 #import "CNSet.h"

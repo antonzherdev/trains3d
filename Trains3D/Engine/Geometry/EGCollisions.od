@@ -10,7 +10,7 @@ class EGCollisions {
             .combinations
             .filter(p -> p.a.a != p.b.a && p.a.b.boundingRect.intersects(p.b.b.boundingRect))
             .uncombinations
-            .flatMap(f -> f.b.segments.map(segment -> (f.a, segment)))
+            .flatMap(f -> f.b.segments.chain.map(segment -> (f.a, segment)))
             .toArray
         if(segments.isEmpty) return NSSet.new<EGCollision>
         val intersections = EGBentleyOttmann.intersectionsFor(segments)

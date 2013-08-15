@@ -17,7 +17,7 @@
 
 - (void)testMain {
     NSSet* r = [EGBentleyOttmann intersectionsForSegments:(@[tuple(@1, [EGLineSegment newWithX1:-1 y1:-1 x2:2 y2:2]), tuple(@2, [EGLineSegment newWithX1:-2 y1:1 x2:2 y2:1]), tuple(@3, [EGLineSegment newWithX1:-2 y1:2 x2:1 y2:-1])])];
-    NSSet* e = [(@[[EGIntersection intersectionWithItems:[CNPair newWithA:@1 b:@2] point:EGPointMake(1, 1)], [EGIntersection intersectionWithItems:[CNPair newWithA:@1 b:@3] point:EGPointMake(0, 0)], [EGIntersection intersectionWithItems:[CNPair newWithA:@2 b:@3] point:EGPointMake(-1, 1)]]) toSet];
+    id<CNSet> e = [(@[[EGIntersection intersectionWithItems:[CNPair newWithA:@1 b:@2] point:EGPointMake(1, 1)], [EGIntersection intersectionWithItems:[CNPair newWithA:@1 b:@3] point:EGPointMake(0, 0)], [EGIntersection intersectionWithItems:[CNPair newWithA:@2 b:@3] point:EGPointMake(-1, 1)]]) toSet];
     [self assertEqualsA:e b:r];
 }
 
@@ -33,31 +33,31 @@
 
 - (void)testVertical {
     NSSet* r = [EGBentleyOttmann intersectionsForSegments:(@[tuple(@1, [EGLineSegment newWithX1:-1 y1:-1 x2:2 y2:2]), tuple(@2, [EGLineSegment newWithX1:1 y1:-2 x2:1 y2:2]), tuple(@3, [EGLineSegment newWithX1:1 y1:-4 x2:1 y2:0]), tuple(@4, [EGLineSegment newWithX1:-1 y1:-1 x2:2 y2:-4]), tuple(@5, [EGLineSegment newWithX1:-1 y1:-1 x2:2 y2:-1])])];
-    NSSet* e = [(@[[EGIntersection intersectionWithItems:[CNPair newWithA:@3 b:@4] point:EGPointMake(1, -3)], [EGIntersection intersectionWithItems:[CNPair newWithA:@2 b:@5] point:EGPointMake(1, -1)], [EGIntersection intersectionWithItems:[CNPair newWithA:@1 b:@2] point:EGPointMake(1, 1)], [EGIntersection intersectionWithItems:[CNPair newWithA:@3 b:@5] point:EGPointMake(1, -1)]]) toSet];
+    id<CNSet> e = [(@[[EGIntersection intersectionWithItems:[CNPair newWithA:@3 b:@4] point:EGPointMake(1, -3)], [EGIntersection intersectionWithItems:[CNPair newWithA:@2 b:@5] point:EGPointMake(1, -1)], [EGIntersection intersectionWithItems:[CNPair newWithA:@1 b:@2] point:EGPointMake(1, 1)], [EGIntersection intersectionWithItems:[CNPair newWithA:@3 b:@5] point:EGPointMake(1, -1)]]) toSet];
     [self assertEqualsA:e b:r];
 }
 
 - (void)testVerticalInPoint {
     NSSet* r = [EGBentleyOttmann intersectionsForSegments:(@[tuple(@1, [EGLineSegment newWithX1:0 y1:0 x2:0 y2:1]), tuple(@2, [EGLineSegment newWithX1:-1 y1:1 x2:1 y2:1]), tuple(@3, [EGLineSegment newWithX1:-1 y1:0 x2:1 y2:0])])];
-    NSSet* e = [(@[[EGIntersection intersectionWithItems:[CNPair newWithA:@1 b:@2] point:EGPointMake(0, 1)], [EGIntersection intersectionWithItems:[CNPair newWithA:@1 b:@3] point:EGPointMake(0, 0)]]) toSet];
+    id<CNSet> e = [(@[[EGIntersection intersectionWithItems:[CNPair newWithA:@1 b:@2] point:EGPointMake(0, 1)], [EGIntersection intersectionWithItems:[CNPair newWithA:@1 b:@3] point:EGPointMake(0, 0)]]) toSet];
     [self assertEqualsA:e b:r];
 }
 
 - (void)testOneStart {
     NSSet* r = [EGBentleyOttmann intersectionsForSegments:(@[tuple(@1, [EGLineSegment newWithX1:-1 y1:1 x2:1 y2:-1]), tuple(@2, [EGLineSegment newWithX1:-1 y1:1 x2:2 y2:1]), tuple(@3, [EGLineSegment newWithX1:-1 y1:-1 x2:2 y2:2])])];
-    NSSet* e = [(@[[EGIntersection intersectionWithItems:[CNPair newWithA:@1 b:@3] point:EGPointMake(0, 0)], [EGIntersection intersectionWithItems:[CNPair newWithA:@2 b:@3] point:EGPointMake(1, 1)]]) toSet];
+    id<CNSet> e = [(@[[EGIntersection intersectionWithItems:[CNPair newWithA:@1 b:@3] point:EGPointMake(0, 0)], [EGIntersection intersectionWithItems:[CNPair newWithA:@2 b:@3] point:EGPointMake(1, 1)]]) toSet];
     [self assertEqualsA:e b:r];
 }
 
 - (void)testOneEnd {
     NSSet* r = [EGBentleyOttmann intersectionsForSegments:(@[tuple(@1, [EGLineSegment newWithX1:-2 y1:1 x2:1 y2:1]), tuple(@2, [EGLineSegment newWithX1:-1 y1:-1 x2:1 y2:1]), tuple(@3, [EGLineSegment newWithX1:-2 y1:2 x2:2 y2:-2])])];
-    NSSet* e = [(@[[EGIntersection intersectionWithItems:[CNPair newWithA:@1 b:@3] point:EGPointMake(-1, 1)], [EGIntersection intersectionWithItems:[CNPair newWithA:@2 b:@3] point:EGPointMake(0, 0)]]) toSet];
+    id<CNSet> e = [(@[[EGIntersection intersectionWithItems:[CNPair newWithA:@1 b:@3] point:EGPointMake(-1, 1)], [EGIntersection intersectionWithItems:[CNPair newWithA:@2 b:@3] point:EGPointMake(0, 0)]]) toSet];
     [self assertEqualsA:e b:r];
 }
 
 - (void)testSameLines {
     NSSet* r = [EGBentleyOttmann intersectionsForSegments:(@[tuple(@1, [EGLineSegment newWithX1:-1 y1:1 x2:1 y2:-1]), tuple(@2, [EGLineSegment newWithX1:-1 y1:1 x2:1 y2:-1]), tuple(@3, [EGLineSegment newWithX1:-1 y1:-1 x2:2 y2:2])])];
-    NSSet* e = [(@[[EGIntersection intersectionWithItems:[CNPair newWithA:@1 b:@2] point:EGPointMake(0, 0)], [EGIntersection intersectionWithItems:[CNPair newWithA:@2 b:@3] point:EGPointMake(0, 0)], [EGIntersection intersectionWithItems:[CNPair newWithA:@1 b:@3] point:EGPointMake(0, 0)]]) toSet];
+    id<CNSet> e = [(@[[EGIntersection intersectionWithItems:[CNPair newWithA:@1 b:@2] point:EGPointMake(0, 0)], [EGIntersection intersectionWithItems:[CNPair newWithA:@2 b:@3] point:EGPointMake(0, 0)], [EGIntersection intersectionWithItems:[CNPair newWithA:@1 b:@3] point:EGPointMake(0, 0)]]) toSet];
     [self assertEqualsA:e b:r];
 }
 

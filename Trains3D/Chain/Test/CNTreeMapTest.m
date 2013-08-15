@@ -22,12 +22,12 @@
     [tests forEach:^void(id i) {
         [map setObject:[@"test" stringByAppendingFormat:@"%li", unumi(i)] forKey:i];
     }];
-    [self assertEqualsA:numi([[tests distinct] count]) b:numi([map count])];
-    [[tests distinct] forEach:^void(id i) {
+    [self assertEqualsA:numi([[[tests chain] distinct] count]) b:numi([map count])];
+    [[[tests chain] distinct] forEach:^void(id i) {
         [self assertEqualsA:[@"test" stringByAppendingFormat:@"%li", unumi(i)] b:[[map objectForKey:i] get]];
     }];
     [self assertEqualsA:(@[@-30, @-20, @-18, @-15, @-10, @0, @10, @11, @13, @20]) b:[[map.keys chain] toArray]];
-    [[tests distinct] forEach:^void(id i) {
+    [[[tests chain] distinct] forEach:^void(id i) {
         [self assertEqualsA:[@"test" stringByAppendingFormat:@"%li", unumi(i)] b:[[map objectForKey:i] get]];
         [map removeObjectForKey:i];
         [self assertTrueValue:[[map objectForKey:i] isEmpty]];

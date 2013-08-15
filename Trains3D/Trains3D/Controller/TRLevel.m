@@ -121,7 +121,7 @@
 }
 
 - (void)createNewCity {
-    EGPointI tile = uwrap(EGPointI, [[[_map.partialTiles exclude:[[self cities] map:^id(TRCity* _) {
+    EGPointI tile = uwrap(EGPointI, [[[[_map.partialTiles chain] exclude:[[[self cities] chain] map:^id(TRCity* _) {
         return wrap(EGPointI, _.tile);
     }]] randomItem] get]);
     TRCity* city = [TRCity cityWithColor:[TRColor values][[[self cities] count]] tile:tile angle:[self randomCityDirectionForTile:tile]];
@@ -131,7 +131,7 @@
 
 - (TRCityAngle*)randomCityDirectionForTile:(EGPointI)tile {
     EGRectI cut = [_map cutRectForTile:tile];
-    return [[[[TRCityAngle values] filter:^BOOL(TRCityAngle* a) {
+    return [[[[[TRCityAngle values] chain] filter:^BOOL(TRCityAngle* a) {
         NSInteger angle = a.angle;
         return (angle == 0 && egRectIX2(cut) == 0 && egRectIY2(cut) == 0) || (angle == 90 && cut.x == 0 && egRectIY2(cut) == 0) || (angle == 180 && cut.x == 0 && cut.y == 0) || (angle == 270 && egRectIX2(cut) == 0 && cut.y == 0);
     }] randomItem] get];
@@ -141,6 +141,9 @@
     [train startFromCity:fromCity];
     __trains = [__trains arrayByAddingObject:train];
     [_score runTrain:train];
+}
+
+- (void)runTrainWithGenerator:(TRTrainGenerator*)generator {
 }
 
 - (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint {
@@ -170,13 +173,13 @@
 }
 
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch {
-    return [[__trains find:^BOOL(TRTrain* _) {
+    return [[__trains findWhere:^BOOL(TRTrain* _) {
         return [_ isLockedTheSwitch:theSwitch];
     }] isDefined];
 }
 
 - (id)cityForTile:(EGPointI)tile {
-    return [__cities find:^BOOL(TRCity* _) {
+    return [__cities findWhere:^BOOL(TRCity* _) {
         return EGPointIEq(_.tile, tile);
     }];
 }
@@ -195,8 +198,8 @@
 }
 
 - (NSSet*)detectCollisions {
-    NSArray* carFigures = [[__trains flatMap:^CNChain*(TRTrain* train) {
-        return [train.cars map:^CNTuple*(TRCar* car) {
+    NSArray* carFigures = [[[__trains chain] flatMap:^CNChain*(TRTrain* train) {
+        return [[train.cars chain] map:^CNTuple*(TRCar* car) {
             return tuple(train, [car figure]);
         }];
     }] toArray];

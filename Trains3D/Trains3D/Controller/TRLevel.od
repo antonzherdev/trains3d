@@ -36,8 +36,8 @@ class TRLevel(rules : TRLevelRules) extends EGController {
         schedule
     }
 
-    private def createNewCity {
-        val tile = map.partialTiles.exclude(cities.map(_.tile)).randomItem.get
+    def createNewCity {
+        val tile = map.partialTiles.chain.exclude(cities.chain.map(_.tile)).randomItem.get
         val city = TRCity(TRColor[cities.count], tile, randomCityDirectionFor(tile))
         railroad.tryAdd(TRRail(tile, city.angle.form))
         _cities.add(city)
@@ -45,7 +45,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
 
     private def randomCityDirectionFor(tile : EGPointI) = {
         val cut = map.cutRectFor(tile)
-        TRCityAngle.values.filter(a -> {
+        TRCityAngle.values.chain.filter(a -> {
             val angle = a.angle
             {(angle == 0 && cut.x2 == 0 && cut.y2 == 0)
             || (angle == 90 && cut.x == 0 && cut.y2 == 0)
@@ -58,6 +58,10 @@ class TRLevel(rules : TRLevelRules) extends EGController {
         train.startFrom(fromCity)
         _trains += train
         score.run(train)
+    }
+
+    def runTrainWith(generator : TRTrainGenerator) {
+        //run(TRTrain(self, _cities.randomItem))
     }
 
     def testRun(train : TRTrain, fromPoint : TRRailPoint) {
@@ -102,7 +106,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
     }
 
     def detectCollisions : NSSet<EGCollision<TRTrain>> = {
-        val carFigures = _trains.flatMap(train -> train.cars.map(car -> (train, car.figure))).toArray
+        val carFigures = _trains.chain.flatMap(train -> train.cars.chain.map(car -> (train, car.figure))).toArray
         EGCollisions.collisionsFor(carFigures)
     }
 

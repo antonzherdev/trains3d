@@ -2,19 +2,21 @@
 #import "CNOption.h"
 #import "cnTypes.h"
 #import "CNCollection.h"
+#import "CNList.h"
 @class CNChain;
 
 @class CNRange;
 @class CNRangeIterator;
 
-@interface CNRange : NSObject<CNIterable>
+@interface CNRange : NSObject<CNList>
 @property (nonatomic, readonly) NSInteger start;
 @property (nonatomic, readonly) NSInteger end;
 @property (nonatomic, readonly) NSInteger step;
+@property (nonatomic, readonly) NSUInteger count;
 
 + (id)rangeWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step;
 - (id)initWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step;
-- (NSUInteger)count;
+- (id)atIndex:(NSUInteger)index;
 - (id<CNIterator>)iterator;
 @end
 

@@ -19,7 +19,7 @@
     NSArray* segments = [[[[[[figures chain] combinations] filter:^BOOL(CNTuple* p) {
         return !([((CNTuple*)p.a).a isEqual:((CNTuple*)p.b).a]) && egRectIntersects([((CNTuple*)p.a).b boundingRect], [((CNTuple*)p.b).b boundingRect]);
     }] uncombinations] flatMap:^CNChain*(CNTuple* f) {
-        return [[f.b segments] map:^CNTuple*(EGLineSegment* segment) {
+        return [[[f.b segments] chain] map:^CNTuple*(EGLineSegment* segment) {
             return tuple(f.a, segment);
         }];
     }] toArray];

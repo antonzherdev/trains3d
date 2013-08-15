@@ -5,10 +5,12 @@
     NSInteger _start;
     NSInteger _end;
     NSInteger _step;
+    NSUInteger _count;
 }
 @synthesize start = _start;
 @synthesize end = _end;
 @synthesize step = _step;
+@synthesize count = _count;
 
 + (id)rangeWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step {
     return [[CNRange alloc] initWithStart:start end:end step:step];
@@ -20,17 +22,28 @@
         _start = start;
         _end = end;
         _step = step;
+        _count = (_end - _start) / _step;
     }
     
     return self;
 }
 
-- (NSUInteger)count {
-    return (_end - _start) / _step;
+- (id)atIndex:(NSUInteger)index {
+    if(index >= _count) return [CNOption none];
+    else return [CNOption opt:numi(_start + _step * index)];
 }
 
 - (id<CNIterator>)iterator {
     return [CNRangeIterator rangeIteratorWithStart:_start end:_end step:_step];
+}
+
+- (id)randomItem {
+    if([self isEmpty]) return [CNOption none];
+    else return [self atIndex:randomWith([self count] - 1)];
+}
+
+- (id<CNSet>)toSet {
+    return [self convertWithBuilder:[NSSetBuilder setBuilder]];
 }
 
 - (id)head {
@@ -66,6 +79,25 @@
         if([[i next] isEqual:i]) return YES;
     }
     return NO;
+}
+
+- (id)findWhere:(BOOL(^)(id))where {
+    __block id ret = [CNOption none];
+    [self goOn:^BOOL(id x) {
+        if(where(ret)) {
+            ret = [CNOption opt:x];
+            NO;
+        }
+        return YES;
+    }];
+    return ret;
+}
+
+- (id)convertWithBuilder:(id<CNBuilder>)builder {
+    [self forEach:^void(id x) {
+        [builder addObject:x];
+    }];
+    return [builder build];
 }
 
 - (id)copyWithZone:(NSZone*)zone {

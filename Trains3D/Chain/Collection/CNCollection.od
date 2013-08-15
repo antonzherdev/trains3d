@@ -7,6 +7,12 @@ trait CNIterator<T> {
    def next : T
 }
 
+trait CNBuilder<T, C extends CNTraversable<T>> {
+    def add(object : T)
+    def build : C
+}
+
+
 trait CNTraversable<T> {
     def for(each : T -> void) {
         go(item -> {
@@ -21,7 +27,24 @@ trait CNTraversable<T> {
         CNChain.chainWith<T>(self)
     }
 
+    def find(where : T -> bool) : T? = {
+        var ret : T? = nil
+        go(x -> {
+            if(where(ret)) {
+                ret = x
+                false
+            }
+            true
+        })
+        ret
+    }
+
     def head : T?
+
+    def convertWith<C extends CNTraversable<T>>(builder : CNBuilder<T, C>) : C = {
+        for(x -> builder.add(x))
+        builder.build
+    }
 }
 
 trait CNIterable<T> extends CNTraversable<T> {
@@ -49,9 +72,4 @@ trait CNIterable<T> extends CNTraversable<T> {
         while(i.hasNext) if(i.next == i) return true
         false
     }
-}
-
-trait CNBuilder<T, C extends CNTraversable<T>> {
-    def add(object : T)
-    def build : C
 }
