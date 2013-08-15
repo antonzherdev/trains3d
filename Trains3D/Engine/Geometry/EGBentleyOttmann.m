@@ -30,7 +30,7 @@
             return [[[[((NSMutableSet*)p.b) chain] combinations] filter:^BOOL(CNTuple* comb) {
                 return !([((EGBentleyOttmannPointEvent*)comb.a) isVertical]) || !([((EGBentleyOttmannPointEvent*)comb.b) isVertical]);
             }] map:^EGIntersection*(CNTuple* comb) {
-                return [EGIntersection intersectionWithItems:[CNPair newWithA:((EGBentleyOttmannPointEvent*)comb.a).data b:((EGBentleyOttmannPointEvent*)comb.b).data] point:((EGPointClass*)p.a).point];
+                return [EGIntersection intersectionWithItems:[CNPair newWithA:((EGBentleyOttmannPointEvent*)((EGBentleyOttmannPointEvent*)comb.a).data) b:((EGBentleyOttmannPointEvent*)((EGBentleyOttmannPointEvent*)comb.b).data)] point:((EGPointClass*)p.a).point];
             }];
         }] toSet];
     }
@@ -315,8 +315,8 @@
     if(!([segments isEmpty])) {
         [segments forEach:^void(CNTuple* s) {
             EGLineSegment* segment = ((EGLineSegment*)s.b);
-            [ret offerPoint:segment.p1 event:[EGBentleyOttmannPointEvent bentleyOttmannPointEventWithIsStart:YES data:s.a segment:segment point:segment.p1]];
-            [ret offerPoint:segment.p2 event:[EGBentleyOttmannPointEvent bentleyOttmannPointEventWithIsStart:NO data:s.a segment:segment point:segment.p2]];
+            [ret offerPoint:segment.p1 event:[EGBentleyOttmannPointEvent bentleyOttmannPointEventWithIsStart:YES data:((CNTuple*)s.a) segment:segment point:segment.p1]];
+            [ret offerPoint:segment.p2 event:[EGBentleyOttmannPointEvent bentleyOttmannPointEventWithIsStart:NO data:((CNTuple*)s.a) segment:segment point:segment.p2]];
         }];
         sweepLine.queue = ret;
     }

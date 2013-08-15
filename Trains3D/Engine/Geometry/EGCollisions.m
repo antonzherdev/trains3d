@@ -17,10 +17,10 @@
 
 + (NSSet*)collisionsForFigures:(NSArray*)figures {
     NSArray* segments = [[[[[[figures chain] combinations] filter:^BOOL(CNTuple* p) {
-        return !([((CNTuple*)p.a).a isEqual:((CNTuple*)p.b).a]) && egRectIntersects([((CNTuple*)p.a).b boundingRect], [((CNTuple*)p.b).b boundingRect]);
+        return !(((CNTuple*)((CNTuple*)p.a).a) == ((CNTuple*)((CNTuple*)p.b).a)) && egRectIntersects([((CNTuple*)p.a).b boundingRect], [((CNTuple*)p.b).b boundingRect]);
     }] uncombinations] flatMap:^CNChain*(CNTuple* f) {
         return [[[f.b segments] chain] map:^CNTuple*(EGLineSegment* segment) {
-            return tuple(f.a, segment);
+            return tuple(((CNTuple*)f.a), segment);
         }];
     }] toArray];
     if([segments isEmpty]) return [NSSet set];
