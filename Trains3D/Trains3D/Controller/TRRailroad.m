@@ -17,7 +17,7 @@
     return self;
 }
 
-- (BOOL)canAddRail {
+- (BOOL)canAddRail:(TRRail*)rail {
     return YES;
 }
 
@@ -150,6 +150,10 @@ static TRRailroadConnectorContent* _instance;
     return [TRLight lightWithTile:_tile connector:connector rail:self];
 }
 
+- (BOOL)canAddRail:(TRRail*)rail {
+    return rail.form != _form;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -218,7 +222,7 @@ static TRRailroadConnectorContent* _instance;
     _firstActive = !(_firstActive);
 }
 
-- (BOOL)canAddRail {
+- (BOOL)canAddRail:(TRRail*)rail {
     return NO;
 }
 
@@ -299,8 +303,8 @@ static TRRailroadConnectorContent* _instance;
     _isGreen = !(_isGreen);
 }
 
-- (BOOL)canAddRail {
-    return YES;
+- (BOOL)canAddRail:(TRRail*)rail {
+    return [rail canAddRail:rail];
 }
 
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to {
@@ -396,7 +400,7 @@ static TRRailroadConnectorContent* _instance;
 
 - (BOOL)canAddRail:(TRRail*)rail {
     NSMutableDictionary* tileIndex = [_connectorIndex objectForTile:rail.tile];
-    return [((TRRailroadConnectorContent*)[[tileIndex optionObjectForKey:rail.form.start] get]) canAddRail] && [((TRRailroadConnectorContent*)[[tileIndex optionObjectForKey:rail.form.end] get]) canAddRail];
+    return [((TRRailroadConnectorContent*)[[tileIndex optionObjectForKey:rail.form.start] get]) canAddRail:rail] && [((TRRailroadConnectorContent*)[[tileIndex optionObjectForKey:rail.form.end] get]) canAddRail:rail];
 }
 
 - (BOOL)tryAddRail:(TRRail*)rail {

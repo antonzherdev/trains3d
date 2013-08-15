@@ -21,7 +21,7 @@
 @interface TRRailroadConnectorContent : NSObject
 + (id)railroadConnectorContent;
 - (id)init;
-- (BOOL)canAddRail;
+- (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
 - (NSArray*)rails;
@@ -48,6 +48,7 @@
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (NSArray*)rails;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
+- (BOOL)canAddRail:(TRRail*)rail;
 @end
 
 
@@ -62,7 +63,7 @@
 - (id)initWithTile:(EGPointI)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
 - (TRRail*)activeRail;
 - (void)turn;
-- (BOOL)canAddRail;
+- (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (NSArray*)rails;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
@@ -78,7 +79,7 @@
 + (id)lightWithTile:(EGPointI)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail;
 - (id)initWithTile:(EGPointI)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail;
 - (void)turn;
-- (BOOL)canAddRail;
+- (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (NSArray*)rails;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;

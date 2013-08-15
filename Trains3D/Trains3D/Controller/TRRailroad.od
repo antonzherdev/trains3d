@@ -7,7 +7,7 @@ import TRRailPoint
 import TRScore
 
 class TRRailroadConnectorContent {
-    def canAddRail : bool = true
+    def canAdd(rail : TRRail) : bool = true
     def connect(rail : TRRail, to : TRRailConnector) : TRRailroadConnectorContent
     def buildLightIn(connector : TRRailConnector) : TRRailroadConnectorContent = self
     def rails : [TRRail]
@@ -25,13 +25,14 @@ class TRRail(tile : EGPointI, form : TRRailForm) extends TRRailroadConnectorCont
     def connect(rail : TRRail, to : TRRailConnector) : TRRailroadConnectorContent = TRSwitch(rail.tile, to, self, rail)
     def rails : [TRRail] = [self]
     def buildLightIn(connector : TRRailConnector) : TRRailroadConnectorContent = TRLight(tile, connector, self)
+    def canAdd(rail : TRRail) : bool = rail.form != form
 }
 
 class TRSwitch(tile : EGPointI, connector : TRRailConnector, rail1 : TRRail, rail2 : TRRail) extends TRRailroadConnectorContent {
     var firstActive = true
     def activeRail : TRRail = if(firstActive) rail1 else rail2
     def turn { firstActive = !firstActive }
-    def canAddRail = false
+    def canAdd(rail : TRRail) = false
     def connect(rail : TRRail, to : TRRailConnector) : TRRailroadConnectorContent = throw "Couldn't add rail to switch"
     def rails : [TRRail] = if(firstActive) [rail1, rail2] else [rail2, rail1]
     def buildLightIn(connector : TRRailConnector) : TRRailroadConnectorContent = self
@@ -40,7 +41,7 @@ class TRSwitch(tile : EGPointI, connector : TRRailConnector, rail1 : TRRail, rai
 class TRLight(tile : EGPointI, connector : TRRailConnector, rail : TRRail) extends TRRailroadConnectorContent {
     var isGreen = true
     def turn { isGreen = !isGreen }
-    def canAddRail = true
+    def canAdd(rail : TRRail) : bool = rail.canAdd(rail)
     def connect(rail : TRRail, to : TRRailConnector) : TRRailroadConnectorContent = TRSwitch(tile, to, self.rail, rail)
     def rails : [TRRail] = [rail]
     def buildLightIn(connector : TRRailConnector) : TRRailroadConnectorContent = self
@@ -59,7 +60,7 @@ class TRRailroad(map : EGMapSso, score : TRScore) {
 
     def canAdd(rail : TRRail) : bool = {
         val tileIndex = connectorIndex[rail.tile]
-        tileIndex[rail.form.start].get.canAddRail && tileIndex[rail.form.end].get.canAddRail
+        tileIndex[rail.form.start].get.canAdd(rail) && tileIndex[rail.form.end].get.canAdd(rail)
     }
 
     def tryAdd(rail : TRRail) : bool = {
