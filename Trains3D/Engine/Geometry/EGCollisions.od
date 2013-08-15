@@ -19,7 +19,7 @@ class EGCollisions {
                 by = _.items,
                 map = _.point,
                 withBuilder = NSSetBuilder.new<EGPoint>)
-            .map(p -> EGCollision(p.a, p.b))
+            .map(p -> EGCollision<T>(p.a, p.b))
             .toSet
     }
 }

@@ -30,7 +30,7 @@
             return [[[[((NSMutableSet*)p.b) chain] combinations] filter:^BOOL(CNTuple* comb) {
                 return !([((EGBentleyOttmannPointEvent*)comb.a) isVertical]) || !([((EGBentleyOttmannPointEvent*)comb.b) isVertical]);
             }] map:^EGIntersection*(CNTuple* comb) {
-                return [EGIntersection intersectionWithItems:[CNPair newWithA:((EGSweepLine*)((EGBentleyOttmannPointEvent*)comb.a).data) b:((EGSweepLine*)((EGBentleyOttmannPointEvent*)comb.b).data)] point:((EGPointClass*)p.a).point];
+                return [EGIntersection intersectionWithItems:[CNPair newWithA:((EGBentleyOttmannPointEvent*)comb.a).data b:((EGBentleyOttmannPointEvent*)comb.b).data] point:((EGPointClass*)p.a).point];
             }];
         }] toSet];
     }

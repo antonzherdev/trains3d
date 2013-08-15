@@ -13,7 +13,7 @@ trait CNList<T> extends CNIterable<T> {
         if(isEmpty) nil
         else at(randomWith(count - 1))
 
-    def toSet : CNSet<T> = convertWith<NSSet<T>>(NSSetBuilder.new<T>)
+    def toSet : CNSet<T> = convertWith(NSSetBuilder.new<T>)
 }
 
 stub class NSArray<T> extends CNList<T> {}

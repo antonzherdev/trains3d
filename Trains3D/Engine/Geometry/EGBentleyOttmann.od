@@ -11,7 +11,7 @@ class EGBentleyOttmann {
     static def intersectionsFor<T>(segments : [(T, EGLineSegment)]) : NSSet<EGIntersection<T>> =
         if(segments.count < 2) NSSet.new<T>
         else {
-            val sweepLine = EGSweepLine.new
+            val sweepLine = EGSweepLine.new<T>
             val queue = EGBentleyOttmannEventQueue.newWith(segments, sweepLine)
 
             while(!queue.isEmpty) {
