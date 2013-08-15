@@ -31,7 +31,7 @@
 }
 
 - (NSUInteger)count {
-    return 2;
+    return ((NSUInteger)2);
 }
 
 - (id<CNIterator>)iterator {
@@ -43,7 +43,7 @@
 }
 
 - (BOOL)isEmpty {
-    return [[self iterator] hasNext];
+    return !([[self iterator] hasNext]);
 }
 
 - (CNChain*)chain {

@@ -47,11 +47,11 @@ static double _carsDelta;
 }
 
 - (void)doTest1ForLevel:(TRLevel*)level delta:(double)delta form:(TRRailForm*)form {
-    TRTrain* t1 = [TRTrain trainWithLevel:level color:TRColor.green cars:(@[[TRCar car]]) speed:0];
+    TRTrain* t1 = [TRTrain trainWithLevel:level color:TRColor.green cars:(@[[TRCar car]]) speed:((NSUInteger)0)];
     TRRailPoint* p = [TRRailPoint railPointWithTile:EGPointIMake(0, 0) form:form x:0 back:NO];
     TRRailPoint* p2 = [level.railroad moveConsideringLights:NO forLength:_carLen point:p].point;
     [level testRunTrain:t1 fromPoint:p2];
-    TRTrain* t2 = [TRTrain trainWithLevel:level color:TRColor.orange cars:(@[[TRCar car], [TRCar car]]) speed:0];
+    TRTrain* t2 = [TRTrain trainWithLevel:level color:TRColor.orange cars:(@[[TRCar car], [TRCar car]]) speed:((NSUInteger)0)];
     p2 = [level.railroad moveConsideringLights:NO forLength:_carLen * 3 + _carsDelta + delta point:p].point;
     [level testRunTrain:t2 fromPoint:p2];
     NSSet* cols = [self checkLevel:level];
@@ -76,11 +76,11 @@ static double _carsDelta;
     [level.railroad tryAddRail:[TRRail railWithTile:EGPointIMake(2, 1) form:TRRailForm.leftRight]];
     [level.railroad tryAddRail:[TRRail railWithTile:EGPointIMake(3, 1) form:TRRailForm.leftRight]];
     [level.railroad tryAddRail:[TRRail railWithTile:EGPointIMake(1, 0) form:TRRailForm.bottomTop]];
-    TRTrain* t1 = [TRTrain trainWithLevel:level color:TRColor.green cars:(@[[TRCar car]]) speed:0];
+    TRTrain* t1 = [TRTrain trainWithLevel:level color:TRColor.green cars:(@[[TRCar car]]) speed:((NSUInteger)0)];
     TRRailPoint* p = [TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.bottomTop x:0 back:NO];
     TRRailPoint* p1 = [level.railroad moveConsideringLights:NO forLength:0.5 - _carWidth - 0.001 point:p].point;
     [level testRunTrain:t1 fromPoint:p1];
-    TRTrain* t2 = [TRTrain trainWithLevel:level color:TRColor.orange cars:(@[[TRCar car], [TRCar car]]) speed:0];
+    TRTrain* t2 = [TRTrain trainWithLevel:level color:TRColor.orange cars:(@[[TRCar car], [TRCar car]]) speed:((NSUInteger)0)];
     p = [TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight x:0 back:NO];
     TRRailPoint* p2 = [level.railroad moveConsideringLights:NO forLength:_carLen * 2 + _carsDelta point:p].point;
     [level testRunTrain:t2 fromPoint:p2];

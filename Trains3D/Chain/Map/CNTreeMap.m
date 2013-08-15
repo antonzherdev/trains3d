@@ -23,7 +23,7 @@ static NSInteger _RED;
     if(self) {
         _comparator = comparator;
         _root = nil;
-        __size = 0;
+        __size = ((NSUInteger)0);
         _keys = [CNTreeMapKeySet treeMapKeySetWithMap:self];
         _values = [CNTreeMapValues treeMapValuesWithMap:self];
     }
@@ -56,7 +56,7 @@ static NSInteger _RED;
 }
 
 - (void)clear {
-    __size = 0;
+    __size = ((NSUInteger)0);
     _root = nil;
 }
 
@@ -86,7 +86,7 @@ static NSInteger _RED;
     CNTreeMapEntry* t = _root;
     if(t == nil) {
         _root = [CNTreeMapEntry newWithKey:forKey object:object parent:nil];
-        __size = 1;
+        __size = ((NSUInteger)1);
     } else {
         NSInteger cmp = 0;
         CNTreeMapEntry* parent = nil;
@@ -593,7 +593,7 @@ static NSInteger _RED;
 }
 
 - (BOOL)isEmpty {
-    return [[self iterator] hasNext];
+    return !([[self iterator] hasNext]);
 }
 
 - (CNChain*)chain {
@@ -759,7 +759,7 @@ static NSInteger _RED;
 }
 
 - (BOOL)isEmpty {
-    return [[self iterator] hasNext];
+    return !([[self iterator] hasNext]);
 }
 
 - (CNChain*)chain {

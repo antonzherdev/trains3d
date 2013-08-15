@@ -15,7 +15,7 @@ class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : uin
     private var back = false
     static val carsDelta : float = 0.1
     private val length : float = cars.chain.fold(((r, car) -> car.length + r + carsDelta), -1.0 * carsDelta)
-    private val _speedF : float = speed / 100
+    private val _speedF : float = 0.01 * speed
 
     def startFrom(city : TRCity) {
         head = city.startPoint
@@ -90,7 +90,7 @@ class TRCar {
     def figure : EGThickLineSegment = EGThickLineSegment(EGLineSegment.newWith(head.point, tail.point), width)
 }
 
-class TRTrainGenerator(carsCount : CNList<uint>, speed : CNList<uint>) {
+class TRTrainGenerator(carsCount : CNList<int>, speed : CNList<int>) {
     def generateCars : [TRCar] = carsCount.randomItem.get.range.chain.map(TRCar.new).toArray
     def generateSpeed : uint = speed.randomItem.get
 }

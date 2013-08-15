@@ -1,8 +1,9 @@
+import CNRange
+
 import EGTypes
 import EGScene
 import EGLayer
 import EGMapIso
-import EGSchedule
 
 import TRTrain
 import TRLevel
@@ -27,8 +28,14 @@ class TRLevelFactory {
         delayFine = (train, i) -> i*1000,
         repairCost = 2000
         )
+    private static def train(cars : CNRange, speed : CNRange) : TRLevel -> void = (level : TRLevel)->
+        level.runTrainWith(TRTrainGenerator(cars, speed))
+
     private static val rules = [
-        TRLevelRules(EGSizeI(5, 3), scoreRules, [])
+        TRLevelRules(EGSizeI(5, 3), scoreRules, [
+            (1, train(cars = 1.to(5), speed = 50.to(100).with(step = 10))),
+            (10, train(cars = 1.to(5), speed = 50.to(100).with(step = 10)))
+        ])
     ]
     static def levelWith(number : uint) = TRLevel(rules[number - 1])
     static def levelWith(mapSize : EGSizeI) = TRLevel(TRLevelRules(mapSize, scoreRules, []))

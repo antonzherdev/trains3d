@@ -93,7 +93,7 @@ static NSObject* _obj;
 }
 
 - (BOOL)isEmpty {
-    return [[self iterator] hasNext];
+    return !([[self iterator] hasNext]);
 }
 
 - (CNChain*)chain {

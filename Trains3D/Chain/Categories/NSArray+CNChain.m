@@ -1,5 +1,6 @@
 #import "CNCollection.h"
 #import "NSArray+CNChain.h"
+#import "NSSet+CNChain.h"
 #import "CNChain.h"
 #import "CNOption.h"
 
@@ -15,48 +16,6 @@
     return [CNChain chainWithCollection:self];
 }
 
-- (CNChain *)reverse {
-    return [[self chain] reverse];
-}
-
-
-- (CNChain *)filter:(cnPredicate)predicate {
-    return [[self chain] filter:predicate];
-}
-
-- (CNChain *)filter:(cnPredicate)predicate selectivity:(double)selectivity {
-    return [[self chain] filter:predicate selectivity:selectivity];
-}
-
-- (CNChain *)map:(cnF)f {
-    return [[self chain] map:f];
-}
-
-- (CNChain *)flatMap:(cnF)f {
-    return [[self chain] flatMap:f];
-}
-
-
-- (CNChain *)append:(id)collection {
-    return [[self chain] append:collection];
-}
-
-- (CNChain *)prepend:(id)collection {
-    return [[self chain] prepend:collection];
-}
-
-- (CNChain *)exclude:(id)collection {
-    return [[self chain] exclude:collection];
-}
-
-- (CNChain *)intersect:(id)collection {
-    return [[self chain] intersect:collection];
-}
-
-- (CNChain *)mul:(id)collection {
-    return [[self chain] mul:collection];
-}
-
 - (id <CNIterator>)iterator {
     return nil;
 }
@@ -70,8 +29,28 @@
     return [self objectAtIndex : 0];
 }
 
+- (id)convertWithBuilder:(id<CNBuilder>)builder {
+    for(id x in self)  {
+        [builder addObject:x];
+    }
+    return [builder build];
+}
+
+
 - (id)randomItem {
-    return [[self chain] randomItem];
+    if([self isEmpty]) return [CNOption none];
+    else return [self objectAtIndex:randomWith([self count] - 1)];
+}
+
+- (id)findWhere:(BOOL(^)(id))where {
+    id ret = [CNOption none];
+    for(id item in self)  {
+        if(where(item)) {
+            ret = item;
+            break;
+        }
+    }
+    return ret;
 }
 
 - (void)forEach:(cnP)p {
@@ -88,26 +67,13 @@
 }
 
 
-- (id)fold:(cnF2)f withStart:(id)start {
-    return [[self chain] fold:f withStart:start];
-}
-
-- (id)find:(cnPredicate)predicate {
-    return [[self chain] find:predicate];
-}
-
-
-- (CNChain *)distinct {
-    return [[self chain] distinct];
-}
-
 - (NSArray *)arrayByRemovingObject:(id)object {
-    return [[self filter:^BOOL(id x) {
+    return [[[self chain] filter:^BOOL(id x) {
         return ![x isEqual:object];
     }] toArray];
 }
 
-- (NSSet *)toSet {
+- (id <CNSet>)toSet {
     return [NSSet setWithArray:self];
 }
 

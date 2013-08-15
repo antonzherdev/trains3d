@@ -52,7 +52,7 @@ trait CNIterable<T> extends CNTraversable<T> {
     def iterator : CNIterator<T>
 
     def head : T? = iterator.next
-    def isEmpty : bool = iterator.hasNext
+    def isEmpty : bool = !iterator.hasNext
 
     def chain : CNChain<T> = {
         CNChain.chainWith<T>(self)

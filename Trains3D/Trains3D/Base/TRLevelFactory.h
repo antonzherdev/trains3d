@@ -1,9 +1,9 @@
 #import "objd.h"
+#import "CNRange.h"
 #import "EGTypes.h"
 @class EGScene;
 @class EGLayer;
 @class EGMapSso;
-@class EGSchedule;
 @class TRTrain;
 @class TRCar;
 @class TRTrainGenerator;

@@ -3,7 +3,7 @@
 
 #define p(x, y) tuple(numi(x), numi(y))
 NSArray * pointToTuples(NSArray * arr) {
-    return [[arr map:^id(id x) {
+    return [[[arr chain] map:^id(id x) {
         EGPointI p = uwrap(EGPointI, x);
         return tuple(numi(p.x), numi(p.y));
     }] toArray];

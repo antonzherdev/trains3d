@@ -284,7 +284,7 @@ EGRectI egRectIApply(EGRect rect) {
     return EGRectIMake(lround(rect.x), lround(rect.width), lround(rect.y), lround(rect.height));
 }
 EGRectI egRectINewXY(double x, double x2, double y, double y2) {
-    return EGRectIMake(x, x2 - x, y, y2 - y);
+    return EGRectIMake(((NSInteger)x), ((NSInteger)x2 - x), ((NSInteger)y), ((NSInteger)y2 - y));
 }
 NSInteger egRectIX2(EGRectI self) {
     return self.x + self.width;

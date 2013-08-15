@@ -9,6 +9,7 @@
 - (id)init;
 - (void)scheduleEvent:(void(^)())event after:(double)after;
 - (void)updateWithDelta:(double)delta;
+- (double)time;
 @end
 
 

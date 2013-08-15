@@ -61,7 +61,10 @@ class TRLevel(rules : TRLevelRules) extends EGController {
     }
 
     def runTrainWith(generator : TRTrainGenerator) {
-        //run(TRTrain(self, _cities.randomItem))
+        val city = _cities.randomItem.get
+        run(
+            train = TRTrain(self, city.color, generator.generateCars, generator.generateSpeed),
+            fromCity = _cities.chain.filter(_ != city).randomItem.get)
     }
 
     def testRun(train : TRTrain, fromPoint : TRRailPoint) {

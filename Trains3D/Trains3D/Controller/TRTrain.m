@@ -38,7 +38,7 @@ static double _carsDelta;
         _length = unumf([[_cars chain] fold:^id(id r, TRCar* car) {
             return numf([car length] + unumf(r) + _carsDelta);
         } withStart:numf(-1.0 * _carsDelta)]);
-        __speedF = _speed / 100;
+        __speedF = 0.01 * _speed;
     }
     
     return self;
@@ -217,13 +217,13 @@ static double _carsDelta;
 }
 
 - (NSArray*)generateCars {
-    return [[[uintRange(unumi([[_carsCount randomItem] get])) chain] map:^TRCar*(id _) {
+    return [[[intRange(unumi([[_carsCount randomItem] get])) chain] map:^TRCar*(id _) {
         return [TRCar car];
     }] toArray];
 }
 
 - (NSUInteger)generateSpeed {
-    return unumi([[_speed randomItem] get]);
+    return ((NSUInteger)unumi([[_speed randomItem] get]));
 }
 
 - (id)copyWithZone:(NSZone*)zone {

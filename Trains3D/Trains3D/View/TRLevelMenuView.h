@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "EGTypes.h"
 @class EGCamera2D;
+@class EGSchedule;
 @class TRLevelRules;
 @class TRLevel;
 @class TRScoreRules;

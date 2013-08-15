@@ -31,4 +31,6 @@ static inline NSInteger uintCompare(NSUInteger a, NSUInteger b) {
 }
 
 CNRange* intRange(NSInteger x) ;
+CNRange* intTo(NSInteger a, NSInteger b);
 CNRange* uintRange(NSUInteger x) ;
+CNRange* uintTo(NSUInteger a, NSUInteger b);

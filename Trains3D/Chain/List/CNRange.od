@@ -12,6 +12,12 @@ class CNRange(start : int, end : int, step : int) extends CNList<int> {
         if(index >= count) nil
         else start + step*index
     def iterator : CNIterator<int> = CNRangeIterator(start, end, step)
+
+    def with(step : int) : CNRange = CNRange(start, end, step)
+    def isEmpty : bool =
+        if(step > 0) start > end
+        else if(step < 0) start < end
+        else false
 }
 
 class CNRangeIterator(start : int, end : int, step : int) extends CNIterator<int> {

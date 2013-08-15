@@ -18,4 +18,6 @@ class EGSchedule extends EGController {
             _next = _map.firstKey.getOr(-1.0)
         }
     }
+
+    def time : float = _current
 }

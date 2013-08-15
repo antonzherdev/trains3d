@@ -22,12 +22,12 @@ stub class CNChain<A> extends CNIterable<A> {
     def group<B, K, C extends CNTraversable<K>>(by : A -> K, map : A -> B, withBuilder : () -> CNBuilder<B, C>) : CNChain<(K, C<B>)>
     def group<K, V>(by : A -> K, fold : (V, A) -> V, withStart : () -> V) : CNChain<(K, V)>
 
-    def join<K, V1, V2>(self : CNChain<(K, V1)>, chain : CNChain<(K, V2)>) : CNChain<K, (V1, V2)>
+    def join<K, V1, V2>(self : CNChain<(K, V1)>, chain : CNIterable<(K, V2)>) : CNChain<K, (V1, V2)>
 
-    def prepend(: CNChain<A>) : CNChain<A>
-    def append(: CNChain<A>) : CNChain<A>
-    def exclude(: CNChain<A>) : CNChain<A>
-    def intersect(: CNChain<A>) : CNChain<A>
+    def prepend(: CNIterable<A>) : CNChain<A>
+    def append(: CNIterable<A>) : CNChain<A>
+    def exclude(: CNIterable<A>) : CNChain<A>
+    def intersect(: CNIterable<A>) : CNChain<A>
 
     def reverse : CNChain<A>
     def distinct : CNChain<A>

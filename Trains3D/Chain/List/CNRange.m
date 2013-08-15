@@ -22,7 +22,7 @@
         _start = start;
         _end = end;
         _step = step;
-        _count = (_end - _start) / _step;
+        _count = ((NSUInteger)(_end - _start) / _step);
     }
     
     return self;
@@ -37,6 +37,19 @@
     return [CNRangeIterator rangeIteratorWithStart:_start end:_end step:_step];
 }
 
+- (CNRange*)withStep:(NSInteger)step {
+    return [CNRange rangeWithStart:_start end:_end step:step];
+}
+
+- (BOOL)isEmpty {
+    if(_step > 0) {
+        return _start > _end;
+    } else {
+        if(_step < 0) return _start < _end;
+        else return NO;
+    }
+}
+
 - (id)randomItem {
     if([self isEmpty]) return [CNOption none];
     else return [self atIndex:randomWith([self count] - 1)];
@@ -48,10 +61,6 @@
 
 - (id)head {
     return [CNOption opt:[[self iterator] next]];
-}
-
-- (BOOL)isEmpty {
-    return [[self iterator] hasNext];
 }
 
 - (CNChain*)chain {

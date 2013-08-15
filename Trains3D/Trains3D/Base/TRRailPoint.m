@@ -31,10 +31,10 @@ static NSArray* _TRRailConnector_values;
 
 + (void)initialize {
     [super initialize];
-    _left = [TRRailConnector railConnectorWithOrdinal:0 name:@"left" x:-1 y:0 angle:0];
-    _bottom = [TRRailConnector railConnectorWithOrdinal:1 name:@"bottom" x:0 y:-1 angle:90];
-    _top = [TRRailConnector railConnectorWithOrdinal:2 name:@"top" x:0 y:1 angle:270];
-    _right = [TRRailConnector railConnectorWithOrdinal:3 name:@"right" x:1 y:0 angle:180];
+    _left = [TRRailConnector railConnectorWithOrdinal:((NSUInteger)0) name:@"left" x:-1 y:0 angle:0];
+    _bottom = [TRRailConnector railConnectorWithOrdinal:((NSUInteger)1) name:@"bottom" x:0 y:-1 angle:90];
+    _top = [TRRailConnector railConnectorWithOrdinal:((NSUInteger)2) name:@"top" x:0 y:1 angle:270];
+    _right = [TRRailConnector railConnectorWithOrdinal:((NSUInteger)3) name:@"right" x:1 y:0 angle:180];
     _TRRailConnector_values = (@[_left, _bottom, _top, _right]);
 }
 
@@ -134,22 +134,22 @@ static NSArray* _TRRailForm_values;
 
 + (void)initialize {
     [super initialize];
-    _leftBottom = [TRRailForm railFormWithOrdinal:0 name:@"leftBottom" start:TRRailConnector.left end:TRRailConnector.bottom isTurn:YES length:M_PI_4 pointFun:^EGPoint(double x) {
+    _leftBottom = [TRRailForm railFormWithOrdinal:((NSUInteger)0) name:@"leftBottom" start:TRRailConnector.left end:TRRailConnector.bottom isTurn:YES length:M_PI_4 pointFun:^EGPoint(double x) {
         return EGPointMake(-0.5 + 0.5 * sin(x * 2), -0.5 + 0.5 * cos(x * 2));
     }];
-    _leftRight = [TRRailForm railFormWithOrdinal:1 name:@"leftRight" start:TRRailConnector.left end:TRRailConnector.right isTurn:NO length:1 pointFun:^EGPoint(double x) {
+    _leftRight = [TRRailForm railFormWithOrdinal:((NSUInteger)1) name:@"leftRight" start:TRRailConnector.left end:TRRailConnector.right isTurn:NO length:1 pointFun:^EGPoint(double x) {
         return EGPointMake(x - 0.5, 0);
     }];
-    _leftTop = [TRRailForm railFormWithOrdinal:2 name:@"leftTop" start:TRRailConnector.left end:TRRailConnector.top isTurn:YES length:M_PI_4 pointFun:^EGPoint(double x) {
+    _leftTop = [TRRailForm railFormWithOrdinal:((NSUInteger)2) name:@"leftTop" start:TRRailConnector.left end:TRRailConnector.top isTurn:YES length:M_PI_4 pointFun:^EGPoint(double x) {
         return EGPointMake(-0.5 + 0.5 * sin(x * 2), 0.5 - 0.5 * cos(x * 2));
     }];
-    _bottomTop = [TRRailForm railFormWithOrdinal:3 name:@"bottomTop" start:TRRailConnector.bottom end:TRRailConnector.top isTurn:NO length:1 pointFun:^EGPoint(double x) {
+    _bottomTop = [TRRailForm railFormWithOrdinal:((NSUInteger)3) name:@"bottomTop" start:TRRailConnector.bottom end:TRRailConnector.top isTurn:NO length:1 pointFun:^EGPoint(double x) {
         return EGPointMake(0, x - 0.5);
     }];
-    _bottomRight = [TRRailForm railFormWithOrdinal:4 name:@"bottomRight" start:TRRailConnector.bottom end:TRRailConnector.right isTurn:YES length:M_PI_4 pointFun:^EGPoint(double x) {
+    _bottomRight = [TRRailForm railFormWithOrdinal:((NSUInteger)4) name:@"bottomRight" start:TRRailConnector.bottom end:TRRailConnector.right isTurn:YES length:M_PI_4 pointFun:^EGPoint(double x) {
         return EGPointMake(0.5 - 0.5 * cos(x * 2), -0.5 + 0.5 * sin(x * 2));
     }];
-    _topRight = [TRRailForm railFormWithOrdinal:5 name:@"topRight" start:TRRailConnector.top end:TRRailConnector.right isTurn:YES length:M_PI_4 pointFun:^EGPoint(double x) {
+    _topRight = [TRRailForm railFormWithOrdinal:((NSUInteger)5) name:@"topRight" start:TRRailConnector.top end:TRRailConnector.right isTurn:YES length:M_PI_4 pointFun:^EGPoint(double x) {
         return EGPointMake(0.5 - 0.5 * cos(x * 2), 0.5 - 0.5 * sin(x * 2));
     }];
     _TRRailForm_values = (@[_leftBottom, _leftRight, _leftTop, _bottomTop, _bottomRight, _topRight]);

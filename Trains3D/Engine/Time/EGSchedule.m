@@ -34,6 +34,10 @@
     }
 }
 
+- (double)time {
+    return __current;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }

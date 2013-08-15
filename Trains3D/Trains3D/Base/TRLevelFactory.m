@@ -3,7 +3,6 @@
 #import "EGScene.h"
 #import "EGLayer.h"
 #import "EGMapIso.h"
-#import "EGSchedule.h"
 #import "TRTrain.h"
 #import "TRLevel.h"
 #import "TRLevelView.h"
@@ -34,11 +33,17 @@ static NSArray* _rules;
     } delayPeriod:10 delayFine:^NSInteger(TRTrain* train, NSInteger i) {
         return i * 1000;
     } repairCost:2000];
-    _rules = (@[[TRLevelRules levelRulesWithMapSize:EGSizeIMake(5, 3) scoreRules:_scoreRules events:(@[])]]);
+    _rules = (@[[TRLevelRules levelRulesWithMapSize:EGSizeIMake(5, 3) scoreRules:_scoreRules events:(@[tuple(@1, [TRLevelFactory trainCars:intTo(1, 5) speed:[intTo(50, 100) withStep:10]]), tuple(@10, [TRLevelFactory trainCars:intTo(1, 5) speed:[intTo(50, 100) withStep:10]])])]]);
 }
 
 + (EGScene*)sceneForLevel:(TRLevel*)level {
     return [EGScene sceneWithController:level layers:(@[[EGLayer layerWithView:[TRLevelView levelViewWithLevel:level] processor:[CNOption opt:[TRLevelProcessor levelProcessorWithLevel:level]]], [EGLayer layerWithView:[TRLevelMenuView levelMenuViewWithLevel:level] processor:[CNOption none]]])];
+}
+
++ (void(^)(TRLevel*))trainCars:(CNRange*)cars speed:(CNRange*)speed {
+    return ^void(TRLevel* level) {
+        [level runTrainWithGenerator:[TRTrainGenerator trainGeneratorWithCarsCount:cars speed:speed]];
+    };
 }
 
 + (TRLevel*)levelWithNumber:(NSUInteger)number {

@@ -16,19 +16,19 @@ SPEC_BEGIN(CNChainSpec)
       });
 
       it(@"should filter items with condition", ^{
-          NSArray *r = [[s filter:^BOOL(id x) {
+          NSArray *r = [[[s chain] filter:^BOOL(id x) {
               return [x intValue] <= 2;
           }] toArray];
           [[r should] equal:@[@1, @2]];
       });
       it(@"should modify values with map function", ^{
-          NSArray *r = [[s map:^id(id x) {
+          NSArray *r = [[[s chain] map:^id(id x) {
               return [NSNumber numberWithInt:[x intValue] * 2];
           }] toArray];
           [[r should] equal:@[@2, @6, @4]];
       });
       it(@"should perform several operations in one chain", ^{
-          NSArray *r = [[[s
+          NSArray *r = [[[[s chain]
                   filter:LESS_THAN_3]
                   map:^id(id x) {
                       return [NSNumber numberWithInt:[x intValue] * 2];
@@ -37,8 +37,8 @@ SPEC_BEGIN(CNChainSpec)
           [[r should] equal:@[@2, @4]];
       });
       it(@".head should return first value or nil", ^{
-          [[[[s filter:LESS_THAN_3] head] should] equal:@1];
-          BOOL isNil = [[[s filter:^BOOL(id x) {
+          [[[[[s chain] filter:LESS_THAN_3] head] should] equal:@1];
+          BOOL isNil = [[[[s chain] filter:^BOOL(id x) {
               return NO;
           }] head] isEmpty];
           [[theValue(isNil) should] beTrue];
@@ -107,44 +107,44 @@ SPEC_BEGIN(CNChainSpec)
           [[theValue(sum) should] equal:@6];
       });
       it(@".count should return count items in chain", ^{
-          NSUInteger count = [[s filter:^BOOL(id x) {
+          NSUInteger count = [[[s chain] filter:^BOOL(id x) {
               return [x intValue] < 3;
           }] count];
           [[theValue(count) should] equal:@2];
       });
       it(@".reverse shoude reverse collection", ^{
-          [[[[s reverse] toArray] should] equal:@[@2, @3, @1]];
+          [[[[[s chain] reverse] toArray] should] equal:@[@2, @3, @1]];
           [[[[[s chain] reverse] toArray] should] equal:@[@2, @3, @1]];
       });
       it(@".fold should make fold", ^{
-          id r = [s fold:^id(id x, id y) {
+          id r = [[s chain] fold:^id(id x, id y) {
               return numi(unumi(x) + unumi(y));
           } withStart:@0];
           [[r should] equal:@6];
       });
       it(@".find should find first compatilable items or none", ^{
-          [[[s find:LESS_THAN_3] should] equal:@1];
-          BOOL isNil = [[s find:^BOOL(id x) {
+          [[[[s chain] find:LESS_THAN_3] should] equal:@1];
+          BOOL isNil = [[[s chain] find:^BOOL(id x) {
               return NO;
           }] isEmpty];
           [[theValue(isNil) should] beTrue];
       });
       it(@".flatMap should concatinate the returning arrays into the one array", ^{
-          NSArray *r = [[s flatMap:^id(id x) {
-              return [s map:^id(id x2) {
+          NSArray *r = [[[s chain] flatMap:^id(id x) {
+              return [[s chain] map:^id(id x2) {
                   return numi(unumi(x) * unumi(x2));
               }];
           }] toArray];
           [[r should] equal:@[@1, @3, @2, @3, @9, @6, @2, @6, @4]];
-          r = [[s flatMap:^id(id x) {
-              return [[s map:^id(id x2) {
+          r = [[[s chain] flatMap:^id(id x) {
+              return [[[s chain] map:^id(id x2) {
                   return numi(unumi(x) * unumi(x2));
               }] toArray];
           }] toArray];
           [[r should] equal:@[@1, @3, @2, @3, @9, @6, @2, @6, @4]];
       });
       it(@".distinct should filter unique items", ^{
-          NSArray *r = [[@[@1, @3, @2, @3, @1, @0] distinct] toArray];
+          NSArray *r = [[[@[@1, @3, @2, @3, @1, @0] chain] distinct] toArray];
 
           [[r should] equal:@[@1, @3, @2, @0]];
       });

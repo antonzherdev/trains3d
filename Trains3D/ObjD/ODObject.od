@@ -18,11 +18,13 @@ stub trait ODComparable<T> {
 stub struct ODInt extends ODComparable<int> {
     def compare(to : int) : int
     def range : CNRange
+    def to(: int) : CNRange
 }
 
 stub struct ODUInt extends ODComparable<uint> {
     def compare(to : uint) : int
     def range : CNRange
+    def to(: uint) : CNRange
 }
 
 stub struct ODFloat extends ODComparable<float> {

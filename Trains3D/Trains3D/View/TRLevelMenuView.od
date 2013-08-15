@@ -2,6 +2,7 @@ import EGTypes
 import EGCamera2D
 import EGText
 import EGGL
+import EGSchedule
 
 import TRLevel
 import TRScore
@@ -12,5 +13,7 @@ class TRLevelMenuView(level : TRLevel) extends EGView {
     def drawView {
         egColor3(1, 1, 1)
         egTextGlutDraw(level.score.score, GLUT_BITMAP_HELVETICA_18, EGPoint(1, 1))
+        val seconds : int = level.schedule.time
+        egTextGlutDraw(seconds, GLUT_BITMAP_HELVETICA_18, EGPoint(1.5, 1))
     }
 }

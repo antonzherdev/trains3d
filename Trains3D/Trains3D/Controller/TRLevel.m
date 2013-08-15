@@ -144,6 +144,10 @@
 }
 
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator {
+    TRCity* city = ((TRCity*)[[__cities randomItem] get]);
+    [self runTrain:[TRTrain trainWithLevel:self color:city.color cars:[generator generateCars] speed:[generator generateSpeed]] fromCity:((TRCity*)[[[[__cities chain] filter:^BOOL(TRCity* _) {
+        return !(_ == city);
+    }] randomItem] get])];
 }
 
 - (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint {
@@ -155,8 +159,8 @@
 - (void)runSample {
     TRCity* city0 = ((TRCity*)__cities[0]);
     TRCity* city1 = ((TRCity*)__cities[1]);
-    [self runTrain:[TRTrain trainWithLevel:self color:city1.color cars:(@[[TRCar car], [TRCar car]]) speed:0.3] fromCity:city0];
-    [self runTrain:[TRTrain trainWithLevel:self color:city0.color cars:(@[[TRCar car]]) speed:0.6] fromCity:city1];
+    [self runTrain:[TRTrain trainWithLevel:self color:city1.color cars:(@[[TRCar car], [TRCar car]]) speed:((NSUInteger)0.3)] fromCity:city0];
+    [self runTrain:[TRTrain trainWithLevel:self color:city0.color cars:(@[[TRCar car]]) speed:((NSUInteger)0.6)] fromCity:city1];
 }
 
 - (void)updateWithDelta:(double)delta {
