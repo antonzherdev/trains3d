@@ -1,23 +1,16 @@
 #import <Foundation/Foundation.h>
+#import "ODObject.h"
+
+@class CNTuple;
+
+@interface CNTuple : NSObject<ODComparable>
+@property (nonatomic, readonly) id a;
+@property (nonatomic, readonly) id b;
+
++ (id)tupleWithA:(id)a b:(id)b;
+- (id)initWithA:(id)a b:(id)b;
+- (NSInteger)compareTo:(CNTuple*)to;
+@end
 
 
 #define tuple(anA, aB) [CNTuple tupleWithA:anA b: aB]
-
-@interface CNTuple : NSObject <NSCopying>
-@property (readonly, nonatomic) id a;
-@property (readonly, nonatomic) id b;
-
-- (id)initWithA:(id)anA b:(id)aB;
-
-+ (id)tupleWithA:(id)anA b:(id)aB;
-
-- (BOOL)isEqual:(id)other;
-
-- (BOOL)isEqualToTuple:(CNTuple *)tuple;
-
-- (NSUInteger)hash;
-
-- (NSString *)description;
-
-- (id)copyWithZone:(NSZone *)zone;
-@end

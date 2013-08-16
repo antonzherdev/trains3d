@@ -8,15 +8,15 @@
 #import "CNList.h"
 @class CNChain;
 
-@class CNTreeSet;
+@class CNMutableTreeSet;
 
-@interface CNTreeSet : NSObject<CNSet>
-@property (nonatomic, readonly) CNTreeMap* map;
+@interface CNMutableTreeSet : NSObject<CNSet>
+@property (nonatomic, readonly) CNMutableTreeMap* map;
 
-+ (id)treeSetWithMap:(CNTreeMap*)map;
-- (id)initWithMap:(CNTreeMap*)map;
-+ (CNTreeSet*)newWithComparator:(NSInteger(^)(id, id))comparator;
-+ (CNTreeSet*)new;
++ (id)mutableTreeSetWithMap:(CNMutableTreeMap*)map;
+- (id)initWithMap:(CNMutableTreeMap*)map;
++ (CNMutableTreeSet*)newWithComparator:(NSInteger(^)(id, id))comparator;
++ (CNMutableTreeSet*)new;
 - (id<CNList>)betweenA:(id)a b:(id)b;
 - (void)addObject:(id)object;
 - (BOOL)removeObject:(id)object;
@@ -30,7 +30,7 @@
 - (BOOL)containsObject:(id)object;
 - (void)clear;
 - (void)addAllObjects:(id<CNTraversable>)objects;
-- (CNTreeSet*)reorder;
+- (CNMutableTreeSet*)reorder;
 @end
 
 

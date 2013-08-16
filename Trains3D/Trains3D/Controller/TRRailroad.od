@@ -1,3 +1,5 @@
+import CNTreeMap
+
 import EGMap
 import EGMapIso
 import EGTypes
@@ -55,13 +57,11 @@ class TRRailroad(map : EGMapSso, score : TRScore) {
     private var _lights : [TRLight] = []
     def lights = _lights
     val builder = TRRailroadBuilder(self)
-    private val connectorIndex = EGMapSsoTileIndex(map,
-        TRRailConnector.values.chain.map( (_, TREmptyConnector.instance) ).toMutableMap)
+    private val connectorIndex = CNMapDefault(TREmptyConnector.instance, CNMutableHashMap.new<(EGPointI, TRRailConnector), TRRailroadConnectorContent>)
 
-    def canAdd(rail : TRRail) : bool = {
-        val tileIndex = connectorIndex[rail.tile]
-        tileIndex[rail.form.start].get.canAdd(rail) && tileIndex[rail.form.end].get.canAdd(rail)
-    }
+    def canAdd(rail : TRRail) : bool =
+        connectorIndex[(rail.tile, rail.form.start)].canAdd(rail)
+        && connectorIndex[(rail.tile, rail.form.end)].canAdd(rail)
 
     def tryAdd(rail : TRRail) : bool = {
         if(canAdd(rail)) {
@@ -75,11 +75,11 @@ class TRRailroad(map : EGMapSso, score : TRScore) {
         } else false
     }
 
-    def contentIn(tile : EGPointI, connector : TRRailConnector) : TRRailroadConnectorContent? =
-        connectorIndex[tile][connector].get
+    def contentIn(tile : EGPointI, connector : TRRailConnector) : TRRailroadConnectorContent =
+        connectorIndex[(tile, connector)]
 
     private def connect(rail : TRRail, to : TRRailConnector) {
-        connectorIndex[rail.tile].modify(_.get.connect(rail, to), to)
+        connectorIndex.modify(by = _.connect(rail, to), forKey = (rail.tile, to))
     }
 
     private def buildLightsFor(tile : EGPointI, connector : TRRailConnector) {
@@ -92,33 +92,32 @@ class TRRailroad(map : EGMapSso, score : TRScore) {
             buildLightIn(nextTile, otherSideConnector)
         }
 
-        if(isTurnRailIn(tile, connector) && connectorIndex[nextTile][otherSideConnector].get.rails.count == 1) {
+        if(isTurnRailIn(tile, connector) && connectorIndex[(nextTile, otherSideConnector)].rails.count == 1) {
             buildLightIn(tile, connector)
         }
     }
 
     private def isTurnRailIn(tile : EGPointI, connector : TRRailConnector) : bool = {
-        val rails = connectorIndex[tile][connector].get.rails
+        val rails = connectorIndex[(tile, connector)].rails
         rails.count == 1 && rails[0].form.isTurn
     }
 
     private def buildLightIn(tile : EGPointI, connector : TRRailConnector) {
-        connectorIndex[tile].modify(_.get.buildLightIn(connector), connector)
+        connectorIndex.modify(by = _.buildLightIn(connector), forKey = (tile, connector))
     }
 
 
     private def rebuildArrays {
-        val allObjects = connectorIndex.values.chain.flatMap(_.values).toArray
-        _rails = allObjects.chain.flatMap(_.rails).distinct.toArray
-        _switches = allObjects.chain.filter(_.is<TRSwitch>).toArray
-        _lights = allObjects.chain.filter(_.is<TRLight>).toArray
+        _rails = connectorIndex.values.chain.flatMap(_.rails).distinct.toArray
+        _switches = connectorIndex.values.chain.filter(_.is<TRSwitch>).toArray
+        _lights = connectorIndex.values.chain.filter(_.is<TRLight>).toArray
     }
 
     def move(consideringLights : bool, forLength : float, point : TRRailPoint) : TRRailPointCorrection =
         correct(consideringLights, point.add(forLength))
 
     private def activeRailFor(tile : EGPointI, connector : TRRailConnector) : TRRail? =
-        connectorIndex[tile][connector].get.rails.head
+        connectorIndex[(tile, connector)].rails.head
 
     private def correct(consideringLights : bool, point : TRRailPoint) : TRRailPointCorrection = {
         val correction = point.correct
@@ -126,7 +125,7 @@ class TRRailroad(map : EGMapSso, score : TRScore) {
         if(correction.error == 0) correction
         else {
             val connector = point.endConnector
-            val connectorDesc = connectorIndex[point.tile][connector].get
+            val connectorDesc = connectorIndex[(point.tile, connector)]
             val activeRailOpt = connectorDesc.rails.head
             if(activeRailOpt.isEmpty || (consideringLights && !(connectorDesc.isGreen))) correction
             else {

@@ -1,3 +1,10 @@
 package core
 
-stub class CNTuple<A, B>(a : A, b : B)
+import ODObject
+
+stub class CNTuple<A, B>(a : A, b : B) extends ODComparable<CNTuple<A, B>> {
+    def compare<AC extends ODComparable<A>, BC extends ODComparable<B>>(to : CNTuple<AC, BC>) : int = {
+        val r = to.a.compare(a)
+        if(r == 0) -to.b.compare(b) else -r
+    }
+}

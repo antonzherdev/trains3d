@@ -78,6 +78,10 @@ NSInteger egPointCompare(EGPoint self, EGPoint to) {
     return EGPointHash(_value);
 }
 
+- (NSInteger)compareTo:(EGPointWrap*)to {
+    return egPointCompare(_value, to.value);
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -97,6 +101,11 @@ EGPointI egPointISub(EGPointI self, EGPointI point) {
 }
 EGPointI egPointINegate(EGPointI self) {
     return EGPointIMake(-self.x, -self.y);
+}
+NSInteger egPointICompare(EGPointI self, EGPointI to) {
+    NSInteger dX = intCompare(self.x, to.x);
+    if(dX != 0) return dX;
+    else return intCompare(self.y, to.y);
 }
 @implementation EGPointIWrap{
     EGPointI _value;
@@ -126,6 +135,10 @@ EGPointI egPointINegate(EGPointI self) {
 
 - (NSUInteger)hash {
     return EGPointIHash(_value);
+}
+
+- (NSInteger)compareTo:(EGPointIWrap*)to {
+    return egPointICompare(_value, to.value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {

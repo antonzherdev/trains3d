@@ -11,6 +11,8 @@
 - (NSString*)description;
 - (BOOL)isEqual:(id)other;
 - (NSUInteger)hash;
+
+- (NSInteger)compareTo:(ODEnum *)to;
 @end
 
 

@@ -1,51 +1,47 @@
 #import "CNTuple.h"
 
-
-@implementation CNTuple {
+@implementation CNTuple{
     id _a;
     id _b;
 }
 @synthesize a = _a;
 @synthesize b = _b;
 
-- (id)initWithA:(id)anA b:(id)aB {
-    self = [super init];
-    if (self) {
-        _a = anA;
-        _b = aB;
-    }
++ (id)tupleWithA:(id)a b:(id)b {
+    return [[CNTuple alloc] initWithA:a b:b];
+}
 
+- (id)initWithA:(id)a b:(id)b {
+    self = [super init];
+    if(self) {
+        _a = a;
+        _b = b;
+    }
+    
     return self;
 }
 
-+ (id)tupleWithA:(id)anA b:(id)aB {
-    return [[self alloc] initWithA:anA b:aB];
+- (NSInteger)compareTo:(CNTuple*)to {
+    NSInteger r = [to.a compareTo:_a];
+    if(r == 0) return -[to.b compareTo:_b];
+    else return -r;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 - (BOOL)isEqual:(id)other {
-    if (other == self)
-        return YES;
-    if (!other || ![[other class] isEqual:[self class]])
-        return NO;
-
-    return [self isEqualToTuple:other];
-}
-
-- (BOOL)isEqualToTuple:(CNTuple *)tuple {
-    if (self == tuple)
-        return YES;
-    if (tuple == nil)
-        return NO;
-    if (_a != tuple->_a && ![_a isEqual:tuple->_a])
-        return NO;
-    if (_b != tuple->_b && ![_b isEqual:tuple->_b])
-        return NO;
-    return YES;
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    CNTuple* o = ((CNTuple*)other);
+    return [self.a isEqual:o.a] && [self.b isEqual:o.b];
 }
 
 - (NSUInteger)hash {
-    NSUInteger hash = [_a hash];
-    hash = hash * 31u + [_b hash];
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.a hash];
+    hash = hash * 31 + [self.b hash];
     return hash;
 }
 
@@ -53,8 +49,6 @@
     return [NSString stringWithFormat:@"(%@, %@)", _a, _b];
 }
 
-- (id)copyWithZone:(NSZone *)zone {
-    return self;
-}
-
 @end
+
+

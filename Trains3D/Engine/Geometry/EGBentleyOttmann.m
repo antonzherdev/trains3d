@@ -289,7 +289,7 @@
 
 
 @implementation EGBentleyOttmannEventQueue{
-    CNTreeMap* _events;
+    CNMutableTreeMap* _events;
 }
 @synthesize events = _events;
 
@@ -299,7 +299,7 @@
 
 - (id)init {
     self = [super init];
-    if(self) _events = [CNTreeMap treeMapWithComparator:^NSInteger(id a, id b) {
+    if(self) _events = [CNMutableTreeMap mutableTreeMapWithComparator:^NSInteger(id a, id b) {
         return egPointCompare(uwrap(EGPoint, a), uwrap(EGPoint, b));
     }];
     
@@ -400,7 +400,7 @@
 
 
 @implementation EGSweepLine{
-    CNTreeSet* _events;
+    CNMutableTreeSet* _events;
     id<CNMutableMap> _intersections;
     EGPoint _currentEventPoint;
     EGBentleyOttmannEventQueue* _queue;
@@ -416,7 +416,7 @@
 - (id)init {
     self = [super init];
     if(self) {
-        _events = [CNTreeSet newWithComparator:^NSInteger(EGBentleyOttmannPointEvent* a, EGBentleyOttmannPointEvent* b) {
+        _events = [CNMutableTreeSet newWithComparator:^NSInteger(EGBentleyOttmannPointEvent* a, EGBentleyOttmannPointEvent* b) {
             return [self compareEventsA:a b:b];
         }];
         _intersections = [(@{}) mutableCopy];

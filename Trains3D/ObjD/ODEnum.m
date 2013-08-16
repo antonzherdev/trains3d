@@ -37,6 +37,11 @@
     return _ordinal;
 }
 
+- (NSInteger)compareTo:(ODEnum*)to {
+    return intCompare(_ordinal, to.ordinal);
+}
+
+
 @end
 
 

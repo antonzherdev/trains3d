@@ -77,7 +77,6 @@
 		6F3DF4C5C874D3EF6E10D71C /* CNYield.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFDEE02FCC8D0DB72821 /* CNYield.m */; };
 		6F3DF4CE8AD5DC3373EDA13F /* EGCameraIsoSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE665996C1442AB21E51 /* EGCameraIsoSpec.m */; };
 		6F3DF4CF01107556AF396D0D /* EGTypes.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF1133AEE9DB43A613D5E /* EGTypes.od */; };
-		6F3DF4DCD4A053E249248DAD /* EGMapIsoTileIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB452C935D420CB665F4 /* EGMapIsoTileIndex.m */; };
 		6F3DF4E6C4B3E309B20B07F3 /* KWBeSubclassOfClassMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC1EA5E595C9632E5574 /* KWBeSubclassOfClassMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF4F373C7AEB81B0BBF8F /* KWAfterEachNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9A2807799E9A7261FAC /* KWAfterEachNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF532E3E3C3B36E3390A0 /* KWEqualMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF16B343577D6355460C0 /* KWEqualMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -123,6 +122,7 @@
 		6F3DF85DF7958BF013E5B1C2 /* KWGenericMatchEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC506DF7AFF339438CBF /* KWGenericMatchEvaluator.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF8735E29864F38A6AD83 /* EGCameraIso.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF3C7B0EE49FD496C5709 /* EGCameraIso.od */; };
 		6F3DF8784CC3ABA3DEE7980C /* CNReverseLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF5D30EBF50722D5A00BA /* CNReverseLink.m */; };
+		6F3DF87D43F1A1FCB3AB948C /* CNMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD83C8390308493AEA05 /* CNMap.m */; };
 		6F3DF88D48BDBB5132575C47 /* EGText.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFFADDB980529C1D266D8 /* EGText.od */; };
 		6F3DF89C8872876229AD774A /* CNMapLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBF9CB73172393811F54 /* CNMapLink.m */; };
 		6F3DF8B667CAF32427A98B10 /* CNSourceLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF71A717A6FD3CAA174BA /* CNSourceLink.m */; };
@@ -413,7 +413,6 @@
 		6F3DF7197DB69706355A0E86 /* NSDictionary+CNChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+CNChain.h"; sourceTree = "<group>"; };
 		6F3DF71A717A6FD3CAA174BA /* CNSourceLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSourceLink.m; sourceTree = "<group>"; };
 		6F3DF71EA2723811F530D770 /* EGBentleyOttmannTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGBentleyOttmannTest.m; sourceTree = "<group>"; };
-		6F3DF72C997AF0D63DCCF3CB /* EGMapIsoTileIndex.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGMapIsoTileIndex.od; sourceTree = "<group>"; };
 		6F3DF7386C7FDAEC32527DA1 /* EGText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGText.m; sourceTree = "<group>"; };
 		6F3DF7398A3F688B6EEB636A /* EGCamera2D.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGCamera2D.od; sourceTree = "<group>"; };
 		6F3DF73C71F0899A454496DB /* TRTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRTypes.h; sourceTree = "<group>"; };
@@ -476,7 +475,6 @@
 		6F3DF93E50A4EFBCDEB40111 /* NSNull+CNOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNull+CNOption.m"; sourceTree = "<group>"; };
 		6F3DF941611C64E76051A4FC /* KWInvocationCapturer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWInvocationCapturer.h; sourceTree = "<group>"; };
 		6F3DF946F8CAA27604FD5220 /* CNPrependLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNPrependLink.h; sourceTree = "<group>"; };
-		6F3DF950960CA92640FEE66E /* EGMapIsoTileIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGMapIsoTileIndex.h; sourceTree = "<group>"; };
 		6F3DF9689D60A7CCDAB6D105 /* KWHaveMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWHaveMatcher.h; sourceTree = "<group>"; };
 		6F3DF9731A8A3019A891CB25 /* KWGenericMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWGenericMatcher.m; sourceTree = "<group>"; };
 		6F3DF976D80C0AFBAB0B1DF4 /* EGFigureTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGFigureTest.m; sourceTree = "<group>"; };
@@ -529,7 +527,6 @@
 		6F3DFB3F5E6376418F736195 /* EGBentleyOttmann.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGBentleyOttmann.od; sourceTree = "<group>"; };
 		6F3DFB4130140E277A84ADC8 /* EGTwoFingerTouchToMouse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGTwoFingerTouchToMouse.h; sourceTree = "<group>"; };
 		6F3DFB440B974454D02406F0 /* TRCityView.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TRCityView.od; sourceTree = "<group>"; };
-		6F3DFB452C935D420CB665F4 /* EGMapIsoTileIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGMapIsoTileIndex.m; sourceTree = "<group>"; };
 		6F3DFB4834E2D90F91985566 /* EGEventMac.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGEventMac.m; sourceTree = "<group>"; };
 		6F3DFB597301FEB371F1F6E6 /* TRCity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRCity.h; sourceTree = "<group>"; };
 		6F3DFB620D5564E11CD99739 /* CNDistinctLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNDistinctLink.m; sourceTree = "<group>"; };
@@ -591,6 +588,7 @@
 		6F3DFD5EE53EE883BC4D4E75 /* ODObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ODObject.h; sourceTree = "<group>"; };
 		6F3DFD6827964283DDF670E2 /* KWBeIdenticalToMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeIdenticalToMatcher.h; sourceTree = "<group>"; };
 		6F3DFD7A7B4B1CFC4434C1EA /* EGMap.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGMap.od; sourceTree = "<group>"; };
+		6F3DFD83C8390308493AEA05 /* CNMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNMap.m; sourceTree = "<group>"; };
 		6F3DFDA4DA79E4EF39EF3B68 /* KWHaveValueMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWHaveValueMatcher.h; sourceTree = "<group>"; };
 		6F3DFDAA4AA0BEE1B1AF1D5B /* EGTexture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGTexture.m; sourceTree = "<group>"; };
 		6F3DFDAAE89FF423B6D833A0 /* CNCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNCache.m; sourceTree = "<group>"; };
@@ -851,6 +849,7 @@
 				6F3DF61F6AC6163A38816654 /* CNTreeMap.m */,
 				6F3DF977B1BF4876AC99AED7 /* CNMap.od */,
 				6F3DFEC18617F545F2EF268A /* CNMap.h */,
+				6F3DFD83C8390308493AEA05 /* CNMap.m */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -1104,9 +1103,6 @@
 				6F3DF3C7B0EE49FD496C5709 /* EGCameraIso.od */,
 				6F3DF784ED37D5A77ED749F9 /* EGCameraIso.h */,
 				6F3DFC9A54762DFF5C0A52EC /* EGCameraIso.m */,
-				6F3DF72C997AF0D63DCCF3CB /* EGMapIsoTileIndex.od */,
-				6F3DF950960CA92640FEE66E /* EGMapIsoTileIndex.h */,
-				6F3DFB452C935D420CB665F4 /* EGMapIsoTileIndex.m */,
 			);
 			path = Isometric;
 			sourceTree = "<group>";
@@ -1614,7 +1610,6 @@
 				6F3DF558DDDC8C024E187EFB /* TRTypes.m in Sources */,
 				6F3DFFA5AE377882684AB133 /* TRRailPoint.m in Sources */,
 				6F3DF2203AE3479DF0789BF7 /* ODEnum.m in Sources */,
-				6F3DF4DCD4A053E249248DAD /* EGMapIsoTileIndex.m in Sources */,
 				6F3DFC7067586699D3679403 /* TRSwitchProcessor.m in Sources */,
 				6F3DFC77EDE9D9A2AD829ACA /* EGTypes.m in Sources */,
 				6F3DFC308FC169DC650A3BA8 /* NSDictionary+CNChain.m in Sources */,
@@ -1644,6 +1639,7 @@
 				6F3DF65C3F1A4EF6EE557A13 /* NSMutableArray+CNChain.m in Sources */,
 				6F3DF7FCAA43500304F78253 /* EGSchedule.m in Sources */,
 				6F3DFFDFCC2CA24A95EB59A6 /* CNRange.m in Sources */,
+				6F3DF87D43F1A1FCB3AB948C /* CNMap.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

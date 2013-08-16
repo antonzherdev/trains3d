@@ -1,6 +1,7 @@
 package core.chain
 
 import CNCollection
+import CNChain
 import "CNOption.h"
 
 trait CNMap<K, V> extends CNIterable<(K, V)> {
@@ -11,7 +12,7 @@ trait CNMap<K, V> extends CNIterable<(K, V)> {
 }
 
 trait CNMutableMap<K, V> extends CNMap<K, V> {
-    def set(object : V, forKey : K) : V
+    def set(object : V, forKey : K)
     def removeFor(key : K) : V?
     def objectFor(key: K, orUpdateWith: () -> V) : V = {
         val o = apply(key)
@@ -27,6 +28,23 @@ trait CNMutableMap<K, V> extends CNMap<K, V> {
         if(newObject.isEmpty) removeFor(forKey)
         else set(newObject, forKey)
         newObject
+    }
+}
+
+class CNMapDefault<K, V>(defaultFunc : K -> V, map : CNMutableMap<K, V>) extends CNIterable<(K, V)> {
+    def count : uint = map.count
+    def iterator : CNIterator<(K, V)> = map.iterator
+    def apply(key : K) : V = map.objectFor(key, orUpdateWith = defaultFunc(key))
+    def keys : CNIterable<K> = map.keys
+    def values : CNIterable<V> = map.values
+    def contains(key : K) : bool = map.contains(key)
+    def set(object : V, forKey : K) {
+        map.set(object, forKey)
+    }
+    def modify(by : V -> V, forKey : K) : V {
+        val object = by(apply(forKey))
+        map.set(object, forKey)
+        object
     }
 }
 

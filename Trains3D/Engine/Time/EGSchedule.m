@@ -1,7 +1,7 @@
 #import "EGSchedule.h"
 
 @implementation EGSchedule{
-    CNTreeMap* __map;
+    CNMutableTreeMap* __map;
     double __current;
     double __next;
 }
@@ -13,7 +13,7 @@
 - (id)init {
     self = [super init];
     if(self) {
-        __map = [CNTreeMap new];
+        __map = [CNMutableTreeMap new];
         __current = 0.0;
         __next = -1.0;
     }

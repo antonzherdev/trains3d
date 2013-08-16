@@ -2,17 +2,17 @@
 
 #import "CNCollection.h"
 #import "CNChain.h"
-@implementation CNTreeSet{
-    CNTreeMap* _map;
+@implementation CNMutableTreeSet{
+    CNMutableTreeMap* _map;
 }
 static NSObject* _obj;
 @synthesize map = _map;
 
-+ (id)treeSetWithMap:(CNTreeMap*)map {
-    return [[CNTreeSet alloc] initWithMap:map];
++ (id)mutableTreeSetWithMap:(CNMutableTreeMap*)map {
+    return [[CNMutableTreeSet alloc] initWithMap:map];
 }
 
-- (id)initWithMap:(CNTreeMap*)map {
+- (id)initWithMap:(CNMutableTreeMap*)map {
     self = [super init];
     if(self) _map = map;
     
@@ -24,12 +24,12 @@ static NSObject* _obj;
     _obj = [NSObject object];
 }
 
-+ (CNTreeSet*)newWithComparator:(NSInteger(^)(id, id))comparator {
-    return [CNTreeSet treeSetWithMap:[CNTreeMap treeMapWithComparator:comparator]];
++ (CNMutableTreeSet*)newWithComparator:(NSInteger(^)(id, id))comparator {
+    return [CNMutableTreeSet mutableTreeSetWithMap:[CNMutableTreeMap mutableTreeMapWithComparator:comparator]];
 }
 
-+ (CNTreeSet*)new {
-    return [CNTreeSet treeSetWithMap:[CNTreeMap new]];
++ (CNMutableTreeSet*)new {
+    return [CNMutableTreeSet mutableTreeSetWithMap:[CNMutableTreeMap new]];
 }
 
 - (id<CNList>)betweenA:(id)a b:(id)b {
@@ -37,7 +37,7 @@ static NSObject* _obj;
 }
 
 - (void)addObject:(id)object {
-    ((NSObject*)[_map setObject:_obj forKey:object]);
+    [_map setObject:_obj forKey:object];
 }
 
 - (BOOL)removeObject:(id)object {
@@ -86,8 +86,8 @@ static NSObject* _obj;
     }];
 }
 
-- (CNTreeSet*)reorder {
-    CNTreeSet* ret = [CNTreeSet treeSetWithMap:[CNTreeMap treeMapWithComparator:_map.comparator]];
+- (CNMutableTreeSet*)reorder {
+    CNMutableTreeSet* ret = [CNMutableTreeSet mutableTreeSetWithMap:[CNMutableTreeMap mutableTreeMapWithComparator:_map.comparator]];
     [ret addAllObjects:self];
     return ret;
 }
@@ -141,7 +141,7 @@ static NSObject* _obj;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNTreeSet* o = ((CNTreeSet*)other);
+    CNMutableTreeSet* o = ((CNMutableTreeSet*)other);
     return [self.map isEqual:o.map];
 }
 

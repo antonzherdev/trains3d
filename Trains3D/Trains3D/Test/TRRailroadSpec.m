@@ -63,15 +63,17 @@ SPEC_BEGIN(TRRailroadSpec)
             [[theValue([[railroad rails] count]) should] equal:@3];
             [[theValue([[railroad switches] count]) should] equal:@2];
             
-            TRSwitch * theSwitch = railroad.switches[0];
+            TRSwitch * theSwitch = [[[railroad.switches chain] find:^BOOL(id x) {
+                return [x connector] == [TRRailConnector left];
+            }] get];
             [[theValue(EGPointIEq(theSwitch.tile, EGPointIMake(2, 0))) should] beTrue];
-            [[theSwitch.connector should] equal:[TRRailConnector left]];
             [[theSwitch.rail1 should] equal:xRail];
             [[theSwitch.rail2 should] equal:turnRail];
 
-            theSwitch = railroad.switches[1];
+            theSwitch = [[[railroad.switches chain] find:^BOOL(id x) {
+                return [x connector] == [TRRailConnector top];
+            }] get];
             [[theValue(EGPointIEq(theSwitch.tile, EGPointIMake(2, 0))) should] beTrue];
-            [[theSwitch.connector should] equal:[TRRailConnector top]];
             [[theSwitch.rail1 should] equal:yRail];
             [[theSwitch.rail2 should] equal:turnRail];
         });

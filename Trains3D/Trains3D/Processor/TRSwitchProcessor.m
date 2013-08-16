@@ -35,7 +35,7 @@
     EGPointI tile = egPointIApply(location);
     EGPoint relPoint = egPointSub(location, egPointApply(tile));
     _downed = [[_index applyPoint:relPoint] flatMap:^id(CNTuple* v) {
-        id content = [_level.railroad contentInTile:tile connector:((TRRailConnector*)v.a)];
+        TRRailroadConnectorContent* content = [_level.railroad contentInTile:tile connector:((TRRailConnector*)v.a)];
         if(unumb(v.b)) return [content asKindOfClass:[TRLight class]];
         else return [content asKindOfClass:[TRSwitch class]];
     }];

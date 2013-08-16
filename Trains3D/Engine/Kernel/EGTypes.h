@@ -92,6 +92,7 @@ EGPointI egPointIApply(EGPoint point);
 EGPointI egPointIAdd(EGPointI self, EGPointI point);
 EGPointI egPointISub(EGPointI self, EGPointI point);
 EGPointI egPointINegate(EGPointI self);
+NSInteger egPointICompare(EGPointI self, EGPointI to);
 @interface EGPointIWrap : NSObject
 @property (readonly, nonatomic) EGPointI value;
 

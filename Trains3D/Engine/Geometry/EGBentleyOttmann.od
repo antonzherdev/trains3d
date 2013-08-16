@@ -49,7 +49,7 @@ class EGBentleyOttmannIntersectionEvent<T>(point : EGPoint) extends EGBentleyOtt
 
 
 class EGBentleyOttmannEventQueue<T> {
-    val events = CNTreeMap<EGPoint, [var EGBentleyOttmannEvent<T>]>((a, b) -> a.compare(b))
+    val events = CNMutableTreeMap<EGPoint, [var EGBentleyOttmannEvent<T>]>((a, b) -> a.compare(b))
 
     def isEmpty : bool = events.isEmpty
 
@@ -85,7 +85,7 @@ class EGSweepLine<T>
     */
 //    ignoreSegmentEndings : bool
 {
-    var events = CNTreeSet.newWith<EGBentleyOttmannPointEvent<T>>((a, b) -> compareEvents(a, b))
+    var events = CNMutableTreeSet.newWith<EGBentleyOttmannPointEvent<T>>((a, b) -> compareEvents(a, b))
 
     /**
     * A map holding all intersection points mapped to the Events

@@ -1,7 +1,7 @@
 #import "objd.h"
+#import "CNTreeMap.h"
 @class EGMapSso;
 #import "EGTypes.h"
-@class EGMapSsoTileIndex;
 @class TRRailConnector;
 @class TRRailForm;
 @class TRRailPoint;
@@ -98,7 +98,7 @@
 - (id<CNList>)lights;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (BOOL)tryAddRail:(TRRail*)rail;
-- (id)contentInTile:(EGPointI)tile connector:(TRRailConnector*)connector;
+- (TRRailroadConnectorContent*)contentInTile:(EGPointI)tile connector:(TRRailConnector*)connector;
 - (TRRailPointCorrection*)moveConsideringLights:(BOOL)consideringLights forLength:(double)forLength point:(TRRailPoint*)point;
 @end
 

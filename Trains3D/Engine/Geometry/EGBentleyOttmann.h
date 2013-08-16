@@ -8,7 +8,7 @@
 @class EGPolygon;
 @class EGThickLineSegment;
 #import "CNTreeMap.h"
-@class CNTreeSet;
+@class CNMutableTreeSet;
 @protocol CNIterator;
 @protocol CNBuilder;
 @protocol CNTraversable;
@@ -77,7 +77,7 @@
 
 
 @interface EGBentleyOttmannEventQueue : NSObject
-@property (nonatomic, readonly) CNTreeMap* events;
+@property (nonatomic, readonly) CNMutableTreeMap* events;
 
 + (id)bentleyOttmannEventQueue;
 - (id)init;
@@ -97,7 +97,7 @@
 
 
 @interface EGSweepLine : NSObject
-@property (nonatomic, retain) CNTreeSet* events;
+@property (nonatomic, retain) CNMutableTreeSet* events;
 @property (nonatomic, readonly) id<CNMutableMap> intersections;
 @property (nonatomic, retain) EGBentleyOttmannEventQueue* queue;
 

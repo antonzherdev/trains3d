@@ -1,7 +1,7 @@
 import "EGTypesAdd.h"
 import EGGL
 
-struct EGPoint(x : float, y : float) {
+struct EGPoint(x : float, y : float) extends ODComparable<EGPoint> {
     static def apply(point : EGPointI) = EGPoint(point.x, point.y)
 
     def add(point : EGPoint) = EGPoint(x + point.x, y + point.y)
@@ -24,12 +24,17 @@ struct EGPoint(x : float, y : float) {
     }
 }
 
-struct EGPointI(x : int, y : int) {
+struct EGPointI(x : int, y : int) extends ODComparable<EGPointI> {
     static def apply(point : EGPoint) = EGPointI(lround(point.x), lround(point.y))
 
     def add(point : EGPointI) = EGPointI(x + point.x, y + point.y)
     def sub(point : EGPointI) = EGPointI(x - point.x, y - point.y)
     def negate = EGPointI(-x, -y)
+
+    def compare(to : EGPointI) : int = {
+        val dX = x.compare(to.x)
+        if(dX != 0) dX else y.compare(to.y)
+    }
 }
 
 struct EGSize(width : float, height : float)

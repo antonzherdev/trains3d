@@ -1,7 +1,7 @@
 #import "CNTreeMap.h"
 
 #import "CNChain.h"
-@implementation CNTreeMap{
+@implementation CNMutableTreeMap{
     NSInteger(^_comparator)(id, id);
     CNTreeMapEntry* _root;
     NSUInteger __size;
@@ -14,8 +14,8 @@ static NSInteger _RED;
 @synthesize keys = _keys;
 @synthesize values = _values;
 
-+ (id)treeMapWithComparator:(NSInteger(^)(id, id))comparator {
-    return [[CNTreeMap alloc] initWithComparator:comparator];
++ (id)mutableTreeMapWithComparator:(NSInteger(^)(id, id))comparator {
+    return [[CNMutableTreeMap alloc] initWithComparator:comparator];
 }
 
 - (id)initWithComparator:(NSInteger(^)(id, id))comparator {
@@ -37,8 +37,8 @@ static NSInteger _RED;
     _RED = 1;
 }
 
-+ (CNTreeMap*)new {
-    return [CNTreeMap treeMapWithComparator:^NSInteger(id a, id b) {
++ (CNMutableTreeMap*)new {
+    return [CNMutableTreeMap mutableTreeMapWithComparator:^NSInteger(id a, id b) {
         return [a compareTo:b];
     }];
 }
@@ -82,7 +82,7 @@ static NSInteger _RED;
     return p;
 }
 
-- (id)setObject:(id)object forKey:(id)forKey {
+- (void)setObject:(id)object forKey:(id)forKey {
     CNTreeMapEntry* t = _root;
     if(t == nil) {
         _root = [CNTreeMapEntry newWithKey:forKey object:object parent:nil];
@@ -100,7 +100,7 @@ static NSInteger _RED;
                     t = t.right;
                 } else {
                     t.object = object;
-                    return object;
+                    return ;
                 }
             }
         } while(t != nil);
@@ -110,7 +110,6 @@ static NSInteger _RED;
         [self fixAfterInsertionEntry:e];
         __size++;
     }
-    return object;
 }
 
 - (id)removeForKey:(id)key {
@@ -473,7 +472,7 @@ static NSInteger _RED;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNTreeMap* o = ((CNTreeMap*)other);
+    CNMutableTreeMap* o = ((CNMutableTreeMap*)other);
     return [self.comparator isEqual:o.comparator];
 }
 
@@ -561,15 +560,15 @@ static NSInteger _RED;
 
 
 @implementation CNTreeMapKeySet{
-    CNTreeMap* _map;
+    CNMutableTreeMap* _map;
 }
 @synthesize map = _map;
 
-+ (id)treeMapKeySetWithMap:(CNTreeMap*)map {
++ (id)treeMapKeySetWithMap:(CNMutableTreeMap*)map {
     return [[CNTreeMapKeySet alloc] initWithMap:map];
 }
 
-- (id)initWithMap:(CNTreeMap*)map {
+- (id)initWithMap:(CNMutableTreeMap*)map {
     self = [super init];
     if(self) _map = map;
     
@@ -670,24 +669,24 @@ static NSInteger _RED;
 
 
 @implementation CNTreeMapKeyIterator{
-    CNTreeMap* _map;
+    CNMutableTreeMap* _map;
     CNTreeMapEntry* _entry;
 }
 @synthesize map = _map;
 @synthesize entry = _entry;
 
-+ (id)treeMapKeyIteratorWithMap:(CNTreeMap*)map {
++ (id)treeMapKeyIteratorWithMap:(CNMutableTreeMap*)map {
     return [[CNTreeMapKeyIterator alloc] initWithMap:map];
 }
 
-- (id)initWithMap:(CNTreeMap*)map {
+- (id)initWithMap:(CNMutableTreeMap*)map {
     self = [super init];
     if(self) _map = map;
     
     return self;
 }
 
-+ (CNTreeMapKeyIterator*)newMap:(CNTreeMap*)map entry:(CNTreeMapEntry*)entry {
++ (CNTreeMapKeyIterator*)newMap:(CNMutableTreeMap*)map entry:(CNTreeMapEntry*)entry {
     CNTreeMapKeyIterator* ret = [CNTreeMapKeyIterator treeMapKeyIteratorWithMap:map];
     ret.entry = entry;
     return ret;
@@ -731,15 +730,15 @@ static NSInteger _RED;
 
 
 @implementation CNTreeMapValues{
-    CNTreeMap* _map;
+    CNMutableTreeMap* _map;
 }
 @synthesize map = _map;
 
-+ (id)treeMapValuesWithMap:(CNTreeMap*)map {
++ (id)treeMapValuesWithMap:(CNMutableTreeMap*)map {
     return [[CNTreeMapValues alloc] initWithMap:map];
 }
 
-- (id)initWithMap:(CNTreeMap*)map {
+- (id)initWithMap:(CNMutableTreeMap*)map {
     self = [super init];
     if(self) _map = map;
     
@@ -836,24 +835,24 @@ static NSInteger _RED;
 
 
 @implementation CNTreeMapValuesIterator{
-    CNTreeMap* _map;
+    CNMutableTreeMap* _map;
     CNTreeMapEntry* _entry;
 }
 @synthesize map = _map;
 @synthesize entry = _entry;
 
-+ (id)treeMapValuesIteratorWithMap:(CNTreeMap*)map {
++ (id)treeMapValuesIteratorWithMap:(CNMutableTreeMap*)map {
     return [[CNTreeMapValuesIterator alloc] initWithMap:map];
 }
 
-- (id)initWithMap:(CNTreeMap*)map {
+- (id)initWithMap:(CNMutableTreeMap*)map {
     self = [super init];
     if(self) _map = map;
     
     return self;
 }
 
-+ (CNTreeMapValuesIterator*)newMap:(CNTreeMap*)map entry:(CNTreeMapEntry*)entry {
++ (CNTreeMapValuesIterator*)newMap:(CNMutableTreeMap*)map entry:(CNTreeMapEntry*)entry {
     CNTreeMapValuesIterator* ret = [CNTreeMapValuesIterator treeMapValuesIteratorWithMap:map];
     ret.entry = entry;
     return ret;
@@ -897,24 +896,24 @@ static NSInteger _RED;
 
 
 @implementation CNTreeMapIterator{
-    CNTreeMap* _map;
+    CNMutableTreeMap* _map;
     CNTreeMapEntry* _entry;
 }
 @synthesize map = _map;
 @synthesize entry = _entry;
 
-+ (id)treeMapIteratorWithMap:(CNTreeMap*)map {
++ (id)treeMapIteratorWithMap:(CNMutableTreeMap*)map {
     return [[CNTreeMapIterator alloc] initWithMap:map];
 }
 
-- (id)initWithMap:(CNTreeMap*)map {
+- (id)initWithMap:(CNMutableTreeMap*)map {
     self = [super init];
     if(self) _map = map;
     
     return self;
 }
 
-+ (CNTreeMapIterator*)newMap:(CNTreeMap*)map entry:(CNTreeMapEntry*)entry {
++ (CNTreeMapIterator*)newMap:(CNMutableTreeMap*)map entry:(CNTreeMapEntry*)entry {
     CNTreeMapIterator* ret = [CNTreeMapIterator treeMapIteratorWithMap:map];
     ret.entry = entry;
     return ret;

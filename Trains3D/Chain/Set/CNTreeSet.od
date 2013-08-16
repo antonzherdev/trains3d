@@ -6,12 +6,12 @@ import CNSet
 import CNList
 import CNChain
 
-class CNTreeSet<T>(map : CNTreeMap<T, ODObject>) extends CNSet<T> {
-    static def newWith<T>(comparator : (T, T) -> int) : CNTreeSet<T> = {
-        CNTreeSet<T>(CNTreeMap<T, ODObject>(comparator))
+class CNMutableTreeSet<T>(map : CNMutableTreeMap<T, ODObject>) extends CNSet<T> {
+    static def newWith<T>(comparator : (T, T) -> int) : CNMutableTreeSet<T> = {
+        CNMutableTreeSet<T>(CNMutableTreeMap<T, ODObject>(comparator))
     }
 
-    static def new<T> = CNTreeSet<T>(CNTreeMap.new<T, ODObject>)
+    static def new<T> = CNMutableTreeSet<T>(CNMutableTreeMap.new<T, ODObject>)
     private static val obj = NSObject.new
 
     def between(a : T, b : T) : [T]
@@ -42,8 +42,8 @@ class CNTreeSet<T>(map : CNTreeMap<T, ODObject>) extends CNSet<T> {
         objects.for(add(object = _))
     }
 
-    def reorder : CNTreeSet<T> = {
-        val ret = CNTreeSet<T>(CNTreeMap<T, ODObject>(map.comparator))
+    def reorder : CNMutableTreeSet<T> = {
+        val ret = CNMutableTreeSet<T>(CNMutableTreeMap<T, ODObject>(map.comparator))
         ret.addAll(self)
         ret
     }

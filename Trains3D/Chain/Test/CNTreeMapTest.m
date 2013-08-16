@@ -13,7 +13,7 @@
 }
 
 - (void)testMain {
-    CNTreeMap* map = [CNTreeMap new];
+    CNMutableTreeMap* map = [CNMutableTreeMap new];
     [self assertEqualsA:@0 b:numi([map count])];
     [self assertTrueValue:[[map applyKey:@0] isEmpty]];
     [map setObject:@"test" forKey:@0];

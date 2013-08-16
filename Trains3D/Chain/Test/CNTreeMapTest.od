@@ -3,7 +3,7 @@ import CNTreeMap
 
 class CNTreeMapTest extends CNTestCase {
     def testMain {
-        val map = CNTreeMap.new<int, string>
+        val map = CNMutableTreeMap.new<int, string>
         assertEquals(0, map.count)
         assertTrue(map[0].isEmpty)
 
