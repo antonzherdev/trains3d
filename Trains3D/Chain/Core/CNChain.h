@@ -38,6 +38,10 @@
 - (CNChain*)reverse;
 - (CNChain *)distinct;
 - (CNChain *)distinctWithSelectivity:(double) selectivity;
+- (CNChain *)sort;
+- (CNChain *)sort:(cnCompare)comparator;
+- (CNChain *)sortDesc;
+
 
 - (void)forEach:(cnP)p;
 - (id)head;
@@ -52,6 +56,4 @@
 - (NSDictionary *)toMap;
 - (NSMutableDictionary *)toMutableMap;
 - (CNYieldResult)apply:(CNYield *)yield;
-
-
 @end

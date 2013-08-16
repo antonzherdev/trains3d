@@ -55,6 +55,7 @@
 - (BOOL)isValid;
 - (TRRailPointCorrection*)correct;
 - (TRRailPoint*)invert;
+- (TRRailPoint*)setX:(double)x;
 - (EGPointI)nextTile;
 @end
 

@@ -3,6 +3,7 @@
 @class CNChain;
 typedef void (^cnChainBuildBlock)(CNChain * chain);
 typedef BOOL (^cnPredicate)(id x);
+typedef NSInteger (^cnCompare)(id x, id y);
 typedef id (^cnF)(id x);
 typedef id (^cnF2)(id x, id y);
 typedef id (^cnF0)();

@@ -66,7 +66,9 @@ class TRRailroad(map : EGMapSso, score : TRScore) {
     def lights = _lights
     val builder = TRRailroadBuilder(self)
     private val connectorIndex = CNMapDefault(TREmptyConnector.instance, CNMutableHashMap.new<(EGPointI, TRRailConnector), TRRailroadConnectorContent>)
-    private val damages = CNMutableHashMap.new<(EGPointI, TRRailForm), [float]>
+    private val damagesIndex = CNMutableHashMap.new<(EGPointI, TRRailForm), [float]>
+    private var _damagesPoints = CNMutableArray.new<TRRailPoint>
+    def damagesPoints : [TRRailPoint] = _damagesPoints
 
     def canAdd(rail : TRRail) : bool =
         connectorIndex[(rail.tile, rail.form.start)].canAdd(rail)
@@ -122,19 +124,23 @@ class TRRailroad(map : EGMapSso, score : TRScore) {
         _lights = connectorIndex.values.chain.filter(_.is<TRLight>).toArray
     }
 
-    def moveWith(obstacleProcessor : TRObstacle -> bool, forLength : float, point : TRRailPoint) : TRRailPointCorrection =
-        correctWith(obstacleProcessor, point.add(forLength))
-
     private def activeRailFor(tile : EGPointI, connector : TRRailConnector) : TRRail? =
         connectorIndex[(tile, connector)].rails.head
 
-    private def correctWith(obstacleProcessor : TRObstacle -> bool, point : TRRailPoint) : TRRailPointCorrection = {
-        val correction = point.correct
 
+    def moveWith(obstacleProcessor : TRObstacle -> bool, forLength : float, point : TRRailPoint) : TRRailPointCorrection = {
+        val p = point.add(forLength)
+
+        val correction = p.correct
+        val damage = checkDamagesWith(obstacleProcessor, point, correction.point.x)
+        if(damage.isDefined) {
+            val x = damage.get
+            return TRRailPointCorrection(p.set(x = x), correction.error + correction.point.x - x)
+        }
         if(correction.error == 0) return correction
 
-        val connector = point.endConnector
-        val connectorDesc = connectorIndex[(point.tile, connector)]
+        val connector = p.endConnector
+        val connectorDesc = connectorIndex[(p.tile, connector)]
         val activeRailOpt = connectorDesc.rails.head
         if(activeRailOpt.isEmpty) return correction
 
@@ -144,12 +150,12 @@ class TRRailroad(map : EGMapSso, score : TRScore) {
             }
         }
 
-        if(activeRailOpt.get.form != point.form) {
+        if(activeRailOpt.get.form != p.form) {
             obstacleProcessor(TRObstacle(TRObstacleType.switch, correction.point))
             return correction
         }
 
-        val nextTile = connector.next(point.tile)
+        val nextTile = connector.next(p.tile)
         val otherSideConnector = connector.otherSideConnector
         val nextRail = activeRailFor(nextTile, otherSideConnector)
 
@@ -160,17 +166,36 @@ class TRRailroad(map : EGMapSso, score : TRScore) {
 
         val nextActiveRail = nextRail.get
         val form = nextActiveRail.form
-        correctWith(obstacleProcessor, TRRailPoint(nextTile, form, correction.error, form.end == otherSideConnector))
+        moveWith(obstacleProcessor, correction.error, TRRailPoint(nextTile, form, 0, form.end == otherSideConnector))
+    }
+
+    def checkDamagesWith(obstacleProcessor : TRObstacle -> bool, from : TRRailPoint, to : float) : float? = {
+        if(from.x == to) return nil
+        val opt = damagesIndex[(from.tile, from.form)]
+        if(opt.isEmpty) return nil
+
+        val on : ODFloat -> bool = x : ODFloat -> {
+            !obstacleProcessor(TRObstacle(TRObstacleType.damage, from.set(x = x)))
+        }
+        val len = from.form.length
+        if(from.back) opt.get.chain.filter(_.between(len - to, len - from.x)).sortDesc.map(len - _).find(on)
+        else opt.get.chain.filter(_.between(from.x, to)).sort.find(on)
     }
 
     def addDamageAt(point : TRRailPoint) {
         if(point.back) addDamageAt(point.invert)
-        damages.modify(by = arr -> arr.map(_ + point.x).getOrElse([point.x]), forKey = (point.tile, point.form))
+        else {
+            damagesIndex.modify(by = arr -> arr.map(_ + point.x).getOrElse([point.x]), forKey = (point.tile, point.form))
+            _damagesPoints.add(point)
+        }
     }
 
     def fixDamageAt(point : TRRailPoint) {
         if(point.back) fixDamageAt(point.invert)
-        damages.modify(by = arrOpt -> arrOpt.map(arr -> arr.chain.filter(_ != point.x).toArray), forKey = (point.tile, point.form))
+        else {
+            damagesIndex.modify(by = arrOpt -> arrOpt.map(arr -> arr.chain.filter(_ != point.x).toArray), forKey = (point.tile, point.form))
+            _damagesPoints.remove(point)
+        }
     }
 }
 

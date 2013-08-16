@@ -1,0 +1,47 @@
+import CNTest
+
+import EGTypes
+import EGMapIso
+
+import TRRailroad
+import TRScore
+import TRLevelFactory
+import TRRailPoint
+
+class TRDamageTest extends CNTestCase {
+    def testMain {
+        val railroad = TRRailroad(EGMapSso(EGSizeI(4, 3)), TRScore(TRLevelFactory.scoreRules))
+
+        railroad.tryAdd(TRRail(EGPointI(1, 1), TRRailForm.leftRight))
+        railroad.addDamageAt(TRRailPoint(EGPointI(1, 1), TRRailForm.leftRight, 0.2, false))
+        railroad.addDamageAt(TRRailPoint(EGPointI(1, 1), TRRailForm.leftRight, 0.6, true))
+
+        var damagesCount : [float] = []
+        val p0 = TRRailPoint(EGPointI(1, 1), TRRailForm.leftRight, 0, false)
+        val p1 = railroad.moveWith(obstacleProcessor = o -> {
+            if(o.obstacleType == TRObstacleType.damage) damagesCount += o.point.x
+            true
+        }, forLength = 1, p0)
+        assertEquals(damagesCount, [0.2, 0.4])
+        assertEquals(p1.error, 0)
+        assertEquals(p1.point.x, 1)
+
+        damagesCount = []
+        val p00 = railroad.moveWith(obstacleProcessor = o -> {
+            if(o.obstacleType == TRObstacleType.damage) damagesCount += o.point.x
+            true
+        }, forLength = 1, p1.point.invert)
+        assertEquals(damagesCount, [0.6, 0.8])
+        assertEquals(p00.error, 0)
+        assertEquals(p00.point.x, 1)
+
+        damagesCount = []
+        val p01 = railroad.moveWith(obstacleProcessor = o -> {
+            if(o.obstacleType == TRObstacleType.damage) damagesCount += o.point.x
+            false
+        }, forLength = 1, p1.point.invert)
+        assertEquals(damagesCount, [0.6])
+        assertEquals(p01.error, 0.4)
+        assertEquals(p01.point.x, 0.6)
+    }
+}

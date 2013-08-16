@@ -456,7 +456,8 @@ static NSArray* _TRObstacleType_values;
     id<CNList> __lights;
     TRRailroadBuilder* _builder;
     CNMapDefault* _connectorIndex;
-    NSMutableDictionary* _damages;
+    NSMutableDictionary* _damagesIndex;
+    NSMutableArray* __damagesPoints;
 }
 @synthesize map = _map;
 @synthesize score = _score;
@@ -478,7 +479,8 @@ static NSArray* _TRObstacleType_values;
         _connectorIndex = [CNMapDefault mapDefaultWithDefaultFunc:^TRRailroadConnectorContent*(CNTuple* _) {
             return TREmptyConnector.instance;
         } map:[NSMutableDictionary mutableDictionary]];
-        _damages = [NSMutableDictionary mutableDictionary];
+        _damagesIndex = [NSMutableDictionary mutableDictionary];
+        __damagesPoints = [NSMutableArray mutableArray];
     }
     
     return self;
@@ -494,6 +496,10 @@ static NSArray* _TRObstacleType_values;
 
 - (id<CNList>)lights {
     return __lights;
+}
+
+- (id<CNList>)damagesPoints {
+    return __damagesPoints;
 }
 
 - (BOOL)canAddRail:(TRRail*)rail {
@@ -558,27 +564,29 @@ static NSArray* _TRObstacleType_values;
     }] toArray];
 }
 
-- (TRRailPointCorrection*)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(double)forLength point:(TRRailPoint*)point {
-    return [self correctWithObstacleProcessor:obstacleProcessor point:[point addX:forLength]];
-}
-
 - (id)activeRailForTile:(EGPointI)tile connector:(TRRailConnector*)connector {
     return [[((TRRailroadConnectorContent*)[_connectorIndex applyKey:tuple(wrap(EGPointI, tile), connector)]) rails] head];
 }
 
-- (TRRailPointCorrection*)correctWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor point:(TRRailPoint*)point {
-    TRRailPointCorrection* correction = [point correct];
+- (TRRailPointCorrection*)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(double)forLength point:(TRRailPoint*)point {
+    TRRailPoint* p = [point addX:forLength];
+    TRRailPointCorrection* correction = [p correct];
+    id damage = [self checkDamagesWithObstacleProcessor:obstacleProcessor from:point to:correction.point.x];
+    if([damage isDefined]) {
+        double x = unumf([damage get]);
+        return [TRRailPointCorrection railPointCorrectionWithPoint:[p setX:x] error:correction.error + correction.point.x - x];
+    }
     if(eqf(correction.error, 0)) return correction;
-    TRRailConnector* connector = [point endConnector];
-    TRRailroadConnectorContent* connectorDesc = ((TRRailroadConnectorContent*)[_connectorIndex applyKey:tuple(wrap(EGPointI, point.tile), connector)]);
+    TRRailConnector* connector = [p endConnector];
+    TRRailroadConnectorContent* connectorDesc = ((TRRailroadConnectorContent*)[_connectorIndex applyKey:tuple(wrap(EGPointI, p.tile), connector)]);
     id activeRailOpt = [[connectorDesc rails] head];
     if([activeRailOpt isEmpty]) return correction;
     if(!([connectorDesc isGreen])) if(!(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.light point:correction.point]))) return correction;
-    if(((TRRail*)[activeRailOpt get]).form != point.form) {
+    if(((TRRail*)[activeRailOpt get]).form != p.form) {
         obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.aSwitch point:correction.point]);
         return correction;
     }
-    EGPointI nextTile = [connector nextTile:point.tile];
+    EGPointI nextTile = [connector nextTile:p.tile];
     TRRailConnector* otherSideConnector = [connector otherSideConnector];
     id nextRail = [self activeRailForTile:nextTile connector:otherSideConnector];
     if([nextRail isEmpty]) {
@@ -587,29 +595,55 @@ static NSArray* _TRObstacleType_values;
     }
     TRRail* nextActiveRail = ((TRRail*)[nextRail get]);
     TRRailForm* form = nextActiveRail.form;
-    return [self correctWithObstacleProcessor:obstacleProcessor point:[TRRailPoint railPointWithTile:nextTile form:form x:correction.error back:form.end == otherSideConnector]];
+    return [self moveWithObstacleProcessor:obstacleProcessor forLength:correction.error point:[TRRailPoint railPointWithTile:nextTile form:form x:0 back:form.end == otherSideConnector]];
+}
+
+- (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint*)from to:(double)to {
+    if(eqf(from.x, to)) return [CNOption none];
+    id opt = [_damagesIndex applyKey:tuple(wrap(EGPointI, from.tile), from.form)];
+    if([opt isEmpty]) return [CNOption none];
+    BOOL(^on)(id) = ^BOOL(id x) {
+        return !(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.damage point:[from setX:unumf(x)]]));
+    };
+    double len = from.form.length;
+    if(from.back) return [[[[[[opt get] chain] filter:^BOOL(id _) {
+        return floatBetween(unumf(_), len - to, len - from.x);
+    }] sortDesc] map:^id(id _) {
+        return numf(len - unumf(_));
+    }] find:on];
+    else return [[[[[opt get] chain] filter:^BOOL(id _) {
+        return floatBetween(unumf(_), from.x, to);
+    }] sort] find:on];
 }
 
 - (void)addDamageAtPoint:(TRRailPoint*)point {
-    if(point.back) [self addDamageAtPoint:[point invert]];
-    [_damages modifyBy:^id(id arr) {
-        return [CNOption opt:[[arr map:^id<CNList>(id<CNList> _) {
-            return [_ arrayByAddingObject:numf(point.x)];
-        }] getOrElse:^id<CNList>() {
-            return (@[numf(point.x)]);
-        }]];
-    } forKey:tuple(wrap(EGPointI, point.tile), point.form)];
+    if(point.back) {
+        [self addDamageAtPoint:[point invert]];
+    } else {
+        [_damagesIndex modifyBy:^id(id arr) {
+            return [CNOption opt:[[arr map:^id<CNList>(id<CNList> _) {
+                return [_ arrayByAddingObject:numf(point.x)];
+            }] getOrElse:^id<CNList>() {
+                return (@[numf(point.x)]);
+            }]];
+        } forKey:tuple(wrap(EGPointI, point.tile), point.form)];
+        [__damagesPoints addObject:point];
+    }
 }
 
 - (void)fixDamageAtPoint:(TRRailPoint*)point {
-    if(point.back) [self fixDamageAtPoint:[point invert]];
-    [_damages modifyBy:^id(id arrOpt) {
-        return [arrOpt map:^id<CNList>(id<CNList> arr) {
-            return [[[arr chain] filter:^BOOL(id _) {
-                return !(eqf(unumf(_), point.x));
-            }] toArray];
-        }];
-    } forKey:tuple(wrap(EGPointI, point.tile), point.form)];
+    if(point.back) {
+        [self fixDamageAtPoint:[point invert]];
+    } else {
+        [_damagesIndex modifyBy:^id(id arrOpt) {
+            return [arrOpt map:^id<CNList>(id<CNList> arr) {
+                return [[[arr chain] filter:^BOOL(id _) {
+                    return !(eqf(unumf(_), point.x));
+                }] toArray];
+            }];
+        } forKey:tuple(wrap(EGPointI, point.tile), point.form)];
+        [__damagesPoints removeObject:point];
+    }
 }
 
 - (id)copyWithZone:(NSZone*)zone {

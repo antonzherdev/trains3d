@@ -16,6 +16,7 @@
 #import "CNUncombinationsLink.h"
 #import "CNGroupByLink.h"
 #import "CNList.h"
+#import "CNSortLink.h"
 
 
 @implementation CNChain {
@@ -217,6 +218,22 @@
     return [self link:[CNReverseLink link]];
 }
 
+- (CNChain *)sort {
+    return [self sort:^NSInteger(id x, id y) {
+        return [x compareTo:y];
+    }];
+}
+
+- (CNChain *)sort:(cnCompare)comparator {
+    return [self link:[CNSortLink linkWithComparator:comparator]];
+}
+
+- (CNChain *)sortDesc {
+    return [self sort:^NSInteger(id x, id y) {
+        return -[x compareTo:y];
+    }];
+}
+
 - (void)forEach:(cnP)p {
     [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
         p(item);
@@ -312,7 +329,6 @@
 - (CNChain *)distinctWithSelectivity:(double)selectivity {
     return [self link:[CNDistinctLink linkWithSelectivity:selectivity]];
 }
-
 @end
 
 id cnResolveCollection(id collection) {

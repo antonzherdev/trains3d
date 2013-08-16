@@ -66,6 +66,7 @@ class TRRailPoint(tile : EGPointI, form : TRRailForm, x : float, back : bool) {
     }
 
     def invert = TRRailPoint(tile, form, form.length - x, !back)
+    def set(x : float) = TRRailPoint(tile, form, x, back)
 
     def nextTile : EGPointI = endConnector.next(tile)
 }

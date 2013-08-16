@@ -192,6 +192,14 @@ SPEC_BEGIN(CNChainSpec)
           }] toSet];
           [[set should] equal:[@[tuple(@1, (@[@1, @-1, @1]) ), tuple(@2, @[@2]), tuple(@3, @[@-3])] toSet] ];
       });
+      it(@".sort", ^{
+          NSArray *r = [[[s chain] sort] toArray];
+          [[r should] equal:@[@1, @2, @3]];
+      });
+      it(@".sortDesc", ^{
+          NSArray *r = [[[s chain] sortDesc] toArray];
+          [[r should] equal:@[@3, @2, @1]];
+      });
   });
 
 SPEC_END

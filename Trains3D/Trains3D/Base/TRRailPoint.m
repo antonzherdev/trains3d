@@ -280,6 +280,10 @@ static NSArray* _TRRailForm_values;
     return [TRRailPoint railPointWithTile:_tile form:_form x:_form.length - _x back:!(_back)];
 }
 
+- (TRRailPoint*)setX:(double)x {
+    return [TRRailPoint railPointWithTile:_tile form:_form x:x back:_back];
+}
+
 - (EGPointI)nextTile {
     return [[self endConnector] nextTile:_tile];
 }
