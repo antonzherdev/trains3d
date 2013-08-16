@@ -1,22 +1,22 @@
 #import "EGRectIndex.h"
 
 @implementation EGRectIndex{
-    NSArray* _rects;
+    id<CNList> _rects;
 }
 @synthesize rects = _rects;
 
-+ (id)rectIndexWithRects:(NSArray*)rects {
++ (id)rectIndexWithRects:(id<CNList>)rects {
     return [[EGRectIndex alloc] initWithRects:rects];
 }
 
-- (id)initWithRects:(NSArray*)rects {
+- (id)initWithRects:(id<CNList>)rects {
     self = [super init];
     if(self) _rects = rects;
     
     return self;
 }
 
-- (id)objectForPoint:(EGPoint)point {
+- (id)applyPoint:(EGPoint)point {
     return [[_rects findWhere:^BOOL(CNTuple* _) {
         return egRectContains(uwrap(EGRect, _.a), point);
     }] map:^CNTuple*(CNTuple* _) {

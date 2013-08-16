@@ -112,7 +112,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
         )
     }
 
-    def detectCollisions : NSSet<EGCollision<TRTrain>> = {
+    def detectCollisions : CNSet<EGCollision<TRTrain>> = {
         val carFigures = _trains.chain.flatMap(train -> train.cars.chain.map(car -> (train, car.figure))).toArray
         EGCollisions.collisionsFor(carFigures)
     }

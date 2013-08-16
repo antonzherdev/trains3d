@@ -176,13 +176,13 @@
 
 - (CNChain *)groupBy:(cnF)by map:(cnF)f {
     return [self groupBy:by map: f withBuilder:^id {
-        return [NSArrayBuilder arrayBuilder];
+        return [CNArrayBuilder arrayBuilder];
     }];
 }
 
 - (CNChain *)groupBy:(cnF)by {
     return [self groupBy:by withBuilder:^id {
-        return [NSArrayBuilder arrayBuilder];
+        return [CNArrayBuilder arrayBuilder];
     }];
 }
 

@@ -29,7 +29,7 @@
 + (id)collisionsTest;
 - (id)init;
 - (TRLevel*)newLevel;
-- (NSSet*)checkLevel:(TRLevel*)level;
+- (id<CNSet>)checkLevel:(TRLevel*)level;
 - (void)testStraight;
 - (void)doTest1ForLevel:(TRLevel*)level delta:(double)delta form:(TRRailForm*)form;
 - (void)testTurn;

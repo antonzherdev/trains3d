@@ -32,7 +32,7 @@ static NSObject* _obj;
     return [CNTreeSet treeSetWithMap:[CNTreeMap new]];
 }
 
-- (NSArray*)betweenA:(id)a b:(id)b {
+- (id<CNList>)betweenA:(id)a b:(id)b {
     @throw @"Method between is abstract";
 }
 
@@ -41,7 +41,7 @@ static NSObject* _obj;
 }
 
 - (BOOL)removeObject:(id)object {
-    return [[_map removeObjectForKey:object] isDefined];
+    return [[_map removeForKey:object] isDefined];
 }
 
 - (id)higherThanObject:(id)object {

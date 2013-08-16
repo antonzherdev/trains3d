@@ -41,7 +41,7 @@ class TRSwitch(tile : EGPointI, connector : TRRailConnector, rail1 : TRRail, rai
 class TRLight(tile : EGPointI, connector : TRRailConnector, rail : TRRail) extends TRRailroadConnectorContent {
     var isGreen = true
     def turn { isGreen = !isGreen }
-    def canAdd(rail : TRRail) : bool = rail.canAdd(rail)
+    def canAdd(rail : TRRail) : bool = self.rail.canAdd(rail)
     def connect(rail : TRRail, to : TRRailConnector) : TRRailroadConnectorContent = TRSwitch(tile, to, self.rail, rail)
     def rails : [TRRail] = [rail]
     def buildLightIn(connector : TRRailConnector) : TRRailroadConnectorContent = self

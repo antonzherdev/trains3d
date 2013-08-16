@@ -16,14 +16,14 @@
     return self;
 }
 
-+ (NSSet*)intersectionsForSegments:(NSArray*)segments {
++ (id<CNSet>)intersectionsForSegments:(id<CNList>)segments {
     if([segments count] < 2) {
         return [NSSet set];
     } else {
         EGSweepLine* sweepLine = [EGSweepLine sweepLine];
         EGBentleyOttmannEventQueue* queue = [EGBentleyOttmannEventQueue newWithSegments:segments sweepLine:sweepLine];
         while(!([queue isEmpty])) {
-            NSArray* events = [queue poll];
+            id<CNList> events = [queue poll];
             [sweepLine handleEvents:events];
         }
         return [[[sweepLine.intersections chain] flatMap:^CNChain*(CNTuple* p) {
@@ -310,7 +310,7 @@
     return [_events isEmpty];
 }
 
-+ (EGBentleyOttmannEventQueue*)newWithSegments:(NSArray*)segments sweepLine:(EGSweepLine*)sweepLine {
++ (EGBentleyOttmannEventQueue*)newWithSegments:(id<CNList>)segments sweepLine:(EGSweepLine*)sweepLine {
     EGBentleyOttmannEventQueue* ret = [EGBentleyOttmannEventQueue bentleyOttmannEventQueue];
     if(!([segments isEmpty])) {
         [segments forEach:^void(CNTuple* s) {
@@ -324,12 +324,12 @@
 }
 
 - (void)offerPoint:(EGPoint)point event:(EGBentleyOttmannEvent*)event {
-    [[_events objectForKey:wrap(EGPoint, point) orUpdateWith:^NSMutableArray*() {
+    [[_events objectForKey:wrap(EGPoint, point) orUpdateWith:^id<CNMutableList>() {
         return [(@[]) mutableCopy];
     }] addObject:event];
 }
 
-- (NSArray*)poll {
+- (id<CNList>)poll {
     return ((CNTuple*)[[_events pollFirst] get]).b;
 }
 
@@ -401,7 +401,7 @@
 
 @implementation EGSweepLine{
     CNTreeSet* _events;
-    NSMutableDictionary* _intersections;
+    id<CNMutableMap> _intersections;
     EGPoint _currentEventPoint;
     EGBentleyOttmannEventQueue* _queue;
 }
@@ -426,7 +426,7 @@
     return self;
 }
 
-- (void)handleEvents:(NSArray*)events {
+- (void)handleEvents:(id<CNList>)events {
     [events forEach:^void(EGBentleyOttmannEvent* _) {
         [self handleOneEvent:_];
     }];
@@ -467,8 +467,8 @@
                 [self checkIntersectionA:a b:b];
             }
         } else {
-            NSMutableSet* set = ((NSMutableSet*)[[_intersections optionObjectForKey:[EGPointClass pointClassWithPoint:[event point]]] get]);
-            NSArray* toInsert = [[[set chain] filter:^BOOL(EGBentleyOttmannPointEvent* _) {
+            NSMutableSet* set = ((NSMutableSet*)[[_intersections applyKey:[EGPointClass pointClassWithPoint:[event point]]] get]);
+            id<CNList> toInsert = [[[set chain] filter:^BOOL(EGBentleyOttmannPointEvent* _) {
                 return [_events removeObject:_];
             }] toArray];
             [self sweepToEvent:event];

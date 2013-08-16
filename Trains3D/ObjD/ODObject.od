@@ -33,3 +33,5 @@ stub struct ODFloat extends ODComparable<float> {
 
 stub val DBL_MAX : float
 stub val DBL_MIN : float
+stub def max(a : float, b : float) : float
+stub def min(a : float, b : float) : float

@@ -5,6 +5,7 @@
 @protocol CNTraversable;
 @protocol CNIterable;
 #import "CNSet.h"
+#import "CNList.h"
 @class CNChain;
 
 @class CNTreeSet;
@@ -16,7 +17,7 @@
 - (id)initWithMap:(CNTreeMap*)map;
 + (CNTreeSet*)newWithComparator:(NSInteger(^)(id, id))comparator;
 + (CNTreeSet*)new;
-- (NSArray*)betweenA:(id)a b:(id)b;
+- (id<CNList>)betweenA:(id)a b:(id)b;
 - (void)addObject:(id)object;
 - (BOOL)removeObject:(id)object;
 - (id)higherThanObject:(id)object;

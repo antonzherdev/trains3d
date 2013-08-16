@@ -14,7 +14,7 @@
 
 + (id)mapSsoTileIndexWithMap:(EGMapSso*)map initial:(id(^)())initial;
 - (id)initWithMap:(EGMapSso*)map initial:(id(^)())initial;
-- (id)objectForTile:(EGPointI)tile;
+- (id)applyTile:(EGPointI)tile;
 - (id<CNIterable>)values;
 @end
 

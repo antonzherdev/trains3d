@@ -7,6 +7,7 @@
 @class EGLineSegment;
 @class EGPolygon;
 @class EGThickLineSegment;
+@protocol EGFigure;
 
 @interface EGLine : NSObject
 + (id)line;
@@ -68,7 +69,7 @@
 
 @protocol EGFigure<NSObject>
 - (EGRect)boundingRect;
-- (NSArray*)segments;
+- (id<CNList>)segments;
 @end
 
 
@@ -88,18 +89,18 @@
 - (BOOL)containsInBoundingRectPoint:(EGPoint)point;
 - (id)intersectionWithSegment:(EGLineSegment*)segment;
 - (BOOL)endingsContainPoint:(EGPoint)point;
-- (NSArray*)segments;
+- (id<CNList>)segments;
 - (EGLineSegment*)moveWithPoint:(EGPoint)point;
 - (EGLineSegment*)moveWithX:(double)x y:(double)y;
 @end
 
 
 @interface EGPolygon : NSObject<EGFigure>
-@property (nonatomic, readonly) NSArray* points;
-@property (nonatomic, readonly) NSArray* segments;
+@property (nonatomic, readonly) id<CNList> points;
+@property (nonatomic, readonly) id<CNList> segments;
 
-+ (id)polygonWithPoints:(NSArray*)points;
-- (id)initWithPoints:(NSArray*)points;
++ (id)polygonWithPoints:(id<CNList>)points;
+- (id)initWithPoints:(id<CNList>)points;
 - (EGRect)boundingRect;
 @end
 
@@ -112,7 +113,7 @@
 + (id)thickLineSegmentWithSegment:(EGLineSegment*)segment thickness:(double)thickness;
 - (id)initWithSegment:(EGLineSegment*)segment thickness:(double)thickness;
 - (EGRect)boundingRect;
-- (NSArray*)segments;
+- (id<CNList>)segments;
 @end
 
 

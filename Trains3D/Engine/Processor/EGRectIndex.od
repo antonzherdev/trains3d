@@ -1,5 +1,5 @@
 import EGTypes
 
 class EGRectIndex<T>(rects : [(EGRect, T)]) {
-    def objectFor(point : EGPoint) : T? = rects.find(_.a.contains(point)).map(_.b)
+    def apply(point : EGPoint) : T? = rects.find(_.a.contains(point)).map(_.b)
 }

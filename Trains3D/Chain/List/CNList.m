@@ -1,13 +1,13 @@
 #import "CNList.h"
 
 #import "CNChain.h"
-@implementation NSArrayBuilder{
+@implementation CNArrayBuilder{
     NSMutableArray* _array;
 }
 @synthesize array = _array;
 
 + (id)arrayBuilder {
-    return [[NSArrayBuilder alloc] init];
+    return [[CNArrayBuilder alloc] init];
 }
 
 - (id)init {
@@ -19,10 +19,17 @@
 
 - (void)addObject:(id)object {
     [_array addObject:object];
+    self;
 }
 
 - (NSArray*)build {
     return _array;
+}
+
+- (void)addAllObject:(id<CNTraversable>)object {
+    [object forEach:^void(id _) {
+        [self addObject:_];
+    }];
 }
 
 - (id)copyWithZone:(NSZone*)zone {

@@ -2,9 +2,11 @@
 #import "CNOption.h"
 #import "CNCollection.h"
 
+@protocol CNMap;
+@protocol CNMutableMap;
 
 @protocol CNMap<CNIterable>
-- (id)objectForKey:(id)key;
+- (id)applyKey:(id)key;
 - (id<CNIterable>)keys;
 - (id<CNIterable>)values;
 - (BOOL)containsKey:(id)key;
@@ -13,7 +15,7 @@
 
 @protocol CNMutableMap<CNMap>
 - (id)setObject:(id)object forKey:(id)forKey;
-- (id)removeObjectForKey:(id)key;
+- (id)removeForKey:(id)key;
 - (id)objectForKey:(id)key orUpdateWith:(id(^)())orUpdateWith;
 - (id)modifyWith:(id(^)(id))with forKey:(id)forKey;
 @end

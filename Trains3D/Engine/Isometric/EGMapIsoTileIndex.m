@@ -5,7 +5,7 @@
 @implementation EGMapSsoTileIndex{
     EGMapSso* _map;
     id(^_initial)();
-    NSMutableDictionary* _index;
+    id<CNMutableMap> _index;
     NSInteger _wh;
 }
 @synthesize map = _map;
@@ -31,7 +31,7 @@
     return (tile.x + tile.y) * _wh + tile.y - tile.x;
 }
 
-- (id)objectForTile:(EGPointI)tile {
+- (id)applyTile:(EGPointI)tile {
     return [_index objectForKey:numi([self numberForTile:tile]) orUpdateWith:_initial];
 }
 

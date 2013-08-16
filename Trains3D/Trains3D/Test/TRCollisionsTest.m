@@ -33,7 +33,7 @@ static double _carsDelta;
     return [TRLevel levelWithRules:[TRLevelRules levelRulesWithMapSize:EGSizeIMake(5, 3) scoreRules:TRLevelFactory.scoreRules events:(@[])]];
 }
 
-- (NSSet*)checkLevel:(TRLevel*)level {
+- (id<CNSet>)checkLevel:(TRLevel*)level {
     return [[[[level detectCollisions] chain] flatMap:^CNPair*(EGCollision* _) {
         return _.items;
     }] toSet];
@@ -54,7 +54,7 @@ static double _carsDelta;
     TRTrain* t2 = [TRTrain trainWithLevel:level color:TRColor.orange cars:(@[[TRCar car], [TRCar car]]) speed:((NSUInteger)0)];
     p2 = [level.railroad moveConsideringLights:NO forLength:_carLen * 3 + _carsDelta + delta point:p].point;
     [level testRunTrain:t2 fromPoint:p2];
-    NSSet* cols = [self checkLevel:level];
+    id<CNSet> cols = [self checkLevel:level];
     [self assertTrueValue:[cols isEmpty]];
     [t2 setHead:[p2 addX:-delta - 0.001]];
     cols = [self checkLevel:level];
@@ -84,7 +84,7 @@ static double _carsDelta;
     p = [TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight x:0 back:NO];
     TRRailPoint* p2 = [level.railroad moveConsideringLights:NO forLength:_carLen * 2 + _carsDelta point:p].point;
     [level testRunTrain:t2 fromPoint:p2];
-    NSSet* cols = [self checkLevel:level];
+    id<CNSet> cols = [self checkLevel:level];
     [self assertTrueValue:[cols isEmpty]];
     [t1 setHead:[p2 addX:-0.002]];
     cols = [self checkLevel:level];

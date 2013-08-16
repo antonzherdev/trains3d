@@ -1,6 +1,9 @@
 #import "objd.h"
 #import "EGTypesAdd.h"
 
+@protocol EGController;
+@protocol EGCamera;
+@protocol EGView;
 typedef struct EGPoint EGPoint;
 typedef struct EGPointI EGPointI;
 typedef struct EGSize EGSize;

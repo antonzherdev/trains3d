@@ -3,6 +3,8 @@
 #import "CNOption.h"
 #import "CNPair.h"
 #import "CNTuple.h"
+#import "CNList.h"
+#import "CNMap.h"
 #import "NSArray+CNChain.h"
 #import "NSMutableDictionary+CNChain.h"
 #import "NSSet+CNChain.h"

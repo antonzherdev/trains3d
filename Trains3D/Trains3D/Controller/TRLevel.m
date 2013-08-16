@@ -13,17 +13,17 @@
 @implementation TRLevelRules{
     EGSizeI _mapSize;
     TRScoreRules* _scoreRules;
-    NSArray* _events;
+    id<CNList> _events;
 }
 @synthesize mapSize = _mapSize;
 @synthesize scoreRules = _scoreRules;
 @synthesize events = _events;
 
-+ (id)levelRulesWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules events:(NSArray*)events {
++ (id)levelRulesWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules events:(id<CNList>)events {
     return [[TRLevelRules alloc] initWithMapSize:mapSize scoreRules:scoreRules events:events];
 }
 
-- (id)initWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules events:(NSArray*)events {
+- (id)initWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules events:(id<CNList>)events {
     self = [super init];
     if(self) {
         _mapSize = mapSize;
@@ -70,9 +70,9 @@
     EGMapSso* _map;
     TRScore* _score;
     TRRailroad* _railroad;
-    NSMutableArray* __cities;
+    id<CNMutableList> __cities;
     EGSchedule* _schedule;
-    NSArray* __trains;
+    id<CNList> __trains;
 }
 @synthesize rules = _rules;
 @synthesize map = _map;
@@ -99,11 +99,11 @@
     return self;
 }
 
-- (NSArray*)cities {
+- (id<CNList>)cities {
     return __cities;
 }
 
-- (NSArray*)trains {
+- (id<CNList>)trains {
     return __trains;
 }
 
@@ -207,8 +207,8 @@
     }];
 }
 
-- (NSSet*)detectCollisions {
-    NSArray* carFigures = [[[__trains chain] flatMap:^CNChain*(TRTrain* train) {
+- (id<CNSet>)detectCollisions {
+    id<CNList> carFigures = [[[__trains chain] flatMap:^CNChain*(TRTrain* train) {
         return [[train.cars chain] map:^CNTuple*(TRCar* car) {
             return tuple(train, [car figure]);
         }];

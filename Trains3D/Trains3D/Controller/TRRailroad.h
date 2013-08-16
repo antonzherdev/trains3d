@@ -24,7 +24,7 @@
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
-- (NSArray*)rails;
+- (id<CNList>)rails;
 - (BOOL)isGreen;
 @end
 
@@ -32,7 +32,7 @@
 @interface TREmptyConnector : TRRailroadConnectorContent
 + (id)emptyConnector;
 - (id)init;
-- (NSArray*)rails;
+- (id<CNList>)rails;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 + (TRRailroadConnectorContent*)instance;
 @end
@@ -46,7 +46,7 @@
 - (id)initWithTile:(EGPointI)tile form:(TRRailForm*)form;
 - (BOOL)hasConnector:(TRRailConnector*)connector;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
-- (NSArray*)rails;
+- (id<CNList>)rails;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
 - (BOOL)canAddRail:(TRRail*)rail;
 @end
@@ -65,7 +65,7 @@
 - (void)turn;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
-- (NSArray*)rails;
+- (id<CNList>)rails;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
 @end
 
@@ -81,7 +81,7 @@
 - (void)turn;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
-- (NSArray*)rails;
+- (id<CNList>)rails;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
 @end
 
@@ -93,9 +93,9 @@
 
 + (id)railroadWithMap:(EGMapSso*)map score:(TRScore*)score;
 - (id)initWithMap:(EGMapSso*)map score:(TRScore*)score;
-- (NSArray*)rails;
-- (NSArray*)switches;
-- (NSArray*)lights;
+- (id<CNList>)rails;
+- (id<CNList>)switches;
+- (id<CNList>)lights;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (BOOL)tryAddRail:(TRRail*)rail;
 - (id)contentInTile:(EGPointI)tile connector:(TRRailConnector*)connector;

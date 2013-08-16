@@ -1,12 +1,12 @@
 #import "CNSet.h"
 
-@implementation NSSetBuilder{
+@implementation CNHashSetBuilder{
     NSMutableSet* _set;
 }
 @synthesize set = _set;
 
-+ (id)setBuilder {
-    return [[NSSetBuilder alloc] init];
++ (id)hashSetBuilder {
+    return [[CNHashSetBuilder alloc] init];
 }
 
 - (id)init {
@@ -18,10 +18,17 @@
 
 - (void)addObject:(id)object {
     [_set addObject:object];
+    self;
 }
 
 - (NSSet*)build {
     return _set;
+}
+
+- (void)addAllObject:(id<CNTraversable>)object {
+    [object forEach:^void(id _) {
+        [self addObject:_];
+    }];
 }
 
 - (id)copyWithZone:(NSZone*)zone {

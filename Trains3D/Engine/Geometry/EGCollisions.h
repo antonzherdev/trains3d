@@ -25,16 +25,16 @@
 @interface EGCollisions : NSObject
 + (id)collisions;
 - (id)init;
-+ (NSSet*)collisionsForFigures:(NSArray*)figures;
++ (id<CNSet>)collisionsForFigures:(id<CNList>)figures;
 @end
 
 
 @interface EGCollision : NSObject
 @property (nonatomic, readonly) CNPair* items;
-@property (nonatomic, readonly) NSSet* points;
+@property (nonatomic, readonly) id<CNSet> points;
 
-+ (id)collisionWithItems:(CNPair*)items points:(NSSet*)points;
-- (id)initWithItems:(CNPair*)items points:(NSSet*)points;
++ (id)collisionWithItems:(CNPair*)items points:(id<CNSet>)points;
+- (id)initWithItems:(CNPair*)items points:(id<CNSet>)points;
 @end
 
 

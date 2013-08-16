@@ -1,6 +1,6 @@
 package core
 
-stub class ODOption<V> {
+stub class CNOption<V> {
     def get : V
     def getOrElse(: () -> V) : V
     def getOr(: V) : V

@@ -12,7 +12,7 @@
 #import "TRRailroad.h"
 @implementation TRLevelFactory
 static TRScoreRules* _scoreRules;
-static NSArray* _rules;
+static id<CNList> _rules;
 
 + (id)levelFactory {
     return [[TRLevelFactory alloc] init];

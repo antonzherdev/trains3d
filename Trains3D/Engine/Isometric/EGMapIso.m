@@ -6,9 +6,9 @@
 @implementation EGMapSso{
     EGSizeI _size;
     EGRectI _limits;
-    NSArray* _fullTiles;
-    NSArray* _partialTiles;
-    NSArray* _allTiles;
+    id<CNList> _fullTiles;
+    id<CNList> _partialTiles;
+    id<CNList> _allTiles;
 }
 @synthesize size = _size;
 @synthesize limits = _limits;

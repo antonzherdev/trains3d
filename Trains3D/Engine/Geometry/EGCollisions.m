@@ -15,8 +15,8 @@
     return self;
 }
 
-+ (NSSet*)collisionsForFigures:(NSArray*)figures {
-    NSArray* segments = [[[[[[figures chain] combinations] filter:^BOOL(CNTuple* p) {
++ (id<CNSet>)collisionsForFigures:(id<CNList>)figures {
+    id<CNList> segments = [[[[[[figures chain] combinations] filter:^BOOL(CNTuple* p) {
         return !(((CNTuple*)((CNTuple*)p.a).a) == ((CNTuple*)((CNTuple*)p.b).a)) && egRectIntersects([((CNTuple*)p.a).b boundingRect], [((CNTuple*)p.b).b boundingRect]);
     }] uncombinations] flatMap:^CNChain*(CNTuple* f) {
         return [[[f.b segments] chain] map:^CNTuple*(EGLineSegment* segment) {
@@ -24,15 +24,15 @@
         }];
     }] toArray];
     if([segments isEmpty]) return [NSSet set];
-    NSSet* intersections = [EGBentleyOttmann intersectionsForSegments:segments];
+    id<CNSet> intersections = [EGBentleyOttmann intersectionsForSegments:segments];
     return [[[[intersections chain] groupBy:^CNPair*(EGIntersection* _) {
         return _.items;
     } map:^id(EGIntersection* _) {
         return wrap(EGPoint, _.point);
-    } withBuilder:^NSSetBuilder*() {
-        return [NSSetBuilder setBuilder];
+    } withBuilder:^CNHashSetBuilder*() {
+        return [CNHashSetBuilder hashSetBuilder];
     }] map:^EGCollision*(CNTuple* p) {
-        return [EGCollision collisionWithItems:p.a points:((NSSet*)p.b)];
+        return [EGCollision collisionWithItems:p.a points:p.b];
     }] toSet];
 }
 
@@ -61,16 +61,16 @@
 
 @implementation EGCollision{
     CNPair* _items;
-    NSSet* _points;
+    id<CNSet> _points;
 }
 @synthesize items = _items;
 @synthesize points = _points;
 
-+ (id)collisionWithItems:(CNPair*)items points:(NSSet*)points {
++ (id)collisionWithItems:(CNPair*)items points:(id<CNSet>)points {
     return [[EGCollision alloc] initWithItems:items points:points];
 }
 
-- (id)initWithItems:(CNPair*)items points:(NSSet*)points {
+- (id)initWithItems:(CNPair*)items points:(id<CNSet>)points {
     self = [super init];
     if(self) {
         _items = items;

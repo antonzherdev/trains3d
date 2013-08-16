@@ -10,7 +10,7 @@
 @implementation TRTrain{
     __weak TRLevel* _level;
     TRColor* _color;
-    NSArray* _cars;
+    id<CNList> _cars;
     NSUInteger _speed;
     TRRailPoint* _head;
     BOOL _back;
@@ -23,11 +23,11 @@ static double _carsDelta;
 @synthesize cars = _cars;
 @synthesize speed = _speed;
 
-+ (id)trainWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(NSUInteger)speed {
++ (id)trainWithLevel:(TRLevel*)level color:(TRColor*)color cars:(id<CNList>)cars speed:(NSUInteger)speed {
     return [[TRTrain alloc] initWithLevel:level color:color cars:cars speed:speed];
 }
 
-- (id)initWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(NSUInteger)speed {
+- (id)initWithLevel:(TRLevel*)level color:(TRColor*)color cars:(id<CNList>)cars speed:(NSUInteger)speed {
     self = [super init];
     if(self) {
         _level = level;
@@ -77,7 +77,7 @@ static double _carsDelta;
     [self correctCorrection:[_level.railroad moveConsideringLights:YES forLength:delta * __speedF point:_head]];
 }
 
-- (NSArray*)directedCars {
+- (id<CNList>)directedCars {
     if(_back) return [[[_cars chain] reverse] toArray];
     else return _cars;
 }
@@ -216,7 +216,7 @@ static double _carsDelta;
     return self;
 }
 
-- (NSArray*)generateCars {
+- (id<CNList>)generateCars {
     return [[[intRange(unumi([[_carsCount randomItem] get])) chain] map:^TRCar*(id _) {
         return [TRCar car];
     }] toArray];

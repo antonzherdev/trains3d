@@ -76,7 +76,7 @@
 @implementation TRScore{
     TRScoreRules* _rules;
     NSInteger __score;
-    NSMutableArray* _trains;
+    id<CNMutableList> _trains;
 }
 @synthesize rules = _rules;
 

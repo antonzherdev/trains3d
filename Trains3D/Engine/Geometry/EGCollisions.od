@@ -5,23 +5,23 @@ import CNPair
 import CNSet
 
 class EGCollisions {
-    static def collisionsFor<T>(figures : [(T, EGFigure)]) : NSSet<EGCollision<T>> = {
+    static def collisionsFor<T>(figures : [(T, EGFigure)]) : CNSet<EGCollision<T>> = {
         val segments = figures.chain
             .combinations
             .filter(p -> p.a.a != p.b.a && p.a.b.boundingRect.intersects(p.b.b.boundingRect))
             .uncombinations
             .flatMap(f -> f.b.segments.chain.map(segment -> (f.a, segment)))
             .toArray
-        if(segments.isEmpty) return NSSet.new<EGCollision>
+        if(segments.isEmpty) return CNHashSet.new<EGCollision>
         val intersections = EGBentleyOttmann.intersectionsFor(segments)
         intersections.chain
-            .group<CNPair<T>, EGPoint, NSSet<EGPoint>>(
+            .group<CNPair<T>, EGPoint, CNSet<EGPoint>>(
                 by = _.items,
                 map = _.point,
-                withBuilder = NSSetBuilder.new<EGPoint>)
+                withBuilder = CNHashSetBuilder.new<EGPoint>)
             .map(p -> EGCollision<T>(p.a, p.b))
             .toSet
     }
 }
 
-class EGCollision<T>(items : CNPair<T>, points : NSSet<EGPoint>)
+class EGCollision<T>(items : CNPair<T>, points : CNSet<EGPoint>)

@@ -29,7 +29,7 @@
     return self;
 }
 
-- (NSArray*)rails {
+- (id<CNList>)rails {
     @throw @"Method rails is abstract";
 }
 
@@ -78,7 +78,7 @@ static TRRailroadConnectorContent* _instance;
     _instance = [TREmptyConnector emptyConnector];
 }
 
-- (NSArray*)rails {
+- (id<CNList>)rails {
     return (@[]);
 }
 
@@ -142,7 +142,7 @@ static TRRailroadConnectorContent* _instance;
     return [TRSwitch switchWithTile:rail.tile connector:to rail1:self rail2:rail];
 }
 
-- (NSArray*)rails {
+- (id<CNList>)rails {
     return (@[self]);
 }
 
@@ -230,7 +230,7 @@ static TRRailroadConnectorContent* _instance;
     @throw @"Couldn't add rail to switch";
 }
 
-- (NSArray*)rails {
+- (id<CNList>)rails {
     if(_firstActive) return (@[_rail1, _rail2]);
     else return (@[_rail2, _rail1]);
 }
@@ -304,14 +304,14 @@ static TRRailroadConnectorContent* _instance;
 }
 
 - (BOOL)canAddRail:(TRRail*)rail {
-    return [rail canAddRail:rail];
+    return [_rail canAddRail:rail];
 }
 
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to {
     return [TRSwitch switchWithTile:_tile connector:to rail1:_rail rail2:rail];
 }
 
-- (NSArray*)rails {
+- (id<CNList>)rails {
     return (@[_rail]);
 }
 
@@ -353,9 +353,9 @@ static TRRailroadConnectorContent* _instance;
 @implementation TRRailroad{
     EGMapSso* _map;
     TRScore* _score;
-    NSArray* __rails;
-    NSArray* __switches;
-    NSArray* __lights;
+    id<CNList> __rails;
+    id<CNList> __switches;
+    id<CNList> __lights;
     TRRailroadBuilder* _builder;
     EGMapSsoTileIndex* _connectorIndex;
 }
@@ -376,7 +376,7 @@ static TRRailroadConnectorContent* _instance;
         __switches = (@[]);
         __lights = (@[]);
         _builder = [TRRailroadBuilder railroadBuilderWithRailroad:self];
-        _connectorIndex = [EGMapSsoTileIndex mapSsoTileIndexWithMap:_map initial:^NSMutableDictionary*() {
+        _connectorIndex = [EGMapSsoTileIndex mapSsoTileIndexWithMap:_map initial:^id<CNMutableMap>() {
             return [[[[TRRailConnector values] chain] map:^CNTuple*(TRRailConnector* _) {
                 return tuple(_, TREmptyConnector.instance);
             }] toMutableMap];
@@ -386,21 +386,21 @@ static TRRailroadConnectorContent* _instance;
     return self;
 }
 
-- (NSArray*)rails {
+- (id<CNList>)rails {
     return __rails;
 }
 
-- (NSArray*)switches {
+- (id<CNList>)switches {
     return __switches;
 }
 
-- (NSArray*)lights {
+- (id<CNList>)lights {
     return __lights;
 }
 
 - (BOOL)canAddRail:(TRRail*)rail {
-    NSMutableDictionary* tileIndex = [_connectorIndex objectForTile:rail.tile];
-    return [((TRRailroadConnectorContent*)[[tileIndex optionObjectForKey:rail.form.start] get]) canAddRail:rail] && [((TRRailroadConnectorContent*)[[tileIndex optionObjectForKey:rail.form.end] get]) canAddRail:rail];
+    id<CNMutableMap> tileIndex = [_connectorIndex applyTile:rail.tile];
+    return [((TRRailroadConnectorContent*)[[tileIndex applyKey:rail.form.start] get]) canAddRail:rail] && [((TRRailroadConnectorContent*)[[tileIndex applyKey:rail.form.end] get]) canAddRail:rail];
 }
 
 - (BOOL)tryAddRail:(TRRail*)rail {
@@ -418,11 +418,11 @@ static TRRailroadConnectorContent* _instance;
 }
 
 - (id)contentInTile:(EGPointI)tile connector:(TRRailConnector*)connector {
-    return [CNOption opt:((TRRailroadConnectorContent*)[[_connectorIndex objectForTile:tile][connector] get])];
+    return [CNOption opt:((TRRailroadConnectorContent*)[[_connectorIndex applyTile:tile][connector] get])];
 }
 
 - (void)connectRail:(TRRail*)rail to:(TRRailConnector*)to {
-    [[_connectorIndex objectForTile:rail.tile] modifyWith:^id(id _) {
+    [[_connectorIndex applyTile:rail.tile] modifyWith:^id(id _) {
         return [CNOption opt:[((TRRailroadConnectorContent*)[_ get]) connectRail:rail to:to]];
     } forKey:to];
 }
@@ -435,25 +435,25 @@ static TRRailroadConnectorContent* _instance;
     } else {
         if([self isTurnRailInTile:nextTile connector:otherSideConnector]) [self buildLightInTile:nextTile connector:otherSideConnector];
     }
-    if([self isTurnRailInTile:tile connector:connector] && [[((TRRailroadConnectorContent*)[[_connectorIndex objectForTile:nextTile][otherSideConnector] get]) rails] count] == 1) [self buildLightInTile:tile connector:connector];
+    if([self isTurnRailInTile:tile connector:connector] && [[((TRRailroadConnectorContent*)[[_connectorIndex applyTile:nextTile][otherSideConnector] get]) rails] count] == 1) [self buildLightInTile:tile connector:connector];
 }
 
 - (BOOL)isTurnRailInTile:(EGPointI)tile connector:(TRRailConnector*)connector {
-    NSArray* rails = [((TRRailroadConnectorContent*)[[_connectorIndex objectForTile:tile][connector] get]) rails];
+    id<CNList> rails = [((TRRailroadConnectorContent*)[[_connectorIndex applyTile:tile][connector] get]) rails];
     return [rails count] == 1 && ((TRRail*)rails[0]).form.isTurn;
 }
 
 - (void)buildLightInTile:(EGPointI)tile connector:(TRRailConnector*)connector {
-    [[_connectorIndex objectForTile:tile] modifyWith:^id(id _) {
+    [[_connectorIndex applyTile:tile] modifyWith:^id(id _) {
         return [CNOption opt:[((TRRailroadConnectorContent*)[_ get]) buildLightInConnector:connector]];
     } forKey:connector];
 }
 
 - (void)rebuildArrays {
-    NSArray* allObjects = [[[[_connectorIndex values] chain] flatMap:^id<CNIterable>(NSMutableDictionary* _) {
+    id<CNList> allObjects = [[[[_connectorIndex values] chain] flatMap:^id<CNIterable>(id<CNMutableMap> _) {
         return [_ values];
     }] toArray];
-    __rails = [[[[allObjects chain] flatMap:^NSArray*(TRRailroadConnectorContent* _) {
+    __rails = [[[[allObjects chain] flatMap:^id<CNList>(TRRailroadConnectorContent* _) {
         return [_ rails];
     }] distinct] toArray];
     __switches = [[[allObjects chain] filter:^BOOL(TRRailroadConnectorContent* _) {
@@ -469,7 +469,7 @@ static TRRailroadConnectorContent* _instance;
 }
 
 - (id)activeRailForTile:(EGPointI)tile connector:(TRRailConnector*)connector {
-    return [[((TRRailroadConnectorContent*)[[_connectorIndex objectForTile:tile][connector] get]) rails] head];
+    return [[((TRRailroadConnectorContent*)[[_connectorIndex applyTile:tile][connector] get]) rails] head];
 }
 
 - (TRRailPointCorrection*)correctConsideringLights:(BOOL)consideringLights point:(TRRailPoint*)point {
@@ -478,7 +478,7 @@ static TRRailroadConnectorContent* _instance;
         return correction;
     } else {
         TRRailConnector* connector = [point endConnector];
-        TRRailroadConnectorContent* connectorDesc = ((TRRailroadConnectorContent*)[[_connectorIndex objectForTile:point.tile][connector] get]);
+        TRRailroadConnectorContent* connectorDesc = ((TRRailroadConnectorContent*)[[_connectorIndex applyTile:point.tile][connector] get]);
         id activeRailOpt = [[connectorDesc rails] head];
         if([activeRailOpt isEmpty] || (consideringLights && !([connectorDesc isGreen]))) {
             return correction;

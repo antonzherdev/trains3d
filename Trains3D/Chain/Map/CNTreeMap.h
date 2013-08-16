@@ -24,12 +24,12 @@
 + (CNTreeMap*)new;
 - (NSUInteger)count;
 - (BOOL)isEmpty;
-- (id)objectForKey:(id)key;
+- (id)applyKey:(id)key;
 - (void)clear;
 - (id<CNIterator>)iterator;
 - (CNTreeMapIterator*)iteratorHigherThanKey:(id)key;
 - (id)setObject:(id)object forKey:(id)forKey;
-- (id)removeObjectForKey:(id)key;
+- (id)removeForKey:(id)key;
 - (id)pollFirst;
 - (id)firstKey;
 - (id)lastKey;

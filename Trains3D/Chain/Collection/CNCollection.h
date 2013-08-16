@@ -1,6 +1,10 @@
 #import <Foundation/Foundation.h>
 @class CNChain;
 
+@protocol CNIterator;
+@protocol CNBuilder;
+@protocol CNTraversable;
+@protocol CNIterable;
 
 @protocol CNIterator<NSObject>
 - (BOOL)hasNext;
@@ -11,6 +15,7 @@
 @protocol CNBuilder<NSObject>
 - (void)addObject:(id)object;
 - (id)build;
+- (void)addAllObject:(id<CNTraversable>)object;
 @end
 
 

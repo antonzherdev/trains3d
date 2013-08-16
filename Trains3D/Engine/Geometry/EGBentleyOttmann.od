@@ -8,8 +8,8 @@ import CNSet
 
 
 class EGBentleyOttmann {
-    static def intersectionsFor<T>(segments : [(T, EGLineSegment)]) : NSSet<EGIntersection<T>> =
-        if(segments.count < 2) NSSet.new<T>
+    static def intersectionsFor<T>(segments : [(T, EGLineSegment)]) : CNSet<EGIntersection<T>> =
+        if(segments.count < 2) CNHashSet.new<T>
         else {
             val sweepLine = EGSweepLine.new<T>
             val queue = EGBentleyOttmannEventQueue.newWith(segments, sweepLine)

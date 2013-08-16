@@ -17,7 +17,8 @@ SPEC_BEGIN(TRLevelSpec)
             for(int i = 0; i < 500; i++) {
                 @autoreleasepool {
                     TRLevel* level = [TRLevelFactory levelWithMapSize:mapSize];
-                    [[[level cities] should] haveCountOf:2];
+                    NSArray * c = (NSArray *) [level cities];
+                    [[c should] haveCountOf:2];
 
                     //This cities should be generated on an edge of the map.
                     [[level cities] forEach:^(TRCity* x) {

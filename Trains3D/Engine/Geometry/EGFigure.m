@@ -371,7 +371,7 @@
     return EGPointEq(_p1, point) || EGPointEq(_p2, point);
 }
 
-- (NSArray*)segments {
+- (id<CNList>)segments {
     return (@[self]);
 }
 
@@ -419,17 +419,17 @@
 
 
 @implementation EGPolygon{
-    NSArray* _points;
-    NSArray* _segments;
+    id<CNList> _points;
+    id<CNList> _segments;
 }
 @synthesize points = _points;
 @synthesize segments = _segments;
 
-+ (id)polygonWithPoints:(NSArray*)points {
++ (id)polygonWithPoints:(id<CNList>)points {
     return [[EGPolygon alloc] initWithPoints:points];
 }
 
-- (id)initWithPoints:(NSArray*)points {
+- (id)initWithPoints:(id<CNList>)points {
     self = [super init];
     if(self) {
         _points = points;
@@ -486,7 +486,7 @@
     EGLineSegment* _segment;
     double _thickness;
     double _thickness_2;
-    NSArray* __segments;
+    id<CNList> __segments;
 }
 @synthesize segment = _segment;
 @synthesize thickness = _thickness;
@@ -511,7 +511,7 @@
     return egRectThicken(_segment.boundingRect, [_segment isHorizontal] ? 0 : _thickness_2, [_segment isVertical] ? 0 : _thickness_2);
 }
 
-- (NSArray*)segments {
+- (id<CNList>)segments {
     if(__segments == nil) {
         double dx = 0;
         double dy = 0;

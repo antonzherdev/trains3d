@@ -2,6 +2,9 @@
 #import "EGTypes.h"
 
 @class EGEvent;
+@protocol EGProcessor;
+@protocol EGMouseProcessor;
+@protocol EGTouchProcessor;
 
 @protocol EGProcessor<NSObject>
 - (BOOL)processEvent:(EGEvent*)event;

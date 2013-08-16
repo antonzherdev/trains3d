@@ -19,7 +19,7 @@ class CNTreeMapTest extends CNTestCase {
 
         tests.chain.distinct.for(i -> {
             assertEquals("test" + i, map[i].get)
-            map.removeObjectFor(key = i)
+            map.removeFor(key = i)
             assertTrue(map[i].isEmpty)
         })
         assertEquals(0, map.count)

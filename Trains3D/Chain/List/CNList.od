@@ -13,19 +13,37 @@ trait CNList<T> extends CNIterable<T> {
         if(isEmpty) nil
         else at(randomWith(count - 1))
 
-    def toSet : CNSet<T> = convertWith(NSSetBuilder.new<T>)
+    def toSet : CNSet<T> = convertWith(CNHashSetBuilder.new<T>)
+    def arrayByAdding(object : T) : CNList<T> = {
+        val builder = CNArrayBuilder.new<int>
+        builder.addAll(self)
+        builder.add(object)
+        builder.build
+    }
+
+    def arrayByRemoving(object : T) : CNList<T> = {
+        chain.filter(_ != object).toArray
+    }
 }
 
-stub class NSArray<T> extends CNList<T> {}
-stub class NSMutableArray<T> extends NSArray<T> {
+trait CNMutableList<T> extends CNList<T> {
     def add(object : T)
+    def remove(object : T)
 }
 
-class NSArrayBuilder<T> extends CNBuilder<T, NSArray<T>> {
+stub class NSArray<T> extends CNList<T> {
+}
+stub class NSMutableArray<T> extends CNMutableList<T> {}
+
+type CNArray<T> = NSArray<T>
+type CNMutableArray<T> = NSMutableArray<T>
+
+class CNArrayBuilder<T> extends CNBuilder<T, CNArray<T>> {
     val array = NSMutableArray.new<T>
 
     def add(object : T) {
         array.add(object)
+        self
     }
 
     def build : NSArray<T> = array

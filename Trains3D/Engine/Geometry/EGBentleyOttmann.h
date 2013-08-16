@@ -29,7 +29,7 @@
 @interface EGBentleyOttmann : NSObject
 + (id)bentleyOttmann;
 - (id)init;
-+ (NSSet*)intersectionsForSegments:(NSArray*)segments;
++ (id<CNSet>)intersectionsForSegments:(id<CNList>)segments;
 @end
 
 
@@ -82,9 +82,9 @@
 + (id)bentleyOttmannEventQueue;
 - (id)init;
 - (BOOL)isEmpty;
-+ (EGBentleyOttmannEventQueue*)newWithSegments:(NSArray*)segments sweepLine:(EGSweepLine*)sweepLine;
++ (EGBentleyOttmannEventQueue*)newWithSegments:(id<CNList>)segments sweepLine:(EGSweepLine*)sweepLine;
 - (void)offerPoint:(EGPoint)point event:(EGBentleyOttmannEvent*)event;
-- (NSArray*)poll;
+- (id<CNList>)poll;
 @end
 
 
@@ -98,12 +98,12 @@
 
 @interface EGSweepLine : NSObject
 @property (nonatomic, retain) CNTreeSet* events;
-@property (nonatomic, readonly) NSMutableDictionary* intersections;
+@property (nonatomic, readonly) id<CNMutableMap> intersections;
 @property (nonatomic, retain) EGBentleyOttmannEventQueue* queue;
 
 + (id)sweepLine;
 - (id)init;
-- (void)handleEvents:(NSArray*)events;
+- (void)handleEvents:(id<CNList>)events;
 @end
 
 

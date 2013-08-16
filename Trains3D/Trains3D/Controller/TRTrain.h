@@ -33,11 +33,11 @@
 @interface TRTrain : NSObject
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) TRColor* color;
-@property (nonatomic, readonly) NSArray* cars;
+@property (nonatomic, readonly) id<CNList> cars;
 @property (nonatomic, readonly) NSUInteger speed;
 
-+ (id)trainWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(NSUInteger)speed;
-- (id)initWithLevel:(TRLevel*)level color:(TRColor*)color cars:(NSArray*)cars speed:(NSUInteger)speed;
++ (id)trainWithLevel:(TRLevel*)level color:(TRColor*)color cars:(id<CNList>)cars speed:(NSUInteger)speed;
+- (id)initWithLevel:(TRLevel*)level color:(TRColor*)color cars:(id<CNList>)cars speed:(NSUInteger)speed;
 - (void)startFromCity:(TRCity*)city;
 - (void)setHead:(TRRailPoint*)head;
 - (void)updateWithDelta:(double)delta;
@@ -65,7 +65,7 @@
 
 + (id)trainGeneratorWithCarsCount:(id<CNList>)carsCount speed:(id<CNList>)speed;
 - (id)initWithCarsCount:(id<CNList>)carsCount speed:(id<CNList>)speed;
-- (NSArray*)generateCars;
+- (id<CNList>)generateCars;
 - (NSUInteger)generateSpeed;
 @end
 

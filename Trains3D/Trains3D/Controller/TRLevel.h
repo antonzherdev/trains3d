@@ -34,10 +34,10 @@
 @interface TRLevelRules : NSObject
 @property (nonatomic, readonly) EGSizeI mapSize;
 @property (nonatomic, readonly) TRScoreRules* scoreRules;
-@property (nonatomic, readonly) NSArray* events;
+@property (nonatomic, readonly) id<CNList> events;
 
-+ (id)levelRulesWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules events:(NSArray*)events;
-- (id)initWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules events:(NSArray*)events;
++ (id)levelRulesWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules events:(id<CNList>)events;
+- (id)initWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules events:(id<CNList>)events;
 @end
 
 
@@ -50,8 +50,8 @@
 
 + (id)levelWithRules:(TRLevelRules*)rules;
 - (id)initWithRules:(TRLevelRules*)rules;
-- (NSArray*)cities;
-- (NSArray*)trains;
+- (id<CNList>)cities;
+- (id<CNList>)trains;
 - (void)createNewCity;
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator;
 - (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint;
@@ -60,7 +60,7 @@
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch;
 - (id)cityForTile:(EGPointI)tile;
 - (void)arrivedTrain:(TRTrain*)train;
-- (NSSet*)detectCollisions;
+- (id<CNSet>)detectCollisions;
 - (void)destroyTrain:(TRTrain*)train;
 @end
 

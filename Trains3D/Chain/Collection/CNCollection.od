@@ -10,6 +10,9 @@ trait CNIterator<T> {
 trait CNBuilder<T, C extends CNTraversable<T>> {
     def add(object : T)
     def build : C
+    def addAll(object : CNTraversable<T>) {
+        object.for(add(_))
+    }
 }
 
 

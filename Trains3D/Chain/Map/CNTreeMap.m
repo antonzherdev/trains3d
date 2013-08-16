@@ -51,7 +51,7 @@ static NSInteger _RED;
     return _root == nil;
 }
 
-- (id)objectForKey:(id)key {
+- (id)applyKey:(id)key {
     return [CNOption opt:[self entryForKey:key].object];
 }
 
@@ -113,7 +113,7 @@ static NSInteger _RED;
     return object;
 }
 
-- (id)removeObjectForKey:(id)key {
+- (id)removeForKey:(id)key {
     CNTreeMapEntry* entry = [self entryForKey:key];
     if(entry != nil) return [CNOption opt:[self deleteEntry:entry]];
     else return [CNOption none];
@@ -387,7 +387,7 @@ static NSInteger _RED;
 }
 
 - (id)objectForKey:(id)key orUpdateWith:(id(^)())orUpdateWith {
-    id o = [self objectForKey:key];
+    id o = [self applyKey:key];
     if([o isDefined]) {
         return [o get];
     } else {
@@ -398,14 +398,14 @@ static NSInteger _RED;
 }
 
 - (id)modifyWith:(id(^)(id))with forKey:(id)forKey {
-    id newObject = with([self objectForKey:forKey]);
-    if([newObject isEmpty]) [self removeObjectForKey:forKey];
+    id newObject = with([self applyKey:forKey]);
+    if([newObject isEmpty]) [self removeForKey:forKey];
     else [self setObject:newObject forKey:forKey];
     return newObject;
 }
 
 - (BOOL)containsKey:(id)key {
-    return [[self objectForKey:key] isDefined];
+    return [[self applyKey:key] isDefined];
 }
 
 - (id)head {

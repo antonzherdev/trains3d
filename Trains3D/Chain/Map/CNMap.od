@@ -4,17 +4,17 @@ import CNCollection
 import "CNOption.h"
 
 trait CNMap<K, V> extends CNIterable<(K, V)> {
-    def objectFor(key : K) : V?
+    def apply(key : K) : V?
     def keys : CNIterable<K>
     def values : CNIterable<V>
-    def contains(key : K) : bool = objectFor(key).isDefined
+    def contains(key : K) : bool = apply(key).isDefined
 }
 
 trait CNMutableMap<K, V> extends CNMap<K, V> {
     def set(object : V, forKey : K) : V
-    def removeObjectFor(key : K) : V?
+    def removeFor(key : K) : V?
     def objectFor(key: K, orUpdateWith: () -> V) : V = {
-        val o = objectFor(key)
+        val o = apply(key)
         if(o.isDefined) o.get
         else {
             val init : V = orUpdateWith
@@ -23,9 +23,16 @@ trait CNMutableMap<K, V> extends CNMap<K, V> {
         }
     }
     def modify(with : V? -> V?, forKey : K) : V? = {
-        val newObject = with(objectFor(forKey))
-        if(newObject.isEmpty) removeObjectFor(forKey)
+        val newObject = with(apply(forKey))
+        if(newObject.isEmpty) removeFor(forKey)
         else set(newObject, forKey)
         newObject
     }
 }
+
+stub class NSDictionary <K, V> extends CNMap<K, V>
+
+stub class NSMutableDictionary<K, V> extends CNMutableMap<K, V>
+
+type CNHashMap<K, V> = NSDictionary<K, V>
+type CNMutableHashMap<K, V> = NSMutableDictionary<K, V>

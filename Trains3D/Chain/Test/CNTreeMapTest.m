@@ -15,22 +15,22 @@
 - (void)testMain {
     CNTreeMap* map = [CNTreeMap new];
     [self assertEqualsA:@0 b:numi([map count])];
-    [self assertTrueValue:[[map objectForKey:@0] isEmpty]];
+    [self assertTrueValue:[[map applyKey:@0] isEmpty]];
     [map setObject:@"test" forKey:@0];
-    [self assertEqualsA:@"test" b:[[map objectForKey:@0] get]];
-    NSArray* tests = (@[@-10, @-20, @-30, @10, @20, @-15, @20, @0, @11, @13, @-18]);
+    [self assertEqualsA:@"test" b:[[map applyKey:@0] get]];
+    id<CNList> tests = (@[@-10, @-20, @-30, @10, @20, @-15, @20, @0, @11, @13, @-18]);
     [tests forEach:^void(id i) {
         [map setObject:[@"test" stringByAppendingFormat:@"%li", unumi(i)] forKey:i];
     }];
     [self assertEqualsA:numi([[[tests chain] distinct] count]) b:numi([map count])];
     [[[tests chain] distinct] forEach:^void(id i) {
-        [self assertEqualsA:[@"test" stringByAppendingFormat:@"%li", unumi(i)] b:[[map objectForKey:i] get]];
+        [self assertEqualsA:[@"test" stringByAppendingFormat:@"%li", unumi(i)] b:[[map applyKey:i] get]];
     }];
     [self assertEqualsA:(@[@-30, @-20, @-18, @-15, @-10, @0, @10, @11, @13, @20]) b:[[map.keys chain] toArray]];
     [[[tests chain] distinct] forEach:^void(id i) {
-        [self assertEqualsA:[@"test" stringByAppendingFormat:@"%li", unumi(i)] b:[[map objectForKey:i] get]];
-        [map removeObjectForKey:i];
-        [self assertTrueValue:[[map objectForKey:i] isEmpty]];
+        [self assertEqualsA:[@"test" stringByAppendingFormat:@"%li", unumi(i)] b:[[map applyKey:i] get]];
+        [map removeForKey:i];
+        [self assertTrueValue:[[map applyKey:i] isEmpty]];
     }];
     [self assertEqualsA:@0 b:numi([map count])];
 }

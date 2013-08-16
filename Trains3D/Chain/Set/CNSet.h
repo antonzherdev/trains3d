@@ -2,16 +2,17 @@
 #import "NSMutableSet+CNChain.h"
 #import "CNCollection.h"
 
-@class NSSetBuilder;
+@class CNHashSetBuilder;
+@protocol CNSet;
 
 @protocol CNSet<CNIterable>
 @end
 
 
-@interface NSSetBuilder : NSObject<CNBuilder>
+@interface CNHashSetBuilder : NSObject<CNBuilder>
 @property (nonatomic, readonly) NSMutableSet* set;
 
-+ (id)setBuilder;
++ (id)hashSetBuilder;
 - (id)init;
 - (void)addObject:(id)object;
 - (NSSet*)build;
