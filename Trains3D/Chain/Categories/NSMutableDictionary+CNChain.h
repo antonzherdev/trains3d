@@ -4,5 +4,7 @@
 @interface NSMutableDictionary (CNChain) <CNMutableMap>
 - (id)objectForKey:(id)key orUpdateWith:(id (^)())with;
 
-- (id)modifyWith:(id (^)(id))with forKey:(id)key;
++ (NSMutableDictionary *)mutableDictionary;
+
+- (id)modifyBy:(id (^)(id))with forKey:(id)key;
 @end

@@ -8,6 +8,10 @@
     return ret;
 }
 
++ (NSMutableDictionary *)mutableDictionary {
+    return [NSMutableDictionary dictionary];
+}
+
 - (id)applyKey:(id)key {
     return [CNOption opt:[self objectForKey:key]];
 }
@@ -20,7 +24,7 @@
     return v;
 }
 
-- (id)modifyWith:(id (^)(id))with forKey:(id)key {
+- (id)modifyBy:(id (^)(id))with forKey:(id)key {
     id v = with([self optionObjectForKey:key]);
     if([v isEmpty]) {
         [self removeObjectForKey:v];

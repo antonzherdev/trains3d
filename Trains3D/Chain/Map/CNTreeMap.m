@@ -397,8 +397,8 @@ static NSInteger _RED;
     }
 }
 
-- (id)modifyWith:(id(^)(id))with forKey:(id)forKey {
-    id newObject = with([self applyKey:forKey]);
+- (id)modifyBy:(id(^)(id))by forKey:(id)forKey {
+    id newObject = by([self applyKey:forKey]);
     if([newObject isEmpty]) [self removeForKey:forKey];
     else [self setObject:newObject forKey:forKey];
     return newObject;

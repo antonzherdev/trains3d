@@ -17,7 +17,7 @@
 - (id)setObject:(id)object forKey:(id)forKey;
 - (id)removeForKey:(id)key;
 - (id)objectForKey:(id)key orUpdateWith:(id(^)())orUpdateWith;
-- (id)modifyWith:(id(^)(id))with forKey:(id)forKey;
+- (id)modifyBy:(id(^)(id))by forKey:(id)forKey;
 @end
 
 

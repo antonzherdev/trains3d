@@ -5,7 +5,7 @@
 @implementation EGMapSsoTileIndex{
     EGMapSso* _map;
     id(^_initial)();
-    id<CNMutableMap> _index;
+    NSMutableDictionary* _index;
     NSInteger _wh;
 }
 @synthesize map = _map;
@@ -20,7 +20,7 @@
     if(self) {
         _map = map;
         _initial = initial;
-        _index = [(@{}) mutableCopy];
+        _index = [NSMutableDictionary mutableDictionary];
         _wh = _map.size.width + _map.size.height + 1;
     }
     

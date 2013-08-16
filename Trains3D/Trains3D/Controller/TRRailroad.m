@@ -422,7 +422,7 @@ static TRRailroadConnectorContent* _instance;
 }
 
 - (void)connectRail:(TRRail*)rail to:(TRRailConnector*)to {
-    [[_connectorIndex applyTile:rail.tile] modifyWith:^id(id _) {
+    [[_connectorIndex applyTile:rail.tile] modifyBy:^id(id _) {
         return [CNOption opt:[((TRRailroadConnectorContent*)[_ get]) connectRail:rail to:to]];
     } forKey:to];
 }
@@ -444,7 +444,7 @@ static TRRailroadConnectorContent* _instance;
 }
 
 - (void)buildLightInTile:(EGPointI)tile connector:(TRRailConnector*)connector {
-    [[_connectorIndex applyTile:tile] modifyWith:^id(id _) {
+    [[_connectorIndex applyTile:tile] modifyBy:^id(id _) {
         return [CNOption opt:[((TRRailroadConnectorContent*)[_ get]) buildLightInConnector:connector]];
     } forKey:connector];
 }

@@ -79,7 +79,7 @@ class TRRailroad(map : EGMapSso, score : TRScore) {
         connectorIndex[tile][connector].get
 
     private def connect(rail : TRRail, to : TRRailConnector) {
-        connectorIndex[rail.tile].modify(with = _.get.connect(rail, to), to)
+        connectorIndex[rail.tile].modify(_.get.connect(rail, to), to)
     }
 
     private def buildLightsFor(tile : EGPointI, connector : TRRailConnector) {
@@ -103,7 +103,7 @@ class TRRailroad(map : EGMapSso, score : TRScore) {
     }
 
     private def buildLightIn(tile : EGPointI, connector : TRRailConnector) {
-        connectorIndex[tile].modify(with = _.get.buildLightIn(connector), connector)
+        connectorIndex[tile].modify(_.get.buildLightIn(connector), connector)
     }
 
 
