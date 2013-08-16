@@ -26,13 +26,15 @@ class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : uin
         self.head = head
         calculateCarPositions
     }
+    private val carsObstacleProcessor : TRObstacle -> bool = (o : TRObstacle) ->
+        o.obstacleType ==  TRObstacleType.light
 
     private def calculateCarPositions {
         directedCars.chain.fold((hl, car) -> {
             car.head = hl
-            val next = level.railroad.move(consideringLights = false, forLength = car.length, point = hl).addErrorToPoint
+            val next = level.railroad.moveWith(obstacleProcessor = carsObstacleProcessor, forLength = car.length, point = hl).addErrorToPoint
             car.tail = next
-            car.nextHead = level.railroad.move(consideringLights = false, forLength = carsDelta, point = next).addErrorToPoint
+            car.nextHead = level.railroad.moveWith(obstacleProcessor = carsObstacleProcessor, forLength = carsDelta, point = next).addErrorToPoint
             car.nextHead
         }, head.invert)
     }
@@ -40,7 +42,7 @@ class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : uin
     private def move(point : EGPoint, length : float) = EGPoint(point.x, point.y + length)
 
     def updateWith(delta : float) {
-        correct(level.railroad.move(consideringLights = true, forLength = delta*_speedF, point = head))
+        correct(level.railroad.moveWith(obstacleProcessor = false, forLength = delta*_speedF, point = head))
     }
 
     private def directedCars : [TRCar] = if(back) cars.chain.reverse.toArray else cars

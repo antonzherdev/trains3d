@@ -149,7 +149,7 @@
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator {
     TRCity* city = ((TRCity*)[[__cities randomItem] get]);
     [self runTrain:[TRTrain trainWithLevel:self color:city.color cars:[generator generateCars] speed:[generator generateSpeed]] fromCity:((TRCity*)[[[[__cities chain] filter:^BOOL(TRCity* _) {
-        return !(_ == city);
+        return !([_ isEqual:city]);
     }] randomItem] get])];
 }
 

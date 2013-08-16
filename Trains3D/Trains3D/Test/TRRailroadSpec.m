@@ -10,7 +10,7 @@
 #define cor(p, e) [TRRailPointCorrection railPointCorrectionWithPoint:p error:e]
 #define zcor(p) [TRRailPointCorrection railPointCorrectionWithPoint:p error:0]
 #define zrpm(tx, ty, fform, xx, bback) zcor([[TRRailPoint alloc] initWithTile:EGPointIMake(tx, ty) form:[TRRailForm fform] x:xx back:bback])
-#define move(p, len) [railroad moveConsideringLights:YES forLength:len point:p]
+#define move(p, len) [railroad moveWithObstacleProcessor:^BOOL(TRObstacle* o) {return NO;} forLength:len point:p]
 SPEC_BEGIN(TRRailroadSpec)
     describe(@"TRRailroad", ^{
         it(@"should move point", ^{

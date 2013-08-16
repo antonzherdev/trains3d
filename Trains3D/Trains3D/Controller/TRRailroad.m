@@ -349,6 +349,105 @@ static TRRailroadConnectorContent* _instance;
 @end
 
 
+@implementation TRObstacleType
+static TRObstacleType* _damage;
+static TRObstacleType* _switch;
+static TRObstacleType* _light;
+static TRObstacleType* _end;
+static NSArray* _TRObstacleType_values;
+
++ (id)obstacleTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
+    return [[TRObstacleType alloc] initWithOrdinal:ordinal name:name];
+}
+
+- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
+    self = [super initWithOrdinal:ordinal name:name];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _damage = [TRObstacleType obstacleTypeWithOrdinal:((NSUInteger)0) name:@"damage"];
+    _switch = [TRObstacleType obstacleTypeWithOrdinal:((NSUInteger)1) name:@"switch"];
+    _light = [TRObstacleType obstacleTypeWithOrdinal:((NSUInteger)2) name:@"light"];
+    _end = [TRObstacleType obstacleTypeWithOrdinal:((NSUInteger)3) name:@"end"];
+    _TRObstacleType_values = (@[_damage, _switch, _light, _end]);
+}
+
++ (TRObstacleType*)damage {
+    return _damage;
+}
+
++ (TRObstacleType*)aSwitch {
+    return _switch;
+}
+
++ (TRObstacleType*)light {
+    return _light;
+}
+
++ (TRObstacleType*)end {
+    return _end;
+}
+
++ (NSArray*)values {
+    return _TRObstacleType_values;
+}
+
+@end
+
+
+@implementation TRObstacle{
+    TRObstacleType* _obstacleType;
+    TRRailPoint* _point;
+}
+@synthesize obstacleType = _obstacleType;
+@synthesize point = _point;
+
++ (id)obstacleWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint*)point {
+    return [[TRObstacle alloc] initWithObstacleType:obstacleType point:point];
+}
+
+- (id)initWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint*)point {
+    self = [super init];
+    if(self) {
+        _obstacleType = obstacleType;
+        _point = point;
+    }
+    
+    return self;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRObstacle* o = ((TRObstacle*)other);
+    return self.obstacleType == o.obstacleType && [self.point isEqual:o.point];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.obstacleType ordinal];
+    hash = hash * 31 + [self.point hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"obstacleType=%@", self.obstacleType];
+    [description appendFormat:@", point=%@", self.point];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation TRRailroad{
     EGMapSso* _map;
     TRScore* _score;
@@ -357,6 +456,7 @@ static TRRailroadConnectorContent* _instance;
     id<CNList> __lights;
     TRRailroadBuilder* _builder;
     CNMapDefault* _connectorIndex;
+    NSMutableDictionary* _damages;
 }
 @synthesize map = _map;
 @synthesize score = _score;
@@ -378,6 +478,7 @@ static TRRailroadConnectorContent* _instance;
         _connectorIndex = [CNMapDefault mapDefaultWithDefaultFunc:^TRRailroadConnectorContent*(CNTuple* _) {
             return TREmptyConnector.instance;
         } map:[NSMutableDictionary mutableDictionary]];
+        _damages = [NSMutableDictionary mutableDictionary];
     }
     
     return self;
@@ -457,41 +558,58 @@ static TRRailroadConnectorContent* _instance;
     }] toArray];
 }
 
-- (TRRailPointCorrection*)moveConsideringLights:(BOOL)consideringLights forLength:(double)forLength point:(TRRailPoint*)point {
-    return [self correctConsideringLights:consideringLights point:[point addX:forLength]];
+- (TRRailPointCorrection*)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(double)forLength point:(TRRailPoint*)point {
+    return [self correctWithObstacleProcessor:obstacleProcessor point:[point addX:forLength]];
 }
 
 - (id)activeRailForTile:(EGPointI)tile connector:(TRRailConnector*)connector {
     return [[((TRRailroadConnectorContent*)[_connectorIndex applyKey:tuple(wrap(EGPointI, tile), connector)]) rails] head];
 }
 
-- (TRRailPointCorrection*)correctConsideringLights:(BOOL)consideringLights point:(TRRailPoint*)point {
+- (TRRailPointCorrection*)correctWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor point:(TRRailPoint*)point {
     TRRailPointCorrection* correction = [point correct];
-    if(eqf(correction.error, 0)) {
+    if(eqf(correction.error, 0)) return correction;
+    TRRailConnector* connector = [point endConnector];
+    TRRailroadConnectorContent* connectorDesc = ((TRRailroadConnectorContent*)[_connectorIndex applyKey:tuple(wrap(EGPointI, point.tile), connector)]);
+    id activeRailOpt = [[connectorDesc rails] head];
+    if([activeRailOpt isEmpty]) return correction;
+    if(!([connectorDesc isGreen])) if(!(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.light point:correction.point]))) return correction;
+    if(((TRRail*)[activeRailOpt get]).form != point.form) {
+        obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.aSwitch point:correction.point]);
         return correction;
-    } else {
-        TRRailConnector* connector = [point endConnector];
-        TRRailroadConnectorContent* connectorDesc = ((TRRailroadConnectorContent*)[_connectorIndex applyKey:tuple(wrap(EGPointI, point.tile), connector)]);
-        id activeRailOpt = [[connectorDesc rails] head];
-        if([activeRailOpt isEmpty] || (consideringLights && !([connectorDesc isGreen]))) {
-            return correction;
-        } else {
-            if(((TRRail*)[activeRailOpt get]).form != point.form) {
-                return correction;
-            } else {
-                EGPointI nextTile = [connector nextTile:point.tile];
-                TRRailConnector* otherSideConnector = [connector otherSideConnector];
-                id nextRail = [self activeRailForTile:nextTile connector:otherSideConnector];
-                if([nextRail isEmpty]) {
-                    return correction;
-                } else {
-                    TRRail* nextActiveRail = ((TRRail*)[nextRail get]);
-                    TRRailForm* form = nextActiveRail.form;
-                    return [self correctConsideringLights:consideringLights point:[TRRailPoint railPointWithTile:nextTile form:form x:correction.error back:form.end == otherSideConnector]];
-                }
-            }
-        }
     }
+    EGPointI nextTile = [connector nextTile:point.tile];
+    TRRailConnector* otherSideConnector = [connector otherSideConnector];
+    id nextRail = [self activeRailForTile:nextTile connector:otherSideConnector];
+    if([nextRail isEmpty]) {
+        obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.end point:correction.point]);
+        return correction;
+    }
+    TRRail* nextActiveRail = ((TRRail*)[nextRail get]);
+    TRRailForm* form = nextActiveRail.form;
+    return [self correctWithObstacleProcessor:obstacleProcessor point:[TRRailPoint railPointWithTile:nextTile form:form x:correction.error back:form.end == otherSideConnector]];
+}
+
+- (void)addDamageAtPoint:(TRRailPoint*)point {
+    if(point.back) [self addDamageAtPoint:[point invert]];
+    [_damages modifyBy:^id(id arr) {
+        return [CNOption opt:[[arr map:^id<CNList>(id<CNList> _) {
+            return [_ arrayByAddingObject:numf(point.x)];
+        }] getOrElse:^id<CNList>() {
+            return (@[numf(point.x)]);
+        }]];
+    } forKey:tuple(wrap(EGPointI, point.tile), point.form)];
+}
+
+- (void)fixDamageAtPoint:(TRRailPoint*)point {
+    if(point.back) [self fixDamageAtPoint:[point invert]];
+    [_damages modifyBy:^id(id arrOpt) {
+        return [arrOpt map:^id<CNList>(id<CNList> arr) {
+            return [[[arr chain] filter:^BOOL(id _) {
+                return !(eqf(unumf(_), point.x));
+            }] toArray];
+        }];
+    } forKey:tuple(wrap(EGPointI, point.tile), point.form)];
 }
 
 - (id)copyWithZone:(NSZone*)zone {

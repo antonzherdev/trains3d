@@ -30,11 +30,11 @@ class TRCollisionsTest extends CNTestCase {
     def doTest1For(level : TRLevel, delta : float, form : TRRailForm) {
         val t1 = TRTrain(level, TRColor.green, [TRCar.new], 0)
         val p = TRRailPoint(EGPointI(0, 0), form, 0, false)
-        var p2 = level.railroad.move(false, carLen, p).point
+        var p2 = level.railroad.moveWith(false, carLen, p).point
         level.testRun(t1, p2)
 
         val t2 = TRTrain(level, TRColor.orange, [TRCar.new, TRCar.new], 0)
-        p2 = level.railroad.move(false, carLen*3 + carsDelta + delta, p).point
+        p2 = level.railroad.moveWith(false, carLen*3 + carsDelta + delta, p).point
         level.testRun(t2, p2)
         var cols = check(level)
         assertTrue(cols.isEmpty)
@@ -62,12 +62,12 @@ class TRCollisionsTest extends CNTestCase {
 
         val t1 = TRTrain(level, TRColor.green, [TRCar.new], 0)
         val p = TRRailPoint(EGPointI(1, 1), TRRailForm.bottomTop, 0, false)
-        val p1 = level.railroad.move(false, 0.5 - carWidth - 0.001, p).point
+        val p1 = level.railroad.moveWith(false, 0.5 - carWidth - 0.001, p).point
         level.testRun(t1, p1)
 
         val t2 = TRTrain(level, TRColor.orange, [TRCar.new, TRCar.new], 0)
         p = TRRailPoint(EGPointI(1, 1), TRRailForm.leftRight, 0, false)
-        val p2 = level.railroad.move(false, carLen*2 + carsDelta, p).point
+        val p2 = level.railroad.moveWith(false, carLen*2 + carsDelta, p).point
         level.testRun(t2, p2)
         var cols = check(level)
         assertTrue(cols.isEmpty)

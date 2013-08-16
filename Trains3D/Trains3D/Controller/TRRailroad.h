@@ -15,8 +15,10 @@
 @class TRRail;
 @class TRSwitch;
 @class TRLight;
+@class TRObstacle;
 @class TRRailroad;
 @class TRRailroadBuilder;
+@class TRObstacleType;
 
 @interface TRRailroadConnectorContent : NSObject
 + (id)railroadConnectorContent;
@@ -86,6 +88,24 @@
 @end
 
 
+@interface TRObstacleType : ODEnum
++ (TRObstacleType*)damage;
++ (TRObstacleType*)aSwitch;
++ (TRObstacleType*)light;
++ (TRObstacleType*)end;
++ (NSArray*)values;
+@end
+
+
+@interface TRObstacle : NSObject
+@property (nonatomic, readonly) TRObstacleType* obstacleType;
+@property (nonatomic, readonly) TRRailPoint* point;
+
++ (id)obstacleWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint*)point;
+- (id)initWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint*)point;
+@end
+
+
 @interface TRRailroad : NSObject
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRScore* score;
@@ -99,7 +119,9 @@
 - (BOOL)canAddRail:(TRRail*)rail;
 - (BOOL)tryAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)contentInTile:(EGPointI)tile connector:(TRRailConnector*)connector;
-- (TRRailPointCorrection*)moveConsideringLights:(BOOL)consideringLights forLength:(double)forLength point:(TRRailPoint*)point;
+- (TRRailPointCorrection*)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(double)forLength point:(TRRailPoint*)point;
+- (void)addDamageAtPoint:(TRRailPoint*)point;
+- (void)fixDamageAtPoint:(TRRailPoint*)point;
 @end
 
 

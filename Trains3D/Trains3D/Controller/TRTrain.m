@@ -16,6 +16,7 @@
     BOOL _back;
     double _length;
     double __speedF;
+    BOOL(^_carsObstacleProcessor)(TRObstacle*);
 }
 static double _carsDelta;
 @synthesize level = _level;
@@ -39,6 +40,9 @@ static double _carsDelta;
             return numf([car length] + unumf(r) + _carsDelta);
         } withStart:numf(-1.0 * _carsDelta)]);
         __speedF = 0.01 * _speed;
+        _carsObstacleProcessor = ^BOOL(TRObstacle* o) {
+            return o.obstacleType == TRObstacleType.light;
+        };
     }
     
     return self;
@@ -62,9 +66,9 @@ static double _carsDelta;
 - (void)calculateCarPositions {
     ((TRRailPoint*)[[[self directedCars] chain] fold:^TRRailPoint*(TRRailPoint* hl, TRCar* car) {
         car.head = hl;
-        TRRailPoint* next = [[_level.railroad moveConsideringLights:NO forLength:[car length] point:hl] addErrorToPoint];
+        TRRailPoint* next = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:[car length] point:hl] addErrorToPoint];
         car.tail = next;
-        car.nextHead = [[_level.railroad moveConsideringLights:NO forLength:_carsDelta point:next] addErrorToPoint];
+        car.nextHead = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:_carsDelta point:next] addErrorToPoint];
         return car.nextHead;
     } withStart:[_head invert]]);
 }
@@ -74,7 +78,9 @@ static double _carsDelta;
 }
 
 - (void)updateWithDelta:(double)delta {
-    [self correctCorrection:[_level.railroad moveConsideringLights:YES forLength:delta * __speedF point:_head]];
+    [self correctCorrection:[_level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
+        return NO;
+    } forLength:delta * __speedF point:_head]];
 }
 
 - (id<CNList>)directedCars {

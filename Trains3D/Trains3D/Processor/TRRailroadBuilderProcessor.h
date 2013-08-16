@@ -7,6 +7,8 @@
 @class TRRail;
 @class TRSwitch;
 @class TRLight;
+@class TRObstacleType;
+@class TRObstacle;
 @class TRRailroad;
 @class TRRailroadBuilder;
 @class TRRailConnector;
