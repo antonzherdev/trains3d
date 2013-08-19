@@ -8,6 +8,7 @@
 #import "TRLevelView.h"
 #import "TRLevelMenuView.h"
 #import "TRLevelProcessor.h"
+#import "TRLevelMenuProcessor.h"
 #import "TRScore.h"
 #import "TRRailroad.h"
 @implementation TRLevelFactory
@@ -33,11 +34,11 @@ static id<CNList> _rules;
     } delayPeriod:10 delayFine:^NSInteger(TRTrain* train, NSInteger i) {
         return i * 1000;
     } repairCost:2000];
-    _rules = (@[[TRLevelRules levelRulesWithMapSize:EGSizeIMake(5, 3) scoreRules:_scoreRules events:(@[tuple(@5, [TRLevelFactory trainCars:intTo(1, 5) speed:[intTo(30, 60) setStep:10]]), tuple(@10, [TRLevelFactory trainCars:intTo(1, 5) speed:[intTo(30, 60) setStep:10]]), tuple(@15, [TRLevelFactory trainCars:intTo(1, 5) speed:[intTo(30, 60) setStep:10]])])]]);
+    _rules = (@[[TRLevelRules levelRulesWithMapSize:EGSizeIMake(5, 3) scoreRules:_scoreRules repairerSpeed:((NSUInteger)(30)) events:(@[tuple(@5, [TRLevelFactory trainCars:intTo(1, 5) speed:[intTo(30, 60) setStep:10]]), tuple(@10, [TRLevelFactory trainCars:intTo(1, 5) speed:[intTo(30, 60) setStep:10]]), tuple(@15, [TRLevelFactory createNewCity]), tuple(@20, [TRLevelFactory trainCars:intTo(1, 5) speed:[intTo(30, 60) setStep:10]])])]]);
 }
 
 + (EGScene*)sceneForLevel:(TRLevel*)level {
-    return [EGScene sceneWithController:level layers:(@[[EGLayer layerWithView:[TRLevelView levelViewWithLevel:level] processor:[CNOption opt:[TRLevelProcessor levelProcessorWithLevel:level]]], [EGLayer layerWithView:[TRLevelMenuView levelMenuViewWithLevel:level] processor:[CNOption none]]])];
+    return [EGScene sceneWithController:level layers:(@[[EGLayer layerWithView:[TRLevelView levelViewWithLevel:level] processor:[CNOption opt:[TRLevelProcessor levelProcessorWithLevel:level]]], [EGLayer layerWithView:[TRLevelMenuView levelMenuViewWithLevel:level] processor:[CNOption opt:[TRLevelMenuProcessor levelMenuProcessorWithLevel:level]]]])];
 }
 
 + (void(^)(TRLevel*))trainCars:(CNRange*)cars speed:(CNRange*)speed {
@@ -46,12 +47,18 @@ static id<CNList> _rules;
     };
 }
 
++ (void(^)(TRLevel*))createNewCity {
+    return ^void(TRLevel* level) {
+        [level createNewCity];
+    };
+}
+
 + (TRLevel*)levelWithNumber:(NSUInteger)number {
-    return [TRLevel levelWithRules:((TRLevelRules*)_rules[number - 1])];
+    return [TRLevel levelWithRules:((TRLevelRules*)([_rules applyIndex:number - 1]))];
 }
 
 + (TRLevel*)levelWithMapSize:(EGSizeI)mapSize {
-    return [TRLevel levelWithRules:[TRLevelRules levelRulesWithMapSize:mapSize scoreRules:_scoreRules events:(@[])]];
+    return [TRLevel levelWithRules:[TRLevelRules levelRulesWithMapSize:mapSize scoreRules:_scoreRules repairerSpeed:((NSUInteger)(30)) events:(@[])]];
 }
 
 + (EGScene*)sceneForLevelWithNumber:(NSUInteger)number {

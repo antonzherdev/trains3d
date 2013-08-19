@@ -13,6 +13,7 @@
 @class TRLevelView;
 @class TRLevelMenuView;
 @class TRLevelProcessor;
+@class TRLevelMenuProcessor;
 @class TRScoreRules;
 @class TRScore;
 @class TRTrainScore;

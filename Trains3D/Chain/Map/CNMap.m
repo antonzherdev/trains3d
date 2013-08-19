@@ -119,7 +119,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNMapDefault* o = ((CNMapDefault*)other);
+    CNMapDefault* o = ((CNMapDefault*)(other));
     return [self.defaultFunc isEqual:o.defaultFunc] && [self.map isEqual:o.map];
 }
 

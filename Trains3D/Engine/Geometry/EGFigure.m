@@ -137,7 +137,7 @@
     if([line isVertical]) {
         return [line xIntersectionWithLine:self];
     } else {
-        EGSlopeLine* that = ((EGSlopeLine*)line);
+        EGSlopeLine* that = ((EGSlopeLine*)(line));
         return (that.constant - _constant) / (_slope - that.slope);
     }
 }
@@ -147,7 +147,7 @@
 }
 
 - (id)intersectionWithLine:(EGLine*)line {
-    if(!([line isVertical]) && eqf(((EGSlopeLine*)line).slope, _slope)) {
+    if(!([line isVertical]) && eqf(((EGSlopeLine*)(line)).slope, _slope)) {
         return [CNOption none];
     } else {
         double xInt = [self xIntersectionWithLine:line];
@@ -182,7 +182,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSlopeLine* o = ((EGSlopeLine*)other);
+    EGSlopeLine* o = ((EGSlopeLine*)(other));
     return eqf(self.slope, o.slope) && eqf(self.constant, o.constant);
 }
 
@@ -268,7 +268,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGVerticalLine* o = ((EGVerticalLine*)other);
+    EGVerticalLine* o = ((EGVerticalLine*)(other));
     return eqf(self.x, o.x);
 }
 
@@ -396,7 +396,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGLineSegment* o = ((EGLineSegment*)other);
+    EGLineSegment* o = ((EGLineSegment*)(other));
     return EGPointEq(self.p1, o.p1) && EGPointEq(self.p2, o.p2);
 }
 
@@ -462,7 +462,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGPolygon* o = ((EGPolygon*)other);
+    EGPolygon* o = ((EGPolygon*)(other));
     return [self.points isEqual:o.points];
 }
 
@@ -543,7 +543,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGThickLineSegment* o = ((EGThickLineSegment*)other);
+    EGThickLineSegment* o = ((EGThickLineSegment*)(other));
     return [self.segment isEqual:o.segment] && eqf(self.thickness, o.thickness);
 }
 

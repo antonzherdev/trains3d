@@ -15,7 +15,7 @@ class TRScore(rules : TRScoreRules) extends EGController {
         _score -= rules.railCost
     }
 
-    private val trains : [var TRTrainScore] = []
+    private val trains = CNMutableArray.new<TRTrainScore>
     def run(train : TRTrain) {
         trains.add(TRTrainScore(train))
     }

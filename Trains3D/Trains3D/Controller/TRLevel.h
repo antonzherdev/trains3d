@@ -38,10 +38,11 @@
 @interface TRLevelRules : NSObject
 @property (nonatomic, readonly) EGSizeI mapSize;
 @property (nonatomic, readonly) TRScoreRules* scoreRules;
+@property (nonatomic, readonly) NSUInteger repairerSpeed;
 @property (nonatomic, readonly) id<CNList> events;
 
-+ (id)levelRulesWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules events:(id<CNList>)events;
-- (id)initWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules events:(id<CNList>)events;
++ (id)levelRulesWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNList>)events;
+- (id)initWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNList>)events;
 @end
 
 
@@ -56,6 +57,7 @@
 - (id)initWithRules:(TRLevelRules*)rules;
 - (id<CNList>)cities;
 - (id<CNList>)trains;
+- (id)repairer;
 - (void)createNewCity;
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator;
 - (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint;
@@ -66,6 +68,8 @@
 - (void)processCollisions;
 - (id<CNSet>)detectCollisions;
 - (void)destroyTrain:(TRTrain*)train;
+- (void)removeTrain:(TRTrain*)train;
+- (void)runRepairerFromCity:(TRCity*)city;
 @end
 
 

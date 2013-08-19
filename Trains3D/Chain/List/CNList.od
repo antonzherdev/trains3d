@@ -7,11 +7,11 @@ import "cnTypes.h"
 import "NSMutableArray+CNChain.h"
 
 trait CNList<T> extends CNIterable<T> {
-    def at(index : uint) : T?
+    def apply(index : uint) : T?
 
     def randomItem : T? =
         if(isEmpty) nil
-        else at(randomWith(count - 1))
+        else apply(randomWith(count - 1))
 
     def toSet : CNSet<T> = convertWith(CNHashSetBuilder.new<T>)
     def arrayByAdding(object : T) : CNList<T> = {

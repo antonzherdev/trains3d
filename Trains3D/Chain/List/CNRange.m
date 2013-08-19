@@ -22,13 +22,13 @@
         _start = start;
         _end = end;
         _step = step;
-        _count = ((NSUInteger)(_end - _start) / _step);
+        _count = ((NSUInteger)((_end - _start) / _step));
     }
     
     return self;
 }
 
-- (id)atIndex:(NSUInteger)index {
+- (id)applyIndex:(NSUInteger)index {
     if(index >= _count) return [CNOption none];
     else return [CNOption opt:numi(_start + _step * index)];
 }
@@ -52,7 +52,7 @@
 
 - (id)randomItem {
     if([self isEmpty]) return [CNOption none];
-    else return [self atIndex:randomWith([self count] - 1)];
+    else return [self applyIndex:randomWith([self count] - 1)];
 }
 
 - (id<CNSet>)toSet {
@@ -63,7 +63,7 @@
     CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
     [builder addAllObject:self];
     [builder addObject:object];
-    return ((NSArray*)[builder build]);
+    return ((NSArray*)([builder build]));
 }
 
 - (id<CNList>)arrayByRemovingObject:(id)object {
@@ -129,7 +129,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNRange* o = ((CNRange*)other);
+    CNRange* o = ((CNRange*)(other));
     return self.start == o.start && self.end == o.end && self.step == o.step;
 }
 
@@ -196,7 +196,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNRangeIterator* o = ((CNRangeIterator*)other);
+    CNRangeIterator* o = ((CNRangeIterator*)(other));
     return self.start == o.start && self.end == o.end && self.step == o.step;
 }
 

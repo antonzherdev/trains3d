@@ -10,7 +10,7 @@
 @protocol CNMutableList;
 
 @protocol CNList<CNIterable>
-- (id)atIndex:(NSUInteger)index;
+- (id)applyIndex:(NSUInteger)index;
 - (id)randomItem;
 - (id<CNSet>)toSet;
 - (id<CNList>)arrayByAddingObject:(id)object;

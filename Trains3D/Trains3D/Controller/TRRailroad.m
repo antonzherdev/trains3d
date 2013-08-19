@@ -160,7 +160,7 @@ static TRRailroadConnectorContent* _instance;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRail* o = ((TRRail*)other);
+    TRRail* o = ((TRRail*)(other));
     return EGPointIEq(self.tile, o.tile) && self.form == o.form;
 }
 
@@ -245,7 +245,7 @@ static TRRailroadConnectorContent* _instance;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRSwitch* o = ((TRSwitch*)other);
+    TRSwitch* o = ((TRSwitch*)(other));
     return EGPointIEq(self.tile, o.tile) && self.connector == o.connector && [self.rail1 isEqual:o.rail1] && [self.rail2 isEqual:o.rail2];
 }
 
@@ -325,7 +325,7 @@ static TRRailroadConnectorContent* _instance;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRLight* o = ((TRLight*)other);
+    TRLight* o = ((TRLight*)(other));
     return EGPointIEq(self.tile, o.tile) && self.connector == o.connector && [self.rail isEqual:o.rail];
 }
 
@@ -368,10 +368,10 @@ static NSArray* _TRObstacleType_values;
 
 + (void)initialize {
     [super initialize];
-    _damage = [TRObstacleType obstacleTypeWithOrdinal:((NSUInteger)0) name:@"damage"];
-    _switch = [TRObstacleType obstacleTypeWithOrdinal:((NSUInteger)1) name:@"switch"];
-    _light = [TRObstacleType obstacleTypeWithOrdinal:((NSUInteger)2) name:@"light"];
-    _end = [TRObstacleType obstacleTypeWithOrdinal:((NSUInteger)3) name:@"end"];
+    _damage = [TRObstacleType obstacleTypeWithOrdinal:((NSUInteger)(0)) name:@"damage"];
+    _switch = [TRObstacleType obstacleTypeWithOrdinal:((NSUInteger)(1)) name:@"switch"];
+    _light = [TRObstacleType obstacleTypeWithOrdinal:((NSUInteger)(2)) name:@"light"];
+    _end = [TRObstacleType obstacleTypeWithOrdinal:((NSUInteger)(3)) name:@"end"];
     _TRObstacleType_values = (@[_damage, _switch, _light, _end]);
 }
 
@@ -426,7 +426,7 @@ static NSArray* _TRObstacleType_values;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRObstacle* o = ((TRObstacle*)other);
+    TRObstacle* o = ((TRObstacle*)(other));
     return self.obstacleType == o.obstacleType && [self.point isEqual:o.point];
 }
 
@@ -503,7 +503,7 @@ static NSArray* _TRObstacleType_values;
 }
 
 - (BOOL)canAddRail:(TRRail*)rail {
-    return [((TRRailroadConnectorContent*)[_connectorIndex applyKey:tuple(wrap(EGPointI, rail.tile), rail.form.start)]) canAddRail:rail] && [((TRRailroadConnectorContent*)[_connectorIndex applyKey:tuple(wrap(EGPointI, rail.tile), rail.form.end)]) canAddRail:rail];
+    return [((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGPointI, rail.tile), rail.form.start)])) canAddRail:rail] && [((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGPointI, rail.tile), rail.form.end)])) canAddRail:rail];
 }
 
 - (BOOL)tryAddRail:(TRRail*)rail {
@@ -521,13 +521,13 @@ static NSArray* _TRObstacleType_values;
 }
 
 - (TRRailroadConnectorContent*)contentInTile:(EGPointI)tile connector:(TRRailConnector*)connector {
-    return ((TRRailroadConnectorContent*)[_connectorIndex applyKey:tuple(wrap(EGPointI, tile), connector)]);
+    return ((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGPointI, tile), connector)]));
 }
 
 - (void)connectRail:(TRRail*)rail to:(TRRailConnector*)to {
-    ((TRRailroadConnectorContent*)[_connectorIndex modifyBy:^TRRailroadConnectorContent*(TRRailroadConnectorContent* _) {
+    ((TRRailroadConnectorContent*)([_connectorIndex modifyBy:^TRRailroadConnectorContent*(TRRailroadConnectorContent* _) {
         return [_ connectRail:rail to:to];
-    } forKey:tuple(wrap(EGPointI, rail.tile), to)]);
+    } forKey:tuple(wrap(EGPointI, rail.tile), to)]));
 }
 
 - (void)buildLightsForTile:(EGPointI)tile connector:(TRRailConnector*)connector {
@@ -538,18 +538,18 @@ static NSArray* _TRObstacleType_values;
     } else {
         if([self isTurnRailInTile:nextTile connector:otherSideConnector]) [self buildLightInTile:nextTile connector:otherSideConnector];
     }
-    if([self isTurnRailInTile:tile connector:connector] && [[((TRRailroadConnectorContent*)[_connectorIndex applyKey:tuple(wrap(EGPointI, nextTile), otherSideConnector)]) rails] count] == 1) [self buildLightInTile:tile connector:connector];
+    if([self isTurnRailInTile:tile connector:connector] && [[((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGPointI, nextTile), otherSideConnector)])) rails] count] == 1) [self buildLightInTile:tile connector:connector];
 }
 
 - (BOOL)isTurnRailInTile:(EGPointI)tile connector:(TRRailConnector*)connector {
-    id<CNList> rails = [((TRRailroadConnectorContent*)[_connectorIndex applyKey:tuple(wrap(EGPointI, tile), connector)]) rails];
-    return [rails count] == 1 && ((TRRail*)rails[0]).form.isTurn;
+    id<CNList> rails = [((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGPointI, tile), connector)])) rails];
+    return [rails count] == 1 && ((TRRail*)([rails applyIndex:0])).form.isTurn;
 }
 
 - (void)buildLightInTile:(EGPointI)tile connector:(TRRailConnector*)connector {
-    ((TRRailroadConnectorContent*)[_connectorIndex modifyBy:^TRRailroadConnectorContent*(TRRailroadConnectorContent* _) {
+    ((TRRailroadConnectorContent*)([_connectorIndex modifyBy:^TRRailroadConnectorContent*(TRRailroadConnectorContent* _) {
         return [_ buildLightInConnector:connector];
-    } forKey:tuple(wrap(EGPointI, tile), connector)]);
+    } forKey:tuple(wrap(EGPointI, tile), connector)]));
 }
 
 - (void)rebuildArrays {
@@ -565,7 +565,7 @@ static NSArray* _TRObstacleType_values;
 }
 
 - (id)activeRailForTile:(EGPointI)tile connector:(TRRailConnector*)connector {
-    return [[((TRRailroadConnectorContent*)[_connectorIndex applyKey:tuple(wrap(EGPointI, tile), connector)]) rails] head];
+    return [[((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGPointI, tile), connector)])) rails] head];
 }
 
 - (TRRailPointCorrection*)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(double)forLength point:(TRRailPoint*)point {
@@ -578,11 +578,11 @@ static NSArray* _TRObstacleType_values;
     }
     if(eqf(correction.error, 0)) return correction;
     TRRailConnector* connector = [p endConnector];
-    TRRailroadConnectorContent* connectorDesc = ((TRRailroadConnectorContent*)[_connectorIndex applyKey:tuple(wrap(EGPointI, p.tile), connector)]);
+    TRRailroadConnectorContent* connectorDesc = ((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGPointI, p.tile), connector)]));
     id activeRailOpt = [[connectorDesc rails] head];
     if([activeRailOpt isEmpty]) return correction;
     if(!([connectorDesc isGreen])) if(!(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.light point:correction.point]))) return correction;
-    if(((TRRail*)[activeRailOpt get]).form != p.form) {
+    if(((TRRail*)([activeRailOpt get])).form != p.form) {
         obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.aSwitch point:correction.point]);
         return correction;
     }
@@ -593,7 +593,7 @@ static NSArray* _TRObstacleType_values;
         obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.end point:correction.point]);
         return correction;
     }
-    TRRail* nextActiveRail = ((TRRail*)[nextRail get]);
+    TRRail* nextActiveRail = ((TRRail*)([nextRail get]));
     TRRailForm* form = nextActiveRail.form;
     return [self moveWithObstacleProcessor:obstacleProcessor forLength:correction.error point:[TRRailPoint railPointWithTile:nextTile form:form x:0 back:form.end == otherSideConnector]];
 }
@@ -653,7 +653,7 @@ static NSArray* _TRObstacleType_values;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRailroad* o = ((TRRailroad*)other);
+    TRRailroad* o = ((TRRailroad*)(other));
     return [self.map isEqual:o.map] && [self.score isEqual:o.score];
 }
 
@@ -726,7 +726,7 @@ static NSArray* _TRObstacleType_values;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRailroadBuilder* o = ((TRRailroadBuilder*)other);
+    TRRailroadBuilder* o = ((TRRailroadBuilder*)(other));
     return [self.railroad isEqual:o.railroad];
 }
 

@@ -126,7 +126,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGMapSso* o = ((EGMapSso*)other);
+    EGMapSso* o = ((EGMapSso*)(other));
     return EGSizeIEq(self.size, o.size);
 }
 

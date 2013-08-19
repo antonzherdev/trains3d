@@ -8,6 +8,18 @@
 @class TRScoreRules;
 @class TRScore;
 @class TRTrainScore;
+@class TRCityAngle;
+@class TRCity;
+@class TRRailroadConnectorContent;
+@class TREmptyConnector;
+@class TRRail;
+@class TRSwitch;
+@class TRLight;
+@class TRObstacleType;
+@class TRObstacle;
+@class TRRailroad;
+@class TRRailroadBuilder;
+@class TRColor;
 
 @class TRLevelMenuView;
 

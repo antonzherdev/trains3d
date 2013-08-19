@@ -8,7 +8,7 @@ import CNChain
 
 class CNRange(start : int, end : int, step : int) extends CNList<int> {
     val count : uint = (end - start)/step
-    def at(index : uint) : int? =
+    def apply(index : uint) : int? =
         if(index >= count) nil
         else start + step*index
     def iterator : CNIterator<int> = CNRangeIterator(start, end, step)

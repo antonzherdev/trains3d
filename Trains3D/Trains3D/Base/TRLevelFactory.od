@@ -10,13 +10,14 @@ import TRLevel
 import TRLevelView
 import TRLevelMenuView
 import TRLevelProcessor
+import TRLevelMenuProcessor
 import TRScore
 import TRRailroad
 
 class TRLevelFactory {
     static def sceneFor(level : TRLevel) = EGScene(level, [
         EGLayer(TRLevelView(level), TRLevelProcessor(level)),
-        EGLayer(TRLevelMenuView(level), nil)
+        EGLayer(TRLevelMenuView(level), TRLevelMenuProcessor(level))
     ])
 
     static val scoreRules = TRScoreRules(
@@ -30,16 +31,18 @@ class TRLevelFactory {
         )
     private static def train(cars : CNRange, speed : CNRange) : TRLevel -> void = (level : TRLevel)->
         level.runTrainWith(TRTrainGenerator(TRTrainType.simple, cars, speed))
-
+    private static def createNewCity : TRLevel -> void = (level : TRLevel)->
+        level.createNewCity
     private static val rules = [
-        TRLevelRules(EGSizeI(5, 3), scoreRules, [
+        TRLevelRules(EGSizeI(5, 3), scoreRules, repairerSpeed = 30, [
             (5, train(cars = 1.to(5), speed = 30.to(60).set(step = 10))),
             (10, train(cars = 1.to(5), speed = 30.to(60).set(step = 10))),
-            (15, train(cars = 1.to(5), speed = 30.to(60).set(step = 10)))
+            (15, createNewCity),
+            (20, train(cars = 1.to(5), speed = 30.to(60).set(step = 10)))
         ])
     ]
     static def levelWith(number : uint) = TRLevel(rules[number - 1])
-    static def levelWith(mapSize : EGSizeI) = TRLevel(TRLevelRules(mapSize, scoreRules, []))
+    static def levelWith(mapSize : EGSizeI) = TRLevel(TRLevelRules(mapSize, scoreRules, repairerSpeed = 30, []))
     static def sceneForLevelWith(number : uint) = sceneFor(levelWith(number))
     static def score = TRScore(scoreRules)
     static def railroadWith(mapSize : EGSizeI) = TRRailroad(EGMapSso(mapSize), score)

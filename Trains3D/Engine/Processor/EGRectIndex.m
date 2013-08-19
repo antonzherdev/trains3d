@@ -20,7 +20,7 @@
     return [[_rects findWhere:^BOOL(CNTuple* _) {
         return egRectContains(uwrap(EGRect, _.a), point);
     }] map:^CNTuple*(CNTuple* _) {
-        return ((CNTuple*)_.b);
+        return ((CNTuple*)(_.b));
     }];
 }
 
@@ -31,7 +31,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGRectIndex* o = ((EGRectIndex*)other);
+    EGRectIndex* o = ((EGRectIndex*)(other));
     return [self.rects isEqual:o.rects];
 }
 

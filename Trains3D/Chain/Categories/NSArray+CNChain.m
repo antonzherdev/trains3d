@@ -78,7 +78,8 @@
     return [NSSet setWithArray:self];
 }
 
-- (id)atIndex:(NSUInteger)index {
+- (id)applyIndex:(NSUInteger)index {
+    if(index >= self.count) return [CNOption none];
     return [self objectAtIndex:index];
 }
 

@@ -46,7 +46,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGScene* o = ((EGScene*)other);
+    EGScene* o = ((EGScene*)(other));
     return [self.controller isEqual:o.controller] && [self.layers isEqual:o.layers];
 }
 

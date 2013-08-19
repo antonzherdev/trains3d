@@ -51,7 +51,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGCamera2D* o = ((EGCamera2D*)other);
+    EGCamera2D* o = ((EGCamera2D*)(other));
     return EGSizeEq(self.size, o.size);
 }
 

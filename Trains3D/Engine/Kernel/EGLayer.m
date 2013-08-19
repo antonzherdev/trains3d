@@ -41,7 +41,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGLayer* o = ((EGLayer*)other);
+    EGLayer* o = ((EGLayer*)(other));
     return [self.view isEqual:o.view] && [self.processor isEqual:o.processor];
 }
 

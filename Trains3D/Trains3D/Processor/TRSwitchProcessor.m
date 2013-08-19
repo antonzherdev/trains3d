@@ -35,7 +35,7 @@
     EGPointI tile = egPointIApply(location);
     EGPoint relPoint = egPointSub(location, egPointApply(tile));
     _downed = [[_index applyPoint:relPoint] flatMap:^id(CNTuple* v) {
-        TRRailroadConnectorContent* content = [_level.railroad contentInTile:tile connector:((TRRailConnector*)v.a)];
+        TRRailroadConnectorContent* content = [_level.railroad contentInTile:tile connector:((TRRailConnector*)(v.a))];
         if(unumb(v.b)) return [content asKindOfClass:[TRLight class]];
         else return [content asKindOfClass:[TRSwitch class]];
     }];
@@ -48,10 +48,10 @@
 
 - (BOOL)mouseUpEvent:(EGEvent*)event {
     if([_downed isDefined]) {
-        [[((TRRailroadConnectorContent*)[_downed get]) asKindOfClass:[TRSwitch class]] forEach:^void(TRSwitch* _) {
+        [[((TRRailroadConnectorContent*)([_downed get])) asKindOfClass:[TRSwitch class]] forEach:^void(TRSwitch* _) {
             [_level tryTurnTheSwitch:_];
         }];
-        [[((TRRailroadConnectorContent*)[_downed get]) asKindOfClass:[TRLight class]] forEach:^void(TRLight* _) {
+        [[((TRRailroadConnectorContent*)([_downed get])) asKindOfClass:[TRLight class]] forEach:^void(TRLight* _) {
             [_ turn];
         }];
         return YES;
@@ -67,7 +67,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRSwitchProcessor* o = ((TRSwitchProcessor*)other);
+    TRSwitchProcessor* o = ((TRSwitchProcessor*)(other));
     return [self.level isEqual:o.level];
 }
 

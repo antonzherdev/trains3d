@@ -17,10 +17,10 @@
 
 + (id<CNSet>)collisionsForFigures:(id<CNList>)figures {
     id<CNList> segments = [[[[[[figures chain] combinations] filter:^BOOL(CNTuple* p) {
-        return !([((CNTuple*)((CNTuple*)p.a).a) isEqual:((CNTuple*)((CNTuple*)p.b).a)]) && egRectIntersects([((CNTuple*)p.a).b boundingRect], [((CNTuple*)p.b).b boundingRect]);
+        return !([((CNTuple*)(((CNTuple*)(p.a)).a)) isEqual:((CNTuple*)(((CNTuple*)(p.b)).a))]) && egRectIntersects([((CNTuple*)(p.a)).b boundingRect], [((CNTuple*)(p.b)).b boundingRect]);
     }] uncombinations] flatMap:^CNChain*(CNTuple* f) {
         return [[[f.b segments] chain] map:^CNTuple*(EGLineSegment* segment) {
-            return tuple(((CNTuple*)f.a), segment);
+            return tuple(((CNTuple*)(f.a)), segment);
         }];
     }] toArray];
     if([segments isEmpty]) return [NSSet set];
@@ -87,7 +87,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGCollision* o = ((EGCollision*)other);
+    EGCollision* o = ((EGCollision*)(other));
     return [self.items isEqual:o.items] && [self.points isEqual:o.points];
 }
 

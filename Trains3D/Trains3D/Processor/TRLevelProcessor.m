@@ -37,7 +37,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRLevelProcessor* o = ((TRLevelProcessor*)other);
+    TRLevelProcessor* o = ((TRLevelProcessor*)(other));
     return [self.level isEqual:o.level];
 }
 

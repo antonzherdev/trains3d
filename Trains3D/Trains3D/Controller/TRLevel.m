@@ -14,21 +14,24 @@
 @implementation TRLevelRules{
     EGSizeI _mapSize;
     TRScoreRules* _scoreRules;
+    NSUInteger _repairerSpeed;
     id<CNList> _events;
 }
 @synthesize mapSize = _mapSize;
 @synthesize scoreRules = _scoreRules;
+@synthesize repairerSpeed = _repairerSpeed;
 @synthesize events = _events;
 
-+ (id)levelRulesWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules events:(id<CNList>)events {
-    return [[TRLevelRules alloc] initWithMapSize:mapSize scoreRules:scoreRules events:events];
++ (id)levelRulesWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNList>)events {
+    return [[TRLevelRules alloc] initWithMapSize:mapSize scoreRules:scoreRules repairerSpeed:repairerSpeed events:events];
 }
 
-- (id)initWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules events:(id<CNList>)events {
+- (id)initWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNList>)events {
     self = [super init];
     if(self) {
         _mapSize = mapSize;
         _scoreRules = scoreRules;
+        _repairerSpeed = repairerSpeed;
         _events = events;
     }
     
@@ -42,14 +45,15 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRLevelRules* o = ((TRLevelRules*)other);
-    return EGSizeIEq(self.mapSize, o.mapSize) && [self.scoreRules isEqual:o.scoreRules] && [self.events isEqual:o.events];
+    TRLevelRules* o = ((TRLevelRules*)(other));
+    return EGSizeIEq(self.mapSize, o.mapSize) && [self.scoreRules isEqual:o.scoreRules] && self.repairerSpeed == o.repairerSpeed && [self.events isEqual:o.events];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + EGSizeIHash(self.mapSize);
     hash = hash * 31 + [self.scoreRules hash];
+    hash = hash * 31 + self.repairerSpeed;
     hash = hash * 31 + [self.events hash];
     return hash;
 }
@@ -58,6 +62,7 @@
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"mapSize=%@", EGSizeIDescription(self.mapSize)];
     [description appendFormat:@", scoreRules=%@", self.scoreRules];
+    [description appendFormat:@", repairerSpeed=%li", self.repairerSpeed];
     [description appendFormat:@", events=%@", self.events];
     [description appendString:@">"];
     return description;
@@ -74,6 +79,7 @@
     NSMutableArray* __cities;
     EGSchedule* _schedule;
     id<CNList> __trains;
+    id __repairer;
 }
 @synthesize rules = _rules;
 @synthesize map = _map;
@@ -95,6 +101,7 @@
         __cities = [NSMutableArray mutableArray];
         _schedule = [self createSchedule];
         __trains = (@[]);
+        __repairer = [CNOption none];
     }
     
     return self;
@@ -106,6 +113,10 @@
 
 - (id<CNList>)trains {
     return __trains;
+}
+
+- (id)repairer {
+    return __repairer;
 }
 
 - (EGSchedule*)createSchedule {
@@ -132,10 +143,10 @@
 
 - (TRCityAngle*)randomCityDirectionForTile:(EGPointI)tile {
     EGRectI cut = [_map cutRectForTile:tile];
-    return ((TRCityAngle*)[[[[[TRCityAngle values] chain] filter:^BOOL(TRCityAngle* a) {
+    return ((TRCityAngle*)([[[[[TRCityAngle values] chain] filter:^BOOL(TRCityAngle* a) {
         NSInteger angle = a.angle;
         return (angle == 0 && egRectIX2(cut) == 0 && egRectIY2(cut) == 0) || (angle == 90 && cut.x == 0 && egRectIY2(cut) == 0) || (angle == 180 && cut.x == 0 && cut.y == 0) || (angle == 270 && egRectIX2(cut) == 0 && cut.y == 0);
-    }] randomItem] get]);
+    }] randomItem] get]));
 }
 
 - (void)runTrain:(TRTrain*)train fromCity:(TRCity*)fromCity {
@@ -148,10 +159,10 @@
 }
 
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator {
-    TRCity* city = ((TRCity*)[[__cities randomItem] get]);
-    [self runTrain:[TRTrain trainWithLevel:self trainType:generator.trainType color:city.color cars:[generator generateCars] speed:[generator generateSpeed]] fromCity:((TRCity*)[[[[__cities chain] filter:^BOOL(TRCity* _) {
+    TRCity* city = ((TRCity*)([[__cities randomItem] get]));
+    [self runTrain:[TRTrain trainWithLevel:self trainType:generator.trainType color:city.color cars:[generator generateCars] speed:[generator generateSpeed]] fromCity:((TRCity*)([[[[__cities chain] filter:^BOOL(TRCity* _) {
         return !([_ isEqual:city]);
-    }] randomItem] get])];
+    }] randomItem] get]))];
 }
 
 - (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint {
@@ -189,24 +200,24 @@
 }
 
 - (void)arrivedTrain:(TRTrain*)train {
-    __trains = [__trains arrayByRemovingObject:train];
+    [self removeTrain:train];
     [_score arrivedTrain:train];
 }
 
 - (void)processCollisions {
     [[self detectCollisions] forEach:^void(EGCollision* collision) {
         [collision.items forEach:^void(CNTuple* _) {
-            [self destroyTrain:((TRTrain*)_.a)];
+            [self destroyTrain:((TRTrain*)(_.a))];
         }];
-        TRCar* car1 = ((TRCar*)((CNTuple*)collision.items.a).b);
-        TRCar* car2 = ((TRCar*)((CNTuple*)collision.items.b).b);
+        TRCar* car1 = ((TRCar*)(((CNTuple*)(collision.items.a)).b));
+        TRCar* car2 = ((TRCar*)(((CNTuple*)(collision.items.b)).b));
         [[[[[[[[(@[car1.head, car1.tail]) chain] mul:(@[car2.head, car2.tail])] sortBy] ascBy:^id(CNTuple* pair) {
-            TRRailPoint* x = ((TRRailPoint*)pair.a);
-            TRRailPoint* y = ((TRRailPoint*)pair.b);
+            TRRailPoint* x = ((TRRailPoint*)(pair.a));
+            TRRailPoint* y = ((TRRailPoint*)(pair.b));
             if(x.form == y.form && EGPointIEq(x.tile, y.tile)) return numf(fabs(x.x - y.x));
             else return @1000;
         }] endSort] map:^TRRailPoint*(CNTuple* _) {
-            return ((TRRailPoint*)_.a);
+            return ((TRRailPoint*)(_.a));
         }] head] forEach:^void(TRRailPoint* _) {
             [_railroad addDamageAtPoint:_];
         }];
@@ -224,8 +235,23 @@
 
 - (void)destroyTrain:(TRTrain*)train {
     if([__trains containsObject:train]) {
-        __trains = [__trains arrayByRemovingObject:train];
+        [self removeTrain:train];
         [_score destroyedTrain:train];
+    }
+}
+
+- (void)removeTrain:(TRTrain*)train {
+    __trains = [__trains arrayByRemovingObject:train];
+    __repairer = [__repairer filter:^BOOL(TRTrain* _) {
+        return !([_ isEqual:train]);
+    }];
+}
+
+- (void)runRepairerFromCity:(TRCity*)city {
+    if([__repairer isEmpty]) {
+        TRTrain* train = [TRTrain trainWithLevel:self trainType:TRTrainType.repairer color:TRColor.grey cars:(@[[TRCar car]]) speed:_rules.repairerSpeed];
+        [self runTrain:train fromCity:city];
+        __repairer = [CNOption opt:train];
     }
 }
 
@@ -236,7 +262,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRLevel* o = ((TRLevel*)other);
+    TRLevel* o = ((TRLevel*)(other));
     return [self.rules isEqual:o.rules];
 }
 

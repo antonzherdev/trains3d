@@ -36,7 +36,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRailroadBuilderProcessor* o = ((TRRailroadBuilderProcessor*)other);
+    TRRailroadBuilderProcessor* o = ((TRRailroadBuilderProcessor*)(other));
     return [self.builder isEqual:o.builder];
 }
 
@@ -78,7 +78,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRailCorrectionWrap* o = ((TRRailCorrectionWrap*)other);
+    TRRailCorrectionWrap* o = ((TRRailCorrectionWrap*)(other));
     return TRRailCorrectionEq(_value, o.value);
 }
 
@@ -212,7 +212,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRailroadBuilderMouseProcessor* o = ((TRRailroadBuilderMouseProcessor*)other);
+    TRRailroadBuilderMouseProcessor* o = ((TRRailroadBuilderMouseProcessor*)(other));
     return [self.builder isEqual:o.builder];
 }
 

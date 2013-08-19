@@ -10,6 +10,7 @@
 + (TRColor*)orange;
 + (TRColor*)green;
 + (TRColor*)purple;
++ (TRColor*)grey;
 + (NSArray*)values;
 @end
 

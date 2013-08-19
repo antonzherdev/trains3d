@@ -30,21 +30,25 @@ static NSArray* _TRTrainType_values;
 
 + (void)initialize {
     [super initialize];
-    _simple = [TRTrainType trainTypeWithOrdinal:((NSUInteger)0) name:@"simple" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
+    _simple = [TRTrainType trainTypeWithOrdinal:((NSUInteger)(0)) name:@"simple" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) [level destroyTrain:train];
         return NO;
     }];
-    _crazy = [TRTrainType trainTypeWithOrdinal:((NSUInteger)1) name:@"crazy" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
+    _crazy = [TRTrainType trainTypeWithOrdinal:((NSUInteger)(1)) name:@"crazy" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) [level destroyTrain:train];
         return o.obstacleType == TRObstacleType.light;
     }];
-    _fast = [TRTrainType trainTypeWithOrdinal:((NSUInteger)2) name:@"fast" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
+    _fast = [TRTrainType trainTypeWithOrdinal:((NSUInteger)(2)) name:@"fast" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage || o.obstacleType == TRObstacleType.aSwitch) [level destroyTrain:train];
         return NO;
     }];
-    _repairer = [TRTrainType trainTypeWithOrdinal:((NSUInteger)3) name:@"repairer" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
-        if(o.obstacleType == TRObstacleType.damage) [level.railroad fixDamageAtPoint:o.point];
-        return NO;
+    _repairer = [TRTrainType trainTypeWithOrdinal:((NSUInteger)(3)) name:@"repairer" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
+        if(o.obstacleType == TRObstacleType.damage) {
+            [level.railroad fixDamageAtPoint:o.point];
+            return YES;
+        } else {
+            return NO;
+        }
     }];
     _TRTrainType_values = (@[_simple, _crazy, _fast, _repairer]);
 }
@@ -132,13 +136,13 @@ static double _carsDelta;
 }
 
 - (void)calculateCarPositions {
-    ((TRRailPoint*)[[[self directedCars] chain] fold:^TRRailPoint*(TRRailPoint* hl, TRCar* car) {
+    ((TRRailPoint*)([[[self directedCars] chain] fold:^TRRailPoint*(TRRailPoint* hl, TRCar* car) {
         car.head = hl;
         TRRailPoint* next = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:[car length] point:hl] addErrorToPoint];
         car.tail = next;
         car.nextHead = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:_carsDelta point:next] addErrorToPoint];
         return car.nextHead;
-    } withStart:[_head invert]]);
+    } withStart:[_head invert]]));
 }
 
 - (EGPoint)movePoint:(EGPoint)point length:(double)length {
@@ -160,11 +164,11 @@ static double _carsDelta;
     if(!(eqf(correction.error, 0.0))) {
         BOOL isMoveToCity = [self isMoveToCityForPoint:correction.point];
         if(!(isMoveToCity) || correction.error >= _length) {
-            if(isMoveToCity && ((TRCity*)[[_level cityForTile:correction.point.tile] get]).color == _color) {
+            if(isMoveToCity && (_color == TRColor.grey || ((TRCity*)([[_level cityForTile:correction.point.tile] get])).color == _color)) {
                 [_level arrivedTrain:self];
             } else {
                 _back = !(_back);
-                TRCar* lastCar = ((TRCar*)[[[self directedCars] head] get]);
+                TRCar* lastCar = ((TRCar*)([[[self directedCars] head] get]));
                 _head = lastCar.tail;
             }
         } else {
@@ -199,7 +203,7 @@ static double _carsDelta;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRTrain* o = ((TRTrain*)other);
+    TRTrain* o = ((TRTrain*)(other));
     return [self.level isEqual:o.level] && self.trainType == o.trainType && self.color == o.color && [self.cars isEqual:o.cars] && self.speed == o.speed;
 }
 
@@ -302,7 +306,7 @@ static double _carsDelta;
 }
 
 - (NSUInteger)generateSpeed {
-    return ((NSUInteger)unumi([[_speed randomItem] get]));
+    return ((NSUInteger)(unumi([[_speed randomItem] get])));
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -312,7 +316,7 @@ static double _carsDelta;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRTrainGenerator* o = ((TRTrainGenerator*)other);
+    TRTrainGenerator* o = ((TRTrainGenerator*)(other));
     return self.trainType == o.trainType && [self.carsCount isEqual:o.carsCount] && [self.speed isEqual:o.speed];
 }
 

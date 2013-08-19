@@ -141,7 +141,7 @@ static NSObject* _obj;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNMutableTreeSet* o = ((CNMutableTreeSet*)other);
+    CNMutableTreeSet* o = ((CNMutableTreeSet*)(other));
     return [self.map isEqual:o.map];
 }
 

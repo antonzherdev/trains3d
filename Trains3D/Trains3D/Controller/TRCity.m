@@ -35,10 +35,10 @@ static NSArray* _TRCityAngle_values;
 
 + (void)initialize {
     [super initialize];
-    _angle0 = [TRCityAngle cityAngleWithOrdinal:((NSUInteger)0) name:@"angle0" angle:0 form:TRRailForm.leftRight back:NO];
-    _angle90 = [TRCityAngle cityAngleWithOrdinal:((NSUInteger)1) name:@"angle90" angle:90 form:TRRailForm.bottomTop back:YES];
-    _angle180 = [TRCityAngle cityAngleWithOrdinal:((NSUInteger)2) name:@"angle180" angle:180 form:TRRailForm.leftRight back:YES];
-    _angle270 = [TRCityAngle cityAngleWithOrdinal:((NSUInteger)3) name:@"angle270" angle:270 form:TRRailForm.bottomTop back:NO];
+    _angle0 = [TRCityAngle cityAngleWithOrdinal:((NSUInteger)(0)) name:@"angle0" angle:0 form:TRRailForm.leftRight back:NO];
+    _angle90 = [TRCityAngle cityAngleWithOrdinal:((NSUInteger)(1)) name:@"angle90" angle:90 form:TRRailForm.bottomTop back:YES];
+    _angle180 = [TRCityAngle cityAngleWithOrdinal:((NSUInteger)(2)) name:@"angle180" angle:180 form:TRRailForm.leftRight back:YES];
+    _angle270 = [TRCityAngle cityAngleWithOrdinal:((NSUInteger)(3)) name:@"angle270" angle:270 form:TRRailForm.bottomTop back:NO];
     _TRCityAngle_values = (@[_angle0, _angle90, _angle180, _angle270]);
 }
 
@@ -108,7 +108,7 @@ static NSArray* _TRCityAngle_values;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRCity* o = ((TRCity*)other);
+    TRCity* o = ((TRCity*)(other));
     return self.color == o.color && EGPointIEq(self.tile, o.tile) && self.angle == o.angle;
 }
 

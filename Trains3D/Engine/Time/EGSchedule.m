@@ -29,7 +29,7 @@
 - (void)updateWithDelta:(double)delta {
     __current += delta;
     while(__next > 0 && __current > __next) {
-        ((void(^)())((CNTuple*)[[__map pollFirst] get]).b)();
+        ((void(^)())(((CNTuple*)([[__map pollFirst] get])).b))();
         __next = unumf([[__map firstKey] getOr:@-1.0]);
     }
 }
@@ -94,7 +94,7 @@
         if(__time >= 1.0) {
             __time = 1.0;
             __run = NO;
-            ((void(^)())_finish)();
+            ((void(^)())(_finish))();
         }
     }
 }
@@ -106,7 +106,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGAnimation* o = ((EGAnimation*)other);
+    EGAnimation* o = ((EGAnimation*)(other));
     return eqf(self.length, o.length) && [self.finish isEqual:o.finish];
 }
 

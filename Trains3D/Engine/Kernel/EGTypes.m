@@ -70,7 +70,7 @@ NSInteger egPointCompare(EGPoint self, EGPoint to) {
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGPointWrap* o = ((EGPointWrap*)other);
+    EGPointWrap* o = ((EGPointWrap*)(other));
     return EGPointEq(_value, o.value);
 }
 
@@ -129,7 +129,7 @@ NSInteger egPointICompare(EGPointI self, EGPointI to) {
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGPointIWrap* o = ((EGPointIWrap*)other);
+    EGPointIWrap* o = ((EGPointIWrap*)(other));
     return EGPointIEq(_value, o.value);
 }
 
@@ -171,7 +171,7 @@ NSInteger egPointICompare(EGPointI self, EGPointI to) {
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSizeWrap* o = ((EGSizeWrap*)other);
+    EGSizeWrap* o = ((EGSizeWrap*)(other));
     return EGSizeEq(_value, o.value);
 }
 
@@ -209,7 +209,7 @@ NSInteger egPointICompare(EGPointI self, EGPointI to) {
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSizeIWrap* o = ((EGSizeIWrap*)other);
+    EGSizeIWrap* o = ((EGSizeIWrap*)(other));
     return EGSizeIEq(_value, o.value);
 }
 
@@ -277,7 +277,7 @@ EGRect egRectThicken(EGRect self, double x, double y) {
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGRectWrap* o = ((EGRectWrap*)other);
+    EGRectWrap* o = ((EGRectWrap*)(other));
     return EGRectEq(_value, o.value);
 }
 
@@ -297,7 +297,7 @@ EGRectI egRectIApply(EGRect rect) {
     return EGRectIMake(lround(rect.x), lround(rect.width), lround(rect.y), lround(rect.height));
 }
 EGRectI egRectINewXY(double x, double x2, double y, double y2) {
-    return EGRectIMake(((NSInteger)x), ((NSInteger)x2 - x), ((NSInteger)y), ((NSInteger)y2 - y));
+    return EGRectIMake(((NSInteger)(x)), ((NSInteger)(x2 - x)), ((NSInteger)(y)), ((NSInteger)(y2 - y)));
 }
 NSInteger egRectIX2(EGRectI self) {
     return self.x + self.width;
@@ -327,7 +327,7 @@ NSInteger egRectIY2(EGRectI self) {
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGRectIWrap* o = ((EGRectIWrap*)other);
+    EGRectIWrap* o = ((EGRectIWrap*)(other));
     return EGRectIEq(_value, o.value);
 }
 
@@ -368,7 +368,7 @@ void egColorSet(EGColor self) {
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGColorWrap* o = ((EGColorWrap*)other);
+    EGColorWrap* o = ((EGColorWrap*)(other));
     return EGColorEq(_value, o.value);
 }
 

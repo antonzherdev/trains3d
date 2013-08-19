@@ -14,7 +14,7 @@ import TRRailPoint
 import TRTrain
 import TRScore
 
-class TRLevelRules(mapSize : EGSizeI, scoreRules : TRScoreRules, events : [(float, (TRLevel) -> void)])
+class TRLevelRules(mapSize : EGSizeI, scoreRules : TRScoreRules, repairerSpeed : uint, events : [(float, (TRLevel) -> void)])
 
 class TRLevel(rules : TRLevelRules) extends EGController {
     val map : EGMapSso = EGMapSso(rules.mapSize)
@@ -25,6 +25,9 @@ class TRLevel(rules : TRLevelRules) extends EGController {
     def cities : [TRCity] = _cities
     private var _trains : [TRTrain] = []
     def trains = _trains
+    private var _repairer : TRTrain? = nil
+    def repairer = _repairer
+
 
     private def createSchedule : EGSchedule = {
         val schedule = EGSchedule.new
@@ -96,7 +99,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
     def cityFor(tile : EGPointI) : TRCity? = _cities.find(_.tile == tile)
 
     def arrived(train : TRTrain) {
-        _trains -= train
+        remove(train)
         score.arrived(train)
     }
 
@@ -128,8 +131,21 @@ class TRLevel(rules : TRLevelRules) extends EGController {
 
     def destroy(train : TRTrain) {
         if(_trains.contains(train)) {
-            _trains -= train
+            remove(train)
             score.destroyed(train)
+        }
+    }
+
+    def remove(train : TRTrain) {
+        _trains -= train
+        _repairer = _repairer.filter(_ != train)
+    }
+
+    def runRepairerFrom(city : TRCity) {
+        if(_repairer.isEmpty) {
+            val train = TRTrain(self, TRTrainType.repairer, TRColor.grey, [TRCar.new], rules.repairerSpeed)
+            run(train, city)
+            _repairer = train
         }
     }
 }

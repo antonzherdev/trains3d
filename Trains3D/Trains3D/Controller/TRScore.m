@@ -44,7 +44,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRScoreRules* o = ((TRScoreRules*)other);
+    TRScoreRules* o = ((TRScoreRules*)(other));
     return self.initialScore == o.initialScore && self.railCost == o.railCost && [self.arrivedPrize isEqual:o.arrivedPrize] && [self.destructionFine isEqual:o.destructionFine] && eqf(self.delayPeriod, o.delayPeriod) && [self.delayFine isEqual:o.delayFine] && self.repairCost == o.repairCost;
 }
 
@@ -76,7 +76,7 @@
 @implementation TRScore{
     TRScoreRules* _rules;
     NSInteger __score;
-    id<CNMutableList> _trains;
+    NSMutableArray* _trains;
 }
 @synthesize rules = _rules;
 
@@ -89,7 +89,7 @@
     if(self) {
         _rules = rules;
         __score = _rules.initialScore;
-        _trains = [(@[]) mutableCopy];
+        _trains = [NSMutableArray mutableArray];
     }
     
     return self;
@@ -131,7 +131,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRScore* o = ((TRScore*)other);
+    TRScore* o = ((TRScore*)(other));
     return [self.rules isEqual:o.rules];
 }
 
@@ -194,7 +194,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRTrainScore* o = ((TRTrainScore*)other);
+    TRTrainScore* o = ((TRTrainScore*)(other));
     return [self.train isEqual:o.train];
 }
 

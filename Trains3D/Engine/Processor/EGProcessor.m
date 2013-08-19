@@ -103,7 +103,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGEvent* o = ((EGEvent*)other);
+    EGEvent* o = ((EGEvent*)(other));
     return EGSizeEq(self.viewSize, o.viewSize) && [self.camera isEqual:o.camera];
 }
 

@@ -31,7 +31,7 @@
 }
 
 - (NSUInteger)count {
-    return ((NSUInteger)2);
+    return ((NSUInteger)(2));
 }
 
 - (id<CNIterator>)iterator {
@@ -91,7 +91,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNPair* o = ((CNPair*)other);
+    CNPair* o = ((CNPair*)(other));
     return [self.a isEqual:o.a] && [self.b isEqual:o.b];
 }
 
@@ -150,7 +150,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNPairIterator* o = ((CNPairIterator*)other);
+    CNPairIterator* o = ((CNPairIterator*)(other));
     return [self.pair isEqual:o.pair];
 }
 

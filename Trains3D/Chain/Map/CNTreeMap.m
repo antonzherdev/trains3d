@@ -23,7 +23,7 @@ static NSInteger _RED;
     if(self) {
         _comparator = comparator;
         _root = nil;
-        __size = ((NSUInteger)0);
+        __size = ((NSUInteger)(0));
         _keys = [CNTreeMapKeySet treeMapKeySetWithMap:self];
         _values = [CNTreeMapValues treeMapValuesWithMap:self];
     }
@@ -56,7 +56,7 @@ static NSInteger _RED;
 }
 
 - (void)clear {
-    __size = ((NSUInteger)0);
+    __size = ((NSUInteger)(0));
     _root = nil;
 }
 
@@ -65,7 +65,7 @@ static NSInteger _RED;
 }
 
 - (CNTreeMapIterator*)iteratorHigherThanKey:(id)key {
-    return [CNTreeMapIterator newMap:self entry:((CNTreeMapEntry*)[[self higherEntryThanKey:key] getOr:nil])];
+    return [CNTreeMapIterator newMap:self entry:((CNTreeMapEntry*)([[self higherEntryThanKey:key] getOr:nil]))];
 }
 
 - (CNTreeMapEntry*)entryForKey:(id)key {
@@ -86,7 +86,7 @@ static NSInteger _RED;
     CNTreeMapEntry* t = _root;
     if(t == nil) {
         _root = [CNTreeMapEntry newWithKey:forKey object:object parent:nil];
-        __size = ((NSUInteger)1);
+        __size = ((NSUInteger)(1));
     } else {
         NSInteger cmp = 0;
         CNTreeMapEntry* parent = nil;
@@ -472,7 +472,7 @@ static NSInteger _RED;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNMutableTreeMap* o = ((CNMutableTreeMap*)other);
+    CNMutableTreeMap* o = ((CNMutableTreeMap*)(other));
     return [self.comparator isEqual:o.comparator];
 }
 
@@ -584,7 +584,7 @@ static NSInteger _RED;
 }
 
 - (id<CNIterator>)iteratorHigherThanKey:(id)key {
-    return [CNTreeMapKeyIterator newMap:_map entry:((CNTreeMapEntry*)[[_map higherEntryThanKey:key] getOr:nil])];
+    return [CNTreeMapKeyIterator newMap:_map entry:((CNTreeMapEntry*)([[_map higherEntryThanKey:key] getOr:nil]))];
 }
 
 - (id)head {
@@ -648,7 +648,7 @@ static NSInteger _RED;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNTreeMapKeySet* o = ((CNTreeMapKeySet*)other);
+    CNTreeMapKeySet* o = ((CNTreeMapKeySet*)(other));
     return [self.map isEqual:o.map];
 }
 
@@ -709,7 +709,7 @@ static NSInteger _RED;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNTreeMapKeyIterator* o = ((CNTreeMapKeyIterator*)other);
+    CNTreeMapKeyIterator* o = ((CNTreeMapKeyIterator*)(other));
     return [self.map isEqual:o.map];
 }
 
@@ -814,7 +814,7 @@ static NSInteger _RED;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNTreeMapValues* o = ((CNTreeMapValues*)other);
+    CNTreeMapValues* o = ((CNTreeMapValues*)(other));
     return [self.map isEqual:o.map];
 }
 
@@ -875,7 +875,7 @@ static NSInteger _RED;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNTreeMapValuesIterator* o = ((CNTreeMapValuesIterator*)other);
+    CNTreeMapValuesIterator* o = ((CNTreeMapValuesIterator*)(other));
     return [self.map isEqual:o.map];
 }
 
@@ -936,7 +936,7 @@ static NSInteger _RED;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNTreeMapIterator* o = ((CNTreeMapIterator*)other);
+    CNTreeMapIterator* o = ((CNTreeMapIterator*)(other));
     return [self.map isEqual:o.map];
 }
 

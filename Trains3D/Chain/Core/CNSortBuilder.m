@@ -59,7 +59,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNSortBuilder* o = ((CNSortBuilder*)other);
+    CNSortBuilder* o = ((CNSortBuilder*)(other));
     return [self.chain isEqual:o.chain];
 }
 

@@ -6,6 +6,9 @@
 #import "EGSchedule.h"
 #import "TRLevel.h"
 #import "TRScore.h"
+#import "TRCity.h"
+#import "TRRailroad.h"
+#import "TRTypes.h"
 @implementation TRLevelMenuView{
     TRLevel* _level;
     id<EGCamera> _camera;
@@ -30,8 +33,17 @@
 - (void)drawView {
     egColor3(1, 1, 1);
     egTextGlutDraw([NSString stringWithFormat:@"%li", [_level.score score]], GLUT_BITMAP_HELVETICA_18, EGPointMake(1, 1));
-    NSInteger seconds = ((NSInteger)[_level.schedule time]);
+    NSInteger seconds = ((NSInteger)([_level.schedule time]));
     egTextGlutDraw([NSString stringWithFormat:@"%li", seconds], GLUT_BITMAP_HELVETICA_18, EGPointMake(1.5, 1));
+    if(!([[_level.railroad damagesPoints] isEmpty])) {
+        glPushMatrix();
+        [[_level cities] forEach:^void(TRCity* city) {
+            [city.color set];
+            egRect(0, 0, 0.1, 0.1);
+            egTranslate(0.1, 0, 0);
+        }];
+        glPopMatrix();
+    }
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -41,7 +53,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRLevelMenuView* o = ((TRLevelMenuView*)other);
+    TRLevelMenuView* o = ((TRLevelMenuView*)(other));
     return [self.level isEqual:o.level];
 }
 
