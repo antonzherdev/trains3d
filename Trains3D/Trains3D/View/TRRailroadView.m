@@ -154,6 +154,7 @@
     egColor3(0.2, 0.8, 0.2);
     if(form.start.x + form.end.x == 0) {
         glBegin(GL_QUADS);
+        egNormal3(0, 0, 1);
         egVertex2(-0.5, 0.05);
         egVertex2(-0.5, -0.05);
         egVertex2(-0.25, -0.02);
@@ -167,6 +168,7 @@
         NSInteger oy = otherConnector.y;
         if((x == -1 && oy == -1) || (y == 1 && ox == -1) || (y == -1 && ox == 1) || (x == 1 && oy == 1)) egScale(1, -1, 1);
         glBegin(GL_QUADS);
+        egNormal3(0, 0, 1);
         egVertex2(-0.5, 0.05);
         egVertex2(-0.5, -0.05);
         egVertex2(-0.25, 0.1);
@@ -261,6 +263,7 @@
     glPushMatrix();
     egTranslate(point.point.x, point.point.y, 0.01);
     egColor4(1.0, 0.0, 0.0, 0.5);
+    egNormal3(0, 0, 1);
     egRect(-0.1, -0.1, 0.1, 0.1);
     glPopMatrix();
 }

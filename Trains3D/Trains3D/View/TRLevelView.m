@@ -44,6 +44,7 @@
     glShadeModel(GL_SMOOTH);
     egAmbientColor(0.5, 0.5, 0.5);
     egLightColor(GL_LIGHT0, 0.8, 0.8, 0.8);
+    egLightDirection(GL_LIGHT0, 0.2, -0.2, 0.5);
     [_backgroundView drawLevel:_level];
     [[_level cities] forEach:^void(TRCity* city) {
         [_cityView drawCity:city];

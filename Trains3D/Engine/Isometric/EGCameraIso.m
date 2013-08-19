@@ -1,5 +1,4 @@
 #import "EGCameraIso.h"
-#import "EGMapIso.h"
 
 static inline CGRect calculateViewportSize(EGSizeI tilesOnScreen, EGSize viewSize) {
     CGFloat ww = tilesOnScreen.width + tilesOnScreen.height;
@@ -33,7 +32,7 @@ static inline CGRect calculateViewportSize(EGSizeI tilesOnScreen, EGSize viewSiz
 
 - (void)focusForViewSize:(EGSize)viewSize {
     CGRect vps = calculateViewportSize(_tilesOnScreen, viewSize);
-    glViewport(vps.origin.x, vps.origin.y, vps.size.width, vps.size.height);
+    glViewport((GLint) vps.origin.x, (GLint) vps.origin.y, (GLsizei) vps.size.width, (GLsizei) vps.size.height);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
