@@ -27,6 +27,9 @@ static inline void egVertex2(CGFloat x, CGFloat y) {
 static inline void egVertex3(CGFloat x, CGFloat y, CGFloat z) {
     glVertex3d(x, y, z);
 }
+static inline void egNormal3(CGFloat x, CGFloat y, CGFloat z) {
+    glNormal3d(x, y, z);
+}
 
 static inline void egTexCoord2 (CGFloat s, CGFloat t) {
     glTexCoord2d(s, t);
@@ -43,4 +46,24 @@ static inline void egViewport(EGRectI rect) {
 
 static inline void egRect (CGFloat x1, CGFloat y1, CGFloat x2, CGFloat y2) {
     glRectd(x1, y1, x2, y2);
+}
+
+static inline void egAmbientColor(double r, double g, double b) {
+    GLfloat ambientColor[] = {(GLfloat) r, (GLfloat) g, (GLfloat) b, 1.0f};
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
+}
+
+static inline void egLightColor(GLenum light, double r, double g, double b) {
+    GLfloat lightColor0[] = {(GLfloat) r, (GLfloat) g, (GLfloat) b, 1.0f};
+    glLightfv(light, GL_DIFFUSE, lightColor0);
+}
+
+static inline void egLightPosition(GLenum light, double x, double y, double z) {
+    GLfloat lightPosition[] = {(GLfloat) x, (GLfloat) y, (GLfloat) z, 1.0f};
+    glLightfv(light, GL_POSITION, lightPosition);
+}
+
+static inline void egLightDirection(GLenum light, double x, double y, double z) {
+    GLfloat lightPosition[] = {(GLfloat) x, (GLfloat) y, (GLfloat) z, 0.0f};
+    glLightfv(light, GL_POSITION, lightPosition);
 }

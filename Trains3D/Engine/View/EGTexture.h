@@ -7,7 +7,7 @@
 - (id)initWithFile:(NSString *)file;
 + (id)textureWithFile:(NSString *)file;
 - (void)bind;
-- (void)with:(void (^)())f;
+- (void)draw:(void (^)())f;
 @end
 
 

@@ -3,5 +3,5 @@ import EGTypes
 stub class EGTexture(file : string)  {
     def size : EGSize
     def bind
-    def with(: () -> void)
+    def draw(: () -> void)
 }

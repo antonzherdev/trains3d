@@ -5,6 +5,6 @@ import EGMapIso
 
 class TRLevelBackgroundView {
     def draw(level : TRLevel) {
-        egTexture("Grass.png").with(level.map.drawPlane)
+        egTexture("Grass.png").draw(level.map.drawPlane)
     }
 }

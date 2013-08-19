@@ -53,6 +53,7 @@
     double top = ISO * _size.height;
     double bottom = ISO * -_size.width;
     double right = ISO * (_size.width + _size.height - 1);
+    egNormal3(0, 0, 1);
     egVertex3(left, top, 0.0);
     egVertex3(left, bottom, 0.0);
     egVertex3(left, bottom, 0.0);
@@ -67,6 +68,7 @@
     glBegin(GL_LINES);
     [_fullTiles forEach:^void(id tile) {
         EGPointI p = uwrap(EGPointI, tile);
+        egNormal3(0, 0, 1);
         egVertex3(p.x - 0.5, p.y - 0.5, 0.0);
         egVertex3(p.x + 0.5, p.y - 0.5, 0.0);
         egVertex3(p.x + 0.5, p.y - 0.5, 0.0);
@@ -88,6 +90,7 @@
     double b = egRectIY2(_limits) + 1.5;
     NSInteger w = _limits.width + 3;
     NSInteger h = _limits.height + 3;
+    egNormal3(0, 0, 1);
     egTexCoord2(0.0, 0.0);
     egVertex3(l, b, 0);
     egTexCoord2(w, 0.0);

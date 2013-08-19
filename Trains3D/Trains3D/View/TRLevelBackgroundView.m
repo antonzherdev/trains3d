@@ -17,7 +17,7 @@
 }
 
 - (void)drawLevel:(TRLevel*)level {
-    [egTexture(@"Grass.png") with:^void() {
+    [egTexture(@"Grass.png") draw:^void() {
         [level.map drawPlane];
     }];
 }

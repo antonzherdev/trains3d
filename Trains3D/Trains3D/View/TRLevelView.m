@@ -37,6 +37,13 @@
 }
 
 - (void)drawView {
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_NORMALIZE);
+    glShadeModel(GL_SMOOTH);
+    egAmbientColor(0.5, 0.5, 0.5);
+    egLightColor(GL_LIGHT0, 0.8, 0.8, 0.8);
     [_backgroundView drawLevel:_level];
     [[_level cities] forEach:^void(TRCity* city) {
         [_cityView drawCity:city];
@@ -47,6 +54,10 @@
     }];
     egColor3(1.0, 1.0, 1.0);
     [_level.map drawLayout];
+    glDisable(GL_LIGHTING);
+    glDisable(GL_LIGHT0);
+    glDisable(GL_COLOR_MATERIAL);
+    glDisable(GL_NORMALIZE);
 }
 
 - (id)copyWithZone:(NSZone*)zone {
