@@ -37,7 +37,7 @@
     return [CNRangeIterator rangeIteratorWithStart:_start end:_end step:_step];
 }
 
-- (CNRange*)withStep:(NSInteger)step {
+- (CNRange*)setStep:(NSInteger)step {
     return [CNRange rangeWithStart:_start end:_end step:step];
 }
 

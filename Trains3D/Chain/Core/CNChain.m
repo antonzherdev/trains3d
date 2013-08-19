@@ -17,6 +17,7 @@
 #import "CNGroupByLink.h"
 #import "CNList.h"
 #import "CNSortLink.h"
+#import "CNSortBuilder.h"
 
 
 @implementation CNChain {
@@ -328,6 +329,10 @@
 
 - (CNChain *)distinctWithSelectivity:(double)selectivity {
     return [self link:[CNDistinctLink linkWithSelectivity:selectivity]];
+}
+
+- (CNSortBuilder *)sortBy {
+    return [CNSortBuilder sortBuilderWithChain:self];
 }
 @end
 

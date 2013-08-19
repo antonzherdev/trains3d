@@ -17,7 +17,10 @@
 - (id)initWithComparator:(cnCompare)comparator {
     self = [super init];
     if (self) {
-        _comparator = comparator;
+        _comparator = ^NSInteger(id x, id y) {
+            NSInteger ret = comparator(x, y);
+            return ret == 0 ? 1 : ret;
+        };
     }
 
     return self;

@@ -2,6 +2,7 @@ package core.chain
 
 import CNCollection
 import CNSet
+import CNSortBuilder
 
 stub class CNChain<A> extends CNIterable<A> {
     static def chainWith<T>(collection:CNTraversable<T>) : CNChain<T>
@@ -14,7 +15,7 @@ stub class CNChain<A> extends CNIterable<A> {
     def uncombinations<B>(self : CNChain<(B, B)>) : CNChain<B>
     def neighbors : CNChain<(A, A)>
     def neighborsRing : CNChain<(A, A)>
-    def mul<B>(: CNChain<B>) : CNChain<(A,B)>
+    def mul<B>(: CNTraversable<B>) : CNChain<(A,B)>
 
     def group<K>(by : A -> K) : CNChain<(K, [A])>
     def group<K, B>(by : A -> K, map : A -> B) : CNChain<(K, [B])>
@@ -31,9 +32,10 @@ stub class CNChain<A> extends CNIterable<A> {
 
     def reverse : CNChain<A>
     def distinct : CNChain<A>
-    def sort : CNChain<A>
-    def sortDesc : CNChain<A>
+    def sort<B extends ODComparable<B>> (self : CNChain<B>) : CNChain<A>
+    def sortDesc<B extends ODComparable<B>> (self : CNChain<B>) : CNChain<A>
     def sort(:(A, A) -> int) : CNChain<A>
+    def sortBy : CNSortBuilder<A>
 
     def fold<B>( : (B, A) -> B, withStart : B) : B
     def count : uint

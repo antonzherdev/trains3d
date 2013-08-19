@@ -1,4 +1,5 @@
 import CNChain
+import CNSortBuilder
 import CNSet
 
 import EGTypes
@@ -106,14 +107,29 @@ class TRLevel(rules : TRLevelRules) extends EGController {
         score.arrived(train)
     }
 
-    private def processCollisions {
-        detectCollisions.for(collision ->
-            collision.items.for(destroy(_))
-        )
+    def processCollisions {
+        detectCollisions.for(collision -> {
+            collision.items.for(destroy(_.a))
+            val car1 = collision.items.a.b
+            val car2 = collision.items.b.b
+            [car1.head, car1.tail].chain
+                .mul([car2.head, car2.tail])
+                .sortBy.asc(pair -> {
+                    val x = pair.a
+                    val y = pair.b
+                    if(x.form == y.form && x.tile == y.tile) fabs(x.x - y.x)
+                    else 1000
+                }).endSort
+                .map(_.a)
+                .head
+                .for(railroad.addDamageAt(_))
+        })
     }
 
-    def detectCollisions : CNSet<EGCollision<TRTrain>> = {
-        val carFigures = _trains.chain.flatMap(train -> train.cars.chain.map(car -> (train, car.figure))).toArray
+
+
+    def detectCollisions : CNSet<EGCollision<(TRTrain, TRCar)>> = {
+        val carFigures = _trains.chain.flatMap(train -> train.cars.chain.map(car -> ((train, car), car.figure))).toArray
         EGCollisions.collisionsFor(carFigures)
     }
 

@@ -18,7 +18,7 @@
 - (id)initWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step;
 - (id)atIndex:(NSUInteger)index;
 - (id<CNIterator>)iterator;
-- (CNRange*)withStep:(NSInteger)step;
+- (CNRange*)setStep:(NSInteger)step;
 - (BOOL)isEmpty;
 @end
 

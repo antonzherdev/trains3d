@@ -1,6 +1,7 @@
 #import "chain.h"
 #import "Kiwi.h"
 #import "CNRange.h"
+#import "CNSortBuilder.h"
 
 static BOOL (^const LESS_THAN_3)(id) = ^BOOL(id x) {return [x intValue] < 3;};
 
@@ -199,6 +200,14 @@ SPEC_BEGIN(CNChainSpec)
       it(@".sortDesc", ^{
           NSArray *r = [[[s chain] sortDesc] toArray];
           [[r should] equal:@[@3, @2, @1]];
+      });
+      it(@".sortBy", ^{
+          NSArray *r = [[[[[[@[@5, @2, @6, @3, @5] chain] sortBy] ascBy:^id(id o) {
+              return numi(unumi(o)/2);
+          }] descBy:^id(id o) {
+              return o;
+          }] endSort] toArray];
+          [[r should] equal:@[@3, @2, @5, @5, @6]];
       });
   });
 

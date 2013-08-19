@@ -34,8 +34,10 @@ static double _carsDelta;
 }
 
 - (id<CNSet>)checkLevel:(TRLevel*)level {
-    return [[[[level detectCollisions] chain] flatMap:^CNPair*(EGCollision* _) {
+    return [[[[[level detectCollisions] chain] flatMap:^CNPair*(EGCollision* _) {
         return _.items;
+    }] map:^TRTrain*(CNTuple* _) {
+        return ((TRTrain*)_.a);
     }] toSet];
 }
 
@@ -60,9 +62,17 @@ static double _carsDelta;
     [level testRunTrain:t2 fromPoint:p2];
     id<CNSet> cols = [self checkLevel:level];
     [self assertTrueValue:[cols isEmpty]];
-    [t2 setHead:[p2 addX:-delta - 0.001]];
+    p2 = [p2 addX:-delta - 0.001];
+    [t2 setHead:p2];
     cols = [self checkLevel:level];
     [self assertEqualsA:cols b:[(@[t1, t2]) toSet]];
+    [self assertEqualsA:numi([[level trains] count]) b:numi(((NSUInteger)2))];
+    [self assertEqualsA:numi([[level.railroad damagesPoints] count]) b:numi(((NSUInteger)0))];
+    [level processCollisions];
+    [self assertEqualsA:numi([[level trains] count]) b:numi(((NSUInteger)0))];
+    [self assertEqualsA:numi([[level.railroad damagesPoints] count]) b:numi(((NSUInteger)1))];
+    TRRailPoint* damage = ((TRRailPoint*)[level.railroad damagesPoints][0]);
+    [self assertTrueValue:floatBetween(damage.x, 0.59, 0.6)];
 }
 
 - (void)testTurn {

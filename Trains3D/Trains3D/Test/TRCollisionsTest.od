@@ -18,7 +18,7 @@ class TRCollisionsTest extends CNTestCase {
     def newLevel = TRLevel(TRLevelRules(EGSizeI(5, 3), TRLevelFactory.scoreRules, []))
 
 
-    def check(level : TRLevel) : CNSet<TRTrain> = level.detectCollisions.chain.flatMap(_.items).toSet
+    def check(level : TRLevel) : CNSet<TRTrain> = level.detectCollisions.chain.flatMap(_.items).map(_.a).toSet
 
     def testStraight {
         val level = newLevel
@@ -39,9 +39,18 @@ class TRCollisionsTest extends CNTestCase {
         var cols = check(level)
         assertTrue(cols.isEmpty)
 
-        t2.set(head = p2.add(-delta - 0.001))
+        p2 = p2.add(-delta - 0.001)
+        t2.set(head = p2)
         cols = check(level)
         assertEquals(cols, [t1, t2].toSet)
+
+        assertEquals(level.trains.count, 2)
+        assertEquals(level.railroad.damagesPoints.count, 0)
+        level.processCollisions
+        assertEquals(level.trains.count, 0)
+        assertEquals(level.railroad.damagesPoints.count, 1)
+        val damage = level.railroad.damagesPoints[0]
+        assertTrue(damage.x.between(0.59, 0.6))
     }
 
     def testTurn {

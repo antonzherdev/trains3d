@@ -1,5 +1,6 @@
 #import "objd.h"
 @class CNChain;
+@class CNSortBuilder;
 #import "CNSet.h"
 #import "EGTypes.h"
 @class EGMapSso;
@@ -62,6 +63,7 @@
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch;
 - (id)cityForTile:(EGPointI)tile;
 - (void)arrivedTrain:(TRTrain*)train;
+- (void)processCollisions;
 - (id<CNSet>)detectCollisions;
 - (void)destroyTrain:(TRTrain*)train;
 @end

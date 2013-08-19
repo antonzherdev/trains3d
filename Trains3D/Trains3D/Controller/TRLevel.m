@@ -1,6 +1,7 @@
 #import "TRLevel.h"
 
 #import "CNChain.h"
+#import "CNSortBuilder.h"
 #import "EGMapIso.h"
 #import "EGCollisions.h"
 #import "EGSchedule.h"
@@ -201,8 +202,20 @@
 
 - (void)processCollisions {
     [[self detectCollisions] forEach:^void(EGCollision* collision) {
-        [collision.items forEach:^void(TRTrain* _) {
-            [self destroyTrain:_];
+        [collision.items forEach:^void(CNTuple* _) {
+            [self destroyTrain:((TRTrain*)_.a)];
+        }];
+        TRCar* car1 = ((TRCar*)((CNTuple*)collision.items.a).b);
+        TRCar* car2 = ((TRCar*)((CNTuple*)collision.items.b).b);
+        [[[[[[[[(@[car1.head, car1.tail]) chain] mul:(@[car2.head, car2.tail])] sortBy] ascBy:^id(CNTuple* pair) {
+            TRRailPoint* x = ((TRRailPoint*)pair.a);
+            TRRailPoint* y = ((TRRailPoint*)pair.b);
+            if(x.form == y.form && EGPointIEq(x.tile, y.tile)) return numf(fabs(x.x - y.x));
+            else return @1000;
+        }] endSort] map:^TRRailPoint*(CNTuple* _) {
+            return ((TRRailPoint*)_.a);
+        }] head] forEach:^void(TRRailPoint* _) {
+            [_railroad addDamageAtPoint:_];
         }];
     }];
 }
@@ -210,7 +223,7 @@
 - (id<CNSet>)detectCollisions {
     id<CNList> carFigures = [[[__trains chain] flatMap:^CNChain*(TRTrain* train) {
         return [[train.cars chain] map:^CNTuple*(TRCar* car) {
-            return tuple(train, [car figure]);
+            return tuple(tuple(train, car), [car figure]);
         }];
     }] toArray];
     return [EGCollisions collisionsForFigures:carFigures];

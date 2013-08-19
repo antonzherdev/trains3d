@@ -3,6 +3,7 @@
 #import "NSSet+CNChain.h"
 #import "CNChain.h"
 #import "CNOption.h"
+#import "CNEnumerator.h"
 
 
 @implementation NSArray (CNChain)
@@ -17,7 +18,7 @@
 }
 
 - (id <CNIterator>)iterator {
-    return nil;
+    return [CNEnumerator enumeratorWithEnumerator:[self objectEnumerator]];
 }
 
 - (BOOL)isEmpty {

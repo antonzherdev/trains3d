@@ -2,6 +2,8 @@
 #import "cnTypes.h"
 #import "CNCollection.h"
 
+@class CNSortBuilder;
+
 @interface CNChain : NSObject <CNTraversable>
 - (id)initWithLink:(id <CNChainLink>)link previous:(CNChain *)previous;
 
@@ -41,6 +43,7 @@
 - (CNChain *)sort;
 - (CNChain *)sort:(cnCompare)comparator;
 - (CNChain *)sortDesc;
+- (CNSortBuilder *)sortBy;
 
 
 - (void)forEach:(cnP)p;

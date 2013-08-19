@@ -33,8 +33,8 @@ class TRLevelFactory {
 
     private static val rules = [
         TRLevelRules(EGSizeI(5, 3), scoreRules, [
-            (1, train(cars = 1.to(5), speed = 50.to(100).with(step = 10))),
-            (10, train(cars = 1.to(5), speed = 50.to(100).with(step = 10)))
+            (1, train(cars = 1.to(5), speed = 50.to(100).set(step = 10))),
+            (10, train(cars = 1.to(5), speed = 50.to(100).set(step = 10)))
         ])
     ]
     static def levelWith(number : uint) = TRLevel(rules[number - 1])

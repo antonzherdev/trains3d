@@ -1,0 +1,29 @@
+import CNChain
+
+class CNSortBuilder<A>(chain : CNChain<A>) {
+    private val functions = CNMutableArray.new<(A, A) -> int>
+
+    def asc<B extends ODComparable<B>>(by : A -> B) : CNSortBuilder<A> = {
+        functions.add((x : A, y : A) -> by(x).compare(by(y)))
+        self
+    }
+    def desc<B extends ODComparable<B>>(by : A -> B) : CNSortBuilder<A> = {
+        functions.add((x : A, y : A) -> by(y).compare(by(x)))
+        self
+    }
+    def by(f : (A, A) -> int) : CNSortBuilder<A> = {
+        functions.add(f)
+        self
+    }
+    def endSort : CNChain<A> = {
+        chain.sort((x, y) -> {
+            var ret = 0
+            val i = functions.iterator
+            while(ret == 0 && i.hasNext) {
+                val f = i.next
+                ret = f(x, y)
+            }
+            ret
+        })
+    }
+}
