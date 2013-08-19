@@ -33,6 +33,7 @@
 - (void)runTrain:(TRTrain*)train;
 - (void)arrivedTrain:(TRTrain*)train;
 - (void)destroyedTrain:(TRTrain*)train;
+- (void)removeTrain:(TRTrain*)train;
 - (void)updateWithDelta:(double)delta;
 @end
 

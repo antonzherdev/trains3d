@@ -76,7 +76,7 @@
 @implementation TRScore{
     TRScoreRules* _rules;
     NSInteger __score;
-    NSMutableArray* _trains;
+    id<CNList> _trains;
 }
 @synthesize rules = _rules;
 
@@ -89,7 +89,7 @@
     if(self) {
         _rules = rules;
         __score = _rules.initialScore;
-        _trains = [NSMutableArray mutableArray];
+        _trains = (@[]);
     }
     
     return self;
@@ -104,17 +104,23 @@
 }
 
 - (void)runTrain:(TRTrain*)train {
-    [_trains addObject:[TRTrainScore trainScoreWithTrain:train]];
+    _trains = [_trains arrayByAddingObject:[TRTrainScore trainScoreWithTrain:train]];
 }
 
 - (void)arrivedTrain:(TRTrain*)train {
     __score += _rules.arrivedPrize(train);
-    [_trains removeObject:train];
+    [self removeTrain:train];
 }
 
 - (void)destroyedTrain:(TRTrain*)train {
     __score -= _rules.destructionFine(train);
-    [_trains removeObject:train];
+    [self removeTrain:train];
+}
+
+- (void)removeTrain:(TRTrain*)train {
+    _trains = [[[_trains chain] filter:^BOOL(TRTrainScore* _) {
+        return !([_.train isEqual:train]);
+    }] toArray];
 }
 
 - (void)updateWithDelta:(double)delta {

@@ -15,17 +15,20 @@ class TRScore(rules : TRScoreRules) extends EGController {
         _score -= rules.railCost
     }
 
-    private val trains = CNMutableArray.new<TRTrainScore>
+    private var trains : [TRTrainScore] = []
     def run(train : TRTrain) {
-        trains.add(TRTrainScore(train))
+        trains += TRTrainScore(train)
     }
     def arrived(train : TRTrain) {
         _score += rules.arrivedPrize(train)
-        trains.remove(train)
+        remove(train)
     }
     def destroyed(train : TRTrain) {
         _score -= rules.destructionFine(train)
-        trains.remove(train)
+        remove(train)
+    }
+    def remove(train : TRTrain) {
+        trains = trains.chain.filter(_.train != train).toArray
     }
     def updateWith(delta : float) {
         trains.for(train -> {
