@@ -24,7 +24,7 @@ class TRCityView {
 
         {
             glPushMatrix
-            city.color.set
+            city.color.setMaterial
             egTranslate(0.3, -0.3, 0)
             glutSolidCube(0.15)
 

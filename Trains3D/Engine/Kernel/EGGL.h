@@ -67,3 +67,16 @@ static inline void egLightDirection(GLenum light, double x, double y, double z) 
     GLfloat lightPosition[] = {(GLfloat) x, (GLfloat) y, (GLfloat) z, 0.0f};
     glLightfv(light, GL_POSITION, lightPosition);
 }
+
+static inline void egMaterialColor(GLenum face, GLenum tp, EGColor color) {
+    GLfloat mat[4];
+    mat[0] = (GLfloat) color.r;
+    mat[1] = (GLfloat) color.g;
+    mat[2] = (GLfloat) color.b;
+    mat[3] = (GLfloat) color.a;
+    glMaterialfv(face, tp, mat);
+}
+
+static inline void egMaterial(GLenum face, GLenum tp, double value) {
+    glMaterialf(face, tp, (GLfloat) value);
+}

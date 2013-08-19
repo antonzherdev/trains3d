@@ -3,6 +3,7 @@
 @class TRLevelRules;
 @class TRLevel;
 @class EGMapSso;
+@class EGMaterial;
 
 @class TRLevelBackgroundView;
 

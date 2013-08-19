@@ -4,6 +4,7 @@
 #import "EGTexture.h"
 #import "TRLevel.h"
 #import "EGMapIso.h"
+#import "EGMaterial.h"
 @implementation TRLevelBackgroundView
 
 + (id)levelBackgroundView {
@@ -17,6 +18,7 @@
 }
 
 - (void)drawLevel:(TRLevel*)level {
+    [EGMaterial.grass set];
     [egTexture(@"Grass.png") draw:^void() {
         [level.map drawPlane];
     }];

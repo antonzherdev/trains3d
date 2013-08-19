@@ -19,7 +19,7 @@
 }
 
 - (void)drawTrain:(TRTrain*)train {
-    [train.color set];
+    [train.color setMaterial];
     [train.cars forEach:^void(TRCar* car) {
         glPushMatrix();
         EGPoint h = car.head.point;

@@ -2,9 +2,11 @@ import EG
 import EGTexture
 import TRLevel
 import EGMapIso
+import EGMaterial
 
 class TRLevelBackgroundView {
     def draw(level : TRLevel) {
+        EGMaterial.grass.set
         egTexture("Grass.png").draw(level.map.drawPlane)
     }
 }

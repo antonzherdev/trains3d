@@ -13,6 +13,7 @@
 @class TRRailPoint;
 @class TRRailPointCorrection;
 @class EGTexture;
+@class EGMaterial;
 
 @class TRRailroadView;
 @class TRRailView;

@@ -30,7 +30,7 @@
     glEnd();
     egTranslate(0, 0, -0.001);
     glPushMatrix();
-    [city.color set];
+    [city.color setMaterial];
     egTranslate(0.3, -0.3, 0);
     glutSolidCube(0.15);
     egTranslate(-0.3, 0, 0);

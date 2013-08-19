@@ -9,6 +9,7 @@
 #import "TRRailPoint.h"
 #import "EG.h"
 #import "EGTexture.h"
+#import "EGMaterial.h"
 @implementation TRRailroadView{
     TRRailView* _railView;
     TRSwitchView* _switchView;
@@ -91,18 +92,14 @@
     if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
         if(rail.form == TRRailForm.leftRight) egRotate(90, 0, 0, 1);
         egRotate(90, 1, 0, 0);
-        egColor3(0.5, 0.5, 0.5);
+        [EGMaterial.stone set];
         [egTexture(@"Gravel.png") draw:^void() {
             egDrawJasModel(RailGravel);
         }];
-        egColor3(0.7, 0.7, 0.7);
-        [egTexture(@"Wood.png") draw:^void() {
-            egDrawJasModel(RailTies);
-        }];
-        egColor3(0.9, 0.9, 0.9);
-        [egTexture(@"Rust.png") draw:^void() {
-            egDrawJasModel(Rails);
-        }];
+        [EGMaterial.wood set];
+        egDrawJasModel(RailTies);
+        [EGMaterial.steel set];
+        egDrawJasModel(Rails);
     } else {
         if(rail.form == TRRailForm.topRight) {
             egRotate(270, 0, 0, 1);
@@ -115,6 +112,7 @@
         }
         egRotate(90, 1, 0, 0);
         egColor3(0.5, 0.5, 0.5);
+        [EGMaterial.stone set];
         [egTexture(@"Gravel.png") draw:^void() {
             egDrawJasModel(RailTurnGravel);
         }];
@@ -231,8 +229,8 @@
     egTranslate(light.tile.x, light.tile.y, 0);
     egRotate(light.connector.angle, 0, 0, 1);
     egTranslate(-0.45, 0.2, 0);
-    if(light.isGreen) egColor3(0, 1, 0);
-    else egColor3(1, 0, 0);
+    if(light.isGreen) [EGMaterial.emerald set];
+    else [EGMaterial.ruby set];
     glutSolidCube(0.1);
     glPopMatrix();
 }

@@ -48,3 +48,16 @@ stub def egAmbientColor(r : float, g : float, b : float)
 stub def egLightColor(light: uint, r : float, g : float, b : float)
 stub def egLightPosition(light: uint, r : float, g : float, b : float)
 stub def egLightDirection(light: uint, r : float, g : float, b : float)
+
+stub def egMaterialColor(face : uint, tp : uint, color : EGColor)
+stub def egMaterial(face : uint, tp : uint, value : float)
+stub val GL_BACK : uint
+stub val GL_FRONT : uint
+stub val GL_FRONT_AND_BACK : uint
+
+stub val GL_AMBIENT : uint
+stub val GL_DIFFUSE : uint
+stub val GL_SPECULAR : uint
+stub val GL_EMISSION : uint
+stub val GL_SHININESS : uint
+stub val GL_AMBIENT_AND_DIFFUSE : uint

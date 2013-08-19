@@ -7,6 +7,7 @@
 @property (nonatomic, readonly) EGColor color;
 
 - (void)set;
+- (void)setMaterial;
 + (TRColor*)orange;
 + (TRColor*)green;
 + (TRColor*)purple;

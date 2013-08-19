@@ -10,4 +10,8 @@ enum TRColor(color : EGColor) {
     def set {
         color.set
     }
+
+    def setMaterial {
+        color.setMaterial
+    }
 }
