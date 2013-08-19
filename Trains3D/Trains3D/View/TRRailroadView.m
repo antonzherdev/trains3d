@@ -1,6 +1,7 @@
 #import "TRRailroadView.h"
 #import "TR3DRail.h"
 #import "TR3DRailGravel.h"
+#import "TR3DRailTurnGravel.h"
 #import "TR3DRailTurn.h"
 
 #import "EGGL.h"
@@ -88,33 +89,31 @@
 - (void)drawRail:(TRRail*)rail {
     glPushMatrix();
     egTranslate(rail.tile.x, rail.tile.y, 0.001);
-    egColor3(0.2, 0.2, 0.2);
-    if(rail.form == TRRailForm.bottomTop) {
-        [egTexture(@"Gravel.png") draw:^void() {
+    egColor3(0.5, 0.5, 0.5);
+    [egTexture(@"Gravel.png") draw:^void() {
+        if(rail.form == TRRailForm.bottomTop) {
             egRotate(90, 1, 0, 0);
             egDrawJasModel(RailGravel);
-        }];
-    } else {
-        if(rail.form == TRRailForm.leftRight) {
-            [egTexture(@"Gravel.png") draw:^void() {
+        } else {
+            if(rail.form == TRRailForm.leftRight) {
                 egRotate(90, 0, 0, 1);
                 egRotate(90, 1, 0, 0);
                 egDrawJasModel(RailGravel);
-            }];
-        } else {
-            if(rail.form.start.x == 0 && rail.form.start.y == 1) {
-                egRotate(90, 0, 0, 1);
             } else {
-                if(rail.form.start.x == -1 && rail.form.end.y == 1) {
-                    egRotate(180, 0, 0, 1);
+                if(rail.form == TRRailForm.topRight) {
+                    egRotate(270, 0, 0, 1);
                 } else {
-                    if(rail.form.start.x == -1 && rail.form.end.y == -1) egRotate(270, 0, 0, 1);
+                    if(rail.form == TRRailForm.bottomRight) {
+                        egRotate(180, 0, 0, 1);
+                    } else {
+                        if(rail.form == TRRailForm.leftBottom) egRotate(90, 0, 0, 1);
+                    }
                 }
+                egRotate(90, 1, 0, 0);
+                egDrawJasModel(RailTurnGravel);
             }
-            egRotate(90, 1, 0, 0);
-            egDrawJasModel(RailTurn);
         }
-    }
+    }];
     glPopMatrix();
 }
 
