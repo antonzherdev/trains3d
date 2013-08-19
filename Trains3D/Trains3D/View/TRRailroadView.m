@@ -8,6 +8,7 @@
     TRRailView* _railView;
     TRSwitchView* _switchView;
     TRLightView* _lightView;
+    TRDamageView* _damageView;
 }
 
 + (id)railroadView {
@@ -20,6 +21,7 @@
         _railView = [TRRailView railView];
         _switchView = [TRSwitchView switchView];
         _lightView = [TRLightView lightView];
+        _damageView = [TRDamageView damageView];
     }
     
     return self;
@@ -37,6 +39,9 @@
     }];
     [[railroad.builder rail] forEach:^void(TRRail* _) {
         [_railView drawRail:_];
+    }];
+    [[railroad damagesPoints] forEach:^void(TRRailPoint* _) {
+        [_damageView drawPoint:_];
     }];
 }
 
@@ -214,6 +219,49 @@
     if(light.isGreen) egColor3(0, 1, 0);
     else egColor3(1, 0, 0);
     glutSolidCube(0.1);
+    glPopMatrix();
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRDamageView
+
++ (id)damageView {
+    return [[TRDamageView alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
+
+- (void)drawPoint:(TRRailPoint*)point {
+    glPushMatrix();
+    egTranslate(point.point.x, point.point.y, 0.01);
+    egColor4(1.0, 0.0, 0.0, 0.5);
+    egRect(-0.1, -0.1, 0.1, 0.1);
     glPopMatrix();
 }
 

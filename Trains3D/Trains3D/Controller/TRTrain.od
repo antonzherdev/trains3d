@@ -13,7 +13,7 @@ import TRRailroad
 class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : uint) {
     private var head : TRRailPoint
     private var back = false
-    static val carsDelta : float = 0.1
+    static val carsDelta : float = 0.15
     private val length : float = cars.chain.fold(((r, car) -> car.length + r + carsDelta), -1.0 * carsDelta)
     private val _speedF : float = 0.01 * speed
 

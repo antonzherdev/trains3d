@@ -50,7 +50,7 @@ static double _carsDelta;
 
 + (void)initialize {
     [super initialize];
-    _carsDelta = 0.1;
+    _carsDelta = 0.15;
 }
 
 - (void)startFromCity:(TRCity*)city {

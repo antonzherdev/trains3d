@@ -14,7 +14,7 @@ import TRTrain
 class TRCollisionsTest extends CNTestCase {
     static val carLen = 0.6
     static val carWidth = 0.2
-    static val carsDelta = 0.1
+    static val carsDelta = 0.15
     def newLevel = TRLevel(TRLevelRules(EGSizeI(5, 3), TRLevelFactory.scoreRules, []))
 
 

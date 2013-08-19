@@ -19,6 +19,7 @@
 @class TRRailView;
 @class TRSwitchView;
 @class TRLightView;
+@class TRDamageView;
 
 @interface TRRailroadView : NSObject
 + (id)railroadView;
@@ -45,6 +46,13 @@
 + (id)lightView;
 - (id)init;
 - (void)drawLight:(TRLight*)light;
+@end
+
+
+@interface TRDamageView : NSObject
++ (id)damageView;
+- (id)init;
+- (void)drawPoint:(TRRailPoint*)point;
 @end
 
 

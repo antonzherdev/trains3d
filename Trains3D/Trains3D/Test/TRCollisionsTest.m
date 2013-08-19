@@ -26,7 +26,7 @@ static double _carsDelta;
     [super initialize];
     _carLen = 0.6;
     _carWidth = 0.2;
-    _carsDelta = 0.1;
+    _carsDelta = 0.15;
 }
 
 - (TRLevel*)newLevel {

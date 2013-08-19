@@ -11,12 +11,14 @@ class TRRailroadView {
     private val railView = TRRailView.new
     private val switchView = TRSwitchView.new
     private val lightView = TRLightView.new
+    private val damageView = TRDamageView.new
 
     def draw(railroad : TRRailroad) {
         railroad.rails.for(railView.draw(_))
         railroad.switches.for(switchView.draw(_))
         railroad.lights.for(lightView.draw(_))
         railroad.builder.rail.for(railView.draw(_))
+        railroad.damagesPoints.for(damageView.draw(_))
     }
 }
 
@@ -97,6 +99,16 @@ class TRLightView {
         if(light.isGreen) egColor3(0, 1, 0) else egColor3(1, 0, 0)
         glutSolidCube(0.1)
 
+        glPopMatrix
+    }
+}
+
+class TRDamageView {
+    def draw(point : TRRailPoint) {
+        glPushMatrix
+        egTranslate(point.point.x, point.point.y, 0.01)
+        egColor4(1.0, 0.0, 0.0, 0.5)
+        egRect(-0.1, -0.1, 0.1, 0.1)
         glPopMatrix
     }
 }
