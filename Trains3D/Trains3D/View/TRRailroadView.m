@@ -1,6 +1,5 @@
 #import "TRRailroadView.h"
 #import "TR3DRail.h"
-#import "TR3DRailGravel.h"
 #import "TR3DRailTurnGravel.h"
 #import "TR3DRailTurn.h"
 
@@ -89,31 +88,37 @@
 - (void)drawRail:(TRRail*)rail {
     glPushMatrix();
     egTranslate(rail.tile.x, rail.tile.y, 0.001);
-    egColor3(0.5, 0.5, 0.5);
-    [egTexture(@"Gravel.png") draw:^void() {
-        if(rail.form == TRRailForm.bottomTop) {
-            egRotate(90, 1, 0, 0);
+    if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
+        if(rail.form == TRRailForm.leftRight) egRotate(90, 0, 0, 1);
+        egRotate(90, 1, 0, 0);
+        egColor3(0.5, 0.5, 0.5);
+        [egTexture(@"Gravel.png") draw:^void() {
             egDrawJasModel(RailGravel);
+        }];
+        egColor3(0.7, 0.7, 0.7);
+        [egTexture(@"Wood.png") draw:^void() {
+            egDrawJasModel(RailTies);
+        }];
+        egColor3(0.9, 0.9, 0.9);
+        [egTexture(@"Rust.png") draw:^void() {
+            egDrawJasModel(Rails);
+        }];
+    } else {
+        if(rail.form == TRRailForm.topRight) {
+            egRotate(270, 0, 0, 1);
         } else {
-            if(rail.form == TRRailForm.leftRight) {
-                egRotate(90, 0, 0, 1);
-                egRotate(90, 1, 0, 0);
-                egDrawJasModel(RailGravel);
+            if(rail.form == TRRailForm.bottomRight) {
+                egRotate(180, 0, 0, 1);
             } else {
-                if(rail.form == TRRailForm.topRight) {
-                    egRotate(270, 0, 0, 1);
-                } else {
-                    if(rail.form == TRRailForm.bottomRight) {
-                        egRotate(180, 0, 0, 1);
-                    } else {
-                        if(rail.form == TRRailForm.leftBottom) egRotate(90, 0, 0, 1);
-                    }
-                }
-                egRotate(90, 1, 0, 0);
-                egDrawJasModel(RailTurnGravel);
+                if(rail.form == TRRailForm.leftBottom) egRotate(90, 0, 0, 1);
             }
         }
-    }];
+        egRotate(90, 1, 0, 0);
+        egColor3(0.5, 0.5, 0.5);
+        [egTexture(@"Gravel.png") draw:^void() {
+            egDrawJasModel(RailTurnGravel);
+        }];
+    }
     glPopMatrix();
 }
 

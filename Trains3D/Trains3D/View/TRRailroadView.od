@@ -7,7 +7,6 @@ import EG
 import EGTexture
 
 import "TR3DRail.h"
-import "TR3DRailGravel.h"
 import "TR3DRailTurnGravel.h"
 import "TR3DRailTurn.h"
 
@@ -28,6 +27,8 @@ class TRRailroadView {
 
 stub val Rail : string
 stub val RailGravel : string
+stub val RailTies : string
+stub val Rails : string
 stub val RailTurn : string
 stub val RailTurnGravel : string
 
@@ -36,22 +37,23 @@ class TRRailView {
         glPushMatrix
         egTranslate(rail.tile.x, rail.tile.y, 0.001)
 
-        egColor3(0.5, 0.5, 0.5)
-        egTexture("Gravel.png").draw(
-            if(rail.form == TRRailForm.bottomTop) {
-                egRotate(90, 1, 0, 0)
-                egDrawJasModel(RailGravel)
-            } else if(rail.form == TRRailForm.leftRight) {
-                egRotate(90, 0, 0, 1)
-                egRotate(90, 1, 0, 0)
-                egDrawJasModel(RailGravel)
-            } else {
-                if(rail.form == TRRailForm.topRight) egRotate(270, 0, 0, 1)
-                else if(rail.form == TRRailForm.bottomRight) egRotate(180, 0, 0, 1)
-                else if(rail.form == TRRailForm.leftBottom) egRotate(90, 0, 0, 1)
-                egRotate(90, 1, 0, 0)
-                egDrawJasModel(RailTurnGravel)
-            })
+        if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
+            if(rail.form == TRRailForm.leftRight) egRotate(90, 0, 0, 1)
+            egRotate(90, 1, 0, 0)
+            egColor3(0.5, 0.5, 0.5)
+            egTexture("Gravel.png").draw(egDrawJasModel(RailGravel))
+            egColor3(0.7, 0.7, 0.7)
+            egTexture("Wood.png").draw(egDrawJasModel(RailTies))
+            egColor3(0.9, 0.9, 0.9)
+            egTexture("Rust.png").draw(egDrawJasModel(Rails))
+        } else {
+            if(rail.form == TRRailForm.topRight) egRotate(270, 0, 0, 1)
+            else if(rail.form == TRRailForm.bottomRight) egRotate(180, 0, 0, 1)
+            else if(rail.form == TRRailForm.leftBottom) egRotate(90, 0, 0, 1)
+            egRotate(90, 1, 0, 0)
+            egColor3(0.5, 0.5, 0.5)
+            egTexture("Gravel.png").draw(egDrawJasModel(RailTurnGravel))
+        }
         glPopMatrix
     }
 }
