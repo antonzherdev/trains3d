@@ -24,6 +24,7 @@
 @class TRRailForm;
 @class TRRailPoint;
 @class TRRailPointCorrection;
+@class TRTrainType;
 @class TRTrain;
 @class TRCar;
 @class TRTrainGenerator;
@@ -58,7 +59,6 @@
 - (void)createNewCity;
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator;
 - (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint;
-- (void)runSample;
 - (void)updateWithDelta:(double)delta;
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch;
 - (id)cityForTile:(EGPointI)tile;

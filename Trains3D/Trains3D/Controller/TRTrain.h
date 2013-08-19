@@ -31,15 +31,28 @@
 @class TRTrain;
 @class TRCar;
 @class TRTrainGenerator;
+@class TRTrainType;
+
+@interface TRTrainType : ODEnum
+@property (nonatomic, readonly) BOOL(^obstacleProcessor)(TRLevel*, TRTrain*, TRObstacle*);
+
++ (TRTrainType*)simple;
++ (TRTrainType*)crazy;
++ (TRTrainType*)fast;
++ (TRTrainType*)repairer;
++ (NSArray*)values;
+@end
+
 
 @interface TRTrain : NSObject
 @property (nonatomic, readonly, weak) TRLevel* level;
+@property (nonatomic, readonly) TRTrainType* trainType;
 @property (nonatomic, readonly) TRColor* color;
 @property (nonatomic, readonly) id<CNList> cars;
 @property (nonatomic, readonly) NSUInteger speed;
 
-+ (id)trainWithLevel:(TRLevel*)level color:(TRColor*)color cars:(id<CNList>)cars speed:(NSUInteger)speed;
-- (id)initWithLevel:(TRLevel*)level color:(TRColor*)color cars:(id<CNList>)cars speed:(NSUInteger)speed;
++ (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color cars:(id<CNList>)cars speed:(NSUInteger)speed;
+- (id)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color cars:(id<CNList>)cars speed:(NSUInteger)speed;
 - (void)startFromCity:(TRCity*)city;
 - (void)setHead:(TRRailPoint*)head;
 - (void)updateWithDelta:(double)delta;
@@ -62,11 +75,12 @@
 
 
 @interface TRTrainGenerator : NSObject
+@property (nonatomic, readonly) TRTrainType* trainType;
 @property (nonatomic, readonly) id<CNList> carsCount;
 @property (nonatomic, readonly) id<CNList> speed;
 
-+ (id)trainGeneratorWithCarsCount:(id<CNList>)carsCount speed:(id<CNList>)speed;
-- (id)initWithCarsCount:(id<CNList>)carsCount speed:(id<CNList>)speed;
++ (id)trainGeneratorWithTrainType:(TRTrainType*)trainType carsCount:(id<CNList>)carsCount speed:(id<CNList>)speed;
+- (id)initWithTrainType:(TRTrainType*)trainType carsCount:(id<CNList>)carsCount speed:(id<CNList>)speed;
 - (id<CNList>)generateCars;
 - (NSUInteger)generateSpeed;
 @end

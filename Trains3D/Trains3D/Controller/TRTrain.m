@@ -7,8 +7,74 @@
 #import "TRLevel.h"
 #import "TRRailPoint.h"
 #import "TRRailroad.h"
+@implementation TRTrainType{
+    BOOL(^_obstacleProcessor)(TRLevel*, TRTrain*, TRObstacle*);
+}
+static TRTrainType* _simple;
+static TRTrainType* _crazy;
+static TRTrainType* _fast;
+static TRTrainType* _repairer;
+static NSArray* _TRTrainType_values;
+@synthesize obstacleProcessor = _obstacleProcessor;
+
++ (id)trainTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name obstacleProcessor:(BOOL(^)(TRLevel*, TRTrain*, TRObstacle*))obstacleProcessor {
+    return [[TRTrainType alloc] initWithOrdinal:ordinal name:name obstacleProcessor:obstacleProcessor];
+}
+
+- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name obstacleProcessor:(BOOL(^)(TRLevel*, TRTrain*, TRObstacle*))obstacleProcessor {
+    self = [super initWithOrdinal:ordinal name:name];
+    if(self) _obstacleProcessor = obstacleProcessor;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _simple = [TRTrainType trainTypeWithOrdinal:((NSUInteger)0) name:@"simple" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
+        if(o.obstacleType == TRObstacleType.damage) [level destroyTrain:train];
+        return NO;
+    }];
+    _crazy = [TRTrainType trainTypeWithOrdinal:((NSUInteger)1) name:@"crazy" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
+        if(o.obstacleType == TRObstacleType.damage) [level destroyTrain:train];
+        return o.obstacleType == TRObstacleType.light;
+    }];
+    _fast = [TRTrainType trainTypeWithOrdinal:((NSUInteger)2) name:@"fast" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
+        if(o.obstacleType == TRObstacleType.damage || o.obstacleType == TRObstacleType.aSwitch) [level destroyTrain:train];
+        return NO;
+    }];
+    _repairer = [TRTrainType trainTypeWithOrdinal:((NSUInteger)3) name:@"repairer" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
+        if(o.obstacleType == TRObstacleType.damage) [level.railroad fixDamageAtPoint:o.point];
+        return NO;
+    }];
+    _TRTrainType_values = (@[_simple, _crazy, _fast, _repairer]);
+}
+
++ (TRTrainType*)simple {
+    return _simple;
+}
+
++ (TRTrainType*)crazy {
+    return _crazy;
+}
+
++ (TRTrainType*)fast {
+    return _fast;
+}
+
++ (TRTrainType*)repairer {
+    return _repairer;
+}
+
++ (NSArray*)values {
+    return _TRTrainType_values;
+}
+
+@end
+
+
 @implementation TRTrain{
     __weak TRLevel* _level;
+    TRTrainType* _trainType;
     TRColor* _color;
     id<CNList> _cars;
     NSUInteger _speed;
@@ -20,18 +86,20 @@
 }
 static double _carsDelta;
 @synthesize level = _level;
+@synthesize trainType = _trainType;
 @synthesize color = _color;
 @synthesize cars = _cars;
 @synthesize speed = _speed;
 
-+ (id)trainWithLevel:(TRLevel*)level color:(TRColor*)color cars:(id<CNList>)cars speed:(NSUInteger)speed {
-    return [[TRTrain alloc] initWithLevel:level color:color cars:cars speed:speed];
++ (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color cars:(id<CNList>)cars speed:(NSUInteger)speed {
+    return [[TRTrain alloc] initWithLevel:level trainType:trainType color:color cars:cars speed:speed];
 }
 
-- (id)initWithLevel:(TRLevel*)level color:(TRColor*)color cars:(id<CNList>)cars speed:(NSUInteger)speed {
+- (id)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color cars:(id<CNList>)cars speed:(NSUInteger)speed {
     self = [super init];
     if(self) {
         _level = level;
+        _trainType = trainType;
         _color = color;
         _cars = cars;
         _speed = speed;
@@ -50,7 +118,7 @@ static double _carsDelta;
 
 + (void)initialize {
     [super initialize];
-    _carsDelta = 0.15;
+    _carsDelta = 0.3;
 }
 
 - (void)startFromCity:(TRCity*)city {
@@ -79,7 +147,7 @@ static double _carsDelta;
 
 - (void)updateWithDelta:(double)delta {
     [self correctCorrection:[_level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
-        return NO;
+        return _trainType.obstacleProcessor(_level, self, _);
     } forLength:delta * __speedF point:_head]];
 }
 
@@ -132,12 +200,13 @@ static double _carsDelta;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRTrain* o = ((TRTrain*)other);
-    return [self.level isEqual:o.level] && self.color == o.color && [self.cars isEqual:o.cars] && self.speed == o.speed;
+    return [self.level isEqual:o.level] && self.trainType == o.trainType && self.color == o.color && [self.cars isEqual:o.cars] && self.speed == o.speed;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.level hash];
+    hash = hash * 31 + [self.trainType ordinal];
     hash = hash * 31 + [self.color ordinal];
     hash = hash * 31 + [self.cars hash];
     hash = hash * 31 + self.speed;
@@ -147,6 +216,7 @@ static double _carsDelta;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"level=%@", self.level];
+    [description appendFormat:@", trainType=%@", self.trainType];
     [description appendFormat:@", color=%@", self.color];
     [description appendFormat:@", cars=%@", self.cars];
     [description appendFormat:@", speed=%li", self.speed];
@@ -202,19 +272,22 @@ static double _carsDelta;
 
 
 @implementation TRTrainGenerator{
+    TRTrainType* _trainType;
     id<CNList> _carsCount;
     id<CNList> _speed;
 }
+@synthesize trainType = _trainType;
 @synthesize carsCount = _carsCount;
 @synthesize speed = _speed;
 
-+ (id)trainGeneratorWithCarsCount:(id<CNList>)carsCount speed:(id<CNList>)speed {
-    return [[TRTrainGenerator alloc] initWithCarsCount:carsCount speed:speed];
++ (id)trainGeneratorWithTrainType:(TRTrainType*)trainType carsCount:(id<CNList>)carsCount speed:(id<CNList>)speed {
+    return [[TRTrainGenerator alloc] initWithTrainType:trainType carsCount:carsCount speed:speed];
 }
 
-- (id)initWithCarsCount:(id<CNList>)carsCount speed:(id<CNList>)speed {
+- (id)initWithTrainType:(TRTrainType*)trainType carsCount:(id<CNList>)carsCount speed:(id<CNList>)speed {
     self = [super init];
     if(self) {
+        _trainType = trainType;
         _carsCount = carsCount;
         _speed = speed;
     }
@@ -240,11 +313,12 @@ static double _carsDelta;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRTrainGenerator* o = ((TRTrainGenerator*)other);
-    return [self.carsCount isEqual:o.carsCount] && [self.speed isEqual:o.speed];
+    return self.trainType == o.trainType && [self.carsCount isEqual:o.carsCount] && [self.speed isEqual:o.speed];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
+    hash = hash * 31 + [self.trainType ordinal];
     hash = hash * 31 + [self.carsCount hash];
     hash = hash * 31 + [self.speed hash];
     return hash;
@@ -252,7 +326,8 @@ static double _carsDelta;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"carsCount=%@", self.carsCount];
+    [description appendFormat:@"trainType=%@", self.trainType];
+    [description appendFormat:@", carsCount=%@", self.carsCount];
     [description appendFormat:@", speed=%@", self.speed];
     [description appendString:@">"];
     return description;

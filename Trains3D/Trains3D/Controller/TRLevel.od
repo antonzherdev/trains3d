@@ -20,7 +20,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
     val map : EGMapSso = EGMapSso(rules.mapSize)
     val score : TRScore = TRScore(rules.scoreRules)
     val railroad : TRRailroad = TRRailroad(map, score)
-    private var _cities : [var TRCity] = []
+    private var _cities = CNMutableArray.new<TRCity>
     val schedule : EGSchedule = createSchedule
     def cities : [TRCity] = _cities
     private var _trains : [TRTrain] = []
@@ -67,7 +67,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
     def runTrainWith(generator : TRTrainGenerator) {
         val city = _cities.randomItem.get
         run(
-            train = TRTrain(self, city.color, generator.generateCars, generator.generateSpeed),
+            train = TRTrain(self, generator.trainType, city.color, generator.generateCars, generator.generateSpeed),
             fromCity = _cities.chain.filter(_ != city).randomItem.get)
     }
 
@@ -75,13 +75,6 @@ class TRLevel(rules : TRLevelRules) extends EGController {
         train.set(head = fromPoint)
         _trains += train
         score.run(train)
-    }
-
-    def runSample {
-        val city0 = _cities[0]
-        val city1 = _cities[1]
-        run(TRTrain(self, city1.color, [TRCar.new, TRCar.new], 0.3), city0)
-        run(TRTrain(self, city0.color, [TRCar.new], 0.6), city1)
     }
 
     def updateWith(delta : float) {

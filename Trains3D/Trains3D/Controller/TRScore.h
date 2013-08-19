@@ -1,5 +1,6 @@
 #import "objd.h"
 #import "EGTypes.h"
+@class TRTrainType;
 @class TRTrain;
 @class TRCar;
 @class TRTrainGenerator;

@@ -10,10 +10,29 @@ import TRLevel
 import TRRailPoint
 import TRRailroad
 
-class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : uint) {
+enum TRTrainType(obstacleProcessor : (TRLevel, TRTrain, TRObstacle) -> bool) {
+    simple((level : TRLevel, train : TRTrain, o : TRObstacle) -> {
+        if(o.obstacleType ==  TRObstacleType.damage) level.destroy(train)
+        false
+    })
+    crazy((level : TRLevel, train : TRTrain, o : TRObstacle) -> {
+        if(o.obstacleType ==  TRObstacleType.damage) level.destroy(train)
+        o.obstacleType ==  TRObstacleType.light
+    })
+    fast((level : TRLevel, train : TRTrain, o : TRObstacle) -> {
+        if(o.obstacleType ==  TRObstacleType.damage || o.obstacleType == TRObstacleType.switch) level.destroy(train)
+        false
+    })
+    repairer((level : TRLevel, train : TRTrain, o : TRObstacle) -> {
+        if(o.obstacleType ==  TRObstacleType.damage) level.railroad.fixDamageAt(o.point)
+        false
+    })
+}
+
+class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, cars : [TRCar], speed : uint) {
     private var head : TRRailPoint
     private var back = false
-    static val carsDelta : float = 0.15
+    static val carsDelta : float = 0.3
     private val length : float = cars.chain.fold(((r, car) -> car.length + r + carsDelta), -1.0 * carsDelta)
     private val _speedF : float = 0.01 * speed
 
@@ -42,7 +61,8 @@ class TRTrain(weak level : TRLevel, color : TRColor, cars : [TRCar], speed : uin
     private def move(point : EGPoint, length : float) = EGPoint(point.x, point.y + length)
 
     def updateWith(delta : float) {
-        correct(level.railroad.moveWith(obstacleProcessor = false, forLength = delta*_speedF, point = head))
+        correct(level.railroad.moveWith(obstacleProcessor = trainType.obstacleProcessor(level, self, _),
+            forLength = delta*_speedF, point = head))
     }
 
     private def directedCars : [TRCar] = if(back) cars.chain.reverse.toArray else cars
@@ -92,7 +112,7 @@ class TRCar {
     def figure : EGThickLineSegment = EGThickLineSegment(EGLineSegment.newWith(head.point, tail.point), width)
 }
 
-class TRTrainGenerator(carsCount : CNList<int>, speed : CNList<int>) {
+class TRTrainGenerator(trainType : TRTrainType, carsCount : CNList<int>, speed : CNList<int>) {
     def generateCars : [TRCar] = carsCount.randomItem.get.range.chain.map(TRCar.new).toArray
     def generateSpeed : uint = speed.randomItem.get
 }

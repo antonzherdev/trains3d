@@ -4,6 +4,7 @@
 @class EGScene;
 @class EGLayer;
 @class EGMapSso;
+@class TRTrainType;
 @class TRTrain;
 @class TRCar;
 @class TRTrainGenerator;

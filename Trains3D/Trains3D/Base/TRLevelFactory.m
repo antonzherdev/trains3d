@@ -33,7 +33,7 @@ static id<CNList> _rules;
     } delayPeriod:10 delayFine:^NSInteger(TRTrain* train, NSInteger i) {
         return i * 1000;
     } repairCost:2000];
-    _rules = (@[[TRLevelRules levelRulesWithMapSize:EGSizeIMake(5, 3) scoreRules:_scoreRules events:(@[tuple(@1, [TRLevelFactory trainCars:intTo(1, 5) speed:[intTo(50, 100) setStep:10]]), tuple(@10, [TRLevelFactory trainCars:intTo(1, 5) speed:[intTo(50, 100) setStep:10]])])]]);
+    _rules = (@[[TRLevelRules levelRulesWithMapSize:EGSizeIMake(5, 3) scoreRules:_scoreRules events:(@[tuple(@5, [TRLevelFactory trainCars:intTo(1, 5) speed:[intTo(30, 60) setStep:10]]), tuple(@10, [TRLevelFactory trainCars:intTo(1, 5) speed:[intTo(30, 60) setStep:10]]), tuple(@15, [TRLevelFactory trainCars:intTo(1, 5) speed:[intTo(30, 60) setStep:10]])])]]);
 }
 
 + (EGScene*)sceneForLevel:(TRLevel*)level {
@@ -42,7 +42,7 @@ static id<CNList> _rules;
 
 + (void(^)(TRLevel*))trainCars:(CNRange*)cars speed:(CNRange*)speed {
     return ^void(TRLevel* level) {
-        [level runTrainWithGenerator:[TRTrainGenerator trainGeneratorWithCarsCount:cars speed:speed]];
+        [level runTrainWithGenerator:[TRTrainGenerator trainGeneratorWithTrainType:TRTrainType.simple carsCount:cars speed:speed]];
     };
 }
 

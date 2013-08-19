@@ -71,7 +71,7 @@
     EGMapSso* _map;
     TRScore* _score;
     TRRailroad* _railroad;
-    id<CNMutableList> __cities;
+    NSMutableArray* __cities;
     EGSchedule* _schedule;
     id<CNList> __trains;
 }
@@ -92,7 +92,7 @@
         _map = [EGMapSso mapSsoWithSize:_rules.mapSize];
         _score = [TRScore scoreWithRules:_rules.scoreRules];
         _railroad = [TRRailroad railroadWithMap:_map score:_score];
-        __cities = [(@[]) mutableCopy];
+        __cities = [NSMutableArray mutableArray];
         _schedule = [self createSchedule];
         __trains = (@[]);
     }
@@ -149,7 +149,7 @@
 
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator {
     TRCity* city = ((TRCity*)[[__cities randomItem] get]);
-    [self runTrain:[TRTrain trainWithLevel:self color:city.color cars:[generator generateCars] speed:[generator generateSpeed]] fromCity:((TRCity*)[[[[__cities chain] filter:^BOOL(TRCity* _) {
+    [self runTrain:[TRTrain trainWithLevel:self trainType:generator.trainType color:city.color cars:[generator generateCars] speed:[generator generateSpeed]] fromCity:((TRCity*)[[[[__cities chain] filter:^BOOL(TRCity* _) {
         return !([_ isEqual:city]);
     }] randomItem] get])];
 }
@@ -158,13 +158,6 @@
     [train setHead:fromPoint];
     __trains = [__trains arrayByAddingObject:train];
     [_score runTrain:train];
-}
-
-- (void)runSample {
-    TRCity* city0 = ((TRCity*)__cities[0]);
-    TRCity* city1 = ((TRCity*)__cities[1]);
-    [self runTrain:[TRTrain trainWithLevel:self color:city1.color cars:(@[[TRCar car], [TRCar car]]) speed:((NSUInteger)0.3)] fromCity:city0];
-    [self runTrain:[TRTrain trainWithLevel:self color:city0.color cars:(@[[TRCar car]]) speed:((NSUInteger)0.6)] fromCity:city1];
 }
 
 - (void)updateWithDelta:(double)delta {

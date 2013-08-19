@@ -21,6 +21,7 @@
 @class TRObstacle;
 @class TRRailroad;
 @class TRRailroadBuilder;
+@class TRTrainType;
 @class TRTrain;
 @class TRCar;
 @class TRTrainGenerator;
