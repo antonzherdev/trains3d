@@ -1,6 +1,4 @@
 #import <Foundation/Foundation.h>
-#import "cnTypes.h"
-#import "NSMutableArray+CNChain.h"
 #import "CNCollection.h"
 @class CNChain;
 #import "CNSet.h"

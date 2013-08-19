@@ -7,6 +7,7 @@
 #import "CNSet.h"
 #import "CNList.h"
 @class CNChain;
+@class CNOption;
 
 @class CNMutableTreeSet;
 

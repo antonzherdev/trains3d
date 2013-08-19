@@ -1,6 +1,4 @@
 #import <Foundation/Foundation.h>
-#import "CNOption.h"
-#import "CNTuple.h"
 #import "ODObject.h"
 #import "CNCollection.h"
 #import "CNMap.h"

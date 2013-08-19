@@ -8,7 +8,7 @@
 @class EGPolygon;
 @class EGThickLineSegment;
 #import "CNTreeMap.h"
-@class CNMutableTreeSet;
+#import "CNTreeSet.h"
 @protocol CNIterator;
 @protocol CNBuilder;
 @protocol CNTraversable;

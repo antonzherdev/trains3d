@@ -1,6 +1,4 @@
 #import <Foundation/Foundation.h>
-#import "CNOption.h"
-#import "cnTypes.h"
 #import "CNCollection.h"
 #import "CNList.h"
 @class CNChain;

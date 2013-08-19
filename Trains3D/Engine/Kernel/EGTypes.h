@@ -1,5 +1,4 @@
 #import "objd.h"
-#import "EGTypesAdd.h"
 
 @protocol EGController;
 @protocol EGCamera;

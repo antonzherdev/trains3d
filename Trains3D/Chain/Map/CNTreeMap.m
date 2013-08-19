@@ -1,4 +1,6 @@
 #import "CNTreeMap.h"
+#import "CNOption.h"
+#import "CNTuple.h"
 
 #import "CNChain.h"
 @implementation CNMutableTreeMap{

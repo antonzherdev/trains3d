@@ -1,5 +1,4 @@
 #import "objd.h"
-#import "TR3DCar.h"
 #import "EGTypes.h"
 @class TRTrainType;
 @class TRTrain;

@@ -95,6 +95,7 @@
 		6F3DF5E5E76EA3D7E67A6445 /* CNDistinctLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB620D5564E11CD99739 /* CNDistinctLink.m */; };
 		6F3DF5EDE671302F365CE75B /* KWReceiveMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDFB7CC11E02423EBA48 /* KWReceiveMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF62090C875D98E734CB9 /* TRRailroadView.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF84A9246F0144995CA8F /* TRRailroadView.od */; };
+		6F3DF63359D84820AF5B75C4 /* Gravel.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFC79A31A300663D68EAA /* Gravel.png */; };
 		6F3DF63C77E5E49C2E54ED61 /* NSSet+CNChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0CF799BED6D9CCA4ACA /* NSSet+CNChain.m */; };
 		6F3DF646D777473E0B8F0AA6 /* TRCityView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF43AE13D170644E2F651 /* TRCityView.m */; };
 		6F3DF64EBFE88F9620C34993 /* CNTest.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFE81516FE64EFCB02FC6 /* CNTest.od */; };
@@ -498,6 +499,7 @@
 		6F3DF980D0476B0472119D26 /* TRAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRAppDelegate.m; sourceTree = "<group>"; };
 		6F3DF98E9B2374642D900DFA /* KWGenericMatchEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWGenericMatchEvaluator.h; sourceTree = "<group>"; };
 		6F3DF995908565F2E36557FA /* NSMutableArray+CNChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+CNChain.m"; sourceTree = "<group>"; };
+		6F3DF99DC2D7E69F67CDF738 /* TR3DRailGravel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TR3DRailGravel.h; sourceTree = "<group>"; };
 		6F3DF9A2807799E9A7261FAC /* KWAfterEachNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWAfterEachNode.m; sourceTree = "<group>"; };
 		6F3DF9AB1EFCD0C77A21525C /* CNList.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = CNList.od; sourceTree = "<group>"; };
 		6F3DF9AF54A0CAE5E3EB6282 /* TRLevelFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRLevelFactory.m; sourceTree = "<group>"; };
@@ -579,6 +581,7 @@
 		6F3DFC506DF7AFF339438CBF /* KWGenericMatchEvaluator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWGenericMatchEvaluator.m; sourceTree = "<group>"; };
 		6F3DFC6A1C0E2F6DFE3D2A5F /* KWFailure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWFailure.h; sourceTree = "<group>"; };
 		6F3DFC7949AE36A333A09765 /* KWRegisterMatchersNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWRegisterMatchersNode.h; sourceTree = "<group>"; };
+		6F3DFC79A31A300663D68EAA /* Gravel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Gravel.png; sourceTree = "<group>"; };
 		6F3DFC7B3085F8A807BFB401 /* KWExampleNodeVisitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWExampleNodeVisitor.h; sourceTree = "<group>"; };
 		6F3DFC80E9DA8CD643DB08D2 /* EGModel.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGModel.od; sourceTree = "<group>"; };
 		6F3DFC93A510D579F0FFBDB7 /* CNTreeSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNTreeSet.h; sourceTree = "<group>"; };
@@ -1186,6 +1189,8 @@
 				6F3DF6EF8472E0B9B9816D7A /* TR3DRailTurn.h */,
 				6F3DF5179C1952E6FF9F25E4 /* TR3DCar.h */,
 				6F3DF1FEC13D94D80F345C3A /* TR3DCar.jas */,
+				6F3DF99DC2D7E69F67CDF738 /* TR3DRailGravel.h */,
+				6F3DFC79A31A300663D68EAA /* Gravel.png */,
 			);
 			path = 3DModels;
 			sourceTree = "<group>";
@@ -1561,6 +1566,7 @@
 				6F3DFAD97CFFF0C9012108AC /* CNChain.od in Resources */,
 				6F3DF18EEDD1037EB727484F /* CNPair.od in Resources */,
 				6F3DF0C41B1AE0C692C22C09 /* TRDamageTest.od in Resources */,
+				6F3DF63359D84820AF5B75C4 /* Gravel.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

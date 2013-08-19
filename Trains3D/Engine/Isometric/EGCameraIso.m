@@ -1,4 +1,5 @@
 #import "EGCameraIso.h"
+#import "EGMapIso.h"
 
 static inline CGRect calculateViewportSize(EGSizeI tilesOnScreen, EGSize viewSize) {
     CGFloat ww = tilesOnScreen.width + tilesOnScreen.height;
@@ -13,6 +14,7 @@ static inline CGRect calculateViewportSize(EGSizeI tilesOnScreen, EGSize viewSiz
     EGSizeI _tilesOnScreen;
     EGPoint _center;
 }
+static double _ISO;
 @synthesize tilesOnScreen = _tilesOnScreen;
 @synthesize center = _center;
 
@@ -30,6 +32,11 @@ static inline CGRect calculateViewportSize(EGSizeI tilesOnScreen, EGSize viewSiz
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _ISO = [EGMapSso ISO];
+}
+
 - (void)focusForViewSize:(EGSize)viewSize {
     CGRect vps = calculateViewportSize(_tilesOnScreen, viewSize);
     glViewport((GLint) vps.origin.x, (GLint) vps.origin.y, (GLsizei) vps.size.width, (GLsizei) vps.size.height);
@@ -37,7 +44,7 @@ static inline CGRect calculateViewportSize(EGSizeI tilesOnScreen, EGSize viewSiz
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     CGFloat ww = _tilesOnScreen.width + _tilesOnScreen.height;
-    glOrtho(-ISO, ISO*ww - ISO, -ISO*_tilesOnScreen.width/2, ISO*_tilesOnScreen.height/2, 0.0f, 1000.0f);
+    glOrtho(-_ISO, _ISO*ww - _ISO, -_ISO*_tilesOnScreen.width/2, _ISO*_tilesOnScreen.height/2, 0.0f, 1000.0f);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();

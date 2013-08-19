@@ -1,4 +1,5 @@
 #import "EGTypes.h"
+#import "EGTypesAdd.h"
 
 #import "EGGL.h"
 EGPoint egPointApply(EGPointI point) {

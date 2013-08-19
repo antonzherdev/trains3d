@@ -52,10 +52,10 @@
     glPixelStorei(GL_UNPACK_ROW_LENGTH, (GLint)width);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glGenTextures(1, &_id);
-    glBindTexture(GL_TEXTURE_RECTANGLE_ARB, _id);
-    gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, (GLsizei)width, (GLsizei)height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, myData);
+    glBindTexture(GL_TEXTURE_2D, _id);
     glTexParameteri   ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     glTexParameteri   ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+    gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, (GLsizei)width, (GLsizei)height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, myData);
 
     _size = CGSizeMake(width, height);
 
@@ -70,8 +70,8 @@
 
 - (void)draw:(void (^)())f {
     if(!_loaded) [self load];
-    glBindTexture( GL_TEXTURE_2D, _id);
     glEnable( GL_TEXTURE_2D );
+    glBindTexture( GL_TEXTURE_2D, _id);
     @try {
         f();
     } @finally {

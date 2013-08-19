@@ -1,4 +1,5 @@
 #import "TRTrainView.h"
+#import "TR3DCar.h"
 
 #import "EGGL.h"
 #import "EGModel.h"

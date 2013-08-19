@@ -1,9 +1,14 @@
 #import "TRRailroadView.h"
+#import "TR3DRail.h"
+#import "TR3DRailGravel.h"
+#import "TR3DRailTurn.h"
 
 #import "EGGL.h"
 #import "EGModel.h"
 #import "TRRailroad.h"
 #import "TRRailPoint.h"
+#import "EG.h"
+#import "EGTexture.h"
 @implementation TRRailroadView{
     TRRailView* _railView;
     TRSwitchView* _switchView;
@@ -85,13 +90,17 @@
     egTranslate(rail.tile.x, rail.tile.y, 0.001);
     egColor3(0.2, 0.2, 0.2);
     if(rail.form == TRRailForm.bottomTop) {
-        egRotate(90, 1, 0, 0);
-        egDrawJasModel(Rail);
+        [egTexture(@"Gravel.png") draw:^void() {
+            egRotate(90, 1, 0, 0);
+            egDrawJasModel(RailGravel);
+        }];
     } else {
         if(rail.form == TRRailForm.leftRight) {
-            egRotate(90, 0, 0, 1);
-            egRotate(90, 1, 0, 0);
-            egDrawJasModel(Rail);
+            [egTexture(@"Gravel.png") draw:^void() {
+                egRotate(90, 0, 0, 1);
+                egRotate(90, 1, 0, 0);
+                egDrawJasModel(RailGravel);
+            }];
         } else {
             if(rail.form.start.x == 0 && rail.form.start.y == 1) {
                 egRotate(90, 0, 0, 1);

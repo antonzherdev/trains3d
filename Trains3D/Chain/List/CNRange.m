@@ -1,4 +1,6 @@
 #import "CNRange.h"
+#import "CNOption.h"
+#import "cnTypes.h"
 
 #import "CNChain.h"
 @implementation CNRange{

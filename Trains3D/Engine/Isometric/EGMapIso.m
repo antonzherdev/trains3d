@@ -10,6 +10,7 @@
     id<CNList> _partialTiles;
     id<CNList> _allTiles;
 }
+static double _ISO;
 @synthesize size = _size;
 @synthesize limits = _limits;
 @synthesize fullTiles = _fullTiles;
@@ -37,6 +38,11 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _ISO = 0.70710676908493;
+}
+
 - (BOOL)isFullTile:(EGPointI)tile {
     return tile.y + tile.x >= 0 && tile.y - tile.x <= _size.height - 1 && tile.y + tile.x <= _size.width + _size.height - 2 && tile.y - tile.x >= -_size.width + 1;
 }
@@ -49,10 +55,10 @@
     glPushMatrix();
     egRotate(45, 0, 0, 1);
     glBegin(GL_LINES);
-    double left = -ISO;
-    double top = ISO * _size.height;
-    double bottom = ISO * -_size.width;
-    double right = ISO * (_size.width + _size.height - 1);
+    double left = -_ISO;
+    double top = _ISO * _size.height;
+    double bottom = _ISO * -_size.width;
+    double right = _ISO * (_size.width + _size.height - 1);
     egNormal3(0, 0, 1);
     egVertex3(left, top, 0.0);
     egVertex3(left, bottom, 0.0);
@@ -120,6 +126,10 @@
 
 - (EGRectI)cutRectForTile:(EGPointI)tile {
     return egRectINewXY([self tileCutAxisLess:0 more:tile.x + tile.y], [self tileCutAxisLess:tile.x + tile.y more:_size.width + _size.height - 2], [self tileCutAxisLess:tile.y - tile.x more:_size.height - 1], [self tileCutAxisLess:-_size.width + 1 more:tile.y - tile.x]);
+}
+
++ (double)ISO {
+    return _ISO;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

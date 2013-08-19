@@ -1,4 +1,5 @@
 #import "CNMap.h"
+#import "CNOption.h"
 
 #import "CNChain.h"
 @implementation CNMapDefault{

@@ -1,6 +1,4 @@
 #import "objd.h"
-#import "TR3DRail.h"
-#import "TR3DRailTurn.h"
 @class TRRailroadConnectorContent;
 @class TREmptyConnector;
 @class TRRail;
@@ -14,6 +12,7 @@
 @class TRRailForm;
 @class TRRailPoint;
 @class TRRailPointCorrection;
+@class EGTexture;
 
 @class TRRailroadView;
 @class TRRailView;

@@ -1,7 +1,6 @@
 #import "EGBentleyOttmann.h"
 
 #import "EGFigure.h"
-#import "CNTreeSet.h"
 #import "CNCollection.h"
 #import "CNPair.h"
 @implementation EGBentleyOttmann

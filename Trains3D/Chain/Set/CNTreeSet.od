@@ -5,6 +5,8 @@ import CNCollection
 import CNSet
 import CNList
 import CNChain
+import CNOption
+import "NSObject+CNOption.h"
 
 class CNMutableTreeSet<T>(map : CNMutableTreeMap<T, ODObject>) extends CNSet<T> {
     static def newWith<T>(comparator : (T, T) -> int) : CNMutableTreeSet<T> = {

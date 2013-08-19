@@ -1,4 +1,6 @@
 #import "CNList.h"
+#import "cnTypes.h"
+#import "NSMutableArray+CNChain.h"
 
 #import "CNChain.h"
 @implementation CNArrayBuilder{

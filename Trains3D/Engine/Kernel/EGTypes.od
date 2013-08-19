@@ -69,7 +69,6 @@ struct EGColor(r : float, g : float, b : float, a : float) {
     def set = egColor4(r, g, b, a)
 }
 
-stub val ISO : float
 stub val M_PI : float
 stub val M_PI_2 : float
 stub val M_PI_4 : float
