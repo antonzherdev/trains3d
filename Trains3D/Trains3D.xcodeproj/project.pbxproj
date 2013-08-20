@@ -89,7 +89,6 @@
 		6F3DF57C7CEF905A33A6C84C /* CNEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2AA337B3EA531C5DEA5 /* CNEnumerator.m */; };
 		6F3DF5928B9B4445494A9BDF /* KWValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFACC20BF8698A6F56017 /* KWValue.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF5B8922AE637B43642E1 /* TRRailroadBuilderProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF37F737A3145F69F8298 /* TRRailroadBuilderProcessor.m */; };
-		6F3DF5BDFBAA925AA66FE03B /* TR3DRailTurnGravel.jas in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF1EA36227C0D678A7A29 /* TR3DRailTurnGravel.jas */; };
 		6F3DF5BF04BE2B8C12922BA6 /* CNTreeMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF61F6AC6163A38816654 /* CNTreeMap.m */; };
 		6F3DF5C63790425F8F8EB5CD /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F3DF60FCB04B7E52FECB861 /* GLUT.framework */; };
 		6F3DF5C76F75F828CE9CD2F0 /* EGFigure.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF170190413B8F6FEABEB /* EGFigure.od */; };
@@ -250,7 +249,6 @@
 		0214B14F1773394500C03C71 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		024F434D1774A5C3005B6F82 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		6F3DF00AC03B6A58770FAAE6 /* EGMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGMap.m; sourceTree = "<group>"; };
-		6F3DF017C91A46357DF82AC8 /* TR3DRailTurnGravel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TR3DRailTurnGravel.h; sourceTree = "<group>"; };
 		6F3DF0255D0634FEBC03437A /* KWProbePoller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWProbePoller.m; sourceTree = "<group>"; };
 		6F3DF030044A0CD5069F2FDC /* EGCamera2D.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGCamera2D.m; sourceTree = "<group>"; };
 		6F3DF032FA1C5FDEC691E129 /* KWMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWMatcher.h; sourceTree = "<group>"; };
@@ -294,7 +292,6 @@
 		6F3DF19D193921A2623A28BF /* CNFilterLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNFilterLink.m; sourceTree = "<group>"; };
 		6F3DF1ACEB276707BD41C0F4 /* KWBeKindOfClassMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWBeKindOfClassMatcher.m; sourceTree = "<group>"; };
 		6F3DF1E33966B8D9FE4E3B36 /* KWGenericMatchingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWGenericMatchingAdditions.h; sourceTree = "<group>"; };
-		6F3DF1EA36227C0D678A7A29 /* TR3DRailTurnGravel.jas */ = {isa = PBXFileReference; lastKnownFileType = file.jas; path = TR3DRailTurnGravel.jas; sourceTree = "<group>"; };
 		6F3DF1F233D7AEE1B3A6678A /* TRCityView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRCityView.h; sourceTree = "<group>"; };
 		6F3DF1F4CD4FCB33FEC12109 /* TRLevelMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRLevelMenuView.h; sourceTree = "<group>"; };
 		6F3DF1F8CF0334439242AFDD /* NSObject+KiwiStubAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+KiwiStubAdditions.m"; sourceTree = "<group>"; };
@@ -1201,8 +1198,6 @@
 				6F3DF1FEC13D94D80F345C3A /* TR3DCar.jas */,
 				6F3DFC79A31A300663D68EAA /* Gravel.png */,
 				6F3DFE6B7DD72660F3A94C9A /* Grass.png */,
-				6F3DF017C91A46357DF82AC8 /* TR3DRailTurnGravel.h */,
-				6F3DF1EA36227C0D678A7A29 /* TR3DRailTurnGravel.jas */,
 				6F3DF2D976840AA4CE1ECC3E /* TR3DRail.jas */,
 				6F3DF7FFD5B6617B816AE635 /* Rust.png */,
 				6F3DF63CF2608012CCF3D308 /* Wood.png */,
@@ -1577,7 +1572,6 @@
 				6F3DF0C41B1AE0C692C22C09 /* TRDamageTest.od in Resources */,
 				6F3DF63359D84820AF5B75C4 /* Gravel.png in Resources */,
 				6F3DF546BE51CB6724038784 /* Grass.png in Resources */,
-				6F3DF5BDFBAA925AA66FE03B /* TR3DRailTurnGravel.jas in Resources */,
 				6F3DF7AFCEAA01BD6C94F225 /* Rust.png in Resources */,
 				6F3DF07454AB0F14F7AD0280 /* Wood.png in Resources */,
 			);

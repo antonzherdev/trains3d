@@ -8,7 +8,6 @@ import EGTexture
 import EGMaterial
 
 import "TR3DRail.h"
-import "TR3DRailTurnGravel.h"
 import "TR3DRailTurn.h"
 
 class TRRailroadView {
@@ -26,12 +25,12 @@ class TRRailroadView {
     }
 }
 
-stub val Rail : string
 stub val RailGravel : string
 stub val RailTies : string
 stub val Rails : string
-stub val RailTurn : string
+stub val RailsTurn : string
 stub val RailTurnGravel : string
+stub val RailTurnTies : string
 
 class TRRailView {
     def draw(rail : TRRail) {
@@ -55,6 +54,10 @@ class TRRailView {
             egColor3(0.5, 0.5, 0.5)
             EGMaterial.stone.set
             egTexture("Gravel.png").draw(egDrawJasModel(RailTurnGravel))
+            EGMaterial.wood.set
+            egDrawJasModel(RailTurnTies)
+            EGMaterial.steel.set
+            egDrawJasModel(RailsTurn)
         }
         glPopMatrix
     }

@@ -1,6 +1,5 @@
 #import "TRRailroadView.h"
 #import "TR3DRail.h"
-#import "TR3DRailTurnGravel.h"
 #import "TR3DRailTurn.h"
 
 #import "EGGL.h"
@@ -116,6 +115,10 @@
         [egTexture(@"Gravel.png") draw:^void() {
             egDrawJasModel(RailTurnGravel);
         }];
+        [EGMaterial.wood set];
+        egDrawJasModel(RailTurnTies);
+        [EGMaterial.steel set];
+        egDrawJasModel(RailsTurn);
     }
     glPopMatrix();
 }
