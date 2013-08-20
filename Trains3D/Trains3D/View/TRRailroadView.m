@@ -1,6 +1,7 @@
 #import "TRRailroadView.h"
 #import "TR3DRail.h"
 #import "TR3DRailTurn.h"
+#import "TR3DSwitch.h"
 
 #import "EGGL.h"
 #import "EGModel.h"
@@ -161,19 +162,15 @@
 - (void)drawTheSwitch:(TRSwitch*)theSwitch {
     TRRailConnector* connector = theSwitch.connector;
     glPushMatrix();
-    egTranslate(theSwitch.tile.x, theSwitch.tile.y, 0.01);
+    egTranslate(theSwitch.tile.x, theSwitch.tile.y, 0.03);
     egRotate(connector.angle, 0, 0, 1);
     TRRail* rail = [theSwitch activeRail];
     TRRailForm* form = rail.form;
-    egColor3(0.2, 0.8, 0.2);
+    [EGMaterial.emerald set];
+    egTranslate(-0.5, 0, 0);
     if(form.start.x + form.end.x == 0) {
-        glBegin(GL_QUADS);
-        egNormal3(0, 0, 1);
-        egVertex2(-0.5, 0.05);
-        egVertex2(-0.5, -0.05);
-        egVertex2(-0.25, -0.02);
-        egVertex2(-0.25, 0.02);
-        glEnd();
+        egRotate(90, 1, 0, 0);
+        egDrawJasModel(SwitchStraight);
     } else {
         TRRailConnector* otherConnector = ((form.start == connector) ? form.end : form.start);
         NSInteger x = connector.x;
@@ -181,13 +178,8 @@
         NSInteger ox = otherConnector.x;
         NSInteger oy = otherConnector.y;
         if((x == -1 && oy == -1) || (y == 1 && ox == -1) || (y == -1 && ox == 1) || (x == 1 && oy == 1)) egScale(1, -1, 1);
-        glBegin(GL_QUADS);
-        egNormal3(0, 0, 1);
-        egVertex2(-0.5, 0.05);
-        egVertex2(-0.5, -0.05);
-        egVertex2(-0.25, 0.1);
-        egVertex2(-0.25, 0.15);
-        glEnd();
+        egRotate(90, 1, 0, 0);
+        egDrawJasModel(SwitchTurn);
     }
     glPopMatrix();
 }

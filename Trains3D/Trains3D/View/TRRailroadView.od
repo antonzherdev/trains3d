@@ -9,6 +9,7 @@ import EGMaterial
 
 import "TR3DRail.h"
 import "TR3DRailTurn.h"
+import "TR3DSwitch.h"
 
 class TRRailroadView {
     private val railView = TRRailView.new
@@ -31,6 +32,8 @@ stub val Rails : string
 stub val RailsTurn : string
 stub val RailTurnGravel : string
 stub val RailTurnTies : string
+stub val SwitchStraight : string
+stub val SwitchTurn : string
 
 class TRRailView {
     def draw(rail : TRRail) {
@@ -67,21 +70,17 @@ class TRSwitchView {
     def draw(theSwitch : TRSwitch) {
         val connector = theSwitch.connector
         glPushMatrix
-        egTranslate(theSwitch.tile.x, theSwitch.tile.y, 0.01)
+        egTranslate(theSwitch.tile.x, theSwitch.tile.y, 0.03)
         egRotate(connector.angle, 0, 0, 1)
 
         val rail = theSwitch.activeRail
         val form = rail.form
 
-        egColor3(0.2, 0.8, 0.2)
+        EGMaterial.emerald.set
+        egTranslate(-0.5, 0, 0)
         if(form.start.x + form.end.x == 0) {
-            glBegin(GL_QUADS)
-            egNormal3(0, 0, 1)
-            egVertex2(-0.5, 0.05)
-            egVertex2(-0.5, -0.05)
-            egVertex2(-0.25, -0.02)
-            egVertex2(-0.25, 0.02)
-            glEnd
+            egRotate(90, 1, 0, 0)
+            egDrawJasModel(SwitchStraight)
         } else {
             val otherConnector = if(form.start == connector) form.end else form.start
             val x = connector.x
@@ -91,13 +90,8 @@ class TRSwitchView {
             if(x == -1 && oy == -1 || y == 1 && ox == -1 || y == -1 && ox == 1 || x == 1 && oy == 1) {
                 egScale(1, -1, 1)
             }
-            glBegin(GL_QUADS)
-            egNormal3(0, 0, 1)
-            egVertex2(-0.5, 0.05)
-            egVertex2(-0.5, -0.05)
-            egVertex2(-0.25, 0.1)
-            egVertex2(-0.25, 0.15)
-            glEnd
+            egRotate(90, 1, 0, 0)
+            egDrawJasModel(SwitchTurn)
         }
 
         glPopMatrix
