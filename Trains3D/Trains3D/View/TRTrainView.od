@@ -7,9 +7,13 @@ import TRTrain
 import TRTypes
 import TRRailPoint
 import "TR3DCar.h"
+import "TR3DEngine.h"
 
 stub val Car : string
 stub val CarBlack : string
+stub val Engine : string
+stub val EngineBlack : string
+stub val EngineFloor : string
 
 class TRTrainView {
     def draw(train : TRTrain) {
@@ -25,10 +29,19 @@ class TRTrainView {
             egRotate(angle, 0, 0, 1)
 
             egRotate(90, 1, 0, 0)
-            train.color.setMaterial
-            egDrawJasModel(Car)
-            EGMaterial.blackMetal.set
-            egDrawJasModel(CarBlack)
+
+            if(car.carType == TRCarType.car) {
+                train.color.setMaterial
+                egDrawJasModel(Car)
+                EGMaterial.blackMetal.set
+                egDrawJasModel(CarBlack)
+            } else {
+                train.color.setMaterial
+                egDrawJasModel(Engine)
+                egDrawJasModel(EngineFloor)
+                EGMaterial.blackMetal.set
+                egDrawJasModel(EngineBlack)
+            }
 
             glPopMatrix
         })

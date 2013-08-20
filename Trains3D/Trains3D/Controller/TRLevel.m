@@ -249,7 +249,7 @@
 
 - (void)runRepairerFromCity:(TRCity*)city {
     if([__repairer isEmpty]) {
-        TRTrain* train = [TRTrain trainWithLevel:self trainType:TRTrainType.repairer color:TRColor.grey cars:(@[[TRCar car]]) speed:_rules.repairerSpeed];
+        TRTrain* train = [TRTrain trainWithLevel:self trainType:TRTrainType.repairer color:TRColor.grey cars:(@[[TRCar carWithCarType:TRCarType.engine]]) speed:_rules.repairerSpeed];
         [self runTrain:train fromCity:city];
         __repairer = [CNOption opt:train];
     }

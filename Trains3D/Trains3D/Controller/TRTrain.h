@@ -32,6 +32,7 @@
 @class TRCar;
 @class TRTrainGenerator;
 @class TRTrainType;
+@class TRCarType;
 
 @interface TRTrainType : ODEnum
 @property (nonatomic, readonly) BOOL(^obstacleProcessor)(TRLevel*, TRTrain*, TRObstacle*);
@@ -60,14 +61,29 @@
 @end
 
 
+@interface TRCarType : ODEnum
+@property (nonatomic, readonly) double length;
+@property (nonatomic, readonly) double width;
+@property (nonatomic, readonly) double frontConnectorLength;
+@property (nonatomic, readonly) double backConnectorLength;
+@property (nonatomic, readonly) BOOL isEngine;
+
+- (double)fullLength;
++ (TRCarType*)car;
++ (TRCarType*)engine;
++ (NSArray*)values;
+@end
+
+
 @interface TRCar : NSObject
+@property (nonatomic, readonly) TRCarType* carType;
 @property (nonatomic, retain) TRRailPoint* frontConnector;
 @property (nonatomic, retain) TRRailPoint* backConnector;
 @property (nonatomic, retain) TRRailPoint* head;
 @property (nonatomic, retain) TRRailPoint* tail;
 
-+ (id)car;
-- (id)init;
++ (id)carWithCarType:(TRCarType*)carType;
+- (id)initWithCarType:(TRCarType*)carType;
 - (double)frontConnectorLength;
 - (double)backConnectorLength;
 - (double)length;
@@ -81,9 +97,10 @@
 @property (nonatomic, readonly) TRTrainType* trainType;
 @property (nonatomic, readonly) id<CNList> carsCount;
 @property (nonatomic, readonly) id<CNList> speed;
+@property (nonatomic, readonly) id<CNList> carTypes;
 
-+ (id)trainGeneratorWithTrainType:(TRTrainType*)trainType carsCount:(id<CNList>)carsCount speed:(id<CNList>)speed;
-- (id)initWithTrainType:(TRTrainType*)trainType carsCount:(id<CNList>)carsCount speed:(id<CNList>)speed;
++ (id)trainGeneratorWithTrainType:(TRTrainType*)trainType carsCount:(id<CNList>)carsCount speed:(id<CNList>)speed carTypes:(id<CNList>)carTypes;
+- (id)initWithTrainType:(TRTrainType*)trainType carsCount:(id<CNList>)carsCount speed:(id<CNList>)speed carTypes:(id<CNList>)carTypes;
 - (id<CNList>)generateCars;
 - (NSUInteger)generateSpeed;
 @end

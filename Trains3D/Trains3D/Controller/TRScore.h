@@ -2,6 +2,7 @@
 #import "EGTypes.h"
 @class TRTrainType;
 @class TRTrain;
+@class TRCarType;
 @class TRCar;
 @class TRTrainGenerator;
 

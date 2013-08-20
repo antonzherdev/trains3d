@@ -6,6 +6,7 @@
 @class EGMapSso;
 @class TRTrainType;
 @class TRTrain;
+@class TRCarType;
 @class TRCar;
 @class TRTrainGenerator;
 @class TRLevelRules;

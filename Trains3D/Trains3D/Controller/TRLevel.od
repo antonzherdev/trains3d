@@ -143,7 +143,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
 
     def runRepairerFrom(city : TRCity) {
         if(_repairer.isEmpty) {
-            val train = TRTrain(self, TRTrainType.repairer, TRColor.grey, [TRCar.new], rules.repairerSpeed)
+            val train = TRTrain(self, TRTrainType.repairer, TRColor.grey, [TRCar(TRCarType.engine)], rules.repairerSpeed)
             run(train, city)
             _repairer = train
         }

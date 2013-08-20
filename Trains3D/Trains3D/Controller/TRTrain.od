@@ -105,22 +105,34 @@ class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, ca
 }
 
 
-class TRCar {
+enum TRCarType(length : float, width : float, frontConnectorLength : float, backConnectorLength: float, isEngine : bool) {
+    car(0.44, 0.18, 0.13, 0.13, false)
+    engine(0.7, 0.18, 0.13, 0.13, true)
+
+    def fullLength : float = length + frontConnectorLength + backConnectorLength
+}
+
+class TRCar(carType : TRCarType) {
     var frontConnector : TRRailPoint
     var backConnector : TRRailPoint
     var head : TRRailPoint
     var tail : TRRailPoint
 
-    def frontConnectorLength = 0.13
-    def backConnectorLength = 0.13
-    def length : float = 0.44
-    def width : float = 0.18
-    def fullLength : float = length + frontConnectorLength + backConnectorLength
+    def frontConnectorLength = carType.frontConnectorLength
+    def backConnectorLength = carType.backConnectorLength
+    def length : float = carType.length
+    def width : float = carType.width
+    def fullLength : float = carType.fullLength
 
     def figure : EGThickLineSegment = EGThickLineSegment(EGLineSegment.newWith(head.point, tail.point), width)
 }
 
-class TRTrainGenerator(trainType : TRTrainType, carsCount : CNList<int>, speed : CNList<int>) {
-    def generateCars : [TRCar] = carsCount.randomItem.get.range.chain.map(TRCar.new).toArray
+class TRTrainGenerator(trainType : TRTrainType, carsCount : [int], speed : [int], carTypes : [TRCarType]) {
+    def generateCars : [TRCar] = {
+        val count = carsCount.randomItem.get
+        val engine = TRCar(carTypes.chain.filter(_.isEngine).randomItem.get)
+        if(count <= 1) [engine]
+        else (count - 1).range.chain.map(i -> TRCar(carTypes.chain.filter(!_.isEngine).randomItem.get)).prepend([engine]).toArray
+    }
     def generateSpeed : uint = speed.randomItem.get
 }

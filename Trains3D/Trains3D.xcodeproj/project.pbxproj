@@ -527,6 +527,7 @@
 		6F3DFA206C44BE358E350D6D /* KWBeforeEachNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeforeEachNode.h; sourceTree = "<group>"; };
 		6F3DFA3414CC30A8B005B9C0 /* EGOpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOpenGLView.m; sourceTree = "<group>"; };
 		6F3DFA363E29E82F722687A6 /* CNTreeMapTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNTreeMapTest.h; sourceTree = "<group>"; };
+		6F3DFA39EC58E3D33B823745 /* TR3DEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TR3DEngine.h; sourceTree = "<group>"; };
 		6F3DFA403FBCACC14EC46D88 /* KWBlockNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWBlockNode.m; sourceTree = "<group>"; };
 		6F3DFA5F61C3E623C3026F49 /* CNTreeSet.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = CNTreeSet.od; sourceTree = "<group>"; };
 		6F3DFA6815E349D06B7F3B0F /* KWVerifying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWVerifying.h; sourceTree = "<group>"; };
@@ -1201,6 +1202,7 @@
 				6F3DF2D976840AA4CE1ECC3E /* TR3DRail.jas */,
 				6F3DF7FFD5B6617B816AE635 /* Rust.png */,
 				6F3DF63CF2608012CCF3D308 /* Wood.png */,
+				6F3DFA39EC58E3D33B823745 /* TR3DEngine.h */,
 			);
 			path = 3DModels;
 			sourceTree = "<group>";

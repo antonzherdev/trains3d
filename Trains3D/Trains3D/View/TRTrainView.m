@@ -1,5 +1,6 @@
 #import "TRTrainView.h"
 #import "TR3DCar.h"
+#import "TR3DEngine.h"
 
 #import "EGGL.h"
 #import "EGModel.h"
@@ -29,10 +30,18 @@
         double angle = 90 + 180.0 / M_PI * egPointAngle(egPointSub(t, h));
         egRotate(angle, 0, 0, 1);
         egRotate(90, 1, 0, 0);
-        [train.color setMaterial];
-        egDrawJasModel(Car);
-        [EGMaterial.blackMetal set];
-        egDrawJasModel(CarBlack);
+        if(car.carType == TRCarType.car) {
+            [train.color setMaterial];
+            egDrawJasModel(Car);
+            [EGMaterial.blackMetal set];
+            egDrawJasModel(CarBlack);
+        } else {
+            [train.color setMaterial];
+            egDrawJasModel(Engine);
+            egDrawJasModel(EngineFloor);
+            [EGMaterial.blackMetal set];
+            egDrawJasModel(EngineBlack);
+        }
         glPopMatrix();
     }];
 }
