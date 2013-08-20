@@ -19,7 +19,7 @@ class TRTrainView {
 
             glPushMatrix
             val mid = h.mid(point = t)
-            egTranslate(mid.x, mid.y, 0)
+            egTranslate(mid.x, mid.y, 0.05)
 
             val angle = 90 + (180.0 / M_PI * t.sub(h).angle)
             egRotate(angle, 0, 0, 1)
