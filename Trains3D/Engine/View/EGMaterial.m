@@ -35,6 +35,7 @@ static EGMaterial* _yellowRubber;
 static EGMaterial* _wood;
 static EGMaterial* _stone;
 static EGMaterial* _steel;
+static EGMaterial* _blackMetal;
 static EGMaterial* _grass;
 @synthesize ambient = _ambient;
 @synthesize diffuse = _diffuse;
@@ -87,6 +88,7 @@ static EGMaterial* _grass;
     _wood = [EGMaterial materialWithAmbient:EGColorMake(0.05, 0.0, 0.0, 1) diffuse:EGColorMake(0.55, 0.45, 0.25, 1) specular:EGColorMake(0.04, 0.04, 0.04, 1) shininess:0.07];
     _stone = [EGMaterial materialWithAmbient:EGColorMake(0.0, 0.0, 0.0, 1) diffuse:EGColorMake(0.9, 0.85, 0.8, 1) specular:EGColorMake(0.0, 0.0, 0.0, 1) shininess:0.0];
     _steel = [EGMaterial materialWithAmbient:EGColorMake(0.189, 0.19, 0.2, 1) diffuse:EGColorMake(0.45, 0.47, 0.55, 1) specular:EGColorMake(0.508273, 0.508273, 0.508273, 1) shininess:0.4];
+    _blackMetal = [EGMaterial materialWithAmbient:EGColorMake(0.05, 0.05, 0.05, 1) diffuse:EGColorMake(0.1, 0.1, 0.1, 1) specular:EGColorMake(0.3, 0.3, 0.3, 1) shininess:0.2];
     _grass = [EGMaterial materialWithAmbient:EGColorMake(0.7, 0.8, 0.6, 1) diffuse:EGColorMake(0.7, 0.8, 0.6, 1) specular:EGColorMake(0.0, 0.0, 0.0, 1) shininess:0.0];
 }
 
@@ -214,6 +216,10 @@ static EGMaterial* _grass;
 
 + (EGMaterial*)steel {
     return _steel;
+}
+
++ (EGMaterial*)blackMetal {
+    return _blackMetal;
 }
 
 + (EGMaterial*)grass {

@@ -122,7 +122,7 @@ static double _carsDelta;
 
 + (void)initialize {
     [super initialize];
-    _carsDelta = 0.3;
+    _carsDelta = 0.1;
 }
 
 - (void)startFromCity:(TRCity*)city {
@@ -255,7 +255,7 @@ static double _carsDelta;
 }
 
 - (double)width {
-    return 0.2;
+    return 0.18;
 }
 
 - (EGThickLineSegment*)figure {

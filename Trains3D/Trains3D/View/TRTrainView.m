@@ -3,6 +3,7 @@
 
 #import "EGGL.h"
 #import "EGModel.h"
+#import "EGMaterial.h"
 #import "TRTrain.h"
 #import "TRTypes.h"
 #import "TRRailPoint.h"
@@ -19,7 +20,6 @@
 }
 
 - (void)drawTrain:(TRTrain*)train {
-    [train.color setMaterial];
     [train.cars forEach:^void(TRCar* car) {
         glPushMatrix();
         EGPoint h = car.head.point;
@@ -29,7 +29,10 @@
         double angle = 90 + 180.0 / M_PI * egPointAngle(egPointSub(t, h));
         egRotate(angle, 0, 0, 1);
         egRotate(90, 1, 0, 0);
+        [train.color setMaterial];
         egDrawJasModel(Car);
+        [EGMaterial.blackMetal set];
+        egDrawJasModel(CarBlack);
         glPopMatrix();
     }];
 }

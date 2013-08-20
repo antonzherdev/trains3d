@@ -41,6 +41,7 @@
 + (EGMaterial*)wood;
 + (EGMaterial*)stone;
 + (EGMaterial*)steel;
++ (EGMaterial*)blackMetal;
 + (EGMaterial*)grass;
 @end
 
