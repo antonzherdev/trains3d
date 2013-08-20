@@ -508,7 +508,7 @@
 }
 
 - (EGRect)boundingRect {
-    return egRectThicken(_segment.boundingRect, [_segment isHorizontal] ? 0 : _thickness_2, [_segment isVertical] ? 0 : _thickness_2);
+    return egRectThicken(_segment.boundingRect, (([_segment isHorizontal]) ? 0 : _thickness_2), (([_segment isVertical]) ? 0 : _thickness_2));
 }
 
 - (id<CNList>)segments {

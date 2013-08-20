@@ -129,7 +129,7 @@ static NSInteger _RED;
         p.object = s.object;
         p = s;
     }
-    CNTreeMapEntry* replacement = p.left != nil ? p.left : p.right;
+    CNTreeMapEntry* replacement = ((p.left != nil) ? p.left : p.right);
     if(replacement != nil) {
         replacement.parent = p.parent;
         if(p.parent == nil) {

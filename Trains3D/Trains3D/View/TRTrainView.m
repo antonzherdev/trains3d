@@ -27,7 +27,7 @@
         glPushMatrix();
         EGPoint mid = egPointMid(h, t);
         egTranslate(mid.x, mid.y, 0.05);
-        double angle = 90 + 180.0 / M_PI * egPointAngle(egPointSub(t, h));
+        double angle = (([train isBack]) ? 90 : -90) + 180.0 / M_PI * egPointAngle(egPointSub(t, h));
         egRotate(angle, 0, 0, 1);
         egRotate(90, 1, 0, 0);
         if(car.carType == TRCarType.car) {

@@ -175,7 +175,7 @@
         egVertex2(-0.25, 0.02);
         glEnd();
     } else {
-        TRRailConnector* otherConnector = form.start == connector ? form.end : form.start;
+        TRRailConnector* otherConnector = ((form.start == connector) ? form.end : form.start);
         NSInteger x = connector.x;
         NSInteger y = connector.y;
         NSInteger ox = otherConnector.x;

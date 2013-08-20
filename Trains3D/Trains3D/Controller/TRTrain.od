@@ -34,6 +34,7 @@ enum TRTrainType(obstacleProcessor : (TRLevel, TRTrain, TRObstacle) -> bool) {
 class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, cars : [TRCar], speed : uint) {
     private var head : TRRailPoint
     private var back = false
+    def isBack = back
     private val length : float = cars.chain.fold(((r, car) -> car.fullLength + r), 0.0)
     private val _speedF : float = 0.01 * speed
 

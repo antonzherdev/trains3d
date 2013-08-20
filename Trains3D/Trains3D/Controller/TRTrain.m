@@ -119,6 +119,10 @@ static NSArray* _TRTrainType_values;
     return self;
 }
 
+- (BOOL)isBack {
+    return _back;
+}
+
 - (void)startFromCity:(TRCity*)city {
     _head = [city startPoint];
     [self calculateCarPositions];

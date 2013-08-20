@@ -270,7 +270,7 @@ static NSArray* _TRRailForm_values;
 }
 
 - (EGPoint)calculatePoint {
-    double x = _back ? _form.length - _x : _x;
+    double x = ((_back) ? _form.length - _x : _x);
     EGPoint(^f)(double) = _form.pointFun;
     EGPoint p = f(x);
     return EGPointMake(p.x + _tile.x, p.y + _tile.y);
