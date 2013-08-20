@@ -136,11 +136,13 @@ static NSArray* _TRTrainType_values;
 - (void)calculateCarPositions {
     ((TRRailPoint*)([[[self directedCars] chain] fold:^TRRailPoint*(TRRailPoint* hl, TRCar* car) {
         car.frontConnector = hl;
-        TRRailPoint* p = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:[car frontConnectorLength] point:hl] addErrorToPoint];
+        double fl = [car frontConnectorLength];
+        double bl = [car backConnectorLength];
+        TRRailPoint* p = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((_back) ? bl : fl) point:hl] addErrorToPoint];
         car.head = p;
         p = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:[car length] point:p] addErrorToPoint];
         car.tail = p;
-        p = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:[car backConnectorLength] point:p] addErrorToPoint];
+        p = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((_back) ? fl : bl) point:p] addErrorToPoint];
         car.backConnector = p;
         return p;
     } withStart:[_head invert]]));
@@ -264,7 +266,7 @@ static NSArray* _TRCarType_values;
 + (void)initialize {
     [super initialize];
     _car = [TRCarType carTypeWithOrdinal:((NSUInteger)(0)) name:@"car" length:0.44 width:0.18 frontConnectorLength:0.13 backConnectorLength:0.13 isEngine:NO];
-    _engine = [TRCarType carTypeWithOrdinal:((NSUInteger)(1)) name:@"engine" length:0.7 width:0.18 frontConnectorLength:0.13 backConnectorLength:0.13 isEngine:YES];
+    _engine = [TRCarType carTypeWithOrdinal:((NSUInteger)(1)) name:@"engine" length:0.33 width:0.18 frontConnectorLength:0.12 backConnectorLength:0.24 isEngine:YES];
     _TRCarType_values = (@[_car, _engine]);
 }
 

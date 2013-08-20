@@ -53,11 +53,13 @@ class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, ca
     private def calculateCarPositions {
         directedCars.chain.fold((hl, car) -> {
             car.frontConnector = hl
-            var p =  level.railroad.moveWith(carsObstacleProcessor, car.frontConnectorLength, hl).addErrorToPoint
+            val fl = car.frontConnectorLength
+            val bl = car.backConnectorLength
+            var p =  level.railroad.moveWith(carsObstacleProcessor, if(back) bl else fl, hl).addErrorToPoint
             car.head = p
             p =  level.railroad.moveWith(carsObstacleProcessor, car.length, p).addErrorToPoint
             car.tail = p
-            p =  level.railroad.moveWith(carsObstacleProcessor, car.backConnectorLength, p).addErrorToPoint
+            p =  level.railroad.moveWith(carsObstacleProcessor, if(back) fl else bl, p).addErrorToPoint
             car.backConnector = p
             p
         }, head.invert)
@@ -108,7 +110,7 @@ class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, ca
 
 enum TRCarType(length : float, width : float, frontConnectorLength : float, backConnectorLength: float, isEngine : bool) {
     car(0.44, 0.18, 0.13, 0.13, false)
-    engine(0.7, 0.18, 0.13, 0.13, true)
+    engine(0.43, 0.18, 0.12, 0.2, true)
 
     def fullLength : float = length + frontConnectorLength + backConnectorLength
 }
