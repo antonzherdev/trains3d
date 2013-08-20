@@ -21,9 +21,9 @@
 
 - (void)drawTrain:(TRTrain*)train {
     [train.cars forEach:^void(TRCar* car) {
-        glPushMatrix();
         EGPoint h = car.head.point;
         EGPoint t = car.tail.point;
+        glPushMatrix();
         EGPoint mid = egPointMid(h, t);
         egTranslate(mid.x, mid.y, 0);
         double angle = 90 + 180.0 / M_PI * egPointAngle(egPointSub(t, h));

@@ -88,7 +88,6 @@ static NSArray* _TRTrainType_values;
     double __speedF;
     BOOL(^_carsObstacleProcessor)(TRObstacle*);
 }
-static double _carsDelta;
 @synthesize level = _level;
 @synthesize trainType = _trainType;
 @synthesize color = _color;
@@ -109,8 +108,8 @@ static double _carsDelta;
         _speed = speed;
         _back = NO;
         _length = unumf([[_cars chain] fold:^id(id r, TRCar* car) {
-            return numf([car length] + unumf(r) + _carsDelta);
-        } withStart:numf(-1.0 * _carsDelta)]);
+            return numf([car fullLength] + unumf(r));
+        } withStart:@0.0]);
         __speedF = 0.01 * _speed;
         _carsObstacleProcessor = ^BOOL(TRObstacle* o) {
             return o.obstacleType == TRObstacleType.light;
@@ -118,11 +117,6 @@ static double _carsDelta;
     }
     
     return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _carsDelta = 0.1;
 }
 
 - (void)startFromCity:(TRCity*)city {
@@ -137,11 +131,14 @@ static double _carsDelta;
 
 - (void)calculateCarPositions {
     ((TRRailPoint*)([[[self directedCars] chain] fold:^TRRailPoint*(TRRailPoint* hl, TRCar* car) {
-        car.head = hl;
-        TRRailPoint* next = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:[car length] point:hl] addErrorToPoint];
-        car.tail = next;
-        car.nextHead = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:_carsDelta point:next] addErrorToPoint];
-        return car.nextHead;
+        car.frontConnector = hl;
+        TRRailPoint* p = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:[car frontConnectorLength] point:hl] addErrorToPoint];
+        car.head = p;
+        p = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:[car length] point:p] addErrorToPoint];
+        car.tail = p;
+        p = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:[car backConnectorLength] point:p] addErrorToPoint];
+        car.backConnector = p;
+        return p;
     } withStart:[_head invert]]));
 }
 
@@ -169,7 +166,7 @@ static double _carsDelta;
             } else {
                 _back = !(_back);
                 TRCar* lastCar = ((TRCar*)([[[self directedCars] head] get]));
-                _head = lastCar.tail;
+                _head = lastCar.backConnector;
             }
         } else {
             _head = [correction addErrorToPoint];
@@ -188,12 +185,8 @@ static double _carsDelta;
     EGPointI tile = theSwitch.tile;
     EGPointI nextTile = [theSwitch.connector nextTile:tile];
     return [[_cars findWhere:^BOOL(TRCar* _) {
-        return (EGPointIEq(_.head.tile, tile) && EGPointIEq(_.nextHead.tile, nextTile)) || (EGPointIEq(_.head.tile, nextTile) && EGPointIEq(_.nextHead.tile, tile));
+        return (EGPointIEq(_.frontConnector.tile, tile) && EGPointIEq(_.backConnector.tile, nextTile)) || (EGPointIEq(_.frontConnector.tile, nextTile) && EGPointIEq(_.backConnector.tile, tile));
     }] isDefined];
-}
-
-+ (double)carsDelta {
-    return _carsDelta;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -232,13 +225,15 @@ static double _carsDelta;
 
 
 @implementation TRCar{
+    TRRailPoint* _frontConnector;
+    TRRailPoint* _backConnector;
     TRRailPoint* _head;
     TRRailPoint* _tail;
-    TRRailPoint* _nextHead;
 }
+@synthesize frontConnector = _frontConnector;
+@synthesize backConnector = _backConnector;
 @synthesize head = _head;
 @synthesize tail = _tail;
-@synthesize nextHead = _nextHead;
 
 + (id)car {
     return [[TRCar alloc] init];
@@ -250,12 +245,24 @@ static double _carsDelta;
     return self;
 }
 
+- (double)frontConnectorLength {
+    return 0.13;
+}
+
+- (double)backConnectorLength {
+    return 0.13;
+}
+
 - (double)length {
-    return 0.6;
+    return 0.44;
 }
 
 - (double)width {
     return 0.18;
+}
+
+- (double)fullLength {
+    return [self length] + [self frontConnectorLength] + [self backConnectorLength];
 }
 
 - (EGThickLineSegment*)figure {

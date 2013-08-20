@@ -57,19 +57,22 @@
 - (void)setHead:(TRRailPoint*)head;
 - (void)updateWithDelta:(double)delta;
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch;
-+ (double)carsDelta;
 @end
 
 
 @interface TRCar : NSObject
+@property (nonatomic, retain) TRRailPoint* frontConnector;
+@property (nonatomic, retain) TRRailPoint* backConnector;
 @property (nonatomic, retain) TRRailPoint* head;
 @property (nonatomic, retain) TRRailPoint* tail;
-@property (nonatomic, retain) TRRailPoint* nextHead;
 
 + (id)car;
 - (id)init;
+- (double)frontConnectorLength;
+- (double)backConnectorLength;
 - (double)length;
 - (double)width;
+- (double)fullLength;
 - (EGThickLineSegment*)figure;
 @end
 
