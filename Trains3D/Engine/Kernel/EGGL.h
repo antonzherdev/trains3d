@@ -96,3 +96,13 @@ static inline NSUInteger GLuintHash(GLuint x) {
 static inline NSString *GLuintDescription(GLuint x) {
     return [NSString stringWithFormat:@"%d", x];
 }
+
+static inline GLuint egGenBuffer() {
+    GLuint buffer;
+    glGenBuffers(1, &buffer);
+    return buffer;
+}
+
+static inline void egDeleteBuffer(GLuint handle) {
+    glDeleteBuffers(1, &handle);
+}

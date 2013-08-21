@@ -1,0 +1,13 @@
+stub class NSData(bytes : [void], length : uint) {
+    static def dataWith(bytesNoCopy : [void], length : uint)
+}
+
+type CNData = NSData
+
+//class CNDataList(bytes : [void], count : uint, length : uint) {
+//
+//}
+
+
+stub def sizeof(bytes : [void]) : uint
+stub def data(bytes : [void], length : uint) : CNData

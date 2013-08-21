@@ -10,8 +10,8 @@
     CNTreeMapKeySet* _keys;
     CNTreeMapValues* _values;
 }
-static NSInteger _BLACK;
-static NSInteger _RED;
+static NSInteger _BLACK = 0;
+static NSInteger _RED = 1;
 @synthesize comparator = _comparator;
 @synthesize keys = _keys;
 @synthesize values = _values;
@@ -31,12 +31,6 @@ static NSInteger _RED;
     }
     
     return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _BLACK = 0;
-    _RED = 1;
 }
 
 + (CNMutableTreeMap*)new {

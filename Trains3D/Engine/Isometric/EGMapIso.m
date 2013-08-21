@@ -10,7 +10,7 @@
     id<CNList> _partialTiles;
     id<CNList> _allTiles;
 }
-static double _ISO;
+static double _ISO = 0.70710676908493;
 @synthesize size = _size;
 @synthesize limits = _limits;
 @synthesize fullTiles = _fullTiles;
@@ -36,11 +36,6 @@ static double _ISO;
     }
     
     return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _ISO = 0.70710676908493;
 }
 
 - (BOOL)isFullTile:(EGPointI)tile {

@@ -47,7 +47,7 @@
     egShaderSource(shader, source);
     glCompileShader(shader);
     [egGetShaderError(shader) forEach:^void(NSString* _) {
-        @throw [[[@"Error in shader compiling : " stringByAppendingString:_] stringByAppendingString:@"in:\\n"] stringByAppendingString:source];
+        @throw [[@"Error in shader compiling : " stringByAppendingString:_] stringByAppendingString:source];
     }];
     return shader;
 }

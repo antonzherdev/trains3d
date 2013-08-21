@@ -1,7 +1,18 @@
+import CNData
+
 import EGGL
 
-class EGBuffer {
-    static def createWith(bufferType : GLenum, size : uint, data : string, usage : GLenum) : EGBuffer
+class EGBuffer(handle : GLuint) {
+    static def createWith(bufferType : GLenum, size : uint, data : [void], usage : GLenum) : EGBuffer = {
+        val handle = egGenBuffer
+        glBindBuffer(GL_ARRAY_BUFFER, handle)
+        glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW)
+        EGBuffer(handle)
+    }
+
+    def dealoc {
+        egDeleteBuffer(handle)
+    }
 }
 
 stub val GL_ARRAY_BUFFER : GLenum

@@ -3,6 +3,8 @@ import EGTypes
 stub struct GLenum
 stub struct GLint
 stub struct GLuint
+stub struct GLubyte
+stub struct GLsizeiptr
 
 stub def egClear
 
@@ -82,3 +84,8 @@ stub def egGetShaderError(shader : GLuint) : string?
 
 stub val GL_VERTEX_SHADER : GLenum
 stub val GL_FRAGMENT_SHADER : GLenum
+
+stub def egGenBuffer : GLuint
+stub def egDeleteBuffer(handle : GLuint)
+stub def glBindBuffer(target : GLenum, handle : GLuint) : GLuint
+stub def glBufferData(target : GLenum, size : GLsizeiptr, data : [void], usage : GLenum)
