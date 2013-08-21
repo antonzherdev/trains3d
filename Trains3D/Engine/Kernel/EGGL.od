@@ -4,6 +4,8 @@ stub struct GLenum
 stub struct GLint
 stub struct GLuint
 stub struct GLubyte
+stub struct GLsizei
+stub struct GLboolean
 stub struct GLsizeiptr
 
 stub def egClear
@@ -75,8 +77,10 @@ stub def glAttachShader(program : GLuint, shader : GLuint)
 stub def glLinkProgram(program : GLuint)
 stub def glDeleteProgram(program : GLuint)
 stub def glUseProgram(program : GLuint)
-stub def glDeleteShader(shader : GLuint)
+stub def egGetAttribLocation(program : GLuint, name : string) : GLuint
 stub def egGetProgramError(program : GLuint) : string?
+
+stub def glDeleteShader(shader : GLuint)
 stub def glCreateShader(shaderType : GLenum) : GLuint
 stub def egShaderSource(shader : GLuint, source : string)
 stub def glCompileShader(shader : GLuint)
@@ -89,3 +93,15 @@ stub def egGenBuffer : GLuint
 stub def egDeleteBuffer(handle : GLuint)
 stub def glBindBuffer(target : GLenum, handle : GLuint) : GLuint
 stub def glBufferData(target : GLenum, size : GLsizeiptr, data : [void], usage : GLenum)
+stub def egVertexAttribPointer(slot : GLuint, size : uint, tp : GLenum, normalized : GLboolean, stride : uint, shift : uint)
+stub def glDrawElements(mode : GLenum, count : GLsizei, tp : GLenum, indices : [void])
+
+stub val GL_TRIANGLES : GLenum
+
+stub val GL_FLOAT : GLenum
+stub val GL_DOUBLE : GLenum
+stub val GL_BYTE : GLenum
+stub val GL_UNSIGNED_BYTE : GLenum
+
+stub val GL_TRUE : GLboolean
+stub val GL_FALSE : GLboolean

@@ -97,6 +97,18 @@ static inline NSString *GLuintDescription(GLuint x) {
     return [NSString stringWithFormat:@"%d", x];
 }
 
+static inline BOOL GLenumEq(GLenum a, GLenum b) {
+    return a == b;
+}
+
+static inline NSUInteger GLenumHash(GLenum x) {
+    return x;
+}
+
+static inline NSString *GLenumDescription(GLenum x) {
+    return [NSString stringWithFormat:@"%d", x];
+}
+
 static inline GLuint egGenBuffer() {
     GLuint buffer;
     glGenBuffers(1, &buffer);
@@ -105,4 +117,12 @@ static inline GLuint egGenBuffer() {
 
 static inline void egDeleteBuffer(GLuint handle) {
     glDeleteBuffers(1, &handle);
+}
+
+static inline GLuint egGetAttribLocation(GLuint program, NSString* name) {
+    glGetAttribLocation(program, [name cStringUsingEncoding:NSUTF8StringEncoding]);
+}
+
+static inline void egVertexAttribPointer (GLuint index, NSUInteger size, GLenum type, GLboolean normalized, NSUInteger stride, NSUInteger pointer) {
+    glVertexAttribPointer(index, size, type, normalized, stride, (GLvoid const *) pointer);
 }

@@ -51,6 +51,7 @@
 		6F3DF25DE0C56EC3C464EF67 /* TRLevelMenuProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF96E6FE7099A6EF6112D /* TRLevelMenuProcessor.m */; };
 		6F3DF274DAD6313378447447 /* KWAny.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0C686B576496A1C863F /* KWAny.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF285A1A8FDEFE4449147 /* NSArray+CNChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFE56391C58FE97FAF35 /* NSArray+CNChain.m */; };
+		6F3DF29190AD608F019F4167 /* EGMatrix.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFCCC5CD62ACA9193A555 /* EGMatrix.od */; };
 		6F3DF2977A38FE7940E5CE35 /* TRLevel.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF124FA3EDCF67ED63F3B /* TRLevel.od */; };
 		6F3DF2A409115C42355E8143 /* EGDirector.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFACF90AEDEC71A116F83 /* EGDirector.od */; };
 		6F3DF2AE01C0B421079F45FE /* EGCollisionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8A7840109DAEECA927C /* EGCollisionsTest.m */; };
@@ -623,6 +624,7 @@
 		6F3DFCB4E8FA8114ED7BF41E /* EGSchedule.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGSchedule.od; sourceTree = "<group>"; };
 		6F3DFCC4599C7D1A631371CA /* TRRailroadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRRailroadView.h; sourceTree = "<group>"; };
 		6F3DFCCA0B3E842E18E2F103 /* EGMapIso.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGMapIso.od; sourceTree = "<group>"; };
+		6F3DFCCC5CD62ACA9193A555 /* EGMatrix.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGMatrix.od; sourceTree = "<group>"; };
 		6F3DFCD0CB7B57497EE5DE31 /* KWStringUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWStringUtilities.m; sourceTree = "<group>"; };
 		6F3DFCD25609BB4D99A4CB41 /* TRLevelProcessor.od */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.od; path = TRLevelProcessor.od; sourceTree = "<group>"; };
 		6F3DFCD33016FC4B01A86256 /* Emitter.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Emitter.vsh; sourceTree = "<group>"; };
@@ -1339,6 +1341,7 @@
 				6F3DFAAF0038BE2402D79B0E /* EGCollisions.od */,
 				6F3DF3F73EDFC67C71B3C25B /* EGCollisions.h */,
 				6F3DF24379604F8870D170FF /* EGCollisions.m */,
+				6F3DFCCC5CD62ACA9193A555 /* EGMatrix.od */,
 			);
 			path = Geometry;
 			sourceTree = "<group>";
@@ -1652,6 +1655,7 @@
 				6F3DF5615840513ECDE0A0FD /* Emitter.fsh in Resources */,
 				6F3DF829578FFE28BF383D36 /* Test.vsh in Resources */,
 				6F3DFD0C8345A3A77C7409A5 /* Test.fsh in Resources */,
+				6F3DF29190AD608F019F4167 /* EGMatrix.od in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

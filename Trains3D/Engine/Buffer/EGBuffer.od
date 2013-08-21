@@ -2,16 +2,37 @@ import CNData
 
 import EGGL
 
-class EGBuffer(handle : GLuint) {
-    static def createWith(bufferType : GLenum, size : uint, data : [void], usage : GLenum) : EGBuffer = {
-        val handle = egGenBuffer
-        glBindBuffer(GL_ARRAY_BUFFER, handle)
-        glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW)
-        EGBuffer(handle)
-    }
+class EGBuffer(bufferType : GLenum, stride : uint, handle : GLuint) {
+    private var _length : uint = 0
+    def length : uint = _length
+    static def createWith(bufferType : GLenum, stride : uint) : EGBuffer = EGBuffer(bufferType, stride, egGenBuffer)
 
     def dealoc {
         egDeleteBuffer(handle)
+    }
+
+    def set(data : [void], length : uint) : EGBuffer = set(data, length, GL_STATIC_DRAW)
+
+    def set(data : [void], length : uint, usage : GLenum) : EGBuffer = {
+        glBindBuffer(bufferType, handle)
+        glBufferData(bufferType, length, data, GL_STATIC_DRAW)
+        glBindBuffer(bufferType, 0)
+        _length = length
+        self
+    }
+
+    def bind {
+        glBindBuffer(bufferType, handle)
+    }
+
+    def clear {
+        glBindBuffer(bufferType, 0)
+    }
+
+    def draw {
+        bind
+        glDrawElements(GL_TRIANGLES, _length, GL_UNSIGNED_BYTE, 0)
+        clear
     }
 }
 
