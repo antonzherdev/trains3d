@@ -1,4 +1,5 @@
 #import "EGGL.h"
+#import "EGMatrix.h"
 
 id egGetProgramError(GLuint program) {
     GLint linkSuccess;
@@ -29,4 +30,13 @@ id egGetShaderError(GLuint shader) {
         return [NSString stringWithCString:messages encoding:NSUTF8StringEncoding];
     }
     return [CNOption none];
+}
+
+
+EGMatrix* egModelViewProjectionMatrix() {
+    double* model = malloc(sizeof(double) * 16);
+    double* projection = malloc(sizeof(double) * 16);
+    glGetDoublev(GL_MODELVIEW_MATRIX, model);
+    glGetDoublev(GL_PROJECTION_MATRIX, projection);
+    return [[EGMatrix matrixWithM:model] multiply:[EGMatrix matrixWithM:projection]];
 }

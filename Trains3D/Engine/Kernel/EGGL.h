@@ -1,6 +1,8 @@
 #import <GLUT/glut.h>
 #import "EGTypes.h"
 
+@class EGMatrix;
+
 static inline void egRotate(CGFloat angle, CGFloat x, CGFloat y, CGFloat z) {
     glRotated(angle, x, y, z);
 }
@@ -126,3 +128,5 @@ static inline GLuint egGetAttribLocation(GLuint program, NSString* name) {
 static inline void egVertexAttribPointer (GLuint index, NSUInteger size, GLenum type, GLboolean normalized, NSUInteger stride, NSUInteger pointer) {
     glVertexAttribPointer(index, size, type, normalized, stride, (GLvoid const *) pointer);
 }
+
+EGMatrix* egModelViewProjectionMatrix();
