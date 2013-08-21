@@ -1,5 +1,9 @@
 import EGTypes
 
+stub struct GLenum
+stub struct GLint
+stub struct GLuint
+
 stub def egClear
 
 stub def egColor3(r : float, g : float, b : float)
@@ -61,3 +65,20 @@ stub val GL_SPECULAR : uint
 stub val GL_EMISSION : uint
 stub val GL_SHININESS : uint
 stub val GL_AMBIENT_AND_DIFFUSE : uint
+
+
+stub def glCreateProgram : GLuint
+stub def glAttachShader(program : GLuint, shader : GLuint)
+stub def glAttachShader(program : GLuint, shader : GLuint)
+stub def glLinkProgram(program : GLuint)
+stub def glDeleteProgram(program : GLuint)
+stub def glUseProgram(program : GLuint)
+stub def glDeleteShader(shader : GLuint)
+stub def egGetProgramError(program : GLuint) : string?
+stub def glCreateShader(shaderType : GLenum) : GLuint
+stub def egShaderSource(shader : GLuint, source : string)
+stub def glCompileShader(shader : GLuint)
+stub def egGetShaderError(shader : GLuint) : string?
+
+stub val GL_VERTEX_SHADER : GLenum
+stub val GL_FRAGMENT_SHADER : GLenum

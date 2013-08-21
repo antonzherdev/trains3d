@@ -1,0 +1,54 @@
+import CNFile
+
+import EGGL
+
+class EGShaderProgram(handle : GLuint) {
+    static def loadFromFiles(vertex : string, fragment : string) : EGShaderProgram =
+        linkFromStrings(CNBundle.readToString(vertex), CNBundle.readToString(fragment))
+
+    static def linkFromStrings(vertex : string, fragment : string) : EGShaderProgram =  {
+        val vertexShader = compileShaderFor(GL_VERTEX_SHADER, vertex)
+        val fragmentShader = compileShaderFor(GL_FRAGMENT_SHADER, fragment)
+        val program = linkFromShaders(vertexShader, fragmentShader)
+        glDeleteShader(vertexShader)
+        glDeleteShader(fragmentShader)
+        program
+    }
+
+
+    static def linkFromShaders(vertex : GLuint, fragment : GLuint) : EGShaderProgram = {
+        val handle = glCreateProgram
+        glAttachShader(handle, vertex)
+        glAttachShader(handle, fragment)
+        glLinkProgram(handle)
+        egGetProgramError(handle).for(throw "Error in shader program linking: " + _)
+        EGShaderProgram(handle)
+    }
+
+    static def compileShaderFor(shaderType : GLenum, source : string) : GLuint = {
+        val shader = glCreateShader(shaderType)
+        egShaderSource(shader, source)
+        glCompileShader(shader)
+        egGetShaderError(shader).for(throw  "Error in shader compiling : " + _ + source)
+        shader
+    }
+
+    def dealoc {
+        glDeleteProgram(handle)
+    }
+
+    def set {
+        glUseProgram(handle)
+    }
+
+    def clear {
+        glUseProgram(0)
+    }
+
+    def draw(f : () -> void) {
+        glUseProgram(handle)
+        f()
+        glUseProgram(0)
+    }
+}
+

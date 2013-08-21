@@ -80,3 +80,19 @@ static inline void egMaterialColor(GLenum face, GLenum tp, EGColor color) {
 static inline void egMaterial(GLenum face, GLenum tp, double value) {
     glMaterialf(face, tp, (GLfloat) value);
 }
+
+id egGetProgramError(GLuint program);
+void egShaderSource(GLuint shader, NSString* source);
+id egGetShaderError(GLuint shader);
+
+static inline BOOL GLuintEq(GLuint a, GLuint b) {
+    return a == b;
+}
+
+static inline NSUInteger GLuintHash(GLuint x) {
+    return x;
+}
+
+static inline NSString *GLuintDescription(GLuint x) {
+    return [NSString stringWithFormat:@"%d", x];
+}

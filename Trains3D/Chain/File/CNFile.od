@@ -1,0 +1,4 @@
+stub class CNBundle {
+    static def fileNameFor(resource : string) : string
+    static def readToString(resource : string) : string
+}
