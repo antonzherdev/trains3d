@@ -323,8 +323,8 @@
 }
 
 - (void)offerPoint:(EGPoint)point event:(EGBentleyOttmannEvent*)event {
-    [[_events objectForKey:wrap(EGPoint, point) orUpdateWith:^id<CNMutableList>() {
-        return [(@[]) mutableCopy];
+    [[_events objectForKey:wrap(EGPoint, point) orUpdateWith:^NSMutableArray*() {
+        return [NSMutableArray mutableArray];
     }] addObject:event];
 }
 
@@ -400,7 +400,7 @@
 
 @implementation EGSweepLine{
     CNMutableTreeSet* _events;
-    id<CNMutableMap> _intersections;
+    NSMutableDictionary* _intersections;
     EGPoint _currentEventPoint;
     EGBentleyOttmannEventQueue* _queue;
 }
@@ -418,7 +418,7 @@
         _events = [CNMutableTreeSet newWithComparator:^NSInteger(EGBentleyOttmannPointEvent* a, EGBentleyOttmannPointEvent* b) {
             return [self compareEventsA:a b:b];
         }];
-        _intersections = [(@{}) mutableCopy];
+        _intersections = [NSMutableDictionary mutableDictionary];
         _queue = nil;
     }
     

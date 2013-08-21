@@ -98,7 +98,7 @@
 
 @interface EGSweepLine : NSObject
 @property (nonatomic, retain) CNMutableTreeSet* events;
-@property (nonatomic, readonly) id<CNMutableMap> intersections;
+@property (nonatomic, readonly) NSMutableDictionary* intersections;
 @property (nonatomic, retain) EGBentleyOttmannEventQueue* queue;
 
 + (id)sweepLine;

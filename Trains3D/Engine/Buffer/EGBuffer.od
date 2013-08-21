@@ -1,0 +1,10 @@
+import EGGL
+
+class EGBuffer {
+    static def createWith(bufferType : GLenum, size : uint, data : string, usage : GLenum) : EGBuffer
+}
+
+stub val GL_ARRAY_BUFFER : GLenum
+stub val GL_ELEMENT_ARRAY_BUFFER : GLenum
+
+stub val GL_STATIC_DRAW : GLenum
