@@ -40,7 +40,6 @@
 - (void)testCross;
 + (double)carLen;
 + (double)carWidth;
-+ (double)carsDelta;
 @end
 
 

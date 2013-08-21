@@ -10,7 +10,6 @@
 @implementation TRCollisionsTest
 static double _carLen;
 static double _carWidth;
-static double _carsDelta;
 
 + (id)collisionsTest {
     return [[TRCollisionsTest alloc] init];
@@ -24,9 +23,8 @@ static double _carsDelta;
 
 + (void)initialize {
     [super initialize];
-    _carLen = 0.6;
-    _carWidth = 0.2;
-    _carsDelta = 0.3;
+    _carLen = [TRCarType.car fullLength];
+    _carWidth = TRCarType.car.width;
 }
 
 - (TRLevel*)newLevel {
@@ -50,16 +48,16 @@ static double _carsDelta;
 }
 
 - (void)doTest1ForLevel:(TRLevel*)level delta:(double)delta form:(TRRailForm*)form {
-    TRTrain* t1 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRColor.green cars:(@[[ODObject object]]) speed:((NSUInteger)(0))];
+    TRTrain* t1 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRColor.green cars:(@[[TRCar carWithCarType:TRCarType.car]]) speed:((NSUInteger)(0))];
     TRRailPoint* p = [TRRailPoint railPointWithTile:EGPointIMake(0, 0) form:form x:0 back:NO];
     TRRailPoint* p2 = [level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
     } forLength:_carLen point:p].point;
     [level testRunTrain:t1 fromPoint:p2];
-    TRTrain* t2 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRColor.orange cars:(@[[ODObject object], [ODObject object]]) speed:((NSUInteger)(0))];
+    TRTrain* t2 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRColor.orange cars:(@[[TRCar carWithCarType:TRCarType.car], [TRCar carWithCarType:TRCarType.car]]) speed:((NSUInteger)(0))];
     p2 = [level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
-    } forLength:_carLen * 3 + _carsDelta + delta point:p].point;
+    } forLength:_carLen * 3 + delta point:p].point;
     [level testRunTrain:t2 fromPoint:p2];
     id<CNSet> cols = [self checkLevel:level];
     [self assertTrueValue:[cols isEmpty]];
@@ -81,7 +79,7 @@ static double _carsDelta;
     [level.railroad tryAddRail:[TRRail railWithTile:EGPointIMake(0, 0) form:TRRailForm.leftTop]];
     [level.railroad tryAddRail:[TRRail railWithTile:EGPointIMake(0, 1) form:TRRailForm.bottomRight]];
     [level.railroad tryAddRail:[TRRail railWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight]];
-    [self doTest1ForLevel:level delta:_carsDelta form:TRRailForm.leftTop];
+    [self doTest1ForLevel:level delta:0.3 form:TRRailForm.leftTop];
 }
 
 - (void)testCross {
@@ -91,17 +89,17 @@ static double _carsDelta;
     [level.railroad tryAddRail:[TRRail railWithTile:EGPointIMake(2, 1) form:TRRailForm.leftRight]];
     [level.railroad tryAddRail:[TRRail railWithTile:EGPointIMake(3, 1) form:TRRailForm.leftRight]];
     [level.railroad tryAddRail:[TRRail railWithTile:EGPointIMake(1, 0) form:TRRailForm.bottomTop]];
-    TRTrain* t1 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRColor.green cars:(@[[ODObject object]]) speed:((NSUInteger)(0))];
+    TRTrain* t1 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRColor.green cars:(@[[TRCar carWithCarType:TRCarType.car]]) speed:((NSUInteger)(0))];
     TRRailPoint* p = [TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.bottomTop x:0 back:NO];
     TRRailPoint* p1 = [level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
     } forLength:0.5 - _carWidth - 0.001 point:p].point;
     [level testRunTrain:t1 fromPoint:p1];
-    TRTrain* t2 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRColor.orange cars:(@[[ODObject object], [ODObject object]]) speed:((NSUInteger)(0))];
+    TRTrain* t2 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRColor.orange cars:(@[[TRCar carWithCarType:TRCarType.car], [TRCar carWithCarType:TRCarType.car]]) speed:((NSUInteger)(0))];
     p = [TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight x:0 back:NO];
     TRRailPoint* p2 = [level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
-    } forLength:_carLen * 2 + _carsDelta point:p].point;
+    } forLength:_carLen * 2 point:p].point;
     [level testRunTrain:t2 fromPoint:p2];
     id<CNSet> cols = [self checkLevel:level];
     [self assertTrueValue:[cols isEmpty]];
@@ -116,10 +114,6 @@ static double _carsDelta;
 
 + (double)carWidth {
     return _carWidth;
-}
-
-+ (double)carsDelta {
-    return _carsDelta;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
