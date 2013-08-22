@@ -258,7 +258,7 @@
 }
 
 - (void)setMatrix:(EGMatrix*)matrix {
-    glUniformMatrix4fv(_handle, 1, GL_FALSE, matrix.m);
+    glUniformMatrix4fv(_handle, 1, GL_FALSE, [matrix array]);
 }
 
 - (id)copyWithZone:(NSZone*)zone {

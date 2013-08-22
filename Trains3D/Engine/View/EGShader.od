@@ -97,6 +97,6 @@ class EGShaderAttribute(handle : GLint) {
 
 class EGShaderUniform(handle : GLint) {
     def set(matrix : EGMatrix) {
-        glUniformMatrix4fv(handle, 1, GL_FALSE, matrix.m)
+        glUniformMatrix4fv(handle, 1, GL_FALSE, matrix.array)
     }
 }

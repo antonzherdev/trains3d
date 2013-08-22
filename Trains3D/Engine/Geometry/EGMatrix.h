@@ -2,15 +2,19 @@
 
 @class EGMatrix;
 
+struct EGMatrixImpl;
+typedef struct EGMatrixImpl EGMatrixImpl;
 @interface EGMatrix : NSObject
-@property(nonatomic) float *m;
+- (EGMatrixImpl*)impl;
 
-- (id)initWithM:(float *)m;
+- (id)initWithImpl:(EGMatrixImpl *)m;
 
-+ (id)matrixWithM:(float *)m;
-
++ (id)matrixWithImpl:(EGMatrixImpl *)m;
++ (id)matrixWithArray:(float[16])m;
 
 - (EGMatrix*)multiply:(EGMatrix*)matrix;
+
+- (GLfloat const *)array;
 @end
 
 
