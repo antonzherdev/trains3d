@@ -16,10 +16,24 @@ typedef void (^cnP)(id x);
 extern id cnResolveCollection(id collection);
 
 
+#define numc(expr) [NSNumber numberWithChar:expr]
+#define unumc(expr) [expr charValue]
+#define numi4(expr) [NSNumber numberWithInt:expr]
+#define unumi4(expr) [expr intValue]
 #define numi(expr) [NSNumber numberWithLong:expr]
 #define unumi(expr) [expr longValue]
-#define numf(expr) [NSNumber numberWithDouble:expr]
-#define unumf(expr) [expr doubleValue]
+
+#define numuc(expr) [NSNumber numberWithUnsignedChar:expr]
+#define unumuc(expr) [expr unsignedCharValue]
+#define numui(expr) [NSNumber numberWithUnsignedInt:expr]
+#define unumui(expr) [expr unsignedIntValue]
+#define numul(expr) [NSNumber numberWithUnsignedLong:expr]
+#define unumul(expr) [expr unsignedLongValue]
+
+#define numf(expr) [NSNumber numberWithFloat:expr]
+#define unumf(expr) [expr floatValue]
+#define numd(expr) [NSNumber numberWithDouble:expr]
+#define unumd(expr) [expr doubleValue]
 #define numb(expr) [NSNumber numberWithBool:expr]
 #define unumb(expr) [expr boolValue]
 
@@ -41,5 +55,5 @@ extern id cnResolveCollection(id collection);
 #define uwrap(tp, expr) [((tp ## Wrap*)expr) value]
 
 static inline NSUInteger randomWith(NSUInteger max) {
-    return arc4random_uniform((u_int32_t)max + 1);
+    return arc4random_uniform((u_int32_t)(max + 1));
 }

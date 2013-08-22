@@ -10,7 +10,7 @@
     id<CNList> _partialTiles;
     id<CNList> _allTiles;
 }
-static double _ISO = 0.70710676908493;
+static float _ISO = 0.70710676908493;
 @synthesize size = _size;
 @synthesize limits = _limits;
 @synthesize fullTiles = _fullTiles;
@@ -25,7 +25,7 @@ static double _ISO = 0.70710676908493;
     self = [super init];
     if(self) {
         _size = size;
-        _limits = egRectINewXY((1 - _size.height) / 2 - 1, (2 * _size.width + _size.height - 3) / 2 + 1, (1 - _size.width) / 2 - 1, (_size.width + 2 * _size.height - 3) / 2 + 1);
+        _limits = egRectINewXY(((float)((1 - _size.height) / 2 - 1)), ((float)((2 * _size.width + _size.height - 3) / 2 + 1)), ((float)((1 - _size.width) / 2 - 1)), ((float)((_size.width + 2 * _size.height - 3) / 2 + 1)));
         _fullTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
             return [self isFullTile:uwrap(EGPointI, _)];
         }] toArray];
@@ -48,13 +48,13 @@ static double _ISO = 0.70710676908493;
 
 - (void)drawLayout {
     glPushMatrix();
-    egRotate(45, 0, 0, 1);
+    egRotate(((float)(45)), ((float)(0)), ((float)(0)), ((float)(1)));
     glBegin(GL_LINES);
-    double left = -_ISO;
-    double top = _ISO * _size.height;
-    double bottom = _ISO * -_size.width;
-    double right = _ISO * (_size.width + _size.height - 1);
-    egNormal3(0, 0, 1);
+    float left = -_ISO;
+    float top = _ISO * _size.height;
+    float bottom = _ISO * -_size.width;
+    float right = _ISO * (_size.width + _size.height - 1);
+    egNormal3(((float)(0)), ((float)(0)), ((float)(1)));
     egVertex3(left, top, 0.0);
     egVertex3(left, bottom, 0.0);
     egVertex3(left, bottom, 0.0);
@@ -69,7 +69,7 @@ static double _ISO = 0.70710676908493;
     glBegin(GL_LINES);
     [_fullTiles forEach:^void(id tile) {
         EGPointI p = uwrap(EGPointI, tile);
-        egNormal3(0, 0, 1);
+        egNormal3(((float)(0)), ((float)(0)), ((float)(1)));
         egVertex3(p.x - 0.5, p.y - 0.5, 0.0);
         egVertex3(p.x + 0.5, p.y - 0.5, 0.0);
         egVertex3(p.x + 0.5, p.y - 0.5, 0.0);
@@ -85,21 +85,21 @@ static double _ISO = 0.70710676908493;
 
 - (void)drawPlane {
     glBegin(GL_QUADS);
-    double l = _limits.x - 1.5;
-    double r = egRectIX2(_limits) + 1.5;
-    double t = _limits.y - 1.5;
-    double b = egRectIY2(_limits) + 1.5;
+    float l = _limits.x - 1.5;
+    float r = egRectIX2(_limits) + 1.5;
+    float t = _limits.y - 1.5;
+    float b = egRectIY2(_limits) + 1.5;
     NSInteger w = _limits.width + 3;
     NSInteger h = _limits.height + 3;
-    egNormal3(0, 0, 1);
+    egNormal3(((float)(0)), ((float)(0)), ((float)(1)));
     egTexCoord2(0.0, 0.0);
-    egVertex3(l, b, 0);
-    egTexCoord2(w, 0.0);
-    egVertex3(r, b, 0);
-    egTexCoord2(w, h);
-    egVertex3(r, t, 0);
-    egTexCoord2(0.0, h);
-    egVertex3(l, t, 0);
+    egVertex3(l, b, ((float)(0)));
+    egTexCoord2(((float)(w)), 0.0);
+    egVertex3(r, b, ((float)(0)));
+    egTexCoord2(((float)(w)), ((float)(h)));
+    egVertex3(r, t, ((float)(0)));
+    egTexCoord2(0.0, ((float)(h)));
+    egVertex3(l, t, ((float)(0)));
     glEnd();
     glPopMatrix();
 }
@@ -120,10 +120,10 @@ static double _ISO = 0.70710676908493;
 }
 
 - (EGRectI)cutRectForTile:(EGPointI)tile {
-    return egRectINewXY([self tileCutAxisLess:0 more:tile.x + tile.y], [self tileCutAxisLess:tile.x + tile.y more:_size.width + _size.height - 2], [self tileCutAxisLess:tile.y - tile.x more:_size.height - 1], [self tileCutAxisLess:-_size.width + 1 more:tile.y - tile.x]);
+    return egRectINewXY(((float)([self tileCutAxisLess:0 more:tile.x + tile.y])), ((float)([self tileCutAxisLess:tile.x + tile.y more:_size.width + _size.height - 2])), ((float)([self tileCutAxisLess:tile.y - tile.x more:_size.height - 1])), ((float)([self tileCutAxisLess:-_size.width + 1 more:tile.y - tile.x])));
 }
 
-+ (double)ISO {
++ (float)ISO {
     return _ISO;
 }
 

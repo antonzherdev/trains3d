@@ -262,12 +262,32 @@
     return ret;
 }
 
+- (id)convertWithBuilder:(id <CNBuilder>)builder {
+    [self forEach:^void(id x) {
+        [builder addObject:x];
+    }];
+    return [builder build];
+}
+
+- (id)findWhere:(BOOL(^)(id))where {
+    __block id ret = [CNOption none];
+    [self goOn:^BOOL(id x) {
+        if(where(ret)) {
+            ret = [CNOption opt:x];
+            NO;
+        }
+        return YES;
+    }];
+    return ret;
+}
+
+
 - (id)randomItem {
     NSArray *array = [self toArray];
     if(array.count == 0) {
         return [CNOption none];
     }
-    u_int32_t n = randomWith((u_int32_t)array.count - 1);
+    NSUInteger n = randomWith(array.count - 1);
     return [array objectAtIndex:n];
 }
 

@@ -57,19 +57,19 @@
 - (BOOL)isBack;
 - (void)startFromCity:(TRCity*)city;
 - (void)setHead:(TRRailPoint*)head;
-- (void)updateWithDelta:(double)delta;
+- (void)updateWithDelta:(float)delta;
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch;
 @end
 
 
 @interface TRCarType : ODEnum
-@property (nonatomic, readonly) double length;
-@property (nonatomic, readonly) double width;
-@property (nonatomic, readonly) double frontConnectorLength;
-@property (nonatomic, readonly) double backConnectorLength;
+@property (nonatomic, readonly) float length;
+@property (nonatomic, readonly) float width;
+@property (nonatomic, readonly) float frontConnectorLength;
+@property (nonatomic, readonly) float backConnectorLength;
 @property (nonatomic, readonly) BOOL isEngine;
 
-- (double)fullLength;
+- (float)fullLength;
 + (TRCarType*)car;
 + (TRCarType*)engine;
 + (NSArray*)values;
@@ -85,11 +85,11 @@
 
 + (id)carWithCarType:(TRCarType*)carType;
 - (id)initWithCarType:(TRCarType*)carType;
-- (double)frontConnectorLength;
-- (double)backConnectorLength;
-- (double)length;
-- (double)width;
-- (double)fullLength;
+- (float)frontConnectorLength;
+- (float)backConnectorLength;
+- (float)length;
+- (float)width;
+- (float)fullLength;
 - (EGThickLineSegment*)figure;
 @end
 

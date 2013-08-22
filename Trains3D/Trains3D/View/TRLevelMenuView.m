@@ -24,23 +24,23 @@
     self = [super init];
     if(self) {
         _level = level;
-        _camera = [EGCamera2D camera2DWithSize:EGSizeMake(2, 1)];
+        _camera = [EGCamera2D camera2DWithSize:EGSizeMake(((float)(2)), ((float)(1)))];
     }
     
     return self;
 }
 
 - (void)drawView {
-    egColor3(1, 1, 1);
-    egTextGlutDraw([NSString stringWithFormat:@"%li", [_level.score score]], GLUT_BITMAP_HELVETICA_18, EGPointMake(1, 1));
+    egColor3(((float)(1)), ((float)(1)), ((float)(1)));
+    egTextGlutDraw([NSString stringWithFormat:@"%li", [_level.score score]], GLUT_BITMAP_HELVETICA_18, EGPointMake(((float)(1)), ((float)(1))));
     NSInteger seconds = ((NSInteger)([_level.schedule time]));
-    egTextGlutDraw([NSString stringWithFormat:@"%li", seconds], GLUT_BITMAP_HELVETICA_18, EGPointMake(1.5, 1));
+    egTextGlutDraw([NSString stringWithFormat:@"%li", seconds], GLUT_BITMAP_HELVETICA_18, EGPointMake(1.5, ((float)(1))));
     if(!([[_level.railroad damagesPoints] isEmpty]) && [[_level repairer] isEmpty]) {
         glPushMatrix();
         [[_level cities] forEach:^void(TRCity* city) {
             [city.color set];
-            egRect(0, 0, 0.1, 0.1);
-            egTranslate(0.1, 0, 0);
+            egRect(((float)(0)), ((float)(0)), 0.1, 0.1);
+            egTranslate(0.1, ((float)(0)), ((float)(0)));
         }];
         glPopMatrix();
     }

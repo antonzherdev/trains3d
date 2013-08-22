@@ -7,10 +7,10 @@
 @property (nonatomic, readonly) EGColor ambient;
 @property (nonatomic, readonly) EGColor diffuse;
 @property (nonatomic, readonly) EGColor specular;
-@property (nonatomic, readonly) double shininess;
+@property (nonatomic, readonly) float shininess;
 
-+ (id)materialWithAmbient:(EGColor)ambient diffuse:(EGColor)diffuse specular:(EGColor)specular shininess:(double)shininess;
-- (id)initWithAmbient:(EGColor)ambient diffuse:(EGColor)diffuse specular:(EGColor)specular shininess:(double)shininess;
++ (id)materialWithAmbient:(EGColor)ambient diffuse:(EGColor)diffuse specular:(EGColor)specular shininess:(float)shininess;
+- (id)initWithAmbient:(EGColor)ambient diffuse:(EGColor)diffuse specular:(EGColor)specular shininess:(float)shininess;
 - (void)set;
 - (void)drawF:(void(^)())f;
 + (EGMaterial*)default;

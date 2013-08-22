@@ -12,10 +12,10 @@ typedef struct EGRectI EGRectI;
 typedef struct EGColor EGColor;
 
 struct EGPoint {
-    double x;
-    double y;
+    float x;
+    float y;
 };
-static inline EGPoint EGPointMake(double x, double y) {
+static inline EGPoint EGPointMake(float x, float y) {
     EGPoint ret;
     ret.x = x;
     ret.y = y;
@@ -26,8 +26,8 @@ static inline BOOL EGPointEq(EGPoint s1, EGPoint s2) {
 }
 static inline NSUInteger EGPointHash(EGPoint self) {
     NSUInteger hash = 0;
-    hash = hash * 31 + [[NSNumber numberWithDouble:self.x] hash];
-    hash = hash * 31 + [[NSNumber numberWithDouble:self.y] hash];
+    hash = hash * 31 + [[NSNumber numberWithFloat:self.x] hash];
+    hash = hash * 31 + [[NSNumber numberWithFloat:self.y] hash];
     return hash;
 }
 static inline NSString* EGPointDescription(EGPoint self) {
@@ -41,15 +41,15 @@ EGPoint egPointApply(EGPointI point);
 EGPoint egPointAdd(EGPoint self, EGPoint point);
 EGPoint egPointSub(EGPoint self, EGPoint point);
 EGPoint egPointNegate(EGPoint self);
-double egPointAngle(EGPoint self);
-double egPointDot(EGPoint self, EGPoint point);
-double egPointLengthSquare(EGPoint self);
-double egPointLength(EGPoint self);
-EGPoint egPointMul(EGPoint self, double value);
-EGPoint egPointDiv(EGPoint self, double value);
+float egPointAngle(EGPoint self);
+float egPointDot(EGPoint self, EGPoint point);
+float egPointLengthSquare(EGPoint self);
+float egPointLength(EGPoint self);
+EGPoint egPointMul(EGPoint self, float value);
+EGPoint egPointDiv(EGPoint self, float value);
 EGPoint egPointMid(EGPoint self, EGPoint point);
-double egPointDistanceTo(EGPoint self, EGPoint point);
-EGPoint egPointSet(EGPoint self, double length);
+float egPointDistanceTo(EGPoint self, EGPoint point);
+EGPoint egPointSet(EGPoint self, float length);
 EGPoint egPointNormalize(EGPoint self);
 NSInteger egPointCompare(EGPoint self, EGPoint to);
 @interface EGPointWrap : NSObject
@@ -102,10 +102,10 @@ NSInteger egPointICompare(EGPointI self, EGPointI to);
 
 
 struct EGSize {
-    double width;
-    double height;
+    float width;
+    float height;
 };
-static inline EGSize EGSizeMake(double width, double height) {
+static inline EGSize EGSizeMake(float width, float height) {
     EGSize ret;
     ret.width = width;
     ret.height = height;
@@ -116,8 +116,8 @@ static inline BOOL EGSizeEq(EGSize s1, EGSize s2) {
 }
 static inline NSUInteger EGSizeHash(EGSize self) {
     NSUInteger hash = 0;
-    hash = hash * 31 + [[NSNumber numberWithDouble:self.width] hash];
-    hash = hash * 31 + [[NSNumber numberWithDouble:self.height] hash];
+    hash = hash * 31 + [[NSNumber numberWithFloat:self.width] hash];
+    hash = hash * 31 + [[NSNumber numberWithFloat:self.height] hash];
     return hash;
 }
 static inline NSString* EGSizeDescription(EGSize self) {
@@ -172,12 +172,12 @@ static inline NSString* EGSizeIDescription(EGSizeI self) {
 
 
 struct EGRect {
-    double x;
-    double width;
-    double y;
-    double height;
+    float x;
+    float width;
+    float y;
+    float height;
 };
-static inline EGRect EGRectMake(double x, double width, double y, double height) {
+static inline EGRect EGRectMake(float x, float width, float y, float height) {
     EGRect ret;
     ret.x = x;
     ret.width = width;
@@ -190,10 +190,10 @@ static inline BOOL EGRectEq(EGRect s1, EGRect s2) {
 }
 static inline NSUInteger EGRectHash(EGRect self) {
     NSUInteger hash = 0;
-    hash = hash * 31 + [[NSNumber numberWithDouble:self.x] hash];
-    hash = hash * 31 + [[NSNumber numberWithDouble:self.width] hash];
-    hash = hash * 31 + [[NSNumber numberWithDouble:self.y] hash];
-    hash = hash * 31 + [[NSNumber numberWithDouble:self.height] hash];
+    hash = hash * 31 + [[NSNumber numberWithFloat:self.x] hash];
+    hash = hash * 31 + [[NSNumber numberWithFloat:self.width] hash];
+    hash = hash * 31 + [[NSNumber numberWithFloat:self.y] hash];
+    hash = hash * 31 + [[NSNumber numberWithFloat:self.height] hash];
     return hash;
 }
 static inline NSString* EGRectDescription(EGRect self) {
@@ -206,15 +206,15 @@ static inline NSString* EGRectDescription(EGRect self) {
     return description;
 }
 BOOL egRectContains(EGRect self, EGPoint point);
-double egRectX2(EGRect self);
-double egRectY2(EGRect self);
-EGRect egRectNewXY(double x, double x2, double y, double y2);
-EGRect egRectMove(EGRect self, double x, double y);
+float egRectX2(EGRect self);
+float egRectY2(EGRect self);
+EGRect egRectNewXY(float x, float x2, float y, float y2);
+EGRect egRectMove(EGRect self, float x, float y);
 EGRect egRectMoveToCenterFor(EGRect self, EGSize size);
 EGPoint egRectPoint(EGRect self);
 EGSize egRectSize(EGRect self);
 BOOL egRectIntersects(EGRect self, EGRect rect);
-EGRect egRectThicken(EGRect self, double x, double y);
+EGRect egRectThicken(EGRect self, float x, float y);
 @interface EGRectWrap : NSObject
 @property (readonly, nonatomic) EGRect value;
 
@@ -259,7 +259,7 @@ static inline NSString* EGRectIDescription(EGRectI self) {
     return description;
 }
 EGRectI egRectIApply(EGRect rect);
-EGRectI egRectINewXY(double x, double x2, double y, double y2);
+EGRectI egRectINewXY(float x, float x2, float y, float y2);
 NSInteger egRectIX2(EGRectI self);
 NSInteger egRectIY2(EGRectI self);
 @interface EGRectIWrap : NSObject
@@ -272,12 +272,12 @@ NSInteger egRectIY2(EGRectI self);
 
 
 struct EGColor {
-    double r;
-    double g;
-    double b;
-    double a;
+    float r;
+    float g;
+    float b;
+    float a;
 };
-static inline EGColor EGColorMake(double r, double g, double b, double a) {
+static inline EGColor EGColorMake(float r, float g, float b, float a) {
     EGColor ret;
     ret.r = r;
     ret.g = g;
@@ -290,10 +290,10 @@ static inline BOOL EGColorEq(EGColor s1, EGColor s2) {
 }
 static inline NSUInteger EGColorHash(EGColor self) {
     NSUInteger hash = 0;
-    hash = hash * 31 + [[NSNumber numberWithDouble:self.r] hash];
-    hash = hash * 31 + [[NSNumber numberWithDouble:self.g] hash];
-    hash = hash * 31 + [[NSNumber numberWithDouble:self.b] hash];
-    hash = hash * 31 + [[NSNumber numberWithDouble:self.a] hash];
+    hash = hash * 31 + [[NSNumber numberWithFloat:self.r] hash];
+    hash = hash * 31 + [[NSNumber numberWithFloat:self.g] hash];
+    hash = hash * 31 + [[NSNumber numberWithFloat:self.b] hash];
+    hash = hash * 31 + [[NSNumber numberWithFloat:self.a] hash];
     return hash;
 }
 static inline NSString* EGColorDescription(EGColor self) {
@@ -317,7 +317,7 @@ void egColorSetMaterial(EGColor self);
 
 
 @protocol EGController<NSObject>
-- (void)updateWithDelta:(double)delta;
+- (void)updateWithDelta:(float)delta;
 @end
 
 

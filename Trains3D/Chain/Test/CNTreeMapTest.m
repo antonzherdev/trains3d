@@ -14,7 +14,7 @@
 
 - (void)testMain {
     CNMutableTreeMap* map = [CNMutableTreeMap new];
-    [self assertEqualsA:@0 b:numi([map count])];
+    [self assertEqualsA:@0 b:numi(((NSInteger)([map count])))];
     [self assertTrueValue:[[map applyKey:@0] isEmpty]];
     [map setObject:@"test" forKey:@0];
     [self assertEqualsA:@"test" b:[[map applyKey:@0] get]];
@@ -22,7 +22,7 @@
     [tests forEach:^void(id i) {
         [map setObject:[@"test" stringByAppendingFormat:@"%li", unumi(i)] forKey:i];
     }];
-    [self assertEqualsA:numi([[[tests chain] distinct] count]) b:numi([map count])];
+    [self assertEqualsA:numui([[[tests chain] distinct] count]) b:numui([map count])];
     [[[tests chain] distinct] forEach:^void(id i) {
         [self assertEqualsA:[@"test" stringByAppendingFormat:@"%li", unumi(i)] b:[[map applyKey:i] get]];
     }];
@@ -32,7 +32,7 @@
         [map removeForKey:i];
         [self assertTrueValue:[[map applyKey:i] isEmpty]];
     }];
-    [self assertEqualsA:@0 b:numi([map count])];
+    [self assertEqualsA:@0 b:numi(((NSInteger)([map count])))];
 }
 
 - (id)copyWithZone:(NSZone*)zone {

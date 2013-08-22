@@ -18,7 +18,7 @@
     TRLevel *level = [TRLevelFactory levelWithNumber:1];
 //    [level runSample];
     EGScene *scene = [TRLevelFactory sceneForLevel:level];
-    TRRailroad *railroad = level.railroad;
+//    TRRailroad *railroad = level.railroad;
 //    [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(0, 0) form:[TRRailForm leftRight]]];
 //    [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(1, 0) form:[TRRailForm leftBottom]]];
 //    [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(1, -1) form:[TRRailForm topRight]]];

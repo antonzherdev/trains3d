@@ -12,57 +12,57 @@
 @interface EGLine : NSObject
 + (id)line;
 - (id)init;
-+ (EGLine*)newWithSlope:(double)slope point:(EGPoint)point;
++ (EGLine*)newWithSlope:(float)slope point:(EGPoint)point;
 + (EGLine*)newWithP1:(EGPoint)p1 p2:(EGPoint)p2;
-+ (double)calculateSlopeWithP1:(EGPoint)p1 p2:(EGPoint)p2;
-+ (double)calculateConstantWithSlope:(double)slope point:(EGPoint)point;
++ (float)calculateSlopeWithP1:(EGPoint)p1 p2:(EGPoint)p2;
++ (float)calculateConstantWithSlope:(float)slope point:(EGPoint)point;
 - (BOOL)containsPoint:(EGPoint)point;
 - (BOOL)isVertical;
 - (BOOL)isHorizontal;
 - (id)intersectionWithLine:(EGLine*)line;
-- (double)xIntersectionWithLine:(EGLine*)line;
+- (float)xIntersectionWithLine:(EGLine*)line;
 - (BOOL)isRightPoint:(EGPoint)point;
-- (double)slope;
-- (id)moveWithDistance:(double)distance;
-- (double)angle;
-- (double)degreeAngle;
+- (float)slope;
+- (id)moveWithDistance:(float)distance;
+- (float)angle;
+- (float)degreeAngle;
 - (EGLine*)perpendicularWithPoint:(EGPoint)point;
 @end
 
 
 @interface EGSlopeLine : EGLine
-@property (nonatomic, readonly) double slope;
-@property (nonatomic, readonly) double constant;
+@property (nonatomic, readonly) float slope;
+@property (nonatomic, readonly) float constant;
 
-+ (id)slopeLineWithSlope:(double)slope constant:(double)constant;
-- (id)initWithSlope:(double)slope constant:(double)constant;
++ (id)slopeLineWithSlope:(float)slope constant:(float)constant;
+- (id)initWithSlope:(float)slope constant:(float)constant;
 - (BOOL)containsPoint:(EGPoint)point;
 - (BOOL)isVertical;
 - (BOOL)isHorizontal;
-- (double)xIntersectionWithLine:(EGLine*)line;
-- (double)yForX:(double)x;
+- (float)xIntersectionWithLine:(EGLine*)line;
+- (float)yForX:(float)x;
 - (id)intersectionWithLine:(EGLine*)line;
 - (BOOL)isRightPoint:(EGPoint)point;
-- (id)moveWithDistance:(double)distance;
-- (double)angle;
+- (id)moveWithDistance:(float)distance;
+- (float)angle;
 - (EGLine*)perpendicularWithPoint:(EGPoint)point;
 @end
 
 
 @interface EGVerticalLine : EGLine
-@property (nonatomic, readonly) double x;
+@property (nonatomic, readonly) float x;
 
-+ (id)verticalLineWithX:(double)x;
-- (id)initWithX:(double)x;
++ (id)verticalLineWithX:(float)x;
+- (id)initWithX:(float)x;
 - (BOOL)containsPoint:(EGPoint)point;
 - (BOOL)isVertical;
 - (BOOL)isHorizontal;
-- (double)xIntersectionWithLine:(EGLine*)line;
+- (float)xIntersectionWithLine:(EGLine*)line;
 - (id)intersectionWithLine:(EGLine*)line;
 - (BOOL)isRightPoint:(EGPoint)point;
-- (double)slope;
-- (id)moveWithDistance:(double)distance;
-- (double)angle;
+- (float)slope;
+- (id)moveWithDistance:(float)distance;
+- (float)angle;
 - (EGLine*)perpendicularWithPoint:(EGPoint)point;
 @end
 
@@ -81,7 +81,7 @@
 + (id)lineSegmentWithP1:(EGPoint)p1 p2:(EGPoint)p2;
 - (id)initWithP1:(EGPoint)p1 p2:(EGPoint)p2;
 + (EGLineSegment*)newWithP1:(EGPoint)p1 p2:(EGPoint)p2;
-+ (EGLineSegment*)newWithX1:(double)x1 y1:(double)y1 x2:(double)x2 y2:(double)y2;
++ (EGLineSegment*)newWithX1:(float)x1 y1:(float)y1 x2:(float)x2 y2:(float)y2;
 - (BOOL)isVertical;
 - (BOOL)isHorizontal;
 - (EGLine*)line;
@@ -91,7 +91,7 @@
 - (BOOL)endingsContainPoint:(EGPoint)point;
 - (id<CNList>)segments;
 - (EGLineSegment*)moveWithPoint:(EGPoint)point;
-- (EGLineSegment*)moveWithX:(double)x y:(double)y;
+- (EGLineSegment*)moveWithX:(float)x y:(float)y;
 @end
 
 
@@ -107,11 +107,11 @@
 
 @interface EGThickLineSegment : NSObject<EGFigure>
 @property (nonatomic, readonly) EGLineSegment* segment;
-@property (nonatomic, readonly) double thickness;
-@property (nonatomic, readonly) double thickness_2;
+@property (nonatomic, readonly) float thickness;
+@property (nonatomic, readonly) float thickness_2;
 
-+ (id)thickLineSegmentWithSegment:(EGLineSegment*)segment thickness:(double)thickness;
-- (id)initWithSegment:(EGLineSegment*)segment thickness:(double)thickness;
++ (id)thickLineSegmentWithSegment:(EGLineSegment*)segment thickness:(float)thickness;
+- (id)initWithSegment:(EGLineSegment*)segment thickness:(float)thickness;
 - (EGRect)boundingRect;
 - (id<CNList>)segments;
 @end

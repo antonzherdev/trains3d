@@ -16,19 +16,19 @@
 }
 
 - (void)testDavidsStar {
-    id<CNList> figures = (@[tuple(@1, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(1, 0)), wrap(EGPoint, EGPointMake(3, 2)), wrap(EGPoint, EGPointMake(5, 0))])]), tuple(@2, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(1, 1)), wrap(EGPoint, EGPointMake(5, 1)), wrap(EGPoint, EGPointMake(3, -1))])]), tuple(@3, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(4, -1)), wrap(EGPoint, EGPointMake(4.5, -0.5)), wrap(EGPoint, EGPointMake(5, -1))])])]);
+    id<CNList> figures = (@[tuple(@1, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(((float)(1)), ((float)(0)))), wrap(EGPoint, EGPointMake(((float)(3)), ((float)(2)))), wrap(EGPoint, EGPointMake(((float)(5)), ((float)(0))))])]), tuple(@2, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(((float)(1)), ((float)(1)))), wrap(EGPoint, EGPointMake(((float)(5)), ((float)(1)))), wrap(EGPoint, EGPointMake(((float)(3)), ((float)(-1))))])]), tuple(@3, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(((float)(4)), ((float)(-1)))), wrap(EGPoint, EGPointMake(4.5, -0.5)), wrap(EGPoint, EGPointMake(((float)(5)), ((float)(-1))))])])]);
     id<CNSet> collisions = [EGCollisions collisionsForFigures:figures];
-    [self assertEqualsA:collisions b:[(@[[EGCollision collisionWithItems:[CNPair pairWithA:@1 b:@2] points:[(@[wrap(EGPoint, EGPointMake(1.5, 0.5)), wrap(EGPoint, EGPointMake(2, 0)), wrap(EGPoint, EGPointMake(2, 1)), wrap(EGPoint, EGPointMake(4.5, 0.5)), wrap(EGPoint, EGPointMake(4, 0)), wrap(EGPoint, EGPointMake(4, 1))]) toSet]]]) toSet]];
+    [self assertEqualsA:collisions b:[(@[[EGCollision collisionWithItems:[CNPair pairWithA:@1 b:@2] points:[(@[wrap(EGPoint, EGPointMake(1.5, 0.5)), wrap(EGPoint, EGPointMake(((float)(2)), ((float)(0)))), wrap(EGPoint, EGPointMake(((float)(2)), ((float)(1)))), wrap(EGPoint, EGPointMake(4.5, 0.5)), wrap(EGPoint, EGPointMake(((float)(4)), ((float)(0)))), wrap(EGPoint, EGPointMake(((float)(4)), ((float)(1))))]) toSet]]]) toSet]];
 }
 
 - (void)testEmptyWithCrossedBoundingRects {
-    id<CNList> figures = (@[tuple(@1, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(1, 0)), wrap(EGPoint, EGPointMake(3, 2)), wrap(EGPoint, EGPointMake(5, 0))])]), tuple(@3, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(4, -1)), wrap(EGPoint, EGPointMake(4.5, -0.5)), wrap(EGPoint, EGPointMake(5, -1))])])]);
+    id<CNList> figures = (@[tuple(@1, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(((float)(1)), ((float)(0)))), wrap(EGPoint, EGPointMake(((float)(3)), ((float)(2)))), wrap(EGPoint, EGPointMake(((float)(5)), ((float)(0))))])]), tuple(@3, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(((float)(4)), ((float)(-1)))), wrap(EGPoint, EGPointMake(4.5, -0.5)), wrap(EGPoint, EGPointMake(((float)(5)), ((float)(-1))))])])]);
     id<CNSet> collisions = [EGCollisions collisionsForFigures:figures];
     [self assertEqualsA:collisions b:[(@[]) toSet]];
 }
 
 - (void)testEmptyWithoutCrossedBoundingRects {
-    id<CNList> figures = (@[tuple(@1, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(1, 0)), wrap(EGPoint, EGPointMake(3, 2)), wrap(EGPoint, EGPointMake(5, 0))])]), tuple(@3, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(6, -1)), wrap(EGPoint, EGPointMake(6.5, -0.5)), wrap(EGPoint, EGPointMake(7, -1))])])]);
+    id<CNList> figures = (@[tuple(@1, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(((float)(1)), ((float)(0)))), wrap(EGPoint, EGPointMake(((float)(3)), ((float)(2)))), wrap(EGPoint, EGPointMake(((float)(5)), ((float)(0))))])]), tuple(@3, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(((float)(6)), ((float)(-1)))), wrap(EGPoint, EGPointMake(6.5, -0.5)), wrap(EGPoint, EGPointMake(((float)(7)), ((float)(-1))))])])]);
     id<CNSet> collisions = [EGCollisions collisionsForFigures:figures];
     [self assertEqualsA:collisions b:[(@[]) toSet]];
 }

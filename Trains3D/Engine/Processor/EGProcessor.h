@@ -35,7 +35,7 @@
 - (EGEvent*)setCamera:(id)camera;
 - (EGPoint)locationInView;
 - (EGPoint)location;
-- (EGPoint)locationForDepth:(double)depth;
+- (EGPoint)locationForDepth:(float)depth;
 - (BOOL)isLeftMouseDown;
 - (BOOL)isLeftMouseDrag;
 - (BOOL)isLeftMouseUp;

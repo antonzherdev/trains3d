@@ -28,10 +28,10 @@ static id<CNList> _rules;
 + (void)initialize {
     [super initialize];
     _scoreRules = [TRScoreRules scoreRulesWithInitialScore:100000 railCost:1000 arrivedPrize:^NSInteger(TRTrain* train) {
-        return [train.cars count] * 2000;
+        return ((NSInteger)([train.cars count] * 2000));
     } destructionFine:^NSInteger(TRTrain* train) {
-        return [train.cars count] * 3000;
-    } delayPeriod:10 delayFine:^NSInteger(TRTrain* train, NSInteger i) {
+        return ((NSInteger)([train.cars count] * 3000));
+    } delayPeriod:((float)(10)) delayFine:^NSInteger(TRTrain* train, NSInteger i) {
         return i * 1000;
     } repairCost:2000];
     _rules = (@[[TRLevelRules levelRulesWithMapSize:EGSizeIMake(5, 3) scoreRules:_scoreRules repairerSpeed:((NSUInteger)(30)) events:(@[tuple(@5, [TRLevelFactory trainCars:intTo(2, 5) speed:[intTo(30, 60) setStep:10]]), tuple(@15, [TRLevelFactory createNewCity])])]]);

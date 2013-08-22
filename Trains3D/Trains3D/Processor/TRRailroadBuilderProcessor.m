@@ -144,7 +144,7 @@
     return EGPointIMake([self nX:point.x], [self nX:point.y]);
 }
 
-- (NSInteger)nX:(double)x {
+- (NSInteger)nX:(float)x {
     return lround(x * 2);
 }
 
@@ -173,16 +173,16 @@
                                 if(rail.start.x == rail.end.x && rail.start.y > rail.end.y) {
                                     return [self correctRail:TRRailCorrectionMake(rail.tile, rail.end, rail.start)];
                                 } else {
-                                    if(eqf(fabs(rail.start.x), 1) && eqf(fabs(rail.start.y), 1) && rail.start.x != rail.end.x) {
+                                    if(eqf(fabs(((float)(rail.start.x))), 1) && eqf(fabs(((float)(rail.start.y))), 1) && rail.start.x != rail.end.x) {
                                         return [self correctRail:TRRailCorrectionMake(rail.tile, EGPointIMake(rail.start.x, 0), rail.end)];
                                     } else {
-                                        if(eqf(fabs(rail.start.x), 1) && eqf(fabs(rail.start.y), 1)) {
+                                        if(eqf(fabs(((float)(rail.start.x))), 1) && eqf(fabs(((float)(rail.start.y))), 1)) {
                                             return [self correctRail:TRRailCorrectionMake(rail.tile, EGPointIMake(0, rail.start.y), rail.end)];
                                         } else {
-                                            if(eqf(fabs(rail.end.x), 1) && eqf(fabs(rail.end.y), 1) && rail.start.x != rail.end.x) {
+                                            if(eqf(fabs(((float)(rail.end.x))), 1) && eqf(fabs(((float)(rail.end.y))), 1) && rail.start.x != rail.end.x) {
                                                 return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, EGPointIMake(rail.end.x, 0))];
                                             } else {
-                                                if(eqf(fabs(rail.end.x), 1) && eqf(fabs(rail.end.y), 1)) return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, EGPointIMake(0, rail.end.y))];
+                                                if(eqf(fabs(((float)(rail.end.x))), 1) && eqf(fabs(((float)(rail.end.y))), 1)) return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, EGPointIMake(0, rail.end.y))];
                                                 else return rail;
                                             }
                                         }

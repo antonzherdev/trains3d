@@ -30,10 +30,10 @@
 }
 
 - (EGPoint)location {
-    return [self locationForDepth:0];
+    return [self locationForDepth:((float)(0))];
 }
 
-- (EGPoint)locationForDepth:(double)depth {
+- (EGPoint)locationForDepth:(float)depth {
     if([_camera isEmpty]) return [self locationInView];
     else return [[_camera get] translateWithViewSize:_viewSize viewPoint:[self locationInView]];
 }

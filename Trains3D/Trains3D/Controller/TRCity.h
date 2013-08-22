@@ -33,7 +33,7 @@
 + (id)cityWithColor:(TRColor*)color tile:(EGPointI)tile angle:(TRCityAngle*)angle;
 - (id)initWithColor:(TRColor*)color tile:(EGPointI)tile angle:(TRCityAngle*)angle;
 - (TRRailPoint*)startPoint;
-- (void)updateWithDelta:(double)delta;
+- (void)updateWithDelta:(float)delta;
 @end
 
 

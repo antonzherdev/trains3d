@@ -150,7 +150,7 @@
 }
 
 - (void)runTrain:(TRTrain*)train fromCity:(TRCity*)fromCity {
-    fromCity.expectedTrainAnimation = [CNOption opt:[EGAnimation animationWithLength:3 finish:^void() {
+    fromCity.expectedTrainAnimation = [CNOption opt:[EGAnimation animationWithLength:((float)(3)) finish:^void() {
         fromCity.expectedTrainAnimation = [CNOption none];
         [train startFromCity:fromCity];
         __trains = [__trains arrayByAddingObject:train];
@@ -171,7 +171,7 @@
     [_score runTrain:train];
 }
 
-- (void)updateWithDelta:(double)delta {
+- (void)updateWithDelta:(float)delta {
     [_score updateWithDelta:delta];
     [__trains forEach:^void(TRTrain* _) {
         [_ updateWithDelta:delta];

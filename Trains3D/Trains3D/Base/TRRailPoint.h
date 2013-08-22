@@ -26,8 +26,8 @@
 @property (nonatomic, readonly) TRRailConnector* start;
 @property (nonatomic, readonly) TRRailConnector* end;
 @property (nonatomic, readonly) BOOL isTurn;
-@property (nonatomic, readonly) double length;
-@property (nonatomic, readonly) EGPoint(^pointFun)(double);
+@property (nonatomic, readonly) float length;
+@property (nonatomic, readonly) EGPoint(^pointFun)(float);
 
 + (TRRailForm*)formForConnector1:(TRRailConnector*)connector1 connector2:(TRRailConnector*)connector2;
 + (TRRailForm*)leftBottom;
@@ -43,29 +43,29 @@
 @interface TRRailPoint : NSObject
 @property (nonatomic, readonly) EGPointI tile;
 @property (nonatomic, readonly) TRRailForm* form;
-@property (nonatomic, readonly) double x;
+@property (nonatomic, readonly) float x;
 @property (nonatomic, readonly) BOOL back;
 @property (nonatomic, readonly) EGPoint point;
 
-+ (id)railPointWithTile:(EGPointI)tile form:(TRRailForm*)form x:(double)x back:(BOOL)back;
-- (id)initWithTile:(EGPointI)tile form:(TRRailForm*)form x:(double)x back:(BOOL)back;
-- (TRRailPoint*)addX:(double)x;
++ (id)railPointWithTile:(EGPointI)tile form:(TRRailForm*)form x:(float)x back:(BOOL)back;
+- (id)initWithTile:(EGPointI)tile form:(TRRailForm*)form x:(float)x back:(BOOL)back;
+- (TRRailPoint*)addX:(float)x;
 - (TRRailConnector*)startConnector;
 - (TRRailConnector*)endConnector;
 - (BOOL)isValid;
 - (TRRailPointCorrection*)correct;
 - (TRRailPoint*)invert;
-- (TRRailPoint*)setX:(double)x;
+- (TRRailPoint*)setX:(float)x;
 - (EGPointI)nextTile;
 @end
 
 
 @interface TRRailPointCorrection : NSObject
 @property (nonatomic, readonly) TRRailPoint* point;
-@property (nonatomic, readonly) double error;
+@property (nonatomic, readonly) float error;
 
-+ (id)railPointCorrectionWithPoint:(TRRailPoint*)point error:(double)error;
-- (id)initWithPoint:(TRRailPoint*)point error:(double)error;
++ (id)railPointCorrectionWithPoint:(TRRailPoint*)point error:(float)error;
+- (id)initWithPoint:(TRRailPoint*)point error:(float)error;
 - (TRRailPoint*)addErrorToPoint;
 @end
 

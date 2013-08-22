@@ -27,9 +27,9 @@
         glPushMatrix();
         EGPoint mid = egPointMid(h, t);
         egTranslate(mid.x, mid.y, 0.05);
-        double angle = (([train isBack]) ? 90 : -90) + 180.0 / M_PI * egPointAngle(egPointSub(t, h));
-        egRotate(angle, 0, 0, 1);
-        egRotate(90, 1, 0, 0);
+        float angle = (([train isBack]) ? 90 : -90) + 180.0 / M_PI * egPointAngle(egPointSub(t, h));
+        egRotate(angle, ((float)(0)), ((float)(0)), ((float)(1)));
+        egRotate(((float)(90)), ((float)(1)), ((float)(0)), ((float)(0)));
         if(car.carType == TRCarType.car) {
             [train.color setMaterial];
             egDrawJasModel(Car);

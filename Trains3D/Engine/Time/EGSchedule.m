@@ -2,8 +2,8 @@
 
 @implementation EGSchedule{
     CNMutableTreeMap* __map;
-    double __current;
-    double __next;
+    float __current;
+    float __next;
 }
 
 + (id)schedule {
@@ -21,12 +21,12 @@
     return self;
 }
 
-- (void)scheduleEvent:(void(^)())event after:(double)after {
+- (void)scheduleEvent:(void(^)())event after:(float)after {
     [__map setObject:event forKey:numf(after)];
     __next = unumf([[__map firstKey] get]);
 }
 
-- (void)updateWithDelta:(double)delta {
+- (void)updateWithDelta:(float)delta {
     __current += delta;
     while(__next > 0 && __current > __next) {
         ((void(^)())(((CNTuple*)([[__map pollFirst] get])).b))();
@@ -34,7 +34,7 @@
     }
 }
 
-- (double)time {
+- (float)time {
     return __current;
 }
 
@@ -52,19 +52,19 @@
 
 
 @implementation EGAnimation{
-    double _length;
+    float _length;
     void(^_finish)();
-    double __time;
+    float __time;
     BOOL __run;
 }
 @synthesize length = _length;
 @synthesize finish = _finish;
 
-+ (id)animationWithLength:(double)length finish:(void(^)())finish {
++ (id)animationWithLength:(float)length finish:(void(^)())finish {
     return [[EGAnimation alloc] initWithLength:length finish:finish];
 }
 
-- (id)initWithLength:(double)length finish:(void(^)())finish {
+- (id)initWithLength:(float)length finish:(void(^)())finish {
     self = [super init];
     if(self) {
         _length = length;
@@ -76,7 +76,7 @@
     return self;
 }
 
-- (double)time {
+- (float)time {
     return __time;
 }
 
@@ -88,7 +88,7 @@
     return !(__run);
 }
 
-- (void)updateWithDelta:(double)delta {
+- (void)updateWithDelta:(float)delta {
     if(__run) {
         __time += delta / _length;
         if(__time >= 1.0) {
@@ -112,7 +112,7 @@
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [[NSNumber numberWithDouble:self.length] hash];
+    hash = hash * 31 + [[NSNumber numberWithFloat:self.length] hash];
     hash = hash * 31 + [self.finish hash];
     return hash;
 }

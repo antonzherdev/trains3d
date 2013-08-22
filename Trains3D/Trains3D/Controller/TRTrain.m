@@ -84,8 +84,8 @@ static NSArray* _TRTrainType_values;
     NSUInteger _speed;
     TRRailPoint* _head;
     BOOL _back;
-    double _length;
-    double __speedF;
+    float _length;
+    float __speedF;
     BOOL(^_carsObstacleProcessor)(TRObstacle*);
 }
 @synthesize level = _level;
@@ -136,8 +136,8 @@ static NSArray* _TRTrainType_values;
 - (void)calculateCarPositions {
     ((TRRailPoint*)([[[self directedCars] chain] fold:^TRRailPoint*(TRRailPoint* hl, TRCar* car) {
         car.frontConnector = hl;
-        double fl = [car frontConnectorLength];
-        double bl = [car backConnectorLength];
+        float fl = [car frontConnectorLength];
+        float bl = [car backConnectorLength];
         TRRailPoint* p = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((_back) ? bl : fl) point:hl] addErrorToPoint];
         car.head = p;
         p = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:[car length] point:p] addErrorToPoint];
@@ -148,11 +148,11 @@ static NSArray* _TRTrainType_values;
     } withStart:[_head invert]]));
 }
 
-- (EGPoint)movePoint:(EGPoint)point length:(double)length {
+- (EGPoint)movePoint:(EGPoint)point length:(float)length {
     return EGPointMake(point.x, point.y + length);
 }
 
-- (void)updateWithDelta:(double)delta {
+- (void)updateWithDelta:(float)delta {
     [self correctCorrection:[_level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return _trainType.obstacleProcessor(_level, self, _);
     } forLength:delta * __speedF point:_head]];
@@ -231,10 +231,10 @@ static NSArray* _TRTrainType_values;
 
 
 @implementation TRCarType{
-    double _length;
-    double _width;
-    double _frontConnectorLength;
-    double _backConnectorLength;
+    float _length;
+    float _width;
+    float _frontConnectorLength;
+    float _backConnectorLength;
     BOOL _isEngine;
 }
 static TRCarType* _car;
@@ -246,11 +246,11 @@ static NSArray* _TRCarType_values;
 @synthesize backConnectorLength = _backConnectorLength;
 @synthesize isEngine = _isEngine;
 
-+ (id)carTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name length:(double)length width:(double)width frontConnectorLength:(double)frontConnectorLength backConnectorLength:(double)backConnectorLength isEngine:(BOOL)isEngine {
++ (id)carTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name length:(float)length width:(float)width frontConnectorLength:(float)frontConnectorLength backConnectorLength:(float)backConnectorLength isEngine:(BOOL)isEngine {
     return [[TRCarType alloc] initWithOrdinal:ordinal name:name length:length width:width frontConnectorLength:frontConnectorLength backConnectorLength:backConnectorLength isEngine:isEngine];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name length:(double)length width:(double)width frontConnectorLength:(double)frontConnectorLength backConnectorLength:(double)backConnectorLength isEngine:(BOOL)isEngine {
+- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name length:(float)length width:(float)width frontConnectorLength:(float)frontConnectorLength backConnectorLength:(float)backConnectorLength isEngine:(BOOL)isEngine {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
         _length = length;
@@ -270,7 +270,7 @@ static NSArray* _TRCarType_values;
     _TRCarType_values = (@[_car, _engine]);
 }
 
-- (double)fullLength {
+- (float)fullLength {
     return _length + _frontConnectorLength + _backConnectorLength;
 }
 
@@ -313,23 +313,23 @@ static NSArray* _TRCarType_values;
     return self;
 }
 
-- (double)frontConnectorLength {
+- (float)frontConnectorLength {
     return _carType.frontConnectorLength;
 }
 
-- (double)backConnectorLength {
+- (float)backConnectorLength {
     return _carType.backConnectorLength;
 }
 
-- (double)length {
+- (float)length {
     return _carType.length;
 }
 
-- (double)width {
+- (float)width {
     return _carType.width;
 }
 
-- (double)fullLength {
+- (float)fullLength {
     return [_carType fullLength];
 }
 

@@ -8,22 +8,22 @@
 @interface EGSchedule : NSObject<EGController>
 + (id)schedule;
 - (id)init;
-- (void)scheduleEvent:(void(^)())event after:(double)after;
-- (void)updateWithDelta:(double)delta;
-- (double)time;
+- (void)scheduleEvent:(void(^)())event after:(float)after;
+- (void)updateWithDelta:(float)delta;
+- (float)time;
 @end
 
 
 @interface EGAnimation : NSObject<EGController>
-@property (nonatomic, readonly) double length;
+@property (nonatomic, readonly) float length;
 @property (nonatomic, readonly) void(^finish)();
 
-+ (id)animationWithLength:(double)length finish:(void(^)())finish;
-- (id)initWithLength:(double)length finish:(void(^)())finish;
-- (double)time;
++ (id)animationWithLength:(float)length finish:(void(^)())finish;
+- (id)initWithLength:(float)length finish:(void(^)())finish;
+- (float)time;
 - (BOOL)isRun;
 - (BOOL)isStopped;
-- (void)updateWithDelta:(double)delta;
+- (void)updateWithDelta:(float)delta;
 @end
 
 

@@ -14,17 +14,17 @@
 }
 
 - (void)testThickLine {
-    EGThickLineSegment* l = [EGThickLineSegment thickLineSegmentWithSegment:[EGLineSegment lineSegmentWithP1:EGPointMake(0, 0) p2:EGPointMake(1, 0)] thickness:1];
-    [self assertEqualsA:wrap(EGRect, [l boundingRect]) b:wrap(EGRect, EGRectMake(0, 1, -0.5, 1))];
-    EGPolygon* p = [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(0, 0.5)), wrap(EGPoint, EGPointMake(0, -0.5)), wrap(EGPoint, EGPointMake(1, -0.5)), wrap(EGPoint, EGPointMake(1, 0.5))])];
+    EGThickLineSegment* l = [EGThickLineSegment thickLineSegmentWithSegment:[EGLineSegment lineSegmentWithP1:EGPointMake(((float)(0)), ((float)(0))) p2:EGPointMake(((float)(1)), ((float)(0)))] thickness:((float)(1))];
+    [self assertEqualsA:wrap(EGRect, [l boundingRect]) b:wrap(EGRect, EGRectMake(((float)(0)), ((float)(1)), -0.5, ((float)(1))))];
+    EGPolygon* p = [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(((float)(0)), 0.5)), wrap(EGPoint, EGPointMake(((float)(0)), -0.5)), wrap(EGPoint, EGPointMake(((float)(1)), -0.5)), wrap(EGPoint, EGPointMake(((float)(1)), 0.5))])];
     [self assertEqualsA:[[l segments] toSet] b:[p.segments toSet]];
-    l = [EGThickLineSegment thickLineSegmentWithSegment:[EGLineSegment lineSegmentWithP1:EGPointMake(0, 0) p2:EGPointMake(0, 1)] thickness:1];
-    [self assertEqualsA:wrap(EGRect, [l boundingRect]) b:wrap(EGRect, EGRectMake(-0.5, 1, 0, 1))];
-    p = [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(0.5, 0)), wrap(EGPoint, EGPointMake(-0.5, 0)), wrap(EGPoint, EGPointMake(-0.5, 1)), wrap(EGPoint, EGPointMake(0.5, 1))])];
+    l = [EGThickLineSegment thickLineSegmentWithSegment:[EGLineSegment lineSegmentWithP1:EGPointMake(((float)(0)), ((float)(0))) p2:EGPointMake(((float)(0)), ((float)(1)))] thickness:((float)(1))];
+    [self assertEqualsA:wrap(EGRect, [l boundingRect]) b:wrap(EGRect, EGRectMake(-0.5, ((float)(1)), ((float)(0)), ((float)(1))))];
+    p = [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(0.5, ((float)(0)))), wrap(EGPoint, EGPointMake(-0.5, ((float)(0)))), wrap(EGPoint, EGPointMake(-0.5, ((float)(1)))), wrap(EGPoint, EGPointMake(0.5, ((float)(1))))])];
     [self assertEqualsA:[[l segments] toSet] b:[p.segments toSet]];
-    double s2 = sqrt(2);
-    l = [EGThickLineSegment thickLineSegmentWithSegment:[EGLineSegment lineSegmentWithP1:EGPointMake(0, 0) p2:EGPointMake(1, 1)] thickness:s2];
-    [self assertEqualsA:wrap(EGRect, [l boundingRect]) b:wrap(EGRect, egRectThicken(EGRectMake(0, 1, 0, 1), s2 / 2, s2 / 2))];
+    float s2 = sqrt(((float)(2)));
+    l = [EGThickLineSegment thickLineSegmentWithSegment:[EGLineSegment lineSegmentWithP1:EGPointMake(((float)(0)), ((float)(0))) p2:EGPointMake(((float)(1)), ((float)(1)))] thickness:s2];
+    [self assertEqualsA:wrap(EGRect, [l boundingRect]) b:wrap(EGRect, egRectThicken(EGRectMake(((float)(0)), ((float)(1)), ((float)(0)), ((float)(1))), s2 / 2, s2 / 2))];
     p = [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(-0.5, 0.5)), wrap(EGPoint, EGPointMake(0.5, 1.5)), wrap(EGPoint, EGPointMake(1.5, 0.5)), wrap(EGPoint, EGPointMake(0.5, -0.5))])];
     [self assertEqualsA:[[l segments] toSet] b:[p.segments toSet]];
 }

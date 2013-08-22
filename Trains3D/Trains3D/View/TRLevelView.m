@@ -30,7 +30,7 @@
         _cityView = [TRCityView cityView];
         _railroadView = [TRRailroadView railroadView];
         _trainView = [TRTrainView trainView];
-        _camera = [EGCameraIso cameraIsoWithTilesOnScreen:_level.map.size center:EGPointMake(0, 0)];
+        _camera = [EGCameraIso cameraIsoWithTilesOnScreen:_level.map.size center:EGPointMake(((float)(0)), ((float)(0)))];
     }
     
     return self;
@@ -42,7 +42,7 @@
     glEnable(GL_NORMALIZE);
     glShadeModel(GL_SMOOTH);
     egAmbientColor(0.3, 0.3, 0.3);
-    egLightColor(GL_LIGHT0, 1, 1, 1);
+    egLightColor(GL_LIGHT0, ((float)(1)), ((float)(1)), ((float)(1)));
     egLightDirection(GL_LIGHT0, 0.2, -0.2, 0.5);
     [_backgroundView drawLevel:_level];
     [[_level cities] forEach:^void(TRCity* city) {

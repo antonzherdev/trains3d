@@ -35,7 +35,7 @@
     } withStart:@NO]);
 }
 
-- (void)updateWithDelta:(double)delta {
+- (void)updateWithDelta:(float)delta {
     [_controller updateWithDelta:delta];
 }
 
