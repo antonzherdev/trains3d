@@ -6,7 +6,7 @@
     NSInteger _railCost;
     NSInteger(^_arrivedPrize)(TRTrain*);
     NSInteger(^_destructionFine)(TRTrain*);
-    float _delayPeriod;
+    CGFloat _delayPeriod;
     NSInteger(^_delayFine)(TRTrain*, NSInteger);
     NSInteger _repairCost;
 }
@@ -18,11 +18,11 @@
 @synthesize delayFine = _delayFine;
 @synthesize repairCost = _repairCost;
 
-+ (id)scoreRulesWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(float)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost {
++ (id)scoreRulesWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost {
     return [[TRScoreRules alloc] initWithInitialScore:initialScore railCost:railCost arrivedPrize:arrivedPrize destructionFine:destructionFine delayPeriod:delayPeriod delayFine:delayFine repairCost:repairCost];
 }
 
-- (id)initWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(float)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost {
+- (id)initWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost {
     self = [super init];
     if(self) {
         _initialScore = initialScore;
@@ -54,7 +54,7 @@
     hash = hash * 31 + self.railCost;
     hash = hash * 31 + [self.arrivedPrize hash];
     hash = hash * 31 + [self.destructionFine hash];
-    hash = hash * 31 + [[NSNumber numberWithFloat:self.delayPeriod] hash];
+    hash = hash * 31 + floatHash(self.delayPeriod);
     hash = hash * 31 + [self.delayFine hash];
     hash = hash * 31 + self.repairCost;
     return hash;
@@ -123,7 +123,7 @@
     }] toArray];
 }
 
-- (void)updateWithDelta:(float)delta {
+- (void)updateWithDelta:(CGFloat)delta {
     [_trains forEach:^void(TRTrainScore* train) {
         [train updateWithDelta:delta];
         if([train needFineWithDelayPeriod:_rules.delayPeriod]) __score -= [train fineWithRule:_rules.delayFine];
@@ -159,7 +159,7 @@
 
 @implementation TRTrainScore{
     TRTrain* _train;
-    float _delayTime;
+    CGFloat _delayTime;
     NSInteger _fineCount;
 }
 @synthesize train = _train;
@@ -179,17 +179,17 @@
     return self;
 }
 
-- (void)updateWithDelta:(float)delta {
+- (void)updateWithDelta:(CGFloat)delta {
     _delayTime += delta;
 }
 
-- (BOOL)needFineWithDelayPeriod:(float)delayPeriod {
+- (BOOL)needFineWithDelayPeriod:(CGFloat)delayPeriod {
     return _delayTime >= delayPeriod;
 }
 
 - (NSInteger)fineWithRule:(NSInteger(^)(TRTrain*, NSInteger))rule {
     _fineCount++;
-    _delayTime = ((float)(0));
+    _delayTime = ((CGFloat)(0));
     return rule(_train, _fineCount);
 }
 

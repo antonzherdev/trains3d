@@ -120,8 +120,8 @@
 - (BOOL)canAddRail:(TRRail*)rail;
 - (BOOL)tryAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)contentInTile:(EGPointI)tile connector:(TRRailConnector*)connector;
-- (TRRailPointCorrection*)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(float)forLength point:(TRRailPoint*)point;
-- (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint*)from to:(float)to;
+- (TRRailPointCorrection*)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(CGFloat)forLength point:(TRRailPoint*)point;
+- (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint*)from to:(CGFloat)to;
 - (void)addDamageAtPoint:(TRRailPoint*)point;
 - (void)fixDamageAtPoint:(TRRailPoint*)point;
 @end

@@ -3,7 +3,7 @@
 
 #import "EGGL.h"
 EGPoint egPointApply(EGPointI point) {
-    return EGPointMake(((float)(point.x)), ((float)(point.y)));
+    return EGPointMake(((CGFloat)(point.x)), ((CGFloat)(point.y)));
 }
 EGPoint egPointAdd(EGPoint self, EGPoint point) {
     return EGPointMake(self.x + point.x, self.y + point.y);
@@ -14,31 +14,31 @@ EGPoint egPointSub(EGPoint self, EGPoint point) {
 EGPoint egPointNegate(EGPoint self) {
     return EGPointMake(-self.x, -self.y);
 }
-float egPointAngle(EGPoint self) {
+CGFloat egPointAngle(EGPoint self) {
     return atan2(self.y, self.x);
 }
-float egPointDot(EGPoint self, EGPoint point) {
+CGFloat egPointDot(EGPoint self, EGPoint point) {
     return self.x * point.x + self.y * point.y;
 }
-float egPointLengthSquare(EGPoint self) {
+CGFloat egPointLengthSquare(EGPoint self) {
     return egPointDot(self, self);
 }
-float egPointLength(EGPoint self) {
+CGFloat egPointLength(EGPoint self) {
     return sqrt(egPointLengthSquare(self));
 }
-EGPoint egPointMul(EGPoint self, float value) {
+EGPoint egPointMul(EGPoint self, CGFloat value) {
     return EGPointMake(self.x * value, self.y * value);
 }
-EGPoint egPointDiv(EGPoint self, float value) {
+EGPoint egPointDiv(EGPoint self, CGFloat value) {
     return EGPointMake(self.x / value, self.y / value);
 }
 EGPoint egPointMid(EGPoint self, EGPoint point) {
     return egPointMul(egPointAdd(self, point), 0.5);
 }
-float egPointDistanceTo(EGPoint self, EGPoint point) {
+CGFloat egPointDistanceTo(EGPoint self, EGPoint point) {
     return egPointLength(egPointSub(self, point));
 }
-EGPoint egPointSet(EGPoint self, float length) {
+EGPoint egPointSet(EGPoint self, CGFloat length) {
     return egPointMul(self, length / egPointLength(self));
 }
 EGPoint egPointNormalize(EGPoint self) {
@@ -229,16 +229,16 @@ NSInteger egPointICompare(EGPointI self, EGPointI to) {
 BOOL egRectContains(EGRect self, EGPoint point) {
     return self.x <= point.x && point.x <= self.x + self.width && self.y <= point.y && point.y <= self.y + self.height;
 }
-float egRectX2(EGRect self) {
+CGFloat egRectX2(EGRect self) {
     return self.x + self.width;
 }
-float egRectY2(EGRect self) {
+CGFloat egRectY2(EGRect self) {
     return self.y + self.height;
 }
-EGRect egRectNewXY(float x, float x2, float y, float y2) {
+EGRect egRectNewXY(CGFloat x, CGFloat x2, CGFloat y, CGFloat y2) {
     return EGRectMake(x, x2 - x, y, y2 - y);
 }
-EGRect egRectMove(EGRect self, float x, float y) {
+EGRect egRectMove(EGRect self, CGFloat x, CGFloat y) {
     return EGRectMake(self.x + x, self.width, self.y + y, self.height);
 }
 EGRect egRectMoveToCenterFor(EGRect self, EGSize size) {
@@ -253,7 +253,7 @@ EGSize egRectSize(EGRect self) {
 BOOL egRectIntersects(EGRect self, EGRect rect) {
     return self.x <= egRectX2(rect) && egRectX2(self) >= rect.x && self.y <= egRectY2(rect) && egRectY2(self) >= rect.y;
 }
-EGRect egRectThicken(EGRect self, float x, float y) {
+EGRect egRectThicken(EGRect self, CGFloat x, CGFloat y) {
     return EGRectMake(self.x - x, self.width + 2 * x, self.y - y, self.height + 2 * y);
 }
 @implementation EGRectWrap{
@@ -297,7 +297,7 @@ EGRect egRectThicken(EGRect self, float x, float y) {
 EGRectI egRectIApply(EGRect rect) {
     return EGRectIMake(lround(rect.x), lround(rect.width), lround(rect.y), lround(rect.height));
 }
-EGRectI egRectINewXY(float x, float x2, float y, float y2) {
+EGRectI egRectINewXY(CGFloat x, CGFloat x2, CGFloat y, CGFloat y2) {
     return EGRectIMake(((NSInteger)(x)), ((NSInteger)(x2 - x)), ((NSInteger)(y)), ((NSInteger)(y2 - y)));
 }
 NSInteger egRectIX2(EGRectI self) {

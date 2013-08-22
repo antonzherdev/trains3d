@@ -17,7 +17,7 @@
     return self;
 }
 
-- (float)factorForViewSize:(EGSize)viewSize {
+- (CGFloat)factorForViewSize:(EGSize)viewSize {
     return min(viewSize.width / _size.width, viewSize.height / _size.height);
 }
 
@@ -25,21 +25,21 @@
     return [self viewportRectForViewSize:viewSize factor:[self factorForViewSize:viewSize]];
 }
 
-- (EGRect)viewportRectForViewSize:(EGSize)viewSize factor:(float)factor {
-    return egRectMoveToCenterFor(EGRectMake(((float)(0)), _size.width * factor, ((float)(0)), _size.height * factor), viewSize);
+- (EGRect)viewportRectForViewSize:(EGSize)viewSize factor:(CGFloat)factor {
+    return egRectMoveToCenterFor(EGRectMake(((CGFloat)(0)), _size.width * factor, ((CGFloat)(0)), _size.height * factor), viewSize);
 }
 
 - (void)focusForViewSize:(EGSize)viewSize {
     egViewport(egRectIApply([self viewportRectForViewSize:viewSize]));
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(((float)(0)), _size.width, ((float)(0)), _size.height, ((float)(0)), ((float)(1)));
+    glOrtho(((CGFloat)(0)), _size.width, ((CGFloat)(0)), _size.height, ((CGFloat)(0)), ((CGFloat)(1)));
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
 
 - (EGPoint)translateWithViewSize:(EGSize)viewSize viewPoint:(EGPoint)viewPoint {
-    float factor = [self factorForViewSize:viewSize];
+    CGFloat factor = [self factorForViewSize:viewSize];
     EGRect viewport = [self viewportRectForViewSize:viewSize factor:factor];
     return egPointDiv(egPointSub(viewPoint, egRectPoint(viewport)), factor);
 }

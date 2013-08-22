@@ -568,12 +568,12 @@ static NSArray* _TRObstacleType_values;
     return [[((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGPointI, tile), connector)])) rails] head];
 }
 
-- (TRRailPointCorrection*)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(float)forLength point:(TRRailPoint*)point {
+- (TRRailPointCorrection*)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(CGFloat)forLength point:(TRRailPoint*)point {
     TRRailPoint* p = [point addX:forLength];
     TRRailPointCorrection* correction = [p correct];
     id damage = [self checkDamagesWithObstacleProcessor:obstacleProcessor from:point to:correction.point.x];
     if([damage isDefined]) {
-        float x = unumf([damage get]);
+        CGFloat x = unumf([damage get]);
         return [TRRailPointCorrection railPointCorrectionWithPoint:[p setX:x] error:correction.error + correction.point.x - x];
     }
     if(eqf(correction.error, 0)) return correction;
@@ -595,17 +595,17 @@ static NSArray* _TRObstacleType_values;
     }
     TRRail* nextActiveRail = ((TRRail*)([nextRail get]));
     TRRailForm* form = nextActiveRail.form;
-    return [self moveWithObstacleProcessor:obstacleProcessor forLength:correction.error point:[TRRailPoint railPointWithTile:nextTile form:form x:((float)(0)) back:form.end == otherSideConnector]];
+    return [self moveWithObstacleProcessor:obstacleProcessor forLength:correction.error point:[TRRailPoint railPointWithTile:nextTile form:form x:((CGFloat)(0)) back:form.end == otherSideConnector]];
 }
 
-- (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint*)from to:(float)to {
+- (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint*)from to:(CGFloat)to {
     if(eqf(from.x, to)) return [CNOption none];
     id opt = [_damagesIndex applyKey:tuple(wrap(EGPointI, from.tile), from.form)];
     if([opt isEmpty]) return [CNOption none];
     BOOL(^on)(id) = ^BOOL(id x) {
         return !(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.damage point:[from setX:unumf(x)]]));
     };
-    float len = from.form.length;
+    CGFloat len = from.form.length;
     if(from.back) return [[[[[[opt get] chain] filter:^BOOL(id _) {
         return floatBetween(unumf(_), len - to, len - from.x);
     }] sortDesc] map:^id(id _) {

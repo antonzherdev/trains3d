@@ -186,7 +186,7 @@
     return self;
 }
 
-- (float)yForX:(float)x {
+- (CGFloat)yForX:(CGFloat)x {
     if([[_segment line] isVertical]) {
         if(_isStart) return _segment.p1.y;
         else return _segment.p2.y;
@@ -195,7 +195,7 @@
     }
 }
 
-- (float)slope {
+- (CGFloat)slope {
     return [[_segment line] slope];
 }
 
@@ -440,13 +440,13 @@
         [self sweepToEvent:event];
         EGBentleyOttmannPointEvent* pe = ((EGBentleyOttmannPointEvent*)(event));
         if([pe isVertical]) {
-            float minY = pe.segment.p1.y;
-            float maxY = pe.segment.p2.y;
+            CGFloat minY = pe.segment.p1.y;
+            CGFloat maxY = pe.segment.p2.y;
             id<CNIterator> i = [_events iteratorHigherThanObject:event];
             while([i hasNext]) {
                 EGBentleyOttmannPointEvent* e = ((EGBentleyOttmannPointEvent*)([i next]));
                 if(!([e isVertical])) {
-                    float y = [e yForX:_currentEventPoint.x];
+                    CGFloat y = [e yForX:_currentEventPoint.x];
                     if(y > maxY) break;
                     if(y >= minY) [self registerIntersectionA:pe b:e point:EGPointMake(_currentEventPoint.x, y)];
                 }
@@ -514,8 +514,8 @@
 
 - (NSInteger)compareEventsA:(EGBentleyOttmannPointEvent*)a b:(EGBentleyOttmannPointEvent*)b {
     if([a isEqual:b]) return 0;
-    float ay = [a yForX:_currentEventPoint.x];
-    float by = [b yForX:_currentEventPoint.x];
+    CGFloat ay = [a yForX:_currentEventPoint.x];
+    CGFloat by = [b yForX:_currentEventPoint.x];
     NSInteger c = floatCompare(ay, by);
     if(c == 0) if([a isVertical]) {
         c = -1;

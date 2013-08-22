@@ -23,27 +23,27 @@
     [railroad addDamageAtPoint:[TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight x:0.2 back:NO]];
     [railroad addDamageAtPoint:[TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight x:0.6 back:YES]];
     __block id<CNList> damagesCount = (@[]);
-    TRRailPoint* p0 = [TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight x:((float)(0)) back:NO];
+    TRRailPoint* p0 = [TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight x:((CGFloat)(0)) back:NO];
     TRRailPointCorrection* p1 = [railroad moveWithObstacleProcessor:^BOOL(TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount arrayByAddingObject:numf(o.point.x)];
         return YES;
-    } forLength:((float)(1)) point:p0];
+    } forLength:((CGFloat)(1)) point:p0];
     [self assertEqualsA:damagesCount b:(@[@0.2, @0.4])];
-    [self assertEqualsA:numf(p1.error) b:numf(((float)(0)))];
-    [self assertEqualsA:numf(p1.point.x) b:numf(((float)(1)))];
+    [self assertEqualsA:numf(p1.error) b:numf(((CGFloat)(0)))];
+    [self assertEqualsA:numf(p1.point.x) b:numf(((CGFloat)(1)))];
     damagesCount = (@[]);
     TRRailPointCorrection* p00 = [railroad moveWithObstacleProcessor:^BOOL(TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount arrayByAddingObject:numf(o.point.x)];
         return YES;
-    } forLength:((float)(1)) point:[p1.point invert]];
+    } forLength:((CGFloat)(1)) point:[p1.point invert]];
     [self assertEqualsA:damagesCount b:(@[@0.6, @0.8])];
-    [self assertEqualsA:numf(p00.error) b:numf(((float)(0)))];
-    [self assertEqualsA:numf(p00.point.x) b:numf(((float)(1)))];
+    [self assertEqualsA:numf(p00.error) b:numf(((CGFloat)(0)))];
+    [self assertEqualsA:numf(p00.point.x) b:numf(((CGFloat)(1)))];
     damagesCount = (@[]);
     TRRailPointCorrection* p01 = [railroad moveWithObstacleProcessor:^BOOL(TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount arrayByAddingObject:numf(o.point.x)];
         return NO;
-    } forLength:((float)(1)) point:[p1.point invert]];
+    } forLength:((CGFloat)(1)) point:[p1.point invert]];
     [self assertEqualsA:damagesCount b:(@[@0.6])];
     [self assertEqualsA:numf(p01.error) b:@0.4];
     [self assertEqualsA:numf(p01.point.x) b:@0.6];

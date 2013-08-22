@@ -92,10 +92,10 @@ static NSArray* _TRCityAngle_values;
 }
 
 - (TRRailPoint*)startPoint {
-    return [TRRailPoint railPointWithTile:_tile form:_angle.form x:((float)(0)) back:_angle.back];
+    return [TRRailPoint railPointWithTile:_tile form:_angle.form x:((CGFloat)(0)) back:_angle.back];
 }
 
-- (void)updateWithDelta:(float)delta {
+- (void)updateWithDelta:(CGFloat)delta {
     [_expectedTrainAnimation forEach:^void(EGAnimation* _) {
         [_ updateWithDelta:delta];
     }];

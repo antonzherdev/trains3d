@@ -5,6 +5,7 @@ import CNList
 import "CNOption.h"
 import "cnTypes.h"
 import CNChain
+import "NSArray+CNChain.h"
 
 class CNRange(start : int, end : int, step : int) extends CNList<int> {
     val count : uint = (end - start)/step

@@ -60,8 +60,8 @@
 
 + (id)bentleyOttmannPointEventWithIsStart:(BOOL)isStart data:(id)data segment:(EGLineSegment*)segment point:(EGPoint)point;
 - (id)initWithIsStart:(BOOL)isStart data:(id)data segment:(EGLineSegment*)segment point:(EGPoint)point;
-- (float)yForX:(float)x;
-- (float)slope;
+- (CGFloat)yForX:(CGFloat)x;
+- (CGFloat)slope;
 - (BOOL)isVertical;
 - (BOOL)isEnd;
 @end

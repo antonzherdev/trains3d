@@ -16,19 +16,19 @@
 }
 
 - (void)testDavidsStar {
-    id<CNList> figures = (@[tuple(@1, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(((float)(1)), ((float)(0)))), wrap(EGPoint, EGPointMake(((float)(3)), ((float)(2)))), wrap(EGPoint, EGPointMake(((float)(5)), ((float)(0))))])]), tuple(@2, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(((float)(1)), ((float)(1)))), wrap(EGPoint, EGPointMake(((float)(5)), ((float)(1)))), wrap(EGPoint, EGPointMake(((float)(3)), ((float)(-1))))])]), tuple(@3, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(((float)(4)), ((float)(-1)))), wrap(EGPoint, EGPointMake(4.5, -0.5)), wrap(EGPoint, EGPointMake(((float)(5)), ((float)(-1))))])])]);
+    id<CNList> figures = (@[tuple(@1, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(((CGFloat)(1)), ((CGFloat)(0)))), wrap(EGPoint, EGPointMake(((CGFloat)(3)), ((CGFloat)(2)))), wrap(EGPoint, EGPointMake(((CGFloat)(5)), ((CGFloat)(0))))])]), tuple(@2, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(((CGFloat)(1)), ((CGFloat)(1)))), wrap(EGPoint, EGPointMake(((CGFloat)(5)), ((CGFloat)(1)))), wrap(EGPoint, EGPointMake(((CGFloat)(3)), ((CGFloat)(-1))))])]), tuple(@3, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(((CGFloat)(4)), ((CGFloat)(-1)))), wrap(EGPoint, EGPointMake(4.5, -0.5)), wrap(EGPoint, EGPointMake(((CGFloat)(5)), ((CGFloat)(-1))))])])]);
     id<CNSet> collisions = [EGCollisions collisionsForFigures:figures];
-    [self assertEqualsA:collisions b:[(@[[EGCollision collisionWithItems:[CNPair pairWithA:@1 b:@2] points:[(@[wrap(EGPoint, EGPointMake(1.5, 0.5)), wrap(EGPoint, EGPointMake(((float)(2)), ((float)(0)))), wrap(EGPoint, EGPointMake(((float)(2)), ((float)(1)))), wrap(EGPoint, EGPointMake(4.5, 0.5)), wrap(EGPoint, EGPointMake(((float)(4)), ((float)(0)))), wrap(EGPoint, EGPointMake(((float)(4)), ((float)(1))))]) toSet]]]) toSet]];
+    [self assertEqualsA:collisions b:[(@[[EGCollision collisionWithItems:[CNPair pairWithA:@1 b:@2] points:[(@[wrap(EGPoint, EGPointMake(1.5, 0.5)), wrap(EGPoint, EGPointMake(((CGFloat)(2)), ((CGFloat)(0)))), wrap(EGPoint, EGPointMake(((CGFloat)(2)), ((CGFloat)(1)))), wrap(EGPoint, EGPointMake(4.5, 0.5)), wrap(EGPoint, EGPointMake(((CGFloat)(4)), ((CGFloat)(0)))), wrap(EGPoint, EGPointMake(((CGFloat)(4)), ((CGFloat)(1))))]) toSet]]]) toSet]];
 }
 
 - (void)testEmptyWithCrossedBoundingRects {
-    id<CNList> figures = (@[tuple(@1, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(((float)(1)), ((float)(0)))), wrap(EGPoint, EGPointMake(((float)(3)), ((float)(2)))), wrap(EGPoint, EGPointMake(((float)(5)), ((float)(0))))])]), tuple(@3, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(((float)(4)), ((float)(-1)))), wrap(EGPoint, EGPointMake(4.5, -0.5)), wrap(EGPoint, EGPointMake(((float)(5)), ((float)(-1))))])])]);
+    id<CNList> figures = (@[tuple(@1, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(((CGFloat)(1)), ((CGFloat)(0)))), wrap(EGPoint, EGPointMake(((CGFloat)(3)), ((CGFloat)(2)))), wrap(EGPoint, EGPointMake(((CGFloat)(5)), ((CGFloat)(0))))])]), tuple(@3, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(((CGFloat)(4)), ((CGFloat)(-1)))), wrap(EGPoint, EGPointMake(4.5, -0.5)), wrap(EGPoint, EGPointMake(((CGFloat)(5)), ((CGFloat)(-1))))])])]);
     id<CNSet> collisions = [EGCollisions collisionsForFigures:figures];
     [self assertEqualsA:collisions b:[(@[]) toSet]];
 }
 
 - (void)testEmptyWithoutCrossedBoundingRects {
-    id<CNList> figures = (@[tuple(@1, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(((float)(1)), ((float)(0)))), wrap(EGPoint, EGPointMake(((float)(3)), ((float)(2)))), wrap(EGPoint, EGPointMake(((float)(5)), ((float)(0))))])]), tuple(@3, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(((float)(6)), ((float)(-1)))), wrap(EGPoint, EGPointMake(6.5, -0.5)), wrap(EGPoint, EGPointMake(((float)(7)), ((float)(-1))))])])]);
+    id<CNList> figures = (@[tuple(@1, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(((CGFloat)(1)), ((CGFloat)(0)))), wrap(EGPoint, EGPointMake(((CGFloat)(3)), ((CGFloat)(2)))), wrap(EGPoint, EGPointMake(((CGFloat)(5)), ((CGFloat)(0))))])]), tuple(@3, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(((CGFloat)(6)), ((CGFloat)(-1)))), wrap(EGPoint, EGPointMake(6.5, -0.5)), wrap(EGPoint, EGPointMake(((CGFloat)(7)), ((CGFloat)(-1))))])])]);
     id<CNSet> collisions = [EGCollisions collisionsForFigures:figures];
     [self assertEqualsA:collisions b:[(@[]) toSet]];
 }

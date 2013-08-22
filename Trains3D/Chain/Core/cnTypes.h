@@ -20,20 +20,34 @@ extern id cnResolveCollection(id collection);
 #define unumc(expr) [expr charValue]
 #define numi4(expr) [NSNumber numberWithInt:expr]
 #define unumi4(expr) [expr intValue]
-#define numi(expr) [NSNumber numberWithLong:expr]
-#define unumi(expr) [expr longValue]
+#define numi8(expr) [NSNumber numberWithLong:expr]
+#define unumi8(expr) [expr longValue]
+#define numi(expr) [NSNumber numberWithInteger:expr]
+#define unumi(expr) [expr integerValue]
 
 #define numuc(expr) [NSNumber numberWithUnsignedChar:expr]
 #define unumuc(expr) [expr unsignedCharValue]
-#define numui(expr) [NSNumber numberWithUnsignedInt:expr]
-#define unumui(expr) [expr unsignedIntValue]
-#define numul(expr) [NSNumber numberWithUnsignedLong:expr]
-#define unumul(expr) [expr unsignedLongValue]
+#define numui4(expr) [NSNumber numberWithUnsignedInt:expr]
+#define unumui4(expr) [expr unsignedIntValue]
+#define numui8(expr) [NSNumber numberWithUnsignedLong:expr]
+#define unumui8(expr) [expr unsignedLongValue]
+#define numui(expr) [NSNumber numberWithUnsignedInteger:expr]
+#define unumui(expr) [expr unsignedIntegerValue]
 
+
+#define numf4(expr) [NSNumber numberWithFloat:expr]
+#define unumf4(expr) [expr floatValue]
+#define numf8(expr) [NSNumber numberWithDouble:expr]
+#define unumf8(expr) [expr doubleValue]
+
+#if defined(__LP64__) && __LP64__
+#define numf(expr) [NSNumber numberWithDouble:expr]
+#define unumf(expr) [expr doubleValue]
+#else
 #define numf(expr) [NSNumber numberWithFloat:expr]
 #define unumf(expr) [expr floatValue]
-#define numd(expr) [NSNumber numberWithDouble:expr]
-#define unumd(expr) [expr doubleValue]
+#endif
+
 #define numb(expr) [NSNumber numberWithBool:expr]
 #define unumb(expr) [expr boolValue]
 

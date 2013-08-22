@@ -8,8 +8,8 @@
 #import "TRRailroad.h"
 #import "TRTrain.h"
 @implementation TRCollisionsTest
-static float _carLen;
-static float _carWidth;
+static CGFloat _carLen;
+static CGFloat _carWidth;
 
 + (id)collisionsTest {
     return [[TRCollisionsTest alloc] init];
@@ -47,9 +47,9 @@ static float _carWidth;
     [self doTest1ForLevel:level delta:0.001 form:TRRailForm.leftRight];
 }
 
-- (void)doTest1ForLevel:(TRLevel*)level delta:(float)delta form:(TRRailForm*)form {
+- (void)doTest1ForLevel:(TRLevel*)level delta:(CGFloat)delta form:(TRRailForm*)form {
     TRTrain* t1 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRColor.green cars:(@[[TRCar carWithCarType:TRCarType.car]]) speed:((NSUInteger)(0))];
-    TRRailPoint* p = [TRRailPoint railPointWithTile:EGPointIMake(0, 0) form:form x:((float)(0)) back:NO];
+    TRRailPoint* p = [TRRailPoint railPointWithTile:EGPointIMake(0, 0) form:form x:((CGFloat)(0)) back:NO];
     TRRailPoint* p2 = [level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
     } forLength:_carLen point:p].point;
@@ -90,13 +90,13 @@ static float _carWidth;
     [level.railroad tryAddRail:[TRRail railWithTile:EGPointIMake(3, 1) form:TRRailForm.leftRight]];
     [level.railroad tryAddRail:[TRRail railWithTile:EGPointIMake(1, 0) form:TRRailForm.bottomTop]];
     TRTrain* t1 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRColor.green cars:(@[[TRCar carWithCarType:TRCarType.car]]) speed:((NSUInteger)(0))];
-    TRRailPoint* p = [TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.bottomTop x:((float)(0)) back:NO];
+    TRRailPoint* p = [TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.bottomTop x:((CGFloat)(0)) back:NO];
     TRRailPoint* p1 = [level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
     } forLength:0.5 - _carWidth - 0.001 point:p].point;
     [level testRunTrain:t1 fromPoint:p1];
     TRTrain* t2 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRColor.orange cars:(@[[TRCar carWithCarType:TRCarType.car], [TRCar carWithCarType:TRCarType.car]]) speed:((NSUInteger)(0))];
-    p = [TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight x:((float)(0)) back:NO];
+    p = [TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight x:((CGFloat)(0)) back:NO];
     TRRailPoint* p2 = [level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
     } forLength:_carLen * 2 point:p].point;
@@ -108,11 +108,11 @@ static float _carWidth;
     [self assertEqualsA:cols b:[(@[t1, t2]) toSet]];
 }
 
-+ (float)carLen {
++ (CGFloat)carLen {
     return _carLen;
 }
 
-+ (float)carWidth {
++ (CGFloat)carWidth {
     return _carWidth;
 }
 

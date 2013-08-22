@@ -19,7 +19,7 @@
 - (void)drawLayout;
 - (void)drawPlane;
 - (EGRectI)cutRectForTile:(EGPointI)tile;
-+ (float)ISO;
++ (CGFloat)ISO;
 @end
 
 

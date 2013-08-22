@@ -62,7 +62,7 @@
 - (void)createNewCity;
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator;
 - (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint;
-- (void)updateWithDelta:(float)delta;
+- (void)updateWithDelta:(CGFloat)delta;
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch;
 - (id)cityForTile:(EGPointI)tile;
 - (void)arrivedTrain:(TRTrain*)train;

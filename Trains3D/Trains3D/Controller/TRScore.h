@@ -15,12 +15,12 @@
 @property (nonatomic, readonly) NSInteger railCost;
 @property (nonatomic, readonly) NSInteger(^arrivedPrize)(TRTrain*);
 @property (nonatomic, readonly) NSInteger(^destructionFine)(TRTrain*);
-@property (nonatomic, readonly) float delayPeriod;
+@property (nonatomic, readonly) CGFloat delayPeriod;
 @property (nonatomic, readonly) NSInteger(^delayFine)(TRTrain*, NSInteger);
 @property (nonatomic, readonly) NSInteger repairCost;
 
-+ (id)scoreRulesWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(float)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost;
-- (id)initWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(float)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost;
++ (id)scoreRulesWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost;
+- (id)initWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost;
 @end
 
 
@@ -35,7 +35,7 @@
 - (void)arrivedTrain:(TRTrain*)train;
 - (void)destroyedTrain:(TRTrain*)train;
 - (void)removeTrain:(TRTrain*)train;
-- (void)updateWithDelta:(float)delta;
+- (void)updateWithDelta:(CGFloat)delta;
 @end
 
 
@@ -44,8 +44,8 @@
 
 + (id)trainScoreWithTrain:(TRTrain*)train;
 - (id)initWithTrain:(TRTrain*)train;
-- (void)updateWithDelta:(float)delta;
-- (BOOL)needFineWithDelayPeriod:(float)delayPeriod;
+- (void)updateWithDelta:(CGFloat)delta;
+- (BOOL)needFineWithDelayPeriod:(CGFloat)delayPeriod;
 - (NSInteger)fineWithRule:(NSInteger(^)(TRTrain*, NSInteger))rule;
 @end
 

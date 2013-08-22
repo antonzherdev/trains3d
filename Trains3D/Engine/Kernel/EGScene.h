@@ -16,7 +16,7 @@
 - (id)initWithController:(id<EGController>)controller layers:(id<CNList>)layers;
 - (void)drawWithViewSize:(EGSize)viewSize;
 - (BOOL)processEvent:(EGEvent*)event;
-- (void)updateWithDelta:(float)delta;
+- (void)updateWithDelta:(CGFloat)delta;
 @end
 
 

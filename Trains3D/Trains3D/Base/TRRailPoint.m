@@ -99,8 +99,8 @@ static NSArray* _TRRailConnector_values;
     TRRailConnector* _start;
     TRRailConnector* _end;
     BOOL _isTurn;
-    float _length;
-    EGPoint(^_pointFun)(float);
+    CGFloat _length;
+    EGPoint(^_pointFun)(CGFloat);
 }
 static TRRailForm* _leftBottom;
 static TRRailForm* _leftRight;
@@ -115,11 +115,11 @@ static NSArray* _TRRailForm_values;
 @synthesize length = _length;
 @synthesize pointFun = _pointFun;
 
-+ (id)railFormWithOrdinal:(NSUInteger)ordinal name:(NSString*)name start:(TRRailConnector*)start end:(TRRailConnector*)end isTurn:(BOOL)isTurn length:(float)length pointFun:(EGPoint(^)(float))pointFun {
++ (id)railFormWithOrdinal:(NSUInteger)ordinal name:(NSString*)name start:(TRRailConnector*)start end:(TRRailConnector*)end isTurn:(BOOL)isTurn length:(CGFloat)length pointFun:(EGPoint(^)(CGFloat))pointFun {
     return [[TRRailForm alloc] initWithOrdinal:ordinal name:name start:start end:end isTurn:isTurn length:length pointFun:pointFun];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name start:(TRRailConnector*)start end:(TRRailConnector*)end isTurn:(BOOL)isTurn length:(float)length pointFun:(EGPoint(^)(float))pointFun {
+- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name start:(TRRailConnector*)start end:(TRRailConnector*)end isTurn:(BOOL)isTurn length:(CGFloat)length pointFun:(EGPoint(^)(CGFloat))pointFun {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
         _start = start;
@@ -134,22 +134,22 @@ static NSArray* _TRRailForm_values;
 
 + (void)initialize {
     [super initialize];
-    _leftBottom = [TRRailForm railFormWithOrdinal:((NSUInteger)(0)) name:@"leftBottom" start:TRRailConnector.left end:TRRailConnector.bottom isTurn:YES length:M_PI_4 pointFun:^EGPoint(float x) {
+    _leftBottom = [TRRailForm railFormWithOrdinal:((NSUInteger)(0)) name:@"leftBottom" start:TRRailConnector.left end:TRRailConnector.bottom isTurn:YES length:M_PI_4 pointFun:^EGPoint(CGFloat x) {
         return EGPointMake(-0.5 + 0.5 * sin(x * 2), -0.5 + 0.5 * cos(x * 2));
     }];
-    _leftRight = [TRRailForm railFormWithOrdinal:((NSUInteger)(1)) name:@"leftRight" start:TRRailConnector.left end:TRRailConnector.right isTurn:NO length:((float)(1)) pointFun:^EGPoint(float x) {
-        return EGPointMake(x - 0.5, ((float)(0)));
+    _leftRight = [TRRailForm railFormWithOrdinal:((NSUInteger)(1)) name:@"leftRight" start:TRRailConnector.left end:TRRailConnector.right isTurn:NO length:((CGFloat)(1)) pointFun:^EGPoint(CGFloat x) {
+        return EGPointMake(x - 0.5, ((CGFloat)(0)));
     }];
-    _leftTop = [TRRailForm railFormWithOrdinal:((NSUInteger)(2)) name:@"leftTop" start:TRRailConnector.left end:TRRailConnector.top isTurn:YES length:M_PI_4 pointFun:^EGPoint(float x) {
+    _leftTop = [TRRailForm railFormWithOrdinal:((NSUInteger)(2)) name:@"leftTop" start:TRRailConnector.left end:TRRailConnector.top isTurn:YES length:M_PI_4 pointFun:^EGPoint(CGFloat x) {
         return EGPointMake(-0.5 + 0.5 * sin(x * 2), 0.5 - 0.5 * cos(x * 2));
     }];
-    _bottomTop = [TRRailForm railFormWithOrdinal:((NSUInteger)(3)) name:@"bottomTop" start:TRRailConnector.bottom end:TRRailConnector.top isTurn:NO length:((float)(1)) pointFun:^EGPoint(float x) {
-        return EGPointMake(((float)(0)), x - 0.5);
+    _bottomTop = [TRRailForm railFormWithOrdinal:((NSUInteger)(3)) name:@"bottomTop" start:TRRailConnector.bottom end:TRRailConnector.top isTurn:NO length:((CGFloat)(1)) pointFun:^EGPoint(CGFloat x) {
+        return EGPointMake(((CGFloat)(0)), x - 0.5);
     }];
-    _bottomRight = [TRRailForm railFormWithOrdinal:((NSUInteger)(4)) name:@"bottomRight" start:TRRailConnector.bottom end:TRRailConnector.right isTurn:YES length:M_PI_4 pointFun:^EGPoint(float x) {
+    _bottomRight = [TRRailForm railFormWithOrdinal:((NSUInteger)(4)) name:@"bottomRight" start:TRRailConnector.bottom end:TRRailConnector.right isTurn:YES length:M_PI_4 pointFun:^EGPoint(CGFloat x) {
         return EGPointMake(0.5 - 0.5 * cos(x * 2), -0.5 + 0.5 * sin(x * 2));
     }];
-    _topRight = [TRRailForm railFormWithOrdinal:((NSUInteger)(5)) name:@"topRight" start:TRRailConnector.top end:TRRailConnector.right isTurn:YES length:M_PI_4 pointFun:^EGPoint(float x) {
+    _topRight = [TRRailForm railFormWithOrdinal:((NSUInteger)(5)) name:@"topRight" start:TRRailConnector.top end:TRRailConnector.right isTurn:YES length:M_PI_4 pointFun:^EGPoint(CGFloat x) {
         return EGPointMake(0.5 - 0.5 * cos(x * 2), 0.5 - 0.5 * sin(x * 2));
     }];
     _TRRailForm_values = (@[_leftBottom, _leftRight, _leftTop, _bottomTop, _bottomRight, _topRight]);
@@ -218,7 +218,7 @@ static NSArray* _TRRailForm_values;
 @implementation TRRailPoint{
     EGPointI _tile;
     TRRailForm* _form;
-    float _x;
+    CGFloat _x;
     BOOL _back;
     EGPoint _point;
 }
@@ -228,11 +228,11 @@ static NSArray* _TRRailForm_values;
 @synthesize back = _back;
 @synthesize point = _point;
 
-+ (id)railPointWithTile:(EGPointI)tile form:(TRRailForm*)form x:(float)x back:(BOOL)back {
++ (id)railPointWithTile:(EGPointI)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back {
     return [[TRRailPoint alloc] initWithTile:tile form:form x:x back:back];
 }
 
-- (id)initWithTile:(EGPointI)tile form:(TRRailForm*)form x:(float)x back:(BOOL)back {
+- (id)initWithTile:(EGPointI)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back {
     self = [super init];
     if(self) {
         _tile = tile;
@@ -245,7 +245,7 @@ static NSArray* _TRRailForm_values;
     return self;
 }
 
-- (TRRailPoint*)addX:(float)x {
+- (TRRailPoint*)addX:(CGFloat)x {
     return [TRRailPoint railPointWithTile:_tile form:_form x:_x + x back:_back];
 }
 
@@ -264,14 +264,14 @@ static NSArray* _TRRailForm_values;
 }
 
 - (TRRailPointCorrection*)correct {
-    float length = _form.length;
+    CGFloat length = _form.length;
     if(_x > length) return [TRRailPointCorrection railPointCorrectionWithPoint:[TRRailPoint railPointWithTile:_tile form:_form x:length back:_back] error:_x - length];
-    else return [TRRailPointCorrection railPointCorrectionWithPoint:self error:((float)(0))];
+    else return [TRRailPointCorrection railPointCorrectionWithPoint:self error:((CGFloat)(0))];
 }
 
 - (EGPoint)calculatePoint {
-    float x = ((_back) ? _form.length - _x : _x);
-    EGPoint(^f)(float) = _form.pointFun;
+    CGFloat x = ((_back) ? _form.length - _x : _x);
+    EGPoint(^f)(CGFloat) = _form.pointFun;
     EGPoint p = f(x);
     return EGPointMake(p.x + _tile.x, p.y + _tile.y);
 }
@@ -280,7 +280,7 @@ static NSArray* _TRRailForm_values;
     return [TRRailPoint railPointWithTile:_tile form:_form x:_form.length - _x back:!(_back)];
 }
 
-- (TRRailPoint*)setX:(float)x {
+- (TRRailPoint*)setX:(CGFloat)x {
     return [TRRailPoint railPointWithTile:_tile form:_form x:x back:_back];
 }
 
@@ -303,7 +303,7 @@ static NSArray* _TRRailForm_values;
     NSUInteger hash = 0;
     hash = hash * 31 + EGPointIHash(self.tile);
     hash = hash * 31 + [self.form ordinal];
-    hash = hash * 31 + [[NSNumber numberWithFloat:self.x] hash];
+    hash = hash * 31 + floatHash(self.x);
     hash = hash * 31 + self.back;
     return hash;
 }
@@ -323,16 +323,16 @@ static NSArray* _TRRailForm_values;
 
 @implementation TRRailPointCorrection{
     TRRailPoint* _point;
-    float _error;
+    CGFloat _error;
 }
 @synthesize point = _point;
 @synthesize error = _error;
 
-+ (id)railPointCorrectionWithPoint:(TRRailPoint*)point error:(float)error {
++ (id)railPointCorrectionWithPoint:(TRRailPoint*)point error:(CGFloat)error {
     return [[TRRailPointCorrection alloc] initWithPoint:point error:error];
 }
 
-- (id)initWithPoint:(TRRailPoint*)point error:(float)error {
+- (id)initWithPoint:(TRRailPoint*)point error:(CGFloat)error {
     self = [super init];
     if(self) {
         _point = point;
@@ -361,7 +361,7 @@ static NSArray* _TRRailForm_values;
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.point hash];
-    hash = hash * 31 + [[NSNumber numberWithFloat:self.error] hash];
+    hash = hash * 31 + floatHash(self.error);
     return hash;
 }
 

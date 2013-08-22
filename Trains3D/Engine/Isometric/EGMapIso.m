@@ -10,7 +10,7 @@
     id<CNList> _partialTiles;
     id<CNList> _allTiles;
 }
-static float _ISO = 0.70710676908493;
+static CGFloat _ISO = 0.70710676908493;
 @synthesize size = _size;
 @synthesize limits = _limits;
 @synthesize fullTiles = _fullTiles;
@@ -25,7 +25,7 @@ static float _ISO = 0.70710676908493;
     self = [super init];
     if(self) {
         _size = size;
-        _limits = egRectINewXY(((float)((1 - _size.height) / 2 - 1)), ((float)((2 * _size.width + _size.height - 3) / 2 + 1)), ((float)((1 - _size.width) / 2 - 1)), ((float)((_size.width + 2 * _size.height - 3) / 2 + 1)));
+        _limits = egRectINewXY(((CGFloat)((1 - _size.height) / 2 - 1)), ((CGFloat)((2 * _size.width + _size.height - 3) / 2 + 1)), ((CGFloat)((1 - _size.width) / 2 - 1)), ((CGFloat)((_size.width + 2 * _size.height - 3) / 2 + 1)));
         _fullTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
             return [self isFullTile:uwrap(EGPointI, _)];
         }] toArray];
@@ -48,13 +48,13 @@ static float _ISO = 0.70710676908493;
 
 - (void)drawLayout {
     glPushMatrix();
-    egRotate(((float)(45)), ((float)(0)), ((float)(0)), ((float)(1)));
+    egRotate(((CGFloat)(45)), ((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
     glBegin(GL_LINES);
-    float left = -_ISO;
-    float top = _ISO * _size.height;
-    float bottom = _ISO * -_size.width;
-    float right = _ISO * (_size.width + _size.height - 1);
-    egNormal3(((float)(0)), ((float)(0)), ((float)(1)));
+    CGFloat left = -_ISO;
+    CGFloat top = _ISO * _size.height;
+    CGFloat bottom = _ISO * -_size.width;
+    CGFloat right = _ISO * (_size.width + _size.height - 1);
+    egNormal3(((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
     egVertex3(left, top, 0.0);
     egVertex3(left, bottom, 0.0);
     egVertex3(left, bottom, 0.0);
@@ -69,7 +69,7 @@ static float _ISO = 0.70710676908493;
     glBegin(GL_LINES);
     [_fullTiles forEach:^void(id tile) {
         EGPointI p = uwrap(EGPointI, tile);
-        egNormal3(((float)(0)), ((float)(0)), ((float)(1)));
+        egNormal3(((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
         egVertex3(p.x - 0.5, p.y - 0.5, 0.0);
         egVertex3(p.x + 0.5, p.y - 0.5, 0.0);
         egVertex3(p.x + 0.5, p.y - 0.5, 0.0);
@@ -85,21 +85,21 @@ static float _ISO = 0.70710676908493;
 
 - (void)drawPlane {
     glBegin(GL_QUADS);
-    float l = _limits.x - 1.5;
-    float r = egRectIX2(_limits) + 1.5;
-    float t = _limits.y - 1.5;
-    float b = egRectIY2(_limits) + 1.5;
+    CGFloat l = _limits.x - 1.5;
+    CGFloat r = egRectIX2(_limits) + 1.5;
+    CGFloat t = _limits.y - 1.5;
+    CGFloat b = egRectIY2(_limits) + 1.5;
     NSInteger w = _limits.width + 3;
     NSInteger h = _limits.height + 3;
-    egNormal3(((float)(0)), ((float)(0)), ((float)(1)));
+    egNormal3(((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
     egTexCoord2(0.0, 0.0);
-    egVertex3(l, b, ((float)(0)));
-    egTexCoord2(((float)(w)), 0.0);
-    egVertex3(r, b, ((float)(0)));
-    egTexCoord2(((float)(w)), ((float)(h)));
-    egVertex3(r, t, ((float)(0)));
-    egTexCoord2(0.0, ((float)(h)));
-    egVertex3(l, t, ((float)(0)));
+    egVertex3(l, b, ((CGFloat)(0)));
+    egTexCoord2(((CGFloat)(w)), 0.0);
+    egVertex3(r, b, ((CGFloat)(0)));
+    egTexCoord2(((CGFloat)(w)), ((CGFloat)(h)));
+    egVertex3(r, t, ((CGFloat)(0)));
+    egTexCoord2(0.0, ((CGFloat)(h)));
+    egVertex3(l, t, ((CGFloat)(0)));
     glEnd();
     glPopMatrix();
 }
@@ -120,10 +120,10 @@ static float _ISO = 0.70710676908493;
 }
 
 - (EGRectI)cutRectForTile:(EGPointI)tile {
-    return egRectINewXY(((float)([self tileCutAxisLess:0 more:tile.x + tile.y])), ((float)([self tileCutAxisLess:tile.x + tile.y more:_size.width + _size.height - 2])), ((float)([self tileCutAxisLess:tile.y - tile.x more:_size.height - 1])), ((float)([self tileCutAxisLess:-_size.width + 1 more:tile.y - tile.x])));
+    return egRectINewXY(((CGFloat)([self tileCutAxisLess:0 more:tile.x + tile.y])), ((CGFloat)([self tileCutAxisLess:tile.x + tile.y more:_size.width + _size.height - 2])), ((CGFloat)([self tileCutAxisLess:tile.y - tile.x more:_size.height - 1])), ((CGFloat)([self tileCutAxisLess:-_size.width + 1 more:tile.y - tile.x])));
 }
 
-+ (float)ISO {
++ (CGFloat)ISO {
     return _ISO;
 }
 

@@ -26,8 +26,8 @@
 @property (nonatomic, readonly) TRRailConnector* start;
 @property (nonatomic, readonly) TRRailConnector* end;
 @property (nonatomic, readonly) BOOL isTurn;
-@property (nonatomic, readonly) float length;
-@property (nonatomic, readonly) EGPoint(^pointFun)(float);
+@property (nonatomic, readonly) CGFloat length;
+@property (nonatomic, readonly) EGPoint(^pointFun)(CGFloat);
 
 + (TRRailForm*)formForConnector1:(TRRailConnector*)connector1 connector2:(TRRailConnector*)connector2;
 + (TRRailForm*)leftBottom;
@@ -43,29 +43,29 @@
 @interface TRRailPoint : NSObject
 @property (nonatomic, readonly) EGPointI tile;
 @property (nonatomic, readonly) TRRailForm* form;
-@property (nonatomic, readonly) float x;
+@property (nonatomic, readonly) CGFloat x;
 @property (nonatomic, readonly) BOOL back;
 @property (nonatomic, readonly) EGPoint point;
 
-+ (id)railPointWithTile:(EGPointI)tile form:(TRRailForm*)form x:(float)x back:(BOOL)back;
-- (id)initWithTile:(EGPointI)tile form:(TRRailForm*)form x:(float)x back:(BOOL)back;
-- (TRRailPoint*)addX:(float)x;
++ (id)railPointWithTile:(EGPointI)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back;
+- (id)initWithTile:(EGPointI)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back;
+- (TRRailPoint*)addX:(CGFloat)x;
 - (TRRailConnector*)startConnector;
 - (TRRailConnector*)endConnector;
 - (BOOL)isValid;
 - (TRRailPointCorrection*)correct;
 - (TRRailPoint*)invert;
-- (TRRailPoint*)setX:(float)x;
+- (TRRailPoint*)setX:(CGFloat)x;
 - (EGPointI)nextTile;
 @end
 
 
 @interface TRRailPointCorrection : NSObject
 @property (nonatomic, readonly) TRRailPoint* point;
-@property (nonatomic, readonly) float error;
+@property (nonatomic, readonly) CGFloat error;
 
-+ (id)railPointCorrectionWithPoint:(TRRailPoint*)point error:(float)error;
-- (id)initWithPoint:(TRRailPoint*)point error:(float)error;
++ (id)railPointCorrectionWithPoint:(TRRailPoint*)point error:(CGFloat)error;
+- (id)initWithPoint:(TRRailPoint*)point error:(CGFloat)error;
 - (TRRailPoint*)addErrorToPoint;
 @end
 

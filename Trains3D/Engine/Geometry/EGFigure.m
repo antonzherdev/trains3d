@@ -12,7 +12,7 @@
     return self;
 }
 
-+ (EGLine*)newWithSlope:(float)slope point:(EGPoint)point {
++ (EGLine*)newWithSlope:(CGFloat)slope point:(EGPoint)point {
     return [EGSlopeLine slopeLineWithSlope:slope constant:[EGLine calculateConstantWithSlope:slope point:point]];
 }
 
@@ -20,16 +20,16 @@
     if(eqf(p1.x, p2.x)) {
         return [EGVerticalLine verticalLineWithX:p1.x];
     } else {
-        float slope = [EGLine calculateSlopeWithP1:p1 p2:p2];
+        CGFloat slope = [EGLine calculateSlopeWithP1:p1 p2:p2];
         return [EGSlopeLine slopeLineWithSlope:slope constant:[EGLine calculateConstantWithSlope:slope point:p1]];
     }
 }
 
-+ (float)calculateSlopeWithP1:(EGPoint)p1 p2:(EGPoint)p2 {
++ (CGFloat)calculateSlopeWithP1:(EGPoint)p1 p2:(EGPoint)p2 {
     return (p2.y - p1.y) / (p2.x - p1.x);
 }
 
-+ (float)calculateConstantWithSlope:(float)slope point:(EGPoint)point {
++ (CGFloat)calculateConstantWithSlope:(CGFloat)slope point:(EGPoint)point {
     return point.y - slope * point.x;
 }
 
@@ -49,7 +49,7 @@
     @throw @"Method intersectionWith is abstract";
 }
 
-- (float)xIntersectionWithLine:(EGLine*)line {
+- (CGFloat)xIntersectionWithLine:(EGLine*)line {
     @throw @"Method xIntersectionWith is abstract";
 }
 
@@ -57,19 +57,19 @@
     @throw @"Method isRight is abstract";
 }
 
-- (float)slope {
+- (CGFloat)slope {
     @throw @"Method slope is abstract";
 }
 
-- (id)moveWithDistance:(float)distance {
+- (id)moveWithDistance:(CGFloat)distance {
     @throw @"Method moveWith is abstract";
 }
 
-- (float)angle {
+- (CGFloat)angle {
     @throw @"Method angle is abstract";
 }
 
-- (float)degreeAngle {
+- (CGFloat)degreeAngle {
     return [self angle] * 180 / M_PI;
 }
 
@@ -101,17 +101,17 @@
 
 
 @implementation EGSlopeLine{
-    float _slope;
-    float _constant;
+    CGFloat _slope;
+    CGFloat _constant;
 }
 @synthesize slope = _slope;
 @synthesize constant = _constant;
 
-+ (id)slopeLineWithSlope:(float)slope constant:(float)constant {
++ (id)slopeLineWithSlope:(CGFloat)slope constant:(CGFloat)constant {
     return [[EGSlopeLine alloc] initWithSlope:slope constant:constant];
 }
 
-- (id)initWithSlope:(float)slope constant:(float)constant {
+- (id)initWithSlope:(CGFloat)slope constant:(CGFloat)constant {
     self = [super init];
     if(self) {
         _slope = slope;
@@ -133,7 +133,7 @@
     return eqf(_slope, 0);
 }
 
-- (float)xIntersectionWithLine:(EGLine*)line {
+- (CGFloat)xIntersectionWithLine:(EGLine*)line {
     if([line isVertical]) {
         return [line xIntersectionWithLine:self];
     } else {
@@ -142,7 +142,7 @@
     }
 }
 
-- (float)yForX:(float)x {
+- (CGFloat)yForX:(CGFloat)x {
     return _slope * x + _constant;
 }
 
@@ -150,7 +150,7 @@
     if(!([line isVertical]) && eqf(((EGSlopeLine*)(line)).slope, _slope)) {
         return [CNOption none];
     } else {
-        float xInt = [self xIntersectionWithLine:line];
+        CGFloat xInt = [self xIntersectionWithLine:line];
         return [CNOption opt:wrap(EGPoint, EGPointMake(xInt, [self yForX:xInt]))];
     }
 }
@@ -160,12 +160,12 @@
     else return point.y < [self yForX:point.x];
 }
 
-- (id)moveWithDistance:(float)distance {
+- (id)moveWithDistance:(CGFloat)distance {
     return [EGSlopeLine slopeLineWithSlope:_slope constant:_constant + distance];
 }
 
-- (float)angle {
-    float a = atan(_slope);
+- (CGFloat)angle {
+    CGFloat a = atan(_slope);
     if(a < 0) return M_PI + a;
     else return a;
 }
@@ -188,8 +188,8 @@
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [[NSNumber numberWithFloat:self.slope] hash];
-    hash = hash * 31 + [[NSNumber numberWithFloat:self.constant] hash];
+    hash = hash * 31 + floatHash(self.slope);
+    hash = hash * 31 + floatHash(self.constant);
     return hash;
 }
 
@@ -205,15 +205,15 @@
 
 
 @implementation EGVerticalLine{
-    float _x;
+    CGFloat _x;
 }
 @synthesize x = _x;
 
-+ (id)verticalLineWithX:(float)x {
++ (id)verticalLineWithX:(CGFloat)x {
     return [[EGVerticalLine alloc] initWithX:x];
 }
 
-- (id)initWithX:(float)x {
+- (id)initWithX:(CGFloat)x {
     self = [super init];
     if(self) _x = x;
     
@@ -232,7 +232,7 @@
     return NO;
 }
 
-- (float)xIntersectionWithLine:(EGLine*)line {
+- (CGFloat)xIntersectionWithLine:(EGLine*)line {
     return _x;
 }
 
@@ -245,20 +245,20 @@
     return point.x > _x;
 }
 
-- (float)slope {
+- (CGFloat)slope {
     return DBL_MAX;
 }
 
-- (id)moveWithDistance:(float)distance {
+- (id)moveWithDistance:(CGFloat)distance {
     return [EGVerticalLine verticalLineWithX:_x + distance];
 }
 
-- (float)angle {
+- (CGFloat)angle {
     return M_PI_2;
 }
 
 - (EGLine*)perpendicularWithPoint:(EGPoint)point {
-    return [EGSlopeLine slopeLineWithSlope:((float)(0)) constant:point.y];
+    return [EGSlopeLine slopeLineWithSlope:((CGFloat)(0)) constant:point.y];
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -274,7 +274,7 @@
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [[NSNumber numberWithFloat:self.x] hash];
+    hash = hash * 31 + floatHash(self.x);
     return hash;
 }
 
@@ -318,7 +318,7 @@
     else return [EGLineSegment lineSegmentWithP1:p2 p2:p1];
 }
 
-+ (EGLineSegment*)newWithX1:(float)x1 y1:(float)y1 x2:(float)x2 y2:(float)y2 {
++ (EGLineSegment*)newWithX1:(CGFloat)x1 y1:(CGFloat)y1 x2:(CGFloat)x2 y2:(CGFloat)y2 {
     return [EGLineSegment newWithP1:EGPointMake(x1, y1) p2:EGPointMake(x2, y2)];
 }
 
@@ -379,7 +379,7 @@
     return [self moveWithX:point.x y:point.y];
 }
 
-- (EGLineSegment*)moveWithX:(float)x y:(float)y {
+- (EGLineSegment*)moveWithX:(CGFloat)x y:(CGFloat)y {
     EGLineSegment* ret = [EGLineSegment lineSegmentWithP1:EGPointMake(_p1.x + x, _p1.y + y) p2:EGPointMake(_p2.x + x, _p2.y + y)];
     if(__line != nil) [ret setLine:[__line moveWithDistance:x + y]];
     return ret;
@@ -442,10 +442,10 @@
 }
 
 - (EGRect)boundingRect {
-    __block float minX = DBL_MAX;
-    __block float maxX = DBL_MIN;
-    __block float minY = DBL_MAX;
-    __block float maxY = DBL_MIN;
+    __block CGFloat minX = DBL_MAX;
+    __block CGFloat maxX = DBL_MIN;
+    __block CGFloat minY = DBL_MAX;
+    __block CGFloat maxY = DBL_MIN;
     [_points forEach:^void(id p) {
         if(uwrap(EGPoint, p).x < minX) minX = uwrap(EGPoint, p).x;
         if(uwrap(EGPoint, p).x > maxX) maxX = uwrap(EGPoint, p).x;
@@ -484,19 +484,19 @@
 
 @implementation EGThickLineSegment{
     EGLineSegment* _segment;
-    float _thickness;
-    float _thickness_2;
+    CGFloat _thickness;
+    CGFloat _thickness_2;
     id<CNList> __segments;
 }
 @synthesize segment = _segment;
 @synthesize thickness = _thickness;
 @synthesize thickness_2 = _thickness_2;
 
-+ (id)thickLineSegmentWithSegment:(EGLineSegment*)segment thickness:(float)thickness {
++ (id)thickLineSegmentWithSegment:(EGLineSegment*)segment thickness:(CGFloat)thickness {
     return [[EGThickLineSegment alloc] initWithSegment:segment thickness:thickness];
 }
 
-- (id)initWithSegment:(EGLineSegment*)segment thickness:(float)thickness {
+- (id)initWithSegment:(EGLineSegment*)segment thickness:(CGFloat)thickness {
     self = [super init];
     if(self) {
         _segment = segment;
@@ -508,22 +508,22 @@
 }
 
 - (EGRect)boundingRect {
-    return egRectThicken(_segment.boundingRect, ((float)((([_segment isHorizontal]) ? 0 : _thickness_2))), ((float)((([_segment isVertical]) ? 0 : _thickness_2))));
+    return egRectThicken(_segment.boundingRect, ((CGFloat)((([_segment isHorizontal]) ? 0 : _thickness_2))), ((CGFloat)((([_segment isVertical]) ? 0 : _thickness_2))));
 }
 
 - (id<CNList>)segments {
     if(__segments == nil) {
-        float dx = ((float)(0));
-        float dy = ((float)(0));
+        CGFloat dx = ((CGFloat)(0));
+        CGFloat dy = ((CGFloat)(0));
         if([_segment isVertical]) {
             dx = _thickness_2;
-            dy = ((float)(0));
+            dy = ((CGFloat)(0));
         } else {
             if([_segment isHorizontal]) {
-                dx = ((float)(0));
+                dx = ((CGFloat)(0));
                 dy = _thickness_2;
             } else {
-                float k = [[_segment line] slope];
+                CGFloat k = [[_segment line] slope];
                 dy = _thickness_2 / sqrt(1 + k);
                 dx = k * dy;
             }
@@ -550,7 +550,7 @@
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.segment hash];
-    hash = hash * 31 + [[NSNumber numberWithFloat:self.thickness] hash];
+    hash = hash * 31 + floatHash(self.thickness);
     return hash;
 }
 
