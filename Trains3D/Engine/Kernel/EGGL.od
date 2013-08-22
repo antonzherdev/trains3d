@@ -52,6 +52,7 @@ stub val GL_MODELVIEW : uint
 stub def glLoadIdentity
 stub def glOrtho(left : float, right : float, bottom : float, top : float, zNear : float, zFar : float)
 stub def egModelViewProjectionMatrix : EGMatrix
+stub def glUniformMatrix4fv(location : GLint, count : GLsizei, transpose : GLboolean, value : [float4])
 
 
 stub def egAmbientColor(r : float, g : float, b : float)
@@ -79,7 +80,8 @@ stub def glAttachShader(program : GLuint, shader : GLuint)
 stub def glLinkProgram(program : GLuint)
 stub def glDeleteProgram(program : GLuint)
 stub def glUseProgram(program : GLuint)
-stub def egGetAttribLocation(program : GLuint, name : string) : GLuint
+stub def egGetAttribLocation(program : GLuint, name : string) : GLint
+stub def egGetUniformLocation(program : GLuint, name : string) : GLint
 stub def egGetProgramError(program : GLuint) : string?
 
 stub def glDeleteShader(shader : GLuint)
@@ -97,6 +99,7 @@ stub def glBindBuffer(target : GLenum, handle : GLuint) : GLuint
 stub def glBufferData(target : GLenum, size : GLsizeiptr, data : [void], usage : GLenum)
 stub def egVertexAttribPointer(slot : GLuint, size : uint, tp : GLenum, normalized : GLboolean, stride : uint, shift : uint)
 stub def glDrawElements(mode : GLenum, count : GLsizei, tp : GLenum, indices : [void])
+stub def glEnableVertexAttribArray(handle : GLint)
 
 stub val GL_TRIANGLES : GLenum
 

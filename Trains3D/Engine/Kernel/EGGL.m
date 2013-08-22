@@ -34,9 +34,9 @@ id egGetShaderError(GLuint shader) {
 
 
 EGMatrix* egModelViewProjectionMatrix() {
-    double* model = malloc(sizeof(double) * 16);
-    double* projection = malloc(sizeof(double) * 16);
-    glGetDoublev(GL_MODELVIEW_MATRIX, model);
-    glGetDoublev(GL_PROJECTION_MATRIX, projection);
+    float* model = malloc(sizeof(float) * 16);
+    float* projection = malloc(sizeof(float) * 16);
+    glGetFloatv(GL_MODELVIEW_MATRIX, model);
+    glGetFloatv(GL_PROJECTION_MATRIX, projection);
     return [[EGMatrix matrixWithM:model] multiply:[EGMatrix matrixWithM:projection]];
 }

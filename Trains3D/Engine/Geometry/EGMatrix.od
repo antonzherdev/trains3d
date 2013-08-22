@@ -1,3 +1,3 @@
-stub class EGMatrix(m : float[16]) {
+stub class EGMatrix(m : float4[16]) {
     def multiply( : EGMatrix) : EGMatrix
 }

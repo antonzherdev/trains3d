@@ -99,6 +99,18 @@ static inline NSString *GLuintDescription(GLuint x) {
     return [NSString stringWithFormat:@"%d", x];
 }
 
+static inline BOOL GLintEq(GLint a, GLint b) {
+    return a == b;
+}
+
+static inline NSUInteger GLintHash(GLint x) {
+    return (NSUInteger) x;
+}
+
+static inline NSString *GLintDescription(GLint x) {
+    return [NSString stringWithFormat:@"%d", x];
+}
+
 static inline BOOL GLenumEq(GLenum a, GLenum b) {
     return a == b;
 }

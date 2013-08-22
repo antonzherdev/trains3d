@@ -1,10 +1,12 @@
 #import "objd.h"
 @class CNBundle;
 @class EGBuffer;
+@class EGMatrix;
 
 @class EGShaderProgram;
 @class EGShader;
 @class EGShaderAttribute;
+@class EGShaderUniform;
 
 @interface EGShaderProgram : NSObject
 @property (nonatomic, readonly) GLuint handle;
@@ -19,7 +21,8 @@
 - (void)set;
 - (void)clear;
 - (void)drawF:(void(^)())f;
-- (EGShaderAttribute*)attributeHandleForName:(NSString*)name;
+- (EGShaderAttribute*)attributeForName:(NSString*)name;
+- (EGShaderUniform*)uniformForName:(NSString*)name;
 @end
 
 
@@ -32,16 +35,26 @@
 - (void)set;
 - (void)load;
 - (void)clear;
-- (EGShaderAttribute*)attributeHandleForName:(NSString*)name;
+- (EGShaderAttribute*)attributeForName:(NSString*)name;
+- (EGShaderUniform*)uniformForName:(NSString*)name;
 @end
 
 
 @interface EGShaderAttribute : NSObject
-@property (nonatomic, readonly) GLuint handle;
+@property (nonatomic, readonly) GLint handle;
 
-+ (id)shaderAttributeWithHandle:(GLuint)handle;
-- (id)initWithHandle:(GLuint)handle;
++ (id)shaderAttributeWithHandle:(GLint)handle;
+- (id)initWithHandle:(GLint)handle;
 - (NSUInteger)setFromBuffer:(EGBuffer*)buffer valuesCount:(NSUInteger)valuesCount valuesType:(GLenum)valuesType shift:(NSUInteger)shift;
+@end
+
+
+@interface EGShaderUniform : NSObject
+@property (nonatomic, readonly) GLint handle;
+
++ (id)shaderUniformWithHandle:(GLint)handle;
+- (id)initWithHandle:(GLint)handle;
+- (void)setMatrix:(EGMatrix*)matrix;
 @end
 
 

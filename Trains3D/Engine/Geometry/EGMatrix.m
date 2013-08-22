@@ -1,11 +1,11 @@
 #import "EGMatrix.h"
 
 @implementation EGMatrix{
-    double* _m;
+    float* _m;
 }
 @synthesize m = _m;
 
-- (id)initWithM:(double *)m {
+- (id)initWithM:(float *)m {
     self = [super init];
     if (self) {
         _m = m;
@@ -14,14 +14,14 @@
     return self;
 }
 
-+ (id)matrixWithM:(double *)m {
++ (id)matrixWithM:(float *)m {
     return [[self alloc] initWithM:m];
 }
 
 
 - (EGMatrix*)multiply:(EGMatrix*)matrix {
-    double *mm = malloc(sizeof(double) * 16);
-    double *m2 = matrix.m;
+    float *mm = malloc(sizeof(float) * 16);
+    float *m2 = matrix.m;
     mm[0] = _m[0] * m2[0] + _m[4] * m2[1] + _m[8] * m2[2] + _m[12] * m2[3];
     mm[1] = _m[1] * m2[0] + _m[5] * m2[1] + _m[9] * m2[2] + _m[13] * m2[3];
     mm[2] = _m[2] * m2[0] + _m[6] * m2[1] + _m[10] * m2[2] + _m[14] * m2[3];

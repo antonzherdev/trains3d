@@ -3,11 +3,11 @@
 @class EGMatrix;
 
 @interface EGMatrix : NSObject
-@property(nonatomic) double *m;
+@property(nonatomic) float *m;
 
-- (id)initWithM:(double *)m;
+- (id)initWithM:(float *)m;
 
-+ (id)matrixWithM:(double *)m;
++ (id)matrixWithM:(float *)m;
 
 
 - (EGMatrix*)multiply:(EGMatrix*)matrix;

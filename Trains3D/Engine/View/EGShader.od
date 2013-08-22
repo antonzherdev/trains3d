@@ -2,6 +2,7 @@ import CNFile
 
 import EGGL
 import EGBuffer
+import EGMatrix
 
 class EGShaderProgram(handle : GLuint) {
     static def loadFromFiles(vertex : string, fragment : string) : EGShaderProgram =
@@ -52,7 +53,12 @@ class EGShaderProgram(handle : GLuint) {
         glUseProgram(0)
     }
 
-    def attributeHandleFor(name : string ) = EGShaderAttribute(egGetAttribLocation(handle, name))
+    def attributeFor(name : string ) = {
+        val ret = EGShaderAttribute(egGetAttribLocation(handle, name))
+        glEnableVertexAttribArray(ret.handle)
+        ret
+    }
+    def uniformFor(name : string ) = EGShaderUniform(egGetUniformLocation(handle, name))
 }
 
 class EGShader(program : EGShaderProgram) {
@@ -74,16 +80,23 @@ class EGShader(program : EGShaderProgram) {
         glUseProgram(0)
     }
 
-    def attributeHandleFor(name : string ) = EGShaderAttribute(program.attributeHandleFor(name))
+    def attributeFor(name : string ) = program.attributeFor(name)
+    def uniformFor(name : string ) = program.uniformFor(name)
 }
 
-class EGShaderAttribute(handle : GLuint) {
+class EGShaderAttribute(handle : GLint) {
     def setFrom(buffer : EGBuffer, valuesCount : uint, valuesType : GLenum, shift : uint) : uint = {
         egVertexAttribPointer(handle, valuesCount, valuesType, GL_FALSE, buffer.stride, shift)
-        if(valuesType == GL_DOUBLE) valuesCount*shift + 8
-        else if(valuesType == GL_FLOAT) valuesCount*shift + 4
-        else if(valuesType == GL_BYTE) valuesCount*shift + 1
-        else if(valuesType == GL_UNSIGNED_BYTE) valuesCount*shift + 1
+        if(valuesType == GL_DOUBLE) valuesCount*8 + shift
+        else if(valuesType == GL_FLOAT) valuesCount*4 + shift
+        else if(valuesType == GL_BYTE) valuesCount + shift
+        else if(valuesType == GL_UNSIGNED_BYTE) valuesCount + shift
         else throw "Unknown type"
+    }
+}
+
+class EGShaderUniform(handle : GLint) {
+    def set(matrix : EGMatrix) {
+        glUniformMatrix4fv(handle, 1, GL_FALSE, matrix.m)
     }
 }
