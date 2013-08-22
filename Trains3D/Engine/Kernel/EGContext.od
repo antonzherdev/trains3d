@@ -1,5 +1,6 @@
-import EGTexture
 import CNCache
+
+import EGTexture
 
 class EGContext {
     private val textureCache = CNCache.new<string, EGTexture>

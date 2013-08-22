@@ -1,6 +1,6 @@
 #import "objd.h"
-@class EGTexture;
 @class CNCache;
+@class EGTexture;
 
 @class EGContext;
 

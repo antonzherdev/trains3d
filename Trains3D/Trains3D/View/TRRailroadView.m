@@ -93,7 +93,7 @@
         if(rail.form == TRRailForm.leftRight) egRotate(((CGFloat)(90)), ((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
         egRotate(((CGFloat)(90)), ((CGFloat)(1)), ((CGFloat)(0)), ((CGFloat)(0)));
         [EGMaterial.stone set];
-        [egTexture(@"Gravel.png") draw:^void() {
+        [[EG textureForFile:@"Gravel.png"] draw:^void() {
             egDrawJasModel(RailGravel);
         }];
         [EGMaterial.wood set];
@@ -113,7 +113,7 @@
         egRotate(((CGFloat)(90)), ((CGFloat)(1)), ((CGFloat)(0)), ((CGFloat)(0)));
         egColor3(0.5, 0.5, 0.5);
         [EGMaterial.stone set];
-        [egTexture(@"Gravel.png") draw:^void() {
+        [[EG textureForFile:@"Gravel.png"] draw:^void() {
             egDrawJasModel(RailTurnGravel);
         }];
         [EGMaterial.wood set];

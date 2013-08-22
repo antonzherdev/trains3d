@@ -2,6 +2,8 @@ import EGDirector
 import EGContext
 import EGTexture
 
-stub def egDirector : EGDirector
-stub def egContext : EGContext
-stub def egTexture(file : string) : EGTexture
+class EG {
+    static def director : EGDirector = EGDirector.current
+    static def context : EGContext = EGDirector.current.context
+    static def textureFor(file : string) : EGTexture = context.textureFor(file)
+}

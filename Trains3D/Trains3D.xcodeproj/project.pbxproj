@@ -281,6 +281,7 @@
 		6F3DFD42297F886FCEFD9B89 /* ODObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF047BA6008E8473EAD30 /* ODObject.m */; };
 		6F3DFD46D8D45297CE6B34DB /* EGMatrix.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC0186D9A67A07B86D28 /* EGMatrix.mm */; };
 		6F3DFD490F4692BE968A8625 /* quaternion.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF62C1EA3B0B7A4E618C9 /* quaternion.inl */; };
+		6F3DFD532DA1D76D377D692B /* EG.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF65CAE98CB8EAADEB3FC /* EG.m */; };
 		6F3DFD55291A99DFBB4BC96E /* KWMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF08167587560C849D6A1 /* KWMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DFD5D381ED5E4CC8EB786 /* CNFilterLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF19D193921A2623A28BF /* CNFilterLink.m */; };
 		6F3DFD6C586DB73F46E2BEAA /* NSInvocation+KiwiAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF6BDCA09F45613AA98D6 /* NSInvocation+KiwiAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -623,6 +624,7 @@
 		6F3DF65460A5DBAC04BC37F7 /* EGDirectorMac.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGDirectorMac.m; sourceTree = "<group>"; };
 		6F3DF65614649C256027E3AF /* KWIntercept.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWIntercept.m; sourceTree = "<group>"; };
 		6F3DF657B4308BA0FAF47749 /* CNFile.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = CNFile.od; sourceTree = "<group>"; };
+		6F3DF65CAE98CB8EAADEB3FC /* EG.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EG.m; sourceTree = "<group>"; };
 		6F3DF6633D52B4401D6A62D6 /* EGTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGTypes.h; sourceTree = "<group>"; };
 		6F3DF6660E7BC79B636C9948 /* objd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objd.h; sourceTree = "<group>"; };
 		6F3DF66EFFC15D335BB57790 /* color_cast.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = color_cast.hpp; sourceTree = "<group>"; };
@@ -1615,6 +1617,7 @@
 				6F3DFDF61D0A66694D5D75C4 /* EGLayer.m */,
 				6F3DFBEE0A2376A87A246928 /* EGTypes.m */,
 				6F3DFA45DCD71966A35C9D7F /* EGGL.m */,
+				6F3DF65CAE98CB8EAADEB3FC /* EG.m */,
 			);
 			path = Kernel;
 			sourceTree = "<group>";
@@ -2465,6 +2468,7 @@
 				6F3DFE3A07C7294934BDC8CF /* EGShader.m in Sources */,
 				6F3DFAFAFC4A82D8EE7D6C44 /* EGBuffer.m in Sources */,
 				6F3DFD46D8D45297CE6B34DB /* EGMatrix.mm in Sources */,
+				6F3DFD532DA1D76D377D692B /* EG.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

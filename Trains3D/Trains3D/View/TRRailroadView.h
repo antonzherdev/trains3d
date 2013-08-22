@@ -12,6 +12,7 @@
 @class TRRailForm;
 @class TRRailPoint;
 @class TRRailPointCorrection;
+@class EG;
 @class EGTexture;
 @class EGMaterial;
 

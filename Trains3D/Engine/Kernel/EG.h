@@ -1,16 +1,16 @@
-#import "EGDirector.h"
-#import "EGContext.h"
-
+#import "objd.h"
+@class EGDirector;
+@class EGContext;
 @class EGTexture;
 
-static inline EGDirector * egDirector() {
-    return [EGDirector current];
-}
+@class EG;
 
-static inline EGContext * egContext() {
-    return egDirector().context;
-}
+@interface EG : NSObject
++ (id)g;
+- (id)init;
++ (EGDirector*)director;
++ (EGContext*)context;
++ (EGTexture*)textureForFile:(NSString*)file;
+@end
 
-static inline EGTexture * egTexture(NSString * file) {
-    return [egContext() textureForFile:file];
-}
+

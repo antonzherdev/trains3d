@@ -1,7 +1,7 @@
 #import "EGContext.h"
 
-#import "EGTexture.h"
 #import "CNCache.h"
+#import "EGTexture.h"
 @implementation EGContext{
     CNCache* _textureCache;
 }

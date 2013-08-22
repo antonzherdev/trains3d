@@ -44,7 +44,7 @@ class TRRailView {
             if(rail.form == TRRailForm.leftRight) egRotate(90, 0, 0, 1)
             egRotate(90, 1, 0, 0)
             EGMaterial.stone.set
-            egTexture("Gravel.png").draw(egDrawJasModel(RailGravel))
+            EG.textureFor("Gravel.png").draw(egDrawJasModel(RailGravel))
             EGMaterial.wood.set
             egDrawJasModel(RailTies)
             EGMaterial.steel.set
@@ -56,7 +56,7 @@ class TRRailView {
             egRotate(90, 1, 0, 0)
             egColor3(0.5, 0.5, 0.5)
             EGMaterial.stone.set
-            egTexture("Gravel.png").draw(egDrawJasModel(RailTurnGravel))
+            EG.textureFor("Gravel.png").draw(egDrawJasModel(RailTurnGravel))
             EGMaterial.wood.set
             egDrawJasModel(RailTurnTies)
             EGMaterial.steel.set

@@ -1,14 +1,12 @@
-#import "TRLevelBackgroundView.h"
-
 #import "EG.h"
-#import "EGTexture.h"
-#import "TRLevel.h"
-#import "EGMapIso.h"
-#import "EGMaterial.h"
-@implementation TRLevelBackgroundView
 
-+ (id)levelBackgroundView {
-    return [[TRLevelBackgroundView alloc] init];
+#import "EGDirector.h"
+#import "EGContext.h"
+#import "EGTexture.h"
+@implementation EG
+
++ (id)g {
+    return [[EG alloc] init];
 }
 
 - (id)init {
@@ -17,11 +15,16 @@
     return self;
 }
 
-- (void)drawLevel:(TRLevel*)level {
-    [EGMaterial.grass set];
-    [[EG textureForFile:@"Grass.png"] draw:^void() {
-        [level.map drawPlane];
-    }];
++ (EGDirector*)director {
+    return [EGDirector current];
+}
+
++ (EGContext*)context {
+    return [EGDirector current].context;
+}
+
++ (EGTexture*)textureForFile:(NSString*)file {
+    return [[EG context] textureForFile:file];
 }
 
 - (id)copyWithZone:(NSZone*)zone {

@@ -1,4 +1,5 @@
 #import "objd.h"
+@class EG;
 @class EGTexture;
 @class TRLevelRules;
 @class TRLevel;
