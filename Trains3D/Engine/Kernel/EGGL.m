@@ -38,5 +38,5 @@ EGMatrix* egModelViewProjectionMatrix() {
     float* projection = malloc(sizeof(float) * 16);
     glGetFloatv(GL_MODELVIEW_MATRIX, model);
     glGetFloatv(GL_PROJECTION_MATRIX, projection);
-    return [[EGMatrix matrixWithM:model] multiply:[EGMatrix matrixWithM:projection]];
+    return [[EGMatrix matrixWithM:projection] multiply:[EGMatrix matrixWithM:model]];
 }
