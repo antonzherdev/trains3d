@@ -1,13 +1,11 @@
-import CNCache
-
 import EGTexture
 import EGMatrix
 
 
 class EGContext {
-    private val textureCache = CNCache.new<string, EGTexture>
+    private val textureCache = CNMutableHashMap.new<string, EGTexture>
 
-    def textureFor(file : string) : EGTexture = textureCache.lookupWith(init = EGTexture(file), forKey = file)
+    def textureFor(file : string) : EGTexture = textureCache.objectFor(key = file, orUpdateWith = EGTexture(file))
 
 
     val matrixModel = EGMatrixModel.new

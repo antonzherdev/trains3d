@@ -1,5 +1,4 @@
 #import "objd.h"
-@class CNCache;
 @class EGTexture;
 @class EGMatrix;
 

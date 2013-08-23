@@ -1,10 +1,9 @@
 #import "EGContext.h"
 
-#import "CNCache.h"
 #import "EGTexture.h"
 #import "EGMatrix.h"
 @implementation EGContext{
-    CNCache* _textureCache;
+    NSMutableDictionary* _textureCache;
     EGMatrixModel* _matrixModel;
 }
 @synthesize matrixModel = _matrixModel;
@@ -16,7 +15,7 @@
 - (id)init {
     self = [super init];
     if(self) {
-        _textureCache = [CNCache cache];
+        _textureCache = [NSMutableDictionary mutableDictionary];
         _matrixModel = [EGMatrixModel matrixModel];
     }
     
@@ -24,9 +23,9 @@
 }
 
 - (EGTexture*)textureForFile:(NSString*)file {
-    return ((EGTexture*)([_textureCache lookupWithInit:^EGTexture*() {
+    return ((EGTexture*)([_textureCache objectForKey:file orUpdateWith:^EGTexture*() {
         return [EGTexture textureWithFile:file];
-    } forKey:file]));
+    }]));
 }
 
 - (id)copyWithZone:(NSZone*)zone {

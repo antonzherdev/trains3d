@@ -1,5 +1,0 @@
-stub class CNCache<K, V> {
-    def lookupWith(init : () -> V, forKey : K) : V
-    def set(object : V, forKey : K) : V
-    def clear
-}
