@@ -43,6 +43,7 @@ static EGDirector* __current;
 - (void)drawWithSize:(EGSize)size {
     __current = self;
     egClear();
+    [_context clearMatrix];
     glEnable(GL_DEPTH_TEST);
     [_scene drawWithViewSize:size];
     glDisable(GL_DEPTH_TEST);

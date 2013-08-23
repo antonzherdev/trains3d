@@ -1,6 +1,10 @@
 stub class EGMatrix {
-    def multiply( : EGMatrix) : EGMatrix
     def array : float[16]
 
     static def identity : EGMatrix
+
+    def multiply( : EGMatrix) : EGMatrix
+    def rotate(angle : float, x : float, y : float, z : float) : EGMatrix
+    def scale(x : float, y : float, z : float) : EGMatrix
+    def translate(x : float, y : float, z : float) : EGMatrix
 }

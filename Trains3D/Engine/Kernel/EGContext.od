@@ -8,47 +8,52 @@ class EGContext {
     def textureFor(file : string) : EGTexture = textureCache.objectFor(key = file, orUpdateWith = EGTexture(file))
 
 
-    val matrixModel = EGMatrixModel()
-}
+    val modelMatrix = EGMutableMatrix()
+    val viewMatrix = EGMutableMatrix()
+    val projectionMatrix = EGMutableMatrix()
+    def mvp : EGMatrix = modelMatrix.value.multiply(viewMatrix.value).multiply(projectionMatrix.value)
 
-class EGMatrixModel {
-    private var _model : EGMatrix = EGMatrix.identity
-    private var _view : EGMatrix = EGMatrix.identity
-    private var _projection : EGMatrix = EGMatrix.identity
-    def mvp : EGMatrix = _projection.multiply(_view).multiply(_model)
-
-    def clear {
-        _model = EGMatrix.identity
-        _view = EGMatrix.identity
-        _projection = EGMatrix.identity
-    }
-
-    def model : EGMatrix = _model
-    def setModel(matrix : EGMatrix) {
-        _model = matrix
-    }
-
-    def view : EGMatrix = _view
-    def setView(matrix : EGMatrix) {
-        _view = matrix
-    }
-
-    def projection : EGMatrix = _projection
-    def setProjection(matrix : EGMatrix) {
-        _projection = matrix
+    def clearMatrix {
+        modelMatrix.clear
+        viewMatrix.clear
+        projectionMatrix.clear
     }
 }
 
 class EGMutableMatrix {
-    private var _stack = CNList.apply<EGMatrix>()
-    private var _value : EGMatrix
+    private var _stack = CNList<EGMatrix>()
+    private var _value = EGMatrix.identity
 
     def push {
-        _stack = CNList.apply(_value, _stack)
+        _stack = CNList(_value, _stack)
     }
 
     def pop {
         _value = _stack.head.get
+        _stack = _stack.tail
     }
 
+    def value : EGMatrix = _value
+    def set(value : EGMatrix) {
+        _value = value
+    }
+
+    def setIdentity {
+        _value = EGMatrix.identity
+    }
+
+    def clear {
+        setIdentity
+        _stack = CNList<EGMatrix>()
+    }
+
+    def rotate(angle : float, x : float, y : float, z : float) {
+        _value = _value.rotate(angle, x, y, z)
+    }
+    def scale(x : float, y : float, z : float) {
+        _value = _value.scale(x, y, z)
+    }
+    def translate(x : float, y : float, z : float) {
+        _value = _value.translate(x, y, z)
+    }
 }

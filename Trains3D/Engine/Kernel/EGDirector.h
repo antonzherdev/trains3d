@@ -4,7 +4,6 @@
 @class EGStat;
 #import "EGTypes.h"
 @class EGContext;
-@class EGMatrixModel;
 @class EGMutableMatrix;
 @protocol EGProcessor;
 @protocol EGMouseProcessor;

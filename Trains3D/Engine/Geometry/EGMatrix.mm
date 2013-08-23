@@ -1,8 +1,13 @@
 #import "EGMatrix.h"
 
+#if defined(__LP64__) && __LP64__
+#define GLM_PRECISION_HIGHP_FLOAT
+#endif
+
 #include "glm.hpp"
 #include "matrix_transform.hpp"
 #import "type_ptr.hpp"
+
 
 struct EGMatrixImpl {
     glm::mat4 m;
@@ -74,8 +79,26 @@ static EGMatrix* _identity;
     return memcmp(_impl, o.impl, sizeof(double[16])) == 0;
 }
 
-- (GLfloat const *)array {
+- (CGFloat const *)array {
     return glm::value_ptr(_impl->m);
+}
+
+- (EGMatrix *)rotateAngle:(CGFloat)angle x:(CGFloat)x y:(CGFloat)y z:(CGFloat)z {
+    EGMatrixImpl* impl = new EGMatrixImpl;
+    impl->m = glm::rotate(_impl->m, angle, glm::vec3(x, y, z));
+    return [EGMatrix matrixWithImpl:impl];
+}
+
+- (EGMatrix *)scaleX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z {
+    EGMatrixImpl* impl = new EGMatrixImpl;
+    impl->m = glm::scale(_impl->m, glm::vec3(x, y, z));
+    return [EGMatrix matrixWithImpl:impl];
+}
+
+- (EGMatrix *)translateX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z {
+    EGMatrixImpl* impl = new EGMatrixImpl;
+    impl->m = glm::translate(_impl->m, glm::vec3(x, y, z));
+    return [EGMatrix matrixWithImpl:impl];
 }
 @end
 

@@ -16,7 +16,13 @@ typedef struct EGMatrixImpl EGMatrixImpl;
 
 + (EGMatrix *)identity;
 
-- (GLfloat const *)array;
+- (CGFloat const *)array;
+
+- (EGMatrix *)rotateAngle:(CGFloat)angle x:(CGFloat)x y:(CGFloat)y z:(CGFloat)z;
+
+- (EGMatrix *)scaleX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z;
+
+- (EGMatrix *)translateX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z;
 @end
 
 

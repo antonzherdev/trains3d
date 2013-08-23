@@ -4,9 +4,13 @@
 #import "EGMatrix.h"
 @implementation EGContext{
     NSMutableDictionary* _textureCache;
-    EGMatrixModel* _matrixModel;
+    EGMutableMatrix* _modelMatrix;
+    EGMutableMatrix* _viewMatrix;
+    EGMutableMatrix* _projectionMatrix;
 }
-@synthesize matrixModel = _matrixModel;
+@synthesize modelMatrix = _modelMatrix;
+@synthesize viewMatrix = _viewMatrix;
+@synthesize projectionMatrix = _projectionMatrix;
 
 + (id)context {
     return [[EGContext alloc] init];
@@ -16,7 +20,9 @@
     self = [super init];
     if(self) {
         _textureCache = [NSMutableDictionary mutableDictionary];
-        _matrixModel = [EGMatrixModel matrixModel];
+        _modelMatrix = [EGMutableMatrix mutableMatrix];
+        _viewMatrix = [EGMutableMatrix mutableMatrix];
+        _projectionMatrix = [EGMutableMatrix mutableMatrix];
     }
     
     return self;
@@ -26,6 +32,16 @@
     return ((EGTexture*)([_textureCache objectForKey:file orUpdateWith:^EGTexture*() {
         return [EGTexture textureWithFile:file];
     }]));
+}
+
+- (EGMatrix*)mvp {
+    return [[[_modelMatrix value] multiply:[_viewMatrix value]] multiply:[_projectionMatrix value]];
+}
+
+- (void)clearMatrix {
+    [_modelMatrix clear];
+    [_viewMatrix clear];
+    [_projectionMatrix clear];
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -51,74 +67,6 @@
 @end
 
 
-@implementation EGMatrixModel{
-    EGMatrix* __model;
-    EGMatrix* __view;
-    EGMatrix* __projection;
-}
-
-+ (id)matrixModel {
-    return [[EGMatrixModel alloc] init];
-}
-
-- (id)init {
-    self = [super init];
-    if(self) {
-        __model = [EGMatrix identity];
-        __view = [EGMatrix identity];
-        __projection = [EGMatrix identity];
-    }
-    
-    return self;
-}
-
-- (EGMatrix*)mvp {
-    return [[__projection multiply:__view] multiply:__model];
-}
-
-- (void)clear {
-    __model = [EGMatrix identity];
-    __view = [EGMatrix identity];
-    __projection = [EGMatrix identity];
-}
-
-- (EGMatrix*)model {
-    return __model;
-}
-
-- (void)setModelMatrix:(EGMatrix*)matrix {
-    __model = matrix;
-}
-
-- (EGMatrix*)view {
-    return __view;
-}
-
-- (void)setViewMatrix:(EGMatrix*)matrix {
-    __view = matrix;
-}
-
-- (EGMatrix*)projection {
-    return __projection;
-}
-
-- (void)setProjectionMatrix:(EGMatrix*)matrix {
-    __projection = matrix;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
 @implementation EGMutableMatrix{
     CNList* __stack;
     EGMatrix* __value;
@@ -130,7 +78,10 @@
 
 - (id)init {
     self = [super init];
-    if(self) __stack = [CNList apply];
+    if(self) {
+        __stack = [CNList apply];
+        __value = [EGMatrix identity];
+    }
     
     return self;
 }
@@ -141,6 +92,36 @@
 
 - (void)pop {
     __value = ((EGMatrix*)([[__stack head] get]));
+    __stack = [__stack tail];
+}
+
+- (EGMatrix*)value {
+    return __value;
+}
+
+- (void)setValue:(EGMatrix*)value {
+    __value = value;
+}
+
+- (void)setIdentity {
+    __value = [EGMatrix identity];
+}
+
+- (void)clear {
+    [self setIdentity];
+    __stack = [CNList apply];
+}
+
+- (void)rotateAngle:(CGFloat)angle x:(CGFloat)x y:(CGFloat)y z:(CGFloat)z {
+    __value = [__value rotateAngle:angle x:x y:y z:z];
+}
+
+- (void)scaleX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z {
+    __value = [__value scaleX:x y:y z:z];
+}
+
+- (void)translateX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z {
+    __value = [__value translateX:x y:y z:z];
 }
 
 - (id)copyWithZone:(NSZone*)zone {

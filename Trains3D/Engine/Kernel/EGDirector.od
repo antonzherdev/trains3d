@@ -18,6 +18,7 @@ class EGDirector {
     def drawWith(size : EGSize) {
         _current = self
         egClear
+        context.clearMatrix
         glEnable(GL_DEPTH_TEST)
         scene.drawWith(size)
         glDisable(GL_DEPTH_TEST)
