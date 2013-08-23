@@ -68,6 +68,12 @@ static EGMatrix* _identity;
     return self;
 }
 
++ (EGMatrix *)orthoLeft:(CGFloat)left right:(CGFloat)right bottom:(CGFloat)bottom top:(CGFloat)top zNear:(CGFloat)near zFar:(CGFloat)far {
+    EGMatrixImpl* impl = new EGMatrixImpl;
+    impl->m = glm::ortho(left, right, bottom, top, near, far);
+    return [EGMatrix matrixWithImpl:impl];
+}
+
 - (void)dealloc {
     delete _impl;
 }

@@ -1,7 +1,52 @@
+import EG
+import EGGL
 import EGTypes
+import EGMapIso
+import EGContext
 
-stub class EGCameraIso(tilesOnScreen : EGSizeI, center : EGPoint) extends EGCamera {
+class EGCameraIso(tilesOnScreen : EGSizeI, center : EGPoint) extends EGCamera {
+    private static val ISO = EGMapSso.ISO
+
+    def calculateViewportSizeWith(viewSize : EGSize) : EGRect = {
+        val ww = tilesOnScreen.width + tilesOnScreen.height
+        val tileSize = min(viewSize.width / ww, 2*viewSize.height/ ww)
+        val viewportWidth = tileSize * ww
+        val viewportHeight = tileSize * ww / 2
+        EGRect((viewSize.width - viewportWidth)/2, viewportWidth,
+            (viewSize.height - viewportHeight)/2, viewportHeight)
+    }
+
+
     def focusFor(viewSize : EGSize) {
+        val vps = calculateViewportSizeWith(viewSize)
+        glViewport(vps.x, vps.y, vps.width, vps.height)
+
+        glMatrixMode(GL_PROJECTION)
+        val pm = EG.projectionMatrix
+        pm.setIdentity
+        val ww : float = tilesOnScreen.width + tilesOnScreen.height
+        pm.ortho(-ISO, ISO*ww - ISO, -ISO*tilesOnScreen.width/2, ISO*tilesOnScreen.height/2, 0.0, 1000.0)
+
+//        EG.viewMatrix.setIdentity
+
+        glMatrixMode(GL_MODELVIEW)
+        val mm = EG.modelMatrix
+        mm.translate(0, 0, -100)
+        mm.rotate(30, 1, 0, 0)
+        mm.rotate(-45.0, 0, 1, 0)
+        mm.rotate(-90, 1, 0, 0)
+        mm.translate(-center.x, 0, -center.y)
+    }
+
+    def translateWith(viewSize : EGSize, viewPoint : EGPoint) : EGPoint = {
+        val vps = calculateViewportSizeWith(viewSize)
+        val x = viewPoint.x - vps.x
+        val y = viewPoint.y - vps.y
+        val vw = vps.size.width
+        val vh = vps.size.height
+        val ww2 : float = (tilesOnScreen.width + tilesOnScreen.height)/2.0
+        val tw : float = tilesOnScreen.width
+        EGPoint((x/vw - y/vh)*ww2 + tw/2 - 0.5 + center.x, (x/vw + y/vh)*ww2 - tw/2 - 0.5 + center.y)
     }
 }
 

@@ -7,4 +7,5 @@ stub class EGMatrix {
     def rotate(angle : float, x : float, y : float, z : float) : EGMatrix
     def scale(x : float, y : float, z : float) : EGMatrix
     def translate(x : float, y : float, z : float) : EGMatrix
+    static def ortho(left : float, right : float, bottom : float, top : float, zNear : float, zFar : float) : EGMatrix
 }

@@ -12,6 +12,9 @@
 + (EGDirector*)director;
 + (EGContext*)context;
 + (EGTexture*)textureForFile:(NSString*)file;
++ (EGMutableMatrix*)projectionMatrix;
++ (EGMutableMatrix*)viewMatrix;
++ (EGMutableMatrix*)modelMatrix;
 @end
 
 

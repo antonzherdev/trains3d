@@ -1,5 +1,6 @@
 import EGTexture
 import EGMatrix
+import EGGL
 
 
 class EGContext {
@@ -39,6 +40,7 @@ class EGMutableMatrix {
     }
 
     def setIdentity {
+        glLoadIdentity
         _value = EGMatrix.identity
     }
 
@@ -48,12 +50,19 @@ class EGMutableMatrix {
     }
 
     def rotate(angle : float, x : float, y : float, z : float) {
+        egRotate(angle, x, y, z)
         _value = _value.rotate(angle, x, y, z)
     }
     def scale(x : float, y : float, z : float) {
+        egScale(x, y, z)
         _value = _value.scale(x, y, z)
     }
     def translate(x : float, y : float, z : float) {
+        egTranslate(x, y, z)
         _value = _value.translate(x, y, z)
+    }
+    def ortho(left : float, right : float, bottom : float, top : float, zNear : float, zFar : float) {
+        glOrtho(left, right, bottom, top, zNear, zFar)
+        _value = EGMatrix.ortho(left, right, bottom, top, zNear, zFar)
     }
 }

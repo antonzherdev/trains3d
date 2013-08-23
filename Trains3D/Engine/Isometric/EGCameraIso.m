@@ -1,20 +1,14 @@
 #import "EGCameraIso.h"
+
+#import "EG.h"
+#import "EGGL.h"
 #import "EGMapIso.h"
-
-static inline CGRect calculateViewportSize(EGSizeI tilesOnScreen, EGSize viewSize) {
-    CGFloat ww = tilesOnScreen.width + tilesOnScreen.height;
-    CGFloat tileSize = MIN(viewSize.width / ww, 2*viewSize.height/ ww);
-    CGFloat viewportWidth = tileSize * ww;
-    CGFloat viewportHeight = tileSize * ww / 2;
-    return CGRectMake((viewSize.width - viewportWidth)/2, (viewSize.height - viewportHeight)/2,
-            viewportWidth, viewportHeight);
-}
-
+#import "EGContext.h"
 @implementation EGCameraIso{
     EGSizeI _tilesOnScreen;
     EGPoint _center;
 }
-static double _ISO;
+static CGFloat _ISO;
 @synthesize tilesOnScreen = _tilesOnScreen;
 @synthesize center = _center;
 
@@ -34,39 +28,70 @@ static double _ISO;
 
 + (void)initialize {
     [super initialize];
-    _ISO = [EGMapSso ISO];
+    _ISO = EGMapSso.ISO;
+}
+
+- (EGRect)calculateViewportSizeWithViewSize:(EGSize)viewSize {
+    NSInteger ww = _tilesOnScreen.width + _tilesOnScreen.height;
+    CGFloat tileSize = min(viewSize.width / ww, 2 * viewSize.height / ww);
+    CGFloat viewportWidth = tileSize * ww;
+    CGFloat viewportHeight = tileSize * ww / 2;
+    return EGRectMake((viewSize.width - viewportWidth) / 2, viewportWidth, (viewSize.height - viewportHeight) / 2, viewportHeight);
 }
 
 - (void)focusForViewSize:(EGSize)viewSize {
-    CGRect vps = calculateViewportSize(_tilesOnScreen, viewSize);
-    glViewport((GLint) vps.origin.x, (GLint) vps.origin.y, (GLsizei) vps.size.width, (GLsizei) vps.size.height);
-
+    EGRect vps = [self calculateViewportSizeWithViewSize:viewSize];
+    glViewport(((NSInteger)(vps.x)), ((NSInteger)(vps.y)), ((NSInteger)(vps.width)), ((NSInteger)(vps.height)));
     glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    CGFloat ww = _tilesOnScreen.width + _tilesOnScreen.height;
-    glOrtho(-_ISO, _ISO*ww - _ISO, -_ISO*_tilesOnScreen.width/2, _ISO*_tilesOnScreen.height/2, 0.0f, 1000.0f);
-
+    EGMutableMatrix* pm = [EG projectionMatrix];
+    [pm setIdentity];
+    CGFloat ww = ((CGFloat)(_tilesOnScreen.width + _tilesOnScreen.height));
+    [pm orthoLeft:-_ISO right:_ISO * ww - _ISO bottom:-_ISO * _tilesOnScreen.width / 2 top:_ISO * _tilesOnScreen.height / 2 zNear:0.0 zFar:1000.0];
     glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    glTranslatef(0 ,0 ,-100);
-    glRotatef(30, 1, 0, 0);
-    glRotatef(-45.0f, 0, 1, 0);
-    glRotatef(-90, 1, 0, 0);
-    glTranslatef((GLfloat) -_center.x,0, (GLfloat) -_center.y);
+    EGMutableMatrix* mm = [EG modelMatrix];
+    [mm translateX:((CGFloat)(0)) y:((CGFloat)(0)) z:((CGFloat)(-100))];
+    [mm rotateAngle:((CGFloat)(30)) x:((CGFloat)(1)) y:((CGFloat)(0)) z:((CGFloat)(0))];
+    [mm rotateAngle:-45.0 x:((CGFloat)(0)) y:((CGFloat)(1)) z:((CGFloat)(0))];
+    [mm rotateAngle:((CGFloat)(-90)) x:((CGFloat)(1)) y:((CGFloat)(0)) z:((CGFloat)(0))];
+    [mm translateX:-_center.x y:((CGFloat)(0)) z:-_center.y];
 }
 
 - (EGPoint)translateWithViewSize:(EGSize)viewSize viewPoint:(EGPoint)viewPoint {
-    CGRect vps = calculateViewportSize(_tilesOnScreen, viewSize);
-    CGFloat x = viewPoint.x - vps.origin.x;
-    CGFloat y = viewPoint.y - vps.origin.y;
-    CGFloat vw = vps.size.width;
-    CGFloat vh = vps.size.height;
-    CGFloat ww2 = ((CGFloat)_tilesOnScreen.width + _tilesOnScreen.height)/2;
-    CGFloat tw = _tilesOnScreen.width;
-    return EGPointMake((x/vw - y/vh)*ww2 + tw/2 - 0.5 + _center.x, (x/vw + y/vh)*ww2 - tw/2 - 0.5 + _center.y);
+    EGRect vps = [self calculateViewportSizeWithViewSize:viewSize];
+    CGFloat x = viewPoint.x - vps.x;
+    CGFloat y = viewPoint.y - vps.y;
+    CGFloat vw = egRectSize(vps).width;
+    CGFloat vh = egRectSize(vps).height;
+    CGFloat ww2 = (_tilesOnScreen.width + _tilesOnScreen.height) / 2.0;
+    CGFloat tw = ((CGFloat)(_tilesOnScreen.width));
+    return EGPointMake((x / vw - y / vh) * ww2 + tw / 2 - 0.5 + _center.x, (x / vw + y / vh) * ww2 - tw / 2 - 0.5 + _center.y);
 }
 
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGCameraIso* o = ((EGCameraIso*)(other));
+    return EGSizeIEq(self.tilesOnScreen, o.tilesOnScreen) && EGPointEq(self.center, o.center);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + EGSizeIHash(self.tilesOnScreen);
+    hash = hash * 31 + EGPointHash(self.center);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"tilesOnScreen=%@", EGSizeIDescription(self.tilesOnScreen)];
+    [description appendFormat:@", center=%@", EGPointDescription(self.center)];
+    [description appendString:@">"];
+    return description;
+}
 
 @end
 

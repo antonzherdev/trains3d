@@ -18,6 +18,8 @@ typedef struct EGMatrixImpl EGMatrixImpl;
 
 - (CGFloat const *)array;
 
++ (EGMatrix *)orthoLeft:(CGFloat)left right:(CGFloat)right bottom:(CGFloat)bottom top:(CGFloat)top zNear:(CGFloat)near zFar:(CGFloat)far;
+
 - (EGMatrix *)rotateAngle:(CGFloat)angle x:(CGFloat)x y:(CGFloat)y z:(CGFloat)z;
 
 - (EGMatrix *)scaleX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z;

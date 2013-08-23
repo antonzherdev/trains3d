@@ -2,6 +2,7 @@
 
 #import "EGTexture.h"
 #import "EGMatrix.h"
+#import "EGGL.h"
 @implementation EGContext{
     NSMutableDictionary* _textureCache;
     EGMutableMatrix* _modelMatrix;
@@ -104,6 +105,7 @@
 }
 
 - (void)setIdentity {
+    glLoadIdentity();
     __value = [EGMatrix identity];
 }
 
@@ -113,15 +115,23 @@
 }
 
 - (void)rotateAngle:(CGFloat)angle x:(CGFloat)x y:(CGFloat)y z:(CGFloat)z {
+    egRotate(angle, x, y, z);
     __value = [__value rotateAngle:angle x:x y:y z:z];
 }
 
 - (void)scaleX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z {
+    egScale(x, y, z);
     __value = [__value scaleX:x y:y z:z];
 }
 
 - (void)translateX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z {
+    egTranslate(x, y, z);
     __value = [__value translateX:x y:y z:z];
+}
+
+- (void)orthoLeft:(CGFloat)left right:(CGFloat)right bottom:(CGFloat)bottom top:(CGFloat)top zNear:(CGFloat)zNear zFar:(CGFloat)zFar {
+    glOrtho(left, right, bottom, top, zNear, zFar);
+    __value = [EGMatrix orthoLeft:left right:right bottom:bottom top:top zNear:zNear zFar:zFar];
 }
 
 - (id)copyWithZone:(NSZone*)zone {

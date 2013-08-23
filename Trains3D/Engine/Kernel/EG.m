@@ -27,6 +27,18 @@
     return [[EG context] textureForFile:file];
 }
 
++ (EGMutableMatrix*)projectionMatrix {
+    return [EG context].projectionMatrix;
+}
+
++ (EGMutableMatrix*)viewMatrix {
+    return [EG context].viewMatrix;
+}
+
++ (EGMutableMatrix*)modelMatrix {
+    return [EG context].modelMatrix;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
