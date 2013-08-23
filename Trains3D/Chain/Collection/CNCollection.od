@@ -67,7 +67,7 @@ trait CNIterable<T> extends CNTraversable<T> {
     }
     def iterator : CNIterator<T>
 
-    def head : T? = iterator.next
+    def head : T? = if(iterator.hasNext) iterator.next else nil
     def isEmpty : bool = !iterator.hasNext
 
     def chain : CNChain<T> = {

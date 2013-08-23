@@ -120,6 +120,7 @@
 
 
 @implementation EGMutableMatrix{
+    CNList* __stack;
     EGMatrix* __value;
 }
 
@@ -129,8 +130,17 @@
 
 - (id)init {
     self = [super init];
+    if(self) __stack = [CNList apply];
     
     return self;
+}
+
+- (void)push {
+    __stack = [CNList applyObject:__value tail:__stack];
+}
+
+- (void)pop {
+    __value = ((EGMatrix*)([[__stack head] get]));
 }
 
 - (id)copyWithZone:(NSZone*)zone {

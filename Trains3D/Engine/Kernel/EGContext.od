@@ -40,7 +40,15 @@ class EGMatrixModel {
 }
 
 class EGMutableMatrix {
+    private var _stack = CNList.apply<EGMatrix>()
     private var _value : EGMatrix
 
+    def push {
+        _stack = CNList.apply(_value, _stack)
+    }
+
+    def pop {
+        _value = _stack.head.get
+    }
 
 }

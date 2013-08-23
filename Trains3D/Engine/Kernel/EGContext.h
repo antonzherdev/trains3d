@@ -32,6 +32,8 @@
 @interface EGMutableMatrix : NSObject
 + (id)mutableMatrix;
 - (id)init;
+- (void)push;
+- (void)pop;
 @end
 
 

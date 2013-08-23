@@ -76,7 +76,8 @@
 }
 
 - (id)head {
-    return [CNOption opt:[[self iterator] next]];
+    if([[self iterator] hasNext]) return [CNOption opt:[[self iterator] next]];
+    else return [CNOption none];
 }
 
 - (CNChain*)chain {
