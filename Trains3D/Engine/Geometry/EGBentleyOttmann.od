@@ -9,9 +9,9 @@ import CNSet
 
 class EGBentleyOttmann {
     static def intersectionsFor<T>(segments : [(T, EGLineSegment)]) : CNSet<EGIntersection<T>> =
-        if(segments.count < 2) CNHashSet.new<T>
+        if(segments.count < 2) CNHashSet<T>()
         else {
-            val sweepLine = EGSweepLine.new<T>
+            val sweepLine = EGSweepLine<T>()
             val queue = EGBentleyOttmannEventQueue.newWith(segments, sweepLine)
 
             while(!queue.isEmpty) {
@@ -54,7 +54,7 @@ class EGBentleyOttmannEventQueue<T> {
     def isEmpty : bool = events.isEmpty
 
     static def newWith<T>(segments : [(T, EGLineSegment)], sweepLine : EGSweepLine) : EGBentleyOttmannEventQueue<T> {
-        val ret = EGBentleyOttmannEventQueue.new<T>
+        val ret = EGBentleyOttmannEventQueue<T>()
         if(!(segments.isEmpty)) {
             segments.for(s -> {
                 val segment : EGLineSegment = s.b
@@ -67,7 +67,7 @@ class EGBentleyOttmannEventQueue<T> {
     }
 
     def offer(point : EGPoint, event : EGBentleyOttmannEvent) {
-        events.objectFor(key = point, orUpdateWith = CNMutableArray.new<EGBentleyOttmannEvent<T>>).add(event)
+        events.objectFor(key = point, orUpdateWith = CNMutableArray<EGBentleyOttmannEvent<T>>() ).add(event)
     }
 
     def poll : [EGBentleyOttmannEvent] {
@@ -91,7 +91,7 @@ class EGSweepLine<T>
     * A map holding all intersection points mapped to the Events
     * that form these intersections.
     */
-    val intersections = CNMutableHashMap.new<EGPointClass, NSMutableSet<EGBentleyOttmannPointEvent<T>>>
+    val intersections = CNMutableHashMap<EGPointClass, NSMutableSet<EGBentleyOttmannPointEvent<T>>>()
 
 
     /**
@@ -176,7 +176,7 @@ class EGSweepLine<T>
         if(!a.segment.endingsContain(point) || !b.segment.endingsContain(point)) {
 
             // Add the intersection.
-            val existing = intersections.objectFor(key = EGPointClass(point), orUpdateWith = NSMutableSet.new<EGBentleyOttmannPointEvent<T>>)
+            val existing = intersections.objectFor(key = EGPointClass(point), orUpdateWith = NSMutableSet<EGBentleyOttmannPointEvent<T>>())
             existing.add(a)
             existing.add(b)
 

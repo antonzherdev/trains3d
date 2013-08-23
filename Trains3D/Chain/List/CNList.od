@@ -12,7 +12,7 @@ class CNList<T> extends CNSeq<T> {
     static def apply<T>(object : T, tail : CNList<T>) : CNList<T>  = CNFilledList<T>(object, tail)
 
     def iterator : CNIterator<T> = {
-        val i = CNListIterator.new<T>
+        val i = CNListIterator<T>()
         i.list = self
         i
     }
@@ -31,7 +31,7 @@ class CNEmptyList<T> extends CNList<T> {
     def tail : CNList<T> = self
     def isEmpty = true
 
-    static val instance = CNEmptyList.new<int>
+    static val instance = CNEmptyList<int>()
 }
 
 class CNListIterator<T> extends CNIterator<T> {

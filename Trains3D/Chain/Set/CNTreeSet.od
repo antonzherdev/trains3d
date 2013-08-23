@@ -14,7 +14,7 @@ class CNMutableTreeSet<T>(map : CNMutableTreeMap<T, ODObject>) extends CNMutable
     }
 
     static def new<T> = CNMutableTreeSet<T>(CNMutableTreeMap.new<T, ODObject>)
-    private static val obj = NSObject.new
+    private static val obj = NSObject()
 
     def between(a : T, b : T) : [T]
 

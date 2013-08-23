@@ -8,7 +8,7 @@ trait CNSet<T> extends CNIterable<T> {}
 trait CNMutableSet<T> extends CNSet<T> with CNMutableIterable<T> {}
 
 class CNHashSetBuilder<T> extends CNBuilder<T, CNHashSet<T>> {
-    val set = NSMutableSet.new<T>
+    val set = NSMutableSet<T>()
 
     def add(object : T) {
         set.add(object)

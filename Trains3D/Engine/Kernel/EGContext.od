@@ -3,12 +3,12 @@ import EGMatrix
 
 
 class EGContext {
-    private val textureCache = CNMutableHashMap.new<string, EGTexture>
+    private val textureCache = CNMutableHashMap<string, EGTexture>()
 
     def textureFor(file : string) : EGTexture = textureCache.objectFor(key = file, orUpdateWith = EGTexture(file))
 
 
-    val matrixModel = EGMatrixModel.new
+    val matrixModel = EGMatrixModel()
 }
 
 class EGMatrixModel {

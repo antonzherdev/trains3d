@@ -20,7 +20,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
     val map : EGMapSso = EGMapSso(rules.mapSize)
     val score : TRScore = TRScore(rules.scoreRules)
     val railroad : TRRailroad = TRRailroad(map, score)
-    private var _cities = CNMutableArray.new<TRCity>
+    private var _cities = CNMutableArray<TRCity>()
     val schedule : EGSchedule = createSchedule
     def cities : [TRCity] = _cities
     private var _trains : [TRTrain] = []

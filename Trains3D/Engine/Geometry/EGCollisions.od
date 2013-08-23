@@ -12,13 +12,13 @@ class EGCollisions {
             .uncombinations
             .flatMap(f -> f.b.segments.chain.map(segment -> (f.a, segment)))
             .toArray
-        if(segments.isEmpty) return CNHashSet.new<EGCollision>
+        if(segments.isEmpty) return CNHashSet<EGCollision>()
         val intersections = EGBentleyOttmann.intersectionsFor(segments)
         intersections.chain
             .group<CNPair<T>, EGPoint, CNSet<EGPoint>>(
                 by = _.items,
                 map = _.point,
-                withBuilder = CNHashSetBuilder.new<EGPoint>)
+                withBuilder = CNHashSetBuilder<EGPoint>())
             .map(p -> EGCollision<T>(p.a, p.b))
             .toSet
     }

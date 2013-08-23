@@ -22,9 +22,9 @@ trait CNSeq<T> extends CNIterable<T> {
         if(isEmpty) nil
         else apply(randomWith(count - 1))
 
-    def toSet : CNSet<T> = convertWith(CNHashSetBuilder.new<T>)
+    def toSet : CNSet<T> = convertWith(CNHashSetBuilder<T>())
     def arrayByAdding(object : T) : CNSeq<T> = {
-        val builder = CNArrayBuilder.new<T>
+        val builder = CNArrayBuilder<T>()
         builder.addAll(self)
         builder.add(object)
         builder.build
@@ -44,7 +44,7 @@ type CNArray<T> = NSArray<T>
 type CNMutableArray<T> = NSMutableArray<T>
 
 class CNArrayBuilder<T> extends CNBuilder<T, CNArray<T>> {
-    val array = NSMutableArray.new<T>
+    val array = NSMutableArray<T>()
 
     def add(object : T) {
         array.add(object)

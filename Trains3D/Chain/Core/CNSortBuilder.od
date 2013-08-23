@@ -6,7 +6,7 @@ import "NSMutableArray+CNChain.h"
 import "ODObject.h"
 
 class CNSortBuilder<A>(chain : CNChain<A>) {
-    private val functions = CNMutableArray.new<(A, A) -> int>
+    private val functions = CNMutableArray<(A, A) -> int>()
 
     def asc<B extends ODComparable<B>>(by : A -> B) : CNSortBuilder<A> = {
         functions.add((x : A, y : A) -> by(x).compare(by(y)))
