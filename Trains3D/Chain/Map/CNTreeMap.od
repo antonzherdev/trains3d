@@ -329,7 +329,7 @@ class CNTreeMapEntry<K, V> {
     weak var parent : CNTreeMapEntry<K, V>
 
     static def newWith<K, V>(key : K, object : V, parent : CNTreeMapEntry<K, V>) : CNTreeMapEntry<K, V> = {
-        val r = CNTreeMapEntry.new<K, V>
+        val r = CNTreeMapEntry<K, V>()
         r.key = key
         r.object = object
         r.parent = parent

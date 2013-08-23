@@ -30,7 +30,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
 
 
     private def createSchedule : EGSchedule = {
-        val schedule = EGSchedule.new
+        val schedule = EGSchedule()
         createNewCity
         createNewCity
         rules.events.for(t -> {

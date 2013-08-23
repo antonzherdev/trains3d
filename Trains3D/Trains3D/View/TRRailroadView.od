@@ -12,10 +12,10 @@ import "TR3DRailTurn.h"
 import "TR3DSwitch.h"
 
 class TRRailroadView {
-    private val railView = TRRailView.new
-    private val switchView = TRSwitchView.new
-    private val lightView = TRLightView.new
-    private val damageView = TRDamageView.new
+    private val railView = TRRailView()
+    private val switchView = TRSwitchView()
+    private val lightView = TRLightView()
+    private val damageView = TRDamageView()
 
     def draw(railroad : TRRailroad) {
         railroad.rails.for(railView.draw(_))
