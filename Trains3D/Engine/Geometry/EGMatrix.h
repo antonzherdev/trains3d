@@ -14,6 +14,8 @@ typedef struct EGMatrixImpl EGMatrixImpl;
 
 - (EGMatrix*)multiply:(EGMatrix*)matrix;
 
++ (EGMatrix *)identity;
+
 - (GLfloat const *)array;
 @end
 

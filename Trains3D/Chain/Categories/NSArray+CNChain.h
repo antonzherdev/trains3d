@@ -5,7 +5,7 @@
 @class CNChain;
 
 
-@interface NSArray (CNChain)<CNList>
+@interface NSArray (CNChain)<CNSeq>
 - (id) chain:(cnChainBuildBlock)block;
 - (CNChain*) chain;
 

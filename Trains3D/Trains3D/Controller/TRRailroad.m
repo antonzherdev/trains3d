@@ -28,7 +28,7 @@
     return self;
 }
 
-- (id<CNList>)rails {
+- (id<CNSeq>)rails {
     @throw @"Method rails is abstract";
 }
 
@@ -77,7 +77,7 @@ static TRRailroadConnectorContent* _instance;
     _instance = [TREmptyConnector emptyConnector];
 }
 
-- (id<CNList>)rails {
+- (id<CNSeq>)rails {
     return (@[]);
 }
 
@@ -141,7 +141,7 @@ static TRRailroadConnectorContent* _instance;
     return [TRSwitch switchWithTile:rail.tile connector:to rail1:self rail2:rail];
 }
 
-- (id<CNList>)rails {
+- (id<CNSeq>)rails {
     return (@[self]);
 }
 
@@ -229,7 +229,7 @@ static TRRailroadConnectorContent* _instance;
     @throw @"Couldn't add rail to switch";
 }
 
-- (id<CNList>)rails {
+- (id<CNSeq>)rails {
     if(_firstActive) return (@[_rail1, _rail2]);
     else return (@[_rail2, _rail1]);
 }
@@ -310,7 +310,7 @@ static TRRailroadConnectorContent* _instance;
     return [TRSwitch switchWithTile:_tile connector:to rail1:_rail rail2:rail];
 }
 
-- (id<CNList>)rails {
+- (id<CNSeq>)rails {
     return (@[_rail]);
 }
 
@@ -451,9 +451,9 @@ static NSArray* _TRObstacleType_values;
 @implementation TRRailroad{
     EGMapSso* _map;
     TRScore* _score;
-    id<CNList> __rails;
-    id<CNList> __switches;
-    id<CNList> __lights;
+    id<CNSeq> __rails;
+    id<CNSeq> __switches;
+    id<CNSeq> __lights;
     TRRailroadBuilder* _builder;
     CNMapDefault* _connectorIndex;
     NSMutableDictionary* _damagesIndex;
@@ -486,19 +486,19 @@ static NSArray* _TRObstacleType_values;
     return self;
 }
 
-- (id<CNList>)rails {
+- (id<CNSeq>)rails {
     return __rails;
 }
 
-- (id<CNList>)switches {
+- (id<CNSeq>)switches {
     return __switches;
 }
 
-- (id<CNList>)lights {
+- (id<CNSeq>)lights {
     return __lights;
 }
 
-- (id<CNList>)damagesPoints {
+- (id<CNSeq>)damagesPoints {
     return __damagesPoints;
 }
 
@@ -542,7 +542,7 @@ static NSArray* _TRObstacleType_values;
 }
 
 - (BOOL)isTurnRailInTile:(EGPointI)tile connector:(TRRailConnector*)connector {
-    id<CNList> rails = [((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGPointI, tile), connector)])) rails];
+    id<CNSeq> rails = [((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGPointI, tile), connector)])) rails];
     return [rails count] == 1 && ((TRRail*)([rails applyIndex:0])).form.isTurn;
 }
 
@@ -553,7 +553,7 @@ static NSArray* _TRObstacleType_values;
 }
 
 - (void)rebuildArrays {
-    __rails = [[[[[_connectorIndex values] chain] flatMap:^id<CNList>(TRRailroadConnectorContent* _) {
+    __rails = [[[[[_connectorIndex values] chain] flatMap:^id<CNSeq>(TRRailroadConnectorContent* _) {
         return [_ rails];
     }] distinct] toArray];
     __switches = [[[[_connectorIndex values] chain] filter:^BOOL(TRRailroadConnectorContent* _) {
@@ -621,9 +621,9 @@ static NSArray* _TRObstacleType_values;
         [self addDamageAtPoint:[point invert]];
     } else {
         [_damagesIndex modifyBy:^id(id arr) {
-            return [CNOption opt:[[arr map:^id<CNList>(id<CNList> _) {
+            return [CNOption opt:[[arr map:^id<CNSeq>(id<CNSeq> _) {
                 return [_ arrayByAddingObject:numf(point.x)];
-            }] getOrElse:^id<CNList>() {
+            }] getOrElse:^id<CNSeq>() {
                 return (@[numf(point.x)]);
             }]];
         } forKey:tuple(wrap(EGPointI, point.tile), point.form)];
@@ -636,7 +636,7 @@ static NSArray* _TRObstacleType_values;
         [self fixDamageAtPoint:[point invert]];
     } else {
         [_damagesIndex modifyBy:^id(id arrOpt) {
-            return [arrOpt map:^id<CNList>(id<CNList> arr) {
+            return [arrOpt map:^id<CNSeq>(id<CNSeq> arr) {
                 return [[[arr chain] filter:^BOOL(id _) {
                     return !(eqf(unumf(_), point.x));
                 }] toArray];

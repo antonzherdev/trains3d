@@ -1,15 +1,15 @@
 #import "EGRectIndex.h"
 
 @implementation EGRectIndex{
-    id<CNList> _rects;
+    id<CNSeq> _rects;
 }
 @synthesize rects = _rects;
 
-+ (id)rectIndexWithRects:(id<CNList>)rects {
++ (id)rectIndexWithRects:(id<CNSeq>)rects {
     return [[EGRectIndex alloc] initWithRects:rects];
 }
 
-- (id)initWithRects:(id<CNList>)rects {
+- (id)initWithRects:(id<CNSeq>)rects {
     self = [super init];
     if(self) _rects = rects;
     

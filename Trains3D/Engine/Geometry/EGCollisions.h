@@ -25,7 +25,7 @@
 @interface EGCollisions : NSObject
 + (id)collisions;
 - (id)init;
-+ (id<CNSet>)collisionsForFigures:(id<CNList>)figures;
++ (id<CNSet>)collisionsForFigures:(id<CNSeq>)figures;
 @end
 
 

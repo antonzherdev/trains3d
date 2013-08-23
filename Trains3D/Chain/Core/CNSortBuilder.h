@@ -1,5 +1,6 @@
-#import "objd.h"
+#import <Foundation/Foundation.h>
 @class CNChain;
+#import "CNSeq.h"
 
 @class CNSortBuilder;
 

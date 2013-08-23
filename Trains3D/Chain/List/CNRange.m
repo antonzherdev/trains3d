@@ -62,14 +62,14 @@
     return [self convertWithBuilder:[CNHashSetBuilder hashSetBuilder]];
 }
 
-- (id<CNList>)arrayByAddingObject:(id)object {
+- (id<CNSeq>)arrayByAddingObject:(id)object {
     CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
     [builder addAllObject:self];
     [builder addObject:object];
     return ((NSArray*)([builder build]));
 }
 
-- (id<CNList>)arrayByRemovingObject:(id)object {
+- (id<CNSeq>)arrayByRemovingObject:(id)object {
     return [[[self chain] filter:^BOOL(id _) {
         return !([_ isEqual:object]);
     }] toArray];

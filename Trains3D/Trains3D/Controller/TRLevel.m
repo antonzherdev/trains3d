@@ -1,7 +1,6 @@
 #import "TRLevel.h"
 
 #import "CNChain.h"
-#import "CNSortBuilder.h"
 #import "EGMapIso.h"
 #import "EGCollisions.h"
 #import "EGSchedule.h"
@@ -15,18 +14,18 @@
     EGSizeI _mapSize;
     TRScoreRules* _scoreRules;
     NSUInteger _repairerSpeed;
-    id<CNList> _events;
+    id<CNSeq> _events;
 }
 @synthesize mapSize = _mapSize;
 @synthesize scoreRules = _scoreRules;
 @synthesize repairerSpeed = _repairerSpeed;
 @synthesize events = _events;
 
-+ (id)levelRulesWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNList>)events {
++ (id)levelRulesWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
     return [[TRLevelRules alloc] initWithMapSize:mapSize scoreRules:scoreRules repairerSpeed:repairerSpeed events:events];
 }
 
-- (id)initWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNList>)events {
+- (id)initWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
     self = [super init];
     if(self) {
         _mapSize = mapSize;
@@ -78,7 +77,7 @@
     TRRailroad* _railroad;
     NSMutableArray* __cities;
     EGSchedule* _schedule;
-    id<CNList> __trains;
+    id<CNSeq> __trains;
     id __repairer;
 }
 @synthesize rules = _rules;
@@ -107,11 +106,11 @@
     return self;
 }
 
-- (id<CNList>)cities {
+- (id<CNSeq>)cities {
     return __cities;
 }
 
-- (id<CNList>)trains {
+- (id<CNSeq>)trains {
     return __trains;
 }
 
@@ -225,7 +224,7 @@
 }
 
 - (id<CNSet>)detectCollisions {
-    id<CNList> carFigures = [[[__trains chain] flatMap:^CNChain*(TRTrain* train) {
+    id<CNSeq> carFigures = [[[__trains chain] flatMap:^CNChain*(TRTrain* train) {
         return [[train.cars chain] map:^CNTuple*(TRCar* car) {
             return tuple(tuple(train, car), [car figure]);
         }];

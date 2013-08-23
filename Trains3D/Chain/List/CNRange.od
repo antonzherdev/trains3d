@@ -1,13 +1,13 @@
 package core.chain
 
 import CNCollection
-import CNList
+import CNSeq
 import "CNOption.h"
 import "cnTypes.h"
 import CNChain
 import "NSArray+CNChain.h"
 
-class CNRange(start : int, end : int, step : int) extends CNList<int> {
+class CNRange(start : int, end : int, step : int) extends CNSeq<int> {
     val count : uint = (end - start)/step
     def apply(index : uint) : int? =
         if(index >= count) nil

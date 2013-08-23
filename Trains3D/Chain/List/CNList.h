@@ -1,34 +1,53 @@
 #import <Foundation/Foundation.h>
 #import "CNCollection.h"
+#import "CNSeq.h"
+@class CNOption;
 @class CNChain;
-#import "CNSet.h"
 
-@class CNArrayBuilder;
-@protocol CNList;
-@protocol CNMutableList;
+@class CNList;
+@class CNFilledList;
+@class CNEmptyList;
+@class CNListIterator;
 
-@protocol CNList<CNIterable>
-- (id)applyIndex:(NSUInteger)index;
-- (id)randomItem;
-- (id<CNSet>)toSet;
-- (id<CNList>)arrayByAddingObject:(id)object;
-- (id<CNList>)arrayByRemovingObject:(id)object;
-@end
-
-
-@protocol CNMutableList<CNList>
-- (void)addObject:(id)object;
-- (void)removeObject:(id)object;
-@end
-
-
-@interface CNArrayBuilder : NSObject<CNBuilder>
-@property (nonatomic, readonly) NSMutableArray* array;
-
-+ (id)arrayBuilder;
+@interface CNList : NSObject<CNSeq>
++ (id)list;
 - (id)init;
-- (void)addObject:(id)object;
-- (NSArray*)build;
++ (CNList*)apply;
++ (CNList*)applyObject:(id)object;
++ (CNList*)applyObject:(id)object tail:(CNList*)tail;
+- (id<CNIterator>)iterator;
+- (CNList*)tail;
+@end
+
+
+@interface CNFilledList : CNList
+@property (nonatomic, readonly) id item;
+@property (nonatomic, readonly) CNList* tail;
+
++ (id)filledListWithItem:(id)item tail:(CNList*)tail;
+- (id)initWithItem:(id)item tail:(CNList*)tail;
+- (id)head;
+- (BOOL)isEmpty;
+@end
+
+
+@interface CNEmptyList : CNList
++ (id)emptyList;
+- (id)init;
+- (id)head;
+- (CNList*)tail;
+- (BOOL)isEmpty;
++ (CNEmptyList*)instance;
+@end
+
+
+@interface CNListIterator : NSObject<CNIterator>
+@property (nonatomic, retain) CNList* list;
+
++ (id)listIterator;
+- (id)init;
+- (BOOL)hasNext;
+- (id)next;
 @end
 
 

@@ -1,4 +1,6 @@
 stub class EGMatrix {
     def multiply( : EGMatrix) : EGMatrix
     def array : float[16]
+
+    static def identity : EGMatrix
 }

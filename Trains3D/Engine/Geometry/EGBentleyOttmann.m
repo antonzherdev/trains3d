@@ -15,14 +15,14 @@
     return self;
 }
 
-+ (id<CNSet>)intersectionsForSegments:(id<CNList>)segments {
++ (id<CNSet>)intersectionsForSegments:(id<CNSeq>)segments {
     if([segments count] < 2) {
         return [NSSet set];
     } else {
         EGSweepLine* sweepLine = [EGSweepLine sweepLine];
         EGBentleyOttmannEventQueue* queue = [EGBentleyOttmannEventQueue newWithSegments:segments sweepLine:sweepLine];
         while(!([queue isEmpty])) {
-            id<CNList> events = [queue poll];
+            id<CNSeq> events = [queue poll];
             [sweepLine handleEvents:events];
         }
         return [[[sweepLine.intersections chain] flatMap:^CNChain*(CNTuple* p) {
@@ -309,7 +309,7 @@
     return [_events isEmpty];
 }
 
-+ (EGBentleyOttmannEventQueue*)newWithSegments:(id<CNList>)segments sweepLine:(EGSweepLine*)sweepLine {
++ (EGBentleyOttmannEventQueue*)newWithSegments:(id<CNSeq>)segments sweepLine:(EGSweepLine*)sweepLine {
     EGBentleyOttmannEventQueue* ret = [EGBentleyOttmannEventQueue bentleyOttmannEventQueue];
     if(!([segments isEmpty])) {
         [segments forEach:^void(CNTuple* s) {
@@ -328,7 +328,7 @@
     }] addObject:event];
 }
 
-- (id<CNList>)poll {
+- (id<CNSeq>)poll {
     return ((CNTuple*)([[_events pollFirst] get])).b;
 }
 
@@ -425,7 +425,7 @@
     return self;
 }
 
-- (void)handleEvents:(id<CNList>)events {
+- (void)handleEvents:(id<CNSeq>)events {
     [events forEach:^void(EGBentleyOttmannEvent* _) {
         [self handleOneEvent:_];
     }];
@@ -467,7 +467,7 @@
             }
         } else {
             NSMutableSet* set = ((NSMutableSet*)([[_intersections applyKey:[EGPointClass pointClassWithPoint:[event point]]] get]));
-            id<CNList> toInsert = [[[set chain] filter:^BOOL(EGBentleyOttmannPointEvent* _) {
+            id<CNSeq> toInsert = [[[set chain] filter:^BOOL(EGBentleyOttmannPointEvent* _) {
                 return [_events removeObject:_];
             }] toArray];
             [self sweepToEvent:event];

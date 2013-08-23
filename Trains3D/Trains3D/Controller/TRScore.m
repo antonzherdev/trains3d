@@ -76,7 +76,7 @@
 @implementation TRScore{
     TRScoreRules* _rules;
     NSInteger __score;
-    id<CNList> _trains;
+    id<CNSeq> _trains;
 }
 @synthesize rules = _rules;
 

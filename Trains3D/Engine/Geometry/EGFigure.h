@@ -69,7 +69,7 @@
 
 @protocol EGFigure<NSObject>
 - (EGRect)boundingRect;
-- (id<CNList>)segments;
+- (id<CNSeq>)segments;
 @end
 
 
@@ -89,18 +89,18 @@
 - (BOOL)containsInBoundingRectPoint:(EGPoint)point;
 - (id)intersectionWithSegment:(EGLineSegment*)segment;
 - (BOOL)endingsContainPoint:(EGPoint)point;
-- (id<CNList>)segments;
+- (id<CNSeq>)segments;
 - (EGLineSegment*)moveWithPoint:(EGPoint)point;
 - (EGLineSegment*)moveWithX:(CGFloat)x y:(CGFloat)y;
 @end
 
 
 @interface EGPolygon : NSObject<EGFigure>
-@property (nonatomic, readonly) id<CNList> points;
-@property (nonatomic, readonly) id<CNList> segments;
+@property (nonatomic, readonly) id<CNSeq> points;
+@property (nonatomic, readonly) id<CNSeq> segments;
 
-+ (id)polygonWithPoints:(id<CNList>)points;
-- (id)initWithPoints:(id<CNList>)points;
++ (id)polygonWithPoints:(id<CNSeq>)points;
+- (id)initWithPoints:(id<CNSeq>)points;
 - (EGRect)boundingRect;
 @end
 
@@ -113,7 +113,7 @@
 + (id)thickLineSegmentWithSegment:(EGLineSegment*)segment thickness:(CGFloat)thickness;
 - (id)initWithSegment:(EGLineSegment*)segment thickness:(CGFloat)thickness;
 - (EGRect)boundingRect;
-- (id<CNList>)segments;
+- (id<CNSeq>)segments;
 @end
 
 

@@ -8,9 +8,9 @@
 @interface EGMapSso : NSObject
 @property (nonatomic, readonly) EGSizeI size;
 @property (nonatomic, readonly) EGRectI limits;
-@property (nonatomic, readonly) id<CNList> fullTiles;
-@property (nonatomic, readonly) id<CNList> partialTiles;
-@property (nonatomic, readonly) id<CNList> allTiles;
+@property (nonatomic, readonly) id<CNSeq> fullTiles;
+@property (nonatomic, readonly) id<CNSeq> partialTiles;
+@property (nonatomic, readonly) id<CNSeq> allTiles;
 
 + (id)mapSsoWithSize:(EGSizeI)size;
 - (id)initWithSize:(EGSizeI)size;

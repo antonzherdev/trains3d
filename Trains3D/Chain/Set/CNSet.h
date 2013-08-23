@@ -3,8 +3,13 @@
 
 @class CNHashSetBuilder;
 @protocol CNSet;
+@protocol CNMutableSet;
 
 @protocol CNSet<CNIterable>
+@end
+
+
+@protocol CNMutableSet<CNSet>
 @end
 
 

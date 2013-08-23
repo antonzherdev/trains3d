@@ -22,7 +22,7 @@
     [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight]];
     [railroad addDamageAtPoint:[TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight x:0.2 back:NO]];
     [railroad addDamageAtPoint:[TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight x:0.6 back:YES]];
-    __block id<CNList> damagesCount = (@[]);
+    __block id<CNSeq> damagesCount = (@[]);
     TRRailPoint* p0 = [TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight x:((CGFloat)(0)) back:NO];
     TRRailPointCorrection* p1 = [railroad moveWithObstacleProcessor:^BOOL(TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount arrayByAddingObject:numf(o.point.x)];

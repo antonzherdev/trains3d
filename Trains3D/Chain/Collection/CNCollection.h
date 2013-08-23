@@ -4,7 +4,9 @@
 @protocol CNIterator;
 @protocol CNBuilder;
 @protocol CNTraversable;
+@protocol CNMutableTraversable;
 @protocol CNIterable;
+@protocol CNMutableIterable;
 
 @protocol CNIterator<NSObject>
 - (BOOL)hasNext;
@@ -29,6 +31,12 @@
 @end
 
 
+@protocol CNMutableTraversable<CNTraversable>
+- (void)addObject:(id)object;
+- (void)removeObject:(id)object;
+@end
+
+
 @protocol CNIterable<CNTraversable>
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
@@ -38,6 +46,10 @@
 - (void)forEach:(void(^)(id))each;
 - (BOOL)goOn:(BOOL(^)(id))on;
 - (BOOL)containsObject:(id)object;
+@end
+
+
+@protocol CNMutableIterable<CNIterable>
 @end
 
 

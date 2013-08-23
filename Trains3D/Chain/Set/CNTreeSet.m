@@ -34,7 +34,7 @@ static NSObject* _obj;
     return [CNMutableTreeSet mutableTreeSetWithMap:[CNMutableTreeMap new]];
 }
 
-- (id<CNList>)betweenA:(id)a b:(id)b {
+- (id<CNSeq>)betweenA:(id)a b:(id)b {
     @throw @"Method between is abstract";
 }
 

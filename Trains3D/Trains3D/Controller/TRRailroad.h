@@ -26,7 +26,7 @@
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
-- (id<CNList>)rails;
+- (id<CNSeq>)rails;
 - (BOOL)isGreen;
 @end
 
@@ -34,7 +34,7 @@
 @interface TREmptyConnector : TRRailroadConnectorContent
 + (id)emptyConnector;
 - (id)init;
-- (id<CNList>)rails;
+- (id<CNSeq>)rails;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 + (TRRailroadConnectorContent*)instance;
 @end
@@ -48,7 +48,7 @@
 - (id)initWithTile:(EGPointI)tile form:(TRRailForm*)form;
 - (BOOL)hasConnector:(TRRailConnector*)connector;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
-- (id<CNList>)rails;
+- (id<CNSeq>)rails;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
 - (BOOL)canAddRail:(TRRail*)rail;
 @end
@@ -67,7 +67,7 @@
 - (void)turn;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
-- (id<CNList>)rails;
+- (id<CNSeq>)rails;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
 @end
 
@@ -83,7 +83,7 @@
 - (void)turn;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
-- (id<CNList>)rails;
+- (id<CNSeq>)rails;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
 @end
 
@@ -113,10 +113,10 @@
 
 + (id)railroadWithMap:(EGMapSso*)map score:(TRScore*)score;
 - (id)initWithMap:(EGMapSso*)map score:(TRScore*)score;
-- (id<CNList>)rails;
-- (id<CNList>)switches;
-- (id<CNList>)lights;
-- (id<CNList>)damagesPoints;
+- (id<CNSeq>)rails;
+- (id<CNSeq>)switches;
+- (id<CNSeq>)lights;
+- (id<CNSeq>)damagesPoints;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (BOOL)tryAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)contentInTile:(EGPointI)tile connector:(TRRailConnector*)connector;

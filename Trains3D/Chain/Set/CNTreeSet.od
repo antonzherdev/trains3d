@@ -3,12 +3,12 @@ package core.chain
 import CNTreeMap
 import CNCollection
 import CNSet
-import CNList
+import CNSeq
 import CNChain
 import CNOption
 import "NSObject+CNOption.h"
 
-class CNMutableTreeSet<T>(map : CNMutableTreeMap<T, ODObject>) extends CNSet<T> {
+class CNMutableTreeSet<T>(map : CNMutableTreeMap<T, ODObject>) extends CNMutableSet<T> {
     static def newWith<T>(comparator : (T, T) -> int) : CNMutableTreeSet<T> = {
         CNMutableTreeSet<T>(CNMutableTreeMap<T, ODObject>(comparator))
     }

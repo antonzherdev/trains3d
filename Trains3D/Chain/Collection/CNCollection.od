@@ -50,8 +50,21 @@ trait CNTraversable<T> {
     }
 }
 
+trait CNMutableTraversable<T> extends CNTraversable<T> {
+    def add(object : T)
+    def remove(object : T)
+}
+
 trait CNIterable<T> extends CNTraversable<T> {
-    def count : uint
+    def count : uint = {
+        val i = iterator
+        var n : uint = 0
+        while(i.hasNext) {
+            i.next
+            n++
+        }
+        n
+    }
     def iterator : CNIterator<T>
 
     def head : T? = iterator.next
@@ -76,3 +89,5 @@ trait CNIterable<T> extends CNTraversable<T> {
         false
     }
 }
+
+trait CNMutableIterable<T> extends CNIterable<T> with CNMutableTraversable<T> {}

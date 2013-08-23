@@ -10,10 +10,10 @@
 
 @interface EGScene : NSObject
 @property (nonatomic, readonly) id<EGController> controller;
-@property (nonatomic, readonly) id<CNList> layers;
+@property (nonatomic, readonly) id<CNSeq> layers;
 
-+ (id)sceneWithController:(id<EGController>)controller layers:(id<CNList>)layers;
-- (id)initWithController:(id<EGController>)controller layers:(id<CNList>)layers;
++ (id)sceneWithController:(id<EGController>)controller layers:(id<CNSeq>)layers;
+- (id)initWithController:(id<EGController>)controller layers:(id<CNSeq>)layers;
 - (void)drawWithViewSize:(EGSize)viewSize;
 - (BOOL)processEvent:(EGEvent*)event;
 - (void)updateWithDelta:(CGFloat)delta;

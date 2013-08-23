@@ -1,4 +1,6 @@
 #import "CNSortBuilder.h"
+#import "NSMutableArray+CNChain.h"
+#import "ODObject.h"
 
 #import "CNChain.h"
 @implementation CNSortBuilder{

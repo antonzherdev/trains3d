@@ -2,6 +2,7 @@
 #import "CNOption.h"
 
 #import "CNChain.h"
+#import "CNTuple.h"
 @implementation CNMapDefault{
     id(^_defaultFunc)(id);
     id<CNMutableMap> _map;
@@ -57,6 +58,14 @@
     id object = by([self applyKey:forKey]);
     [_map setObject:object forKey:forKey];
     return object;
+}
+
+- (void)addObject:(CNTuple*)object {
+    [_map addObject:object];
+}
+
+- (void)removeObject:(CNTuple*)object {
+    [_map removeObject:object];
 }
 
 - (id)head {

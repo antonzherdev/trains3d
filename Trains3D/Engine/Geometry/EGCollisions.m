@@ -15,8 +15,8 @@
     return self;
 }
 
-+ (id<CNSet>)collisionsForFigures:(id<CNList>)figures {
-    id<CNList> segments = [[[[[[figures chain] combinations] filter:^BOOL(CNTuple* p) {
++ (id<CNSet>)collisionsForFigures:(id<CNSeq>)figures {
+    id<CNSeq> segments = [[[[[[figures chain] combinations] filter:^BOOL(CNTuple* p) {
         return !([((CNTuple*)(((CNTuple*)(p.a)).a)) isEqual:((CNTuple*)(((CNTuple*)(p.b)).a))]) && egRectIntersects([((CNTuple*)(p.a)).b boundingRect], [((CNTuple*)(p.b)).b boundingRect]);
     }] uncombinations] flatMap:^CNChain*(CNTuple* f) {
         return [[[f.b segments] chain] map:^CNTuple*(EGLineSegment* segment) {

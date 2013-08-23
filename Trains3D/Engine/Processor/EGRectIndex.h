@@ -4,10 +4,10 @@
 @class EGRectIndex;
 
 @interface EGRectIndex : NSObject
-@property (nonatomic, readonly) id<CNList> rects;
+@property (nonatomic, readonly) id<CNSeq> rects;
 
-+ (id)rectIndexWithRects:(id<CNList>)rects;
-- (id)initWithRects:(id<CNList>)rects;
++ (id)rectIndexWithRects:(id<CNSeq>)rects;
+- (id)initWithRects:(id<CNSeq>)rects;
 - (id)applyPoint:(EGPoint)point;
 @end
 

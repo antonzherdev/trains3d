@@ -14,6 +14,8 @@ struct EGMatrixImpl {
     struct EGMatrixImpl*_impl;
 }
 
+static EGMatrix* _identity;
+
 - (struct EGMatrixImpl *)impl {
     return _impl;
 }
@@ -43,6 +45,18 @@ struct EGMatrixImpl {
     EGMatrixImpl* impl = new EGMatrixImpl;
     impl->m = _impl->m * matrix.impl->m;
     return [EGMatrix matrixWithImpl:impl];
+}
+
++ (void)initialize {
+    [super initialize];
+    EGMatrixImpl* impl = new EGMatrixImpl;
+    impl->m = glm::mat4(1.0);
+    _identity = [EGMatrix matrixWithImpl:impl];
+}
+
+
++ (EGMatrix *)identity {
+    return _identity;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

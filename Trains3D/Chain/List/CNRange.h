@@ -1,12 +1,12 @@
 #import <Foundation/Foundation.h>
 #import "CNCollection.h"
-#import "CNList.h"
+#import "CNSeq.h"
 @class CNChain;
 
 @class CNRange;
 @class CNRangeIterator;
 
-@interface CNRange : NSObject<CNList>
+@interface CNRange : NSObject<CNSeq>
 @property (nonatomic, readonly) NSInteger start;
 @property (nonatomic, readonly) NSInteger end;
 @property (nonatomic, readonly) NSInteger step;

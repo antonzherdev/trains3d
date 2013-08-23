@@ -3,8 +3,9 @@ package core.chain
 import CNCollection
 import "NSMutableSet+CNChain.h"
 
-trait CNSet<T> extends CNIterable<T> {
-}
+trait CNSet<T> extends CNIterable<T> {}
+
+trait CNMutableSet<T> extends CNSet<T> with CNMutableIterable<T> {}
 
 class CNHashSetBuilder<T> extends CNBuilder<T, CNHashSet<T>> {
     val set = NSMutableSet.new<T>
@@ -16,12 +17,9 @@ class CNHashSetBuilder<T> extends CNBuilder<T, CNHashSet<T>> {
     def build : CNHashSet<T> = set
 }
 
-stub class NSSet<T> extends CNSet<T> {
-}
+stub class NSSet<T> extends CNSet<T>
 
-stub class NSMutableSet<T> extends NSSet<T> {
-    def add(object : T) : void
-}
+stub class NSMutableSet<T> extends NSSet<T> with CNMutableSet<T>
 
 type CNHashSet<T> = NSSet<T>
 type CNMutableHashSet<T> = NSMutableSet<T>

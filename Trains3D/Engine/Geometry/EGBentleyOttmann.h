@@ -12,7 +12,9 @@
 @protocol CNIterator;
 @protocol CNBuilder;
 @protocol CNTraversable;
+@protocol CNMutableTraversable;
 @protocol CNIterable;
+@protocol CNMutableIterable;
 @class CNPair;
 @class CNPairIterator;
 #import "CNSet.h"
@@ -29,7 +31,7 @@
 @interface EGBentleyOttmann : NSObject
 + (id)bentleyOttmann;
 - (id)init;
-+ (id<CNSet>)intersectionsForSegments:(id<CNList>)segments;
++ (id<CNSet>)intersectionsForSegments:(id<CNSeq>)segments;
 @end
 
 
@@ -82,9 +84,9 @@
 + (id)bentleyOttmannEventQueue;
 - (id)init;
 - (BOOL)isEmpty;
-+ (EGBentleyOttmannEventQueue*)newWithSegments:(id<CNList>)segments sweepLine:(EGSweepLine*)sweepLine;
++ (EGBentleyOttmannEventQueue*)newWithSegments:(id<CNSeq>)segments sweepLine:(EGSweepLine*)sweepLine;
 - (void)offerPoint:(EGPoint)point event:(EGBentleyOttmannEvent*)event;
-- (id<CNList>)poll;
+- (id<CNSeq>)poll;
 @end
 
 
@@ -103,7 +105,7 @@
 
 + (id)sweepLine;
 - (id)init;
-- (void)handleEvents:(id<CNList>)events;
+- (void)handleEvents:(id<CNSeq>)events;
 @end
 
 

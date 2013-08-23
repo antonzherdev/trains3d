@@ -1,50 +1,46 @@
 package core.chain
 
 import CNCollection
+import CNSeq
+import CNOption
 import CNChain
-import CNSet
-import "cnTypes.h"
-import "NSMutableArray+CNChain.h"
+import "NSArray+CNChain.h"
 
-trait CNList<T> extends CNIterable<T> {
-    def apply(index : uint) : T?
+class CNList<T> extends CNSeq<T> {
+    static def apply<T> : CNList<T> = CNEmptyList.instance
+    static def apply<T>(object : T) : CNList<T> = CNFilledList<T>(object, CNEmptyList.instance)
+    static def apply<T>(object : T, tail : CNList<T>) : CNList<T>  = CNFilledList<T>(object, tail)
 
-    def randomItem : T? =
-        if(isEmpty) nil
-        else apply(randomWith(count - 1))
-
-    def toSet : CNSet<T> = convertWith(CNHashSetBuilder.new<T>)
-    def arrayByAdding(object : T) : CNList<T> = {
-        val builder = CNArrayBuilder.new<int>
-        builder.addAll(self)
-        builder.add(object)
-        builder.build
+    def iterator : CNIterator<T> = {
+        val i = CNListIterator.new<T>
+        i.list = self
+        i
     }
-
-    def arrayByRemoving(object : T) : CNList<T> = {
-        chain.filter(_ != object).toArray
-    }
+    def tail : CNList<T>
 }
 
-trait CNMutableList<T> extends CNList<T> {
-    def add(object : T)
-    def remove(object : T)
+class CNFilledList<T>(item : T, tail : CNList<T>) extends CNList<T> {
+    def head : T? = item
+
+    def isEmpty = false
+
 }
 
-stub class NSArray<T> extends CNList<T> {
+class CNEmptyList<T> extends CNList<T> {
+    def head : T? = nil
+    def tail : CNList<T> = self
+    def isEmpty = true
+
+    static val instance = CNEmptyList.new<int>
 }
-stub class NSMutableArray<T> extends CNMutableList<T> {}
 
-type CNArray<T> = NSArray<T>
-type CNMutableArray<T> = NSMutableArray<T>
+class CNListIterator<T> extends CNIterator<T> {
+    var list : CNList<T>
+    def hasNext = list.isEmpty
 
-class CNArrayBuilder<T> extends CNBuilder<T, CNArray<T>> {
-    val array = NSMutableArray.new<T>
-
-    def add(object : T) {
-        array.add(object)
-        self
+    def next : T = {
+        val ret = list.head.get
+        list = list.tail
+        ret
     }
-
-    def build : NSArray<T> = array
 }

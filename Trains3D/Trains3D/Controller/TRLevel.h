@@ -1,6 +1,6 @@
 #import "objd.h"
 @class CNChain;
-@class CNSortBuilder;
+#import "CNSortBuilder.h"
 #import "CNSet.h"
 #import "EGTypes.h"
 @class EGMapSso;
@@ -40,10 +40,10 @@
 @property (nonatomic, readonly) EGSizeI mapSize;
 @property (nonatomic, readonly) TRScoreRules* scoreRules;
 @property (nonatomic, readonly) NSUInteger repairerSpeed;
-@property (nonatomic, readonly) id<CNList> events;
+@property (nonatomic, readonly) id<CNSeq> events;
 
-+ (id)levelRulesWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNList>)events;
-- (id)initWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNList>)events;
++ (id)levelRulesWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
+- (id)initWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
 @end
 
 
@@ -56,8 +56,8 @@
 
 + (id)levelWithRules:(TRLevelRules*)rules;
 - (id)initWithRules:(TRLevelRules*)rules;
-- (id<CNList>)cities;
-- (id<CNList>)trains;
+- (id<CNSeq>)cities;
+- (id<CNSeq>)trains;
 - (id)repairer;
 - (void)createNewCity;
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator;

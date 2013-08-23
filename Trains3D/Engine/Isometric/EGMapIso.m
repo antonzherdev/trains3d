@@ -6,9 +6,9 @@
 @implementation EGMapSso{
     EGSizeI _size;
     EGRectI _limits;
-    id<CNList> _fullTiles;
-    id<CNList> _partialTiles;
-    id<CNList> _allTiles;
+    id<CNSeq> _fullTiles;
+    id<CNSeq> _partialTiles;
+    id<CNSeq> _allTiles;
 }
 static CGFloat _ISO = 0.70710676908493;
 @synthesize size = _size;

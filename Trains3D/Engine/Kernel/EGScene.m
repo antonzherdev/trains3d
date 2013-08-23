@@ -4,16 +4,16 @@
 #import "EGLayer.h"
 @implementation EGScene{
     id<EGController> _controller;
-    id<CNList> _layers;
+    id<CNSeq> _layers;
 }
 @synthesize controller = _controller;
 @synthesize layers = _layers;
 
-+ (id)sceneWithController:(id<EGController>)controller layers:(id<CNList>)layers {
++ (id)sceneWithController:(id<EGController>)controller layers:(id<CNSeq>)layers {
     return [[EGScene alloc] initWithController:controller layers:layers];
 }
 
-- (id)initWithController:(id<EGController>)controller layers:(id<CNList>)layers {
+- (id)initWithController:(id<EGController>)controller layers:(id<CNSeq>)layers {
     self = [super init];
     if(self) {
         _controller = controller;

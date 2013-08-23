@@ -1,9 +1,48 @@
 import CNCache
 
 import EGTexture
+import EGMatrix
+
 
 class EGContext {
     private val textureCache = CNCache.new<string, EGTexture>
 
     def textureFor(file : string) : EGTexture = textureCache.lookupWith(init = EGTexture(file), forKey = file)
+
+
+    val matrixModel = EGMatrixModel.new
+}
+
+class EGMatrixModel {
+    private var _model : EGMatrix = EGMatrix.identity
+    private var _view : EGMatrix = EGMatrix.identity
+    private var _projection : EGMatrix = EGMatrix.identity
+    def mvp : EGMatrix = _projection.multiply(_view).multiply(_model)
+
+    def clear {
+        _model = EGMatrix.identity
+        _view = EGMatrix.identity
+        _projection = EGMatrix.identity
+    }
+
+    def model : EGMatrix = _model
+    def setModel(matrix : EGMatrix) {
+        _model = matrix
+    }
+
+    def view : EGMatrix = _view
+    def setView(matrix : EGMatrix) {
+        _view = matrix
+    }
+
+    def projection : EGMatrix = _projection
+    def setProjection(matrix : EGMatrix) {
+        _projection = matrix
+    }
+}
+
+class EGMutableMatrix {
+    private var _value : EGMatrix
+
+
 }

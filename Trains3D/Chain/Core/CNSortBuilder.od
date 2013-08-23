@@ -1,4 +1,9 @@
+package core.chain
+
 import CNChain
+import CNSeq
+import "NSMutableArray+CNChain.h"
+import "ODObject.h"
 
 class CNSortBuilder<A>(chain : CNChain<A>) {
     private val functions = CNMutableArray.new<(A, A) -> int>

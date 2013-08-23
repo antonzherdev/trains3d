@@ -399,6 +399,14 @@ static NSInteger _RED = 1;
     return newObject;
 }
 
+- (void)addObject:(CNTuple*)object {
+    [self setObject:object.a forKey:object.b];
+}
+
+- (void)removeObject:(CNTuple*)object {
+    [self removeForKey:object.a];
+}
+
 - (BOOL)containsKey:(id)key {
     return [[self applyKey:key] isDefined];
 }

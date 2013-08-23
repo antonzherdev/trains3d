@@ -371,7 +371,7 @@
     return EGPointEq(_p1, point) || EGPointEq(_p2, point);
 }
 
-- (id<CNList>)segments {
+- (id<CNSeq>)segments {
     return (@[self]);
 }
 
@@ -419,17 +419,17 @@
 
 
 @implementation EGPolygon{
-    id<CNList> _points;
-    id<CNList> _segments;
+    id<CNSeq> _points;
+    id<CNSeq> _segments;
 }
 @synthesize points = _points;
 @synthesize segments = _segments;
 
-+ (id)polygonWithPoints:(id<CNList>)points {
++ (id)polygonWithPoints:(id<CNSeq>)points {
     return [[EGPolygon alloc] initWithPoints:points];
 }
 
-- (id)initWithPoints:(id<CNList>)points {
+- (id)initWithPoints:(id<CNSeq>)points {
     self = [super init];
     if(self) {
         _points = points;
@@ -486,7 +486,7 @@
     EGLineSegment* _segment;
     CGFloat _thickness;
     CGFloat _thickness_2;
-    id<CNList> __segments;
+    id<CNSeq> __segments;
 }
 @synthesize segment = _segment;
 @synthesize thickness = _thickness;
@@ -511,7 +511,7 @@
     return egRectThicken(_segment.boundingRect, ((CGFloat)((([_segment isHorizontal]) ? 0 : _thickness_2))), ((CGFloat)((([_segment isVertical]) ? 0 : _thickness_2))));
 }
 
-- (id<CNList>)segments {
+- (id<CNSeq>)segments {
     if(__segments == nil) {
         CGFloat dx = ((CGFloat)(0));
         CGFloat dy = ((CGFloat)(0));

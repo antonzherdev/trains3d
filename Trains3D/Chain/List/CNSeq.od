@@ -1,0 +1,55 @@
+package core.chain
+
+import CNCollection
+import CNChain
+import CNSet
+import "cnTypes.h"
+import "NSMutableArray+CNChain.h"
+
+trait CNSeq<T> extends CNIterable<T> {
+    def apply(index : uint) : T? = {
+        val i = iterator
+        var n = index
+        while(i.hasNext) {
+            if(n == 0) return i.next
+            i.next
+            n--
+        }
+        nil
+    }
+
+    def randomItem : T? =
+        if(isEmpty) nil
+        else apply(randomWith(count - 1))
+
+    def toSet : CNSet<T> = convertWith(CNHashSetBuilder.new<T>)
+    def arrayByAdding(object : T) : CNSeq<T> = {
+        val builder = CNArrayBuilder.new<T>
+        builder.addAll(self)
+        builder.add(object)
+        builder.build
+    }
+
+    def arrayByRemoving(object : T) : CNSeq<T> = {
+        chain.filter(_ != object).toArray
+    }
+}
+
+trait CNMutableSeq<T> extends CNSeq<T> with CNMutableIterable<T>
+
+stub class NSArray<T> extends CNSeq<T> {}
+stub class NSMutableArray<T> extends CNMutableSeq<T> {}
+
+type CNArray<T> = NSArray<T>
+type CNMutableArray<T> = NSMutableArray<T>
+
+class CNArrayBuilder<T> extends CNBuilder<T, CNArray<T>> {
+    val array = NSMutableArray.new<T>
+
+    def add(object : T) {
+        array.add(object)
+        self
+    }
+
+    def build : NSArray<T> = array
+}

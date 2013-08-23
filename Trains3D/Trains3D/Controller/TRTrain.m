@@ -80,7 +80,7 @@ static NSArray* _TRTrainType_values;
     __weak TRLevel* _level;
     TRTrainType* _trainType;
     TRColor* _color;
-    id<CNList> _cars;
+    id<CNSeq> _cars;
     NSUInteger _speed;
     TRRailPoint* _head;
     BOOL _back;
@@ -94,11 +94,11 @@ static NSArray* _TRTrainType_values;
 @synthesize cars = _cars;
 @synthesize speed = _speed;
 
-+ (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color cars:(id<CNList>)cars speed:(NSUInteger)speed {
++ (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color cars:(id<CNSeq>)cars speed:(NSUInteger)speed {
     return [[TRTrain alloc] initWithLevel:level trainType:trainType color:color cars:cars speed:speed];
 }
 
-- (id)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color cars:(id<CNList>)cars speed:(NSUInteger)speed {
+- (id)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color cars:(id<CNSeq>)cars speed:(NSUInteger)speed {
     self = [super init];
     if(self) {
         _level = level;
@@ -158,7 +158,7 @@ static NSArray* _TRTrainType_values;
     } forLength:delta * __speedF point:_head]];
 }
 
-- (id<CNList>)directedCars {
+- (id<CNSeq>)directedCars {
     if(_back) return [[[_cars chain] reverse] toArray];
     else return _cars;
 }
@@ -366,20 +366,20 @@ static NSArray* _TRCarType_values;
 
 @implementation TRTrainGenerator{
     TRTrainType* _trainType;
-    id<CNList> _carsCount;
-    id<CNList> _speed;
-    id<CNList> _carTypes;
+    id<CNSeq> _carsCount;
+    id<CNSeq> _speed;
+    id<CNSeq> _carTypes;
 }
 @synthesize trainType = _trainType;
 @synthesize carsCount = _carsCount;
 @synthesize speed = _speed;
 @synthesize carTypes = _carTypes;
 
-+ (id)trainGeneratorWithTrainType:(TRTrainType*)trainType carsCount:(id<CNList>)carsCount speed:(id<CNList>)speed carTypes:(id<CNList>)carTypes {
++ (id)trainGeneratorWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes {
     return [[TRTrainGenerator alloc] initWithTrainType:trainType carsCount:carsCount speed:speed carTypes:carTypes];
 }
 
-- (id)initWithTrainType:(TRTrainType*)trainType carsCount:(id<CNList>)carsCount speed:(id<CNList>)speed carTypes:(id<CNList>)carTypes {
+- (id)initWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes {
     self = [super init];
     if(self) {
         _trainType = trainType;
@@ -391,7 +391,7 @@ static NSArray* _TRCarType_values;
     return self;
 }
 
-- (id<CNList>)generateCars {
+- (id<CNSeq>)generateCars {
     NSInteger count = unumi([[_carsCount randomItem] get]);
     TRCar* engine = [TRCar carWithCarType:((TRCarType*)([[[[_carTypes chain] filter:^BOOL(TRCarType* _) {
         return _.isEngine;

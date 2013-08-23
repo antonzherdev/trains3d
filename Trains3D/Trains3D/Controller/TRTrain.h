@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "CNList.h"
+#import "CNSeq.h"
 #import "EGTypes.h"
 @class EGMapSso;
 @class EGLine;
@@ -49,11 +49,11 @@
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) TRTrainType* trainType;
 @property (nonatomic, readonly) TRColor* color;
-@property (nonatomic, readonly) id<CNList> cars;
+@property (nonatomic, readonly) id<CNSeq> cars;
 @property (nonatomic, readonly) NSUInteger speed;
 
-+ (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color cars:(id<CNList>)cars speed:(NSUInteger)speed;
-- (id)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color cars:(id<CNList>)cars speed:(NSUInteger)speed;
++ (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color cars:(id<CNSeq>)cars speed:(NSUInteger)speed;
+- (id)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color cars:(id<CNSeq>)cars speed:(NSUInteger)speed;
 - (BOOL)isBack;
 - (void)startFromCity:(TRCity*)city;
 - (void)setHead:(TRRailPoint*)head;
@@ -96,13 +96,13 @@
 
 @interface TRTrainGenerator : NSObject
 @property (nonatomic, readonly) TRTrainType* trainType;
-@property (nonatomic, readonly) id<CNList> carsCount;
-@property (nonatomic, readonly) id<CNList> speed;
-@property (nonatomic, readonly) id<CNList> carTypes;
+@property (nonatomic, readonly) id<CNSeq> carsCount;
+@property (nonatomic, readonly) id<CNSeq> speed;
+@property (nonatomic, readonly) id<CNSeq> carTypes;
 
-+ (id)trainGeneratorWithTrainType:(TRTrainType*)trainType carsCount:(id<CNList>)carsCount speed:(id<CNList>)speed carTypes:(id<CNList>)carTypes;
-- (id)initWithTrainType:(TRTrainType*)trainType carsCount:(id<CNList>)carsCount speed:(id<CNList>)speed carTypes:(id<CNList>)carTypes;
-- (id<CNList>)generateCars;
++ (id)trainGeneratorWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes;
+- (id)initWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes;
+- (id<CNSeq>)generateCars;
 - (NSUInteger)generateSpeed;
 @end
 

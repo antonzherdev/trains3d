@@ -3,22 +3,24 @@
 @protocol CNIterator;
 @protocol CNBuilder;
 @protocol CNTraversable;
+@protocol CNMutableTraversable;
 @protocol CNIterable;
+@protocol CNMutableIterable;
 #import "CNSet.h"
-#import "CNList.h"
+#import "CNSeq.h"
 @class CNChain;
 @class CNOption;
 
 @class CNMutableTreeSet;
 
-@interface CNMutableTreeSet : NSObject<CNSet>
+@interface CNMutableTreeSet : NSObject<CNMutableSet>
 @property (nonatomic, readonly) CNMutableTreeMap* map;
 
 + (id)mutableTreeSetWithMap:(CNMutableTreeMap*)map;
 - (id)initWithMap:(CNMutableTreeMap*)map;
 + (CNMutableTreeSet*)newWithComparator:(NSInteger(^)(id, id))comparator;
 + (CNMutableTreeSet*)new;
-- (id<CNList>)betweenA:(id)a b:(id)b;
+- (id<CNSeq>)betweenA:(id)a b:(id)b;
 - (void)addObject:(id)object;
 - (BOOL)removeObject:(id)object;
 - (id)higherThanObject:(id)object;
