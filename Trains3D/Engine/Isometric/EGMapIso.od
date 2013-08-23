@@ -1,8 +1,10 @@
+import CNChain
+import CNRange
+
 import EGTypes
 import EGGL
 import EGMap
-import CNChain
-import CNRange
+import EGBuffer
 
 class EGMapSso(size : EGSizeI) {
     static val ISO = 0.70710676908493
@@ -32,11 +34,31 @@ class EGMapSso(size : EGSizeI) {
             || tile.y - tile.x == -size.width //bottom
         )
 
+    private def allPosibleTiles : CNChain<EGPointI> =
+        CNRange(start = limits.x, end = limits.x2, step = 1).chain
+            .mul<int>(CNRange(start = limits.y, end = limits.y2, step = 1))
+            .map(EGPointI(_.a, _.b))
+
+    private def tileCutAxis(less : int, more : int) : int =
+        if(less == more) 1
+        else if(less < more) 0
+        else 2
+
+    def cutRectFor(tile : EGPointI) = EGRectI.newXY(
+        tileCutAxis(0, tile.x + tile.y),
+        tileCutAxis(tile.x + tile.y, size.width + size.height - 2),
+        tileCutAxis(tile.y - tile.x, size.height - 1),
+        tileCutAxis(-size.width + 1, tile.y - tile.x))
+}
+
+class EGMapSsoView(map : EGMapSso) {
     def drawLayout {
         glPushMatrix
         egRotate(45, 0, 0, 1)
         glBegin(GL_LINES)
         {
+            val ISO = EGMapSso.ISO
+            val size = map.size
             val left = -ISO
             val top = ISO*size.height
             val bottom = ISO*(-size.width)
@@ -60,7 +82,7 @@ class EGMapSso(size : EGSizeI) {
         egColor3(1.0, 1.0, 1.0)
         glBegin(GL_LINES)
         {
-            fullTiles.for(tile -> {
+            map.fullTiles.for(tile -> {
                 val p = tile
                 egNormal3(0, 0, 1)
                 egVertex3(p.x - 0.5, p.y - 0.5, 0.0)
@@ -83,6 +105,7 @@ class EGMapSso(size : EGSizeI) {
     def drawPlane {
         glBegin(GL_QUADS)
         {
+            val limits = map.limits
             val l = limits.x - 1.5
             val r = limits.x2 + 1.5
             val t = limits.y - 1.5
@@ -99,19 +122,4 @@ class EGMapSso(size : EGSizeI) {
         glPopMatrix
     }
 
-    private def allPosibleTiles : CNChain<EGPointI> =
-        CNRange(start = limits.x, end = limits.x2, step = 1).chain
-            .mul<int>(CNRange(start = limits.y, end = limits.y2, step = 1))
-            .map(EGPointI(_.a, _.b))
-
-    private def tileCutAxis(less : int, more : int) : int =
-        if(less == more) 1
-        else if(less < more) 0
-        else 2
-
-    def cutRectFor(tile : EGPointI) = EGRectI.newXY(
-        tileCutAxis(0, tile.x + tile.y),
-        tileCutAxis(tile.x + tile.y, size.width + size.height - 2),
-        tileCutAxis(tile.y - tile.x, size.height - 1),
-        tileCutAxis(-size.width + 1, tile.y - tile.x))
 }

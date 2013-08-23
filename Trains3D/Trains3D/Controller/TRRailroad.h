@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "CNTreeMap.h"
 @class EGMapSso;
+@class EGMapSsoView;
 #import "EGTypes.h"
 @class TRRailConnector;
 @class TRRailForm;

@@ -4,9 +4,11 @@ import TRLevel
 import EGMapIso
 import EGMaterial
 
-class TRLevelBackgroundView {
-    def draw(level : TRLevel) {
+class TRLevelBackgroundView(map : EGMapSso) {
+    val mapView = EGMapSsoView(map)
+
+    def draw {
         EGMaterial.grass.set
-        EG.textureFor("Grass.png").draw(level.map.drawPlane)
+        EG.textureFor("Grass.png").draw(mapView.drawPlane)
     }
 }

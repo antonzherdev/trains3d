@@ -1,8 +1,9 @@
 #import "EGMapIso.h"
 
+#import "CNChain.h"
 #import "EGGL.h"
 #import "EGMap.h"
-#import "CNChain.h"
+#import "EGBuffer.h"
 @implementation EGMapSso{
     EGSizeI _size;
     EGRectI _limits;
@@ -44,64 +45,6 @@ static CGFloat _ISO = 0.70710676908493;
 
 - (BOOL)isPartialTile:(EGPointI)tile {
     return tile.y + tile.x >= -1 && tile.y - tile.x <= _size.height && tile.y + tile.x <= _size.width + _size.height - 1 && tile.y - tile.x >= -_size.width && (tile.y + tile.x == -1 || tile.y - tile.x == _size.height || tile.y + tile.x == _size.width + _size.height - 1 || tile.y - tile.x == -_size.width);
-}
-
-- (void)drawLayout {
-    glPushMatrix();
-    egRotate(((CGFloat)(45)), ((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
-    glBegin(GL_LINES);
-    CGFloat left = -_ISO;
-    CGFloat top = _ISO * _size.height;
-    CGFloat bottom = _ISO * -_size.width;
-    CGFloat right = _ISO * (_size.width + _size.height - 1);
-    egNormal3(((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
-    egVertex3(left, top, 0.0);
-    egVertex3(left, bottom, 0.0);
-    egVertex3(left, bottom, 0.0);
-    egVertex3(right, bottom, 0.0);
-    egVertex3(right, bottom, 0.0);
-    egVertex3(right, top, 0.0);
-    egVertex3(right, top, 0.0);
-    egVertex3(left, top, 0.0);
-    glEnd();
-    glPopMatrix();
-    egColor3(1.0, 1.0, 1.0);
-    glBegin(GL_LINES);
-    [_fullTiles forEach:^void(id tile) {
-        EGPointI p = uwrap(EGPointI, tile);
-        egNormal3(((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
-        egVertex3(p.x - 0.5, p.y - 0.5, 0.0);
-        egVertex3(p.x + 0.5, p.y - 0.5, 0.0);
-        egVertex3(p.x + 0.5, p.y - 0.5, 0.0);
-        egVertex3(p.x + 0.5, p.y + 0.5, 0.0);
-        egVertex3(p.x + 0.5, p.y + 0.5, 0.0);
-        egVertex3(p.x - 0.5, p.y + 0.5, 0.0);
-        egVertex3(p.x - 0.5, p.y + 0.5, 0.0);
-        egVertex3(p.x - 0.5, p.y - 0.5, 0.0);
-    }];
-    glEnd();
-    egMapDrawAxis();
-}
-
-- (void)drawPlane {
-    glBegin(GL_QUADS);
-    CGFloat l = _limits.x - 1.5;
-    CGFloat r = egRectIX2(_limits) + 1.5;
-    CGFloat t = _limits.y - 1.5;
-    CGFloat b = egRectIY2(_limits) + 1.5;
-    NSInteger w = _limits.width + 3;
-    NSInteger h = _limits.height + 3;
-    egNormal3(((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
-    egTexCoord2(0.0, 0.0);
-    egVertex3(l, b, ((CGFloat)(0)));
-    egTexCoord2(((CGFloat)(w)), 0.0);
-    egVertex3(r, b, ((CGFloat)(0)));
-    egTexCoord2(((CGFloat)(w)), ((CGFloat)(h)));
-    egVertex3(r, t, ((CGFloat)(0)));
-    egTexCoord2(0.0, ((CGFloat)(h)));
-    egVertex3(l, t, ((CGFloat)(0)));
-    glEnd();
-    glPopMatrix();
 }
 
 - (CNChain*)allPosibleTiles {
@@ -147,6 +90,110 @@ static CGFloat _ISO = 0.70710676908493;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"size=%@", EGSizeIDescription(self.size)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGMapSsoView{
+    EGMapSso* _map;
+}
+@synthesize map = _map;
+
++ (id)mapSsoViewWithMap:(EGMapSso*)map {
+    return [[EGMapSsoView alloc] initWithMap:map];
+}
+
+- (id)initWithMap:(EGMapSso*)map {
+    self = [super init];
+    if(self) _map = map;
+    
+    return self;
+}
+
+- (void)drawLayout {
+    glPushMatrix();
+    egRotate(((CGFloat)(45)), ((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
+    glBegin(GL_LINES);
+    CGFloat ISO = EGMapSso.ISO;
+    EGSizeI size = _map.size;
+    CGFloat left = -ISO;
+    CGFloat top = ISO * size.height;
+    CGFloat bottom = ISO * -size.width;
+    CGFloat right = ISO * (size.width + size.height - 1);
+    egNormal3(((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
+    egVertex3(left, top, 0.0);
+    egVertex3(left, bottom, 0.0);
+    egVertex3(left, bottom, 0.0);
+    egVertex3(right, bottom, 0.0);
+    egVertex3(right, bottom, 0.0);
+    egVertex3(right, top, 0.0);
+    egVertex3(right, top, 0.0);
+    egVertex3(left, top, 0.0);
+    glEnd();
+    glPopMatrix();
+    egColor3(1.0, 1.0, 1.0);
+    glBegin(GL_LINES);
+    [_map.fullTiles forEach:^void(id tile) {
+        EGPointI p = uwrap(EGPointI, tile);
+        egNormal3(((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
+        egVertex3(p.x - 0.5, p.y - 0.5, 0.0);
+        egVertex3(p.x + 0.5, p.y - 0.5, 0.0);
+        egVertex3(p.x + 0.5, p.y - 0.5, 0.0);
+        egVertex3(p.x + 0.5, p.y + 0.5, 0.0);
+        egVertex3(p.x + 0.5, p.y + 0.5, 0.0);
+        egVertex3(p.x - 0.5, p.y + 0.5, 0.0);
+        egVertex3(p.x - 0.5, p.y + 0.5, 0.0);
+        egVertex3(p.x - 0.5, p.y - 0.5, 0.0);
+    }];
+    glEnd();
+    egMapDrawAxis();
+}
+
+- (void)drawPlane {
+    glBegin(GL_QUADS);
+    EGRectI limits = _map.limits;
+    CGFloat l = limits.x - 1.5;
+    CGFloat r = egRectIX2(limits) + 1.5;
+    CGFloat t = limits.y - 1.5;
+    CGFloat b = egRectIY2(limits) + 1.5;
+    NSInteger w = limits.width + 3;
+    NSInteger h = limits.height + 3;
+    egNormal3(((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
+    egTexCoord2(0.0, 0.0);
+    egVertex3(l, b, ((CGFloat)(0)));
+    egTexCoord2(((CGFloat)(w)), 0.0);
+    egVertex3(r, b, ((CGFloat)(0)));
+    egTexCoord2(((CGFloat)(w)), ((CGFloat)(h)));
+    egVertex3(r, t, ((CGFloat)(0)));
+    egTexCoord2(0.0, ((CGFloat)(h)));
+    egVertex3(l, t, ((CGFloat)(0)));
+    glEnd();
+    glPopMatrix();
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGMapSsoView* o = ((EGMapSsoView*)(other));
+    return [self.map isEqual:o.map];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.map hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"map=%@", self.map];
     [description appendString:@">"];
     return description;
 }

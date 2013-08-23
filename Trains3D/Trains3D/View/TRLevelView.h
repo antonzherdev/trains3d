@@ -3,6 +3,7 @@
 @class EGCameraIso;
 @class EG;
 @class EGMapSso;
+@class EGMapSsoView;
 @class TRLevelRules;
 @class TRLevel;
 @class TRLevelBackgroundView;

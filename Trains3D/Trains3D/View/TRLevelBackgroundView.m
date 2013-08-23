@@ -5,22 +5,31 @@
 #import "TRLevel.h"
 #import "EGMapIso.h"
 #import "EGMaterial.h"
-@implementation TRLevelBackgroundView
+@implementation TRLevelBackgroundView{
+    EGMapSso* _map;
+    EGMapSsoView* _mapView;
+}
+@synthesize map = _map;
+@synthesize mapView = _mapView;
 
-+ (id)levelBackgroundView {
-    return [[TRLevelBackgroundView alloc] init];
++ (id)levelBackgroundViewWithMap:(EGMapSso*)map {
+    return [[TRLevelBackgroundView alloc] initWithMap:map];
 }
 
-- (id)init {
+- (id)initWithMap:(EGMapSso*)map {
     self = [super init];
+    if(self) {
+        _map = map;
+        _mapView = [EGMapSsoView mapSsoViewWithMap:_map];
+    }
     
     return self;
 }
 
-- (void)drawLevel:(TRLevel*)level {
+- (void)draw {
     [EGMaterial.grass set];
     [[EG textureForFile:@"Grass.png"] draw:^void() {
-        [level.map drawPlane];
+        [_mapView drawPlane];
     }];
 }
 
@@ -31,15 +40,19 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
+    TRLevelBackgroundView* o = ((TRLevelBackgroundView*)(other));
+    return [self.map isEqual:o.map];
 }
 
 - (NSUInteger)hash {
-    return 0;
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.map hash];
+    return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"map=%@", self.map];
     [description appendString:@">"];
     return description;
 }

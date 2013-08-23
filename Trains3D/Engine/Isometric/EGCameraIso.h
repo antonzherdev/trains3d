@@ -2,6 +2,7 @@
 @class EG;
 #import "EGTypes.h"
 @class EGMapSso;
+@class EGMapSsoView;
 @class EGContext;
 @class EGMutableMatrix;
 

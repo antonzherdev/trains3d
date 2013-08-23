@@ -2,6 +2,7 @@
 #import "CNSeq.h"
 #import "EGTypes.h"
 @class EGMapSso;
+@class EGMapSsoView;
 @class EGLine;
 @class EGSlopeLine;
 @class EGVerticalLine;

@@ -4,6 +4,7 @@
 #import "CNSet.h"
 #import "EGTypes.h"
 @class EGMapSso;
+@class EGMapSsoView;
 @class EGCollisions;
 @class EGCollision;
 @class EGSchedule;

@@ -11,7 +11,7 @@ import TRRailroadView
 import TRTrainView
 
 class TRLevelView(level : TRLevel) extends EGView {
-    private val backgroundView = TRLevelBackgroundView()
+    private val backgroundView = TRLevelBackgroundView(level.map)
     private val cityView = TRCityView()
     private val railroadView = TRRailroadView()
     private val trainView = TRTrainView()
@@ -27,7 +27,7 @@ class TRLevelView(level : TRLevel) extends EGView {
         egLightColor(GL_LIGHT0, 1, 1, 1)
         egLightDirection(GL_LIGHT0, 0.2, -0.2, 0.5)
 
-        backgroundView.draw(level)
+        backgroundView.draw
         level.cities.for(city -> cityView.draw(city))
         railroadView.draw(level.railroad)
         level.trains.for(train -> trainView.draw(train))

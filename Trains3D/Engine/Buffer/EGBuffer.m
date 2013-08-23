@@ -32,7 +32,7 @@
     return __length;
 }
 
-+ (EGBuffer*)createWithBufferType:(GLenum)bufferType stride:(NSUInteger)stride {
++ (EGBuffer*)applyBufferType:(GLenum)bufferType stride:(NSUInteger)stride {
     return [EGBuffer bufferWithBufferType:bufferType stride:stride handle:egGenBuffer()];
 }
 

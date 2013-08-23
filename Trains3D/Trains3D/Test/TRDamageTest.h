@@ -2,6 +2,7 @@
 #import "CNTest.h"
 #import "EGTypes.h"
 @class EGMapSso;
+@class EGMapSsoView;
 @class TRRailroadConnectorContent;
 @class TREmptyConnector;
 @class TRRail;

@@ -26,7 +26,7 @@
     self = [super init];
     if(self) {
         _level = level;
-        _backgroundView = [TRLevelBackgroundView levelBackgroundView];
+        _backgroundView = [TRLevelBackgroundView levelBackgroundViewWithMap:_level.map];
         _cityView = [TRCityView cityView];
         _railroadView = [TRRailroadView railroadView];
         _trainView = [TRTrainView trainView];
@@ -44,7 +44,7 @@
     egAmbientColor(0.3, 0.3, 0.3);
     egLightColor(GL_LIGHT0, ((CGFloat)(1)), ((CGFloat)(1)), ((CGFloat)(1)));
     egLightDirection(GL_LIGHT0, 0.2, -0.2, 0.5);
-    [_backgroundView drawLevel:_level];
+    [_backgroundView draw];
     [[_level cities] forEach:^void(TRCity* city) {
         [_cityView drawCity:city];
     }];

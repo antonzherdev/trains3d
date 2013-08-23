@@ -12,7 +12,7 @@
 + (id)bufferWithBufferType:(GLenum)bufferType stride:(NSUInteger)stride handle:(GLuint)handle;
 - (id)initWithBufferType:(GLenum)bufferType stride:(NSUInteger)stride handle:(GLuint)handle;
 - (NSUInteger)length;
-+ (EGBuffer*)createWithBufferType:(GLenum)bufferType stride:(NSUInteger)stride;
++ (EGBuffer*)applyBufferType:(GLenum)bufferType stride:(NSUInteger)stride;
 - (void)dealoc;
 - (EGBuffer*)setData:(void*)data length:(NSUInteger)length;
 - (EGBuffer*)setData:(void*)data length:(NSUInteger)length usage:(GLenum)usage;

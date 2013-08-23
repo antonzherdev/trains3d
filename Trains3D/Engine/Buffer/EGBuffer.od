@@ -5,7 +5,7 @@ import EGGL
 class EGBuffer(bufferType : GLenum, stride : uint, handle : GLuint) {
     private var _length : uint = 0
     def length : uint = _length
-    static def createWith(bufferType : GLenum, stride : uint) : EGBuffer = EGBuffer(bufferType, stride, egGenBuffer)
+    static def apply(bufferType : GLenum, stride : uint) : EGBuffer = EGBuffer(bufferType, stride, egGenBuffer)
 
     def dealoc {
         egDeleteBuffer(handle)
