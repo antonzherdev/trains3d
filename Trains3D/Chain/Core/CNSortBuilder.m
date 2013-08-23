@@ -37,7 +37,7 @@
     return self;
 }
 
-- (CNSortBuilder*)byF:(NSInteger(^)(id, id))f {
+- (CNSortBuilder*)andF:(NSInteger(^)(id, id))f {
     [_functions addObject:f];
     return self;
 }

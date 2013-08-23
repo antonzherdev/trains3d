@@ -16,7 +16,7 @@ class CNSortBuilder<A>(chain : CNChain<A>) {
         functions.add((x : A, y : A) -> by(y).compare(by(x)))
         self
     }
-    def by(f : (A, A) -> int) : CNSortBuilder<A> = {
+    def and(f : (A, A) -> int) : CNSortBuilder<A> = {
         functions.add(f)
         self
     }

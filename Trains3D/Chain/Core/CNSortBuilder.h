@@ -11,7 +11,7 @@
 - (id)initWithChain:(CNChain*)chain;
 - (CNSortBuilder*)ascBy:(id(^)(id))by;
 - (CNSortBuilder*)descBy:(id(^)(id))by;
-- (CNSortBuilder*)byF:(NSInteger(^)(id, id))f;
+- (CNSortBuilder*)andF:(NSInteger(^)(id, id))f;
 - (CNChain*)endSort;
 @end
 
