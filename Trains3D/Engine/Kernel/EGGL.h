@@ -146,3 +146,11 @@ static inline void egVertexAttribPointer (GLuint index, NSUInteger size, GLenum 
 }
 
 EGMatrix* egModelViewProjectionMatrix();
+
+static inline void egColor(EGColor self) {
+    egColor4(self.r, self.g, self.b, self.a);
+}
+
+static inline void egColorSetMaterial(EGColor self) {
+    egMaterialColor(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, self);
+}

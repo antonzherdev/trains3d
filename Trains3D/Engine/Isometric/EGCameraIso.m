@@ -1,7 +1,6 @@
 #import "EGCameraIso.h"
 
 #import "EG.h"
-#import "EGGL.h"
 #import "EGMapIso.h"
 #import "EGContext.h"
 @implementation EGCameraIso{
@@ -41,7 +40,7 @@ static CGFloat _ISO;
 
 - (void)focusForViewSize:(EGSize)viewSize {
     EGRect vps = [self calculateViewportSizeWithViewSize:viewSize];
-    glViewport(((NSInteger)(vps.x)), ((NSInteger)(vps.y)), ((NSInteger)(vps.width)), ((NSInteger)(vps.height)));
+    glViewport(vps.x, vps.y, vps.width, vps.height);
     glMatrixMode(GL_PROJECTION);
     EGMutableMatrix* pm = [EG projectionMatrix];
     [pm setIdentity];
@@ -49,11 +48,11 @@ static CGFloat _ISO;
     [pm orthoLeft:-_ISO right:_ISO * ww - _ISO bottom:-_ISO * _tilesOnScreen.width / 2 top:_ISO * _tilesOnScreen.height / 2 zNear:0.0 zFar:1000.0];
     glMatrixMode(GL_MODELVIEW);
     EGMutableMatrix* mm = [EG modelMatrix];
-    [mm translateX:((CGFloat)(0)) y:((CGFloat)(0)) z:((CGFloat)(-100))];
-    [mm rotateAngle:((CGFloat)(30)) x:((CGFloat)(1)) y:((CGFloat)(0)) z:((CGFloat)(0))];
-    [mm rotateAngle:-45.0 x:((CGFloat)(0)) y:((CGFloat)(1)) z:((CGFloat)(0))];
-    [mm rotateAngle:((CGFloat)(-90)) x:((CGFloat)(1)) y:((CGFloat)(0)) z:((CGFloat)(0))];
-    [mm translateX:-_center.x y:((CGFloat)(0)) z:-_center.y];
+    [mm translateX:0.0 y:0.0 z:-100.0];
+    [mm rotateAngle:30.0 x:1.0 y:0.0 z:0.0];
+    [mm rotateAngle:-45.0 x:0.0 y:1.0 z:0.0];
+    [mm rotateAngle:-90.0 x:1.0 y:0.0 z:0.0];
+    [mm translateX:-_center.x y:0.0 z:-_center.y];
 }
 
 - (EGPoint)translateWithViewSize:(EGSize)viewSize viewPoint:(EGPoint)viewPoint {

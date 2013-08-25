@@ -33,6 +33,16 @@ trait CNSeq<T> extends CNIterable<T> {
     def arrayByRemoving(object : T) : CNSeq<T> = {
         chain.filter(_ != object).toArray
     }
+
+    def isEqualTo(seq : CNSeq<T>) : bool = {
+        if(self.count != seq.count) return false
+        val ia = self.iterator
+        val ib = seq.iterator
+        while(ia.hasNext && ib.hasNext) {
+            if(ia.next != ib.next) return false
+        }
+        true
+    }
 }
 
 trait CNMutableSeq<T> extends CNSeq<T> with CNMutableIterable<T>

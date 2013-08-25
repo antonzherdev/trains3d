@@ -1,8 +1,9 @@
 #import <Foundation/Foundation.h>
-#import "cnTypes.h"
+#import "CNTypes.h"
 #import "CNCollection.h"
 
 @class CNSortBuilder;
+@protocol CNTraversable;
 
 @interface CNChain : NSObject <CNTraversable>
 - (id)initWithLink:(id <CNChainLink>)link previous:(CNChain *)previous;
@@ -59,4 +60,6 @@
 - (NSDictionary *)toMap;
 - (NSMutableDictionary *)toMutableMap;
 - (CNYieldResult)apply:(CNYield *)yield;
+- (NSString *)toStringWithDelimiter:(NSString *)delimiter;
+- (NSString *)toStringWithStart:(NSString *)string delimiter:(NSString *)delimiter end:(NSString *)end;
 @end

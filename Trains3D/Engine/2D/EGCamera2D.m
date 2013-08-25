@@ -1,6 +1,5 @@
 #import "EGCamera2D.h"
 
-#import "EGGL.h"
 @implementation EGCamera2D{
     EGSize _size;
 }
@@ -26,14 +25,14 @@
 }
 
 - (EGRect)viewportRectForViewSize:(EGSize)viewSize factor:(CGFloat)factor {
-    return egRectMoveToCenterFor(EGRectMake(((CGFloat)(0)), _size.width * factor, ((CGFloat)(0)), _size.height * factor), viewSize);
+    return egRectMoveToCenterFor(EGRectMake(0.0, _size.width * factor, 0.0, _size.height * factor), viewSize);
 }
 
 - (void)focusForViewSize:(EGSize)viewSize {
     egViewport(egRectIApply([self viewportRectForViewSize:viewSize]));
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(((CGFloat)(0)), _size.width, ((CGFloat)(0)), _size.height, ((CGFloat)(0)), ((CGFloat)(1)));
+    glOrtho(0.0, _size.width, 0.0, _size.height, 0.0, 1.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }

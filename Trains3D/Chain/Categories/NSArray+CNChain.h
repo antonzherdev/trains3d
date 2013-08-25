@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-#import "cnTypes.h"
+#import "CNTypes.h"
 #import "CNList.h"
 
 @class CNChain;

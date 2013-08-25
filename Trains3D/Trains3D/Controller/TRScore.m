@@ -189,7 +189,7 @@
 
 - (NSInteger)fineWithRule:(NSInteger(^)(TRTrain*, NSInteger))rule {
     _fineCount++;
-    _delayTime = ((CGFloat)(0));
+    _delayTime = 0.0;
     return rule(_train, _fineCount);
 }
 

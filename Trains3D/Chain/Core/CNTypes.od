@@ -1,0 +1,6 @@
+package core.chain
+
+stub def sizeof(bytes : VoidRef) : uint
+stub def copy(bytes : VoidRef, size : uint) : VoidRef
+stub def free(bytes : VoidRef) : void
+stub struct VoidRef

@@ -30,19 +30,19 @@ static NSArray* _TRTrainType_values;
 
 + (void)initialize {
     [super initialize];
-    _simple = [TRTrainType trainTypeWithOrdinal:((NSUInteger)(0)) name:@"simple" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
+    _simple = [TRTrainType trainTypeWithOrdinal:0 name:@"simple" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) [level destroyTrain:train];
         return NO;
     }];
-    _crazy = [TRTrainType trainTypeWithOrdinal:((NSUInteger)(1)) name:@"crazy" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
+    _crazy = [TRTrainType trainTypeWithOrdinal:1 name:@"crazy" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) [level destroyTrain:train];
         return o.obstacleType == TRObstacleType.light;
     }];
-    _fast = [TRTrainType trainTypeWithOrdinal:((NSUInteger)(2)) name:@"fast" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
+    _fast = [TRTrainType trainTypeWithOrdinal:2 name:@"fast" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage || o.obstacleType == TRObstacleType.aSwitch) [level destroyTrain:train];
         return NO;
     }];
-    _repairer = [TRTrainType trainTypeWithOrdinal:((NSUInteger)(3)) name:@"repairer" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
+    _repairer = [TRTrainType trainTypeWithOrdinal:3 name:@"repairer" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) {
             [level.railroad fixDamageAtPoint:o.point];
             return YES;
@@ -265,8 +265,8 @@ static NSArray* _TRCarType_values;
 
 + (void)initialize {
     [super initialize];
-    _car = [TRCarType carTypeWithOrdinal:((NSUInteger)(0)) name:@"car" length:0.44 width:0.18 frontConnectorLength:0.13 backConnectorLength:0.13 isEngine:NO];
-    _engine = [TRCarType carTypeWithOrdinal:((NSUInteger)(1)) name:@"engine" length:0.43 width:0.18 frontConnectorLength:0.12 backConnectorLength:0.2 isEngine:YES];
+    _car = [TRCarType carTypeWithOrdinal:0 name:@"car" length:0.44 width:0.18 frontConnectorLength:0.13 backConnectorLength:0.13 isEngine:NO];
+    _engine = [TRCarType carTypeWithOrdinal:1 name:@"engine" length:0.43 width:0.18 frontConnectorLength:0.12 backConnectorLength:0.2 isEngine:YES];
     _TRCarType_values = (@[_car, _engine]);
 }
 
@@ -422,8 +422,8 @@ static NSArray* _TRCarType_values;
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.trainType ordinal];
-    hash = hash * 31 + [self.carsCount hash];
-    hash = hash * 31 + [self.speed hash];
+    hash = hash * 31 + 0;
+    hash = hash * 31 + 0;
     hash = hash * 31 + [self.carTypes hash];
     return hash;
 }
@@ -431,8 +431,8 @@ static NSArray* _TRCarType_values;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"trainType=%@", self.trainType];
-    [description appendFormat:@", carsCount=%@", self.carsCount];
-    [description appendFormat:@", speed=%@", self.speed];
+    [description appendFormat:@", carsCount=[]"];
+    [description appendFormat:@", speed=[]"];
     [description appendFormat:@", carTypes=%@", self.carTypes];
     [description appendString:@">"];
     return description;

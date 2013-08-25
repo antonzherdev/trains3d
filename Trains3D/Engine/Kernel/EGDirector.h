@@ -3,6 +3,7 @@
 @class EGTime;
 @class EGStat;
 #import "EGTypes.h"
+#import "EGGL.h"
 @class EGContext;
 @class EGMutableMatrix;
 @protocol EGProcessor;

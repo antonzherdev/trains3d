@@ -354,6 +354,24 @@
 - (CNSortBuilder *)sortBy {
     return [CNSortBuilder sortBuilderWithChain:self];
 }
+
+- (NSString *)toStringWithDelimiter:(NSString *)delimiter {
+    return [self toStringWithStart:@"" delimiter:delimiter end:@""];
+}
+
+
+- (NSString *)toStringWithStart:(NSString *)start delimiter:(NSString *)delimiter end:(NSString *)end {
+    NSMutableString * s = [NSMutableString stringWithString:start];
+    __block BOOL first = YES;
+    [self forEach:^(id x) {
+        if(first) first = NO;
+        else [s appendString:delimiter];
+
+        [s appendFormat:@"%@", x];
+    }];
+    [s appendString:end];
+    return s;
+}
 @end
 
 id cnResolveCollection(id collection) {

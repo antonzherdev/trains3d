@@ -3,7 +3,6 @@
 #import "EGScene.h"
 #import "EGTime.h"
 #import "EGStat.h"
-#import "EGGL.h"
 #import "EGContext.h"
 #import "EGProcessor.h"
 @implementation EGDirector{

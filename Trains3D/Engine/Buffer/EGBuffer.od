@@ -2,20 +2,20 @@ import CNData
 
 import EGGL
 
-class EGBuffer(bufferType : GLenum, stride : uint, handle : GLuint) {
+class EGBuffer<T>(bufferType : GLenum, handle : GLuint) {
     private var _length : uint = 0
     def length : uint = _length
-    static def apply(bufferType : GLenum, stride : uint) : EGBuffer = EGBuffer(bufferType, stride, egGenBuffer)
+    static def apply<T>(bufferType : GLenum) : EGBuffer = EGBuffer<T>(bufferType, egGenBuffer)
 
     def dealoc {
         egDeleteBuffer(handle)
     }
 
-    def set(data : [void], length : uint) : EGBuffer = set(data, length, GL_STATIC_DRAW)
+    def set(data : CNPArray<T>) : self = set(data, GL_STATIC_DRAW)
 
-    def set(data : [void], length : uint, usage : GLenum) : EGBuffer = {
+    def set(data : CNPArray<T>, usage : GLenum) : self = {
         glBindBuffer(bufferType, handle)
-        glBufferData(bufferType, length, data, GL_STATIC_DRAW)
+        glBufferData(bufferType, data.length, data.bytes, GL_STATIC_DRAW)
         glBindBuffer(bufferType, 0)
         _length = length
         self
@@ -28,10 +28,18 @@ class EGBuffer(bufferType : GLenum, stride : uint, handle : GLuint) {
     def clear {
         glBindBuffer(bufferType, 0)
     }
+}
+
+class EGVertexBuffer<T>(stride : uint, handle : GLuint) extends EGBuffer<T>(GL_ARRAY_BUFFER, handle) {
+    static def apply<T>(stride : uint) : EGVertexBuffer<T> = EGVertexBuffer<T>(stride, egGenBuffer)
+}
+
+class EGIndexBuffer<T>(handle : GLuint) extends EGBuffer<T>(GL_ELEMENT_ARRAY_BUFFER, handle) {
+    static def apply<T> : EGIndexBuffer<T> = EGIndexBuffer<T>(egGenBuffer)
 
     def draw {
         bind
-        glDrawElements(GL_TRIANGLES, _length, GL_UNSIGNED_BYTE, 0)
+        glDrawElements(GL_TRIANGLES, length, GL_UNSIGNED_BYTE, 0)
         clear
     }
 }

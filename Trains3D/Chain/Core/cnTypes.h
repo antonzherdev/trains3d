@@ -1,5 +1,7 @@
 #import "CNYield.h"
 
+
+typedef void* VoidRef;
 @class CNChain;
 typedef void (^cnChainBuildBlock)(CNChain * chain);
 typedef BOOL (^cnPredicate)(id x);
@@ -68,6 +70,45 @@ extern id cnResolveCollection(id collection);
 
 #define uwrap(tp, expr) [((tp ## Wrap*)expr) value]
 
+
+#define arr(p_type, p_f, p_count)  CNPArray applyStride:sizeof(p_type) wrap:^id(void* arr, NSUInteger i) { \
+    return p_f(((p_type*)(arr))[i]);\
+} count:p_count copyBytes:(p_type[])
+
+#define arru(p_count) arr(char, numu, p_count)
+#define arruc(p_count) arr(unsigned char, numuc, p_count)
+#define arri(p_count) arr(NSInteger, numi, p_count)
+#define arrui(p_count) arr(NSUInteger, numui, p_count)
+#define arri4(p_count) arr(int, numi4, p_count)
+#define arrui4(p_count) arr(unsigned int, numui4, p_count)
+#define arri8(p_count) arr(long, numi8, p_count)
+#define arrui8(p_count) arr(unsigned long, numui8, p_count)
+#define arrf(p_count) arr(CGFloat, numf, p_count)
+#define arrf4(p_count) arr(float, numf4, p_count)
+#define arrf8(p_count) arr(double, numf8, p_count)
+
+
+
 static inline NSUInteger randomWith(NSUInteger max) {
     return arc4random_uniform((u_int32_t)(max + 1));
 }
+
+static inline NSUInteger VoidRefHash(void * v) {
+    return (NSUInteger) v;
+}
+
+static inline BOOL VoidRefEq(void * a, void * b) {
+    return a == b;
+}
+
+static inline NSString* VoidRefDescription(void * v) {
+    return [NSString stringWithFormat:@"%p", v];
+}
+
+static inline void* copy(void * mem, NSUInteger len) {
+    void* ret = malloc(len);
+    memcpy(ret, mem, len);
+    return ret;
+}
+
+

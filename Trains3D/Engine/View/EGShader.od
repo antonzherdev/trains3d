@@ -85,7 +85,7 @@ class EGShader(program : EGShaderProgram) {
 }
 
 class EGShaderAttribute(handle : GLint) {
-    def setFrom(buffer : EGBuffer, valuesCount : uint, valuesType : GLenum, shift : uint) : uint = {
+    def setFrom(buffer : EGVertexBuffer, valuesCount : uint, valuesType : GLenum, shift : uint) : uint = {
         egVertexAttribPointer(handle, valuesCount, valuesType, GL_FALSE, buffer.stride, shift)
         if(valuesType == GL_DOUBLE) valuesCount*8 + shift
         else if(valuesType == GL_FLOAT) valuesCount*4 + shift

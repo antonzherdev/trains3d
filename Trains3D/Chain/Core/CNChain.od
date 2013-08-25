@@ -47,6 +47,8 @@ stub class CNChain<A> extends CNIterable<A> {
     def gap<B extends ODComparable<B>> (self : CNChain<B>) : (A, A)?
     def min<B extends ODComparable<B>> (self : CNChain<B>) : A?
     def max<B extends ODComparable<B>> (self : CNChain<B>) : A?
+    def toStringWith(start : string, delimiter : string, end : string) : string
+    def toStringWith(delimiter : string) : string
 
     def toArray : [A]
     def toSet : CNSet<A>

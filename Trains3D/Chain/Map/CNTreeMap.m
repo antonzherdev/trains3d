@@ -25,7 +25,7 @@ static NSInteger _RED = 1;
     if(self) {
         _comparator = comparator;
         _root = nil;
-        __size = ((NSUInteger)(0));
+        __size = 0;
         _keys = [CNTreeMapKeySet treeMapKeySetWithMap:self];
         _values = [CNTreeMapValues treeMapValuesWithMap:self];
     }
@@ -52,7 +52,7 @@ static NSInteger _RED = 1;
 }
 
 - (void)clear {
-    __size = ((NSUInteger)(0));
+    __size = 0;
     _root = nil;
 }
 
@@ -82,7 +82,7 @@ static NSInteger _RED = 1;
     CNTreeMapEntry* t = _root;
     if(t == nil) {
         _root = [CNTreeMapEntry newWithKey:forKey object:object parent:nil];
-        __size = ((NSUInteger)(1));
+        __size = 1;
     } else {
         NSInteger cmp = 0;
         CNTreeMapEntry* parent = nil;
@@ -443,6 +443,10 @@ static NSInteger _RED = 1;
     return NO;
 }
 
+- (NSString*)description {
+    return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
+}
+
 - (id)findWhere:(BOOL(^)(id))where {
     __block id ret = [CNOption none];
     [self goOn:^BOOL(id x) {
@@ -485,12 +489,6 @@ static NSInteger _RED = 1;
     NSUInteger hash = 0;
     hash = hash * 31 + [self.comparator hash];
     return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
 }
 
 @end
@@ -628,6 +626,10 @@ static NSInteger _RED = 1;
     return NO;
 }
 
+- (NSString*)description {
+    return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
+}
+
 - (id)findWhere:(BOOL(^)(id))where {
     __block id ret = [CNOption none];
     [self goOn:^BOOL(id x) {
@@ -662,13 +664,6 @@ static NSInteger _RED = 1;
     NSUInteger hash = 0;
     hash = hash * 31 + [self.map hash];
     return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"map=%@", self.map];
-    [description appendString:@">"];
-    return description;
 }
 
 @end
@@ -795,6 +790,10 @@ static NSInteger _RED = 1;
     return NO;
 }
 
+- (NSString*)description {
+    return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
+}
+
 - (id)findWhere:(BOOL(^)(id))where {
     __block id ret = [CNOption none];
     [self goOn:^BOOL(id x) {
@@ -829,13 +828,6 @@ static NSInteger _RED = 1;
     NSUInteger hash = 0;
     hash = hash * 31 + [self.map hash];
     return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"map=%@", self.map];
-    [description appendString:@">"];
-    return description;
 }
 
 @end

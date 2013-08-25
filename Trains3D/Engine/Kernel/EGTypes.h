@@ -305,8 +305,6 @@ static inline NSString* EGColorDescription(EGColor self) {
     [description appendString:@">"];
     return description;
 }
-void egColorSet(EGColor self);
-void egColorSetMaterial(EGColor self);
 @interface EGColorWrap : NSObject
 @property (readonly, nonatomic) EGColor value;
 

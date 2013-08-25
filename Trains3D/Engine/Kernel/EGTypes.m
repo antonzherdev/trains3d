@@ -1,7 +1,5 @@
 #import "EGTypes.h"
-#import "EGTypesAdd.h"
 
-#import "EGGL.h"
 EGPoint egPointApply(EGPointI point) {
     return EGPointMake(((CGFloat)(point.x)), ((CGFloat)(point.y)));
 }
@@ -344,12 +342,6 @@ NSInteger egRectIY2(EGRectI self) {
 
 
 
-void egColorSet(EGColor self) {
-    egColor4(self.r, self.g, self.b, self.a);
-}
-void egColorSetMaterial(EGColor self) {
-    egMaterialColor(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, self);
-}
 @implementation EGColorWrap{
     EGColor _value;
 }

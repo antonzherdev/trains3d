@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-#import "cnTypes.h"
+#import "CNTypes.h"
 #import "CNCollection.h"
 #import "CNSet.h"
 

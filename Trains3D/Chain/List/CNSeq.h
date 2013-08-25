@@ -13,6 +13,7 @@
 - (id<CNSet>)toSet;
 - (id<CNSeq>)arrayByAddingObject:(id)object;
 - (id<CNSeq>)arrayByRemovingObject:(id)object;
+- (BOOL)isEqualToSeq:(id<CNSeq>)seq;
 @end
 
 

@@ -1,54 +1,56 @@
-#import "CNRange.h"
+#import "CNData.h"
 
 #import "CNOption.h"
 #import "CNChain.h"
-@implementation CNRange{
-    NSInteger _start;
-    NSInteger _end;
-    NSInteger _step;
+@implementation CNPArray{
+    NSUInteger _stride;
+    id(^_wrap)(VoidRef, NSUInteger);
     NSUInteger _count;
+    NSUInteger _length;
+    VoidRef _bytes;
+    BOOL _copied;
 }
-@synthesize start = _start;
-@synthesize end = _end;
-@synthesize step = _step;
+@synthesize stride = _stride;
+@synthesize wrap = _wrap;
 @synthesize count = _count;
+@synthesize length = _length;
+@synthesize bytes = _bytes;
+@synthesize copied = _copied;
 
-+ (id)rangeWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step {
-    return [[CNRange alloc] initWithStart:start end:end step:step];
++ (id)arrayWithStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count length:(NSUInteger)length bytes:(VoidRef)bytes copied:(BOOL)copied {
+    return [[CNPArray alloc] initWithStride:stride wrap:wrap count:count length:length bytes:bytes copied:copied];
 }
 
-- (id)initWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step {
+- (id)initWithStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count length:(NSUInteger)length bytes:(VoidRef)bytes copied:(BOOL)copied {
     self = [super init];
     if(self) {
-        _start = start;
-        _end = end;
-        _step = step;
-        _count = ((NSUInteger)((_end - _start) / _step));
+        _stride = stride;
+        _wrap = wrap;
+        _count = count;
+        _length = length;
+        _bytes = bytes;
+        _copied = copied;
     }
     
     return self;
 }
 
-- (id)applyIndex:(NSUInteger)index {
-    if(index >= _count) return [CNOption none];
-    else return [CNOption opt:numi(_start + _step * index)];
++ (CNPArray*)applyStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count copyBytes:(VoidRef)copyBytes {
+    NSUInteger len = count * stride;
+    return [CNPArray arrayWithStride:stride wrap:wrap count:count length:len bytes:copy(copyBytes, count * stride) copied:YES];
 }
 
 - (id<CNIterator>)iterator {
-    return [CNRangeIterator rangeIteratorWithStart:_start end:_end step:_step];
+    return [CNPArrayIterator arrayIteratorWithArray:self];
 }
 
-- (CNRange*)setStep:(NSInteger)step {
-    return [CNRange rangeWithStart:_start end:_end step:step];
+- (id)applyIndex:(NSUInteger)index {
+    if(index >= _count) return [CNOption none];
+    else return [CNOption opt:_wrap(_bytes, index)];
 }
 
-- (BOOL)isEmpty {
-    if(_step > 0) {
-        return _start > _end;
-    } else {
-        if(_step < 0) return _start < _end;
-        else return NO;
-    }
+- (void)dealloc {
+    if(_copied) free(_bytes);
 }
 
 - (id)randomItem {
@@ -86,6 +88,10 @@
 - (id)head {
     if([[self iterator] hasNext]) return [CNOption opt:[[self iterator] next]];
     else return [CNOption none];
+}
+
+- (BOOL)isEmpty {
+    return !([[self iterator] hasNext]);
 }
 
 - (CNChain*)chain {
@@ -151,49 +157,46 @@
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + self.start;
-    hash = hash * 31 + self.end;
-    hash = hash * 31 + self.step;
+    hash = hash * 31 + self.stride;
+    hash = hash * 31 + [self.wrap hash];
+    hash = hash * 31 + self.count;
+    hash = hash * 31 + self.length;
+    hash = hash * 31 + VoidRefHash(self.bytes);
+    hash = hash * 31 + self.copied;
     return hash;
 }
 
 @end
 
 
-@implementation CNRangeIterator{
-    NSInteger _start;
-    NSInteger _end;
-    NSInteger _step;
+@implementation CNPArrayIterator{
+    CNPArray* _array;
     NSInteger _i;
 }
-@synthesize start = _start;
-@synthesize end = _end;
-@synthesize step = _step;
+@synthesize array = _array;
 
-+ (id)rangeIteratorWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step {
-    return [[CNRangeIterator alloc] initWithStart:start end:end step:step];
++ (id)arrayIteratorWithArray:(CNPArray*)array {
+    return [[CNPArrayIterator alloc] initWithArray:array];
 }
 
-- (id)initWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step {
+- (id)initWithArray:(CNPArray*)array {
     self = [super init];
     if(self) {
-        _start = start;
-        _end = end;
-        _step = step;
-        _i = _start;
+        _array = array;
+        _i = 0;
     }
     
     return self;
 }
 
 - (BOOL)hasNext {
-    return (_step > 0 && _i <= _end) || (_step < 0 && _i >= _end);
+    return _i < _array.count;
 }
 
 - (id)next {
-    NSInteger ret = _i;
-    _i += _step;
-    return numi(ret);
+    id ret = [_array applyIndex:((NSUInteger)(_i))];
+    _i++;
+    return ret;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -203,23 +206,19 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNRangeIterator* o = ((CNRangeIterator*)(other));
-    return self.start == o.start && self.end == o.end && self.step == o.step;
+    CNPArrayIterator* o = ((CNPArrayIterator*)(other));
+    return [self.array isEqual:o.array];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + self.start;
-    hash = hash * 31 + self.end;
-    hash = hash * 31 + self.step;
+    hash = hash * 31 + [self.array hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"start=%li", self.start];
-    [description appendFormat:@", end=%li", self.end];
-    [description appendFormat:@", step=%li", self.step];
+    [description appendFormat:@"array=%@", self.array];
     [description appendString:@">"];
     return description;
 }

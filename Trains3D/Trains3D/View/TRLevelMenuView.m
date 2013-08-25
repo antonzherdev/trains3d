@@ -2,7 +2,6 @@
 
 #import "EGCamera2D.h"
 #import "EGText.h"
-#import "EGGL.h"
 #import "EGSchedule.h"
 #import "TRLevel.h"
 #import "TRScore.h"
@@ -24,23 +23,23 @@
     self = [super init];
     if(self) {
         _level = level;
-        _camera = [EGCamera2D camera2DWithSize:EGSizeMake(((CGFloat)(2)), ((CGFloat)(1)))];
+        _camera = [EGCamera2D camera2DWithSize:EGSizeMake(2.0, 1.0)];
     }
     
     return self;
 }
 
 - (void)drawView {
-    egColor3(((CGFloat)(1)), ((CGFloat)(1)), ((CGFloat)(1)));
-    egTextGlutDraw([NSString stringWithFormat:@"%li", [_level.score score]], GLUT_BITMAP_HELVETICA_18, EGPointMake(((CGFloat)(1)), ((CGFloat)(1))));
+    egColor3(1.0, 1.0, 1.0);
+    egTextGlutDraw([NSString stringWithFormat:@"%li", [_level.score score]], GLUT_BITMAP_HELVETICA_18, EGPointMake(1.0, 1.0));
     NSInteger seconds = ((NSInteger)([_level.schedule time]));
-    egTextGlutDraw([NSString stringWithFormat:@"%li", seconds], GLUT_BITMAP_HELVETICA_18, EGPointMake(1.5, ((CGFloat)(1))));
+    egTextGlutDraw([NSString stringWithFormat:@"%li", seconds], GLUT_BITMAP_HELVETICA_18, EGPointMake(1.5, 1.0));
     if(!([[_level.railroad damagesPoints] isEmpty]) && [[_level repairer] isEmpty]) {
         glPushMatrix();
         [[_level cities] forEach:^void(TRCity* city) {
             [city.color set];
-            egRect(((CGFloat)(0)), ((CGFloat)(0)), 0.1, 0.1);
-            egTranslate(0.1, ((CGFloat)(0)), ((CGFloat)(0)));
+            egRect(0.0, 0.0, 0.1, 0.1);
+            egTranslate(0.1, 0.0, 0.0);
         }];
         glPopMatrix();
     }

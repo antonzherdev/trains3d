@@ -88,6 +88,10 @@ trait CNIterable<T> extends CNTraversable<T> {
         while(i.hasNext) if(i.next == i) return true
         false
     }
+
+    def description : string = {
+        chain.toStringWith(start = "[", delimiter = ", ", end = "]")
+    }
 }
 
 trait CNMutableIterable<T> extends CNIterable<T> with CNMutableTraversable<T> {}

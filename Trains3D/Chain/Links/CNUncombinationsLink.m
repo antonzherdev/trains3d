@@ -1,4 +1,4 @@
-#import "cnTypes.h"
+#import "CNTypes.h"
 #import "CNUncombinationsLink.h"
 #import "CNTuple.h"
 

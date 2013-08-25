@@ -74,6 +74,28 @@
     }] toArray];
 }
 
+- (BOOL)isEqualToSeq:(id<CNSeq>)seq {
+    if([self count] != [seq count]) return NO;
+    id<CNIterator> ia = [self iterator];
+    id<CNIterator> ib = [seq iterator];
+    while([ia hasNext] && [ib hasNext]) {
+        if(!([[ia next] isEqual:[ib next]])) return NO;
+    }
+    return YES;
+}
+
+- (NSString*)description {
+    return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other)) return NO;
+    if([other conformsToProtocol:@protocol(CNSeq)]) return [self isEqualToSeq:((id<CNSeq>)(other))];
+    return NO;
+}
+
+
 - (id <CNSet>)toSet {
     return [NSSet setWithArray:self];
 }

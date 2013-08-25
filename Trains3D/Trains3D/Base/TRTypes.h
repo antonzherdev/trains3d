@@ -1,5 +1,6 @@
 #import "objd.h"
 #import "EGTypes.h"
+#import "EGGL.h"
 
 @class TRColor;
 

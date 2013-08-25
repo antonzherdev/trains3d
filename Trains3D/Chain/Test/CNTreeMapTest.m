@@ -18,7 +18,7 @@
     [self assertTrueValue:[[map applyKey:@0] isEmpty]];
     [map setObject:@"test" forKey:@0];
     [self assertEqualsA:@"test" b:[[map applyKey:@0] get]];
-    id<CNSeq> tests = (@[@-10, @-20, @-30, @10, @20, @-15, @20, @0, @11, @13, @-18]);
+    id<CNSeq> tests = [ arri(11) {-10, -20, -30, 10, 20, -15, 20, 0, 11, 13, -18}];
     [tests forEach:^void(id i) {
         [map setObject:[@"test" stringByAppendingFormat:@"%li", unumi(i)] forKey:i];
     }];

@@ -1,7 +1,6 @@
 #import "EGShader.h"
 
 #import "CNFile.h"
-#import "EGGL.h"
 #import "EGBuffer.h"
 #import "EGMatrix.h"
 @implementation EGShaderProgram{
@@ -196,7 +195,7 @@
     return self;
 }
 
-- (NSUInteger)setFromBuffer:(EGBuffer*)buffer valuesCount:(NSUInteger)valuesCount valuesType:(GLenum)valuesType shift:(NSUInteger)shift {
+- (NSUInteger)setFromBuffer:(EGVertexBuffer*)buffer valuesCount:(NSUInteger)valuesCount valuesType:(GLenum)valuesType shift:(NSUInteger)shift {
     egVertexAttribPointer(_handle, valuesCount, valuesType, GL_FALSE, buffer.stride, shift);
     if(GLenumEq(valuesType, GL_DOUBLE)) {
         return valuesCount * 8 + shift;

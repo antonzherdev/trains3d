@@ -31,7 +31,7 @@
 }
 
 - (NSUInteger)count {
-    return ((NSUInteger)(2));
+    return 2;
 }
 
 - (id<CNIterator>)iterator {
@@ -63,6 +63,10 @@
         if(!(on([i next]))) return NO;
     }
     return YES;
+}
+
+- (NSString*)description {
+    return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
 }
 
 - (id)findWhere:(BOOL(^)(id))where {
@@ -100,14 +104,6 @@
     hash = hash * 31 + [self.a hash];
     hash = hash * 31 + [self.b hash];
     return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"a=%@", self.a];
-    [description appendFormat:@", b=%@", self.b];
-    [description appendString:@">"];
-    return description;
 }
 
 @end

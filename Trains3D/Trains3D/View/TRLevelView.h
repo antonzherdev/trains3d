@@ -2,6 +2,7 @@
 #import "EGTypes.h"
 @class EGCameraIso;
 @class EG;
+#import "EGGL.h"
 @class EGMapSso;
 @class EGMapSsoView;
 @class TRLevelRules;

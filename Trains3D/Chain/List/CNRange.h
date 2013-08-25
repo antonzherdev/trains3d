@@ -1,6 +1,8 @@
 #import <Foundation/Foundation.h>
 #import "CNCollection.h"
 #import "CNSeq.h"
+@class CNOption;
+#import "CNTypes.h"
 @class CNChain;
 
 @class CNRange;

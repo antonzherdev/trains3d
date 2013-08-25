@@ -1,4 +1,5 @@
 #import "objd.h"
+#import "EGGL.h"
 @class EGSchedule;
 @class EGAnimation;
 @class TRCityAngle;

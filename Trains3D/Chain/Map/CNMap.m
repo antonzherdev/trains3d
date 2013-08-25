@@ -104,6 +104,10 @@
     return NO;
 }
 
+- (NSString*)description {
+    return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
+}
+
 - (id)findWhere:(BOOL(^)(id))where {
     __block id ret = [CNOption none];
     [self goOn:^BOOL(id x) {
@@ -139,13 +143,6 @@
     hash = hash * 31 + [self.defaultFunc hash];
     hash = hash * 31 + [self.map hash];
     return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"map=%@", self.map];
-    [description appendString:@">"];
-    return description;
 }
 
 @end

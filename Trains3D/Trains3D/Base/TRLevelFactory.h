@@ -1,5 +1,6 @@
 #import "objd.h"
-#import "CNRange.h"
+@class CNRange;
+@class CNRangeIterator;
 #import "EGTypes.h"
 @class EGScene;
 @class EGLayer;

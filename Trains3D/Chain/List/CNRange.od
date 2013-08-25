@@ -2,10 +2,9 @@ package core.chain
 
 import CNCollection
 import CNSeq
-import "CNOption.h"
-import "cnTypes.h"
+import CNOption
+import CNTypes
 import CNChain
-import "NSArray+CNChain.h"
 
 class CNRange(start : int, end : int, step : int) extends CNSeq<int> {
     val count : uint = (end - start)/step

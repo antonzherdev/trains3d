@@ -2,7 +2,6 @@
 
 #import "EGCameraIso.h"
 #import "EG.h"
-#import "EGGL.h"
 #import "EGMapIso.h"
 #import "TRLevel.h"
 #import "TRLevelBackgroundView.h"
@@ -30,7 +29,7 @@
         _cityView = [TRCityView cityView];
         _railroadView = [TRRailroadView railroadView];
         _trainView = [TRTrainView trainView];
-        _camera = [EGCameraIso cameraIsoWithTilesOnScreen:_level.map.size center:EGPointMake(((CGFloat)(0)), ((CGFloat)(0)))];
+        _camera = [EGCameraIso cameraIsoWithTilesOnScreen:_level.map.size center:EGPointMake(0.0, 0.0)];
     }
     
     return self;
@@ -42,7 +41,7 @@
     glEnable(GL_NORMALIZE);
     glShadeModel(GL_SMOOTH);
     egAmbientColor(0.3, 0.3, 0.3);
-    egLightColor(GL_LIGHT0, ((CGFloat)(1)), ((CGFloat)(1)), ((CGFloat)(1)));
+    egLightColor(GL_LIGHT0, 1.0, 1.0, 1.0);
     egLightDirection(GL_LIGHT0, 0.2, -0.2, 0.5);
     [_backgroundView draw];
     [[_level cities] forEach:^void(TRCity* city) {

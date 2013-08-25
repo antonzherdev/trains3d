@@ -368,10 +368,10 @@ static NSArray* _TRObstacleType_values;
 
 + (void)initialize {
     [super initialize];
-    _damage = [TRObstacleType obstacleTypeWithOrdinal:((NSUInteger)(0)) name:@"damage"];
-    _switch = [TRObstacleType obstacleTypeWithOrdinal:((NSUInteger)(1)) name:@"switch"];
-    _light = [TRObstacleType obstacleTypeWithOrdinal:((NSUInteger)(2)) name:@"light"];
-    _end = [TRObstacleType obstacleTypeWithOrdinal:((NSUInteger)(3)) name:@"end"];
+    _damage = [TRObstacleType obstacleTypeWithOrdinal:0 name:@"damage"];
+    _switch = [TRObstacleType obstacleTypeWithOrdinal:1 name:@"switch"];
+    _light = [TRObstacleType obstacleTypeWithOrdinal:2 name:@"light"];
+    _end = [TRObstacleType obstacleTypeWithOrdinal:3 name:@"end"];
     _TRObstacleType_values = (@[_damage, _switch, _light, _end]);
 }
 
@@ -595,7 +595,7 @@ static NSArray* _TRObstacleType_values;
     }
     TRRail* nextActiveRail = ((TRRail*)([nextRail get]));
     TRRailForm* form = nextActiveRail.form;
-    return [self moveWithObstacleProcessor:obstacleProcessor forLength:correction.error point:[TRRailPoint railPointWithTile:nextTile form:form x:((CGFloat)(0)) back:form.end == otherSideConnector]];
+    return [self moveWithObstacleProcessor:obstacleProcessor forLength:correction.error point:[TRRailPoint railPointWithTile:nextTile form:form x:0.0 back:form.end == otherSideConnector]];
 }
 
 - (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint*)from to:(CGFloat)to {
@@ -624,7 +624,7 @@ static NSArray* _TRObstacleType_values;
             return [CNOption opt:[[arr map:^id<CNSeq>(id<CNSeq> _) {
                 return [_ arrayByAddingObject:numf(point.x)];
             }] getOrElse:^id<CNSeq>() {
-                return (@[numf(point.x)]);
+                return [ arrf(1) {point.x}];
             }]];
         } forKey:tuple(wrap(EGPointI, point.tile), point.form)];
         [__damagesPoints addObject:point];

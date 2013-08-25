@@ -1,4 +1,4 @@
-#import "cnTypes.h"
+#import "CNTypes.h"
 #import "CNGroupByLink.h"
 #import "CNTuple.h"
 #import "NSMutableDictionary+CNChain.h"

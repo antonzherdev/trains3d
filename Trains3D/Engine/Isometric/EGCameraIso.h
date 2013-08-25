@@ -1,5 +1,6 @@
 #import "objd.h"
 @class EG;
+#import "EGGL.h"
 #import "EGTypes.h"
 @class EGMapSso;
 @class EGMapSsoView;

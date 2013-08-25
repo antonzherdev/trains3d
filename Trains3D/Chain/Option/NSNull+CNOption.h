@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-#import "cnTypes.h"
+#import "CNTypes.h"
 
 @interface NSNull (CNOption)
 - (void)forEach:(cnP)f;

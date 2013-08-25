@@ -1,6 +1,7 @@
 #import "objd.h"
 @class EGTexture;
 @class EGMatrix;
+#import "EGGL.h"
 
 @class EGContext;
 @class EGMutableMatrix;

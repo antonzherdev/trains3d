@@ -3,7 +3,7 @@ import EGGL
 
 class EGMaterial(ambient : EGColor, diffuse : EGColor, specular : EGColor, shininess : float) {
     def set {
-        ambient.set
+        egColor(ambient)
         egMaterialColor(GL_FRONT_AND_BACK, GL_AMBIENT, ambient)
         egMaterialColor(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse)
         egMaterialColor(GL_FRONT_AND_BACK, GL_SPECULAR, specular)

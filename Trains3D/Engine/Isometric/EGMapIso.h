@@ -1,8 +1,12 @@
 #import "objd.h"
 @class CNChain;
-#import "CNRange.h"
+@class CNRange;
+@class CNRangeIterator;
 #import "EGTypes.h"
+#import "EGGL.h"
 @class EGBuffer;
+@class EGVertexBuffer;
+@class EGIndexBuffer;
 
 @class EGMapSso;
 @class EGMapSsoView;

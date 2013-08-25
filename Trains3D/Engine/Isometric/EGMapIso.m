@@ -1,7 +1,7 @@
 #import "EGMapIso.h"
 
 #import "CNChain.h"
-#import "EGGL.h"
+#import "CNRange.h"
 #import "EGMap.h"
 #import "EGBuffer.h"
 @implementation EGMapSso{
@@ -115,7 +115,7 @@ static CGFloat _ISO = 0.70710676908493;
 
 - (void)drawLayout {
     glPushMatrix();
-    egRotate(((CGFloat)(45)), ((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
+    egRotate(45.0, 0.0, 0.0, 1.0);
     glBegin(GL_LINES);
     CGFloat ISO = EGMapSso.ISO;
     EGSizeI size = _map.size;
@@ -123,7 +123,7 @@ static CGFloat _ISO = 0.70710676908493;
     CGFloat top = ISO * size.height;
     CGFloat bottom = ISO * -size.width;
     CGFloat right = ISO * (size.width + size.height - 1);
-    egNormal3(((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
+    egNormal3(0.0, 0.0, 1.0);
     egVertex3(left, top, 0.0);
     egVertex3(left, bottom, 0.0);
     egVertex3(left, bottom, 0.0);
@@ -138,7 +138,7 @@ static CGFloat _ISO = 0.70710676908493;
     glBegin(GL_LINES);
     [_map.fullTiles forEach:^void(id tile) {
         EGPointI p = uwrap(EGPointI, tile);
-        egNormal3(((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
+        egNormal3(0.0, 0.0, 1.0);
         egVertex3(p.x - 0.5, p.y - 0.5, 0.0);
         egVertex3(p.x + 0.5, p.y - 0.5, 0.0);
         egVertex3(p.x + 0.5, p.y - 0.5, 0.0);
@@ -161,15 +161,15 @@ static CGFloat _ISO = 0.70710676908493;
     CGFloat b = egRectIY2(limits) + 1.5;
     NSInteger w = limits.width + 3;
     NSInteger h = limits.height + 3;
-    egNormal3(((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
+    egNormal3(0.0, 0.0, 1.0);
     egTexCoord2(0.0, 0.0);
-    egVertex3(l, b, ((CGFloat)(0)));
+    egVertex3(l, b, 0.0);
     egTexCoord2(((CGFloat)(w)), 0.0);
-    egVertex3(r, b, ((CGFloat)(0)));
+    egVertex3(r, b, 0.0);
     egTexCoord2(((CGFloat)(w)), ((CGFloat)(h)));
-    egVertex3(r, t, ((CGFloat)(0)));
+    egVertex3(r, t, 0.0);
     egTexCoord2(0.0, ((CGFloat)(h)));
-    egVertex3(l, t, ((CGFloat)(0)));
+    egVertex3(l, t, 0.0);
     glEnd();
     glPopMatrix();
 }

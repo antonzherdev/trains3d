@@ -1,5 +1,6 @@
 #import "TRLevelFactory.h"
 
+#import "CNRange.h"
 #import "EGScene.h"
 #import "EGLayer.h"
 #import "EGMapIso.h"
@@ -31,10 +32,10 @@ static id<CNSeq> _rules;
         return ((NSInteger)([train.cars count] * 2000));
     } destructionFine:^NSInteger(TRTrain* train) {
         return ((NSInteger)([train.cars count] * 3000));
-    } delayPeriod:((CGFloat)(10)) delayFine:^NSInteger(TRTrain* train, NSInteger i) {
+    } delayPeriod:10.0 delayFine:^NSInteger(TRTrain* train, NSInteger i) {
         return i * 1000;
     } repairCost:2000];
-    _rules = (@[[TRLevelRules levelRulesWithMapSize:EGSizeIMake(5, 3) scoreRules:_scoreRules repairerSpeed:((NSUInteger)(30)) events:(@[tuple(@5, [TRLevelFactory trainCars:intTo(2, 5) speed:[intTo(30, 60) setStep:10]]), tuple(@15, [TRLevelFactory createNewCity])])]]);
+    _rules = (@[[TRLevelRules levelRulesWithMapSize:EGSizeIMake(5, 3) scoreRules:_scoreRules repairerSpeed:30 events:(@[tuple(@5, [TRLevelFactory trainCars:intTo(2, 5) speed:[intTo(30, 60) setStep:10]]), tuple(@15, [TRLevelFactory createNewCity])])]]);
 }
 
 + (EGScene*)sceneForLevel:(TRLevel*)level {
@@ -58,7 +59,7 @@ static id<CNSeq> _rules;
 }
 
 + (TRLevel*)levelWithMapSize:(EGSizeI)mapSize {
-    return [TRLevel levelWithRules:[TRLevelRules levelRulesWithMapSize:mapSize scoreRules:_scoreRules repairerSpeed:((NSUInteger)(30)) events:(@[])]];
+    return [TRLevel levelWithRules:[TRLevelRules levelRulesWithMapSize:mapSize scoreRules:_scoreRules repairerSpeed:30 events:(@[])]];
 }
 
 + (EGScene*)sceneForLevelWithNumber:(NSUInteger)number {

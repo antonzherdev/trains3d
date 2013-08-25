@@ -23,15 +23,15 @@ static NSArray* _TRColor_values;
 
 + (void)initialize {
     [super initialize];
-    _orange = [TRColor colorWithOrdinal:((NSUInteger)(0)) name:@"orange" color:EGColorMake(1.0, 0.5, 0.0, 1.0)];
-    _green = [TRColor colorWithOrdinal:((NSUInteger)(1)) name:@"green" color:EGColorMake(0.66, 0.9, 0.44, 1.0)];
-    _purple = [TRColor colorWithOrdinal:((NSUInteger)(2)) name:@"purple" color:EGColorMake(0.9, 0.44, 0.66, 1.0)];
-    _grey = [TRColor colorWithOrdinal:((NSUInteger)(3)) name:@"grey" color:EGColorMake(0.5, 0.5, 0.5, 1.0)];
+    _orange = [TRColor colorWithOrdinal:0 name:@"orange" color:EGColorMake(1.0, 0.5, 0.0, 1.0)];
+    _green = [TRColor colorWithOrdinal:1 name:@"green" color:EGColorMake(0.66, 0.9, 0.44, 1.0)];
+    _purple = [TRColor colorWithOrdinal:2 name:@"purple" color:EGColorMake(0.9, 0.44, 0.66, 1.0)];
+    _grey = [TRColor colorWithOrdinal:3 name:@"grey" color:EGColorMake(0.5, 0.5, 0.5, 1.0)];
     _TRColor_values = (@[_orange, _green, _purple, _grey]);
 }
 
 - (void)set {
-    egColorSet(_color);
+    egColor(_color);
 }
 
 - (void)setMaterial {

@@ -149,7 +149,7 @@
 }
 
 - (void)runTrain:(TRTrain*)train fromCity:(TRCity*)fromCity {
-    fromCity.expectedTrainAnimation = [CNOption opt:[EGAnimation animationWithLength:((CGFloat)(3)) finish:^void() {
+    fromCity.expectedTrainAnimation = [CNOption opt:[EGAnimation animationWithLength:3.0 finish:^void() {
         fromCity.expectedTrainAnimation = [CNOption none];
         [train startFromCity:fromCity];
         __trains = [__trains arrayByAddingObject:train];

@@ -258,7 +258,7 @@
 }
 
 - (EGLine*)perpendicularWithPoint:(EGPoint)point {
-    return [EGSlopeLine slopeLineWithSlope:((CGFloat)(0)) constant:point.y];
+    return [EGSlopeLine slopeLineWithSlope:0.0 constant:point.y];
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -513,14 +513,14 @@
 
 - (id<CNSeq>)segments {
     if(__segments == nil) {
-        CGFloat dx = ((CGFloat)(0));
-        CGFloat dy = ((CGFloat)(0));
+        CGFloat dx = 0.0;
+        CGFloat dy = 0.0;
         if([_segment isVertical]) {
             dx = _thickness_2;
-            dy = ((CGFloat)(0));
+            dy = 0.0;
         } else {
             if([_segment isHorizontal]) {
-                dx = ((CGFloat)(0));
+                dx = 0.0;
                 dy = _thickness_2;
             } else {
                 CGFloat k = [[_segment line] slope];

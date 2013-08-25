@@ -22,29 +22,29 @@
     [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight]];
     [railroad addDamageAtPoint:[TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight x:0.2 back:NO]];
     [railroad addDamageAtPoint:[TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight x:0.6 back:YES]];
-    __block id<CNSeq> damagesCount = (@[]);
-    TRRailPoint* p0 = [TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight x:((CGFloat)(0)) back:NO];
+    __block id<CNSeq> damagesCount = [ arrf(0) {}];
+    TRRailPoint* p0 = [TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight x:0.0 back:NO];
     TRRailPointCorrection* p1 = [railroad moveWithObstacleProcessor:^BOOL(TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount arrayByAddingObject:numf(o.point.x)];
         return YES;
-    } forLength:((CGFloat)(1)) point:p0];
-    [self assertEqualsA:damagesCount b:(@[@0.2, @0.4])];
-    [self assertEqualsA:numf(p1.error) b:numf(((CGFloat)(0)))];
-    [self assertEqualsA:numf(p1.point.x) b:numf(((CGFloat)(1)))];
-    damagesCount = (@[]);
+    } forLength:1.0 point:p0];
+    [self assertEqualsA:damagesCount b:[ arrf(2) {0.2, 0.4}]];
+    [self assertEqualsA:numf(p1.error) b:@0.0];
+    [self assertEqualsA:numf(p1.point.x) b:@1.0];
+    damagesCount = [ arrf(0) {}];
     TRRailPointCorrection* p00 = [railroad moveWithObstacleProcessor:^BOOL(TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount arrayByAddingObject:numf(o.point.x)];
         return YES;
-    } forLength:((CGFloat)(1)) point:[p1.point invert]];
-    [self assertEqualsA:damagesCount b:(@[@0.6, @0.8])];
-    [self assertEqualsA:numf(p00.error) b:numf(((CGFloat)(0)))];
-    [self assertEqualsA:numf(p00.point.x) b:numf(((CGFloat)(1)))];
-    damagesCount = (@[]);
+    } forLength:1.0 point:[p1.point invert]];
+    [self assertEqualsA:damagesCount b:[ arrf(2) {0.6, 0.8}]];
+    [self assertEqualsA:numf(p00.error) b:@0.0];
+    [self assertEqualsA:numf(p00.point.x) b:@1.0];
+    damagesCount = [ arrf(0) {}];
     TRRailPointCorrection* p01 = [railroad moveWithObstacleProcessor:^BOOL(TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount arrayByAddingObject:numf(o.point.x)];
         return NO;
-    } forLength:((CGFloat)(1)) point:[p1.point invert]];
-    [self assertEqualsA:damagesCount b:(@[@0.6])];
+    } forLength:1.0 point:[p1.point invert]];
+    [self assertEqualsA:damagesCount b:[ arrf(1) {0.6}]];
     [self assertEqualsA:numf(p01.error) b:@0.4];
     [self assertEqualsA:numf(p01.point.x) b:@0.6];
 }

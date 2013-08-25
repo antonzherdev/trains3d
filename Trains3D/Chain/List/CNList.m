@@ -70,9 +70,19 @@
     }] toArray];
 }
 
+- (BOOL)isEqualToSeq:(id<CNSeq>)seq {
+    if([self count] != [seq count]) return NO;
+    id<CNIterator> ia = [self iterator];
+    id<CNIterator> ib = [seq iterator];
+    while([ia hasNext] && [ib hasNext]) {
+        if(!([[ia next] isEqual:[ib next]])) return NO;
+    }
+    return YES;
+}
+
 - (NSUInteger)count {
     id<CNIterator> i = [self iterator];
-    NSUInteger n = ((NSUInteger)(0));
+    NSUInteger n = 0;
     while([i hasNext]) {
         [i next];
         n++;
@@ -116,6 +126,10 @@
     return NO;
 }
 
+- (NSString*)description {
+    return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
+}
+
 - (id)findWhere:(BOOL(^)(id))where {
     __block id ret = [CNOption none];
     [self goOn:^BOOL(id x) {
@@ -141,18 +155,13 @@
 
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
+    if(!(other)) return NO;
+    if([other conformsToProtocol:@protocol(CNSeq)]) return [self isEqualToSeq:((id<CNSeq>)(other))];
+    return NO;
 }
 
 - (NSUInteger)hash {
     return 0;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
 }
 
 @end

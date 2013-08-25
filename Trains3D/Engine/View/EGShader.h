@@ -1,6 +1,9 @@
 #import "objd.h"
 @class CNBundle;
+#import "EGGL.h"
 @class EGBuffer;
+@class EGVertexBuffer;
+@class EGIndexBuffer;
 @class EGMatrix;
 
 @class EGShaderProgram;
@@ -45,7 +48,7 @@
 
 + (id)shaderAttributeWithHandle:(GLint)handle;
 - (id)initWithHandle:(GLint)handle;
-- (NSUInteger)setFromBuffer:(EGBuffer*)buffer valuesCount:(NSUInteger)valuesCount valuesType:(GLenum)valuesType shift:(NSUInteger)shift;
+- (NSUInteger)setFromBuffer:(EGVertexBuffer*)buffer valuesCount:(NSUInteger)valuesCount valuesType:(GLenum)valuesType shift:(NSUInteger)shift;
 @end
 
 

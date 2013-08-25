@@ -30,7 +30,7 @@
 }
 
 - (EGPoint)location {
-    return [self locationForDepth:((CGFloat)(0))];
+    return [self locationForDepth:0.0];
 }
 
 - (EGPoint)locationForDepth:(CGFloat)depth {

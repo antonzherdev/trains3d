@@ -2,7 +2,6 @@
 
 #import "EGTexture.h"
 #import "EGMatrix.h"
-#import "EGGL.h"
 @implementation EGContext{
     NSMutableDictionary* _textureCache;
     EGMutableMatrix* _modelMatrix;

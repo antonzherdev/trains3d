@@ -3,7 +3,6 @@
 #import "TR3DRailTurn.h"
 #import "TR3DSwitch.h"
 
-#import "EGGL.h"
 #import "EGModel.h"
 #import "TRRailroad.h"
 #import "TRRailPoint.h"
@@ -90,8 +89,8 @@
     glPushMatrix();
     egTranslate(((CGFloat)(rail.tile.x)), ((CGFloat)(rail.tile.y)), 0.001);
     if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
-        if(rail.form == TRRailForm.leftRight) egRotate(((CGFloat)(90)), ((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
-        egRotate(((CGFloat)(90)), ((CGFloat)(1)), ((CGFloat)(0)), ((CGFloat)(0)));
+        if(rail.form == TRRailForm.leftRight) egRotate(90.0, 0.0, 0.0, 1.0);
+        egRotate(90.0, 1.0, 0.0, 0.0);
         [EGMaterial.stone set];
         [[EG textureForFile:@"Gravel.png"] draw:^void() {
             egDrawJasModel(RailGravel);
@@ -102,15 +101,15 @@
         egDrawJasModel(Rails);
     } else {
         if(rail.form == TRRailForm.topRight) {
-            egRotate(((CGFloat)(270)), ((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
+            egRotate(270.0, 0.0, 0.0, 1.0);
         } else {
             if(rail.form == TRRailForm.bottomRight) {
-                egRotate(((CGFloat)(180)), ((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
+                egRotate(180.0, 0.0, 0.0, 1.0);
             } else {
-                if(rail.form == TRRailForm.leftBottom) egRotate(((CGFloat)(90)), ((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
+                if(rail.form == TRRailForm.leftBottom) egRotate(90.0, 0.0, 0.0, 1.0);
             }
         }
-        egRotate(((CGFloat)(90)), ((CGFloat)(1)), ((CGFloat)(0)), ((CGFloat)(0)));
+        egRotate(90.0, 1.0, 0.0, 0.0);
         egColor3(0.5, 0.5, 0.5);
         [EGMaterial.stone set];
         [[EG textureForFile:@"Gravel.png"] draw:^void() {
@@ -163,13 +162,13 @@
     TRRailConnector* connector = theSwitch.connector;
     glPushMatrix();
     egTranslate(((CGFloat)(theSwitch.tile.x)), ((CGFloat)(theSwitch.tile.y)), 0.03);
-    egRotate(((CGFloat)(connector.angle)), ((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
+    egRotate(((CGFloat)(connector.angle)), 0.0, 0.0, 1.0);
     TRRail* rail = [theSwitch activeRail];
     TRRailForm* form = rail.form;
     [EGMaterial.emerald set];
-    egTranslate(-0.5, ((CGFloat)(0)), ((CGFloat)(0)));
+    egTranslate(-0.5, 0.0, 0.0);
     if(form.start.x + form.end.x == 0) {
-        egRotate(((CGFloat)(90)), ((CGFloat)(1)), ((CGFloat)(0)), ((CGFloat)(0)));
+        egRotate(90.0, 1.0, 0.0, 0.0);
         egDrawJasModel(SwitchStraight);
     } else {
         TRRailConnector* otherConnector = ((form.start == connector) ? form.end : form.start);
@@ -177,8 +176,8 @@
         NSInteger y = connector.y;
         NSInteger ox = otherConnector.x;
         NSInteger oy = otherConnector.y;
-        if((x == -1 && oy == -1) || (y == 1 && ox == -1) || (y == -1 && ox == 1) || (x == 1 && oy == 1)) egScale(((CGFloat)(1)), ((CGFloat)(-1)), ((CGFloat)(1)));
-        egRotate(((CGFloat)(90)), ((CGFloat)(1)), ((CGFloat)(0)), ((CGFloat)(0)));
+        if((x == -1 && oy == -1) || (y == 1 && ox == -1) || (y == -1 && ox == 1) || (x == 1 && oy == 1)) egScale(1.0, -1.0, 1.0);
+        egRotate(90.0, 1.0, 0.0, 0.0);
         egDrawJasModel(SwitchTurn);
     }
     glPopMatrix();
@@ -221,9 +220,9 @@
 
 - (void)drawLight:(TRLight*)light {
     glPushMatrix();
-    egTranslate(((CGFloat)(light.tile.x)), ((CGFloat)(light.tile.y)), ((CGFloat)(0)));
-    egRotate(((CGFloat)(light.connector.angle)), ((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
-    egTranslate(-0.45, 0.2, ((CGFloat)(0)));
+    egTranslate(((CGFloat)(light.tile.x)), ((CGFloat)(light.tile.y)), 0.0);
+    egRotate(((CGFloat)(light.connector.angle)), 0.0, 0.0, 1.0);
+    egTranslate(-0.45, 0.2, 0.0);
     if(light.isGreen) [EGMaterial.emerald set];
     else [EGMaterial.ruby set];
     glutSolidCube(0.1);
@@ -269,7 +268,7 @@
     glPushMatrix();
     egTranslate(point.point.x, point.point.y, 0.01);
     egColor4(1.0, 0.0, 0.0, 0.5);
-    egNormal3(((CGFloat)(0)), ((CGFloat)(0)), ((CGFloat)(1)));
+    egNormal3(0.0, 0.0, 1.0);
     egRect(-0.1, -0.1, 0.1, 0.1);
     glPopMatrix();
 }
