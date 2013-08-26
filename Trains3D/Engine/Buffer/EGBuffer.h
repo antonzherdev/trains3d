@@ -1,6 +1,7 @@
 #import "objd.h"
 @class CNPArray;
 @class CNPArrayIterator;
+@class EG;
 #import "EGGL.h"
 
 @class EGBuffer;
@@ -19,7 +20,7 @@
 - (id)setData:(CNPArray*)data;
 - (id)setData:(CNPArray*)data usage:(GLenum)usage;
 - (void)bind;
-- (void)clear;
+- (void)unbind;
 @end
 
 

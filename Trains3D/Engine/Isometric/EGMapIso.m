@@ -2,8 +2,14 @@
 
 #import "CNChain.h"
 #import "CNRange.h"
+#import "CNData.h"
+#import "EG.h"
 #import "EGMap.h"
+#import "EGModel.h"
+#import "EGStandardShader.h"
 #import "EGBuffer.h"
+#import "EGShader.h"
+#import "EGContext.h"
 @implementation EGMapSso{
     EGSizeI _size;
     EGRectI _limits;
@@ -99,8 +105,10 @@ static CGFloat _ISO = 0.70710676908493;
 
 @implementation EGMapSsoView{
     EGMapSso* _map;
+    EGMesh* _plane;
 }
 @synthesize map = _map;
+@synthesize plane = _plane;
 
 + (id)mapSsoViewWithMap:(EGMapSso*)map {
     return [[EGMapSsoView alloc] initWithMap:map];
@@ -108,7 +116,10 @@ static CGFloat _ISO = 0.70710676908493;
 
 - (id)initWithMap:(EGMapSso*)map {
     self = [super init];
-    if(self) _map = map;
+    if(self) {
+        _map = map;
+        _plane = [self createPlane];
+    }
     
     return self;
 }
@@ -152,8 +163,7 @@ static CGFloat _ISO = 0.70710676908493;
     egMapDrawAxis();
 }
 
-- (void)drawPlane {
-    glBegin(GL_QUADS);
+- (EGMesh*)createPlane {
     EGRectI limits = _map.limits;
     CGFloat l = limits.x - 1.5;
     CGFloat r = egRectIX2(limits) + 1.5;
@@ -161,17 +171,11 @@ static CGFloat _ISO = 0.70710676908493;
     CGFloat b = egRectIY2(limits) + 1.5;
     NSInteger w = limits.width + 3;
     NSInteger h = limits.height + 3;
-    egNormal3(0.0, 0.0, 1.0);
-    egTexCoord2(0.0, 0.0);
-    egVertex3(l, b, 0.0);
-    egTexCoord2(((CGFloat)(w)), 0.0);
-    egVertex3(r, b, 0.0);
-    egTexCoord2(((CGFloat)(w)), ((CGFloat)(h)));
-    egVertex3(r, t, 0.0);
-    egTexCoord2(0.0, ((CGFloat)(h)));
-    egVertex3(l, t, 0.0);
-    glEnd();
-    glPopMatrix();
+    return [EGMesh applyVertexData:[ arrf4(32) {0, 0, 0, 0, 1, l, b, 0, w, 0, 0, 0, 1, r, b, 0, w, h, 0, 0, 1, r, t, 0, 0, h, 0, 0, 1, l, t, 0}] index:[ arruc(6) {0, 1, 2, 2, 3, 0}]];
+}
+
+- (void)drawPlane {
+    [_plane draw];
 }
 
 - (id)copyWithZone:(NSZone*)zone {

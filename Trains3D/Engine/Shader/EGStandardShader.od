@@ -1,0 +1,26 @@
+import CNTypes
+
+import EG
+import EGGL
+import EGShader
+import EGTypes
+import EGContext
+
+class EGStandardShader(program : EGShaderProgram) extends EGShader(program) {
+    static val STRIDE = 8*4
+    static val POSITION_SHIFT = 5*4
+}
+
+class EGSimpleColorShader extends EGStandardShader(EGShaderProgram.loadFromFiles("Simple.vsh", "SimpleColor.fsh")) {
+    var color = EGColor(1, 1, 1, 1)
+
+    val positionSlot : EGShaderAttribute = attributeFor("position")
+    val colorUniform = uniformFor("color")
+    val mvpUniform = uniformFor("mvp")
+
+    def load {
+        positionSlot.setFromBufferWith(STRIDE, valuesCount = 3, GL_FLOAT, POSITION_SHIFT)
+        mvpUniform.set(matrix = EG.context.mvp)
+        colorUniform.set(color = color)
+    }
+}

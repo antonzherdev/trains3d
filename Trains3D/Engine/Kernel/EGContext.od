@@ -12,7 +12,7 @@ class EGContext {
     val modelMatrix = EGMutableMatrix()
     val viewMatrix = EGMutableMatrix()
     val projectionMatrix = EGMutableMatrix()
-    def mvp : EGMatrix = modelMatrix.value.multiply(viewMatrix.value).multiply(projectionMatrix.value)
+    def mvp : EGMatrix = projectionMatrix.value.multiply(viewMatrix.value).multiply(modelMatrix.value)
 
     def clearMatrix {
         modelMatrix.clear

@@ -16,15 +16,15 @@ typedef struct EGMatrixImpl EGMatrixImpl;
 
 + (EGMatrix *)identity;
 
-- (CGFloat const *)array;
+- (float const *)array;
 
-+ (EGMatrix *)orthoLeft:(CGFloat)left right:(CGFloat)right bottom:(CGFloat)bottom top:(CGFloat)top zNear:(CGFloat)near zFar:(CGFloat)far;
++ (EGMatrix *)orthoLeft:(float)left right:(float)right bottom:(float)bottom top:(float)top zNear:(float)near zFar:(float)far;
 
-- (EGMatrix *)rotateAngle:(CGFloat)angle x:(CGFloat)x y:(CGFloat)y z:(CGFloat)z;
+- (EGMatrix *)rotateAngle:(float)angle x:(float)x y:(float)y z:(float)z;
 
-- (EGMatrix *)scaleX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z;
+- (EGMatrix *)scaleX:(float)x y:(float)y z:(float)z;
 
-- (EGMatrix *)translateX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z;
+- (EGMatrix *)translateX:(float)x y:(float)y z:(float)z;
 @end
 
 

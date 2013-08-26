@@ -2,11 +2,23 @@
 @class CNChain;
 @class CNRange;
 @class CNRangeIterator;
+@class CNPArray;
+@class CNPArrayIterator;
 #import "EGTypes.h"
+@class EG;
 #import "EGGL.h"
+@class EGMesh;
+@class EGStandardShader;
+@class EGSimpleColorShader;
 @class EGBuffer;
 @class EGVertexBuffer;
 @class EGIndexBuffer;
+@class EGShaderProgram;
+@class EGShader;
+@class EGShaderAttribute;
+@class EGShaderUniform;
+@class EGContext;
+@class EGMutableMatrix;
 
 @class EGMapSso;
 @class EGMapSsoView;
@@ -29,10 +41,12 @@
 
 @interface EGMapSsoView : NSObject
 @property (nonatomic, readonly) EGMapSso* map;
+@property (nonatomic, readonly) EGMesh* plane;
 
 + (id)mapSsoViewWithMap:(EGMapSso*)map;
 - (id)initWithMap:(EGMapSso*)map;
 - (void)drawLayout;
+- (EGMesh*)createPlane;
 - (void)drawPlane;
 @end
 

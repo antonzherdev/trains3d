@@ -35,7 +35,7 @@
 }
 
 - (EGMatrix*)mvp {
-    return [[[_modelMatrix value] multiply:[_viewMatrix value]] multiply:[_projectionMatrix value]];
+    return [[[_projectionMatrix value] multiply:[_viewMatrix value]] multiply:[_modelMatrix value]];
 }
 
 - (void)clearMatrix {
@@ -115,22 +115,22 @@
 
 - (void)rotateAngle:(CGFloat)angle x:(CGFloat)x y:(CGFloat)y z:(CGFloat)z {
     egRotate(angle, x, y, z);
-    __value = [__value rotateAngle:angle x:x y:y z:z];
+    __value = [__value rotateAngle:((float)(angle)) x:((float)(x)) y:((float)(y)) z:((float)(z))];
 }
 
 - (void)scaleX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z {
     egScale(x, y, z);
-    __value = [__value scaleX:x y:y z:z];
+    __value = [__value scaleX:((float)(x)) y:((float)(y)) z:((float)(z))];
 }
 
 - (void)translateX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z {
     egTranslate(x, y, z);
-    __value = [__value translateX:x y:y z:z];
+    __value = [__value translateX:((float)(x)) y:((float)(y)) z:((float)(z))];
 }
 
 - (void)orthoLeft:(CGFloat)left right:(CGFloat)right bottom:(CGFloat)bottom top:(CGFloat)top zNear:(CGFloat)zNear zFar:(CGFloat)zFar {
     glOrtho(left, right, bottom, top, zNear, zFar);
-    __value = [EGMatrix orthoLeft:left right:right bottom:bottom top:top zNear:zNear zFar:zFar];
+    __value = [EGMatrix orthoLeft:((float)(left)) right:((float)(right)) bottom:((float)(bottom)) top:((float)(top)) zNear:((float)(zNear)) zFar:((float)(zFar))];
 }
 
 - (id)copyWithZone:(NSZone*)zone {

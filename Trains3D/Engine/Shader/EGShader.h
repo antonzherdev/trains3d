@@ -1,10 +1,15 @@
 #import "objd.h"
 @class CNBundle;
+#import "CNTypes.h"
+@class EG;
 #import "EGGL.h"
 @class EGBuffer;
 @class EGVertexBuffer;
 @class EGIndexBuffer;
 @class EGMatrix;
+@class EGContext;
+@class EGMutableMatrix;
+#import "EGTypes.h"
 
 @class EGShaderProgram;
 @class EGShader;
@@ -44,20 +49,21 @@
 
 
 @interface EGShaderAttribute : NSObject
-@property (nonatomic, readonly) GLint handle;
+@property (nonatomic, readonly) GLuint handle;
 
-+ (id)shaderAttributeWithHandle:(GLint)handle;
-- (id)initWithHandle:(GLint)handle;
-- (NSUInteger)setFromBuffer:(EGVertexBuffer*)buffer valuesCount:(NSUInteger)valuesCount valuesType:(GLenum)valuesType shift:(NSUInteger)shift;
++ (id)shaderAttributeWithHandle:(GLuint)handle;
+- (id)initWithHandle:(GLuint)handle;
+- (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(GLenum)valuesType shift:(NSUInteger)shift;
 @end
 
 
 @interface EGShaderUniform : NSObject
-@property (nonatomic, readonly) GLint handle;
+@property (nonatomic, readonly) GLuint handle;
 
-+ (id)shaderUniformWithHandle:(GLint)handle;
-- (id)initWithHandle:(GLint)handle;
++ (id)shaderUniformWithHandle:(GLuint)handle;
+- (id)initWithHandle:(GLuint)handle;
 - (void)setMatrix:(EGMatrix*)matrix;
+- (void)setColor:(EGColor)color;
 @end
 
 

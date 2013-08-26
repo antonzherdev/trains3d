@@ -1,1 +1,19 @@
-stub def egDrawJasModel(name : string)
+import CNData
+
+import EGBuffer
+import EGStandardShader
+import EGTypes
+
+class EGMesh(vertexBuffer : EGVertexBuffer<float4>, indexBuffer : EGIndexBuffer<ubyte>) {
+    static def apply(vertexData : CNPArray<float4>, index : CNPArray<ubyte>) : EGMesh =
+        EGMesh(vertexBuffer = EGVertexBuffer<float4>(8*4).set(vertexData), indexBuffer = EGIndexBuffer<ubyte>().set(index))
+    val shader = EGSimpleColorShader()
+    def draw {
+        vertexBuffer.bind
+        shader.color = EGColor(0, 1, 0, 1)
+        shader.draw({
+            indexBuffer.draw
+        })
+        vertexBuffer.unbind
+    }
+}

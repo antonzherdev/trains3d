@@ -1,8 +1,24 @@
-#define egDrawJasModel(NAME) {\
-    glEnableClientState(GL_INDEX_ARRAY);\
-    glEnableClientState(GL_NORMAL_ARRAY);\
-    glEnableClientState(GL_VERTEX_ARRAY);\
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);\
-    glInterleavedArrays(GL_T2F_N3F_V3F,0,NAME ## _vertex);\
-	glDrawElements(GL_TRIANGLES,NAME ## _polygoncount*3,GL_UNSIGNED_INT,NAME ## _index);\
-}
+#import "objd.h"
+@class CNPArray;
+@class CNPArrayIterator;
+@class EGBuffer;
+@class EGVertexBuffer;
+@class EGIndexBuffer;
+@class EGStandardShader;
+@class EGSimpleColorShader;
+#import "EGTypes.h"
+
+@class EGMesh;
+
+@interface EGMesh : NSObject
+@property (nonatomic, readonly) EGVertexBuffer* vertexBuffer;
+@property (nonatomic, readonly) EGIndexBuffer* indexBuffer;
+@property (nonatomic, readonly) EGSimpleColorShader* shader;
+
++ (id)meshWithVertexBuffer:(EGVertexBuffer*)vertexBuffer indexBuffer:(EGIndexBuffer*)indexBuffer;
+- (id)initWithVertexBuffer:(EGVertexBuffer*)vertexBuffer indexBuffer:(EGIndexBuffer*)indexBuffer;
++ (EGMesh*)applyVertexData:(CNPArray*)vertexData index:(CNPArray*)index;
+- (void)draw;
+@end
+
+

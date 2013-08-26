@@ -1,8 +1,12 @@
 import CNFile
+import CNTypes
 
+import EG
 import EGGL
 import EGBuffer
 import EGMatrix
+import EGContext
+import EGTypes
 
 class EGShaderProgram(handle : GLuint) {
     static def loadFromFiles(vertex : string, fragment : string) : EGShaderProgram =
@@ -53,12 +57,17 @@ class EGShaderProgram(handle : GLuint) {
         glUseProgram(0)
     }
 
-    def attributeFor(name : string ) = {
-        val ret = EGShaderAttribute(egGetAttribLocation(handle, name))
-        glEnableVertexAttribArray(ret.handle)
+    def attributeFor(name : string ) : EGShaderAttribute = {
+        val h = egGetAttribLocation(handle, name)
+        if(h < 0) throw "Could not found attribute for name " + name
+        val ret = EGShaderAttribute(h)
         ret
     }
-    def uniformFor(name : string ) = EGShaderUniform(egGetUniformLocation(handle, name))
+    def uniformFor(name : string ) : EGShaderUniform = {
+        val h = egGetUniformLocation(handle, name)
+        if(h < 0) throw "Could not found attribute for name " + name
+        EGShaderUniform(h)
+    }
 }
 
 class EGShader(program : EGShaderProgram) {
@@ -84,19 +93,19 @@ class EGShader(program : EGShaderProgram) {
     def uniformFor(name : string ) = program.uniformFor(name)
 }
 
-class EGShaderAttribute(handle : GLint) {
-    def setFrom(buffer : EGVertexBuffer, valuesCount : uint, valuesType : GLenum, shift : uint) : uint = {
-        egVertexAttribPointer(handle, valuesCount, valuesType, GL_FALSE, buffer.stride, shift)
-        if(valuesType == GL_DOUBLE) valuesCount*8 + shift
-        else if(valuesType == GL_FLOAT) valuesCount*4 + shift
-        else if(valuesType == GL_BYTE) valuesCount + shift
-        else if(valuesType == GL_UNSIGNED_BYTE) valuesCount + shift
-        else throw "Unknown type"
+class EGShaderAttribute(handle : GLuint) {
+    def setFromBufferWith(stride : uint, valuesCount : uint, valuesType : GLenum, shift : uint) {
+        glEnableVertexAttribArray(handle)
+        egVertexAttribPointer(handle, valuesCount, valuesType, GL_FALSE, stride, shift)
     }
 }
 
-class EGShaderUniform(handle : GLint) {
+class EGShaderUniform(handle : GLuint) {
     def set(matrix : EGMatrix) {
         glUniformMatrix4fv(handle, 1, GL_FALSE, matrix.array)
     }
+    def set(color : EGColor) {
+        egUniformColor(handle, color)
+    }
 }
+

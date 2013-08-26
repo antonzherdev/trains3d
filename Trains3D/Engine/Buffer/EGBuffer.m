@@ -1,6 +1,7 @@
 #import "EGBuffer.h"
 
 #import "CNData.h"
+#import "EG.h"
 @implementation EGBuffer{
     GLenum _bufferType;
     GLuint _handle;
@@ -44,7 +45,7 @@
     glBindBuffer(_bufferType, _handle);
     glBufferData(_bufferType, data.length, data.bytes, GL_STATIC_DRAW);
     glBindBuffer(_bufferType, 0);
-    __length = [self length];
+    __length = data.length;
     return self;
 }
 
@@ -52,7 +53,7 @@
     glBindBuffer(_bufferType, _handle);
 }
 
-- (void)clear {
+- (void)unbind {
     glBindBuffer(_bufferType, 0);
 }
 
@@ -153,7 +154,7 @@
 - (void)draw {
     [self bind];
     glDrawElements(GL_TRIANGLES, [self length], GL_UNSIGNED_BYTE, 0);
-    [self clear];
+    [self unbind];
 }
 
 - (id)copyWithZone:(NSZone*)zone {

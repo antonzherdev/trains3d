@@ -1,11 +1,11 @@
 stub class EGMatrix {
-    def array : float[16]
+    def array : float4[16]
 
     static def identity : EGMatrix
 
     def multiply( : EGMatrix) : EGMatrix
-    def rotate(angle : float, x : float, y : float, z : float) : EGMatrix
-    def scale(x : float, y : float, z : float) : EGMatrix
-    def translate(x : float, y : float, z : float) : EGMatrix
-    static def ortho(left : float, right : float, bottom : float, top : float, zNear : float, zFar : float) : EGMatrix
+    def rotate(angle : float4, x : float4, y : float4, z : float4) : EGMatrix
+    def scale(x : float4, y : float4, z : float4) : EGMatrix
+    def translate(x : float4, y : float4, z : float4) : EGMatrix
+    static def ortho(left : float4, right : float4, bottom : float4, top : float4, zNear : float4, zFar : float4) : EGMatrix
 }

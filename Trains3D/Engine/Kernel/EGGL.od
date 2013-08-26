@@ -53,7 +53,8 @@ stub val GL_MODELVIEW : uint
 stub def glLoadIdentity
 stub def glOrtho(left : float, right : float, bottom : float, top : float, zNear : float, zFar : float)
 stub def egModelViewProjectionMatrix : EGMatrix
-stub def glUniformMatrix4fv(location : GLint, count : GLsizei, transpose : GLboolean, value : [float4])
+stub def glUniformMatrix4fv(location : GLuint, count : GLsizei, transpose : GLboolean, value : [float4])
+stub def egUniformColor(location : GLuint, color : EGColor)
 
 
 stub def egAmbientColor(r : float, g : float, b : float)
@@ -101,7 +102,9 @@ stub def glBindBuffer(target : GLenum, handle : GLuint) : GLuint
 stub def glBufferData(target : GLenum, size : GLsizeiptr, data : [void], usage : GLenum)
 stub def egVertexAttribPointer(slot : GLuint, size : uint, tp : GLenum, normalized : GLboolean, stride : uint, shift : uint)
 stub def glDrawElements(mode : GLenum, count : GLsizei, tp : GLenum, indices : [void])
+stub def glDrawArrays(mode : GLenum, first : GLint, count : GLsizei)
 stub def glEnableVertexAttribArray(handle : GLint)
+stub def glDisableVertexAttribArray(handle : GLint)
 
 stub val GL_TRIANGLES : GLenum
 
@@ -112,3 +115,5 @@ stub val GL_UNSIGNED_BYTE : GLenum
 
 stub val GL_TRUE : GLboolean
 stub val GL_FALSE : GLboolean
+
+stub def egDrawJasModel(name : string)

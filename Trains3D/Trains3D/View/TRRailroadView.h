@@ -1,5 +1,6 @@
 #import "objd.h"
 #import "EGGL.h"
+@class EGMesh;
 @class TRRailroadConnectorContent;
 @class TREmptyConnector;
 @class TRRail;

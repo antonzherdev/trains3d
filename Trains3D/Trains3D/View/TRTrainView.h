@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "EGGL.h"
 #import "EGTypes.h"
+@class EGMesh;
 @class EGMaterial;
 @class TRTrainType;
 @class TRTrain;

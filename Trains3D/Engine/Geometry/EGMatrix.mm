@@ -1,8 +1,8 @@
 #import "EGMatrix.h"
 
-#if defined(__LP64__) && __LP64__
-#define GLM_PRECISION_HIGHP_FLOAT
-#endif
+//#if defined(__LP64__) && __LP64__
+//#define GLM_PRECISION_HIGHP_FLOAT
+//#endif
 
 #include "glm.hpp"
 #include "matrix_transform.hpp"
@@ -68,7 +68,7 @@ static EGMatrix* _identity;
     return self;
 }
 
-+ (EGMatrix *)orthoLeft:(CGFloat)left right:(CGFloat)right bottom:(CGFloat)bottom top:(CGFloat)top zNear:(CGFloat)near zFar:(CGFloat)far {
++ (EGMatrix *)orthoLeft:(float)left right:(float)right bottom:(float)bottom top:(float)top zNear:(float)near zFar:(float)far {
     EGMatrixImpl* impl = new EGMatrixImpl;
     impl->m = glm::ortho(left, right, bottom, top, near, far);
     return [EGMatrix matrixWithImpl:impl];
@@ -85,27 +85,41 @@ static EGMatrix* _identity;
     return memcmp(_impl, o.impl, sizeof(double[16])) == 0;
 }
 
-- (CGFloat const *)array {
+- (float const *)array {
     return glm::value_ptr(_impl->m);
 }
 
-- (EGMatrix *)rotateAngle:(CGFloat)angle x:(CGFloat)x y:(CGFloat)y z:(CGFloat)z {
+- (EGMatrix *)rotateAngle:(float)angle x:(float)x y:(float)y z:(float)z {
     EGMatrixImpl* impl = new EGMatrixImpl;
     impl->m = glm::rotate(_impl->m, angle, glm::vec3(x, y, z));
     return [EGMatrix matrixWithImpl:impl];
 }
 
-- (EGMatrix *)scaleX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z {
+- (EGMatrix *)scaleX:(float)x y:(float)y z:(float)z {
     EGMatrixImpl* impl = new EGMatrixImpl;
     impl->m = glm::scale(_impl->m, glm::vec3(x, y, z));
     return [EGMatrix matrixWithImpl:impl];
 }
 
-- (EGMatrix *)translateX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z {
+- (EGMatrix *)translateX:(float)x y:(float)y z:(float)z {
     EGMatrixImpl* impl = new EGMatrixImpl;
     impl->m = glm::translate(_impl->m, glm::vec3(x, y, z));
     return [EGMatrix matrixWithImpl:impl];
 }
+
+- (NSString*)description {
+    float const *m = [self array];
+    return [NSString stringWithFormat:
+            @"[%f, %f, %f, %f,\n"
+                    " %f, %f, %f, %f,\n"
+                    " %f, %f, %f, %f,\n"
+                    " %f, %f, %f, %f]",
+            m[0], m[4], m[8],  m[12],
+            m[1], m[5], m[9],  m[13],
+            m[2], m[6], m[10], m[14],
+            m[3], m[7], m[11], m[15]];
+}
+
 @end
 
 

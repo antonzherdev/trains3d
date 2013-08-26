@@ -1,8 +1,10 @@
 #import "EGShader.h"
 
 #import "CNFile.h"
+#import "EG.h"
 #import "EGBuffer.h"
 #import "EGMatrix.h"
+#import "EGContext.h"
 @implementation EGShaderProgram{
     GLuint _handle;
 }
@@ -72,13 +74,16 @@
 }
 
 - (EGShaderAttribute*)attributeForName:(NSString*)name {
-    EGShaderAttribute* ret = [EGShaderAttribute shaderAttributeWithHandle:egGetAttribLocation(_handle, name)];
-    glEnableVertexAttribArray(ret.handle);
+    GLint h = egGetAttribLocation(_handle, name);
+    if(h < 0) @throw [@"Could not found attribute for name " stringByAppendingString:name];
+    EGShaderAttribute* ret = [EGShaderAttribute shaderAttributeWithHandle:h];
     return ret;
 }
 
 - (EGShaderUniform*)uniformForName:(NSString*)name {
-    return [EGShaderUniform shaderUniformWithHandle:egGetUniformLocation(_handle, name)];
+    GLint h = egGetUniformLocation(_handle, name);
+    if(h < 0) @throw [@"Could not found attribute for name " stringByAppendingString:name];
+    return [EGShaderUniform shaderUniformWithHandle:h];
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -180,37 +185,24 @@
 
 
 @implementation EGShaderAttribute{
-    GLint _handle;
+    GLuint _handle;
 }
 @synthesize handle = _handle;
 
-+ (id)shaderAttributeWithHandle:(GLint)handle {
++ (id)shaderAttributeWithHandle:(GLuint)handle {
     return [[EGShaderAttribute alloc] initWithHandle:handle];
 }
 
-- (id)initWithHandle:(GLint)handle {
+- (id)initWithHandle:(GLuint)handle {
     self = [super init];
     if(self) _handle = handle;
     
     return self;
 }
 
-- (NSUInteger)setFromBuffer:(EGVertexBuffer*)buffer valuesCount:(NSUInteger)valuesCount valuesType:(GLenum)valuesType shift:(NSUInteger)shift {
-    egVertexAttribPointer(_handle, valuesCount, valuesType, GL_FALSE, buffer.stride, shift);
-    if(GLenumEq(valuesType, GL_DOUBLE)) {
-        return valuesCount * 8 + shift;
-    } else {
-        if(GLenumEq(valuesType, GL_FLOAT)) {
-            return valuesCount * 4 + shift;
-        } else {
-            if(GLenumEq(valuesType, GL_BYTE)) {
-                return valuesCount + shift;
-            } else {
-                if(GLenumEq(valuesType, GL_UNSIGNED_BYTE)) return valuesCount + shift;
-                else @throw @"Unknown type";
-            }
-        }
-    }
+- (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(GLenum)valuesType shift:(NSUInteger)shift {
+    glEnableVertexAttribArray(_handle);
+    egVertexAttribPointer(_handle, valuesCount, valuesType, GL_FALSE, stride, shift);
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -221,18 +213,18 @@
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGShaderAttribute* o = ((EGShaderAttribute*)(other));
-    return GLintEq(self.handle, o.handle);
+    return GLuintEq(self.handle, o.handle);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + GLintHash(self.handle);
+    hash = hash * 31 + GLuintHash(self.handle);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"handle=%@", GLintDescription(self.handle)];
+    [description appendFormat:@"handle=%@", GLuintDescription(self.handle)];
     [description appendString:@">"];
     return description;
 }
@@ -241,15 +233,15 @@
 
 
 @implementation EGShaderUniform{
-    GLint _handle;
+    GLuint _handle;
 }
 @synthesize handle = _handle;
 
-+ (id)shaderUniformWithHandle:(GLint)handle {
++ (id)shaderUniformWithHandle:(GLuint)handle {
     return [[EGShaderUniform alloc] initWithHandle:handle];
 }
 
-- (id)initWithHandle:(GLint)handle {
+- (id)initWithHandle:(GLuint)handle {
     self = [super init];
     if(self) _handle = handle;
     
@@ -260,6 +252,10 @@
     glUniformMatrix4fv(_handle, 1, GL_FALSE, [matrix array]);
 }
 
+- (void)setColor:(EGColor)color {
+    egUniformColor(_handle, color);
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -268,18 +264,18 @@
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGShaderUniform* o = ((EGShaderUniform*)(other));
-    return GLintEq(self.handle, o.handle);
+    return GLuintEq(self.handle, o.handle);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + GLintHash(self.handle);
+    hash = hash * 31 + GLuintHash(self.handle);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"handle=%@", GLintDescription(self.handle)];
+    [description appendFormat:@"handle=%@", GLuintDescription(self.handle)];
     [description appendString:@">"];
     return description;
 }

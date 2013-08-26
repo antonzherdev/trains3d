@@ -1,10 +1,16 @@
 import CNChain
 import CNRange
+import CNData
 
 import EGTypes
+import EG
 import EGGL
 import EGMap
+import EGModel
+import EGStandardShader
 import EGBuffer
+import EGShader
+import EGContext
 
 class EGMapSso(size : EGSizeI) {
     static val ISO = 0.70710676908493
@@ -102,24 +108,26 @@ class EGMapSsoView(map : EGMapSso) {
         egMapDrawAxis
     }
 
-    def drawPlane {
-        glBegin(GL_QUADS)
-        {
-            val limits = map.limits
-            val l = limits.x - 1.5
-            val r = limits.x2 + 1.5
-            val t = limits.y - 1.5
-            val b = limits.y2 + 1.5
-            val w = limits.width + 3
-            val h = limits.height + 3
-            egNormal3(0, 0, 1)
-            egTexCoord2(0.0, 0.0) egVertex3(l, b, 0)
-            egTexCoord2(w, 0.0) egVertex3(r, b, 0)
-            egTexCoord2(w, h) egVertex3(r, t, 0)
-            egTexCoord2(0.0, h) egVertex3(l, t, 0)
-        }
-        glEnd
-        glPopMatrix
+
+    val plane : EGMesh = createPlane
+    def createPlane : EGMesh = {
+        val limits = map.limits
+        val l = limits.x - 1.5
+        val r = limits.x2 + 1.5
+        val t = limits.y - 1.5
+        val b = limits.y2 + 1.5
+        val w = limits.width + 3
+        val h = limits.height + 3
+        EGMesh([
+            0, 0, 0, 0, 1, l, b, 0,
+            w, 0, 0, 0, 1, r, b, 0,
+            w, h, 0, 0, 1, r, t, 0,
+            0, h, 0, 0, 1, l, t, 0
+        ], [0, 1, 2,
+            2, 3, 0])
     }
 
+    def drawPlane {
+        plane.draw
+    }
 }
