@@ -9,11 +9,11 @@ class EGMesh(vertexBuffer : EGVertexBuffer<float4>, indexBuffer : EGIndexBuffer<
     static def apply(vertexData : CNPArray<float4>, index : CNPArray<ubyte>) : EGMesh =
         EGMesh(vertexBuffer = EGVertexBuffer<float4>(8*4).set(vertexData), indexBuffer = EGIndexBuffer<ubyte>().set(index))
     def drawWith(material : EGMaterial2) {
-        vertexBuffer({
-            material({
+        vertexBuffer {
+            material {
                 indexBuffer.draw
-            })
-        })
+            }
+        }
     }
 }
 

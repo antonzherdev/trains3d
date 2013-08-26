@@ -49,13 +49,13 @@ class TRLevel(rules : TRLevelRules) extends EGController {
 
     private def randomCityDirectionFor(tile : EGPointI) = {
         val cut = map.cutRectFor(tile)
-        TRCityAngle.values.chain.filter(a -> {
+        TRCityAngle.values.chain.filter{a ->
             val angle = a.angle
-            {(angle == 0 && cut.x2 == 0 && cut.y2 == 0)
+            (angle == 0 && cut.x2 == 0 && cut.y2 == 0)
             || (angle == 90 && cut.x == 0 && cut.y2 == 0)
             || (angle == 180 && cut.x == 0 && cut.y == 0)
-            || (angle == 270 && cut.x2 == 0 && cut.y == 0)}
-        }).randomItem.get
+            || (angle == 270 && cut.x2 == 0 && cut.y == 0)
+        }.randomItem.get
     }
 
     private def run(train : TRTrain, fromCity : TRCity) {
