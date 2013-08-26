@@ -1,5 +1,282 @@
 #import "EGMaterial.h"
 
+#import "EG.h"
+#import "EGContext.h"
+#import "EGShader.h"
+#import "EGStandardShader.h"
+#import "EGTexture.h"
+@implementation EGColorSource
+
++ (id)colorSource {
+    return [[EGColorSource alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGColorSourceColor{
+    EGColor _color;
+}
+@synthesize color = _color;
+
++ (id)colorSourceColorWithColor:(EGColor)color {
+    return [[EGColorSourceColor alloc] initWithColor:color];
+}
+
+- (id)initWithColor:(EGColor)color {
+    self = [super init];
+    if(self) _color = color;
+    
+    return self;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGColorSourceColor* o = ((EGColorSourceColor*)(other));
+    return EGColorEq(self.color, o.color);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + EGColorHash(self.color);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"color=%@", EGColorDescription(self.color)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGColorSourceTexture{
+    EGTexture* _texture;
+}
+@synthesize texture = _texture;
+
++ (id)colorSourceTextureWithTexture:(EGTexture*)texture {
+    return [[EGColorSourceTexture alloc] initWithTexture:texture];
+}
+
+- (id)initWithTexture:(EGTexture*)texture {
+    self = [super init];
+    if(self) _texture = texture;
+    
+    return self;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGColorSourceTexture* o = ((EGColorSourceTexture*)(other));
+    return [self.texture isEqual:o.texture];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.texture hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"texture=%@", self.texture];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGMaterial2
+
++ (id)material2 {
+    return [[EGMaterial2 alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
+
+- (EGShader*)shaderForContext:(EGContext*)context {
+    @throw @"Method shaderFor is abstract";
+}
+
+- (void)applyDraw:(void(^)())draw {
+    [[self shaderForContext:[EG context]] applyDraw:draw];
+}
+
++ (EGMaterial2*)applyColor:(EGColor)color {
+    return [EGMaterialColor materialColorWithColor:color];
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGMaterialColor{
+    EGColor _color;
+}
+@synthesize color = _color;
+
++ (id)materialColorWithColor:(EGColor)color {
+    return [[EGMaterialColor alloc] initWithColor:color];
+}
+
+- (id)initWithColor:(EGColor)color {
+    self = [super init];
+    if(self) _color = color;
+    
+    return self;
+}
+
+- (EGShader*)shaderForContext:(EGContext*)context {
+    EGSimpleColorShader* shader = EGSimpleColorShader.instance;
+    shader.color = _color;
+    return shader;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGMaterialColor* o = ((EGMaterialColor*)(other));
+    return EGColorEq(self.color, o.color);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + EGColorHash(self.color);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"color=%@", EGColorDescription(self.color)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGStandardMaterial{
+    EGColorSource* _diffuse;
+    CGFloat _ambient;
+    EGColor _specular;
+}
+@synthesize diffuse = _diffuse;
+@synthesize ambient = _ambient;
+@synthesize specular = _specular;
+
++ (id)standardMaterialWithDiffuse:(EGColorSource*)diffuse ambient:(CGFloat)ambient specular:(EGColor)specular {
+    return [[EGStandardMaterial alloc] initWithDiffuse:diffuse ambient:ambient specular:specular];
+}
+
+- (id)initWithDiffuse:(EGColorSource*)diffuse ambient:(CGFloat)ambient specular:(EGColor)specular {
+    self = [super init];
+    if(self) {
+        _diffuse = diffuse;
+        _ambient = ambient;
+        _specular = specular;
+    }
+    
+    return self;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGStandardMaterial* o = ((EGStandardMaterial*)(other));
+    return [self.diffuse isEqual:o.diffuse] && eqf(self.ambient, o.ambient) && EGColorEq(self.specular, o.specular);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.diffuse hash];
+    hash = hash * 31 + floatHash(self.ambient);
+    hash = hash * 31 + EGColorHash(self.specular);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"diffuse=%@", self.diffuse];
+    [description appendFormat:@", ambient=%f", self.ambient];
+    [description appendFormat:@", specular=%@", EGColorDescription(self.specular)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation EGMaterial{
     EGColor _ambient;
     EGColor _diffuse;

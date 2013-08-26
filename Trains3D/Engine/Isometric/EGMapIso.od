@@ -6,7 +6,8 @@ import EGTypes
 import EG
 import EGGL
 import EGMap
-import EGModel
+import EGMesh
+import EGMaterial
 import EGStandardShader
 import EGBuffer
 import EGShader
@@ -109,7 +110,7 @@ class EGMapSsoView(map : EGMapSso) {
     }
 
 
-    val plane : EGMesh = createPlane
+    val plane  = EGMeshModel([(createPlane, EGColor(0, 0.5, 0, 1))])
     def createPlane : EGMesh = {
         val limits = map.limits
         val l = limits.x - 1.5

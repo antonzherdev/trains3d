@@ -63,6 +63,7 @@ static NSInteger _POSITION_SHIFT;
     EGShaderUniform* _colorUniform;
     EGShaderUniform* _mvpUniform;
 }
+static EGSimpleColorShader* _instance;
 @synthesize color = _color;
 @synthesize positionSlot = _positionSlot;
 @synthesize colorUniform = _colorUniform;
@@ -84,10 +85,19 @@ static NSInteger _POSITION_SHIFT;
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _instance = [EGSimpleColorShader simpleColorShader];
+}
+
 - (void)load {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([EGSimpleColorShader STRIDE])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleColorShader POSITION_SHIFT]))];
     [_mvpUniform setMatrix:[[EG context] mvp]];
     [_colorUniform setColor:_color];
+}
+
++ (EGSimpleColorShader*)instance {
+    return _instance;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

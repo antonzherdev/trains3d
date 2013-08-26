@@ -21,6 +21,7 @@
 - (id)setData:(CNPArray*)data usage:(GLenum)usage;
 - (void)bind;
 - (void)unbind;
+- (void)applyDraw:(void(^)())draw;
 @end
 
 

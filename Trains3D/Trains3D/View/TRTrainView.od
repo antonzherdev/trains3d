@@ -1,6 +1,6 @@
 import EGGL
 import EGTypes
-import EGModel
+import EGMesh
 import EGMaterial
 
 import TRTrain

@@ -29,6 +29,12 @@ class EGBuffer<T>(bufferType : GLenum, handle : GLuint) {
     def unbind {
         glBindBuffer(bufferType, 0)
     }
+
+    def apply(draw : () -> void) {
+        bind
+        draw()
+        unbind
+    }
 }
 
 class EGVertexBuffer<T>(stride : uint, handle : GLuint) extends EGBuffer<T>(GL_ARRAY_BUFFER, handle) {

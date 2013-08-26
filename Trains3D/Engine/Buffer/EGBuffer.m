@@ -57,6 +57,12 @@
     glBindBuffer(_bufferType, 0);
 }
 
+- (void)applyDraw:(void(^)())draw {
+    [self bind];
+    ((void(^)())(draw))();
+    [self unbind];
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }

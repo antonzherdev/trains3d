@@ -1,5 +1,5 @@
 import EGGL
-import EGModel
+import EGMesh
 
 import TRRailroad
 import TRRailPoint

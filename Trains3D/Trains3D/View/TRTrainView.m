@@ -2,7 +2,7 @@
 #import "TR3DCar.h"
 #import "TR3DEngine.h"
 
-#import "EGModel.h"
+#import "EGMesh.h"
 #import "EGMaterial.h"
 #import "TRTrain.h"
 #import "TRTypes.h"

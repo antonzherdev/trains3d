@@ -3,7 +3,7 @@
 #import "TR3DRailTurn.h"
 #import "TR3DSwitch.h"
 
-#import "EGModel.h"
+#import "EGMesh.h"
 #import "TRRailroad.h"
 #import "TRRailPoint.h"
 #import "EG.h"

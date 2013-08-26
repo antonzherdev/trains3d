@@ -5,7 +5,8 @@
 #import "CNData.h"
 #import "EG.h"
 #import "EGMap.h"
-#import "EGModel.h"
+#import "EGMesh.h"
+#import "EGMaterial.h"
 #import "EGStandardShader.h"
 #import "EGBuffer.h"
 #import "EGShader.h"
@@ -105,7 +106,7 @@ static CGFloat _ISO = 0.70710676908493;
 
 @implementation EGMapSsoView{
     EGMapSso* _map;
-    EGMesh* _plane;
+    EGMeshModel* _plane;
 }
 @synthesize map = _map;
 @synthesize plane = _plane;
@@ -118,7 +119,7 @@ static CGFloat _ISO = 0.70710676908493;
     self = [super init];
     if(self) {
         _map = map;
-        _plane = [self createPlane];
+        _plane = [EGMeshModel meshModelWithMeshes:(@[tuple([self createPlane], ((EGMaterial2*)([EGMaterial2 applyColor:EGColorMake(0.0, 0.5, 0.0, 1.0)])))])];
     }
     
     return self;

@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "EGGL.h"
 @class EGMesh;
+@class EGMeshModel;
 @class TRRailroadConnectorContent;
 @class TREmptyConnector;
 @class TRRail;
@@ -16,6 +17,12 @@
 @class TRRailPointCorrection;
 @class EG;
 @class EGTexture;
+@class EGColorSource;
+@class EGColorSourceColor;
+@class EGColorSourceTexture;
+@class EGMaterial2;
+@class EGMaterialColor;
+@class EGStandardMaterial;
 @class EGMaterial;
 
 @class TRRailroadView;

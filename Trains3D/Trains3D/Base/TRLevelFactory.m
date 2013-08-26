@@ -35,7 +35,7 @@ static id<CNSeq> _rules;
     } delayPeriod:10.0 delayFine:^NSInteger(TRTrain* train, NSInteger i) {
         return i * 1000;
     } repairCost:2000];
-    _rules = (@[[TRLevelRules levelRulesWithMapSize:EGSizeIMake(5, 3) scoreRules:_scoreRules repairerSpeed:30 events:(@[tuple(@5, [TRLevelFactory trainCars:intTo(2, 5) speed:[intTo(30, 60) setStep:10]]), tuple(@15, [TRLevelFactory createNewCity])])]]);
+    _rules = (@[[TRLevelRules levelRulesWithMapSize:EGSizeIMake(5, 3) scoreRules:_scoreRules repairerSpeed:30 events:(@[tuple(@5.0, [TRLevelFactory trainCars:intTo(2, 5) speed:[intTo(30, 60) setStep:10]]), tuple(@15.0, [TRLevelFactory createNewCity])])]]);
 }
 
 + (EGScene*)sceneForLevel:(TRLevel*)level {

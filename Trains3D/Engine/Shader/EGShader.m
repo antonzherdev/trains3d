@@ -129,10 +129,10 @@
     return self;
 }
 
-- (void)drawF:(void(^)())f {
+- (void)applyDraw:(void(^)())draw {
     glUseProgram(_program.handle);
     [self load];
-    ((void(^)())(f))();
+    ((void(^)())(draw))();
     glUseProgram(0);
 }
 

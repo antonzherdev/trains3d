@@ -1,5 +1,38 @@
 import EGTypes
+import EG
 import EGGL
+import EGContext
+import EGShader
+import EGStandardShader
+import EGTexture
+
+class EGColorSource
+
+class EGColorSourceColor(color : EGColor) extends EGColorSource
+class EGColorSourceTexture(texture : EGTexture) extends EGColorSource
+
+
+class EGMaterial2 {
+    def shaderFor(context : EGContext) : EGShader
+    def apply(draw : () -> void) {
+        shaderFor(EG.context).apply(draw)
+    }
+
+    static def apply(color : EGColor) : EGMaterial2 = EGMaterialColor(color)
+}
+
+class EGMaterialColor(color : EGColor) extends EGMaterial2 {
+    def shaderFor(context : EGContext) : EGShader = {
+        val shader = EGSimpleColorShader.instance
+        shader.color = color
+        shader
+    }
+}
+
+class EGStandardMaterial(diffuse : EGColorSource, ambient : float, specular : EGColor) {
+
+}
+
 
 class EGMaterial(ambient : EGColor, diffuse : EGColor, specular : EGColor, shininess : float) {
     def set {

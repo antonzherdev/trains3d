@@ -71,10 +71,10 @@ class EGShaderProgram(handle : GLuint) {
 }
 
 class EGShader(program : EGShaderProgram) {
-    def draw(f : () -> void) {
+    def apply(draw : () -> void) {
         glUseProgram(program.handle)
         load
-        f()
+        draw()
         glUseProgram(0)
     }
 

@@ -8,6 +8,14 @@
 @class EG;
 #import "EGGL.h"
 @class EGMesh;
+@class EGMeshModel;
+@class EGColorSource;
+@class EGColorSourceColor;
+@class EGColorSourceTexture;
+@class EGMaterial2;
+@class EGMaterialColor;
+@class EGStandardMaterial;
+@class EGMaterial;
 @class EGStandardShader;
 @class EGSimpleColorShader;
 @class EGBuffer;
@@ -41,7 +49,7 @@
 
 @interface EGMapSsoView : NSObject
 @property (nonatomic, readonly) EGMapSso* map;
-@property (nonatomic, readonly) EGMesh* plane;
+@property (nonatomic, readonly) EGMeshModel* plane;
 
 + (id)mapSsoViewWithMap:(EGMapSso*)map;
 - (id)initWithMap:(EGMapSso*)map;

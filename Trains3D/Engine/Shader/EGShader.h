@@ -39,7 +39,7 @@
 
 + (id)shaderWithProgram:(EGShaderProgram*)program;
 - (id)initWithProgram:(EGShaderProgram*)program;
-- (void)drawF:(void(^)())f;
+- (void)applyDraw:(void(^)())draw;
 - (void)set;
 - (void)load;
 - (void)clear;

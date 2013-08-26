@@ -12,7 +12,8 @@ class EGStandardShader(program : EGShaderProgram) extends EGShader(program) {
 }
 
 class EGSimpleColorShader extends EGStandardShader(EGShaderProgram.loadFromFiles("Simple.vsh", "SimpleColor.fsh")) {
-    var color = EGColor(1, 1, 1, 1)
+    static val instance = EGSimpleColorShader()
+    var color : EGColor = EGColor(1, 1, 1, 1)
 
     val positionSlot : EGShaderAttribute = attributeFor("position")
     val colorUniform = uniformFor("color")

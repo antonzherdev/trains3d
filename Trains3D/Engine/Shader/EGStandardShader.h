@@ -27,6 +27,7 @@
 + (id)simpleColorShader;
 - (id)init;
 - (void)load;
++ (EGSimpleColorShader*)instance;
 @end
 
 

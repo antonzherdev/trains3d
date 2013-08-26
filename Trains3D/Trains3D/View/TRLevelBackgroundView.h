@@ -5,6 +5,12 @@
 @class TRLevel;
 @class EGMapSso;
 @class EGMapSsoView;
+@class EGColorSource;
+@class EGColorSourceColor;
+@class EGColorSourceTexture;
+@class EGMaterial2;
+@class EGMaterialColor;
+@class EGStandardMaterial;
 @class EGMaterial;
 
 @class TRLevelBackgroundView;
