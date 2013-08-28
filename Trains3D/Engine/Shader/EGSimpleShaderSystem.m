@@ -98,6 +98,7 @@ static EGSimpleTextureShader* _textureShader;
 
 @implementation EGSimpleShader
 static NSInteger _STRIDE;
+static NSInteger _UV_SHIFT = 0;
 static NSInteger _POSITION_SHIFT;
 
 + (id)simpleShaderWithProgram:(EGShaderProgram*)program {
@@ -118,6 +119,10 @@ static NSInteger _POSITION_SHIFT;
 
 + (NSInteger)STRIDE {
     return _STRIDE;
+}
+
++ (NSInteger)UV_SHIFT {
+    return _UV_SHIFT;
 }
 
 + (NSInteger)POSITION_SHIFT {
@@ -228,24 +233,29 @@ static NSString* _colorFragmentProgram = @"uniform vec4 color;\n"
 
 @implementation EGSimpleTextureShader{
     EGTexture* _texture;
+    EGShaderAttribute* _uvSlot;
     EGShaderAttribute* _positionSlot;
-    EGShaderUniform* _colorUniform;
     EGShaderUniform* _mvpUniform;
 }
-static NSString* _textureVertexProgram = @"attribute vec3 position;\n"
+static NSString* _textureVertexProgram = @"attribute vec2 vertexUV;\n"
+    "attribute vec3 position;\n"
     "uniform mat4 mvp;\n"
+    "\n"
+    "varying vec2 UV;\n"
     "\n"
     "void main(void) {\n"
     "   gl_Position = mvp * vec4(position, 1);\n"
+    "   UV = vertexUV;\n"
     "}";
-static NSString* _textureFragmentProgram = @"uniform vec4 color;\n"
+static NSString* _textureFragmentProgram = @"varying vec2 UV;\n"
+    "uniform sampler2D texture;\n"
     "\n"
     "void main(void) {\n"
-    "   gl_FragColor = color;\n"
+    "   gl_FragColor = texture2D(texture, UV);\n"
     "}";
 @synthesize texture = _texture;
+@synthesize uvSlot = _uvSlot;
 @synthesize positionSlot = _positionSlot;
-@synthesize colorUniform = _colorUniform;
 @synthesize mvpUniform = _mvpUniform;
 
 + (id)simpleTextureShader {
@@ -255,8 +265,8 @@ static NSString* _textureFragmentProgram = @"uniform vec4 color;\n"
 - (id)init {
     self = [super initWithProgram:[EGShaderProgram applyVertex:EGSimpleTextureShader.textureVertexProgram fragment:EGSimpleTextureShader.textureFragmentProgram]];
     if(self) {
+        _uvSlot = [self attributeForName:@"vertexUV"];
         _positionSlot = [self attributeForName:@"position"];
-        _colorUniform = [self uniformForName:@"color"];
         _mvpUniform = [self uniformForName:@"mvp"];
     }
     
@@ -264,9 +274,9 @@ static NSString* _textureFragmentProgram = @"uniform vec4 color;\n"
 }
 
 - (void)load {
+    [_uvSlot setFromBufferWithStride:((NSUInteger)([EGSimpleTextureShader STRIDE])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleTextureShader UV_SHIFT]))];
     [_positionSlot setFromBufferWithStride:((NSUInteger)([EGSimpleTextureShader STRIDE])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleTextureShader POSITION_SHIFT]))];
     [_mvpUniform setMatrix:[[EG context] mvp]];
-    [_colorUniform setColor:EGColorMake(0.0, 0.5, 0.0, 1.0)];
 }
 
 + (NSString*)textureVertexProgram {

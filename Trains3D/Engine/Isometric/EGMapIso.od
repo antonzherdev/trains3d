@@ -8,7 +8,7 @@ import EGGL
 import EGMap
 import EGMesh
 import EGMaterial
-import EGSimpleShaderSystem
+import EGTexture
 import EGBuffer
 import EGShader
 import EGContext
@@ -110,7 +110,7 @@ class EGMapSsoView(map : EGMapSso) {
     }
 
 
-    val plane  = EGMeshModel([(createPlane, EGColor(0, 0.5, 0, 1))])
+    val plane  = EGMeshModel([(createPlane, EGTexture("Grass.png"))])
     def createPlane : EGMesh = {
         val limits = map.limits
         val l = limits.x - 1.5

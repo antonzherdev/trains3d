@@ -7,7 +7,7 @@
 #import "EGMap.h"
 #import "EGMesh.h"
 #import "EGMaterial.h"
-#import "EGSimpleShaderSystem.h"
+#import "EGTexture.h"
 #import "EGBuffer.h"
 #import "EGShader.h"
 #import "EGContext.h"
@@ -119,7 +119,7 @@ static CGFloat _ISO = 0.70710676908493;
     self = [super init];
     if(self) {
         _map = map;
-        _plane = [EGMeshModel meshModelWithMeshes:(@[tuple([self createPlane], ((EGMaterial2*)([EGMaterial2 applyColor:EGColorMake(0.0, 0.5, 0.0, 1.0)])))])];
+        _plane = [EGMeshModel meshModelWithMeshes:(@[tuple([self createPlane], ((EGMaterial2*)([EGMaterial2 applyTexture:[EGTexture textureWithFile:@"Grass.png"]])))])];
     }
     
     return self;

@@ -32,6 +32,7 @@
 + (id)simpleShaderWithProgram:(EGShaderProgram*)program;
 - (id)initWithProgram:(EGShaderProgram*)program;
 + (NSInteger)STRIDE;
++ (NSInteger)UV_SHIFT;
 + (NSInteger)POSITION_SHIFT;
 @end
 
@@ -52,8 +53,8 @@
 
 @interface EGSimpleTextureShader : EGSimpleShader
 @property (nonatomic, retain) EGTexture* texture;
+@property (nonatomic, readonly) EGShaderAttribute* uvSlot;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
-@property (nonatomic, readonly) EGShaderUniform* colorUniform;
 @property (nonatomic, readonly) EGShaderUniform* mvpUniform;
 
 + (id)simpleTextureShader;
