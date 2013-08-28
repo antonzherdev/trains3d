@@ -135,7 +135,7 @@ static ODType* _CNMutableTreeMap_type;
         if(p.parent == nil) {
             _root = replacement;
         } else {
-            if([p isEqual:p.parent.left]) p.parent.left = replacement;
+            if(p == p.parent.left) p.parent.left = replacement;
             else p.parent.right = replacement;
         }
         p.left = nil;
@@ -148,10 +148,10 @@ static ODType* _CNMutableTreeMap_type;
         } else {
             if(p.color == _CNMutableTreeMap_BLACK) [self fixAfterDeletionEntry:p];
             if(p.parent != nil) {
-                if([p isEqual:p.parent.left]) {
+                if(p == p.parent.left) {
                     p.parent.left = nil;
                 } else {
-                    if([p isEqual:p.parent.right]) p.parent.right = nil;
+                    if(p == p.parent.right) p.parent.right = nil;
                 }
                 p.parent = nil;
             }
@@ -163,8 +163,8 @@ static ODType* _CNMutableTreeMap_type;
 - (void)fixAfterInsertionEntry:(CNTreeMapEntry*)entry {
     CNTreeMapEntry* x = entry;
     x.color = _CNMutableTreeMap_RED;
-    while(x != nil && !([x isEqual:_root]) && x.parent.color == _CNMutableTreeMap_RED) {
-        if([x.parent isEqual:x.parent.parent.left]) {
+    while(x != nil && x != _root && x.parent.color == _CNMutableTreeMap_RED) {
+        if(x.parent == x.parent.parent.left) {
             CNTreeMapEntry* y = x.parent.parent.right;
             if(y.color == _CNMutableTreeMap_RED) {
                 x.parent.color = _CNMutableTreeMap_BLACK;
@@ -172,7 +172,7 @@ static ODType* _CNMutableTreeMap_type;
                 x.parent.parent.color = _CNMutableTreeMap_RED;
                 x = x.parent.parent;
             } else {
-                if([x isEqual:x.parent.right]) {
+                if(x == x.parent.right) {
                     x = x.parent;
                     [self rotateLeftP:x];
                 }
@@ -188,7 +188,7 @@ static ODType* _CNMutableTreeMap_type;
                 x.parent.parent.color = _CNMutableTreeMap_RED;
                 x = x.parent.parent;
             } else {
-                if([x isEqual:x.parent.left]) {
+                if(x == x.parent.left) {
                     x = x.parent;
                     [self rotateRightP:x];
                 }
@@ -203,8 +203,8 @@ static ODType* _CNMutableTreeMap_type;
 
 - (void)fixAfterDeletionEntry:(CNTreeMapEntry*)entry {
     CNTreeMapEntry* x = entry;
-    while(!([x isEqual:_root]) && x.color == _CNMutableTreeMap_BLACK) {
-        if([x isEqual:x.parent.left]) {
+    while(x != _root && x.color == _CNMutableTreeMap_BLACK) {
+        if(x == x.parent.left) {
             CNTreeMapEntry* sib = x.parent.right;
             if(sib.color == _CNMutableTreeMap_RED) {
                 sib.color = _CNMutableTreeMap_BLACK;
@@ -266,7 +266,7 @@ static ODType* _CNMutableTreeMap_type;
         if(p.parent == nil) {
             _root = r;
         } else {
-            if([p.parent.left isEqual:p]) p.parent.left = r;
+            if(p.parent.left == p) p.parent.left = r;
             else p.parent.right = r;
         }
         r.left = p;
@@ -283,7 +283,7 @@ static ODType* _CNMutableTreeMap_type;
         if(p.parent == nil) {
             _root = l;
         } else {
-            if([p.parent.right isEqual:p]) p.parent.right = l;
+            if(p.parent.right == p) p.parent.right = l;
             else p.parent.left = l;
         }
         l.right = p;
@@ -352,7 +352,7 @@ static ODType* _CNMutableTreeMap_type;
             } else {
                 CNTreeMapEntry* parent = p.parent;
                 CNTreeMapEntry* ch = p;
-                while(parent != nil && [ch isEqual:parent.left]) {
+                while(parent != nil && ch == parent.left) {
                     ch = parent;
                     parent = parent.parent;
                 }
@@ -376,7 +376,7 @@ static ODType* _CNMutableTreeMap_type;
             } else {
                 CNTreeMapEntry* parent = p.parent;
                 CNTreeMapEntry* ch = p;
-                while(parent != nil && [ch isEqual:parent.right]) {
+                while(parent != nil && ch == parent.right) {
                     ch = parent;
                     parent = parent.parent;
                 }
@@ -561,7 +561,7 @@ static ODType* _CNTreeMapEntry_type;
     } else {
         CNTreeMapEntry* p = _parent;
         CNTreeMapEntry* ch = self;
-        while(p != nil && [ch isEqual:p.right]) {
+        while(p != nil && ch == p.right) {
             ch = p;
             p = p.parent;
         }
@@ -579,16 +579,6 @@ static ODType* _CNTreeMapEntry_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {
