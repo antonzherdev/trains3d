@@ -6,9 +6,11 @@
 #import "EGTypes.h"
 @class EGContext;
 @class EGMutableMatrix;
+@class EGTexture;
 
 @class EGStandardShader;
 @class EGSimpleColorShader;
+@class EGSimpleTextureShader;
 
 @interface EGStandardShader : EGShader
 + (id)standardShaderWithProgram:(EGShaderProgram*)program;
@@ -27,7 +29,24 @@
 + (id)simpleColorShader;
 - (id)init;
 - (void)load;
++ (NSString*)vertexProgram;
++ (NSString*)fragmentProgram;
 + (EGSimpleColorShader*)instance;
+@end
+
+
+@interface EGSimpleTextureShader : EGStandardShader
+@property (nonatomic, retain) EGTexture* texture;
+@property (nonatomic, readonly) EGShaderAttribute* positionSlot;
+@property (nonatomic, readonly) EGShaderUniform* colorUniform;
+@property (nonatomic, readonly) EGShaderUniform* mvpUniform;
+
++ (id)simpleTextureShader;
+- (id)init;
+- (void)load;
++ (NSString*)vertexProgram1;
++ (NSString*)fragmentProgram1;
++ (EGSimpleTextureShader*)instance1;
 @end
 
 

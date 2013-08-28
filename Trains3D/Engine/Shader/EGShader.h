@@ -22,7 +22,7 @@
 + (id)shaderProgramWithHandle:(GLuint)handle;
 - (id)initWithHandle:(GLuint)handle;
 + (EGShaderProgram*)loadFromFilesVertex:(NSString*)vertex fragment:(NSString*)fragment;
-+ (EGShaderProgram*)linkFromStringsVertex:(NSString*)vertex fragment:(NSString*)fragment;
++ (EGShaderProgram*)applyVertex:(NSString*)vertex fragment:(NSString*)fragment;
 + (EGShaderProgram*)linkFromShadersVertex:(GLuint)vertex fragment:(GLuint)fragment;
 + (GLuint)compileShaderForShaderType:(GLenum)shaderType source:(NSString*)source;
 - (void)dealoc;

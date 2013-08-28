@@ -10,9 +10,9 @@ import EGTypes
 
 class EGShaderProgram(handle : GLuint) {
     static def loadFromFiles(vertex : string, fragment : string) : EGShaderProgram =
-        linkFromStrings(CNBundle.readToString(vertex), CNBundle.readToString(fragment))
+        EGShaderProgram(CNBundle.readToString(vertex), CNBundle.readToString(fragment))
 
-    static def linkFromStrings(vertex : string, fragment : string) : EGShaderProgram =  {
+    static def apply(vertex : string, fragment : string) : EGShaderProgram =  {
         val vertexShader = compileShaderFor(GL_VERTEX_SHADER, vertex)
         val fragmentShader = compileShaderFor(GL_FRAGMENT_SHADER, fragment)
         val program = linkFromShaders(vertexShader, fragmentShader)

@@ -6,4 +6,6 @@
 @interface CNOption : NSObject
 + (id) none;
 + (id) opt:(id)value;
+
++ (id)some:(id)value;
 @end

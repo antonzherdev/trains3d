@@ -17,6 +17,14 @@
     return self;
 }
 
++ (EGColorSource*)applyColor:(EGColor)color {
+    return [EGColorSourceColor colorSourceColorWithColor:color];
+}
+
++ (EGColorSource*)applyTexture:(EGTexture*)texture {
+    return [EGColorSourceTexture colorSourceTextureWithTexture:texture];
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -147,7 +155,11 @@
 }
 
 + (EGMaterial2*)applyColor:(EGColor)color {
-    return [EGMaterialColor materialColorWithColor:color];
+    return [EGMaterialColor materialColorWithColor:[EGColorSource applyColor:color]];
+}
+
++ (EGMaterial2*)applyTexture:(EGTexture*)texture {
+    return [EGMaterialColor materialColorWithColor:[EGColorSource applyTexture:texture]];
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -174,15 +186,15 @@
 
 
 @implementation EGMaterialColor{
-    EGColor _color;
+    EGColorSource* _color;
 }
 @synthesize color = _color;
 
-+ (id)materialColorWithColor:(EGColor)color {
++ (id)materialColorWithColor:(EGColorSource*)color {
     return [[EGMaterialColor alloc] initWithColor:color];
 }
 
-- (id)initWithColor:(EGColor)color {
+- (id)initWithColor:(EGColorSource*)color {
     self = [super init];
     if(self) _color = color;
     
@@ -190,9 +202,43 @@
 }
 
 - (EGShader*)shaderForContext:(EGContext*)context {
-    EGSimpleColorShader* shader = EGSimpleColorShader.instance;
-    shader.color = _color;
-    return shader;
+    EGColorSource* __case__ = _color;
+    BOOL __incomplete__ = YES;
+    EGStandardShader* __result__;
+    if(__incomplete__) {
+        BOOL __ok__ = YES;
+        EGColor cl;
+        if([__case__ isKindOfClass:[EGColorSourceColor class]]) {
+            EGColorSourceColor* __case1__ = ((EGColorSourceColor*)(__case__));
+            cl = [__case1__ color];
+        } else {
+            __ok__ = NO;
+        }
+        if(__ok__) {
+            EGSimpleColorShader* shader = EGSimpleColorShader.instance;
+            shader.color = cl;
+            __result__ = shader;
+            __incomplete__ = NO;
+        }
+    }
+    if(__incomplete__) {
+        BOOL __ok__ = YES;
+        EGTexture* tex;
+        if([__case__ isKindOfClass:[EGColorSourceTexture class]]) {
+            EGColorSourceTexture* __case1__ = ((EGColorSourceTexture*)(__case__));
+            tex = [__case1__ texture];
+        } else {
+            __ok__ = NO;
+        }
+        if(__ok__) {
+            EGSimpleTextureShader* shader = EGSimpleTextureShader.instance1;
+            shader.texture = tex;
+            __result__ = shader;
+            __incomplete__ = NO;
+        }
+    }
+    if(__incomplete__) @throw @"Case incomplete";
+    return __result__;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -203,18 +249,18 @@
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGMaterialColor* o = ((EGMaterialColor*)(other));
-    return EGColorEq(self.color, o.color);
+    return [self.color isEqual:o.color];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + EGColorHash(self.color);
+    hash = hash * 31 + [self.color hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"color=%@", EGColorDescription(self.color)];
+    [description appendFormat:@"color=%@", self.color];
     [description appendString:@">"];
     return description;
 }

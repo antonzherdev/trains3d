@@ -10,6 +10,7 @@
 @class EGShaderUniform;
 @class EGStandardShader;
 @class EGSimpleColorShader;
+@class EGSimpleTextureShader;
 @class EGTexture;
 
 @class EGColorSource;
@@ -23,6 +24,8 @@
 @interface EGColorSource : NSObject
 + (id)colorSource;
 - (id)init;
++ (EGColorSource*)applyColor:(EGColor)color;
++ (EGColorSource*)applyTexture:(EGTexture*)texture;
 @end
 
 
@@ -48,14 +51,15 @@
 - (EGShader*)shaderForContext:(EGContext*)context;
 - (void)applyDraw:(void(^)())draw;
 + (EGMaterial2*)applyColor:(EGColor)color;
++ (EGMaterial2*)applyTexture:(EGTexture*)texture;
 @end
 
 
 @interface EGMaterialColor : EGMaterial2
-@property (nonatomic, readonly) EGColor color;
+@property (nonatomic, readonly) EGColorSource* color;
 
-+ (id)materialColorWithColor:(EGColor)color;
-- (id)initWithColor:(EGColor)color;
++ (id)materialColorWithColor:(EGColorSource*)color;
+- (id)initWithColor:(EGColorSource*)color;
 - (EGShader*)shaderForContext:(EGContext*)context;
 @end
 

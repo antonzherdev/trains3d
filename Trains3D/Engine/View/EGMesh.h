@@ -6,6 +6,7 @@
 @class EGIndexBuffer;
 @class EGStandardShader;
 @class EGSimpleColorShader;
+@class EGSimpleTextureShader;
 #import "EGTypes.h"
 @class EGColorSource;
 @class EGColorSourceColor;

@@ -5,13 +5,27 @@ import EGGL
 import EGShader
 import EGTypes
 import EGContext
+import EGTexture
 
 class EGStandardShader(program : EGShaderProgram) extends EGShader(program) {
     static val STRIDE = 8*4
     static val POSITION_SHIFT = 5*4
 }
 
-class EGSimpleColorShader extends EGStandardShader(EGShaderProgram.loadFromFiles("Simple.vsh", "SimpleColor.fsh")) {
+class EGSimpleColorShader extends EGStandardShader(EGShaderProgram(EGSimpleColorShader.vertexProgram, EGSimpleColorShader.fragmentProgram)) {
+    static val vertexProgram =
+        "attribute vec3 position;
+         uniform mat4 mvp;
+
+         void main(void) {
+            gl_Position = mvp * vec4(position, 1);
+         }"
+    static val fragmentProgram =
+        "uniform vec4 color;
+
+         void main(void) {
+             gl_FragColor = color;
+         }"
     static val instance = EGSimpleColorShader()
     var color : EGColor = EGColor(1, 1, 1, 1)
 
@@ -23,5 +37,33 @@ class EGSimpleColorShader extends EGStandardShader(EGShaderProgram.loadFromFiles
         positionSlot.setFromBufferWith(STRIDE, valuesCount = 3, GL_FLOAT, POSITION_SHIFT)
         mvpUniform.set(matrix = EG.context.mvp)
         colorUniform.set(color = color)
+    }
+}
+
+class EGSimpleTextureShader extends EGStandardShader(EGShaderProgram(EGSimpleTextureShader.vertexProgram1, EGSimpleTextureShader.fragmentProgram1)) {
+    static val vertexProgram1 =
+        "attribute vec3 position;
+         uniform mat4 mvp;
+
+         void main(void) {
+            gl_Position = mvp * vec4(position, 1);
+         }"
+    static val fragmentProgram1 =
+        "uniform vec4 color;
+
+         void main(void) {
+            gl_FragColor = color;
+         }"
+    static val instance1 = EGSimpleTextureShader()
+    var texture : EGTexture
+
+    val positionSlot : EGShaderAttribute = attributeFor("position")
+    val colorUniform = uniformFor("color")
+    val mvpUniform = uniformFor("mvp")
+
+    def load {
+        positionSlot.setFromBufferWith(STRIDE, valuesCount = 3, GL_FLOAT, POSITION_SHIFT)
+        mvpUniform.set(matrix = EG.context.mvp)
+        colorUniform.set(color = EGColor(0, 0.5, 0, 1))
     }
 }

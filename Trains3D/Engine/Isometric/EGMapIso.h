@@ -18,6 +18,7 @@
 @class EGMaterial;
 @class EGStandardShader;
 @class EGSimpleColorShader;
+@class EGSimpleTextureShader;
 @class EGBuffer;
 @class EGVertexBuffer;
 @class EGIndexBuffer;

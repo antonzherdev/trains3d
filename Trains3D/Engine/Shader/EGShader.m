@@ -22,10 +22,10 @@
 }
 
 + (EGShaderProgram*)loadFromFilesVertex:(NSString*)vertex fragment:(NSString*)fragment {
-    return [EGShaderProgram linkFromStringsVertex:[CNBundle readToStringResource:vertex] fragment:[CNBundle readToStringResource:fragment]];
+    return [EGShaderProgram applyVertex:[CNBundle readToStringResource:vertex] fragment:[CNBundle readToStringResource:fragment]];
 }
 
-+ (EGShaderProgram*)linkFromStringsVertex:(NSString*)vertex fragment:(NSString*)fragment {
++ (EGShaderProgram*)applyVertex:(NSString*)vertex fragment:(NSString*)fragment {
     GLuint vertexShader = [EGShaderProgram compileShaderForShaderType:GL_VERTEX_SHADER source:vertex];
     GLuint fragmentShader = [EGShaderProgram compileShaderForShaderType:GL_FRAGMENT_SHADER source:fragment];
     EGShaderProgram* program = [EGShaderProgram linkFromShadersVertex:vertexShader fragment:fragmentShader];
