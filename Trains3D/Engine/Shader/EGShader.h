@@ -10,11 +10,21 @@
 @class EGContext;
 @class EGMutableMatrix;
 #import "EGTypes.h"
+@class EGColorSource;
+@class EGColorSourceColor;
+@class EGColorSourceTexture;
+@class EGMaterial2;
+@class EGSimpleMaterial;
+@class EGStandardMaterial;
+@class EGMaterial;
+@class EGContext;
+@class EGMutableMatrix;
 
 @class EGShaderProgram;
 @class EGShader;
 @class EGShaderAttribute;
 @class EGShaderUniform;
+@protocol EGShaderSystem;
 
 @interface EGShaderProgram : NSObject
 @property (nonatomic, readonly) GLuint handle;
@@ -28,7 +38,7 @@
 - (void)dealoc;
 - (void)set;
 - (void)clear;
-- (void)drawF:(void(^)())f;
+- (void)applyDraw:(void(^)())draw;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
 - (EGShaderUniform*)uniformForName:(NSString*)name;
 @end
@@ -64,6 +74,12 @@
 - (id)initWithHandle:(GLuint)handle;
 - (void)setMatrix:(EGMatrix*)matrix;
 - (void)setColor:(EGColor)color;
+@end
+
+
+@protocol EGShaderSystem<NSObject>
+- (void)applyContext:(EGContext*)context material:(id)material draw:(void(^)())draw;
+- (EGShader*)shaderForContext:(EGContext*)context material:(id)material;
 @end
 
 

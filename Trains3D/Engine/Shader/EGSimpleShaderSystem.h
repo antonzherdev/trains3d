@@ -7,20 +7,36 @@
 @class EGContext;
 @class EGMutableMatrix;
 @class EGTexture;
+@class EGColorSource;
+@class EGColorSourceColor;
+@class EGColorSourceTexture;
+@class EGMaterial2;
+@class EGSimpleMaterial;
+@class EGStandardMaterial;
+@class EGMaterial;
 
-@class EGStandardShader;
+@class EGSimpleShaderSystem;
+@class EGSimpleShader;
 @class EGSimpleColorShader;
 @class EGSimpleTextureShader;
 
-@interface EGStandardShader : EGShader
-+ (id)standardShaderWithProgram:(EGShaderProgram*)program;
+@interface EGSimpleShaderSystem : NSObject<EGShaderSystem>
++ (id)simpleShaderSystem;
+- (id)init;
+- (EGShader*)shaderForContext:(EGContext*)context material:(EGSimpleMaterial*)material;
++ (EGSimpleShaderSystem*)instance;
+@end
+
+
+@interface EGSimpleShader : EGShader
++ (id)simpleShaderWithProgram:(EGShaderProgram*)program;
 - (id)initWithProgram:(EGShaderProgram*)program;
 + (NSInteger)STRIDE;
 + (NSInteger)POSITION_SHIFT;
 @end
 
 
-@interface EGSimpleColorShader : EGStandardShader
+@interface EGSimpleColorShader : EGSimpleShader
 @property (nonatomic) EGColor color;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderUniform* colorUniform;
@@ -29,13 +45,12 @@
 + (id)simpleColorShader;
 - (id)init;
 - (void)load;
-+ (NSString*)vertexProgram;
-+ (NSString*)fragmentProgram;
-+ (EGSimpleColorShader*)instance;
++ (NSString*)colorVertexProgram;
++ (NSString*)colorFragmentProgram;
 @end
 
 
-@interface EGSimpleTextureShader : EGStandardShader
+@interface EGSimpleTextureShader : EGSimpleShader
 @property (nonatomic, retain) EGTexture* texture;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderUniform* colorUniform;
@@ -44,9 +59,8 @@
 + (id)simpleTextureShader;
 - (id)init;
 - (void)load;
-+ (NSString*)vertexProgram1;
-+ (NSString*)fragmentProgram1;
-+ (EGSimpleTextureShader*)instance1;
++ (NSString*)textureVertexProgram;
++ (NSString*)textureFragmentProgram;
 @end
 
 

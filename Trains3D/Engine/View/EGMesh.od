@@ -1,7 +1,7 @@
 import CNData
 
 import EGBuffer
-import EGStandardShader
+import EGSimpleShaderSystem
 import EGTypes
 import EGMaterial
 

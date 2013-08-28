@@ -9,7 +9,7 @@
 @class EGColorSourceColor;
 @class EGColorSourceTexture;
 @class EGMaterial2;
-@class EGMaterialColor;
+@class EGSimpleMaterial;
 @class EGStandardMaterial;
 @class EGMaterial;
 

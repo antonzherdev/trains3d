@@ -6,27 +6,44 @@ import EGShader
 import EGTypes
 import EGContext
 import EGTexture
+import EGMaterial
 
-class EGStandardShader(program : EGShaderProgram) extends EGShader(program) {
+class EGSimpleShaderSystem extends EGShaderSystem<EGSimpleMaterial> {
+    static val instance = EGSimpleShaderSystem()
+    private static val colorShader = EGSimpleColorShader()
+    private static val textureShader = EGSimpleTextureShader()
+
+    def shaderFor(context : EGContext, material : EGSimpleMaterial) : EGShader = case(material.color)
+        EGColorSourceColor(cl) -> {
+            colorShader.color = cl
+            colorShader
+        }
+        EGColorSourceTexture(tex) -> {
+            textureShader.texture = tex
+            textureShader
+        }
+
+}
+
+class EGSimpleShader(program : EGShaderProgram) extends EGShader(program) {
     static val STRIDE = 8*4
     static val POSITION_SHIFT = 5*4
 }
 
-class EGSimpleColorShader extends EGStandardShader(EGShaderProgram(EGSimpleColorShader.vertexProgram, EGSimpleColorShader.fragmentProgram)) {
-    static val vertexProgram =
+class EGSimpleColorShader extends EGSimpleShader(EGShaderProgram(EGSimpleColorShader.colorVertexProgram, EGSimpleColorShader.colorFragmentProgram)) {
+    static val colorVertexProgram =
         "attribute vec3 position;
          uniform mat4 mvp;
 
          void main(void) {
             gl_Position = mvp * vec4(position, 1);
          }"
-    static val fragmentProgram =
+    static val colorFragmentProgram =
         "uniform vec4 color;
 
          void main(void) {
              gl_FragColor = color;
          }"
-    static val instance = EGSimpleColorShader()
     var color : EGColor = EGColor(1, 1, 1, 1)
 
     val positionSlot : EGShaderAttribute = attributeFor("position")
@@ -40,21 +57,20 @@ class EGSimpleColorShader extends EGStandardShader(EGShaderProgram(EGSimpleColor
     }
 }
 
-class EGSimpleTextureShader extends EGStandardShader(EGShaderProgram(EGSimpleTextureShader.vertexProgram1, EGSimpleTextureShader.fragmentProgram1)) {
-    static val vertexProgram1 =
+class EGSimpleTextureShader extends EGSimpleShader(EGShaderProgram(EGSimpleTextureShader.textureVertexProgram, EGSimpleTextureShader.textureFragmentProgram)) {
+    static val textureVertexProgram =
         "attribute vec3 position;
          uniform mat4 mvp;
 
          void main(void) {
             gl_Position = mvp * vec4(position, 1);
          }"
-    static val fragmentProgram1 =
+    static val textureFragmentProgram =
         "uniform vec4 color;
 
          void main(void) {
             gl_FragColor = color;
          }"
-    static val instance1 = EGSimpleTextureShader()
     var texture : EGTexture
 
     val positionSlot : EGShaderAttribute = attributeFor("position")

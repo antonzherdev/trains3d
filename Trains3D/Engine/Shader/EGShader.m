@@ -5,6 +5,8 @@
 #import "EGBuffer.h"
 #import "EGMatrix.h"
 #import "EGContext.h"
+#import "EGMaterial.h"
+#import "EGContext.h"
 @implementation EGShaderProgram{
     GLuint _handle;
 }
@@ -67,9 +69,9 @@
     glUseProgram(0);
 }
 
-- (void)drawF:(void(^)())f {
+- (void)applyDraw:(void(^)())draw {
     glUseProgram(_handle);
-    ((void(^)())(f))();
+    ((void(^)())(draw))();
     glUseProgram(0);
 }
 

@@ -7,6 +7,8 @@ import EGBuffer
 import EGMatrix
 import EGContext
 import EGTypes
+import EGMaterial
+import EGContext
 
 class EGShaderProgram(handle : GLuint) {
     static def loadFromFiles(vertex : string, fragment : string) : EGShaderProgram =
@@ -51,9 +53,9 @@ class EGShaderProgram(handle : GLuint) {
         glUseProgram(0)
     }
 
-    def draw(f : () -> void) {
+    def apply(draw : () -> void) {
         glUseProgram(handle)
-        f()
+        draw()
         glUseProgram(0)
     }
 
@@ -108,4 +110,14 @@ class EGShaderUniform(handle : GLuint) {
         egUniformColor(handle, color)
     }
 }
+
+trait EGShaderSystem<M extends EGMaterial2> {
+    def apply(context : EGContext, material : M, draw : () -> void)  {
+        val shader = shaderFor(context, material)
+        shader(draw)
+    }
+
+    def shaderFor(context : EGContext, material : M) : EGShader
+}
+
 

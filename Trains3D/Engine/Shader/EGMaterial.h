@@ -8,7 +8,9 @@
 @class EGShader;
 @class EGShaderAttribute;
 @class EGShaderUniform;
-@class EGStandardShader;
+@protocol EGShaderSystem;
+@class EGSimpleShaderSystem;
+@class EGSimpleShader;
 @class EGSimpleColorShader;
 @class EGSimpleTextureShader;
 @class EGTexture;
@@ -17,7 +19,7 @@
 @class EGColorSourceColor;
 @class EGColorSourceTexture;
 @class EGMaterial2;
-@class EGMaterialColor;
+@class EGSimpleMaterial;
 @class EGStandardMaterial;
 @class EGMaterial;
 
@@ -48,19 +50,19 @@
 @interface EGMaterial2 : NSObject
 + (id)material2;
 - (id)init;
-- (EGShader*)shaderForContext:(EGContext*)context;
+- (id<EGShaderSystem>)shaderSystem;
 - (void)applyDraw:(void(^)())draw;
 + (EGMaterial2*)applyColor:(EGColor)color;
 + (EGMaterial2*)applyTexture:(EGTexture*)texture;
 @end
 
 
-@interface EGMaterialColor : EGMaterial2
+@interface EGSimpleMaterial : EGMaterial2
 @property (nonatomic, readonly) EGColorSource* color;
 
-+ (id)materialColorWithColor:(EGColorSource*)color;
++ (id)simpleMaterialWithColor:(EGColorSource*)color;
 - (id)initWithColor:(EGColorSource*)color;
-- (EGShader*)shaderForContext:(EGContext*)context;
+- (id<EGShaderSystem>)shaderSystem;
 @end
 
 
@@ -71,6 +73,7 @@
 
 + (id)standardMaterialWithDiffuse:(EGColorSource*)diffuse ambient:(CGFloat)ambient specular:(EGColor)specular;
 - (id)initWithDiffuse:(EGColorSource*)diffuse ambient:(CGFloat)ambient specular:(EGColor)specular;
+- (id<EGShaderSystem>)shaderSystem;
 @end
 
 

@@ -8,7 +8,7 @@ import EGGL
 import EGMap
 import EGMesh
 import EGMaterial
-import EGStandardShader
+import EGSimpleShaderSystem
 import EGBuffer
 import EGShader
 import EGContext

@@ -13,10 +13,11 @@
 @class EGColorSourceColor;
 @class EGColorSourceTexture;
 @class EGMaterial2;
-@class EGMaterialColor;
+@class EGSimpleMaterial;
 @class EGStandardMaterial;
 @class EGMaterial;
-@class EGStandardShader;
+@class EGSimpleShaderSystem;
+@class EGSimpleShader;
 @class EGSimpleColorShader;
 @class EGSimpleTextureShader;
 @class EGBuffer;
@@ -26,6 +27,7 @@
 @class EGShader;
 @class EGShaderAttribute;
 @class EGShaderUniform;
+@protocol EGShaderSystem;
 @class EGContext;
 @class EGMutableMatrix;
 

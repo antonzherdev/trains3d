@@ -1,6 +1,13 @@
 #import "objd.h"
 @class EGTexture;
 @class EGMatrix;
+@class EGColorSource;
+@class EGColorSourceColor;
+@class EGColorSourceTexture;
+@class EGMaterial2;
+@class EGSimpleMaterial;
+@class EGStandardMaterial;
+@class EGMaterial;
 #import "EGGL.h"
 
 @class EGContext;

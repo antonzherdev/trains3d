@@ -1,5 +1,6 @@
 import EGTexture
 import EGMatrix
+import EGMaterial
 import EGGL
 
 

@@ -2,7 +2,7 @@
 
 #import "CNData.h"
 #import "EGBuffer.h"
-#import "EGStandardShader.h"
+#import "EGSimpleShaderSystem.h"
 #import "EGMaterial.h"
 @implementation EGMesh{
     EGVertexBuffer* _vertexBuffer;

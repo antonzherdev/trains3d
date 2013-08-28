@@ -4,7 +4,8 @@
 @class EGBuffer;
 @class EGVertexBuffer;
 @class EGIndexBuffer;
-@class EGStandardShader;
+@class EGSimpleShaderSystem;
+@class EGSimpleShader;
 @class EGSimpleColorShader;
 @class EGSimpleTextureShader;
 #import "EGTypes.h"
@@ -12,7 +13,7 @@
 @class EGColorSourceColor;
 @class EGColorSourceTexture;
 @class EGMaterial2;
-@class EGMaterialColor;
+@class EGSimpleMaterial;
 @class EGStandardMaterial;
 @class EGMaterial;
 

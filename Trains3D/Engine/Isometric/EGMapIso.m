@@ -7,7 +7,7 @@
 #import "EGMap.h"
 #import "EGMesh.h"
 #import "EGMaterial.h"
-#import "EGStandardShader.h"
+#import "EGSimpleShaderSystem.h"
 #import "EGBuffer.h"
 #import "EGShader.h"
 #import "EGContext.h"

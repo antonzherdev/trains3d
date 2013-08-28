@@ -3,7 +3,7 @@
 #import "EG.h"
 #import "EGContext.h"
 #import "EGShader.h"
-#import "EGStandardShader.h"
+#import "EGSimpleShaderSystem.h"
 #import "EGTexture.h"
 @implementation EGColorSource
 
@@ -146,20 +146,20 @@
     return self;
 }
 
-- (EGShader*)shaderForContext:(EGContext*)context {
-    @throw @"Method shaderFor is abstract";
+- (id<EGShaderSystem>)shaderSystem {
+    @throw @"Method shaderSystem is abstract";
 }
 
 - (void)applyDraw:(void(^)())draw {
-    [[self shaderForContext:[EG context]] applyDraw:draw];
+    [[self shaderSystem] applyContext:[EG context] material:self draw:draw];
 }
 
 + (EGMaterial2*)applyColor:(EGColor)color {
-    return [EGMaterialColor materialColorWithColor:[EGColorSource applyColor:color]];
+    return [EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyColor:color]];
 }
 
 + (EGMaterial2*)applyTexture:(EGTexture*)texture {
-    return [EGMaterialColor materialColorWithColor:[EGColorSource applyTexture:texture]];
+    return [EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyTexture:texture]];
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -185,13 +185,13 @@
 @end
 
 
-@implementation EGMaterialColor{
+@implementation EGSimpleMaterial{
     EGColorSource* _color;
 }
 @synthesize color = _color;
 
-+ (id)materialColorWithColor:(EGColorSource*)color {
-    return [[EGMaterialColor alloc] initWithColor:color];
++ (id)simpleMaterialWithColor:(EGColorSource*)color {
+    return [[EGSimpleMaterial alloc] initWithColor:color];
 }
 
 - (id)initWithColor:(EGColorSource*)color {
@@ -201,44 +201,8 @@
     return self;
 }
 
-- (EGShader*)shaderForContext:(EGContext*)context {
-    EGColorSource* __case__ = _color;
-    BOOL __incomplete__ = YES;
-    EGStandardShader* __result__;
-    if(__incomplete__) {
-        BOOL __ok__ = YES;
-        EGColor cl;
-        if([__case__ isKindOfClass:[EGColorSourceColor class]]) {
-            EGColorSourceColor* __case1__ = ((EGColorSourceColor*)(__case__));
-            cl = [__case1__ color];
-        } else {
-            __ok__ = NO;
-        }
-        if(__ok__) {
-            EGSimpleColorShader* shader = EGSimpleColorShader.instance;
-            shader.color = cl;
-            __result__ = shader;
-            __incomplete__ = NO;
-        }
-    }
-    if(__incomplete__) {
-        BOOL __ok__ = YES;
-        EGTexture* tex;
-        if([__case__ isKindOfClass:[EGColorSourceTexture class]]) {
-            EGColorSourceTexture* __case1__ = ((EGColorSourceTexture*)(__case__));
-            tex = [__case1__ texture];
-        } else {
-            __ok__ = NO;
-        }
-        if(__ok__) {
-            EGSimpleTextureShader* shader = EGSimpleTextureShader.instance1;
-            shader.texture = tex;
-            __result__ = shader;
-            __incomplete__ = NO;
-        }
-    }
-    if(__incomplete__) @throw @"Case incomplete";
-    return __result__;
+- (id<EGShaderSystem>)shaderSystem {
+    return EGSimpleShaderSystem.instance;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -248,7 +212,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGMaterialColor* o = ((EGMaterialColor*)(other));
+    EGSimpleMaterial* o = ((EGSimpleMaterial*)(other));
     return [self.color isEqual:o.color];
 }
 
@@ -290,6 +254,10 @@
     }
     
     return self;
+}
+
+- (id<EGShaderSystem>)shaderSystem {
+    return EGSimpleShaderSystem.instance;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

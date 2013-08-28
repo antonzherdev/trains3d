@@ -3,7 +3,7 @@ import EG
 import EGGL
 import EGContext
 import EGShader
-import EGStandardShader
+import EGSimpleShaderSystem
 import EGTexture
 
 class EGColorSource {
@@ -16,34 +16,21 @@ class EGColorSourceTexture(texture : EGTexture) extends EGColorSource
 
 
 class EGMaterial2 {
-    def shaderFor(context : EGContext) : EGShader
+    def shaderSystem : EGShaderSystem<self>
     def apply(draw : () -> void) {
-        shaderFor(EG.context).apply(draw)
+        shaderSystem(EG.context, self, draw)
     }
 
-    static def apply(color : EGColor) : EGMaterial2 = EGMaterialColor(color)
-    static def apply(texture : EGTexture) : EGMaterial2 = EGMaterialColor(texture)
+    static def apply(color : EGColor) : EGMaterial2 = EGSimpleMaterial(color)
+    static def apply(texture : EGTexture) : EGMaterial2 = EGSimpleMaterial(texture)
 }
 
-class EGMaterialColor(color : EGColorSource) extends EGMaterial2 {
-    def shaderFor(context : EGContext) : EGShader = case(color) {
-        EGColorSourceColor(cl) -> {
-            val shader = EGSimpleColorShader.instance
-            shader.color = cl
-            shader
-        }
-        EGColorSourceTexture(tex) -> {
-            val shader = EGSimpleTextureShader.instance1
-            shader.texture = tex
-            shader
-        }
-    }
-
-
+class EGSimpleMaterial(color : EGColorSource) extends EGMaterial2 {
+    def shaderSystem : EGShaderSystem<self> = EGSimpleShaderSystem.instance
 }
 
 class EGStandardMaterial(diffuse : EGColorSource, ambient : float, specular : EGColor) {
-
+    def shaderSystem : EGShaderSystem<self> = EGSimpleShaderSystem.instance
 }
 
 
