@@ -1,9 +1,12 @@
 import EGTypes
 import EGProcessor
+import EG
+import EGContext
 
 class EGLayer(view : EGView, processor : EGProcessor?) {
     def drawWith(viewSize : EGSize) {
         view.camera.focusFor(viewSize)
+        EG.context.environment = view.environment
         view.drawView
     }
 

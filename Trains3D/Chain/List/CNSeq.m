@@ -6,6 +6,7 @@
 @implementation CNArrayBuilder{
     NSMutableArray* _array;
 }
+static ODType* _CNArrayBuilder_type;
 @synthesize array = _array;
 
 + (id)arrayBuilder {
@@ -19,6 +20,11 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _CNArrayBuilder_type = [ODType typeWithCls:[CNArrayBuilder class]];
+}
+
 - (void)addObject:(id)object {
     [_array addObject:object];
     self;
@@ -28,10 +34,18 @@
     return _array;
 }
 
+- (ODType*)type {
+    return _CNArrayBuilder_type;
+}
+
 - (void)addAllObject:(id<CNTraversable>)object {
     [object forEach:^void(id _) {
         [self addObject:_];
     }];
+}
+
++ (ODType*)type {
+    return _CNArrayBuilder_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

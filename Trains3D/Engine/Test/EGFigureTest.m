@@ -2,6 +2,7 @@
 
 #import "EGFigure.h"
 @implementation EGFigureTest
+static ODType* _EGFigureTest_type;
 
 + (id)figureTest {
     return [[EGFigureTest alloc] init];
@@ -11,6 +12,11 @@
     self = [super init];
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGFigureTest_type = [ODType typeWithCls:[EGFigureTest class]];
 }
 
 - (void)testThickLine {
@@ -27,6 +33,14 @@
     [self assertEqualsA:wrap(EGRect, [l boundingRect]) b:wrap(EGRect, egRectThicken(EGRectMake(0.0, 1.0, 0.0, 1.0), s2 / 2, s2 / 2))];
     p = [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(-0.5, 0.5)), wrap(EGPoint, EGPointMake(0.5, 1.5)), wrap(EGPoint, EGPointMake(1.5, 0.5)), wrap(EGPoint, EGPointMake(0.5, -0.5))])];
     [self assertEqualsA:[[l segments] toSet] b:[p.segments toSet]];
+}
+
+- (ODType*)type {
+    return _EGFigureTest_type;
+}
+
++ (ODType*)type {
+    return _EGFigureTest_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

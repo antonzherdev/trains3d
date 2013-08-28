@@ -28,6 +28,8 @@
 - (id)init;
 + (EGColorSource*)applyColor:(EGColor)color;
 + (EGColorSource*)applyTexture:(EGTexture*)texture;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -36,6 +38,8 @@
 
 + (id)colorSourceColorWithColor:(EGColor)color;
 - (id)initWithColor:(EGColor)color;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -44,6 +48,8 @@
 
 + (id)colorSourceTextureWithTexture:(EGTexture*)texture;
 - (id)initWithTexture:(EGTexture*)texture;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -54,6 +60,8 @@
 - (void)applyDraw:(void(^)())draw;
 + (EGMaterial2*)applyColor:(EGColor)color;
 + (EGMaterial2*)applyTexture:(EGTexture*)texture;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -63,6 +71,8 @@
 + (id)simpleMaterialWithColor:(EGColorSource*)color;
 - (id)initWithColor:(EGColorSource*)color;
 - (id<EGShaderSystem>)shaderSystem;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -74,6 +84,8 @@
 + (id)standardMaterialWithDiffuse:(EGColorSource*)diffuse ambient:(CGFloat)ambient specular:(EGColor)specular;
 - (id)initWithDiffuse:(EGColorSource*)diffuse ambient:(CGFloat)ambient specular:(EGColor)specular;
 - (id<EGShaderSystem>)shaderSystem;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -87,7 +99,8 @@
 - (id)initWithAmbient:(EGColor)ambient diffuse:(EGColor)diffuse specular:(EGColor)specular shininess:(CGFloat)shininess;
 - (void)set;
 - (void)drawF:(void(^)())f;
-+ (EGMaterial*)default;
+- (ODType*)type;
++ (EGMaterial*)aDefault;
 + (EGMaterial*)emerald;
 + (EGMaterial*)jade;
 + (EGMaterial*)obsidian;
@@ -117,6 +130,7 @@
 + (EGMaterial*)steel;
 + (EGMaterial*)blackMetal;
 + (EGMaterial*)grass;
++ (ODType*)type;
 @end
 
 

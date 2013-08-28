@@ -7,7 +7,8 @@
 @implementation CNMutableTreeSet{
     CNMutableTreeMap* _map;
 }
-static NSObject* _obj;
+static NSObject* _CNMutableTreeSet_obj;
+static ODType* _CNMutableTreeSet_type;
 @synthesize map = _map;
 
 + (id)mutableTreeSetWithMap:(CNMutableTreeMap*)map {
@@ -23,7 +24,8 @@ static NSObject* _obj;
 
 + (void)initialize {
     [super initialize];
-    _obj = [NSObject object];
+    _CNMutableTreeSet_obj = [NSObject object];
+    _CNMutableTreeSet_type = [ODType typeWithCls:[CNMutableTreeSet class]];
 }
 
 + (CNMutableTreeSet*)newWithComparator:(NSInteger(^)(id, id))comparator {
@@ -39,7 +41,7 @@ static NSObject* _obj;
 }
 
 - (void)addObject:(id)object {
-    [_map setObject:_obj forKey:object];
+    [_map setObject:_CNMutableTreeSet_obj forKey:object];
 }
 
 - (BOOL)removeObject:(id)object {
@@ -94,6 +96,10 @@ static NSObject* _obj;
     return ret;
 }
 
+- (ODType*)type {
+    return _CNMutableTreeSet_type;
+}
+
 - (BOOL)isEmpty {
     return !([[self iterator] hasNext]);
 }
@@ -138,6 +144,10 @@ static NSObject* _obj;
         [builder addObject:x];
     }];
     return [builder build];
+}
+
++ (ODType*)type {
+    return _CNMutableTreeSet_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

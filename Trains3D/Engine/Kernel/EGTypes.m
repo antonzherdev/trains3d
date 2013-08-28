@@ -380,3 +380,235 @@ NSInteger egRectIY2(EGRectI self) {
 
 
 
+@implementation EGVec3Wrap{
+    EGVec3 _value;
+}
+@synthesize value = _value;
+
++ (id)wrapWithValue:(EGVec3)value {
+    return [[EGVec3Wrap alloc] initWithValue:value];
+}
+
+- (id)initWithValue:(EGVec3)value {
+    self = [super init];
+    if(self) _value = value;
+    return self;
+}
+
+- (NSString*)description {
+    return EGVec3Description(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGVec3Wrap* o = ((EGVec3Wrap*)(other));
+    return EGVec3Eq(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return EGVec3Hash(_value);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
+
+
+@implementation EGEnvironment{
+    EGColor _ambientColor;
+    id<CNSeq> _lights;
+}
+static EGEnvironment* _EGEnvironment_default;
+static ODType* _EGEnvironment_type;
+@synthesize ambientColor = _ambientColor;
+@synthesize lights = _lights;
+
++ (id)environmentWithAmbientColor:(EGColor)ambientColor lights:(id<CNSeq>)lights {
+    return [[EGEnvironment alloc] initWithAmbientColor:ambientColor lights:lights];
+}
+
+- (id)initWithAmbientColor:(EGColor)ambientColor lights:(id<CNSeq>)lights {
+    self = [super init];
+    if(self) {
+        _ambientColor = ambientColor;
+        _lights = lights;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGEnvironment_default = [EGEnvironment environmentWithAmbientColor:EGColorMake(1.0, 1.0, 1.0, 1.0) lights:(@[])];
+    _EGEnvironment_type = [ODType typeWithCls:[EGEnvironment class]];
+}
+
++ (EGEnvironment*)applyLights:(id<CNSeq>)lights {
+    return [EGEnvironment environmentWithAmbientColor:EGColorMake(1.0, 1.0, 1.0, 1.0) lights:lights];
+}
+
++ (EGEnvironment*)applyLight:(EGLight*)light {
+    return [EGEnvironment environmentWithAmbientColor:EGColorMake(1.0, 1.0, 1.0, 1.0) lights:(@[light])];
+}
+
+- (ODType*)type {
+    return _EGEnvironment_type;
+}
+
++ (EGEnvironment*)aDefault {
+    return _EGEnvironment_default;
+}
+
++ (ODType*)type {
+    return _EGEnvironment_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGEnvironment* o = ((EGEnvironment*)(other));
+    return EGColorEq(self.ambientColor, o.ambientColor) && [self.lights isEqual:o.lights];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + EGColorHash(self.ambientColor);
+    hash = hash * 31 + [self.lights hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"ambientColor=%@", EGColorDescription(self.ambientColor)];
+    [description appendFormat:@", lights=%@", self.lights];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGLight{
+    EGColor _color;
+}
+static ODType* _EGLight_type;
+@synthesize color = _color;
+
++ (id)lightWithColor:(EGColor)color {
+    return [[EGLight alloc] initWithColor:color];
+}
+
+- (id)initWithColor:(EGColor)color {
+    self = [super init];
+    if(self) _color = color;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGLight_type = [ODType typeWithCls:[EGLight class]];
+}
+
+- (ODType*)type {
+    return _EGLight_type;
+}
+
++ (ODType*)type {
+    return _EGLight_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGLight* o = ((EGLight*)(other));
+    return EGColorEq(self.color, o.color);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + EGColorHash(self.color);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"color=%@", EGColorDescription(self.color)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGDirectLight{
+    EGVec3 _direction;
+}
+static ODType* _EGDirectLight_type;
+@synthesize direction = _direction;
+
++ (id)directLightWithColor:(EGColor)color direction:(EGVec3)direction {
+    return [[EGDirectLight alloc] initWithColor:color direction:direction];
+}
+
+- (id)initWithColor:(EGColor)color direction:(EGVec3)direction {
+    self = [super init];
+    if(self) _direction = direction;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGDirectLight_type = [ODType typeWithCls:[EGDirectLight class]];
+}
+
+- (ODType*)type {
+    return _EGDirectLight_type;
+}
+
++ (ODType*)type {
+    return _EGDirectLight_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGDirectLight* o = ((EGDirectLight*)(other));
+    return EGColorEq(self.color, o.color) && EGVec3Eq(self.direction, o.direction);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + EGColorHash(self.color);
+    hash = hash * 31 + EGVec3Hash(self.direction);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"color=%@", EGColorDescription(self.color)];
+    [description appendFormat:@", direction=%@", EGVec3Description(self.direction)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+

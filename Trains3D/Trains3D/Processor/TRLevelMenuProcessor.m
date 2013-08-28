@@ -5,6 +5,7 @@
 @implementation TRLevelMenuProcessor{
     TRLevel* _level;
 }
+static ODType* _TRLevelMenuProcessor_type;
 @synthesize level = _level;
 
 + (id)levelMenuProcessorWithLevel:(TRLevel*)level {
@@ -16,6 +17,11 @@
     if(self) _level = level;
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRLevelMenuProcessor_type = [ODType typeWithCls:[TRLevelMenuProcessor class]];
 }
 
 - (BOOL)processEvent:(EGEvent*)event {
@@ -33,12 +39,20 @@
     return YES;
 }
 
+- (ODType*)type {
+    return _TRLevelMenuProcessor_type;
+}
+
 - (BOOL)mouseDownEvent:(EGEvent*)event {
     return NO;
 }
 
 - (BOOL)mouseDragEvent:(EGEvent*)event {
     return NO;
+}
+
++ (ODType*)type {
+    return _TRLevelMenuProcessor_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

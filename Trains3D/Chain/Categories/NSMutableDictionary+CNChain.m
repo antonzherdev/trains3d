@@ -25,7 +25,7 @@
 }
 
 - (id)modifyBy:(id (^)(id))with forKey:(id)key {
-    id v = with([self optionObjectForKey:key]);
+    id v = with([self applyKey:key]);
     if([v isEmpty]) {
         [self removeObjectForKey:v];
     } else {

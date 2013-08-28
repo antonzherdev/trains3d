@@ -4,6 +4,7 @@
 #import "EGBentleyOttmann.h"
 #import "CNPair.h"
 @implementation EGCollisions
+static ODType* _EGCollisions_type;
 
 + (id)collisions {
     return [[EGCollisions alloc] init];
@@ -13,6 +14,11 @@
     self = [super init];
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGCollisions_type = [ODType typeWithCls:[EGCollisions class]];
 }
 
 + (id<CNSet>)collisionsForFigures:(id<CNSeq>)figures {
@@ -34,6 +40,14 @@
     }] map:^EGCollision*(CNTuple* p) {
         return [EGCollision collisionWithItems:p.a points:p.b];
     }] toSet];
+}
+
+- (ODType*)type {
+    return _EGCollisions_type;
+}
+
++ (ODType*)type {
+    return _EGCollisions_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -63,6 +77,7 @@
     CNPair* _items;
     id<CNSet> _points;
 }
+static ODType* _EGCollision_type;
 @synthesize items = _items;
 @synthesize points = _points;
 
@@ -78,6 +93,19 @@
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGCollision_type = [ODType typeWithCls:[EGCollision class]];
+}
+
+- (ODType*)type {
+    return _EGCollision_type;
+}
+
++ (ODType*)type {
+    return _EGCollision_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

@@ -7,7 +7,8 @@
     EGSizeI _tilesOnScreen;
     EGPoint _center;
 }
-static CGFloat _ISO;
+static CGFloat _EGCameraIso_ISO;
+static ODType* _EGCameraIso_type;
 @synthesize tilesOnScreen = _tilesOnScreen;
 @synthesize center = _center;
 
@@ -27,7 +28,8 @@ static CGFloat _ISO;
 
 + (void)initialize {
     [super initialize];
-    _ISO = EGMapSso.ISO;
+    _EGCameraIso_ISO = EGMapSso.ISO;
+    _EGCameraIso_type = [ODType typeWithCls:[EGCameraIso class]];
 }
 
 - (EGRect)calculateViewportSizeWithViewSize:(EGSize)viewSize {
@@ -45,7 +47,7 @@ static CGFloat _ISO;
     EGMutableMatrix* pm = [EG projectionMatrix];
     [pm setIdentity];
     CGFloat ww = ((CGFloat)(_tilesOnScreen.width + _tilesOnScreen.height));
-    [pm orthoLeft:-_ISO right:_ISO * ww - _ISO bottom:-_ISO * _tilesOnScreen.width / 2 top:_ISO * _tilesOnScreen.height / 2 zNear:0.0 zFar:1000.0];
+    [pm orthoLeft:-_EGCameraIso_ISO right:_EGCameraIso_ISO * ww - _EGCameraIso_ISO bottom:-_EGCameraIso_ISO * _tilesOnScreen.width / 2 top:_EGCameraIso_ISO * _tilesOnScreen.height / 2 zNear:0.0 zFar:1000.0];
     glMatrixMode(GL_MODELVIEW);
     EGMutableMatrix* mm = [EG modelMatrix];
     [mm translateX:0.0 y:0.0 z:-100.0];
@@ -64,6 +66,14 @@ static CGFloat _ISO;
     CGFloat ww2 = (_tilesOnScreen.width + _tilesOnScreen.height) / 2.0;
     CGFloat tw = ((CGFloat)(_tilesOnScreen.width));
     return EGPointMake((x / vw - y / vh) * ww2 + tw / 2 - 0.5 + _center.x, (x / vw + y / vh) * ww2 - tw / 2 - 0.5 + _center.y);
+}
+
+- (ODType*)type {
+    return _EGCameraIso_type;
+}
+
++ (ODType*)type {
+    return _EGCameraIso_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

@@ -1,4 +1,4 @@
-#import <Foundation/Foundation.h>
+#import "objdcore.h"
 #import "CNTreeMap.h"
 @protocol CNIterator;
 @protocol CNBuilder;
@@ -34,6 +34,8 @@
 - (void)clear;
 - (void)addAllObjects:(id<CNTraversable>)objects;
 - (CNMutableTreeSet*)reorder;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

@@ -1,4 +1,4 @@
-#import <Foundation/Foundation.h>
+#import "objdcore.h"
 #import "CNSeq.h"
 #import "CNCollection.h"
 #import "CNTypes.h"
@@ -22,6 +22,8 @@
 - (id<CNIterator>)iterator;
 - (id)applyIndex:(NSUInteger)index;
 - (void)dealloc;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -32,6 +34,8 @@
 - (id)initWithArray:(CNPArray*)array;
 - (BOOL)hasNext;
 - (id)next;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

@@ -1,10 +1,13 @@
 #import "EGLayer.h"
 
 #import "EGProcessor.h"
+#import "EG.h"
+#import "EGContext.h"
 @implementation EGLayer{
     id<EGView> _view;
     id _processor;
 }
+static ODType* _EGLayer_type;
 @synthesize view = _view;
 @synthesize processor = _processor;
 
@@ -22,8 +25,14 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _EGLayer_type = [ODType typeWithCls:[EGLayer class]];
+}
+
 - (void)drawWithViewSize:(EGSize)viewSize {
     [[_view camera] focusForViewSize:viewSize];
+    [EG context].environment = [_view environment];
     [_view drawView];
 }
 
@@ -32,6 +41,14 @@
     return unumb([[_processor map:^id(id<EGProcessor> _) {
         return numb([_ processEvent:cameraEvent]);
     }] getOr:@NO]);
+}
+
+- (ODType*)type {
+    return _EGLayer_type;
+}
+
++ (ODType*)type {
+    return _EGLayer_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

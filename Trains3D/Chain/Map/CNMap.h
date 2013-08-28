@@ -1,4 +1,4 @@
-#import <Foundation/Foundation.h>
+#import "objdcore.h"
 #import "CNCollection.h"
 @class CNChain;
 @class CNTuple;
@@ -14,6 +14,7 @@
 - (id<CNIterable>)keys;
 - (id<CNIterable>)values;
 - (BOOL)containsKey:(id)key;
+- (ODType*)type;
 @end
 
 
@@ -24,6 +25,7 @@
 - (id)modifyBy:(id(^)(id))by forKey:(id)forKey;
 - (void)addObject:(CNTuple*)object;
 - (void)removeObject:(CNTuple*)object;
+- (ODType*)type;
 @end
 
 
@@ -43,6 +45,8 @@
 - (id)modifyBy:(id(^)(id))by forKey:(id)forKey;
 - (void)addObject:(CNTuple*)object;
 - (void)removeObject:(CNTuple*)object;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

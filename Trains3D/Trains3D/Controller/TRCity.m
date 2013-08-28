@@ -9,10 +9,10 @@
     TRRailForm* _form;
     BOOL _back;
 }
-static TRCityAngle* _angle0;
-static TRCityAngle* _angle90;
-static TRCityAngle* _angle180;
-static TRCityAngle* _angle270;
+static TRCityAngle* _TRCityAngle_angle0;
+static TRCityAngle* _TRCityAngle_angle90;
+static TRCityAngle* _TRCityAngle_angle180;
+static TRCityAngle* _TRCityAngle_angle270;
 static NSArray* _TRCityAngle_values;
 @synthesize angle = _angle;
 @synthesize form = _form;
@@ -35,27 +35,27 @@ static NSArray* _TRCityAngle_values;
 
 + (void)initialize {
     [super initialize];
-    _angle0 = [TRCityAngle cityAngleWithOrdinal:0 name:@"angle0" angle:0 form:TRRailForm.leftRight back:NO];
-    _angle90 = [TRCityAngle cityAngleWithOrdinal:1 name:@"angle90" angle:90 form:TRRailForm.bottomTop back:YES];
-    _angle180 = [TRCityAngle cityAngleWithOrdinal:2 name:@"angle180" angle:180 form:TRRailForm.leftRight back:YES];
-    _angle270 = [TRCityAngle cityAngleWithOrdinal:3 name:@"angle270" angle:270 form:TRRailForm.bottomTop back:NO];
-    _TRCityAngle_values = (@[_angle0, _angle90, _angle180, _angle270]);
+    _TRCityAngle_angle0 = [TRCityAngle cityAngleWithOrdinal:0 name:@"angle0" angle:0 form:TRRailForm.leftRight back:NO];
+    _TRCityAngle_angle90 = [TRCityAngle cityAngleWithOrdinal:1 name:@"angle90" angle:90 form:TRRailForm.bottomTop back:YES];
+    _TRCityAngle_angle180 = [TRCityAngle cityAngleWithOrdinal:2 name:@"angle180" angle:180 form:TRRailForm.leftRight back:YES];
+    _TRCityAngle_angle270 = [TRCityAngle cityAngleWithOrdinal:3 name:@"angle270" angle:270 form:TRRailForm.bottomTop back:NO];
+    _TRCityAngle_values = (@[_TRCityAngle_angle0, _TRCityAngle_angle90, _TRCityAngle_angle180, _TRCityAngle_angle270]);
 }
 
 + (TRCityAngle*)angle0 {
-    return _angle0;
+    return _TRCityAngle_angle0;
 }
 
 + (TRCityAngle*)angle90 {
-    return _angle90;
+    return _TRCityAngle_angle90;
 }
 
 + (TRCityAngle*)angle180 {
-    return _angle180;
+    return _TRCityAngle_angle180;
 }
 
 + (TRCityAngle*)angle270 {
-    return _angle270;
+    return _TRCityAngle_angle270;
 }
 
 + (NSArray*)values {
@@ -71,6 +71,7 @@ static NSArray* _TRCityAngle_values;
     TRCityAngle* _angle;
     id _expectedTrainAnimation;
 }
+static ODType* _TRCity_type;
 @synthesize color = _color;
 @synthesize tile = _tile;
 @synthesize angle = _angle;
@@ -91,6 +92,11 @@ static NSArray* _TRCityAngle_values;
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _TRCity_type = [ODType typeWithCls:[TRCity class]];
+}
+
 - (TRRailPoint*)startPoint {
     return [TRRailPoint railPointWithTile:_tile form:_angle.form x:0.0 back:_angle.back];
 }
@@ -99,6 +105,14 @@ static NSArray* _TRCityAngle_values;
     [_expectedTrainAnimation forEach:^void(EGAnimation* _) {
         [_ updateWithDelta:delta];
     }];
+}
+
+- (ODType*)type {
+    return _TRCity_type;
+}
+
++ (ODType*)type {
+    return _TRCity_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

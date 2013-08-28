@@ -5,6 +5,7 @@
     CGFloat __current;
     CGFloat __next;
 }
+static ODType* _EGSchedule_type;
 
 + (id)schedule {
     return [[EGSchedule alloc] init];
@@ -19,6 +20,11 @@
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGSchedule_type = [ODType typeWithCls:[EGSchedule class]];
 }
 
 - (void)scheduleEvent:(void(^)())event after:(CGFloat)after {
@@ -38,8 +44,26 @@
     return __current;
 }
 
+- (ODType*)type {
+    return _EGSchedule_type;
+}
+
++ (ODType*)type {
+    return _EGSchedule_type;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
 }
 
 - (NSString*)description {
@@ -57,6 +81,7 @@
     CGFloat __time;
     BOOL __run;
 }
+static ODType* _EGAnimation_type;
 @synthesize length = _length;
 @synthesize finish = _finish;
 
@@ -74,6 +99,11 @@
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGAnimation_type = [ODType typeWithCls:[EGAnimation class]];
 }
 
 - (CGFloat)time {
@@ -97,6 +127,14 @@
             ((void(^)())(_finish))();
         }
     }
+}
+
+- (ODType*)type {
+    return _EGAnimation_type;
+}
+
++ (ODType*)type {
+    return _EGAnimation_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

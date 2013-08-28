@@ -90,5 +90,18 @@ trait EGView {
     def camera : EGCamera
 
     def drawView
+
+    def environment = EGEnvironment.default
 }
 
+
+struct EGVec3(x : float, y : float, z : float)
+
+class EGEnvironment(ambientColor : EGColor, lights : [EGLight]) {
+    static val default = EGEnvironment(EGColor(1, 1, 1, 1), [])
+    static def apply(lights : [EGLight]) = EGEnvironment(EGColor(1, 1, 1, 1), lights)
+    static def apply(light : EGLight) = EGEnvironment(EGColor(1, 1, 1, 1), [light])
+}
+
+class EGLight(color : EGColor)
+class EGDirectLight(color : EGColor, direction : EGVec3) extends EGLight

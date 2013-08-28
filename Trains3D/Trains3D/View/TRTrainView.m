@@ -8,6 +8,7 @@
 #import "TRTypes.h"
 #import "TRRailPoint.h"
 @implementation TRTrainView
+static ODType* _TRTrainView_type;
 
 + (id)trainView {
     return [[TRTrainView alloc] init];
@@ -17,6 +18,11 @@
     self = [super init];
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRTrainView_type = [ODType typeWithCls:[TRTrainView class]];
 }
 
 - (void)drawTrain:(TRTrain*)train {
@@ -43,6 +49,14 @@
         }
         glPopMatrix();
     }];
+}
+
+- (ODType*)type {
+    return _TRTrainView_type;
+}
+
++ (ODType*)type {
+    return _TRTrainView_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

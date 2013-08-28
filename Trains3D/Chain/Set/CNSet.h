@@ -1,4 +1,4 @@
-#import <Foundation/Foundation.h>
+#import "objdcore.h"
 #import "CNCollection.h"
 
 @class CNHashSetBuilder;
@@ -6,10 +6,12 @@
 @protocol CNMutableSet;
 
 @protocol CNSet<CNIterable>
+- (ODType*)type;
 @end
 
 
 @protocol CNMutableSet<CNSet>
+- (ODType*)type;
 @end
 
 
@@ -20,6 +22,8 @@
 - (id)init;
 - (void)addObject:(id)object;
 - (NSSet*)build;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

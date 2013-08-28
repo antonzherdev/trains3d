@@ -6,6 +6,7 @@
 #import "TRLevelFactory.h"
 #import "TRRailPoint.h"
 @implementation TRDamageTest
+static ODType* _TRDamageTest_type;
 
 + (id)damageTest {
     return [[TRDamageTest alloc] init];
@@ -15,6 +16,11 @@
     self = [super init];
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRDamageTest_type = [ODType typeWithCls:[TRDamageTest class]];
 }
 
 - (void)testMain {
@@ -47,6 +53,14 @@
     [self assertEqualsA:damagesCount b:[ arrf(1) {0.6}]];
     [self assertEqualsA:numf(p01.error) b:@0.4];
     [self assertEqualsA:numf(p01.point.x) b:@0.6];
+}
+
+- (ODType*)type {
+    return _TRDamageTest_type;
+}
+
++ (ODType*)type {
+    return _TRDamageTest_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

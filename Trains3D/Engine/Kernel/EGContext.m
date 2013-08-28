@@ -5,10 +5,13 @@
 #import "EGMaterial.h"
 @implementation EGContext{
     NSMutableDictionary* _textureCache;
+    EGEnvironment* _environment;
     EGMutableMatrix* _modelMatrix;
     EGMutableMatrix* _viewMatrix;
     EGMutableMatrix* _projectionMatrix;
 }
+static ODType* _EGContext_type;
+@synthesize environment = _environment;
 @synthesize modelMatrix = _modelMatrix;
 @synthesize viewMatrix = _viewMatrix;
 @synthesize projectionMatrix = _projectionMatrix;
@@ -21,12 +24,18 @@
     self = [super init];
     if(self) {
         _textureCache = [NSMutableDictionary mutableDictionary];
+        _environment = EGEnvironment.aDefault;
         _modelMatrix = [EGMutableMatrix mutableMatrix];
         _viewMatrix = [EGMutableMatrix mutableMatrix];
         _projectionMatrix = [EGMutableMatrix mutableMatrix];
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGContext_type = [ODType typeWithCls:[EGContext class]];
 }
 
 - (EGTexture*)textureForFile:(NSString*)file {
@@ -43,6 +52,14 @@
     [_modelMatrix clear];
     [_viewMatrix clear];
     [_projectionMatrix clear];
+}
+
+- (ODType*)type {
+    return _EGContext_type;
+}
+
++ (ODType*)type {
+    return _EGContext_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -72,6 +89,7 @@
     CNList* __stack;
     EGMatrix* __value;
 }
+static ODType* _EGMutableMatrix_type;
 
 + (id)mutableMatrix {
     return [[EGMutableMatrix alloc] init];
@@ -85,6 +103,11 @@
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGMutableMatrix_type = [ODType typeWithCls:[EGMutableMatrix class]];
 }
 
 - (void)push {
@@ -134,8 +157,26 @@
     __value = [EGMatrix orthoLeft:((float)(left)) right:((float)(right)) bottom:((float)(bottom)) top:((float)(top)) zNear:((float)(zNear)) zFar:((float)(zFar))];
 }
 
+- (ODType*)type {
+    return _EGMutableMatrix_type;
+}
+
++ (ODType*)type {
+    return _EGMutableMatrix_type;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
 }
 
 - (NSString*)description {

@@ -32,6 +32,8 @@
 + (id)bentleyOttmann;
 - (id)init;
 + (id<CNSet>)intersectionsForSegments:(id<CNSeq>)segments;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -41,6 +43,8 @@
 
 + (id)intersectionWithItems:(CNPair*)items point:(EGPoint)point;
 - (id)initWithItems:(CNPair*)items point:(EGPoint)point;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -51,6 +55,8 @@
 - (BOOL)isIntersection;
 - (BOOL)isStart;
 - (BOOL)isEnd;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -66,6 +72,8 @@
 - (CGFloat)slope;
 - (BOOL)isVertical;
 - (BOOL)isEnd;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -75,6 +83,8 @@
 + (id)bentleyOttmannIntersectionEventWithPoint:(EGPoint)point;
 - (id)initWithPoint:(EGPoint)point;
 - (BOOL)isIntersection;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -87,6 +97,8 @@
 + (EGBentleyOttmannEventQueue*)newWithSegments:(id<CNSeq>)segments sweepLine:(EGSweepLine*)sweepLine;
 - (void)offerPoint:(EGPoint)point event:(EGBentleyOttmannEvent*)event;
 - (id<CNSeq>)poll;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -95,6 +107,8 @@
 
 + (id)pointClassWithPoint:(EGPoint)point;
 - (id)initWithPoint:(EGPoint)point;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -106,6 +120,8 @@
 + (id)sweepLine;
 - (id)init;
 - (void)handleEvents:(id<CNSeq>)events;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

@@ -8,6 +8,7 @@
     EGVertexBuffer* _vertexBuffer;
     EGIndexBuffer* _indexBuffer;
 }
+static ODType* _EGMesh_type;
 @synthesize vertexBuffer = _vertexBuffer;
 @synthesize indexBuffer = _indexBuffer;
 
@@ -25,6 +26,11 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _EGMesh_type = [ODType typeWithCls:[EGMesh class]];
+}
+
 + (EGMesh*)applyVertexData:(CNPArray*)vertexData index:(CNPArray*)index {
     return [EGMesh meshWithVertexBuffer:[[EGVertexBuffer applyStride:((NSUInteger)(8 * 4))] setData:vertexData] indexBuffer:[[EGIndexBuffer apply] setData:index]];
 }
@@ -35,6 +41,14 @@
             [_indexBuffer draw];
         }];
     }];
+}
+
+- (ODType*)type {
+    return _EGMesh_type;
+}
+
++ (ODType*)type {
+    return _EGMesh_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -69,6 +83,7 @@
 @implementation EGMeshModel{
     id<CNSeq> _meshes;
 }
+static ODType* _EGMeshModel_type;
 @synthesize meshes = _meshes;
 
 + (id)meshModelWithMeshes:(id<CNSeq>)meshes {
@@ -82,10 +97,23 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _EGMeshModel_type = [ODType typeWithCls:[EGMeshModel class]];
+}
+
 - (void)draw {
     [_meshes forEach:^void(CNTuple* p) {
         [((EGMesh*)(p.a)) drawWithMaterial:((EGMaterial2*)(p.b))];
     }];
+}
+
+- (ODType*)type {
+    return _EGMeshModel_type;
+}
+
++ (ODType*)type {
+    return _EGMeshModel_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

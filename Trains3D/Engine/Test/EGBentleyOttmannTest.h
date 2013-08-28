@@ -33,6 +33,8 @@
 - (void)testOneStart;
 - (void)testOneEnd;
 - (void)testSameLines;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

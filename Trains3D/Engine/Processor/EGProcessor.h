@@ -8,6 +8,7 @@
 
 @protocol EGProcessor<NSObject>
 - (BOOL)processEvent:(EGEvent*)event;
+- (ODType*)type;
 @end
 
 
@@ -15,6 +16,7 @@
 - (BOOL)mouseDownEvent:(EGEvent*)event;
 - (BOOL)mouseDragEvent:(EGEvent*)event;
 - (BOOL)mouseUpEvent:(EGEvent*)event;
+- (ODType*)type;
 @end
 
 
@@ -23,6 +25,7 @@
 - (BOOL)touchMovedEvent:(EGEvent*)event;
 - (BOOL)touchEndedEvent:(EGEvent*)event;
 - (BOOL)touchCanceledEvent:(EGEvent*)event;
+- (ODType*)type;
 @end
 
 
@@ -45,6 +48,8 @@
 - (BOOL)isTouchEnded;
 - (BOOL)isTouchCanceled;
 - (BOOL)touchProcessor:(id<EGTouchProcessor>)processor;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

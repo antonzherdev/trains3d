@@ -34,6 +34,8 @@
 - (BOOL)isDisplayingStats;
 - (void)displayStats;
 - (void)cancelDisplayingStats;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

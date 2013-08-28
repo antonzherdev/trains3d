@@ -15,6 +15,8 @@
 + (id)figureTest;
 - (id)init;
 - (void)testThickLine;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

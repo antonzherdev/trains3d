@@ -5,9 +5,10 @@
 #import "EGTexture.h"
 #import "EGMaterial.h"
 @implementation EGSimpleShaderSystem
-static EGSimpleShaderSystem* _instance;
-static EGSimpleColorShader* _colorShader;
-static EGSimpleTextureShader* _textureShader;
+static EGSimpleShaderSystem* _EGSimpleShaderSystem_instance;
+static EGSimpleColorShader* _EGSimpleShaderSystem_colorShader;
+static EGSimpleTextureShader* _EGSimpleShaderSystem_textureShader;
+static ODType* _EGSimpleShaderSystem_type;
 
 + (id)simpleShaderSystem {
     return [[EGSimpleShaderSystem alloc] init];
@@ -21,9 +22,10 @@ static EGSimpleTextureShader* _textureShader;
 
 + (void)initialize {
     [super initialize];
-    _instance = [EGSimpleShaderSystem simpleShaderSystem];
-    _colorShader = [EGSimpleColorShader simpleColorShader];
-    _textureShader = [EGSimpleTextureShader simpleTextureShader];
+    _EGSimpleShaderSystem_instance = [EGSimpleShaderSystem simpleShaderSystem];
+    _EGSimpleShaderSystem_colorShader = [EGSimpleColorShader simpleColorShader];
+    _EGSimpleShaderSystem_textureShader = [EGSimpleTextureShader simpleTextureShader];
+    _EGSimpleShaderSystem_type = [ODType typeWithCls:[EGSimpleShaderSystem class]];
 }
 
 - (EGShader*)shaderForContext:(EGContext*)context material:(EGSimpleMaterial*)material {
@@ -40,8 +42,8 @@ static EGSimpleTextureShader* _textureShader;
             __ok__ = NO;
         }
         if(__ok__) {
-            _colorShader.color = cl;
-            __result__ = _colorShader;
+            _EGSimpleShaderSystem_colorShader.color = cl;
+            __result__ = _EGSimpleShaderSystem_colorShader;
             __incomplete__ = NO;
         }
     }
@@ -55,13 +57,17 @@ static EGSimpleTextureShader* _textureShader;
             __ok__ = NO;
         }
         if(__ok__) {
-            _textureShader.texture = tex;
-            __result__ = _textureShader;
+            _EGSimpleShaderSystem_textureShader.texture = tex;
+            __result__ = _EGSimpleShaderSystem_textureShader;
             __incomplete__ = NO;
         }
     }
     if(__incomplete__) @throw @"Case incomplete";
     return __result__;
+}
+
+- (ODType*)type {
+    return _EGSimpleShaderSystem_type;
 }
 
 - (void)applyContext:(EGContext*)context material:(id)material draw:(void(^)())draw {
@@ -70,7 +76,11 @@ static EGSimpleTextureShader* _textureShader;
 }
 
 + (EGSimpleShaderSystem*)instance {
-    return _instance;
+    return _EGSimpleShaderSystem_instance;
+}
+
++ (ODType*)type {
+    return _EGSimpleShaderSystem_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -97,9 +107,10 @@ static EGSimpleTextureShader* _textureShader;
 
 
 @implementation EGSimpleShader
-static NSInteger _STRIDE;
-static NSInteger _UV_SHIFT = 0;
-static NSInteger _POSITION_SHIFT;
+static NSInteger _EGSimpleShader_STRIDE;
+static NSInteger _EGSimpleShader_UV_SHIFT = 0;
+static NSInteger _EGSimpleShader_POSITION_SHIFT;
+static ODType* _EGSimpleShader_type;
 
 + (id)simpleShaderWithProgram:(EGShaderProgram*)program {
     return [[EGSimpleShader alloc] initWithProgram:program];
@@ -113,20 +124,29 @@ static NSInteger _POSITION_SHIFT;
 
 + (void)initialize {
     [super initialize];
-    _STRIDE = 8 * 4;
-    _POSITION_SHIFT = 5 * 4;
+    _EGSimpleShader_STRIDE = 8 * 4;
+    _EGSimpleShader_POSITION_SHIFT = 5 * 4;
+    _EGSimpleShader_type = [ODType typeWithCls:[EGSimpleShader class]];
+}
+
+- (ODType*)type {
+    return _EGSimpleShader_type;
 }
 
 + (NSInteger)STRIDE {
-    return _STRIDE;
+    return _EGSimpleShader_STRIDE;
 }
 
 + (NSInteger)UV_SHIFT {
-    return _UV_SHIFT;
+    return _EGSimpleShader_UV_SHIFT;
 }
 
 + (NSInteger)POSITION_SHIFT {
-    return _POSITION_SHIFT;
+    return _EGSimpleShader_POSITION_SHIFT;
+}
+
++ (ODType*)type {
+    return _EGSimpleShader_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -162,17 +182,18 @@ static NSInteger _POSITION_SHIFT;
     EGShaderUniform* _colorUniform;
     EGShaderUniform* _mvpUniform;
 }
-static NSString* _colorVertexProgram = @"attribute vec3 position;\n"
+static NSString* _EGSimpleColorShader_colorVertexProgram = @"attribute vec3 position;\n"
     "uniform mat4 mvp;\n"
     "\n"
     "void main(void) {\n"
     "   gl_Position = mvp * vec4(position, 1);\n"
     "}";
-static NSString* _colorFragmentProgram = @"uniform vec4 color;\n"
+static NSString* _EGSimpleColorShader_colorFragmentProgram = @"uniform vec4 color;\n"
     "\n"
     "void main(void) {\n"
     "    gl_FragColor = color;\n"
     "}";
+static ODType* _EGSimpleColorShader_type;
 @synthesize color = _color;
 @synthesize positionSlot = _positionSlot;
 @synthesize colorUniform = _colorUniform;
@@ -194,18 +215,31 @@ static NSString* _colorFragmentProgram = @"uniform vec4 color;\n"
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _EGSimpleColorShader_type = [ODType typeWithCls:[EGSimpleColorShader class]];
+}
+
 - (void)load {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([EGSimpleColorShader STRIDE])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleColorShader POSITION_SHIFT]))];
     [_mvpUniform setMatrix:[[EG context] mvp]];
     [_colorUniform setColor:_color];
 }
 
+- (ODType*)type {
+    return _EGSimpleColorShader_type;
+}
+
 + (NSString*)colorVertexProgram {
-    return _colorVertexProgram;
+    return _EGSimpleColorShader_colorVertexProgram;
 }
 
 + (NSString*)colorFragmentProgram {
-    return _colorFragmentProgram;
+    return _EGSimpleColorShader_colorFragmentProgram;
+}
+
++ (ODType*)type {
+    return _EGSimpleColorShader_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -237,7 +271,7 @@ static NSString* _colorFragmentProgram = @"uniform vec4 color;\n"
     EGShaderAttribute* _positionSlot;
     EGShaderUniform* _mvpUniform;
 }
-static NSString* _textureVertexProgram = @"attribute vec2 vertexUV;\n"
+static NSString* _EGSimpleTextureShader_textureVertexProgram = @"attribute vec2 vertexUV;\n"
     "attribute vec3 position;\n"
     "uniform mat4 mvp;\n"
     "\n"
@@ -247,12 +281,13 @@ static NSString* _textureVertexProgram = @"attribute vec2 vertexUV;\n"
     "   gl_Position = mvp * vec4(position, 1);\n"
     "   UV = vertexUV;\n"
     "}";
-static NSString* _textureFragmentProgram = @"varying vec2 UV;\n"
+static NSString* _EGSimpleTextureShader_textureFragmentProgram = @"varying vec2 UV;\n"
     "uniform sampler2D texture;\n"
     "\n"
     "void main(void) {\n"
     "   gl_FragColor = texture2D(texture, UV);\n"
     "}";
+static ODType* _EGSimpleTextureShader_type;
 @synthesize texture = _texture;
 @synthesize uvSlot = _uvSlot;
 @synthesize positionSlot = _positionSlot;
@@ -273,18 +308,31 @@ static NSString* _textureFragmentProgram = @"varying vec2 UV;\n"
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _EGSimpleTextureShader_type = [ODType typeWithCls:[EGSimpleTextureShader class]];
+}
+
 - (void)load {
     [_uvSlot setFromBufferWithStride:((NSUInteger)([EGSimpleTextureShader STRIDE])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleTextureShader UV_SHIFT]))];
     [_positionSlot setFromBufferWithStride:((NSUInteger)([EGSimpleTextureShader STRIDE])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleTextureShader POSITION_SHIFT]))];
     [_mvpUniform setMatrix:[[EG context] mvp]];
 }
 
+- (ODType*)type {
+    return _EGSimpleTextureShader_type;
+}
+
 + (NSString*)textureVertexProgram {
-    return _textureVertexProgram;
+    return _EGSimpleTextureShader_textureVertexProgram;
 }
 
 + (NSString*)textureFragmentProgram {
-    return _textureFragmentProgram;
+    return _EGSimpleTextureShader_textureFragmentProgram;
+}
+
++ (ODType*)type {
+    return _EGSimpleTextureShader_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

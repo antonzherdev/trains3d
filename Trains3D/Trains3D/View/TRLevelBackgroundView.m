@@ -9,6 +9,7 @@
     EGMapSso* _map;
     EGMapSsoView* _mapView;
 }
+static ODType* _TRLevelBackgroundView_type;
 @synthesize map = _map;
 @synthesize mapView = _mapView;
 
@@ -26,11 +27,24 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _TRLevelBackgroundView_type = [ODType typeWithCls:[TRLevelBackgroundView class]];
+}
+
 - (void)draw {
     [EGMaterial.grass set];
     [[EG textureForFile:@"Grass.png"] draw:^void() {
         [_mapView drawPlane];
     }];
+}
+
+- (ODType*)type {
+    return _TRLevelBackgroundView_type;
+}
+
++ (ODType*)type {
+    return _TRLevelBackgroundView_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

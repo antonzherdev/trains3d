@@ -1,4 +1,4 @@
-#import <Foundation/Foundation.h>
+#import "objdcore.h"
 #import "CNCollection.h"
 #import "CNSeq.h"
 @class CNOption;
@@ -17,6 +17,8 @@
 + (CNList*)applyObject:(id)object tail:(CNList*)tail;
 - (id<CNIterator>)iterator;
 - (CNList*)tail;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -28,6 +30,8 @@
 - (id)initWithItem:(id)item tail:(CNList*)tail;
 - (id)head;
 - (BOOL)isEmpty;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -37,7 +41,9 @@
 - (id)head;
 - (CNList*)tail;
 - (BOOL)isEmpty;
+- (ODType*)type;
 + (CNEmptyList*)instance;
++ (ODType*)type;
 @end
 
 
@@ -48,6 +54,8 @@
 - (id)init;
 - (BOOL)hasNext;
 - (id)next;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

@@ -4,6 +4,7 @@
 #import "CNPair.h"
 #import "EGFigure.h"
 @implementation EGBentleyOttmannTest
+static ODType* _EGBentleyOttmannTest_type;
 
 + (id)bentleyOttmannTest {
     return [[EGBentleyOttmannTest alloc] init];
@@ -13,6 +14,11 @@
     self = [super init];
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGBentleyOttmannTest_type = [ODType typeWithCls:[EGBentleyOttmannTest class]];
 }
 
 - (void)testMain {
@@ -59,6 +65,14 @@
     id<CNSet> r = [EGBentleyOttmann intersectionsForSegments:(@[tuple(@1, [EGLineSegment newWithX1:-1.0 y1:1.0 x2:1.0 y2:-1.0]), tuple(@2, [EGLineSegment newWithX1:-1.0 y1:1.0 x2:1.0 y2:-1.0]), tuple(@3, [EGLineSegment newWithX1:-1.0 y1:-1.0 x2:2.0 y2:2.0])])];
     id<CNSet> e = [(@[[EGIntersection intersectionWithItems:[CNPair newWithA:@1 b:@2] point:EGPointMake(0.0, 0.0)], [EGIntersection intersectionWithItems:[CNPair newWithA:@2 b:@3] point:EGPointMake(0.0, 0.0)], [EGIntersection intersectionWithItems:[CNPair newWithA:@1 b:@3] point:EGPointMake(0.0, 0.0)]]) toSet];
     [self assertEqualsA:e b:r];
+}
+
+- (ODType*)type {
+    return _EGBentleyOttmannTest_type;
+}
+
++ (ODType*)type {
+    return _EGBentleyOttmannTest_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

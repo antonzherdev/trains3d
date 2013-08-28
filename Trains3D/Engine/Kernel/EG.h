@@ -15,6 +15,8 @@
 + (EGMutableMatrix*)projectionMatrix;
 + (EGMutableMatrix*)viewMatrix;
 + (EGMutableMatrix*)modelMatrix;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

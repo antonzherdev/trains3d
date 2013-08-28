@@ -4,6 +4,7 @@
 #import "EGContext.h"
 #import "EGTexture.h"
 @implementation EG
+static ODType* _EG_type;
 
 + (id)g {
     return [[EG alloc] init];
@@ -13,6 +14,11 @@
     self = [super init];
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EG_type = [ODType typeWithCls:[EG class]];
 }
 
 + (EGDirector*)director {
@@ -37,6 +43,14 @@
 
 + (EGMutableMatrix*)modelMatrix {
     return [EG context].modelMatrix;
+}
+
+- (ODType*)type {
+    return _EG_type;
+}
+
++ (ODType*)type {
+    return _EG_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

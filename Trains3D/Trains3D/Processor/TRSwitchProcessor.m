@@ -9,6 +9,7 @@
     EGRectIndex* _index;
     id _downed;
 }
+static ODType* _TRSwitchProcessor_type;
 @synthesize level = _level;
 
 + (id)switchProcessorWithLevel:(TRLevel*)level {
@@ -24,6 +25,11 @@
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRSwitchProcessor_type = [ODType typeWithCls:[TRSwitchProcessor class]];
 }
 
 - (BOOL)processEvent:(EGEvent*)event {
@@ -58,6 +64,14 @@
     } else {
         return NO;
     }
+}
+
+- (ODType*)type {
+    return _TRSwitchProcessor_type;
+}
+
++ (ODType*)type {
+    return _TRSwitchProcessor_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

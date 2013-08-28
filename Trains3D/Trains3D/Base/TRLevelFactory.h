@@ -41,7 +41,9 @@
 + (EGScene*)sceneForLevelWithNumber:(NSUInteger)number;
 + (TRScore*)score;
 + (TRRailroad*)railroadWithMapSize:(EGSizeI)mapSize;
+- (ODType*)type;
 + (TRScoreRules*)scoreRules;
++ (ODType*)type;
 @end
 
 

@@ -16,6 +16,8 @@
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
 - (id)head;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -26,6 +28,8 @@
 - (id)initWithPair:(CNPair*)pair;
 - (BOOL)hasNext;
 - (id)next;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

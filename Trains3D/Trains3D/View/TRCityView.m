@@ -4,6 +4,7 @@
 #import "TRCity.h"
 #import "TRTypes.h"
 @implementation TRCityView
+static ODType* _TRCityView_type;
 
 + (id)cityView {
     return [[TRCityView alloc] init];
@@ -13,6 +14,11 @@
     self = [super init];
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRCityView_type = [ODType typeWithCls:[TRCityView class]];
 }
 
 - (void)drawCity:(TRCity*)city {
@@ -50,6 +56,14 @@
         egRect(-0.5, -0.5, 0.5, 0.5);
     }];
     glPopMatrix();
+}
+
+- (ODType*)type {
+    return _TRCityView_type;
+}
+
++ (ODType*)type {
+    return _TRCityView_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

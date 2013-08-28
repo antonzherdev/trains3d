@@ -12,6 +12,8 @@
 + (id)cityView;
 - (id)init;
 - (void)drawCity:(TRCity*)city;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

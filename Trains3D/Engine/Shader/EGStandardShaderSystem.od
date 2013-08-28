@@ -1,0 +1,69 @@
+import EGShader
+import EGMaterial
+import EGContext
+import EGTypes
+
+class EGStandardShaderSystem extends EGShaderSystem<EGStandardMaterial> {
+    def shaderFor(context : EGContext, material : EGStandardMaterial) : EGShader = {
+        val lightMap = context.environment.lights.chain.group(_.type).toMap
+        val directLights = lightMap[EGDirectLight.type].getOrElse([])
+        val key = EGStandardShaderKey(directLights.count, material.diffuse.is<EGColorSourceTexture>)
+
+        shaders.objectFor(key, orUpdateWith = key.shader)
+    }
+
+    private static val shaders = CNMutableHashMap<EGStandardShaderKey, EGShader>()
+}
+
+class EGStandardShaderKey(directLightCount : uint, texture : bool) {
+    def shader : EGShader = {
+        val vertexShader =
+            "attribute vec3 normal;
+             attribute vec3 vertexUV; $when(texture)
+             attribute vec3 position;
+             uniform mat4 mvp;
+             $lightsVertexUniform
+
+             varying vec2 UV; $when(texture)
+             $lightsVaryings
+
+             void main(void) {
+                gl_Position = mvp * vec4(position, 1);
+                UV = vertexUV; $when(texture)
+                $lightsCalculateVaryings
+             }"
+        val fragmentShader =
+            "
+            $if(texture)
+             varying vec2 UV;
+             uniform sampler2D texture;
+            $else
+             uniform vec4 color;
+            $endif
+             $lightsVaryings
+             $lightsFragmentUniform
+
+             void main(void) {
+                vec4 matericalColor = color $when(!texture)
+                vec4 matericalColor = texture2D(texture, UV); $when(texture)
+                vec4 diffuse = vec4(0, 0, 0, 0)
+                $lightsDiffuse
+                gl_FragColor = diffuse;
+             }"
+        EGShaderProgram(vertexShader, fragmentShader)
+    }
+
+    def lightsVertexUniform : string = directLightCount.range.chain.map{i -> "uniform vec3 lightDirection$i;"}.toStringWith("\n")
+    def lightsVaryings : string = directLightCount.range.chain.map{i -> "varying float lightDirectionCos$i;"}.toStringWith("\n")
+    def lightsCalculateVaryings : string = directLightCount.range.chain.map{i ->
+        "lightDirectionCos$i = clamp(dot(normal, normalize(lightDirection$i)), 0, 1);"
+    }.toStringWith("\n")
+
+    def lightsFragmentUniform : string = directLightCount.range.chain.map{i -> "uniform vec4 lightDirectionColor$i;"}.toStringWith("\n")
+    def lightsDiffuse : string =  directLightCount.range.chain.map{i ->
+        "diffuse += lightDirectionCos$i * (matericalColor * lightDirectionColor$i);"
+    }.toStringWith("\n")
+
+}
+
+class EGStanda

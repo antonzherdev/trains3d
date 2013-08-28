@@ -8,14 +8,14 @@
 @end
 
 CNRange* intRange(NSInteger x) {
-    return [CNRange rangeWithStart:0 end:x step:1];
+    return [CNRange rangeWithStart:0 end:x - 1 step:1];
 }
 CNRange* intTo(NSInteger a, NSInteger b) {
     return [CNRange rangeWithStart:a end:b step:(a <= b) ? 1 : -1];
 }
 
 CNRange* uintRange(NSUInteger x) {
-    return [CNRange rangeWithStart:0 end:x step:1];
+    return [CNRange rangeWithStart:0 end:x - 1 step:1];
 }
 
 CNRange* uintTo(NSUInteger a, NSUInteger b) {

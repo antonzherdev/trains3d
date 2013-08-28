@@ -38,8 +38,10 @@
 - (void)doTest1ForLevel:(TRLevel*)level delta:(CGFloat)delta form:(TRRailForm*)form;
 - (void)testTurn;
 - (void)testCross;
+- (ODType*)type;
 + (CGFloat)carLen;
 + (CGFloat)carWidth;
++ (ODType*)type;
 @end
 
 

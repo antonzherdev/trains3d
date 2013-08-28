@@ -8,6 +8,8 @@
 + (id)treeMapTest;
 - (id)init;
 - (void)testMain;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

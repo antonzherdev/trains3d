@@ -16,6 +16,7 @@
     NSUInteger _repairerSpeed;
     id<CNSeq> _events;
 }
+static ODType* _TRLevelRules_type;
 @synthesize mapSize = _mapSize;
 @synthesize scoreRules = _scoreRules;
 @synthesize repairerSpeed = _repairerSpeed;
@@ -35,6 +36,19 @@
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRLevelRules_type = [ODType typeWithCls:[TRLevelRules class]];
+}
+
+- (ODType*)type {
+    return _TRLevelRules_type;
+}
+
++ (ODType*)type {
+    return _TRLevelRules_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -80,6 +94,7 @@
     id<CNSeq> __trains;
     id __repairer;
 }
+static ODType* _TRLevel_type;
 @synthesize rules = _rules;
 @synthesize map = _map;
 @synthesize score = _score;
@@ -104,6 +119,11 @@
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRLevel_type = [ODType typeWithCls:[TRLevel class]];
 }
 
 - (id<CNSeq>)cities {
@@ -252,6 +272,14 @@
         [self runTrain:train fromCity:city];
         __repairer = [CNOption opt:train];
     }
+}
+
+- (ODType*)type {
+    return _TRLevel_type;
+}
+
++ (ODType*)type {
+    return _TRLevel_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

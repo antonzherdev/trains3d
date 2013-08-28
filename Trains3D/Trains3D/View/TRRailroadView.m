@@ -15,6 +15,7 @@
     TRLightView* _lightView;
     TRDamageView* _damageView;
 }
+static ODType* _TRRailroadView_type;
 
 + (id)railroadView {
     return [[TRRailroadView alloc] init];
@@ -30,6 +31,11 @@
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRRailroadView_type = [ODType typeWithCls:[TRRailroadView class]];
 }
 
 - (void)drawRailroad:(TRRailroad*)railroad {
@@ -48,6 +54,14 @@
     [[railroad damagesPoints] forEach:^void(TRRailPoint* _) {
         [_damageView drawPoint:_];
     }];
+}
+
+- (ODType*)type {
+    return _TRRailroadView_type;
+}
+
++ (ODType*)type {
+    return _TRRailroadView_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -74,6 +88,7 @@
 
 
 @implementation TRRailView
+static ODType* _TRRailView_type;
 
 + (id)railView {
     return [[TRRailView alloc] init];
@@ -83,6 +98,11 @@
     self = [super init];
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRRailView_type = [ODType typeWithCls:[TRRailView class]];
 }
 
 - (void)drawRail:(TRRail*)rail {
@@ -123,6 +143,14 @@
     glPopMatrix();
 }
 
+- (ODType*)type {
+    return _TRRailView_type;
+}
+
++ (ODType*)type {
+    return _TRRailView_type;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -147,6 +175,7 @@
 
 
 @implementation TRSwitchView
+static ODType* _TRSwitchView_type;
 
 + (id)switchView {
     return [[TRSwitchView alloc] init];
@@ -156,6 +185,11 @@
     self = [super init];
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRSwitchView_type = [ODType typeWithCls:[TRSwitchView class]];
 }
 
 - (void)drawTheSwitch:(TRSwitch*)theSwitch {
@@ -183,6 +217,14 @@
     glPopMatrix();
 }
 
+- (ODType*)type {
+    return _TRSwitchView_type;
+}
+
++ (ODType*)type {
+    return _TRSwitchView_type;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -207,6 +249,7 @@
 
 
 @implementation TRLightView
+static ODType* _TRLightView_type;
 
 + (id)lightView {
     return [[TRLightView alloc] init];
@@ -218,6 +261,11 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _TRLightView_type = [ODType typeWithCls:[TRLightView class]];
+}
+
 - (void)drawLight:(TRLight*)light {
     glPushMatrix();
     egTranslate(((CGFloat)(light.tile.x)), ((CGFloat)(light.tile.y)), 0.0);
@@ -227,6 +275,14 @@
     else [EGMaterial.ruby set];
     glutSolidCube(0.1);
     glPopMatrix();
+}
+
+- (ODType*)type {
+    return _TRLightView_type;
+}
+
++ (ODType*)type {
+    return _TRLightView_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -253,6 +309,7 @@
 
 
 @implementation TRDamageView
+static ODType* _TRDamageView_type;
 
 + (id)damageView {
     return [[TRDamageView alloc] init];
@@ -264,6 +321,11 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _TRDamageView_type = [ODType typeWithCls:[TRDamageView class]];
+}
+
 - (void)drawPoint:(TRRailPoint*)point {
     glPushMatrix();
     egTranslate(point.point.x, point.point.y, 0.01);
@@ -271,6 +333,14 @@
     egNormal3(0.0, 0.0, 1.0);
     egRect(-0.1, -0.1, 0.1, 0.1);
     glPopMatrix();
+}
+
+- (ODType*)type {
+    return _TRDamageView_type;
+}
+
++ (ODType*)type {
+    return _TRDamageView_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

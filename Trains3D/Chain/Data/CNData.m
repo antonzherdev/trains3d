@@ -10,6 +10,7 @@
     VoidRef _bytes;
     BOOL _copied;
 }
+static ODType* _CNPArray_type;
 @synthesize stride = _stride;
 @synthesize wrap = _wrap;
 @synthesize count = _count;
@@ -35,6 +36,11 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _CNPArray_type = [ODType typeWithCls:[CNPArray class]];
+}
+
 + (CNPArray*)applyStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count copyBytes:(VoidRef)copyBytes {
     NSUInteger len = count * stride;
     return [CNPArray arrayWithStride:stride wrap:wrap count:count length:len bytes:copy(copyBytes, count * stride) copied:YES];
@@ -51,6 +57,10 @@
 
 - (void)dealloc {
     if(_copied) free(_bytes);
+}
+
+- (ODType*)type {
+    return _CNPArray_type;
 }
 
 - (id)randomItem {
@@ -144,6 +154,10 @@
     return [builder build];
 }
 
++ (ODType*)type {
+    return _CNPArray_type;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -173,6 +187,7 @@
     CNPArray* _array;
     NSInteger _i;
 }
+static ODType* _CNPArrayIterator_type;
 @synthesize array = _array;
 
 + (id)arrayIteratorWithArray:(CNPArray*)array {
@@ -189,6 +204,11 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _CNPArrayIterator_type = [ODType typeWithCls:[CNPArrayIterator class]];
+}
+
 - (BOOL)hasNext {
     return _i < _array.count;
 }
@@ -197,6 +217,14 @@
     id ret = [_array applyIndex:((NSUInteger)(_i))];
     _i++;
     return ret;
+}
+
+- (ODType*)type {
+    return _CNPArrayIterator_type;
+}
+
++ (ODType*)type {
+    return _CNPArrayIterator_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

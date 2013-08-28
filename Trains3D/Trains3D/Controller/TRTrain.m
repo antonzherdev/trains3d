@@ -10,10 +10,10 @@
 @implementation TRTrainType{
     BOOL(^_obstacleProcessor)(TRLevel*, TRTrain*, TRObstacle*);
 }
-static TRTrainType* _simple;
-static TRTrainType* _crazy;
-static TRTrainType* _fast;
-static TRTrainType* _repairer;
+static TRTrainType* _TRTrainType_simple;
+static TRTrainType* _TRTrainType_crazy;
+static TRTrainType* _TRTrainType_fast;
+static TRTrainType* _TRTrainType_repairer;
 static NSArray* _TRTrainType_values;
 @synthesize obstacleProcessor = _obstacleProcessor;
 
@@ -30,19 +30,19 @@ static NSArray* _TRTrainType_values;
 
 + (void)initialize {
     [super initialize];
-    _simple = [TRTrainType trainTypeWithOrdinal:0 name:@"simple" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
+    _TRTrainType_simple = [TRTrainType trainTypeWithOrdinal:0 name:@"simple" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) [level destroyTrain:train];
         return NO;
     }];
-    _crazy = [TRTrainType trainTypeWithOrdinal:1 name:@"crazy" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
+    _TRTrainType_crazy = [TRTrainType trainTypeWithOrdinal:1 name:@"crazy" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) [level destroyTrain:train];
         return o.obstacleType == TRObstacleType.light;
     }];
-    _fast = [TRTrainType trainTypeWithOrdinal:2 name:@"fast" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
+    _TRTrainType_fast = [TRTrainType trainTypeWithOrdinal:2 name:@"fast" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage || o.obstacleType == TRObstacleType.aSwitch) [level destroyTrain:train];
         return NO;
     }];
-    _repairer = [TRTrainType trainTypeWithOrdinal:3 name:@"repairer" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
+    _TRTrainType_repairer = [TRTrainType trainTypeWithOrdinal:3 name:@"repairer" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) {
             [level.railroad fixDamageAtPoint:o.point];
             return YES;
@@ -50,23 +50,23 @@ static NSArray* _TRTrainType_values;
             return NO;
         }
     }];
-    _TRTrainType_values = (@[_simple, _crazy, _fast, _repairer]);
+    _TRTrainType_values = (@[_TRTrainType_simple, _TRTrainType_crazy, _TRTrainType_fast, _TRTrainType_repairer]);
 }
 
 + (TRTrainType*)simple {
-    return _simple;
+    return _TRTrainType_simple;
 }
 
 + (TRTrainType*)crazy {
-    return _crazy;
+    return _TRTrainType_crazy;
 }
 
 + (TRTrainType*)fast {
-    return _fast;
+    return _TRTrainType_fast;
 }
 
 + (TRTrainType*)repairer {
-    return _repairer;
+    return _TRTrainType_repairer;
 }
 
 + (NSArray*)values {
@@ -88,6 +88,7 @@ static NSArray* _TRTrainType_values;
     CGFloat __speedF;
     BOOL(^_carsObstacleProcessor)(TRObstacle*);
 }
+static ODType* _TRTrain_type;
 @synthesize level = _level;
 @synthesize trainType = _trainType;
 @synthesize color = _color;
@@ -117,6 +118,11 @@ static NSArray* _TRTrainType_values;
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRTrain_type = [ODType typeWithCls:[TRTrain class]];
 }
 
 - (BOOL)isBack {
@@ -195,6 +201,14 @@ static NSArray* _TRTrainType_values;
     }] isDefined];
 }
 
+- (ODType*)type {
+    return _TRTrain_type;
+}
+
++ (ODType*)type {
+    return _TRTrain_type;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -237,8 +251,8 @@ static NSArray* _TRTrainType_values;
     CGFloat _backConnectorLength;
     BOOL _isEngine;
 }
-static TRCarType* _car;
-static TRCarType* _engine;
+static TRCarType* _TRCarType_car;
+static TRCarType* _TRCarType_engine;
 static NSArray* _TRCarType_values;
 @synthesize length = _length;
 @synthesize width = _width;
@@ -265,9 +279,9 @@ static NSArray* _TRCarType_values;
 
 + (void)initialize {
     [super initialize];
-    _car = [TRCarType carTypeWithOrdinal:0 name:@"car" length:0.44 width:0.18 frontConnectorLength:0.13 backConnectorLength:0.13 isEngine:NO];
-    _engine = [TRCarType carTypeWithOrdinal:1 name:@"engine" length:0.43 width:0.18 frontConnectorLength:0.12 backConnectorLength:0.2 isEngine:YES];
-    _TRCarType_values = (@[_car, _engine]);
+    _TRCarType_car = [TRCarType carTypeWithOrdinal:0 name:@"car" length:0.44 width:0.18 frontConnectorLength:0.13 backConnectorLength:0.13 isEngine:NO];
+    _TRCarType_engine = [TRCarType carTypeWithOrdinal:1 name:@"engine" length:0.43 width:0.18 frontConnectorLength:0.12 backConnectorLength:0.2 isEngine:YES];
+    _TRCarType_values = (@[_TRCarType_car, _TRCarType_engine]);
 }
 
 - (CGFloat)fullLength {
@@ -275,11 +289,11 @@ static NSArray* _TRCarType_values;
 }
 
 + (TRCarType*)car {
-    return _car;
+    return _TRCarType_car;
 }
 
 + (TRCarType*)engine {
-    return _engine;
+    return _TRCarType_engine;
 }
 
 + (NSArray*)values {
@@ -296,6 +310,7 @@ static NSArray* _TRCarType_values;
     TRRailPoint* _head;
     TRRailPoint* _tail;
 }
+static ODType* _TRCar_type;
 @synthesize carType = _carType;
 @synthesize frontConnector = _frontConnector;
 @synthesize backConnector = _backConnector;
@@ -311,6 +326,11 @@ static NSArray* _TRCarType_values;
     if(self) _carType = carType;
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRCar_type = [ODType typeWithCls:[TRCar class]];
 }
 
 - (CGFloat)frontConnectorLength {
@@ -335,6 +355,14 @@ static NSArray* _TRCarType_values;
 
 - (EGThickLineSegment*)figure {
     return [EGThickLineSegment thickLineSegmentWithSegment:[EGLineSegment newWithP1:_head.point p2:_tail.point] thickness:[self width]];
+}
+
+- (ODType*)type {
+    return _TRCar_type;
+}
+
++ (ODType*)type {
+    return _TRCar_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -370,6 +398,7 @@ static NSArray* _TRCarType_values;
     id<CNSeq> _speed;
     id<CNSeq> _carTypes;
 }
+static ODType* _TRTrainGenerator_type;
 @synthesize trainType = _trainType;
 @synthesize carsCount = _carsCount;
 @synthesize speed = _speed;
@@ -391,13 +420,18 @@ static NSArray* _TRCarType_values;
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _TRTrainGenerator_type = [ODType typeWithCls:[TRTrainGenerator class]];
+}
+
 - (id<CNSeq>)generateCars {
     NSInteger count = unumi([[_carsCount randomItem] get]);
     TRCar* engine = [TRCar carWithCarType:((TRCarType*)([[[[_carTypes chain] filter:^BOOL(TRCarType* _) {
         return _.isEngine;
     }] randomItem] get]))];
     if(count <= 1) return (@[engine]);
-    else return [[[[intRange(count - 1) chain] map:^TRCar*(id i) {
+    else return [[[[intRange(count) chain] map:^TRCar*(id i) {
         return [TRCar carWithCarType:((TRCarType*)([[[[_carTypes chain] filter:^BOOL(TRCarType* _) {
             return !(_.isEngine);
         }] randomItem] get]))];
@@ -406,6 +440,14 @@ static NSArray* _TRCarType_values;
 
 - (NSUInteger)generateSpeed {
     return ((NSUInteger)(unumi([[_speed randomItem] get])));
+}
+
+- (ODType*)type {
+    return _TRTrainGenerator_type;
+}
+
++ (ODType*)type {
+    return _TRTrainGenerator_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

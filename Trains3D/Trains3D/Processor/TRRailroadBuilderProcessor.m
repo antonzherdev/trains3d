@@ -8,6 +8,7 @@
     TRRailroadBuilderMouseProcessor* _mouseProcessor;
     EGTwoFingerTouchToMouse* _touchProcessor;
 }
+static ODType* _TRRailroadBuilderProcessor_type;
 @synthesize builder = _builder;
 
 + (id)railroadBuilderProcessorWithBuilder:(TRRailroadBuilder*)builder {
@@ -25,8 +26,21 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _TRRailroadBuilderProcessor_type = [ODType typeWithCls:[TRRailroadBuilderProcessor class]];
+}
+
 - (BOOL)processEvent:(EGEvent*)event {
     return [event leftMouseProcessor:_mouseProcessor] || [event touchProcessor:_touchProcessor];
+}
+
+- (ODType*)type {
+    return _TRRailroadBuilderProcessor_type;
+}
+
++ (ODType*)type {
+    return _TRRailroadBuilderProcessor_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -98,6 +112,7 @@
     TRRailroadBuilder* _builder;
     id _startedPoint;
 }
+static ODType* _TRRailroadBuilderMouseProcessor_type;
 @synthesize builder = _builder;
 
 + (id)railroadBuilderMouseProcessorWithBuilder:(TRRailroadBuilder*)builder {
@@ -112,6 +127,11 @@
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRRailroadBuilderMouseProcessor_type = [ODType typeWithCls:[TRRailroadBuilderMouseProcessor class]];
 }
 
 - (BOOL)mouseDownEvent:(EGEvent*)event {
@@ -203,6 +223,14 @@
 
 - (TRRail*)convertRail:(TRRailCorrection)rail {
     return [TRRail railWithTile:rail.tile form:[TRRailForm formForConnector1:[TRRailConnector connectorForX:rail.start.x y:rail.start.y] connector2:[TRRailConnector connectorForX:rail.end.x y:rail.end.y]]];
+}
+
+- (ODType*)type {
+    return _TRRailroadBuilderMouseProcessor_type;
+}
+
++ (ODType*)type {
+    return _TRRailroadBuilderMouseProcessor_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

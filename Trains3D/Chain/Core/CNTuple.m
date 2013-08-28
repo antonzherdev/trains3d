@@ -5,6 +5,7 @@
     id _a;
     id _b;
 }
+static ODType* _CNTuple_type;
 @synthesize a = _a;
 @synthesize b = _b;
 
@@ -22,6 +23,11 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _CNTuple_type = [ODType typeWithCls:[CNTuple class]];
+}
+
 - (NSInteger)compareTo:(CNTuple*)to {
     NSInteger r = [to.a compareTo:_a];
     if(r == 0) return -[to.b compareTo:_b];
@@ -34,6 +40,14 @@
 
 + (id)unapplyTuple:(CNTuple*)tuple {
     return [CNOption opt:tuple];
+}
+
+- (ODType*)type {
+    return _CNTuple_type;
+}
+
++ (ODType*)type {
+    return _CNTuple_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -62,6 +76,7 @@
     id _b;
     id _c;
 }
+static ODType* _CNTuple3_type;
 @synthesize a = _a;
 @synthesize b = _b;
 @synthesize c = _c;
@@ -81,6 +96,11 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _CNTuple3_type = [ODType typeWithCls:[CNTuple3 class]];
+}
+
 - (NSInteger)compareTo:(CNTuple3*)to {
     NSInteger r = [to.a compareTo:_a];
     if(r == 0) {
@@ -98,6 +118,14 @@
 
 + (id)unapplyTuple:(CNTuple3*)tuple {
     return [CNOption opt:tuple];
+}
+
+- (ODType*)type {
+    return _CNTuple3_type;
+}
+
++ (ODType*)type {
+    return _CNTuple3_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -128,6 +156,7 @@
     id _c;
     id _d;
 }
+static ODType* _CNTuple4_type;
 @synthesize a = _a;
 @synthesize b = _b;
 @synthesize c = _c;
@@ -147,6 +176,11 @@
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _CNTuple4_type = [ODType typeWithCls:[CNTuple4 class]];
 }
 
 - (NSInteger)compareTo:(CNTuple4*)to {
@@ -171,6 +205,14 @@
 
 + (id)unapplyTuple:(CNTuple4*)tuple {
     return [CNOption opt:tuple];
+}
+
+- (ODType*)type {
+    return _CNTuple4_type;
+}
+
++ (ODType*)type {
+    return _CNTuple4_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

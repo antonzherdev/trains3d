@@ -1,4 +1,4 @@
-#import <Foundation/Foundation.h>
+#import "objdcore.h"
 #import "CNCollection.h"
 #import "CNSeq.h"
 @class CNOption;
@@ -20,6 +20,8 @@
 - (id<CNIterator>)iterator;
 - (CNRange*)setStep:(NSInteger)step;
 - (BOOL)isEmpty;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -32,6 +34,8 @@
 - (id)initWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step;
 - (BOOL)hasNext;
 - (id)next;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

@@ -10,6 +10,7 @@
 @implementation EGShaderProgram{
     GLuint _handle;
 }
+static ODType* _EGShaderProgram_type;
 @synthesize handle = _handle;
 
 + (id)shaderProgramWithHandle:(GLuint)handle {
@@ -21,6 +22,11 @@
     if(self) _handle = handle;
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGShaderProgram_type = [ODType typeWithCls:[EGShaderProgram class]];
 }
 
 + (EGShaderProgram*)loadFromFilesVertex:(NSString*)vertex fragment:(NSString*)fragment {
@@ -88,6 +94,14 @@
     return [EGShaderUniform shaderUniformWithHandle:h];
 }
 
+- (ODType*)type {
+    return _EGShaderProgram_type;
+}
+
++ (ODType*)type {
+    return _EGShaderProgram_type;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -118,6 +132,7 @@
 @implementation EGShader{
     EGShaderProgram* _program;
 }
+static ODType* _EGShader_type;
 @synthesize program = _program;
 
 + (id)shaderWithProgram:(EGShaderProgram*)program {
@@ -129,6 +144,11 @@
     if(self) _program = program;
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGShader_type = [ODType typeWithCls:[EGShader class]];
 }
 
 - (void)applyDraw:(void(^)())draw {
@@ -157,6 +177,14 @@
 
 - (EGShaderUniform*)uniformForName:(NSString*)name {
     return [_program uniformForName:name];
+}
+
+- (ODType*)type {
+    return _EGShader_type;
+}
+
++ (ODType*)type {
+    return _EGShader_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -189,6 +217,7 @@
 @implementation EGShaderAttribute{
     GLuint _handle;
 }
+static ODType* _EGShaderAttribute_type;
 @synthesize handle = _handle;
 
 + (id)shaderAttributeWithHandle:(GLuint)handle {
@@ -202,9 +231,22 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _EGShaderAttribute_type = [ODType typeWithCls:[EGShaderAttribute class]];
+}
+
 - (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(GLenum)valuesType shift:(NSUInteger)shift {
     glEnableVertexAttribArray(_handle);
     egVertexAttribPointer(_handle, valuesCount, valuesType, GL_FALSE, stride, shift);
+}
+
+- (ODType*)type {
+    return _EGShaderAttribute_type;
+}
+
++ (ODType*)type {
+    return _EGShaderAttribute_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -237,6 +279,7 @@
 @implementation EGShaderUniform{
     GLuint _handle;
 }
+static ODType* _EGShaderUniform_type;
 @synthesize handle = _handle;
 
 + (id)shaderUniformWithHandle:(GLuint)handle {
@@ -250,12 +293,25 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _EGShaderUniform_type = [ODType typeWithCls:[EGShaderUniform class]];
+}
+
 - (void)setMatrix:(EGMatrix*)matrix {
     glUniformMatrix4fv(_handle, 1, GL_FALSE, [matrix array]);
 }
 
 - (void)setColor:(EGColor)color {
     egUniformColor(_handle, color);
+}
+
+- (ODType*)type {
+    return _EGShaderUniform_type;
+}
+
++ (ODType*)type {
+    return _EGShaderUniform_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

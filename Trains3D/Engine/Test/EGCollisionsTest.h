@@ -21,6 +21,8 @@
 - (void)testDavidsStar;
 - (void)testEmptyWithCrossedBoundingRects;
 - (void)testEmptyWithoutCrossedBoundingRects;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

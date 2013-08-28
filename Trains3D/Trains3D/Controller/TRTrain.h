@@ -60,6 +60,8 @@
 - (void)setHead:(TRRailPoint*)head;
 - (void)updateWithDelta:(CGFloat)delta;
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -92,6 +94,8 @@
 - (CGFloat)width;
 - (CGFloat)fullLength;
 - (EGThickLineSegment*)figure;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -105,6 +109,8 @@
 - (id)initWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes;
 - (id<CNSeq>)generateCars;
 - (NSUInteger)generateSpeed;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

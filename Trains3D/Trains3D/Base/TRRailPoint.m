@@ -5,10 +5,10 @@
     NSInteger _y;
     NSInteger _angle;
 }
-static TRRailConnector* _left;
-static TRRailConnector* _bottom;
-static TRRailConnector* _top;
-static TRRailConnector* _right;
+static TRRailConnector* _TRRailConnector_left;
+static TRRailConnector* _TRRailConnector_bottom;
+static TRRailConnector* _TRRailConnector_top;
+static TRRailConnector* _TRRailConnector_right;
 static NSArray* _TRRailConnector_values;
 @synthesize x = _x;
 @synthesize y = _y;
@@ -31,24 +31,24 @@ static NSArray* _TRRailConnector_values;
 
 + (void)initialize {
     [super initialize];
-    _left = [TRRailConnector railConnectorWithOrdinal:0 name:@"left" x:-1 y:0 angle:0];
-    _bottom = [TRRailConnector railConnectorWithOrdinal:1 name:@"bottom" x:0 y:-1 angle:90];
-    _top = [TRRailConnector railConnectorWithOrdinal:2 name:@"top" x:0 y:1 angle:270];
-    _right = [TRRailConnector railConnectorWithOrdinal:3 name:@"right" x:1 y:0 angle:180];
-    _TRRailConnector_values = (@[_left, _bottom, _top, _right]);
+    _TRRailConnector_left = [TRRailConnector railConnectorWithOrdinal:0 name:@"left" x:-1 y:0 angle:0];
+    _TRRailConnector_bottom = [TRRailConnector railConnectorWithOrdinal:1 name:@"bottom" x:0 y:-1 angle:90];
+    _TRRailConnector_top = [TRRailConnector railConnectorWithOrdinal:2 name:@"top" x:0 y:1 angle:270];
+    _TRRailConnector_right = [TRRailConnector railConnectorWithOrdinal:3 name:@"right" x:1 y:0 angle:180];
+    _TRRailConnector_values = (@[_TRRailConnector_left, _TRRailConnector_bottom, _TRRailConnector_top, _TRRailConnector_right]);
 }
 
 + (TRRailConnector*)connectorForX:(NSInteger)x y:(NSInteger)y {
     if(x == -1 && y == 0) {
-        return _left;
+        return _TRRailConnector_left;
     } else {
         if(x == 0 && y == -1) {
-            return _bottom;
+            return _TRRailConnector_bottom;
         } else {
             if(x == 0 && y == 1) {
-                return _top;
+                return _TRRailConnector_top;
             } else {
-                if(x == 1 && y == 0) return _right;
+                if(x == 1 && y == 0) return _TRRailConnector_right;
                 else @throw @"No rail connector";
             }
         }
@@ -56,14 +56,14 @@ static NSArray* _TRRailConnector_values;
 }
 
 - (TRRailConnector*)otherSideConnector {
-    if(self == _left) {
-        return _right;
+    if(self == _TRRailConnector_left) {
+        return _TRRailConnector_right;
     } else {
-        if(self == _right) {
-            return _left;
+        if(self == _TRRailConnector_right) {
+            return _TRRailConnector_left;
         } else {
-            if(self == _top) return _bottom;
-            else return _top;
+            if(self == _TRRailConnector_top) return _TRRailConnector_bottom;
+            else return _TRRailConnector_top;
         }
     }
 }
@@ -73,19 +73,19 @@ static NSArray* _TRRailConnector_values;
 }
 
 + (TRRailConnector*)left {
-    return _left;
+    return _TRRailConnector_left;
 }
 
 + (TRRailConnector*)bottom {
-    return _bottom;
+    return _TRRailConnector_bottom;
 }
 
 + (TRRailConnector*)top {
-    return _top;
+    return _TRRailConnector_top;
 }
 
 + (TRRailConnector*)right {
-    return _right;
+    return _TRRailConnector_right;
 }
 
 + (NSArray*)values {
@@ -102,12 +102,12 @@ static NSArray* _TRRailConnector_values;
     CGFloat _length;
     EGPoint(^_pointFun)(CGFloat);
 }
-static TRRailForm* _leftBottom;
-static TRRailForm* _leftRight;
-static TRRailForm* _leftTop;
-static TRRailForm* _bottomTop;
-static TRRailForm* _bottomRight;
-static TRRailForm* _topRight;
+static TRRailForm* _TRRailForm_leftBottom;
+static TRRailForm* _TRRailForm_leftRight;
+static TRRailForm* _TRRailForm_leftTop;
+static TRRailForm* _TRRailForm_bottomTop;
+static TRRailForm* _TRRailForm_bottomRight;
+static TRRailForm* _TRRailForm_topRight;
 static NSArray* _TRRailForm_values;
 @synthesize start = _start;
 @synthesize end = _end;
@@ -134,25 +134,25 @@ static NSArray* _TRRailForm_values;
 
 + (void)initialize {
     [super initialize];
-    _leftBottom = [TRRailForm railFormWithOrdinal:0 name:@"leftBottom" start:TRRailConnector.left end:TRRailConnector.bottom isTurn:YES length:M_PI_4 pointFun:^EGPoint(CGFloat x) {
+    _TRRailForm_leftBottom = [TRRailForm railFormWithOrdinal:0 name:@"leftBottom" start:TRRailConnector.left end:TRRailConnector.bottom isTurn:YES length:M_PI_4 pointFun:^EGPoint(CGFloat x) {
         return EGPointMake(-0.5 + 0.5 * sin(x * 2), -0.5 + 0.5 * cos(x * 2));
     }];
-    _leftRight = [TRRailForm railFormWithOrdinal:1 name:@"leftRight" start:TRRailConnector.left end:TRRailConnector.right isTurn:NO length:1.0 pointFun:^EGPoint(CGFloat x) {
+    _TRRailForm_leftRight = [TRRailForm railFormWithOrdinal:1 name:@"leftRight" start:TRRailConnector.left end:TRRailConnector.right isTurn:NO length:1.0 pointFun:^EGPoint(CGFloat x) {
         return EGPointMake(x - 0.5, 0.0);
     }];
-    _leftTop = [TRRailForm railFormWithOrdinal:2 name:@"leftTop" start:TRRailConnector.left end:TRRailConnector.top isTurn:YES length:M_PI_4 pointFun:^EGPoint(CGFloat x) {
+    _TRRailForm_leftTop = [TRRailForm railFormWithOrdinal:2 name:@"leftTop" start:TRRailConnector.left end:TRRailConnector.top isTurn:YES length:M_PI_4 pointFun:^EGPoint(CGFloat x) {
         return EGPointMake(-0.5 + 0.5 * sin(x * 2), 0.5 - 0.5 * cos(x * 2));
     }];
-    _bottomTop = [TRRailForm railFormWithOrdinal:3 name:@"bottomTop" start:TRRailConnector.bottom end:TRRailConnector.top isTurn:NO length:1.0 pointFun:^EGPoint(CGFloat x) {
+    _TRRailForm_bottomTop = [TRRailForm railFormWithOrdinal:3 name:@"bottomTop" start:TRRailConnector.bottom end:TRRailConnector.top isTurn:NO length:1.0 pointFun:^EGPoint(CGFloat x) {
         return EGPointMake(0.0, x - 0.5);
     }];
-    _bottomRight = [TRRailForm railFormWithOrdinal:4 name:@"bottomRight" start:TRRailConnector.bottom end:TRRailConnector.right isTurn:YES length:M_PI_4 pointFun:^EGPoint(CGFloat x) {
+    _TRRailForm_bottomRight = [TRRailForm railFormWithOrdinal:4 name:@"bottomRight" start:TRRailConnector.bottom end:TRRailConnector.right isTurn:YES length:M_PI_4 pointFun:^EGPoint(CGFloat x) {
         return EGPointMake(0.5 - 0.5 * cos(x * 2), -0.5 + 0.5 * sin(x * 2));
     }];
-    _topRight = [TRRailForm railFormWithOrdinal:5 name:@"topRight" start:TRRailConnector.top end:TRRailConnector.right isTurn:YES length:M_PI_4 pointFun:^EGPoint(CGFloat x) {
+    _TRRailForm_topRight = [TRRailForm railFormWithOrdinal:5 name:@"topRight" start:TRRailConnector.top end:TRRailConnector.right isTurn:YES length:M_PI_4 pointFun:^EGPoint(CGFloat x) {
         return EGPointMake(0.5 - 0.5 * cos(x * 2), 0.5 - 0.5 * sin(x * 2));
     }];
-    _TRRailForm_values = (@[_leftBottom, _leftRight, _leftTop, _bottomTop, _bottomRight, _topRight]);
+    _TRRailForm_values = (@[_TRRailForm_leftBottom, _TRRailForm_leftRight, _TRRailForm_leftTop, _TRRailForm_bottomTop, _TRRailForm_bottomRight, _TRRailForm_topRight]);
 }
 
 + (TRRailForm*)formForConnector1:(TRRailConnector*)connector1 connector2:(TRRailConnector*)connector2 {
@@ -160,21 +160,21 @@ static NSArray* _TRRailForm_values;
         return [TRRailForm formForConnector1:connector2 connector2:connector1];
     } else {
         if(connector1 == TRRailConnector.left && connector2 == TRRailConnector.right) {
-            return _leftRight;
+            return _TRRailForm_leftRight;
         } else {
             if(connector1 == TRRailConnector.left && connector2 == TRRailConnector.bottom) {
-                return _leftBottom;
+                return _TRRailForm_leftBottom;
             } else {
                 if(connector1 == TRRailConnector.left && connector2 == TRRailConnector.top) {
-                    return _leftTop;
+                    return _TRRailForm_leftTop;
                 } else {
                     if(connector1 == TRRailConnector.bottom && connector2 == TRRailConnector.top) {
-                        return _bottomTop;
+                        return _TRRailForm_bottomTop;
                     } else {
                         if(connector1 == TRRailConnector.bottom && connector2 == TRRailConnector.right) {
-                            return _bottomRight;
+                            return _TRRailForm_bottomRight;
                         } else {
-                            if(connector1 == TRRailConnector.top && connector2 == TRRailConnector.right) return _topRight;
+                            if(connector1 == TRRailConnector.top && connector2 == TRRailConnector.right) return _TRRailForm_topRight;
                             else @throw @"No form for connectors";
                         }
                     }
@@ -185,27 +185,27 @@ static NSArray* _TRRailForm_values;
 }
 
 + (TRRailForm*)leftBottom {
-    return _leftBottom;
+    return _TRRailForm_leftBottom;
 }
 
 + (TRRailForm*)leftRight {
-    return _leftRight;
+    return _TRRailForm_leftRight;
 }
 
 + (TRRailForm*)leftTop {
-    return _leftTop;
+    return _TRRailForm_leftTop;
 }
 
 + (TRRailForm*)bottomTop {
-    return _bottomTop;
+    return _TRRailForm_bottomTop;
 }
 
 + (TRRailForm*)bottomRight {
-    return _bottomRight;
+    return _TRRailForm_bottomRight;
 }
 
 + (TRRailForm*)topRight {
-    return _topRight;
+    return _TRRailForm_topRight;
 }
 
 + (NSArray*)values {
@@ -222,6 +222,7 @@ static NSArray* _TRRailForm_values;
     BOOL _back;
     EGPoint _point;
 }
+static ODType* _TRRailPoint_type;
 @synthesize tile = _tile;
 @synthesize form = _form;
 @synthesize x = _x;
@@ -243,6 +244,11 @@ static NSArray* _TRRailForm_values;
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRRailPoint_type = [ODType typeWithCls:[TRRailPoint class]];
 }
 
 - (TRRailPoint*)addX:(CGFloat)x {
@@ -288,6 +294,14 @@ static NSArray* _TRRailForm_values;
     return [[self endConnector] nextTile:_tile];
 }
 
+- (ODType*)type {
+    return _TRRailPoint_type;
+}
+
++ (ODType*)type {
+    return _TRRailPoint_type;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -325,6 +339,7 @@ static NSArray* _TRRailForm_values;
     TRRailPoint* _point;
     CGFloat _error;
 }
+static ODType* _TRRailPointCorrection_type;
 @synthesize point = _point;
 @synthesize error = _error;
 
@@ -342,9 +357,22 @@ static NSArray* _TRRailForm_values;
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _TRRailPointCorrection_type = [ODType typeWithCls:[TRRailPointCorrection class]];
+}
+
 - (TRRailPoint*)addErrorToPoint {
     if(eqf(_error, 0)) return _point;
     else return [_point addX:_error];
+}
+
+- (ODType*)type {
+    return _TRRailPointCorrection_type;
+}
+
++ (ODType*)type {
+    return _TRRailPointCorrection_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

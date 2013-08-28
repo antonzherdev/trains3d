@@ -29,6 +29,8 @@
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
 - (id<CNSeq>)rails;
 - (BOOL)isGreen;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -37,7 +39,9 @@
 - (id)init;
 - (id<CNSeq>)rails;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
+- (ODType*)type;
 + (TRRailroadConnectorContent*)instance;
++ (ODType*)type;
 @end
 
 
@@ -52,6 +56,8 @@
 - (id<CNSeq>)rails;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
 - (BOOL)canAddRail:(TRRail*)rail;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -70,6 +76,8 @@
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (id<CNSeq>)rails;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -86,6 +94,8 @@
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (id<CNSeq>)rails;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -104,6 +114,8 @@
 
 + (id)obstacleWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint*)point;
 - (id)initWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint*)point;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -125,6 +137,8 @@
 - (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint*)from to:(CGFloat)to;
 - (void)addDamageAtPoint:(TRRailPoint*)point;
 - (void)fixDamageAtPoint:(TRRailPoint*)point;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -137,6 +151,8 @@
 - (BOOL)tryBuildRail:(TRRail*)rail;
 - (void)clear;
 - (void)fix;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

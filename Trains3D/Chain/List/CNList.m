@@ -4,6 +4,7 @@
 #import "CNOption.h"
 #import "CNChain.h"
 @implementation CNList
+static ODType* _CNList_type;
 
 + (id)list {
     return [[CNList alloc] init];
@@ -13,6 +14,11 @@
     self = [super init];
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _CNList_type = [ODType typeWithCls:[CNList class]];
 }
 
 + (CNList*)apply {
@@ -35,6 +41,10 @@
 
 - (CNList*)tail {
     @throw @"Method tail is abstract";
+}
+
+- (ODType*)type {
+    return _CNList_type;
 }
 
 - (id)applyIndex:(NSUInteger)index {
@@ -149,6 +159,10 @@
     return [builder build];
 }
 
++ (ODType*)type {
+    return _CNList_type;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -171,6 +185,7 @@
     id _item;
     CNList* _tail;
 }
+static ODType* _CNFilledList_type;
 @synthesize item = _item;
 @synthesize tail = _tail;
 
@@ -188,12 +203,25 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _CNFilledList_type = [ODType typeWithCls:[CNFilledList class]];
+}
+
 - (id)head {
     return [CNOption opt:_item];
 }
 
 - (BOOL)isEmpty {
     return NO;
+}
+
+- (ODType*)type {
+    return _CNFilledList_type;
+}
+
++ (ODType*)type {
+    return _CNFilledList_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -226,7 +254,8 @@
 
 
 @implementation CNEmptyList
-static CNEmptyList* _instance;
+static CNEmptyList* _CNEmptyList_instance;
+static ODType* _CNEmptyList_type;
 
 + (id)emptyList {
     return [[CNEmptyList alloc] init];
@@ -240,7 +269,8 @@ static CNEmptyList* _instance;
 
 + (void)initialize {
     [super initialize];
-    _instance = [CNEmptyList emptyList];
+    _CNEmptyList_instance = [CNEmptyList emptyList];
+    _CNEmptyList_type = [ODType typeWithCls:[CNEmptyList class]];
 }
 
 - (id)head {
@@ -255,8 +285,16 @@ static CNEmptyList* _instance;
     return YES;
 }
 
+- (ODType*)type {
+    return _CNEmptyList_type;
+}
+
 + (CNEmptyList*)instance {
-    return _instance;
+    return _CNEmptyList_instance;
+}
+
++ (ODType*)type {
+    return _CNEmptyList_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -285,6 +323,7 @@ static CNEmptyList* _instance;
 @implementation CNListIterator{
     CNList* _list;
 }
+static ODType* _CNListIterator_type;
 @synthesize list = _list;
 
 + (id)listIterator {
@@ -297,6 +336,11 @@ static CNEmptyList* _instance;
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _CNListIterator_type = [ODType typeWithCls:[CNListIterator class]];
+}
+
 - (BOOL)hasNext {
     return [_list isEmpty];
 }
@@ -307,8 +351,26 @@ static CNEmptyList* _instance;
     return ret;
 }
 
+- (ODType*)type {
+    return _CNListIterator_type;
+}
+
++ (ODType*)type {
+    return _CNListIterator_type;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
 }
 
 - (NSString*)description {

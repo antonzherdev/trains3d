@@ -13,7 +13,8 @@
     EGContext* _context;
     id __stat;
 }
-static EGDirector* __current;
+static EGDirector* _EGDirector__current;
+static ODType* _EGDirector_type;
 @synthesize scene = _scene;
 @synthesize time = _time;
 @synthesize context = _context;
@@ -35,12 +36,17 @@ static EGDirector* __current;
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _EGDirector_type = [ODType typeWithCls:[EGDirector class]];
+}
+
 + (EGDirector*)current {
-    return __current;
+    return _EGDirector__current;
 }
 
 - (void)drawWithSize:(EGSize)size {
-    __current = self;
+    _EGDirector__current = self;
     egClear();
     [_context clearMatrix];
     glEnable(GL_DEPTH_TEST);
@@ -105,6 +111,14 @@ static EGDirector* __current;
 
 - (void)cancelDisplayingStats {
     __stat = [CNOption none];
+}
+
+- (ODType*)type {
+    return _EGDirector_type;
+}
+
++ (ODType*)type {
+    return _EGDirector_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

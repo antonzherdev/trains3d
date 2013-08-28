@@ -1,12 +1,11 @@
 #import <Foundation/Foundation.h>
 #import "CNTypes.h"
+#import "CNMap.h"
 
 @class CNChain;
 
-@interface NSDictionary (CNChain)
-- (NSArray *)values;
+@interface NSDictionary (CNChain) <CNMap>
 - (NSDictionary *)dictionaryByAddingValue:(id)value forKey:(id)key;
-- (id)optionObjectForKey:(id)key;
 - (CNChain *) chain;
 - (void) forEach:(cnP)p;
 - (BOOL) goOn:(BOOL(^)(id))on;

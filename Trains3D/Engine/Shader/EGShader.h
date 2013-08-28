@@ -41,6 +41,8 @@
 - (void)applyDraw:(void(^)())draw;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
 - (EGShaderUniform*)uniformForName:(NSString*)name;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -55,6 +57,8 @@
 - (void)clear;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
 - (EGShaderUniform*)uniformForName:(NSString*)name;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -64,6 +68,8 @@
 + (id)shaderAttributeWithHandle:(GLuint)handle;
 - (id)initWithHandle:(GLuint)handle;
 - (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(GLenum)valuesType shift:(NSUInteger)shift;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -74,12 +80,15 @@
 - (id)initWithHandle:(GLuint)handle;
 - (void)setMatrix:(EGMatrix*)matrix;
 - (void)setColor:(EGColor)color;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
 @protocol EGShaderSystem<NSObject>
 - (void)applyContext:(EGContext*)context material:(id)material draw:(void(^)())draw;
 - (EGShader*)shaderForContext:(EGContext*)context material:(id)material;
+- (ODType*)type;
 @end
 
 

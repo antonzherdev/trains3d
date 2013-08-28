@@ -45,6 +45,8 @@
 
 + (id)levelRulesWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
 - (id)initWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -72,6 +74,8 @@
 - (void)destroyTrain:(TRTrain*)train;
 - (void)removeTrain:(TRTrain*)train;
 - (void)runRepairerFromCity:(TRCity*)city;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

@@ -18,6 +18,8 @@
 - (EGRect)calculateViewportSizeWithViewSize:(EGSize)viewSize;
 - (void)focusForViewSize:(EGSize)viewSize;
 - (EGPoint)translateWithViewSize:(EGSize)viewSize viewPoint:(EGPoint)viewPoint;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

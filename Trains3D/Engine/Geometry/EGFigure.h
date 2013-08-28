@@ -27,6 +27,8 @@
 - (CGFloat)angle;
 - (CGFloat)degreeAngle;
 - (EGLine*)perpendicularWithPoint:(EGPoint)point;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -46,6 +48,8 @@
 - (id)moveWithDistance:(CGFloat)distance;
 - (CGFloat)angle;
 - (EGLine*)perpendicularWithPoint:(EGPoint)point;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -64,12 +68,15 @@
 - (id)moveWithDistance:(CGFloat)distance;
 - (CGFloat)angle;
 - (EGLine*)perpendicularWithPoint:(EGPoint)point;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
 @protocol EGFigure<NSObject>
 - (EGRect)boundingRect;
 - (id<CNSeq>)segments;
+- (ODType*)type;
 @end
 
 
@@ -92,6 +99,8 @@
 - (id<CNSeq>)segments;
 - (EGLineSegment*)moveWithPoint:(EGPoint)point;
 - (EGLineSegment*)moveWithX:(CGFloat)x y:(CGFloat)y;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -102,6 +111,8 @@
 + (id)polygonWithPoints:(id<CNSeq>)points;
 - (id)initWithPoints:(id<CNSeq>)points;
 - (EGRect)boundingRect;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -114,6 +125,8 @@
 - (id)initWithSegment:(EGLineSegment*)segment thickness:(CGFloat)thickness;
 - (EGRect)boundingRect;
 - (id<CNSeq>)segments;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

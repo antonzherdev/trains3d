@@ -24,16 +24,20 @@
 + (id)simpleShaderSystem;
 - (id)init;
 - (EGShader*)shaderForContext:(EGContext*)context material:(EGSimpleMaterial*)material;
+- (ODType*)type;
 + (EGSimpleShaderSystem*)instance;
++ (ODType*)type;
 @end
 
 
 @interface EGSimpleShader : EGShader
 + (id)simpleShaderWithProgram:(EGShaderProgram*)program;
 - (id)initWithProgram:(EGShaderProgram*)program;
+- (ODType*)type;
 + (NSInteger)STRIDE;
 + (NSInteger)UV_SHIFT;
 + (NSInteger)POSITION_SHIFT;
++ (ODType*)type;
 @end
 
 
@@ -46,8 +50,10 @@
 + (id)simpleColorShader;
 - (id)init;
 - (void)load;
+- (ODType*)type;
 + (NSString*)colorVertexProgram;
 + (NSString*)colorFragmentProgram;
++ (ODType*)type;
 @end
 
 
@@ -60,8 +66,10 @@
 + (id)simpleTextureShader;
 - (id)init;
 - (void)load;
+- (ODType*)type;
 + (NSString*)textureVertexProgram;
 + (NSString*)textureFragmentProgram;
++ (ODType*)type;
 @end
 
 

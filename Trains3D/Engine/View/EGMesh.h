@@ -28,6 +28,8 @@
 - (id)initWithVertexBuffer:(EGVertexBuffer*)vertexBuffer indexBuffer:(EGIndexBuffer*)indexBuffer;
 + (EGMesh*)applyVertexData:(CNPArray*)vertexData index:(CNPArray*)index;
 - (void)drawWithMaterial:(EGMaterial2*)material;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -37,6 +39,8 @@
 + (id)meshModelWithMeshes:(id<CNSeq>)meshes;
 - (id)initWithMeshes:(id<CNSeq>)meshes;
 - (void)draw;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

@@ -2,6 +2,7 @@ import EGTexture
 import EGMatrix
 import EGMaterial
 import EGGL
+import EGTypes
 
 
 class EGContext {
@@ -9,7 +10,7 @@ class EGContext {
 
     def textureFor(file : string) : EGTexture = textureCache.objectFor(key = file, orUpdateWith = EGTexture(file))
 
-
+    var environment = EGEnvironment.default
     val modelMatrix = EGMutableMatrix()
     val viewMatrix = EGMutableMatrix()
     val projectionMatrix = EGMutableMatrix()

@@ -8,6 +8,7 @@
     NSInteger _step;
     NSUInteger _count;
 }
+static ODType* _CNRange_type;
 @synthesize start = _start;
 @synthesize end = _end;
 @synthesize step = _step;
@@ -27,6 +28,11 @@
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _CNRange_type = [ODType typeWithCls:[CNRange class]];
 }
 
 - (id)applyIndex:(NSUInteger)index {
@@ -49,6 +55,10 @@
         if(_step < 0) return _start < _end;
         else return NO;
     }
+}
+
+- (ODType*)type {
+    return _CNRange_type;
 }
 
 - (id)randomItem {
@@ -138,6 +148,10 @@
     return [builder build];
 }
 
++ (ODType*)type {
+    return _CNRange_type;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -166,6 +180,7 @@
     NSInteger _step;
     NSInteger _i;
 }
+static ODType* _CNRangeIterator_type;
 @synthesize start = _start;
 @synthesize end = _end;
 @synthesize step = _step;
@@ -186,6 +201,11 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _CNRangeIterator_type = [ODType typeWithCls:[CNRangeIterator class]];
+}
+
 - (BOOL)hasNext {
     return (_step > 0 && _i <= _end) || (_step < 0 && _i >= _end);
 }
@@ -194,6 +214,14 @@
     NSInteger ret = _i;
     _i += _step;
     return numi(ret);
+}
+
+- (ODType*)type {
+    return _CNRangeIterator_type;
+}
+
++ (ODType*)type {
+    return _CNRangeIterator_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

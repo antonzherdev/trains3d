@@ -135,7 +135,7 @@ class TRTrainGenerator(trainType : TRTrainType, carsCount : [int], speed : [int]
         val count = carsCount.randomItem.get
         val engine = TRCar(carTypes.chain.filter(_.isEngine).randomItem.get)
         if(count <= 1) [engine]
-        else (count - 1).range.chain.map(i -> TRCar(carTypes.chain.filter(!_.isEngine).randomItem.get)).prepend([engine]).toArray
+        else count.range.chain.map(i -> TRCar(carTypes.chain.filter(!_.isEngine).randomItem.get)).prepend([engine]).toArray
     }
     def generateSpeed : uint = speed.randomItem.get
 }

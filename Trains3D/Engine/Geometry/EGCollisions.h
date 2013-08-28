@@ -26,6 +26,8 @@
 + (id)collisions;
 - (id)init;
 + (id<CNSet>)collisionsForFigures:(id<CNSeq>)figures;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -35,6 +37,8 @@
 
 + (id)collisionWithItems:(CNPair*)items points:(id<CNSet>)points;
 - (id)initWithItems:(CNPair*)items points:(id<CNSet>)points;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

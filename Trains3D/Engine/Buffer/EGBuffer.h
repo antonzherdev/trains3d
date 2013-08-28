@@ -22,6 +22,8 @@
 - (void)bind;
 - (void)unbind;
 - (void)applyDraw:(void(^)())draw;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -31,6 +33,8 @@
 + (id)vertexBufferWithStride:(NSUInteger)stride handle:(GLuint)handle;
 - (id)initWithStride:(NSUInteger)stride handle:(GLuint)handle;
 + (EGVertexBuffer*)applyStride:(NSUInteger)stride;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -39,6 +43,8 @@
 - (id)initWithHandle:(GLuint)handle;
 + (EGIndexBuffer*)apply;
 - (void)draw;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

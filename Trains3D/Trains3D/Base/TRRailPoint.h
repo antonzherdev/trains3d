@@ -57,6 +57,8 @@
 - (TRRailPoint*)invert;
 - (TRRailPoint*)setX:(CGFloat)x;
 - (EGPointI)nextTile;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -67,6 +69,8 @@
 + (id)railPointCorrectionWithPoint:(TRRailPoint*)point error:(CGFloat)error;
 - (id)initWithPoint:(TRRailPoint*)point error:(CGFloat)error;
 - (TRRailPoint*)addErrorToPoint;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

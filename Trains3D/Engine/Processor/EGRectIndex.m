@@ -3,6 +3,7 @@
 @implementation EGRectIndex{
     id<CNSeq> _rects;
 }
+static ODType* _EGRectIndex_type;
 @synthesize rects = _rects;
 
 + (id)rectIndexWithRects:(id<CNSeq>)rects {
@@ -16,12 +17,25 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _EGRectIndex_type = [ODType typeWithCls:[EGRectIndex class]];
+}
+
 - (id)applyPoint:(EGPoint)point {
     return [[_rects findWhere:^BOOL(CNTuple* _) {
         return egRectContains(uwrap(EGRect, _.a), point);
     }] map:^CNTuple*(CNTuple* _) {
         return ((CNTuple*)(_.b));
     }];
+}
+
+- (ODType*)type {
+    return _EGRectIndex_type;
+}
+
++ (ODType*)type {
+    return _EGRectIndex_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

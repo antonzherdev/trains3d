@@ -1,0 +1,14 @@
+package core
+
+stub def NSStringFromClass(cls : Class) : string
+stub struct Class{}
+
+
+stub class ODType<T>(cls : Class) {
+    def name = NSStringFromClass(cls)
+
+    def description = NSStringFromClass(cls) + ".type"
+
+    def hash : uint = self
+    def isEqualTo(other : ODType<T>) = self == other
+}

@@ -4,6 +4,7 @@
 @implementation CNHashSetBuilder{
     NSMutableSet* _set;
 }
+static ODType* _CNHashSetBuilder_type;
 @synthesize set = _set;
 
 + (id)hashSetBuilder {
@@ -17,6 +18,11 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _CNHashSetBuilder_type = [ODType typeWithCls:[CNHashSetBuilder class]];
+}
+
 - (void)addObject:(id)object {
     [_set addObject:object];
     self;
@@ -26,10 +32,18 @@
     return _set;
 }
 
+- (ODType*)type {
+    return _CNHashSetBuilder_type;
+}
+
 - (void)addAllObject:(id<CNTraversable>)object {
     [object forEach:^void(id _) {
         [self addObject:_];
     }];
+}
+
++ (ODType*)type {
+    return _CNHashSetBuilder_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

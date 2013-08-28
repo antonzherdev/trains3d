@@ -13,8 +13,9 @@
 #import "TRScore.h"
 #import "TRRailroad.h"
 @implementation TRLevelFactory
-static TRScoreRules* _scoreRules;
-static id<CNSeq> _rules;
+static TRScoreRules* _TRLevelFactory_scoreRules;
+static id<CNSeq> _TRLevelFactory_rules;
+static ODType* _TRLevelFactory_type;
 
 + (id)levelFactory {
     return [[TRLevelFactory alloc] init];
@@ -28,14 +29,15 @@ static id<CNSeq> _rules;
 
 + (void)initialize {
     [super initialize];
-    _scoreRules = [TRScoreRules scoreRulesWithInitialScore:100000 railCost:1000 arrivedPrize:^NSInteger(TRTrain* train) {
+    _TRLevelFactory_scoreRules = [TRScoreRules scoreRulesWithInitialScore:100000 railCost:1000 arrivedPrize:^NSInteger(TRTrain* train) {
         return ((NSInteger)([train.cars count] * 2000));
     } destructionFine:^NSInteger(TRTrain* train) {
         return ((NSInteger)([train.cars count] * 3000));
     } delayPeriod:10.0 delayFine:^NSInteger(TRTrain* train, NSInteger i) {
         return i * 1000;
     } repairCost:2000];
-    _rules = (@[[TRLevelRules levelRulesWithMapSize:EGSizeIMake(5, 3) scoreRules:_scoreRules repairerSpeed:30 events:(@[tuple(@5.0, [TRLevelFactory trainCars:intTo(2, 5) speed:[intTo(30, 60) setStep:10]]), tuple(@15.0, [TRLevelFactory createNewCity])])]]);
+    _TRLevelFactory_rules = (@[[TRLevelRules levelRulesWithMapSize:EGSizeIMake(5, 3) scoreRules:_TRLevelFactory_scoreRules repairerSpeed:30 events:(@[tuple(@5.0, [TRLevelFactory trainCars:intTo(2, 5) speed:[intTo(30, 60) setStep:10]]), tuple(@15.0, [TRLevelFactory createNewCity])])]]);
+    _TRLevelFactory_type = [ODType typeWithCls:[TRLevelFactory class]];
 }
 
 + (EGScene*)sceneForLevel:(TRLevel*)level {
@@ -55,11 +57,11 @@ static id<CNSeq> _rules;
 }
 
 + (TRLevel*)levelWithNumber:(NSUInteger)number {
-    return [TRLevel levelWithRules:((TRLevelRules*)([_rules applyIndex:number - 1]))];
+    return [TRLevel levelWithRules:((TRLevelRules*)([_TRLevelFactory_rules applyIndex:number - 1]))];
 }
 
 + (TRLevel*)levelWithMapSize:(EGSizeI)mapSize {
-    return [TRLevel levelWithRules:[TRLevelRules levelRulesWithMapSize:mapSize scoreRules:_scoreRules repairerSpeed:30 events:(@[])]];
+    return [TRLevel levelWithRules:[TRLevelRules levelRulesWithMapSize:mapSize scoreRules:_TRLevelFactory_scoreRules repairerSpeed:30 events:(@[])]];
 }
 
 + (EGScene*)sceneForLevelWithNumber:(NSUInteger)number {
@@ -67,15 +69,23 @@ static id<CNSeq> _rules;
 }
 
 + (TRScore*)score {
-    return [TRScore scoreWithRules:_scoreRules];
+    return [TRScore scoreWithRules:_TRLevelFactory_scoreRules];
 }
 
 + (TRRailroad*)railroadWithMapSize:(EGSizeI)mapSize {
     return [TRRailroad railroadWithMap:[EGMapSso mapSsoWithSize:mapSize] score:[TRLevelFactory score]];
 }
 
+- (ODType*)type {
+    return _TRLevelFactory_type;
+}
+
 + (TRScoreRules*)scoreRules {
-    return _scoreRules;
+    return _TRLevelFactory_scoreRules;
+}
+
++ (ODType*)type {
+    return _TRLevelFactory_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

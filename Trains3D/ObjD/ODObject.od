@@ -1,13 +1,18 @@
 package core
 
 import CNRange
+import ODType
 
 stub class ODObject {
     def is<T> : bool
     def as<T> : T?
     def cast<T> : T
     def description : string
+    static def type : ODType<self>
+    static def class : Class
 }
+
+
 stub class NSObject {
 }
 

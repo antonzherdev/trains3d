@@ -8,8 +8,9 @@
 #import "TRRailroad.h"
 #import "TRTrain.h"
 @implementation TRCollisionsTest
-static CGFloat _carLen;
-static CGFloat _carWidth;
+static CGFloat _TRCollisionsTest_carLen;
+static CGFloat _TRCollisionsTest_carWidth;
+static ODType* _TRCollisionsTest_type;
 
 + (id)collisionsTest {
     return [[TRCollisionsTest alloc] init];
@@ -23,8 +24,9 @@ static CGFloat _carWidth;
 
 + (void)initialize {
     [super initialize];
-    _carLen = [TRCarType.car fullLength];
-    _carWidth = TRCarType.car.width;
+    _TRCollisionsTest_carLen = [TRCarType.car fullLength];
+    _TRCollisionsTest_carWidth = TRCarType.car.width;
+    _TRCollisionsTest_type = [ODType typeWithCls:[TRCollisionsTest class]];
 }
 
 - (TRLevel*)newLevel {
@@ -52,12 +54,12 @@ static CGFloat _carWidth;
     TRRailPoint* p = [TRRailPoint railPointWithTile:EGPointIMake(0, 0) form:form x:0.0 back:NO];
     TRRailPoint* p2 = [level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
-    } forLength:_carLen point:p].point;
+    } forLength:_TRCollisionsTest_carLen point:p].point;
     [level testRunTrain:t1 fromPoint:p2];
     TRTrain* t2 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRColor.orange cars:(@[[TRCar carWithCarType:TRCarType.car], [TRCar carWithCarType:TRCarType.car]]) speed:0];
     p2 = [level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
-    } forLength:_carLen * 3 + delta point:p].point;
+    } forLength:_TRCollisionsTest_carLen * 3 + delta point:p].point;
     [level testRunTrain:t2 fromPoint:p2];
     id<CNSet> cols = [self checkLevel:level];
     [self assertTrueValue:[cols isEmpty]];
@@ -93,13 +95,13 @@ static CGFloat _carWidth;
     TRRailPoint* p = [TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.bottomTop x:0.0 back:NO];
     TRRailPoint* p1 = [level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
-    } forLength:0.5 - _carWidth - 0.001 point:p].point;
+    } forLength:0.5 - _TRCollisionsTest_carWidth - 0.001 point:p].point;
     [level testRunTrain:t1 fromPoint:p1];
     TRTrain* t2 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRColor.orange cars:(@[[TRCar carWithCarType:TRCarType.car], [TRCar carWithCarType:TRCarType.car]]) speed:0];
     p = [TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight x:0.0 back:NO];
     TRRailPoint* p2 = [level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
-    } forLength:_carLen * 2 point:p].point;
+    } forLength:_TRCollisionsTest_carLen * 2 point:p].point;
     [level testRunTrain:t2 fromPoint:p2];
     id<CNSet> cols = [self checkLevel:level];
     [self assertTrueValue:[cols isEmpty]];
@@ -108,12 +110,20 @@ static CGFloat _carWidth;
     [self assertEqualsA:cols b:[(@[t1, t2]) toSet]];
 }
 
+- (ODType*)type {
+    return _TRCollisionsTest_type;
+}
+
 + (CGFloat)carLen {
-    return _carLen;
+    return _TRCollisionsTest_carLen;
 }
 
 + (CGFloat)carWidth {
-    return _carWidth;
+    return _TRCollisionsTest_carWidth;
+}
+
++ (ODType*)type {
+    return _TRCollisionsTest_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

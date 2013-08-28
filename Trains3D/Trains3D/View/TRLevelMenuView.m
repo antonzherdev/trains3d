@@ -12,6 +12,7 @@
     TRLevel* _level;
     id<EGCamera> _camera;
 }
+static ODType* _TRLevelMenuView_type;
 @synthesize level = _level;
 @synthesize camera = _camera;
 
@@ -29,6 +30,11 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _TRLevelMenuView_type = [ODType typeWithCls:[TRLevelMenuView class]];
+}
+
 - (void)drawView {
     egColor3(1.0, 1.0, 1.0);
     egTextGlutDraw([NSString stringWithFormat:@"%li", [_level.score score]], GLUT_BITMAP_HELVETICA_18, EGPointMake(1.0, 1.0));
@@ -43,6 +49,18 @@
         }];
         glPopMatrix();
     }
+}
+
+- (ODType*)type {
+    return _TRLevelMenuView_type;
+}
+
+- (EGEnvironment*)environment {
+    return EGEnvironment.aDefault;
+}
+
++ (ODType*)type {
+    return _TRLevelMenuView_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

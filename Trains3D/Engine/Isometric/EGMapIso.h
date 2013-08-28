@@ -43,7 +43,9 @@
 - (BOOL)isFullTile:(EGPointI)tile;
 - (BOOL)isPartialTile:(EGPointI)tile;
 - (EGRectI)cutRectForTile:(EGPointI)tile;
+- (ODType*)type;
 + (CGFloat)ISO;
++ (ODType*)type;
 @end
 
 
@@ -56,6 +58,8 @@
 - (void)drawLayout;
 - (EGMesh*)createPlane;
 - (void)drawPlane;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

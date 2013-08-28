@@ -4,6 +4,7 @@
 #import "CNCollection.h"
 #import "CNPair.h"
 @implementation EGBentleyOttmann
+static ODType* _EGBentleyOttmann_type;
 
 + (id)bentleyOttmann {
     return [[EGBentleyOttmann alloc] init];
@@ -13,6 +14,11 @@
     self = [super init];
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGBentleyOttmann_type = [ODType typeWithCls:[EGBentleyOttmann class]];
 }
 
 + (id<CNSet>)intersectionsForSegments:(id<CNSeq>)segments {
@@ -33,6 +39,14 @@
             }];
         }] toSet];
     }
+}
+
+- (ODType*)type {
+    return _EGBentleyOttmann_type;
+}
+
++ (ODType*)type {
+    return _EGBentleyOttmann_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -62,6 +76,7 @@
     CNPair* _items;
     EGPoint _point;
 }
+static ODType* _EGIntersection_type;
 @synthesize items = _items;
 @synthesize point = _point;
 
@@ -77,6 +92,19 @@
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGIntersection_type = [ODType typeWithCls:[EGIntersection class]];
+}
+
+- (ODType*)type {
+    return _EGIntersection_type;
+}
+
++ (ODType*)type {
+    return _EGIntersection_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -109,6 +137,7 @@
 
 
 @implementation EGBentleyOttmannEvent
+static ODType* _EGBentleyOttmannEvent_type;
 
 + (id)bentleyOttmannEvent {
     return [[EGBentleyOttmannEvent alloc] init];
@@ -118,6 +147,11 @@
     self = [super init];
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGBentleyOttmannEvent_type = [ODType typeWithCls:[EGBentleyOttmannEvent class]];
 }
 
 - (EGPoint)point {
@@ -134,6 +168,14 @@
 
 - (BOOL)isEnd {
     return NO;
+}
+
+- (ODType*)type {
+    return _EGBentleyOttmannEvent_type;
+}
+
++ (ODType*)type {
+    return _EGBentleyOttmannEvent_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -165,6 +207,7 @@
     EGLineSegment* _segment;
     EGPoint _point;
 }
+static ODType* _EGBentleyOttmannPointEvent_type;
 @synthesize isStart = _isStart;
 @synthesize data = _data;
 @synthesize segment = _segment;
@@ -186,6 +229,11 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _EGBentleyOttmannPointEvent_type = [ODType typeWithCls:[EGBentleyOttmannPointEvent class]];
+}
+
 - (CGFloat)yForX:(CGFloat)x {
     if([[_segment line] isVertical]) {
         if(_isStart) return _segment.p1.y;
@@ -205,6 +253,14 @@
 
 - (BOOL)isEnd {
     return !(_isStart);
+}
+
+- (ODType*)type {
+    return _EGBentleyOttmannPointEvent_type;
+}
+
++ (ODType*)type {
+    return _EGBentleyOttmannPointEvent_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -243,6 +299,7 @@
 @implementation EGBentleyOttmannIntersectionEvent{
     EGPoint _point;
 }
+static ODType* _EGBentleyOttmannIntersectionEvent_type;
 @synthesize point = _point;
 
 + (id)bentleyOttmannIntersectionEventWithPoint:(EGPoint)point {
@@ -256,8 +313,21 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _EGBentleyOttmannIntersectionEvent_type = [ODType typeWithCls:[EGBentleyOttmannIntersectionEvent class]];
+}
+
 - (BOOL)isIntersection {
     return YES;
+}
+
+- (ODType*)type {
+    return _EGBentleyOttmannIntersectionEvent_type;
+}
+
++ (ODType*)type {
+    return _EGBentleyOttmannIntersectionEvent_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -290,6 +360,7 @@
 @implementation EGBentleyOttmannEventQueue{
     CNMutableTreeMap* _events;
 }
+static ODType* _EGBentleyOttmannEventQueue_type;
 @synthesize events = _events;
 
 + (id)bentleyOttmannEventQueue {
@@ -303,6 +374,11 @@
     }];
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGBentleyOttmannEventQueue_type = [ODType typeWithCls:[EGBentleyOttmannEventQueue class]];
 }
 
 - (BOOL)isEmpty {
@@ -332,6 +408,14 @@
     return ((CNTuple*)([[_events pollFirst] get])).b;
 }
 
+- (ODType*)type {
+    return _EGBentleyOttmannEventQueue_type;
+}
+
++ (ODType*)type {
+    return _EGBentleyOttmannEventQueue_type;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -358,6 +442,7 @@
 @implementation EGPointClass{
     EGPoint _point;
 }
+static ODType* _EGPointClass_type;
 @synthesize point = _point;
 
 + (id)pointClassWithPoint:(EGPoint)point {
@@ -369,6 +454,19 @@
     if(self) _point = point;
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGPointClass_type = [ODType typeWithCls:[EGPointClass class]];
+}
+
+- (ODType*)type {
+    return _EGPointClass_type;
+}
+
++ (ODType*)type {
+    return _EGPointClass_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -404,6 +502,7 @@
     EGPoint _currentEventPoint;
     EGBentleyOttmannEventQueue* _queue;
 }
+static ODType* _EGSweepLine_type;
 @synthesize events = _events;
 @synthesize intersections = _intersections;
 @synthesize queue = _queue;
@@ -423,6 +522,11 @@
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGSweepLine_type = [ODType typeWithCls:[EGSweepLine class]];
 }
 
 - (void)handleEvents:(id<CNSeq>)events {
@@ -529,6 +633,14 @@
         }
     }
     return c;
+}
+
+- (ODType*)type {
+    return _EGSweepLine_type;
+}
+
++ (ODType*)type {
+    return _EGSweepLine_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

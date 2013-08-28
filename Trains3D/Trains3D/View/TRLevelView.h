@@ -21,6 +21,8 @@
 + (id)levelViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
 - (void)drawView;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

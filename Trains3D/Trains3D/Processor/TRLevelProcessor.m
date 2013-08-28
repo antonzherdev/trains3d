@@ -9,6 +9,7 @@
     TRRailroadBuilderProcessor* _railroadBuilderProcessor;
     TRSwitchProcessor* _switchProcessor;
 }
+static ODType* _TRLevelProcessor_type;
 @synthesize level = _level;
 
 + (id)levelProcessorWithLevel:(TRLevel*)level {
@@ -26,8 +27,21 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _TRLevelProcessor_type = [ODType typeWithCls:[TRLevelProcessor class]];
+}
+
 - (BOOL)processEvent:(EGEvent*)event {
     return [_switchProcessor processEvent:event] || [_railroadBuilderProcessor processEvent:event];
+}
+
+- (ODType*)type {
+    return _TRLevelProcessor_type;
+}
+
++ (ODType*)type {
+    return _TRLevelProcessor_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

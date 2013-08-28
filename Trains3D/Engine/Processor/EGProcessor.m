@@ -4,6 +4,7 @@
     EGSize _viewSize;
     id _camera;
 }
+static ODType* _EGEvent_type;
 @synthesize viewSize = _viewSize;
 @synthesize camera = _camera;
 
@@ -19,6 +20,11 @@
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGEvent_type = [ODType typeWithCls:[EGEvent class]];
 }
 
 - (EGEvent*)setCamera:(id)camera {
@@ -94,6 +100,14 @@
             }
         }
     }
+}
+
+- (ODType*)type {
+    return _EGEvent_type;
+}
+
++ (ODType*)type {
+    return _EGEvent_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

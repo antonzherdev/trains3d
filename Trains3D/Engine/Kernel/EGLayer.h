@@ -4,6 +4,9 @@
 @protocol EGMouseProcessor;
 @protocol EGTouchProcessor;
 @class EGEvent;
+@class EG;
+@class EGContext;
+@class EGMutableMatrix;
 
 @class EGLayer;
 
@@ -15,6 +18,8 @@
 - (id)initWithView:(id<EGView>)view processor:(id)processor;
 - (void)drawWithViewSize:(EGSize)viewSize;
 - (BOOL)processEvent:(EGEvent*)event;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

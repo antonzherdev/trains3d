@@ -3,6 +3,7 @@
 @implementation EGCamera2D{
     EGSize _size;
 }
+static ODType* _EGCamera2D_type;
 @synthesize size = _size;
 
 + (id)camera2DWithSize:(EGSize)size {
@@ -14,6 +15,11 @@
     if(self) _size = size;
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGCamera2D_type = [ODType typeWithCls:[EGCamera2D class]];
 }
 
 - (CGFloat)factorForViewSize:(EGSize)viewSize {
@@ -41,6 +47,14 @@
     CGFloat factor = [self factorForViewSize:viewSize];
     EGRect viewport = [self viewportRectForViewSize:viewSize factor:factor];
     return egPointDiv(egPointSub(viewPoint, egRectPoint(viewport)), factor);
+}
+
+- (ODType*)type {
+    return _EGCamera2D_type;
+}
+
++ (ODType*)type {
+    return _EGCamera2D_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

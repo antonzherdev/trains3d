@@ -1,6 +1,7 @@
 #import "CNTreeMapTest.h"
 
 @implementation CNTreeMapTest
+static ODType* _CNTreeMapTest_type;
 
 + (id)treeMapTest {
     return [[CNTreeMapTest alloc] init];
@@ -10,6 +11,11 @@
     self = [super init];
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _CNTreeMapTest_type = [ODType typeWithCls:[CNTreeMapTest class]];
 }
 
 - (void)testMain {
@@ -33,6 +39,14 @@
         [self assertTrueValue:[[map applyKey:i] isEmpty]];
     }];
     [self assertEqualsA:@0 b:numi(((NSInteger)([map count])))];
+}
+
+- (ODType*)type {
+    return _CNTreeMapTest_type;
+}
+
++ (ODType*)type {
+    return _CNTreeMapTest_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

@@ -7,6 +7,7 @@
     GLuint _handle;
     NSUInteger __length;
 }
+static ODType* _EGBuffer_type;
 @synthesize bufferType = _bufferType;
 @synthesize handle = _handle;
 
@@ -23,6 +24,11 @@
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGBuffer_type = [ODType typeWithCls:[EGBuffer class]];
 }
 
 - (NSUInteger)length {
@@ -63,6 +69,14 @@
     [self unbind];
 }
 
+- (ODType*)type {
+    return _EGBuffer_type;
+}
+
++ (ODType*)type {
+    return _EGBuffer_type;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -95,6 +109,7 @@
 @implementation EGVertexBuffer{
     NSUInteger _stride;
 }
+static ODType* _EGVertexBuffer_type;
 @synthesize stride = _stride;
 
 + (id)vertexBufferWithStride:(NSUInteger)stride handle:(GLuint)handle {
@@ -108,8 +123,21 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _EGVertexBuffer_type = [ODType typeWithCls:[EGVertexBuffer class]];
+}
+
 + (EGVertexBuffer*)applyStride:(NSUInteger)stride {
     return [EGVertexBuffer vertexBufferWithStride:stride handle:egGenBuffer()];
+}
+
+- (ODType*)type {
+    return _EGVertexBuffer_type;
+}
+
++ (ODType*)type {
+    return _EGVertexBuffer_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -142,6 +170,7 @@
 
 
 @implementation EGIndexBuffer
+static ODType* _EGIndexBuffer_type;
 
 + (id)indexBufferWithHandle:(GLuint)handle {
     return [[EGIndexBuffer alloc] initWithHandle:handle];
@@ -153,6 +182,11 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _EGIndexBuffer_type = [ODType typeWithCls:[EGIndexBuffer class]];
+}
+
 + (EGIndexBuffer*)apply {
     return [EGIndexBuffer indexBufferWithHandle:egGenBuffer()];
 }
@@ -161,6 +195,14 @@
     [self bind];
     glDrawElements(GL_TRIANGLES, [self length], GL_UNSIGNED_BYTE, 0);
     [self unbind];
+}
+
+- (ODType*)type {
+    return _EGIndexBuffer_type;
+}
+
++ (ODType*)type {
+    return _EGIndexBuffer_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

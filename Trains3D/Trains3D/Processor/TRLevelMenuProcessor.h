@@ -21,6 +21,8 @@
 - (id)initWithLevel:(TRLevel*)level;
 - (BOOL)processEvent:(EGEvent*)event;
 - (BOOL)mouseUpEvent:(EGEvent*)event;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

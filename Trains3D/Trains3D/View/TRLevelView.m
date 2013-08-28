@@ -14,6 +14,7 @@
     TRTrainView* _trainView;
     id<EGCamera> _camera;
 }
+static ODType* _TRLevelView_type;
 @synthesize level = _level;
 @synthesize camera = _camera;
 
@@ -35,6 +36,11 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _TRLevelView_type = [ODType typeWithCls:[TRLevelView class]];
+}
+
 - (void)drawView {
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
@@ -54,6 +60,18 @@
     glDisable(GL_LIGHTING);
     glDisable(GL_LIGHT0);
     glDisable(GL_NORMALIZE);
+}
+
+- (ODType*)type {
+    return _TRLevelView_type;
+}
+
+- (EGEnvironment*)environment {
+    return EGEnvironment.aDefault;
+}
+
++ (ODType*)type {
+    return _TRLevelView_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

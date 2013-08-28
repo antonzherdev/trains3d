@@ -5,6 +5,7 @@
 #import "TRRailPoint.h"
 #import "TRScore.h"
 @implementation TRRailroadConnectorContent
+static ODType* _TRRailroadConnectorContent_type;
 
 + (id)railroadConnectorContent {
     return [[TRRailroadConnectorContent alloc] init];
@@ -14,6 +15,11 @@
     self = [super init];
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRRailroadConnectorContent_type = [ODType typeWithCls:[TRRailroadConnectorContent class]];
 }
 
 - (BOOL)canAddRail:(TRRail*)rail {
@@ -34,6 +40,14 @@
 
 - (BOOL)isGreen {
     return YES;
+}
+
+- (ODType*)type {
+    return _TRRailroadConnectorContent_type;
+}
+
++ (ODType*)type {
+    return _TRRailroadConnectorContent_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -60,7 +74,8 @@
 
 
 @implementation TREmptyConnector
-static TRRailroadConnectorContent* _instance;
+static TRRailroadConnectorContent* _TREmptyConnector_instance;
+static ODType* _TREmptyConnector_type;
 
 + (id)emptyConnector {
     return [[TREmptyConnector alloc] init];
@@ -74,7 +89,8 @@ static TRRailroadConnectorContent* _instance;
 
 + (void)initialize {
     [super initialize];
-    _instance = [TREmptyConnector emptyConnector];
+    _TREmptyConnector_instance = [TREmptyConnector emptyConnector];
+    _TREmptyConnector_type = [ODType typeWithCls:[TREmptyConnector class]];
 }
 
 - (id<CNSeq>)rails {
@@ -85,8 +101,16 @@ static TRRailroadConnectorContent* _instance;
     return rail;
 }
 
+- (ODType*)type {
+    return _TREmptyConnector_type;
+}
+
 + (TRRailroadConnectorContent*)instance {
-    return _instance;
+    return _TREmptyConnector_instance;
+}
+
++ (ODType*)type {
+    return _TREmptyConnector_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -116,6 +140,7 @@ static TRRailroadConnectorContent* _instance;
     EGPointI _tile;
     TRRailForm* _form;
 }
+static ODType* _TRRail_type;
 @synthesize tile = _tile;
 @synthesize form = _form;
 
@@ -131,6 +156,11 @@ static TRRailroadConnectorContent* _instance;
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRRail_type = [ODType typeWithCls:[TRRail class]];
 }
 
 - (BOOL)hasConnector:(TRRailConnector*)connector {
@@ -151,6 +181,14 @@ static TRRailroadConnectorContent* _instance;
 
 - (BOOL)canAddRail:(TRRail*)rail {
     return rail.form != _form;
+}
+
+- (ODType*)type {
+    return _TRRail_type;
+}
+
++ (ODType*)type {
+    return _TRRail_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -189,6 +227,7 @@ static TRRailroadConnectorContent* _instance;
     TRRail* _rail2;
     BOOL _firstActive;
 }
+static ODType* _TRSwitch_type;
 @synthesize tile = _tile;
 @synthesize connector = _connector;
 @synthesize rail1 = _rail1;
@@ -210,6 +249,11 @@ static TRRailroadConnectorContent* _instance;
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRSwitch_type = [ODType typeWithCls:[TRSwitch class]];
 }
 
 - (TRRail*)activeRail {
@@ -236,6 +280,14 @@ static TRRailroadConnectorContent* _instance;
 
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector {
     return self;
+}
+
+- (ODType*)type {
+    return _TRSwitch_type;
+}
+
++ (ODType*)type {
+    return _TRSwitch_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -277,6 +329,7 @@ static TRRailroadConnectorContent* _instance;
     TRRail* _rail;
     BOOL _isGreen;
 }
+static ODType* _TRLight_type;
 @synthesize tile = _tile;
 @synthesize connector = _connector;
 @synthesize rail = _rail;
@@ -298,6 +351,11 @@ static TRRailroadConnectorContent* _instance;
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _TRLight_type = [ODType typeWithCls:[TRLight class]];
+}
+
 - (void)turn {
     _isGreen = !(_isGreen);
 }
@@ -316,6 +374,14 @@ static TRRailroadConnectorContent* _instance;
 
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector {
     return self;
+}
+
+- (ODType*)type {
+    return _TRLight_type;
+}
+
++ (ODType*)type {
+    return _TRLight_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -350,10 +416,10 @@ static TRRailroadConnectorContent* _instance;
 
 
 @implementation TRObstacleType
-static TRObstacleType* _damage;
-static TRObstacleType* _switch;
-static TRObstacleType* _light;
-static TRObstacleType* _end;
+static TRObstacleType* _TRObstacleType_damage;
+static TRObstacleType* _TRObstacleType_switch;
+static TRObstacleType* _TRObstacleType_light;
+static TRObstacleType* _TRObstacleType_end;
 static NSArray* _TRObstacleType_values;
 
 + (id)obstacleTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
@@ -368,27 +434,27 @@ static NSArray* _TRObstacleType_values;
 
 + (void)initialize {
     [super initialize];
-    _damage = [TRObstacleType obstacleTypeWithOrdinal:0 name:@"damage"];
-    _switch = [TRObstacleType obstacleTypeWithOrdinal:1 name:@"switch"];
-    _light = [TRObstacleType obstacleTypeWithOrdinal:2 name:@"light"];
-    _end = [TRObstacleType obstacleTypeWithOrdinal:3 name:@"end"];
-    _TRObstacleType_values = (@[_damage, _switch, _light, _end]);
+    _TRObstacleType_damage = [TRObstacleType obstacleTypeWithOrdinal:0 name:@"damage"];
+    _TRObstacleType_switch = [TRObstacleType obstacleTypeWithOrdinal:1 name:@"switch"];
+    _TRObstacleType_light = [TRObstacleType obstacleTypeWithOrdinal:2 name:@"light"];
+    _TRObstacleType_end = [TRObstacleType obstacleTypeWithOrdinal:3 name:@"end"];
+    _TRObstacleType_values = (@[_TRObstacleType_damage, _TRObstacleType_switch, _TRObstacleType_light, _TRObstacleType_end]);
 }
 
 + (TRObstacleType*)damage {
-    return _damage;
+    return _TRObstacleType_damage;
 }
 
 + (TRObstacleType*)aSwitch {
-    return _switch;
+    return _TRObstacleType_switch;
 }
 
 + (TRObstacleType*)light {
-    return _light;
+    return _TRObstacleType_light;
 }
 
 + (TRObstacleType*)end {
-    return _end;
+    return _TRObstacleType_end;
 }
 
 + (NSArray*)values {
@@ -402,6 +468,7 @@ static NSArray* _TRObstacleType_values;
     TRObstacleType* _obstacleType;
     TRRailPoint* _point;
 }
+static ODType* _TRObstacle_type;
 @synthesize obstacleType = _obstacleType;
 @synthesize point = _point;
 
@@ -417,6 +484,19 @@ static NSArray* _TRObstacleType_values;
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRObstacle_type = [ODType typeWithCls:[TRObstacle class]];
+}
+
+- (ODType*)type {
+    return _TRObstacle_type;
+}
+
++ (ODType*)type {
+    return _TRObstacle_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -459,6 +539,7 @@ static NSArray* _TRObstacleType_values;
     NSMutableDictionary* _damagesIndex;
     NSMutableArray* __damagesPoints;
 }
+static ODType* _TRRailroad_type;
 @synthesize map = _map;
 @synthesize score = _score;
 @synthesize builder = _builder;
@@ -484,6 +565,11 @@ static NSArray* _TRObstacleType_values;
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRRailroad_type = [ODType typeWithCls:[TRRailroad class]];
 }
 
 - (id<CNSeq>)rails {
@@ -646,6 +732,14 @@ static NSArray* _TRObstacleType_values;
     }
 }
 
+- (ODType*)type {
+    return _TRRailroad_type;
+}
+
++ (ODType*)type {
+    return _TRRailroad_type;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -679,6 +773,7 @@ static NSArray* _TRObstacleType_values;
     __weak TRRailroad* _railroad;
     id __rail;
 }
+static ODType* _TRRailroadBuilder_type;
 @synthesize railroad = _railroad;
 
 + (id)railroadBuilderWithRailroad:(TRRailroad*)railroad {
@@ -693,6 +788,11 @@ static NSArray* _TRObstacleType_values;
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRRailroadBuilder_type = [ODType typeWithCls:[TRRailroadBuilder class]];
 }
 
 - (id)rail {
@@ -717,6 +817,14 @@ static NSArray* _TRObstacleType_values;
         [_railroad tryAddRail:r];
     }];
     __rail = [CNOption none];
+}
+
+- (ODType*)type {
+    return _TRRailroadBuilder_type;
+}
+
++ (ODType*)type {
+    return _TRRailroadBuilder_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

@@ -3,10 +3,10 @@
 @implementation TRColor{
     EGColor _color;
 }
-static TRColor* _orange;
-static TRColor* _green;
-static TRColor* _purple;
-static TRColor* _grey;
+static TRColor* _TRColor_orange;
+static TRColor* _TRColor_green;
+static TRColor* _TRColor_purple;
+static TRColor* _TRColor_grey;
 static NSArray* _TRColor_values;
 @synthesize color = _color;
 
@@ -23,11 +23,11 @@ static NSArray* _TRColor_values;
 
 + (void)initialize {
     [super initialize];
-    _orange = [TRColor colorWithOrdinal:0 name:@"orange" color:EGColorMake(1.0, 0.5, 0.0, 1.0)];
-    _green = [TRColor colorWithOrdinal:1 name:@"green" color:EGColorMake(0.66, 0.9, 0.44, 1.0)];
-    _purple = [TRColor colorWithOrdinal:2 name:@"purple" color:EGColorMake(0.9, 0.44, 0.66, 1.0)];
-    _grey = [TRColor colorWithOrdinal:3 name:@"grey" color:EGColorMake(0.5, 0.5, 0.5, 1.0)];
-    _TRColor_values = (@[_orange, _green, _purple, _grey]);
+    _TRColor_orange = [TRColor colorWithOrdinal:0 name:@"orange" color:EGColorMake(1.0, 0.5, 0.0, 1.0)];
+    _TRColor_green = [TRColor colorWithOrdinal:1 name:@"green" color:EGColorMake(0.66, 0.9, 0.44, 1.0)];
+    _TRColor_purple = [TRColor colorWithOrdinal:2 name:@"purple" color:EGColorMake(0.9, 0.44, 0.66, 1.0)];
+    _TRColor_grey = [TRColor colorWithOrdinal:3 name:@"grey" color:EGColorMake(0.5, 0.5, 0.5, 1.0)];
+    _TRColor_values = (@[_TRColor_orange, _TRColor_green, _TRColor_purple, _TRColor_grey]);
 }
 
 - (void)set {
@@ -39,19 +39,19 @@ static NSArray* _TRColor_values;
 }
 
 + (TRColor*)orange {
-    return _orange;
+    return _TRColor_orange;
 }
 
 + (TRColor*)green {
-    return _green;
+    return _TRColor_green;
 }
 
 + (TRColor*)purple {
-    return _purple;
+    return _TRColor_purple;
 }
 
 + (TRColor*)grey {
-    return _grey;
+    return _TRColor_grey;
 }
 
 + (NSArray*)values {

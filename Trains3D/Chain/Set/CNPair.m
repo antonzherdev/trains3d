@@ -4,6 +4,7 @@
     id _a;
     id _b;
 }
+static ODType* _CNPair_type;
 @synthesize a = _a;
 @synthesize b = _b;
 
@@ -19,6 +20,11 @@
     }
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _CNPair_type = [ODType typeWithCls:[CNPair class]];
 }
 
 + (CNPair*)newWithA:(id)a b:(id)b {
@@ -40,6 +46,10 @@
 
 - (id)head {
     return [CNOption opt:_a];
+}
+
+- (ODType*)type {
+    return _CNPair_type;
 }
 
 - (BOOL)isEmpty {
@@ -88,6 +98,10 @@
     return [builder build];
 }
 
++ (ODType*)type {
+    return _CNPair_type;
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -113,6 +127,7 @@
     CNPair* _pair;
     NSInteger _state;
 }
+static ODType* _CNPairIterator_type;
 @synthesize pair = _pair;
 
 + (id)pairIteratorWithPair:(CNPair*)pair {
@@ -129,6 +144,11 @@
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _CNPairIterator_type = [ODType typeWithCls:[CNPairIterator class]];
+}
+
 - (BOOL)hasNext {
     return _state < 2;
 }
@@ -137,6 +157,14 @@
     _state++;
     if(_state == 1) return _pair.a;
     else return _pair.b;
+}
+
+- (ODType*)type {
+    return _CNPairIterator_type;
+}
+
++ (ODType*)type {
+    return _CNPairIterator_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

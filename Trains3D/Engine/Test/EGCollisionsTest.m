@@ -4,6 +4,7 @@
 #import "EGFigure.h"
 #import "EGCollisions.h"
 @implementation EGCollisionsTest
+static ODType* _EGCollisionsTest_type;
 
 + (id)collisionsTest {
     return [[EGCollisionsTest alloc] init];
@@ -13,6 +14,11 @@
     self = [super init];
     
     return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGCollisionsTest_type = [ODType typeWithCls:[EGCollisionsTest class]];
 }
 
 - (void)testDavidsStar {
@@ -31,6 +37,14 @@
     id<CNSeq> figures = (@[tuple(@1, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(1.0, 0.0)), wrap(EGPoint, EGPointMake(3.0, 2.0)), wrap(EGPoint, EGPointMake(5.0, 0.0))])]), tuple(@3, [EGPolygon polygonWithPoints:(@[wrap(EGPoint, EGPointMake(6.0, -1.0)), wrap(EGPoint, EGPointMake(6.5, -0.5)), wrap(EGPoint, EGPointMake(7.0, -1.0))])])]);
     id<CNSet> collisions = [EGCollisions collisionsForFigures:figures];
     [self assertEqualsA:collisions b:[(@[]) toSet]];
+}
+
+- (ODType*)type {
+    return _EGCollisionsTest_type;
+}
+
++ (ODType*)type {
+    return _EGCollisionsTest_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

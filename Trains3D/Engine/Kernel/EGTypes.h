@@ -1,5 +1,8 @@
 #import "objd.h"
 
+@class EGEnvironment;
+@class EGLight;
+@class EGDirectLight;
 @protocol EGController;
 @protocol EGCamera;
 @protocol EGView;
@@ -10,6 +13,7 @@ typedef struct EGSizeI EGSizeI;
 typedef struct EGRect EGRect;
 typedef struct EGRectI EGRectI;
 typedef struct EGColor EGColor;
+typedef struct EGVec3 EGVec3;
 
 struct EGPoint {
     CGFloat x;
@@ -316,18 +320,95 @@ static inline NSString* EGColorDescription(EGColor self) {
 
 @protocol EGController<NSObject>
 - (void)updateWithDelta:(CGFloat)delta;
+- (ODType*)type;
 @end
 
 
 @protocol EGCamera<NSObject>
 - (void)focusForViewSize:(EGSize)viewSize;
 - (EGPoint)translateWithViewSize:(EGSize)viewSize viewPoint:(EGPoint)viewPoint;
+- (ODType*)type;
 @end
 
 
 @protocol EGView<NSObject>
 - (id<EGCamera>)camera;
 - (void)drawView;
+- (EGEnvironment*)environment;
+- (ODType*)type;
+@end
+
+
+struct EGVec3 {
+    CGFloat x;
+    CGFloat y;
+    CGFloat z;
+};
+static inline EGVec3 EGVec3Make(CGFloat x, CGFloat y, CGFloat z) {
+    EGVec3 ret;
+    ret.x = x;
+    ret.y = y;
+    ret.z = z;
+    return ret;
+}
+static inline BOOL EGVec3Eq(EGVec3 s1, EGVec3 s2) {
+    return eqf(s1.x, s2.x) && eqf(s1.y, s2.y) && eqf(s1.z, s2.z);
+}
+static inline NSUInteger EGVec3Hash(EGVec3 self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + floatHash(self.x);
+    hash = hash * 31 + floatHash(self.y);
+    hash = hash * 31 + floatHash(self.z);
+    return hash;
+}
+static inline NSString* EGVec3Description(EGVec3 self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<EGVec3: "];
+    [description appendFormat:@"x=%f", self.x];
+    [description appendFormat:@", y=%f", self.y];
+    [description appendFormat:@", z=%f", self.z];
+    [description appendString:@">"];
+    return description;
+}
+@interface EGVec3Wrap : NSObject
+@property (readonly, nonatomic) EGVec3 value;
+
++ (id)wrapWithValue:(EGVec3)value;
+- (id)initWithValue:(EGVec3)value;
+@end
+
+
+
+@interface EGEnvironment : NSObject
+@property (nonatomic, readonly) EGColor ambientColor;
+@property (nonatomic, readonly) id<CNSeq> lights;
+
++ (id)environmentWithAmbientColor:(EGColor)ambientColor lights:(id<CNSeq>)lights;
+- (id)initWithAmbientColor:(EGColor)ambientColor lights:(id<CNSeq>)lights;
++ (EGEnvironment*)applyLights:(id<CNSeq>)lights;
++ (EGEnvironment*)applyLight:(EGLight*)light;
+- (ODType*)type;
++ (EGEnvironment*)aDefault;
++ (ODType*)type;
+@end
+
+
+@interface EGLight : NSObject
+@property (nonatomic, readonly) EGColor color;
+
++ (id)lightWithColor:(EGColor)color;
+- (id)initWithColor:(EGColor)color;
+- (ODType*)type;
++ (ODType*)type;
+@end
+
+
+@interface EGDirectLight : EGLight
+@property (nonatomic, readonly) EGVec3 direction;
+
++ (id)directLightWithColor:(EGColor)color direction:(EGVec3)direction;
+- (id)initWithColor:(EGColor)color direction:(EGVec3)direction;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

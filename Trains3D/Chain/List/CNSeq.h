@@ -1,4 +1,4 @@
-#import <Foundation/Foundation.h>
+#import "objdcore.h"
 #import "CNCollection.h"
 @class CNChain;
 #import "CNSet.h"
@@ -14,10 +14,12 @@
 - (id<CNSeq>)arrayByAddingObject:(id)object;
 - (id<CNSeq>)arrayByRemovingObject:(id)object;
 - (BOOL)isEqualToSeq:(id<CNSeq>)seq;
+- (ODType*)type;
 @end
 
 
 @protocol CNMutableSeq<CNSeq>
+- (ODType*)type;
 @end
 
 
@@ -28,6 +30,8 @@
 - (id)init;
 - (void)addObject:(id)object;
 - (NSArray*)build;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

@@ -35,6 +35,8 @@
 + (id)railroadView;
 - (id)init;
 - (void)drawRailroad:(TRRailroad*)railroad;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -42,6 +44,8 @@
 + (id)railView;
 - (id)init;
 - (void)drawRail:(TRRail*)rail;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -49,6 +53,8 @@
 + (id)switchView;
 - (id)init;
 - (void)drawTheSwitch:(TRSwitch*)theSwitch;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -56,6 +62,8 @@
 + (id)lightView;
 - (id)init;
 - (void)drawLight:(TRLight*)light;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
@@ -63,6 +71,8 @@
 + (id)damageView;
 - (id)init;
 - (void)drawPoint:(TRRailPoint*)point;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

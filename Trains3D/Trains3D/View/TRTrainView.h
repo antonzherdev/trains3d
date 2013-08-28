@@ -27,6 +27,8 @@
 + (id)trainView;
 - (id)init;
 - (void)drawTrain:(TRTrain*)train;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 

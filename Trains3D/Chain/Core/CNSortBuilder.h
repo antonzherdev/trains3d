@@ -1,4 +1,4 @@
-#import <Foundation/Foundation.h>
+#import "objdcore.h"
 @class CNChain;
 #import "CNSeq.h"
 
@@ -13,6 +13,8 @@
 - (CNSortBuilder*)descBy:(id(^)(id))by;
 - (CNSortBuilder*)andF:(NSInteger(^)(id, id))f;
 - (CNChain*)endSort;
+- (ODType*)type;
++ (ODType*)type;
 @end
 
 
