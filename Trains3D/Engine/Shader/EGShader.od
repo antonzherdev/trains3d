@@ -72,24 +72,15 @@ class EGShaderProgram(handle : GLuint) {
     }
 }
 
-class EGShader(program : EGShaderProgram) {
-    def apply(draw : () -> void) {
+class EGShader<M extends EGMaterial2>(program : EGShaderProgram) {
+    def apply(context : EGContext, material : M, draw : () -> void) {
         glUseProgram(program.handle)
-        load
+        load(context, material)
         draw()
         glUseProgram(0)
     }
 
-    def set {
-        glUseProgram(program.handle)
-        load
-    }
-
-    def load
-
-    def clear {
-        glUseProgram(0)
-    }
+    def load(context : EGContext, material : M)
 
     def attributeFor(name : string ) = program.attributeFor(name)
     def uniformFor(name : string ) = program.uniformFor(name)
@@ -109,12 +100,15 @@ class EGShaderUniform(handle : GLuint) {
     def set(color : EGColor) {
         egUniformColor(handle, color)
     }
+    def set(vec3 : EGVec3) {
+        egUniformVec3(handle, vec3)
+    }
 }
 
 trait EGShaderSystem<M extends EGMaterial2> {
     def apply(context : EGContext, material : M, draw : () -> void)  {
         val shader = shaderFor(context, material)
-        shader(draw)
+        shader(context, material, draw)
     }
 
     def shaderFor(context : EGContext, material : M) : EGShader

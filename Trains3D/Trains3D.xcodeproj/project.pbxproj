@@ -172,6 +172,7 @@
 		6F3DF803F5D6DCCA4B91979F /* KWInvocationCapturer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB9DA8F713DA214EC16E /* KWInvocationCapturer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF809F7D3562C204E9AA3 /* KWNull.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF81BB6C3BC2858EF6253 /* KWNull.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF80A3B1822ED2F667E9E /* KWChangeMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFCEBA634AC4B5285ABFA /* KWChangeMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		6F3DF813654C2CE7D86E3A20 /* CNZipLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF9A503B00E41C272272 /* CNZipLink.m */; };
 		6F3DF81AE50E6C3FF7F043E2 /* transform2.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFF5038E63FE65C7E4F9A /* transform2.inl */; };
 		6F3DF81E33776FFC651A6BAE /* CNFlatMapLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9B9CFB60AC2B50B34FE /* CNFlatMapLink.m */; };
 		6F3DF8286700751750F0DD27 /* verbose_operator.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFB4DA62F45967EDC4D00 /* verbose_operator.inl */; };
@@ -787,6 +788,7 @@
 		6F3DF9B278CDB3BCD10C073B /* KWInequalityMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWInequalityMatcher.h; sourceTree = "<group>"; };
 		6F3DF9B37B463BDA38324C29 /* KiwiConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KiwiConfiguration.h; sourceTree = "<group>"; };
 		6F3DF9B58395D7F6CA5DE892 /* KWMock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWMock.m; sourceTree = "<group>"; };
+		6F3DF9B61E943A6B07A673A9 /* CNZipLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNZipLink.h; sourceTree = "<group>"; };
 		6F3DF9B9CFB60AC2B50B34FE /* CNFlatMapLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNFlatMapLink.m; sourceTree = "<group>"; };
 		6F3DF9C71EEB1311FD44C7E4 /* matrix_major_storage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = matrix_major_storage.hpp; sourceTree = "<group>"; };
 		6F3DF9CA8CE074D789C085B6 /* func_trigonometric.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = func_trigonometric.hpp; sourceTree = "<group>"; };
@@ -1044,6 +1046,7 @@
 		6F3DFF8BEFC837FAB00BBD99 /* NSInvocation+KiwiAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSInvocation+KiwiAdditions.h"; sourceTree = "<group>"; };
 		6F3DFF8F7807038FA9BF1E16 /* CNTuple.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = CNTuple.od; sourceTree = "<group>"; };
 		6F3DFF9481B97325B2576F9E /* CNList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNList.h; sourceTree = "<group>"; };
+		6F3DFF9A503B00E41C272272 /* CNZipLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNZipLink.m; sourceTree = "<group>"; };
 		6F3DFF9FCEF06BB9D540032F /* TRLevelMenuView.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TRLevelMenuView.od; sourceTree = "<group>"; };
 		6F3DFFA33FCA2F616291C726 /* KWBeBetweenMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeBetweenMatcher.h; sourceTree = "<group>"; };
 		6F3DFFA478BD42A9E971DDE8 /* KWBeNilMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeNilMatcher.h; sourceTree = "<group>"; };
@@ -2036,6 +2039,8 @@
 				6F3DF212FCB3DEA0A5F72BDF /* CNGroupByLink.m */,
 				6F3DF0B758E9CDAFADEC6C0A /* CNSortLink.m */,
 				6F3DFE226AD53C9498117AFC /* CNSortLink.h */,
+				6F3DF9B61E943A6B07A673A9 /* CNZipLink.h */,
+				6F3DFF9A503B00E41C272272 /* CNZipLink.m */,
 			);
 			path = Links;
 			sourceTree = "<group>";
@@ -2515,6 +2520,7 @@
 				6F3DFA35DB35374FB455FB14 /* EGSimpleShaderSystem.m in Sources */,
 				6F3DF00C590705DCF4E3E183 /* EGStandardShaderSystem.m in Sources */,
 				6F3DFEEEE1C1245C13CA1790 /* ODType.m in Sources */,
+				6F3DF813654C2CE7D86E3A20 /* CNZipLink.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

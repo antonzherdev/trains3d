@@ -51,10 +51,8 @@
 
 + (id)shaderWithProgram:(EGShaderProgram*)program;
 - (id)initWithProgram:(EGShaderProgram*)program;
-- (void)applyDraw:(void(^)())draw;
-- (void)set;
-- (void)load;
-- (void)clear;
+- (void)applyContext:(EGContext*)context material:(id)material draw:(void(^)())draw;
+- (void)loadContext:(EGContext*)context material:(id)material;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
 - (EGShaderUniform*)uniformForName:(NSString*)name;
 - (ODType*)type;
@@ -80,6 +78,7 @@
 - (id)initWithHandle:(GLuint)handle;
 - (void)setMatrix:(EGMatrix*)matrix;
 - (void)setColor:(EGColor)color;
+- (void)setVec3:(EGVec3)vec3;
 - (ODType*)type;
 + (ODType*)type;
 @end

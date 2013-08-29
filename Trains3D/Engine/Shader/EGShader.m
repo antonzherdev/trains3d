@@ -151,24 +151,15 @@ static ODType* _EGShader_type;
     _EGShader_type = [ODType typeWithCls:[EGShader class]];
 }
 
-- (void)applyDraw:(void(^)())draw {
+- (void)applyContext:(EGContext*)context material:(id)material draw:(void(^)())draw {
     glUseProgram(_program.handle);
-    [self load];
+    [self loadContext:context material:material];
     ((void(^)())(draw))();
     glUseProgram(0);
 }
 
-- (void)set {
-    glUseProgram(_program.handle);
-    [self load];
-}
-
-- (void)load {
+- (void)loadContext:(EGContext*)context material:(id)material {
     @throw @"Method load is abstract";
-}
-
-- (void)clear {
-    glUseProgram(0);
 }
 
 - (EGShaderAttribute*)attributeForName:(NSString*)name {
@@ -304,6 +295,10 @@ static ODType* _EGShaderUniform_type;
 
 - (void)setColor:(EGColor)color {
     egUniformColor(_handle, color);
+}
+
+- (void)setVec3:(EGVec3)vec3 {
+    egUniformVec3(_handle, vec3);
 }
 
 - (ODType*)type {

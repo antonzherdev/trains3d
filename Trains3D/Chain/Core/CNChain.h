@@ -15,6 +15,8 @@
 - (CNChain*)link:(id<CNChainLink>)link;
 - (CNChain*)filter:(cnPredicate)predicate;
 - (CNChain*)filter:(cnPredicate)predicate selectivity:(double)selectivity;
+- (CNChain*)filterCast:(ODType *)type;
+
 
 - (CNChain*)map:(cnF)f;
 - (CNChain*)flatMap:(cnF)f;
@@ -30,6 +32,10 @@
 - (CNChain*)groupBy:(cnF)by map:(cnF)f;
 - (CNChain*)groupBy:(cnF)by;
 
+- (CNChain*)zipA:(id <CNIterable>)a;
+- (CNChain*)zipA:(id <CNIterable>)a by:(cnF2)by;
+- (CNChain*)zip3A:(id <CNIterable>)a b:(id <CNIterable>)b;
+- (CNChain*)zip3A:(id <CNIterable>)a b:(id <CNIterable>)b by:(cnF3)by;
 
 - (CNChain*)append:(id)collection;
 - (CNChain*)prepend:(id)collection;

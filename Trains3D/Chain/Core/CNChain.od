@@ -10,6 +10,7 @@ stub class CNChain<A> extends CNIterable<A> {
     def filter(: A -> bool) : CNChain<A>
     def map<B>(: A -> B) : CNChain<B>
     def flatMap<B>(: A -> CNTraversable<B>) : CNChain<B>
+    def filterCast<B>( : Type<B>) : CNChain<B>
 
     def combinations : CNChain<(A, A)>
     def uncombinations<B>(self : CNChain<(B, B)>) : CNChain<B>
@@ -22,6 +23,11 @@ stub class CNChain<A> extends CNIterable<A> {
     def group<K, C extends CNTraversable<K>>(by : A -> K, withBuilder : () -> CNBuilder<A, C>) : CNChain<(K, C<A>)>
     def group<B, K, C extends CNTraversable<K>>(by : A -> K, map : A -> B, withBuilder : () -> CNBuilder<B, C>) : CNChain<(K, C<B>)>
     def group<K, V>(by : A -> K, fold : (V, A) -> V, withStart : () -> V) : CNChain<(K, V)>
+
+    def zip<B>(a: CNIterable<B>) : CNChain<(A, B)>
+    def zip<B, X>(a : CNIterable<B>, by : (A, B) -> X) : CNChain<X>
+    def zip3<B, C>(a: CNIterable<B>, b : CNIterable<C>) : CNChain<(A, B, C)>
+    def zip3<B, C, X>(a : CNIterable<B>, b : CNIterable<C>, by : (A, B, C) -> X) : CNChain<X>
 
     def join<K, V1, V2>(self : CNChain<(K, V1)>, chain : CNIterable<(K, V2)>) : CNChain<K, (V1, V2)>
 

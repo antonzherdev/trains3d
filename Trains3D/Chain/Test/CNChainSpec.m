@@ -209,6 +209,10 @@ SPEC_BEGIN(CNChainSpec)
           }] endSort] toArray];
           [[r should] equal:@[@3, @2, @5, @5, @6]];
       });
+      it(@".zip", ^{
+          NSArray *r = [[[@[@1, @2, @3] chain] zipA:@[@5, @4]] toArray];
+          [[r should] equal:@[tuple(@1, @5), tuple(@2, @4)]];
+      });
   });
 
 SPEC_END

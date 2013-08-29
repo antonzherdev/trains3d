@@ -10,10 +10,12 @@
 @class EGContext;
 @class EGMutableMatrix;
 #import "EGTypes.h"
+@class EGTexture;
+#import "EGGL.h"
 
 @class EGStandardShaderSystem;
 @class EGStandardShaderKey;
-@class EGStanda;
+@class EGStandardShader;
 
 @interface EGStandardShaderSystem : NSObject<EGShaderSystem>
 + (id)standardShaderSystem;
@@ -30,7 +32,7 @@
 
 + (id)standardShaderKeyWithDirectLightCount:(NSUInteger)directLightCount texture:(BOOL)texture;
 - (id)initWithDirectLightCount:(NSUInteger)directLightCount texture:(BOOL)texture;
-- (EGShader*)shader;
+- (EGStandardShader*)shader;
 - (NSString*)lightsVertexUniform;
 - (NSString*)lightsVaryings;
 - (NSString*)lightsCalculateVaryings;
@@ -41,10 +43,24 @@
 @end
 
 
-@interface EGStanda : NSObject
-+ (id)standa;
-- (id)init;
+@interface EGStandardShader : EGShader
+@property (nonatomic, readonly) EGStandardShaderKey* key;
+@property (nonatomic, readonly) EGShaderAttribute* positionSlot;
+@property (nonatomic, readonly) EGShaderAttribute* normalSlot;
+@property (nonatomic, readonly) id uvSlot;
+@property (nonatomic, readonly) EGShaderUniform* diffuseUniform;
+@property (nonatomic, readonly) EGShaderUniform* mvpUniform;
+@property (nonatomic, readonly) id<CNSeq> directLightDirections;
+@property (nonatomic, readonly) id<CNSeq> directLightColors;
+
++ (id)standardShaderWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
+- (id)initWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
+- (void)loadContext:(EGContext*)context material:(EGStandardMaterial*)material;
 - (ODType*)type;
++ (NSInteger)STRIDE;
++ (NSInteger)UV_SHIFT;
++ (NSInteger)NORMAL_SHIFT;
++ (NSInteger)POSITION_SHIFT;
 + (ODType*)type;
 @end
 

@@ -12,3 +12,5 @@ stub class ODType<T>(cls : Class) {
     def hash : uint = self
     def isEqualTo(other : ODType<T>) = self == other
 }
+
+type Type<T> = ODType<T>

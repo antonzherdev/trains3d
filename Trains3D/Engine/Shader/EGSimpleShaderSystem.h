@@ -1,6 +1,5 @@
 #import "objd.h"
 #import "CNTypes.h"
-@class EG;
 #import "EGGL.h"
 #import "EGShader.h"
 #import "EGTypes.h"
@@ -42,14 +41,13 @@
 
 
 @interface EGSimpleColorShader : EGSimpleShader
-@property (nonatomic) EGColor color;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderUniform* colorUniform;
 @property (nonatomic, readonly) EGShaderUniform* mvpUniform;
 
 + (id)simpleColorShader;
 - (id)init;
-- (void)load;
+- (void)loadContext:(EGContext*)context material:(EGSimpleMaterial*)material;
 - (ODType*)type;
 + (NSString*)colorVertexProgram;
 + (NSString*)colorFragmentProgram;
@@ -58,14 +56,13 @@
 
 
 @interface EGSimpleTextureShader : EGSimpleShader
-@property (nonatomic, retain) EGTexture* texture;
 @property (nonatomic, readonly) EGShaderAttribute* uvSlot;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderUniform* mvpUniform;
 
 + (id)simpleTextureShader;
 - (id)init;
-- (void)load;
+- (void)loadContext:(EGContext*)context material:(EGSimpleMaterial*)material;
 - (ODType*)type;
 + (NSString*)textureVertexProgram;
 + (NSString*)textureFragmentProgram;

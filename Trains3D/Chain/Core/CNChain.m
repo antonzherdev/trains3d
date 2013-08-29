@@ -18,6 +18,7 @@
 #import "CNList.h"
 #import "CNSortLink.h"
 #import "CNSortBuilder.h"
+#import "CNZipLink.h"
 
 
 @implementation CNChain {
@@ -123,6 +124,12 @@
     return [self link:[CNFilterLink linkWithPredicate:predicate selectivity:selectivity]];
 }
 
+- (CNChain *)filterCast:(ODType *)type {
+    return [self filter:^BOOL(id x) {
+        return [x isKindOfClass:[type cls]];
+    }];
+}
+
 - (CNChain *)map:(cnF)f {
     return [self link:[CNMapLink linkWithF:f]];
 }
@@ -186,6 +193,28 @@
     return [self groupBy:by withBuilder:^id {
         return [CNArrayBuilder arrayBuilder];
     }];
+}
+
+- (CNChain *)zipA:(id <CNIterable>)a {
+    return [self zipA:a by:^id(id x, id y) {
+        return tuple(x, y);
+    }];
+}
+
+
+- (CNChain *)zipA:(id <CNIterable>)a by:(id (^)(id, id))by {
+    return [self link:[CNZipLink linkWithA:a by:by]];
+}
+
+- (CNChain *)zip3A:(id <CNIterable>)a b:(id <CNIterable>)b {
+    return [self zip3A:a b:b by:^id(id x, id y, id z) {
+        return tuple3(x, y, z);
+    }];
+}
+
+
+- (CNChain *)zip3A:(id <CNIterable>)a b:(id <CNIterable>)b by:(cnF3)by {
+    return [self link:[CNZip3Link linkWithA:a b:b by:by]];
 }
 
 - (CNChain *)append:(id)collection {

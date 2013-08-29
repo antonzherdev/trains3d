@@ -80,7 +80,10 @@ static inline void egMaterialColor(GLenum face, GLenum tp, EGColor color) {
 }
 
 static inline void egUniformColor(GLuint location, EGColor color ) {
-    glUniform4f(location, (GLfloat) color.r, (GLfloat) color.g, (GLfloat) color.b, (GLfloat) color.a);
+    glUniform4fv(location, 4, (GLfloat const *) &color);
+}
+static inline void egUniformVec3(GLuint location, EGVec3 vec3 ) {
+    glUniform4fv(location, 3, (GLfloat const *) &vec3);
 }
 
 static inline void egMaterial(GLenum face, GLenum tp, CGFloat value) {
