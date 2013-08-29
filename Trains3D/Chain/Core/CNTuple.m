@@ -35,7 +35,7 @@ static ODType* _CNTuple_type;
 }
 
 - (NSString*)description {
-    return [[[[@"(" stringByAppendingFormat:@"%@", _a] stringByAppendingString:@", "] stringByAppendingFormat:@"%@", _b] stringByAppendingString:@")"];
+    return [NSString stringWithFormat:@"(%@, %@)", _a, _b];
 }
 
 + (id)unapplyTuple:(CNTuple*)tuple {
@@ -113,7 +113,7 @@ static ODType* _CNTuple3_type;
 }
 
 - (NSString*)description {
-    return [[[[[[@"(" stringByAppendingFormat:@"%@", _a] stringByAppendingString:@", "] stringByAppendingFormat:@"%@", _b] stringByAppendingString:@", "] stringByAppendingFormat:@"%@", _c] stringByAppendingString:@")"];
+    return [NSString stringWithFormat:@"(%@, %@, %@)", _a, _b, _c];
 }
 
 + (id)unapplyTuple:(CNTuple3*)tuple {
@@ -200,7 +200,7 @@ static ODType* _CNTuple4_type;
 }
 
 - (NSString*)description {
-    return [[[[[[@"(" stringByAppendingFormat:@"%@", _a] stringByAppendingString:@", "] stringByAppendingFormat:@"%@", _b] stringByAppendingString:@", "] stringByAppendingFormat:@"%@", _c] stringByAppendingString:@")"];
+    return [NSString stringWithFormat:@"(%@, %@, %@, %@)", _a, _b, _c, _d];
 }
 
 + (id)unapplyTuple:(CNTuple4*)tuple {

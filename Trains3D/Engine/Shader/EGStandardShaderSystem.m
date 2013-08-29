@@ -99,68 +99,66 @@ static ODType* _EGStandardShaderKey_type;
 }
 
 - (EGShader*)shader {
-    NSString* vertexShader = @"attribute vec3 normal;\n"
-        "attribute vec3 vertexUV; $when(texture)\n"
+    NSString* vertexShader = [NSString stringWithFormat:@"attribute vec3 normal;%@\n"
         "attribute vec3 position;\n"
         "uniform mat4 mvp;\n"
-        "$lightsVertexUniform\n"
-        "\n"
-        "varying vec2 UV; $when(texture)\n"
-        "$lightsVaryings\n"
-        "\n"
-        "void main(void) {\n"
-        "   gl_Position = mvp * vec4(position, 1);\n"
-        "   UV = vertexUV; $when(texture)\n"
-        "   $lightsCalculateVaryings\n"
-        "}";
-    NSString* fragmentShader = @"\n"
-        "if(texture)\n"
-        "varying vec2 UV;\n"
-        "uniform sampler2D texture;\n"
-        "else\n"
-        "uniform vec4 color;\n"
-        "endif\n"
-        "$lightsVaryings\n"
-        "$lightsFragmentUniform\n"
+        "%@\n"
+        "%@\n"
+        "%@\n"
         "\n"
         "void main(void) {\n"
-        "   vec4 matericalColor = color $when(!texture)\n"
-        "   vec4 matericalColor = texture2D(texture, UV); $when(texture)\n"
+        "   gl_Position = mvp * vec4(position, 1);%@\n"
+        "   %@\n"
+        "}", ((_texture) ? @"\n"
+        "attribute vec3 vertexUV; " : @""), [self lightsVertexUniform], ((_texture) ? @"\n"
+        "varying vec2 UV; " : @""), [self lightsVaryings], ((_texture) ? @"\n"
+        "   UV = vertexUV; " : @""), [self lightsCalculateVaryings]];
+    NSString* fragmentShader = [NSString stringWithFormat:@"\n"
+        "%@\n"
+        "%@\n"
+        "%@\n"
+        "\n"
+        "void main(void) {%@%@\n"
         "   vec4 diffuse = vec4(0, 0, 0, 0)\n"
-        "   $lightsDiffuse\n"
+        "   %@\n"
         "   gl_FragColor = diffuse;\n"
-        "}";
+        "}", ((_texture) ? @"\n"
+        "varying vec2 UV;\n"
+        "uniform sampler2D texture;" : @"\n"
+        "uniform vec4 color;"), [self lightsVaryings], [self lightsFragmentUniform], ((!(_texture)) ? @"\n"
+        "   vec4 matericalColor = color " : @""), ((_texture) ? @"\n"
+        "   vec4 matericalColor = texture2D(texture, UV); " : @""), [self lightsDiffuse]];
     return [EGShader shaderWithProgram:[EGShaderProgram applyVertex:vertexShader fragment:fragmentShader]];
 }
 
 - (NSString*)lightsVertexUniform {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return @"uniform vec3 lightDirection$i;";
-    }] toStringWithDelimiter:@"\n"];
+        return [NSString stringWithFormat:@"uniform vec3 lightDirection%@;", i];
+    }] toStringWithDelimiter:@"n"];
 }
 
 - (NSString*)lightsVaryings {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return @"varying float lightDirectionCos$i;";
-    }] toStringWithDelimiter:@"\n"];
+        return [NSString stringWithFormat:@"varying float lightDirectionCos%@;", i];
+    }] toStringWithDelimiter:@"n"];
 }
 
 - (NSString*)lightsCalculateVaryings {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return @"lightDirectionCos$i = clamp(dot(normal, normalize(lightDirection$i)), 0, 1);";
-    }] toStringWithDelimiter:@"\n"];
+        return [NSString stringWithFormat:@"lightDirectionCos%@= clamp(dot(normal, normalize(lightDirection%@)), 0, 1);", i, i];
+    }] toStringWithDelimiter:@"n"];
 }
 
 - (NSString*)lightsFragmentUniform {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return @"uniform vec4 lightDirectionColor$i;";
-    }] toStringWithDelimiter:@"\n"];
+        return [NSString stringWithFormat:@"uniform vec4 lightDirectionColor%@;", i];
+    }] toStringWithDelimiter:@"n"];
 }
 
 - (NSString*)lightsDiffuse {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return @"diffuse += lightDirectionCos$i * (matericalColor * lightDirectionColor$i);";
-    }] toStringWithDelimiter:@"\n"];
+        return [NSString stringWithFormat:@"diffuse += lightDirectionCos%@* (matericalColor * lightDirectionColor%@);", i, i];
+    }] toStringWithDelimiter:@"n"];
 }
 
 - (ODType*)type {

@@ -10,7 +10,7 @@ class CNTuple<A, B>(a : A, b : B) extends ODComparable<CNTuple<A, B>> {
         if(r == 0) -to.b.compare(b) else -r
     }
 
-    def description = "(" + a + ", " + b + ")"
+    def description = "($a, $b)"
     static def unapply<A, B>(tuple : CNTuple<A, B>) : CNTuple<A, B>? = tuple
 }
 
@@ -23,7 +23,7 @@ class CNTuple3<A, B, C>(a : A, b : B, c : C) extends ODComparable<CNTuple3<A, B,
         } else -r
     }
 
-    def description = "(" + a + ", " + b + ", " + c + ")"
+    def description = "($a, $b, $c)"
     static def unapply<A, B, C>(tuple : CNTuple3<A, B, C>) : CNTuple3<A, B, C>? = tuple
 }
 
@@ -43,6 +43,6 @@ class CNTuple4<A, B, C, D>(a : A, b : B, c : C, d : D) extends ODComparable<CNTu
         } else -r
     }
 
-    def description = "(" + a + ", " + b + ", " + c + ")"
+    def description = "($a, $b, $c, $d)"
     static def unapply<A, B, C, D>(tuple : CNTuple4<A, B, C, D>) : CNTuple3<A, B, C, D>? = tuple
 }
