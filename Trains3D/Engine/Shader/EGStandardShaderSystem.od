@@ -6,6 +6,7 @@ import EGTexture
 import EGGL
 
 class EGStandardShaderSystem extends EGShaderSystem<EGStandardMaterial> {
+    static val instance = EGStandardShaderSystem()
     def shaderFor(context : EGContext, material : EGStandardMaterial) : EGShader = {
         val lightMap = context.environment.lights.chain.group(_.type).toMap
         val directLights = lightMap[EGDirectLight.type].getOrElse([])
@@ -21,7 +22,7 @@ class EGStandardShaderKey(directLightCount : uint, texture : bool) {
     def shader : EGStandardShader = {
         val vertexShader =
             "attribute vec3 normal;
-             attribute vec3 vertexUV; $when(texture)
+             attribute vec2 vertexUV; $when(texture)
              attribute vec3 position;
              uniform mat4 mvp;
              $lightsVertexUniform
@@ -42,15 +43,16 @@ class EGStandardShaderKey(directLightCount : uint, texture : bool) {
             $else
              uniform vec4 diffuse;
             $endif
+             uniform vec4 ambientColor;
              $lightsVaryings
              $lightsFragmentUniform
 
              void main(void) {
                 vec4 matericalColor = diffuse; $when(!texture)
                 vec4 matericalColor = texture2D(diffuse, UV); $when(texture)
-                vec4 diffuse = vec4(0, 0, 0, 0);
+                vec4 color = ambientColor * matericalColor;
                 $lightsDiffuse
-                gl_FragColor = diffuse;
+                gl_FragColor = color;
              }"
         EGStandardShader(self, EGShaderProgram(vertexShader, fragmentShader))
     }
@@ -58,12 +60,12 @@ class EGStandardShaderKey(directLightCount : uint, texture : bool) {
     def lightsVertexUniform : string = directLightCount.range.chain.map{i -> "uniform vec3 dirLightDirection$i;"}.toStringWith("\n")
     def lightsVaryings : string = directLightCount.range.chain.map{i -> "varying float dirLightDirectionCos$i;"}.toStringWith("\n")
     def lightsCalculateVaryings : string = directLightCount.range.chain.map{i ->
-        "dirLightDirectionCos$i = clamp(dot(normal, normalize(dirLightDirection$i)), 0, 1);"
+        "dirLightDirectionCos$i = max(dot(normal, normalize(dirLightDirection$i)), 0.0);"
     }.toStringWith("\n")
 
     def lightsFragmentUniform : string = directLightCount.range.chain.map{i -> "uniform vec4 dirLightColor$i;"}.toStringWith("\n")
     def lightsDiffuse : string =  directLightCount.range.chain.map{i ->
-        "diffuse += dirLightDirectionCos$i * (matericalColor * dirLightColor$i);"
+        "color += dirLightDirectionCos$i * (matericalColor * dirLightColor$i);"
     }.toStringWith("\n")
 
 }
@@ -75,9 +77,10 @@ class EGStandardShader(key : EGStandardShaderKey, program : EGShaderProgram) ext
     static val POSITION_SHIFT = 5*4
 
     val positionSlot : EGShaderAttribute = attributeFor("position")
-    val normalSlot : EGShaderAttribute = attributeFor("normal")
+    val normalSlot : EGShaderAttribute? = if(key.directLightCount > 0) attributeFor("normal") else nil
     val uvSlot : EGShaderAttribute? = if(key.texture) attributeFor("vertexUV") else nil
 
+    val ambientColor : EGShaderUniform = uniformFor("ambientColor")
     val diffuseUniform : EGShaderUniform = uniformFor("diffuse")
     val mvpUniform : EGShaderUniform = uniformFor("mvp")
 
@@ -85,18 +88,18 @@ class EGStandardShader(key : EGStandardShaderKey, program : EGShaderProgram) ext
     val directLightColors : [EGShaderUniform] = key.directLightCount.range.chain.map{i -> uniformFor("dirLightColor$i")}.toArray
 
     def load(context : EGContext, material : EGStandardMaterial) {
-        normalSlot.setFromBufferWith(STRIDE, valuesCount = 3, GL_FLOAT, NORMAL_SHIFT)
         positionSlot.setFromBufferWith(STRIDE, valuesCount = 3, GL_FLOAT, POSITION_SHIFT)
         mvpUniform.set(matrix = context.mvp)
-
         if(key.texture) {
             uvSlot.get.setFromBufferWith(STRIDE, valuesCount = 2, GL_FLOAT, UV_SHIFT)
             material.diffuse.cast<EGColorSourceTexture>.texture.bind
         }
         val env = context.environment
+        ambientColor.set(color = env.ambientColor)
         if(key.directLightCount > 0) {
+            normalSlot.get.setFromBufferWith(STRIDE, valuesCount = 3, GL_FLOAT, NORMAL_SHIFT)
             env.lights.chain.filterCast(EGDirectLight.type).zip3(directLightDirections, directLightColors){light, dirSlot, colorSlot ->
-                dirSlot.set(color = light.color)
+                dirSlot.set(vec3 = light.direction)
                 colorSlot.set(color = light.color)
                 light
             }.count

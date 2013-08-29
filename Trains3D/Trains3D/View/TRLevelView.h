@@ -16,6 +16,7 @@
 
 @interface TRLevelView : NSObject<EGView>
 @property (nonatomic, readonly) TRLevel* level;
+@property (nonatomic, readonly) EGEnvironment* environment;
 @property (nonatomic, readonly) id<EGCamera> camera;
 
 + (id)levelViewWithLevel:(TRLevel*)level;

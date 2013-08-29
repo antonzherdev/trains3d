@@ -4,6 +4,7 @@
 #import "EGContext.h"
 #import "EGShader.h"
 #import "EGSimpleShaderSystem.h"
+#import "EGStandardShaderSystem.h"
 #import "EGTexture.h"
 @implementation EGColorSource
 static ODType* _EGColorSource_type;
@@ -203,11 +204,11 @@ static ODType* _EGMaterial2_type;
 }
 
 + (EGMaterial2*)applyColor:(EGColor)color {
-    return [EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyColor:color]];
+    return [EGStandardMaterial applyDiffuse:[EGColorSource applyColor:color]];
 }
 
 + (EGMaterial2*)applyTexture:(EGTexture*)texture {
-    return [EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyTexture:texture]];
+    return [EGStandardMaterial applyDiffuse:[EGColorSource applyTexture:texture]];
 }
 
 - (ODType*)type {
@@ -304,23 +305,20 @@ static ODType* _EGSimpleMaterial_type;
 
 @implementation EGStandardMaterial{
     EGColorSource* _diffuse;
-    CGFloat _ambient;
     EGColor _specular;
 }
 static ODType* _EGStandardMaterial_type;
 @synthesize diffuse = _diffuse;
-@synthesize ambient = _ambient;
 @synthesize specular = _specular;
 
-+ (id)standardMaterialWithDiffuse:(EGColorSource*)diffuse ambient:(CGFloat)ambient specular:(EGColor)specular {
-    return [[EGStandardMaterial alloc] initWithDiffuse:diffuse ambient:ambient specular:specular];
++ (id)standardMaterialWithDiffuse:(EGColorSource*)diffuse specular:(EGColor)specular {
+    return [[EGStandardMaterial alloc] initWithDiffuse:diffuse specular:specular];
 }
 
-- (id)initWithDiffuse:(EGColorSource*)diffuse ambient:(CGFloat)ambient specular:(EGColor)specular {
+- (id)initWithDiffuse:(EGColorSource*)diffuse specular:(EGColor)specular {
     self = [super init];
     if(self) {
         _diffuse = diffuse;
-        _ambient = ambient;
         _specular = specular;
     }
     
@@ -332,8 +330,12 @@ static ODType* _EGStandardMaterial_type;
     _EGStandardMaterial_type = [ODType typeWithCls:[EGStandardMaterial class]];
 }
 
++ (EGStandardMaterial*)applyDiffuse:(EGColorSource*)diffuse {
+    return [EGStandardMaterial standardMaterialWithDiffuse:diffuse specular:EGColorMake(0.0, 0.0, 0.0, 1.0)];
+}
+
 - (id<EGShaderSystem>)shaderSystem {
-    return EGSimpleShaderSystem.instance;
+    return EGStandardShaderSystem.instance;
 }
 
 - (ODType*)type {
@@ -352,13 +354,12 @@ static ODType* _EGStandardMaterial_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGStandardMaterial* o = ((EGStandardMaterial*)(other));
-    return [self.diffuse isEqual:o.diffuse] && eqf(self.ambient, o.ambient) && EGColorEq(self.specular, o.specular);
+    return [self.diffuse isEqual:o.diffuse] && EGColorEq(self.specular, o.specular);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.diffuse hash];
-    hash = hash * 31 + floatHash(self.ambient);
     hash = hash * 31 + EGColorHash(self.specular);
     return hash;
 }
@@ -366,7 +367,6 @@ static ODType* _EGStandardMaterial_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"diffuse=%@", self.diffuse];
-    [description appendFormat:@", ambient=%f", self.ambient];
     [description appendFormat:@", specular=%@", EGColorDescription(self.specular)];
     [description appendString:@">"];
     return description;

@@ -104,4 +104,4 @@ class EGEnvironment(ambientColor : EGColor, lights : [EGLight]) {
 }
 
 class EGLight(color : EGColor)
-class EGDirectLight(color : EGColor, direction : EGVec3) extends EGLight
+class EGDirectLight(color : EGColor, direction : EGVec3) extends EGLight(color)

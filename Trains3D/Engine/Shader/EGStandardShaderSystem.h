@@ -22,6 +22,7 @@
 - (id)init;
 - (EGShader*)shaderForContext:(EGContext*)context material:(EGStandardMaterial*)material;
 - (ODType*)type;
++ (EGStandardShaderSystem*)instance;
 + (ODType*)type;
 @end
 
@@ -46,8 +47,9 @@
 @interface EGStandardShader : EGShader
 @property (nonatomic, readonly) EGStandardShaderKey* key;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
-@property (nonatomic, readonly) EGShaderAttribute* normalSlot;
+@property (nonatomic, readonly) id normalSlot;
 @property (nonatomic, readonly) id uvSlot;
+@property (nonatomic, readonly) EGShaderUniform* ambientColor;
 @property (nonatomic, readonly) EGShaderUniform* diffuseUniform;
 @property (nonatomic, readonly) EGShaderUniform* mvpUniform;
 @property (nonatomic, readonly) id<CNSeq> directLightDirections;

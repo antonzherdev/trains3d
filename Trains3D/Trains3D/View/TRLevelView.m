@@ -12,10 +12,12 @@
     TRCityView* _cityView;
     TRRailroadView* _railroadView;
     TRTrainView* _trainView;
+    EGEnvironment* _environment;
     id<EGCamera> _camera;
 }
 static ODType* _TRLevelView_type;
 @synthesize level = _level;
+@synthesize environment = _environment;
 @synthesize camera = _camera;
 
 + (id)levelViewWithLevel:(TRLevel*)level {
@@ -30,6 +32,7 @@ static ODType* _TRLevelView_type;
         _cityView = [TRCityView cityView];
         _railroadView = [TRRailroadView railroadView];
         _trainView = [TRTrainView trainView];
+        _environment = [EGEnvironment environmentWithAmbientColor:EGColorMake(0.2, 0.2, 0.2, 1.0) lights:(@[[EGDirectLight directLightWithColor:EGColorMake(1.0, 1.0, 1.0, 1.0) direction:EGVec3Make(0.2, -0.2, 0.5)]])];
         _camera = [EGCameraIso cameraIsoWithTilesOnScreen:_level.map.size center:EGPointMake(0.0, 0.0)];
     }
     
@@ -64,10 +67,6 @@ static ODType* _TRLevelView_type;
 
 - (ODType*)type {
     return _TRLevelView_type;
-}
-
-- (EGEnvironment*)environment {
-    return EGEnvironment.aDefault;
 }
 
 + (ODType*)type {

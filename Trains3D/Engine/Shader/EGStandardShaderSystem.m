@@ -4,6 +4,7 @@
 #import "EGContext.h"
 #import "EGTexture.h"
 @implementation EGStandardShaderSystem
+static EGStandardShaderSystem* _EGStandardShaderSystem_instance;
 static NSMutableDictionary* _EGStandardShaderSystem_shaders;
 static ODType* _EGStandardShaderSystem_type;
 
@@ -19,6 +20,7 @@ static ODType* _EGStandardShaderSystem_type;
 
 + (void)initialize {
     [super initialize];
+    _EGStandardShaderSystem_instance = [EGStandardShaderSystem standardShaderSystem];
     _EGStandardShaderSystem_shaders = [NSMutableDictionary mutableDictionary];
     _EGStandardShaderSystem_type = [ODType typeWithCls:[EGStandardShaderSystem class]];
 }
@@ -43,6 +45,10 @@ static ODType* _EGStandardShaderSystem_type;
 - (void)applyContext:(EGContext*)context material:(id)material draw:(void(^)())draw {
     EGShader* shader = [self shaderForContext:context material:material];
     [shader applyContext:context material:material draw:draw];
+}
+
++ (EGStandardShaderSystem*)instance {
+    return _EGStandardShaderSystem_instance;
 }
 
 + (ODType*)type {
@@ -111,18 +117,19 @@ static ODType* _EGStandardShaderKey_type;
         "   gl_Position = mvp * vec4(position, 1);%@\n"
         "   %@\n"
         "}", ((_texture) ? @"\n"
-        "attribute vec3 vertexUV; " : @""), [self lightsVertexUniform], ((_texture) ? @"\n"
+        "attribute vec2 vertexUV; " : @""), [self lightsVertexUniform], ((_texture) ? @"\n"
         "varying vec2 UV; " : @""), [self lightsVaryings], ((_texture) ? @"\n"
         "   UV = vertexUV; " : @""), [self lightsCalculateVaryings]];
     NSString* fragmentShader = [NSString stringWithFormat:@"\n"
         "%@\n"
+        "uniform vec4 ambientColor;\n"
         "%@\n"
         "%@\n"
         "\n"
         "void main(void) {%@%@\n"
-        "   vec4 diffuse = vec4(0, 0, 0, 0);\n"
+        "   vec4 color = ambientColor * matericalColor;\n"
         "   %@\n"
-        "   gl_FragColor = diffuse;\n"
+        "   gl_FragColor = color;\n"
         "}", ((_texture) ? @"\n"
         "varying vec2 UV;\n"
         "uniform sampler2D diffuse;" : @"\n"
@@ -146,7 +153,7 @@ static ODType* _EGStandardShaderKey_type;
 
 - (NSString*)lightsCalculateVaryings {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return [NSString stringWithFormat:@"dirLightDirectionCos%@= clamp(dot(normal, normalize(dirLightDirection%@)), 0, 1);", i, i];
+        return [NSString stringWithFormat:@"dirLightDirectionCos%@= max(dot(normal, normalize(dirLightDirection%@)), 0.0);", i, i];
     }] toStringWithDelimiter:@"n"];
 }
 
@@ -158,7 +165,7 @@ static ODType* _EGStandardShaderKey_type;
 
 - (NSString*)lightsDiffuse {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return [NSString stringWithFormat:@"diffuse += dirLightDirectionCos%@* (matericalColor * dirLightColor%@);", i, i];
+        return [NSString stringWithFormat:@"color += dirLightDirectionCos%@* (matericalColor * dirLightColor%@);", i, i];
     }] toStringWithDelimiter:@"n"];
 }
 
@@ -202,8 +209,9 @@ static ODType* _EGStandardShaderKey_type;
 @implementation EGStandardShader{
     EGStandardShaderKey* _key;
     EGShaderAttribute* _positionSlot;
-    EGShaderAttribute* _normalSlot;
+    id _normalSlot;
     id _uvSlot;
+    EGShaderUniform* _ambientColor;
     EGShaderUniform* _diffuseUniform;
     EGShaderUniform* _mvpUniform;
     id<CNSeq> _directLightDirections;
@@ -218,6 +226,7 @@ static ODType* _EGStandardShader_type;
 @synthesize positionSlot = _positionSlot;
 @synthesize normalSlot = _normalSlot;
 @synthesize uvSlot = _uvSlot;
+@synthesize ambientColor = _ambientColor;
 @synthesize diffuseUniform = _diffuseUniform;
 @synthesize mvpUniform = _mvpUniform;
 @synthesize directLightDirections = _directLightDirections;
@@ -232,8 +241,9 @@ static ODType* _EGStandardShader_type;
     if(self) {
         _key = key;
         _positionSlot = [self attributeForName:@"position"];
-        _normalSlot = [self attributeForName:@"normal"];
+        _normalSlot = [CNOption opt:((_key.directLightCount > 0) ? [self attributeForName:@"normal"] : nil)];
         _uvSlot = [CNOption opt:((_key.texture) ? [self attributeForName:@"vertexUV"] : nil)];
+        _ambientColor = [self uniformForName:@"ambientColor"];
         _diffuseUniform = [self uniformForName:@"diffuse"];
         _mvpUniform = [self uniformForName:@"mvp"];
         _directLightDirections = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniform*(id i) {
@@ -256,7 +266,6 @@ static ODType* _EGStandardShader_type;
 }
 
 - (void)loadContext:(EGContext*)context material:(EGStandardMaterial*)material {
-    [_normalSlot setFromBufferWithStride:((NSUInteger)(_EGStandardShader_STRIDE)) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_NORMAL_SHIFT))];
     [_positionSlot setFromBufferWithStride:((NSUInteger)(_EGStandardShader_STRIDE)) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_POSITION_SHIFT))];
     [_mvpUniform setMatrix:[context mvp]];
     if(_key.texture) {
@@ -264,11 +273,15 @@ static ODType* _EGStandardShader_type;
         [((EGColorSourceTexture*)(material.diffuse)).texture bind];
     }
     EGEnvironment* env = context.environment;
-    if(_key.directLightCount > 0) [[[[env.lights chain] filterCast:EGDirectLight.type] zip3A:_directLightDirections b:_directLightColors by:^EGDirectLight*(EGDirectLight* light, EGShaderUniform* dirSlot, EGShaderUniform* colorSlot) {
-        [dirSlot setColor:light.color];
-        [colorSlot setColor:light.color];
-        return light;
-    }] count];
+    [_ambientColor setColor:env.ambientColor];
+    if(_key.directLightCount > 0) {
+        [((EGShaderAttribute*)([_normalSlot get])) setFromBufferWithStride:((NSUInteger)(_EGStandardShader_STRIDE)) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_NORMAL_SHIFT))];
+        [[[[env.lights chain] filterCast:EGDirectLight.type] zip3A:_directLightDirections b:_directLightColors by:^EGDirectLight*(EGDirectLight* light, EGShaderUniform* dirSlot, EGShaderUniform* colorSlot) {
+            [dirSlot setVec3:light.direction];
+            [colorSlot setColor:light.color];
+            return light;
+        }] count];
+    }
 }
 
 - (ODType*)type {

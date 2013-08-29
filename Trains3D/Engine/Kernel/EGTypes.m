@@ -564,7 +564,7 @@ static ODType* _EGDirectLight_type;
 }
 
 - (id)initWithColor:(EGColor)color direction:(EGVec3)direction {
-    self = [super init];
+    self = [super initWithColor:color];
     if(self) _direction = direction;
     
     return self;

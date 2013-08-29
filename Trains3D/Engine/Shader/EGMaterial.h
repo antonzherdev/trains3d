@@ -13,6 +13,9 @@
 @class EGSimpleShader;
 @class EGSimpleColorShader;
 @class EGSimpleTextureShader;
+@class EGStandardShaderSystem;
+@class EGStandardShaderKey;
+@class EGStandardShader;
 @class EGTexture;
 
 @class EGColorSource;
@@ -76,13 +79,13 @@
 @end
 
 
-@interface EGStandardMaterial : NSObject
+@interface EGStandardMaterial : EGMaterial2
 @property (nonatomic, readonly) EGColorSource* diffuse;
-@property (nonatomic, readonly) CGFloat ambient;
 @property (nonatomic, readonly) EGColor specular;
 
-+ (id)standardMaterialWithDiffuse:(EGColorSource*)diffuse ambient:(CGFloat)ambient specular:(EGColor)specular;
-- (id)initWithDiffuse:(EGColorSource*)diffuse ambient:(CGFloat)ambient specular:(EGColor)specular;
++ (id)standardMaterialWithDiffuse:(EGColorSource*)diffuse specular:(EGColor)specular;
+- (id)initWithDiffuse:(EGColorSource*)diffuse specular:(EGColor)specular;
++ (EGStandardMaterial*)applyDiffuse:(EGColorSource*)diffuse;
 - (id<EGShaderSystem>)shaderSystem;
 - (ODType*)type;
 + (ODType*)type;

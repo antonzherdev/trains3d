@@ -24,7 +24,7 @@ static ODType* _CNRange_type;
         _start = start;
         _end = end;
         _step = step;
-        _count = ((NSUInteger)((_end - _start) / _step));
+        _count = ((NSUInteger)(((_step > 0) ? ((_start < _end) ? (_end - _start) / _step : 0) : ((_step < 0) ? ((_start > _end) ? (_start - _end) / _step : 0) : 0))));
     }
     
     return self;
@@ -53,7 +53,7 @@ static ODType* _CNRange_type;
         return _start > _end;
     } else {
         if(_step < 0) return _start < _end;
-        else return NO;
+        else return YES;
     }
 }
 
