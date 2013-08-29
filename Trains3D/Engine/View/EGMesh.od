@@ -5,9 +5,9 @@ import EGSimpleShaderSystem
 import EGTypes
 import EGMaterial
 
-class EGMesh(vertexBuffer : EGVertexBuffer<float4>, indexBuffer : EGIndexBuffer<ubyte>) {
-    static def apply(vertexData : CNPArray<float4>, index : CNPArray<ubyte>) : EGMesh =
-        EGMesh(vertexBuffer = EGVertexBuffer<float4>(8*4).set(vertexData), indexBuffer = EGIndexBuffer<ubyte>().set(index))
+class EGMesh(vertexBuffer : EGVertexBuffer<float4>, indexBuffer : EGIndexBuffer<uint4>) {
+    static def apply(vertexData : CNPArray<float4>, index : CNPArray<uint4>) : EGMesh =
+        EGMesh(vertexBuffer = EGVertexBuffer<float4>(8*4).set(vertexData), indexBuffer = EGIndexBuffer<uint4>().set(index))
     def drawWith(material : EGMaterial2) {
         vertexBuffer {
             material {

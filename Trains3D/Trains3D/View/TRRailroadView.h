@@ -2,6 +2,18 @@
 #import "EGGL.h"
 @class EGMesh;
 @class EGMeshModel;
+@class EG;
+@class EGTexture;
+@class EGColorSource;
+@class EGColorSourceColor;
+@class EGColorSourceTexture;
+@class EGMaterial2;
+@class EGSimpleMaterial;
+@class EGStandardMaterial;
+@class EGMaterial;
+@class EGContext;
+@class EGMutableMatrix;
+#import "EGTypes.h"
 @class TRRailroadConnectorContent;
 @class TREmptyConnector;
 @class TRRail;
@@ -15,15 +27,7 @@
 @class TRRailForm;
 @class TRRailPoint;
 @class TRRailPointCorrection;
-@class EG;
-@class EGTexture;
-@class EGColorSource;
-@class EGColorSourceColor;
-@class EGColorSourceTexture;
-@class EGMaterial2;
-@class EGSimpleMaterial;
-@class EGStandardMaterial;
-@class EGMaterial;
+@class TR3D;
 
 @class TRRailroadView;
 @class TRRailView;
@@ -41,6 +45,8 @@
 
 
 @interface TRRailView : NSObject
+@property (nonatomic, readonly) EGMeshModel* railModel;
+
 + (id)railView;
 - (id)init;
 - (void)drawRail:(TRRail*)rail;

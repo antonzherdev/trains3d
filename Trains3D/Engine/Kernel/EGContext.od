@@ -28,12 +28,14 @@ class EGMutableMatrix {
     private var _value = EGMatrix.identity
 
     def push {
+        glPushMatrix
         _stack = CNList(_value, _stack)
     }
 
     def pop {
         _value = _stack.head.get
         _stack = _stack.tail
+        glPopMatrix
     }
 
     def value : EGMatrix = _value

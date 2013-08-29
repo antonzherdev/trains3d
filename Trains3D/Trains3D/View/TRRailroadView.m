@@ -1,14 +1,15 @@
 #import "TRRailroadView.h"
-#import "TR3DRail.h"
 #import "TR3DRailTurn.h"
 #import "TR3DSwitch.h"
 
 #import "EGMesh.h"
-#import "TRRailroad.h"
-#import "TRRailPoint.h"
 #import "EG.h"
 #import "EGTexture.h"
 #import "EGMaterial.h"
+#import "EGContext.h"
+#import "TRRailroad.h"
+#import "TRRailPoint.h"
+#import "TR3D.h"
 @implementation TRRailroadView{
     TRRailView* _railView;
     TRSwitchView* _switchView;
@@ -87,8 +88,11 @@ static ODType* _TRRailroadView_type;
 @end
 
 
-@implementation TRRailView
+@implementation TRRailView{
+    EGMeshModel* _railModel;
+}
 static ODType* _TRRailView_type;
+@synthesize railModel = _railModel;
 
 + (id)railView {
     return [[TRRailView alloc] init];
@@ -96,6 +100,7 @@ static ODType* _TRRailView_type;
 
 - (id)init {
     self = [super init];
+    if(self) _railModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.railGravel, ((EGMaterial2*)([EGMaterial2 applyTexture:[EG textureForFile:@"Gravel.png"]]))), tuple(TR3D.railTies, ((EGMaterial2*)([EGMaterial2 applyColor:EGColorMake(1.0, 1.0, 0.0, 1.0)]))), tuple(TR3D.rails, ((EGMaterial2*)([EGMaterial2 applyColor:EGColorMake(1.0, 1.0, 1.0, 1.0)])))])];
     
     return self;
 }
@@ -106,30 +111,24 @@ static ODType* _TRRailView_type;
 }
 
 - (void)drawRail:(TRRail*)rail {
-    glPushMatrix();
-    egTranslate(((CGFloat)(rail.tile.x)), ((CGFloat)(rail.tile.y)), 0.001);
+    EGMutableMatrix* m = [EG modelMatrix];
+    [m push];
+    [m translateX:((CGFloat)(rail.tile.x)) y:((CGFloat)(rail.tile.y)) z:0.001];
     if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
-        if(rail.form == TRRailForm.leftRight) egRotate(90.0, 0.0, 0.0, 1.0);
-        egRotate(90.0, 1.0, 0.0, 0.0);
-        [EGMaterial.stone set];
-        [[EG textureForFile:@"Gravel.png"] draw:^void() {
-            egDrawJasModel(RailGravel);
-        }];
-        [EGMaterial.wood set];
-        egDrawJasModel(RailTies);
-        [EGMaterial.steel set];
-        egDrawJasModel(Rails);
+        if(rail.form == TRRailForm.leftRight) [m rotateAngle:90.0 x:0.0 y:0.0 z:1.0];
+        [m rotateAngle:90.0 x:1.0 y:0.0 z:0.0];
+        [_railModel draw];
     } else {
         if(rail.form == TRRailForm.topRight) {
-            egRotate(270.0, 0.0, 0.0, 1.0);
+            [m rotateAngle:270.0 x:0.0 y:0.0 z:1.0];
         } else {
             if(rail.form == TRRailForm.bottomRight) {
-                egRotate(180.0, 0.0, 0.0, 1.0);
+                [m rotateAngle:180.0 x:0.0 y:0.0 z:1.0];
             } else {
-                if(rail.form == TRRailForm.leftBottom) egRotate(90.0, 0.0, 0.0, 1.0);
+                if(rail.form == TRRailForm.leftBottom) [m rotateAngle:90.0 x:0.0 y:0.0 z:1.0];
             }
         }
-        egRotate(90.0, 1.0, 0.0, 0.0);
+        [m rotateAngle:90.0 x:1.0 y:0.0 z:0.0];
         egColor3(0.5, 0.5, 0.5);
         [EGMaterial.stone set];
         [[EG textureForFile:@"Gravel.png"] draw:^void() {
@@ -140,7 +139,7 @@ static ODType* _TRRailView_type;
         [EGMaterial.steel set];
         egDrawJasModel(RailsTurn);
     }
-    glPopMatrix();
+    [m pop];
 }
 
 - (ODType*)type {

@@ -1,0 +1,8 @@
+import EGGL
+import EGMesh
+
+stub class TR3D {
+    static val railTies : EGMesh = nil
+    static val railGravel : EGMesh = nil
+    static val rails : EGMesh = nil
+}

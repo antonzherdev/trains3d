@@ -6,6 +6,7 @@
     GLenum _bufferType;
     GLuint _handle;
     NSUInteger __length;
+    NSUInteger __count;
 }
 static ODType* _EGBuffer_type;
 @synthesize bufferType = _bufferType;
@@ -21,6 +22,7 @@ static ODType* _EGBuffer_type;
         _bufferType = bufferType;
         _handle = handle;
         __length = 0;
+        __count = 0;
     }
     
     return self;
@@ -33,6 +35,10 @@ static ODType* _EGBuffer_type;
 
 - (NSUInteger)length {
     return __length;
+}
+
+- (NSUInteger)count {
+    return __count;
 }
 
 + (EGBuffer*)applyBufferType:(GLenum)bufferType {
@@ -52,6 +58,7 @@ static ODType* _EGBuffer_type;
     glBufferData(_bufferType, data.length, data.bytes, GL_STATIC_DRAW);
     glBindBuffer(_bufferType, 0);
     __length = data.length;
+    __count = data.count;
     return self;
 }
 
@@ -193,7 +200,7 @@ static ODType* _EGIndexBuffer_type;
 
 - (void)draw {
     [self bind];
-    glDrawElements(GL_TRIANGLES, [self length], GL_UNSIGNED_BYTE, 0);
+    glDrawElements(GL_TRIANGLES, [self count], GL_UNSIGNED_INT, 0);
     [self unbind];
 }
 

@@ -127,15 +127,15 @@ static ODType* _EGStandardShaderKey_type;
         "%@\n"
         "\n"
         "void main(void) {%@%@\n"
-        "   vec4 color = ambientColor * matericalColor;\n"
+        "   vec4 color = ambientColor * materialColor;\n"
         "   %@\n"
         "   gl_FragColor = color;\n"
         "}", ((_texture) ? @"\n"
         "varying vec2 UV;\n"
         "uniform sampler2D diffuse;" : @"\n"
         "uniform vec4 diffuse;"), [self lightsVaryings], [self lightsFragmentUniform], ((!(_texture)) ? @"\n"
-        "   vec4 matericalColor = diffuse; " : @""), ((_texture) ? @"\n"
-        "   vec4 matericalColor = texture2D(diffuse, UV); " : @""), [self lightsDiffuse]];
+        "   vec4 materialColor = diffuse; " : @""), ((_texture) ? @"\n"
+        "   vec4 materialColor = texture2D(diffuse, UV); " : @""), [self lightsDiffuse]];
     return [EGStandardShader standardShaderWithKey:self program:[EGShaderProgram applyVertex:vertexShader fragment:fragmentShader]];
 }
 
@@ -165,7 +165,7 @@ static ODType* _EGStandardShaderKey_type;
 
 - (NSString*)lightsDiffuse {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return [NSString stringWithFormat:@"color += dirLightDirectionCos%@* (matericalColor * dirLightColor%@);", i, i];
+        return [NSString stringWithFormat:@"color += dirLightDirectionCos%@* (materialColor * dirLightColor%@);", i, i];
     }] toStringWithDelimiter:@"n"];
 }
 
@@ -271,6 +271,8 @@ static ODType* _EGStandardShader_type;
     if(_key.texture) {
         [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:((NSUInteger)(_EGStandardShader_STRIDE)) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_UV_SHIFT))];
         [((EGColorSourceTexture*)(material.diffuse)).texture bind];
+    } else {
+        [_diffuseUniform setColor:((EGColorSourceColor*)(material.diffuse)).color];
     }
     EGEnvironment* env = context.environment;
     [_ambientColor setColor:env.ambientColor];

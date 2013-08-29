@@ -15,6 +15,7 @@
 + (id)bufferWithBufferType:(GLenum)bufferType handle:(GLuint)handle;
 - (id)initWithBufferType:(GLenum)bufferType handle:(GLuint)handle;
 - (NSUInteger)length;
+- (NSUInteger)count;
 + (EGBuffer*)applyBufferType:(GLenum)bufferType;
 - (void)dealoc;
 - (id)setData:(CNPArray*)data;

@@ -170,3 +170,7 @@ static inline void egColorSetMaterial(EGColor self) {
     glInterleavedArrays(GL_T2F_N3F_V3F,0,NAME ## _vertex);\
 	glDrawElements(GL_TRIANGLES,NAME ## _polygoncount*3,GL_UNSIGNED_INT,NAME ## _index);\
 }
+
+#define egJasModel(NAME) [EGMesh \
+    applyVertexData:[arrp(float, numf4, NAME ## _vertexcount*8) NAME ## _vertex] \
+    index: [arrp(unsigned int, numui4, NAME ## _polygoncount*3) NAME ## _index]]

@@ -111,12 +111,14 @@ static ODType* _EGMutableMatrix_type;
 }
 
 - (void)push {
+    glPushMatrix();
     __stack = [CNList applyObject:__value tail:__stack];
 }
 
 - (void)pop {
     __value = ((EGMatrix*)([[__stack head] get]));
     __stack = [__stack tail];
+    glPopMatrix();
 }
 
 - (EGMatrix*)value {

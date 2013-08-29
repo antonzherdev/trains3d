@@ -113,6 +113,8 @@ stub val GL_FLOAT : GLenum
 stub val GL_DOUBLE : GLenum
 stub val GL_BYTE : GLenum
 stub val GL_UNSIGNED_BYTE : GLenum
+stub val GL_INT : GLenum
+stub val GL_UNSIGNED_INT : GLenum
 
 stub val GL_TRUE : GLboolean
 stub val GL_FALSE : GLboolean

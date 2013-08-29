@@ -76,7 +76,9 @@ extern id cnResolveCollection(id collection);
 #define arr(p_type, p_f, p_count)  CNPArray applyStride:sizeof(p_type) wrap:^id(void* arr, NSUInteger i) { \
     return p_f(((p_type*)(arr))[i]);\
 } count:p_count copyBytes:(p_type[])
-
+#define arrp(p_type, p_f, p_count)  CNPArray applyStride:sizeof(p_type) wrap:^id(void* arr, NSUInteger i) { \
+    return p_f(((p_type*)(arr))[i]);\
+} count:p_count copyBytes:(p_type*)
 #define arru(p_count) arr(char, numu, p_count)
 #define arruc(p_count) arr(unsigned char, numuc, p_count)
 #define arri(p_count) arr(NSInteger, numi, p_count)

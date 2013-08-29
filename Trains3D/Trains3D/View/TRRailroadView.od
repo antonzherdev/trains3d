@@ -1,13 +1,15 @@
 import EGGL
 import EGMesh
-
-import TRRailroad
-import TRRailPoint
 import EG
 import EGTexture
 import EGMaterial
+import EGContext
+import EGTypes
 
-import "TR3DRail.h"
+import TRRailroad
+import TRRailPoint
+import TR3D
+
 import "TR3DRailTurn.h"
 import "TR3DSwitch.h"
 
@@ -26,9 +28,6 @@ class TRRailroadView {
     }
 }
 
-stub val RailGravel : string
-stub val RailTies : string
-stub val Rails : string
 stub val RailsTurn : string
 stub val RailTurnGravel : string
 stub val RailTurnTies : string
@@ -36,24 +35,36 @@ stub val SwitchStraight : string
 stub val SwitchTurn : string
 
 class TRRailView {
+    val railModel = EGMeshModel([
+        (TR3D.railGravel, EG.textureFor("Gravel.png")),
+        (TR3D.railTies, EGColor(1, 1, 0, 1)),
+        (TR3D.rails, EGColor(1, 1, 1, 1))
+    ])
+//    val railMesh = EGMesh([
+//        0, 0, 0, -1, 0, -0.5,0, -0.5,
+//        1, 0, 0, -1, 0, 0.5, 0, -0.5,
+//        1, 1, 0, -1, 0, 0.5, 0, 0.5,
+//        0, 1, 0, -1, 0, -0.5, 0, 0.5
+//    ], [0, 1, 2,
+//    2, 3, 0])
+//    val railModel =  EGMeshModel([
+//        (railMesh, EGColor(1, 0, 1, 1))
+//    ])
     def draw(rail : TRRail) {
-        glPushMatrix
-        egTranslate(rail.tile.x, rail.tile.y, 0.001)
+        val m = EG.modelMatrix
+        m.push
+
+        m.translate(rail.tile.x, rail.tile.y, 0.001)
 
         if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
-            if(rail.form == TRRailForm.leftRight) egRotate(90, 0, 0, 1)
-            egRotate(90, 1, 0, 0)
-            EGMaterial.stone.set
-            EG.textureFor("Gravel.png").draw(egDrawJasModel(RailGravel))
-            EGMaterial.wood.set
-            egDrawJasModel(RailTies)
-            EGMaterial.steel.set
-            egDrawJasModel(Rails)
+            if(rail.form == TRRailForm.leftRight) m.rotate(90, 0, 0, 1)
+            m.rotate(90, 1, 0, 0)
+            railModel.draw
         } else {
-            if(rail.form == TRRailForm.topRight) egRotate(270, 0, 0, 1)
-            else if(rail.form == TRRailForm.bottomRight) egRotate(180, 0, 0, 1)
-            else if(rail.form == TRRailForm.leftBottom) egRotate(90, 0, 0, 1)
-            egRotate(90, 1, 0, 0)
+            if(rail.form == TRRailForm.topRight) m.rotate(270, 0, 0, 1)
+            else if(rail.form == TRRailForm.bottomRight) m.rotate(180, 0, 0, 1)
+            else if(rail.form == TRRailForm.leftBottom) m.rotate(90, 0, 0, 1)
+            m.rotate(90, 1, 0, 0)
             egColor3(0.5, 0.5, 0.5)
             EGMaterial.stone.set
             EG.textureFor("Gravel.png").draw(egDrawJasModel(RailTurnGravel))
@@ -62,7 +73,7 @@ class TRRailView {
             EGMaterial.steel.set
             egDrawJasModel(RailsTurn)
         }
-        glPopMatrix
+        m.pop
     }
 }
 

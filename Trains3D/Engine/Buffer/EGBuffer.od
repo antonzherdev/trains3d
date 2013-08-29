@@ -5,7 +5,9 @@ import EGGL
 
 class EGBuffer<T>(bufferType : GLenum, handle : GLuint) {
     private var _length : uint = 0
+    private var _count : uint = 0
     def length : uint = _length
+    def count : uint = _count
     static def apply<T>(bufferType : GLenum) : EGBuffer = EGBuffer<T>(bufferType, egGenBuffer)
 
     def dealoc {
@@ -19,6 +21,7 @@ class EGBuffer<T>(bufferType : GLenum, handle : GLuint) {
         glBufferData(bufferType, data.length, data.bytes, GL_STATIC_DRAW)
         glBindBuffer(bufferType, 0)
         _length = data.length
+        _count = data.count
         self
     }
 
@@ -46,7 +49,7 @@ class EGIndexBuffer<T>(handle : GLuint) extends EGBuffer<T>(GL_ELEMENT_ARRAY_BUF
 
     def draw {
         bind
-        glDrawElements(GL_TRIANGLES, length, GL_UNSIGNED_BYTE, 0)
+        glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0)
         unbind
     }
 }
