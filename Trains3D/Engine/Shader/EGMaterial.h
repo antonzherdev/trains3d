@@ -81,10 +81,11 @@
 
 @interface EGStandardMaterial : EGMaterial2
 @property (nonatomic, readonly) EGColorSource* diffuse;
-@property (nonatomic, readonly) EGColor specular;
+@property (nonatomic, readonly) EGColor specularColor;
+@property (nonatomic, readonly) CGFloat specularSize;
 
-+ (id)standardMaterialWithDiffuse:(EGColorSource*)diffuse specular:(EGColor)specular;
-- (id)initWithDiffuse:(EGColorSource*)diffuse specular:(EGColor)specular;
++ (id)standardMaterialWithDiffuse:(EGColorSource*)diffuse specularColor:(EGColor)specularColor specularSize:(CGFloat)specularSize;
+- (id)initWithDiffuse:(EGColorSource*)diffuse specularColor:(EGColor)specularColor specularSize:(CGFloat)specularSize;
 + (EGStandardMaterial*)applyDiffuse:(EGColorSource*)diffuse;
 - (id<EGShaderSystem>)shaderSystem;
 - (ODType*)type;

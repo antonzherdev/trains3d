@@ -127,6 +127,7 @@ static ODType* _EGStandardShaderKey_type;
         "%@\n"
         "uniform vec4 ambientColor;\n"
         "uniform vec4 specularColor;\n"
+        "uniform float specularSize;\n"
         "%@\n"
         "%@\n"
         "\n"
@@ -172,7 +173,7 @@ static ODType* _EGStandardShaderKey_type;
 - (NSString*)lightsDiffuse {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
         return [NSString stringWithFormat:@"color += dirLightDirectionCos%@* (materialColor * dirLightColor%@);\n"
-            "color += specularColor * dirLightColor%@* pow(dirLightDirectionCosA%@, 5.0);", i, i, i, i];
+            "color += specularColor * dirLightColor%@* pow(dirLightDirectionCosA%@, 5.0/specularSize);", i, i, i, i];
     }] toStringWithDelimiter:@"n"];
 }
 
@@ -220,6 +221,7 @@ static ODType* _EGStandardShaderKey_type;
     id _uvSlot;
     EGShaderUniform* _ambientColor;
     EGShaderUniform* _specularColor;
+    EGShaderUniform* _specularSize;
     EGShaderUniform* _diffuseUniform;
     EGShaderUniform* _mwcpUniform;
     id _mUniform;
@@ -238,6 +240,7 @@ static ODType* _EGStandardShader_type;
 @synthesize uvSlot = _uvSlot;
 @synthesize ambientColor = _ambientColor;
 @synthesize specularColor = _specularColor;
+@synthesize specularSize = _specularSize;
 @synthesize diffuseUniform = _diffuseUniform;
 @synthesize mwcpUniform = _mwcpUniform;
 @synthesize mUniform = _mUniform;
@@ -258,6 +261,7 @@ static ODType* _EGStandardShader_type;
         _uvSlot = [CNOption opt:((_key.texture) ? [self attributeForName:@"vertexUV"] : nil)];
         _ambientColor = [self uniformForName:@"ambientColor"];
         _specularColor = [self uniformForName:@"specularColor"];
+        _specularSize = [self uniformForName:@"specularSize"];
         _diffuseUniform = [self uniformForName:@"diffuse"];
         _mwcpUniform = [self uniformForName:@"mwcp"];
         _mUniform = [CNOption opt:((_key.directLightCount > 0) ? [self uniformForName:@"m"] : nil)];
@@ -290,7 +294,8 @@ static ODType* _EGStandardShader_type;
     } else {
         [_diffuseUniform setColor:((EGColorSourceColor*)(material.diffuse)).color];
     }
-    [_specularColor setColor:material.specular];
+    [_specularColor setColor:material.specularColor];
+    [_specularSize setNumber:((float)(material.specularSize))];
     EGEnvironment* env = context.environment;
     [_ambientColor setColor:env.ambientColor];
     if(_key.directLightCount > 0) {

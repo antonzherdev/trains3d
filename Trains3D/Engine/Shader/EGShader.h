@@ -79,6 +79,7 @@
 - (void)setMatrix:(EGMatrix*)matrix;
 - (void)setColor:(EGColor)color;
 - (void)setVec3:(EGVec3)vec3;
+- (void)setNumber:(float)number;
 - (ODType*)type;
 + (ODType*)type;
 @end

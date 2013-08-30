@@ -58,6 +58,6 @@ class EGCameraIso(tilesOnScreen : EGSizeI, center : EGPoint) extends EGCamera {
         EGPoint((x/vw - y/vh)*ww2 + tw/2 - 0.5 + center.x, (x/vw + y/vh)*ww2 - tw/2 - 0.5 + center.y)
     }
 
-    val eyeDirection : EGVec3 = EGVec3(0, -1, 0)
+    val eyeDirection : EGVec3 = EGVec3(1, -1, 0.5)
 }
 

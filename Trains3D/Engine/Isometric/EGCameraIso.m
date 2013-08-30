@@ -23,7 +23,7 @@ static ODType* _EGCameraIso_type;
     if(self) {
         _tilesOnScreen = tilesOnScreen;
         _center = center;
-        _eyeDirection = EGVec3Make(0.0, -1.0, 0.0);
+        _eyeDirection = EGVec3Make(1.0, -1.0, 0.5);
     }
     
     return self;

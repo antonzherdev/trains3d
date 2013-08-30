@@ -103,6 +103,9 @@ class EGShaderUniform(handle : GLuint) {
     def set(vec3 : EGVec3) {
         egUniformVec3(handle, vec3)
     }
+    def set(number : float4) {
+        glUniform1f(handle, number)
+    }
 }
 
 trait EGShaderSystem<M extends EGMaterial2> {

@@ -30,8 +30,8 @@ class EGSimpleMaterial(color : EGColorSource) extends EGMaterial2 {
     def shaderSystem : EGShaderSystem<self> = EGSimpleShaderSystem.instance
 }
 
-class EGStandardMaterial(diffuse : EGColorSource, specular : EGColor)  extends EGMaterial2 {
-    static def apply(diffuse : EGColorSource) = EGStandardMaterial(diffuse, EGColor(0, 0, 0, 1))
+class EGStandardMaterial(diffuse : EGColorSource, specularColor : EGColor, specularSize : float)  extends EGMaterial2 {
+    static def apply(diffuse : EGColorSource) = EGStandardMaterial(diffuse, EGColor(0, 0, 0, 1), 1)
     def shaderSystem : EGShaderSystem<self> = EGStandardShaderSystem.instance
 }
 

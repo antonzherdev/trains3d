@@ -54,6 +54,7 @@ stub def glLoadIdentity
 stub def glOrtho(left : float, right : float, bottom : float, top : float, zNear : float, zFar : float)
 stub def egModelViewProjectionMatrix : EGMatrix
 stub def glUniformMatrix4fv(location : GLuint, count : GLsizei, transpose : GLboolean, value : [float4])
+stub def glUniform1f(location : GLuint, f : float4)
 stub def egUniformColor(location : GLuint, color : EGColor)
 stub def egUniformVec3(location : GLuint, color : EGVec3)
 

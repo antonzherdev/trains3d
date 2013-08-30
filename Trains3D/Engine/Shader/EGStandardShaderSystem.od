@@ -48,6 +48,7 @@ class EGStandardShaderKey(directLightCount : uint, texture : bool) {
             $endif
              uniform vec4 ambientColor;
              uniform vec4 specularColor;
+             uniform float specularSize;
              $lightsVaryings
              $lightsFragmentUniform
 
@@ -75,7 +76,7 @@ class EGStandardShaderKey(directLightCount : uint, texture : bool) {
     def lightsFragmentUniform : string = directLightCount.range.chain.map{i -> "uniform vec4 dirLightColor$i;"}.toStringWith("\n")
     def lightsDiffuse : string =  directLightCount.range.chain.map{i ->
         "color += dirLightDirectionCos$i * (materialColor * dirLightColor$i);
-         color += specularColor * dirLightColor$i * pow(dirLightDirectionCosA$i, 5.0);
+         color += specularColor * dirLightColor$i * pow(dirLightDirectionCosA$i, 5.0/specularSize);
         "
     }.toStringWith("\n")
 
@@ -93,6 +94,7 @@ class EGStandardShader(key : EGStandardShaderKey, program : EGShaderProgram) ext
 
     val ambientColor : EGShaderUniform = uniformFor("ambientColor")
     val specularColor : EGShaderUniform = uniformFor("specularColor")
+    val specularSize : EGShaderUniform = uniformFor("specularSize")
     val diffuseUniform : EGShaderUniform = uniformFor("diffuse")
     val mwcpUniform : EGShaderUniform = uniformFor("mwcp")
     val mUniform : EGShaderUniform? = if(key.directLightCount > 0) uniformFor("m") else nil
@@ -110,7 +112,8 @@ class EGStandardShader(key : EGStandardShaderKey, program : EGShaderProgram) ext
         } else {
             diffuseUniform.set(color = material.diffuse.cast<EGColorSourceColor>.color)
         }
-        specularColor.set(color = material.specular)
+        specularColor.set(color = material.specularColor)
+        specularSize.set(number = material.specularSize)
         val env = context.environment
         ambientColor.set(color = env.ambientColor)
         if(key.directLightCount > 0) {

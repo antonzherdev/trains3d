@@ -305,21 +305,24 @@ static ODType* _EGSimpleMaterial_type;
 
 @implementation EGStandardMaterial{
     EGColorSource* _diffuse;
-    EGColor _specular;
+    EGColor _specularColor;
+    CGFloat _specularSize;
 }
 static ODType* _EGStandardMaterial_type;
 @synthesize diffuse = _diffuse;
-@synthesize specular = _specular;
+@synthesize specularColor = _specularColor;
+@synthesize specularSize = _specularSize;
 
-+ (id)standardMaterialWithDiffuse:(EGColorSource*)diffuse specular:(EGColor)specular {
-    return [[EGStandardMaterial alloc] initWithDiffuse:diffuse specular:specular];
++ (id)standardMaterialWithDiffuse:(EGColorSource*)diffuse specularColor:(EGColor)specularColor specularSize:(CGFloat)specularSize {
+    return [[EGStandardMaterial alloc] initWithDiffuse:diffuse specularColor:specularColor specularSize:specularSize];
 }
 
-- (id)initWithDiffuse:(EGColorSource*)diffuse specular:(EGColor)specular {
+- (id)initWithDiffuse:(EGColorSource*)diffuse specularColor:(EGColor)specularColor specularSize:(CGFloat)specularSize {
     self = [super init];
     if(self) {
         _diffuse = diffuse;
-        _specular = specular;
+        _specularColor = specularColor;
+        _specularSize = specularSize;
     }
     
     return self;
@@ -331,7 +334,7 @@ static ODType* _EGStandardMaterial_type;
 }
 
 + (EGStandardMaterial*)applyDiffuse:(EGColorSource*)diffuse {
-    return [EGStandardMaterial standardMaterialWithDiffuse:diffuse specular:EGColorMake(0.0, 0.0, 0.0, 1.0)];
+    return [EGStandardMaterial standardMaterialWithDiffuse:diffuse specularColor:EGColorMake(0.0, 0.0, 0.0, 1.0) specularSize:1.0];
 }
 
 - (id<EGShaderSystem>)shaderSystem {
@@ -354,20 +357,22 @@ static ODType* _EGStandardMaterial_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGStandardMaterial* o = ((EGStandardMaterial*)(other));
-    return [self.diffuse isEqual:o.diffuse] && EGColorEq(self.specular, o.specular);
+    return [self.diffuse isEqual:o.diffuse] && EGColorEq(self.specularColor, o.specularColor) && eqf(self.specularSize, o.specularSize);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.diffuse hash];
-    hash = hash * 31 + EGColorHash(self.specular);
+    hash = hash * 31 + EGColorHash(self.specularColor);
+    hash = hash * 31 + floatHash(self.specularSize);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"diffuse=%@", self.diffuse];
-    [description appendFormat:@", specular=%@", EGColorDescription(self.specular)];
+    [description appendFormat:@", specularColor=%@", EGColorDescription(self.specularColor)];
+    [description appendFormat:@", specularSize=%f", self.specularSize];
     [description appendString:@">"];
     return description;
 }

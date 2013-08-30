@@ -301,6 +301,10 @@ static ODType* _EGShaderUniform_type;
     egUniformVec3(_handle, vec3);
 }
 
+- (void)setNumber:(float)number {
+    glUniform1f(_handle, number);
+}
+
 - (ODType*)type {
     return _EGShaderUniform_type;
 }

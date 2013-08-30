@@ -29,12 +29,12 @@ class TRRailView {
     val railModel = EGMeshModel([
         (TR3D.railGravel, EG.textureFor("Gravel.png")),
         (TR3D.railTies, EGColor(0.55, 0.45, 0.25, 1)),
-        (TR3D.rails, EGStandardMaterial( EGColor(0.45, 0.47, 0.55, 1), EGColor(0.5, 0.5, 0.5, 1)))
+        (TR3D.rails, EGStandardMaterial( EGColor(0.45, 0.47, 0.55, 1), EGColor(0.5, 0.5, 0.5, 1), 1))
     ])
     val railTurnModel = EGMeshModel([
         (TR3D.railTurnGravel, EG.textureFor("Gravel.png")),
         (TR3D.railTurnTies, EGColor(0.55, 0.45, 0.25, 1)),
-        (TR3D.railsTurn, EGStandardMaterial( EGColor(0.45, 0.47, 0.55, 1), EGColor(0.5, 0.5, 0.5, 1)))
+        (TR3D.railsTurn, EGStandardMaterial( EGColor(0.45, 0.47, 0.55, 1), EGColor(0.5, 0.5, 0.5, 1), 1))
     ])
     def draw(rail : TRRail) {
         EG.keepMW {
@@ -54,7 +54,7 @@ class TRRailView {
 }
 
 class TRSwitchView {
-    val material = EGStandardMaterial( EGColor(0.07568, 0.61424, 0.07568, 1), EGColor(0.633, 0.727811, 0.633, 1))
+    val material = EGStandardMaterial( EGColor(0.07568, 0.61424, 0.07568, 1), EGColor(0.633, 0.727811, 0.633, 1), 1)
     val switchStraightModel = EGMeshModel([
         (TR3D.switchStraight, material)
     ])
@@ -92,8 +92,8 @@ class TRSwitchView {
 }
 
 class TRLightView {
-    val greenMaterial = EGStandardMaterial( EGColor(0.07568, 0.61424, 0.07568, 1), EGColor(0.633, 0.727811, 0.633, 1))
-    val redMaterial = EGStandardMaterial(EGColor(0.61424, 0.04136, 0.04136, 1), EGColor(0.727811, 0.626959, 0.626959, 1))
+    val greenMaterial = EGStandardMaterial( EGColor(0.07568, 0.61424, 0.07568, 1), EGColor(0.633, 0.727811, 0.633, 1), 1)
+    val redMaterial = EGStandardMaterial(EGColor(0.61424, 0.04136, 0.04136, 1), EGColor(0.727811, 0.626959, 0.626959, 1), 1)
     def draw(light : TRLight) {
         EG.keepMW {
             EG.worldMatrix.translate(light.tile.x, light.tile.y, 0)
