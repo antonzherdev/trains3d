@@ -316,8 +316,11 @@ static ODType* _TRLightView_type;
 @end
 
 
-@implementation TRDamageView
+@implementation TRDamageView{
+    EGMeshModel* _model;
+}
 static ODType* _TRDamageView_type;
+@synthesize model = _model;
 
 + (id)damageView {
     return [[TRDamageView alloc] init];
@@ -325,6 +328,7 @@ static ODType* _TRDamageView_type;
 
 - (id)init {
     self = [super init];
+    if(self) _model = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.damage, ((EGMaterial2*)([EGMaterial2 applyColor:EGColorMake(1.0, 0.0, 0.0, 1.0)])))])];
     
     return self;
 }
@@ -335,12 +339,10 @@ static ODType* _TRDamageView_type;
 }
 
 - (void)drawPoint:(TRRailPoint*)point {
-    glPushMatrix();
-    egTranslate(point.point.x, point.point.y, 0.01);
-    egColor4(1.0, 0.0, 0.0, 0.5);
-    egNormal3(0.0, 0.0, 1.0);
-    egRect(-0.1, -0.1, 0.1, 0.1);
-    glPopMatrix();
+    [[EG worldMatrix] keepF:^void() {
+        [[EG worldMatrix] translateX:point.point.x y:point.point.y z:0.0];
+        [_model draw];
+    }];
 }
 
 - (ODType*)type {

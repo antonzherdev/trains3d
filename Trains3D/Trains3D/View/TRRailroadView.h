@@ -82,6 +82,8 @@
 
 
 @interface TRDamageView : NSObject
+@property (nonatomic, readonly) EGMeshModel* model;
+
 + (id)damageView;
 - (id)init;
 - (void)drawPoint:(TRRailPoint*)point;

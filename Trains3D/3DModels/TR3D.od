@@ -22,4 +22,6 @@ stub class TR3D {
     static val engine : EGMesh = nil
     static val engineBlack : EGMesh = nil
     static val engineFloor : EGMesh = nil
+
+    static val damage : EGMesh = nil
 }

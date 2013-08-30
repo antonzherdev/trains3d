@@ -74,4 +74,10 @@ class EGMutableMatrix {
         glOrtho(left, right, bottom, top, zNear, zFar)
         _value = EGMatrix.ortho(left, right, bottom, top, zNear, zFar)
     }
+
+    def keep(f : () -> void) {
+        push
+        f()
+        pop
+    }
 }

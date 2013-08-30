@@ -27,6 +27,7 @@
 + (EGMesh *)engine;
 + (EGMesh *)engineBlack;
 + (EGMesh *)engineFloor;
++ (EGMesh *)damage;
 @end
 
 

@@ -8,6 +8,7 @@
 #import "TR3DCity.h"
 #import "TR3DCar.h"
 #import "TR3DEngine.h"
+#import "TR3DDamage.h"
 
 
 @implementation TR3D
@@ -26,6 +27,7 @@ static EGMesh *_engineBlack = nil;
 static EGMesh *_engine = nil;
 static EGMesh *_carBlack = nil;
 static EGMesh *_car = nil;
+static EGMesh *_damage = nil;
 
 
 static ODType* _TR3D_type;
@@ -58,6 +60,7 @@ static ODType* _TR3D_type;
     _engine = egJasModel(Engine);
     _carBlack = egJasModel(CarBlack);
     _car = egJasModel(Car);
+    _damage = egJasModel(Damage);
 }
 
 - (ODType*)type {
@@ -131,6 +134,10 @@ static ODType* _TR3D_type;
 
 + (EGMesh *)engineFloor {
     return _engineFloor;
+}
+
++ (EGMesh *)damage {
+    return _damage;
 }
 
 

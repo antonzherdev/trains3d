@@ -47,6 +47,7 @@
 - (void)scaleX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z;
 - (void)translateX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z;
 - (void)orthoLeft:(CGFloat)left right:(CGFloat)right bottom:(CGFloat)bottom top:(CGFloat)top zNear:(CGFloat)zNear zFar:(CGFloat)zFar;
+- (void)keepF:(void(^)())f;
 - (ODType*)type;
 + (ODType*)type;
 @end

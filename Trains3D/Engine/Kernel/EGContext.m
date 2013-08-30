@@ -175,6 +175,12 @@ static ODType* _EGMutableMatrix_type;
     __value = [EGMatrix orthoLeft:((float)(left)) right:((float)(right)) bottom:((float)(bottom)) top:((float)(top)) zNear:((float)(zNear)) zFar:((float)(zFar))];
 }
 
+- (void)keepF:(void(^)())f {
+    [self push];
+    ((void(^)())(f))();
+    [self pop];
+}
+
 - (ODType*)type {
     return _EGMutableMatrix_type;
 }
