@@ -1,57 +1,33 @@
+import EG
 import EGGL
 import EGSchedule
+import EGMesh
+import EGTypes
+import EGContext
+import EGMaterial
 
 import TRCity
 import TRTypes
+import TR3D
 
 class TRCityView {
+    val expectedTrainModel = EGMesh([
+        0, 0, 0, 1, 0, -0.5, 0.001, -0.5,
+        1, 0, 0, 1, 0, 0.5, 0.001, -0.5,
+        1, 1, 0, 1, 0, 0.5, 0.001, 0.5,
+        0, 1, 0, 1, 0, -0.5, 0.001, 0.5
+        ], [0, 1, 2,
+        2, 3, 0])
     def draw(city : TRCity) {
-        glPushMatrix
-        egTranslate(city.tile.x, city.tile.y, 0)
-        egRotate(city.angle.angle, 0, 0, -1)
+        EG.keepMW {
+            EG.worldMatrix.translate(city.tile.x, city.tile.y, 0)
+            EG.modelMatrix.rotate(city.angle.angle, 0, -1, 0)
+            TR3D.city.drawWith(material = city.color.color)
 
-        {
-            egTranslate(0, 0, 0.001)
-            egColor3(0.2, 0.2, 0.2)
-            glBegin(GL_QUADS)
-            egVertex2(0, 0.05)
-            egVertex2(0.5, 0.05)
-            egVertex2(0.5, -0.05)
-            egVertex2(0, -0.05)
-            glEnd
-            egTranslate(0, 0, -0.001)
+            city.expectedTrainAnimation.for(a -> {
+                val x = -a.time/2
+                expectedTrainModel.drawWith(material = EGColor(1.0, 0.5 - x, 0.5 - x, 1))
+            })
         }
-
-        {
-            glPushMatrix
-            city.color.setMaterial
-            egTranslate(0.3, -0.3, 0)
-            glutSolidCube(0.15)
-
-            egTranslate(-0.3, 0, 0)
-            glutSolidCube(0.15)
-
-            egTranslate(-0.3, 0, 0)
-            glutSolidCube(0.15)
-
-            egTranslate(0, 0.6, 0)
-            glutSolidCube(0.15)
-
-            egTranslate(0.3, 0, 0)
-            glutSolidCube(0.15)
-
-            egTranslate(0.3, 0, 0)
-            glutSolidCube(0.15)
-            glPopMatrix
-        }
-
-        city.expectedTrainAnimation.for(a -> {
-            egTranslate(0, 0, 0.001)
-            val x = -a.time/2
-            egColor3(1.0, 0.5 - x, 0.5 - x)
-            egRect(-0.5, -0.5, 0.5, 0.5)
-        })
-
-        glPopMatrix
     }
 }

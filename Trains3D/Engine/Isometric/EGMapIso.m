@@ -186,10 +186,10 @@ static ODType* _EGMapSsoView_type;
 
 - (EGMesh*)createPlane {
     EGRectI limits = _map.limits;
-    CGFloat l = limits.x - 1.5;
-    CGFloat r = egRectIX2(limits) + 1.5;
-    CGFloat t = limits.y - 1.5;
-    CGFloat b = egRectIY2(limits) + 1.5;
+    CGFloat l = limits.x - 2.5;
+    CGFloat r = egRectIX2(limits) + 0.5;
+    CGFloat t = limits.y - 2.5;
+    CGFloat b = egRectIY2(limits) + 0.5;
     NSInteger w = limits.width + 3;
     NSInteger h = limits.height + 3;
     return [EGMesh applyVertexData:[ arrf4(32) {0, 0, 0, 1, 0, l, 0, b, w, 0, 0, 1, 0, r, 0, b, w, h, 0, 1, 0, r, 0, t, 0, h, 0, 1, 0, l, 0, t}] index:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];

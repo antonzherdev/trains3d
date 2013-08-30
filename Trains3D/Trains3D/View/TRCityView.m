@@ -1,10 +1,18 @@
 #import "TRCityView.h"
 
+#import "EG.h"
 #import "EGSchedule.h"
+#import "EGMesh.h"
+#import "EGContext.h"
+#import "EGMaterial.h"
 #import "TRCity.h"
 #import "TRTypes.h"
-@implementation TRCityView
+#import "TR3D.h"
+@implementation TRCityView{
+    EGMesh* _expectedTrainModel;
+}
 static ODType* _TRCityView_type;
+@synthesize expectedTrainModel = _expectedTrainModel;
 
 + (id)cityView {
     return [[TRCityView alloc] init];
@@ -12,6 +20,7 @@ static ODType* _TRCityView_type;
 
 - (id)init {
     self = [super init];
+    if(self) _expectedTrainModel = [EGMesh applyVertexData:[ arrf4(32) {0, 0, 0, 1, 0, -0.5, 0.001, -0.5, 1, 0, 0, 1, 0, 0.5, 0.001, -0.5, 1, 1, 0, 1, 0, 0.5, 0.001, 0.5, 0, 1, 0, 1, 0, -0.5, 0.001, 0.5}] index:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
     
     return self;
 }
@@ -22,40 +31,15 @@ static ODType* _TRCityView_type;
 }
 
 - (void)drawCity:(TRCity*)city {
-    glPushMatrix();
-    egTranslate(((CGFloat)(city.tile.x)), ((CGFloat)(city.tile.y)), 0.0);
-    egRotate(((CGFloat)(city.angle.angle)), 0.0, 0.0, -1.0);
-    egTranslate(0.0, 0.0, 0.001);
-    egColor3(0.2, 0.2, 0.2);
-    glBegin(GL_QUADS);
-    egVertex2(0.0, 0.05);
-    egVertex2(0.5, 0.05);
-    egVertex2(0.5, -0.05);
-    egVertex2(0.0, -0.05);
-    glEnd();
-    egTranslate(0.0, 0.0, -0.001);
-    glPushMatrix();
-    [city.color setMaterial];
-    egTranslate(0.3, -0.3, 0.0);
-    glutSolidCube(0.15);
-    egTranslate(-0.3, 0.0, 0.0);
-    glutSolidCube(0.15);
-    egTranslate(-0.3, 0.0, 0.0);
-    glutSolidCube(0.15);
-    egTranslate(0.0, 0.6, 0.0);
-    glutSolidCube(0.15);
-    egTranslate(0.3, 0.0, 0.0);
-    glutSolidCube(0.15);
-    egTranslate(0.3, 0.0, 0.0);
-    glutSolidCube(0.15);
-    glPopMatrix();
-    [city.expectedTrainAnimation forEach:^void(EGAnimation* a) {
-        egTranslate(0.0, 0.0, 0.001);
-        CGFloat x = -[a time] / 2;
-        egColor3(1.0, 0.5 - x, 0.5 - x);
-        egRect(-0.5, -0.5, 0.5, 0.5);
+    [EG keepMWF:^void() {
+        [[EG worldMatrix] translateX:((CGFloat)(city.tile.x)) y:((CGFloat)(city.tile.y)) z:0.0];
+        [[EG modelMatrix] rotateAngle:((CGFloat)(city.angle.angle)) x:0.0 y:-1.0 z:0.0];
+        [TR3D.city drawWithMaterial:[EGMaterial2 applyColor:city.color.color]];
+        [city.expectedTrainAnimation forEach:^void(EGAnimation* a) {
+            CGFloat x = -[a time] / 2;
+            [_expectedTrainModel drawWithMaterial:[EGMaterial2 applyColor:EGColorMake(1.0, 0.5 - x, 0.5 - x, 1.0)]];
+        }];
     }];
-    glPopMatrix();
 }
 
 - (ODType*)type {

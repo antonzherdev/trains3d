@@ -19,6 +19,8 @@
 + (EGMesh*)switchTurn;
 + (EGMesh*)light;
 + (ODType*)type;
+
++ (EGMesh *)city;
 @end
 
 

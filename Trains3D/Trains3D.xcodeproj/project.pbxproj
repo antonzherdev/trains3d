@@ -630,6 +630,7 @@
 		6F3DF60FCB04B7E52FECB861 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../../../Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/GLUT.framework; sourceTree = "<group>"; };
 		6F3DF6144A9964C632AD02EA /* KWMessageSpying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWMessageSpying.h; sourceTree = "<group>"; };
 		6F3DF61F6AC6163A38816654 /* CNTreeMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNTreeMap.m; sourceTree = "<group>"; };
+		6F3DF62511F2DBCD7D3393D8 /* TR3DCity.jas */ = {isa = PBXFileReference; lastKnownFileType = file.jas; path = TR3DCity.jas; sourceTree = "<group>"; };
 		6F3DF62541132522E2B8DC04 /* type_mat4x2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_mat4x2.hpp; sourceTree = "<group>"; };
 		6F3DF627373554D9AC2430AF /* type_half.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = type_half.inl; sourceTree = "<group>"; };
 		6F3DF62C1EA3B0B7A4E618C9 /* quaternion.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = quaternion.inl; sourceTree = "<group>"; };
@@ -1021,6 +1022,7 @@
 		6F3DFED12F6B44D3D971ABF7 /* type_mat2x2.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = type_mat2x2.inl; sourceTree = "<group>"; };
 		6F3DFED79BC6B57461236AA6 /* KWDeviceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWDeviceInfo.h; sourceTree = "<group>"; };
 		6F3DFEDD74BA65C8006A3268 /* CNSortBuilder.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = CNSortBuilder.od; sourceTree = "<group>"; };
+		6F3DFEDF57B942568AAEE9F0 /* TR3DCity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TR3DCity.h; sourceTree = "<group>"; };
 		6F3DFEE2C232D44AC24037A9 /* _fixes.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = _fixes.hpp; sourceTree = "<group>"; };
 		6F3DFEF17EC736D0518467F4 /* type_gentype.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = type_gentype.inl; sourceTree = "<group>"; };
 		6F3DFEF62D691FF6C2A194BD /* TRTrain.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TRTrain.od; sourceTree = "<group>"; };
@@ -1610,6 +1612,8 @@
 				6F3DFD1F28E8481AF70D50FF /* TR3D.m */,
 				6F3DF5E038A823117A288E80 /* TR3DLight.jas */,
 				6F3DF435AE5E103FF064EFE4 /* TR3DLight.h */,
+				6F3DF62511F2DBCD7D3393D8 /* TR3DCity.jas */,
+				6F3DFEDF57B942568AAEE9F0 /* TR3DCity.h */,
 			);
 			path = 3DModels;
 			sourceTree = "<group>";
