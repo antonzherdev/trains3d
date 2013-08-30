@@ -15,6 +15,7 @@
 @class EGMutableMatrix;
 
 @interface EGContext : NSObject
+@property (nonatomic) EGVec3 eyeDirection;
 @property (nonatomic, retain) EGEnvironment* environment;
 @property (nonatomic, readonly) EGMutableMatrix* modelMatrix;
 @property (nonatomic, readonly) EGMutableMatrix* worldMatrix;
@@ -25,6 +26,9 @@
 - (id)init;
 - (EGTexture*)textureForFile:(NSString*)file;
 - (EGMatrix*)m;
+- (EGMatrix*)w;
+- (EGMatrix*)c;
+- (EGMatrix*)p;
 - (EGMatrix*)mw;
 - (EGMatrix*)mwc;
 - (EGMatrix*)mwcp;

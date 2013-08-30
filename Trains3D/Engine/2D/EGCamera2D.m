@@ -2,9 +2,11 @@
 
 @implementation EGCamera2D{
     EGSize _size;
+    EGVec3 _eyeDirection;
 }
 static ODType* _EGCamera2D_type;
 @synthesize size = _size;
+@synthesize eyeDirection = _eyeDirection;
 
 + (id)camera2DWithSize:(EGSize)size {
     return [[EGCamera2D alloc] initWithSize:size];
@@ -12,7 +14,10 @@ static ODType* _EGCamera2D_type;
 
 - (id)initWithSize:(EGSize)size {
     self = [super init];
-    if(self) _size = size;
+    if(self) {
+        _size = size;
+        _eyeDirection = EGVec3Make(0.0, 0.0, 1.0);
+    }
     
     return self;
 }

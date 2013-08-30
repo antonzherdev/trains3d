@@ -10,12 +10,16 @@ class EGContext {
 
     def textureFor(file : string) : EGTexture = textureCache.objectFor(key = file, orUpdateWith = EGTexture(file))
 
+    var eyeDirection = EGVec3(0, 0, 0)
     var environment = EGEnvironment.default
     val modelMatrix = EGMutableMatrix()
     val worldMatrix = EGMutableMatrix()
     val cameraMatrix = EGMutableMatrix()
     val projectionMatrix = EGMutableMatrix()
     def m : EGMatrix = modelMatrix.value
+    def w : EGMatrix = worldMatrix.value
+    def c : EGMatrix = cameraMatrix.value
+    def p : EGMatrix = projectionMatrix.value
     def mw : EGMatrix = worldMatrix.value.multiply(modelMatrix.value)
     def mwc : EGMatrix = cameraMatrix.value.multiply(worldMatrix.value.multiply(modelMatrix.value))
     def mwcp : EGMatrix = projectionMatrix.value.multiply(cameraMatrix.value).multiply(worldMatrix.value).multiply(modelMatrix.value)

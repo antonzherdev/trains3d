@@ -6,6 +6,7 @@ import EGContext
 class EGLayer(view : EGView, processor : EGProcessor?) {
     def drawWith(viewSize : EGSize) {
         view.camera.focusFor(viewSize)
+        EG.context.eyeDirection = view.camera.eyeDirection
         EG.context.environment = view.environment
         view.drawView
     }

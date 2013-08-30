@@ -84,6 +84,8 @@ trait EGCamera {
     def focusFor(viewSize : EGSize)
 
     def translateWith(viewSize : EGSize, viewPoint : EGPoint) : EGPoint
+
+    def eyeDirection : EGVec3
 }
 
 trait EGView {

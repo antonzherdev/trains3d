@@ -5,6 +5,7 @@
 #import "EGMaterial.h"
 @implementation EGContext{
     NSMutableDictionary* _textureCache;
+    EGVec3 _eyeDirection;
     EGEnvironment* _environment;
     EGMutableMatrix* _modelMatrix;
     EGMutableMatrix* _worldMatrix;
@@ -12,6 +13,7 @@
     EGMutableMatrix* _projectionMatrix;
 }
 static ODType* _EGContext_type;
+@synthesize eyeDirection = _eyeDirection;
 @synthesize environment = _environment;
 @synthesize modelMatrix = _modelMatrix;
 @synthesize worldMatrix = _worldMatrix;
@@ -26,6 +28,7 @@ static ODType* _EGContext_type;
     self = [super init];
     if(self) {
         _textureCache = [NSMutableDictionary mutableDictionary];
+        _eyeDirection = EGVec3Make(0.0, 0.0, 0.0);
         _environment = EGEnvironment.aDefault;
         _modelMatrix = [EGMutableMatrix mutableMatrix];
         _worldMatrix = [EGMutableMatrix mutableMatrix];
@@ -49,6 +52,18 @@ static ODType* _EGContext_type;
 
 - (EGMatrix*)m {
     return [_modelMatrix value];
+}
+
+- (EGMatrix*)w {
+    return [_worldMatrix value];
+}
+
+- (EGMatrix*)c {
+    return [_cameraMatrix value];
+}
+
+- (EGMatrix*)p {
+    return [_projectionMatrix value];
 }
 
 - (EGMatrix*)mw {

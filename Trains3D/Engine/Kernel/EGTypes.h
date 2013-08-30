@@ -327,6 +327,7 @@ static inline NSString* EGColorDescription(EGColor self) {
 @protocol EGCamera<NSObject>
 - (void)focusForViewSize:(EGSize)viewSize;
 - (EGPoint)translateWithViewSize:(EGSize)viewSize viewPoint:(EGPoint)viewPoint;
+- (EGVec3)eyeDirection;
 - (ODType*)type;
 @end
 

@@ -26,12 +26,14 @@ class EGStandardShaderKey(directLightCount : uint, texture : bool) {
              attribute vec3 position;
              uniform mat4 mwcp;
              uniform mat4 m;
+             uniform vec3 eyeDirection;
              $lightsVertexUniform
 
              varying vec2 UV; $when(texture)
              $lightsVaryings
 
              void main(void) {
+                vec3 normalM = normalize((m * vec4(normal, 0)).xyz);
                 gl_Position = mwcp * vec4(position, 1);
                 UV = vertexUV; $when(texture)
                 $lightsCalculateVaryings
@@ -45,6 +47,7 @@ class EGStandardShaderKey(directLightCount : uint, texture : bool) {
              uniform vec4 diffuse;
             $endif
              uniform vec4 ambientColor;
+             uniform vec4 specularColor;
              $lightsVaryings
              $lightsFragmentUniform
 
@@ -59,14 +62,21 @@ class EGStandardShaderKey(directLightCount : uint, texture : bool) {
     }
 
     def lightsVertexUniform : string = directLightCount.range.chain.map{i -> "uniform vec3 dirLightDirection$i;"}.toStringWith("\n")
-    def lightsVaryings : string = directLightCount.range.chain.map{i -> "varying float dirLightDirectionCos$i;"}.toStringWith("\n")
+    def lightsVaryings : string = directLightCount.range.chain.map{i ->
+        "varying float dirLightDirectionCos$i;
+         varying float dirLightDirectionCosA$i;"}.toStringWith("\n")
     def lightsCalculateVaryings : string = directLightCount.range.chain.map{i ->
-        "dirLightDirectionCos$i = max(dot(normalize((m * vec4(normal, 0)).xyz), -normalize(dirLightDirection$i)), 0.0);"
+        "dirLightDirectionCos$i = max(dot(normalM, -normalize(dirLightDirection$i)), 0.0);
+         dirLightDirectionCosA$i = max(dot(eyeDirection, reflect(normalize(dirLightDirection$i), normalM)), 0.0);
+        "
     }.toStringWith("\n")
+
 
     def lightsFragmentUniform : string = directLightCount.range.chain.map{i -> "uniform vec4 dirLightColor$i;"}.toStringWith("\n")
     def lightsDiffuse : string =  directLightCount.range.chain.map{i ->
-        "color += dirLightDirectionCos$i * (materialColor * dirLightColor$i);"
+        "color += dirLightDirectionCos$i * (materialColor * dirLightColor$i);
+         color += specularColor * dirLightColor$i * pow(dirLightDirectionCosA$i, 5.0);
+        "
     }.toStringWith("\n")
 
 }
@@ -82,9 +92,11 @@ class EGStandardShader(key : EGStandardShaderKey, program : EGShaderProgram) ext
     val uvSlot : EGShaderAttribute? = if(key.texture) attributeFor("vertexUV") else nil
 
     val ambientColor : EGShaderUniform = uniformFor("ambientColor")
+    val specularColor : EGShaderUniform = uniformFor("specularColor")
     val diffuseUniform : EGShaderUniform = uniformFor("diffuse")
     val mwcpUniform : EGShaderUniform = uniformFor("mwcp")
     val mUniform : EGShaderUniform? = if(key.directLightCount > 0) uniformFor("m") else nil
+    val eyeDirectionUniform : EGShaderUniform? = if(key.directLightCount > 0) uniformFor("eyeDirection") else nil
 
     val directLightDirections : [EGShaderUniform] = key.directLightCount.range.chain.map{i -> uniformFor("dirLightDirection$i")}.toArray
     val directLightColors : [EGShaderUniform] = key.directLightCount.range.chain.map{i -> uniformFor("dirLightColor$i")}.toArray
@@ -98,10 +110,12 @@ class EGStandardShader(key : EGStandardShaderKey, program : EGShaderProgram) ext
         } else {
             diffuseUniform.set(color = material.diffuse.cast<EGColorSourceColor>.color)
         }
+        specularColor.set(color = material.specular)
         val env = context.environment
         ambientColor.set(color = env.ambientColor)
         if(key.directLightCount > 0) {
             mUniform.get.set(matrix = context.m)
+            eyeDirectionUniform.get.set(vec3 = context.eyeDirection)
             normalSlot.get.setFromBufferWith(STRIDE, valuesCount = 3, GL_FLOAT, NORMAL_SHIFT)
             env.lights.chain.filterCast(EGDirectLight.type).zip3(directLightDirections, directLightColors){light, dirSlot, colorSlot ->
                 dirSlot.set(vec3 = light.direction)

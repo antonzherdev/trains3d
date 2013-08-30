@@ -32,6 +32,7 @@ static ODType* _EGLayer_type;
 
 - (void)drawWithViewSize:(EGSize)viewSize {
     [[_view camera] focusForViewSize:viewSize];
+    [EG context].eyeDirection = [[_view camera] eyeDirection];
     [EG context].environment = [_view environment];
     [_view drawView];
 }

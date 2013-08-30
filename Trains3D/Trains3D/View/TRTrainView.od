@@ -12,7 +12,7 @@ import TR3D
 
 class TRTrainView {
     val blackMaterial = EGStandardMaterial(EGColor(0, 0, 0, 1), EGColor(0.1, 0.1, 0.1, 1))
-    def trainMaterialFor(color : EGColor) : EGMaterial2 = EGStandardMaterial(color, EGColor(0.2, 0.2, 0.2, 1))
+    def trainMaterialFor(color : EGColor) : EGMaterial2 = EGStandardMaterial(color, EGColor(1, 1, 1, 1))
     def draw(train : TRTrain) {
         train.cars.for(car -> {
             val h = car.head.point
@@ -25,13 +25,14 @@ class TRTrainView {
                 val angle = (if(train.isBack) 90 else -90) + (180.0 / M_PI * t.sub(h).angle)
                 EG.modelMatrix.rotate(angle, 0, 1, 0)
 
+                val material = trainMaterialFor(train.color.color)
                 if(car.carType == TRCarType.car) {
-                    TR3D.car.drawWith(material = train.color.color)
-                    TR3D.carBlack.drawWith(material = blackMaterial)
+                    TR3D.car.drawWith(material)
+                    TR3D.carBlack.drawWith(blackMaterial)
                 } else {
-                    TR3D.engine.drawWith(material = train.color.color)
-                    TR3D.engineFloor.drawWith(material = train.color.color)
-                    TR3D.carBlack.drawWith(material = blackMaterial)
+                    TR3D.engine.drawWith(material)
+                    TR3D.engineFloor.drawWith(material)
+                    TR3D.carBlack.drawWith(blackMaterial)
                 }
             }
         })

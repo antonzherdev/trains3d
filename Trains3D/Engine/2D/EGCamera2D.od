@@ -23,4 +23,6 @@ class EGCamera2D(size : EGSize) extends EGCamera {
         val viewport = viewportRectFor(viewSize, factor)
         viewPoint.sub(viewport.point).div(factor)
     }
+
+    val eyeDirection : EGVec3 = EGVec3(0, 0, 1)
 }

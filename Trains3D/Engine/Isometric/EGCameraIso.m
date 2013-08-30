@@ -6,11 +6,13 @@
 @implementation EGCameraIso{
     EGSizeI _tilesOnScreen;
     EGPoint _center;
+    EGVec3 _eyeDirection;
 }
 static CGFloat _EGCameraIso_ISO;
 static ODType* _EGCameraIso_type;
 @synthesize tilesOnScreen = _tilesOnScreen;
 @synthesize center = _center;
+@synthesize eyeDirection = _eyeDirection;
 
 + (id)cameraIsoWithTilesOnScreen:(EGSizeI)tilesOnScreen center:(EGPoint)center {
     return [[EGCameraIso alloc] initWithTilesOnScreen:tilesOnScreen center:center];
@@ -21,6 +23,7 @@ static ODType* _EGCameraIso_type;
     if(self) {
         _tilesOnScreen = tilesOnScreen;
         _center = center;
+        _eyeDirection = EGVec3Make(0.0, -1.0, 0.0);
     }
     
     return self;
