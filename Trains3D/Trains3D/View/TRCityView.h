@@ -14,7 +14,6 @@
 @class EGMaterial2;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
-@class EGMaterial;
 @class TRCityAngle;
 @class TRCity;
 @class TRColor;

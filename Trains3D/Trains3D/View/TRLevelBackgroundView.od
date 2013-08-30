@@ -8,7 +8,6 @@ class TRLevelBackgroundView(map : EGMapSso) {
     val mapView = EGMapSsoView(map)
 
     def draw {
-        EGMaterial.grass.set
-        EG.textureFor("Grass.png").draw(mapView.drawPlane)
+        mapView.drawPlaneWith(material = EGTexture("Grass.png"))
     }
 }

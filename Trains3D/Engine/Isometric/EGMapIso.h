@@ -15,7 +15,6 @@
 @class EGMaterial2;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
-@class EGMaterial;
 @class EGTexture;
 @class EGBuffer;
 @class EGVertexBuffer;
@@ -51,13 +50,13 @@
 
 @interface EGMapSsoView : NSObject
 @property (nonatomic, readonly) EGMapSso* map;
-@property (nonatomic, readonly) EGMeshModel* plane;
+@property (nonatomic, readonly) EGMesh* plane;
 
 + (id)mapSsoViewWithMap:(EGMapSso*)map;
 - (id)initWithMap:(EGMapSso*)map;
 - (void)drawLayout;
 - (EGMesh*)createPlane;
-- (void)drawPlane;
+- (void)drawPlaneWithMaterial:(EGMaterial2*)material;
 - (ODType*)type;
 + (ODType*)type;
 @end

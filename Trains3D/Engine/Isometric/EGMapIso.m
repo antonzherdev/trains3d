@@ -120,7 +120,7 @@ static ODType* _EGMapSso_type;
 
 @implementation EGMapSsoView{
     EGMapSso* _map;
-    EGMeshModel* _plane;
+    EGMesh* _plane;
 }
 static ODType* _EGMapSsoView_type;
 @synthesize map = _map;
@@ -134,7 +134,7 @@ static ODType* _EGMapSsoView_type;
     self = [super init];
     if(self) {
         _map = map;
-        _plane = [EGMeshModel meshModelWithMeshes:(@[tuple([self createPlane], ((EGMaterial2*)([EGMaterial2 applyTexture:[EGTexture textureWithFile:@"Grass.png"]])))])];
+        _plane = [self createPlane];
     }
     
     return self;
@@ -195,8 +195,8 @@ static ODType* _EGMapSsoView_type;
     return [EGMesh applyVertexData:[ arrf4(32) {0, 0, 0, 1, 0, l, 0, b, w, 0, 0, 1, 0, r, 0, b, w, h, 0, 1, 0, r, 0, t, 0, h, 0, 1, 0, l, 0, t}] index:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
 }
 
-- (void)drawPlane {
-    [_plane draw];
+- (void)drawPlaneWithMaterial:(EGMaterial2*)material {
+    [_plane drawWithMaterial:material];
 }
 
 - (ODType*)type {

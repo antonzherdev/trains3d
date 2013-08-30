@@ -7,7 +7,6 @@
 @class EGMaterial2;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
-@class EGMaterial;
 #import "EGGL.h"
 #import "EGTypes.h"
 

@@ -110,7 +110,7 @@ class EGMapSsoView(map : EGMapSso) {
     }
 
 
-    val plane  = EGMeshModel([(createPlane, EGTexture("Grass.png"))])
+    val plane  = createPlane
     def createPlane : EGMesh = {
         val limits = map.limits
         val l = limits.x - 2.5
@@ -128,7 +128,7 @@ class EGMapSsoView(map : EGMapSso) {
             2, 3, 0])
     }
 
-    def drawPlane {
-        plane.draw
+    def drawPlaneWith(material : EGMaterial2) {
+        plane.drawWith(material)
     }
 }

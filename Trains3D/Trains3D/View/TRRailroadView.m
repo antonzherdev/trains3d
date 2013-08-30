@@ -202,7 +202,6 @@ static ODType* _TRSwitchView_type;
         [[EG modelMatrix] rotateAngle:((CGFloat)(connector.angle)) x:0.0 y:1.0 z:0.0];
         TRRail* rail = [theSwitch activeRail];
         TRRailForm* form = rail.form;
-        [EGMaterial.emerald set];
         [[EG modelMatrix] translateX:-0.5 y:0.0 z:0.0];
         if(form.start.x + form.end.x == 0) {
             [_switchStraightModel draw];
