@@ -109,7 +109,7 @@ static ODType* _EGStandardShaderKey_type;
     NSString* vertexShader = [NSString stringWithFormat:@"attribute vec3 normal;%@\n"
         "attribute vec3 position;\n"
         "uniform mat4 mwcp;\n"
-        "uniform mat4 mw;\n"
+        "uniform mat4 m;\n"
         "%@\n"
         "%@\n"
         "%@\n"
@@ -130,7 +130,7 @@ static ODType* _EGStandardShaderKey_type;
         "void main(void) {%@%@\n"
         "   vec4 color = ambientColor * materialColor;\n"
         "   %@\n"
-        "   gl_FragColor = vec4(vec3(dirLightDirectionCos0), 1);\n"
+        "   gl_FragColor = color;\n"
         "}", ((_texture) ? @"\n"
         "varying vec2 UV;\n"
         "uniform sampler2D diffuse;" : @"\n"
@@ -154,7 +154,7 @@ static ODType* _EGStandardShaderKey_type;
 
 - (NSString*)lightsCalculateVaryings {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return [NSString stringWithFormat:@"dirLightDirectionCos%@= max(dot(normalize((mw * vec4(normal, 0)).xyz), -normalize(dirLightDirection%@)), 0.0);", i, i];
+        return [NSString stringWithFormat:@"dirLightDirectionCos%@= max(dot(normalize((m * vec4(normal, 0)).xyz), -normalize(dirLightDirection%@)), 0.0);", i, i];
     }] toStringWithDelimiter:@"n"];
 }
 
@@ -215,7 +215,7 @@ static ODType* _EGStandardShaderKey_type;
     EGShaderUniform* _ambientColor;
     EGShaderUniform* _diffuseUniform;
     EGShaderUniform* _mwcpUniform;
-    id _mwUniform;
+    id _mUniform;
     id<CNSeq> _directLightDirections;
     id<CNSeq> _directLightColors;
 }
@@ -231,7 +231,7 @@ static ODType* _EGStandardShader_type;
 @synthesize ambientColor = _ambientColor;
 @synthesize diffuseUniform = _diffuseUniform;
 @synthesize mwcpUniform = _mwcpUniform;
-@synthesize mwUniform = _mwUniform;
+@synthesize mUniform = _mUniform;
 @synthesize directLightDirections = _directLightDirections;
 @synthesize directLightColors = _directLightColors;
 
@@ -249,7 +249,7 @@ static ODType* _EGStandardShader_type;
         _ambientColor = [self uniformForName:@"ambientColor"];
         _diffuseUniform = [self uniformForName:@"diffuse"];
         _mwcpUniform = [self uniformForName:@"mwcp"];
-        _mwUniform = [CNOption opt:((_key.directLightCount > 0) ? [self uniformForName:@"mw"] : nil)];
+        _mUniform = [CNOption opt:((_key.directLightCount > 0) ? [self uniformForName:@"m"] : nil)];
         _directLightDirections = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniform*(id i) {
             return [self uniformForName:[NSString stringWithFormat:@"dirLightDirection%@", i]];
         }] toArray];
@@ -281,7 +281,7 @@ static ODType* _EGStandardShader_type;
     EGEnvironment* env = context.environment;
     [_ambientColor setColor:env.ambientColor];
     if(_key.directLightCount > 0) {
-        [((EGShaderUniform*)([_mwUniform get])) setMatrix:[context mw]];
+        [((EGShaderUniform*)([_mUniform get])) setMatrix:[context m]];
         [((EGShaderAttribute*)([_normalSlot get])) setFromBufferWithStride:((NSUInteger)(_EGStandardShader_STRIDE)) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_NORMAL_SHIFT))];
         [[[[env.lights chain] filterCast:EGDirectLight.type] zip3A:_directLightDirections b:_directLightColors by:^EGDirectLight*(EGDirectLight* light, EGShaderUniform* dirSlot, EGShaderUniform* colorSlot) {
             [dirSlot setVec3:light.direction];

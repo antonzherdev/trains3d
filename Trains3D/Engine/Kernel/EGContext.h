@@ -24,6 +24,7 @@
 + (id)context;
 - (id)init;
 - (EGTexture*)textureForFile:(NSString*)file;
+- (EGMatrix*)m;
 - (EGMatrix*)mw;
 - (EGMatrix*)mwc;
 - (EGMatrix*)mwcp;

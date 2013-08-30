@@ -1,6 +1,4 @@
 #import "TRRailroadView.h"
-#import "TR3DRailTurn.h"
-#import "TR3DSwitch.h"
 
 #import "EGMesh.h"
 #import "EG.h"
@@ -90,9 +88,11 @@ static ODType* _TRRailroadView_type;
 
 @implementation TRRailView{
     EGMeshModel* _railModel;
+    EGMeshModel* _railTurnModel;
 }
 static ODType* _TRRailView_type;
 @synthesize railModel = _railModel;
+@synthesize railTurnModel = _railTurnModel;
 
 + (id)railView {
     return [[TRRailView alloc] init];
@@ -100,7 +100,10 @@ static ODType* _TRRailView_type;
 
 - (id)init {
     self = [super init];
-    if(self) _railModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.railGravel, ((EGMaterial2*)([EGMaterial2 applyTexture:[EG textureForFile:@"Gravel.png"]]))), tuple(TR3D.railTies, ((EGMaterial2*)([EGMaterial2 applyColor:EGColorMake(0.55, 0.45, 0.25, 1.0)]))), tuple(TR3D.rails, [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.45, 0.47, 0.55, 1.0)] specular:EGColorMake(0.5, 0.5, 0.5, 1.0)])])];
+    if(self) {
+        _railModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.railGravel, ((EGMaterial2*)([EGMaterial2 applyTexture:[EG textureForFile:@"Gravel.png"]]))), tuple(TR3D.railTies, ((EGMaterial2*)([EGMaterial2 applyColor:EGColorMake(0.55, 0.45, 0.25, 1.0)]))), tuple(TR3D.rails, [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.45, 0.47, 0.55, 1.0)] specular:EGColorMake(0.5, 0.5, 0.5, 1.0)])])];
+        _railTurnModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.railTurnGravel, ((EGMaterial2*)([EGMaterial2 applyTexture:[EG textureForFile:@"Gravel.png"]]))), tuple(TR3D.railTurnTies, ((EGMaterial2*)([EGMaterial2 applyColor:EGColorMake(0.55, 0.45, 0.25, 1.0)]))), tuple(TR3D.railsTurn, [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.45, 0.47, 0.55, 1.0)] specular:EGColorMake(0.5, 0.5, 0.5, 1.0)])])];
+    }
     
     return self;
 }
@@ -111,34 +114,26 @@ static ODType* _TRRailView_type;
 }
 
 - (void)drawRail:(TRRail*)rail {
-    EGMutableMatrix* m = [EG worldMatrix];
-    [m push];
-    [m translateX:((CGFloat)(rail.tile.x)) y:((CGFloat)(rail.tile.y)) z:0.001];
+    [[EG worldMatrix] push];
+    [[EG modelMatrix] push];
+    [[EG worldMatrix] translateX:((CGFloat)(rail.tile.x)) y:((CGFloat)(rail.tile.y)) z:0.001];
     if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
-        if(rail.form == TRRailForm.leftRight) [m rotateAngle:90.0 x:0.0 y:0.0 z:1.0];
+        if(rail.form == TRRailForm.leftRight) [[EG modelMatrix] rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
         [_railModel draw];
     } else {
         if(rail.form == TRRailForm.topRight) {
-            [m rotateAngle:270.0 x:0.0 y:0.0 z:1.0];
+            [[EG modelMatrix] rotateAngle:270.0 x:0.0 y:1.0 z:0.0];
         } else {
             if(rail.form == TRRailForm.bottomRight) {
-                [m rotateAngle:180.0 x:0.0 y:0.0 z:1.0];
+                [[EG modelMatrix] rotateAngle:180.0 x:0.0 y:1.0 z:0.0];
             } else {
-                if(rail.form == TRRailForm.leftBottom) [m rotateAngle:90.0 x:0.0 y:0.0 z:1.0];
+                if(rail.form == TRRailForm.leftBottom) [[EG modelMatrix] rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
             }
         }
-        [m rotateAngle:90.0 x:1.0 y:0.0 z:0.0];
-        egColor3(0.5, 0.5, 0.5);
-        [EGMaterial.stone set];
-        [[EG textureForFile:@"Gravel.png"] draw:^void() {
-            egDrawJasModel(RailTurnGravel);
-        }];
-        [EGMaterial.wood set];
-        egDrawJasModel(RailTurnTies);
-        [EGMaterial.steel set];
-        egDrawJasModel(RailsTurn);
+        [_railTurnModel draw];
     }
-    [m pop];
+    [[EG modelMatrix] pop];
+    [[EG worldMatrix] pop];
 }
 
 - (ODType*)type {
@@ -172,8 +167,15 @@ static ODType* _TRRailView_type;
 @end
 
 
-@implementation TRSwitchView
+@implementation TRSwitchView{
+    EGStandardMaterial* _material;
+    EGMeshModel* _switchStraightModel;
+    EGMeshModel* _switchTurnModel;
+}
 static ODType* _TRSwitchView_type;
+@synthesize material = _material;
+@synthesize switchStraightModel = _switchStraightModel;
+@synthesize switchTurnModel = _switchTurnModel;
 
 + (id)switchView {
     return [[TRSwitchView alloc] init];
@@ -181,6 +183,11 @@ static ODType* _TRSwitchView_type;
 
 - (id)init {
     self = [super init];
+    if(self) {
+        _material = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.07568, 0.61424, 0.07568, 1.0)] specular:EGColorMake(0.633, 0.727811, 0.633, 1.0)];
+        _switchStraightModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.switchStraight, _material)])];
+        _switchTurnModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.switchTurn, _material)])];
+    }
     
     return self;
 }
@@ -192,27 +199,27 @@ static ODType* _TRSwitchView_type;
 
 - (void)drawTheSwitch:(TRSwitch*)theSwitch {
     TRRailConnector* connector = theSwitch.connector;
-    glPushMatrix();
-    egTranslate(((CGFloat)(theSwitch.tile.x)), ((CGFloat)(theSwitch.tile.y)), 0.03);
-    egRotate(((CGFloat)(connector.angle)), 0.0, 0.0, 1.0);
+    [[EG worldMatrix] push];
+    [[EG modelMatrix] push];
+    [[EG worldMatrix] translateX:((CGFloat)(theSwitch.tile.x)) y:((CGFloat)(theSwitch.tile.y)) z:0.03];
+    [[EG modelMatrix] rotateAngle:((CGFloat)(connector.angle)) x:0.0 y:1.0 z:0.0];
     TRRail* rail = [theSwitch activeRail];
     TRRailForm* form = rail.form;
     [EGMaterial.emerald set];
-    egTranslate(-0.5, 0.0, 0.0);
+    [[EG modelMatrix] translateX:-0.5 y:0.0 z:0.0];
     if(form.start.x + form.end.x == 0) {
-        egRotate(90.0, 1.0, 0.0, 0.0);
-        egDrawJasModel(SwitchStraight);
+        [_switchStraightModel draw];
     } else {
         TRRailConnector* otherConnector = ((form.start == connector) ? form.end : form.start);
         NSInteger x = connector.x;
         NSInteger y = connector.y;
         NSInteger ox = otherConnector.x;
         NSInteger oy = otherConnector.y;
-        if((x == -1 && oy == -1) || (y == 1 && ox == -1) || (y == -1 && ox == 1) || (x == 1 && oy == 1)) egScale(1.0, -1.0, 1.0);
-        egRotate(90.0, 1.0, 0.0, 0.0);
-        egDrawJasModel(SwitchTurn);
+        if((x == -1 && oy == -1) || (y == 1 && ox == -1) || (y == -1 && ox == 1) || (x == 1 && oy == 1)) [[EG modelMatrix] scaleX:1.0 y:1.0 z:-1.0];
+        [_switchTurnModel draw];
     }
-    glPopMatrix();
+    [[EG modelMatrix] pop];
+    [[EG worldMatrix] pop];
 }
 
 - (ODType*)type {

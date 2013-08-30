@@ -10,9 +10,6 @@ import TRRailroad
 import TRRailPoint
 import TR3D
 
-import "TR3DRailTurn.h"
-import "TR3DSwitch.h"
-
 class TRRailroadView {
     private val railView = TRRailView()
     private val switchView = TRSwitchView()
@@ -28,70 +25,61 @@ class TRRailroadView {
     }
 }
 
-stub val RailsTurn : string
-stub val RailTurnGravel : string
-stub val RailTurnTies : string
-stub val SwitchStraight : string
-stub val SwitchTurn : string
-
 class TRRailView {
     val railModel = EGMeshModel([
         (TR3D.railGravel, EG.textureFor("Gravel.png")),
         (TR3D.railTies, EGColor(0.55, 0.45, 0.25, 1)),
         (TR3D.rails, EGStandardMaterial( EGColor(0.45, 0.47, 0.55, 1), EGColor(0.5, 0.5, 0.5, 1)))
     ])
-//    val railMesh = EGMesh([
-//        0, 0, 0, -1, 0, -0.5,0, -0.5,
-//        1, 0, 0, -1, 0, 0.5, 0, -0.5,
-//        1, 1, 0, -1, 0, 0.5, 0, 0.5,
-//        0, 1, 0, -1, 0, -0.5, 0, 0.5
-//    ], [0, 1, 2,
-//    2, 3, 0])
-//    val railModel =  EGMeshModel([
-//        (railMesh, EGColor(1, 0, 1, 1))
-//    ])
+    val railTurnModel = EGMeshModel([
+        (TR3D.railTurnGravel, EG.textureFor("Gravel.png")),
+        (TR3D.railTurnTies, EGColor(0.55, 0.45, 0.25, 1)),
+        (TR3D.railsTurn, EGStandardMaterial( EGColor(0.45, 0.47, 0.55, 1), EGColor(0.5, 0.5, 0.5, 1)))
+    ])
     def draw(rail : TRRail) {
-        val m = EG.worldMatrix
-        m.push
+        EG.worldMatrix.push
+        EG.modelMatrix.push
 
-        m.translate(rail.tile.x, rail.tile.y, 0.001)
+        EG.worldMatrix.translate(rail.tile.x, rail.tile.y, 0.001)
 
         if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
-            if(rail.form == TRRailForm.leftRight) m.rotate(90, 0, 0, 1)
-//            m.rotate(90, 1, 0, 0)
+            if(rail.form == TRRailForm.leftRight) EG.modelMatrix.rotate(90, 0, 1, 0)
             railModel.draw
         } else {
-            if(rail.form == TRRailForm.topRight) m.rotate(270, 0, 0, 1)
-            else if(rail.form == TRRailForm.bottomRight) m.rotate(180, 0, 0, 1)
-            else if(rail.form == TRRailForm.leftBottom) m.rotate(90, 0, 0, 1)
-            m.rotate(90, 1, 0, 0)
-            egColor3(0.5, 0.5, 0.5)
-            EGMaterial.stone.set
-            EG.textureFor("Gravel.png").draw(egDrawJasModel(RailTurnGravel))
-            EGMaterial.wood.set
-            egDrawJasModel(RailTurnTies)
-            EGMaterial.steel.set
-            egDrawJasModel(RailsTurn)
+            if(rail.form == TRRailForm.topRight) EG.modelMatrix.rotate(270, 0, 1, 0)
+            else if(rail.form == TRRailForm.bottomRight) EG.modelMatrix.rotate(180, 0, 1, 0)
+            else if(rail.form == TRRailForm.leftBottom) EG.modelMatrix.rotate(90, 0, 1, 0)
+            railTurnModel.draw
         }
-        m.pop
+        EG.modelMatrix.pop
+        EG.worldMatrix.pop
     }
 }
 
 class TRSwitchView {
+    val material = EGStandardMaterial( EGColor(0.07568, 0.61424, 0.07568, 1), EGColor(0.633, 0.727811, 0.633, 1))
+    val switchStraightModel = EGMeshModel([
+        (TR3D.switchStraight, material)
+    ])
+    val switchTurnModel = EGMeshModel([
+        (TR3D.switchTurn, material)
+    ])
+
     def draw(theSwitch : TRSwitch) {
         val connector = theSwitch.connector
-        glPushMatrix
-        egTranslate(theSwitch.tile.x, theSwitch.tile.y, 0.03)
-        egRotate(connector.angle, 0, 0, 1)
+        EG.worldMatrix.push
+        EG.modelMatrix.push
+
+        EG.worldMatrix.translate(theSwitch.tile.x, theSwitch.tile.y, 0.03)
+        EG.modelMatrix.rotate(connector.angle, 0, 1, 0)
 
         val rail = theSwitch.activeRail
         val form = rail.form
 
         EGMaterial.emerald.set
-        egTranslate(-0.5, 0, 0)
+        EG.modelMatrix.translate(-0.5, 0, 0)
         if(form.start.x + form.end.x == 0) {
-            egRotate(90, 1, 0, 0)
-            egDrawJasModel(SwitchStraight)
+            switchStraightModel.draw
         } else {
             val otherConnector = if(form.start == connector) form.end else form.start
             val x = connector.x
@@ -99,13 +87,13 @@ class TRSwitchView {
             val ox = otherConnector.x
             val oy = otherConnector.y
             if(x == -1 && oy == -1 || y == 1 && ox == -1 || y == -1 && ox == 1 || x == 1 && oy == 1) {
-                egScale(1, -1, 1)
+                EG.modelMatrix.scale(1, 1, -1)
             }
-            egRotate(90, 1, 0, 0)
-            egDrawJasModel(SwitchTurn)
+            switchTurnModel.draw
         }
 
-        glPopMatrix
+        EG.modelMatrix.pop
+        EG.worldMatrix.pop
     }
 }
 

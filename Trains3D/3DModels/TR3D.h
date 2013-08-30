@@ -12,6 +12,11 @@
 + (EGMesh*)railTies;
 + (EGMesh*)railGravel;
 + (EGMesh*)rails;
++ (EGMesh*)railTurnTies;
++ (EGMesh*)railTurnGravel;
++ (EGMesh*)railsTurn;
++ (EGMesh*)switchStraight;
++ (EGMesh*)switchTurn;
 + (ODType*)type;
 @end
 

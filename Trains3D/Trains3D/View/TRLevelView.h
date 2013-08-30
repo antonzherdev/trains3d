@@ -9,7 +9,11 @@
 @class TRLevel;
 @class TRLevelBackgroundView;
 @class TRCityView;
-#import "TRRailroadView.h"
+@class TRRailroadView;
+@class TRRailView;
+@class TRSwitchView;
+@class TRLightView;
+@class TRDamageView;
 #import "TRTrainView.h"
 
 @class TRLevelView;

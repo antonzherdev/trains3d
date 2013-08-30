@@ -47,6 +47,10 @@ static ODType* _EGContext_type;
     }]));
 }
 
+- (EGMatrix*)m {
+    return [_modelMatrix value];
+}
+
 - (EGMatrix*)mw {
     return [[_worldMatrix value] multiply:[_modelMatrix value]];
 }
