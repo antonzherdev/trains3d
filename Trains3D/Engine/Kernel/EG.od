@@ -11,4 +11,12 @@ class EG {
     static def cameraMatrix : EGMutableMatrix = context.cameraMatrix
     static def worldMatrix : EGMutableMatrix = context.worldMatrix
     static def modelMatrix : EGMutableMatrix = context.modelMatrix
+
+    static def keepMW(f : () -> void) {
+        context.modelMatrix.push
+        context.worldMatrix.push
+        f()
+        context.modelMatrix.pop
+        context.worldMatrix.pop
+    }
 }

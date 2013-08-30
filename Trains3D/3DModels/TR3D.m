@@ -4,6 +4,7 @@
 #import "TR3DRail.h"
 #import "TR3DRailTurn.h"
 #import "TR3DSwitch.h"
+#import "TR3DLight.h"
 
 @implementation TR3D
 static EGMesh*_railTies = nil;
@@ -14,6 +15,7 @@ static EGMesh*_railTurnGravel = nil;
 static EGMesh*_railsTurn = nil;
 static EGMesh *_switchStraight = nil;
 static EGMesh *_switchTurn = nil;
+static EGMesh *_light = nil;
 static ODType* _TR3D_type;
 
 + (id)r3D {
@@ -37,6 +39,7 @@ static ODType* _TR3D_type;
     _railsTurn = egJasModel(RailsTurn);
     _switchStraight = egJasModel(SwitchStraight);
     _switchTurn = egJasModel(SwitchTurn);
+    _light = egJasModel(Light);
 }
 
 - (ODType*)type {
@@ -73,6 +76,10 @@ static ODType* _TR3D_type;
 
 + (EGMesh *)switchTurn {
     return _switchTurn;
+}
+
++ (EGMesh *)light {
+    return _light;
 }
 
 

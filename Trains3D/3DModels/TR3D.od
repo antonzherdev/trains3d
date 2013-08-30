@@ -12,4 +12,5 @@ stub class TR3D {
 
     static val switchStraight : EGMesh = nil
     static val switchTurn : EGMesh = nil
+    static val light : EGMesh = nil
 }

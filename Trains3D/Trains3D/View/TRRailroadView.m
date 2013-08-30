@@ -114,26 +114,24 @@ static ODType* _TRRailView_type;
 }
 
 - (void)drawRail:(TRRail*)rail {
-    [[EG worldMatrix] push];
-    [[EG modelMatrix] push];
-    [[EG worldMatrix] translateX:((CGFloat)(rail.tile.x)) y:((CGFloat)(rail.tile.y)) z:0.001];
-    if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
-        if(rail.form == TRRailForm.leftRight) [[EG modelMatrix] rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
-        [_railModel draw];
-    } else {
-        if(rail.form == TRRailForm.topRight) {
-            [[EG modelMatrix] rotateAngle:270.0 x:0.0 y:1.0 z:0.0];
+    [EG keepMWF:^void() {
+        [[EG worldMatrix] translateX:((CGFloat)(rail.tile.x)) y:((CGFloat)(rail.tile.y)) z:0.001];
+        if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
+            if(rail.form == TRRailForm.leftRight) [[EG modelMatrix] rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
+            [_railModel draw];
         } else {
-            if(rail.form == TRRailForm.bottomRight) {
-                [[EG modelMatrix] rotateAngle:180.0 x:0.0 y:1.0 z:0.0];
+            if(rail.form == TRRailForm.topRight) {
+                [[EG modelMatrix] rotateAngle:270.0 x:0.0 y:1.0 z:0.0];
             } else {
-                if(rail.form == TRRailForm.leftBottom) [[EG modelMatrix] rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
+                if(rail.form == TRRailForm.bottomRight) {
+                    [[EG modelMatrix] rotateAngle:180.0 x:0.0 y:1.0 z:0.0];
+                } else {
+                    if(rail.form == TRRailForm.leftBottom) [[EG modelMatrix] rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
+                }
             }
+            [_railTurnModel draw];
         }
-        [_railTurnModel draw];
-    }
-    [[EG modelMatrix] pop];
-    [[EG worldMatrix] pop];
+    }];
 }
 
 - (ODType*)type {
@@ -198,28 +196,26 @@ static ODType* _TRSwitchView_type;
 }
 
 - (void)drawTheSwitch:(TRSwitch*)theSwitch {
-    TRRailConnector* connector = theSwitch.connector;
-    [[EG worldMatrix] push];
-    [[EG modelMatrix] push];
-    [[EG worldMatrix] translateX:((CGFloat)(theSwitch.tile.x)) y:((CGFloat)(theSwitch.tile.y)) z:0.03];
-    [[EG modelMatrix] rotateAngle:((CGFloat)(connector.angle)) x:0.0 y:1.0 z:0.0];
-    TRRail* rail = [theSwitch activeRail];
-    TRRailForm* form = rail.form;
-    [EGMaterial.emerald set];
-    [[EG modelMatrix] translateX:-0.5 y:0.0 z:0.0];
-    if(form.start.x + form.end.x == 0) {
-        [_switchStraightModel draw];
-    } else {
-        TRRailConnector* otherConnector = ((form.start == connector) ? form.end : form.start);
-        NSInteger x = connector.x;
-        NSInteger y = connector.y;
-        NSInteger ox = otherConnector.x;
-        NSInteger oy = otherConnector.y;
-        if((x == -1 && oy == -1) || (y == 1 && ox == -1) || (y == -1 && ox == 1) || (x == 1 && oy == 1)) [[EG modelMatrix] scaleX:1.0 y:1.0 z:-1.0];
-        [_switchTurnModel draw];
-    }
-    [[EG modelMatrix] pop];
-    [[EG worldMatrix] pop];
+    [EG keepMWF:^void() {
+        TRRailConnector* connector = theSwitch.connector;
+        [[EG worldMatrix] translateX:((CGFloat)(theSwitch.tile.x)) y:((CGFloat)(theSwitch.tile.y)) z:0.03];
+        [[EG modelMatrix] rotateAngle:((CGFloat)(connector.angle)) x:0.0 y:1.0 z:0.0];
+        TRRail* rail = [theSwitch activeRail];
+        TRRailForm* form = rail.form;
+        [EGMaterial.emerald set];
+        [[EG modelMatrix] translateX:-0.5 y:0.0 z:0.0];
+        if(form.start.x + form.end.x == 0) {
+            [_switchStraightModel draw];
+        } else {
+            TRRailConnector* otherConnector = ((form.start == connector) ? form.end : form.start);
+            NSInteger x = connector.x;
+            NSInteger y = connector.y;
+            NSInteger ox = otherConnector.x;
+            NSInteger oy = otherConnector.y;
+            if((x == -1 && oy == -1) || (y == 1 && ox == -1) || (y == -1 && ox == 1) || (x == 1 && oy == 1)) [[EG modelMatrix] scaleX:1.0 y:1.0 z:-1.0];
+            [_switchTurnModel draw];
+        }
+    }];
 }
 
 - (ODType*)type {
@@ -253,8 +249,13 @@ static ODType* _TRSwitchView_type;
 @end
 
 
-@implementation TRLightView
+@implementation TRLightView{
+    EGStandardMaterial* _greenMaterial;
+    EGStandardMaterial* _redMaterial;
+}
 static ODType* _TRLightView_type;
+@synthesize greenMaterial = _greenMaterial;
+@synthesize redMaterial = _redMaterial;
 
 + (id)lightView {
     return [[TRLightView alloc] init];
@@ -262,6 +263,10 @@ static ODType* _TRLightView_type;
 
 - (id)init {
     self = [super init];
+    if(self) {
+        _greenMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.07568, 0.61424, 0.07568, 1.0)] specular:EGColorMake(0.633, 0.727811, 0.633, 1.0)];
+        _redMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.61424, 0.04136, 0.04136, 1.0)] specular:EGColorMake(0.727811, 0.626959, 0.626959, 1.0)];
+    }
     
     return self;
 }
@@ -272,14 +277,12 @@ static ODType* _TRLightView_type;
 }
 
 - (void)drawLight:(TRLight*)light {
-    glPushMatrix();
-    egTranslate(((CGFloat)(light.tile.x)), ((CGFloat)(light.tile.y)), 0.0);
-    egRotate(((CGFloat)(light.connector.angle)), 0.0, 0.0, 1.0);
-    egTranslate(-0.45, 0.2, 0.0);
-    if(light.isGreen) [EGMaterial.emerald set];
-    else [EGMaterial.ruby set];
-    glutSolidCube(0.1);
-    glPopMatrix();
+    [EG keepMWF:^void() {
+        [[EG worldMatrix] translateX:((CGFloat)(light.tile.x)) y:((CGFloat)(light.tile.y)) z:0.0];
+        [[EG modelMatrix] rotateAngle:((CGFloat)(light.connector.angle)) x:0.0 y:1.0 z:0.0];
+        [[EG modelMatrix] translateX:-0.45 y:0.0 z:-0.2];
+        [TR3D.light drawWithMaterial:((light.isGreen) ? _greenMaterial : _redMaterial)];
+    }];
 }
 
 - (ODType*)type {

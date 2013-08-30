@@ -17,6 +17,7 @@
 + (EGMesh*)railsTurn;
 + (EGMesh*)switchStraight;
 + (EGMesh*)switchTurn;
++ (EGMesh*)light;
 + (ODType*)type;
 @end
 

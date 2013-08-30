@@ -49,6 +49,14 @@ static ODType* _EG_type;
     return [EG context].modelMatrix;
 }
 
++ (void)keepMWF:(void(^)())f {
+    [[EG context].modelMatrix push];
+    [[EG context].worldMatrix push];
+    ((void(^)())(f))();
+    [[EG context].modelMatrix pop];
+    [[EG context].worldMatrix pop];
+}
+
 - (ODType*)type {
     return _EG_type;
 }

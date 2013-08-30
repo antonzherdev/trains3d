@@ -541,6 +541,7 @@
 		6F3DF42505ED13B3C92256B9 /* gradient_paint.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = gradient_paint.hpp; sourceTree = "<group>"; };
 		6F3DF4272C7BD31625806564 /* type_mat3x3.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = type_mat3x3.inl; sourceTree = "<group>"; };
 		6F3DF435825AB9478708E458 /* random.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = random.inl; sourceTree = "<group>"; };
+		6F3DF435AE5E103FF064EFE4 /* TR3DLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TR3DLight.h; sourceTree = "<group>"; };
 		6F3DF4382F11B7680DC08403 /* type_mat4x3.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_mat4x3.hpp; sourceTree = "<group>"; };
 		6F3DF43FE0BDE7614873756B /* KWContextNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWContextNode.h; sourceTree = "<group>"; };
 		6F3DF4416D9CDAE2101320B7 /* KWObjCUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWObjCUtilities.h; sourceTree = "<group>"; };
@@ -617,6 +618,7 @@
 		6F3DF5C9B58E04CB16E3604B /* type_vec4.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_vec4.hpp; sourceTree = "<group>"; };
 		6F3DF5D30EBF50722D5A00BA /* CNReverseLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNReverseLink.m; sourceTree = "<group>"; };
 		6F3DF5D63CC0193EEA5622DE /* KWFutureObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWFutureObject.h; sourceTree = "<group>"; };
+		6F3DF5E038A823117A288E80 /* TR3DLight.jas */ = {isa = PBXFileReference; lastKnownFileType = file.jas; path = TR3DLight.jas; sourceTree = "<group>"; };
 		6F3DF5E4EBB29E2692218B0C /* associated_min_max.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = associated_min_max.hpp; sourceTree = "<group>"; };
 		6F3DF5EBA996D312588949F3 /* type_vec1.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_vec1.hpp; sourceTree = "<group>"; };
 		6F3DF5F168AA005DD585BCFB /* TRAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRAppDelegate.h; sourceTree = "<group>"; };
@@ -1606,6 +1608,8 @@
 				6F3DF7C0B51AADF113C32337 /* TR3D.od */,
 				6F3DFFBECCBDFC5E0C7A8FF8 /* TR3D.h */,
 				6F3DFD1F28E8481AF70D50FF /* TR3D.m */,
+				6F3DF5E038A823117A288E80 /* TR3DLight.jas */,
+				6F3DF435AE5E103FF064EFE4 /* TR3DLight.h */,
 			);
 			path = 3DModels;
 			sourceTree = "<group>";

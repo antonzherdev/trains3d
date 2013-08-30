@@ -16,6 +16,7 @@
 + (EGMutableMatrix*)cameraMatrix;
 + (EGMutableMatrix*)worldMatrix;
 + (EGMutableMatrix*)modelMatrix;
++ (void)keepMWF:(void(^)())f;
 - (ODType*)type;
 + (ODType*)type;
 @end
