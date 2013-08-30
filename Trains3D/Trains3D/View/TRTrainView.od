@@ -11,7 +11,8 @@ import TRRailPoint
 import TR3D
 
 class TRTrainView {
-    val blackMaterial = EGStandardMaterial(EGColor(0, 0, 0, 1), EGColor(0.1, 0.1, 0.1, 0))
+    val blackMaterial = EGStandardMaterial(EGColor(0, 0, 0, 1), EGColor(0.1, 0.1, 0.1, 1))
+    def trainMaterialFor(color : EGColor) : EGMaterial2 = EGStandardMaterial(color, EGColor(0.2, 0.2, 0.2, 1))
     def draw(train : TRTrain) {
         train.cars.for(car -> {
             val h = car.head.point

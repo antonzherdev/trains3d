@@ -20,7 +20,7 @@ static ODType* _TRTrainView_type;
 
 - (id)init {
     self = [super init];
-    if(self) _blackMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.0, 0.0, 0.0, 1.0)] specular:EGColorMake(0.1, 0.1, 0.1, 0.0)];
+    if(self) _blackMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.0, 0.0, 0.0, 1.0)] specular:EGColorMake(0.1, 0.1, 0.1, 1.0)];
     
     return self;
 }
@@ -28,6 +28,10 @@ static ODType* _TRTrainView_type;
 + (void)initialize {
     [super initialize];
     _TRTrainView_type = [ODType typeWithCls:[TRTrainView class]];
+}
+
+- (EGMaterial2*)trainMaterialForColor:(EGColor)color {
+    return [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:color] specular:EGColorMake(0.2, 0.2, 0.2, 1.0)];
 }
 
 - (void)drawTrain:(TRTrain*)train {

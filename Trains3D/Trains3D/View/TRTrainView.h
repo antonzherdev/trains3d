@@ -32,6 +32,7 @@
 
 + (id)trainView;
 - (id)init;
+- (EGMaterial2*)trainMaterialForColor:(EGColor)color;
 - (void)drawTrain:(TRTrain*)train;
 - (ODType*)type;
 + (ODType*)type;
