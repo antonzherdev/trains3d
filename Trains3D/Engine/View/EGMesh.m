@@ -35,7 +35,7 @@ static ODType* _EGMesh_type;
     return [EGMesh meshWithVertexBuffer:[[EGVertexBuffer applyStride:((NSUInteger)(8 * 4))] setData:vertexData] indexBuffer:[[EGIndexBuffer apply] setData:index]];
 }
 
-- (void)drawWithMaterial:(EGMaterial2*)material {
+- (void)drawWithMaterial:(EGMaterial*)material {
     [_vertexBuffer applyDraw:^void() {
         [material applyDraw:^void() {
             [_indexBuffer draw];
@@ -104,7 +104,7 @@ static ODType* _EGMeshModel_type;
 
 - (void)draw {
     [_meshes forEach:^void(CNTuple* p) {
-        [((EGMesh*)(p.a)) drawWithMaterial:((EGMaterial2*)(p.b))];
+        [((EGMesh*)(p.a)) drawWithMaterial:((EGMaterial*)(p.b))];
     }];
 }
 

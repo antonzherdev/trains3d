@@ -128,7 +128,7 @@ class EGMapSsoView(map : EGMapSso) {
             2, 3, 0])
     }
 
-    def drawPlaneWith(material : EGMaterial2) {
+    def drawPlaneWith(material : EGMaterial) {
         plane.drawWith(material)
     }
 }

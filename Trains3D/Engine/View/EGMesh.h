@@ -12,7 +12,7 @@
 @class EGColorSource;
 @class EGColorSourceColor;
 @class EGColorSourceTexture;
-@class EGMaterial2;
+@class EGMaterial;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
 
@@ -26,7 +26,7 @@
 + (id)meshWithVertexBuffer:(EGVertexBuffer*)vertexBuffer indexBuffer:(EGIndexBuffer*)indexBuffer;
 - (id)initWithVertexBuffer:(EGVertexBuffer*)vertexBuffer indexBuffer:(EGIndexBuffer*)indexBuffer;
 + (EGMesh*)applyVertexData:(CNPArray*)vertexData index:(CNPArray*)index;
-- (void)drawWithMaterial:(EGMaterial2*)material;
+- (void)drawWithMaterial:(EGMaterial*)material;
 - (ODType*)type;
 + (ODType*)type;
 @end

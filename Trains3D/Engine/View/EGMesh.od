@@ -8,7 +8,7 @@ import EGMaterial
 class EGMesh(vertexBuffer : EGVertexBuffer<float4>, indexBuffer : EGIndexBuffer<uint4>) {
     static def apply(vertexData : CNPArray<float4>, index : CNPArray<uint4>) : EGMesh =
         EGMesh(vertexBuffer = EGVertexBuffer<float4>(8*4).set(vertexData), indexBuffer = EGIndexBuffer<uint4>().set(index))
-    def drawWith(material : EGMaterial2) {
+    def drawWith(material : EGMaterial) {
         vertexBuffer {
             material {
                 indexBuffer.draw
@@ -17,7 +17,7 @@ class EGMesh(vertexBuffer : EGVertexBuffer<float4>, indexBuffer : EGIndexBuffer<
     }
 }
 
-class EGMeshModel(meshes : [(EGMesh, EGMaterial2)]) {
+class EGMeshModel(meshes : [(EGMesh, EGMaterial)]) {
     def draw {
         meshes.for(p -> p.a.drawWith(material = p.b))
     }

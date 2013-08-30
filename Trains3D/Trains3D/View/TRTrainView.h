@@ -7,7 +7,7 @@
 @class EGColorSource;
 @class EGColorSourceColor;
 @class EGColorSourceTexture;
-@class EGMaterial2;
+@class EGMaterial;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
 @class EGContext;
@@ -31,7 +31,7 @@
 
 + (id)trainView;
 - (id)init;
-- (EGMaterial2*)trainMaterialForColor:(EGColor)color;
+- (EGMaterial*)trainMaterialForColor:(EGColor)color;
 - (void)drawTrain:(TRTrain*)train;
 - (ODType*)type;
 + (ODType*)type;

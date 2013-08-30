@@ -34,10 +34,10 @@ static ODType* _TRCityView_type;
     [EG keepMWF:^void() {
         [[EG worldMatrix] translateX:((CGFloat)(city.tile.x)) y:((CGFloat)(city.tile.y)) z:0.0];
         [[EG modelMatrix] rotateAngle:((CGFloat)(city.angle.angle)) x:0.0 y:-1.0 z:0.0];
-        [TR3D.city drawWithMaterial:[EGMaterial2 applyColor:city.color.color]];
+        [TR3D.city drawWithMaterial:[EGMaterial applyColor:city.color.color]];
         [city.expectedTrainAnimation forEach:^void(EGAnimation* a) {
             CGFloat x = -[a time] / 2;
-            [_expectedTrainModel drawWithMaterial:[EGMaterial2 applyColor:EGColorMake(1.0, 0.5 - x, 0.5 - x, 1.0)]];
+            [_expectedTrainModel drawWithMaterial:[EGMaterial applyColor:EGColorMake(1.0, 0.5 - x, 0.5 - x, 1.0)]];
         }];
     }];
 }

@@ -30,7 +30,7 @@ static ODType* _TRTrainView_type;
     _TRTrainView_type = [ODType typeWithCls:[TRTrainView class]];
 }
 
-- (EGMaterial2*)trainMaterialForColor:(EGColor)color {
+- (EGMaterial*)trainMaterialForColor:(EGColor)color {
     return [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:color] specularColor:EGColorMake(0.3, 0.3, 0.3, 1.0) specularSize:1.0];
 }
 
@@ -43,7 +43,7 @@ static ODType* _TRTrainView_type;
             [[EG worldMatrix] translateX:mid.x y:mid.y z:0.05];
             CGFloat angle = (([train isBack]) ? 90 : -90) + 180.0 / M_PI * egPointAngle(egPointSub(t, h));
             [[EG modelMatrix] rotateAngle:angle x:0.0 y:1.0 z:0.0];
-            EGMaterial2* material = [self trainMaterialForColor:train.color.color];
+            EGMaterial* material = [self trainMaterialForColor:train.color.color];
             if(car.carType == TRCarType.car) {
                 [TR3D.car drawWithMaterial:material];
                 [TR3D.carBlack drawWithMaterial:_blackMaterial];

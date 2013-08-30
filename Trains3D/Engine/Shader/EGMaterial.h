@@ -21,7 +21,7 @@
 @class EGColorSource;
 @class EGColorSourceColor;
 @class EGColorSourceTexture;
-@class EGMaterial2;
+@class EGMaterial;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
 
@@ -55,19 +55,19 @@
 @end
 
 
-@interface EGMaterial2 : NSObject
-+ (id)material2;
+@interface EGMaterial : NSObject
++ (id)material;
 - (id)init;
 - (id<EGShaderSystem>)shaderSystem;
 - (void)applyDraw:(void(^)())draw;
-+ (EGMaterial2*)applyColor:(EGColor)color;
-+ (EGMaterial2*)applyTexture:(EGTexture*)texture;
++ (EGMaterial*)applyColor:(EGColor)color;
++ (EGMaterial*)applyTexture:(EGTexture*)texture;
 - (ODType*)type;
 + (ODType*)type;
 @end
 
 
-@interface EGSimpleMaterial : EGMaterial2
+@interface EGSimpleMaterial : EGMaterial
 @property (nonatomic, readonly) EGColorSource* color;
 
 + (id)simpleMaterialWithColor:(EGColorSource*)color;
@@ -78,7 +78,7 @@
 @end
 
 
-@interface EGStandardMaterial : EGMaterial2
+@interface EGStandardMaterial : EGMaterial
 @property (nonatomic, readonly) EGColorSource* diffuse;
 @property (nonatomic, readonly) EGColor specularColor;
 @property (nonatomic, readonly) CGFloat specularSize;

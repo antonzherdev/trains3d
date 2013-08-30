@@ -33,7 +33,7 @@ static ODType* _TRLevelBackgroundView_type;
 }
 
 - (void)draw {
-    [_mapView drawPlaneWithMaterial:[EGMaterial2 applyTexture:[EGTexture textureWithFile:@"Grass.png"]]];
+    [_mapView drawPlaneWithMaterial:[EGMaterial applyTexture:[EGTexture textureWithFile:@"Grass.png"]]];
 }
 
 - (ODType*)type {

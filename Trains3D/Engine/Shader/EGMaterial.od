@@ -16,21 +16,21 @@ class EGColorSourceColor(color : EGColor) extends EGColorSource
 class EGColorSourceTexture(texture : EGTexture) extends EGColorSource
 
 
-class EGMaterial2 {
+class EGMaterial {
     def shaderSystem : EGShaderSystem<self>
     def apply(draw : () -> void) {
         shaderSystem(EG.context, self, draw)
     }
 
-    static def apply(color : EGColor) : EGMaterial2 = EGStandardMaterial(color)
-    static def apply(texture : EGTexture) : EGMaterial2 = EGStandardMaterial(texture)
+    static def apply(color : EGColor) : EGMaterial = EGStandardMaterial(color)
+    static def apply(texture : EGTexture) : EGMaterial = EGStandardMaterial(texture)
 }
 
-class EGSimpleMaterial(color : EGColorSource) extends EGMaterial2 {
+class EGSimpleMaterial(color : EGColorSource) extends EGMaterial {
     def shaderSystem : EGShaderSystem<self> = EGSimpleShaderSystem.instance
 }
 
-class EGStandardMaterial(diffuse : EGColorSource, specularColor : EGColor, specularSize : float)  extends EGMaterial2 {
+class EGStandardMaterial(diffuse : EGColorSource, specularColor : EGColor, specularSize : float)  extends EGMaterial {
     static def apply(diffuse : EGColorSource) = EGStandardMaterial(diffuse, EGColor(0, 0, 0, 1), 1)
     def shaderSystem : EGShaderSystem<self> = EGStandardShaderSystem.instance
 }

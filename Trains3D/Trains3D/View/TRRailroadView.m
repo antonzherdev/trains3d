@@ -101,8 +101,8 @@ static ODType* _TRRailView_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _railModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.railGravel, ((EGMaterial2*)([EGMaterial2 applyTexture:[EG textureForFile:@"Gravel.png"]]))), tuple(TR3D.railTies, ((EGMaterial2*)([EGMaterial2 applyColor:EGColorMake(0.55, 0.45, 0.25, 1.0)]))), tuple(TR3D.rails, [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.45, 0.47, 0.55, 1.0)] specularColor:EGColorMake(0.5, 0.5, 0.5, 1.0) specularSize:1.0])])];
-        _railTurnModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.railTurnGravel, ((EGMaterial2*)([EGMaterial2 applyTexture:[EG textureForFile:@"Gravel.png"]]))), tuple(TR3D.railTurnTies, ((EGMaterial2*)([EGMaterial2 applyColor:EGColorMake(0.55, 0.45, 0.25, 1.0)]))), tuple(TR3D.railsTurn, [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.45, 0.47, 0.55, 1.0)] specularColor:EGColorMake(0.5, 0.5, 0.5, 1.0) specularSize:1.0])])];
+        _railModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.railGravel, ((EGMaterial*)([EGMaterial applyTexture:[EG textureForFile:@"Gravel.png"]]))), tuple(TR3D.railTies, ((EGMaterial*)([EGMaterial applyColor:EGColorMake(0.55, 0.45, 0.25, 1.0)]))), tuple(TR3D.rails, [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.45, 0.47, 0.55, 1.0)] specularColor:EGColorMake(0.5, 0.5, 0.5, 1.0) specularSize:1.0])])];
+        _railTurnModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.railTurnGravel, ((EGMaterial*)([EGMaterial applyTexture:[EG textureForFile:@"Gravel.png"]]))), tuple(TR3D.railTurnTies, ((EGMaterial*)([EGMaterial applyColor:EGColorMake(0.55, 0.45, 0.25, 1.0)]))), tuple(TR3D.railsTurn, [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.45, 0.47, 0.55, 1.0)] specularColor:EGColorMake(0.5, 0.5, 0.5, 1.0) specularSize:1.0])])];
     }
     
     return self;
@@ -327,7 +327,7 @@ static ODType* _TRDamageView_type;
 
 - (id)init {
     self = [super init];
-    if(self) _model = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.damage, ((EGMaterial2*)([EGMaterial2 applyColor:EGColorMake(1.0, 0.0, 0.0, 1.0)])))])];
+    if(self) _model = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.damage, ((EGMaterial*)([EGMaterial applyColor:EGColorMake(1.0, 0.0, 0.0, 1.0)])))])];
     
     return self;
 }

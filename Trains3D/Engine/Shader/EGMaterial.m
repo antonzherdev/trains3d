@@ -177,11 +177,11 @@ static ODType* _EGColorSourceTexture_type;
 @end
 
 
-@implementation EGMaterial2
-static ODType* _EGMaterial2_type;
+@implementation EGMaterial
+static ODType* _EGMaterial_type;
 
-+ (id)material2 {
-    return [[EGMaterial2 alloc] init];
++ (id)material {
+    return [[EGMaterial alloc] init];
 }
 
 - (id)init {
@@ -192,7 +192,7 @@ static ODType* _EGMaterial2_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMaterial2_type = [ODType typeWithCls:[EGMaterial2 class]];
+    _EGMaterial_type = [ODType typeWithCls:[EGMaterial class]];
 }
 
 - (id<EGShaderSystem>)shaderSystem {
@@ -203,20 +203,20 @@ static ODType* _EGMaterial2_type;
     [[self shaderSystem] applyContext:[EG context] material:self draw:draw];
 }
 
-+ (EGMaterial2*)applyColor:(EGColor)color {
++ (EGMaterial*)applyColor:(EGColor)color {
     return [EGStandardMaterial applyDiffuse:[EGColorSource applyColor:color]];
 }
 
-+ (EGMaterial2*)applyTexture:(EGTexture*)texture {
++ (EGMaterial*)applyTexture:(EGTexture*)texture {
     return [EGStandardMaterial applyDiffuse:[EGColorSource applyTexture:texture]];
 }
 
 - (ODType*)type {
-    return _EGMaterial2_type;
+    return _EGMaterial_type;
 }
 
 + (ODType*)type {
-    return _EGMaterial2_type;
+    return _EGMaterial_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
