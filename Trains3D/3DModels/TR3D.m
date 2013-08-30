@@ -6,6 +6,9 @@
 #import "TR3DSwitch.h"
 #import "TR3DLight.h"
 #import "TR3DCity.h"
+#import "TR3DCar.h"
+#import "TR3DEngine.h"
+
 
 @implementation TR3D
 static EGMesh*_railTies = nil;
@@ -18,6 +21,13 @@ static EGMesh *_switchStraight = nil;
 static EGMesh *_switchTurn = nil;
 static EGMesh *_light = nil;
 static EGMesh *_city = nil;
+static EGMesh *_engineFloor = nil;
+static EGMesh *_engineBlack = nil;
+static EGMesh *_engine = nil;
+static EGMesh *_carBlack = nil;
+static EGMesh *_car = nil;
+
+
 static ODType* _TR3D_type;
 
 + (id)r3D {
@@ -43,6 +53,11 @@ static ODType* _TR3D_type;
     _switchTurn = egJasModel(SwitchTurn);
     _light = egJasModel(Light);
     _city = egJasModel(City);
+    _engineFloor = egJasModel(EngineFloor);
+    _engineBlack = egJasModel(EngineBlack);
+    _engine = egJasModel(Engine);
+    _carBlack = egJasModel(CarBlack);
+    _car = egJasModel(Car);
 }
 
 - (ODType*)type {
@@ -97,6 +112,27 @@ static ODType* _TR3D_type;
 + (EGMesh *)city {
     return _city;
 }
+
++ (EGMesh *)car {
+    return _car;
+}
+
++ (EGMesh *)carBlack {
+    return _carBlack;
+}
+
++ (EGMesh *)engine {
+    return _engine;
+}
+
++ (EGMesh *)engineBlack {
+    return _engineBlack;
+}
+
++ (EGMesh *)engineFloor {
+    return _engineFloor;
+}
+
 
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;

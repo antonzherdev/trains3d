@@ -7,6 +7,7 @@
 #import "TRLevelBackgroundView.h"
 #import "TRCityView.h"
 #import "TRRailroadView.h"
+#import "TRTrainView.h"
 @implementation TRLevelView{
     TRLevel* _level;
     TRLevelBackgroundView* _backgroundView;

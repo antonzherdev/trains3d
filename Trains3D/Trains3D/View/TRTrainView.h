@@ -1,4 +1,5 @@
 #import "objd.h"
+@class EG;
 #import "EGGL.h"
 #import "EGTypes.h"
 @class EGMesh;
@@ -10,6 +11,8 @@
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
 @class EGMaterial;
+@class EGContext;
+@class EGMutableMatrix;
 @class TRTrainType;
 @class TRTrain;
 @class TRCarType;
@@ -20,10 +23,13 @@
 @class TRRailForm;
 @class TRRailPoint;
 @class TRRailPointCorrection;
+@class TR3D;
 
 @class TRTrainView;
 
 @interface TRTrainView : NSObject
+@property (nonatomic, readonly) EGStandardMaterial* blackMaterial;
+
 + (id)trainView;
 - (id)init;
 - (void)drawTrain:(TRTrain*)train;

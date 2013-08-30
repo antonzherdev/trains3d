@@ -1,5 +1,6 @@
 #import "objd.h"
 #import "EGGL.h"
+
 @class EGMesh;
 @class EGMeshModel;
 
@@ -21,6 +22,11 @@
 + (ODType*)type;
 
 + (EGMesh *)city;
++ (EGMesh *)car;
++ (EGMesh *)carBlack;
++ (EGMesh *)engine;
++ (EGMesh *)engineBlack;
++ (EGMesh *)engineFloor;
 @end
 
 

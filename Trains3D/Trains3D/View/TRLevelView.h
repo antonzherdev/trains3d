@@ -14,7 +14,7 @@
 @class TRSwitchView;
 @class TRLightView;
 @class TRDamageView;
-#import "TRTrainView.h"
+@class TRTrainView;
 
 @class TRLevelView;
 

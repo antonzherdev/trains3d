@@ -15,4 +15,11 @@ stub class TR3D {
     static val light : EGMesh = nil
 
     static val city : EGMesh = nil
+
+    static val car : EGMesh = nil
+    static val carBlack : EGMesh = nil
+
+    static val engine : EGMesh = nil
+    static val engineBlack : EGMesh = nil
+    static val engineFloor : EGMesh = nil
 }
