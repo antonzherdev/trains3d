@@ -16,7 +16,7 @@ class TRLevelView(level : TRLevel) extends EGView {
     private val railroadView = TRRailroadView()
     private val trainView = TRTrainView()
 
-    val environment = EGEnvironment(ambientColor = EGColor(0.2, 0.2, 0.2, 1), lights = [EGDirectLight(EGColor(1, 1, 1, 1), EGVec3(0.2, -0.2, 0.5))])
+    val environment = EGEnvironment(ambientColor = EGColor(0.4, 0.4, 0.4, 1), lights = [EGDirectLight(EGColor(1, 1, 1, 1), EGVec3(-0.2, 0.2, -0.5))])
 
     def drawView {
         glEnable(GL_LIGHTING)

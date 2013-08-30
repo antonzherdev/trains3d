@@ -7,13 +7,15 @@
     NSMutableDictionary* _textureCache;
     EGEnvironment* _environment;
     EGMutableMatrix* _modelMatrix;
-    EGMutableMatrix* _viewMatrix;
+    EGMutableMatrix* _worldMatrix;
+    EGMutableMatrix* _cameraMatrix;
     EGMutableMatrix* _projectionMatrix;
 }
 static ODType* _EGContext_type;
 @synthesize environment = _environment;
 @synthesize modelMatrix = _modelMatrix;
-@synthesize viewMatrix = _viewMatrix;
+@synthesize worldMatrix = _worldMatrix;
+@synthesize cameraMatrix = _cameraMatrix;
 @synthesize projectionMatrix = _projectionMatrix;
 
 + (id)context {
@@ -26,7 +28,8 @@ static ODType* _EGContext_type;
         _textureCache = [NSMutableDictionary mutableDictionary];
         _environment = EGEnvironment.aDefault;
         _modelMatrix = [EGMutableMatrix mutableMatrix];
-        _viewMatrix = [EGMutableMatrix mutableMatrix];
+        _worldMatrix = [EGMutableMatrix mutableMatrix];
+        _cameraMatrix = [EGMutableMatrix mutableMatrix];
         _projectionMatrix = [EGMutableMatrix mutableMatrix];
     }
     
@@ -44,13 +47,22 @@ static ODType* _EGContext_type;
     }]));
 }
 
-- (EGMatrix*)mvp {
-    return [[[_projectionMatrix value] multiply:[_viewMatrix value]] multiply:[_modelMatrix value]];
+- (EGMatrix*)mw {
+    return [[_worldMatrix value] multiply:[_modelMatrix value]];
+}
+
+- (EGMatrix*)mwc {
+    return [[_cameraMatrix value] multiply:[[_worldMatrix value] multiply:[_modelMatrix value]]];
+}
+
+- (EGMatrix*)mwcp {
+    return [[[[_projectionMatrix value] multiply:[_cameraMatrix value]] multiply:[_worldMatrix value]] multiply:[_modelMatrix value]];
 }
 
 - (void)clearMatrix {
     [_modelMatrix clear];
-    [_viewMatrix clear];
+    [_worldMatrix clear];
+    [_cameraMatrix clear];
     [_projectionMatrix clear];
 }
 

@@ -108,13 +108,14 @@ static ODType* _EGStandardShaderKey_type;
 - (EGStandardShader*)shader {
     NSString* vertexShader = [NSString stringWithFormat:@"attribute vec3 normal;%@\n"
         "attribute vec3 position;\n"
-        "uniform mat4 mvp;\n"
+        "uniform mat4 mwcp;\n"
+        "uniform mat4 mw;\n"
         "%@\n"
         "%@\n"
         "%@\n"
         "\n"
         "void main(void) {\n"
-        "   gl_Position = mvp * vec4(position, 1);%@\n"
+        "   gl_Position = mwcp * vec4(position, 1);%@\n"
         "   %@\n"
         "}", ((_texture) ? @"\n"
         "attribute vec2 vertexUV; " : @""), [self lightsVertexUniform], ((_texture) ? @"\n"
@@ -129,7 +130,7 @@ static ODType* _EGStandardShaderKey_type;
         "void main(void) {%@%@\n"
         "   vec4 color = ambientColor * materialColor;\n"
         "   %@\n"
-        "   gl_FragColor = color;\n"
+        "   gl_FragColor = vec4(vec3(dirLightDirectionCos0), 1);\n"
         "}", ((_texture) ? @"\n"
         "varying vec2 UV;\n"
         "uniform sampler2D diffuse;" : @"\n"
@@ -153,7 +154,7 @@ static ODType* _EGStandardShaderKey_type;
 
 - (NSString*)lightsCalculateVaryings {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return [NSString stringWithFormat:@"dirLightDirectionCos%@= max(dot(normal, normalize(dirLightDirection%@)), 0.0);", i, i];
+        return [NSString stringWithFormat:@"dirLightDirectionCos%@= max(dot(normalize((mw * vec4(normal, 0)).xyz), -normalize(dirLightDirection%@)), 0.0);", i, i];
     }] toStringWithDelimiter:@"n"];
 }
 
@@ -213,7 +214,8 @@ static ODType* _EGStandardShaderKey_type;
     id _uvSlot;
     EGShaderUniform* _ambientColor;
     EGShaderUniform* _diffuseUniform;
-    EGShaderUniform* _mvpUniform;
+    EGShaderUniform* _mwcpUniform;
+    id _mwUniform;
     id<CNSeq> _directLightDirections;
     id<CNSeq> _directLightColors;
 }
@@ -228,7 +230,8 @@ static ODType* _EGStandardShader_type;
 @synthesize uvSlot = _uvSlot;
 @synthesize ambientColor = _ambientColor;
 @synthesize diffuseUniform = _diffuseUniform;
-@synthesize mvpUniform = _mvpUniform;
+@synthesize mwcpUniform = _mwcpUniform;
+@synthesize mwUniform = _mwUniform;
 @synthesize directLightDirections = _directLightDirections;
 @synthesize directLightColors = _directLightColors;
 
@@ -245,7 +248,8 @@ static ODType* _EGStandardShader_type;
         _uvSlot = [CNOption opt:((_key.texture) ? [self attributeForName:@"vertexUV"] : nil)];
         _ambientColor = [self uniformForName:@"ambientColor"];
         _diffuseUniform = [self uniformForName:@"diffuse"];
-        _mvpUniform = [self uniformForName:@"mvp"];
+        _mwcpUniform = [self uniformForName:@"mwcp"];
+        _mwUniform = [CNOption opt:((_key.directLightCount > 0) ? [self uniformForName:@"mw"] : nil)];
         _directLightDirections = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniform*(id i) {
             return [self uniformForName:[NSString stringWithFormat:@"dirLightDirection%@", i]];
         }] toArray];
@@ -267,7 +271,7 @@ static ODType* _EGStandardShader_type;
 
 - (void)loadContext:(EGContext*)context material:(EGStandardMaterial*)material {
     [_positionSlot setFromBufferWithStride:((NSUInteger)(_EGStandardShader_STRIDE)) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_POSITION_SHIFT))];
-    [_mvpUniform setMatrix:[context mvp]];
+    [_mwcpUniform setMatrix:[context mwcp]];
     if(_key.texture) {
         [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:((NSUInteger)(_EGStandardShader_STRIDE)) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_UV_SHIFT))];
         [((EGColorSourceTexture*)(material.diffuse)).texture bind];
@@ -277,6 +281,7 @@ static ODType* _EGStandardShader_type;
     EGEnvironment* env = context.environment;
     [_ambientColor setColor:env.ambientColor];
     if(_key.directLightCount > 0) {
+        [((EGShaderUniform*)([_mwUniform get])) setMatrix:[context mw]];
         [((EGShaderAttribute*)([_normalSlot get])) setFromBufferWithStride:((NSUInteger)(_EGStandardShader_STRIDE)) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_NORMAL_SHIFT))];
         [[[[env.lights chain] filterCast:EGDirectLight.type] zip3A:_directLightDirections b:_directLightColors by:^EGDirectLight*(EGDirectLight* light, EGShaderUniform* dirSlot, EGShaderUniform* colorSlot) {
             [dirSlot setVec3:light.direction];

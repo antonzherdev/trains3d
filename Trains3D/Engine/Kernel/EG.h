@@ -13,7 +13,8 @@
 + (EGContext*)context;
 + (EGTexture*)textureForFile:(NSString*)file;
 + (EGMutableMatrix*)projectionMatrix;
-+ (EGMutableMatrix*)viewMatrix;
++ (EGMutableMatrix*)cameraMatrix;
++ (EGMutableMatrix*)worldMatrix;
 + (EGMutableMatrix*)modelMatrix;
 - (ODType*)type;
 + (ODType*)type;

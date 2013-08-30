@@ -37,8 +37,8 @@ stub val SwitchTurn : string
 class TRRailView {
     val railModel = EGMeshModel([
         (TR3D.railGravel, EG.textureFor("Gravel.png")),
-        (TR3D.railTies, EGColor(1, 1, 0, 1)),
-        (TR3D.rails, EGColor(1, 1, 1, 1))
+        (TR3D.railTies, EGColor(0.55, 0.45, 0.25, 1)),
+        (TR3D.rails, EGStandardMaterial( EGColor(0.45, 0.47, 0.55, 1), EGColor(0.5, 0.5, 0.5, 1)))
     ])
 //    val railMesh = EGMesh([
 //        0, 0, 0, -1, 0, -0.5,0, -0.5,
@@ -51,14 +51,14 @@ class TRRailView {
 //        (railMesh, EGColor(1, 0, 1, 1))
 //    ])
     def draw(rail : TRRail) {
-        val m = EG.modelMatrix
+        val m = EG.worldMatrix
         m.push
 
         m.translate(rail.tile.x, rail.tile.y, 0.001)
 
         if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
             if(rail.form == TRRailForm.leftRight) m.rotate(90, 0, 0, 1)
-            m.rotate(90, 1, 0, 0)
+//            m.rotate(90, 1, 0, 0)
             railModel.draw
         } else {
             if(rail.form == TRRailForm.topRight) m.rotate(270, 0, 0, 1)

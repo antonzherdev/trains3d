@@ -8,6 +8,7 @@ class EG {
     static def textureFor(file : string) : EGTexture = context.textureFor(file)
 
     static def projectionMatrix : EGMutableMatrix = context.projectionMatrix
-    static def viewMatrix : EGMutableMatrix = context.viewMatrix
+    static def cameraMatrix : EGMutableMatrix = context.cameraMatrix
+    static def worldMatrix : EGMutableMatrix = context.worldMatrix
     static def modelMatrix : EGMutableMatrix = context.modelMatrix
 }

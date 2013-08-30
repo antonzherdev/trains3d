@@ -43,18 +43,24 @@ static ODType* _EGCameraIso_type;
 - (void)focusForViewSize:(EGSize)viewSize {
     EGRect vps = [self calculateViewportSizeWithViewSize:viewSize];
     glViewport(vps.x, vps.y, vps.width, vps.height);
+    glMatrixMode(GL_MODELVIEW);
+    EGMutableMatrix* mm = [EG modelMatrix];
+    [mm setIdentity];
+    [mm rotateAngle:90.0 x:1.0 y:0.0 z:0.0];
+    EGMutableMatrix* wm = [EG worldMatrix];
+    [wm setIdentity];
+    [wm translateX:0.0 y:0.0 z:-100.0];
+    [wm rotateAngle:30.0 x:1.0 y:0.0 z:0.0];
+    [wm rotateAngle:-45.0 x:0.0 y:1.0 z:0.0];
+    [wm rotateAngle:-90.0 x:1.0 y:0.0 z:0.0];
     glMatrixMode(GL_PROJECTION);
+    EGMutableMatrix* cm = [EG cameraMatrix];
+    [cm setIdentity];
+    [cm translateX:-_center.x y:0.0 z:-_center.y];
     EGMutableMatrix* pm = [EG projectionMatrix];
     [pm setIdentity];
     CGFloat ww = ((CGFloat)(_tilesOnScreen.width + _tilesOnScreen.height));
     [pm orthoLeft:-_EGCameraIso_ISO right:_EGCameraIso_ISO * ww - _EGCameraIso_ISO bottom:-_EGCameraIso_ISO * _tilesOnScreen.width / 2 top:_EGCameraIso_ISO * _tilesOnScreen.height / 2 zNear:0.0 zFar:1000.0];
-    glMatrixMode(GL_MODELVIEW);
-    EGMutableMatrix* mm = [EG modelMatrix];
-    [mm translateX:0.0 y:0.0 z:-100.0];
-    [mm rotateAngle:30.0 x:1.0 y:0.0 z:0.0];
-    [mm rotateAngle:-45.0 x:0.0 y:1.0 z:0.0];
-    [mm rotateAngle:-90.0 x:1.0 y:0.0 z:0.0];
-    [mm translateX:-_center.x y:0.0 z:-_center.y];
 }
 
 - (EGPoint)translateWithViewSize:(EGSize)viewSize viewPoint:(EGPoint)viewPoint {

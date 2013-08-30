@@ -12,13 +12,17 @@ class EGContext {
 
     var environment = EGEnvironment.default
     val modelMatrix = EGMutableMatrix()
-    val viewMatrix = EGMutableMatrix()
+    val worldMatrix = EGMutableMatrix()
+    val cameraMatrix = EGMutableMatrix()
     val projectionMatrix = EGMutableMatrix()
-    def mvp : EGMatrix = projectionMatrix.value.multiply(viewMatrix.value).multiply(modelMatrix.value)
+    def mw : EGMatrix = worldMatrix.value.multiply(modelMatrix.value)
+    def mwc : EGMatrix = cameraMatrix.value.multiply(worldMatrix.value.multiply(modelMatrix.value))
+    def mwcp : EGMatrix = projectionMatrix.value.multiply(cameraMatrix.value).multiply(worldMatrix.value).multiply(modelMatrix.value)
 
     def clearMatrix {
         modelMatrix.clear
-        viewMatrix.clear
+        worldMatrix.clear
+        cameraMatrix.clear
         projectionMatrix.clear
     }
 }

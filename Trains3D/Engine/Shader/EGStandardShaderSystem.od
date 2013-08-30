@@ -24,14 +24,15 @@ class EGStandardShaderKey(directLightCount : uint, texture : bool) {
             "attribute vec3 normal;
              attribute vec2 vertexUV; $when(texture)
              attribute vec3 position;
-             uniform mat4 mvp;
+             uniform mat4 mwcp;
+             uniform mat4 mw;
              $lightsVertexUniform
 
              varying vec2 UV; $when(texture)
              $lightsVaryings
 
              void main(void) {
-                gl_Position = mvp * vec4(position, 1);
+                gl_Position = mwcp * vec4(position, 1);
                 UV = vertexUV; $when(texture)
                 $lightsCalculateVaryings
              }"
@@ -52,7 +53,7 @@ class EGStandardShaderKey(directLightCount : uint, texture : bool) {
                 vec4 materialColor = texture2D(diffuse, UV); $when(texture)
                 vec4 color = ambientColor * materialColor;
                 $lightsDiffuse
-                gl_FragColor = color;
+                gl_FragColor = vec4(vec3(dirLightDirectionCos0), 1);
              }"
         EGStandardShader(self, EGShaderProgram(vertexShader, fragmentShader))
     }
@@ -60,7 +61,7 @@ class EGStandardShaderKey(directLightCount : uint, texture : bool) {
     def lightsVertexUniform : string = directLightCount.range.chain.map{i -> "uniform vec3 dirLightDirection$i;"}.toStringWith("\n")
     def lightsVaryings : string = directLightCount.range.chain.map{i -> "varying float dirLightDirectionCos$i;"}.toStringWith("\n")
     def lightsCalculateVaryings : string = directLightCount.range.chain.map{i ->
-        "dirLightDirectionCos$i = max(dot(normal, normalize(dirLightDirection$i)), 0.0);"
+        "dirLightDirectionCos$i = max(dot(normalize((mw * vec4(normal, 0)).xyz), -normalize(dirLightDirection$i)), 0.0);"
     }.toStringWith("\n")
 
     def lightsFragmentUniform : string = directLightCount.range.chain.map{i -> "uniform vec4 dirLightColor$i;"}.toStringWith("\n")
@@ -82,14 +83,15 @@ class EGStandardShader(key : EGStandardShaderKey, program : EGShaderProgram) ext
 
     val ambientColor : EGShaderUniform = uniformFor("ambientColor")
     val diffuseUniform : EGShaderUniform = uniformFor("diffuse")
-    val mvpUniform : EGShaderUniform = uniformFor("mvp")
+    val mwcpUniform : EGShaderUniform = uniformFor("mwcp")
+    val mwUniform : EGShaderUniform? = if(key.directLightCount > 0) uniformFor("mw") else nil
 
     val directLightDirections : [EGShaderUniform] = key.directLightCount.range.chain.map{i -> uniformFor("dirLightDirection$i")}.toArray
     val directLightColors : [EGShaderUniform] = key.directLightCount.range.chain.map{i -> uniformFor("dirLightColor$i")}.toArray
 
     def load(context : EGContext, material : EGStandardMaterial) {
         positionSlot.setFromBufferWith(STRIDE, valuesCount = 3, GL_FLOAT, POSITION_SHIFT)
-        mvpUniform.set(matrix = context.mvp)
+        mwcpUniform.set(matrix = context.mwcp)
         if(key.texture) {
             uvSlot.get.setFromBufferWith(STRIDE, valuesCount = 2, GL_FLOAT, UV_SHIFT)
             material.diffuse.cast<EGColorSourceTexture>.texture.bind
@@ -99,6 +101,7 @@ class EGStandardShader(key : EGStandardShaderKey, program : EGShaderProgram) ext
         val env = context.environment
         ambientColor.set(color = env.ambientColor)
         if(key.directLightCount > 0) {
+            mwUniform.get.set(matrix = context.mw)
             normalSlot.get.setFromBufferWith(STRIDE, valuesCount = 3, GL_FLOAT, NORMAL_SHIFT)
             env.lights.chain.filterCast(EGDirectLight.type).zip3(directLightDirections, directLightColors){light, dirSlot, colorSlot ->
                 dirSlot.set(vec3 = light.direction)

@@ -37,8 +37,12 @@ static ODType* _EG_type;
     return [EG context].projectionMatrix;
 }
 
-+ (EGMutableMatrix*)viewMatrix {
-    return [EG context].viewMatrix;
++ (EGMutableMatrix*)cameraMatrix {
+    return [EG context].cameraMatrix;
+}
+
++ (EGMutableMatrix*)worldMatrix {
+    return [EG context].worldMatrix;
 }
 
 + (EGMutableMatrix*)modelMatrix {

@@ -51,7 +51,8 @@
 @property (nonatomic, readonly) id uvSlot;
 @property (nonatomic, readonly) EGShaderUniform* ambientColor;
 @property (nonatomic, readonly) EGShaderUniform* diffuseUniform;
-@property (nonatomic, readonly) EGShaderUniform* mvpUniform;
+@property (nonatomic, readonly) EGShaderUniform* mwcpUniform;
+@property (nonatomic, readonly) id mwUniform;
 @property (nonatomic, readonly) id<CNSeq> directLightDirections;
 @property (nonatomic, readonly) id<CNSeq> directLightColors;
 

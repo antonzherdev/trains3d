@@ -17,13 +17,16 @@
 @interface EGContext : NSObject
 @property (nonatomic, retain) EGEnvironment* environment;
 @property (nonatomic, readonly) EGMutableMatrix* modelMatrix;
-@property (nonatomic, readonly) EGMutableMatrix* viewMatrix;
+@property (nonatomic, readonly) EGMutableMatrix* worldMatrix;
+@property (nonatomic, readonly) EGMutableMatrix* cameraMatrix;
 @property (nonatomic, readonly) EGMutableMatrix* projectionMatrix;
 
 + (id)context;
 - (id)init;
 - (EGTexture*)textureForFile:(NSString*)file;
-- (EGMatrix*)mvp;
+- (EGMatrix*)mw;
+- (EGMatrix*)mwc;
+- (EGMatrix*)mwcp;
 - (void)clearMatrix;
 - (ODType*)type;
 + (ODType*)type;

@@ -100,7 +100,7 @@ static ODType* _TRRailView_type;
 
 - (id)init {
     self = [super init];
-    if(self) _railModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.railGravel, ((EGMaterial2*)([EGMaterial2 applyTexture:[EG textureForFile:@"Gravel.png"]]))), tuple(TR3D.railTies, ((EGMaterial2*)([EGMaterial2 applyColor:EGColorMake(1.0, 1.0, 0.0, 1.0)]))), tuple(TR3D.rails, ((EGMaterial2*)([EGMaterial2 applyColor:EGColorMake(1.0, 1.0, 1.0, 1.0)])))])];
+    if(self) _railModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.railGravel, ((EGMaterial2*)([EGMaterial2 applyTexture:[EG textureForFile:@"Gravel.png"]]))), tuple(TR3D.railTies, ((EGMaterial2*)([EGMaterial2 applyColor:EGColorMake(0.55, 0.45, 0.25, 1.0)]))), tuple(TR3D.rails, [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.45, 0.47, 0.55, 1.0)] specular:EGColorMake(0.5, 0.5, 0.5, 1.0)])])];
     
     return self;
 }
@@ -111,12 +111,11 @@ static ODType* _TRRailView_type;
 }
 
 - (void)drawRail:(TRRail*)rail {
-    EGMutableMatrix* m = [EG modelMatrix];
+    EGMutableMatrix* m = [EG worldMatrix];
     [m push];
     [m translateX:((CGFloat)(rail.tile.x)) y:((CGFloat)(rail.tile.y)) z:0.001];
     if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
         if(rail.form == TRRailForm.leftRight) [m rotateAngle:90.0 x:0.0 y:0.0 z:1.0];
-        [m rotateAngle:90.0 x:1.0 y:0.0 z:0.0];
         [_railModel draw];
     } else {
         if(rail.form == TRRailForm.topRight) {

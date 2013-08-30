@@ -21,21 +21,30 @@ class EGCameraIso(tilesOnScreen : EGSizeI, center : EGPoint) extends EGCamera {
         val vps = calculateViewportSizeWith(viewSize)
         glViewport(vps.x, vps.y, vps.width, vps.height)
 
+//        EG.viewMatrix.setIdentity
+
+        glMatrixMode(GL_MODELVIEW)
+        val mm = EG.modelMatrix
+        mm.setIdentity
+        mm.rotate(90, 1, 0, 0)
+
+        val wm = EG.worldMatrix
+        wm.setIdentity
+        wm.translate(0, 0, -100)
+        wm.rotate(30, 1, 0, 0)
+        wm.rotate(-45.0, 0, 1, 0)
+        wm.rotate(-90, 1, 0, 0)
+
         glMatrixMode(GL_PROJECTION)
+        val cm = EG.cameraMatrix
+        cm.setIdentity
+        cm.translate(-center.x, 0, -center.y)
+
         val pm = EG.projectionMatrix
         pm.setIdentity
         val ww : float = tilesOnScreen.width + tilesOnScreen.height
         pm.ortho(-ISO, ISO*ww - ISO, -ISO*tilesOnScreen.width/2, ISO*tilesOnScreen.height/2, 0.0, 1000.0)
 
-//        EG.viewMatrix.setIdentity
-
-        glMatrixMode(GL_MODELVIEW)
-        val mm = EG.modelMatrix
-        mm.translate(0, 0, -100)
-        mm.rotate(30, 1, 0, 0)
-        mm.rotate(-45.0, 0, 1, 0)
-        mm.rotate(-90, 1, 0, 0)
-        mm.translate(-center.x, 0, -center.y)
     }
 
     def translateWith(viewSize : EGSize, viewPoint : EGPoint) : EGPoint = {
