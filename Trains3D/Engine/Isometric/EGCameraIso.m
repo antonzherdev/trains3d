@@ -46,7 +46,6 @@ static ODType* _EGCameraIso_type;
 - (void)focusForViewSize:(EGSize)viewSize {
     EGRect vps = [self calculateViewportSizeWithViewSize:viewSize];
     glViewport(vps.x, vps.y, vps.width, vps.height);
-    glMatrixMode(GL_MODELVIEW);
     EGMutableMatrix* mm = [EG modelMatrix];
     [mm setIdentity];
     [mm rotateAngle:90.0 x:1.0 y:0.0 z:0.0];
@@ -56,7 +55,6 @@ static ODType* _EGCameraIso_type;
     [wm rotateAngle:30.0 x:1.0 y:0.0 z:0.0];
     [wm rotateAngle:-45.0 x:0.0 y:1.0 z:0.0];
     [wm rotateAngle:-90.0 x:1.0 y:0.0 z:0.0];
-    glMatrixMode(GL_PROJECTION);
     EGMutableMatrix* cm = [EG cameraMatrix];
     [cm setIdentity];
     [cm translateX:-_center.x y:0.0 z:-_center.y];

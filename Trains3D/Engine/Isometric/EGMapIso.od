@@ -60,7 +60,7 @@ class EGMapSso(size : EGSizeI) {
 
 class EGMapSsoView(map : EGMapSso) {
     def drawLayout {
-        glPushMatrix
+        /*glPushMatrix
         egRotate(45, 0, 0, 1)
         glBegin(GL_LINES)
         {
@@ -106,7 +106,7 @@ class EGMapSsoView(map : EGMapSso) {
             })
         }
         glEnd
-        egMapDrawAxis
+        egMapDrawAxis   */
     }
 
 

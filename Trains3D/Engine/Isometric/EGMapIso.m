@@ -146,42 +146,6 @@ static ODType* _EGMapSsoView_type;
 }
 
 - (void)drawLayout {
-    glPushMatrix();
-    egRotate(45.0, 0.0, 0.0, 1.0);
-    glBegin(GL_LINES);
-    CGFloat ISO = EGMapSso.ISO;
-    EGSizeI size = _map.size;
-    CGFloat left = -ISO;
-    CGFloat top = ISO * size.height;
-    CGFloat bottom = ISO * -size.width;
-    CGFloat right = ISO * (size.width + size.height - 1);
-    egNormal3(0.0, 0.0, 1.0);
-    egVertex3(left, top, 0.0);
-    egVertex3(left, bottom, 0.0);
-    egVertex3(left, bottom, 0.0);
-    egVertex3(right, bottom, 0.0);
-    egVertex3(right, bottom, 0.0);
-    egVertex3(right, top, 0.0);
-    egVertex3(right, top, 0.0);
-    egVertex3(left, top, 0.0);
-    glEnd();
-    glPopMatrix();
-    egColor3(1.0, 1.0, 1.0);
-    glBegin(GL_LINES);
-    [_map.fullTiles forEach:^void(id tile) {
-        EGPointI p = uwrap(EGPointI, tile);
-        egNormal3(0.0, 0.0, 1.0);
-        egVertex3(p.x - 0.5, p.y - 0.5, 0.0);
-        egVertex3(p.x + 0.5, p.y - 0.5, 0.0);
-        egVertex3(p.x + 0.5, p.y - 0.5, 0.0);
-        egVertex3(p.x + 0.5, p.y + 0.5, 0.0);
-        egVertex3(p.x + 0.5, p.y + 0.5, 0.0);
-        egVertex3(p.x - 0.5, p.y + 0.5, 0.0);
-        egVertex3(p.x - 0.5, p.y + 0.5, 0.0);
-        egVertex3(p.x - 0.5, p.y - 0.5, 0.0);
-    }];
-    glEnd();
-    egMapDrawAxis();
 }
 
 - (EGMesh*)createPlane {

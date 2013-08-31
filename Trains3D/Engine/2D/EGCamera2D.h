@@ -1,6 +1,9 @@
 #import "objd.h"
 #import "EGTypes.h"
+@class EG;
 #import "EGGL.h"
+@class EGContext;
+@class EGMutableMatrix;
 
 @class EGCamera2D;
 

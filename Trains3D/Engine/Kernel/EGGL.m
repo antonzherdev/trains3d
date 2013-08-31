@@ -33,10 +33,3 @@ id egGetShaderError(GLuint shader) {
 }
 
 
-EGMatrix* egModelViewProjectionMatrix() {
-    float* model = malloc(sizeof(float) * 16);
-    float* projection = malloc(sizeof(float) * 16);
-    glGetFloatv(GL_MODELVIEW_MATRIX, model);
-    glGetFloatv(GL_PROJECTION_MATRIX, projection);
-    return [[EGMatrix matrixWithArray:projection] multiply:[EGMatrix matrixWithArray:model]];
-}
