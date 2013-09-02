@@ -5,8 +5,10 @@ import EGGL
 import EGTypes
 import EGBuffer
 import EGShader
+import EGContext
 
 import TRTrain
+import TRRailPoint
 
 class TRSmoke(train : TRTrain) extends EGController {
     private var _particles = CNList<TRSmokeParticle>()
@@ -61,15 +63,15 @@ class TRSmokeParticle extends EGController {
 class TRSmokeView(smoke : TRSmoke) {
     val positionBuffer = EGVertexBuffer<float4>(3*4)
     val cornerBuffer = EGVertexBuffer<byte>(1)
-    val indexBuffer = EGIndexBuffer()
+    val indexBuffer = EGIndexBuffer<int>()
     val shader = TRSmokeShader.instance
     def draw {
         val particles = smoke.particles
         val n = particles.count
         val positionArr = CNMutablePArray(EGVec3.type, 4*n)
-        val cornerArr = CNMutablePArray(byte.type, 4*n)
+        val cornerArr = CNMutablePArray(ODByte.type, 4*n)
         particles.for{p ->
-            posisionArr.write(item = p.position, times = 4)
+            positionArr.write(item = p.position, times = 4)
             cornerArr.write([0, 1, 2, 3])
         }
         positionBuffer.set(positionArr)

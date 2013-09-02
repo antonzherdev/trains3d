@@ -21,3 +21,14 @@ CNRange* uintRange(NSUInteger x) {
 CNRange* uintTo(NSUInteger a, NSUInteger b) {
     return [CNRange rangeWithStart:a end:b step:(a <= b) ? 1 : -1];
 }
+
+
+ODPType * odByteType() {
+    static ODPType * type = nil;
+    if(type == nil) {
+        type = [ODPType typeWithCls:[NSNumber class] name:@"byte" size:1 wrap:^id(void *pVoid, NSUInteger i) {
+            return numb(((char*)pVoid)[i]);
+        }];
+    }
+    return type;
+}

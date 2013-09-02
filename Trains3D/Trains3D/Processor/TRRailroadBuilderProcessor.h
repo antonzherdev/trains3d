@@ -61,6 +61,7 @@ static inline NSString* TRRailCorrectionDescription(TRRailCorrection self) {
     [description appendString:@">"];
     return description;
 }
+ODPType* trRailCorrectionType();
 @interface TRRailCorrectionWrap : NSObject
 @property (readonly, nonatomic) TRRailCorrection value;
 

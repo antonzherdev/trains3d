@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 #import <math.h>
+#import "ODType.h"
 
 @class CNRange;
 
@@ -71,3 +72,5 @@ CNRange* intRange(NSInteger x) ;
 CNRange* intTo(NSInteger a, NSInteger b);
 CNRange* uintRange(NSUInteger x) ;
 CNRange* uintTo(NSUInteger a, NSUInteger b);
+
+ODPType * odByteType();

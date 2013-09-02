@@ -20,18 +20,26 @@ stub trait ODComparable<T> {
     def compare(to : T) : int
 }
 
+stub struct ODByte extends ODComparable<byte> {
+    def compare(to : byte) : byte
+    def range : CNRange
+    def to(: byte) : CNRange
+    def between(from : byte, to : byte) : bool
+}
+
+
 stub struct ODInt extends ODComparable<int> {
     def compare(to : int) : int
     def range : CNRange
     def to(: int) : CNRange
-    def between(from : float, to : float) : bool
+    def between(from : int, to : int) : bool
 }
 
 stub struct ODUInt extends ODComparable<uint> {
     def compare(to : uint) : int
     def range : CNRange
     def to(: uint) : CNRange
-    def between(from : float, to : float) : bool
+    def between(from : uint, to : uint) : bool
 }
 
 stub struct ODFloat extends ODComparable<float> {

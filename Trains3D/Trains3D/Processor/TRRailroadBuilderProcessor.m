@@ -70,6 +70,13 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
 @end
 
 
+ODPType* trRailCorrectionType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[TRRailCorrectionWrap class] name:@"TRRailCorrection" size:sizeof(TRRailCorrection) wrap:^id(void* data, NSUInteger i) {
+        return wrap(TRRailCorrection, ((TRRailCorrection*)(data))[i]);
+    }];
+    return _ret;
+}
 @implementation TRRailCorrectionWrap{
     TRRailCorrection _value;
 }

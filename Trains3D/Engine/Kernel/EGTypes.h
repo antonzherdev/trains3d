@@ -56,6 +56,7 @@ CGFloat egPointDistanceTo(EGPoint self, EGPoint point);
 EGPoint egPointSet(EGPoint self, CGFloat length);
 EGPoint egPointNormalize(EGPoint self);
 NSInteger egPointCompare(EGPoint self, EGPoint to);
+ODPType* egPointType();
 @interface EGPointWrap : NSObject
 @property (readonly, nonatomic) EGPoint value;
 
@@ -96,6 +97,7 @@ EGPointI egPointIAdd(EGPointI self, EGPointI point);
 EGPointI egPointISub(EGPointI self, EGPointI point);
 EGPointI egPointINegate(EGPointI self);
 NSInteger egPointICompare(EGPointI self, EGPointI to);
+ODPType* egPointIType();
 @interface EGPointIWrap : NSObject
 @property (readonly, nonatomic) EGPointI value;
 
@@ -131,6 +133,7 @@ static inline NSString* EGSizeDescription(EGSize self) {
     [description appendString:@">"];
     return description;
 }
+ODPType* egSizeType();
 @interface EGSizeWrap : NSObject
 @property (readonly, nonatomic) EGSize value;
 
@@ -166,6 +169,7 @@ static inline NSString* EGSizeIDescription(EGSizeI self) {
     [description appendString:@">"];
     return description;
 }
+ODPType* egSizeIType();
 @interface EGSizeIWrap : NSObject
 @property (readonly, nonatomic) EGSizeI value;
 
@@ -219,6 +223,7 @@ EGPoint egRectPoint(EGRect self);
 EGSize egRectSize(EGRect self);
 BOOL egRectIntersects(EGRect self, EGRect rect);
 EGRect egRectThicken(EGRect self, CGFloat x, CGFloat y);
+ODPType* egRectType();
 @interface EGRectWrap : NSObject
 @property (readonly, nonatomic) EGRect value;
 
@@ -266,6 +271,7 @@ EGRectI egRectIApply(EGRect rect);
 EGRectI egRectINewXY(CGFloat x, CGFloat x2, CGFloat y, CGFloat y2);
 NSInteger egRectIX2(EGRectI self);
 NSInteger egRectIY2(EGRectI self);
+ODPType* egRectIType();
 @interface EGRectIWrap : NSObject
 @property (readonly, nonatomic) EGRectI value;
 
@@ -309,6 +315,7 @@ static inline NSString* EGColorDescription(EGColor self) {
     [description appendString:@">"];
     return description;
 }
+ODPType* egColorType();
 @interface EGColorWrap : NSObject
 @property (readonly, nonatomic) EGColor value;
 
@@ -371,6 +378,7 @@ EGVec3 egVec3Apply(EGPoint vec2, CGFloat z);
 EGVec3 egVec3Add(EGVec3 self, EGVec3 v);
 EGVec3 egVec3Sqr(EGVec3 self);
 EGVec3 egVec3Mul(EGVec3 self, CGFloat k);
+ODPType* egVec3Type();
 @interface EGVec3Wrap : NSObject
 @property (readonly, nonatomic) EGVec3 value;
 

@@ -47,6 +47,13 @@ NSInteger egPointCompare(EGPoint self, EGPoint to) {
     if(dX != 0) return dX;
     else return floatCompare(self.y, to.y);
 }
+ODPType* egPointType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGPointWrap class] name:@"EGPoint" size:sizeof(EGPoint) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGPoint, ((EGPoint*)(data))[i]);
+    }];
+    return _ret;
+}
 @implementation EGPointWrap{
     EGPoint _value;
 }
@@ -106,6 +113,13 @@ NSInteger egPointICompare(EGPointI self, EGPointI to) {
     if(dX != 0) return dX;
     else return intCompare(self.y, to.y);
 }
+ODPType* egPointIType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGPointIWrap class] name:@"EGPointI" size:sizeof(EGPointI) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGPointI, ((EGPointI*)(data))[i]);
+    }];
+    return _ret;
+}
 @implementation EGPointIWrap{
     EGPointI _value;
 }
@@ -148,6 +162,13 @@ NSInteger egPointICompare(EGPointI self, EGPointI to) {
 
 
 
+ODPType* egSizeType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGSizeWrap class] name:@"EGSize" size:sizeof(EGSize) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGSize, ((EGSize*)(data))[i]);
+    }];
+    return _ret;
+}
 @implementation EGSizeWrap{
     EGSize _value;
 }
@@ -186,6 +207,13 @@ NSInteger egPointICompare(EGPointI self, EGPointI to) {
 
 
 
+ODPType* egSizeIType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGSizeIWrap class] name:@"EGSizeI" size:sizeof(EGSizeI) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGSizeI, ((EGSizeI*)(data))[i]);
+    }];
+    return _ret;
+}
 @implementation EGSizeIWrap{
     EGSizeI _value;
 }
@@ -254,6 +282,13 @@ BOOL egRectIntersects(EGRect self, EGRect rect) {
 EGRect egRectThicken(EGRect self, CGFloat x, CGFloat y) {
     return EGRectMake(self.x - x, self.width + 2 * x, self.y - y, self.height + 2 * y);
 }
+ODPType* egRectType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGRectWrap class] name:@"EGRect" size:sizeof(EGRect) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGRect, ((EGRect*)(data))[i]);
+    }];
+    return _ret;
+}
 @implementation EGRectWrap{
     EGRect _value;
 }
@@ -304,6 +339,13 @@ NSInteger egRectIX2(EGRectI self) {
 NSInteger egRectIY2(EGRectI self) {
     return self.y + self.height;
 }
+ODPType* egRectIType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGRectIWrap class] name:@"EGRectI" size:sizeof(EGRectI) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGRectI, ((EGRectI*)(data))[i]);
+    }];
+    return _ret;
+}
 @implementation EGRectIWrap{
     EGRectI _value;
 }
@@ -342,6 +384,13 @@ NSInteger egRectIY2(EGRectI self) {
 
 
 
+ODPType* egColorType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGColorWrap class] name:@"EGColor" size:sizeof(EGColor) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGColor, ((EGColor*)(data))[i]);
+    }];
+    return _ret;
+}
 @implementation EGColorWrap{
     EGColor _value;
 }
@@ -391,6 +440,13 @@ EGVec3 egVec3Sqr(EGVec3 self) {
 }
 EGVec3 egVec3Mul(EGVec3 self, CGFloat k) {
     return EGVec3Make(k * self.x, k * self.y, k * self.z);
+}
+ODPType* egVec3Type() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGVec3Wrap class] name:@"EGVec3" size:sizeof(EGVec3) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGVec3, ((EGVec3*)(data))[i]);
+    }];
+    return _ret;
 }
 @implementation EGVec3Wrap{
     EGVec3 _value;

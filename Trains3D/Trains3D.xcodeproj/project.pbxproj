@@ -74,6 +74,7 @@
 		6F3DF2B20694215089A962CA /* raw_data.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF028BE493F6A2FCE2F52 /* raw_data.inl */; };
 		6F3DF2D25FE0FB304A64A987 /* TRTrain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB08F20E2FD32E0CA79A /* TRTrain.m */; };
 		6F3DF2DA20DFA76AE80EACF4 /* KWSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF6D8A39E76EEA5F3C9CC /* KWSpec.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		6F3DF2DF59E5FEE868FFA88D /* TRSmoke.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1D0F040BB4977D9F1A0 /* TRSmoke.m */; };
 		6F3DF2E52943E97302649747 /* int_10_10_10_2.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF13F7A8F2D919AE09CA8 /* int_10_10_10_2.inl */; };
 		6F3DF2E5B6EAE5560538453B /* TR3D.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF7C0B51AADF113C32337 /* TR3D.od */; };
 		6F3DF2EBA93C8F06FE6F87A4 /* KWAfterAllNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF40DA35F37C3DB136B42 /* KWAfterAllNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -443,6 +444,7 @@
 		6F3DF1AE27B33BFFB15B792B /* extented_min_max.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = extented_min_max.inl; sourceTree = "<group>"; };
 		6F3DF1B42349419870E8CDCE /* vector_query.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = vector_query.inl; sourceTree = "<group>"; };
 		6F3DF1BDEAC9F196C8582930 /* matrix_inverse.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = matrix_inverse.hpp; sourceTree = "<group>"; };
+		6F3DF1D0F040BB4977D9F1A0 /* TRSmoke.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRSmoke.m; sourceTree = "<group>"; };
 		6F3DF1E33966B8D9FE4E3B36 /* KWGenericMatchingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWGenericMatchingAdditions.h; sourceTree = "<group>"; };
 		6F3DF1E4642B3C6D244DCD91 /* verbose_operator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = verbose_operator.hpp; sourceTree = "<group>"; };
 		6F3DF1F8CF0334439242AFDD /* NSObject+KiwiStubAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+KiwiStubAdditions.m"; sourceTree = "<group>"; };
@@ -829,6 +831,7 @@
 		6F3DFA41C450594BF55A0AD2 /* number_precision.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = number_precision.hpp; sourceTree = "<group>"; };
 		6F3DFA45DCD71966A35C9D7F /* EGGL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGGL.m; sourceTree = "<group>"; };
 		6F3DFA468B4F86E43B7E3480 /* vec1.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = vec1.inl; sourceTree = "<group>"; };
+		6F3DFA524BE52473B7B4ACFA /* TRSmoke.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRSmoke.h; sourceTree = "<group>"; };
 		6F3DFA5F61C3E623C3026F49 /* CNTreeSet.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = CNTreeSet.od; sourceTree = "<group>"; };
 		6F3DFA6815E349D06B7F3B0F /* KWVerifying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWVerifying.h; sourceTree = "<group>"; };
 		6F3DFA6BA2742BAF1B621214 /* associated_min_max.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = associated_min_max.inl; sourceTree = "<group>"; };
@@ -2199,6 +2202,8 @@
 				6F3DF5426C4F02CCF2F83213 /* TRLevelBackgroundView.m */,
 				6F3DFB46543DAAFD7D289CFA /* TRLevelBackgroundView.od */,
 				6F3DF538007ABB42BAA049AD /* TRSmoke.od */,
+				6F3DFA524BE52473B7B4ACFA /* TRSmoke.h */,
+				6F3DF1D0F040BB4977D9F1A0 /* TRSmoke.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2545,6 +2550,7 @@
 				6F3DFEEEE1C1245C13CA1790 /* ODType.m in Sources */,
 				6F3DF813654C2CE7D86E3A20 /* CNZipLink.m in Sources */,
 				6F3DFE9178721CF43F89780D /* TR3D.m in Sources */,
+				6F3DF2DF59E5FEE868FFA88D /* TRSmoke.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
