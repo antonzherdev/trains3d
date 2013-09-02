@@ -227,9 +227,12 @@ static ODClassType* _TRSmokeView_type;
     }];
     [_positionBuffer setData:positionArr];
     [_indexBuffer setData:indexArr];
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     [_shader applyPositionBuffer:_positionBuffer draw:^void() {
         [_indexBuffer draw];
     }];
+    glDisable(GL_BLEND);
 }
 
 - (ODClassType*)type {

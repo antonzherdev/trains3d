@@ -21,13 +21,7 @@ stub def glutSolidCube(size :float)
 stub def glEnable(: uint)
 stub def glDisable(: uint)
 stub val GL_DEPTH_TEST : uint
-stub val GL_LIGHTING : uint
-stub val GL_LIGHT0 : uint
-stub val GL_LIGHT1 : uint
-stub val GL_COLOR_MATERIAL : uint
-stub val GL_NORMALIZE : uint
-stub def glShadeModel(: uint)
-stub val GL_SMOOTH : uint
+stub val GL_BLEND : uint
 
 stub def glBegin(: uint)
 stub def glEnd
@@ -81,3 +75,7 @@ stub val GL_UNSIGNED_INT : GLenum
 
 stub val GL_TRUE : GLboolean
 stub val GL_FALSE : GLboolean
+
+stub def glBlendFunc(sfactor : GLenum, dfactor : GLenum)
+stub val GL_SRC_ALPHA : uint
+stub val GL_ONE_MINUS_SRC_ALPHA : uint

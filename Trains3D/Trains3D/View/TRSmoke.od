@@ -89,9 +89,12 @@ class TRSmokeView {
         positionBuffer.set(positionArr)
         indexBuffer.set(indexArr)
 
+        glEnable(GL_BLEND)
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
         shader(positionBuffer) {
             indexBuffer.draw
         }
+        glDisable(GL_BLEND)
     }
 }
 
