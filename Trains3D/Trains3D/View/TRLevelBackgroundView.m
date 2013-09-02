@@ -8,10 +8,12 @@
 @implementation TRLevelBackgroundView{
     EGMapSso* _map;
     EGMapSsoView* _mapView;
+    EGStandardMaterial* _material;
 }
 static ODClassType* _TRLevelBackgroundView_type;
 @synthesize map = _map;
 @synthesize mapView = _mapView;
+@synthesize material = _material;
 
 + (id)levelBackgroundViewWithMap:(EGMapSso*)map {
     return [[TRLevelBackgroundView alloc] initWithMap:map];
@@ -22,6 +24,7 @@ static ODClassType* _TRLevelBackgroundView_type;
     if(self) {
         _map = map;
         _mapView = [EGMapSsoView mapSsoViewWithMap:_map];
+        _material = [EGStandardMaterial applyDiffuse:[EGColorSource applyTexture:[EG textureForFile:@"Grass.png"]]];
     }
     
     return self;
@@ -33,7 +36,7 @@ static ODClassType* _TRLevelBackgroundView_type;
 }
 
 - (void)draw {
-    [_mapView drawPlaneWithMaterial:[EGMaterial applyTexture:[EGTexture textureWithFile:@"Grass.png"]]];
+    [_mapView drawPlaneWithMaterial:_material];
 }
 
 - (ODClassType*)type {
