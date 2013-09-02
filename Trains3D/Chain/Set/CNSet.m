@@ -4,7 +4,7 @@
 @implementation CNHashSetBuilder{
     NSMutableSet* _set;
 }
-static ODType* _CNHashSetBuilder_type;
+static ODClassType* _CNHashSetBuilder_type;
 @synthesize set = _set;
 
 + (id)hashSetBuilder {
@@ -20,7 +20,7 @@ static ODType* _CNHashSetBuilder_type;
 
 + (void)initialize {
     [super initialize];
-    _CNHashSetBuilder_type = [ODType typeWithCls:[CNHashSetBuilder class]];
+    _CNHashSetBuilder_type = [ODClassType classTypeWithCls:[CNHashSetBuilder class]];
 }
 
 - (void)addObject:(id)object {
@@ -32,17 +32,17 @@ static ODType* _CNHashSetBuilder_type;
     return _set;
 }
 
-- (ODType*)type {
-    return _CNHashSetBuilder_type;
-}
-
 - (void)addAllObject:(id<CNTraversable>)object {
     [object forEach:^void(id _) {
         [self addObject:_];
     }];
 }
 
-+ (ODType*)type {
+- (ODClassType*)type {
+    return [CNHashSetBuilder type];
+}
+
++ (ODClassType*)type {
     return _CNHashSetBuilder_type;
 }
 

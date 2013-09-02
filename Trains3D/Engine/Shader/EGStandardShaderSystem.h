@@ -19,10 +19,10 @@
 @interface EGStandardShaderSystem : NSObject<EGShaderSystem>
 + (id)standardShaderSystem;
 - (id)init;
+- (ODClassType*)type;
 - (EGShader*)shaderForContext:(EGContext*)context material:(EGStandardMaterial*)material;
-- (ODType*)type;
 + (EGStandardShaderSystem*)instance;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -32,14 +32,14 @@
 
 + (id)standardShaderKeyWithDirectLightCount:(NSUInteger)directLightCount texture:(BOOL)texture;
 - (id)initWithDirectLightCount:(NSUInteger)directLightCount texture:(BOOL)texture;
+- (ODClassType*)type;
 - (EGStandardShader*)shader;
 - (NSString*)lightsVertexUniform;
 - (NSString*)lightsVaryings;
 - (NSString*)lightsCalculateVaryings;
 - (NSString*)lightsFragmentUniform;
 - (NSString*)lightsDiffuse;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -60,13 +60,13 @@
 
 + (id)standardShaderWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
 - (id)initWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
+- (ODClassType*)type;
 - (void)loadContext:(EGContext*)context material:(EGStandardMaterial*)material;
-- (ODType*)type;
 + (NSInteger)STRIDE;
 + (NSInteger)UV_SHIFT;
 + (NSInteger)NORMAL_SHIFT;
 + (NSInteger)POSITION_SHIFT;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

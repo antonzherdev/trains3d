@@ -5,7 +5,7 @@
 #import "TRRailPoint.h"
 #import "TRScore.h"
 @implementation TRRailroadConnectorContent
-static ODType* _TRRailroadConnectorContent_type;
+static ODClassType* _TRRailroadConnectorContent_type;
 
 + (id)railroadConnectorContent {
     return [[TRRailroadConnectorContent alloc] init];
@@ -19,7 +19,7 @@ static ODType* _TRRailroadConnectorContent_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRailroadConnectorContent_type = [ODType typeWithCls:[TRRailroadConnectorContent class]];
+    _TRRailroadConnectorContent_type = [ODClassType classTypeWithCls:[TRRailroadConnectorContent class]];
 }
 
 - (BOOL)canAddRail:(TRRail*)rail {
@@ -42,11 +42,11 @@ static ODType* _TRRailroadConnectorContent_type;
     return YES;
 }
 
-- (ODType*)type {
-    return _TRRailroadConnectorContent_type;
+- (ODClassType*)type {
+    return [TRRailroadConnectorContent type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRRailroadConnectorContent_type;
 }
 
@@ -75,7 +75,7 @@ static ODType* _TRRailroadConnectorContent_type;
 
 @implementation TREmptyConnector
 static TRRailroadConnectorContent* _TREmptyConnector_instance;
-static ODType* _TREmptyConnector_type;
+static ODClassType* _TREmptyConnector_type;
 
 + (id)emptyConnector {
     return [[TREmptyConnector alloc] init];
@@ -89,8 +89,8 @@ static ODType* _TREmptyConnector_type;
 
 + (void)initialize {
     [super initialize];
+    _TREmptyConnector_type = [ODClassType classTypeWithCls:[TREmptyConnector class]];
     _TREmptyConnector_instance = [TREmptyConnector emptyConnector];
-    _TREmptyConnector_type = [ODType typeWithCls:[TREmptyConnector class]];
 }
 
 - (id<CNSeq>)rails {
@@ -101,15 +101,15 @@ static ODType* _TREmptyConnector_type;
     return rail;
 }
 
-- (ODType*)type {
-    return _TREmptyConnector_type;
+- (ODClassType*)type {
+    return [TREmptyConnector type];
 }
 
 + (TRRailroadConnectorContent*)instance {
     return _TREmptyConnector_instance;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TREmptyConnector_type;
 }
 
@@ -140,7 +140,7 @@ static ODType* _TREmptyConnector_type;
     EGPointI _tile;
     TRRailForm* _form;
 }
-static ODType* _TRRail_type;
+static ODClassType* _TRRail_type;
 @synthesize tile = _tile;
 @synthesize form = _form;
 
@@ -160,7 +160,7 @@ static ODType* _TRRail_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRail_type = [ODType typeWithCls:[TRRail class]];
+    _TRRail_type = [ODClassType classTypeWithCls:[TRRail class]];
 }
 
 - (BOOL)hasConnector:(TRRailConnector*)connector {
@@ -183,11 +183,11 @@ static ODType* _TRRail_type;
     return rail.form != _form;
 }
 
-- (ODType*)type {
-    return _TRRail_type;
+- (ODClassType*)type {
+    return [TRRail type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRRail_type;
 }
 
@@ -227,7 +227,7 @@ static ODType* _TRRail_type;
     TRRail* _rail2;
     BOOL _firstActive;
 }
-static ODType* _TRSwitch_type;
+static ODClassType* _TRSwitch_type;
 @synthesize tile = _tile;
 @synthesize connector = _connector;
 @synthesize rail1 = _rail1;
@@ -253,7 +253,7 @@ static ODType* _TRSwitch_type;
 
 + (void)initialize {
     [super initialize];
-    _TRSwitch_type = [ODType typeWithCls:[TRSwitch class]];
+    _TRSwitch_type = [ODClassType classTypeWithCls:[TRSwitch class]];
 }
 
 - (TRRail*)activeRail {
@@ -282,11 +282,11 @@ static ODType* _TRSwitch_type;
     return self;
 }
 
-- (ODType*)type {
-    return _TRSwitch_type;
+- (ODClassType*)type {
+    return [TRSwitch type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRSwitch_type;
 }
 
@@ -329,7 +329,7 @@ static ODType* _TRSwitch_type;
     TRRail* _rail;
     BOOL _isGreen;
 }
-static ODType* _TRLight_type;
+static ODClassType* _TRLight_type;
 @synthesize tile = _tile;
 @synthesize connector = _connector;
 @synthesize rail = _rail;
@@ -353,7 +353,7 @@ static ODType* _TRLight_type;
 
 + (void)initialize {
     [super initialize];
-    _TRLight_type = [ODType typeWithCls:[TRLight class]];
+    _TRLight_type = [ODClassType classTypeWithCls:[TRLight class]];
 }
 
 - (void)turn {
@@ -376,11 +376,11 @@ static ODType* _TRLight_type;
     return self;
 }
 
-- (ODType*)type {
-    return _TRLight_type;
+- (ODClassType*)type {
+    return [TRLight type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRLight_type;
 }
 
@@ -468,7 +468,7 @@ static NSArray* _TRObstacleType_values;
     TRObstacleType* _obstacleType;
     TRRailPoint* _point;
 }
-static ODType* _TRObstacle_type;
+static ODClassType* _TRObstacle_type;
 @synthesize obstacleType = _obstacleType;
 @synthesize point = _point;
 
@@ -488,14 +488,14 @@ static ODType* _TRObstacle_type;
 
 + (void)initialize {
     [super initialize];
-    _TRObstacle_type = [ODType typeWithCls:[TRObstacle class]];
+    _TRObstacle_type = [ODClassType classTypeWithCls:[TRObstacle class]];
 }
 
-- (ODType*)type {
-    return _TRObstacle_type;
+- (ODClassType*)type {
+    return [TRObstacle type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRObstacle_type;
 }
 
@@ -539,7 +539,7 @@ static ODType* _TRObstacle_type;
     NSMutableDictionary* _damagesIndex;
     NSMutableArray* __damagesPoints;
 }
-static ODType* _TRRailroad_type;
+static ODClassType* _TRRailroad_type;
 @synthesize map = _map;
 @synthesize score = _score;
 @synthesize builder = _builder;
@@ -569,7 +569,7 @@ static ODType* _TRRailroad_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRailroad_type = [ODType typeWithCls:[TRRailroad class]];
+    _TRRailroad_type = [ODClassType classTypeWithCls:[TRRailroad class]];
 }
 
 - (id<CNSeq>)rails {
@@ -732,11 +732,11 @@ static ODType* _TRRailroad_type;
     }
 }
 
-- (ODType*)type {
-    return _TRRailroad_type;
+- (ODClassType*)type {
+    return [TRRailroad type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRRailroad_type;
 }
 
@@ -773,7 +773,7 @@ static ODType* _TRRailroad_type;
     __weak TRRailroad* _railroad;
     id __rail;
 }
-static ODType* _TRRailroadBuilder_type;
+static ODClassType* _TRRailroadBuilder_type;
 @synthesize railroad = _railroad;
 
 + (id)railroadBuilderWithRailroad:(TRRailroad*)railroad {
@@ -792,7 +792,7 @@ static ODType* _TRRailroadBuilder_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRailroadBuilder_type = [ODType typeWithCls:[TRRailroadBuilder class]];
+    _TRRailroadBuilder_type = [ODClassType classTypeWithCls:[TRRailroadBuilder class]];
 }
 
 - (id)rail {
@@ -819,11 +819,11 @@ static ODType* _TRRailroadBuilder_type;
     __rail = [CNOption none];
 }
 
-- (ODType*)type {
-    return _TRRailroadBuilder_type;
+- (ODClassType*)type {
+    return [TRRailroadBuilder type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRRailroadBuilder_type;
 }
 

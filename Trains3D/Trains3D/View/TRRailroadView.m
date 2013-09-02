@@ -14,7 +14,7 @@
     TRLightView* _lightView;
     TRDamageView* _damageView;
 }
-static ODType* _TRRailroadView_type;
+static ODClassType* _TRRailroadView_type;
 
 + (id)railroadView {
     return [[TRRailroadView alloc] init];
@@ -34,7 +34,7 @@ static ODType* _TRRailroadView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRailroadView_type = [ODType typeWithCls:[TRRailroadView class]];
+    _TRRailroadView_type = [ODClassType classTypeWithCls:[TRRailroadView class]];
 }
 
 - (void)drawRailroad:(TRRailroad*)railroad {
@@ -55,11 +55,11 @@ static ODType* _TRRailroadView_type;
     }];
 }
 
-- (ODType*)type {
-    return _TRRailroadView_type;
+- (ODClassType*)type {
+    return [TRRailroadView type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRRailroadView_type;
 }
 
@@ -90,7 +90,7 @@ static ODType* _TRRailroadView_type;
     EGMeshModel* _railModel;
     EGMeshModel* _railTurnModel;
 }
-static ODType* _TRRailView_type;
+static ODClassType* _TRRailView_type;
 @synthesize railModel = _railModel;
 @synthesize railTurnModel = _railTurnModel;
 
@@ -110,7 +110,7 @@ static ODType* _TRRailView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRailView_type = [ODType typeWithCls:[TRRailView class]];
+    _TRRailView_type = [ODClassType classTypeWithCls:[TRRailView class]];
 }
 
 - (void)drawRail:(TRRail*)rail {
@@ -134,11 +134,11 @@ static ODType* _TRRailView_type;
     }];
 }
 
-- (ODType*)type {
-    return _TRRailView_type;
+- (ODClassType*)type {
+    return [TRRailView type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRRailView_type;
 }
 
@@ -170,7 +170,7 @@ static ODType* _TRRailView_type;
     EGMeshModel* _switchStraightModel;
     EGMeshModel* _switchTurnModel;
 }
-static ODType* _TRSwitchView_type;
+static ODClassType* _TRSwitchView_type;
 @synthesize material = _material;
 @synthesize switchStraightModel = _switchStraightModel;
 @synthesize switchTurnModel = _switchTurnModel;
@@ -192,7 +192,7 @@ static ODType* _TRSwitchView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRSwitchView_type = [ODType typeWithCls:[TRSwitchView class]];
+    _TRSwitchView_type = [ODClassType classTypeWithCls:[TRSwitchView class]];
 }
 
 - (void)drawTheSwitch:(TRSwitch*)theSwitch {
@@ -217,11 +217,11 @@ static ODType* _TRSwitchView_type;
     }];
 }
 
-- (ODType*)type {
-    return _TRSwitchView_type;
+- (ODClassType*)type {
+    return [TRSwitchView type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRSwitchView_type;
 }
 
@@ -252,7 +252,7 @@ static ODType* _TRSwitchView_type;
     EGStandardMaterial* _greenMaterial;
     EGStandardMaterial* _redMaterial;
 }
-static ODType* _TRLightView_type;
+static ODClassType* _TRLightView_type;
 @synthesize greenMaterial = _greenMaterial;
 @synthesize redMaterial = _redMaterial;
 
@@ -272,7 +272,7 @@ static ODType* _TRLightView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRLightView_type = [ODType typeWithCls:[TRLightView class]];
+    _TRLightView_type = [ODClassType classTypeWithCls:[TRLightView class]];
 }
 
 - (void)drawLight:(TRLight*)light {
@@ -284,11 +284,11 @@ static ODType* _TRLightView_type;
     }];
 }
 
-- (ODType*)type {
-    return _TRLightView_type;
+- (ODClassType*)type {
+    return [TRLightView type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRLightView_type;
 }
 
@@ -318,7 +318,7 @@ static ODType* _TRLightView_type;
 @implementation TRDamageView{
     EGMeshModel* _model;
 }
-static ODType* _TRDamageView_type;
+static ODClassType* _TRDamageView_type;
 @synthesize model = _model;
 
 + (id)damageView {
@@ -334,7 +334,7 @@ static ODType* _TRDamageView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRDamageView_type = [ODType typeWithCls:[TRDamageView class]];
+    _TRDamageView_type = [ODClassType classTypeWithCls:[TRDamageView class]];
 }
 
 - (void)drawPoint:(TRRailPoint*)point {
@@ -344,11 +344,11 @@ static ODType* _TRDamageView_type;
     }];
 }
 
-- (ODType*)type {
-    return _TRDamageView_type;
+- (ODClassType*)type {
+    return [TRDamageView type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRDamageView_type;
 }
 

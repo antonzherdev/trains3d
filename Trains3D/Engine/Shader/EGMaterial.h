@@ -28,10 +28,10 @@
 @interface EGColorSource : NSObject
 + (id)colorSource;
 - (id)init;
+- (ODClassType*)type;
 + (EGColorSource*)applyColor:(EGColor)color;
 + (EGColorSource*)applyTexture:(EGTexture*)texture;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -40,8 +40,8 @@
 
 + (id)colorSourceColorWithColor:(EGColor)color;
 - (id)initWithColor:(EGColor)color;
-- (ODType*)type;
-+ (ODType*)type;
+- (ODClassType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -50,20 +50,20 @@
 
 + (id)colorSourceTextureWithTexture:(EGTexture*)texture;
 - (id)initWithTexture:(EGTexture*)texture;
-- (ODType*)type;
-+ (ODType*)type;
+- (ODClassType*)type;
++ (ODClassType*)type;
 @end
 
 
 @interface EGMaterial : NSObject
 + (id)material;
 - (id)init;
+- (ODClassType*)type;
 - (id<EGShaderSystem>)shaderSystem;
 - (void)applyDraw:(void(^)())draw;
 + (EGMaterial*)applyColor:(EGColor)color;
 + (EGMaterial*)applyTexture:(EGTexture*)texture;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -72,9 +72,9 @@
 
 + (id)simpleMaterialWithColor:(EGColorSource*)color;
 - (id)initWithColor:(EGColorSource*)color;
+- (ODClassType*)type;
 - (id<EGShaderSystem>)shaderSystem;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -85,10 +85,10 @@
 
 + (id)standardMaterialWithDiffuse:(EGColorSource*)diffuse specularColor:(EGColor)specularColor specularSize:(CGFloat)specularSize;
 - (id)initWithDiffuse:(EGColorSource*)diffuse specularColor:(EGColor)specularColor specularSize:(CGFloat)specularSize;
+- (ODClassType*)type;
 + (EGStandardMaterial*)applyDiffuse:(EGColorSource*)diffuse;
 - (id<EGShaderSystem>)shaderSystem;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

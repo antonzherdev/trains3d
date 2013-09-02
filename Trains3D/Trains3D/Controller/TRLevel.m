@@ -16,7 +16,7 @@
     NSUInteger _repairerSpeed;
     id<CNSeq> _events;
 }
-static ODType* _TRLevelRules_type;
+static ODClassType* _TRLevelRules_type;
 @synthesize mapSize = _mapSize;
 @synthesize scoreRules = _scoreRules;
 @synthesize repairerSpeed = _repairerSpeed;
@@ -40,14 +40,14 @@ static ODType* _TRLevelRules_type;
 
 + (void)initialize {
     [super initialize];
-    _TRLevelRules_type = [ODType typeWithCls:[TRLevelRules class]];
+    _TRLevelRules_type = [ODClassType classTypeWithCls:[TRLevelRules class]];
 }
 
-- (ODType*)type {
-    return _TRLevelRules_type;
+- (ODClassType*)type {
+    return [TRLevelRules type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRLevelRules_type;
 }
 
@@ -94,7 +94,7 @@ static ODType* _TRLevelRules_type;
     id<CNSeq> __trains;
     id __repairer;
 }
-static ODType* _TRLevel_type;
+static ODClassType* _TRLevel_type;
 @synthesize rules = _rules;
 @synthesize map = _map;
 @synthesize score = _score;
@@ -123,7 +123,7 @@ static ODType* _TRLevel_type;
 
 + (void)initialize {
     [super initialize];
-    _TRLevel_type = [ODType typeWithCls:[TRLevel class]];
+    _TRLevel_type = [ODClassType classTypeWithCls:[TRLevel class]];
 }
 
 - (id<CNSeq>)cities {
@@ -274,11 +274,11 @@ static ODType* _TRLevel_type;
     }
 }
 
-- (ODType*)type {
-    return _TRLevel_type;
+- (ODClassType*)type {
+    return [TRLevel type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRLevel_type;
 }
 

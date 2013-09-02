@@ -15,7 +15,7 @@
 @implementation TRLevelFactory
 static TRScoreRules* _TRLevelFactory_scoreRules;
 static id<CNSeq> _TRLevelFactory_rules;
-static ODType* _TRLevelFactory_type;
+static ODClassType* _TRLevelFactory_type;
 
 + (id)levelFactory {
     return [[TRLevelFactory alloc] init];
@@ -29,6 +29,7 @@ static ODType* _TRLevelFactory_type;
 
 + (void)initialize {
     [super initialize];
+    _TRLevelFactory_type = [ODClassType classTypeWithCls:[TRLevelFactory class]];
     _TRLevelFactory_scoreRules = [TRScoreRules scoreRulesWithInitialScore:100000 railCost:1000 arrivedPrize:^NSInteger(TRTrain* train) {
         return ((NSInteger)([train.cars count] * 2000));
     } destructionFine:^NSInteger(TRTrain* train) {
@@ -37,7 +38,6 @@ static ODType* _TRLevelFactory_type;
         return i * 1000;
     } repairCost:2000];
     _TRLevelFactory_rules = (@[[TRLevelRules levelRulesWithMapSize:EGSizeIMake(5, 3) scoreRules:_TRLevelFactory_scoreRules repairerSpeed:30 events:(@[tuple(@5.0, [TRLevelFactory trainCars:intTo(2, 5) speed:[intTo(30, 60) setStep:10]]), tuple(@15.0, [TRLevelFactory createNewCity]), tuple(@20.0, [TRLevelFactory trainCars:intTo(1, 5) speed:[intTo(30, 60) setStep:10]])])]]);
-    _TRLevelFactory_type = [ODType typeWithCls:[TRLevelFactory class]];
 }
 
 + (EGScene*)sceneForLevel:(TRLevel*)level {
@@ -76,15 +76,15 @@ static ODType* _TRLevelFactory_type;
     return [TRRailroad railroadWithMap:[EGMapSso mapSsoWithSize:mapSize] score:[TRLevelFactory score]];
 }
 
-- (ODType*)type {
-    return _TRLevelFactory_type;
+- (ODClassType*)type {
+    return [TRLevelFactory type];
 }
 
 + (TRScoreRules*)scoreRules {
     return _TRLevelFactory_scoreRules;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRLevelFactory_type;
 }
 

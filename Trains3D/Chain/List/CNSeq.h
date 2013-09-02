@@ -14,12 +14,10 @@
 - (id<CNSeq>)arrayByAddingObject:(id)object;
 - (id<CNSeq>)arrayByRemovingObject:(id)object;
 - (BOOL)isEqualToSeq:(id<CNSeq>)seq;
-- (ODType*)type;
 @end
 
 
 @protocol CNMutableSeq<CNSeq>
-- (ODType*)type;
 @end
 
 
@@ -28,10 +26,10 @@
 
 + (id)arrayBuilder;
 - (id)init;
+- (ODClassType*)type;
 - (void)addObject:(id)object;
 - (NSArray*)build;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

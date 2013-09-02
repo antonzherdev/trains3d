@@ -16,10 +16,10 @@
 
 + (id)layerWithView:(id<EGView>)view processor:(id)processor;
 - (id)initWithView:(id<EGView>)view processor:(id)processor;
+- (ODClassType*)type;
 - (void)drawWithViewSize:(EGSize)viewSize;
 - (BOOL)processEvent:(EGEvent*)event;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

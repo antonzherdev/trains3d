@@ -14,9 +14,9 @@
 @interface EGFigureTest : CNTestCase
 + (id)figureTest;
 - (id)init;
+- (ODClassType*)type;
 - (void)testThickLine;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

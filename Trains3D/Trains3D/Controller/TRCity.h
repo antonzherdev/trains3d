@@ -32,10 +32,10 @@
 
 + (id)cityWithColor:(TRColor*)color tile:(EGPointI)tile angle:(TRCityAngle*)angle;
 - (id)initWithColor:(TRColor*)color tile:(EGPointI)tile angle:(TRCityAngle*)angle;
+- (ODClassType*)type;
 - (TRRailPoint*)startPoint;
 - (void)updateWithDelta:(CGFloat)delta;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

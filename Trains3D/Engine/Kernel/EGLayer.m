@@ -7,7 +7,7 @@
     id<EGView> _view;
     id _processor;
 }
-static ODType* _EGLayer_type;
+static ODClassType* _EGLayer_type;
 @synthesize view = _view;
 @synthesize processor = _processor;
 
@@ -27,7 +27,7 @@ static ODType* _EGLayer_type;
 
 + (void)initialize {
     [super initialize];
-    _EGLayer_type = [ODType typeWithCls:[EGLayer class]];
+    _EGLayer_type = [ODClassType classTypeWithCls:[EGLayer class]];
 }
 
 - (void)drawWithViewSize:(EGSize)viewSize {
@@ -44,11 +44,11 @@ static ODType* _EGLayer_type;
     }] getOr:@NO]);
 }
 
-- (ODType*)type {
-    return _EGLayer_type;
+- (ODClassType*)type {
+    return [EGLayer type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGLayer_type;
 }
 

@@ -6,7 +6,7 @@
     id<EGController> _controller;
     id<CNSeq> _layers;
 }
-static ODType* _EGScene_type;
+static ODClassType* _EGScene_type;
 @synthesize controller = _controller;
 @synthesize layers = _layers;
 
@@ -26,7 +26,7 @@ static ODType* _EGScene_type;
 
 + (void)initialize {
     [super initialize];
-    _EGScene_type = [ODType typeWithCls:[EGScene class]];
+    _EGScene_type = [ODClassType classTypeWithCls:[EGScene class]];
 }
 
 - (void)drawWithViewSize:(EGSize)viewSize {
@@ -45,11 +45,11 @@ static ODType* _EGScene_type;
     [_controller updateWithDelta:delta];
 }
 
-- (ODType*)type {
-    return _EGScene_type;
+- (ODClassType*)type {
+    return [EGScene type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGScene_type;
 }
 

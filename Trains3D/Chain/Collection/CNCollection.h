@@ -11,7 +11,6 @@
 @protocol CNIterator<NSObject>
 - (BOOL)hasNext;
 - (id)next;
-- (ODType*)type;
 @end
 
 
@@ -19,7 +18,6 @@
 - (void)addObject:(id)object;
 - (id)build;
 - (void)addAllObject:(id<CNTraversable>)object;
-- (ODType*)type;
 @end
 
 
@@ -30,14 +28,12 @@
 - (id)findWhere:(BOOL(^)(id))where;
 - (id)head;
 - (id)convertWithBuilder:(id<CNBuilder>)builder;
-- (ODType*)type;
 @end
 
 
 @protocol CNMutableTraversable<CNTraversable>
 - (void)addObject:(id)object;
 - (void)removeObject:(id)object;
-- (ODType*)type;
 @end
 
 
@@ -51,12 +47,10 @@
 - (BOOL)goOn:(BOOL(^)(id))on;
 - (BOOL)containsObject:(id)object;
 - (NSString*)description;
-- (ODType*)type;
 @end
 
 
 @protocol CNMutableIterable<CNIterable>
-- (ODType*)type;
 @end
 
 

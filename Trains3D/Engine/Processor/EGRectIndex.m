@@ -3,7 +3,7 @@
 @implementation EGRectIndex{
     id<CNSeq> _rects;
 }
-static ODType* _EGRectIndex_type;
+static ODClassType* _EGRectIndex_type;
 @synthesize rects = _rects;
 
 + (id)rectIndexWithRects:(id<CNSeq>)rects {
@@ -19,7 +19,7 @@ static ODType* _EGRectIndex_type;
 
 + (void)initialize {
     [super initialize];
-    _EGRectIndex_type = [ODType typeWithCls:[EGRectIndex class]];
+    _EGRectIndex_type = [ODClassType classTypeWithCls:[EGRectIndex class]];
 }
 
 - (id)applyPoint:(EGPoint)point {
@@ -30,11 +30,11 @@ static ODType* _EGRectIndex_type;
     }];
 }
 
-- (ODType*)type {
-    return _EGRectIndex_type;
+- (ODClassType*)type {
+    return [EGRectIndex type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGRectIndex_type;
 }
 

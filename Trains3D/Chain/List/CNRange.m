@@ -8,7 +8,7 @@
     NSInteger _step;
     NSUInteger _count;
 }
-static ODType* _CNRange_type;
+static ODClassType* _CNRange_type;
 @synthesize start = _start;
 @synthesize end = _end;
 @synthesize step = _step;
@@ -24,7 +24,7 @@ static ODType* _CNRange_type;
         _start = start;
         _end = end;
         _step = step;
-        _count = ((NSUInteger)(((_step > 0) ? ((_start < _end) ? (_end - _start) / _step : 0) : ((_step < 0) ? ((_start > _end) ? (_start - _end) / _step : 0) : 0))));
+        _count = ((NSUInteger)(((_step > 0) ? ((_start < _end) ? (_end - _start) / _step : 0) : ((_step < 0) ? ((_start > _end) ? (_end - _start) / _step : 0) : 0))));
     }
     
     return self;
@@ -32,7 +32,7 @@ static ODType* _CNRange_type;
 
 + (void)initialize {
     [super initialize];
-    _CNRange_type = [ODType typeWithCls:[CNRange class]];
+    _CNRange_type = [ODClassType classTypeWithCls:[CNRange class]];
 }
 
 - (id)applyIndex:(NSUInteger)index {
@@ -55,10 +55,6 @@ static ODType* _CNRange_type;
         if(_step < 0) return _start < _end;
         else return YES;
     }
-}
-
-- (ODType*)type {
-    return _CNRange_type;
 }
 
 - (id)randomItem {
@@ -148,7 +144,11 @@ static ODType* _CNRange_type;
     return [builder build];
 }
 
-+ (ODType*)type {
+- (ODClassType*)type {
+    return [CNRange type];
+}
+
++ (ODClassType*)type {
     return _CNRange_type;
 }
 
@@ -180,7 +180,7 @@ static ODType* _CNRange_type;
     NSInteger _step;
     NSInteger _i;
 }
-static ODType* _CNRangeIterator_type;
+static ODClassType* _CNRangeIterator_type;
 @synthesize start = _start;
 @synthesize end = _end;
 @synthesize step = _step;
@@ -203,7 +203,7 @@ static ODType* _CNRangeIterator_type;
 
 + (void)initialize {
     [super initialize];
-    _CNRangeIterator_type = [ODType typeWithCls:[CNRangeIterator class]];
+    _CNRangeIterator_type = [ODClassType classTypeWithCls:[CNRangeIterator class]];
 }
 
 - (BOOL)hasNext {
@@ -216,11 +216,11 @@ static ODType* _CNRangeIterator_type;
     return numi(ret);
 }
 
-- (ODType*)type {
-    return _CNRangeIterator_type;
+- (ODClassType*)type {
+    return [CNRangeIterator type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNRangeIterator_type;
 }
 

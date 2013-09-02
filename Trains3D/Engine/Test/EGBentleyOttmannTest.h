@@ -25,6 +25,7 @@
 @interface EGBentleyOttmannTest : CNTestCase
 + (id)bentleyOttmannTest;
 - (id)init;
+- (ODClassType*)type;
 - (void)testMain;
 - (void)testInPoint;
 - (void)testNoCross;
@@ -33,8 +34,7 @@
 - (void)testOneStart;
 - (void)testOneEnd;
 - (void)testSameLines;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

@@ -380,8 +380,17 @@ NSInteger egRectIY2(EGRectI self) {
 
 
 
+EGVec3 egVec3Apply(EGPoint vec2, CGFloat z) {
+    return EGVec3Make(vec2.x, vec2.y, z);
+}
 EGVec3 egVec3Add(EGVec3 self, EGVec3 v) {
     return EGVec3Make(self.x + v.x, self.y + v.y, self.z + v.y);
+}
+EGVec3 egVec3Sqr(EGVec3 self) {
+    return EGVec3Make(self.x * self.x, self.y * self.y, self.z * self.z);
+}
+EGVec3 egVec3Mul(EGVec3 self, CGFloat k) {
+    return EGVec3Make(k * self.x, k * self.y, k * self.z);
 }
 @implementation EGVec3Wrap{
     EGVec3 _value;
@@ -426,7 +435,7 @@ EGVec3 egVec3Add(EGVec3 self, EGVec3 v) {
     id<CNSeq> _lights;
 }
 static EGEnvironment* _EGEnvironment_default;
-static ODType* _EGEnvironment_type;
+static ODClassType* _EGEnvironment_type;
 @synthesize ambientColor = _ambientColor;
 @synthesize lights = _lights;
 
@@ -446,8 +455,8 @@ static ODType* _EGEnvironment_type;
 
 + (void)initialize {
     [super initialize];
+    _EGEnvironment_type = [ODClassType classTypeWithCls:[EGEnvironment class]];
     _EGEnvironment_default = [EGEnvironment environmentWithAmbientColor:EGColorMake(1.0, 1.0, 1.0, 1.0) lights:(@[])];
-    _EGEnvironment_type = [ODType typeWithCls:[EGEnvironment class]];
 }
 
 + (EGEnvironment*)applyLights:(id<CNSeq>)lights {
@@ -458,15 +467,15 @@ static ODType* _EGEnvironment_type;
     return [EGEnvironment environmentWithAmbientColor:EGColorMake(1.0, 1.0, 1.0, 1.0) lights:(@[light])];
 }
 
-- (ODType*)type {
-    return _EGEnvironment_type;
+- (ODClassType*)type {
+    return [EGEnvironment type];
 }
 
 + (EGEnvironment*)aDefault {
     return _EGEnvironment_default;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGEnvironment_type;
 }
 
@@ -502,7 +511,7 @@ static ODType* _EGEnvironment_type;
 @implementation EGLight{
     EGColor _color;
 }
-static ODType* _EGLight_type;
+static ODClassType* _EGLight_type;
 @synthesize color = _color;
 
 + (id)lightWithColor:(EGColor)color {
@@ -518,14 +527,14 @@ static ODType* _EGLight_type;
 
 + (void)initialize {
     [super initialize];
-    _EGLight_type = [ODType typeWithCls:[EGLight class]];
+    _EGLight_type = [ODClassType classTypeWithCls:[EGLight class]];
 }
 
-- (ODType*)type {
-    return _EGLight_type;
+- (ODClassType*)type {
+    return [EGLight type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGLight_type;
 }
 
@@ -559,7 +568,7 @@ static ODType* _EGLight_type;
 @implementation EGDirectLight{
     EGVec3 _direction;
 }
-static ODType* _EGDirectLight_type;
+static ODClassType* _EGDirectLight_type;
 @synthesize direction = _direction;
 
 + (id)directLightWithColor:(EGColor)color direction:(EGVec3)direction {
@@ -575,14 +584,14 @@ static ODType* _EGDirectLight_type;
 
 + (void)initialize {
     [super initialize];
-    _EGDirectLight_type = [ODType typeWithCls:[EGDirectLight class]];
+    _EGDirectLight_type = [ODClassType classTypeWithCls:[EGDirectLight class]];
 }
 
-- (ODType*)type {
-    return _EGDirectLight_type;
+- (ODClassType*)type {
+    return [EGDirectLight type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGDirectLight_type;
 }
 

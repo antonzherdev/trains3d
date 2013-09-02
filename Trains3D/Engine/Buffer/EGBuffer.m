@@ -8,7 +8,7 @@
     NSUInteger __length;
     NSUInteger __count;
 }
-static ODType* _EGBuffer_type;
+static ODClassType* _EGBuffer_type;
 @synthesize bufferType = _bufferType;
 @synthesize handle = _handle;
 
@@ -30,7 +30,7 @@ static ODType* _EGBuffer_type;
 
 + (void)initialize {
     [super initialize];
-    _EGBuffer_type = [ODType typeWithCls:[EGBuffer class]];
+    _EGBuffer_type = [ODClassType classTypeWithCls:[EGBuffer class]];
 }
 
 - (NSUInteger)length {
@@ -76,11 +76,11 @@ static ODType* _EGBuffer_type;
     [self unbind];
 }
 
-- (ODType*)type {
-    return _EGBuffer_type;
+- (ODClassType*)type {
+    return [EGBuffer type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGBuffer_type;
 }
 
@@ -116,7 +116,7 @@ static ODType* _EGBuffer_type;
 @implementation EGVertexBuffer{
     NSUInteger _stride;
 }
-static ODType* _EGVertexBuffer_type;
+static ODClassType* _EGVertexBuffer_type;
 @synthesize stride = _stride;
 
 + (id)vertexBufferWithStride:(NSUInteger)stride handle:(GLuint)handle {
@@ -132,18 +132,18 @@ static ODType* _EGVertexBuffer_type;
 
 + (void)initialize {
     [super initialize];
-    _EGVertexBuffer_type = [ODType typeWithCls:[EGVertexBuffer class]];
+    _EGVertexBuffer_type = [ODClassType classTypeWithCls:[EGVertexBuffer class]];
 }
 
 + (EGVertexBuffer*)applyStride:(NSUInteger)stride {
     return [EGVertexBuffer vertexBufferWithStride:stride handle:egGenBuffer()];
 }
 
-- (ODType*)type {
-    return _EGVertexBuffer_type;
+- (ODClassType*)type {
+    return [EGVertexBuffer type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGVertexBuffer_type;
 }
 
@@ -177,7 +177,7 @@ static ODType* _EGVertexBuffer_type;
 
 
 @implementation EGIndexBuffer
-static ODType* _EGIndexBuffer_type;
+static ODClassType* _EGIndexBuffer_type;
 
 + (id)indexBufferWithHandle:(GLuint)handle {
     return [[EGIndexBuffer alloc] initWithHandle:handle];
@@ -191,7 +191,7 @@ static ODType* _EGIndexBuffer_type;
 
 + (void)initialize {
     [super initialize];
-    _EGIndexBuffer_type = [ODType typeWithCls:[EGIndexBuffer class]];
+    _EGIndexBuffer_type = [ODClassType classTypeWithCls:[EGIndexBuffer class]];
 }
 
 + (EGIndexBuffer*)apply {
@@ -204,11 +204,11 @@ static ODType* _EGIndexBuffer_type;
     [self unbind];
 }
 
-- (ODType*)type {
-    return _EGIndexBuffer_type;
+- (ODClassType*)type {
+    return [EGIndexBuffer type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGIndexBuffer_type;
 }
 

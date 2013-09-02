@@ -12,14 +12,14 @@
 @interface CNList : NSObject<CNSeq>
 + (id)list;
 - (id)init;
+- (ODClassType*)type;
 + (CNList*)apply;
 + (CNList*)applyObject:(id)object;
 + (CNList*)applyObject:(id)object tail:(CNList*)tail;
 - (id<CNIterator>)iterator;
 - (CNList*)tail;
 - (CNList*)filterF:(BOOL(^)(id))f;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -30,25 +30,25 @@
 
 + (id)filledListWithItem:(id)item tail:(CNList*)tail;
 - (id)initWithItem:(id)item tail:(CNList*)tail;
+- (ODClassType*)type;
 - (id)head;
 - (BOOL)isEmpty;
 - (CNList*)filterF:(BOOL(^)(id))f;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
 @interface CNEmptyList : CNList
 + (id)emptyList;
 - (id)init;
+- (ODClassType*)type;
 - (NSUInteger)count;
 - (id)head;
 - (CNList*)tail;
 - (BOOL)isEmpty;
 - (CNList*)filterF:(BOOL(^)(id))f;
-- (ODType*)type;
 + (CNEmptyList*)instance;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -57,10 +57,10 @@
 
 + (id)listIterator;
 - (id)init;
+- (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

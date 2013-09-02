@@ -6,7 +6,7 @@
     EGSize _size;
     EGVec3 _eyeDirection;
 }
-static ODType* _EGCamera2D_type;
+static ODClassType* _EGCamera2D_type;
 @synthesize size = _size;
 @synthesize eyeDirection = _eyeDirection;
 
@@ -26,7 +26,7 @@ static ODType* _EGCamera2D_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCamera2D_type = [ODType typeWithCls:[EGCamera2D class]];
+    _EGCamera2D_type = [ODClassType classTypeWithCls:[EGCamera2D class]];
 }
 
 - (CGFloat)factorForViewSize:(EGSize)viewSize {
@@ -53,11 +53,11 @@ static ODType* _EGCamera2D_type;
     return egPointDiv(egPointSub(viewPoint, egRectPoint(viewport)), factor);
 }
 
-- (ODType*)type {
-    return _EGCamera2D_type;
+- (ODClassType*)type {
+    return [EGCamera2D type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGCamera2D_type;
 }
 

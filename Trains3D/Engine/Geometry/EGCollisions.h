@@ -25,9 +25,9 @@
 @interface EGCollisions : NSObject
 + (id)collisions;
 - (id)init;
+- (ODClassType*)type;
 + (id<CNSet>)collisionsForFigures:(id<CNSeq>)figures;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -37,8 +37,8 @@
 
 + (id)collisionWithItems:(CNPair*)items points:(id<CNSet>)points;
 - (id)initWithItems:(CNPair*)items points:(id<CNSet>)points;
-- (ODType*)type;
-+ (ODType*)type;
+- (ODClassType*)type;
++ (ODClassType*)type;
 @end
 
 

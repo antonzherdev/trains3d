@@ -9,12 +9,12 @@
 
 + (id)sortBuilderWithChain:(CNChain*)chain;
 - (id)initWithChain:(CNChain*)chain;
+- (ODClassType*)type;
 - (CNSortBuilder*)ascBy:(id(^)(id))by;
 - (CNSortBuilder*)descBy:(id(^)(id))by;
 - (CNSortBuilder*)andF:(NSInteger(^)(id, id))f;
 - (CNChain*)endSort;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

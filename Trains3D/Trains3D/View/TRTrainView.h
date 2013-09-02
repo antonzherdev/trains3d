@@ -14,6 +14,7 @@
 @class EGMutableMatrix;
 @class TRTrainType;
 @class TRTrain;
+@class TREngineType;
 @class TRCarType;
 @class TRCar;
 @class TRTrainGenerator;
@@ -31,10 +32,10 @@
 
 + (id)trainView;
 - (id)init;
+- (ODClassType*)type;
 - (EGMaterial*)trainMaterialForColor:(EGColor)color;
 - (void)drawTrain:(TRTrain*)train;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

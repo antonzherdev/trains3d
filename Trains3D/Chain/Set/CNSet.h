@@ -6,12 +6,10 @@
 @protocol CNMutableSet;
 
 @protocol CNSet<CNIterable>
-- (ODType*)type;
 @end
 
 
 @protocol CNMutableSet<CNSet>
-- (ODType*)type;
 @end
 
 
@@ -20,10 +18,10 @@
 
 + (id)hashSetBuilder;
 - (id)init;
+- (ODClassType*)type;
 - (void)addObject:(id)object;
 - (NSSet*)build;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

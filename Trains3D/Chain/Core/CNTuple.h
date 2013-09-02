@@ -13,11 +13,11 @@
 
 + (id)tupleWithA:(id)a b:(id)b;
 - (id)initWithA:(id)a b:(id)b;
+- (ODClassType*)type;
 - (NSInteger)compareTo:(CNTuple*)to;
 - (NSString*)description;
 + (id)unapplyTuple:(CNTuple*)tuple;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -28,11 +28,11 @@
 
 + (id)tuple3WithA:(id)a b:(id)b c:(id)c;
 - (id)initWithA:(id)a b:(id)b c:(id)c;
+- (ODClassType*)type;
 - (NSInteger)compareTo:(CNTuple3*)to;
 - (NSString*)description;
 + (id)unapplyTuple:(CNTuple3*)tuple;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -44,11 +44,11 @@
 
 + (id)tuple4WithA:(id)a b:(id)b c:(id)c d:(id)d;
 - (id)initWithA:(id)a b:(id)b c:(id)c d:(id)d;
+- (ODClassType*)type;
 - (NSInteger)compareTo:(CNTuple4*)to;
 - (NSString*)description;
 + (id)unapplyTuple:(CNTuple4*)tuple;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

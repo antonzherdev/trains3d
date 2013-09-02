@@ -8,9 +8,9 @@
 
 + (id)rectIndexWithRects:(id<CNSeq>)rects;
 - (id)initWithRects:(id<CNSeq>)rects;
+- (ODClassType*)type;
 - (id)applyPoint:(EGPoint)point;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

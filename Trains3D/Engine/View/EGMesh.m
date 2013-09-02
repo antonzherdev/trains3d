@@ -8,7 +8,7 @@
     EGVertexBuffer* _vertexBuffer;
     EGIndexBuffer* _indexBuffer;
 }
-static ODType* _EGMesh_type;
+static ODClassType* _EGMesh_type;
 @synthesize vertexBuffer = _vertexBuffer;
 @synthesize indexBuffer = _indexBuffer;
 
@@ -28,7 +28,7 @@ static ODType* _EGMesh_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMesh_type = [ODType typeWithCls:[EGMesh class]];
+    _EGMesh_type = [ODClassType classTypeWithCls:[EGMesh class]];
 }
 
 + (EGMesh*)applyVertexData:(CNPArray*)vertexData index:(CNPArray*)index {
@@ -43,11 +43,11 @@ static ODType* _EGMesh_type;
     }];
 }
 
-- (ODType*)type {
-    return _EGMesh_type;
+- (ODClassType*)type {
+    return [EGMesh type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGMesh_type;
 }
 
@@ -83,7 +83,7 @@ static ODType* _EGMesh_type;
 @implementation EGMeshModel{
     id<CNSeq> _meshes;
 }
-static ODType* _EGMeshModel_type;
+static ODClassType* _EGMeshModel_type;
 @synthesize meshes = _meshes;
 
 + (id)meshModelWithMeshes:(id<CNSeq>)meshes {
@@ -99,7 +99,7 @@ static ODType* _EGMeshModel_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMeshModel_type = [ODType typeWithCls:[EGMeshModel class]];
+    _EGMeshModel_type = [ODClassType classTypeWithCls:[EGMeshModel class]];
 }
 
 - (void)draw {
@@ -108,11 +108,11 @@ static ODType* _EGMeshModel_type;
     }];
 }
 
-- (ODType*)type {
-    return _EGMeshModel_type;
+- (ODClassType*)type {
+    return [EGMeshModel type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGMeshModel_type;
 }
 

@@ -19,7 +19,7 @@
     id<CNSeq> _allTiles;
 }
 static CGFloat _EGMapSso_ISO = 0.70710676908493;
-static ODType* _EGMapSso_type;
+static ODClassType* _EGMapSso_type;
 @synthesize size = _size;
 @synthesize limits = _limits;
 @synthesize fullTiles = _fullTiles;
@@ -49,7 +49,7 @@ static ODType* _EGMapSso_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMapSso_type = [ODType typeWithCls:[EGMapSso class]];
+    _EGMapSso_type = [ODClassType classTypeWithCls:[EGMapSso class]];
 }
 
 - (BOOL)isFullTile:(EGPointI)tile {
@@ -79,15 +79,15 @@ static ODType* _EGMapSso_type;
     return egRectINewXY(((CGFloat)([self tileCutAxisLess:0 more:tile.x + tile.y])), ((CGFloat)([self tileCutAxisLess:tile.x + tile.y more:_size.width + _size.height - 2])), ((CGFloat)([self tileCutAxisLess:tile.y - tile.x more:_size.height - 1])), ((CGFloat)([self tileCutAxisLess:-_size.width + 1 more:tile.y - tile.x])));
 }
 
-- (ODType*)type {
-    return _EGMapSso_type;
+- (ODClassType*)type {
+    return [EGMapSso type];
 }
 
 + (CGFloat)ISO {
     return _EGMapSso_ISO;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGMapSso_type;
 }
 
@@ -122,7 +122,7 @@ static ODType* _EGMapSso_type;
     EGMapSso* _map;
     EGMesh* _plane;
 }
-static ODType* _EGMapSsoView_type;
+static ODClassType* _EGMapSsoView_type;
 @synthesize map = _map;
 @synthesize plane = _plane;
 
@@ -142,7 +142,7 @@ static ODType* _EGMapSsoView_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMapSsoView_type = [ODType typeWithCls:[EGMapSsoView class]];
+    _EGMapSsoView_type = [ODClassType classTypeWithCls:[EGMapSsoView class]];
 }
 
 - (void)drawLayout {
@@ -163,11 +163,11 @@ static ODType* _EGMapSsoView_type;
     [_plane drawWithMaterial:material];
 }
 
-- (ODType*)type {
-    return _EGMapSsoView_type;
+- (ODClassType*)type {
+    return [EGMapSsoView type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGMapSsoView_type;
 }
 

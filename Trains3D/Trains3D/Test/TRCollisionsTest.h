@@ -23,6 +23,7 @@
 @class TRRailroadBuilder;
 @class TRTrainType;
 @class TRTrain;
+@class TREngineType;
 @class TRCarType;
 @class TRCar;
 @class TRTrainGenerator;
@@ -32,16 +33,16 @@
 @interface TRCollisionsTest : CNTestCase
 + (id)collisionsTest;
 - (id)init;
+- (ODClassType*)type;
 - (TRLevel*)newLevel;
 - (id<CNSet>)checkLevel:(TRLevel*)level;
 - (void)testStraight;
 - (void)doTest1ForLevel:(TRLevel*)level delta:(CGFloat)delta form:(TRRailForm*)form;
 - (void)testTurn;
 - (void)testCross;
-- (ODType*)type;
 + (CGFloat)carLen;
 + (CGFloat)carWidth;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

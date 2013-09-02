@@ -30,6 +30,7 @@
 @class TRRailroadBuilder;
 
 @class TRTrain;
+@class TREngineType;
 @class TRCar;
 @class TRTrainGenerator;
 @class TRTrainType;
@@ -55,13 +56,23 @@
 
 + (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color cars:(id<CNSeq>)cars speed:(NSUInteger)speed;
 - (id)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color cars:(id<CNSeq>)cars speed:(NSUInteger)speed;
+- (ODClassType*)type;
 - (BOOL)isBack;
 - (void)startFromCity:(TRCity*)city;
 - (void)setHead:(TRRailPoint*)head;
 - (void)updateWithDelta:(CGFloat)delta;
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface TREngineType : NSObject
+@property (nonatomic, readonly) EGVec3 tubePos;
+
++ (id)engineTypeWithTubePos:(EGVec3)tubePos;
+- (id)initWithTubePos:(EGVec3)tubePos;
+- (ODClassType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -70,9 +81,10 @@
 @property (nonatomic, readonly) CGFloat width;
 @property (nonatomic, readonly) CGFloat frontConnectorLength;
 @property (nonatomic, readonly) CGFloat backConnectorLength;
-@property (nonatomic, readonly) BOOL isEngine;
+@property (nonatomic, readonly) id engineType;
 
 - (CGFloat)fullLength;
+- (BOOL)isEngine;
 + (TRCarType*)car;
 + (TRCarType*)engine;
 + (NSArray*)values;
@@ -88,14 +100,14 @@
 
 + (id)carWithCarType:(TRCarType*)carType;
 - (id)initWithCarType:(TRCarType*)carType;
+- (ODClassType*)type;
 - (CGFloat)frontConnectorLength;
 - (CGFloat)backConnectorLength;
 - (CGFloat)length;
 - (CGFloat)width;
 - (CGFloat)fullLength;
 - (EGThickLineSegment*)figure;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -107,10 +119,10 @@
 
 + (id)trainGeneratorWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes;
 - (id)initWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes;
+- (ODClassType*)type;
 - (id<CNSeq>)generateCars;
 - (NSUInteger)generateSpeed;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

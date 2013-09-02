@@ -25,9 +25,9 @@ typedef struct TRRailCorrection TRRailCorrection;
 
 + (id)railroadBuilderProcessorWithBuilder:(TRRailroadBuilder*)builder;
 - (id)initWithBuilder:(TRRailroadBuilder*)builder;
+- (ODClassType*)type;
 - (BOOL)processEvent:(EGEvent*)event;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -75,11 +75,11 @@ static inline NSString* TRRailCorrectionDescription(TRRailCorrection self) {
 
 + (id)railroadBuilderMouseProcessorWithBuilder:(TRRailroadBuilder*)builder;
 - (id)initWithBuilder:(TRRailroadBuilder*)builder;
+- (ODClassType*)type;
 - (BOOL)mouseDownEvent:(EGEvent*)event;
 - (BOOL)mouseDragEvent:(EGEvent*)event;
 - (BOOL)mouseUpEvent:(EGEvent*)event;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

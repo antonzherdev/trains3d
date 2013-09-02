@@ -1,6 +1,7 @@
 #import "objd.h"
 @class CNPArray;
 @class CNPArrayIterator;
+@class CNMutablePArray;
 @class EG;
 #import "EGGL.h"
 
@@ -14,6 +15,7 @@
 
 + (id)bufferWithBufferType:(GLenum)bufferType handle:(GLuint)handle;
 - (id)initWithBufferType:(GLenum)bufferType handle:(GLuint)handle;
+- (ODClassType*)type;
 - (NSUInteger)length;
 - (NSUInteger)count;
 + (EGBuffer*)applyBufferType:(GLenum)bufferType;
@@ -23,8 +25,7 @@
 - (void)bind;
 - (void)unbind;
 - (void)applyDraw:(void(^)())draw;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -33,19 +34,19 @@
 
 + (id)vertexBufferWithStride:(NSUInteger)stride handle:(GLuint)handle;
 - (id)initWithStride:(NSUInteger)stride handle:(GLuint)handle;
+- (ODClassType*)type;
 + (EGVertexBuffer*)applyStride:(NSUInteger)stride;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
 @interface EGIndexBuffer : EGBuffer
 + (id)indexBufferWithHandle:(GLuint)handle;
 - (id)initWithHandle:(GLuint)handle;
+- (ODClassType*)type;
 + (EGIndexBuffer*)apply;
 - (void)draw;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

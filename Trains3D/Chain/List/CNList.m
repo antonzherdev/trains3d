@@ -4,7 +4,7 @@
 #import "CNOption.h"
 #import "CNChain.h"
 @implementation CNList
-static ODType* _CNList_type;
+static ODClassType* _CNList_type;
 
 + (id)list {
     return [[CNList alloc] init];
@@ -18,7 +18,7 @@ static ODType* _CNList_type;
 
 + (void)initialize {
     [super initialize];
-    _CNList_type = [ODType typeWithCls:[CNList class]];
+    _CNList_type = [ODClassType classTypeWithCls:[CNList class]];
 }
 
 + (CNList*)apply {
@@ -45,10 +45,6 @@ static ODType* _CNList_type;
 
 - (CNList*)filterF:(BOOL(^)(id))f {
     @throw @"Method filter is abstract";
-}
-
-- (ODType*)type {
-    return _CNList_type;
 }
 
 - (id)applyIndex:(NSUInteger)index {
@@ -163,7 +159,11 @@ static ODType* _CNList_type;
     return [builder build];
 }
 
-+ (ODType*)type {
+- (ODClassType*)type {
+    return [CNList type];
+}
+
++ (ODClassType*)type {
     return _CNList_type;
 }
 
@@ -190,7 +190,7 @@ static ODType* _CNList_type;
     CNList* _tail;
     NSUInteger _count;
 }
-static ODType* _CNFilledList_type;
+static ODClassType* _CNFilledList_type;
 @synthesize item = _item;
 @synthesize tail = _tail;
 @synthesize count = _count;
@@ -212,7 +212,7 @@ static ODType* _CNFilledList_type;
 
 + (void)initialize {
     [super initialize];
-    _CNFilledList_type = [ODType typeWithCls:[CNFilledList class]];
+    _CNFilledList_type = [ODClassType classTypeWithCls:[CNFilledList class]];
 }
 
 - (id)head {
@@ -228,11 +228,11 @@ static ODType* _CNFilledList_type;
     else return [_tail filterF:f];
 }
 
-- (ODType*)type {
-    return _CNFilledList_type;
+- (ODClassType*)type {
+    return [CNFilledList type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNFilledList_type;
 }
 
@@ -267,7 +267,7 @@ static ODType* _CNFilledList_type;
 
 @implementation CNEmptyList
 static CNEmptyList* _CNEmptyList_instance;
-static ODType* _CNEmptyList_type;
+static ODClassType* _CNEmptyList_type;
 
 + (id)emptyList {
     return [[CNEmptyList alloc] init];
@@ -281,8 +281,8 @@ static ODType* _CNEmptyList_type;
 
 + (void)initialize {
     [super initialize];
+    _CNEmptyList_type = [ODClassType classTypeWithCls:[CNEmptyList class]];
     _CNEmptyList_instance = [CNEmptyList emptyList];
-    _CNEmptyList_type = [ODType typeWithCls:[CNEmptyList class]];
 }
 
 - (NSUInteger)count {
@@ -305,15 +305,15 @@ static ODType* _CNEmptyList_type;
     return self;
 }
 
-- (ODType*)type {
-    return _CNEmptyList_type;
+- (ODClassType*)type {
+    return [CNEmptyList type];
 }
 
 + (CNEmptyList*)instance {
     return _CNEmptyList_instance;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNEmptyList_type;
 }
 
@@ -343,7 +343,7 @@ static ODType* _CNEmptyList_type;
 @implementation CNListIterator{
     CNList* _list;
 }
-static ODType* _CNListIterator_type;
+static ODClassType* _CNListIterator_type;
 @synthesize list = _list;
 
 + (id)listIterator {
@@ -358,7 +358,7 @@ static ODType* _CNListIterator_type;
 
 + (void)initialize {
     [super initialize];
-    _CNListIterator_type = [ODType typeWithCls:[CNListIterator class]];
+    _CNListIterator_type = [ODClassType classTypeWithCls:[CNListIterator class]];
 }
 
 - (BOOL)hasNext {
@@ -371,11 +371,11 @@ static ODType* _CNListIterator_type;
     return ret;
 }
 
-- (ODType*)type {
-    return _CNListIterator_type;
+- (ODClassType*)type {
+    return [CNListIterator type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNListIterator_type;
 }
 

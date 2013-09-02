@@ -1,0 +1,116 @@
+import CNData
+
+import EG
+import EGGL
+import EGTypes
+import EGBuffer
+import EGShader
+
+import TRTrain
+
+class TRSmoke(train : TRTrain) extends EGController {
+    private var _particles = CNList<TRSmokeParticle>()
+    def particles = _particles
+    private val engine : TRCar = train.cars.head.get
+    private val tubePos = engine.carType.engineType.get.tubePos
+    private static val zSpeed = 0.1
+    private static val emitEvery = 0.1
+    private var emitTime = 0.0
+
+    def updateWith(delta : float) {
+        emitTime += delta
+        if(emitTime > emitEvery) {
+            emitTime -= emitEvery
+            createParticle
+        }
+        _particles = _particles.filter(_.isLive)
+        _particles.for(_.updateWith(delta))
+    }
+
+    def createParticle {
+        val fPos = engine.frontConnector.point
+        val bPos = engine.backConnector.point
+        val delta = bPos.sub(fPos)
+        val tubeXY = fPos.add(delta.set(length = tubePos.x))
+        val emitterPos = EGVec3(tubeXY, tubePos.z)
+
+        val p = TRSmokeParticle()
+        p.position = emitterPos
+        p.speed = EGVec3(delta.set(length = train.speed), zSpeed)
+        _particles = CNList(p, _particles)
+    }
+}
+
+class TRSmokeParticle extends EGController {
+    var position : EGVec3
+    var speed : EGVec3
+    var time = 0.0
+    static val lifeTime = 10
+    static val dragCoefficient = 0.1 // air resistance coefficient | a = -dragCoefficient * sqr(speed)
+
+    def updateWith(delta : float) {
+        val a = speed.sqr.mul(-dragCoefficient)
+        speed = speed.add(a.mul(delta))
+        position = position.add(speed.mul(delta))
+        time += delta
+    }
+
+    def isLive = time < lifeTime
+}
+
+class TRSmokeView(smoke : TRSmoke) {
+    val positionBuffer = EGVertexBuffer<float4>(3*4)
+    val cornerBuffer = EGVertexBuffer<byte>(1)
+    val indexBuffer = EGIndexBuffer()
+    val shader = TRSmokeShader.instance
+    def draw {
+        val particles = smoke.particles
+        val n = particles.count
+        val positionArr = CNMutablePArray(EGVec3.type, 4*n)
+        val cornerArr = CNMutablePArray(byte.type, 4*n)
+        particles.for{p ->
+            posisionArr.write(item = p.position, times = 4)
+            cornerArr.write([0, 1, 2, 3])
+        }
+        positionBuffer.set(positionArr)
+        cornerBuffer.set(cornerArr)
+
+        shader(positionBuffer, cornerBuffer) {
+            indexBuffer.draw
+        }
+    }
+}
+
+class TRSmokeShader {
+    static val vertex =
+        "attribute vec3 position;
+         attribute byte corner;
+         uniform mat4 cp;
+
+         void main(void) {
+            gl_Position = cp * vec4(position, 1);
+         }"
+    static val fragment =
+        "void main(void) {
+            gl_FragColor = vec4(1, 0, 0, 0.5);
+         }"
+    static val instance = TRSmokeShader()
+    val program = EGShaderProgram(vertex, fragment)
+    val positionSlot = program.attributeFor("position")
+    val cornerSlot = program.attributeFor("corner")
+    val cpUniform = program.uniformFor("cp")
+
+    def apply(positionBuffer: EGVertexBuffer<float4>, cornerBuffer : EGVertexBuffer<ubyte>, draw : () -> void) {
+        program {
+            positionBuffer {
+                positionSlot.setFromBufferWith(stride = 3*4, valuesCount = 3, GL_FLOAT, shift = 0)
+            }
+            cornerBuffer {
+                cornerSlot.setFromBufferWith(stride = 1, valuesCount = 1, GL_BYTE, shift = 0)
+            }
+            cpUniform.set(matrix = EG.context.cp)
+
+            draw()
+        }
+    }
+}

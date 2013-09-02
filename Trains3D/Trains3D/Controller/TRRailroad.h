@@ -24,24 +24,24 @@
 @interface TRRailroadConnectorContent : NSObject
 + (id)railroadConnectorContent;
 - (id)init;
+- (ODClassType*)type;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
 - (id<CNSeq>)rails;
 - (BOOL)isGreen;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
 @interface TREmptyConnector : TRRailroadConnectorContent
 + (id)emptyConnector;
 - (id)init;
+- (ODClassType*)type;
 - (id<CNSeq>)rails;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
-- (ODType*)type;
 + (TRRailroadConnectorContent*)instance;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -51,13 +51,13 @@
 
 + (id)railWithTile:(EGPointI)tile form:(TRRailForm*)form;
 - (id)initWithTile:(EGPointI)tile form:(TRRailForm*)form;
+- (ODClassType*)type;
 - (BOOL)hasConnector:(TRRailConnector*)connector;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (id<CNSeq>)rails;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
 - (BOOL)canAddRail:(TRRail*)rail;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -70,14 +70,14 @@
 
 + (id)switchWithTile:(EGPointI)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
 - (id)initWithTile:(EGPointI)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
+- (ODClassType*)type;
 - (TRRail*)activeRail;
 - (void)turn;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (id<CNSeq>)rails;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -89,13 +89,13 @@
 
 + (id)lightWithTile:(EGPointI)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail;
 - (id)initWithTile:(EGPointI)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail;
+- (ODClassType*)type;
 - (void)turn;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (id<CNSeq>)rails;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -114,8 +114,8 @@
 
 + (id)obstacleWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint*)point;
 - (id)initWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint*)point;
-- (ODType*)type;
-+ (ODType*)type;
+- (ODClassType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -126,6 +126,7 @@
 
 + (id)railroadWithMap:(EGMapSso*)map score:(TRScore*)score;
 - (id)initWithMap:(EGMapSso*)map score:(TRScore*)score;
+- (ODClassType*)type;
 - (id<CNSeq>)rails;
 - (id<CNSeq>)switches;
 - (id<CNSeq>)lights;
@@ -137,8 +138,7 @@
 - (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint*)from to:(CGFloat)to;
 - (void)addDamageAtPoint:(TRRailPoint*)point;
 - (void)fixDamageAtPoint:(TRRailPoint*)point;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -147,12 +147,12 @@
 
 + (id)railroadBuilderWithRailroad:(TRRailroad*)railroad;
 - (id)initWithRailroad:(TRRailroad*)railroad;
+- (ODClassType*)type;
 - (id)rail;
 - (BOOL)tryBuildRail:(TRRail*)rail;
 - (void)clear;
 - (void)fix;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

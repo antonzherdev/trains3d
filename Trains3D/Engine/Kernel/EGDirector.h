@@ -20,6 +20,7 @@
 
 + (id)director;
 - (id)init;
+- (ODClassType*)type;
 + (EGDirector*)current;
 - (void)drawWithSize:(EGSize)size;
 - (void)processEvent:(EGEvent*)event;
@@ -34,8 +35,7 @@
 - (BOOL)isDisplayingStats;
 - (void)displayStats;
 - (void)cancelDisplayingStats;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

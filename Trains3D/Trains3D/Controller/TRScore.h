@@ -2,6 +2,7 @@
 #import "EGTypes.h"
 @class TRTrainType;
 @class TRTrain;
+@class TREngineType;
 @class TRCarType;
 @class TRCar;
 @class TRTrainGenerator;
@@ -21,8 +22,8 @@
 
 + (id)scoreRulesWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost;
 - (id)initWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost;
-- (ODType*)type;
-+ (ODType*)type;
+- (ODClassType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -31,6 +32,7 @@
 
 + (id)scoreWithRules:(TRScoreRules*)rules;
 - (id)initWithRules:(TRScoreRules*)rules;
+- (ODClassType*)type;
 - (NSInteger)score;
 - (void)railBuilt;
 - (void)runTrain:(TRTrain*)train;
@@ -38,8 +40,7 @@
 - (void)destroyedTrain:(TRTrain*)train;
 - (void)removeTrain:(TRTrain*)train;
 - (void)updateWithDelta:(CGFloat)delta;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -48,11 +49,11 @@
 
 + (id)trainScoreWithTrain:(TRTrain*)train;
 - (id)initWithTrain:(TRTrain*)train;
+- (ODClassType*)type;
 - (void)updateWithDelta:(CGFloat)delta;
 - (BOOL)needFineWithDelayPeriod:(CGFloat)delayPeriod;
 - (NSInteger)fineWithRule:(NSInteger(^)(TRTrain*, NSInteger))rule;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

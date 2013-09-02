@@ -27,6 +27,7 @@
 @class TRRailPointCorrection;
 @class TRTrainType;
 @class TRTrain;
+@class TREngineType;
 @class TRCarType;
 @class TRCar;
 @class TRTrainGenerator;
@@ -45,8 +46,8 @@
 
 + (id)levelRulesWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
 - (id)initWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
-- (ODType*)type;
-+ (ODType*)type;
+- (ODClassType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -59,6 +60,7 @@
 
 + (id)levelWithRules:(TRLevelRules*)rules;
 - (id)initWithRules:(TRLevelRules*)rules;
+- (ODClassType*)type;
 - (id<CNSeq>)cities;
 - (id<CNSeq>)trains;
 - (id)repairer;
@@ -74,8 +76,7 @@
 - (void)destroyTrain:(TRTrain*)train;
 - (void)removeTrain:(TRTrain*)train;
 - (void)runRepairerFromCity:(TRCity*)city;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

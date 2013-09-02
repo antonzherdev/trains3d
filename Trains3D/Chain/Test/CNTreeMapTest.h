@@ -7,9 +7,9 @@
 @interface CNTreeMapTest : CNTestCase
 + (id)treeMapTest;
 - (id)init;
+- (ODClassType*)type;
 - (void)testMain;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

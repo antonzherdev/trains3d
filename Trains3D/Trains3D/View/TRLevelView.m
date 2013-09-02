@@ -17,7 +17,7 @@
     EGEnvironment* _environment;
     id<EGCamera> _camera;
 }
-static ODType* _TRLevelView_type;
+static ODClassType* _TRLevelView_type;
 @synthesize level = _level;
 @synthesize environment = _environment;
 @synthesize camera = _camera;
@@ -43,7 +43,7 @@ static ODType* _TRLevelView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRLevelView_type = [ODType typeWithCls:[TRLevelView class]];
+    _TRLevelView_type = [ODClassType classTypeWithCls:[TRLevelView class]];
 }
 
 - (void)drawView {
@@ -67,11 +67,11 @@ static ODType* _TRLevelView_type;
     glDisable(GL_NORMALIZE);
 }
 
-- (ODType*)type {
-    return _TRLevelView_type;
+- (ODClassType*)type {
+    return [TRLevelView type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRLevelView_type;
 }
 

@@ -49,6 +49,7 @@
 
 + (id)railPointWithTile:(EGPointI)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back;
 - (id)initWithTile:(EGPointI)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back;
+- (ODClassType*)type;
 - (TRRailPoint*)addX:(CGFloat)x;
 - (TRRailConnector*)startConnector;
 - (TRRailConnector*)endConnector;
@@ -57,8 +58,7 @@
 - (TRRailPoint*)invert;
 - (TRRailPoint*)setX:(CGFloat)x;
 - (EGPointI)nextTile;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -68,9 +68,9 @@
 
 + (id)railPointCorrectionWithPoint:(TRRailPoint*)point error:(CGFloat)error;
 - (id)initWithPoint:(TRRailPoint*)point error:(CGFloat)error;
+- (ODClassType*)type;
 - (TRRailPoint*)addErrorToPoint;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

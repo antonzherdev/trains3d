@@ -4,7 +4,7 @@
     EGSize _viewSize;
     id _camera;
 }
-static ODType* _EGEvent_type;
+static ODClassType* _EGEvent_type;
 @synthesize viewSize = _viewSize;
 @synthesize camera = _camera;
 
@@ -24,7 +24,7 @@ static ODType* _EGEvent_type;
 
 + (void)initialize {
     [super initialize];
-    _EGEvent_type = [ODType typeWithCls:[EGEvent class]];
+    _EGEvent_type = [ODClassType classTypeWithCls:[EGEvent class]];
 }
 
 - (EGEvent*)setCamera:(id)camera {
@@ -102,11 +102,11 @@ static ODType* _EGEvent_type;
     }
 }
 
-- (ODType*)type {
-    return _EGEvent_type;
+- (ODClassType*)type {
+    return [EGEvent type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGEvent_type;
 }
 

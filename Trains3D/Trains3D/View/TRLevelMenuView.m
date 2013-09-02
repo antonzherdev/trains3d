@@ -12,7 +12,7 @@
     TRLevel* _level;
     id<EGCamera> _camera;
 }
-static ODType* _TRLevelMenuView_type;
+static ODClassType* _TRLevelMenuView_type;
 @synthesize level = _level;
 @synthesize camera = _camera;
 
@@ -32,7 +32,7 @@ static ODType* _TRLevelMenuView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRLevelMenuView_type = [ODType typeWithCls:[TRLevelMenuView class]];
+    _TRLevelMenuView_type = [ODClassType classTypeWithCls:[TRLevelMenuView class]];
 }
 
 - (void)drawView {
@@ -44,15 +44,15 @@ static ODType* _TRLevelMenuView_type;
     }
 }
 
-- (ODType*)type {
-    return _TRLevelMenuView_type;
-}
-
 - (EGEnvironment*)environment {
     return EGEnvironment.aDefault;
 }
 
-+ (ODType*)type {
+- (ODClassType*)type {
+    return [TRLevelMenuView type];
+}
+
++ (ODClassType*)type {
     return _TRLevelMenuView_type;
 }
 

@@ -11,7 +11,7 @@
 @implementation TRTrainView{
     EGStandardMaterial* _blackMaterial;
 }
-static ODType* _TRTrainView_type;
+static ODClassType* _TRTrainView_type;
 @synthesize blackMaterial = _blackMaterial;
 
 + (id)trainView {
@@ -27,7 +27,7 @@ static ODType* _TRTrainView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRTrainView_type = [ODType typeWithCls:[TRTrainView class]];
+    _TRTrainView_type = [ODClassType classTypeWithCls:[TRTrainView class]];
 }
 
 - (EGMaterial*)trainMaterialForColor:(EGColor)color {
@@ -56,11 +56,11 @@ static ODType* _TRTrainView_type;
     }];
 }
 
-- (ODType*)type {
-    return _TRTrainView_type;
+- (ODClassType*)type {
+    return [TRTrainView type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRTrainView_type;
 }
 

@@ -5,7 +5,7 @@
 @implementation TRLevelMenuProcessor{
     TRLevel* _level;
 }
-static ODType* _TRLevelMenuProcessor_type;
+static ODClassType* _TRLevelMenuProcessor_type;
 @synthesize level = _level;
 
 + (id)levelMenuProcessorWithLevel:(TRLevel*)level {
@@ -21,7 +21,7 @@ static ODType* _TRLevelMenuProcessor_type;
 
 + (void)initialize {
     [super initialize];
-    _TRLevelMenuProcessor_type = [ODType typeWithCls:[TRLevelMenuProcessor class]];
+    _TRLevelMenuProcessor_type = [ODClassType classTypeWithCls:[TRLevelMenuProcessor class]];
 }
 
 - (BOOL)processEvent:(EGEvent*)event {
@@ -39,10 +39,6 @@ static ODType* _TRLevelMenuProcessor_type;
     return YES;
 }
 
-- (ODType*)type {
-    return _TRLevelMenuProcessor_type;
-}
-
 - (BOOL)mouseDownEvent:(EGEvent*)event {
     return NO;
 }
@@ -51,7 +47,11 @@ static ODType* _TRLevelMenuProcessor_type;
     return NO;
 }
 
-+ (ODType*)type {
+- (ODClassType*)type {
+    return [TRLevelMenuProcessor type];
+}
+
++ (ODClassType*)type {
     return _TRLevelMenuProcessor_type;
 }
 

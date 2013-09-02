@@ -7,7 +7,7 @@
     CNChain* _chain;
     NSMutableArray* _functions;
 }
-static ODType* _CNSortBuilder_type;
+static ODClassType* _CNSortBuilder_type;
 @synthesize chain = _chain;
 
 + (id)sortBuilderWithChain:(CNChain*)chain {
@@ -26,7 +26,7 @@ static ODType* _CNSortBuilder_type;
 
 + (void)initialize {
     [super initialize];
-    _CNSortBuilder_type = [ODType typeWithCls:[CNSortBuilder class]];
+    _CNSortBuilder_type = [ODClassType classTypeWithCls:[CNSortBuilder class]];
 }
 
 - (CNSortBuilder*)ascBy:(id(^)(id))by {
@@ -60,11 +60,11 @@ static ODType* _CNSortBuilder_type;
     }];
 }
 
-- (ODType*)type {
-    return _CNSortBuilder_type;
+- (ODClassType*)type {
+    return [CNSortBuilder type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNSortBuilder_type;
 }
 

@@ -25,12 +25,12 @@
 
 + (id)switchProcessorWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
+- (ODClassType*)type;
 - (BOOL)processEvent:(EGEvent*)event;
 - (BOOL)mouseDownEvent:(EGEvent*)event;
 - (BOOL)mouseDragEvent:(EGEvent*)event;
 - (BOOL)mouseUpEvent:(EGEvent*)event;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

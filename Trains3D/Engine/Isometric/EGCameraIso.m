@@ -9,7 +9,7 @@
     EGVec3 _eyeDirection;
 }
 static CGFloat _EGCameraIso_ISO;
-static ODType* _EGCameraIso_type;
+static ODClassType* _EGCameraIso_type;
 @synthesize tilesOnScreen = _tilesOnScreen;
 @synthesize center = _center;
 @synthesize eyeDirection = _eyeDirection;
@@ -31,8 +31,8 @@ static ODType* _EGCameraIso_type;
 
 + (void)initialize {
     [super initialize];
+    _EGCameraIso_type = [ODClassType classTypeWithCls:[EGCameraIso class]];
     _EGCameraIso_ISO = EGMapSso.ISO;
-    _EGCameraIso_type = [ODType typeWithCls:[EGCameraIso class]];
 }
 
 - (EGRect)calculateViewportSizeWithViewSize:(EGSize)viewSize {
@@ -75,11 +75,11 @@ static ODType* _EGCameraIso_type;
     return EGPointMake((x / vw - y / vh) * ww2 + tw / 2 - 0.5 + _center.x, (x / vw + y / vh) * ww2 - tw / 2 - 0.5 + _center.y);
 }
 
-- (ODType*)type {
-    return _EGCameraIso_type;
+- (ODClassType*)type {
+    return [EGCameraIso type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGCameraIso_type;
 }
 

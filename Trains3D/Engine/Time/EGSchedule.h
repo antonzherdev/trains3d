@@ -8,11 +8,11 @@
 @interface EGSchedule : NSObject<EGController>
 + (id)schedule;
 - (id)init;
+- (ODClassType*)type;
 - (void)scheduleEvent:(void(^)())event after:(CGFloat)after;
 - (void)updateWithDelta:(CGFloat)delta;
 - (CGFloat)time;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -22,12 +22,12 @@
 
 + (id)animationWithLength:(CGFloat)length finish:(void(^)())finish;
 - (id)initWithLength:(CGFloat)length finish:(void(^)())finish;
+- (ODClassType*)type;
 - (CGFloat)time;
 - (BOOL)isRun;
 - (BOOL)isStopped;
 - (void)updateWithDelta:(CGFloat)delta;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

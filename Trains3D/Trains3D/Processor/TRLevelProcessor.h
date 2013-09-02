@@ -23,9 +23,9 @@
 
 + (id)levelProcessorWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
+- (ODClassType*)type;
 - (BOOL)processEvent:(EGEvent*)event;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

@@ -10,7 +10,7 @@
 @implementation TRCollisionsTest
 static CGFloat _TRCollisionsTest_carLen;
 static CGFloat _TRCollisionsTest_carWidth;
-static ODType* _TRCollisionsTest_type;
+static ODClassType* _TRCollisionsTest_type;
 
 + (id)collisionsTest {
     return [[TRCollisionsTest alloc] init];
@@ -24,9 +24,9 @@ static ODType* _TRCollisionsTest_type;
 
 + (void)initialize {
     [super initialize];
+    _TRCollisionsTest_type = [ODClassType classTypeWithCls:[TRCollisionsTest class]];
     _TRCollisionsTest_carLen = [TRCarType.car fullLength];
     _TRCollisionsTest_carWidth = TRCarType.car.width;
-    _TRCollisionsTest_type = [ODType typeWithCls:[TRCollisionsTest class]];
 }
 
 - (TRLevel*)newLevel {
@@ -110,8 +110,8 @@ static ODType* _TRCollisionsTest_type;
     [self assertEqualsA:cols b:[(@[t1, t2]) toSet]];
 }
 
-- (ODType*)type {
-    return _TRCollisionsTest_type;
+- (ODClassType*)type {
+    return [TRCollisionsTest type];
 }
 
 + (CGFloat)carLen {
@@ -122,7 +122,7 @@ static ODType* _TRCollisionsTest_type;
     return _TRCollisionsTest_carWidth;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRCollisionsTest_type;
 }
 

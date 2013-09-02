@@ -30,9 +30,9 @@
 
 + (id)levelMenuViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
+- (ODClassType*)type;
 - (void)drawView;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

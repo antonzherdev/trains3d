@@ -9,6 +9,7 @@
 @interface EG : NSObject
 + (id)g;
 - (id)init;
+- (ODClassType*)type;
 + (EGDirector*)director;
 + (EGContext*)context;
 + (EGTexture*)textureForFile:(NSString*)file;
@@ -17,8 +18,7 @@
 + (EGMutableMatrix*)worldMatrix;
 + (EGMutableMatrix*)modelMatrix;
 + (void)keepMWF:(void(^)())f;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

@@ -4,7 +4,7 @@
 #import "CNPair.h"
 #import "EGFigure.h"
 @implementation EGBentleyOttmannTest
-static ODType* _EGBentleyOttmannTest_type;
+static ODClassType* _EGBentleyOttmannTest_type;
 
 + (id)bentleyOttmannTest {
     return [[EGBentleyOttmannTest alloc] init];
@@ -18,7 +18,7 @@ static ODType* _EGBentleyOttmannTest_type;
 
 + (void)initialize {
     [super initialize];
-    _EGBentleyOttmannTest_type = [ODType typeWithCls:[EGBentleyOttmannTest class]];
+    _EGBentleyOttmannTest_type = [ODClassType classTypeWithCls:[EGBentleyOttmannTest class]];
 }
 
 - (void)testMain {
@@ -67,11 +67,11 @@ static ODType* _EGBentleyOttmannTest_type;
     [self assertEqualsA:e b:r];
 }
 
-- (ODType*)type {
-    return _EGBentleyOttmannTest_type;
+- (ODClassType*)type {
+    return [EGBentleyOttmannTest type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGBentleyOttmannTest_type;
 }
 

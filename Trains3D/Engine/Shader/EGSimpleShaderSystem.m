@@ -7,7 +7,7 @@
 static EGSimpleShaderSystem* _EGSimpleShaderSystem_instance;
 static EGSimpleColorShader* _EGSimpleShaderSystem_colorShader;
 static EGSimpleTextureShader* _EGSimpleShaderSystem_textureShader;
-static ODType* _EGSimpleShaderSystem_type;
+static ODClassType* _EGSimpleShaderSystem_type;
 
 + (id)simpleShaderSystem {
     return [[EGSimpleShaderSystem alloc] init];
@@ -21,10 +21,10 @@ static ODType* _EGSimpleShaderSystem_type;
 
 + (void)initialize {
     [super initialize];
+    _EGSimpleShaderSystem_type = [ODClassType classTypeWithCls:[EGSimpleShaderSystem class]];
     _EGSimpleShaderSystem_instance = [EGSimpleShaderSystem simpleShaderSystem];
     _EGSimpleShaderSystem_colorShader = [EGSimpleColorShader simpleColorShader];
     _EGSimpleShaderSystem_textureShader = [EGSimpleTextureShader simpleTextureShader];
-    _EGSimpleShaderSystem_type = [ODType typeWithCls:[EGSimpleShaderSystem class]];
 }
 
 - (EGShader*)shaderForContext:(EGContext*)context material:(EGSimpleMaterial*)material {
@@ -63,20 +63,20 @@ static ODType* _EGSimpleShaderSystem_type;
     return __result__;
 }
 
-- (ODType*)type {
-    return _EGSimpleShaderSystem_type;
-}
-
 - (void)applyContext:(EGContext*)context material:(id)material draw:(void(^)())draw {
     EGShader* shader = [self shaderForContext:context material:material];
     [shader applyContext:context material:material draw:draw];
+}
+
+- (ODClassType*)type {
+    return [EGSimpleShaderSystem type];
 }
 
 + (EGSimpleShaderSystem*)instance {
     return _EGSimpleShaderSystem_instance;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGSimpleShaderSystem_type;
 }
 
@@ -107,7 +107,7 @@ static ODType* _EGSimpleShaderSystem_type;
 static NSInteger _EGSimpleShader_STRIDE;
 static NSInteger _EGSimpleShader_UV_SHIFT = 0;
 static NSInteger _EGSimpleShader_POSITION_SHIFT;
-static ODType* _EGSimpleShader_type;
+static ODClassType* _EGSimpleShader_type;
 
 + (id)simpleShaderWithProgram:(EGShaderProgram*)program {
     return [[EGSimpleShader alloc] initWithProgram:program];
@@ -121,13 +121,13 @@ static ODType* _EGSimpleShader_type;
 
 + (void)initialize {
     [super initialize];
+    _EGSimpleShader_type = [ODClassType classTypeWithCls:[EGSimpleShader class]];
     _EGSimpleShader_STRIDE = 8 * 4;
     _EGSimpleShader_POSITION_SHIFT = 5 * 4;
-    _EGSimpleShader_type = [ODType typeWithCls:[EGSimpleShader class]];
 }
 
-- (ODType*)type {
-    return _EGSimpleShader_type;
+- (ODClassType*)type {
+    return [EGSimpleShader type];
 }
 
 + (NSInteger)STRIDE {
@@ -142,7 +142,7 @@ static ODType* _EGSimpleShader_type;
     return _EGSimpleShader_POSITION_SHIFT;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGSimpleShader_type;
 }
 
@@ -189,7 +189,7 @@ static NSString* _EGSimpleColorShader_colorFragmentProgram = @"uniform vec4 colo
     "void main(void) {\n"
     "    gl_FragColor = color;\n"
     "}";
-static ODType* _EGSimpleColorShader_type;
+static ODClassType* _EGSimpleColorShader_type;
 @synthesize positionSlot = _positionSlot;
 @synthesize colorUniform = _colorUniform;
 @synthesize mvpUniform = _mvpUniform;
@@ -211,7 +211,7 @@ static ODType* _EGSimpleColorShader_type;
 
 + (void)initialize {
     [super initialize];
-    _EGSimpleColorShader_type = [ODType typeWithCls:[EGSimpleColorShader class]];
+    _EGSimpleColorShader_type = [ODClassType classTypeWithCls:[EGSimpleColorShader class]];
 }
 
 - (void)loadContext:(EGContext*)context material:(EGSimpleMaterial*)material {
@@ -220,8 +220,8 @@ static ODType* _EGSimpleColorShader_type;
     [_colorUniform setColor:((EGColorSourceColor*)(material.color)).color];
 }
 
-- (ODType*)type {
-    return _EGSimpleColorShader_type;
+- (ODClassType*)type {
+    return [EGSimpleColorShader type];
 }
 
 + (NSString*)colorVertexProgram {
@@ -232,7 +232,7 @@ static ODType* _EGSimpleColorShader_type;
     return _EGSimpleColorShader_colorFragmentProgram;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGSimpleColorShader_type;
 }
 
@@ -280,7 +280,7 @@ static NSString* _EGSimpleTextureShader_textureFragmentProgram = @"varying vec2 
     "void main(void) {\n"
     "   gl_FragColor = texture2D(texture, UV);\n"
     "}";
-static ODType* _EGSimpleTextureShader_type;
+static ODClassType* _EGSimpleTextureShader_type;
 @synthesize uvSlot = _uvSlot;
 @synthesize positionSlot = _positionSlot;
 @synthesize mvpUniform = _mvpUniform;
@@ -302,7 +302,7 @@ static ODType* _EGSimpleTextureShader_type;
 
 + (void)initialize {
     [super initialize];
-    _EGSimpleTextureShader_type = [ODType typeWithCls:[EGSimpleTextureShader class]];
+    _EGSimpleTextureShader_type = [ODClassType classTypeWithCls:[EGSimpleTextureShader class]];
 }
 
 - (void)loadContext:(EGContext*)context material:(EGSimpleMaterial*)material {
@@ -312,8 +312,8 @@ static ODType* _EGSimpleTextureShader_type;
     [((EGColorSourceTexture*)(material.color)).texture bind];
 }
 
-- (ODType*)type {
-    return _EGSimpleTextureShader_type;
+- (ODClassType*)type {
+    return [EGSimpleTextureShader type];
 }
 
 + (NSString*)textureVertexProgram {
@@ -324,7 +324,7 @@ static ODType* _EGSimpleTextureShader_type;
     return _EGSimpleTextureShader_textureFragmentProgram;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGSimpleTextureShader_type;
 }
 

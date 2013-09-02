@@ -7,7 +7,7 @@
     id(^_defaultFunc)(id);
     id<CNMutableMap> _map;
 }
-static ODType* _CNMapDefault_type;
+static ODClassType* _CNMapDefault_type;
 @synthesize defaultFunc = _defaultFunc;
 @synthesize map = _map;
 
@@ -27,7 +27,7 @@ static ODType* _CNMapDefault_type;
 
 + (void)initialize {
     [super initialize];
-    _CNMapDefault_type = [ODType typeWithCls:[CNMapDefault class]];
+    _CNMapDefault_type = [ODClassType classTypeWithCls:[CNMapDefault class]];
 }
 
 - (NSUInteger)count {
@@ -72,10 +72,6 @@ static ODType* _CNMapDefault_type;
 
 - (void)removeObject:(CNTuple*)object {
     [_map removeObject:object];
-}
-
-- (ODType*)type {
-    return _CNMapDefault_type;
 }
 
 - (id)head {
@@ -137,7 +133,11 @@ static ODType* _CNMapDefault_type;
     return [builder build];
 }
 
-+ (ODType*)type {
+- (ODClassType*)type {
+    return [CNMapDefault type];
+}
+
++ (ODClassType*)type {
     return _CNMapDefault_type;
 }
 

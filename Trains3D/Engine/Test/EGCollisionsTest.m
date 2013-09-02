@@ -4,7 +4,7 @@
 #import "EGFigure.h"
 #import "EGCollisions.h"
 @implementation EGCollisionsTest
-static ODType* _EGCollisionsTest_type;
+static ODClassType* _EGCollisionsTest_type;
 
 + (id)collisionsTest {
     return [[EGCollisionsTest alloc] init];
@@ -18,7 +18,7 @@ static ODType* _EGCollisionsTest_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCollisionsTest_type = [ODType typeWithCls:[EGCollisionsTest class]];
+    _EGCollisionsTest_type = [ODClassType classTypeWithCls:[EGCollisionsTest class]];
 }
 
 - (void)testDavidsStar {
@@ -39,11 +39,11 @@ static ODType* _EGCollisionsTest_type;
     [self assertEqualsA:collisions b:[(@[]) toSet]];
 }
 
-- (ODType*)type {
-    return _EGCollisionsTest_type;
+- (ODClassType*)type {
+    return [EGCollisionsTest type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGCollisionsTest_type;
 }
 

@@ -37,9 +37,9 @@
 @interface TRRailroadView : NSObject
 + (id)railroadView;
 - (id)init;
+- (ODClassType*)type;
 - (void)drawRailroad:(TRRailroad*)railroad;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -49,9 +49,9 @@
 
 + (id)railView;
 - (id)init;
+- (ODClassType*)type;
 - (void)drawRail:(TRRail*)rail;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -62,9 +62,9 @@
 
 + (id)switchView;
 - (id)init;
+- (ODClassType*)type;
 - (void)drawTheSwitch:(TRSwitch*)theSwitch;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -74,9 +74,9 @@
 
 + (id)lightView;
 - (id)init;
+- (ODClassType*)type;
 - (void)drawLight:(TRLight*)light;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -85,9 +85,9 @@
 
 + (id)damageView;
 - (id)init;
+- (ODClassType*)type;
 - (void)drawPoint:(TRRailPoint*)point;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

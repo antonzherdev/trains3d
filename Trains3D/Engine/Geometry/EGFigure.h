@@ -12,6 +12,7 @@
 @interface EGLine : NSObject
 + (id)line;
 - (id)init;
+- (ODClassType*)type;
 + (EGLine*)newWithSlope:(CGFloat)slope point:(EGPoint)point;
 + (EGLine*)newWithP1:(EGPoint)p1 p2:(EGPoint)p2;
 + (CGFloat)calculateSlopeWithP1:(EGPoint)p1 p2:(EGPoint)p2;
@@ -27,8 +28,7 @@
 - (CGFloat)angle;
 - (CGFloat)degreeAngle;
 - (EGLine*)perpendicularWithPoint:(EGPoint)point;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -38,6 +38,7 @@
 
 + (id)slopeLineWithSlope:(CGFloat)slope constant:(CGFloat)constant;
 - (id)initWithSlope:(CGFloat)slope constant:(CGFloat)constant;
+- (ODClassType*)type;
 - (BOOL)containsPoint:(EGPoint)point;
 - (BOOL)isVertical;
 - (BOOL)isHorizontal;
@@ -48,8 +49,7 @@
 - (id)moveWithDistance:(CGFloat)distance;
 - (CGFloat)angle;
 - (EGLine*)perpendicularWithPoint:(EGPoint)point;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -58,6 +58,7 @@
 
 + (id)verticalLineWithX:(CGFloat)x;
 - (id)initWithX:(CGFloat)x;
+- (ODClassType*)type;
 - (BOOL)containsPoint:(EGPoint)point;
 - (BOOL)isVertical;
 - (BOOL)isHorizontal;
@@ -68,15 +69,13 @@
 - (id)moveWithDistance:(CGFloat)distance;
 - (CGFloat)angle;
 - (EGLine*)perpendicularWithPoint:(EGPoint)point;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
 @protocol EGFigure<NSObject>
 - (EGRect)boundingRect;
 - (id<CNSeq>)segments;
-- (ODType*)type;
 @end
 
 
@@ -87,6 +86,7 @@
 
 + (id)lineSegmentWithP1:(EGPoint)p1 p2:(EGPoint)p2;
 - (id)initWithP1:(EGPoint)p1 p2:(EGPoint)p2;
+- (ODClassType*)type;
 + (EGLineSegment*)newWithP1:(EGPoint)p1 p2:(EGPoint)p2;
 + (EGLineSegment*)newWithX1:(CGFloat)x1 y1:(CGFloat)y1 x2:(CGFloat)x2 y2:(CGFloat)y2;
 - (BOOL)isVertical;
@@ -99,8 +99,7 @@
 - (id<CNSeq>)segments;
 - (EGLineSegment*)moveWithPoint:(EGPoint)point;
 - (EGLineSegment*)moveWithX:(CGFloat)x y:(CGFloat)y;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -110,9 +109,9 @@
 
 + (id)polygonWithPoints:(id<CNSeq>)points;
 - (id)initWithPoints:(id<CNSeq>)points;
+- (ODClassType*)type;
 - (EGRect)boundingRect;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -123,10 +122,10 @@
 
 + (id)thickLineSegmentWithSegment:(EGLineSegment*)segment thickness:(CGFloat)thickness;
 - (id)initWithSegment:(EGLineSegment*)segment thickness:(CGFloat)thickness;
+- (ODClassType*)type;
 - (EGRect)boundingRect;
 - (id<CNSeq>)segments;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

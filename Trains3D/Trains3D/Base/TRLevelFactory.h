@@ -8,6 +8,7 @@
 @class EGMapSsoView;
 @class TRTrainType;
 @class TRTrain;
+@class TREngineType;
 @class TRCarType;
 @class TRCar;
 @class TRTrainGenerator;
@@ -35,15 +36,15 @@
 @interface TRLevelFactory : NSObject
 + (id)levelFactory;
 - (id)init;
+- (ODClassType*)type;
 + (EGScene*)sceneForLevel:(TRLevel*)level;
 + (TRLevel*)levelWithNumber:(NSUInteger)number;
 + (TRLevel*)levelWithMapSize:(EGSizeI)mapSize;
 + (EGScene*)sceneForLevelWithNumber:(NSUInteger)number;
 + (TRScore*)score;
 + (TRRailroad*)railroadWithMapSize:(EGSizeI)mapSize;
-- (ODType*)type;
 + (TRScoreRules*)scoreRules;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

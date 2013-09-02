@@ -88,7 +88,7 @@ static NSArray* _TRTrainType_values;
     CGFloat __speedF;
     BOOL(^_carsObstacleProcessor)(TRObstacle*);
 }
-static ODType* _TRTrain_type;
+static ODClassType* _TRTrain_type;
 @synthesize level = _level;
 @synthesize trainType = _trainType;
 @synthesize color = _color;
@@ -122,7 +122,7 @@ static ODType* _TRTrain_type;
 
 + (void)initialize {
     [super initialize];
-    _TRTrain_type = [ODType typeWithCls:[TRTrain class]];
+    _TRTrain_type = [ODClassType classTypeWithCls:[TRTrain class]];
 }
 
 - (BOOL)isBack {
@@ -201,11 +201,11 @@ static ODType* _TRTrain_type;
     }] isDefined];
 }
 
-- (ODType*)type {
-    return _TRTrain_type;
+- (ODClassType*)type {
+    return [TRTrain type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRTrain_type;
 }
 
@@ -244,12 +244,69 @@ static ODType* _TRTrain_type;
 @end
 
 
+@implementation TREngineType{
+    EGVec3 _tubePos;
+}
+static ODClassType* _TREngineType_type;
+@synthesize tubePos = _tubePos;
+
++ (id)engineTypeWithTubePos:(EGVec3)tubePos {
+    return [[TREngineType alloc] initWithTubePos:tubePos];
+}
+
+- (id)initWithTubePos:(EGVec3)tubePos {
+    self = [super init];
+    if(self) _tubePos = tubePos;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TREngineType_type = [ODClassType classTypeWithCls:[TREngineType class]];
+}
+
+- (ODClassType*)type {
+    return [TREngineType type];
+}
+
++ (ODClassType*)type {
+    return _TREngineType_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TREngineType* o = ((TREngineType*)(other));
+    return EGVec3Eq(self.tubePos, o.tubePos);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + EGVec3Hash(self.tubePos);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"tubePos=%@", EGVec3Description(self.tubePos)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation TRCarType{
     CGFloat _length;
     CGFloat _width;
     CGFloat _frontConnectorLength;
     CGFloat _backConnectorLength;
-    BOOL _isEngine;
+    id _engineType;
 }
 static TRCarType* _TRCarType_car;
 static TRCarType* _TRCarType_engine;
@@ -258,20 +315,20 @@ static NSArray* _TRCarType_values;
 @synthesize width = _width;
 @synthesize frontConnectorLength = _frontConnectorLength;
 @synthesize backConnectorLength = _backConnectorLength;
-@synthesize isEngine = _isEngine;
+@synthesize engineType = _engineType;
 
-+ (id)carTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name length:(CGFloat)length width:(CGFloat)width frontConnectorLength:(CGFloat)frontConnectorLength backConnectorLength:(CGFloat)backConnectorLength isEngine:(BOOL)isEngine {
-    return [[TRCarType alloc] initWithOrdinal:ordinal name:name length:length width:width frontConnectorLength:frontConnectorLength backConnectorLength:backConnectorLength isEngine:isEngine];
++ (id)carTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name length:(CGFloat)length width:(CGFloat)width frontConnectorLength:(CGFloat)frontConnectorLength backConnectorLength:(CGFloat)backConnectorLength engineType:(id)engineType {
+    return [[TRCarType alloc] initWithOrdinal:ordinal name:name length:length width:width frontConnectorLength:frontConnectorLength backConnectorLength:backConnectorLength engineType:engineType];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name length:(CGFloat)length width:(CGFloat)width frontConnectorLength:(CGFloat)frontConnectorLength backConnectorLength:(CGFloat)backConnectorLength isEngine:(BOOL)isEngine {
+- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name length:(CGFloat)length width:(CGFloat)width frontConnectorLength:(CGFloat)frontConnectorLength backConnectorLength:(CGFloat)backConnectorLength engineType:(id)engineType {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
         _length = length;
         _width = width;
         _frontConnectorLength = frontConnectorLength;
         _backConnectorLength = backConnectorLength;
-        _isEngine = isEngine;
+        _engineType = engineType;
     }
     
     return self;
@@ -279,13 +336,17 @@ static NSArray* _TRCarType_values;
 
 + (void)initialize {
     [super initialize];
-    _TRCarType_car = [TRCarType carTypeWithOrdinal:0 name:@"car" length:0.44 width:0.18 frontConnectorLength:0.13 backConnectorLength:0.13 isEngine:NO];
-    _TRCarType_engine = [TRCarType carTypeWithOrdinal:1 name:@"engine" length:0.43 width:0.18 frontConnectorLength:0.12 backConnectorLength:0.2 isEngine:YES];
+    _TRCarType_car = [TRCarType carTypeWithOrdinal:0 name:@"car" length:0.44 width:0.18 frontConnectorLength:0.13 backConnectorLength:0.13 engineType:[CNOption none]];
+    _TRCarType_engine = [TRCarType carTypeWithOrdinal:1 name:@"engine" length:0.43 width:0.18 frontConnectorLength:0.12 backConnectorLength:0.2 engineType:[CNOption opt:[TREngineType engineTypeWithTubePos:EGVec3Make(0.2, 0.0, 0.2)]]];
     _TRCarType_values = (@[_TRCarType_car, _TRCarType_engine]);
 }
 
 - (CGFloat)fullLength {
     return _length + _frontConnectorLength + _backConnectorLength;
+}
+
+- (BOOL)isEngine {
+    return [_engineType isDefined];
 }
 
 + (TRCarType*)car {
@@ -310,7 +371,7 @@ static NSArray* _TRCarType_values;
     TRRailPoint* _head;
     TRRailPoint* _tail;
 }
-static ODType* _TRCar_type;
+static ODClassType* _TRCar_type;
 @synthesize carType = _carType;
 @synthesize frontConnector = _frontConnector;
 @synthesize backConnector = _backConnector;
@@ -330,7 +391,7 @@ static ODType* _TRCar_type;
 
 + (void)initialize {
     [super initialize];
-    _TRCar_type = [ODType typeWithCls:[TRCar class]];
+    _TRCar_type = [ODClassType classTypeWithCls:[TRCar class]];
 }
 
 - (CGFloat)frontConnectorLength {
@@ -357,11 +418,11 @@ static ODType* _TRCar_type;
     return [EGThickLineSegment thickLineSegmentWithSegment:[EGLineSegment newWithP1:_head.point p2:_tail.point] thickness:[self width]];
 }
 
-- (ODType*)type {
-    return _TRCar_type;
+- (ODClassType*)type {
+    return [TRCar type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRCar_type;
 }
 
@@ -398,7 +459,7 @@ static ODType* _TRCar_type;
     id<CNSeq> _speed;
     id<CNSeq> _carTypes;
 }
-static ODType* _TRTrainGenerator_type;
+static ODClassType* _TRTrainGenerator_type;
 @synthesize trainType = _trainType;
 @synthesize carsCount = _carsCount;
 @synthesize speed = _speed;
@@ -422,18 +483,18 @@ static ODType* _TRTrainGenerator_type;
 
 + (void)initialize {
     [super initialize];
-    _TRTrainGenerator_type = [ODType typeWithCls:[TRTrainGenerator class]];
+    _TRTrainGenerator_type = [ODClassType classTypeWithCls:[TRTrainGenerator class]];
 }
 
 - (id<CNSeq>)generateCars {
     NSInteger count = unumi([[_carsCount randomItem] get]);
     TRCar* engine = [TRCar carWithCarType:((TRCarType*)([[[[_carTypes chain] filter:^BOOL(TRCarType* _) {
-        return _.isEngine;
+        return [_ isEngine];
     }] randomItem] get]))];
     if(count <= 1) return (@[engine]);
     else return [[[[intRange(count) chain] map:^TRCar*(id i) {
         return [TRCar carWithCarType:((TRCarType*)([[[[_carTypes chain] filter:^BOOL(TRCarType* _) {
-            return !(_.isEngine);
+            return !([_ isEngine]);
         }] randomItem] get]))];
     }] prepend:(@[engine])] toArray];
 }
@@ -442,11 +503,11 @@ static ODType* _TRTrainGenerator_type;
     return ((NSUInteger)(unumi([[_speed randomItem] get])));
 }
 
-- (ODType*)type {
-    return _TRTrainGenerator_type;
+- (ODClassType*)type {
+    return [TRTrainGenerator type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRTrainGenerator_type;
 }
 

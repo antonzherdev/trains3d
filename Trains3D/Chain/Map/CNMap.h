@@ -14,7 +14,6 @@
 - (id<CNIterable>)keys;
 - (id<CNIterable>)values;
 - (BOOL)containsKey:(id)key;
-- (ODType*)type;
 @end
 
 
@@ -25,7 +24,6 @@
 - (id)modifyBy:(id(^)(id))by forKey:(id)forKey;
 - (void)addObject:(CNTuple*)object;
 - (void)removeObject:(CNTuple*)object;
-- (ODType*)type;
 @end
 
 
@@ -35,6 +33,7 @@
 
 + (id)mapDefaultWithDefaultFunc:(id(^)(id))defaultFunc map:(id<CNMutableMap>)map;
 - (id)initWithDefaultFunc:(id(^)(id))defaultFunc map:(id<CNMutableMap>)map;
+- (ODClassType*)type;
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
 - (id)applyKey:(id)key;
@@ -45,8 +44,7 @@
 - (id)modifyBy:(id(^)(id))by forKey:(id)forKey;
 - (void)addObject:(CNTuple*)object;
 - (void)removeObject:(CNTuple*)object;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

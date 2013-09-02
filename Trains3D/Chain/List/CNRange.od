@@ -9,7 +9,7 @@ import CNChain
 class CNRange(start : int, end : int, step : int) extends CNSeq<int> {
     val count : uint =
         if(step > 0) if(start < end) (end - start)/step else 0
-        else if(step < 0) if(start > end) (start - end)/step else 0
+        else if(step < 0) if(start > end) (end - start)/step else 0
         else 0
     def apply(index : uint) : int? =
         if(index >= count) nil

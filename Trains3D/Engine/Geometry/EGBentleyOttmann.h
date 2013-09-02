@@ -31,9 +31,9 @@
 @interface EGBentleyOttmann : NSObject
 + (id)bentleyOttmann;
 - (id)init;
+- (ODClassType*)type;
 + (id<CNSet>)intersectionsForSegments:(id<CNSeq>)segments;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -43,20 +43,20 @@
 
 + (id)intersectionWithItems:(CNPair*)items point:(EGPoint)point;
 - (id)initWithItems:(CNPair*)items point:(EGPoint)point;
-- (ODType*)type;
-+ (ODType*)type;
+- (ODClassType*)type;
++ (ODClassType*)type;
 @end
 
 
 @interface EGBentleyOttmannEvent : NSObject
 + (id)bentleyOttmannEvent;
 - (id)init;
+- (ODClassType*)type;
 - (EGPoint)point;
 - (BOOL)isIntersection;
 - (BOOL)isStart;
 - (BOOL)isEnd;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -68,12 +68,12 @@
 
 + (id)bentleyOttmannPointEventWithIsStart:(BOOL)isStart data:(id)data segment:(EGLineSegment*)segment point:(EGPoint)point;
 - (id)initWithIsStart:(BOOL)isStart data:(id)data segment:(EGLineSegment*)segment point:(EGPoint)point;
+- (ODClassType*)type;
 - (CGFloat)yForX:(CGFloat)x;
 - (CGFloat)slope;
 - (BOOL)isVertical;
 - (BOOL)isEnd;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -82,9 +82,9 @@
 
 + (id)bentleyOttmannIntersectionEventWithPoint:(EGPoint)point;
 - (id)initWithPoint:(EGPoint)point;
+- (ODClassType*)type;
 - (BOOL)isIntersection;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -93,12 +93,12 @@
 
 + (id)bentleyOttmannEventQueue;
 - (id)init;
+- (ODClassType*)type;
 - (BOOL)isEmpty;
 + (EGBentleyOttmannEventQueue*)newWithSegments:(id<CNSeq>)segments sweepLine:(EGSweepLine*)sweepLine;
 - (void)offerPoint:(EGPoint)point event:(EGBentleyOttmannEvent*)event;
 - (id<CNSeq>)poll;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -107,8 +107,8 @@
 
 + (id)pointClassWithPoint:(EGPoint)point;
 - (id)initWithPoint:(EGPoint)point;
-- (ODType*)type;
-+ (ODType*)type;
+- (ODClassType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -119,9 +119,9 @@
 
 + (id)sweepLine;
 - (id)init;
+- (ODClassType*)type;
 - (void)handleEvents:(id<CNSeq>)events;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

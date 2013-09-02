@@ -4,7 +4,7 @@
     id _a;
     id _b;
 }
-static ODType* _CNPair_type;
+static ODClassType* _CNPair_type;
 @synthesize a = _a;
 @synthesize b = _b;
 
@@ -24,7 +24,7 @@ static ODType* _CNPair_type;
 
 + (void)initialize {
     [super initialize];
-    _CNPair_type = [ODType typeWithCls:[CNPair class]];
+    _CNPair_type = [ODClassType classTypeWithCls:[CNPair class]];
 }
 
 + (CNPair*)newWithA:(id)a b:(id)b {
@@ -46,10 +46,6 @@ static ODType* _CNPair_type;
 
 - (id)head {
     return [CNOption opt:_a];
-}
-
-- (ODType*)type {
-    return _CNPair_type;
 }
 
 - (BOOL)isEmpty {
@@ -98,7 +94,11 @@ static ODType* _CNPair_type;
     return [builder build];
 }
 
-+ (ODType*)type {
+- (ODClassType*)type {
+    return [CNPair type];
+}
+
++ (ODClassType*)type {
     return _CNPair_type;
 }
 
@@ -127,7 +127,7 @@ static ODType* _CNPair_type;
     CNPair* _pair;
     NSInteger _state;
 }
-static ODType* _CNPairIterator_type;
+static ODClassType* _CNPairIterator_type;
 @synthesize pair = _pair;
 
 + (id)pairIteratorWithPair:(CNPair*)pair {
@@ -146,7 +146,7 @@ static ODType* _CNPairIterator_type;
 
 + (void)initialize {
     [super initialize];
-    _CNPairIterator_type = [ODType typeWithCls:[CNPairIterator class]];
+    _CNPairIterator_type = [ODClassType classTypeWithCls:[CNPairIterator class]];
 }
 
 - (BOOL)hasNext {
@@ -159,11 +159,11 @@ static ODType* _CNPairIterator_type;
     else return _pair.b;
 }
 
-- (ODType*)type {
-    return _CNPairIterator_type;
+- (ODClassType*)type {
+    return [CNPairIterator type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNPairIterator_type;
 }
 

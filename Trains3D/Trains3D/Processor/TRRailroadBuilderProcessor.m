@@ -8,7 +8,7 @@
     TRRailroadBuilderMouseProcessor* _mouseProcessor;
     EGTwoFingerTouchToMouse* _touchProcessor;
 }
-static ODType* _TRRailroadBuilderProcessor_type;
+static ODClassType* _TRRailroadBuilderProcessor_type;
 @synthesize builder = _builder;
 
 + (id)railroadBuilderProcessorWithBuilder:(TRRailroadBuilder*)builder {
@@ -28,18 +28,18 @@ static ODType* _TRRailroadBuilderProcessor_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRailroadBuilderProcessor_type = [ODType typeWithCls:[TRRailroadBuilderProcessor class]];
+    _TRRailroadBuilderProcessor_type = [ODClassType classTypeWithCls:[TRRailroadBuilderProcessor class]];
 }
 
 - (BOOL)processEvent:(EGEvent*)event {
     return [event leftMouseProcessor:_mouseProcessor] || [event touchProcessor:_touchProcessor];
 }
 
-- (ODType*)type {
-    return _TRRailroadBuilderProcessor_type;
+- (ODClassType*)type {
+    return [TRRailroadBuilderProcessor type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRRailroadBuilderProcessor_type;
 }
 
@@ -112,7 +112,7 @@ static ODType* _TRRailroadBuilderProcessor_type;
     TRRailroadBuilder* _builder;
     id _startedPoint;
 }
-static ODType* _TRRailroadBuilderMouseProcessor_type;
+static ODClassType* _TRRailroadBuilderMouseProcessor_type;
 @synthesize builder = _builder;
 
 + (id)railroadBuilderMouseProcessorWithBuilder:(TRRailroadBuilder*)builder {
@@ -131,7 +131,7 @@ static ODType* _TRRailroadBuilderMouseProcessor_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRailroadBuilderMouseProcessor_type = [ODType typeWithCls:[TRRailroadBuilderMouseProcessor class]];
+    _TRRailroadBuilderMouseProcessor_type = [ODClassType classTypeWithCls:[TRRailroadBuilderMouseProcessor class]];
 }
 
 - (BOOL)mouseDownEvent:(EGEvent*)event {
@@ -225,11 +225,11 @@ static ODType* _TRRailroadBuilderMouseProcessor_type;
     return [TRRail railWithTile:rail.tile form:[TRRailForm formForConnector1:[TRRailConnector connectorForX:rail.start.x y:rail.start.y] connector2:[TRRailConnector connectorForX:rail.end.x y:rail.end.y]]];
 }
 
-- (ODType*)type {
-    return _TRRailroadBuilderMouseProcessor_type;
+- (ODClassType*)type {
+    return [TRRailroadBuilderMouseProcessor type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRRailroadBuilderMouseProcessor_type;
 }
 

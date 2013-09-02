@@ -10,7 +10,7 @@
     VoidRef _bytes;
     BOOL _copied;
 }
-static ODType* _CNPArray_type;
+static ODClassType* _CNPArray_type;
 @synthesize stride = _stride;
 @synthesize wrap = _wrap;
 @synthesize count = _count;
@@ -38,7 +38,7 @@ static ODType* _CNPArray_type;
 
 + (void)initialize {
     [super initialize];
-    _CNPArray_type = [ODType typeWithCls:[CNPArray class]];
+    _CNPArray_type = [ODClassType classTypeWithCls:[CNPArray class]];
 }
 
 + (CNPArray*)applyStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count copyBytes:(VoidRef)copyBytes {
@@ -57,10 +57,6 @@ static ODType* _CNPArray_type;
 
 - (void)dealloc {
     if(_copied) free(_bytes);
-}
-
-- (ODType*)type {
-    return _CNPArray_type;
 }
 
 - (id)randomItem {
@@ -154,7 +150,11 @@ static ODType* _CNPArray_type;
     return [builder build];
 }
 
-+ (ODType*)type {
+- (ODClassType*)type {
+    return [CNPArray type];
+}
+
++ (ODClassType*)type {
     return _CNPArray_type;
 }
 
@@ -187,7 +187,7 @@ static ODType* _CNPArray_type;
     CNPArray* _array;
     NSInteger _i;
 }
-static ODType* _CNPArrayIterator_type;
+static ODClassType* _CNPArrayIterator_type;
 @synthesize array = _array;
 
 + (id)arrayIteratorWithArray:(CNPArray*)array {
@@ -206,7 +206,7 @@ static ODType* _CNPArrayIterator_type;
 
 + (void)initialize {
     [super initialize];
-    _CNPArrayIterator_type = [ODType typeWithCls:[CNPArrayIterator class]];
+    _CNPArrayIterator_type = [ODClassType classTypeWithCls:[CNPArrayIterator class]];
 }
 
 - (BOOL)hasNext {
@@ -219,11 +219,11 @@ static ODType* _CNPArrayIterator_type;
     return ret;
 }
 
-- (ODType*)type {
-    return _CNPArrayIterator_type;
+- (ODClassType*)type {
+    return [CNPArrayIterator type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNPArrayIterator_type;
 }
 
@@ -247,6 +247,75 @@ static ODType* _CNPArrayIterator_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"array=%@", self.array];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation CNMutablePArray{
+    VoidRef _pointer;
+}
+static ODClassType* _CNMutablePArray_type;
+
++ (id)mutablePArrayWithStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count length:(NSUInteger)length bytes:(VoidRef)bytes {
+    return [[CNMutablePArray alloc] initWithStride:stride wrap:wrap count:count length:length bytes:bytes];
+}
+
+- (id)initWithStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count length:(NSUInteger)length bytes:(VoidRef)bytes {
+    self = [super initWithStride:stride wrap:wrap count:count length:length bytes:bytes copied:YES];
+    if(self) _pointer = [self bytes];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _CNMutablePArray_type = [ODClassType classTypeWithCls:[CNMutablePArray class]];
+}
+
++ (CNMutablePArray*)applyTp:(ODPType*)tp count:(NSUInteger)count {
+    NSUInteger length = tp.size * count;
+    return [CNMutablePArray mutablePArrayWithStride:tp.size wrap:tp.wrap count:count length:length bytes:malloc(length)];
+}
+
+- (void)writeItem:(VoidRef)item {
+    memcpy(_pointer, item, [self stride]);
+    _pointer += [self stride];
+}
+
+- (void)writeItem:(VoidRef)item times:(NSUInteger)times {
+    while(times > 0) {
+        memcpy(_pointer, item, [self stride]);
+        _pointer += [self stride];
+        times--;
+    }
+}
+
+- (void)writeItems:(CNPArray*)items {
+    memcpy(_pointer, items.bytes, items.length);
+    _pointer += items.length;
+}
+
+- (ODClassType*)type {
+    return [CNMutablePArray type];
+}
+
++ (ODClassType*)type {
+    return _CNMutablePArray_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"stride=%li", self.stride];
+    [description appendFormat:@", count=%li", self.count];
+    [description appendFormat:@", length=%li", self.length];
+    [description appendFormat:@", bytes=%@", VoidRefDescription(self.bytes)];
     [description appendString:@">"];
     return description;
 }

@@ -5,7 +5,7 @@
     id _a;
     id _b;
 }
-static ODType* _CNTuple_type;
+static ODClassType* _CNTuple_type;
 @synthesize a = _a;
 @synthesize b = _b;
 
@@ -25,7 +25,7 @@ static ODType* _CNTuple_type;
 
 + (void)initialize {
     [super initialize];
-    _CNTuple_type = [ODType typeWithCls:[CNTuple class]];
+    _CNTuple_type = [ODClassType classTypeWithCls:[CNTuple class]];
 }
 
 - (NSInteger)compareTo:(CNTuple*)to {
@@ -42,11 +42,11 @@ static ODType* _CNTuple_type;
     return [CNOption opt:tuple];
 }
 
-- (ODType*)type {
-    return _CNTuple_type;
+- (ODClassType*)type {
+    return [CNTuple type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNTuple_type;
 }
 
@@ -76,7 +76,7 @@ static ODType* _CNTuple_type;
     id _b;
     id _c;
 }
-static ODType* _CNTuple3_type;
+static ODClassType* _CNTuple3_type;
 @synthesize a = _a;
 @synthesize b = _b;
 @synthesize c = _c;
@@ -98,7 +98,7 @@ static ODType* _CNTuple3_type;
 
 + (void)initialize {
     [super initialize];
-    _CNTuple3_type = [ODType typeWithCls:[CNTuple3 class]];
+    _CNTuple3_type = [ODClassType classTypeWithCls:[CNTuple3 class]];
 }
 
 - (NSInteger)compareTo:(CNTuple3*)to {
@@ -120,11 +120,11 @@ static ODType* _CNTuple3_type;
     return [CNOption opt:tuple];
 }
 
-- (ODType*)type {
-    return _CNTuple3_type;
+- (ODClassType*)type {
+    return [CNTuple3 type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNTuple3_type;
 }
 
@@ -156,7 +156,7 @@ static ODType* _CNTuple3_type;
     id _c;
     id _d;
 }
-static ODType* _CNTuple4_type;
+static ODClassType* _CNTuple4_type;
 @synthesize a = _a;
 @synthesize b = _b;
 @synthesize c = _c;
@@ -180,7 +180,7 @@ static ODType* _CNTuple4_type;
 
 + (void)initialize {
     [super initialize];
-    _CNTuple4_type = [ODType typeWithCls:[CNTuple4 class]];
+    _CNTuple4_type = [ODClassType classTypeWithCls:[CNTuple4 class]];
 }
 
 - (NSInteger)compareTo:(CNTuple4*)to {
@@ -207,11 +207,11 @@ static ODType* _CNTuple4_type;
     return [CNOption opt:tuple];
 }
 
-- (ODType*)type {
-    return _CNTuple4_type;
+- (ODClassType*)type {
+    return [CNTuple4 type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNTuple4_type;
 }
 

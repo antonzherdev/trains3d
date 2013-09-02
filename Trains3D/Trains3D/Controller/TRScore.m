@@ -10,7 +10,7 @@
     NSInteger(^_delayFine)(TRTrain*, NSInteger);
     NSInteger _repairCost;
 }
-static ODType* _TRScoreRules_type;
+static ODClassType* _TRScoreRules_type;
 @synthesize initialScore = _initialScore;
 @synthesize railCost = _railCost;
 @synthesize arrivedPrize = _arrivedPrize;
@@ -40,14 +40,14 @@ static ODType* _TRScoreRules_type;
 
 + (void)initialize {
     [super initialize];
-    _TRScoreRules_type = [ODType typeWithCls:[TRScoreRules class]];
+    _TRScoreRules_type = [ODClassType classTypeWithCls:[TRScoreRules class]];
 }
 
-- (ODType*)type {
-    return _TRScoreRules_type;
+- (ODClassType*)type {
+    return [TRScoreRules type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRScoreRules_type;
 }
 
@@ -92,7 +92,7 @@ static ODType* _TRScoreRules_type;
     NSInteger __score;
     id<CNSeq> _trains;
 }
-static ODType* _TRScore_type;
+static ODClassType* _TRScore_type;
 @synthesize rules = _rules;
 
 + (id)scoreWithRules:(TRScoreRules*)rules {
@@ -112,7 +112,7 @@ static ODType* _TRScore_type;
 
 + (void)initialize {
     [super initialize];
-    _TRScore_type = [ODType typeWithCls:[TRScore class]];
+    _TRScore_type = [ODClassType classTypeWithCls:[TRScore class]];
 }
 
 - (NSInteger)score {
@@ -150,11 +150,11 @@ static ODType* _TRScore_type;
     }];
 }
 
-- (ODType*)type {
-    return _TRScore_type;
+- (ODClassType*)type {
+    return [TRScore type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRScore_type;
 }
 
@@ -190,7 +190,7 @@ static ODType* _TRScore_type;
     CGFloat _delayTime;
     NSInteger _fineCount;
 }
-static ODType* _TRTrainScore_type;
+static ODClassType* _TRTrainScore_type;
 @synthesize train = _train;
 
 + (id)trainScoreWithTrain:(TRTrain*)train {
@@ -210,7 +210,7 @@ static ODType* _TRTrainScore_type;
 
 + (void)initialize {
     [super initialize];
-    _TRTrainScore_type = [ODType typeWithCls:[TRTrainScore class]];
+    _TRTrainScore_type = [ODClassType classTypeWithCls:[TRTrainScore class]];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -227,11 +227,11 @@ static ODType* _TRTrainScore_type;
     return rule(_train, _fineCount);
 }
 
-- (ODType*)type {
-    return _TRTrainScore_type;
+- (ODClassType*)type {
+    return [TRTrainScore type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRTrainScore_type;
 }
 

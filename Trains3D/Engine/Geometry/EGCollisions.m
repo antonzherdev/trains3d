@@ -4,7 +4,7 @@
 #import "EGBentleyOttmann.h"
 #import "CNPair.h"
 @implementation EGCollisions
-static ODType* _EGCollisions_type;
+static ODClassType* _EGCollisions_type;
 
 + (id)collisions {
     return [[EGCollisions alloc] init];
@@ -18,7 +18,7 @@ static ODType* _EGCollisions_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCollisions_type = [ODType typeWithCls:[EGCollisions class]];
+    _EGCollisions_type = [ODClassType classTypeWithCls:[EGCollisions class]];
 }
 
 + (id<CNSet>)collisionsForFigures:(id<CNSeq>)figures {
@@ -42,11 +42,11 @@ static ODType* _EGCollisions_type;
     }] toSet];
 }
 
-- (ODType*)type {
-    return _EGCollisions_type;
+- (ODClassType*)type {
+    return [EGCollisions type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGCollisions_type;
 }
 
@@ -77,7 +77,7 @@ static ODType* _EGCollisions_type;
     CNPair* _items;
     id<CNSet> _points;
 }
-static ODType* _EGCollision_type;
+static ODClassType* _EGCollision_type;
 @synthesize items = _items;
 @synthesize points = _points;
 
@@ -97,14 +97,14 @@ static ODType* _EGCollision_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCollision_type = [ODType typeWithCls:[EGCollision class]];
+    _EGCollision_type = [ODClassType classTypeWithCls:[EGCollision class]];
 }
 
-- (ODType*)type {
-    return _EGCollision_type;
+- (ODClassType*)type {
+    return [EGCollision type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGCollision_type;
 }
 

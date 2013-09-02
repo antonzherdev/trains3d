@@ -30,7 +30,7 @@ static EGMesh *_car = nil;
 static EGMesh *_damage = nil;
 
 
-static ODType* _TR3D_type;
+static ODClassType* _TR3D_type;
 
 + (id)r3D {
     return [[TR3D alloc] init];
@@ -44,7 +44,7 @@ static ODType* _TR3D_type;
 
 + (void)initialize {
     [super initialize];
-    _TR3D_type = [ODType typeWithCls:[TR3D class]];
+    _TR3D_type = [ODClassType classTypeWithCls:[TR3D class]];
     _railTies = egJasModel(RailTies);
     _railGravel = egJasModel(RailGravel);
     _rails = egJasModel(Rails);

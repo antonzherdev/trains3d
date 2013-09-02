@@ -12,7 +12,7 @@
     EGMutableMatrix* _cameraMatrix;
     EGMutableMatrix* _projectionMatrix;
 }
-static ODType* _EGContext_type;
+static ODClassType* _EGContext_type;
 @synthesize eyeDirection = _eyeDirection;
 @synthesize environment = _environment;
 @synthesize modelMatrix = _modelMatrix;
@@ -41,7 +41,7 @@ static ODType* _EGContext_type;
 
 + (void)initialize {
     [super initialize];
-    _EGContext_type = [ODType typeWithCls:[EGContext class]];
+    _EGContext_type = [ODClassType classTypeWithCls:[EGContext class]];
 }
 
 - (EGTexture*)textureForFile:(NSString*)file {
@@ -78,6 +78,10 @@ static ODType* _EGContext_type;
     return [[[[_projectionMatrix value] multiply:[_cameraMatrix value]] multiply:[_worldMatrix value]] multiply:[_modelMatrix value]];
 }
 
+- (EGMatrix*)cp {
+    return [[_projectionMatrix value] multiply:[_cameraMatrix value]];
+}
+
 - (void)clearMatrix {
     [_modelMatrix clear];
     [_worldMatrix clear];
@@ -85,11 +89,11 @@ static ODType* _EGContext_type;
     [_projectionMatrix clear];
 }
 
-- (ODType*)type {
-    return _EGContext_type;
+- (ODClassType*)type {
+    return [EGContext type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGContext_type;
 }
 
@@ -120,7 +124,7 @@ static ODType* _EGContext_type;
     CNList* __stack;
     EGMatrix* __value;
 }
-static ODType* _EGMutableMatrix_type;
+static ODClassType* _EGMutableMatrix_type;
 
 + (id)mutableMatrix {
     return [[EGMutableMatrix alloc] init];
@@ -138,7 +142,7 @@ static ODType* _EGMutableMatrix_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMutableMatrix_type = [ODType typeWithCls:[EGMutableMatrix class]];
+    _EGMutableMatrix_type = [ODClassType classTypeWithCls:[EGMutableMatrix class]];
 }
 
 - (void)push {
@@ -189,11 +193,11 @@ static ODType* _EGMutableMatrix_type;
     [self pop];
 }
 
-- (ODType*)type {
-    return _EGMutableMatrix_type;
+- (ODClassType*)type {
+    return [EGMutableMatrix type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGMutableMatrix_type;
 }
 

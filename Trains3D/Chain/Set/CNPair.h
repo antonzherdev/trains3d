@@ -11,13 +11,13 @@
 
 + (id)pairWithA:(id)a b:(id)b;
 - (id)initWithA:(id)a b:(id)b;
+- (ODClassType*)type;
 + (CNPair*)newWithA:(id)a b:(id)b;
 - (BOOL)containsObject:(id)object;
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
 - (id)head;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -26,10 +26,10 @@
 
 + (id)pairIteratorWithPair:(CNPair*)pair;
 - (id)initWithPair:(CNPair*)pair;
+- (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

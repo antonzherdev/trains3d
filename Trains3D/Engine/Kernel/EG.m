@@ -4,7 +4,7 @@
 #import "EGContext.h"
 #import "EGTexture.h"
 @implementation EG
-static ODType* _EG_type;
+static ODClassType* _EG_type;
 
 + (id)g {
     return [[EG alloc] init];
@@ -18,7 +18,7 @@ static ODType* _EG_type;
 
 + (void)initialize {
     [super initialize];
-    _EG_type = [ODType typeWithCls:[EG class]];
+    _EG_type = [ODClassType classTypeWithCls:[EG class]];
 }
 
 + (EGDirector*)director {
@@ -57,11 +57,11 @@ static ODType* _EG_type;
     [[EG context].worldMatrix pop];
 }
 
-- (ODType*)type {
-    return _EG_type;
+- (ODClassType*)type {
+    return [EG type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EG_type;
 }
 

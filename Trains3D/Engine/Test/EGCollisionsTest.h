@@ -18,11 +18,11 @@
 @interface EGCollisionsTest : CNTestCase
 + (id)collisionsTest;
 - (id)init;
+- (ODClassType*)type;
 - (void)testDavidsStar;
 - (void)testEmptyWithCrossedBoundingRects;
 - (void)testEmptyWithoutCrossedBoundingRects;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

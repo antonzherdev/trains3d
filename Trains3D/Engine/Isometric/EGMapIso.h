@@ -4,6 +4,7 @@
 @class CNRangeIterator;
 @class CNPArray;
 @class CNPArrayIterator;
+@class CNMutablePArray;
 #import "EGTypes.h"
 @class EG;
 #import "EGGL.h"
@@ -39,12 +40,12 @@
 
 + (id)mapSsoWithSize:(EGSizeI)size;
 - (id)initWithSize:(EGSizeI)size;
+- (ODClassType*)type;
 - (BOOL)isFullTile:(EGPointI)tile;
 - (BOOL)isPartialTile:(EGPointI)tile;
 - (EGRectI)cutRectForTile:(EGPointI)tile;
-- (ODType*)type;
 + (CGFloat)ISO;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -54,11 +55,11 @@
 
 + (id)mapSsoViewWithMap:(EGMapSso*)map;
 - (id)initWithMap:(EGMapSso*)map;
+- (ODClassType*)type;
 - (void)drawLayout;
 - (EGMesh*)createPlane;
 - (void)drawPlaneWithMaterial:(EGMaterial*)material;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

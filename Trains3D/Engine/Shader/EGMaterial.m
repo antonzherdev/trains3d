@@ -7,7 +7,7 @@
 #import "EGStandardShaderSystem.h"
 #import "EGTexture.h"
 @implementation EGColorSource
-static ODType* _EGColorSource_type;
+static ODClassType* _EGColorSource_type;
 
 + (id)colorSource {
     return [[EGColorSource alloc] init];
@@ -21,7 +21,7 @@ static ODType* _EGColorSource_type;
 
 + (void)initialize {
     [super initialize];
-    _EGColorSource_type = [ODType typeWithCls:[EGColorSource class]];
+    _EGColorSource_type = [ODClassType classTypeWithCls:[EGColorSource class]];
 }
 
 + (EGColorSource*)applyColor:(EGColor)color {
@@ -32,11 +32,11 @@ static ODType* _EGColorSource_type;
     return [EGColorSourceTexture colorSourceTextureWithTexture:texture];
 }
 
-- (ODType*)type {
-    return _EGColorSource_type;
+- (ODClassType*)type {
+    return [EGColorSource type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGColorSource_type;
 }
 
@@ -66,7 +66,7 @@ static ODType* _EGColorSource_type;
 @implementation EGColorSourceColor{
     EGColor _color;
 }
-static ODType* _EGColorSourceColor_type;
+static ODClassType* _EGColorSourceColor_type;
 @synthesize color = _color;
 
 + (id)colorSourceColorWithColor:(EGColor)color {
@@ -82,14 +82,14 @@ static ODType* _EGColorSourceColor_type;
 
 + (void)initialize {
     [super initialize];
-    _EGColorSourceColor_type = [ODType typeWithCls:[EGColorSourceColor class]];
+    _EGColorSourceColor_type = [ODClassType classTypeWithCls:[EGColorSourceColor class]];
 }
 
-- (ODType*)type {
-    return _EGColorSourceColor_type;
+- (ODClassType*)type {
+    return [EGColorSourceColor type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGColorSourceColor_type;
 }
 
@@ -123,7 +123,7 @@ static ODType* _EGColorSourceColor_type;
 @implementation EGColorSourceTexture{
     EGTexture* _texture;
 }
-static ODType* _EGColorSourceTexture_type;
+static ODClassType* _EGColorSourceTexture_type;
 @synthesize texture = _texture;
 
 + (id)colorSourceTextureWithTexture:(EGTexture*)texture {
@@ -139,14 +139,14 @@ static ODType* _EGColorSourceTexture_type;
 
 + (void)initialize {
     [super initialize];
-    _EGColorSourceTexture_type = [ODType typeWithCls:[EGColorSourceTexture class]];
+    _EGColorSourceTexture_type = [ODClassType classTypeWithCls:[EGColorSourceTexture class]];
 }
 
-- (ODType*)type {
-    return _EGColorSourceTexture_type;
+- (ODClassType*)type {
+    return [EGColorSourceTexture type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGColorSourceTexture_type;
 }
 
@@ -178,7 +178,7 @@ static ODType* _EGColorSourceTexture_type;
 
 
 @implementation EGMaterial
-static ODType* _EGMaterial_type;
+static ODClassType* _EGMaterial_type;
 
 + (id)material {
     return [[EGMaterial alloc] init];
@@ -192,7 +192,7 @@ static ODType* _EGMaterial_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMaterial_type = [ODType typeWithCls:[EGMaterial class]];
+    _EGMaterial_type = [ODClassType classTypeWithCls:[EGMaterial class]];
 }
 
 - (id<EGShaderSystem>)shaderSystem {
@@ -211,11 +211,11 @@ static ODType* _EGMaterial_type;
     return [EGStandardMaterial applyDiffuse:[EGColorSource applyTexture:texture]];
 }
 
-- (ODType*)type {
-    return _EGMaterial_type;
+- (ODClassType*)type {
+    return [EGMaterial type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGMaterial_type;
 }
 
@@ -245,7 +245,7 @@ static ODType* _EGMaterial_type;
 @implementation EGSimpleMaterial{
     EGColorSource* _color;
 }
-static ODType* _EGSimpleMaterial_type;
+static ODClassType* _EGSimpleMaterial_type;
 @synthesize color = _color;
 
 + (id)simpleMaterialWithColor:(EGColorSource*)color {
@@ -261,18 +261,18 @@ static ODType* _EGSimpleMaterial_type;
 
 + (void)initialize {
     [super initialize];
-    _EGSimpleMaterial_type = [ODType typeWithCls:[EGSimpleMaterial class]];
+    _EGSimpleMaterial_type = [ODClassType classTypeWithCls:[EGSimpleMaterial class]];
 }
 
 - (id<EGShaderSystem>)shaderSystem {
     return EGSimpleShaderSystem.instance;
 }
 
-- (ODType*)type {
-    return _EGSimpleMaterial_type;
+- (ODClassType*)type {
+    return [EGSimpleMaterial type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGSimpleMaterial_type;
 }
 
@@ -308,7 +308,7 @@ static ODType* _EGSimpleMaterial_type;
     EGColor _specularColor;
     CGFloat _specularSize;
 }
-static ODType* _EGStandardMaterial_type;
+static ODClassType* _EGStandardMaterial_type;
 @synthesize diffuse = _diffuse;
 @synthesize specularColor = _specularColor;
 @synthesize specularSize = _specularSize;
@@ -330,7 +330,7 @@ static ODType* _EGStandardMaterial_type;
 
 + (void)initialize {
     [super initialize];
-    _EGStandardMaterial_type = [ODType typeWithCls:[EGStandardMaterial class]];
+    _EGStandardMaterial_type = [ODClassType classTypeWithCls:[EGStandardMaterial class]];
 }
 
 + (EGStandardMaterial*)applyDiffuse:(EGColorSource*)diffuse {
@@ -341,11 +341,11 @@ static ODType* _EGStandardMaterial_type;
     return EGStandardShaderSystem.instance;
 }
 
-- (ODType*)type {
-    return _EGStandardMaterial_type;
+- (ODClassType*)type {
+    return [EGStandardMaterial type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGStandardMaterial_type;
 }
 

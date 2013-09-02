@@ -222,7 +222,7 @@ static NSArray* _TRRailForm_values;
     BOOL _back;
     EGPoint _point;
 }
-static ODType* _TRRailPoint_type;
+static ODClassType* _TRRailPoint_type;
 @synthesize tile = _tile;
 @synthesize form = _form;
 @synthesize x = _x;
@@ -248,7 +248,7 @@ static ODType* _TRRailPoint_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRailPoint_type = [ODType typeWithCls:[TRRailPoint class]];
+    _TRRailPoint_type = [ODClassType classTypeWithCls:[TRRailPoint class]];
 }
 
 - (TRRailPoint*)addX:(CGFloat)x {
@@ -294,11 +294,11 @@ static ODType* _TRRailPoint_type;
     return [[self endConnector] nextTile:_tile];
 }
 
-- (ODType*)type {
-    return _TRRailPoint_type;
+- (ODClassType*)type {
+    return [TRRailPoint type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRRailPoint_type;
 }
 
@@ -339,7 +339,7 @@ static ODType* _TRRailPoint_type;
     TRRailPoint* _point;
     CGFloat _error;
 }
-static ODType* _TRRailPointCorrection_type;
+static ODClassType* _TRRailPointCorrection_type;
 @synthesize point = _point;
 @synthesize error = _error;
 
@@ -359,7 +359,7 @@ static ODType* _TRRailPointCorrection_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRailPointCorrection_type = [ODType typeWithCls:[TRRailPointCorrection class]];
+    _TRRailPointCorrection_type = [ODClassType classTypeWithCls:[TRRailPointCorrection class]];
 }
 
 - (TRRailPoint*)addErrorToPoint {
@@ -367,11 +367,11 @@ static ODType* _TRRailPointCorrection_type;
     else return [_point addX:_error];
 }
 
-- (ODType*)type {
-    return _TRRailPointCorrection_type;
+- (ODClassType*)type {
+    return [TRRailPointCorrection type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRRailPointCorrection_type;
 }
 

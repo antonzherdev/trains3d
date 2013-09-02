@@ -20,9 +20,9 @@
 
 + (id)levelBackgroundViewWithMap:(EGMapSso*)map;
 - (id)initWithMap:(EGMapSso*)map;
+- (ODClassType*)type;
 - (void)draw;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

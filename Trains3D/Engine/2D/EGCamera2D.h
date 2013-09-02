@@ -13,10 +13,10 @@
 
 + (id)camera2DWithSize:(EGSize)size;
 - (id)initWithSize:(EGSize)size;
+- (ODClassType*)type;
 - (void)focusForViewSize:(EGSize)viewSize;
 - (EGPoint)translateWithViewSize:(EGSize)viewSize viewPoint:(EGPoint)viewPoint;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

@@ -1,6 +1,7 @@
 #import "objd.h"
 @class CNPArray;
 @class CNPArrayIterator;
+@class CNMutablePArray;
 @class EGBuffer;
 @class EGVertexBuffer;
 @class EGIndexBuffer;
@@ -25,10 +26,10 @@
 
 + (id)meshWithVertexBuffer:(EGVertexBuffer*)vertexBuffer indexBuffer:(EGIndexBuffer*)indexBuffer;
 - (id)initWithVertexBuffer:(EGVertexBuffer*)vertexBuffer indexBuffer:(EGIndexBuffer*)indexBuffer;
+- (ODClassType*)type;
 + (EGMesh*)applyVertexData:(CNPArray*)vertexData index:(CNPArray*)index;
 - (void)drawWithMaterial:(EGMaterial*)material;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -37,9 +38,9 @@
 
 + (id)meshModelWithMeshes:(id<CNSeq>)meshes;
 - (id)initWithMeshes:(id<CNSeq>)meshes;
+- (ODClassType*)type;
 - (void)draw;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

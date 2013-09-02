@@ -16,12 +16,12 @@
 
 + (id)rangeWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step;
 - (id)initWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step;
+- (ODClassType*)type;
 - (id)applyIndex:(NSUInteger)index;
 - (id<CNIterator>)iterator;
 - (CNRange*)setStep:(NSInteger)step;
 - (BOOL)isEmpty;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -32,10 +32,10 @@
 
 + (id)rangeIteratorWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step;
 - (id)initWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step;
+- (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

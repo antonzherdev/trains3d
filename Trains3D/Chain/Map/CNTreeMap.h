@@ -19,6 +19,7 @@
 
 + (id)mutableTreeMapWithComparator:(NSInteger(^)(id, id))comparator;
 - (id)initWithComparator:(NSInteger(^)(id, id))comparator;
+- (ODClassType*)type;
 + (CNMutableTreeMap*)new;
 - (NSUInteger)count;
 - (BOOL)isEmpty;
@@ -33,10 +34,9 @@
 - (id)lastKey;
 - (id)lowerKeyThanKey:(id)key;
 - (id)higherKeyThanKey:(id)key;
-- (ODType*)type;
 + (NSInteger)BLACK;
 + (NSInteger)RED;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -50,10 +50,10 @@
 
 + (id)treeMapEntry;
 - (id)init;
+- (ODClassType*)type;
 + (CNTreeMapEntry*)newWithKey:(id)key object:(id)object parent:(CNTreeMapEntry*)parent;
 - (CNTreeMapEntry*)next;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -62,11 +62,11 @@
 
 + (id)treeMapKeySetWithMap:(CNMutableTreeMap*)map;
 - (id)initWithMap:(CNMutableTreeMap*)map;
+- (ODClassType*)type;
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
 - (id<CNIterator>)iteratorHigherThanKey:(id)key;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -76,11 +76,11 @@
 
 + (id)treeMapKeyIteratorWithMap:(CNMutableTreeMap*)map;
 - (id)initWithMap:(CNMutableTreeMap*)map;
+- (ODClassType*)type;
 + (CNTreeMapKeyIterator*)newMap:(CNMutableTreeMap*)map entry:(CNTreeMapEntry*)entry;
 - (BOOL)hasNext;
 - (id)next;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -89,10 +89,10 @@
 
 + (id)treeMapValuesWithMap:(CNMutableTreeMap*)map;
 - (id)initWithMap:(CNMutableTreeMap*)map;
+- (ODClassType*)type;
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -102,11 +102,11 @@
 
 + (id)treeMapValuesIteratorWithMap:(CNMutableTreeMap*)map;
 - (id)initWithMap:(CNMutableTreeMap*)map;
+- (ODClassType*)type;
 + (CNTreeMapValuesIterator*)newMap:(CNMutableTreeMap*)map entry:(CNTreeMapEntry*)entry;
 - (BOOL)hasNext;
 - (id)next;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -116,11 +116,11 @@
 
 + (id)treeMapIteratorWithMap:(CNMutableTreeMap*)map;
 - (id)initWithMap:(CNMutableTreeMap*)map;
+- (ODClassType*)type;
 + (CNTreeMapIterator*)newMap:(CNMutableTreeMap*)map entry:(CNTreeMapEntry*)entry;
 - (BOOL)hasNext;
 - (id)next;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

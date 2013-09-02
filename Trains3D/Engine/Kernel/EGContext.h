@@ -23,6 +23,7 @@
 
 + (id)context;
 - (id)init;
+- (ODClassType*)type;
 - (EGTexture*)textureForFile:(NSString*)file;
 - (EGMatrix*)m;
 - (EGMatrix*)w;
@@ -31,15 +32,16 @@
 - (EGMatrix*)mw;
 - (EGMatrix*)mwc;
 - (EGMatrix*)mwcp;
+- (EGMatrix*)cp;
 - (void)clearMatrix;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
 @interface EGMutableMatrix : NSObject
 + (id)mutableMatrix;
 - (id)init;
+- (ODClassType*)type;
 - (void)push;
 - (void)pop;
 - (EGMatrix*)value;
@@ -51,8 +53,7 @@
 - (void)translateX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z;
 - (void)orthoLeft:(CGFloat)left right:(CGFloat)right bottom:(CGFloat)bottom top:(CGFloat)top zNear:(CGFloat)zNear zFar:(CGFloat)zFar;
 - (void)keepF:(void(^)())f;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

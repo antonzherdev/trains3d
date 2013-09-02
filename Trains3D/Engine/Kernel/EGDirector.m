@@ -14,7 +14,7 @@
     id __stat;
 }
 static EGDirector* _EGDirector__current;
-static ODType* _EGDirector_type;
+static ODClassType* _EGDirector_type;
 @synthesize scene = _scene;
 @synthesize time = _time;
 @synthesize context = _context;
@@ -38,7 +38,7 @@ static ODType* _EGDirector_type;
 
 + (void)initialize {
     [super initialize];
-    _EGDirector_type = [ODType typeWithCls:[EGDirector class]];
+    _EGDirector_type = [ODClassType classTypeWithCls:[EGDirector class]];
 }
 
 + (EGDirector*)current {
@@ -113,11 +113,11 @@ static ODType* _EGDirector_type;
     __stat = [CNOption none];
 }
 
-- (ODType*)type {
-    return _EGDirector_type;
+- (ODClassType*)type {
+    return [EGDirector type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGDirector_type;
 }
 

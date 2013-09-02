@@ -2,7 +2,7 @@
 
 #import "EGFigure.h"
 @implementation EGFigureTest
-static ODType* _EGFigureTest_type;
+static ODClassType* _EGFigureTest_type;
 
 + (id)figureTest {
     return [[EGFigureTest alloc] init];
@@ -16,7 +16,7 @@ static ODType* _EGFigureTest_type;
 
 + (void)initialize {
     [super initialize];
-    _EGFigureTest_type = [ODType typeWithCls:[EGFigureTest class]];
+    _EGFigureTest_type = [ODClassType classTypeWithCls:[EGFigureTest class]];
 }
 
 - (void)testThickLine {
@@ -35,11 +35,11 @@ static ODType* _EGFigureTest_type;
     [self assertEqualsA:[[l segments] toSet] b:[p.segments toSet]];
 }
 
-- (ODType*)type {
-    return _EGFigureTest_type;
+- (ODClassType*)type {
+    return [EGFigureTest type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGFigureTest_type;
 }
 

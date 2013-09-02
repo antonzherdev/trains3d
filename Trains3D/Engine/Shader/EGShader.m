@@ -10,7 +10,7 @@
 @implementation EGShaderProgram{
     GLuint _handle;
 }
-static ODType* _EGShaderProgram_type;
+static ODClassType* _EGShaderProgram_type;
 @synthesize handle = _handle;
 
 + (id)shaderProgramWithHandle:(GLuint)handle {
@@ -26,7 +26,7 @@ static ODType* _EGShaderProgram_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShaderProgram_type = [ODType typeWithCls:[EGShaderProgram class]];
+    _EGShaderProgram_type = [ODClassType classTypeWithCls:[EGShaderProgram class]];
 }
 
 + (EGShaderProgram*)loadFromFilesVertex:(NSString*)vertex fragment:(NSString*)fragment {
@@ -94,11 +94,11 @@ static ODType* _EGShaderProgram_type;
     return [EGShaderUniform shaderUniformWithHandle:h];
 }
 
-- (ODType*)type {
-    return _EGShaderProgram_type;
+- (ODClassType*)type {
+    return [EGShaderProgram type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGShaderProgram_type;
 }
 
@@ -132,7 +132,7 @@ static ODType* _EGShaderProgram_type;
 @implementation EGShader{
     EGShaderProgram* _program;
 }
-static ODType* _EGShader_type;
+static ODClassType* _EGShader_type;
 @synthesize program = _program;
 
 + (id)shaderWithProgram:(EGShaderProgram*)program {
@@ -148,7 +148,7 @@ static ODType* _EGShader_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShader_type = [ODType typeWithCls:[EGShader class]];
+    _EGShader_type = [ODClassType classTypeWithCls:[EGShader class]];
 }
 
 - (void)applyContext:(EGContext*)context material:(id)material draw:(void(^)())draw {
@@ -170,11 +170,11 @@ static ODType* _EGShader_type;
     return [_program uniformForName:name];
 }
 
-- (ODType*)type {
-    return _EGShader_type;
+- (ODClassType*)type {
+    return [EGShader type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGShader_type;
 }
 
@@ -208,7 +208,7 @@ static ODType* _EGShader_type;
 @implementation EGShaderAttribute{
     GLuint _handle;
 }
-static ODType* _EGShaderAttribute_type;
+static ODClassType* _EGShaderAttribute_type;
 @synthesize handle = _handle;
 
 + (id)shaderAttributeWithHandle:(GLuint)handle {
@@ -224,7 +224,7 @@ static ODType* _EGShaderAttribute_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShaderAttribute_type = [ODType typeWithCls:[EGShaderAttribute class]];
+    _EGShaderAttribute_type = [ODClassType classTypeWithCls:[EGShaderAttribute class]];
 }
 
 - (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(GLenum)valuesType shift:(NSUInteger)shift {
@@ -232,11 +232,11 @@ static ODType* _EGShaderAttribute_type;
     egVertexAttribPointer(_handle, valuesCount, valuesType, GL_FALSE, stride, shift);
 }
 
-- (ODType*)type {
-    return _EGShaderAttribute_type;
+- (ODClassType*)type {
+    return [EGShaderAttribute type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGShaderAttribute_type;
 }
 
@@ -270,7 +270,7 @@ static ODType* _EGShaderAttribute_type;
 @implementation EGShaderUniform{
     GLuint _handle;
 }
-static ODType* _EGShaderUniform_type;
+static ODClassType* _EGShaderUniform_type;
 @synthesize handle = _handle;
 
 + (id)shaderUniformWithHandle:(GLuint)handle {
@@ -286,7 +286,7 @@ static ODType* _EGShaderUniform_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShaderUniform_type = [ODType typeWithCls:[EGShaderUniform class]];
+    _EGShaderUniform_type = [ODClassType classTypeWithCls:[EGShaderUniform class]];
 }
 
 - (void)setMatrix:(EGMatrix*)matrix {
@@ -305,11 +305,11 @@ static ODType* _EGShaderUniform_type;
     glUniform1f(_handle, number);
 }
 
-- (ODType*)type {
-    return _EGShaderUniform_type;
+- (ODClassType*)type {
+    return [EGShaderUniform type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGShaderUniform_type;
 }
 

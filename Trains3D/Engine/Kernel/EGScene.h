@@ -14,11 +14,11 @@
 
 + (id)sceneWithController:(id<EGController>)controller layers:(id<CNSeq>)layers;
 - (id)initWithController:(id<EGController>)controller layers:(id<CNSeq>)layers;
+- (ODClassType*)type;
 - (void)drawWithViewSize:(EGSize)viewSize;
 - (BOOL)processEvent:(EGEvent*)event;
 - (void)updateWithDelta:(CGFloat)delta;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

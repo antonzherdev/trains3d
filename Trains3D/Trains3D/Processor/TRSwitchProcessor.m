@@ -9,7 +9,7 @@
     EGRectIndex* _index;
     id _downed;
 }
-static ODType* _TRSwitchProcessor_type;
+static ODClassType* _TRSwitchProcessor_type;
 @synthesize level = _level;
 
 + (id)switchProcessorWithLevel:(TRLevel*)level {
@@ -29,7 +29,7 @@ static ODType* _TRSwitchProcessor_type;
 
 + (void)initialize {
     [super initialize];
-    _TRSwitchProcessor_type = [ODType typeWithCls:[TRSwitchProcessor class]];
+    _TRSwitchProcessor_type = [ODClassType classTypeWithCls:[TRSwitchProcessor class]];
 }
 
 - (BOOL)processEvent:(EGEvent*)event {
@@ -66,11 +66,11 @@ static ODType* _TRSwitchProcessor_type;
     }
 }
 
-- (ODType*)type {
-    return _TRSwitchProcessor_type;
+- (ODClassType*)type {
+    return [TRSwitchProcessor type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRSwitchProcessor_type;
 }
 

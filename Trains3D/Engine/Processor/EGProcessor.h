@@ -8,7 +8,6 @@
 
 @protocol EGProcessor<NSObject>
 - (BOOL)processEvent:(EGEvent*)event;
-- (ODType*)type;
 @end
 
 
@@ -16,7 +15,6 @@
 - (BOOL)mouseDownEvent:(EGEvent*)event;
 - (BOOL)mouseDragEvent:(EGEvent*)event;
 - (BOOL)mouseUpEvent:(EGEvent*)event;
-- (ODType*)type;
 @end
 
 
@@ -25,7 +23,6 @@
 - (BOOL)touchMovedEvent:(EGEvent*)event;
 - (BOOL)touchEndedEvent:(EGEvent*)event;
 - (BOOL)touchCanceledEvent:(EGEvent*)event;
-- (ODType*)type;
 @end
 
 
@@ -35,6 +32,7 @@
 
 + (id)eventWithViewSize:(EGSize)viewSize camera:(id)camera;
 - (id)initWithViewSize:(EGSize)viewSize camera:(id)camera;
+- (ODClassType*)type;
 - (EGEvent*)setCamera:(id)camera;
 - (EGPoint)locationInView;
 - (EGPoint)location;
@@ -48,8 +46,7 @@
 - (BOOL)isTouchEnded;
 - (BOOL)isTouchCanceled;
 - (BOOL)touchProcessor:(id<EGTouchProcessor>)processor;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

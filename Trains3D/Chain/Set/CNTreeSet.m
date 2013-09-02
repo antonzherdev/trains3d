@@ -8,7 +8,7 @@
     CNMutableTreeMap* _map;
 }
 static NSObject* _CNMutableTreeSet_obj;
-static ODType* _CNMutableTreeSet_type;
+static ODClassType* _CNMutableTreeSet_type;
 @synthesize map = _map;
 
 + (id)mutableTreeSetWithMap:(CNMutableTreeMap*)map {
@@ -24,8 +24,8 @@ static ODType* _CNMutableTreeSet_type;
 
 + (void)initialize {
     [super initialize];
+    _CNMutableTreeSet_type = [ODClassType classTypeWithCls:[CNMutableTreeSet class]];
     _CNMutableTreeSet_obj = [NSObject object];
-    _CNMutableTreeSet_type = [ODType typeWithCls:[CNMutableTreeSet class]];
 }
 
 + (CNMutableTreeSet*)newWithComparator:(NSInteger(^)(id, id))comparator {
@@ -96,10 +96,6 @@ static ODType* _CNMutableTreeSet_type;
     return ret;
 }
 
-- (ODType*)type {
-    return _CNMutableTreeSet_type;
-}
-
 - (BOOL)isEmpty {
     return !([[self iterator] hasNext]);
 }
@@ -146,7 +142,11 @@ static ODType* _CNMutableTreeSet_type;
     return [builder build];
 }
 
-+ (ODType*)type {
+- (ODClassType*)type {
+    return [CNMutableTreeSet type];
+}
+
++ (ODClassType*)type {
     return _CNMutableTreeSet_type;
 }
 

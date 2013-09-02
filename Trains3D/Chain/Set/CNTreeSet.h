@@ -18,6 +18,7 @@
 
 + (id)mutableTreeSetWithMap:(CNMutableTreeMap*)map;
 - (id)initWithMap:(CNMutableTreeMap*)map;
+- (ODClassType*)type;
 + (CNMutableTreeSet*)newWithComparator:(NSInteger(^)(id, id))comparator;
 + (CNMutableTreeSet*)new;
 - (id<CNSeq>)betweenA:(id)a b:(id)b;
@@ -34,8 +35,7 @@
 - (void)clear;
 - (void)addAllObjects:(id<CNTraversable>)objects;
 - (CNMutableTreeSet*)reorder;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

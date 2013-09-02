@@ -320,7 +320,6 @@ static inline NSString* EGColorDescription(EGColor self) {
 
 @protocol EGController<NSObject>
 - (void)updateWithDelta:(CGFloat)delta;
-- (ODType*)type;
 @end
 
 
@@ -328,7 +327,6 @@ static inline NSString* EGColorDescription(EGColor self) {
 - (void)focusForViewSize:(EGSize)viewSize;
 - (EGPoint)translateWithViewSize:(EGSize)viewSize viewPoint:(EGPoint)viewPoint;
 - (EGVec3)eyeDirection;
-- (ODType*)type;
 @end
 
 
@@ -336,7 +334,6 @@ static inline NSString* EGColorDescription(EGColor self) {
 - (id<EGCamera>)camera;
 - (void)drawView;
 - (EGEnvironment*)environment;
-- (ODType*)type;
 @end
 
 
@@ -370,7 +367,10 @@ static inline NSString* EGVec3Description(EGVec3 self) {
     [description appendString:@">"];
     return description;
 }
+EGVec3 egVec3Apply(EGPoint vec2, CGFloat z);
 EGVec3 egVec3Add(EGVec3 self, EGVec3 v);
+EGVec3 egVec3Sqr(EGVec3 self);
+EGVec3 egVec3Mul(EGVec3 self, CGFloat k);
 @interface EGVec3Wrap : NSObject
 @property (readonly, nonatomic) EGVec3 value;
 
@@ -386,11 +386,11 @@ EGVec3 egVec3Add(EGVec3 self, EGVec3 v);
 
 + (id)environmentWithAmbientColor:(EGColor)ambientColor lights:(id<CNSeq>)lights;
 - (id)initWithAmbientColor:(EGColor)ambientColor lights:(id<CNSeq>)lights;
+- (ODClassType*)type;
 + (EGEnvironment*)applyLights:(id<CNSeq>)lights;
 + (EGEnvironment*)applyLight:(EGLight*)light;
-- (ODType*)type;
 + (EGEnvironment*)aDefault;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -399,8 +399,8 @@ EGVec3 egVec3Add(EGVec3 self, EGVec3 v);
 
 + (id)lightWithColor:(EGColor)color;
 - (id)initWithColor:(EGColor)color;
-- (ODType*)type;
-+ (ODType*)type;
+- (ODClassType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -409,8 +409,8 @@ EGVec3 egVec3Add(EGVec3 self, EGVec3 v);
 
 + (id)directLightWithColor:(EGColor)color direction:(EGVec3)direction;
 - (id)initWithColor:(EGColor)color direction:(EGVec3)direction;
-- (ODType*)type;
-+ (ODType*)type;
+- (ODClassType*)type;
++ (ODClassType*)type;
 @end
 
 

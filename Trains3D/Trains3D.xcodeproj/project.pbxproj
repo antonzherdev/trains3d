@@ -593,6 +593,7 @@
 		6F3DF52CA92C3E41942E4CF9 /* KWAfterAllNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWAfterAllNode.h; sourceTree = "<group>"; };
 		6F3DF52DB655D7E02221C43E /* KWFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWFormatter.m; sourceTree = "<group>"; };
 		6F3DF530130343F501A7F5C0 /* EGBentleyOttmannTest.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGBentleyOttmannTest.od; sourceTree = "<group>"; };
+		6F3DF538007ABB42BAA049AD /* TRSmoke.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TRSmoke.od; sourceTree = "<group>"; };
 		6F3DF538A8A48139F0541E0A /* EGMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGMatrix.h; sourceTree = "<group>"; };
 		6F3DF53978B4FC6B4618A49D /* KWDeviceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWDeviceInfo.m; sourceTree = "<group>"; };
 		6F3DF539C1DCB1A0FA0BA2D6 /* TRLevelMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRLevelMenuView.m; sourceTree = "<group>"; };
@@ -2197,6 +2198,7 @@
 				6F3DFAEDCE258F324ACD709B /* TRLevelBackgroundView.h */,
 				6F3DF5426C4F02CCF2F83213 /* TRLevelBackgroundView.m */,
 				6F3DFB46543DAAFD7D289CFA /* TRLevelBackgroundView.od */,
+				6F3DF538007ABB42BAA049AD /* TRSmoke.od */,
 			);
 			path = View;
 			sourceTree = "<group>";

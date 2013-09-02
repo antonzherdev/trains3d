@@ -30,6 +30,7 @@
 
 + (id)shaderProgramWithHandle:(GLuint)handle;
 - (id)initWithHandle:(GLuint)handle;
+- (ODClassType*)type;
 + (EGShaderProgram*)loadFromFilesVertex:(NSString*)vertex fragment:(NSString*)fragment;
 + (EGShaderProgram*)applyVertex:(NSString*)vertex fragment:(NSString*)fragment;
 + (EGShaderProgram*)linkFromShadersVertex:(GLuint)vertex fragment:(GLuint)fragment;
@@ -40,8 +41,7 @@
 - (void)applyDraw:(void(^)())draw;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
 - (EGShaderUniform*)uniformForName:(NSString*)name;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -50,12 +50,12 @@
 
 + (id)shaderWithProgram:(EGShaderProgram*)program;
 - (id)initWithProgram:(EGShaderProgram*)program;
+- (ODClassType*)type;
 - (void)applyContext:(EGContext*)context material:(id)material draw:(void(^)())draw;
 - (void)loadContext:(EGContext*)context material:(id)material;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
 - (EGShaderUniform*)uniformForName:(NSString*)name;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -64,9 +64,9 @@
 
 + (id)shaderAttributeWithHandle:(GLuint)handle;
 - (id)initWithHandle:(GLuint)handle;
+- (ODClassType*)type;
 - (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(GLenum)valuesType shift:(NSUInteger)shift;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -75,19 +75,18 @@
 
 + (id)shaderUniformWithHandle:(GLuint)handle;
 - (id)initWithHandle:(GLuint)handle;
+- (ODClassType*)type;
 - (void)setMatrix:(EGMatrix*)matrix;
 - (void)setColor:(EGColor)color;
 - (void)setVec3:(EGVec3)vec3;
 - (void)setNumber:(float)number;
-- (ODType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
 @protocol EGShaderSystem<NSObject>
 - (void)applyContext:(EGContext*)context material:(id)material draw:(void(^)())draw;
 - (EGShader*)shaderForContext:(EGContext*)context material:(id)material;
-- (ODType*)type;
 @end
 
 

@@ -1,7 +1,7 @@
 #import "EGFigure.h"
 
 @implementation EGLine
-static ODType* _EGLine_type;
+static ODClassType* _EGLine_type;
 
 + (id)line {
     return [[EGLine alloc] init];
@@ -15,7 +15,7 @@ static ODType* _EGLine_type;
 
 + (void)initialize {
     [super initialize];
-    _EGLine_type = [ODType typeWithCls:[EGLine class]];
+    _EGLine_type = [ODClassType classTypeWithCls:[EGLine class]];
 }
 
 + (EGLine*)newWithSlope:(CGFloat)slope point:(EGPoint)point {
@@ -83,11 +83,11 @@ static ODType* _EGLine_type;
     @throw @"Method perpendicularWith is abstract";
 }
 
-- (ODType*)type {
-    return _EGLine_type;
+- (ODClassType*)type {
+    return [EGLine type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGLine_type;
 }
 
@@ -118,7 +118,7 @@ static ODType* _EGLine_type;
     CGFloat _slope;
     CGFloat _constant;
 }
-static ODType* _EGSlopeLine_type;
+static ODClassType* _EGSlopeLine_type;
 @synthesize slope = _slope;
 @synthesize constant = _constant;
 
@@ -138,7 +138,7 @@ static ODType* _EGSlopeLine_type;
 
 + (void)initialize {
     [super initialize];
-    _EGSlopeLine_type = [ODType typeWithCls:[EGSlopeLine class]];
+    _EGSlopeLine_type = [ODClassType classTypeWithCls:[EGSlopeLine class]];
 }
 
 - (BOOL)containsPoint:(EGPoint)point {
@@ -195,11 +195,11 @@ static ODType* _EGSlopeLine_type;
     else return [EGLine newWithSlope:-_slope point:point];
 }
 
-- (ODType*)type {
-    return _EGSlopeLine_type;
+- (ODClassType*)type {
+    return [EGSlopeLine type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGSlopeLine_type;
 }
 
@@ -235,7 +235,7 @@ static ODType* _EGSlopeLine_type;
 @implementation EGVerticalLine{
     CGFloat _x;
 }
-static ODType* _EGVerticalLine_type;
+static ODClassType* _EGVerticalLine_type;
 @synthesize x = _x;
 
 + (id)verticalLineWithX:(CGFloat)x {
@@ -251,7 +251,7 @@ static ODType* _EGVerticalLine_type;
 
 + (void)initialize {
     [super initialize];
-    _EGVerticalLine_type = [ODType typeWithCls:[EGVerticalLine class]];
+    _EGVerticalLine_type = [ODClassType classTypeWithCls:[EGVerticalLine class]];
 }
 
 - (BOOL)containsPoint:(EGPoint)point {
@@ -295,11 +295,11 @@ static ODType* _EGVerticalLine_type;
     return [EGSlopeLine slopeLineWithSlope:0.0 constant:point.y];
 }
 
-- (ODType*)type {
-    return _EGVerticalLine_type;
+- (ODClassType*)type {
+    return [EGVerticalLine type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGVerticalLine_type;
 }
 
@@ -336,7 +336,7 @@ static ODType* _EGVerticalLine_type;
     EGLine* __line;
     EGRect _boundingRect;
 }
-static ODType* _EGLineSegment_type;
+static ODClassType* _EGLineSegment_type;
 @synthesize p1 = _p1;
 @synthesize p2 = _p2;
 @synthesize boundingRect = _boundingRect;
@@ -358,7 +358,7 @@ static ODType* _EGLineSegment_type;
 
 + (void)initialize {
     [super initialize];
-    _EGLineSegment_type = [ODType typeWithCls:[EGLineSegment class]];
+    _EGLineSegment_type = [ODClassType classTypeWithCls:[EGLineSegment class]];
 }
 
 + (EGLineSegment*)newWithP1:(EGPoint)p1 p2:(EGPoint)p2 {
@@ -437,11 +437,11 @@ static ODType* _EGLineSegment_type;
     __line = line;
 }
 
-- (ODType*)type {
-    return _EGLineSegment_type;
+- (ODClassType*)type {
+    return [EGLineSegment type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGLineSegment_type;
 }
 
@@ -478,7 +478,7 @@ static ODType* _EGLineSegment_type;
     id<CNSeq> _points;
     id<CNSeq> _segments;
 }
-static ODType* _EGPolygon_type;
+static ODClassType* _EGPolygon_type;
 @synthesize points = _points;
 @synthesize segments = _segments;
 
@@ -500,7 +500,7 @@ static ODType* _EGPolygon_type;
 
 + (void)initialize {
     [super initialize];
-    _EGPolygon_type = [ODType typeWithCls:[EGPolygon class]];
+    _EGPolygon_type = [ODClassType classTypeWithCls:[EGPolygon class]];
 }
 
 - (EGRect)boundingRect {
@@ -517,11 +517,11 @@ static ODType* _EGPolygon_type;
     return egRectNewXY(minX, maxX, minY, maxY);
 }
 
-- (ODType*)type {
-    return _EGPolygon_type;
+- (ODClassType*)type {
+    return [EGPolygon type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGPolygon_type;
 }
 
@@ -558,7 +558,7 @@ static ODType* _EGPolygon_type;
     CGFloat _thickness_2;
     id<CNSeq> __segments;
 }
-static ODType* _EGThickLineSegment_type;
+static ODClassType* _EGThickLineSegment_type;
 @synthesize segment = _segment;
 @synthesize thickness = _thickness;
 @synthesize thickness_2 = _thickness_2;
@@ -580,7 +580,7 @@ static ODType* _EGThickLineSegment_type;
 
 + (void)initialize {
     [super initialize];
-    _EGThickLineSegment_type = [ODType typeWithCls:[EGThickLineSegment class]];
+    _EGThickLineSegment_type = [ODClassType classTypeWithCls:[EGThickLineSegment class]];
 }
 
 - (EGRect)boundingRect {
@@ -612,11 +612,11 @@ static ODType* _EGThickLineSegment_type;
     return __segments;
 }
 
-- (ODType*)type {
-    return _EGThickLineSegment_type;
+- (ODClassType*)type {
+    return [EGThickLineSegment type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGThickLineSegment_type;
 }
 
