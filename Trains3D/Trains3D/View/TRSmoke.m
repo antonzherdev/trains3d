@@ -8,7 +8,7 @@
 #import "TRTrain.h"
 #import "TRRailPoint.h"
 @implementation TRSmoke{
-    TRTrain* _train;
+    __weak TRTrain* _train;
     CNList* __particles;
     TRCar* _engine;
     EGVec3 _tubePos;
@@ -175,29 +175,26 @@ static ODClassType* _TRSmokeParticle_type;
 
 
 @implementation TRSmokeView{
-    TRSmoke* _smoke;
     EGVertexBuffer* _positionBuffer;
     EGVertexBuffer* _cornerBuffer;
     EGIndexBuffer* _indexBuffer;
     TRSmokeShader* _shader;
 }
 static ODClassType* _TRSmokeView_type;
-@synthesize smoke = _smoke;
 @synthesize positionBuffer = _positionBuffer;
 @synthesize cornerBuffer = _cornerBuffer;
 @synthesize indexBuffer = _indexBuffer;
 @synthesize shader = _shader;
 
-+ (id)smokeViewWithSmoke:(TRSmoke*)smoke {
-    return [[TRSmokeView alloc] initWithSmoke:smoke];
++ (id)smokeView {
+    return [[TRSmokeView alloc] init];
 }
 
-- (id)initWithSmoke:(TRSmoke*)smoke {
+- (id)init {
     self = [super init];
     if(self) {
-        _smoke = smoke;
         _positionBuffer = [EGVertexBuffer applyStride:((NSUInteger)(3 * 4))];
-        _cornerBuffer = [EGVertexBuffer applyStride:1];
+        _cornerBuffer = [EGVertexBuffer applyStride:4];
         _indexBuffer = [EGIndexBuffer apply];
         _shader = TRSmokeShader.instance;
     }
@@ -210,12 +207,13 @@ static ODClassType* _TRSmokeView_type;
     _TRSmokeView_type = [ODClassType classTypeWithCls:[TRSmokeView class]];
 }
 
-- (void)draw {
-    CNList* particles = [_smoke particles];
+- (void)drawSmoke:(TRSmoke*)smoke {
+    CNList* particles = [smoke particles];
     NSUInteger n = [particles count];
+    if(n == 0) return ;
     CNMutablePArray* positionArr = [CNMutablePArray applyTp:egVec3Type() count:((NSUInteger)(4 * n))];
-    CNMutablePArray* cornerArr = [CNMutablePArray applyTp:odByteType() count:((NSUInteger)(4 * n))];
-    CNPArray* corners = [ arrc(4) {0, 1, 2, 3}];
+    CNMutablePArray* cornerArr = [CNMutablePArray applyTp:odFloat4Type() count:((NSUInteger)(4 * n))];
+    CNPArray* corners = [ arrf4(4) {0, 1, 2, 3}];
     [particles forEach:^void(TRSmokeParticle* p) {
         [positionArr writeItem:voidRef(p.position) times:4];
         [cornerArr writeArray:corners];
@@ -242,19 +240,15 @@ static ODClassType* _TRSmokeView_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRSmokeView* o = ((TRSmokeView*)(other));
-    return [self.smoke isEqual:o.smoke];
+    return YES;
 }
 
 - (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.smoke hash];
-    return hash;
+    return 0;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"smoke=%@", self.smoke];
     [description appendString:@">"];
     return description;
 }
@@ -266,14 +260,22 @@ static ODClassType* _TRSmokeView_type;
     EGShaderProgram* _program;
     EGShaderAttribute* _positionSlot;
     EGShaderAttribute* _cornerSlot;
-    EGShaderUniform* _cpUniform;
+    EGShaderUniform* _cUniform;
+    EGShaderUniform* _pUniform;
 }
 static NSString* _TRSmokeShader_vertex = @"attribute vec3 position;\n"
-    "attribute byte corner;\n"
-    "uniform mat4 cp;\n"
+    "attribute float corner;\n"
+    "uniform mat4 c;\n"
+    "uniform mat4 p;\n"
     "\n"
     "void main(void) {\n"
-    "   gl_Position = cp * vec4(position, 1);\n"
+    "   vec4 pos = c * vec4(position, 1);\n"
+    "   if(corner <= 0.1) pos = vec4(pos.x - 0.1, pos.y - 0.1, pos.z, 1);\n"
+    "   else if(corner <= 1.1) pos = vec4(pos.x + 0.1, pos.y - 0.1, pos.z, 1);\n"
+    "   else if(corner <= 2.1) pos = vec4(pos.x + 0.1, pos.y + 0.1, pos.z, 1);\n"
+    "   else if(corner <= 3.1) pos = vec4(pos.x - 0.1, pos.y + 0.1, pos.z, 1);\n"
+    "\n"
+    "   gl_Position = p * pos;\n"
     "}";
 static NSString* _TRSmokeShader_fragment = @"void main(void) {\n"
     "   gl_FragColor = vec4(1, 0, 0, 0.5);\n"
@@ -283,7 +285,8 @@ static ODClassType* _TRSmokeShader_type;
 @synthesize program = _program;
 @synthesize positionSlot = _positionSlot;
 @synthesize cornerSlot = _cornerSlot;
-@synthesize cpUniform = _cpUniform;
+@synthesize cUniform = _cUniform;
+@synthesize pUniform = _pUniform;
 
 + (id)smokeShader {
     return [[TRSmokeShader alloc] init];
@@ -295,7 +298,8 @@ static ODClassType* _TRSmokeShader_type;
         _program = [EGShaderProgram applyVertex:_TRSmokeShader_vertex fragment:_TRSmokeShader_fragment];
         _positionSlot = [_program attributeForName:@"position"];
         _cornerSlot = [_program attributeForName:@"corner"];
-        _cpUniform = [_program uniformForName:@"cp"];
+        _cUniform = [_program uniformForName:@"c"];
+        _pUniform = [_program uniformForName:@"p"];
     }
     
     return self;
@@ -315,7 +319,8 @@ static ODClassType* _TRSmokeShader_type;
         [cornerBuffer applyDraw:^void() {
             [_cornerSlot setFromBufferWithStride:1 valuesCount:1 valuesType:GL_BYTE shift:0];
         }];
-        [_cpUniform setMatrix:[[EG context] cp]];
+        [_cUniform setMatrix:[[EG context] c]];
+        [_pUniform setMatrix:[[EG context] p]];
         ((void(^)())(draw))();
     }];
 }

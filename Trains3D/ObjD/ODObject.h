@@ -74,3 +74,5 @@ CNRange* uintRange(NSUInteger x) ;
 CNRange* uintTo(NSUInteger a, NSUInteger b);
 
 ODPType * odByteType();
+ODPType * odIntType();
+ODPType * odFloat4Type();

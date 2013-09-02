@@ -24,10 +24,15 @@
 @class TRRailPoint;
 @class TRRailPointCorrection;
 @class TR3D;
+@class TRSmoke;
+@class TRSmokeParticle;
+@class TRSmokeView;
+@class TRSmokeShader;
 
 @class TRTrainView;
 
 @interface TRTrainView : NSObject
+@property (nonatomic, readonly) TRSmokeView* smokeView;
 @property (nonatomic, readonly) EGStandardMaterial* blackMaterial;
 
 + (id)trainView;
@@ -35,6 +40,7 @@
 - (ODClassType*)type;
 - (EGMaterial*)trainMaterialForColor:(EGColor)color;
 - (void)drawTrain:(TRTrain*)train;
+- (void)updateWithDelta:(CGFloat)delta train:(TRTrain*)train;
 + (ODClassType*)type;
 @end
 

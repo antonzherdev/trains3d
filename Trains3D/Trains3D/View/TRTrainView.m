@@ -8,10 +8,13 @@
 #import "TRTypes.h"
 #import "TRRailPoint.h"
 #import "TR3D.h"
+#import "TRSmoke.h"
 @implementation TRTrainView{
+    TRSmokeView* _smokeView;
     EGStandardMaterial* _blackMaterial;
 }
 static ODClassType* _TRTrainView_type;
+@synthesize smokeView = _smokeView;
 @synthesize blackMaterial = _blackMaterial;
 
 + (id)trainView {
@@ -20,7 +23,10 @@ static ODClassType* _TRTrainView_type;
 
 - (id)init {
     self = [super init];
-    if(self) _blackMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.0, 0.0, 0.0, 1.0)] specularColor:EGColorMake(0.1, 0.1, 0.1, 1.0) specularSize:1.0];
+    if(self) {
+        _smokeView = [TRSmokeView smokeView];
+        _blackMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.0, 0.0, 0.0, 1.0)] specularColor:EGColorMake(0.1, 0.1, 0.1, 1.0) specularSize:1.0];
+    }
     
     return self;
 }
@@ -54,6 +60,12 @@ static ODClassType* _TRTrainView_type;
             }
         }];
     }];
+    if(train.viewData == nil) train.viewData = [TRSmoke smokeWithTrain:train];
+    [_smokeView drawSmoke:train.viewData];
+}
+
+- (void)updateWithDelta:(CGFloat)delta train:(TRTrain*)train {
+    [((TRSmoke*)(train.viewData)) updateWithDelta:delta];
 }
 
 - (ODClassType*)type {

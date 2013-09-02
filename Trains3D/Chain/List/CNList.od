@@ -41,7 +41,7 @@ class CNEmptyList<T> extends CNList<T> {
 
 class CNListIterator<T> extends CNIterator<T> {
     var list : CNList<T>
-    def hasNext = list.isEmpty
+    def hasNext = !list.isEmpty
 
     def next : T = {
         val ret = list.head.get

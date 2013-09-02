@@ -68,6 +68,9 @@ static ODClassType* _TRLevelView_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
+    [[_level trains] forEach:^void(TRTrain* _) {
+        [_trainView updateWithDelta:delta train:_];
+    }];
 }
 
 - (ODClassType*)type {

@@ -27,6 +27,7 @@
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)drawView;
+- (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
 @end
 

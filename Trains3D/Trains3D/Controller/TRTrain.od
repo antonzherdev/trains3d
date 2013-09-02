@@ -31,7 +31,8 @@ enum TRTrainType(obstacleProcessor : (TRLevel, TRTrain, TRObstacle) -> bool) {
     })
 }
 
-class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, cars : [TRCar], speed : uint) {
+class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, cars : [TRCar], speed : uint) extends EGController {
+    var viewData : any = nil
     private var head : TRRailPoint
     private var back = false
     def isBack = back

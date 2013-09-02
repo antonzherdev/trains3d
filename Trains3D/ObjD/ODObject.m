@@ -32,3 +32,23 @@ ODPType * odByteType() {
     }
     return type;
 }
+
+ODPType * odIntType() {
+    static ODPType * type = nil;
+    if(type == nil) {
+        type = [ODPType typeWithCls:[NSNumber class] name:@"int" size:4 wrap:^id(void *pVoid, NSUInteger i) {
+            return numi(((int*)pVoid)[i]);
+        }];
+    }
+    return type;
+}
+
+ODPType * odFloat4Type() {
+    static ODPType * type = nil;
+    if(type == nil) {
+        type = [ODPType typeWithCls:[NSNumber class] name:@"float4" size:4 wrap:^id(void *pVoid, NSUInteger i) {
+            return numf4(((float*)pVoid)[i]);
+        }];
+    }
+    return type;
+}

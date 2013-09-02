@@ -47,12 +47,13 @@
 @end
 
 
-@interface TRTrain : NSObject
+@interface TRTrain : NSObject<EGController>
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) TRTrainType* trainType;
 @property (nonatomic, readonly) TRColor* color;
 @property (nonatomic, readonly) id<CNSeq> cars;
 @property (nonatomic, readonly) NSUInteger speed;
+@property (nonatomic) id viewData;
 
 + (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color cars:(id<CNSeq>)cars speed:(NSUInteger)speed;
 - (id)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color cars:(id<CNSeq>)cars speed:(NSUInteger)speed;

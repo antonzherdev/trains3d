@@ -32,7 +32,7 @@
 @class TRSmokeShader;
 
 @interface TRSmoke : NSObject<EGController>
-@property (nonatomic, readonly) TRTrain* train;
+@property (nonatomic, readonly, weak) TRTrain* train;
 
 + (id)smokeWithTrain:(TRTrain*)train;
 - (id)initWithTrain:(TRTrain*)train;
@@ -61,16 +61,15 @@
 
 
 @interface TRSmokeView : NSObject
-@property (nonatomic, readonly) TRSmoke* smoke;
 @property (nonatomic, readonly) EGVertexBuffer* positionBuffer;
 @property (nonatomic, readonly) EGVertexBuffer* cornerBuffer;
 @property (nonatomic, readonly) EGIndexBuffer* indexBuffer;
 @property (nonatomic, readonly) TRSmokeShader* shader;
 
-+ (id)smokeViewWithSmoke:(TRSmoke*)smoke;
-- (id)initWithSmoke:(TRSmoke*)smoke;
++ (id)smokeView;
+- (id)init;
 - (ODClassType*)type;
-- (void)draw;
+- (void)drawSmoke:(TRSmoke*)smoke;
 + (ODClassType*)type;
 @end
 
@@ -79,7 +78,8 @@
 @property (nonatomic, readonly) EGShaderProgram* program;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderAttribute* cornerSlot;
-@property (nonatomic, readonly) EGShaderUniform* cpUniform;
+@property (nonatomic, readonly) EGShaderUniform* cUniform;
+@property (nonatomic, readonly) EGShaderUniform* pUniform;
 
 + (id)smokeShader;
 - (id)init;

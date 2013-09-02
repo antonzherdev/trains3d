@@ -44,4 +44,8 @@ class TRLevelView(level : TRLevel) extends EGView {
     }
 
     val camera : EGCamera = EGCameraIso(level.map.size, EGPoint(0, 0))
+
+    def updateWith(delta : float) {
+        level.trains.for(trainView.updateWith(delta, _))
+    }
 }

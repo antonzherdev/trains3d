@@ -82,6 +82,7 @@ static NSArray* _TRTrainType_values;
     TRColor* _color;
     id<CNSeq> _cars;
     NSUInteger _speed;
+    id _viewData;
     TRRailPoint* _head;
     BOOL _back;
     CGFloat _length;
@@ -94,6 +95,7 @@ static ODClassType* _TRTrain_type;
 @synthesize color = _color;
 @synthesize cars = _cars;
 @synthesize speed = _speed;
+@synthesize viewData = _viewData;
 
 + (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color cars:(id<CNSeq>)cars speed:(NSUInteger)speed {
     return [[TRTrain alloc] initWithLevel:level trainType:trainType color:color cars:cars speed:speed];
@@ -107,6 +109,7 @@ static ODClassType* _TRTrain_type;
         _color = color;
         _cars = cars;
         _speed = speed;
+        _viewData = nil;
         _back = NO;
         _length = unumf([[_cars chain] fold:^id(id r, TRCar* car) {
             return numf([car fullLength] + unumf(r));

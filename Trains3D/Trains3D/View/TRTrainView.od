@@ -9,9 +9,13 @@ import TRTrain
 import TRTypes
 import TRRailPoint
 import TR3D
+import TRSmoke
 
 class TRTrainView {
+    val smokeView = TRSmokeView()
+
     val blackMaterial = EGStandardMaterial(EGColor(0, 0, 0, 1), EGColor(0.1, 0.1, 0.1, 1), 1)
+
     def trainMaterialFor(color : EGColor) : EGMaterial = EGStandardMaterial(color, EGColor(0.3, 0.3, 0.3, 1), 1)
     def draw(train : TRTrain) {
         train.cars.for(car -> {
@@ -36,6 +40,11 @@ class TRTrainView {
                 }
             }
         })
+        if(train.viewData == nil) train.viewData = TRSmoke(train)
+        smokeView.draw(train.viewData)
     }
 
+    def updateWith(delta : float, train : TRTrain) {
+        train.viewData.cast<TRSmoke>.updateWith(delta)
+    }
 }

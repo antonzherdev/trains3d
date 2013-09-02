@@ -48,6 +48,11 @@ stub struct ODFloat extends ODComparable<float> {
     def between(from : float, to : float) : bool
 }
 
+stub struct ODFloat4 extends ODComparable<float4> {
+    def compare(to : float4) : int
+    def between(from : float4, to : float4) : bool
+}
+
 stub val DBL_MAX : float
 stub val DBL_MIN : float
 stub def max(a : float, b : float) : float

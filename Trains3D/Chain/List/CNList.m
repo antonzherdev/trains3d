@@ -367,7 +367,7 @@ static ODClassType* _CNListIterator_type;
 }
 
 - (BOOL)hasNext {
-    return [_list isEmpty];
+    return !([_list isEmpty]);
 }
 
 - (id)next {
