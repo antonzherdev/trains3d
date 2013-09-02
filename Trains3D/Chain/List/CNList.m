@@ -43,6 +43,10 @@ static ODType* _CNList_type;
     @throw @"Method tail is abstract";
 }
 
+- (CNList*)filterF:(BOOL(^)(id))f {
+    @throw @"Method filter is abstract";
+}
+
 - (ODType*)type {
     return _CNList_type;
 }
@@ -184,10 +188,12 @@ static ODType* _CNList_type;
 @implementation CNFilledList{
     id _item;
     CNList* _tail;
+    NSUInteger _count;
 }
 static ODType* _CNFilledList_type;
 @synthesize item = _item;
 @synthesize tail = _tail;
+@synthesize count = _count;
 
 + (id)filledListWithItem:(id)item tail:(CNList*)tail {
     return [[CNFilledList alloc] initWithItem:item tail:tail];
@@ -198,6 +204,7 @@ static ODType* _CNFilledList_type;
     if(self) {
         _item = item;
         _tail = tail;
+        _count = [_tail count] + 1;
     }
     
     return self;
@@ -214,6 +221,11 @@ static ODType* _CNFilledList_type;
 
 - (BOOL)isEmpty {
     return NO;
+}
+
+- (CNList*)filterF:(BOOL(^)(id))f {
+    if(f(_item)) return [CNFilledList filledListWithItem:_item tail:[_tail filterF:f]];
+    else return [_tail filterF:f];
 }
 
 - (ODType*)type {
@@ -273,6 +285,10 @@ static ODType* _CNEmptyList_type;
     _CNEmptyList_type = [ODType typeWithCls:[CNEmptyList class]];
 }
 
+- (NSUInteger)count {
+    return 0;
+}
+
 - (id)head {
     return [CNOption none];
 }
@@ -283,6 +299,10 @@ static ODType* _CNEmptyList_type;
 
 - (BOOL)isEmpty {
     return YES;
+}
+
+- (CNList*)filterF:(BOOL(^)(id))f {
+    return self;
 }
 
 - (ODType*)type {

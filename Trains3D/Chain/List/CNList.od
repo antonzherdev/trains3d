@@ -17,21 +17,26 @@ class CNList<T> extends CNSeq<T> {
         i
     }
     def tail : CNList<T>
+    def filter(f : T -> bool) : CNList<T>
 }
 
 class CNFilledList<T>(item : T, tail : CNList<T>) extends CNList<T> {
     def head : T? = item
-
+    val count : uint = tail.count + 1
     def isEmpty = false
-
+    def filter(f : T -> bool) : CNList<T> =
+        if(f(item)) CNFilledList<T>(item, tail.filter(f))
+        else tail.filter(f)
 }
 
 class CNEmptyList<T> extends CNList<T> {
+    def count : uint = 0
     def head : T? = nil
     def tail : CNList<T> = self
     def isEmpty = true
 
     static val instance = CNEmptyList<int>()
+    def filter(f : T -> bool) : CNList<T> = self
 }
 
 class CNListIterator<T> extends CNIterator<T> {

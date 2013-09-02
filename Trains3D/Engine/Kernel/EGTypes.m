@@ -380,6 +380,9 @@ NSInteger egRectIY2(EGRectI self) {
 
 
 
+EGVec3 egVec3Add(EGVec3 self, EGVec3 v) {
+    return EGVec3Make(self.x + v.x, self.y + v.y, self.z + v.y);
+}
 @implementation EGVec3Wrap{
     EGVec3 _value;
 }

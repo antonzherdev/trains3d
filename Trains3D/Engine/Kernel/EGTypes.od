@@ -97,7 +97,9 @@ trait EGView {
 }
 
 
-struct EGVec3(x : float, y : float, z : float)
+struct EGVec3(x : float, y : float, z : float) {
+    def add(v : EGVec3) = EGVec3(x + v.x, y + v.y, z + v.y)
+}
 
 class EGEnvironment(ambientColor : EGColor, lights : [EGLight]) {
     static val default = EGEnvironment(EGColor(1, 1, 1, 1), [])

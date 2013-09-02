@@ -17,6 +17,7 @@
 + (CNList*)applyObject:(id)object tail:(CNList*)tail;
 - (id<CNIterator>)iterator;
 - (CNList*)tail;
+- (CNList*)filterF:(BOOL(^)(id))f;
 - (ODType*)type;
 + (ODType*)type;
 @end
@@ -25,11 +26,13 @@
 @interface CNFilledList : CNList
 @property (nonatomic, readonly) id item;
 @property (nonatomic, readonly) CNList* tail;
+@property (nonatomic, readonly) NSUInteger count;
 
 + (id)filledListWithItem:(id)item tail:(CNList*)tail;
 - (id)initWithItem:(id)item tail:(CNList*)tail;
 - (id)head;
 - (BOOL)isEmpty;
+- (CNList*)filterF:(BOOL(^)(id))f;
 - (ODType*)type;
 + (ODType*)type;
 @end
@@ -38,9 +41,11 @@
 @interface CNEmptyList : CNList
 + (id)emptyList;
 - (id)init;
+- (NSUInteger)count;
 - (id)head;
 - (CNList*)tail;
 - (BOOL)isEmpty;
+- (CNList*)filterF:(BOOL(^)(id))f;
 - (ODType*)type;
 + (CNEmptyList*)instance;
 + (ODType*)type;

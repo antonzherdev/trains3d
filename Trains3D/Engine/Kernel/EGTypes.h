@@ -370,6 +370,7 @@ static inline NSString* EGVec3Description(EGVec3 self) {
     [description appendString:@">"];
     return description;
 }
+EGVec3 egVec3Add(EGVec3 self, EGVec3 v);
 @interface EGVec3Wrap : NSObject
 @property (readonly, nonatomic) EGVec3 value;
 
