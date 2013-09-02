@@ -118,7 +118,7 @@ enum TRCarType(
     frontConnectorLength : float, backConnectorLength: float, // distances between start or end of the car and the nearest wheels
     engineType : TREngineType?) {
     car(0.44, 0.18, 0.13, 0.13, nil)
-    engine(0.43, 0.18, 0.12, 0.2, TREngineType(tubePos = EGVec3(0.2, 0, 0.2)))
+    engine(0.43, 0.18, 0.12, 0.2, TREngineType(tubePos = EGVec3(0.15, 0, 0.5)))
 
     def fullLength : float = length + frontConnectorLength + backConnectorLength
     def isEngine : bool = engineType.isDefined

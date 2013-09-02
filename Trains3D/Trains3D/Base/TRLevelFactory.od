@@ -37,8 +37,8 @@ class TRLevelFactory {
         TRLevelRules(EGSizeI(5, 3), scoreRules, repairerSpeed = 30, [
             (5, train(cars = 2.to(5), speed = 30.to(60).set(step = 10))),
 //            (10, train(cars = 1.to(5), speed = 30.to(60).set(step = 10))),
-            (15, createNewCity),
-            (20, train(cars = 1.to(5), speed = 30.to(60).set(step = 10)))
+            (15, createNewCity)//,
+            //(20, train(cars = 1.to(5), speed = 30.to(60).set(step = 10)))
         ])
     ]
     static def levelWith(number : uint) = TRLevel(rules[number - 1])

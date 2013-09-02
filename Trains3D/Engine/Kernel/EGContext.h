@@ -33,6 +33,7 @@
 - (EGMatrix*)mwc;
 - (EGMatrix*)mwcp;
 - (EGMatrix*)cp;
+- (EGMatrix*)wcp;
 - (void)clearMatrix;
 + (ODClassType*)type;
 @end

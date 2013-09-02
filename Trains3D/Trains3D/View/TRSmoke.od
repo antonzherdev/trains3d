@@ -62,7 +62,6 @@ class TRSmokeParticle extends EGController {
 
 class TRSmokeView {
     val positionBuffer = EGVertexBuffer<float4>(3*4)
-    val cornerBuffer = EGVertexBuffer<float4>(4)
     val indexBuffer = EGIndexBuffer<int>()
     val shader = TRSmokeShader.instance
     def draw(smoke : TRSmoke) {
@@ -71,26 +70,26 @@ class TRSmokeView {
         if(n == 0) return nil
 
         val positionArr = CNMutablePArray(EGVec3.type, 4*n)
-        val cornerArr = CNMutablePArray(ODFloat4.type, 4*n)
         val indexArr = CNMutablePArray(ODUInt4.type, 6*n)
-        val corners : CNPArray<float4> = [0, 1, 2, 3]
         var i : uint = 0
         particles.for{p ->
-            positionArr.write(item = p.position, times = 4)
-            cornerArr.write(array = corners)
+            val v = p.position
+            positionArr.write(item = EGVec3(v.x - 0.1, v.y - 0.1, v.z))
+            positionArr.write(item = EGVec3(v.x + 0.1, v.y - 0.1, v.z))
+            positionArr.write(item = EGVec3(v.x + 0.1, v.y + 0.1, v.z))
+            positionArr.write(item = EGVec3(v.x - 0.1, v.y + 0.1, v.z))
             indexArr.write(uInt4 = i)
             indexArr.write(uInt4 = i + 1)
             indexArr.write(uInt4 = i + 2)
             indexArr.write(uInt4 = i + 2)
             indexArr.write(uInt4 = i + 3)
             indexArr.write(uInt4 = i)
-            i += 6
+            i += 4
         }
         positionBuffer.set(positionArr)
-        cornerBuffer.set(cornerArr)
         indexBuffer.set(indexArr)
 
-        shader(positionBuffer, cornerBuffer) {
+        shader(positionBuffer) {
             indexBuffer.draw
         }
     }
@@ -99,18 +98,10 @@ class TRSmokeView {
 class TRSmokeShader {
     static val vertex =
         "attribute vec3 position;
-         attribute float corner;
-         uniform mat4 c;
-         uniform mat4 p;
+         uniform mat4 wcp;
 
          void main(void) {
-            vec4 pos = c * vec4(position, 1);
-            if(corner <= 0.1) pos = vec4(pos.x - 0.1, pos.y - 0.1, pos.z, 1);
-            else if(corner <= 1.1) pos = vec4(pos.x + 0.1, pos.y - 0.1, pos.z, 1);
-            else if(corner <= 2.1) pos = vec4(pos.x + 0.1, pos.y + 0.1, pos.z, 1);
-            else if(corner <= 3.1) pos = vec4(pos.x - 0.1, pos.y + 0.1, pos.z, 1);
-
-            gl_Position = p * pos;
+            gl_Position = wcp * vec4(position, 1);
          }"
     static val fragment =
         "void main(void) {
@@ -119,22 +110,16 @@ class TRSmokeShader {
     static val instance = TRSmokeShader()
     val program = EGShaderProgram(vertex, fragment)
     val positionSlot = program.attributeFor("position")
-    val cornerSlot = program.attributeFor("corner")
-    val cUniform = program.uniformFor("c")
-    val pUniform = program.uniformFor("p")
+    val wcpUniform = program.uniformFor("wcp")
 
-    def apply(positionBuffer: EGVertexBuffer<float4>, cornerBuffer : EGVertexBuffer<int>, draw : () -> void) {
+    def apply(positionBuffer: EGVertexBuffer<float4>, draw : () -> void) {
         program {
             positionBuffer {
                 positionSlot.setFromBufferWith(stride = 3*4, valuesCount = 3, GL_FLOAT, shift = 0)
-            }
-            cornerBuffer {
-                cornerSlot.setFromBufferWith(stride = 4, valuesCount = 1, GL_FLOAT, shift = 0)
-            }
-            cUniform.set(matrix = EG.context.c)
-            pUniform.set(matrix = EG.context.p)
+                wcpUniform.set(matrix = EG.context.wcp)
 
-            draw()
+                draw()
+            }
         }
     }
 }

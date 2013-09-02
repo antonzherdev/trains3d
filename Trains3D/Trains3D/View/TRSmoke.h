@@ -62,7 +62,6 @@
 
 @interface TRSmokeView : NSObject
 @property (nonatomic, readonly) EGVertexBuffer* positionBuffer;
-@property (nonatomic, readonly) EGVertexBuffer* cornerBuffer;
 @property (nonatomic, readonly) EGIndexBuffer* indexBuffer;
 @property (nonatomic, readonly) TRSmokeShader* shader;
 
@@ -77,14 +76,12 @@
 @interface TRSmokeShader : NSObject
 @property (nonatomic, readonly) EGShaderProgram* program;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
-@property (nonatomic, readonly) EGShaderAttribute* cornerSlot;
-@property (nonatomic, readonly) EGShaderUniform* cUniform;
-@property (nonatomic, readonly) EGShaderUniform* pUniform;
+@property (nonatomic, readonly) EGShaderUniform* wcpUniform;
 
 + (id)smokeShader;
 - (id)init;
 - (ODClassType*)type;
-- (void)applyPositionBuffer:(EGVertexBuffer*)positionBuffer cornerBuffer:(EGVertexBuffer*)cornerBuffer draw:(void(^)())draw;
+- (void)applyPositionBuffer:(EGVertexBuffer*)positionBuffer draw:(void(^)())draw;
 + (NSString*)vertex;
 + (NSString*)fragment;
 + (TRSmokeShader*)instance;

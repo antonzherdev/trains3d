@@ -82,6 +82,10 @@ static ODClassType* _EGContext_type;
     return [[_projectionMatrix value] multiply:[_cameraMatrix value]];
 }
 
+- (EGMatrix*)wcp {
+    return [[[_projectionMatrix value] multiply:[_cameraMatrix value]] multiply:[_worldMatrix value]];
+}
+
 - (void)clearMatrix {
     [_modelMatrix clear];
     [_worldMatrix clear];
