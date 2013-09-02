@@ -43,6 +43,9 @@ static ODClassType* _EGScene_type;
 
 - (void)updateWithDelta:(CGFloat)delta {
     [_controller updateWithDelta:delta];
+    [_layers forEach:^void(EGLayer* _) {
+        [_ updateWithDelta:delta];
+    }];
 }
 
 - (ODClassType*)type {

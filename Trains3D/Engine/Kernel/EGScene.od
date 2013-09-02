@@ -12,5 +12,6 @@ class EGScene(val controller : EGController, val layers : [EGLayer]) {
 
     def updateWith(delta : float) {
         controller.updateWith(delta)
+        layers.for(_.updateWith(delta))
     }
 }

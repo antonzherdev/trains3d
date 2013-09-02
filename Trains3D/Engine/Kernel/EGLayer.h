@@ -10,7 +10,7 @@
 
 @class EGLayer;
 
-@interface EGLayer : NSObject
+@interface EGLayer : NSObject<EGController>
 @property (nonatomic, readonly) id<EGView> view;
 @property (nonatomic, readonly) id processor;
 
@@ -19,6 +19,7 @@
 - (ODClassType*)type;
 - (void)drawWithViewSize:(EGSize)viewSize;
 - (BOOL)processEvent:(EGEvent*)event;
+- (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
 @end
 

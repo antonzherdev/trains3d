@@ -48,6 +48,9 @@ static ODClassType* _TRLevelMenuView_type;
     return EGEnvironment.aDefault;
 }
 
+- (void)updateWithDelta:(CGFloat)delta {
+}
+
 - (ODClassType*)type {
     return [TRLevelMenuView type];
 }

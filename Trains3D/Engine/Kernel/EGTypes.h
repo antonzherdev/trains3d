@@ -337,10 +337,11 @@ ODPType* egColorType();
 @end
 
 
-@protocol EGView<NSObject>
+@protocol EGView<EGController>
 - (id<EGCamera>)camera;
 - (void)drawView;
 - (EGEnvironment*)environment;
+- (void)updateWithDelta:(CGFloat)delta;
 @end
 
 

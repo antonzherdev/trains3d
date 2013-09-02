@@ -44,6 +44,10 @@ static ODClassType* _EGLayer_type;
     }] getOr:@NO]);
 }
 
+- (void)updateWithDelta:(CGFloat)delta {
+    [_view updateWithDelta:delta];
+}
+
 - (ODClassType*)type {
     return [EGLayer type];
 }

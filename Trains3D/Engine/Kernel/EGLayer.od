@@ -3,7 +3,7 @@ import EGProcessor
 import EG
 import EGContext
 
-class EGLayer(view : EGView, processor : EGProcessor?) {
+class EGLayer(view : EGView, processor : EGProcessor?) extends EGController {
     def drawWith(viewSize : EGSize) {
         view.camera.focusFor(viewSize)
         EG.context.eyeDirection = view.camera.eyeDirection
@@ -14,5 +14,9 @@ class EGLayer(view : EGView, processor : EGProcessor?) {
     def process(event : EGEvent) : bool = {
         val cameraEvent = event.set(camera = view.camera)
         processor.map(_.process(cameraEvent)).getOr(false)
+    }
+
+    def updateWith(delta : float) {
+        view.updateWith(delta)
     }
 }

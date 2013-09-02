@@ -67,6 +67,9 @@ static ODClassType* _TRLevelView_type;
     glDisable(GL_NORMALIZE);
 }
 
+- (void)updateWithDelta:(CGFloat)delta {
+}
+
 - (ODClassType*)type {
     return [TRLevelView type];
 }
