@@ -101,7 +101,7 @@ trait EGView extends EGController {
 
 struct EGVec3(x : float4, y : float4, z : float4) {
     static def apply(vec2 : EGPoint, z : float4) = EGVec3(vec2.x, vec2.y, z)
-    def add(v : EGVec3) = EGVec3(x + v.x, y + v.y, z + v.y)
+    def add(v : EGVec3) = EGVec3(x + v.x, y + v.y, z + v.z)
     def sqr = mul(length)
     def mul(k : float4) = EGVec3(k*x, k*y, k*z)
     def dot(vec3 : EGVec3) : float = x*vec3.x + y*vec3.y + z*vec3.z

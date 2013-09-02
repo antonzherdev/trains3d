@@ -433,7 +433,7 @@ EGVec3 egVec3Apply(EGPoint vec2, float z) {
     return EGVec3Make(((float)(vec2.x)), ((float)(vec2.y)), z);
 }
 EGVec3 egVec3Add(EGVec3 self, EGVec3 v) {
-    return EGVec3Make(self.x + v.x, self.y + v.y, self.z + v.y);
+    return EGVec3Make(self.x + v.x, self.y + v.y, self.z + v.z);
 }
 EGVec3 egVec3Sqr(EGVec3 self) {
     return egVec3Mul(self, ((float)(egVec3Length(self))));

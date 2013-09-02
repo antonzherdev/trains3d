@@ -30,15 +30,15 @@ class TRSmoke(weak train : TRTrain) extends EGController {
     }
 
     def createParticle {
-        val fPos = engine.frontConnector.point
-        val bPos = engine.backConnector.point
+        val fPos = if(train.isBack) engine.backConnector.point else engine.frontConnector.point
+        val bPos = if(train.isBack) engine.frontConnector.point else engine.backConnector.point
         val delta = bPos.sub(fPos)
         val tubeXY = fPos.add(delta.set(length = tubePos.x))
         val emitterPos = EGVec3(tubeXY, tubePos.z)
 
         val p = TRSmokeParticle()
         p.position = emitterPos
-        p.speed = EGVec3(delta.set(length = train.speedFloat), zSpeed)
+        p.speed = EGVec3((if(train.isBack) fPos.sub(bPos) else delta).set(length = train.speedFloat), zSpeed)
         _particles = CNList(p, _particles)
     }
 }

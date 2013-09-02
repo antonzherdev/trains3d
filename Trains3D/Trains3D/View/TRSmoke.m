@@ -60,14 +60,14 @@ static ODClassType* _TRSmoke_type;
 }
 
 - (void)createParticle {
-    EGPoint fPos = _engine.frontConnector.point;
-    EGPoint bPos = _engine.backConnector.point;
+    EGPoint fPos = (([_train isBack]) ? _engine.backConnector.point : _engine.frontConnector.point);
+    EGPoint bPos = (([_train isBack]) ? _engine.frontConnector.point : _engine.backConnector.point);
     EGPoint delta = egPointSub(bPos, fPos);
     EGPoint tubeXY = egPointAdd(fPos, egPointSet(delta, ((CGFloat)(_tubePos.x))));
     EGVec3 emitterPos = egVec3Apply(tubeXY, _tubePos.z);
     TRSmokeParticle* p = [TRSmokeParticle smokeParticle];
     p.position = emitterPos;
-    p.speed = egVec3Apply(egPointSet(delta, _train.speedFloat), ((float)(_TRSmoke_zSpeed)));
+    p.speed = egVec3Apply(egPointSet((([_train isBack]) ? egPointSub(fPos, bPos) : delta), _train.speedFloat), ((float)(_TRSmoke_zSpeed)));
     __particles = [CNList applyObject:p tail:__particles];
 }
 
