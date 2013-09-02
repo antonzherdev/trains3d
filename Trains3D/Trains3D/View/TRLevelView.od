@@ -19,16 +19,6 @@ class TRLevelView(level : TRLevel) extends EGView {
     val environment = EGEnvironment(ambientColor = EGColor(0.4, 0.4, 0.4, 1), lights = [EGDirectLight(EGColor(1, 1, 1, 1), EGVec3(-0.2, 0.2, -0.5))])
 
     def drawView {
-        glEnable(GL_LIGHTING)
-        glEnable(GL_LIGHT0)
-//        glEnable(GL_COLOR_MATERIAL)
-        glEnable(GL_NORMALIZE)
-        glShadeModel(GL_SMOOTH)
-
-        egAmbientColor(0.3, 0.3, 0.3)
-        egLightColor(GL_LIGHT0, 1, 1, 1)
-        egLightDirection(GL_LIGHT0, 0.2, -0.2, 0.5)
-
         backgroundView.draw
         level.cities.for(city -> cityView.draw(city))
         railroadView.draw(level.railroad)
@@ -36,11 +26,6 @@ class TRLevelView(level : TRLevel) extends EGView {
 
 //        egColor3(1.0, 1.0, 1.0)
 //        level.map.drawLayout
-
-        glDisable(GL_LIGHTING)
-        glDisable(GL_LIGHT0)
-//        glDisable(GL_COLOR_MATERIAL)
-        glDisable(GL_NORMALIZE)
     }
 
     val camera : EGCamera = EGCameraIso(level.map.size, EGPoint(0, 0))

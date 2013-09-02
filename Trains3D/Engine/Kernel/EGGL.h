@@ -23,19 +23,6 @@ static inline void egColor4(CGFloat red, CGFloat green, CGFloat blue, CGFloat al
     glColor4d(red, green, blue, alpha);
 }
 
-static inline void egVertex2(CGFloat x, CGFloat y) {
-    glVertex2d(x, y);
-}
-static inline void egVertex3(CGFloat x, CGFloat y, CGFloat z) {
-    glVertex3d(x, y, z);
-}
-static inline void egNormal3(CGFloat x, CGFloat y, CGFloat z) {
-    glNormal3d(x, y, z);
-}
-
-static inline void egTexCoord2 (CGFloat s, CGFloat t) {
-    glTexCoord2d(s, t);
-}
 
 static inline void egClear() {
     glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -46,48 +33,12 @@ static inline void egViewport(EGRectI rect) {
     glViewport((GLint)rect.x, (GLint)rect.y, (GLsizei)rect.width, (GLsizei)rect.height);
 }
 
-static inline void egRect (CGFloat x1, CGFloat y1, CGFloat x2, CGFloat y2) {
-    glRectd(x1, y1, x2, y2);
-}
-
-static inline void egAmbientColor(CGFloat r, CGFloat g, CGFloat b) {
-    GLfloat ambientColor[] = {(GLfloat) r, (GLfloat) g, (GLfloat) b, 1.0f};
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
-}
-
-static inline void egLightColor(GLenum light, CGFloat r, CGFloat g, CGFloat b) {
-    GLfloat lightColor0[] = {(GLfloat) r, (GLfloat) g, (GLfloat) b, 1.0f};
-    glLightfv(light, GL_DIFFUSE, lightColor0);
-}
-
-static inline void egLightPosition(GLenum light, CGFloat x, CGFloat y, CGFloat z) {
-    GLfloat lightPosition[] = {(GLfloat) x, (GLfloat) y, (GLfloat) z, 1.0f};
-    glLightfv(light, GL_POSITION, lightPosition);
-}
-
-static inline void egLightDirection(GLenum light, CGFloat x, CGFloat y, CGFloat z) {
-    GLfloat lightPosition[] = {(GLfloat) x, (GLfloat) y, (GLfloat) z, 0.0f};
-    glLightfv(light, GL_POSITION, lightPosition);
-}
-
-static inline void egMaterialColor(GLenum face, GLenum tp, EGColor color) {
-    GLfloat mat[4];
-    mat[0] = (GLfloat) color.r;
-    mat[1] = (GLfloat) color.g;
-    mat[2] = (GLfloat) color.b;
-    mat[3] = (GLfloat) color.a;
-    glMaterialfv(face, tp, mat);
-}
 
 static inline void egUniformColor(GLuint location, EGColor color ) {
     glUniform4f(location, (GLfloat) color.r, (GLfloat) color.g, (GLfloat) color.b, (GLfloat) color.a);
 }
 static inline void egUniformVec3(GLuint location, EGVec3 vec3 ) {
     glUniform3f(location, (GLfloat) vec3.x, (GLfloat) vec3.y, (GLfloat) vec3.z);
-}
-
-static inline void egMaterial(GLenum face, GLenum tp, CGFloat value) {
-    glMaterialf(face, tp, (GLfloat) value);
 }
 
 id egGetProgramError(GLuint program);
@@ -154,10 +105,6 @@ static inline void egVertexAttribPointer (GLuint index, NSUInteger size, GLenum 
 
 static inline void egColor(EGColor self) {
     egColor4(self.r, self.g, self.b, self.a);
-}
-
-static inline void egColorSetMaterial(EGColor self) {
-    egMaterialColor(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, self);
 }
 
 

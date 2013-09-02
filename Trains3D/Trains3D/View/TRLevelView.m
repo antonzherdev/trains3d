@@ -47,13 +47,6 @@ static ODClassType* _TRLevelView_type;
 }
 
 - (void)drawView {
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-    glEnable(GL_NORMALIZE);
-    glShadeModel(GL_SMOOTH);
-    egAmbientColor(0.3, 0.3, 0.3);
-    egLightColor(GL_LIGHT0, 1.0, 1.0, 1.0);
-    egLightDirection(GL_LIGHT0, 0.2, -0.2, 0.5);
     [_backgroundView draw];
     [[_level cities] forEach:^void(TRCity* city) {
         [_cityView drawCity:city];
@@ -62,9 +55,6 @@ static ODClassType* _TRLevelView_type;
     [[_level trains] forEach:^void(TRTrain* train) {
         [_trainView drawTrain:train];
     }];
-    glDisable(GL_LIGHTING);
-    glDisable(GL_LIGHT0);
-    glDisable(GL_NORMALIZE);
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

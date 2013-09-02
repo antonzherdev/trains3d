@@ -34,10 +34,6 @@ static NSArray* _TRColor_values;
     egColor(_color);
 }
 
-- (void)setMaterial {
-    egColorSetMaterial(_color);
-}
-
 + (TRColor*)orange {
     return _TRColor_orange;
 }

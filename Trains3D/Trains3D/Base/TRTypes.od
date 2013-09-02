@@ -11,8 +11,4 @@ enum TRColor(color : EGColor) {
     def set {
         egColor(color)
     }
-
-    def setMaterial {
-        egColorSetMaterial(color)
-    }
 }
