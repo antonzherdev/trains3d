@@ -92,6 +92,15 @@ trait CNIterable<T> extends CNTraversable<T> {
     def description : string = {
         chain.toStringWith(start = "[", delimiter = ", ", end = "]")
     }
+
+    def hash : uint = {
+        var ret : uint = 13
+        val i = iterator
+        while(i.hasNext) {
+            ret = ret*31 + i.next.hash
+        }
+        ret
+    }
 }
 
 trait CNMutableIterable<T> extends CNIterable<T> with CNMutableTraversable<T> {}

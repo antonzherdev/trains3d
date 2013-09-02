@@ -114,6 +114,15 @@ static ODClassType* _CNMapDefault_type;
     return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
 }
 
+- (NSUInteger)hash {
+    NSUInteger ret = 13;
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        ret = ret * 31 + [[i next] hash];
+    }
+    return ret;
+}
+
 - (id)findWhere:(BOOL(^)(id))where {
     __block id ret = [CNOption none];
     [self goOn:^BOOL(id x) {
@@ -150,13 +159,6 @@ static ODClassType* _CNMapDefault_type;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     CNMapDefault* o = ((CNMapDefault*)(other));
     return [self.defaultFunc isEqual:o.defaultFunc] && [self.map isEqual:o.map];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.defaultFunc hash];
-    hash = hash * 31 + [self.map hash];
-    return hash;
 }
 
 @end

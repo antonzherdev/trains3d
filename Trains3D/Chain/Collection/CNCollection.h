@@ -47,6 +47,7 @@
 - (BOOL)goOn:(BOOL(^)(id))on;
 - (BOOL)containsObject:(id)object;
 - (NSString*)description;
+- (NSUInteger)hash;
 @end
 
 

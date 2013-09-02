@@ -75,6 +75,15 @@ static ODClassType* _CNPair_type;
     return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
 }
 
+- (NSUInteger)hash {
+    NSUInteger ret = 13;
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        ret = ret * 31 + [[i next] hash];
+    }
+    return ret;
+}
+
 - (id)findWhere:(BOOL(^)(id))where {
     __block id ret = [CNOption none];
     [self goOn:^BOOL(id x) {
@@ -111,13 +120,6 @@ static ODClassType* _CNPair_type;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     CNPair* o = ((CNPair*)(other));
     return [self.a isEqual:o.a] && [self.b isEqual:o.b];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.a hash];
-    hash = hash * 31 + [self.b hash];
-    return hash;
 }
 
 @end

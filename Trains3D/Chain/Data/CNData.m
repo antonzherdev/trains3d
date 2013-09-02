@@ -131,6 +131,15 @@ static ODClassType* _CNPArray_type;
     return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
 }
 
+- (NSUInteger)hash {
+    NSUInteger ret = 13;
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        ret = ret * 31 + [[i next] hash];
+    }
+    return ret;
+}
+
 - (id)findWhere:(BOOL(^)(id))where {
     __block id ret = [CNOption none];
     [self goOn:^BOOL(id x) {
@@ -167,17 +176,6 @@ static ODClassType* _CNPArray_type;
     if(!(other)) return NO;
     if([other conformsToProtocol:@protocol(CNSeq)]) return [self isEqualToSeq:((id<CNSeq>)(other))];
     return NO;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.stride;
-    hash = hash * 31 + [self.wrap hash];
-    hash = hash * 31 + self.count;
-    hash = hash * 31 + self.length;
-    hash = hash * 31 + VoidRefHash(self.bytes);
-    hash = hash * 31 + self.copied;
-    return hash;
 }
 
 @end
@@ -293,9 +291,9 @@ static ODClassType* _CNMutablePArray_type;
     }
 }
 
-- (void)writeItems:(CNPArray*)items {
-    memcpy(_pointer, items.bytes, items.length);
-    _pointer += items.length;
+- (void)writeArray:(CNPArray*)array {
+    memcpy(_pointer, array.bytes, array.length);
+    _pointer += array.length;
 }
 
 - (ODClassType*)type {
@@ -315,7 +313,7 @@ static ODClassType* _CNMutablePArray_type;
     [description appendFormat:@"stride=%li", self.stride];
     [description appendFormat:@", count=%li", self.count];
     [description appendFormat:@", length=%li", self.length];
-    [description appendFormat:@", bytes=%@", VoidRefDescription(self.bytes)];
+    [description appendFormat:@", bytes=%p", self.bytes];
     [description appendString:@">"];
     return description;
 }

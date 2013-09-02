@@ -59,8 +59,8 @@ class CNMutablePArray<T>(stride : uint, wrap : (VoidRef, uint) -> T, count : uin
         }
     }
 
-    def write(items : CNPArray<T>) {
-        memcpy(pointer, items.bytes, items.length)
-        pointer += items.length
+    def write(array : CNPArray<T>) {
+        memcpy(pointer, array.bytes, array.length)
+        pointer += array.length
     }
 }

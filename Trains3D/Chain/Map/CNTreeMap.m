@@ -453,6 +453,15 @@ static ODClassType* _CNMutableTreeMap_type;
     return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
 }
 
+- (NSUInteger)hash {
+    NSUInteger ret = 13;
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        ret = ret * 31 + [[i next] hash];
+    }
+    return ret;
+}
+
 - (id)findWhere:(BOOL(^)(id))where {
     __block id ret = [CNOption none];
     [self goOn:^BOOL(id x) {
@@ -497,12 +506,6 @@ static ODClassType* _CNMutableTreeMap_type;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     CNMutableTreeMap* o = ((CNMutableTreeMap*)(other));
     return [self.comparator isEqual:o.comparator];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.comparator hash];
-    return hash;
 }
 
 @end
@@ -664,6 +667,15 @@ static ODClassType* _CNTreeMapKeySet_type;
     return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
 }
 
+- (NSUInteger)hash {
+    NSUInteger ret = 13;
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        ret = ret * 31 + [[i next] hash];
+    }
+    return ret;
+}
+
 - (id)findWhere:(BOOL(^)(id))where {
     __block id ret = [CNOption none];
     [self goOn:^BOOL(id x) {
@@ -700,12 +712,6 @@ static ODClassType* _CNTreeMapKeySet_type;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     CNTreeMapKeySet* o = ((CNTreeMapKeySet*)(other));
     return [self.map isEqual:o.map];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.map hash];
-    return hash;
 }
 
 @end
@@ -856,6 +862,15 @@ static ODClassType* _CNTreeMapValues_type;
     return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
 }
 
+- (NSUInteger)hash {
+    NSUInteger ret = 13;
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        ret = ret * 31 + [[i next] hash];
+    }
+    return ret;
+}
+
 - (id)findWhere:(BOOL(^)(id))where {
     __block id ret = [CNOption none];
     [self goOn:^BOOL(id x) {
@@ -892,12 +907,6 @@ static ODClassType* _CNTreeMapValues_type;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     CNTreeMapValues* o = ((CNTreeMapValues*)(other));
     return [self.map isEqual:o.map];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.map hash];
-    return hash;
 }
 
 @end

@@ -215,9 +215,10 @@ static ODClassType* _TRSmokeView_type;
     NSUInteger n = [particles count];
     CNMutablePArray* positionArr = [CNMutablePArray applyTp:egVec3Type() count:((NSUInteger)(4 * n))];
     CNMutablePArray* cornerArr = [CNMutablePArray applyTp:odByteType() count:((NSUInteger)(4 * n))];
+    CNPArray* corners = [ arrc(4) {0, 1, 2, 3}];
     [particles forEach:^void(TRSmokeParticle* p) {
-       // [positionArr writeItem:p.position times:4];
-       // [cornerArr writeItem:(@[@0, @1, @2, @3])];
+        [positionArr writeItem:voidRef(p.position) times:4];
+        [cornerArr writeArray:corners];
     }];
     [_positionBuffer setData:positionArr];
     [_cornerBuffer setData:cornerArr];

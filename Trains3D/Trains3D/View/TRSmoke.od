@@ -70,9 +70,10 @@ class TRSmokeView(smoke : TRSmoke) {
         val n = particles.count
         val positionArr = CNMutablePArray(EGVec3.type, 4*n)
         val cornerArr = CNMutablePArray(ODByte.type, 4*n)
+        val corners : CNPArray<byte> = [0, 1, 2, 3]
         particles.for{p ->
             positionArr.write(item = p.position, times = 4)
-            cornerArr.write([0, 1, 2, 3])
+            cornerArr.write(array = corners)
         }
         positionBuffer.set(positionArr)
         cornerBuffer.set(cornerArr)

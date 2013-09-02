@@ -8,6 +8,7 @@ stub class ODObject {
     def as<T> : T?
     def cast<T> : T
     def description : string
+    def hash : uint
     static def type : Type<self>
     static def class : Class
 }
