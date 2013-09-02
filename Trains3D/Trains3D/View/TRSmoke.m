@@ -63,11 +63,11 @@ static ODClassType* _TRSmoke_type;
     EGPoint fPos = _engine.frontConnector.point;
     EGPoint bPos = _engine.backConnector.point;
     EGPoint delta = egPointSub(bPos, fPos);
-    EGPoint tubeXY = egPointAdd(fPos, egPointSet(delta, _tubePos.x));
+    EGPoint tubeXY = egPointAdd(fPos, egPointSet(delta, ((CGFloat)(_tubePos.x))));
     EGVec3 emitterPos = egVec3Apply(tubeXY, _tubePos.z);
     TRSmokeParticle* p = [TRSmokeParticle smokeParticle];
     p.position = emitterPos;
-    p.speed = egVec3Apply(egPointSet(delta, ((CGFloat)(_train.speed))), _TRSmoke_zSpeed);
+    p.speed = egVec3Apply(egPointSet(delta, _train.speedFloat), ((float)(_TRSmoke_zSpeed)));
     __particles = [CNList applyObject:p tail:__particles];
 }
 
@@ -135,9 +135,9 @@ static ODClassType* _TRSmokeParticle_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    EGVec3 a = egVec3Mul(egVec3Sqr(_speed), -_TRSmokeParticle_dragCoefficient);
-    _speed = egVec3Add(_speed, egVec3Mul(a, delta));
-    _position = egVec3Add(_position, egVec3Mul(_speed, delta));
+    EGVec3 a = egVec3Mul(egVec3Sqr(_speed), ((float)(-_TRSmokeParticle_dragCoefficient)));
+    _speed = egVec3Add(_speed, egVec3Mul(a, ((float)(delta))));
+    _position = egVec3Add(_position, egVec3Mul(_speed, ((float)(delta))));
     _time += delta;
 }
 
@@ -213,13 +213,23 @@ static ODClassType* _TRSmokeView_type;
     if(n == 0) return ;
     CNMutablePArray* positionArr = [CNMutablePArray applyTp:egVec3Type() count:((NSUInteger)(4 * n))];
     CNMutablePArray* cornerArr = [CNMutablePArray applyTp:odFloat4Type() count:((NSUInteger)(4 * n))];
+    CNMutablePArray* indexArr = [CNMutablePArray applyTp:oduInt4Type() count:((NSUInteger)(6 * n))];
     CNPArray* corners = [ arrf4(4) {0, 1, 2, 3}];
+    __block NSUInteger i = 0;
     [particles forEach:^void(TRSmokeParticle* p) {
         [positionArr writeItem:voidRef(p.position) times:4];
         [cornerArr writeArray:corners];
+        [indexArr writeUInt4:((unsigned int)(i))];
+        [indexArr writeUInt4:((unsigned int)(i + 1))];
+        [indexArr writeUInt4:((unsigned int)(i + 2))];
+        [indexArr writeUInt4:((unsigned int)(i + 2))];
+        [indexArr writeUInt4:((unsigned int)(i + 3))];
+        [indexArr writeUInt4:((unsigned int)(i))];
+        i += 6;
     }];
     [_positionBuffer setData:positionArr];
     [_cornerBuffer setData:cornerArr];
+    [_indexBuffer setData:indexArr];
     [_shader applyPositionBuffer:_positionBuffer cornerBuffer:_cornerBuffer draw:^void() {
         [_indexBuffer draw];
     }];
@@ -317,7 +327,7 @@ static ODClassType* _TRSmokeShader_type;
             [_positionSlot setFromBufferWithStride:((NSUInteger)(3 * 4)) valuesCount:3 valuesType:GL_FLOAT shift:0];
         }];
         [cornerBuffer applyDraw:^void() {
-            [_cornerSlot setFromBufferWithStride:1 valuesCount:1 valuesType:GL_BYTE shift:0];
+            [_cornerSlot setFromBufferWithStride:4 valuesCount:1 valuesType:GL_FLOAT shift:0];
         }];
         [_cUniform setMatrix:[[EG context] c]];
         [_pUniform setMatrix:[[EG context] p]];

@@ -283,6 +283,11 @@ static ODClassType* _CNMutablePArray_type;
     _pointer += [self stride];
 }
 
+- (void)writeUInt4:(unsigned int)uInt4 {
+    setui4(_pointer, uInt4);
+    _pointer += [self stride];
+}
+
 - (void)writeItem:(VoidRef)item times:(NSUInteger)times {
     while(times > 0) {
         memcpy(_pointer, item, [self stride]);

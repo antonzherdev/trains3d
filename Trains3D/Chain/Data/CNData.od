@@ -51,6 +51,11 @@ class CNMutablePArray<T>(stride : uint, wrap : (VoidRef, uint) -> T, count : uin
         pointer += stride
     }
 
+    def write(uInt4 : uint4) {
+        setui4(pointer, uInt4)
+        pointer += stride
+    }
+
     def write(item : VoidRef, times : uint) {
         while(times > 0) {
             memcpy(pointer, item, stride)

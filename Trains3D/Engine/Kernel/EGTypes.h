@@ -346,11 +346,11 @@ ODPType* egColorType();
 
 
 struct EGVec3 {
-    CGFloat x;
-    CGFloat y;
-    CGFloat z;
+    float x;
+    float y;
+    float z;
 };
-static inline EGVec3 EGVec3Make(CGFloat x, CGFloat y, CGFloat z) {
+static inline EGVec3 EGVec3Make(float x, float y, float z) {
     EGVec3 ret;
     ret.x = x;
     ret.y = y;
@@ -358,13 +358,13 @@ static inline EGVec3 EGVec3Make(CGFloat x, CGFloat y, CGFloat z) {
     return ret;
 }
 static inline BOOL EGVec3Eq(EGVec3 s1, EGVec3 s2) {
-    return eqf(s1.x, s2.x) && eqf(s1.y, s2.y) && eqf(s1.z, s2.z);
+    return eqf4(s1.x, s2.x) && eqf4(s1.y, s2.y) && eqf4(s1.z, s2.z);
 }
 static inline NSUInteger EGVec3Hash(EGVec3 self) {
     NSUInteger hash = 0;
-    hash = hash * 31 + floatHash(self.x);
-    hash = hash * 31 + floatHash(self.y);
-    hash = hash * 31 + floatHash(self.z);
+    hash = hash * 31 + float4Hash(self.x);
+    hash = hash * 31 + float4Hash(self.y);
+    hash = hash * 31 + float4Hash(self.z);
     return hash;
 }
 static inline NSString* EGVec3Description(EGVec3 self) {
@@ -375,10 +375,13 @@ static inline NSString* EGVec3Description(EGVec3 self) {
     [description appendString:@">"];
     return description;
 }
-EGVec3 egVec3Apply(EGPoint vec2, CGFloat z);
+EGVec3 egVec3Apply(EGPoint vec2, float z);
 EGVec3 egVec3Add(EGVec3 self, EGVec3 v);
 EGVec3 egVec3Sqr(EGVec3 self);
-EGVec3 egVec3Mul(EGVec3 self, CGFloat k);
+EGVec3 egVec3Mul(EGVec3 self, float k);
+CGFloat egVec3Dot(EGVec3 self, EGVec3 vec3);
+CGFloat egVec3LengthSquare(EGVec3 self);
+CGFloat egVec3Length(EGVec3 self);
 ODPType* egVec3Type();
 @interface EGVec3Wrap : NSObject
 @property (readonly, nonatomic) EGVec3 value;

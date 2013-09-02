@@ -96,6 +96,7 @@ extern id cnResolveCollection(id collection);
 #define arrf4(p_count) arr(float, numf4, p_count)
 #define arrf8(p_count) arr(double, numf8, p_count)
 
+#define setui4(p_bytes, p_value) *(unsigned int*)p_bytes = p_value;
 
 
 static inline NSUInteger randomWith(NSUInteger max) {

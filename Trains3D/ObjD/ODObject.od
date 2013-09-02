@@ -43,6 +43,13 @@ stub struct ODUInt extends ODComparable<uint> {
     def between(from : uint, to : uint) : bool
 }
 
+stub struct ODUInt4 extends ODComparable<uint4> {
+    def compare(to : uint4) : int
+    def range : CNRange
+    def to(: uint4) : CNRange
+    def between(from : uint4, to : uint4) : bool
+}
+
 stub struct ODFloat extends ODComparable<float> {
     def compare(to : float) : int
     def between(from : float, to : float) : bool

@@ -33,11 +33,20 @@ ODPType * odByteType() {
     return type;
 }
 
-ODPType * odIntType() {
+ODPType * odInt4Type() {
     static ODPType * type = nil;
     if(type == nil) {
-        type = [ODPType typeWithCls:[NSNumber class] name:@"int" size:4 wrap:^id(void *pVoid, NSUInteger i) {
-            return numi(((int*)pVoid)[i]);
+        type = [ODPType typeWithCls:[NSNumber class] name:@"int4" size:4 wrap:^id(void *pVoid, NSUInteger i) {
+            return numi4(((int*)pVoid)[i]);
+        }];
+    }
+    return type;
+}
+ODPType * oduInt4Type() {
+    static ODPType * type = nil;
+    if(type == nil) {
+        type = [ODPType typeWithCls:[NSNumber class] name:@"uint4" size:4 wrap:^id(void *pVoid, NSUInteger i) {
+            return numui4(((unsigned int*)pVoid)[i]);
         }];
     }
     return type;

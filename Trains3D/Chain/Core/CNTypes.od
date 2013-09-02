@@ -6,3 +6,4 @@ stub def memcpy(ref : VoidRef, bytes : VoidRef, size : uint)
 stub def malloc(size : uint) : VoidRef
 stub def free(bytes : VoidRef) : void
 stub struct VoidRef
+stub def setui4(ref : VoidRef, value : uint4)

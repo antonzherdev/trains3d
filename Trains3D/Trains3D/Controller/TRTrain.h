@@ -54,6 +54,7 @@
 @property (nonatomic, readonly) id<CNSeq> cars;
 @property (nonatomic, readonly) NSUInteger speed;
 @property (nonatomic) id viewData;
+@property (nonatomic, readonly) CGFloat speedFloat;
 
 + (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color cars:(id<CNSeq>)cars speed:(NSUInteger)speed;
 - (id)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color cars:(id<CNSeq>)cars speed:(NSUInteger)speed;

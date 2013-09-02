@@ -37,7 +37,7 @@ class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, ca
     private var back = false
     def isBack = back
     private val length : float = cars.chain.fold(((r, car) -> car.fullLength + r), 0.0)
-    private val _speedF : float = 0.01 * speed
+    val speedFloat : float = 0.01 * speed
 
     def startFrom(city : TRCity) {
         head = city.startPoint
@@ -70,7 +70,7 @@ class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, ca
 
     def updateWith(delta : float) {
         correct(level.railroad.moveWith(obstacleProcessor = trainType.obstacleProcessor(level, self, _),
-            forLength = delta*_speedF, point = head))
+            forLength = delta*speedFloat, point = head))
     }
 
     private def directedCars : [TRCar] = if(back) cars.chain.reverse.toArray else cars

@@ -429,17 +429,26 @@ ODPType* egColorType() {
 
 
 
-EGVec3 egVec3Apply(EGPoint vec2, CGFloat z) {
-    return EGVec3Make(vec2.x, vec2.y, z);
+EGVec3 egVec3Apply(EGPoint vec2, float z) {
+    return EGVec3Make(((float)(vec2.x)), ((float)(vec2.y)), z);
 }
 EGVec3 egVec3Add(EGVec3 self, EGVec3 v) {
     return EGVec3Make(self.x + v.x, self.y + v.y, self.z + v.y);
 }
 EGVec3 egVec3Sqr(EGVec3 self) {
-    return EGVec3Make(self.x * self.x, self.y * self.y, self.z * self.z);
+    return egVec3Mul(self, ((float)(egVec3Length(self))));
 }
-EGVec3 egVec3Mul(EGVec3 self, CGFloat k) {
+EGVec3 egVec3Mul(EGVec3 self, float k) {
     return EGVec3Make(k * self.x, k * self.y, k * self.z);
+}
+CGFloat egVec3Dot(EGVec3 self, EGVec3 vec3) {
+    return ((CGFloat)(self.x * vec3.x + self.y * vec3.y + self.z * vec3.z));
+}
+CGFloat egVec3LengthSquare(EGVec3 self) {
+    return ((CGFloat)(self.x * self.x + self.y * self.y + self.z * self.z));
+}
+CGFloat egVec3Length(EGVec3 self) {
+    return sqrt(egVec3LengthSquare(self));
 }
 ODPType* egVec3Type() {
     static ODPType* _ret = nil;

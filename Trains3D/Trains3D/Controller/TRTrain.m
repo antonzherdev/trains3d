@@ -86,7 +86,7 @@ static NSArray* _TRTrainType_values;
     TRRailPoint* _head;
     BOOL _back;
     CGFloat _length;
-    CGFloat __speedF;
+    CGFloat _speedFloat;
     BOOL(^_carsObstacleProcessor)(TRObstacle*);
 }
 static ODClassType* _TRTrain_type;
@@ -96,6 +96,7 @@ static ODClassType* _TRTrain_type;
 @synthesize cars = _cars;
 @synthesize speed = _speed;
 @synthesize viewData = _viewData;
+@synthesize speedFloat = _speedFloat;
 
 + (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color cars:(id<CNSeq>)cars speed:(NSUInteger)speed {
     return [[TRTrain alloc] initWithLevel:level trainType:trainType color:color cars:cars speed:speed];
@@ -114,7 +115,7 @@ static ODClassType* _TRTrain_type;
         _length = unumf([[_cars chain] fold:^id(id r, TRCar* car) {
             return numf([car fullLength] + unumf(r));
         } withStart:@0.0]);
-        __speedF = 0.01 * _speed;
+        _speedFloat = 0.01 * _speed;
         _carsObstacleProcessor = ^BOOL(TRObstacle* o) {
             return o.obstacleType == TRObstacleType.light;
         };
@@ -164,7 +165,7 @@ static ODClassType* _TRTrain_type;
 - (void)updateWithDelta:(CGFloat)delta {
     [self correctCorrection:[_level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return _trainType.obstacleProcessor(_level, self, _);
-    } forLength:delta * __speedF point:_head]];
+    } forLength:delta * _speedFloat point:_head]];
 }
 
 - (id<CNSeq>)directedCars {
@@ -340,7 +341,7 @@ static NSArray* _TRCarType_values;
 + (void)initialize {
     [super initialize];
     _TRCarType_car = [TRCarType carTypeWithOrdinal:0 name:@"car" length:0.44 width:0.18 frontConnectorLength:0.13 backConnectorLength:0.13 engineType:[CNOption none]];
-    _TRCarType_engine = [TRCarType carTypeWithOrdinal:1 name:@"engine" length:0.43 width:0.18 frontConnectorLength:0.12 backConnectorLength:0.2 engineType:[CNOption opt:[TREngineType engineTypeWithTubePos:EGVec3Make(0.2, 0.0, 0.2)]]];
+    _TRCarType_engine = [TRCarType carTypeWithOrdinal:1 name:@"engine" length:0.43 width:0.18 frontConnectorLength:0.12 backConnectorLength:0.2 engineType:[CNOption opt:[TREngineType engineTypeWithTubePos:EGVec3Make(((float)(0.2)), 0.0, ((float)(0.2)))]]];
     _TRCarType_values = (@[_TRCarType_car, _TRCarType_engine]);
 }
 
