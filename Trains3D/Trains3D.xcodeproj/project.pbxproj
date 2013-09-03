@@ -101,6 +101,7 @@
 		6F3DF414DE9DEAFDF8C42F87 /* swizzle.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF1152F85EFC97E82B045 /* swizzle.inl */; };
 		6F3DF41D2FFC4CFBD4269C4D /* TRRailPointSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD2B4DE89BFC30B63617 /* TRRailPointSpec.m */; };
 		6F3DF432E05ED0088DACBB7C /* EGBentleyOttmann.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF74E3EEB164494632660 /* EGBentleyOttmann.m */; };
+		6F3DF4334CFE55C4C1884BB5 /* ODLazy.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF511B94555B57FFCAE6B /* ODLazy.od */; };
 		6F3DF437E087F4F298F40C45 /* TRTypes.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF0F2E2E19D3D9B3F1423 /* TRTypes.od */; };
 		6F3DF43CAAB339F6B2E62F11 /* TRLevelSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF06063B5F1A002BF4352 /* TRLevelSpec.m */; };
 		6F3DF48A070B61A687673D31 /* ocl_type.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF081AC507F4BA5C065A5 /* ocl_type.inl */; };
@@ -585,6 +586,7 @@
 		6F3DF4FAA15963195E4F8796 /* EGTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGTime.h; sourceTree = "<group>"; };
 		6F3DF4FDB0C36D2CA76F34B7 /* TR3DRail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TR3DRail.h; sourceTree = "<group>"; };
 		6F3DF4FECA63670199B82631 /* intrinsic_trigonometric.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = intrinsic_trigonometric.hpp; sourceTree = "<group>"; };
+		6F3DF511B94555B57FFCAE6B /* ODLazy.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = ODLazy.od; sourceTree = "<group>"; };
 		6F3DF5179C1952E6FF9F25E4 /* TR3DCar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TR3DCar.h; sourceTree = "<group>"; };
 		6F3DF517F44CC5583DB27DBA /* KWBeZeroMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeZeroMatcher.h; sourceTree = "<group>"; };
 		6F3DF51885ED8BFB7CBDD733 /* TR3DSwitch.jas */ = {isa = PBXFileReference; lastKnownFileType = file.jas; path = TR3DSwitch.jas; sourceTree = "<group>"; };
@@ -1536,6 +1538,7 @@
 				6F3DFEC7773538E209182D21 /* ODType.h */,
 				6F3DFBD7D0D9B35B241BF676 /* ODType.m */,
 				6F3DF492AC2AB6310D620570 /* objdcore.h */,
+				6F3DF511B94555B57FFCAE6B /* ODLazy.od */,
 			);
 			path = ObjD;
 			sourceTree = "<group>";
@@ -2417,6 +2420,7 @@
 				6F3DF2E5B6EAE5560538453B /* TR3D.od in Resources */,
 				6F3DFD999C577C5EEB8EA3A4 /* Smoke.png in Resources */,
 				6F3DFDD47A0124F3E9F5F6F9 /* EGSurface.od in Resources */,
+				6F3DF4334CFE55C4C1884BB5 /* ODLazy.od in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

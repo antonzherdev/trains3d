@@ -15,6 +15,7 @@ stub def egClear
 
 stub def egColor3(r : float, g : float, b : float)
 stub def egColor4(r : float, g : float, b : float, a : float)
+stub def glClearColor(r : float, g : float, b : float, a : float)
 stub def egColor(color : EGColor)
 
 stub def glutSolidCube(size :float)

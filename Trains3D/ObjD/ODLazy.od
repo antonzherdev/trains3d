@@ -1,0 +1,13 @@
+package core
+
+class ODLazy<T>(f : () -> T) {
+    private var _value : T
+    private var _calculated = false
+    def get : T =
+        if(_calculated) _value
+        else {
+            _value = f()
+            _calculated = true
+            _value
+        }
+}

@@ -1,15 +1,22 @@
 #import "EGSurface.h"
 
 #import "EGTexture.h"
+#import "EGMesh.h"
+#import "EGShader.h"
+#import "EGBuffer.h"
 @implementation EGSurface{
     NSUInteger _width;
     NSUInteger _height;
     GLuint _frameBuffer;
     EGTexture* _texture;
+    ODLazy* __lazy_fullScreenVertexBuffer;
+    ODLazy* __lazy_fullScreenIndexBuffer;
+    ODLazy* __lazy_shader;
 }
 static ODClassType* _EGSurface_type;
 @synthesize width = _width;
 @synthesize height = _height;
+@synthesize texture = _texture;
 
 + (id)surfaceWithWidth:(NSUInteger)width height:(NSUInteger)height {
     return [[EGSurface alloc] initWithWidth:width height:height];
@@ -22,6 +29,15 @@ static ODClassType* _EGSurface_type;
         _height = height;
         _frameBuffer = egGenFrameBuffer();
         _texture = [EGTexture texture];
+        __lazy_fullScreenVertexBuffer = [ODLazy lazyWithF:^EGVertexBuffer*() {
+            return [[EGVertexBuffer applyStride:((NSUInteger)(2 * 4))] setData:[ arrf4(8) {0, 0, 1, 0, 1, 1, 0, 1}]];
+        }];
+        __lazy_fullScreenIndexBuffer = [ODLazy lazyWithF:^EGIndexBuffer*() {
+            return [[EGIndexBuffer apply] setData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
+        }];
+        __lazy_shader = [ODLazy lazyWithF:^EGSurfaceShader*() {
+            return [EGSurfaceShader surfaceShader];
+        }];
     }
     
     return self;
@@ -32,7 +48,19 @@ static ODClassType* _EGSurface_type;
     _EGSurface_type = [ODClassType classTypeWithCls:[EGSurface class]];
 }
 
-- (void)init {
+- (EGVertexBuffer*)fullScreenVertexBuffer {
+    return [__lazy_fullScreenVertexBuffer get];
+}
+
+- (EGIndexBuffer*)fullScreenIndexBuffer {
+    return [__lazy_fullScreenIndexBuffer get];
+}
+
+- (EGSurfaceShader*)shader {
+    return [__lazy_shader get];
+}
+
+- (EGSurface*)init {
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
     glBindTexture(GL_TEXTURE_2D, _texture.id);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -43,6 +71,7 @@ static ODClassType* _EGSurface_type;
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture.id, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    return self;
 }
 
 - (void)dealloc {
@@ -66,7 +95,14 @@ static ODClassType* _EGSurface_type;
     glPopAttrib();
 }
 
-- (void)draw {
+- (void)drawFullScreen {
+    [_texture applyDraw:^void() {
+        [[self fullScreenVertexBuffer] applyDraw:^void() {
+            [[self shader] applyDraw:^void() {
+                [[self fullScreenIndexBuffer] draw];
+            }];
+        }];
+    }];
 }
 
 - (ODClassType*)type {
@@ -99,6 +135,93 @@ static ODClassType* _EGSurface_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"width=%li", self.width];
     [description appendFormat:@", height=%li", self.height];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGSurfaceShader{
+    EGShaderProgram* _program;
+    EGShaderAttribute* _positionSlot;
+}
+static NSString* _EGSurfaceShader_vertex = @"attribute vec2 position;\n"
+    "varying vec2 UV;\n"
+    "\n"
+    "void main(void) {\n"
+    "   gl_Position = vec4(2.0*position.x - 1.0, 2.0*position.y - 1.0, 0, 1);\n"
+    "   UV = position;\n"
+    "}";
+static NSString* _EGSurfaceShader_fragment = @"varying vec2 UV;\n"
+    "\n"
+    "uniform sampler2D texture;\n"
+    "\n"
+    "void main(void) {\n"
+    "   gl_FragColor = texture2D(texture, UV);\n"
+    "}";
+static ODClassType* _EGSurfaceShader_type;
+@synthesize program = _program;
+@synthesize positionSlot = _positionSlot;
+
++ (id)surfaceShader {
+    return [[EGSurfaceShader alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    if(self) {
+        _program = [EGShaderProgram applyVertex:_EGSurfaceShader_vertex fragment:_EGSurfaceShader_fragment];
+        _positionSlot = [_program attributeForName:@"position"];
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGSurfaceShader_type = [ODClassType classTypeWithCls:[EGSurfaceShader class]];
+}
+
+- (void)applyDraw:(void(^)())draw {
+    [_program applyDraw:^void() {
+        [_positionSlot setFromBufferWithStride:((NSUInteger)(2 * 4)) valuesCount:2 valuesType:GL_FLOAT shift:0];
+        ((void(^)())(draw))();
+    }];
+}
+
+- (ODClassType*)type {
+    return [EGSurfaceShader type];
+}
+
++ (NSString*)vertex {
+    return _EGSurfaceShader_vertex;
+}
+
++ (NSString*)fragment {
+    return _EGSurfaceShader_fragment;
+}
+
++ (ODClassType*)type {
+    return _EGSurfaceShader_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
     return description;
 }

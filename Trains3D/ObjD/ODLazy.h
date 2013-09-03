@@ -1,11 +1,15 @@
-#import <Foundation/Foundation.h>
+#import "objdcore.h"
 
-typedef id (^LazyBlock)();
+@class ODLazy;
 
 @interface ODLazy : NSObject
-- (id)initWithBlock:(LazyBlock)aBlock;
+@property (nonatomic, readonly) id(^f)();
 
-+ (id)lazyWithBlock:(LazyBlock)aBlock;
-
-- (id) get;
++ (id)lazyWithF:(id(^)())f;
+- (id)initWithF:(id(^)())f;
+- (ODClassType*)type;
+- (id)get;
++ (ODClassType*)type;
 @end
+
+

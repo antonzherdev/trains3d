@@ -25,7 +25,6 @@ static inline void egColor4(CGFloat red, CGFloat green, CGFloat blue, CGFloat al
 
 
 static inline void egClear() {
-    glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 

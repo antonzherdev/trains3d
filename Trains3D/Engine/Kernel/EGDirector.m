@@ -47,6 +47,7 @@ static ODClassType* _EGDirector_type;
 
 - (void)drawWithSize:(EGSize)size {
     _EGDirector__current = self;
+    glClearColor(0.0, 0.0, 0.0, 1.0);
     egClear();
     [_context clearMatrix];
     glEnable(GL_DEPTH_TEST);

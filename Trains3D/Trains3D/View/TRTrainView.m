@@ -39,6 +39,19 @@ static ODClassType* _TRTrainView_type;
     return [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:color] specularColor:EGColorMake(0.3, 0.3, 0.3, 1.0) specularSize:1.0];
 }
 
+- (void)drawTrains:(id<CNSeq>)trains {
+    if([trains isEmpty]) return ;
+    [trains forEach:^void(TRTrain* _) {
+        [self drawTrain:_];
+    }];
+    [_smokeView begin];
+    [trains forEach:^void(TRTrain* train) {
+        if(train.viewData == nil) train.viewData = [TRSmoke smokeWithTrain:train];
+        [_smokeView drawSmoke:train.viewData];
+    }];
+    [_smokeView end];
+}
+
 - (void)drawTrain:(TRTrain*)train {
     [train.cars forEach:^void(TRCar* car) {
         EGPoint h = car.head.point;
@@ -59,8 +72,6 @@ static ODClassType* _TRTrainView_type;
             }
         }];
     }];
-    if(train.viewData == nil) train.viewData = [TRSmoke smokeWithTrain:train];
-    [_smokeView drawSmoke:train.viewData];
 }
 
 - (void)updateWithDelta:(CGFloat)delta train:(TRTrain*)train {

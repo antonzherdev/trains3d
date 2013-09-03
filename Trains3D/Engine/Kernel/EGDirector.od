@@ -17,6 +17,7 @@ class EGDirector {
 
     def drawWith(size : EGSize) {
         _current = self
+        glClearColor(0.0, 0.0, 0.0, 1)
         egClear
         context.clearMatrix
         glEnable(GL_DEPTH_TEST)

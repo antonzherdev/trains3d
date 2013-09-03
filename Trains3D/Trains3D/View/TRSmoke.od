@@ -8,6 +8,8 @@ import EGShader
 import EGContext
 import EGTexture
 import EGMatrix
+import EGSurface
+import EGMesh
 
 import TRTrain
 import TRRailPoint
@@ -66,9 +68,31 @@ struct TRSmokeBufferData(x : float4, y : float4, z : float4, uvx : float4, uvy :
 
 class TRSmokeView {
     val positionBuffer = EGVertexBuffer<float4>(3*4)
-    val indexBuffer = EGIndexBuffer<int>()
+    val indexBuffer = EGIndexBuffer<uint4>()
     val shader = TRSmokeShader.instance
     val texture = EG.textureFor("Smoke.png")
+    val surface = EGSurface(1024, 512).init
+
+    def begin {
+        surface.bind
+        glClearColor(0.0, 0.0, 0.0, 1)
+        egClear
+        glDisable(GL_DEPTH_TEST)
+        glDisable(GL_CULL_FACE)
+        glEnable(GL_BLEND)
+        glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE_MINUS_SRC_ALPHA)
+    }
+
+    def end {
+        surface.unbind
+        glBlendFunc(GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA)
+        surface.drawFullScreen
+
+        glDisable(GL_BLEND)
+        glEnable(GL_CULL_FACE)
+        glEnable(GL_DEPTH_TEST)
+    }
+
     def draw(smoke : TRSmoke) {
         val particles = smoke.particles
         val n = particles.count
@@ -94,16 +118,9 @@ class TRSmokeView {
         positionBuffer.set(positionArr)
         indexBuffer.set(indexArr)
 
-        glDisable(GL_DEPTH_TEST)
-        glDisable(GL_CULL_FACE)
-        glEnable(GL_BLEND)
-        glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE_MINUS_SRC_ALPHA)
         shader(texture, positionBuffer) {
             indexBuffer.draw
         }
-        glDisable(GL_BLEND)
-        glEnable(GL_CULL_FACE)
-        glEnable(GL_DEPTH_TEST)
     }
 }
 

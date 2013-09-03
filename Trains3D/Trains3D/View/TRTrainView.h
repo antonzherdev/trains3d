@@ -36,6 +36,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (EGMaterial*)trainMaterialForColor:(EGColor)color;
+- (void)drawTrains:(id<CNSeq>)trains;
 - (void)drawTrain:(TRTrain*)train;
 - (void)updateWithDelta:(CGFloat)delta train:(TRTrain*)train;
 + (ODClassType*)type;

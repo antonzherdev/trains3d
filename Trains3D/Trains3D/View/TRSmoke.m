@@ -7,6 +7,8 @@
 #import "EGContext.h"
 #import "EGTexture.h"
 #import "EGMatrix.h"
+#import "EGSurface.h"
+#import "EGMesh.h"
 #import "TRTrain.h"
 #import "TRRailPoint.h"
 @implementation TRSmoke{
@@ -226,12 +228,14 @@ ODPType* trSmokeBufferDataType() {
     EGIndexBuffer* _indexBuffer;
     TRSmokeShader* _shader;
     EGFileTexture* _texture;
+    EGSurface* _surface;
 }
 static ODClassType* _TRSmokeView_type;
 @synthesize positionBuffer = _positionBuffer;
 @synthesize indexBuffer = _indexBuffer;
 @synthesize shader = _shader;
 @synthesize texture = _texture;
+@synthesize surface = _surface;
 
 + (id)smokeView {
     return [[TRSmokeView alloc] init];
@@ -244,6 +248,7 @@ static ODClassType* _TRSmokeView_type;
         _indexBuffer = [EGIndexBuffer apply];
         _shader = TRSmokeShader.instance;
         _texture = [EG textureForFile:@"Smoke.png"];
+        _surface = [[EGSurface surfaceWithWidth:1024 height:512] init];
     }
     
     return self;
@@ -252,6 +257,25 @@ static ODClassType* _TRSmokeView_type;
 + (void)initialize {
     [super initialize];
     _TRSmokeView_type = [ODClassType classTypeWithCls:[TRSmokeView class]];
+}
+
+- (void)begin {
+    [_surface bind];
+    glClearColor(0.0, 0.0, 0.0, 1.0);
+    egClear();
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
+    glEnable(GL_BLEND);
+    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+- (void)end {
+    [_surface unbind];
+    glBlendFunc(GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA);
+    [_surface drawFullScreen];
+    glDisable(GL_BLEND);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
 }
 
 - (void)drawSmoke:(TRSmoke*)smoke {
@@ -277,16 +301,9 @@ static ODClassType* _TRSmokeView_type;
     }];
     [_positionBuffer setData:positionArr];
     [_indexBuffer setData:indexArr];
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_CULL_FACE);
-    glEnable(GL_BLEND);
-    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE_MINUS_SRC_ALPHA);
     [_shader applyTexture:_texture positionBuffer:_positionBuffer draw:^void() {
         [_indexBuffer draw];
     }];
-    glDisable(GL_BLEND);
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_DEPTH_TEST);
 }
 
 - (ODClassType*)type {

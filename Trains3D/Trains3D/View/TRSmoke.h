@@ -18,6 +18,10 @@
 @class EGTexture;
 @class EGFileTexture;
 @class EGMatrix;
+@class EGSurface;
+@class EGSurfaceShader;
+@class EGMesh;
+@class EGMeshModel;
 @class TRTrainType;
 @class TRTrain;
 @class TREngineType;
@@ -117,10 +121,13 @@ ODPType* trSmokeBufferDataType();
 @property (nonatomic, readonly) EGIndexBuffer* indexBuffer;
 @property (nonatomic, readonly) TRSmokeShader* shader;
 @property (nonatomic, readonly) EGFileTexture* texture;
+@property (nonatomic, readonly) EGSurface* surface;
 
 + (id)smokeView;
 - (id)init;
 - (ODClassType*)type;
+- (void)begin;
+- (void)end;
 - (void)drawSmoke:(TRSmoke*)smoke;
 + (ODClassType*)type;
 @end

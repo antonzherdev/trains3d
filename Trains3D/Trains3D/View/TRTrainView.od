@@ -17,6 +17,18 @@ class TRTrainView {
     val blackMaterial = EGStandardMaterial(EGColor(0, 0, 0, 1), EGColor(0.1, 0.1, 0.1, 1), 1)
 
     def trainMaterialFor(color : EGColor) : EGMaterial = EGStandardMaterial(color, EGColor(0.3, 0.3, 0.3, 1), 1)
+    def draw(trains : [TRTrain]) {
+        if(trains.isEmpty) return nil
+
+        trains.for(draw(train = _))
+        smokeView.begin
+        trains.for{ train ->
+            if(train.viewData == nil) train.viewData = TRSmoke(train)
+            smokeView.draw(train.viewData)
+        }
+        smokeView.end
+    }
+
     def draw(train : TRTrain) {
         train.cars.for(car -> {
             val h = car.head.point
@@ -40,11 +52,11 @@ class TRTrainView {
                 }
             }
         })
-        if(train.viewData == nil) train.viewData = TRSmoke(train)
-        smokeView.draw(train.viewData)
     }
 
     def updateWith(delta : float, train : TRTrain) {
         train.viewData.cast<TRSmoke>.updateWith(delta)
     }
+
+
 }

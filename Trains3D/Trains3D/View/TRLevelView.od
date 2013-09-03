@@ -22,8 +22,8 @@ class TRLevelView(level : TRLevel) extends EGView {
         backgroundView.draw
         level.cities.for(city -> cityView.draw(city))
         railroadView.draw(level.railroad)
-        level.trains.for(train -> trainView.draw(train))
 
+        trainView.draw(trains = level.trains)
 //        egColor3(1.0, 1.0, 1.0)
 //        level.map.drawLayout
     }
