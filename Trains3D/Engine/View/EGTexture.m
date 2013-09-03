@@ -2,25 +2,18 @@
 
 #import "CNFile.h"
 @implementation EGTexture{
-    NSString* _file;
-    GLuint __id;
-    BOOL __loaded;
-    EGSize __size;
+    GLuint _id;
 }
 static ODClassType* _EGTexture_type;
-@synthesize file = _file;
+@synthesize id = _id;
 
-+ (id)textureWithFile:(NSString*)file {
-    return [[EGTexture alloc] initWithFile:file];
++ (id)texture {
+    return [[EGTexture alloc] init];
 }
 
-- (id)initWithFile:(NSString*)file {
+- (id)init {
     self = [super init];
-    if(self) {
-        _file = file;
-        __id = egGenTexture();
-        __loaded = NO;
-    }
+    if(self) _id = egGenTexture();
     
     return self;
 }
@@ -30,24 +23,13 @@ static ODClassType* _EGTexture_type;
     _EGTexture_type = [ODClassType classTypeWithCls:[EGTexture class]];
 }
 
-- (void)load {
-    __size = egLoadTextureFromFile(__id, [CNBundle fileNameForResource:_file]);
-    __loaded = YES;
-}
-
-- (EGSize)size {
-    if(!(__loaded)) [self load];
-    return __size;
-}
-
 - (void)bind {
-    if(!(__loaded)) [self load];
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, __id);
+    glBindTexture(GL_TEXTURE_2D, _id);
 }
 
 - (void)dealloc {
-    egDeleteTexture(__id);
+    egDeleteTexture(_id);
 }
 
 - (void)unbind {
@@ -76,7 +58,81 @@ static ODClassType* _EGTexture_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGTexture* o = ((EGTexture*)(other));
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGFileTexture{
+    NSString* _file;
+    BOOL __loaded;
+    EGSize __size;
+}
+static ODClassType* _EGFileTexture_type;
+@synthesize file = _file;
+
++ (id)fileTextureWithFile:(NSString*)file {
+    return [[EGFileTexture alloc] initWithFile:file];
+}
+
+- (id)initWithFile:(NSString*)file {
+    self = [super init];
+    if(self) {
+        _file = file;
+        __loaded = NO;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGFileTexture_type = [ODClassType classTypeWithCls:[EGFileTexture class]];
+}
+
+- (void)load {
+    __size = egLoadTextureFromFile([self id], [CNBundle fileNameForResource:_file]);
+    __loaded = YES;
+}
+
+- (EGSize)size {
+    if(!(__loaded)) [self load];
+    return __size;
+}
+
+- (void)bind {
+    if(!(__loaded)) [self load];
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, [self id]);
+}
+
+- (ODClassType*)type {
+    return [EGFileTexture type];
+}
+
++ (ODClassType*)type {
+    return _EGFileTexture_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGFileTexture* o = ((EGFileTexture*)(other));
     return [self.file isEqual:o.file];
 }
 

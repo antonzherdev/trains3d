@@ -5,7 +5,7 @@ import EGTexture
 class EG {
     static def director : EGDirector = EGDirector.current
     static def context : EGContext = EGDirector.current.context
-    static def textureFor(file : string) : EGTexture = context.textureFor(file)
+    static def textureFor(file : string) : EGFileTexture = context.textureFor(file)
 
     static def projectionMatrix : EGMutableMatrix = context.projectionMatrix
     static def cameraMatrix : EGMutableMatrix = context.cameraMatrix

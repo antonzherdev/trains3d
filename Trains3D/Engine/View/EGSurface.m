@@ -5,7 +5,7 @@
     NSUInteger _width;
     NSUInteger _height;
     GLuint _frameBuffer;
-    GLuint _texture;
+    EGTexture* _texture;
 }
 static ODClassType* _EGSurface_type;
 @synthesize width = _width;
@@ -21,7 +21,7 @@ static ODClassType* _EGSurface_type;
         _width = width;
         _height = height;
         _frameBuffer = egGenFrameBuffer();
-        _texture = egGenTexture();
+        _texture = [EGTexture texture];
     }
     
     return self;
@@ -34,20 +34,19 @@ static ODClassType* _EGSurface_type;
 
 - (void)init {
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-    glBindTexture(GL_TEXTURE_2D, _texture);
+    glBindTexture(GL_TEXTURE_2D, _texture.id);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture.id, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 - (void)dealloc {
     egDeleteFrameBuffer(_frameBuffer);
-    egDeleteTexture(_texture);
 }
 
 - (void)applyDraw:(void(^)())draw {

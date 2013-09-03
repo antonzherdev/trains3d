@@ -225,7 +225,7 @@ ODPType* trSmokeBufferDataType() {
     EGVertexBuffer* _positionBuffer;
     EGIndexBuffer* _indexBuffer;
     TRSmokeShader* _shader;
-    EGTexture* _texture;
+    EGFileTexture* _texture;
 }
 static ODClassType* _TRSmokeView_type;
 @synthesize positionBuffer = _positionBuffer;
@@ -380,7 +380,7 @@ static ODClassType* _TRSmokeShader_type;
     _TRSmokeShader_instance = [TRSmokeShader smokeShader];
 }
 
-- (void)applyTexture:(EGTexture*)texture positionBuffer:(EGVertexBuffer*)positionBuffer draw:(void(^)())draw {
+- (void)applyTexture:(EGFileTexture*)texture positionBuffer:(EGVertexBuffer*)positionBuffer draw:(void(^)())draw {
     [_program applyDraw:^void() {
         [texture applyDraw:^void() {
             [positionBuffer applyDraw:^void() {

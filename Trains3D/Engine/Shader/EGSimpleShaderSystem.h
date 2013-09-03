@@ -6,6 +6,7 @@
 @class EGContext;
 @class EGMutableMatrix;
 @class EGTexture;
+@class EGFileTexture;
 @class EGColorSource;
 @class EGColorSourceColor;
 @class EGColorSourceTexture;

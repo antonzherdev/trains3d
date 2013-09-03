@@ -17,6 +17,7 @@
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
 @class EGTexture;
+@class EGFileTexture;
 @class EGBuffer;
 @class EGVertexBuffer;
 @class EGIndexBuffer;

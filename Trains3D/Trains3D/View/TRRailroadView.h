@@ -4,6 +4,7 @@
 @class EGMeshModel;
 @class EG;
 @class EGTexture;
+@class EGFileTexture;
 @class EGColorSource;
 @class EGColorSourceColor;
 @class EGColorSourceTexture;

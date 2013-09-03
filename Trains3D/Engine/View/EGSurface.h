@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "EGGL.h"
 @class EGTexture;
+@class EGFileTexture;
 
 @class EGSurface;
 

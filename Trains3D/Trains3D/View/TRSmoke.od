@@ -137,7 +137,7 @@ class TRSmokeShader {
     val wcpUniform = program.uniformFor("wcp")
     val mUniform = program.uniformFor("m")
 
-    def apply(texture : EGTexture, positionBuffer: EGVertexBuffer<float4>, draw : () -> void) {
+    def apply(texture : EGFileTexture, positionBuffer: EGVertexBuffer<float4>, draw : () -> void) {
         program {
             texture {
                 positionBuffer {

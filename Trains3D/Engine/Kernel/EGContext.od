@@ -6,9 +6,9 @@ import EGTypes
 
 
 class EGContext {
-    private val textureCache = CNMutableHashMap<string, EGTexture>()
+    private val textureCache = CNMutableHashMap<string, EGFileTexture>()
 
-    def textureFor(file : string) : EGTexture = textureCache.objectFor(key = file, orUpdateWith = EGTexture(file))
+    def textureFor(file : string) : EGFileTexture = textureCache.objectFor(key = file, orUpdateWith = EGFileTexture(file))
 
     var eyeDirection = EGVec3(0, 0, 0)
     var environment = EGEnvironment.default

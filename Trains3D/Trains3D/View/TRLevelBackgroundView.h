@@ -1,6 +1,7 @@
 #import "objd.h"
 @class EG;
 @class EGTexture;
+@class EGFileTexture;
 @class TRLevelRules;
 @class TRLevel;
 @class EGMapSso;

@@ -1,5 +1,6 @@
 #import "objd.h"
 @class EGTexture;
+@class EGFileTexture;
 @class EGMatrix;
 @class EGColorSource;
 @class EGColorSourceColor;
@@ -24,7 +25,7 @@
 + (id)context;
 - (id)init;
 - (ODClassType*)type;
-- (EGTexture*)textureForFile:(NSString*)file;
+- (EGFileTexture*)textureForFile:(NSString*)file;
 - (EGMatrix*)m;
 - (EGMatrix*)w;
 - (EGMatrix*)c;

@@ -4,18 +4,30 @@
 #import "EGGL.h"
 
 @class EGTexture;
+@class EGFileTexture;
 
 @interface EGTexture : NSObject
-@property (nonatomic, readonly) NSString* file;
+@property (nonatomic, readonly) GLuint id;
 
-+ (id)textureWithFile:(NSString*)file;
-- (id)initWithFile:(NSString*)file;
++ (id)texture;
+- (id)init;
 - (ODClassType*)type;
-- (EGSize)size;
 - (void)bind;
 - (void)dealloc;
 - (void)unbind;
 - (void)applyDraw:(void(^)())draw;
++ (ODClassType*)type;
+@end
+
+
+@interface EGFileTexture : EGTexture
+@property (nonatomic, readonly) NSString* file;
+
++ (id)fileTextureWithFile:(NSString*)file;
+- (id)initWithFile:(NSString*)file;
+- (ODClassType*)type;
+- (EGSize)size;
+- (void)bind;
 + (ODClassType*)type;
 @end
 

@@ -44,9 +44,9 @@ static ODClassType* _EGContext_type;
     _EGContext_type = [ODClassType classTypeWithCls:[EGContext class]];
 }
 
-- (EGTexture*)textureForFile:(NSString*)file {
-    return ((EGTexture*)([_textureCache objectForKey:file orUpdateWith:^EGTexture*() {
-        return [EGTexture textureWithFile:file];
+- (EGFileTexture*)textureForFile:(NSString*)file {
+    return ((EGFileTexture*)([_textureCache objectForKey:file orUpdateWith:^EGFileTexture*() {
+        return [EGFileTexture fileTextureWithFile:file];
     }]));
 }
 

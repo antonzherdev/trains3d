@@ -3,6 +3,7 @@
 @class EGContext;
 @class EGMutableMatrix;
 @class EGTexture;
+@class EGFileTexture;
 
 @class EG;
 
@@ -12,7 +13,7 @@
 - (ODClassType*)type;
 + (EGDirector*)director;
 + (EGContext*)context;
-+ (EGTexture*)textureForFile:(NSString*)file;
++ (EGFileTexture*)textureForFile:(NSString*)file;
 + (EGMutableMatrix*)projectionMatrix;
 + (EGMutableMatrix*)cameraMatrix;
 + (EGMutableMatrix*)worldMatrix;

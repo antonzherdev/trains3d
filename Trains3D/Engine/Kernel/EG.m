@@ -29,7 +29,7 @@ static ODClassType* _EG_type;
     return [EGDirector current].context;
 }
 
-+ (EGTexture*)textureForFile:(NSString*)file {
++ (EGFileTexture*)textureForFile:(NSString*)file {
     return [[EG context] textureForFile:file];
 }
 

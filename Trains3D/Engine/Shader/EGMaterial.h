@@ -17,6 +17,7 @@
 @class EGStandardShaderKey;
 @class EGStandardShader;
 @class EGTexture;
+@class EGFileTexture;
 
 @class EGColorSource;
 @class EGColorSourceColor;

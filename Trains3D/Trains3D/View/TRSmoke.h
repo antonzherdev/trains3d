@@ -16,6 +16,7 @@
 @class EGContext;
 @class EGMutableMatrix;
 @class EGTexture;
+@class EGFileTexture;
 @class EGMatrix;
 @class TRTrainType;
 @class TRTrain;
@@ -115,7 +116,7 @@ ODPType* trSmokeBufferDataType();
 @property (nonatomic, readonly) EGVertexBuffer* positionBuffer;
 @property (nonatomic, readonly) EGIndexBuffer* indexBuffer;
 @property (nonatomic, readonly) TRSmokeShader* shader;
-@property (nonatomic, readonly) EGTexture* texture;
+@property (nonatomic, readonly) EGFileTexture* texture;
 
 + (id)smokeView;
 - (id)init;
@@ -136,7 +137,7 @@ ODPType* trSmokeBufferDataType();
 + (id)smokeShader;
 - (id)init;
 - (ODClassType*)type;
-- (void)applyTexture:(EGTexture*)texture positionBuffer:(EGVertexBuffer*)positionBuffer draw:(void(^)())draw;
+- (void)applyTexture:(EGFileTexture*)texture positionBuffer:(EGVertexBuffer*)positionBuffer draw:(void(^)())draw;
 + (NSString*)vertex;
 + (NSString*)fragment;
 + (TRSmokeShader*)instance;

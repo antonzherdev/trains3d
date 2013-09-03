@@ -10,6 +10,7 @@
 @class EGMutableMatrix;
 #import "EGTypes.h"
 @class EGTexture;
+@class EGFileTexture;
 #import "EGGL.h"
 
 @class EGStandardShaderSystem;
