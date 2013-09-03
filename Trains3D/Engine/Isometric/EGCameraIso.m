@@ -62,6 +62,7 @@ static ODClassType* _EGCameraIso_type;
     [pm setIdentity];
     CGFloat ww = ((CGFloat)(_tilesOnScreen.width + _tilesOnScreen.height));
     [pm orthoLeft:-_EGCameraIso_ISO right:_EGCameraIso_ISO * ww - _EGCameraIso_ISO bottom:-_EGCameraIso_ISO * _tilesOnScreen.width / 2 top:_EGCameraIso_ISO * _tilesOnScreen.height / 2 zNear:0.0 zFar:1000.0];
+    glCullFace(GL_FRONT);
 }
 
 - (EGPoint)translateWithViewSize:(EGSize)viewSize viewPoint:(EGPoint)viewPoint {

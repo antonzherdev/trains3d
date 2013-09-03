@@ -16,6 +16,7 @@
 @class EGContext;
 @class EGMutableMatrix;
 @class EGTexture;
+@class EGMatrix;
 @class TRTrainType;
 @class TRTrain;
 @class TREngineType;
@@ -128,7 +129,9 @@ ODPType* trSmokeBufferDataType();
 @property (nonatomic, readonly) EGShaderProgram* program;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderAttribute* uvSlot;
+@property (nonatomic, readonly) EGMatrix* m;
 @property (nonatomic, readonly) EGShaderUniform* wcpUniform;
+@property (nonatomic, readonly) EGShaderUniform* mUniform;
 
 + (id)smokeShader;
 - (id)init;

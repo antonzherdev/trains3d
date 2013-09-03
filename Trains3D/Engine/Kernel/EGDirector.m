@@ -50,6 +50,7 @@ static ODClassType* _EGDirector_type;
     egClear();
     [_context clearMatrix];
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
     [_scene drawWithViewSize:size];
     glDisable(GL_DEPTH_TEST);
     [__stat forEach:^void(EGStat* _) {

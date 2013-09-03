@@ -160,7 +160,9 @@ static ODClassType* _EGMapSsoView_type;
 }
 
 - (void)drawPlaneWithMaterial:(EGMaterial*)material {
+    glDisable(GL_CULL_FACE);
     [_plane drawWithMaterial:material];
+    glEnable(GL_CULL_FACE);
 }
 
 - (ODClassType*)type {

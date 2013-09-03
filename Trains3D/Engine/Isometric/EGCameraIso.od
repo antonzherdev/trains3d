@@ -41,6 +41,7 @@ class EGCameraIso(tilesOnScreen : EGSizeI, center : EGPoint) extends EGCamera {
         val ww : float = tilesOnScreen.width + tilesOnScreen.height
         pm.ortho(-ISO, ISO*ww - ISO, -ISO*tilesOnScreen.width/2, ISO*tilesOnScreen.height/2, 0.0, 1000.0)
 
+        glCullFace(GL_FRONT)
     }
 
     def translateWith(viewSize : EGSize, viewPoint : EGPoint) : EGPoint = {

@@ -286,6 +286,7 @@
 		6F3DFCD4964E9AF9F1AF6151 /* CNNeighboursLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2E04DF68D352A206E1C /* CNNeighboursLink.m */; };
 		6F3DFCE328B3054C9C43AF0C /* KWExistVerifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF92CB6763A29CE4AEE55 /* KWExistVerifier.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DFCF3EAF27C4636F080BB /* KWRaiseMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF3970B2897173003B852 /* KWRaiseMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		6F3DFCF640CC7AD0AEBFBE8F /* EGFrameBuffer.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFD2FC5094D0FFAD020BA /* EGFrameBuffer.od */; };
 		6F3DFD07F66801063D8386F8 /* EGMapIsoSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFE4B782DA7BC8DC8CEB /* EGMapIsoSpec.m */; };
 		6F3DFD0BCBB2D6FC07084A59 /* half_float.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF5C69B656279BA967540 /* half_float.inl */; };
 		6F3DFD22DA4D237BBA3C99A0 /* handed_coordinate_space.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF4A91E67CA1C196639BF /* handed_coordinate_space.inl */; };
@@ -953,6 +954,7 @@
 		6F3DFD26092BC5F970E399C9 /* fast_square_root.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = fast_square_root.inl; sourceTree = "<group>"; };
 		6F3DFD260BC81FA6083B707E /* EGShader.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGShader.od; sourceTree = "<group>"; };
 		6F3DFD2B4DE89BFC30B63617 /* TRRailPointSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRRailPointSpec.m; sourceTree = "<group>"; };
+		6F3DFD2FC5094D0FFAD020BA /* EGFrameBuffer.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGFrameBuffer.od; sourceTree = "<group>"; };
 		6F3DFD3039BA31409DBDB1EC /* func_geometric.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = func_geometric.hpp; sourceTree = "<group>"; };
 		6F3DFD30F469519D8F47F283 /* spline.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = spline.inl; sourceTree = "<group>"; };
 		6F3DFD3C35F678D203FD25A7 /* func_common.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = func_common.hpp; sourceTree = "<group>"; };
@@ -1547,7 +1549,6 @@
 				6F3DF5F620165EF318D6EBC6 /* Isometric */,
 				6F3DF0DB868B269BAC958414 /* 2D */,
 				6F3DFA1CBDE62B5C4628CFB4 /* Geometry */,
-				6F3DFA38B551C6181E9736FD /* Particles */,
 				6F3DF83661A773830CFAFB15 /* Buffer */,
 				6F3DF33A93FD3815F8AE11DD /* Shader */,
 			);
@@ -1715,13 +1716,6 @@
 			path = Geometry;
 			sourceTree = "<group>";
 		};
-		6F3DFA38B551C6181E9736FD /* Particles */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Particles;
-			sourceTree = "<group>";
-		};
 		6F3DFA5356F5510D38374333 /* Collection */ = {
 			isa = PBXGroup;
 			children = (
@@ -1843,6 +1837,7 @@
 				6F3DFC80E9DA8CD643DB08D2 /* EGMesh.od */,
 				6F3DF701050E87A51147E236 /* EGMesh.h */,
 				6F3DFC1C935AC5BC52C605EF /* EGMesh.m */,
+				6F3DFD2FC5094D0FFAD020BA /* EGFrameBuffer.od */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2416,6 +2411,7 @@
 				6F3DF55F6C735C679A03099F /* ODType.od in Resources */,
 				6F3DF2E5B6EAE5560538453B /* TR3D.od in Resources */,
 				6F3DFD999C577C5EEB8EA3A4 /* Smoke.png in Resources */,
+				6F3DFCF640CC7AD0AEBFBE8F /* EGFrameBuffer.od in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

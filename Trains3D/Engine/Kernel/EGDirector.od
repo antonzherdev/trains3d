@@ -20,6 +20,7 @@ class EGDirector {
         egClear
         context.clearMatrix
         glEnable(GL_DEPTH_TEST)
+        glEnable(GL_CULL_FACE)
         scene.drawWith(size)
         glDisable(GL_DEPTH_TEST)
         _stat.for(_.draw)

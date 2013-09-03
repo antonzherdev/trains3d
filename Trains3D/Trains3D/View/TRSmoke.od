@@ -7,6 +7,7 @@ import EGBuffer
 import EGShader
 import EGContext
 import EGTexture
+import EGMatrix
 
 import TRTrain
 import TRRailPoint
@@ -78,10 +79,10 @@ class TRSmokeView {
         var i : uint = 0
         particles.for{p ->
             val v = p.position
-            positionArr.write(item = TRSmokeBufferData(v.x - 0.1, v.y - 0.1, v.z, 0, 0))
-            positionArr.write(item = TRSmokeBufferData(v.x + 0.1, v.y - 0.1, v.z, 1, 0))
-            positionArr.write(item = TRSmokeBufferData(v.x + 0.1, v.y + 0.1, v.z, 1, 1))
-            positionArr.write(item = TRSmokeBufferData(v.x - 0.1, v.y + 0.1, v.z, 0, 1))
+            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 0, 0))
+            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 1, 0))
+            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 1, 1))
+            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 0, 1))
             indexArr.write(uInt4 = i)
             indexArr.write(uInt4 = i + 1)
             indexArr.write(uInt4 = i + 2)
@@ -93,12 +94,16 @@ class TRSmokeView {
         positionBuffer.set(positionArr)
         indexBuffer.set(indexArr)
 
+        glDisable(GL_DEPTH_TEST)
+        glDisable(GL_CULL_FACE)
         glEnable(GL_BLEND)
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+        glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE_MINUS_SRC_ALPHA)
         shader(texture, positionBuffer) {
             indexBuffer.draw
         }
         glDisable(GL_BLEND)
+        glEnable(GL_CULL_FACE)
+        glEnable(GL_DEPTH_TEST)
     }
 }
 
@@ -106,12 +111,14 @@ class TRSmokeShader {
     static val vertex =
         "attribute vec3 position;
          attribute vec2 vertexUV;
+         uniform mat4 m;
          uniform mat4 wcp;
 
          varying vec2 UV;
 
          void main(void) {
-            gl_Position = wcp * vec4(position, 1);
+            vec4 model = m * vec4(0.2*vertexUV.x - 0.1, 0.2*vertexUV.y - 0.1, 0, 1);
+            gl_Position = wcp * (vec4(position, 0) + model);
             UV = vertexUV;
         }"
     static val fragment =
@@ -126,7 +133,9 @@ class TRSmokeShader {
     val program = EGShaderProgram(vertex, fragment)
     val positionSlot = program.attributeFor("position")
     val uvSlot = program.attributeFor("vertexUV")
+    val m = EGMatrix.identity.rotate(60, 1, 0, 0).rotate(45, 0, 1, 0)
     val wcpUniform = program.uniformFor("wcp")
+    val mUniform = program.uniformFor("m")
 
     def apply(texture : EGTexture, positionBuffer: EGVertexBuffer<float4>, draw : () -> void) {
         program {
@@ -135,6 +144,7 @@ class TRSmokeShader {
                     positionSlot.setFromBufferWith(stride = 5*4, valuesCount = 3, GL_FLOAT, shift = 0)
                     uvSlot.setFromBufferWith(stride = 5*4, valuesCount = 2, GL_FLOAT, shift = 3*4)
                     wcpUniform.set(matrix = EG.context.wcp)
+                    mUniform.set(matrix = m)
 
                     draw()
                 }

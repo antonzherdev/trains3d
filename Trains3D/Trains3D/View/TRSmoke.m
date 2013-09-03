@@ -6,6 +6,7 @@
 #import "EGShader.h"
 #import "EGContext.h"
 #import "EGTexture.h"
+#import "EGMatrix.h"
 #import "TRTrain.h"
 #import "TRRailPoint.h"
 @implementation TRSmoke{
@@ -262,10 +263,10 @@ static ODClassType* _TRSmokeView_type;
     __block NSUInteger i = 0;
     [particles forEach:^void(TRSmokeParticle* p) {
         EGVec3 v = p.position;
-        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x - 0.1, v.y - 0.1, v.z, 0.0, 0.0))];
-        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x + 0.1, v.y - 0.1, v.z, 1.0, 0.0))];
-        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x + 0.1, v.y + 0.1, v.z, 1.0, 1.0))];
-        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x - 0.1, v.y + 0.1, v.z, 0.0, 1.0))];
+        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, 0.0, 0.0))];
+        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, 1.0, 0.0))];
+        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, 1.0, 1.0))];
+        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, 0.0, 1.0))];
         [indexArr writeUInt4:((unsigned int)(i))];
         [indexArr writeUInt4:((unsigned int)(i + 1))];
         [indexArr writeUInt4:((unsigned int)(i + 2))];
@@ -276,12 +277,16 @@ static ODClassType* _TRSmokeView_type;
     }];
     [_positionBuffer setData:positionArr];
     [_indexBuffer setData:indexArr];
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE_MINUS_SRC_ALPHA);
     [_shader applyTexture:_texture positionBuffer:_positionBuffer draw:^void() {
         [_indexBuffer draw];
     }];
     glDisable(GL_BLEND);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
 }
 
 - (ODClassType*)type {
@@ -319,16 +324,20 @@ static ODClassType* _TRSmokeView_type;
     EGShaderProgram* _program;
     EGShaderAttribute* _positionSlot;
     EGShaderAttribute* _uvSlot;
+    EGMatrix* _m;
     EGShaderUniform* _wcpUniform;
+    EGShaderUniform* _mUniform;
 }
 static NSString* _TRSmokeShader_vertex = @"attribute vec3 position;\n"
     "attribute vec2 vertexUV;\n"
+    "uniform mat4 m;\n"
     "uniform mat4 wcp;\n"
     "\n"
     "varying vec2 UV;\n"
     "\n"
     "void main(void) {\n"
-    "   gl_Position = wcp * vec4(position, 1);\n"
+    "   vec4 model = m * vec4(0.2*vertexUV.x - 0.1, 0.2*vertexUV.y - 0.1, 0, 1);\n"
+    "   gl_Position = wcp * (vec4(position, 0) + model);\n"
     "   UV = vertexUV;\n"
     "}";
 static NSString* _TRSmokeShader_fragment = @"varying vec2 UV;\n"
@@ -343,7 +352,9 @@ static ODClassType* _TRSmokeShader_type;
 @synthesize program = _program;
 @synthesize positionSlot = _positionSlot;
 @synthesize uvSlot = _uvSlot;
+@synthesize m = _m;
 @synthesize wcpUniform = _wcpUniform;
+@synthesize mUniform = _mUniform;
 
 + (id)smokeShader {
     return [[TRSmokeShader alloc] init];
@@ -355,7 +366,9 @@ static ODClassType* _TRSmokeShader_type;
         _program = [EGShaderProgram applyVertex:_TRSmokeShader_vertex fragment:_TRSmokeShader_fragment];
         _positionSlot = [_program attributeForName:@"position"];
         _uvSlot = [_program attributeForName:@"vertexUV"];
+        _m = [[[EGMatrix identity] rotateAngle:60.0 x:1.0 y:0.0 z:0.0] rotateAngle:45.0 x:0.0 y:1.0 z:0.0];
         _wcpUniform = [_program uniformForName:@"wcp"];
+        _mUniform = [_program uniformForName:@"m"];
     }
     
     return self;
@@ -374,6 +387,7 @@ static ODClassType* _TRSmokeShader_type;
                 [_positionSlot setFromBufferWithStride:((NSUInteger)(5 * 4)) valuesCount:3 valuesType:GL_FLOAT shift:0];
                 [_uvSlot setFromBufferWithStride:((NSUInteger)(5 * 4)) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(3 * 4))];
                 [_wcpUniform setMatrix:[[EG context] wcp]];
+                [_mUniform setMatrix:_m];
                 ((void(^)())(draw))();
             }];
         }];

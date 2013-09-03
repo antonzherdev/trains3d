@@ -129,6 +129,8 @@ class EGMapSsoView(map : EGMapSso) {
     }
 
     def drawPlaneWith(material : EGMaterial) {
+        glDisable(GL_CULL_FACE)
         plane.drawWith(material)
+        glEnable(GL_CULL_FACE)
     }
 }

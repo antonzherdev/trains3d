@@ -91,6 +91,16 @@ static inline void egDeleteBuffer(GLuint handle) {
     glDeleteBuffers(1, &handle);
 }
 
+static inline GLuint egGenFrameBuffer() {
+    GLuint buffer;
+    glGenFramebuffers(1, &buffer);
+    return buffer;
+}
+
+static inline void egDeleteFrameBuffer(GLuint handle) {
+    glDeleteFramebuffers(1, &handle);
+}
+
 static inline GLint egGetAttribLocation(GLuint program, NSString* name) {
     return glGetAttribLocation(program, [name cStringUsingEncoding:NSUTF8StringEncoding]);
 }
