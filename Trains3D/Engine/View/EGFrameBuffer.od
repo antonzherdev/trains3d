@@ -1,3 +1,0 @@
-class EGSurface(width : uint, height : uint) {
-    static def create
-}

@@ -32,4 +32,34 @@ id egGetShaderError(GLuint shader) {
     return [CNOption none];
 }
 
+EGSize egLoadTextureFromFile(GLuint target, NSString* file) {
+    CFURLRef url = (__bridge CFURLRef)[NSURL fileURLWithPath:file];
+    CGImageSourceRef myImageSourceRef = CGImageSourceCreateWithURL(url, NULL);
+    CGImageRef myImageRef = CGImageSourceCreateImageAtIndex (myImageSourceRef, 0, NULL);
+
+    size_t width = CGImageGetWidth(myImageRef);
+    size_t height = CGImageGetHeight(myImageRef);
+    CGRect rect = {{0, 0}, {width, height}};
+    void * myData = calloc(width * 4, height);
+    CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
+    CGContextRef myBitmapContext = CGBitmapContextCreate (myData,
+            width, height, 8,
+            width*4, space,
+            kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst);
+    CGContextSetBlendMode(myBitmapContext, kCGBlendModeCopy);
+    CGContextDrawImage(myBitmapContext, rect, myImageRef);
+    CGContextRelease(myBitmapContext);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, (GLint)width);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glBindTexture(GL_TEXTURE_2D, target);
+    glTexParameteri   ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    glTexParameteri   ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+    gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, (GLsizei)width, (GLsizei)height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, myData);
+
+    CFRelease(myImageSourceRef);
+    CFRelease(myImageRef);
+    free(myData);
+    return EGSizeMake(width, height);
+
+}
 

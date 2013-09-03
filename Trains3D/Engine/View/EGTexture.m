@@ -1,88 +1,96 @@
 #import "EGTexture.h"
-#import "EGContext.h"
-#import <OpenGL/glu.h>
 
+#import "CNFile.h"
 @implementation EGTexture{
-    BOOL _loaded;
-    GLuint _id;
-    CGSize _size;
-    NSString * _file;
+    NSString* _file;
+    GLuint __id;
+    BOOL __loaded;
+    EGSize __size;
 }
+static ODClassType* _EGTexture_type;
 @synthesize file = _file;
 
-- (id)initWithFile:(NSString *)file {
-    self = [super init];
-    if (self) {
-        _file = file;
-        _loaded = NO;
-    }
++ (id)textureWithFile:(NSString*)file {
+    return [[EGTexture alloc] initWithFile:file];
+}
 
+- (id)initWithFile:(NSString*)file {
+    self = [super init];
+    if(self) {
+        _file = file;
+        __id = egGenTexture();
+        __loaded = NO;
+    }
+    
     return self;
 }
 
-+ (id)textureWithFile:(NSString *)file {
-    return [[self alloc] initWithFile:file];
++ (void)initialize {
+    [super initialize];
+    _EGTexture_type = [ODClassType classTypeWithCls:[EGTexture class]];
 }
-
-
-- (void)dealloc {
-    glDeleteTextures(1, &_id);
-}
-
 
 - (void)load {
-    NSString* file = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent: _file];
+    __size = egLoadTextureFromFile(__id, [CNBundle fileNameForResource:_file]);
+    __loaded = YES;
+}
 
-    CFURLRef url = (__bridge CFURLRef)[NSURL fileURLWithPath:file];
-    CGImageSourceRef myImageSourceRef = CGImageSourceCreateWithURL(url, NULL);
-    CGImageRef myImageRef = CGImageSourceCreateImageAtIndex (myImageSourceRef, 0, NULL);
-
-    size_t width = CGImageGetWidth(myImageRef);
-    size_t height = CGImageGetHeight(myImageRef);
-    CGRect rect = {{0, 0}, {width, height}};
-    void * myData = calloc(width * 4, height);
-    CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
-    CGContextRef myBitmapContext = CGBitmapContextCreate (myData,
-            width, height, 8,
-            width*4, space,
-            kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst);
-    CGContextSetBlendMode(myBitmapContext, kCGBlendModeCopy);
-    CGContextDrawImage(myBitmapContext, rect, myImageRef);
-    CGContextRelease(myBitmapContext);
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, (GLint)width);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glGenTextures(1, &_id);
-    glBindTexture(GL_TEXTURE_2D, _id);
-    glTexParameteri   ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    glTexParameteri   ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
-    gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, (GLsizei)width, (GLsizei)height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, myData);
-
-    _size = CGSizeMake(width, height);
-
-    free(myData);
-    _loaded = YES;
+- (EGSize)size {
+    if(!(__loaded)) [self load];
+    return __size;
 }
 
 - (void)bind {
-    if(!_loaded) [self load];
-    glBindTexture( GL_TEXTURE_2D, _id);
+    if(!(__loaded)) [self load];
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, __id);
 }
 
-- (void)applyDraw:(void (^)())f {
-    if(!_loaded) [self load];
-    glEnable( GL_TEXTURE_2D );
-    glBindTexture( GL_TEXTURE_2D, _id);
-    @try {
-        f();
-    } @finally {
-        glDisable(GL_TEXTURE_2D);
-    }
+- (void)dealloc {
+    egDeleteTexture(__id);
 }
 
+- (void)unbind {
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
+}
 
-- (CGSize) size {
-    if(!_loaded) [self load];
-    return _size;
+- (void)applyDraw:(void(^)())draw {
+    [self bind];
+    ((void(^)())(draw))();
+    [self unbind];
+}
+
+- (ODClassType*)type {
+    return [EGTexture type];
+}
+
++ (ODClassType*)type {
+    return _EGTexture_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGTexture* o = ((EGTexture*)(other));
+    return [self.file isEqual:o.file];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.file hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"file=%@", self.file];
+    [description appendString:@">"];
+    return description;
 }
 
 @end

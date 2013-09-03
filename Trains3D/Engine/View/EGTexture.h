@@ -1,13 +1,22 @@
-#import <Foundation/Foundation.h>
+#import "objd.h"
+@class CNBundle;
+#import "EGTypes.h"
+#import "EGGL.h"
+
+@class EGTexture;
 
 @interface EGTexture : NSObject
-@property (readonly, nonatomic) NSString * file;
-@property (readonly, nonatomic) CGSize size;
+@property (nonatomic, readonly) NSString* file;
 
-- (id)initWithFile:(NSString *)file;
-+ (id)textureWithFile:(NSString *)file;
++ (id)textureWithFile:(NSString*)file;
+- (id)initWithFile:(NSString*)file;
+- (ODClassType*)type;
+- (EGSize)size;
 - (void)bind;
-- (void)applyDraw:(void (^)())f;
+- (void)dealloc;
+- (void)unbind;
+- (void)applyDraw:(void(^)())draw;
++ (ODClassType*)type;
 @end
 
 

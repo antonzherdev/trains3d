@@ -1,7 +1,38 @@
-import EGTypes
+import CNFile
 
-stub class EGTexture(file : string)  {
-    def size : EGSize
-    def bind
-    def apply(draw: () -> void)
+import EGTypes
+import EGGL
+
+class EGTexture(file : string)  {
+    private var _id :GLuint = egGenTexture
+    private var _loaded = false
+    private var _size : EGSize
+
+    private def load {
+        _size = egLoadTextureFromFile(_id, CNBundle.fileNameFor(file))
+        _loaded = true
+    }
+
+    def size : EGSize = {
+        if(!_loaded) load
+        _size
+    }
+    def bind {
+        if(!_loaded) load
+        glEnable(GL_TEXTURE_2D)
+        glBindTexture(GL_TEXTURE_2D, _id)
+    }
+    def dealloc {
+        egDeleteTexture(_id)
+    }
+
+    def unbind {
+        glBindTexture(GL_TEXTURE_2D, 0)
+        glDisable(GL_TEXTURE_2D)
+    }
+    def apply(draw: () -> void) {
+        bind
+        draw()
+        unbind
+    }
 }

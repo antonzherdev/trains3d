@@ -1,3 +1,4 @@
+import CNTypes
 import EGTypes
 import EGMatrix
 
@@ -8,6 +9,7 @@ stub struct GLubyte
 stub struct GLsizei
 stub struct GLboolean
 stub struct GLsizeiptr
+stub struct GLbitfield
 
 stub def egClear
 
@@ -95,3 +97,27 @@ stub val GL_ONE_MINUS_SRC_ALPHA : uint
 
 stub def egGenFrameBuffer : GLuint
 stub def egDeleteFrameBuffer(handle : GLuint)
+stub def glBindFramebuffer( : GLenum,handle : GLuint)
+stub val GL_FRAMEBUFFER : GLenum
+stub def glBindTexture( : GLenum,handle : GLuint)
+stub val GL_TEXTURE_2D : GLenum
+stub val GL_RGBA : GLenum
+stub def egGenTexture : GLuint
+stub def egDeleteTexture(handle : GLuint)
+
+stub def glTexImage2D(target : GLenum, level : GLint, internalformat  : GLint, width : GLsizei, height : GLsizei, border : GLint, format : GLenum, tp : GLenum, pixels : VoidRef)
+stub def glTexParameteri(target : GLenum, pname : GLenum, param : GLint)
+stub val GL_TEXTURE_WRAP_S : GLenum
+stub val GL_TEXTURE_WRAP_T : GLenum
+stub val GL_CLAMP_TO_EDGE : GLenum
+stub val GL_NEAREST : GLenum
+stub val GL_TEXTURE_MIN_FILTER : GLenum
+stub val GL_TEXTURE_MAG_FILTER : GLenum
+stub def glFramebufferTexture2D(target : GLenum, attachment : GLenum, textarget : GLenum, texture : GLuint, level : GLint)
+stub val GL_COLOR_ATTACHMENT0 : GLenum
+
+stub def glPushAttrib(mask : GLbitfield)
+stub val GL_VIEWPORT_BIT : GLenum
+stub def glPopAttrib
+
+stub def egLoadTextureFromFile(target : GLuint, file : string) : EGSize

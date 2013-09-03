@@ -101,6 +101,16 @@ static inline void egDeleteFrameBuffer(GLuint handle) {
     glDeleteFramebuffers(1, &handle);
 }
 
+static inline GLuint egGenTexture() {
+    GLuint buffer;
+    glGenTextures(1, &buffer);
+    return buffer;
+}
+
+static inline void egDeleteTexture(GLuint handle) {
+    glDeleteTextures(1, &handle);
+}
+
 static inline GLint egGetAttribLocation(GLuint program, NSString* name) {
     return glGetAttribLocation(program, [name cStringUsingEncoding:NSUTF8StringEncoding]);
 }
@@ -121,3 +131,5 @@ static inline void egColor(EGColor self) {
 #define egJasModel(NAME) [EGMesh \
     applyVertexData:[arrp(float, numf4, NAME ## _vertexcount*8) NAME ## _vertex] \
     index: [arrp(unsigned int, numui4, NAME ## _polygoncount*3) NAME ## _index]]
+
+EGSize egLoadTextureFromFile(GLuint target, NSString* file);
