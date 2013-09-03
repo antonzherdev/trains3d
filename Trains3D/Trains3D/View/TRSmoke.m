@@ -18,8 +18,8 @@
     EGVec3 _tubePos;
     CGFloat _emitTime;
 }
-static CGFloat _TRSmoke_zSpeed = 0.1;
-static CGFloat _TRSmoke_emitEvery = 0.1;
+static CGFloat _TRSmoke_zSpeed = 0.3;
+static CGFloat _TRSmoke_emitEvery = 0.005;
 static ODClassType* _TRSmoke_type;
 @synthesize train = _train;
 
@@ -51,7 +51,7 @@ static ODClassType* _TRSmoke_type;
 
 - (void)updateWithDelta:(CGFloat)delta {
     _emitTime += delta;
-    if(_emitTime > _TRSmoke_emitEvery) {
+    while(_emitTime > _TRSmoke_emitEvery) {
         _emitTime -= _TRSmoke_emitEvery;
         [self createParticle];
     }
@@ -64,14 +64,16 @@ static ODClassType* _TRSmoke_type;
 }
 
 - (void)createParticle {
-    EGPoint fPos = (([_train isBack]) ? _engine.backConnector.point : _engine.frontConnector.point);
-    EGPoint bPos = (([_train isBack]) ? _engine.frontConnector.point : _engine.backConnector.point);
+    EGPoint fPos = (([_train isBack]) ? _engine.tail.point : _engine.head.point);
+    EGPoint bPos = (([_train isBack]) ? _engine.head.point : _engine.tail.point);
     EGPoint delta = egPointSub(bPos, fPos);
     EGPoint tubeXY = egPointAdd(fPos, egPointSet(delta, ((CGFloat)(_tubePos.x))));
     EGVec3 emitterPos = egVec3Apply(tubeXY, _tubePos.z);
     TRSmokeParticle* p = [TRSmokeParticle smokeParticle];
-    p.position = emitterPos;
-    p.speed = egVec3Apply(egPointSet((([_train isBack]) ? egPointSub(fPos, bPos) : delta), _train.speedFloat), ((float)(_TRSmoke_zSpeed)));
+    p.position = EGVec3Make(emitterPos.x + randomFloatGap(-0.03, 0.03), emitterPos.y + randomFloatGap(-0.03, 0.03), emitterPos.z);
+    randomFloat();
+    EGVec3 s = egVec3Apply(egPointSet((([_train isBack]) ? egPointSub(fPos, bPos) : delta), _train.speedFloat), ((float)(_TRSmoke_zSpeed)));
+    p.speed = EGVec3Make(s.x * randomPercents(0.3), s.y * randomPercents(0.3), s.z * randomPercents(0.3));
     __particles = [CNList applyObject:p tail:__particles];
 }
 
@@ -115,7 +117,7 @@ static ODClassType* _TRSmoke_type;
     EGVec3 _speed;
     CGFloat _time;
 }
-static NSInteger _TRSmokeParticle_lifeTime = 10;
+static NSInteger _TRSmokeParticle_lifeTime = 2;
 static CGFloat _TRSmokeParticle_dragCoefficient = 0.1;
 static ODClassType* _TRSmokeParticle_type;
 @synthesize position = _position;
@@ -228,14 +230,12 @@ ODPType* trSmokeBufferDataType() {
     EGIndexBuffer* _indexBuffer;
     TRSmokeShader* _shader;
     EGFileTexture* _texture;
-    EGSurface* _surface;
 }
 static ODClassType* _TRSmokeView_type;
 @synthesize positionBuffer = _positionBuffer;
 @synthesize indexBuffer = _indexBuffer;
 @synthesize shader = _shader;
 @synthesize texture = _texture;
-@synthesize surface = _surface;
 
 + (id)smokeView {
     return [[TRSmokeView alloc] init];
@@ -244,11 +244,10 @@ static ODClassType* _TRSmokeView_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _positionBuffer = [EGVertexBuffer applyStride:((NSUInteger)(3 * 4))];
+        _positionBuffer = [EGVertexBuffer applyStride:((NSUInteger)(6 * 4))];
         _indexBuffer = [EGIndexBuffer apply];
         _shader = TRSmokeShader.instance;
         _texture = [EG textureForFile:@"Smoke.png"];
-        _surface = [[EGSurface surfaceWithWidth:1024 height:512] init];
     }
     
     return self;
@@ -260,19 +259,13 @@ static ODClassType* _TRSmokeView_type;
 }
 
 - (void)begin {
-    [_surface bind];
-    glClearColor(0.0, 0.0, 0.0, 1.0);
-    egClear();
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     glEnable(GL_BLEND);
-    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 - (void)end {
-    [_surface unbind];
-    glBlendFunc(GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA);
-    [_surface drawFullScreen];
     glDisable(GL_BLEND);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
@@ -282,15 +275,16 @@ static ODClassType* _TRSmokeView_type;
     CNList* particles = [smoke particles];
     NSUInteger n = [particles count];
     if(n == 0) return ;
-    CNMutablePArray* positionArr = [CNMutablePArray applyTp:trSmokeBufferDataType() count:((NSUInteger)(6 * n))];
+    CNMutablePArray* positionArr = [CNMutablePArray applyTp:trSmokeBufferDataType() count:((NSUInteger)(4 * n))];
     CNMutablePArray* indexArr = [CNMutablePArray applyTp:oduInt4Type() count:((NSUInteger)(6 * n))];
     __block NSUInteger i = 0;
     [particles forEach:^void(TRSmokeParticle* p) {
         EGVec3 v = p.position;
-        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, 0.0, 0.0))];
-        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, 1.0, 0.0))];
-        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, 1.0, 1.0))];
-        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, 0.0, 1.0))];
+        CGFloat t = p.time;
+        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, 0.0, 0.0, ((float)(t))))];
+        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, 1.0, 0.0, ((float)(t))))];
+        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, 1.0, 1.0, ((float)(t))))];
+        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, 0.0, 1.0, ((float)(t))))];
         [indexArr writeUInt4:((unsigned int)(i))];
         [indexArr writeUInt4:((unsigned int)(i + 1))];
         [indexArr writeUInt4:((unsigned int)(i + 2))];
@@ -341,34 +335,46 @@ static ODClassType* _TRSmokeView_type;
     EGShaderProgram* _program;
     EGShaderAttribute* _positionSlot;
     EGShaderAttribute* _uvSlot;
+    EGShaderAttribute* _lifeSlot;
     EGMatrix* _m;
     EGShaderUniform* _wcpUniform;
     EGShaderUniform* _mUniform;
 }
 static NSString* _TRSmokeShader_vertex = @"attribute vec3 position;\n"
     "attribute vec2 vertexUV;\n"
+    "attribute float vertexLife;\n"
     "uniform mat4 m;\n"
     "uniform mat4 wcp;\n"
     "\n"
     "varying vec2 UV;\n"
+    "varying float life;\n"
     "\n"
     "void main(void) {\n"
-    "   vec4 model = m * vec4(0.2*vertexUV.x - 0.1, 0.2*vertexUV.y - 0.1, 0, 1);\n"
+    "   float size = 0.03;\n"
+    "   vec4 model = m * vec4(2.0*size*vertexUV.x - size, 2.0*size*vertexUV.y - size, 0, 1);\n"
     "   gl_Position = wcp * (vec4(position, 0) + model);\n"
     "   UV = vertexUV;\n"
+    "   life = vertexLife;\n"
     "}";
 static NSString* _TRSmokeShader_fragment = @"varying vec2 UV;\n"
+    "varying float life;\n"
     "\n"
     "uniform sampler2D texture;\n"
     "\n"
     "void main(void) {\n"
     "   gl_FragColor = texture2D(texture, UV);\n"
+    "   if(gl_FragColor.x > 0.7) {\n"
+    "       gl_FragColor.w = min(0.7, 1.4 - 0.7*life);\n"
+    "   } else {\n"
+    "       gl_FragColor.w = 0.0;\n"
+    "   }\n"
     "}";
 static TRSmokeShader* _TRSmokeShader_instance;
 static ODClassType* _TRSmokeShader_type;
 @synthesize program = _program;
 @synthesize positionSlot = _positionSlot;
 @synthesize uvSlot = _uvSlot;
+@synthesize lifeSlot = _lifeSlot;
 @synthesize m = _m;
 @synthesize wcpUniform = _wcpUniform;
 @synthesize mUniform = _mUniform;
@@ -383,6 +389,7 @@ static ODClassType* _TRSmokeShader_type;
         _program = [EGShaderProgram applyVertex:_TRSmokeShader_vertex fragment:_TRSmokeShader_fragment];
         _positionSlot = [_program attributeForName:@"position"];
         _uvSlot = [_program attributeForName:@"vertexUV"];
+        _lifeSlot = [_program attributeForName:@"vertexLife"];
         _m = [[[EGMatrix identity] rotateAngle:60.0 x:1.0 y:0.0 z:0.0] rotateAngle:45.0 x:0.0 y:1.0 z:0.0];
         _wcpUniform = [_program uniformForName:@"wcp"];
         _mUniform = [_program uniformForName:@"m"];
@@ -401,8 +408,9 @@ static ODClassType* _TRSmokeShader_type;
     [_program applyDraw:^void() {
         [texture applyDraw:^void() {
             [positionBuffer applyDraw:^void() {
-                [_positionSlot setFromBufferWithStride:((NSUInteger)(5 * 4)) valuesCount:3 valuesType:GL_FLOAT shift:0];
-                [_uvSlot setFromBufferWithStride:((NSUInteger)(5 * 4)) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(3 * 4))];
+                [_positionSlot setFromBufferWithStride:((NSUInteger)(6 * 4)) valuesCount:3 valuesType:GL_FLOAT shift:0];
+                [_uvSlot setFromBufferWithStride:((NSUInteger)(6 * 4)) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(3 * 4))];
+                [_lifeSlot setFromBufferWithStride:((NSUInteger)(6 * 4)) valuesCount:1 valuesType:GL_FLOAT shift:((NSUInteger)(5 * 4))];
                 [_wcpUniform setMatrix:[[EG context] wcp]];
                 [_mUniform setMatrix:_m];
                 ((void(^)())(draw))();

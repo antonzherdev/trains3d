@@ -103,6 +103,19 @@ static inline NSUInteger randomWith(NSUInteger max) {
     return arc4random_uniform((u_int32_t)(max + 1));
 }
 
+static inline CGFloat randomFloat() {
+    return (CGFloat)drand48();
+}
+
+static inline CGFloat randomPercents(CGFloat o) {
+    return 1 + o - 2*o*(CGFloat)drand48();
+}
+
+static inline CGFloat randomFloatGap(CGFloat s, CGFloat e) {
+    return (CGFloat)drand48() * (e - s) + s;
+}
+
+
 static inline NSUInteger VoidRefHash(void * v) {
     return (NSUInteger) v;
 }

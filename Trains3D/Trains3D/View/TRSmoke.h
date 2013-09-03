@@ -74,18 +74,20 @@ struct TRSmokeBufferData {
     float z;
     float uvx;
     float uvy;
+    float time;
 };
-static inline TRSmokeBufferData TRSmokeBufferDataMake(float x, float y, float z, float uvx, float uvy) {
+static inline TRSmokeBufferData TRSmokeBufferDataMake(float x, float y, float z, float uvx, float uvy, float time) {
     TRSmokeBufferData ret;
     ret.x = x;
     ret.y = y;
     ret.z = z;
     ret.uvx = uvx;
     ret.uvy = uvy;
+    ret.time = time;
     return ret;
 }
 static inline BOOL TRSmokeBufferDataEq(TRSmokeBufferData s1, TRSmokeBufferData s2) {
-    return eqf4(s1.x, s2.x) && eqf4(s1.y, s2.y) && eqf4(s1.z, s2.z) && eqf4(s1.uvx, s2.uvx) && eqf4(s1.uvy, s2.uvy);
+    return eqf4(s1.x, s2.x) && eqf4(s1.y, s2.y) && eqf4(s1.z, s2.z) && eqf4(s1.uvx, s2.uvx) && eqf4(s1.uvy, s2.uvy) && eqf4(s1.time, s2.time);
 }
 static inline NSUInteger TRSmokeBufferDataHash(TRSmokeBufferData self) {
     NSUInteger hash = 0;
@@ -94,6 +96,7 @@ static inline NSUInteger TRSmokeBufferDataHash(TRSmokeBufferData self) {
     hash = hash * 31 + float4Hash(self.z);
     hash = hash * 31 + float4Hash(self.uvx);
     hash = hash * 31 + float4Hash(self.uvy);
+    hash = hash * 31 + float4Hash(self.time);
     return hash;
 }
 static inline NSString* TRSmokeBufferDataDescription(TRSmokeBufferData self) {
@@ -103,6 +106,7 @@ static inline NSString* TRSmokeBufferDataDescription(TRSmokeBufferData self) {
     [description appendFormat:@", z=%f", self.z];
     [description appendFormat:@", uvx=%f", self.uvx];
     [description appendFormat:@", uvy=%f", self.uvy];
+    [description appendFormat:@", time=%f", self.time];
     [description appendString:@">"];
     return description;
 }
@@ -121,7 +125,6 @@ ODPType* trSmokeBufferDataType();
 @property (nonatomic, readonly) EGIndexBuffer* indexBuffer;
 @property (nonatomic, readonly) TRSmokeShader* shader;
 @property (nonatomic, readonly) EGFileTexture* texture;
-@property (nonatomic, readonly) EGSurface* surface;
 
 + (id)smokeView;
 - (id)init;
@@ -137,6 +140,7 @@ ODPType* trSmokeBufferDataType();
 @property (nonatomic, readonly) EGShaderProgram* program;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderAttribute* uvSlot;
+@property (nonatomic, readonly) EGShaderAttribute* lifeSlot;
 @property (nonatomic, readonly) EGMatrix* m;
 @property (nonatomic, readonly) EGShaderUniform* wcpUniform;
 @property (nonatomic, readonly) EGShaderUniform* mUniform;

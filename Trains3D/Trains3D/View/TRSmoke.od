@@ -19,13 +19,13 @@ class TRSmoke(weak train : TRTrain) extends EGController {
     def particles = _particles
     private val engine : TRCar = train.cars.head.get
     private val tubePos = engine.carType.engineType.get.tubePos
-    private static val zSpeed = 0.1
-    private static val emitEvery = 0.1
+    private static val zSpeed = 0.3
+    private static val emitEvery = 0.005
     private var emitTime = 0.0
 
     def updateWith(delta : float) {
         emitTime += delta
-        if(emitTime > emitEvery) {
+        while(emitTime > emitEvery) {
             emitTime -= emitEvery
             createParticle
         }
@@ -34,15 +34,18 @@ class TRSmoke(weak train : TRTrain) extends EGController {
     }
 
     def createParticle {
-        val fPos = if(train.isBack) engine.backConnector.point else engine.frontConnector.point
-        val bPos = if(train.isBack) engine.frontConnector.point else engine.backConnector.point
+        val fPos = if(train.isBack) engine.tail.point else engine.head.point
+        val bPos = if(train.isBack) engine.head.point else engine.tail.point
         val delta = bPos.sub(fPos)
         val tubeXY = fPos.add(delta.set(length = tubePos.x))
         val emitterPos = EGVec3(tubeXY, tubePos.z)
 
         val p = TRSmokeParticle()
-        p.position = emitterPos
-        p.speed = EGVec3((if(train.isBack) fPos.sub(bPos) else delta).set(length = train.speedFloat), zSpeed)
+        p.position = EGVec3(emitterPos.x + randomFloatGap(-0.03, 0.03), emitterPos.y + randomFloatGap(-0.03, 0.03), emitterPos.z)
+        randomFloat
+        val s = EGVec3((if(train.isBack) fPos.sub(bPos) else delta).set(length = train.speedFloat), zSpeed)
+//        p.speed = EGVec3(s.x * randomPercents(0.3), s.y * randomPercents(0.3), s.z * randomPercents(0.3))
+        p.speed = EGVec3(s.x * randomPercents(0.3), s.y * randomPercents(0.3), s.z * randomPercents(0.3))
         _particles = CNList(p, _particles)
     }
 }
@@ -51,7 +54,7 @@ class TRSmokeParticle extends EGController {
     var position : EGVec3
     var speed : EGVec3
     var time = 0.0
-    static val lifeTime = 10
+    static val lifeTime = 2
     static val dragCoefficient = 0.1 // air resistance coefficient | a = -dragCoefficient * sqr(speed)
 
     def updateWith(delta : float) {
@@ -64,30 +67,22 @@ class TRSmokeParticle extends EGController {
     def isLive = time < lifeTime
 }
 
-struct TRSmokeBufferData(x : float4, y : float4, z : float4, uvx : float4, uvy : float4)
+struct TRSmokeBufferData(x : float4, y : float4, z : float4, uvx : float4, uvy : float4, time : float4)
 
 class TRSmokeView {
-    val positionBuffer = EGVertexBuffer<float4>(3*4)
+    val positionBuffer = EGVertexBuffer<float4>(6*4)
     val indexBuffer = EGIndexBuffer<uint4>()
     val shader = TRSmokeShader.instance
     val texture = EG.textureFor("Smoke.png")
-    val surface = EGSurface(1024, 512).init
 
     def begin {
-        surface.bind
-        glClearColor(0.0, 0.0, 0.0, 1)
-        egClear
         glDisable(GL_DEPTH_TEST)
         glDisable(GL_CULL_FACE)
         glEnable(GL_BLEND)
-        glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE_MINUS_SRC_ALPHA)
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
     }
 
     def end {
-        surface.unbind
-        glBlendFunc(GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA)
-        surface.drawFullScreen
-
         glDisable(GL_BLEND)
         glEnable(GL_CULL_FACE)
         glEnable(GL_DEPTH_TEST)
@@ -98,15 +93,16 @@ class TRSmokeView {
         val n = particles.count
         if(n == 0) return nil
 
-        val positionArr = CNMutablePArray(TRSmokeBufferData.type, 6*n)
+        val positionArr = CNMutablePArray(TRSmokeBufferData.type, 4*n)
         val indexArr = CNMutablePArray(ODUInt4.type, 6*n)
         var i : uint = 0
         particles.for{p ->
             val v = p.position
-            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 0, 0))
-            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 1, 0))
-            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 1, 1))
-            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 0, 1))
+            val t = p.time
+            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 0, 0, t))
+            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 1, 0, t))
+            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 1, 1, t))
+            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 0, 1, t))
             indexArr.write(uInt4 = i)
             indexArr.write(uInt4 = i + 1)
             indexArr.write(uInt4 = i + 2)
@@ -128,28 +124,39 @@ class TRSmokeShader {
     static val vertex =
         "attribute vec3 position;
          attribute vec2 vertexUV;
+         attribute float vertexLife;
          uniform mat4 m;
          uniform mat4 wcp;
 
          varying vec2 UV;
+         varying float life;
 
          void main(void) {
-            vec4 model = m * vec4(0.2*vertexUV.x - 0.1, 0.2*vertexUV.y - 0.1, 0, 1);
+            float size = 0.03;
+            vec4 model = m * vec4(2.0*size*vertexUV.x - size, 2.0*size*vertexUV.y - size, 0, 1);
             gl_Position = wcp * (vec4(position, 0) + model);
             UV = vertexUV;
+            life = vertexLife;
         }"
     static val fragment =
         "varying vec2 UV;
+         varying float life;
 
          uniform sampler2D texture;
 
          void main(void) {
             gl_FragColor = texture2D(texture, UV);
+            if(gl_FragColor.x > 0.7) {
+                gl_FragColor.w = min(0.7, 1.4 - 0.7*life);
+            } else {
+                gl_FragColor.w = 0.0;
+            }
          }"
     static val instance = TRSmokeShader()
     val program = EGShaderProgram(vertex, fragment)
     val positionSlot = program.attributeFor("position")
     val uvSlot = program.attributeFor("vertexUV")
+    val lifeSlot = program.attributeFor("vertexLife")
     val m = EGMatrix.identity.rotate(60, 1, 0, 0).rotate(45, 0, 1, 0)
     val wcpUniform = program.uniformFor("wcp")
     val mUniform = program.uniformFor("m")
@@ -158,8 +165,9 @@ class TRSmokeShader {
         program {
             texture {
                 positionBuffer {
-                    positionSlot.setFromBufferWith(stride = 5*4, valuesCount = 3, GL_FLOAT, shift = 0)
-                    uvSlot.setFromBufferWith(stride = 5*4, valuesCount = 2, GL_FLOAT, shift = 3*4)
+                    positionSlot.setFromBufferWith(stride = 6*4, valuesCount = 3, GL_FLOAT, shift = 0)
+                    uvSlot.setFromBufferWith(stride = 6*4, valuesCount = 2, GL_FLOAT, shift = 3*4)
+                    lifeSlot.setFromBufferWith(stride = 6*4, valuesCount = 1, GL_FLOAT, shift = 5*4)
                     wcpUniform.set(matrix = EG.context.wcp)
                     mUniform.set(matrix = m)
 
