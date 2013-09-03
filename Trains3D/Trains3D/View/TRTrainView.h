@@ -24,10 +24,7 @@
 @class TRRailPoint;
 @class TRRailPointCorrection;
 @class TR3D;
-@class TRSmoke;
-@class TRSmokeParticle;
-@class TRSmokeView;
-@class TRSmokeShader;
+#import "TRSmoke.h"
 
 @class TRTrainView;
 

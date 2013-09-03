@@ -5,6 +5,7 @@
 #import "EGBuffer.h"
 #import "EGShader.h"
 #import "EGContext.h"
+#import "EGTexture.h"
 #import "TRTrain.h"
 #import "TRRailPoint.h"
 @implementation TRSmoke{
@@ -174,15 +175,62 @@ static ODClassType* _TRSmokeParticle_type;
 @end
 
 
+ODPType* trSmokeBufferDataType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[TRSmokeBufferDataWrap class] name:@"TRSmokeBufferData" size:sizeof(TRSmokeBufferData) wrap:^id(void* data, NSUInteger i) {
+        return wrap(TRSmokeBufferData, ((TRSmokeBufferData*)(data))[i]);
+    }];
+    return _ret;
+}
+@implementation TRSmokeBufferDataWrap{
+    TRSmokeBufferData _value;
+}
+@synthesize value = _value;
+
++ (id)wrapWithValue:(TRSmokeBufferData)value {
+    return [[TRSmokeBufferDataWrap alloc] initWithValue:value];
+}
+
+- (id)initWithValue:(TRSmokeBufferData)value {
+    self = [super init];
+    if(self) _value = value;
+    return self;
+}
+
+- (NSString*)description {
+    return TRSmokeBufferDataDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRSmokeBufferDataWrap* o = ((TRSmokeBufferDataWrap*)(other));
+    return TRSmokeBufferDataEq(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return TRSmokeBufferDataHash(_value);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
+
+
 @implementation TRSmokeView{
     EGVertexBuffer* _positionBuffer;
     EGIndexBuffer* _indexBuffer;
     TRSmokeShader* _shader;
+    EGTexture* _texture;
 }
 static ODClassType* _TRSmokeView_type;
 @synthesize positionBuffer = _positionBuffer;
 @synthesize indexBuffer = _indexBuffer;
 @synthesize shader = _shader;
+@synthesize texture = _texture;
 
 + (id)smokeView {
     return [[TRSmokeView alloc] init];
@@ -194,6 +242,7 @@ static ODClassType* _TRSmokeView_type;
         _positionBuffer = [EGVertexBuffer applyStride:((NSUInteger)(3 * 4))];
         _indexBuffer = [EGIndexBuffer apply];
         _shader = TRSmokeShader.instance;
+        _texture = [EG textureForFile:@"Smoke.png"];
     }
     
     return self;
@@ -208,15 +257,15 @@ static ODClassType* _TRSmokeView_type;
     CNList* particles = [smoke particles];
     NSUInteger n = [particles count];
     if(n == 0) return ;
-    CNMutablePArray* positionArr = [CNMutablePArray applyTp:egVec3Type() count:((NSUInteger)(4 * n))];
+    CNMutablePArray* positionArr = [CNMutablePArray applyTp:trSmokeBufferDataType() count:((NSUInteger)(6 * n))];
     CNMutablePArray* indexArr = [CNMutablePArray applyTp:oduInt4Type() count:((NSUInteger)(6 * n))];
     __block NSUInteger i = 0;
     [particles forEach:^void(TRSmokeParticle* p) {
         EGVec3 v = p.position;
-        [positionArr writeItem:voidRef(EGVec3Make(v.x - 0.1, v.y - 0.1, v.z))];
-        [positionArr writeItem:voidRef(EGVec3Make(v.x + 0.1, v.y - 0.1, v.z))];
-        [positionArr writeItem:voidRef(EGVec3Make(v.x + 0.1, v.y + 0.1, v.z))];
-        [positionArr writeItem:voidRef(EGVec3Make(v.x - 0.1, v.y + 0.1, v.z))];
+        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x - 0.1, v.y - 0.1, v.z, 0.0, 0.0))];
+        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x + 0.1, v.y - 0.1, v.z, 1.0, 0.0))];
+        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x + 0.1, v.y + 0.1, v.z, 1.0, 1.0))];
+        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x - 0.1, v.y + 0.1, v.z, 0.0, 1.0))];
         [indexArr writeUInt4:((unsigned int)(i))];
         [indexArr writeUInt4:((unsigned int)(i + 1))];
         [indexArr writeUInt4:((unsigned int)(i + 2))];
@@ -229,7 +278,7 @@ static ODClassType* _TRSmokeView_type;
     [_indexBuffer setData:indexArr];
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    [_shader applyPositionBuffer:_positionBuffer draw:^void() {
+    [_shader applyTexture:_texture positionBuffer:_positionBuffer draw:^void() {
         [_indexBuffer draw];
     }];
     glDisable(GL_BLEND);
@@ -269,21 +318,31 @@ static ODClassType* _TRSmokeView_type;
 @implementation TRSmokeShader{
     EGShaderProgram* _program;
     EGShaderAttribute* _positionSlot;
+    EGShaderAttribute* _uvSlot;
     EGShaderUniform* _wcpUniform;
 }
 static NSString* _TRSmokeShader_vertex = @"attribute vec3 position;\n"
+    "attribute vec2 vertexUV;\n"
     "uniform mat4 wcp;\n"
+    "\n"
+    "varying vec2 UV;\n"
     "\n"
     "void main(void) {\n"
     "   gl_Position = wcp * vec4(position, 1);\n"
+    "   UV = vertexUV;\n"
     "}";
-static NSString* _TRSmokeShader_fragment = @"void main(void) {\n"
-    "   gl_FragColor = vec4(1, 0, 0, 0.5);\n"
+static NSString* _TRSmokeShader_fragment = @"varying vec2 UV;\n"
+    "\n"
+    "uniform sampler2D texture;\n"
+    "\n"
+    "void main(void) {\n"
+    "   gl_FragColor = texture2D(texture, UV);\n"
     "}";
 static TRSmokeShader* _TRSmokeShader_instance;
 static ODClassType* _TRSmokeShader_type;
 @synthesize program = _program;
 @synthesize positionSlot = _positionSlot;
+@synthesize uvSlot = _uvSlot;
 @synthesize wcpUniform = _wcpUniform;
 
 + (id)smokeShader {
@@ -295,6 +354,7 @@ static ODClassType* _TRSmokeShader_type;
     if(self) {
         _program = [EGShaderProgram applyVertex:_TRSmokeShader_vertex fragment:_TRSmokeShader_fragment];
         _positionSlot = [_program attributeForName:@"position"];
+        _uvSlot = [_program attributeForName:@"vertexUV"];
         _wcpUniform = [_program uniformForName:@"wcp"];
     }
     
@@ -307,12 +367,15 @@ static ODClassType* _TRSmokeShader_type;
     _TRSmokeShader_instance = [TRSmokeShader smokeShader];
 }
 
-- (void)applyPositionBuffer:(EGVertexBuffer*)positionBuffer draw:(void(^)())draw {
+- (void)applyTexture:(EGTexture*)texture positionBuffer:(EGVertexBuffer*)positionBuffer draw:(void(^)())draw {
     [_program applyDraw:^void() {
-        [positionBuffer applyDraw:^void() {
-            [_positionSlot setFromBufferWithStride:((NSUInteger)(3 * 4)) valuesCount:3 valuesType:GL_FLOAT shift:0];
-            [_wcpUniform setMatrix:[[EG context] wcp]];
-            ((void(^)())(draw))();
+        [texture applyDraw:^void() {
+            [positionBuffer applyDraw:^void() {
+                [_positionSlot setFromBufferWithStride:((NSUInteger)(5 * 4)) valuesCount:3 valuesType:GL_FLOAT shift:0];
+                [_uvSlot setFromBufferWithStride:((NSUInteger)(5 * 4)) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(3 * 4))];
+                [_wcpUniform setMatrix:[[EG context] wcp]];
+                ((void(^)())(draw))();
+            }];
         }];
     }];
 }

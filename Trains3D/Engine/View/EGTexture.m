@@ -68,7 +68,7 @@
     glBindTexture( GL_TEXTURE_2D, _id);
 }
 
-- (void)draw:(void (^)())f {
+- (void)applyDraw:(void (^)())f {
     if(!_loaded) [self load];
     glEnable( GL_TEXTURE_2D );
     glBindTexture( GL_TEXTURE_2D, _id);
