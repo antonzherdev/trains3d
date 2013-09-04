@@ -28,6 +28,7 @@
 @protocol EGShaderSystem;
 @class EGContext;
 @class EGMutableMatrix;
+#import "EGVec.h"
 
 @class EGMapSso;
 @class EGMapSsoView;

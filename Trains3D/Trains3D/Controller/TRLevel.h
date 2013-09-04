@@ -9,6 +9,7 @@
 @class EGCollision;
 @class EGSchedule;
 @class EGAnimation;
+#import "EGVec.h"
 @class TRCityAngle;
 @class TRCity;
 @class TRColor;

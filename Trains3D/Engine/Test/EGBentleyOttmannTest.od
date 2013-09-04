@@ -3,6 +3,8 @@ import CNTest
 import CNPair
 import EGFigure
 import EGTypes
+import EGVec
+
 import CNSet
 
 

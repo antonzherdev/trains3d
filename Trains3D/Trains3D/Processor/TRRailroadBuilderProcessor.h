@@ -2,6 +2,7 @@
 #import "EGTypes.h"
 #import "EGProcessor.h"
 @class EGTwoFingerTouchToMouse;
+#import "EGVec.h"
 @class TRRailroadConnectorContent;
 @class TREmptyConnector;
 @class TRRail;

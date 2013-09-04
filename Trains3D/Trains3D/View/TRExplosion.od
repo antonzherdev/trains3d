@@ -1,4 +1,6 @@
 import EGTypes
+import EGVec
+
 
 class TRExplosion(position : EGVec3) extends EGController {
 

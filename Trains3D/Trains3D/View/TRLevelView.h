@@ -5,6 +5,7 @@
 #import "EGGL.h"
 @class EGMapSso;
 @class EGMapSsoView;
+#import "EGVec.h"
 @class TRLevelRules;
 @class TRLevel;
 @class TRLevelBackgroundView;

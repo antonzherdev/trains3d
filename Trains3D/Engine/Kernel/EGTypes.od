@@ -1,38 +1,5 @@
-struct EGVec2(x : float, y : float) extends ODComparable<EGVec2> {
-    static def apply(point : EGVec2I) = EGVec2(point.x, point.y)
-
-    def add(point : EGVec2) = EGVec2(x + point.x, y + point.y)
-    def sub(point : EGVec2) = EGVec2(x - point.x, y - point.y)
-    def negate = EGVec2(-x, -y)
-    def angle : float = atan2(y, x)
-    def dot(point : EGVec2) : float = x*point.x + y*point.y
-    def lengthSquare : float = dot(self)
-    def length = sqrt(lengthSquare)
-    def mul(value : float) = EGVec2(x*value, y*value)
-    def div(value : float) = EGVec2(x/value, y/value)
-    def mid(point : EGVec2) = add(point).mul(0.5)
-    def distanceTo(point : EGVec2) = sub(point).length
-    def set(length : float) = mul(length/self.length)
-    def normalize = set(length = 1.0)
-
-    def compare(to : EGVec2) : int = {
-        val dX = x.compare(to.x)
-        if(dX != 0) dX else y.compare(to.y)
-    }
-}
-
-struct EGVec2I(x : int, y : int) extends ODComparable<EGVec2I> {
-    static def apply(point : EGVec2) = EGVec2I(lround(point.x), lround(point.y))
-
-    def add(point : EGVec2I) = EGVec2I(x + point.x, y + point.y)
-    def sub(point : EGVec2I) = EGVec2I(x - point.x, y - point.y)
-    def negate = EGVec2I(-x, -y)
-
-    def compare(to : EGVec2I) : int = {
-        val dX = x.compare(to.x)
-        if(dX != 0) dX else y.compare(to.y)
-    }
-}
+import EGVec
+import EGMath
 
 struct EGSize(width : float, height : float)
 struct EGSizeI(width : int, height : int)
@@ -64,17 +31,6 @@ struct EGRectI(x : int, width : int, y : int, height : int) {
 
 struct EGColor(r : float, g : float, b : float, a : float)
 
-stub val M_PI : float
-stub val M_PI_2 : float
-stub val M_PI_4 : float
-stub def round(: float) : float
-stub def lround(: float) : int
-stub def sin(:float) : float
-stub def cos(:float) : float
-stub def fabs(:float) : float
-stub def atan2(:float, :float) : float
-stub def atan(:float) : float
-stub def sqrt(:float) : float
 
 trait EGController {
     def updateWith(delta : float)
@@ -99,15 +55,6 @@ trait EGView extends EGController {
 }
 
 
-struct EGVec3(x : float4, y : float4, z : float4) {
-    static def apply(vec2 : EGVec2, z : float4) = EGVec3(vec2.x, vec2.y, z)
-    def add(v : EGVec3) = EGVec3(x + v.x, y + v.y, z + v.z)
-    def sqr = mul(length)
-    def mul(k : float4) = EGVec3(k*x, k*y, k*z)
-    def dot(vec3 : EGVec3) : float = x*vec3.x + y*vec3.y + z*vec3.z
-    def lengthSquare : float = x*x + y*y + z*z
-    def length = sqrt(lengthSquare)
-}
 
 class EGEnvironment(ambientColor : EGColor, lights : [EGLight]) {
     static val default = EGEnvironment(EGColor(1, 1, 1, 1), [])

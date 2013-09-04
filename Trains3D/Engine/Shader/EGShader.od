@@ -9,6 +9,7 @@ import EGContext
 import EGTypes
 import EGMaterial
 import EGContext
+import EGVec
 
 class EGShaderProgram(handle : GLuint) {
     static def loadFromFiles(vertex : string, fragment : string) : EGShaderProgram =

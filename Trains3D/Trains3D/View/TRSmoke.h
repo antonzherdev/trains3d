@@ -22,6 +22,7 @@
 @class EGSurfaceShader;
 @class EGMesh;
 @class EGMeshModel;
+#import "EGVec.h"
 @class TRTrainType;
 @class TRTrain;
 @class TREngineType;

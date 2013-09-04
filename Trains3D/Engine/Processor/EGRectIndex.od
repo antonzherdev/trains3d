@@ -1,4 +1,5 @@
 import EGTypes
+import EGVec
 
 class EGRectIndex<T>(rects : [(EGRect, T)]) {
     def apply(point : EGVec2) : T? = rects.find(_.a.contains(point)).map(_.b)

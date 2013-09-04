@@ -1,3 +1,4 @@
+import EGVec
 import EGTypes
 import EG
 import EGGL

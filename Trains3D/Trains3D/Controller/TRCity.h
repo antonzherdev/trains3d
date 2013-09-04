@@ -2,6 +2,7 @@
 #import "EGTypes.h"
 @class EGSchedule;
 @class EGAnimation;
+#import "EGVec.h"
 @class TRColor;
 @class TRRailConnector;
 @class TRRailForm;

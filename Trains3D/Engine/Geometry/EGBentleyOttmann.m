@@ -1,8 +1,8 @@
 #import "EGBentleyOttmann.h"
 
-#import "EGFigure.h"
 #import "CNCollection.h"
 #import "CNPair.h"
+#import "EGFigure.h"
 @implementation EGBentleyOttmann
 static ODClassType* _EGBentleyOttmann_type;
 

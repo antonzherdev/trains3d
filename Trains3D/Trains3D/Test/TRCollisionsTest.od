@@ -3,6 +3,7 @@ import CNSet
 
 import EGTypes
 import EGCollisions
+import EGVec
 
 import TRTypes
 import TRLevel

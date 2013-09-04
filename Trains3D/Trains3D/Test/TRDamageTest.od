@@ -2,6 +2,7 @@ import CNTest
 
 import EGTypes
 import EGMapIso
+import EGVec
 
 import TRRailroad
 import TRScore

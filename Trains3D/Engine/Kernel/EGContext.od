@@ -3,6 +3,7 @@ import EGMatrix
 import EGMaterial
 import EGGL
 import EGTypes
+import EGVec
 
 
 class EGContext {

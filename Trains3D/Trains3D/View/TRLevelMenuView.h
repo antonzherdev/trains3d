@@ -4,6 +4,7 @@
 #import "EGGL.h"
 @class EGSchedule;
 @class EGAnimation;
+#import "EGVec.h"
 @class TRLevelRules;
 @class TRLevel;
 @class TRScoreRules;

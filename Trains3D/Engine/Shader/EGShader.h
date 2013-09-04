@@ -18,6 +18,7 @@
 @class EGStandardMaterial;
 @class EGContext;
 @class EGMutableMatrix;
+#import "EGVec.h"
 
 @class EGShaderProgram;
 @class EGShader;

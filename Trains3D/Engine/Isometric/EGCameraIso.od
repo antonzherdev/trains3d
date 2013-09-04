@@ -3,6 +3,7 @@ import EGGL
 import EGTypes
 import EGMapIso
 import EGContext
+import EGVec
 
 class EGCameraIso(tilesOnScreen : EGSizeI, center : EGVec2) extends EGCamera {
     private static val ISO = EGMapSso.ISO

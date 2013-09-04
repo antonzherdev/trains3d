@@ -3,6 +3,7 @@
 #import "EGTypes.h"
 @class EGMapSso;
 @class EGMapSsoView;
+#import "EGVec.h"
 @class EGLine;
 @class EGSlopeLine;
 @class EGVerticalLine;

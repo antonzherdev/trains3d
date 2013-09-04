@@ -4,6 +4,7 @@ import EGMap
 import EGMapIso
 import EGTypes
 import EGMapIsoTileIndex
+import EGVec
 
 import TRRailPoint
 import TRScore

@@ -1,11 +1,12 @@
-import EGTypes
-import EGFigure
 import CNTreeMap
 import CNTreeSet
 import CNCollection
 import CNPair
 import CNSet
 
+import EGVec
+import EGTypes
+import EGFigure
 
 class EGBentleyOttmann {
     static def intersectionsFor<T>(segments : [(T, EGLineSegment)]) : CNSet<EGIntersection<T>> =

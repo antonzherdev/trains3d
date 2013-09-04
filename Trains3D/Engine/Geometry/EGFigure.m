@@ -1,5 +1,6 @@
 #import "EGFigure.h"
 
+#import "EGMath.h"
 @implementation EGLine
 static ODClassType* _EGLine_type;
 

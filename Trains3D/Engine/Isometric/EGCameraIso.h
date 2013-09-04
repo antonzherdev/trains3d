@@ -6,6 +6,7 @@
 @class EGMapSsoView;
 @class EGContext;
 @class EGMutableMatrix;
+#import "EGVec.h"
 
 @class EGCameraIso;
 

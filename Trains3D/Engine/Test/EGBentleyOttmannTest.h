@@ -18,6 +18,7 @@
 @class EGPolygon;
 @class EGThickLineSegment;
 #import "EGTypes.h"
+#import "EGVec.h"
 #import "CNSet.h"
 
 @class EGBentleyOttmannTest;

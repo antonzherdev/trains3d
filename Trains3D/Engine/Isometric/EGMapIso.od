@@ -12,6 +12,7 @@ import EGTexture
 import EGBuffer
 import EGShader
 import EGContext
+import EGVec
 
 class EGMapSso(size : EGSizeI) {
     static val ISO = 0.70710676908493

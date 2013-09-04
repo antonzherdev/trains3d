@@ -1,6 +1,7 @@
 import EGTypes
 import EGMap
 import EGSchedule
+import EGVec
 
 import TRColor
 import TRTypes

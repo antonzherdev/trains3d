@@ -1,6 +1,7 @@
 import CNTypes
 import EGTypes
 import EGMatrix
+import EGVec
 
 stub struct GLenum
 stub struct GLint

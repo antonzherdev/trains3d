@@ -2,6 +2,7 @@ import CNSeq
 
 import EGTypes
 import EGMapIso
+import EGVec
 import EGFigure
 
 import TRTypes

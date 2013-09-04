@@ -3,6 +3,7 @@ import EGCamera2D
 import EGText
 import EGGL
 import EGSchedule
+import EGVec
 
 import TRLevel
 import TRScore

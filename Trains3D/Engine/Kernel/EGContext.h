@@ -10,6 +10,7 @@
 @class EGStandardMaterial;
 #import "EGGL.h"
 #import "EGTypes.h"
+#import "EGVec.h"
 
 @class EGContext;
 @class EGMutableMatrix;

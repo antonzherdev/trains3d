@@ -1,4 +1,5 @@
 #import "objd.h"
+#import "EGVec.h"
 #import "EGTypes.h"
 
 @class EGLine;

@@ -12,6 +12,7 @@
 @class EGThickLineSegment;
 @class EGCollisions;
 @class EGCollision;
+#import "EGVec.h"
 
 @class EGCollisionsTest;
 

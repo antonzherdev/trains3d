@@ -1,12 +1,4 @@
 #import "objd.h"
-#import "EGTypes.h"
-@class EGLine;
-@class EGSlopeLine;
-@class EGVerticalLine;
-@protocol EGFigure;
-@class EGLineSegment;
-@class EGPolygon;
-@class EGThickLineSegment;
 #import "CNTreeMap.h"
 #import "CNTreeSet.h"
 @protocol CNIterator;
@@ -18,6 +10,15 @@
 @class CNPair;
 @class CNPairIterator;
 #import "CNSet.h"
+#import "EGVec.h"
+#import "EGTypes.h"
+@class EGLine;
+@class EGSlopeLine;
+@class EGVerticalLine;
+@protocol EGFigure;
+@class EGLineSegment;
+@class EGPolygon;
+@class EGThickLineSegment;
 
 @class EGBentleyOttmann;
 @class EGIntersection;

@@ -1,6 +1,7 @@
 import EGTypes
 import EGProcessor
 import EGRectIndex
+import EGVec
 
 import TRRailPoint
 import TRRailroad

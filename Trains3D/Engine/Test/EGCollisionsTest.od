@@ -3,6 +3,7 @@ import CNPair
 import EGTypes
 import EGFigure
 import EGCollisions
+import EGVec
 
 class EGCollisionsTest extends CNTestCase {
     def testDavidsStar {

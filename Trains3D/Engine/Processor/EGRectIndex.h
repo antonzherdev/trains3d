@@ -1,5 +1,6 @@
 #import "objd.h"
 #import "EGTypes.h"
+#import "EGVec.h"
 
 @class EGRectIndex;
 

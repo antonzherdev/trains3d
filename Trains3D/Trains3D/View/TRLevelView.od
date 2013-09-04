@@ -3,6 +3,7 @@ import EGCameraIso
 import EG
 import EGGL
 import EGMapIso
+import EGVec
 
 import TRLevel
 import TRLevelBackgroundView

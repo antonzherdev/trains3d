@@ -1,4 +1,6 @@
 import EGTypes
+import EGVec
+import EGMath
 
 enum TRRailConnector(x : int, y : int, angle : int) {
     left(-1, 0, 0)

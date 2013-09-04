@@ -2,6 +2,8 @@ import CNTest
 
 import EGFigure
 import EGTypes
+import EGVec
+import EGMath
 
 class EGFigureTest extends CNTestCase {
     def testThickLine {

@@ -1,8 +1,8 @@
 #import "EGCollisions.h"
 
+#import "CNPair.h"
 #import "EGFigure.h"
 #import "EGBentleyOttmann.h"
-#import "CNPair.h"
 @implementation EGCollisions
 static ODClassType* _EGCollisions_type;
 

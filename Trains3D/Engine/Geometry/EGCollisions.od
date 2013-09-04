@@ -1,8 +1,9 @@
-import EGFigure
-import EGBentleyOttmann
-import EGTypes
 import CNPair
 import CNSet
+
+import EGFigure
+import EGBentleyOttmann
+import EGVec
 
 class EGCollisions {
     static def collisionsFor<T>(figures : [(T, EGFigure)]) : CNSet<EGCollision<T>> = {

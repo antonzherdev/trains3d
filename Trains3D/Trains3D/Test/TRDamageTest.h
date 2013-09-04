@@ -3,6 +3,7 @@
 #import "EGTypes.h"
 @class EGMapSso;
 @class EGMapSsoView;
+#import "EGVec.h"
 @class TRRailroadConnectorContent;
 @class TREmptyConnector;
 @class TRRail;

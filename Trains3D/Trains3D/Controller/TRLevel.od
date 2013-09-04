@@ -6,6 +6,8 @@ import EGTypes
 import EGMapIso
 import EGCollisions
 import EGSchedule
+import EGVec
+import EGMath
 
 import TRCity
 import TRTypes

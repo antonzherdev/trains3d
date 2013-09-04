@@ -1,4 +1,7 @@
 #import "objd.h"
+@class CNPair;
+@class CNPairIterator;
+#import "CNSet.h"
 @class EGLine;
 @class EGSlopeLine;
 @class EGVerticalLine;
@@ -14,10 +17,7 @@
 @class EGBentleyOttmannEventQueue;
 @class EGPointClass;
 @class EGSweepLine;
-#import "EGTypes.h"
-@class CNPair;
-@class CNPairIterator;
-#import "CNSet.h"
+#import "EGVec.h"
 
 @class EGCollisions;
 @class EGCollision;

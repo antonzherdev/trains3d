@@ -4,6 +4,7 @@
 #import "EGTypes.h"
 @class EGCollisions;
 @class EGCollision;
+#import "EGVec.h"
 @class TRColor;
 @class TRLevelRules;
 @class TRLevel;

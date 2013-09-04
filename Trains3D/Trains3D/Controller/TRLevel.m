@@ -4,6 +4,7 @@
 #import "EGMapIso.h"
 #import "EGCollisions.h"
 #import "EGSchedule.h"
+#import "EGMath.h"
 #import "TRCity.h"
 #import "TRTypes.h"
 #import "TRRailroad.h"

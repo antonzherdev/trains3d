@@ -3,6 +3,7 @@
 @class EGMapSso;
 @class EGMapSsoView;
 #import "EGTypes.h"
+#import "EGVec.h"
 @class TRRailConnector;
 @class TRRailForm;
 @class TRRailPoint;

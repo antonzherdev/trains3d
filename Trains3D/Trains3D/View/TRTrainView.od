@@ -4,6 +4,7 @@ import EGTypes
 import EGMesh
 import EGMaterial
 import EGContext
+import EGMath
 
 import TRTrain
 import TRTypes

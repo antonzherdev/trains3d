@@ -1,6 +1,8 @@
 import EGTypes
 import EGProcessor
 import EGTwoFingerTouchToMouse
+import EGVec
+import EGMath
 
 import TRRailroad
 import TRRailPoint

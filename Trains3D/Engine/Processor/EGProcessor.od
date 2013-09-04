@@ -1,4 +1,5 @@
 import EGTypes
+import EGVec
 
 trait EGProcessor {
     def process(event : EGEvent) : bool

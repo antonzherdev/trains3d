@@ -4,6 +4,7 @@
 #import "EGMesh.h"
 #import "EGMaterial.h"
 #import "EGContext.h"
+#import "EGMath.h"
 #import "TRTrain.h"
 #import "TRTypes.h"
 #import "TRRailPoint.h"
