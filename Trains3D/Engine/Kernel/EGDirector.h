@@ -1,4 +1,5 @@
 #import "objd.h"
+#import "EGVec.h"
 @class EGScene;
 @class EGTime;
 @class EGStat;
@@ -22,7 +23,7 @@
 - (id)init;
 - (ODClassType*)type;
 + (EGDirector*)current;
-- (void)drawWithSize:(EGSize)size;
+- (void)drawWithSize:(EGVec2)size;
 - (void)processEvent:(EGEvent*)event;
 - (BOOL)isStarted;
 - (void)start;

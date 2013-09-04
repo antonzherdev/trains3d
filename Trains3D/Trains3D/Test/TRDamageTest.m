@@ -24,7 +24,7 @@ static ODClassType* _TRDamageTest_type;
 }
 
 - (void)testMain {
-    TRRailroad* railroad = [TRRailroad railroadWithMap:[EGMapSso mapSsoWithSize:EGSizeIMake(4, 3)] score:[TRScore scoreWithRules:TRLevelFactory.scoreRules]];
+    TRRailroad* railroad = [TRRailroad railroadWithMap:[EGMapSso mapSsoWithSize:EGVec2IMake(4, 3)] score:[TRScore scoreWithRules:TRLevelFactory.scoreRules]];
     [railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(1, 1) form:TRRailForm.leftRight]];
     [railroad addDamageAtPoint:[TRRailPoint railPointWithTile:EGVec2IMake(1, 1) form:TRRailForm.leftRight x:0.2 back:NO]];
     [railroad addDamageAtPoint:[TRRailPoint railPointWithTile:EGVec2IMake(1, 1) form:TRRailForm.leftRight x:0.6 back:YES]];

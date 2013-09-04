@@ -9,14 +9,14 @@
 @class EGCamera2D;
 
 @interface EGCamera2D : NSObject<EGCamera>
-@property (nonatomic, readonly) EGSize size;
+@property (nonatomic, readonly) EGVec2 size;
 @property (nonatomic, readonly) EGVec3 eyeDirection;
 
-+ (id)camera2DWithSize:(EGSize)size;
-- (id)initWithSize:(EGSize)size;
++ (id)camera2DWithSize:(EGVec2)size;
+- (id)initWithSize:(EGVec2)size;
 - (ODClassType*)type;
-- (void)focusForViewSize:(EGSize)viewSize;
-- (EGVec2)translateWithViewSize:(EGSize)viewSize viewPoint:(EGVec2)viewPoint;
+- (void)focusForViewSize:(EGVec2)viewSize;
+- (EGVec2)translateWithViewSize:(EGVec2)viewSize viewPoint:(EGVec2)viewPoint;
 + (ODClassType*)type;
 @end
 

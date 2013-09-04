@@ -15,7 +15,7 @@ import TRTrain
 class TRCollisionsTest extends CNTestCase {
     static val carLen = TRCarType.car.fullLength
     static val carWidth = TRCarType.car.width
-    def newLevel = TRLevel(TRLevelRules(EGSizeI(5, 3), TRLevelFactory.scoreRules, 30, []))
+    def newLevel = TRLevel(TRLevelRules(EGVec2I(5, 3), TRLevelFactory.scoreRules, 30, []))
 
 
     def check(level : TRLevel) : CNSet<TRTrain> = level.detectCollisions.chain.flatMap(_.items).map(_.a).toSet

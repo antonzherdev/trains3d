@@ -12,7 +12,7 @@ import TRRailroad
 import TRTypes
 
 class TRLevelMenuView(level : TRLevel) extends EGView {
-    val camera : EGCamera = EGCamera2D(EGSize(2, 1))
+    val camera : EGCamera = EGCamera2D(EGVec2(2, 1))
 
     def drawView {
         egColor3(1, 1, 1)

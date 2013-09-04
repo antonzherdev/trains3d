@@ -7,83 +7,9 @@
 @protocol EGController;
 @protocol EGCamera;
 @protocol EGView;
-typedef struct EGSize EGSize;
-typedef struct EGSizeI EGSizeI;
 typedef struct EGRect EGRect;
 typedef struct EGRectI EGRectI;
 typedef struct EGColor EGColor;
-
-struct EGSize {
-    CGFloat width;
-    CGFloat height;
-};
-static inline EGSize EGSizeMake(CGFloat width, CGFloat height) {
-    EGSize ret;
-    ret.width = width;
-    ret.height = height;
-    return ret;
-}
-static inline BOOL EGSizeEq(EGSize s1, EGSize s2) {
-    return eqf(s1.width, s2.width) && eqf(s1.height, s2.height);
-}
-static inline NSUInteger EGSizeHash(EGSize self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + floatHash(self.width);
-    hash = hash * 31 + floatHash(self.height);
-    return hash;
-}
-static inline NSString* EGSizeDescription(EGSize self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<EGSize: "];
-    [description appendFormat:@"width=%f", self.width];
-    [description appendFormat:@", height=%f", self.height];
-    [description appendString:@">"];
-    return description;
-}
-ODPType* egSizeType();
-@interface EGSizeWrap : NSObject
-@property (readonly, nonatomic) EGSize value;
-
-+ (id)wrapWithValue:(EGSize)value;
-- (id)initWithValue:(EGSize)value;
-@end
-
-
-
-struct EGSizeI {
-    NSInteger width;
-    NSInteger height;
-};
-static inline EGSizeI EGSizeIMake(NSInteger width, NSInteger height) {
-    EGSizeI ret;
-    ret.width = width;
-    ret.height = height;
-    return ret;
-}
-static inline BOOL EGSizeIEq(EGSizeI s1, EGSizeI s2) {
-    return s1.width == s2.width && s1.height == s2.height;
-}
-static inline NSUInteger EGSizeIHash(EGSizeI self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.width;
-    hash = hash * 31 + self.height;
-    return hash;
-}
-static inline NSString* EGSizeIDescription(EGSizeI self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<EGSizeI: "];
-    [description appendFormat:@"width=%li", self.width];
-    [description appendFormat:@", height=%li", self.height];
-    [description appendString:@">"];
-    return description;
-}
-ODPType* egSizeIType();
-@interface EGSizeIWrap : NSObject
-@property (readonly, nonatomic) EGSizeI value;
-
-+ (id)wrapWithValue:(EGSizeI)value;
-- (id)initWithValue:(EGSizeI)value;
-@end
-
-
 
 struct EGRect {
     CGFloat x;
@@ -124,9 +50,9 @@ CGFloat egRectX2(EGRect self);
 CGFloat egRectY2(EGRect self);
 EGRect egRectNewXY(CGFloat x, CGFloat x2, CGFloat y, CGFloat y2);
 EGRect egRectMove(EGRect self, CGFloat x, CGFloat y);
-EGRect egRectMoveToCenterFor(EGRect self, EGSize size);
+EGRect egRectMoveToCenterFor(EGRect self, EGVec2 size);
 EGVec2 egRectPoint(EGRect self);
-EGSize egRectSize(EGRect self);
+EGVec2 egRectSize(EGRect self);
 BOOL egRectIntersects(EGRect self, EGRect rect);
 EGRect egRectThicken(EGRect self, CGFloat x, CGFloat y);
 ODPType* egRectType();
@@ -237,8 +163,8 @@ ODPType* egColorType();
 
 
 @protocol EGCamera<NSObject>
-- (void)focusForViewSize:(EGSize)viewSize;
-- (EGVec2)translateWithViewSize:(EGSize)viewSize viewPoint:(EGVec2)viewPoint;
+- (void)focusForViewSize:(EGVec2)viewSize;
+- (EGVec2)translateWithViewSize:(EGVec2)viewSize viewPoint:(EGVec2)viewPoint;
 - (EGVec3)eyeDirection;
 @end
 

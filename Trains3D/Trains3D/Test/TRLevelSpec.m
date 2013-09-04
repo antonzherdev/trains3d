@@ -8,7 +8,7 @@
 
 SPEC_BEGIN(TRLevelSpec)
     describe(@"TRLevel", ^{
-        EGSizeI mapSize = EGSizeIMake(1, 3);
+        EGVec2I mapSize = EGVec2IMake(1, 3);
         it(@"should generare two cities in a time of starting.\n"
                 "These cities should be generated on an edge of the map.\n"
                 "These cities should be generated in different tiles.\n"

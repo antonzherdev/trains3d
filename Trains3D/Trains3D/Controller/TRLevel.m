@@ -12,7 +12,7 @@
 #import "TRTrain.h"
 #import "TRScore.h"
 @implementation TRLevelRules{
-    EGSizeI _mapSize;
+    EGVec2I _mapSize;
     TRScoreRules* _scoreRules;
     NSUInteger _repairerSpeed;
     id<CNSeq> _events;
@@ -23,11 +23,11 @@ static ODClassType* _TRLevelRules_type;
 @synthesize repairerSpeed = _repairerSpeed;
 @synthesize events = _events;
 
-+ (id)levelRulesWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
++ (id)levelRulesWithMapSize:(EGVec2I)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
     return [[TRLevelRules alloc] initWithMapSize:mapSize scoreRules:scoreRules repairerSpeed:repairerSpeed events:events];
 }
 
-- (id)initWithMapSize:(EGSizeI)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
+- (id)initWithMapSize:(EGVec2I)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
     self = [super init];
     if(self) {
         _mapSize = mapSize;
@@ -60,12 +60,12 @@ static ODClassType* _TRLevelRules_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRLevelRules* o = ((TRLevelRules*)(other));
-    return EGSizeIEq(self.mapSize, o.mapSize) && [self.scoreRules isEqual:o.scoreRules] && self.repairerSpeed == o.repairerSpeed && [self.events isEqual:o.events];
+    return EGVec2IEq(self.mapSize, o.mapSize) && [self.scoreRules isEqual:o.scoreRules] && self.repairerSpeed == o.repairerSpeed && [self.events isEqual:o.events];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + EGSizeIHash(self.mapSize);
+    hash = hash * 31 + EGVec2IHash(self.mapSize);
     hash = hash * 31 + [self.scoreRules hash];
     hash = hash * 31 + self.repairerSpeed;
     hash = hash * 31 + [self.events hash];
@@ -74,7 +74,7 @@ static ODClassType* _TRLevelRules_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"mapSize=%@", EGSizeIDescription(self.mapSize)];
+    [description appendFormat:@"mapSize=%@", EGVec2IDescription(self.mapSize)];
     [description appendFormat:@", scoreRules=%@", self.scoreRules];
     [description appendFormat:@", repairerSpeed=%li", self.repairerSpeed];
     [description appendFormat:@", events=%@", self.events];

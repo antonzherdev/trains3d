@@ -7,7 +7,7 @@
 
 @private
     EGDirector *_director;
-    EGSize _viewSize;
+    EGVec2 _viewSize;
 }
 
 @synthesize director = _director;
@@ -64,7 +64,7 @@
     [self lockOpenGLContext];
     @try {
         CGSize nsSize = self.bounds.size;
-        _viewSize = EGSizeMake(nsSize.width, nsSize.height);
+        _viewSize = EGVec2Make(nsSize.width, nsSize.height);
         [_director drawWithSize:_viewSize];
 
         [self.openGLContext flushBuffer];

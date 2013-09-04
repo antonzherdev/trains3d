@@ -37,7 +37,7 @@ static ODClassType* _TRLevelFactory_type;
     } delayPeriod:10.0 delayFine:^NSInteger(TRTrain* train, NSInteger i) {
         return i * 1000;
     } repairCost:2000];
-    _TRLevelFactory_rules = (@[[TRLevelRules levelRulesWithMapSize:EGSizeIMake(5, 3) scoreRules:_TRLevelFactory_scoreRules repairerSpeed:30 events:(@[tuple(@1.0, [TRLevelFactory trainCars:intTo(2, 5) speed:[intTo(30, 60) setStep:10]]), tuple(@15.0, [TRLevelFactory createNewCity])])]]);
+    _TRLevelFactory_rules = (@[[TRLevelRules levelRulesWithMapSize:EGVec2IMake(5, 3) scoreRules:_TRLevelFactory_scoreRules repairerSpeed:30 events:(@[tuple(@1.0, [TRLevelFactory trainCars:intTo(2, 5) speed:[intTo(30, 60) setStep:10]]), tuple(@15.0, [TRLevelFactory createNewCity])])]]);
 }
 
 + (EGScene*)sceneForLevel:(TRLevel*)level {
@@ -60,7 +60,7 @@ static ODClassType* _TRLevelFactory_type;
     return [TRLevel levelWithRules:((TRLevelRules*)([_TRLevelFactory_rules applyIndex:number - 1]))];
 }
 
-+ (TRLevel*)levelWithMapSize:(EGSizeI)mapSize {
++ (TRLevel*)levelWithMapSize:(EGVec2I)mapSize {
     return [TRLevel levelWithRules:[TRLevelRules levelRulesWithMapSize:mapSize scoreRules:_TRLevelFactory_scoreRules repairerSpeed:30 events:(@[])]];
 }
 
@@ -72,7 +72,7 @@ static ODClassType* _TRLevelFactory_type;
     return [TRScore scoreWithRules:_TRLevelFactory_scoreRules];
 }
 
-+ (TRRailroad*)railroadWithMapSize:(EGSizeI)mapSize {
++ (TRRailroad*)railroadWithMapSize:(EGVec2I)mapSize {
     return [TRRailroad railroadWithMap:[EGMapSso mapSsoWithSize:mapSize] score:[TRLevelFactory score]];
 }
 

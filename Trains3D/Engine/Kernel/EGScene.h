@@ -5,6 +5,7 @@
 @protocol EGTouchProcessor;
 @class EGEvent;
 @class EGLayer;
+#import "EGVec.h"
 
 @class EGScene;
 
@@ -15,7 +16,7 @@
 + (id)sceneWithController:(id<EGController>)controller layers:(id<CNSeq>)layers;
 - (id)initWithController:(id<EGController>)controller layers:(id<CNSeq>)layers;
 - (ODClassType*)type;
-- (void)drawWithViewSize:(EGSize)viewSize;
+- (void)drawWithViewSize:(EGVec2)viewSize;
 - (BOOL)processEvent:(EGEvent*)event;
 - (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;

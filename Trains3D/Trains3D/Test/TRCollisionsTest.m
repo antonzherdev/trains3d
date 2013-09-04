@@ -30,7 +30,7 @@ static ODClassType* _TRCollisionsTest_type;
 }
 
 - (TRLevel*)newLevel {
-    return [TRLevel levelWithRules:[TRLevelRules levelRulesWithMapSize:EGSizeIMake(5, 3) scoreRules:TRLevelFactory.scoreRules repairerSpeed:30 events:(@[])]];
+    return [TRLevel levelWithRules:[TRLevelRules levelRulesWithMapSize:EGVec2IMake(5, 3) scoreRules:TRLevelFactory.scoreRules repairerSpeed:30 events:(@[])]];
 }
 
 - (id<CNSet>)checkLevel:(TRLevel*)level {

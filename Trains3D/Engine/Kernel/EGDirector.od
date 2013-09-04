@@ -1,3 +1,4 @@
+import EGVec
 import EGScene
 import EGTime
 import EGStat
@@ -15,7 +16,7 @@ class EGDirector {
     static def current = _current
     val context = EGContext()
 
-    def drawWith(size : EGSize) {
+    def drawWith(size : EGVec2) {
         _current = self
         glClearColor(0.0, 0.0, 0.0, 1)
         egClear

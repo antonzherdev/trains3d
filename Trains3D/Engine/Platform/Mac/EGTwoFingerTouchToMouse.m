@@ -110,7 +110,7 @@
     NSUInteger _type;
     EGVec2 _locationInView;
 }
-- (id)initWithType:(NSUInteger)type locationInView:(EGVec2)locationInView viewSize:(EGSize)viewSize camera:(id)camera{
+- (id)initWithType:(NSUInteger)type locationInView:(EGVec2)locationInView viewSize:(EGVec2)viewSize camera:(id)camera{
     self = [super initWithViewSize:viewSize camera:camera];
     if (self) {
         _locationInView = locationInView;
@@ -120,7 +120,7 @@
     return self;
 }
 
-+ (id)eventWithType:(NSUInteger)type locationInView:(EGVec2)locationInView  viewSize:(EGSize)viewSize camera:(id)camera {
++ (id)eventWithType:(NSUInteger)type locationInView:(EGVec2)locationInView  viewSize:(EGVec2)viewSize camera:(id)camera {
     return [[self alloc] initWithType:type locationInView:locationInView viewSize:viewSize camera:camera];
 }
 

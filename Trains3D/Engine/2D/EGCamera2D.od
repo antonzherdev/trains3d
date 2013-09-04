@@ -4,20 +4,20 @@ import EG
 import EGGL
 import EGContext
 
-class EGCamera2D(size : EGSize) extends EGCamera {
-    private def factorFor(viewSize : EGSize) : float = min(viewSize.width/size.width, viewSize.height/size.height)
-    private def viewportRectFor(viewSize : EGSize) : EGRect = viewportRectFor(viewSize, factorFor(viewSize))
-    private def viewportRectFor(viewSize : EGSize, factor : float) : EGRect =
-        EGRect(0, size.width*factor, 0, size.height*factor).moveToCenterFor(viewSize)
+class EGCamera2D(size : EGVec2) extends EGCamera {
+    private def factorFor(viewSize : EGVec2) : float = min(viewSize.x/size.x, viewSize.y/size.y)
+    private def viewportRectFor(viewSize : EGVec2) : EGRect = viewportRectFor(viewSize, factorFor(viewSize))
+    private def viewportRectFor(viewSize : EGVec2, factor : float) : EGRect =
+        EGRect(0, size.x*factor, 0, size.y*factor).moveToCenterFor(viewSize)
 
-    def focusFor(viewSize : EGSize) {
+    def focusFor(viewSize : EGVec2) {
         egViewport(viewportRectFor(viewSize))
 
         EG.context.clearMatrix
-        EG.context.projectionMatrix.ortho(0, size.width, 0, size.height, 0, 1)
+        EG.context.projectionMatrix.ortho(0, size.x, 0, size.y, 0, 1)
     }
 
-    def translateWith(viewSize : EGSize, viewPoint : EGVec2) : EGVec2 = {
+    def translateWith(viewSize : EGVec2, viewPoint : EGVec2) : EGVec2 = {
         val factor = factorFor(viewSize)
         val viewport = viewportRectFor(viewSize, factor)
         viewPoint.sub(viewport.point).div(factor)

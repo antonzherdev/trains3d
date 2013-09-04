@@ -11,7 +11,7 @@ import TRRailPoint
 
 class TRDamageTest extends CNTestCase {
     def testMain {
-        val railroad = TRRailroad(EGMapSso(EGSizeI(4, 3)), TRScore(TRLevelFactory.scoreRules))
+        val railroad = TRRailroad(EGMapSso(EGVec2I(4, 3)), TRScore(TRLevelFactory.scoreRules))
 
         railroad.tryAdd(TRRail(EGVec2I(1, 1), TRRailForm.leftRight))
         railroad.addDamageAt(TRRailPoint(EGVec2I(1, 1), TRRailForm.leftRight, 0.2, false))

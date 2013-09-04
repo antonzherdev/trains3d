@@ -16,7 +16,7 @@ import TRRailPoint
 import TRTrain
 import TRScore
 
-class TRLevelRules(mapSize : EGSizeI, scoreRules : TRScoreRules, repairerSpeed : uint, events : [(float, (TRLevel) -> void)])
+class TRLevelRules(mapSize : EGVec2I, scoreRules : TRScoreRules, repairerSpeed : uint, events : [(float, (TRLevel) -> void)])
 
 class TRLevel(rules : TRLevelRules) extends EGController {
     val map : EGMapSso = EGMapSso(rules.mapSize)

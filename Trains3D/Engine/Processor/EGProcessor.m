@@ -1,18 +1,18 @@
 #import "EGProcessor.h"
 
 @implementation EGEvent{
-    EGSize _viewSize;
+    EGVec2 _viewSize;
     id _camera;
 }
 static ODClassType* _EGEvent_type;
 @synthesize viewSize = _viewSize;
 @synthesize camera = _camera;
 
-+ (id)eventWithViewSize:(EGSize)viewSize camera:(id)camera {
++ (id)eventWithViewSize:(EGVec2)viewSize camera:(id)camera {
     return [[EGEvent alloc] initWithViewSize:viewSize camera:camera];
 }
 
-- (id)initWithViewSize:(EGSize)viewSize camera:(id)camera {
+- (id)initWithViewSize:(EGVec2)viewSize camera:(id)camera {
     self = [super init];
     if(self) {
         _viewSize = viewSize;
@@ -118,19 +118,19 @@ static ODClassType* _EGEvent_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGEvent* o = ((EGEvent*)(other));
-    return EGSizeEq(self.viewSize, o.viewSize) && [self.camera isEqual:o.camera];
+    return EGVec2Eq(self.viewSize, o.viewSize) && [self.camera isEqual:o.camera];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + EGSizeHash(self.viewSize);
+    hash = hash * 31 + EGVec2Hash(self.viewSize);
     hash = hash * 31 + [self.camera hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"viewSize=%@", EGSizeDescription(self.viewSize)];
+    [description appendFormat:@"viewSize=%@", EGVec2Description(self.viewSize)];
     [description appendFormat:@", camera=%@", self.camera];
     [description appendString:@">"];
     return description;

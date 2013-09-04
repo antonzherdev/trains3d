@@ -2,6 +2,7 @@ import CNFile
 
 import EGTypes
 import EGGL
+import EGVec
 
 class EGTexture {
     val id : GLuint = egGenTexture
@@ -28,14 +29,14 @@ class EGTexture {
 
 class EGFileTexture(file : string) extends EGTexture  {
     private var _loaded = false
-    private var _size : EGSize
+    private var _size : EGVec2
 
     private def load {
         _size = egLoadTextureFromFile(id, CNBundle.fileNameFor(file))
         _loaded = true
     }
 
-    def size : EGSize = {
+    def size : EGVec2 = {
         if(!_loaded) load
         _size
     }

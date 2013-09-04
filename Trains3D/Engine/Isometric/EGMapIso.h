@@ -34,14 +34,14 @@
 @class EGMapSsoView;
 
 @interface EGMapSso : NSObject
-@property (nonatomic, readonly) EGSizeI size;
+@property (nonatomic, readonly) EGVec2I size;
 @property (nonatomic, readonly) EGRectI limits;
 @property (nonatomic, readonly) id<CNSeq> fullTiles;
 @property (nonatomic, readonly) id<CNSeq> partialTiles;
 @property (nonatomic, readonly) id<CNSeq> allTiles;
 
-+ (id)mapSsoWithSize:(EGSizeI)size;
-- (id)initWithSize:(EGSizeI)size;
++ (id)mapSsoWithSize:(EGVec2I)size;
+- (id)initWithSize:(EGVec2I)size;
 - (ODClassType*)type;
 - (BOOL)isFullTile:(EGVec2I)tile;
 - (BOOL)isPartialTile:(EGVec2I)tile;

@@ -1,4 +1,5 @@
 import EGTypes
+import EGVec
 
-stub def egMapDrawLayout(size: EGSizeI)
+stub def egMapDrawLayout(size: EGVec2I)
 stub def egMapDrawAxis

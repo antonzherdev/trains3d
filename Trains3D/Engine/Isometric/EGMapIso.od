@@ -14,32 +14,32 @@ import EGShader
 import EGContext
 import EGVec
 
-class EGMapSso(size : EGSizeI) {
+class EGMapSso(size : EGVec2I) {
     static val ISO = 0.70710676908493
 
-    val limits = EGRectI.newXY((1 - size.height)/2 - 1,
-                         (2*size.width + size.height - 3)/2 + 1,
-                         (1 - size.width)/2 - 1,
-                         (size.width + 2*size.height - 3)/2 + 1)
+    val limits = EGRectI.newXY((1 - size.y)/2 - 1,
+                         (2*size.x + size.y - 3)/2 + 1,
+                         (1 - size.x)/2 - 1,
+                         (size.x + 2*size.y - 3)/2 + 1)
     val fullTiles : [EGVec2I] = allPosibleTiles.filter(isFull(_)).toArray
     val partialTiles : [EGVec2I] = allPosibleTiles.filter(isPartial(_)).toArray
     val allTiles : [EGVec2I] = fullTiles + partialTiles
 
     def isFull(tile : EGVec2I) : bool =
         tile.y + tile.x >= 0 //left
-        && tile.y - tile.x <= size.height - 1 //top
-        && tile.y + tile.x <= size.width + size.height - 2 //right
-        && tile.y - tile.x >= -size.width + 1
+        && tile.y - tile.x <= size.y - 1 //top
+        && tile.y + tile.x <= size.x + size.y - 2 //right
+        && tile.y - tile.x >= -size.x + 1
 
     def isPartial(tile : EGVec2I) : bool =
         tile.y + tile.x >= -1 //left
-        && tile.y - tile.x <= size.height //top
-        && tile.y + tile.x <= size.width + size.height - 1 //right
-        && tile.y - tile.x >= -size.width && (
+        && tile.y - tile.x <= size.y //top
+        && tile.y + tile.x <= size.x + size.y - 1 //right
+        && tile.y - tile.x >= -size.x && (
             tile.y + tile.x == -1 //left
-            || tile.y - tile.x == size.height //top
-            || tile.y + tile.x == size.width + size.height - 1 //right
-            || tile.y - tile.x == -size.width //bottom
+            || tile.y - tile.x == size.y //top
+            || tile.y + tile.x == size.x + size.y - 1 //right
+            || tile.y - tile.x == -size.x //bottom
         )
 
     private def allPosibleTiles : CNChain<EGVec2I> =
@@ -54,9 +54,9 @@ class EGMapSso(size : EGSizeI) {
 
     def cutRectFor(tile : EGVec2I) = EGRectI.newXY(
         tileCutAxis(0, tile.x + tile.y),
-        tileCutAxis(tile.x + tile.y, size.width + size.height - 2),
-        tileCutAxis(tile.y - tile.x, size.height - 1),
-        tileCutAxis(-size.width + 1, tile.y - tile.x))
+        tileCutAxis(tile.x + tile.y, size.x + size.y - 2),
+        tileCutAxis(tile.y - tile.x, size.y - 1),
+        tileCutAxis(-size.x + 1, tile.y - tile.x))
 }
 
 class EGMapSsoView(map : EGMapSso) {

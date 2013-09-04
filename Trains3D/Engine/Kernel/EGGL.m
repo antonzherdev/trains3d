@@ -32,7 +32,7 @@ id egGetShaderError(GLuint shader) {
     return [CNOption none];
 }
 
-EGSize egLoadTextureFromFile(GLuint target, NSString* file) {
+EGVec2 egLoadTextureFromFile(GLuint target, NSString* file) {
     CFURLRef url = (__bridge CFURLRef)[NSURL fileURLWithPath:file];
     CGImageSourceRef myImageSourceRef = CGImageSourceCreateWithURL(url, NULL);
     CGImageRef myImageRef = CGImageSourceCreateImageAtIndex (myImageSourceRef, 0, NULL);
@@ -59,7 +59,7 @@ EGSize egLoadTextureFromFile(GLuint target, NSString* file) {
     CFRelease(myImageSourceRef);
     CFRelease(myImageRef);
     free(myData);
-    return EGSizeMake(width, height);
+    return EGVec2Make(width, height);
 
 }
 

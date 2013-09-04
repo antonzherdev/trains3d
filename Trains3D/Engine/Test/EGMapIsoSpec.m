@@ -12,7 +12,7 @@ SPEC_BEGIN(EGMapIsoSpec)
     describe(@"Square isometric(Sso)", ^{
         describe(@"should determine full and partial tiles. ", ^{
             describe(@"For map size 2x3", ^{
-                EGMapSso* m = [EGMapSso mapSsoWithSize:EGSizeIMake(2, 3)];
+                EGMapSso* m = [EGMapSso mapSsoWithSize:EGVec2IMake(2, 3)];
                 it(@"the tile 0:2 should be full", ^{
                     [[theValue([m isFullTile:EGVec2IMake(0, 2)]) should] beTrue];
                 });

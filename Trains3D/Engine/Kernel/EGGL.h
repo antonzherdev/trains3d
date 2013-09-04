@@ -131,4 +131,4 @@ static inline void egColor(EGColor self) {
     applyVertexData:[arrp(float, numf4, NAME ## _vertexcount*8) NAME ## _vertex] \
     index: [arrp(unsigned int, numui4, NAME ## _polygoncount*3) NAME ## _index]]
 
-EGSize egLoadTextureFromFile(GLuint target, NSString* file);
+EGVec2 egLoadTextureFromFile(GLuint target, NSString* file);

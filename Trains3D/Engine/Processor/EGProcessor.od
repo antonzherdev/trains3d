@@ -18,7 +18,7 @@ trait EGTouchProcessor {
     def touchCanceled(event : EGEvent) : bool = false
 }
 
-class EGEvent(viewSize : EGSize, camera : EGCamera?) {
+class EGEvent(viewSize : EGVec2, camera : EGCamera?) {
     def set(camera : EGCamera?) : EGEvent
 
     def locationInView : EGVec2

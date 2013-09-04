@@ -1,10 +1,11 @@
 import EGTypes
 import EGProcessor
 import EGLayer
+import EGVec
 
 
 class EGScene(val controller : EGController, val layers : [EGLayer]) {
-    def drawWith(viewSize : EGSize) {
+    def drawWith(viewSize : EGVec2) {
         layers.for(_.drawWith(viewSize))
     }
 

@@ -2,9 +2,10 @@ import EGTypes
 import EGProcessor
 import EG
 import EGContext
+import EGVec
 
 class EGLayer(view : EGView, processor : EGProcessor?) extends EGController {
-    def drawWith(viewSize : EGSize) {
+    def drawWith(viewSize : EGVec2) {
         view.camera.focusFor(viewSize)
         EG.context.eyeDirection = view.camera.eyeDirection
         EG.context.environment = view.environment

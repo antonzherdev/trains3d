@@ -14,7 +14,7 @@
 SPEC_BEGIN(TRRailroadSpec)
     describe(@"TRRailroad", ^{
         it(@"should move point", ^{
-            TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:EGSizeIMake(10, 7)];
+            TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:EGVec2IMake(10, 7)];
 
             [railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(0, 0) form:[TRRailForm leftRight]]];
             [railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(1, 0) form:[TRRailForm leftBottom]]];
@@ -49,7 +49,7 @@ SPEC_BEGIN(TRRailroadSpec)
             checkCorrection;
         });
         it(@"should add switches", ^{
-            TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:EGSizeIMake(10, 7)];
+            TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:EGVec2IMake(10, 7)];
 
             TRRail *xRail = [TRRail railWithTile:EGVec2IMake(2, 0) form:[TRRailForm leftRight]];
             [railroad tryAddRail:xRail];
@@ -78,7 +78,7 @@ SPEC_BEGIN(TRRailroadSpec)
             [[theSwitch.rail2 should] equal:turnRail];
         });
         it(@"should choose active switch and should lock moving through closing switch", ^{
-            TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:EGSizeIMake(10, 7)];
+            TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:EGVec2IMake(10, 7)];
             [railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(2, 0) form:[TRRailForm leftRight]]];
             [railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(3, 0) form:[TRRailForm leftTop]]];
             [railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(3, 0) form:[TRRailForm leftRight]]];
@@ -102,7 +102,7 @@ SPEC_BEGIN(TRRailroadSpec)
             checkCorrection;
         });
         it(@"should create light near a city", ^{
-            TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:EGSizeIMake(1, 1)];
+            TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:EGVec2IMake(1, 1)];
             [railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(-1, 0) form:[TRRailForm leftRight]]];
 
             NSArray * lc = (NSArray *) railroad.lights;
@@ -116,7 +116,7 @@ SPEC_BEGIN(TRRailroadSpec)
             [[light.connector should] equal:[TRRailConnector right]];
         });
         it(@"should create lights near turn rails", ^{
-            TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:EGSizeIMake(3, 3)];
+            TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:EGVec2IMake(3, 3)];
             [railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(1, 2) form:[TRRailForm bottomTop]]];
             [railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(0, 1) form:[TRRailForm bottomRight]]];
             NSArray * lc = (NSArray *) railroad.lights;

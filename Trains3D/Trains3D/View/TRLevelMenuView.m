@@ -24,7 +24,7 @@ static ODClassType* _TRLevelMenuView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _camera = [EGCamera2D camera2DWithSize:EGSizeMake(2.0, 1.0)];
+        _camera = [EGCamera2D camera2DWithSize:EGVec2Make(2.0, 1.0)];
     }
     
     return self;

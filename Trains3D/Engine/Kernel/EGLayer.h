@@ -7,6 +7,7 @@
 @class EG;
 @class EGContext;
 @class EGMutableMatrix;
+#import "EGVec.h"
 
 @class EGLayer;
 
@@ -17,7 +18,7 @@
 + (id)layerWithView:(id<EGView>)view processor:(id)processor;
 - (id)initWithView:(id<EGView>)view processor:(id)processor;
 - (ODClassType*)type;
-- (void)drawWithViewSize:(EGSize)viewSize;
+- (void)drawWithViewSize:(EGVec2)viewSize;
 - (BOOL)processEvent:(EGEvent*)event;
 - (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;

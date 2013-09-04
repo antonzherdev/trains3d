@@ -122,4 +122,4 @@ stub def glPushAttrib(mask : GLbitfield)
 stub val GL_VIEWPORT_BIT : GLenum
 stub def glPopAttrib
 
-stub def egLoadTextureFromFile(target : GLuint, file : string) : EGSize
+stub def egLoadTextureFromFile(target : GLuint, file : string) : EGVec2

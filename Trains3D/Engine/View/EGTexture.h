@@ -2,6 +2,7 @@
 @class CNBundle;
 #import "EGTypes.h"
 #import "EGGL.h"
+#import "EGVec.h"
 
 @class EGTexture;
 @class EGFileTexture;
@@ -26,7 +27,7 @@
 + (id)fileTextureWithFile:(NSString*)file;
 - (id)initWithFile:(NSString*)file;
 - (ODClassType*)type;
-- (EGSize)size;
+- (EGVec2)size;
 - (void)bind;
 + (ODClassType*)type;
 @end

@@ -1,96 +1,6 @@
 #import "EGTypes.h"
 
 #import "EGMath.h"
-ODPType* egSizeType() {
-    static ODPType* _ret = nil;
-    if(_ret == nil) _ret = [ODPType typeWithCls:[EGSizeWrap class] name:@"EGSize" size:sizeof(EGSize) wrap:^id(void* data, NSUInteger i) {
-        return wrap(EGSize, ((EGSize*)(data))[i]);
-    }];
-    return _ret;
-}
-@implementation EGSizeWrap{
-    EGSize _value;
-}
-@synthesize value = _value;
-
-+ (id)wrapWithValue:(EGSize)value {
-    return [[EGSizeWrap alloc] initWithValue:value];
-}
-
-- (id)initWithValue:(EGSize)value {
-    self = [super init];
-    if(self) _value = value;
-    return self;
-}
-
-- (NSString*)description {
-    return EGSizeDescription(_value);
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSizeWrap* o = ((EGSizeWrap*)(other));
-    return EGSizeEq(_value, o.value);
-}
-
-- (NSUInteger)hash {
-    return EGSizeHash(_value);
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-@end
-
-
-
-ODPType* egSizeIType() {
-    static ODPType* _ret = nil;
-    if(_ret == nil) _ret = [ODPType typeWithCls:[EGSizeIWrap class] name:@"EGSizeI" size:sizeof(EGSizeI) wrap:^id(void* data, NSUInteger i) {
-        return wrap(EGSizeI, ((EGSizeI*)(data))[i]);
-    }];
-    return _ret;
-}
-@implementation EGSizeIWrap{
-    EGSizeI _value;
-}
-@synthesize value = _value;
-
-+ (id)wrapWithValue:(EGSizeI)value {
-    return [[EGSizeIWrap alloc] initWithValue:value];
-}
-
-- (id)initWithValue:(EGSizeI)value {
-    self = [super init];
-    if(self) _value = value;
-    return self;
-}
-
-- (NSString*)description {
-    return EGSizeIDescription(_value);
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSizeIWrap* o = ((EGSizeIWrap*)(other));
-    return EGSizeIEq(_value, o.value);
-}
-
-- (NSUInteger)hash {
-    return EGSizeIHash(_value);
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-@end
-
-
-
 BOOL egRectContains(EGRect self, EGVec2 point) {
     return self.x <= point.x && point.x <= self.x + self.width && self.y <= point.y && point.y <= self.y + self.height;
 }
@@ -106,14 +16,14 @@ EGRect egRectNewXY(CGFloat x, CGFloat x2, CGFloat y, CGFloat y2) {
 EGRect egRectMove(EGRect self, CGFloat x, CGFloat y) {
     return EGRectMake(self.x + x, self.width, self.y + y, self.height);
 }
-EGRect egRectMoveToCenterFor(EGRect self, EGSize size) {
-    return EGRectMake((size.width - self.width) / 2, self.width, (size.height - self.height) / 2, self.height);
+EGRect egRectMoveToCenterFor(EGRect self, EGVec2 size) {
+    return EGRectMake((size.x - self.width) / 2, self.width, (size.y - self.height) / 2, self.height);
 }
 EGVec2 egRectPoint(EGRect self) {
     return EGVec2Make(self.x, self.y);
 }
-EGSize egRectSize(EGRect self) {
-    return EGSizeMake(self.width, self.height);
+EGVec2 egRectSize(EGRect self) {
+    return EGVec2Make(self.width, self.height);
 }
 BOOL egRectIntersects(EGRect self, EGRect rect) {
     return self.x <= egRectX2(rect) && egRectX2(self) >= rect.x && self.y <= egRectY2(rect) && egRectY2(self) >= rect.y;

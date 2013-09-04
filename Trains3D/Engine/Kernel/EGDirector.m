@@ -45,7 +45,7 @@ static ODClassType* _EGDirector_type;
     return _EGDirector__current;
 }
 
-- (void)drawWithSize:(EGSize)size {
+- (void)drawWithSize:(EGVec2)size {
     _EGDirector__current = self;
     glClearColor(0.0, 0.0, 0.0, 1.0);
     egClear();

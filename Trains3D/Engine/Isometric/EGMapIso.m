@@ -12,7 +12,7 @@
 #import "EGShader.h"
 #import "EGContext.h"
 @implementation EGMapSso{
-    EGSizeI _size;
+    EGVec2I _size;
     EGRectI _limits;
     id<CNSeq> _fullTiles;
     id<CNSeq> _partialTiles;
@@ -26,15 +26,15 @@ static ODClassType* _EGMapSso_type;
 @synthesize partialTiles = _partialTiles;
 @synthesize allTiles = _allTiles;
 
-+ (id)mapSsoWithSize:(EGSizeI)size {
++ (id)mapSsoWithSize:(EGVec2I)size {
     return [[EGMapSso alloc] initWithSize:size];
 }
 
-- (id)initWithSize:(EGSizeI)size {
+- (id)initWithSize:(EGVec2I)size {
     self = [super init];
     if(self) {
         _size = size;
-        _limits = egRectINewXY(((CGFloat)((1 - _size.height) / 2 - 1)), ((CGFloat)((2 * _size.width + _size.height - 3) / 2 + 1)), ((CGFloat)((1 - _size.width) / 2 - 1)), ((CGFloat)((_size.width + 2 * _size.height - 3) / 2 + 1)));
+        _limits = egRectINewXY(((CGFloat)((1 - _size.y) / 2 - 1)), ((CGFloat)((2 * _size.x + _size.y - 3) / 2 + 1)), ((CGFloat)((1 - _size.x) / 2 - 1)), ((CGFloat)((_size.x + 2 * _size.y - 3) / 2 + 1)));
         _fullTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
             return [self isFullTile:uwrap(EGVec2I, _)];
         }] toArray];
@@ -53,11 +53,11 @@ static ODClassType* _EGMapSso_type;
 }
 
 - (BOOL)isFullTile:(EGVec2I)tile {
-    return tile.y + tile.x >= 0 && tile.y - tile.x <= _size.height - 1 && tile.y + tile.x <= _size.width + _size.height - 2 && tile.y - tile.x >= -_size.width + 1;
+    return tile.y + tile.x >= 0 && tile.y - tile.x <= _size.y - 1 && tile.y + tile.x <= _size.x + _size.y - 2 && tile.y - tile.x >= -_size.x + 1;
 }
 
 - (BOOL)isPartialTile:(EGVec2I)tile {
-    return tile.y + tile.x >= -1 && tile.y - tile.x <= _size.height && tile.y + tile.x <= _size.width + _size.height - 1 && tile.y - tile.x >= -_size.width && (tile.y + tile.x == -1 || tile.y - tile.x == _size.height || tile.y + tile.x == _size.width + _size.height - 1 || tile.y - tile.x == -_size.width);
+    return tile.y + tile.x >= -1 && tile.y - tile.x <= _size.y && tile.y + tile.x <= _size.x + _size.y - 1 && tile.y - tile.x >= -_size.x && (tile.y + tile.x == -1 || tile.y - tile.x == _size.y || tile.y + tile.x == _size.x + _size.y - 1 || tile.y - tile.x == -_size.x);
 }
 
 - (CNChain*)allPosibleTiles {
@@ -76,7 +76,7 @@ static ODClassType* _EGMapSso_type;
 }
 
 - (EGRectI)cutRectForTile:(EGVec2I)tile {
-    return egRectINewXY(((CGFloat)([self tileCutAxisLess:0 more:tile.x + tile.y])), ((CGFloat)([self tileCutAxisLess:tile.x + tile.y more:_size.width + _size.height - 2])), ((CGFloat)([self tileCutAxisLess:tile.y - tile.x more:_size.height - 1])), ((CGFloat)([self tileCutAxisLess:-_size.width + 1 more:tile.y - tile.x])));
+    return egRectINewXY(((CGFloat)([self tileCutAxisLess:0 more:tile.x + tile.y])), ((CGFloat)([self tileCutAxisLess:tile.x + tile.y more:_size.x + _size.y - 2])), ((CGFloat)([self tileCutAxisLess:tile.y - tile.x more:_size.y - 1])), ((CGFloat)([self tileCutAxisLess:-_size.x + 1 more:tile.y - tile.x])));
 }
 
 - (ODClassType*)type {
@@ -99,18 +99,18 @@ static ODClassType* _EGMapSso_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGMapSso* o = ((EGMapSso*)(other));
-    return EGSizeIEq(self.size, o.size);
+    return EGVec2IEq(self.size, o.size);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + EGSizeIHash(self.size);
+    hash = hash * 31 + EGVec2IHash(self.size);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"size=%@", EGSizeIDescription(self.size)];
+    [description appendFormat:@"size=%@", EGVec2IDescription(self.size)];
     [description appendString:@">"];
     return description;
 }

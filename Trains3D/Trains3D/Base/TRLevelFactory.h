@@ -6,6 +6,7 @@
 @class EGLayer;
 @class EGMapSso;
 @class EGMapSsoView;
+#import "EGVec.h"
 @class TRTrainType;
 @class TRTrain;
 @class TREngineType;
@@ -39,10 +40,10 @@
 - (ODClassType*)type;
 + (EGScene*)sceneForLevel:(TRLevel*)level;
 + (TRLevel*)levelWithNumber:(NSUInteger)number;
-+ (TRLevel*)levelWithMapSize:(EGSizeI)mapSize;
++ (TRLevel*)levelWithMapSize:(EGVec2I)mapSize;
 + (EGScene*)sceneForLevelWithNumber:(NSUInteger)number;
 + (TRScore*)score;
-+ (TRRailroad*)railroadWithMapSize:(EGSizeI)mapSize;
++ (TRRailroad*)railroadWithMapSize:(EGVec2I)mapSize;
 + (TRScoreRules*)scoreRules;
 + (ODClassType*)type;
 @end

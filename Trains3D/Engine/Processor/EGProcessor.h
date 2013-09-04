@@ -28,11 +28,11 @@
 
 
 @interface EGEvent : NSObject
-@property (nonatomic, readonly) EGSize viewSize;
+@property (nonatomic, readonly) EGVec2 viewSize;
 @property (nonatomic, readonly) id camera;
 
-+ (id)eventWithViewSize:(EGSize)viewSize camera:(id)camera;
-- (id)initWithViewSize:(EGSize)viewSize camera:(id)camera;
++ (id)eventWithViewSize:(EGVec2)viewSize camera:(id)camera;
+- (id)initWithViewSize:(EGVec2)viewSize camera:(id)camera;
 - (ODClassType*)type;
 - (EGEvent*)setCamera:(id)camera;
 - (EGVec2)locationInView;

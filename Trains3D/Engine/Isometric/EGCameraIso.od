@@ -5,20 +5,20 @@ import EGMapIso
 import EGContext
 import EGVec
 
-class EGCameraIso(tilesOnScreen : EGSizeI, center : EGVec2) extends EGCamera {
+class EGCameraIso(tilesOnScreen : EGVec2I, center : EGVec2) extends EGCamera {
     private static val ISO = EGMapSso.ISO
 
-    def calculateViewportSizeWith(viewSize : EGSize) : EGRect = {
-        val ww = tilesOnScreen.width + tilesOnScreen.height
-        val tileSize = min(viewSize.width / ww, 2*viewSize.height/ ww)
+    def calculateViewportSizeWith(viewSize : EGVec2) : EGRect = {
+        val ww = tilesOnScreen.x + tilesOnScreen.y
+        val tileSize = min(viewSize.x / ww, 2*viewSize.y/ ww)
         val viewportWidth = tileSize * ww
         val viewportHeight = tileSize * ww / 2
-        EGRect((viewSize.width - viewportWidth)/2, viewportWidth,
-            (viewSize.height - viewportHeight)/2, viewportHeight)
+        EGRect((viewSize.x - viewportWidth)/2, viewportWidth,
+            (viewSize.y - viewportHeight)/2, viewportHeight)
     }
 
 
-    def focusFor(viewSize : EGSize) {
+    def focusFor(viewSize : EGVec2) {
         val vps = calculateViewportSizeWith(viewSize)
         glViewport(vps.x, vps.y, vps.width, vps.height)
 
@@ -39,20 +39,20 @@ class EGCameraIso(tilesOnScreen : EGSizeI, center : EGVec2) extends EGCamera {
 
         val pm = EG.projectionMatrix
         pm.setIdentity
-        val ww : float = tilesOnScreen.width + tilesOnScreen.height
-        pm.ortho(-ISO, ISO*ww - ISO, -ISO*tilesOnScreen.width/2, ISO*tilesOnScreen.height/2, 0.0, 1000.0)
+        val ww : float = tilesOnScreen.x + tilesOnScreen.y
+        pm.ortho(-ISO, ISO*ww - ISO, -ISO*tilesOnScreen.x/2, ISO*tilesOnScreen.y/2, 0.0, 1000.0)
 
         glCullFace(GL_FRONT)
     }
 
-    def translateWith(viewSize : EGSize, viewPoint : EGVec2) : EGVec2 = {
+    def translateWith(viewSize : EGVec2, viewPoint : EGVec2) : EGVec2 = {
         val vps = calculateViewportSizeWith(viewSize)
         val x = viewPoint.x - vps.x
         val y = viewPoint.y - vps.y
-        val vw = vps.size.width
-        val vh = vps.size.height
-        val ww2 : float = (tilesOnScreen.width + tilesOnScreen.height)/2.0
-        val tw : float = tilesOnScreen.width
+        val vw = vps.size.x
+        val vh = vps.size.y
+        val ww2 : float = (tilesOnScreen.x + tilesOnScreen.y)/2.0
+        val tw : float = tilesOnScreen.x
         EGVec2((x/vw - y/vh)*ww2 + tw/2 - 0.5 + center.x, (x/vw + y/vh)*ww2 - tw/2 - 0.5 + center.y)
     }
 
