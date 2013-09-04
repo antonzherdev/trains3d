@@ -51,17 +51,18 @@ static ODClassType* _EGCameraIso_type;
     [mm rotateAngle:90.0 x:1.0 y:0.0 z:0.0];
     EGMutableMatrix* wm = [EG worldMatrix];
     [wm setIdentity];
-    [wm translateX:0.0 y:0.0 z:-100.0];
-    [wm rotateAngle:30.0 x:1.0 y:0.0 z:0.0];
-    [wm rotateAngle:-45.0 x:0.0 y:1.0 z:0.0];
     [wm rotateAngle:-90.0 x:1.0 y:0.0 z:0.0];
     EGMutableMatrix* cm = [EG cameraMatrix];
     [cm setIdentity];
-    [cm translateX:-_center.x y:0.0 z:-_center.y];
+    CGFloat ww = ((CGFloat)(_tilesOnScreen.x + _tilesOnScreen.y));
+    CGFloat isoWW2 = ww * _EGCameraIso_ISO / 2;
+    CGFloat isoWW4 = isoWW2 / 2;
+    [cm translateX:-isoWW2 + _EGCameraIso_ISO y:-_EGCameraIso_ISO * (_tilesOnScreen.y - _tilesOnScreen.x) / 4 z:0.0];
+    [cm rotateAngle:30.0 x:1.0 y:0.0 z:0.0];
+    [cm rotateAngle:-45.0 x:0.0 y:1.0 z:0.0];
     EGMutableMatrix* pm = [EG projectionMatrix];
     [pm setIdentity];
-    CGFloat ww = ((CGFloat)(_tilesOnScreen.x + _tilesOnScreen.y));
-    [pm orthoLeft:-_EGCameraIso_ISO right:_EGCameraIso_ISO * ww - _EGCameraIso_ISO bottom:-_EGCameraIso_ISO * _tilesOnScreen.x / 2 top:_EGCameraIso_ISO * _tilesOnScreen.y / 2 zNear:0.0 zFar:1000.0];
+    [pm orthoLeft:-isoWW2 right:isoWW2 bottom:-isoWW4 top:isoWW4 zNear:-1000.0 zFar:1000.0];
     glCullFace(GL_FRONT);
 }
 

@@ -1,0 +1,8 @@
+import EG
+import EGVec
+
+class EGBillboard {
+    static def drawWith(size : EGVec2) {
+
+    }
+}

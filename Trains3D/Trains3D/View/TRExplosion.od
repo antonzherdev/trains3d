@@ -2,13 +2,28 @@ import EGTypes
 import EGVec
 
 
-class TRExplosion(position : EGVec3) extends EGController {
-
+class TRExplosion(position : EGVec3, size : float) extends EGController {
+    private val flame = TRExplosionFlame(position, size)
     def updateWith(delta : float) {
-
+        flame.updateWith(delta)
     }
 }
 
-class TRExplosionFlame(position : EGVec3)
+class TRExplosionFlame(position : EGVec3, size : float) extends EGController {
+    val particles : [TRExplosionFlameParticle] = 4.range.chain.map {_ -> generateParticle}.toArray
+    private static val uvs : [EGVec2] = [EGVec2(0, 0), EGVec2(0.25, 0), EGVec2(0, 0.25), EGVec2(0.25, 0.25)]
+    def generateParticle : TRExplosionFlameParticle = {
+        TRExplosionFlameParticle(position, EGVec2(0, 0), uvs.randomItem)
 
-struct TRExplosionFlameParticle(position : EGVec3, texturePos : EGVec2)
+    }
+    private var time = 0.0
+
+    def updateWith(delta : float) {
+        time += delta
+        if(time < 1) {
+
+        }
+    }
+}
+
+struct TRExplosionFlameParticle(var position : EGVec3, var size : EGVec2, uv : EGVec2)

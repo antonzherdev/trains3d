@@ -203,6 +203,7 @@
 		6F3DF8D61894C834380B6D91 /* type_mat4x3.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF0C41B6CEA9D3BADE23E /* type_mat4x3.inl */; };
 		6F3DF8DB52C6A63E63E291A5 /* KWStringUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFCD0CB7B57497EE5DE31 /* KWStringUtilities.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF8E71E0A1A00FE19ADA4 /* func_geometric.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF0103DACAC74EFF729C5 /* func_geometric.inl */; };
+		6F3DF8E7877B4527AD5F3FC9 /* EGBillboard.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFBF2E0A3B3B69DF76027 /* EGBillboard.od */; };
 		6F3DF8FE2FF416801D0C0F71 /* EGStandardShaderSystem.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFD6659BADE0527FE8800 /* EGStandardShaderSystem.od */; };
 		6F3DF9010CE9C52D69C5C3C6 /* CNGroupByLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF212FCB3DEA0A5F72BDF /* CNGroupByLink.m */; };
 		6F3DF9032278FAA038AB3FDE /* KWStringPrefixMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF5AAA4A045F54CAD4E80 /* KWStringPrefixMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -912,6 +913,7 @@
 		6F3DFBE1118449E4AF0709E8 /* KWExampleGroupBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWExampleGroupBuilder.h; sourceTree = "<group>"; };
 		6F3DFBEE0A2376A87A246928 /* EGTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGTypes.m; sourceTree = "<group>"; };
 		6F3DFBEE7B279CE4A05E3342 /* CNOption.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = CNOption.od; sourceTree = "<group>"; };
+		6F3DFBF2E0A3B3B69DF76027 /* EGBillboard.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGBillboard.od; sourceTree = "<group>"; };
 		6F3DFBF9CB73172393811F54 /* CNMapLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNMapLink.m; sourceTree = "<group>"; };
 		6F3DFC0186D9A67A07B86D28 /* EGMatrix.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EGMatrix.mm; sourceTree = "<group>"; };
 		6F3DFC0229D6D74D6F0B677F /* KWMock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWMock.h; sourceTree = "<group>"; };
@@ -1570,6 +1572,7 @@
 				6F3DFA1CBDE62B5C4628CFB4 /* Geometry */,
 				6F3DF83661A773830CFAFB15 /* Buffer */,
 				6F3DF33A93FD3815F8AE11DD /* Shader */,
+				6F3DFBAF36A3290D6CA7BB96 /* Particles */,
 			);
 			path = Engine;
 			sourceTree = "<group>";
@@ -1868,6 +1871,14 @@
 				6F3DF8BDE3C13A930798963D /* EGSurface.od */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		6F3DFBAF36A3290D6CA7BB96 /* Particles */ = {
+			isa = PBXGroup;
+			children = (
+				6F3DFBF2E0A3B3B69DF76027 /* EGBillboard.od */,
+			);
+			path = Particles;
 			sourceTree = "<group>";
 		};
 		6F3DFCB6E4C3AACFF0D292ED /* Processor */ = {
@@ -2446,6 +2457,7 @@
 				6F3DF8B8903DC8FC9CBCA7D0 /* TRExplosion.od in Resources */,
 				6F3DF9874408BBEC9E1E0BCD /* EGVec.od in Resources */,
 				6F3DFC74C28D3D9AD06BF05A /* EGMath.od in Resources */,
+				6F3DF8E7877B4527AD5F3FC9 /* EGBillboard.od in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
