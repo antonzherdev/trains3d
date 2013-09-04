@@ -341,7 +341,7 @@ static NSArray* _TRCarType_values;
 + (void)initialize {
     [super initialize];
     _TRCarType_car = [TRCarType carTypeWithOrdinal:0 name:@"car" length:0.44 width:0.18 frontConnectorLength:0.13 backConnectorLength:0.13 engineType:[CNOption none]];
-    _TRCarType_engine = [TRCarType carTypeWithOrdinal:1 name:@"engine" length:0.43 width:0.18 frontConnectorLength:0.12 backConnectorLength:0.2 engineType:[CNOption opt:[TREngineType engineTypeWithTubePos:EGVec3Make(((float)(-0.07)), 0.0, ((float)(0.5)))]]];
+    _TRCarType_engine = [TRCarType carTypeWithOrdinal:1 name:@"engine" length:0.43 width:0.18 frontConnectorLength:0.12 backConnectorLength:0.2 engineType:[CNOption opt:[TREngineType engineTypeWithTubePos:EGVec3Make(((float)(-0.06)), 0.0, ((float)(0.5)))]]];
     _TRCarType_values = (@[_TRCarType_car, _TRCarType_engine]);
 }
 

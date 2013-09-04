@@ -19,7 +19,7 @@ class TRSmoke(weak train : TRTrain) extends EGController {
     def particles = _particles
     private val engine : TRCar = train.cars.head.get
     private val tubePos = engine.carType.engineType.get.tubePos
-    private static val zSpeed = 0.3
+    private static val zSpeed = 0.1
     private static val emitEvery = 0.005
     private var emitTime = 0.0
 
@@ -41,11 +41,10 @@ class TRSmoke(weak train : TRTrain) extends EGController {
         val emitterPos = EGVec3(tubeXY, tubePos.z)
 
         val p = TRSmokeParticle()
-        p.position = EGVec3(emitterPos.x + randomFloatGap(-0.03, 0.03), emitterPos.y + randomFloatGap(-0.03, 0.03), emitterPos.z)
+        p.position = EGVec3(emitterPos.x + randomFloatGap(-0.01, 0.01), emitterPos.y + randomFloatGap(-0.01, 0.01), emitterPos.z)
         randomFloat
         val s = EGVec3((if(train.isBack) fPos.sub(bPos) else delta).set(length = train.speedFloat), zSpeed)
-//        p.speed = EGVec3(s.x * randomPercents(0.3), s.y * randomPercents(0.3), s.z * randomPercents(0.3))
-        p.speed = EGVec3(s.x * randomPercents(0.3), s.y * randomPercents(0.3), s.z * randomPercents(0.3))
+        p.speed = EGVec3(-s.x * randomPercents(0.4), -s.y * randomPercents(0.4), s.z * randomPercents(0.4))
         _particles = CNList(p, _particles)
     }
 }
@@ -54,11 +53,11 @@ class TRSmokeParticle extends EGController {
     var position : EGVec3
     var speed : EGVec3
     var time = 0.0
-    static val lifeTime = 2
-    static val dragCoefficient = 0.1 // air resistance coefficient | a = -dragCoefficient * sqr(speed)
+    static val lifeTime = 4
+    static val dragCoefficient = 0.5 // air resistance coefficient | a = -dragCoefficient * sqr(speed)
 
     def updateWith(delta : float) {
-        val a = speed.sqr.mul(-dragCoefficient)
+        val a = speed.mul(-dragCoefficient)
         speed = speed.add(a.mul(delta))
         position = position.add(speed.mul(delta))
         time += delta
@@ -147,7 +146,7 @@ class TRSmokeShader {
          void main(void) {
             gl_FragColor = texture2D(texture, UV);
             if(gl_FragColor.x > 0.7) {
-                gl_FragColor.w = min(0.7, 1.4 - 0.7*life);
+                gl_FragColor.w = min(0.7, 2.8 - 0.7*life);
             } else {
                 gl_FragColor.w = 0.0;
             }

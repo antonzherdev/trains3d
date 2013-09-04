@@ -18,7 +18,7 @@
     EGVec3 _tubePos;
     CGFloat _emitTime;
 }
-static CGFloat _TRSmoke_zSpeed = 0.3;
+static CGFloat _TRSmoke_zSpeed = 0.1;
 static CGFloat _TRSmoke_emitEvery = 0.005;
 static ODClassType* _TRSmoke_type;
 @synthesize train = _train;
@@ -70,10 +70,10 @@ static ODClassType* _TRSmoke_type;
     EGPoint tubeXY = egPointAdd(fPos, egPointSet(delta, ((CGFloat)(_tubePos.x))));
     EGVec3 emitterPos = egVec3Apply(tubeXY, _tubePos.z);
     TRSmokeParticle* p = [TRSmokeParticle smokeParticle];
-    p.position = EGVec3Make(emitterPos.x + randomFloatGap(-0.03, 0.03), emitterPos.y + randomFloatGap(-0.03, 0.03), emitterPos.z);
+    p.position = EGVec3Make(emitterPos.x + randomFloatGap(-0.01, 0.01), emitterPos.y + randomFloatGap(-0.01, 0.01), emitterPos.z);
     randomFloat();
     EGVec3 s = egVec3Apply(egPointSet((([_train isBack]) ? egPointSub(fPos, bPos) : delta), _train.speedFloat), ((float)(_TRSmoke_zSpeed)));
-    p.speed = EGVec3Make(s.x * randomPercents(0.3), s.y * randomPercents(0.3), s.z * randomPercents(0.3));
+    p.speed = EGVec3Make(-s.x * randomPercents(0.4), -s.y * randomPercents(0.4), s.z * randomPercents(0.4));
     __particles = [CNList applyObject:p tail:__particles];
 }
 
@@ -117,8 +117,8 @@ static ODClassType* _TRSmoke_type;
     EGVec3 _speed;
     CGFloat _time;
 }
-static NSInteger _TRSmokeParticle_lifeTime = 2;
-static CGFloat _TRSmokeParticle_dragCoefficient = 0.1;
+static NSInteger _TRSmokeParticle_lifeTime = 4;
+static CGFloat _TRSmokeParticle_dragCoefficient = 0.5;
 static ODClassType* _TRSmokeParticle_type;
 @synthesize position = _position;
 @synthesize speed = _speed;
@@ -141,7 +141,7 @@ static ODClassType* _TRSmokeParticle_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    EGVec3 a = egVec3Mul(egVec3Sqr(_speed), ((float)(-_TRSmokeParticle_dragCoefficient)));
+    EGVec3 a = egVec3Mul(_speed, ((float)(-_TRSmokeParticle_dragCoefficient)));
     _speed = egVec3Add(_speed, egVec3Mul(a, ((float)(delta))));
     _position = egVec3Add(_position, egVec3Mul(_speed, ((float)(delta))));
     _time += delta;
@@ -364,7 +364,7 @@ static NSString* _TRSmokeShader_fragment = @"varying vec2 UV;\n"
     "void main(void) {\n"
     "   gl_FragColor = texture2D(texture, UV);\n"
     "   if(gl_FragColor.x > 0.7) {\n"
-    "       gl_FragColor.w = min(0.7, 1.4 - 0.7*life);\n"
+    "       gl_FragColor.w = min(0.7, 2.8 - 0.7*life);\n"
     "   } else {\n"
     "       gl_FragColor.w = 0.0;\n"
     "   }\n"
