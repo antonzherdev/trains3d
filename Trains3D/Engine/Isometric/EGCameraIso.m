@@ -5,7 +5,7 @@
 #import "EGContext.h"
 @implementation EGCameraIso{
     EGSizeI _tilesOnScreen;
-    EGPoint _center;
+    EGVec2 _center;
     EGVec3 _eyeDirection;
 }
 static CGFloat _EGCameraIso_ISO;
@@ -14,11 +14,11 @@ static ODClassType* _EGCameraIso_type;
 @synthesize center = _center;
 @synthesize eyeDirection = _eyeDirection;
 
-+ (id)cameraIsoWithTilesOnScreen:(EGSizeI)tilesOnScreen center:(EGPoint)center {
++ (id)cameraIsoWithTilesOnScreen:(EGSizeI)tilesOnScreen center:(EGVec2)center {
     return [[EGCameraIso alloc] initWithTilesOnScreen:tilesOnScreen center:center];
 }
 
-- (id)initWithTilesOnScreen:(EGSizeI)tilesOnScreen center:(EGPoint)center {
+- (id)initWithTilesOnScreen:(EGSizeI)tilesOnScreen center:(EGVec2)center {
     self = [super init];
     if(self) {
         _tilesOnScreen = tilesOnScreen;
@@ -65,7 +65,7 @@ static ODClassType* _EGCameraIso_type;
     glCullFace(GL_FRONT);
 }
 
-- (EGPoint)translateWithViewSize:(EGSize)viewSize viewPoint:(EGPoint)viewPoint {
+- (EGVec2)translateWithViewSize:(EGSize)viewSize viewPoint:(EGVec2)viewPoint {
     EGRect vps = [self calculateViewportSizeWithViewSize:viewSize];
     CGFloat x = viewPoint.x - vps.x;
     CGFloat y = viewPoint.y - vps.y;
@@ -73,7 +73,7 @@ static ODClassType* _EGCameraIso_type;
     CGFloat vh = egRectSize(vps).height;
     CGFloat ww2 = (_tilesOnScreen.width + _tilesOnScreen.height) / 2.0;
     CGFloat tw = ((CGFloat)(_tilesOnScreen.width));
-    return EGPointMake((x / vw - y / vh) * ww2 + tw / 2 - 0.5 + _center.x, (x / vw + y / vh) * ww2 - tw / 2 - 0.5 + _center.y);
+    return EGVec2Make((x / vw - y / vh) * ww2 + tw / 2 - 0.5 + _center.x, (x / vw + y / vh) * ww2 - tw / 2 - 0.5 + _center.y);
 }
 
 - (ODClassType*)type {
@@ -92,20 +92,20 @@ static ODClassType* _EGCameraIso_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGCameraIso* o = ((EGCameraIso*)(other));
-    return EGSizeIEq(self.tilesOnScreen, o.tilesOnScreen) && EGPointEq(self.center, o.center);
+    return EGSizeIEq(self.tilesOnScreen, o.tilesOnScreen) && EGVec2Eq(self.center, o.center);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + EGSizeIHash(self.tilesOnScreen);
-    hash = hash * 31 + EGPointHash(self.center);
+    hash = hash * 31 + EGVec2Hash(self.center);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"tilesOnScreen=%@", EGSizeIDescription(self.tilesOnScreen)];
-    [description appendFormat:@", center=%@", EGPointDescription(self.center)];
+    [description appendFormat:@", center=%@", EGVec2Description(self.center)];
     [description appendString:@">"];
     return description;
 }

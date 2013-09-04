@@ -1,34 +1,34 @@
-struct EGPoint(x : float, y : float) extends ODComparable<EGPoint> {
-    static def apply(point : EGPointI) = EGPoint(point.x, point.y)
+struct EGVec2(x : float, y : float) extends ODComparable<EGVec2> {
+    static def apply(point : EGVec2I) = EGVec2(point.x, point.y)
 
-    def add(point : EGPoint) = EGPoint(x + point.x, y + point.y)
-    def sub(point : EGPoint) = EGPoint(x - point.x, y - point.y)
-    def negate = EGPoint(-x, -y)
+    def add(point : EGVec2) = EGVec2(x + point.x, y + point.y)
+    def sub(point : EGVec2) = EGVec2(x - point.x, y - point.y)
+    def negate = EGVec2(-x, -y)
     def angle : float = atan2(y, x)
-    def dot(point : EGPoint) : float = x*point.x + y*point.y
+    def dot(point : EGVec2) : float = x*point.x + y*point.y
     def lengthSquare : float = dot(self)
     def length = sqrt(lengthSquare)
-    def mul(value : float) = EGPoint(x*value, y*value)
-    def div(value : float) = EGPoint(x/value, y/value)
-    def mid(point : EGPoint) = add(point).mul(0.5)
-    def distanceTo(point : EGPoint) = sub(point).length
+    def mul(value : float) = EGVec2(x*value, y*value)
+    def div(value : float) = EGVec2(x/value, y/value)
+    def mid(point : EGVec2) = add(point).mul(0.5)
+    def distanceTo(point : EGVec2) = sub(point).length
     def set(length : float) = mul(length/self.length)
     def normalize = set(length = 1.0)
 
-    def compare(to : EGPoint) : int = {
+    def compare(to : EGVec2) : int = {
         val dX = x.compare(to.x)
         if(dX != 0) dX else y.compare(to.y)
     }
 }
 
-struct EGPointI(x : int, y : int) extends ODComparable<EGPointI> {
-    static def apply(point : EGPoint) = EGPointI(lround(point.x), lround(point.y))
+struct EGVec2I(x : int, y : int) extends ODComparable<EGVec2I> {
+    static def apply(point : EGVec2) = EGVec2I(lround(point.x), lround(point.y))
 
-    def add(point : EGPointI) = EGPointI(x + point.x, y + point.y)
-    def sub(point : EGPointI) = EGPointI(x - point.x, y - point.y)
-    def negate = EGPointI(-x, -y)
+    def add(point : EGVec2I) = EGVec2I(x + point.x, y + point.y)
+    def sub(point : EGVec2I) = EGVec2I(x - point.x, y - point.y)
+    def negate = EGVec2I(-x, -y)
 
-    def compare(to : EGPointI) : int = {
+    def compare(to : EGVec2I) : int = {
         val dX = x.compare(to.x)
         if(dX != 0) dX else y.compare(to.y)
     }
@@ -37,7 +37,7 @@ struct EGPointI(x : int, y : int) extends ODComparable<EGPointI> {
 struct EGSize(width : float, height : float)
 struct EGSizeI(width : int, height : int)
 struct EGRect(x : float, width : float, y : float, height : float) {
-    def contains(point : EGPoint) : bool = x <= point.x && point.x <= x + width && y <= point.y && point.y <= y + height
+    def contains(point : EGVec2) : bool = x <= point.x && point.x <= x + width && y <= point.y && point.y <= y + height
     def x2 : float = x + width
     def y2 : float = y + height
 
@@ -45,7 +45,7 @@ struct EGRect(x : float, width : float, y : float, height : float) {
 
     def move(x : float, y : float) = EGRect(self.x + x, width, self.y + y, height)
     def moveToCenterFor(size : EGSize) = EGRect((size.width - width)/2, width, (size.height - height)/2, height)
-    def point : EGPoint = EGPoint(x, y)
+    def point : EGVec2 = EGVec2(x, y)
     def size : EGSize = EGSize(width, height)
 
     def intersects(rect : EGRect) : bool =
@@ -83,7 +83,7 @@ trait EGController {
 trait EGCamera {
     def focusFor(viewSize : EGSize)
 
-    def translateWith(viewSize : EGSize, viewPoint : EGPoint) : EGPoint
+    def translateWith(viewSize : EGSize, viewPoint : EGVec2) : EGVec2
 
     def eyeDirection : EGVec3
 }
@@ -100,7 +100,7 @@ trait EGView extends EGController {
 
 
 struct EGVec3(x : float4, y : float4, z : float4) {
-    static def apply(vec2 : EGPoint, z : float4) = EGVec3(vec2.x, vec2.y, z)
+    static def apply(vec2 : EGVec2, z : float4) = EGVec3(vec2.x, vec2.y, z)
     def add(v : EGVec3) = EGVec3(x + v.x, y + v.y, z + v.z)
     def sqr = mul(length)
     def mul(k : float4) = EGVec3(k*x, k*y, k*z)

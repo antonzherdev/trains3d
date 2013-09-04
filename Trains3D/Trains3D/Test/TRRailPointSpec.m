@@ -4,13 +4,13 @@
 
 #define p(fform, xx) [((TRRailPoint*)[TRRailPoint railPointWithTile:t0 form:[TRRailForm fform] x:xx back:NO]) point]
 #define pb(fform, xx) [((TRRailPoint*)[TRRailPoint railPointWithTile:t0 form:[TRRailForm fform] x:xx back:YES]) point]
-#define chechPoints(p1, p2) [[theValue(EGPointEq(p1, p2)) should] beTrue]
-#define egp(x, y) EGPointMake(x, y)
+#define chechPoints(p1, p2) [[theValue(EGVec2Eq(p1, p2)) should] beTrue]
+#define egp(x, y) EGVec2Make(x, y)
 
 SPEC_BEGIN(TRRailPointSpec)
     describe(@"TRRailPoint", ^{
         describe(@"should translate itself to CGPoint", ^{
-            EGPointI t0 = EGPointIMake(0, 0);
+            EGVec2I t0 = EGVec2IMake(0, 0);
             CGFloat sin45_2 = sqrt(2.0)/4.0;
             CGFloat tl = [[TRRailForm leftTop] length];
             CGFloat tl2 = tl/2;

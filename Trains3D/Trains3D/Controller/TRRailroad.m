@@ -137,18 +137,18 @@ static ODClassType* _TREmptyConnector_type;
 
 
 @implementation TRRail{
-    EGPointI _tile;
+    EGVec2I _tile;
     TRRailForm* _form;
 }
 static ODClassType* _TRRail_type;
 @synthesize tile = _tile;
 @synthesize form = _form;
 
-+ (id)railWithTile:(EGPointI)tile form:(TRRailForm*)form {
++ (id)railWithTile:(EGVec2I)tile form:(TRRailForm*)form {
     return [[TRRail alloc] initWithTile:tile form:form];
 }
 
-- (id)initWithTile:(EGPointI)tile form:(TRRailForm*)form {
+- (id)initWithTile:(EGVec2I)tile form:(TRRailForm*)form {
     self = [super init];
     if(self) {
         _tile = tile;
@@ -199,19 +199,19 @@ static ODClassType* _TRRail_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRRail* o = ((TRRail*)(other));
-    return EGPointIEq(self.tile, o.tile) && self.form == o.form;
+    return EGVec2IEq(self.tile, o.tile) && self.form == o.form;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + EGPointIHash(self.tile);
+    hash = hash * 31 + EGVec2IHash(self.tile);
     hash = hash * 31 + [self.form ordinal];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"tile=%@", EGPointIDescription(self.tile)];
+    [description appendFormat:@"tile=%@", EGVec2IDescription(self.tile)];
     [description appendFormat:@", form=%@", self.form];
     [description appendString:@">"];
     return description;
@@ -221,7 +221,7 @@ static ODClassType* _TRRail_type;
 
 
 @implementation TRSwitch{
-    EGPointI _tile;
+    EGVec2I _tile;
     TRRailConnector* _connector;
     TRRail* _rail1;
     TRRail* _rail2;
@@ -234,11 +234,11 @@ static ODClassType* _TRSwitch_type;
 @synthesize rail2 = _rail2;
 @synthesize firstActive = _firstActive;
 
-+ (id)switchWithTile:(EGPointI)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2 {
++ (id)switchWithTile:(EGVec2I)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2 {
     return [[TRSwitch alloc] initWithTile:tile connector:connector rail1:rail1 rail2:rail2];
 }
 
-- (id)initWithTile:(EGPointI)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2 {
+- (id)initWithTile:(EGVec2I)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2 {
     self = [super init];
     if(self) {
         _tile = tile;
@@ -298,12 +298,12 @@ static ODClassType* _TRSwitch_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRSwitch* o = ((TRSwitch*)(other));
-    return EGPointIEq(self.tile, o.tile) && self.connector == o.connector && [self.rail1 isEqual:o.rail1] && [self.rail2 isEqual:o.rail2];
+    return EGVec2IEq(self.tile, o.tile) && self.connector == o.connector && [self.rail1 isEqual:o.rail1] && [self.rail2 isEqual:o.rail2];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + EGPointIHash(self.tile);
+    hash = hash * 31 + EGVec2IHash(self.tile);
     hash = hash * 31 + [self.connector ordinal];
     hash = hash * 31 + [self.rail1 hash];
     hash = hash * 31 + [self.rail2 hash];
@@ -312,7 +312,7 @@ static ODClassType* _TRSwitch_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"tile=%@", EGPointIDescription(self.tile)];
+    [description appendFormat:@"tile=%@", EGVec2IDescription(self.tile)];
     [description appendFormat:@", connector=%@", self.connector];
     [description appendFormat:@", rail1=%@", self.rail1];
     [description appendFormat:@", rail2=%@", self.rail2];
@@ -324,7 +324,7 @@ static ODClassType* _TRSwitch_type;
 
 
 @implementation TRLight{
-    EGPointI _tile;
+    EGVec2I _tile;
     TRRailConnector* _connector;
     TRRail* _rail;
     BOOL _isGreen;
@@ -335,11 +335,11 @@ static ODClassType* _TRLight_type;
 @synthesize rail = _rail;
 @synthesize isGreen = _isGreen;
 
-+ (id)lightWithTile:(EGPointI)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail {
++ (id)lightWithTile:(EGVec2I)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail {
     return [[TRLight alloc] initWithTile:tile connector:connector rail:rail];
 }
 
-- (id)initWithTile:(EGPointI)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail {
+- (id)initWithTile:(EGVec2I)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail {
     self = [super init];
     if(self) {
         _tile = tile;
@@ -392,12 +392,12 @@ static ODClassType* _TRLight_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRLight* o = ((TRLight*)(other));
-    return EGPointIEq(self.tile, o.tile) && self.connector == o.connector && [self.rail isEqual:o.rail];
+    return EGVec2IEq(self.tile, o.tile) && self.connector == o.connector && [self.rail isEqual:o.rail];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + EGPointIHash(self.tile);
+    hash = hash * 31 + EGVec2IHash(self.tile);
     hash = hash * 31 + [self.connector ordinal];
     hash = hash * 31 + [self.rail hash];
     return hash;
@@ -405,7 +405,7 @@ static ODClassType* _TRLight_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"tile=%@", EGPointIDescription(self.tile)];
+    [description appendFormat:@"tile=%@", EGVec2IDescription(self.tile)];
     [description appendFormat:@", connector=%@", self.connector];
     [description appendFormat:@", rail=%@", self.rail];
     [description appendString:@">"];
@@ -589,7 +589,7 @@ static ODClassType* _TRRailroad_type;
 }
 
 - (BOOL)canAddRail:(TRRail*)rail {
-    return [((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGPointI, rail.tile), rail.form.start)])) canAddRail:rail] && [((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGPointI, rail.tile), rail.form.end)])) canAddRail:rail];
+    return [((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGVec2I, rail.tile), rail.form.start)])) canAddRail:rail] && [((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGVec2I, rail.tile), rail.form.end)])) canAddRail:rail];
 }
 
 - (BOOL)tryAddRail:(TRRail*)rail {
@@ -606,36 +606,36 @@ static ODClassType* _TRRailroad_type;
     }
 }
 
-- (TRRailroadConnectorContent*)contentInTile:(EGPointI)tile connector:(TRRailConnector*)connector {
-    return ((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGPointI, tile), connector)]));
+- (TRRailroadConnectorContent*)contentInTile:(EGVec2I)tile connector:(TRRailConnector*)connector {
+    return ((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGVec2I, tile), connector)]));
 }
 
 - (void)connectRail:(TRRail*)rail to:(TRRailConnector*)to {
     ((TRRailroadConnectorContent*)([_connectorIndex modifyBy:^TRRailroadConnectorContent*(TRRailroadConnectorContent* _) {
         return [_ connectRail:rail to:to];
-    } forKey:tuple(wrap(EGPointI, rail.tile), to)]));
+    } forKey:tuple(wrap(EGVec2I, rail.tile), to)]));
 }
 
-- (void)buildLightsForTile:(EGPointI)tile connector:(TRRailConnector*)connector {
-    EGPointI nextTile = [connector nextTile:tile];
+- (void)buildLightsForTile:(EGVec2I)tile connector:(TRRailConnector*)connector {
+    EGVec2I nextTile = [connector nextTile:tile];
     TRRailConnector* otherSideConnector = [connector otherSideConnector];
     if([_map isFullTile:tile] && [_map isPartialTile:nextTile]) {
         [self buildLightInTile:nextTile connector:otherSideConnector];
     } else {
         if([self isTurnRailInTile:nextTile connector:otherSideConnector]) [self buildLightInTile:nextTile connector:otherSideConnector];
     }
-    if([self isTurnRailInTile:tile connector:connector] && [[((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGPointI, nextTile), otherSideConnector)])) rails] count] == 1) [self buildLightInTile:tile connector:connector];
+    if([self isTurnRailInTile:tile connector:connector] && [[((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGVec2I, nextTile), otherSideConnector)])) rails] count] == 1) [self buildLightInTile:tile connector:connector];
 }
 
-- (BOOL)isTurnRailInTile:(EGPointI)tile connector:(TRRailConnector*)connector {
-    id<CNSeq> rails = [((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGPointI, tile), connector)])) rails];
+- (BOOL)isTurnRailInTile:(EGVec2I)tile connector:(TRRailConnector*)connector {
+    id<CNSeq> rails = [((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGVec2I, tile), connector)])) rails];
     return [rails count] == 1 && ((TRRail*)([rails applyIndex:0])).form.isTurn;
 }
 
-- (void)buildLightInTile:(EGPointI)tile connector:(TRRailConnector*)connector {
+- (void)buildLightInTile:(EGVec2I)tile connector:(TRRailConnector*)connector {
     ((TRRailroadConnectorContent*)([_connectorIndex modifyBy:^TRRailroadConnectorContent*(TRRailroadConnectorContent* _) {
         return [_ buildLightInConnector:connector];
-    } forKey:tuple(wrap(EGPointI, tile), connector)]));
+    } forKey:tuple(wrap(EGVec2I, tile), connector)]));
 }
 
 - (void)rebuildArrays {
@@ -650,8 +650,8 @@ static ODClassType* _TRRailroad_type;
     }] toArray];
 }
 
-- (id)activeRailForTile:(EGPointI)tile connector:(TRRailConnector*)connector {
-    return [[((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGPointI, tile), connector)])) rails] head];
+- (id)activeRailForTile:(EGVec2I)tile connector:(TRRailConnector*)connector {
+    return [[((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGVec2I, tile), connector)])) rails] head];
 }
 
 - (TRRailPointCorrection*)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(CGFloat)forLength point:(TRRailPoint*)point {
@@ -664,7 +664,7 @@ static ODClassType* _TRRailroad_type;
     }
     if(eqf(correction.error, 0)) return correction;
     TRRailConnector* connector = [p endConnector];
-    TRRailroadConnectorContent* connectorDesc = ((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGPointI, p.tile), connector)]));
+    TRRailroadConnectorContent* connectorDesc = ((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(EGVec2I, p.tile), connector)]));
     id activeRailOpt = [[connectorDesc rails] head];
     if([activeRailOpt isEmpty]) return correction;
     if(!([connectorDesc isGreen])) if(!(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.light point:correction.point]))) return correction;
@@ -672,7 +672,7 @@ static ODClassType* _TRRailroad_type;
         obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.aSwitch point:correction.point]);
         return correction;
     }
-    EGPointI nextTile = [connector nextTile:p.tile];
+    EGVec2I nextTile = [connector nextTile:p.tile];
     TRRailConnector* otherSideConnector = [connector otherSideConnector];
     id nextRail = [self activeRailForTile:nextTile connector:otherSideConnector];
     if([nextRail isEmpty]) {
@@ -686,7 +686,7 @@ static ODClassType* _TRRailroad_type;
 
 - (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint*)from to:(CGFloat)to {
     if(eqf(from.x, to)) return [CNOption none];
-    id opt = [_damagesIndex applyKey:tuple(wrap(EGPointI, from.tile), from.form)];
+    id opt = [_damagesIndex applyKey:tuple(wrap(EGVec2I, from.tile), from.form)];
     if([opt isEmpty]) return [CNOption none];
     BOOL(^on)(id) = ^BOOL(id x) {
         return !(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.damage point:[from setX:unumf(x)]]));
@@ -712,7 +712,7 @@ static ODClassType* _TRRailroad_type;
             }] getOrElse:^id<CNSeq>() {
                 return [ arrf(1) {point.x}];
             }]];
-        } forKey:tuple(wrap(EGPointI, point.tile), point.form)];
+        } forKey:tuple(wrap(EGVec2I, point.tile), point.form)];
         [__damagesPoints addObject:point];
     }
 }
@@ -727,7 +727,7 @@ static ODClassType* _TRRailroad_type;
                     return !(eqf(unumf(_), point.x));
                 }] toArray];
             }];
-        } forKey:tuple(wrap(EGPointI, point.tile), point.form)];
+        } forKey:tuple(wrap(EGVec2I, point.tile), point.form)];
         [__damagesPoints removeObject:point];
     }
 }

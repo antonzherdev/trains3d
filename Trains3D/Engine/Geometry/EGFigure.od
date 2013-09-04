@@ -1,36 +1,36 @@
 import EGTypes
 
 class EGLine {
-    static def newWith(slope : float, point : EGPoint) : EGLine = EGSlopeLine(slope, calculateConstantWith(slope, point))
-    static def newWith(p1 : EGPoint, p2 : EGPoint) : EGLine =
+    static def newWith(slope : float, point : EGVec2) : EGLine = EGSlopeLine(slope, calculateConstantWith(slope, point))
+    static def newWith(p1 : EGVec2, p2 : EGVec2) : EGLine =
         if(p1.x == p2.x) EGVerticalLine(p1.x)
         else {
             val slope = calculateSlopeWith(p1, p2)
             EGSlopeLine(slope, calculateConstantWith(slope, p1))
         }
 
-    static def calculateSlopeWith(p1 : EGPoint, p2 : EGPoint) : float = (p2.y - p1.y)/(p2.x - p1.x)
-    static def calculateConstantWith(slope : float, point : EGPoint) : float = point.y - slope*point.x
+    static def calculateSlopeWith(p1 : EGVec2, p2 : EGVec2) : float = (p2.y - p1.y)/(p2.x - p1.x)
+    static def calculateConstantWith(slope : float, point : EGVec2) : float = point.y - slope*point.x
 
-    def contains(point : EGPoint) : bool
+    def contains(point : EGVec2) : bool
     def isVertical : bool
     def isHorizontal : bool
 
-    def intersectionWith(line : EGLine) : EGPoint?
+    def intersectionWith(line : EGLine) : EGVec2?
     def xIntersectionWith(line : EGLine) : float
 
-    def isRight(point : EGPoint) : bool
+    def isRight(point : EGVec2) : bool
     def slope : float
     def moveWith(distance : float) : self
 
     def angle : float
     def degreeAngle : float = angle*180/M_PI
 
-    def perpendicularWith(point : EGPoint) : EGLine
+    def perpendicularWith(point : EGVec2) : EGLine
 }
 
 class EGSlopeLine(slope : float, constant : float) extends EGLine {
-    def contains(point : EGPoint) : bool = point.y == slope*point.x + constant
+    def contains(point : EGVec2) : bool = point.y == slope*point.x + constant
     def isVertical : bool = false
     def isHorizontal : bool = slope == 0
     def xIntersectionWith(line : EGLine) : float =
@@ -42,14 +42,14 @@ class EGSlopeLine(slope : float, constant : float) extends EGLine {
     def yFor(x : float) : float = {
         return slope*x + constant
     }
-    def intersectionWith(line : EGLine) : EGPoint? =
+    def intersectionWith(line : EGLine) : EGVec2? =
         if (!line.isVertical && line.cast<EGSlopeLine>.slope == slope) nil
         else {
             val xInt = xIntersectionWith(line)
-            EGPoint(xInt, yFor(xInt))
+            EGVec2(xInt, yFor(xInt))
         }
 
-    def isRight(point : EGPoint) : bool =
+    def isRight(point : EGVec2) : bool =
         if(contains(point)) false
         else point.y < yFor(point.x)
 
@@ -60,26 +60,26 @@ class EGSlopeLine(slope : float, constant : float) extends EGLine {
         if(a < 0) M_PI + a else a
     }
 
-    def perpendicularWith(point : EGPoint) : EGLine =
+    def perpendicularWith(point : EGVec2) : EGLine =
         if(slope == 0) EGVerticalLine(point.x)
         else EGLine.newWith(slope = -slope, point = point)
 }
 
 class EGVerticalLine(x : float) extends EGLine {
-    def contains(point : EGPoint) : bool = point.x == x
+    def contains(point : EGVec2) : bool = point.x == x
     def isVertical : bool = true
     def isHorizontal : bool = false
     def xIntersectionWith(line : EGLine) : float = x
-    def intersectionWith(line : EGLine) : EGPoint? =
+    def intersectionWith(line : EGLine) : EGVec2? =
         if(line.isVertical) nil
         else line.intersectionWith(self)
 
-    def isRight(point : EGPoint) : bool = point.x > x
+    def isRight(point : EGVec2) : bool = point.x > x
     def slope : float = DBL_MAX
     def moveWith(distance : float) : self = EGVerticalLine(x + distance)
     def angle : float = M_PI_2
 
-    def perpendicularWith(point : EGPoint) : EGLine = EGSlopeLine(0, point.y)
+    def perpendicularWith(point : EGVec2) : EGLine = EGSlopeLine(0, point.y)
 }
 
 trait EGFigure {
@@ -88,11 +88,11 @@ trait EGFigure {
 }
 
 
-class EGLineSegment(p1 : EGPoint, p2 : EGPoint) extends EGFigure {
-    static def newWith(p1 : EGPoint, p2 : EGPoint) : EGLineSegment =
+class EGLineSegment(p1 : EGVec2, p2 : EGVec2) extends EGFigure {
+    static def newWith(p1 : EGVec2, p2 : EGVec2) : EGLineSegment =
         if(p1.compare(p2) < 0) EGLineSegment(p1, p2) else EGLineSegment(p2, p1)
     static def newWith(x1 : float, y1 : float, x2 : float, y2 : float) : EGLineSegment =
-        EGLineSegment.newWith(EGPoint(x1, y1), EGPoint(x2, y2))
+        EGLineSegment.newWith(EGVec2(x1, y1), EGVec2(x2, y2))
 
     def isVertical : bool = p1.x == p2.x
     def isHorizontal : bool = p1.y == p2.y
@@ -104,25 +104,25 @@ class EGLineSegment(p1 : EGPoint, p2 : EGPoint) extends EGFigure {
     }
     val boundingRect : EGRect = EGRect.newXY(min(p1.x, p2.x), max(p1.x, p2.x), min(p1.y, p2.y), max(p1.y, p2.y))
 
-    def contains(point : EGPoint) : bool = {
+    def contains(point : EGVec2) : bool = {
         p1 == point || p2 == point ||
         (line.contains(point) && boundingRect.contains(point))
     }
 
-    def containsInBoundingRect(point : EGPoint) : bool = boundingRect.contains(point)
+    def containsInBoundingRect(point : EGVec2) : bool = boundingRect.contains(point)
 
-    def intersectionWith(segment : EGLineSegment) : EGPoint? =
+    def intersectionWith(segment : EGLineSegment) : EGVec2? =
         if (p1 == segment.p2) p1
         else if (p2 == segment.p1) p2
         else if(p1 == segment.p1) if(line == segment.line) nil else p1
         else if(p2 == segment.p2) if(line == segment.line) nil else p2
         else line.intersectionWith(segment.line).filter(p -> containsInBoundingRect(p) && segment.containsInBoundingRect(p))
 
-    def endingsContain(point :EGPoint) : bool = p1 == point || p2 == point
+    def endingsContain(point :EGVec2) : bool = p1 == point || p2 == point
     def segments : [EGLineSegment] = [self]
-    def moveWith(point : EGPoint) : EGLineSegment = moveWith(point.x, point.y)
+    def moveWith(point : EGVec2) : EGLineSegment = moveWith(point.x, point.y)
     def moveWith(x : float, y : float) : EGLineSegment = {
-        val ret = EGLineSegment(EGPoint(p1.x + x, p1.y + y), EGPoint(p2.x + x, p2.y + y))
+        val ret = EGLineSegment(EGVec2(p1.x + x, p1.y + y), EGVec2(p2.x + x, p2.y + y))
         if(_line != nil) ret.set(line = _line.moveWith(distance = x + y))
         ret
     }
@@ -131,7 +131,7 @@ class EGLineSegment(p1 : EGPoint, p2 : EGPoint) extends EGFigure {
     }
 }
 
-class EGPolygon(points : [EGPoint]) extends EGFigure {
+class EGPolygon(points : [EGVec2]) extends EGFigure {
     def boundingRect : EGRect = {
         var minX = DBL_MAX
         var maxX = DBL_MIN

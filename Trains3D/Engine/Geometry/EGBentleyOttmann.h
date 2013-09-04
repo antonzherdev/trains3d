@@ -39,10 +39,10 @@
 
 @interface EGIntersection : NSObject
 @property (nonatomic, readonly) CNPair* items;
-@property (nonatomic, readonly) EGPoint point;
+@property (nonatomic, readonly) EGVec2 point;
 
-+ (id)intersectionWithItems:(CNPair*)items point:(EGPoint)point;
-- (id)initWithItems:(CNPair*)items point:(EGPoint)point;
++ (id)intersectionWithItems:(CNPair*)items point:(EGVec2)point;
+- (id)initWithItems:(CNPair*)items point:(EGVec2)point;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -52,7 +52,7 @@
 + (id)bentleyOttmannEvent;
 - (id)init;
 - (ODClassType*)type;
-- (EGPoint)point;
+- (EGVec2)point;
 - (BOOL)isIntersection;
 - (BOOL)isStart;
 - (BOOL)isEnd;
@@ -64,10 +64,10 @@
 @property (nonatomic, readonly) BOOL isStart;
 @property (nonatomic, readonly) id data;
 @property (nonatomic, readonly) EGLineSegment* segment;
-@property (nonatomic, readonly) EGPoint point;
+@property (nonatomic, readonly) EGVec2 point;
 
-+ (id)bentleyOttmannPointEventWithIsStart:(BOOL)isStart data:(id)data segment:(EGLineSegment*)segment point:(EGPoint)point;
-- (id)initWithIsStart:(BOOL)isStart data:(id)data segment:(EGLineSegment*)segment point:(EGPoint)point;
++ (id)bentleyOttmannPointEventWithIsStart:(BOOL)isStart data:(id)data segment:(EGLineSegment*)segment point:(EGVec2)point;
+- (id)initWithIsStart:(BOOL)isStart data:(id)data segment:(EGLineSegment*)segment point:(EGVec2)point;
 - (ODClassType*)type;
 - (CGFloat)yForX:(CGFloat)x;
 - (CGFloat)slope;
@@ -78,10 +78,10 @@
 
 
 @interface EGBentleyOttmannIntersectionEvent : EGBentleyOttmannEvent
-@property (nonatomic, readonly) EGPoint point;
+@property (nonatomic, readonly) EGVec2 point;
 
-+ (id)bentleyOttmannIntersectionEventWithPoint:(EGPoint)point;
-- (id)initWithPoint:(EGPoint)point;
++ (id)bentleyOttmannIntersectionEventWithPoint:(EGVec2)point;
+- (id)initWithPoint:(EGVec2)point;
 - (ODClassType*)type;
 - (BOOL)isIntersection;
 + (ODClassType*)type;
@@ -96,17 +96,17 @@
 - (ODClassType*)type;
 - (BOOL)isEmpty;
 + (EGBentleyOttmannEventQueue*)newWithSegments:(id<CNSeq>)segments sweepLine:(EGSweepLine*)sweepLine;
-- (void)offerPoint:(EGPoint)point event:(EGBentleyOttmannEvent*)event;
+- (void)offerPoint:(EGVec2)point event:(EGBentleyOttmannEvent*)event;
 - (id<CNSeq>)poll;
 + (ODClassType*)type;
 @end
 
 
 @interface EGPointClass : NSObject
-@property (nonatomic, readonly) EGPoint point;
+@property (nonatomic, readonly) EGVec2 point;
 
-+ (id)pointClassWithPoint:(EGPoint)point;
-- (id)initWithPoint:(EGPoint)point;
++ (id)pointClassWithPoint:(EGVec2)point;
+- (id)initWithPoint:(EGVec2)point;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

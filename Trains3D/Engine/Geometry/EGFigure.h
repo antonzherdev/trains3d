@@ -13,21 +13,21 @@
 + (id)line;
 - (id)init;
 - (ODClassType*)type;
-+ (EGLine*)newWithSlope:(CGFloat)slope point:(EGPoint)point;
-+ (EGLine*)newWithP1:(EGPoint)p1 p2:(EGPoint)p2;
-+ (CGFloat)calculateSlopeWithP1:(EGPoint)p1 p2:(EGPoint)p2;
-+ (CGFloat)calculateConstantWithSlope:(CGFloat)slope point:(EGPoint)point;
-- (BOOL)containsPoint:(EGPoint)point;
++ (EGLine*)newWithSlope:(CGFloat)slope point:(EGVec2)point;
++ (EGLine*)newWithP1:(EGVec2)p1 p2:(EGVec2)p2;
++ (CGFloat)calculateSlopeWithP1:(EGVec2)p1 p2:(EGVec2)p2;
++ (CGFloat)calculateConstantWithSlope:(CGFloat)slope point:(EGVec2)point;
+- (BOOL)containsPoint:(EGVec2)point;
 - (BOOL)isVertical;
 - (BOOL)isHorizontal;
 - (id)intersectionWithLine:(EGLine*)line;
 - (CGFloat)xIntersectionWithLine:(EGLine*)line;
-- (BOOL)isRightPoint:(EGPoint)point;
+- (BOOL)isRightPoint:(EGVec2)point;
 - (CGFloat)slope;
 - (id)moveWithDistance:(CGFloat)distance;
 - (CGFloat)angle;
 - (CGFloat)degreeAngle;
-- (EGLine*)perpendicularWithPoint:(EGPoint)point;
+- (EGLine*)perpendicularWithPoint:(EGVec2)point;
 + (ODClassType*)type;
 @end
 
@@ -39,16 +39,16 @@
 + (id)slopeLineWithSlope:(CGFloat)slope constant:(CGFloat)constant;
 - (id)initWithSlope:(CGFloat)slope constant:(CGFloat)constant;
 - (ODClassType*)type;
-- (BOOL)containsPoint:(EGPoint)point;
+- (BOOL)containsPoint:(EGVec2)point;
 - (BOOL)isVertical;
 - (BOOL)isHorizontal;
 - (CGFloat)xIntersectionWithLine:(EGLine*)line;
 - (CGFloat)yForX:(CGFloat)x;
 - (id)intersectionWithLine:(EGLine*)line;
-- (BOOL)isRightPoint:(EGPoint)point;
+- (BOOL)isRightPoint:(EGVec2)point;
 - (id)moveWithDistance:(CGFloat)distance;
 - (CGFloat)angle;
-- (EGLine*)perpendicularWithPoint:(EGPoint)point;
+- (EGLine*)perpendicularWithPoint:(EGVec2)point;
 + (ODClassType*)type;
 @end
 
@@ -59,16 +59,16 @@
 + (id)verticalLineWithX:(CGFloat)x;
 - (id)initWithX:(CGFloat)x;
 - (ODClassType*)type;
-- (BOOL)containsPoint:(EGPoint)point;
+- (BOOL)containsPoint:(EGVec2)point;
 - (BOOL)isVertical;
 - (BOOL)isHorizontal;
 - (CGFloat)xIntersectionWithLine:(EGLine*)line;
 - (id)intersectionWithLine:(EGLine*)line;
-- (BOOL)isRightPoint:(EGPoint)point;
+- (BOOL)isRightPoint:(EGVec2)point;
 - (CGFloat)slope;
 - (id)moveWithDistance:(CGFloat)distance;
 - (CGFloat)angle;
-- (EGLine*)perpendicularWithPoint:(EGPoint)point;
+- (EGLine*)perpendicularWithPoint:(EGVec2)point;
 + (ODClassType*)type;
 @end
 
@@ -80,24 +80,24 @@
 
 
 @interface EGLineSegment : NSObject<EGFigure>
-@property (nonatomic, readonly) EGPoint p1;
-@property (nonatomic, readonly) EGPoint p2;
+@property (nonatomic, readonly) EGVec2 p1;
+@property (nonatomic, readonly) EGVec2 p2;
 @property (nonatomic, readonly) EGRect boundingRect;
 
-+ (id)lineSegmentWithP1:(EGPoint)p1 p2:(EGPoint)p2;
-- (id)initWithP1:(EGPoint)p1 p2:(EGPoint)p2;
++ (id)lineSegmentWithP1:(EGVec2)p1 p2:(EGVec2)p2;
+- (id)initWithP1:(EGVec2)p1 p2:(EGVec2)p2;
 - (ODClassType*)type;
-+ (EGLineSegment*)newWithP1:(EGPoint)p1 p2:(EGPoint)p2;
++ (EGLineSegment*)newWithP1:(EGVec2)p1 p2:(EGVec2)p2;
 + (EGLineSegment*)newWithX1:(CGFloat)x1 y1:(CGFloat)y1 x2:(CGFloat)x2 y2:(CGFloat)y2;
 - (BOOL)isVertical;
 - (BOOL)isHorizontal;
 - (EGLine*)line;
-- (BOOL)containsPoint:(EGPoint)point;
-- (BOOL)containsInBoundingRectPoint:(EGPoint)point;
+- (BOOL)containsPoint:(EGVec2)point;
+- (BOOL)containsInBoundingRectPoint:(EGVec2)point;
 - (id)intersectionWithSegment:(EGLineSegment*)segment;
-- (BOOL)endingsContainPoint:(EGPoint)point;
+- (BOOL)endingsContainPoint:(EGVec2)point;
 - (id<CNSeq>)segments;
-- (EGLineSegment*)moveWithPoint:(EGPoint)point;
+- (EGLineSegment*)moveWithPoint:(EGVec2)point;
 - (EGLineSegment*)moveWithX:(CGFloat)x y:(CGFloat)y;
 + (ODClassType*)type;
 @end

@@ -32,11 +32,11 @@ typedef struct TRRailCorrection TRRailCorrection;
 
 
 struct TRRailCorrection {
-    EGPointI tile;
-    EGPointI start;
-    EGPointI end;
+    EGVec2I tile;
+    EGVec2I start;
+    EGVec2I end;
 };
-static inline TRRailCorrection TRRailCorrectionMake(EGPointI tile, EGPointI start, EGPointI end) {
+static inline TRRailCorrection TRRailCorrectionMake(EGVec2I tile, EGVec2I start, EGVec2I end) {
     TRRailCorrection ret;
     ret.tile = tile;
     ret.start = start;
@@ -44,20 +44,20 @@ static inline TRRailCorrection TRRailCorrectionMake(EGPointI tile, EGPointI star
     return ret;
 }
 static inline BOOL TRRailCorrectionEq(TRRailCorrection s1, TRRailCorrection s2) {
-    return EGPointIEq(s1.tile, s2.tile) && EGPointIEq(s1.start, s2.start) && EGPointIEq(s1.end, s2.end);
+    return EGVec2IEq(s1.tile, s2.tile) && EGVec2IEq(s1.start, s2.start) && EGVec2IEq(s1.end, s2.end);
 }
 static inline NSUInteger TRRailCorrectionHash(TRRailCorrection self) {
     NSUInteger hash = 0;
-    hash = hash * 31 + EGPointIHash(self.tile);
-    hash = hash * 31 + EGPointIHash(self.start);
-    hash = hash * 31 + EGPointIHash(self.end);
+    hash = hash * 31 + EGVec2IHash(self.tile);
+    hash = hash * 31 + EGVec2IHash(self.start);
+    hash = hash * 31 + EGVec2IHash(self.end);
     return hash;
 }
 static inline NSString* TRRailCorrectionDescription(TRRailCorrection self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<TRRailCorrection: "];
-    [description appendFormat:@"tile=%@", EGPointIDescription(self.tile)];
-    [description appendFormat:@", start=%@", EGPointIDescription(self.start)];
-    [description appendFormat:@", end=%@", EGPointIDescription(self.end)];
+    [description appendFormat:@"tile=%@", EGVec2IDescription(self.tile)];
+    [description appendFormat:@", start=%@", EGVec2IDescription(self.start)];
+    [description appendFormat:@", end=%@", EGVec2IDescription(self.end)];
     [description appendString:@">"];
     return description;
 }

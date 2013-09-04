@@ -34,9 +34,9 @@
 - (id)initWithViewSize:(EGSize)viewSize camera:(id)camera;
 - (ODClassType*)type;
 - (EGEvent*)setCamera:(id)camera;
-- (EGPoint)locationInView;
-- (EGPoint)location;
-- (EGPoint)locationForDepth:(CGFloat)depth;
+- (EGVec2)locationInView;
+- (EGVec2)location;
+- (EGVec2)locationForDepth:(CGFloat)depth;
 - (BOOL)isLeftMouseDown;
 - (BOOL)isLeftMouseDrag;
 - (BOOL)isLeftMouseUp;

@@ -1,7 +1,7 @@
 #import <GLUT/glut.h>
 #import "EGText.h"
 
-void egTextGlutDraw(NSString* text, void* font, EGPoint position) {
+void egTextGlutDraw(NSString* text, void* font, EGVec2 position) {
     glRasterPos2f((GLfloat) position.x, (GLfloat) position.y);
     int len, i;
     len = (int)[text length];

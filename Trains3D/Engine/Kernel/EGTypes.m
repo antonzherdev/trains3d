@@ -1,91 +1,91 @@
 #import "EGTypes.h"
 
-EGPoint egPointApply(EGPointI point) {
-    return EGPointMake(((CGFloat)(point.x)), ((CGFloat)(point.y)));
+EGVec2 egVec2Apply(EGVec2I point) {
+    return EGVec2Make(((CGFloat)(point.x)), ((CGFloat)(point.y)));
 }
-EGPoint egPointAdd(EGPoint self, EGPoint point) {
-    return EGPointMake(self.x + point.x, self.y + point.y);
+EGVec2 egVec2Add(EGVec2 self, EGVec2 point) {
+    return EGVec2Make(self.x + point.x, self.y + point.y);
 }
-EGPoint egPointSub(EGPoint self, EGPoint point) {
-    return EGPointMake(self.x - point.x, self.y - point.y);
+EGVec2 egVec2Sub(EGVec2 self, EGVec2 point) {
+    return EGVec2Make(self.x - point.x, self.y - point.y);
 }
-EGPoint egPointNegate(EGPoint self) {
-    return EGPointMake(-self.x, -self.y);
+EGVec2 egVec2Negate(EGVec2 self) {
+    return EGVec2Make(-self.x, -self.y);
 }
-CGFloat egPointAngle(EGPoint self) {
+CGFloat egVec2Angle(EGVec2 self) {
     return atan2(self.y, self.x);
 }
-CGFloat egPointDot(EGPoint self, EGPoint point) {
+CGFloat egVec2Dot(EGVec2 self, EGVec2 point) {
     return self.x * point.x + self.y * point.y;
 }
-CGFloat egPointLengthSquare(EGPoint self) {
-    return egPointDot(self, self);
+CGFloat egVec2LengthSquare(EGVec2 self) {
+    return egVec2Dot(self, self);
 }
-CGFloat egPointLength(EGPoint self) {
-    return sqrt(egPointLengthSquare(self));
+CGFloat egVec2Length(EGVec2 self) {
+    return sqrt(egVec2LengthSquare(self));
 }
-EGPoint egPointMul(EGPoint self, CGFloat value) {
-    return EGPointMake(self.x * value, self.y * value);
+EGVec2 egVec2Mul(EGVec2 self, CGFloat value) {
+    return EGVec2Make(self.x * value, self.y * value);
 }
-EGPoint egPointDiv(EGPoint self, CGFloat value) {
-    return EGPointMake(self.x / value, self.y / value);
+EGVec2 egVec2Div(EGVec2 self, CGFloat value) {
+    return EGVec2Make(self.x / value, self.y / value);
 }
-EGPoint egPointMid(EGPoint self, EGPoint point) {
-    return egPointMul(egPointAdd(self, point), 0.5);
+EGVec2 egVec2Mid(EGVec2 self, EGVec2 point) {
+    return egVec2Mul(egVec2Add(self, point), 0.5);
 }
-CGFloat egPointDistanceTo(EGPoint self, EGPoint point) {
-    return egPointLength(egPointSub(self, point));
+CGFloat egVec2DistanceTo(EGVec2 self, EGVec2 point) {
+    return egVec2Length(egVec2Sub(self, point));
 }
-EGPoint egPointSet(EGPoint self, CGFloat length) {
-    return egPointMul(self, length / egPointLength(self));
+EGVec2 egVec2Set(EGVec2 self, CGFloat length) {
+    return egVec2Mul(self, length / egVec2Length(self));
 }
-EGPoint egPointNormalize(EGPoint self) {
-    return egPointSet(self, 1.0);
+EGVec2 egVec2Normalize(EGVec2 self) {
+    return egVec2Set(self, 1.0);
 }
-NSInteger egPointCompare(EGPoint self, EGPoint to) {
+NSInteger egVec2Compare(EGVec2 self, EGVec2 to) {
     NSInteger dX = floatCompare(self.x, to.x);
     if(dX != 0) return dX;
     else return floatCompare(self.y, to.y);
 }
-ODPType* egPointType() {
+ODPType* egVec2Type() {
     static ODPType* _ret = nil;
-    if(_ret == nil) _ret = [ODPType typeWithCls:[EGPointWrap class] name:@"EGPoint" size:sizeof(EGPoint) wrap:^id(void* data, NSUInteger i) {
-        return wrap(EGPoint, ((EGPoint*)(data))[i]);
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGVec2Wrap class] name:@"EGVec2" size:sizeof(EGVec2) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGVec2, ((EGVec2*)(data))[i]);
     }];
     return _ret;
 }
-@implementation EGPointWrap{
-    EGPoint _value;
+@implementation EGVec2Wrap{
+    EGVec2 _value;
 }
 @synthesize value = _value;
 
-+ (id)wrapWithValue:(EGPoint)value {
-    return [[EGPointWrap alloc] initWithValue:value];
++ (id)wrapWithValue:(EGVec2)value {
+    return [[EGVec2Wrap alloc] initWithValue:value];
 }
 
-- (id)initWithValue:(EGPoint)value {
+- (id)initWithValue:(EGVec2)value {
     self = [super init];
     if(self) _value = value;
     return self;
 }
 
 - (NSString*)description {
-    return EGPointDescription(_value);
+    return EGVec2Description(_value);
 }
 
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGPointWrap* o = ((EGPointWrap*)(other));
-    return EGPointEq(_value, o.value);
+    EGVec2Wrap* o = ((EGVec2Wrap*)(other));
+    return EGVec2Eq(_value, o.value);
 }
 
 - (NSUInteger)hash {
-    return EGPointHash(_value);
+    return EGVec2Hash(_value);
 }
 
-- (NSInteger)compareTo:(EGPointWrap*)to {
-    return egPointCompare(_value, to.value);
+- (NSInteger)compareTo:(EGVec2Wrap*)to {
+    return egVec2Compare(_value, to.value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -96,62 +96,62 @@ ODPType* egPointType() {
 
 
 
-EGPointI egPointIApply(EGPoint point) {
-    return EGPointIMake(lround(point.x), lround(point.y));
+EGVec2I egVec2IApply(EGVec2 point) {
+    return EGVec2IMake(lround(point.x), lround(point.y));
 }
-EGPointI egPointIAdd(EGPointI self, EGPointI point) {
-    return EGPointIMake(self.x + point.x, self.y + point.y);
+EGVec2I egVec2IAdd(EGVec2I self, EGVec2I point) {
+    return EGVec2IMake(self.x + point.x, self.y + point.y);
 }
-EGPointI egPointISub(EGPointI self, EGPointI point) {
-    return EGPointIMake(self.x - point.x, self.y - point.y);
+EGVec2I egVec2ISub(EGVec2I self, EGVec2I point) {
+    return EGVec2IMake(self.x - point.x, self.y - point.y);
 }
-EGPointI egPointINegate(EGPointI self) {
-    return EGPointIMake(-self.x, -self.y);
+EGVec2I egVec2INegate(EGVec2I self) {
+    return EGVec2IMake(-self.x, -self.y);
 }
-NSInteger egPointICompare(EGPointI self, EGPointI to) {
+NSInteger egVec2ICompare(EGVec2I self, EGVec2I to) {
     NSInteger dX = intCompare(self.x, to.x);
     if(dX != 0) return dX;
     else return intCompare(self.y, to.y);
 }
-ODPType* egPointIType() {
+ODPType* egVec2IType() {
     static ODPType* _ret = nil;
-    if(_ret == nil) _ret = [ODPType typeWithCls:[EGPointIWrap class] name:@"EGPointI" size:sizeof(EGPointI) wrap:^id(void* data, NSUInteger i) {
-        return wrap(EGPointI, ((EGPointI*)(data))[i]);
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGVec2IWrap class] name:@"EGVec2I" size:sizeof(EGVec2I) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGVec2I, ((EGVec2I*)(data))[i]);
     }];
     return _ret;
 }
-@implementation EGPointIWrap{
-    EGPointI _value;
+@implementation EGVec2IWrap{
+    EGVec2I _value;
 }
 @synthesize value = _value;
 
-+ (id)wrapWithValue:(EGPointI)value {
-    return [[EGPointIWrap alloc] initWithValue:value];
++ (id)wrapWithValue:(EGVec2I)value {
+    return [[EGVec2IWrap alloc] initWithValue:value];
 }
 
-- (id)initWithValue:(EGPointI)value {
+- (id)initWithValue:(EGVec2I)value {
     self = [super init];
     if(self) _value = value;
     return self;
 }
 
 - (NSString*)description {
-    return EGPointIDescription(_value);
+    return EGVec2IDescription(_value);
 }
 
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGPointIWrap* o = ((EGPointIWrap*)(other));
-    return EGPointIEq(_value, o.value);
+    EGVec2IWrap* o = ((EGVec2IWrap*)(other));
+    return EGVec2IEq(_value, o.value);
 }
 
 - (NSUInteger)hash {
-    return EGPointIHash(_value);
+    return EGVec2IHash(_value);
 }
 
-- (NSInteger)compareTo:(EGPointIWrap*)to {
-    return egPointICompare(_value, to.value);
+- (NSInteger)compareTo:(EGVec2IWrap*)to {
+    return egVec2ICompare(_value, to.value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -252,7 +252,7 @@ ODPType* egSizeIType() {
 
 
 
-BOOL egRectContains(EGRect self, EGPoint point) {
+BOOL egRectContains(EGRect self, EGVec2 point) {
     return self.x <= point.x && point.x <= self.x + self.width && self.y <= point.y && point.y <= self.y + self.height;
 }
 CGFloat egRectX2(EGRect self) {
@@ -270,8 +270,8 @@ EGRect egRectMove(EGRect self, CGFloat x, CGFloat y) {
 EGRect egRectMoveToCenterFor(EGRect self, EGSize size) {
     return EGRectMake((size.width - self.width) / 2, self.width, (size.height - self.height) / 2, self.height);
 }
-EGPoint egRectPoint(EGRect self) {
-    return EGPointMake(self.x, self.y);
+EGVec2 egRectPoint(EGRect self) {
+    return EGVec2Make(self.x, self.y);
 }
 EGSize egRectSize(EGRect self) {
     return EGSizeMake(self.width, self.height);
@@ -429,7 +429,7 @@ ODPType* egColorType() {
 
 
 
-EGVec3 egVec3Apply(EGPoint vec2, float z) {
+EGVec3 egVec3Apply(EGVec2 vec2, float z) {
     return EGVec3Make(((float)(vec2.x)), ((float)(vec2.y)), z);
 }
 EGVec3 egVec3Add(EGVec3 self, EGVec3 v) {

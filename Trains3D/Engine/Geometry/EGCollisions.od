@@ -15,13 +15,13 @@ class EGCollisions {
         if(segments.isEmpty) return CNHashSet<EGCollision>()
         val intersections = EGBentleyOttmann.intersectionsFor(segments)
         intersections.chain
-            .group<CNPair<T>, EGPoint, CNSet<EGPoint>>(
+            .group<CNPair<T>, EGVec2, CNSet<EGVec2>>(
                 by = _.items,
                 map = _.point,
-                withBuilder = CNHashSetBuilder<EGPoint>())
+                withBuilder = CNHashSetBuilder<EGVec2>())
             .map(p -> EGCollision<T>(p.a, p.b))
             .toSet
     }
 }
 
-class EGCollision<T>(items : CNPair<T>, points : CNSet<EGPoint>)
+class EGCollision<T>(items : CNPair<T>, points : CNSet<EGVec2>)

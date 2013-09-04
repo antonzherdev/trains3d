@@ -152,15 +152,15 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)createNewCity {
-    EGPointI tile = uwrap(EGPointI, [[[[_map.partialTiles chain] exclude:[[[self cities] chain] map:^id(TRCity* _) {
-        return wrap(EGPointI, _.tile);
+    EGVec2I tile = uwrap(EGVec2I, [[[[_map.partialTiles chain] exclude:[[[self cities] chain] map:^id(TRCity* _) {
+        return wrap(EGVec2I, _.tile);
     }]] randomItem] get]);
     TRCity* city = [TRCity cityWithColor:[TRColor values][[[self cities] count]] tile:tile angle:[self randomCityDirectionForTile:tile]];
     [_railroad tryAddRail:[TRRail railWithTile:tile form:city.angle.form]];
     [__cities addObject:city];
 }
 
-- (TRCityAngle*)randomCityDirectionForTile:(EGPointI)tile {
+- (TRCityAngle*)randomCityDirectionForTile:(EGVec2I)tile {
     EGRectI cut = [_map cutRectForTile:tile];
     return ((TRCityAngle*)([[[[[TRCityAngle values] chain] filter:^BOOL(TRCityAngle* a) {
         NSInteger angle = a.angle;
@@ -212,9 +212,9 @@ static ODClassType* _TRLevel_type;
     }] isDefined];
 }
 
-- (id)cityForTile:(EGPointI)tile {
+- (id)cityForTile:(EGVec2I)tile {
     return [__cities findWhere:^BOOL(TRCity* _) {
-        return EGPointIEq(_.tile, tile);
+        return EGVec2IEq(_.tile, tile);
     }];
 }
 
@@ -233,7 +233,7 @@ static ODClassType* _TRLevel_type;
         [[[[[[[[(@[car1.head, car1.tail]) chain] mul:(@[car2.head, car2.tail])] sortBy] ascBy:^id(CNTuple* pair) {
             TRRailPoint* x = ((TRRailPoint*)(pair.a));
             TRRailPoint* y = ((TRRailPoint*)(pair.b));
-            if(x.form == y.form && EGPointIEq(x.tile, y.tile)) return numf(fabs(x.x - y.x));
+            if(x.form == y.form && EGVec2IEq(x.tile, y.tile)) return numf(fabs(x.x - y.x));
             else return @1000;
         }] endSort] map:^TRRailPoint*(CNTuple* _) {
             return ((TRRailPoint*)(_.a));

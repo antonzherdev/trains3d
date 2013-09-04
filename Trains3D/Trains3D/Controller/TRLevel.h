@@ -69,7 +69,7 @@
 - (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch;
-- (id)cityForTile:(EGPointI)tile;
+- (id)cityForTile:(EGVec2I)tile;
 - (void)arrivedTrain:(TRTrain*)train;
 - (void)processCollisions;
 - (id<CNSet>)detectCollisions;

@@ -20,9 +20,9 @@ trait EGTouchProcessor {
 class EGEvent(viewSize : EGSize, camera : EGCamera?) {
     def set(camera : EGCamera?) : EGEvent
 
-    def locationInView : EGPoint
+    def locationInView : EGVec2
     def location = locationFor(0)
-    def locationFor(depth : float) : EGPoint =
+    def locationFor(depth : float) : EGVec2 =
         if(camera.isEmpty) locationInView
         else camera.get.translateWith(viewSize, locationInView)
 

@@ -196,6 +196,8 @@
 		6F3DF8AF9BB229B7635F54A0 /* unsigned_int.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF9CC8725187552B6E63B /* unsigned_int.inl */; };
 		6F3DF8B4C769EB6C4F0A3BA9 /* TRTrainView.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFD46EA054E41A43C6F17 /* TRTrainView.od */; };
 		6F3DF8B667CAF32427A98B10 /* CNSourceLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF71A717A6FD3CAA174BA /* CNSourceLink.m */; };
+		6F3DF8B8903DC8FC9CBCA7D0 /* TRExplosion.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF3B0B448A2ACE946A93D /* TRExplosion.od */; };
+		6F3DF8BF9C06EEE842DF1078 /* Explosion.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFD6BA70BC24B4A2BE65F /* Explosion.png */; };
 		6F3DF8C1DADD5AF81B504C0C /* type_mat2x2.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFED12F6B44D3D971ABF7 /* type_mat2x2.inl */; };
 		6F3DF8C9E2B5C31DB8D8BA3C /* TRCityView.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF2CF7B5EC86C30890C20 /* TRCityView.od */; };
 		6F3DF8D61894C834380B6D91 /* type_mat4x3.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF0C41B6CEA9D3BADE23E /* type_mat4x3.inl */; };
@@ -523,6 +525,7 @@
 		6F3DF39BB199F14036D8F826 /* EGMatrix.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGMatrix.od; sourceTree = "<group>"; };
 		6F3DF3A960522DD52DF6E645 /* noise.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = noise.hpp; sourceTree = "<group>"; };
 		6F3DF3AA0BD46B8102F64FBA /* KWProbePoller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWProbePoller.h; sourceTree = "<group>"; };
+		6F3DF3B0B448A2ACE946A93D /* TRExplosion.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TRExplosion.od; sourceTree = "<group>"; };
 		6F3DF3B28EDF7690F0C5A980 /* KWMatchVerifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWMatchVerifier.m; sourceTree = "<group>"; };
 		6F3DF3B47262109D576780AB /* EGShader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGShader.m; sourceTree = "<group>"; };
 		6F3DF3BB353084B701C4018D /* matrix_interpolation.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = matrix_interpolation.inl; sourceTree = "<group>"; };
@@ -976,6 +979,7 @@
 		6F3DFD5EE53EE883BC4D4E75 /* ODObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ODObject.h; sourceTree = "<group>"; };
 		6F3DFD6659BADE0527FE8800 /* EGStandardShaderSystem.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGStandardShaderSystem.od; sourceTree = "<group>"; };
 		6F3DFD6827964283DDF670E2 /* KWBeIdenticalToMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeIdenticalToMatcher.h; sourceTree = "<group>"; };
+		6F3DFD6BA70BC24B4A2BE65F /* Explosion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Explosion.png; sourceTree = "<group>"; };
 		6F3DFD7A7B4B1CFC4434C1EA /* EGMap.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGMap.od; sourceTree = "<group>"; };
 		6F3DFD7F7E9F4D345455C30E /* type_mat.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = type_mat.inl; sourceTree = "<group>"; };
 		6F3DFD83C8390308493AEA05 /* CNMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNMap.m; sourceTree = "<group>"; };
@@ -1628,6 +1632,7 @@
 				6F3DFAB8C4094B8A11BC1E0F /* TR3DDamage.h */,
 				6F3DFED3F835CFFA12B36A5C /* Smoke.png */,
 				6F3DF0179B006708DEA1E31C /* Textures.sbs */,
+				6F3DFD6BA70BC24B4A2BE65F /* Explosion.png */,
 			);
 			path = 3DModels;
 			sourceTree = "<group>";
@@ -2206,6 +2211,7 @@
 				6F3DF538007ABB42BAA049AD /* TRSmoke.od */,
 				6F3DFA524BE52473B7B4ACFA /* TRSmoke.h */,
 				6F3DF1D0F040BB4977D9F1A0 /* TRSmoke.m */,
+				6F3DF3B0B448A2ACE946A93D /* TRExplosion.od */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2423,6 +2429,8 @@
 				6F3DFD999C577C5EEB8EA3A4 /* Smoke.png in Resources */,
 				6F3DFDD47A0124F3E9F5F6F9 /* EGSurface.od in Resources */,
 				6F3DF4334CFE55C4C1884BB5 /* ODLazy.od in Resources */,
+				6F3DF8BF9C06EEE842DF1078 /* Explosion.png in Resources */,
+				6F3DF8B8903DC8FC9CBCA7D0 /* TRExplosion.od in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

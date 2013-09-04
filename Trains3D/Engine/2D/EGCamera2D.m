@@ -47,10 +47,10 @@ static ODClassType* _EGCamera2D_type;
     [[EG context].projectionMatrix orthoLeft:0.0 right:_size.width bottom:0.0 top:_size.height zNear:0.0 zFar:1.0];
 }
 
-- (EGPoint)translateWithViewSize:(EGSize)viewSize viewPoint:(EGPoint)viewPoint {
+- (EGVec2)translateWithViewSize:(EGSize)viewSize viewPoint:(EGVec2)viewPoint {
     CGFloat factor = [self factorForViewSize:viewSize];
     EGRect viewport = [self viewportRectForViewSize:viewSize factor:factor];
-    return egPointDiv(egPointSub(viewPoint, egRectPoint(viewport)), factor);
+    return egVec2Div(egVec2Sub(viewPoint, egRectPoint(viewport)), factor);
 }
 
 - (ODClassType*)type {

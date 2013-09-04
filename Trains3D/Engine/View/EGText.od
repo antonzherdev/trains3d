@@ -1,4 +1,4 @@
 import EGTypes
 
-stub def egTextGlutDraw(text : string, font : uint, position : EGPoint)
+stub def egTextGlutDraw(text : string, font : uint, position : EGVec2)
 stub val GLUT_BITMAP_HELVETICA_18 : uint

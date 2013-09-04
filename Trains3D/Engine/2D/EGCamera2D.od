@@ -16,7 +16,7 @@ class EGCamera2D(size : EGSize) extends EGCamera {
         EG.context.projectionMatrix.ortho(0, size.width, 0, size.height, 0, 1)
     }
 
-    def translateWith(viewSize : EGSize, viewPoint : EGPoint) : EGPoint = {
+    def translateWith(viewSize : EGSize, viewPoint : EGVec2) : EGVec2 = {
         val factor = factorFor(viewSize)
         val viewport = viewportRectFor(viewSize, factor)
         viewPoint.sub(viewport.point).div(factor)

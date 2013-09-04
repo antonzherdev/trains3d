@@ -20,17 +20,17 @@ class EGMapSso(size : EGSizeI) {
                          (2*size.width + size.height - 3)/2 + 1,
                          (1 - size.width)/2 - 1,
                          (size.width + 2*size.height - 3)/2 + 1)
-    val fullTiles : [EGPointI] = allPosibleTiles.filter(isFull(_)).toArray
-    val partialTiles : [EGPointI] = allPosibleTiles.filter(isPartial(_)).toArray
-    val allTiles : [EGPointI] = fullTiles + partialTiles
+    val fullTiles : [EGVec2I] = allPosibleTiles.filter(isFull(_)).toArray
+    val partialTiles : [EGVec2I] = allPosibleTiles.filter(isPartial(_)).toArray
+    val allTiles : [EGVec2I] = fullTiles + partialTiles
 
-    def isFull(tile : EGPointI) : bool =
+    def isFull(tile : EGVec2I) : bool =
         tile.y + tile.x >= 0 //left
         && tile.y - tile.x <= size.height - 1 //top
         && tile.y + tile.x <= size.width + size.height - 2 //right
         && tile.y - tile.x >= -size.width + 1
 
-    def isPartial(tile : EGPointI) : bool =
+    def isPartial(tile : EGVec2I) : bool =
         tile.y + tile.x >= -1 //left
         && tile.y - tile.x <= size.height //top
         && tile.y + tile.x <= size.width + size.height - 1 //right
@@ -41,17 +41,17 @@ class EGMapSso(size : EGSizeI) {
             || tile.y - tile.x == -size.width //bottom
         )
 
-    private def allPosibleTiles : CNChain<EGPointI> =
+    private def allPosibleTiles : CNChain<EGVec2I> =
         CNRange(start = limits.x, end = limits.x2, step = 1).chain
             .mul<int>(CNRange(start = limits.y, end = limits.y2, step = 1))
-            .map(EGPointI(_.a, _.b))
+            .map(EGVec2I(_.a, _.b))
 
     private def tileCutAxis(less : int, more : int) : int =
         if(less == more) 1
         else if(less < more) 0
         else 2
 
-    def cutRectFor(tile : EGPointI) = EGRectI.newXY(
+    def cutRectFor(tile : EGVec2I) = EGRectI.newXY(
         tileCutAxis(0, tile.x + tile.y),
         tileCutAxis(tile.x + tile.y, size.width + size.height - 2),
         tileCutAxis(tile.y - tile.x, size.height - 1),

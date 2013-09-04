@@ -47,7 +47,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
         _cities.add(city)
     }
 
-    private def randomCityDirectionFor(tile : EGPointI) = {
+    private def randomCityDirectionFor(tile : EGVec2I) = {
         val cut = map.cutRectFor(tile)
         TRCityAngle.values.chain.filter{a ->
             val angle = a.angle
@@ -96,7 +96,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
 
     private def isLocked(theSwitch : TRSwitch) : bool = _trains.find(_.isLocked(theSwitch)).isDefined
 
-    def cityFor(tile : EGPointI) : TRCity? = _cities.find(_.tile == tile)
+    def cityFor(tile : EGVec2I) : TRCity? = _cities.find(_.tile == tile)
 
     def arrived(train : TRTrain) {
         remove(train)

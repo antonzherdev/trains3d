@@ -22,14 +22,14 @@ SPEC_BEGIN(TRLevelSpec)
 
                     //This cities should be generated on an edge of the map.
                     [[level cities] forEach:^(TRCity* x) {
-                        EGPointI tile = x.tile;
+                        EGVec2I tile = x.tile;
                         BOOL isPartial = [level.map isPartialTile:tile];
                         [[theValue(isPartial) should] beTrue];
                     }];
 
                     //This cities should be generated in different tiles.
                     NSSet *tilesSet = [[[[level cities] chain] map:^id(TRCity *x) {
-                        return wrap(EGPointI, x.tile);
+                        return wrap(EGVec2I, x.tile);
                     }] toSet];
                     [[tilesSet should] haveCountOf:2];
 

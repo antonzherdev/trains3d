@@ -7,21 +7,21 @@ import EGCollisions
 class EGCollisionsTest extends CNTestCase {
     def testDavidsStar {
         val figures = [
-            (1, EGPolygon([EGPoint(1, 0), EGPoint(3, 2), EGPoint(5, 0)])),
-            (2, EGPolygon([EGPoint(1, 1), EGPoint(5, 1), EGPoint(3, -1)])),
-            (3, EGPolygon([EGPoint(4, -1), EGPoint(4.5, -0.5), EGPoint(5, -1)]))
+            (1, EGPolygon([EGVec2(1, 0), EGVec2(3, 2), EGVec2(5, 0)])),
+            (2, EGPolygon([EGVec2(1, 1), EGVec2(5, 1), EGVec2(3, -1)])),
+            (3, EGPolygon([EGVec2(4, -1), EGVec2(4.5, -0.5), EGVec2(5, -1)]))
         ]
         val collisions = EGCollisions.collisionsFor(figures)
         assertEquals(collisions, [EGCollision(CNPair(1, 2), [
-            EGPoint(1.5, 0.5), EGPoint(2, 0), EGPoint(2, 1),
-            EGPoint(4.5, 0.5), EGPoint(4, 0), EGPoint(4, 1)
+            EGVec2(1.5, 0.5), EGVec2(2, 0), EGVec2(2, 1),
+            EGVec2(4.5, 0.5), EGVec2(4, 0), EGVec2(4, 1)
         ].toSet)].toSet)
     }
 
     def testEmptyWithCrossedBoundingRects {
         val figures = [
-            (1, EGPolygon([EGPoint(1, 0), EGPoint(3, 2), EGPoint(5, 0)])),
-            (3, EGPolygon([EGPoint(4, -1), EGPoint(4.5, -0.5), EGPoint(5, -1)]))
+            (1, EGPolygon([EGVec2(1, 0), EGVec2(3, 2), EGVec2(5, 0)])),
+            (3, EGPolygon([EGVec2(4, -1), EGVec2(4.5, -0.5), EGVec2(5, -1)]))
         ]
         val collisions = EGCollisions.collisionsFor(figures)
         assertEquals(collisions, [].toSet)
@@ -29,8 +29,8 @@ class EGCollisionsTest extends CNTestCase {
 
     def testEmptyWithoutCrossedBoundingRects {
         val figures = [
-            (1, EGPolygon([EGPoint(1, 0), EGPoint(3, 2), EGPoint(5, 0)])),
-            (3, EGPolygon([EGPoint(6, -1), EGPoint(6.5, -0.5), EGPoint(7, -1)]))
+            (1, EGPolygon([EGVec2(1, 0), EGVec2(3, 2), EGVec2(5, 0)])),
+            (3, EGPolygon([EGVec2(6, -1), EGVec2(6.5, -0.5), EGVec2(7, -1)]))
         ]
         val collisions = EGCollisions.collisionsFor(figures)
         assertEquals(collisions, [].toSet)

@@ -31,15 +31,15 @@ static ODClassType* _EGEvent_type;
     @throw @"Method set is abstract";
 }
 
-- (EGPoint)locationInView {
+- (EGVec2)locationInView {
     @throw @"Method locationInView is abstract";
 }
 
-- (EGPoint)location {
+- (EGVec2)location {
     return [self locationForDepth:0.0];
 }
 
-- (EGPoint)locationForDepth:(CGFloat)depth {
+- (EGVec2)locationForDepth:(CGFloat)depth {
     if([_camera isEmpty]) return [self locationInView];
     else return [[_camera get] translateWithViewSize:_viewSize viewPoint:[self locationInView]];
 }

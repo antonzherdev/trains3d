@@ -1,0 +1,12 @@
+import EGTypes
+
+class TRExplosion(position : EGVec3) extends EGController {
+
+    def updateWith(delta : float) {
+
+    }
+}
+
+class TRExplosionFlame(position : EGVec3)
+
+struct TRExplosionFlameParticle(position : EGVec3, texturePos : EGVec2)

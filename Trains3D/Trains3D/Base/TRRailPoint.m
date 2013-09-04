@@ -68,8 +68,8 @@ static NSArray* _TRRailConnector_values;
     }
 }
 
-- (EGPointI)nextTile:(EGPointI)tile {
-    return EGPointIMake(tile.x + _x, tile.y + _y);
+- (EGVec2I)nextTile:(EGVec2I)tile {
+    return EGVec2IMake(tile.x + _x, tile.y + _y);
 }
 
 + (TRRailConnector*)left {
@@ -100,7 +100,7 @@ static NSArray* _TRRailConnector_values;
     TRRailConnector* _end;
     BOOL _isTurn;
     CGFloat _length;
-    EGPoint(^_pointFun)(CGFloat);
+    EGVec2(^_pointFun)(CGFloat);
 }
 static TRRailForm* _TRRailForm_leftBottom;
 static TRRailForm* _TRRailForm_leftRight;
@@ -115,11 +115,11 @@ static NSArray* _TRRailForm_values;
 @synthesize length = _length;
 @synthesize pointFun = _pointFun;
 
-+ (id)railFormWithOrdinal:(NSUInteger)ordinal name:(NSString*)name start:(TRRailConnector*)start end:(TRRailConnector*)end isTurn:(BOOL)isTurn length:(CGFloat)length pointFun:(EGPoint(^)(CGFloat))pointFun {
++ (id)railFormWithOrdinal:(NSUInteger)ordinal name:(NSString*)name start:(TRRailConnector*)start end:(TRRailConnector*)end isTurn:(BOOL)isTurn length:(CGFloat)length pointFun:(EGVec2(^)(CGFloat))pointFun {
     return [[TRRailForm alloc] initWithOrdinal:ordinal name:name start:start end:end isTurn:isTurn length:length pointFun:pointFun];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name start:(TRRailConnector*)start end:(TRRailConnector*)end isTurn:(BOOL)isTurn length:(CGFloat)length pointFun:(EGPoint(^)(CGFloat))pointFun {
+- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name start:(TRRailConnector*)start end:(TRRailConnector*)end isTurn:(BOOL)isTurn length:(CGFloat)length pointFun:(EGVec2(^)(CGFloat))pointFun {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
         _start = start;
@@ -134,23 +134,23 @@ static NSArray* _TRRailForm_values;
 
 + (void)initialize {
     [super initialize];
-    _TRRailForm_leftBottom = [TRRailForm railFormWithOrdinal:0 name:@"leftBottom" start:TRRailConnector.left end:TRRailConnector.bottom isTurn:YES length:M_PI_4 pointFun:^EGPoint(CGFloat x) {
-        return EGPointMake(-0.5 + 0.5 * sin(x * 2), -0.5 + 0.5 * cos(x * 2));
+    _TRRailForm_leftBottom = [TRRailForm railFormWithOrdinal:0 name:@"leftBottom" start:TRRailConnector.left end:TRRailConnector.bottom isTurn:YES length:M_PI_4 pointFun:^EGVec2(CGFloat x) {
+        return EGVec2Make(-0.5 + 0.5 * sin(x * 2), -0.5 + 0.5 * cos(x * 2));
     }];
-    _TRRailForm_leftRight = [TRRailForm railFormWithOrdinal:1 name:@"leftRight" start:TRRailConnector.left end:TRRailConnector.right isTurn:NO length:1.0 pointFun:^EGPoint(CGFloat x) {
-        return EGPointMake(x - 0.5, 0.0);
+    _TRRailForm_leftRight = [TRRailForm railFormWithOrdinal:1 name:@"leftRight" start:TRRailConnector.left end:TRRailConnector.right isTurn:NO length:1.0 pointFun:^EGVec2(CGFloat x) {
+        return EGVec2Make(x - 0.5, 0.0);
     }];
-    _TRRailForm_leftTop = [TRRailForm railFormWithOrdinal:2 name:@"leftTop" start:TRRailConnector.left end:TRRailConnector.top isTurn:YES length:M_PI_4 pointFun:^EGPoint(CGFloat x) {
-        return EGPointMake(-0.5 + 0.5 * sin(x * 2), 0.5 - 0.5 * cos(x * 2));
+    _TRRailForm_leftTop = [TRRailForm railFormWithOrdinal:2 name:@"leftTop" start:TRRailConnector.left end:TRRailConnector.top isTurn:YES length:M_PI_4 pointFun:^EGVec2(CGFloat x) {
+        return EGVec2Make(-0.5 + 0.5 * sin(x * 2), 0.5 - 0.5 * cos(x * 2));
     }];
-    _TRRailForm_bottomTop = [TRRailForm railFormWithOrdinal:3 name:@"bottomTop" start:TRRailConnector.bottom end:TRRailConnector.top isTurn:NO length:1.0 pointFun:^EGPoint(CGFloat x) {
-        return EGPointMake(0.0, x - 0.5);
+    _TRRailForm_bottomTop = [TRRailForm railFormWithOrdinal:3 name:@"bottomTop" start:TRRailConnector.bottom end:TRRailConnector.top isTurn:NO length:1.0 pointFun:^EGVec2(CGFloat x) {
+        return EGVec2Make(0.0, x - 0.5);
     }];
-    _TRRailForm_bottomRight = [TRRailForm railFormWithOrdinal:4 name:@"bottomRight" start:TRRailConnector.bottom end:TRRailConnector.right isTurn:YES length:M_PI_4 pointFun:^EGPoint(CGFloat x) {
-        return EGPointMake(0.5 - 0.5 * cos(x * 2), -0.5 + 0.5 * sin(x * 2));
+    _TRRailForm_bottomRight = [TRRailForm railFormWithOrdinal:4 name:@"bottomRight" start:TRRailConnector.bottom end:TRRailConnector.right isTurn:YES length:M_PI_4 pointFun:^EGVec2(CGFloat x) {
+        return EGVec2Make(0.5 - 0.5 * cos(x * 2), -0.5 + 0.5 * sin(x * 2));
     }];
-    _TRRailForm_topRight = [TRRailForm railFormWithOrdinal:5 name:@"topRight" start:TRRailConnector.top end:TRRailConnector.right isTurn:YES length:M_PI_4 pointFun:^EGPoint(CGFloat x) {
-        return EGPointMake(0.5 - 0.5 * cos(x * 2), 0.5 - 0.5 * sin(x * 2));
+    _TRRailForm_topRight = [TRRailForm railFormWithOrdinal:5 name:@"topRight" start:TRRailConnector.top end:TRRailConnector.right isTurn:YES length:M_PI_4 pointFun:^EGVec2(CGFloat x) {
+        return EGVec2Make(0.5 - 0.5 * cos(x * 2), 0.5 - 0.5 * sin(x * 2));
     }];
     _TRRailForm_values = (@[_TRRailForm_leftBottom, _TRRailForm_leftRight, _TRRailForm_leftTop, _TRRailForm_bottomTop, _TRRailForm_bottomRight, _TRRailForm_topRight]);
 }
@@ -216,11 +216,11 @@ static NSArray* _TRRailForm_values;
 
 
 @implementation TRRailPoint{
-    EGPointI _tile;
+    EGVec2I _tile;
     TRRailForm* _form;
     CGFloat _x;
     BOOL _back;
-    EGPoint _point;
+    EGVec2 _point;
 }
 static ODClassType* _TRRailPoint_type;
 @synthesize tile = _tile;
@@ -229,11 +229,11 @@ static ODClassType* _TRRailPoint_type;
 @synthesize back = _back;
 @synthesize point = _point;
 
-+ (id)railPointWithTile:(EGPointI)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back {
++ (id)railPointWithTile:(EGVec2I)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back {
     return [[TRRailPoint alloc] initWithTile:tile form:form x:x back:back];
 }
 
-- (id)initWithTile:(EGPointI)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back {
+- (id)initWithTile:(EGVec2I)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back {
     self = [super init];
     if(self) {
         _tile = tile;
@@ -275,11 +275,11 @@ static ODClassType* _TRRailPoint_type;
     else return [TRRailPointCorrection railPointCorrectionWithPoint:self error:0.0];
 }
 
-- (EGPoint)calculatePoint {
+- (EGVec2)calculatePoint {
     CGFloat x = ((_back) ? _form.length - _x : _x);
-    EGPoint(^f)(CGFloat) = _form.pointFun;
-    EGPoint p = f(x);
-    return EGPointMake(p.x + _tile.x, p.y + _tile.y);
+    EGVec2(^f)(CGFloat) = _form.pointFun;
+    EGVec2 p = f(x);
+    return EGVec2Make(p.x + _tile.x, p.y + _tile.y);
 }
 
 - (TRRailPoint*)invert {
@@ -290,7 +290,7 @@ static ODClassType* _TRRailPoint_type;
     return [TRRailPoint railPointWithTile:_tile form:_form x:x back:_back];
 }
 
-- (EGPointI)nextTile {
+- (EGVec2I)nextTile {
     return [[self endConnector] nextTile:_tile];
 }
 
@@ -310,12 +310,12 @@ static ODClassType* _TRRailPoint_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRRailPoint* o = ((TRRailPoint*)(other));
-    return EGPointIEq(self.tile, o.tile) && self.form == o.form && eqf(self.x, o.x) && self.back == o.back;
+    return EGVec2IEq(self.tile, o.tile) && self.form == o.form && eqf(self.x, o.x) && self.back == o.back;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + EGPointIHash(self.tile);
+    hash = hash * 31 + EGVec2IHash(self.tile);
     hash = hash * 31 + [self.form ordinal];
     hash = hash * 31 + floatHash(self.x);
     hash = hash * 31 + self.back;
@@ -324,7 +324,7 @@ static ODClassType* _TRRailPoint_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"tile=%@", EGPointIDescription(self.tile)];
+    [description appendFormat:@"tile=%@", EGVec2IDescription(self.tile)];
     [description appendFormat:@", form=%@", self.form];
     [description appendFormat:@", x=%f", self.x];
     [description appendFormat:@", back=%d", self.back];

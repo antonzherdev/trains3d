@@ -4,7 +4,7 @@
 #define p(x, y) tuple(numi(x), numi(y))
 NSArray * pointToTuples(NSArray * arr) {
     return [[[arr chain] map:^id(id x) {
-        EGPointI p = uwrap(EGPointI, x);
+        EGVec2I p = uwrap(EGVec2I, x);
         return tuple(numi(p.x), numi(p.y));
     }] toArray];
 }
@@ -14,25 +14,25 @@ SPEC_BEGIN(EGMapIsoSpec)
             describe(@"For map size 2x3", ^{
                 EGMapSso* m = [EGMapSso mapSsoWithSize:EGSizeIMake(2, 3)];
                 it(@"the tile 0:2 should be full", ^{
-                    [[theValue([m isFullTile:EGPointIMake(0, 2)]) should] beTrue];
+                    [[theValue([m isFullTile:EGVec2IMake(0, 2)]) should] beTrue];
                 });
                 it(@"the tile 1:0 should be full", ^{
-                    [[theValue([m isFullTile:EGPointIMake(1, 0)]) should] beTrue];
+                    [[theValue([m isFullTile:EGVec2IMake(1, 0)]) should] beTrue];
                 });
                 it(@"the tile -1:1 should be full", ^{
-                    [[theValue([m isFullTile:EGPointIMake(-1, 1)]) should] beTrue];
+                    [[theValue([m isFullTile:EGVec2IMake(-1, 1)]) should] beTrue];
                 });
                 it(@"the tile -1:0 should not be full but should be partial", ^{
-                    [[theValue([m isFullTile:EGPointIMake(-1, 0)]) should] beFalse];
-                    [[theValue([m isPartialTile:EGPointIMake(-1, 0)]) should] beTrue];
+                    [[theValue([m isFullTile:EGVec2IMake(-1, 0)]) should] beFalse];
+                    [[theValue([m isPartialTile:EGVec2IMake(-1, 0)]) should] beTrue];
                 });
                 it(@"the tile -2:1 should not be full but should be partial", ^{
-                    [[theValue([m isFullTile:EGPointIMake(-2, 1)]) should] beFalse];
-                    [[theValue([m isPartialTile:EGPointIMake(-2, 1)]) should] beTrue];
+                    [[theValue([m isFullTile:EGVec2IMake(-2, 1)]) should] beFalse];
+                    [[theValue([m isPartialTile:EGVec2IMake(-2, 1)]) should] beTrue];
                 });
                 it(@"the tile -3:1 should not be full and should not be partial", ^{
-                    [[theValue([m isFullTile:EGPointIMake(-3, 1)]) should] beFalse];
-                    [[theValue([m isPartialTile:EGPointIMake(-3, 1)]) should] beFalse];
+                    [[theValue([m isFullTile:EGVec2IMake(-3, 1)]) should] beFalse];
+                    [[theValue([m isPartialTile:EGVec2IMake(-3, 1)]) should] beFalse];
                 });
                 it(@"the list of full tiles should be [(-1,1), (0,0), (0,1), (0,2), (1,0), (1,1), (1,2), (2,1)]", ^{
                     NSArray *r = pointToTuples(m.fullTiles);

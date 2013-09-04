@@ -26,12 +26,12 @@
 
 @interface TRCity : NSObject<EGController>
 @property (nonatomic, readonly) TRColor* color;
-@property (nonatomic, readonly) EGPointI tile;
+@property (nonatomic, readonly) EGVec2I tile;
 @property (nonatomic, readonly) TRCityAngle* angle;
 @property (nonatomic) id expectedTrainAnimation;
 
-+ (id)cityWithColor:(TRColor*)color tile:(EGPointI)tile angle:(TRCityAngle*)angle;
-- (id)initWithColor:(TRColor*)color tile:(EGPointI)tile angle:(TRCityAngle*)angle;
++ (id)cityWithColor:(TRColor*)color tile:(EGVec2I)tile angle:(TRCityAngle*)angle;
+- (id)initWithColor:(TRColor*)color tile:(EGVec2I)tile angle:(TRCityAngle*)angle;
 - (ODClassType*)type;
 - (TRRailPoint*)startPoint;
 - (void)updateWithDelta:(CGFloat)delta;

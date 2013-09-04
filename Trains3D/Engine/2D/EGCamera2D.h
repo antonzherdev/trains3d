@@ -15,7 +15,7 @@
 - (id)initWithSize:(EGSize)size;
 - (ODClassType*)type;
 - (void)focusForViewSize:(EGSize)viewSize;
-- (EGPoint)translateWithViewSize:(EGSize)viewSize viewPoint:(EGPoint)viewPoint;
+- (EGVec2)translateWithViewSize:(EGSize)viewSize viewPoint:(EGVec2)viewPoint;
 + (ODClassType*)type;
 @end
 

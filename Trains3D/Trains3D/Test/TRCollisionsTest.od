@@ -21,15 +21,15 @@ class TRCollisionsTest extends CNTestCase {
 
     def testStraight {
         val level = newLevel
-        level.railroad.tryAdd(TRRail(EGPointI(0, 0), TRRailForm.leftRight))
-        level.railroad.tryAdd(TRRail(EGPointI(1, 0), TRRailForm.leftRight))
-        level.railroad.tryAdd(TRRail(EGPointI(2, 0), TRRailForm.leftRight))
+        level.railroad.tryAdd(TRRail(EGVec2I(0, 0), TRRailForm.leftRight))
+        level.railroad.tryAdd(TRRail(EGVec2I(1, 0), TRRailForm.leftRight))
+        level.railroad.tryAdd(TRRail(EGVec2I(2, 0), TRRailForm.leftRight))
         doTest1For(level, 0.001, TRRailForm.leftRight)
     }
 
     def doTest1For(level : TRLevel, delta : float, form : TRRailForm) {
         val t1 = TRTrain(level, TRTrainType.simple, TRColor.green, [TRCar(TRCarType.car)], 0)
-        val p = TRRailPoint(EGPointI(0, 0), form, 0, false)
+        val p = TRRailPoint(EGVec2I(0, 0), form, 0, false)
         var p2 = level.railroad.moveWith(false, carLen, p).point
         level.testRun(t1, p2)
 
@@ -55,27 +55,27 @@ class TRCollisionsTest extends CNTestCase {
 
     def testTurn {
         val level = newLevel
-        level.railroad.tryAdd(TRRail(EGPointI(0, 0), TRRailForm.leftTop))
-        level.railroad.tryAdd(TRRail(EGPointI(0, 1), TRRailForm.bottomRight))
-        level.railroad.tryAdd(TRRail(EGPointI(1, 1), TRRailForm.leftRight))
+        level.railroad.tryAdd(TRRail(EGVec2I(0, 0), TRRailForm.leftTop))
+        level.railroad.tryAdd(TRRail(EGVec2I(0, 1), TRRailForm.bottomRight))
+        level.railroad.tryAdd(TRRail(EGVec2I(1, 1), TRRailForm.leftRight))
         doTest1For(level, 0.3, TRRailForm.leftTop)
     }
 
     def testCross {
         val level = newLevel
-        level.railroad.tryAdd(TRRail(EGPointI(1, 1), TRRailForm.leftRight))
-        level.railroad.tryAdd(TRRail(EGPointI(1, 1), TRRailForm.bottomTop))
-        level.railroad.tryAdd(TRRail(EGPointI(2, 1), TRRailForm.leftRight))
-        level.railroad.tryAdd(TRRail(EGPointI(3, 1), TRRailForm.leftRight))
-        level.railroad.tryAdd(TRRail(EGPointI(1, 0), TRRailForm.bottomTop))
+        level.railroad.tryAdd(TRRail(EGVec2I(1, 1), TRRailForm.leftRight))
+        level.railroad.tryAdd(TRRail(EGVec2I(1, 1), TRRailForm.bottomTop))
+        level.railroad.tryAdd(TRRail(EGVec2I(2, 1), TRRailForm.leftRight))
+        level.railroad.tryAdd(TRRail(EGVec2I(3, 1), TRRailForm.leftRight))
+        level.railroad.tryAdd(TRRail(EGVec2I(1, 0), TRRailForm.bottomTop))
 
         val t1 = TRTrain(level, TRTrainType.simple, TRColor.green, [TRCar(TRCarType.car)], 0)
-        val p = TRRailPoint(EGPointI(1, 1), TRRailForm.bottomTop, 0, false)
+        val p = TRRailPoint(EGVec2I(1, 1), TRRailForm.bottomTop, 0, false)
         val p1 = level.railroad.moveWith(false, 0.5 - carWidth - 0.001, p).point
         level.testRun(t1, p1)
 
         val t2 = TRTrain(level, TRTrainType.simple, TRColor.orange, [TRCar(TRCarType.car), TRCar(TRCarType.car)], 0)
-        p = TRRailPoint(EGPointI(1, 1), TRRailForm.leftRight, 0, false)
+        p = TRRailPoint(EGVec2I(1, 1), TRRailForm.leftRight, 0, false)
         val p2 = level.railroad.moveWith(false, carLen*2, p).point
         level.testRun(t2, p2)
         var cols = check(level)

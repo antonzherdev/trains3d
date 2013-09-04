@@ -34,7 +34,7 @@ static ODClassType* _EGCollisions_type;
     return [[[[intersections chain] groupBy:^CNPair*(EGIntersection* _) {
         return _.items;
     } map:^id(EGIntersection* _) {
-        return wrap(EGPoint, _.point);
+        return wrap(EGVec2, _.point);
     } withBuilder:^CNHashSetBuilder*() {
         return [CNHashSetBuilder hashSetBuilder];
     }] map:^EGCollision*(CNTuple* p) {

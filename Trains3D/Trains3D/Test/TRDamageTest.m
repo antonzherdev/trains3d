@@ -25,11 +25,11 @@ static ODClassType* _TRDamageTest_type;
 
 - (void)testMain {
     TRRailroad* railroad = [TRRailroad railroadWithMap:[EGMapSso mapSsoWithSize:EGSizeIMake(4, 3)] score:[TRScore scoreWithRules:TRLevelFactory.scoreRules]];
-    [railroad tryAddRail:[TRRail railWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight]];
-    [railroad addDamageAtPoint:[TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight x:0.2 back:NO]];
-    [railroad addDamageAtPoint:[TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight x:0.6 back:YES]];
+    [railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(1, 1) form:TRRailForm.leftRight]];
+    [railroad addDamageAtPoint:[TRRailPoint railPointWithTile:EGVec2IMake(1, 1) form:TRRailForm.leftRight x:0.2 back:NO]];
+    [railroad addDamageAtPoint:[TRRailPoint railPointWithTile:EGVec2IMake(1, 1) form:TRRailForm.leftRight x:0.6 back:YES]];
     __block id<CNSeq> damagesCount = [ arrf(0) {}];
-    TRRailPoint* p0 = [TRRailPoint railPointWithTile:EGPointIMake(1, 1) form:TRRailForm.leftRight x:0.0 back:NO];
+    TRRailPoint* p0 = [TRRailPoint railPointWithTile:EGVec2IMake(1, 1) form:TRRailForm.leftRight x:0.0 back:NO];
     TRRailPointCorrection* p1 = [railroad moveWithObstacleProcessor:^BOOL(TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount arrayByAddingObject:numf(o.point.x)];
         return YES;

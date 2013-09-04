@@ -37,9 +37,9 @@ static ODClassType* _TRSwitchProcessor_type;
 }
 
 - (BOOL)mouseDownEvent:(EGEvent*)event {
-    EGPoint location = [event location];
-    EGPointI tile = egPointIApply(location);
-    EGPoint relPoint = egPointSub(location, egPointApply(tile));
+    EGVec2 location = [event location];
+    EGVec2I tile = egVec2IApply(location);
+    EGVec2 relPoint = egVec2Sub(location, egVec2Apply(tile));
     _downed = [[_index applyPoint:relPoint] flatMap:^id(CNTuple* v) {
         TRRailroadConnectorContent* content = [_level.railroad contentInTile:tile connector:((TRRailConnector*)(v.a))];
         if(unumb(v.b)) return [content asKindOfClass:[TRLight class]];

@@ -26,16 +26,16 @@ class EGBentleyOttmann {
         }
 }
 
-class EGIntersection<T>(items : CNPair<T>, point : EGPoint)
+class EGIntersection<T>(items : CNPair<T>, point : EGVec2)
 
 class EGBentleyOttmannEvent<T> {
-    def point : EGPoint
+    def point : EGVec2
     def isIntersection : bool = false
     def isStart : bool = false
     def isEnd : bool = false
 }
 
-class EGBentleyOttmannPointEvent<T>(isStart : bool, data : T, segment : EGLineSegment, point : EGPoint) extends EGBentleyOttmannEvent<T> {
+class EGBentleyOttmannPointEvent<T>(isStart : bool, data : T, segment : EGLineSegment, point : EGVec2) extends EGBentleyOttmannEvent<T> {
     def yFor(x : float) : float =
         if(segment.line.isVertical) if(isStart) segment.p1.y else segment.p2.y
         else segment.line.cast<EGSlopeLine>.yFor(x)
@@ -43,13 +43,13 @@ class EGBentleyOttmannPointEvent<T>(isStart : bool, data : T, segment : EGLineSe
     def isVertical : bool = segment.line.isVertical
     def isEnd : bool = !isStart
 }
-class EGBentleyOttmannIntersectionEvent<T>(point : EGPoint) extends EGBentleyOttmannEvent<T> {
+class EGBentleyOttmannIntersectionEvent<T>(point : EGVec2) extends EGBentleyOttmannEvent<T> {
     def isIntersection = true
 }
 
 
 class EGBentleyOttmannEventQueue<T> {
-    val events = CNMutableTreeMap<EGPoint, CNMutableArray<EGBentleyOttmannEvent<T>>>((a, b) -> a.compare(b))
+    val events = CNMutableTreeMap<EGVec2, CNMutableArray<EGBentleyOttmannEvent<T>>>((a, b) -> a.compare(b))
 
     def isEmpty : bool = events.isEmpty
 
@@ -66,7 +66,7 @@ class EGBentleyOttmannEventQueue<T> {
         ret
     }
 
-    def offer(point : EGPoint, event : EGBentleyOttmannEvent) {
+    def offer(point : EGVec2, event : EGBentleyOttmannEvent) {
         events.objectFor(key = point, orUpdateWith = CNMutableArray<EGBentleyOttmannEvent<T>>() ).add(event)
     }
 
@@ -75,7 +75,7 @@ class EGBentleyOttmannEventQueue<T> {
     }
 }
 
-class EGPointClass(point : EGPoint) {}
+class EGPointClass(point : EGVec2) {}
 
 
 class EGSweepLine<T>
@@ -97,7 +97,7 @@ class EGSweepLine<T>
     /**
     * The point of the current Event.
     */
-    private var currentEventPoint : EGPoint
+    private var currentEventPoint : EGVec2
 
     /**
     * The queue associated with this sweep line.
@@ -126,7 +126,7 @@ class EGSweepLine<T>
                         val y = e.yFor(currentEventPoint.x)
                         if(y > maxY) break
                         if(y >= minY) {
-                            registerIntersection(pe, e, EGPoint(currentEventPoint.x, y))
+                            registerIntersection(pe, e, EGVec2(currentEventPoint.x, y))
                         }
                     }
                 }
@@ -172,7 +172,7 @@ class EGSweepLine<T>
         }
     }
 
-    private def registerIntersection(a : EGBentleyOttmannPointEvent<T>, b : EGBentleyOttmannPointEvent<T>, point : EGPoint) {
+    private def registerIntersection(a : EGBentleyOttmannPointEvent<T>, b : EGBentleyOttmannPointEvent<T>, point : EGVec2) {
         if(!a.segment.endingsContain(point) || !b.segment.endingsContain(point)) {
 
             // Add the intersection.

@@ -54,12 +54,12 @@ static ODClassType* _TRTrainView_type;
 
 - (void)drawTrain:(TRTrain*)train {
     [train.cars forEach:^void(TRCar* car) {
-        EGPoint h = car.head.point;
-        EGPoint t = car.tail.point;
+        EGVec2 h = car.head.point;
+        EGVec2 t = car.tail.point;
         [EG keepMWF:^void() {
-            EGPoint mid = egPointMid(h, t);
+            EGVec2 mid = egVec2Mid(h, t);
             [[EG worldMatrix] translateX:mid.x y:mid.y z:0.05];
-            CGFloat angle = (([train isBack]) ? 90 : -90) + 180.0 / M_PI * egPointAngle(egPointSub(t, h));
+            CGFloat angle = (([train isBack]) ? 90 : -90) + 180.0 / M_PI * egVec2Angle(egVec2Sub(t, h));
             [[EG modelMatrix] rotateAngle:angle x:0.0 y:1.0 z:0.0];
             EGMaterial* material = [self trainMaterialForColor:train.color.color];
             if(car.carType == TRCarType.car) {

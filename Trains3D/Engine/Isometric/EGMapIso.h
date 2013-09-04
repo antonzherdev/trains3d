@@ -42,9 +42,9 @@
 + (id)mapSsoWithSize:(EGSizeI)size;
 - (id)initWithSize:(EGSizeI)size;
 - (ODClassType*)type;
-- (BOOL)isFullTile:(EGPointI)tile;
-- (BOOL)isPartialTile:(EGPointI)tile;
-- (EGRectI)cutRectForTile:(EGPointI)tile;
+- (BOOL)isFullTile:(EGVec2I)tile;
+- (BOOL)isPartialTile:(EGVec2I)tile;
+- (EGRectI)cutRectForTile:(EGVec2I)tile;
 + (CGFloat)ISO;
 + (ODClassType*)type;
 @end

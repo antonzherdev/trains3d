@@ -11,15 +11,15 @@
 
 @interface EGCameraIso : NSObject<EGCamera>
 @property (nonatomic, readonly) EGSizeI tilesOnScreen;
-@property (nonatomic, readonly) EGPoint center;
+@property (nonatomic, readonly) EGVec2 center;
 @property (nonatomic, readonly) EGVec3 eyeDirection;
 
-+ (id)cameraIsoWithTilesOnScreen:(EGSizeI)tilesOnScreen center:(EGPoint)center;
-- (id)initWithTilesOnScreen:(EGSizeI)tilesOnScreen center:(EGPoint)center;
++ (id)cameraIsoWithTilesOnScreen:(EGSizeI)tilesOnScreen center:(EGVec2)center;
+- (id)initWithTilesOnScreen:(EGSizeI)tilesOnScreen center:(EGVec2)center;
 - (ODClassType*)type;
 - (EGRect)calculateViewportSizeWithViewSize:(EGSize)viewSize;
 - (void)focusForViewSize:(EGSize)viewSize;
-- (EGPoint)translateWithViewSize:(EGSize)viewSize viewPoint:(EGPoint)viewPoint;
+- (EGVec2)translateWithViewSize:(EGSize)viewSize viewPoint:(EGVec2)viewPoint;
 + (ODClassType*)type;
 @end
 

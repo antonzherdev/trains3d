@@ -67,7 +67,7 @@ static NSArray* _TRCityAngle_values;
 
 @implementation TRCity{
     TRColor* _color;
-    EGPointI _tile;
+    EGVec2I _tile;
     TRCityAngle* _angle;
     id _expectedTrainAnimation;
 }
@@ -77,11 +77,11 @@ static ODClassType* _TRCity_type;
 @synthesize angle = _angle;
 @synthesize expectedTrainAnimation = _expectedTrainAnimation;
 
-+ (id)cityWithColor:(TRColor*)color tile:(EGPointI)tile angle:(TRCityAngle*)angle {
++ (id)cityWithColor:(TRColor*)color tile:(EGVec2I)tile angle:(TRCityAngle*)angle {
     return [[TRCity alloc] initWithColor:color tile:tile angle:angle];
 }
 
-- (id)initWithColor:(TRColor*)color tile:(EGPointI)tile angle:(TRCityAngle*)angle {
+- (id)initWithColor:(TRColor*)color tile:(EGVec2I)tile angle:(TRCityAngle*)angle {
     self = [super init];
     if(self) {
         _color = color;
@@ -123,13 +123,13 @@ static ODClassType* _TRCity_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRCity* o = ((TRCity*)(other));
-    return self.color == o.color && EGPointIEq(self.tile, o.tile) && self.angle == o.angle;
+    return self.color == o.color && EGVec2IEq(self.tile, o.tile) && self.angle == o.angle;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.color ordinal];
-    hash = hash * 31 + EGPointIHash(self.tile);
+    hash = hash * 31 + EGVec2IHash(self.tile);
     hash = hash * 31 + [self.angle ordinal];
     return hash;
 }
@@ -137,7 +137,7 @@ static ODClassType* _TRCity_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"color=%@", self.color];
-    [description appendFormat:@", tile=%@", EGPointIDescription(self.tile)];
+    [description appendFormat:@", tile=%@", EGVec2IDescription(self.tile)];
     [description appendFormat:@", angle=%@", self.angle];
     [description appendString:@">"];
     return description;

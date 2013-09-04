@@ -6,8 +6,8 @@
 @protocol EGController;
 @protocol EGCamera;
 @protocol EGView;
-typedef struct EGPoint EGPoint;
-typedef struct EGPointI EGPointI;
+typedef struct EGVec2 EGVec2;
+typedef struct EGVec2I EGVec2I;
 typedef struct EGSize EGSize;
 typedef struct EGSizeI EGSizeI;
 typedef struct EGRect EGRect;
@@ -15,94 +15,94 @@ typedef struct EGRectI EGRectI;
 typedef struct EGColor EGColor;
 typedef struct EGVec3 EGVec3;
 
-struct EGPoint {
+struct EGVec2 {
     CGFloat x;
     CGFloat y;
 };
-static inline EGPoint EGPointMake(CGFloat x, CGFloat y) {
-    EGPoint ret;
+static inline EGVec2 EGVec2Make(CGFloat x, CGFloat y) {
+    EGVec2 ret;
     ret.x = x;
     ret.y = y;
     return ret;
 }
-static inline BOOL EGPointEq(EGPoint s1, EGPoint s2) {
+static inline BOOL EGVec2Eq(EGVec2 s1, EGVec2 s2) {
     return eqf(s1.x, s2.x) && eqf(s1.y, s2.y);
 }
-static inline NSUInteger EGPointHash(EGPoint self) {
+static inline NSUInteger EGVec2Hash(EGVec2 self) {
     NSUInteger hash = 0;
     hash = hash * 31 + floatHash(self.x);
     hash = hash * 31 + floatHash(self.y);
     return hash;
 }
-static inline NSString* EGPointDescription(EGPoint self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<EGPoint: "];
+static inline NSString* EGVec2Description(EGVec2 self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<EGVec2: "];
     [description appendFormat:@"x=%f", self.x];
     [description appendFormat:@", y=%f", self.y];
     [description appendString:@">"];
     return description;
 }
-EGPoint egPointApply(EGPointI point);
-EGPoint egPointAdd(EGPoint self, EGPoint point);
-EGPoint egPointSub(EGPoint self, EGPoint point);
-EGPoint egPointNegate(EGPoint self);
-CGFloat egPointAngle(EGPoint self);
-CGFloat egPointDot(EGPoint self, EGPoint point);
-CGFloat egPointLengthSquare(EGPoint self);
-CGFloat egPointLength(EGPoint self);
-EGPoint egPointMul(EGPoint self, CGFloat value);
-EGPoint egPointDiv(EGPoint self, CGFloat value);
-EGPoint egPointMid(EGPoint self, EGPoint point);
-CGFloat egPointDistanceTo(EGPoint self, EGPoint point);
-EGPoint egPointSet(EGPoint self, CGFloat length);
-EGPoint egPointNormalize(EGPoint self);
-NSInteger egPointCompare(EGPoint self, EGPoint to);
-ODPType* egPointType();
-@interface EGPointWrap : NSObject
-@property (readonly, nonatomic) EGPoint value;
+EGVec2 egVec2Apply(EGVec2I point);
+EGVec2 egVec2Add(EGVec2 self, EGVec2 point);
+EGVec2 egVec2Sub(EGVec2 self, EGVec2 point);
+EGVec2 egVec2Negate(EGVec2 self);
+CGFloat egVec2Angle(EGVec2 self);
+CGFloat egVec2Dot(EGVec2 self, EGVec2 point);
+CGFloat egVec2LengthSquare(EGVec2 self);
+CGFloat egVec2Length(EGVec2 self);
+EGVec2 egVec2Mul(EGVec2 self, CGFloat value);
+EGVec2 egVec2Div(EGVec2 self, CGFloat value);
+EGVec2 egVec2Mid(EGVec2 self, EGVec2 point);
+CGFloat egVec2DistanceTo(EGVec2 self, EGVec2 point);
+EGVec2 egVec2Set(EGVec2 self, CGFloat length);
+EGVec2 egVec2Normalize(EGVec2 self);
+NSInteger egVec2Compare(EGVec2 self, EGVec2 to);
+ODPType* egVec2Type();
+@interface EGVec2Wrap : NSObject
+@property (readonly, nonatomic) EGVec2 value;
 
-+ (id)wrapWithValue:(EGPoint)value;
-- (id)initWithValue:(EGPoint)value;
++ (id)wrapWithValue:(EGVec2)value;
+- (id)initWithValue:(EGVec2)value;
 @end
 
 
 
-struct EGPointI {
+struct EGVec2I {
     NSInteger x;
     NSInteger y;
 };
-static inline EGPointI EGPointIMake(NSInteger x, NSInteger y) {
-    EGPointI ret;
+static inline EGVec2I EGVec2IMake(NSInteger x, NSInteger y) {
+    EGVec2I ret;
     ret.x = x;
     ret.y = y;
     return ret;
 }
-static inline BOOL EGPointIEq(EGPointI s1, EGPointI s2) {
+static inline BOOL EGVec2IEq(EGVec2I s1, EGVec2I s2) {
     return s1.x == s2.x && s1.y == s2.y;
 }
-static inline NSUInteger EGPointIHash(EGPointI self) {
+static inline NSUInteger EGVec2IHash(EGVec2I self) {
     NSUInteger hash = 0;
     hash = hash * 31 + self.x;
     hash = hash * 31 + self.y;
     return hash;
 }
-static inline NSString* EGPointIDescription(EGPointI self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<EGPointI: "];
+static inline NSString* EGVec2IDescription(EGVec2I self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<EGVec2I: "];
     [description appendFormat:@"x=%li", self.x];
     [description appendFormat:@", y=%li", self.y];
     [description appendString:@">"];
     return description;
 }
-EGPointI egPointIApply(EGPoint point);
-EGPointI egPointIAdd(EGPointI self, EGPointI point);
-EGPointI egPointISub(EGPointI self, EGPointI point);
-EGPointI egPointINegate(EGPointI self);
-NSInteger egPointICompare(EGPointI self, EGPointI to);
-ODPType* egPointIType();
-@interface EGPointIWrap : NSObject
-@property (readonly, nonatomic) EGPointI value;
+EGVec2I egVec2IApply(EGVec2 point);
+EGVec2I egVec2IAdd(EGVec2I self, EGVec2I point);
+EGVec2I egVec2ISub(EGVec2I self, EGVec2I point);
+EGVec2I egVec2INegate(EGVec2I self);
+NSInteger egVec2ICompare(EGVec2I self, EGVec2I to);
+ODPType* egVec2IType();
+@interface EGVec2IWrap : NSObject
+@property (readonly, nonatomic) EGVec2I value;
 
-+ (id)wrapWithValue:(EGPointI)value;
-- (id)initWithValue:(EGPointI)value;
++ (id)wrapWithValue:(EGVec2I)value;
+- (id)initWithValue:(EGVec2I)value;
 @end
 
 
@@ -213,13 +213,13 @@ static inline NSString* EGRectDescription(EGRect self) {
     [description appendString:@">"];
     return description;
 }
-BOOL egRectContains(EGRect self, EGPoint point);
+BOOL egRectContains(EGRect self, EGVec2 point);
 CGFloat egRectX2(EGRect self);
 CGFloat egRectY2(EGRect self);
 EGRect egRectNewXY(CGFloat x, CGFloat x2, CGFloat y, CGFloat y2);
 EGRect egRectMove(EGRect self, CGFloat x, CGFloat y);
 EGRect egRectMoveToCenterFor(EGRect self, EGSize size);
-EGPoint egRectPoint(EGRect self);
+EGVec2 egRectPoint(EGRect self);
 EGSize egRectSize(EGRect self);
 BOOL egRectIntersects(EGRect self, EGRect rect);
 EGRect egRectThicken(EGRect self, CGFloat x, CGFloat y);
@@ -332,7 +332,7 @@ ODPType* egColorType();
 
 @protocol EGCamera<NSObject>
 - (void)focusForViewSize:(EGSize)viewSize;
-- (EGPoint)translateWithViewSize:(EGSize)viewSize viewPoint:(EGPoint)viewPoint;
+- (EGVec2)translateWithViewSize:(EGSize)viewSize viewPoint:(EGVec2)viewPoint;
 - (EGVec3)eyeDirection;
 @end
 
@@ -375,7 +375,7 @@ static inline NSString* EGVec3Description(EGVec3 self) {
     [description appendString:@">"];
     return description;
 }
-EGVec3 egVec3Apply(EGPoint vec2, float z);
+EGVec3 egVec3Apply(EGVec2 vec2, float z);
 EGVec3 egVec3Add(EGVec3 self, EGVec3 v);
 EGVec3 egVec3Sqr(EGVec3 self);
 EGVec3 egVec3Mul(EGVec3 self, float k);

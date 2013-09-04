@@ -64,15 +64,15 @@ static ODClassType* _TRSmoke_type;
 }
 
 - (void)createParticle {
-    EGPoint fPos = (([_train isBack]) ? _engine.tail.point : _engine.head.point);
-    EGPoint bPos = (([_train isBack]) ? _engine.head.point : _engine.tail.point);
-    EGPoint delta = egPointSub(bPos, fPos);
-    EGPoint tubeXY = egPointAdd(fPos, egPointSet(delta, ((CGFloat)(_tubePos.x))));
+    EGVec2 fPos = (([_train isBack]) ? _engine.tail.point : _engine.head.point);
+    EGVec2 bPos = (([_train isBack]) ? _engine.head.point : _engine.tail.point);
+    EGVec2 delta = egVec2Sub(bPos, fPos);
+    EGVec2 tubeXY = egVec2Add(fPos, egVec2Set(delta, ((CGFloat)(_tubePos.x))));
     EGVec3 emitterPos = egVec3Apply(tubeXY, _tubePos.z);
     TRSmokeParticle* p = [TRSmokeParticle smokeParticleWithTexture:((NSInteger)(randomMax(3)))];
     p.position = EGVec3Make(emitterPos.x + randomFloatGap(-0.01, 0.01), emitterPos.y + randomFloatGap(-0.01, 0.01), emitterPos.z);
     randomFloat();
-    EGVec3 s = egVec3Apply(egPointSet((([_train isBack]) ? egPointSub(fPos, bPos) : delta), _train.speedFloat), ((float)(_TRSmoke_zSpeed)));
+    EGVec3 s = egVec3Apply(egVec2Set((([_train isBack]) ? egVec2Sub(fPos, bPos) : delta), _train.speedFloat), ((float)(_TRSmoke_zSpeed)));
     p.speed = EGVec3Make(-s.x * randomPercents(0.6), -s.y * randomPercents(0.6), s.z * randomPercents(0.6));
     __particles = [CNList applyObject:p tail:__particles];
 }
