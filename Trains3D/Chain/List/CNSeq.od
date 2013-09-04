@@ -20,7 +20,7 @@ trait CNSeq<T> extends CNIterable<T> {
 
     def randomItem : T? =
         if(isEmpty) nil
-        else apply(randomWith(count - 1))
+        else apply(randomMax(count - 1))
 
     def toSet : CNSet<T> = convertWith(CNHashSetBuilder<T>())
     def arrayByAdding(object : T) : CNSeq<T> = {

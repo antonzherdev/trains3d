@@ -69,11 +69,11 @@ static ODClassType* _TRSmoke_type;
     EGPoint delta = egPointSub(bPos, fPos);
     EGPoint tubeXY = egPointAdd(fPos, egPointSet(delta, ((CGFloat)(_tubePos.x))));
     EGVec3 emitterPos = egVec3Apply(tubeXY, _tubePos.z);
-    TRSmokeParticle* p = [TRSmokeParticle smokeParticle];
+    TRSmokeParticle* p = [TRSmokeParticle smokeParticleWithTexture:((NSInteger)(randomMax(3)))];
     p.position = EGVec3Make(emitterPos.x + randomFloatGap(-0.01, 0.01), emitterPos.y + randomFloatGap(-0.01, 0.01), emitterPos.z);
     randomFloat();
     EGVec3 s = egVec3Apply(egPointSet((([_train isBack]) ? egPointSub(fPos, bPos) : delta), _train.speedFloat), ((float)(_TRSmoke_zSpeed)));
-    p.speed = EGVec3Make(-s.x * randomPercents(0.4), -s.y * randomPercents(0.4), s.z * randomPercents(0.4));
+    p.speed = EGVec3Make(-s.x * randomPercents(0.6), -s.y * randomPercents(0.6), s.z * randomPercents(0.6));
     __particles = [CNList applyObject:p tail:__particles];
 }
 
@@ -113,24 +113,29 @@ static ODClassType* _TRSmoke_type;
 
 
 @implementation TRSmokeParticle{
+    NSInteger _texture;
     EGVec3 _position;
     EGVec3 _speed;
     CGFloat _time;
 }
 static NSInteger _TRSmokeParticle_lifeTime = 4;
-static CGFloat _TRSmokeParticle_dragCoefficient = 0.5;
+static NSInteger _TRSmokeParticle_dragCoefficient = 1;
 static ODClassType* _TRSmokeParticle_type;
+@synthesize texture = _texture;
 @synthesize position = _position;
 @synthesize speed = _speed;
 @synthesize time = _time;
 
-+ (id)smokeParticle {
-    return [[TRSmokeParticle alloc] init];
++ (id)smokeParticleWithTexture:(NSInteger)texture {
+    return [[TRSmokeParticle alloc] initWithTexture:texture];
 }
 
-- (id)init {
+- (id)initWithTexture:(NSInteger)texture {
     self = [super init];
-    if(self) _time = 0.0;
+    if(self) {
+        _texture = texture;
+        _time = 0.0;
+    }
     
     return self;
 }
@@ -159,7 +164,7 @@ static ODClassType* _TRSmokeParticle_type;
     return _TRSmokeParticle_lifeTime;
 }
 
-+ (CGFloat)dragCoefficient {
++ (NSInteger)dragCoefficient {
     return _TRSmokeParticle_dragCoefficient;
 }
 
@@ -171,8 +176,22 @@ static ODClassType* _TRSmokeParticle_type;
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRSmokeParticle* o = ((TRSmokeParticle*)(other));
+    return self.texture == o.texture;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.texture;
+    return hash;
+}
+
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"texture=%li", self.texture];
     [description appendString:@">"];
     return description;
 }
@@ -280,11 +299,13 @@ static ODClassType* _TRSmokeView_type;
     __block NSUInteger i = 0;
     [particles forEach:^void(TRSmokeParticle* p) {
         EGVec3 v = p.position;
-        CGFloat t = p.time;
-        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, 0.0, 0.0, ((float)(t))))];
-        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, 1.0, 0.0, ((float)(t))))];
-        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, 1.0, 1.0, ((float)(t))))];
-        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, 0.0, 1.0, ((float)(t))))];
+        float t = ((float)(p.time));
+        float tx = ((float)(((p.texture >= 2) ? 0.5 : 0)));
+        float ty = ((float)(((p.texture == 1 || p.texture == 3) ? 0.5 : 0)));
+        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, 0.0, 0.0, t, tx, ty))];
+        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, 1.0, 0.0, t, tx, ty))];
+        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, 1.0, 1.0, t, tx, ty))];
+        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, 0.0, 1.0, t, tx, ty))];
         [indexArr writeUInt4:((unsigned int)(i))];
         [indexArr writeUInt4:((unsigned int)(i + 1))];
         [indexArr writeUInt4:((unsigned int)(i + 2))];
@@ -336,6 +357,7 @@ static ODClassType* _TRSmokeView_type;
     EGShaderAttribute* _positionSlot;
     EGShaderAttribute* _uvSlot;
     EGShaderAttribute* _lifeSlot;
+    EGShaderAttribute* _textureRelSlot;
     EGMatrix* _m;
     EGShaderUniform* _wcpUniform;
     EGShaderUniform* _mUniform;
@@ -343,6 +365,7 @@ static ODClassType* _TRSmokeView_type;
 static NSString* _TRSmokeShader_vertex = @"attribute vec3 position;\n"
     "attribute vec2 vertexUV;\n"
     "attribute float vertexLife;\n"
+    "attribute vec2 textureRel;\n"
     "uniform mat4 m;\n"
     "uniform mat4 wcp;\n"
     "\n"
@@ -353,7 +376,7 @@ static NSString* _TRSmokeShader_vertex = @"attribute vec3 position;\n"
     "   float size = 0.03;\n"
     "   vec4 model = m * vec4(2.0*size*vertexUV.x - size, 2.0*size*vertexUV.y - size, 0, 1);\n"
     "   gl_Position = wcp * (vec4(position, 0) + model);\n"
-    "   UV = vertexUV;\n"
+    "   UV = 0.5*vertexUV + textureRel;\n"
     "   life = vertexLife;\n"
     "}";
 static NSString* _TRSmokeShader_fragment = @"varying vec2 UV;\n"
@@ -375,6 +398,7 @@ static ODClassType* _TRSmokeShader_type;
 @synthesize positionSlot = _positionSlot;
 @synthesize uvSlot = _uvSlot;
 @synthesize lifeSlot = _lifeSlot;
+@synthesize textureRelSlot = _textureRelSlot;
 @synthesize m = _m;
 @synthesize wcpUniform = _wcpUniform;
 @synthesize mUniform = _mUniform;
@@ -390,6 +414,7 @@ static ODClassType* _TRSmokeShader_type;
         _positionSlot = [_program attributeForName:@"position"];
         _uvSlot = [_program attributeForName:@"vertexUV"];
         _lifeSlot = [_program attributeForName:@"vertexLife"];
+        _textureRelSlot = [_program attributeForName:@"textureRel"];
         _m = [[[EGMatrix identity] rotateAngle:60.0 x:1.0 y:0.0 z:0.0] rotateAngle:45.0 x:0.0 y:1.0 z:0.0];
         _wcpUniform = [_program uniformForName:@"wcp"];
         _mUniform = [_program uniformForName:@"m"];
@@ -408,9 +433,10 @@ static ODClassType* _TRSmokeShader_type;
     [_program applyDraw:^void() {
         [texture applyDraw:^void() {
             [positionBuffer applyDraw:^void() {
-                [_positionSlot setFromBufferWithStride:((NSUInteger)(6 * 4)) valuesCount:3 valuesType:GL_FLOAT shift:0];
-                [_uvSlot setFromBufferWithStride:((NSUInteger)(6 * 4)) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(3 * 4))];
-                [_lifeSlot setFromBufferWithStride:((NSUInteger)(6 * 4)) valuesCount:1 valuesType:GL_FLOAT shift:((NSUInteger)(5 * 4))];
+                [_positionSlot setFromBufferWithStride:((NSUInteger)(8 * 4)) valuesCount:3 valuesType:GL_FLOAT shift:0];
+                [_uvSlot setFromBufferWithStride:((NSUInteger)(8 * 4)) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(3 * 4))];
+                [_lifeSlot setFromBufferWithStride:((NSUInteger)(8 * 4)) valuesCount:1 valuesType:GL_FLOAT shift:((NSUInteger)(5 * 4))];
+                [_textureRelSlot setFromBufferWithStride:((NSUInteger)(8 * 4)) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(6 * 4))];
                 [_wcpUniform setMatrix:[[EG context] wcp]];
                 [_mUniform setMatrix:_m];
                 ((void(^)())(draw))();

@@ -61,7 +61,7 @@ static ODClassType* _CNPArray_type;
 
 - (id)randomItem {
     if([self isEmpty]) return [CNOption none];
-    else return [self applyIndex:randomWith([self count] - 1)];
+    else return [self applyIndex:randomMax([self count] - 1)];
 }
 
 - (id<CNSet>)toSet {

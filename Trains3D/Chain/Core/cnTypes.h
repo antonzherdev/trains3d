@@ -99,7 +99,7 @@ extern id cnResolveCollection(id collection);
 #define setui4(p_bytes, p_value) *(unsigned int*)p_bytes = p_value;
 
 
-static inline NSUInteger randomWith(NSUInteger max) {
+static inline NSUInteger randomMax(NSUInteger max) {
     return arc4random_uniform((u_int32_t)(max + 1));
 }
 

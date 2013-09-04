@@ -65,6 +65,7 @@ stub val DBL_MIN : float
 stub def max(a : float, b : float) : float
 stub def min(a : float, b : float) : float
 
+stub def randomMax(: uint) : uint
 stub def randomFloat : float
 stub def randomFloatGap(s : float, e : float) : float
 stub def randomPercents(:float) : float

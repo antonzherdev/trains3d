@@ -40,21 +40,21 @@ class TRSmoke(weak train : TRTrain) extends EGController {
         val tubeXY = fPos.add(delta.set(length = tubePos.x))
         val emitterPos = EGVec3(tubeXY, tubePos.z)
 
-        val p = TRSmokeParticle()
+        val p = TRSmokeParticle(randomMax(3))
         p.position = EGVec3(emitterPos.x + randomFloatGap(-0.01, 0.01), emitterPos.y + randomFloatGap(-0.01, 0.01), emitterPos.z)
         randomFloat
         val s = EGVec3((if(train.isBack) fPos.sub(bPos) else delta).set(length = train.speedFloat), zSpeed)
-        p.speed = EGVec3(-s.x * randomPercents(0.4), -s.y * randomPercents(0.4), s.z * randomPercents(0.4))
+        p.speed = EGVec3(-s.x * randomPercents(0.6), -s.y * randomPercents(0.6), s.z * randomPercents(0.6))
         _particles = CNList(p, _particles)
     }
 }
 
-class TRSmokeParticle extends EGController {
+class TRSmokeParticle(texture : int) extends EGController {
     var position : EGVec3
     var speed : EGVec3
     var time = 0.0
     static val lifeTime = 4
-    static val dragCoefficient = 0.5 // air resistance coefficient | a = -dragCoefficient * sqr(speed)
+    static val dragCoefficient = 1 // air resistance coefficient | a = -dragCoefficient * sqr(speed)
 
     def updateWith(delta : float) {
         val a = speed.mul(-dragCoefficient)
@@ -66,7 +66,7 @@ class TRSmokeParticle extends EGController {
     def isLive = time < lifeTime
 }
 
-struct TRSmokeBufferData(x : float4, y : float4, z : float4, uvx : float4, uvy : float4, time : float4)
+struct TRSmokeBufferData(x : float4, y : float4, z : float4, uvx : float4, uvy : float4, time : float4, textureX : float4, textureY : float4)
 
 class TRSmokeView {
     val positionBuffer = EGVertexBuffer<float4>(6*4)
@@ -97,11 +97,13 @@ class TRSmokeView {
         var i : uint = 0
         particles.for{p ->
             val v = p.position
-            val t = p.time
-            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 0, 0, t))
-            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 1, 0, t))
-            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 1, 1, t))
-            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 0, 1, t))
+            val t : float4 = p.time
+            val tx : float4 = if(p.texture >= 2) 0.5 else 0
+            val ty : float4 = if(p.texture == 1 || p.texture == 3) 0.5 else 0
+            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 0, 0, t, tx, ty))
+            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 1, 0, t, tx, ty))
+            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 1, 1, t, tx, ty))
+            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 0, 1, t, tx, ty))
             indexArr.write(uInt4 = i)
             indexArr.write(uInt4 = i + 1)
             indexArr.write(uInt4 = i + 2)
@@ -124,6 +126,7 @@ class TRSmokeShader {
         "attribute vec3 position;
          attribute vec2 vertexUV;
          attribute float vertexLife;
+         attribute vec2 textureRel;
          uniform mat4 m;
          uniform mat4 wcp;
 
@@ -134,7 +137,7 @@ class TRSmokeShader {
             float size = 0.03;
             vec4 model = m * vec4(2.0*size*vertexUV.x - size, 2.0*size*vertexUV.y - size, 0, 1);
             gl_Position = wcp * (vec4(position, 0) + model);
-            UV = vertexUV;
+            UV = 0.5*vertexUV + textureRel;
             life = vertexLife;
         }"
     static val fragment =
@@ -156,6 +159,7 @@ class TRSmokeShader {
     val positionSlot = program.attributeFor("position")
     val uvSlot = program.attributeFor("vertexUV")
     val lifeSlot = program.attributeFor("vertexLife")
+    val textureRelSlot = program.attributeFor("textureRel")
     val m = EGMatrix.identity.rotate(60, 1, 0, 0).rotate(45, 0, 1, 0)
     val wcpUniform = program.uniformFor("wcp")
     val mUniform = program.uniformFor("m")
@@ -164,9 +168,10 @@ class TRSmokeShader {
         program {
             texture {
                 positionBuffer {
-                    positionSlot.setFromBufferWith(stride = 6*4, valuesCount = 3, GL_FLOAT, shift = 0)
-                    uvSlot.setFromBufferWith(stride = 6*4, valuesCount = 2, GL_FLOAT, shift = 3*4)
-                    lifeSlot.setFromBufferWith(stride = 6*4, valuesCount = 1, GL_FLOAT, shift = 5*4)
+                    positionSlot.setFromBufferWith(stride = 8*4, valuesCount = 3, GL_FLOAT, shift = 0)
+                    uvSlot.setFromBufferWith(stride = 8*4, valuesCount = 2, GL_FLOAT, shift = 3*4)
+                    lifeSlot.setFromBufferWith(stride = 8*4, valuesCount = 1, GL_FLOAT, shift = 5*4)
+                    textureRelSlot.setFromBufferWith(stride = 8*4, valuesCount = 2, GL_FLOAT, shift = 6*4)
                     wcpUniform.set(matrix = EG.context.wcp)
                     mUniform.set(matrix = m)
 

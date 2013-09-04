@@ -40,7 +40,7 @@
 
 - (id)randomItem {
     if([self isEmpty]) return [CNOption none];
-    else return [self objectAtIndex:randomWith([self count] - 1)];
+    else return [self objectAtIndex:randomMax([self count] - 1)];
 }
 
 - (id)findWhere:(BOOL(^)(id))where {

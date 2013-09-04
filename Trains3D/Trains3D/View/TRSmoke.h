@@ -53,17 +53,18 @@ typedef struct TRSmokeBufferData TRSmokeBufferData;
 
 
 @interface TRSmokeParticle : NSObject<EGController>
+@property (nonatomic, readonly) NSInteger texture;
 @property (nonatomic) EGVec3 position;
 @property (nonatomic) EGVec3 speed;
 @property (nonatomic) CGFloat time;
 
-+ (id)smokeParticle;
-- (id)init;
++ (id)smokeParticleWithTexture:(NSInteger)texture;
+- (id)initWithTexture:(NSInteger)texture;
 - (ODClassType*)type;
 - (void)updateWithDelta:(CGFloat)delta;
 - (BOOL)isLive;
 + (NSInteger)lifeTime;
-+ (CGFloat)dragCoefficient;
++ (NSInteger)dragCoefficient;
 + (ODClassType*)type;
 @end
 
@@ -75,8 +76,10 @@ struct TRSmokeBufferData {
     float uvx;
     float uvy;
     float time;
+    float textureX;
+    float textureY;
 };
-static inline TRSmokeBufferData TRSmokeBufferDataMake(float x, float y, float z, float uvx, float uvy, float time) {
+static inline TRSmokeBufferData TRSmokeBufferDataMake(float x, float y, float z, float uvx, float uvy, float time, float textureX, float textureY) {
     TRSmokeBufferData ret;
     ret.x = x;
     ret.y = y;
@@ -84,10 +87,12 @@ static inline TRSmokeBufferData TRSmokeBufferDataMake(float x, float y, float z,
     ret.uvx = uvx;
     ret.uvy = uvy;
     ret.time = time;
+    ret.textureX = textureX;
+    ret.textureY = textureY;
     return ret;
 }
 static inline BOOL TRSmokeBufferDataEq(TRSmokeBufferData s1, TRSmokeBufferData s2) {
-    return eqf4(s1.x, s2.x) && eqf4(s1.y, s2.y) && eqf4(s1.z, s2.z) && eqf4(s1.uvx, s2.uvx) && eqf4(s1.uvy, s2.uvy) && eqf4(s1.time, s2.time);
+    return eqf4(s1.x, s2.x) && eqf4(s1.y, s2.y) && eqf4(s1.z, s2.z) && eqf4(s1.uvx, s2.uvx) && eqf4(s1.uvy, s2.uvy) && eqf4(s1.time, s2.time) && eqf4(s1.textureX, s2.textureX) && eqf4(s1.textureY, s2.textureY);
 }
 static inline NSUInteger TRSmokeBufferDataHash(TRSmokeBufferData self) {
     NSUInteger hash = 0;
@@ -97,6 +102,8 @@ static inline NSUInteger TRSmokeBufferDataHash(TRSmokeBufferData self) {
     hash = hash * 31 + float4Hash(self.uvx);
     hash = hash * 31 + float4Hash(self.uvy);
     hash = hash * 31 + float4Hash(self.time);
+    hash = hash * 31 + float4Hash(self.textureX);
+    hash = hash * 31 + float4Hash(self.textureY);
     return hash;
 }
 static inline NSString* TRSmokeBufferDataDescription(TRSmokeBufferData self) {
@@ -107,6 +114,8 @@ static inline NSString* TRSmokeBufferDataDescription(TRSmokeBufferData self) {
     [description appendFormat:@", uvx=%f", self.uvx];
     [description appendFormat:@", uvy=%f", self.uvy];
     [description appendFormat:@", time=%f", self.time];
+    [description appendFormat:@", textureX=%f", self.textureX];
+    [description appendFormat:@", textureY=%f", self.textureY];
     [description appendString:@">"];
     return description;
 }
@@ -141,6 +150,7 @@ ODPType* trSmokeBufferDataType();
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderAttribute* uvSlot;
 @property (nonatomic, readonly) EGShaderAttribute* lifeSlot;
+@property (nonatomic, readonly) EGShaderAttribute* textureRelSlot;
 @property (nonatomic, readonly) EGMatrix* m;
 @property (nonatomic, readonly) EGShaderUniform* wcpUniform;
 @property (nonatomic, readonly) EGShaderUniform* mUniform;

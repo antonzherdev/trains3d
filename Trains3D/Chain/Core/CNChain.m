@@ -316,7 +316,7 @@
     if(array.count == 0) {
         return [CNOption none];
     }
-    NSUInteger n = randomWith(array.count - 1);
+    NSUInteger n = randomMax(array.count - 1);
     return [array objectAtIndex:n];
 }
 
