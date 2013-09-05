@@ -1,6 +1,8 @@
 #import "objd.h"
 @class EG;
 @class EGContext;
+@class EGMatrixStack;
+@class EGMatrixModel;
 @class EGMutableMatrix;
 #import "EGGL.h"
 @class EGSchedule;
@@ -8,9 +10,6 @@
 @class EGMesh;
 @class EGMeshModel;
 #import "EGTypes.h"
-@class EG;
-@class EGContext;
-@class EGMutableMatrix;
 @class EGColorSource;
 @class EGColorSourceColor;
 @class EGColorSourceTexture;
@@ -21,6 +20,7 @@
 @class TRCity;
 @class TRColor;
 @class TR3D;
+@class EGMatrix;
 
 @class TRCityView;
 

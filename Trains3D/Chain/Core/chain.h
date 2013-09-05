@@ -2,6 +2,7 @@
 #import "CNChain.h"
 #import "CNOption.h"
 #import "CNPair.h"
+#import "CNLazy.h"
 #import "CNTuple.h"
 #import "CNList.h"
 #import "CNSeq.h"

@@ -1,15 +1,15 @@
-#import "ODLazy.h"
+#import "CNLazy.h"
 
-@implementation ODLazy{
+@implementation CNLazy{
     id(^_f)();
     id __value;
     BOOL __calculated;
 }
-static ODClassType* _ODLazy_type;
+static ODClassType* _CNLazy_type;
 @synthesize f = _f;
 
 + (id)lazyWithF:(id(^)())f {
-    return [[ODLazy alloc] initWithF:f];
+    return [[CNLazy alloc] initWithF:f];
 }
 
 - (id)initWithF:(id(^)())f {
@@ -24,7 +24,11 @@ static ODClassType* _ODLazy_type;
 
 + (void)initialize {
     [super initialize];
-    _ODLazy_type = [ODClassType classTypeWithCls:[ODLazy class]];
+    _CNLazy_type = [ODClassType classTypeWithCls:[CNLazy class]];
+}
+
+- (BOOL)isCalculated {
+    return __calculated;
 }
 
 - (id)get {
@@ -38,11 +42,11 @@ static ODClassType* _ODLazy_type;
 }
 
 - (ODClassType*)type {
-    return [ODLazy type];
+    return [CNLazy type];
 }
 
 + (ODClassType*)type {
-    return _ODLazy_type;
+    return _CNLazy_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -52,7 +56,7 @@ static ODClassType* _ODLazy_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    ODLazy* o = ((ODLazy*)(other));
+    CNLazy* o = ((CNLazy*)(other));
     return [self.f isEqual:o.f];
 }
 

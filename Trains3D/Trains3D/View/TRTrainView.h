@@ -1,6 +1,8 @@
 #import "objd.h"
 @class EG;
 @class EGContext;
+@class EGMatrixStack;
+@class EGMatrixModel;
 @class EGMutableMatrix;
 #import "EGGL.h"
 #import "EGTypes.h"
@@ -25,6 +27,7 @@
 @class TRRailPointCorrection;
 @class TR3D;
 #import "TRSmoke.h"
+@class EGMatrix;
 
 @class TRTrainView;
 

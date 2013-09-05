@@ -1,6 +1,8 @@
 #import "objd.h"
 @class EG;
 @class EGContext;
+@class EGMatrixStack;
+@class EGMatrixModel;
 @class EGMutableMatrix;
 @class EGTexture;
 @class EGFileTexture;
@@ -14,6 +16,7 @@
 @class EGMaterial;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
+@class EGMatrix;
 
 @class TRLevelBackgroundView;
 

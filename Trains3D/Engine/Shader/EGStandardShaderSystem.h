@@ -8,11 +8,14 @@
 @class EGStandardMaterial;
 @class EG;
 @class EGContext;
+@class EGMatrixStack;
+@class EGMatrixModel;
 @class EGMutableMatrix;
 #import "EGTypes.h"
 @class EGTexture;
 @class EGFileTexture;
 #import "EGGL.h"
+@class EGMatrix;
 
 @class EGStandardShaderSystem;
 @class EGStandardShaderKey;

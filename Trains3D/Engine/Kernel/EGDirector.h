@@ -7,11 +7,14 @@
 #import "EGGL.h"
 @class EG;
 @class EGContext;
+@class EGMatrixStack;
+@class EGMatrixModel;
 @class EGMutableMatrix;
 @protocol EGProcessor;
 @protocol EGMouseProcessor;
 @protocol EGTouchProcessor;
 @class EGEvent;
+@class EGMatrix;
 
 @class EGDirector;
 

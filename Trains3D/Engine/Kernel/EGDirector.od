@@ -17,7 +17,7 @@ class EGDirector {
         EG.context.director = self
         glClearColor(0.0, 0.0, 0.0, 1)
         egClear
-        EG.context.clearMatrix
+        EG.matrix.clear
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_CULL_FACE)
         scene.drawWith(size)

@@ -2,6 +2,7 @@
 
 #import "CNData.h"
 #import "EG.h"
+#import "EGMatrix.h"
 @implementation EGBuffer{
     GLenum _bufferType;
     GLuint _handle;

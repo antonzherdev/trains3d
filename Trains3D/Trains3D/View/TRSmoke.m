@@ -436,7 +436,7 @@ static ODClassType* _TRSmokeShader_type;
                 [_uvSlot setFromBufferWithStride:((NSUInteger)(8 * 4)) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(3 * 4))];
                 [_lifeSlot setFromBufferWithStride:((NSUInteger)(8 * 4)) valuesCount:1 valuesType:GL_FLOAT shift:((NSUInteger)(5 * 4))];
                 [_textureRelSlot setFromBufferWithStride:((NSUInteger)(8 * 4)) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(6 * 4))];
-                [_wcpUniform setMatrix:[EG.context wcp]];
+                [_wcpUniform setMatrix:[EG.matrix.value wcp]];
                 [_mUniform setMatrix:_m];
                 ((void(^)())(draw))();
             }];

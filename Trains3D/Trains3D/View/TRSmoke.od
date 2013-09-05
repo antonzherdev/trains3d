@@ -172,7 +172,7 @@ class TRSmokeShader {
                     uvSlot.setFromBufferWith(stride = 8*4, valuesCount = 2, GL_FLOAT, shift = 3*4)
                     lifeSlot.setFromBufferWith(stride = 8*4, valuesCount = 1, GL_FLOAT, shift = 5*4)
                     textureRelSlot.setFromBufferWith(stride = 8*4, valuesCount = 2, GL_FLOAT, shift = 6*4)
-                    wcpUniform.set(matrix = EG.context.wcp)
+                    wcpUniform.set(matrix = EG.matrix.value.wcp)
                     mUniform.set(matrix = m)
 
                     draw()

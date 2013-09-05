@@ -37,16 +37,22 @@ class TRRailView {
         (TR3D.railsTurn, EGStandardMaterial( EGColor(0.45, 0.47, 0.55, 1), EGColor(0.5, 0.5, 0.5, 1), 1))
     ])
     def draw(rail : TRRail) {
-        EG.keepMW {
-            EG.worldMatrix.translate(rail.tile.x, rail.tile.y, 0.001)
-
+        EG.matrix(
+            _.modify(w = w -> w.translate(rail.tile.x, rail.tile.y, 0.001))
+             .modify(m = m ->
+                if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
+                    if(rail.form == TRRailForm.leftRight) m.rotate(90, 0, 1, 0)
+                    else m
+                } else {
+                    if(rail.form == TRRailForm.topRight) m.rotate(270, 0, 1, 0)
+                    else if(rail.form == TRRailForm.bottomRight) m.rotate(180, 0, 1, 0)
+                    else if(rail.form == TRRailForm.leftBottom) m.rotate(90, 0, 1, 0)
+                    else m
+                })
+        ) {
             if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
-                if(rail.form == TRRailForm.leftRight) EG.modelMatrix.rotate(90, 0, 1, 0)
                 railModel.draw
             } else {
-                if(rail.form == TRRailForm.topRight) EG.modelMatrix.rotate(270, 0, 1, 0)
-                else if(rail.form == TRRailForm.bottomRight) EG.modelMatrix.rotate(180, 0, 1, 0)
-                else if(rail.form == TRRailForm.leftBottom) EG.modelMatrix.rotate(90, 0, 1, 0)
                 railTurnModel.draw
             }
         }
@@ -63,27 +69,28 @@ class TRSwitchView {
     ])
 
     def draw(theSwitch : TRSwitch) {
-        EG.keepMW {
-            val connector = theSwitch.connector
-
-            EG.worldMatrix.translate(theSwitch.tile.x, theSwitch.tile.y, 0.03)
-            EG.modelMatrix.rotate(connector.angle, 0, 1, 0)
-
-            val rail = theSwitch.activeRail
-            val form = rail.form
-
-            EG.modelMatrix.translate(-0.5, 0, 0)
+        val connector = theSwitch.connector
+        val rail = theSwitch.activeRail
+        val form = rail.form
+        EG.matrix(
+            _.modify(w = w -> w.translate(theSwitch.tile.x, theSwitch.tile.y, 0.03))
+             .modify(m = m -> {
+                val m2 = m.rotate(connector.angle, 0, 1, 0).translate(-0.5, 0, 0)
+                if(form.start.x + form.end.x != 0) {
+                    val otherConnector = if(form.start == connector) form.end else form.start
+                    val x = connector.x
+                    val y = connector.y
+                    val ox = otherConnector.x
+                    val oy = otherConnector.y
+                    if(x == -1 && oy == -1 || y == 1 && ox == -1 || y == -1 && ox == 1 || x == 1 && oy == 1) {
+                        m2.scale(1, 1, -1)
+                    } else m2
+                } else m2
+             })
+        ) {
             if(form.start.x + form.end.x == 0) {
                 switchStraightModel.draw
             } else {
-                val otherConnector = if(form.start == connector) form.end else form.start
-                val x = connector.x
-                val y = connector.y
-                val ox = otherConnector.x
-                val oy = otherConnector.y
-                if(x == -1 && oy == -1 || y == 1 && ox == -1 || y == -1 && ox == 1 || x == 1 && oy == 1) {
-                    EG.modelMatrix.scale(1, 1, -1)
-                }
                 switchTurnModel.draw
             }
         }
@@ -94,11 +101,10 @@ class TRLightView {
     val greenMaterial = EGStandardMaterial( EGColor(0.07568, 0.61424, 0.07568, 1), EGColor(0.633, 0.727811, 0.633, 1), 1)
     val redMaterial = EGStandardMaterial(EGColor(0.61424, 0.04136, 0.04136, 1), EGColor(0.727811, 0.626959, 0.626959, 1), 1)
     def draw(light : TRLight) {
-        EG.keepMW {
-            EG.worldMatrix.translate(light.tile.x, light.tile.y, 0)
-
-            EG.modelMatrix.rotate(light.connector.angle, 0, 1, 0)
-            EG.modelMatrix.translate(-0.45, 0, -0.2)
+        EG.matrix(
+            _.modify(w = w -> w.translate(light.tile.x, light.tile.y, 0))
+             .modify(m = m -> m.rotate(light.connector.angle, 0, 1, 0).translate(-0.45, 0, -0.2))
+        ) {
             TR3D.light.drawWith(if(light.isGreen) greenMaterial else redMaterial)
         }
     }
@@ -107,8 +113,9 @@ class TRLightView {
 class TRDamageView {
     val model = EGMeshModel([(TR3D.damage, EGColor(1, 0, 0, 1))])
     def draw(point : TRRailPoint) {
-        EG.worldMatrix.keep {
-            EG.worldMatrix.translate(point.point.x, point.point.y, 0.0)
+        EG.matrix(
+            _.modify(w = w -> w.translate(point.point.x, point.point.y, 0.0))
+        ) {
             model.draw
         }
     }

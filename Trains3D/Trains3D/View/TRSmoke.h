@@ -4,6 +4,8 @@
 @class CNMutablePArray;
 @class EG;
 @class EGContext;
+@class EGMatrixStack;
+@class EGMatrixModel;
 @class EGMutableMatrix;
 #import "EGGL.h"
 #import "EGTypes.h"

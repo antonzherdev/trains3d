@@ -3,6 +3,7 @@
 #import "EG.h"
 #import "EGTexture.h"
 #import "EGMaterial.h"
+#import "EGMatrix.h"
 @implementation EGSimpleShaderSystem
 static EGSimpleShaderSystem* _EGSimpleShaderSystem_instance;
 static EGSimpleColorShader* _EGSimpleShaderSystem_colorShader;
@@ -216,7 +217,7 @@ static ODClassType* _EGSimpleColorShader_type;
 
 - (void)loadContext:(EGContext*)context material:(EGSimpleMaterial*)material {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([EGSimpleColorShader STRIDE])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleColorShader POSITION_SHIFT]))];
-    [_mvpUniform setMatrix:[context mwcp]];
+    [_mvpUniform setMatrix:[context.matrixStack.value mwcp]];
     [_colorUniform setColor:((EGColorSourceColor*)(material.color)).color];
 }
 
@@ -307,7 +308,7 @@ static ODClassType* _EGSimpleTextureShader_type;
 
 - (void)loadContext:(EGContext*)context material:(EGSimpleMaterial*)material {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([EGSimpleTextureShader STRIDE])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleTextureShader POSITION_SHIFT]))];
-    [_mvpUniform setMatrix:[context mwcp]];
+    [_mvpUniform setMatrix:[context.matrixStack.value mwcp]];
     [_uvSlot setFromBufferWithStride:((NSUInteger)([EGSimpleTextureShader STRIDE])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleTextureShader UV_SHIFT]))];
     [((EGColorSourceTexture*)(material.color)).texture bind];
 }

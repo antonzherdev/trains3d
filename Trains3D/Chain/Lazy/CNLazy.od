@@ -1,8 +1,9 @@
 package core
 
-class ODLazy<T>(f : () -> T) {
+class CNLazy<T>(f : () -> T) {
     private var _value : T
     private var _calculated = false
+    def isCalculated : bool =  _calculated
     def get : T =
         if(_calculated) _value
         else {

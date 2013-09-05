@@ -8,6 +8,7 @@
 #import "TRCityView.h"
 #import "TRRailroadView.h"
 #import "TRTrainView.h"
+#import "EGMatrix.h"
 @implementation TRLevelView{
     TRLevel* _level;
     TRLevelBackgroundView* _backgroundView;

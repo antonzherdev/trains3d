@@ -10,6 +10,7 @@
 #import "EGTexture.h"
 #import "EGBuffer.h"
 #import "EGShader.h"
+#import "EGMatrix.h"
 @implementation EGMapSso{
     EGVec2I _size;
     EGRectI _limits;

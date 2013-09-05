@@ -34,13 +34,15 @@ class TRTrainView {
             val h = car.head.point
             val t = car.tail.point
 
-            EG.keepMW {
-                val mid = h.mid(point = t)
-                EG.worldMatrix.translate(mid.x, mid.y, 0.05)
-
-                val angle = (if(train.isBack) 90 else -90) + (180.0 / M_PI * t.sub(h).angle)
-                EG.modelMatrix.rotate(angle, 0, 1, 0)
-
+            EG.matrix(
+                _.modify(w = w -> {
+                    val mid = h.mid(point = t)
+                    w.translate(mid.x, mid.y, 0.05)
+                }).modify(m = m -> {
+                    val angle = (if(train.isBack) 90 else -90) + (180.0 / M_PI * t.sub(h).angle)
+                    m.rotate(angle, 0, 1, 0)
+                })
+            ){
                 val material = trainMaterialFor(train.color.color)
                 if(car.carType == TRCarType.car) {
                     TR3D.car.drawWith(material)

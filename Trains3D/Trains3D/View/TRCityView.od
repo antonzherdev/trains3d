@@ -19,9 +19,10 @@ class TRCityView {
         ], [0, 1, 2,
         2, 3, 0])
     def draw(city : TRCity) {
-        EG.keepMW {
-            EG.worldMatrix.translate(city.tile.x, city.tile.y, 0)
-            EG.modelMatrix.rotate(city.angle.angle, 0, -1, 0)
+        EG.matrix(
+            _.modify(w = w -> w.translate(city.tile.x, city.tile.y, 0))
+             .modify(m = m -> m.rotate(city.angle.angle, 0, -1, 0))
+        ) {
             TR3D.city.drawWith(material = city.color.color)
 
             city.expectedTrainAnimation.for(a -> {

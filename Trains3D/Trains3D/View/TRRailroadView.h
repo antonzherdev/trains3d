@@ -4,6 +4,8 @@
 @class EGMeshModel;
 @class EG;
 @class EGContext;
+@class EGMatrixStack;
+@class EGMatrixModel;
 @class EGMutableMatrix;
 @class EGTexture;
 @class EGFileTexture;
@@ -13,9 +15,6 @@
 @class EGMaterial;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
-@class EG;
-@class EGContext;
-@class EGMutableMatrix;
 #import "EGTypes.h"
 @class TRRailroadConnectorContent;
 @class TREmptyConnector;
@@ -31,6 +30,7 @@
 @class TRRailPoint;
 @class TRRailPointCorrection;
 @class TR3D;
+@class EGMatrix;
 
 @class TRRailroadView;
 @class TRRailView;

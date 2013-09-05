@@ -3,11 +3,11 @@
 #import "EG.h"
 #import "EGSchedule.h"
 #import "EGMesh.h"
-#import "EG.h"
 #import "EGMaterial.h"
 #import "TRCity.h"
 #import "TRTypes.h"
 #import "TR3D.h"
+#import "EGMatrix.h"
 @implementation TRCityView{
     EGMesh* _expectedTrainModel;
 }
@@ -31,9 +31,13 @@ static ODClassType* _TRCityView_type;
 }
 
 - (void)drawCity:(TRCity*)city {
-    [EG keepMWF:^void() {
-        [[EG worldMatrix] translateX:((CGFloat)(city.tile.x)) y:((CGFloat)(city.tile.y)) z:0.0];
-        [[EG modelMatrix] rotateAngle:((CGFloat)(city.angle.angle)) x:0.0 y:-1.0 z:0.0];
+    [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
+        return [[_ modifyW:^EGMatrix*(EGMatrix* w) {
+            return [w translateX:((float)(city.tile.x)) y:((float)(city.tile.y)) z:0.0];
+        }] modifyM:^EGMatrix*(EGMatrix* m) {
+            return [m rotateAngle:((float)(city.angle.angle)) x:0.0 y:-1.0 z:0.0];
+        }];
+    } f:^void() {
         [TR3D.city drawWithMaterial:[EGMaterial applyColor:city.color.color]];
         [city.expectedTrainAnimation forEach:^void(EGAnimation* a) {
             CGFloat x = -[a time] / 2;

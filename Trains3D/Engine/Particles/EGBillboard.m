@@ -1,6 +1,7 @@
 #import "EGBillboard.h"
 
 #import "EG.h"
+#import "EGMatrix.h"
 @implementation EGBillboard
 static ODClassType* _EGBillboard_type;
 

@@ -1,26 +1,18 @@
+import CNLazy
+
 import EGDirector
 import EGTexture
 import EGMatrix
 import EGVec
 import EGTypes
 
+export EGMatrix
+
 class EG {
     static def director : EGDirector = context.director
     static val context : EGContext = EGContext()
+    static val matrix : EGMatrixStack = context.matrixStack
     static def textureFor(file : string) : EGFileTexture = context.textureFor(file)
-
-    static def projectionMatrix : EGMutableMatrix = context.projectionMatrix
-    static def cameraMatrix : EGMutableMatrix = context.cameraMatrix
-    static def worldMatrix : EGMutableMatrix = context.worldMatrix
-    static def modelMatrix : EGMutableMatrix = context.modelMatrix
-
-    static def keepMW(f : () -> void) {
-        context.modelMatrix.push
-        context.worldMatrix.push
-        f()
-        context.modelMatrix.pop
-        context.worldMatrix.pop
-    }
 }
 
 class EGContext {
@@ -31,25 +23,91 @@ class EGContext {
     var director : EGDirector
     var eyeDirection = EGVec3(0, 0, 0)
     var environment = EGEnvironment.default
-    val modelMatrix = EGMutableMatrix()
-    val worldMatrix = EGMutableMatrix()
-    val cameraMatrix = EGMutableMatrix()
-    val projectionMatrix = EGMutableMatrix()
-    def m : EGMatrix = modelMatrix.value
-    def w : EGMatrix = worldMatrix.value
-    def c : EGMatrix = cameraMatrix.value
-    def p : EGMatrix = projectionMatrix.value
-    def mw : EGMatrix = worldMatrix.value.multiply(modelMatrix.value)
-    def mwc : EGMatrix = cameraMatrix.value.multiply(worldMatrix.value.multiply(modelMatrix.value))
-    def mwcp : EGMatrix = projectionMatrix.value.multiply(cameraMatrix.value).multiply(worldMatrix.value).multiply(modelMatrix.value)
-    def cp : EGMatrix = projectionMatrix.value.multiply(cameraMatrix.value)
-    def wcp : EGMatrix = projectionMatrix.value.multiply(cameraMatrix.value).multiply(worldMatrix.value)
+    val matrixStack = EGMatrixStack()
+}
 
-    def clearMatrix {
-        modelMatrix.clear
-        worldMatrix.clear
-        cameraMatrix.clear
-        projectionMatrix.clear
+class EGMatrixStack {
+    private var stack = CNList<EGMatrixModel>()
+    var value = EGMatrixModel.identity
+
+    def clear {
+        value = EGMatrixModel.identity
+        stack = CNList<EGMatrixModel>()
+    }
+
+    def push {
+        stack = CNList(value, stack)
+    }
+
+    def pop {
+        value = stack.head.get
+        stack = stack.tail
+    }
+
+    def apply(modify : EGMatrixModel -> EGMatrixModel, f : () -> void) {
+        push
+        value = modify(value)
+        f()
+        pop
+    }
+}
+
+class EGMatrixModel(m : EGMatrix, w : EGMatrix, c : EGMatrix, p : EGMatrix,
+    _mw : CNLazy<EGMatrix>, _mwc : CNLazy<EGMatrix>, _mwcp : CNLazy<EGMatrix>,
+    _cp : CNLazy<EGMatrix>, _wcp : CNLazy<EGMatrix>, _wc : CNLazy<EGMatrix>)
+{
+    static def apply(m : EGMatrix, w : EGMatrix, c : EGMatrix, p : EGMatrix) : EGMatrixModel = {
+        val _mw = CNLazy(w.multiply(m))
+        val _mwc = CNLazy(c.multiply(_mw.get))
+        val _cp = CNLazy(p.multiply(c))
+        val _mwcp = CNLazy(_cp.get.multiply(_mw.get))
+        val _wc = CNLazy(c.multiply(w))
+        val _wcp = CNLazy(p.multiply(_wc.get))
+        EGMatrixModel(m, w, c, p, _mw, _mwc, _mwcp, _cp, _wcp, _wc)
+    }
+    static val identity = EGMatrixModel(EGMatrix.identity, EGMatrix.identity, EGMatrix.identity, EGMatrix.identity)
+    def mw = _mw.get
+    def mwc = _mwc.get
+    def mwcp = _mwcp.get
+    def cp = _cp.get
+    def wcp = _wcp.get
+    def wc = _wc.get
+
+    def modify(m : EGMatrix -> EGMatrix) : EGMatrixModel = {
+        val mm = m(self.m)
+        val _mw = CNLazy(w.multiply(mm))
+        val _mwc = CNLazy(c.multiply(_mw.get))
+        val _mwcp = CNLazy(_cp.get.multiply(_mw.get))
+        EGMatrixModel(mm, w, c, p, _mw, _mwc, _mwcp, _cp, _wcp, _wc)
+    }
+
+
+    def modify(w : EGMatrix -> EGMatrix) : EGMatrixModel = {
+        val ww = w(self.w)
+        val _mw = CNLazy(ww.multiply(m))
+        val _mwc = CNLazy(c.multiply(_mw.get))
+        val _mwcp = CNLazy(_cp.get.multiply(_mw.get))
+        val _wc = CNLazy(c.multiply(ww))
+        val _wcp = CNLazy(p.multiply(_wc.get))
+        EGMatrixModel(m, ww, c, p, _mw, _mwc, _mwcp, _cp, _wcp, _wc)
+    }
+
+    def modify(c : EGMatrix -> EGMatrix) : EGMatrixModel = {
+        val cc = c(self.c)
+        val _mwc = CNLazy(cc.multiply(_mw.get))
+        val _cp = CNLazy(p.multiply(cc))
+        val _mwcp = CNLazy(_cp.get.multiply(_mw.get))
+        val _wc = CNLazy(cc.multiply(w))
+        val _wcp = CNLazy(p.multiply(_wc.get))
+        EGMatrixModel(m, w, cc, p, _mw, _mwc, _mwcp, _cp, _wcp, _wc)
+    }
+
+    def modify(p : EGMatrix -> EGMatrix) : EGMatrixModel = {
+        val pp = p(self.p)
+        val _cp = CNLazy(pp.multiply(c))
+        val _mwcp = CNLazy(_cp.get.multiply(_mw.get))
+        val _wcp = CNLazy(pp.multiply(_wc.get))
+        EGMatrixModel(m, w, c, pp, _mw, _mwc, _mwcp, _cp, _wcp, _wc)
     }
 }
 

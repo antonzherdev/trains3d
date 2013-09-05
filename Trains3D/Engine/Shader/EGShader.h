@@ -3,6 +3,8 @@
 #import "CNTypes.h"
 @class EG;
 @class EGContext;
+@class EGMatrixStack;
+@class EGMatrixModel;
 @class EGMutableMatrix;
 #import "EGGL.h"
 @class EGBuffer;

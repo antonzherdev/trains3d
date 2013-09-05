@@ -2,6 +2,8 @@
 #import "EGTypes.h"
 @class EG;
 @class EGContext;
+@class EGMatrixStack;
+@class EGMatrixModel;
 @class EGMutableMatrix;
 #import "EGGL.h"
 @class EGShaderProgram;
@@ -18,6 +20,7 @@
 @class EGStandardShader;
 @class EGTexture;
 @class EGFileTexture;
+@class EGMatrix;
 
 @class EGColorSource;
 @class EGColorSourceColor;

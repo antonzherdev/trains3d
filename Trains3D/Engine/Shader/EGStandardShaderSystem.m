@@ -3,6 +3,7 @@
 #import "EGMaterial.h"
 #import "EG.h"
 #import "EGTexture.h"
+#import "EGMatrix.h"
 @implementation EGStandardShaderSystem
 static EGStandardShaderSystem* _EGStandardShaderSystem_instance;
 static NSMutableDictionary* _EGStandardShaderSystem_shaders;
@@ -287,7 +288,7 @@ static ODClassType* _EGStandardShader_type;
 
 - (void)loadContext:(EGContext*)context material:(EGStandardMaterial*)material {
     [_positionSlot setFromBufferWithStride:((NSUInteger)(_EGStandardShader_STRIDE)) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_POSITION_SHIFT))];
-    [_mwcpUniform setMatrix:[context mwcp]];
+    [_mwcpUniform setMatrix:[context.matrixStack.value mwcp]];
     if(_key.texture) {
         [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:((NSUInteger)(_EGStandardShader_STRIDE)) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_UV_SHIFT))];
         [((EGColorSourceTexture*)(material.diffuse)).texture bind];
@@ -299,7 +300,7 @@ static ODClassType* _EGStandardShader_type;
     EGEnvironment* env = context.environment;
     [_ambientColor setColor:env.ambientColor];
     if(_key.directLightCount > 0) {
-        [((EGShaderUniform*)([_mUniform get])) setMatrix:[context m]];
+        [((EGShaderUniform*)([_mUniform get])) setMatrix:context.matrixStack.value.m];
         [((EGShaderUniform*)([_eyeDirectionUniform get])) setVec3:context.eyeDirection];
         [((EGShaderAttribute*)([_normalSlot get])) setFromBufferWithStride:((NSUInteger)(_EGStandardShader_STRIDE)) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_NORMAL_SHIFT))];
         [[[[env.lights chain] filterCast:EGDirectLight.type] zip3A:_directLightDirections b:_directLightColors by:^EGDirectLight*(EGDirectLight* light, EGShaderUniform* dirSlot, EGShaderUniform* colorSlot) {

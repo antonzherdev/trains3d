@@ -4,10 +4,10 @@
 #import "EG.h"
 #import "EGTexture.h"
 #import "EGMaterial.h"
-#import "EG.h"
 #import "TRRailroad.h"
 #import "TRRailPoint.h"
 #import "TR3D.h"
+#import "EGMatrix.h"
 @implementation TRRailroadView{
     TRRailView* _railView;
     TRSwitchView* _switchView;
@@ -114,23 +114,29 @@ static ODClassType* _TRRailView_type;
 }
 
 - (void)drawRail:(TRRail*)rail {
-    [EG keepMWF:^void() {
-        [[EG worldMatrix] translateX:((CGFloat)(rail.tile.x)) y:((CGFloat)(rail.tile.y)) z:0.001];
-        if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
-            if(rail.form == TRRailForm.leftRight) [[EG modelMatrix] rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
-            [_railModel draw];
-        } else {
-            if(rail.form == TRRailForm.topRight) {
-                [[EG modelMatrix] rotateAngle:270.0 x:0.0 y:1.0 z:0.0];
+    [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
+        return [[_ modifyW:^EGMatrix*(EGMatrix* w) {
+            return [w translateX:((float)(rail.tile.x)) y:((float)(rail.tile.y)) z:((float)(0.001))];
+        }] modifyM:^EGMatrix*(EGMatrix* m) {
+            if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
+                if(rail.form == TRRailForm.leftRight) return [m rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
+                else return m;
             } else {
-                if(rail.form == TRRailForm.bottomRight) {
-                    [[EG modelMatrix] rotateAngle:180.0 x:0.0 y:1.0 z:0.0];
+                if(rail.form == TRRailForm.topRight) {
+                    return [m rotateAngle:270.0 x:0.0 y:1.0 z:0.0];
                 } else {
-                    if(rail.form == TRRailForm.leftBottom) [[EG modelMatrix] rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
+                    if(rail.form == TRRailForm.bottomRight) {
+                        return [m rotateAngle:180.0 x:0.0 y:1.0 z:0.0];
+                    } else {
+                        if(rail.form == TRRailForm.leftBottom) return [m rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
+                        else return m;
+                    }
                 }
             }
-            [_railTurnModel draw];
-        }
+        }];
+    } f:^void() {
+        if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) [_railModel draw];
+        else [_railTurnModel draw];
     }];
 }
 
@@ -196,24 +202,29 @@ static ODClassType* _TRSwitchView_type;
 }
 
 - (void)drawTheSwitch:(TRSwitch*)theSwitch {
-    [EG keepMWF:^void() {
-        TRRailConnector* connector = theSwitch.connector;
-        [[EG worldMatrix] translateX:((CGFloat)(theSwitch.tile.x)) y:((CGFloat)(theSwitch.tile.y)) z:0.03];
-        [[EG modelMatrix] rotateAngle:((CGFloat)(connector.angle)) x:0.0 y:1.0 z:0.0];
-        TRRail* rail = [theSwitch activeRail];
-        TRRailForm* form = rail.form;
-        [[EG modelMatrix] translateX:-0.5 y:0.0 z:0.0];
-        if(form.start.x + form.end.x == 0) {
-            [_switchStraightModel draw];
-        } else {
-            TRRailConnector* otherConnector = ((form.start == connector) ? form.end : form.start);
-            NSInteger x = connector.x;
-            NSInteger y = connector.y;
-            NSInteger ox = otherConnector.x;
-            NSInteger oy = otherConnector.y;
-            if((x == -1 && oy == -1) || (y == 1 && ox == -1) || (y == -1 && ox == 1) || (x == 1 && oy == 1)) [[EG modelMatrix] scaleX:1.0 y:1.0 z:-1.0];
-            [_switchTurnModel draw];
-        }
+    TRRailConnector* connector = theSwitch.connector;
+    TRRail* rail = [theSwitch activeRail];
+    TRRailForm* form = rail.form;
+    [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
+        return [[_ modifyW:^EGMatrix*(EGMatrix* w) {
+            return [w translateX:((float)(theSwitch.tile.x)) y:((float)(theSwitch.tile.y)) z:((float)(0.03))];
+        }] modifyM:^EGMatrix*(EGMatrix* m) {
+            EGMatrix* m2 = [[m rotateAngle:((float)(connector.angle)) x:0.0 y:1.0 z:0.0] translateX:((float)(-0.5)) y:0.0 z:0.0];
+            if(form.start.x + form.end.x != 0) {
+                TRRailConnector* otherConnector = ((form.start == connector) ? form.end : form.start);
+                NSInteger x = connector.x;
+                NSInteger y = connector.y;
+                NSInteger ox = otherConnector.x;
+                NSInteger oy = otherConnector.y;
+                if((x == -1 && oy == -1) || (y == 1 && ox == -1) || (y == -1 && ox == 1) || (x == 1 && oy == 1)) return [m2 scaleX:1.0 y:1.0 z:-1.0];
+                else return m2;
+            } else {
+                return m2;
+            }
+        }];
+    } f:^void() {
+        if(form.start.x + form.end.x == 0) [_switchStraightModel draw];
+        else [_switchTurnModel draw];
     }];
 }
 
@@ -276,10 +287,13 @@ static ODClassType* _TRLightView_type;
 }
 
 - (void)drawLight:(TRLight*)light {
-    [EG keepMWF:^void() {
-        [[EG worldMatrix] translateX:((CGFloat)(light.tile.x)) y:((CGFloat)(light.tile.y)) z:0.0];
-        [[EG modelMatrix] rotateAngle:((CGFloat)(light.connector.angle)) x:0.0 y:1.0 z:0.0];
-        [[EG modelMatrix] translateX:-0.45 y:0.0 z:-0.2];
+    [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
+        return [[_ modifyW:^EGMatrix*(EGMatrix* w) {
+            return [w translateX:((float)(light.tile.x)) y:((float)(light.tile.y)) z:0.0];
+        }] modifyM:^EGMatrix*(EGMatrix* m) {
+            return [[m rotateAngle:((float)(light.connector.angle)) x:0.0 y:1.0 z:0.0] translateX:((float)(-0.45)) y:0.0 z:((float)(-0.2))];
+        }];
+    } f:^void() {
         [TR3D.light drawWithMaterial:((light.isGreen) ? _greenMaterial : _redMaterial)];
     }];
 }
@@ -338,8 +352,11 @@ static ODClassType* _TRDamageView_type;
 }
 
 - (void)drawPoint:(TRRailPoint*)point {
-    [[EG worldMatrix] keepF:^void() {
-        [[EG worldMatrix] translateX:point.point.x y:point.point.y z:0.0];
+    [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
+        return [_ modifyW:^EGMatrix*(EGMatrix* w) {
+            return [w translateX:((float)(point.point.x)) y:((float)(point.point.y)) z:((float)(0.0))];
+        }];
+    } f:^void() {
         [_model draw];
     }];
 }

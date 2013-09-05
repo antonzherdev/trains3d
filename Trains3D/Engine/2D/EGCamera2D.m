@@ -1,8 +1,10 @@
 #import "EGCamera2D.h"
 
 #import "EG.h"
+#import "EGMatrix.h"
 @implementation EGCamera2D{
     EGVec2 _size;
+    EGMatrixModel* _matrixModel;
     EGVec3 _eyeDirection;
 }
 static ODClassType* _EGCamera2D_type;
@@ -17,6 +19,7 @@ static ODClassType* _EGCamera2D_type;
     self = [super init];
     if(self) {
         _size = size;
+        _matrixModel = [EGMatrixModel applyM:[EGMatrix identity] w:[EGMatrix identity] c:[EGMatrix identity] p:[EGMatrix orthoLeft:0.0 right:((float)(_size.x)) bottom:0.0 top:((float)(_size.y)) zNear:-1.0 zFar:1.0]];
         _eyeDirection = EGVec3Make(0.0, 0.0, 1.0);
     }
     
@@ -42,8 +45,7 @@ static ODClassType* _EGCamera2D_type;
 
 - (void)focusForViewSize:(EGVec2)viewSize {
     egViewport(egRectIApply([self viewportRectForViewSize:viewSize]));
-    [EG.context clearMatrix];
-    [EG.context.projectionMatrix orthoLeft:0.0 right:_size.x bottom:0.0 top:_size.y zNear:0.0 zFar:1.0];
+    EG.matrix.value = _matrixModel;
 }
 
 - (EGVec2)translateWithViewSize:(EGVec2)viewSize viewPoint:(EGVec2)viewPoint {

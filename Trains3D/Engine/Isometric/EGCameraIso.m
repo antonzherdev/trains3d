@@ -2,9 +2,11 @@
 
 #import "EG.h"
 #import "EGMapIso.h"
+#import "EGMatrix.h"
 @implementation EGCameraIso{
     EGVec2I _tilesOnScreen;
     EGVec2 _center;
+    EGMatrixModel* _matrixModel;
     EGVec3 _eyeDirection;
 }
 static CGFloat _EGCameraIso_ISO;
@@ -22,6 +24,12 @@ static ODClassType* _EGCameraIso_type;
     if(self) {
         _tilesOnScreen = tilesOnScreen;
         _center = center;
+        _matrixModel = ^EGMatrixModel*() {
+            CGFloat ww = ((CGFloat)(_tilesOnScreen.x + _tilesOnScreen.y));
+            CGFloat isoWW2 = ww * _EGCameraIso_ISO / 2;
+            CGFloat isoWW4 = isoWW2 / 2;
+            return [EGMatrixModel applyM:[[EGMatrix identity] rotateAngle:90.0 x:1.0 y:0.0 z:0.0] w:[[EGMatrix identity] rotateAngle:-90.0 x:1.0 y:0.0 z:0.0] c:[[[[EGMatrix identity] translateX:((float)(-isoWW2 + _EGCameraIso_ISO)) y:((float)(-_EGCameraIso_ISO * (_tilesOnScreen.y - _tilesOnScreen.x) / 4)) z:0.0] rotateAngle:30.0 x:1.0 y:0.0 z:0.0] rotateAngle:((float)(-45.0)) x:0.0 y:1.0 z:0.0] p:[EGMatrix orthoLeft:((float)(-isoWW2)) right:((float)(isoWW2)) bottom:((float)(-isoWW4)) top:((float)(isoWW4)) zNear:((float)(-1000.0)) zFar:((float)(1000.0))]];
+        }();
         _eyeDirection = EGVec3Make(1.0, -1.0, ((float)(0.5)));
     }
     
@@ -45,23 +53,7 @@ static ODClassType* _EGCameraIso_type;
 - (void)focusForViewSize:(EGVec2)viewSize {
     EGRect vps = [self calculateViewportSizeWithViewSize:viewSize];
     glViewport(vps.x, vps.y, vps.width, vps.height);
-    EGMutableMatrix* mm = [EG modelMatrix];
-    [mm setIdentity];
-    [mm rotateAngle:90.0 x:1.0 y:0.0 z:0.0];
-    EGMutableMatrix* wm = [EG worldMatrix];
-    [wm setIdentity];
-    [wm rotateAngle:-90.0 x:1.0 y:0.0 z:0.0];
-    EGMutableMatrix* cm = [EG cameraMatrix];
-    [cm setIdentity];
-    CGFloat ww = ((CGFloat)(_tilesOnScreen.x + _tilesOnScreen.y));
-    CGFloat isoWW2 = ww * _EGCameraIso_ISO / 2;
-    CGFloat isoWW4 = isoWW2 / 2;
-    [cm translateX:-isoWW2 + _EGCameraIso_ISO y:-_EGCameraIso_ISO * (_tilesOnScreen.y - _tilesOnScreen.x) / 4 z:0.0];
-    [cm rotateAngle:30.0 x:1.0 y:0.0 z:0.0];
-    [cm rotateAngle:-45.0 x:0.0 y:1.0 z:0.0];
-    EGMutableMatrix* pm = [EG projectionMatrix];
-    [pm setIdentity];
-    [pm orthoLeft:-isoWW2 right:isoWW2 bottom:-isoWW4 top:isoWW4 zNear:-1000.0 zFar:1000.0];
+    EG.matrix.value = _matrixModel;
     glCullFace(GL_FRONT);
 }
 

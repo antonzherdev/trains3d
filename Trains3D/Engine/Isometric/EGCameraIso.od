@@ -2,6 +2,7 @@ import EG
 import EGGL
 import EGTypes
 import EGMapIso
+import EGMatrix
 import EGVec
 
 class EGCameraIso(tilesOnScreen : EGVec2I, center : EGVec2) extends EGCamera {
@@ -16,34 +17,26 @@ class EGCameraIso(tilesOnScreen : EGVec2I, center : EGVec2) extends EGCamera {
             (viewSize.y - viewportHeight)/2, viewportHeight)
     }
 
+    private val matrixModel : EGMatrixModel = {
+        val ww : float = tilesOnScreen.x + tilesOnScreen.y
+        val isoWW2 = ww*ISO/2
+        val isoWW4 = isoWW2/2
+
+        EGMatrixModel(
+            m = EGMatrix.identity.rotate(90, 1, 0, 0),
+            w = EGMatrix.identity.rotate(-90, 1, 0, 0),
+            c = EGMatrix.identity
+                    .translate(-isoWW2 + ISO, -ISO*(tilesOnScreen.y - tilesOnScreen.x)/4, 0)
+                    .rotate(30, 1, 0, 0)
+                    .rotate(-45.0, 0, 1, 0),
+            p = EGMatrix.ortho(-isoWW2, isoWW2, -isoWW4, isoWW4, -1000.0, 1000.0)
+        )
+    }
 
     def focusFor(viewSize : EGVec2) {
         val vps = calculateViewportSizeWith(viewSize)
         glViewport(vps.x, vps.y, vps.width, vps.height)
-
-        val mm = EG.modelMatrix
-        mm.setIdentity
-        mm.rotate(90, 1, 0, 0)
-
-        val wm = EG.worldMatrix
-        wm.setIdentity
-        wm.rotate(-90, 1, 0, 0)
-
-        val cm = EG.cameraMatrix
-        cm.setIdentity
-
-        val ww : float = tilesOnScreen.x + tilesOnScreen.y
-        val isoWW2 = ww*ISO/2
-        val isoWW4 = isoWW2/2
-        cm.translate(-isoWW2 + ISO, -ISO*(tilesOnScreen.y - tilesOnScreen.x)/4, 0)
-
-        cm.rotate(30, 1, 0, 0)
-        cm.rotate(-45.0, 0, 1, 0)
-
-        val pm = EG.projectionMatrix
-        pm.setIdentity
-        pm.ortho(-isoWW2, isoWW2, -isoWW4, isoWW4, -1000.0, 1000.0)
-
+        EG.matrix.value = matrixModel
         glCullFace(GL_FRONT)
     }
 

@@ -5,6 +5,7 @@
 #import "EGStat.h"
 #import "EG.h"
 #import "EGProcessor.h"
+#import "EGMatrix.h"
 @implementation EGDirector{
     EGScene* _scene;
     BOOL __isStarted;
@@ -41,7 +42,7 @@ static ODClassType* _EGDirector_type;
     EG.context.director = self;
     glClearColor(0.0, 0.0, 0.0, 1.0);
     egClear();
-    [EG.context clearMatrix];
+    [EG.matrix clear];
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     [_scene drawWithViewSize:size];

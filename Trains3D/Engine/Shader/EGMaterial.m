@@ -5,6 +5,7 @@
 #import "EGSimpleShaderSystem.h"
 #import "EGStandardShaderSystem.h"
 #import "EGTexture.h"
+#import "EGMatrix.h"
 @implementation EGColorSource
 static ODClassType* _EGColorSource_type;
 
