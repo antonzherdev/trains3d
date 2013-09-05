@@ -10,6 +10,7 @@ import EGMatrix
 import EGSurface
 import EGMesh
 import EGVec
+import EGBillboard
 
 import TRTrain
 import TRRailPoint
@@ -101,10 +102,10 @@ class TRSmokeView {
             val t : float4 = p.time
             val tx : float4 = if(p.texture >= 2) 0.5 else 0
             val ty : float4 = if(p.texture == 1 || p.texture == 3) 0.5 else 0
-            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, -particleSize, -particleSize, t, tx, ty))
-            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z,  particleSize, -particleSize, t, tx + 0.5, ty))
-            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z,  particleSize,  particleSize, t, tx + 0.5, ty + 0.5))
-            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, -particleSize,  particleSize, t, tx, ty + 0.5))
+            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, -particleSize, -particleSize, tx, ty, t))
+            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z,  particleSize, -particleSize, tx + 0.5, ty, t))
+            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z,  particleSize,  particleSize, tx + 0.5, ty + 0.5, t))
+            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, -particleSize,  particleSize, tx, ty + 0.5, t))
             indexArr.write(uInt4 = i)
             indexArr.write(uInt4 = i + 1)
             indexArr.write(uInt4 = i + 2)
@@ -115,68 +116,31 @@ class TRSmokeView {
         }
         positionBuffer.set(positionArr)
         indexBuffer.set(indexArr)
-
-        shader(texture, positionBuffer) {
-            indexBuffer.draw
+        texture {
+            positionBuffer {
+                shader {
+                    indexBuffer.draw
+                }
+            }
         }
     }
 }
 
-class TRSmokeShader {
-    static val vertex =
-        "attribute vec3 position;
-         attribute vec2 model;
-         attribute float vertexLife;
-         attribute vec2 vertexUV;
-         uniform mat4 wc;
-         uniform mat4 p;
-
-         varying vec2 UV;
-         varying float life;
-
-         void main(void) {
-            float size = 0.03;
-            vec4 pos = wc*vec4(position, 1);
-            pos.x += model.x;
-            pos.y += model.y;
-            gl_Position = p*pos;
-            UV = vertexUV;
-            life = vertexLife;
-        }"
-    static val fragment =
-        "varying vec2 UV;
-         varying float life;
-
-         uniform sampler2D texture;
-
-         void main(void) {
-            gl_FragColor = texture2D(texture, UV);
-            gl_FragColor.w *= min(0.7, 2.8 - 0.7*life);
-         }"
+class TRSmokeShader extends EGBillboardShader(EGShaderProgram(vertex, fragment), true) {
+    static val vertex = vertexTextWith(
+           texture = true,
+        parameters = "attribute float vertexLife;
+                      varying float life;",
+              code = "life = vertexLife;")
+    static val fragment = fragmentTextWith(
+           texture = true,
+        parameters = "varying float life;",
+              code = "gl_FragColor.w *= min(0.7, 2.8 - 0.7*life);")
     static val instance = TRSmokeShader()
-    val program = EGShaderProgram(vertex, fragment)
-    val positionSlot = program.attributeFor("position")
-    val modelSlot = program.attributeFor("model")
     val lifeSlot = program.attributeFor("vertexLife")
-    val uvSlot = program.attributeFor("vertexUV")
-    val m = EGMatrix.identity.rotate(60, 1, 0, 0).rotate(45, 0, 1, 0)
-    val wcUniform = program.uniformFor("wc")
-    val pUniform = program.uniformFor("p")
 
-    def apply(texture : EGFileTexture, positionBuffer: EGVertexBuffer<float4>, draw : () -> void) {
-        program {
-            texture {
-                positionBuffer {
-                    positionSlot.setFromBufferWith(stride = 8*4, valuesCount = 3, GL_FLOAT, shift = 0)
-                    modelSlot.setFromBufferWith(stride = 8*4, valuesCount = 2, GL_FLOAT, shift = 3*4)
-                    lifeSlot.setFromBufferWith(stride = 8*4, valuesCount = 1, GL_FLOAT, shift = 5*4)
-                    uvSlot.setFromBufferWith(stride = 8*4, valuesCount = 2, GL_FLOAT, shift = 6*4)
-                    wcUniform.set(matrix = EG.matrix.value.wc)
-                    pUniform.set(matrix = EG.matrix.value.p)
-
-                    draw()
-                }
-            }
-        }
+    def load {
+        super.load
+        lifeSlot.setFromBufferWith(stride = 8*4, valuesCount = 1, GL_FLOAT, shift = 7*4)
     }
 }

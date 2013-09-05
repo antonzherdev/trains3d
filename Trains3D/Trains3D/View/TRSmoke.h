@@ -24,6 +24,7 @@
 @class EGMesh;
 @class EGMeshModel;
 #import "EGVec.h"
+#import "EGBillboard.h"
 @class TRTrainType;
 @class TRTrain;
 @class TREngineType;
@@ -148,20 +149,13 @@ ODPType* trSmokeBufferDataType();
 @end
 
 
-@interface TRSmokeShader : NSObject
-@property (nonatomic, readonly) EGShaderProgram* program;
-@property (nonatomic, readonly) EGShaderAttribute* positionSlot;
-@property (nonatomic, readonly) EGShaderAttribute* modelSlot;
+@interface TRSmokeShader : EGBillboardShader
 @property (nonatomic, readonly) EGShaderAttribute* lifeSlot;
-@property (nonatomic, readonly) EGShaderAttribute* uvSlot;
-@property (nonatomic, readonly) EGMatrix* m;
-@property (nonatomic, readonly) EGShaderUniform* wcUniform;
-@property (nonatomic, readonly) EGShaderUniform* pUniform;
 
 + (id)smokeShader;
 - (id)init;
 - (ODClassType*)type;
-- (void)applyTexture:(EGFileTexture*)texture positionBuffer:(EGVertexBuffer*)positionBuffer draw:(void(^)())draw;
+- (void)load;
 + (NSString*)vertex;
 + (NSString*)fragment;
 + (TRSmokeShader*)instance;
