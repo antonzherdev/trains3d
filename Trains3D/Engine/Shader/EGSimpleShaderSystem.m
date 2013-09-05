@@ -28,7 +28,7 @@ static ODClassType* _EGSimpleShaderSystem_type;
     _EGSimpleShaderSystem_textureShader = [EGSimpleTextureShader simpleTextureShader];
 }
 
-- (EGShader*)shaderForContext:(EGContext*)context material:(EGSimpleMaterial*)material {
+- (EGShader*)shaderForMaterial:(EGSimpleMaterial*)material {
     EGColorSource* __case__ = material.color;
     BOOL __incomplete__ = YES;
     EGSimpleShader* __result__;
@@ -64,9 +64,9 @@ static ODClassType* _EGSimpleShaderSystem_type;
     return __result__;
 }
 
-- (void)applyContext:(EGContext*)context material:(id)material draw:(void(^)())draw {
-    EGShader* shader = [self shaderForContext:context material:material];
-    [shader applyContext:context material:material draw:draw];
+- (void)applyMaterial:(id)material draw:(void(^)())draw {
+    EGShader* shader = [self shaderForMaterial:material];
+    [shader applyMaterial:material draw:draw];
 }
 
 - (ODClassType*)type {
@@ -215,9 +215,9 @@ static ODClassType* _EGSimpleColorShader_type;
     _EGSimpleColorShader_type = [ODClassType classTypeWithCls:[EGSimpleColorShader class]];
 }
 
-- (void)loadContext:(EGContext*)context material:(EGSimpleMaterial*)material {
+- (void)loadMaterial:(EGSimpleMaterial*)material {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([EGSimpleColorShader STRIDE])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleColorShader POSITION_SHIFT]))];
-    [_mvpUniform setMatrix:[context.matrixStack.value mwcp]];
+    [_mvpUniform setMatrix:[EG.matrix.value mwcp]];
     [_colorUniform setColor:((EGColorSourceColor*)(material.color)).color];
 }
 
@@ -306,9 +306,9 @@ static ODClassType* _EGSimpleTextureShader_type;
     _EGSimpleTextureShader_type = [ODClassType classTypeWithCls:[EGSimpleTextureShader class]];
 }
 
-- (void)loadContext:(EGContext*)context material:(EGSimpleMaterial*)material {
+- (void)loadMaterial:(EGSimpleMaterial*)material {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([EGSimpleTextureShader STRIDE])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleTextureShader POSITION_SHIFT]))];
-    [_mvpUniform setMatrix:[context.matrixStack.value mwcp]];
+    [_mvpUniform setMatrix:[EG.matrix.value mwcp]];
     [_uvSlot setFromBufferWithStride:((NSUInteger)([EGSimpleTextureShader STRIDE])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleTextureShader UV_SHIFT]))];
     [((EGColorSourceTexture*)(material.color)).texture bind];
 }

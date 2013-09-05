@@ -5,6 +5,12 @@
 @class EGMatrixModel;
 #import "EGGL.h"
 #import "EGVec.h"
+@class EGColorSource;
+@class EGColorSourceColor;
+@class EGColorSourceTexture;
+@class EGMaterial;
+@class EGSimpleMaterial;
+@class EGStandardMaterial;
 @class EGShaderProgram;
 @class EGShader;
 @class EGShaderAttribute;

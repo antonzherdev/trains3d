@@ -200,7 +200,7 @@ static ODClassType* _EGMaterial_type;
 }
 
 - (void)applyDraw:(void(^)())draw {
-    [[self shaderSystem] applyContext:EG.context material:self draw:draw];
+    [[self shaderSystem] applyMaterial:self draw:draw];
 }
 
 + (EGMaterial*)applyColor:(EGColor)color {

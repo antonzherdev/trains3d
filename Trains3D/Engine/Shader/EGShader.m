@@ -149,14 +149,14 @@ static ODClassType* _EGShader_type;
     _EGShader_type = [ODClassType classTypeWithCls:[EGShader class]];
 }
 
-- (void)applyContext:(EGContext*)context material:(id)material draw:(void(^)())draw {
+- (void)applyMaterial:(id)material draw:(void(^)())draw {
     glUseProgram(_program.handle);
-    [self loadContext:context material:material];
+    [self loadMaterial:material];
     ((void(^)())(draw))();
     glUseProgram(0);
 }
 
-- (void)loadContext:(EGContext*)context material:(id)material {
+- (void)loadMaterial:(id)material {
     @throw @"Method load is abstract";
 }
 

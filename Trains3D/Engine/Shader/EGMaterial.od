@@ -18,7 +18,7 @@ class EGColorSourceTexture(texture : EGTexture) extends EGColorSource
 class EGMaterial {
     def shaderSystem : EGShaderSystem<self>
     def apply(draw : () -> void) {
-        shaderSystem(EG.context, self, draw)
+        shaderSystem(self, draw)
     }
 
     static def apply(color : EGColor) : EGMaterial = EGStandardMaterial(color)

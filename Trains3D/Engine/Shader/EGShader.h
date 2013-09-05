@@ -51,8 +51,8 @@
 + (id)shaderWithProgram:(EGShaderProgram*)program;
 - (id)initWithProgram:(EGShaderProgram*)program;
 - (ODClassType*)type;
-- (void)applyContext:(EGContext*)context material:(id)material draw:(void(^)())draw;
-- (void)loadContext:(EGContext*)context material:(id)material;
+- (void)applyMaterial:(id)material draw:(void(^)())draw;
+- (void)loadMaterial:(id)material;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
 - (EGShaderUniform*)uniformForName:(NSString*)name;
 + (ODClassType*)type;
@@ -85,8 +85,8 @@
 
 
 @protocol EGShaderSystem<NSObject>
-- (void)applyContext:(EGContext*)context material:(id)material draw:(void(^)())draw;
-- (EGShader*)shaderForContext:(EGContext*)context material:(id)material;
+- (void)applyMaterial:(id)material draw:(void(^)())draw;
+- (EGShader*)shaderForMaterial:(id)material;
 @end
 
 

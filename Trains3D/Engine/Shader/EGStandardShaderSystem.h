@@ -25,7 +25,7 @@
 + (id)standardShaderSystem;
 - (id)init;
 - (ODClassType*)type;
-- (EGShader*)shaderForContext:(EGContext*)context material:(EGStandardMaterial*)material;
+- (EGShader*)shaderForMaterial:(EGStandardMaterial*)material;
 + (EGStandardShaderSystem*)instance;
 + (ODClassType*)type;
 @end
@@ -65,7 +65,7 @@
 + (id)standardShaderWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
 - (id)initWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
 - (ODClassType*)type;
-- (void)loadContext:(EGContext*)context material:(EGStandardMaterial*)material;
+- (void)loadMaterial:(EGStandardMaterial*)material;
 + (NSInteger)STRIDE;
 + (NSInteger)UV_SHIFT;
 + (NSInteger)NORMAL_SHIFT;

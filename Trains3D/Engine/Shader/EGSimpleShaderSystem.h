@@ -26,7 +26,7 @@
 + (id)simpleShaderSystem;
 - (id)init;
 - (ODClassType*)type;
-- (EGShader*)shaderForContext:(EGContext*)context material:(EGSimpleMaterial*)material;
+- (EGShader*)shaderForMaterial:(EGSimpleMaterial*)material;
 + (EGSimpleShaderSystem*)instance;
 + (ODClassType*)type;
 @end
@@ -51,7 +51,7 @@
 + (id)simpleColorShader;
 - (id)init;
 - (ODClassType*)type;
-- (void)loadContext:(EGContext*)context material:(EGSimpleMaterial*)material;
+- (void)loadMaterial:(EGSimpleMaterial*)material;
 + (NSString*)colorVertexProgram;
 + (NSString*)colorFragmentProgram;
 + (ODClassType*)type;
@@ -66,7 +66,7 @@
 + (id)simpleTextureShader;
 - (id)init;
 - (ODClassType*)type;
-- (void)loadContext:(EGContext*)context material:(EGSimpleMaterial*)material;
+- (void)loadMaterial:(EGSimpleMaterial*)material;
 + (NSString*)textureVertexProgram;
 + (NSString*)textureFragmentProgram;
 + (ODClassType*)type;

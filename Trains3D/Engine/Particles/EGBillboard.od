@@ -1,6 +1,7 @@
 import EG
 import EGGL
 import EGVec
+import EGMaterial
 import EGShader
 
 class EGBillboard {
