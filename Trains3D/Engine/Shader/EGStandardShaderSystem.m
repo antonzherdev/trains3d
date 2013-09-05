@@ -110,14 +110,14 @@ static ODClassType* _EGStandardShaderKey_type;
     NSString* vertexShader = [NSString stringWithFormat:@"attribute vec3 normal;%@\n"
         "attribute vec3 position;\n"
         "uniform mat4 mwcp;\n"
-        "uniform mat4 m;\n"
-        "uniform vec3 eyeDirection;\n"
+        "uniform mat4 mwc;\n"
         "%@\n"
         "%@\n"
         "%@\n"
         "\n"
         "void main(void) {\n"
-        "   vec3 normalM = normalize((m * vec4(normal, 0)).xyz);\n"
+        "   vec3 normalMWC = normalize((mwc * vec4(normal, 0)).xyz);\n"
+        "   vec3 eyeDirection = normalize(-(mwc * vec4(position, 1)).xyz);\n"
         "   gl_Position = mwcp * vec4(position, 1);%@\n"
         "   %@\n"
         "}", ((_texture) ? @"\n"
@@ -160,8 +160,8 @@ static ODClassType* _EGStandardShaderKey_type;
 
 - (NSString*)lightsCalculateVaryings {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return [NSString stringWithFormat:@"dirLightDirectionCos%@= max(dot(normalM, -normalize(dirLightDirection%@)), 0.0);\n"
-            "dirLightDirectionCosA%@= max(dot(eyeDirection, reflect(normalize(dirLightDirection%@), normalM)), 0.0);", i, i, i, i];
+        return [NSString stringWithFormat:@"dirLightDirectionCos%@= max(dot(normalMWC, -normalize(dirLightDirection%@)), 0.0);\n"
+            "dirLightDirectionCosA%@= max(dot(eyeDirection, reflect(normalize(dirLightDirection%@), normalMWC)), 0.0);", i, i, i, i];
     }] toStringWithDelimiter:@"n"];
 }
 
@@ -225,8 +225,7 @@ static ODClassType* _EGStandardShaderKey_type;
     EGShaderUniform* _specularSize;
     EGShaderUniform* _diffuseUniform;
     EGShaderUniform* _mwcpUniform;
-    id _mUniform;
-    id _eyeDirectionUniform;
+    id _mwcUniform;
     id<CNSeq> _directLightDirections;
     id<CNSeq> _directLightColors;
 }
@@ -244,8 +243,7 @@ static ODClassType* _EGStandardShader_type;
 @synthesize specularSize = _specularSize;
 @synthesize diffuseUniform = _diffuseUniform;
 @synthesize mwcpUniform = _mwcpUniform;
-@synthesize mUniform = _mUniform;
-@synthesize eyeDirectionUniform = _eyeDirectionUniform;
+@synthesize mwcUniform = _mwcUniform;
 @synthesize directLightDirections = _directLightDirections;
 @synthesize directLightColors = _directLightColors;
 
@@ -265,8 +263,7 @@ static ODClassType* _EGStandardShader_type;
         _specularSize = [self uniformForName:@"specularSize"];
         _diffuseUniform = [self uniformForName:@"diffuse"];
         _mwcpUniform = [self uniformForName:@"mwcp"];
-        _mUniform = [CNOption opt:((_key.directLightCount > 0) ? [self uniformForName:@"m"] : nil)];
-        _eyeDirectionUniform = [CNOption opt:((_key.directLightCount > 0) ? [self uniformForName:@"eyeDirection"] : nil)];
+        _mwcUniform = [CNOption opt:((_key.directLightCount > 0) ? [self uniformForName:@"mwc"] : nil)];
         _directLightDirections = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniform*(id i) {
             return [self uniformForName:[NSString stringWithFormat:@"dirLightDirection%@", i]];
         }] toArray];
@@ -300,11 +297,11 @@ static ODClassType* _EGStandardShader_type;
     EGEnvironment* env = context.environment;
     [_ambientColor setColor:env.ambientColor];
     if(_key.directLightCount > 0) {
-        [((EGShaderUniform*)([_mUniform get])) setMatrix:context.matrixStack.value.m];
-        [((EGShaderUniform*)([_eyeDirectionUniform get])) setVec3:context.eyeDirection];
+        [((EGShaderUniform*)([_mwcUniform get])) setMatrix:[context.matrixStack.value mwc]];
         [((EGShaderAttribute*)([_normalSlot get])) setFromBufferWithStride:((NSUInteger)(_EGStandardShader_STRIDE)) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_NORMAL_SHIFT))];
         [[[[env.lights chain] filterCast:EGDirectLight.type] zip3A:_directLightDirections b:_directLightColors by:^EGDirectLight*(EGDirectLight* light, EGShaderUniform* dirSlot, EGShaderUniform* colorSlot) {
-            [dirSlot setVec3:light.direction];
+            EGVec3 dir = egVec4Xyz([[context.matrixStack.value wc] mulVec3:light.direction w:0.0]);
+            [dirSlot setVec3:dir];
             [colorSlot setColor:light.color];
             return light;
         }] count];

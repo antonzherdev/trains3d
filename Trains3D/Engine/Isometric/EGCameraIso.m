@@ -7,13 +7,11 @@
     EGVec2I _tilesOnScreen;
     EGVec2 _center;
     EGMatrixModel* _matrixModel;
-    EGVec3 _eyeDirection;
 }
 static CGFloat _EGCameraIso_ISO;
 static ODClassType* _EGCameraIso_type;
 @synthesize tilesOnScreen = _tilesOnScreen;
 @synthesize center = _center;
-@synthesize eyeDirection = _eyeDirection;
 
 + (id)cameraIsoWithTilesOnScreen:(EGVec2I)tilesOnScreen center:(EGVec2)center {
     return [[EGCameraIso alloc] initWithTilesOnScreen:tilesOnScreen center:center];
@@ -28,9 +26,8 @@ static ODClassType* _EGCameraIso_type;
             CGFloat ww = ((CGFloat)(_tilesOnScreen.x + _tilesOnScreen.y));
             CGFloat isoWW2 = ww * _EGCameraIso_ISO / 2;
             CGFloat isoWW4 = isoWW2 / 2;
-            return [EGMatrixModel applyM:[[EGMatrix identity] rotateAngle:90.0 x:1.0 y:0.0 z:0.0] w:[[EGMatrix identity] rotateAngle:-90.0 x:1.0 y:0.0 z:0.0] c:[[[[EGMatrix identity] translateX:((float)(-isoWW2 + _EGCameraIso_ISO)) y:((float)(-_EGCameraIso_ISO * (_tilesOnScreen.y - _tilesOnScreen.x) / 4)) z:0.0] rotateAngle:30.0 x:1.0 y:0.0 z:0.0] rotateAngle:((float)(-45.0)) x:0.0 y:1.0 z:0.0] p:[EGMatrix orthoLeft:((float)(-isoWW2)) right:((float)(isoWW2)) bottom:((float)(-isoWW4)) top:((float)(isoWW4)) zNear:((float)(-1000.0)) zFar:((float)(1000.0))]];
+            return [EGMatrixModel applyM:[[EGMatrix identity] rotateAngle:90.0 x:1.0 y:0.0 z:0.0] w:[[EGMatrix identity] rotateAngle:-90.0 x:1.0 y:0.0 z:0.0] c:[[[[EGMatrix identity] translateX:((float)(-isoWW2 + _EGCameraIso_ISO)) y:((float)(-_EGCameraIso_ISO * (_tilesOnScreen.y - _tilesOnScreen.x) / 4 + isoWW4)) z:-1000.0] rotateAngle:30.0 x:1.0 y:0.0 z:0.0] rotateAngle:((float)(-45.0)) x:0.0 y:1.0 z:0.0] p:[EGMatrix orthoLeft:((float)(-isoWW2)) right:((float)(isoWW2)) bottom:0.0 top:((float)(isoWW2)) zNear:((float)(0.0)) zFar:((float)(2000.0))]];
         }();
-        _eyeDirection = EGVec3Make(1.0, -1.0, ((float)(0.5)));
     }
     
     return self;

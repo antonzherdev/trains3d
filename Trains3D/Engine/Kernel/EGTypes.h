@@ -165,7 +165,6 @@ ODPType* egColorType();
 @protocol EGCamera<NSObject>
 - (void)focusForViewSize:(EGVec2)viewSize;
 - (EGVec2)translateWithViewSize:(EGVec2)viewSize viewPoint:(EGVec2)viewPoint;
-- (EGVec3)eyeDirection;
 @end
 
 

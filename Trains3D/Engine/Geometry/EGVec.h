@@ -134,6 +134,8 @@ EGVec3 egVec3Mul(EGVec3 self, float k);
 CGFloat egVec3Dot(EGVec3 self, EGVec3 vec3);
 CGFloat egVec3LengthSquare(EGVec3 self);
 CGFloat egVec3Length(EGVec3 self);
+EGVec3 egVec3Set(EGVec3 self, CGFloat length);
+EGVec3 egVec3Normalize(EGVec3 self);
 ODPType* egVec3Type();
 @interface EGVec3Wrap : NSObject
 @property (readonly, nonatomic) EGVec3 value;
@@ -179,6 +181,12 @@ static inline NSString* EGVec4Description(EGVec4 self) {
     return description;
 }
 EGVec4 egVec4Apply(EGVec3 vec3, float w);
+EGVec3 egVec4Xyz(EGVec4 self);
+EGVec4 egVec4Mul(EGVec4 self, float k);
+CGFloat egVec4LengthSquare(EGVec4 self);
+CGFloat egVec4Length(EGVec4 self);
+EGVec4 egVec4Set(EGVec4 self, CGFloat length);
+EGVec4 egVec4Normalize(EGVec4 self);
 ODPType* egVec4Type();
 @interface EGVec4Wrap : NSObject
 @property (readonly, nonatomic) EGVec4 value;

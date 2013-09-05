@@ -26,10 +26,10 @@ class EGCameraIso(tilesOnScreen : EGVec2I, center : EGVec2) extends EGCamera {
             m = EGMatrix.identity.rotate(90, 1, 0, 0),
             w = EGMatrix.identity.rotate(-90, 1, 0, 0),
             c = EGMatrix.identity
-                    .translate(-isoWW2 + ISO, -ISO*(tilesOnScreen.y - tilesOnScreen.x)/4, 0)
+                    .translate(-isoWW2 + ISO, -ISO*(tilesOnScreen.y - tilesOnScreen.x)/4 + isoWW4, -1000)
                     .rotate(30, 1, 0, 0)
                     .rotate(-45.0, 0, 1, 0),
-            p = EGMatrix.ortho(-isoWW2, isoWW2, -isoWW4, isoWW4, -1000.0, 1000.0)
+            p = EGMatrix.ortho(-isoWW2, isoWW2, 0, isoWW2, 0.0, 2000.0)
         )
     }
 
@@ -50,7 +50,5 @@ class EGCameraIso(tilesOnScreen : EGVec2I, center : EGVec2) extends EGCamera {
         val tw : float = tilesOnScreen.x
         EGVec2((x/vw - y/vh)*ww2 + tw/2 - 0.5 + center.x, (x/vw + y/vh)*ww2 - tw/2 - 0.5 + center.y)
     }
-
-    val eyeDirection : EGVec3 = EGVec3(1, -1, 0.5)
 }
 

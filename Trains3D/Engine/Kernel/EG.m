@@ -76,13 +76,11 @@ static ODClassType* _EG_type;
 @implementation EGContext{
     NSMutableDictionary* _textureCache;
     EGDirector* _director;
-    EGVec3 _eyeDirection;
     EGEnvironment* _environment;
     EGMatrixStack* _matrixStack;
 }
 static ODClassType* _EGContext_type;
 @synthesize director = _director;
-@synthesize eyeDirection = _eyeDirection;
 @synthesize environment = _environment;
 @synthesize matrixStack = _matrixStack;
 
@@ -94,7 +92,6 @@ static ODClassType* _EGContext_type;
     self = [super init];
     if(self) {
         _textureCache = [NSMutableDictionary mutableDictionary];
-        _eyeDirection = EGVec3Make(0.0, 0.0, 0.0);
         _environment = EGEnvironment.aDefault;
         _matrixStack = [EGMatrixStack matrixStack];
     }

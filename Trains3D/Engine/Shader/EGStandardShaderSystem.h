@@ -10,6 +10,7 @@
 @class EGContext;
 @class EGMatrixStack;
 @class EGMatrixModel;
+#import "EGVec.h"
 #import "EGTypes.h"
 @class EGTexture;
 @class EGFileTexture;
@@ -57,8 +58,7 @@
 @property (nonatomic, readonly) EGShaderUniform* specularSize;
 @property (nonatomic, readonly) EGShaderUniform* diffuseUniform;
 @property (nonatomic, readonly) EGShaderUniform* mwcpUniform;
-@property (nonatomic, readonly) id mUniform;
-@property (nonatomic, readonly) id eyeDirectionUniform;
+@property (nonatomic, readonly) id mwcUniform;
 @property (nonatomic, readonly) id<CNSeq> directLightDirections;
 @property (nonatomic, readonly) id<CNSeq> directLightColors;
 

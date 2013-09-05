@@ -21,7 +21,6 @@ class EGContext {
     def textureFor(file : string) : EGFileTexture = textureCache.objectFor(key = file, orUpdateWith = EGFileTexture(file))
 
     var director : EGDirector
-    var eyeDirection = EGVec3(0, 0, 0)
     var environment = EGEnvironment.default
     val matrixStack = EGMatrixStack()
 }

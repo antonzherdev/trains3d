@@ -26,7 +26,6 @@
 
 @interface EGContext : NSObject
 @property (nonatomic, retain) EGDirector* director;
-@property (nonatomic) EGVec3 eyeDirection;
 @property (nonatomic, retain) EGEnvironment* environment;
 @property (nonatomic, readonly) EGMatrixStack* matrixStack;
 

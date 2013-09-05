@@ -5,11 +5,9 @@
 @implementation EGCamera2D{
     EGVec2 _size;
     EGMatrixModel* _matrixModel;
-    EGVec3 _eyeDirection;
 }
 static ODClassType* _EGCamera2D_type;
 @synthesize size = _size;
-@synthesize eyeDirection = _eyeDirection;
 
 + (id)camera2DWithSize:(EGVec2)size {
     return [[EGCamera2D alloc] initWithSize:size];
@@ -20,7 +18,6 @@ static ODClassType* _EGCamera2D_type;
     if(self) {
         _size = size;
         _matrixModel = [EGMatrixModel applyM:[EGMatrix identity] w:[EGMatrix identity] c:[EGMatrix identity] p:[EGMatrix orthoLeft:0.0 right:((float)(_size.x)) bottom:0.0 top:((float)(_size.y)) zNear:-1.0 zFar:1.0]];
-        _eyeDirection = EGVec3Make(0.0, 0.0, 1.0);
     }
     
     return self;

@@ -184,6 +184,12 @@ CGFloat egVec3LengthSquare(EGVec3 self) {
 CGFloat egVec3Length(EGVec3 self) {
     return sqrt(egVec3LengthSquare(self));
 }
+EGVec3 egVec3Set(EGVec3 self, CGFloat length) {
+    return egVec3Mul(self, ((float)(length / egVec3Length(self))));
+}
+EGVec3 egVec3Normalize(EGVec3 self) {
+    return egVec3Set(self, 1.0);
+}
 ODPType* egVec3Type() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[EGVec3Wrap class] name:@"EGVec3" size:sizeof(EGVec3) wrap:^id(void* data, NSUInteger i) {
@@ -231,6 +237,24 @@ ODPType* egVec3Type() {
 
 EGVec4 egVec4Apply(EGVec3 vec3, float w) {
     return EGVec4Make(vec3.x, vec3.y, vec3.z, w);
+}
+EGVec3 egVec4Xyz(EGVec4 self) {
+    return EGVec3Make(self.x, self.y, self.z);
+}
+EGVec4 egVec4Mul(EGVec4 self, float k) {
+    return EGVec4Make(k * self.x, k * self.y, k * self.z, k * self.w);
+}
+CGFloat egVec4LengthSquare(EGVec4 self) {
+    return ((CGFloat)(self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w));
+}
+CGFloat egVec4Length(EGVec4 self) {
+    return sqrt(egVec4LengthSquare(self));
+}
+EGVec4 egVec4Set(EGVec4 self, CGFloat length) {
+    return egVec4Mul(self, ((float)(length / egVec4Length(self))));
+}
+EGVec4 egVec4Normalize(EGVec4 self) {
+    return egVec4Set(self, 1.0);
 }
 ODPType* egVec4Type() {
     static ODPType* _ret = nil;

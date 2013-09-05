@@ -44,8 +44,16 @@ struct EGVec3(x : float4, y : float4, z : float4) {
     def dot(vec3 : EGVec3) : float = x*vec3.x + y*vec3.y + z*vec3.z
     def lengthSquare : float = x*x + y*y + z*z
     def length = sqrt(lengthSquare)
+    def set(length : float) = mul(length/self.length)
+    def normalize = set(length = 1.0)
 }
 
 struct EGVec4(x : float4, y : float4, z : float4, w : float4) {
     static def apply(vec3 : EGVec3, w : float4) = EGVec4(vec3.x, vec3.y, vec3.z, w)
+    def xyz = EGVec3(x, y, z)
+    def mul(k : float4) = EGVec4(k*x, k*y, k*z, k*w)
+    def lengthSquare : float = x*x + y*y + z*z + w*w
+    def length = sqrt(lengthSquare)
+    def set(length : float) = mul(length/self.length)
+    def normalize = set(length = 1.0)
 }

@@ -12,7 +12,6 @@
 
 @interface EGCamera2D : NSObject<EGCamera>
 @property (nonatomic, readonly) EGVec2 size;
-@property (nonatomic, readonly) EGVec3 eyeDirection;
 
 + (id)camera2DWithSize:(EGVec2)size;
 - (id)initWithSize:(EGVec2)size;
