@@ -15,7 +15,7 @@
 - (ODClassType*)type;
 - (void)bind;
 - (void)dealloc;
-- (void)unbind;
++ (void)unbind;
 - (void)applyDraw:(void(^)())draw;
 + (ODClassType*)type;
 @end

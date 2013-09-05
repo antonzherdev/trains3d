@@ -16,6 +16,8 @@
 @class EGMaterial;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
+@class EGTexture;
+@class EGFileTexture;
 
 @class EGMesh;
 @class EGMeshModel;

@@ -11,12 +11,10 @@
 @class EGMaterial;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
-@class EGShaderProgram;
-@class EGShader;
-@class EGShaderAttribute;
-@class EGShaderUniform;
-@protocol EGShaderSystem;
+#import "EGShader.h"
 @class EGMatrix;
+@class EGTexture;
+@class EGFileTexture;
 
 @class EGBillboard;
 @class EGBillboardShader;
@@ -30,12 +28,12 @@
 @end
 
 
-@interface EGBillboardShader : NSObject
-@property (nonatomic, readonly) EGShaderProgram* program;
+@interface EGBillboardShader : EGShader
 @property (nonatomic, readonly) BOOL texture;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderAttribute* modelSlot;
 @property (nonatomic, readonly) id uvSlot;
+@property (nonatomic, readonly) id colorUniform;
 @property (nonatomic, readonly) EGShaderUniform* wcUniform;
 @property (nonatomic, readonly) EGShaderUniform* pUniform;
 
@@ -44,8 +42,8 @@
 - (ODClassType*)type;
 + (NSString*)vertexTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code;
 + (NSString*)fragmentTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code;
-- (void)load;
-- (void)applyDraw:(void(^)())draw;
+- (void)loadMaterial:(EGSimpleMaterial*)material;
+- (void)unloadMaterial:(EGSimpleMaterial*)material;
 + (ODClassType*)type;
 @end
 

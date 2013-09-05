@@ -8,6 +8,7 @@
 #import "TRTypes.h"
 #import "TR3D.h"
 #import "EGMatrix.h"
+#import "EGTexture.h"
 @implementation TRCityView{
     EGMesh* _expectedTrainModel;
 }

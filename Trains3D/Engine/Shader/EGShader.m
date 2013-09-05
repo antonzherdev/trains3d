@@ -5,6 +5,7 @@
 #import "EGBuffer.h"
 #import "EGMatrix.h"
 #import "EGMaterial.h"
+#import "EGTexture.h"
 @implementation EGShaderProgram{
     GLuint _handle;
 }
@@ -153,11 +154,15 @@ static ODClassType* _EGShader_type;
     glUseProgram(_program.handle);
     [self loadMaterial:material];
     ((void(^)())(draw))();
+    [self unloadMaterial:material];
     glUseProgram(0);
 }
 
 - (void)loadMaterial:(id)material {
     @throw @"Method load is abstract";
+}
+
+- (void)unloadMaterial:(id)material {
 }
 
 - (EGShaderAttribute*)attributeForName:(NSString*)name {

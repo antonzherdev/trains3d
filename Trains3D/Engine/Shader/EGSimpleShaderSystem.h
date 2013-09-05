@@ -67,6 +67,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)loadMaterial:(EGSimpleMaterial*)material;
+- (void)unloadMaterial:(EGSimpleMaterial*)material;
 + (NSString*)textureVertexProgram;
 + (NSString*)textureFragmentProgram;
 + (ODClassType*)type;

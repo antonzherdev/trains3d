@@ -9,6 +9,7 @@
 #import "TRRailPoint.h"
 #import "TR3D.h"
 #import "EGMatrix.h"
+#import "EGTexture.h"
 @implementation TRTrainView{
     TRSmokeView* _smokeView;
     EGStandardMaterial* _blackMaterial;

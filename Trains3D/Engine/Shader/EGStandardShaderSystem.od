@@ -127,4 +127,8 @@ class EGStandardShader(key : EGStandardShaderKey, program : EGShaderProgram) ext
             }.count
         }
     }
+
+    def unload(material : EGSimpleMaterial) {
+        if(key.texture) EGTexture.unbind
+    }
 }

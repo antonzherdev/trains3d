@@ -10,6 +10,7 @@
 #import "EGMesh.h"
 #import "TRTrain.h"
 #import "TRRailPoint.h"
+#import "EGMaterial.h"
 @implementation TRSmoke{
     __weak TRTrain* _train;
     CNList* __particles;
@@ -247,7 +248,7 @@ ODPType* trSmokeBufferDataType() {
     EGVertexBuffer* _positionBuffer;
     EGIndexBuffer* _indexBuffer;
     TRSmokeShader* _shader;
-    EGFileTexture* _texture;
+    EGSimpleMaterial* _texture;
 }
 static CGFloat _TRSmokeView_particleSize = 0.03;
 static ODClassType* _TRSmokeView_type;
@@ -266,7 +267,7 @@ static ODClassType* _TRSmokeView_type;
         _positionBuffer = [EGVertexBuffer applyStride:((NSUInteger)(6 * 4))];
         _indexBuffer = [EGIndexBuffer apply];
         _shader = TRSmokeShader.instance;
-        _texture = [EG textureForFile:@"Smoke.png"];
+        _texture = [EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyTexture:[EG textureForFile:@"Smoke.png"]]];
     }
     
     return self;
@@ -316,11 +317,9 @@ static ODClassType* _TRSmokeView_type;
     }];
     [_positionBuffer setData:positionArr];
     [_indexBuffer setData:indexArr];
-    [_texture applyDraw:^void() {
-        [_positionBuffer applyDraw:^void() {
-            [_shader applyDraw:^void() {
-                [_indexBuffer draw];
-            }];
+    [_positionBuffer applyDraw:^void() {
+        [_shader applyMaterial:_texture draw:^void() {
+            [_indexBuffer draw];
         }];
     }];
 }
@@ -389,8 +388,8 @@ static ODClassType* _TRSmokeShader_type;
     _TRSmokeShader_instance = [TRSmokeShader smokeShader];
 }
 
-- (void)load {
-    [super load];
+- (void)loadMaterial:(EGSimpleMaterial*)material {
+    [super loadMaterial:material];
     [_lifeSlot setFromBufferWithStride:((NSUInteger)(8 * 4)) valuesCount:1 valuesType:GL_FLOAT shift:((NSUInteger)(7 * 4))];
 }
 

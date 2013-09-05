@@ -6,8 +6,10 @@ import EGGL
 import EGBuffer
 import EGMatrix
 import EGTypes
-import EGMaterial
 import EGVec
+
+export EGMaterial
+export EGTexture
 
 class EGShaderProgram(handle : GLuint) {
     static def loadFromFiles(vertex : string, fragment : string) : EGShaderProgram =
@@ -76,10 +78,12 @@ class EGShader<M extends EGMaterial>(program : EGShaderProgram) {
         glUseProgram(program.handle)
         load(material)
         draw()
+        unload(material)
         glUseProgram(0)
     }
 
     def load(material : M)
+    def unload(material : M) {}
 
     def attributeFor(name : string ) = program.attributeFor(name)
     def uniformFor(name : string ) = program.uniformFor(name)

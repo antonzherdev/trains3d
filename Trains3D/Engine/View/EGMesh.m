@@ -4,6 +4,7 @@
 #import "EGBuffer.h"
 #import "EGSimpleShaderSystem.h"
 #import "EGMaterial.h"
+#import "EGTexture.h"
 @implementation EGMesh{
     EGVertexBuffer* _vertexBuffer;
     EGIndexBuffer* _indexBuffer;

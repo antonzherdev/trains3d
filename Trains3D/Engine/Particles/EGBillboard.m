@@ -2,8 +2,8 @@
 
 #import "EG.h"
 #import "EGMaterial.h"
-#import "EGShader.h"
 #import "EGMatrix.h"
+#import "EGTexture.h"
 @implementation EGBillboard
 static ODClassType* _EGBillboard_type;
 
@@ -57,20 +57,20 @@ static ODClassType* _EGBillboard_type;
 
 
 @implementation EGBillboardShader{
-    EGShaderProgram* _program;
     BOOL _texture;
     EGShaderAttribute* _positionSlot;
     EGShaderAttribute* _modelSlot;
     id _uvSlot;
+    id _colorUniform;
     EGShaderUniform* _wcUniform;
     EGShaderUniform* _pUniform;
 }
 static ODClassType* _EGBillboardShader_type;
-@synthesize program = _program;
 @synthesize texture = _texture;
 @synthesize positionSlot = _positionSlot;
 @synthesize modelSlot = _modelSlot;
 @synthesize uvSlot = _uvSlot;
+@synthesize colorUniform = _colorUniform;
 @synthesize wcUniform = _wcUniform;
 @synthesize pUniform = _pUniform;
 
@@ -79,15 +79,15 @@ static ODClassType* _EGBillboardShader_type;
 }
 
 - (id)initWithProgram:(EGShaderProgram*)program texture:(BOOL)texture {
-    self = [super init];
+    self = [super initWithProgram:program];
     if(self) {
-        _program = program;
         _texture = texture;
-        _positionSlot = [_program attributeForName:@"position"];
-        _modelSlot = [_program attributeForName:@"model"];
-        _uvSlot = [CNOption opt:((_texture) ? [_program attributeForName:@"vertexUV"] : nil)];
-        _wcUniform = [_program uniformForName:@"wc"];
-        _pUniform = [_program uniformForName:@"p"];
+        _positionSlot = [self attributeForName:@"position"];
+        _modelSlot = [self attributeForName:@"model"];
+        _uvSlot = [CNOption opt:((_texture) ? [self attributeForName:@"vertexUV"] : nil)];
+        _colorUniform = [CNOption none];
+        _wcUniform = [self uniformForName:@"wc"];
+        _pUniform = [self uniformForName:@"p"];
     }
     
     return self;
@@ -135,21 +135,23 @@ static ODClassType* _EGBillboardShader_type;
         "   gl_FragColor = color; " : @""), code];
 }
 
-- (void)load {
+- (void)loadMaterial:(EGSimpleMaterial*)material {
     [_positionSlot setFromBufferWithStride:((NSUInteger)(8 * 4)) valuesCount:3 valuesType:GL_FLOAT shift:0];
     [_modelSlot setFromBufferWithStride:((NSUInteger)(8 * 4)) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(3 * 4))];
-    [_uvSlot forEach:^void(EGShaderAttribute* _) {
-        [_ setFromBufferWithStride:((NSUInteger)(8 * 4)) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(5 * 4))];
-    }];
     [_wcUniform setMatrix:[EG.matrix.value wc]];
     [_pUniform setMatrix:EG.matrix.value.p];
+    if(_texture) {
+        [_uvSlot forEach:^void(EGShaderAttribute* _) {
+            [_ setFromBufferWithStride:((NSUInteger)(8 * 4)) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(5 * 4))];
+        }];
+        [((EGColorSourceTexture*)(material.color)).texture bind];
+    } else {
+        [((EGShaderUniform*)([_colorUniform get])) setColor:((EGColorSourceColor*)(material.color)).color];
+    }
 }
 
-- (void)applyDraw:(void(^)())draw {
-    [_program applyDraw:^void() {
-        [self load];
-        ((void(^)())(draw))();
-    }];
+- (void)unloadMaterial:(EGSimpleMaterial*)material {
+    if(_texture) [EGTexture unbind];
 }
 
 - (ODClassType*)type {

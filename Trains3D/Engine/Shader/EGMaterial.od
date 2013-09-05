@@ -4,7 +4,8 @@ import EGGL
 import EGShader
 import EGSimpleShaderSystem
 import EGStandardShaderSystem
-import EGTexture
+
+export EGTexture
 
 class EGColorSource {
     static def apply(color : EGColor) : EGColorSource = EGColorSourceColor(color)

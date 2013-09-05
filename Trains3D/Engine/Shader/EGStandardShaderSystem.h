@@ -66,6 +66,7 @@
 - (id)initWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
 - (ODClassType*)type;
 - (void)loadMaterial:(EGStandardMaterial*)material;
+- (void)unloadMaterial:(EGSimpleMaterial*)material;
 + (NSInteger)STRIDE;
 + (NSInteger)UV_SHIFT;
 + (NSInteger)NORMAL_SHIFT;

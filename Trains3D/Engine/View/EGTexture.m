@@ -32,7 +32,7 @@ static ODClassType* _EGTexture_type;
     egDeleteTexture(_id);
 }
 
-- (void)unbind {
++ (void)unbind {
     glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_TEXTURE_2D);
 }
@@ -40,7 +40,7 @@ static ODClassType* _EGTexture_type;
 - (void)applyDraw:(void(^)())draw {
     [self bind];
     ((void(^)())(draw))();
-    [self unbind];
+    [EGTexture unbind];
 }
 
 - (ODClassType*)type {

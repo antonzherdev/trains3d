@@ -36,7 +36,7 @@
     glLoadIdentity();
     NSString *string = [[NSString alloc] initWithFormat:@"%.1f", _frameRate];
     
-    glColor3f(1.0, 1.0, 1.0);
+    glColor4f(1.0, 1.0, 1.0, 1.0);
     egTextGlutDraw(string, GLUT_BITMAP_HELVETICA_18, EGVec2Make(-0.99, -0.99));
 
     glMatrixMode(GL_PROJECTION);

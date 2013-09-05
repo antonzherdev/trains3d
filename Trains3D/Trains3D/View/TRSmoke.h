@@ -35,6 +35,12 @@
 @class TRRailForm;
 @class TRRailPoint;
 @class TRRailPointCorrection;
+@class EGColorSource;
+@class EGColorSourceColor;
+@class EGColorSourceTexture;
+@class EGMaterial;
+@class EGSimpleMaterial;
+@class EGStandardMaterial;
 
 @class TRSmoke;
 @class TRSmokeParticle;
@@ -136,7 +142,7 @@ ODPType* trSmokeBufferDataType();
 @property (nonatomic, readonly) EGVertexBuffer* positionBuffer;
 @property (nonatomic, readonly) EGIndexBuffer* indexBuffer;
 @property (nonatomic, readonly) TRSmokeShader* shader;
-@property (nonatomic, readonly) EGFileTexture* texture;
+@property (nonatomic, readonly) EGSimpleMaterial* texture;
 
 + (id)smokeView;
 - (id)init;
@@ -155,7 +161,7 @@ ODPType* trSmokeBufferDataType();
 + (id)smokeShader;
 - (id)init;
 - (ODClassType*)type;
-- (void)load;
+- (void)loadMaterial:(EGSimpleMaterial*)material;
 + (NSString*)vertex;
 + (NSString*)fragment;
 + (TRSmokeShader*)instance;

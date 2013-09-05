@@ -16,7 +16,7 @@ class EGTexture {
         egDeleteTexture(id)
     }
 
-    def unbind {
+    static def unbind {
         glBindTexture(GL_TEXTURE_2D, 0)
         glDisable(GL_TEXTURE_2D)
     }

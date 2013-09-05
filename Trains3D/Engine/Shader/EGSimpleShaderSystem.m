@@ -313,6 +313,10 @@ static ODClassType* _EGSimpleTextureShader_type;
     [((EGColorSourceTexture*)(material.color)).texture bind];
 }
 
+- (void)unloadMaterial:(EGSimpleMaterial*)material {
+    [EGTexture unbind];
+}
+
 - (ODClassType*)type {
     return [EGSimpleTextureShader type];
 }

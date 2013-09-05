@@ -11,13 +11,15 @@
 @class EGIndexBuffer;
 @class EGMatrix;
 #import "EGTypes.h"
+#import "EGVec.h"
 @class EGColorSource;
 @class EGColorSourceColor;
 @class EGColorSourceTexture;
 @class EGMaterial;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
-#import "EGVec.h"
+@class EGTexture;
+@class EGFileTexture;
 
 @class EGShaderProgram;
 @class EGShader;
@@ -53,6 +55,7 @@
 - (ODClassType*)type;
 - (void)applyMaterial:(id)material draw:(void(^)())draw;
 - (void)loadMaterial:(id)material;
+- (void)unloadMaterial:(id)material;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
 - (EGShaderUniform*)uniformForName:(NSString*)name;
 + (ODClassType*)type;

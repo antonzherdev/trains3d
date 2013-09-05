@@ -27,6 +27,8 @@
 @class TR3D;
 #import "TRSmoke.h"
 @class EGMatrix;
+@class EGTexture;
+@class EGFileTexture;
 
 @class TRTrainView;
 

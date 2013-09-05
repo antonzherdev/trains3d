@@ -308,6 +308,10 @@ static ODClassType* _EGStandardShader_type;
     }
 }
 
+- (void)unloadMaterial:(EGSimpleMaterial*)material {
+    if(_key.texture) [EGTexture unbind];
+}
+
 - (ODClassType*)type {
     return [EGStandardShader type];
 }

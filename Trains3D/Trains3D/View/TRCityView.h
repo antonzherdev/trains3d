@@ -20,6 +20,8 @@
 @class TRColor;
 @class TR3D;
 @class EGMatrix;
+@class EGTexture;
+@class EGFileTexture;
 
 @class TRCityView;
 
