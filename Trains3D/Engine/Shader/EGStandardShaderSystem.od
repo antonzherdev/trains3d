@@ -1,6 +1,6 @@
 import EGShader
 import EGMaterial
-import EGContext
+import EG
 import EGTypes
 import EGTexture
 import EGGL

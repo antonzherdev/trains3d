@@ -1,10 +1,12 @@
 import EGDirector
-import EGContext
 import EGTexture
+import EGMatrix
+import EGVec
+import EGTypes
 
 class EG {
-    static def director : EGDirector = EGDirector.current
-    static def context : EGContext = EGDirector.current.context
+    static def director : EGDirector = context.director
+    static val context : EGContext = EGContext()
     static def textureFor(file : string) : EGFileTexture = context.textureFor(file)
 
     static def projectionMatrix : EGMutableMatrix = context.projectionMatrix
@@ -18,5 +20,82 @@ class EG {
         f()
         context.modelMatrix.pop
         context.worldMatrix.pop
+    }
+}
+
+class EGContext {
+    private val textureCache = CNMutableHashMap<string, EGFileTexture>()
+
+    def textureFor(file : string) : EGFileTexture = textureCache.objectFor(key = file, orUpdateWith = EGFileTexture(file))
+
+    var director : EGDirector
+    var eyeDirection = EGVec3(0, 0, 0)
+    var environment = EGEnvironment.default
+    val modelMatrix = EGMutableMatrix()
+    val worldMatrix = EGMutableMatrix()
+    val cameraMatrix = EGMutableMatrix()
+    val projectionMatrix = EGMutableMatrix()
+    def m : EGMatrix = modelMatrix.value
+    def w : EGMatrix = worldMatrix.value
+    def c : EGMatrix = cameraMatrix.value
+    def p : EGMatrix = projectionMatrix.value
+    def mw : EGMatrix = worldMatrix.value.multiply(modelMatrix.value)
+    def mwc : EGMatrix = cameraMatrix.value.multiply(worldMatrix.value.multiply(modelMatrix.value))
+    def mwcp : EGMatrix = projectionMatrix.value.multiply(cameraMatrix.value).multiply(worldMatrix.value).multiply(modelMatrix.value)
+    def cp : EGMatrix = projectionMatrix.value.multiply(cameraMatrix.value)
+    def wcp : EGMatrix = projectionMatrix.value.multiply(cameraMatrix.value).multiply(worldMatrix.value)
+
+    def clearMatrix {
+        modelMatrix.clear
+        worldMatrix.clear
+        cameraMatrix.clear
+        projectionMatrix.clear
+    }
+}
+
+class EGMutableMatrix {
+    private var _stack = CNList<EGMatrix>()
+    private var _value = EGMatrix.identity
+
+    def push {
+        _stack = CNList(_value, _stack)
+    }
+
+    def pop {
+        _value = _stack.head.get
+        _stack = _stack.tail
+    }
+
+    def value : EGMatrix = _value
+    def set(value : EGMatrix) {
+        _value = value
+    }
+
+    def setIdentity {
+        _value = EGMatrix.identity
+    }
+
+    def clear {
+        setIdentity
+        _stack = CNList<EGMatrix>()
+    }
+
+    def rotate(angle : float, x : float, y : float, z : float) {
+        _value = _value.rotate(angle, x, y, z)
+    }
+    def scale(x : float, y : float, z : float) {
+        _value = _value.scale(x, y, z)
+    }
+    def translate(x : float, y : float, z : float) {
+        _value = _value.translate(x, y, z)
+    }
+    def ortho(left : float, right : float, bottom : float, top : float, zNear : float, zFar : float) {
+        _value = EGMatrix.ortho(left, right, bottom, top, zNear, zFar)
+    }
+
+    def keep(f : () -> void) {
+        push
+        f()
+        pop
     }
 }

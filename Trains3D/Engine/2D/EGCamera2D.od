@@ -2,7 +2,6 @@ import EGVec
 import EGTypes
 import EG
 import EGGL
-import EGContext
 
 class EGCamera2D(size : EGVec2) extends EGCamera {
     private def factorFor(viewSize : EGVec2) : float = min(viewSize.x/size.x, viewSize.y/size.y)

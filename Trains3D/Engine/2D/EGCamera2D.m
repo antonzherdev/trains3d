@@ -1,7 +1,6 @@
 #import "EGCamera2D.h"
 
 #import "EG.h"
-#import "EGContext.h"
 @implementation EGCamera2D{
     EGVec2 _size;
     EGVec3 _eyeDirection;
@@ -43,8 +42,8 @@ static ODClassType* _EGCamera2D_type;
 
 - (void)focusForViewSize:(EGVec2)viewSize {
     egViewport(egRectIApply([self viewportRectForViewSize:viewSize]));
-    [[EG context] clearMatrix];
-    [[EG context].projectionMatrix orthoLeft:0.0 right:_size.x bottom:0.0 top:_size.y zNear:0.0 zFar:1.0];
+    [EG.context clearMatrix];
+    [EG.context.projectionMatrix orthoLeft:0.0 right:_size.x bottom:0.0 top:_size.y zNear:0.0 zFar:1.0];
 }
 
 - (EGVec2)translateWithViewSize:(EGVec2)viewSize viewPoint:(EGVec2)viewPoint {

@@ -2,13 +2,13 @@
 @class CNBundle;
 #import "CNTypes.h"
 @class EG;
+@class EGContext;
+@class EGMutableMatrix;
 #import "EGGL.h"
 @class EGBuffer;
 @class EGVertexBuffer;
 @class EGIndexBuffer;
 @class EGMatrix;
-@class EGContext;
-@class EGMutableMatrix;
 #import "EGTypes.h"
 @class EGColorSource;
 @class EGColorSourceColor;
@@ -16,8 +16,6 @@
 @class EGMaterial;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
-@class EGContext;
-@class EGMutableMatrix;
 #import "EGVec.h"
 
 @class EGShaderProgram;

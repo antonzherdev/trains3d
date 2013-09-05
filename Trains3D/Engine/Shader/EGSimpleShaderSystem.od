@@ -3,7 +3,7 @@ import CNTypes
 import EGGL
 import EGShader
 import EGTypes
-import EGContext
+import EG
 import EGTexture
 import EGMaterial
 

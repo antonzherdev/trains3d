@@ -1,5 +1,7 @@
 #import "objd.h"
 @class EG;
+@class EGContext;
+@class EGMutableMatrix;
 #import "EGVec.h"
 
 @class EGBillboard;

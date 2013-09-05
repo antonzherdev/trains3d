@@ -3,7 +3,7 @@ import EGGL
 import EGSchedule
 import EGMesh
 import EGTypes
-import EGContext
+import EG
 import EGMaterial
 
 import TRCity

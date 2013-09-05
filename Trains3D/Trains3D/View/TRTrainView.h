@@ -1,5 +1,7 @@
 #import "objd.h"
 @class EG;
+@class EGContext;
+@class EGMutableMatrix;
 #import "EGGL.h"
 #import "EGTypes.h"
 @class EGMesh;
@@ -10,8 +12,6 @@
 @class EGMaterial;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
-@class EGContext;
-@class EGMutableMatrix;
 @class TRTrainType;
 @class TRTrain;
 @class TREngineType;

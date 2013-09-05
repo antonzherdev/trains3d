@@ -4,7 +4,7 @@
 #import "EG.h"
 #import "EGTexture.h"
 #import "EGMaterial.h"
-#import "EGContext.h"
+#import "EG.h"
 #import "TRRailroad.h"
 #import "TRRailPoint.h"
 #import "TR3D.h"

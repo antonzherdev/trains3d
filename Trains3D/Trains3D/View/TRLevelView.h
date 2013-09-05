@@ -2,6 +2,8 @@
 #import "EGTypes.h"
 @class EGCameraIso;
 @class EG;
+@class EGContext;
+@class EGMutableMatrix;
 #import "EGGL.h"
 @class EGMapSso;
 @class EGMapSsoView;

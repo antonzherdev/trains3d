@@ -11,7 +11,6 @@ import EGMaterial
 import EGTexture
 import EGBuffer
 import EGShader
-import EGContext
 import EGVec
 
 class EGMapSso(size : EGVec2I) {

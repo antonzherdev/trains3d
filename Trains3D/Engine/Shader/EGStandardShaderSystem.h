@@ -6,6 +6,7 @@
 @class EGMaterial;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
+@class EG;
 @class EGContext;
 @class EGMutableMatrix;
 #import "EGTypes.h"

@@ -3,21 +3,18 @@
 #import "EGScene.h"
 #import "EGTime.h"
 #import "EGStat.h"
-#import "EGContext.h"
+#import "EG.h"
 #import "EGProcessor.h"
 @implementation EGDirector{
     EGScene* _scene;
     BOOL __isStarted;
     BOOL __isPaused;
     EGTime* _time;
-    EGContext* _context;
     id __stat;
 }
-static EGDirector* _EGDirector__current;
 static ODClassType* _EGDirector_type;
 @synthesize scene = _scene;
 @synthesize time = _time;
-@synthesize context = _context;
 
 + (id)director {
     return [[EGDirector alloc] init];
@@ -29,7 +26,6 @@ static ODClassType* _EGDirector_type;
         __isStarted = NO;
         __isPaused = NO;
         _time = [EGTime time];
-        _context = [EGContext context];
         __stat = [CNOption none];
     }
     
@@ -41,15 +37,11 @@ static ODClassType* _EGDirector_type;
     _EGDirector_type = [ODClassType classTypeWithCls:[EGDirector class]];
 }
 
-+ (EGDirector*)current {
-    return _EGDirector__current;
-}
-
 - (void)drawWithSize:(EGVec2)size {
-    _EGDirector__current = self;
+    EG.context.director = self;
     glClearColor(0.0, 0.0, 0.0, 1.0);
     egClear();
-    [_context clearMatrix];
+    [EG.context clearMatrix];
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     [_scene drawWithViewSize:size];

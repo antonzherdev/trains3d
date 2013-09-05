@@ -1,7 +1,6 @@
 import EGTypes
 import EG
 import EGGL
-import EGContext
 import EGShader
 import EGSimpleShaderSystem
 import EGStandardShaderSystem

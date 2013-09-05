@@ -3,6 +3,8 @@
 @class CNPArrayIterator;
 @class CNMutablePArray;
 @class EG;
+@class EGContext;
+@class EGMutableMatrix;
 #import "EGGL.h"
 
 @class EGBuffer;

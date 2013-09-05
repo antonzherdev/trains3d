@@ -3,6 +3,8 @@
 @class EGMesh;
 @class EGMeshModel;
 @class EG;
+@class EGContext;
+@class EGMutableMatrix;
 @class EGTexture;
 @class EGFileTexture;
 @class EGColorSource;
@@ -11,6 +13,7 @@
 @class EGMaterial;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
+@class EG;
 @class EGContext;
 @class EGMutableMatrix;
 #import "EGTypes.h"

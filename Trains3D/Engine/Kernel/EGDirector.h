@@ -5,6 +5,7 @@
 @class EGStat;
 #import "EGTypes.h"
 #import "EGGL.h"
+@class EG;
 @class EGContext;
 @class EGMutableMatrix;
 @protocol EGProcessor;
@@ -17,12 +18,10 @@
 @interface EGDirector : NSObject
 @property (nonatomic, retain) EGScene* scene;
 @property (nonatomic, readonly) EGTime* time;
-@property (nonatomic, readonly) EGContext* context;
 
 + (id)director;
 - (id)init;
 - (ODClassType*)type;
-+ (EGDirector*)current;
 - (void)drawWithSize:(EGVec2)size;
 - (void)processEvent:(EGEvent*)event;
 - (BOOL)isStarted;

@@ -1,6 +1,6 @@
 #import "EGSimpleShaderSystem.h"
 
-#import "EGContext.h"
+#import "EG.h"
 #import "EGTexture.h"
 #import "EGMaterial.h"
 @implementation EGSimpleShaderSystem

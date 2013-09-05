@@ -1,7 +1,7 @@
 #import "EGStandardShaderSystem.h"
 
 #import "EGMaterial.h"
-#import "EGContext.h"
+#import "EG.h"
 #import "EGTexture.h"
 @implementation EGStandardShaderSystem
 static EGStandardShaderSystem* _EGStandardShaderSystem_instance;

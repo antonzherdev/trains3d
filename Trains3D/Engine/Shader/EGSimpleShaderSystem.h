@@ -3,6 +3,7 @@
 #import "EGGL.h"
 #import "EGShader.h"
 #import "EGTypes.h"
+@class EG;
 @class EGContext;
 @class EGMutableMatrix;
 @class EGTexture;

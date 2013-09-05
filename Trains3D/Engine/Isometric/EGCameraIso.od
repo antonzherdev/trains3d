@@ -2,7 +2,6 @@ import EG
 import EGGL
 import EGTypes
 import EGMapIso
-import EGContext
 import EGVec
 
 class EGCameraIso(tilesOnScreen : EGVec2I, center : EGVec2) extends EGCamera {

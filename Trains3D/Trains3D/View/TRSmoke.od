@@ -5,7 +5,6 @@ import EGGL
 import EGTypes
 import EGBuffer
 import EGShader
-import EGContext
 import EGTexture
 import EGMatrix
 import EGSurface

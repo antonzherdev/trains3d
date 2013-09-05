@@ -3,7 +3,7 @@ import EGMesh
 import EG
 import EGTexture
 import EGMaterial
-import EGContext
+import EG
 import EGTypes
 
 import TRRailroad

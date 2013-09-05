@@ -1,9 +1,9 @@
 #import "objd.h"
 #import "EGTypes.h"
 @class EG;
-#import "EGGL.h"
 @class EGContext;
 @class EGMutableMatrix;
+#import "EGGL.h"
 @class EGShaderProgram;
 @class EGShader;
 @class EGShaderAttribute;

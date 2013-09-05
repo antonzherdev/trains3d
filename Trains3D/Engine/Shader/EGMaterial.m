@@ -1,7 +1,6 @@
 #import "EGMaterial.h"
 
 #import "EG.h"
-#import "EGContext.h"
 #import "EGShader.h"
 #import "EGSimpleShaderSystem.h"
 #import "EGStandardShaderSystem.h"
@@ -200,7 +199,7 @@ static ODClassType* _EGMaterial_type;
 }
 
 - (void)applyDraw:(void(^)())draw {
-    [[self shaderSystem] applyContext:[EG context] material:self draw:draw];
+    [[self shaderSystem] applyContext:EG.context material:self draw:draw];
 }
 
 + (EGMaterial*)applyColor:(EGColor)color {

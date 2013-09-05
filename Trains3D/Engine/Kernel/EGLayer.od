@@ -1,7 +1,6 @@
 import EGTypes
 import EGProcessor
 import EG
-import EGContext
 import EGVec
 
 class EGLayer(view : EGView, processor : EGProcessor?) extends EGController {

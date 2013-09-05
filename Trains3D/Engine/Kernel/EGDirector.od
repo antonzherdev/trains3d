@@ -4,7 +4,7 @@ import EGTime
 import EGStat
 import EGTypes
 import EGGL
-import EGContext
+import EG
 import EGProcessor
 
 class EGDirector {
@@ -12,15 +12,12 @@ class EGDirector {
     private var _isStarted = false
     private var _isPaused = false
     val time : EGTime = EGTime()
-    private static var _current : EGDirector
-    static def current = _current
-    val context = EGContext()
 
     def drawWith(size : EGVec2) {
-        _current = self
+        EG.context.director = self
         glClearColor(0.0, 0.0, 0.0, 1)
         egClear
-        context.clearMatrix
+        EG.context.clearMatrix
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_CULL_FACE)
         scene.drawWith(size)

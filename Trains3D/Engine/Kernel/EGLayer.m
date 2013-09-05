@@ -2,7 +2,6 @@
 
 #import "EGProcessor.h"
 #import "EG.h"
-#import "EGContext.h"
 @implementation EGLayer{
     id<EGView> _view;
     id _processor;
@@ -32,8 +31,8 @@ static ODClassType* _EGLayer_type;
 
 - (void)drawWithViewSize:(EGVec2)viewSize {
     [[_view camera] focusForViewSize:viewSize];
-    [EG context].eyeDirection = [[_view camera] eyeDirection];
-    [EG context].environment = [_view environment];
+    EG.context.eyeDirection = [[_view camera] eyeDirection];
+    EG.context.environment = [_view environment];
     [_view drawView];
 }
 

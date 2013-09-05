@@ -7,6 +7,8 @@
 @class CNMutablePArray;
 #import "EGTypes.h"
 @class EG;
+@class EGContext;
+@class EGMutableMatrix;
 #import "EGGL.h"
 @class EGMesh;
 @class EGMeshModel;
@@ -26,8 +28,6 @@
 @class EGShaderAttribute;
 @class EGShaderUniform;
 @protocol EGShaderSystem;
-@class EGContext;
-@class EGMutableMatrix;
 #import "EGVec.h"
 
 @class EGMapSso;

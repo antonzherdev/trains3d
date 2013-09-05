@@ -5,10 +5,8 @@ import EG
 import EGGL
 import EGBuffer
 import EGMatrix
-import EGContext
 import EGTypes
 import EGMaterial
-import EGContext
 import EGVec
 
 class EGShaderProgram(handle : GLuint) {

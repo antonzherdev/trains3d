@@ -4,9 +4,7 @@
 #import "EG.h"
 #import "EGBuffer.h"
 #import "EGMatrix.h"
-#import "EGContext.h"
 #import "EGMaterial.h"
-#import "EGContext.h"
 @implementation EGShaderProgram{
     GLuint _handle;
 }

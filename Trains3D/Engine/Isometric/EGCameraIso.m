@@ -2,7 +2,6 @@
 
 #import "EG.h"
 #import "EGMapIso.h"
-#import "EGContext.h"
 @implementation EGCameraIso{
     EGVec2I _tilesOnScreen;
     EGVec2 _center;

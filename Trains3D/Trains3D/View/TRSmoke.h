@@ -3,6 +3,8 @@
 @class CNPArrayIterator;
 @class CNMutablePArray;
 @class EG;
+@class EGContext;
+@class EGMutableMatrix;
 #import "EGGL.h"
 #import "EGTypes.h"
 @class EGBuffer;
@@ -13,8 +15,6 @@
 @class EGShaderAttribute;
 @class EGShaderUniform;
 @protocol EGShaderSystem;
-@class EGContext;
-@class EGMutableMatrix;
 @class EGTexture;
 @class EGFileTexture;
 @class EGMatrix;

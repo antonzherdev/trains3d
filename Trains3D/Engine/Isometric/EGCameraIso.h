@@ -1,11 +1,11 @@
 #import "objd.h"
 @class EG;
+@class EGContext;
+@class EGMutableMatrix;
 #import "EGGL.h"
 #import "EGTypes.h"
 @class EGMapSso;
 @class EGMapSsoView;
-@class EGContext;
-@class EGMutableMatrix;
 #import "EGVec.h"
 
 @class EGCameraIso;

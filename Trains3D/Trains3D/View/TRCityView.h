@@ -1,11 +1,14 @@
 #import "objd.h"
 @class EG;
+@class EGContext;
+@class EGMutableMatrix;
 #import "EGGL.h"
 @class EGSchedule;
 @class EGAnimation;
 @class EGMesh;
 @class EGMeshModel;
 #import "EGTypes.h"
+@class EG;
 @class EGContext;
 @class EGMutableMatrix;
 @class EGColorSource;
