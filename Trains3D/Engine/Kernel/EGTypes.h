@@ -147,6 +147,7 @@ static inline NSString* EGColorDescription(EGColor self) {
     [description appendString:@">"];
     return description;
 }
+EGColor egColorWhite();
 ODPType* egColorType();
 @interface EGColorWrap : NSObject
 @property (readonly, nonatomic) EGColor value;

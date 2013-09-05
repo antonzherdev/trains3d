@@ -50,6 +50,7 @@
 - (ODClassType*)type;
 + (EGIndexBuffer*)apply;
 - (void)draw;
+- (void)drawByQuads;
 + (ODClassType*)type;
 @end
 

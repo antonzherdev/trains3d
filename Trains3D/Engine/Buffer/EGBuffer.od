@@ -52,6 +52,16 @@ class EGIndexBuffer<T>(handle : GLuint) extends EGBuffer<T>(GL_ELEMENT_ARRAY_BUF
         glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0)
         unbind
     }
+
+    def drawByQuads {
+        bind
+        var i = 0
+        while(i + 6 <= count) {
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 4*i)
+            i += 6
+        }
+        unbind
+    }
 }
 
 stub val GL_ARRAY_BUFFER : GLenum

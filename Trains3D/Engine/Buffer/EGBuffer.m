@@ -205,6 +205,16 @@ static ODClassType* _EGIndexBuffer_type;
     [self unbind];
 }
 
+- (void)drawByQuads {
+    [self bind];
+    NSInteger i = 0;
+    while(i + 6 <= [self count]) {
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 4 * i);
+        i += 6;
+    }
+    [self unbind];
+}
+
 - (ODClassType*)type {
     return [EGIndexBuffer type];
 }

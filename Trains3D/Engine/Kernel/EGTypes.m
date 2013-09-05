@@ -133,6 +133,10 @@ ODPType* egRectIType() {
 
 
 
+EGColor egColorWhite() {
+    static EGColor _ret = {1.0, 1.0, 1.0, 1.0};
+    return _ret;
+}
 ODPType* egColorType() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[EGColorWrap class] name:@"EGColor" size:sizeof(EGColor) wrap:^id(void* data, NSUInteger i) {

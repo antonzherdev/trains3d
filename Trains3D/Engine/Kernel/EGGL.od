@@ -74,6 +74,7 @@ stub def glBindBuffer(target : GLenum, handle : GLuint) : GLuint
 stub def glBufferData(target : GLenum, size : GLsizeiptr, data : [void], usage : GLenum)
 stub def egVertexAttribPointer(slot : GLuint, size : uint, tp : GLenum, normalized : GLboolean, stride : uint, shift : uint)
 stub def glDrawElements(mode : GLenum, count : GLsizei, tp : GLenum, indices : [void])
+stub def glDrawRangeElements(mode : GLenum, start : GLuint, end : GLuint, count : GLsizei, tp : GLenum, indices : [void])
 stub def glDrawArrays(mode : GLenum, first : GLint, count : GLsizei)
 stub def glEnableVertexAttribArray(handle : GLint)
 stub def glDisableVertexAttribArray(handle : GLint)

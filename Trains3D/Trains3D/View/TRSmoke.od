@@ -151,11 +151,7 @@ class TRSmokeShader {
 
          void main(void) {
             gl_FragColor = texture2D(texture, UV);
-            if(gl_FragColor.x > 0.7) {
-                gl_FragColor.w = min(0.7, 2.8 - 0.7*life);
-            } else {
-                gl_FragColor.w = 0.0;
-            }
+            gl_FragColor.w *= min(0.7, 2.8 - 0.7*life);
          }"
     static val instance = TRSmokeShader()
     val program = EGShaderProgram(vertex, fragment)

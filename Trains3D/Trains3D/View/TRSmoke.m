@@ -392,11 +392,7 @@ static NSString* _TRSmokeShader_fragment = @"varying vec2 UV;\n"
     "\n"
     "void main(void) {\n"
     "   gl_FragColor = texture2D(texture, UV);\n"
-    "   if(gl_FragColor.x > 0.7) {\n"
-    "       gl_FragColor.w = min(0.7, 2.8 - 0.7*life);\n"
-    "   } else {\n"
-    "       gl_FragColor.w = 0.0;\n"
-    "   }\n"
+    "   gl_FragColor.w *= min(0.7, 2.8 - 0.7*life);\n"
     "}";
 static TRSmokeShader* _TRSmokeShader_instance;
 static ODClassType* _TRSmokeShader_type;
