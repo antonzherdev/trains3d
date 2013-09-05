@@ -1,10 +1,7 @@
 #import "EGMesh.h"
 
 #import "CNData.h"
-#import "EGBuffer.h"
 #import "EGSimpleShaderSystem.h"
-#import "EGMaterial.h"
-#import "EGTexture.h"
 @implementation EGMesh{
     EGVertexBuffer* _vertexBuffer;
     EGIndexBuffer* _indexBuffer;
@@ -34,14 +31,6 @@ static ODClassType* _EGMesh_type;
 
 + (EGMesh*)applyVertexData:(CNPArray*)vertexData index:(CNPArray*)index {
     return [EGMesh meshWithVertexBuffer:[[EGVertexBuffer applyStride:((NSUInteger)(8 * 4))] setData:vertexData] indexBuffer:[[EGIndexBuffer apply] setData:index]];
-}
-
-- (void)drawWithMaterial:(EGMaterial*)material {
-    [_vertexBuffer applyDraw:^void() {
-        [material applyDraw:^void() {
-            [_indexBuffer draw];
-        }];
-    }];
 }
 
 - (ODClassType*)type {
@@ -81,40 +70,86 @@ static ODClassType* _EGMesh_type;
 @end
 
 
-@implementation EGMeshModel{
-    id<CNSeq> _meshes;
+@implementation EGBuffer{
+    GLenum _bufferType;
+    GLuint _handle;
+    NSUInteger __length;
+    NSUInteger __count;
 }
-static ODClassType* _EGMeshModel_type;
-@synthesize meshes = _meshes;
+static ODClassType* _EGBuffer_type;
+@synthesize bufferType = _bufferType;
+@synthesize handle = _handle;
 
-+ (id)meshModelWithMeshes:(id<CNSeq>)meshes {
-    return [[EGMeshModel alloc] initWithMeshes:meshes];
++ (id)bufferWithBufferType:(GLenum)bufferType handle:(GLuint)handle {
+    return [[EGBuffer alloc] initWithBufferType:bufferType handle:handle];
 }
 
-- (id)initWithMeshes:(id<CNSeq>)meshes {
+- (id)initWithBufferType:(GLenum)bufferType handle:(GLuint)handle {
     self = [super init];
-    if(self) _meshes = meshes;
+    if(self) {
+        _bufferType = bufferType;
+        _handle = handle;
+        __length = 0;
+        __count = 0;
+    }
     
     return self;
 }
 
 + (void)initialize {
     [super initialize];
-    _EGMeshModel_type = [ODClassType classTypeWithCls:[EGMeshModel class]];
+    _EGBuffer_type = [ODClassType classTypeWithCls:[EGBuffer class]];
 }
 
-- (void)draw {
-    [_meshes forEach:^void(CNTuple* p) {
-        [((EGMesh*)(p.a)) drawWithMaterial:((EGMaterial*)(p.b))];
-    }];
+- (NSUInteger)length {
+    return __length;
+}
+
+- (NSUInteger)count {
+    return __count;
+}
+
++ (EGBuffer*)applyBufferType:(GLenum)bufferType {
+    return [EGBuffer bufferWithBufferType:bufferType handle:egGenBuffer()];
+}
+
+- (void)dealoc {
+    egDeleteBuffer(_handle);
+}
+
+- (id)setData:(CNPArray*)data {
+    return [self setData:data usage:GL_STATIC_DRAW];
+}
+
+- (id)setData:(CNPArray*)data usage:(GLenum)usage {
+    glBindBuffer(_bufferType, _handle);
+    glBufferData(_bufferType, data.length, data.bytes, GL_STATIC_DRAW);
+    glBindBuffer(_bufferType, 0);
+    __length = data.length;
+    __count = data.count;
+    return self;
+}
+
+- (void)bind {
+    glBindBuffer(_bufferType, _handle);
+}
+
+- (void)unbind {
+    glBindBuffer(_bufferType, 0);
+}
+
+- (void)applyDraw:(void(^)())draw {
+    [self bind];
+    ((void(^)())(draw))();
+    [self unbind];
 }
 
 - (ODClassType*)type {
-    return [EGMeshModel type];
+    return [EGBuffer type];
 }
 
 + (ODClassType*)type {
-    return _EGMeshModel_type;
+    return _EGBuffer_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -124,19 +159,157 @@ static ODClassType* _EGMeshModel_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGMeshModel* o = ((EGMeshModel*)(other));
-    return [self.meshes isEqual:o.meshes];
+    EGBuffer* o = ((EGBuffer*)(other));
+    return GLenumEq(self.bufferType, o.bufferType) && GLuintEq(self.handle, o.handle);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [self.meshes hash];
+    hash = hash * 31 + GLenumHash(self.bufferType);
+    hash = hash * 31 + GLuintHash(self.handle);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"meshes=%@", self.meshes];
+    [description appendFormat:@"bufferType=%@", GLenumDescription(self.bufferType)];
+    [description appendFormat:@", handle=%@", GLuintDescription(self.handle)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGVertexBuffer{
+    NSUInteger _stride;
+}
+static ODClassType* _EGVertexBuffer_type;
+@synthesize stride = _stride;
+
++ (id)vertexBufferWithStride:(NSUInteger)stride handle:(GLuint)handle {
+    return [[EGVertexBuffer alloc] initWithStride:stride handle:handle];
+}
+
+- (id)initWithStride:(NSUInteger)stride handle:(GLuint)handle {
+    self = [super initWithBufferType:GL_ARRAY_BUFFER handle:handle];
+    if(self) _stride = stride;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGVertexBuffer_type = [ODClassType classTypeWithCls:[EGVertexBuffer class]];
+}
+
++ (EGVertexBuffer*)applyStride:(NSUInteger)stride {
+    return [EGVertexBuffer vertexBufferWithStride:stride handle:egGenBuffer()];
+}
+
+- (ODClassType*)type {
+    return [EGVertexBuffer type];
+}
+
++ (ODClassType*)type {
+    return _EGVertexBuffer_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGVertexBuffer* o = ((EGVertexBuffer*)(other));
+    return self.stride == o.stride && GLuintEq(self.handle, o.handle);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.stride;
+    hash = hash * 31 + GLuintHash(self.handle);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"stride=%li", self.stride];
+    [description appendFormat:@", handle=%@", GLuintDescription(self.handle)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGIndexBuffer
+static ODClassType* _EGIndexBuffer_type;
+
++ (id)indexBufferWithHandle:(GLuint)handle {
+    return [[EGIndexBuffer alloc] initWithHandle:handle];
+}
+
+- (id)initWithHandle:(GLuint)handle {
+    self = [super initWithBufferType:GL_ELEMENT_ARRAY_BUFFER handle:handle];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGIndexBuffer_type = [ODClassType classTypeWithCls:[EGIndexBuffer class]];
+}
+
++ (EGIndexBuffer*)apply {
+    return [EGIndexBuffer indexBufferWithHandle:egGenBuffer()];
+}
+
+- (void)draw {
+    [self bind];
+    glDrawElements(GL_TRIANGLES, [self count], GL_UNSIGNED_INT, 0);
+    [self unbind];
+}
+
+- (void)drawByQuads {
+    [self bind];
+    NSInteger i = 0;
+    while(i + 6 <= [self count]) {
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 4 * i);
+        i += 6;
+    }
+    [self unbind];
+}
+
+- (ODClassType*)type {
+    return [EGIndexBuffer type];
+}
+
++ (ODClassType*)type {
+    return _EGIndexBuffer_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGIndexBuffer* o = ((EGIndexBuffer*)(other));
+    return GLuintEq(self.handle, o.handle);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + GLuintHash(self.handle);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"handle=%@", GLuintDescription(self.handle)];
     [description appendString:@">"];
     return description;
 }

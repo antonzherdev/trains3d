@@ -3,21 +3,21 @@
 @class EGTexture;
 @class EGFileTexture;
 @class EGMesh;
-@class EGMeshModel;
+@class EGBuffer;
+@class EGVertexBuffer;
+@class EGIndexBuffer;
 @class EGShaderProgram;
 @class EGShader;
 @class EGShaderAttribute;
 @class EGShaderUniform;
 @protocol EGShaderSystem;
-@class EGBuffer;
-@class EGVertexBuffer;
-@class EGIndexBuffer;
 @class EGColorSource;
 @class EGColorSourceColor;
 @class EGColorSourceTexture;
 @class EGMaterial;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
+@class EGMeshModel;
 
 @class EGSurface;
 @class EGSurfaceShader;

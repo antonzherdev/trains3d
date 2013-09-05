@@ -23,11 +23,11 @@ class TRCityView {
             _.modify(w = w -> w.translate(city.tile.x, city.tile.y, 0))
              .modify(m = m -> m.rotate(city.angle.angle, 0, -1, 0))
         ) {
-            TR3D.city.drawWith(material = city.color.color)
+            EGStandardMaterial(city.color.color).draw(TR3D.city)
 
             city.expectedTrainAnimation.for(a -> {
                 val x = -a.time/2
-                expectedTrainModel.drawWith(material = EGColor(1.0, 0.5 - x, 0.5 - x, 1))
+                EGStandardMaterial(EGColor(1.0, 0.5 - x, 0.5 - x, 1)).draw(expectedTrainModel)
             })
         }
     }

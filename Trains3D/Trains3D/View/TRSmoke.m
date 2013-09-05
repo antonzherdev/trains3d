@@ -2,7 +2,6 @@
 
 #import "CNData.h"
 #import "EG.h"
-#import "EGBuffer.h"
 #import "EGShader.h"
 #import "EGTexture.h"
 #import "EGMatrix.h"
@@ -317,11 +316,7 @@ static ODClassType* _TRSmokeView_type;
     }];
     [_positionBuffer setData:positionArr];
     [_indexBuffer setData:indexArr];
-    [_positionBuffer applyDraw:^void() {
-        [_shader applyMaterial:_texture draw:^void() {
-            [_indexBuffer draw];
-        }];
-    }];
+    [_shader drawMaterial:_texture mesh:[EGMesh meshWithVertexBuffer:_positionBuffer indexBuffer:_indexBuffer]];
 }
 
 - (ODClassType*)type {

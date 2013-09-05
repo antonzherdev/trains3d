@@ -6,18 +6,20 @@
 @class EGMatrixStack;
 @class EGMatrixModel;
 #import "EGGL.h"
-@class EGBuffer;
-@class EGVertexBuffer;
-@class EGIndexBuffer;
 @class EGMatrix;
 #import "EGTypes.h"
 #import "EGVec.h"
+@class EGMesh;
+@class EGBuffer;
+@class EGVertexBuffer;
+@class EGIndexBuffer;
 @class EGColorSource;
 @class EGColorSourceColor;
 @class EGColorSourceTexture;
 @class EGMaterial;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
+@class EGMeshModel;
 @class EGTexture;
 @class EGFileTexture;
 
@@ -53,6 +55,7 @@
 + (id)shaderWithProgram:(EGShaderProgram*)program;
 - (id)initWithProgram:(EGShaderProgram*)program;
 - (ODClassType*)type;
+- (void)drawMaterial:(id)material mesh:(EGMesh*)mesh;
 - (void)applyMaterial:(id)material draw:(void(^)())draw;
 - (void)loadMaterial:(id)material;
 - (void)unloadMaterial:(id)material;
@@ -88,6 +91,7 @@
 
 
 @protocol EGShaderSystem<NSObject>
+- (void)drawMaterial:(id)material mesh:(EGMesh*)mesh;
 - (void)applyMaterial:(id)material draw:(void(^)())draw;
 - (EGShader*)shaderForMaterial:(id)material;
 @end

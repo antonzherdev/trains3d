@@ -6,6 +6,7 @@
 @class EGMaterial;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
+@class EGMeshModel;
 @class EG;
 @class EGContext;
 @class EGMatrixStack;

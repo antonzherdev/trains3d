@@ -1,7 +1,9 @@
 #import "objd.h"
 #import "EGGL.h"
 @class EGMesh;
-@class EGMeshModel;
+@class EGBuffer;
+@class EGVertexBuffer;
+@class EGIndexBuffer;
 @class EG;
 @class EGContext;
 @class EGMatrixStack;
@@ -14,6 +16,7 @@
 @class EGMaterial;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
+@class EGMeshModel;
 #import "EGTypes.h"
 @class TRRailroadConnectorContent;
 @class TREmptyConnector;

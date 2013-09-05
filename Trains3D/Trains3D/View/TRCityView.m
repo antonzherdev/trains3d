@@ -39,10 +39,10 @@ static ODClassType* _TRCityView_type;
             return [m rotateAngle:((float)(city.angle.angle)) x:0.0 y:-1.0 z:0.0];
         }];
     } f:^void() {
-        [TR3D.city drawWithMaterial:[EGMaterial applyColor:city.color.color]];
+        [[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:city.color.color]] drawMesh:TR3D.city];
         [city.expectedTrainAnimation forEach:^void(EGAnimation* a) {
             CGFloat x = -[a time] / 2;
-            [_expectedTrainModel drawWithMaterial:[EGMaterial applyColor:EGColorMake(1.0, 0.5 - x, 0.5 - x, 1.0)]];
+            [[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:EGColorMake(1.0, 0.5 - x, 0.5 - x, 1.0)]] drawMesh:_expectedTrainModel];
         }];
     }];
 }

@@ -15,6 +15,7 @@
 @class EGMaterial;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
+@class EGMeshModel;
 @class EGMatrix;
 
 @class TRLevelBackgroundView;

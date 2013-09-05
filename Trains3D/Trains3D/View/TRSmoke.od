@@ -3,7 +3,6 @@ import CNData
 import EG
 import EGGL
 import EGTypes
-import EGBuffer
 import EGShader
 import EGTexture
 import EGMatrix
@@ -117,11 +116,7 @@ class TRSmokeView {
         positionBuffer.set(positionArr)
         indexBuffer.set(indexArr)
 
-        positionBuffer {
-            shader(texture) {
-                indexBuffer.draw
-            }
-        }
+        shader.draw(texture, EGMesh(vertexBuffer = positionBuffer, indexBuffer))
     }
 }
 

@@ -7,7 +7,9 @@
 @class EGSchedule;
 @class EGAnimation;
 @class EGMesh;
-@class EGMeshModel;
+@class EGBuffer;
+@class EGVertexBuffer;
+@class EGIndexBuffer;
 #import "EGTypes.h"
 @class EGColorSource;
 @class EGColorSourceColor;
@@ -15,6 +17,7 @@
 @class EGMaterial;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
+@class EGMeshModel;
 @class TRCityAngle;
 @class TRCity;
 @class TRColor;

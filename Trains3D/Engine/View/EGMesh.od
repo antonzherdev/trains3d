@@ -1,24 +1,76 @@
 import CNData
 
-import EGBuffer
+import EGGL
 import EGSimpleShaderSystem
 import EGTypes
-import EGMaterial
 
 class EGMesh(vertexBuffer : EGVertexBuffer<float4>, indexBuffer : EGIndexBuffer<uint4>) {
     static def apply(vertexData : CNPArray<float4>, index : CNPArray<uint4>) : EGMesh =
         EGMesh(vertexBuffer = EGVertexBuffer<float4>(8*4).set(vertexData), indexBuffer = EGIndexBuffer<uint4>().set(index))
-    def drawWith(material : EGMaterial) {
-        vertexBuffer {
-            material {
-                indexBuffer.draw
-            }
-        }
+}
+
+class EGBuffer<T>(bufferType : GLenum, handle : GLuint) {
+    private var _length : uint = 0
+    private var _count : uint = 0
+    def length : uint = _length
+    def count : uint = _count
+    static def apply<T>(bufferType : GLenum) : EGBuffer = EGBuffer<T>(bufferType, egGenBuffer)
+
+    def dealoc {
+        egDeleteBuffer(handle)
+    }
+
+    def set(data : CNPArray<T>) : self = set(data, GL_STATIC_DRAW)
+
+    def set(data : CNPArray<T>, usage : GLenum) : self = {
+        glBindBuffer(bufferType, handle)
+        glBufferData(bufferType, data.length, data.bytes, GL_STATIC_DRAW)
+        glBindBuffer(bufferType, 0)
+        _length = data.length
+        _count = data.count
+        self
+    }
+
+    def bind {
+        glBindBuffer(bufferType, handle)
+    }
+
+    def unbind {
+        glBindBuffer(bufferType, 0)
+    }
+
+    def apply(draw : () -> void) {
+        bind
+        draw()
+        unbind
     }
 }
 
-class EGMeshModel(meshes : [(EGMesh, EGMaterial)]) {
+class EGVertexBuffer<T>(stride : uint, handle : GLuint) extends EGBuffer<T>(GL_ARRAY_BUFFER, handle) {
+    static def apply<T>(stride : uint) : EGVertexBuffer<T> = EGVertexBuffer<T>(stride, egGenBuffer)
+}
+
+class EGIndexBuffer<T>(handle : GLuint) extends EGBuffer<T>(GL_ELEMENT_ARRAY_BUFFER, handle) {
+    static def apply<T> : EGIndexBuffer<T> = EGIndexBuffer<T>(egGenBuffer)
+
     def draw {
-        meshes.for(p -> p.a.drawWith(material = p.b))
+        bind
+        glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0)
+        unbind
+    }
+
+    def drawByQuads {
+        bind
+        var i = 0
+        while(i + 6 <= count) {
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 4*i)
+            i += 6
+        }
+        unbind
     }
 }
+
+stub val GL_ARRAY_BUFFER : GLenum
+stub val GL_ELEMENT_ARRAY_BUFFER : GLenum
+
+stub val GL_STATIC_DRAW : GLenum

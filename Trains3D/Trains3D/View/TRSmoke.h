@@ -8,9 +8,6 @@
 @class EGMatrixModel;
 #import "EGGL.h"
 #import "EGTypes.h"
-@class EGBuffer;
-@class EGVertexBuffer;
-@class EGIndexBuffer;
 @class EGShaderProgram;
 @class EGShader;
 @class EGShaderAttribute;
@@ -22,7 +19,9 @@
 @class EGSurface;
 @class EGSurfaceShader;
 @class EGMesh;
-@class EGMeshModel;
+@class EGBuffer;
+@class EGVertexBuffer;
+@class EGIndexBuffer;
 #import "EGVec.h"
 #import "EGBillboard.h"
 @class TRTrainType;
@@ -41,6 +40,7 @@
 @class EGMaterial;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
+@class EGMeshModel;
 
 @class TRSmoke;
 @class TRSmokeParticle;

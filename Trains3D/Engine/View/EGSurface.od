@@ -2,7 +2,6 @@ import EGGL
 import EGTexture
 import EGMesh
 import EGShader
-import EGBuffer
 
 class EGSurface(width : uint, height : uint) {
     private val frameBuffer = egGenFrameBuffer

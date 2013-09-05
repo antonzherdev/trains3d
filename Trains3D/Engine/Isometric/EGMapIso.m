@@ -8,7 +8,6 @@
 #import "EGMesh.h"
 #import "EGMaterial.h"
 #import "EGTexture.h"
-#import "EGBuffer.h"
 #import "EGShader.h"
 #import "EGMatrix.h"
 @implementation EGMapSso{
@@ -161,7 +160,7 @@ static ODClassType* _EGMapSsoView_type;
 
 - (void)drawPlaneWithMaterial:(EGMaterial*)material {
     glDisable(GL_CULL_FACE);
-    [_plane drawWithMaterial:material];
+    [material drawMesh:_plane];
     glEnable(GL_CULL_FACE);
 }
 

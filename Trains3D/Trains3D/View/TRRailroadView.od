@@ -105,7 +105,7 @@ class TRLightView {
             _.modify(w = w -> w.translate(light.tile.x, light.tile.y, 0))
              .modify(m = m -> m.rotate(light.connector.angle, 0, 1, 0).translate(-0.45, 0, -0.2))
         ) {
-            TR3D.light.drawWith(if(light.isGreen) greenMaterial else redMaterial)
+            (if(light.isGreen) greenMaterial else redMaterial).draw(TR3D.light)
         }
     }
 }

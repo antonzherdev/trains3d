@@ -294,7 +294,7 @@ static ODClassType* _TRLightView_type;
             return [[m rotateAngle:((float)(light.connector.angle)) x:0.0 y:1.0 z:0.0] translateX:((float)(-0.45)) y:0.0 z:((float)(-0.2))];
         }];
     } f:^void() {
-        [TR3D.light drawWithMaterial:((light.isGreen) ? _greenMaterial : _redMaterial)];
+        [((light.isGreen) ? _greenMaterial : _redMaterial) drawMesh:TR3D.light];
     }];
 }
 

@@ -39,6 +39,11 @@ static ODClassType* _EGStandardShaderSystem_type;
     }]));
 }
 
+- (void)drawMaterial:(id)material mesh:(EGMesh*)mesh {
+    EGShader* shader = [self shaderForMaterial:material];
+    [shader drawMaterial:material mesh:mesh];
+}
+
 - (void)applyMaterial:(id)material draw:(void(^)())draw {
     EGShader* shader = [self shaderForMaterial:material];
     [shader applyMaterial:material draw:draw];

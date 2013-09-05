@@ -11,6 +11,7 @@
 @class EGMaterial;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
+@class EGMeshModel;
 #import "EGShader.h"
 @class EGMatrix;
 @class EGTexture;

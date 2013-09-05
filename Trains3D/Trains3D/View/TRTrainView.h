@@ -6,13 +6,16 @@
 #import "EGGL.h"
 #import "EGTypes.h"
 @class EGMesh;
-@class EGMeshModel;
+@class EGBuffer;
+@class EGVertexBuffer;
+@class EGIndexBuffer;
 @class EGColorSource;
 @class EGColorSourceColor;
 @class EGColorSourceTexture;
 @class EGMaterial;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
+@class EGMeshModel;
 @class TRTrainType;
 @class TRTrain;
 @class TREngineType;

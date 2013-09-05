@@ -45,12 +45,12 @@ class TRTrainView {
             ){
                 val material = trainMaterialFor(train.color.color)
                 if(car.carType == TRCarType.car) {
-                    TR3D.car.drawWith(material)
-                    TR3D.carBlack.drawWith(blackMaterial)
+                    material.draw(TR3D.car)
+                    blackMaterial.draw(TR3D.carBlack)
                 } else {
-                    TR3D.engine.drawWith(material)
-                    TR3D.engineFloor.drawWith(material)
-                    TR3D.carBlack.drawWith(blackMaterial)
+                    material.draw(TR3D.engine)
+                    material.draw(TR3D.engineFloor)
+                    blackMaterial.draw(TR3D.engineBlack)
                 }
             }
         })
@@ -59,6 +59,4 @@ class TRTrainView {
     def updateWith(delta : float, train : TRTrain) {
         train.viewData.cast<TRSmoke>.updateWith(delta)
     }
-
-
 }

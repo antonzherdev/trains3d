@@ -2,6 +2,7 @@ import EGTypes
 import EG
 import EGGL
 import EGShader
+import EGMesh
 import EGSimpleShaderSystem
 import EGStandardShaderSystem
 
@@ -18,6 +19,9 @@ class EGColorSourceTexture(texture : EGTexture) extends EGColorSource
 
 class EGMaterial {
     def shaderSystem : EGShaderSystem<self>
+    def draw(mesh : EGMesh) {
+        shaderSystem.draw(self, mesh)
+    }
     def apply(draw : () -> void) {
         shaderSystem(self, draw)
     }
@@ -34,3 +38,11 @@ class EGStandardMaterial(diffuse : EGColorSource, specularColor : EGColor, specu
     static def apply(diffuse : EGColorSource) = EGStandardMaterial(diffuse, EGColor(0, 0, 0, 1), 1)
     def shaderSystem : EGShaderSystem<self> = EGStandardShaderSystem.instance
 }
+
+class EGMeshModel(meshes : [(EGMesh, EGMaterial)]) {
+    def draw {
+        meshes.for(p -> p.b.draw(mesh = p.a))
+    }
+}
+
+

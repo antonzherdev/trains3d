@@ -10,6 +10,10 @@
 @class EGShaderAttribute;
 @class EGShaderUniform;
 @protocol EGShaderSystem;
+@class EGMesh;
+@class EGBuffer;
+@class EGVertexBuffer;
+@class EGIndexBuffer;
 @class EGSimpleShaderSystem;
 @class EGSimpleShader;
 @class EGSimpleColorShader;
@@ -28,6 +32,7 @@
 @class EGMaterial;
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
+@class EGMeshModel;
 
 @interface EGColorSource : NSObject
 + (id)colorSource;
@@ -64,6 +69,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (id<EGShaderSystem>)shaderSystem;
+- (void)drawMesh:(EGMesh*)mesh;
 - (void)applyDraw:(void(^)())draw;
 + (EGMaterial*)applyColor:(EGColor)color;
 + (EGMaterial*)applyTexture:(EGTexture*)texture;
@@ -92,6 +98,17 @@
 - (ODClassType*)type;
 + (EGStandardMaterial*)applyDiffuse:(EGColorSource*)diffuse;
 - (id<EGShaderSystem>)shaderSystem;
++ (ODClassType*)type;
+@end
+
+
+@interface EGMeshModel : NSObject
+@property (nonatomic, readonly) id<CNSeq> meshes;
+
++ (id)meshModelWithMeshes:(id<CNSeq>)meshes;
+- (id)initWithMeshes:(id<CNSeq>)meshes;
+- (ODClassType*)type;
+- (void)draw;
 + (ODClassType*)type;
 @end
 

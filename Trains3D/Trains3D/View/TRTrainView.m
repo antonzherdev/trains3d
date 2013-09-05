@@ -69,12 +69,12 @@ static ODClassType* _TRTrainView_type;
         } f:^void() {
             EGMaterial* material = [self trainMaterialForColor:train.color.color];
             if(car.carType == TRCarType.car) {
-                [TR3D.car drawWithMaterial:material];
-                [TR3D.carBlack drawWithMaterial:_blackMaterial];
+                [material drawMesh:TR3D.car];
+                [_blackMaterial drawMesh:TR3D.carBlack];
             } else {
-                [TR3D.engine drawWithMaterial:material];
-                [TR3D.engineFloor drawWithMaterial:material];
-                [TR3D.carBlack drawWithMaterial:_blackMaterial];
+                [material drawMesh:TR3D.engine];
+                [material drawMesh:TR3D.engineFloor];
+                [_blackMaterial drawMesh:TR3D.engineBlack];
             }
         }];
     }];

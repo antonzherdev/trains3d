@@ -2,8 +2,8 @@
 
 #import "CNFile.h"
 #import "EG.h"
-#import "EGBuffer.h"
 #import "EGMatrix.h"
+#import "EGMesh.h"
 #import "EGMaterial.h"
 #import "EGTexture.h"
 @implementation EGShaderProgram{
@@ -148,6 +148,16 @@ static ODClassType* _EGShader_type;
 + (void)initialize {
     [super initialize];
     _EGShader_type = [ODClassType classTypeWithCls:[EGShader class]];
+}
+
+- (void)drawMaterial:(id)material mesh:(EGMesh*)mesh {
+    glUseProgram(_program.handle);
+    [mesh.vertexBuffer applyDraw:^void() {
+        [self loadMaterial:material];
+        [mesh.indexBuffer draw];
+        [self unloadMaterial:material];
+    }];
+    glUseProgram(0);
 }
 
 - (void)applyMaterial:(id)material draw:(void(^)())draw {
