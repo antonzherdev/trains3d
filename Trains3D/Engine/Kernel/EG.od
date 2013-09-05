@@ -57,12 +57,12 @@ class EGMatrixModel(m : EGMatrix, w : EGMatrix, c : EGMatrix, p : EGMatrix,
     _cp : CNLazy<EGMatrix>, _wcp : CNLazy<EGMatrix>, _wc : CNLazy<EGMatrix>)
 {
     static def apply(m : EGMatrix, w : EGMatrix, c : EGMatrix, p : EGMatrix) : EGMatrixModel = {
-        val _mw = CNLazy(w.multiply(m))
-        val _mwc = CNLazy(c.multiply(_mw.get))
-        val _cp = CNLazy(p.multiply(c))
-        val _mwcp = CNLazy(_cp.get.multiply(_mw.get))
-        val _wc = CNLazy(c.multiply(w))
-        val _wcp = CNLazy(p.multiply(_wc.get))
+        val _mw = CNLazy(w.mul(m))
+        val _mwc = CNLazy(c.mul(_mw.get))
+        val _cp = CNLazy(p.mul(c))
+        val _mwcp = CNLazy(_cp.get.mul(_mw.get))
+        val _wc = CNLazy(c.mul(w))
+        val _wcp = CNLazy(p.mul(_wc.get))
         EGMatrixModel(m, w, c, p, _mw, _mwc, _mwcp, _cp, _wcp, _wc)
     }
     static val identity = EGMatrixModel(EGMatrix.identity, EGMatrix.identity, EGMatrix.identity, EGMatrix.identity)
@@ -75,85 +75,38 @@ class EGMatrixModel(m : EGMatrix, w : EGMatrix, c : EGMatrix, p : EGMatrix,
 
     def modify(m : EGMatrix -> EGMatrix) : EGMatrixModel = {
         val mm = m(self.m)
-        val _mw = CNLazy(w.multiply(mm))
-        val _mwc = CNLazy(c.multiply(_mw.get))
-        val _mwcp = CNLazy(_cp.get.multiply(_mw.get))
+        val _mw = CNLazy(w.mul(mm))
+        val _mwc = CNLazy(c.mul(_mw.get))
+        val _mwcp = CNLazy(_cp.get.mul(_mw.get))
         EGMatrixModel(mm, w, c, p, _mw, _mwc, _mwcp, _cp, _wcp, _wc)
     }
 
 
     def modify(w : EGMatrix -> EGMatrix) : EGMatrixModel = {
         val ww = w(self.w)
-        val _mw = CNLazy(ww.multiply(m))
-        val _mwc = CNLazy(c.multiply(_mw.get))
-        val _mwcp = CNLazy(_cp.get.multiply(_mw.get))
-        val _wc = CNLazy(c.multiply(ww))
-        val _wcp = CNLazy(p.multiply(_wc.get))
+        val _mw = CNLazy(ww.mul(m))
+        val _mwc = CNLazy(c.mul(_mw.get))
+        val _mwcp = CNLazy(_cp.get.mul(_mw.get))
+        val _wc = CNLazy(c.mul(ww))
+        val _wcp = CNLazy(p.mul(_wc.get))
         EGMatrixModel(m, ww, c, p, _mw, _mwc, _mwcp, _cp, _wcp, _wc)
     }
 
     def modify(c : EGMatrix -> EGMatrix) : EGMatrixModel = {
         val cc = c(self.c)
-        val _mwc = CNLazy(cc.multiply(_mw.get))
-        val _cp = CNLazy(p.multiply(cc))
-        val _mwcp = CNLazy(_cp.get.multiply(_mw.get))
-        val _wc = CNLazy(cc.multiply(w))
-        val _wcp = CNLazy(p.multiply(_wc.get))
+        val _mwc = CNLazy(cc.mul(_mw.get))
+        val _cp = CNLazy(p.mul(cc))
+        val _mwcp = CNLazy(_cp.get.mul(_mw.get))
+        val _wc = CNLazy(cc.mul(w))
+        val _wcp = CNLazy(p.mul(_wc.get))
         EGMatrixModel(m, w, cc, p, _mw, _mwc, _mwcp, _cp, _wcp, _wc)
     }
 
     def modify(p : EGMatrix -> EGMatrix) : EGMatrixModel = {
         val pp = p(self.p)
-        val _cp = CNLazy(pp.multiply(c))
-        val _mwcp = CNLazy(_cp.get.multiply(_mw.get))
-        val _wcp = CNLazy(pp.multiply(_wc.get))
+        val _cp = CNLazy(pp.mul(c))
+        val _mwcp = CNLazy(_cp.get.mul(_mw.get))
+        val _wcp = CNLazy(pp.mul(_wc.get))
         EGMatrixModel(m, w, c, pp, _mw, _mwc, _mwcp, _cp, _wcp, _wc)
-    }
-}
-
-class EGMutableMatrix {
-    private var _stack = CNList<EGMatrix>()
-    private var _value = EGMatrix.identity
-
-    def push {
-        _stack = CNList(_value, _stack)
-    }
-
-    def pop {
-        _value = _stack.head.get
-        _stack = _stack.tail
-    }
-
-    def value : EGMatrix = _value
-    def set(value : EGMatrix) {
-        _value = value
-    }
-
-    def setIdentity {
-        _value = EGMatrix.identity
-    }
-
-    def clear {
-        setIdentity
-        _stack = CNList<EGMatrix>()
-    }
-
-    def rotate(angle : float, x : float, y : float, z : float) {
-        _value = _value.rotate(angle, x, y, z)
-    }
-    def scale(x : float, y : float, z : float) {
-        _value = _value.scale(x, y, z)
-    }
-    def translate(x : float, y : float, z : float) {
-        _value = _value.translate(x, y, z)
-    }
-    def ortho(left : float, right : float, bottom : float, top : float, zNear : float, zFar : float) {
-        _value = EGMatrix.ortho(left, right, bottom, top, zNear, zFar)
-    }
-
-    def keep(f : () -> void) {
-        push
-        f()
-        pop
     }
 }

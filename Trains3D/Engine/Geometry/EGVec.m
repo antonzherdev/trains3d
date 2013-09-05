@@ -229,3 +229,51 @@ ODPType* egVec3Type() {
 
 
 
+EGVec4 egVec4Apply(EGVec3 vec3, float w) {
+    return EGVec4Make(vec3.x, vec3.y, vec3.z, w);
+}
+ODPType* egVec4Type() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGVec4Wrap class] name:@"EGVec4" size:sizeof(EGVec4) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGVec4, ((EGVec4*)(data))[i]);
+    }];
+    return _ret;
+}
+@implementation EGVec4Wrap{
+    EGVec4 _value;
+}
+@synthesize value = _value;
+
++ (id)wrapWithValue:(EGVec4)value {
+    return [[EGVec4Wrap alloc] initWithValue:value];
+}
+
+- (id)initWithValue:(EGVec4)value {
+    self = [super init];
+    if(self) _value = value;
+    return self;
+}
+
+- (NSString*)description {
+    return EGVec4Description(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGVec4Wrap* o = ((EGVec4Wrap*)(other));
+    return EGVec4Eq(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return EGVec4Hash(_value);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
+
+

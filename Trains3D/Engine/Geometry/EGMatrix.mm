@@ -46,7 +46,7 @@ static EGMatrix* _identity;
 }
 
 
-- (EGMatrix*)multiply:(EGMatrix*)matrix {
+- (EGMatrix*)mulMatrix:(EGMatrix*)matrix {
     EGMatrixImpl* impl = new EGMatrixImpl;
     impl->m = _impl->m * matrix.impl->m;
     return [EGMatrix matrixWithImpl:impl];
@@ -57,6 +57,17 @@ static EGMatrix* _identity;
     EGMatrixImpl* impl = new EGMatrixImpl;
     impl->m = glm::mat4(1.0);
     _identity = [EGMatrix matrixWithImpl:impl];
+}
+
+
+- (EGVec4)mulVec4:(EGVec4)vec4 {
+    glm::vec4 v4 = _impl->m* glm::vec4(vec4.x, vec4.y, vec4.z, vec4.w);
+    return {v4.x, v4.y, v4.z, v4.w};
+}
+
+- (EGVec4)mulVec3:(EGVec3)vec3 w:(float)w {
+    glm::vec4 v4 = _impl->m* glm::vec4(vec3.x, vec3.y, vec3.z, w);
+    return {v4.x, v4.y, v4.z, v4.w};
 }
 
 

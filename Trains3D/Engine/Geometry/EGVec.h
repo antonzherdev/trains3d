@@ -3,6 +3,7 @@
 typedef struct EGVec2 EGVec2;
 typedef struct EGVec2I EGVec2I;
 typedef struct EGVec3 EGVec3;
+typedef struct EGVec4 EGVec4;
 
 struct EGVec2 {
     CGFloat x;
@@ -139,6 +140,51 @@ ODPType* egVec3Type();
 
 + (id)wrapWithValue:(EGVec3)value;
 - (id)initWithValue:(EGVec3)value;
+@end
+
+
+
+struct EGVec4 {
+    float x;
+    float y;
+    float z;
+    float w;
+};
+static inline EGVec4 EGVec4Make(float x, float y, float z, float w) {
+    EGVec4 ret;
+    ret.x = x;
+    ret.y = y;
+    ret.z = z;
+    ret.w = w;
+    return ret;
+}
+static inline BOOL EGVec4Eq(EGVec4 s1, EGVec4 s2) {
+    return eqf4(s1.x, s2.x) && eqf4(s1.y, s2.y) && eqf4(s1.z, s2.z) && eqf4(s1.w, s2.w);
+}
+static inline NSUInteger EGVec4Hash(EGVec4 self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + float4Hash(self.x);
+    hash = hash * 31 + float4Hash(self.y);
+    hash = hash * 31 + float4Hash(self.z);
+    hash = hash * 31 + float4Hash(self.w);
+    return hash;
+}
+static inline NSString* EGVec4Description(EGVec4 self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<EGVec4: "];
+    [description appendFormat:@"x=%f", self.x];
+    [description appendFormat:@", y=%f", self.y];
+    [description appendFormat:@", z=%f", self.z];
+    [description appendFormat:@", w=%f", self.w];
+    [description appendString:@">"];
+    return description;
+}
+EGVec4 egVec4Apply(EGVec3 vec3, float w);
+ODPType* egVec4Type();
+@interface EGVec4Wrap : NSObject
+@property (readonly, nonatomic) EGVec4 value;
+
++ (id)wrapWithValue:(EGVec4)value;
+- (id)initWithValue:(EGVec4)value;
 @end
 
 

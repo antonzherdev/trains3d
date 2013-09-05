@@ -4,7 +4,6 @@
 @class EGContext;
 @class EGMatrixStack;
 @class EGMatrixModel;
-@class EGMutableMatrix;
 #import "EGGL.h"
 @class EGShaderProgram;
 @class EGShader;

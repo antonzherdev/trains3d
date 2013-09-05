@@ -1,4 +1,5 @@
 #import "objd.h"
+#import "EGVec.h"
 
 @class EGMatrix;
 
@@ -12,7 +13,9 @@ typedef struct EGMatrixImpl EGMatrixImpl;
 + (id)matrixWithImpl:(EGMatrixImpl *)m;
 + (id)matrixWithArray:(float[16])m;
 
-- (EGMatrix*)multiply:(EGMatrix*)matrix;
+- (EGMatrix*)mulMatrix:(EGMatrix*)matrix;
+- (EGVec4)mulVec4:(EGVec4)vec4;
+- (EGVec4)mulVec3:(EGVec3)vec3 w:(float)w;
 
 + (EGMatrix *)identity;
 

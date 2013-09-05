@@ -45,3 +45,7 @@ struct EGVec3(x : float4, y : float4, z : float4) {
     def lengthSquare : float = x*x + y*y + z*z
     def length = sqrt(lengthSquare)
 }
+
+struct EGVec4(x : float4, y : float4, z : float4, w : float4) {
+    static def apply(vec3 : EGVec3, w : float4) = EGVec4(vec3.x, vec3.y, vec3.z, w)
+}

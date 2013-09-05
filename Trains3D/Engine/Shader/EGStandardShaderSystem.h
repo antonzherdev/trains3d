@@ -10,7 +10,6 @@
 @class EGContext;
 @class EGMatrixStack;
 @class EGMatrixModel;
-@class EGMutableMatrix;
 #import "EGTypes.h"
 @class EGTexture;
 @class EGFileTexture;

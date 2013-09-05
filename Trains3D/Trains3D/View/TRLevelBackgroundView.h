@@ -3,7 +3,6 @@
 @class EGContext;
 @class EGMatrixStack;
 @class EGMatrixModel;
-@class EGMutableMatrix;
 @class EGTexture;
 @class EGFileTexture;
 @class TRLevelRules;

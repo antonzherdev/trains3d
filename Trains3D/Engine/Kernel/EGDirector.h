@@ -9,7 +9,6 @@
 @class EGContext;
 @class EGMatrixStack;
 @class EGMatrixModel;
-@class EGMutableMatrix;
 @protocol EGProcessor;
 @protocol EGMouseProcessor;
 @protocol EGTouchProcessor;

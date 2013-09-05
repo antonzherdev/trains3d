@@ -6,7 +6,6 @@
 @class EGContext;
 @class EGMatrixStack;
 @class EGMatrixModel;
-@class EGMutableMatrix;
 #import "EGGL.h"
 @class EGMatrix;
 

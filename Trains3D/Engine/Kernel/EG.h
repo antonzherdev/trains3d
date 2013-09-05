@@ -11,7 +11,6 @@
 @class EGContext;
 @class EGMatrixStack;
 @class EGMatrixModel;
-@class EGMutableMatrix;
 
 @interface EG : NSObject
 + (id)g;
@@ -80,25 +79,6 @@
 - (EGMatrixModel*)modifyC:(EGMatrix*(^)(EGMatrix*))c;
 - (EGMatrixModel*)modifyP:(EGMatrix*(^)(EGMatrix*))p;
 + (EGMatrixModel*)identity;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGMutableMatrix : NSObject
-+ (id)mutableMatrix;
-- (id)init;
-- (ODClassType*)type;
-- (void)push;
-- (void)pop;
-- (EGMatrix*)value;
-- (void)setValue:(EGMatrix*)value;
-- (void)setIdentity;
-- (void)clear;
-- (void)rotateAngle:(CGFloat)angle x:(CGFloat)x y:(CGFloat)y z:(CGFloat)z;
-- (void)scaleX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z;
-- (void)translateX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z;
-- (void)orthoLeft:(CGFloat)left right:(CGFloat)right bottom:(CGFloat)bottom top:(CGFloat)top zNear:(CGFloat)zNear zFar:(CGFloat)zFar;
-- (void)keepF:(void(^)())f;
 + (ODClassType*)type;
 @end
 

@@ -267,22 +267,22 @@ static ODClassType* _EGMatrixModel_type;
 
 + (EGMatrixModel*)applyM:(EGMatrix*)m w:(EGMatrix*)w c:(EGMatrix*)c p:(EGMatrix*)p {
     CNLazy* _mw = [CNLazy lazyWithF:^EGMatrix*() {
-        return [w multiply:m];
+        return [w mulMatrix:m];
     }];
     CNLazy* _mwc = [CNLazy lazyWithF:^EGMatrix*() {
-        return [c multiply:((EGMatrix*)([_mw get]))];
+        return [c mulMatrix:((EGMatrix*)([_mw get]))];
     }];
     CNLazy* _cp = [CNLazy lazyWithF:^EGMatrix*() {
-        return [p multiply:c];
+        return [p mulMatrix:c];
     }];
     CNLazy* _mwcp = [CNLazy lazyWithF:^EGMatrix*() {
-        return [((EGMatrix*)([_cp get])) multiply:((EGMatrix*)([_mw get]))];
+        return [((EGMatrix*)([_cp get])) mulMatrix:((EGMatrix*)([_mw get]))];
     }];
     CNLazy* _wc = [CNLazy lazyWithF:^EGMatrix*() {
-        return [c multiply:w];
+        return [c mulMatrix:w];
     }];
     CNLazy* _wcp = [CNLazy lazyWithF:^EGMatrix*() {
-        return [p multiply:((EGMatrix*)([_wc get]))];
+        return [p mulMatrix:((EGMatrix*)([_wc get]))];
     }];
     return [EGMatrixModel matrixModelWithM:m w:w c:c p:p _mw:_mw _mwc:_mwc _mwcp:_mwcp _cp:_cp _wcp:_wcp _wc:_wc];
 }
@@ -314,13 +314,13 @@ static ODClassType* _EGMatrixModel_type;
 - (EGMatrixModel*)modifyM:(EGMatrix*(^)(EGMatrix*))m {
     EGMatrix* mm = m(_m);
     CNLazy* _mw = [CNLazy lazyWithF:^EGMatrix*() {
-        return [_w multiply:mm];
+        return [_w mulMatrix:mm];
     }];
     CNLazy* _mwc = [CNLazy lazyWithF:^EGMatrix*() {
-        return [_c multiply:((EGMatrix*)([_mw get]))];
+        return [_c mulMatrix:((EGMatrix*)([_mw get]))];
     }];
     CNLazy* _mwcp = [CNLazy lazyWithF:^EGMatrix*() {
-        return [((EGMatrix*)([__cp get])) multiply:((EGMatrix*)([_mw get]))];
+        return [((EGMatrix*)([__cp get])) mulMatrix:((EGMatrix*)([_mw get]))];
     }];
     return [EGMatrixModel matrixModelWithM:mm w:_w c:_c p:_p _mw:_mw _mwc:_mwc _mwcp:_mwcp _cp:__cp _wcp:__wcp _wc:__wc];
 }
@@ -328,19 +328,19 @@ static ODClassType* _EGMatrixModel_type;
 - (EGMatrixModel*)modifyW:(EGMatrix*(^)(EGMatrix*))w {
     EGMatrix* ww = w(_w);
     CNLazy* _mw = [CNLazy lazyWithF:^EGMatrix*() {
-        return [ww multiply:_m];
+        return [ww mulMatrix:_m];
     }];
     CNLazy* _mwc = [CNLazy lazyWithF:^EGMatrix*() {
-        return [_c multiply:((EGMatrix*)([_mw get]))];
+        return [_c mulMatrix:((EGMatrix*)([_mw get]))];
     }];
     CNLazy* _mwcp = [CNLazy lazyWithF:^EGMatrix*() {
-        return [((EGMatrix*)([__cp get])) multiply:((EGMatrix*)([_mw get]))];
+        return [((EGMatrix*)([__cp get])) mulMatrix:((EGMatrix*)([_mw get]))];
     }];
     CNLazy* _wc = [CNLazy lazyWithF:^EGMatrix*() {
-        return [_c multiply:ww];
+        return [_c mulMatrix:ww];
     }];
     CNLazy* _wcp = [CNLazy lazyWithF:^EGMatrix*() {
-        return [_p multiply:((EGMatrix*)([_wc get]))];
+        return [_p mulMatrix:((EGMatrix*)([_wc get]))];
     }];
     return [EGMatrixModel matrixModelWithM:_m w:ww c:_c p:_p _mw:_mw _mwc:_mwc _mwcp:_mwcp _cp:__cp _wcp:_wcp _wc:_wc];
 }
@@ -348,19 +348,19 @@ static ODClassType* _EGMatrixModel_type;
 - (EGMatrixModel*)modifyC:(EGMatrix*(^)(EGMatrix*))c {
     EGMatrix* cc = c(_c);
     CNLazy* _mwc = [CNLazy lazyWithF:^EGMatrix*() {
-        return [cc multiply:((EGMatrix*)([__mw get]))];
+        return [cc mulMatrix:((EGMatrix*)([__mw get]))];
     }];
     CNLazy* _cp = [CNLazy lazyWithF:^EGMatrix*() {
-        return [_p multiply:cc];
+        return [_p mulMatrix:cc];
     }];
     CNLazy* _mwcp = [CNLazy lazyWithF:^EGMatrix*() {
-        return [((EGMatrix*)([_cp get])) multiply:((EGMatrix*)([__mw get]))];
+        return [((EGMatrix*)([_cp get])) mulMatrix:((EGMatrix*)([__mw get]))];
     }];
     CNLazy* _wc = [CNLazy lazyWithF:^EGMatrix*() {
-        return [cc multiply:_w];
+        return [cc mulMatrix:_w];
     }];
     CNLazy* _wcp = [CNLazy lazyWithF:^EGMatrix*() {
-        return [_p multiply:((EGMatrix*)([_wc get]))];
+        return [_p mulMatrix:((EGMatrix*)([_wc get]))];
     }];
     return [EGMatrixModel matrixModelWithM:_m w:_w c:cc p:_p _mw:__mw _mwc:_mwc _mwcp:_mwcp _cp:_cp _wcp:_wcp _wc:_wc];
 }
@@ -368,13 +368,13 @@ static ODClassType* _EGMatrixModel_type;
 - (EGMatrixModel*)modifyP:(EGMatrix*(^)(EGMatrix*))p {
     EGMatrix* pp = p(_p);
     CNLazy* _cp = [CNLazy lazyWithF:^EGMatrix*() {
-        return [pp multiply:_c];
+        return [pp mulMatrix:_c];
     }];
     CNLazy* _mwcp = [CNLazy lazyWithF:^EGMatrix*() {
-        return [((EGMatrix*)([_cp get])) multiply:((EGMatrix*)([__mw get]))];
+        return [((EGMatrix*)([_cp get])) mulMatrix:((EGMatrix*)([__mw get]))];
     }];
     CNLazy* _wcp = [CNLazy lazyWithF:^EGMatrix*() {
-        return [pp multiply:((EGMatrix*)([__wc get]))];
+        return [pp mulMatrix:((EGMatrix*)([__wc get]))];
     }];
     return [EGMatrixModel matrixModelWithM:_m w:_w c:_c p:pp _mw:__mw _mwc:__mwc _mwcp:_mwcp _cp:_cp _wcp:_wcp _wc:__wc];
 }
@@ -429,100 +429,6 @@ static ODClassType* _EGMatrixModel_type;
     [description appendFormat:@", _cp=%@", self._cp];
     [description appendFormat:@", _wcp=%@", self._wcp];
     [description appendFormat:@", _wc=%@", self._wc];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
-@implementation EGMutableMatrix{
-    CNList* __stack;
-    EGMatrix* __value;
-}
-static ODClassType* _EGMutableMatrix_type;
-
-+ (id)mutableMatrix {
-    return [[EGMutableMatrix alloc] init];
-}
-
-- (id)init {
-    self = [super init];
-    if(self) {
-        __stack = [CNList apply];
-        __value = [EGMatrix identity];
-    }
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _EGMutableMatrix_type = [ODClassType classTypeWithCls:[EGMutableMatrix class]];
-}
-
-- (void)push {
-    __stack = [CNList applyObject:__value tail:__stack];
-}
-
-- (void)pop {
-    __value = ((EGMatrix*)([[__stack head] get]));
-    __stack = [__stack tail];
-}
-
-- (EGMatrix*)value {
-    return __value;
-}
-
-- (void)setValue:(EGMatrix*)value {
-    __value = value;
-}
-
-- (void)setIdentity {
-    __value = [EGMatrix identity];
-}
-
-- (void)clear {
-    [self setIdentity];
-    __stack = [CNList apply];
-}
-
-- (void)rotateAngle:(CGFloat)angle x:(CGFloat)x y:(CGFloat)y z:(CGFloat)z {
-    __value = [__value rotateAngle:((float)(angle)) x:((float)(x)) y:((float)(y)) z:((float)(z))];
-}
-
-- (void)scaleX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z {
-    __value = [__value scaleX:((float)(x)) y:((float)(y)) z:((float)(z))];
-}
-
-- (void)translateX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z {
-    __value = [__value translateX:((float)(x)) y:((float)(y)) z:((float)(z))];
-}
-
-- (void)orthoLeft:(CGFloat)left right:(CGFloat)right bottom:(CGFloat)bottom top:(CGFloat)top zNear:(CGFloat)zNear zFar:(CGFloat)zFar {
-    __value = [EGMatrix orthoLeft:((float)(left)) right:((float)(right)) bottom:((float)(bottom)) top:((float)(top)) zNear:((float)(zNear)) zFar:((float)(zFar))];
-}
-
-- (void)keepF:(void(^)())f {
-    [self push];
-    ((void(^)())(f))();
-    [self pop];
-}
-
-- (ODClassType*)type {
-    return [EGMutableMatrix type];
-}
-
-+ (ODClassType*)type {
-    return _EGMutableMatrix_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
     return description;
 }
