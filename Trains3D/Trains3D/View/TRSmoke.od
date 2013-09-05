@@ -69,7 +69,7 @@ class TRSmokeParticle(texture : int) extends EGController {
 struct TRSmokeBufferData(x : float4, y : float4, z : float4, uvx : float4, uvy : float4, time : float4, textureX : float4, textureY : float4)
 
 class TRSmokeView {
-    val positionBuffer = EGVertexBuffer<float4>(6*4)
+    val positionBuffer = EGVertexBuffer<float4>(8*4)
     val indexBuffer = EGIndexBuffer<uint4>()
     val shader = TRSmokeShader.instance
     val texture = EGSimpleMaterial(EG.textureFor("Smoke.png"))
@@ -133,8 +133,8 @@ class TRSmokeShader extends EGBillboardShader(EGShaderProgram(vertex, fragment),
     static val instance = TRSmokeShader()
     val lifeSlot = program.attributeFor("vertexLife")
 
-    def load(material : EGSimpleMaterial) {
-        super.load(material)
-        lifeSlot.setFromBufferWith(stride = 8*4, valuesCount = 1, GL_FLOAT, shift = 7*4)
+    def load(vertexBuffer : EGVertexBuffer<_>, material : EGSimpleMaterial) {
+        super.load(vertexBuffer, material)
+        lifeSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 1, GL_FLOAT, shift = 7*4)
     }
 }

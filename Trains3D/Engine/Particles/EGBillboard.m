@@ -4,6 +4,7 @@
 #import "EGMaterial.h"
 #import "EGMatrix.h"
 #import "EGTexture.h"
+#import "EGMesh.h"
 @implementation EGBillboard
 static ODClassType* _EGBillboard_type;
 
@@ -22,7 +23,7 @@ static ODClassType* _EGBillboard_type;
     _EGBillboard_type = [ODClassType classTypeWithCls:[EGBillboard class]];
 }
 
-+ (void)drawWithSize:(EGVec2)size {
++ (void)drawWithMaterial:(EGSimpleMaterial*)material size:(EGVec2)size {
 }
 
 - (ODClassType*)type {
@@ -135,14 +136,14 @@ static ODClassType* _EGBillboardShader_type;
         "   gl_FragColor = color; " : @""), code];
 }
 
-- (void)loadMaterial:(EGSimpleMaterial*)material {
-    [_positionSlot setFromBufferWithStride:((NSUInteger)(8 * 4)) valuesCount:3 valuesType:GL_FLOAT shift:0];
-    [_modelSlot setFromBufferWithStride:((NSUInteger)(8 * 4)) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(3 * 4))];
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material {
+    [_positionSlot setFromBufferWithStride:vertexBuffer.stride valuesCount:3 valuesType:GL_FLOAT shift:0];
+    [_modelSlot setFromBufferWithStride:vertexBuffer.stride valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(3 * 4))];
     [_wcUniform setMatrix:[EG.matrix.value wc]];
     [_pUniform setMatrix:EG.matrix.value.p];
     if(_texture) {
         [_uvSlot forEach:^void(EGShaderAttribute* _) {
-            [_ setFromBufferWithStride:((NSUInteger)(8 * 4)) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(5 * 4))];
+            [_ setFromBufferWithStride:vertexBuffer.stride valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(5 * 4))];
         }];
         [((EGColorSourceTexture*)(material.color)).texture bind];
     } else {

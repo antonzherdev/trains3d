@@ -3,6 +3,7 @@
 #import "EGMaterial.h"
 #import "EG.h"
 #import "EGTexture.h"
+#import "EGMesh.h"
 #import "EGMatrix.h"
 @implementation EGStandardShaderSystem
 static EGStandardShaderSystem* _EGStandardShaderSystem_instance;
@@ -42,11 +43,6 @@ static ODClassType* _EGStandardShaderSystem_type;
 - (void)drawMaterial:(id)material mesh:(EGMesh*)mesh {
     EGShader* shader = [self shaderForMaterial:material];
     [shader drawMaterial:material mesh:mesh];
-}
-
-- (void)applyMaterial:(id)material draw:(void(^)())draw {
-    EGShader* shader = [self shaderForMaterial:material];
-    [shader applyMaterial:material draw:draw];
 }
 
 - (ODClassType*)type {
@@ -234,7 +230,6 @@ static ODClassType* _EGStandardShaderKey_type;
     id<CNSeq> _directLightDirections;
     id<CNSeq> _directLightColors;
 }
-static NSInteger _EGStandardShader_STRIDE;
 static NSInteger _EGStandardShader_UV_SHIFT = 0;
 static NSInteger _EGStandardShader_NORMAL_SHIFT;
 static NSInteger _EGStandardShader_POSITION_SHIFT;
@@ -283,16 +278,15 @@ static ODClassType* _EGStandardShader_type;
 + (void)initialize {
     [super initialize];
     _EGStandardShader_type = [ODClassType classTypeWithCls:[EGStandardShader class]];
-    _EGStandardShader_STRIDE = 8 * 4;
     _EGStandardShader_NORMAL_SHIFT = 2 * 4;
     _EGStandardShader_POSITION_SHIFT = 5 * 4;
 }
 
-- (void)loadMaterial:(EGStandardMaterial*)material {
-    [_positionSlot setFromBufferWithStride:((NSUInteger)(_EGStandardShader_STRIDE)) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_POSITION_SHIFT))];
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGStandardMaterial*)material {
+    [_positionSlot setFromBufferWithStride:vertexBuffer.stride valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_POSITION_SHIFT))];
     [_mwcpUniform setMatrix:[EG.matrix.value mwcp]];
     if(_key.texture) {
-        [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:((NSUInteger)(_EGStandardShader_STRIDE)) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_UV_SHIFT))];
+        [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:vertexBuffer.stride valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_UV_SHIFT))];
         [((EGColorSourceTexture*)(material.diffuse)).texture bind];
     } else {
         [_diffuseUniform setColor:((EGColorSourceColor*)(material.diffuse)).color];
@@ -303,7 +297,7 @@ static ODClassType* _EGStandardShader_type;
     [_ambientColor setColor:env.ambientColor];
     if(_key.directLightCount > 0) {
         [((EGShaderUniform*)([_mwcUniform get])) setMatrix:[EG.context.matrixStack.value mwc]];
-        [((EGShaderAttribute*)([_normalSlot get])) setFromBufferWithStride:((NSUInteger)(_EGStandardShader_STRIDE)) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_NORMAL_SHIFT))];
+        [((EGShaderAttribute*)([_normalSlot get])) setFromBufferWithStride:vertexBuffer.stride valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_NORMAL_SHIFT))];
         [[[[env.lights chain] filterCast:EGDirectLight.type] zip3A:_directLightDirections b:_directLightColors by:^EGDirectLight*(EGDirectLight* light, EGShaderUniform* dirSlot, EGShaderUniform* colorSlot) {
             EGVec3 dir = egVec4Xyz([[EG.matrix.value wc] mulVec3:light.direction w:0.0]);
             [dirSlot setVec3:dir];
@@ -319,10 +313,6 @@ static ODClassType* _EGStandardShader_type;
 
 - (ODClassType*)type {
     return [EGStandardShader type];
-}
-
-+ (NSInteger)STRIDE {
-    return _EGStandardShader_STRIDE;
 }
 
 + (NSInteger)UV_SHIFT {

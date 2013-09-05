@@ -263,7 +263,7 @@ static ODClassType* _TRSmokeView_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _positionBuffer = [EGVertexBuffer applyStride:((NSUInteger)(6 * 4))];
+        _positionBuffer = [EGVertexBuffer applyStride:((NSUInteger)(8 * 4))];
         _indexBuffer = [EGIndexBuffer apply];
         _shader = TRSmokeShader.instance;
         _texture = [EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyTexture:[EG textureForFile:@"Smoke.png"]]];
@@ -383,9 +383,9 @@ static ODClassType* _TRSmokeShader_type;
     _TRSmokeShader_instance = [TRSmokeShader smokeShader];
 }
 
-- (void)loadMaterial:(EGSimpleMaterial*)material {
-    [super loadMaterial:material];
-    [_lifeSlot setFromBufferWithStride:((NSUInteger)(8 * 4)) valuesCount:1 valuesType:GL_FLOAT shift:((NSUInteger)(7 * 4))];
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material {
+    [super loadVertexBuffer:vertexBuffer material:material];
+    [_lifeSlot setFromBufferWithStride:vertexBuffer.stride valuesCount:1 valuesType:GL_FLOAT shift:((NSUInteger)(7 * 4))];
 }
 
 - (ODClassType*)type {

@@ -204,10 +204,6 @@ static ODClassType* _EGMaterial_type;
     [[self shaderSystem] drawMaterial:self mesh:mesh];
 }
 
-- (void)applyDraw:(void(^)())draw {
-    [[self shaderSystem] applyMaterial:self draw:draw];
-}
-
 + (EGMaterial*)applyColor:(EGColor)color {
     return [EGStandardMaterial applyDiffuse:[EGColorSource applyColor:color]];
 }

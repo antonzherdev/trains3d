@@ -16,6 +16,10 @@
 @class EGMatrix;
 @class EGTexture;
 @class EGFileTexture;
+@class EGMesh;
+@class EGBuffer;
+@class EGVertexBuffer;
+@class EGIndexBuffer;
 
 @class EGBillboard;
 @class EGBillboardShader;
@@ -24,7 +28,7 @@
 + (id)billboard;
 - (id)init;
 - (ODClassType*)type;
-+ (void)drawWithSize:(EGVec2)size;
++ (void)drawWithMaterial:(EGSimpleMaterial*)material size:(EGVec2)size;
 + (ODClassType*)type;
 @end
 
@@ -43,7 +47,7 @@
 - (ODClassType*)type;
 + (NSString*)vertexTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code;
 + (NSString*)fragmentTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code;
-- (void)loadMaterial:(EGSimpleMaterial*)material;
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material;
 - (void)unloadMaterial:(EGSimpleMaterial*)material;
 + (ODClassType*)type;
 @end

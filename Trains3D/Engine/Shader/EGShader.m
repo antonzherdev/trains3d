@@ -153,22 +153,14 @@ static ODClassType* _EGShader_type;
 - (void)drawMaterial:(id)material mesh:(EGMesh*)mesh {
     glUseProgram(_program.handle);
     [mesh.vertexBuffer applyDraw:^void() {
-        [self loadMaterial:material];
+        [self loadVertexBuffer:mesh.vertexBuffer material:material];
         [mesh.indexBuffer draw];
         [self unloadMaterial:material];
     }];
     glUseProgram(0);
 }
 
-- (void)applyMaterial:(id)material draw:(void(^)())draw {
-    glUseProgram(_program.handle);
-    [self loadMaterial:material];
-    ((void(^)())(draw))();
-    [self unloadMaterial:material];
-    glUseProgram(0);
-}
-
-- (void)loadMaterial:(id)material {
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(id)material {
     @throw @"Method load is abstract";
 }
 

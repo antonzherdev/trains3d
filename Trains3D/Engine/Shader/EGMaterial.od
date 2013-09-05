@@ -22,9 +22,6 @@ class EGMaterial {
     def draw(mesh : EGMesh) {
         shaderSystem.draw(self, mesh)
     }
-    def apply(draw : () -> void) {
-        shaderSystem(self, draw)
-    }
 
     static def apply(color : EGColor) : EGMaterial = EGStandardMaterial(color)
     static def apply(texture : EGTexture) : EGMaterial = EGStandardMaterial(texture)

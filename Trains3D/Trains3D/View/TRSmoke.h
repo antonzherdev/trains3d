@@ -161,7 +161,7 @@ ODPType* trSmokeBufferDataType();
 + (id)smokeShader;
 - (id)init;
 - (ODClassType*)type;
-- (void)loadMaterial:(EGSimpleMaterial*)material;
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material;
 + (NSString*)vertex;
 + (NSString*)fragment;
 + (TRSmokeShader*)instance;

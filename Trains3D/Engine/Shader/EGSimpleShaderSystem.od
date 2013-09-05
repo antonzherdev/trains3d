@@ -19,7 +19,6 @@ class EGSimpleShaderSystem extends EGShaderSystem<EGSimpleMaterial> {
 }
 
 class EGSimpleShader(program : EGShaderProgram) extends EGShader(program) {
-    static val STRIDE = 8*4
     static val UV_SHIFT = 0
     static val POSITION_SHIFT = 5*4
 }
@@ -42,8 +41,8 @@ class EGSimpleColorShader extends EGSimpleShader<EGSimpleMaterial>(EGShaderProgr
     val colorUniform = uniformFor("color")
     val mvpUniform = uniformFor("mvp")
 
-    def load(material : EGSimpleMaterial) {
-        positionSlot.setFromBufferWith(STRIDE, valuesCount = 3, GL_FLOAT, POSITION_SHIFT)
+    def load(vertexBuffer : EGVertexBuffer<_>, material : EGSimpleMaterial) {
+        positionSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 3, GL_FLOAT, POSITION_SHIFT)
         mvpUniform.set(matrix = EG.matrix.value.mwcp)
         colorUniform.set(color = material.color.cast<EGColorSourceColor>.color)
     }
@@ -72,11 +71,11 @@ class EGSimpleTextureShader extends EGSimpleShader<EGSimpleMaterial>(EGShaderPro
     val positionSlot : EGShaderAttribute = attributeFor("position")
     val mvpUniform = uniformFor("mvp")
 
-    def load(material : EGSimpleMaterial) {
-        positionSlot.setFromBufferWith(STRIDE, valuesCount = 3, GL_FLOAT, POSITION_SHIFT)
+    def load(vertexBuffer : EGVertexBuffer<_>, material : EGSimpleMaterial) {
+        positionSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 3, GL_FLOAT, POSITION_SHIFT)
         mvpUniform.set(matrix = EG.matrix.value.mwcp)
 
-        uvSlot.setFromBufferWith(STRIDE, valuesCount = 2, GL_FLOAT, UV_SHIFT)
+        uvSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 2, GL_FLOAT, UV_SHIFT)
         material.color.cast<EGColorSourceTexture>.texture.bind
     }
 

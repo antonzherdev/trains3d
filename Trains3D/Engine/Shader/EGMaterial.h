@@ -70,7 +70,6 @@
 - (ODClassType*)type;
 - (id<EGShaderSystem>)shaderSystem;
 - (void)drawMesh:(EGMesh*)mesh;
-- (void)applyDraw:(void(^)())draw;
 + (EGMaterial*)applyColor:(EGColor)color;
 + (EGMaterial*)applyTexture:(EGTexture*)texture;
 + (ODClassType*)type;

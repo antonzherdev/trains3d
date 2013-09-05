@@ -16,6 +16,10 @@
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
 @class EGMeshModel;
+@class EGMesh;
+@class EGBuffer;
+@class EGVertexBuffer;
+@class EGIndexBuffer;
 @class EGMatrix;
 
 @class EGSimpleShaderSystem;
@@ -37,7 +41,6 @@
 + (id)simpleShaderWithProgram:(EGShaderProgram*)program;
 - (id)initWithProgram:(EGShaderProgram*)program;
 - (ODClassType*)type;
-+ (NSInteger)STRIDE;
 + (NSInteger)UV_SHIFT;
 + (NSInteger)POSITION_SHIFT;
 + (ODClassType*)type;
@@ -52,7 +55,7 @@
 + (id)simpleColorShader;
 - (id)init;
 - (ODClassType*)type;
-- (void)loadMaterial:(EGSimpleMaterial*)material;
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material;
 + (NSString*)colorVertexProgram;
 + (NSString*)colorFragmentProgram;
 + (ODClassType*)type;
@@ -67,7 +70,7 @@
 + (id)simpleTextureShader;
 - (id)init;
 - (ODClassType*)type;
-- (void)loadMaterial:(EGSimpleMaterial*)material;
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material;
 - (void)unloadMaterial:(EGSimpleMaterial*)material;
 + (NSString*)textureVertexProgram;
 + (NSString*)textureFragmentProgram;

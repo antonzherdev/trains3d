@@ -84,7 +84,6 @@ class EGStandardShaderKey(directLightCount : uint, texture : bool) {
 }
 
 class EGStandardShader(key : EGStandardShaderKey, program : EGShaderProgram) extends EGShader<EGStandardMaterial>(program) {
-    static val STRIDE = 8*4
     static val UV_SHIFT = 0
     static val NORMAL_SHIFT = 2*4
     static val POSITION_SHIFT = 5*4
@@ -103,11 +102,11 @@ class EGStandardShader(key : EGStandardShaderKey, program : EGShaderProgram) ext
     val directLightDirections : [EGShaderUniform] = key.directLightCount.range.chain.map{i -> uniformFor("dirLightDirection$i")}.toArray
     val directLightColors : [EGShaderUniform] = key.directLightCount.range.chain.map{i -> uniformFor("dirLightColor$i")}.toArray
 
-    def load(material : EGStandardMaterial) {
-        positionSlot.setFromBufferWith(STRIDE, valuesCount = 3, GL_FLOAT, POSITION_SHIFT)
+    def load(vertexBuffer :EGVertexBuffer<_>, material : EGStandardMaterial) {
+        positionSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 3, GL_FLOAT, POSITION_SHIFT)
         mwcpUniform.set(matrix = EG.matrix.value.mwcp)
         if(key.texture) {
-            uvSlot.get.setFromBufferWith(STRIDE, valuesCount = 2, GL_FLOAT, UV_SHIFT)
+            uvSlot.get.setFromBufferWith(vertexBuffer.stride, valuesCount = 2, GL_FLOAT, UV_SHIFT)
             material.diffuse.cast<EGColorSourceTexture>.texture.bind
         } else {
             diffuseUniform.set(color = material.diffuse.cast<EGColorSourceColor>.color)
@@ -118,7 +117,7 @@ class EGStandardShader(key : EGStandardShaderKey, program : EGShaderProgram) ext
         ambientColor.set(color = env.ambientColor)
         if(key.directLightCount > 0) {
             mwcUniform.get.set(matrix = EG.context.matrixStack.value.mwc)
-            normalSlot.get.setFromBufferWith(STRIDE, valuesCount = 3, GL_FLOAT, NORMAL_SHIFT)
+            normalSlot.get.setFromBufferWith(vertexBuffer.stride, valuesCount = 3, GL_FLOAT, NORMAL_SHIFT)
             env.lights.chain.filterCast(EGDirectLight.type).zip3(directLightDirections, directLightColors){light, dirSlot, colorSlot ->
                 val dir = EG.matrix.value.wc.mul(vec3 = light.direction, 0).xyz
                 dirSlot.set(vec3 = dir)

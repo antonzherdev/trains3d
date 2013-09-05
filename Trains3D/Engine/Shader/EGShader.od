@@ -10,6 +10,7 @@ import EGMesh
 
 export EGMaterial
 export EGTexture
+export EGMesh
 
 class EGShaderProgram(handle : GLuint) {
     static def loadFromFiles(vertex : string, fragment : string) : EGShaderProgram =
@@ -77,22 +78,14 @@ class EGShader<M extends EGMaterial>(program : EGShaderProgram) {
     def draw(material : M, mesh : EGMesh) {
         glUseProgram(program.handle)
         mesh.vertexBuffer {
-            load(material)
+            load(mesh.vertexBuffer, material)
             mesh.indexBuffer.draw
             unload(material)
         }
         glUseProgram(0)
     }
 
-    def apply(material : M, draw : () -> void) {
-        glUseProgram(program.handle)
-        load(material)
-        draw()
-        unload(material)
-        glUseProgram(0)
-    }
-
-    def load(material : M)
+    def load(vertexBuffer : EGVertexBuffer<_>, material : M)
     def unload(material : M) {}
 
     def attributeFor(name : string ) = program.attributeFor(name)
@@ -125,11 +118,6 @@ trait EGShaderSystem<M extends EGMaterial> {
     def draw(material : M, mesh : EGMesh) {
         val shader = shaderFor(material)
         shader.draw(material, mesh)
-    }
-
-    def apply(material : M, draw : () -> void)  {
-        val shader = shaderFor(material)
-        shader(material, draw)
     }
 
     def shaderFor(material : M) : EGShader

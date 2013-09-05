@@ -16,6 +16,10 @@
 @class EGTexture;
 @class EGFileTexture;
 #import "EGGL.h"
+@class EGMesh;
+@class EGBuffer;
+@class EGVertexBuffer;
+@class EGIndexBuffer;
 @class EGMatrix;
 
 @class EGStandardShaderSystem;
@@ -66,9 +70,8 @@
 + (id)standardShaderWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
 - (id)initWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
 - (ODClassType*)type;
-- (void)loadMaterial:(EGStandardMaterial*)material;
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGStandardMaterial*)material;
 - (void)unloadMaterial:(EGSimpleMaterial*)material;
-+ (NSInteger)STRIDE;
 + (NSInteger)UV_SHIFT;
 + (NSInteger)NORMAL_SHIFT;
 + (NSInteger)POSITION_SHIFT;

@@ -3,6 +3,7 @@
 #import "EG.h"
 #import "EGTexture.h"
 #import "EGMaterial.h"
+#import "EGMesh.h"
 #import "EGMatrix.h"
 @implementation EGSimpleShaderSystem
 static EGSimpleShaderSystem* _EGSimpleShaderSystem_instance;
@@ -69,11 +70,6 @@ static ODClassType* _EGSimpleShaderSystem_type;
     [shader drawMaterial:material mesh:mesh];
 }
 
-- (void)applyMaterial:(id)material draw:(void(^)())draw {
-    EGShader* shader = [self shaderForMaterial:material];
-    [shader applyMaterial:material draw:draw];
-}
-
 - (ODClassType*)type {
     return [EGSimpleShaderSystem type];
 }
@@ -110,7 +106,6 @@ static ODClassType* _EGSimpleShaderSystem_type;
 
 
 @implementation EGSimpleShader
-static NSInteger _EGSimpleShader_STRIDE;
 static NSInteger _EGSimpleShader_UV_SHIFT = 0;
 static NSInteger _EGSimpleShader_POSITION_SHIFT;
 static ODClassType* _EGSimpleShader_type;
@@ -128,16 +123,11 @@ static ODClassType* _EGSimpleShader_type;
 + (void)initialize {
     [super initialize];
     _EGSimpleShader_type = [ODClassType classTypeWithCls:[EGSimpleShader class]];
-    _EGSimpleShader_STRIDE = 8 * 4;
     _EGSimpleShader_POSITION_SHIFT = 5 * 4;
 }
 
 - (ODClassType*)type {
     return [EGSimpleShader type];
-}
-
-+ (NSInteger)STRIDE {
-    return _EGSimpleShader_STRIDE;
 }
 
 + (NSInteger)UV_SHIFT {
@@ -220,8 +210,8 @@ static ODClassType* _EGSimpleColorShader_type;
     _EGSimpleColorShader_type = [ODClassType classTypeWithCls:[EGSimpleColorShader class]];
 }
 
-- (void)loadMaterial:(EGSimpleMaterial*)material {
-    [_positionSlot setFromBufferWithStride:((NSUInteger)([EGSimpleColorShader STRIDE])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleColorShader POSITION_SHIFT]))];
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material {
+    [_positionSlot setFromBufferWithStride:vertexBuffer.stride valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleColorShader POSITION_SHIFT]))];
     [_mvpUniform setMatrix:[EG.matrix.value mwcp]];
     [_colorUniform setColor:((EGColorSourceColor*)(material.color)).color];
 }
@@ -311,10 +301,10 @@ static ODClassType* _EGSimpleTextureShader_type;
     _EGSimpleTextureShader_type = [ODClassType classTypeWithCls:[EGSimpleTextureShader class]];
 }
 
-- (void)loadMaterial:(EGSimpleMaterial*)material {
-    [_positionSlot setFromBufferWithStride:((NSUInteger)([EGSimpleTextureShader STRIDE])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleTextureShader POSITION_SHIFT]))];
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material {
+    [_positionSlot setFromBufferWithStride:vertexBuffer.stride valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleTextureShader POSITION_SHIFT]))];
     [_mvpUniform setMatrix:[EG.matrix.value mwcp]];
-    [_uvSlot setFromBufferWithStride:((NSUInteger)([EGSimpleTextureShader STRIDE])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleTextureShader UV_SHIFT]))];
+    [_uvSlot setFromBufferWithStride:vertexBuffer.stride valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleTextureShader UV_SHIFT]))];
     [((EGColorSourceTexture*)(material.color)).texture bind];
 }
 
