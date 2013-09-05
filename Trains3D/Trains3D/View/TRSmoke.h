@@ -143,6 +143,7 @@ ODPType* trSmokeBufferDataType();
 - (void)begin;
 - (void)end;
 - (void)drawSmoke:(TRSmoke*)smoke;
++ (CGFloat)particleSize;
 + (ODClassType*)type;
 @end
 
@@ -150,12 +151,12 @@ ODPType* trSmokeBufferDataType();
 @interface TRSmokeShader : NSObject
 @property (nonatomic, readonly) EGShaderProgram* program;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
-@property (nonatomic, readonly) EGShaderAttribute* uvSlot;
+@property (nonatomic, readonly) EGShaderAttribute* modelSlot;
 @property (nonatomic, readonly) EGShaderAttribute* lifeSlot;
-@property (nonatomic, readonly) EGShaderAttribute* textureRelSlot;
+@property (nonatomic, readonly) EGShaderAttribute* uvSlot;
 @property (nonatomic, readonly) EGMatrix* m;
-@property (nonatomic, readonly) EGShaderUniform* wcpUniform;
-@property (nonatomic, readonly) EGShaderUniform* mUniform;
+@property (nonatomic, readonly) EGShaderUniform* wcUniform;
+@property (nonatomic, readonly) EGShaderUniform* pUniform;
 
 + (id)smokeShader;
 - (id)init;

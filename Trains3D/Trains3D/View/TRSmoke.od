@@ -87,6 +87,7 @@ class TRSmokeView {
         glEnable(GL_DEPTH_TEST)
     }
 
+    static val particleSize = 0.03
     def draw(smoke : TRSmoke) {
         val particles = smoke.particles
         val n = particles.count
@@ -100,10 +101,10 @@ class TRSmokeView {
             val t : float4 = p.time
             val tx : float4 = if(p.texture >= 2) 0.5 else 0
             val ty : float4 = if(p.texture == 1 || p.texture == 3) 0.5 else 0
-            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 0, 0, t, tx, ty))
-            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 1, 0, t, tx, ty))
-            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 1, 1, t, tx, ty))
-            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, 0, 1, t, tx, ty))
+            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, -particleSize, -particleSize, t, tx, ty))
+            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z,  particleSize, -particleSize, t, tx + 0.5, ty))
+            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z,  particleSize,  particleSize, t, tx + 0.5, ty + 0.5))
+            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, -particleSize,  particleSize, t, tx, ty + 0.5))
             indexArr.write(uInt4 = i)
             indexArr.write(uInt4 = i + 1)
             indexArr.write(uInt4 = i + 2)
@@ -124,20 +125,22 @@ class TRSmokeView {
 class TRSmokeShader {
     static val vertex =
         "attribute vec3 position;
-         attribute vec2 vertexUV;
+         attribute vec2 model;
          attribute float vertexLife;
-         attribute vec2 textureRel;
-         uniform mat4 m;
-         uniform mat4 wcp;
+         attribute vec2 vertexUV;
+         uniform mat4 wc;
+         uniform mat4 p;
 
          varying vec2 UV;
          varying float life;
 
          void main(void) {
             float size = 0.03;
-            vec4 model = m * vec4(2.0*size*vertexUV.x - size, 2.0*size*vertexUV.y - size, 0, 1);
-            gl_Position = wcp * (vec4(position, 0) + model);
-            UV = 0.5*vertexUV + textureRel;
+            vec4 pos = wc*vec4(position, 1);
+            pos.x += model.x;
+            pos.y += model.y;
+            gl_Position = p*pos;
+            UV = vertexUV;
             life = vertexLife;
         }"
     static val fragment =
@@ -157,23 +160,23 @@ class TRSmokeShader {
     static val instance = TRSmokeShader()
     val program = EGShaderProgram(vertex, fragment)
     val positionSlot = program.attributeFor("position")
-    val uvSlot = program.attributeFor("vertexUV")
+    val modelSlot = program.attributeFor("model")
     val lifeSlot = program.attributeFor("vertexLife")
-    val textureRelSlot = program.attributeFor("textureRel")
+    val uvSlot = program.attributeFor("vertexUV")
     val m = EGMatrix.identity.rotate(60, 1, 0, 0).rotate(45, 0, 1, 0)
-    val wcpUniform = program.uniformFor("wcp")
-    val mUniform = program.uniformFor("m")
+    val wcUniform = program.uniformFor("wc")
+    val pUniform = program.uniformFor("p")
 
     def apply(texture : EGFileTexture, positionBuffer: EGVertexBuffer<float4>, draw : () -> void) {
         program {
             texture {
                 positionBuffer {
                     positionSlot.setFromBufferWith(stride = 8*4, valuesCount = 3, GL_FLOAT, shift = 0)
-                    uvSlot.setFromBufferWith(stride = 8*4, valuesCount = 2, GL_FLOAT, shift = 3*4)
+                    modelSlot.setFromBufferWith(stride = 8*4, valuesCount = 2, GL_FLOAT, shift = 3*4)
                     lifeSlot.setFromBufferWith(stride = 8*4, valuesCount = 1, GL_FLOAT, shift = 5*4)
-                    textureRelSlot.setFromBufferWith(stride = 8*4, valuesCount = 2, GL_FLOAT, shift = 6*4)
-                    wcpUniform.set(matrix = EG.matrix.value.wcp)
-                    mUniform.set(matrix = m)
+                    uvSlot.setFromBufferWith(stride = 8*4, valuesCount = 2, GL_FLOAT, shift = 6*4)
+                    wcUniform.set(matrix = EG.matrix.value.wc)
+                    pUniform.set(matrix = EG.matrix.value.p)
 
                     draw()
                 }
