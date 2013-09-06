@@ -1,0 +1,30 @@
+import CNData
+
+import EGTypes
+
+
+class EGParticleSystem <P extends EGParticle> extends EGController {
+    private var _particles = CNList<P>()
+    def particles : [P] = _particles
+
+    def generateParticle : P
+    def generateParticlesWith(delta : float)
+
+    def emitParticle {
+        _particles = CNList(generateParticle, _particles)
+    }
+
+    def updateWith(delta : float) {
+        generateParticlesWith(delta)
+
+        _particles = _particles.filter(_.isLive)
+        _particles.for(_.updateWith(delta))
+    }
+}
+
+trait EGParticle extends EGController {
+    def writeTo(array : CNMutablePArray<float4>)
+
+    def isLive : bool
+}
+

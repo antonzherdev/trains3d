@@ -40,11 +40,6 @@ static ODClassType* _EGStandardShaderSystem_type;
     }]));
 }
 
-- (void)drawMaterial:(id)material mesh:(EGMesh*)mesh {
-    EGShader* shader = [self shaderForMaterial:material];
-    [shader drawMaterial:material mesh:mesh];
-}
-
 - (ODClassType*)type {
     return [EGStandardShaderSystem type];
 }

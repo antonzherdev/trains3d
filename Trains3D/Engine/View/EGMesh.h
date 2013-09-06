@@ -22,6 +22,7 @@
 - (id)initWithVertexBuffer:(EGVertexBuffer*)vertexBuffer indexBuffer:(EGIndexBuffer*)indexBuffer;
 - (ODClassType*)type;
 + (EGMesh*)applyVertexData:(CNPArray*)vertexData index:(CNPArray*)index;
++ (EGMesh*)quadVertexBuffer:(EGVertexBuffer*)vertexBuffer;
 + (ODClassType*)type;
 @end
 

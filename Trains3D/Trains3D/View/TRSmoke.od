@@ -10,30 +10,27 @@ import EGSurface
 import EGMesh
 import EGVec
 import EGBillboard
+import EGParticleSystem
 
 import TRTrain
 import TRRailPoint
 
-class TRSmoke(weak train : TRTrain) extends EGController {
-    private var _particles = CNList<TRSmokeParticle>()
-    def particles = _particles
+class TRSmoke(weak train : TRTrain) extends EGParticleSystem<TRSmokeParticle> {
     private val engine : TRCar = train.cars.head.get
     private val tubePos = engine.carType.engineType.get.tubePos
     private static val zSpeed = 0.1
     private static val emitEvery = 0.005
     private var emitTime = 0.0
 
-    def updateWith(delta : float) {
+    def generateParticlesWith(delta : float) {
         emitTime += delta
         while(emitTime > emitEvery) {
             emitTime -= emitEvery
-            createParticle
+            emitParticle
         }
-        _particles = _particles.filter(_.isLive)
-        _particles.for(_.updateWith(delta))
     }
 
-    def createParticle {
+    def generateParticle : TRSmokeParticle =  {
         val fPos = if(train.isBack) engine.tail.point else engine.head.point
         val bPos = if(train.isBack) engine.head.point else engine.tail.point
         val delta = bPos.sub(fPos)
@@ -45,11 +42,11 @@ class TRSmoke(weak train : TRTrain) extends EGController {
         randomFloat
         val s = EGVec3((if(train.isBack) fPos.sub(bPos) else delta).set(length = train.speedFloat), zSpeed)
         p.speed = EGVec3(-s.x * randomPercents(0.6), -s.y * randomPercents(0.6), s.z * randomPercents(0.6))
-        _particles = CNList(p, _particles)
+        p
     }
 }
 
-class TRSmokeParticle(texture : int) extends EGController {
+class TRSmokeParticle(texture : int) extends EGParticle {
     var position : EGVec3
     var speed : EGVec3
     var time = 0.0

@@ -48,7 +48,9 @@
 + (CNMutablePArray*)applyTp:(ODPType*)tp count:(NSUInteger)count;
 - (void)writeItem:(VoidRef)item;
 - (void)writeUInt4:(unsigned int)uInt4;
+- (void)writeFloat4:(float)Float4;
 - (void)writeItem:(VoidRef)item times:(NSUInteger)times;
+- (void)writeTp:(ODPType*)tp item:(VoidRef)item;
 - (void)writeArray:(CNPArray*)array;
 + (ODClassType*)type;
 @end

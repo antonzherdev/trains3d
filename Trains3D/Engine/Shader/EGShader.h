@@ -27,7 +27,7 @@
 @class EGShader;
 @class EGShaderAttribute;
 @class EGShaderUniform;
-@protocol EGShaderSystem;
+@class EGShaderSystem;
 
 @interface EGShaderProgram : NSObject
 @property (nonatomic, readonly) GLuint handle;
@@ -89,9 +89,13 @@
 @end
 
 
-@protocol EGShaderSystem<NSObject>
+@interface EGShaderSystem : NSObject
++ (id)shaderSystem;
+- (id)init;
+- (ODClassType*)type;
 - (void)drawMaterial:(id)material mesh:(EGMesh*)mesh;
 - (EGShader*)shaderForMaterial:(id)material;
++ (ODClassType*)type;
 @end
 
 

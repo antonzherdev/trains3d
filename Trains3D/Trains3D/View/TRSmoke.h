@@ -12,7 +12,7 @@
 @class EGShader;
 @class EGShaderAttribute;
 @class EGShaderUniform;
-@protocol EGShaderSystem;
+@class EGShaderSystem;
 @class EGTexture;
 @class EGFileTexture;
 @class EGMatrix;
@@ -24,6 +24,7 @@
 @class EGIndexBuffer;
 #import "EGVec.h"
 #import "EGBillboard.h"
+#import "EGParticleSystem.h"
 @class TRTrainType;
 @class TRTrain;
 @class TREngineType;
@@ -48,20 +49,19 @@
 @class TRSmokeShader;
 typedef struct TRSmokeBufferData TRSmokeBufferData;
 
-@interface TRSmoke : NSObject<EGController>
+@interface TRSmoke : EGParticleSystem
 @property (nonatomic, readonly, weak) TRTrain* train;
 
 + (id)smokeWithTrain:(TRTrain*)train;
 - (id)initWithTrain:(TRTrain*)train;
 - (ODClassType*)type;
-- (CNList*)particles;
-- (void)updateWithDelta:(CGFloat)delta;
-- (void)createParticle;
+- (void)generateParticlesWithDelta:(CGFloat)delta;
+- (TRSmokeParticle*)generateParticle;
 + (ODClassType*)type;
 @end
 
 
-@interface TRSmokeParticle : NSObject<EGController>
+@interface TRSmokeParticle : NSObject<EGParticle>
 @property (nonatomic, readonly) NSInteger texture;
 @property (nonatomic) EGVec3 position;
 @property (nonatomic) EGVec3 speed;

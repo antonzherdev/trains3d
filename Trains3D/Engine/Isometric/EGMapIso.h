@@ -28,7 +28,7 @@
 @class EGShader;
 @class EGShaderAttribute;
 @class EGShaderUniform;
-@protocol EGShaderSystem;
+@class EGShaderSystem;
 #import "EGVec.h"
 @class EGMatrix;
 

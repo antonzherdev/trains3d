@@ -33,6 +33,10 @@ static ODClassType* _EGMesh_type;
     return [EGMesh meshWithVertexBuffer:[[EGVertexBuffer applyStride:((NSUInteger)(8 * 4))] setData:vertexData] indexBuffer:[[EGIndexBuffer apply] setData:index]];
 }
 
++ (EGMesh*)quadVertexBuffer:(EGVertexBuffer*)vertexBuffer {
+    return [EGMesh applyVertexData:vertexBuffer index:[[EGIndexBuffer apply] setData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]]];
+}
+
 - (ODClassType*)type {
     return [EGMesh type];
 }

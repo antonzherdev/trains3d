@@ -12,7 +12,6 @@
 #import "EGMaterial.h"
 @implementation TRSmoke{
     __weak TRTrain* _train;
-    CNList* __particles;
     TRCar* _engine;
     EGVec3 _tubePos;
     CGFloat _emitTime;
@@ -30,7 +29,6 @@ static ODClassType* _TRSmoke_type;
     self = [super init];
     if(self) {
         _train = train;
-        __particles = [CNList apply];
         _engine = ((TRCar*)([[_train.cars head] get]));
         _tubePos = ((TREngineType*)([_engine.carType.engineType get])).tubePos;
         _emitTime = 0.0;
@@ -44,25 +42,15 @@ static ODClassType* _TRSmoke_type;
     _TRSmoke_type = [ODClassType classTypeWithCls:[TRSmoke class]];
 }
 
-- (CNList*)particles {
-    return __particles;
-}
-
-- (void)updateWithDelta:(CGFloat)delta {
+- (void)generateParticlesWithDelta:(CGFloat)delta {
     _emitTime += delta;
     while(_emitTime > _TRSmoke_emitEvery) {
         _emitTime -= _TRSmoke_emitEvery;
-        [self createParticle];
+        [self emitParticle];
     }
-    __particles = [__particles filterF:^BOOL(TRSmokeParticle* _) {
-        return [_ isLive];
-    }];
-    [__particles forEach:^void(TRSmokeParticle* _) {
-        [_ updateWithDelta:delta];
-    }];
 }
 
-- (void)createParticle {
+- (TRSmokeParticle*)generateParticle {
     EGVec2 fPos = (([_train isBack]) ? _engine.tail.point : _engine.head.point);
     EGVec2 bPos = (([_train isBack]) ? _engine.head.point : _engine.tail.point);
     EGVec2 delta = egVec2Sub(bPos, fPos);
@@ -73,7 +61,7 @@ static ODClassType* _TRSmoke_type;
     randomFloat();
     EGVec3 s = egVec3Apply(egVec2Set((([_train isBack]) ? egVec2Sub(fPos, bPos) : delta), _train.speedFloat), ((float)(_TRSmoke_zSpeed)));
     p.speed = EGVec3Make(-s.x * randomPercents(0.6), -s.y * randomPercents(0.6), s.z * randomPercents(0.6));
-    __particles = [CNList applyObject:p tail:__particles];
+    return p;
 }
 
 - (ODClassType*)type {
@@ -291,7 +279,7 @@ static ODClassType* _TRSmokeView_type;
 }
 
 - (void)drawSmoke:(TRSmoke*)smoke {
-    CNList* particles = [smoke particles];
+    id<CNSeq> particles = [smoke particles];
     NSUInteger n = [particles count];
     if(n == 0) return ;
     CNMutablePArray* positionArr = [CNMutablePArray applyTp:trSmokeBufferDataType() count:((NSUInteger)(4 * n))];

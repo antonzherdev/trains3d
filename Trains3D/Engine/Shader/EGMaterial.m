@@ -196,7 +196,7 @@ static ODClassType* _EGMaterial_type;
     _EGMaterial_type = [ODClassType classTypeWithCls:[EGMaterial class]];
 }
 
-- (id<EGShaderSystem>)shaderSystem {
+- (EGShaderSystem*)shaderSystem {
     @throw @"Method shaderSystem is abstract";
 }
 
@@ -265,7 +265,7 @@ static ODClassType* _EGSimpleMaterial_type;
     _EGSimpleMaterial_type = [ODClassType classTypeWithCls:[EGSimpleMaterial class]];
 }
 
-- (id<EGShaderSystem>)shaderSystem {
+- (EGShaderSystem*)shaderSystem {
     return EGSimpleShaderSystem.instance;
 }
 
@@ -338,7 +338,7 @@ static ODClassType* _EGStandardMaterial_type;
     return [EGStandardMaterial standardMaterialWithDiffuse:diffuse specularColor:EGColorMake(0.0, 0.0, 0.0, 1.0) specularSize:1.0];
 }
 
-- (id<EGShaderSystem>)shaderSystem {
+- (EGShaderSystem*)shaderSystem {
     return EGStandardShaderSystem.instance;
 }
 

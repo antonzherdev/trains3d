@@ -10,7 +10,7 @@
 @class EGShader;
 @class EGShaderAttribute;
 @class EGShaderUniform;
-@protocol EGShaderSystem;
+@class EGShaderSystem;
 @class EGColorSource;
 @class EGColorSourceColor;
 @class EGColorSourceTexture;

@@ -4,13 +4,23 @@ import EGVec
 import EGMaterial
 import EGShader
 
-class EGBillboard {
-    static def drawWith(material : EGSimpleMaterial, size : EGVec2) {
 
-    }
+class EGBillboardShaderSystem extends EGShaderSystem<EGSimpleMaterial> {
+    static val instance = EGBillboardShaderSystem()
+
+    def shaderFor(material : EGSimpleMaterial) : EGBillboardShader = case(material.color)
+        EGColorSourceColor(_) -> EGBillboardShader.instanceForColor
+        _ -> EGBillboardShader.instanceForTexture
 }
 
 class EGBillboardShader(program : EGShaderProgram, texture : bool) extends EGShader<EGSimpleMaterial>(program) {
+    static lazy val instanceForColor = EGBillboardShader(EGShaderProgram(
+        vertexTextWith(false, "", ""),
+        fragmentTextWith(false, "", "")))
+    static lazy val instanceForTexture = EGBillboardShader(EGShaderProgram(
+        vertexTextWith(false, "", ""),
+        fragmentTextWith(false, "", "")))
+
     static def vertexTextWith(texture : bool, parameters : string, code : string) =
         "attribute vec3 position;
          attribute vec2 model;

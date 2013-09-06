@@ -53,7 +53,12 @@ class CNMutablePArray<T>(stride : uint, wrap : (VoidRef, uint) -> T, count : uin
 
     def write(uInt4 : uint4) {
         setui4(pointer, uInt4)
-        pointer += stride
+        pointer += 4
+    }
+
+    def write(Float4 : float4) {
+        setf4(pointer, Float4)
+        pointer += 4
     }
 
     def write(item : VoidRef, times : uint) {
@@ -62,6 +67,11 @@ class CNMutablePArray<T>(stride : uint, wrap : (VoidRef, uint) -> T, count : uin
             pointer += stride
             times--
         }
+    }
+
+    def write<T>(tp : ODPType<T>, item : VoidRef) {
+        memcpy(pointer, item, stride)
+        pointer += tp.size
     }
 
     def write(array : CNPArray<T>) {

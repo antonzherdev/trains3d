@@ -26,7 +26,7 @@
 @class EGStandardShaderKey;
 @class EGStandardShader;
 
-@interface EGStandardShaderSystem : NSObject<EGShaderSystem>
+@interface EGStandardShaderSystem : EGShaderSystem
 + (id)standardShaderSystem;
 - (id)init;
 - (ODClassType*)type;

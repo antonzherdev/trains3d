@@ -345,3 +345,61 @@ static ODClassType* _EGShaderUniform_type;
 @end
 
 
+@implementation EGShaderSystem
+static ODClassType* _EGShaderSystem_type;
+
++ (id)shaderSystem {
+    return [[EGShaderSystem alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGShaderSystem_type = [ODClassType classTypeWithCls:[EGShaderSystem class]];
+}
+
+- (void)drawMaterial:(id)material mesh:(EGMesh*)mesh {
+    EGShader* shader = [self shaderForMaterial:material];
+    [shader drawMaterial:material mesh:mesh];
+}
+
+- (EGShader*)shaderForMaterial:(id)material {
+    @throw @"Method shaderFor is abstract";
+}
+
+- (ODClassType*)type {
+    return [EGShaderSystem type];
+}
+
++ (ODClassType*)type {
+    return _EGShaderSystem_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+

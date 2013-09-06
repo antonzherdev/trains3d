@@ -114,7 +114,7 @@ class EGShaderUniform(handle : GLuint) {
     }
 }
 
-trait EGShaderSystem<M extends EGMaterial> {
+class EGShaderSystem<M extends EGMaterial> {
     def draw(material : M, mesh : EGMesh) {
         val shader = shaderFor(material)
         shader.draw(material, mesh)

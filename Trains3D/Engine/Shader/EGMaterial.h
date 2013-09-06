@@ -9,7 +9,7 @@
 @class EGShader;
 @class EGShaderAttribute;
 @class EGShaderUniform;
-@protocol EGShaderSystem;
+@class EGShaderSystem;
 @class EGMesh;
 @class EGBuffer;
 @class EGVertexBuffer;
@@ -68,7 +68,7 @@
 + (id)material;
 - (id)init;
 - (ODClassType*)type;
-- (id<EGShaderSystem>)shaderSystem;
+- (EGShaderSystem*)shaderSystem;
 - (void)drawMesh:(EGMesh*)mesh;
 + (EGMaterial*)applyColor:(EGColor)color;
 + (EGMaterial*)applyTexture:(EGTexture*)texture;
@@ -82,7 +82,7 @@
 + (id)simpleMaterialWithColor:(EGColorSource*)color;
 - (id)initWithColor:(EGColorSource*)color;
 - (ODClassType*)type;
-- (id<EGShaderSystem>)shaderSystem;
+- (EGShaderSystem*)shaderSystem;
 + (ODClassType*)type;
 @end
 
@@ -96,7 +96,7 @@
 - (id)initWithDiffuse:(EGColorSource*)diffuse specularColor:(EGColor)specularColor specularSize:(CGFloat)specularSize;
 - (ODClassType*)type;
 + (EGStandardMaterial*)applyDiffuse:(EGColorSource*)diffuse;
-- (id<EGShaderSystem>)shaderSystem;
+- (EGShaderSystem*)shaderSystem;
 + (ODClassType*)type;
 @end
 

@@ -5,11 +5,12 @@
 #import "EGMatrix.h"
 #import "EGTexture.h"
 #import "EGMesh.h"
-@implementation EGBillboard
-static ODClassType* _EGBillboard_type;
+@implementation EGBillboardShaderSystem
+static EGBillboardShaderSystem* _EGBillboardShaderSystem_instance;
+static ODClassType* _EGBillboardShaderSystem_type;
 
-+ (id)billboard {
-    return [[EGBillboard alloc] init];
++ (id)billboardShaderSystem {
+    return [[EGBillboardShaderSystem alloc] init];
 }
 
 - (id)init {
@@ -20,18 +21,49 @@ static ODClassType* _EGBillboard_type;
 
 + (void)initialize {
     [super initialize];
-    _EGBillboard_type = [ODClassType classTypeWithCls:[EGBillboard class]];
+    _EGBillboardShaderSystem_type = [ODClassType classTypeWithCls:[EGBillboardShaderSystem class]];
+    _EGBillboardShaderSystem_instance = [EGBillboardShaderSystem billboardShaderSystem];
 }
 
-+ (void)drawWithMaterial:(EGSimpleMaterial*)material size:(EGVec2)size {
+- (EGBillboardShader*)shaderForMaterial:(EGSimpleMaterial*)material {
+    EGColorSource* __case__ = material.color;
+    BOOL __incomplete__ = YES;
+    EGShader* __result__;
+    if(__incomplete__) {
+        BOOL __ok__ = YES;
+        EGColor _;
+        if([__case__ isKindOfClass:[EGColorSourceColor class]]) {
+            EGColorSourceColor* __case1__ = ((EGColorSourceColor*)(__case__));
+            _ = [__case1__ color];
+        } else {
+            __ok__ = NO;
+        }
+        if(__ok__) {
+            __result__ = [EGBillboardShader instanceForColor];
+            __incomplete__ = NO;
+        }
+    }
+    if(__incomplete__) {
+        BOOL __ok__ = YES;
+        if(__ok__) {
+            __result__ = [EGBillboardShader instanceForTexture];
+            __incomplete__ = NO;
+        }
+    }
+    if(__incomplete__) @throw @"Case incomplete";
+    return __result__;
 }
 
 - (ODClassType*)type {
-    return [EGBillboard type];
+    return [EGBillboardShaderSystem type];
+}
+
++ (EGBillboardShaderSystem*)instance {
+    return _EGBillboardShaderSystem_instance;
 }
 
 + (ODClassType*)type {
-    return _EGBillboard_type;
+    return _EGBillboardShaderSystem_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -66,6 +98,8 @@ static ODClassType* _EGBillboard_type;
     EGShaderUniform* _wcUniform;
     EGShaderUniform* _pUniform;
 }
+static CNLazy* _EGBillboardShader__lazy_instanceForColor;
+static CNLazy* _EGBillboardShader__lazy_instanceForTexture;
 static ODClassType* _EGBillboardShader_type;
 @synthesize texture = _texture;
 @synthesize positionSlot = _positionSlot;
@@ -97,6 +131,20 @@ static ODClassType* _EGBillboardShader_type;
 + (void)initialize {
     [super initialize];
     _EGBillboardShader_type = [ODClassType classTypeWithCls:[EGBillboardShader class]];
+    _EGBillboardShader__lazy_instanceForColor = [CNLazy lazyWithF:^EGShader*() {
+        return [EGShader shaderWithProgram:[EGShaderProgram applyVertex:[EGBillboardShader vertexTextWithTexture:NO parameters:@"" code:@""] fragment:[EGBillboardShader fragmentTextWithTexture:NO parameters:@"" code:@""]]];
+    }];
+    _EGBillboardShader__lazy_instanceForTexture = [CNLazy lazyWithF:^EGShader*() {
+        return [EGShader shaderWithProgram:[EGShaderProgram applyVertex:[EGBillboardShader vertexTextWithTexture:NO parameters:@"" code:@""] fragment:[EGBillboardShader fragmentTextWithTexture:NO parameters:@"" code:@""]]];
+    }];
+}
+
++ (EGShader*)instanceForColor {
+    return [_EGBillboardShader__lazy_instanceForColor get];
+}
+
++ (EGShader*)instanceForTexture {
+    return [_EGBillboardShader__lazy_instanceForTexture get];
 }
 
 + (NSString*)vertexTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code {

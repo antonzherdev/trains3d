@@ -7,6 +7,9 @@ import EGTypes
 class EGMesh(vertexBuffer : EGVertexBuffer<float4>, indexBuffer : EGIndexBuffer<uint4>) {
     static def apply(vertexData : CNPArray<float4>, index : CNPArray<uint4>) : EGMesh =
         EGMesh(vertexBuffer = EGVertexBuffer<float4>(8*4).set(vertexData), indexBuffer = EGIndexBuffer<uint4>().set(index))
+
+    static def quad(vertexBuffer : EGVertexBuffer<float4>) : EGMesh =
+        EGMesh(vertexBuffer, EGIndexBuffer<uint4>().set([0, 1, 2, 2, 3, 0]))
 }
 
 class EGBuffer<T>(bufferType : GLenum, handle : GLuint) {

@@ -27,7 +27,7 @@
 @class EGSimpleColorShader;
 @class EGSimpleTextureShader;
 
-@interface EGSimpleShaderSystem : NSObject<EGShaderSystem>
+@interface EGSimpleShaderSystem : EGShaderSystem
 + (id)simpleShaderSystem;
 - (id)init;
 - (ODClassType*)type;

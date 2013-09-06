@@ -21,14 +21,15 @@
 @class EGVertexBuffer;
 @class EGIndexBuffer;
 
-@class EGBillboard;
+@class EGBillboardShaderSystem;
 @class EGBillboardShader;
 
-@interface EGBillboard : NSObject
-+ (id)billboard;
+@interface EGBillboardShaderSystem : EGShaderSystem
++ (id)billboardShaderSystem;
 - (id)init;
 - (ODClassType*)type;
-+ (void)drawWithMaterial:(EGSimpleMaterial*)material size:(EGVec2)size;
+- (EGBillboardShader*)shaderForMaterial:(EGSimpleMaterial*)material;
++ (EGBillboardShaderSystem*)instance;
 + (ODClassType*)type;
 @end
 
@@ -45,6 +46,8 @@
 + (id)billboardShaderWithProgram:(EGShaderProgram*)program texture:(BOOL)texture;
 - (id)initWithProgram:(EGShaderProgram*)program texture:(BOOL)texture;
 - (ODClassType*)type;
++ (EGShader*)instanceForColor;
++ (EGShader*)instanceForTexture;
 + (NSString*)vertexTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code;
 + (NSString*)fragmentTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code;
 - (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material;
