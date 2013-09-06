@@ -117,9 +117,9 @@ static ODClassType* _EGStandardShaderKey_type;
         "   gl_Position = mwcp * vec4(position, 1);%@\n"
         "   %@\n"
         "}", ((_texture) ? @"\n"
-        "attribute vec2 vertexUV; " : @""), [self lightsVertexUniform], ((_texture) ? @"\n"
-        "varying vec2 UV; " : @""), [self lightsVaryings], ((_texture) ? @"\n"
-        "   UV = vertexUV; " : @""), [self lightsCalculateVaryings]];
+        "attribute vec2 vertexUV; " : @""), self.lightsVertexUniform, ((_texture) ? @"\n"
+        "varying vec2 UV; " : @""), self.lightsVaryings, ((_texture) ? @"\n"
+        "   UV = vertexUV; " : @""), self.lightsCalculateVaryings];
     NSString* fragmentShader = [NSString stringWithFormat:@"\n"
         "%@\n"
         "uniform vec4 ambientColor;\n"
@@ -135,9 +135,9 @@ static ODClassType* _EGStandardShaderKey_type;
         "}", ((_texture) ? @"\n"
         "varying vec2 UV;\n"
         "uniform sampler2D diffuse;" : @"\n"
-        "uniform vec4 diffuse;"), [self lightsVaryings], [self lightsFragmentUniform], ((!(_texture)) ? @"\n"
+        "uniform vec4 diffuse;"), self.lightsVaryings, self.lightsFragmentUniform, ((!(_texture)) ? @"\n"
         "   vec4 materialColor = diffuse; " : @""), ((_texture) ? @"\n"
-        "   vec4 materialColor = texture2D(diffuse, UV); " : @""), [self lightsDiffuse]];
+        "   vec4 materialColor = texture2D(diffuse, UV); " : @""), self.lightsDiffuse];
     return [EGStandardShader standardShaderWithKey:self program:[EGShaderProgram applyVertex:vertexShader fragment:fragmentShader]];
 }
 

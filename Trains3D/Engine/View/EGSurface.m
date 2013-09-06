@@ -79,9 +79,9 @@ static ODClassType* _EGSurface_type;
 }
 
 - (void)applyDraw:(void(^)())draw {
-    [self bind];
+    self.bind;
     ((void(^)())(draw))();
-    [self unbind];
+    self.unbind;
 }
 
 - (void)bind {
@@ -97,9 +97,9 @@ static ODClassType* _EGSurface_type;
 
 - (void)drawFullScreen {
     [_texture applyDraw:^void() {
-        [[self fullScreenVertexBuffer] applyDraw:^void() {
-            [[self shader] applyDraw:^void() {
-                [[self fullScreenIndexBuffer] draw];
+        [self.fullScreenVertexBuffer applyDraw:^void() {
+            [self.shader applyDraw:^void() {
+                [self.fullScreenIndexBuffer draw];
             }];
         }];
     }];

@@ -182,6 +182,19 @@ ODPType* egColorType() {
 
 
 
+EGQuad egQuadMulValue(EGQuad self, float value) {
+    return EGQuadMake(egVec2MulValue(self.p1, value), egVec2MulValue(self.p2, value), egVec2MulValue(self.p3, value), egVec2MulValue(self.p4, value));
+}
+EGQuad egQuadAddVec2(EGQuad self, EGVec2 vec2) {
+    return EGQuadMake(egVec2AddVec2(self.p1, vec2), egVec2AddVec2(self.p2, vec2), egVec2AddVec2(self.p3, vec2), egVec2AddVec2(self.p4, vec2));
+}
+EGQuad egQuadAddXY(EGQuad self, float x, float y) {
+    return egQuadAddVec2(self, EGVec2Make(x, y));
+}
+EGQuad egQuadIdentity() {
+    static EGQuad _ret = {{0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}, {0.0, 1.0}};
+    return _ret;
+}
 ODPType* egQuadType() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[EGQuadWrap class] name:@"EGQuad" size:sizeof(EGQuad) wrap:^id(void* data, NSUInteger i) {

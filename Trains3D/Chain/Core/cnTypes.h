@@ -95,6 +95,9 @@ extern id cnResolveCollection(id collection);
 #define arrf(p_count) arr(CGFloat, numf, p_count)
 #define arrf4(p_count) arr(float, numf4, p_count)
 #define arrf8(p_count) arr(double, numf8, p_count)
+#define arrs(p_type, p_count) CNPArray applyStride:sizeof(p_type) wrap:^id(void* arr, NSUInteger i) { \
+    return wrap(p_type, ((p_type*)(arr))[i]);\
+} count:p_count copyBytes:(p_type[])
 
 static inline NSUInteger randomMax(NSUInteger max) {
     return arc4random_uniform((u_int32_t)(max + 1));

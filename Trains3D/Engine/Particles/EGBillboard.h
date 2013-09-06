@@ -67,18 +67,20 @@ typedef struct EGBillboardBufferData EGBillboardBufferData;
 struct EGBillboardBufferData {
     EGVec3 position;
     EGVec2 model;
+    EGVec4 color;
     EGVec2 uv;
 };
-static inline EGBillboardBufferData EGBillboardBufferDataMake(EGVec3 position, EGVec2 model, EGVec2 uv) {
-    return (EGBillboardBufferData){position, model, uv};
+static inline EGBillboardBufferData EGBillboardBufferDataMake(EGVec3 position, EGVec2 model, EGVec4 color, EGVec2 uv) {
+    return (EGBillboardBufferData){position, model, color, uv};
 }
 static inline BOOL EGBillboardBufferDataEq(EGBillboardBufferData s1, EGBillboardBufferData s2) {
-    return EGVec3Eq(s1.position, s2.position) && EGVec2Eq(s1.model, s2.model) && EGVec2Eq(s1.uv, s2.uv);
+    return EGVec3Eq(s1.position, s2.position) && EGVec2Eq(s1.model, s2.model) && EGVec4Eq(s1.color, s2.color) && EGVec2Eq(s1.uv, s2.uv);
 }
 static inline NSUInteger EGBillboardBufferDataHash(EGBillboardBufferData self) {
     NSUInteger hash = 0;
     hash = hash * 31 + EGVec3Hash(self.position);
     hash = hash * 31 + EGVec2Hash(self.model);
+    hash = hash * 31 + EGVec4Hash(self.color);
     hash = hash * 31 + EGVec2Hash(self.uv);
     return hash;
 }
@@ -86,6 +88,7 @@ static inline NSString* EGBillboardBufferDataDescription(EGBillboardBufferData s
     NSMutableString* description = [NSMutableString stringWithString:@"<EGBillboardBufferData: "];
     [description appendFormat:@"position=%@", EGVec3Description(self.position)];
     [description appendFormat:@", model=%@", EGVec2Description(self.model)];
+    [description appendFormat:@", color=%@", EGVec4Description(self.color)];
     [description appendFormat:@", uv=%@", EGVec2Description(self.uv)];
     [description appendString:@">"];
     return description;
@@ -112,12 +115,12 @@ ODPType* egBillboardBufferDataType();
 @property (nonatomic) EGVec3 position;
 @property (nonatomic) EGQuad uv;
 @property (nonatomic) EGQuad model;
+@property (nonatomic) EGVec4 color;
 
 + (id)billboardParticleWithLifeLength:(float)lifeLength;
 - (id)initWithLifeLength:(float)lifeLength;
 - (ODClassType*)type;
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array;
-- (BOOL)isLive;
 + (ODClassType*)type;
 @end
 

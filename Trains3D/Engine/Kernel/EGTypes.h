@@ -173,6 +173,10 @@ static inline NSString* EGQuadDescription(EGQuad self) {
     [description appendString:@">"];
     return description;
 }
+EGQuad egQuadMulValue(EGQuad self, float value);
+EGQuad egQuadAddVec2(EGQuad self, EGVec2 vec2);
+EGQuad egQuadAddXY(EGQuad self, float x, float y);
+EGQuad egQuadIdentity();
 ODPType* egQuadType();
 @interface EGQuadWrap : NSObject
 @property (readonly, nonatomic) EGQuad value;

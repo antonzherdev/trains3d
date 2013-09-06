@@ -28,7 +28,9 @@
 @class TRRailPoint;
 @class TRRailPointCorrection;
 @class TR3D;
-#import "TRSmoke.h"
+@class TRSmoke;
+@class TRSmokeParticle;
+@class TRSmokeView;
 @class EGMatrix;
 @class EGTexture;
 @class EGFileTexture;

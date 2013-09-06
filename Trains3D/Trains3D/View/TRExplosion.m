@@ -93,7 +93,7 @@ static ODClassType* _TRExplosionFlame_type;
         _position = position;
         _size = size;
         _particles = [[[intRange(4) chain] map:^id(id _) {
-            return wrap(TRExplosionFlameParticle, [self generateParticle]);
+            return wrap(TRExplosionFlameParticle, self.generateParticle);
         }] toArray];
         _time = 0.0;
     }

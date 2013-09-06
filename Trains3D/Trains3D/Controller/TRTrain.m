@@ -135,16 +135,16 @@ static ODClassType* _TRTrain_type;
 
 - (void)startFromCity:(TRCity*)city {
     _head = [city startPoint];
-    [self calculateCarPositions];
+    self.calculateCarPositions;
 }
 
 - (void)setHead:(TRRailPoint*)head {
     _head = head;
-    [self calculateCarPositions];
+    self.calculateCarPositions;
 }
 
 - (void)calculateCarPositions {
-    ((TRRailPoint*)([[[self directedCars] chain] fold:^TRRailPoint*(TRRailPoint* hl, TRCar* car) {
+    ((TRRailPoint*)([[self.directedCars chain] fold:^TRRailPoint*(TRRailPoint* hl, TRCar* car) {
         car.frontConnector = hl;
         CGFloat fl = [car frontConnectorLength];
         CGFloat bl = [car backConnectorLength];
@@ -181,7 +181,7 @@ static ODClassType* _TRTrain_type;
                 [_level arrivedTrain:self];
             } else {
                 _back = !(_back);
-                TRCar* lastCar = ((TRCar*)([[[self directedCars] head] get]));
+                TRCar* lastCar = ((TRCar*)([[self.directedCars head] get]));
                 _head = lastCar.backConnector;
             }
         } else {
@@ -190,7 +190,7 @@ static ODClassType* _TRTrain_type;
     } else {
         _head = correction.point;
     }
-    [self calculateCarPositions];
+    self.calculateCarPositions;
 }
 
 - (BOOL)isMoveToCityForPoint:(TRRailPoint*)point {
@@ -419,7 +419,7 @@ static ODClassType* _TRCar_type;
 }
 
 - (EGThickLineSegment*)figure {
-    return [EGThickLineSegment thickLineSegmentWithSegment:[EGLineSegment newWithP1:_head.point p2:_tail.point] thickness:[self width]];
+    return [EGThickLineSegment thickLineSegmentWithSegment:[EGLineSegment newWithP1:_head.point p2:_tail.point] thickness:self.width];
 }
 
 - (ODClassType*)type {

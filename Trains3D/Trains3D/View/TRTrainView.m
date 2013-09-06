@@ -8,6 +8,7 @@
 #import "TRTypes.h"
 #import "TRRailPoint.h"
 #import "TR3D.h"
+#import "TRSmoke.h"
 #import "EGMatrix.h"
 #import "EGTexture.h"
 @implementation TRTrainView{

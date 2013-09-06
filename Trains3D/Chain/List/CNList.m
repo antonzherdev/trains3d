@@ -48,7 +48,7 @@ static ODClassType* _CNList_type;
 }
 
 - (id)applyIndex:(NSUInteger)index {
-    id<CNIterator> i = [self iterator];
+    id<CNIterator> i = self.iterator;
     NSUInteger n = index;
     while([i hasNext]) {
         if(n == 0) return [i next];
@@ -59,8 +59,8 @@ static ODClassType* _CNList_type;
 }
 
 - (id)randomItem {
-    if([self isEmpty]) return [CNOption none];
-    else return [self applyIndex:randomMax([self count] - 1)];
+    if(self.isEmpty) return [CNOption none];
+    else return [self applyIndex:randomMax(self.count - 1)];
 }
 
 - (id<CNSet>)toSet {
@@ -75,14 +75,14 @@ static ODClassType* _CNList_type;
 }
 
 - (id<CNSeq>)arrayByRemovingObject:(id)object {
-    return [[[self chain] filter:^BOOL(id _) {
+    return [[self.chain filter:^BOOL(id _) {
         return !([_ isEqual:object]);
     }] toArray];
 }
 
 - (BOOL)isEqualToSeq:(id<CNSeq>)seq {
-    if([self count] != [seq count]) return NO;
-    id<CNIterator> ia = [self iterator];
+    if(self.count != [seq count]) return NO;
+    id<CNIterator> ia = self.iterator;
     id<CNIterator> ib = [seq iterator];
     while([ia hasNext] && [ib hasNext]) {
         if(!([[ia next] isEqual:[ib next]])) return NO;
@@ -91,7 +91,7 @@ static ODClassType* _CNList_type;
 }
 
 - (NSUInteger)count {
-    id<CNIterator> i = [self iterator];
+    id<CNIterator> i = self.iterator;
     NSUInteger n = 0;
     while([i hasNext]) {
         [i next];
@@ -101,12 +101,12 @@ static ODClassType* _CNList_type;
 }
 
 - (id)head {
-    if([[self iterator] hasNext]) return [CNOption opt:[[self iterator] next]];
+    if([self.iterator hasNext]) return [CNOption opt:[self.iterator next]];
     else return [CNOption none];
 }
 
 - (BOOL)isEmpty {
-    return !([[self iterator] hasNext]);
+    return !([self.iterator hasNext]);
 }
 
 - (CNChain*)chain {
@@ -114,14 +114,14 @@ static ODClassType* _CNList_type;
 }
 
 - (void)forEach:(void(^)(id))each {
-    id<CNIterator> i = [self iterator];
+    id<CNIterator> i = self.iterator;
     while([i hasNext]) {
         each([i next]);
     }
 }
 
 - (BOOL)goOn:(BOOL(^)(id))on {
-    id<CNIterator> i = [self iterator];
+    id<CNIterator> i = self.iterator;
     while([i hasNext]) {
         if(!(on([i next]))) return NO;
     }
@@ -129,7 +129,7 @@ static ODClassType* _CNList_type;
 }
 
 - (BOOL)containsObject:(id)object {
-    id<CNIterator> i = [self iterator];
+    id<CNIterator> i = self.iterator;
     while([i hasNext]) {
         if([[i next] isEqual:i]) return YES;
     }
@@ -137,12 +137,12 @@ static ODClassType* _CNList_type;
 }
 
 - (NSString*)description {
-    return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
+    return [self.chain toStringWithStart:@"[" delimiter:@", " end:@"]"];
 }
 
 - (NSUInteger)hash {
     NSUInteger ret = 13;
-    id<CNIterator> i = [self iterator];
+    id<CNIterator> i = self.iterator;
     while([i hasNext]) {
         ret = ret * 31 + [[i next] hash];
     }

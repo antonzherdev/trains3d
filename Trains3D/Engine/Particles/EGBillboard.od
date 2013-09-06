@@ -91,7 +91,7 @@ class EGBillboardShader(program : EGShaderProgram, texture : bool) extends EGSha
     }
 }
 
-struct EGBillboardBufferData(position : EGVec3, model : EGVec2, uv : EGVec2)
+struct EGBillboardBufferData(position : EGVec3, model : EGVec2, color : EGVec4, uv : EGVec2)
 
 
 class EGBillboardParticleSystem extends EGParticleSystem<EGBillboardParticle> {
@@ -104,19 +104,18 @@ class EGBillboardParticle(lifeLength : float4) extends EGParticle(lifeLength) {
     var position : EGVec3
     var uv : EGQuad
     var model : EGQuad
+    var color : EGVec4
 
     def writeTo(array : CNVoidRefArray) : CNVoidRefArray = {
         array
-            .write(EGBillboardBufferData, EGBillboardBufferData(position, model.p1, uv.p1))
-            .write(EGBillboardBufferData, EGBillboardBufferData(position, model.p2, uv.p2))
-            .write(EGBillboardBufferData, EGBillboardBufferData(position, model.p3, uv.p3))
-            .write(EGBillboardBufferData, EGBillboardBufferData(position, model.p4, uv.p4))
+            .write(EGBillboardBufferData, EGBillboardBufferData(position, model.p1, color, uv.p1))
+            .write(EGBillboardBufferData, EGBillboardBufferData(position, model.p2, color, uv.p2))
+            .write(EGBillboardBufferData, EGBillboardBufferData(position, model.p3, color, uv.p3))
+            .write(EGBillboardBufferData, EGBillboardBufferData(position, model.p4, color, uv.p4))
     }
-    def isLive : bool
-
 }
 
-class EGBillboardParticleSystemView(material : EGSimpleMaterial) extends  EGParticleSystemView<EGBillboardParticle> {
+class EGBillboardParticleSystemView(material : EGSimpleMaterial) extends  EGParticleSystemView<EGBillboardParticle>(EGBillboardBufferData.type) {
     val shader : EGShader =  EGBillboardShaderSystem.instance.shaderFor(material)
     val vertexCount : uint = 4
 }

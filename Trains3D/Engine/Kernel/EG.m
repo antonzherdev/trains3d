@@ -182,10 +182,10 @@ static ODClassType* _EGMatrixStack_type;
 }
 
 - (void)applyModify:(EGMatrixModel*(^)(EGMatrixModel*))modify f:(void(^)())f {
-    [self push];
+    self.push;
     _value = modify(_value);
     ((void(^)())(f))();
-    [self pop];
+    self.pop;
 }
 
 - (ODClassType*)type {

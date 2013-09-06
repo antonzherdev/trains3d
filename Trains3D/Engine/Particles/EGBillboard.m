@@ -346,11 +346,13 @@ static ODClassType* _EGBillboardParticleSystem_type;
     EGVec3 _position;
     EGQuad _uv;
     EGQuad _model;
+    EGVec4 _color;
 }
 static ODClassType* _EGBillboardParticle_type;
 @synthesize position = _position;
 @synthesize uv = _uv;
 @synthesize model = _model;
+@synthesize color = _color;
 
 + (id)billboardParticleWithLifeLength:(float)lifeLength {
     return [[EGBillboardParticle alloc] initWithLifeLength:lifeLength];
@@ -368,11 +370,7 @@ static ODClassType* _EGBillboardParticle_type;
 }
 
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array {
-    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p1, _uv.p1)), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p2, _uv.p2)), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p3, _uv.p3)), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p4, _uv.p4));
-}
-
-- (BOOL)isLive {
-    @throw @"Method isLive is abstract";
+    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p1, _color, _uv.p1)), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p2, _color, _uv.p2)), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p3, _color, _uv.p3)), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p4, _color, _uv.p4));
 }
 
 - (ODClassType*)type {
@@ -412,7 +410,7 @@ static ODClassType* _EGBillboardParticleSystemView_type;
 }
 
 - (id)initWithMaterial:(EGSimpleMaterial*)material {
-    self = [super init];
+    self = [super initWithDtp:egBillboardBufferDataType()];
     if(self) {
         _material = material;
         _shader = [EGBillboardShaderSystem.instance shaderForMaterial:_material];

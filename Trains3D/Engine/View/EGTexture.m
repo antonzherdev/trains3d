@@ -38,7 +38,7 @@ static ODClassType* _EGTexture_type;
 }
 
 - (void)applyDraw:(void(^)())draw {
-    [self bind];
+    self.bind;
     ((void(^)())(draw))();
     [EGTexture unbind];
 }
@@ -102,19 +102,19 @@ static ODClassType* _EGFileTexture_type;
 }
 
 - (void)load {
-    __size = egLoadTextureFromFile([self id], [CNBundle fileNameForResource:_file]);
+    __size = egLoadTextureFromFile(self.id, [CNBundle fileNameForResource:_file]);
     __loaded = YES;
 }
 
 - (EGVec2)size {
-    if(!(__loaded)) [self load];
+    if(!(__loaded)) self.load;
     return __size;
 }
 
 - (void)bind {
-    if(!(__loaded)) [self load];
+    if(!(__loaded)) self.load;
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, [self id]);
+    glBindTexture(GL_TEXTURE_2D, self.id);
 }
 
 - (ODClassType*)type {

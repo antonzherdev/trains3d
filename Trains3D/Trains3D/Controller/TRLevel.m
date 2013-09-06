@@ -114,7 +114,7 @@ static ODClassType* _TRLevel_type;
         _score = [TRScore scoreWithRules:_rules.scoreRules];
         _railroad = [TRRailroad railroadWithMap:_map score:_score];
         __cities = [NSMutableArray mutableArray];
-        _schedule = [self createSchedule];
+        _schedule = self.createSchedule;
         __trains = (@[]);
         __repairer = [CNOption none];
     }
@@ -141,8 +141,8 @@ static ODClassType* _TRLevel_type;
 
 - (EGSchedule*)createSchedule {
     EGSchedule* schedule = [EGSchedule schedule];
-    [self createNewCity];
-    [self createNewCity];
+    self.createNewCity;
+    self.createNewCity;
     [_rules.events forEach:^void(CNTuple* t) {
         void(^f)(TRLevel*) = t.b;
         [schedule scheduleEvent:^void() {
@@ -153,10 +153,10 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)createNewCity {
-    EGVec2I tile = uwrap(EGVec2I, [[[[_map.partialTiles chain] exclude:[[[self cities] chain] map:^id(TRCity* _) {
+    EGVec2I tile = uwrap(EGVec2I, [[[[_map.partialTiles chain] exclude:[[self.cities chain] map:^id(TRCity* _) {
         return wrap(EGVec2I, _.tile);
     }]] randomItem] get]);
-    TRCity* city = [TRCity cityWithColor:[TRColor values][[[self cities] count]] tile:tile angle:[self randomCityDirectionForTile:tile]];
+    TRCity* city = [TRCity cityWithColor:[TRColor values][[self.cities count]] tile:tile angle:[self randomCityDirectionForTile:tile]];
     [_railroad tryAddRail:[TRRail railWithTile:tile form:city.angle.form]];
     [__cities addObject:city];
 }
@@ -199,7 +199,7 @@ static ODClassType* _TRLevel_type;
     [__cities forEach:^void(TRCity* _) {
         [_ updateWithDelta:delta];
     }];
-    [self processCollisions];
+    self.processCollisions;
     [_schedule updateWithDelta:delta];
 }
 
@@ -225,7 +225,7 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)processCollisions {
-    [[self detectCollisions] forEach:^void(EGCollision* collision) {
+    [self.detectCollisions forEach:^void(EGCollision* collision) {
         [collision.items forEach:^void(CNTuple* _) {
             [self destroyTrain:((TRTrain*)(_.a))];
         }];
