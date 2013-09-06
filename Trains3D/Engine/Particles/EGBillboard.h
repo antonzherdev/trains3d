@@ -15,6 +15,7 @@
 #import "EGShader.h"
 #import "EGTypes.h"
 #import "EGParticleSystem.h"
+#import "CNVoidRefArray.h"
 @class EGMatrix;
 @class EGTexture;
 @class EGFileTexture;
@@ -22,7 +23,6 @@
 @class EGBuffer;
 @class EGVertexBuffer;
 @class EGIndexBuffer;
-#import "CNVoidRefArray.h"
 
 @class EGBillboardShaderSystem;
 @class EGBillboardShader;

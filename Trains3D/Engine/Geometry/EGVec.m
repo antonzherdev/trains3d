@@ -301,3 +301,118 @@ ODPType* egVec4Type() {
 
 
 
+EGQuad egQuadApplySize(float size) {
+    return EGQuadMake(EGVec2Make(-size, -size), EGVec2Make(size, -size), EGVec2Make(size, size), EGVec2Make(-size, size));
+}
+EGQuad egQuadMulValue(EGQuad self, float value) {
+    return EGQuadMake(egVec2MulValue(self.p1, value), egVec2MulValue(self.p2, value), egVec2MulValue(self.p3, value), egVec2MulValue(self.p4, value));
+}
+EGQuad egQuadAddVec2(EGQuad self, EGVec2 vec2) {
+    return EGQuadMake(egVec2AddVec2(self.p1, vec2), egVec2AddVec2(self.p2, vec2), egVec2AddVec2(self.p3, vec2), egVec2AddVec2(self.p4, vec2));
+}
+EGQuad egQuadAddXY(EGQuad self, float x, float y) {
+    return egQuadAddVec2(self, EGVec2Make(x, y));
+}
+EGQuadrant egQuadQuadrant(EGQuad self) {
+    float x = (self.p2.x - self.p1.x) / 2;
+    float y = (self.p4.y - self.p1.y) / 2;
+    EGQuad q = egQuadAddVec2(egQuadMulValue(self, ((float)(0.5))), self.p1);
+    return EGQuadrantMake((EGQuad[]){q, egQuadAddXY(q, x, 0.0), egQuadAddXY(q, x, y), egQuadAddXY(q, 0.0, y)});
+}
+EGQuad egQuadIdentity() {
+    static EGQuad _ret = {{0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}, {0.0, 1.0}};
+    return _ret;
+}
+ODPType* egQuadType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGQuadWrap class] name:@"EGQuad" size:sizeof(EGQuad) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGQuad, ((EGQuad*)(data))[i]);
+    }];
+    return _ret;
+}
+@implementation EGQuadWrap{
+    EGQuad _value;
+}
+@synthesize value = _value;
+
++ (id)wrapWithValue:(EGQuad)value {
+    return [[EGQuadWrap alloc] initWithValue:value];
+}
+
+- (id)initWithValue:(EGQuad)value {
+    self = [super init];
+    if(self) _value = value;
+    return self;
+}
+
+- (NSString*)description {
+    return EGQuadDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGQuadWrap* o = ((EGQuadWrap*)(other));
+    return EGQuadEq(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return EGQuadHash(_value);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
+
+
+EGQuad egQuadrantRandomQuad(EGQuadrant self) {
+    return self.quads[randomMax(3)];
+}
+ODPType* egQuadrantType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGQuadrantWrap class] name:@"EGQuadrant" size:sizeof(EGQuadrant) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGQuadrant, ((EGQuadrant*)(data))[i]);
+    }];
+    return _ret;
+}
+@implementation EGQuadrantWrap{
+    EGQuadrant _value;
+}
+@synthesize value = _value;
+
++ (id)wrapWithValue:(EGQuadrant)value {
+    return [[EGQuadrantWrap alloc] initWithValue:value];
+}
+
+- (id)initWithValue:(EGQuadrant)value {
+    self = [super init];
+    if(self) _value = value;
+    return self;
+}
+
+- (NSString*)description {
+    return EGQuadrantDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGQuadrantWrap* o = ((EGQuadrantWrap*)(other));
+    return EGQuadrantEq(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return EGQuadrantHash(_value);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
+
+

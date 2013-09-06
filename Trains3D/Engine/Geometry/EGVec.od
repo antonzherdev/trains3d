@@ -57,3 +57,22 @@ struct EGVec4(x : float4, y : float4, z : float4, w : float4) {
     def set(length : float) = mul(length/self.length)
     def normalize = set(length = 1.0)
 }
+
+struct EGQuad(p1 : EGVec2, p2 : EGVec2, p3 : EGVec2, p4 : EGVec2) {
+    static val identity = EGQuad(EGVec2(0, 0), EGVec2(1, 0), EGVec2(1, 1), EGVec2(0, 1))
+    static def apply(size : float4) = EGQuad(EGVec2(-size, -size), EGVec2(size, -size), EGVec2(size, size), EGVec2(-size, size))
+    def mul(value : float4) = EGQuad(p1.mul(value), p2.mul(value), p3.mul(value), p4.mul(value))
+    def add(vec2 : EGVec2) = EGQuad(p1.add(vec2), p2.add(vec2), p3.add(vec2), p4.add(vec2))
+    def add(x : float4, y : float4) = add(EGVec2(x, y))
+
+    def quadrant :EGQuadrant = {
+        val x = (p2.x - p1.x)/2
+        val y = (p4.y - p1.y)/2
+        val q = mul(0.5).add(p1)
+        EGQuadrant([q, q.add(x, 0), q.add(x, y), q.add(0, y)])
+    }
+}
+
+struct EGQuadrant(quads : EGQuad[4]) {
+    def randomQuad = quads[randomMax(3)]
+}

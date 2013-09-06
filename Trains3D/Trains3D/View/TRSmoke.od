@@ -31,14 +31,8 @@ class TRSmoke(weak train : TRTrain) extends EGBillboardParticleSystem {
     }
 
     static val particleSize : float4 = 0.03
-    static val modelQuad = EGQuad(
-        EGVec2(-particleSize, -particleSize),
-        EGVec2(particleSize, -particleSize),
-        EGVec2(particleSize, particleSize),
-        EGVec2(-particleSize, particleSize))
-    static val textureQuad = EGQuad.identity.mul(0.25)
-    static val textureQuads : [EGQuad] = [textureQuad,
-        textureQuad.add(0.25, 0), textureQuad.add(0.25, 0.25), textureQuad.add(0, 0.25)]
+    static val modelQuad = EGQuad(particleSize)
+    static val textureQuadrant : EGQuadrant = EGQuad.identity.mul(0.5).quadrant
     static val defColor = EGVec4(1, 1, 1, 0.7)
     def generateParticle : TRSmokeParticle =  {
         val fPos = if(train.isBack) engine.tail.point else engine.head.point
@@ -51,7 +45,7 @@ class TRSmoke(weak train : TRTrain) extends EGBillboardParticleSystem {
         p.color = defColor
         p.position = EGVec3(emitterPos.x + randomFloatGap(-0.01, 0.01), emitterPos.y + randomFloatGap(-0.01, 0.01), emitterPos.z)
         p.model = modelQuad
-        p.uv = textureQuads.randomItem.get
+        p.uv = textureQuadrant.randomQuad
         val s = EGVec3((if(train.isBack) fPos.sub(bPos) else delta).set(length = train.speedFloat), zSpeed)
         p.speed = EGVec3(-s.x * randomPercents(0.6), -s.y * randomPercents(0.6), s.z * randomPercents(0.6))
         p

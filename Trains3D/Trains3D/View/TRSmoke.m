@@ -21,8 +21,7 @@ static CGFloat _TRSmoke_zSpeed = 0.1;
 static CGFloat _TRSmoke_emitEvery = 0.005;
 static float _TRSmoke_particleSize = ((float)(0.03));
 static EGQuad _TRSmoke_modelQuad;
-static EGQuad _TRSmoke_textureQuad;
-static id<CNSeq> _TRSmoke_textureQuads;
+static EGQuadrant _TRSmoke_textureQuadrant;
 static EGVec4 _TRSmoke_defColor = {1.0, 1.0, 1.0, ((float)(0.7))};
 static ODClassType* _TRSmoke_type;
 @synthesize train = _train;
@@ -46,9 +45,8 @@ static ODClassType* _TRSmoke_type;
 + (void)initialize {
     [super initialize];
     _TRSmoke_type = [ODClassType classTypeWithCls:[TRSmoke class]];
-    _TRSmoke_modelQuad = EGQuadMake(EGVec2Make(-_TRSmoke_particleSize, -_TRSmoke_particleSize), EGVec2Make(_TRSmoke_particleSize, -_TRSmoke_particleSize), EGVec2Make(_TRSmoke_particleSize, _TRSmoke_particleSize), EGVec2Make(-_TRSmoke_particleSize, _TRSmoke_particleSize));
-    _TRSmoke_textureQuad = egQuadMulValue(egQuadIdentity(), ((float)(0.25)));
-    _TRSmoke_textureQuads = (@[wrap(EGQuad, _TRSmoke_textureQuad), wrap(EGQuad, egQuadAddXY(_TRSmoke_textureQuad, ((float)(0.25)), 0.0)), wrap(EGQuad, egQuadAddXY(_TRSmoke_textureQuad, ((float)(0.25)), ((float)(0.25)))), wrap(EGQuad, egQuadAddXY(_TRSmoke_textureQuad, 0.0, ((float)(0.25))))]);
+    _TRSmoke_modelQuad = egQuadApplySize(_TRSmoke_particleSize);
+    _TRSmoke_textureQuadrant = egQuadQuadrant(egQuadMulValue(egQuadIdentity(), ((float)(0.5))));
 }
 
 - (void)generateParticlesWithDelta:(CGFloat)delta {
@@ -69,7 +67,7 @@ static ODClassType* _TRSmoke_type;
     p.color = _TRSmoke_defColor;
     p.position = EGVec3Make(emitterPos.x + randomFloatGap(-0.01, 0.01), emitterPos.y + randomFloatGap(-0.01, 0.01), emitterPos.z);
     p.model = _TRSmoke_modelQuad;
-    p.uv = uwrap(EGQuad, [[_TRSmoke_textureQuads randomItem] get]);
+    p.uv = egQuadrantRandomQuad(_TRSmoke_textureQuadrant);
     EGVec3 s = egVec3ApplyVec2Z(egVec2SetLength((([_train isBack]) ? egVec2SubVec2(fPos, bPos) : delta), ((float)(_train.speedFloat))), ((float)(_TRSmoke_zSpeed)));
     p.speed = EGVec3Make(-s.x * randomPercents(0.6), -s.y * randomPercents(0.6), s.z * randomPercents(0.6));
     return p;
@@ -87,12 +85,8 @@ static ODClassType* _TRSmoke_type;
     return _TRSmoke_modelQuad;
 }
 
-+ (EGQuad)textureQuad {
-    return _TRSmoke_textureQuad;
-}
-
-+ (id<CNSeq>)textureQuads {
-    return _TRSmoke_textureQuads;
++ (EGQuadrant)textureQuadrant {
+    return _TRSmoke_textureQuadrant;
 }
 
 + (EGVec4)defColor {

@@ -13,7 +13,7 @@ class EGParticleSystem <P extends EGParticle> extends EGController {
     def particles : [P] = _particles
 
     def generateParticle : P
-    def generateParticlesWith(delta : float)
+    def generateParticlesWith(delta : float) {}
 
     def emitParticle {
         _particles = CNList(generateParticle, _particles)

@@ -31,13 +31,6 @@ struct EGColor(r : float4, g : float4, b : float4, a : float4) {
     static val white = EGColor(1, 1, 1, 1)
 }
 
-struct EGQuad(p1 : EGVec2, p2 : EGVec2, p3 : EGVec2, p4 : EGVec2) {
-    static val identity = EGQuad(EGVec2(0, 0), EGVec2(1, 0), EGVec2(1, 1), EGVec2(0, 1))
-    def mul(value : float4) = EGQuad(p1.mul(value), p2.mul(value), p3.mul(value), p4.mul(value))
-    def add(vec2 : EGVec2) = EGQuad(p1.add(vec2), p2.add(vec2), p3.add(vec2), p4.add(vec2))
-    def add(x : float4, y : float4) = add(EGVec2(x, y))
-}
-
 trait EGController {
     def updateWith(delta : float)
 }

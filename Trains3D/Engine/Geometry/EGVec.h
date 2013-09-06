@@ -4,6 +4,8 @@ typedef struct EGVec2 EGVec2;
 typedef struct EGVec2I EGVec2I;
 typedef struct EGVec3 EGVec3;
 typedef struct EGVec4 EGVec4;
+typedef struct EGQuad EGQuad;
+typedef struct EGQuadrant EGQuadrant;
 
 struct EGVec2 {
     float x;
@@ -178,6 +180,82 @@ ODPType* egVec4Type();
 
 + (id)wrapWithValue:(EGVec4)value;
 - (id)initWithValue:(EGVec4)value;
+@end
+
+
+
+struct EGQuad {
+    EGVec2 p1;
+    EGVec2 p2;
+    EGVec2 p3;
+    EGVec2 p4;
+};
+static inline EGQuad EGQuadMake(EGVec2 p1, EGVec2 p2, EGVec2 p3, EGVec2 p4) {
+    return (EGQuad){p1, p2, p3, p4};
+}
+static inline BOOL EGQuadEq(EGQuad s1, EGQuad s2) {
+    return EGVec2Eq(s1.p1, s2.p1) && EGVec2Eq(s1.p2, s2.p2) && EGVec2Eq(s1.p3, s2.p3) && EGVec2Eq(s1.p4, s2.p4);
+}
+static inline NSUInteger EGQuadHash(EGQuad self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + EGVec2Hash(self.p1);
+    hash = hash * 31 + EGVec2Hash(self.p2);
+    hash = hash * 31 + EGVec2Hash(self.p3);
+    hash = hash * 31 + EGVec2Hash(self.p4);
+    return hash;
+}
+static inline NSString* EGQuadDescription(EGQuad self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<EGQuad: "];
+    [description appendFormat:@"p1=%@", EGVec2Description(self.p1)];
+    [description appendFormat:@", p2=%@", EGVec2Description(self.p2)];
+    [description appendFormat:@", p3=%@", EGVec2Description(self.p3)];
+    [description appendFormat:@", p4=%@", EGVec2Description(self.p4)];
+    [description appendString:@">"];
+    return description;
+}
+EGQuad egQuadApplySize(float size);
+EGQuad egQuadMulValue(EGQuad self, float value);
+EGQuad egQuadAddVec2(EGQuad self, EGVec2 vec2);
+EGQuad egQuadAddXY(EGQuad self, float x, float y);
+EGQuadrant egQuadQuadrant(EGQuad self);
+EGQuad egQuadIdentity();
+ODPType* egQuadType();
+@interface EGQuadWrap : NSObject
+@property (readonly, nonatomic) EGQuad value;
+
++ (id)wrapWithValue:(EGQuad)value;
+- (id)initWithValue:(EGQuad)value;
+@end
+
+
+
+struct EGQuadrant {
+    EGQuad quads[4];
+};
+static inline EGQuadrant EGQuadrantMake(EGQuad quads[4]) {
+    return (EGQuadrant){{quads[0], quads[1], quads[2], quads[3]}};
+}
+static inline BOOL EGQuadrantEq(EGQuadrant s1, EGQuadrant s2) {
+    return s1.quads == s2.quads;
+}
+static inline NSUInteger EGQuadrantHash(EGQuadrant self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + 13 * (13 * (13 * EGQuadHash(self.quads[0]) + EGQuadHash(self.quads[1])) + EGQuadHash(self.quads[2])) + EGQuadHash(self.quads[3]);
+    return hash;
+}
+static inline NSString* EGQuadrantDescription(EGQuadrant self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<EGQuadrant: "];
+    [description appendFormat:@"quads=[%@, %@, %@, %@]", EGQuadDescription(self.quads[0]), EGQuadDescription(self.quads[1]), EGQuadDescription(self.quads[2]), EGQuadDescription(self.quads[3])];
+    [description appendString:@">"];
+    return description;
+}
+EGQuad egQuadrantRandomQuad(EGQuadrant self);
+ODPType* egQuadrantType();
+@interface EGQuadrantWrap : NSObject
+@property (readonly, nonatomic) EGQuadrant value;
+
++ (id)wrapWithValue:(EGQuadrant)value;
+- (id)initWithValue:(EGQuadrant)value;
 @end
 
 

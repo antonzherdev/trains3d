@@ -523,7 +523,7 @@ static ODClassType* _TRTrainGenerator_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRTrainGenerator* o = ((TRTrainGenerator*)(other));
-    return self.trainType == o.trainType && [self.carsCount isEqual:o.carsCount] && [self.speed isEqual:o.speed] && [self.carTypes isEqual:o.carTypes];
+    return self.trainType == o.trainType && self.carsCount == o.carsCount && self.speed == o.speed && [self.carTypes isEqual:o.carTypes];
 }
 
 - (NSUInteger)hash {

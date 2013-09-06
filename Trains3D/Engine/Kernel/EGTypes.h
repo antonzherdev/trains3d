@@ -10,7 +10,6 @@
 typedef struct EGRect EGRect;
 typedef struct EGRectI EGRectI;
 typedef struct EGColor EGColor;
-typedef struct EGQuad EGQuad;
 
 struct EGRect {
     CGFloat x;
@@ -140,49 +139,6 @@ ODPType* egColorType();
 
 + (id)wrapWithValue:(EGColor)value;
 - (id)initWithValue:(EGColor)value;
-@end
-
-
-
-struct EGQuad {
-    EGVec2 p1;
-    EGVec2 p2;
-    EGVec2 p3;
-    EGVec2 p4;
-};
-static inline EGQuad EGQuadMake(EGVec2 p1, EGVec2 p2, EGVec2 p3, EGVec2 p4) {
-    return (EGQuad){p1, p2, p3, p4};
-}
-static inline BOOL EGQuadEq(EGQuad s1, EGQuad s2) {
-    return EGVec2Eq(s1.p1, s2.p1) && EGVec2Eq(s1.p2, s2.p2) && EGVec2Eq(s1.p3, s2.p3) && EGVec2Eq(s1.p4, s2.p4);
-}
-static inline NSUInteger EGQuadHash(EGQuad self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + EGVec2Hash(self.p1);
-    hash = hash * 31 + EGVec2Hash(self.p2);
-    hash = hash * 31 + EGVec2Hash(self.p3);
-    hash = hash * 31 + EGVec2Hash(self.p4);
-    return hash;
-}
-static inline NSString* EGQuadDescription(EGQuad self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<EGQuad: "];
-    [description appendFormat:@"p1=%@", EGVec2Description(self.p1)];
-    [description appendFormat:@", p2=%@", EGVec2Description(self.p2)];
-    [description appendFormat:@", p3=%@", EGVec2Description(self.p3)];
-    [description appendFormat:@", p4=%@", EGVec2Description(self.p4)];
-    [description appendString:@">"];
-    return description;
-}
-EGQuad egQuadMulValue(EGQuad self, float value);
-EGQuad egQuadAddVec2(EGQuad self, EGVec2 vec2);
-EGQuad egQuadAddXY(EGQuad self, float x, float y);
-EGQuad egQuadIdentity();
-ODPType* egQuadType();
-@interface EGQuadWrap : NSObject
-@property (readonly, nonatomic) EGQuad value;
-
-+ (id)wrapWithValue:(EGQuad)value;
-- (id)initWithValue:(EGQuad)value;
 @end
 
 

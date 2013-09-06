@@ -34,7 +34,6 @@ static ODClassType* _EGParticleSystem_type;
 }
 
 - (void)generateParticlesWithDelta:(CGFloat)delta {
-    @throw @"Method generateParticlesWith is abstract";
 }
 
 - (void)emitParticle {

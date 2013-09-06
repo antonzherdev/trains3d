@@ -60,8 +60,7 @@
 - (TRSmokeParticle*)generateParticle;
 + (float)particleSize;
 + (EGQuad)modelQuad;
-+ (EGQuad)textureQuad;
-+ (id<CNSeq>)textureQuads;
++ (EGQuadrant)textureQuadrant;
 + (EGVec4)defColor;
 + (ODClassType*)type;
 @end

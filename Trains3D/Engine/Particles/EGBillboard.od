@@ -4,7 +4,9 @@ import EGVec
 import EGMaterial
 import EGShader
 import EGTypes
-import EGParticleSystem
+
+export EGParticleSystem
+export CNVoidRefArray
 
 class EGBillboardShaderSystem extends EGShaderSystem<EGSimpleMaterial> {
     static val instance = EGBillboardShaderSystem()
@@ -94,10 +96,7 @@ class EGBillboardShader(program : EGShaderProgram, texture : bool) extends EGSha
 struct EGBillboardBufferData(position : EGVec3, model : EGVec2, color : EGVec4, uv : EGVec2)
 
 
-class EGBillboardParticleSystem extends EGParticleSystem<EGBillboardParticle> {
-
-}
-
+class EGBillboardParticleSystem extends EGParticleSystem<EGBillboardParticle>
 
 
 class EGBillboardParticle(lifeLength : float4) extends EGParticle(lifeLength) {
