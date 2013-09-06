@@ -10,13 +10,7 @@
 @class EGParticle;
 @class EGParticleSystemView;
 #import "CNVoidRefArray.h"
-@class EGColorSource;
-@class EGColorSourceColor;
-@class EGColorSourceTexture;
-@class EGMaterial;
-@class EGSimpleMaterial;
-@class EGStandardMaterial;
-@class EGMeshModel;
+#import "EGMaterial.h"
 @class EGMatrix;
 
 @class TRExplosion;

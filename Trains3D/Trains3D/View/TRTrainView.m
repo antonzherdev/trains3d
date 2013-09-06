@@ -2,7 +2,6 @@
 
 #import "EG.h"
 #import "EGMesh.h"
-#import "EGMaterial.h"
 #import "EGMath.h"
 #import "TRTrain.h"
 #import "TRTypes.h"

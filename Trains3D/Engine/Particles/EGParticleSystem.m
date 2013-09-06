@@ -2,7 +2,6 @@
 
 #import "EGMesh.h"
 #import "EGShader.h"
-#import "EGMaterial.h"
 #import "EGTexture.h"
 @implementation EGParticleSystem{
     CNList* __particles;
@@ -156,22 +155,25 @@ static ODClassType* _EGParticle_type;
 
 @implementation EGParticleSystemView{
     ODPType* _dtp;
+    EGBlendFunction _blendFunc;
     EGVertexBuffer* _vertexBuffer;
     EGIndexBuffer* _indexBuffer;
 }
 static ODClassType* _EGParticleSystemView_type;
 @synthesize dtp = _dtp;
+@synthesize blendFunc = _blendFunc;
 @synthesize vertexBuffer = _vertexBuffer;
 @synthesize indexBuffer = _indexBuffer;
 
-+ (id)particleSystemViewWithDtp:(ODPType*)dtp {
-    return [[EGParticleSystemView alloc] initWithDtp:dtp];
++ (id)particleSystemViewWithDtp:(ODPType*)dtp blendFunc:(EGBlendFunction)blendFunc {
+    return [[EGParticleSystemView alloc] initWithDtp:dtp blendFunc:blendFunc];
 }
 
-- (id)initWithDtp:(ODPType*)dtp {
+- (id)initWithDtp:(ODPType*)dtp blendFunc:(EGBlendFunction)blendFunc {
     self = [super init];
     if(self) {
         _dtp = dtp;
+        _blendFunc = blendFunc;
         _vertexBuffer = [EGVertexBuffer applyStride:_dtp.size];
         _indexBuffer = [EGIndexBuffer apply];
     }
@@ -206,25 +208,24 @@ static ODClassType* _EGParticleSystemView_type;
     if(n == 0) return ;
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    NSUInteger vc = self.vertexCount;
-    CNVoidRefArray vertexArr = cnVoidRefArrayApplyTpCount(_dtp, n * vc);
-    CNVoidRefArray indexArr = cnVoidRefArrayApplyTpCount(oduInt4Type(), n * 3 * (vc - 2));
-    __block CNVoidRefArray indexPointer = indexArr;
-    __block CNVoidRefArray vertexPointer = vertexArr;
-    __block unsigned int index = 0;
-    [particles forEach:^void(id particle) {
-        vertexPointer = [particle writeToArray:vertexPointer];
-        indexPointer = [self writeIndexesToIndexPointer:indexPointer i:index];
-        index += ((unsigned int)(vc));
-    }];
-    [_vertexBuffer setTp:_dtp array:vertexArr];
-    [_indexBuffer setTp:oduInt4Type() array:indexArr];
-    cnVoidRefArrayFree(vertexArr);
-    cnVoidRefArrayFree(indexArr);
-    [self.shader drawMaterial:self.material mesh:[EGMesh meshWithVertexBuffer:_vertexBuffer indexBuffer:_indexBuffer]];
-    glDisable(GL_BLEND);
+    egBlendFunctionApplyDraw(_blendFunc, ^void() {
+        NSUInteger vc = self.vertexCount;
+        CNVoidRefArray vertexArr = cnVoidRefArrayApplyTpCount(_dtp, n * vc);
+        CNVoidRefArray indexArr = cnVoidRefArrayApplyTpCount(oduInt4Type(), n * 3 * (vc - 2));
+        __block CNVoidRefArray indexPointer = indexArr;
+        __block CNVoidRefArray vertexPointer = vertexArr;
+        __block unsigned int index = 0;
+        [particles forEach:^void(id particle) {
+            vertexPointer = [particle writeToArray:vertexPointer];
+            indexPointer = [self writeIndexesToIndexPointer:indexPointer i:index];
+            index += ((unsigned int)(vc));
+        }];
+        [_vertexBuffer setTp:_dtp array:vertexArr];
+        [_indexBuffer setTp:oduInt4Type() array:indexArr];
+        cnVoidRefArrayFree(vertexArr);
+        cnVoidRefArrayFree(indexArr);
+        [self.shader drawMaterial:self.material mesh:[EGMesh meshWithVertexBuffer:_vertexBuffer indexBuffer:_indexBuffer]];
+    });
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
 }
@@ -245,18 +246,20 @@ static ODClassType* _EGParticleSystemView_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGParticleSystemView* o = ((EGParticleSystemView*)(other));
-    return [self.dtp isEqual:o.dtp];
+    return [self.dtp isEqual:o.dtp] && EGBlendFunctionEq(self.blendFunc, o.blendFunc);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.dtp hash];
+    hash = hash * 31 + EGBlendFunctionHash(self.blendFunc);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"dtp=%@", self.dtp];
+    [description appendFormat:@", blendFunc=%@", EGBlendFunctionDescription(self.blendFunc)];
     [description appendString:@">"];
     return description;
 }

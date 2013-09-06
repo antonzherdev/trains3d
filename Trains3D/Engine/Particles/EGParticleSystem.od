@@ -46,7 +46,7 @@ class EGParticle(lifeLength : float4) extends EGController {
 }
 
 
-class EGParticleSystemView<P extends EGParticle>(dtp : ODPType<_>) {
+class EGParticleSystemView<P extends EGParticle>(dtp : ODPType<_>, blendFunc : EGBlendFunction) {
     val vertexBuffer = EGVertexBuffer<float4>(dtp.size)
     val indexBuffer = EGIndexBuffer<uint4>()
 
@@ -62,28 +62,25 @@ class EGParticleSystemView<P extends EGParticle>(dtp : ODPType<_>) {
 
         glDisable(GL_DEPTH_TEST)
         glDisable(GL_CULL_FACE)
-        glEnable(GL_BLEND)
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+        blendFunc {
+            val vc = vertexCount
+            val vertexArr = CNVoidRefArray(dtp, n*vc)
+            val indexArr = CNVoidRefArray(ODUInt4.type, n*3*(vc - 2))
+            var indexPointer = indexArr
+            var vertexPointer = vertexArr
+            var index : uint4 = 0
+            particles.for{particle ->
+                vertexPointer = particle.writeTo(vertexPointer)
+                indexPointer = writeIndexesTo(indexPointer, index)
+                index += vc
+            }
+            vertexBuffer.set(dtp, array = vertexArr)
+            indexBuffer.set(ODUInt4.type, array = indexArr)
+            vertexArr.free
+            indexArr.free
 
-        val vc = vertexCount
-        val vertexArr = CNVoidRefArray(dtp, n*vc)
-        val indexArr = CNVoidRefArray(ODUInt4.type, n*3*(vc - 2))
-        var indexPointer = indexArr
-        var vertexPointer = vertexArr
-        var index : uint4 = 0
-        particles.for{particle ->
-            vertexPointer = particle.writeTo(vertexPointer)
-            indexPointer = writeIndexesTo(indexPointer, index)
-            index += vc
+            shader.draw(material, EGMesh(vertexBuffer = vertexBuffer, indexBuffer))
         }
-        vertexBuffer.set(dtp, array = vertexArr)
-        indexBuffer.set(ODUInt4.type, array = indexArr)
-        vertexArr.free
-        indexArr.free
-
-        shader.draw(material, EGMesh(vertexBuffer = vertexBuffer, indexBuffer))
-
-        glDisable(GL_BLEND)
         glEnable(GL_CULL_FACE)
         glEnable(GL_DEPTH_TEST)
     }

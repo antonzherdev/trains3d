@@ -114,7 +114,10 @@ class EGBillboardParticle(lifeLength : float4) extends EGParticle(lifeLength) {
     }
 }
 
-class EGBillboardParticleSystemView(material : EGSimpleMaterial) extends  EGParticleSystemView<EGBillboardParticle>(EGBillboardBufferData.type) {
+class EGBillboardParticleSystemView(material : EGSimpleMaterial, blendFunc : EGBlendFunction)
+    extends  EGParticleSystemView<EGBillboardParticle>(EGBillboardBufferData.type, blendFunc)
+{
+    static def apply(material : EGSimpleMaterial)  = EGBillboardParticleSystemView(material, EGBlendFunction.standard)
     val shader : EGShader =  EGBillboardShaderSystem.instance.shaderFor(material)
     val vertexCount : uint = 4
 

@@ -11,13 +11,7 @@
 @class EGVertexBuffer;
 @class EGIndexBuffer;
 #import "EGTypes.h"
-@class EGColorSource;
-@class EGColorSourceColor;
-@class EGColorSourceTexture;
-@class EGMaterial;
-@class EGSimpleMaterial;
-@class EGStandardMaterial;
-@class EGMeshModel;
+#import "EGMaterial.h"
 @class TRCityAngle;
 @class TRCity;
 @class TRColor;

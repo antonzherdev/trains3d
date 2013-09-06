@@ -2,7 +2,6 @@
 
 #import "EG.h"
 #import "EGParticleSystem.h"
-#import "EGMaterial.h"
 #import "EGMatrix.h"
 @implementation TRExplosion{
     EGVec3 _position;
@@ -115,7 +114,9 @@ static ODClassType* _TRExplosionFlame_type;
 }
 
 - (TRExplosionFlame*)init {
-    self.emitParticle;
+    [intRange(4) forEach:^void(id _) {
+        self.emitParticle;
+    }];
     return self;
 }
 
@@ -183,7 +184,7 @@ static ODClassType* _TRExplosionFlameParticle_type;
 + (TRExplosionFlameParticle*)applyPosition:(EGVec3)position size:(float)size {
     TRExplosionFlameParticle* ret = [TRExplosionFlameParticle explosionFlameParticleWithSize:size];
     ret.position = position;
-    ret.color = EGVec4Make(1.0, 0.5, 0.0, 0.7);
+    ret.color = EGVec4Make(1.0, 0.7, 0.0, 0.5);
     ret.uv = egQuadrantRandomQuad(_TRExplosionFlameParticle_textureQuadrant);
     ret.model = egQuadApplySize(0.0);
     return ret;
@@ -248,7 +249,7 @@ static ODClassType* _TRExplosionView_type;
     self = [super init];
     if(self) {
         _material = [EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyTexture:[EG textureForFile:@"Explosion.png"]]];
-        _view = [EGBillboardParticleSystemView billboardParticleSystemViewWithMaterial:_material];
+        _view = [EGBillboardParticleSystemView billboardParticleSystemViewWithMaterial:_material blendFunc:egBlendFunctionPremultiplied()];
     }
     
     return self;

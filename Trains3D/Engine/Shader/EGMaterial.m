@@ -444,3 +444,62 @@ static ODClassType* _EGMeshModel_type;
 @end
 
 
+void egBlendFunctionApplyDraw(EGBlendFunction self, void(^draw)()) {
+    glEnable(GL_BLEND);
+    glBlendFunc(self.source, self.destination);
+    ((void(^)())(draw))();
+    glDisable(GL_BLEND);
+}
+EGBlendFunction egBlendFunctionStandard() {
+    static EGBlendFunction _ret = {GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA};
+    return _ret;
+}
+EGBlendFunction egBlendFunctionPremultiplied() {
+    static EGBlendFunction _ret = {GL_ONE, GL_ONE_MINUS_SRC_ALPHA};
+    return _ret;
+}
+ODPType* egBlendFunctionType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGBlendFunctionWrap class] name:@"EGBlendFunction" size:sizeof(EGBlendFunction) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGBlendFunction, ((EGBlendFunction*)(data))[i]);
+    }];
+    return _ret;
+}
+@implementation EGBlendFunctionWrap{
+    EGBlendFunction _value;
+}
+@synthesize value = _value;
+
++ (id)wrapWithValue:(EGBlendFunction)value {
+    return [[EGBlendFunctionWrap alloc] initWithValue:value];
+}
+
+- (id)initWithValue:(EGBlendFunction)value {
+    self = [super init];
+    if(self) _value = value;
+    return self;
+}
+
+- (NSString*)description {
+    return EGBlendFunctionDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGBlendFunctionWrap* o = ((EGBlendFunctionWrap*)(other));
+    return EGBlendFunctionEq(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return EGBlendFunctionHash(_value);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
+
+

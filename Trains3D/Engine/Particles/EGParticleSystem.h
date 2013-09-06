@@ -12,13 +12,7 @@
 @class EGShaderUniform;
 @class EGShaderSystem;
 #import "CNVoidRefArray.h"
-@class EGColorSource;
-@class EGColorSourceColor;
-@class EGColorSourceTexture;
-@class EGMaterial;
-@class EGSimpleMaterial;
-@class EGStandardMaterial;
-@class EGMeshModel;
+#import "EGMaterial.h"
 @class EGTexture;
 @class EGFileTexture;
 
@@ -57,11 +51,12 @@
 
 @interface EGParticleSystemView : NSObject
 @property (nonatomic, readonly) ODPType* dtp;
+@property (nonatomic, readonly) EGBlendFunction blendFunc;
 @property (nonatomic, readonly) EGVertexBuffer* vertexBuffer;
 @property (nonatomic, readonly) EGIndexBuffer* indexBuffer;
 
-+ (id)particleSystemViewWithDtp:(ODPType*)dtp;
-- (id)initWithDtp:(ODPType*)dtp;
++ (id)particleSystemViewWithDtp:(ODPType*)dtp blendFunc:(EGBlendFunction)blendFunc;
+- (id)initWithDtp:(ODPType*)dtp blendFunc:(EGBlendFunction)blendFunc;
 - (ODClassType*)type;
 - (NSUInteger)vertexCount;
 - (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i;

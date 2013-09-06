@@ -5,6 +5,7 @@
 @class EGFileTexture;
 @class EGMatrix;
 #import "EGVec.h"
+#import "EGGL.h"
 #import "EGTypes.h"
 
 @class EG;

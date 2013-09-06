@@ -1,7 +1,6 @@
 #import "EGBillboard.h"
 
 #import "EG.h"
-#import "EGMaterial.h"
 #import "EGMatrix.h"
 #import "EGTexture.h"
 #import "EGMesh.h"
@@ -405,12 +404,12 @@ static ODClassType* _EGBillboardParticleSystemView_type;
 @synthesize shader = _shader;
 @synthesize vertexCount = _vertexCount;
 
-+ (id)billboardParticleSystemViewWithMaterial:(EGSimpleMaterial*)material {
-    return [[EGBillboardParticleSystemView alloc] initWithMaterial:material];
++ (id)billboardParticleSystemViewWithMaterial:(EGSimpleMaterial*)material blendFunc:(EGBlendFunction)blendFunc {
+    return [[EGBillboardParticleSystemView alloc] initWithMaterial:material blendFunc:blendFunc];
 }
 
-- (id)initWithMaterial:(EGSimpleMaterial*)material {
-    self = [super initWithDtp:egBillboardBufferDataType()];
+- (id)initWithMaterial:(EGSimpleMaterial*)material blendFunc:(EGBlendFunction)blendFunc {
+    self = [super initWithDtp:egBillboardBufferDataType() blendFunc:blendFunc];
     if(self) {
         _material = material;
         _shader = [EGBillboardShaderSystem.instance shaderForMaterial:_material];
@@ -423,6 +422,10 @@ static ODClassType* _EGBillboardParticleSystemView_type;
 + (void)initialize {
     [super initialize];
     _EGBillboardParticleSystemView_type = [ODClassType classTypeWithCls:[EGBillboardParticleSystemView class]];
+}
+
++ (EGBillboardParticleSystemView*)applyMaterial:(EGSimpleMaterial*)material {
+    return [EGBillboardParticleSystemView billboardParticleSystemViewWithMaterial:material blendFunc:egBlendFunctionStandard()];
 }
 
 - (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i {
@@ -445,18 +448,20 @@ static ODClassType* _EGBillboardParticleSystemView_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGBillboardParticleSystemView* o = ((EGBillboardParticleSystemView*)(other));
-    return [self.material isEqual:o.material];
+    return [self.material isEqual:o.material] && EGBlendFunctionEq(self.blendFunc, o.blendFunc);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.material hash];
+    hash = hash * 31 + EGBlendFunctionHash(self.blendFunc);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"material=%@", self.material];
+    [description appendFormat:@", blendFunc=%@", EGBlendFunctionDescription(self.blendFunc)];
     [description appendString:@">"];
     return description;
 }

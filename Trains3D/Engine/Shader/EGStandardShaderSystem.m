@@ -1,6 +1,5 @@
 #import "EGStandardShaderSystem.h"
 
-#import "EGMaterial.h"
 #import "EG.h"
 #import "EGTexture.h"
 #import "EGMesh.h"

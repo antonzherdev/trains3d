@@ -6,7 +6,6 @@
 #import "EG.h"
 #import "EGMap.h"
 #import "EGMesh.h"
-#import "EGMaterial.h"
 #import "EGTexture.h"
 #import "EGShader.h"
 #import "EGMatrix.h"

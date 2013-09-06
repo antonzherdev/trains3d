@@ -9,13 +9,7 @@
 @class TRLevel;
 @class EGMapSso;
 @class EGMapSsoView;
-@class EGColorSource;
-@class EGColorSourceColor;
-@class EGColorSourceTexture;
-@class EGMaterial;
-@class EGSimpleMaterial;
-@class EGStandardMaterial;
-@class EGMeshModel;
+#import "EGMaterial.h"
 @class EGMatrix;
 
 @class TRLevelBackgroundView;

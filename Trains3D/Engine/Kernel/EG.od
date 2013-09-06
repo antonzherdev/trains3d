@@ -4,6 +4,7 @@ import EGDirector
 import EGTexture
 import EGMatrix
 import EGVec
+import EGGL
 import EGTypes
 
 export EGMatrix

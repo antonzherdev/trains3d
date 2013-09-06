@@ -14,13 +14,7 @@
 @class EGBuffer;
 @class EGVertexBuffer;
 @class EGIndexBuffer;
-@class EGColorSource;
-@class EGColorSourceColor;
-@class EGColorSourceTexture;
-@class EGMaterial;
-@class EGSimpleMaterial;
-@class EGStandardMaterial;
-@class EGMeshModel;
+#import "EGMaterial.h"
 @class EGTexture;
 @class EGFileTexture;
 @class EGShaderProgram;

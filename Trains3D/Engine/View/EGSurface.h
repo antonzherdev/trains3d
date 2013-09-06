@@ -11,13 +11,7 @@
 @class EGShaderAttribute;
 @class EGShaderUniform;
 @class EGShaderSystem;
-@class EGColorSource;
-@class EGColorSourceColor;
-@class EGColorSourceTexture;
-@class EGMaterial;
-@class EGSimpleMaterial;
-@class EGStandardMaterial;
-@class EGMeshModel;
+#import "EGMaterial.h"
 
 @class EGSurface;
 @class EGSurfaceShader;

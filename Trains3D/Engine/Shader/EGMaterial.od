@@ -42,4 +42,16 @@ class EGMeshModel(meshes : [(EGMesh, EGMaterial)]) {
     }
 }
 
+struct EGBlendFunction(source : GLenum, destination : GLenum) {
+    static val standard : EGBlendFunction = EGBlendFunction(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+    static val premultiplied : EGBlendFunction = EGBlendFunction(GL_ONE, GL_ONE_MINUS_SRC_ALPHA)
+    def apply(draw : () -> void) {
+        glEnable(GL_BLEND)
+        glBlendFunc(source, destination)
+
+        draw()
+        glDisable(GL_BLEND)
+    }
+}
+
 

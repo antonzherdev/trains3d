@@ -10,7 +10,6 @@
 #import "EGParticleSystem.h"
 #import "TRTrain.h"
 #import "TRRailPoint.h"
-#import "EGMaterial.h"
 @implementation TRSmoke{
     __weak TRTrain* _train;
     TRCar* _engine;
@@ -186,7 +185,7 @@ static ODClassType* _TRSmokeView_type;
 }
 
 - (id)init {
-    self = [super initWithMaterial:[EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyTexture:[EG textureForFile:@"Smoke.png"]]]];
+    self = [super initWithMaterial:[EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyTexture:[EG textureForFile:@"Smoke.png"]]] blendFunc:egBlendFunctionStandard()];
     
     return self;
 }

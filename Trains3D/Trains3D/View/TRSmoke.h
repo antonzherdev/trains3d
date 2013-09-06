@@ -37,13 +37,7 @@
 @class TRRailPoint;
 @class TRRailPointCorrection;
 #import "CNTypes.h"
-@class EGColorSource;
-@class EGColorSourceColor;
-@class EGColorSourceTexture;
-@class EGMaterial;
-@class EGSimpleMaterial;
-@class EGStandardMaterial;
-@class EGMeshModel;
+#import "EGMaterial.h"
 #import "CNVoidRefArray.h"
 
 @class TRSmoke;

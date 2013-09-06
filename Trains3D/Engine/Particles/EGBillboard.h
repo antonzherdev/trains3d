@@ -9,13 +9,7 @@
 #import "EGTypes.h"
 #import "EGParticleSystem.h"
 #import "CNVoidRefArray.h"
-@class EGColorSource;
-@class EGColorSourceColor;
-@class EGColorSourceTexture;
-@class EGMaterial;
-@class EGSimpleMaterial;
-@class EGStandardMaterial;
-@class EGMeshModel;
+#import "EGMaterial.h"
 @class EGMatrix;
 @class EGTexture;
 @class EGFileTexture;
@@ -130,9 +124,10 @@ ODPType* egBillboardBufferDataType();
 @property (nonatomic, readonly) EGShader* shader;
 @property (nonatomic, readonly) NSUInteger vertexCount;
 
-+ (id)billboardParticleSystemViewWithMaterial:(EGSimpleMaterial*)material;
-- (id)initWithMaterial:(EGSimpleMaterial*)material;
++ (id)billboardParticleSystemViewWithMaterial:(EGSimpleMaterial*)material blendFunc:(EGBlendFunction)blendFunc;
+- (id)initWithMaterial:(EGSimpleMaterial*)material blendFunc:(EGBlendFunction)blendFunc;
 - (ODClassType*)type;
++ (EGBillboardParticleSystemView*)applyMaterial:(EGSimpleMaterial*)material;
 - (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i;
 + (ODClassType*)type;
 @end

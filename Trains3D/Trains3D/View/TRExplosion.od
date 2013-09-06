@@ -21,8 +21,7 @@ class TRExplosionFlame(position : EGVec3, size : float4) extends EGBillboardPart
     def generateParticle : EGBillboardParticle = TRExplosionFlameParticle(position, size)
 
     def init : TRExplosionFlame = {
-//        1.range.for(emitParticle)
-        emitParticle
+        4.range.for(emitParticle)
         self
     }
 }
@@ -32,7 +31,7 @@ class TRExplosionFlameParticle(size : float4) extends EGBillboardParticle(4) {
     static def apply(position : EGVec3, size : float4) : TRExplosionFlameParticle = {
         val ret = TRExplosionFlameParticle(size)
         ret.position = position
-        ret.color = EGVec4(1, 0.5, 0, 0.7)
+        ret.color = EGVec4(1, 0.7, 0, 0.5)
         ret.uv = textureQuadrant.randomQuad
         ret.model = EGQuad(0)
         ret
@@ -47,7 +46,7 @@ class TRExplosionFlameParticle(size : float4) extends EGBillboardParticle(4) {
 
 class TRExplosionView {
     val material = EGSimpleMaterial(EG.textureFor("Explosion.png"))
-    val view = EGBillboardParticleSystemView(material)
+    val view = EGBillboardParticleSystemView(material, EGBlendFunction.premultiplied)
 
     def draw(explosion : TRExplosion) {
         view.draw(explosion.flame)

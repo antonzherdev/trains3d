@@ -4,7 +4,6 @@
 #import "EGTexture.h"
 #import "TRLevel.h"
 #import "EGMapIso.h"
-#import "EGMaterial.h"
 #import "EGMatrix.h"
 @implementation TRLevelBackgroundView{
     EGMapSso* _map;

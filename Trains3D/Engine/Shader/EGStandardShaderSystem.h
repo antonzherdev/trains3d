@@ -1,12 +1,6 @@
 #import "objd.h"
 #import "EGShader.h"
-@class EGColorSource;
-@class EGColorSourceColor;
-@class EGColorSourceTexture;
-@class EGMaterial;
-@class EGSimpleMaterial;
-@class EGStandardMaterial;
-@class EGMeshModel;
+#import "EGMaterial.h"
 @class EG;
 @class EGContext;
 @class EGMatrixStack;

@@ -3,7 +3,6 @@
 #import "EGTexture.h"
 #import "EGMesh.h"
 #import "EGShader.h"
-#import "EGMaterial.h"
 @implementation EGSurface{
     NSUInteger _width;
     NSUInteger _height;

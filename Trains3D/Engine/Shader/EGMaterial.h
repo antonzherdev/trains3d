@@ -33,6 +33,7 @@
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
 @class EGMeshModel;
+typedef struct EGBlendFunction EGBlendFunction;
 
 @interface EGColorSource : NSObject
 + (id)colorSource;
@@ -110,5 +111,41 @@
 - (void)draw;
 + (ODClassType*)type;
 @end
+
+
+struct EGBlendFunction {
+    GLenum source;
+    GLenum destination;
+};
+static inline EGBlendFunction EGBlendFunctionMake(GLenum source, GLenum destination) {
+    return (EGBlendFunction){source, destination};
+}
+static inline BOOL EGBlendFunctionEq(EGBlendFunction s1, EGBlendFunction s2) {
+    return GLenumEq(s1.source, s2.source) && GLenumEq(s1.destination, s2.destination);
+}
+static inline NSUInteger EGBlendFunctionHash(EGBlendFunction self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + GLenumHash(self.source);
+    hash = hash * 31 + GLenumHash(self.destination);
+    return hash;
+}
+static inline NSString* EGBlendFunctionDescription(EGBlendFunction self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<EGBlendFunction: "];
+    [description appendFormat:@"source=%@", GLenumDescription(self.source)];
+    [description appendFormat:@", destination=%@", GLenumDescription(self.destination)];
+    [description appendString:@">"];
+    return description;
+}
+void egBlendFunctionApplyDraw(EGBlendFunction self, void(^draw)());
+EGBlendFunction egBlendFunctionStandard();
+EGBlendFunction egBlendFunctionPremultiplied();
+ODPType* egBlendFunctionType();
+@interface EGBlendFunctionWrap : NSObject
+@property (readonly, nonatomic) EGBlendFunction value;
+
++ (id)wrapWithValue:(EGBlendFunction)value;
+- (id)initWithValue:(EGBlendFunction)value;
+@end
+
 
 

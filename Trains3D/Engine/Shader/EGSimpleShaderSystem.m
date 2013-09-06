@@ -2,7 +2,6 @@
 
 #import "EG.h"
 #import "EGTexture.h"
-#import "EGMaterial.h"
 #import "EGMesh.h"
 #import "EGMatrix.h"
 @implementation EGSimpleShaderSystem

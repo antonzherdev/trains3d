@@ -10,13 +10,7 @@
 @class EGMatrixModel;
 @class EGTexture;
 @class EGFileTexture;
-@class EGColorSource;
-@class EGColorSourceColor;
-@class EGColorSourceTexture;
-@class EGMaterial;
-@class EGSimpleMaterial;
-@class EGStandardMaterial;
-@class EGMeshModel;
+#import "EGMaterial.h"
 #import "EGTypes.h"
 @class TRRailroadConnectorContent;
 @class TREmptyConnector;
