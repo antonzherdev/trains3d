@@ -4,6 +4,7 @@ import EGVec
 import EGMaterial
 import EGShader
 
+struct EGBillboardBufferData(position : EGVec3, model : EGVec2, uv : EGVec2)
 
 class EGBillboardShaderSystem extends EGShaderSystem<EGSimpleMaterial> {
     static val instance = EGBillboardShaderSystem()

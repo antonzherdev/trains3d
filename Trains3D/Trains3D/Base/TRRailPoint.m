@@ -136,22 +136,22 @@ static NSArray* _TRRailForm_values;
 + (void)initialize {
     [super initialize];
     _TRRailForm_leftBottom = [TRRailForm railFormWithOrdinal:0 name:@"leftBottom" start:TRRailConnector.left end:TRRailConnector.bottom isTurn:YES length:M_PI_4 pointFun:^EGVec2(CGFloat x) {
-        return EGVec2Make(-0.5 + 0.5 * sin(x * 2), -0.5 + 0.5 * cos(x * 2));
+        return EGVec2Make(((float)(-0.5 + 0.5 * sin(x * 2))), ((float)(-0.5 + 0.5 * cos(x * 2))));
     }];
     _TRRailForm_leftRight = [TRRailForm railFormWithOrdinal:1 name:@"leftRight" start:TRRailConnector.left end:TRRailConnector.right isTurn:NO length:1.0 pointFun:^EGVec2(CGFloat x) {
-        return EGVec2Make(x - 0.5, 0.0);
+        return EGVec2Make(((float)(x - 0.5)), 0.0);
     }];
     _TRRailForm_leftTop = [TRRailForm railFormWithOrdinal:2 name:@"leftTop" start:TRRailConnector.left end:TRRailConnector.top isTurn:YES length:M_PI_4 pointFun:^EGVec2(CGFloat x) {
-        return EGVec2Make(-0.5 + 0.5 * sin(x * 2), 0.5 - 0.5 * cos(x * 2));
+        return EGVec2Make(((float)(-0.5 + 0.5 * sin(x * 2))), ((float)(0.5 - 0.5 * cos(x * 2))));
     }];
     _TRRailForm_bottomTop = [TRRailForm railFormWithOrdinal:3 name:@"bottomTop" start:TRRailConnector.bottom end:TRRailConnector.top isTurn:NO length:1.0 pointFun:^EGVec2(CGFloat x) {
-        return EGVec2Make(0.0, x - 0.5);
+        return EGVec2Make(0.0, ((float)(x - 0.5)));
     }];
     _TRRailForm_bottomRight = [TRRailForm railFormWithOrdinal:4 name:@"bottomRight" start:TRRailConnector.bottom end:TRRailConnector.right isTurn:YES length:M_PI_4 pointFun:^EGVec2(CGFloat x) {
-        return EGVec2Make(0.5 - 0.5 * cos(x * 2), -0.5 + 0.5 * sin(x * 2));
+        return EGVec2Make(((float)(0.5 - 0.5 * cos(x * 2))), ((float)(-0.5 + 0.5 * sin(x * 2))));
     }];
     _TRRailForm_topRight = [TRRailForm railFormWithOrdinal:5 name:@"topRight" start:TRRailConnector.top end:TRRailConnector.right isTurn:YES length:M_PI_4 pointFun:^EGVec2(CGFloat x) {
-        return EGVec2Make(0.5 - 0.5 * cos(x * 2), 0.5 - 0.5 * sin(x * 2));
+        return EGVec2Make(((float)(0.5 - 0.5 * cos(x * 2))), ((float)(0.5 - 0.5 * sin(x * 2))));
     }];
     _TRRailForm_values = (@[_TRRailForm_leftBottom, _TRRailForm_leftRight, _TRRailForm_leftTop, _TRRailForm_bottomTop, _TRRailForm_bottomRight, _TRRailForm_topRight]);
 }

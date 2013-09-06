@@ -43,15 +43,11 @@ static ODClassType* _TRTrainView_type;
 
 - (void)drawTrains:(id<CNSeq>)trains {
     if([trains isEmpty]) return ;
-    [trains forEach:^void(TRTrain* _) {
-        [self drawTrain:_];
-    }];
-    [_smokeView begin];
     [trains forEach:^void(TRTrain* train) {
+        [self drawTrain:train];
         if(train.viewData == nil) train.viewData = [TRSmoke smokeWithTrain:train];
-        [_smokeView drawSmoke:train.viewData];
+        [_smokeView drawSystem:train.viewData];
     }];
-    [_smokeView end];
 }
 
 - (void)drawTrain:(TRTrain*)train {
@@ -61,7 +57,7 @@ static ODClassType* _TRTrainView_type;
         [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
             return [[_ modifyW:^EGMatrix*(EGMatrix* w) {
                 EGVec2 mid = egVec2Mid(h, t);
-                return [w translateX:((float)(mid.x)) y:((float)(mid.y)) z:((float)(0.05))];
+                return [w translateX:mid.x y:mid.y z:((float)(0.05))];
             }] modifyM:^EGMatrix*(EGMatrix* m) {
                 CGFloat angle = (([train isBack]) ? 90 : -90) + 180.0 / M_PI * egVec2Angle(egVec2Sub(t, h));
                 return [m rotateAngle:((float)(angle)) x:0.0 y:1.0 z:0.0];

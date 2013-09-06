@@ -41,10 +41,10 @@ static ODClassType* _EGCameraIso_type;
 
 - (EGRect)calculateViewportSizeWithViewSize:(EGVec2)viewSize {
     NSInteger ww = _tilesOnScreen.x + _tilesOnScreen.y;
-    CGFloat tileSize = min(viewSize.x / ww, 2 * viewSize.y / ww);
+    CGFloat tileSize = min(((CGFloat)(viewSize.x / ww)), ((CGFloat)(2 * viewSize.y / ww)));
     CGFloat viewportWidth = tileSize * ww;
     CGFloat viewportHeight = tileSize * ww / 2;
-    return EGRectMake((viewSize.x - viewportWidth) / 2, viewportWidth, (viewSize.y - viewportHeight) / 2, viewportHeight);
+    return EGRectMake(((CGFloat)((viewSize.x - viewportWidth) / 2)), viewportWidth, ((CGFloat)((viewSize.y - viewportHeight) / 2)), viewportHeight);
 }
 
 - (void)focusForViewSize:(EGVec2)viewSize {
@@ -56,10 +56,10 @@ static ODClassType* _EGCameraIso_type;
 
 - (EGVec2)translateWithViewSize:(EGVec2)viewSize viewPoint:(EGVec2)viewPoint {
     EGRect vps = [self calculateViewportSizeWithViewSize:viewSize];
-    CGFloat x = viewPoint.x - vps.x;
-    CGFloat y = viewPoint.y - vps.y;
-    CGFloat vw = egRectSize(vps).x;
-    CGFloat vh = egRectSize(vps).y;
+    float x = viewPoint.x - vps.x;
+    float y = viewPoint.y - vps.y;
+    float vw = egRectSize(vps).x;
+    float vh = egRectSize(vps).y;
     CGFloat ww2 = (_tilesOnScreen.x + _tilesOnScreen.y) / 2.0;
     CGFloat tw = ((CGFloat)(_tilesOnScreen.x));
     return EGVec2Make((x / vw - y / vh) * ww2 + tw / 2 - 0.5 + _center.x, (x / vw + y / vh) * ww2 - tw / 2 - 0.5 + _center.y);

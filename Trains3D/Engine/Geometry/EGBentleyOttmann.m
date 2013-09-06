@@ -236,8 +236,8 @@ static ODClassType* _EGBentleyOttmannPointEvent_type;
 
 - (CGFloat)yForX:(CGFloat)x {
     if([[_segment line] isVertical]) {
-        if(_isStart) return _segment.p1.y;
-        else return _segment.p2.y;
+        if(_isStart) return ((CGFloat)(_segment.p1.y));
+        else return ((CGFloat)(_segment.p2.y));
     } else {
         return [((EGSlopeLine*)([_segment line])) yForX:x];
     }
@@ -544,15 +544,15 @@ static ODClassType* _EGSweepLine_type;
         [self sweepToEvent:event];
         EGBentleyOttmannPointEvent* pe = ((EGBentleyOttmannPointEvent*)(event));
         if([pe isVertical]) {
-            CGFloat minY = pe.segment.p1.y;
-            CGFloat maxY = pe.segment.p2.y;
+            float minY = pe.segment.p1.y;
+            float maxY = pe.segment.p2.y;
             id<CNIterator> i = [_events iteratorHigherThanObject:event];
             while([i hasNext]) {
                 EGBentleyOttmannPointEvent* e = ((EGBentleyOttmannPointEvent*)([i next]));
                 if(!([e isVertical])) {
-                    CGFloat y = [e yForX:_currentEventPoint.x];
+                    CGFloat y = [e yForX:((CGFloat)(_currentEventPoint.x))];
                     if(y > maxY) break;
-                    if(y >= minY) [self registerIntersectionA:pe b:e point:EGVec2Make(_currentEventPoint.x, y)];
+                    if(y >= minY) [self registerIntersectionA:pe b:e point:EGVec2Make(_currentEventPoint.x, ((float)(y)))];
                 }
             }
         } else {
@@ -609,7 +609,7 @@ static ODClassType* _EGSweepLine_type;
         }]));
         [existing addObject:a];
         [existing addObject:b];
-        if(point.x > _currentEventPoint.x || (eqf(point.x, _currentEventPoint.x) && point.y > _currentEventPoint.y)) {
+        if(point.x > _currentEventPoint.x || (eqf4(point.x, _currentEventPoint.x) && point.y > _currentEventPoint.y)) {
             EGBentleyOttmannIntersectionEvent* intersection = [EGBentleyOttmannIntersectionEvent bentleyOttmannIntersectionEventWithPoint:point];
             [_queue offerPoint:point event:intersection];
         }
@@ -618,8 +618,8 @@ static ODClassType* _EGSweepLine_type;
 
 - (NSInteger)compareEventsA:(EGBentleyOttmannPointEvent*)a b:(EGBentleyOttmannPointEvent*)b {
     if([a isEqual:b]) return 0;
-    CGFloat ay = [a yForX:_currentEventPoint.x];
-    CGFloat by = [b yForX:_currentEventPoint.x];
+    CGFloat ay = [a yForX:((CGFloat)(_currentEventPoint.x))];
+    CGFloat by = [b yForX:((CGFloat)(_currentEventPoint.x))];
     NSInteger c = floatCompare(ay, by);
     if(c == 0) if([a isVertical]) {
         c = -1;
@@ -629,7 +629,7 @@ static ODClassType* _EGSweepLine_type;
         } else {
             c = floatCompare([a slope], [b slope]);
             if(ay > _currentEventPoint.y) c = -c;
-            if(c == 0) c = floatCompare(a.point.x, b.point.x);
+            if(c == 0) c = float4Compare(a.point.x, b.point.x);
         }
     }
     return c;

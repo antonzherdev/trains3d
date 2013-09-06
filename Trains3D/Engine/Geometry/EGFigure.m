@@ -24,8 +24,8 @@ static ODClassType* _EGLine_type;
 }
 
 + (EGLine*)newWithP1:(EGVec2)p1 p2:(EGVec2)p2 {
-    if(eqf(p1.x, p2.x)) {
-        return [EGVerticalLine verticalLineWithX:p1.x];
+    if(eqf4(p1.x, p2.x)) {
+        return [EGVerticalLine verticalLineWithX:((CGFloat)(p1.x))];
     } else {
         CGFloat slope = [EGLine calculateSlopeWithP1:p1 p2:p2];
         return [EGSlopeLine slopeLineWithSlope:slope constant:[EGLine calculateConstantWithSlope:slope point:p1]];
@@ -33,11 +33,11 @@ static ODClassType* _EGLine_type;
 }
 
 + (CGFloat)calculateSlopeWithP1:(EGVec2)p1 p2:(EGVec2)p2 {
-    return (p2.y - p1.y) / (p2.x - p1.x);
+    return ((CGFloat)((p2.y - p1.y) / (p2.x - p1.x)));
 }
 
 + (CGFloat)calculateConstantWithSlope:(CGFloat)slope point:(EGVec2)point {
-    return point.y - slope * point.x;
+    return ((CGFloat)(point.y - slope * point.x));
 }
 
 - (BOOL)containsPoint:(EGVec2)point {
@@ -143,7 +143,7 @@ static ODClassType* _EGSlopeLine_type;
 }
 
 - (BOOL)containsPoint:(EGVec2)point {
-    return eqf(point.y, _slope * point.x + _constant);
+    return eqf4(point.y, _slope * point.x + _constant);
 }
 
 - (BOOL)isVertical {
@@ -172,13 +172,13 @@ static ODClassType* _EGSlopeLine_type;
         return [CNOption none];
     } else {
         CGFloat xInt = [self xIntersectionWithLine:line];
-        return [CNOption opt:wrap(EGVec2, EGVec2Make(xInt, [self yForX:xInt]))];
+        return [CNOption opt:wrap(EGVec2, EGVec2Make(((float)(xInt)), ((float)([self yForX:xInt]))))];
     }
 }
 
 - (BOOL)isRightPoint:(EGVec2)point {
     if([self containsPoint:point]) return NO;
-    else return point.y < [self yForX:point.x];
+    else return point.y < [self yForX:((CGFloat)(point.x))];
 }
 
 - (id)moveWithDistance:(CGFloat)distance {
@@ -192,7 +192,7 @@ static ODClassType* _EGSlopeLine_type;
 }
 
 - (EGLine*)perpendicularWithPoint:(EGVec2)point {
-    if(eqf(_slope, 0)) return [EGVerticalLine verticalLineWithX:point.x];
+    if(eqf(_slope, 0)) return [EGVerticalLine verticalLineWithX:((CGFloat)(point.x))];
     else return [EGLine newWithSlope:-_slope point:point];
 }
 
@@ -256,7 +256,7 @@ static ODClassType* _EGVerticalLine_type;
 }
 
 - (BOOL)containsPoint:(EGVec2)point {
-    return eqf(point.x, _x);
+    return eqf4(point.x, _x);
 }
 
 - (BOOL)isVertical {
@@ -293,7 +293,7 @@ static ODClassType* _EGVerticalLine_type;
 }
 
 - (EGLine*)perpendicularWithPoint:(EGVec2)point {
-    return [EGSlopeLine slopeLineWithSlope:0.0 constant:point.y];
+    return [EGSlopeLine slopeLineWithSlope:0.0 constant:((CGFloat)(point.y))];
 }
 
 - (ODClassType*)type {
@@ -351,7 +351,7 @@ static ODClassType* _EGLineSegment_type;
     if(self) {
         _p1 = p1;
         _p2 = p2;
-        _boundingRect = egRectNewXY(min(_p1.x, _p2.x), max(_p1.x, _p2.x), min(_p1.y, _p2.y), max(_p1.y, _p2.y));
+        _boundingRect = egRectNewXY(min(((CGFloat)(_p1.x)), ((CGFloat)(_p2.x))), max(((CGFloat)(_p1.x)), ((CGFloat)(_p2.x))), min(((CGFloat)(_p1.y)), ((CGFloat)(_p2.y))), max(((CGFloat)(_p1.y)), ((CGFloat)(_p2.y))));
     }
     
     return self;
@@ -368,15 +368,15 @@ static ODClassType* _EGLineSegment_type;
 }
 
 + (EGLineSegment*)newWithX1:(CGFloat)x1 y1:(CGFloat)y1 x2:(CGFloat)x2 y2:(CGFloat)y2 {
-    return [EGLineSegment newWithP1:EGVec2Make(x1, y1) p2:EGVec2Make(x2, y2)];
+    return [EGLineSegment newWithP1:EGVec2Make(((float)(x1)), ((float)(y1))) p2:EGVec2Make(((float)(x2)), ((float)(y2)))];
 }
 
 - (BOOL)isVertical {
-    return eqf(_p1.x, _p2.x);
+    return eqf4(_p1.x, _p2.x);
 }
 
 - (BOOL)isHorizontal {
-    return eqf(_p1.y, _p2.y);
+    return eqf4(_p1.y, _p2.y);
 }
 
 - (EGLine*)line {
@@ -425,7 +425,7 @@ static ODClassType* _EGLineSegment_type;
 }
 
 - (EGLineSegment*)moveWithPoint:(EGVec2)point {
-    return [self moveWithX:point.x y:point.y];
+    return [self moveWithX:((CGFloat)(point.x)) y:((CGFloat)(point.y))];
 }
 
 - (EGLineSegment*)moveWithX:(CGFloat)x y:(CGFloat)y {
@@ -510,10 +510,10 @@ static ODClassType* _EGPolygon_type;
     __block CGFloat minY = DBL_MAX;
     __block CGFloat maxY = DBL_MIN;
     [_points forEach:^void(id p) {
-        if(uwrap(EGVec2, p).x < minX) minX = uwrap(EGVec2, p).x;
-        if(uwrap(EGVec2, p).x > maxX) maxX = uwrap(EGVec2, p).x;
-        if(uwrap(EGVec2, p).y < minY) minY = uwrap(EGVec2, p).y;
-        if(uwrap(EGVec2, p).y > maxY) maxY = uwrap(EGVec2, p).y;
+        if(uwrap(EGVec2, p).x < minX) minX = ((CGFloat)(uwrap(EGVec2, p).x));
+        if(uwrap(EGVec2, p).x > maxX) maxX = ((CGFloat)(uwrap(EGVec2, p).x));
+        if(uwrap(EGVec2, p).y < minY) minY = ((CGFloat)(uwrap(EGVec2, p).y));
+        if(uwrap(EGVec2, p).y > maxY) maxY = ((CGFloat)(uwrap(EGVec2, p).y));
     }];
     return egRectNewXY(minX, maxX, minY, maxY);
 }

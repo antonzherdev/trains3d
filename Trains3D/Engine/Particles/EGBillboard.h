@@ -23,6 +23,47 @@
 
 @class EGBillboardShaderSystem;
 @class EGBillboardShader;
+typedef struct EGBillboardBufferData EGBillboardBufferData;
+
+struct EGBillboardBufferData {
+    EGVec3 position;
+    EGVec2 model;
+    EGVec2 uv;
+};
+static inline EGBillboardBufferData EGBillboardBufferDataMake(EGVec3 position, EGVec2 model, EGVec2 uv) {
+    EGBillboardBufferData ret;
+    ret.position = position;
+    ret.model = model;
+    ret.uv = uv;
+    return ret;
+}
+static inline BOOL EGBillboardBufferDataEq(EGBillboardBufferData s1, EGBillboardBufferData s2) {
+    return EGVec3Eq(s1.position, s2.position) && EGVec2Eq(s1.model, s2.model) && EGVec2Eq(s1.uv, s2.uv);
+}
+static inline NSUInteger EGBillboardBufferDataHash(EGBillboardBufferData self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + EGVec3Hash(self.position);
+    hash = hash * 31 + EGVec2Hash(self.model);
+    hash = hash * 31 + EGVec2Hash(self.uv);
+    return hash;
+}
+static inline NSString* EGBillboardBufferDataDescription(EGBillboardBufferData self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<EGBillboardBufferData: "];
+    [description appendFormat:@"position=%@", EGVec3Description(self.position)];
+    [description appendFormat:@", model=%@", EGVec2Description(self.model)];
+    [description appendFormat:@", uv=%@", EGVec2Description(self.uv)];
+    [description appendString:@">"];
+    return description;
+}
+ODPType* egBillboardBufferDataType();
+@interface EGBillboardBufferDataWrap : NSObject
+@property (readonly, nonatomic) EGBillboardBufferData value;
+
++ (id)wrapWithValue:(EGBillboardBufferData)value;
+- (id)initWithValue:(EGBillboardBufferData)value;
+@end
+
+
 
 @interface EGBillboardShaderSystem : EGShaderSystem
 + (id)billboardShaderSystem;

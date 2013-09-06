@@ -6,22 +6,22 @@ typedef struct EGVec3 EGVec3;
 typedef struct EGVec4 EGVec4;
 
 struct EGVec2 {
-    CGFloat x;
-    CGFloat y;
+    float x;
+    float y;
 };
-static inline EGVec2 EGVec2Make(CGFloat x, CGFloat y) {
+static inline EGVec2 EGVec2Make(float x, float y) {
     EGVec2 ret;
     ret.x = x;
     ret.y = y;
     return ret;
 }
 static inline BOOL EGVec2Eq(EGVec2 s1, EGVec2 s2) {
-    return eqf(s1.x, s2.x) && eqf(s1.y, s2.y);
+    return eqf4(s1.x, s2.x) && eqf4(s1.y, s2.y);
 }
 static inline NSUInteger EGVec2Hash(EGVec2 self) {
     NSUInteger hash = 0;
-    hash = hash * 31 + floatHash(self.x);
-    hash = hash * 31 + floatHash(self.y);
+    hash = hash * 31 + float4Hash(self.x);
+    hash = hash * 31 + float4Hash(self.y);
     return hash;
 }
 static inline NSString* EGVec2Description(EGVec2 self) {
@@ -35,15 +35,15 @@ EGVec2 egVec2Apply(EGVec2I point);
 EGVec2 egVec2Add(EGVec2 self, EGVec2 point);
 EGVec2 egVec2Sub(EGVec2 self, EGVec2 point);
 EGVec2 egVec2Negate(EGVec2 self);
-CGFloat egVec2Angle(EGVec2 self);
-CGFloat egVec2Dot(EGVec2 self, EGVec2 point);
-CGFloat egVec2LengthSquare(EGVec2 self);
+float egVec2Angle(EGVec2 self);
+float egVec2Dot(EGVec2 self, EGVec2 point);
+float egVec2LengthSquare(EGVec2 self);
 CGFloat egVec2Length(EGVec2 self);
-EGVec2 egVec2Mul(EGVec2 self, CGFloat value);
-EGVec2 egVec2Div(EGVec2 self, CGFloat value);
+EGVec2 egVec2Mul(EGVec2 self, float value);
+EGVec2 egVec2Div(EGVec2 self, float value);
 EGVec2 egVec2Mid(EGVec2 self, EGVec2 point);
 CGFloat egVec2DistanceTo(EGVec2 self, EGVec2 point);
-EGVec2 egVec2Set(EGVec2 self, CGFloat length);
+EGVec2 egVec2Set(EGVec2 self, float length);
 EGVec2 egVec2Normalize(EGVec2 self);
 NSInteger egVec2Compare(EGVec2 self, EGVec2 to);
 ODPType* egVec2Type();

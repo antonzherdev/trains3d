@@ -76,7 +76,7 @@ static ODClassType* _TRExplosion_type;
     id<CNSeq> _particles;
     CGFloat _time;
 }
-static id<CNSeq> _TRExplosionFlame_uvs = (@[wrap(EGVec2, {0.0, 0.0}), wrap(EGVec2, {0.25, 0.0}), wrap(EGVec2, {0.0, 0.25}), wrap(EGVec2, {0.25, 0.25})]);
+static id<CNSeq> _TRExplosionFlame_uvs = (@[wrap(EGVec2, {0.0, 0.0}), wrap(EGVec2, {((float)(0.25)), 0.0}), wrap(EGVec2, {0.0, ((float)(0.25))}), wrap(EGVec2, {((float)(0.25)), ((float)(0.25))})]);
 static ODClassType* _TRExplosionFlame_type;
 @synthesize position = _position;
 @synthesize size = _size;

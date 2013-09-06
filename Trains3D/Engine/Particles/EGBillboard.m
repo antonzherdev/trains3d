@@ -5,6 +5,51 @@
 #import "EGMatrix.h"
 #import "EGTexture.h"
 #import "EGMesh.h"
+ODPType* egBillboardBufferDataType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGBillboardBufferDataWrap class] name:@"EGBillboardBufferData" size:sizeof(EGBillboardBufferData) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGBillboardBufferData, ((EGBillboardBufferData*)(data))[i]);
+    }];
+    return _ret;
+}
+@implementation EGBillboardBufferDataWrap{
+    EGBillboardBufferData _value;
+}
+@synthesize value = _value;
+
++ (id)wrapWithValue:(EGBillboardBufferData)value {
+    return [[EGBillboardBufferDataWrap alloc] initWithValue:value];
+}
+
+- (id)initWithValue:(EGBillboardBufferData)value {
+    self = [super init];
+    if(self) _value = value;
+    return self;
+}
+
+- (NSString*)description {
+    return EGBillboardBufferDataDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGBillboardBufferDataWrap* o = ((EGBillboardBufferDataWrap*)(other));
+    return EGBillboardBufferDataEq(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return EGBillboardBufferDataHash(_value);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
+
+
 @implementation EGBillboardShaderSystem
 static EGBillboardShaderSystem* _EGBillboardShaderSystem_instance;
 static ODClassType* _EGBillboardShaderSystem_type;

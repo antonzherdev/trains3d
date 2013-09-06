@@ -17,7 +17,7 @@ static ODClassType* _EGCamera2D_type;
     self = [super init];
     if(self) {
         _size = size;
-        _matrixModel = [EGMatrixModel applyM:[EGMatrix identity] w:[EGMatrix identity] c:[EGMatrix identity] p:[EGMatrix orthoLeft:0.0 right:((float)(_size.x)) bottom:0.0 top:((float)(_size.y)) zNear:-1.0 zFar:1.0]];
+        _matrixModel = [EGMatrixModel applyM:[EGMatrix identity] w:[EGMatrix identity] c:[EGMatrix identity] p:[EGMatrix orthoLeft:0.0 right:_size.x bottom:0.0 top:_size.y zNear:-1.0 zFar:1.0]];
     }
     
     return self;
@@ -29,7 +29,7 @@ static ODClassType* _EGCamera2D_type;
 }
 
 - (CGFloat)factorForViewSize:(EGVec2)viewSize {
-    return min(viewSize.x / _size.x, viewSize.y / _size.y);
+    return min(((CGFloat)(viewSize.x / _size.x)), ((CGFloat)(viewSize.y / _size.y)));
 }
 
 - (EGRect)viewportRectForViewSize:(EGVec2)viewSize {
@@ -37,7 +37,7 @@ static ODClassType* _EGCamera2D_type;
 }
 
 - (EGRect)viewportRectForViewSize:(EGVec2)viewSize factor:(CGFloat)factor {
-    return egRectMoveToCenterFor(EGRectMake(0.0, _size.x * factor, 0.0, _size.y * factor), viewSize);
+    return egRectMoveToCenterFor(EGRectMake(0.0, ((CGFloat)(_size.x * factor)), 0.0, ((CGFloat)(_size.y * factor))), viewSize);
 }
 
 - (void)focusForViewSize:(EGVec2)viewSize {
@@ -48,7 +48,7 @@ static ODClassType* _EGCamera2D_type;
 - (EGVec2)translateWithViewSize:(EGVec2)viewSize viewPoint:(EGVec2)viewPoint {
     CGFloat factor = [self factorForViewSize:viewSize];
     EGRect viewport = [self viewportRectForViewSize:viewSize factor:factor];
-    return egVec2Div(egVec2Sub(viewPoint, egRectPoint(viewport)), factor);
+    return egVec2Div(egVec2Sub(viewPoint, egRectPoint(viewport)), ((float)(factor)));
 }
 
 - (ODClassType*)type {

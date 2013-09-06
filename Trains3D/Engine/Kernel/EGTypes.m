@@ -17,13 +17,13 @@ EGRect egRectMove(EGRect self, CGFloat x, CGFloat y) {
     return EGRectMake(self.x + x, self.width, self.y + y, self.height);
 }
 EGRect egRectMoveToCenterFor(EGRect self, EGVec2 size) {
-    return EGRectMake((size.x - self.width) / 2, self.width, (size.y - self.height) / 2, self.height);
+    return EGRectMake(((CGFloat)((size.x - self.width) / 2)), self.width, ((CGFloat)((size.y - self.height) / 2)), self.height);
 }
 EGVec2 egRectPoint(EGRect self) {
-    return EGVec2Make(self.x, self.y);
+    return EGVec2Make(((float)(self.x)), ((float)(self.y)));
 }
 EGVec2 egRectSize(EGRect self) {
-    return EGVec2Make(self.width, self.height);
+    return EGVec2Make(((float)(self.width)), ((float)(self.height)));
 }
 BOOL egRectIntersects(EGRect self, EGRect rect) {
     return self.x <= egRectX2(rect) && egRectX2(self) >= rect.x && self.y <= egRectY2(rect) && egRectY2(self) >= rect.y;

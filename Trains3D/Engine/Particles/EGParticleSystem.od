@@ -1,9 +1,14 @@
+import ODType
+
 import CNData
 
+import EGGL
 import EGTypes
+import EGMesh
+import EGShader
 
 
-class EGParticleSystem <P extends EGParticle> extends EGController {
+class EGParticleSystem <D, P extends EGParticle<D>> extends EGController {
     private var _particles = CNList<P>()
     def particles : [P] = _particles
 
@@ -22,9 +27,55 @@ class EGParticleSystem <P extends EGParticle> extends EGController {
     }
 }
 
-trait EGParticle extends EGController {
-    def writeTo(array : CNMutablePArray<float4>)
+trait EGParticle<D> extends EGController {
+    def writeTo(array : CNMutablePArray<D>)
 
     def isLive : bool
 }
 
+
+class EGParticleSystemView<D, P extends EGParticle<D>>(dtp : ODPType<D>) {
+    val vertexBuffer = EGVertexBuffer<float4>(8*4)
+    val indexBuffer = EGIndexBuffer<uint4>()
+
+    def vertexCount : uint
+    def shader : EGShader
+    def material : EGMaterial
+
+    def draw(system : EGParticleSystem<D, P>) {
+        val particles = system.particles
+        val n = particles.count
+        if(n == 0) return nil
+
+        glDisable(GL_DEPTH_TEST)
+        glDisable(GL_CULL_FACE)
+        glEnable(GL_BLEND)
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+
+        val vc = vertexCount
+        val positionArr = CNMutablePArray<D>(dtp, n*vc)
+        val indexArr = CNMutablePArray(ODUInt4.type, n*3*(vc - 2))
+        var index = 0
+        particles.for{particle ->
+            particle.writeTo(positionArr)
+
+            var vci = vc - 2
+            while(vci > 0) {
+                indexArr.write(uInt4 = index)
+                indexArr.write(uInt4 = index + 1)
+                indexArr.write(uInt4 = index + 2)
+                index++
+                vci--
+            }
+            index += 2
+        }
+        vertexBuffer.set(positionArr)
+        indexBuffer.set(indexArr)
+
+        shader.draw(material, EGMesh(vertexBuffer = vertexBuffer, indexBuffer))
+
+        glDisable(GL_BLEND)
+        glEnable(GL_CULL_FACE)
+        glEnable(GL_DEPTH_TEST)
+    }
+}

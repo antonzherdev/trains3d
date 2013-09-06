@@ -354,7 +354,7 @@ static ODClassType* _TRDamageView_type;
 - (void)drawPoint:(TRRailPoint*)point {
     [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
         return [_ modifyW:^EGMatrix*(EGMatrix* w) {
-            return [w translateX:((float)(point.point.x)) y:((float)(point.point.y)) z:((float)(0.0))];
+            return [w translateX:point.point.x y:point.point.y z:((float)(0.0))];
         }];
     } f:^void() {
         [_model draw];

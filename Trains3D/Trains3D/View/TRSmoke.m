@@ -54,12 +54,12 @@ static ODClassType* _TRSmoke_type;
     EGVec2 fPos = (([_train isBack]) ? _engine.tail.point : _engine.head.point);
     EGVec2 bPos = (([_train isBack]) ? _engine.head.point : _engine.tail.point);
     EGVec2 delta = egVec2Sub(bPos, fPos);
-    EGVec2 tubeXY = egVec2Add(fPos, egVec2Set(delta, ((CGFloat)(_tubePos.x))));
+    EGVec2 tubeXY = egVec2Add(fPos, egVec2Set(delta, _tubePos.x));
     EGVec3 emitterPos = egVec3Apply(tubeXY, _tubePos.z);
     TRSmokeParticle* p = [TRSmokeParticle smokeParticleWithTexture:((NSInteger)(randomMax(3)))];
     p.position = EGVec3Make(emitterPos.x + randomFloatGap(-0.01, 0.01), emitterPos.y + randomFloatGap(-0.01, 0.01), emitterPos.z);
     randomFloat();
-    EGVec3 s = egVec3Apply(egVec2Set((([_train isBack]) ? egVec2Sub(fPos, bPos) : delta), _train.speedFloat), ((float)(_TRSmoke_zSpeed)));
+    EGVec3 s = egVec3Apply(egVec2Set((([_train isBack]) ? egVec2Sub(fPos, bPos) : delta), ((float)(_train.speedFloat))), ((float)(_TRSmoke_zSpeed)));
     p.speed = EGVec3Make(-s.x * randomPercents(0.6), -s.y * randomPercents(0.6), s.z * randomPercents(0.6));
     return p;
 }
@@ -107,6 +107,7 @@ static ODClassType* _TRSmoke_type;
 }
 static NSInteger _TRSmokeParticle_lifeTime = 4;
 static NSInteger _TRSmokeParticle_dragCoefficient = 1;
+static CGFloat _TRSmokeParticle_particleSize = 0.03;
 static ODClassType* _TRSmokeParticle_type;
 @synthesize texture = _texture;
 @synthesize position = _position;
@@ -143,6 +144,15 @@ static ODClassType* _TRSmokeParticle_type;
     return _time < _TRSmokeParticle_lifeTime;
 }
 
+- (void)writeToArray:(CNMutablePArray*)array {
+    float tx = ((float)(((_texture >= 2) ? 0.5 : 0)));
+    float ty = ((float)(((_texture == 1 || _texture == 3) ? 0.5 : 0)));
+    [array writeItem:voidRef(TRSmokeBufferDataMake(_position, EGVec2Make(((float)(-_TRSmokeParticle_particleSize)), ((float)(-_TRSmokeParticle_particleSize))), EGVec2Make(tx, ty), ((float)(_time))))];
+    [array writeItem:voidRef(TRSmokeBufferDataMake(_position, EGVec2Make(((float)(_TRSmokeParticle_particleSize)), ((float)(-_TRSmokeParticle_particleSize))), EGVec2Make(tx + 0.5, ty), ((float)(_time))))];
+    [array writeItem:voidRef(TRSmokeBufferDataMake(_position, EGVec2Make(((float)(_TRSmokeParticle_particleSize)), ((float)(_TRSmokeParticle_particleSize))), EGVec2Make(tx + 0.5, ty + 0.5), ((float)(_time))))];
+    [array writeItem:voidRef(TRSmokeBufferDataMake(_position, EGVec2Make(((float)(-_TRSmokeParticle_particleSize)), ((float)(_TRSmokeParticle_particleSize))), EGVec2Make(tx, ty + 0.5), ((float)(_time))))];
+}
+
 - (ODClassType*)type {
     return [TRSmokeParticle type];
 }
@@ -153,6 +163,10 @@ static ODClassType* _TRSmokeParticle_type;
 
 + (NSInteger)dragCoefficient {
     return _TRSmokeParticle_dragCoefficient;
+}
+
++ (CGFloat)particleSize {
+    return _TRSmokeParticle_particleSize;
 }
 
 + (ODClassType*)type {
@@ -232,29 +246,22 @@ ODPType* trSmokeBufferDataType() {
 
 
 @implementation TRSmokeView{
-    EGVertexBuffer* _positionBuffer;
-    EGIndexBuffer* _indexBuffer;
     TRSmokeShader* _shader;
-    EGSimpleMaterial* _texture;
+    EGSimpleMaterial* _material;
 }
-static CGFloat _TRSmokeView_particleSize = 0.03;
 static ODClassType* _TRSmokeView_type;
-@synthesize positionBuffer = _positionBuffer;
-@synthesize indexBuffer = _indexBuffer;
 @synthesize shader = _shader;
-@synthesize texture = _texture;
+@synthesize material = _material;
 
 + (id)smokeView {
     return [[TRSmokeView alloc] init];
 }
 
 - (id)init {
-    self = [super init];
+    self = [super initWithDtp:trSmokeBufferDataType()];
     if(self) {
-        _positionBuffer = [EGVertexBuffer applyStride:((NSUInteger)(8 * 4))];
-        _indexBuffer = [EGIndexBuffer apply];
         _shader = TRSmokeShader.instance;
-        _texture = [EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyTexture:[EG textureForFile:@"Smoke.png"]]];
+        _material = [EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyTexture:[EG textureForFile:@"Smoke.png"]]];
     }
     
     return self;
@@ -265,54 +272,12 @@ static ODClassType* _TRSmokeView_type;
     _TRSmokeView_type = [ODClassType classTypeWithCls:[TRSmokeView class]];
 }
 
-- (void)begin {
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_CULL_FACE);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-}
-
-- (void)end {
-    glDisable(GL_BLEND);
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_DEPTH_TEST);
-}
-
-- (void)drawSmoke:(TRSmoke*)smoke {
-    id<CNSeq> particles = [smoke particles];
-    NSUInteger n = [particles count];
-    if(n == 0) return ;
-    CNMutablePArray* positionArr = [CNMutablePArray applyTp:trSmokeBufferDataType() count:((NSUInteger)(4 * n))];
-    CNMutablePArray* indexArr = [CNMutablePArray applyTp:oduInt4Type() count:((NSUInteger)(6 * n))];
-    __block NSUInteger i = 0;
-    [particles forEach:^void(TRSmokeParticle* p) {
-        EGVec3 v = p.position;
-        float t = ((float)(p.time));
-        float tx = ((float)(((p.texture >= 2) ? 0.5 : 0)));
-        float ty = ((float)(((p.texture == 1 || p.texture == 3) ? 0.5 : 0)));
-        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, ((float)(-_TRSmokeView_particleSize)), ((float)(-_TRSmokeView_particleSize)), tx, ty, t))];
-        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, ((float)(_TRSmokeView_particleSize)), ((float)(-_TRSmokeView_particleSize)), tx + 0.5, ty, t))];
-        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, ((float)(_TRSmokeView_particleSize)), ((float)(_TRSmokeView_particleSize)), tx + 0.5, ty + 0.5, t))];
-        [positionArr writeItem:voidRef(TRSmokeBufferDataMake(v.x, v.y, v.z, ((float)(-_TRSmokeView_particleSize)), ((float)(_TRSmokeView_particleSize)), tx, ty + 0.5, t))];
-        [indexArr writeUInt4:((unsigned int)(i))];
-        [indexArr writeUInt4:((unsigned int)(i + 1))];
-        [indexArr writeUInt4:((unsigned int)(i + 2))];
-        [indexArr writeUInt4:((unsigned int)(i + 2))];
-        [indexArr writeUInt4:((unsigned int)(i + 3))];
-        [indexArr writeUInt4:((unsigned int)(i))];
-        i += 4;
-    }];
-    [_positionBuffer setData:positionArr];
-    [_indexBuffer setData:indexArr];
-    [_shader drawMaterial:_texture mesh:[EGMesh meshWithVertexBuffer:_positionBuffer indexBuffer:_indexBuffer]];
+- (NSUInteger)vertexCount {
+    return 4;
 }
 
 - (ODClassType*)type {
     return [TRSmokeView type];
-}
-
-+ (CGFloat)particleSize {
-    return _TRSmokeView_particleSize;
 }
 
 + (ODClassType*)type {

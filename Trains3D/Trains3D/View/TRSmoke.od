@@ -15,7 +15,7 @@ import EGParticleSystem
 import TRTrain
 import TRRailPoint
 
-class TRSmoke(weak train : TRTrain) extends EGParticleSystem<TRSmokeParticle> {
+class TRSmoke(weak train : TRTrain) extends EGParticleSystem<TRSmokeBufferData, TRSmokeParticle> {
     private val engine : TRCar = train.cars.head.get
     private val tubePos = engine.carType.engineType.get.tubePos
     private static val zSpeed = 0.1
@@ -46,7 +46,7 @@ class TRSmoke(weak train : TRTrain) extends EGParticleSystem<TRSmokeParticle> {
     }
 }
 
-class TRSmokeParticle(texture : int) extends EGParticle {
+class TRSmokeParticle(texture : int) extends EGParticle<TRSmokeBufferData> {
     var position : EGVec3
     var speed : EGVec3
     var time = 0.0
@@ -61,60 +61,24 @@ class TRSmokeParticle(texture : int) extends EGParticle {
     }
 
     def isLive = time < lifeTime
-}
-
-struct TRSmokeBufferData(x : float4, y : float4, z : float4, uvx : float4, uvy : float4, time : float4, textureX : float4, textureY : float4)
-
-class TRSmokeView {
-    val positionBuffer = EGVertexBuffer<float4>(8*4)
-    val indexBuffer = EGIndexBuffer<uint4>()
-    val shader = TRSmokeShader.instance
-    val texture = EGSimpleMaterial(EG.textureFor("Smoke.png"))
-
-    def begin {
-        glDisable(GL_DEPTH_TEST)
-        glDisable(GL_CULL_FACE)
-        glEnable(GL_BLEND)
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-    }
-
-    def end {
-        glDisable(GL_BLEND)
-        glEnable(GL_CULL_FACE)
-        glEnable(GL_DEPTH_TEST)
-    }
 
     static val particleSize = 0.03
-    def draw(smoke : TRSmoke) {
-        val particles = smoke.particles
-        val n = particles.count
-        if(n == 0) return nil
-
-        val positionArr = CNMutablePArray(TRSmokeBufferData.type, 4*n)
-        val indexArr = CNMutablePArray(ODUInt4.type, 6*n)
-        var i : uint = 0
-        particles.for{p ->
-            val v = p.position
-            val t : float4 = p.time
-            val tx : float4 = if(p.texture >= 2) 0.5 else 0
-            val ty : float4 = if(p.texture == 1 || p.texture == 3) 0.5 else 0
-            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, -particleSize, -particleSize, tx, ty, t))
-            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z,  particleSize, -particleSize, tx + 0.5, ty, t))
-            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z,  particleSize,  particleSize, tx + 0.5, ty + 0.5, t))
-            positionArr.write(item = TRSmokeBufferData(v.x, v.y, v.z, -particleSize,  particleSize, tx, ty + 0.5, t))
-            indexArr.write(uInt4 = i)
-            indexArr.write(uInt4 = i + 1)
-            indexArr.write(uInt4 = i + 2)
-            indexArr.write(uInt4 = i + 2)
-            indexArr.write(uInt4 = i + 3)
-            indexArr.write(uInt4 = i)
-            i += 4
-        }
-        positionBuffer.set(positionArr)
-        indexBuffer.set(indexArr)
-
-        shader.draw(texture, EGMesh(vertexBuffer = positionBuffer, indexBuffer))
+    def writeTo(array : CNMutablePArray<TRSmokeBufferData>) {
+        val tx : float4 = if(texture >= 2) 0.5 else 0
+        val ty : float4 = if(texture == 1 || texture == 3) 0.5 else 0
+        array.write(item = TRSmokeBufferData(position, EGVec2(-particleSize, -particleSize), EGVec2(tx, ty), time))
+        array.write(item = TRSmokeBufferData(position, EGVec2(particleSize, -particleSize), EGVec2(tx + 0.5, ty), time))
+        array.write(item = TRSmokeBufferData(position, EGVec2(particleSize,  particleSize), EGVec2(tx + 0.5, ty + 0.5), time))
+        array.write(item = TRSmokeBufferData(position, EGVec2(-particleSize,  particleSize), EGVec2(tx, ty + 0.5), time))
     }
+}
+
+struct TRSmokeBufferData(position : EGVec3, model : EGVec2, uv : EGVec2, time : float4)
+
+class TRSmokeView extends EGParticleSystemView<TRSmokeBufferData, TRSmokeParticle>(TRSmokeBufferData.type) {
+    val shader = TRSmokeShader.instance
+    val material = EGSimpleMaterial(EG.textureFor("Smoke.png"))
+    def vertexCount : uint = 4
 }
 
 class TRSmokeShader extends EGBillboardShader(EGShaderProgram(vertex, fragment), true) {

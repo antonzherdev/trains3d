@@ -153,7 +153,7 @@ static ODClassType* _TRRailroadBuilderMouseProcessor_type;
         if(egVec2LengthSquare(deltaVector) > 0.25) {
             EGVec2I spTile = egVec2IApply(uwrap(EGVec2, sp));
             EGVec2I start = [self normPoint:egVec2Sub(uwrap(EGVec2, sp), egVec2Apply(spTile))];
-            EGVec2I end = egVec2IAdd(start, [self normPoint:egVec2Set(deltaVector, 0.7)]);
+            EGVec2I end = egVec2IAdd(start, [self normPoint:egVec2Set(deltaVector, ((float)(0.7)))]);
             [_builder tryBuildRail:[self convertRail:[self correctRail:TRRailCorrectionMake(spTile, start, end)]]];
         }
         return @YES;
@@ -169,7 +169,7 @@ static ODClassType* _TRRailroadBuilderMouseProcessor_type;
 }
 
 - (EGVec2I)normPoint:(EGVec2)point {
-    return EGVec2IMake([self nX:point.x], [self nX:point.y]);
+    return EGVec2IMake([self nX:((CGFloat)(point.x))], [self nX:((CGFloat)(point.y))]);
 }
 
 - (NSInteger)nX:(CGFloat)x {

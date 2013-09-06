@@ -23,16 +23,16 @@ static ODClassType* _EGFigureTest_type;
 - (void)testThickLine {
     EGThickLineSegment* l = [EGThickLineSegment thickLineSegmentWithSegment:[EGLineSegment lineSegmentWithP1:EGVec2Make(0.0, 0.0) p2:EGVec2Make(1.0, 0.0)] thickness:1.0];
     [self assertEqualsA:wrap(EGRect, [l boundingRect]) b:wrap(EGRect, EGRectMake(0.0, 1.0, -0.5, 1.0))];
-    EGPolygon* p = [EGPolygon polygonWithPoints:(@[wrap(EGVec2, EGVec2Make(0.0, 0.5)), wrap(EGVec2, EGVec2Make(0.0, -0.5)), wrap(EGVec2, EGVec2Make(1.0, -0.5)), wrap(EGVec2, EGVec2Make(1.0, 0.5))])];
+    EGPolygon* p = [EGPolygon polygonWithPoints:(@[wrap(EGVec2, EGVec2Make(0.0, ((float)(0.5)))), wrap(EGVec2, EGVec2Make(0.0, ((float)(-0.5)))), wrap(EGVec2, EGVec2Make(1.0, ((float)(-0.5)))), wrap(EGVec2, EGVec2Make(1.0, ((float)(0.5))))])];
     [self assertEqualsA:[[l segments] toSet] b:[p.segments toSet]];
     l = [EGThickLineSegment thickLineSegmentWithSegment:[EGLineSegment lineSegmentWithP1:EGVec2Make(0.0, 0.0) p2:EGVec2Make(0.0, 1.0)] thickness:1.0];
     [self assertEqualsA:wrap(EGRect, [l boundingRect]) b:wrap(EGRect, EGRectMake(-0.5, 1.0, 0.0, 1.0))];
-    p = [EGPolygon polygonWithPoints:(@[wrap(EGVec2, EGVec2Make(0.5, 0.0)), wrap(EGVec2, EGVec2Make(-0.5, 0.0)), wrap(EGVec2, EGVec2Make(-0.5, 1.0)), wrap(EGVec2, EGVec2Make(0.5, 1.0))])];
+    p = [EGPolygon polygonWithPoints:(@[wrap(EGVec2, EGVec2Make(((float)(0.5)), 0.0)), wrap(EGVec2, EGVec2Make(((float)(-0.5)), 0.0)), wrap(EGVec2, EGVec2Make(((float)(-0.5)), 1.0)), wrap(EGVec2, EGVec2Make(((float)(0.5)), 1.0))])];
     [self assertEqualsA:[[l segments] toSet] b:[p.segments toSet]];
     CGFloat s2 = sqrt(2.0);
     l = [EGThickLineSegment thickLineSegmentWithSegment:[EGLineSegment lineSegmentWithP1:EGVec2Make(0.0, 0.0) p2:EGVec2Make(1.0, 1.0)] thickness:s2];
     [self assertEqualsA:wrap(EGRect, [l boundingRect]) b:wrap(EGRect, egRectThicken(EGRectMake(0.0, 1.0, 0.0, 1.0), s2 / 2, s2 / 2))];
-    p = [EGPolygon polygonWithPoints:(@[wrap(EGVec2, EGVec2Make(-0.5, 0.5)), wrap(EGVec2, EGVec2Make(0.5, 1.5)), wrap(EGVec2, EGVec2Make(1.5, 0.5)), wrap(EGVec2, EGVec2Make(0.5, -0.5))])];
+    p = [EGPolygon polygonWithPoints:(@[wrap(EGVec2, EGVec2Make(((float)(-0.5)), ((float)(0.5)))), wrap(EGVec2, EGVec2Make(((float)(0.5)), ((float)(1.5)))), wrap(EGVec2, EGVec2Make(((float)(1.5)), ((float)(0.5)))), wrap(EGVec2, EGVec2Make(((float)(0.5)), ((float)(-0.5))))])];
     [self assertEqualsA:[[l segments] toSet] b:[p.segments toSet]];
 }
 

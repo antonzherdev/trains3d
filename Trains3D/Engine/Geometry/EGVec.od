@@ -1,20 +1,20 @@
 import EGMath
 
-struct EGVec2(x : float, y : float) extends ODComparable<EGVec2> {
+struct EGVec2(x : float4, y : float4) extends ODComparable<EGVec2> {
     static def apply(point : EGVec2I) = EGVec2(point.x, point.y)
 
     def add(point : EGVec2) = EGVec2(x + point.x, y + point.y)
     def sub(point : EGVec2) = EGVec2(x - point.x, y - point.y)
     def negate = EGVec2(-x, -y)
-    def angle : float = atan2(y, x)
-    def dot(point : EGVec2) : float = x*point.x + y*point.y
-    def lengthSquare : float = dot(self)
+    def angle : float4 = atan2(y, x)
+    def dot(point : EGVec2) : float4 = x*point.x + y*point.y
+    def lengthSquare : float4 = dot(self)
     def length = sqrt(lengthSquare)
-    def mul(value : float) = EGVec2(x*value, y*value)
-    def div(value : float) = EGVec2(x/value, y/value)
+    def mul(value : float4) = EGVec2(x*value, y*value)
+    def div(value : float4) = EGVec2(x/value, y/value)
     def mid(point : EGVec2) = add(point).mul(0.5)
     def distanceTo(point : EGVec2) = sub(point).length
-    def set(length : float) = mul(length/self.length)
+    def set(length : float4) = mul(length/self.length)
     def normalize = set(length = 1.0)
 
     def compare(to : EGVec2) : int = {

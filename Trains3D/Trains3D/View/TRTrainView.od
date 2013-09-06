@@ -20,13 +20,11 @@ class TRTrainView {
     def draw(trains : [TRTrain]) {
         if(trains.isEmpty) return nil
 
-        trains.for(draw(train = _))
-        smokeView.begin
-        trains.for{ train ->
+        trains.for {train ->
+            draw(train = train)
             if(train.viewData == nil) train.viewData = TRSmoke(train)
             smokeView.draw(train.viewData)
         }
-        smokeView.end
     }
 
     def draw(train : TRTrain) {
