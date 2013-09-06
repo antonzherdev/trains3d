@@ -46,7 +46,7 @@ static ODClassType* _TRSmoke_type;
     [super initialize];
     _TRSmoke_type = [ODClassType classTypeWithCls:[TRSmoke class]];
     _TRSmoke_modelQuad = egQuadApplySize(_TRSmoke_particleSize);
-    _TRSmoke_textureQuadrant = egQuadQuadrant(egQuadMulValue(egQuadIdentity(), ((float)(0.5))));
+    _TRSmoke_textureQuadrant = egQuadQuadrant(egQuadIdentity());
 }
 
 - (void)generateParticlesWithDelta:(CGFloat)delta {
