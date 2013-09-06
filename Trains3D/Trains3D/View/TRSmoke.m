@@ -106,6 +106,7 @@ static ODClassType* _TRSmoke_type;
 }
 static NSInteger _TRSmokeParticle_dragCoefficient = 1;
 static float _TRSmokeParticle_particleSize = ((float)(0.03));
+static EGVec4 _TRSmokeParticle_defColor = {1.0, 1.0, 1.0, ((float)(0.7))};
 static ODClassType* _TRSmokeParticle_type;
 @synthesize texture = _texture;
 @synthesize position = _position;
@@ -135,10 +136,10 @@ static ODClassType* _TRSmokeParticle_type;
 }
 
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array {
-    float t = [self lifeTime];
+    EGVec4 t = (([self lifeTime] < 3) ? _TRSmokeParticle_defColor : EGVec4Make(1.0, 1.0, 1.0, ((float)(2.8 - 0.7 * [self lifeTime]))));
     float tx = ((float)(((_texture >= 2) ? 0.5 : 0)));
     float ty = ((float)(((_texture == 1 || _texture == 3) ? 0.5 : 0)));
-    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, TRSmokeBufferData, TRSmokeBufferDataMake(_position, EGVec2Make(-_TRSmokeParticle_particleSize, -_TRSmokeParticle_particleSize), EGVec2Make(tx, ty), t)), TRSmokeBufferData, TRSmokeBufferDataMake(_position, EGVec2Make(_TRSmokeParticle_particleSize, -_TRSmokeParticle_particleSize), EGVec2Make(tx + 0.5, ty), t)), TRSmokeBufferData, TRSmokeBufferDataMake(_position, EGVec2Make(_TRSmokeParticle_particleSize, _TRSmokeParticle_particleSize), EGVec2Make(tx + 0.5, ty + 0.5), t)), TRSmokeBufferData, TRSmokeBufferDataMake(_position, EGVec2Make(-_TRSmokeParticle_particleSize, _TRSmokeParticle_particleSize), EGVec2Make(tx, ty + 0.5), t));
+    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, TRSmokeBufferData, TRSmokeBufferDataMake(_position, EGVec2Make(-_TRSmokeParticle_particleSize, -_TRSmokeParticle_particleSize), t, EGVec2Make(tx, ty))), TRSmokeBufferData, TRSmokeBufferDataMake(_position, EGVec2Make(_TRSmokeParticle_particleSize, -_TRSmokeParticle_particleSize), t, EGVec2Make(tx + 0.5, ty))), TRSmokeBufferData, TRSmokeBufferDataMake(_position, EGVec2Make(_TRSmokeParticle_particleSize, _TRSmokeParticle_particleSize), t, EGVec2Make(tx + 0.5, ty + 0.5))), TRSmokeBufferData, TRSmokeBufferDataMake(_position, EGVec2Make(-_TRSmokeParticle_particleSize, _TRSmokeParticle_particleSize), t, EGVec2Make(tx, ty + 0.5)));
 }
 
 - (ODClassType*)type {
@@ -151,6 +152,10 @@ static ODClassType* _TRSmokeParticle_type;
 
 + (float)particleSize {
     return _TRSmokeParticle_particleSize;
+}
+
++ (EGVec4)defColor {
+    return _TRSmokeParticle_defColor;
 }
 
 + (ODClassType*)type {
@@ -230,7 +235,7 @@ ODPType* trSmokeBufferDataType() {
 
 
 @implementation TRSmokeView{
-    TRSmokeShader* _shader;
+    EGBillboardShader* _shader;
     EGSimpleMaterial* _material;
 }
 static ODClassType* _TRSmokeView_type;
@@ -244,7 +249,7 @@ static ODClassType* _TRSmokeView_type;
 - (id)init {
     self = [super initWithDtp:trSmokeBufferDataType()];
     if(self) {
-        _shader = TRSmokeShader.instance;
+        _shader = [EGBillboardShader instanceForTexture];
         _material = [EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyTexture:[EG textureForFile:@"Smoke.png"]]];
     }
     
@@ -266,83 +271,6 @@ static ODClassType* _TRSmokeView_type;
 
 + (ODClassType*)type {
     return _TRSmokeView_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
-@implementation TRSmokeShader{
-    EGShaderAttribute* _lifeSlot;
-}
-static NSString* _TRSmokeShader_vertex;
-static NSString* _TRSmokeShader_fragment;
-static TRSmokeShader* _TRSmokeShader_instance;
-static ODClassType* _TRSmokeShader_type;
-@synthesize lifeSlot = _lifeSlot;
-
-+ (id)smokeShader {
-    return [[TRSmokeShader alloc] init];
-}
-
-- (id)init {
-    self = [super initWithProgram:[EGShaderProgram applyVertex:_TRSmokeShader_vertex fragment:_TRSmokeShader_fragment] texture:YES];
-    if(self) _lifeSlot = [[self program] attributeForName:@"vertexLife"];
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _TRSmokeShader_type = [ODClassType classTypeWithCls:[TRSmokeShader class]];
-    _TRSmokeShader_vertex = [TRSmokeShader vertexTextWithTexture:YES parameters:@"attribute float vertexLife;\n"
-        "varying float life;" code:@"life = vertexLife;"];
-    _TRSmokeShader_fragment = [TRSmokeShader fragmentTextWithTexture:YES parameters:@"varying float life;" code:@"gl_FragColor.w *= min(0.7, 2.8 - 0.7*life);"];
-    _TRSmokeShader_instance = [TRSmokeShader smokeShader];
-}
-
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material {
-    [super loadVertexBuffer:vertexBuffer material:material];
-    [_lifeSlot setFromBufferWithStride:vertexBuffer.stride valuesCount:1 valuesType:GL_FLOAT shift:((NSUInteger)(7 * 4))];
-}
-
-- (ODClassType*)type {
-    return [TRSmokeShader type];
-}
-
-+ (NSString*)vertex {
-    return _TRSmokeShader_vertex;
-}
-
-+ (NSString*)fragment {
-    return _TRSmokeShader_fragment;
-}
-
-+ (TRSmokeShader*)instance {
-    return _TRSmokeShader_instance;
-}
-
-+ (ODClassType*)type {
-    return _TRSmokeShader_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

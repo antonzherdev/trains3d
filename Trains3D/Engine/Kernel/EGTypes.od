@@ -27,7 +27,7 @@ struct EGRectI(x : int, width : int, y : int, height : int) {
     def y2 : int  = y + height
 }
 
-struct EGColor(r : float, g : float, b : float, a : float) {
+struct EGColor(r : float4, g : float4, b : float4, a : float4) {
     static val white = EGColor(1, 1, 1, 1)
 }
 

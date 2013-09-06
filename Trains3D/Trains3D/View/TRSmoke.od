@@ -59,40 +59,22 @@ class TRSmokeParticle(texture : int) extends EGParticle(4) {
     }
 
     static val particleSize : float4 = 0.03
+    static val defColor = EGVec4(1, 1, 1, 0.7)
     def writeTo(array : CNVoidRefArray) : CNVoidRefArray = {
-        val t = lifeTime
+        val t = if(lifeTime < 3) defColor else EGVec4(1, 1, 1, 2.8 - 0.7*lifeTime)
         val tx : float4 = if(texture >= 2) 0.5 else 0
         val ty : float4 = if(texture == 1 || texture == 3) 0.5 else 0
-        array.write(TRSmokeBufferData, TRSmokeBufferData(position, EGVec2(-particleSize, -particleSize), EGVec2(tx, ty), t))
-             .write(TRSmokeBufferData, TRSmokeBufferData(position, EGVec2(particleSize, -particleSize), EGVec2(tx + 0.5, ty), t))
-             .write(TRSmokeBufferData, TRSmokeBufferData(position, EGVec2(particleSize,  particleSize), EGVec2(tx + 0.5, ty + 0.5), t))
-             .write(TRSmokeBufferData, TRSmokeBufferData(position, EGVec2(-particleSize,  particleSize), EGVec2(tx, ty + 0.5), t))
+        array.write(TRSmokeBufferData, TRSmokeBufferData(position, EGVec2(-particleSize, -particleSize), t, EGVec2(tx, ty)))
+             .write(TRSmokeBufferData, TRSmokeBufferData(position, EGVec2(particleSize, -particleSize), t, EGVec2(tx + 0.5, ty)))
+             .write(TRSmokeBufferData, TRSmokeBufferData(position, EGVec2(particleSize,  particleSize), t, EGVec2(tx + 0.5, ty + 0.5)))
+             .write(TRSmokeBufferData, TRSmokeBufferData(position, EGVec2(-particleSize,  particleSize), t, EGVec2(tx, ty + 0.5)))
     }
 }
 
-struct TRSmokeBufferData(position : EGVec3, model : EGVec2, uv : EGVec2, time : float4)
+struct TRSmokeBufferData(position : EGVec3, model : EGVec2, color : EGVec4, uv : EGVec2)
 
 class TRSmokeView extends EGParticleSystemView<TRSmokeBufferData, TRSmokeParticle>(TRSmokeBufferData.type) {
-    val shader = TRSmokeShader.instance
+    val shader = EGBillboardShader.instanceForTexture
     val material = EGSimpleMaterial(EG.textureFor("Smoke.png"))
     def vertexCount : uint = 4
-}
-
-class TRSmokeShader extends EGBillboardShader(EGShaderProgram(vertex, fragment), true) {
-    static val vertex = vertexTextWith(
-           texture = true,
-        parameters = "attribute float vertexLife;
-                      varying float life;",
-              code = "life = vertexLife;")
-    static val fragment = fragmentTextWith(
-           texture = true,
-        parameters = "varying float life;",
-              code = "gl_FragColor.w *= min(0.7, 2.8 - 0.7*life);")
-    static val instance = TRSmokeShader()
-    val lifeSlot = program.attributeFor("vertexLife")
-
-    def load(vertexBuffer : EGVertexBuffer<_>, material : EGSimpleMaterial) {
-        super.load(vertexBuffer, material)
-        lifeSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 1, GL_FLOAT, shift = 7*4)
-    }
 }

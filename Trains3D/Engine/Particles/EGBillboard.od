@@ -17,20 +17,22 @@ class EGBillboardShaderSystem extends EGShaderSystem<EGSimpleMaterial> {
 class EGBillboardShader(program : EGShaderProgram, texture : bool) extends EGShader<EGSimpleMaterial>(program) {
     static lazy val instanceForColor = EGBillboardShader(EGShaderProgram(
         vertexTextWith(false, "", ""),
-        fragmentTextWith(false, "", "")))
+        fragmentTextWith(false, "", "")), false)
     static lazy val instanceForTexture = EGBillboardShader(EGShaderProgram(
-        vertexTextWith(false, "", ""),
-        fragmentTextWith(false, "", "")))
+        vertexTextWith(true, "", ""),
+        fragmentTextWith(true, "", "")), true)
 
     static def vertexTextWith(texture : bool, parameters : string, code : string) =
         "attribute vec3 position;
          attribute vec2 model;
          attribute vec2 vertexUV; $when(texture)
+         attribute vec4 vertexColor;
 
          uniform mat4 wc;
          uniform mat4 p;
 
          varying vec2 UV; $when(texture)
+         varying vec4 fragColor;
          $parameters
 
          void main(void) {
@@ -40,6 +42,7 @@ class EGBillboardShader(program : EGShaderProgram, texture : bool) extends EGSha
             pos.y += model.y;
             gl_Position = p*pos;
             UV = vertexUV;
+            fragColor = vertexColor;
             $code
          }"
     static def fragmentTextWith(texture : bool, parameters : string, code : string) =
@@ -50,11 +53,12 @@ class EGBillboardShader(program : EGShaderProgram, texture : bool) extends EGSha
         $else
          uniform vec4 color;
         $endif
+         varying vec4 fragColor;
 
          $parameters
          void main(void) {
-            gl_FragColor = texture2D(texture, UV); $when(texture)
-            gl_FragColor = color; $when(!texture)
+            gl_FragColor = fragColor * texture2D(texture, UV); $when(texture)
+            gl_FragColor = fragColor * color; $when(!texture)
             $code
          }"
 
@@ -62,6 +66,7 @@ class EGBillboardShader(program : EGShaderProgram, texture : bool) extends EGSha
     val positionSlot = attributeFor("position")
     val modelSlot = attributeFor("model")
     val uvSlot : EGShaderAttribute? = if(texture) attributeFor("vertexUV") else nil
+    val colorSlot = attributeFor("vertexColor")
     val colorUniform : EGShaderUniform? = if(texture) nil else uniformFor("color")
 
     val wcUniform = uniformFor("wc")
@@ -70,10 +75,11 @@ class EGBillboardShader(program : EGShaderProgram, texture : bool) extends EGSha
     def load(vertexBuffer : EGVertexBuffer<_>, material : EGSimpleMaterial) {
         positionSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 3, GL_FLOAT, shift = 0)
         modelSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 2, GL_FLOAT, shift = 3*4)
+        colorSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 4, GL_FLOAT, shift = 5*4)
         wcUniform.set(matrix = EG.matrix.value.wc)
         pUniform.set(matrix = EG.matrix.value.p)
         if(texture) {
-            uvSlot.for(_.setFromBufferWith(vertexBuffer.stride, valuesCount = 2, GL_FLOAT, shift = 5*4))
+            uvSlot.for(_.setFromBufferWith(vertexBuffer.stride, valuesCount = 2, GL_FLOAT, shift = 9*4))
             material.color.cast<EGColorSourceTexture>.texture.bind
         } else {
             colorUniform.get.set(color = material.color.cast<EGColorSourceColor>.color)

@@ -105,23 +105,23 @@ ODPType* egRectIType();
 
 
 struct EGColor {
-    CGFloat r;
-    CGFloat g;
-    CGFloat b;
-    CGFloat a;
+    float r;
+    float g;
+    float b;
+    float a;
 };
-static inline EGColor EGColorMake(CGFloat r, CGFloat g, CGFloat b, CGFloat a) {
+static inline EGColor EGColorMake(float r, float g, float b, float a) {
     return (EGColor){r, g, b, a};
 }
 static inline BOOL EGColorEq(EGColor s1, EGColor s2) {
-    return eqf(s1.r, s2.r) && eqf(s1.g, s2.g) && eqf(s1.b, s2.b) && eqf(s1.a, s2.a);
+    return eqf4(s1.r, s2.r) && eqf4(s1.g, s2.g) && eqf4(s1.b, s2.b) && eqf4(s1.a, s2.a);
 }
 static inline NSUInteger EGColorHash(EGColor self) {
     NSUInteger hash = 0;
-    hash = hash * 31 + floatHash(self.r);
-    hash = hash * 31 + floatHash(self.g);
-    hash = hash * 31 + floatHash(self.b);
-    hash = hash * 31 + floatHash(self.a);
+    hash = hash * 31 + float4Hash(self.r);
+    hash = hash * 31 + float4Hash(self.g);
+    hash = hash * 31 + float4Hash(self.b);
+    hash = hash * 31 + float4Hash(self.a);
     return hash;
 }
 static inline NSString* EGColorDescription(EGColor self) {

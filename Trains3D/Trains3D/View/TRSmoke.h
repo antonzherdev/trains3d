@@ -47,7 +47,6 @@
 @class TRSmoke;
 @class TRSmokeParticle;
 @class TRSmokeView;
-@class TRSmokeShader;
 typedef struct TRSmokeBufferData TRSmokeBufferData;
 
 @interface TRSmoke : EGParticleSystem
@@ -74,6 +73,7 @@ typedef struct TRSmokeBufferData TRSmokeBufferData;
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array;
 + (NSInteger)dragCoefficient;
 + (float)particleSize;
++ (EGVec4)defColor;
 + (ODClassType*)type;
 @end
 
@@ -81,29 +81,29 @@ typedef struct TRSmokeBufferData TRSmokeBufferData;
 struct TRSmokeBufferData {
     EGVec3 position;
     EGVec2 model;
+    EGVec4 color;
     EGVec2 uv;
-    float time;
 };
-static inline TRSmokeBufferData TRSmokeBufferDataMake(EGVec3 position, EGVec2 model, EGVec2 uv, float time) {
-    return (TRSmokeBufferData){position, model, uv, time};
+static inline TRSmokeBufferData TRSmokeBufferDataMake(EGVec3 position, EGVec2 model, EGVec4 color, EGVec2 uv) {
+    return (TRSmokeBufferData){position, model, color, uv};
 }
 static inline BOOL TRSmokeBufferDataEq(TRSmokeBufferData s1, TRSmokeBufferData s2) {
-    return EGVec3Eq(s1.position, s2.position) && EGVec2Eq(s1.model, s2.model) && EGVec2Eq(s1.uv, s2.uv) && eqf4(s1.time, s2.time);
+    return EGVec3Eq(s1.position, s2.position) && EGVec2Eq(s1.model, s2.model) && EGVec4Eq(s1.color, s2.color) && EGVec2Eq(s1.uv, s2.uv);
 }
 static inline NSUInteger TRSmokeBufferDataHash(TRSmokeBufferData self) {
     NSUInteger hash = 0;
     hash = hash * 31 + EGVec3Hash(self.position);
     hash = hash * 31 + EGVec2Hash(self.model);
+    hash = hash * 31 + EGVec4Hash(self.color);
     hash = hash * 31 + EGVec2Hash(self.uv);
-    hash = hash * 31 + float4Hash(self.time);
     return hash;
 }
 static inline NSString* TRSmokeBufferDataDescription(TRSmokeBufferData self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<TRSmokeBufferData: "];
     [description appendFormat:@"position=%@", EGVec3Description(self.position)];
     [description appendFormat:@", model=%@", EGVec2Description(self.model)];
+    [description appendFormat:@", color=%@", EGVec4Description(self.color)];
     [description appendFormat:@", uv=%@", EGVec2Description(self.uv)];
-    [description appendFormat:@", time=%f", self.time];
     [description appendString:@">"];
     return description;
 }
@@ -118,27 +118,13 @@ ODPType* trSmokeBufferDataType();
 
 
 @interface TRSmokeView : EGParticleSystemView
-@property (nonatomic, readonly) TRSmokeShader* shader;
+@property (nonatomic, readonly) EGBillboardShader* shader;
 @property (nonatomic, readonly) EGSimpleMaterial* material;
 
 + (id)smokeView;
 - (id)init;
 - (ODClassType*)type;
 - (NSUInteger)vertexCount;
-+ (ODClassType*)type;
-@end
-
-
-@interface TRSmokeShader : EGBillboardShader
-@property (nonatomic, readonly) EGShaderAttribute* lifeSlot;
-
-+ (id)smokeShader;
-- (id)init;
-- (ODClassType*)type;
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material;
-+ (NSString*)vertex;
-+ (NSString*)fragment;
-+ (TRSmokeShader*)instance;
 + (ODClassType*)type;
 @end
 

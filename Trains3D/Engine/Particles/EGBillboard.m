@@ -28,7 +28,7 @@ static ODClassType* _EGBillboardShaderSystem_type;
 - (EGBillboardShader*)shaderForMaterial:(EGSimpleMaterial*)material {
     EGColorSource* __case__ = material.color;
     BOOL __incomplete__ = YES;
-    EGShader* __result__;
+    EGBillboardShader* __result__;
     if(__incomplete__) {
         BOOL __ok__ = YES;
         EGColor _;
@@ -94,6 +94,7 @@ static ODClassType* _EGBillboardShaderSystem_type;
     EGShaderAttribute* _positionSlot;
     EGShaderAttribute* _modelSlot;
     id _uvSlot;
+    EGShaderAttribute* _colorSlot;
     id _colorUniform;
     EGShaderUniform* _wcUniform;
     EGShaderUniform* _pUniform;
@@ -105,6 +106,7 @@ static ODClassType* _EGBillboardShader_type;
 @synthesize positionSlot = _positionSlot;
 @synthesize modelSlot = _modelSlot;
 @synthesize uvSlot = _uvSlot;
+@synthesize colorSlot = _colorSlot;
 @synthesize colorUniform = _colorUniform;
 @synthesize wcUniform = _wcUniform;
 @synthesize pUniform = _pUniform;
@@ -120,6 +122,7 @@ static ODClassType* _EGBillboardShader_type;
         _positionSlot = [self attributeForName:@"position"];
         _modelSlot = [self attributeForName:@"model"];
         _uvSlot = [CNOption opt:((_texture) ? [self attributeForName:@"vertexUV"] : nil)];
+        _colorSlot = [self attributeForName:@"vertexColor"];
         _colorUniform = [CNOption none];
         _wcUniform = [self uniformForName:@"wc"];
         _pUniform = [self uniformForName:@"p"];
@@ -131,29 +134,31 @@ static ODClassType* _EGBillboardShader_type;
 + (void)initialize {
     [super initialize];
     _EGBillboardShader_type = [ODClassType classTypeWithCls:[EGBillboardShader class]];
-    _EGBillboardShader__lazy_instanceForColor = [CNLazy lazyWithF:^EGShader*() {
-        return [EGShader shaderWithProgram:[EGShaderProgram applyVertex:[EGBillboardShader vertexTextWithTexture:NO parameters:@"" code:@""] fragment:[EGBillboardShader fragmentTextWithTexture:NO parameters:@"" code:@""]]];
+    _EGBillboardShader__lazy_instanceForColor = [CNLazy lazyWithF:^EGBillboardShader*() {
+        return [EGBillboardShader billboardShaderWithProgram:[EGShaderProgram applyVertex:[EGBillboardShader vertexTextWithTexture:NO parameters:@"" code:@""] fragment:[EGBillboardShader fragmentTextWithTexture:NO parameters:@"" code:@""]] texture:NO];
     }];
-    _EGBillboardShader__lazy_instanceForTexture = [CNLazy lazyWithF:^EGShader*() {
-        return [EGShader shaderWithProgram:[EGShaderProgram applyVertex:[EGBillboardShader vertexTextWithTexture:NO parameters:@"" code:@""] fragment:[EGBillboardShader fragmentTextWithTexture:NO parameters:@"" code:@""]]];
+    _EGBillboardShader__lazy_instanceForTexture = [CNLazy lazyWithF:^EGBillboardShader*() {
+        return [EGBillboardShader billboardShaderWithProgram:[EGShaderProgram applyVertex:[EGBillboardShader vertexTextWithTexture:YES parameters:@"" code:@""] fragment:[EGBillboardShader fragmentTextWithTexture:YES parameters:@"" code:@""]] texture:YES];
     }];
 }
 
-+ (EGShader*)instanceForColor {
++ (EGBillboardShader*)instanceForColor {
     return [_EGBillboardShader__lazy_instanceForColor get];
 }
 
-+ (EGShader*)instanceForTexture {
++ (EGBillboardShader*)instanceForTexture {
     return [_EGBillboardShader__lazy_instanceForTexture get];
 }
 
 + (NSString*)vertexTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code {
     return [NSString stringWithFormat:@"attribute vec3 position;\n"
         "attribute vec2 model;%@\n"
+        "attribute vec4 vertexColor;\n"
         "\n"
         "uniform mat4 wc;\n"
         "uniform mat4 p;\n"
         "%@\n"
+        "varying vec4 fragColor;\n"
         "%@\n"
         "\n"
         "void main(void) {\n"
@@ -163,6 +168,7 @@ static ODClassType* _EGBillboardShader_type;
         "   pos.y += model.y;\n"
         "   gl_Position = p*pos;\n"
         "   UV = vertexUV;\n"
+        "   fragColor = vertexColor;\n"
         "   %@\n"
         "}", ((texture) ? @"\n"
         "attribute vec2 vertexUV; " : @""), ((texture) ? @"\n"
@@ -172,6 +178,7 @@ static ODClassType* _EGBillboardShader_type;
 + (NSString*)fragmentTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code {
     return [NSString stringWithFormat:@"\n"
         "%@\n"
+        "varying vec4 fragColor;\n"
         "\n"
         "%@\n"
         "void main(void) {%@%@\n"
@@ -180,18 +187,19 @@ static ODClassType* _EGBillboardShader_type;
         "varying vec2 UV;\n"
         "uniform sampler2D texture;" : @"\n"
         "uniform vec4 color;"), parameters, ((texture) ? @"\n"
-        "   gl_FragColor = texture2D(texture, UV); " : @""), ((!(texture)) ? @"\n"
-        "   gl_FragColor = color; " : @""), code];
+        "   gl_FragColor = fragColor * texture2D(texture, UV); " : @""), ((!(texture)) ? @"\n"
+        "   gl_FragColor = fragColor * color; " : @""), code];
 }
 
 - (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material {
     [_positionSlot setFromBufferWithStride:vertexBuffer.stride valuesCount:3 valuesType:GL_FLOAT shift:0];
     [_modelSlot setFromBufferWithStride:vertexBuffer.stride valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(3 * 4))];
+    [_colorSlot setFromBufferWithStride:vertexBuffer.stride valuesCount:4 valuesType:GL_FLOAT shift:((NSUInteger)(5 * 4))];
     [_wcUniform setMatrix:[EG.matrix.value wc]];
     [_pUniform setMatrix:EG.matrix.value.p];
     if(_texture) {
         [_uvSlot forEach:^void(EGShaderAttribute* _) {
-            [_ setFromBufferWithStride:vertexBuffer.stride valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(5 * 4))];
+            [_ setFromBufferWithStride:vertexBuffer.stride valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(9 * 4))];
         }];
         [((EGColorSourceTexture*)(material.color)).texture bind];
     } else {
