@@ -18,12 +18,7 @@ struct EGRect {
     CGFloat height;
 };
 static inline EGRect EGRectMake(CGFloat x, CGFloat width, CGFloat y, CGFloat height) {
-    EGRect ret;
-    ret.x = x;
-    ret.width = width;
-    ret.y = y;
-    ret.height = height;
-    return ret;
+    return (EGRect){x, width, y, height};
 }
 static inline BOOL EGRectEq(EGRect s1, EGRect s2) {
     return eqf(s1.x, s2.x) && eqf(s1.width, s2.width) && eqf(s1.y, s2.y) && eqf(s1.height, s2.height);
@@ -72,12 +67,7 @@ struct EGRectI {
     NSInteger height;
 };
 static inline EGRectI EGRectIMake(NSInteger x, NSInteger width, NSInteger y, NSInteger height) {
-    EGRectI ret;
-    ret.x = x;
-    ret.width = width;
-    ret.y = y;
-    ret.height = height;
-    return ret;
+    return (EGRectI){x, width, y, height};
 }
 static inline BOOL EGRectIEq(EGRectI s1, EGRectI s2) {
     return s1.x == s2.x && s1.width == s2.width && s1.y == s2.y && s1.height == s2.height;
@@ -120,12 +110,7 @@ struct EGColor {
     CGFloat a;
 };
 static inline EGColor EGColorMake(CGFloat r, CGFloat g, CGFloat b, CGFloat a) {
-    EGColor ret;
-    ret.r = r;
-    ret.g = g;
-    ret.b = b;
-    ret.a = a;
-    return ret;
+    return (EGColor){r, g, b, a};
 }
 static inline BOOL EGColorEq(EGColor s1, EGColor s2) {
     return eqf(s1.r, s2.r) && eqf(s1.g, s2.g) && eqf(s1.b, s2.b) && eqf(s1.a, s2.a);

@@ -31,11 +31,7 @@ struct EGBillboardBufferData {
     EGVec2 uv;
 };
 static inline EGBillboardBufferData EGBillboardBufferDataMake(EGVec3 position, EGVec2 model, EGVec2 uv) {
-    EGBillboardBufferData ret;
-    ret.position = position;
-    ret.model = model;
-    ret.uv = uv;
-    return ret;
+    return (EGBillboardBufferData){position, model, uv};
 }
 static inline BOOL EGBillboardBufferDataEq(EGBillboardBufferData s1, EGBillboardBufferData s2) {
     return EGVec3Eq(s1.position, s2.position) && EGVec2Eq(s1.model, s2.model) && EGVec2Eq(s1.uv, s2.uv);

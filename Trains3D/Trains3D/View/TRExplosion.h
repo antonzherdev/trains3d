@@ -38,11 +38,7 @@ struct TRExplosionFlameParticle {
     EGVec2 uv;
 };
 static inline TRExplosionFlameParticle TRExplosionFlameParticleMake(EGVec3 position, EGVec2 size, EGVec2 uv) {
-    TRExplosionFlameParticle ret;
-    ret.position = position;
-    ret.size = size;
-    ret.uv = uv;
-    return ret;
+    return (TRExplosionFlameParticle){position, size, uv};
 }
 static inline BOOL TRExplosionFlameParticleEq(TRExplosionFlameParticle s1, TRExplosionFlameParticle s2) {
     return EGVec3Eq(s1.position, s2.position) && EGVec2Eq(s1.size, s2.size) && EGVec2Eq(s1.uv, s2.uv);

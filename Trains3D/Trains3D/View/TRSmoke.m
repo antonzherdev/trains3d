@@ -103,11 +103,11 @@ static ODClassType* _TRSmoke_type;
     NSInteger _texture;
     EGVec3 _position;
     EGVec3 _speed;
-    CGFloat _time;
+    float _time;
 }
 static NSInteger _TRSmokeParticle_lifeTime = 4;
 static NSInteger _TRSmokeParticle_dragCoefficient = 1;
-static CGFloat _TRSmokeParticle_particleSize = 0.03;
+static float _TRSmokeParticle_particleSize = ((float)(0.03));
 static ODClassType* _TRSmokeParticle_type;
 @synthesize texture = _texture;
 @synthesize position = _position;
@@ -122,7 +122,7 @@ static ODClassType* _TRSmokeParticle_type;
     self = [super init];
     if(self) {
         _texture = texture;
-        _time = 0.0;
+        _time = ((float)(0.0));
     }
     
     return self;
@@ -137,7 +137,7 @@ static ODClassType* _TRSmokeParticle_type;
     EGVec3 a = egVec3Mul(_speed, ((float)(-_TRSmokeParticle_dragCoefficient)));
     _speed = egVec3Add(_speed, egVec3Mul(a, ((float)(delta))));
     _position = egVec3Add(_position, egVec3Mul(_speed, ((float)(delta))));
-    _time += delta;
+    _time += ((float)(delta));
 }
 
 - (BOOL)isLive {
@@ -147,10 +147,10 @@ static ODClassType* _TRSmokeParticle_type;
 - (void)writeToArray:(CNMutablePArray*)array {
     float tx = ((float)(((_texture >= 2) ? 0.5 : 0)));
     float ty = ((float)(((_texture == 1 || _texture == 3) ? 0.5 : 0)));
-    [array writeItem:voidRef(TRSmokeBufferDataMake(_position, EGVec2Make(((float)(-_TRSmokeParticle_particleSize)), ((float)(-_TRSmokeParticle_particleSize))), EGVec2Make(tx, ty), ((float)(_time))))];
-    [array writeItem:voidRef(TRSmokeBufferDataMake(_position, EGVec2Make(((float)(_TRSmokeParticle_particleSize)), ((float)(-_TRSmokeParticle_particleSize))), EGVec2Make(tx + 0.5, ty), ((float)(_time))))];
-    [array writeItem:voidRef(TRSmokeBufferDataMake(_position, EGVec2Make(((float)(_TRSmokeParticle_particleSize)), ((float)(_TRSmokeParticle_particleSize))), EGVec2Make(tx + 0.5, ty + 0.5), ((float)(_time))))];
-    [array writeItem:voidRef(TRSmokeBufferDataMake(_position, EGVec2Make(((float)(-_TRSmokeParticle_particleSize)), ((float)(_TRSmokeParticle_particleSize))), EGVec2Make(tx, ty + 0.5), ((float)(_time))))];
+    [array writeItem:voidRef(TRSmokeBufferDataMake(_position, EGVec2Make(-_TRSmokeParticle_particleSize, -_TRSmokeParticle_particleSize), EGVec2Make(tx, ty), _time))];
+    [array writeItem:voidRef(TRSmokeBufferDataMake(_position, EGVec2Make(_TRSmokeParticle_particleSize, -_TRSmokeParticle_particleSize), EGVec2Make(tx + 0.5, ty), _time))];
+    [array writeItem:voidRef(TRSmokeBufferDataMake(_position, EGVec2Make(_TRSmokeParticle_particleSize, _TRSmokeParticle_particleSize), EGVec2Make(tx + 0.5, ty + 0.5), _time))];
+    [array writeItem:voidRef(TRSmokeBufferDataMake(_position, EGVec2Make(-_TRSmokeParticle_particleSize, _TRSmokeParticle_particleSize), EGVec2Make(tx, ty + 0.5), _time))];
 }
 
 - (ODClassType*)type {
@@ -165,7 +165,7 @@ static ODClassType* _TRSmokeParticle_type;
     return _TRSmokeParticle_dragCoefficient;
 }
 
-+ (CGFloat)particleSize {
++ (float)particleSize {
     return _TRSmokeParticle_particleSize;
 }
 

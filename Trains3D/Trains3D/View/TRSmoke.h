@@ -65,7 +65,7 @@ typedef struct TRSmokeBufferData TRSmokeBufferData;
 @property (nonatomic, readonly) NSInteger texture;
 @property (nonatomic) EGVec3 position;
 @property (nonatomic) EGVec3 speed;
-@property (nonatomic) CGFloat time;
+@property (nonatomic) float time;
 
 + (id)smokeParticleWithTexture:(NSInteger)texture;
 - (id)initWithTexture:(NSInteger)texture;
@@ -75,7 +75,7 @@ typedef struct TRSmokeBufferData TRSmokeBufferData;
 - (void)writeToArray:(CNMutablePArray*)array;
 + (NSInteger)lifeTime;
 + (NSInteger)dragCoefficient;
-+ (CGFloat)particleSize;
++ (float)particleSize;
 + (ODClassType*)type;
 @end
 
@@ -87,12 +87,7 @@ struct TRSmokeBufferData {
     float time;
 };
 static inline TRSmokeBufferData TRSmokeBufferDataMake(EGVec3 position, EGVec2 model, EGVec2 uv, float time) {
-    TRSmokeBufferData ret;
-    ret.position = position;
-    ret.model = model;
-    ret.uv = uv;
-    ret.time = time;
-    return ret;
+    return (TRSmokeBufferData){position, model, uv, time};
 }
 static inline BOOL TRSmokeBufferDataEq(TRSmokeBufferData s1, TRSmokeBufferData s2) {
     return EGVec3Eq(s1.position, s2.position) && EGVec2Eq(s1.model, s2.model) && EGVec2Eq(s1.uv, s2.uv) && eqf4(s1.time, s2.time);

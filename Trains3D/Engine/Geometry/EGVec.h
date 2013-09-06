@@ -10,10 +10,7 @@ struct EGVec2 {
     float y;
 };
 static inline EGVec2 EGVec2Make(float x, float y) {
-    EGVec2 ret;
-    ret.x = x;
-    ret.y = y;
-    return ret;
+    return (EGVec2){x, y};
 }
 static inline BOOL EGVec2Eq(EGVec2 s1, EGVec2 s2) {
     return eqf4(s1.x, s2.x) && eqf4(s1.y, s2.y);
@@ -61,10 +58,7 @@ struct EGVec2I {
     NSInteger y;
 };
 static inline EGVec2I EGVec2IMake(NSInteger x, NSInteger y) {
-    EGVec2I ret;
-    ret.x = x;
-    ret.y = y;
-    return ret;
+    return (EGVec2I){x, y};
 }
 static inline BOOL EGVec2IEq(EGVec2I s1, EGVec2I s2) {
     return s1.x == s2.x && s1.y == s2.y;
@@ -103,11 +97,7 @@ struct EGVec3 {
     float z;
 };
 static inline EGVec3 EGVec3Make(float x, float y, float z) {
-    EGVec3 ret;
-    ret.x = x;
-    ret.y = y;
-    ret.z = z;
-    return ret;
+    return (EGVec3){x, y, z};
 }
 static inline BOOL EGVec3Eq(EGVec3 s1, EGVec3 s2) {
     return eqf4(s1.x, s2.x) && eqf4(s1.y, s2.y) && eqf4(s1.z, s2.z);
@@ -153,12 +143,7 @@ struct EGVec4 {
     float w;
 };
 static inline EGVec4 EGVec4Make(float x, float y, float z, float w) {
-    EGVec4 ret;
-    ret.x = x;
-    ret.y = y;
-    ret.z = z;
-    ret.w = w;
-    return ret;
+    return (EGVec4){x, y, z, w};
 }
 static inline BOOL EGVec4Eq(EGVec4 s1, EGVec4 s2) {
     return eqf4(s1.x, s2.x) && eqf4(s1.y, s2.y) && eqf4(s1.z, s2.z) && eqf4(s1.w, s2.w);

@@ -38,11 +38,7 @@ struct TRRailCorrection {
     EGVec2I end;
 };
 static inline TRRailCorrection TRRailCorrectionMake(EGVec2I tile, EGVec2I start, EGVec2I end) {
-    TRRailCorrection ret;
-    ret.tile = tile;
-    ret.start = start;
-    ret.end = end;
-    return ret;
+    return (TRRailCorrection){tile, start, end};
 }
 static inline BOOL TRRailCorrectionEq(TRRailCorrection s1, TRRailCorrection s2) {
     return EGVec2IEq(s1.tile, s2.tile) && EGVec2IEq(s1.start, s2.start) && EGVec2IEq(s1.end, s2.end);

@@ -49,7 +49,7 @@ class TRSmoke(weak train : TRTrain) extends EGParticleSystem<TRSmokeBufferData, 
 class TRSmokeParticle(texture : int) extends EGParticle<TRSmokeBufferData> {
     var position : EGVec3
     var speed : EGVec3
-    var time = 0.0
+    var time : float4 = 0.0
     static val lifeTime = 4
     static val dragCoefficient = 1 // air resistance coefficient | a = -dragCoefficient * sqr(speed)
 
@@ -62,7 +62,7 @@ class TRSmokeParticle(texture : int) extends EGParticle<TRSmokeBufferData> {
 
     def isLive = time < lifeTime
 
-    static val particleSize = 0.03
+    static val particleSize : float4 = 0.03
     def writeTo(array : CNMutablePArray<TRSmokeBufferData>) {
         val tx : float4 = if(texture >= 2) 0.5 else 0
         val ty : float4 = if(texture == 1 || texture == 3) 0.5 else 0
