@@ -101,8 +101,8 @@ static ODClassType* _TRRailView_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _railModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.railGravel, ((EGMaterial*)([EGMaterial applyTexture:[EG textureForFile:@"Gravel.png"]]))), tuple(TR3D.railTies, ((EGMaterial*)([EGMaterial applyColor:EGColorMake(((float)(0.55)), ((float)(0.45)), ((float)(0.25)), 1.0)]))), tuple(TR3D.rails, [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(((float)(0.45)), ((float)(0.47)), ((float)(0.55)), 1.0)] specularColor:EGColorMake(((float)(0.5)), ((float)(0.5)), ((float)(0.5)), 1.0) specularSize:1.0])])];
-        _railTurnModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.railTurnGravel, ((EGMaterial*)([EGMaterial applyTexture:[EG textureForFile:@"Gravel.png"]]))), tuple(TR3D.railTurnTies, ((EGMaterial*)([EGMaterial applyColor:EGColorMake(((float)(0.55)), ((float)(0.45)), ((float)(0.25)), 1.0)]))), tuple(TR3D.railsTurn, [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(((float)(0.45)), ((float)(0.47)), ((float)(0.55)), 1.0)] specularColor:EGColorMake(((float)(0.5)), ((float)(0.5)), ((float)(0.5)), 1.0) specularSize:1.0])])];
+        _railModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.railGravel, ((EGMaterial*)([EGMaterial applyTexture:[EG textureForFile:@"Gravel.png"]]))), tuple(TR3D.railTies, ((EGMaterial*)([EGMaterial applyColor:EGColorMake(0.55, 0.45, 0.25, 1.0)]))), tuple(TR3D.rails, [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.45, 0.47, 0.55, 1.0)] specularColor:EGColorMake(0.5, 0.5, 0.5, 1.0) specularSize:1.0])])];
+        _railTurnModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.railTurnGravel, ((EGMaterial*)([EGMaterial applyTexture:[EG textureForFile:@"Gravel.png"]]))), tuple(TR3D.railTurnTies, ((EGMaterial*)([EGMaterial applyColor:EGColorMake(0.55, 0.45, 0.25, 1.0)]))), tuple(TR3D.railsTurn, [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.45, 0.47, 0.55, 1.0)] specularColor:EGColorMake(0.5, 0.5, 0.5, 1.0) specularSize:1.0])])];
     }
     
     return self;
@@ -116,7 +116,7 @@ static ODClassType* _TRRailView_type;
 - (void)drawRail:(TRRail*)rail {
     [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
         return [[_ modifyW:^EGMatrix*(EGMatrix* w) {
-            return [w translateX:((float)(rail.tile.x)) y:((float)(rail.tile.y)) z:((float)(0.001))];
+            return [w translateX:((float)(rail.tile.x)) y:((float)(rail.tile.y)) z:0.001];
         }] modifyM:^EGMatrix*(EGMatrix* m) {
             if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
                 if(rail.form == TRRailForm.leftRight) return [m rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
@@ -188,7 +188,7 @@ static ODClassType* _TRSwitchView_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _material = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(((float)(0.07568)), ((float)(0.61424)), ((float)(0.07568)), 1.0)] specularColor:EGColorMake(((float)(0.633)), ((float)(0.727811)), ((float)(0.633)), 1.0) specularSize:1.0];
+        _material = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.07568, 0.61424, 0.07568, 1.0)] specularColor:EGColorMake(0.633, 0.727811, 0.633, 1.0) specularSize:1.0];
         _switchStraightModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.switchStraight, _material)])];
         _switchTurnModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.switchTurn, _material)])];
     }
@@ -207,9 +207,9 @@ static ODClassType* _TRSwitchView_type;
     TRRailForm* form = rail.form;
     [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
         return [[_ modifyW:^EGMatrix*(EGMatrix* w) {
-            return [w translateX:((float)(theSwitch.tile.x)) y:((float)(theSwitch.tile.y)) z:((float)(0.03))];
+            return [w translateX:((float)(theSwitch.tile.x)) y:((float)(theSwitch.tile.y)) z:0.03];
         }] modifyM:^EGMatrix*(EGMatrix* m) {
-            EGMatrix* m2 = [[m rotateAngle:((float)(connector.angle)) x:0.0 y:1.0 z:0.0] translateX:((float)(-0.5)) y:0.0 z:0.0];
+            EGMatrix* m2 = [[m rotateAngle:((float)(connector.angle)) x:0.0 y:1.0 z:0.0] translateX:-0.5 y:0.0 z:0.0];
             if(form.start.x + form.end.x != 0) {
                 TRRailConnector* otherConnector = ((form.start == connector) ? form.end : form.start);
                 NSInteger x = connector.x;
@@ -274,8 +274,8 @@ static ODClassType* _TRLightView_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _greenMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(((float)(0.07568)), ((float)(0.61424)), ((float)(0.07568)), 1.0)] specularColor:EGColorMake(((float)(0.633)), ((float)(0.727811)), ((float)(0.633)), 1.0) specularSize:1.0];
-        _redMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(((float)(0.61424)), ((float)(0.04136)), ((float)(0.04136)), 1.0)] specularColor:EGColorMake(((float)(0.727811)), ((float)(0.626959)), ((float)(0.626959)), 1.0) specularSize:1.0];
+        _greenMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.07568, 0.61424, 0.07568, 1.0)] specularColor:EGColorMake(0.633, 0.727811, 0.633, 1.0) specularSize:1.0];
+        _redMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.61424, 0.04136, 0.04136, 1.0)] specularColor:EGColorMake(0.727811, 0.626959, 0.626959, 1.0) specularSize:1.0];
     }
     
     return self;
@@ -291,7 +291,7 @@ static ODClassType* _TRLightView_type;
         return [[_ modifyW:^EGMatrix*(EGMatrix* w) {
             return [w translateX:((float)(light.tile.x)) y:((float)(light.tile.y)) z:0.0];
         }] modifyM:^EGMatrix*(EGMatrix* m) {
-            return [[m rotateAngle:((float)(light.connector.angle)) x:0.0 y:1.0 z:0.0] translateX:((float)(-0.45)) y:0.0 z:((float)(-0.2))];
+            return [[m rotateAngle:((float)(light.connector.angle)) x:0.0 y:1.0 z:0.0] translateX:-0.45 y:0.0 z:-0.2];
         }];
     } f:^void() {
         [((light.isGreen) ? _greenMaterial : _redMaterial) drawMesh:TR3D.light];
@@ -354,7 +354,7 @@ static ODClassType* _TRDamageView_type;
 - (void)drawPoint:(TRRailPoint*)point {
     [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
         return [_ modifyW:^EGMatrix*(EGMatrix* w) {
-            return [w translateX:point.point.x y:point.point.y z:((float)(0.0))];
+            return [w translateX:point.point.x y:point.point.y z:0.0];
         }];
     } f:^void() {
         [_model draw];

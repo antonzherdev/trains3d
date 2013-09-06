@@ -153,7 +153,7 @@ static ODClassType* _TRRailroadBuilderMouseProcessor_type;
         if(egVec2LengthSquare(deltaVector) > 0.25) {
             EGVec2I spTile = egVec2IApplyVec2(uwrap(EGVec2, sp));
             EGVec2I start = [self normPoint:egVec2SubVec2(uwrap(EGVec2, sp), egVec2ApplyVec2i(spTile))];
-            EGVec2I end = egVec2IAddVec2i(start, [self normPoint:egVec2SetLength(deltaVector, ((float)(0.7)))]);
+            EGVec2I end = egVec2IAddVec2i(start, [self normPoint:egVec2SetLength(deltaVector, 0.7)]);
             [_builder tryBuildRail:[self convertRail:[self correctRail:TRRailCorrectionMake(spTile, start, end)]]];
         }
         return @YES;

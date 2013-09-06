@@ -25,6 +25,8 @@ class EGParticleSystem <P extends EGParticle> extends EGController {
         _particles = _particles.filter(_.isLive)
         _particles.for(_.updateWith(delta))
     }
+
+    def hasParticles = !_particles.isEmpty
 }
 
 class EGParticle(lifeLength : float4) extends EGController {
@@ -37,7 +39,10 @@ class EGParticle(lifeLength : float4) extends EGController {
 
     def updateWith(delta : float) {
         _lifeTime += delta
+        update(t = _lifeTime, dt = delta)
     }
+
+    def update(t : float4, dt : float4)
 }
 
 

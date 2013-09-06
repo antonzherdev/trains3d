@@ -2,31 +2,54 @@ import EGTypes
 import EGVec
 
 import EGBillboard
+import EG
 
 
 class TRExplosion(position : EGVec3, size : float4) extends EGController {
-    private val flame = TRExplosionFlame(position, size).init
+    val flame = TRExplosionFlame(position, size).init
     def updateWith(delta : float) {
         flame.updateWith(delta)
+    }
+
+    def isFinished = !flame.hasParticles
+    def restart {
+        flame.init
     }
 }
 
 class TRExplosionFlame(position : EGVec3, size : float4) extends EGBillboardParticleSystem {
-    val particles : [TRExplosionFlameParticle] = 4.range.chain.map {_ -> generateParticle}.toArray
-    private static val uvs : [EGVec2] = [EGVec2(0, 0), EGVec2(0.25, 0), EGVec2(0, 0.25), EGVec2(0.25, 0.25)]
     def generateParticle : EGBillboardParticle = TRExplosionFlameParticle(position, size)
 
     def init : TRExplosionFlame = {
-        5.range.for(emitParticle)
+//        1.range.for(emitParticle)
+        emitParticle
         self
     }
 }
 
-class TRExplosionFlameParticle extends EGBillboardParticle {
+class TRExplosionFlameParticle(size : float4) extends EGBillboardParticle(4) {
+    static val textureQuadrant : EGQuadrant = EGQuad.identity.mul(0.5).quadrant
     static def apply(position : EGVec3, size : float4) : TRExplosionFlameParticle = {
-        val ret = TRExplosionFlameParticle()
+        val ret = TRExplosionFlameParticle(size)
         ret.position = position
         ret.color = EGVec4(1, 0.5, 0, 0.7)
-        self
+        ret.uv = textureQuadrant.randomQuad
+        ret.model = EGQuad(0)
+        ret
+    }
+
+    def update(t : float4, dt : float4) {
+        if(t < 1) {
+            model = EGQuad(size * t)
+        }
+    }
+}
+
+class TRExplosionView {
+    val material = EGSimpleMaterial(EG.textureFor("Explosion.png"))
+    val view = EGBillboardParticleSystemView(material)
+
+    def draw(explosion : TRExplosion) {
+        view.draw(explosion.flame)
     }
 }

@@ -23,10 +23,10 @@ static NSArray* _TRColor_values;
 
 + (void)initialize {
     [super initialize];
-    _TRColor_orange = [TRColor colorWithOrdinal:0 name:@"orange" color:EGColorMake(((float)(1.0)), ((float)(0.5)), ((float)(0.0)), ((float)(1.0)))];
-    _TRColor_green = [TRColor colorWithOrdinal:1 name:@"green" color:EGColorMake(((float)(0.66)), ((float)(0.9)), ((float)(0.44)), ((float)(1.0)))];
-    _TRColor_purple = [TRColor colorWithOrdinal:2 name:@"purple" color:EGColorMake(((float)(0.9)), ((float)(0.44)), ((float)(0.66)), ((float)(1.0)))];
-    _TRColor_grey = [TRColor colorWithOrdinal:3 name:@"grey" color:EGColorMake(((float)(0.5)), ((float)(0.5)), ((float)(0.5)), ((float)(1.0)))];
+    _TRColor_orange = [TRColor colorWithOrdinal:0 name:@"orange" color:EGColorMake(1.0, 0.5, 0.0, 1.0)];
+    _TRColor_green = [TRColor colorWithOrdinal:1 name:@"green" color:EGColorMake(0.66, 0.9, 0.44, 1.0)];
+    _TRColor_purple = [TRColor colorWithOrdinal:2 name:@"purple" color:EGColorMake(0.9, 0.44, 0.66, 1.0)];
+    _TRColor_grey = [TRColor colorWithOrdinal:3 name:@"grey" color:EGColorMake(0.5, 0.5, 0.5, 1.0)];
     _TRColor_values = (@[_TRColor_orange, _TRColor_green, _TRColor_purple, _TRColor_grey]);
 }
 

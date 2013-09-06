@@ -39,7 +39,7 @@ static ODClassType* _TRLevelMenuView_type;
     egColor3(1.0, 1.0, 1.0);
     egTextGlutDraw([NSString stringWithFormat:@"%li", [_level.score score]], GLUT_BITMAP_HELVETICA_18, EGVec2Make(1.0, 1.0));
     NSInteger seconds = ((NSInteger)([_level.schedule time]));
-    egTextGlutDraw([NSString stringWithFormat:@"%li", seconds], GLUT_BITMAP_HELVETICA_18, EGVec2Make(((float)(1.5)), 1.0));
+    egTextGlutDraw([NSString stringWithFormat:@"%li", seconds], GLUT_BITMAP_HELVETICA_18, EGVec2Make(1.5, 1.0));
     if(!([[_level.railroad damagesPoints] isEmpty]) && [[_level repairer] isEmpty]) {
     }
 }

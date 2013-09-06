@@ -35,6 +35,7 @@
 - (void)generateParticlesWithDelta:(CGFloat)delta;
 - (void)emitParticle;
 - (void)updateWithDelta:(CGFloat)delta;
+- (BOOL)hasParticles;
 + (ODClassType*)type;
 @end
 
@@ -49,6 +50,7 @@
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array;
 - (BOOL)isLive;
 - (void)updateWithDelta:(CGFloat)delta;
+- (void)updateT:(float)t dt:(float)dt;
 + (ODClassType*)type;
 @end
 

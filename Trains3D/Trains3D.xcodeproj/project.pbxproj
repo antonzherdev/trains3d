@@ -95,6 +95,7 @@
 		6F3DF390637CDAEBFF1126C4 /* TRLevelMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF539C1DCB1A0FA0BA2D6 /* TRLevelMenuView.m */; };
 		6F3DF3A10ABAF885D9084740 /* type_vec.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF0B949A81552EF19BE0A /* type_vec.inl */; };
 		6F3DF3B9C05BE4FBFE6BCDB2 /* EGBentleyOttmannTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF71EA2723811F530D770 /* EGBentleyOttmannTest.m */; };
+		6F3DF3D165FD591CF46D296D /* TRExplosion.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4F25E785972FAFEC88D /* TRExplosion.m */; };
 		6F3DF3D3FD50B90CC6026F14 /* spline.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFD30F469519D8F47F283 /* spline.inl */; };
 		6F3DF3EAAEA3DAC4B8645001 /* KWStub.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF5F571B2B940C1C176E2 /* KWStub.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF3FE14A479BC013A6786 /* KWBeIdenticalToMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF7546E3706613D614955 /* KWBeIdenticalToMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -593,6 +594,7 @@
 		6F3DF4E8C161C3268A04C5FB /* NSProxy+KiwiVerifierAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSProxy+KiwiVerifierAdditions.h"; sourceTree = "<group>"; };
 		6F3DF4E9443B2021C7362F37 /* string_cast.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = string_cast.hpp; sourceTree = "<group>"; };
 		6F3DF4EE86B9FB7E6A32D957 /* TRRailPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRRailPoint.h; sourceTree = "<group>"; };
+		6F3DF4F25E785972FAFEC88D /* TRExplosion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRExplosion.m; sourceTree = "<group>"; };
 		6F3DF4F5AC8338B855D5BA61 /* CNRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNRange.h; sourceTree = "<group>"; };
 		6F3DF4FAA15963195E4F8796 /* EGTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGTime.h; sourceTree = "<group>"; };
 		6F3DF4FDB0C36D2CA76F34B7 /* TR3DRail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TR3DRail.h; sourceTree = "<group>"; };
@@ -734,6 +736,7 @@
 		6F3DF83148CBA40C2E7F5BDA /* KWUserDefinedMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWUserDefinedMatcher.h; sourceTree = "<group>"; };
 		6F3DF8330F146DC202FE17DD /* intrinsic_exponential.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = intrinsic_exponential.hpp; sourceTree = "<group>"; };
 		6F3DF834266145B7F6EDDB7B /* color_space_YCoCg.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = color_space_YCoCg.inl; sourceTree = "<group>"; };
+		6F3DF835631400EB083B98F9 /* TRExplosion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRExplosion.h; sourceTree = "<group>"; };
 		6F3DF83611A12F17B71FACB3 /* TRScore.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TRScore.od; sourceTree = "<group>"; };
 		6F3DF83859B81D93F4F25B10 /* KWContextNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWContextNode.m; sourceTree = "<group>"; };
 		6F3DF839D75970DA0AFEF832 /* NSSet+CNChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSSet+CNChain.h"; sourceTree = "<group>"; };
@@ -2242,6 +2245,8 @@
 				6F3DFA524BE52473B7B4ACFA /* TRSmoke.h */,
 				6F3DF1D0F040BB4977D9F1A0 /* TRSmoke.m */,
 				6F3DF3B0B448A2ACE946A93D /* TRExplosion.od */,
+				6F3DF835631400EB083B98F9 /* TRExplosion.h */,
+				6F3DF4F25E785972FAFEC88D /* TRExplosion.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2599,6 +2604,7 @@
 				6F3DFD1CEBE145B1581C61EF /* EGBillboard.m in Sources */,
 				6F3DFF861A5265A644C637ED /* EGParticleSystem.m in Sources */,
 				6F3DF73DF156A2CE68F03ADC /* CNVoidRefArray.m in Sources */,
+				6F3DF3D165FD591CF46D296D /* TRExplosion.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

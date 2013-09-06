@@ -72,7 +72,7 @@
 + (id)smokeParticle;
 - (id)init;
 - (ODClassType*)type;
-- (void)updateWithDelta:(CGFloat)delta;
+- (void)updateT:(float)t dt:(float)dt;
 + (NSInteger)dragCoefficient;
 + (ODClassType*)type;
 @end

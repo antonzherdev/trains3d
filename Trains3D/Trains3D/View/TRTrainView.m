@@ -27,7 +27,7 @@ static ODClassType* _TRTrainView_type;
     self = [super init];
     if(self) {
         _smokeView = [TRSmokeView smokeView];
-        _blackMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.0, 0.0, 0.0, 1.0)] specularColor:EGColorMake(((float)(0.1)), ((float)(0.1)), ((float)(0.1)), 1.0) specularSize:1.0];
+        _blackMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.0, 0.0, 0.0, 1.0)] specularColor:EGColorMake(0.1, 0.1, 0.1, 1.0) specularSize:1.0];
     }
     
     return self;
@@ -39,7 +39,7 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (EGMaterial*)trainMaterialForColor:(EGColor)color {
-    return [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:color] specularColor:EGColorMake(((float)(0.3)), ((float)(0.3)), ((float)(0.3)), 1.0) specularSize:1.0];
+    return [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:color] specularColor:EGColorMake(0.3, 0.3, 0.3, 1.0) specularSize:1.0];
 }
 
 - (void)drawTrains:(id<CNSeq>)trains {
@@ -58,7 +58,7 @@ static ODClassType* _TRTrainView_type;
         [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
             return [[_ modifyW:^EGMatrix*(EGMatrix* w) {
                 EGVec2 mid = egVec2MidVec2(h, t);
-                return [w translateX:mid.x y:mid.y z:((float)(0.05))];
+                return [w translateX:mid.x y:mid.y z:0.05];
             }] modifyM:^EGMatrix*(EGMatrix* m) {
                 CGFloat angle = (([train isBack]) ? 90 : -90) + 180.0 / M_PI * egVec2Angle(egVec2SubVec2(t, h));
                 return [m rotateAngle:((float)(angle)) x:0.0 y:1.0 z:0.0];

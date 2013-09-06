@@ -5,6 +5,10 @@
 @class EGMatrixModel;
 #import "EGGL.h"
 #import "EGVec.h"
+#import "EGShader.h"
+#import "EGTypes.h"
+#import "EGParticleSystem.h"
+#import "CNVoidRefArray.h"
 @class EGColorSource;
 @class EGColorSourceColor;
 @class EGColorSourceTexture;
@@ -12,10 +16,6 @@
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
 @class EGMeshModel;
-#import "EGShader.h"
-#import "EGTypes.h"
-#import "EGParticleSystem.h"
-#import "CNVoidRefArray.h"
 @class EGMatrix;
 @class EGTexture;
 @class EGFileTexture;

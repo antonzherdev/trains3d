@@ -32,7 +32,7 @@ EGVec2 egVec2DivValue(EGVec2 self, float value) {
     return EGVec2Make(self.x / value, self.y / value);
 }
 EGVec2 egVec2MidVec2(EGVec2 self, EGVec2 vec2) {
-    return egVec2MulValue(egVec2AddVec2(self, vec2), ((float)(0.5)));
+    return egVec2MulValue(egVec2AddVec2(self, vec2), 0.5);
 }
 CGFloat egVec2DistanceToVec2(EGVec2 self, EGVec2 vec2) {
     return egVec2Length(egVec2SubVec2(self, vec2));
@@ -41,7 +41,7 @@ EGVec2 egVec2SetLength(EGVec2 self, float length) {
     return egVec2MulValue(self, length / egVec2Length(self));
 }
 EGVec2 egVec2Normalize(EGVec2 self) {
-    return egVec2SetLength(self, ((float)(1.0)));
+    return egVec2SetLength(self, 1.0);
 }
 NSInteger egVec2CompareTo(EGVec2 self, EGVec2 to) {
     NSInteger dX = float4CompareTo(self.x, to.x);
@@ -316,7 +316,7 @@ EGQuad egQuadAddXY(EGQuad self, float x, float y) {
 EGQuadrant egQuadQuadrant(EGQuad self) {
     float x = (self.p2.x - self.p1.x) / 2;
     float y = (self.p4.y - self.p1.y) / 2;
-    EGQuad q = egQuadAddVec2(egQuadMulValue(self, ((float)(0.5))), self.p1);
+    EGQuad q = egQuadAddVec2(egQuadMulValue(self, 0.5), self.p1);
     return EGQuadrantMake((EGQuad[]){q, egQuadAddXY(q, x, 0.0), egQuadAddXY(q, x, y), egQuadAddXY(q, 0.0, y)});
 }
 EGQuad egQuadIdentity() {

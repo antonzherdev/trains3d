@@ -1,6 +1,9 @@
 #import "TRExplosion.h"
 
+#import "EG.h"
 #import "EGParticleSystem.h"
+#import "EGMaterial.h"
+#import "EGMatrix.h"
 @implementation TRExplosion{
     EGVec3 _position;
     float _size;
@@ -9,6 +12,7 @@
 static ODClassType* _TRExplosion_type;
 @synthesize position = _position;
 @synthesize size = _size;
+@synthesize flame = _flame;
 
 + (id)explosionWithPosition:(EGVec3)position size:(float)size {
     return [[TRExplosion alloc] initWithPosition:position size:size];
@@ -32,6 +36,14 @@ static ODClassType* _TRExplosion_type;
 
 - (void)updateWithDelta:(CGFloat)delta {
     [_flame updateWithDelta:delta];
+}
+
+- (BOOL)isFinished {
+    return !([_flame hasParticles]);
+}
+
+- (void)restart {
+    [_flame init];
 }
 
 - (ODClassType*)type {
@@ -74,13 +86,10 @@ static ODClassType* _TRExplosion_type;
 @implementation TRExplosionFlame{
     EGVec3 _position;
     float _size;
-    id<CNSeq> _particles;
 }
-static id<CNSeq> _TRExplosionFlame_uvs = (@[wrap(EGVec2, {0.0, 0.0}), wrap(EGVec2, {((float)(0.25)), 0.0}), wrap(EGVec2, {0.0, ((float)(0.25))}), wrap(EGVec2, {((float)(0.25)), ((float)(0.25))})]);
 static ODClassType* _TRExplosionFlame_type;
 @synthesize position = _position;
 @synthesize size = _size;
-@synthesize particles = _particles;
 
 + (id)explosionFlameWithPosition:(EGVec3)position size:(float)size {
     return [[TRExplosionFlame alloc] initWithPosition:position size:size];
@@ -91,9 +100,6 @@ static ODClassType* _TRExplosionFlame_type;
     if(self) {
         _position = position;
         _size = size;
-        _particles = [[[intRange(4) chain] map:^EGBillboardParticle*(id _) {
-            return self.generateParticle;
-        }] toArray];
     }
     
     return self;
@@ -109,9 +115,7 @@ static ODClassType* _TRExplosionFlame_type;
 }
 
 - (TRExplosionFlame*)init {
-    [intRange(5) forEach:^void(id _) {
-        self.emitParticle;
-    }];
+    self.emitParticle;
     return self;
 }
 
@@ -152,15 +156,20 @@ static ODClassType* _TRExplosionFlame_type;
 @end
 
 
-@implementation TRExplosionFlameParticle
+@implementation TRExplosionFlameParticle{
+    float _size;
+}
+static EGQuadrant _TRExplosionFlameParticle_textureQuadrant;
 static ODClassType* _TRExplosionFlameParticle_type;
+@synthesize size = _size;
 
-+ (id)explosionFlameParticle {
-    return [[TRExplosionFlameParticle alloc] init];
++ (id)explosionFlameParticleWithSize:(float)size {
+    return [[TRExplosionFlameParticle alloc] initWithSize:size];
 }
 
-- (id)init {
-    self = [super init];
+- (id)initWithSize:(float)size {
+    self = [super initWithLifeLength:4.0];
+    if(self) _size = size;
     
     return self;
 }
@@ -168,21 +177,98 @@ static ODClassType* _TRExplosionFlameParticle_type;
 + (void)initialize {
     [super initialize];
     _TRExplosionFlameParticle_type = [ODClassType classTypeWithCls:[TRExplosionFlameParticle class]];
+    _TRExplosionFlameParticle_textureQuadrant = egQuadQuadrant(egQuadMulValue(egQuadIdentity(), 0.5));
 }
 
 + (TRExplosionFlameParticle*)applyPosition:(EGVec3)position size:(float)size {
-    TRExplosionFlameParticle* ret = [TRExplosionFlameParticle explosionFlameParticle];
+    TRExplosionFlameParticle* ret = [TRExplosionFlameParticle explosionFlameParticleWithSize:size];
     ret.position = position;
-    ret.color = EGVec4Make(1.0, ((float)(0.5)), 0.0, ((float)(0.7)));
-    return self;
+    ret.color = EGVec4Make(1.0, 0.5, 0.0, 0.7);
+    ret.uv = egQuadrantRandomQuad(_TRExplosionFlameParticle_textureQuadrant);
+    ret.model = egQuadApplySize(0.0);
+    return ret;
+}
+
+- (void)updateT:(float)t dt:(float)dt {
+    if(t < 1) self.model = egQuadApplySize(_size * t);
 }
 
 - (ODClassType*)type {
     return [TRExplosionFlameParticle type];
 }
 
++ (EGQuadrant)textureQuadrant {
+    return _TRExplosionFlameParticle_textureQuadrant;
+}
+
 + (ODClassType*)type {
     return _TRExplosionFlameParticle_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRExplosionFlameParticle* o = ((TRExplosionFlameParticle*)(other));
+    return eqf4(self.size, o.size);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + float4Hash(self.size);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"size=%f", self.size];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRExplosionView{
+    EGSimpleMaterial* _material;
+    EGBillboardParticleSystemView* _view;
+}
+static ODClassType* _TRExplosionView_type;
+@synthesize material = _material;
+@synthesize view = _view;
+
++ (id)explosionView {
+    return [[TRExplosionView alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    if(self) {
+        _material = [EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyTexture:[EG textureForFile:@"Explosion.png"]]];
+        _view = [EGBillboardParticleSystemView billboardParticleSystemViewWithMaterial:_material];
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRExplosionView_type = [ODClassType classTypeWithCls:[TRExplosionView class]];
+}
+
+- (void)drawExplosion:(TRExplosion*)explosion {
+    [_view drawSystem:explosion.flame];
+}
+
+- (ODClassType*)type {
+    return [TRExplosionView type];
+}
+
++ (ODClassType*)type {
+    return _TRExplosionView_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

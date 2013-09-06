@@ -56,11 +56,10 @@ class TRSmokeParticle extends EGBillboardParticle(4) {
     var speed : EGVec3
     static val dragCoefficient = 1 // air resistance coefficient | a = -dragCoefficient * sqr(speed)
 
-    def updateWith(delta : float) {
-        super.updateWith(delta)
+    def update(t : float4, dt : float4) {
         val a = speed.mul(-dragCoefficient)
-        speed = speed.add(a.mul(delta))
-        position = position.add(speed.mul(delta))
+        speed = speed.add(a.mul(dt))
+        position = position.add(speed.mul(dt))
         if(lifeTime > 3) {
             color = EGVec4(1, 1, 1, 2.8 - 0.7*lifeTime)
         }

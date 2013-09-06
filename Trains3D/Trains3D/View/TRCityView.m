@@ -42,7 +42,7 @@ static ODClassType* _TRCityView_type;
         [[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:city.color.color]] drawMesh:TR3D.city];
         [city.expectedTrainAnimation forEach:^void(EGAnimation* a) {
             CGFloat x = -[a time] / 2;
-            [[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:EGColorMake(((float)(1.0)), ((float)(0.5 - x)), ((float)(0.5 - x)), 1.0)]] drawMesh:_expectedTrainModel];
+            [[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:EGColorMake(1.0, ((float)(0.5 - x)), ((float)(0.5 - x)), 1.0)]] drawMesh:_expectedTrainModel];
         }];
     }];
 }

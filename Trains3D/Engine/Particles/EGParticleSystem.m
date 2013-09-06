@@ -50,6 +50,10 @@ static ODClassType* _EGParticleSystem_type;
     }];
 }
 
+- (BOOL)hasParticles {
+    return !([__particles isEmpty]);
+}
+
 - (ODClassType*)type {
     return [EGParticleSystem type];
 }
@@ -108,6 +112,11 @@ static ODClassType* _EGParticle_type;
 
 - (void)updateWithDelta:(CGFloat)delta {
     __lifeTime += ((float)(delta));
+    [self updateT:__lifeTime dt:((float)(delta))];
+}
+
+- (void)updateT:(float)t dt:(float)dt {
+    @throw @"Method update is abstract";
 }
 
 - (ODClassType*)type {

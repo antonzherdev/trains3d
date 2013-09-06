@@ -19,10 +19,10 @@
 }
 static CGFloat _TRSmoke_zSpeed = 0.1;
 static CGFloat _TRSmoke_emitEvery = 0.005;
-static float _TRSmoke_particleSize = ((float)(0.03));
+static float _TRSmoke_particleSize = 0.03;
 static EGQuad _TRSmoke_modelQuad;
 static EGQuadrant _TRSmoke_textureQuadrant;
-static EGVec4 _TRSmoke_defColor = {1.0, 1.0, 1.0, ((float)(0.7))};
+static EGVec4 _TRSmoke_defColor = {1.0, 1.0, 1.0, 0.7};
 static ODClassType* _TRSmoke_type;
 @synthesize train = _train;
 
@@ -146,11 +146,10 @@ static ODClassType* _TRSmokeParticle_type;
     _TRSmokeParticle_type = [ODClassType classTypeWithCls:[TRSmokeParticle class]];
 }
 
-- (void)updateWithDelta:(CGFloat)delta {
-    [super updateWithDelta:delta];
+- (void)updateT:(float)t dt:(float)dt {
     EGVec3 a = egVec3MulK(_speed, ((float)(-_TRSmokeParticle_dragCoefficient)));
-    _speed = egVec3AddV(_speed, egVec3MulK(a, ((float)(delta))));
-    self.position = egVec3AddV(self.position, egVec3MulK(_speed, ((float)(delta))));
+    _speed = egVec3AddV(_speed, egVec3MulK(a, dt));
+    self.position = egVec3AddV(self.position, egVec3MulK(_speed, dt));
     if(self.lifeTime > 3) self.color = EGVec4Make(1.0, 1.0, 1.0, ((float)(2.8 - 0.7 * self.lifeTime)));
 }
 
