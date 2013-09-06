@@ -1,14 +1,14 @@
 #import "EGVec.h"
 
 #import "EGMath.h"
-EGVec2 egVec2Apply(EGVec2I point) {
-    return EGVec2Make(((float)(point.x)), ((float)(point.y)));
+EGVec2 egVec2ApplyVec2i(EGVec2I vec2i) {
+    return EGVec2Make(((float)(vec2i.x)), ((float)(vec2i.y)));
 }
-EGVec2 egVec2Add(EGVec2 self, EGVec2 point) {
-    return EGVec2Make(self.x + point.x, self.y + point.y);
+EGVec2 egVec2AddVec2(EGVec2 self, EGVec2 vec2) {
+    return EGVec2Make(self.x + vec2.x, self.y + vec2.y);
 }
-EGVec2 egVec2Sub(EGVec2 self, EGVec2 point) {
-    return EGVec2Make(self.x - point.x, self.y - point.y);
+EGVec2 egVec2SubVec2(EGVec2 self, EGVec2 vec2) {
+    return EGVec2Make(self.x - vec2.x, self.y - vec2.y);
 }
 EGVec2 egVec2Negate(EGVec2 self) {
     return EGVec2Make(-self.x, -self.y);
@@ -16,37 +16,37 @@ EGVec2 egVec2Negate(EGVec2 self) {
 float egVec2Angle(EGVec2 self) {
     return ((float)(atan2(((CGFloat)(self.y)), ((CGFloat)(self.x)))));
 }
-float egVec2Dot(EGVec2 self, EGVec2 point) {
-    return self.x * point.x + self.y * point.y;
+float egVec2DotVec2(EGVec2 self, EGVec2 vec2) {
+    return self.x * vec2.x + self.y * vec2.y;
 }
 float egVec2LengthSquare(EGVec2 self) {
-    return egVec2Dot(self, self);
+    return egVec2DotVec2(self, self);
 }
 CGFloat egVec2Length(EGVec2 self) {
     return sqrt(((CGFloat)(egVec2LengthSquare(self))));
 }
-EGVec2 egVec2Mul(EGVec2 self, float value) {
+EGVec2 egVec2MulValue(EGVec2 self, float value) {
     return EGVec2Make(self.x * value, self.y * value);
 }
-EGVec2 egVec2Div(EGVec2 self, float value) {
+EGVec2 egVec2DivValue(EGVec2 self, float value) {
     return EGVec2Make(self.x / value, self.y / value);
 }
-EGVec2 egVec2Mid(EGVec2 self, EGVec2 point) {
-    return egVec2Mul(egVec2Add(self, point), ((float)(0.5)));
+EGVec2 egVec2MidVec2(EGVec2 self, EGVec2 vec2) {
+    return egVec2MulValue(egVec2AddVec2(self, vec2), ((float)(0.5)));
 }
-CGFloat egVec2DistanceTo(EGVec2 self, EGVec2 point) {
-    return egVec2Length(egVec2Sub(self, point));
+CGFloat egVec2DistanceToVec2(EGVec2 self, EGVec2 vec2) {
+    return egVec2Length(egVec2SubVec2(self, vec2));
 }
-EGVec2 egVec2Set(EGVec2 self, float length) {
-    return egVec2Mul(self, length / egVec2Length(self));
+EGVec2 egVec2SetLength(EGVec2 self, float length) {
+    return egVec2MulValue(self, length / egVec2Length(self));
 }
 EGVec2 egVec2Normalize(EGVec2 self) {
-    return egVec2Set(self, ((float)(1.0)));
+    return egVec2SetLength(self, ((float)(1.0)));
 }
-NSInteger egVec2Compare(EGVec2 self, EGVec2 to) {
-    NSInteger dX = float4Compare(self.x, to.x);
+NSInteger egVec2CompareTo(EGVec2 self, EGVec2 to) {
+    NSInteger dX = float4CompareTo(self.x, to.x);
     if(dX != 0) return dX;
-    else return float4Compare(self.y, to.y);
+    else return float4CompareTo(self.y, to.y);
 }
 ODPType* egVec2Type() {
     static ODPType* _ret = nil;
@@ -86,7 +86,7 @@ ODPType* egVec2Type() {
 }
 
 - (NSInteger)compareTo:(EGVec2Wrap*)to {
-    return egVec2Compare(_value, to.value);
+    return egVec2CompareTo(_value, to.value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -97,22 +97,22 @@ ODPType* egVec2Type() {
 
 
 
-EGVec2I egVec2IApply(EGVec2 point) {
-    return EGVec2IMake(lround(((CGFloat)(point.x))), lround(((CGFloat)(point.y))));
+EGVec2I egVec2IApplyVec2(EGVec2 vec2) {
+    return EGVec2IMake(lround(((CGFloat)(vec2.x))), lround(((CGFloat)(vec2.y))));
 }
-EGVec2I egVec2IAdd(EGVec2I self, EGVec2I point) {
-    return EGVec2IMake(self.x + point.x, self.y + point.y);
+EGVec2I egVec2IAddVec2i(EGVec2I self, EGVec2I vec2i) {
+    return EGVec2IMake(self.x + vec2i.x, self.y + vec2i.y);
 }
-EGVec2I egVec2ISub(EGVec2I self, EGVec2I point) {
-    return EGVec2IMake(self.x - point.x, self.y - point.y);
+EGVec2I egVec2ISubVec2i(EGVec2I self, EGVec2I vec2i) {
+    return EGVec2IMake(self.x - vec2i.x, self.y - vec2i.y);
 }
 EGVec2I egVec2INegate(EGVec2I self) {
     return EGVec2IMake(-self.x, -self.y);
 }
-NSInteger egVec2ICompare(EGVec2I self, EGVec2I to) {
-    NSInteger dX = intCompare(self.x, to.x);
+NSInteger egVec2ICompareTo(EGVec2I self, EGVec2I to) {
+    NSInteger dX = intCompareTo(self.x, to.x);
     if(dX != 0) return dX;
-    else return intCompare(self.y, to.y);
+    else return intCompareTo(self.y, to.y);
 }
 ODPType* egVec2IType() {
     static ODPType* _ret = nil;
@@ -152,7 +152,7 @@ ODPType* egVec2IType() {
 }
 
 - (NSInteger)compareTo:(EGVec2IWrap*)to {
-    return egVec2ICompare(_value, to.value);
+    return egVec2ICompareTo(_value, to.value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -163,19 +163,19 @@ ODPType* egVec2IType() {
 
 
 
-EGVec3 egVec3Apply(EGVec2 vec2, float z) {
+EGVec3 egVec3ApplyVec2Z(EGVec2 vec2, float z) {
     return EGVec3Make(vec2.x, vec2.y, z);
 }
-EGVec3 egVec3Add(EGVec3 self, EGVec3 v) {
+EGVec3 egVec3AddV(EGVec3 self, EGVec3 v) {
     return EGVec3Make(self.x + v.x, self.y + v.y, self.z + v.z);
 }
 EGVec3 egVec3Sqr(EGVec3 self) {
-    return egVec3Mul(self, ((float)(egVec3Length(self))));
+    return egVec3MulK(self, ((float)(egVec3Length(self))));
 }
-EGVec3 egVec3Mul(EGVec3 self, float k) {
+EGVec3 egVec3MulK(EGVec3 self, float k) {
     return EGVec3Make(k * self.x, k * self.y, k * self.z);
 }
-CGFloat egVec3Dot(EGVec3 self, EGVec3 vec3) {
+CGFloat egVec3DotVec3(EGVec3 self, EGVec3 vec3) {
     return ((CGFloat)(self.x * vec3.x + self.y * vec3.y + self.z * vec3.z));
 }
 CGFloat egVec3LengthSquare(EGVec3 self) {
@@ -184,11 +184,11 @@ CGFloat egVec3LengthSquare(EGVec3 self) {
 CGFloat egVec3Length(EGVec3 self) {
     return sqrt(egVec3LengthSquare(self));
 }
-EGVec3 egVec3Set(EGVec3 self, CGFloat length) {
-    return egVec3Mul(self, ((float)(length / egVec3Length(self))));
+EGVec3 egVec3SetLength(EGVec3 self, CGFloat length) {
+    return egVec3MulK(self, ((float)(length / egVec3Length(self))));
 }
 EGVec3 egVec3Normalize(EGVec3 self) {
-    return egVec3Set(self, 1.0);
+    return egVec3SetLength(self, 1.0);
 }
 ODPType* egVec3Type() {
     static ODPType* _ret = nil;
@@ -235,13 +235,13 @@ ODPType* egVec3Type() {
 
 
 
-EGVec4 egVec4Apply(EGVec3 vec3, float w) {
+EGVec4 egVec4ApplyVec3W(EGVec3 vec3, float w) {
     return EGVec4Make(vec3.x, vec3.y, vec3.z, w);
 }
 EGVec3 egVec4Xyz(EGVec4 self) {
     return EGVec3Make(self.x, self.y, self.z);
 }
-EGVec4 egVec4Mul(EGVec4 self, float k) {
+EGVec4 egVec4MulK(EGVec4 self, float k) {
     return EGVec4Make(k * self.x, k * self.y, k * self.z, k * self.w);
 }
 CGFloat egVec4LengthSquare(EGVec4 self) {
@@ -250,11 +250,11 @@ CGFloat egVec4LengthSquare(EGVec4 self) {
 CGFloat egVec4Length(EGVec4 self) {
     return sqrt(egVec4LengthSquare(self));
 }
-EGVec4 egVec4Set(EGVec4 self, CGFloat length) {
-    return egVec4Mul(self, ((float)(length / egVec4Length(self))));
+EGVec4 egVec4SetLength(EGVec4 self, CGFloat length) {
+    return egVec4MulK(self, ((float)(length / egVec4Length(self))));
 }
 EGVec4 egVec4Normalize(EGVec4 self) {
-    return egVec4Set(self, 1.0);
+    return egVec4SetLength(self, 1.0);
 }
 ODPType* egVec4Type() {
     static ODPType* _ret = nil;

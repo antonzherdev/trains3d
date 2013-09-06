@@ -1,7 +1,7 @@
 #import "EGTypes.h"
 
 #import "EGMath.h"
-BOOL egRectContains(EGRect self, EGVec2 point) {
+BOOL egRectContainsPoint(EGRect self, EGVec2 point) {
     return self.x <= point.x && point.x <= self.x + self.width && self.y <= point.y && point.y <= self.y + self.height;
 }
 CGFloat egRectX2(EGRect self) {
@@ -10,13 +10,13 @@ CGFloat egRectX2(EGRect self) {
 CGFloat egRectY2(EGRect self) {
     return self.y + self.height;
 }
-EGRect egRectNewXY(CGFloat x, CGFloat x2, CGFloat y, CGFloat y2) {
+EGRect egRectNewXYXX2YY2(CGFloat x, CGFloat x2, CGFloat y, CGFloat y2) {
     return EGRectMake(x, x2 - x, y, y2 - y);
 }
-EGRect egRectMove(EGRect self, CGFloat x, CGFloat y) {
+EGRect egRectMoveXY(EGRect self, CGFloat x, CGFloat y) {
     return EGRectMake(self.x + x, self.width, self.y + y, self.height);
 }
-EGRect egRectMoveToCenterFor(EGRect self, EGVec2 size) {
+EGRect egRectMoveToCenterForSize(EGRect self, EGVec2 size) {
     return EGRectMake(((CGFloat)((size.x - self.width) / 2)), self.width, ((CGFloat)((size.y - self.height) / 2)), self.height);
 }
 EGVec2 egRectPoint(EGRect self) {
@@ -25,10 +25,10 @@ EGVec2 egRectPoint(EGRect self) {
 EGVec2 egRectSize(EGRect self) {
     return EGVec2Make(((float)(self.width)), ((float)(self.height)));
 }
-BOOL egRectIntersects(EGRect self, EGRect rect) {
+BOOL egRectIntersectsRect(EGRect self, EGRect rect) {
     return self.x <= egRectX2(rect) && egRectX2(self) >= rect.x && self.y <= egRectY2(rect) && egRectY2(self) >= rect.y;
 }
-EGRect egRectThicken(EGRect self, CGFloat x, CGFloat y) {
+EGRect egRectThickenXY(EGRect self, CGFloat x, CGFloat y) {
     return EGRectMake(self.x - x, self.width + 2 * x, self.y - y, self.height + 2 * y);
 }
 ODPType* egRectType() {
@@ -76,10 +76,10 @@ ODPType* egRectType() {
 
 
 
-EGRectI egRectIApply(EGRect rect) {
+EGRectI egRectIApplyRect(EGRect rect) {
     return EGRectIMake(lround(rect.x), lround(rect.width), lround(rect.y), lround(rect.height));
 }
-EGRectI egRectINewXY(CGFloat x, CGFloat x2, CGFloat y, CGFloat y2) {
+EGRectI egRectINewXYXX2YY2(CGFloat x, CGFloat x2, CGFloat y, CGFloat y2) {
     return EGRectIMake(((NSInteger)(x)), ((NSInteger)(x2 - x)), ((NSInteger)(y)), ((NSInteger)(y2 - y)));
 }
 NSInteger egRectIX2(EGRectI self) {

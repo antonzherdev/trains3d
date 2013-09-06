@@ -2,13 +2,12 @@
 #import "ODType.h"
 #import "CNSeq.h"
 #import "CNCollection.h"
-#import "CNTypes.h"
 @class CNOption;
 @class CNChain;
+#import "CNTypes.h"
 
 @class CNPArray;
 @class CNPArrayIterator;
-@class CNMutablePArray;
 
 @interface CNPArray : NSObject<CNSeq>
 @property (nonatomic, readonly) NSUInteger stride;
@@ -37,21 +36,6 @@
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;
-+ (ODClassType*)type;
-@end
-
-
-@interface CNMutablePArray : CNPArray
-+ (id)mutablePArrayWithStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count length:(NSUInteger)length bytes:(VoidRef)bytes;
-- (id)initWithStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count length:(NSUInteger)length bytes:(VoidRef)bytes;
-- (ODClassType*)type;
-+ (CNMutablePArray*)applyTp:(ODPType*)tp count:(NSUInteger)count;
-- (void)writeItem:(VoidRef)item;
-- (void)writeUInt4:(unsigned int)uInt4;
-- (void)writeFloat4:(float)Float4;
-- (void)writeItem:(VoidRef)item times:(NSUInteger)times;
-- (void)writeTp:(ODPType*)tp item:(VoidRef)item;
-- (void)writeArray:(CNPArray*)array;
 + (ODClassType*)type;
 @end
 

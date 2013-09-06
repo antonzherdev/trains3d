@@ -1,8 +1,5 @@
 #import "objd.h"
 #import "ODType.h"
-@class CNPArray;
-@class CNPArrayIterator;
-@class CNMutablePArray;
 #import "EGGL.h"
 #import "EGTypes.h"
 @class EGMesh;
@@ -14,6 +11,7 @@
 @class EGShaderAttribute;
 @class EGShaderUniform;
 @class EGShaderSystem;
+#import "CNVoidRefArray.h"
 @class EGColorSource;
 @class EGColorSourceColor;
 @class EGColorSourceTexture;
@@ -42,7 +40,7 @@
 
 
 @protocol EGParticle<EGController>
-- (void)writeToArray:(CNMutablePArray*)array;
+- (CNVoidRefArray)writeToArray:(CNVoidRefArray)array;
 - (BOOL)isLive;
 @end
 

@@ -1,13 +1,15 @@
 #import "objd.h"
+#import "ODType.h"
 @class CNPArray;
 @class CNPArrayIterator;
-@class CNMutablePArray;
+#import "CNVoidRefArray.h"
 #import "EGGL.h"
 @class EGSimpleShaderSystem;
 @class EGSimpleShader;
 @class EGSimpleColorShader;
 @class EGSimpleTextureShader;
 #import "EGTypes.h"
+#import "CNTypes.h"
 
 @class EGMesh;
 @class EGBuffer;
@@ -39,7 +41,9 @@
 + (EGBuffer*)applyBufferType:(GLenum)bufferType;
 - (void)dealoc;
 - (id)setData:(CNPArray*)data;
+- (id)setTp:(ODPType*)tp array:(CNVoidRefArray)array;
 - (id)setData:(CNPArray*)data usage:(GLenum)usage;
+- (id)setTp:(ODPType*)tp array:(CNVoidRefArray)array usage:(GLenum)usage;
 - (void)bind;
 - (void)unbind;
 - (void)applyDraw:(void(^)())draw;

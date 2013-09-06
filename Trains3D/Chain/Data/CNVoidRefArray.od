@@ -1,0 +1,17 @@
+import ODType
+
+import CNData
+export CNTypes
+
+
+stub struct CNVoidRefArray(length : uint, bytes : VoidRef)
+{
+    static def apply(length : uint) : CNVoidRefArray = CNVoidRefArray(length, malloc(length))
+    static def apply(tp: ODPType<_>, count : uint) : CNVoidRefArray = CNVoidRefArray(tp.size * count)
+
+    def write(tp : any, item : any) : CNVoidRefArray
+
+    def write(uInt4 : uint4) :CNVoidRefArray
+
+    def free = free(bytes)
+}

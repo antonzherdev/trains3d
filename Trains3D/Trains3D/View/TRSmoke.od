@@ -63,13 +63,13 @@ class TRSmokeParticle(texture : int) extends EGParticle<TRSmokeBufferData> {
     def isLive = time < lifeTime
 
     static val particleSize : float4 = 0.03
-    def writeTo(array : CNMutablePArray<TRSmokeBufferData>) {
+    def writeTo(array : CNVoidRefArray) : CNVoidRefArray = {
         val tx : float4 = if(texture >= 2) 0.5 else 0
         val ty : float4 = if(texture == 1 || texture == 3) 0.5 else 0
-        array.write(item = TRSmokeBufferData(position, EGVec2(-particleSize, -particleSize), EGVec2(tx, ty), time))
-        array.write(item = TRSmokeBufferData(position, EGVec2(particleSize, -particleSize), EGVec2(tx + 0.5, ty), time))
-        array.write(item = TRSmokeBufferData(position, EGVec2(particleSize,  particleSize), EGVec2(tx + 0.5, ty + 0.5), time))
-        array.write(item = TRSmokeBufferData(position, EGVec2(-particleSize,  particleSize), EGVec2(tx, ty + 0.5), time))
+        array.write(TRSmokeBufferData, TRSmokeBufferData(position, EGVec2(-particleSize, -particleSize), EGVec2(tx, ty), time))
+             .write(TRSmokeBufferData, TRSmokeBufferData(position, EGVec2(particleSize, -particleSize), EGVec2(tx + 0.5, ty), time))
+             .write(TRSmokeBufferData, TRSmokeBufferData(position, EGVec2(particleSize,  particleSize), EGVec2(tx + 0.5, ty + 0.5), time))
+             .write(TRSmokeBufferData, TRSmokeBufferData(position, EGVec2(-particleSize,  particleSize), EGVec2(tx, ty + 0.5), time))
     }
 }
 

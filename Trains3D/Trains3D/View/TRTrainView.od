@@ -34,7 +34,7 @@ class TRTrainView {
 
             EG.matrix(
                 _.modify(w = w -> {
-                    val mid = h.mid(point = t)
+                    val mid = h.mid(vec2 = t)
                     w.translate(mid.x, mid.y, 0.05)
                 }).modify(m = m -> {
                     val angle = (if(train.isBack) 90 else -90) + (180.0 / M_PI * t.sub(h).angle)

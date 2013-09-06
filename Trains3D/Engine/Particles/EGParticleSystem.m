@@ -1,6 +1,5 @@
 #import "EGParticleSystem.h"
 
-#import "CNData.h"
 #import "EGMesh.h"
 #import "EGShader.h"
 #import "EGMaterial.h"
@@ -124,23 +123,27 @@ static ODClassType* _EGParticleSystemView_type;
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     NSUInteger vc = [self vertexCount];
-    CNMutablePArray* positionArr = [CNMutablePArray applyTp:_dtp count:n * vc];
-    CNMutablePArray* indexArr = [CNMutablePArray applyTp:oduInt4Type() count:n * 3 * (vc - 2)];
-    __block NSInteger index = 0;
+    CNVoidRefArray vertexArr = cnVoidRefArrayApplyTpCount(_dtp, n * vc);
+    CNVoidRefArray indexArr = cnVoidRefArrayApplyTpCount(oduInt4Type(), n * 3 * (vc - 2));
+    __block CNVoidRefArray indexPointer = indexArr;
+    __block CNVoidRefArray vertexPointer = vertexArr;
+    __block unsigned int index = 0;
     [particles forEach:^void(id particle) {
-        [particle writeToArray:positionArr];
+        vertexPointer = [particle writeToArray:vertexPointer];
         NSUInteger vci = vc - 2;
         while(vci > 0) {
-            [indexArr writeUInt4:((unsigned int)(index))];
-            [indexArr writeUInt4:((unsigned int)(index + 1))];
-            [indexArr writeUInt4:((unsigned int)(index + 2))];
+            indexPointer = cnVoidRefArrayWriteUInt4(indexPointer, index);
+            indexPointer = cnVoidRefArrayWriteUInt4(indexPointer, index + 1);
+            indexPointer = cnVoidRefArrayWriteUInt4(indexPointer, index + 2);
             index++;
             vci--;
         }
         index += 2;
     }];
-    [_vertexBuffer setData:positionArr];
-    [_indexBuffer setData:indexArr];
+    [_vertexBuffer setTp:_dtp array:vertexArr];
+    [_indexBuffer setTp:oduInt4Type() array:indexArr];
+    cnVoidRefArrayFree(vertexArr);
+    cnVoidRefArrayFree(indexArr);
     [[self shader] drawMaterial:[self material] mesh:[EGMesh meshWithVertexBuffer:_vertexBuffer indexBuffer:_indexBuffer]];
     glDisable(GL_BLEND);
     glEnable(GL_CULL_FACE);

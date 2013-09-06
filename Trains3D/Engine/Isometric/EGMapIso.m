@@ -33,7 +33,7 @@ static ODClassType* _EGMapSso_type;
     self = [super init];
     if(self) {
         _size = size;
-        _limits = egRectINewXY(((CGFloat)((1 - _size.y) / 2 - 1)), ((CGFloat)((2 * _size.x + _size.y - 3) / 2 + 1)), ((CGFloat)((1 - _size.x) / 2 - 1)), ((CGFloat)((_size.x + 2 * _size.y - 3) / 2 + 1)));
+        _limits = egRectINewXYXX2YY2(((CGFloat)((1 - _size.y) / 2 - 1)), ((CGFloat)((2 * _size.x + _size.y - 3) / 2 + 1)), ((CGFloat)((1 - _size.x) / 2 - 1)), ((CGFloat)((_size.x + 2 * _size.y - 3) / 2 + 1)));
         _fullTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
             return [self isFullTile:uwrap(EGVec2I, _)];
         }] toArray];
@@ -75,7 +75,7 @@ static ODClassType* _EGMapSso_type;
 }
 
 - (EGRectI)cutRectForTile:(EGVec2I)tile {
-    return egRectINewXY(((CGFloat)([self tileCutAxisLess:0 more:tile.x + tile.y])), ((CGFloat)([self tileCutAxisLess:tile.x + tile.y more:_size.x + _size.y - 2])), ((CGFloat)([self tileCutAxisLess:tile.y - tile.x more:_size.y - 1])), ((CGFloat)([self tileCutAxisLess:-_size.x + 1 more:tile.y - tile.x])));
+    return egRectINewXYXX2YY2(((CGFloat)([self tileCutAxisLess:0 more:tile.x + tile.y])), ((CGFloat)([self tileCutAxisLess:tile.x + tile.y more:_size.x + _size.y - 2])), ((CGFloat)([self tileCutAxisLess:tile.y - tile.x more:_size.y - 1])), ((CGFloat)([self tileCutAxisLess:-_size.x + 1 more:tile.y - tile.x])));
 }
 
 - (ODClassType*)type {

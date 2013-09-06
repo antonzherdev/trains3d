@@ -1,4 +1,7 @@
+import ODType
+
 import CNData
+import CNVoidRefArray
 
 import EGGL
 import EGSimpleShaderSystem
@@ -23,7 +26,8 @@ class EGBuffer<T>(bufferType : GLenum, handle : GLuint) {
         egDeleteBuffer(handle)
     }
 
-    def set(data : CNPArray<T>) : self = set(data, GL_STATIC_DRAW)
+    def set(data : CNPArray<T>) : self = set(data = data, GL_STATIC_DRAW)
+    def set(tp : ODPType<T>, array : CNVoidRefArray) : self = set(tp, array = array, GL_STATIC_DRAW)
 
     def set(data : CNPArray<T>, usage : GLenum) : self = {
         glBindBuffer(bufferType, handle)
@@ -31,6 +35,15 @@ class EGBuffer<T>(bufferType : GLenum, handle : GLuint) {
         glBindBuffer(bufferType, 0)
         _length = data.length
         _count = data.count
+        self
+    }
+
+    def set(tp : ODPType<T>, array : CNVoidRefArray<T>, usage : GLenum) : self = {
+        glBindBuffer(bufferType, handle)
+        glBufferData(bufferType, array.length, array.bytes, GL_STATIC_DRAW)
+        glBindBuffer(bufferType, 0)
+        _length = array.length
+        _count = array.length/tp.size
         self
     }
 

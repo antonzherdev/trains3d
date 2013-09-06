@@ -125,12 +125,25 @@ static ODClassType* _EGBuffer_type;
     return [self setData:data usage:GL_STATIC_DRAW];
 }
 
+- (id)setTp:(ODPType*)tp array:(CNVoidRefArray)array {
+    return [self setTp:tp array:array usage:GL_STATIC_DRAW];
+}
+
 - (id)setData:(CNPArray*)data usage:(GLenum)usage {
     glBindBuffer(_bufferType, _handle);
     glBufferData(_bufferType, data.length, data.bytes, GL_STATIC_DRAW);
     glBindBuffer(_bufferType, 0);
     __length = data.length;
     __count = data.count;
+    return self;
+}
+
+- (id)setTp:(ODPType*)tp array:(CNVoidRefArray)array usage:(GLenum)usage {
+    glBindBuffer(_bufferType, _handle);
+    glBufferData(_bufferType, array.length, array.bytes, GL_STATIC_DRAW);
+    glBindBuffer(_bufferType, 0);
+    __length = array.length;
+    __count = array.length / tp.size;
     return self;
 }
 

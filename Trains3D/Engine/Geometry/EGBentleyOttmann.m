@@ -370,7 +370,7 @@ static ODClassType* _EGBentleyOttmannEventQueue_type;
 - (id)init {
     self = [super init];
     if(self) _events = [CNMutableTreeMap mutableTreeMapWithComparator:^NSInteger(id a, id b) {
-        return egVec2Compare(uwrap(EGVec2, a), uwrap(EGVec2, b));
+        return egVec2CompareTo(uwrap(EGVec2, a), uwrap(EGVec2, b));
     }];
     
     return self;
@@ -620,16 +620,16 @@ static ODClassType* _EGSweepLine_type;
     if([a isEqual:b]) return 0;
     CGFloat ay = [a yForX:((CGFloat)(_currentEventPoint.x))];
     CGFloat by = [b yForX:((CGFloat)(_currentEventPoint.x))];
-    NSInteger c = floatCompare(ay, by);
+    NSInteger c = floatCompareTo(ay, by);
     if(c == 0) if([a isVertical]) {
         c = -1;
     } else {
         if([b isVertical]) {
             c = 1;
         } else {
-            c = floatCompare([a slope], [b slope]);
+            c = floatCompareTo([a slope], [b slope]);
             if(ay > _currentEventPoint.y) c = -c;
-            if(c == 0) c = float4Compare(a.point.x, b.point.x);
+            if(c == 0) c = float4CompareTo(a.point.x, b.point.x);
         }
     }
     return c;

@@ -40,16 +40,16 @@ static inline NSString* EGRectDescription(EGRect self) {
     [description appendString:@">"];
     return description;
 }
-BOOL egRectContains(EGRect self, EGVec2 point);
+BOOL egRectContainsPoint(EGRect self, EGVec2 point);
 CGFloat egRectX2(EGRect self);
 CGFloat egRectY2(EGRect self);
-EGRect egRectNewXY(CGFloat x, CGFloat x2, CGFloat y, CGFloat y2);
-EGRect egRectMove(EGRect self, CGFloat x, CGFloat y);
-EGRect egRectMoveToCenterFor(EGRect self, EGVec2 size);
+EGRect egRectNewXYXX2YY2(CGFloat x, CGFloat x2, CGFloat y, CGFloat y2);
+EGRect egRectMoveXY(EGRect self, CGFloat x, CGFloat y);
+EGRect egRectMoveToCenterForSize(EGRect self, EGVec2 size);
 EGVec2 egRectPoint(EGRect self);
 EGVec2 egRectSize(EGRect self);
-BOOL egRectIntersects(EGRect self, EGRect rect);
-EGRect egRectThicken(EGRect self, CGFloat x, CGFloat y);
+BOOL egRectIntersectsRect(EGRect self, EGRect rect);
+EGRect egRectThickenXY(EGRect self, CGFloat x, CGFloat y);
 ODPType* egRectType();
 @interface EGRectWrap : NSObject
 @property (readonly, nonatomic) EGRect value;
@@ -89,8 +89,8 @@ static inline NSString* EGRectIDescription(EGRectI self) {
     [description appendString:@">"];
     return description;
 }
-EGRectI egRectIApply(EGRect rect);
-EGRectI egRectINewXY(CGFloat x, CGFloat x2, CGFloat y, CGFloat y2);
+EGRectI egRectIApplyRect(EGRect rect);
+EGRectI egRectINewXYXX2YY2(CGFloat x, CGFloat x2, CGFloat y, CGFloat y2);
 NSInteger egRectIX2(EGRectI self);
 NSInteger egRectIY2(EGRectI self);
 ODPType* egRectIType();

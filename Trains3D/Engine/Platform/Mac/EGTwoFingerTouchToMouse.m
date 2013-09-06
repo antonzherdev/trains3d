@@ -69,7 +69,7 @@
     );
 
 
-    _touchLastPoint = egVec2Add(_touchStartPoint, delta);
+    _touchLastPoint = egVec2AddVec2(_touchStartPoint, delta);
     CGPoint cursor = CGPointMake(_touchStartScreenPoint.x + delta.x, _touchStartScreenPoint.y - delta.y);
     CGWarpMouseCursorPosition(cursor);
     [_processor mouseDragEvent:[EGEventEmulateMouseMove

@@ -56,10 +56,10 @@ static ODClassType* _TRTrainView_type;
         EGVec2 t = car.tail.point;
         [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
             return [[_ modifyW:^EGMatrix*(EGMatrix* w) {
-                EGVec2 mid = egVec2Mid(h, t);
+                EGVec2 mid = egVec2MidVec2(h, t);
                 return [w translateX:mid.x y:mid.y z:((float)(0.05))];
             }] modifyM:^EGMatrix*(EGMatrix* m) {
-                CGFloat angle = (([train isBack]) ? 90 : -90) + 180.0 / M_PI * egVec2Angle(egVec2Sub(t, h));
+                CGFloat angle = (([train isBack]) ? 90 : -90) + 180.0 / M_PI * egVec2Angle(egVec2SubVec2(t, h));
                 return [m rotateAngle:((float)(angle)) x:0.0 y:1.0 z:0.0];
             }];
         } f:^void() {

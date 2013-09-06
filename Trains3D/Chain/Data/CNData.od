@@ -4,7 +4,7 @@ import ODType
 
 import CNSeq
 import CNCollection
-import CNTypes
+export CNTypes
 import CNOption
 import CNChain
 
@@ -34,48 +34,5 @@ class CNPArrayIterator<T>(array : CNPArray<T>) extends CNIterator<T> {
         val ret = array.apply(i)
         i++
         ret
-    }
-}
-
-class CNMutablePArray<T>(stride : uint, wrap : (VoidRef, uint) -> T, count : uint, length : uint, bytes : VoidRef)
-    extends CNPArray<T>(stride, wrap, count, length, bytes, true)
-{
-    private var pointer = bytes
-    static def apply<T>(tp: ODPType<T>, count : uint) : CNMutablePArray<T> = {
-        val length = tp.size * count
-        CNMutablePArray<T>(tp.size, tp.wrap, count, length, malloc(length))
-    }
-
-    def write(item : VoidRef) {
-        memcpy(pointer, item, stride)
-        pointer += stride
-    }
-
-    def write(uInt4 : uint4) {
-        setui4(pointer, uInt4)
-        pointer += 4
-    }
-
-    def write(Float4 : float4) {
-        setf4(pointer, Float4)
-        pointer += 4
-    }
-
-    def write(item : VoidRef, times : uint) {
-        while(times > 0) {
-            memcpy(pointer, item, stride)
-            pointer += stride
-            times--
-        }
-    }
-
-    def write<T>(tp : ODPType<T>, item : VoidRef) {
-        memcpy(pointer, item, stride)
-        pointer += tp.size
-    }
-
-    def write(array : CNPArray<T>) {
-        memcpy(pointer, array.bytes, array.length)
-        pointer += array.length
     }
 }

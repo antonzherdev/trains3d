@@ -31,24 +31,24 @@ static inline BOOL eqf(CGFloat a, CGFloat b) {
 - (NSInteger)compareTo:(id)to;
 @end
 
-static inline NSInteger floatCompare(CGFloat a, CGFloat b) {
+static inline NSInteger floatCompareTo(CGFloat a, CGFloat b) {
     return eqf(a, b) ? 0 : (a < b ? -1 : 1);
 }
 
-static inline NSInteger float4Compare(float a, float b) {
+static inline NSInteger float4CompareTo(float a, float b) {
     return eqf4(a, b) ? 0 : (a < b ? -1 : 1);
 }
 
-static inline NSInteger float8Compare(double a, double b) {
+static inline NSInteger float8CompareTo(double a, double b) {
     return eqf8(a, b) ? 0 : (a < b ? -1 : 1);
 }
 
 
-static inline NSInteger intCompare(NSInteger a, NSInteger b) {
+static inline NSInteger intCompareTo(NSInteger a, NSInteger b) {
     return a < b ? -1 : (a > b ? 1 : 0);
 }
 
-static inline NSInteger uintCompare(NSUInteger a, NSUInteger b) {
+static inline NSInteger uintCompareTo(NSUInteger a, NSUInteger b) {
     return a < b ? -1 : (a > b ? 1 : 0);
 }
 

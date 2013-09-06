@@ -4,7 +4,6 @@
 @class CNRangeIterator;
 @class CNPArray;
 @class CNPArrayIterator;
-@class CNMutablePArray;
 #import "EGTypes.h"
 @class EG;
 @class EGContext;
@@ -30,6 +29,7 @@
 @class EGShaderUniform;
 @class EGShaderSystem;
 #import "EGVec.h"
+#import "CNTypes.h"
 @class EGMatrix;
 
 @class EGMapSso;

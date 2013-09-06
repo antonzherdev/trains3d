@@ -351,7 +351,7 @@ static ODClassType* _EGLineSegment_type;
     if(self) {
         _p1 = p1;
         _p2 = p2;
-        _boundingRect = egRectNewXY(min(((CGFloat)(_p1.x)), ((CGFloat)(_p2.x))), max(((CGFloat)(_p1.x)), ((CGFloat)(_p2.x))), min(((CGFloat)(_p1.y)), ((CGFloat)(_p2.y))), max(((CGFloat)(_p1.y)), ((CGFloat)(_p2.y))));
+        _boundingRect = egRectNewXYXX2YY2(min(((CGFloat)(_p1.x)), ((CGFloat)(_p2.x))), max(((CGFloat)(_p1.x)), ((CGFloat)(_p2.x))), min(((CGFloat)(_p1.y)), ((CGFloat)(_p2.y))), max(((CGFloat)(_p1.y)), ((CGFloat)(_p2.y))));
     }
     
     return self;
@@ -363,7 +363,7 @@ static ODClassType* _EGLineSegment_type;
 }
 
 + (EGLineSegment*)newWithP1:(EGVec2)p1 p2:(EGVec2)p2 {
-    if(egVec2Compare(p1, p2) < 0) return [EGLineSegment lineSegmentWithP1:p1 p2:p2];
+    if(egVec2CompareTo(p1, p2) < 0) return [EGLineSegment lineSegmentWithP1:p1 p2:p2];
     else return [EGLineSegment lineSegmentWithP1:p2 p2:p1];
 }
 
@@ -385,11 +385,11 @@ static ODClassType* _EGLineSegment_type;
 }
 
 - (BOOL)containsPoint:(EGVec2)point {
-    return EGVec2Eq(_p1, point) || EGVec2Eq(_p2, point) || ([[self line] containsPoint:point] && egRectContains(_boundingRect, point));
+    return EGVec2Eq(_p1, point) || EGVec2Eq(_p2, point) || ([[self line] containsPoint:point] && egRectContainsPoint(_boundingRect, point));
 }
 
 - (BOOL)containsInBoundingRectPoint:(EGVec2)point {
-    return egRectContains(_boundingRect, point);
+    return egRectContainsPoint(_boundingRect, point);
 }
 
 - (id)intersectionWithSegment:(EGLineSegment*)segment {
@@ -515,7 +515,7 @@ static ODClassType* _EGPolygon_type;
         if(uwrap(EGVec2, p).y < minY) minY = ((CGFloat)(uwrap(EGVec2, p).y));
         if(uwrap(EGVec2, p).y > maxY) maxY = ((CGFloat)(uwrap(EGVec2, p).y));
     }];
-    return egRectNewXY(minX, maxX, minY, maxY);
+    return egRectNewXYXX2YY2(minX, maxX, minY, maxY);
 }
 
 - (ODClassType*)type {
@@ -585,7 +585,7 @@ static ODClassType* _EGThickLineSegment_type;
 }
 
 - (EGRect)boundingRect {
-    return egRectThicken(_segment.boundingRect, ((CGFloat)((([_segment isHorizontal]) ? 0 : _thickness_2))), ((CGFloat)((([_segment isVertical]) ? 0 : _thickness_2))));
+    return egRectThickenXY(_segment.boundingRect, ((CGFloat)((([_segment isHorizontal]) ? 0 : _thickness_2))), ((CGFloat)((([_segment isVertical]) ? 0 : _thickness_2))));
 }
 
 - (id<CNSeq>)segments {
@@ -608,7 +608,7 @@ static ODClassType* _EGThickLineSegment_type;
         EGLineSegment* line1 = [_segment moveWithX:-dx y:dy];
         EGLineSegment* line2 = [_segment moveWithX:dx y:-dy];
         EGLineSegment* line3 = [EGLineSegment newWithP1:line1.p1 p2:line2.p1];
-        __segments = (@[line1, line2, line3, [line3 moveWithPoint:egVec2Sub(_segment.p2, _segment.p1)]]);
+        __segments = (@[line1, line2, line3, [line3 moveWithPoint:egVec2SubVec2(_segment.p2, _segment.p1)]]);
     }
     return __segments;
 }

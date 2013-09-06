@@ -37,18 +37,18 @@ static ODClassType* _EGCamera2D_type;
 }
 
 - (EGRect)viewportRectForViewSize:(EGVec2)viewSize factor:(CGFloat)factor {
-    return egRectMoveToCenterFor(EGRectMake(0.0, ((CGFloat)(_size.x * factor)), 0.0, ((CGFloat)(_size.y * factor))), viewSize);
+    return egRectMoveToCenterForSize(EGRectMake(0.0, ((CGFloat)(_size.x * factor)), 0.0, ((CGFloat)(_size.y * factor))), viewSize);
 }
 
 - (void)focusForViewSize:(EGVec2)viewSize {
-    egViewport(egRectIApply([self viewportRectForViewSize:viewSize]));
+    egViewport(egRectIApplyRect([self viewportRectForViewSize:viewSize]));
     EG.matrix.value = _matrixModel;
 }
 
 - (EGVec2)translateWithViewSize:(EGVec2)viewSize viewPoint:(EGVec2)viewPoint {
     CGFloat factor = [self factorForViewSize:viewSize];
     EGRect viewport = [self viewportRectForViewSize:viewSize factor:factor];
-    return egVec2Div(egVec2Sub(viewPoint, egRectPoint(viewport)), ((float)(factor)));
+    return egVec2DivValue(egVec2SubVec2(viewPoint, egRectPoint(viewport)), ((float)(factor)));
 }
 
 - (ODClassType*)type {

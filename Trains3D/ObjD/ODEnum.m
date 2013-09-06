@@ -38,7 +38,7 @@
 }
 
 - (NSInteger)compareTo:(ODEnum*)to {
-    return intCompare(_ordinal, to.ordinal);
+    return intCompareTo(_ordinal, to.ordinal);
 }
 
 

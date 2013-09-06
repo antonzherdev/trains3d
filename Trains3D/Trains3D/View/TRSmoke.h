@@ -1,7 +1,6 @@
 #import "objd.h"
 @class CNPArray;
 @class CNPArrayIterator;
-@class CNMutablePArray;
 @class EG;
 @class EGContext;
 @class EGMatrixStack;
@@ -35,6 +34,7 @@
 @class TRRailForm;
 @class TRRailPoint;
 @class TRRailPointCorrection;
+#import "CNTypes.h"
 @class EGColorSource;
 @class EGColorSourceColor;
 @class EGColorSourceTexture;
@@ -42,6 +42,7 @@
 @class EGSimpleMaterial;
 @class EGStandardMaterial;
 @class EGMeshModel;
+#import "CNVoidRefArray.h"
 
 @class TRSmoke;
 @class TRSmokeParticle;
@@ -72,7 +73,7 @@ typedef struct TRSmokeBufferData TRSmokeBufferData;
 - (ODClassType*)type;
 - (void)updateWithDelta:(CGFloat)delta;
 - (BOOL)isLive;
-- (void)writeToArray:(CNMutablePArray*)array;
+- (CNVoidRefArray)writeToArray:(CNVoidRefArray)array;
 + (NSInteger)lifeTime;
 + (NSInteger)dragCoefficient;
 + (float)particleSize;

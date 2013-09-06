@@ -1,14 +1,14 @@
 import ODType
 
-import CNData
-
 import EGGL
 import EGTypes
 import EGMesh
 import EGShader
 
+export CNVoidRefArray
 
-class EGParticleSystem <D, P extends EGParticle<D>> extends EGController {
+
+class EGParticleSystem <P extends EGParticle> extends EGController {
     private var _particles = CNList<P>()
     def particles : [P] = _particles
 
@@ -27,14 +27,14 @@ class EGParticleSystem <D, P extends EGParticle<D>> extends EGController {
     }
 }
 
-trait EGParticle<D> extends EGController {
-    def writeTo(array : CNMutablePArray<D>)
+trait EGParticle extends EGController {
+    def writeTo(array : CNVoidRefArray) : CNVoidRefArray
 
     def isLive : bool
 }
 
 
-class EGParticleSystemView<D, P extends EGParticle<D>>(dtp : ODPType<D>) {
+class EGParticleSystemView<P extends EGParticle>(dtp : ODPType<_>) {
     val vertexBuffer = EGVertexBuffer<float4>(8*4)
     val indexBuffer = EGIndexBuffer<uint4>()
 
@@ -42,7 +42,7 @@ class EGParticleSystemView<D, P extends EGParticle<D>>(dtp : ODPType<D>) {
     def shader : EGShader
     def material : EGMaterial
 
-    def draw(system : EGParticleSystem<D, P>) {
+    def draw(system : EGParticleSystem<P>) {
         val particles = system.particles
         val n = particles.count
         if(n == 0) return nil
@@ -53,24 +53,28 @@ class EGParticleSystemView<D, P extends EGParticle<D>>(dtp : ODPType<D>) {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
         val vc = vertexCount
-        val positionArr = CNMutablePArray<D>(dtp, n*vc)
-        val indexArr = CNMutablePArray(ODUInt4.type, n*3*(vc - 2))
-        var index = 0
+        val vertexArr = CNVoidRefArray(dtp, n*vc)
+        val indexArr = CNVoidRefArray(ODUInt4.type, n*3*(vc - 2))
+        var indexPointer = indexArr
+        var vertexPointer = vertexArr
+        var index : uint4 = 0
         particles.for{particle ->
-            particle.writeTo(positionArr)
+            vertexPointer = particle.writeTo(vertexPointer)
 
             var vci = vc - 2
             while(vci > 0) {
-                indexArr.write(uInt4 = index)
-                indexArr.write(uInt4 = index + 1)
-                indexArr.write(uInt4 = index + 2)
+                indexPointer = indexPointer.write(uInt4 = index)
+                indexPointer = indexPointer.write(uInt4 = index + 1)
+                indexPointer = indexPointer.write(uInt4 = index + 2)
                 index++
                 vci--
             }
             index += 2
         }
-        vertexBuffer.set(positionArr)
-        indexBuffer.set(indexArr)
+        vertexBuffer.set(dtp, array = vertexArr)
+        indexBuffer.set(ODUInt4.type, array = indexArr)
+        vertexArr.free
+        indexArr.free
 
         shader.draw(material, EGMesh(vertexBuffer = vertexBuffer, indexBuffer))
 
