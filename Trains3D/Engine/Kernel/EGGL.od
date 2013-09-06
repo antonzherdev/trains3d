@@ -94,6 +94,7 @@ stub val GL_FALSE : GLboolean
 stub def glBlendFunc(sfactor : GLenum, dfactor : GLenum)
 stub def glBlendFuncSeparate(srcRGB : GLenum, dstRGB : GLenum, stcAlpha : GLenum, dstAlpha : GLenum)
 stub val GL_ZERO : uint
+stub val GL_ONE : uint
 stub val GL_SRC_ALPHA : uint
 stub val GL_ONE_MINUS_SRC_ALPHA : uint
 
