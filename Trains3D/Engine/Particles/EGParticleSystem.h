@@ -23,8 +23,8 @@
 @class EGFileTexture;
 
 @class EGParticleSystem;
+@class EGParticle;
 @class EGParticleSystemView;
-@protocol EGParticle;
 
 @interface EGParticleSystem : NSObject<EGController>
 + (id)particleSystem;
@@ -39,9 +39,17 @@
 @end
 
 
-@protocol EGParticle<EGController>
+@interface EGParticle : NSObject<EGController>
+@property (nonatomic, readonly) float lifeLength;
+
++ (id)particleWithLifeLength:(float)lifeLength;
+- (id)initWithLifeLength:(float)lifeLength;
+- (ODClassType*)type;
+- (float)lifeTime;
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array;
 - (BOOL)isLive;
+- (void)updateWithDelta:(CGFloat)delta;
++ (ODClassType*)type;
 @end
 
 

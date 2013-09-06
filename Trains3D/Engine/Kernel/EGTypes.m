@@ -182,6 +182,51 @@ ODPType* egColorType() {
 
 
 
+ODPType* egQuadType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGQuadWrap class] name:@"EGQuad" size:sizeof(EGQuad) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGQuad, ((EGQuad*)(data))[i]);
+    }];
+    return _ret;
+}
+@implementation EGQuadWrap{
+    EGQuad _value;
+}
+@synthesize value = _value;
+
++ (id)wrapWithValue:(EGQuad)value {
+    return [[EGQuadWrap alloc] initWithValue:value];
+}
+
+- (id)initWithValue:(EGQuad)value {
+    self = [super init];
+    if(self) _value = value;
+    return self;
+}
+
+- (NSString*)description {
+    return EGQuadDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGQuadWrap* o = ((EGQuadWrap*)(other));
+    return EGQuadEq(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return EGQuadHash(_value);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
+
+
 @implementation EGEnvironment{
     EGColor _ambientColor;
     id<CNSeq> _lights;

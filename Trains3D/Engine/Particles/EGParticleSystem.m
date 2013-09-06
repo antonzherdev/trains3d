@@ -72,6 +72,80 @@ static ODClassType* _EGParticleSystem_type;
 @end
 
 
+@implementation EGParticle{
+    float _lifeLength;
+    float __lifeTime;
+}
+static ODClassType* _EGParticle_type;
+@synthesize lifeLength = _lifeLength;
+
++ (id)particleWithLifeLength:(float)lifeLength {
+    return [[EGParticle alloc] initWithLifeLength:lifeLength];
+}
+
+- (id)initWithLifeLength:(float)lifeLength {
+    self = [super init];
+    if(self) _lifeLength = lifeLength;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGParticle_type = [ODClassType classTypeWithCls:[EGParticle class]];
+}
+
+- (float)lifeTime {
+    return __lifeTime;
+}
+
+- (CNVoidRefArray)writeToArray:(CNVoidRefArray)array {
+    @throw @"Method writeTo is abstract";
+}
+
+- (BOOL)isLive {
+    return __lifeTime <= _lifeLength;
+}
+
+- (void)updateWithDelta:(CGFloat)delta {
+    __lifeTime += ((float)(delta));
+}
+
+- (ODClassType*)type {
+    return [EGParticle type];
+}
+
++ (ODClassType*)type {
+    return _EGParticle_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGParticle* o = ((EGParticle*)(other));
+    return eqf4(self.lifeLength, o.lifeLength);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + float4Hash(self.lifeLength);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"lifeLength=%f", self.lifeLength];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation EGParticleSystemView{
     ODPType* _dtp;
     EGVertexBuffer* _vertexBuffer;
@@ -90,7 +164,7 @@ static ODClassType* _EGParticleSystemView_type;
     self = [super init];
     if(self) {
         _dtp = dtp;
-        _vertexBuffer = [EGVertexBuffer applyStride:((NSUInteger)(8 * 4))];
+        _vertexBuffer = [EGVertexBuffer applyStride:_dtp.size];
         _indexBuffer = [EGIndexBuffer apply];
     }
     

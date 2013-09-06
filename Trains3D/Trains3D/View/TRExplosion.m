@@ -1,5 +1,6 @@
 #import "TRExplosion.h"
 
+#import "EGParticleSystem.h"
 @implementation TRExplosion{
     EGVec3 _position;
     CGFloat _size;

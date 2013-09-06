@@ -62,19 +62,16 @@ typedef struct TRSmokeBufferData TRSmokeBufferData;
 @end
 
 
-@interface TRSmokeParticle : NSObject<EGParticle>
+@interface TRSmokeParticle : EGParticle
 @property (nonatomic, readonly) NSInteger texture;
 @property (nonatomic) EGVec3 position;
 @property (nonatomic) EGVec3 speed;
-@property (nonatomic) float time;
 
 + (id)smokeParticleWithTexture:(NSInteger)texture;
 - (id)initWithTexture:(NSInteger)texture;
 - (ODClassType*)type;
 - (void)updateWithDelta:(CGFloat)delta;
-- (BOOL)isLive;
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array;
-+ (NSInteger)lifeTime;
 + (NSInteger)dragCoefficient;
 + (float)particleSize;
 + (ODClassType*)type;

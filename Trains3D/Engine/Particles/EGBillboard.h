@@ -13,6 +13,8 @@
 @class EGStandardMaterial;
 @class EGMeshModel;
 #import "EGShader.h"
+#import "EGTypes.h"
+#import "EGParticleSystem.h"
 @class EGMatrix;
 @class EGTexture;
 @class EGFileTexture;
@@ -20,10 +22,46 @@
 @class EGBuffer;
 @class EGVertexBuffer;
 @class EGIndexBuffer;
+#import "CNVoidRefArray.h"
 
 @class EGBillboardShaderSystem;
 @class EGBillboardShader;
+@class EGBillboardParticleSystem;
+@class EGBillboardParticle;
+@class EGBillboardParticleSystemView;
 typedef struct EGBillboardBufferData EGBillboardBufferData;
+
+@interface EGBillboardShaderSystem : EGShaderSystem
++ (id)billboardShaderSystem;
+- (id)init;
+- (ODClassType*)type;
+- (EGBillboardShader*)shaderForMaterial:(EGSimpleMaterial*)material;
++ (EGBillboardShaderSystem*)instance;
++ (ODClassType*)type;
+@end
+
+
+@interface EGBillboardShader : EGShader
+@property (nonatomic, readonly) BOOL texture;
+@property (nonatomic, readonly) EGShaderAttribute* positionSlot;
+@property (nonatomic, readonly) EGShaderAttribute* modelSlot;
+@property (nonatomic, readonly) id uvSlot;
+@property (nonatomic, readonly) id colorUniform;
+@property (nonatomic, readonly) EGShaderUniform* wcUniform;
+@property (nonatomic, readonly) EGShaderUniform* pUniform;
+
++ (id)billboardShaderWithProgram:(EGShaderProgram*)program texture:(BOOL)texture;
+- (id)initWithProgram:(EGShaderProgram*)program texture:(BOOL)texture;
+- (ODClassType*)type;
++ (EGShader*)instanceForColor;
++ (EGShader*)instanceForTexture;
++ (NSString*)vertexTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code;
++ (NSString*)fragmentTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code;
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material;
+- (void)unloadMaterial:(EGSimpleMaterial*)material;
++ (ODClassType*)type;
+@end
+
 
 struct EGBillboardBufferData {
     EGVec3 position;
@@ -61,34 +99,36 @@ ODPType* egBillboardBufferDataType();
 
 
 
-@interface EGBillboardShaderSystem : EGShaderSystem
-+ (id)billboardShaderSystem;
+@interface EGBillboardParticleSystem : EGParticleSystem
++ (id)billboardParticleSystem;
 - (id)init;
 - (ODClassType*)type;
-- (EGBillboardShader*)shaderForMaterial:(EGSimpleMaterial*)material;
-+ (EGBillboardShaderSystem*)instance;
 + (ODClassType*)type;
 @end
 
 
-@interface EGBillboardShader : EGShader
-@property (nonatomic, readonly) BOOL texture;
-@property (nonatomic, readonly) EGShaderAttribute* positionSlot;
-@property (nonatomic, readonly) EGShaderAttribute* modelSlot;
-@property (nonatomic, readonly) id uvSlot;
-@property (nonatomic, readonly) id colorUniform;
-@property (nonatomic, readonly) EGShaderUniform* wcUniform;
-@property (nonatomic, readonly) EGShaderUniform* pUniform;
+@interface EGBillboardParticle : EGParticle
+@property (nonatomic) EGVec3 position;
+@property (nonatomic) EGQuad uv;
+@property (nonatomic) EGQuad model;
 
-+ (id)billboardShaderWithProgram:(EGShaderProgram*)program texture:(BOOL)texture;
-- (id)initWithProgram:(EGShaderProgram*)program texture:(BOOL)texture;
++ (id)billboardParticleWithLifeLength:(float)lifeLength;
+- (id)initWithLifeLength:(float)lifeLength;
 - (ODClassType*)type;
-+ (EGShader*)instanceForColor;
-+ (EGShader*)instanceForTexture;
-+ (NSString*)vertexTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code;
-+ (NSString*)fragmentTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code;
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material;
-- (void)unloadMaterial:(EGSimpleMaterial*)material;
+- (CNVoidRefArray)writeToArray:(CNVoidRefArray)array;
+- (BOOL)isLive;
++ (ODClassType*)type;
+@end
+
+
+@interface EGBillboardParticleSystemView : EGParticleSystemView
+@property (nonatomic, readonly) EGSimpleMaterial* material;
+@property (nonatomic, readonly) EGShader* shader;
+@property (nonatomic, readonly) NSUInteger vertexCount;
+
++ (id)billboardParticleSystemViewWithMaterial:(EGSimpleMaterial*)material;
+- (id)initWithMaterial:(EGSimpleMaterial*)material;
+- (ODClassType*)type;
 + (ODClassType*)type;
 @end
 

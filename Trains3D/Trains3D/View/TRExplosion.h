@@ -1,6 +1,10 @@
 #import "objd.h"
 #import "EGTypes.h"
 #import "EGVec.h"
+@class EGParticleSystem;
+@class EGParticle;
+@class EGParticleSystemView;
+#import "CNVoidRefArray.h"
 
 @class TRExplosion;
 @class TRExplosionFlame;

@@ -103,27 +103,21 @@ static ODClassType* _TRSmoke_type;
     NSInteger _texture;
     EGVec3 _position;
     EGVec3 _speed;
-    float _time;
 }
-static NSInteger _TRSmokeParticle_lifeTime = 4;
 static NSInteger _TRSmokeParticle_dragCoefficient = 1;
 static float _TRSmokeParticle_particleSize = ((float)(0.03));
 static ODClassType* _TRSmokeParticle_type;
 @synthesize texture = _texture;
 @synthesize position = _position;
 @synthesize speed = _speed;
-@synthesize time = _time;
 
 + (id)smokeParticleWithTexture:(NSInteger)texture {
     return [[TRSmokeParticle alloc] initWithTexture:texture];
 }
 
 - (id)initWithTexture:(NSInteger)texture {
-    self = [super init];
-    if(self) {
-        _texture = texture;
-        _time = ((float)(0.0));
-    }
+    self = [super initWithLifeLength:4.0];
+    if(self) _texture = texture;
     
     return self;
 }
@@ -134,28 +128,21 @@ static ODClassType* _TRSmokeParticle_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
+    [super updateWithDelta:delta];
     EGVec3 a = egVec3MulK(_speed, ((float)(-_TRSmokeParticle_dragCoefficient)));
     _speed = egVec3AddV(_speed, egVec3MulK(a, ((float)(delta))));
     _position = egVec3AddV(_position, egVec3MulK(_speed, ((float)(delta))));
-    _time += ((float)(delta));
-}
-
-- (BOOL)isLive {
-    return _time < _TRSmokeParticle_lifeTime;
 }
 
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array {
+    float t = [self lifeTime];
     float tx = ((float)(((_texture >= 2) ? 0.5 : 0)));
     float ty = ((float)(((_texture == 1 || _texture == 3) ? 0.5 : 0)));
-    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, TRSmokeBufferData, TRSmokeBufferDataMake(_position, EGVec2Make(-_TRSmokeParticle_particleSize, -_TRSmokeParticle_particleSize), EGVec2Make(tx, ty), _time)), TRSmokeBufferData, TRSmokeBufferDataMake(_position, EGVec2Make(_TRSmokeParticle_particleSize, -_TRSmokeParticle_particleSize), EGVec2Make(tx + 0.5, ty), _time)), TRSmokeBufferData, TRSmokeBufferDataMake(_position, EGVec2Make(_TRSmokeParticle_particleSize, _TRSmokeParticle_particleSize), EGVec2Make(tx + 0.5, ty + 0.5), _time)), TRSmokeBufferData, TRSmokeBufferDataMake(_position, EGVec2Make(-_TRSmokeParticle_particleSize, _TRSmokeParticle_particleSize), EGVec2Make(tx, ty + 0.5), _time));
+    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, TRSmokeBufferData, TRSmokeBufferDataMake(_position, EGVec2Make(-_TRSmokeParticle_particleSize, -_TRSmokeParticle_particleSize), EGVec2Make(tx, ty), t)), TRSmokeBufferData, TRSmokeBufferDataMake(_position, EGVec2Make(_TRSmokeParticle_particleSize, -_TRSmokeParticle_particleSize), EGVec2Make(tx + 0.5, ty), t)), TRSmokeBufferData, TRSmokeBufferDataMake(_position, EGVec2Make(_TRSmokeParticle_particleSize, _TRSmokeParticle_particleSize), EGVec2Make(tx + 0.5, ty + 0.5), t)), TRSmokeBufferData, TRSmokeBufferDataMake(_position, EGVec2Make(-_TRSmokeParticle_particleSize, _TRSmokeParticle_particleSize), EGVec2Make(tx, ty + 0.5), t));
 }
 
 - (ODClassType*)type {
     return [TRSmokeParticle type];
-}
-
-+ (NSInteger)lifeTime {
-    return _TRSmokeParticle_lifeTime;
 }
 
 + (NSInteger)dragCoefficient {

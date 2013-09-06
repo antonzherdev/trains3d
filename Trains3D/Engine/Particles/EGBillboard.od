@@ -3,8 +3,8 @@ import EGGL
 import EGVec
 import EGMaterial
 import EGShader
-
-struct EGBillboardBufferData(position : EGVec3, model : EGVec2, uv : EGVec2)
+import EGTypes
+import EGParticleSystem
 
 class EGBillboardShaderSystem extends EGShaderSystem<EGSimpleMaterial> {
     static val instance = EGBillboardShaderSystem()
@@ -83,4 +83,34 @@ class EGBillboardShader(program : EGShaderProgram, texture : bool) extends EGSha
     def unload(material : EGSimpleMaterial) {
         if(texture) EGTexture.unbind
     }
+}
+
+struct EGBillboardBufferData(position : EGVec3, model : EGVec2, uv : EGVec2)
+
+
+class EGBillboardParticleSystem extends EGParticleSystem<EGBillboardParticle> {
+
+}
+
+
+
+class EGBillboardParticle(lifeLength : float4) extends EGParticle(lifeLength) {
+    var position : EGVec3
+    var uv : EGQuad
+    var model : EGQuad
+
+    def writeTo(array : CNVoidRefArray) : CNVoidRefArray = {
+        array
+            .write(EGBillboardBufferData, EGBillboardBufferData(position, model.p1, uv.p1))
+            .write(EGBillboardBufferData, EGBillboardBufferData(position, model.p2, uv.p2))
+            .write(EGBillboardBufferData, EGBillboardBufferData(position, model.p3, uv.p3))
+            .write(EGBillboardBufferData, EGBillboardBufferData(position, model.p4, uv.p4))
+    }
+    def isLive : bool
+
+}
+
+class EGBillboardParticleSystemView(material : EGSimpleMaterial) extends  EGParticleSystemView<EGBillboardParticle> {
+    val shader : EGShader =  EGBillboardShaderSystem.instance.shaderFor(material)
+    val vertexCount : uint = 4
 }

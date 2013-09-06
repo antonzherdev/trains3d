@@ -5,51 +5,6 @@
 #import "EGMatrix.h"
 #import "EGTexture.h"
 #import "EGMesh.h"
-ODPType* egBillboardBufferDataType() {
-    static ODPType* _ret = nil;
-    if(_ret == nil) _ret = [ODPType typeWithCls:[EGBillboardBufferDataWrap class] name:@"EGBillboardBufferData" size:sizeof(EGBillboardBufferData) wrap:^id(void* data, NSUInteger i) {
-        return wrap(EGBillboardBufferData, ((EGBillboardBufferData*)(data))[i]);
-    }];
-    return _ret;
-}
-@implementation EGBillboardBufferDataWrap{
-    EGBillboardBufferData _value;
-}
-@synthesize value = _value;
-
-+ (id)wrapWithValue:(EGBillboardBufferData)value {
-    return [[EGBillboardBufferDataWrap alloc] initWithValue:value];
-}
-
-- (id)initWithValue:(EGBillboardBufferData)value {
-    self = [super init];
-    if(self) _value = value;
-    return self;
-}
-
-- (NSString*)description {
-    return EGBillboardBufferDataDescription(_value);
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGBillboardBufferDataWrap* o = ((EGBillboardBufferDataWrap*)(other));
-    return EGBillboardBufferDataEq(_value, o.value);
-}
-
-- (NSUInteger)hash {
-    return EGBillboardBufferDataHash(_value);
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-@end
-
-
-
 @implementation EGBillboardShaderSystem
 static EGBillboardShaderSystem* _EGBillboardShaderSystem_instance;
 static ODClassType* _EGBillboardShaderSystem_type;
@@ -278,6 +233,220 @@ static ODClassType* _EGBillboardShader_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"program=%@", self.program];
     [description appendFormat:@", texture=%d", self.texture];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+ODPType* egBillboardBufferDataType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGBillboardBufferDataWrap class] name:@"EGBillboardBufferData" size:sizeof(EGBillboardBufferData) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGBillboardBufferData, ((EGBillboardBufferData*)(data))[i]);
+    }];
+    return _ret;
+}
+@implementation EGBillboardBufferDataWrap{
+    EGBillboardBufferData _value;
+}
+@synthesize value = _value;
+
++ (id)wrapWithValue:(EGBillboardBufferData)value {
+    return [[EGBillboardBufferDataWrap alloc] initWithValue:value];
+}
+
+- (id)initWithValue:(EGBillboardBufferData)value {
+    self = [super init];
+    if(self) _value = value;
+    return self;
+}
+
+- (NSString*)description {
+    return EGBillboardBufferDataDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGBillboardBufferDataWrap* o = ((EGBillboardBufferDataWrap*)(other));
+    return EGBillboardBufferDataEq(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return EGBillboardBufferDataHash(_value);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
+
+
+@implementation EGBillboardParticleSystem
+static ODClassType* _EGBillboardParticleSystem_type;
+
++ (id)billboardParticleSystem {
+    return [[EGBillboardParticleSystem alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGBillboardParticleSystem_type = [ODClassType classTypeWithCls:[EGBillboardParticleSystem class]];
+}
+
+- (ODClassType*)type {
+    return [EGBillboardParticleSystem type];
+}
+
++ (ODClassType*)type {
+    return _EGBillboardParticleSystem_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGBillboardParticle{
+    EGVec3 _position;
+    EGQuad _uv;
+    EGQuad _model;
+}
+static ODClassType* _EGBillboardParticle_type;
+@synthesize position = _position;
+@synthesize uv = _uv;
+@synthesize model = _model;
+
++ (id)billboardParticleWithLifeLength:(float)lifeLength {
+    return [[EGBillboardParticle alloc] initWithLifeLength:lifeLength];
+}
+
+- (id)initWithLifeLength:(float)lifeLength {
+    self = [super initWithLifeLength:lifeLength];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGBillboardParticle_type = [ODClassType classTypeWithCls:[EGBillboardParticle class]];
+}
+
+- (CNVoidRefArray)writeToArray:(CNVoidRefArray)array {
+    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p1, _uv.p1)), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p2, _uv.p2)), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p3, _uv.p3)), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p4, _uv.p4));
+}
+
+- (BOOL)isLive {
+    @throw @"Method isLive is abstract";
+}
+
+- (ODClassType*)type {
+    return [EGBillboardParticle type];
+}
+
++ (ODClassType*)type {
+    return _EGBillboardParticle_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"lifeLength=%f", self.lifeLength];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGBillboardParticleSystemView{
+    EGSimpleMaterial* _material;
+    EGShader* _shader;
+    NSUInteger _vertexCount;
+}
+static ODClassType* _EGBillboardParticleSystemView_type;
+@synthesize material = _material;
+@synthesize shader = _shader;
+@synthesize vertexCount = _vertexCount;
+
++ (id)billboardParticleSystemViewWithMaterial:(EGSimpleMaterial*)material {
+    return [[EGBillboardParticleSystemView alloc] initWithMaterial:material];
+}
+
+- (id)initWithMaterial:(EGSimpleMaterial*)material {
+    self = [super init];
+    if(self) {
+        _material = material;
+        _shader = [EGBillboardShaderSystem.instance shaderForMaterial:_material];
+        _vertexCount = 4;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGBillboardParticleSystemView_type = [ODClassType classTypeWithCls:[EGBillboardParticleSystemView class]];
+}
+
+- (ODClassType*)type {
+    return [EGBillboardParticleSystemView type];
+}
+
++ (ODClassType*)type {
+    return _EGBillboardParticleSystemView_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGBillboardParticleSystemView* o = ((EGBillboardParticleSystemView*)(other));
+    return [self.material isEqual:o.material];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.material hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"material=%@", self.material];
     [description appendString:@">"];
     return description;
 }

@@ -46,30 +46,27 @@ class TRSmoke(weak train : TRTrain) extends EGParticleSystem<TRSmokeBufferData, 
     }
 }
 
-class TRSmokeParticle(texture : int) extends EGParticle<TRSmokeBufferData> {
+class TRSmokeParticle(texture : int) extends EGParticle(4) {
     var position : EGVec3
     var speed : EGVec3
-    var time : float4 = 0.0
-    static val lifeTime = 4
     static val dragCoefficient = 1 // air resistance coefficient | a = -dragCoefficient * sqr(speed)
 
     def updateWith(delta : float) {
+        super.updateWith(delta)
         val a = speed.mul(-dragCoefficient)
         speed = speed.add(a.mul(delta))
         position = position.add(speed.mul(delta))
-        time += delta
     }
-
-    def isLive = time < lifeTime
 
     static val particleSize : float4 = 0.03
     def writeTo(array : CNVoidRefArray) : CNVoidRefArray = {
+        val t = lifeTime
         val tx : float4 = if(texture >= 2) 0.5 else 0
         val ty : float4 = if(texture == 1 || texture == 3) 0.5 else 0
-        array.write(TRSmokeBufferData, TRSmokeBufferData(position, EGVec2(-particleSize, -particleSize), EGVec2(tx, ty), time))
-             .write(TRSmokeBufferData, TRSmokeBufferData(position, EGVec2(particleSize, -particleSize), EGVec2(tx + 0.5, ty), time))
-             .write(TRSmokeBufferData, TRSmokeBufferData(position, EGVec2(particleSize,  particleSize), EGVec2(tx + 0.5, ty + 0.5), time))
-             .write(TRSmokeBufferData, TRSmokeBufferData(position, EGVec2(-particleSize,  particleSize), EGVec2(tx, ty + 0.5), time))
+        array.write(TRSmokeBufferData, TRSmokeBufferData(position, EGVec2(-particleSize, -particleSize), EGVec2(tx, ty), t))
+             .write(TRSmokeBufferData, TRSmokeBufferData(position, EGVec2(particleSize, -particleSize), EGVec2(tx + 0.5, ty), t))
+             .write(TRSmokeBufferData, TRSmokeBufferData(position, EGVec2(particleSize,  particleSize), EGVec2(tx + 0.5, ty + 0.5), t))
+             .write(TRSmokeBufferData, TRSmokeBufferData(position, EGVec2(-particleSize,  particleSize), EGVec2(tx, ty + 0.5), t))
     }
 }
 

@@ -1,6 +1,8 @@
 import EGTypes
 import EGVec
 
+import EGParticleSystem
+
 
 class TRExplosion(position : EGVec3, size : float) extends EGController {
     private val flame = TRExplosionFlame(position, size)

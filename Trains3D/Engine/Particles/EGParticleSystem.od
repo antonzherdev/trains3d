@@ -27,15 +27,22 @@ class EGParticleSystem <P extends EGParticle> extends EGController {
     }
 }
 
-trait EGParticle extends EGController {
+class EGParticle(lifeLength : float4) extends EGController {
+    private var _lifeTime : float4
+    def lifeTime : float4 = _lifeTime
+
     def writeTo(array : CNVoidRefArray) : CNVoidRefArray
 
-    def isLive : bool
+    def isLive : bool  = _lifeTime <= lifeLength
+
+    def updateWith(delta : float) {
+        _lifeTime += delta
+    }
 }
 
 
 class EGParticleSystemView<P extends EGParticle>(dtp : ODPType<_>) {
-    val vertexBuffer = EGVertexBuffer<float4>(8*4)
+    val vertexBuffer = EGVertexBuffer<float4>(dtp.size)
     val indexBuffer = EGIndexBuffer<uint4>()
 
     def vertexCount : uint
