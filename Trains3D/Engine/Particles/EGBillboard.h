@@ -133,6 +133,7 @@ ODPType* egBillboardBufferDataType();
 + (id)billboardParticleSystemViewWithMaterial:(EGSimpleMaterial*)material;
 - (id)initWithMaterial:(EGSimpleMaterial*)material;
 - (ODClassType*)type;
+- (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i;
 + (ODClassType*)type;
 @end
 

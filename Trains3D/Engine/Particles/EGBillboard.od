@@ -117,4 +117,10 @@ class EGBillboardParticle(lifeLength : float4) extends EGParticle(lifeLength) {
 class EGBillboardParticleSystemView(material : EGSimpleMaterial) extends  EGParticleSystemView<EGBillboardParticle>(EGBillboardBufferData.type) {
     val shader : EGShader =  EGBillboardShaderSystem.instance.shaderFor(material)
     val vertexCount : uint = 4
+
+    def writeIndexesTo(indexPointer : CNVoidRefArray, i : uint4) : CNVoidRefArray = {
+        indexPointer
+            .write(uInt4 = i).write(uInt4 = i + 1).write(uInt4 = i + 2)
+            .write(uInt4 = i + 2).write(uInt4 = i).write(uInt4 = i + 3)
+    }
 }

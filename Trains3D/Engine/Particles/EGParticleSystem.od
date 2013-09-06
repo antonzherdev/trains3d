@@ -51,6 +51,7 @@ class EGParticleSystemView<P extends EGParticle>(dtp : ODPType<_>) {
     val indexBuffer = EGIndexBuffer<uint4>()
 
     def vertexCount : uint
+    def writeIndexesTo(indexPointer : CNVoidRefArray, i : uint4) : CNVoidRefArray
     def shader : EGShader
     def material : EGMaterial
 
@@ -72,16 +73,8 @@ class EGParticleSystemView<P extends EGParticle>(dtp : ODPType<_>) {
         var index : uint4 = 0
         particles.for{particle ->
             vertexPointer = particle.writeTo(vertexPointer)
-
-            var vci = vc - 2
-            while(vci > 0) {
-                indexPointer = indexPointer.write(uInt4 = index)
-                indexPointer = indexPointer.write(uInt4 = index + 1)
-                indexPointer = indexPointer.write(uInt4 = index + 2)
-                index++
-                vci--
-            }
-            index += 2
+            indexPointer = writeIndexesTo(indexPointer, index)
+            index += vc
         }
         vertexBuffer.set(dtp, array = vertexArr)
         indexBuffer.set(ODUInt4.type, array = indexArr)

@@ -188,6 +188,10 @@ static ODClassType* _EGParticleSystemView_type;
     @throw @"Method vertexCount is abstract";
 }
 
+- (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i {
+    @throw @"Method writeIndexesTo is abstract";
+}
+
 - (EGShader*)shader {
     @throw @"Method shader is abstract";
 }
@@ -212,15 +216,8 @@ static ODClassType* _EGParticleSystemView_type;
     __block unsigned int index = 0;
     [particles forEach:^void(id particle) {
         vertexPointer = [particle writeToArray:vertexPointer];
-        NSUInteger vci = vc - 2;
-        while(vci > 0) {
-            indexPointer = cnVoidRefArrayWriteUInt4(indexPointer, index);
-            indexPointer = cnVoidRefArrayWriteUInt4(indexPointer, index + 1);
-            indexPointer = cnVoidRefArrayWriteUInt4(indexPointer, index + 2);
-            index++;
-            vci--;
-        }
-        index += 2;
+        indexPointer = [self writeIndexesToIndexPointer:indexPointer i:index];
+        index += ((unsigned int)(vc));
     }];
     [_vertexBuffer setTp:_dtp array:vertexArr];
     [_indexBuffer setTp:oduInt4Type() array:indexArr];

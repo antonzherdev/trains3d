@@ -64,6 +64,7 @@
 - (id)initWithDtp:(ODPType*)dtp;
 - (ODClassType*)type;
 - (NSUInteger)vertexCount;
+- (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i;
 - (EGShader*)shader;
 - (EGMaterial*)material;
 - (void)drawSystem:(EGParticleSystem*)system;
