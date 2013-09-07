@@ -1,3 +1,5 @@
+package com.antonzherdev.trains
+
 import CNTest
 import CNSet
 

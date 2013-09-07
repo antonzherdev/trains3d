@@ -1,3 +1,5 @@
+package com.antonzherdev.trains
+
 import EGTypes
 import EGProcessor
 import EGTwoFingerTouchToMouse

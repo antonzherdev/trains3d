@@ -1,3 +1,5 @@
+package com.antonzherdev.trains
+
 import CNRange
 
 import EGTypes

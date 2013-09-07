@@ -1,9 +1,10 @@
+package com.antonzherdev.trains
+
 import EGTypes
 import EGMap
 import EGSchedule
 import EGVec
 
-import TRColor
 import TRTypes
 import TRRailPoint
 

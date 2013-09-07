@@ -1,3 +1,5 @@
+package com.antonzherdev.eg
+
 import EGTypes
 import EGProcessor
 import EG

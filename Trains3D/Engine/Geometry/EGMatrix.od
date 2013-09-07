@@ -1,3 +1,5 @@
+package com.antonzherdev.eg
+
 import EGVec
 
 stub class EGMatrix {

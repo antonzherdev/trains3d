@@ -1,3 +1,5 @@
+package com.antonzherdev.eg
+
 stub class EGTime {
     val delta : float
     def tick

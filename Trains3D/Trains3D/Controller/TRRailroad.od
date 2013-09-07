@@ -1,9 +1,10 @@
+package com.antonzherdev.trains
+
 import CNTreeMap
 
 import EGMap
 import EGMapIso
 import EGTypes
-import EGMapIsoTileIndex
 import EGVec
 
 import TRRailPoint
