@@ -23,8 +23,6 @@
 @class EGShaderUniform;
 @class EGShaderSystem;
 #import "EGVec.h"
-#import "CNTypes.h"
-@class EGMatrix;
 
 @class EGMapSso;
 @class EGMapSsoView;

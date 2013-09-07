@@ -26,6 +26,7 @@
 @class EGParticleSystem;
 @class EGParticle;
 @class EGParticleSystemView;
+#import "EGMaterial.h"
 @class TRTrainType;
 @class TRTrain;
 @class TREngineType;
@@ -36,9 +37,6 @@
 @class TRRailForm;
 @class TRRailPoint;
 @class TRRailPointCorrection;
-#import "CNTypes.h"
-#import "EGMaterial.h"
-#import "CNVoidRefArray.h"
 
 @class TRSmoke;
 @class TRSmokeParticle;

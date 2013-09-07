@@ -9,7 +9,6 @@
 @class EGSimpleColorShader;
 @class EGSimpleTextureShader;
 #import "EGTypes.h"
-#import "CNTypes.h"
 
 @class EGMesh;
 @class EGBuffer;

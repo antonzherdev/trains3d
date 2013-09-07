@@ -13,7 +13,6 @@
 @protocol EGMouseProcessor;
 @protocol EGTouchProcessor;
 @class EGEvent;
-@class EGMatrix;
 
 @class EGDirector;
 

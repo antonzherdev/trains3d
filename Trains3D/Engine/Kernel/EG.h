@@ -7,6 +7,7 @@
 #import "EGVec.h"
 #import "EGGL.h"
 #import "EGTypes.h"
+@class EGMatrix;
 
 @class EG;
 @class EGContext;

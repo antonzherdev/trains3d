@@ -9,7 +9,6 @@
 @class EGMatrixStack;
 @class EGMatrixModel;
 #import "EGVec.h"
-@class EGMatrix;
 
 @class EGLayer;
 

@@ -14,7 +14,6 @@
 @class EGBuffer;
 @class EGVertexBuffer;
 @class EGIndexBuffer;
-@class EGMatrix;
 
 @class EGSimpleShaderSystem;
 @class EGSimpleShader;

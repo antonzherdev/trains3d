@@ -10,7 +10,6 @@
 #import "EGParticleSystem.h"
 #import "CNVoidRefArray.h"
 #import "EGMaterial.h"
-@class EGMatrix;
 @class EGTexture;
 @class EGFileTexture;
 @class EGMesh;

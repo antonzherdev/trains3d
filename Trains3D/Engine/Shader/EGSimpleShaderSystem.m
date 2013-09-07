@@ -3,7 +3,6 @@
 #import "EG.h"
 #import "EGTexture.h"
 #import "EGMesh.h"
-#import "EGMatrix.h"
 @implementation EGSimpleShaderSystem
 static EGSimpleShaderSystem* _EGSimpleShaderSystem_instance;
 static EGSimpleColorShader* _EGSimpleShaderSystem_colorShader;

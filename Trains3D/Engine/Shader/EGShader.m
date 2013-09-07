@@ -5,6 +5,7 @@
 #import "EGMatrix.h"
 #import "EGMesh.h"
 #import "EGTexture.h"
+#import "EGMesh.h"
 @implementation EGShaderProgram{
     GLuint _handle;
 }

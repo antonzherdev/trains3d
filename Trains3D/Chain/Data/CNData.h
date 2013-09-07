@@ -2,9 +2,9 @@
 #import "ODType.h"
 #import "CNSeq.h"
 #import "CNCollection.h"
+#import "CNTypes.h"
 @class CNOption;
 @class CNChain;
-#import "CNTypes.h"
 
 @class CNPArray;
 @class CNPArrayIterator;

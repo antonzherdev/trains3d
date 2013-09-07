@@ -9,10 +9,9 @@ import EGMatrix
 import EGTypes
 import EGVec
 import EGMesh
-
-export EGMaterial
-export EGTexture
-export EGMesh
+import EGMaterial
+import EGTexture
+import EGMesh
 
 class EGShaderProgram(handle : GLuint) {
     static def loadFromFiles(vertex : string, fragment : string) : EGShaderProgram =

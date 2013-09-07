@@ -8,8 +8,7 @@ import EGMatrix
 import EGVec
 import EGGL
 import EGTypes
-
-export EGMatrix
+import EGMatrix
 
 class EG {
     static def director : EGDirector = context.director

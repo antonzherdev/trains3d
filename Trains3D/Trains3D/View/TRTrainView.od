@@ -6,6 +6,7 @@ import EGTypes
 import EGMesh
 import EGMaterial
 import EGMath
+import EGMatrix
 
 import TRTrain
 import TRTypes

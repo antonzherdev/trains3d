@@ -4,7 +4,7 @@ import ODType
 
 import CNSeq
 import CNCollection
-export CNTypes
+import CNTypes
 import CNOption
 import CNChain
 

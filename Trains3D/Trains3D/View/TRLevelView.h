@@ -19,7 +19,6 @@
 @class TRLightView;
 @class TRDamageView;
 @class TRTrainView;
-@class EGMatrix;
 
 @class TRLevelView;
 

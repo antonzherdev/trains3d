@@ -8,6 +8,7 @@ import EGTypes
 import EG
 import EGTexture
 import EGMaterial
+import EGMesh
 
 class EGSimpleShaderSystem extends EGShaderSystem<EGSimpleMaterial> {
     static val instance = EGSimpleShaderSystem()

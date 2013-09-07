@@ -11,10 +11,8 @@
 @class EGShaderAttribute;
 @class EGShaderUniform;
 @class EGShaderSystem;
-#import "CNVoidRefArray.h"
 #import "EGMaterial.h"
-@class EGTexture;
-@class EGFileTexture;
+#import "CNVoidRefArray.h"
 
 @class EGParticleSystem;
 @class EGParticle;

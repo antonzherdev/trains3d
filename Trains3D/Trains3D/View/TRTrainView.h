@@ -10,6 +10,7 @@
 @class EGVertexBuffer;
 @class EGIndexBuffer;
 #import "EGMaterial.h"
+@class EGMatrix;
 @class TRTrainType;
 @class TRTrain;
 @class TREngineType;
@@ -25,9 +26,6 @@
 @class TRSmoke;
 @class TRSmokeParticle;
 @class TRSmokeView;
-@class EGMatrix;
-@class EGTexture;
-@class EGFileTexture;
 
 @class TRTrainView;
 

@@ -6,6 +6,7 @@ import EGVec
 import EGBillboard
 import EG
 import EGSchedule
+import EGMaterial
 import EGProgress
 
 

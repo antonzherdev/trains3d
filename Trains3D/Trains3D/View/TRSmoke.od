@@ -13,6 +13,7 @@ import EGMesh
 import EGVec
 import EGBillboard
 import EGParticleSystem
+import EGMaterial
 
 import TRTrain
 import TRRailPoint

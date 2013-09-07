@@ -7,6 +7,8 @@ import EGVec
 import EGTypes
 import EGTexture
 import EGGL
+import EGMesh
+import EGMatrix
 
 class EGStandardShaderSystem extends EGShaderSystem<EGStandardMaterial> {
     static val instance = EGStandardShaderSystem()

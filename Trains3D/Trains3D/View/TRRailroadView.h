@@ -11,7 +11,12 @@
 @class EGTexture;
 @class EGFileTexture;
 #import "EGMaterial.h"
+@class EG;
+@class EGContext;
+@class EGMatrixStack;
+@class EGMatrixModel;
 #import "EGTypes.h"
+@class EGMatrix;
 @class TRRailroadConnectorContent;
 @class TREmptyConnector;
 @class TRRail;
@@ -26,7 +31,6 @@
 @class TRRailPoint;
 @class TRRailPointCorrection;
 @class TR3D;
-@class EGMatrix;
 
 @class TRRailroadView;
 @class TRRailView;

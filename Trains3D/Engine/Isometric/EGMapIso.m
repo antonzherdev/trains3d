@@ -8,7 +8,6 @@
 #import "EGMesh.h"
 #import "EGTexture.h"
 #import "EGShader.h"
-#import "EGMatrix.h"
 @implementation EGMapSso{
     EGVec2I _size;
     EGRectI _limits;

@@ -5,7 +5,6 @@
 #import "EGStat.h"
 #import "EG.h"
 #import "EGProcessor.h"
-#import "EGMatrix.h"
 @implementation EGDirector{
     EGScene* _scene;
     BOOL __isStarted;

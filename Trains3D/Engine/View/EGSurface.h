@@ -11,7 +11,6 @@
 @class EGShaderAttribute;
 @class EGShaderUniform;
 @class EGShaderSystem;
-#import "EGMaterial.h"
 
 @class EGSurface;
 @class EGSurfaceShader;

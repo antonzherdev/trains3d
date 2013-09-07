@@ -1,7 +1,7 @@
 import ODType
 
 import CNData
-export CNTypes
+import CNTypes
 
 
 stub struct CNVoidRefArray(length : uint, bytes : VoidRef)

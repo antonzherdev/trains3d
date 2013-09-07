@@ -3,13 +3,12 @@
 #import "EG.h"
 #import "EGMesh.h"
 #import "EGMath.h"
+#import "EGMatrix.h"
 #import "TRTrain.h"
 #import "TRTypes.h"
 #import "TRRailPoint.h"
 #import "TR3D.h"
 #import "TRSmoke.h"
-#import "EGMatrix.h"
-#import "EGTexture.h"
 @implementation TRTrainView{
     TRSmokeView* _smokeView;
     EGStandardMaterial* _blackMaterial;

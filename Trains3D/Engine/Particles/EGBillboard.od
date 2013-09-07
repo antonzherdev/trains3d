@@ -5,10 +5,11 @@ import EGGL
 import EGVec
 import EGShader
 import EGTypes
-
-export EGParticleSystem
-export CNVoidRefArray
-export EGMaterial
+import EGParticleSystem
+import CNVoidRefArray
+import EGMaterial
+import EGTexture
+import EGMesh
 
 class EGBillboardShaderSystem extends EGShaderSystem<EGSimpleMaterial> {
     static val instance = EGBillboardShaderSystem()

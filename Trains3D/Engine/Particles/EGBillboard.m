@@ -1,7 +1,6 @@
 #import "EGBillboard.h"
 
 #import "EG.h"
-#import "EGMatrix.h"
 #import "EGTexture.h"
 #import "EGMesh.h"
 @implementation EGBillboardShaderSystem

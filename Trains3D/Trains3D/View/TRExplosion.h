@@ -8,13 +8,8 @@
 @class EGMatrixModel;
 @class EGSchedule;
 @class EGAnimation;
-@class EGProgress;
-@class EGParticleSystem;
-@class EGParticle;
-@class EGParticleSystemView;
-#import "CNVoidRefArray.h"
 #import "EGMaterial.h"
-@class EGMatrix;
+@class EGProgress;
 
 @class TRExplosion;
 @class TRExplosionFlame;

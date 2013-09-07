@@ -23,8 +23,6 @@
 @class EGStandardShader;
 @class EGTexture;
 @class EGFileTexture;
-@class EGMatrix;
-#import "EGMaterial.h"
 
 @class EGColorSource;
 @class EGColorSourceColor;

@@ -3,11 +3,11 @@
 #import "EG.h"
 #import "EGSchedule.h"
 #import "EGMesh.h"
+#import "EG.h"
+#import "EGMatrix.h"
 #import "TRCity.h"
 #import "TRTypes.h"
 #import "TR3D.h"
-#import "EGMatrix.h"
-#import "EGTexture.h"
 @implementation TRCityView{
     EGMesh* _expectedTrainModel;
 }

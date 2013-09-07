@@ -2,7 +2,6 @@
 
 #import "EGMesh.h"
 #import "EGShader.h"
-#import "EGTexture.h"
 @implementation EGParticleSystem{
     CNList* __particles;
 }

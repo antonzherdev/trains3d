@@ -3,8 +3,6 @@
 #import "EG.h"
 #import "EGSchedule.h"
 #import "EGProgress.h"
-#import "EGParticleSystem.h"
-#import "EGMatrix.h"
 @implementation TRExplosion{
     EGVec3 _position;
     float _size;

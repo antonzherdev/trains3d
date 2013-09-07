@@ -3,10 +3,11 @@
 #import "EGMesh.h"
 #import "EG.h"
 #import "EGTexture.h"
+#import "EG.h"
+#import "EGMatrix.h"
 #import "TRRailroad.h"
 #import "TRRailPoint.h"
 #import "TR3D.h"
-#import "EGMatrix.h"
 @implementation TRRailroadView{
     TRRailView* _railView;
     TRSwitchView* _switchView;

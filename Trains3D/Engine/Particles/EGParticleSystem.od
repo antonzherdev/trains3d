@@ -6,8 +6,8 @@ import EGGL
 import EGTypes
 import EGMesh
 import EGShader
-
-export CNVoidRefArray
+import EGMaterial
+import CNVoidRefArray
 
 
 class EGParticleSystem <P extends EGParticle> extends EGController {

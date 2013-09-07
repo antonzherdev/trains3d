@@ -10,7 +10,6 @@
 @class EGMapSso;
 @class EGMapSsoView;
 #import "EGMaterial.h"
-@class EGMatrix;
 
 @class TRLevelBackgroundView;
 
