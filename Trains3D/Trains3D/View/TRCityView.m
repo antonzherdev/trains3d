@@ -3,7 +3,6 @@
 #import "EG.h"
 #import "EGSchedule.h"
 #import "EGMesh.h"
-#import "EG.h"
 #import "EGMatrix.h"
 #import "TRCity.h"
 #import "TRTypes.h"

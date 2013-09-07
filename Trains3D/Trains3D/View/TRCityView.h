@@ -11,10 +11,6 @@
 @class EGVertexBuffer;
 @class EGIndexBuffer;
 #import "EGTypes.h"
-@class EG;
-@class EGContext;
-@class EGMatrixStack;
-@class EGMatrixModel;
 #import "EGMaterial.h"
 @class EGMatrix;
 @class TRCityAngle;

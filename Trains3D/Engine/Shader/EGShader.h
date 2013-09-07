@@ -16,10 +16,6 @@
 #import "EGMaterial.h"
 @class EGTexture;
 @class EGFileTexture;
-@class EGMesh;
-@class EGBuffer;
-@class EGVertexBuffer;
-@class EGIndexBuffer;
 
 @class EGShaderProgram;
 @class EGShader;

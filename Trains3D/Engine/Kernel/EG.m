@@ -4,7 +4,6 @@
 #import "EGDirector.h"
 #import "EGTexture.h"
 #import "EGMatrix.h"
-#import "EGMatrix.h"
 @implementation EG
 static EGContext* _EG_context;
 static EGMatrixStack* _EG_matrix;

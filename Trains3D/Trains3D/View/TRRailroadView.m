@@ -3,7 +3,6 @@
 #import "EGMesh.h"
 #import "EG.h"
 #import "EGTexture.h"
-#import "EG.h"
 #import "EGMatrix.h"
 #import "TRRailroad.h"
 #import "TRRailPoint.h"
