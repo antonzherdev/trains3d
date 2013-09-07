@@ -1,5 +1,6 @@
 #import "CNTypes.h"
 #import "CNZipLink.h"
+#import "CNCollection.h"
 
 
 @implementation CNZipLink {

@@ -1,6 +1,10 @@
 #import "objdcore.h"
 @class CNChain;
-#import "CNSeq.h"
+@protocol CNSeq;
+@protocol CNMutableSeq;
+@class NSArray;
+@class NSMutableArray;
+@class CNArrayBuilder;
 
 @class CNSortBuilder;
 

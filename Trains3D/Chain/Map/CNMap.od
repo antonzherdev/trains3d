@@ -3,7 +3,6 @@ package core.chain
 import CNCollection
 import CNChain
 import CNTuple
-import "CNOption.h"
 
 trait CNMap<K, V> extends CNIterable<(K, V)> {
     def apply(key : K) : V?

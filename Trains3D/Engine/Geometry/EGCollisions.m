@@ -1,6 +1,7 @@
 #import "EGCollisions.h"
 
 #import "CNPair.h"
+#import "CNSet.h"
 #import "EGFigure.h"
 #import "EGBentleyOttmann.h"
 @implementation EGCollisions

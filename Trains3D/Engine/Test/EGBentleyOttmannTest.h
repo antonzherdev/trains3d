@@ -19,7 +19,11 @@
 @class EGThickLineSegment;
 #import "EGTypes.h"
 #import "EGVec.h"
-#import "CNSet.h"
+@protocol CNSet;
+@protocol CNMutableSet;
+@class CNHashSetBuilder;
+@class NSSet;
+@class NSMutableSet;
 
 @class EGBentleyOttmannTest;
 

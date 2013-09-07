@@ -1,6 +1,8 @@
 #import <Foundation/Foundation.h>
 #import "CNTypes.h"
 
+@protocol CNIterable;
+
 
 @interface CNZipLink : NSObject <CNChainLink>
 - (id)initWithA:(id <CNIterable>)a by:(cnF2)f;

@@ -1,7 +1,6 @@
 package core.chain
 
 import CNCollection
-import "NSMutableSet+CNChain.h"
 
 trait CNSet<T> extends CNIterable<T> {}
 

@@ -1,7 +1,11 @@
 #import "objd.h"
 @class CNPair;
 @class CNPairIterator;
-#import "CNSet.h"
+@protocol CNSet;
+@protocol CNMutableSet;
+@class CNHashSetBuilder;
+@class NSSet;
+@class NSMutableSet;
 @class EGLine;
 @class EGSlopeLine;
 @class EGVerticalLine;

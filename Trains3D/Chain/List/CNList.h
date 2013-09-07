@@ -3,6 +3,11 @@
 #import "CNSeq.h"
 @class CNOption;
 @class CNChain;
+@protocol CNSet;
+@protocol CNMutableSet;
+@class CNHashSetBuilder;
+@class NSSet;
+@class NSMutableSet;
 
 @class CNList;
 @class CNFilledList;

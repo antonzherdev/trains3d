@@ -1,6 +1,12 @@
 #import "objd.h"
-#import "CNTreeMap.h"
-#import "CNTreeSet.h"
+@class CNMutableTreeMap;
+@class CNTreeMapEntry;
+@class CNTreeMapKeySet;
+@class CNTreeMapKeyIterator;
+@class CNTreeMapValues;
+@class CNTreeMapValuesIterator;
+@class CNTreeMapIterator;
+@class CNMutableTreeSet;
 @protocol CNIterator;
 @protocol CNBuilder;
 @protocol CNTraversable;
@@ -9,7 +15,11 @@
 @protocol CNMutableIterable;
 @class CNPair;
 @class CNPairIterator;
-#import "CNSet.h"
+@protocol CNSet;
+@protocol CNMutableSet;
+@class CNHashSetBuilder;
+@class NSSet;
+@class NSMutableSet;
 #import "EGVec.h"
 #import "EGTypes.h"
 @class EGLine;

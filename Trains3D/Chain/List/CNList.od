@@ -4,7 +4,7 @@ import CNCollection
 import CNSeq
 import CNOption
 import CNChain
-import "NSArray+CNChain.h"
+import CNSet
 
 class CNList<T> extends CNSeq<T> {
     static def apply<T> : CNList<T> = CNEmptyList.instance

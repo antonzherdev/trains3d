@@ -1,5 +1,6 @@
 #import "TRCollisionsTest.h"
 
+#import "CNSet.h"
 #import "EGCollisions.h"
 #import "TRTypes.h"
 #import "TRLevel.h"

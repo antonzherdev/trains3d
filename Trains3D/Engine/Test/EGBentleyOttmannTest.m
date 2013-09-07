@@ -3,6 +3,7 @@
 #import "EGBentleyOttmann.h"
 #import "CNPair.h"
 #import "EGFigure.h"
+#import "CNSet.h"
 @implementation EGBentleyOttmannTest
 static ODClassType* _EGBentleyOttmannTest_type;
 

@@ -1,3 +1,4 @@
+#import "objd.h"
 #import "CNLazy.h"
 
 @implementation CNLazy{

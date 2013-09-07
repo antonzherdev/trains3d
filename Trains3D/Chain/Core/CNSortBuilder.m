@@ -1,8 +1,8 @@
+#import "objd.h"
 #import "CNSortBuilder.h"
-#import "NSMutableArray+CNChain.h"
-#import "ODObject.h"
 
 #import "CNChain.h"
+#import "CNSeq.h"
 @implementation CNSortBuilder{
     CNChain* _chain;
     NSMutableArray* _functions;

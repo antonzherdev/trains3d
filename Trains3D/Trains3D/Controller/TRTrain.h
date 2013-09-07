@@ -1,5 +1,9 @@
 #import "objd.h"
-#import "CNSeq.h"
+@protocol CNSeq;
+@protocol CNMutableSeq;
+@class NSArray;
+@class NSMutableArray;
+@class CNArrayBuilder;
 #import "EGTypes.h"
 @class EGMapSso;
 @class EGMapSsoView;

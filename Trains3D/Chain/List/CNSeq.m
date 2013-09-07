@@ -1,8 +1,8 @@
+#import "objd.h"
 #import "CNSeq.h"
-#import "cnTypes.h"
-#import "NSMutableArray+CNChain.h"
 
 #import "CNChain.h"
+#import "CNSet.h"
 @implementation CNArrayBuilder{
     NSMutableArray* _array;
 }

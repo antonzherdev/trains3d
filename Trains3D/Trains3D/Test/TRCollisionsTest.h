@@ -1,6 +1,10 @@
 #import "objd.h"
 #import "CNTest.h"
-#import "CNSet.h"
+@protocol CNSet;
+@protocol CNMutableSet;
+@class CNHashSetBuilder;
+@class NSSet;
+@class NSMutableSet;
 #import "EGTypes.h"
 @class EGCollisions;
 @class EGCollision;

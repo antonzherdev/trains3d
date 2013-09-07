@@ -1,5 +1,6 @@
 #import "TRTrain.h"
 
+#import "CNSeq.h"
 #import "EGMapIso.h"
 #import "EGFigure.h"
 #import "TRTypes.h"

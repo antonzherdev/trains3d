@@ -1,6 +1,8 @@
 #import "TRLevel.h"
 
 #import "CNChain.h"
+#import "CNSortBuilder.h"
+#import "CNSet.h"
 #import "EGMapIso.h"
 #import "EGCollisions.h"
 #import "EGSchedule.h"
@@ -141,7 +143,7 @@ static ODClassType* _TRLevel_type;
 
 - (EGSchedule*)createSchedule {
     EGSchedule* schedule = [EGSchedule schedule];
-    self.createNewCity;
+    [self createNewCity];
     self.createNewCity;
     [_rules.events forEach:^void(CNTuple* t) {
         void(^f)(TRLevel*) = t.b;

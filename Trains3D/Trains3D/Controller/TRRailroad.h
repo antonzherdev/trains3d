@@ -1,5 +1,11 @@
 #import "objd.h"
-#import "CNTreeMap.h"
+@class CNMutableTreeMap;
+@class CNTreeMapEntry;
+@class CNTreeMapKeySet;
+@class CNTreeMapKeyIterator;
+@class CNTreeMapValues;
+@class CNTreeMapValuesIterator;
+@class CNTreeMapIterator;
 @class EGMapSso;
 @class EGMapSsoView;
 #import "EGTypes.h"

@@ -1,5 +1,5 @@
+#import "objd.h"
 #import "CNSet.h"
-#import "NSMutableSet+CNChain.h"
 
 @implementation CNHashSetBuilder{
     NSMutableSet* _set;

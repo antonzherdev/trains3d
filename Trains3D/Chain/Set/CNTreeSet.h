@@ -1,5 +1,11 @@
 #import "objdcore.h"
-#import "CNTreeMap.h"
+@class CNMutableTreeMap;
+@class CNTreeMapEntry;
+@class CNTreeMapKeySet;
+@class CNTreeMapKeyIterator;
+@class CNTreeMapValues;
+@class CNTreeMapValuesIterator;
+@class CNTreeMapIterator;
 @protocol CNIterator;
 @protocol CNBuilder;
 @protocol CNTraversable;
@@ -7,7 +13,11 @@
 @protocol CNIterable;
 @protocol CNMutableIterable;
 #import "CNSet.h"
-#import "CNSeq.h"
+@protocol CNSeq;
+@protocol CNMutableSeq;
+@class NSArray;
+@class NSMutableArray;
+@class CNArrayBuilder;
 @class CNChain;
 @class CNOption;
 

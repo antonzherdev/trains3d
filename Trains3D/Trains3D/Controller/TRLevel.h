@@ -1,7 +1,11 @@
 #import "objd.h"
 @class CNChain;
-#import "CNSortBuilder.h"
-#import "CNSet.h"
+@class CNSortBuilder;
+@protocol CNSet;
+@protocol CNMutableSet;
+@class CNHashSetBuilder;
+@class NSSet;
+@class NSMutableSet;
 #import "EGTypes.h"
 @class EGMapSso;
 @class EGMapSsoView;

@@ -1,6 +1,8 @@
+#import "objd.h"
 #import "CNTuple.h"
 
 #import "CNOption.h"
+#import "CNSeq.h"
 @implementation CNTuple{
     id _a;
     id _b;
