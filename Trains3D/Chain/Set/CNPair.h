@@ -1,4 +1,4 @@
-#import "objd.h"
+#import "objdcore.h"
 #import "CNCollection.h"
 #import "CNSet.h"
 

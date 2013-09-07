@@ -1,3 +1,4 @@
+#import "objd.h"
 #import "CNPair.h"
 
 @implementation CNPair{

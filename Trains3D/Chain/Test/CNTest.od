@@ -1,3 +1,5 @@
+package core.chain
+
 stub class SenTestCase
 
 stub def STAssertEquals<T>(a: T, b : T, s : string)
