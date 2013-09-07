@@ -6,6 +6,9 @@
 @class EGContext;
 @class EGMatrixStack;
 @class EGMatrixModel;
+@class EGSchedule;
+@class EGAnimation;
+@class EGProgress;
 @class EGParticleSystem;
 @class EGParticle;
 @class EGParticleSystemView;
@@ -48,9 +51,11 @@
 
 @interface TRExplosionFlameParticle : EGBillboardParticle
 @property (nonatomic, readonly) float size;
+@property (nonatomic, readonly) EGVec2 shift;
+@property (nonatomic, readonly) EGVec4 startColor;
 
-+ (id)explosionFlameParticleWithSize:(float)size;
-- (id)initWithSize:(float)size;
++ (id)explosionFlameParticleWithSize:(float)size shift:(EGVec2)shift;
+- (id)initWithSize:(float)size shift:(EGVec2)shift;
 - (ODClassType*)type;
 + (TRExplosionFlameParticle*)applyPosition:(EGVec3)position size:(float)size;
 - (void)updateT:(float)t dt:(float)dt;

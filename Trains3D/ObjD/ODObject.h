@@ -52,7 +52,15 @@ static inline NSInteger uintCompareTo(NSUInteger a, NSUInteger b) {
     return a < b ? -1 : (a > b ? 1 : 0);
 }
 
-static inline BOOL floatBetween(double s, double a, double b) {
+static inline BOOL floatBetween(CGFloat s, CGFloat a, CGFloat b) {
+    return a <= s && s <= b;
+}
+
+static inline BOOL float4Between(float s, float a, float b) {
+    return a <= s && s <= b;
+}
+
+static inline BOOL float8Between(double s, double a, double b) {
     return a <= s && s <= b;
 }
 

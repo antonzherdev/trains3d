@@ -1,0 +1,21 @@
+package com.antonzherdev.eg
+
+import CNOption
+
+object EGProgress {
+    def progress(y1 : float4, y2 : float4) : float4 -> float4 = {
+        val k = (y2 - y1)
+        t : float4 -> {k*t + y1}
+    }
+
+    def gap(t1 : float4, t2 : float4) : float4 -> float4? = {
+        val l = t2 - t1
+        t : float4 ->
+            if(t.between(t1, t2)) CNOption.some((t - t1)/l)
+            else CNOption.none<float4>
+    }
+
+    def compile(functions : [float4 -> void]) : float4 -> void =
+    t : float4 -> {functions.for(_(t))}
+
+}

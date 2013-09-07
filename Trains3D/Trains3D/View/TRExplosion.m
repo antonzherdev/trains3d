@@ -1,6 +1,8 @@
 #import "TRExplosion.h"
 
 #import "EG.h"
+#import "EGSchedule.h"
+#import "EGProgress.h"
 #import "EGParticleSystem.h"
 #import "EGMatrix.h"
 @implementation TRExplosion{
@@ -159,18 +161,26 @@ static ODClassType* _TRExplosionFlame_type;
 
 @implementation TRExplosionFlameParticle{
     float _size;
+    EGVec2 _shift;
+    EGVec4 _startColor;
 }
 static EGQuadrant _TRExplosionFlameParticle_textureQuadrant;
 static ODClassType* _TRExplosionFlameParticle_type;
 @synthesize size = _size;
+@synthesize shift = _shift;
+@synthesize startColor = _startColor;
 
-+ (id)explosionFlameParticleWithSize:(float)size {
-    return [[TRExplosionFlameParticle alloc] initWithSize:size];
++ (id)explosionFlameParticleWithSize:(float)size shift:(EGVec2)shift {
+    return [[TRExplosionFlameParticle alloc] initWithSize:size shift:shift];
 }
 
-- (id)initWithSize:(float)size {
-    self = [super initWithLifeLength:4.0];
-    if(self) _size = size;
+- (id)initWithSize:(float)size shift:(EGVec2)shift {
+    self = [super initWithLifeLength:1.0];
+    if(self) {
+        _size = size;
+        _shift = shift;
+        _startColor = EGVec4Make(1.0, 0.7, 0.0, 0.5);
+    }
     
     return self;
 }
@@ -182,7 +192,7 @@ static ODClassType* _TRExplosionFlameParticle_type;
 }
 
 + (TRExplosionFlameParticle*)applyPosition:(EGVec3)position size:(float)size {
-    TRExplosionFlameParticle* ret = [TRExplosionFlameParticle explosionFlameParticleWithSize:size];
+    TRExplosionFlameParticle* ret = [TRExplosionFlameParticle explosionFlameParticleWithSize:size shift:EGVec2Make(((float)(randomFloatGap(0.0, 0.1 * size))), ((float)(randomFloatGap(0.0, 0.1 * size))))];
     ret.position = position;
     ret.color = EGVec4Make(1.0, 0.7, 0.0, 0.5);
     ret.uv = egQuadrantRandomQuad(_TRExplosionFlameParticle_textureQuadrant);
@@ -214,18 +224,20 @@ static ODClassType* _TRExplosionFlameParticle_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRExplosionFlameParticle* o = ((TRExplosionFlameParticle*)(other));
-    return eqf4(self.size, o.size);
+    return eqf4(self.size, o.size) && EGVec2Eq(self.shift, o.shift);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + float4Hash(self.size);
+    hash = hash * 31 + EGVec2Hash(self.shift);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"size=%f", self.size];
+    [description appendFormat:@", shift=%@", EGVec2Description(self.shift)];
     [description appendString:@">"];
     return description;
 }

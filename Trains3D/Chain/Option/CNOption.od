@@ -1,6 +1,9 @@
 package core
 
 stub class CNOption<V> {
+    static def none<V> : V?
+    static def some<V>(: V) : V?
+
     def get : V
     def getOrElse(: () -> V) : V
     def getOr(: V) : V

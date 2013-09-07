@@ -131,6 +131,7 @@
 		6F3DF5AE8C7CF8E5EEBFEEE5 /* reciprocal.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF6C76FC145E0BBAF8CDF /* reciprocal.inl */; };
 		6F3DF5B8922AE637B43642E1 /* TRRailroadBuilderProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF37F737A3145F69F8298 /* TRRailroadBuilderProcessor.m */; };
 		6F3DF5BF04BE2B8C12922BA6 /* CNTreeMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF61F6AC6163A38816654 /* CNTreeMap.m */; };
+		6F3DF5C5233B98B0C83893A7 /* EGProgress.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFC08459F125194A91B39 /* EGProgress.od */; };
 		6F3DF5C63790425F8F8EB5CD /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F3DF60FCB04B7E52FECB861 /* GLUT.framework */; };
 		6F3DF5C76F75F828CE9CD2F0 /* EGFigure.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF170190413B8F6FEABEB /* EGFigure.od */; };
 		6F3DF5D90987A4446D4A3B9F /* matrix_access.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFB000969082C9EEAC6B0 /* matrix_access.inl */; };
@@ -187,6 +188,7 @@
 		6F3DF853FA57B8BEE900DA27 /* KWMatcherFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFFB07075D0B621DA115 /* KWMatcherFactory.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF85C9B44831A893CD33A /* KWCallSite.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF09F4DC5C8503452E941 /* KWCallSite.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF85DF7958BF013E5B1C2 /* KWGenericMatchEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC506DF7AFF339438CBF /* KWGenericMatchEvaluator.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		6F3DF866312F16371AE001CB /* EGProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF54466337FFA2B6FB465 /* EGProgress.m */; };
 		6F3DF869C3C6E2DE9EE9E4C7 /* intersect.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF307504747634D59E3B1 /* intersect.inl */; };
 		6F3DF8735E29864F38A6AD83 /* EGCameraIso.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF3C7B0EE49FD496C5709 /* EGCameraIso.od */; };
 		6F3DF8784CC3ABA3DEE7980C /* CNReverseLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF5D30EBF50722D5A00BA /* CNReverseLink.m */; };
@@ -618,6 +620,8 @@
 		6F3DF539C1DCB1A0FA0BA2D6 /* TRLevelMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRLevelMenuView.m; sourceTree = "<group>"; };
 		6F3DF53A3A2C4DD2AF0B54A2 /* type_gentype.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_gentype.hpp; sourceTree = "<group>"; };
 		6F3DF5426C4F02CCF2F83213 /* TRLevelBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRLevelBackgroundView.m; sourceTree = "<group>"; };
+		6F3DF542A0C47CCD8CB281A0 /* EGProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGProgress.h; sourceTree = "<group>"; };
+		6F3DF54466337FFA2B6FB465 /* EGProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGProgress.m; sourceTree = "<group>"; };
 		6F3DF54DBF83013B0177F022 /* EGFigureTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGFigureTest.h; sourceTree = "<group>"; };
 		6F3DF551B72D813646EAD499 /* KWBeNilMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWBeNilMatcher.m; sourceTree = "<group>"; };
 		6F3DF555417A6C054D259F93 /* orthonormalize.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = orthonormalize.inl; sourceTree = "<group>"; };
@@ -923,6 +927,7 @@
 		6F3DFC0229D6D74D6F0B677F /* KWMock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWMock.h; sourceTree = "<group>"; };
 		6F3DFC02D9E03D0658162F27 /* matrix_operation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = matrix_operation.hpp; sourceTree = "<group>"; };
 		6F3DFC034EF43DAEC53C642E /* EGCollisionsTest.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGCollisionsTest.od; sourceTree = "<group>"; };
+		6F3DFC08459F125194A91B39 /* EGProgress.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = EGProgress.od; sourceTree = "<group>"; };
 		6F3DFC0CA904EE3BFD1368E3 /* EGCamera2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGCamera2D.h; sourceTree = "<group>"; };
 		6F3DFC0D21FEC5A694BED172 /* CNChainSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNChainSpec.m; sourceTree = "<group>"; };
 		6F3DFC10AAF2EA07B7086A8D /* TRRailPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRRailPoint.m; sourceTree = "<group>"; };
@@ -1921,6 +1926,9 @@
 				6F3DFCB4E8FA8114ED7BF41E /* EGSchedule.od */,
 				6F3DF77CAEC93D711CCF53A7 /* EGSchedule.h */,
 				6F3DF9EA2E28CC61810D9757 /* EGSchedule.m */,
+				6F3DFC08459F125194A91B39 /* EGProgress.od */,
+				6F3DF542A0C47CCD8CB281A0 /* EGProgress.h */,
+				6F3DF54466337FFA2B6FB465 /* EGProgress.m */,
 			);
 			path = Time;
 			sourceTree = "<group>";
@@ -2470,6 +2478,7 @@
 				6F3DF8E7877B4527AD5F3FC9 /* EGBillboard.od in Resources */,
 				6F3DFDFAC9A51112C7711303 /* CNLazy.od in Resources */,
 				6F3DF2C53BCEBE96EBFEE8B8 /* EGParticleSystem.od in Resources */,
+				6F3DF5C5233B98B0C83893A7 /* EGProgress.od in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2605,6 +2614,7 @@
 				6F3DFF861A5265A644C637ED /* EGParticleSystem.m in Sources */,
 				6F3DF73DF156A2CE68F03ADC /* CNVoidRefArray.m in Sources */,
 				6F3DF3D165FD591CF46D296D /* TRExplosion.m in Sources */,
+				6F3DF866312F16371AE001CB /* EGProgress.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
