@@ -117,7 +117,7 @@ static ODClassType* _TRExplosionFlame_type;
 
 - (TRExplosionFlame*)init {
     [intRange(4) forEach:^void(id _) {
-        self.emitParticle;
+        [self emitParticle];
     }];
     return self;
 }

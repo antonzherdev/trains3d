@@ -599,7 +599,7 @@ static ODClassType* _TRRailroad_type;
         [self connectRail:rail to:rail.form.end];
         [self buildLightsForTile:rail.tile connector:rail.form.start];
         [self buildLightsForTile:rail.tile connector:rail.form.end];
-        self.rebuildArrays;
+        [self rebuildArrays];
         [_score railBuilt];
         return YES;
     } else {

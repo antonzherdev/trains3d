@@ -33,4 +33,13 @@
     }
     return v;
 }
+
+- (void)addObject:(CNTuple *)object {
+    [self setObject:object.b forKey:object.a];
+}
+
+- (void)removeObject:(CNTuple *)object {
+    [self removeObjectForKey:object.a];
+}
+
 @end

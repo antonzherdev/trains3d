@@ -77,7 +77,7 @@ static ODClassType* _EGLine_type;
 }
 
 - (CGFloat)degreeAngle {
-    return self.angle * 180 / M_PI;
+    return [self angle] * 180 / M_PI;
 }
 
 - (EGLine*)perpendicularWithPoint:(EGVec2)point {
@@ -385,7 +385,7 @@ static ODClassType* _EGLineSegment_type;
 }
 
 - (BOOL)containsPoint:(EGVec2)point {
-    return EGVec2Eq(_p1, point) || EGVec2Eq(_p2, point) || ([self.line containsPoint:point] && egRectContainsPoint(_boundingRect, point));
+    return EGVec2Eq(_p1, point) || EGVec2Eq(_p2, point) || ([[self line] containsPoint:point] && egRectContainsPoint(_boundingRect, point));
 }
 
 - (BOOL)containsInBoundingRectPoint:(EGVec2)point {
@@ -400,14 +400,14 @@ static ODClassType* _EGLineSegment_type;
             return [CNOption opt:wrap(EGVec2, _p2)];
         } else {
             if(EGVec2Eq(_p1, segment.p1)) {
-                if([self.line isEqual:[segment line]]) return [CNOption none];
+                if([[self line] isEqual:[segment line]]) return [CNOption none];
                 else return [CNOption opt:wrap(EGVec2, _p1)];
             } else {
                 if(EGVec2Eq(_p2, segment.p2)) {
-                    if([self.line isEqual:[segment line]]) return [CNOption none];
+                    if([[self line] isEqual:[segment line]]) return [CNOption none];
                     else return [CNOption opt:wrap(EGVec2, _p2)];
                 } else {
-                    return [[self.line intersectionWithLine:[segment line]] filter:^BOOL(id p) {
+                    return [[[self line] intersectionWithLine:[segment line]] filter:^BOOL(id p) {
                         return [self containsInBoundingRectPoint:uwrap(EGVec2, p)] && [segment containsInBoundingRectPoint:uwrap(EGVec2, p)];
                     }];
                 }

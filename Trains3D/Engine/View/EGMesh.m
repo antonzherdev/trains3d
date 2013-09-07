@@ -156,9 +156,9 @@ static ODClassType* _EGBuffer_type;
 }
 
 - (void)applyDraw:(void(^)())draw {
-    self.bind;
+    [self bind];
     ((void(^)())(draw))();
-    self.unbind;
+    [self unbind];
 }
 
 - (ODClassType*)type {
@@ -284,19 +284,19 @@ static ODClassType* _EGIndexBuffer_type;
 }
 
 - (void)draw {
-    self.bind;
-    glDrawElements(GL_TRIANGLES, self.count, GL_UNSIGNED_INT, 0);
-    self.unbind;
+    [self bind];
+    glDrawElements(GL_TRIANGLES, [self count], GL_UNSIGNED_INT, 0);
+    [self unbind];
 }
 
 - (void)drawByQuads {
-    self.bind;
+    [self bind];
     NSInteger i = 0;
-    while(i + 6 <= self.count) {
+    while(i + 6 <= [self count]) {
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 4 * i);
         i += 6;
     }
-    self.unbind;
+    [self unbind];
 }
 
 - (ODClassType*)type {

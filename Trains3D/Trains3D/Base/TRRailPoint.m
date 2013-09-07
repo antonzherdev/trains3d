@@ -241,7 +241,7 @@ static ODClassType* _TRRailPoint_type;
         _form = form;
         _x = x;
         _back = back;
-        _point = self.calculatePoint;
+        _point = [self calculatePoint];
     }
     
     return self;
@@ -292,7 +292,7 @@ static ODClassType* _TRRailPoint_type;
 }
 
 - (EGVec2I)nextTile {
-    return [self.endConnector nextTile:_tile];
+    return [[self endConnector] nextTile:_tile];
 }
 
 - (ODClassType*)type {

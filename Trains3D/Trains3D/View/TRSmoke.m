@@ -52,7 +52,7 @@ static ODClassType* _TRSmoke_type;
     _emitTime += delta;
     while(_emitTime > _TRSmoke_emitEvery) {
         _emitTime -= _TRSmoke_emitEvery;
-        self.emitParticle;
+        [self emitParticle];
     }
 }
 
@@ -149,7 +149,7 @@ static ODClassType* _TRSmokeParticle_type;
     EGVec3 a = egVec3MulK(_speed, ((float)(-_TRSmokeParticle_dragCoefficient)));
     _speed = egVec3AddV(_speed, egVec3MulK(a, dt));
     self.position = egVec3AddV(self.position, egVec3MulK(_speed, dt));
-    if(self.lifeTime > 3) self.color = EGVec4Make(1.0, 1.0, 1.0, ((float)(2.8 - 0.7 * self.lifeTime)));
+    if([self lifeTime] > 3) self.color = EGVec4Make(1.0, 1.0, 1.0, ((float)(2.8 - 0.7 * [self lifeTime])));
 }
 
 - (ODClassType*)type {

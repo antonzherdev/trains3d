@@ -201,7 +201,7 @@ static ODClassType* _EGMaterial_type;
 }
 
 - (void)drawMesh:(EGMesh*)mesh {
-    [self.shaderSystem drawMaterial:self mesh:mesh];
+    [[self shaderSystem] drawMaterial:self mesh:mesh];
 }
 
 + (EGMaterial*)applyColor:(EGColor)color {

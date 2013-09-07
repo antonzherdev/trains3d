@@ -62,7 +62,7 @@ static ODClassType* _CNMutableTreeMap_type;
 }
 
 - (id<CNIterator>)iterator {
-    return [CNTreeMapIterator newMap:self entry:self.firstEntry];
+    return [CNTreeMapIterator newMap:self entry:[self firstEntry]];
 }
 
 - (CNTreeMapIterator*)iteratorHigherThanKey:(id)key {
@@ -307,7 +307,7 @@ static ODClassType* _CNMutableTreeMap_type;
 }
 
 - (id)pollFirst {
-    CNTreeMapEntry* entry = self.firstEntry;
+    CNTreeMapEntry* entry = [self firstEntry];
     if(entry == nil) {
         return [CNOption none];
     } else {
@@ -318,12 +318,12 @@ static ODClassType* _CNMutableTreeMap_type;
 
 - (id)firstKey {
     if(_root == nil) return [CNOption none];
-    else return [CNOption opt:self.firstEntry.key];
+    else return [CNOption opt:[self firstEntry].key];
 }
 
 - (id)lastKey {
     if(_root == nil) return [CNOption none];
-    else return [CNOption opt:self.lastEntry.key];
+    else return [CNOption opt:[self lastEntry].key];
 }
 
 - (id)lowerKeyThanKey:(id)key {
@@ -417,7 +417,7 @@ static ODClassType* _CNMutableTreeMap_type;
 }
 
 - (id)head {
-    if([self.iterator hasNext]) return [CNOption opt:[self.iterator next]];
+    if([[self iterator] hasNext]) return [CNOption opt:[[self iterator] next]];
     else return [CNOption none];
 }
 
@@ -426,14 +426,14 @@ static ODClassType* _CNMutableTreeMap_type;
 }
 
 - (void)forEach:(void(^)(id))each {
-    id<CNIterator> i = self.iterator;
+    id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         each([i next]);
     }
 }
 
 - (BOOL)goOn:(BOOL(^)(id))on {
-    id<CNIterator> i = self.iterator;
+    id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         if(!(on([i next]))) return NO;
     }
@@ -441,7 +441,7 @@ static ODClassType* _CNMutableTreeMap_type;
 }
 
 - (BOOL)containsObject:(id)object {
-    id<CNIterator> i = self.iterator;
+    id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         if([[i next] isEqual:i]) return YES;
     }
@@ -449,12 +449,12 @@ static ODClassType* _CNMutableTreeMap_type;
 }
 
 - (NSString*)description {
-    return [self.chain toStringWithStart:@"[" delimiter:@", " end:@"]"];
+    return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
 }
 
 - (NSUInteger)hash {
     NSUInteger ret = 13;
-    id<CNIterator> i = self.iterator;
+    id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         ret = ret * 31 + [[i next] hash];
     }
@@ -627,12 +627,12 @@ static ODClassType* _CNTreeMapKeySet_type;
 }
 
 - (id)head {
-    if([self.iterator hasNext]) return [CNOption opt:[self.iterator next]];
+    if([[self iterator] hasNext]) return [CNOption opt:[[self iterator] next]];
     else return [CNOption none];
 }
 
 - (BOOL)isEmpty {
-    return !([self.iterator hasNext]);
+    return !([[self iterator] hasNext]);
 }
 
 - (CNChain*)chain {
@@ -640,14 +640,14 @@ static ODClassType* _CNTreeMapKeySet_type;
 }
 
 - (void)forEach:(void(^)(id))each {
-    id<CNIterator> i = self.iterator;
+    id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         each([i next]);
     }
 }
 
 - (BOOL)goOn:(BOOL(^)(id))on {
-    id<CNIterator> i = self.iterator;
+    id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         if(!(on([i next]))) return NO;
     }
@@ -655,7 +655,7 @@ static ODClassType* _CNTreeMapKeySet_type;
 }
 
 - (BOOL)containsObject:(id)object {
-    id<CNIterator> i = self.iterator;
+    id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         if([[i next] isEqual:i]) return YES;
     }
@@ -663,12 +663,12 @@ static ODClassType* _CNTreeMapKeySet_type;
 }
 
 - (NSString*)description {
-    return [self.chain toStringWithStart:@"[" delimiter:@", " end:@"]"];
+    return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
 }
 
 - (NSUInteger)hash {
     NSUInteger ret = 13;
-    id<CNIterator> i = self.iterator;
+    id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         ret = ret * 31 + [[i next] hash];
     }
@@ -822,12 +822,12 @@ static ODClassType* _CNTreeMapValues_type;
 }
 
 - (id)head {
-    if([self.iterator hasNext]) return [CNOption opt:[self.iterator next]];
+    if([[self iterator] hasNext]) return [CNOption opt:[[self iterator] next]];
     else return [CNOption none];
 }
 
 - (BOOL)isEmpty {
-    return !([self.iterator hasNext]);
+    return !([[self iterator] hasNext]);
 }
 
 - (CNChain*)chain {
@@ -835,14 +835,14 @@ static ODClassType* _CNTreeMapValues_type;
 }
 
 - (void)forEach:(void(^)(id))each {
-    id<CNIterator> i = self.iterator;
+    id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         each([i next]);
     }
 }
 
 - (BOOL)goOn:(BOOL(^)(id))on {
-    id<CNIterator> i = self.iterator;
+    id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         if(!(on([i next]))) return NO;
     }
@@ -850,7 +850,7 @@ static ODClassType* _CNTreeMapValues_type;
 }
 
 - (BOOL)containsObject:(id)object {
-    id<CNIterator> i = self.iterator;
+    id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         if([[i next] isEqual:i]) return YES;
     }
@@ -858,12 +858,12 @@ static ODClassType* _CNTreeMapValues_type;
 }
 
 - (NSString*)description {
-    return [self.chain toStringWithStart:@"[" delimiter:@", " end:@"]"];
+    return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
 }
 
 - (NSUInteger)hash {
     NSUInteger ret = 13;
-    id<CNIterator> i = self.iterator;
+    id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         ret = ret * 31 + [[i next] hash];
     }

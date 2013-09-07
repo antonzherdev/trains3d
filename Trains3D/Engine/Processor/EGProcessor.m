@@ -40,8 +40,8 @@ static ODClassType* _EGEvent_type;
 }
 
 - (EGVec2)locationForDepth:(CGFloat)depth {
-    if([_camera isEmpty]) return self.locationInView;
-    else return [[_camera get] translateWithViewSize:_viewSize viewPoint:self.locationInView];
+    if([_camera isEmpty]) return [self locationInView];
+    else return [[_camera get] translateWithViewSize:_viewSize viewPoint:[self locationInView]];
 }
 
 - (BOOL)isLeftMouseDown {
@@ -57,13 +57,13 @@ static ODClassType* _EGEvent_type;
 }
 
 - (BOOL)leftMouseProcessor:(id<EGMouseProcessor>)processor {
-    if(self.isLeftMouseDown) {
+    if([self isLeftMouseDown]) {
         return [processor mouseDownEvent:self];
     } else {
-        if(self.isLeftMouseDrag) {
+        if([self isLeftMouseDrag]) {
             return [processor mouseDragEvent:self];
         } else {
-            if(self.isLeftMouseUp) return [processor mouseUpEvent:self];
+            if([self isLeftMouseUp]) return [processor mouseUpEvent:self];
             else return NO;
         }
     }
@@ -86,16 +86,16 @@ static ODClassType* _EGEvent_type;
 }
 
 - (BOOL)touchProcessor:(id<EGTouchProcessor>)processor {
-    if(self.isTouchBegan) {
+    if([self isTouchBegan]) {
         return [processor touchBeganEvent:self];
     } else {
-        if(self.isTouchMoved) {
+        if([self isTouchMoved]) {
             return [processor touchMovedEvent:self];
         } else {
-            if(self.isTouchEnded) {
+            if([self isTouchEnded]) {
                 return [processor touchEndedEvent:self];
             } else {
-                if(self.isTouchCanceled) return [processor touchCanceledEvent:self];
+                if([self isTouchCanceled]) return [processor touchCanceledEvent:self];
                 else return NO;
             }
         }

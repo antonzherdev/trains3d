@@ -33,10 +33,10 @@ static ODClassType* _EGMapSso_type;
     if(self) {
         _size = size;
         _limits = egRectINewXYXX2YY2(((CGFloat)((1 - _size.y) / 2 - 1)), ((CGFloat)((2 * _size.x + _size.y - 3) / 2 + 1)), ((CGFloat)((1 - _size.x) / 2 - 1)), ((CGFloat)((_size.x + 2 * _size.y - 3) / 2 + 1)));
-        _fullTiles = [[self.allPosibleTiles filter:^BOOL(id _) {
+        _fullTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
             return [self isFullTile:uwrap(EGVec2I, _)];
         }] toArray];
-        _partialTiles = [[self.allPosibleTiles filter:^BOOL(id _) {
+        _partialTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
             return [self isPartialTile:uwrap(EGVec2I, _)];
         }] toArray];
         _allTiles = [_fullTiles arrayByAddingObject:_partialTiles];
@@ -132,7 +132,7 @@ static ODClassType* _EGMapSsoView_type;
     self = [super init];
     if(self) {
         _map = map;
-        _plane = self.createPlane;
+        _plane = [self createPlane];
     }
     
     return self;

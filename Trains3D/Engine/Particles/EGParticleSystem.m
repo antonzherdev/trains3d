@@ -36,7 +36,7 @@ static ODClassType* _EGParticleSystem_type;
 }
 
 - (void)emitParticle {
-    __particles = [CNList applyObject:self.generateParticle tail:__particles];
+    __particles = [CNList applyObject:[self generateParticle] tail:__particles];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -209,7 +209,7 @@ static ODClassType* _EGParticleSystemView_type;
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     egBlendFunctionApplyDraw(_blendFunc, ^void() {
-        NSUInteger vc = self.vertexCount;
+        NSUInteger vc = [self vertexCount];
         CNVoidRefArray vertexArr = cnVoidRefArrayApplyTpCount(_dtp, n * vc);
         CNVoidRefArray indexArr = cnVoidRefArrayApplyTpCount(oduInt4Type(), n * 3 * (vc - 2));
         __block CNVoidRefArray indexPointer = indexArr;
@@ -224,7 +224,7 @@ static ODClassType* _EGParticleSystemView_type;
         [_indexBuffer setTp:oduInt4Type() array:indexArr];
         cnVoidRefArrayFree(vertexArr);
         cnVoidRefArrayFree(indexArr);
-        [self.shader drawMaterial:self.material mesh:[EGMesh meshWithVertexBuffer:_vertexBuffer indexBuffer:_indexBuffer]];
+        [[self shader] drawMaterial:[self material] mesh:[EGMesh meshWithVertexBuffer:_vertexBuffer indexBuffer:_indexBuffer]];
     });
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);

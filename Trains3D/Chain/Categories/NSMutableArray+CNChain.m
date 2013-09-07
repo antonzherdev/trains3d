@@ -1,4 +1,5 @@
 #import "NSMutableArray+CNChain.h"
+#import "NSArray+CNChain.h"
 
 
 @implementation NSMutableArray (CNChain)
