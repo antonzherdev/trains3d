@@ -1,13 +1,7 @@
 package com.antonzherdev.trains
 
-import EGTypes
-import EGProcessor
-import EGTwoFingerTouchToMouse
-import EGVec
-import EGMath
-
-import TRRailroad
-import TRRailPoint
+import com.antonzherdev.eg._
+import core.ODMath._
 
 class TRRailroadBuilderProcessor(builder : TRRailroadBuilder) extends EGProcessor {
     private val mouseProcessor = TRRailroadBuilderMouseProcessor(builder)

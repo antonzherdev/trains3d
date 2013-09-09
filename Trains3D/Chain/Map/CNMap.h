@@ -1,9 +1,5 @@
 #import "objdcore.h"
 #import "CNCollection.h"
-@class CNChain;
-@class CNTuple;
-@class CNTuple3;
-@class CNTuple4;
 
 @class CNMapDefault;
 @protocol CNMap;

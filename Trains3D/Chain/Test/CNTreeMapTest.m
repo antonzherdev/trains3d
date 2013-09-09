@@ -2,6 +2,7 @@
 #import "CNTreeMapTest.h"
 
 #import "CNTreeMap.h"
+#import "CNChain.h"
 @implementation CNTreeMapTest
 static ODClassType* _CNTreeMapTest_type;
 

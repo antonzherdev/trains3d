@@ -1,17 +1,6 @@
 package com.antonzherdev.trains
 
-import EGTypes
-import EGCameraIso
-import EG
-import EGGL
-import EGMapIso
-import EGVec
-
-import TRLevel
-import TRLevelBackgroundView
-import TRCityView
-import TRRailroadView
-import TRTrainView
+import com.antonzherdev.eg._
 
 class TRLevelView(level : TRLevel) extends EGView {
     private val backgroundView = TRLevelBackgroundView(level.map)

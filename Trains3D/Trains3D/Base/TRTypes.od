@@ -1,7 +1,7 @@
 package com.antonzherdev.trains
 
-import EGTypes
-import EGGL
+import com.antonzherdev.eg._
+import com.antonzherdev.eg.EGGL._
 
 enum TRColor(color : EGColor) {
     orange(EGColor(1.0, 0.5, 0.0, 1.0))

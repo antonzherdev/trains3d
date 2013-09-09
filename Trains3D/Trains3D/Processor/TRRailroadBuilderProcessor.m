@@ -1,8 +1,7 @@
 #import "TRRailroadBuilderProcessor.h"
 
-#import "EGTwoFingerTouchToMouse.h"
-#import "EGMath.h"
 #import "TRRailroad.h"
+#import "EGTwoFingerTouchToMouse.h"
 #import "TRRailPoint.h"
 @implementation TRRailroadBuilderProcessor{
     TRRailroadBuilder* _builder;

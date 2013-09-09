@@ -1,10 +1,6 @@
 package com.antonzherdev.trains
 
-import EG
-import EGTexture
-import TRLevel
-import EGMapIso
-import EGMaterial
+import com.antonzherdev.eg._
 
 class TRLevelBackgroundView(map : EGMapSso) {
     val mapView = EGMapSsoView(map)

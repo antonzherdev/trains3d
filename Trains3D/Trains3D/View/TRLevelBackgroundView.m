@@ -1,9 +1,8 @@
 #import "TRLevelBackgroundView.h"
 
-#import "EG.h"
-#import "EGTexture.h"
-#import "TRLevel.h"
 #import "EGMapIso.h"
+#import "EGMaterial.h"
+#import "EG.h"
 @implementation TRLevelBackgroundView{
     EGMapSso* _map;
     EGMapSsoView* _mapView;

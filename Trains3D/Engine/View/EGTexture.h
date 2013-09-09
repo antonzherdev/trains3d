@@ -1,6 +1,4 @@
 #import "objd.h"
-@class CNBundle;
-#import "EGTypes.h"
 #import "EGGL.h"
 #import "EGVec.h"
 

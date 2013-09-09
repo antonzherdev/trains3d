@@ -6,7 +6,7 @@ import EGDirector
 import EGTexture
 import EGMatrix
 import EGVec
-import EGGL
+import com.antonzherdev.eg.EGGL._
 import EGTypes
 import EGMatrix
 

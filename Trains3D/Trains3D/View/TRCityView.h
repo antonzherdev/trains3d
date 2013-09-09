@@ -1,22 +1,18 @@
 #import "objd.h"
-@class EG;
-@class EGContext;
-@class EGMatrixStack;
-@class EGMatrixModel;
-#import "EGGL.h"
-@class EGSchedule;
-@class EGAnimation;
-@class EGMesh;
-@class EGBuffer;
-@class EGVertexBuffer;
-@class EGIndexBuffer;
+#import "EGVec.h"
 #import "EGTypes.h"
-#import "EGMaterial.h"
-@class EGMatrix;
-@class TRCityAngle;
+@class EGMesh;
+@class EG;
 @class TRCity;
+@class EGMatrix;
+@class EGMatrixModel;
+@class TRCityAngle;
 @class TRColor;
+@class EGColorSource;
+@class EGStandardMaterial;
 @class TR3D;
+@class EGAnimation;
+@class EGMatrixStack;
 
 @class TRCityView;
 

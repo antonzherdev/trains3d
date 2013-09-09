@@ -1,13 +1,8 @@
 #import "EGMapIso.h"
 
-#import "CNChain.h"
-#import "CNRange.h"
-#import "CNData.h"
-#import "EG.h"
-#import "EGMap.h"
 #import "EGMesh.h"
-#import "EGTexture.h"
-#import "EGShader.h"
+#import "EGGL.h"
+#import "EGMaterial.h"
 @implementation EGMapSso{
     EGVec2I _size;
     EGRectI _limits;

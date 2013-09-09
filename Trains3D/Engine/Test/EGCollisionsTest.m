@@ -1,6 +1,5 @@
 #import "EGCollisionsTest.h"
 
-#import "CNPair.h"
 #import "EGFigure.h"
 #import "EGCollisions.h"
 @implementation EGCollisionsTest

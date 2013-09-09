@@ -1,16 +1,8 @@
 #import "objd.h"
 #import "EGProcessor.h"
-@class TRLevelRules;
+#import "EGVec.h"
 @class TRLevel;
-@class TRRailroadConnectorContent;
-@class TREmptyConnector;
-@class TRRail;
-@class TRSwitch;
-@class TRLight;
-@class TRObstacleType;
-@class TRObstacle;
 @class TRRailroad;
-@class TRRailroadBuilder;
 
 @class TRLevelMenuProcessor;
 

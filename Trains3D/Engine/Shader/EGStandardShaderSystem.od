@@ -6,7 +6,7 @@ import EG
 import EGVec
 import EGTypes
 import EGTexture
-import EGGL
+import com.antonzherdev.eg.EGGL._
 import EGMesh
 import EGMatrix
 

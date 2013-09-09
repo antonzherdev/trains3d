@@ -1,8 +1,6 @@
 #import "objd.h"
 #import "CNMap.h"
 
-#import "CNChain.h"
-#import "CNTuple.h"
 @implementation CNMapDefault{
     id(^_defaultFunc)(id);
     id<CNMutableMap> _map;

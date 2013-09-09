@@ -1,9 +1,6 @@
 #import "objdcore.h"
-#import "CNCollection.h"
 #import "CNSeq.h"
-@class CNOption;
-#import "CNTypes.h"
-@class CNChain;
+#import "CNCollection.h"
 
 @class CNRange;
 @class CNRangeIterator;

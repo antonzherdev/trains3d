@@ -1,13 +1,2 @@
 package com.antonzherdev.eg
 
-stub val M_PI : float
-stub val M_PI_2 : float
-stub val M_PI_4 : float
-stub def round(: float) : float
-stub def lround(: float) : int
-stub def sin(:float) : float
-stub def cos(:float) : float
-stub def fabs(:float) : float
-stub def atan2(:float, :float) : float
-stub def atan(:float) : float
-stub def sqrt(:float) : float

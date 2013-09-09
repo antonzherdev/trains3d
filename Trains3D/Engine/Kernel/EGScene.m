@@ -1,7 +1,8 @@
 #import "EGScene.h"
 
-#import "EGProcessor.h"
+#import "EGTypes.h"
 #import "EGLayer.h"
+#import "EGProcessor.h"
 @implementation EGScene{
     id<EGController> _controller;
     id<CNSeq> _layers;

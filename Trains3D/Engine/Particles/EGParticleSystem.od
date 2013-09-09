@@ -1,13 +1,6 @@
 package com.antonzherdev.eg
 
-import ODType
-
-import EGGL
-import EGTypes
-import EGMesh
-import EGShader
-import EGMaterial
-import CNVoidRefArray
+import com.antonzherdev.eg.EGGL._
 
 
 class EGParticleSystem <P extends EGParticle> extends EGController {

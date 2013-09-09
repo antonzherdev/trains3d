@@ -1,10 +1,5 @@
 #import "EGBentleyOttmann.h"
 
-#import "CNTreeMap.h"
-#import "CNTreeSet.h"
-#import "CNCollection.h"
-#import "CNPair.h"
-#import "CNSet.h"
 #import "EGFigure.h"
 @implementation EGBentleyOttmann
 static ODClassType* _EGBentleyOttmann_type;

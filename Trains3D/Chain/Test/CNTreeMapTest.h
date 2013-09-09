@@ -1,12 +1,8 @@
 #import "objdcore.h"
 #import "CNTest.h"
 @class CNMutableTreeMap;
-@class CNTreeMapEntry;
+@class CNChain;
 @class CNTreeMapKeySet;
-@class CNTreeMapKeyIterator;
-@class CNTreeMapValues;
-@class CNTreeMapValuesIterator;
-@class CNTreeMapIterator;
 
 @class CNTreeMapTest;
 

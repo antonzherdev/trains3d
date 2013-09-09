@@ -1,7 +1,6 @@
 #import "EGFigureTest.h"
 
 #import "EGFigure.h"
-#import "EGMath.h"
 @implementation EGFigureTest
 static ODClassType* _EGFigureTest_type;
 

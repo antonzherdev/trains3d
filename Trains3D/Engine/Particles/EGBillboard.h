@@ -1,21 +1,13 @@
 #import "objd.h"
+#import "EGShader.h"
+#import "EGVec.h"
+#import "EGParticleSystem.h"
+#import "EGMaterial.h"
+@class EGVertexBuffer;
 @class EG;
-@class EGContext;
 @class EGMatrixStack;
 @class EGMatrixModel;
-#import "EGGL.h"
-#import "EGVec.h"
-#import "EGShader.h"
-#import "EGTypes.h"
-#import "EGParticleSystem.h"
-#import "CNVoidRefArray.h"
-#import "EGMaterial.h"
 @class EGTexture;
-@class EGFileTexture;
-@class EGMesh;
-@class EGBuffer;
-@class EGVertexBuffer;
-@class EGIndexBuffer;
 
 @class EGBillboardShaderSystem;
 @class EGBillboardShader;

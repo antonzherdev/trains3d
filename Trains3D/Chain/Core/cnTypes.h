@@ -2,7 +2,7 @@
 #import "CNTuple.h"
 
 
-typedef void* VoidRef;
+typedef char* VoidRef;
 @class CNChain;
 typedef void (^cnChainBuildBlock)(CNChain * chain);
 typedef BOOL (^cnPredicate)(id x);
@@ -78,10 +78,10 @@ extern id cnResolveCollection(id collection);
 #define uwrap(tp, expr) [((tp ## Wrap*)expr) value]
 
 
-#define arr(p_type, p_f, p_count)  CNPArray applyStride:sizeof(p_type) wrap:^id(void* arr, NSUInteger i) { \
+#define arr(p_type, p_f, p_count)  CNPArray applyStride:sizeof(p_type) wrap:^id(VoidRef arr, NSUInteger i) { \
     return p_f(((p_type*)(arr))[i]);\
 } count:p_count copyBytes:(p_type[])
-#define arrp(p_type, p_f, p_count)  CNPArray applyStride:sizeof(p_type) wrap:^id(void* arr, NSUInteger i) { \
+#define arrp(p_type, p_f, p_count)  CNPArray applyStride:sizeof(p_type) wrap:^id(VoidRef arr, NSUInteger i) { \
     return p_f(((p_type*)(arr))[i]);\
 } count:p_count copyBytes:(p_type*)
 #define arrc(p_count) arr(char, numc, p_count)

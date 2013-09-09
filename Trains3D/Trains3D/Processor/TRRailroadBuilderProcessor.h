@@ -1,21 +1,11 @@
 #import "objd.h"
-#import "EGTypes.h"
 #import "EGProcessor.h"
-@class EGTwoFingerTouchToMouse;
 #import "EGVec.h"
-@class TRRailroadConnectorContent;
-@class TREmptyConnector;
-@class TRRail;
-@class TRSwitch;
-@class TRLight;
-@class TRObstacleType;
-@class TRObstacle;
-@class TRRailroad;
 @class TRRailroadBuilder;
+@class EGTwoFingerTouchToMouse;
+@class TRRail;
 @class TRRailConnector;
 @class TRRailForm;
-@class TRRailPoint;
-@class TRRailPointCorrection;
 
 @class TRRailroadBuilderProcessor;
 @class TRRailroadBuilderMouseProcessor;

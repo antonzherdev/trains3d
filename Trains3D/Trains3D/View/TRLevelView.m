@@ -1,13 +1,12 @@
 #import "TRLevelView.h"
 
-#import "EGCameraIso.h"
-#import "EG.h"
-#import "EGMapIso.h"
 #import "TRLevel.h"
 #import "TRLevelBackgroundView.h"
 #import "TRCityView.h"
 #import "TRRailroadView.h"
 #import "TRTrainView.h"
+#import "EGMapIso.h"
+#import "EGCameraIso.h"
 @implementation TRLevelView{
     TRLevel* _level;
     TRLevelBackgroundView* _backgroundView;

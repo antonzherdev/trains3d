@@ -2,8 +2,9 @@
 
 #import "EGScene.h"
 #import "EGTime.h"
-#import "EGStat.h"
 #import "EG.h"
+#import "EGGL.h"
+#import "EGStat.h"
 #import "EGProcessor.h"
 @implementation EGDirector{
     EGScene* _scene;

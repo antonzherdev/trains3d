@@ -1,5 +1,4 @@
 #import "objd.h"
-@class CNOption;
 
 @class EGProgress;
 

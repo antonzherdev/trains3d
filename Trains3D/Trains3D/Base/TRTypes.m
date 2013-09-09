@@ -1,5 +1,6 @@
 #import "TRTypes.h"
 
+#import "EGGL.h"
 @implementation TRColor{
     EGColor _color;
 }

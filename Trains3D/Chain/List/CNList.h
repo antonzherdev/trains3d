@@ -1,13 +1,6 @@
 #import "objdcore.h"
-#import "CNCollection.h"
 #import "CNSeq.h"
-@class CNOption;
-@class CNChain;
-@protocol CNSet;
-@protocol CNMutableSet;
-@class CNHashSetBuilder;
-@class NSSet;
-@class NSMutableSet;
+#import "CNCollection.h"
 
 @class CNList;
 @class CNFilledList;

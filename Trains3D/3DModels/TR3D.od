@@ -1,7 +1,6 @@
 package com.antonzherdev.trains
 
-import EGGL
-import EGMesh
+import com.antonzherdev.eg.EGMesh
 
 stub class TR3D {
     static val railTies : EGMesh = nil

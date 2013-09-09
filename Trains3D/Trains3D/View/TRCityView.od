@@ -1,17 +1,7 @@
 package com.antonzherdev.trains
 
-import EG
-import EGGL
-import EGSchedule
-import EGMesh
-import EGTypes
-import EG
-import EGMaterial
-import EGMatrix
-
-import TRCity
-import TRTypes
-import TR3D
+import com.antonzherdev.eg.EGGL._
+import com.antonzherdev.eg._
 
 class TRCityView {
     val expectedTrainModel = EGMesh([

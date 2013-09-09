@@ -1,13 +1,6 @@
 package com.antonzherdev.eg
 
-import EGBentleyOttmann
-import CNTest
-import CNPair
-import EGFigure
-import EGTypes
-import EGVec
-
-import CNSet
+import test._
 
 
 class EGBentleyOttmannTest extends CNTestCase {

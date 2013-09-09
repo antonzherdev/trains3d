@@ -2,6 +2,7 @@
 
 #import "EG.h"
 #import "EGMatrix.h"
+#import "EGGL.h"
 @implementation EGCamera2D{
     EGVec2 _size;
     EGMatrixModel* _matrixModel;

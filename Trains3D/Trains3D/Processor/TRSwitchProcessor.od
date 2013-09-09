@@ -1,13 +1,6 @@
 package com.antonzherdev.trains
 
-import EGTypes
-import EGProcessor
-import EGRectIndex
-import EGVec
-
-import TRRailPoint
-import TRRailroad
-import TRLevel
+import com.antonzherdev.eg._
 
 class TRSwitchProcessor(level : TRLevel) extends EGMouseProcessor {
     def process(event : EGEvent) : bool = event.leftMouse(self)

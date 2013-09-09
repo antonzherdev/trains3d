@@ -1,8 +1,6 @@
 package com.antonzherdev.trains
 
-import EGTypes
-
-import TRTrain
+import com.antonzherdev.eg._
 
 class TRScoreRules(initialScore : int, railCost : int,
     arrivedPrize : TRTrain -> int, destructionFine : TRTrain -> int,

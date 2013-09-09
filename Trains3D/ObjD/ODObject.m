@@ -1,5 +1,6 @@
 #import "ODObject.h"
 #import "CNRange.h"
+#import "CNTypes.h"
 
 @implementation NSNumber (ODObject)
 - (NSInteger)compareTo:(id)to {

@@ -1,9 +1,6 @@
 #import "objd.h"
 #import "CNList.h"
 
-#import "CNOption.h"
-#import "CNChain.h"
-#import "CNSet.h"
 @implementation CNList
 static ODClassType* _CNList_type;
 

@@ -1,10 +1,5 @@
 package com.antonzherdev.eg
 
-import CNTypes
-import EGTypes
-import EGMatrix
-import EGVec
-
 stub struct GLenum
 stub struct GLint
 stub struct GLuint
@@ -14,116 +9,118 @@ stub struct GLboolean
 stub struct GLsizeiptr
 stub struct GLbitfield
 
-stub def egClear
+stub object EGGL {
+    def egClear
 
-stub def egColor3(r : float, g : float, b : float)
-stub def egColor4(r : float, g : float, b : float, a : float)
-stub def glClearColor(r : float, g : float, b : float, a : float)
-stub def egColor(color : EGColor)
+    def egColor3(r : float, g : float, b : float)
+    def egColor4(r : float, g : float, b : float, a : float)
+    def glClearColor(r : float, g : float, b : float, a : float)
+    def egColor(color : EGColor)
 
-stub def glutSolidCube(size :float)
-
-
-stub def glEnable(: uint)
-stub def glDisable(: uint)
-stub val GL_DEPTH_TEST : uint
-stub val GL_CULL_FACE : uint
-stub val GL_BLEND : uint
-
-stub def glCullFace(: uint)
-stub val GL_FRONT : uint
-stub val GL_BACK : uint
-stub val GL_FRONT_AND_BACK : uint
-
-stub def glFrontFace(: uint)
-stub val GL_CW : uint
-stub val GL_CWW : uint
-
-stub def glBegin(: uint)
-stub def glEnd
-stub val GL_QUADS : uint
-stub val GL_LINES : uint
-
-stub def egViewport(rect : EGRectI)
-stub def glViewport (x : GLint, y : GLint, width : GLsizei, height : GLsizei)
-stub def glUniformMatrix4fv(location : GLuint, count : GLsizei, transpose : GLboolean, value : [float4])
-stub def glUniform1f(location : GLuint, f : float4)
-stub def egUniformColor(location : GLuint, color : EGColor)
-stub def egUniformVec3(location : GLuint, color : EGVec3)
-
-stub def glCreateProgram : GLuint
-stub def glAttachShader(program : GLuint, shader : GLuint)
-stub def glAttachShader(program : GLuint, shader : GLuint)
-stub def glLinkProgram(program : GLuint)
-stub def glDeleteProgram(program : GLuint)
-stub def glUseProgram(program : GLuint)
-stub def egGetAttribLocation(program : GLuint, name : string) : GLint
-stub def egGetUniformLocation(program : GLuint, name : string) : GLint
-stub def egGetProgramError(program : GLuint) : string?
-
-stub def glDeleteShader(shader : GLuint)
-stub def glCreateShader(shaderType : GLenum) : GLuint
-stub def egShaderSource(shader : GLuint, source : string)
-stub def glCompileShader(shader : GLuint)
-stub def egGetShaderError(shader : GLuint) : string?
-
-stub val GL_VERTEX_SHADER : GLenum
-stub val GL_FRAGMENT_SHADER : GLenum
-
-stub def egGenBuffer : GLuint
-stub def egDeleteBuffer(handle : GLuint)
-stub def glBindBuffer(target : GLenum, handle : GLuint) : GLuint
-stub def glBufferData(target : GLenum, size : GLsizeiptr, data : [void], usage : GLenum)
-stub def egVertexAttribPointer(slot : GLuint, size : uint, tp : GLenum, normalized : GLboolean, stride : uint, shift : uint)
-stub def glDrawElements(mode : GLenum, count : GLsizei, tp : GLenum, indices : [void])
-stub def glDrawRangeElements(mode : GLenum, start : GLuint, end : GLuint, count : GLsizei, tp : GLenum, indices : [void])
-stub def glDrawArrays(mode : GLenum, first : GLint, count : GLsizei)
-stub def glEnableVertexAttribArray(handle : GLint)
-stub def glDisableVertexAttribArray(handle : GLint)
-
-stub val GL_TRIANGLES : GLenum
-
-stub val GL_FLOAT : GLenum
-stub val GL_DOUBLE : GLenum
-stub val GL_BYTE : GLenum
-stub val GL_UNSIGNED_BYTE : GLenum
-stub val GL_INT : GLenum
-stub val GL_UNSIGNED_INT : GLenum
-
-stub val GL_TRUE : GLboolean
-stub val GL_FALSE : GLboolean
-
-stub def glBlendFunc(sfactor : GLenum, dfactor : GLenum)
-stub def glBlendFuncSeparate(srcRGB : GLenum, dstRGB : GLenum, stcAlpha : GLenum, dstAlpha : GLenum)
-stub val GL_ZERO : uint
-stub val GL_ONE : uint
-stub val GL_SRC_ALPHA : uint
-stub val GL_ONE_MINUS_SRC_ALPHA : uint
+    def glutSolidCube(size :float)
 
 
-stub def egGenFrameBuffer : GLuint
-stub def egDeleteFrameBuffer(handle : GLuint)
-stub def glBindFramebuffer( : GLenum,handle : GLuint)
-stub val GL_FRAMEBUFFER : GLenum
-stub def glBindTexture( : GLenum,handle : GLuint)
-stub val GL_TEXTURE_2D : GLenum
-stub val GL_RGBA : GLenum
-stub def egGenTexture : GLuint
-stub def egDeleteTexture(handle : GLuint)
+    def glEnable(: uint)
+    def glDisable(: uint)
+    val GL_DEPTH_TEST : uint
+    val GL_CULL_FACE : uint
+    val GL_BLEND : uint
 
-stub def glTexImage2D(target : GLenum, level : GLint, internalformat  : GLint, width : GLsizei, height : GLsizei, border : GLint, format : GLenum, tp : GLenum, pixels : VoidRef)
-stub def glTexParameteri(target : GLenum, pname : GLenum, param : GLint)
-stub val GL_TEXTURE_WRAP_S : GLenum
-stub val GL_TEXTURE_WRAP_T : GLenum
-stub val GL_CLAMP_TO_EDGE : GLenum
-stub val GL_NEAREST : GLenum
-stub val GL_TEXTURE_MIN_FILTER : GLenum
-stub val GL_TEXTURE_MAG_FILTER : GLenum
-stub def glFramebufferTexture2D(target : GLenum, attachment : GLenum, textarget : GLenum, texture : GLuint, level : GLint)
-stub val GL_COLOR_ATTACHMENT0 : GLenum
+    def glCullFace(: uint)
+    val GL_FRONT : uint
+    val GL_BACK : uint
+    val GL_FRONT_AND_BACK : uint
 
-stub def glPushAttrib(mask : GLbitfield)
-stub val GL_VIEWPORT_BIT : GLenum
-stub def glPopAttrib
+    def glFrontFace(: uint)
+    val GL_CW : uint
+    val GL_CWW : uint
 
-stub def egLoadTextureFromFile(target : GLuint, file : string) : EGVec2
+    def glBegin(: uint)
+    def glEnd
+    val GL_QUADS : uint
+    val GL_LINES : uint
+
+    def egViewport(rect : EGRectI)
+    def glViewport (x : GLint, y : GLint, width : GLsizei, height : GLsizei)
+    def glUniformMatrix4fv(location : GLuint, count : GLsizei, transpose : GLboolean, value : [float4])
+    def glUniform1f(location : GLuint, f : float4)
+    def egUniformColor(location : GLuint, color : EGColor)
+    def egUniformVec3(location : GLuint, color : EGVec3)
+
+    def glCreateProgram : GLuint
+    def glAttachShader(program : GLuint, shader : GLuint)
+    def glAttachShader(program : GLuint, shader : GLuint)
+    def glLinkProgram(program : GLuint)
+    def glDeleteProgram(program : GLuint)
+    def glUseProgram(program : GLuint)
+    def egGetAttribLocation(program : GLuint, name : string) : GLint
+    def egGetUniformLocation(program : GLuint, name : string) : GLint
+    def egGetProgramError(program : GLuint) : string?
+
+    def glDeleteShader(shader : GLuint)
+    def glCreateShader(shaderType : GLenum) : GLuint
+    def egShaderSource(shader : GLuint, source : string)
+    def glCompileShader(shader : GLuint)
+    def egGetShaderError(shader : GLuint) : string?
+
+    val GL_VERTEX_SHADER : GLenum
+    val GL_FRAGMENT_SHADER : GLenum
+
+    def egGenBuffer : GLuint
+    def egDeleteBuffer(handle : GLuint)
+    def glBindBuffer(target : GLenum, handle : GLuint) : GLuint
+    def glBufferData(target : GLenum, size : GLsizeiptr, data : [void], usage : GLenum)
+    def egVertexAttribPointer(slot : GLuint, size : uint, tp : GLenum, normalized : GLboolean, stride : uint, shift : uint)
+    def glDrawElements(mode : GLenum, count : GLsizei, tp : GLenum, indices : [void])
+    def glDrawRangeElements(mode : GLenum, start : GLuint, end : GLuint, count : GLsizei, tp : GLenum, indices : [void])
+    def glDrawArrays(mode : GLenum, first : GLint, count : GLsizei)
+    def glEnableVertexAttribArray(handle : GLint)
+    def glDisableVertexAttribArray(handle : GLint)
+
+    val GL_TRIANGLES : GLenum
+
+    val GL_FLOAT : GLenum
+    val GL_DOUBLE : GLenum
+    val GL_BYTE : GLenum
+    val GL_UNSIGNED_BYTE : GLenum
+    val GL_INT : GLenum
+    val GL_UNSIGNED_INT : GLenum
+
+    val GL_TRUE : GLboolean
+    val GL_FALSE : GLboolean
+
+    def glBlendFunc(sfactor : GLenum, dfactor : GLenum)
+    def glBlendFuncSeparate(srcRGB : GLenum, dstRGB : GLenum, stcAlpha : GLenum, dstAlpha : GLenum)
+    val GL_ZERO : uint
+    val GL_ONE : uint
+    val GL_SRC_ALPHA : uint
+    val GL_ONE_MINUS_SRC_ALPHA : uint
+
+
+    def egGenFrameBuffer : GLuint
+    def egDeleteFrameBuffer(handle : GLuint)
+    def glBindFramebuffer( : GLenum,handle : GLuint)
+    val GL_FRAMEBUFFER : GLenum
+    def glBindTexture( : GLenum,handle : GLuint)
+    val GL_TEXTURE_2D : GLenum
+    val GL_RGBA : GLenum
+    def egGenTexture : GLuint
+    def egDeleteTexture(handle : GLuint)
+
+    def glTexImage2D(target : GLenum, level : GLint, internalformat  : GLint, width : GLsizei, height : GLsizei, border : GLint, format : GLenum, tp : GLenum, pixels : VoidRef)
+    def glTexParameteri(target : GLenum, pname : GLenum, param : GLint)
+    val GL_TEXTURE_WRAP_S : GLenum
+    val GL_TEXTURE_WRAP_T : GLenum
+    val GL_CLAMP_TO_EDGE : GLenum
+    val GL_NEAREST : GLenum
+    val GL_TEXTURE_MIN_FILTER : GLenum
+    val GL_TEXTURE_MAG_FILTER : GLenum
+    def glFramebufferTexture2D(target : GLenum, attachment : GLenum, textarget : GLenum, texture : GLuint, level : GLint)
+    val GL_COLOR_ATTACHMENT0 : GLenum
+
+    def glPushAttrib(mask : GLbitfield)
+    val GL_VIEWPORT_BIT : GLenum
+    def glPopAttrib
+
+    def egLoadTextureFromFile(target : GLuint, file : string) : EGVec2
+}

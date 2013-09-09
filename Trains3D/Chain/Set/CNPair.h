@@ -1,6 +1,6 @@
 #import "objdcore.h"
-#import "CNCollection.h"
 #import "CNSet.h"
+#import "CNCollection.h"
 
 @class CNPair;
 @class CNPairIterator;

@@ -1,18 +1,8 @@
 package com.antonzherdev.trains
 
-import EG
-import EGGL
-import EGTypes
-import EGMesh
-import EGMaterial
-import EGMath
-import EGMatrix
-
-import TRTrain
-import TRTypes
-import TRRailPoint
-import TR3D
-import TRSmoke
+import com.antonzherdev.eg.EGGL._
+import core.ODMath._
+import com.antonzherdev.eg._
 
 class TRTrainView {
     val smokeView = TRSmokeView()

@@ -1,16 +1,10 @@
 #import "objd.h"
 #import "EGGL.h"
 @class EGTexture;
-@class EGFileTexture;
-@class EGMesh;
-@class EGBuffer;
 @class EGVertexBuffer;
 @class EGIndexBuffer;
 @class EGShaderProgram;
-@class EGShader;
 @class EGShaderAttribute;
-@class EGShaderUniform;
-@class EGShaderSystem;
 
 @class EGSurface;
 @class EGSurfaceShader;

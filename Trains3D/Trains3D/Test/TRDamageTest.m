@@ -1,9 +1,9 @@
 #import "TRDamageTest.h"
 
 #import "EGMapIso.h"
-#import "TRRailroad.h"
-#import "TRScore.h"
 #import "TRLevelFactory.h"
+#import "TRScore.h"
+#import "TRRailroad.h"
 #import "TRRailPoint.h"
 @implementation TRDamageTest
 static ODClassType* _TRDamageTest_type;

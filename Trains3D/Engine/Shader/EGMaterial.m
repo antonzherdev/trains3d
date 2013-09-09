@@ -1,11 +1,10 @@
 #import "EGMaterial.h"
 
-#import "EG.h"
+#import "EGTexture.h"
 #import "EGShader.h"
 #import "EGMesh.h"
 #import "EGSimpleShaderSystem.h"
 #import "EGStandardShaderSystem.h"
-#import "EGTexture.h"
 @implementation EGColorSource
 static ODClassType* _EGColorSource_type;
 

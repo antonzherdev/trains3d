@@ -1,15 +1,8 @@
 #import "TRSmoke.h"
 
-#import "CNData.h"
-#import "EG.h"
-#import "EGShader.h"
-#import "EGTexture.h"
-#import "EGMatrix.h"
-#import "EGSurface.h"
-#import "EGMesh.h"
-#import "EGParticleSystem.h"
 #import "TRTrain.h"
 #import "TRRailPoint.h"
+#import "EG.h"
 @implementation TRSmoke{
     __weak TRTrain* _train;
     TRCar* _engine;

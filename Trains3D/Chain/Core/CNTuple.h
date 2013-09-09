@@ -1,11 +1,5 @@
 #import "objdcore.h"
 #import "ODObject.h"
-@class CNOption;
-@protocol CNSeq;
-@protocol CNMutableSeq;
-@class NSArray;
-@class NSMutableArray;
-@class CNArrayBuilder;
 
 @class CNTuple;
 @class CNTuple3;

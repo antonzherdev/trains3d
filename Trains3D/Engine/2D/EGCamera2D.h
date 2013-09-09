@@ -1,12 +1,10 @@
 #import "objd.h"
-#import "EGVec.h"
 #import "EGTypes.h"
-@class EG;
-@class EGContext;
-@class EGMatrixStack;
+#import "EGVec.h"
 @class EGMatrixModel;
-#import "EGGL.h"
 @class EGMatrix;
+@class EG;
+@class EGMatrixStack;
 
 @class EGCamera2D;
 

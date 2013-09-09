@@ -1,11 +1,6 @@
 package com.antonzherdev.eg
 
-import CNTest
-import CNPair
-import EGTypes
-import EGFigure
-import EGCollisions
-import EGVec
+import test._
 
 class EGCollisionsTest extends CNTestCase {
     def testDavidsStar {

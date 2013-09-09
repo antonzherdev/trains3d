@@ -1,22 +1,11 @@
 #import "objd.h"
-@class CNMutableTreeMap;
-@class CNTreeMapEntry;
-@class CNTreeMapKeySet;
-@class CNTreeMapKeyIterator;
-@class CNTreeMapValues;
-@class CNTreeMapValuesIterator;
-@class CNTreeMapIterator;
-@class EGMapSso;
-@class EGMapSsoView;
-#import "EGTypes.h"
 #import "EGVec.h"
 @class TRRailConnector;
 @class TRRailForm;
 @class TRRailPoint;
-@class TRRailPointCorrection;
-@class TRScoreRules;
+@class EGMapSso;
 @class TRScore;
-@class TRTrainScore;
+@class TRRailPointCorrection;
 
 @class TRRailroadConnectorContent;
 @class TREmptyConnector;

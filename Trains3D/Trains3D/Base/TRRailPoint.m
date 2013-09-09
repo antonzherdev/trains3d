@@ -1,6 +1,5 @@
 #import "TRRailPoint.h"
 
-#import "EGMath.h"
 @implementation TRRailConnector{
     NSInteger _x;
     NSInteger _y;

@@ -1,8 +1,8 @@
 #import "EG.h"
 
-#import "CNLazy.h"
 #import "EGDirector.h"
 #import "EGTexture.h"
+#import "EGTypes.h"
 #import "EGMatrix.h"
 @implementation EG
 static EGContext* _EG_context;

@@ -1,14 +1,5 @@
 #import "objd.h"
-#import "ODType.h"
-@class CNPArray;
-@class CNPArrayIterator;
-#import "CNVoidRefArray.h"
 #import "EGGL.h"
-@class EGSimpleShaderSystem;
-@class EGSimpleShader;
-@class EGSimpleColorShader;
-@class EGSimpleTextureShader;
-#import "EGTypes.h"
 
 @class EGMesh;
 @class EGBuffer;

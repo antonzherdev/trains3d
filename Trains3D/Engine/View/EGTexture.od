@@ -1,10 +1,6 @@
 package com.antonzherdev.eg
 
-import CNFile
-
-import EGTypes
-import EGGL
-import EGVec
+import com.antonzherdev.eg.EGGL._
 
 class EGTexture {
     val id : GLuint = egGenTexture

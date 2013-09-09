@@ -1,10 +1,6 @@
 #import "objdcore.h"
-#import "ODType.h"
 #import "CNSeq.h"
 #import "CNCollection.h"
-#import "CNTypes.h"
-@class CNOption;
-@class CNChain;
 
 @class CNPArray;
 @class CNPArrayIterator;

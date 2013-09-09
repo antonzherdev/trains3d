@@ -1,5 +1,6 @@
 #import "EGProcessor.h"
 
+#import "EGTypes.h"
 @implementation EGEvent{
     EGVec2 _viewSize;
     id _camera;

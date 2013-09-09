@@ -5,7 +5,7 @@ import ODType
 import CNData
 import CNVoidRefArray
 
-import EGGL
+import com.antonzherdev.eg.EGGL._
 import EGSimpleShaderSystem
 import EGTypes
 

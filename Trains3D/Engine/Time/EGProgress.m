@@ -1,6 +1,5 @@
 #import "EGProgress.h"
 
-#import "CNOption.h"
 @implementation EGProgress
 static ODClassType* _EGProgress_type;
 

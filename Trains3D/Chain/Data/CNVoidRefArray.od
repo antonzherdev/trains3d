@@ -1,10 +1,6 @@
 package core.chain
 
-import ODType
-
-import CNData
-import CNTypes
-
+import core.chain.CNMemory._
 
 stub struct CNVoidRefArray(length : uint, bytes : VoidRef)
 {
@@ -15,5 +11,7 @@ stub struct CNVoidRefArray(length : uint, bytes : VoidRef)
 
     def write(uInt4 : uint4) :CNVoidRefArray
 
-    def free = free(bytes)
+    def free {
+        free(bytes)
+    }
 }

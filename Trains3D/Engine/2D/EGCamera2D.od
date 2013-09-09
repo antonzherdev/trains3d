@@ -1,10 +1,7 @@
 package com.antonzherdev.eg
 
-import EGVec
-import EGTypes
-import EG
-import EGGL
-import EGMatrix
+import core.ODMath._
+import com.antonzherdev.eg.EGGL._
 
 class EGCamera2D(size : EGVec2) extends EGCamera {
     private def factorFor(viewSize : EGVec2) : float = min(viewSize.x/size.x, viewSize.y/size.y)

@@ -1,9 +1,9 @@
 #import "TRSwitchProcessor.h"
 
+#import "TRLevel.h"
 #import "EGRectIndex.h"
 #import "TRRailPoint.h"
 #import "TRRailroad.h"
-#import "TRLevel.h"
 @implementation TRSwitchProcessor{
     TRLevel* _level;
     EGRectIndex* _index;

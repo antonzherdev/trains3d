@@ -1,8 +1,10 @@
 #import "EGSimpleShaderSystem.h"
 
+#import "EGMaterial.h"
+#import "EGMesh.h"
+#import "EGGL.h"
 #import "EG.h"
 #import "EGTexture.h"
-#import "EGMesh.h"
 @implementation EGSimpleShaderSystem
 static EGSimpleShaderSystem* _EGSimpleShaderSystem_instance;
 static EGSimpleColorShader* _EGSimpleShaderSystem_colorShader;

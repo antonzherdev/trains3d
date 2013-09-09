@@ -1,21 +1,11 @@
 #import "objd.h"
-@class CNBundle;
-#import "CNTypes.h"
-@class EG;
-@class EGContext;
-@class EGMatrixStack;
-@class EGMatrixModel;
 #import "EGGL.h"
-@class EGMatrix;
 #import "EGTypes.h"
 #import "EGVec.h"
 @class EGMesh;
-@class EGBuffer;
-@class EGVertexBuffer;
 @class EGIndexBuffer;
-#import "EGMaterial.h"
-@class EGTexture;
-@class EGFileTexture;
+@class EGVertexBuffer;
+@class EGMatrix;
 
 @class EGShaderProgram;
 @class EGShader;

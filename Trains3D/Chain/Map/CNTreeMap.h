@@ -1,8 +1,7 @@
 #import "objdcore.h"
+#import "CNMap.h"
 #import "ODObject.h"
 #import "CNCollection.h"
-#import "CNMap.h"
-@class CNChain;
 
 @class CNMutableTreeMap;
 @class CNTreeMapEntry;

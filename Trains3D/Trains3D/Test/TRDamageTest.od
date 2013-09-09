@@ -1,15 +1,7 @@
 package com.antonzherdev.trains
 
-import CNTest
-
-import EGTypes
-import EGMapIso
-import EGVec
-
-import TRRailroad
-import TRScore
-import TRLevelFactory
-import TRRailPoint
+import com.antonzherdev.eg._
+import test._
 
 class TRDamageTest extends CNTestCase {
     def testMain {

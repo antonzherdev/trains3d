@@ -1,18 +1,10 @@
 #import "objd.h"
-#import "ODType.h"
-#import "EGGL.h"
 #import "EGTypes.h"
-@class EGMesh;
-@class EGBuffer;
+#import "EGMaterial.h"
 @class EGVertexBuffer;
 @class EGIndexBuffer;
-@class EGShaderProgram;
 @class EGShader;
-@class EGShaderAttribute;
-@class EGShaderUniform;
-@class EGShaderSystem;
-#import "EGMaterial.h"
-#import "CNVoidRefArray.h"
+@class EGMesh;
 
 @class EGParticleSystem;
 @class EGParticle;

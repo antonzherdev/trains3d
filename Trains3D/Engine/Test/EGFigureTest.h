@@ -1,14 +1,10 @@
 #import "objd.h"
 #import "CNTest.h"
-@class EGLine;
-@class EGSlopeLine;
-@class EGVerticalLine;
-@protocol EGFigure;
-@class EGLineSegment;
-@class EGPolygon;
-@class EGThickLineSegment;
-#import "EGTypes.h"
 #import "EGVec.h"
+#import "EGTypes.h"
+@class EGLineSegment;
+@class EGThickLineSegment;
+@class EGPolygon;
 
 @class EGFigureTest;
 

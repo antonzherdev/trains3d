@@ -1,12 +1,6 @@
 package com.antonzherdev.trains
 
-import EGTypes
-import EGMap
-import EGSchedule
-import EGVec
-
-import TRTypes
-import TRRailPoint
+import com.antonzherdev.eg._
 
 enum TRCityAngle(angle : int, form : TRRailForm, back : bool) {
     angle0(0, TRRailForm.leftRight, false)

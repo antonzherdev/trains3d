@@ -1,6 +1,5 @@
 #import "EGSchedule.h"
 
-#import "CNTreeMap.h"
 @implementation EGSchedule{
     CNMutableTreeMap* __map;
     CGFloat __current;

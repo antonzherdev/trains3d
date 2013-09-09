@@ -1,17 +1,6 @@
 package com.antonzherdev.trains
 
-import CNSeq
-
-import EGTypes
-import EGMapIso
-import EGVec
-import EGFigure
-
-import TRTypes
-import TRCity
-import TRLevel
-import TRRailPoint
-import TRRailroad
+import com.antonzherdev.eg._
 
 enum TRTrainType(obstacleProcessor : (TRLevel, TRTrain, TRObstacle) -> bool) {
     simple((level : TRLevel, train : TRTrain, o : TRObstacle) -> {

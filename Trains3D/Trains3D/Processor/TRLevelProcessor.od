@@ -1,14 +1,6 @@
 package com.antonzherdev.trains
 
-import EGTypes
-import EGProcessor
-
-import TRRailroadBuilderProcessor
-import TRSwitchProcessor
-import TRLevel
-import TRLevelView
-import TRRailroad
-
+import com.antonzherdev.eg._
 
 class TRLevelProcessor(level : TRLevel) extends EGProcessor {
     private val railroadBuilderProcessor = TRRailroadBuilderProcessor(level.railroad.builder)

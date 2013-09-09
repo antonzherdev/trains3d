@@ -1,6 +1,6 @@
 #import "objd.h"
-#import "EGTypes.h"
 #import "EGVec.h"
+@protocol EGCamera;
 
 @class EGEvent;
 @protocol EGProcessor;

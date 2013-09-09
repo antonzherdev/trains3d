@@ -1,8 +1,7 @@
 package com.antonzherdev.trains
 
-import EGTypes
-import EGVec
-import EGMath
+import com.antonzherdev.eg._
+import core.ODMath._
 
 enum TRRailConnector(x : int, y : int, angle : int) {
     left(-1, 0, 0)

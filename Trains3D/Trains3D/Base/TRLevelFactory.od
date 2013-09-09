@@ -1,21 +1,6 @@
 package com.antonzherdev.trains
 
-import CNRange
-
-import EGTypes
-import EGScene
-import EGLayer
-import EGMapIso
-import EGVec
-
-import TRTrain
-import TRLevel
-import TRLevelView
-import TRLevelMenuView
-import TRLevelProcessor
-import TRLevelMenuProcessor
-import TRScore
-import TRRailroad
+import com.antonzherdev.eg._
 
 class TRLevelFactory {
     static def sceneFor(level : TRLevel) = EGScene(level, [

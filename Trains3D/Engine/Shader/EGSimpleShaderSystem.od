@@ -2,7 +2,7 @@ package com.antonzherdev.eg
 
 import CNTypes
 
-import EGGL
+import com.antonzherdev.eg.EGGL._
 import EGShader
 import EGTypes
 import EG

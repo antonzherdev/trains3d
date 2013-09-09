@@ -1,18 +1,9 @@
 #import "objd.h"
 #import "CNTest.h"
-@class CNPair;
-@class CNPairIterator;
-#import "EGTypes.h"
-@class EGLine;
-@class EGSlopeLine;
-@class EGVerticalLine;
-@protocol EGFigure;
-@class EGLineSegment;
+#import "EGVec.h"
 @class EGPolygon;
-@class EGThickLineSegment;
 @class EGCollisions;
 @class EGCollision;
-#import "EGVec.h"
 
 @class EGCollisionsTest;
 

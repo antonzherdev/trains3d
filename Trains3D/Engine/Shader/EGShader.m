@@ -1,10 +1,7 @@
 #import "EGShader.h"
 
-#import "CNFile.h"
-#import "EG.h"
-#import "EGMatrix.h"
 #import "EGMesh.h"
-#import "EGTexture.h"
+#import "EGMatrix.h"
 @implementation EGShaderProgram{
     GLuint _handle;
 }

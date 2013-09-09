@@ -1,22 +1,7 @@
 package com.antonzherdev.trains
 
-import CNChain
-import CNSortBuilder
-import CNSet
-
-import EGTypes
-import EGMapIso
-import EGCollisions
-import EGSchedule
-import EGVec
-import EGMath
-
-import TRCity
-import TRTypes
-import TRRailroad
-import TRRailPoint
-import TRTrain
-import TRScore
+import com.antonzherdev.eg._
+import core.ODMath._
 
 class TRLevelRules(mapSize : EGVec2I, scoreRules : TRScoreRules, repairerSpeed : uint, events : [(float, (TRLevel) -> void)])
 

@@ -1,29 +1,9 @@
 #import "objd.h"
+#import "CNTest.h"
+#import "EGVec.h"
+@class EGLineSegment;
 @class EGBentleyOttmann;
 @class EGIntersection;
-@class EGBentleyOttmannEvent;
-@class EGBentleyOttmannPointEvent;
-@class EGBentleyOttmannIntersectionEvent;
-@class EGBentleyOttmannEventQueue;
-@class EGPointClass;
-@class EGSweepLine;
-#import "CNTest.h"
-@class CNPair;
-@class CNPairIterator;
-@class EGLine;
-@class EGSlopeLine;
-@class EGVerticalLine;
-@protocol EGFigure;
-@class EGLineSegment;
-@class EGPolygon;
-@class EGThickLineSegment;
-#import "EGTypes.h"
-#import "EGVec.h"
-@protocol CNSet;
-@protocol CNMutableSet;
-@class CNHashSetBuilder;
-@class NSSet;
-@class NSMutableSet;
 
 @class EGBentleyOttmannTest;
 

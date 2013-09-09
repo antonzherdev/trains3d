@@ -1,17 +1,8 @@
 package com.antonzherdev.trains
 
-import EGTypes
-import EGCamera2D
-import EGText
-import EGGL
-import EGSchedule
-import EGVec
-
-import TRLevel
-import TRScore
-import TRCity
-import TRRailroad
-import TRTypes
+import com.antonzherdev.eg.EGText._
+import com.antonzherdev.eg.EGGL._
+import com.antonzherdev.eg._
 
 class TRLevelMenuView(level : TRLevel) extends EGView {
     val camera : EGCamera = EGCamera2D(EGVec2(2, 1))

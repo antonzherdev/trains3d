@@ -1,23 +1,13 @@
 #import "objd.h"
-#import "EGTypes.h"
 #import "EGProcessor.h"
-@class EGRectIndex;
+#import "EGTypes.h"
 #import "EGVec.h"
-@class TRRailConnector;
-@class TRRailForm;
-@class TRRailPoint;
-@class TRRailPointCorrection;
-@class TRRailroadConnectorContent;
-@class TREmptyConnector;
-@class TRRail;
-@class TRSwitch;
-@class TRLight;
-@class TRObstacleType;
-@class TRObstacle;
-@class TRRailroad;
-@class TRRailroadBuilder;
-@class TRLevelRules;
 @class TRLevel;
+@class EGRectIndex;
+@class TRRailConnector;
+@class TRRailroad;
+@class TRRailroadConnectorContent;
+@class TRLight;
 
 @class TRSwitchProcessor;
 

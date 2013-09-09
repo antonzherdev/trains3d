@@ -60,12 +60,27 @@ stub struct ODFloat4 extends ODComparable<float4> {
     def between( : float4, : float4) : bool
 }
 
-stub val DBL_MAX : float
-stub val DBL_MIN : float
-stub def max(a : float, b : float) : float
-stub def min(a : float, b : float) : float
 
-stub def randomMax(: uint) : uint
-stub def randomFloat : float
-stub def randomFloatGap(s : float, e : float) : float
-stub def randomPercents(:float) : float
+stub object ODMath {
+    val DBL_MAX : float
+    val DBL_MIN : float
+    def max(a : float, b : float) : float
+    def min(a : float, b : float) : float
+    def randomMax(: uint) : uint
+    def randomFloat : float
+    def randomFloatGap(s : float, e : float) : float
+    def randomPercents(:float) : float
+
+    val M_PI : float
+    val M_PI_2 : float
+    val M_PI_4 : float
+    def round(: float) : float
+    def lround(: float) : int
+    def sin(:float) : float
+    def cos(:float) : float
+    def fabs(:float) : float
+    def atan2(:float, :float) : float
+    def atan(:float) : float
+    def sqrt(:float) : float
+}
+

@@ -1,9 +1,8 @@
 #import "TRCity.h"
 
-#import "EGMap.h"
-#import "EGSchedule.h"
-#import "TRTypes.h"
 #import "TRRailPoint.h"
+#import "TRTypes.h"
+#import "EGSchedule.h"
 @implementation TRCityAngle{
     NSInteger _angle;
     TRRailForm* _form;

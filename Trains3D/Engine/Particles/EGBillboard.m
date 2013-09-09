@@ -1,8 +1,9 @@
 #import "EGBillboard.h"
 
+#import "EGMesh.h"
+#import "EGGL.h"
 #import "EG.h"
 #import "EGTexture.h"
-#import "EGMesh.h"
 @implementation EGBillboardShaderSystem
 static EGBillboardShaderSystem* _EGBillboardShaderSystem_instance;
 static ODClassType* _EGBillboardShaderSystem_type;

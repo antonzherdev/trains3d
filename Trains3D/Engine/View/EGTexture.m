@@ -1,6 +1,5 @@
 #import "EGTexture.h"
 
-#import "CNFile.h"
 @implementation EGTexture{
     GLuint _id;
 }

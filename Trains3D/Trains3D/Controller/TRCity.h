@@ -1,13 +1,10 @@
 #import "objd.h"
 #import "EGTypes.h"
-@class EGSchedule;
-@class EGAnimation;
 #import "EGVec.h"
-@class TRColor;
-@class TRRailConnector;
 @class TRRailForm;
+@class TRColor;
 @class TRRailPoint;
-@class TRRailPointCorrection;
+@class EGAnimation;
 
 @class TRCity;
 @class TRCityAngle;

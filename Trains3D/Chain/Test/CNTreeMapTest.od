@@ -1,7 +1,6 @@
 package core.chain
 
-import CNTest
-import CNTreeMap
+import test._
 
 class CNTreeMapTest extends CNTestCase {
     def testMain {

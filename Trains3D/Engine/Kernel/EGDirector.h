@@ -2,16 +2,10 @@
 #import "EGVec.h"
 @class EGScene;
 @class EGTime;
-@class EGStat;
-#import "EGTypes.h"
-#import "EGGL.h"
 @class EG;
 @class EGContext;
 @class EGMatrixStack;
-@class EGMatrixModel;
-@protocol EGProcessor;
-@protocol EGMouseProcessor;
-@protocol EGTouchProcessor;
+@class EGStat;
 @class EGEvent;
 
 @class EGDirector;

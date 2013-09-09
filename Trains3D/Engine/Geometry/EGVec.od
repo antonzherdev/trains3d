@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-import EGMath
+import core.ODMath._
 
 struct EGVec2(x : float4, y : float4) extends ODComparable<EGVec2> {
     static def apply(vec2i : EGVec2I) = EGVec2(vec2i.x, vec2i.y)

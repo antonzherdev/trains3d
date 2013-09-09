@@ -1,6 +1,5 @@
 #import "EGVec.h"
 
-#import "EGMath.h"
 EGVec2 egVec2ApplyVec2i(EGVec2I vec2i) {
     return EGVec2Make(((float)(vec2i.x)), ((float)(vec2i.y)));
 }

@@ -1,14 +1,6 @@
 package com.antonzherdev.trains
 
-import CNTreeMap
-
-import EGMap
-import EGMapIso
-import EGTypes
-import EGVec
-
-import TRRailPoint
-import TRScore
+import com.antonzherdev.eg._
 
 class TRRailroadConnectorContent {
     def canAdd(rail : TRRail) : bool = true

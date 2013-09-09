@@ -1,7 +1,5 @@
 #import "EGMesh.h"
 
-#import "CNData.h"
-#import "EGSimpleShaderSystem.h"
 @implementation EGMesh{
     EGVertexBuffer* _vertexBuffer;
     EGIndexBuffer* _indexBuffer;

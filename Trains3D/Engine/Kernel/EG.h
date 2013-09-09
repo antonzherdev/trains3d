@@ -1,12 +1,8 @@
 #import "objd.h"
-@class CNLazy;
 @class EGDirector;
-@class EGTexture;
 @class EGFileTexture;
+@class EGEnvironment;
 @class EGMatrix;
-#import "EGVec.h"
-#import "EGGL.h"
-#import "EGTypes.h"
 
 @class EG;
 @class EGContext;

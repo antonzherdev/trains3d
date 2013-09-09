@@ -1,27 +1,11 @@
 #import "objd.h"
 #import "EGTypes.h"
-@class EGCamera2D;
-#import "EGGL.h"
-@class EGSchedule;
-@class EGAnimation;
 #import "EGVec.h"
-@class TRLevelRules;
 @class TRLevel;
-@class TRScoreRules;
+@class EGCamera2D;
 @class TRScore;
-@class TRTrainScore;
-@class TRCityAngle;
-@class TRCity;
-@class TRRailroadConnectorContent;
-@class TREmptyConnector;
-@class TRRail;
-@class TRSwitch;
-@class TRLight;
-@class TRObstacleType;
-@class TRObstacle;
+@class EGSchedule;
 @class TRRailroad;
-@class TRRailroadBuilder;
-@class TRColor;
 
 @class TRLevelMenuView;
 

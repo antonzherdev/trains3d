@@ -1,13 +1,6 @@
 package com.antonzherdev.eg
 
-import EGVec
-import EGScene
-import EGTime
-import EGStat
-import EGTypes
-import EGGL
-import EG
-import EGProcessor
+import com.antonzherdev.eg.EGGL._
 
 class EGDirector {
     var scene : EGScene

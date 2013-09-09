@@ -2,14 +2,8 @@
 #import "EGTypes.h"
 #import "EGVec.h"
 #import "EGBillboard.h"
-@class EG;
-@class EGContext;
-@class EGMatrixStack;
-@class EGMatrixModel;
-@class EGSchedule;
-@class EGAnimation;
 #import "EGMaterial.h"
-@class EGProgress;
+@class EG;
 
 @class TRExplosion;
 @class TRExplosionFlame;

@@ -6,7 +6,7 @@ import CNData
 
 import EGTypes
 import EG
-import EGGL
+import com.antonzherdev.eg.EGGL._
 import EGMap
 import EGMesh
 import EGMaterial

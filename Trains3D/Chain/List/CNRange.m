@@ -1,8 +1,6 @@
 #import "objd.h"
 #import "CNRange.h"
 
-#import "CNOption.h"
-#import "CNChain.h"
 @implementation CNRange{
     NSInteger _start;
     NSInteger _end;

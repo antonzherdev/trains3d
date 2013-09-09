@@ -1,13 +1,12 @@
 #import "TRTrain.h"
 
-#import "CNSeq.h"
+#import "TRRailroad.h"
+#import "TRLevel.h"
+#import "TRTypes.h"
+#import "TRRailPoint.h"
+#import "TRCity.h"
 #import "EGMapIso.h"
 #import "EGFigure.h"
-#import "TRTypes.h"
-#import "TRCity.h"
-#import "TRLevel.h"
-#import "TRRailPoint.h"
-#import "TRRailroad.h"
 @implementation TRTrainType{
     BOOL(^_obstacleProcessor)(TRLevel*, TRTrain*, TRObstacle*);
 }

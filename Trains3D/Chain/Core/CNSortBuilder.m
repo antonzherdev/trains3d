@@ -2,7 +2,7 @@
 #import "CNSortBuilder.h"
 
 #import "CNChain.h"
-#import "CNSeq.h"
+#import "CNCollection.h"
 @implementation CNSortBuilder{
     CNChain* _chain;
     NSMutableArray* _functions;

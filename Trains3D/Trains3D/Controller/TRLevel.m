@@ -1,18 +1,14 @@
 #import "TRLevel.h"
 
-#import "CNChain.h"
-#import "CNSortBuilder.h"
-#import "CNSet.h"
-#import "EGMapIso.h"
-#import "EGCollisions.h"
-#import "EGSchedule.h"
-#import "EGMath.h"
-#import "TRCity.h"
-#import "TRTypes.h"
-#import "TRRailroad.h"
-#import "TRRailPoint.h"
-#import "TRTrain.h"
 #import "TRScore.h"
+#import "EGMapIso.h"
+#import "TRRailroad.h"
+#import "EGSchedule.h"
+#import "TRCity.h"
+#import "TRTrain.h"
+#import "TRRailPoint.h"
+#import "EGCollisions.h"
+#import "TRTypes.h"
 @implementation TRLevelRules{
     EGVec2I _mapSize;
     TRScoreRules* _scoreRules;

@@ -1,6 +1,5 @@
 #import "EGTypes.h"
 
-#import "EGMath.h"
 BOOL egRectContainsPoint(EGRect self, EGVec2 point) {
     return self.x <= point.x && point.x <= self.x + self.width && self.y <= point.y && point.y <= self.y + self.height;
 }

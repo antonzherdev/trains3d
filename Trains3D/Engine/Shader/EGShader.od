@@ -4,7 +4,7 @@ import CNFile
 import CNTypes
 
 import EG
-import EGGL
+import com.antonzherdev.eg.EGGL._
 import EGMatrix
 import EGTypes
 import EGVec

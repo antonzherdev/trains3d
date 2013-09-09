@@ -1,19 +1,14 @@
 #import "objd.h"
-#import "CNTypes.h"
-#import "EGGL.h"
 #import "EGShader.h"
-#import "EGTypes.h"
+@class EGSimpleMaterial;
+@class EGColorSource;
+@class EGColorSourceColor;
+@class EGColorSourceTexture;
+@class EGVertexBuffer;
 @class EG;
-@class EGContext;
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class EGTexture;
-@class EGFileTexture;
-#import "EGMaterial.h"
-@class EGMesh;
-@class EGBuffer;
-@class EGVertexBuffer;
-@class EGIndexBuffer;
 
 @class EGSimpleShaderSystem;
 @class EGSimpleShader;

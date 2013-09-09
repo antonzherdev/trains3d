@@ -1,8 +1,7 @@
 #import "objd.h"
 #import "CNData.h"
 
-#import "CNOption.h"
-#import "CNChain.h"
+#import "CNTypes.h"
 @implementation CNPArray{
     NSUInteger _stride;
     id(^_wrap)(VoidRef, NSUInteger);

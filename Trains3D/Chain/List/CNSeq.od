@@ -1,8 +1,6 @@
 package core.chain
 
-import CNCollection
-import CNChain
-import CNSet
+import core.ODMath._
 
 trait CNSeq<T> extends CNIterable<T> {
     def apply(index : uint) : T? = {

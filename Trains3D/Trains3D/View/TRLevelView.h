@@ -1,24 +1,13 @@
 #import "objd.h"
 #import "EGTypes.h"
-@class EGCameraIso;
-@class EG;
-@class EGContext;
-@class EGMatrixStack;
-@class EGMatrixModel;
-#import "EGGL.h"
-@class EGMapSso;
-@class EGMapSsoView;
 #import "EGVec.h"
-@class TRLevelRules;
 @class TRLevel;
 @class TRLevelBackgroundView;
 @class TRCityView;
 @class TRRailroadView;
-@class TRRailView;
-@class TRSwitchView;
-@class TRLightView;
-@class TRDamageView;
 @class TRTrainView;
+@class EGMapSso;
+@class EGCameraIso;
 
 @class TRLevelView;
 
