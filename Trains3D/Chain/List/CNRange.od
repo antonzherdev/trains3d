@@ -1,11 +1,5 @@
 package core.chain
 
-import CNCollection
-import CNSeq
-import CNOption
-import CNTypes
-import CNChain
-
 class CNRange(start : int, end : int, step : int) extends CNSeq<int> {
     val count : uint =
         if(step > 0) if(start < end) (end - start)/step else 0

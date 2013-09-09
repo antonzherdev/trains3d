@@ -33,7 +33,7 @@ static ODClassType* _EGMapSso_type;
         _partialTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
             return [self isPartialTile:uwrap(EGVec2I, _)];
         }] toArray];
-        _allTiles = [_fullTiles arrayByAddingObject:_partialTiles];
+        _allTiles = [_fullTiles arrayByAddingItem:_partialTiles];
     }
     
     return self;

@@ -1,7 +1,5 @@
 package com.antonzherdev.eg
 
-import CNOption
-
 object EGProgress {
     def progress(y1 : float4, y2 : float4) : float4 -> float4 = {
         val k = (y2 - y1)

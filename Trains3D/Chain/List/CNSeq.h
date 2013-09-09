@@ -12,13 +12,13 @@
 - (id)applyIndex:(NSUInteger)index;
 - (id)randomItem;
 - (id<CNSet>)toSet;
-- (id<CNSeq>)arrayByAddingObject:(id)object;
-- (id<CNSeq>)arrayByRemovingObject:(id)object;
+- (id<CNSeq>)arrayByAddingItem:(id)item;
+- (id<CNSeq>)arrayByRemovingItem:(id)item;
 - (BOOL)isEqualToSeq:(id<CNSeq>)seq;
 @end
 
 
-@protocol CNMutableSeq<CNSeq>
+@protocol CNMutableSeq<CNSeq, CNMutableIterable>
 @end
 
 
@@ -28,7 +28,7 @@
 + (id)arrayBuilder;
 - (id)init;
 - (ODClassType*)type;
-- (void)addObject:(id)object;
+- (void)addItem:(id)item;
 - (NSArray*)build;
 + (ODClassType*)type;
 @end

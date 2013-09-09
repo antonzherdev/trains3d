@@ -13,7 +13,7 @@
 - (id)initWithA:(id)a b:(id)b;
 - (ODClassType*)type;
 + (CNPair*)newWithA:(id)a b:(id)b;
-- (BOOL)containsObject:(id)object;
+- (BOOL)containsItem:(id)item;
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
 - (id)head;

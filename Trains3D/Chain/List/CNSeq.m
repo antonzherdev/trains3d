@@ -26,8 +26,8 @@ static ODClassType* _CNArrayBuilder_type;
     _CNArrayBuilder_type = [ODClassType classTypeWithCls:[CNArrayBuilder class]];
 }
 
-- (void)addObject:(id)object {
-    [_array addObject:object];
+- (void)addItem:(id)item {
+    [_array addItem:item];
     self;
 }
 
@@ -35,9 +35,9 @@ static ODClassType* _CNArrayBuilder_type;
     return _array;
 }
 
-- (void)addAllObject:(id<CNTraversable>)object {
-    [object forEach:^void(id _) {
-        [self addObject:_];
+- (void)addAllItem:(id<CNTraversable>)item {
+    [item forEach:^void(id _) {
+        [self addItem:_];
     }];
 }
 

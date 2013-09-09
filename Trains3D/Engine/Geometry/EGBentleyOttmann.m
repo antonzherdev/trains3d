@@ -399,7 +399,7 @@ static ODClassType* _EGBentleyOttmannEventQueue_type;
 - (void)offerPoint:(EGVec2)point event:(EGBentleyOttmannEvent*)event {
     [[_events objectForKey:wrap(EGVec2, point) orUpdateWith:^NSMutableArray*() {
         return [NSMutableArray mutableArray];
-    }] addObject:event];
+    }] addItem:event];
 }
 
 - (id<CNSeq>)poll {
@@ -544,7 +544,7 @@ static ODClassType* _EGSweepLine_type;
         if([pe isVertical]) {
             float minY = pe.segment.p1.y;
             float maxY = pe.segment.p2.y;
-            id<CNIterator> i = [_events iteratorHigherThanObject:event];
+            id<CNIterator> i = [_events iteratorHigherThanItem:event];
             while([i hasNext]) {
                 EGBentleyOttmannPointEvent* e = ((EGBentleyOttmannPointEvent*)([i next]));
                 if(!([e isVertical])) {
@@ -554,7 +554,7 @@ static ODClassType* _EGSweepLine_type;
                 }
             }
         } else {
-            [_events addObject:event];
+            [_events addItem:event];
             [self checkIntersectionA:[CNOption opt:event] b:[self aboveEvent:event]];
             [self checkIntersectionA:[CNOption opt:event] b:[self belowEvent:event]];
         }
@@ -563,18 +563,18 @@ static ODClassType* _EGSweepLine_type;
             if(!([((EGBentleyOttmannPointEvent*)(event)) isVertical])) {
                 id a = [self aboveEvent:event];
                 id b = [self belowEvent:event];
-                [_events removeObject:event];
+                [_events removeItem:event];
                 [self sweepToEvent:event];
                 [self checkIntersectionA:a b:b];
             }
         } else {
             NSMutableSet* set = ((NSMutableSet*)([[_intersections applyKey:[EGPointClass pointClassWithPoint:[event point]]] get]));
             id<CNSeq> toInsert = [[[set chain] filter:^BOOL(EGBentleyOttmannPointEvent* _) {
-                return [_events removeObject:_];
+                return [_events removeItem:_];
             }] toArray];
             [self sweepToEvent:event];
             [toInsert forEach:^void(EGBentleyOttmannPointEvent* e) {
-                [_events addObject:e];
+                [_events addItem:e];
                 [self checkIntersectionA:[CNOption opt:e] b:[self aboveEvent:e]];
                 [self checkIntersectionA:[CNOption opt:e] b:[self belowEvent:e]];
             }];
@@ -583,11 +583,11 @@ static ODClassType* _EGSweepLine_type;
 }
 
 - (id)aboveEvent:(EGBentleyOttmannEvent*)event {
-    return [_events higherThanObject:event];
+    return [_events higherThanItem:event];
 }
 
 - (id)belowEvent:(EGBentleyOttmannEvent*)event {
-    return [_events lowerThanObject:event];
+    return [_events lowerThanItem:event];
 }
 
 - (void)checkIntersectionA:(id)a b:(id)b {
@@ -605,8 +605,8 @@ static ODClassType* _EGSweepLine_type;
         NSMutableSet* existing = ((NSMutableSet*)([_intersections objectForKey:[EGPointClass pointClassWithPoint:point] orUpdateWith:^NSMutableSet*() {
             return [NSMutableSet mutableSet];
         }]));
-        [existing addObject:a];
-        [existing addObject:b];
+        [existing addItem:a];
+        [existing addItem:b];
         if(point.x > _currentEventPoint.x || (eqf4(point.x, _currentEventPoint.x) && point.y > _currentEventPoint.y)) {
             EGBentleyOttmannIntersectionEvent* intersection = [EGBentleyOttmannIntersectionEvent bentleyOttmannIntersectionEventWithPoint:point];
             [_queue offerPoint:point event:intersection];

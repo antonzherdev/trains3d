@@ -1,10 +1,10 @@
 package core
 
-import CNTypes
 
-stub def NSStringFromClass(cls : Class) : string
+stub object NSGeneric{
+    def NSStringFromClass(cls : Class) : string
+}
 stub struct Class{}
-
 
 stub class ODType<T> {
     def cls : Class
@@ -16,7 +16,7 @@ stub class ODType<T> {
 }
 
 stub class ODClassType<T>(cls : Class) extends ODType<T> {
-    def name = NSStringFromClass(cls)
+    def name = NSGeneric.NSStringFromClass(cls)
 }
 
 stub class ODPType<T>(cls : Class, name : string, size : uint, wrap : (VoidRef, uint) -> T) extends ODType<T>

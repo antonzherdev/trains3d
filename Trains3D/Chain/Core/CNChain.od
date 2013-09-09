@@ -1,11 +1,5 @@
 package core.chain
 
-import ODType
-
-import CNCollection
-import CNSet
-import CNSortBuilder
-
 stub class CNChain<A> extends CNIterable<A> {
     static def chainWith<T>(collection:CNTraversable<T>) : CNChain<T>
 

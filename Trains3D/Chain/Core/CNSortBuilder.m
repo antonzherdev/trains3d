@@ -30,21 +30,21 @@ static ODClassType* _CNSortBuilder_type;
 }
 
 - (CNSortBuilder*)ascBy:(id(^)(id))by {
-    [_functions addObject:^NSInteger(id x, id y) {
+    [_functions addItem:^NSInteger(id x, id y) {
         return [by(x) compareTo:by(y)];
     }];
     return self;
 }
 
 - (CNSortBuilder*)descBy:(id(^)(id))by {
-    [_functions addObject:^NSInteger(id x, id y) {
+    [_functions addItem:^NSInteger(id x, id y) {
         return [by(y) compareTo:by(x)];
     }];
     return self;
 }
 
 - (CNSortBuilder*)andF:(NSInteger(^)(id, id))f {
-    [_functions addObject:f];
+    [_functions addItem:f];
     return self;
 }
 

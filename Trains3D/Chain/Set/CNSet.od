@@ -1,7 +1,5 @@
 package core.chain
 
-import CNCollection
-
 trait CNSet<T> extends CNIterable<T> {}
 
 trait CNMutableSet<T> extends CNSet<T> with CNMutableIterable<T> {}
@@ -9,8 +7,8 @@ trait CNMutableSet<T> extends CNSet<T> with CNMutableIterable<T> {}
 class CNHashSetBuilder<T> extends CNBuilder<T, CNHashSet<T>> {
     val set = NSMutableSet<T>()
 
-    def add(object : T) {
-        set.add(object)
+    def add(item : T) {
+        set.add(item)
         self
     }
     def build : CNHashSet<T> = set

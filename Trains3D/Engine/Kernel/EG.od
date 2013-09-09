@@ -1,14 +1,6 @@
 package com.antonzherdev.eg
 
-import CNLazy
-
-import EGDirector
-import EGTexture
-import EGMatrix
-import EGVec
 import com.antonzherdev.eg.EGGL._
-import EGTypes
-import EGMatrix
 
 class EG {
     static def director : EGDirector = context.director

@@ -52,7 +52,7 @@ static ODClassType* _CNMutableTreeMap_type;
 }
 
 - (id)applyKey:(id)key {
-    return [CNOption opt:[self entryForKey:key].object];
+    return [CNOption opt:[self entryForKey:key].value];
 }
 
 - (void)clear {
@@ -82,10 +82,10 @@ static ODClassType* _CNMutableTreeMap_type;
     return p;
 }
 
-- (void)setObject:(id)object forKey:(id)forKey {
+- (void)setValue:(id)value forKey:(id)forKey {
     CNTreeMapEntry* t = _root;
     if(t == nil) {
-        _root = [CNTreeMapEntry newWithKey:forKey object:object parent:nil];
+        _root = [CNTreeMapEntry newWithKey:forKey value:value parent:nil];
         __size = 1;
     } else {
         NSInteger cmp = 0;
@@ -99,12 +99,12 @@ static ODClassType* _CNMutableTreeMap_type;
                 if(cmp > 0) {
                     t = t.right;
                 } else {
-                    t.object = object;
+                    t.value = value;
                     return ;
                 }
             }
         } while(t != nil);
-        CNTreeMapEntry* e = [CNTreeMapEntry newWithKey:forKey object:object parent:parent];
+        CNTreeMapEntry* e = [CNTreeMapEntry newWithKey:forKey value:value parent:parent];
         if(cmp < 0) parent.left = e;
         else parent.right = e;
         [self fixAfterInsertionEntry:e];
@@ -124,7 +124,7 @@ static ODClassType* _CNMutableTreeMap_type;
     if(p.left != nil && p.right != nil) {
         CNTreeMapEntry* s = [p next];
         p.key = s.key;
-        p.object = s.object;
+        p.value = s.value;
         p = s;
     }
     CNTreeMapEntry* replacement = ((p.left != nil) ? p.left : p.right);
@@ -155,7 +155,7 @@ static ODClassType* _CNMutableTreeMap_type;
             }
         }
     }
-    return entry.object;
+    return entry.value;
 }
 
 - (void)fixAfterInsertionEntry:(CNTreeMapEntry*)entry {
@@ -311,7 +311,7 @@ static ODClassType* _CNMutableTreeMap_type;
         return [CNOption none];
     } else {
         [self deleteEntry:entry];
-        return [CNOption opt:tuple(entry.key, entry.object)];
+        return [CNOption opt:tuple(entry.key, entry.value)];
     }
 }
 
@@ -391,7 +391,7 @@ static ODClassType* _CNMutableTreeMap_type;
         return [o get];
     } else {
         id init = orUpdateWith();
-        [self setObject:init forKey:key];
+        [self setValue:init forKey:key];
         return init;
     }
 }
@@ -399,16 +399,16 @@ static ODClassType* _CNMutableTreeMap_type;
 - (id)modifyBy:(id(^)(id))by forKey:(id)forKey {
     id newObject = by([self applyKey:forKey]);
     if([newObject isEmpty]) [self removeForKey:forKey];
-    else [self setObject:newObject forKey:forKey];
+    else [self setValue:newObject forKey:forKey];
     return newObject;
 }
 
-- (void)addObject:(CNTuple*)object {
-    [self setObject:object.a forKey:object.b];
+- (void)addItem:(CNTuple*)item {
+    [self setValue:item.a forKey:item.b];
 }
 
-- (void)removeObject:(CNTuple*)object {
-    [self removeForKey:object.a];
+- (void)removeItem:(CNTuple*)item {
+    [self removeForKey:item.a];
 }
 
 - (BOOL)containsKey:(id)key {
@@ -439,7 +439,7 @@ static ODClassType* _CNMutableTreeMap_type;
     return YES;
 }
 
-- (BOOL)containsObject:(id)object {
+- (BOOL)containsItem:(id)item {
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         if([[i next] isEqual:i]) return YES;
@@ -474,7 +474,7 @@ static ODClassType* _CNMutableTreeMap_type;
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {
     [self forEach:^void(id x) {
-        [builder addObject:x];
+        [builder addItem:x];
     }];
     return [builder build];
 }
@@ -511,7 +511,7 @@ static ODClassType* _CNMutableTreeMap_type;
 
 @implementation CNTreeMapEntry{
     id _key;
-    id _object;
+    id _value;
     CNTreeMapEntry* _left;
     CNTreeMapEntry* _right;
     NSInteger _color;
@@ -519,7 +519,7 @@ static ODClassType* _CNMutableTreeMap_type;
 }
 static ODClassType* _CNTreeMapEntry_type;
 @synthesize key = _key;
-@synthesize object = _object;
+@synthesize value = _value;
 @synthesize left = _left;
 @synthesize right = _right;
 @synthesize color = _color;
@@ -544,10 +544,10 @@ static ODClassType* _CNTreeMapEntry_type;
     _CNTreeMapEntry_type = [ODClassType classTypeWithCls:[CNTreeMapEntry class]];
 }
 
-+ (CNTreeMapEntry*)newWithKey:(id)key object:(id)object parent:(CNTreeMapEntry*)parent {
++ (CNTreeMapEntry*)newWithKey:(id)key value:(id)value parent:(CNTreeMapEntry*)parent {
     CNTreeMapEntry* r = [CNTreeMapEntry treeMapEntry];
     r.key = key;
-    r.object = object;
+    r.value = value;
     r.parent = parent;
     return r;
 }
@@ -653,7 +653,7 @@ static ODClassType* _CNTreeMapKeySet_type;
     return YES;
 }
 
-- (BOOL)containsObject:(id)object {
+- (BOOL)containsItem:(id)item {
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         if([[i next] isEqual:i]) return YES;
@@ -688,7 +688,7 @@ static ODClassType* _CNTreeMapKeySet_type;
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {
     [self forEach:^void(id x) {
-        [builder addObject:x];
+        [builder addItem:x];
     }];
     return [builder build];
 }
@@ -848,7 +848,7 @@ static ODClassType* _CNTreeMapValues_type;
     return YES;
 }
 
-- (BOOL)containsObject:(id)object {
+- (BOOL)containsItem:(id)item {
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         if([[i next] isEqual:i]) return YES;
@@ -883,7 +883,7 @@ static ODClassType* _CNTreeMapValues_type;
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {
     [self forEach:^void(id x) {
-        [builder addObject:x];
+        [builder addItem:x];
     }];
     return [builder build];
 }
@@ -945,7 +945,7 @@ static ODClassType* _CNTreeMapValuesIterator_type;
 }
 
 - (id)next {
-    id ret = _entry.object;
+    id ret = _entry.value;
     _entry = [_entry next];
     return ret;
 }
@@ -1020,7 +1020,7 @@ static ODClassType* _CNTreeMapIterator_type;
 }
 
 - (id)next {
-    CNTuple* ret = tuple(_entry.key, _entry.object);
+    CNTuple* ret = tuple(_entry.key, _entry.value);
     _entry = [_entry next];
     return ret;
 }

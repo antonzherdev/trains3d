@@ -1,9 +1,5 @@
 package core
 
-import ODObject
-import CNOption
-import CNSeq
-
 class CNTuple<A, B>(a : A, b : B) extends ODComparable<CNTuple<A, B>> {
     def compare<AC extends ODComparable<A>, BC extends ODComparable<B>>(to : CNTuple<AC, BC>) : int = {
         val r = to.a.compare(a)

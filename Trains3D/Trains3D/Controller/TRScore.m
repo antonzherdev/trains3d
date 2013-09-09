@@ -124,7 +124,7 @@ static ODClassType* _TRScore_type;
 }
 
 - (void)runTrain:(TRTrain*)train {
-    _trains = [_trains arrayByAddingObject:[TRTrainScore trainScoreWithTrain:train]];
+    _trains = [_trains arrayByAddingItem:[TRTrainScore trainScoreWithTrain:train]];
 }
 
 - (void)arrivedTrain:(TRTrain*)train {

@@ -1,10 +1,5 @@
 package core.chain
 
-import ODObject
-import CNCollection
-import CNMap
-import CNChain
-
 class CNMutableTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K, V> {
     static def new<K extends ODComparable<K>, V> = CNMutableTreeMap<K, V>((a : K, b : K) -> a.compare(b))
 
@@ -13,7 +8,7 @@ class CNMutableTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K,
 
     def count = _size
     def isEmpty : bool = root == nil
-    def apply(key : K) : V? = entryFor(key).object
+    def apply(key : K) : V? = entryFor(key).value
     def clear {
         _size = 0
         root = nil
@@ -38,10 +33,10 @@ class CNMutableTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K,
     static val BLACK = 0
     static val RED = 1
 
-    def set(object : V, forKey : K)  {
+    def set(value : V, forKey : K)  {
         val t = root
         if (t == nil) {
-            root = CNTreeMapEntry.newWith<K,V>(forKey, object, parent = nil)
+            root = CNTreeMapEntry.newWith<K,V>(forKey, value, parent = nil)
             _size = 1
         } else {
             val cmp : int = 0
@@ -53,12 +48,12 @@ class CNMutableTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K,
                 if (cmp < 0) t = t.left
                 else if (cmp > 0) t = t.right
                 else {
-                    t.object = object
+                    t.value = value
                     return nil
                 }
             } while (t != nil)
 
-            val e =  CNTreeMapEntry.newWith<K,V>(forKey, object, parent)
+            val e =  CNTreeMapEntry.newWith<K,V>(forKey, value, parent)
             if (cmp < 0) parent.left = e
             else parent.right = e
             fixAfterInsertion(e)
@@ -81,7 +76,7 @@ class CNMutableTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K,
         if (p.left != nil && p.right != nil) {
             val s = p.next
             p.key = s.key
-            p.object = s.object
+            p.value = s.value
             p = s
         } // p has 2 children
 
@@ -111,7 +106,7 @@ class CNMutableTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K,
                 p.parent = nil
             }
         }
-        entry.object
+        entry.value
     }
 
     private def fixAfterInsertion(entry : CNTreeMapEntry<K, V>) {
@@ -259,7 +254,7 @@ class CNMutableTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K,
         if(entry == nil) nil
         else {
             delete(entry)
-            (entry.key, entry.object)
+            (entry.key, entry.value)
         }
     }
 
@@ -320,16 +315,16 @@ class CNMutableTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K,
 
 class CNTreeMapEntry<K, V> {
     var key : K
-    var object : V
+    var value : V
     var left : CNTreeMapEntry<K, V> = nil
     var right : CNTreeMapEntry<K, V> = nil
     var color : int
     weak var parent : CNTreeMapEntry<K, V>
 
-    static def newWith<K, V>(key : K, object : V, parent : CNTreeMapEntry<K, V>) : CNTreeMapEntry<K, V> = {
+    static def newWith<K, V>(key : K, value : V, parent : CNTreeMapEntry<K, V>) : CNTreeMapEntry<K, V> = {
         val r = CNTreeMapEntry<K, V>()
         r.key = key
-        r.object = object
+        r.value = value
         r.parent = parent
         r
     }
@@ -388,7 +383,7 @@ class CNTreeMapValuesIterator<V>(map : CNMutableTreeMap<_, V>) extends CNIterato
     var entry : CNTreeMapEntry<_, V>
     def hasNext : bool = entry != nil
     def next : V = {
-        val ret = entry.object
+        val ret = entry.value
         entry = entry.next
         ret
     }
@@ -404,7 +399,7 @@ class CNTreeMapIterator<K, V>(map : CNMutableTreeMap<K, V>) extends CNIterator<(
     var entry : CNTreeMapEntry<K, V>
 
     def next : V = {
-        val ret = (entry.key, entry.object)
+        val ret = (entry.key, entry.value)
         entry = entry.next
         ret
     }

@@ -36,7 +36,7 @@ static ODClassType* _EGParticleSystem_type;
 }
 
 - (void)emitParticle {
-    __particles = [CNList applyObject:[self generateParticle] tail:__particles];
+    __particles = [CNList applyItem:[self generateParticle] tail:__particles];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

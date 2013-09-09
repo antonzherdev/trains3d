@@ -2,6 +2,10 @@
 
 
 @implementation NSMutableDictionary (CNChain)
+- (void)setValue:(id)value forKey:(id)forKey {
+    [self setObject:value forKey:forKey];
+}
+
 - (id)removeForKey:(id)key {
     id ret = [self applyKey:key];
     [self removeObjectForKey:key];
@@ -34,11 +38,11 @@
     return v;
 }
 
-- (void)addObject:(CNTuple *)object {
+- (void)addItem:(CNTuple *)object {
     [self setObject:object.b forKey:object.a];
 }
 
-- (void)removeObject:(CNTuple *)object {
+- (void)removeItem:(CNTuple *)object {
     [self removeObjectForKey:object.a];
 }
 

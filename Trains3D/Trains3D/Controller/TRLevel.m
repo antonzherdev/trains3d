@@ -156,7 +156,7 @@ static ODClassType* _TRLevel_type;
     }]] randomItem] get]);
     TRCity* city = [TRCity cityWithColor:[TRColor values][[[self cities] count]] tile:tile angle:[self randomCityDirectionForTile:tile]];
     [_railroad tryAddRail:[TRRail railWithTile:tile form:city.angle.form]];
-    [__cities addObject:city];
+    [__cities addItem:city];
 }
 
 - (TRCityAngle*)randomCityDirectionForTile:(EGVec2I)tile {
@@ -171,7 +171,7 @@ static ODClassType* _TRLevel_type;
     fromCity.expectedTrainAnimation = [CNOption opt:[EGAnimation animationWithLength:3.0 finish:^void() {
         fromCity.expectedTrainAnimation = [CNOption none];
         [train startFromCity:fromCity];
-        __trains = [__trains arrayByAddingObject:train];
+        __trains = [__trains arrayByAddingItem:train];
         [_score runTrain:train];
     }]];
 }
@@ -185,7 +185,7 @@ static ODClassType* _TRLevel_type;
 
 - (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint {
     [train setHead:fromPoint];
-    __trains = [__trains arrayByAddingObject:train];
+    __trains = [__trains arrayByAddingItem:train];
     [_score runTrain:train];
 }
 
@@ -252,14 +252,14 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)destroyTrain:(TRTrain*)train {
-    if([__trains containsObject:train]) {
+    if([__trains containsItem:train]) {
         [self removeTrain:train];
         [_score destroyedTrain:train];
     }
 }
 
 - (void)removeTrain:(TRTrain*)train {
-    __trains = [__trains arrayByRemovingObject:train];
+    __trains = [__trains arrayByRemovingItem:train];
     __repairer = [__repairer filter:^BOOL(TRTrain* _) {
         return !([_ isEqual:train]);
     }];

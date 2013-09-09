@@ -19,15 +19,15 @@ trait CNSeq<T> extends CNIterable<T> {
         else apply(randomMax(count - 1))
 
     def toSet : CNSet<T> = convertWith(CNHashSetBuilder<T>())
-    def arrayByAdding(object : T) : CNSeq<T> = {
+    def arrayByAdding(item : T) : CNSeq<T> = {
         val builder = CNArrayBuilder<T>()
         builder.addAll(self)
-        builder.add(object)
+        builder.add(item)
         builder.build
     }
 
-    def arrayByRemoving(object : T) : CNSeq<T> = {
-        chain.filter(_ != object).toArray
+    def arrayByRemoving(item : T) : CNSeq<T> = {
+        chain.filter(_ != item).toArray
     }
 
     def isEqualTo(seq : CNSeq<T>) : bool = {
@@ -52,8 +52,8 @@ type CNMutableArray<T> = NSMutableArray<T>
 class CNArrayBuilder<T> extends CNBuilder<T, CNArray<T>> {
     val array = NSMutableArray<T>()
 
-    def add(object : T) {
-        array.add(object)
+    def add(item : T) {
+        array.add(item)
         self
     }
 

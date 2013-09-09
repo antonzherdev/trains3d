@@ -1,4 +1,5 @@
 #import "NSMutableSet+CNChain.h"
+#import "NSSet+CNChain.h"
 
 
 @implementation NSMutableSet (CNChain)
@@ -6,4 +7,11 @@
     return [NSMutableSet set];
 }
 
+- (void)addItem:(id)object {
+    [self addObject:object];
+}
+
+- (void)removeItem:(id)object {
+    [self removeObject:object];
+}
 @end

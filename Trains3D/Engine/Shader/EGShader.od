@@ -1,17 +1,6 @@
 package com.antonzherdev.eg
 
-import CNFile
-import CNTypes
-
-import EG
 import com.antonzherdev.eg.EGGL._
-import EGMatrix
-import EGTypes
-import EGVec
-import EGMesh
-import EGMaterial
-import EGTexture
-import EGMesh
 
 class EGShaderProgram(handle : GLuint) {
     static def loadFromFiles(vertex : string, fragment : string) : EGShaderProgram =

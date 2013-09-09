@@ -10,30 +10,30 @@ class CNMutableTreeSet<T>(map : CNMutableTreeMap<T, ODObject>) extends CNMutable
 
     def between(a : T, b : T) : [T]
 
-    def add(object : T) {
-        map.set(object = obj, forKey = object)
+    def add(item : T) {
+        map.set(value = obj, forKey = item)
     }
 
-    def remove(object : T) : bool = map.removeFor(key = object).isDefined
+    def remove(item : T) : bool = map.removeFor(key = item).isDefined
 
 
-    def higherThan(object : T) : T? = map.higherKeyThan(object)
-    def lowerThan(object : T) : T? = map.lowerKeyThan(object)
+    def higherThan(item : T) : T? = map.higherKeyThan(item)
+    def lowerThan(item : T) : T? = map.lowerKeyThan(item)
 
     def count : uint = map.count
     def iterator = map.keys.iterator
-    def iteratorHigherThan(object : T) = map.keys.iteratorHigherThan(object)
+    def iteratorHigherThan(item : T) = map.keys.iteratorHigherThan(item)
 
     def head : T? = map.firstKey
     def last : T? = map.lastKey
-    def contains(object : T) : bool = map.contains(key = object)
+    def contains(item : T) : bool = map.contains(key = item)
 
     def clear {
         map.clear
     }
 
     def addAll(objects : CNTraversable<T>) {
-        objects.for(add(object = _))
+        objects.for(add(item = _))
     }
 
     def reorder : CNMutableTreeSet<T> = {

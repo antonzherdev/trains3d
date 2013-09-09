@@ -1,8 +1,5 @@
 package core.chain
 
-import CNChain
-import CNSeq
-
 class CNSortBuilder<A>(chain : CNChain<A>) {
     private val functions = CNMutableArray<(A, A) -> int>()
 

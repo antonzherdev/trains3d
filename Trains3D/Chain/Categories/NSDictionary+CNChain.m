@@ -42,6 +42,11 @@
     return ret;
 }
 
+- (BOOL)containsItem:(id)item {
+    return [[self allValues] containsObject:item];
+}
+
+
 - (id <CNIterator>)iterator {
     return nil;
 }
@@ -59,10 +64,6 @@
     else return [CNOption none];
 }
 
-- (BOOL)containsObject:(id)object {
-    return [[self allValues] containsObject:object];
-}
-
 
 - (id)findWhere:(BOOL(^)(id))where {
     __block id ret = [CNOption none];
@@ -78,7 +79,7 @@
 
 - (id)convertWithBuilder:(id <CNBuilder>)builder {
     [self forEach:^void(id x) {
-        [builder addObject:x];
+        [builder addItem:x];
     }];
     return [builder build];
 }

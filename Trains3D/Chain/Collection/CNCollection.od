@@ -1,17 +1,15 @@
 package core.chain
 
-import CNChain
-
 trait CNIterator<T> {
    def hasNext : bool
    def next : T
 }
 
 trait CNBuilder<T, C extends CNTraversable<T>> {
-    def add(object : T)
+    def add(item : T)
     def build : C
-    def addAll(object : CNTraversable<T>) {
-        object.for(add(_))
+    def addAll(item : CNTraversable<T>) {
+        item.for(add(_))
     }
 }
 
@@ -51,8 +49,8 @@ trait CNTraversable<T> {
 }
 
 trait CNMutableTraversable<T> extends CNTraversable<T> {
-    def add(object : T)
-    def remove(object : T)
+    def add(item : T)
+    def remove(item : T)
 }
 
 trait CNIterable<T> extends CNTraversable<T> {
@@ -83,7 +81,7 @@ trait CNIterable<T> extends CNTraversable<T> {
         true
     }
 
-    def contains(object : T) : bool = {
+    def contains(item : T) : bool = {
         val i = iterator
         while(i.hasNext) if(i.next == i) return true
         false

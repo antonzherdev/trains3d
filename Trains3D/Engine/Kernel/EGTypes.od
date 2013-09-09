@@ -1,6 +1,5 @@
 package com.antonzherdev.eg
 
-import EGVec
 import core.ODMath._
 
 struct EGRect(x : float, width : float, y : float, height : float) {

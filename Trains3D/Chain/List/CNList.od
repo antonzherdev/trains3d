@@ -1,15 +1,9 @@
 package core.chain
 
-import CNCollection
-import CNSeq
-import CNOption
-import CNChain
-import CNSet
-
 class CNList<T> extends CNSeq<T> {
     static def apply<T> : CNList<T> = CNEmptyList.instance
-    static def apply<T>(object : T) : CNList<T> = CNFilledList<T>(object, CNEmptyList.instance)
-    static def apply<T>(object : T, tail : CNList<T>) : CNList<T>  = CNFilledList<T>(object, tail)
+    static def apply<T>(item : T) : CNList<T> = CNFilledList<T>(item, CNEmptyList.instance)
+    static def apply<T>(item : T, tail : CNList<T>) : CNList<T>  = CNFilledList<T>(item, tail)
 
     def iterator : CNIterator<T> = {
         val i = CNListIterator<T>()

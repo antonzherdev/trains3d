@@ -1,18 +1,6 @@
 package com.antonzherdev.eg
 
-import CNChain
-import CNRange
-import CNData
-
-import EGTypes
-import EG
 import com.antonzherdev.eg.EGGL._
-import EGMap
-import EGMesh
-import EGMaterial
-import EGTexture
-import EGShader
-import EGVec
 
 class EGMapSso(size : EGVec2I) {
     static val ISO = 0.70710676908493

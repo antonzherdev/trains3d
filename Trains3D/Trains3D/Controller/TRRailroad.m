@@ -707,12 +707,12 @@ static ODClassType* _TRRailroad_type;
     } else {
         [_damagesIndex modifyBy:^id(id arr) {
             return [CNOption opt:[[arr map:^id<CNSeq>(id<CNSeq> _) {
-                return [_ arrayByAddingObject:numf(point.x)];
+                return [_ arrayByAddingItem:numf(point.x)];
             }] getOrElse:^id<CNSeq>() {
                 return [ arrf(1) {point.x}];
             }]];
         } forKey:tuple(wrap(EGVec2I, point.tile), point.form)];
-        [__damagesPoints addObject:point];
+        [__damagesPoints addItem:point];
     }
 }
 
@@ -727,7 +727,7 @@ static ODClassType* _TRRailroad_type;
                 }] toArray];
             }];
         } forKey:tuple(wrap(EGVec2I, point.tile), point.form)];
-        [__damagesPoints removeObject:point];
+        [__damagesPoints removeItem:point];
     }
 }
 

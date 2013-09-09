@@ -40,20 +40,20 @@ static ODClassType* _CNMutableTreeSet_type;
     @throw @"Method between is abstract";
 }
 
-- (void)addObject:(id)object {
-    [_map setObject:_CNMutableTreeSet_obj forKey:object];
+- (void)addItem:(id)item {
+    [_map setValue:_CNMutableTreeSet_obj forKey:item];
 }
 
-- (BOOL)removeObject:(id)object {
-    return [[_map removeForKey:object] isDefined];
+- (BOOL)removeItem:(id)item {
+    return [[_map removeForKey:item] isDefined];
 }
 
-- (id)higherThanObject:(id)object {
-    return [_map higherKeyThanKey:object];
+- (id)higherThanItem:(id)item {
+    return [_map higherKeyThanKey:item];
 }
 
-- (id)lowerThanObject:(id)object {
-    return [_map lowerKeyThanKey:object];
+- (id)lowerThanItem:(id)item {
+    return [_map lowerKeyThanKey:item];
 }
 
 - (NSUInteger)count {
@@ -64,8 +64,8 @@ static ODClassType* _CNMutableTreeSet_type;
     return [_map.keys iterator];
 }
 
-- (id<CNIterator>)iteratorHigherThanObject:(id)object {
-    return [_map.keys iteratorHigherThanKey:object];
+- (id<CNIterator>)iteratorHigherThanItem:(id)item {
+    return [_map.keys iteratorHigherThanKey:item];
 }
 
 - (id)head {
@@ -76,8 +76,8 @@ static ODClassType* _CNMutableTreeSet_type;
     return [_map lastKey];
 }
 
-- (BOOL)containsObject:(id)object {
-    return [_map containsKey:object];
+- (BOOL)containsItem:(id)item {
+    return [_map containsKey:item];
 }
 
 - (void)clear {
@@ -86,7 +86,7 @@ static ODClassType* _CNMutableTreeSet_type;
 
 - (void)addAllObjects:(id<CNTraversable>)objects {
     [objects forEach:^void(id _) {
-        [self addObject:_];
+        [self addItem:_];
     }];
 }
 
@@ -146,7 +146,7 @@ static ODClassType* _CNMutableTreeSet_type;
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {
     [self forEach:^void(id x) {
-        [builder addObject:x];
+        [builder addItem:x];
     }];
     return [builder build];
 }

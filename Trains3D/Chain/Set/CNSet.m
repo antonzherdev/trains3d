@@ -23,8 +23,8 @@ static ODClassType* _CNHashSetBuilder_type;
     _CNHashSetBuilder_type = [ODClassType classTypeWithCls:[CNHashSetBuilder class]];
 }
 
-- (void)addObject:(id)object {
-    [_set addObject:object];
+- (void)addItem:(id)item {
+    [_set addItem:item];
     self;
 }
 
@@ -32,9 +32,9 @@ static ODClassType* _CNHashSetBuilder_type;
     return _set;
 }
 
-- (void)addAllObject:(id<CNTraversable>)object {
-    [object forEach:^void(id _) {
-        [self addObject:_];
+- (void)addAllItem:(id<CNTraversable>)item {
+    [item forEach:^void(id _) {
+        [self addItem:_];
     }];
 }
 

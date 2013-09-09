@@ -1,5 +1,7 @@
 #import <Foundation/Foundation.h>
 
-@interface NSMutableSet (CNChain)
+#import "CNSet.h"
+
+@interface NSMutableSet (CNChain)<CNMutableSet>
 + (id) mutableSet;
 @end

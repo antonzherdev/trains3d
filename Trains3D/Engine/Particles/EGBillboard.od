@@ -1,15 +1,6 @@
 package com.antonzherdev.eg
 
-import EG
 import com.antonzherdev.eg.EGGL._
-import EGVec
-import EGShader
-import EGTypes
-import EGParticleSystem
-import CNVoidRefArray
-import EGMaterial
-import EGTexture
-import EGMesh
 
 class EGBillboardShaderSystem extends EGShaderSystem<EGSimpleMaterial> {
     static val instance = EGBillboardShaderSystem()

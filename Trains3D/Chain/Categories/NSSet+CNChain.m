@@ -34,7 +34,7 @@
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {
     for(id x in self)  {
-        [builder addObject:x];
+        [builder addItem:x];
     }
     return [builder build];
 }
@@ -52,4 +52,9 @@
     }
     return YES;
 }
+
+- (BOOL)containsItem:(id)item {
+    return [self containsObject:item];
+}
+
 @end

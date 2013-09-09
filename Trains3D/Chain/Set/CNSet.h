@@ -9,7 +9,7 @@
 @end
 
 
-@protocol CNMutableSet<CNSet>
+@protocol CNMutableSet<CNSet, CNMutableIterable>
 @end
 
 
@@ -19,7 +19,7 @@
 + (id)hashSetBuilder;
 - (id)init;
 - (ODClassType*)type;
-- (void)addObject:(id)object;
+- (void)addItem:(id)item;
 - (NSSet*)build;
 + (ODClassType*)type;
 @end

@@ -1,13 +1,10 @@
 package core.chain
 
-import CNCollection
-import CNSet
-
 class CNPair<T>(a : T, b : T) extends CNSet<T> {
     static def newWith<T>(a : T, b : T) : CNPair<T> =
         if(a < b) CNPair<T>(a, b)
         else CNPair<T>(b, a)
-    def contains(object : T) : bool = a == object || b == object
+    def contains(item : T) : bool = a == item || b == item
     def count : uint = 2
     def iterator : CNIterator<T> = CNPairIterator<T>(self)
     def head : T? = a

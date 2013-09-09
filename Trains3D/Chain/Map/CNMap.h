@@ -13,13 +13,13 @@
 @end
 
 
-@protocol CNMutableMap<CNMap>
-- (void)setObject:(id)object forKey:(id)forKey;
+@protocol CNMutableMap<CNMap, CNMutableIterable>
+- (void)setValue:(id)value forKey:(id)forKey;
 - (id)removeForKey:(id)key;
 - (id)objectForKey:(id)key orUpdateWith:(id(^)())orUpdateWith;
 - (id)modifyBy:(id(^)(id))by forKey:(id)forKey;
-- (void)addObject:(CNTuple*)object;
-- (void)removeObject:(CNTuple*)object;
+- (void)addItem:(CNTuple*)item;
+- (void)removeItem:(CNTuple*)item;
 @end
 
 
@@ -36,10 +36,10 @@
 - (id<CNIterable>)keys;
 - (id<CNIterable>)values;
 - (BOOL)containsKey:(id)key;
-- (void)setObject:(id)object forKey:(id)forKey;
+- (void)setValue:(id)value forKey:(id)forKey;
 - (id)modifyBy:(id(^)(id))by forKey:(id)forKey;
-- (void)addObject:(CNTuple*)object;
-- (void)removeObject:(CNTuple*)object;
+- (void)addItem:(CNTuple*)item;
+- (void)removeItem:(CNTuple*)item;
 + (ODClassType*)type;
 @end
 

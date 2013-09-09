@@ -16,9 +16,9 @@
 
 
 @protocol CNBuilder<NSObject>
-- (void)addObject:(id)object;
+- (void)addItem:(id)item;
 - (id)build;
-- (void)addAllObject:(id<CNTraversable>)object;
+- (void)addAllItem:(id<CNTraversable>)item;
 @end
 
 
@@ -33,8 +33,8 @@
 
 
 @protocol CNMutableTraversable<CNTraversable>
-- (void)addObject:(id)object;
-- (void)removeObject:(id)object;
+- (void)addItem:(id)item;
+- (void)removeItem:(id)item;
 @end
 
 
@@ -46,13 +46,13 @@
 - (CNChain*)chain;
 - (void)forEach:(void(^)(id))each;
 - (BOOL)goOn:(BOOL(^)(id))on;
-- (BOOL)containsObject:(id)object;
+- (BOOL)containsItem:(id)item;
 - (NSString*)description;
 - (NSUInteger)hash;
 @end
 
 
-@protocol CNMutableIterable<CNIterable>
+@protocol CNMutableIterable<CNIterable, CNMutableTraversable>
 @end
 
 

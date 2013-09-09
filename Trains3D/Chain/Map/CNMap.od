@@ -1,9 +1,5 @@
 package core.chain
 
-import CNCollection
-import CNChain
-import CNTuple
-
 trait CNMap<K, V> extends CNIterable<(K, V)> {
     def apply(key : K) : V?
     def keys : CNIterable<K>
@@ -12,7 +8,7 @@ trait CNMap<K, V> extends CNIterable<(K, V)> {
 }
 
 trait CNMutableMap<K, V> extends CNMap<K, V> with CNMutableIterable<(K, V)> {
-    def set(object : V, forKey : K)
+    def set(value : V, forKey : K)
     def removeFor(key : K) : V?
     def objectFor(key: K, orUpdateWith: () -> V) : V = {
         val o = apply(key)
@@ -30,11 +26,11 @@ trait CNMutableMap<K, V> extends CNMap<K, V> with CNMutableIterable<(K, V)> {
         newObject
     }
 
-    def add(object : (K, V)) {
-        set(object.a, object.b)
+    def add(item : (K, V)) {
+        set(item.a, item.b)
     }
-    def remove(object : (K, V)) {
-        removeFor(object.a)
+    def remove(item : (K, V)) {
+        removeFor(item.a)
     }
 }
 
@@ -45,19 +41,19 @@ class CNMapDefault<K, V>(defaultFunc : K -> V, map : CNMutableMap<K, V>) extends
     def keys : CNIterable<K> = map.keys
     def values : CNIterable<V> = map.values
     def contains(key : K) : bool = map.contains(key)
-    def set(object : V, forKey : K) {
-        map.set(object, forKey)
+    def set(value : V, forKey : K) {
+        map.set(value, forKey)
     }
     def modify(by : V -> V, forKey : K) : V {
-        val object = by(apply(forKey))
-        map.set(object, forKey)
-        object
+        val value = by(apply(forKey))
+        map.set(value, forKey)
+        value
     }
-    def add(object : (K, V)) {
-        map.add(object)
+    def add(item : (K, V)) {
+        map.add(item)
     }
-    def remove(object : (K, V)) {
-        map.remove(object)
+    def remove(item : (K, V)) {
+        map.remove(item)
     }
 }
 

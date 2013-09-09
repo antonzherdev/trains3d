@@ -1,13 +1,6 @@
 package com.antonzherdev.eg
 
-import EGTypes
-import EG
 import com.antonzherdev.eg.EGGL._
-import EGShader
-import EGMesh
-import EGSimpleShaderSystem
-import EGStandardShaderSystem
-import EGTexture
 
 class EGColorSource {
     static def apply(color : EGColor) : EGColorSource = EGColorSourceColor(color)

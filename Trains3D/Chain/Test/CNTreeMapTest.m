@@ -25,11 +25,11 @@ static ODClassType* _CNTreeMapTest_type;
     CNMutableTreeMap* map = [CNMutableTreeMap new];
     [self assertEqualsA:@0 b:numi(((NSInteger)([map count])))];
     [self assertTrueValue:[[map applyKey:@0] isEmpty]];
-    [map setObject:@"test" forKey:@0];
+    [map setValue:@"test" forKey:@0];
     [self assertEqualsA:@"test" b:[[map applyKey:@0] get]];
     id<CNSeq> tests = [ arri(11) {-10, -20, -30, 10, 20, -15, 20, 0, 11, 13, -18}];
     [tests forEach:^void(id i) {
-        [map setObject:[@"test" stringByAppendingFormat:@"%li", unumi(i)] forKey:i];
+        [map setValue:[@"test" stringByAppendingFormat:@"%li", unumi(i)] forKey:i];
     }];
     [self assertEqualsA:numui([[[tests chain] distinct] count]) b:numui([map count])];
     [[[tests chain] distinct] forEach:^void(id i) {

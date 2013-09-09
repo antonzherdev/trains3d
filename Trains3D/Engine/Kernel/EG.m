@@ -173,7 +173,7 @@ static ODClassType* _EGMatrixStack_type;
 }
 
 - (void)push {
-    _stack = [CNList applyObject:_value tail:_stack];
+    _stack = [CNList applyItem:_value tail:_stack];
 }
 
 - (void)pop {

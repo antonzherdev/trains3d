@@ -12,8 +12,8 @@
 - (id)init;
 - (ODClassType*)type;
 + (CNList*)apply;
-+ (CNList*)applyObject:(id)object;
-+ (CNList*)applyObject:(id)object tail:(CNList*)tail;
++ (CNList*)applyItem:(id)item;
++ (CNList*)applyItem:(id)item tail:(CNList*)tail;
 - (id<CNIterator>)iterator;
 - (CNList*)tail;
 - (CNList*)filterF:(BOOL(^)(id))f;

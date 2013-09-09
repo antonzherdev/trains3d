@@ -23,12 +23,12 @@ static ODClassType* _CNList_type;
     return CNEmptyList.instance;
 }
 
-+ (CNList*)applyObject:(id)object {
-    return [CNFilledList filledListWithItem:object tail:CNEmptyList.instance];
++ (CNList*)applyItem:(id)item {
+    return [CNFilledList filledListWithItem:item tail:CNEmptyList.instance];
 }
 
-+ (CNList*)applyObject:(id)object tail:(CNList*)tail {
-    return [CNFilledList filledListWithItem:object tail:tail];
++ (CNList*)applyItem:(id)item tail:(CNList*)tail {
+    return [CNFilledList filledListWithItem:item tail:tail];
 }
 
 - (id<CNIterator>)iterator {
@@ -65,16 +65,16 @@ static ODClassType* _CNList_type;
     return [self convertWithBuilder:[CNHashSetBuilder hashSetBuilder]];
 }
 
-- (id<CNSeq>)arrayByAddingObject:(id)object {
+- (id<CNSeq>)arrayByAddingItem:(id)item {
     CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
-    [builder addAllObject:self];
-    [builder addObject:object];
+    [builder addAllItem:self];
+    [builder addItem:item];
     return ((NSArray*)([builder build]));
 }
 
-- (id<CNSeq>)arrayByRemovingObject:(id)object {
+- (id<CNSeq>)arrayByRemovingItem:(id)item {
     return [[[self chain] filter:^BOOL(id _) {
-        return !([_ isEqual:object]);
+        return !([_ isEqual:item]);
     }] toArray];
 }
 
@@ -126,7 +126,7 @@ static ODClassType* _CNList_type;
     return YES;
 }
 
-- (BOOL)containsObject:(id)object {
+- (BOOL)containsItem:(id)item {
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         if([[i next] isEqual:i]) return YES;
@@ -161,7 +161,7 @@ static ODClassType* _CNList_type;
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {
     [self forEach:^void(id x) {
-        [builder addObject:x];
+        [builder addItem:x];
     }];
     return [builder build];
 }

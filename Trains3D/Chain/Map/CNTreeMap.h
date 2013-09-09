@@ -26,7 +26,7 @@
 - (void)clear;
 - (id<CNIterator>)iterator;
 - (CNTreeMapIterator*)iteratorHigherThanKey:(id)key;
-- (void)setObject:(id)object forKey:(id)forKey;
+- (void)setValue:(id)value forKey:(id)forKey;
 - (id)removeForKey:(id)key;
 - (id)pollFirst;
 - (id)firstKey;
@@ -41,7 +41,7 @@
 
 @interface CNTreeMapEntry : NSObject
 @property (nonatomic) id key;
-@property (nonatomic) id object;
+@property (nonatomic) id value;
 @property (nonatomic, retain) CNTreeMapEntry* left;
 @property (nonatomic, retain) CNTreeMapEntry* right;
 @property (nonatomic) NSInteger color;
@@ -50,7 +50,7 @@
 + (id)treeMapEntry;
 - (id)init;
 - (ODClassType*)type;
-+ (CNTreeMapEntry*)newWithKey:(id)key object:(id)object parent:(CNTreeMapEntry*)parent;
++ (CNTreeMapEntry*)newWithKey:(id)key value:(id)value parent:(CNTreeMapEntry*)parent;
 - (CNTreeMapEntry*)next;
 + (ODClassType*)type;
 @end

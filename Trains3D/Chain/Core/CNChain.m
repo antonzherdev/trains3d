@@ -166,7 +166,7 @@
 
 - (CNChain *)groupBy:(cnF)by withBuilder:(cnF0)builder {
     return [self link:[CNGroupByLink linkWithBy:by fold:^id(id r, id x) {
-        [r addObject:x];
+        [r addItem:x];
         return r;
     } withStart:builder factor:0.5 mutableMode:YES mapAfter:^id(id x) {
         return [x build];
@@ -175,7 +175,7 @@
 
 - (CNChain *)groupBy:(cnF)by map:(cnF)f withBuilder:(cnF0)builder {
     return [self link:[CNGroupByLink linkWithBy:by fold:^id(id r, id x) {
-        [r addObject:f(x)];
+        [r addItem:f(x)];
         return r;
     } withStart:builder factor:0.5 mutableMode:YES mapAfter:^id(id x) {
         return [x build];
@@ -293,7 +293,7 @@
 
 - (id)convertWithBuilder:(id <CNBuilder>)builder {
     [self forEach:^void(id x) {
-        [builder addObject:x];
+        [builder addItem:x];
     }];
     return [builder build];
 }

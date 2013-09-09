@@ -54,22 +54,22 @@ static ODClassType* _CNMapDefault_type;
     return [_map containsKey:key];
 }
 
-- (void)setObject:(id)object forKey:(id)forKey {
-    [_map setObject:object forKey:forKey];
+- (void)setValue:(id)value forKey:(id)forKey {
+    [_map setValue:value forKey:forKey];
 }
 
 - (id)modifyBy:(id(^)(id))by forKey:(id)forKey {
-    id object = by([self applyKey:forKey]);
-    [_map setObject:object forKey:forKey];
-    return object;
+    id value = by([self applyKey:forKey]);
+    [_map setValue:value forKey:forKey];
+    return value;
 }
 
-- (void)addObject:(CNTuple*)object {
-    [_map addObject:object];
+- (void)addItem:(CNTuple*)item {
+    [_map addItem:item];
 }
 
-- (void)removeObject:(CNTuple*)object {
-    [_map removeObject:object];
+- (void)removeItem:(CNTuple*)item {
+    [_map removeItem:item];
 }
 
 - (id)head {
@@ -100,7 +100,7 @@ static ODClassType* _CNMapDefault_type;
     return YES;
 }
 
-- (BOOL)containsObject:(id)object {
+- (BOOL)containsItem:(id)item {
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         if([[i next] isEqual:i]) return YES;
@@ -135,7 +135,7 @@ static ODClassType* _CNMapDefault_type;
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {
     [self forEach:^void(id x) {
-        [builder addObject:x];
+        [builder addItem:x];
     }];
     return [builder build];
 }

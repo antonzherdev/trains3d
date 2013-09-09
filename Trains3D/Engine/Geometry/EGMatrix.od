@@ -1,7 +1,5 @@
 package com.antonzherdev.eg
 
-import EGVec
-
 stub class EGMatrix {
     def array : float4[16]
 

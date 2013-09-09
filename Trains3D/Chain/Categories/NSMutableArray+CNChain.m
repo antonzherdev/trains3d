@@ -6,4 +6,13 @@
 + (NSMutableArray *)mutableArray {
     return [NSMutableArray array];
 }
+
+- (void)addItem:(id)object {
+    [self addObject:object];
+}
+
+- (void)removeItem:(id)object {
+    [self removeObject:object];
+}
+
 @end

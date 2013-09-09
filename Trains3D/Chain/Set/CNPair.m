@@ -33,8 +33,8 @@ static ODClassType* _CNPair_type;
     else return [CNPair pairWithA:b b:a];
 }
 
-- (BOOL)containsObject:(id)object {
-    return [_a isEqual:object] || [_b isEqual:object];
+- (BOOL)containsItem:(id)item {
+    return [_a isEqual:item] || [_b isEqual:item];
 }
 
 - (NSUInteger)count {
@@ -99,7 +99,7 @@ static ODClassType* _CNPair_type;
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {
     [self forEach:^void(id x) {
-        [builder addObject:x];
+        [builder addItem:x];
     }];
     return [builder build];
 }
