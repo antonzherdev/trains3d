@@ -37,6 +37,5 @@ class EGAnimation(length : float, finish : void -> void) extends EGController {
                 finish()
             }
         }
-
     }
 }

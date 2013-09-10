@@ -3,6 +3,7 @@
 #import "EGVec.h"
 #import "EGBillboard.h"
 #import "EGMaterial.h"
+@class EGProgress;
 @class EG;
 
 @class TRExplosion;
@@ -42,6 +43,7 @@
 @property (nonatomic, readonly) float size;
 @property (nonatomic, readonly) EGVec2 shift;
 @property (nonatomic, readonly) EGVec4 startColor;
+@property (nonatomic, readonly) void(^animation)(float);
 
 + (id)explosionFlameParticleWithSize:(float)size shift:(EGVec2)shift;
 - (id)initWithSize:(float)size shift:(EGVec2)shift;

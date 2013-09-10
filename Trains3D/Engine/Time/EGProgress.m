@@ -23,14 +23,6 @@ static ODClassType* _EGProgress_type;
     };
 }
 
-+ (void(^)(float))compileFunctions:(id<CNSeq>)functions {
-    return ^void(float t) {
-        [functions forEach:^void(void(^_)(float)) {
-            _(t);
-        }];
-    };
-}
-
 - (ODClassType*)type {
     return [EGProgress type];
 }

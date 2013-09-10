@@ -1,5 +1,6 @@
 #import "TRExplosion.h"
 
+#import "EGProgress.h"
 #import "EG.h"
 @implementation TRExplosion{
     EGVec3 _position;
@@ -159,12 +160,14 @@ static ODClassType* _TRExplosionFlame_type;
     float _size;
     EGVec2 _shift;
     EGVec4 _startColor;
+    void(^_animation)(float);
 }
 static EGQuadrant _TRExplosionFlameParticle_textureQuadrant;
 static ODClassType* _TRExplosionFlameParticle_type;
 @synthesize size = _size;
 @synthesize shift = _shift;
 @synthesize startColor = _startColor;
+@synthesize animation = _animation;
 
 + (id)explosionFlameParticleWithSize:(float)size shift:(EGVec2)shift {
     return [[TRExplosionFlameParticle alloc] initWithSize:size shift:shift];
@@ -176,6 +179,17 @@ static ODClassType* _TRExplosionFlameParticle_type;
         _size = size;
         _shift = shift;
         _startColor = EGVec4Make(1.0, 0.7, 0.0, 0.5);
+        _animation = ^void(float _) {
+            [^id(float _) {
+                return [[EGProgress gapT1:0.0 t2:0.1](_) map:^id(id _) {
+                    return numf4([EGProgress progressY1:0.0 y2:_size](unumf4(_)));
+                }];
+            }(_) forEach:^void(id _) {
+                ^void(float xx) {
+                    self.model = egQuadApplySize(xx);
+                }(unumf4(_));
+            }];
+        };
     }
     
     return self;
@@ -197,7 +211,7 @@ static ODClassType* _TRExplosionFlameParticle_type;
 }
 
 - (void)updateT:(float)t dt:(float)dt {
-    if(t < 1) self.model = egQuadApplySize(_size * t);
+    _animation(t);
 }
 
 - (ODClassType*)type {

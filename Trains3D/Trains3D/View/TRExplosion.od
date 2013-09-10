@@ -2,6 +2,7 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 import core.ODMath._
+import com.antonzherdev.eg.EGProgress._
 
 
 class TRExplosion(position : EGVec3, size : float4) extends EGController {
@@ -45,11 +46,11 @@ class TRExplosionFlameParticle(size : float4, shift : EGVec2) extends EGBillboar
         ])
     } */
 
+//    val animation = gap(0, 0.1) >> progress(0, size) >> model = EGQuad(_)
+    val animation = gap(0, 0.1) >> progress(0, size) >> xx : float4 -> model = EGQuad(xx)
+
     def update(t : float4, dt : float4) {
-        //animation(t)
-        if(t < 1) {
-            model = EGQuad(size * t)
-        }
+        animation(t)
     }
 }
 

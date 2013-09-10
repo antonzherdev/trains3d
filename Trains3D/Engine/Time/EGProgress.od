@@ -12,8 +12,4 @@ object EGProgress {
             if(t.between(t1, t2)) CNOption.some((t - t1)/l)
             else CNOption.none<float4>
     }
-
-    def compile(functions : [float4 -> void]) : float4 -> void =
-    t : float4 -> {functions.for(_(t))}
-
 }
