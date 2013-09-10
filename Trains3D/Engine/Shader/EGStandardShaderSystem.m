@@ -250,6 +250,7 @@ static ODClassType* _EGStandardShader_type;
 
 - (id)initWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program {
     self = [super initWithProgram:program];
+    __weak EGStandardShader* _weakSelf = self;
     if(self) {
         _key = key;
         _positionSlot = [self attributeForName:@"position"];
@@ -262,10 +263,10 @@ static ODClassType* _EGStandardShader_type;
         _mwcpUniform = [self uniformForName:@"mwcp"];
         _mwcUniform = [CNOption opt:((_key.directLightCount > 0) ? [self uniformForName:@"mwc"] : nil)];
         _directLightDirections = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniform*(id i) {
-            return [self uniformForName:[NSString stringWithFormat:@"dirLightDirection%@", i]];
+            return [_weakSelf uniformForName:[NSString stringWithFormat:@"dirLightDirection%@", i]];
         }] toArray];
         _directLightColors = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniform*(id i) {
-            return [self uniformForName:[NSString stringWithFormat:@"dirLightColor%@", i]];
+            return [_weakSelf uniformForName:[NSString stringWithFormat:@"dirLightColor%@", i]];
         }] toArray];
     }
     

@@ -24,14 +24,15 @@ static ODClassType* _EGMapSso_type;
 
 - (id)initWithSize:(EGVec2I)size {
     self = [super init];
+    __weak EGMapSso* _weakSelf = self;
     if(self) {
         _size = size;
         _limits = egRectINewXYXX2YY2(((CGFloat)((1 - _size.y) / 2 - 1)), ((CGFloat)((2 * _size.x + _size.y - 3) / 2 + 1)), ((CGFloat)((1 - _size.x) / 2 - 1)), ((CGFloat)((_size.x + 2 * _size.y - 3) / 2 + 1)));
         _fullTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
-            return [self isFullTile:uwrap(EGVec2I, _)];
+            return [_weakSelf isFullTile:uwrap(EGVec2I, _)];
         }] toArray];
         _partialTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
-            return [self isPartialTile:uwrap(EGVec2I, _)];
+            return [_weakSelf isPartialTile:uwrap(EGVec2I, _)];
         }] toArray];
         _allTiles = [_fullTiles arrayByAddingItem:_partialTiles];
     }

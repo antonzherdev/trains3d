@@ -175,6 +175,7 @@ static ODClassType* _TRExplosionFlameParticle_type;
 
 - (id)initWithSize:(float)size shift:(EGVec2)shift {
     self = [super initWithLifeLength:1.0];
+    __weak TRExplosionFlameParticle* _weakSelf = self;
     if(self) {
         _size = size;
         _shift = shift;
@@ -182,11 +183,11 @@ static ODClassType* _TRExplosionFlameParticle_type;
         _animation = ^void(float _) {
             [^id(float _) {
                 return [[EGProgress gapT1:0.0 t2:0.1](_) map:^id(id _) {
-                    return numf4([EGProgress progressY1:0.0 y2:_size](unumf4(_)));
+                    return numf4([EGProgress progressY1:0.0 y2:_weakSelf.size](unumf4(_)));
                 }];
             }(_) forEach:^void(id _) {
                 ^void(float xx) {
-                    self.model = egQuadApplySize(xx);
+                    _weakSelf.model = egQuadApplySize(xx);
                 }(unumf4(_));
             }];
         };

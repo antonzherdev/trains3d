@@ -511,9 +511,10 @@ static ODClassType* _EGSweepLine_type;
 
 - (id)init {
     self = [super init];
+    __weak EGSweepLine* _weakSelf = self;
     if(self) {
         _events = [CNMutableTreeSet newWithComparator:^NSInteger(EGBentleyOttmannPointEvent* a, EGBentleyOttmannPointEvent* b) {
-            return [self compareEventsA:a b:b];
+            return [_weakSelf compareEventsA:a b:b];
         }];
         _intersections = [NSMutableDictionary mutableDictionary];
         _queue = nil;
