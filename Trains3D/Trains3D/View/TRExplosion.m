@@ -186,8 +186,8 @@ static ODClassType* _TRExplosionFlameParticle_type;
                     return numf4([EGProgress progressY1:0.0 y2:_weakSelf.size](unumf4(_)));
                 }];
             }(_) forEach:^void(id _) {
-                ^void(float xx) {
-                    _weakSelf.model = egQuadApplySize(xx);
+                ^void(float _) {
+                    _weakSelf.model = egQuadApplySize(_);
                 }(unumf4(_));
             }];
         };
