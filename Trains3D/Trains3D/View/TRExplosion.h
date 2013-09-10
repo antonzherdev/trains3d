@@ -41,15 +41,16 @@
 
 @interface TRExplosionFlameParticle : EGBillboardParticle
 @property (nonatomic, readonly) float size;
+@property (nonatomic, readonly) EGVec2 startShift;
 @property (nonatomic, readonly) EGVec2 shift;
-@property (nonatomic, readonly) EGVec4 startColor;
 @property (nonatomic, readonly) void(^animation)(float);
 
-+ (id)explosionFlameParticleWithSize:(float)size shift:(EGVec2)shift;
-- (id)initWithSize:(float)size shift:(EGVec2)shift;
++ (id)explosionFlameParticleWithSize:(float)size startShift:(EGVec2)startShift shift:(EGVec2)shift;
+- (id)initWithSize:(float)size startShift:(EGVec2)startShift shift:(EGVec2)shift;
 - (ODClassType*)type;
 + (TRExplosionFlameParticle*)applyPosition:(EGVec3)position size:(float)size;
 - (void)updateT:(float)t dt:(float)dt;
++ (EGVec4)startColor;
 + (EGQuadrant)textureQuadrant;
 + (ODClassType*)type;
 @end

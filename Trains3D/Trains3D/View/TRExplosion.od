@@ -26,13 +26,14 @@ class TRExplosionFlame(position : EGVec3, size : float4) extends EGBillboardPart
     }
 }
 
-class TRExplosionFlameParticle(size : float4, shift : EGVec2) extends EGBillboardParticle(1) {
-    val startColor = EGVec4(1, 0.7, 0, 0.5)
+class TRExplosionFlameParticle(size : float4, startShift : EGVec2, shift : EGVec2) extends EGBillboardParticle(2) {
+    static val startColor = EGVec4(1, 0.4, 0, 0.3)
     static val textureQuadrant : EGQuadrant = EGQuad.identity.mul(0.5).quadrant
     static def apply(position : EGVec3, size : float4) : TRExplosionFlameParticle = {
-        val ret = TRExplosionFlameParticle(size, shift = EGVec2(randomFloatGap(0, 0.1*size), randomFloatGap(0, 0.1*size)))
+        val startShift = randomVec2.mul(size*0.2)
+        val ret = TRExplosionFlameParticle(size, startShift, shift = startShift.add(randomVec2.mul(size*0.2)))
         ret.position = position
-        ret.color = EGVec4(1, 0.7, 0, 0.5)
+        ret.color = startColor
         ret.uv = textureQuadrant.randomQuad
         ret.model = EGQuad(0)
         ret
@@ -50,8 +51,9 @@ class TRExplosionFlameParticle(size : float4, shift : EGVec2) extends EGBillboar
     val animation =
     {
         val bigQuad = EGQuad(size)
-            gap(0, 0.1) >> progress(f4 = 0, size) >> model = EGQuad(_)
-        *|* gap(0.1, 1) >> progress(vec2 = EGVec2(0, 0), shift) >> model = bigQuad.add(_)
+            gap(0, 0.1) >> progress(f4 = 0, size) >> model = EGQuad(_).add(startShift)
+        *|* gap(0.1, 1) >> progress(vec2 = startShift, shift) >> model = bigQuad.add(_)
+        *|* gap(0.05, 1) >> progress(vec4 = startColor, EGVec4(0, 0, 0, 0)) >> color = _
     }
     def update(t : float4, dt : float4) {
         animation(t)
