@@ -180,17 +180,33 @@ static ODClassType* _TRExplosionFlameParticle_type;
         _size = size;
         _shift = shift;
         _startColor = EGVec4Make(1.0, 0.7, 0.0, 0.5);
-        _animation = ^void(float _) {
-            [^id(float _) {
-                return [[EGProgress gapT1:0.0 t2:0.1](_) map:^id(id _) {
-                    return numf4([EGProgress progressY1:0.0 y2:_weakSelf.size](unumf4(_)));
-                }];
-            }(_) forEach:^void(id _) {
+        _animation = ^id() {
+            EGQuad bigQuad = egQuadApplySize(_size);
+            return ^void(float _) {
                 ^void(float _) {
-                    _weakSelf.model = egQuadApplySize(_);
-                }(unumf4(_));
-            }];
-        };
+                    [^id(float _) {
+                        return [[EGProgress gapT1:0.0 t2:0.1](_) map:^id(id _) {
+                            return numf4([EGProgress progressF4:0.0 f42:_weakSelf.size](unumf4(_)));
+                        }];
+                    }(_) forEach:^void(id _) {
+                        ^void(float _) {
+                            _weakSelf.model = egQuadApplySize(_);
+                        }(unumf4(_));
+                    }];
+                }(_);
+                ^void(float _) {
+                    [^id(float _) {
+                        return [[EGProgress gapT1:0.1 t2:1.0](_) map:^id(id _) {
+                            return wrap(EGVec2, [EGProgress progressVec2:EGVec2Make(0.0, 0.0) vec22:_weakSelf.shift](unumf4(_)));
+                        }];
+                    }(_) forEach:^void(id _) {
+                        ^void(EGVec2 _) {
+                            _weakSelf.model = egQuadAddVec2(bigQuad, _);
+                        }(uwrap(EGVec2, _));
+                    }];
+                }(_);
+            };
+        }();
     }
     
     return self;

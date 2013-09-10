@@ -8,10 +8,18 @@ static ODClassType* _EGProgress_type;
     _EGProgress_type = [ODClassType classTypeWithCls:[EGProgress class]];
 }
 
-+ (float(^)(float))progressY1:(float)y1 y2:(float)y2 {
-    float k = y2 - y1;
++ (float(^)(float))progressF4:(float)f4 f42:(float)f42 {
+    float k = f42 - f4;
     return ^float(float t) {
-        return k * t + y1;
+        return k * t + f4;
+    };
+}
+
++ (EGVec2(^)(float))progressVec2:(EGVec2)vec2 vec22:(EGVec2)vec22 {
+    float(^x)(float) = [EGProgress progressF4:vec2.x f42:vec22.x];
+    float(^y)(float) = [EGProgress progressF4:vec2.y f42:vec22.y];
+    return ^EGVec2(float t) {
+        return EGVec2Make(x(t), y(t));
     };
 }
 

@@ -47,8 +47,12 @@ class TRExplosionFlameParticle(size : float4, shift : EGVec2) extends EGBillboar
     } */
 
 //    val animation = gap(0, 0.1) >> progress(0, size) >> model = EGQuad(_)
-    val animation = gap(0, 0.1) >> progress(0, size) >> model = EGQuad(_)
-
+    val animation =
+    {
+        val bigQuad = EGQuad(size)
+            gap(0, 0.1) >> progress(f4 = 0, size) >> model = EGQuad(_)
+        *|* gap(0.1, 1) >> progress(vec2 = EGVec2(0, 0), shift) >> model = bigQuad.add(_)
+    }
     def update(t : float4, dt : float4) {
         animation(t)
     }
