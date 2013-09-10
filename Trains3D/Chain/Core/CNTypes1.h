@@ -2,7 +2,7 @@
 #import "CNTuple.h"
 
 
-typedef char* VoidRef;
+typedef void* VoidRef;
 @class CNChain;
 typedef void (^cnChainBuildBlock)(CNChain * chain);
 typedef BOOL (^cnPredicate)(id x);
