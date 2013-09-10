@@ -34,7 +34,7 @@ CNVoidRefArray cnVoidRefArrayApplyTpCount(ODPType* tp, NSUInteger count);
 })
 static inline CNVoidRefArray cnVoidRefArrayWriteUInt4(const CNVoidRefArray self, unsigned int uInt4) {
     *(unsigned int*)self.bytes = uInt4;
-    return (CNVoidRefArray){self.length, self.bytes + 4};
+    return (CNVoidRefArray){self.length, ((unsigned int*)self.bytes) + 1};
 }
 static inline void cnVoidRefArrayFree(CNVoidRefArray self) {
     free(self.bytes);
