@@ -1,0 +1,8 @@
+package com.antonzherdev.eg
+
+class EGCollisionItem {
+}
+
+class EGCollisionBox {
+
+}

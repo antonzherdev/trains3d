@@ -1,0 +1,5 @@
+package com.antonzherdev.eg
+
+class EGCollisionWorld {
+    def add(item : EGCollisionItem)
+}
