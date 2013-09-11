@@ -1,0 +1,26 @@
+package com.antonzherdev.eg
+
+stub class EGCollisionBody<T>(data : T, shape : EGCollisionShape, isKinematic : bool) {
+    val obj : VoidRef = nil
+    private var _matrix : EGMatrix = EGMatrix.identity
+    def matrix = _matrix
+    def set(matrix : EGMatrix) {
+        _matrix = matrix
+    }
+
+    def translate(x : float4, y : float4, z : float4) {
+        _matrix = _matrix.translate(x, y, z)
+    }
+
+    def rotate(angle : float4, x : float4, y : float4, z : float4) {
+        _matrix = _matrix.rotate(angle, x, y, z)
+    }
+}
+
+stub trait EGCollisionShape {
+    def shape : VoidRef = nil
+}
+
+stub class EGCollisionBox(halfSize : EGVec3) extends EGCollisionShape {
+    static def apply(x : float4, y : float4, z : float4) = EGCollisionBox(EGVec3(x, y, z))
+}

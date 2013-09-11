@@ -4,6 +4,9 @@
 @class EGPolygon;
 @class EGCollisions;
 @class EGCollision;
+@class EGCollisionWorld;
+@class EGCollisionBox;
+@class EGCollisionBody;
 
 @class EGCollisionsTest;
 
@@ -14,6 +17,7 @@
 - (void)testDavidsStar;
 - (void)testEmptyWithCrossedBoundingRects;
 - (void)testEmptyWithoutCrossedBoundingRects;
+- (void)testCollisions2;
 + (ODClassType*)type;
 @end
 

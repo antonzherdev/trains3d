@@ -1,0 +1,30 @@
+package com.antonzherdev.eg
+
+class EGCollision2<T>(bodies : CNPair<EGCollisionBody<T>>, contacts : [EGContact])
+class EGContact(a : EGVec3, b : EGVec3)
+
+class EGIndexFunFilteredIterable<T>(maxCount : uint, f : uint -> T?) extends CNIterable<T> {
+    def iterator : CNIterator<T> = EGIndexFunFilteredIterator<T>(maxCount, f)
+}
+
+class EGIndexFunFilteredIterator<T>(maxCount : uint, f : uint -> T?) extends CNIterator<T> {
+    private var i : uint = 0
+    private var _next : T? = roll
+
+    def hasNext = _next.isDefined
+
+    def next : T = {
+        val ret = _next.get
+        _next = roll
+        ret
+    }
+
+    private def roll : T? = {
+        var ret : T? = nil
+        while(ret.isEmpty && i < maxCount ) {
+            ret = f(i)
+            i++
+        }
+        ret
+    }
+}

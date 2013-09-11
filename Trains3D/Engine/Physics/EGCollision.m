@@ -1,0 +1,347 @@
+#import "EGCollision.h"
+
+@implementation EGCollision2{
+    CNPair* _bodies;
+    id<CNSeq> _contacts;
+}
+static ODClassType* _EGCollision2_type;
+@synthesize bodies = _bodies;
+@synthesize contacts = _contacts;
+
++ (id)collision2WithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts {
+    return [[EGCollision2 alloc] initWithBodies:bodies contacts:contacts];
+}
+
+- (id)initWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts {
+    self = [super init];
+    if(self) {
+        _bodies = bodies;
+        _contacts = contacts;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGCollision2_type = [ODClassType classTypeWithCls:[EGCollision2 class]];
+}
+
+- (ODClassType*)type {
+    return [EGCollision2 type];
+}
+
++ (ODClassType*)type {
+    return _EGCollision2_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGCollision2* o = ((EGCollision2*)(other));
+    return [self.bodies isEqual:o.bodies] && [self.contacts isEqual:o.contacts];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.bodies hash];
+    hash = hash * 31 + [self.contacts hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"bodies=%@", self.bodies];
+    [description appendFormat:@", contacts=%@", self.contacts];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGContact{
+    EGVec3 _a;
+    EGVec3 _b;
+}
+static ODClassType* _EGContact_type;
+@synthesize a = _a;
+@synthesize b = _b;
+
++ (id)contactWithA:(EGVec3)a b:(EGVec3)b {
+    return [[EGContact alloc] initWithA:a b:b];
+}
+
+- (id)initWithA:(EGVec3)a b:(EGVec3)b {
+    self = [super init];
+    if(self) {
+        _a = a;
+        _b = b;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGContact_type = [ODClassType classTypeWithCls:[EGContact class]];
+}
+
+- (ODClassType*)type {
+    return [EGContact type];
+}
+
++ (ODClassType*)type {
+    return _EGContact_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGContact* o = ((EGContact*)(other));
+    return EGVec3Eq(self.a, o.a) && EGVec3Eq(self.b, o.b);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + EGVec3Hash(self.a);
+    hash = hash * 31 + EGVec3Hash(self.b);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"a=%@", EGVec3Description(self.a)];
+    [description appendFormat:@", b=%@", EGVec3Description(self.b)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGIndexFunFilteredIterable{
+    NSUInteger _maxCount;
+    id(^_f)(NSUInteger);
+}
+static ODClassType* _EGIndexFunFilteredIterable_type;
+@synthesize maxCount = _maxCount;
+@synthesize f = _f;
+
++ (id)indexFunFilteredIterableWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f {
+    return [[EGIndexFunFilteredIterable alloc] initWithMaxCount:maxCount f:f];
+}
+
+- (id)initWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f {
+    self = [super init];
+    if(self) {
+        _maxCount = maxCount;
+        _f = f;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGIndexFunFilteredIterable_type = [ODClassType classTypeWithCls:[EGIndexFunFilteredIterable class]];
+}
+
+- (id<CNIterator>)iterator {
+    return [EGIndexFunFilteredIterator indexFunFilteredIteratorWithMaxCount:_maxCount f:_f];
+}
+
+- (NSUInteger)count {
+    id<CNIterator> i = [self iterator];
+    NSUInteger n = 0;
+    while([i hasNext]) {
+        [i next];
+        n++;
+    }
+    return n;
+}
+
+- (id)head {
+    if([[self iterator] hasNext]) return [CNOption opt:[[self iterator] next]];
+    else return [CNOption none];
+}
+
+- (BOOL)isEmpty {
+    return !([[self iterator] hasNext]);
+}
+
+- (CNChain*)chain {
+    return [CNChain chainWithCollection:self];
+}
+
+- (void)forEach:(void(^)(id))each {
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        each([i next]);
+    }
+}
+
+- (BOOL)goOn:(BOOL(^)(id))on {
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        if(!(on([i next]))) return NO;
+    }
+    return YES;
+}
+
+- (BOOL)containsItem:(id)item {
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        if([[i next] isEqual:i]) return YES;
+    }
+    return NO;
+}
+
+- (NSString*)description {
+    return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
+}
+
+- (NSUInteger)hash {
+    NSUInteger ret = 13;
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        ret = ret * 31 + [[i next] hash];
+    }
+    return ret;
+}
+
+- (id)findWhere:(BOOL(^)(id))where {
+    __block id ret = [CNOption none];
+    [self goOn:^BOOL(id x) {
+        if(where(ret)) {
+            ret = [CNOption opt:x];
+            NO;
+        }
+        return YES;
+    }];
+    return ret;
+}
+
+- (id)convertWithBuilder:(id<CNBuilder>)builder {
+    [self forEach:^void(id x) {
+        [builder addItem:x];
+    }];
+    return [builder build];
+}
+
+- (ODClassType*)type {
+    return [EGIndexFunFilteredIterable type];
+}
+
++ (ODClassType*)type {
+    return _EGIndexFunFilteredIterable_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGIndexFunFilteredIterable* o = ((EGIndexFunFilteredIterable*)(other));
+    return self.maxCount == o.maxCount && [self.f isEqual:o.f];
+}
+
+@end
+
+
+@implementation EGIndexFunFilteredIterator{
+    NSUInteger _maxCount;
+    id(^_f)(NSUInteger);
+    NSUInteger _i;
+    id __next;
+}
+static ODClassType* _EGIndexFunFilteredIterator_type;
+@synthesize maxCount = _maxCount;
+@synthesize f = _f;
+
++ (id)indexFunFilteredIteratorWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f {
+    return [[EGIndexFunFilteredIterator alloc] initWithMaxCount:maxCount f:f];
+}
+
+- (id)initWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f {
+    self = [super init];
+    if(self) {
+        _maxCount = maxCount;
+        _f = f;
+        _i = 0;
+        __next = [self roll];
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGIndexFunFilteredIterator_type = [ODClassType classTypeWithCls:[EGIndexFunFilteredIterator class]];
+}
+
+- (BOOL)hasNext {
+    return [__next isDefined];
+}
+
+- (id)next {
+    id ret = [__next get];
+    __next = [self roll];
+    return ret;
+}
+
+- (id)roll {
+    id ret = [CNOption none];
+    while([ret isEmpty] && _i < _maxCount) {
+        ret = _f(_i);
+        _i++;
+    }
+    return ret;
+}
+
+- (ODClassType*)type {
+    return [EGIndexFunFilteredIterator type];
+}
+
++ (ODClassType*)type {
+    return _EGIndexFunFilteredIterator_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGIndexFunFilteredIterator* o = ((EGIndexFunFilteredIterator*)(other));
+    return self.maxCount == o.maxCount && [self.f isEqual:o.f];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.maxCount;
+    hash = hash * 31 + [self.f hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"maxCount=%li", self.maxCount];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+

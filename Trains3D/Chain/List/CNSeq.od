@@ -59,3 +59,22 @@ class CNArrayBuilder<T> extends CNBuilder<T, CNArray<T>> {
 
     def build : NSArray<T> = array
 }
+
+class CNIndexFunSeq<T>(count : uint, f : uint -> T) extends CNSeq<T> {
+    def apply(index : uint) : T? =
+        if(index >= count) nil
+        else f(index)
+
+    def iterator : CNIterator<T> = CNIndexFunSeqIterator<T>(count, f)
+}
+
+class CNIndexFunSeqIterator<T>(count : uint, f : uint -> T) {
+    var i : uint = 0
+    def hasNext = i < count
+
+    def next : T = {
+        val ret = f(i)
+        i++
+        ret
+    }
+}

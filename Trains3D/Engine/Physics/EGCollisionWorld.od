@@ -1,5 +1,9 @@
 package com.antonzherdev.eg
 
-class EGCollisionWorld {
-    def add(item : EGCollisionItem)
+stub class EGCollisionWorld<T> {
+    def add(body : EGCollisionBody<T>)
+    def remove(body : EGCollisionBody<T>)
+
+    def detect : CNIterable<EGCollision2<T>>
 }
+

@@ -1,10 +1,13 @@
 #import "objdcore.h"
 #import "CNCollection.h"
+#import "ODObject.h"
 @protocol CNSet;
 @class CNHashSetBuilder;
 @class CNChain;
 
 @class CNArrayBuilder;
+@class CNIndexFunSeq;
+@class CNIndexFunSeqIterator;
 @protocol CNSeq;
 @protocol CNMutableSeq;
 
@@ -30,6 +33,33 @@
 - (ODClassType*)type;
 - (void)addItem:(id)item;
 - (NSArray*)build;
++ (ODClassType*)type;
+@end
+
+
+@interface CNIndexFunSeq : NSObject<CNSeq>
+@property (nonatomic, readonly) NSUInteger count;
+@property (nonatomic, readonly) id(^f)(NSUInteger);
+
++ (id)indexFunSeqWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f;
+- (id)initWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f;
+- (ODClassType*)type;
+- (id)applyIndex:(NSUInteger)index;
+- (id<CNIterator>)iterator;
++ (ODClassType*)type;
+@end
+
+
+@interface CNIndexFunSeqIterator : NSObject
+@property (nonatomic, readonly) NSUInteger count;
+@property (nonatomic, readonly) id(^f)(NSUInteger);
+@property (nonatomic) NSUInteger i;
+
++ (id)indexFunSeqIteratorWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f;
+- (id)initWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f;
+- (ODClassType*)type;
+- (BOOL)hasNext;
+- (id)next;
 + (ODClassType*)type;
 @end
 
