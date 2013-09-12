@@ -54,6 +54,20 @@ static ODClassType* _EGCollisionsTest_type;
     [self assertTrueValue:[[world detect] isEmpty]];
 }
 
+- (void)testCollisions2d {
+    EGCollisionWorld* world = [EGCollisionWorld collisionWorld];
+    EGCollisionBody* box1 = [EGCollisionBody collisionBodyWithData:@1 shape:[EGCollisionBox2d applyX:1.0 y:1.0] isKinematic:YES];
+    EGCollisionBody* box2 = [EGCollisionBody collisionBodyWithData:@2 shape:[EGCollisionBox2d applyX:1.0 y:1.0] isKinematic:NO];
+    [world addBody:box1];
+    [world addBody:box2];
+    [box1 translateX:1.8 y:1.8 z:0.0];
+    [self assertTrueValue:[[world detect] count] == 1];
+    [box1 translateX:0.1 y:0.1 z:0.0];
+    [self assertTrueValue:[[world detect] count] == 1];
+    [box1 translateX:0.2 y:0.2 z:0.0];
+    [self assertTrueValue:[[world detect] isEmpty]];
+}
+
 - (ODClassType*)type {
     return [EGCollisionsTest type];
 }

@@ -7,6 +7,7 @@
 @class EGCollisionWorld;
 @class EGCollisionBox;
 @class EGCollisionBody;
+@class EGCollisionBox2d;
 
 @class EGCollisionsTest;
 
@@ -18,6 +19,7 @@
 - (void)testEmptyWithCrossedBoundingRects;
 - (void)testEmptyWithoutCrossedBoundingRects;
 - (void)testCollisions2;
+- (void)testCollisions2d;
 + (ODClassType*)type;
 @end
 

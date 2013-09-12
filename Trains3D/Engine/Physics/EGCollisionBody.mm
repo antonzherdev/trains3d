@@ -3,6 +3,7 @@
 #import "EGMatrix.h"
 
 #include "btBulletCollisionCommon.h"
+#include "btBox2dShape.h"
 
 @implementation EGCollisionBody{
     id _data;
@@ -167,4 +168,76 @@ static ODClassType* _EGCollisionBox_type;
 
 @end
 
+@implementation EGCollisionBox2d{
+    EGVec2 _halfSize;
+    btBox2dShape* _box;
+}
+static ODClassType* _EGCollisionBox2d_type;
+@synthesize halfSize = _halfSize;
+
+
++ (id)collisionBox2dWithHalfSize:(EGVec2)halfSize {
+    return [[EGCollisionBox2d alloc] initWithHalfSize:halfSize];
+}
+
+- (id)initWithHalfSize:(EGVec2)halfSize {
+    self = [super init];
+    if(self) {
+        _halfSize = halfSize;
+        _box = new btBox2dShape(btVector3(halfSize.x, halfSize.y, 0));
+    }
+
+    return self;
+}
+
++ (EGCollisionBox2d*)applyX:(float)x y:(float)y{
+    return [EGCollisionBox2d collisionBox2dWithHalfSize:EGVec2Make(x, y)];
+}
+
+- (VoidRef)shape {
+    return _box;
+}
+
+- (void)dealloc {
+    delete _box;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGCollisionBox2d_type = [ODClassType classTypeWithCls:[EGCollisionBox2d class]];
+}
+
+- (ODClassType*)type {
+    return [EGCollisionBox type];
+}
+
++ (ODClassType*)type {
+    return _EGCollisionBox2d_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGCollisionBox2d* o = ((EGCollisionBox2d*)(other));
+    return EGVec2Eq(self.halfSize, o.halfSize);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + EGVec2Hash(self.halfSize);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"halfSize=%@", EGVec2Description(self.halfSize)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
 

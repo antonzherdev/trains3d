@@ -40,13 +40,27 @@ class EGCollisionsTest extends CNTestCase {
         val box2 = EGCollisionBody<int>(2, EGCollisionBox(1, 1, 1), isKinematic = false)
         world.add(box1)
         world.add(box2)
-        box1.translate(0.8, 0.8, 0)
+        box1.translate(1.8, 1.8, 0)
         assertTrue(world.detect.count == 1)
         box1.translate(0.1, 0.1, 0)
         assertTrue(world.detect.count == 1)
 
         box1.translate(0.2, 0.2, 0)
         assertTrue(world.detect.isEmpty)
-//        box1.set(matrix = box1.matrix.tra)
+    }
+
+    def testCollisions2d {
+        val world = EGCollisionWorld<int>()
+        val box1 = EGCollisionBody<int>(1, EGCollisionBox2d(1, 1), isKinematic = true)
+        val box2 = EGCollisionBody<int>(2, EGCollisionBox2d(1, 1), isKinematic = false)
+        world.add(box1)
+        world.add(box2)
+        box1.translate(1.8, 1.8, 0)
+        assertTrue(world.detect.count == 1)
+        box1.translate(0.1, 0.1, 0)
+        assertTrue(world.detect.count == 1)
+
+        box1.translate(0.2, 0.2, 0)
+        assertTrue(world.detect.isEmpty)
     }
 }

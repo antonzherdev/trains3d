@@ -24,3 +24,7 @@ stub trait EGCollisionShape {
 stub class EGCollisionBox(halfSize : EGVec3) extends EGCollisionShape {
     static def apply(x : float4, y : float4, z : float4) = EGCollisionBox(EGVec3(x, y, z))
 }
+
+stub class EGCollisionBox2d(halfSize : EGVec2) extends EGCollisionShape {
+    static def apply(x : float4, y : float4) = EGCollisionBox(EGVec2(x, y))
+}

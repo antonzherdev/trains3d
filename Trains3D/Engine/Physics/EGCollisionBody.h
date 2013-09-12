@@ -38,4 +38,13 @@
 + (ODClassType*)type;
 @end
 
+@interface EGCollisionBox2d : NSObject<EGCollisionShape>
+@property (nonatomic, readonly) EGVec2 halfSize;
+
++ (id)collisionBox2dWithHalfSize:(EGVec2)halfSize;
+- (id)initWithHalfSize:(EGVec2)halfSize;
+- (ODClassType*)type;
++ (EGCollisionBox2d*)applyX:(float)x y:(float)y;
++ (ODClassType*)type;
+@end
 
