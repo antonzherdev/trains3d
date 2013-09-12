@@ -1,16 +1,16 @@
 #import "objd.h"
 #import "EGVec.h"
 
-@class EGCollision2;
+@class EGCollision;
 @class EGContact;
 @class EGIndexFunFilteredIterable;
 @class EGIndexFunFilteredIterator;
 
-@interface EGCollision2 : NSObject
+@interface EGCollision : NSObject
 @property (nonatomic, readonly) CNPair* bodies;
 @property (nonatomic, readonly) id<CNSeq> contacts;
 
-+ (id)collision2WithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
++ (id)collisionWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
 - (id)initWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
 - (ODClassType*)type;
 + (ODClassType*)type;

@@ -39,7 +39,7 @@ static ODClassType* _TRCollisionWorld_type;
 }
 
 - (id<CNSeq>)detect {
-    return [[[[_world detect] chain] map:^TRCollision*(EGCollision2* collision) {
+    return [[[[_world detect] chain] map:^TRCollision*(EGCollision* collision) {
         TRCar* car1 = ((TRCar*)(((EGCollisionBody*)(collision.bodies.a)).data));
         TRCar* car2 = ((TRCar*)(((EGCollisionBody*)(collision.bodies.b)).data));
         TRRailPoint* point = ((TRRailPoint*)([[[[[[[[(@[[car1 position].head, [car1 position].tail]) chain] mul:(@[[car2 position].head, [car2 position].tail])] sortBy] ascBy:^id(CNTuple* pair) {

@@ -2,7 +2,7 @@
 @class EGCollisionWorld;
 @class TRTrain;
 @class TRCar;
-@class EGCollision2;
+@class EGCollision;
 @class EGCollisionBody;
 @class TRCarPosition;
 @class TRRailPoint;

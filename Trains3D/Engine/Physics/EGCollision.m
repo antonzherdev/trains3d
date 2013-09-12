@@ -1,15 +1,15 @@
 #import "EGCollision.h"
 
-@implementation EGCollision2{
+@implementation EGCollision{
     CNPair* _bodies;
     id<CNSeq> _contacts;
 }
-static ODClassType* _EGCollision2_type;
+static ODClassType* _EGCollision_type;
 @synthesize bodies = _bodies;
 @synthesize contacts = _contacts;
 
-+ (id)collision2WithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts {
-    return [[EGCollision2 alloc] initWithBodies:bodies contacts:contacts];
++ (id)collisionWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts {
+    return [[EGCollision alloc] initWithBodies:bodies contacts:contacts];
 }
 
 - (id)initWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts {
@@ -24,15 +24,15 @@ static ODClassType* _EGCollision2_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCollision2_type = [ODClassType classTypeWithCls:[EGCollision2 class]];
+    _EGCollision_type = [ODClassType classTypeWithCls:[EGCollision class]];
 }
 
 - (ODClassType*)type {
-    return [EGCollision2 type];
+    return [EGCollision type];
 }
 
 + (ODClassType*)type {
-    return _EGCollision2_type;
+    return _EGCollision_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -42,7 +42,7 @@ static ODClassType* _EGCollision2_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGCollision2* o = ((EGCollision2*)(other));
+    EGCollision* o = ((EGCollision*)(other));
     return [self.bodies isEqual:o.bodies] && [self.contacts isEqual:o.contacts];
 }
 

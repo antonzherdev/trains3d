@@ -62,7 +62,7 @@ static ODClassType* _EGCollisionWorld_type;
         if(pManifold->getNumContacts() == 0) return [CNOption none];
         EGCollisionBody *body0 = (__bridge EGCollisionBody *) pManifold->getBody0()->getUserPointer();
         EGCollisionBody *body1 = (__bridge EGCollisionBody *) pManifold->getBody1()->getUserPointer();
-        return [EGCollision2 collision2WithBodies:[CNPair newWithA:body0 b:body1]
+        return [EGCollision collisionWithBodies:[CNPair newWithA:body0 b:body1]
                                  contacts:[CNIndexFunSeq indexFunSeqWithCount:(NSUInteger) pManifold->getNumContacts() f:^id(NSUInteger i) {
                                      btManifoldPoint & p = pManifold->getContactPoint(i);
                                      btVector3 const & a = p.getPositionWorldOnA();

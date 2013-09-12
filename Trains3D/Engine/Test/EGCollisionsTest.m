@@ -1,7 +1,5 @@
 #import "EGCollisionsTest.h"
 
-#import "EGFigure.h"
-#import "EGCollisions.h"
 #import "EGCollisionWorld.h"
 #import "EGCollisionBody.h"
 @implementation EGCollisionsTest
@@ -22,25 +20,7 @@ static ODClassType* _EGCollisionsTest_type;
     _EGCollisionsTest_type = [ODClassType classTypeWithCls:[EGCollisionsTest class]];
 }
 
-- (void)testDavidsStar {
-    id<CNSeq> figures = (@[tuple(@1, [EGPolygon polygonWithPoints:(@[wrap(EGVec2, EGVec2Make(1.0, 0.0)), wrap(EGVec2, EGVec2Make(3.0, 2.0)), wrap(EGVec2, EGVec2Make(5.0, 0.0))])]), tuple(@2, [EGPolygon polygonWithPoints:(@[wrap(EGVec2, EGVec2Make(1.0, 1.0)), wrap(EGVec2, EGVec2Make(5.0, 1.0)), wrap(EGVec2, EGVec2Make(3.0, -1.0))])]), tuple(@3, [EGPolygon polygonWithPoints:(@[wrap(EGVec2, EGVec2Make(4.0, -1.0)), wrap(EGVec2, EGVec2Make(4.5, -0.5)), wrap(EGVec2, EGVec2Make(5.0, -1.0))])])]);
-    id<CNSet> collisions = [EGCollisions collisionsForFigures:figures];
-    [self assertEqualsA:collisions b:[(@[[EGCollision collisionWithItems:[CNPair pairWithA:@1 b:@2] points:[(@[wrap(EGVec2, EGVec2Make(1.5, 0.5)), wrap(EGVec2, EGVec2Make(2.0, 0.0)), wrap(EGVec2, EGVec2Make(2.0, 1.0)), wrap(EGVec2, EGVec2Make(4.5, 0.5)), wrap(EGVec2, EGVec2Make(4.0, 0.0)), wrap(EGVec2, EGVec2Make(4.0, 1.0))]) toSet]]]) toSet]];
-}
-
-- (void)testEmptyWithCrossedBoundingRects {
-    id<CNSeq> figures = (@[tuple(@1, [EGPolygon polygonWithPoints:(@[wrap(EGVec2, EGVec2Make(1.0, 0.0)), wrap(EGVec2, EGVec2Make(3.0, 2.0)), wrap(EGVec2, EGVec2Make(5.0, 0.0))])]), tuple(@3, [EGPolygon polygonWithPoints:(@[wrap(EGVec2, EGVec2Make(4.0, -1.0)), wrap(EGVec2, EGVec2Make(4.5, -0.5)), wrap(EGVec2, EGVec2Make(5.0, -1.0))])])]);
-    id<CNSet> collisions = [EGCollisions collisionsForFigures:figures];
-    [self assertEqualsA:collisions b:[(@[]) toSet]];
-}
-
-- (void)testEmptyWithoutCrossedBoundingRects {
-    id<CNSeq> figures = (@[tuple(@1, [EGPolygon polygonWithPoints:(@[wrap(EGVec2, EGVec2Make(1.0, 0.0)), wrap(EGVec2, EGVec2Make(3.0, 2.0)), wrap(EGVec2, EGVec2Make(5.0, 0.0))])]), tuple(@3, [EGPolygon polygonWithPoints:(@[wrap(EGVec2, EGVec2Make(6.0, -1.0)), wrap(EGVec2, EGVec2Make(6.5, -0.5)), wrap(EGVec2, EGVec2Make(7.0, -1.0))])])]);
-    id<CNSet> collisions = [EGCollisions collisionsForFigures:figures];
-    [self assertEqualsA:collisions b:[(@[]) toSet]];
-}
-
-- (void)testCollisions2 {
+- (void)testCollisions {
     EGCollisionWorld* world = [EGCollisionWorld collisionWorld];
     EGCollisionBody* box1 = [EGCollisionBody collisionBodyWithData:@1 shape:[EGCollisionBox applyX:1.0 y:1.0 z:1.0] isKinematic:YES];
     EGCollisionBody* box2 = [EGCollisionBody collisionBodyWithData:@2 shape:[EGCollisionBox applyX:1.0 y:1.0 z:1.0] isKinematic:NO];
