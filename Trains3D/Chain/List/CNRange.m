@@ -23,7 +23,7 @@ static ODClassType* _CNRange_type;
         _start = start;
         _end = end;
         _step = step;
-        _count = ((NSUInteger)(((_step > 0) ? ((_start < _end) ? (_end - _start) / _step : 0) : ((_step < 0) ? ((_start > _end) ? (_end - _start) / _step : 0) : 0))));
+        _count = ((_step > 0) ? ((_start <= _end) ? ((NSUInteger)((_end - _start) / _step + 1)) : 0) : ((_step < 0) ? ((_start >= _end) ? ((NSUInteger)((_end - _start) / _step + 1)) : 0) : 1));
     }
     
     return self;
@@ -52,7 +52,7 @@ static ODClassType* _CNRange_type;
         return _start > _end;
     } else {
         if(_step < 0) return _start < _end;
-        else return YES;
+        else return NO;
     }
 }
 

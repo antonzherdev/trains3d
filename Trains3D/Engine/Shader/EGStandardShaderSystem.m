@@ -254,14 +254,14 @@ static ODClassType* _EGStandardShader_type;
     if(self) {
         _key = key;
         _positionSlot = [self attributeForName:@"position"];
-        _normalSlot = [CNOption opt:((_key.directLightCount > 0) ? [self attributeForName:@"normal"] : nil)];
-        _uvSlot = [CNOption opt:((_key.texture) ? [self attributeForName:@"vertexUV"] : nil)];
+        _normalSlot = ((_key.directLightCount > 0) ? [CNOption opt:[self attributeForName:@"normal"]] : [CNOption none]);
+        _uvSlot = ((_key.texture) ? [CNOption opt:[self attributeForName:@"vertexUV"]] : [CNOption none]);
         _ambientColor = [self uniformForName:@"ambientColor"];
         _specularColor = [self uniformForName:@"specularColor"];
         _specularSize = [self uniformForName:@"specularSize"];
         _diffuseUniform = [self uniformForName:@"diffuse"];
         _mwcpUniform = [self uniformForName:@"mwcp"];
-        _mwcUniform = [CNOption opt:((_key.directLightCount > 0) ? [self uniformForName:@"mwc"] : nil)];
+        _mwcUniform = ((_key.directLightCount > 0) ? [CNOption opt:[self uniformForName:@"mwc"]] : [CNOption none]);
         _directLightDirections = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniform*(id i) {
             return [_weakSelf uniformForName:[NSString stringWithFormat:@"dirLightDirection%@", i]];
         }] toArray];

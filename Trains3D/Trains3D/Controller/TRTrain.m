@@ -120,7 +120,7 @@ static ODClassType* _TRTrain_type;
             return _weakSelf._cars(self);
         }];
         _length = unumf([[[self cars] chain] fold:^id(id r, TRCar* car) {
-            return numf([car.carType fullLength] + unumf(r));
+            return numf(car.carType.fullLength + unumf(r));
         } withStart:@0.0]);
         _speedFloat = 0.01 * _speed;
         _carsObstacleProcessor = ^BOOL(TRObstacle* o) {
@@ -157,10 +157,10 @@ static ODClassType* _TRTrain_type;
 - (void)calculateCarPositions {
     ((TRRailPoint*)([[[self directedCars] chain] fold:^TRRailPoint*(TRRailPoint* frontConnector, TRCar* car) {
         TRCarType* tp = car.carType;
-        CGFloat fl = tp.frontConnectorLength;
-        CGFloat bl = tp.backConnectorLength;
+        CGFloat fl = tp.startToWheel;
+        CGFloat bl = tp.wheelToEnd;
         TRRailPoint* head = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((_back) ? bl : fl) point:frontConnector] addErrorToPoint];
-        TRRailPoint* tail = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:tp.length point:head] addErrorToPoint];
+        TRRailPoint* tail = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:tp.betweenWheels point:head] addErrorToPoint];
         TRRailPoint* backConnector = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((_back) ? fl : bl) point:tail] addErrorToPoint];
         [car setPosition:((_back) ? [TRCarPosition carPositionWithFrontConnector:backConnector head:tail tail:head backConnector:frontConnector] : [TRCarPosition carPositionWithFrontConnector:frontConnector head:head tail:tail backConnector:backConnector])];
         return backConnector;
@@ -191,7 +191,7 @@ static ODClassType* _TRTrain_type;
             } else {
                 _back = !(_back);
                 TRCar* lastCar = ((TRCar*)([[[self directedCars] head] get]));
-                _head = [lastCar position].backConnector;
+                _head = ((_back) ? [lastCar position].backConnector : [lastCar position].frontConnector);
             }
         } else {
             _head = [correction addErrorToPoint];
@@ -315,36 +315,51 @@ static ODClassType* _TREngineType_type;
 
 
 @implementation TRCarType{
-    CGFloat _length;
     CGFloat _width;
-    CGFloat _frontConnectorLength;
-    CGFloat _backConnectorLength;
+    CGFloat _startToFront;
+    CGFloat _frontToWheel;
+    CGFloat _betweenWheels;
+    CGFloat _wheelToBack;
+    CGFloat _backToEnd;
     id _engineType;
+    CGFloat _startToWheel;
+    CGFloat _wheelToEnd;
+    CGFloat _fullLength;
     id<EGCollisionShape> _shape;
 }
 static TRCarType* _TRCarType_car;
 static TRCarType* _TRCarType_engine;
 static NSArray* _TRCarType_values;
-@synthesize length = _length;
 @synthesize width = _width;
-@synthesize frontConnectorLength = _frontConnectorLength;
-@synthesize backConnectorLength = _backConnectorLength;
+@synthesize startToFront = _startToFront;
+@synthesize frontToWheel = _frontToWheel;
+@synthesize betweenWheels = _betweenWheels;
+@synthesize wheelToBack = _wheelToBack;
+@synthesize backToEnd = _backToEnd;
 @synthesize engineType = _engineType;
+@synthesize startToWheel = _startToWheel;
+@synthesize wheelToEnd = _wheelToEnd;
+@synthesize fullLength = _fullLength;
 @synthesize shape = _shape;
 
-+ (id)carTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name length:(CGFloat)length width:(CGFloat)width frontConnectorLength:(CGFloat)frontConnectorLength backConnectorLength:(CGFloat)backConnectorLength engineType:(id)engineType {
-    return [[TRCarType alloc] initWithOrdinal:ordinal name:name length:length width:width frontConnectorLength:frontConnectorLength backConnectorLength:backConnectorLength engineType:engineType];
++ (id)carTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name width:(CGFloat)width startToFront:(CGFloat)startToFront frontToWheel:(CGFloat)frontToWheel betweenWheels:(CGFloat)betweenWheels wheelToBack:(CGFloat)wheelToBack backToEnd:(CGFloat)backToEnd engineType:(id)engineType {
+    return [[TRCarType alloc] initWithOrdinal:ordinal name:name width:width startToFront:startToFront frontToWheel:frontToWheel betweenWheels:betweenWheels wheelToBack:wheelToBack backToEnd:backToEnd engineType:engineType];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name length:(CGFloat)length width:(CGFloat)width frontConnectorLength:(CGFloat)frontConnectorLength backConnectorLength:(CGFloat)backConnectorLength engineType:(id)engineType {
+- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name width:(CGFloat)width startToFront:(CGFloat)startToFront frontToWheel:(CGFloat)frontToWheel betweenWheels:(CGFloat)betweenWheels wheelToBack:(CGFloat)wheelToBack backToEnd:(CGFloat)backToEnd engineType:(id)engineType {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
-        _length = length;
         _width = width;
-        _frontConnectorLength = frontConnectorLength;
-        _backConnectorLength = backConnectorLength;
+        _startToFront = startToFront;
+        _frontToWheel = frontToWheel;
+        _betweenWheels = betweenWheels;
+        _wheelToBack = wheelToBack;
+        _backToEnd = backToEnd;
         _engineType = engineType;
-        _shape = [EGCollisionBox2d applyX:((float)(_length / 2)) y:((float)(_width / 2))];
+        _startToWheel = _startToFront + _frontToWheel;
+        _wheelToEnd = _wheelToBack + _backToEnd;
+        _fullLength = _startToWheel + _betweenWheels + _wheelToEnd;
+        _shape = [EGCollisionBox2d applyX:((float)((_frontToWheel + _betweenWheels + _wheelToBack) / 2)) y:((float)(_width / 2))];
     }
     
     return self;
@@ -352,13 +367,9 @@ static NSArray* _TRCarType_values;
 
 + (void)initialize {
     [super initialize];
-    _TRCarType_car = [TRCarType carTypeWithOrdinal:0 name:@"car" length:0.44 width:0.18 frontConnectorLength:0.13 backConnectorLength:0.13 engineType:[CNOption none]];
-    _TRCarType_engine = [TRCarType carTypeWithOrdinal:1 name:@"engine" length:0.43 width:0.18 frontConnectorLength:0.12 backConnectorLength:0.2 engineType:[CNOption opt:[TREngineType engineTypeWithTubePos:EGVec3Make(-0.06, 0.0, 0.5)]]];
+    _TRCarType_car = [TRCarType carTypeWithOrdinal:0 name:@"car" width:0.18 startToFront:0.1 frontToWheel:0.03 betweenWheels:0.44 wheelToBack:0.03 backToEnd:0.1 engineType:[CNOption none]];
+    _TRCarType_engine = [TRCarType carTypeWithOrdinal:1 name:@"engine" width:0.2 startToFront:0.1 frontToWheel:0.09 betweenWheels:0.32 wheelToBack:0.17 backToEnd:0.1 engineType:[CNOption opt:[TREngineType engineTypeWithTubePos:EGVec3Make(-0.06, 0.0, 0.5)]]];
     _TRCarType_values = (@[_TRCarType_car, _TRCarType_engine]);
-}
-
-- (CGFloat)fullLength {
-    return _length + _frontConnectorLength + _backConnectorLength;
 }
 
 - (BOOL)isEngine {
@@ -417,7 +428,15 @@ static ODClassType* _TRCar_type;
 
 - (void)setPosition:(TRCarPosition*)position {
     __position = position;
-    [_collisionBody setMatrix:[position matrix]];
+    EGLineSegment* line = position.line;
+    EGVec2 mid = ((eqf(_carType.wheelToBack, _carType.frontToWheel)) ? [line mid] : ^EGVec2() {
+        CGFloat len = [line length];
+        EGVec2 vec = [line vec];
+        EGVec2 dh = egVec2MulValue(vec, ((float)(_carType.frontToWheel / len)));
+        EGVec2 dt = egVec2MulValue(vec, ((float)(_carType.wheelToBack / len)));
+        return [[line moveWithPoint:egVec2MulValue(egVec2SubVec2(dh, dt), 0.5)] mid];
+    }());
+    [_collisionBody setMatrix:[[[EGMatrix identity] translateX:mid.x y:mid.y z:0.0] rotateAngle:((float)([line degreeAngle])) x:0.0 y:0.0 z:1.0]];
 }
 
 - (ODClassType*)type {
@@ -463,7 +482,6 @@ static ODClassType* _TRCar_type;
     TRRailPoint* _tail;
     TRRailPoint* _backConnector;
     EGLineSegment* _line;
-    CNLazy* __lazy_matrix;
 }
 static ODClassType* _TRCarPosition_type;
 @synthesize frontConnector = _frontConnector;
@@ -478,19 +496,12 @@ static ODClassType* _TRCarPosition_type;
 
 - (id)initWithFrontConnector:(TRRailPoint*)frontConnector head:(TRRailPoint*)head tail:(TRRailPoint*)tail backConnector:(TRRailPoint*)backConnector {
     self = [super init];
-    __weak TRCarPosition* _weakSelf = self;
     if(self) {
         _frontConnector = frontConnector;
         _head = head;
         _tail = tail;
         _backConnector = backConnector;
-        _line = [EGLineSegment lineSegmentWithP1:_head.point p2:_tail.point];
-        __lazy_matrix = [CNLazy lazyWithF:^EGMatrix*() {
-            return ^EGMatrix*() {
-                EGVec2 mid = [_weakSelf.line mid];
-                return [[[EGMatrix identity] translateX:mid.x y:mid.y z:0.0] rotateAngle:((float)([_weakSelf.line degreeAngle])) x:0.0 y:0.0 z:1.0];
-            }();
-        }];
+        _line = [EGLineSegment lineSegmentWithP0:_tail.point p1:_head.point];
     }
     
     return self;
@@ -499,10 +510,6 @@ static ODClassType* _TRCarPosition_type;
 + (void)initialize {
     [super initialize];
     _TRCarPosition_type = [ODClassType classTypeWithCls:[TRCarPosition class]];
-}
-
-- (EGMatrix*)matrix {
-    return [__lazy_matrix get];
 }
 
 - (ODClassType*)type {

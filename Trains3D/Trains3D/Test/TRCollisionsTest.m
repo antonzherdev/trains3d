@@ -10,6 +10,7 @@
 @implementation TRCollisionsTest
 static CGFloat _TRCollisionsTest_carLen;
 static CGFloat _TRCollisionsTest_carWidth;
+static CGFloat _TRCollisionsTest_carConLen;
 static ODClassType* _TRCollisionsTest_type;
 
 + (id)collisionsTest {
@@ -25,8 +26,9 @@ static ODClassType* _TRCollisionsTest_type;
 + (void)initialize {
     [super initialize];
     _TRCollisionsTest_type = [ODClassType classTypeWithCls:[TRCollisionsTest class]];
-    _TRCollisionsTest_carLen = [TRCarType.car fullLength];
+    _TRCollisionsTest_carLen = TRCarType.car.fullLength;
     _TRCollisionsTest_carWidth = TRCarType.car.width;
+    _TRCollisionsTest_carConLen = TRCarType.car.startToFront;
 }
 
 - (TRLevel*)newLevel {
@@ -46,10 +48,10 @@ static ODClassType* _TRCollisionsTest_type;
     [level.railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(0, 0) form:TRRailForm.leftRight]];
     [level.railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(1, 0) form:TRRailForm.leftRight]];
     [level.railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(2, 0) form:TRRailForm.leftRight]];
-    [self doTest1ForLevel:level delta:0.001 form:TRRailForm.leftRight];
+    [self doTest1ForLevel:level form:TRRailForm.leftRight];
 }
 
-- (void)doTest1ForLevel:(TRLevel*)level delta:(CGFloat)delta form:(TRRailForm*)form {
+- (void)doTest1ForLevel:(TRLevel*)level form:(TRRailForm*)form {
     TRTrain* t1 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRColor.green _cars:^id<CNSeq>(TRTrain* _) {
         return (@[[TRCar carWithTrain:_ carType:TRCarType.car]]);
     } speed:0];
@@ -63,11 +65,15 @@ static ODClassType* _TRCollisionsTest_type;
     } speed:0];
     p2 = [level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
-    } forLength:_TRCollisionsTest_carLen * 3 + delta point:p].point;
+    } forLength:_TRCollisionsTest_carLen * 3 point:p].point;
     [level testRunTrain:t2 fromPoint:p2];
     id<CNSet> cols = [self checkLevel:level];
     [self assertTrueValue:[cols isEmpty]];
-    p2 = [p2 addX:-delta - 0.001];
+    p2 = [p2 addX:-2 * _TRCollisionsTest_carConLen + 0.1];
+    [t2 setHead:p2];
+    cols = [self checkLevel:level];
+    [self assertTrueValue:[cols isEmpty]];
+    p2 = [p2 addX:-0.2];
     [t2 setHead:p2];
     cols = [self checkLevel:level];
     [self assertEqualsA:cols b:[(@[t1, t2]) toSet]];
@@ -77,7 +83,8 @@ static ODClassType* _TRCollisionsTest_type;
     [self assertEqualsA:numui([[level trains] count]) b:@0];
     [self assertEqualsA:numui([[level.railroad damagesPoints] count]) b:@1];
     TRRailPoint* damage = ((TRRailPoint*)([[level.railroad damagesPoints] applyIndex:0]));
-    [self assertTrueValue:floatBetween(damage.x, 0.59, 0.6)];
+    CGFloat l = _TRCollisionsTest_carLen - TRCarType.car.startToWheel;
+    [self assertTrueValue:floatBetween(damage.x, l - 0.15, l + 0.15)];
 }
 
 - (void)testTurn {
@@ -85,7 +92,8 @@ static ODClassType* _TRCollisionsTest_type;
     [level.railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(0, 0) form:TRRailForm.leftTop]];
     [level.railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(0, 1) form:TRRailForm.bottomRight]];
     [level.railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(1, 1) form:TRRailForm.leftRight]];
-    [self doTest1ForLevel:level delta:0.3 form:TRRailForm.leftTop];
+    [level.railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(2, 1) form:TRRailForm.leftRight]];
+    [self doTest1ForLevel:level form:TRRailForm.leftTop];
 }
 
 - (void)testCross {
@@ -128,6 +136,10 @@ static ODClassType* _TRCollisionsTest_type;
 
 + (CGFloat)carWidth {
     return _TRCollisionsTest_carWidth;
+}
+
++ (CGFloat)carConLen {
+    return _TRCollisionsTest_carConLen;
 }
 
 + (ODClassType*)type {

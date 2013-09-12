@@ -70,14 +70,18 @@
 
 
 @interface TRCarType : ODEnum
-@property (nonatomic, readonly) CGFloat length;
 @property (nonatomic, readonly) CGFloat width;
-@property (nonatomic, readonly) CGFloat frontConnectorLength;
-@property (nonatomic, readonly) CGFloat backConnectorLength;
+@property (nonatomic, readonly) CGFloat startToFront;
+@property (nonatomic, readonly) CGFloat frontToWheel;
+@property (nonatomic, readonly) CGFloat betweenWheels;
+@property (nonatomic, readonly) CGFloat wheelToBack;
+@property (nonatomic, readonly) CGFloat backToEnd;
 @property (nonatomic, readonly) id engineType;
+@property (nonatomic, readonly) CGFloat startToWheel;
+@property (nonatomic, readonly) CGFloat wheelToEnd;
+@property (nonatomic, readonly) CGFloat fullLength;
 @property (nonatomic, readonly) id<EGCollisionShape> shape;
 
-- (CGFloat)fullLength;
 - (BOOL)isEngine;
 + (TRCarType*)car;
 + (TRCarType*)engine;
@@ -109,7 +113,6 @@
 + (id)carPositionWithFrontConnector:(TRRailPoint*)frontConnector head:(TRRailPoint*)head tail:(TRRailPoint*)tail backConnector:(TRRailPoint*)backConnector;
 - (id)initWithFrontConnector:(TRRailPoint*)frontConnector head:(TRRailPoint*)head tail:(TRRailPoint*)tail backConnector:(TRRailPoint*)backConnector;
 - (ODClassType*)type;
-- (EGMatrix*)matrix;
 + (ODClassType*)type;
 @end
 

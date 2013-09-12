@@ -30,7 +30,7 @@ class EGBentleyOttmannEvent<T> {
 
 class EGBentleyOttmannPointEvent<T>(isStart : bool, data : T, segment : EGLineSegment, point : EGVec2) extends EGBentleyOttmannEvent<T> {
     def yFor(x : float) : float =
-        if(segment.line.isVertical) if(isStart) segment.p1.y else segment.p2.y
+        if(segment.line.isVertical) if(isStart) segment.p0.y else segment.p1.y
         else segment.line.cast<EGSlopeLine>.yFor(x)
     def slope : float = segment.line.slope
     def isVertical : bool = segment.line.isVertical
@@ -51,8 +51,8 @@ class EGBentleyOttmannEventQueue<T> {
         if(!(segments.isEmpty)) {
             segments.for(s -> {
                 val segment : EGLineSegment = s.b
-                ret.offer(segment.p1, EGBentleyOttmannPointEvent(true, s.a, segment, segment.p1))
-                ret.offer(segment.p2, EGBentleyOttmannPointEvent(false, s.a, segment, segment.p2))
+                ret.offer(segment.p0, EGBentleyOttmannPointEvent(true, s.a, segment, segment.p0))
+                ret.offer(segment.p1, EGBentleyOttmannPointEvent(false, s.a, segment, segment.p1))
             })
             sweepLine.queue = ret
         }
@@ -110,8 +110,8 @@ class EGSweepLine<T>
             sweepTo(event)
             val pe = event.cast<EGBentleyOttmannPointEvent<T>>
             if(pe.isVertical) {
-                val minY = pe.segment.p1.y
-                val maxY = pe.segment.p2.y
+                val minY = pe.segment.p0.y
+                val maxY = pe.segment.p1.y
                 val i = events.iteratorHigherThan(event)
                 while(i.hasNext) {
                     val e = i.next

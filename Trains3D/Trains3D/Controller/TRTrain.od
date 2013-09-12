@@ -46,12 +46,12 @@ class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, _c
 
     private def calculateCarPositions {
         directedCars.chain.fold((frontConnector, car) -> {
-            val tp = car.carType
-            val fl = tp.frontConnectorLength
-            val bl = tp.backConnectorLength
+            val tp : TRCarType = car.carType
+            val fl = tp.startToWheel
+            val bl = tp.wheelToEnd
             val head = level.railroad.moveWith(carsObstacleProcessor, if(back) bl else fl, frontConnector).addErrorToPoint
-            val tail = level.railroad.moveWith(carsObstacleProcessor, tp.length, head).addErrorToPoint
-            val backConnector =  level.railroad.moveWith(carsObstacleProcessor, if(back) fl else bl, tail).addErrorToPoint
+            val tail = level.railroad.moveWith(carsObstacleProcessor, tp.betweenWheels, head).addErrorToPoint
+            val backConnector = level.railroad.moveWith(carsObstacleProcessor, if(back) fl else bl, tail).addErrorToPoint
             car.set(position =
                 if(back) TRCarPosition(backConnector, tail, head, frontConnector)
                 else TRCarPosition(frontConnector, head, tail, backConnector))
@@ -77,7 +77,7 @@ class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, _c
                 } else {
                     back = !back
                     val lastCar = directedCars.head.get
-                    head = lastCar.position.backConnector
+                    head = if(back) lastCar.position.backConnector else lastCar.position.frontConnector
                 }
             } else {
                 head = correction.addErrorToPoint
@@ -107,17 +107,23 @@ class TREngineType(
 )
 
 enum TRCarType(
-    length : float, //Length between wheels
-    width : float, //width of the car for collision detection
-    frontConnectorLength : float, backConnectorLength: float, // distances between start or end of the car and the nearest wheels
+    width: float,
+    startToFront : float,
+    frontToWheel : float,
+    betweenWheels : float,
+    wheelToBack : float,
+    backToEnd : float,
+
     engineType : TREngineType?)
 {
-    car(0.44, 0.18, 0.13, 0.13, nil)
-    engine(0.43, 0.18, 0.12, 0.2, TREngineType(tubePos = EGVec3(-0.06, 0, 0.5)))
+    car(0.18,  0.1, 0.03, 0.44, 0.03, 0.1, nil)
+    engine(0.2, 0.1, 0.09, 0.32, 0.17, 0.1, TREngineType(tubePos = EGVec3(-0.06, 0, 0.5)))
 
-    def fullLength : float = length + frontConnectorLength + backConnectorLength
+    val startToWheel = startToFront + frontToWheel
+    val wheelToEnd = wheelToBack + backToEnd
+    val fullLength : float = startToWheel + betweenWheels + wheelToEnd
     def isEngine : bool = engineType.isDefined
-    val shape : EGCollisionShape = EGCollisionBox2d(length/2, width/2)
+    val shape : EGCollisionShape = EGCollisionBox2d((frontToWheel + betweenWheels + wheelToBack)/2, width/2)
 }
 
 class TRCar(weak train : TRTrain, carType : TRCarType) {
@@ -127,16 +133,21 @@ class TRCar(weak train : TRTrain, carType : TRCarType) {
     def position : TRCarPosition = _position
     def set(position : TRCarPosition) {
         _position = position
-        collisionBody.set(matrix = position.matrix)
+        val line = position.line
+        val mid = if(carType.wheelToBack == carType.frontToWheel) line.mid
+        else {
+            val len = line.length
+            val vec = line.vec
+            val dh = vec.mul(carType.frontToWheel/len)
+            val dt = vec.mul(carType.wheelToBack/len)
+            line.moveWith(dh.sub(dt).mul(0.5)).mid
+        }
+        collisionBody.set(matrix = EGMatrix.identity.translate(mid.x, mid.y, 0).rotate(line.degreeAngle, 0, 0, 1))
     }
 }
 
 class TRCarPosition(frontConnector : TRRailPoint, head : TRRailPoint, tail : TRRailPoint, backConnector : TRRailPoint) {
-    val line = EGLineSegment(head.point, tail.point)
-    lazy val matrix = {
-        val mid = line.mid
-        EGMatrix.identity.translate(mid.x, mid.y, 0).rotate(line.degreeAngle, 0, 0, 1)
-    }
+    val line = EGLineSegment(tail.point, head.point)
 }
 
 class TRTrainGenerator(trainType : TRTrainType, carsCount : [int], speed : [int], carTypes : [TRCarType]) {

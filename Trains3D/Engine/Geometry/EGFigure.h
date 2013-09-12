@@ -15,8 +15,8 @@
 - (id)init;
 - (ODClassType*)type;
 + (EGLine*)applySlope:(CGFloat)slope point:(EGVec2)point;
-+ (EGLine*)applyP1:(EGVec2)p1 p2:(EGVec2)p2;
-+ (CGFloat)calculateSlopeWithP1:(EGVec2)p1 p2:(EGVec2)p2;
++ (EGLine*)applyP0:(EGVec2)p0 p1:(EGVec2)p1;
++ (CGFloat)calculateSlopeWithP0:(EGVec2)p0 p1:(EGVec2)p1;
 + (CGFloat)calculateConstantWithSlope:(CGFloat)slope point:(EGVec2)point;
 - (BOOL)containsPoint:(EGVec2)point;
 - (BOOL)isVertical;
@@ -81,14 +81,14 @@
 
 
 @interface EGLineSegment : NSObject<EGFigure>
+@property (nonatomic, readonly) EGVec2 p0;
 @property (nonatomic, readonly) EGVec2 p1;
-@property (nonatomic, readonly) EGVec2 p2;
 @property (nonatomic, readonly) EGRect boundingRect;
 
-+ (id)lineSegmentWithP1:(EGVec2)p1 p2:(EGVec2)p2;
-- (id)initWithP1:(EGVec2)p1 p2:(EGVec2)p2;
++ (id)lineSegmentWithP0:(EGVec2)p0 p1:(EGVec2)p1;
+- (id)initWithP0:(EGVec2)p0 p1:(EGVec2)p1;
 - (ODClassType*)type;
-+ (EGLineSegment*)newWithP1:(EGVec2)p1 p2:(EGVec2)p2;
++ (EGLineSegment*)newWithP0:(EGVec2)p0 p1:(EGVec2)p1;
 + (EGLineSegment*)newWithX1:(CGFloat)x1 y1:(CGFloat)y1 x2:(CGFloat)x2 y2:(CGFloat)y2;
 - (BOOL)isVertical;
 - (BOOL)isHorizontal;
@@ -103,6 +103,9 @@
 - (EGVec2)mid;
 - (CGFloat)angle;
 - (CGFloat)degreeAngle;
+- (CGFloat)length;
+- (EGVec2)vec;
+- (EGVec2)vec1;
 + (ODClassType*)type;
 @end
 

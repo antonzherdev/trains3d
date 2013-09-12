@@ -36,7 +36,7 @@ static ODClassType* _TRLevelFactory_type;
     } delayPeriod:10.0 delayFine:^NSInteger(TRTrain* train, NSInteger i) {
         return i * 1000;
     } repairCost:2000];
-    _TRLevelFactory_rules = (@[[TRLevelRules levelRulesWithMapSize:EGVec2IMake(5, 3) scoreRules:_TRLevelFactory_scoreRules repairerSpeed:30 events:(@[tuple(@1.0, [TRLevelFactory trainCars:intTo(2, 5) speed:[intTo(30, 60) setStep:10]]), tuple(@10.0, [TRLevelFactory trainCars:intTo(1, 5) speed:[intTo(30, 60) setStep:10]]), tuple(@15.0, [TRLevelFactory createNewCity])])]]);
+    _TRLevelFactory_rules = (@[[TRLevelRules levelRulesWithMapSize:EGVec2IMake(5, 3) scoreRules:_TRLevelFactory_scoreRules repairerSpeed:30 events:(@[tuple(@1.0, [TRLevelFactory trainCars:intTo(2, 4) speed:[intTo(30, 30) setStep:10]]), tuple(@10.0, [TRLevelFactory trainCars:intTo(2, 4) speed:[intTo(30, 30) setStep:10]]), tuple(@15.0, [TRLevelFactory createNewCity])])]]);
 }
 
 + (EGScene*)sceneForLevel:(TRLevel*)level {

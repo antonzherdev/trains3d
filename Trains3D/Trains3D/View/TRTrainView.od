@@ -27,7 +27,7 @@ class TRTrainView {
                     val mid = car.position.line.mid
                     w.translate(mid.x, mid.y, 0.05)
                 }).modify(m = m -> {
-                    m.rotate(car.position.line.degreeAngle - 90, 0, 1, 0)
+                    m.rotate(car.position.line.degreeAngle + 90, 0, 1, 0)
                 })
             ){
                 val material = trainMaterialFor(train.color.color)

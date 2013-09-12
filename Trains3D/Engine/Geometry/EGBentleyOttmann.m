@@ -234,8 +234,8 @@ static ODClassType* _EGBentleyOttmannPointEvent_type;
 
 - (CGFloat)yForX:(CGFloat)x {
     if([[_segment line] isVertical]) {
-        if(_isStart) return ((CGFloat)(_segment.p1.y));
-        else return ((CGFloat)(_segment.p2.y));
+        if(_isStart) return ((CGFloat)(_segment.p0.y));
+        else return ((CGFloat)(_segment.p1.y));
     } else {
         return [((EGSlopeLine*)([_segment line])) yForX:x];
     }
@@ -388,8 +388,8 @@ static ODClassType* _EGBentleyOttmannEventQueue_type;
     if(!([segments isEmpty])) {
         [segments forEach:^void(CNTuple* s) {
             EGLineSegment* segment = ((EGLineSegment*)(s.b));
-            [ret offerPoint:segment.p1 event:[EGBentleyOttmannPointEvent bentleyOttmannPointEventWithIsStart:YES data:((CNTuple*)(s.a)) segment:segment point:segment.p1]];
-            [ret offerPoint:segment.p2 event:[EGBentleyOttmannPointEvent bentleyOttmannPointEventWithIsStart:NO data:((CNTuple*)(s.a)) segment:segment point:segment.p2]];
+            [ret offerPoint:segment.p0 event:[EGBentleyOttmannPointEvent bentleyOttmannPointEventWithIsStart:YES data:((CNTuple*)(s.a)) segment:segment point:segment.p0]];
+            [ret offerPoint:segment.p1 event:[EGBentleyOttmannPointEvent bentleyOttmannPointEventWithIsStart:NO data:((CNTuple*)(s.a)) segment:segment point:segment.p1]];
         }];
         sweepLine.queue = ret;
     }
@@ -543,8 +543,8 @@ static ODClassType* _EGSweepLine_type;
         [self sweepToEvent:event];
         EGBentleyOttmannPointEvent* pe = ((EGBentleyOttmannPointEvent*)(event));
         if([pe isVertical]) {
-            float minY = pe.segment.p1.y;
-            float maxY = pe.segment.p2.y;
+            float minY = pe.segment.p0.y;
+            float maxY = pe.segment.p1.y;
             id<CNIterator> i = [_events iteratorHigherThanItem:event];
             while([i hasNext]) {
                 EGBentleyOttmannPointEvent* e = ((EGBentleyOttmannPointEvent*)([i next]));

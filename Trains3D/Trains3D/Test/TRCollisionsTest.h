@@ -25,11 +25,12 @@
 - (TRLevel*)newLevel;
 - (id<CNSet>)checkLevel:(TRLevel*)level;
 - (void)testStraight;
-- (void)doTest1ForLevel:(TRLevel*)level delta:(CGFloat)delta form:(TRRailForm*)form;
+- (void)doTest1ForLevel:(TRLevel*)level form:(TRRailForm*)form;
 - (void)testTurn;
 - (void)testCross;
 + (CGFloat)carLen;
 + (CGFloat)carWidth;
++ (CGFloat)carConLen;
 + (ODClassType*)type;
 @end
 
