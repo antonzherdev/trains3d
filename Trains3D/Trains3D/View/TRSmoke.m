@@ -26,7 +26,7 @@ static ODClassType* _TRSmoke_type;
     self = [super init];
     if(self) {
         _train = train;
-        _engine = ((TRCar*)([[_train.cars head] get]));
+        _engine = ((TRCar*)([[[_train cars] head] get]));
         _tubePos = ((TREngineType*)([_engine.carType.engineType get])).tubePos;
         _emitTime = 0.0;
     }

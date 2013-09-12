@@ -6,6 +6,7 @@
 #import "TRRailPoint.h"
 #import "TRCity.h"
 #import "EGMapIso.h"
+#import "EGCollisionBody.h"
 #import "EGFigure.h"
 @implementation TRTrainType{
     BOOL(^_obstacleProcessor)(TRLevel*, TRTrain*, TRObstacle*);
@@ -80,11 +81,12 @@ static NSArray* _TRTrainType_values;
     __weak TRLevel* _level;
     TRTrainType* _trainType;
     TRColor* _color;
-    id<CNSeq> _cars;
+    id<CNSeq>(^__cars)(TRTrain*);
     NSUInteger _speed;
     id _viewData;
     TRRailPoint* _head;
     BOOL _back;
+    CNLazy* __lazy_cars;
     CGFloat _length;
     CGFloat _speedFloat;
     BOOL(^_carsObstacleProcessor)(TRObstacle*);
@@ -93,26 +95,30 @@ static ODClassType* _TRTrain_type;
 @synthesize level = _level;
 @synthesize trainType = _trainType;
 @synthesize color = _color;
-@synthesize cars = _cars;
+@synthesize _cars = __cars;
 @synthesize speed = _speed;
 @synthesize viewData = _viewData;
 @synthesize speedFloat = _speedFloat;
 
-+ (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color cars:(id<CNSeq>)cars speed:(NSUInteger)speed {
-    return [[TRTrain alloc] initWithLevel:level trainType:trainType color:color cars:cars speed:speed];
++ (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color _cars:(id<CNSeq>(^)(TRTrain*))_cars speed:(NSUInteger)speed {
+    return [[TRTrain alloc] initWithLevel:level trainType:trainType color:color _cars:_cars speed:speed];
 }
 
-- (id)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color cars:(id<CNSeq>)cars speed:(NSUInteger)speed {
+- (id)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color _cars:(id<CNSeq>(^)(TRTrain*))_cars speed:(NSUInteger)speed {
     self = [super init];
+    __weak TRTrain* _weakSelf = self;
     if(self) {
         _level = level;
         _trainType = trainType;
         _color = color;
-        _cars = cars;
+        __cars = _cars;
         _speed = speed;
         _viewData = nil;
         _back = NO;
-        _length = unumf([[_cars chain] fold:^id(id r, TRCar* car) {
+        __lazy_cars = [CNLazy lazyWithF:^id<CNSeq>() {
+            return _weakSelf._cars(self);
+        }];
+        _length = unumf([[[self cars] chain] fold:^id(id r, TRCar* car) {
             return numf([car fullLength] + unumf(r));
         } withStart:@0.0]);
         _speedFloat = 0.01 * _speed;
@@ -127,6 +133,10 @@ static ODClassType* _TRTrain_type;
 + (void)initialize {
     [super initialize];
     _TRTrain_type = [ODClassType classTypeWithCls:[TRTrain class]];
+}
+
+- (id<CNSeq>)cars {
+    return [__lazy_cars get];
 }
 
 - (BOOL)isBack {
@@ -169,8 +179,8 @@ static ODClassType* _TRTrain_type;
 }
 
 - (id<CNSeq>)directedCars {
-    if(_back) return [[[_cars chain] reverse] toArray];
-    else return _cars;
+    if(_back) return [[[[self cars] chain] reverse] toArray];
+    else return [self cars];
 }
 
 - (void)correctCorrection:(TRRailPointCorrection*)correction {
@@ -200,7 +210,7 @@ static ODClassType* _TRTrain_type;
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch {
     EGVec2I tile = theSwitch.tile;
     EGVec2I nextTile = [theSwitch.connector nextTile:tile];
-    return [[_cars findWhere:^BOOL(TRCar* _) {
+    return [[[self cars] findWhere:^BOOL(TRCar* _) {
         return (EGVec2IEq(_.frontConnector.tile, tile) && EGVec2IEq(_.backConnector.tile, nextTile)) || (EGVec2IEq(_.frontConnector.tile, nextTile) && EGVec2IEq(_.backConnector.tile, tile));
     }] isDefined];
 }
@@ -221,7 +231,7 @@ static ODClassType* _TRTrain_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRTrain* o = ((TRTrain*)(other));
-    return [self.level isEqual:o.level] && self.trainType == o.trainType && self.color == o.color && [self.cars isEqual:o.cars] && self.speed == o.speed;
+    return [self.level isEqual:o.level] && self.trainType == o.trainType && self.color == o.color && [self._cars isEqual:o._cars] && self.speed == o.speed;
 }
 
 - (NSUInteger)hash {
@@ -229,7 +239,7 @@ static ODClassType* _TRTrain_type;
     hash = hash * 31 + [self.level hash];
     hash = hash * 31 + [self.trainType ordinal];
     hash = hash * 31 + [self.color ordinal];
-    hash = hash * 31 + [self.cars hash];
+    hash = hash * 31 + [self._cars hash];
     hash = hash * 31 + self.speed;
     return hash;
 }
@@ -239,7 +249,6 @@ static ODClassType* _TRTrain_type;
     [description appendFormat:@"level=%@", self.level];
     [description appendFormat:@", trainType=%@", self.trainType];
     [description appendFormat:@", color=%@", self.color];
-    [description appendFormat:@", cars=%@", self.cars];
     [description appendFormat:@", speed=%li", self.speed];
     [description appendString:@">"];
     return description;
@@ -311,6 +320,7 @@ static ODClassType* _TREngineType_type;
     CGFloat _frontConnectorLength;
     CGFloat _backConnectorLength;
     id _engineType;
+    id<EGCollisionShape> _shape;
 }
 static TRCarType* _TRCarType_car;
 static TRCarType* _TRCarType_engine;
@@ -320,6 +330,7 @@ static NSArray* _TRCarType_values;
 @synthesize frontConnectorLength = _frontConnectorLength;
 @synthesize backConnectorLength = _backConnectorLength;
 @synthesize engineType = _engineType;
+@synthesize shape = _shape;
 
 + (id)carTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name length:(CGFloat)length width:(CGFloat)width frontConnectorLength:(CGFloat)frontConnectorLength backConnectorLength:(CGFloat)backConnectorLength engineType:(id)engineType {
     return [[TRCarType alloc] initWithOrdinal:ordinal name:name length:length width:width frontConnectorLength:frontConnectorLength backConnectorLength:backConnectorLength engineType:engineType];
@@ -333,6 +344,7 @@ static NSArray* _TRCarType_values;
         _frontConnectorLength = frontConnectorLength;
         _backConnectorLength = backConnectorLength;
         _engineType = engineType;
+        _shape = [EGCollisionBox2d applyX:((float)(_length / 2)) y:((float)(_width / 2))];
     }
     
     return self;
@@ -369,6 +381,7 @@ static NSArray* _TRCarType_values;
 
 
 @implementation TRCar{
+    __weak TRTrain* _train;
     TRCarType* _carType;
     TRRailPoint* _frontConnector;
     TRRailPoint* _backConnector;
@@ -376,19 +389,23 @@ static NSArray* _TRCarType_values;
     TRRailPoint* _tail;
 }
 static ODClassType* _TRCar_type;
+@synthesize train = _train;
 @synthesize carType = _carType;
 @synthesize frontConnector = _frontConnector;
 @synthesize backConnector = _backConnector;
 @synthesize head = _head;
 @synthesize tail = _tail;
 
-+ (id)carWithCarType:(TRCarType*)carType {
-    return [[TRCar alloc] initWithCarType:carType];
++ (id)carWithTrain:(TRTrain*)train carType:(TRCarType*)carType {
+    return [[TRCar alloc] initWithTrain:train carType:carType];
 }
 
-- (id)initWithCarType:(TRCarType*)carType {
+- (id)initWithTrain:(TRTrain*)train carType:(TRCarType*)carType {
     self = [super init];
-    if(self) _carType = carType;
+    if(self) {
+        _train = train;
+        _carType = carType;
+    }
     
     return self;
 }
@@ -438,18 +455,20 @@ static ODClassType* _TRCar_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRCar* o = ((TRCar*)(other));
-    return self.carType == o.carType;
+    return [self.train isEqual:o.train] && self.carType == o.carType;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
+    hash = hash * 31 + [self.train hash];
     hash = hash * 31 + [self.carType ordinal];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"carType=%@", self.carType];
+    [description appendFormat:@"train=%@", self.train];
+    [description appendFormat:@", carType=%@", self.carType];
     [description appendString:@">"];
     return description;
 }
@@ -490,14 +509,14 @@ static ODClassType* _TRTrainGenerator_type;
     _TRTrainGenerator_type = [ODClassType classTypeWithCls:[TRTrainGenerator class]];
 }
 
-- (id<CNSeq>)generateCars {
+- (id<CNSeq>)generateCarsForTrain:(TRTrain*)train {
     NSInteger count = unumi([[_carsCount randomItem] get]);
-    TRCar* engine = [TRCar carWithCarType:((TRCarType*)([[[[_carTypes chain] filter:^BOOL(TRCarType* _) {
+    TRCar* engine = [TRCar carWithTrain:train carType:((TRCarType*)([[[[_carTypes chain] filter:^BOOL(TRCarType* _) {
         return [_ isEngine];
     }] randomItem] get]))];
     if(count <= 1) return (@[engine]);
     else return [[[[intRange(count) chain] map:^TRCar*(id i) {
-        return [TRCar carWithCarType:((TRCarType*)([[[[_carTypes chain] filter:^BOOL(TRCarType* _) {
+        return [TRCar carWithTrain:train carType:((TRCarType*)([[[[_carTypes chain] filter:^BOOL(TRCarType* _) {
             return !([_ isEngine]);
         }] randomItem] get]))];
     }] prepend:(@[engine])] toArray];

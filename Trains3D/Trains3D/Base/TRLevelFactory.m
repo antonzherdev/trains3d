@@ -30,9 +30,9 @@ static ODClassType* _TRLevelFactory_type;
     [super initialize];
     _TRLevelFactory_type = [ODClassType classTypeWithCls:[TRLevelFactory class]];
     _TRLevelFactory_scoreRules = [TRScoreRules scoreRulesWithInitialScore:100000 railCost:1000 arrivedPrize:^NSInteger(TRTrain* train) {
-        return ((NSInteger)([train.cars count] * 2000));
+        return ((NSInteger)([[train cars] count] * 2000));
     } destructionFine:^NSInteger(TRTrain* train) {
-        return ((NSInteger)([train.cars count] * 3000));
+        return ((NSInteger)([[train cars] count] * 3000));
     } delayPeriod:10.0 delayFine:^NSInteger(TRTrain* train, NSInteger i) {
         return i * 1000;
     } repairCost:2000];

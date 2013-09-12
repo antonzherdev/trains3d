@@ -23,11 +23,12 @@ enum TRTrainType(obstacleProcessor : (TRLevel, TRTrain, TRObstacle) -> bool) {
     })
 }
 
-class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, cars : [TRCar], speed : uint) extends EGController {
+class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, _cars : (TRTrain) ->[TRCar], speed : uint) extends EGController {
     var viewData : any = nil
     private var head : TRRailPoint
     private var back = false
     def isBack = back
+    lazy val cars = _cars(self)
     private val length : float = cars.chain.fold(((r, car) -> car.fullLength + r), 0.0)
     val speedFloat : float = 0.01 * speed
 
@@ -114,9 +115,10 @@ enum TRCarType(
 
     def fullLength : float = length + frontConnectorLength + backConnectorLength
     def isEngine : bool = engineType.isDefined
+    val shape : EGCollisionShape = EGCollisionBox2d(length/2, width/2)
 }
 
-class TRCar(carType : TRCarType) {
+class TRCar(weak train : TRTrain, carType : TRCarType) {
     var frontConnector : TRRailPoint
     var backConnector : TRRailPoint
     var head : TRRailPoint
@@ -129,14 +131,15 @@ class TRCar(carType : TRCarType) {
     def fullLength : float = carType.fullLength
 
     def figure : EGThickLineSegment = EGThickLineSegment(EGLineSegment.newWith(head.point, tail.point), width)
+
 }
 
 class TRTrainGenerator(trainType : TRTrainType, carsCount : [int], speed : [int], carTypes : [TRCarType]) {
-    def generateCars : [TRCar] = {
+    def generateCarsFor(train : TRTrain) : [TRCar] = {
         val count = carsCount.randomItem.get
-        val engine = TRCar(carTypes.chain.filter(_.isEngine).randomItem.get)
+        val engine = TRCar(train, carTypes.chain.filter(_.isEngine).randomItem.get)
         if(count <= 1) [engine]
-        else count.range.chain.map(i -> TRCar(carTypes.chain.filter(!_.isEngine).randomItem.get)).prepend([engine]).toArray
+        else count.range.chain.map(i -> TRCar(train, carTypes.chain.filter(!_.isEngine).randomItem.get)).prepend([engine]).toArray
     }
     def generateSpeed : uint = speed.randomItem.get
 }

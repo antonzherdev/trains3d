@@ -178,7 +178,10 @@ static ODClassType* _TRLevel_type;
 
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator {
     TRCity* city = ((TRCity*)([[__cities randomItem] get]));
-    [self runTrain:[TRTrain trainWithLevel:self trainType:generator.trainType color:city.color cars:[generator generateCars] speed:[generator generateSpeed]] fromCity:((TRCity*)([[[[__cities chain] filter:^BOOL(TRCity* _) {
+    TRTrain* train = [TRTrain trainWithLevel:self trainType:generator.trainType color:city.color _cars:^id<CNSeq>(TRTrain* _) {
+        return [generator generateCarsForTrain:_];
+    } speed:[generator generateSpeed]];
+    [self runTrain:train fromCity:((TRCity*)([[[[__cities chain] filter:^BOOL(TRCity* _) {
         return !([_ isEqual:city]);
     }] randomItem] get]))];
 }
@@ -244,7 +247,7 @@ static ODClassType* _TRLevel_type;
 
 - (id<CNSet>)detectCollisions {
     id<CNSeq> carFigures = [[[__trains chain] flatMap:^CNChain*(TRTrain* train) {
-        return [[train.cars chain] map:^CNTuple*(TRCar* car) {
+        return [[[train cars] chain] map:^CNTuple*(TRCar* car) {
             return tuple(tuple(train, car), [car figure]);
         }];
     }] toArray];
@@ -267,7 +270,9 @@ static ODClassType* _TRLevel_type;
 
 - (void)runRepairerFromCity:(TRCity*)city {
     if([__repairer isEmpty]) {
-        TRTrain* train = [TRTrain trainWithLevel:self trainType:TRTrainType.repairer color:TRColor.grey cars:(@[[TRCar carWithCarType:TRCarType.engine]]) speed:_rules.repairerSpeed];
+        TRTrain* train = [TRTrain trainWithLevel:self trainType:TRTrainType.repairer color:TRColor.grey _cars:^id<CNSeq>(TRTrain* _) {
+            return (@[[TRCar carWithTrain:_ carType:TRCarType.engine]]);
+        } speed:_rules.repairerSpeed];
         [self runTrain:train fromCity:city];
         __repairer = [CNOption opt:train];
     }

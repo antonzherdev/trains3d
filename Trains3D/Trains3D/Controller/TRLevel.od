@@ -58,9 +58,8 @@ class TRLevel(rules : TRLevelRules) extends EGController {
 
     def runTrainWith(generator : TRTrainGenerator) {
         val city = _cities.randomItem.get
-        run(
-            train = TRTrain(self, generator.trainType, city.color, generator.generateCars, generator.generateSpeed),
-            fromCity = _cities.chain.filter(_ != city).randomItem.get)
+        val train = TRTrain(self, generator.trainType, city.color, generator.generateCarsFor(_), generator.generateSpeed)
+        run(train, fromCity = _cities.chain.filter(_ != city).randomItem.get)
     }
 
     def testRun(train : TRTrain, fromPoint : TRRailPoint) {
@@ -132,7 +131,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
 
     def runRepairerFrom(city : TRCity) {
         if(_repairer.isEmpty) {
-            val train = TRTrain(self, TRTrainType.repairer, TRColor.grey, [TRCar(TRCarType.engine)], rules.repairerSpeed)
+            val train = TRTrain(self, TRTrainType.repairer, TRColor.grey, [TRCar(_, TRCarType.engine)], rules.repairerSpeed)
             run(train, city)
             _repairer = train
         }

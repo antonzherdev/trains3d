@@ -49,7 +49,7 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (void)drawTrain:(TRTrain*)train {
-    [train.cars forEach:^void(TRCar* car) {
+    [[train cars] forEach:^void(TRCar* car) {
         EGVec2 h = car.head.point;
         EGVec2 t = car.tail.point;
         [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
