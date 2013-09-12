@@ -207,7 +207,7 @@ static ODClassType* _TRLevel_type;
     [__cities forEach:^void(TRCity* _) {
         [_ updateWithDelta:delta];
     }];
-    [self processCollisions];
+    if(!([[self trains] isEmpty])) [self processCollisions];
     [_schedule updateWithDelta:delta];
 }
 
