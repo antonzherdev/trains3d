@@ -7,9 +7,10 @@
 @class EGMaterial;
 @class TRTrain;
 @class TRSmoke;
-@class TRCar;
-@class TRRailPoint;
 @class EG;
+@class TRCar;
+@class TRCarPosition;
+@class EGLineSegment;
 @class EGMatrix;
 @class EGMatrixModel;
 @class TRColor;

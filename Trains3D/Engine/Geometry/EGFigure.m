@@ -18,11 +18,11 @@ static ODClassType* _EGLine_type;
     _EGLine_type = [ODClassType classTypeWithCls:[EGLine class]];
 }
 
-+ (EGLine*)newWithSlope:(CGFloat)slope point:(EGVec2)point {
++ (EGLine*)applySlope:(CGFloat)slope point:(EGVec2)point {
     return [EGSlopeLine slopeLineWithSlope:slope constant:[EGLine calculateConstantWithSlope:slope point:point]];
 }
 
-+ (EGLine*)newWithP1:(EGVec2)p1 p2:(EGVec2)p2 {
++ (EGLine*)applyP1:(EGVec2)p1 p2:(EGVec2)p2 {
     if(eqf4(p1.x, p2.x)) {
         return [EGVerticalLine verticalLineWithX:((CGFloat)(p1.x))];
     } else {
@@ -192,7 +192,7 @@ static ODClassType* _EGSlopeLine_type;
 
 - (EGLine*)perpendicularWithPoint:(EGVec2)point {
     if(eqf(_slope, 0)) return [EGVerticalLine verticalLineWithX:((CGFloat)(point.x))];
-    else return [EGLine newWithSlope:-_slope point:point];
+    else return [EGLine applySlope:-_slope point:point];
 }
 
 - (ODClassType*)type {
@@ -333,6 +333,7 @@ static ODClassType* _EGVerticalLine_type;
 @implementation EGLineSegment{
     EGVec2 _p1;
     EGVec2 _p2;
+    BOOL _dir;
     EGLine* __line;
     EGRect _boundingRect;
 }
@@ -350,6 +351,7 @@ static ODClassType* _EGLineSegment_type;
     if(self) {
         _p1 = p1;
         _p2 = p2;
+        _dir = _p1.y < _p2.y || (eqf4(_p1.y, _p2.y) && _p1.x < _p2.x);
         _boundingRect = egRectNewXYXX2YY2(min(((CGFloat)(_p1.x)), ((CGFloat)(_p2.x))), max(((CGFloat)(_p1.x)), ((CGFloat)(_p2.x))), min(((CGFloat)(_p1.y)), ((CGFloat)(_p2.y))), max(((CGFloat)(_p1.y)), ((CGFloat)(_p2.y))));
     }
     
@@ -379,7 +381,7 @@ static ODClassType* _EGLineSegment_type;
 }
 
 - (EGLine*)line {
-    if(__line == nil) __line = [EGLine newWithP1:_p1 p2:_p2];
+    if(__line == nil) __line = [EGLine applyP1:_p1 p2:_p2];
     return __line;
 }
 
@@ -435,6 +437,20 @@ static ODClassType* _EGLineSegment_type;
 
 - (void)setLine:(EGLine*)line {
     __line = line;
+}
+
+- (EGVec2)mid {
+    return egVec2MidVec2(_p1, _p2);
+}
+
+- (CGFloat)angle {
+    if(_dir) return [[self line] angle];
+    else return M_PI + [[self line] angle];
+}
+
+- (CGFloat)degreeAngle {
+    if(_dir) return [[self line] degreeAngle];
+    else return 180 + [[self line] degreeAngle];
 }
 
 - (ODClassType*)type {

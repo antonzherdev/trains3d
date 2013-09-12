@@ -6,6 +6,7 @@
 @class TRCar;
 @class TRCarType;
 @class TREngineType;
+@class TRCarPosition;
 @class TRRailPoint;
 @class EG;
 

@@ -34,6 +34,7 @@ EGVec2 egVec2ApplyVec2i(EGVec2I vec2i);
 EGVec2 egVec2AddVec2(EGVec2 self, EGVec2 vec2);
 EGVec2 egVec2SubVec2(EGVec2 self, EGVec2 vec2);
 EGVec2 egVec2Negate(EGVec2 self);
+float egVec2DegreeAngle(EGVec2 self);
 float egVec2Angle(EGVec2 self);
 float egVec2DotVec2(EGVec2 self, EGVec2 vec2);
 float egVec2LengthSquare(EGVec2 self);

@@ -232,7 +232,7 @@ static ODClassType* _TRLevel_type;
         }];
         TRCar* car1 = ((TRCar*)(((CNTuple*)(collision.items.a)).b));
         TRCar* car2 = ((TRCar*)(((CNTuple*)(collision.items.b)).b));
-        [[[[[[[[(@[car1.head, car1.tail]) chain] mul:(@[car2.head, car2.tail])] sortBy] ascBy:^id(CNTuple* pair) {
+        [[[[[[[[(@[car1.position.head, car1.position.tail]) chain] mul:(@[car2.position.head, car2.position.tail])] sortBy] ascBy:^id(CNTuple* pair) {
             TRRailPoint* x = ((TRRailPoint*)(pair.a));
             TRRailPoint* y = ((TRRailPoint*)(pair.b));
             if(x.form == y.form && EGVec2IEq(x.tile, y.tile)) return numf(fabs(x.x - y.x));

@@ -14,12 +14,15 @@
 @class TRRailConnector;
 @protocol EGCollisionShape;
 @class EGCollisionBox2d;
+@class EGCollisionBody;
 @class EGThickLineSegment;
 @class EGLineSegment;
+@class EGMatrix;
 
 @class TRTrain;
 @class TREngineType;
 @class TRCar;
+@class TRCarPosition;
 @class TRTrainGenerator;
 @class TRTrainType;
 @class TRCarType;
@@ -86,20 +89,28 @@
 @interface TRCar : NSObject
 @property (nonatomic, readonly, weak) TRTrain* train;
 @property (nonatomic, readonly) TRCarType* carType;
-@property (nonatomic, retain) TRRailPoint* frontConnector;
-@property (nonatomic, retain) TRRailPoint* backConnector;
-@property (nonatomic, retain) TRRailPoint* head;
-@property (nonatomic, retain) TRRailPoint* tail;
+@property (nonatomic, retain) TRCarPosition* position;
 
 + (id)carWithTrain:(TRTrain*)train carType:(TRCarType*)carType;
 - (id)initWithTrain:(TRTrain*)train carType:(TRCarType*)carType;
 - (ODClassType*)type;
-- (CGFloat)frontConnectorLength;
-- (CGFloat)backConnectorLength;
-- (CGFloat)length;
-- (CGFloat)width;
-- (CGFloat)fullLength;
+- (EGCollisionBody*)collisionBody;
 - (EGThickLineSegment*)figure;
++ (ODClassType*)type;
+@end
+
+
+@interface TRCarPosition : NSObject
+@property (nonatomic, readonly) TRRailPoint* frontConnector;
+@property (nonatomic, readonly) TRRailPoint* head;
+@property (nonatomic, readonly) TRRailPoint* tail;
+@property (nonatomic, readonly) TRRailPoint* backConnector;
+@property (nonatomic, readonly) EGLineSegment* line;
+
++ (id)carPositionWithFrontConnector:(TRRailPoint*)frontConnector head:(TRRailPoint*)head tail:(TRRailPoint*)tail backConnector:(TRRailPoint*)backConnector;
+- (id)initWithFrontConnector:(TRRailPoint*)frontConnector head:(TRRailPoint*)head tail:(TRRailPoint*)tail backConnector:(TRRailPoint*)backConnector;
+- (ODClassType*)type;
+- (EGMatrix*)matrix;
 + (ODClassType*)type;
 @end
 

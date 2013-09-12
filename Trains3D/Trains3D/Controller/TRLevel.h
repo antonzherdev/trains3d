@@ -16,6 +16,7 @@
 @class TRSwitch;
 @class EGCollision;
 @class TRCar;
+@class TRCarPosition;
 @class EGCollisions;
 @class TRTrainType;
 @class TRColor;

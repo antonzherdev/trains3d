@@ -8,6 +8,7 @@
 #import "EGMapIso.h"
 #import "EGCollisionBody.h"
 #import "EGFigure.h"
+#import "EGMatrix.h"
 @implementation TRTrainType{
     BOOL(^_obstacleProcessor)(TRLevel*, TRTrain*, TRObstacle*);
 }
@@ -119,7 +120,7 @@ static ODClassType* _TRTrain_type;
             return _weakSelf._cars(self);
         }];
         _length = unumf([[[self cars] chain] fold:^id(id r, TRCar* car) {
-            return numf([car fullLength] + unumf(r));
+            return numf([car.carType fullLength] + unumf(r));
         } withStart:@0.0]);
         _speedFloat = 0.01 * _speed;
         _carsObstacleProcessor = ^BOOL(TRObstacle* o) {
@@ -154,17 +155,15 @@ static ODClassType* _TRTrain_type;
 }
 
 - (void)calculateCarPositions {
-    ((TRRailPoint*)([[[self directedCars] chain] fold:^TRRailPoint*(TRRailPoint* hl, TRCar* car) {
-        car.frontConnector = hl;
-        CGFloat fl = [car frontConnectorLength];
-        CGFloat bl = [car backConnectorLength];
-        TRRailPoint* p = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((_back) ? bl : fl) point:hl] addErrorToPoint];
-        car.head = p;
-        p = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:[car length] point:p] addErrorToPoint];
-        car.tail = p;
-        p = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((_back) ? fl : bl) point:p] addErrorToPoint];
-        car.backConnector = p;
-        return p;
+    ((TRRailPoint*)([[[self directedCars] chain] fold:^TRRailPoint*(TRRailPoint* frontConnector, TRCar* car) {
+        TRCarType* tp = car.carType;
+        CGFloat fl = tp.frontConnectorLength;
+        CGFloat bl = tp.backConnectorLength;
+        TRRailPoint* head = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((_back) ? bl : fl) point:frontConnector] addErrorToPoint];
+        TRRailPoint* tail = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:tp.length point:head] addErrorToPoint];
+        TRRailPoint* backConnector = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((_back) ? fl : bl) point:tail] addErrorToPoint];
+        car.position = ((_back) ? [TRCarPosition carPositionWithFrontConnector:backConnector head:tail tail:head backConnector:frontConnector] : [TRCarPosition carPositionWithFrontConnector:frontConnector head:head tail:tail backConnector:backConnector]);
+        return backConnector;
     } withStart:[_head invert]]));
 }
 
@@ -192,7 +191,7 @@ static ODClassType* _TRTrain_type;
             } else {
                 _back = !(_back);
                 TRCar* lastCar = ((TRCar*)([[[self directedCars] head] get]));
-                _head = lastCar.backConnector;
+                _head = lastCar.position.backConnector;
             }
         } else {
             _head = [correction addErrorToPoint];
@@ -210,8 +209,9 @@ static ODClassType* _TRTrain_type;
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch {
     EGVec2I tile = theSwitch.tile;
     EGVec2I nextTile = [theSwitch.connector nextTile:tile];
-    return [[[self cars] findWhere:^BOOL(TRCar* _) {
-        return (EGVec2IEq(_.frontConnector.tile, tile) && EGVec2IEq(_.backConnector.tile, nextTile)) || (EGVec2IEq(_.frontConnector.tile, nextTile) && EGVec2IEq(_.backConnector.tile, tile));
+    return [[[self cars] findWhere:^BOOL(TRCar* car) {
+        TRCarPosition* p = car.position;
+        return (EGVec2IEq(p.frontConnector.tile, tile) && EGVec2IEq(p.backConnector.tile, nextTile)) || (EGVec2IEq(p.frontConnector.tile, nextTile) && EGVec2IEq(p.backConnector.tile, tile));
     }] isDefined];
 }
 
@@ -383,18 +383,13 @@ static NSArray* _TRCarType_values;
 @implementation TRCar{
     __weak TRTrain* _train;
     TRCarType* _carType;
-    TRRailPoint* _frontConnector;
-    TRRailPoint* _backConnector;
-    TRRailPoint* _head;
-    TRRailPoint* _tail;
+    TRCarPosition* _position;
+    EGCollisionBody* __collisionBody;
 }
 static ODClassType* _TRCar_type;
 @synthesize train = _train;
 @synthesize carType = _carType;
-@synthesize frontConnector = _frontConnector;
-@synthesize backConnector = _backConnector;
-@synthesize head = _head;
-@synthesize tail = _tail;
+@synthesize position = _position;
 
 + (id)carWithTrain:(TRTrain*)train carType:(TRCarType*)carType {
     return [[TRCar alloc] initWithTrain:train carType:carType];
@@ -405,6 +400,7 @@ static ODClassType* _TRCar_type;
     if(self) {
         _train = train;
         _carType = carType;
+        __collisionBody = [EGCollisionBody collisionBodyWithData:self shape:_carType.shape isKinematic:YES];
     }
     
     return self;
@@ -415,28 +411,13 @@ static ODClassType* _TRCar_type;
     _TRCar_type = [ODClassType classTypeWithCls:[TRCar class]];
 }
 
-- (CGFloat)frontConnectorLength {
-    return _carType.frontConnectorLength;
-}
-
-- (CGFloat)backConnectorLength {
-    return _carType.backConnectorLength;
-}
-
-- (CGFloat)length {
-    return _carType.length;
-}
-
-- (CGFloat)width {
-    return _carType.width;
-}
-
-- (CGFloat)fullLength {
-    return [_carType fullLength];
+- (EGCollisionBody*)collisionBody {
+    [__collisionBody setMatrix:[_position matrix]];
+    return __collisionBody;
 }
 
 - (EGThickLineSegment*)figure {
-    return [EGThickLineSegment thickLineSegmentWithSegment:[EGLineSegment newWithP1:_head.point p2:_tail.point] thickness:[self width]];
+    return [EGThickLineSegment thickLineSegmentWithSegment:_position.line thickness:_carType.width];
 }
 
 - (ODClassType*)type {
@@ -469,6 +450,95 @@ static ODClassType* _TRCar_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"train=%@", self.train];
     [description appendFormat:@", carType=%@", self.carType];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRCarPosition{
+    TRRailPoint* _frontConnector;
+    TRRailPoint* _head;
+    TRRailPoint* _tail;
+    TRRailPoint* _backConnector;
+    EGLineSegment* _line;
+    CNLazy* __lazy_matrix;
+}
+static ODClassType* _TRCarPosition_type;
+@synthesize frontConnector = _frontConnector;
+@synthesize head = _head;
+@synthesize tail = _tail;
+@synthesize backConnector = _backConnector;
+@synthesize line = _line;
+
++ (id)carPositionWithFrontConnector:(TRRailPoint*)frontConnector head:(TRRailPoint*)head tail:(TRRailPoint*)tail backConnector:(TRRailPoint*)backConnector {
+    return [[TRCarPosition alloc] initWithFrontConnector:frontConnector head:head tail:tail backConnector:backConnector];
+}
+
+- (id)initWithFrontConnector:(TRRailPoint*)frontConnector head:(TRRailPoint*)head tail:(TRRailPoint*)tail backConnector:(TRRailPoint*)backConnector {
+    self = [super init];
+    __weak TRCarPosition* _weakSelf = self;
+    if(self) {
+        _frontConnector = frontConnector;
+        _head = head;
+        _tail = tail;
+        _backConnector = backConnector;
+        _line = [EGLineSegment lineSegmentWithP1:_head.point p2:_tail.point];
+        __lazy_matrix = [CNLazy lazyWithF:^EGMatrix*() {
+            return ^EGMatrix*() {
+                EGVec2 mid = [_weakSelf.line mid];
+                return [[[EGMatrix identity] translateX:mid.x y:mid.y z:0.0] rotateAngle:((float)([_weakSelf.line degreeAngle])) x:0.0 y:0.0 z:1.0];
+            }();
+        }];
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRCarPosition_type = [ODClassType classTypeWithCls:[TRCarPosition class]];
+}
+
+- (EGMatrix*)matrix {
+    return [__lazy_matrix get];
+}
+
+- (ODClassType*)type {
+    return [TRCarPosition type];
+}
+
++ (ODClassType*)type {
+    return _TRCarPosition_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRCarPosition* o = ((TRCarPosition*)(other));
+    return [self.frontConnector isEqual:o.frontConnector] && [self.head isEqual:o.head] && [self.tail isEqual:o.tail] && [self.backConnector isEqual:o.backConnector];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.frontConnector hash];
+    hash = hash * 31 + [self.head hash];
+    hash = hash * 31 + [self.tail hash];
+    hash = hash * 31 + [self.backConnector hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"frontConnector=%@", self.frontConnector];
+    [description appendFormat:@", head=%@", self.head];
+    [description appendFormat:@", tail=%@", self.tail];
+    [description appendFormat:@", backConnector=%@", self.backConnector];
     [description appendString:@">"];
     return description;
 }

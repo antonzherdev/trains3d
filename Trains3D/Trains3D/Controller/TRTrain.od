@@ -29,7 +29,7 @@ class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, _c
     private var back = false
     def isBack = back
     lazy val cars = _cars(self)
-    private val length : float = cars.chain.fold(((r, car) -> car.fullLength + r), 0.0)
+    private val length : float = cars.chain.fold(((r, car) -> car.carType.fullLength + r), 0.0)
     val speedFloat : float = 0.01 * speed
 
     def startFrom(city : TRCity) {
@@ -45,17 +45,17 @@ class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, _c
         o.obstacleType ==  TRObstacleType.light
 
     private def calculateCarPositions {
-        directedCars.chain.fold((hl, car) -> {
-            car.frontConnector = hl
-            val fl = car.frontConnectorLength
-            val bl = car.backConnectorLength
-            var p =  level.railroad.moveWith(carsObstacleProcessor, if(back) bl else fl, hl).addErrorToPoint
-            car.head = p
-            p =  level.railroad.moveWith(carsObstacleProcessor, car.length, p).addErrorToPoint
-            car.tail = p
-            p =  level.railroad.moveWith(carsObstacleProcessor, if(back) fl else bl, p).addErrorToPoint
-            car.backConnector = p
-            p
+        directedCars.chain.fold((frontConnector, car) -> {
+            val tp = car.carType
+            val fl = tp.frontConnectorLength
+            val bl = tp.backConnectorLength
+            val head = level.railroad.moveWith(carsObstacleProcessor, if(back) bl else fl, frontConnector).addErrorToPoint
+            val tail = level.railroad.moveWith(carsObstacleProcessor, tp.length, head).addErrorToPoint
+            val backConnector =  level.railroad.moveWith(carsObstacleProcessor, if(back) fl else bl, tail).addErrorToPoint
+            car.position =
+                if(back) TRCarPosition(backConnector, tail, head, frontConnector)
+                else TRCarPosition(frontConnector, head, tail, backConnector)
+            backConnector
         }, head.invert)
     }
 
@@ -77,7 +77,7 @@ class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, _c
                 } else {
                     back = !back
                     val lastCar = directedCars.head.get
-                    head = lastCar.backConnector
+                    head = lastCar.position.backConnector
                 }
             } else {
                 head = correction.addErrorToPoint
@@ -94,10 +94,11 @@ class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, _c
     def isLocked(theSwitch : TRSwitch) : bool = {
         val tile = theSwitch.tile
         val nextTile = theSwitch.connector.next(tile)
-        cars.find(
-            _.frontConnector.tile == tile && _.backConnector.tile == nextTile
-            || _.frontConnector.tile == nextTile && _.backConnector.tile == tile
-        ).isDefined
+        cars.find{car ->
+            val p = car.position
+            p.frontConnector.tile == tile && p.backConnector.tile == nextTile
+            || p.frontConnector.tile == nextTile && p.backConnector.tile == tile
+        }.isDefined
     }
 }
 
@@ -119,19 +120,23 @@ enum TRCarType(
 }
 
 class TRCar(weak train : TRTrain, carType : TRCarType) {
-    var frontConnector : TRRailPoint
-    var backConnector : TRRailPoint
-    var head : TRRailPoint
-    var tail : TRRailPoint
+    var position : TRCarPosition
 
-    def frontConnectorLength = carType.frontConnectorLength
-    def backConnectorLength = carType.backConnectorLength
-    def length : float = carType.length
-    def width : float = carType.width
-    def fullLength : float = carType.fullLength
+    private val _collisionBody = EGCollisionBody(self, carType.shape, isKinematic = true)
+    def collisionBody = {
+        _collisionBody.set(matrix = position.matrix)
+        _collisionBody
+    }
 
-    def figure : EGThickLineSegment = EGThickLineSegment(EGLineSegment.newWith(head.point, tail.point), width)
+    def figure : EGThickLineSegment = EGThickLineSegment(position.line, carType.width)
+}
 
+class TRCarPosition(frontConnector : TRRailPoint, head : TRRailPoint, tail : TRRailPoint, backConnector : TRRailPoint) {
+    val line = EGLineSegment(head.point, tail.point)
+    lazy val matrix = {
+        val mid = line.mid
+        EGMatrix.identity.translate(mid.x, mid.y, 0).rotate(line.degreeAngle, 0, 0, 1)
+    }
 }
 
 class TRTrainGenerator(trainType : TRTrainType, carsCount : [int], speed : [int], carTypes : [TRCarType]) {

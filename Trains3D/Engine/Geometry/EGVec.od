@@ -8,6 +8,7 @@ struct EGVec2(x : float4, y : float4) extends ODComparable<EGVec2> {
     def add(vec2 : EGVec2) = EGVec2(x + vec2.x, y + vec2.y)
     def sub(vec2 : EGVec2) = EGVec2(x - vec2.x, y - vec2.y)
     def negate = EGVec2(-x, -y)
+    def degreeAngle : float4 = 180.0 / M_PI * atan2(y, x)
     def angle : float4 = atan2(y, x)
     def dot(vec2 : EGVec2) : float4 = x*vec2.x + y*vec2.y
     def lengthSquare : float4 = dot(self)

@@ -25,8 +25,9 @@ class TRSmoke(weak train : TRTrain) extends EGBillboardParticleSystem {
     static val textureQuadrant : EGQuadrant = EGQuad.identity.quadrant
     static val defColor = EGVec4(1, 1, 1, 0.7)
     def generateParticle : TRSmokeParticle =  {
-        val fPos = if(train.isBack) engine.tail.point else engine.head.point
-        val bPos = if(train.isBack) engine.head.point else engine.tail.point
+        val pos = engine.position
+        val fPos = pos.head.point
+        val bPos = pos.tail.point
         val delta = bPos.sub(fPos)
         val tubeXY = fPos.add(delta.set(length = tubePos.x))
         val emitterPos = EGVec3(tubeXY, tubePos.z)

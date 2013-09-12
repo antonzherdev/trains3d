@@ -96,8 +96,8 @@ class TRLevel(rules : TRLevelRules) extends EGController {
             collision.items.for(destroy(_.a))
             val car1 = collision.items.a.b
             val car2 = collision.items.b.b
-            [car1.head, car1.tail].chain
-                .mul([car2.head, car2.tail])
+            [car1.position.head, car1.position.tail].chain
+                .mul([car2.position.head, car2.position.tail])
                 .sortBy.asc(pair -> {
                     val x = pair.a
                     val y = pair.b

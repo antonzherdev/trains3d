@@ -14,8 +14,8 @@
 + (id)line;
 - (id)init;
 - (ODClassType*)type;
-+ (EGLine*)newWithSlope:(CGFloat)slope point:(EGVec2)point;
-+ (EGLine*)newWithP1:(EGVec2)p1 p2:(EGVec2)p2;
++ (EGLine*)applySlope:(CGFloat)slope point:(EGVec2)point;
++ (EGLine*)applyP1:(EGVec2)p1 p2:(EGVec2)p2;
 + (CGFloat)calculateSlopeWithP1:(EGVec2)p1 p2:(EGVec2)p2;
 + (CGFloat)calculateConstantWithSlope:(CGFloat)slope point:(EGVec2)point;
 - (BOOL)containsPoint:(EGVec2)point;
@@ -100,6 +100,9 @@
 - (id<CNSeq>)segments;
 - (EGLineSegment*)moveWithPoint:(EGVec2)point;
 - (EGLineSegment*)moveWithX:(CGFloat)x y:(CGFloat)y;
+- (EGVec2)mid;
+- (CGFloat)angle;
+- (CGFloat)degreeAngle;
 + (ODClassType*)type;
 @end
 

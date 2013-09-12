@@ -12,6 +12,9 @@ EGVec2 egVec2SubVec2(EGVec2 self, EGVec2 vec2) {
 EGVec2 egVec2Negate(EGVec2 self) {
     return EGVec2Make(-self.x, -self.y);
 }
+float egVec2DegreeAngle(EGVec2 self) {
+    return ((float)(180.0 / M_PI * atan2(((CGFloat)(self.y)), ((CGFloat)(self.x)))));
+}
 float egVec2Angle(EGVec2 self) {
     return ((float)(atan2(((CGFloat)(self.y)), ((CGFloat)(self.x)))));
 }

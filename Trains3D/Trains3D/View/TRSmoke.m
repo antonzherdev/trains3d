@@ -50,8 +50,9 @@ static ODClassType* _TRSmoke_type;
 }
 
 - (TRSmokeParticle*)generateParticle {
-    EGVec2 fPos = (([_train isBack]) ? _engine.tail.point : _engine.head.point);
-    EGVec2 bPos = (([_train isBack]) ? _engine.head.point : _engine.tail.point);
+    TRCarPosition* pos = _engine.position;
+    EGVec2 fPos = pos.head.point;
+    EGVec2 bPos = pos.tail.point;
     EGVec2 delta = egVec2SubVec2(bPos, fPos);
     EGVec2 tubeXY = egVec2AddVec2(fPos, egVec2SetLength(delta, _tubePos.x));
     EGVec3 emitterPos = egVec3ApplyVec2Z(tubeXY, _tubePos.z);
