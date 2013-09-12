@@ -1,0 +1,19 @@
+package com.antonzherdev.eg
+
+import test._
+
+class EGDynamicTest extends CNTestCase {
+    def testSimple {
+        val world = EGDynamicWorld<int>(EGVec3(0, -10, 0))
+        val shape = EGCollisionBox(EGVec3(0.5, 0.5, 0.5))
+        val body = EGDynamicBody<int>(1, shape, isKinematic = true, 1)
+        world.add(body)
+
+        var m = body.matrix
+        assertTrue(m.array[13] == 0)
+
+        world.updateWith(delta = 1)
+        m = body.matrix
+        assertTrue(m.array[13].between(-0.18056, -0.18055))
+    }
+}

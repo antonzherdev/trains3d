@@ -93,7 +93,7 @@ static EGMatrix* _identity;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGMatrix* o = ((EGMatrix*)(other));
-    return memcmp(_impl, o.impl, sizeof(double[16])) == 0;
+    return memcmp(_impl, o.impl, sizeof(float[16])) == 0;
 }
 
 - (float const *)array {
