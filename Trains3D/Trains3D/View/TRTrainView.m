@@ -52,10 +52,10 @@ static ODClassType* _TRTrainView_type;
     [[train cars] forEach:^void(TRCar* car) {
         [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
             return [[_ modifyW:^EGMatrix*(EGMatrix* w) {
-                EGVec2 mid = [car.position.line mid];
+                EGVec2 mid = [[car position].line mid];
                 return [w translateX:mid.x y:mid.y z:0.05];
             }] modifyM:^EGMatrix*(EGMatrix* m) {
-                return [m rotateAngle:((float)([car.position.line degreeAngle] - 90)) x:0.0 y:1.0 z:0.0];
+                return [m rotateAngle:((float)([[car position].line degreeAngle] - 90)) x:0.0 y:1.0 z:0.0];
             }];
         } f:^void() {
             EGMaterial* material = [self trainMaterialForColor:train.color.color];

@@ -52,9 +52,9 @@ class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, _c
             val head = level.railroad.moveWith(carsObstacleProcessor, if(back) bl else fl, frontConnector).addErrorToPoint
             val tail = level.railroad.moveWith(carsObstacleProcessor, tp.length, head).addErrorToPoint
             val backConnector =  level.railroad.moveWith(carsObstacleProcessor, if(back) fl else bl, tail).addErrorToPoint
-            car.position =
+            car.set(position =
                 if(back) TRCarPosition(backConnector, tail, head, frontConnector)
-                else TRCarPosition(frontConnector, head, tail, backConnector)
+                else TRCarPosition(frontConnector, head, tail, backConnector))
             backConnector
         }, head.invert)
     }
@@ -110,7 +110,8 @@ enum TRCarType(
     length : float, //Length between wheels
     width : float, //width of the car for collision detection
     frontConnectorLength : float, backConnectorLength: float, // distances between start or end of the car and the nearest wheels
-    engineType : TREngineType?) {
+    engineType : TREngineType?)
+{
     car(0.44, 0.18, 0.13, 0.13, nil)
     engine(0.43, 0.18, 0.12, 0.2, TREngineType(tubePos = EGVec3(-0.06, 0, 0.5)))
 
@@ -120,15 +121,14 @@ enum TRCarType(
 }
 
 class TRCar(weak train : TRTrain, carType : TRCarType) {
-    var position : TRCarPosition
+    val collisionBody = EGCollisionBody(self, carType.shape, isKinematic = true)
 
-    private val _collisionBody = EGCollisionBody(self, carType.shape, isKinematic = true)
-    def collisionBody = {
-        _collisionBody.set(matrix = position.matrix)
-        _collisionBody
+    private var _position : TRCarPosition
+    def position : TRCarPosition = _position
+    def set(position : TRCarPosition) {
+        _position = position
+        collisionBody.set(matrix = position.matrix)
     }
-
-    def figure : EGThickLineSegment = EGThickLineSegment(position.line, carType.width)
 }
 
 class TRCarPosition(frontConnector : TRRailPoint, head : TRRailPoint, tail : TRRailPoint, backConnector : TRRailPoint) {

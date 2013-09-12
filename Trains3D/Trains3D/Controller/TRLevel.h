@@ -6,6 +6,7 @@
 @class TRScore;
 @class TRRailroad;
 @class EGSchedule;
+@class TRCollisionWorld;
 @class TRCity;
 @class TRCityAngle;
 @class TRRail;
@@ -14,10 +15,8 @@
 @class TRTrainGenerator;
 @class TRRailPoint;
 @class TRSwitch;
-@class EGCollision;
+@class TRCollision;
 @class TRCar;
-@class TRCarPosition;
-@class EGCollisions;
 @class TRTrainType;
 @class TRColor;
 @class TRCarType;
@@ -44,6 +43,7 @@
 @property (nonatomic, readonly) TRScore* score;
 @property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic, readonly) EGSchedule* schedule;
+@property (nonatomic, readonly) TRCollisionWorld* collisionWorld;
 
 + (id)levelWithRules:(TRLevelRules*)rules;
 - (id)initWithRules:(TRLevelRules*)rules;
@@ -59,7 +59,7 @@
 - (id)cityForTile:(EGVec2I)tile;
 - (void)arrivedTrain:(TRTrain*)train;
 - (void)processCollisions;
-- (id<CNSet>)detectCollisions;
+- (id<CNSeq>)detectCollisions;
 - (void)destroyTrain:(TRTrain*)train;
 - (void)removeTrain:(TRTrain*)train;
 - (void)runRepairerFromCity:(TRCity*)city;

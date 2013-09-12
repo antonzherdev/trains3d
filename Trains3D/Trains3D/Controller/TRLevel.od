@@ -1,7 +1,7 @@
 package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
-import core.ODMath._
+
 
 class TRLevelRules(mapSize : EGVec2I, scoreRules : TRScoreRules, repairerSpeed : uint, events : [(float, (TRLevel) -> void)])
 
@@ -16,6 +16,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
     def trains = _trains
     private var _repairer : TRTrain? = nil
     def repairer = _repairer
+    val collisionWorld = TRCollisionWorld()
 
 
     private def createSchedule : EGSchedule = {
@@ -51,9 +52,14 @@ class TRLevel(rules : TRLevelRules) extends EGController {
         fromCity.expectedTrainAnimation = EGAnimation(3, {
             fromCity.expectedTrainAnimation = nil
             train.startFrom(fromCity)
-            _trains += train
-            score.run(train)
+            add(train)
         })
+    }
+
+    private def add(train : TRTrain) {
+        _trains += train
+        score.run(train)
+        collisionWorld.add(train)
     }
 
     def runTrainWith(generator : TRTrainGenerator) {
@@ -64,8 +70,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
 
     def testRun(train : TRTrain, fromPoint : TRRailPoint) {
         train.set(head = fromPoint)
-        _trains += train
-        score.run(train)
+        add(train)
     }
 
     def updateWith(delta : float) {
@@ -93,29 +98,14 @@ class TRLevel(rules : TRLevelRules) extends EGController {
 
     def processCollisions {
         detectCollisions.for(collision -> {
-            collision.items.for(destroy(_.a))
-            val car1 = collision.items.a.b
-            val car2 = collision.items.b.b
-            [car1.position.head, car1.position.tail].chain
-                .mul([car2.position.head, car2.position.tail])
-                .sortBy.asc(pair -> {
-                    val x = pair.a
-                    val y = pair.b
-                    if(x.form == y.form && x.tile == y.tile) fabs(x.x - y.x)
-                    else 1000
-                }).endSort
-                .map(_.a)
-                .head
-                .for(railroad.addDamageAt(_))
+            collision.cars.for(destroy(_.train))
+            railroad.addDamageAt(collision.railPoint)
         })
     }
 
 
 
-    def detectCollisions : CNSet<EGCollision<(TRTrain, TRCar)>> = {
-        val carFigures = _trains.chain.flatMap(train -> train.cars.chain.map(car -> ((train, car), car.figure))).toArray
-        EGCollisions.collisionsFor(carFigures)
-    }
+    def detectCollisions = collisionWorld.detect
 
     def destroy(train : TRTrain) {
         if(_trains.contains(train)) {
@@ -126,6 +116,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
 
     def remove(train : TRTrain) {
         _trains -= train
+        collisionWorld.remove(train)
         _repairer = _repairer.filter(_ != train)
     }
 

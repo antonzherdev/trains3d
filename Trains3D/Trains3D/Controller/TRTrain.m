@@ -162,7 +162,7 @@ static ODClassType* _TRTrain_type;
         TRRailPoint* head = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((_back) ? bl : fl) point:frontConnector] addErrorToPoint];
         TRRailPoint* tail = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:tp.length point:head] addErrorToPoint];
         TRRailPoint* backConnector = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((_back) ? fl : bl) point:tail] addErrorToPoint];
-        car.position = ((_back) ? [TRCarPosition carPositionWithFrontConnector:backConnector head:tail tail:head backConnector:frontConnector] : [TRCarPosition carPositionWithFrontConnector:frontConnector head:head tail:tail backConnector:backConnector]);
+        [car setPosition:((_back) ? [TRCarPosition carPositionWithFrontConnector:backConnector head:tail tail:head backConnector:frontConnector] : [TRCarPosition carPositionWithFrontConnector:frontConnector head:head tail:tail backConnector:backConnector])];
         return backConnector;
     } withStart:[_head invert]]));
 }
@@ -191,7 +191,7 @@ static ODClassType* _TRTrain_type;
             } else {
                 _back = !(_back);
                 TRCar* lastCar = ((TRCar*)([[[self directedCars] head] get]));
-                _head = lastCar.position.backConnector;
+                _head = [lastCar position].backConnector;
             }
         } else {
             _head = [correction addErrorToPoint];
@@ -210,7 +210,7 @@ static ODClassType* _TRTrain_type;
     EGVec2I tile = theSwitch.tile;
     EGVec2I nextTile = [theSwitch.connector nextTile:tile];
     return [[[self cars] findWhere:^BOOL(TRCar* car) {
-        TRCarPosition* p = car.position;
+        TRCarPosition* p = [car position];
         return (EGVec2IEq(p.frontConnector.tile, tile) && EGVec2IEq(p.backConnector.tile, nextTile)) || (EGVec2IEq(p.frontConnector.tile, nextTile) && EGVec2IEq(p.backConnector.tile, tile));
     }] isDefined];
 }
@@ -383,13 +383,13 @@ static NSArray* _TRCarType_values;
 @implementation TRCar{
     __weak TRTrain* _train;
     TRCarType* _carType;
-    TRCarPosition* _position;
-    EGCollisionBody* __collisionBody;
+    EGCollisionBody* _collisionBody;
+    TRCarPosition* __position;
 }
 static ODClassType* _TRCar_type;
 @synthesize train = _train;
 @synthesize carType = _carType;
-@synthesize position = _position;
+@synthesize collisionBody = _collisionBody;
 
 + (id)carWithTrain:(TRTrain*)train carType:(TRCarType*)carType {
     return [[TRCar alloc] initWithTrain:train carType:carType];
@@ -400,7 +400,7 @@ static ODClassType* _TRCar_type;
     if(self) {
         _train = train;
         _carType = carType;
-        __collisionBody = [EGCollisionBody collisionBodyWithData:self shape:_carType.shape isKinematic:YES];
+        _collisionBody = [EGCollisionBody collisionBodyWithData:self shape:_carType.shape isKinematic:YES];
     }
     
     return self;
@@ -411,13 +411,13 @@ static ODClassType* _TRCar_type;
     _TRCar_type = [ODClassType classTypeWithCls:[TRCar class]];
 }
 
-- (EGCollisionBody*)collisionBody {
-    [__collisionBody setMatrix:[_position matrix]];
-    return __collisionBody;
+- (TRCarPosition*)position {
+    return __position;
 }
 
-- (EGThickLineSegment*)figure {
-    return [EGThickLineSegment thickLineSegmentWithSegment:_position.line thickness:_carType.width];
+- (void)setPosition:(TRCarPosition*)position {
+    __position = position;
+    [_collisionBody setMatrix:[position matrix]];
 }
 
 - (ODClassType*)type {

@@ -3,7 +3,7 @@
 #import "TRTrain.h"
 #import "TRLevel.h"
 #import "TRLevelFactory.h"
-#import "EGCollisions.h"
+#import "TRCollisions.h"
 #import "TRRailPoint.h"
 #import "TRRailroad.h"
 #import "TRTypes.h"
@@ -34,10 +34,10 @@ static ODClassType* _TRCollisionsTest_type;
 }
 
 - (id<CNSet>)checkLevel:(TRLevel*)level {
-    return [[[[[level detectCollisions] chain] flatMap:^CNPair*(EGCollision* _) {
-        return _.items;
-    }] map:^TRTrain*(CNTuple* _) {
-        return ((TRTrain*)(_.a));
+    return [[[[[level detectCollisions] chain] flatMap:^CNPair*(TRCollision* _) {
+        return _.cars;
+    }] map:^TRTrain*(TRCar* _) {
+        return _.train;
     }] toSet];
 }
 

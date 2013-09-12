@@ -1,0 +1,40 @@
+package com.antonzherdev.trains
+
+import com.antonzherdev.eg._
+import core.ODMath._
+
+class TRCollisionWorld {
+    private val world = EGCollisionWorld<TRCar>()
+
+    def add(train : TRTrain) {
+        train.cars.for{car ->
+            world.add(car.collisionBody)
+        }
+    }
+
+    def remove(train : TRTrain) {
+        train.cars.for{car ->
+            world.remove(car.collisionBody)
+        }
+    }
+
+    def detect = world.detect.chain.map{collision ->
+        val car1 = collision.bodies.a.data
+        val car2 = collision.bodies.b.data
+        val point =
+            [car1.position.head, car1.position.tail].chain
+                .mul([car2.position.head, car2.position.tail])
+                .sortBy.asc{pair ->
+                    val x = pair.a
+                    val y = pair.b
+                    if(x.form == y.form && x.tile == y.tile) fabs(x.x - y.x)
+                    else 1000
+                }.endSort
+                .map(_.a)
+                .head
+                .get
+        TRCollision(CNPair(car1, car2), point)
+    }.toArray
+}
+
+class TRCollision(cars : CNPair<TRCar>, railPoint : TRRailPoint)

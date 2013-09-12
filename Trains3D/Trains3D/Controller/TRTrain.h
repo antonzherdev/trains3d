@@ -15,7 +15,6 @@
 @protocol EGCollisionShape;
 @class EGCollisionBox2d;
 @class EGCollisionBody;
-@class EGThickLineSegment;
 @class EGLineSegment;
 @class EGMatrix;
 
@@ -89,13 +88,13 @@
 @interface TRCar : NSObject
 @property (nonatomic, readonly, weak) TRTrain* train;
 @property (nonatomic, readonly) TRCarType* carType;
-@property (nonatomic, retain) TRCarPosition* position;
+@property (nonatomic, readonly) EGCollisionBody* collisionBody;
 
 + (id)carWithTrain:(TRTrain*)train carType:(TRCarType*)carType;
 - (id)initWithTrain:(TRTrain*)train carType:(TRCarType*)carType;
 - (ODClassType*)type;
-- (EGCollisionBody*)collisionBody;
-- (EGThickLineSegment*)figure;
+- (TRCarPosition*)position;
+- (void)setPosition:(TRCarPosition*)position;
 + (ODClassType*)type;
 @end
 

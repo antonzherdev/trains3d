@@ -4,10 +4,10 @@
 #import "EGMapIso.h"
 #import "TRRailroad.h"
 #import "EGSchedule.h"
+#import "TRCollisions.h"
 #import "TRCity.h"
 #import "TRTrain.h"
 #import "TRRailPoint.h"
-#import "EGCollisions.h"
 #import "TRTypes.h"
 @implementation TRLevelRules{
     EGVec2I _mapSize;
@@ -92,6 +92,7 @@ static ODClassType* _TRLevelRules_type;
     EGSchedule* _schedule;
     id<CNSeq> __trains;
     id __repairer;
+    TRCollisionWorld* _collisionWorld;
 }
 static ODClassType* _TRLevel_type;
 @synthesize rules = _rules;
@@ -99,6 +100,7 @@ static ODClassType* _TRLevel_type;
 @synthesize score = _score;
 @synthesize railroad = _railroad;
 @synthesize schedule = _schedule;
+@synthesize collisionWorld = _collisionWorld;
 
 + (id)levelWithRules:(TRLevelRules*)rules {
     return [[TRLevel alloc] initWithRules:rules];
@@ -115,6 +117,7 @@ static ODClassType* _TRLevel_type;
         _schedule = [self createSchedule];
         __trains = (@[]);
         __repairer = [CNOption none];
+        _collisionWorld = [TRCollisionWorld collisionWorld];
     }
     
     return self;
@@ -171,9 +174,14 @@ static ODClassType* _TRLevel_type;
     fromCity.expectedTrainAnimation = [CNOption opt:[EGAnimation animationWithLength:3.0 finish:^void() {
         fromCity.expectedTrainAnimation = [CNOption none];
         [train startFromCity:fromCity];
-        __trains = [__trains arrayByAddingItem:train];
-        [_score runTrain:train];
+        [self addTrain:train];
     }]];
+}
+
+- (void)addTrain:(TRTrain*)train {
+    __trains = [__trains arrayByAddingItem:train];
+    [_score runTrain:train];
+    [_collisionWorld addTrain:train];
 }
 
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator {
@@ -188,8 +196,7 @@ static ODClassType* _TRLevel_type;
 
 - (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint {
     [train setHead:fromPoint];
-    __trains = [__trains arrayByAddingItem:train];
-    [_score runTrain:train];
+    [self addTrain:train];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -226,32 +233,16 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)processCollisions {
-    [[self detectCollisions] forEach:^void(EGCollision* collision) {
-        [collision.items forEach:^void(CNTuple* _) {
-            [self destroyTrain:((TRTrain*)(_.a))];
+    [[self detectCollisions] forEach:^void(TRCollision* collision) {
+        [collision.cars forEach:^void(TRCar* _) {
+            [self destroyTrain:_.train];
         }];
-        TRCar* car1 = ((TRCar*)(((CNTuple*)(collision.items.a)).b));
-        TRCar* car2 = ((TRCar*)(((CNTuple*)(collision.items.b)).b));
-        [[[[[[[[(@[car1.position.head, car1.position.tail]) chain] mul:(@[car2.position.head, car2.position.tail])] sortBy] ascBy:^id(CNTuple* pair) {
-            TRRailPoint* x = ((TRRailPoint*)(pair.a));
-            TRRailPoint* y = ((TRRailPoint*)(pair.b));
-            if(x.form == y.form && EGVec2IEq(x.tile, y.tile)) return numf(fabs(x.x - y.x));
-            else return @1000;
-        }] endSort] map:^TRRailPoint*(CNTuple* _) {
-            return ((TRRailPoint*)(_.a));
-        }] head] forEach:^void(TRRailPoint* _) {
-            [_railroad addDamageAtPoint:_];
-        }];
+        [_railroad addDamageAtPoint:collision.railPoint];
     }];
 }
 
-- (id<CNSet>)detectCollisions {
-    id<CNSeq> carFigures = [[[__trains chain] flatMap:^CNChain*(TRTrain* train) {
-        return [[[train cars] chain] map:^CNTuple*(TRCar* car) {
-            return tuple(tuple(train, car), [car figure]);
-        }];
-    }] toArray];
-    return [EGCollisions collisionsForFigures:carFigures];
+- (id<CNSeq>)detectCollisions {
+    return [_collisionWorld detect];
 }
 
 - (void)destroyTrain:(TRTrain*)train {
@@ -263,6 +254,7 @@ static ODClassType* _TRLevel_type;
 
 - (void)removeTrain:(TRTrain*)train {
     __trains = [__trains arrayByRemovingItem:train];
+    [_collisionWorld removeTrain:train];
     __repairer = [__repairer filter:^BOOL(TRTrain* _) {
         return !([_ isEqual:train]);
     }];
