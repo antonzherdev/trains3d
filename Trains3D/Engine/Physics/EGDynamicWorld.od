@@ -13,9 +13,9 @@ stub class EGDynamicWorld<T>(gravity : EGVec3) extends EGController {
 
 stub class EGDynamicBody<T>(data : T, shape : EGCollisionShape, isKinematic : bool, mass : float4) {
     val obj : VoidRef = nil
-    private var _matrix : EGMatrix = EGMatrix.identity
-    def matrix = _matrix
-    def set(matrix : EGMatrix) {
-        _matrix = matrix
-    }
+    def matrix : EGMatrix
+    def set(matrix : EGMatrix)
+
+    def velocity : EGVec3
+    def set(velocity : EGVec3)
 }

@@ -34,6 +34,8 @@
 - (EGMatrix*)matrix;
 - (void)setMatrix:(EGMatrix*)matrix;
 + (ODClassType*)type;
+- (EGVec3)velocity;
+- (void)setVelocity:(EGVec3)vec3;
 @end
 
 

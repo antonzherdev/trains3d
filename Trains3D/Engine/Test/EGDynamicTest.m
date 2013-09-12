@@ -28,9 +28,17 @@ static ODClassType* _EGDynamicTest_type;
     [world addBody:body];
     EGMatrix* m = [body matrix];
     [self assertTrueValue:eqf4([m array][13], 0)];
-    [world updateWithDelta:1.0];
+    EGVec3 v = [body velocity];
+    [self assertEqualsA:wrap(EGVec3, v) b:wrap(EGVec3, EGVec3Make(0.0, 0.0, 0.0))];
+    [intRange(30) forEach:^void(id _) {
+        [world updateWithDelta:1.0 / 30.0];
+    }];
     m = [body matrix];
-    [self assertTrueValue:float4Between([m array][13], -0.18056, -0.18055)];
+    [self assertTrueValue:float4Between([m array][13], -5.1, -4.99)];
+    v = [body velocity];
+    [self assertTrueValue:eqf4(v.x, 0)];
+    [self assertTrueValue:float4Between(v.y, -10.01, -9.99)];
+    [self assertTrueValue:eqf4(v.z, 0)];
 }
 
 - (ODClassType*)type {

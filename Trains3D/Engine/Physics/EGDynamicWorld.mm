@@ -45,7 +45,7 @@ static ODClassType* _EGDynamicWorld_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    _world->stepSimulation((btScalar) delta, 10);
+    _world->stepSimulation((btScalar) (delta), 20);
 }
 
 - (void)dealloc {
@@ -141,8 +141,7 @@ static ODClassType* _EGDynamicBody_type;
         _mass = mass;
         btCollisionShape* sh = static_cast<btCollisionShape*>([_shape shape]);
         btVector3 localInertia(0,0,0);
-        if (mass > 0.000001)
-            sh->calculateLocalInertia(mass,localInertia);
+        if (mass > 0.000001) sh->calculateLocalInertia(mass,localInertia);
         btTransform transform;
         transform.setIdentity();
         //using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
@@ -177,6 +176,16 @@ static ODClassType* _EGDynamicBody_type;
     trans.setFromOpenGLMatrix(matrix.array);
     _motionState->setWorldTransform(trans);
 }
+
+- (EGVec3)velocity {
+    btVector3 const & v = _body->getLinearVelocity();
+    return EGVec3Make(v.x(), v.y(), v.z());
+}
+
+- (void)setVelocity:(EGVec3)vec3 {
+    _body->setLinearVelocity(btVector3(vec3.x, vec3.y, vec3.z));
+}
+
 
 - (ODClassType*)type {
     return [EGDynamicBody type];
