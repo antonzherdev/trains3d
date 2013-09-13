@@ -3,6 +3,10 @@ package com.antonzherdev.eg
 import test._
 
 class EGDynamicTest extends CNTestCase {
+    def runSecondIn(world : EGDynamicWorld<_>) {
+        30.range.for(world.updateWith(delta = 1.0/30.0))
+    }
+
     def testSimple {
         val world = EGDynamicWorld<int>(EGVec3(0, -10, 0))
         val shape = EGCollisionBox(EGVec3(0.5, 0.5, 0.5))
@@ -15,7 +19,7 @@ class EGDynamicTest extends CNTestCase {
         var v = body.velocity
         assertEquals(v, EGVec3(0, 0, 0))
 
-        30.range.for(world.updateWith(delta = 1.0/30.0))
+        runSecondIn(world)
         m = body.matrix
         assertTrue(m.array[13].between(-5.1, -4.99))
 
@@ -23,5 +27,22 @@ class EGDynamicTest extends CNTestCase {
         assertTrue(v.x == 0)
         assertTrue(v.y.between(-10.01, -9.99))
         assertTrue(v.z == 0)
+    }
+
+    def testFriction {
+        val world = EGDynamicWorld<int>(EGVec3(0, -10, 0))
+        val plane = EGDynamicBody<int>(1, EGCollisionPlane(EGVec3(0, 1, 0), 0), false, 0)
+        world.add(plane)
+        val body = EGDynamicBody<int>(1, EGCollisionBox(EGVec3(0.5, 0.5, 0.5)), isKinematic = true, 1)
+        body.set(matrix = EGMatrix.identity.translate(0, 0.5, 0))
+        body.set(velocity = EGVec3(10, 0, 0))
+        world.add(body)
+
+        runSecondIn(world)
+//        val m = body.matrix
+        val v = body.velocity
+        assertTrue(v.x.between(7.4, 7.6))
+        assertTrue(v.y.between(-0.1, 0.1))
+        assertTrue(v.z.between(-0.1, 0.1))
     }
 }

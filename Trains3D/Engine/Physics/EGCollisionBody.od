@@ -26,5 +26,7 @@ stub class EGCollisionBox(halfSize : EGVec3) extends EGCollisionShape {
 }
 
 stub class EGCollisionBox2d(halfSize : EGVec2) extends EGCollisionShape {
-    static def apply(x : float4, y : float4) = EGCollisionBox(EGVec2(x, y))
+    static def apply(x : float4, y : float4) = EGCollisionBox2d(EGVec2(x, y))
 }
+
+stub class EGCollisionPlane(normal : EGVec3, distance : float4) extends EGCollisionShape

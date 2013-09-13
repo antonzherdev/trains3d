@@ -241,3 +241,77 @@ static ODClassType* _EGCollisionBox2d_type;
 
 @end
 
+
+@implementation EGCollisionPlane{
+    EGVec3 _normal;
+    float _distance;
+    btStaticPlaneShape* _plane;
+}
+static ODClassType* _EGCollisionPlane_type;
+@synthesize normal = _normal;
+@synthesize distance = _distance;
+
++ (id)collisionPlaneWithNormal:(EGVec3)normal distance:(float)distance {
+    return [[EGCollisionPlane alloc] initWithNormal:normal distance:distance];
+}
+
+- (id)initWithNormal:(EGVec3)normal distance:(float)distance {
+    self = [super init];
+    if(self) {
+        _normal = normal;
+        _distance = distance;
+        _plane = new btStaticPlaneShape(btVector3(normal.x, normal.y, normal.z), distance);
+    }
+
+    return self;
+}
+
+- (void)dealloc {
+    delete _plane;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGCollisionPlane_type = [ODClassType classTypeWithCls:[EGCollisionPlane class]];
+}
+
+- (VoidRef)shape {
+    return _plane;
+}
+
+- (ODClassType*)type {
+    return [EGCollisionPlane type];
+}
+
++ (ODClassType*)type {
+    return _EGCollisionPlane_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGCollisionPlane* o = ((EGCollisionPlane*)(other));
+    return EGVec3Eq(self.normal, o.normal) && eqf4(self.distance, o.distance);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + EGVec3Hash(self.normal);
+    hash = hash * 31 + float4Hash(self.distance);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"normal=%@", EGVec3Description(self.normal)];
+    [description appendFormat:@", distance=%f", self.distance];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+

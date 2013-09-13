@@ -4,6 +4,8 @@
 
 @class EGCollisionBody;
 @class EGCollisionBox;
+@class EGCollisionBox2d;
+@class EGCollisionPlane;
 @protocol EGCollisionShape;
 
 @interface EGCollisionBody : NSObject
@@ -38,6 +40,7 @@
 + (ODClassType*)type;
 @end
 
+
 @interface EGCollisionBox2d : NSObject<EGCollisionShape>
 @property (nonatomic, readonly) EGVec2 halfSize;
 
@@ -47,4 +50,16 @@
 + (EGCollisionBox2d*)applyX:(float)x y:(float)y;
 + (ODClassType*)type;
 @end
+
+
+@interface EGCollisionPlane : NSObject<EGCollisionShape>
+@property (nonatomic, readonly) EGVec3 normal;
+@property (nonatomic, readonly) float distance;
+
++ (id)collisionPlaneWithNormal:(EGVec3)normal distance:(float)distance;
+- (id)initWithNormal:(EGVec3)normal distance:(float)distance;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
 

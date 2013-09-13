@@ -5,6 +5,7 @@
 @class EGCollisionBox;
 @class EGDynamicBody;
 @class EGMatrix;
+@class EGCollisionPlane;
 
 @class EGDynamicTest;
 
@@ -12,7 +13,9 @@
 + (id)dynamicTest;
 - (id)init;
 - (ODClassType*)type;
+- (void)runSecondInWorld:(EGDynamicWorld*)world;
 - (void)testSimple;
+- (void)testFriction;
 + (ODClassType*)type;
 @end
 
