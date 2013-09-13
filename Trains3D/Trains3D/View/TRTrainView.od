@@ -26,7 +26,7 @@ class TRTrainView {
             EG.matrix(
                 _.modify(w = w -> {
                     val mid = car.position.line.mid
-                    w.translate(mid.x, mid.y, 0.05)
+                    w.translate(mid.x, mid.y, 0.0)
                 }).modify(m = m -> {
                     m.rotate(car.position.line.degreeAngle + 90, 0, 1, 0)
                 })
