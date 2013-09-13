@@ -23,8 +23,8 @@ class TRLevelFactory {
         level.createNewCity
     private static val rules = [
         TRLevelRules(EGVec2I(5, 3), scoreRules, repairerSpeed = 30, [
-            (1, train(cars = 2.to(4), speed = 60.to(90).set(step = 10))),
-            (10, train(cars = 2.to(4), speed = 60.to(90).set(step = 10))),
+            (1, train(cars = 2.to(4), speed = 50.to(60).set(step = 10))),
+            (10, train(cars = 2.to(4), speed = 50.to(60).set(step = 10))),
             (15, createNewCity)//,
             //(20, train(cars = 1.to(5), speed = 30.to(60).set(step = 10)))
         ])

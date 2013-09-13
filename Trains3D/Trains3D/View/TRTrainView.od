@@ -61,7 +61,7 @@ class TRTrainView {
         dyingTrain.cars.for{ car ->
             EG.matrix(
                 _.modify(w = w -> {
-                     w.mul(car.dynamicBody.matrix)
+                    w.translate(0, 0, -car.carType.height/2).mul(car.dynamicBody.matrix)
                 }).modify(m = m -> {
                     m.rotate(90, 0, 1, 0)
                 })

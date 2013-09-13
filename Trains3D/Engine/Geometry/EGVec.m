@@ -174,6 +174,9 @@ EGVec3 egVec3AddV(EGVec3 self, EGVec3 v) {
 EGVec3 egVec3Sqr(EGVec3 self) {
     return egVec3MulK(self, ((float)(egVec3Length(self))));
 }
+EGVec3 egVec3Negate(EGVec3 self) {
+    return EGVec3Make(-self.x, -self.y, -self.z);
+}
 EGVec3 egVec3MulK(EGVec3 self, float k) {
     return EGVec3Make(k * self.x, k * self.y, k * self.z);
 }

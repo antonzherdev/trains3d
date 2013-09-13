@@ -41,8 +41,9 @@ class TRCar(weak train : TRTrain, carType : TRCarType) {
         val vec = line.vec
         val mid = midPoint
         val b = EGRigidBody.dynamic(self, carType.rigidShape, carType.weight)
-        b.set(matrix = EGMatrix.identity.translate(mid.x, mid.y, carType.height/2).rotate(line.degreeAngle, 0, 1, 0))
-        b.set(velocity = EGVec3(vec.mul(train.speedFloat/len), 0))
+        b.set(matrix = EGMatrix.identity.translate(mid.x, mid.y, carType.height/2).rotate(line.degreeAngle, 0, 0, 1))
+        val vel = EGVec3(vec.mul(train.speedFloat/len), 0)
+        b.set(velocity = if(train.isBack) vel.negate else vel)
         b
     }
 

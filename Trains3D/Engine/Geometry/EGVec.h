@@ -123,6 +123,7 @@ static inline NSString* EGVec3Description(EGVec3 self) {
 EGVec3 egVec3ApplyVec2Z(EGVec2 vec2, float z);
 EGVec3 egVec3AddV(EGVec3 self, EGVec3 v);
 EGVec3 egVec3Sqr(EGVec3 self);
+EGVec3 egVec3Negate(EGVec3 self);
 EGVec3 egVec3MulK(EGVec3 self, float k);
 CGFloat egVec3DotVec3(EGVec3 self, EGVec3 vec3);
 CGFloat egVec3LengthSquare(EGVec3 self);
