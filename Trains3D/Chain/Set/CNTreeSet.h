@@ -15,7 +15,7 @@
 - (id)initWithMap:(CNMutableTreeMap*)map;
 - (ODClassType*)type;
 + (CNMutableTreeSet*)newWithComparator:(NSInteger(^)(id, id))comparator;
-+ (CNMutableTreeSet*)new;
++ (CNMutableTreeSet*)apply;
 - (id<CNSeq>)betweenA:(id)a b:(id)b;
 - (void)addItem:(id)item;
 - (BOOL)removeItem:(id)item;

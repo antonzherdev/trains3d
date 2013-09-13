@@ -14,7 +14,7 @@ static ODClassType* _EGSchedule_type;
 - (id)init {
     self = [super init];
     if(self) {
-        __map = [CNMutableTreeMap new];
+        __map = [CNMutableTreeMap apply];
         __current = 0.0;
         __next = -1.0;
     }
@@ -28,14 +28,20 @@ static ODClassType* _EGSchedule_type;
 }
 
 - (void)scheduleAfter:(CGFloat)after event:(void(^)())event {
-    [__map setValue:event forKey:numf(after)];
+    [__map modifyBy:^id(id _) {
+        return [CNOption opt:[[_ getOrElse:^id<CNSeq>() {
+            return (@[]);
+        }] arrayByAddingItem:event]];
+    } forKey:numf(__current + after)];
     __next = unumf([[__map firstKey] get]);
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
     __current += delta;
     while(__next > 0 && __current > __next) {
-        ((void(^)())(((CNTuple*)([[__map pollFirst] get])).b))();
+        [((CNTuple*)([[__map pollFirst] get])).b forEach:^void(void(^event)()) {
+            ((void(^)())(event))();
+        }];
         __next = unumf([[__map firstKey] getOr:@-1.0]);
     }
 }

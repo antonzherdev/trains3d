@@ -19,7 +19,7 @@
 + (id)mutableTreeMapWithComparator:(NSInteger(^)(id, id))comparator;
 - (id)initWithComparator:(NSInteger(^)(id, id))comparator;
 - (ODClassType*)type;
-+ (CNMutableTreeMap*)new;
++ (CNMutableTreeMap*)apply;
 - (NSUInteger)count;
 - (BOOL)isEmpty;
 - (id)applyKey:(id)key;

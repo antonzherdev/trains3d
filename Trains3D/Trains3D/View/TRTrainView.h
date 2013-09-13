@@ -7,16 +7,17 @@
 @class EGMaterial;
 @class TRTrain;
 @class TRSmoke;
+@class TRColor;
 @class EG;
 @class TRCar;
 @class TRCarPosition;
 @class EGLineSegment;
 @class EGMatrix;
 @class EGMatrixModel;
-@class TRColor;
+@class EGMatrixStack;
 @class TRCarType;
 @class TR3D;
-@class EGMatrixStack;
+@class EGRigidBody;
 
 @class TRTrainView;
 
@@ -29,7 +30,6 @@
 - (ODClassType*)type;
 - (EGMaterial*)trainMaterialForColor:(EGColor)color;
 - (void)drawTrains:(id<CNSeq>)trains;
-- (void)drawTrain:(TRTrain*)train;
 - (void)drawDyingTrains:(id<CNSeq>)dyingTrains;
 - (void)updateWithDelta:(CGFloat)delta train:(TRTrain*)train;
 + (ODClassType*)type;

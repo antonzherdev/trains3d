@@ -9,6 +9,8 @@
 @class TRCarPosition;
 @class TRRailPoint;
 @class EGDynamicWorld;
+@class EGCollisionPlane;
+@class EGRigidBody;
 
 @class TRCollisionWorld;
 @class TRCollision;

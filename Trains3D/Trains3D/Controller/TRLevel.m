@@ -274,6 +274,7 @@ static ODClassType* _TRLevel_type;
     __trains = [__trains arrayByRemovingItem:train];
     [_collisionWorld removeTrain:train];
     [_dynamicWorld removeTrain:train];
+    [__dyingTrains removeItem:train];
     __repairer = [__repairer filter:^BOOL(TRTrain* _) {
         return !([_ isEqual:train]);
     }];

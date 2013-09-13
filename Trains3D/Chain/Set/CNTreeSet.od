@@ -5,7 +5,7 @@ class CNMutableTreeSet<T>(map : CNMutableTreeMap<T, ODObject>) extends CNMutable
         CNMutableTreeSet<T>(CNMutableTreeMap<T, ODObject>(comparator))
     }
 
-    static def new<T> = CNMutableTreeSet<T>(CNMutableTreeMap.new<T, ODObject>)
+    static def apply<T> = CNMutableTreeSet<T>(CNMutableTreeMap<T, ODObject>())
     private static val obj = NSObject()
 
     def between(a : T, b : T) : [T]

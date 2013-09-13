@@ -20,8 +20,9 @@ class TRTrainView {
         }
     }
 
-    def draw(train : TRTrain) {
-        train.cars.for(car -> {
+    private def draw(train : TRTrain) {
+        val material = trainMaterialFor(train.color.color)
+        train.cars.for{ car ->
             EG.matrix(
                 _.modify(w = w -> {
                     val mid = car.position.line.mid
@@ -30,17 +31,20 @@ class TRTrainView {
                     m.rotate(car.position.line.degreeAngle + 90, 0, 1, 0)
                 })
             ){
-                val material = trainMaterialFor(train.color.color)
-                if(car.carType == TRCarType.car) {
-                    material.draw(TR3D.car)
-                    blackMaterial.draw(TR3D.carBlack)
-                } else {
-                    material.draw(TR3D.engine)
-                    material.draw(TR3D.engineFloor)
-                    blackMaterial.draw(TR3D.engineBlack)
-                }
+                doDraw(car, material)
             }
-        })
+        }
+    }
+
+    private def doDraw(car : TRCar, material : EGMaterial) {
+        if(car.carType == TRCarType.car) {
+            material.draw(TR3D.car)
+            blackMaterial.draw(TR3D.carBlack)
+        } else {
+            material.draw(TR3D.engine)
+            material.draw(TR3D.engineFloor)
+            blackMaterial.draw(TR3D.engineBlack)
+        }
     }
 
     def draw(dyingTrains : [TRTrain]) {
@@ -48,8 +52,23 @@ class TRTrainView {
 
         dyingTrains.for {train ->
             smokeView.draw(train.viewData)
+            draw(dyingTrain = train)
         }
     }
+
+    private def draw(dyingTrain : TRTrain) {
+        val material = trainMaterialFor(dyingTrain.color.color)
+        dyingTrain.cars.for{ car ->
+            EG.matrix(
+                _.modify(w = w -> {
+                     w.mul(car.rigidBody.matrix)
+                })
+            ){
+                doDraw(car, material)
+            }
+        }
+    }
+
 
     def updateWith(delta : float, train : TRTrain) {
         train.viewData.cast<TRSmoke>.updateWith(delta)

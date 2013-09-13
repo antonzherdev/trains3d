@@ -22,7 +22,7 @@ static ODClassType* _CNTreeMapTest_type;
 }
 
 - (void)testMain {
-    CNMutableTreeMap* map = [CNMutableTreeMap new];
+    CNMutableTreeMap* map = [CNMutableTreeMap apply];
     [self assertEqualsA:@0 b:numi(((NSInteger)([map count])))];
     [self assertTrueValue:[[map applyKey:@0] isEmpty]];
     [map setValue:@"test" forKey:@0];

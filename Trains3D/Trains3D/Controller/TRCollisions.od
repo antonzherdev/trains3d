@@ -40,7 +40,11 @@ class TRCollisionWorld {
 class TRCollision(cars : CNPair<TRCar>, railPoint : TRRailPoint)
 
 class TRDynamicWorld extends EGController {
-    private val world = EGDynamicWorld<TRCar>(gravity = EGVec3(0, -10, 0))
+    private val world = {
+        val w = EGDynamicWorld<TRCar>(gravity = EGVec3(0, 0, -10))
+        w.add(EGRigidBody<TRCar>(nil, EGCollisionPlane(EGVec3(0, 0, 1), 0), false, 0))
+        w
+    }
 
     def add(train : TRTrain) {
         train.cars.for{car ->

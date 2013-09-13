@@ -1,7 +1,7 @@
 package core.chain
 
 class CNMutableTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K, V> {
-    static def new<K extends ODComparable<K>, V> = CNMutableTreeMap<K, V>((a : K, b : K) -> a.compare(b))
+    static def apply<K extends ODComparable<K>, V> = CNMutableTreeMap<K, V>((a : K, b : K) -> a.compare(b))
 
     private var root : CNTreeMapEntry<K, V> = nil
     private var _size : uint = 0

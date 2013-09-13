@@ -37,7 +37,7 @@ static ODClassType* _CNMutableTreeMap_type;
     _CNMutableTreeMap_type = [ODClassType classTypeWithCls:[CNMutableTreeMap class]];
 }
 
-+ (CNMutableTreeMap*)new {
++ (CNMutableTreeMap*)apply {
     return [CNMutableTreeMap mutableTreeMapWithComparator:^NSInteger(id a, id b) {
         return [a compareTo:b];
     }];

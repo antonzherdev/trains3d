@@ -3,12 +3,13 @@
 #import "TRSmoke.h"
 #import "EGMaterial.h"
 #import "TRTrain.h"
+#import "TRTypes.h"
 #import "EG.h"
 #import "TRCar.h"
 #import "EGFigure.h"
 #import "EGMatrix.h"
-#import "TRTypes.h"
 #import "TR3D.h"
+#import "EGDynamicWorld.h"
 @implementation TRTrainView{
     TRSmokeView* _smokeView;
     EGStandardMaterial* _blackMaterial;
@@ -50,6 +51,7 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (void)drawTrain:(TRTrain*)train {
+    EGMaterial* material = [self trainMaterialForColor:train.color.color];
     [[train cars] forEach:^void(TRCar* car) {
         [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
             return [[_ modifyW:^EGMatrix*(EGMatrix* w) {
@@ -59,23 +61,40 @@ static ODClassType* _TRTrainView_type;
                 return [m rotateAngle:((float)([[car position].line degreeAngle] + 90)) x:0.0 y:1.0 z:0.0];
             }];
         } f:^void() {
-            EGMaterial* material = [self trainMaterialForColor:train.color.color];
-            if(car.carType == TRCarType.car) {
-                [material drawMesh:TR3D.car];
-                [_blackMaterial drawMesh:TR3D.carBlack];
-            } else {
-                [material drawMesh:TR3D.engine];
-                [material drawMesh:TR3D.engineFloor];
-                [_blackMaterial drawMesh:TR3D.engineBlack];
-            }
+            [self doDrawCar:car material:material];
         }];
     }];
+}
+
+- (void)doDrawCar:(TRCar*)car material:(EGMaterial*)material {
+    if(car.carType == TRCarType.car) {
+        [material drawMesh:TR3D.car];
+        [_blackMaterial drawMesh:TR3D.carBlack];
+    } else {
+        [material drawMesh:TR3D.engine];
+        [material drawMesh:TR3D.engineFloor];
+        [_blackMaterial drawMesh:TR3D.engineBlack];
+    }
 }
 
 - (void)drawDyingTrains:(id<CNSeq>)dyingTrains {
     if([dyingTrains isEmpty]) return ;
     [dyingTrains forEach:^void(TRTrain* train) {
         [_smokeView drawSystem:train.viewData];
+        [self drawDyingTrain:train];
+    }];
+}
+
+- (void)drawDyingTrain:(TRTrain*)dyingTrain {
+    EGMaterial* material = [self trainMaterialForColor:dyingTrain.color.color];
+    [[dyingTrain cars] forEach:^void(TRCar* car) {
+        [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
+            return [_ modifyW:^EGMatrix*(EGMatrix* w) {
+                return [w mulMatrix:[car.rigidBody matrix]];
+            }];
+        } f:^void() {
+            [self doDrawCar:car material:material];
+        }];
     }];
 }
 

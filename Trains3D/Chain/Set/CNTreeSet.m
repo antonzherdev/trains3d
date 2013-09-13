@@ -32,8 +32,8 @@ static ODClassType* _CNMutableTreeSet_type;
     return [CNMutableTreeSet mutableTreeSetWithMap:[CNMutableTreeMap mutableTreeMapWithComparator:comparator]];
 }
 
-+ (CNMutableTreeSet*)new {
-    return [CNMutableTreeSet mutableTreeSetWithMap:[CNMutableTreeMap new]];
++ (CNMutableTreeSet*)apply {
+    return [CNMutableTreeSet mutableTreeSetWithMap:[CNMutableTreeMap apply]];
 }
 
 - (id<CNSeq>)betweenA:(id)a b:(id)b {

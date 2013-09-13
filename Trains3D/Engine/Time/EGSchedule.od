@@ -1,19 +1,21 @@
 package com.antonzherdev.eg
 
 class EGSchedule extends EGController {
-    private var _map = CNMutableTreeMap.new<float, () -> void>
+    private var _map = CNMutableTreeMap<float, [() -> void]>()
     private var _current = 0.0
     private var _next = -1.0
 
     def schedule(after : float, event : () -> void) {
-        _map.set(event, after)
+        _map.modify(_.getOrElse([]) + event, _current + after)
         _next = _map.firstKey.get
     }
 
     def updateWith(delta : float) {
         _current += delta
         while(_next > 0 && _current > _next) {
-            _map.pollFirst.get.b()
+            _map.pollFirst.get.b.for {event ->
+                event()
+            }
             _next = _map.firstKey.getOr(-1.0)
         }
     }
