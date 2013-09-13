@@ -84,7 +84,8 @@ class TRLevel(rules : TRLevelRules) extends EGController {
         _trains.for(_.updateWith(delta))
         _cities.for(_.updateWith(delta))
         if(!trains.isEmpty) processCollisions
-        if(!_dyingTrains.isEmpty) dynamicWorld.updateWith(delta)
+//        if(!_dyingTrains.isEmpty) dynamicWorld.updateWith(delta)
+        dynamicWorld.updateWith(delta)
         schedule.updateWith(delta)
     }
 

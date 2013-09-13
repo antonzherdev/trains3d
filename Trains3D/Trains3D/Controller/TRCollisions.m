@@ -164,7 +164,9 @@ static ODClassType* _TRDynamicWorld_type;
     self = [super init];
     if(self) _world = ^EGDynamicWorld*() {
         EGDynamicWorld* w = [EGDynamicWorld dynamicWorldWithGravity:EGVec3Make(0.0, 0.0, -10.0)];
-        [w addBody:[EGRigidBody rigidBodyWithData:nil shape:[EGCollisionPlane collisionPlaneWithNormal:EGVec3Make(0.0, 0.0, 1.0) distance:0.0] isKinematic:NO mass:0.0]];
+        EGRigidBody* plane = [EGRigidBody rigidBodyWithData:nil shape:[EGCollisionPlane collisionPlaneWithNormal:EGVec3Make(0.0, 0.0, 1.0) distance:0.0] isKinematic:NO mass:0.0];
+        plane.friction = 0.3;
+        [w addBody:plane];
         return w;
     }();
     

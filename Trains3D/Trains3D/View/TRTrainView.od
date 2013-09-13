@@ -16,7 +16,7 @@ class TRTrainView {
         trains.for {train ->
             draw(train = train)
             if(train.viewData == nil) train.viewData = TRSmoke(train)
-            smokeView.draw(train.viewData)
+            //smokeView.draw(train.viewData)
         }
     }
 
@@ -26,7 +26,7 @@ class TRTrainView {
             EG.matrix(
                 _.modify(w = w -> {
                     val mid = car.position.line.mid
-                    w.translate(mid.x, mid.y, 0.0)
+                    w.translate(mid.x, mid.y, 0.04)
                 }).modify(m = m -> {
                     m.rotate(car.position.line.degreeAngle + 90, 0, 1, 0)
                 })
@@ -51,7 +51,7 @@ class TRTrainView {
         if(dyingTrains.isEmpty) return nil
 
         dyingTrains.for {train ->
-            smokeView.draw(train.viewData)
+            //smokeView.draw(train.viewData)
             draw(dyingTrain = train)
         }
     }
@@ -61,7 +61,7 @@ class TRTrainView {
         dyingTrain.cars.for{ car ->
             EG.matrix(
                 _.modify(w = w -> {
-                    w.translate(0, 0, -car.carType.height/2).mul(car.dynamicBody.matrix)
+                    w.translate(0, 0, -car.carType.height/2 + 0.04).mul(car.dynamicBody.matrix)
                 }).modify(m = m -> {
                     m.rotate(90, 0, 1, 0)
                 })
@@ -73,6 +73,6 @@ class TRTrainView {
 
 
     def updateWith(delta : float, train : TRTrain) {
-        train.viewData.cast<TRSmoke>.updateWith(delta)
+        //train.viewData.cast<TRSmoke>.updateWith(delta)
     }
 }

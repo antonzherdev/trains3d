@@ -194,6 +194,14 @@ static ODClassType* _EGDynamicBody_type;
     return [EGMatrix matrixWithArray:matrix];
 }
 
+- (float)friction {
+    return _body->getFriction();
+}
+
+- (void)setFriction:(float)friction {
+    _body->setFriction(friction);
+}
+
 - (void)setMatrix:(EGMatrix*)matrix {
     btTransform trans;
     trans.setFromOpenGLMatrix(matrix.array);

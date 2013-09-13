@@ -46,7 +46,6 @@ static ODClassType* _TRTrainView_type;
     [trains forEach:^void(TRTrain* train) {
         [self drawTrain:train];
         if(train.viewData == nil) train.viewData = [TRSmoke smokeWithTrain:train];
-        [_smokeView drawSystem:train.viewData];
     }];
 }
 
@@ -56,7 +55,7 @@ static ODClassType* _TRTrainView_type;
         [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
             return [[_ modifyW:^EGMatrix*(EGMatrix* w) {
                 EGVec2 mid = [[car position].line mid];
-                return [w translateX:mid.x y:mid.y z:0.0];
+                return [w translateX:mid.x y:mid.y z:0.04];
             }] modifyM:^EGMatrix*(EGMatrix* m) {
                 return [m rotateAngle:((float)([[car position].line degreeAngle] + 90)) x:0.0 y:1.0 z:0.0];
             }];
@@ -80,7 +79,6 @@ static ODClassType* _TRTrainView_type;
 - (void)drawDyingTrains:(id<CNSeq>)dyingTrains {
     if([dyingTrains isEmpty]) return ;
     [dyingTrains forEach:^void(TRTrain* train) {
-        [_smokeView drawSystem:train.viewData];
         [self drawDyingTrain:train];
     }];
 }
@@ -90,7 +88,7 @@ static ODClassType* _TRTrainView_type;
     [[dyingTrain cars] forEach:^void(TRCar* car) {
         [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
             return [[_ modifyW:^EGMatrix*(EGMatrix* w) {
-                return [[w translateX:0.0 y:0.0 z:((float)(-car.carType.height / 2))] mulMatrix:[[car dynamicBody] matrix]];
+                return [[w translateX:0.0 y:0.0 z:((float)(-car.carType.height / 2 + 0.04))] mulMatrix:[[car dynamicBody] matrix]];
             }] modifyM:^EGMatrix*(EGMatrix* m) {
                 return [m rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
             }];
@@ -101,7 +99,6 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta train:(TRTrain*)train {
-    [((TRSmoke*)(train.viewData)) updateWithDelta:delta];
 }
 
 - (ODClassType*)type {

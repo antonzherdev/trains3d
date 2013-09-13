@@ -219,7 +219,7 @@ static ODClassType* _TRLevel_type;
         [_ updateWithDelta:delta];
     }];
     if(!([[self trains] isEmpty])) [self processCollisions];
-    if(!([__dyingTrains isEmpty])) [_dynamicWorld updateWithDelta:delta];
+    [_dynamicWorld updateWithDelta:delta];
     [_schedule updateWithDelta:delta];
 }
 

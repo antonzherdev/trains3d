@@ -125,8 +125,8 @@ static NSArray* _TRCarType_values;
 
 + (void)initialize {
     [super initialize];
-    _TRCarType_car = [TRCarType carTypeWithOrdinal:0 name:@"car" width:0.18 height:0.3 weight:10.0 startToFront:0.05 frontToWheel:0.08 betweenWheels:0.44 wheelToBack:0.08 backToEnd:0.05 engineType:[CNOption none]];
-    _TRCarType_engine = [TRCarType carTypeWithOrdinal:1 name:@"engine" width:0.2 height:0.3 weight:20.0 startToFront:0.05 frontToWheel:0.14 betweenWheels:0.32 wheelToBack:0.22 backToEnd:0.05 engineType:[CNOption opt:[TREngineType engineTypeWithTubePos:EGVec3Make(-0.06, 0.0, 0.5)]]];
+    _TRCarType_car = [TRCarType carTypeWithOrdinal:0 name:@"car" width:0.18 height:0.3 weight:1.0 startToFront:0.05 frontToWheel:0.08 betweenWheels:0.44 wheelToBack:0.08 backToEnd:0.05 engineType:[CNOption none]];
+    _TRCarType_engine = [TRCarType carTypeWithOrdinal:1 name:@"engine" width:0.2 height:0.3 weight:2.0 startToFront:0.05 frontToWheel:0.14 betweenWheels:0.32 wheelToBack:0.22 backToEnd:0.05 engineType:[CNOption opt:[TREngineType engineTypeWithTubePos:EGVec3Make(-0.06, 0.0, 0.5)]]];
     _TRCarType_values = (@[_TRCarType_car, _TRCarType_engine]);
 }
 
@@ -180,7 +180,7 @@ static ODClassType* _TRCar_type;
                 EGVec2 mid = [_weakSelf midPoint];
                 EGRigidBody* b = [EGRigidBody dynamicData:self shape:_weakSelf.carType.rigidShape mass:((float)(_weakSelf.carType.weight))];
                 [b setMatrix:[[[EGMatrix identity] translateX:mid.x y:mid.y z:((float)(_weakSelf.carType.height / 2))] rotateAngle:((float)([line degreeAngle])) x:0.0 y:0.0 z:1.0]];
-                EGVec3 vel = egVec3ApplyVec2Z(egVec2MulValue(vec, ((float)(_weakSelf.train.speedFloat / len))), 0.0);
+                EGVec3 vel = egVec3ApplyVec2Z(egVec2MulValue(vec, ((float)(_weakSelf.train.speedFloat / len * 2))), 0.0);
                 [b setVelocity:(([_weakSelf.train isBack]) ? egVec3Negate(vel) : vel)];
                 return b;
             }();
