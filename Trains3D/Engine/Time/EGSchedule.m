@@ -27,7 +27,7 @@ static ODClassType* _EGSchedule_type;
     _EGSchedule_type = [ODClassType classTypeWithCls:[EGSchedule class]];
 }
 
-- (void)scheduleEvent:(void(^)())event after:(CGFloat)after {
+- (void)scheduleAfter:(CGFloat)after event:(void(^)())event {
     [__map setValue:event forKey:numf(after)];
     __next = unumf([[__map firstKey] get]);
 }

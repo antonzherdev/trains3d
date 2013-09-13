@@ -52,10 +52,14 @@ static ODClassType* _TRLevelView_type;
     }];
     [_railroadView drawRailroad:_level.railroad];
     [_trainView drawTrains:[_level trains]];
+    [_trainView drawDyingTrains:[_level dyingTrains]];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
     [[_level trains] forEach:^void(TRTrain* _) {
+        [_trainView updateWithDelta:delta train:_];
+    }];
+    [[_level dyingTrains] forEach:^void(TRTrain* _) {
         [_trainView updateWithDelta:delta train:_];
     }];
 }

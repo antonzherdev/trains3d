@@ -8,7 +8,7 @@
 + (id)schedule;
 - (id)init;
 - (ODClassType*)type;
-- (void)scheduleEvent:(void(^)())event after:(CGFloat)after;
+- (void)scheduleAfter:(CGFloat)after event:(void(^)())event;
 - (void)updateWithDelta:(CGFloat)delta;
 - (CGFloat)time;
 + (ODClassType*)type;

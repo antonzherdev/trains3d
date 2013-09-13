@@ -43,6 +43,14 @@ class TRTrainView {
         })
     }
 
+    def draw(dyingTrains : [TRTrain]) {
+        if(dyingTrains.isEmpty) return nil
+
+        dyingTrains.for {train ->
+            smokeView.draw(train.viewData)
+        }
+    }
+
     def updateWith(delta : float, train : TRTrain) {
         train.viewData.cast<TRSmoke>.updateWith(delta)
     }

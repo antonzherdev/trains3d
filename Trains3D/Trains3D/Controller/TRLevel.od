@@ -16,7 +16,12 @@ class TRLevel(rules : TRLevelRules) extends EGController {
     def trains = _trains
     private var _repairer : TRTrain? = nil
     def repairer = _repairer
+
     val collisionWorld = TRCollisionWorld()
+    val dynamicWorld = TRDynamicWorld()
+
+    private var _dyingTrains = CNMutableArray<TRTrain>()
+    def dyingTrains : [TRTrain] = _dyingTrains
 
 
     private def createSchedule : EGSchedule = {
@@ -25,7 +30,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
         createNewCity
         rules.events.for(t -> {
             val f = t.b
-            schedule.schedule(event = f(self), after = t.a )
+            schedule.schedule(after = t.a, event = f(self))
         })
         schedule
     }
@@ -60,6 +65,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
         _trains += train
         score.run(train)
         collisionWorld.add(train)
+        dynamicWorld.add(train)
     }
 
     def runTrainWith(generator : TRTrainGenerator) {
@@ -78,6 +84,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
         _trains.for(_.updateWith(delta))
         _cities.for(_.updateWith(delta))
         if(!trains.isEmpty) processCollisions
+        if(!_dyingTrains.isEmpty) dynamicWorld.updateWith(delta)
         schedule.updateWith(delta)
     }
 
@@ -107,14 +114,21 @@ class TRLevel(rules : TRLevelRules) extends EGController {
 
     def destroy(train : TRTrain) {
         if(_trains.contains(train)) {
-            remove(train)
             score.destroyed(train)
+            train.isDying = true
+            _trains -= train
+            collisionWorld.remove(train)
+            _dyingTrains.add(train)
+            schedule.schedule(after = 5) {
+                remove(train)
+            }
         }
     }
 
     def remove(train : TRTrain) {
         _trains -= train
         collisionWorld.remove(train)
+        dynamicWorld.remove(train)
         _repairer = _repairer.filter(_ != train)
     }
 

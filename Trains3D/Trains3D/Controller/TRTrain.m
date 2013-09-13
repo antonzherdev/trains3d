@@ -88,6 +88,7 @@ static NSArray* _TRTrainType_values;
     CNLazy* __lazy_cars;
     CGFloat _length;
     CGFloat _speedFloat;
+    BOOL _isDying;
     BOOL(^_carsObstacleProcessor)(TRObstacle*);
 }
 static ODClassType* _TRTrain_type;
@@ -98,6 +99,7 @@ static ODClassType* _TRTrain_type;
 @synthesize speed = _speed;
 @synthesize viewData = _viewData;
 @synthesize speedFloat = _speedFloat;
+@synthesize isDying = _isDying;
 
 + (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color _cars:(id<CNSeq>(^)(TRTrain*))_cars speed:(NSUInteger)speed {
     return [[TRTrain alloc] initWithLevel:level trainType:trainType color:color _cars:_cars speed:speed];
@@ -121,6 +123,7 @@ static ODClassType* _TRTrain_type;
             return numf(car.carType.fullLength + unumf(r));
         } withStart:@0.0]);
         _speedFloat = 0.01 * _speed;
+        _isDying = NO;
         _carsObstacleProcessor = ^BOOL(TRObstacle* o) {
             return o.obstacleType == TRObstacleType.light;
         };

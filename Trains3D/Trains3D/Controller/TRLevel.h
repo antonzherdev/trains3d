@@ -7,6 +7,7 @@
 @class TRRailroad;
 @class EGSchedule;
 @class TRCollisionWorld;
+@class TRDynamicWorld;
 @class TRCity;
 @class TRCityAngle;
 @class TRRail;
@@ -44,6 +45,7 @@
 @property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic, readonly) EGSchedule* schedule;
 @property (nonatomic, readonly) TRCollisionWorld* collisionWorld;
+@property (nonatomic, readonly) TRDynamicWorld* dynamicWorld;
 
 + (id)levelWithRules:(TRLevelRules*)rules;
 - (id)initWithRules:(TRLevelRules*)rules;
@@ -51,6 +53,7 @@
 - (id<CNSeq>)cities;
 - (id<CNSeq>)trains;
 - (id)repairer;
+- (id<CNSeq>)dyingTrains;
 - (void)createNewCity;
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator;
 - (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint;

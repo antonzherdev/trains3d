@@ -13,6 +13,8 @@ class TRSmoke(weak train : TRTrain) extends EGBillboardParticleSystem {
     private var emitTime = 0.0
 
     def generateParticlesWith(delta : float) {
+        if(train.isDying) return nil
+
         emitTime += delta
         while(emitTime > emitEvery) {
             emitTime -= emitEvery

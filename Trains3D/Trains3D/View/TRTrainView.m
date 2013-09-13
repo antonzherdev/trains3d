@@ -72,6 +72,13 @@ static ODClassType* _TRTrainView_type;
     }];
 }
 
+- (void)drawDyingTrains:(id<CNSeq>)dyingTrains {
+    if([dyingTrains isEmpty]) return ;
+    [dyingTrains forEach:^void(TRTrain* train) {
+        [_smokeView drawSystem:train.viewData];
+    }];
+}
+
 - (void)updateWithDelta:(CGFloat)delta train:(TRTrain*)train {
     [((TRSmoke*)(train.viewData)) updateWithDelta:delta];
 }

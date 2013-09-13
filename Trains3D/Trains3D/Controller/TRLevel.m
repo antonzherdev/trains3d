@@ -94,6 +94,8 @@ static ODClassType* _TRLevelRules_type;
     id<CNSeq> __trains;
     id __repairer;
     TRCollisionWorld* _collisionWorld;
+    TRDynamicWorld* _dynamicWorld;
+    NSMutableArray* __dyingTrains;
 }
 static ODClassType* _TRLevel_type;
 @synthesize rules = _rules;
@@ -102,6 +104,7 @@ static ODClassType* _TRLevel_type;
 @synthesize railroad = _railroad;
 @synthesize schedule = _schedule;
 @synthesize collisionWorld = _collisionWorld;
+@synthesize dynamicWorld = _dynamicWorld;
 
 + (id)levelWithRules:(TRLevelRules*)rules {
     return [[TRLevel alloc] initWithRules:rules];
@@ -119,6 +122,8 @@ static ODClassType* _TRLevel_type;
         __trains = (@[]);
         __repairer = [CNOption none];
         _collisionWorld = [TRCollisionWorld collisionWorld];
+        _dynamicWorld = [TRDynamicWorld dynamicWorld];
+        __dyingTrains = [NSMutableArray mutableArray];
     }
     
     return self;
@@ -141,15 +146,19 @@ static ODClassType* _TRLevel_type;
     return __repairer;
 }
 
+- (id<CNSeq>)dyingTrains {
+    return __dyingTrains;
+}
+
 - (EGSchedule*)createSchedule {
     EGSchedule* schedule = [EGSchedule schedule];
     [self createNewCity];
     [self createNewCity];
     [_rules.events forEach:^void(CNTuple* t) {
         void(^f)(TRLevel*) = t.b;
-        [schedule scheduleEvent:^void() {
+        [schedule scheduleAfter:unumf(t.a) event:^void() {
             f(self);
-        } after:unumf(t.a)];
+        }];
     }];
     return schedule;
 }
@@ -183,6 +192,7 @@ static ODClassType* _TRLevel_type;
     __trains = [__trains arrayByAddingItem:train];
     [_score runTrain:train];
     [_collisionWorld addTrain:train];
+    [_dynamicWorld addTrain:train];
 }
 
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator {
@@ -209,6 +219,7 @@ static ODClassType* _TRLevel_type;
         [_ updateWithDelta:delta];
     }];
     if(!([[self trains] isEmpty])) [self processCollisions];
+    if(!([__dyingTrains isEmpty])) [_dynamicWorld updateWithDelta:delta];
     [_schedule updateWithDelta:delta];
 }
 
@@ -248,14 +259,21 @@ static ODClassType* _TRLevel_type;
 
 - (void)destroyTrain:(TRTrain*)train {
     if([__trains containsItem:train]) {
-        [self removeTrain:train];
         [_score destroyedTrain:train];
+        train.isDying = YES;
+        __trains = [__trains arrayByRemovingItem:train];
+        [_collisionWorld removeTrain:train];
+        [__dyingTrains addItem:train];
+        [_schedule scheduleAfter:5.0 event:^void() {
+            [self removeTrain:train];
+        }];
     }
 }
 
 - (void)removeTrain:(TRTrain*)train {
     __trains = [__trains arrayByRemovingItem:train];
     [_collisionWorld removeTrain:train];
+    [_dynamicWorld removeTrain:train];
     __repairer = [__repairer filter:^BOOL(TRTrain* _) {
         return !([_ isEqual:train]);
     }];

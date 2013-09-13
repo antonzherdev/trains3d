@@ -30,6 +30,7 @@
 - (EGMaterial*)trainMaterialForColor:(EGColor)color;
 - (void)drawTrains:(id<CNSeq>)trains;
 - (void)drawTrain:(TRTrain*)train;
+- (void)drawDyingTrains:(id<CNSeq>)dyingTrains;
 - (void)updateWithDelta:(CGFloat)delta train:(TRTrain*)train;
 + (ODClassType*)type;
 @end

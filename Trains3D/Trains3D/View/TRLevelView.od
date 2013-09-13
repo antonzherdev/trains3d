@@ -16,6 +16,7 @@ class TRLevelView(level : TRLevel) extends EGView {
         railroadView.draw(level.railroad)
 
         trainView.draw(trains = level.trains)
+        trainView.draw(dyingTrains = level.dyingTrains)
 //        egColor3(1.0, 1.0, 1.0)
 //        level.map.drawLayout
     }
@@ -24,5 +25,6 @@ class TRLevelView(level : TRLevel) extends EGView {
 
     def updateWith(delta : float) {
         level.trains.for(trainView.updateWith(delta, _))
+        level.dyingTrains.for(trainView.updateWith(delta, _))
     }
 }

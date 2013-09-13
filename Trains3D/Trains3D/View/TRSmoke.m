@@ -43,6 +43,7 @@ static ODClassType* _TRSmoke_type;
 }
 
 - (void)generateParticlesWithDelta:(CGFloat)delta {
+    if(_train.isDying) return ;
     _emitTime += delta;
     while(_emitTime > _TRSmoke_emitEvery) {
         _emitTime -= _TRSmoke_emitEvery;
