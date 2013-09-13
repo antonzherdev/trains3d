@@ -47,14 +47,17 @@ class TRDynamicWorld extends EGController {
     }
 
     def add(train : TRTrain) {
+    }
+
+    def die(train : TRTrain) {
         train.cars.for{car ->
-            world.add(car.rigidBody)
+            world.add(car.dynamicBody)
         }
     }
 
     def remove(train : TRTrain) {
         train.cars.for{car ->
-            world.remove(car.rigidBody)
+            world.remove(car.dynamicBody)
         }
     }
 

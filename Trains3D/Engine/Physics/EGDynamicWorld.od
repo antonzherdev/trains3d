@@ -12,6 +12,11 @@ stub class EGDynamicWorld<T>(gravity : EGVec3) extends EGController {
 }
 
 stub class EGRigidBody<T>(data : T, shape : EGCollisionShape, isKinematic : bool, mass : float4) {
+    val isDynamic = !isKinematic && mass > 0
+    val isStatic = !isKinematic && mass <= 0
+    static def kinematic<T>(data : T, shape : EGCollisionShape) = EGRigidBody<T>(data, shape, true, 0)
+    static def dynamic<T>(data : T, shape : EGCollisionShape, mass : float4) = EGRigidBody<T>(data, shape, false, mass)
+    static def statical<T>(data : T, shape : EGCollisionShape) = EGRigidBody<T>(data, shape, false, 0)
     val obj : VoidRef = nil
     def matrix : EGMatrix
     def set(matrix : EGMatrix)

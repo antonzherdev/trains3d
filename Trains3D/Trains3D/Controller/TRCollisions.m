@@ -177,14 +177,17 @@ static ODClassType* _TRDynamicWorld_type;
 }
 
 - (void)addTrain:(TRTrain*)train {
+}
+
+- (void)dieTrain:(TRTrain*)train {
     [[train cars] forEach:^void(TRCar* car) {
-        [_world addBody:car.rigidBody];
+        [_world addBody:[car dynamicBody]];
     }];
 }
 
 - (void)removeTrain:(TRTrain*)train {
     [[train cars] forEach:^void(TRCar* car) {
-        [_world removeBody:car.rigidBody];
+        [_world removeBody:[car dynamicBody]];
     }];
 }
 

@@ -35,25 +35,36 @@ enum TRCarType(
 
 class TRCar(weak train : TRTrain, carType : TRCarType) {
     val collisionBody = EGCollisionBody(self, carType.collision2dShape, isKinematic = true)
-    val rigidBody = EGRigidBody(self, carType.rigidShape, isKinematic = true, carType.weight)
+    lazy val dynamicBody = {
+        val line = position.line
+        val len = line.length
+        val vec = line.vec
+        val mid = midPoint
+        val b = EGRigidBody.dynamic(self, carType.rigidShape, carType.weight)
+        b.set(matrix = EGMatrix.identity.translate(mid.x, mid.y, carType.height/2).rotate(line.degreeAngle, 0, 1, 0))
+        b.set(velocity = EGVec3(vec.mul(train.speedFloat/len), 0))
+        b
+    }
 
     private var _position : TRCarPosition
     def position : TRCarPosition = _position
     def set(position : TRCarPosition) {
         _position = position
         val line = position.line
-        val len = line.length
-        val vec = line.vec
-        val mid = if(carType.wheelToBack == carType.frontToWheel) line.mid
+        val mid = midPoint
+        collisionBody.set(matrix = EGMatrix.identity.translate(mid.x, mid.y, 0).rotate(line.degreeAngle, 0, 0, 1))
+    }
+
+    def midPoint =
+        if(carType.wheelToBack == carType.frontToWheel) position.line.mid
         else {
+            val line = position.line
+            val len = line.length
+            val vec = line.vec
             val dh = vec.mul(carType.frontToWheel/len)
             val dt = vec.mul(carType.wheelToBack/len)
             line.moveWith(dh.sub(dt).mul(0.5)).mid
         }
-        collisionBody.set(matrix = EGMatrix.identity.translate(mid.x, mid.y, 0).rotate(line.degreeAngle, 0, 0, 1))
-        rigidBody.set(matrix = EGMatrix.identity.translate(mid.x, mid.y, carType.height/2).rotate(line.degreeAngle, 0, 0, 1))
-        rigidBody.set(velocity = EGVec3(vec.mul(train.speedFloat/len), 0))
-    }
 }
 
 class TRCarPosition(frontConnector : TRRailPoint, head : TRRailPoint, tail : TRRailPoint, backConnector : TRRailPoint) {

@@ -264,6 +264,7 @@ static ODClassType* _TRLevel_type;
         __trains = [__trains arrayByRemovingItem:train];
         [_collisionWorld removeTrain:train];
         [__dyingTrains addItem:train];
+        [_dynamicWorld dieTrain:train];
         [_schedule scheduleAfter:5.0 event:^void() {
             [self removeTrain:train];
         }];

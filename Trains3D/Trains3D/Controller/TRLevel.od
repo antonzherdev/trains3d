@@ -119,6 +119,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
             _trains -= train
             collisionWorld.remove(train)
             _dyingTrains.add(train)
+            dynamicWorld.die(train)
             schedule.schedule(after = 5) {
                 remove(train)
             }

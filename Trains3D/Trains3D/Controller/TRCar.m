@@ -153,14 +153,13 @@ static NSArray* _TRCarType_values;
     __weak TRTrain* _train;
     TRCarType* _carType;
     EGCollisionBody* _collisionBody;
-    EGRigidBody* _rigidBody;
+    CNLazy* __lazy_dynamicBody;
     TRCarPosition* __position;
 }
 static ODClassType* _TRCar_type;
 @synthesize train = _train;
 @synthesize carType = _carType;
 @synthesize collisionBody = _collisionBody;
-@synthesize rigidBody = _rigidBody;
 
 + (id)carWithTrain:(TRTrain*)train carType:(TRCarType*)carType {
     return [[TRCar alloc] initWithTrain:train carType:carType];
@@ -168,11 +167,23 @@ static ODClassType* _TRCar_type;
 
 - (id)initWithTrain:(TRTrain*)train carType:(TRCarType*)carType {
     self = [super init];
+    __weak TRCar* _weakSelf = self;
     if(self) {
         _train = train;
         _carType = carType;
         _collisionBody = [EGCollisionBody collisionBodyWithData:self shape:_carType.collision2dShape isKinematic:YES];
-        _rigidBody = [EGRigidBody rigidBodyWithData:self shape:_carType.rigidShape isKinematic:YES mass:((float)(_carType.weight))];
+        __lazy_dynamicBody = [CNLazy lazyWithF:^EGRigidBody*() {
+            return ^EGRigidBody*() {
+                EGLineSegment* line = [_weakSelf position].line;
+                CGFloat len = [line length];
+                EGVec2 vec = [line vec];
+                EGVec2 mid = [_weakSelf midPoint];
+                EGRigidBody* b = [EGRigidBody dynamicData:self shape:_weakSelf.carType.rigidShape mass:((float)(_weakSelf.carType.weight))];
+                [b setMatrix:[[[EGMatrix identity] translateX:mid.x y:mid.y z:((float)(_weakSelf.carType.height / 2))] rotateAngle:((float)([line degreeAngle])) x:0.0 y:1.0 z:0.0]];
+                [b setVelocity:egVec3ApplyVec2Z(egVec2MulValue(vec, ((float)(_weakSelf.train.speedFloat / len))), 0.0)];
+                return b;
+            }();
+        }];
     }
     
     return self;
@@ -183,6 +194,10 @@ static ODClassType* _TRCar_type;
     _TRCar_type = [ODClassType classTypeWithCls:[TRCar class]];
 }
 
+- (EGRigidBody*)dynamicBody {
+    return [__lazy_dynamicBody get];
+}
+
 - (TRCarPosition*)position {
     return __position;
 }
@@ -190,16 +205,21 @@ static ODClassType* _TRCar_type;
 - (void)setPosition:(TRCarPosition*)position {
     __position = position;
     EGLineSegment* line = position.line;
-    CGFloat len = [line length];
-    EGVec2 vec = [line vec];
-    EGVec2 mid = ((eqf(_carType.wheelToBack, _carType.frontToWheel)) ? [line mid] : ^EGVec2() {
+    EGVec2 mid = [self midPoint];
+    [_collisionBody setMatrix:[[[EGMatrix identity] translateX:mid.x y:mid.y z:0.0] rotateAngle:((float)([line degreeAngle])) x:0.0 y:0.0 z:1.0]];
+}
+
+- (EGVec2)midPoint {
+    if(eqf(_carType.wheelToBack, _carType.frontToWheel)) {
+        return [[self position].line mid];
+    } else {
+        EGLineSegment* line = [self position].line;
+        CGFloat len = [line length];
+        EGVec2 vec = [line vec];
         EGVec2 dh = egVec2MulValue(vec, ((float)(_carType.frontToWheel / len)));
         EGVec2 dt = egVec2MulValue(vec, ((float)(_carType.wheelToBack / len)));
         return [[line moveWithPoint:egVec2MulValue(egVec2SubVec2(dh, dt), 0.5)] mid];
-    }());
-    [_collisionBody setMatrix:[[[EGMatrix identity] translateX:mid.x y:mid.y z:0.0] rotateAngle:((float)([line degreeAngle])) x:0.0 y:0.0 z:1.0]];
-    [_rigidBody setMatrix:[[[EGMatrix identity] translateX:mid.x y:mid.y z:((float)(_carType.height / 2))] rotateAngle:((float)([line degreeAngle])) x:0.0 y:0.0 z:1.0]];
-    [_rigidBody setVelocity:egVec3ApplyVec2Z(egVec2MulValue(vec, ((float)(_train.speedFloat / len))), 0.0)];
+    }
 }
 
 - (ODClassType*)type {

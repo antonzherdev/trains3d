@@ -43,6 +43,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)addTrain:(TRTrain*)train;
+- (void)dieTrain:(TRTrain*)train;
 - (void)removeTrain:(TRTrain*)train;
 - (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;

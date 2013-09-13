@@ -117,12 +117,16 @@ static ODClassType* _EGDynamicWorld_type;
     float _mass;
     btRigidBody* _body;
     btDefaultMotionState* _motionState;
+    BOOL _isDynamic;
+    BOOL _isStatic;
 }
 static ODClassType* _EGDynamicBody_type;
 @synthesize data = _data;
 @synthesize shape = _shape;
 @synthesize isKinematic = _isKinematic;
 @synthesize mass = _mass;
+@synthesize isDynamic = _isDynamic;
+@synthesize isStatic = _isStatic;
 
 - (VoidRef) obj {
     return _body;
@@ -139,6 +143,8 @@ static ODClassType* _EGDynamicBody_type;
         _shape = shape;
         _isKinematic = isKinematic;
         _mass = mass;
+        _isDynamic = !(_isKinematic) && _mass > 0;
+        _isStatic = !(_isKinematic) && _mass <= 0;
         btCollisionShape* sh = static_cast<btCollisionShape*>([_shape shape]);
         btVector3 localInertia(0,0,0);
         if (mass > 0.000001) sh->calculateLocalInertia(mass,localInertia);
@@ -148,10 +154,27 @@ static ODClassType* _EGDynamicBody_type;
         _motionState = new btDefaultMotionState(transform);
         btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, _motionState, sh, localInertia);
         _body = new btRigidBody(rbInfo);
+        if(isKinematic) {
+            _body->setCollisionFlags(_body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+            _body->setActivationState(DISABLE_DEACTIVATION);
+        }
     }
     
     return self;
 }
+
++ (EGRigidBody*)kinematicData:(id)data shape:(id<EGCollisionShape>)shape {
+    return [EGRigidBody rigidBodyWithData:data shape:shape isKinematic:YES mass:0.0];
+}
+
++ (EGRigidBody*)dynamicData:(id)data shape:(id<EGCollisionShape>)shape mass:(float)mass {
+    return [EGRigidBody rigidBodyWithData:data shape:shape isKinematic:NO mass:mass];
+}
+
++ (EGRigidBody*)staticalData:(id)data shape:(id<EGCollisionShape>)shape {
+    return [EGRigidBody rigidBodyWithData:data shape:shape isKinematic:NO mass:0.0];
+}
+
 
 -(void) dealloc {
     delete _motionState;
@@ -174,7 +197,11 @@ static ODClassType* _EGDynamicBody_type;
 - (void)setMatrix:(EGMatrix*)matrix {
     btTransform trans;
     trans.setFromOpenGLMatrix(matrix.array);
-    _motionState->setWorldTransform(trans);
+    if(_isKinematic) {
+        _motionState->setWorldTransform(trans);
+    } else {
+        _body->setWorldTransform(trans);
+    }
 }
 
 - (EGVec3)velocity {
