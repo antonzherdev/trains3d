@@ -2,9 +2,11 @@
 
 #import "EGCollisionWorld.h"
 #import "TRTrain.h"
+#import "TRCar.h"
 #import "EGCollision.h"
 #import "EGCollisionBody.h"
 #import "TRRailPoint.h"
+#import "EGDynamicWorld.h"
 @implementation TRCollisionWorld{
     EGCollisionWorld* _world;
 }
@@ -142,6 +144,74 @@ static ODClassType* _TRCollision_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"cars=%@", self.cars];
     [description appendFormat:@", railPoint=%@", self.railPoint];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRDynamicWorld{
+    EGDynamicWorld* _world;
+}
+static ODClassType* _TRDynamicWorld_type;
+
++ (id)dynamicWorld {
+    return [[TRDynamicWorld alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    if(self) _world = [EGDynamicWorld dynamicWorldWithGravity:EGVec3Make(0.0, -10.0, 0.0)];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRDynamicWorld_type = [ODClassType classTypeWithCls:[TRDynamicWorld class]];
+}
+
+- (void)addTrain:(TRTrain*)train {
+    [[train cars] forEach:^void(TRCar* car) {
+        [_world addBody:car.rigidBody];
+    }];
+}
+
+- (void)removeTrain:(TRTrain*)train {
+    [[train cars] forEach:^void(TRCar* car) {
+        [_world removeBody:car.rigidBody];
+    }];
+}
+
+- (void)updateWithDelta:(CGFloat)delta {
+    [_world updateWithDelta:delta];
+}
+
+- (ODClassType*)type {
+    return [TRDynamicWorld type];
+}
+
++ (ODClassType*)type {
+    return _TRDynamicWorld_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
     return description;
 }

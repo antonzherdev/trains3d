@@ -8,6 +8,7 @@
 #import "TRCity.h"
 #import "TRTrain.h"
 #import "TRRailPoint.h"
+#import "TRCar.h"
 #import "TRTypes.h"
 @implementation TRLevelRules{
     EGVec2I _mapSize;

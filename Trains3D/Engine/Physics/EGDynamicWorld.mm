@@ -65,12 +65,12 @@ static ODClassType* _EGDynamicWorld_type;
     return __bodies;
 }
 
-- (void)addBody:(EGDynamicBody*)body {
+- (void)addBody:(EGRigidBody *)body {
     [__bodies addItem:body];
     _world->addRigidBody(static_cast<btRigidBody*>(body.obj));
 }
 
-- (void)removeBody:(EGDynamicBody*)body {
+- (void)removeBody:(EGRigidBody *)body {
     [__bodies removeItem:body];
     _world->removeRigidBody(static_cast<btRigidBody*>(body.obj));
 }
@@ -110,7 +110,7 @@ static ODClassType* _EGDynamicWorld_type;
 @end
 
 
-@implementation EGDynamicBody{
+@implementation EGRigidBody {
     id _data;
     id<EGCollisionShape> _shape;
     BOOL _isKinematic;
@@ -128,8 +128,8 @@ static ODClassType* _EGDynamicBody_type;
     return _body;
 }
 
-+ (id)dynamicBodyWithData:(id)data shape:(id<EGCollisionShape>)shape isKinematic:(BOOL)isKinematic mass:(float)mass {
-    return [[EGDynamicBody alloc] initWithData:data shape:shape isKinematic:isKinematic mass:mass];
++ (id)rigidBodyWithData:(id)data shape:(id <EGCollisionShape>)shape isKinematic:(BOOL)isKinematic mass:(float)mass {
+    return [[EGRigidBody alloc] initWithData:data shape:shape isKinematic:isKinematic mass:mass];
 }
 
 - (id)initWithData:(id)data shape:(id<EGCollisionShape>)shape isKinematic:(BOOL)isKinematic mass:(float)mass {
@@ -160,7 +160,7 @@ static ODClassType* _EGDynamicBody_type;
 
 + (void)initialize {
     [super initialize];
-    _EGDynamicBody_type = [ODClassType classTypeWithCls:[EGDynamicBody class]];
+    _EGDynamicBody_type = [ODClassType classTypeWithCls:[EGRigidBody class]];
 }
 
 - (EGMatrix*)matrix {
@@ -188,7 +188,7 @@ static ODClassType* _EGDynamicBody_type;
 
 
 - (ODClassType*)type {
-    return [EGDynamicBody type];
+    return [EGRigidBody type];
 }
 
 + (ODClassType*)type {
@@ -202,7 +202,7 @@ static ODClassType* _EGDynamicBody_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGDynamicBody* o = ((EGDynamicBody*)(other));
+    EGRigidBody * o = ((EGRigidBody *)(other));
     return [self.data isEqual:o.data] && [self.shape isEqual:o.shape] && self.isKinematic == o.isKinematic && eqf4(self.mass, o.mass);
 }
 

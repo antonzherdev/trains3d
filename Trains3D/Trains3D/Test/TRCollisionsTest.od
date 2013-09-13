@@ -32,12 +32,12 @@ class TRCollisionsTest extends CNTestCase {
         var cols = check(level)
         assertTrue(cols.isEmpty)
 
-        p2 = p2.add(-2*carConLen + 0.01)
+        p2 = p2.add(-2*carConLen + 0.1)
         t2.set(head = p2)
         cols = check(level)
         assertTrue(cols.isEmpty)
 
-        p2 = p2.add(-0.1)
+        p2 = p2.add(-0.2)
         t2.set(head = p2)
         cols = check(level)
         assertEquals(cols, [t1, t2].toSet)

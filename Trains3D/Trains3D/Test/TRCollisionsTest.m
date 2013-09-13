@@ -1,11 +1,12 @@
 #import "TRCollisionsTest.h"
 
-#import "TRTrain.h"
+#import "TRCar.h"
 #import "TRLevel.h"
 #import "TRLevelFactory.h"
 #import "TRCollisions.h"
 #import "TRRailPoint.h"
 #import "TRRailroad.h"
+#import "TRTrain.h"
 #import "TRTypes.h"
 @implementation TRCollisionsTest
 static CGFloat _TRCollisionsTest_carLen;
@@ -69,11 +70,11 @@ static ODClassType* _TRCollisionsTest_type;
     [level testRunTrain:t2 fromPoint:p2];
     id<CNSet> cols = [self checkLevel:level];
     [self assertTrueValue:[cols isEmpty]];
-    p2 = [p2 addX:-2 * _TRCollisionsTest_carConLen + 0.01];
+    p2 = [p2 addX:-2 * _TRCollisionsTest_carConLen + 0.1];
     [t2 setHead:p2];
     cols = [self checkLevel:level];
     [self assertTrueValue:[cols isEmpty]];
-    p2 = [p2 addX:-0.1];
+    p2 = [p2 addX:-0.2];
     [t2 setHead:p2];
     cols = [self checkLevel:level];
     [self assertEqualsA:cols b:[(@[t1, t2]) toSet]];

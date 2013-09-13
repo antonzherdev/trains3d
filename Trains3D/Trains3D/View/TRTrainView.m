@@ -4,6 +4,7 @@
 #import "EGMaterial.h"
 #import "TRTrain.h"
 #import "EG.h"
+#import "TRCar.h"
 #import "EGFigure.h"
 #import "EGMatrix.h"
 #import "TRTypes.h"

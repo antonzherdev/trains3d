@@ -3,7 +3,7 @@
 #import "EGVec.h"
 @class EGDynamicWorld;
 @class EGCollisionBox;
-@class EGDynamicBody;
+@class EGRigidBody;
 @class EGMatrix;
 @class EGCollisionPlane;
 

@@ -9,6 +9,7 @@
 #import "EGLayer.h"
 #import "TRLevelMenuView.h"
 #import "TRLevelMenuProcessor.h"
+#import "TRCar.h"
 #import "TRRailroad.h"
 #import "EGMapIso.h"
 @implementation TRLevelFactory

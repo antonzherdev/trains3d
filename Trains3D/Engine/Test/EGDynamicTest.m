@@ -30,7 +30,7 @@ static ODClassType* _EGDynamicTest_type;
 - (void)testSimple {
     EGDynamicWorld* world = [EGDynamicWorld dynamicWorldWithGravity:EGVec3Make(0.0, -10.0, 0.0)];
     EGCollisionBox* shape = [EGCollisionBox collisionBoxWithHalfSize:EGVec3Make(0.5, 0.5, 0.5)];
-    EGDynamicBody* body = [EGDynamicBody dynamicBodyWithData:@1 shape:shape isKinematic:YES mass:1.0];
+    EGRigidBody* body = [EGRigidBody rigidBodyWithData:@1 shape:shape isKinematic:YES mass:1.0];
     [world addBody:body];
     EGMatrix* m = [body matrix];
     [self assertTrueValue:eqf4([m array][13], 0)];
@@ -47,9 +47,9 @@ static ODClassType* _EGDynamicTest_type;
 
 - (void)testFriction {
     EGDynamicWorld* world = [EGDynamicWorld dynamicWorldWithGravity:EGVec3Make(0.0, -10.0, 0.0)];
-    EGDynamicBody* plane = [EGDynamicBody dynamicBodyWithData:@1 shape:[EGCollisionPlane collisionPlaneWithNormal:EGVec3Make(0.0, 1.0, 0.0) distance:0.0] isKinematic:NO mass:0.0];
+    EGRigidBody* plane = [EGRigidBody rigidBodyWithData:@1 shape:[EGCollisionPlane collisionPlaneWithNormal:EGVec3Make(0.0, 1.0, 0.0) distance:0.0] isKinematic:NO mass:0.0];
     [world addBody:plane];
-    EGDynamicBody* body = [EGDynamicBody dynamicBodyWithData:@1 shape:[EGCollisionBox collisionBoxWithHalfSize:EGVec3Make(0.5, 0.5, 0.5)] isKinematic:YES mass:1.0];
+    EGRigidBody* body = [EGRigidBody rigidBodyWithData:@1 shape:[EGCollisionBox collisionBoxWithHalfSize:EGVec3Make(0.5, 0.5, 0.5)] isKinematic:YES mass:1.0];
     [body setMatrix:[[EGMatrix identity] translateX:0.0 y:0.5 z:0.0]];
     [body setVelocity:EGVec3Make(10.0, 0.0, 0.0)];
     [world addBody:body];

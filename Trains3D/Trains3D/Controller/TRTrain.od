@@ -102,54 +102,6 @@ class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, _c
     }
 }
 
-class TREngineType(
-    tubePos : EGVec3 //tube position relative to start of the car
-)
-
-enum TRCarType(
-    width: float,
-    startToFront : float,
-    frontToWheel : float,
-    betweenWheels : float,
-    wheelToBack : float,
-    backToEnd : float,
-
-    engineType : TREngineType?)
-{
-    car(0.18,  0.05, 0.08, 0.44, 0.08, 0.05, nil)
-    engine(0.2, 0.05, 0.14, 0.32, 0.22, 0.05, TREngineType(tubePos = EGVec3(-0.06, 0, 0.5)))
-
-    val startToWheel = startToFront + frontToWheel
-    val wheelToEnd = wheelToBack + backToEnd
-    val fullLength : float = startToWheel + betweenWheels + wheelToEnd
-    def isEngine : bool = engineType.isDefined
-    val shape : EGCollisionShape = EGCollisionBox2d((frontToWheel + betweenWheels + wheelToBack)/2, width/2)
-}
-
-class TRCar(weak train : TRTrain, carType : TRCarType) {
-    val collisionBody = EGCollisionBody(self, carType.shape, isKinematic = true)
-
-    private var _position : TRCarPosition
-    def position : TRCarPosition = _position
-    def set(position : TRCarPosition) {
-        _position = position
-        val line = position.line
-        val mid = if(carType.wheelToBack == carType.frontToWheel) line.mid
-        else {
-            val len = line.length
-            val vec = line.vec
-            val dh = vec.mul(carType.frontToWheel/len)
-            val dt = vec.mul(carType.wheelToBack/len)
-            line.moveWith(dh.sub(dt).mul(0.5)).mid
-        }
-        collisionBody.set(matrix = EGMatrix.identity.translate(mid.x, mid.y, 0).rotate(line.degreeAngle, 0, 0, 1))
-    }
-}
-
-class TRCarPosition(frontConnector : TRRailPoint, head : TRRailPoint, tail : TRRailPoint, backConnector : TRRailPoint) {
-    val line = EGLineSegment(tail.point, head.point)
-}
-
 class TRTrainGenerator(trainType : TRTrainType, carsCount : [int], speed : [int], carTypes : [TRCarType]) {
     def generateCarsFor(train : TRTrain) : [TRCar] = {
         val count = carsCount.randomItem.get

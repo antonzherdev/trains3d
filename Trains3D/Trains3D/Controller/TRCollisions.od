@@ -38,3 +38,23 @@ class TRCollisionWorld {
 }
 
 class TRCollision(cars : CNPair<TRCar>, railPoint : TRRailPoint)
+
+class TRDynamicWorld extends EGController {
+    private val world = EGDynamicWorld<TRCar>(gravity = EGVec3(0, -10, 0))
+
+    def add(train : TRTrain) {
+        train.cars.for{car ->
+            world.add(car.rigidBody)
+        }
+    }
+
+    def remove(train : TRTrain) {
+        train.cars.for{car ->
+            world.remove(car.rigidBody)
+        }
+    }
+
+    def updateWith(delta : float) {
+        world.updateWith(delta)
+    }
+}

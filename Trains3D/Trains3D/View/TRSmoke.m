@@ -1,6 +1,7 @@
 #import "TRSmoke.h"
 
 #import "TRTrain.h"
+#import "TRCar.h"
 #import "TRRailPoint.h"
 #import "EG.h"
 @implementation TRSmoke{

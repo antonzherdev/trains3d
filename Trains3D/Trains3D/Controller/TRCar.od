@@ -1,0 +1,62 @@
+package com.antonzherdev.trains
+
+import com.antonzherdev.eg._
+
+class TREngineType(
+    tubePos : EGVec3 //tube position relative to start of the car
+)
+
+enum TRCarType(
+    width: float,
+    height: float,
+    weight : float,
+
+    startToFront : float,
+    frontToWheel : float,
+    betweenWheels : float,
+    wheelToBack : float,
+    backToEnd : float,
+
+    engineType : TREngineType?)
+{
+    car(0.18, 0.3, 10,
+        0.05, 0.08, 0.44, 0.08, 0.05, nil)
+    engine(0.2, 0.3, 20,
+        0.05, 0.14, 0.32, 0.22, 0.05,
+        TREngineType(tubePos = EGVec3(-0.06, 0, 0.5)))
+
+    val startToWheel = startToFront + frontToWheel
+    val wheelToEnd = wheelToBack + backToEnd
+    val fullLength : float = startToWheel + betweenWheels + wheelToEnd
+    def isEngine : bool = engineType.isDefined
+    val collision2dShape : EGCollisionShape = EGCollisionBox2d((frontToWheel + betweenWheels + wheelToBack)/2, width/2)
+    val rigidShape : EGCollisionShape = EGCollisionBox((frontToWheel + betweenWheels + wheelToBack)/2, width/2, height/2)
+}
+
+class TRCar(weak train : TRTrain, carType : TRCarType) {
+    val collisionBody = EGCollisionBody(self, carType.collision2dShape, isKinematic = true)
+    val rigidBody = EGRigidBody(self, carType.rigidShape, isKinematic = true, carType.weight)
+
+    private var _position : TRCarPosition
+    def position : TRCarPosition = _position
+    def set(position : TRCarPosition) {
+        _position = position
+        val line = position.line
+        val len = line.length
+        val vec = line.vec
+        val mid = if(carType.wheelToBack == carType.frontToWheel) line.mid
+        else {
+            val dh = vec.mul(carType.frontToWheel/len)
+            val dt = vec.mul(carType.wheelToBack/len)
+            line.moveWith(dh.sub(dt).mul(0.5)).mid
+        }
+        collisionBody.set(matrix = EGMatrix.identity.translate(mid.x, mid.y, 0).rotate(line.degreeAngle, 0, 0, 1))
+        rigidBody.set(matrix = EGMatrix.identity.translate(mid.x, mid.y, carType.height/2).rotate(line.degreeAngle, 0, 0, 1))
+        rigidBody.set(velocity = EGVec3(vec.mul(train.speedFloat/len), 0))
+    }
+}
+
+class TRCarPosition(frontConnector : TRRailPoint, head : TRRailPoint, tail : TRRailPoint, backConnector : TRRailPoint) {
+    val line = EGLineSegment(tail.point, head.point)
+}
+
