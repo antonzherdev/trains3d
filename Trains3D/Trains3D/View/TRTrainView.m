@@ -88,9 +88,9 @@ static ODClassType* _TRTrainView_type;
     [[dyingTrain cars] forEach:^void(TRCar* car) {
         [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
             return [[_ modifyW:^EGMatrix*(EGMatrix* w) {
-                return [[w translateX:0.0 y:0.0 z:((float)(-car.carType.height / 2 + 0.04))] mulMatrix:[[car dynamicBody] matrix]];
+                return [w translateX:0.0 y:0.0 z:((float)(-car.carType.height / 2 + 0.04))];
             }] modifyM:^EGMatrix*(EGMatrix* m) {
-                return [m rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
+                return [[[car dynamicBody] matrix] mulMatrix:[m rotateAngle:90.0 x:0.0 y:1.0 z:0.0]];
             }];
         } f:^void() {
             [self doDrawCar:car material:material];
