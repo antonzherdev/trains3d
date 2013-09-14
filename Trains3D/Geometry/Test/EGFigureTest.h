@@ -1,7 +1,7 @@
 #import "objd.h"
 #import "CNTest.h"
 #import "EGVec.h"
-#import "EGTypes.h"
+#import "EGRect.h"
 @class EGLineSegment;
 @class EGThickLineSegment;
 @class EGPolygon;

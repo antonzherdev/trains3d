@@ -1,0 +1,5 @@
+package com.antonzherdev
+
+object trains {
+    import com.antonzherdev.eg._
+}

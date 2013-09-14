@@ -1,0 +1,5 @@
+package com.antonzherdev
+
+object geometry {
+    val prefix = "GE"
+}

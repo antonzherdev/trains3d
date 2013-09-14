@@ -1,5 +1,6 @@
 #import <GLUT/glut.h>
 #import "EGTypes.h"
+#import "EGRect.h"
 
 @class EGMatrix;
 

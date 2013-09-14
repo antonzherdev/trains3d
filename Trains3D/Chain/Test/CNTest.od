@@ -2,8 +2,6 @@ package test
 
 stub class SenTestCase
 
-stub def STAssertEquals<T>(a: T, b : T, s : string)
-stub def STAssertTrue(value : bool, s : string)
 stub class CNTestCase extends SenTestCase {
     def assertEquals<T>(a: T, b: T) : void
     def assertTrue(value: bool) :void

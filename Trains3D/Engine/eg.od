@@ -1,0 +1,5 @@
+package com.antonzherdev
+
+object eg {
+    import com.antonzherdev.geometry._
+}

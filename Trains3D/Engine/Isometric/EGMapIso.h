@@ -1,6 +1,6 @@
 #import "objd.h"
 #import "EGVec.h"
-#import "EGTypes.h"
+#import "EGRect.h"
 @class EGMesh;
 @class EGMaterial;
 

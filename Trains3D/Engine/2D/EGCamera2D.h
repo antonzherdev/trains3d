@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "EGTypes.h"
 #import "EGVec.h"
+#import "EGRect.h"
 @class EGMatrixModel;
 @class EGMatrix;
 @class EG;
