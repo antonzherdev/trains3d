@@ -1,6 +1,6 @@
 #import "objd.h"
 #import "EGBillboard.h"
-#import "EGVec.h"
+#import "GEVec.h"
 #import "EGMaterial.h"
 @class TRTrain;
 @class TRCar;
@@ -23,15 +23,15 @@
 - (void)generateParticlesWithDelta:(CGFloat)delta;
 - (TRSmokeParticle*)generateParticle;
 + (float)particleSize;
-+ (EGQuad)modelQuad;
-+ (EGQuadrant)textureQuadrant;
-+ (EGVec4)defColor;
++ (GEQuad)modelQuad;
++ (GEQuadrant)textureQuadrant;
++ (GEVec4)defColor;
 + (ODClassType*)type;
 @end
 
 
 @interface TRSmokeParticle : EGBillboardParticle
-@property (nonatomic) EGVec3 speed;
+@property (nonatomic) GEVec3 speed;
 
 + (id)smokeParticle;
 - (id)init;

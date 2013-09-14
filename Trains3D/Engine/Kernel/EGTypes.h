@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "EGVec.h"
+#import "GEVec.h"
 
 @class EGEnvironment;
 @class EGLight;
@@ -55,8 +55,8 @@ ODPType* egColorType();
 
 
 @protocol EGCamera<NSObject>
-- (void)focusForViewSize:(EGVec2)viewSize;
-- (EGVec2)translateWithViewSize:(EGVec2)viewSize viewPoint:(EGVec2)viewPoint;
+- (void)focusForViewSize:(GEVec2)viewSize;
+- (GEVec2)translateWithViewSize:(GEVec2)viewSize viewPoint:(GEVec2)viewPoint;
 @end
 
 
@@ -93,10 +93,10 @@ ODPType* egColorType();
 
 
 @interface EGDirectLight : EGLight
-@property (nonatomic, readonly) EGVec3 direction;
+@property (nonatomic, readonly) GEVec3 direction;
 
-+ (id)directLightWithColor:(EGColor)color direction:(EGVec3)direction;
-- (id)initWithColor:(EGColor)color direction:(EGVec3)direction;
++ (id)directLightWithColor:(EGColor)color direction:(GEVec3)direction;
+- (id)initWithColor:(EGColor)color direction:(GEVec3)direction;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

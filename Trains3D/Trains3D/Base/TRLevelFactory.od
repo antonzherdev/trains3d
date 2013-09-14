@@ -22,7 +22,7 @@ class TRLevelFactory {
     private static def createNewCity : TRLevel -> void = (level : TRLevel)->
         level.createNewCity
     private static val rules = [
-        TRLevelRules(EGVec2I(5, 3), scoreRules, repairerSpeed = 30, [
+        TRLevelRules(Vec2I(5, 3), scoreRules, repairerSpeed = 30, [
             (1, train(cars = 2.to(4), speed = 50.to(60).set(step = 10))),
             (10, train(cars = 2.to(4), speed = 50.to(60).set(step = 10))),
             (15, createNewCity)//,
@@ -30,8 +30,8 @@ class TRLevelFactory {
         ])
     ]
     static def levelWith(number : uint) = TRLevel(rules[number - 1])
-    static def levelWith(mapSize : EGVec2I) = TRLevel(TRLevelRules(mapSize, scoreRules, repairerSpeed = 30, []))
+    static def levelWith(mapSize : Vec2I) = TRLevel(TRLevelRules(mapSize, scoreRules, repairerSpeed = 30, []))
     static def sceneForLevelWith(number : uint) = sceneFor(levelWith(number))
     static def score = TRScore(scoreRules)
-    static def railroadWith(mapSize : EGVec2I) = TRRailroad(EGMapSso(mapSize), score)
+    static def railroadWith(mapSize : Vec2I) = TRRailroad(EGMapSso(mapSize), score)
 }

@@ -1,7 +1,7 @@
 #import "objd.h"
-#import "EGVec.h"
+#import "GEVec.h"
 #import "EGTypes.h"
-#import "EGRect.h"
+#import "GERect.h"
 @class TRScoreRules;
 @class EGMapSso;
 @class TRScore;
@@ -27,13 +27,13 @@
 @class TRLevel;
 
 @interface TRLevelRules : NSObject
-@property (nonatomic, readonly) EGVec2I mapSize;
+@property (nonatomic, readonly) GEVec2I mapSize;
 @property (nonatomic, readonly) TRScoreRules* scoreRules;
 @property (nonatomic, readonly) NSUInteger repairerSpeed;
 @property (nonatomic, readonly) id<CNSeq> events;
 
-+ (id)levelRulesWithMapSize:(EGVec2I)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
-- (id)initWithMapSize:(EGVec2I)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
++ (id)levelRulesWithMapSize:(GEVec2I)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
+- (id)initWithMapSize:(GEVec2I)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -60,7 +60,7 @@
 - (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch;
-- (id)cityForTile:(EGVec2I)tile;
+- (id)cityForTile:(GEVec2I)tile;
 - (void)arrivedTrain:(TRTrain*)train;
 - (void)processCollisions;
 - (id<CNSeq>)detectCollisions;

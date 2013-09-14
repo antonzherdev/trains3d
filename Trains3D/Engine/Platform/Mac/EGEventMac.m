@@ -54,9 +54,9 @@
     return _type == EGEventTouchCanceled;
 }
 
-- (EGVec2)locationInView {
+- (GEVec2)locationInView {
     NSPoint point = [_view convertPoint:[_event locationInWindow] fromView:nil];
-    return EGVec2Make(point.x, point.y);
+    return GEVec2Make(point.x, point.y);
 }
 
 - (EGEvent *)setCamera:(id)camera {

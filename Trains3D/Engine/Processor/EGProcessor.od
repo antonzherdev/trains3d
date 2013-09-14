@@ -17,12 +17,12 @@ trait EGTouchProcessor {
     def touchCanceled(event : EGEvent) : bool = false
 }
 
-class EGEvent(viewSize : EGVec2, camera : EGCamera?) {
+class EGEvent(viewSize : Vec2, camera : EGCamera?) {
     def set(camera : EGCamera?) : EGEvent
 
-    def locationInView : EGVec2
+    def locationInView : Vec2
     def location = locationFor(0)
-    def locationFor(depth : float) : EGVec2 =
+    def locationFor(depth : float) : Vec2 =
         if(camera.isEmpty) locationInView
         else camera.get.translateWith(viewSize, locationInView)
 

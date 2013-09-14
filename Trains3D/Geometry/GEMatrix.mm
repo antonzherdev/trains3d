@@ -1,4 +1,4 @@
-#import "EGMatrix.h"
+#import "GEMatrix.h"
 
 //#if defined(__LP64__) && __LP64__
 //#define GLM_PRECISION_HIGHP_FLOAT
@@ -9,24 +9,24 @@
 #import "type_ptr.hpp"
 
 
-struct EGMatrixImpl {
+struct GEMatrixImpl {
     glm::mat4 m;
 };
 
 
-@implementation EGMatrix{
+@implementation GEMatrix {
 @private
-    struct EGMatrixImpl*_impl;
+    struct GEMatrixImpl *_impl;
 }
 
-static EGMatrix* _identity;
+static GEMatrix * _identity;
 
-- (struct EGMatrixImpl *)impl {
+- (struct GEMatrixImpl *)impl {
     return _impl;
 }
 
 
-- (id)initWithImpl:(EGMatrixImpl *)m {
+- (id)initWithImpl:(GEMatrixImpl *)m {
     self = [super init];
     if (self) {
         _impl = m;
@@ -35,43 +35,43 @@ static EGMatrix* _identity;
     return self;
 }
 
-+ (id)matrixWithImpl:(EGMatrixImpl *)m {
++ (id)matrixWithImpl:(GEMatrixImpl *)m {
     return [[self alloc] initWithImpl:m];
 }
 
 + (id)matrixWithArray:(float [16])m {
-    EGMatrixImpl* impl = new EGMatrixImpl;
+    GEMatrixImpl * impl = new GEMatrixImpl;
     impl->m = glm::make_mat4(m);
-    return [EGMatrix matrixWithImpl:impl];
+    return [GEMatrix matrixWithImpl:impl];
 }
 
 
-- (EGMatrix*)mulMatrix:(EGMatrix*)matrix {
-    EGMatrixImpl* impl = new EGMatrixImpl;
+- (GEMatrix *)mulMatrix:(GEMatrix *)matrix {
+    GEMatrixImpl * impl = new GEMatrixImpl;
     impl->m = _impl->m * matrix.impl->m;
-    return [EGMatrix matrixWithImpl:impl];
+    return [GEMatrix matrixWithImpl:impl];
 }
 
 + (void)initialize {
     [super initialize];
-    EGMatrixImpl* impl = new EGMatrixImpl;
+    GEMatrixImpl * impl = new GEMatrixImpl;
     impl->m = glm::mat4(1.0);
-    _identity = [EGMatrix matrixWithImpl:impl];
+    _identity = [GEMatrix matrixWithImpl:impl];
 }
 
 
-- (EGVec4)mulVec4:(EGVec4)vec4 {
+- (GEVec4)mulVec4:(GEVec4)vec4 {
     glm::vec4 v4 = _impl->m* glm::vec4(vec4.x, vec4.y, vec4.z, vec4.w);
     return {v4.x, v4.y, v4.z, v4.w};
 }
 
-- (EGVec4)mulVec3:(EGVec3)vec3 w:(float)w {
+- (GEVec4)mulVec3:(GEVec3)vec3 w:(float)w {
     glm::vec4 v4 = _impl->m* glm::vec4(vec3.x, vec3.y, vec3.z, w);
     return {v4.x, v4.y, v4.z, v4.w};
 }
 
 
-+ (EGMatrix *)identity {
++ (GEMatrix *)identity {
     return _identity;
 }
 
@@ -79,10 +79,10 @@ static EGMatrix* _identity;
     return self;
 }
 
-+ (EGMatrix *)orthoLeft:(float)left right:(float)right bottom:(float)bottom top:(float)top zNear:(float)near zFar:(float)far {
-    EGMatrixImpl* impl = new EGMatrixImpl;
++ (GEMatrix *)orthoLeft:(float)left right:(float)right bottom:(float)bottom top:(float)top zNear:(float)near zFar:(float)far {
+    GEMatrixImpl * impl = new GEMatrixImpl;
     impl->m = glm::ortho(left, right, bottom, top, near, far);
-    return [EGMatrix matrixWithImpl:impl];
+    return [GEMatrix matrixWithImpl:impl];
 }
 
 - (void)dealloc {
@@ -92,7 +92,7 @@ static EGMatrix* _identity;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGMatrix* o = ((EGMatrix*)(other));
+    GEMatrix * o = ((GEMatrix *)(other));
     return memcmp(_impl, o.impl, sizeof(float[16])) == 0;
 }
 
@@ -100,22 +100,22 @@ static EGMatrix* _identity;
     return glm::value_ptr(_impl->m);
 }
 
-- (EGMatrix *)rotateAngle:(float)angle x:(float)x y:(float)y z:(float)z {
-    EGMatrixImpl* impl = new EGMatrixImpl;
+- (GEMatrix *)rotateAngle:(float)angle x:(float)x y:(float)y z:(float)z {
+    GEMatrixImpl * impl = new GEMatrixImpl;
     impl->m = glm::rotate(_impl->m, angle, glm::vec3(x, y, z));
-    return [EGMatrix matrixWithImpl:impl];
+    return [GEMatrix matrixWithImpl:impl];
 }
 
-- (EGMatrix *)scaleX:(float)x y:(float)y z:(float)z {
-    EGMatrixImpl* impl = new EGMatrixImpl;
+- (GEMatrix *)scaleX:(float)x y:(float)y z:(float)z {
+    GEMatrixImpl * impl = new GEMatrixImpl;
     impl->m = glm::scale(_impl->m, glm::vec3(x, y, z));
-    return [EGMatrix matrixWithImpl:impl];
+    return [GEMatrix matrixWithImpl:impl];
 }
 
-- (EGMatrix *)translateX:(float)x y:(float)y z:(float)z {
-    EGMatrixImpl* impl = new EGMatrixImpl;
+- (GEMatrix *)translateX:(float)x y:(float)y z:(float)z {
+    GEMatrixImpl * impl = new GEMatrixImpl;
     impl->m = glm::translate(_impl->m, glm::vec3(x, y, z));
-    return [EGMatrix matrixWithImpl:impl];
+    return [GEMatrix matrixWithImpl:impl];
 }
 
 - (NSString*)description {

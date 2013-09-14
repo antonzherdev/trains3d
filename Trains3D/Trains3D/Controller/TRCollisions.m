@@ -47,7 +47,7 @@ static ODClassType* _TRCollisionWorld_type;
         TRRailPoint* point = ((TRRailPoint*)([[[[[[[[(@[[car1 position].head, [car1 position].tail]) chain] mul:(@[[car2 position].head, [car2 position].tail])] sortBy] ascBy:^id(CNTuple* pair) {
             TRRailPoint* x = ((TRRailPoint*)(pair.a));
             TRRailPoint* y = ((TRRailPoint*)(pair.b));
-            if(x.form == y.form && EGVec2IEq(x.tile, y.tile)) return numf(fabs(x.x - y.x));
+            if(x.form == y.form && GEVec2IEq(x.tile, y.tile)) return numf(fabs(x.x - y.x));
             else return @1000;
         }] endSort] map:^TRRailPoint*(CNTuple* _) {
             return ((TRRailPoint*)(_.a));
@@ -163,8 +163,8 @@ static ODClassType* _TRDynamicWorld_type;
 - (id)init {
     self = [super init];
     if(self) _world = ^EGDynamicWorld*() {
-        EGDynamicWorld* w = [EGDynamicWorld dynamicWorldWithGravity:EGVec3Make(0.0, 0.0, -10.0)];
-        EGRigidBody* plane = [EGRigidBody rigidBodyWithData:nil shape:[EGCollisionPlane collisionPlaneWithNormal:EGVec3Make(0.0, 0.0, 1.0) distance:0.0] isKinematic:NO mass:0.0];
+        EGDynamicWorld* w = [EGDynamicWorld dynamicWorldWithGravity:GEVec3Make(0.0, 0.0, -10.0)];
+        EGRigidBody* plane = [EGRigidBody rigidBodyWithData:nil shape:[EGCollisionPlane collisionPlaneWithNormal:GEVec3Make(0.0, 0.0, 1.0) distance:0.0] isKinematic:NO mass:0.0];
         plane.friction = 0.4;
         [w addBody:plane];
         return w;

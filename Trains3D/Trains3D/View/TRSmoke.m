@@ -7,15 +7,15 @@
 @implementation TRSmoke{
     __weak TRTrain* _train;
     TRCar* _engine;
-    EGVec3 _tubePos;
+    GEVec3 _tubePos;
     CGFloat _emitTime;
 }
 static CGFloat _TRSmoke_zSpeed = 0.1;
 static CGFloat _TRSmoke_emitEvery = 0.005;
 static float _TRSmoke_particleSize = 0.03;
-static EGQuad _TRSmoke_modelQuad;
-static EGQuadrant _TRSmoke_textureQuadrant;
-static EGVec4 _TRSmoke_defColor = {1.0, 1.0, 1.0, 0.7};
+static GEQuad _TRSmoke_modelQuad;
+static GEQuadrant _TRSmoke_textureQuadrant;
+static GEVec4 _TRSmoke_defColor = {1.0, 1.0, 1.0, 0.7};
 static ODClassType* _TRSmoke_type;
 @synthesize train = _train;
 
@@ -38,8 +38,8 @@ static ODClassType* _TRSmoke_type;
 + (void)initialize {
     [super initialize];
     _TRSmoke_type = [ODClassType classTypeWithCls:[TRSmoke class]];
-    _TRSmoke_modelQuad = egQuadApplySize(_TRSmoke_particleSize);
-    _TRSmoke_textureQuadrant = egQuadQuadrant(egQuadIdentity());
+    _TRSmoke_modelQuad = geQuadApplySize(_TRSmoke_particleSize);
+    _TRSmoke_textureQuadrant = geQuadQuadrant(geQuadIdentity());
 }
 
 - (void)generateParticlesWithDelta:(CGFloat)delta {
@@ -53,18 +53,18 @@ static ODClassType* _TRSmoke_type;
 
 - (TRSmokeParticle*)generateParticle {
     TRCarPosition* pos = [_engine position];
-    EGVec2 fPos = pos.head.point;
-    EGVec2 bPos = pos.tail.point;
-    EGVec2 delta = egVec2SubVec2(bPos, fPos);
-    EGVec2 tubeXY = egVec2AddVec2(fPos, egVec2SetLength(delta, _tubePos.x));
-    EGVec3 emitterPos = egVec3ApplyVec2Z(tubeXY, _tubePos.z);
+    GEVec2 fPos = pos.head.point;
+    GEVec2 bPos = pos.tail.point;
+    GEVec2 delta = geVec2SubVec2(bPos, fPos);
+    GEVec2 tubeXY = geVec2AddVec2(fPos, geVec2SetLength(delta, _tubePos.x));
+    GEVec3 emitterPos = geVec3ApplyVec2Z(tubeXY, _tubePos.z);
     TRSmokeParticle* p = [TRSmokeParticle smokeParticle];
     p.color = _TRSmoke_defColor;
-    p.position = EGVec3Make(emitterPos.x + randomFloatGap(-0.01, 0.01), emitterPos.y + randomFloatGap(-0.01, 0.01), emitterPos.z);
+    p.position = GEVec3Make(emitterPos.x + randomFloatGap(-0.01, 0.01), emitterPos.y + randomFloatGap(-0.01, 0.01), emitterPos.z);
     p.model = _TRSmoke_modelQuad;
-    p.uv = egQuadrantRandomQuad(_TRSmoke_textureQuadrant);
-    EGVec3 s = egVec3ApplyVec2Z(egVec2SetLength((([_train isBack]) ? egVec2SubVec2(fPos, bPos) : delta), ((float)(_train.speedFloat))), ((float)(_TRSmoke_zSpeed)));
-    p.speed = EGVec3Make(-s.x * randomPercents(0.6), -s.y * randomPercents(0.6), s.z * randomPercents(0.6));
+    p.uv = geQuadrantRandomQuad(_TRSmoke_textureQuadrant);
+    GEVec3 s = geVec3ApplyVec2Z(geVec2SetLength((([_train isBack]) ? geVec2SubVec2(fPos, bPos) : delta), ((float)(_train.speedFloat))), ((float)(_TRSmoke_zSpeed)));
+    p.speed = GEVec3Make(-s.x * randomPercents(0.6), -s.y * randomPercents(0.6), s.z * randomPercents(0.6));
     return p;
 }
 
@@ -76,15 +76,15 @@ static ODClassType* _TRSmoke_type;
     return _TRSmoke_particleSize;
 }
 
-+ (EGQuad)modelQuad {
++ (GEQuad)modelQuad {
     return _TRSmoke_modelQuad;
 }
 
-+ (EGQuadrant)textureQuadrant {
++ (GEQuadrant)textureQuadrant {
     return _TRSmoke_textureQuadrant;
 }
 
-+ (EGVec4)defColor {
++ (GEVec4)defColor {
     return _TRSmoke_defColor;
 }
 
@@ -120,7 +120,7 @@ static ODClassType* _TRSmoke_type;
 
 
 @implementation TRSmokeParticle{
-    EGVec3 _speed;
+    GEVec3 _speed;
 }
 static NSInteger _TRSmokeParticle_dragCoefficient = 1;
 static ODClassType* _TRSmokeParticle_type;
@@ -142,10 +142,10 @@ static ODClassType* _TRSmokeParticle_type;
 }
 
 - (void)updateT:(float)t dt:(float)dt {
-    EGVec3 a = egVec3MulK(_speed, ((float)(-_TRSmokeParticle_dragCoefficient)));
-    _speed = egVec3AddV(_speed, egVec3MulK(a, dt));
-    self.position = egVec3AddV(self.position, egVec3MulK(_speed, dt));
-    if([self lifeTime] > 3) self.color = EGVec4Make(1.0, 1.0, 1.0, ((float)(2.8 - 0.7 * [self lifeTime])));
+    GEVec3 a = geVec3MulK(_speed, ((float)(-_TRSmokeParticle_dragCoefficient)));
+    _speed = geVec3AddV(_speed, geVec3MulK(a, dt));
+    self.position = geVec3AddV(self.position, geVec3MulK(_speed, dt));
+    if([self lifeTime] > 3) self.color = GEVec4Make(1.0, 1.0, 1.0, ((float)(2.8 - 0.7 * [self lifeTime])));
 }
 
 - (ODClassType*)type {

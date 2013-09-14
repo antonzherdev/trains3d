@@ -67,8 +67,8 @@ static ODClassType* _EGCollisionWorld_type;
                                      btManifoldPoint & p = pManifold->getContactPoint(i);
                                      btVector3 const & a = p.getPositionWorldOnA();
                                      btVector3 const & b = p.getPositionWorldOnB();
-                                     return [EGContact contactWithA:EGVec3Make(a.x(), a.y(), a.z())
-                                                                  b:EGVec3Make(b.x(), b.y(), b.z())];
+                                     return [EGContact contactWithA:GEVec3Make(a.x(), a.y(), a.z())
+                                                                  b:GEVec3Make(b.x(), b.y(), b.z())];
                                  }]];
     }];
 }

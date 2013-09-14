@@ -342,10 +342,10 @@ static ODClassType* _EGBillboardParticleSystem_type;
 
 
 @implementation EGBillboardParticle{
-    EGVec3 _position;
-    EGQuad _uv;
-    EGQuad _model;
-    EGVec4 _color;
+    GEVec3 _position;
+    GEQuad _uv;
+    GEQuad _model;
+    GEVec4 _color;
 }
 static ODClassType* _EGBillboardParticle_type;
 @synthesize position = _position;

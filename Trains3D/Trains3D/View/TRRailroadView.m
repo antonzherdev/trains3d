@@ -4,7 +4,7 @@
 #import "EGMaterial.h"
 #import "TR3D.h"
 #import "EG.h"
-#import "EGMatrix.h"
+#import "GEMatrix.h"
 #import "TRRailPoint.h"
 @implementation TRRailroadView{
     TRRailView* _railView;
@@ -113,9 +113,9 @@ static ODClassType* _TRRailView_type;
 
 - (void)drawRail:(TRRail*)rail {
     [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
-        return [[_ modifyW:^EGMatrix*(EGMatrix* w) {
+        return [[_ modifyW:^GEMatrix*(GEMatrix* w) {
             return [w translateX:((float)(rail.tile.x)) y:((float)(rail.tile.y)) z:0.001];
-        }] modifyM:^EGMatrix*(EGMatrix* m) {
+        }] modifyM:^GEMatrix*(GEMatrix* m) {
             if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
                 if(rail.form == TRRailForm.leftRight) return [m rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
                 else return m;
@@ -204,10 +204,10 @@ static ODClassType* _TRSwitchView_type;
     TRRail* rail = [theSwitch activeRail];
     TRRailForm* form = rail.form;
     [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
-        return [[_ modifyW:^EGMatrix*(EGMatrix* w) {
+        return [[_ modifyW:^GEMatrix*(GEMatrix* w) {
             return [w translateX:((float)(theSwitch.tile.x)) y:((float)(theSwitch.tile.y)) z:0.03];
-        }] modifyM:^EGMatrix*(EGMatrix* m) {
-            EGMatrix* m2 = [[m rotateAngle:((float)(connector.angle)) x:0.0 y:1.0 z:0.0] translateX:-0.5 y:0.0 z:0.0];
+        }] modifyM:^GEMatrix*(GEMatrix* m) {
+            GEMatrix* m2 = [[m rotateAngle:((float)(connector.angle)) x:0.0 y:1.0 z:0.0] translateX:-0.5 y:0.0 z:0.0];
             if(form.start.x + form.end.x != 0) {
                 TRRailConnector* otherConnector = ((form.start == connector) ? form.end : form.start);
                 NSInteger x = connector.x;
@@ -286,9 +286,9 @@ static ODClassType* _TRLightView_type;
 
 - (void)drawLight:(TRLight*)light {
     [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
-        return [[_ modifyW:^EGMatrix*(EGMatrix* w) {
+        return [[_ modifyW:^GEMatrix*(GEMatrix* w) {
             return [w translateX:((float)(light.tile.x)) y:((float)(light.tile.y)) z:0.0];
-        }] modifyM:^EGMatrix*(EGMatrix* m) {
+        }] modifyM:^GEMatrix*(GEMatrix* m) {
             return [[m rotateAngle:((float)(light.connector.angle)) x:0.0 y:1.0 z:0.0] translateX:-0.45 y:0.0 z:-0.2];
         }];
     } f:^void() {
@@ -351,7 +351,7 @@ static ODClassType* _TRDamageView_type;
 
 - (void)drawPoint:(TRRailPoint*)point {
     [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
-        return [_ modifyW:^EGMatrix*(EGMatrix* w) {
+        return [_ modifyW:^GEMatrix*(GEMatrix* w) {
             return [w translateX:point.point.x y:point.point.y z:0.0];
         }];
     } f:^void() {

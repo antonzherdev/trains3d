@@ -168,8 +168,8 @@ static ODClassType* _TRTrain_type;
     } withStart:[_head invert]]));
 }
 
-- (EGVec2)movePoint:(EGVec2)point length:(CGFloat)length {
-    return EGVec2Make(point.x, point.y + length);
+- (GEVec2)movePoint:(GEVec2)point length:(CGFloat)length {
+    return GEVec2Make(point.x, point.y + length);
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -208,11 +208,11 @@ static ODClassType* _TRTrain_type;
 }
 
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch {
-    EGVec2I tile = theSwitch.tile;
-    EGVec2I nextTile = [theSwitch.connector nextTile:tile];
+    GEVec2I tile = theSwitch.tile;
+    GEVec2I nextTile = [theSwitch.connector nextTile:tile];
     return [[[self cars] findWhere:^BOOL(TRCar* car) {
         TRCarPosition* p = [car position];
-        return (EGVec2IEq(p.frontConnector.tile, tile) && EGVec2IEq(p.backConnector.tile, nextTile)) || (EGVec2IEq(p.frontConnector.tile, nextTile) && EGVec2IEq(p.backConnector.tile, tile));
+        return (GEVec2IEq(p.frontConnector.tile, tile) && GEVec2IEq(p.backConnector.tile, nextTile)) || (GEVec2IEq(p.frontConnector.tile, nextTile) && GEVec2IEq(p.backConnector.tile, tile));
     }] isDefined];
 }
 

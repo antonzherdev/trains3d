@@ -30,7 +30,7 @@ static ODClassType* _EGScene_type;
     _EGScene_type = [ODClassType classTypeWithCls:[EGScene class]];
 }
 
-- (void)drawWithViewSize:(EGVec2)viewSize {
+- (void)drawWithViewSize:(GEVec2)viewSize {
     [_layers forEach:^void(EGLayer* _) {
         [_ drawWithViewSize:viewSize];
     }];

@@ -2,18 +2,18 @@
 
 #import "EGTypes.h"
 @implementation EGEvent{
-    EGVec2 _viewSize;
+    GEVec2 _viewSize;
     id _camera;
 }
 static ODClassType* _EGEvent_type;
 @synthesize viewSize = _viewSize;
 @synthesize camera = _camera;
 
-+ (id)eventWithViewSize:(EGVec2)viewSize camera:(id)camera {
++ (id)eventWithViewSize:(GEVec2)viewSize camera:(id)camera {
     return [[EGEvent alloc] initWithViewSize:viewSize camera:camera];
 }
 
-- (id)initWithViewSize:(EGVec2)viewSize camera:(id)camera {
+- (id)initWithViewSize:(GEVec2)viewSize camera:(id)camera {
     self = [super init];
     if(self) {
         _viewSize = viewSize;
@@ -32,15 +32,15 @@ static ODClassType* _EGEvent_type;
     @throw @"Method set is abstract";
 }
 
-- (EGVec2)locationInView {
+- (GEVec2)locationInView {
     @throw @"Method locationInView is abstract";
 }
 
-- (EGVec2)location {
+- (GEVec2)location {
     return [self locationForDepth:0.0];
 }
 
-- (EGVec2)locationForDepth:(CGFloat)depth {
+- (GEVec2)locationForDepth:(CGFloat)depth {
     if([_camera isEmpty]) return [self locationInView];
     else return [[_camera get] translateWithViewSize:_viewSize viewPoint:[self locationInView]];
 }
@@ -119,19 +119,19 @@ static ODClassType* _EGEvent_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGEvent* o = ((EGEvent*)(other));
-    return EGVec2Eq(self.viewSize, o.viewSize) && [self.camera isEqual:o.camera];
+    return GEVec2Eq(self.viewSize, o.viewSize) && [self.camera isEqual:o.camera];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + EGVec2Hash(self.viewSize);
+    hash = hash * 31 + GEVec2Hash(self.viewSize);
     hash = hash * 31 + [self.camera hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"viewSize=%@", EGVec2Description(self.viewSize)];
+    [description appendFormat:@"viewSize=%@", GEVec2Description(self.viewSize)];
     [description appendFormat:@", camera=%@", self.camera];
     [description appendString:@">"];
     return description;

@@ -1,6 +1,6 @@
 #import "objd.h"
 #import "CNTest.h"
-#import "EGVec.h"
+#import "GEVec.h"
 @class TRCarType;
 @class TRLevel;
 @class TRLevelFactory;

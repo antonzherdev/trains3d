@@ -1,17 +1,17 @@
 #import "objd.h"
 #import "EGTypes.h"
-#import "EGVec.h"
+#import "GEVec.h"
 @protocol EGCollisionShape;
-@class EGMatrix;
+@class GEMatrix;
 
 @class EGDynamicWorld;
 @class EGRigidBody;
 
 @interface EGDynamicWorld : NSObject<EGController>
-@property (nonatomic, readonly) EGVec3 gravity;
+@property (nonatomic, readonly) GEVec3 gravity;
 
-+ (id)dynamicWorldWithGravity:(EGVec3)gravity;
-- (id)initWithGravity:(EGVec3)gravity;
++ (id)dynamicWorldWithGravity:(GEVec3)gravity;
+- (id)initWithGravity:(GEVec3)gravity;
 - (ODClassType*)type;
 - (id<CNSeq>)bodies;
 - (void)addBody:(EGRigidBody*)body;
@@ -30,7 +30,7 @@
 @property (nonatomic, readonly) VoidRef obj;
 @property(nonatomic) float friction;
 @property(nonatomic) float bounciness;
-@property(nonatomic) EGVec3 angularVelocity;
+@property(nonatomic) GEVec3 angularVelocity;
 
 + (id)rigidBodyWithData:(id)data shape:(id<EGCollisionShape>)shape isKinematic:(BOOL)isKinematic mass:(float)mass;
 - (id)initWithData:(id)data shape:(id<EGCollisionShape>)shape isKinematic:(BOOL)isKinematic mass:(float)mass;
@@ -38,10 +38,10 @@
 + (EGRigidBody*)kinematicData:(id)data shape:(id<EGCollisionShape>)shape;
 + (EGRigidBody*)dynamicData:(id)data shape:(id<EGCollisionShape>)shape mass:(float)mass;
 + (EGRigidBody*)staticalData:(id)data shape:(id<EGCollisionShape>)shape;
-- (EGMatrix*)matrix;
-- (void)setMatrix:(EGMatrix*)matrix;
-- (EGVec3)velocity;
-- (void)setVelocity:(EGVec3)velocity;
+- (GEMatrix *)matrix;
+- (void)setMatrix:(GEMatrix *)matrix;
+- (GEVec3)velocity;
+- (void)setVelocity:(GEVec3)velocity;
 + (ODClassType*)type;
 @end
 

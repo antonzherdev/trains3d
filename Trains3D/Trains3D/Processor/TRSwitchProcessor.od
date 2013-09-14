@@ -7,22 +7,22 @@ class TRSwitchProcessor(level : TRLevel) extends EGMouseProcessor {
 
     private val index : EGRectIndex<(TRRailConnector, bool)> = EGRectIndex(
         [
-            (EGRect(-0.1, 0.2, 0.2, 0.3), (TRRailConnector.top, false)),
-            (EGRect(-0.1, 0.2, -0.5, 0.3), (TRRailConnector.bottom, false)),
-            (EGRect(-0.5, 0.3, -0.1, 0.2), (TRRailConnector.left, false)),
-            (EGRect(0.2, 0.3, -0.1, 0.2), (TRRailConnector.right, false)),
+            (Rect(-0.1, 0.2, 0.2, 0.3), (TRRailConnector.top, false)),
+            (Rect(-0.1, 0.2, -0.5, 0.3), (TRRailConnector.bottom, false)),
+            (Rect(-0.5, 0.3, -0.1, 0.2), (TRRailConnector.left, false)),
+            (Rect(0.2, 0.3, -0.1, 0.2), (TRRailConnector.right, false)),
 
-            (EGRect(0.15, 0.1, 0.4, 0.1), (TRRailConnector.top, true)),
-            (EGRect(-0.25, 0.1, -0.5, 0.1), (TRRailConnector.bottom, true)),
-            (EGRect(-0.5, 0.1, 0.15, 0.1), (TRRailConnector.left, true)),
-            (EGRect(0.4, 0.1, -0.25, 0.1), (TRRailConnector.right, true))
+            (Rect(0.15, 0.1, 0.4, 0.1), (TRRailConnector.top, true)),
+            (Rect(-0.25, 0.1, -0.5, 0.1), (TRRailConnector.bottom, true)),
+            (Rect(-0.5, 0.1, 0.15, 0.1), (TRRailConnector.left, true)),
+            (Rect(0.4, 0.1, -0.25, 0.1), (TRRailConnector.right, true))
         ]
     )
     private var downed : TRRailroadConnectorContent? = nil
 
     def mouseDown(event : EGEvent) = {
         val location = event.location
-        val tile : EGVec2I = location
+        val tile : Vec2I = location
         val relPoint = location.sub(tile)
         downed = index[relPoint].flatMap(v -> {
             val content = level.railroad.contentIn(tile, connector = v.a)

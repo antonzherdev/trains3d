@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
 stub object EGText {
-    def egTextGlutDraw(text : string, font : uint, position : EGVec2)
+    def egTextGlutDraw(text : string, font : uint, position : Vec2)
     val GLUT_BITMAP_HELVETICA_18 : uint
 }

@@ -1,6 +1,6 @@
 #import "objd.h"
 #import "EGTypes.h"
-#import "EGVec.h"
+#import "GEVec.h"
 @class TRRailroad;
 @class TRRailroadBuilder;
 @class EGMeshModel;
@@ -10,7 +10,7 @@
 @class EGColorSource;
 @class EGStandardMaterial;
 @class TRRail;
-@class EGMatrix;
+@class GEMatrix;
 @class EGMatrixModel;
 @class TRRailForm;
 @class EGMatrixStack;

@@ -1,6 +1,6 @@
 #import "objd.h"
 #import "EGShader.h"
-#import "EGVec.h"
+#import "GEVec.h"
 @class EG;
 @class EGContext;
 @class EGEnvironment;
@@ -14,7 +14,7 @@
 @class EGColorSourceTexture;
 @class EGTexture;
 @class EGColorSourceColor;
-@class EGMatrix;
+@class GEMatrix;
 @class EGSimpleMaterial;
 
 @class EGStandardShaderSystem;

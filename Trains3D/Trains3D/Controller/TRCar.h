@@ -1,13 +1,13 @@
 #import "objd.h"
-#import "EGVec.h"
+#import "GEVec.h"
 @protocol EGCollisionShape;
 @class EGCollisionBox2d;
 @class EGCollisionBox;
 @class TRTrain;
 @class EGCollisionBody;
 @class EGRigidBody;
-@class EGLineSegment;
-@class EGMatrix;
+@class GELineSegment;
+@class GEMatrix;
 @class TRRailPoint;
 
 @class TREngineType;
@@ -16,10 +16,10 @@
 @class TRCarType;
 
 @interface TREngineType : NSObject
-@property (nonatomic, readonly) EGVec3 tubePos;
+@property (nonatomic, readonly) GEVec3 tubePos;
 
-+ (id)engineTypeWithTubePos:(EGVec3)tubePos;
-- (id)initWithTubePos:(EGVec3)tubePos;
++ (id)engineTypeWithTubePos:(GEVec3)tubePos;
+- (id)initWithTubePos:(GEVec3)tubePos;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -59,7 +59,7 @@
 - (EGRigidBody*)dynamicBody;
 - (TRCarPosition*)position;
 - (void)setPosition:(TRCarPosition*)position;
-- (EGVec2)midPoint;
+- (GEVec2)midPoint;
 + (ODClassType*)type;
 @end
 
@@ -69,7 +69,7 @@
 @property (nonatomic, readonly) TRRailPoint* head;
 @property (nonatomic, readonly) TRRailPoint* tail;
 @property (nonatomic, readonly) TRRailPoint* backConnector;
-@property (nonatomic, readonly) EGLineSegment* line;
+@property (nonatomic, readonly) GELineSegment* line;
 
 + (id)carPositionWithFrontConnector:(TRRailPoint*)frontConnector head:(TRRailPoint*)head tail:(TRRailPoint*)tail backConnector:(TRRailPoint*)backConnector;
 - (id)initWithFrontConnector:(TRRailPoint*)frontConnector head:(TRRailPoint*)head tail:(TRRailPoint*)tail backConnector:(TRRailPoint*)backConnector;

@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "EGVec.h"
+#import "GEVec.h"
 
 @class EGCollision;
 @class EGContact;
@@ -18,11 +18,11 @@
 
 
 @interface EGContact : NSObject
-@property (nonatomic, readonly) EGVec3 a;
-@property (nonatomic, readonly) EGVec3 b;
+@property (nonatomic, readonly) GEVec3 a;
+@property (nonatomic, readonly) GEVec3 b;
 
-+ (id)contactWithA:(EGVec3)a b:(EGVec3)b;
-- (id)initWithA:(EGVec3)a b:(EGVec3)b;
++ (id)contactWithA:(GEVec3)a b:(GEVec3)b;
+- (id)initWithA:(GEVec3)a b:(GEVec3)b;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

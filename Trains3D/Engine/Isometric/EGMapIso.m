@@ -4,8 +4,8 @@
 #import "EGGL.h"
 #import "EGMaterial.h"
 @implementation EGMapSso{
-    EGVec2I _size;
-    EGRectI _limits;
+    GEVec2I _size;
+    GERectI _limits;
     id<CNSeq> _fullTiles;
     id<CNSeq> _partialTiles;
     id<CNSeq> _allTiles;
@@ -18,21 +18,21 @@ static ODClassType* _EGMapSso_type;
 @synthesize partialTiles = _partialTiles;
 @synthesize allTiles = _allTiles;
 
-+ (id)mapSsoWithSize:(EGVec2I)size {
++ (id)mapSsoWithSize:(GEVec2I)size {
     return [[EGMapSso alloc] initWithSize:size];
 }
 
-- (id)initWithSize:(EGVec2I)size {
+- (id)initWithSize:(GEVec2I)size {
     self = [super init];
     __weak EGMapSso* _weakSelf = self;
     if(self) {
         _size = size;
-        _limits = egRectINewXYXX2YY2(((CGFloat)((1 - _size.y) / 2 - 1)), ((CGFloat)((2 * _size.x + _size.y - 3) / 2 + 1)), ((CGFloat)((1 - _size.x) / 2 - 1)), ((CGFloat)((_size.x + 2 * _size.y - 3) / 2 + 1)));
+        _limits = geRectINewXYXX2YY2(((CGFloat)((1 - _size.y) / 2 - 1)), ((CGFloat)((2 * _size.x + _size.y - 3) / 2 + 1)), ((CGFloat)((1 - _size.x) / 2 - 1)), ((CGFloat)((_size.x + 2 * _size.y - 3) / 2 + 1)));
         _fullTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
-            return [_weakSelf isFullTile:uwrap(EGVec2I, _)];
+            return [_weakSelf isFullTile:uwrap(GEVec2I, _)];
         }] toArray];
         _partialTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
-            return [_weakSelf isPartialTile:uwrap(EGVec2I, _)];
+            return [_weakSelf isPartialTile:uwrap(GEVec2I, _)];
         }] toArray];
         _allTiles = [_fullTiles arrayByAddingItem:_partialTiles];
     }
@@ -45,17 +45,17 @@ static ODClassType* _EGMapSso_type;
     _EGMapSso_type = [ODClassType classTypeWithCls:[EGMapSso class]];
 }
 
-- (BOOL)isFullTile:(EGVec2I)tile {
+- (BOOL)isFullTile:(GEVec2I)tile {
     return tile.y + tile.x >= 0 && tile.y - tile.x <= _size.y - 1 && tile.y + tile.x <= _size.x + _size.y - 2 && tile.y - tile.x >= -_size.x + 1;
 }
 
-- (BOOL)isPartialTile:(EGVec2I)tile {
+- (BOOL)isPartialTile:(GEVec2I)tile {
     return tile.y + tile.x >= -1 && tile.y - tile.x <= _size.y && tile.y + tile.x <= _size.x + _size.y - 1 && tile.y - tile.x >= -_size.x && (tile.y + tile.x == -1 || tile.y - tile.x == _size.y || tile.y + tile.x == _size.x + _size.y - 1 || tile.y - tile.x == -_size.x);
 }
 
 - (CNChain*)allPosibleTiles {
-    return [[[[CNRange rangeWithStart:_limits.x end:egRectIX2(_limits) step:1] chain] mul:[CNRange rangeWithStart:_limits.y end:egRectIY2(_limits) step:1]] map:^id(CNTuple* _) {
-        return wrap(EGVec2I, EGVec2IMake(unumi(_.a), unumi(_.b)));
+    return [[[[CNRange rangeWithStart:_limits.x end:geRectIX2(_limits) step:1] chain] mul:[CNRange rangeWithStart:_limits.y end:geRectIY2(_limits) step:1]] map:^id(CNTuple* _) {
+        return wrap(GEVec2I, GEVec2IMake(unumi(_.a), unumi(_.b)));
     }];
 }
 
@@ -68,8 +68,8 @@ static ODClassType* _EGMapSso_type;
     }
 }
 
-- (EGRectI)cutRectForTile:(EGVec2I)tile {
-    return egRectINewXYXX2YY2(((CGFloat)([self tileCutAxisLess:0 more:tile.x + tile.y])), ((CGFloat)([self tileCutAxisLess:tile.x + tile.y more:_size.x + _size.y - 2])), ((CGFloat)([self tileCutAxisLess:tile.y - tile.x more:_size.y - 1])), ((CGFloat)([self tileCutAxisLess:-_size.x + 1 more:tile.y - tile.x])));
+- (GERectI)cutRectForTile:(GEVec2I)tile {
+    return geRectINewXYXX2YY2(((CGFloat)([self tileCutAxisLess:0 more:tile.x + tile.y])), ((CGFloat)([self tileCutAxisLess:tile.x + tile.y more:_size.x + _size.y - 2])), ((CGFloat)([self tileCutAxisLess:tile.y - tile.x more:_size.y - 1])), ((CGFloat)([self tileCutAxisLess:-_size.x + 1 more:tile.y - tile.x])));
 }
 
 - (ODClassType*)type {
@@ -92,18 +92,18 @@ static ODClassType* _EGMapSso_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGMapSso* o = ((EGMapSso*)(other));
-    return EGVec2IEq(self.size, o.size);
+    return GEVec2IEq(self.size, o.size);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + EGVec2IHash(self.size);
+    hash = hash * 31 + GEVec2IHash(self.size);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"size=%@", EGVec2IDescription(self.size)];
+    [description appendFormat:@"size=%@", GEVec2IDescription(self.size)];
     [description appendString:@">"];
     return description;
 }
@@ -142,11 +142,11 @@ static ODClassType* _EGMapSsoView_type;
 }
 
 - (EGMesh*)createPlane {
-    EGRectI limits = _map.limits;
+    GERectI limits = _map.limits;
     CGFloat l = limits.x - 2.5;
-    CGFloat r = egRectIX2(limits) + 0.5;
+    CGFloat r = geRectIX2(limits) + 0.5;
     CGFloat t = limits.y - 2.5;
-    CGFloat b = egRectIY2(limits) + 0.5;
+    CGFloat b = geRectIY2(limits) + 0.5;
     NSInteger w = limits.width + 3;
     NSInteger h = limits.height + 3;
     return [EGMesh applyVertexData:[ arrf4(32) {0, 0, 0, 1, 0, l, 0, b, w, 0, 0, 1, 0, r, 0, b, w, h, 0, 1, 0, r, 0, t, 0, h, 0, 1, 0, l, 0, t}] index:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];

@@ -16,8 +16,8 @@
 
 
 @interface EGEventEmulateMouseMove : EGEvent
-- (id)initWithType:(NSUInteger)type locationInView:(EGVec2)locationInView viewSize:(EGVec2)viewSize camera:(id)camera;
+- (id)initWithType:(NSUInteger)type locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize camera:(id)camera;
 
-+ (id)eventWithType:(NSUInteger)type locationInView:(EGVec2)locationInView viewSize:(EGVec2)viewSize camera:(id)camera;
++ (id)eventWithType:(NSUInteger)type locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize camera:(id)camera;
 
 @end

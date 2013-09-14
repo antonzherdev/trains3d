@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "EGVec.h"
+#import "GEVec.h"
 
 @class TRRailPoint;
 @class TRRailPointCorrection;
@@ -13,7 +13,7 @@
 
 + (TRRailConnector*)connectorForX:(NSInteger)x y:(NSInteger)y;
 - (TRRailConnector*)otherSideConnector;
-- (EGVec2I)nextTile:(EGVec2I)tile;
+- (GEVec2I)nextTile:(GEVec2I)tile;
 + (TRRailConnector*)left;
 + (TRRailConnector*)bottom;
 + (TRRailConnector*)top;
@@ -27,7 +27,7 @@
 @property (nonatomic, readonly) TRRailConnector* end;
 @property (nonatomic, readonly) BOOL isTurn;
 @property (nonatomic, readonly) CGFloat length;
-@property (nonatomic, readonly) EGVec2(^pointFun)(CGFloat);
+@property (nonatomic, readonly) GEVec2(^pointFun)(CGFloat);
 
 + (TRRailForm*)formForConnector1:(TRRailConnector*)connector1 connector2:(TRRailConnector*)connector2;
 + (TRRailForm*)leftBottom;
@@ -41,14 +41,14 @@
 
 
 @interface TRRailPoint : NSObject
-@property (nonatomic, readonly) EGVec2I tile;
+@property (nonatomic, readonly) GEVec2I tile;
 @property (nonatomic, readonly) TRRailForm* form;
 @property (nonatomic, readonly) CGFloat x;
 @property (nonatomic, readonly) BOOL back;
-@property (nonatomic, readonly) EGVec2 point;
+@property (nonatomic, readonly) GEVec2 point;
 
-+ (id)railPointWithTile:(EGVec2I)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back;
-- (id)initWithTile:(EGVec2I)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back;
++ (id)railPointWithTile:(GEVec2I)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back;
+- (id)initWithTile:(GEVec2I)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back;
 - (ODClassType*)type;
 - (TRRailPoint*)addX:(CGFloat)x;
 - (TRRailConnector*)startConnector;
@@ -57,7 +57,7 @@
 - (TRRailPointCorrection*)correct;
 - (TRRailPoint*)invert;
 - (TRRailPoint*)setX:(CGFloat)x;
-- (EGVec2I)nextTile;
+- (GEVec2I)nextTile;
 + (ODClassType*)type;
 @end
 

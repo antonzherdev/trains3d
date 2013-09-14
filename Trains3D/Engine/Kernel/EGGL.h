@@ -1,8 +1,8 @@
 #import <GLUT/glut.h>
 #import "EGTypes.h"
-#import "EGRect.h"
+#import "GERect.h"
 
-@class EGMatrix;
+@class GEMatrix;
 
 static inline void egRotate(CGFloat angle, CGFloat x, CGFloat y, CGFloat z) {
     glRotated(angle, x, y, z);
@@ -29,7 +29,7 @@ static inline void egClear() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-static inline void egViewport(EGRectI rect) {
+static inline void egViewport(GERectI rect) {
     glViewport((GLint)rect.x, (GLint)rect.y, (GLsizei)rect.width, (GLsizei)rect.height);
 }
 
@@ -37,7 +37,7 @@ static inline void egViewport(EGRectI rect) {
 static inline void egUniformColor(GLuint location, EGColor color ) {
     glUniform4f(location, (GLfloat) color.r, (GLfloat) color.g, (GLfloat) color.b, (GLfloat) color.a);
 }
-static inline void egUniformVec3(GLuint location, EGVec3 vec3 ) {
+static inline void egUniformVec3(GLuint location, GEVec3 vec3 ) {
     glUniform3f(location, (GLfloat) vec3.x, (GLfloat) vec3.y, (GLfloat) vec3.z);
 }
 
@@ -132,4 +132,4 @@ static inline void egColor(EGColor self) {
     applyVertexData:[arrp(float, numf4, NAME ## _vertexcount*8) NAME ## _vertex] \
     index: [arrp(unsigned int, numui4, NAME ## _polygoncount*3) NAME ## _index]]
 
-EGVec2 egLoadTextureFromFile(GLuint target, NSString* file);
+GEVec2 egLoadTextureFromFile(GLuint target, NSString* file);

@@ -1,13 +1,13 @@
 #import "objd.h"
 #import "CNTest.h"
-#import "EGVec.h"
-@class EGLineSegment;
-@class EGBentleyOttmann;
-@class EGIntersection;
+#import "GEVec.h"
+@class GELineSegment;
+@class GEBentleyOttmann;
+@class GEIntersection;
 
-@class EGBentleyOttmannTest;
+@class GEBentleyOttmannTest;
 
-@interface EGBentleyOttmannTest : CNTestCase
+@interface GEBentleyOttmannTest : CNTestCase
 + (id)bentleyOttmannTest;
 - (id)init;
 - (ODClassType*)type;

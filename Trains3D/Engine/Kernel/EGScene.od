@@ -1,7 +1,7 @@
 package com.antonzherdev.eg
 
 class EGScene(val controller : EGController, val layers : [EGLayer]) {
-    def drawWith(viewSize : EGVec2) {
+    def drawWith(viewSize : Vec2) {
         layers.for(_.drawWith(viewSize))
     }
 

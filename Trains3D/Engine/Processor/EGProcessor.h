@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "EGVec.h"
+#import "GEVec.h"
 @protocol EGCamera;
 
 @class EGEvent;
@@ -28,16 +28,16 @@
 
 
 @interface EGEvent : NSObject
-@property (nonatomic, readonly) EGVec2 viewSize;
+@property (nonatomic, readonly) GEVec2 viewSize;
 @property (nonatomic, readonly) id camera;
 
-+ (id)eventWithViewSize:(EGVec2)viewSize camera:(id)camera;
-- (id)initWithViewSize:(EGVec2)viewSize camera:(id)camera;
++ (id)eventWithViewSize:(GEVec2)viewSize camera:(id)camera;
+- (id)initWithViewSize:(GEVec2)viewSize camera:(id)camera;
 - (ODClassType*)type;
 - (EGEvent*)setCamera:(id)camera;
-- (EGVec2)locationInView;
-- (EGVec2)location;
-- (EGVec2)locationForDepth:(CGFloat)depth;
+- (GEVec2)locationInView;
+- (GEVec2)location;
+- (GEVec2)locationForDepth:(CGFloat)depth;
 - (BOOL)isLeftMouseDown;
 - (BOOL)isLeftMouseDrag;
 - (BOOL)isLeftMouseUp;

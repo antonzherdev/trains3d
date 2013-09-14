@@ -1,6 +1,6 @@
 #import "EGCollisionBody.h"
 
-#import "EGMatrix.h"
+#import "GEMatrix.h"
 
 #include "btBulletCollisionCommon.h"
 #include "btBox2dShape.h"
@@ -9,7 +9,7 @@
     id _data;
     id<EGCollisionShape> _shape;
     BOOL _isKinematic;
-    EGMatrix* __matrix;
+    GEMatrix * __matrix;
     btCollisionObject* _obj;
 }
 @synthesize shape = _shape;
@@ -32,7 +32,7 @@ static ODClassType* _EGCollisionBody_type;
         _shape = shape;
         _isKinematic = isKinematic;
         _obj = nil;
-        __matrix = [EGMatrix identity];
+        __matrix = [GEMatrix identity];
         _obj = new btCollisionObject;
         _obj->setUserPointer((__bridge void *)self);
         int f = _obj->getCollisionFlags();
@@ -51,11 +51,11 @@ static ODClassType* _EGCollisionBody_type;
     _EGCollisionBody_type = [ODClassType classTypeWithCls:[EGCollisionBody class]];
 }
 
-- (EGMatrix*)matrix {
+- (GEMatrix *)matrix {
     return __matrix;
 }
 
-- (void)setMatrix:(EGMatrix*)matrix {
+- (void)setMatrix:(GEMatrix *)matrix {
     __matrix = matrix;
     _obj->getWorldTransform().setFromOpenGLMatrix(__matrix.array);
 }
@@ -96,18 +96,18 @@ static ODClassType* _EGCollisionBody_type;
 
 
 @implementation EGCollisionBox{
-    EGVec3 _halfSize;
+    GEVec3 _halfSize;
     btBoxShape* _box;
 }
 static ODClassType* _EGCollisionBox_type;
 @synthesize halfSize = _halfSize;
 
 
-+ (id)collisionBoxWithHalfSize:(EGVec3)halfSize {
++ (id)collisionBoxWithHalfSize:(GEVec3)halfSize {
     return [[EGCollisionBox alloc] initWithHalfSize:halfSize];
 }
 
-- (id)initWithHalfSize:(EGVec3)halfSize {
+- (id)initWithHalfSize:(GEVec3)halfSize {
     self = [super init];
     if(self) {
         _halfSize = halfSize;
@@ -118,7 +118,7 @@ static ODClassType* _EGCollisionBox_type;
 }
 
 + (EGCollisionBox*)applyX:(float)x y:(float)y z:(float)z {
-    return [EGCollisionBox collisionBoxWithHalfSize:EGVec3Make(x, y, z)];
+    return [EGCollisionBox collisionBoxWithHalfSize:GEVec3Make(x, y, z)];
 }
 
 - (VoidRef)shape {
@@ -150,18 +150,18 @@ static ODClassType* _EGCollisionBox_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGCollisionBox* o = ((EGCollisionBox*)(other));
-    return EGVec3Eq(self.halfSize, o.halfSize);
+    return GEVec3Eq(self.halfSize, o.halfSize);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + EGVec3Hash(self.halfSize);
+    hash = hash * 31 + GEVec3Hash(self.halfSize);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"halfSize=%@", EGVec3Description(self.halfSize)];
+    [description appendFormat:@"halfSize=%@", GEVec3Description(self.halfSize)];
     [description appendString:@">"];
     return description;
 }
@@ -169,18 +169,18 @@ static ODClassType* _EGCollisionBox_type;
 @end
 
 @implementation EGCollisionBox2d{
-    EGVec2 _halfSize;
+    GEVec2 _halfSize;
     btBox2dShape* _box;
 }
 static ODClassType* _EGCollisionBox2d_type;
 @synthesize halfSize = _halfSize;
 
 
-+ (id)collisionBox2dWithHalfSize:(EGVec2)halfSize {
++ (id)collisionBox2dWithHalfSize:(GEVec2)halfSize {
     return [[EGCollisionBox2d alloc] initWithHalfSize:halfSize];
 }
 
-- (id)initWithHalfSize:(EGVec2)halfSize {
+- (id)initWithHalfSize:(GEVec2)halfSize {
     self = [super init];
     if(self) {
         _halfSize = halfSize;
@@ -191,7 +191,7 @@ static ODClassType* _EGCollisionBox2d_type;
 }
 
 + (EGCollisionBox2d*)applyX:(float)x y:(float)y{
-    return [EGCollisionBox2d collisionBox2dWithHalfSize:EGVec2Make(x, y)];
+    return [EGCollisionBox2d collisionBox2dWithHalfSize:GEVec2Make(x, y)];
 }
 
 - (VoidRef)shape {
@@ -223,18 +223,18 @@ static ODClassType* _EGCollisionBox2d_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGCollisionBox2d* o = ((EGCollisionBox2d*)(other));
-    return EGVec2Eq(self.halfSize, o.halfSize);
+    return GEVec2Eq(self.halfSize, o.halfSize);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + EGVec2Hash(self.halfSize);
+    hash = hash * 31 + GEVec2Hash(self.halfSize);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"halfSize=%@", EGVec2Description(self.halfSize)];
+    [description appendFormat:@"halfSize=%@", GEVec2Description(self.halfSize)];
     [description appendString:@">"];
     return description;
 }
@@ -243,7 +243,7 @@ static ODClassType* _EGCollisionBox2d_type;
 
 
 @implementation EGCollisionPlane{
-    EGVec3 _normal;
+    GEVec3 _normal;
     float _distance;
     btStaticPlaneShape* _plane;
 }
@@ -251,11 +251,11 @@ static ODClassType* _EGCollisionPlane_type;
 @synthesize normal = _normal;
 @synthesize distance = _distance;
 
-+ (id)collisionPlaneWithNormal:(EGVec3)normal distance:(float)distance {
++ (id)collisionPlaneWithNormal:(GEVec3)normal distance:(float)distance {
     return [[EGCollisionPlane alloc] initWithNormal:normal distance:distance];
 }
 
-- (id)initWithNormal:(EGVec3)normal distance:(float)distance {
+- (id)initWithNormal:(GEVec3)normal distance:(float)distance {
     self = [super init];
     if(self) {
         _normal = normal;
@@ -295,19 +295,19 @@ static ODClassType* _EGCollisionPlane_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGCollisionPlane* o = ((EGCollisionPlane*)(other));
-    return EGVec3Eq(self.normal, o.normal) && eqf4(self.distance, o.distance);
+    return GEVec3Eq(self.normal, o.normal) && eqf4(self.distance, o.distance);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + EGVec3Hash(self.normal);
+    hash = hash * 31 + GEVec3Hash(self.normal);
     hash = hash * 31 + float4Hash(self.distance);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"normal=%@", EGVec3Description(self.normal)];
+    [description appendFormat:@"normal=%@", GEVec3Description(self.normal)];
     [description appendFormat:@", distance=%f", self.distance];
     [description appendString:@">"];
     return description;

@@ -1,10 +1,10 @@
 #import "objd.h"
-#import "EGVec.h"
+#import "GEVec.h"
 #import "EGTypes.h"
 @class EGMesh;
 @class EG;
 @class TRCity;
-@class EGMatrix;
+@class GEMatrix;
 @class EGMatrixModel;
 @class TRCityAngle;
 @class TRColor;

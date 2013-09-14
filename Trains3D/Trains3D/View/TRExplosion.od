@@ -5,7 +5,7 @@ import core.ODMath._
 import com.antonzherdev.eg.EGProgress._
 
 
-class TRExplosion(position : EGVec3, size : float4) extends EGController {
+class TRExplosion(position : Vec3, size : float4) extends EGController {
     val flame = TRExplosionFlame(position, size).init
     def updateWith(delta : float) {
         flame.updateWith(delta)
@@ -17,7 +17,7 @@ class TRExplosion(position : EGVec3, size : float4) extends EGController {
     }
 }
 
-class TRExplosionFlame(position : EGVec3, size : float4) extends EGBillboardParticleSystem {
+class TRExplosionFlame(position : Vec3, size : float4) extends EGBillboardParticleSystem {
     def generateParticle : EGBillboardParticle = TRExplosionFlameParticle(position, size)
 
     def init : TRExplosionFlame = {
@@ -26,34 +26,34 @@ class TRExplosionFlame(position : EGVec3, size : float4) extends EGBillboardPart
     }
 }
 
-class TRExplosionFlameParticle(size : float4, startShift : EGVec2, shift : EGVec2) extends EGBillboardParticle(2) {
-    static val startColor = EGVec4(1, 0.4, 0, 0.3)
-    static val textureQuadrant : EGQuadrant = EGQuad.identity.mul(0.5).quadrant
-    static def apply(position : EGVec3, size : float4) : TRExplosionFlameParticle = {
+class TRExplosionFlameParticle(size : float4, startShift : Vec2, shift : Vec2) extends EGBillboardParticle(2) {
+    static val startColor = Vec4(1, 0.4, 0, 0.3)
+    static val textureQuadrant : Quadrant = Quad.identity.mul(0.5).quadrant
+    static def apply(position : Vec3, size : float4) : TRExplosionFlameParticle = {
         val startShift = randomVec2.mul(size*0.2)
         val ret = TRExplosionFlameParticle(size, startShift, shift = startShift.add(randomVec2.mul(size*0.2)))
         ret.position = position
         ret.color = startColor
         ret.uv = textureQuadrant.randomQuad
-        ret.model = EGQuad(0)
+        ret.model = Quad(0)
         ret
     }
 
     /*val animation = {
-        val bigQuad = EGQuad(size)
+        val bigQuad = Quad(size)
         compile([
-            gap(0, 0.1) >> progress(0, size) >> model = EGQuad(_),
-            gap(0.1, 1) >> progress(EGVec2(0, 0), shift) >> model = bigQuad.add(_)
+            gap(0, 0.1) >> progress(0, size) >> model = Quad(_),
+            gap(0.1, 1) >> progress(Vec2(0, 0), shift) >> model = bigQuad.add(_)
         ])
     } */
 
-//    val animation = gap(0, 0.1) >> progress(0, size) >> model = EGQuad(_)
+//    val animation = gap(0, 0.1) >> progress(0, size) >> model = Quad(_)
     val animation =
     {
-        val bigQuad = EGQuad(size)
-            gap(0, 0.1) >> progress(f4 = 0, size) >> model = EGQuad(_).add(startShift)
+        val bigQuad = Quad(size)
+            gap(0, 0.1) >> progress(f4 = 0, size) >> model = Quad(_).add(startShift)
         *|* gap(0.1, 1) >> progress(vec2 = startShift, shift) >> model = bigQuad.add(_)
-        *|* gap(0.05, 1) >> progress(vec4 = startColor, EGVec4(0, 0, 0, 0)) >> color = _
+        *|* gap(0.05, 1) >> progress(vec4 = startColor, Vec4(0, 0, 0, 0)) >> color = _
     }
     def update(t : float4, dt : float4) {
         animation(t)

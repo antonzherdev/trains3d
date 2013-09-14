@@ -2,24 +2,24 @@ package com.antonzherdev.eg
 
 import com.antonzherdev.eg.EGGL._
 
-class EGMapSso(size : EGVec2I) {
+class EGMapSso(size : Vec2I) {
     static val ISO = 0.70710676908493
 
-    val limits = EGRectI.newXY((1 - size.y)/2 - 1,
+    val limits = RectI.newXY((1 - size.y)/2 - 1,
                          (2*size.x + size.y - 3)/2 + 1,
                          (1 - size.x)/2 - 1,
                          (size.x + 2*size.y - 3)/2 + 1)
-    val fullTiles : [EGVec2I] = allPosibleTiles.filter(isFull(_)).toArray
-    val partialTiles : [EGVec2I] = allPosibleTiles.filter(isPartial(_)).toArray
-    val allTiles : [EGVec2I] = fullTiles + partialTiles
+    val fullTiles : [Vec2I] = allPosibleTiles.filter(isFull(_)).toArray
+    val partialTiles : [Vec2I] = allPosibleTiles.filter(isPartial(_)).toArray
+    val allTiles : [Vec2I] = fullTiles + partialTiles
 
-    def isFull(tile : EGVec2I) : bool =
+    def isFull(tile : Vec2I) : bool =
         tile.y + tile.x >= 0 //left
         && tile.y - tile.x <= size.y - 1 //top
         && tile.y + tile.x <= size.x + size.y - 2 //right
         && tile.y - tile.x >= -size.x + 1
 
-    def isPartial(tile : EGVec2I) : bool =
+    def isPartial(tile : Vec2I) : bool =
         tile.y + tile.x >= -1 //left
         && tile.y - tile.x <= size.y //top
         && tile.y + tile.x <= size.x + size.y - 1 //right
@@ -30,17 +30,17 @@ class EGMapSso(size : EGVec2I) {
             || tile.y - tile.x == -size.x //bottom
         )
 
-    private def allPosibleTiles : CNChain<EGVec2I> =
+    private def allPosibleTiles : CNChain<Vec2I> =
         CNRange(start = limits.x, end = limits.x2, step = 1).chain
             .mul<int>(CNRange(start = limits.y, end = limits.y2, step = 1))
-            .map(EGVec2I(_.a, _.b))
+            .map(Vec2I(_.a, _.b))
 
     private def tileCutAxis(less : int, more : int) : int =
         if(less == more) 1
         else if(less < more) 0
         else 2
 
-    def cutRectFor(tile : EGVec2I) = EGRectI.newXY(
+    def cutRectFor(tile : Vec2I) = RectI.newXY(
         tileCutAxis(0, tile.x + tile.y),
         tileCutAxis(tile.x + tile.y, size.x + size.y - 2),
         tileCutAxis(tile.y - tile.x, size.y - 1),

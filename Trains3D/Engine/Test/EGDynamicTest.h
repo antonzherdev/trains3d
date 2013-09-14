@@ -1,10 +1,10 @@
 #import "objd.h"
 #import "CNTest.h"
-#import "EGVec.h"
+#import "GEVec.h"
 @class EGDynamicWorld;
 @class EGCollisionBox;
 @class EGRigidBody;
-@class EGMatrix;
+@class GEMatrix;
 @class EGCollisionPlane;
 
 @class EGDynamicTest;

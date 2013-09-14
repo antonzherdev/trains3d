@@ -8,7 +8,7 @@
 
 SPEC_BEGIN(TRLevelSpec)
     describe(@"TRLevel", ^{
-        EGVec2I mapSize = EGVec2IMake(1, 3);
+        GEVec2I mapSize = GEVec2IMake(1, 3);
         it(@"should generare two cities in a time of starting.\n"
                 "These cities should be generated on an edge of the map.\n"
                 "These cities should be generated in different tiles.\n"
@@ -22,14 +22,14 @@ SPEC_BEGIN(TRLevelSpec)
 
                     //This cities should be generated on an edge of the map.
                     [[level cities] forEach:^(TRCity* x) {
-                        EGVec2I tile = x.tile;
+                        GEVec2I tile = x.tile;
                         BOOL isPartial = [level.map isPartialTile:tile];
                         [[theValue(isPartial) should] beTrue];
                     }];
 
                     //This cities should be generated in different tiles.
                     NSSet *tilesSet = [[[[level cities] chain] map:^id(TRCity *x) {
-                        return wrap(EGVec2I, x.tile);
+                        return wrap(GEVec2I, x.tile);
                     }] toSet];
                     [[tilesSet should] haveCountOf:2];
 

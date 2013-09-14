@@ -1,7 +1,7 @@
 package com.antonzherdev.eg
 
 class EGCollision<T>(bodies : CNPair<EGCollisionBody<T>>, contacts : [EGContact])
-class EGContact(a : EGVec3, b : EGVec3)
+class EGContact(a : Vec3, b : Vec3)
 
 class EGIndexFunFilteredIterable<T>(maxCount : uint, f : uint -> T?) extends CNIterable<T> {
     def iterator : CNIterator<T> = EGIndexFunFilteredIterator<T>(maxCount, f)

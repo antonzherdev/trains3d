@@ -1,10 +1,10 @@
-#import "EGFigure.h"
+#import "GEFigure.h"
 
-@implementation EGLine
-static ODClassType* _EGLine_type;
+@implementation GELine
+static ODClassType* _GELine_type;
 
 + (id)line {
-    return [[EGLine alloc] init];
+    return [[GELine alloc] init];
 }
 
 - (id)init {
@@ -15,31 +15,31 @@ static ODClassType* _EGLine_type;
 
 + (void)initialize {
     [super initialize];
-    _EGLine_type = [ODClassType classTypeWithCls:[EGLine class]];
+    _GELine_type = [ODClassType classTypeWithCls:[GELine class]];
 }
 
-+ (EGLine*)applySlope:(CGFloat)slope point:(EGVec2)point {
-    return [EGSlopeLine slopeLineWithSlope:slope constant:[EGLine calculateConstantWithSlope:slope point:point]];
++ (GELine*)applySlope:(CGFloat)slope point:(GEVec2)point {
+    return [GESlopeLine slopeLineWithSlope:slope constant:[GELine calculateConstantWithSlope:slope point:point]];
 }
 
-+ (EGLine*)applyP0:(EGVec2)p0 p1:(EGVec2)p1 {
++ (GELine*)applyP0:(GEVec2)p0 p1:(GEVec2)p1 {
     if(eqf4(p0.x, p1.x)) {
-        return [EGVerticalLine verticalLineWithX:((CGFloat)(p0.x))];
+        return [GEVerticalLine verticalLineWithX:((CGFloat)(p0.x))];
     } else {
-        CGFloat slope = [EGLine calculateSlopeWithP0:p0 p1:p1];
-        return [EGSlopeLine slopeLineWithSlope:slope constant:[EGLine calculateConstantWithSlope:slope point:p0]];
+        CGFloat slope = [GELine calculateSlopeWithP0:p0 p1:p1];
+        return [GESlopeLine slopeLineWithSlope:slope constant:[GELine calculateConstantWithSlope:slope point:p0]];
     }
 }
 
-+ (CGFloat)calculateSlopeWithP0:(EGVec2)p0 p1:(EGVec2)p1 {
++ (CGFloat)calculateSlopeWithP0:(GEVec2)p0 p1:(GEVec2)p1 {
     return ((CGFloat)((p1.y - p0.y) / (p1.x - p0.x)));
 }
 
-+ (CGFloat)calculateConstantWithSlope:(CGFloat)slope point:(EGVec2)point {
++ (CGFloat)calculateConstantWithSlope:(CGFloat)slope point:(GEVec2)point {
     return ((CGFloat)(point.y - slope * point.x));
 }
 
-- (BOOL)containsPoint:(EGVec2)point {
+- (BOOL)containsPoint:(GEVec2)point {
     @throw @"Method contains is abstract";
 }
 
@@ -51,15 +51,15 @@ static ODClassType* _EGLine_type;
     @throw @"Method isHorizontal is abstract";
 }
 
-- (id)intersectionWithLine:(EGLine*)line {
+- (id)intersectionWithLine:(GELine*)line {
     @throw @"Method intersectionWith is abstract";
 }
 
-- (CGFloat)xIntersectionWithLine:(EGLine*)line {
+- (CGFloat)xIntersectionWithLine:(GELine*)line {
     @throw @"Method xIntersectionWith is abstract";
 }
 
-- (BOOL)isRightPoint:(EGVec2)point {
+- (BOOL)isRightPoint:(GEVec2)point {
     @throw @"Method isRight is abstract";
 }
 
@@ -79,16 +79,16 @@ static ODClassType* _EGLine_type;
     return [self angle] * 180 / M_PI;
 }
 
-- (EGLine*)perpendicularWithPoint:(EGVec2)point {
+- (GELine*)perpendicularWithPoint:(GEVec2)point {
     @throw @"Method perpendicularWith is abstract";
 }
 
 - (ODClassType*)type {
-    return [EGLine type];
+    return [GELine type];
 }
 
 + (ODClassType*)type {
-    return _EGLine_type;
+    return _GELine_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -114,16 +114,16 @@ static ODClassType* _EGLine_type;
 @end
 
 
-@implementation EGSlopeLine{
+@implementation GESlopeLine{
     CGFloat _slope;
     CGFloat _constant;
 }
-static ODClassType* _EGSlopeLine_type;
+static ODClassType* _GESlopeLine_type;
 @synthesize slope = _slope;
 @synthesize constant = _constant;
 
 + (id)slopeLineWithSlope:(CGFloat)slope constant:(CGFloat)constant {
-    return [[EGSlopeLine alloc] initWithSlope:slope constant:constant];
+    return [[GESlopeLine alloc] initWithSlope:slope constant:constant];
 }
 
 - (id)initWithSlope:(CGFloat)slope constant:(CGFloat)constant {
@@ -138,10 +138,10 @@ static ODClassType* _EGSlopeLine_type;
 
 + (void)initialize {
     [super initialize];
-    _EGSlopeLine_type = [ODClassType classTypeWithCls:[EGSlopeLine class]];
+    _GESlopeLine_type = [ODClassType classTypeWithCls:[GESlopeLine class]];
 }
 
-- (BOOL)containsPoint:(EGVec2)point {
+- (BOOL)containsPoint:(GEVec2)point {
     return eqf4(point.y, _slope * point.x + _constant);
 }
 
@@ -153,11 +153,11 @@ static ODClassType* _EGSlopeLine_type;
     return eqf(_slope, 0);
 }
 
-- (CGFloat)xIntersectionWithLine:(EGLine*)line {
+- (CGFloat)xIntersectionWithLine:(GELine*)line {
     if([line isVertical]) {
         return [line xIntersectionWithLine:self];
     } else {
-        EGSlopeLine* that = ((EGSlopeLine*)(line));
+        GESlopeLine* that = ((GESlopeLine*)(line));
         return (that.constant - _constant) / (_slope - that.slope);
     }
 }
@@ -166,22 +166,22 @@ static ODClassType* _EGSlopeLine_type;
     return _slope * x + _constant;
 }
 
-- (id)intersectionWithLine:(EGLine*)line {
-    if(!([line isVertical]) && eqf(((EGSlopeLine*)(line)).slope, _slope)) {
+- (id)intersectionWithLine:(GELine*)line {
+    if(!([line isVertical]) && eqf(((GESlopeLine*)(line)).slope, _slope)) {
         return [CNOption none];
     } else {
         CGFloat xInt = [self xIntersectionWithLine:line];
-        return [CNOption opt:wrap(EGVec2, EGVec2Make(((float)(xInt)), ((float)([self yForX:xInt]))))];
+        return [CNOption opt:wrap(GEVec2, GEVec2Make(((float)(xInt)), ((float)([self yForX:xInt]))))];
     }
 }
 
-- (BOOL)isRightPoint:(EGVec2)point {
+- (BOOL)isRightPoint:(GEVec2)point {
     if([self containsPoint:point]) return NO;
     else return point.y < [self yForX:((CGFloat)(point.x))];
 }
 
 - (id)moveWithDistance:(CGFloat)distance {
-    return [EGSlopeLine slopeLineWithSlope:_slope constant:_constant + distance];
+    return [GESlopeLine slopeLineWithSlope:_slope constant:_constant + distance];
 }
 
 - (CGFloat)angle {
@@ -190,17 +190,17 @@ static ODClassType* _EGSlopeLine_type;
     else return a;
 }
 
-- (EGLine*)perpendicularWithPoint:(EGVec2)point {
-    if(eqf(_slope, 0)) return [EGVerticalLine verticalLineWithX:((CGFloat)(point.x))];
-    else return [EGLine applySlope:-_slope point:point];
+- (GELine*)perpendicularWithPoint:(GEVec2)point {
+    if(eqf(_slope, 0)) return [GEVerticalLine verticalLineWithX:((CGFloat)(point.x))];
+    else return [GELine applySlope:-_slope point:point];
 }
 
 - (ODClassType*)type {
-    return [EGSlopeLine type];
+    return [GESlopeLine type];
 }
 
 + (ODClassType*)type {
-    return _EGSlopeLine_type;
+    return _GESlopeLine_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -210,7 +210,7 @@ static ODClassType* _EGSlopeLine_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSlopeLine* o = ((EGSlopeLine*)(other));
+    GESlopeLine* o = ((GESlopeLine*)(other));
     return eqf(self.slope, o.slope) && eqf(self.constant, o.constant);
 }
 
@@ -232,14 +232,14 @@ static ODClassType* _EGSlopeLine_type;
 @end
 
 
-@implementation EGVerticalLine{
+@implementation GEVerticalLine{
     CGFloat _x;
 }
-static ODClassType* _EGVerticalLine_type;
+static ODClassType* _GEVerticalLine_type;
 @synthesize x = _x;
 
 + (id)verticalLineWithX:(CGFloat)x {
-    return [[EGVerticalLine alloc] initWithX:x];
+    return [[GEVerticalLine alloc] initWithX:x];
 }
 
 - (id)initWithX:(CGFloat)x {
@@ -251,10 +251,10 @@ static ODClassType* _EGVerticalLine_type;
 
 + (void)initialize {
     [super initialize];
-    _EGVerticalLine_type = [ODClassType classTypeWithCls:[EGVerticalLine class]];
+    _GEVerticalLine_type = [ODClassType classTypeWithCls:[GEVerticalLine class]];
 }
 
-- (BOOL)containsPoint:(EGVec2)point {
+- (BOOL)containsPoint:(GEVec2)point {
     return eqf4(point.x, _x);
 }
 
@@ -266,16 +266,16 @@ static ODClassType* _EGVerticalLine_type;
     return NO;
 }
 
-- (CGFloat)xIntersectionWithLine:(EGLine*)line {
+- (CGFloat)xIntersectionWithLine:(GELine*)line {
     return _x;
 }
 
-- (id)intersectionWithLine:(EGLine*)line {
+- (id)intersectionWithLine:(GELine*)line {
     if([line isVertical]) return [CNOption none];
     else return [line intersectionWithLine:self];
 }
 
-- (BOOL)isRightPoint:(EGVec2)point {
+- (BOOL)isRightPoint:(GEVec2)point {
     return point.x > _x;
 }
 
@@ -284,23 +284,23 @@ static ODClassType* _EGVerticalLine_type;
 }
 
 - (id)moveWithDistance:(CGFloat)distance {
-    return [EGVerticalLine verticalLineWithX:_x + distance];
+    return [GEVerticalLine verticalLineWithX:_x + distance];
 }
 
 - (CGFloat)angle {
     return M_PI_2;
 }
 
-- (EGLine*)perpendicularWithPoint:(EGVec2)point {
-    return [EGSlopeLine slopeLineWithSlope:0.0 constant:((CGFloat)(point.y))];
+- (GELine*)perpendicularWithPoint:(GEVec2)point {
+    return [GESlopeLine slopeLineWithSlope:0.0 constant:((CGFloat)(point.y))];
 }
 
 - (ODClassType*)type {
-    return [EGVerticalLine type];
+    return [GEVerticalLine type];
 }
 
 + (ODClassType*)type {
-    return _EGVerticalLine_type;
+    return _GEVerticalLine_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -310,7 +310,7 @@ static ODClassType* _EGVerticalLine_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGVerticalLine* o = ((EGVerticalLine*)(other));
+    GEVerticalLine* o = ((GEVerticalLine*)(other));
     return eqf(self.x, o.x);
 }
 
@@ -330,29 +330,29 @@ static ODClassType* _EGVerticalLine_type;
 @end
 
 
-@implementation EGLineSegment{
-    EGVec2 _p0;
-    EGVec2 _p1;
+@implementation GELineSegment{
+    GEVec2 _p0;
+    GEVec2 _p1;
     BOOL _dir;
-    EGLine* __line;
-    EGRect _boundingRect;
+    GELine* __line;
+    GERect _boundingRect;
 }
-static ODClassType* _EGLineSegment_type;
+static ODClassType* _GELineSegment_type;
 @synthesize p0 = _p0;
 @synthesize p1 = _p1;
 @synthesize boundingRect = _boundingRect;
 
-+ (id)lineSegmentWithP0:(EGVec2)p0 p1:(EGVec2)p1 {
-    return [[EGLineSegment alloc] initWithP0:p0 p1:p1];
++ (id)lineSegmentWithP0:(GEVec2)p0 p1:(GEVec2)p1 {
+    return [[GELineSegment alloc] initWithP0:p0 p1:p1];
 }
 
-- (id)initWithP0:(EGVec2)p0 p1:(EGVec2)p1 {
+- (id)initWithP0:(GEVec2)p0 p1:(GEVec2)p1 {
     self = [super init];
     if(self) {
         _p0 = p0;
         _p1 = p1;
         _dir = _p0.y < _p1.y || (eqf4(_p0.y, _p1.y) && _p0.x < _p1.x);
-        _boundingRect = egRectNewXYXX2YY2(min(((CGFloat)(_p0.x)), ((CGFloat)(_p1.x))), max(((CGFloat)(_p0.x)), ((CGFloat)(_p1.x))), min(((CGFloat)(_p0.y)), ((CGFloat)(_p1.y))), max(((CGFloat)(_p0.y)), ((CGFloat)(_p1.y))));
+        _boundingRect = geRectNewXYXX2YY2(min(((CGFloat)(_p0.x)), ((CGFloat)(_p1.x))), max(((CGFloat)(_p0.x)), ((CGFloat)(_p1.x))), min(((CGFloat)(_p0.y)), ((CGFloat)(_p1.y))), max(((CGFloat)(_p0.y)), ((CGFloat)(_p1.y))));
     }
     
     return self;
@@ -360,16 +360,16 @@ static ODClassType* _EGLineSegment_type;
 
 + (void)initialize {
     [super initialize];
-    _EGLineSegment_type = [ODClassType classTypeWithCls:[EGLineSegment class]];
+    _GELineSegment_type = [ODClassType classTypeWithCls:[GELineSegment class]];
 }
 
-+ (EGLineSegment*)newWithP0:(EGVec2)p0 p1:(EGVec2)p1 {
-    if(egVec2CompareTo(p0, p1) < 0) return [EGLineSegment lineSegmentWithP0:p0 p1:p1];
-    else return [EGLineSegment lineSegmentWithP0:p1 p1:p0];
++ (GELineSegment*)newWithP0:(GEVec2)p0 p1:(GEVec2)p1 {
+    if(geVec2CompareTo(p0, p1) < 0) return [GELineSegment lineSegmentWithP0:p0 p1:p1];
+    else return [GELineSegment lineSegmentWithP0:p1 p1:p0];
 }
 
-+ (EGLineSegment*)newWithX1:(CGFloat)x1 y1:(CGFloat)y1 x2:(CGFloat)x2 y2:(CGFloat)y2 {
-    return [EGLineSegment newWithP0:EGVec2Make(((float)(x1)), ((float)(y1))) p1:EGVec2Make(((float)(x2)), ((float)(y2)))];
++ (GELineSegment*)newWithX1:(CGFloat)x1 y1:(CGFloat)y1 x2:(CGFloat)x2 y2:(CGFloat)y2 {
+    return [GELineSegment newWithP0:GEVec2Make(((float)(x1)), ((float)(y1))) p1:GEVec2Make(((float)(x2)), ((float)(y2)))];
 }
 
 - (BOOL)isVertical {
@@ -380,36 +380,36 @@ static ODClassType* _EGLineSegment_type;
     return eqf4(_p0.y, _p1.y);
 }
 
-- (EGLine*)line {
-    if(__line == nil) __line = [EGLine applyP0:_p0 p1:_p1];
+- (GELine*)line {
+    if(__line == nil) __line = [GELine applyP0:_p0 p1:_p1];
     return __line;
 }
 
-- (BOOL)containsPoint:(EGVec2)point {
-    return EGVec2Eq(_p0, point) || EGVec2Eq(_p1, point) || ([[self line] containsPoint:point] && egRectContainsPoint(_boundingRect, point));
+- (BOOL)containsPoint:(GEVec2)point {
+    return GEVec2Eq(_p0, point) || GEVec2Eq(_p1, point) || ([[self line] containsPoint:point] && geRectContainsPoint(_boundingRect, point));
 }
 
-- (BOOL)containsInBoundingRectPoint:(EGVec2)point {
-    return egRectContainsPoint(_boundingRect, point);
+- (BOOL)containsInBoundingRectPoint:(GEVec2)point {
+    return geRectContainsPoint(_boundingRect, point);
 }
 
-- (id)intersectionWithSegment:(EGLineSegment*)segment {
-    if(EGVec2Eq(_p0, segment.p1)) {
-        return [CNOption opt:wrap(EGVec2, _p0)];
+- (id)intersectionWithSegment:(GELineSegment*)segment {
+    if(GEVec2Eq(_p0, segment.p1)) {
+        return [CNOption opt:wrap(GEVec2, _p0)];
     } else {
-        if(EGVec2Eq(_p1, segment.p0)) {
-            return [CNOption opt:wrap(EGVec2, _p1)];
+        if(GEVec2Eq(_p1, segment.p0)) {
+            return [CNOption opt:wrap(GEVec2, _p1)];
         } else {
-            if(EGVec2Eq(_p0, segment.p0)) {
+            if(GEVec2Eq(_p0, segment.p0)) {
                 if([[self line] isEqual:[segment line]]) return [CNOption none];
-                else return [CNOption opt:wrap(EGVec2, _p0)];
+                else return [CNOption opt:wrap(GEVec2, _p0)];
             } else {
-                if(EGVec2Eq(_p1, segment.p1)) {
+                if(GEVec2Eq(_p1, segment.p1)) {
                     if([[self line] isEqual:[segment line]]) return [CNOption none];
-                    else return [CNOption opt:wrap(EGVec2, _p1)];
+                    else return [CNOption opt:wrap(GEVec2, _p1)];
                 } else {
                     return [[[self line] intersectionWithLine:[segment line]] filter:^BOOL(id p) {
-                        return [self containsInBoundingRectPoint:uwrap(EGVec2, p)] && [segment containsInBoundingRectPoint:uwrap(EGVec2, p)];
+                        return [self containsInBoundingRectPoint:uwrap(GEVec2, p)] && [segment containsInBoundingRectPoint:uwrap(GEVec2, p)];
                     }];
                 }
             }
@@ -417,30 +417,30 @@ static ODClassType* _EGLineSegment_type;
     }
 }
 
-- (BOOL)endingsContainPoint:(EGVec2)point {
-    return EGVec2Eq(_p0, point) || EGVec2Eq(_p1, point);
+- (BOOL)endingsContainPoint:(GEVec2)point {
+    return GEVec2Eq(_p0, point) || GEVec2Eq(_p1, point);
 }
 
 - (id<CNSeq>)segments {
     return (@[self]);
 }
 
-- (EGLineSegment*)moveWithPoint:(EGVec2)point {
+- (GELineSegment*)moveWithPoint:(GEVec2)point {
     return [self moveWithX:((CGFloat)(point.x)) y:((CGFloat)(point.y))];
 }
 
-- (EGLineSegment*)moveWithX:(CGFloat)x y:(CGFloat)y {
-    EGLineSegment* ret = [EGLineSegment lineSegmentWithP0:EGVec2Make(_p0.x + x, _p0.y + y) p1:EGVec2Make(_p1.x + x, _p1.y + y)];
+- (GELineSegment*)moveWithX:(CGFloat)x y:(CGFloat)y {
+    GELineSegment* ret = [GELineSegment lineSegmentWithP0:GEVec2Make(_p0.x + x, _p0.y + y) p1:GEVec2Make(_p1.x + x, _p1.y + y)];
     [ret setLine:[[self line] moveWithDistance:x + y]];
     return ret;
 }
 
-- (void)setLine:(EGLine*)line {
+- (void)setLine:(GELine*)line {
     __line = line;
 }
 
-- (EGVec2)mid {
-    return egVec2MidVec2(_p0, _p1);
+- (GEVec2)mid {
+    return geVec2MidVec2(_p0, _p1);
 }
 
 - (CGFloat)angle {
@@ -454,23 +454,23 @@ static ODClassType* _EGLineSegment_type;
 }
 
 - (CGFloat)length {
-    return egVec2Length(egVec2SubVec2(_p1, _p0));
+    return geVec2Length(geVec2SubVec2(_p1, _p0));
 }
 
-- (EGVec2)vec {
-    return egVec2SubVec2(_p1, _p0);
+- (GEVec2)vec {
+    return geVec2SubVec2(_p1, _p0);
 }
 
-- (EGVec2)vec1 {
-    return egVec2SubVec2(_p0, _p1);
+- (GEVec2)vec1 {
+    return geVec2SubVec2(_p0, _p1);
 }
 
 - (ODClassType*)type {
-    return [EGLineSegment type];
+    return [GELineSegment type];
 }
 
 + (ODClassType*)type {
-    return _EGLineSegment_type;
+    return _GELineSegment_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -480,21 +480,21 @@ static ODClassType* _EGLineSegment_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGLineSegment* o = ((EGLineSegment*)(other));
-    return EGVec2Eq(self.p0, o.p0) && EGVec2Eq(self.p1, o.p1);
+    GELineSegment* o = ((GELineSegment*)(other));
+    return GEVec2Eq(self.p0, o.p0) && GEVec2Eq(self.p1, o.p1);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + EGVec2Hash(self.p0);
-    hash = hash * 31 + EGVec2Hash(self.p1);
+    hash = hash * 31 + GEVec2Hash(self.p0);
+    hash = hash * 31 + GEVec2Hash(self.p1);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"p0=%@", EGVec2Description(self.p0)];
-    [description appendFormat:@", p1=%@", EGVec2Description(self.p1)];
+    [description appendFormat:@"p0=%@", GEVec2Description(self.p0)];
+    [description appendFormat:@", p1=%@", GEVec2Description(self.p1)];
     [description appendString:@">"];
     return description;
 }
@@ -502,24 +502,24 @@ static ODClassType* _EGLineSegment_type;
 @end
 
 
-@implementation EGPolygon{
+@implementation GEPolygon{
     id<CNSeq> _points;
     id<CNSeq> _segments;
 }
-static ODClassType* _EGPolygon_type;
+static ODClassType* _GEPolygon_type;
 @synthesize points = _points;
 @synthesize segments = _segments;
 
 + (id)polygonWithPoints:(id<CNSeq>)points {
-    return [[EGPolygon alloc] initWithPoints:points];
+    return [[GEPolygon alloc] initWithPoints:points];
 }
 
 - (id)initWithPoints:(id<CNSeq>)points {
     self = [super init];
     if(self) {
         _points = points;
-        _segments = [[[[_points chain] neighborsRing] map:^EGLineSegment*(CNTuple* ps) {
-            return [EGLineSegment newWithP0:uwrap(EGVec2, ps.a) p1:uwrap(EGVec2, ps.b)];
+        _segments = [[[[_points chain] neighborsRing] map:^GELineSegment*(CNTuple* ps) {
+            return [GELineSegment newWithP0:uwrap(GEVec2, ps.a) p1:uwrap(GEVec2, ps.b)];
         }] toArray];
     }
     
@@ -528,29 +528,29 @@ static ODClassType* _EGPolygon_type;
 
 + (void)initialize {
     [super initialize];
-    _EGPolygon_type = [ODClassType classTypeWithCls:[EGPolygon class]];
+    _GEPolygon_type = [ODClassType classTypeWithCls:[GEPolygon class]];
 }
 
-- (EGRect)boundingRect {
+- (GERect)boundingRect {
     __block CGFloat minX = DBL_MAX;
     __block CGFloat maxX = DBL_MIN;
     __block CGFloat minY = DBL_MAX;
     __block CGFloat maxY = DBL_MIN;
     [_points forEach:^void(id p) {
-        if(uwrap(EGVec2, p).x < minX) minX = ((CGFloat)(uwrap(EGVec2, p).x));
-        if(uwrap(EGVec2, p).x > maxX) maxX = ((CGFloat)(uwrap(EGVec2, p).x));
-        if(uwrap(EGVec2, p).y < minY) minY = ((CGFloat)(uwrap(EGVec2, p).y));
-        if(uwrap(EGVec2, p).y > maxY) maxY = ((CGFloat)(uwrap(EGVec2, p).y));
+        if(uwrap(GEVec2, p).x < minX) minX = ((CGFloat)(uwrap(GEVec2, p).x));
+        if(uwrap(GEVec2, p).x > maxX) maxX = ((CGFloat)(uwrap(GEVec2, p).x));
+        if(uwrap(GEVec2, p).y < minY) minY = ((CGFloat)(uwrap(GEVec2, p).y));
+        if(uwrap(GEVec2, p).y > maxY) maxY = ((CGFloat)(uwrap(GEVec2, p).y));
     }];
-    return egRectNewXYXX2YY2(minX, maxX, minY, maxY);
+    return geRectNewXYXX2YY2(minX, maxX, minY, maxY);
 }
 
 - (ODClassType*)type {
-    return [EGPolygon type];
+    return [GEPolygon type];
 }
 
 + (ODClassType*)type {
-    return _EGPolygon_type;
+    return _GEPolygon_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -560,7 +560,7 @@ static ODClassType* _EGPolygon_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGPolygon* o = ((EGPolygon*)(other));
+    GEPolygon* o = ((GEPolygon*)(other));
     return [self.points isEqual:o.points];
 }
 
@@ -580,22 +580,22 @@ static ODClassType* _EGPolygon_type;
 @end
 
 
-@implementation EGThickLineSegment{
-    EGLineSegment* _segment;
+@implementation GEThickLineSegment{
+    GELineSegment* _segment;
     CGFloat _thickness;
     CGFloat _thickness_2;
     id<CNSeq> __segments;
 }
-static ODClassType* _EGThickLineSegment_type;
+static ODClassType* _GEThickLineSegment_type;
 @synthesize segment = _segment;
 @synthesize thickness = _thickness;
 @synthesize thickness_2 = _thickness_2;
 
-+ (id)thickLineSegmentWithSegment:(EGLineSegment*)segment thickness:(CGFloat)thickness {
-    return [[EGThickLineSegment alloc] initWithSegment:segment thickness:thickness];
++ (id)thickLineSegmentWithSegment:(GELineSegment*)segment thickness:(CGFloat)thickness {
+    return [[GEThickLineSegment alloc] initWithSegment:segment thickness:thickness];
 }
 
-- (id)initWithSegment:(EGLineSegment*)segment thickness:(CGFloat)thickness {
+- (id)initWithSegment:(GELineSegment*)segment thickness:(CGFloat)thickness {
     self = [super init];
     if(self) {
         _segment = segment;
@@ -608,11 +608,11 @@ static ODClassType* _EGThickLineSegment_type;
 
 + (void)initialize {
     [super initialize];
-    _EGThickLineSegment_type = [ODClassType classTypeWithCls:[EGThickLineSegment class]];
+    _GEThickLineSegment_type = [ODClassType classTypeWithCls:[GEThickLineSegment class]];
 }
 
-- (EGRect)boundingRect {
-    return egRectThickenXY(_segment.boundingRect, (([_segment isHorizontal]) ? 0.0 : _thickness_2), (([_segment isVertical]) ? 0.0 : _thickness_2));
+- (GERect)boundingRect {
+    return geRectThickenXY(_segment.boundingRect, (([_segment isHorizontal]) ? 0.0 : _thickness_2), (([_segment isVertical]) ? 0.0 : _thickness_2));
 }
 
 - (id<CNSeq>)segments {
@@ -632,20 +632,20 @@ static ODClassType* _EGThickLineSegment_type;
                 dx = k * dy;
             }
         }
-        EGLineSegment* line1 = [_segment moveWithX:-dx y:dy];
-        EGLineSegment* line2 = [_segment moveWithX:dx y:-dy];
-        EGLineSegment* line3 = [EGLineSegment newWithP0:line1.p0 p1:line2.p0];
-        __segments = (@[line1, line2, line3, [line3 moveWithPoint:egVec2SubVec2(_segment.p1, _segment.p0)]]);
+        GELineSegment* line1 = [_segment moveWithX:-dx y:dy];
+        GELineSegment* line2 = [_segment moveWithX:dx y:-dy];
+        GELineSegment* line3 = [GELineSegment newWithP0:line1.p0 p1:line2.p0];
+        __segments = (@[line1, line2, line3, [line3 moveWithPoint:geVec2SubVec2(_segment.p1, _segment.p0)]]);
     }
     return __segments;
 }
 
 - (ODClassType*)type {
-    return [EGThickLineSegment type];
+    return [GEThickLineSegment type];
 }
 
 + (ODClassType*)type {
-    return _EGThickLineSegment_type;
+    return _GEThickLineSegment_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -655,7 +655,7 @@ static ODClassType* _EGThickLineSegment_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGThickLineSegment* o = ((EGThickLineSegment*)(other));
+    GEThickLineSegment* o = ((GEThickLineSegment*)(other));
     return [self.segment isEqual:o.segment] && eqf(self.thickness, o.thickness);
 }
 

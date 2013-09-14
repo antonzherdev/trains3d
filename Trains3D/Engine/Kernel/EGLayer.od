@@ -1,7 +1,7 @@
 package com.antonzherdev.eg
 
 class EGLayer(view : EGView, processor : EGProcessor?) extends EGController {
-    def drawWith(viewSize : EGVec2) {
+    def drawWith(viewSize : Vec2) {
         view.camera.focusFor(viewSize)
         EG.context.environment = view.environment
         view.drawView

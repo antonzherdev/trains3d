@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "EGVec.h"
+#import "GEVec.h"
 @class TRScoreRules;
 @class TRTrain;
 @class TRLevelRules;
@@ -25,10 +25,10 @@
 - (ODClassType*)type;
 + (EGScene*)sceneForLevel:(TRLevel*)level;
 + (TRLevel*)levelWithNumber:(NSUInteger)number;
-+ (TRLevel*)levelWithMapSize:(EGVec2I)mapSize;
++ (TRLevel*)levelWithMapSize:(GEVec2I)mapSize;
 + (EGScene*)sceneForLevelWithNumber:(NSUInteger)number;
 + (TRScore*)score;
-+ (TRRailroad*)railroadWithMapSize:(EGVec2I)mapSize;
++ (TRRailroad*)railroadWithMapSize:(GEVec2I)mapSize;
 + (TRScoreRules*)scoreRules;
 + (ODClassType*)type;
 @end

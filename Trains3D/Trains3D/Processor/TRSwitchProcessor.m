@@ -20,7 +20,7 @@ static ODClassType* _TRSwitchProcessor_type;
     self = [super init];
     if(self) {
         _level = level;
-        _index = [EGRectIndex rectIndexWithRects:(@[tuple(wrap(EGRect, EGRectMake(-0.1, 0.2, 0.2, 0.3)), tuple(TRRailConnector.top, @NO)), tuple(wrap(EGRect, EGRectMake(-0.1, 0.2, -0.5, 0.3)), tuple(TRRailConnector.bottom, @NO)), tuple(wrap(EGRect, EGRectMake(-0.5, 0.3, -0.1, 0.2)), tuple(TRRailConnector.left, @NO)), tuple(wrap(EGRect, EGRectMake(0.2, 0.3, -0.1, 0.2)), tuple(TRRailConnector.right, @NO)), tuple(wrap(EGRect, EGRectMake(0.15, 0.1, 0.4, 0.1)), tuple(TRRailConnector.top, @YES)), tuple(wrap(EGRect, EGRectMake(-0.25, 0.1, -0.5, 0.1)), tuple(TRRailConnector.bottom, @YES)), tuple(wrap(EGRect, EGRectMake(-0.5, 0.1, 0.15, 0.1)), tuple(TRRailConnector.left, @YES)), tuple(wrap(EGRect, EGRectMake(0.4, 0.1, -0.25, 0.1)), tuple(TRRailConnector.right, @YES))])];
+        _index = [EGRectIndex rectIndexWithRects:(@[tuple(wrap(GERect, GERectMake(-0.1, 0.2, 0.2, 0.3)), tuple(TRRailConnector.top, @NO)), tuple(wrap(GERect, GERectMake(-0.1, 0.2, -0.5, 0.3)), tuple(TRRailConnector.bottom, @NO)), tuple(wrap(GERect, GERectMake(-0.5, 0.3, -0.1, 0.2)), tuple(TRRailConnector.left, @NO)), tuple(wrap(GERect, GERectMake(0.2, 0.3, -0.1, 0.2)), tuple(TRRailConnector.right, @NO)), tuple(wrap(GERect, GERectMake(0.15, 0.1, 0.4, 0.1)), tuple(TRRailConnector.top, @YES)), tuple(wrap(GERect, GERectMake(-0.25, 0.1, -0.5, 0.1)), tuple(TRRailConnector.bottom, @YES)), tuple(wrap(GERect, GERectMake(-0.5, 0.1, 0.15, 0.1)), tuple(TRRailConnector.left, @YES)), tuple(wrap(GERect, GERectMake(0.4, 0.1, -0.25, 0.1)), tuple(TRRailConnector.right, @YES))])];
         _downed = [CNOption none];
     }
     
@@ -37,9 +37,9 @@ static ODClassType* _TRSwitchProcessor_type;
 }
 
 - (BOOL)mouseDownEvent:(EGEvent*)event {
-    EGVec2 location = [event location];
-    EGVec2I tile = egVec2IApplyVec2(location);
-    EGVec2 relPoint = egVec2SubVec2(location, egVec2ApplyVec2i(tile));
+    GEVec2 location = [event location];
+    GEVec2I tile = geVec2IApplyVec2(location);
+    GEVec2 relPoint = geVec2SubVec2(location, geVec2ApplyVec2i(tile));
     _downed = [[_index applyPoint:relPoint] flatMap:^id(CNTuple* v) {
         TRRailroadConnectorContent* content = [_level.railroad contentInTile:tile connector:((TRRailConnector*)(v.a))];
         if(unumb(v.b)) return [content asKindOfClass:[TRLight class]];

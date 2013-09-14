@@ -9,9 +9,9 @@ trait EGController {
 }
 
 trait EGCamera {
-    def focusFor(viewSize : EGVec2)
+    def focusFor(viewSize : Vec2)
 
-    def translateWith(viewSize : EGVec2, viewPoint : EGVec2) : EGVec2
+    def translateWith(viewSize : Vec2, viewPoint : Vec2) : Vec2
 }
 
 trait EGView extends EGController {
@@ -33,4 +33,4 @@ class EGEnvironment(ambientColor : EGColor, lights : [EGLight]) {
 }
 
 class EGLight(color : EGColor)
-class EGDirectLight(color : EGColor, direction : EGVec3) extends EGLight(color)
+class EGDirectLight(color : EGColor, direction : Vec3) extends EGLight(color)

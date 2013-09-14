@@ -3,25 +3,25 @@ package com.antonzherdev.eg
 import core.ODMath._
 import com.antonzherdev.eg.EGGL._
 
-class EGCamera2D(size : EGVec2) extends EGCamera {
-    private def factorFor(viewSize : EGVec2) : float = min(viewSize.x/size.x, viewSize.y/size.y)
-    private def viewportRectFor(viewSize : EGVec2) : EGRect = viewportRectFor(viewSize, factorFor(viewSize))
-    private def viewportRectFor(viewSize : EGVec2, factor : float) : EGRect =
-        EGRect(0, size.x*factor, 0, size.y*factor).moveToCenterFor(viewSize)
+class EGCamera2D(size : Vec2) extends EGCamera {
+    private def factorFor(viewSize : Vec2) : float = min(viewSize.x/size.x, viewSize.y/size.y)
+    private def viewportRectFor(viewSize : Vec2) : Rect = viewportRectFor(viewSize, factorFor(viewSize))
+    private def viewportRectFor(viewSize : Vec2, factor : float) : Rect =
+        Rect(0, size.x*factor, 0, size.y*factor).moveToCenterFor(viewSize)
 
     private val matrixModel : EGMatrixModel = EGMatrixModel(
-        m = EGMatrix.identity,
-        w = EGMatrix.identity,
-        c = EGMatrix.identity,
-        p = EGMatrix.ortho(0, size.x, 0, size.y, -1, 1)
+        m = Matrix.identity,
+        w = Matrix.identity,
+        c = Matrix.identity,
+        p = Matrix.ortho(0, size.x, 0, size.y, -1, 1)
     )
-    def focusFor(viewSize : EGVec2) {
+    def focusFor(viewSize : Vec2) {
         egViewport(viewportRectFor(viewSize))
 
         EG.matrix.value = matrixModel
     }
 
-    def translateWith(viewSize : EGVec2, viewPoint : EGVec2) : EGVec2 = {
+    def translateWith(viewSize : Vec2, viewPoint : Vec2) : Vec2 = {
         val factor = factorFor(viewSize)
         val viewport = viewportRectFor(viewSize, factor)
         viewPoint.sub(viewport.point).div(factor)

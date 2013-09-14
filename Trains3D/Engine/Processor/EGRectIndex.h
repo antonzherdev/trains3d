@@ -1,6 +1,6 @@
 #import "objd.h"
-#import "EGRect.h"
-#import "EGVec.h"
+#import "GERect.h"
+#import "GEVec.h"
 
 @class EGRectIndex;
 
@@ -10,7 +10,7 @@
 + (id)rectIndexWithRects:(id<CNSeq>)rects;
 - (id)initWithRects:(id<CNSeq>)rects;
 - (ODClassType*)type;
-- (id)applyPoint:(EGVec2)point;
+- (id)applyPoint:(GEVec2)point;
 + (ODClassType*)type;
 @end
 

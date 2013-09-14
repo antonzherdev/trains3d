@@ -1,11 +1,11 @@
 #import "objd.h"
 #import "EGGL.h"
 #import "EGTypes.h"
-#import "EGVec.h"
+#import "GEVec.h"
 @class EGMesh;
 @class EGIndexBuffer;
 @class EGVertexBuffer;
-@class EGMatrix;
+@class GEMatrix;
 
 @class EGShaderProgram;
 @class EGShader;
@@ -65,9 +65,9 @@
 + (id)shaderUniformWithHandle:(GLuint)handle;
 - (id)initWithHandle:(GLuint)handle;
 - (ODClassType*)type;
-- (void)setMatrix:(EGMatrix*)matrix;
+- (void)setMatrix:(GEMatrix*)matrix;
 - (void)setColor:(EGColor)color;
-- (void)setVec3:(EGVec3)vec3;
+- (void)setVec3:(GEVec3)vec3;
 - (void)setNumber:(float)number;
 + (ODClassType*)type;
 @end

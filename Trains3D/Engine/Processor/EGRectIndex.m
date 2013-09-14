@@ -22,9 +22,9 @@ static ODClassType* _EGRectIndex_type;
     _EGRectIndex_type = [ODClassType classTypeWithCls:[EGRectIndex class]];
 }
 
-- (id)applyPoint:(EGVec2)point {
+- (id)applyPoint:(GEVec2)point {
     return [[_rects findWhere:^BOOL(CNTuple* _) {
-        return egRectContainsPoint(uwrap(EGRect, _.a), point);
+        return geRectContainsPoint(uwrap(GERect, _.a), point);
     }] map:^CNTuple*(CNTuple* _) {
         return ((CNTuple*)(_.b));
     }];

@@ -8,12 +8,12 @@ static ODClassType* _EGProgress_type;
     _EGProgress_type = [ODClassType classTypeWithCls:[EGProgress class]];
 }
 
-+ (EGVec2)randomVec2 {
-    return EGVec2Make(((float)(2 * randomFloat() - 1)), ((float)(2 * randomFloat() - 1)));
++ (GEVec2)randomVec2 {
+    return GEVec2Make(((float)(2 * randomFloat() - 1)), ((float)(2 * randomFloat() - 1)));
 }
 
-+ (EGVec3)randomVec3 {
-    return EGVec3Make(((float)(2 * randomFloat() - 1)), ((float)(2 * randomFloat() - 1)), ((float)(2 * randomFloat() - 1)));
++ (GEVec3)randomVec3 {
+    return GEVec3Make(((float)(2 * randomFloat() - 1)), ((float)(2 * randomFloat() - 1)), ((float)(2 * randomFloat() - 1)));
 }
 
 + (float(^)(float))progressF4:(float)f4 f42:(float)f42 {
@@ -26,30 +26,30 @@ static ODClassType* _EGProgress_type;
     };
 }
 
-+ (EGVec2(^)(float))progressVec2:(EGVec2)vec2 vec22:(EGVec2)vec22 {
++ (GEVec2(^)(float))progressVec2:(GEVec2)vec2 vec22:(GEVec2)vec22 {
     float(^x)(float) = [EGProgress progressF4:vec2.x f42:vec22.x];
     float(^y)(float) = [EGProgress progressF4:vec2.y f42:vec22.y];
-    return ^EGVec2(float t) {
-        return EGVec2Make(x(t), y(t));
+    return ^GEVec2(float t) {
+        return GEVec2Make(x(t), y(t));
     };
 }
 
-+ (EGVec3(^)(float))progressVec3:(EGVec3)vec3 vec32:(EGVec3)vec32 {
++ (GEVec3(^)(float))progressVec3:(GEVec3)vec3 vec32:(GEVec3)vec32 {
     float(^x)(float) = [EGProgress progressF4:vec3.x f42:vec32.x];
     float(^y)(float) = [EGProgress progressF4:vec3.y f42:vec32.y];
     float(^z)(float) = [EGProgress progressF4:vec3.z f42:vec32.z];
-    return ^EGVec3(float t) {
-        return EGVec3Make(x(t), y(t), z(t));
+    return ^GEVec3(float t) {
+        return GEVec3Make(x(t), y(t), z(t));
     };
 }
 
-+ (EGVec4(^)(float))progressVec4:(EGVec4)vec4 vec42:(EGVec4)vec42 {
++ (GEVec4(^)(float))progressVec4:(GEVec4)vec4 vec42:(GEVec4)vec42 {
     float(^x)(float) = [EGProgress progressF4:vec4.x f42:vec42.x];
     float(^y)(float) = [EGProgress progressF4:vec4.y f42:vec42.y];
     float(^z)(float) = [EGProgress progressF4:vec4.z f42:vec42.z];
     float(^w)(float) = [EGProgress progressF4:vec4.w f42:vec42.w];
-    return ^EGVec4(float t) {
-        return EGVec4Make(x(t), y(t), z(t), w(t));
+    return ^GEVec4(float t) {
+        return GEVec4Make(x(t), y(t), z(t), w(t));
     };
 }
 

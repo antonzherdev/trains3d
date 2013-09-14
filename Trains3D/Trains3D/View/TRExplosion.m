@@ -3,7 +3,7 @@
 #import "EGProgress.h"
 #import "EG.h"
 @implementation TRExplosion{
-    EGVec3 _position;
+    GEVec3 _position;
     float _size;
     TRExplosionFlame* _flame;
 }
@@ -12,11 +12,11 @@ static ODClassType* _TRExplosion_type;
 @synthesize size = _size;
 @synthesize flame = _flame;
 
-+ (id)explosionWithPosition:(EGVec3)position size:(float)size {
++ (id)explosionWithPosition:(GEVec3)position size:(float)size {
     return [[TRExplosion alloc] initWithPosition:position size:size];
 }
 
-- (id)initWithPosition:(EGVec3)position size:(float)size {
+- (id)initWithPosition:(GEVec3)position size:(float)size {
     self = [super init];
     if(self) {
         _position = position;
@@ -60,19 +60,19 @@ static ODClassType* _TRExplosion_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRExplosion* o = ((TRExplosion*)(other));
-    return EGVec3Eq(self.position, o.position) && eqf4(self.size, o.size);
+    return GEVec3Eq(self.position, o.position) && eqf4(self.size, o.size);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + EGVec3Hash(self.position);
+    hash = hash * 31 + GEVec3Hash(self.position);
     hash = hash * 31 + float4Hash(self.size);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"position=%@", EGVec3Description(self.position)];
+    [description appendFormat:@"position=%@", GEVec3Description(self.position)];
     [description appendFormat:@", size=%f", self.size];
     [description appendString:@">"];
     return description;
@@ -82,18 +82,18 @@ static ODClassType* _TRExplosion_type;
 
 
 @implementation TRExplosionFlame{
-    EGVec3 _position;
+    GEVec3 _position;
     float _size;
 }
 static ODClassType* _TRExplosionFlame_type;
 @synthesize position = _position;
 @synthesize size = _size;
 
-+ (id)explosionFlameWithPosition:(EGVec3)position size:(float)size {
++ (id)explosionFlameWithPosition:(GEVec3)position size:(float)size {
     return [[TRExplosionFlame alloc] initWithPosition:position size:size];
 }
 
-- (id)initWithPosition:(EGVec3)position size:(float)size {
+- (id)initWithPosition:(GEVec3)position size:(float)size {
     self = [super init];
     if(self) {
         _position = position;
@@ -135,19 +135,19 @@ static ODClassType* _TRExplosionFlame_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRExplosionFlame* o = ((TRExplosionFlame*)(other));
-    return EGVec3Eq(self.position, o.position) && eqf4(self.size, o.size);
+    return GEVec3Eq(self.position, o.position) && eqf4(self.size, o.size);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + EGVec3Hash(self.position);
+    hash = hash * 31 + GEVec3Hash(self.position);
     hash = hash * 31 + float4Hash(self.size);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"position=%@", EGVec3Description(self.position)];
+    [description appendFormat:@"position=%@", GEVec3Description(self.position)];
     [description appendFormat:@", size=%f", self.size];
     [description appendString:@">"];
     return description;
@@ -158,23 +158,23 @@ static ODClassType* _TRExplosionFlame_type;
 
 @implementation TRExplosionFlameParticle{
     float _size;
-    EGVec2 _startShift;
-    EGVec2 _shift;
+    GEVec2 _startShift;
+    GEVec2 _shift;
     void(^_animation)(float);
 }
-static EGVec4 _TRExplosionFlameParticle_startColor = {1.0, 0.4, 0.0, 0.3};
-static EGQuadrant _TRExplosionFlameParticle_textureQuadrant;
+static GEVec4 _TRExplosionFlameParticle_startColor = {1.0, 0.4, 0.0, 0.3};
+static GEQuadrant _TRExplosionFlameParticle_textureQuadrant;
 static ODClassType* _TRExplosionFlameParticle_type;
 @synthesize size = _size;
 @synthesize startShift = _startShift;
 @synthesize shift = _shift;
 @synthesize animation = _animation;
 
-+ (id)explosionFlameParticleWithSize:(float)size startShift:(EGVec2)startShift shift:(EGVec2)shift {
++ (id)explosionFlameParticleWithSize:(float)size startShift:(GEVec2)startShift shift:(GEVec2)shift {
     return [[TRExplosionFlameParticle alloc] initWithSize:size startShift:startShift shift:shift];
 }
 
-- (id)initWithSize:(float)size startShift:(EGVec2)startShift shift:(EGVec2)shift {
+- (id)initWithSize:(float)size startShift:(GEVec2)startShift shift:(GEVec2)shift {
     self = [super initWithLifeLength:2.0];
     __weak TRExplosionFlameParticle* _weakSelf = self;
     if(self) {
@@ -182,7 +182,7 @@ static ODClassType* _TRExplosionFlameParticle_type;
         _startShift = startShift;
         _shift = shift;
         _animation = ^id() {
-            EGQuad bigQuad = egQuadApplySize(_size);
+            GEQuad bigQuad = geQuadApplySize(_size);
             return ^void(float _) {
                 ^void(float _) {
                     ^void(float _) {
@@ -192,31 +192,31 @@ static ODClassType* _TRExplosionFlameParticle_type;
                             }];
                         }(_) forEach:^void(id _) {
                             ^void(float _) {
-                                _weakSelf.model = egQuadAddVec2(egQuadApplySize(_), _weakSelf.startShift);
+                                _weakSelf.model = geQuadAddVec2(geQuadApplySize(_), _weakSelf.startShift);
                             }(unumf4(_));
                         }];
                     }(_);
                     ^void(float _) {
                         [^id(float _) {
                             return [[EGProgress gapT1:0.1 t2:1.0](_) map:^id(id _) {
-                                return wrap(EGVec2, [EGProgress progressVec2:_weakSelf.startShift vec22:_weakSelf.shift](unumf4(_)));
+                                return wrap(GEVec2, [EGProgress progressVec2:_weakSelf.startShift vec22:_weakSelf.shift](unumf4(_)));
                             }];
                         }(_) forEach:^void(id _) {
-                            ^void(EGVec2 _) {
-                                _weakSelf.model = egQuadAddVec2(bigQuad, _);
-                            }(uwrap(EGVec2, _));
+                            ^void(GEVec2 _) {
+                                _weakSelf.model = geQuadAddVec2(bigQuad, _);
+                            }(uwrap(GEVec2, _));
                         }];
                     }(_);
                 }(_);
                 ^void(float _) {
                     [^id(float _) {
                         return [[EGProgress gapT1:0.05 t2:1.0](_) map:^id(id _) {
-                            return wrap(EGVec4, [EGProgress progressVec4:[TRExplosionFlameParticle startColor] vec42:EGVec4Make(0.0, 0.0, 0.0, 0.0)](unumf4(_)));
+                            return wrap(GEVec4, [EGProgress progressVec4:[TRExplosionFlameParticle startColor] vec42:GEVec4Make(0.0, 0.0, 0.0, 0.0)](unumf4(_)));
                         }];
                     }(_) forEach:^void(id _) {
-                        ^void(EGVec4 _) {
+                        ^void(GEVec4 _) {
                             _weakSelf.color = _;
-                        }(uwrap(EGVec4, _));
+                        }(uwrap(GEVec4, _));
                     }];
                 }(_);
             };
@@ -229,16 +229,16 @@ static ODClassType* _TRExplosionFlameParticle_type;
 + (void)initialize {
     [super initialize];
     _TRExplosionFlameParticle_type = [ODClassType classTypeWithCls:[TRExplosionFlameParticle class]];
-    _TRExplosionFlameParticle_textureQuadrant = egQuadQuadrant(egQuadMulValue(egQuadIdentity(), 0.5));
+    _TRExplosionFlameParticle_textureQuadrant = geQuadQuadrant(geQuadMulValue(geQuadIdentity(), 0.5));
 }
 
-+ (TRExplosionFlameParticle*)applyPosition:(EGVec3)position size:(float)size {
-    EGVec2 startShift = egVec2MulValue([EGProgress randomVec2], size * 0.2);
-    TRExplosionFlameParticle* ret = [TRExplosionFlameParticle explosionFlameParticleWithSize:size startShift:startShift shift:egVec2AddVec2(startShift, egVec2MulValue([EGProgress randomVec2], size * 0.2))];
++ (TRExplosionFlameParticle*)applyPosition:(GEVec3)position size:(float)size {
+    GEVec2 startShift = geVec2MulValue([EGProgress randomVec2], size * 0.2);
+    TRExplosionFlameParticle* ret = [TRExplosionFlameParticle explosionFlameParticleWithSize:size startShift:startShift shift:geVec2AddVec2(startShift, geVec2MulValue([EGProgress randomVec2], size * 0.2))];
     ret.position = position;
     ret.color = _TRExplosionFlameParticle_startColor;
-    ret.uv = egQuadrantRandomQuad(_TRExplosionFlameParticle_textureQuadrant);
-    ret.model = egQuadApplySize(0.0);
+    ret.uv = geQuadrantRandomQuad(_TRExplosionFlameParticle_textureQuadrant);
+    ret.model = geQuadApplySize(0.0);
     return ret;
 }
 
@@ -250,11 +250,11 @@ static ODClassType* _TRExplosionFlameParticle_type;
     return [TRExplosionFlameParticle type];
 }
 
-+ (EGVec4)startColor {
++ (GEVec4)startColor {
     return _TRExplosionFlameParticle_startColor;
 }
 
-+ (EGQuadrant)textureQuadrant {
++ (GEQuadrant)textureQuadrant {
     return _TRExplosionFlameParticle_textureQuadrant;
 }
 
@@ -270,22 +270,22 @@ static ODClassType* _TRExplosionFlameParticle_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRExplosionFlameParticle* o = ((TRExplosionFlameParticle*)(other));
-    return eqf4(self.size, o.size) && EGVec2Eq(self.startShift, o.startShift) && EGVec2Eq(self.shift, o.shift);
+    return eqf4(self.size, o.size) && GEVec2Eq(self.startShift, o.startShift) && GEVec2Eq(self.shift, o.shift);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + float4Hash(self.size);
-    hash = hash * 31 + EGVec2Hash(self.startShift);
-    hash = hash * 31 + EGVec2Hash(self.shift);
+    hash = hash * 31 + GEVec2Hash(self.startShift);
+    hash = hash * 31 + GEVec2Hash(self.shift);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"size=%f", self.size];
-    [description appendFormat:@", startShift=%@", EGVec2Description(self.startShift)];
-    [description appendFormat:@", shift=%@", EGVec2Description(self.shift)];
+    [description appendFormat:@", startShift=%@", GEVec2Description(self.startShift)];
+    [description appendFormat:@", shift=%@", GEVec2Description(self.shift)];
     [description appendString:@">"];
     return description;
 }

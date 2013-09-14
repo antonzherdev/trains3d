@@ -185,16 +185,16 @@ static ODClassType* _EGLight_type;
 
 
 @implementation EGDirectLight{
-    EGVec3 _direction;
+    GEVec3 _direction;
 }
 static ODClassType* _EGDirectLight_type;
 @synthesize direction = _direction;
 
-+ (id)directLightWithColor:(EGColor)color direction:(EGVec3)direction {
++ (id)directLightWithColor:(EGColor)color direction:(GEVec3)direction {
     return [[EGDirectLight alloc] initWithColor:color direction:direction];
 }
 
-- (id)initWithColor:(EGColor)color direction:(EGVec3)direction {
+- (id)initWithColor:(EGColor)color direction:(GEVec3)direction {
     self = [super initWithColor:color];
     if(self) _direction = direction;
     
@@ -222,20 +222,20 @@ static ODClassType* _EGDirectLight_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGDirectLight* o = ((EGDirectLight*)(other));
-    return EGColorEq(self.color, o.color) && EGVec3Eq(self.direction, o.direction);
+    return EGColorEq(self.color, o.color) && GEVec3Eq(self.direction, o.direction);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + EGColorHash(self.color);
-    hash = hash * 31 + EGVec3Hash(self.direction);
+    hash = hash * 31 + GEVec3Hash(self.direction);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"color=%@", EGColorDescription(self.color)];
-    [description appendFormat:@", direction=%@", EGVec3Description(self.direction)];
+    [description appendFormat:@", direction=%@", GEVec3Description(self.direction)];
     [description appendString:@">"];
     return description;
 }

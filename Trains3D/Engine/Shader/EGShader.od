@@ -90,13 +90,13 @@ class EGShaderAttribute(handle : GLuint) {
 }
 
 class EGShaderUniform(handle : GLuint) {
-    def set(matrix : EGMatrix) {
+    def set(matrix : Matrix) {
         glUniformMatrix4fv(handle, 1, GL_FALSE, matrix.array)
     }
     def set(color : EGColor) {
         egUniformColor(handle, color)
     }
-    def set(vec3 : EGVec3) {
+    def set(vec3 : Vec3) {
         egUniformVec3(handle, vec3)
     }
     def set(number : float4) {

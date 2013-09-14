@@ -38,7 +38,7 @@ static ODClassType* _EGDirector_type;
     _EGDirector_type = [ODClassType classTypeWithCls:[EGDirector class]];
 }
 
-- (void)drawWithSize:(EGVec2)size {
+- (void)drawWithSize:(GEVec2)size {
     EG.context.director = self;
     glClearColor(0.0, 0.0, 0.0, 1.0);
     egClear();

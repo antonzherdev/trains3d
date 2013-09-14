@@ -1,6 +1,6 @@
 #import "objd.h"
-#import "EGVec.h"
-#import "EGRect.h"
+#import "GEVec.h"
+#import "GERect.h"
 @class EGMesh;
 @class EGMaterial;
 
@@ -8,18 +8,18 @@
 @class EGMapSsoView;
 
 @interface EGMapSso : NSObject
-@property (nonatomic, readonly) EGVec2I size;
-@property (nonatomic, readonly) EGRectI limits;
+@property (nonatomic, readonly) GEVec2I size;
+@property (nonatomic, readonly) GERectI limits;
 @property (nonatomic, readonly) id<CNSeq> fullTiles;
 @property (nonatomic, readonly) id<CNSeq> partialTiles;
 @property (nonatomic, readonly) id<CNSeq> allTiles;
 
-+ (id)mapSsoWithSize:(EGVec2I)size;
-- (id)initWithSize:(EGVec2I)size;
++ (id)mapSsoWithSize:(GEVec2I)size;
+- (id)initWithSize:(GEVec2I)size;
 - (ODClassType*)type;
-- (BOOL)isFullTile:(EGVec2I)tile;
-- (BOOL)isPartialTile:(EGVec2I)tile;
-- (EGRectI)cutRectForTile:(EGVec2I)tile;
+- (BOOL)isFullTile:(GEVec2I)tile;
+- (BOOL)isPartialTile:(GEVec2I)tile;
+- (GERectI)cutRectForTile:(GEVec2I)tile;
 + (CGFloat)ISO;
 + (ODClassType*)type;
 @end

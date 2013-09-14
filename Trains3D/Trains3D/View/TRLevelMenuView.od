@@ -5,13 +5,13 @@ import com.antonzherdev.eg.EGGL._
 import com.antonzherdev.eg._
 
 class TRLevelMenuView(level : TRLevel) extends EGView {
-    val camera : EGCamera = EGCamera2D(EGVec2(2, 1))
+    val camera : EGCamera = EGCamera2D(Vec2(2, 1))
 
     def drawView {
         egColor3(1, 1, 1)
-        egTextGlutDraw(level.score.score, GLUT_BITMAP_HELVETICA_18, EGVec2(1, 1))
+        egTextGlutDraw(level.score.score, GLUT_BITMAP_HELVETICA_18, Vec2(1, 1))
         val seconds : int = level.schedule.time
-        egTextGlutDraw(seconds, GLUT_BITMAP_HELVETICA_18, EGVec2(1.5, 1))
+        egTextGlutDraw(seconds, GLUT_BITMAP_HELVETICA_18, Vec2(1.5, 1))
 
         if(!level.railroad.damagesPoints.isEmpty && level.repairer.isEmpty) {
             /*glPushMatrix

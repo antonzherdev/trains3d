@@ -1,6 +1,6 @@
 #import "objd.h"
 #import "EGTypes.h"
-#import "EGVec.h"
+#import "GEVec.h"
 @class TRSmokeView;
 @class EGStandardMaterial;
 @class EGColorSource;
@@ -11,8 +11,8 @@
 @class EG;
 @class TRCar;
 @class TRCarPosition;
-@class EGLineSegment;
-@class EGMatrix;
+@class GELineSegment;
+@class GEMatrix;
 @class EGMatrixModel;
 @class EGMatrixStack;
 @class TRCarType;

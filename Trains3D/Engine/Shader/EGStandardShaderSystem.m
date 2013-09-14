@@ -6,7 +6,7 @@
 #import "EGMesh.h"
 #import "EGGL.h"
 #import "EGTexture.h"
-#import "EGMatrix.h"
+#import "GEMatrix.h"
 @implementation EGStandardShaderSystem
 static EGStandardShaderSystem* _EGStandardShaderSystem_instance;
 static NSMutableDictionary* _EGStandardShaderSystem_shaders;
@@ -297,7 +297,7 @@ static ODClassType* _EGStandardShader_type;
         [((EGShaderUniform*)([_mwcUniform get])) setMatrix:[EG.context.matrixStack.value mwc]];
         [((EGShaderAttribute*)([_normalSlot get])) setFromBufferWithStride:vertexBuffer.stride valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_NORMAL_SHIFT))];
         [[[[env.lights chain] filterCast:EGDirectLight.type] zip3A:_directLightDirections b:_directLightColors by:^EGDirectLight*(EGDirectLight* light, EGShaderUniform* dirSlot, EGShaderUniform* colorSlot) {
-            EGVec3 dir = egVec4Xyz([[EG.matrix.value wc] mulVec3:light.direction w:0.0]);
+            GEVec3 dir = geVec4Xyz([[EG.matrix.value wc] mulVec3:light.direction w:0.0]);
             [dirSlot setVec3:dir];
             [colorSlot setColor:light.color];
             return light;

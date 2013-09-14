@@ -2,7 +2,7 @@
 @class EGDirector;
 @class EGFileTexture;
 @class EGEnvironment;
-@class EGMatrix;
+@class GEMatrix;
 
 @class EG;
 @class EGContext;
@@ -49,10 +49,10 @@
 
 
 @interface EGMatrixModel : NSObject
-@property (nonatomic, readonly) EGMatrix* m;
-@property (nonatomic, readonly) EGMatrix* w;
-@property (nonatomic, readonly) EGMatrix* c;
-@property (nonatomic, readonly) EGMatrix* p;
+@property (nonatomic, readonly) GEMatrix* m;
+@property (nonatomic, readonly) GEMatrix* w;
+@property (nonatomic, readonly) GEMatrix* c;
+@property (nonatomic, readonly) GEMatrix* p;
 @property (nonatomic, readonly) CNLazy* _mw;
 @property (nonatomic, readonly) CNLazy* _mwc;
 @property (nonatomic, readonly) CNLazy* _mwcp;
@@ -60,20 +60,20 @@
 @property (nonatomic, readonly) CNLazy* _wcp;
 @property (nonatomic, readonly) CNLazy* _wc;
 
-+ (id)matrixModelWithM:(EGMatrix*)m w:(EGMatrix*)w c:(EGMatrix*)c p:(EGMatrix*)p _mw:(CNLazy*)_mw _mwc:(CNLazy*)_mwc _mwcp:(CNLazy*)_mwcp _cp:(CNLazy*)_cp _wcp:(CNLazy*)_wcp _wc:(CNLazy*)_wc;
-- (id)initWithM:(EGMatrix*)m w:(EGMatrix*)w c:(EGMatrix*)c p:(EGMatrix*)p _mw:(CNLazy*)_mw _mwc:(CNLazy*)_mwc _mwcp:(CNLazy*)_mwcp _cp:(CNLazy*)_cp _wcp:(CNLazy*)_wcp _wc:(CNLazy*)_wc;
++ (id)matrixModelWithM:(GEMatrix*)m w:(GEMatrix*)w c:(GEMatrix*)c p:(GEMatrix*)p _mw:(CNLazy*)_mw _mwc:(CNLazy*)_mwc _mwcp:(CNLazy*)_mwcp _cp:(CNLazy*)_cp _wcp:(CNLazy*)_wcp _wc:(CNLazy*)_wc;
+- (id)initWithM:(GEMatrix*)m w:(GEMatrix*)w c:(GEMatrix*)c p:(GEMatrix*)p _mw:(CNLazy*)_mw _mwc:(CNLazy*)_mwc _mwcp:(CNLazy*)_mwcp _cp:(CNLazy*)_cp _wcp:(CNLazy*)_wcp _wc:(CNLazy*)_wc;
 - (ODClassType*)type;
-+ (EGMatrixModel*)applyM:(EGMatrix*)m w:(EGMatrix*)w c:(EGMatrix*)c p:(EGMatrix*)p;
-- (EGMatrix*)mw;
-- (EGMatrix*)mwc;
-- (EGMatrix*)mwcp;
-- (EGMatrix*)cp;
-- (EGMatrix*)wcp;
-- (EGMatrix*)wc;
-- (EGMatrixModel*)modifyM:(EGMatrix*(^)(EGMatrix*))m;
-- (EGMatrixModel*)modifyW:(EGMatrix*(^)(EGMatrix*))w;
-- (EGMatrixModel*)modifyC:(EGMatrix*(^)(EGMatrix*))c;
-- (EGMatrixModel*)modifyP:(EGMatrix*(^)(EGMatrix*))p;
++ (EGMatrixModel*)applyM:(GEMatrix*)m w:(GEMatrix*)w c:(GEMatrix*)c p:(GEMatrix*)p;
+- (GEMatrix*)mw;
+- (GEMatrix*)mwc;
+- (GEMatrix*)mwcp;
+- (GEMatrix*)cp;
+- (GEMatrix*)wcp;
+- (GEMatrix*)wc;
+- (EGMatrixModel*)modifyM:(GEMatrix*(^)(GEMatrix*))m;
+- (EGMatrixModel*)modifyW:(GEMatrix*(^)(GEMatrix*))w;
+- (EGMatrixModel*)modifyC:(GEMatrix*(^)(GEMatrix*))c;
+- (EGMatrixModel*)modifyP:(GEMatrix*(^)(GEMatrix*))p;
 + (EGMatrixModel*)identity;
 + (ODClassType*)type;
 @end

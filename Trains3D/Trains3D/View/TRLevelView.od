@@ -8,7 +8,7 @@ class TRLevelView(level : TRLevel) extends EGView {
     private val railroadView = TRRailroadView()
     private val trainView = TRTrainView()
 
-    val environment = EGEnvironment(ambientColor = EGColor(0.4, 0.4, 0.4, 1), lights = [EGDirectLight(EGColor(1, 1, 1, 1), EGVec3(-0.2, 0.2, -0.5))])
+    val environment = EGEnvironment(ambientColor = EGColor(0.4, 0.4, 0.4, 1), lights = [EGDirectLight(EGColor(1, 1, 1, 1), Vec3(-0.2, 0.2, -0.5))])
 
     def drawView {
         backgroundView.draw
@@ -21,7 +21,7 @@ class TRLevelView(level : TRLevel) extends EGView {
 //        level.map.drawLayout
     }
 
-    val camera : EGCamera = EGCameraIso(level.map.size, EGVec2(0, 0))
+    val camera : EGCamera = EGCameraIso(level.map.size, Vec2(0, 0))
 
     def updateWith(delta : float) {
         level.trains.for(trainView.updateWith(delta, _))

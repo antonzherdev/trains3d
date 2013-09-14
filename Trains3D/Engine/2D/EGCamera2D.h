@@ -1,22 +1,22 @@
 #import "objd.h"
 #import "EGTypes.h"
-#import "EGVec.h"
-#import "EGRect.h"
+#import "GEVec.h"
+#import "GERect.h"
 @class EGMatrixModel;
-@class EGMatrix;
+@class GEMatrix;
 @class EG;
 @class EGMatrixStack;
 
 @class EGCamera2D;
 
 @interface EGCamera2D : NSObject<EGCamera>
-@property (nonatomic, readonly) EGVec2 size;
+@property (nonatomic, readonly) GEVec2 size;
 
-+ (id)camera2DWithSize:(EGVec2)size;
-- (id)initWithSize:(EGVec2)size;
++ (id)camera2DWithSize:(GEVec2)size;
+- (id)initWithSize:(GEVec2)size;
 - (ODClassType*)type;
-- (void)focusForViewSize:(EGVec2)viewSize;
-- (EGVec2)translateWithViewSize:(EGVec2)viewSize viewPoint:(EGVec2)viewPoint;
+- (void)focusForViewSize:(GEVec2)viewSize;
+- (GEVec2)translateWithViewSize:(GEVec2)viewSize viewPoint:(GEVec2)viewPoint;
 + (ODClassType*)type;
 @end
 

@@ -1,6 +1,6 @@
 #import "objd.h"
 #import "EGShader.h"
-#import "EGVec.h"
+#import "GEVec.h"
 #import "EGParticleSystem.h"
 #import "EGMaterial.h"
 @class EGVertexBuffer;
@@ -50,31 +50,31 @@ typedef struct EGBillboardBufferData EGBillboardBufferData;
 
 
 struct EGBillboardBufferData {
-    EGVec3 position;
-    EGVec2 model;
-    EGVec4 color;
-    EGVec2 uv;
+    GEVec3 position;
+    GEVec2 model;
+    GEVec4 color;
+    GEVec2 uv;
 };
-static inline EGBillboardBufferData EGBillboardBufferDataMake(EGVec3 position, EGVec2 model, EGVec4 color, EGVec2 uv) {
+static inline EGBillboardBufferData EGBillboardBufferDataMake(GEVec3 position, GEVec2 model, GEVec4 color, GEVec2 uv) {
     return (EGBillboardBufferData){position, model, color, uv};
 }
 static inline BOOL EGBillboardBufferDataEq(EGBillboardBufferData s1, EGBillboardBufferData s2) {
-    return EGVec3Eq(s1.position, s2.position) && EGVec2Eq(s1.model, s2.model) && EGVec4Eq(s1.color, s2.color) && EGVec2Eq(s1.uv, s2.uv);
+    return GEVec3Eq(s1.position, s2.position) && GEVec2Eq(s1.model, s2.model) && GEVec4Eq(s1.color, s2.color) && GEVec2Eq(s1.uv, s2.uv);
 }
 static inline NSUInteger EGBillboardBufferDataHash(EGBillboardBufferData self) {
     NSUInteger hash = 0;
-    hash = hash * 31 + EGVec3Hash(self.position);
-    hash = hash * 31 + EGVec2Hash(self.model);
-    hash = hash * 31 + EGVec4Hash(self.color);
-    hash = hash * 31 + EGVec2Hash(self.uv);
+    hash = hash * 31 + GEVec3Hash(self.position);
+    hash = hash * 31 + GEVec2Hash(self.model);
+    hash = hash * 31 + GEVec4Hash(self.color);
+    hash = hash * 31 + GEVec2Hash(self.uv);
     return hash;
 }
 static inline NSString* EGBillboardBufferDataDescription(EGBillboardBufferData self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<EGBillboardBufferData: "];
-    [description appendFormat:@"position=%@", EGVec3Description(self.position)];
-    [description appendFormat:@", model=%@", EGVec2Description(self.model)];
-    [description appendFormat:@", color=%@", EGVec4Description(self.color)];
-    [description appendFormat:@", uv=%@", EGVec2Description(self.uv)];
+    [description appendFormat:@"position=%@", GEVec3Description(self.position)];
+    [description appendFormat:@", model=%@", GEVec2Description(self.model)];
+    [description appendFormat:@", color=%@", GEVec4Description(self.color)];
+    [description appendFormat:@", uv=%@", GEVec2Description(self.uv)];
     [description appendString:@">"];
     return description;
 }
@@ -97,10 +97,10 @@ ODPType* egBillboardBufferDataType();
 
 
 @interface EGBillboardParticle : EGParticle
-@property (nonatomic) EGVec3 position;
-@property (nonatomic) EGQuad uv;
-@property (nonatomic) EGQuad model;
-@property (nonatomic) EGVec4 color;
+@property (nonatomic) GEVec3 position;
+@property (nonatomic) GEQuad uv;
+@property (nonatomic) GEQuad model;
+@property (nonatomic) GEVec4 color;
 
 + (id)billboardParticleWithLifeLength:(float)lifeLength;
 - (id)initWithLifeLength:(float)lifeLength;

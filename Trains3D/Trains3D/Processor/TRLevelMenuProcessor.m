@@ -31,7 +31,7 @@ static ODClassType* _TRLevelMenuProcessor_type;
 - (BOOL)mouseUpEvent:(EGEvent*)event {
     if([[_level.railroad damagesPoints] isEmpty]) return NO;
     if([[_level repairer] isDefined]) return NO;
-    EGVec2 p = [event location];
+    GEVec2 p = [event location];
     if(p.y > 0.1) return NO;
     NSUInteger cityNumber = ((NSUInteger)(p.x / 0.1));
     if(cityNumber >= [[_level cities] count]) return NO;

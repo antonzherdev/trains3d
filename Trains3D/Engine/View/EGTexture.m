@@ -76,7 +76,7 @@ static ODClassType* _EGTexture_type;
 @implementation EGFileTexture{
     NSString* _file;
     BOOL __loaded;
-    EGVec2 __size;
+    GEVec2 __size;
 }
 static ODClassType* _EGFileTexture_type;
 @synthesize file = _file;
@@ -105,7 +105,7 @@ static ODClassType* _EGFileTexture_type;
     __loaded = YES;
 }
 
-- (EGVec2)size {
+- (GEVec2)size {
     if(!(__loaded)) [self load];
     return __size;
 }

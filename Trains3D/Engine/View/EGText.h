@@ -3,4 +3,4 @@
 #import "EGGL.h"
 
 
-extern void egTextGlutDraw(NSString* text, void* font, EGVec2 position);
+extern void egTextGlutDraw(NSString* text, void* font, GEVec2 position);

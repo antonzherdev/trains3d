@@ -8,7 +8,7 @@ class EGDirector {
     private var _isPaused = false
     val time : EGTime = EGTime()
 
-    def drawWith(size : EGVec2) {
+    def drawWith(size : Vec2) {
         EG.context.director = self
         glClearColor(0.0, 0.0, 0.0, 1)
         egClear

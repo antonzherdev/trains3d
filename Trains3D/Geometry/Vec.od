@@ -1,0 +1,82 @@
+package com.antonzherdev.geometry
+
+import core.ODMath._
+
+struct Vec2(x : float4, y : float4) extends ODComparable<Vec2> {
+    static def apply(vec2i : Vec2I) = Vec2(vec2i.x, vec2i.y)
+
+    def add(vec2 : Vec2) = Vec2(x + vec2.x, y + vec2.y)
+    def sub(vec2 : Vec2) = Vec2(x - vec2.x, y - vec2.y)
+    def negate = Vec2(-x, -y)
+    def degreeAngle : float4 = 180.0 / M_PI * atan2(y, x)
+    def angle : float4 = atan2(y, x)
+    def dot(vec2 : Vec2) : float4 = x*vec2.x + y*vec2.y
+    def lengthSquare : float4 = dot(self)
+    def length = sqrt(lengthSquare)
+    def mul(value : float4) = Vec2(x*value, y*value)
+    def div(value : float4) = Vec2(x/value, y/value)
+    def mid(vec2 : Vec2) = add(vec2).mul(0.5)
+    def distanceTo(vec2 : Vec2) = sub(vec2).length
+    def set(length : float4) = mul(length/self.length)
+    def normalize = set(length = 1.0)
+
+    def compare(to : Vec2) : int = {
+        val dX = x.compare(to.x)
+        if(dX != 0) dX else y.compare(to.y)
+    }
+}
+
+struct Vec2I(x : int, y : int) extends ODComparable<Vec2I> {
+    static def apply(vec2 : Vec2) = Vec2I(lround(vec2.x), lround(vec2.y))
+
+    def add(vec2i : Vec2I) = Vec2I(x + vec2i.x, y + vec2i.y)
+    def sub(vec2i : Vec2I) = Vec2I(x - vec2i.x, y - vec2i.y)
+    def negate = Vec2I(-x, -y)
+
+    def compare(to : Vec2I) : int = {
+        val dX = x.compare(to.x)
+        if(dX != 0) dX else y.compare(to.y)
+    }
+}
+
+struct Vec3(x : float4, y : float4, z : float4) {
+    static def apply(vec2 : Vec2, z : float4) = Vec3(vec2.x, vec2.y, z)
+    def add(v : Vec3) = Vec3(x + v.x, y + v.y, z + v.z)
+    def sqr = mul(length)
+    def negate = Vec3(-x, -y, -z)
+    def mul(k : float4) = Vec3(k*x, k*y, k*z)
+    def dot(vec3 : Vec3) : float = x*vec3.x + y*vec3.y + z*vec3.z
+    def lengthSquare : float = x*x + y*y + z*z
+    def length = sqrt(lengthSquare)
+    def set(length : float) = mul(length/self.length)
+    def normalize = set(length = 1.0)
+}
+
+struct Vec4(x : float4, y : float4, z : float4, w : float4) {
+    static def apply(vec3 : Vec3, w : float4) = Vec4(vec3.x, vec3.y, vec3.z, w)
+    def xyz = Vec3(x, y, z)
+    def mul(k : float4) = Vec4(k*x, k*y, k*z, k*w)
+    def lengthSquare : float = x*x + y*y + z*z + w*w
+    def length = sqrt(lengthSquare)
+    def set(length : float) = mul(length/self.length)
+    def normalize = set(length = 1.0)
+}
+
+struct Quad(p1 : Vec2, p2 : Vec2, p3 : Vec2, p4 : Vec2) {
+    static val identity = Quad(Vec2(0, 0), Vec2(1, 0), Vec2(1, 1), Vec2(0, 1))
+    static def apply(size : float4) = Quad(Vec2(-size, -size), Vec2(size, -size), Vec2(size, size), Vec2(-size, size))
+    def mul(value : float4) = Quad(p1.mul(value), p2.mul(value), p3.mul(value), p4.mul(value))
+    def add(vec2 : Vec2) = Quad(p1.add(vec2), p2.add(vec2), p3.add(vec2), p4.add(vec2))
+    def add(x : float4, y : float4) = add(Vec2(x, y))
+
+    def quadrant :Quadrant = {
+        val x = (p2.x - p1.x)/2
+        val y = (p4.y - p1.y)/2
+        val q = mul(0.5).add(p1)
+        Quadrant([q, q.add(x, 0), q.add(x, y), q.add(0, y)])
+    }
+}
+
+struct Quadrant(quads : Quad[4]) {
+    def randomQuad = quads[randomMax(3)]
+}

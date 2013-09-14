@@ -65,18 +65,18 @@ static ODClassType* _EGCollision_type;
 
 
 @implementation EGContact{
-    EGVec3 _a;
-    EGVec3 _b;
+    GEVec3 _a;
+    GEVec3 _b;
 }
 static ODClassType* _EGContact_type;
 @synthesize a = _a;
 @synthesize b = _b;
 
-+ (id)contactWithA:(EGVec3)a b:(EGVec3)b {
++ (id)contactWithA:(GEVec3)a b:(GEVec3)b {
     return [[EGContact alloc] initWithA:a b:b];
 }
 
-- (id)initWithA:(EGVec3)a b:(EGVec3)b {
+- (id)initWithA:(GEVec3)a b:(GEVec3)b {
     self = [super init];
     if(self) {
         _a = a;
@@ -107,20 +107,20 @@ static ODClassType* _EGContact_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGContact* o = ((EGContact*)(other));
-    return EGVec3Eq(self.a, o.a) && EGVec3Eq(self.b, o.b);
+    return GEVec3Eq(self.a, o.a) && GEVec3Eq(self.b, o.b);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + EGVec3Hash(self.a);
-    hash = hash * 31 + EGVec3Hash(self.b);
+    hash = hash * 31 + GEVec3Hash(self.a);
+    hash = hash * 31 + GEVec3Hash(self.b);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"a=%@", EGVec3Description(self.a)];
-    [description appendFormat:@", b=%@", EGVec3Description(self.b)];
+    [description appendFormat:@"a=%@", GEVec3Description(self.a)];
+    [description appendFormat:@", b=%@", GEVec3Description(self.b)];
     [description appendString:@">"];
     return description;
 }

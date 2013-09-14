@@ -19,14 +19,14 @@
 //    [level runSample];
     EGScene *scene = [TRLevelFactory sceneForLevel:level];
 //    TRRailroad *railroad = level.railroad;
-//    [railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(0, 0) form:[TRRailForm leftRight]]];
-//    [railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(1, 0) form:[TRRailForm leftBottom]]];
-//    [railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(1, -1) form:[TRRailForm topRight]]];
-//    [railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(2, -1) form:[TRRailForm leftTop]]];
-//    [railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(2, 0) form:[TRRailForm bottomTop]]];
-//    [railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(2, 1) form:[TRRailForm bottomRight]]];
-//    [railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(3, 1) form:[TRRailForm leftTop]]];
-//    [railroad tryAddRail:[TRRail railWithTile:EGVec2IMake(3, 2) form:[TRRailForm leftBottom]]];
+//    [railroad tryAddRail:[TRRail railWithTile:GEVec2IMake(0, 0) form:[TRRailForm leftRight]]];
+//    [railroad tryAddRail:[TRRail railWithTile:GEVec2IMake(1, 0) form:[TRRailForm leftBottom]]];
+//    [railroad tryAddRail:[TRRail railWithTile:GEVec2IMake(1, -1) form:[TRRailForm topRight]]];
+//    [railroad tryAddRail:[TRRail railWithTile:GEVec2IMake(2, -1) form:[TRRailForm leftTop]]];
+//    [railroad tryAddRail:[TRRail railWithTile:GEVec2IMake(2, 0) form:[TRRailForm bottomTop]]];
+//    [railroad tryAddRail:[TRRail railWithTile:GEVec2IMake(2, 1) form:[TRRailForm bottomRight]]];
+//    [railroad tryAddRail:[TRRail railWithTile:GEVec2IMake(3, 1) form:[TRRailForm leftTop]]];
+//    [railroad tryAddRail:[TRRail railWithTile:GEVec2IMake(3, 2) form:[TRRailForm leftBottom]]];
     _view.director.scene = scene;
     [_view.director displayStats];
 }

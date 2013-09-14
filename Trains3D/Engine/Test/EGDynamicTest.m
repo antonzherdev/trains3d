@@ -2,7 +2,7 @@
 
 #import "EGDynamicWorld.h"
 #import "EGCollisionBody.h"
-#import "EGMatrix.h"
+#import "GEMatrix.h"
 @implementation EGDynamicTest
 static ODClassType* _EGDynamicTest_type;
 
@@ -28,15 +28,15 @@ static ODClassType* _EGDynamicTest_type;
 }
 
 - (void)testSimple {
-    EGDynamicWorld* world = [EGDynamicWorld dynamicWorldWithGravity:EGVec3Make(0.0, -10.0, 0.0)];
-    EGCollisionBox* shape = [EGCollisionBox collisionBoxWithHalfSize:EGVec3Make(0.5, 0.5, 0.5)];
+    EGDynamicWorld* world = [EGDynamicWorld dynamicWorldWithGravity:GEVec3Make(0.0, -10.0, 0.0)];
+    EGCollisionBox* shape = [EGCollisionBox collisionBoxWithHalfSize:GEVec3Make(0.5, 0.5, 0.5)];
     EGRigidBody* body = [EGRigidBody dynamicData:@1 shape:shape mass:1.0];
     [world addBody:body];
-    body.matrix = [[EGMatrix identity] translateX:0.0 y:5.0 z:0.0];
-    EGMatrix* m = body.matrix;
+    body.matrix = [[GEMatrix identity] translateX:0.0 y:5.0 z:0.0];
+    GEMatrix* m = body.matrix;
     [self assertTrueValue:eqf4([m array][13], 5)];
-    EGVec3 v = body.velocity;
-    [self assertEqualsA:wrap(EGVec3, v) b:wrap(EGVec3, EGVec3Make(0.0, 0.0, 0.0))];
+    GEVec3 v = body.velocity;
+    [self assertEqualsA:wrap(GEVec3, v) b:wrap(GEVec3, GEVec3Make(0.0, 0.0, 0.0))];
     [self runSecondInWorld:world];
     m = body.matrix;
     [self assertTrueValue:float4Between([m array][13], -0.1, 0.1)];
@@ -47,15 +47,15 @@ static ODClassType* _EGDynamicTest_type;
 }
 
 - (void)testFriction {
-    EGDynamicWorld* world = [EGDynamicWorld dynamicWorldWithGravity:EGVec3Make(0.0, -10.0, 0.0)];
-    EGRigidBody* plane = [EGRigidBody staticalData:@1 shape:[EGCollisionPlane collisionPlaneWithNormal:EGVec3Make(0.0, 1.0, 0.0) distance:0.0]];
+    EGDynamicWorld* world = [EGDynamicWorld dynamicWorldWithGravity:GEVec3Make(0.0, -10.0, 0.0)];
+    EGRigidBody* plane = [EGRigidBody staticalData:@1 shape:[EGCollisionPlane collisionPlaneWithNormal:GEVec3Make(0.0, 1.0, 0.0) distance:0.0]];
     [world addBody:plane];
-    EGRigidBody* body = [EGRigidBody dynamicData:@2 shape:[EGCollisionBox collisionBoxWithHalfSize:EGVec3Make(0.5, 0.5, 0.5)] mass:1.0];
+    EGRigidBody* body = [EGRigidBody dynamicData:@2 shape:[EGCollisionBox collisionBoxWithHalfSize:GEVec3Make(0.5, 0.5, 0.5)] mass:1.0];
     [world addBody:body];
-    body.matrix = [[EGMatrix identity] translateX:0.0 y:0.5 z:0.0];
-    body.velocity = EGVec3Make(10.0, 0.0, 0.0);
+    body.matrix = [[GEMatrix identity] translateX:0.0 y:0.5 z:0.0];
+    body.velocity = GEVec3Make(10.0, 0.0, 0.0);
     [self runSecondInWorld:world];
-    EGVec3 v = body.velocity;
+    GEVec3 v = body.velocity;
     [self assertTrueValue:float4Between(v.x, 7.4, 7.6)];
     [self assertTrueValue:float4Between(v.y, -0.1, 0.1)];
     [self assertTrueValue:float4Between(v.z, -0.1, 0.1)];

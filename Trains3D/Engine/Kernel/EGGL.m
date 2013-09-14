@@ -1,5 +1,5 @@
 #import "EGGL.h"
-#import "EGMatrix.h"
+#import "GEMatrix.h"
 
 id egGetProgramError(GLuint program) {
     GLint linkSuccess;
@@ -32,7 +32,7 @@ id egGetShaderError(GLuint shader) {
     return [CNOption none];
 }
 
-EGVec2 egLoadTextureFromFile(GLuint target, NSString* file) {
+GEVec2 egLoadTextureFromFile(GLuint target, NSString* file) {
     CFURLRef url = (__bridge CFURLRef)[NSURL fileURLWithPath:file];
     CGImageSourceRef myImageSourceRef = CGImageSourceCreateWithURL(url, NULL);
     CGImageRef myImageRef = CGImageSourceCreateImageAtIndex (myImageSourceRef, 0, NULL);
@@ -65,7 +65,7 @@ EGVec2 egLoadTextureFromFile(GLuint target, NSString* file) {
     CFRelease(myImageSourceRef);
     CFRelease(myImageRef);
     free(myData);
-    return EGVec2Make(width, height);
+    return GEVec2Make(width, height);
 
 }
 

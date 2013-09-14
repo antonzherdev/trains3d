@@ -3,7 +3,7 @@
 #import "EGMesh.h"
 #import "EG.h"
 #import "TRCity.h"
-#import "EGMatrix.h"
+#import "GEMatrix.h"
 #import "TRTypes.h"
 #import "EGMaterial.h"
 #import "TR3D.h"
@@ -32,9 +32,9 @@ static ODClassType* _TRCityView_type;
 
 - (void)drawCity:(TRCity*)city {
     [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
-        return [[_ modifyW:^EGMatrix*(EGMatrix* w) {
+        return [[_ modifyW:^GEMatrix*(GEMatrix* w) {
             return [w translateX:((float)(city.tile.x)) y:((float)(city.tile.y)) z:0.0];
-        }] modifyM:^EGMatrix*(EGMatrix* m) {
+        }] modifyM:^GEMatrix*(GEMatrix* m) {
             return [m rotateAngle:((float)(city.angle.angle)) x:0.0 y:-1.0 z:0.0];
         }];
     } f:^void() {

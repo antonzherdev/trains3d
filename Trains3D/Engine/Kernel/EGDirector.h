@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "EGVec.h"
+#import "GEVec.h"
 @class EGScene;
 @class EGTime;
 @class EG;
@@ -17,7 +17,7 @@
 + (id)director;
 - (id)init;
 - (ODClassType*)type;
-- (void)drawWithSize:(EGVec2)size;
+- (void)drawWithSize:(GEVec2)size;
 - (void)processEvent:(EGEvent*)event;
 - (BOOL)isStarted;
 - (void)start;

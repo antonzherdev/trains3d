@@ -1,0 +1,107 @@
+package com.antonzherdev.geometry
+
+import test._
+
+class BentleyOttmannTest extends CNTestCase {
+    def testMain {
+        val r = BentleyOttmann.intersectionsFor([
+            (1, LineSegment.newWith(-1, -1, 2, 2)),
+            (2, LineSegment.newWith(-2, 1, 2, 1)),
+            (3, LineSegment.newWith(-2, 2, 1, -1))
+        ])
+        val e = [
+            Intersection(CNPair.newWith(1, 2), Vec2(1, 1)),
+            Intersection(CNPair.newWith(1, 3), Vec2(0, 0)),
+            Intersection(CNPair.newWith(2, 3), Vec2(-1, 1))
+        ].toSet
+        assertEquals(e, r)
+    }
+
+    def testInPoint {
+        var r = BentleyOttmann.intersectionsFor([
+            (1, LineSegment.newWith(-1, -1, 2, 2)),
+            (3, LineSegment.newWith(-2, 2, 0, 0))
+        ])
+        assertEquals([
+            Intersection(CNPair.newWith(1, 3), Vec2(0, 0))
+        ].toSet, r)
+    }
+
+    def testNoCross {
+        var r = BentleyOttmann.intersectionsFor([
+            (1, LineSegment.newWith(-1, -1, 2, 2)),
+            (3, LineSegment.newWith(-1, -1, 2, 0))
+        ])
+        assertEquals([].toSet, r)
+    }
+
+    def testVertical {
+        var r = BentleyOttmann.intersectionsFor([
+            (1, LineSegment.newWith(-1, -1, 2, 2)),
+            (2, LineSegment.newWith(1, -2, 1, 2)),
+            (3, LineSegment.newWith(1, -4, 1, 0)),
+            (4, LineSegment.newWith(-1, -1, 2, -4)),
+            (5, LineSegment.newWith(-1, -1, 2, -1))
+        ])
+        val e = [
+            Intersection(CNPair.newWith(3, 4), Vec2(1, -3)),
+            Intersection(CNPair.newWith(2, 5), Vec2(1, -1)),
+            Intersection(CNPair.newWith(1, 2), Vec2(1, 1)),
+            Intersection(CNPair.newWith(3, 5), Vec2(1, -1))
+        ].toSet
+        assertEquals(e, r)
+    }
+
+    def testVerticalInPoint {
+        var r = BentleyOttmann.intersectionsFor([
+            (1, LineSegment.newWith(0, 0, 0, 1)),
+            (2, LineSegment.newWith(-1, 1, 1, 1)),
+            (3, LineSegment.newWith(-1, 0, 1, 0))
+        ])
+        val e = [
+            Intersection(CNPair.newWith(1, 2), Vec2(0, 1)),
+            Intersection(CNPair.newWith(1, 3), Vec2(0, 0))
+        ].toSet
+        assertEquals(e, r)
+    }
+
+    def testOneStart {
+        var r = BentleyOttmann.intersectionsFor([
+            (1, LineSegment.newWith(-1, 1, 1, -1)),
+            (2, LineSegment.newWith(-1, 1, 2, 1)),
+            (3, LineSegment.newWith(-1, -1, 2, 2))
+        ])
+        val e = [
+            Intersection(CNPair.newWith(1, 3), Vec2(0, 0)),
+            Intersection(CNPair.newWith(2, 3), Vec2(1, 1))
+        ].toSet
+        assertEquals(e, r)
+    }
+
+    def testOneEnd {
+        var r = BentleyOttmann.intersectionsFor([
+            (1, LineSegment.newWith(-2, 1, 1, 1)),
+            (2, LineSegment.newWith(-1, -1, 1, 1)),
+            (3, LineSegment.newWith(-2, 2, 2, -2))
+        ])
+        val e = [
+            Intersection(CNPair.newWith(1, 3), Vec2(-1, 1)),
+            Intersection(CNPair.newWith(2, 3), Vec2(0, 0))
+        ].toSet
+        assertEquals(e, r)
+    }
+
+    def testSameLines {
+        var r = BentleyOttmann.intersectionsFor([
+            (1, LineSegment.newWith(-1, 1, 1, -1)),
+            (2, LineSegment.newWith(-1, 1, 1, -1)),
+            (3, LineSegment.newWith(-1, -1, 2, 2))
+        ])
+        val e = [
+            Intersection(CNPair.newWith(1, 2), Vec2(0, 0)),
+            Intersection(CNPair.newWith(2, 3), Vec2(0, 0)),
+            Intersection(CNPair.newWith(1, 3), Vec2(0, 0))
+        ].toSet
+        assertEquals(e, r)
+    }
+}

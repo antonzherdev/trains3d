@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "EGVec.h"
+#import "GEVec.h"
 @protocol EGController;
 @class EGLayer;
 @class EGEvent;
@@ -13,7 +13,7 @@
 + (id)sceneWithController:(id<EGController>)controller layers:(id<CNSeq>)layers;
 - (id)initWithController:(id<EGController>)controller layers:(id<CNSeq>)layers;
 - (ODClassType*)type;
-- (void)drawWithViewSize:(EGVec2)viewSize;
+- (void)drawWithViewSize:(GEVec2)viewSize;
 - (BOOL)processEvent:(EGEvent*)event;
 - (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;

@@ -1,24 +1,24 @@
 #import "EGCamera2D.h"
 
 #import "EG.h"
-#import "EGMatrix.h"
+#import "GEMatrix.h"
 #import "EGGL.h"
 @implementation EGCamera2D{
-    EGVec2 _size;
+    GEVec2 _size;
     EGMatrixModel* _matrixModel;
 }
 static ODClassType* _EGCamera2D_type;
 @synthesize size = _size;
 
-+ (id)camera2DWithSize:(EGVec2)size {
++ (id)camera2DWithSize:(GEVec2)size {
     return [[EGCamera2D alloc] initWithSize:size];
 }
 
-- (id)initWithSize:(EGVec2)size {
+- (id)initWithSize:(GEVec2)size {
     self = [super init];
     if(self) {
         _size = size;
-        _matrixModel = [EGMatrixModel applyM:[EGMatrix identity] w:[EGMatrix identity] c:[EGMatrix identity] p:[EGMatrix orthoLeft:0.0 right:_size.x bottom:0.0 top:_size.y zNear:-1.0 zFar:1.0]];
+        _matrixModel = [EGMatrixModel applyM:[GEMatrix identity] w:[GEMatrix identity] c:[GEMatrix identity] p:[GEMatrix orthoLeft:0.0 right:_size.x bottom:0.0 top:_size.y zNear:-1.0 zFar:1.0]];
     }
     
     return self;
@@ -29,27 +29,27 @@ static ODClassType* _EGCamera2D_type;
     _EGCamera2D_type = [ODClassType classTypeWithCls:[EGCamera2D class]];
 }
 
-- (CGFloat)factorForViewSize:(EGVec2)viewSize {
+- (CGFloat)factorForViewSize:(GEVec2)viewSize {
     return min(((CGFloat)(viewSize.x / _size.x)), ((CGFloat)(viewSize.y / _size.y)));
 }
 
-- (EGRect)viewportRectForViewSize:(EGVec2)viewSize {
+- (GERect)viewportRectForViewSize:(GEVec2)viewSize {
     return [self viewportRectForViewSize:viewSize factor:[self factorForViewSize:viewSize]];
 }
 
-- (EGRect)viewportRectForViewSize:(EGVec2)viewSize factor:(CGFloat)factor {
-    return egRectMoveToCenterForSize(EGRectMake(0.0, ((CGFloat)(_size.x * factor)), 0.0, ((CGFloat)(_size.y * factor))), viewSize);
+- (GERect)viewportRectForViewSize:(GEVec2)viewSize factor:(CGFloat)factor {
+    return geRectMoveToCenterForSize(GERectMake(0.0, ((CGFloat)(_size.x * factor)), 0.0, ((CGFloat)(_size.y * factor))), viewSize);
 }
 
-- (void)focusForViewSize:(EGVec2)viewSize {
-    egViewport(egRectIApplyRect([self viewportRectForViewSize:viewSize]));
+- (void)focusForViewSize:(GEVec2)viewSize {
+    egViewport(geRectIApplyRect([self viewportRectForViewSize:viewSize]));
     EG.matrix.value = _matrixModel;
 }
 
-- (EGVec2)translateWithViewSize:(EGVec2)viewSize viewPoint:(EGVec2)viewPoint {
+- (GEVec2)translateWithViewSize:(GEVec2)viewSize viewPoint:(GEVec2)viewPoint {
     CGFloat factor = [self factorForViewSize:viewSize];
-    EGRect viewport = [self viewportRectForViewSize:viewSize factor:factor];
-    return egVec2DivValue(egVec2SubVec2(viewPoint, egRectPoint(viewport)), ((float)(factor)));
+    GERect viewport = [self viewportRectForViewSize:viewSize factor:factor];
+    return geVec2DivValue(geVec2SubVec2(viewPoint, geRectPoint(viewport)), ((float)(factor)));
 }
 
 - (ODClassType*)type {
@@ -68,18 +68,18 @@ static ODClassType* _EGCamera2D_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGCamera2D* o = ((EGCamera2D*)(other));
-    return EGVec2Eq(self.size, o.size);
+    return GEVec2Eq(self.size, o.size);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + EGVec2Hash(self.size);
+    hash = hash * 31 + GEVec2Hash(self.size);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"size=%@", EGVec2Description(self.size)];
+    [description appendFormat:@"size=%@", GEVec2Description(self.size)];
     [description appendString:@">"];
     return description;
 }

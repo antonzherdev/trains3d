@@ -1,6 +1,6 @@
 #import "objd.h"
 #import "EGTypes.h"
-#import "EGVec.h"
+#import "GEVec.h"
 @class TRObstacle;
 @class TRObstacleType;
 @class TRLevel;

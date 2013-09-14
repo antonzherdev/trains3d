@@ -1,6 +1,6 @@
 #import "objd.h"
 #import "EGGL.h"
-#import "EGVec.h"
+#import "GEVec.h"
 
 @class EGTexture;
 @class EGFileTexture;
@@ -25,7 +25,7 @@
 + (id)fileTextureWithFile:(NSString*)file;
 - (id)initWithFile:(NSString*)file;
 - (ODClassType*)type;
-- (EGVec2)size;
+- (GEVec2)size;
 - (void)bind;
 + (ODClassType*)type;
 @end

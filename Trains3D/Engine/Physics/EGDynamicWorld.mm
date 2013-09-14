@@ -1,10 +1,10 @@
 #import "EGDynamicWorld.h"
 
 #import "EGCollisionBody.h"
-#import "EGMatrix.h"
+#import "GEMatrix.h"
 #include "btBulletDynamicsCommon.h"
 @implementation EGDynamicWorld{
-    EGVec3 _gravity;
+    GEVec3 _gravity;
     NSMutableArray* __bodies;
     btDefaultCollisionConfiguration* _collisionConfiguration;
     btCollisionDispatcher* _dispatcher;
@@ -15,11 +15,11 @@
 static ODClassType* _EGDynamicWorld_type;
 @synthesize gravity = _gravity;
 
-+ (id)dynamicWorldWithGravity:(EGVec3)gravity {
++ (id)dynamicWorldWithGravity:(GEVec3)gravity {
     return [[EGDynamicWorld alloc] initWithGravity:gravity];
 }
 
-- (id)initWithGravity:(EGVec3)gravity {
+- (id)initWithGravity:(GEVec3)gravity {
     self = [super init];
     if(self) {
         _gravity = gravity;
@@ -91,18 +91,18 @@ static ODClassType* _EGDynamicWorld_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGDynamicWorld* o = ((EGDynamicWorld*)(other));
-    return EGVec3Eq(self.gravity, o.gravity);
+    return GEVec3Eq(self.gravity, o.gravity);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + EGVec3Hash(self.gravity);
+    hash = hash * 31 + GEVec3Hash(self.gravity);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"gravity=%@", EGVec3Description(self.gravity)];
+    [description appendFormat:@"gravity=%@", GEVec3Description(self.gravity)];
     [description appendString:@">"];
     return description;
 }
@@ -186,7 +186,7 @@ static ODClassType* _EGDynamicBody_type;
     _EGDynamicBody_type = [ODClassType classTypeWithCls:[EGRigidBody class]];
 }
 
-- (EGMatrix*)matrix {
+- (GEMatrix *)matrix {
     btTransform trans;
     if(_isKinematic) {
         _motionState->getWorldTransform(trans);
@@ -195,7 +195,7 @@ static ODClassType* _EGDynamicBody_type;
     }
     float matrix[16];
     trans.getOpenGLMatrix(matrix);
-    return [EGMatrix matrixWithArray:matrix];
+    return [GEMatrix matrixWithArray:matrix];
 }
 
 - (float)friction {
@@ -215,7 +215,7 @@ static ODClassType* _EGDynamicBody_type;
 }
 
 
-- (void)setMatrix:(EGMatrix*)matrix {
+- (void)setMatrix:(GEMatrix *)matrix {
     btTransform trans;
     trans.setFromOpenGLMatrix(matrix.array);
     if(_isKinematic) {
@@ -225,21 +225,21 @@ static ODClassType* _EGDynamicBody_type;
     }
 }
 
-- (EGVec3)velocity {
+- (GEVec3)velocity {
     btVector3 const & v = _body->getLinearVelocity();
-    return EGVec3Make(v.x(), v.y(), v.z());
+    return GEVec3Make(v.x(), v.y(), v.z());
 }
 
-- (void)setVelocity:(EGVec3)vec3 {
+- (void)setVelocity:(GEVec3)vec3 {
     _body->setLinearVelocity(btVector3(vec3.x, vec3.y, vec3.z));
 }
 
-- (EGVec3)angularVelocity {
+- (GEVec3)angularVelocity {
     btVector3 const & v = _body->getAngularVelocity();
-    return EGVec3Make(v.x(), v.y(), v.z());
+    return GEVec3Make(v.x(), v.y(), v.z());
 }
 
-- (void)setAngularVelocity:(EGVec3)vec3 {
+- (void)setAngularVelocity:(GEVec3)vec3 {
     _body->setAngularVelocity(btVector3(vec3.x, vec3.y, vec3.z));
 }
 

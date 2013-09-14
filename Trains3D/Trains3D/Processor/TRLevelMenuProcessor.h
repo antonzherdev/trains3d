@@ -1,6 +1,6 @@
 #import "objd.h"
 #import "EGProcessor.h"
-#import "EGVec.h"
+#import "GEVec.h"
 @class TRLevel;
 @class TRRailroad;
 

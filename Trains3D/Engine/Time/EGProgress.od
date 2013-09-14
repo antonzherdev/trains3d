@@ -3,8 +3,8 @@ package com.antonzherdev.eg
 import core.ODMath._
 
 object EGProgress {
-    def randomVec2 : EGVec2 = EGVec2(2*randomFloat - 1, 2*randomFloat - 1)
-    def randomVec3 : EGVec3 = EGVec3(2*randomFloat - 1, 2*randomFloat - 1, 2*randomFloat - 1)
+    def randomVec2 : Vec2 = Vec2(2*randomFloat - 1, 2*randomFloat - 1)
+    def randomVec3 : Vec3 = Vec3(2*randomFloat - 1, 2*randomFloat - 1, 2*randomFloat - 1)
 
     def progress(f4 : float4, f42 : float4) : float4 -> float4 = {
         val k = (f42 - f4)
@@ -12,25 +12,25 @@ object EGProgress {
         else t : float4 -> {k*t + f4}
     }
 
-    def progress(vec2 : EGVec2, vec22 : EGVec2) : float4 -> EGVec2 = {
+    def progress(vec2 : Vec2, vec22 : Vec2) : float4 -> Vec2 = {
         val x = progress(vec2.x, vec22.x)
         val y = progress(vec2.y, vec22.y)
-        t : float4 -> {EGVec2(x(t), y(t))}
+        t : float4 -> {Vec2(x(t), y(t))}
     }
 
-    def progress(vec3 : EGVec3, vec32 : EGVec3) : float4 -> EGVec3 = {
+    def progress(vec3 : Vec3, vec32 : Vec3) : float4 -> Vec3 = {
         val x = progress(vec3.x, vec32.x)
         val y = progress(vec3.y, vec32.y)
         val z = progress(vec3.z, vec32.z)
-        t : float4 -> {EGVec3(x(t), y(t), z(t))}
+        t : float4 -> {Vec3(x(t), y(t), z(t))}
     }
 
-    def progress(vec4 : EGVec4, vec42 : EGVec4) : float4 -> EGVec4 = {
+    def progress(vec4 : Vec4, vec42 : Vec4) : float4 -> Vec4 = {
         val x = progress(vec4.x, vec42.x)
         val y = progress(vec4.y, vec42.y)
         val z = progress(vec4.z, vec42.z)
         val w = progress(vec4.w, vec42.w)
-        t : float4 -> {EGVec4(x(t), y(t), z(t), w(t))}
+        t : float4 -> {Vec4(x(t), y(t), z(t), w(t))}
     }
 
     def progress(color : EGColor, color2 : EGColor) : float4 -> EGColor = {
