@@ -188,7 +188,11 @@ static ODClassType* _EGDynamicBody_type;
 
 - (EGMatrix*)matrix {
     btTransform trans;
-    _motionState->getWorldTransform(trans);
+    if(_isKinematic) {
+        _motionState->getWorldTransform(trans);
+    } else {
+        trans = _body->getWorldTransform();
+    }
     float matrix[16];
     trans.getOpenGLMatrix(matrix);
     return [EGMatrix matrixWithArray:matrix];
