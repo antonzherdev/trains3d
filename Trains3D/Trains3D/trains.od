@@ -2,4 +2,5 @@ package com.antonzherdev
 
 object trains {
     import com.antonzherdev.eg._
+    import com.antonzherdev.geometry._
 }
