@@ -1,6 +1,7 @@
 package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
+import core.ODMath._
 
 class TREngineType(
     tubePos : EGVec3 //tube position relative to start of the car
@@ -41,9 +42,12 @@ class TRCar(weak train : TRTrain, carType : TRCarType) {
         val vec = line.vec
         val mid = midPoint
         val b = EGRigidBody.dynamic(self, carType.rigidShape, carType.weight)
-        b.set(matrix = EGMatrix.identity.translate(mid.x, mid.y, carType.height/2).rotate(line.degreeAngle, 0, 0, 1))
-        val vel = EGVec3(vec.mul(train.speedFloat/len*2), 0)
-        b.set(velocity = if(train.isBack) vel.negate else vel)
+        b.matrix = EGMatrix.identity.translate(mid.x, mid.y, carType.height/2).rotate(line.degreeAngle, 0, 0, 1)
+        val rnd = EGVec3(randomFloatGap(-0.1, 0.1), randomFloatGap(-0.1, 0.1), randomFloatGap(0, 5))
+        val vel = EGVec3(vec.mul(train.speedFloat/len*2), 0).add(rnd)
+//        val vel = EGVec3(vec.mul(train.speedFloat/len*2), 0)
+        b.velocity = if(train.isBack) vel.negate else vel
+        b.angularVelocity = EGVec3(randomFloatGap(-5, 5), randomFloatGap(-5, 5), randomFloatGap(-5, 5))
         b
     }
 

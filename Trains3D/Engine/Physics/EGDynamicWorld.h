@@ -29,6 +29,8 @@
 @property (nonatomic, readonly) BOOL isStatic;
 @property (nonatomic, readonly) VoidRef obj;
 @property(nonatomic) float friction;
+@property(nonatomic) float bounciness;
+@property(nonatomic) EGVec3 angularVelocity;
 
 + (id)rigidBodyWithData:(id)data shape:(id<EGCollisionShape>)shape isKinematic:(BOOL)isKinematic mass:(float)mass;
 - (id)initWithData:(id)data shape:(id<EGCollisionShape>)shape isKinematic:(BOOL)isKinematic mass:(float)mass;

@@ -202,6 +202,15 @@ static ODClassType* _EGDynamicBody_type;
     _body->setFriction(friction);
 }
 
+- (float)bounciness {
+    return _body->getRestitution();
+}
+
+- (void)setBounciness:(float)bounciness {
+    _body->setRestitution(bounciness);
+}
+
+
 - (void)setMatrix:(EGMatrix*)matrix {
     btTransform trans;
     trans.setFromOpenGLMatrix(matrix.array);
@@ -219,6 +228,15 @@ static ODClassType* _EGDynamicBody_type;
 
 - (void)setVelocity:(EGVec3)vec3 {
     _body->setLinearVelocity(btVector3(vec3.x, vec3.y, vec3.z));
+}
+
+- (EGVec3)angularVelocity {
+    btVector3 const & v = _body->getAngularVelocity();
+    return EGVec3Make(v.x(), v.y(), v.z());
+}
+
+- (void)setAngularVelocity:(EGVec3)vec3 {
+    _body->setAngularVelocity(btVector3(vec3.x, vec3.y, vec3.z));
 }
 
 

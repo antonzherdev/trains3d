@@ -60,10 +60,8 @@ class TRTrainView {
         val material = trainMaterialFor(dyingTrain.color.color)
         dyingTrain.cars.for{ car ->
             EG.matrix(
-                _.modify(w = w -> {
-                    w.translate(0, 0, -car.carType.height/2 + 0.04)
-                }).modify(m = m -> {
-                    car.dynamicBody.matrix.mul(m.rotate(90, 0, 1, 0))
+                _.modify(m = m -> {
+                    car.dynamicBody.matrix.translate(0, 0, -car.carType.height/2 + 0.04).mul(m.rotate(90, 0, 1, 0))
                 })
             ){
                 doDraw(car, material)

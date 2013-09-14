@@ -12,7 +12,7 @@ class EGDynamicTest extends CNTestCase {
         val shape = EGCollisionBox(EGVec3(0.5, 0.5, 0.5))
         val body = EGRigidBody.dynamic<int>(1, shape, 1)
         world.add(body)
-        body.set(matrix = EGMatrix.identity.translate(0, 5, 0))
+        body.matrix = EGMatrix.identity.translate(0, 5, 0)
 
         var m = body.matrix
         assertTrue(m.array[13] == 5)
@@ -36,8 +36,8 @@ class EGDynamicTest extends CNTestCase {
         world.add(plane)
         val body = EGRigidBody.dynamic<int>(2, EGCollisionBox(EGVec3(0.5, 0.5, 0.5)), 1)
         world.add(body)
-        body.set(matrix = EGMatrix.identity.translate(0, 0.5, 0))
-        body.set(velocity = EGVec3(10, 0, 0))
+        body.matrix = EGMatrix.identity.translate(0, 0.5, 0)
+        body.velocity = EGVec3(10, 0, 0)
 
         runSecondIn(world)
 //        val m = body.matrix
