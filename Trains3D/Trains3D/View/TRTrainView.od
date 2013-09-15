@@ -16,7 +16,7 @@ class TRTrainView {
         trains.for {train ->
             draw(train = train)
             if(train.viewData == nil) train.viewData = TRSmoke(train)
-            //smokeView.draw(train.viewData)
+            smokeView.draw(train.viewData)
         }
     }
 
@@ -51,7 +51,7 @@ class TRTrainView {
         if(dyingTrains.isEmpty) return nil
 
         dyingTrains.for {train ->
-            //smokeView.draw(train.viewData)
+            smokeView.draw(train.viewData)
             draw(dyingTrain = train)
         }
     }
@@ -71,6 +71,6 @@ class TRTrainView {
 
 
     def updateWith(delta : float, train : TRTrain) {
-        //train.viewData.cast<TRSmoke>.updateWith(delta)
+        train.viewData.cast<TRSmoke>.updateWith(delta)
     }
 }

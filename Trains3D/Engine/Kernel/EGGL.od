@@ -78,7 +78,8 @@ stub object EGGL {
     def glDisableVertexAttribArray(handle : GLint)
     val GL_ARRAY_BUFFER : GLenum
     val GL_ELEMENT_ARRAY_BUFFER : GLenum
-     val GL_STATIC_DRAW : GLenum
+    val GL_STATIC_DRAW : GLenum
+    val GL_DYNAMIC_DRAW : GLenum
     val GL_TRIANGLES : GLenum
 
     val GL_FLOAT : GLenum

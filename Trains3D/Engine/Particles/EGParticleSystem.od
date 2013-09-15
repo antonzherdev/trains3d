@@ -68,8 +68,8 @@ class EGParticleSystemView<P extends EGParticle>(dtp : ODPType<_>, blendFunc : E
                 indexPointer = writeIndexesTo(indexPointer, index)
                 index += vc
             }
-            vertexBuffer.set(dtp, array = vertexArr)
-            indexBuffer.set(ODUInt4.type, array = indexArr)
+            vertexBuffer.set(dtp, array = vertexArr, usage = GL_DYNAMIC_DRAW)
+            indexBuffer.set(ODUInt4.type, array = indexArr, usage = GL_DYNAMIC_DRAW)
             vertexArr.free
             indexArr.free
 
