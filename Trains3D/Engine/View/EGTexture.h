@@ -15,7 +15,7 @@
 - (void)dealloc;
 + (void)unbind;
 - (void)applyDraw:(void(^)())draw;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -27,7 +27,7 @@
 - (ODClassType*)type;
 - (GEVec2)size;
 - (void)bind;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

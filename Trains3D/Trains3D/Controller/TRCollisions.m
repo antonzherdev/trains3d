@@ -10,7 +10,7 @@
 @implementation TRCollisionWorld{
     EGCollisionWorld* _world;
 }
-static ODType* _TRCollisionWorld_type;
+static ODClassType* _TRCollisionWorld_type;
 
 + (id)collisionWorld {
     return [[TRCollisionWorld alloc] init];
@@ -60,7 +60,7 @@ static ODType* _TRCollisionWorld_type;
     return [TRCollisionWorld type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRCollisionWorld_type;
 }
 
@@ -91,7 +91,7 @@ static ODType* _TRCollisionWorld_type;
     CNPair* _cars;
     TRRailPoint* _railPoint;
 }
-static ODType* _TRCarsCollision_type;
+static ODClassType* _TRCarsCollision_type;
 @synthesize cars = _cars;
 @synthesize railPoint = _railPoint;
 
@@ -118,7 +118,7 @@ static ODType* _TRCarsCollision_type;
     return [TRCarsCollision type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRCarsCollision_type;
 }
 
@@ -154,7 +154,7 @@ static ODType* _TRCarsCollision_type;
 @implementation TRDynamicWorld{
     EGDynamicWorld* _world;
 }
-static ODType* _TRDynamicWorld_type;
+static ODClassType* _TRDynamicWorld_type;
 
 + (id)dynamicWorld {
     return [[TRDynamicWorld alloc] init];
@@ -201,7 +201,7 @@ static ODType* _TRDynamicWorld_type;
     return [TRDynamicWorld type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRDynamicWorld_type;
 }
 

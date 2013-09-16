@@ -21,7 +21,7 @@
 - (id<CNIterator>)iterator;
 - (id)applyIndex:(NSUInteger)index;
 - (void)dealloc;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -33,7 +33,7 @@
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

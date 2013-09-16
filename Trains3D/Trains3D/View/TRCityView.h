@@ -23,7 +23,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)drawCity:(TRCity*)city;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

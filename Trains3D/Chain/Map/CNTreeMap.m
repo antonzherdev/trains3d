@@ -11,7 +11,7 @@
 }
 static NSInteger _CNMutableTreeMap_BLACK = 0;
 static NSInteger _CNMutableTreeMap_RED = 1;
-static ODType* _CNMutableTreeMap_type;
+static ODClassType* _CNMutableTreeMap_type;
 @synthesize comparator = _comparator;
 @synthesize keys = _keys;
 @synthesize values = _values;
@@ -492,7 +492,7 @@ static ODType* _CNMutableTreeMap_type;
     return _CNMutableTreeMap_RED;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNMutableTreeMap_type;
 }
 
@@ -518,7 +518,7 @@ static ODType* _CNMutableTreeMap_type;
     NSInteger _color;
     __weak CNTreeMapEntry* _parent;
 }
-static ODType* _CNTreeMapEntry_type;
+static ODClassType* _CNTreeMapEntry_type;
 @synthesize key = _key;
 @synthesize value = _value;
 @synthesize left = _left;
@@ -575,7 +575,7 @@ static ODType* _CNTreeMapEntry_type;
     return [CNTreeMapEntry type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNTreeMapEntry_type;
 }
 
@@ -595,7 +595,7 @@ static ODType* _CNTreeMapEntry_type;
 @implementation CNTreeMapKeySet{
     CNMutableTreeMap* _map;
 }
-static ODType* _CNTreeMapKeySet_type;
+static ODClassType* _CNTreeMapKeySet_type;
 @synthesize map = _map;
 
 + (id)treeMapKeySetWithMap:(CNMutableTreeMap*)map {
@@ -698,7 +698,7 @@ static ODType* _CNTreeMapKeySet_type;
     return [CNTreeMapKeySet type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNTreeMapKeySet_type;
 }
 
@@ -720,7 +720,7 @@ static ODType* _CNTreeMapKeySet_type;
     CNMutableTreeMap* _map;
     CNTreeMapEntry* _entry;
 }
-static ODType* _CNTreeMapKeyIterator_type;
+static ODClassType* _CNTreeMapKeyIterator_type;
 @synthesize map = _map;
 @synthesize entry = _entry;
 
@@ -760,7 +760,7 @@ static ODType* _CNTreeMapKeyIterator_type;
     return [CNTreeMapKeyIterator type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNTreeMapKeyIterator_type;
 }
 
@@ -794,7 +794,7 @@ static ODType* _CNTreeMapKeyIterator_type;
 @implementation CNTreeMapValues{
     CNMutableTreeMap* _map;
 }
-static ODType* _CNTreeMapValues_type;
+static ODClassType* _CNTreeMapValues_type;
 @synthesize map = _map;
 
 + (id)treeMapValuesWithMap:(CNMutableTreeMap*)map {
@@ -893,7 +893,7 @@ static ODType* _CNTreeMapValues_type;
     return [CNTreeMapValues type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNTreeMapValues_type;
 }
 
@@ -915,7 +915,7 @@ static ODType* _CNTreeMapValues_type;
     CNMutableTreeMap* _map;
     CNTreeMapEntry* _entry;
 }
-static ODType* _CNTreeMapValuesIterator_type;
+static ODClassType* _CNTreeMapValuesIterator_type;
 @synthesize map = _map;
 @synthesize entry = _entry;
 
@@ -955,7 +955,7 @@ static ODType* _CNTreeMapValuesIterator_type;
     return [CNTreeMapValuesIterator type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNTreeMapValuesIterator_type;
 }
 
@@ -990,7 +990,7 @@ static ODType* _CNTreeMapValuesIterator_type;
     CNMutableTreeMap* _map;
     CNTreeMapEntry* _entry;
 }
-static ODType* _CNTreeMapIterator_type;
+static ODClassType* _CNTreeMapIterator_type;
 @synthesize map = _map;
 @synthesize entry = _entry;
 
@@ -1030,7 +1030,7 @@ static ODType* _CNTreeMapIterator_type;
     return [CNTreeMapIterator type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNTreeMapIterator_type;
 }
 

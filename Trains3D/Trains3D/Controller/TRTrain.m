@@ -90,7 +90,7 @@ static NSArray* _TRTrainType_values;
     BOOL _isDying;
     BOOL(^_carsObstacleProcessor)(TRObstacle*);
 }
-static ODType* _TRTrain_type;
+static ODClassType* _TRTrain_type;
 @synthesize level = _level;
 @synthesize trainType = _trainType;
 @synthesize color = _color;
@@ -219,7 +219,7 @@ static ODType* _TRTrain_type;
     return [TRTrain type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRTrain_type;
 }
 
@@ -263,7 +263,7 @@ static ODType* _TRTrain_type;
     id<CNSeq> _speed;
     id<CNSeq> _carTypes;
 }
-static ODType* _TRTrainGenerator_type;
+static ODClassType* _TRTrainGenerator_type;
 @synthesize trainType = _trainType;
 @synthesize carsCount = _carsCount;
 @synthesize speed = _speed;
@@ -311,7 +311,7 @@ static ODType* _TRTrainGenerator_type;
     return [TRTrainGenerator type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRTrainGenerator_type;
 }
 

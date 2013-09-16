@@ -27,7 +27,7 @@
 - (ODClassType*)type;
 - (EGShader*)shaderForMaterial:(EGStandardMaterial*)material;
 + (EGStandardShaderSystem*)instance;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -44,7 +44,7 @@
 - (NSString*)lightsCalculateVaryings;
 - (NSString*)lightsFragmentUniform;
 - (NSString*)lightsDiffuse;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -70,7 +70,7 @@
 + (NSInteger)UV_SHIFT;
 + (NSInteger)NORMAL_SHIFT;
 + (NSInteger)POSITION_SHIFT;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

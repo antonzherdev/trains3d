@@ -58,7 +58,7 @@
 - (TRRailPoint*)invert;
 - (TRRailPoint*)setX:(CGFloat)x;
 - (GEVec2i)nextTile;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -70,7 +70,7 @@
 - (id)initWithPoint:(TRRailPoint*)point error:(CGFloat)error;
 - (ODClassType*)type;
 - (TRRailPoint*)addErrorToPoint;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

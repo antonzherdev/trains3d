@@ -11,7 +11,7 @@
     VoidRef _bytes;
     BOOL _copied;
 }
-static ODType* _CNPArray_type;
+static ODClassType* _CNPArray_type;
 @synthesize stride = _stride;
 @synthesize wrap = _wrap;
 @synthesize count = _count;
@@ -164,7 +164,7 @@ static ODType* _CNPArray_type;
     return [CNPArray type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNPArray_type;
 }
 
@@ -186,7 +186,7 @@ static ODType* _CNPArray_type;
     CNPArray* _array;
     NSInteger _i;
 }
-static ODType* _CNPArrayIterator_type;
+static ODClassType* _CNPArrayIterator_type;
 @synthesize array = _array;
 
 + (id)arrayIteratorWithArray:(CNPArray*)array {
@@ -222,7 +222,7 @@ static ODType* _CNPArrayIterator_type;
     return [CNPArrayIterator type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNPArrayIterator_type;
 }
 

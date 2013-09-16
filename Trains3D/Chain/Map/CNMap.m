@@ -6,7 +6,7 @@
     id(^_defaultFunc)(id);
     id<CNMutableMap> _map;
 }
-static ODType* _CNMapDefault_type;
+static ODClassType* _CNMapDefault_type;
 @synthesize defaultFunc = _defaultFunc;
 @synthesize map = _map;
 
@@ -145,7 +145,7 @@ static ODType* _CNMapDefault_type;
     return [CNMapDefault type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNMapDefault_type;
 }
 

@@ -50,8 +50,8 @@ NSInteger geVec2CompareTo(GEVec2 self, GEVec2 to) {
     if(dX != 0) return dX;
     else return float4CompareTo(self.y, to.y);
 }
-ODType* geVec2Type() {
-    static ODType* _ret = nil;
+ODPType* geVec2Type() {
+    static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[GEVec2Wrap class] name:@"GEVec2" size:sizeof(GEVec2) wrap:^id(void* data, NSUInteger i) {
         return wrap(GEVec2, ((GEVec2*)(data))[i]);
     }];
@@ -116,8 +116,8 @@ NSInteger geVec2iCompareTo(GEVec2i self, GEVec2i to) {
     if(dX != 0) return dX;
     else return intCompareTo(self.y, to.y);
 }
-ODType* geVec2iType() {
-    static ODType* _ret = nil;
+ODPType* geVec2iType() {
+    static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[GEVec2iWrap class] name:@"GEVec2i" size:sizeof(GEVec2i) wrap:^id(void* data, NSUInteger i) {
         return wrap(GEVec2i, ((GEVec2i*)(data))[i]);
     }];
@@ -195,8 +195,8 @@ GEVec3 geVec3SetLength(GEVec3 self, CGFloat length) {
 GEVec3 geVec3Normalize(GEVec3 self) {
     return geVec3SetLength(self, 1.0);
 }
-ODType* geVec3Type() {
-    static ODType* _ret = nil;
+ODPType* geVec3Type() {
+    static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[GEVec3Wrap class] name:@"GEVec3" size:sizeof(GEVec3) wrap:^id(void* data, NSUInteger i) {
         return wrap(GEVec3, ((GEVec3*)(data))[i]);
     }];
@@ -261,8 +261,8 @@ GEVec4 geVec4SetLength(GEVec4 self, CGFloat length) {
 GEVec4 geVec4Normalize(GEVec4 self) {
     return geVec4SetLength(self, 1.0);
 }
-ODType* geVec4Type() {
-    static ODType* _ret = nil;
+ODPType* geVec4Type() {
+    static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[GEVec4Wrap class] name:@"GEVec4" size:sizeof(GEVec4) wrap:^id(void* data, NSUInteger i) {
         return wrap(GEVec4, ((GEVec4*)(data))[i]);
     }];
@@ -328,8 +328,8 @@ GEQuad geQuadIdentity() {
     static GEQuad _ret = {{0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}, {0.0, 1.0}};
     return _ret;
 }
-ODType* geQuadType() {
-    static ODType* _ret = nil;
+ODPType* geQuadType() {
+    static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[GEQuadWrap class] name:@"GEQuad" size:sizeof(GEQuad) wrap:^id(void* data, NSUInteger i) {
         return wrap(GEQuad, ((GEQuad*)(data))[i]);
     }];
@@ -376,8 +376,8 @@ ODType* geQuadType() {
 GEQuad geQuadrantRandomQuad(GEQuadrant self) {
     return self.quads[randomMax(3)];
 }
-ODType* geQuadrantType() {
-    static ODType* _ret = nil;
+ODPType* geQuadrantType() {
+    static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[GEQuadrantWrap class] name:@"GEQuadrant" size:sizeof(GEQuadrant) wrap:^id(void* data, NSUInteger i) {
         return wrap(GEQuadrant, ((GEQuadrant*)(data))[i]);
     }];

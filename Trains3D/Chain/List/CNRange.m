@@ -8,7 +8,7 @@
     NSInteger _step;
     NSUInteger _count;
 }
-static ODType* _CNRange_type;
+static ODClassType* _CNRange_type;
 @synthesize start = _start;
 @synthesize end = _end;
 @synthesize step = _step;
@@ -157,7 +157,7 @@ static ODType* _CNRange_type;
     return [CNRange type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNRange_type;
 }
 
@@ -181,7 +181,7 @@ static ODType* _CNRange_type;
     NSInteger _step;
     NSInteger _i;
 }
-static ODType* _CNRangeIterator_type;
+static ODClassType* _CNRangeIterator_type;
 @synthesize start = _start;
 @synthesize end = _end;
 @synthesize step = _step;
@@ -221,7 +221,7 @@ static ODType* _CNRangeIterator_type;
     return [CNRangeIterator type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNRangeIterator_type;
 }
 

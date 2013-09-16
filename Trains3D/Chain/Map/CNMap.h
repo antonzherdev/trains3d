@@ -41,7 +41,7 @@
 - (id)modifyBy:(id(^)(id))by forKey:(id)forKey;
 - (void)addItem:(CNTuple*)item;
 - (void)removeItem:(CNTuple*)item;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

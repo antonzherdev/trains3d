@@ -14,7 +14,7 @@
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (BOOL)processEvent:(EGEvent*)event;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

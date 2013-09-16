@@ -6,7 +6,7 @@
 #import "TRRailroad.h"
 #import "TRRailPoint.h"
 @implementation TRDamageTest
-static ODType* _TRDamageTest_type;
+static ODClassType* _TRDamageTest_type;
 
 + (id)damageTest {
     return [[TRDamageTest alloc] init];
@@ -59,7 +59,7 @@ static ODType* _TRDamageTest_type;
     return [TRDamageTest type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRDamageTest_type;
 }
 

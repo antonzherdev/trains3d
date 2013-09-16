@@ -20,7 +20,7 @@
 - (void)emitParticle;
 - (void)updateWithDelta:(CGFloat)delta;
 - (BOOL)hasParticles;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -35,7 +35,7 @@
 - (BOOL)isLive;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)updateT:(float)t dt:(float)dt;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -58,7 +58,7 @@
 - (EGMaterial*)material;
 - (void)drawSystem:(EGParticleSystem*)system;
 - (void)dealloc;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

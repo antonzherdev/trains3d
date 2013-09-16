@@ -8,6 +8,7 @@
 @class TREngineType;
 @class TRCarPosition;
 @class TRRailPoint;
+@class EGProgress;
 @class EGGlobal;
 
 @class TRSmoke;
@@ -26,19 +27,20 @@
 + (GEQuad)modelQuad;
 + (GEQuadrant)textureQuadrant;
 + (GEVec4)defColor;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
 @interface TRSmokeParticle : EGBillboardParticle
 @property (nonatomic) GEVec3 speed;
+@property (nonatomic, readonly) void(^animation)(float);
 
 + (id)smokeParticle;
 - (id)init;
 - (ODClassType*)type;
 - (void)updateT:(float)t dt:(float)dt;
 + (NSInteger)dragCoefficient;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -46,7 +48,7 @@
 + (id)smokeView;
 - (id)init;
 - (ODClassType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

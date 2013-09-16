@@ -10,7 +10,7 @@
     NSInteger(^_delayFine)(TRTrain*, NSInteger);
     NSInteger _repairCost;
 }
-static ODType* _TRScoreRules_type;
+static ODClassType* _TRScoreRules_type;
 @synthesize initialScore = _initialScore;
 @synthesize railCost = _railCost;
 @synthesize arrivedPrize = _arrivedPrize;
@@ -47,7 +47,7 @@ static ODType* _TRScoreRules_type;
     return [TRScoreRules type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRScoreRules_type;
 }
 
@@ -92,7 +92,7 @@ static ODType* _TRScoreRules_type;
     NSInteger __score;
     id<CNSeq> _trains;
 }
-static ODType* _TRScore_type;
+static ODClassType* _TRScore_type;
 @synthesize rules = _rules;
 
 + (id)scoreWithRules:(TRScoreRules*)rules {
@@ -154,7 +154,7 @@ static ODType* _TRScore_type;
     return [TRScore type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRScore_type;
 }
 
@@ -190,7 +190,7 @@ static ODType* _TRScore_type;
     CGFloat _delayTime;
     NSInteger _fineCount;
 }
-static ODType* _TRTrainScore_type;
+static ODClassType* _TRTrainScore_type;
 @synthesize train = _train;
 
 + (id)trainScoreWithTrain:(TRTrain*)train {
@@ -231,7 +231,7 @@ static ODType* _TRTrainScore_type;
     return [TRTrainScore type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRTrainScore_type;
 }
 

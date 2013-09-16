@@ -31,7 +31,7 @@
 + (CGFloat)carLen;
 + (CGFloat)carWidth;
 + (CGFloat)carConLen;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

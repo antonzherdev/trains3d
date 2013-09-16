@@ -18,7 +18,7 @@
 - (id<CNIterator>)iterator;
 - (CNList*)tail;
 - (CNList*)filterF:(BOOL(^)(id))f;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -33,7 +33,7 @@
 - (id)head;
 - (BOOL)isEmpty;
 - (CNList*)filterF:(BOOL(^)(id))f;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -47,7 +47,7 @@
 - (BOOL)isEmpty;
 - (CNList*)filterF:(BOOL(^)(id))f;
 + (CNEmptyList*)instance;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -59,7 +59,7 @@
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

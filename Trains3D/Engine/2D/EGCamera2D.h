@@ -17,7 +17,7 @@
 - (ODClassType*)type;
 - (void)focusForViewSize:(GEVec2)viewSize;
 - (GEVec2)translateWithViewSize:(GEVec2)viewSize viewPoint:(GEVec2)viewPoint;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

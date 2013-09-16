@@ -127,7 +127,7 @@ static NSArray* _TRCityAngle_values;
     TRCityAngle* _angle;
     id _expectedTrainAnimation;
 }
-static ODType* _TRCity_type;
+static ODClassType* _TRCity_type;
 @synthesize color = _color;
 @synthesize tile = _tile;
 @synthesize angle = _angle;
@@ -167,7 +167,7 @@ static ODType* _TRCity_type;
     return [TRCity type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRCity_type;
 }
 

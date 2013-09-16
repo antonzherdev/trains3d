@@ -16,7 +16,7 @@
 - (CNSortBuilder*)descBy:(id(^)(id))by;
 - (CNSortBuilder*)andF:(NSInteger(^)(id, id))f;
 - (CNChain*)endSort;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

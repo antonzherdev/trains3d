@@ -34,7 +34,7 @@ static inline NSString* EGMeshDataDescription(EGMeshData self) {
     [description appendString:@">"];
     return description;
 }
-ODType* egMeshDataType();
+ODPType* egMeshDataType();
 @interface EGMeshDataWrap : NSObject
 @property (readonly, nonatomic) EGMeshData value;
 
@@ -53,7 +53,7 @@ ODType* egMeshDataType();
 - (ODClassType*)type;
 + (EGMesh*)applyDataType:(ODPType*)dataType vertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;
 + (EGMesh*)quadVertexBuffer:(EGVertexBuffer*)vertexBuffer;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -78,7 +78,7 @@ ODType* egMeshDataType();
 - (void)unbind;
 - (void)applyDraw:(void(^)())draw;
 - (NSUInteger)stride;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -87,7 +87,7 @@ ODType* egMeshDataType();
 - (id)initWithDataType:(ODPType*)dataType handle:(GLuint)handle;
 - (ODClassType*)type;
 + (EGVertexBuffer*)applyDataType:(ODPType*)dataType;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -99,7 +99,7 @@ ODType* egMeshDataType();
 - (void)draw;
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
 - (void)drawByQuads;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

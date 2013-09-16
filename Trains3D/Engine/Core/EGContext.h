@@ -15,7 +15,7 @@
 + (EGFileTexture*)textureForFile:(NSString*)file;
 + (EGContext*)context;
 + (EGMatrixStack*)matrix;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -28,7 +28,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (EGFileTexture*)textureForFile:(NSString*)file;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -42,7 +42,7 @@
 - (void)push;
 - (void)pop;
 - (void)applyModify:(EGMatrixModel*(^)(EGMatrixModel*))modify f:(void(^)())f;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -73,7 +73,7 @@
 - (EGMatrixModel*)modifyC:(GEMat4*(^)(GEMat4*))c;
 - (EGMatrixModel*)modifyP:(GEMat4*(^)(GEMat4*))p;
 + (EGMatrixModel*)identity;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

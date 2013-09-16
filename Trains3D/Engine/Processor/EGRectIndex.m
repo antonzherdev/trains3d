@@ -3,7 +3,7 @@
 @implementation EGRectIndex{
     id<CNSeq> _rects;
 }
-static ODType* _EGRectIndex_type;
+static ODClassType* _EGRectIndex_type;
 @synthesize rects = _rects;
 
 + (id)rectIndexWithRects:(id<CNSeq>)rects {
@@ -34,7 +34,7 @@ static ODType* _EGRectIndex_type;
     return [EGRectIndex type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGRectIndex_type;
 }
 

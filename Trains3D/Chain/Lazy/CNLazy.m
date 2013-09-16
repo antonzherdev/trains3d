@@ -7,7 +7,7 @@
     id __value;
     BOOL __calculated;
 }
-static ODType* _CNLazy_type;
+static ODClassType* _CNLazy_type;
 @synthesize f = _f;
 
 + (id)lazyWithF:(id(^)())f {
@@ -47,7 +47,7 @@ static ODType* _CNLazy_type;
     return [CNLazy type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNLazy_type;
 }
 

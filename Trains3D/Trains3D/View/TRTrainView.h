@@ -32,7 +32,7 @@
 - (void)drawTrains:(id<CNSeq>)trains;
 - (void)drawDyingTrains:(id<CNSeq>)dyingTrains;
 - (void)updateWithDelta:(CGFloat)delta train:(TRTrain*)train;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

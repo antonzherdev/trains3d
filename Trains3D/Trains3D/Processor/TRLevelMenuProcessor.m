@@ -5,7 +5,7 @@
 @implementation TRLevelMenuProcessor{
     TRLevel* _level;
 }
-static ODType* _TRLevelMenuProcessor_type;
+static ODClassType* _TRLevelMenuProcessor_type;
 @synthesize level = _level;
 
 + (id)levelMenuProcessorWithLevel:(TRLevel*)level {
@@ -51,7 +51,7 @@ static ODType* _TRLevelMenuProcessor_type;
     return [TRLevelMenuProcessor type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRLevelMenuProcessor_type;
 }
 

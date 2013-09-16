@@ -12,7 +12,7 @@
 - (ODClassType*)type;
 - (BOOL)isCalculated;
 - (id)get;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

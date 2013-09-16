@@ -2,7 +2,7 @@
 
 #import "GEFigure.h"
 @implementation GEBentleyOttmann
-static ODType* _GEBentleyOttmann_type;
+static ODClassType* _GEBentleyOttmann_type;
 
 + (id)bentleyOttmann {
     return [[GEBentleyOttmann alloc] init];
@@ -43,7 +43,7 @@ static ODType* _GEBentleyOttmann_type;
     return [GEBentleyOttmann type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _GEBentleyOttmann_type;
 }
 
@@ -74,7 +74,7 @@ static ODType* _GEBentleyOttmann_type;
     CNPair* _items;
     GEVec2 _point;
 }
-static ODType* _GEIntersection_type;
+static ODClassType* _GEIntersection_type;
 @synthesize items = _items;
 @synthesize point = _point;
 
@@ -101,7 +101,7 @@ static ODType* _GEIntersection_type;
     return [GEIntersection type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _GEIntersection_type;
 }
 
@@ -135,7 +135,7 @@ static ODType* _GEIntersection_type;
 
 
 @implementation GEBentleyOttmannEvent
-static ODType* _GEBentleyOttmannEvent_type;
+static ODClassType* _GEBentleyOttmannEvent_type;
 
 + (id)bentleyOttmannEvent {
     return [[GEBentleyOttmannEvent alloc] init];
@@ -172,7 +172,7 @@ static ODType* _GEBentleyOttmannEvent_type;
     return [GEBentleyOttmannEvent type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _GEBentleyOttmannEvent_type;
 }
 
@@ -205,7 +205,7 @@ static ODType* _GEBentleyOttmannEvent_type;
     GELineSegment* _segment;
     GEVec2 _point;
 }
-static ODType* _GEBentleyOttmannPointEvent_type;
+static ODClassType* _GEBentleyOttmannPointEvent_type;
 @synthesize isStart = _isStart;
 @synthesize data = _data;
 @synthesize segment = _segment;
@@ -257,7 +257,7 @@ static ODType* _GEBentleyOttmannPointEvent_type;
     return [GEBentleyOttmannPointEvent type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _GEBentleyOttmannPointEvent_type;
 }
 
@@ -297,7 +297,7 @@ static ODType* _GEBentleyOttmannPointEvent_type;
 @implementation GEBentleyOttmannIntersectionEvent{
     GEVec2 _point;
 }
-static ODType* _GEBentleyOttmannIntersectionEvent_type;
+static ODClassType* _GEBentleyOttmannIntersectionEvent_type;
 @synthesize point = _point;
 
 + (id)bentleyOttmannIntersectionEventWithPoint:(GEVec2)point {
@@ -324,7 +324,7 @@ static ODType* _GEBentleyOttmannIntersectionEvent_type;
     return [GEBentleyOttmannIntersectionEvent type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _GEBentleyOttmannIntersectionEvent_type;
 }
 
@@ -358,7 +358,7 @@ static ODType* _GEBentleyOttmannIntersectionEvent_type;
 @implementation GEBentleyOttmannEventQueue{
     CNMutableTreeMap* _events;
 }
-static ODType* _GEBentleyOttmannEventQueue_type;
+static ODClassType* _GEBentleyOttmannEventQueue_type;
 @synthesize events = _events;
 
 + (id)bentleyOttmannEventQueue {
@@ -410,7 +410,7 @@ static ODType* _GEBentleyOttmannEventQueue_type;
     return [GEBentleyOttmannEventQueue type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _GEBentleyOttmannEventQueue_type;
 }
 
@@ -440,7 +440,7 @@ static ODType* _GEBentleyOttmannEventQueue_type;
 @implementation GEPointClass{
     GEVec2 _point;
 }
-static ODType* _GEPointClass_type;
+static ODClassType* _GEPointClass_type;
 @synthesize point = _point;
 
 + (id)pointClassWithPoint:(GEVec2)point {
@@ -463,7 +463,7 @@ static ODType* _GEPointClass_type;
     return [GEPointClass type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _GEPointClass_type;
 }
 
@@ -500,7 +500,7 @@ static ODType* _GEPointClass_type;
     GEVec2 _currentEventPoint;
     GEBentleyOttmannEventQueue* _queue;
 }
-static ODType* _GESweepLine_type;
+static ODClassType* _GESweepLine_type;
 @synthesize events = _events;
 @synthesize intersections = _intersections;
 @synthesize queue = _queue;
@@ -638,7 +638,7 @@ static ODType* _GESweepLine_type;
     return [GESweepLine type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _GESweepLine_type;
 }
 

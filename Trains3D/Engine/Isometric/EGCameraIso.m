@@ -10,7 +10,7 @@
     EGMatrixModel* _matrixModel;
 }
 static CGFloat _EGCameraIso_ISO;
-static ODType* _EGCameraIso_type;
+static ODClassType* _EGCameraIso_type;
 @synthesize tilesOnScreen = _tilesOnScreen;
 @synthesize center = _center;
 
@@ -70,7 +70,7 @@ static ODType* _EGCameraIso_type;
     return [EGCameraIso type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGCameraIso_type;
 }
 

@@ -12,7 +12,7 @@
     TRLightView* _lightView;
     TRDamageView* _damageView;
 }
-static ODType* _TRRailroadView_type;
+static ODClassType* _TRRailroadView_type;
 
 + (id)railroadView {
     return [[TRRailroadView alloc] init];
@@ -57,7 +57,7 @@ static ODType* _TRRailroadView_type;
     return [TRRailroadView type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRRailroadView_type;
 }
 
@@ -88,7 +88,7 @@ static ODType* _TRRailroadView_type;
     EGMeshModel* _railModel;
     EGMeshModel* _railTurnModel;
 }
-static ODType* _TRRailView_type;
+static ODClassType* _TRRailView_type;
 @synthesize railModel = _railModel;
 @synthesize railTurnModel = _railTurnModel;
 
@@ -142,7 +142,7 @@ static ODType* _TRRailView_type;
     return [TRRailView type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRRailView_type;
 }
 
@@ -174,7 +174,7 @@ static ODType* _TRRailView_type;
     EGMeshModel* _switchStraightModel;
     EGMeshModel* _switchTurnModel;
 }
-static ODType* _TRSwitchView_type;
+static ODClassType* _TRSwitchView_type;
 @synthesize material = _material;
 @synthesize switchStraightModel = _switchStraightModel;
 @synthesize switchTurnModel = _switchTurnModel;
@@ -230,7 +230,7 @@ static ODType* _TRSwitchView_type;
     return [TRSwitchView type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRSwitchView_type;
 }
 
@@ -261,7 +261,7 @@ static ODType* _TRSwitchView_type;
     EGStandardMaterial* _greenMaterial;
     EGStandardMaterial* _redMaterial;
 }
-static ODType* _TRLightView_type;
+static ODClassType* _TRLightView_type;
 @synthesize greenMaterial = _greenMaterial;
 @synthesize redMaterial = _redMaterial;
 
@@ -300,7 +300,7 @@ static ODType* _TRLightView_type;
     return [TRLightView type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRLightView_type;
 }
 
@@ -330,7 +330,7 @@ static ODType* _TRLightView_type;
 @implementation TRDamageView{
     EGMeshModel* _model;
 }
-static ODType* _TRDamageView_type;
+static ODClassType* _TRDamageView_type;
 @synthesize model = _model;
 
 + (id)damageView {
@@ -363,7 +363,7 @@ static ODType* _TRDamageView_type;
     return [TRDamageView type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRDamageView_type;
 }
 

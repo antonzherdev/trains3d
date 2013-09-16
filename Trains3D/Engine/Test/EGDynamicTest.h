@@ -16,7 +16,7 @@
 - (void)runSecondInWorld:(EGDynamicWorld*)world;
 - (void)testSimple;
 - (void)testFriction;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

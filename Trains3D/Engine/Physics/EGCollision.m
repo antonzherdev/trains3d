@@ -4,7 +4,7 @@
     CNPair* _bodies;
     id<CNSeq> _contacts;
 }
-static ODType* _EGCollision_type;
+static ODClassType* _EGCollision_type;
 @synthesize bodies = _bodies;
 @synthesize contacts = _contacts;
 
@@ -31,7 +31,7 @@ static ODType* _EGCollision_type;
     return [EGCollision type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGCollision_type;
 }
 
@@ -68,7 +68,7 @@ static ODType* _EGCollision_type;
     GEVec3 _a;
     GEVec3 _b;
 }
-static ODType* _EGContact_type;
+static ODClassType* _EGContact_type;
 @synthesize a = _a;
 @synthesize b = _b;
 
@@ -95,7 +95,7 @@ static ODType* _EGContact_type;
     return [EGContact type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGContact_type;
 }
 
@@ -132,7 +132,7 @@ static ODType* _EGContact_type;
     NSUInteger _maxCount;
     id(^_f)(NSUInteger);
 }
-static ODType* _EGIndexFunFilteredIterable_type;
+static ODClassType* _EGIndexFunFilteredIterable_type;
 @synthesize maxCount = _maxCount;
 @synthesize f = _f;
 
@@ -241,7 +241,7 @@ static ODType* _EGIndexFunFilteredIterable_type;
     return [EGIndexFunFilteredIterable type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGIndexFunFilteredIterable_type;
 }
 
@@ -265,7 +265,7 @@ static ODType* _EGIndexFunFilteredIterable_type;
     NSUInteger _i;
     id __next;
 }
-static ODType* _EGIndexFunFilteredIterator_type;
+static ODClassType* _EGIndexFunFilteredIterator_type;
 @synthesize maxCount = _maxCount;
 @synthesize f = _f;
 
@@ -313,7 +313,7 @@ static ODType* _EGIndexFunFilteredIterator_type;
     return [EGIndexFunFilteredIterator type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGIndexFunFilteredIterator_type;
 }
 

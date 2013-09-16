@@ -10,7 +10,7 @@
     id<CNSeq> _allTiles;
 }
 static CGFloat _EGMapSso_ISO = 0.70710676908493;
-static ODType* _EGMapSso_type;
+static ODClassType* _EGMapSso_type;
 @synthesize size = _size;
 @synthesize limits = _limits;
 @synthesize fullTiles = _fullTiles;
@@ -79,7 +79,7 @@ static ODType* _EGMapSso_type;
     return _EGMapSso_ISO;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGMapSso_type;
 }
 
@@ -114,7 +114,7 @@ static ODType* _EGMapSso_type;
     EGMapSso* _map;
     EGMesh* _plane;
 }
-static ODType* _EGMapSsoView_type;
+static ODClassType* _EGMapSsoView_type;
 @synthesize map = _map;
 @synthesize plane = _plane;
 
@@ -161,7 +161,7 @@ static ODType* _EGMapSsoView_type;
     return [EGMapSsoView type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGMapSsoView_type;
 }
 

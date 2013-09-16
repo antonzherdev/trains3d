@@ -1,7 +1,7 @@
 #import "GEFigure.h"
 
 @implementation GELine
-static ODType* _GELine_type;
+static ODClassType* _GELine_type;
 
 + (id)line {
     return [[GELine alloc] init];
@@ -87,7 +87,7 @@ static ODType* _GELine_type;
     return [GELine type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _GELine_type;
 }
 
@@ -118,7 +118,7 @@ static ODType* _GELine_type;
     CGFloat _slope;
     CGFloat _constant;
 }
-static ODType* _GESlopeLine_type;
+static ODClassType* _GESlopeLine_type;
 @synthesize slope = _slope;
 @synthesize constant = _constant;
 
@@ -199,7 +199,7 @@ static ODType* _GESlopeLine_type;
     return [GESlopeLine type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _GESlopeLine_type;
 }
 
@@ -235,7 +235,7 @@ static ODType* _GESlopeLine_type;
 @implementation GEVerticalLine{
     CGFloat _x;
 }
-static ODType* _GEVerticalLine_type;
+static ODClassType* _GEVerticalLine_type;
 @synthesize x = _x;
 
 + (id)verticalLineWithX:(CGFloat)x {
@@ -299,7 +299,7 @@ static ODType* _GEVerticalLine_type;
     return [GEVerticalLine type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _GEVerticalLine_type;
 }
 
@@ -337,7 +337,7 @@ static ODType* _GEVerticalLine_type;
     GELine* __line;
     GERect _boundingRect;
 }
-static ODType* _GELineSegment_type;
+static ODClassType* _GELineSegment_type;
 @synthesize p0 = _p0;
 @synthesize p1 = _p1;
 @synthesize boundingRect = _boundingRect;
@@ -469,7 +469,7 @@ static ODType* _GELineSegment_type;
     return [GELineSegment type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _GELineSegment_type;
 }
 
@@ -506,7 +506,7 @@ static ODType* _GELineSegment_type;
     id<CNSeq> _points;
     id<CNSeq> _segments;
 }
-static ODType* _GEPolygon_type;
+static ODClassType* _GEPolygon_type;
 @synthesize points = _points;
 @synthesize segments = _segments;
 
@@ -549,7 +549,7 @@ static ODType* _GEPolygon_type;
     return [GEPolygon type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _GEPolygon_type;
 }
 
@@ -586,7 +586,7 @@ static ODType* _GEPolygon_type;
     CGFloat _thickness_2;
     id<CNSeq> __segments;
 }
-static ODType* _GEThickLineSegment_type;
+static ODClassType* _GEThickLineSegment_type;
 @synthesize segment = _segment;
 @synthesize thickness = _thickness;
 @synthesize thickness_2 = _thickness_2;
@@ -644,7 +644,7 @@ static ODType* _GEThickLineSegment_type;
     return [GEThickLineSegment type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _GEThickLineSegment_type;
 }
 

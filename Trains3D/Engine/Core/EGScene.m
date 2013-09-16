@@ -6,7 +6,7 @@
     id<EGController> _controller;
     id<CNSeq> _layers;
 }
-static ODType* _EGScene_type;
+static ODClassType* _EGScene_type;
 @synthesize controller = _controller;
 @synthesize layers = _layers;
 
@@ -52,7 +52,7 @@ static ODType* _EGScene_type;
     return [EGScene type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGScene_type;
 }
 
@@ -89,7 +89,7 @@ static ODType* _EGScene_type;
     id<EGLayerView> _view;
     id _processor;
 }
-static ODType* _EGLayer_type;
+static ODClassType* _EGLayer_type;
 @synthesize view = _view;
 @synthesize processor = _processor;
 
@@ -133,7 +133,7 @@ static ODType* _EGLayer_type;
     return [EGLayer type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGLayer_type;
 }
 

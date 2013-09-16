@@ -6,7 +6,7 @@
     id _a;
     id _b;
 }
-static ODType* _CNPair_type;
+static ODClassType* _CNPair_type;
 @synthesize a = _a;
 @synthesize b = _b;
 
@@ -109,7 +109,7 @@ static ODType* _CNPair_type;
     return [CNPair type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNPair_type;
 }
 
@@ -131,7 +131,7 @@ static ODType* _CNPair_type;
     CNPair* _pair;
     NSInteger _state;
 }
-static ODType* _CNPairIterator_type;
+static ODClassType* _CNPairIterator_type;
 @synthesize pair = _pair;
 
 + (id)pairIteratorWithPair:(CNPair*)pair {
@@ -167,7 +167,7 @@ static ODType* _CNPairIterator_type;
     return [CNPairIterator type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNPairIterator_type;
 }
 

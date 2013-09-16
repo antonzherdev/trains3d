@@ -19,7 +19,7 @@
 - (void)testOneStart;
 - (void)testOneEnd;
 - (void)testSameLines;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

@@ -12,7 +12,7 @@
     TRLevel* _level;
     id<EGCamera> _camera;
 }
-static ODType* _TRLevelMenuView_type;
+static ODClassType* _TRLevelMenuView_type;
 @synthesize level = _level;
 @synthesize camera = _camera;
 
@@ -55,7 +55,7 @@ static ODType* _TRLevelMenuView_type;
     return [TRLevelMenuView type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRLevelMenuView_type;
 }
 

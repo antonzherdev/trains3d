@@ -9,7 +9,7 @@
     TRRailroadBuilderProcessor* _railroadBuilderProcessor;
     TRSwitchProcessor* _switchProcessor;
 }
-static ODType* _TRLevelProcessor_type;
+static ODClassType* _TRLevelProcessor_type;
 @synthesize level = _level;
 
 + (id)levelProcessorWithLevel:(TRLevel*)level {
@@ -40,7 +40,7 @@ static ODType* _TRLevelProcessor_type;
     return [TRLevelProcessor type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRLevelProcessor_type;
 }
 

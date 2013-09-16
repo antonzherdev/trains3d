@@ -1,7 +1,7 @@
 #import "EGProgress.h"
 
 @implementation EGProgress
-static ODType* _EGProgress_type;
+static ODClassType* _EGProgress_type;
 
 + (void)initialize {
     [super initialize];
@@ -71,11 +71,17 @@ static ODType* _EGProgress_type;
     };
 }
 
++ (float(^)(float))divOn:(float)on {
+    return ^float(float t) {
+        return t / on;
+    };
+}
+
 - (ODClassType*)type {
     return [EGProgress type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGProgress_type;
 }
 

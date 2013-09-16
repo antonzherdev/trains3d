@@ -47,7 +47,7 @@
 - (BOOL)isTouchEnded;
 - (BOOL)isTouchCanceled;
 - (BOOL)touchProcessor:(id<EGTouchProcessor>)processor;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

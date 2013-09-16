@@ -9,7 +9,7 @@
 static EGSimpleShaderSystem* _EGSimpleShaderSystem_instance;
 static EGSimpleColorShader* _EGSimpleShaderSystem_colorShader;
 static EGSimpleTextureShader* _EGSimpleShaderSystem_textureShader;
-static ODType* _EGSimpleShaderSystem_type;
+static ODClassType* _EGSimpleShaderSystem_type;
 
 + (id)simpleShaderSystem {
     return [[EGSimpleShaderSystem alloc] init];
@@ -73,7 +73,7 @@ static ODType* _EGSimpleShaderSystem_type;
     return _EGSimpleShaderSystem_instance;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGSimpleShaderSystem_type;
 }
 
@@ -103,7 +103,7 @@ static ODType* _EGSimpleShaderSystem_type;
 @implementation EGSimpleShader
 static NSInteger _EGSimpleShader_UV_SHIFT = 0;
 static NSInteger _EGSimpleShader_POSITION_SHIFT;
-static ODType* _EGSimpleShader_type;
+static ODClassType* _EGSimpleShader_type;
 
 + (id)simpleShaderWithProgram:(EGShaderProgram*)program {
     return [[EGSimpleShader alloc] initWithProgram:program];
@@ -133,7 +133,7 @@ static ODType* _EGSimpleShader_type;
     return _EGSimpleShader_POSITION_SHIFT;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGSimpleShader_type;
 }
 
@@ -180,7 +180,7 @@ static NSString* _EGSimpleColorShader_colorFragmentProgram = @"uniform vec4 colo
     "void main(void) {\n"
     "    gl_FragColor = color;\n"
     "}";
-static ODType* _EGSimpleColorShader_type;
+static ODClassType* _EGSimpleColorShader_type;
 @synthesize positionSlot = _positionSlot;
 @synthesize colorUniform = _colorUniform;
 @synthesize mvpUniform = _mvpUniform;
@@ -223,7 +223,7 @@ static ODType* _EGSimpleColorShader_type;
     return _EGSimpleColorShader_colorFragmentProgram;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGSimpleColorShader_type;
 }
 
@@ -271,7 +271,7 @@ static NSString* _EGSimpleTextureShader_textureFragmentProgram = @"varying vec2 
     "void main(void) {\n"
     "   gl_FragColor = texture2D(texture, UV);\n"
     "}";
-static ODType* _EGSimpleTextureShader_type;
+static ODClassType* _EGSimpleTextureShader_type;
 @synthesize uvSlot = _uvSlot;
 @synthesize positionSlot = _positionSlot;
 @synthesize mvpUniform = _mvpUniform;
@@ -319,7 +319,7 @@ static ODType* _EGSimpleTextureShader_type;
     return _EGSimpleTextureShader_textureFragmentProgram;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGSimpleTextureShader_type;
 }
 

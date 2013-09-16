@@ -4,7 +4,7 @@
 #import "EGCollisionBody.h"
 #import "GEMat4.h"
 @implementation EGDynamicTest
-static ODType* _EGDynamicTest_type;
+static ODClassType* _EGDynamicTest_type;
 
 + (id)dynamicTest {
     return [[EGDynamicTest alloc] init];
@@ -65,7 +65,7 @@ static ODType* _EGDynamicTest_type;
     return [EGDynamicTest type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGDynamicTest_type;
 }
 

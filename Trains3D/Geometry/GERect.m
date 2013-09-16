@@ -30,8 +30,8 @@ BOOL geRectIntersectsRect(GERect self, GERect rect) {
 GERect geRectThickenXY(GERect self, CGFloat x, CGFloat y) {
     return GERectMake(self.x - x, self.width + 2 * x, self.y - y, self.height + 2 * y);
 }
-ODType* geRectType() {
-    static ODType* _ret = nil;
+ODPType* geRectType() {
+    static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[GERectWrap class] name:@"GERect" size:sizeof(GERect) wrap:^id(void* data, NSUInteger i) {
         return wrap(GERect, ((GERect*)(data))[i]);
     }];
@@ -87,8 +87,8 @@ NSInteger geRectIX2(GERectI self) {
 NSInteger geRectIY2(GERectI self) {
     return self.y + self.height;
 }
-ODType* geRectIType() {
-    static ODType* _ret = nil;
+ODPType* geRectIType() {
+    static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[GERectIWrap class] name:@"GERectI" size:sizeof(GERectI) wrap:^id(void* data, NSUInteger i) {
         return wrap(GERectI, ((GERectI*)(data))[i]);
     }];

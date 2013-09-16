@@ -12,7 +12,7 @@
 static CGFloat _TRCollisionsTest_carLen;
 static CGFloat _TRCollisionsTest_carWidth;
 static CGFloat _TRCollisionsTest_carConLen;
-static ODType* _TRCollisionsTest_type;
+static ODClassType* _TRCollisionsTest_type;
 
 + (id)collisionsTest {
     return [[TRCollisionsTest alloc] init];
@@ -143,7 +143,7 @@ static ODType* _TRCollisionsTest_type;
     return _TRCollisionsTest_carConLen;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRCollisionsTest_type;
 }
 

@@ -7,7 +7,7 @@
 @implementation EGGlobal
 static EGContext* _EGGlobal_context;
 static EGMatrixStack* _EGGlobal_matrix;
-static ODType* _EGGlobal_type;
+static ODClassType* _EGGlobal_type;
 
 + (void)initialize {
     [super initialize];
@@ -36,7 +36,7 @@ static ODType* _EGGlobal_type;
     return _EGGlobal_matrix;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGGlobal_type;
 }
 
@@ -69,7 +69,7 @@ static ODType* _EGGlobal_type;
     EGEGEnvironment* _environment;
     EGMatrixStack* _matrixStack;
 }
-static ODType* _EGContext_type;
+static ODClassType* _EGContext_type;
 @synthesize director = _director;
 @synthesize environment = _environment;
 @synthesize matrixStack = _matrixStack;
@@ -104,7 +104,7 @@ static ODType* _EGContext_type;
     return [EGContext type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGContext_type;
 }
 
@@ -135,7 +135,7 @@ static ODType* _EGContext_type;
     CNList* _stack;
     EGMatrixModel* _value;
 }
-static ODType* _EGMatrixStack_type;
+static ODClassType* _EGMatrixStack_type;
 @synthesize value = _value;
 
 + (id)matrixStack {
@@ -182,7 +182,7 @@ static ODType* _EGMatrixStack_type;
     return [EGMatrixStack type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGMatrixStack_type;
 }
 
@@ -212,7 +212,7 @@ static ODType* _EGMatrixStack_type;
     CNLazy* __wc;
 }
 static EGMatrixModel* _EGMatrixModel_identity;
-static ODType* _EGMatrixModel_type;
+static ODClassType* _EGMatrixModel_type;
 @synthesize m = _m;
 @synthesize w = _w;
 @synthesize c = _c;
@@ -374,7 +374,7 @@ static ODType* _EGMatrixModel_type;
     return _EGMatrixModel_identity;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGMatrixModel_type;
 }
 

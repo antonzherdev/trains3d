@@ -6,7 +6,7 @@
 @implementation CNHashSetBuilder{
     NSMutableSet* _set;
 }
-static ODType* _CNHashSetBuilder_type;
+static ODClassType* _CNHashSetBuilder_type;
 @synthesize set = _set;
 
 + (id)hashSetBuilder {
@@ -44,7 +44,7 @@ static ODType* _CNHashSetBuilder_type;
     return [CNHashSetBuilder type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNHashSetBuilder_type;
 }
 

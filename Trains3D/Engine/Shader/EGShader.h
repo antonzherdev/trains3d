@@ -29,7 +29,7 @@
 - (void)applyDraw:(void(^)())draw;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
 - (EGShaderUniform*)uniformForName:(NSString*)name;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -45,7 +45,7 @@
 - (void)unloadMaterial:(id)material;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
 - (EGShaderUniform*)uniformForName:(NSString*)name;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -56,7 +56,7 @@
 - (id)initWithHandle:(GLuint)handle;
 - (ODClassType*)type;
 - (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(GLenum)valuesType shift:(NSUInteger)shift;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -70,7 +70,7 @@
 - (void)setColor:(EGColor)color;
 - (void)setVec3:(GEVec3)vec3;
 - (void)setNumber:(float)number;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -80,7 +80,7 @@
 - (ODClassType*)type;
 - (void)drawMaterial:(id)material mesh:(EGMesh*)mesh;
 - (EGShader*)shaderForMaterial:(id)material;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

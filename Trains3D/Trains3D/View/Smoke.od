@@ -3,6 +3,7 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 import core.math._
+import com.antonzherdev.eg.Progress._
 
 
 class Smoke(weak train : Train) extends BillboardParticleSystem {
@@ -49,13 +50,13 @@ class SmokeParticle extends BillboardParticle(4) {
     var speed : vec3
     static val dragCoefficient = 1 // air resistance coefficient | a = -dragCoefficient * sqr(speed)
 
+    val animation = div(lifeLength) >> gap(0.75, 1) >> progress(f4 = 1, 0) >> color = vec4(1, 1, 1, _)
+
     def update(t : float4, dt : float4) {
         val a = speed.mul(-dragCoefficient)
         speed = speed.add(a.mul(dt))
         position = position.add(speed.mul(dt))
-        if(lifeTime > 3) {
-            color = vec4(1, 1, 1, 2.8 - 0.7*lifeTime)
-        }
+        animation(t)
     }
 }
 

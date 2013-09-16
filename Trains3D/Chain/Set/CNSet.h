@@ -23,7 +23,7 @@
 - (ODClassType*)type;
 - (void)addItem:(id)item;
 - (NSSet*)build;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

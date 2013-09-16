@@ -10,7 +10,7 @@
 @implementation EGStandardShaderSystem
 static EGStandardShaderSystem* _EGStandardShaderSystem_instance;
 static NSMutableDictionary* _EGStandardShaderSystem_shaders;
-static ODType* _EGStandardShaderSystem_type;
+static ODClassType* _EGStandardShaderSystem_type;
 
 + (id)standardShaderSystem {
     return [[EGStandardShaderSystem alloc] init];
@@ -30,7 +30,7 @@ static ODType* _EGStandardShaderSystem_type;
 }
 
 - (EGShader*)shaderForMaterial:(EGStandardMaterial*)material {
-    id<CNMap> lightMap = [[[EGGlobal.context.environment.lights chain] groupBy:^ODType*(EGEGLight* _) {
+    id<CNMap> lightMap = [[[EGGlobal.context.environment.lights chain] groupBy:^ODClassType*(EGEGLight* _) {
         return _.type;
     }] toMap];
     id<CNSeq> directLights = [[lightMap applyKey:EGEGDirectLight.type] getOrElse:^id<CNSeq>() {
@@ -50,7 +50,7 @@ static ODType* _EGStandardShaderSystem_type;
     return _EGStandardShaderSystem_instance;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGStandardShaderSystem_type;
 }
 
@@ -81,7 +81,7 @@ static ODType* _EGStandardShaderSystem_type;
     NSUInteger _directLightCount;
     BOOL _texture;
 }
-static ODType* _EGStandardShaderKey_type;
+static ODClassType* _EGStandardShaderKey_type;
 @synthesize directLightCount = _directLightCount;
 @synthesize texture = _texture;
 
@@ -180,7 +180,7 @@ static ODType* _EGStandardShaderKey_type;
     return [EGStandardShaderKey type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGStandardShaderKey_type;
 }
 
@@ -230,7 +230,7 @@ static ODType* _EGStandardShaderKey_type;
 static NSInteger _EGStandardShader_UV_SHIFT = 0;
 static NSInteger _EGStandardShader_NORMAL_SHIFT;
 static NSInteger _EGStandardShader_POSITION_SHIFT;
-static ODType* _EGStandardShader_type;
+static ODClassType* _EGStandardShader_type;
 @synthesize key = _key;
 @synthesize positionSlot = _positionSlot;
 @synthesize normalSlot = _normalSlot;
@@ -325,7 +325,7 @@ static ODType* _EGStandardShader_type;
     return _EGStandardShader_POSITION_SHIFT;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGStandardShader_type;
 }
 

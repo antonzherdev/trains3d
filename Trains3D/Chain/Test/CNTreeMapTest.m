@@ -5,7 +5,7 @@
 #import "CNChain.h"
 #import "ODType.h"
 @implementation CNTreeMapTest
-static ODType* _CNTreeMapTest_type;
+static ODClassType* _CNTreeMapTest_type;
 
 + (id)treeMapTest {
     return [[CNTreeMapTest alloc] init];
@@ -49,7 +49,7 @@ static ODType* _CNTreeMapTest_type;
     return [CNTreeMapTest type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNTreeMapTest_type;
 }
 

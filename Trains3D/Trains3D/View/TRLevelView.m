@@ -16,7 +16,7 @@
     EGEGEnvironment* _environment;
     id<EGCamera> _camera;
 }
-static ODType* _TRLevelView_type;
+static ODClassType* _TRLevelView_type;
 @synthesize level = _level;
 @synthesize environment = _environment;
 @synthesize camera = _camera;
@@ -68,7 +68,7 @@ static ODType* _TRLevelView_type;
     return [TRLevelView type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRLevelView_type;
 }
 

@@ -6,7 +6,7 @@
 #import "EGSimpleShaderSystem.h"
 #import "EGStandardShaderSystem.h"
 @implementation EGColorSource
-static ODType* _EGColorSource_type;
+static ODClassType* _EGColorSource_type;
 
 + (id)colorSource {
     return [[EGColorSource alloc] init];
@@ -35,7 +35,7 @@ static ODType* _EGColorSource_type;
     return [EGColorSource type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGColorSource_type;
 }
 
@@ -65,7 +65,7 @@ static ODType* _EGColorSource_type;
 @implementation EGColorSourceColor{
     EGColor _color;
 }
-static ODType* _EGColorSourceColor_type;
+static ODClassType* _EGColorSourceColor_type;
 @synthesize color = _color;
 
 + (id)colorSourceColorWithColor:(EGColor)color {
@@ -88,7 +88,7 @@ static ODType* _EGColorSourceColor_type;
     return [EGColorSourceColor type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGColorSourceColor_type;
 }
 
@@ -122,7 +122,7 @@ static ODType* _EGColorSourceColor_type;
 @implementation EGColorSourceTexture{
     EGTexture* _texture;
 }
-static ODType* _EGColorSourceTexture_type;
+static ODClassType* _EGColorSourceTexture_type;
 @synthesize texture = _texture;
 
 + (id)colorSourceTextureWithTexture:(EGTexture*)texture {
@@ -145,7 +145,7 @@ static ODType* _EGColorSourceTexture_type;
     return [EGColorSourceTexture type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGColorSourceTexture_type;
 }
 
@@ -177,7 +177,7 @@ static ODType* _EGColorSourceTexture_type;
 
 
 @implementation EGMaterial
-static ODType* _EGMaterial_type;
+static ODClassType* _EGMaterial_type;
 
 + (id)material {
     return [[EGMaterial alloc] init];
@@ -214,7 +214,7 @@ static ODType* _EGMaterial_type;
     return [EGMaterial type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGMaterial_type;
 }
 
@@ -244,7 +244,7 @@ static ODType* _EGMaterial_type;
 @implementation EGSimpleMaterial{
     EGColorSource* _color;
 }
-static ODType* _EGSimpleMaterial_type;
+static ODClassType* _EGSimpleMaterial_type;
 @synthesize color = _color;
 
 + (id)simpleMaterialWithColor:(EGColorSource*)color {
@@ -271,7 +271,7 @@ static ODType* _EGSimpleMaterial_type;
     return [EGSimpleMaterial type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGSimpleMaterial_type;
 }
 
@@ -307,7 +307,7 @@ static ODType* _EGSimpleMaterial_type;
     EGColor _specularColor;
     CGFloat _specularSize;
 }
-static ODType* _EGStandardMaterial_type;
+static ODClassType* _EGStandardMaterial_type;
 @synthesize diffuse = _diffuse;
 @synthesize specularColor = _specularColor;
 @synthesize specularSize = _specularSize;
@@ -344,7 +344,7 @@ static ODType* _EGStandardMaterial_type;
     return [EGStandardMaterial type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGStandardMaterial_type;
 }
 
@@ -382,7 +382,7 @@ static ODType* _EGStandardMaterial_type;
 @implementation EGMeshModel{
     id<CNSeq> _meshes;
 }
-static ODType* _EGMeshModel_type;
+static ODClassType* _EGMeshModel_type;
 @synthesize meshes = _meshes;
 
 + (id)meshModelWithMeshes:(id<CNSeq>)meshes {
@@ -411,7 +411,7 @@ static ODType* _EGMeshModel_type;
     return [EGMeshModel type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGMeshModel_type;
 }
 
@@ -456,8 +456,8 @@ EGBlendFunction egBlendFunctionPremultiplied() {
     static EGBlendFunction _ret = {GL_ONE, GL_ONE_MINUS_SRC_ALPHA};
     return _ret;
 }
-ODType* egBlendFunctionType() {
-    static ODType* _ret = nil;
+ODPType* egBlendFunctionType() {
+    static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[EGBlendFunctionWrap class] name:@"EGBlendFunction" size:sizeof(EGBlendFunction) wrap:^id(void* data, NSUInteger i) {
         return wrap(EGBlendFunction, ((EGBlendFunction*)(data))[i]);
     }];

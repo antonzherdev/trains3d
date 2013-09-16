@@ -3,6 +3,7 @@
 #import "TRTrain.h"
 #import "TRCar.h"
 #import "TRRailPoint.h"
+#import "EGProgress.h"
 #import "EGContext.h"
 @implementation TRSmoke{
     __weak TRTrain* _train;
@@ -16,7 +17,7 @@ static float _TRSmoke_particleSize = 0.03;
 static GEQuad _TRSmoke_modelQuad;
 static GEQuadrant _TRSmoke_textureQuadrant;
 static GEVec4 _TRSmoke_defColor = {1.0, 1.0, 1.0, 0.7};
-static ODType* _TRSmoke_type;
+static ODClassType* _TRSmoke_type;
 @synthesize train = _train;
 
 + (id)smokeWithTrain:(TRTrain*)train {
@@ -88,7 +89,7 @@ static ODType* _TRSmoke_type;
     return _TRSmoke_defColor;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRSmoke_type;
 }
 
@@ -121,10 +122,12 @@ static ODType* _TRSmoke_type;
 
 @implementation TRSmokeParticle{
     GEVec3 _speed;
+    void(^_animation)(float);
 }
 static NSInteger _TRSmokeParticle_dragCoefficient = 1;
-static ODType* _TRSmokeParticle_type;
+static ODClassType* _TRSmokeParticle_type;
 @synthesize speed = _speed;
+@synthesize animation = _animation;
 
 + (id)smokeParticle {
     return [[TRSmokeParticle alloc] init];
@@ -132,6 +135,32 @@ static ODType* _TRSmokeParticle_type;
 
 - (id)init {
     self = [super initWithLifeLength:4.0];
+    __weak TRSmokeParticle* _weakSelf = self;
+    if(self) _animation = ^id() {
+        id(^__l)(float) = ^id() {
+            id(^__l)(float) = ^id() {
+                float(^__l)(float) = [EGProgress divOn:self.lifeLength];
+                id(^__r)(float) = [EGProgress gapT1:0.75 t2:1.0];
+                return ^id(float _) {
+                    return __r(__l(_));
+                };
+            }();
+            float(^__r)(float) = [EGProgress progressF4:1.0 f42:0.0];
+            return ^id(float _) {
+                return [__l(_) map:^id(id _) {
+                    return numf4(__r(unumf4(_)));
+                }];
+            };
+        }();
+        void(^__r)(float) = ^void(float _) {
+            _weakSelf.color = GEVec4Make(1.0, 1.0, 1.0, _);
+        };
+        return ^void(float _) {
+            [__l(_) forEach:^void(id _) {
+                __r(unumf4(_));
+            }];
+        };
+    }();
     
     return self;
 }
@@ -145,7 +174,7 @@ static ODType* _TRSmokeParticle_type;
     GEVec3 a = geVec3MulK(_speed, ((float)(-_TRSmokeParticle_dragCoefficient)));
     _speed = geVec3AddV(_speed, geVec3MulK(a, dt));
     self.position = geVec3AddV(self.position, geVec3MulK(_speed, dt));
-    if([self lifeTime] > 3) self.color = GEVec4Make(1.0, 1.0, 1.0, ((float)(2.8 - 0.7 * [self lifeTime])));
+    _animation(t);
 }
 
 - (ODClassType*)type {
@@ -156,12 +185,22 @@ static ODType* _TRSmokeParticle_type;
     return _TRSmokeParticle_dragCoefficient;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRSmokeParticle_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
 }
 
 - (NSString*)description {
@@ -174,7 +213,7 @@ static ODType* _TRSmokeParticle_type;
 
 
 @implementation TRSmokeView
-static ODType* _TRSmokeView_type;
+static ODClassType* _TRSmokeView_type;
 
 + (id)smokeView {
     return [[TRSmokeView alloc] init];
@@ -195,7 +234,7 @@ static ODType* _TRSmokeView_type;
     return [TRSmokeView type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRSmokeView_type;
 }
 

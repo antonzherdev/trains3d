@@ -35,7 +35,7 @@
 - (ODClassType*)type;
 - (void)addItem:(id)item;
 - (NSArray*)build;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -48,7 +48,7 @@
 - (ODClassType*)type;
 - (id)applyIndex:(NSUInteger)index;
 - (id<CNIterator>)iterator;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -62,7 +62,7 @@
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

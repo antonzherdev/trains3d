@@ -19,7 +19,7 @@
 - (id<CNIterator>)iterator;
 - (CNRange*)setStep:(NSInteger)step;
 - (BOOL)isEmpty;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -33,7 +33,7 @@
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

@@ -30,7 +30,7 @@
 - (BOOL)isDisplayingStats;
 - (void)displayStats;
 - (void)cancelDisplayingStats;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

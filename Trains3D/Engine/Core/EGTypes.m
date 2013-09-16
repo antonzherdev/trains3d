@@ -4,8 +4,8 @@ EGColor egColorWhite() {
     static EGColor _ret = {1.0, 1.0, 1.0, 1.0};
     return _ret;
 }
-ODType* egColorType() {
-    static ODType* _ret = nil;
+ODPType* egColorType() {
+    static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[EGColorWrap class] name:@"EGColor" size:sizeof(EGColor) wrap:^id(void* data, NSUInteger i) {
         return wrap(EGColor, ((EGColor*)(data))[i]);
     }];
@@ -54,7 +54,7 @@ ODType* egColorType() {
     id<CNSeq> _lights;
 }
 static EGEGEnvironment* _EGEGEnvironment_default;
-static ODType* _EGEGEnvironment_type;
+static ODClassType* _EGEGEnvironment_type;
 @synthesize ambientColor = _ambientColor;
 @synthesize lights = _lights;
 
@@ -94,7 +94,7 @@ static ODType* _EGEGEnvironment_type;
     return _EGEGEnvironment_default;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGEGEnvironment_type;
 }
 
@@ -130,7 +130,7 @@ static ODType* _EGEGEnvironment_type;
 @implementation EGEGLight{
     EGColor _color;
 }
-static ODType* _EGEGLight_type;
+static ODClassType* _EGEGLight_type;
 @synthesize color = _color;
 
 + (id)lightWithColor:(EGColor)color {
@@ -153,7 +153,7 @@ static ODType* _EGEGLight_type;
     return [EGEGLight type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGEGLight_type;
 }
 
@@ -187,7 +187,7 @@ static ODType* _EGEGLight_type;
 @implementation EGEGDirectLight{
     GEVec3 _direction;
 }
-static ODType* _EGEGDirectLight_type;
+static ODClassType* _EGEGDirectLight_type;
 @synthesize direction = _direction;
 
 + (id)directLightWithColor:(EGColor)color direction:(GEVec3)direction {
@@ -210,7 +210,7 @@ static ODType* _EGEGDirectLight_type;
     return [EGEGDirectLight type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGEGDirectLight_type;
 }
 

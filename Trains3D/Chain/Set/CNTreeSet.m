@@ -9,7 +9,7 @@
     CNMutableTreeMap* _map;
 }
 static NSObject* _CNMutableTreeSet_obj;
-static ODType* _CNMutableTreeSet_type;
+static ODClassType* _CNMutableTreeSet_type;
 @synthesize map = _map;
 
 + (id)mutableTreeSetWithMap:(CNMutableTreeMap*)map {
@@ -156,7 +156,7 @@ static ODType* _CNMutableTreeSet_type;
     return [CNMutableTreeSet type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNMutableTreeSet_type;
 }
 

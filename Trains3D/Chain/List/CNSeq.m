@@ -9,7 +9,7 @@
 @implementation CNArrayBuilder{
     NSMutableArray* _array;
 }
-static ODType* _CNArrayBuilder_type;
+static ODClassType* _CNArrayBuilder_type;
 @synthesize array = _array;
 
 + (id)arrayBuilder {
@@ -47,7 +47,7 @@ static ODType* _CNArrayBuilder_type;
     return [CNArrayBuilder type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNArrayBuilder_type;
 }
 
@@ -78,7 +78,7 @@ static ODType* _CNArrayBuilder_type;
     NSUInteger _count;
     id(^_f)(NSUInteger);
 }
-static ODType* _CNIndexFunSeq_type;
+static ODClassType* _CNIndexFunSeq_type;
 @synthesize count = _count;
 @synthesize f = _f;
 
@@ -214,7 +214,7 @@ static ODType* _CNIndexFunSeq_type;
     return [CNIndexFunSeq type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNIndexFunSeq_type;
 }
 
@@ -237,7 +237,7 @@ static ODType* _CNIndexFunSeq_type;
     id(^_f)(NSUInteger);
     NSUInteger _i;
 }
-static ODType* _CNIndexFunSeqIterator_type;
+static ODClassType* _CNIndexFunSeqIterator_type;
 @synthesize count = _count;
 @synthesize f = _f;
 @synthesize i = _i;
@@ -276,7 +276,7 @@ static ODType* _CNIndexFunSeqIterator_type;
     return [CNIndexFunSeqIterator type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _CNIndexFunSeqIterator_type;
 }
 

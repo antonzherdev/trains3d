@@ -5,7 +5,7 @@
 @implementation EGShaderProgram{
     GLuint _handle;
 }
-static ODType* _EGShaderProgram_type;
+static ODClassType* _EGShaderProgram_type;
 @synthesize handle = _handle;
 
 + (id)shaderProgramWithHandle:(GLuint)handle {
@@ -93,7 +93,7 @@ static ODType* _EGShaderProgram_type;
     return [EGShaderProgram type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGShaderProgram_type;
 }
 
@@ -127,7 +127,7 @@ static ODType* _EGShaderProgram_type;
 @implementation EGShader{
     EGShaderProgram* _program;
 }
-static ODType* _EGShader_type;
+static ODClassType* _EGShader_type;
 @synthesize program = _program;
 
 + (id)shaderWithProgram:(EGShaderProgram*)program {
@@ -179,7 +179,7 @@ static ODType* _EGShader_type;
     return [EGShader type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGShader_type;
 }
 
@@ -213,7 +213,7 @@ static ODType* _EGShader_type;
 @implementation EGShaderAttribute{
     GLuint _handle;
 }
-static ODType* _EGShaderAttribute_type;
+static ODClassType* _EGShaderAttribute_type;
 @synthesize handle = _handle;
 
 + (id)shaderAttributeWithHandle:(GLuint)handle {
@@ -241,7 +241,7 @@ static ODType* _EGShaderAttribute_type;
     return [EGShaderAttribute type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGShaderAttribute_type;
 }
 
@@ -275,7 +275,7 @@ static ODType* _EGShaderAttribute_type;
 @implementation EGShaderUniform{
     GLuint _handle;
 }
-static ODType* _EGShaderUniform_type;
+static ODClassType* _EGShaderUniform_type;
 @synthesize handle = _handle;
 
 + (id)shaderUniformWithHandle:(GLuint)handle {
@@ -314,7 +314,7 @@ static ODType* _EGShaderUniform_type;
     return [EGShaderUniform type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGShaderUniform_type;
 }
 
@@ -346,7 +346,7 @@ static ODType* _EGShaderUniform_type;
 
 
 @implementation EGShaderSystem
-static ODType* _EGShaderSystem_type;
+static ODClassType* _EGShaderSystem_type;
 
 + (id)shaderSystem {
     return [[EGShaderSystem alloc] init];
@@ -376,7 +376,7 @@ static ODType* _EGShaderSystem_type;
     return [EGShaderSystem type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGShaderSystem_type;
 }
 

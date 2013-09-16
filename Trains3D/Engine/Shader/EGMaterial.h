@@ -22,7 +22,7 @@ typedef struct EGBlendFunction EGBlendFunction;
 - (ODClassType*)type;
 + (EGColorSource*)applyColor:(EGColor)color;
 + (EGColorSource*)applyTexture:(EGTexture*)texture;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -32,7 +32,7 @@ typedef struct EGBlendFunction EGBlendFunction;
 + (id)colorSourceColorWithColor:(EGColor)color;
 - (id)initWithColor:(EGColor)color;
 - (ODClassType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -42,7 +42,7 @@ typedef struct EGBlendFunction EGBlendFunction;
 + (id)colorSourceTextureWithTexture:(EGTexture*)texture;
 - (id)initWithTexture:(EGTexture*)texture;
 - (ODClassType*)type;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -54,7 +54,7 @@ typedef struct EGBlendFunction EGBlendFunction;
 - (void)drawMesh:(EGMesh*)mesh;
 + (EGMaterial*)applyColor:(EGColor)color;
 + (EGMaterial*)applyTexture:(EGTexture*)texture;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -65,7 +65,7 @@ typedef struct EGBlendFunction EGBlendFunction;
 - (id)initWithColor:(EGColorSource*)color;
 - (ODClassType*)type;
 - (EGShaderSystem*)shaderSystem;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -79,7 +79,7 @@ typedef struct EGBlendFunction EGBlendFunction;
 - (ODClassType*)type;
 + (EGStandardMaterial*)applyDiffuse:(EGColorSource*)diffuse;
 - (EGShaderSystem*)shaderSystem;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -90,7 +90,7 @@ typedef struct EGBlendFunction EGBlendFunction;
 - (id)initWithMeshes:(id<CNSeq>)meshes;
 - (ODClassType*)type;
 - (void)draw;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -120,7 +120,7 @@ static inline NSString* EGBlendFunctionDescription(EGBlendFunction self) {
 void egBlendFunctionApplyDraw(EGBlendFunction self, void(^draw)());
 EGBlendFunction egBlendFunctionStandard();
 EGBlendFunction egBlendFunctionPremultiplied();
-ODType* egBlendFunctionType();
+ODPType* egBlendFunctionType();
 @interface EGBlendFunctionWrap : NSObject
 @property (readonly, nonatomic) EGBlendFunction value;
 

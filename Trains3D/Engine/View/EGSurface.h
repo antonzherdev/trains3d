@@ -24,7 +24,7 @@
 - (void)bind;
 - (void)unbind;
 - (void)drawFullScreen;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -38,7 +38,7 @@
 - (void)applyDraw:(void(^)())draw;
 + (NSString*)vertex;
 + (NSString*)fragment;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

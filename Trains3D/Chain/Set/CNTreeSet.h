@@ -31,7 +31,7 @@
 - (void)clear;
 - (void)addAllObjects:(id<CNTraversable>)objects;
 - (CNMutableTreeSet*)reorder;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

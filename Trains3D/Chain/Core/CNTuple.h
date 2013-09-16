@@ -16,7 +16,7 @@
 - (NSInteger)compareTo:(CNTuple*)to;
 - (NSString*)description;
 + (id)unapplyTuple:(CNTuple*)tuple;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -31,7 +31,7 @@
 - (NSInteger)compareTo:(CNTuple3*)to;
 - (NSString*)description;
 + (id)unapplyTuple:(CNTuple3*)tuple;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 
@@ -47,7 +47,7 @@
 - (NSInteger)compareTo:(CNTuple4*)to;
 - (NSString*)description;
 + (id)unapplyTuple:(CNTuple4*)tuple;
-+ (ODType*)type;
++ (ODClassType*)type;
 @end
 
 

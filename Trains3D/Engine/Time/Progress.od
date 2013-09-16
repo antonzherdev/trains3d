@@ -47,4 +47,6 @@ object Progress {
             if(t.between(t1, t2)) Option.some((t - t1)/l)
             else Option.none<float4>
     }
+
+    def div(on : float4) : float4 -> float4 = t : float4 -> (t/on)
 }

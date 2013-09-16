@@ -12,7 +12,7 @@
     CNLazy* __lazy_fullScreenIndexBuffer;
     CNLazy* __lazy_shader;
 }
-static ODType* _EGSurface_type;
+static ODClassType* _EGSurface_type;
 @synthesize width = _width;
 @synthesize height = _height;
 @synthesize texture = _texture;
@@ -108,7 +108,7 @@ static ODType* _EGSurface_type;
     return [EGSurface type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGSurface_type;
 }
 
@@ -159,7 +159,7 @@ static NSString* _EGSurfaceShader_fragment = @"varying vec2 UV;\n"
     "void main(void) {\n"
     "   gl_FragColor = texture2D(texture, UV);\n"
     "}";
-static ODType* _EGSurfaceShader_type;
+static ODClassType* _EGSurfaceShader_type;
 @synthesize program = _program;
 @synthesize positionSlot = _positionSlot;
 
@@ -201,7 +201,7 @@ static ODType* _EGSurfaceShader_type;
     return _EGSurfaceShader_fragment;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _EGSurfaceShader_type;
 }
 

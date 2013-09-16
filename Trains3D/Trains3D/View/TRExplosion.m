@@ -7,7 +7,7 @@
     float _size;
     TRExplosionFlame* _flame;
 }
-static ODType* _TRExplosion_type;
+static ODClassType* _TRExplosion_type;
 @synthesize position = _position;
 @synthesize size = _size;
 @synthesize flame = _flame;
@@ -48,7 +48,7 @@ static ODType* _TRExplosion_type;
     return [TRExplosion type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRExplosion_type;
 }
 
@@ -85,7 +85,7 @@ static ODType* _TRExplosion_type;
     GEVec3 _position;
     float _size;
 }
-static ODType* _TRExplosionFlame_type;
+static ODClassType* _TRExplosionFlame_type;
 @synthesize position = _position;
 @synthesize size = _size;
 
@@ -123,7 +123,7 @@ static ODType* _TRExplosionFlame_type;
     return [TRExplosionFlame type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRExplosionFlame_type;
 }
 
@@ -164,7 +164,7 @@ static ODType* _TRExplosionFlame_type;
 }
 static GEVec4 _TRExplosionFlameParticle_startColor = {1.0, 0.4, 0.0, 0.3};
 static GEQuadrant _TRExplosionFlameParticle_textureQuadrant;
-static ODType* _TRExplosionFlameParticle_type;
+static ODClassType* _TRExplosionFlameParticle_type;
 @synthesize size = _size;
 @synthesize startShift = _startShift;
 @synthesize shift = _shift;
@@ -183,42 +183,72 @@ static ODType* _TRExplosionFlameParticle_type;
         _shift = shift;
         _animation = ^id() {
             GEQuad bigQuad = geQuadApplySize(_size);
-            return ^void(float _) {
-                ^void(float _) {
-                    ^void(float _) {
-                        [^id(float _) {
-                            return [[EGProgress gapT1:0.0 t2:0.1](_) map:^id(id _) {
-                                return numf4([EGProgress progressF4:0.0 f42:_weakSelf.size](unumf4(_)));
+            void(^__l)(float) = ^id() {
+                void(^__l)(float) = ^id() {
+                    id(^__l)(float) = ^id() {
+                        id(^__l)(float) = [EGProgress gapT1:0.0 t2:0.1];
+                        float(^__r)(float) = [EGProgress progressF4:0.0 f42:_size];
+                        return ^id(float _) {
+                            return [__l(_) map:^id(id _) {
+                                return numf4(__r(unumf4(_)));
                             }];
-                        }(_) forEach:^void(id _) {
-                            ^void(float _) {
-                                _weakSelf.model = geQuadAddVec2(geQuadApplySize(_), _weakSelf.startShift);
-                            }(unumf4(_));
+                        };
+                    }();
+                    void(^__r)(float) = ^void(float _) {
+                        _weakSelf.model = geQuadAddVec2(geQuadApplySize(_), _weakSelf.startShift);
+                    };
+                    return ^void(float _) {
+                        [__l(_) forEach:^void(id _) {
+                            __r(unumf4(_));
                         }];
-                    }(_);
-                    ^void(float _) {
-                        [^id(float _) {
-                            return [[EGProgress gapT1:0.1 t2:1.0](_) map:^id(id _) {
-                                return wrap(GEVec2, [EGProgress progressVec2:_weakSelf.startShift vec22:_weakSelf.shift](unumf4(_)));
+                    };
+                }();
+                void(^__r)(float) = ^id() {
+                    id(^__l)(float) = ^id() {
+                        id(^__l)(float) = [EGProgress gapT1:0.1 t2:1.0];
+                        GEVec2(^__r)(float) = [EGProgress progressVec2:_startShift vec22:_shift];
+                        return ^id(float _) {
+                            return [__l(_) map:^id(id _) {
+                                return wrap(GEVec2, __r(unumf4(_)));
                             }];
-                        }(_) forEach:^void(id _) {
-                            ^void(GEVec2 _) {
-                                _weakSelf.model = geQuadAddVec2(bigQuad, _);
-                            }(uwrap(GEVec2, _));
+                        };
+                    }();
+                    void(^__r)(GEVec2) = ^void(GEVec2 _) {
+                        _weakSelf.model = geQuadAddVec2(bigQuad, _);
+                    };
+                    return ^void(float _) {
+                        [__l(_) forEach:^void(id _) {
+                            __r(uwrap(GEVec2, _));
                         }];
-                    }(_);
-                }(_);
-                ^void(float _) {
-                    [^id(float _) {
-                        return [[EGProgress gapT1:0.05 t2:1.0](_) map:^id(id _) {
-                            return wrap(GEVec4, [EGProgress progressVec4:[TRExplosionFlameParticle startColor] vec42:GEVec4Make(0.0, 0.0, 0.0, 0.0)](unumf4(_)));
+                    };
+                }();
+                return ^void(float _) {
+                    __l(_);
+                    __r(_);
+                };
+            }();
+            void(^__r)(float) = ^id() {
+                id(^__l)(float) = ^id() {
+                    id(^__l)(float) = [EGProgress gapT1:0.05 t2:1.0];
+                    GEVec4(^__r)(float) = [EGProgress progressVec4:_TRExplosionFlameParticle_startColor vec42:GEVec4Make(0.0, 0.0, 0.0, 0.0)];
+                    return ^id(float _) {
+                        return [__l(_) map:^id(id _) {
+                            return wrap(GEVec4, __r(unumf4(_)));
                         }];
-                    }(_) forEach:^void(id _) {
-                        ^void(GEVec4 _) {
-                            _weakSelf.color = _;
-                        }(uwrap(GEVec4, _));
+                    };
+                }();
+                void(^__r)(GEVec4) = ^void(GEVec4 _) {
+                    _weakSelf.color = _;
+                };
+                return ^void(float _) {
+                    [__l(_) forEach:^void(id _) {
+                        __r(uwrap(GEVec4, _));
                     }];
-                }(_);
+                };
+            }();
+            return ^void(float _) {
+                __l(_);
+                __r(_);
             };
         }();
     }
@@ -258,7 +288,7 @@ static ODType* _TRExplosionFlameParticle_type;
     return _TRExplosionFlameParticle_textureQuadrant;
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRExplosionFlameParticle_type;
 }
 
@@ -297,7 +327,7 @@ static ODType* _TRExplosionFlameParticle_type;
     EGSimpleMaterial* _material;
     EGBillboardParticleSystemView* _view;
 }
-static ODType* _TRExplosionView_type;
+static ODClassType* _TRExplosionView_type;
 @synthesize material = _material;
 @synthesize view = _view;
 
@@ -328,7 +358,7 @@ static ODType* _TRExplosionView_type;
     return [TRExplosionView type];
 }
 
-+ (ODType*)type {
++ (ODClassType*)type {
     return _TRExplosionView_type;
 }
 
