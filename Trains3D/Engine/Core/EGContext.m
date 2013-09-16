@@ -66,7 +66,7 @@ static ODClassType* _EGGlobal_type;
 @implementation EGContext{
     NSMutableDictionary* _textureCache;
     EGDirector* _director;
-    EGEGEnvironment* _environment;
+    EGEnvironment* _environment;
     EGMatrixStack* _matrixStack;
 }
 static ODClassType* _EGContext_type;
@@ -82,7 +82,7 @@ static ODClassType* _EGContext_type;
     self = [super init];
     if(self) {
         _textureCache = [NSMutableDictionary mutableDictionary];
-        _environment = EGEGEnvironment.aDefault;
+        _environment = EGEnvironment.aDefault;
         _matrixStack = [EGMatrixStack matrixStack];
     }
     

@@ -13,7 +13,7 @@
     TRCityView* _cityView;
     TRRailroadView* _railroadView;
     TRTrainView* _trainView;
-    EGEGEnvironment* _environment;
+    EGEnvironment* _environment;
     id<EGCamera> _camera;
 }
 static ODClassType* _TRLevelView_type;
@@ -33,7 +33,7 @@ static ODClassType* _TRLevelView_type;
         _cityView = [TRCityView cityView];
         _railroadView = [TRRailroadView railroadView];
         _trainView = [TRTrainView trainView];
-        _environment = [EGEGEnvironment environmentWithAmbientColor:EGColorMake(0.4, 0.4, 0.4, 1.0) lights:(@[[EGEGDirectLight directLightWithColor:EGColorMake(1.0, 1.0, 1.0, 1.0) direction:GEVec3Make(-0.2, 0.2, -0.5)]])];
+        _environment = [EGEnvironment environmentWithAmbientColor:EGColorMake(0.4, 0.4, 0.4, 1.0) lights:(@[[EGDirectLight directLightWithColor:EGColorMake(1.0, 1.0, 1.0, 1.0) direction:GEVec3Make(-0.2, 0.2, -0.5)]])];
         _camera = [EGCameraIso cameraIsoWithTilesOnScreen:_level.map.size center:GEVec2Make(0.0, 0.0)];
     }
     

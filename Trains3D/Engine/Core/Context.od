@@ -13,7 +13,7 @@ class Context {
     def textureFor(file : string) : FileTexture = textureCache.objectFor(key = file, orUpdateWith = FileTexture(file))
 
     var director : Director
-    var environment = EGEnvironment.default
+    var environment = Environment.default
     val matrixStack = MatrixStack()
 }
 

@@ -41,7 +41,7 @@
 @protocol EGLayerView<EGController>
 - (id<EGCamera>)camera;
 - (void)drawView;
-- (EGEGEnvironment*)environment;
+- (EGEnvironment*)environment;
 - (void)updateWithDelta:(CGFloat)delta;
 @end
 

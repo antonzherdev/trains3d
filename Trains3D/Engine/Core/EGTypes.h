@@ -1,9 +1,9 @@
 #import "objd.h"
 #import "GEVec.h"
 
-@class EGEGEnvironment;
-@class EGEGLight;
-@class EGEGDirectLight;
+@class EGEnvironment;
+@class EGLight;
+@class EGDirectLight;
 @protocol EGController;
 @protocol EGCamera;
 typedef struct EGColor EGColor;
@@ -59,21 +59,21 @@ ODPType* egColorType();
 @end
 
 
-@interface EGEGEnvironment : NSObject
+@interface EGEnvironment : NSObject
 @property (nonatomic, readonly) EGColor ambientColor;
 @property (nonatomic, readonly) id<CNSeq> lights;
 
 + (id)environmentWithAmbientColor:(EGColor)ambientColor lights:(id<CNSeq>)lights;
 - (id)initWithAmbientColor:(EGColor)ambientColor lights:(id<CNSeq>)lights;
 - (ODClassType*)type;
-+ (EGEGEnvironment*)applyLights:(id<CNSeq>)lights;
-+ (EGEGEnvironment*)applyLight:(EGEGLight*)light;
-+ (EGEGEnvironment*)aDefault;
++ (EGEnvironment*)applyLights:(id<CNSeq>)lights;
++ (EGEnvironment*)applyLight:(EGLight*)light;
++ (EGEnvironment*)aDefault;
 + (ODClassType*)type;
 @end
 
 
-@interface EGEGLight : NSObject
+@interface EGLight : NSObject
 @property (nonatomic, readonly) EGColor color;
 
 + (id)lightWithColor:(EGColor)color;
@@ -83,7 +83,7 @@ ODPType* egColorType();
 @end
 
 
-@interface EGEGDirectLight : EGEGLight
+@interface EGDirectLight : EGLight
 @property (nonatomic, readonly) GEVec3 direction;
 
 + (id)directLightWithColor:(EGColor)color direction:(GEVec3)direction;

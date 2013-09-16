@@ -44,8 +44,8 @@ static ODClassType* _TRLevelMenuView_type;
     }
 }
 
-- (EGEGEnvironment*)environment {
-    return EGEGEnvironment.aDefault;
+- (EGEnvironment*)environment {
+    return EGEnvironment.aDefault;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

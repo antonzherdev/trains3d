@@ -93,7 +93,7 @@ class SwitchView {
 class LightView {
     val greenMaterial = StandardMaterial( Color(0.07568, 0.61424, 0.07568, 1), Color(0.633, 0.727811, 0.633, 1), 1)
     val redMaterial = StandardMaterial(Color(0.61424, 0.04136, 0.04136, 1), Color(0.727811, 0.626959, 0.626959, 1), 1)
-    def draw(light : Light) {
+    def draw(light : RailLight) {
         matrix(
             _.modify(w = w -> w.translate(light.tile.x, light.tile.y, 0))
              .modify(m = m -> m.rotate(light.connector.angle, 0, 1, 0).translate(-0.45, 0, -0.2))

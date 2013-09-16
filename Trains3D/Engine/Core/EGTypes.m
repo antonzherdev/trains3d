@@ -49,17 +49,17 @@ ODPType* egColorType() {
 
 
 
-@implementation EGEGEnvironment{
+@implementation EGEnvironment{
     EGColor _ambientColor;
     id<CNSeq> _lights;
 }
-static EGEGEnvironment* _EGEGEnvironment_default;
-static ODClassType* _EGEGEnvironment_type;
+static EGEnvironment* _EGEnvironment_default;
+static ODClassType* _EGEnvironment_type;
 @synthesize ambientColor = _ambientColor;
 @synthesize lights = _lights;
 
 + (id)environmentWithAmbientColor:(EGColor)ambientColor lights:(id<CNSeq>)lights {
-    return [[EGEGEnvironment alloc] initWithAmbientColor:ambientColor lights:lights];
+    return [[EGEnvironment alloc] initWithAmbientColor:ambientColor lights:lights];
 }
 
 - (id)initWithAmbientColor:(EGColor)ambientColor lights:(id<CNSeq>)lights {
@@ -74,28 +74,28 @@ static ODClassType* _EGEGEnvironment_type;
 
 + (void)initialize {
     [super initialize];
-    _EGEGEnvironment_type = [ODClassType classTypeWithCls:[EGEGEnvironment class]];
-    _EGEGEnvironment_default = [EGEGEnvironment environmentWithAmbientColor:EGColorMake(1.0, 1.0, 1.0, 1.0) lights:(@[])];
+    _EGEnvironment_type = [ODClassType classTypeWithCls:[EGEnvironment class]];
+    _EGEnvironment_default = [EGEnvironment environmentWithAmbientColor:EGColorMake(1.0, 1.0, 1.0, 1.0) lights:(@[])];
 }
 
-+ (EGEGEnvironment*)applyLights:(id<CNSeq>)lights {
-    return [EGEGEnvironment environmentWithAmbientColor:EGColorMake(1.0, 1.0, 1.0, 1.0) lights:lights];
++ (EGEnvironment*)applyLights:(id<CNSeq>)lights {
+    return [EGEnvironment environmentWithAmbientColor:EGColorMake(1.0, 1.0, 1.0, 1.0) lights:lights];
 }
 
-+ (EGEGEnvironment*)applyLight:(EGEGLight*)light {
-    return [EGEGEnvironment environmentWithAmbientColor:EGColorMake(1.0, 1.0, 1.0, 1.0) lights:(@[light])];
++ (EGEnvironment*)applyLight:(EGLight*)light {
+    return [EGEnvironment environmentWithAmbientColor:EGColorMake(1.0, 1.0, 1.0, 1.0) lights:(@[light])];
 }
 
 - (ODClassType*)type {
-    return [EGEGEnvironment type];
+    return [EGEnvironment type];
 }
 
-+ (EGEGEnvironment*)aDefault {
-    return _EGEGEnvironment_default;
++ (EGEnvironment*)aDefault {
+    return _EGEnvironment_default;
 }
 
 + (ODClassType*)type {
-    return _EGEGEnvironment_type;
+    return _EGEnvironment_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -105,7 +105,7 @@ static ODClassType* _EGEGEnvironment_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGEGEnvironment* o = ((EGEGEnvironment*)(other));
+    EGEnvironment* o = ((EGEnvironment*)(other));
     return EGColorEq(self.ambientColor, o.ambientColor) && [self.lights isEqual:o.lights];
 }
 
@@ -127,14 +127,14 @@ static ODClassType* _EGEGEnvironment_type;
 @end
 
 
-@implementation EGEGLight{
+@implementation EGLight{
     EGColor _color;
 }
-static ODClassType* _EGEGLight_type;
+static ODClassType* _EGLight_type;
 @synthesize color = _color;
 
 + (id)lightWithColor:(EGColor)color {
-    return [[EGEGLight alloc] initWithColor:color];
+    return [[EGLight alloc] initWithColor:color];
 }
 
 - (id)initWithColor:(EGColor)color {
@@ -146,15 +146,15 @@ static ODClassType* _EGEGLight_type;
 
 + (void)initialize {
     [super initialize];
-    _EGEGLight_type = [ODClassType classTypeWithCls:[EGEGLight class]];
+    _EGLight_type = [ODClassType classTypeWithCls:[EGLight class]];
 }
 
 - (ODClassType*)type {
-    return [EGEGLight type];
+    return [EGLight type];
 }
 
 + (ODClassType*)type {
-    return _EGEGLight_type;
+    return _EGLight_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -164,7 +164,7 @@ static ODClassType* _EGEGLight_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGEGLight* o = ((EGEGLight*)(other));
+    EGLight* o = ((EGLight*)(other));
     return EGColorEq(self.color, o.color);
 }
 
@@ -184,14 +184,14 @@ static ODClassType* _EGEGLight_type;
 @end
 
 
-@implementation EGEGDirectLight{
+@implementation EGDirectLight{
     GEVec3 _direction;
 }
-static ODClassType* _EGEGDirectLight_type;
+static ODClassType* _EGDirectLight_type;
 @synthesize direction = _direction;
 
 + (id)directLightWithColor:(EGColor)color direction:(GEVec3)direction {
-    return [[EGEGDirectLight alloc] initWithColor:color direction:direction];
+    return [[EGDirectLight alloc] initWithColor:color direction:direction];
 }
 
 - (id)initWithColor:(EGColor)color direction:(GEVec3)direction {
@@ -203,15 +203,15 @@ static ODClassType* _EGEGDirectLight_type;
 
 + (void)initialize {
     [super initialize];
-    _EGEGDirectLight_type = [ODClassType classTypeWithCls:[EGEGDirectLight class]];
+    _EGDirectLight_type = [ODClassType classTypeWithCls:[EGDirectLight class]];
 }
 
 - (ODClassType*)type {
-    return [EGEGDirectLight type];
+    return [EGDirectLight type];
 }
 
 + (ODClassType*)type {
-    return _EGEGDirectLight_type;
+    return _EGDirectLight_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -221,7 +221,7 @@ static ODClassType* _EGEGDirectLight_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGEGDirectLight* o = ((EGEGDirectLight*)(other));
+    EGDirectLight* o = ((EGDirectLight*)(other));
     return EGColorEq(self.color, o.color) && GEVec3Eq(self.direction, o.direction);
 }
 

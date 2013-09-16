@@ -6,7 +6,7 @@ class StandardShaderSystem extends ShaderSystem<StandardMaterial> {
     static val instance = StandardShaderSystem()
     def shaderFor(material : StandardMaterial) : Shader = {
         val lightMap = context.environment.lights.chain.group(_.type).toMap
-        val directLights = lightMap[EGDirectLight.type].getOrElse([])
+        val directLights = lightMap[DirectLight.type].getOrElse([])
         val key = StandardShaderKey(directLights.count, material.diffuse.is<ColorSourceTexture>)
 
         shaders.objectFor(key, orUpdateWith = key.shader)
@@ -114,7 +114,7 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
         if(key.directLightCount > 0) {
             mwcUniform.get.set(matrix = context.matrixStack.value.mwc)
             normalSlot.get.setFromBufferWith(vertexBuffer.stride, valuesCount = 3, GL_FLOAT, NORMAL_SHIFT)
-            env.lights.chain.filterCast(EGDirectLight.type).zip3(directLightDirections, directLightColors){light, dirSlot, colorSlot ->
+            env.lights.chain.filterCast(DirectLight.type).zip3(directLightDirections, directLightColors){light, dirSlot, colorSlot ->
                 val dir = matrix.value.wc.mul(vec3 = light.direction, 0).xyz
                 dirSlot.set(vec3 = dir)
                 colorSlot.set(color = light.color)

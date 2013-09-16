@@ -111,7 +111,7 @@ SPEC_BEGIN(TRRailroadSpec)
             [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(0, 0) form:[TRRailForm leftRight]]];
             lc = (NSArray *) railroad.lights;
             [[lc should] haveCountOf:1];
-            TRLight * light = railroad.lights[0];
+            TRRailLight * light = railroad.lights[0];
             [[theValue(GEVec2iEq(light.tile, GEVec2iMake(-1, 0))) should] beTrue];
             [[light.connector should] equal:[TRRailConnector right]];
         });

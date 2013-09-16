@@ -16,7 +16,7 @@
 @class EGMatrixStack;
 @class TRSwitch;
 @class TRRailConnector;
-@class TRLight;
+@class TRRailLight;
 @class TRRailPoint;
 
 @class TRRailroadView;
@@ -66,7 +66,7 @@
 + (id)lightView;
 - (id)init;
 - (ODClassType*)type;
-- (void)drawLight:(TRLight*)light;
+- (void)drawLight:(TRRailLight*)light;
 + (ODClassType*)type;
 @end
 

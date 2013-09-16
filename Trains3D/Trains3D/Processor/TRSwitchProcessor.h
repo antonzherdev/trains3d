@@ -7,7 +7,7 @@
 @class TRRailConnector;
 @class TRRailroad;
 @class TRRailroadConnectorContent;
-@class TRLight;
+@class TRRailLight;
 
 @class TRSwitchProcessor;
 

@@ -42,7 +42,7 @@ static ODClassType* _TRSwitchProcessor_type;
     GEVec2 relPoint = geVec2SubVec2(location, geVec2ApplyVec2i(tile));
     _downed = [[_index applyPoint:relPoint] flatMap:^id(CNTuple* v) {
         TRRailroadConnectorContent* content = [_level.railroad contentInTile:tile connector:((TRRailConnector*)(v.a))];
-        if(unumb(v.b)) return [content asKindOfClass:[TRLight class]];
+        if(unumb(v.b)) return [content asKindOfClass:[TRRailLight class]];
         else return [content asKindOfClass:[TRSwitch class]];
     }];
     return [_downed isDefined];
@@ -57,7 +57,7 @@ static ODClassType* _TRSwitchProcessor_type;
         [[((TRRailroadConnectorContent*)([_downed get])) asKindOfClass:[TRSwitch class]] forEach:^void(TRSwitch* _) {
             [_level tryTurnTheSwitch:_];
         }];
-        [[((TRRailroadConnectorContent*)([_downed get])) asKindOfClass:[TRLight class]] forEach:^void(TRLight* _) {
+        [[((TRRailroadConnectorContent*)([_downed get])) asKindOfClass:[TRRailLight class]] forEach:^void(TRRailLight* _) {
             [_ turn];
         }];
         return YES;

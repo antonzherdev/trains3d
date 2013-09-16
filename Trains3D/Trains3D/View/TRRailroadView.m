@@ -42,7 +42,7 @@ static ODClassType* _TRRailroadView_type;
     [[railroad switches] forEach:^void(TRSwitch* _) {
         [_switchView drawTheSwitch:_];
     }];
-    [[railroad lights] forEach:^void(TRLight* _) {
+    [[railroad lights] forEach:^void(TRRailLight* _) {
         [_lightView drawLight:_];
     }];
     [[railroad.builder rail] forEach:^void(TRRail* _) {
@@ -284,7 +284,7 @@ static ODClassType* _TRLightView_type;
     _TRLightView_type = [ODClassType classTypeWithCls:[TRLightView class]];
 }
 
-- (void)drawLight:(TRLight*)light {
+- (void)drawLight:(TRRailLight*)light {
     [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
         return [[_ modifyW:^GEMat4*(GEMat4* w) {
             return [w translateX:((float)(light.tile.x)) y:((float)(light.tile.y)) z:0.0];

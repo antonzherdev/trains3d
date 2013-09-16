@@ -1,7 +1,7 @@
 #import "objd.h"
 @class EGDirector;
 @class EGFileTexture;
-@class EGEGEnvironment;
+@class EGEnvironment;
 @class GEMat4;
 
 @class EGGlobal;
@@ -21,7 +21,7 @@
 
 @interface EGContext : NSObject
 @property (nonatomic, retain) EGDirector* director;
-@property (nonatomic, retain) EGEGEnvironment* environment;
+@property (nonatomic, retain) EGEnvironment* environment;
 @property (nonatomic, readonly) EGMatrixStack* matrixStack;
 
 + (id)context;

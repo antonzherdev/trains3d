@@ -17,11 +17,11 @@ trait Camera {
 
 
 
-class EGEnvironment(ambientColor : Color, lights : [EGLight]) {
-    static val default = EGEnvironment(Color(1, 1, 1, 1), [])
-    static def apply(lights : [EGLight]) = EGEnvironment(Color(1, 1, 1, 1), lights)
-    static def apply(light : EGLight) = EGEnvironment(Color(1, 1, 1, 1), [light])
+class Environment(ambientColor : Color, lights : [Light]) {
+    static val default = Environment(Color(1, 1, 1, 1), [])
+    static def apply(lights : [Light]) = Environment(Color(1, 1, 1, 1), lights)
+    static def apply(light : Light) = Environment(Color(1, 1, 1, 1), [light])
 }
 
-class EGLight(color : Color)
-class EGDirectLight(color : Color, direction : vec3) extends EGLight(color)
+class Light(color : Color)
+class DirectLight(color : Color, direction : vec3) extends Light(color)

@@ -3,9 +3,9 @@
 #import "GEVec.h"
 @class EGGlobal;
 @class EGContext;
-@class EGEGEnvironment;
-@class EGEGLight;
-@class EGEGDirectLight;
+@class EGEnvironment;
+@class EGLight;
+@class EGDirectLight;
 @class EGStandardMaterial;
 @class EGColorSource;
 @class EGVertexBuffer;

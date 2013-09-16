@@ -2,7 +2,7 @@ package core.chain
 
 stub struct VoidRef
 
-stub object CNMemory {
+stub object Memory {
     def sizeof(bytes : VoidRef) : uint
     def copy(bytes : VoidRef, size : uint) : VoidRef
     def memcpy(ref : VoidRef, bytes : VoidRef, size : uint)

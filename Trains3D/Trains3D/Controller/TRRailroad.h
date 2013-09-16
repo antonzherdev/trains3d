@@ -11,7 +11,7 @@
 @class TREmptyConnector;
 @class TRRail;
 @class TRSwitch;
-@class TRLight;
+@class TRRailLight;
 @class TRObstacle;
 @class TRRailroad;
 @class TRRailroadBuilder;
@@ -77,13 +77,13 @@
 @end
 
 
-@interface TRLight : TRRailroadConnectorContent
+@interface TRRailLight : TRRailroadConnectorContent
 @property (nonatomic, readonly) GEVec2i tile;
 @property (nonatomic, readonly) TRRailConnector* connector;
 @property (nonatomic, readonly) TRRail* rail;
 @property (nonatomic) BOOL isGreen;
 
-+ (id)lightWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail;
++ (id)railLightWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail;
 - (id)initWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail;
 - (ODClassType*)type;
 - (void)turn;
@@ -119,6 +119,7 @@
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRScore* score;
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
+@property (nonatomic) BOOL changed;
 
 + (id)railroadWithMap:(EGMapSso*)map score:(TRScore*)score;
 - (id)initWithMap:(EGMapSso*)map score:(TRScore*)score;

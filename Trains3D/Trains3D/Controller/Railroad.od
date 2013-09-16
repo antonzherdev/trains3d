@@ -20,7 +20,7 @@ class Rail(tile : vec2i, form : RailForm) extends RailroadConnectorContent {
     def has(connector : RailConnector) : bool = form.start == connector || form.end == connector
     def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = Switch(rail.tile, to, self, rail)
     def rails : [Rail] = [self]
-    def buildLightIn(connector : RailConnector) : RailroadConnectorContent = Light(tile, connector, self)
+    def buildLightIn(connector : RailConnector) : RailroadConnectorContent = RailLight(tile, connector, self)
     def canAdd(rail : Rail) : bool = rail.form != form
 }
 
@@ -34,7 +34,7 @@ class Switch(tile : vec2i, connector : RailConnector, rail1 : Rail, rail2 : Rail
     def buildLightIn(connector : RailConnector) : RailroadConnectorContent = self
 }
 
-class Light(tile : vec2i, connector : RailConnector, rail : Rail) extends RailroadConnectorContent {
+class RailLight(tile : vec2i, connector : RailConnector, rail : Rail) extends RailroadConnectorContent {
     var isGreen = true
     def turn { isGreen = !isGreen }
     def canAdd(rail : Rail) : bool = self.rail.canAdd(rail)
@@ -56,9 +56,10 @@ class Railroad(map : MapSso, score : Score) {
     def rails = _rails
     private var _switches : [Switch] = []
     def switches = _switches
-    private var _lights : [Light] = []
+    private var _lights : [RailLight] = []
     def lights = _lights
     val builder = RailroadBuilder(self)
+    var changed = false
     private val connectorIndex = MapDefault(EmptyConnector.instance, MutableHashMap<(vec2i, RailConnector), RailroadConnectorContent>())
     private val damagesIndex = MutableHashMap<(vec2i, RailForm), [float]>()
     private var _damagesPoints = MutableArray<RailPoint>()
@@ -115,7 +116,8 @@ class Railroad(map : MapSso, score : Score) {
     private def rebuildArrays {
         _rails = connectorIndex.values.chain.flatMap(_.rails).distinct.toArray
         _switches = connectorIndex.values.chain.filter(_.is<Switch>).toArray
-        _lights = connectorIndex.values.chain.filter(_.is<Light>).toArray
+        _lights = connectorIndex.values.chain.filter(_.is<RailLight>).toArray
+        changed = true
     }
 
     private def activeRailFor(tile : vec2i, connector : RailConnector) : Rail? =

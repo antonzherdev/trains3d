@@ -175,7 +175,7 @@ static ODClassType* _TRRail_type;
 }
 
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector {
-    return [TRLight lightWithTile:_tile connector:connector rail:self];
+    return [TRRailLight railLightWithTile:_tile connector:connector rail:self];
 }
 
 - (BOOL)canAddRail:(TRRail*)rail {
@@ -322,20 +322,20 @@ static ODClassType* _TRSwitch_type;
 @end
 
 
-@implementation TRLight{
+@implementation TRRailLight{
     GEVec2i _tile;
     TRRailConnector* _connector;
     TRRail* _rail;
     BOOL _isGreen;
 }
-static ODClassType* _TRLight_type;
+static ODClassType* _TRRailLight_type;
 @synthesize tile = _tile;
 @synthesize connector = _connector;
 @synthesize rail = _rail;
 @synthesize isGreen = _isGreen;
 
-+ (id)lightWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail {
-    return [[TRLight alloc] initWithTile:tile connector:connector rail:rail];
++ (id)railLightWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail {
+    return [[TRRailLight alloc] initWithTile:tile connector:connector rail:rail];
 }
 
 - (id)initWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail {
@@ -352,7 +352,7 @@ static ODClassType* _TRLight_type;
 
 + (void)initialize {
     [super initialize];
-    _TRLight_type = [ODClassType classTypeWithCls:[TRLight class]];
+    _TRRailLight_type = [ODClassType classTypeWithCls:[TRRailLight class]];
 }
 
 - (void)turn {
@@ -376,11 +376,11 @@ static ODClassType* _TRLight_type;
 }
 
 - (ODClassType*)type {
-    return [TRLight type];
+    return [TRRailLight type];
 }
 
 + (ODClassType*)type {
-    return _TRLight_type;
+    return _TRRailLight_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -390,7 +390,7 @@ static ODClassType* _TRLight_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRLight* o = ((TRLight*)(other));
+    TRRailLight* o = ((TRRailLight*)(other));
     return GEVec2iEq(self.tile, o.tile) && self.connector == o.connector && [self.rail isEqual:o.rail];
 }
 
@@ -534,6 +534,7 @@ static ODClassType* _TRObstacle_type;
     id<CNSeq> __switches;
     id<CNSeq> __lights;
     TRRailroadBuilder* _builder;
+    BOOL _changed;
     CNMapDefault* _connectorIndex;
     NSMutableDictionary* _damagesIndex;
     NSMutableArray* __damagesPoints;
@@ -542,6 +543,7 @@ static ODClassType* _TRRailroad_type;
 @synthesize map = _map;
 @synthesize score = _score;
 @synthesize builder = _builder;
+@synthesize changed = _changed;
 
 + (id)railroadWithMap:(EGMapSso*)map score:(TRScore*)score {
     return [[TRRailroad alloc] initWithMap:map score:score];
@@ -556,6 +558,7 @@ static ODClassType* _TRRailroad_type;
         __switches = (@[]);
         __lights = (@[]);
         _builder = [TRRailroadBuilder railroadBuilderWithRailroad:self];
+        _changed = NO;
         _connectorIndex = [CNMapDefault mapDefaultWithDefaultFunc:^TRRailroadConnectorContent*(CNTuple* _) {
             return TREmptyConnector.instance;
         } map:[NSMutableDictionary mutableDictionary]];
@@ -645,8 +648,9 @@ static ODClassType* _TRRailroad_type;
         return [_ isKindOfClass:[TRSwitch class]];
     }] toArray];
     __lights = [[[[_connectorIndex values] chain] filter:^BOOL(TRRailroadConnectorContent* _) {
-        return [_ isKindOfClass:[TRLight class]];
+        return [_ isKindOfClass:[TRRailLight class]];
     }] toArray];
+    _changed = YES;
 }
 
 - (id)activeRailForTile:(GEVec2i)tile connector:(TRRailConnector*)connector {

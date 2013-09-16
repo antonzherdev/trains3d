@@ -26,7 +26,7 @@ class SwitchProcessor(level : Level) extends MouseProcessor {
         val relPoint = location.sub(tile)
         downed = index[relPoint].flatMap(v -> {
             val content = level.railroad.contentIn(tile, connector = v.a)
-            if(v.b) content.as<Light>
+            if(v.b) content.as<RailLight>
             else content.as<Switch>
         })
         downed.isDefined
@@ -37,7 +37,7 @@ class SwitchProcessor(level : Level) extends MouseProcessor {
     def mouseUp(event : Event) =
         if(downed.isDefined) {
             downed.get.as<Switch>.for(level.tryTurn(theSwitch = _ ))
-            downed.get.as<Light>.for(_.turn)
+            downed.get.as<RailLight>.for(_.turn)
 
             true
         } else false
