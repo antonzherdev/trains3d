@@ -46,7 +46,6 @@ static ODClassType* _TRTrainView_type;
     [trains forEach:^void(TRTrain* train) {
         [self drawTrain:train];
         if(train.viewData == nil) train.viewData = [TRSmoke smokeWithTrain:train];
-        [_smokeView drawSystem:train.viewData];
     }];
 }
 
@@ -80,7 +79,6 @@ static ODClassType* _TRTrainView_type;
 - (void)drawDyingTrains:(id<CNSeq>)dyingTrains {
     if([dyingTrains isEmpty]) return ;
     [dyingTrains forEach:^void(TRTrain* train) {
-        [_smokeView drawSystem:train.viewData];
         [self drawDyingTrain:train];
     }];
 }
