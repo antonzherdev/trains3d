@@ -1,6 +1,6 @@
 #import <GLUT/glut.h>
 #import "EGTypes.h"
-#import "GERect.h"
+#import "GEVec.h"
 
 @class GEMat4;
 
@@ -29,8 +29,8 @@ static inline void egClear() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-static inline void egViewport(GERectI rect) {
-    glViewport((GLint)rect.x, (GLint)rect.y, (GLsizei)rect.width, (GLsizei)rect.height);
+static inline void egViewport(GERecti rect) {
+    glViewport((GLint)rect.origin.x, (GLint)rect.origin.y, (GLsizei)rect.size.x, (GLsizei)rect.size.y);
 }
 
 

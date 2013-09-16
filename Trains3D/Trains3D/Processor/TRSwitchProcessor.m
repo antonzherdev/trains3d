@@ -1,7 +1,6 @@
 #import "TRSwitchProcessor.h"
 
 #import "TRLevel.h"
-#import "EGRectIndex.h"
 #import "TRRailPoint.h"
 #import "TRRailroad.h"
 @implementation TRSwitchProcessor{
@@ -20,7 +19,7 @@ static ODClassType* _TRSwitchProcessor_type;
     self = [super init];
     if(self) {
         _level = level;
-        _index = [EGRectIndex rectIndexWithRects:(@[tuple(wrap(GERect, GERectMake(-0.1, 0.2, 0.2, 0.3)), tuple(TRRailConnector.top, @NO)), tuple(wrap(GERect, GERectMake(-0.1, 0.2, -0.5, 0.3)), tuple(TRRailConnector.bottom, @NO)), tuple(wrap(GERect, GERectMake(-0.5, 0.3, -0.1, 0.2)), tuple(TRRailConnector.left, @NO)), tuple(wrap(GERect, GERectMake(0.2, 0.3, -0.1, 0.2)), tuple(TRRailConnector.right, @NO)), tuple(wrap(GERect, GERectMake(0.15, 0.1, 0.4, 0.1)), tuple(TRRailConnector.top, @YES)), tuple(wrap(GERect, GERectMake(-0.25, 0.1, -0.5, 0.1)), tuple(TRRailConnector.bottom, @YES)), tuple(wrap(GERect, GERectMake(-0.5, 0.1, 0.15, 0.1)), tuple(TRRailConnector.left, @YES)), tuple(wrap(GERect, GERectMake(0.4, 0.1, -0.25, 0.1)), tuple(TRRailConnector.right, @YES))])];
+        _index = [EGRectIndex rectIndexWithRects:(@[tuple(wrap(GERect, geRectApplyXYWidthHeight(-0.1, 0.2, 0.2, 0.3)), tuple(TRRailConnector.top, @NO)), tuple(wrap(GERect, geRectApplyXYWidthHeight(-0.1, -0.5, 0.2, 0.3)), tuple(TRRailConnector.bottom, @NO)), tuple(wrap(GERect, geRectApplyXYWidthHeight(-0.5, -0.1, 0.3, 0.2)), tuple(TRRailConnector.left, @NO)), tuple(wrap(GERect, geRectApplyXYWidthHeight(0.2, -0.1, 0.3, 0.2)), tuple(TRRailConnector.right, @NO)), tuple(wrap(GERect, geRectApplyXYWidthHeight(0.15, 0.4, 0.1, 0.1)), tuple(TRRailConnector.top, @YES)), tuple(wrap(GERect, geRectApplyXYWidthHeight(-0.25, -0.5, 0.1, 0.1)), tuple(TRRailConnector.bottom, @YES)), tuple(wrap(GERect, geRectApplyXYWidthHeight(-0.5, 0.15, 0.1, 0.1)), tuple(TRRailConnector.left, @YES)), tuple(wrap(GERect, geRectApplyXYWidthHeight(0.4, -0.25, 0.1, 0.1)), tuple(TRRailConnector.right, @YES))])];
         _downed = [CNOption none];
     }
     

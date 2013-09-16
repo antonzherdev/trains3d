@@ -205,7 +205,6 @@
 		6F3DF6B0922FD43065500A26 /* btConeTwistConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF11CB277C948FCF1E426 /* btConeTwistConstraint.cpp */; };
 		6F3DF6D5C140BA8E03A9DE00 /* btConvexTriangleMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2C5FE1F27000317F456 /* btConvexTriangleMeshShape.cpp */; };
 		6F3DF6DABCF4BAA03AFFA443 /* NSObject+KiwiStubAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1F8CF0334439242AFDD /* NSObject+KiwiStubAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		6F3DF6E8DD312192C3CF5C7E /* GERect.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB17EC87177D6F18C661 /* GERect.m */; };
 		6F3DF6F2F07AC005EC8078C9 /* constants.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF3EEF742A17D1F85E53A /* constants.inl */; };
 		6F3DF6FB9D955AFA8E51520C /* type_mat2x3.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFC9849C492EE307686D6 /* type_mat2x3.inl */; };
 		6F3DF70CF2BBCE2C9649DBE8 /* fast_exponential.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFCAC856A4EE0843A18A9 /* fast_exponential.inl */; };
@@ -307,7 +306,6 @@
 		6F3DF9D3BFFED72CBC5C57D4 /* EGText.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF7386C7FDAEC32527DA1 /* EGText.m */; };
 		6F3DF9D4A7F987AED827130A /* EGOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA3414CC30A8B005B9C0 /* EGOpenGLView.m */; };
 		6F3DF9DBFB8EA7C94C109645 /* eg.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF6A31365E0C417389DF7 /* eg.od */; };
-		6F3DF9DCB7489ECEF7C332C5 /* EGRectIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF5B1E2F21ED213CE1BFE /* EGRectIndex.m */; };
 		6F3DF9DEB1DFC70BF17151B6 /* btGjkEpaPenetrationDepthSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBBA5FB95C5800CEDD89 /* btGjkEpaPenetrationDepthSolver.cpp */; };
 		6F3DF9E6A130CF2C943A74C1 /* btContactConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDBC9E80303F3C3F1889 /* btContactConstraint.cpp */; };
 		6F3DF9E8730609E4012D8833 /* btConcaveShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDA9CBBD0DBF0524A566 /* btConcaveShape.cpp */; };
@@ -322,7 +320,6 @@
 		6F3DFA597919BD2DCDAF2425 /* mixed_product.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFB5D05F1FD9DE026B457 /* mixed_product.inl */; };
 		6F3DFA5A92ACF4DED21461D3 /* btContinuousConvexCollision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA5A6B0F27627DED08E8 /* btContinuousConvexCollision.cpp */; };
 		6F3DFA5C1871BB43A168E94B /* CNChainSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC0D21FEC5A694BED172 /* CNChainSpec.m */; };
-		6F3DFA63FAACBA1EF8AB1471 /* RectIndex.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFC3642B7CBBE15E213D2 /* RectIndex.od */; };
 		6F3DFA64192C792F123AD0FD /* btUnionFind.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA938562BA3845FDDCE3 /* btUnionFind.cpp */; };
 		6F3DFA6B4607387168E06EBC /* orthonormalize.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF555417A6C054D259F93 /* orthonormalize.inl */; };
 		6F3DFA6C11C73E8489B10F8C /* CNData.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF7E0992B63CE81C485F8 /* CNData.m */; };
@@ -428,7 +425,6 @@
 		6F3DFDA2C1BE2C6375C164D8 /* KWBeZeroMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF40C82E10E3EB5861A8A /* KWBeZeroMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DFDA4ABBDA8205973A88A /* KWBeMemberOfClassMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8F6A14F39B3B21325E8 /* KWBeMemberOfClassMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DFDACBAC6B7686AFC151E /* CNTreeSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1FCDA8956456CFE3E95 /* CNTreeSet.m */; };
-		6F3DFDB35528CC4DDF6C5DDA /* Rect.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFBA7CA1922F028043E15 /* Rect.od */; };
 		6F3DFDB6587C6A732AD7091E /* KWStringContainsMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD3D4C186302DCCB0952 /* KWStringContainsMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DFDBD45DC593E28F64318 /* KWConformToProtocolMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC2E6FC9971DD03EBBBC /* KWConformToProtocolMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DFDCC1A062CB7B7BD1FCA /* btInternalEdgeUtility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF818C044E47538801BF0 /* btInternalEdgeUtility.cpp */; };
@@ -887,7 +883,6 @@
 		6F3DF5AAA4A045F54CAD4E80 /* KWStringPrefixMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWStringPrefixMatcher.m; sourceTree = "<group>"; };
 		6F3DF5AF0E2F500EF5BA7532 /* raw_data.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = raw_data.hpp; sourceTree = "<group>"; };
 		6F3DF5AFBEAA67FA3D76D1B4 /* btQuantizedBvh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btQuantizedBvh.cpp; sourceTree = "<group>"; };
-		6F3DF5B1E2F21ED213CE1BFE /* EGRectIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGRectIndex.m; sourceTree = "<group>"; };
 		6F3DF5B22734236BB2347398 /* CNTuple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNTuple.m; sourceTree = "<group>"; };
 		6F3DF5B9F4E0A19BA7B96BFC /* EGStat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGStat.h; sourceTree = "<group>"; };
 		6F3DF5C0D9A5DE62F1DD0882 /* type_float.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_float.hpp; sourceTree = "<group>"; };
@@ -1006,7 +1001,6 @@
 		6F3DF79FE213C9FFE8FFC53F /* btTriangleMeshShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btTriangleMeshShape.cpp; sourceTree = "<group>"; };
 		6F3DF7A662AE8EAD03F94024 /* hint.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = hint.hpp; sourceTree = "<group>"; };
 		6F3DF7AB16BBE40B687FE354 /* btBoxBoxDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btBoxBoxDetector.h; sourceTree = "<group>"; };
-		6F3DF7AD2F61EC72B4EF7F34 /* EGRectIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGRectIndex.h; sourceTree = "<group>"; };
 		6F3DF7B69C5E95D9CE977E03 /* CNSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSet.h; sourceTree = "<group>"; };
 		6F3DF7BB60CB81830E9CFEA5 /* LevelMenuProcessor.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = LevelMenuProcessor.od; sourceTree = "<group>"; };
 		6F3DF7BC684B734FD9A3AF81 /* TRSwitchProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRSwitchProcessor.m; sourceTree = "<group>"; };
@@ -1050,7 +1044,6 @@
 		6F3DF840ED44A3436985FB74 /* btDiscreteCollisionDetectorInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btDiscreteCollisionDetectorInterface.h; sourceTree = "<group>"; };
 		6F3DF844A44E8DB76C5EAEE3 /* projection.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = projection.hpp; sourceTree = "<group>"; };
 		6F3DF849786AA284CD2B5671 /* type_mat4x4.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_mat4x4.hpp; sourceTree = "<group>"; };
-		6F3DF84AE32A6AEFED349646 /* GERect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GERect.h; sourceTree = "<group>"; };
 		6F3DF8511B988BF5EF27411C /* KWMessagePattern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWMessagePattern.m; sourceTree = "<group>"; };
 		6F3DF85B5CF17B1EB91A89D2 /* CNUncombinationsLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNUncombinationsLink.h; sourceTree = "<group>"; };
 		6F3DF8637A46EB2019064478 /* matrix_interpolation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = matrix_interpolation.hpp; sourceTree = "<group>"; };
@@ -1249,7 +1242,6 @@
 		6F3DFB0CE25100ACF8F07040 /* CNFilterLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNFilterLink.h; sourceTree = "<group>"; };
 		6F3DFB10B741DDA09E2AFCDE /* chain.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = chain.od; sourceTree = "<group>"; };
 		6F3DFB148DABF512420FCEF4 /* Type.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Type.od; sourceTree = "<group>"; };
-		6F3DFB17EC87177D6F18C661 /* GERect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GERect.m; sourceTree = "<group>"; };
 		6F3DFB23D1184BAB9AC01D72 /* mixed_product.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = mixed_product.hpp; sourceTree = "<group>"; };
 		6F3DFB2AE15E83D7D1BF4889 /* gim_math.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gim_math.h; sourceTree = "<group>"; };
 		6F3DFB2DB37EA81E4DBB62B1 /* btSimplexSolverInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btSimplexSolverInterface.h; sourceTree = "<group>"; };
@@ -1287,7 +1279,6 @@
 		6F3DFBA4FE568CE8B96C9E0B /* KWStringContainsMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWStringContainsMatcher.h; sourceTree = "<group>"; };
 		6F3DFBA57EDF85421CF7B520 /* btDbvtBroadphase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btDbvtBroadphase.cpp; sourceTree = "<group>"; };
 		6F3DFBA6D6FF02C9645F0709 /* _swizzle_func.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = _swizzle_func.hpp; sourceTree = "<group>"; };
-		6F3DFBA7CA1922F028043E15 /* Rect.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Rect.od; sourceTree = "<group>"; };
 		6F3DFBA7FB84688E7CB8353D /* func_packing.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = func_packing.inl; sourceTree = "<group>"; };
 		6F3DFBB0CEBD7917BA7B3433 /* EGShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGShader.h; sourceTree = "<group>"; };
 		6F3DFBB2E106EAF0809269B2 /* EGEventMac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGEventMac.h; sourceTree = "<group>"; };
@@ -1334,7 +1325,6 @@
 		6F3DFC2AD7E12F72F6A1A770 /* gradient_paint.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = gradient_paint.inl; sourceTree = "<group>"; };
 		6F3DFC2DF92415D6518A84C5 /* Time.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Time.od; sourceTree = "<group>"; };
 		6F3DFC2E6FC9971DD03EBBBC /* KWConformToProtocolMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWConformToProtocolMatcher.m; sourceTree = "<group>"; };
-		6F3DFC3642B7CBBE15E213D2 /* RectIndex.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = RectIndex.od; sourceTree = "<group>"; };
 		6F3DFC388FE27E1C23A1EB41 /* btGImpactMassUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btGImpactMassUtil.h; sourceTree = "<group>"; };
 		6F3DFC39B9FE426A92D7784F /* KWExample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWExample.m; sourceTree = "<group>"; };
 		6F3DFC3F0C7C282567ABE16A /* Explosion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Explosion.png; sourceTree = "<group>"; };
@@ -2411,9 +2401,6 @@
 				6F3DF09B89B5EBBB20529EB7 /* GEVec.m */,
 				6F3DF114F909AC4EC6AD33D7 /* Test */,
 				6F3DF63252AB4FDB83A6F8A7 /* geometry.od */,
-				6F3DFBA7CA1922F028043E15 /* Rect.od */,
-				6F3DF84AE32A6AEFED349646 /* GERect.h */,
-				6F3DFB17EC87177D6F18C661 /* GERect.m */,
 				6F3DF6637298356C79DC41A4 /* GEFigure.m */,
 				6F3DFE5FAB0550B2E7C29AFE /* GEFigure.h */,
 			);
@@ -2678,9 +2665,6 @@
 				6F3DFDC9D08945B86C1E9F69 /* Processor.od */,
 				6F3DFE51EF70DAA7841B050F /* EGProcessor.h */,
 				6F3DFE9A3F96D53892227C68 /* EGProcessor.m */,
-				6F3DFC3642B7CBBE15E213D2 /* RectIndex.od */,
-				6F3DF7AD2F61EC72B4EF7F34 /* EGRectIndex.h */,
-				6F3DF5B1E2F21ED213CE1BFE /* EGRectIndex.m */,
 			);
 			path = Processor;
 			sourceTree = "<group>";
@@ -3252,7 +3236,6 @@
 				6F3DF844B1B29FA809B4EA43 /* MapIso.od in Resources */,
 				6F3DF8735E29864F38A6AD83 /* CameraIso.od in Resources */,
 				6F3DF73438F4EBB9AAA9366B /* Enum.od in Resources */,
-				6F3DFA63FAACBA1EF8AB1471 /* RectIndex.od in Resources */,
 				6F3DFA7B8B28D3325401DA52 /* LevelFactory.od in Resources */,
 				6F3DFAD97CFFF0C9012108AC /* Chain.od in Resources */,
 				6F3DF18EEDD1037EB727484F /* Pair.od in Resources */,
@@ -3383,7 +3366,6 @@
 				6F3DF1855C3699ABA63340C3 /* Vec.od in Resources */,
 				6F3DFC9E481702D807D47099 /* geometry.od in Resources */,
 				6F3DF6A32E097E11D5DABC5F /* trains.od in Resources */,
-				6F3DFDB35528CC4DDF6C5DDA /* Rect.od in Resources */,
 				6F3DFC2683510A1CD48D05C2 /* File.od in Resources */,
 				6F3DF9BD0D475C0031AB4A0B /* ObjC.od in Resources */,
 				6F3DF0589A40375A8DFB265A /* TestCase.od in Resources */,
@@ -3486,7 +3468,6 @@
 				6F3DF3037F802A7AB950E792 /* NSMutableDictionary+CNChain.m in Sources */,
 				6F3DF81E33776FFC651A6BAE /* CNFlatMapLink.m in Sources */,
 				6F3DF5E5E76EA3D7E67A6445 /* CNDistinctLink.m in Sources */,
-				6F3DF9DCB7489ECEF7C332C5 /* EGRectIndex.m in Sources */,
 				6F3DFAD9A108CB29563896FE /* TRScore.m in Sources */,
 				6F3DFF0300690C4A49063271 /* TRLevelFactory.m in Sources */,
 				6F3DFB2B18579979F0AFF32E /* EGCamera2D.m in Sources */,
@@ -3664,7 +3645,6 @@
 				6F3DFC33CB5BAFC2861C4FF6 /* GEBentleyOttmann.m in Sources */,
 				6F3DF111031CFB35EF30E05F /* GEMat4.mm in Sources */,
 				6F3DFAA754DDECC75CC8095D /* GEVec.m in Sources */,
-				6F3DF6E8DD312192C3CF5C7E /* GERect.m in Sources */,
 				6F3DFABA00559743909A3DCD /* GEFigure.m in Sources */,
 				6F3DF5E9C4608BD7041073B9 /* EGContext.m in Sources */,
 				6F3DF4C273C9EE545C8B795D /* TRModels.m in Sources */,

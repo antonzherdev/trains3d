@@ -4,7 +4,7 @@
 #import "EGMaterial.h"
 @implementation EGMapSso{
     GEVec2i _size;
-    GERectI _limits;
+    GERecti _limits;
     id<CNSeq> _fullTiles;
     id<CNSeq> _partialTiles;
     id<CNSeq> _allTiles;
@@ -26,7 +26,7 @@ static ODClassType* _EGMapSso_type;
     __weak EGMapSso* _weakSelf = self;
     if(self) {
         _size = size;
-        _limits = geRectINewXYXX2YY2(((CGFloat)((1 - _size.y) / 2 - 1)), ((CGFloat)((2 * _size.x + _size.y - 3) / 2 + 1)), ((CGFloat)((1 - _size.x) / 2 - 1)), ((CGFloat)((_size.x + 2 * _size.y - 3) / 2 + 1)));
+        _limits = geVec2iRectToVec2i(GEVec2iMake((1 - _size.y) / 2 - 1, (1 - _size.x) / 2 - 1), GEVec2iMake((2 * _size.x + _size.y - 3) / 2 + 1, (_size.x + 2 * _size.y - 3) / 2 + 1));
         _fullTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
             return [_weakSelf isFullTile:uwrap(GEVec2i, _)];
         }] toArray];
@@ -53,7 +53,7 @@ static ODClassType* _EGMapSso_type;
 }
 
 - (CNChain*)allPosibleTiles {
-    return [[[[CNRange rangeWithStart:_limits.x end:geRectIX2(_limits) step:1] chain] mul:[CNRange rangeWithStart:_limits.y end:geRectIY2(_limits) step:1]] map:^id(CNTuple* _) {
+    return [[[[CNRange rangeWithStart:geRectiX(_limits) end:geRectiX2(_limits) step:1] chain] mul:[CNRange rangeWithStart:geRectiY(_limits) end:geRectiY2(_limits) step:1]] map:^id(CNTuple* _) {
         return wrap(GEVec2i, GEVec2iMake(unumi(_.a), unumi(_.b)));
     }];
 }
@@ -67,8 +67,8 @@ static ODClassType* _EGMapSso_type;
     }
 }
 
-- (GERectI)cutRectForTile:(GEVec2i)tile {
-    return geRectINewXYXX2YY2(((CGFloat)([self tileCutAxisLess:0 more:tile.x + tile.y])), ((CGFloat)([self tileCutAxisLess:tile.x + tile.y more:_size.x + _size.y - 2])), ((CGFloat)([self tileCutAxisLess:tile.y - tile.x more:_size.y - 1])), ((CGFloat)([self tileCutAxisLess:-_size.x + 1 more:tile.y - tile.x])));
+- (GERecti)cutRectForTile:(GEVec2i)tile {
+    return geVec2iRectToVec2i(GEVec2iMake([self tileCutAxisLess:0 more:tile.x + tile.y], [self tileCutAxisLess:tile.y - tile.x more:_size.y - 1]), GEVec2iMake([self tileCutAxisLess:tile.x + tile.y more:_size.x + _size.y - 2], [self tileCutAxisLess:-_size.x + 1 more:tile.y - tile.x]));
 }
 
 - (ODClassType*)type {
@@ -141,13 +141,13 @@ static ODClassType* _EGMapSsoView_type;
 }
 
 - (EGMesh*)createPlane {
-    GERectI limits = _map.limits;
-    CGFloat l = limits.x - 2.5;
-    CGFloat r = geRectIX2(limits) + 0.5;
-    CGFloat t = limits.y - 2.5;
-    CGFloat b = geRectIY2(limits) + 0.5;
-    NSInteger w = limits.width + 3;
-    NSInteger h = limits.height + 3;
+    GERecti limits = _map.limits;
+    CGFloat l = geRectiX(limits) - 2.5;
+    CGFloat r = geRectiX2(limits) + 0.5;
+    CGFloat t = geRectiY(limits) - 2.5;
+    CGFloat b = geRectiY2(limits) + 0.5;
+    NSInteger w = geRectiWidth(limits) + 3;
+    NSInteger h = geRectiHeight(limits) + 3;
     return [EGMesh applyDataType:egMeshDataType() vertexData:[ arrs(EGMeshData, 32) {0, 0, 0, 1, 0, l, 0, b, w, 0, 0, 1, 0, r, 0, b, w, h, 0, 1, 0, r, 0, t, 0, h, 0, 1, 0, l, 0, t}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
 }
 

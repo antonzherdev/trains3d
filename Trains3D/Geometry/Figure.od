@@ -85,7 +85,7 @@ class VerticalLine(x : float) extends Line {
 }
 
 trait Figure {
-    def boundingRect : Rect
+    def boundingRect : rect
     def segments : [LineSegment]
 }
 
@@ -105,7 +105,7 @@ class LineSegment(p0 : vec2, p1 : vec2) extends Figure {
         if(_line == nil) _line = Line(p0 = p0, p1 = p1)
         _line
     }
-    val boundingRect : Rect = Rect.newXY(min(p0.x, p1.x), max(p0.x, p1.x), min(p0.y, p1.y), max(p0.y, p1.y))
+    val boundingRect : rect = vec2(min(p0.x, p1.x), min(p0.y, p1.y)).rectTo(vec2(max(p0.x, p1.x), max(p0.y, p1.y)))
 
     def contains(point : vec2) : bool = {
         p0 == point || p1 == point ||
@@ -142,7 +142,7 @@ class LineSegment(p0 : vec2, p1 : vec2) extends Figure {
 }
 
 class Polygon(points : [vec2]) extends Figure {
-    def boundingRect : Rect = {
+    def boundingRect : rect = {
         var minX = DBL_MAX
         var maxX = DBL_MIN
         var minY = DBL_MAX
@@ -153,7 +153,7 @@ class Polygon(points : [vec2]) extends Figure {
             if(p.y < minY) minY = p.y
             if(p.y > maxY) maxY = p.y
         })
-        Rect.newXY(minX, maxX, minY, maxY)
+        vec2(minX, minY).rectTo(vec2(maxX, maxY))
     }
 
     val segments : [LineSegment] = points.chain.neighborsRing.map(ps -> LineSegment.newWith(ps.a, ps.b)).toArray
@@ -161,9 +161,9 @@ class Polygon(points : [vec2]) extends Figure {
 
 class ThickLineSegment(segment : LineSegment, thickness : float) extends Figure {
     val thickness_2 = thickness/2
-    def boundingRect : Rect = segment.boundingRect.thicken(
+    def boundingRect : rect = segment.boundingRect.thicken(vec2(
         x = if(segment.isHorizontal) 0 else thickness_2,
-        y = if(segment.isVertical) 0 else thickness_2)
+        y = if(segment.isVertical) 0 else thickness_2))
     private var _segments : [LineSegment]
 
     def segments : [LineSegment] = {

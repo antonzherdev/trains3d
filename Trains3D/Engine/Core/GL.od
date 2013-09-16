@@ -44,7 +44,7 @@ stub object gl {
     val GL_QUADS : uint
     val GL_LINES : uint
 
-    def egViewport(rect : RectI)
+    def egViewport(rect : recti)
     def glViewport (x : GLint, y : GLint, width : GLsizei, height : GLsizei)
     def glUniformMatrix4fv(location : GLuint, count : GLsizei, transpose : GLboolean, value : [float4])
     def glUniform1f(location : GLuint, f : float4)

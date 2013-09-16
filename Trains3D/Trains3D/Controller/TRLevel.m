@@ -172,10 +172,10 @@ static ODClassType* _TRLevel_type;
 }
 
 - (TRCityAngle*)randomCityDirectionForTile:(GEVec2i)tile {
-    GERectI cut = [_map cutRectForTile:tile];
+    GERecti cut = [_map cutRectForTile:tile];
     return ((TRCityAngle*)([[[[[TRCityAngle values] chain] filter:^BOOL(TRCityAngle* a) {
         NSInteger angle = a.angle;
-        return (angle == 0 && geRectIX2(cut) == 0 && geRectIY2(cut) == 0) || (angle == 90 && cut.x == 0 && geRectIY2(cut) == 0) || (angle == 180 && cut.x == 0 && cut.y == 0) || (angle == 270 && geRectIX2(cut) == 0 && cut.y == 0);
+        return (angle == 0 && geRectiX2(cut) == 0 && geRectiY2(cut) == 0) || (angle == 90 && geRectiX(cut) == 0 && geRectiY2(cut) == 0) || (angle == 180 && geRectiX(cut) == 0 && geRectiY(cut) == 0) || (angle == 270 && geRectiX2(cut) == 0 && geRectiY(cut) == 0);
     }] randomItem] get]));
 }
 

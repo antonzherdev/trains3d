@@ -29,27 +29,27 @@ static ODClassType* _EGCamera2D_type;
     _EGCamera2D_type = [ODClassType classTypeWithCls:[EGCamera2D class]];
 }
 
-- (CGFloat)factorForViewSize:(GEVec2)viewSize {
-    return min(((CGFloat)(viewSize.x / _size.x)), ((CGFloat)(viewSize.y / _size.y)));
+- (float)factorForViewSize:(GEVec2)viewSize {
+    return ((float)(min(((CGFloat)(viewSize.x / _size.x)), ((CGFloat)(viewSize.y / _size.y)))));
 }
 
-- (GERect)viewportRectForViewSize:(GEVec2)viewSize {
+- (GERecti)viewportRectForViewSize:(GEVec2)viewSize {
     return [self viewportRectForViewSize:viewSize factor:[self factorForViewSize:viewSize]];
 }
 
-- (GERect)viewportRectForViewSize:(GEVec2)viewSize factor:(CGFloat)factor {
-    return geRectMoveToCenterForSize(GERectMake(0.0, ((CGFloat)(_size.x * factor)), 0.0, ((CGFloat)(_size.y * factor))), viewSize);
+- (GERecti)viewportRectForViewSize:(GEVec2)viewSize factor:(float)factor {
+    return geRectiMoveToCenterForSize(geRectiApplyXYWidthHeight(0.0, 0.0, _size.x * factor, _size.y * factor), viewSize);
 }
 
 - (void)focusForViewSize:(GEVec2)viewSize {
-    egViewport(geRectIApplyRect([self viewportRectForViewSize:viewSize]));
+    egViewport([self viewportRectForViewSize:viewSize]);
     EGGlobal.matrix.value = _matrixModel;
 }
 
 - (GEVec2)translateWithViewSize:(GEVec2)viewSize viewPoint:(GEVec2)viewPoint {
-    CGFloat factor = [self factorForViewSize:viewSize];
-    GERect viewport = [self viewportRectForViewSize:viewSize factor:factor];
-    return geVec2DivValue(geVec2SubVec2(viewPoint, geRectPoint(viewport)), ((float)(factor)));
+    float factor = [self factorForViewSize:viewSize];
+    GERecti viewport = [self viewportRectForViewSize:viewSize factor:factor];
+    return geVec2DivValue(geVec2SubVec2(viewPoint, geVec2ApplyVec2i(viewport.origin)), factor);
 }
 
 - (ODClassType*)type {

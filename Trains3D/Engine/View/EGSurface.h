@@ -1,6 +1,6 @@
 #import "objd.h"
-#import "GL.h"
 #import "GEVec.h"
+#import "GL.h"
 @class EGTexture;
 @class EGVertexBuffer;
 @class EGIndexBuffer;
@@ -9,16 +9,15 @@
 
 @class EGSurface;
 @class EGSurfaceShader;
+@class EGFullScreenSurface;
 
 @interface EGSurface : NSObject
-@property (nonatomic, readonly) NSUInteger width;
-@property (nonatomic, readonly) NSUInteger height;
+@property (nonatomic, readonly) GEVec2i size;
 @property (nonatomic, readonly) EGTexture* texture;
 
-+ (id)surfaceWithWidth:(NSUInteger)width height:(NSUInteger)height;
-- (id)initWithWidth:(NSUInteger)width height:(NSUInteger)height;
++ (id)surfaceWithSize:(GEVec2i)size;
+- (id)initWithSize:(GEVec2i)size;
 - (ODClassType*)type;
-- (EGSurface*)init;
 - (void)dealloc;
 - (void)applyDraw:(void(^)())draw;
 - (void)bind;
@@ -38,6 +37,17 @@
 - (void)applyDraw:(void(^)())draw;
 + (NSString*)vertex;
 + (NSString*)fragment;
++ (ODClassType*)type;
+@end
+
+
+@interface EGFullScreenSurface : NSObject
++ (id)fullScreenSurface;
+- (id)init;
+- (ODClassType*)type;
+- (void)bind;
+- (void)applyDraw:(void(^)())draw;
+- (void)unbind;
 + (ODClassType*)type;
 @end
 

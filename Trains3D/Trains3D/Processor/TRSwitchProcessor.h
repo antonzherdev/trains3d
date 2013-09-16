@@ -1,9 +1,7 @@
 #import "objd.h"
 #import "EGProcessor.h"
-#import "GERect.h"
 #import "GEVec.h"
 @class TRLevel;
-@class EGRectIndex;
 @class TRRailConnector;
 @class TRRailroad;
 @class TRRailroadConnectorContent;

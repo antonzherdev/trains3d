@@ -50,6 +50,9 @@ NSInteger geVec2CompareTo(GEVec2 self, GEVec2 to) {
     if(dX != 0) return dX;
     else return float4CompareTo(self.y, to.y);
 }
+GERect geVec2RectToVec2(GEVec2 self, GEVec2 vec2) {
+    return GERectMake(self, geVec2SubVec2(vec2, self));
+}
 ODPType* geVec2Type() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[GEVec2Wrap class] name:@"GEVec2" size:sizeof(GEVec2) wrap:^id(void* data, NSUInteger i) {
@@ -115,6 +118,9 @@ NSInteger geVec2iCompareTo(GEVec2i self, GEVec2i to) {
     NSInteger dX = intCompareTo(self.x, to.x);
     if(dX != 0) return dX;
     else return intCompareTo(self.y, to.y);
+}
+GERecti geVec2iRectToVec2i(GEVec2i self, GEVec2i vec2i) {
+    return GERectiMake(self, geVec2iSubVec2i(vec2i, self));
 }
 ODPType* geVec2iType() {
     static ODPType* _ret = nil;
@@ -411,6 +417,159 @@ ODPType* geQuadrantType() {
 
 - (NSUInteger)hash {
     return GEQuadrantHash(_value);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
+
+
+GERect geRectApplyXYWidthHeight(float x, float y, float width, float height) {
+    return GERectMake(GEVec2Make(x, y), GEVec2Make(width, height));
+}
+float geRectX(GERect self) {
+    return self.origin.x;
+}
+float geRectY(GERect self) {
+    return self.origin.y;
+}
+float geRectX2(GERect self) {
+    return self.origin.x + self.size.x;
+}
+float geRectY2(GERect self) {
+    return self.origin.y + self.size.y;
+}
+float geRectWidth(GERect self) {
+    return self.size.x;
+}
+float geRectHeight(GERect self) {
+    return self.size.y;
+}
+BOOL geRectContainsPoint(GERect self, GEVec2 point) {
+    return self.origin.x <= point.x && point.x <= self.origin.x + self.size.x && self.origin.y <= point.y && point.y <= self.origin.y + self.size.y;
+}
+GERect geRectAddVec2(GERect self, GEVec2 vec2) {
+    return GERectMake(geVec2AddVec2(self.origin, vec2), self.size);
+}
+GERect geRectMoveToCenterForSize(GERect self, GEVec2 size) {
+    return GERectMake(geVec2MulValue(geVec2SubVec2(size, self.size), 0.5), self.size);
+}
+BOOL geRectIntersectsRect(GERect self, GERect rect) {
+    return self.origin.x <= geRectX2(rect) && geRectX2(self) >= rect.origin.x && self.origin.y <= geRectY2(rect) && geRectY2(self) >= rect.origin.y;
+}
+GERect geRectThickenHalfSize(GERect self, GEVec2 halfSize) {
+    return GERectMake(geVec2SubVec2(self.origin, halfSize), geVec2AddVec2(self.size, geVec2MulValue(halfSize, 2.0)));
+}
+ODPType* geRectType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[GERectWrap class] name:@"GERect" size:sizeof(GERect) wrap:^id(void* data, NSUInteger i) {
+        return wrap(GERect, ((GERect*)(data))[i]);
+    }];
+    return _ret;
+}
+@implementation GERectWrap{
+    GERect _value;
+}
+@synthesize value = _value;
+
++ (id)wrapWithValue:(GERect)value {
+    return [[GERectWrap alloc] initWithValue:value];
+}
+
+- (id)initWithValue:(GERect)value {
+    self = [super init];
+    if(self) _value = value;
+    return self;
+}
+
+- (NSString*)description {
+    return GERectDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    GERectWrap* o = ((GERectWrap*)(other));
+    return GERectEq(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return GERectHash(_value);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
+
+
+GERecti geRectiApplyXYWidthHeight(float x, float y, float width, float height) {
+    return GERectiMake(geVec2iApplyVec2(GEVec2Make(x, y)), geVec2iApplyVec2(GEVec2Make(width, height)));
+}
+GERecti geRectiApplyRect(GERect rect) {
+    return GERectiMake(geVec2iApplyVec2(rect.origin), geVec2iApplyVec2(rect.size));
+}
+NSInteger geRectiX(GERecti self) {
+    return self.origin.x;
+}
+NSInteger geRectiY(GERecti self) {
+    return self.origin.y;
+}
+NSInteger geRectiX2(GERecti self) {
+    return self.origin.x + self.size.x;
+}
+NSInteger geRectiY2(GERecti self) {
+    return self.origin.y + self.size.y;
+}
+NSInteger geRectiWidth(GERecti self) {
+    return self.size.x;
+}
+NSInteger geRectiHeight(GERecti self) {
+    return self.size.y;
+}
+GERecti geRectiMoveToCenterForSize(GERecti self, GEVec2 size) {
+    return GERectiMake(geVec2iApplyVec2(geVec2MulValue(geVec2SubVec2(size, geVec2ApplyVec2i(self.size)), 0.5)), self.size);
+}
+ODPType* geRectiType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[GERectiWrap class] name:@"GERecti" size:sizeof(GERecti) wrap:^id(void* data, NSUInteger i) {
+        return wrap(GERecti, ((GERecti*)(data))[i]);
+    }];
+    return _ret;
+}
+@implementation GERectiWrap{
+    GERecti _value;
+}
+@synthesize value = _value;
+
++ (id)wrapWithValue:(GERecti)value {
+    return [[GERectiWrap alloc] initWithValue:value];
+}
+
+- (id)initWithValue:(GERecti)value {
+    self = [super init];
+    if(self) _value = value;
+    return self;
+}
+
+- (NSString*)description {
+    return GERectiDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    GERectiWrap* o = ((GERectiWrap*)(other));
+    return GERectiEq(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return GERectiHash(_value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {

@@ -7,15 +7,15 @@ class SwitchProcessor(level : Level) extends MouseProcessor {
 
     private val index : RectIndex<(RailConnector, bool)> = RectIndex(
         [
-            (Rect(-0.1, 0.2, 0.2, 0.3), (RailConnector.top, false)),
-            (Rect(-0.1, 0.2, -0.5, 0.3), (RailConnector.bottom, false)),
-            (Rect(-0.5, 0.3, -0.1, 0.2), (RailConnector.left, false)),
-            (Rect(0.2, 0.3, -0.1, 0.2), (RailConnector.right, false)),
+            (rect(-0.1, 0.2, 0.2, 0.3), (RailConnector.top, false)),
+            (rect(-0.1, -0.5, 0.2, 0.3), (RailConnector.bottom, false)),
+            (rect(-0.5, -0.1, 0.3, 0.2), (RailConnector.left, false)),
+            (rect(0.2, -0.1, 0.3, 0.2), (RailConnector.right, false)),
 
-            (Rect(0.15, 0.1, 0.4, 0.1), (RailConnector.top, true)),
-            (Rect(-0.25, 0.1, -0.5, 0.1), (RailConnector.bottom, true)),
-            (Rect(-0.5, 0.1, 0.15, 0.1), (RailConnector.left, true)),
-            (Rect(0.4, 0.1, -0.25, 0.1), (RailConnector.right, true))
+            (rect(0.15, 0.4, 0.1, 0.1), (RailConnector.top, true)),
+            (rect(-0.25, -0.5, 0.1, 0.1), (RailConnector.bottom, true)),
+            (rect(-0.5, 0.15, 0.1, 0.1), (RailConnector.left, true)),
+            (rect(0.4, -0.25, 0.1, 0.1), (RailConnector.right, true))
         ]
     )
     private var downed : RailroadConnectorContent? = nil

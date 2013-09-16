@@ -1,5 +1,0 @@
-package com.antonzherdev.eg
-
-class RectIndex<T>(rects : [(Rect, T)]) {
-    def apply(point : vec2) : T? = rects.find(_.a.contains(point)).map(_.b)
-}

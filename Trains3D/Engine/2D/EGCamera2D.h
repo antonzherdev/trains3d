@@ -1,7 +1,6 @@
 #import "objd.h"
 #import "EGTypes.h"
 #import "GEVec.h"
-#import "GERect.h"
 @class EGMatrixModel;
 @class GEMat4;
 @class EGGlobal;

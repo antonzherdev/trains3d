@@ -21,16 +21,16 @@ static ODClassType* _GEFigureTest_type;
 
 - (void)testThickLine {
     GEThickLineSegment* l = [GEThickLineSegment thickLineSegmentWithSegment:[GELineSegment lineSegmentWithP0:GEVec2Make(0.0, 0.0) p1:GEVec2Make(1.0, 0.0)] thickness:1.0];
-    [self assertEqualsA:wrap(GERect, [l boundingRect]) b:wrap(GERect, GERectMake(0.0, 1.0, -0.5, 1.0))];
+    [self assertEqualsA:wrap(GERect, [l boundingRect]) b:wrap(GERect, geRectApplyXYWidthHeight(0.0, -0.5, 1.0, 1.0))];
     GEPolygon* p = [GEPolygon polygonWithPoints:(@[wrap(GEVec2, GEVec2Make(0.0, 0.5)), wrap(GEVec2, GEVec2Make(0.0, -0.5)), wrap(GEVec2, GEVec2Make(1.0, -0.5)), wrap(GEVec2, GEVec2Make(1.0, 0.5))])];
     [self assertEqualsA:[[l segments] toSet] b:[p.segments toSet]];
     l = [GEThickLineSegment thickLineSegmentWithSegment:[GELineSegment lineSegmentWithP0:GEVec2Make(0.0, 0.0) p1:GEVec2Make(0.0, 1.0)] thickness:1.0];
-    [self assertEqualsA:wrap(GERect, [l boundingRect]) b:wrap(GERect, GERectMake(-0.5, 1.0, 0.0, 1.0))];
+    [self assertEqualsA:wrap(GERect, [l boundingRect]) b:wrap(GERect, geRectApplyXYWidthHeight(-0.5, 0.0, 1.0, 1.0))];
     p = [GEPolygon polygonWithPoints:(@[wrap(GEVec2, GEVec2Make(0.5, 0.0)), wrap(GEVec2, GEVec2Make(-0.5, 0.0)), wrap(GEVec2, GEVec2Make(-0.5, 1.0)), wrap(GEVec2, GEVec2Make(0.5, 1.0))])];
     [self assertEqualsA:[[l segments] toSet] b:[p.segments toSet]];
     CGFloat s2 = sqrt(2.0);
     l = [GEThickLineSegment thickLineSegmentWithSegment:[GELineSegment lineSegmentWithP0:GEVec2Make(0.0, 0.0) p1:GEVec2Make(1.0, 1.0)] thickness:s2];
-    [self assertEqualsA:wrap(GERect, [l boundingRect]) b:wrap(GERect, geRectThickenXY(GERectMake(0.0, 1.0, 0.0, 1.0), s2 / 2, s2 / 2))];
+    [self assertEqualsA:wrap(GERect, [l boundingRect]) b:wrap(GERect, geRectThickenHalfSize(geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0), GEVec2Make(((float)(s2 / 2)), ((float)(s2 / 2)))))];
     p = [GEPolygon polygonWithPoints:(@[wrap(GEVec2, GEVec2Make(-0.5, 0.5)), wrap(GEVec2, GEVec2Make(0.5, 1.5)), wrap(GEVec2, GEVec2Make(1.5, 0.5)), wrap(GEVec2, GEVec2Make(0.5, -0.5))])];
     [self assertEqualsA:[[l segments] toSet] b:[p.segments toSet]];
 }

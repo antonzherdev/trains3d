@@ -6,6 +6,8 @@ typedef struct GEVec3 GEVec3;
 typedef struct GEVec4 GEVec4;
 typedef struct GEQuad GEQuad;
 typedef struct GEQuadrant GEQuadrant;
+typedef struct GERect GERect;
+typedef struct GERecti GERecti;
 
 struct GEVec2 {
     float x;
@@ -46,6 +48,7 @@ CGFloat geVec2DistanceToVec2(GEVec2 self, GEVec2 vec2);
 GEVec2 geVec2SetLength(GEVec2 self, float length);
 GEVec2 geVec2Normalize(GEVec2 self);
 NSInteger geVec2CompareTo(GEVec2 self, GEVec2 to);
+GERect geVec2RectToVec2(GEVec2 self, GEVec2 vec2);
 ODPType* geVec2Type();
 @interface GEVec2Wrap : NSObject
 @property (readonly, nonatomic) GEVec2 value;
@@ -84,6 +87,7 @@ GEVec2i geVec2iAddVec2i(GEVec2i self, GEVec2i vec2i);
 GEVec2i geVec2iSubVec2i(GEVec2i self, GEVec2i vec2i);
 GEVec2i geVec2iNegate(GEVec2i self);
 NSInteger geVec2iCompareTo(GEVec2i self, GEVec2i to);
+GERecti geVec2iRectToVec2i(GEVec2i self, GEVec2i vec2i);
 ODPType* geVec2iType();
 @interface GEVec2iWrap : NSObject
 @property (readonly, nonatomic) GEVec2i value;
@@ -258,6 +262,93 @@ ODPType* geQuadrantType();
 
 + (id)wrapWithValue:(GEQuadrant)value;
 - (id)initWithValue:(GEQuadrant)value;
+@end
+
+
+
+struct GERect {
+    GEVec2 origin;
+    GEVec2 size;
+};
+static inline GERect GERectMake(GEVec2 origin, GEVec2 size) {
+    return (GERect){origin, size};
+}
+static inline BOOL GERectEq(GERect s1, GERect s2) {
+    return GEVec2Eq(s1.origin, s2.origin) && GEVec2Eq(s1.size, s2.size);
+}
+static inline NSUInteger GERectHash(GERect self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + GEVec2Hash(self.origin);
+    hash = hash * 31 + GEVec2Hash(self.size);
+    return hash;
+}
+static inline NSString* GERectDescription(GERect self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<GERect: "];
+    [description appendFormat:@"origin=%@", GEVec2Description(self.origin)];
+    [description appendFormat:@", size=%@", GEVec2Description(self.size)];
+    [description appendString:@">"];
+    return description;
+}
+GERect geRectApplyXYWidthHeight(float x, float y, float width, float height);
+float geRectX(GERect self);
+float geRectY(GERect self);
+float geRectX2(GERect self);
+float geRectY2(GERect self);
+float geRectWidth(GERect self);
+float geRectHeight(GERect self);
+BOOL geRectContainsPoint(GERect self, GEVec2 point);
+GERect geRectAddVec2(GERect self, GEVec2 vec2);
+GERect geRectMoveToCenterForSize(GERect self, GEVec2 size);
+BOOL geRectIntersectsRect(GERect self, GERect rect);
+GERect geRectThickenHalfSize(GERect self, GEVec2 halfSize);
+ODPType* geRectType();
+@interface GERectWrap : NSObject
+@property (readonly, nonatomic) GERect value;
+
++ (id)wrapWithValue:(GERect)value;
+- (id)initWithValue:(GERect)value;
+@end
+
+
+
+struct GERecti {
+    GEVec2i origin;
+    GEVec2i size;
+};
+static inline GERecti GERectiMake(GEVec2i origin, GEVec2i size) {
+    return (GERecti){origin, size};
+}
+static inline BOOL GERectiEq(GERecti s1, GERecti s2) {
+    return GEVec2iEq(s1.origin, s2.origin) && GEVec2iEq(s1.size, s2.size);
+}
+static inline NSUInteger GERectiHash(GERecti self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + GEVec2iHash(self.origin);
+    hash = hash * 31 + GEVec2iHash(self.size);
+    return hash;
+}
+static inline NSString* GERectiDescription(GERecti self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<GERecti: "];
+    [description appendFormat:@"origin=%@", GEVec2iDescription(self.origin)];
+    [description appendFormat:@", size=%@", GEVec2iDescription(self.size)];
+    [description appendString:@">"];
+    return description;
+}
+GERecti geRectiApplyXYWidthHeight(float x, float y, float width, float height);
+GERecti geRectiApplyRect(GERect rect);
+NSInteger geRectiX(GERecti self);
+NSInteger geRectiY(GERecti self);
+NSInteger geRectiX2(GERecti self);
+NSInteger geRectiY2(GERecti self);
+NSInteger geRectiWidth(GERecti self);
+NSInteger geRectiHeight(GERecti self);
+GERecti geRectiMoveToCenterForSize(GERecti self, GEVec2 size);
+ODPType* geRectiType();
+@interface GERectiWrap : NSObject
+@property (readonly, nonatomic) GERecti value;
+
++ (id)wrapWithValue:(GERecti)value;
+- (id)initWithValue:(GERecti)value;
 @end
 
 

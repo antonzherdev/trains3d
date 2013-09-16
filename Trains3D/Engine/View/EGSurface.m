@@ -4,8 +4,7 @@
 #import "EGMesh.h"
 #import "EGShader.h"
 @implementation EGSurface{
-    NSUInteger _width;
-    NSUInteger _height;
+    GEVec2i _size;
     GLuint _frameBuffer;
     EGTexture* _texture;
     CNLazy* __lazy_fullScreenVertexBuffer;
@@ -13,21 +12,32 @@
     CNLazy* __lazy_shader;
 }
 static ODClassType* _EGSurface_type;
-@synthesize width = _width;
-@synthesize height = _height;
+@synthesize size = _size;
 @synthesize texture = _texture;
 
-+ (id)surfaceWithWidth:(NSUInteger)width height:(NSUInteger)height {
-    return [[EGSurface alloc] initWithWidth:width height:height];
++ (id)surfaceWithSize:(GEVec2i)size {
+    return [[EGSurface alloc] initWithSize:size];
 }
 
-- (id)initWithWidth:(NSUInteger)width height:(NSUInteger)height {
+- (id)initWithSize:(GEVec2i)size {
     self = [super init];
     if(self) {
-        _width = width;
-        _height = height;
+        _size = size;
         _frameBuffer = egGenFrameBuffer();
-        _texture = [EGTexture texture];
+        _texture = ^EGTexture*() {
+            EGTexture* t = [EGTexture texture];
+            glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+            glBindTexture(GL_TEXTURE_2D, t.id);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _size.x, _size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, t.id, 0);
+            glBindTexture(GL_TEXTURE_2D, 0);
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            return t;
+        }();
         __lazy_fullScreenVertexBuffer = [CNLazy lazyWithF:^EGVertexBuffer*() {
             return [[EGVertexBuffer applyDataType:geVec2Type()] setData:[ arrs(GEVec2, 8) {0, 0, 1, 0, 1, 1, 0, 1}]];
         }];
@@ -59,20 +69,6 @@ static ODClassType* _EGSurface_type;
     return [__lazy_shader get];
 }
 
-- (EGSurface*)init {
-    glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-    glBindTexture(GL_TEXTURE_2D, _texture.id);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture.id, 0);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    return self;
-}
-
 - (void)dealloc {
     egDeleteFrameBuffer(_frameBuffer);
 }
@@ -86,7 +82,7 @@ static ODClassType* _EGSurface_type;
 - (void)bind {
     glPushAttrib(GL_VIEWPORT_BIT);
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-    glViewport(0, 0, _width, _height);
+    glViewport(0, 0, _size.x, _size.y);
 }
 
 - (void)unbind {
@@ -120,20 +116,18 @@ static ODClassType* _EGSurface_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGSurface* o = ((EGSurface*)(other));
-    return self.width == o.width && self.height == o.height;
+    return GEVec2iEq(self.size, o.size);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + self.width;
-    hash = hash * 31 + self.height;
+    hash = hash * 31 + GEVec2iHash(self.size);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"width=%li", self.width];
-    [description appendFormat:@", height=%li", self.height];
+    [description appendFormat:@"size=%@", GEVec2iDescription(self.size)];
     [description appendString:@">"];
     return description;
 }
@@ -217,6 +211,61 @@ static ODClassType* _EGSurfaceShader_type;
 
 - (NSUInteger)hash {
     return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGFullScreenSurface{
+    id _surface;
+}
+static ODClassType* _EGFullScreenSurface_type;
+
++ (id)fullScreenSurface {
+    return [[EGFullScreenSurface alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    if(self) _surface = [CNOption none];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGFullScreenSurface_type = [ODClassType classTypeWithCls:[EGFullScreenSurface class]];
+}
+
+- (void)bind {
+}
+
+- (void)applyDraw:(void(^)())draw {
+    [self bind];
+    ((void(^)())(draw))();
+    [self unbind];
+}
+
+- (void)unbind {
+    [((EGSurface*)([_surface get])) unbind];
+}
+
+- (ODClassType*)type {
+    return [EGFullScreenSurface type];
+}
+
++ (ODClassType*)type {
+    return _EGFullScreenSurface_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 - (NSString*)description {

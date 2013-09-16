@@ -40,27 +40,27 @@ static ODClassType* _EGCameraIso_type;
     _EGCameraIso_ISO = EGMapSso.ISO;
 }
 
-- (GERect)calculateViewportSizeWithViewSize:(GEVec2)viewSize {
+- (GERecti)calculateViewportSizeWithViewSize:(GEVec2)viewSize {
     NSInteger ww = _tilesOnScreen.x + _tilesOnScreen.y;
     CGFloat tileSize = min(((CGFloat)(viewSize.x / ww)), ((CGFloat)(2 * viewSize.y / ww)));
     CGFloat viewportWidth = tileSize * ww;
     CGFloat viewportHeight = tileSize * ww / 2;
-    return GERectMake(((CGFloat)((viewSize.x - viewportWidth) / 2)), viewportWidth, ((CGFloat)((viewSize.y - viewportHeight) / 2)), viewportHeight);
+    return geRectiMoveToCenterForSize(geRectiApplyXYWidthHeight(0.0, 0.0, ((float)(viewportWidth)), ((float)(viewportHeight))), viewSize);
 }
 
 - (void)focusForViewSize:(GEVec2)viewSize {
-    GERect vps = [self calculateViewportSizeWithViewSize:viewSize];
-    glViewport(vps.x, vps.y, vps.width, vps.height);
+    GERecti vps = [self calculateViewportSizeWithViewSize:viewSize];
+    egViewport(vps);
     EGGlobal.matrix.value = _matrixModel;
     glCullFace(GL_FRONT);
 }
 
 - (GEVec2)translateWithViewSize:(GEVec2)viewSize viewPoint:(GEVec2)viewPoint {
-    GERect vps = [self calculateViewportSizeWithViewSize:viewSize];
-    float x = viewPoint.x - vps.x;
-    float y = viewPoint.y - vps.y;
-    float vw = geRectSize(vps).x;
-    float vh = geRectSize(vps).y;
+    GERecti vps = [self calculateViewportSizeWithViewSize:viewSize];
+    float x = viewPoint.x - geRectiX(vps);
+    float y = viewPoint.y - geRectiY(vps);
+    NSInteger vw = vps.size.x;
+    NSInteger vh = vps.size.y;
     CGFloat ww2 = (_tilesOnScreen.x + _tilesOnScreen.y) / 2.0;
     CGFloat tw = ((CGFloat)(_tilesOnScreen.x));
     return GEVec2Make((x / vw - y / vh) * ww2 + tw / 2 - 0.5 + _center.x, (x / vw + y / vh) * ww2 - tw / 2 - 0.5 + _center.y);

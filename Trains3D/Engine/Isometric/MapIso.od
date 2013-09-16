@@ -5,10 +5,12 @@ package com.antonzherdev.eg
 class MapSso(size : vec2i) {
     static val ISO = 0.70710676908493
 
-    val limits = RectI.newXY((1 - size.y)/2 - 1,
-                         (2*size.x + size.y - 3)/2 + 1,
-                         (1 - size.x)/2 - 1,
-                         (size.x + 2*size.y - 3)/2 + 1)
+    val limits = vec2i(
+        (1 - size.y)/2 - 1,
+        (1 - size.x)/2 - 1)
+    .rectTo(vec2i(
+        (2*size.x + size.y - 3)/2 + 1,
+        (size.x + 2*size.y - 3)/2 + 1))
     val fullTiles : [vec2i] = allPosibleTiles.filter(isFull(_)).toArray
     val partialTiles : [vec2i] = allPosibleTiles.filter(isPartial(_)).toArray
     val allTiles : [vec2i] = fullTiles + partialTiles
@@ -40,11 +42,13 @@ class MapSso(size : vec2i) {
         else if(less < more) 0
         else 2
 
-    def cutRectFor(tile : vec2i) = RectI.newXY(
-        tileCutAxis(0, tile.x + tile.y),
-        tileCutAxis(tile.x + tile.y, size.x + size.y - 2),
-        tileCutAxis(tile.y - tile.x, size.y - 1),
-        tileCutAxis(-size.x + 1, tile.y - tile.x))
+    def cutRectFor(tile : vec2i) =
+        vec2i(
+            tileCutAxis(0, tile.x + tile.y),
+            tileCutAxis(tile.y - tile.x, size.y - 1)
+        ).rectTo(vec2i(
+            tileCutAxis(tile.x + tile.y, size.x + size.y - 2),
+            tileCutAxis(-size.x + 1, tile.y - tile.x)))
 }
 
 class MapSsoView(map : MapSso) {

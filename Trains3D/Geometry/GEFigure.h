@@ -1,6 +1,5 @@
 #import "objd.h"
 #import "GEVec.h"
-#import "GERect.h"
 
 @class GELine;
 @class GESlopeLine;

@@ -1,22 +1,22 @@
 package com.antonzherdev.eg
 
-class Surface(width : uint, height : uint) {
+class Surface(size : vec2i) {
     private val frameBuffer = egGenFrameBuffer
-    val texture = Texture()
-    def init : Surface = {
+    val texture = {
+        val t = Texture()
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
-        glBindTexture(GL_TEXTURE_2D, texture.id)
+        glBindTexture(GL_TEXTURE_2D, t.id)
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0)
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.id, 0)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0)
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, t.id, 0)
 
         glBindTexture(GL_TEXTURE_2D, 0)
         glBindFramebuffer(GL_FRAMEBUFFER, 0)
-        self
+        t
     }
 
     def dealloc {
@@ -32,7 +32,7 @@ class Surface(width : uint, height : uint) {
     def bind {
         glPushAttrib(GL_VIEWPORT_BIT)
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
-        glViewport(0, 0, width, height)
+        glViewport(0, 0, size.x, size.y)
     }
 
     def unbind {
@@ -79,5 +79,23 @@ class SurfaceShader {
             positionSlot.setFromBufferWith(stride = 2*4, valuesCount = 2, GL_FLOAT, shift = 0)
             draw()
         }
+    }
+}
+
+class FullScreenSurface {
+    private var surface : Surface? = nil
+
+    def bind {
+
+    }
+
+    def apply(draw : () -> void) {
+        bind
+        draw()
+        unbind
+    }
+
+    def unbind {
+        surface.get.unbind
     }
 }
