@@ -4,7 +4,7 @@
 #import "GERect.h"
 @class EGMatrixModel;
 @class GEMat4;
-@class EG;
+@class EGGlobal;
 @class EGMatrixStack;
 
 @class EGCamera2D;

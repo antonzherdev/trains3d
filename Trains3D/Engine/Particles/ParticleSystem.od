@@ -1,0 +1,90 @@
+package com.antonzherdev.eg
+
+import core.math._
+
+
+class ParticleSystem <P extends Particle> extends Controller {
+    private var _particles = List<P>()
+    def particles : [P] = _particles
+
+    def generateParticle : P
+    def generateParticlesWith(delta : float) {}
+
+    def emitParticle {
+        _particles = List(generateParticle, _particles)
+    }
+
+    def updateWith(delta : float) {
+        _particles = _particles.filter(_.isLive)
+        generateParticlesWith(delta)
+
+        _particles.for(_.updateWith(delta))
+    }
+
+    def hasParticles = !_particles.isEmpty
+}
+
+class Particle(lifeLength : float4) extends Controller {
+    private var _lifeTime : float4
+    def lifeTime : float4 = _lifeTime
+
+    def writeTo(array : VoidRefArray) : VoidRefArray
+
+    def isLive : bool  = _lifeTime <= lifeLength
+
+    def updateWith(delta : float) {
+        _lifeTime += delta
+        update(t = _lifeTime, dt = delta)
+    }
+
+    def update(t : float4, dt : float4)
+}
+
+
+class ParticleSystemView<P extends Particle, D>(dtp : PType<D>, maxCount : uint, blendFunc : BlendFunction) {
+    val vertexArr = VoidRefArray(dtp, maxCount*vertexCount)
+    val vertexBuffer = VertexBuffer<D>(dtp).set(array = vertexArr, usage = GL_DYNAMIC_DRAW)
+    val indexArr : VoidRefArray = {
+        val vc = vertexCount
+        val ia = VoidRefArray(UInt4.type, maxCount*3*(vc - 2))
+        var indexPointer = ia
+        maxCount.range.for{i ->
+            indexPointer = writeIndexesTo(indexPointer, i*vc)
+        }
+        ia
+    }
+    val indexBuffer = IndexBuffer().set(array = indexArr, usage = GL_STATIC_DRAW)
+    val mesh = Mesh(vertexBuffer = vertexBuffer, indexBuffer)
+
+    def vertexCount : uint
+    def writeIndexesTo(indexPointer : VoidRefArray, i : uint4) : VoidRefArray
+    def shader : Shader
+    def material : Material
+
+    def draw(system : ParticleSystem<P>) {
+        val particles = system.particles
+        if(particles.isEmpty) return nil
+
+        glDisable(GL_DEPTH_TEST)
+        glDisable(GL_CULL_FACE)
+        blendFunc {
+            var i = 0
+            var vertexPointer = vertexArr
+            particles.for{particle ->
+                if(i < maxCount) vertexPointer = particle.writeTo(vertexPointer)
+                i++
+            }
+            val n = min(particles.count, maxCount)
+            val vc = vertexCount
+            vertexBuffer.set(array = vertexArr, usage = GL_DYNAMIC_DRAW)
+            shader.draw(material, mesh, start = 0, count = n*3*(vc - 2))
+        }
+        glEnable(GL_CULL_FACE)
+        glEnable(GL_DEPTH_TEST)
+    }
+
+    def dealloc {
+        indexArr.free
+        vertexArr.free
+    }
+}

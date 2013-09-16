@@ -1,10 +1,10 @@
 package com.antonzherdev.trains
 
-import com.antonzherdev.eg.EGGL._
+
 import com.antonzherdev.eg._
 
 class TRCityView {
-    val expectedTrainModel = EGMesh(EGMeshData.type, [
+    val expectedTrainModel = Mesh(MeshData.type, [
         0, 0, 0, 1, 0, -0.5, 0.001, -0.5,
         1, 0, 0, 1, 0, 0.5, 0.001, -0.5,
         1, 1, 0, 1, 0, 0.5, 0.001, 0.5,
@@ -12,15 +12,15 @@ class TRCityView {
         ], [0, 1, 2,
         2, 3, 0])
     def draw(city : TRCity) {
-        EG.matrix(
+        matrix(
             _.modify(w = w -> w.translate(city.tile.x, city.tile.y, 0))
              .modify(m = m -> m.rotate(city.angle.angle, 0, -1, 0))
         ) {
-            EGStandardMaterial(city.color.color).draw(TR3D.city)
+            StandardMaterial(city.color.color).draw(TR3D.city)
 
             city.expectedTrainAnimation.for(a -> {
                 val x = -a.time/2
-                EGStandardMaterial(EGColor(1.0, 0.5 - x, 0.5 - x, 1)).draw(expectedTrainModel)
+                StandardMaterial(Color(1.0, 0.5 - x, 0.5 - x, 1)).draw(expectedTrainModel)
             })
         }
     }

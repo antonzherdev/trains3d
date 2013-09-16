@@ -1,4 +1,5 @@
 #import "objd.h"
+#import "EGScene.h"
 #import "EGTypes.h"
 #import "GEVec.h"
 @class TRLevel;
@@ -11,9 +12,9 @@
 
 @class TRLevelView;
 
-@interface TRLevelView : NSObject<EGView>
+@interface TRLevelView : NSObject<EGLayerView>
 @property (nonatomic, readonly) TRLevel* level;
-@property (nonatomic, readonly) EGEnvironment* environment;
+@property (nonatomic, readonly) EGEGEnvironment* environment;
 @property (nonatomic, readonly) id<EGCamera> camera;
 
 + (id)levelViewWithLevel:(TRLevel*)level;

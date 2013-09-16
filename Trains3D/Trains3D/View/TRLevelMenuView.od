@@ -1,11 +1,11 @@
 package com.antonzherdev.trains
 
-import com.antonzherdev.eg.EGText._
-import com.antonzherdev.eg.EGGL._
+import com.antonzherdev.eg.Text._
+
 import com.antonzherdev.eg._
 
-class TRLevelMenuView(level : TRLevel) extends EGView {
-    val camera : EGCamera = EGCamera2D(vec2(2, 1))
+class TRLevelMenuView(level : TRLevel) extends LayerView {
+    val camera : Camera = Camera2D(vec2(2, 1))
 
     def drawView {
         egColor3(1, 1, 1)

@@ -1,10 +1,10 @@
 #import "EGStandardShaderSystem.h"
 
-#import "EG.h"
+#import "EGContext.h"
 #import "EGTypes.h"
 #import "EGMaterial.h"
 #import "EGMesh.h"
-#import "EGGL.h"
+#import "GL.h"
 #import "EGTexture.h"
 #import "GEMat4.h"
 @implementation EGStandardShaderSystem
@@ -30,10 +30,10 @@ static ODType* _EGStandardShaderSystem_type;
 }
 
 - (EGShader*)shaderForMaterial:(EGStandardMaterial*)material {
-    id<CNMap> lightMap = [[[EG.context.environment.lights chain] groupBy:^ODType*(EGLight* _) {
+    id<CNMap> lightMap = [[[EGGlobal.context.environment.lights chain] groupBy:^ODType*(EGEGLight* _) {
         return _.type;
     }] toMap];
-    id<CNSeq> directLights = [[lightMap applyKey:EGDirectLight.type] getOrElse:^id<CNSeq>() {
+    id<CNSeq> directLights = [[lightMap applyKey:EGEGDirectLight.type] getOrElse:^id<CNSeq>() {
         return (@[]);
     }];
     EGStandardShaderKey* key = [EGStandardShaderKey standardShaderKeyWithDirectLightCount:[directLights count] texture:[material.diffuse isKindOfClass:[EGColorSourceTexture class]]];
@@ -282,7 +282,7 @@ static ODType* _EGStandardShader_type;
 
 - (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGStandardMaterial*)material {
     [_positionSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_POSITION_SHIFT))];
-    [_mwcpUniform setMatrix:[EG.matrix.value mwcp]];
+    [_mwcpUniform setMatrix:[EGGlobal.matrix.value mwcp]];
     if(_key.texture) {
         [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:[vertexBuffer stride] valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_UV_SHIFT))];
         [((EGColorSourceTexture*)(material.diffuse)).texture bind];
@@ -291,13 +291,13 @@ static ODType* _EGStandardShader_type;
     }
     [_specularColor setColor:material.specularColor];
     [_specularSize setNumber:((float)(material.specularSize))];
-    EGEnvironment* env = EG.context.environment;
+    EGEGEnvironment* env = EGGlobal.context.environment;
     [_ambientColor setColor:env.ambientColor];
     if(_key.directLightCount > 0) {
-        [((EGShaderUniform*)([_mwcUniform get])) setMatrix:[EG.context.matrixStack.value mwc]];
+        [((EGShaderUniform*)([_mwcUniform get])) setMatrix:[EGGlobal.context.matrixStack.value mwc]];
         [((EGShaderAttribute*)([_normalSlot get])) setFromBufferWithStride:[vertexBuffer stride] valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_NORMAL_SHIFT))];
-        [[[[env.lights chain] filterCast:EGDirectLight.type] zip3A:_directLightDirections b:_directLightColors by:^EGDirectLight*(EGDirectLight* light, EGShaderUniform* dirSlot, EGShaderUniform* colorSlot) {
-            GEVec3 dir = geVec4Xyz([[EG.matrix.value wc] mulVec3:light.direction w:0.0]);
+        [[[[env.lights chain] filterCast:EGEGDirectLight.type] zip3A:_directLightDirections b:_directLightColors by:^EGEGDirectLight*(EGEGDirectLight* light, EGShaderUniform* dirSlot, EGShaderUniform* colorSlot) {
+            GEVec3 dir = geVec4Xyz([[EGGlobal.matrix.value wc] mulVec3:light.direction w:0.0]);
             [dirSlot setVec3:dir];
             [colorSlot setColor:light.color];
             return light;

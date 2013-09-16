@@ -1,7 +1,8 @@
 #import "objd.h"
-#import "EGTypes.h"
+#import "EGScene.h"
 #import "GEVec.h"
 @class TRLevel;
+@protocol EGCamera;
 @class EGCamera2D;
 @class TRScore;
 @class EGSchedule;
@@ -9,7 +10,7 @@
 
 @class TRLevelMenuView;
 
-@interface TRLevelMenuView : NSObject<EGView>
+@interface TRLevelMenuView : NSObject<EGLayerView>
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) id<EGCamera> camera;
 

@@ -1,0 +1,32 @@
+package com.antonzherdev.eg
+
+stub class CollisionBody<T>(data : T, shape : CollisionShape, isKinematic : bool) {
+    val obj : VoidRef = nil
+    private var _matrix : mat4 = mat4.identity
+    def matrix = _matrix
+    def set(matrix : mat4) {
+        _matrix = matrix
+    }
+
+    def translate(x : float4, y : float4, z : float4) {
+        _matrix = _matrix.translate(x, y, z)
+    }
+
+    def rotate(angle : float4, x : float4, y : float4, z : float4) {
+        _matrix = _matrix.rotate(angle, x, y, z)
+    }
+}
+
+stub trait CollisionShape {
+    def shape : VoidRef = nil
+}
+
+stub class CollisionBox(halfSize : vec3) extends CollisionShape {
+    static def apply(x : float4, y : float4, z : float4) = CollisionBox(vec3(x, y, z))
+}
+
+stub class CollisionBox2d(halfSize : vec2) extends CollisionShape {
+    static def apply(x : float4, y : float4) = CollisionBox2d(vec2(x, y))
+}
+
+stub class CollisionPlane(normal : vec3, distance : float4) extends CollisionShape

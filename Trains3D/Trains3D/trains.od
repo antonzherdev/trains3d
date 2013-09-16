@@ -1,6 +1,9 @@
 package com.antonzherdev
 
-object trains {
-    import com.antonzherdev.eg._
+stub object trains {
     import com.antonzherdev.geometry._
+    import com.antonzherdev.eg._
+    import com.antonzherdev.eg.Global._
+    import com.antonzherdev.gl._
+    import com.antonzherdev.gl.gl._
 }

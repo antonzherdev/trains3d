@@ -1,9 +1,9 @@
 #import "EGCameraIso.h"
 
 #import "EGMapIso.h"
-#import "EG.h"
+#import "EGContext.h"
 #import "GEMat4.h"
-#import "EGGL.h"
+#import "GL.h"
 @implementation EGCameraIso{
     GEVec2i _tilesOnScreen;
     GEVec2 _center;
@@ -51,7 +51,7 @@ static ODType* _EGCameraIso_type;
 - (void)focusForViewSize:(GEVec2)viewSize {
     GERect vps = [self calculateViewportSizeWithViewSize:viewSize];
     glViewport(vps.x, vps.y, vps.width, vps.height);
-    EG.matrix.value = _matrixModel;
+    EGGlobal.matrix.value = _matrixModel;
     glCullFace(GL_FRONT);
 }
 

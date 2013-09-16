@@ -4,7 +4,7 @@
 #import "EGBillboard.h"
 #import "EGMaterial.h"
 @class EGProgress;
-@class EG;
+@class EGGlobal;
 
 @class TRExplosion;
 @class TRExplosionFlame;

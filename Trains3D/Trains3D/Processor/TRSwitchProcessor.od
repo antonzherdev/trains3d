@@ -2,10 +2,10 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class TRSwitchProcessor(level : TRLevel) extends EGMouseProcessor {
-    def process(event : EGEvent) : bool = event.leftMouse(self)
+class TRSwitchProcessor(level : TRLevel) extends MouseProcessor {
+    def process(event : Event) : bool = event.leftMouse(self)
 
-    private val index : EGRectIndex<(TRRailConnector, bool)> = EGRectIndex(
+    private val index : RectIndex<(TRRailConnector, bool)> = RectIndex(
         [
             (Rect(-0.1, 0.2, 0.2, 0.3), (TRRailConnector.top, false)),
             (Rect(-0.1, 0.2, -0.5, 0.3), (TRRailConnector.bottom, false)),
@@ -20,7 +20,7 @@ class TRSwitchProcessor(level : TRLevel) extends EGMouseProcessor {
     )
     private var downed : TRRailroadConnectorContent? = nil
 
-    def mouseDown(event : EGEvent) = {
+    def mouseDown(event : Event) = {
         val location = event.location
         val tile : vec2i = location
         val relPoint = location.sub(tile)
@@ -32,9 +32,9 @@ class TRSwitchProcessor(level : TRLevel) extends EGMouseProcessor {
         downed.isDefined
     }
 
-    def mouseDrag(event : EGEvent) = downed.isDefined
+    def mouseDrag(event : Event) = downed.isDefined
 
-    def mouseUp(event : EGEvent) =
+    def mouseUp(event : Event) =
         if(downed.isDefined) {
             downed.get.as<TRSwitch>.for(level.tryTurn(theSwitch = _ ))
             downed.get.as<TRLight>.for(_.turn)

@@ -2,7 +2,7 @@
 @class EGMapSso;
 @class EGMapSsoView;
 @class EGStandardMaterial;
-@class EG;
+@class EGGlobal;
 @class EGColorSource;
 
 @class TRLevelBackgroundView;

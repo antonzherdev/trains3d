@@ -4,7 +4,7 @@
 #import "EGParticleSystem.h"
 #import "EGMaterial.h"
 @class EGVertexBuffer;
-@class EG;
+@class EGGlobal;
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class EGTexture;

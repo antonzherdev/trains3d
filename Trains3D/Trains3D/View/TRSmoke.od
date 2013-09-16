@@ -1,11 +1,11 @@
 package com.antonzherdev.trains
 
-import com.antonzherdev.eg.EGGL._
+
 import com.antonzherdev.eg._
 import core.math._
 
 
-class TRSmoke(weak train : TRTrain) extends EGBillboardParticleSystem {
+class TRSmoke(weak train : TRTrain) extends BillboardParticleSystem {
     private val engine : TRCar = train.cars.head.get
     private val tubePos = engine.carType.engineType.get.tubePos
     private static val zSpeed = 0.1
@@ -45,7 +45,7 @@ class TRSmoke(weak train : TRTrain) extends EGBillboardParticleSystem {
     }
 }
 
-class TRSmokeParticle extends EGBillboardParticle(4) {
+class TRSmokeParticle extends BillboardParticle(4) {
     var speed : vec3
     static val dragCoefficient = 1 // air resistance coefficient | a = -dragCoefficient * sqr(speed)
 
@@ -60,4 +60,4 @@ class TRSmokeParticle extends EGBillboardParticle(4) {
 }
 
 
-class TRSmokeView extends EGBillboardParticleSystemView(800, EGSimpleMaterial(EG.textureFor("Smoke.png")), EGBlendFunction.standard)
+class TRSmokeView extends BillboardParticleSystemView(800, SimpleMaterial(textureFor("Smoke.png")), BlendFunction.standard)

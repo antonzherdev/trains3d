@@ -1,0 +1,103 @@
+package com.antonzherdev.eg
+
+object Global {
+    def director : Director = context.director
+    val context : Context = Context()
+    val matrix : MatrixStack = context.matrixStack
+    def textureFor(file : string) : FileTexture = context.textureFor(file)
+}
+
+class Context {
+    private val textureCache = MutableHashMap<string, FileTexture>()
+
+    def textureFor(file : string) : FileTexture = textureCache.objectFor(key = file, orUpdateWith = FileTexture(file))
+
+    var director : Director
+    var environment = EGEnvironment.default
+    val matrixStack = MatrixStack()
+}
+
+class MatrixStack {
+    private var stack = List<MatrixModel>()
+    var value = MatrixModel.identity
+
+    def clear {
+        value = MatrixModel.identity
+        stack = List<MatrixModel>()
+    }
+
+    def push {
+        stack = List(value, stack)
+    }
+
+    def pop {
+        value = stack.head.get
+        stack = stack.tail
+    }
+
+    def apply(modify : MatrixModel -> MatrixModel, f : () -> void) {
+        push
+        value = modify(value)
+        f()
+        pop
+    }
+}
+
+class MatrixModel(m : mat4, w : mat4, c : mat4, p : mat4,
+    _mw : Lazy<mat4>, _mwc : Lazy<mat4>, _mwcp : Lazy<mat4>,
+    _cp : Lazy<mat4>, _wcp : Lazy<mat4>, _wc : Lazy<mat4>)
+{
+    static def apply(m : mat4, w : mat4, c : mat4, p : mat4) : MatrixModel = {
+        val _mw = Lazy(w.mul(m))
+        val _mwc = Lazy(c.mul(_mw.get))
+        val _cp = Lazy(p.mul(c))
+        val _mwcp = Lazy(_cp.get.mul(_mw.get))
+        val _wc = Lazy(c.mul(w))
+        val _wcp = Lazy(p.mul(_wc.get))
+        MatrixModel(m, w, c, p, _mw, _mwc, _mwcp, _cp, _wcp, _wc)
+    }
+    static val identity = MatrixModel(mat4.identity, mat4.identity, mat4.identity, mat4.identity)
+    def mw = _mw.get
+    def mwc = _mwc.get
+    def mwcp = _mwcp.get
+    def cp = _cp.get
+    def wcp = _wcp.get
+    def wc = _wc.get
+
+    def modify(m : mat4 -> mat4) : MatrixModel = {
+        val mm = m(self.m)
+        val _mw = Lazy(w.mul(mm))
+        val _mwc = Lazy(c.mul(_mw.get))
+        val _mwcp = Lazy(_cp.get.mul(_mw.get))
+        MatrixModel(mm, w, c, p, _mw, _mwc, _mwcp, _cp, _wcp, _wc)
+    }
+
+
+    def modify(w : mat4 -> mat4) : MatrixModel = {
+        val ww = w(self.w)
+        val _mw = Lazy(ww.mul(m))
+        val _mwc = Lazy(c.mul(_mw.get))
+        val _mwcp = Lazy(_cp.get.mul(_mw.get))
+        val _wc = Lazy(c.mul(ww))
+        val _wcp = Lazy(p.mul(_wc.get))
+        MatrixModel(m, ww, c, p, _mw, _mwc, _mwcp, _cp, _wcp, _wc)
+    }
+
+    def modify(c : mat4 -> mat4) : MatrixModel = {
+        val cc = c(self.c)
+        val _mwc = Lazy(cc.mul(_mw.get))
+        val _cp = Lazy(p.mul(cc))
+        val _mwcp = Lazy(_cp.get.mul(_mw.get))
+        val _wc = Lazy(cc.mul(w))
+        val _wcp = Lazy(p.mul(_wc.get))
+        MatrixModel(m, w, cc, p, _mw, _mwc, _mwcp, _cp, _wcp, _wc)
+    }
+
+    def modify(p : mat4 -> mat4) : MatrixModel = {
+        val pp = p(self.p)
+        val _cp = Lazy(pp.mul(c))
+        val _mwcp = Lazy(_cp.get.mul(_mw.get))
+        val _wcp = Lazy(pp.mul(_wc.get))
+        MatrixModel(m, w, c, pp, _mw, _mwc, _mwcp, _cp, _wcp, _wc)
+    }
+}

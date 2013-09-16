@@ -1,0 +1,99 @@
+package com.antonzherdev.eg
+
+struct MeshData(uv : vec2, normal : vec3, position : vec3)
+
+class Mesh<T>(vertexBuffer : VertexBuffer<T>, indexBuffer : IndexBuffer<uint4>) {
+    static def apply<T>(dataType : PType<T>, vertexData : PArray<T>, indexData : PArray<uint4>) : Mesh =
+        Mesh<T>(vertexBuffer = VertexBuffer<T>(dataType).set(vertexData),
+            indexBuffer = IndexBuffer().set(indexData))
+
+    static def quad<T>(vertexBuffer : VertexBuffer<T>) : Mesh =
+        Mesh<T>(vertexBuffer, IndexBuffer().set([0, 1, 2, 2, 3, 0]))
+}
+
+class Buffer<T>(dataType : PType<T>, bufferType : GLenum, handle : GLuint) {
+    private var _length : uint = 0
+    private var _count : uint = 0
+    def length : uint = _length
+    def count : uint = _count
+    static def apply<T>(dataType : PType<T>, bufferType : GLenum) : Buffer = Buffer<T>(dataType, bufferType, egGenBuffer)
+
+    def dealoc {
+        egDeleteBuffer(handle)
+    }
+
+    def set(data : PArray<T>) : self = set(data = data, GL_STATIC_DRAW)
+    def set(array : VoidRefArray) : self = set(array = array, GL_STATIC_DRAW)
+
+    def set(data : PArray<T>, usage : GLenum) : self = {
+        glBindBuffer(bufferType, handle)
+        glBufferData(bufferType, data.length, data.bytes, GL_STATIC_DRAW)
+        glBindBuffer(bufferType, 0)
+        _length = data.length
+        _count = data.count
+        self
+    }
+
+    def set(array : VoidRefArray<T>, usage : GLenum) : self = {
+        glBindBuffer(bufferType, handle)
+        glBufferData(bufferType, array.length, array.bytes, GL_STATIC_DRAW)
+        glBindBuffer(bufferType, 0)
+        _length = array.length
+        _count = array.length/dataType.size
+        self
+    }
+
+    def update(start : uint, count : uint, array : VoidRefArray<T>) : self = {
+        glBindBuffer(bufferType, handle)
+        glBufferSubData(bufferType, start*dataType.size, count*dataType.size, array.bytes)
+        glBindBuffer(bufferType, 0)
+        self
+    }
+
+    def bind {
+        glBindBuffer(bufferType, handle)
+    }
+
+    def unbind {
+        glBindBuffer(bufferType, 0)
+    }
+
+    def apply(draw : () -> void) {
+        bind
+        draw()
+        unbind
+    }
+
+    def stride : uint = dataType.size
+}
+
+class VertexBuffer<T>(dataType : PType<T>, handle : GLuint) extends Buffer<T>(dataType, GL_ARRAY_BUFFER, handle) {
+    static def apply<T>(dataType : PType<T>) : VertexBuffer<T> = VertexBuffer<T>(dataType, egGenBuffer)
+}
+
+class IndexBuffer(handle : GLuint) extends Buffer<uint4>(UInt4.type, GL_ELEMENT_ARRAY_BUFFER, handle) {
+    static def apply : IndexBuffer = IndexBuffer(egGenBuffer)
+
+    def draw {
+        bind
+        glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0)
+        unbind
+    }
+
+    def drawWith(start : uint, count : uint) {
+        bind
+        glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 4*start)
+        unbind
+    }
+
+    def drawByQuads {
+        bind
+        var i = 0
+        while(i + 6 <= count) {
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 4*i)
+            i += 6
+        }
+        unbind
+    }
+}
+

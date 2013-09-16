@@ -1,6 +1,6 @@
 #import "objd.h"
 #import "GEVec.h"
-#import "EGGL.h"
+#import "GL.h"
 
 @class EGMesh;
 @class EGBuffer;

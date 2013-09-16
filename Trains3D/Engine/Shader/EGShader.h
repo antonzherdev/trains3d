@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "EGGL.h"
+#import "GL.h"
 #import "EGTypes.h"
 #import "GEVec.h"
 @class EGMesh;

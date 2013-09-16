@@ -1,0 +1,41 @@
+package com.antonzherdev.eg
+
+class Scene(val controller : Controller, val layers : [Layer]) {
+    def drawWith(viewSize : vec2) {
+        layers.for(_.drawWith(viewSize))
+    }
+
+    def process(event : Event) = layers.chain.reverse.fold((r, layer) -> r || layer.process(event), false)
+
+    def updateWith(delta : float) {
+        controller.updateWith(delta)
+        layers.for(_.updateWith(delta))
+    }
+}
+
+class Layer(view : LayerView, processor : Processor?) extends Controller {
+    def drawWith(viewSize : vec2) {
+        view.camera.focusFor(viewSize)
+        context.environment = view.environment
+        view.drawView
+    }
+
+    def process(event : Event) : bool = {
+        val cameraEvent = event.set(camera = view.camera)
+        processor.map(_.process(cameraEvent)).getOr(false)
+    }
+
+    def updateWith(delta : float) {
+        view.updateWith(delta)
+    }
+}
+
+trait LayerView extends Controller {
+    def camera : Camera
+
+    def drawView
+
+    def environment = EGEnvironment.default
+
+    def updateWith(delta : float) {}
+}

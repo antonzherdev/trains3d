@@ -2,11 +2,11 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class TRLevelProcessor(level : TRLevel) extends EGProcessor {
+class TRLevelProcessor(level : TRLevel) extends Processor {
     private val railroadBuilderProcessor = TRRailroadBuilderProcessor(level.railroad.builder)
     private val switchProcessor = TRSwitchProcessor(level)
 
-    def process(event : EGEvent) : bool =
+    def process(event : Event) : bool =
         switchProcessor.process(event)
         || railroadBuilderProcessor.process(event)
 

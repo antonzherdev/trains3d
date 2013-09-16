@@ -1,6 +1,6 @@
 package com.antonzherdev.trains
 
-import com.antonzherdev.eg.EGGL._
+
 import com.antonzherdev.eg._
 
 class TRRailroadView {
@@ -19,18 +19,18 @@ class TRRailroadView {
 }
 
 class TRRailView {
-    val railModel = EGMeshModel([
-        (TR3D.railGravel, EG.textureFor("Gravel.png")),
-        (TR3D.railTies, EGColor(0.55, 0.45, 0.25, 1)),
-        (TR3D.rails, EGStandardMaterial( EGColor(0.45, 0.47, 0.55, 1), EGColor(0.5, 0.5, 0.5, 1), 1))
+    val railModel = MeshModel([
+        (TR3D.railGravel, textureFor("Gravel.png")),
+        (TR3D.railTies, Color(0.55, 0.45, 0.25, 1)),
+        (TR3D.rails, StandardMaterial( Color(0.45, 0.47, 0.55, 1), Color(0.5, 0.5, 0.5, 1), 1))
     ])
-    val railTurnModel = EGMeshModel([
-        (TR3D.railTurnGravel, EG.textureFor("Gravel.png")),
-        (TR3D.railTurnTies, EGColor(0.55, 0.45, 0.25, 1)),
-        (TR3D.railsTurn, EGStandardMaterial( EGColor(0.45, 0.47, 0.55, 1), EGColor(0.5, 0.5, 0.5, 1), 1))
+    val railTurnModel = MeshModel([
+        (TR3D.railTurnGravel, textureFor("Gravel.png")),
+        (TR3D.railTurnTies, Color(0.55, 0.45, 0.25, 1)),
+        (TR3D.railsTurn, StandardMaterial( Color(0.45, 0.47, 0.55, 1), Color(0.5, 0.5, 0.5, 1), 1))
     ])
     def draw(rail : TRRail) {
-        EG.matrix(
+        matrix(
             _.modify(w = w -> w.translate(rail.tile.x, rail.tile.y, 0.001))
              .modify(m = m ->
                 if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
@@ -53,11 +53,11 @@ class TRRailView {
 }
 
 class TRSwitchView {
-    val material = EGStandardMaterial( EGColor(0.07568, 0.61424, 0.07568, 1), EGColor(0.633, 0.727811, 0.633, 1), 1)
-    val switchStraightModel = EGMeshModel([
+    val material = StandardMaterial( Color(0.07568, 0.61424, 0.07568, 1), Color(0.633, 0.727811, 0.633, 1), 1)
+    val switchStraightModel = MeshModel([
         (TR3D.switchStraight, material)
     ])
-    val switchTurnModel = EGMeshModel([
+    val switchTurnModel = MeshModel([
         (TR3D.switchTurn, material)
     ])
 
@@ -65,7 +65,7 @@ class TRSwitchView {
         val connector = theSwitch.connector
         val rail = theSwitch.activeRail
         val form = rail.form
-        EG.matrix(
+        matrix(
             _.modify(w = w -> w.translate(theSwitch.tile.x, theSwitch.tile.y, 0.03))
              .modify(m = m -> {
                 val m2 = m.rotate(connector.angle, 0, 1, 0).translate(-0.5, 0, 0)
@@ -91,10 +91,10 @@ class TRSwitchView {
 }
 
 class TRLightView {
-    val greenMaterial = EGStandardMaterial( EGColor(0.07568, 0.61424, 0.07568, 1), EGColor(0.633, 0.727811, 0.633, 1), 1)
-    val redMaterial = EGStandardMaterial(EGColor(0.61424, 0.04136, 0.04136, 1), EGColor(0.727811, 0.626959, 0.626959, 1), 1)
+    val greenMaterial = StandardMaterial( Color(0.07568, 0.61424, 0.07568, 1), Color(0.633, 0.727811, 0.633, 1), 1)
+    val redMaterial = StandardMaterial(Color(0.61424, 0.04136, 0.04136, 1), Color(0.727811, 0.626959, 0.626959, 1), 1)
     def draw(light : TRLight) {
-        EG.matrix(
+        matrix(
             _.modify(w = w -> w.translate(light.tile.x, light.tile.y, 0))
              .modify(m = m -> m.rotate(light.connector.angle, 0, 1, 0).translate(-0.45, 0, -0.2))
         ) {
@@ -104,9 +104,9 @@ class TRLightView {
 }
 
 class TRDamageView {
-    val model = EGMeshModel([(TR3D.damage, EGColor(1, 0, 0, 1))])
+    val model = MeshModel([(TR3D.damage, Color(1, 0, 0, 1))])
     def draw(point : TRRailPoint) {
-        EG.matrix(
+        matrix(
             _.modify(w = w -> w.translate(point.point.x, point.point.y, 0.0))
         ) {
             model.draw

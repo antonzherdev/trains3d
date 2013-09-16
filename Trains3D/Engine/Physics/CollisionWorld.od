@@ -1,0 +1,9 @@
+package com.antonzherdev.eg
+
+stub class CollisionWorld<T> {
+    def add(body : CollisionBody<T>)
+    def remove(body : CollisionBody<T>)
+
+    def detect : Iterable<Collision<T>>
+}
+

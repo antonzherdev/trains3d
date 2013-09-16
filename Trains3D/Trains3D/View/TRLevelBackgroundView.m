@@ -2,7 +2,7 @@
 
 #import "EGMapIso.h"
 #import "EGMaterial.h"
-#import "EG.h"
+#import "EGContext.h"
 @implementation TRLevelBackgroundView{
     EGMapSso* _map;
     EGMapSsoView* _mapView;
@@ -22,7 +22,7 @@ static ODType* _TRLevelBackgroundView_type;
     if(self) {
         _map = map;
         _mapView = [EGMapSsoView mapSsoViewWithMap:_map];
-        _material = [EGStandardMaterial applyDiffuse:[EGColorSource applyTexture:[EG textureForFile:@"Grass.png"]]];
+        _material = [EGStandardMaterial applyDiffuse:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Grass.png"]]];
     }
     
     return self;

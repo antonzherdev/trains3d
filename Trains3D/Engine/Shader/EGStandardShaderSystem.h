@@ -1,11 +1,11 @@
 #import "objd.h"
 #import "EGShader.h"
 #import "GEVec.h"
-@class EG;
+@class EGGlobal;
 @class EGContext;
-@class EGEnvironment;
-@class EGLight;
-@class EGDirectLight;
+@class EGEGEnvironment;
+@class EGEGLight;
+@class EGEGDirectLight;
 @class EGStandardMaterial;
 @class EGColorSource;
 @class EGVertexBuffer;

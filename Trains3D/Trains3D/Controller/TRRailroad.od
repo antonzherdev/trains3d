@@ -51,7 +51,7 @@ enum TRObstacleType {
 }
 class TRObstacle(obstacleType : TRObstacleType, point : TRRailPoint) {}
 
-class TRRailroad(map : EGMapSso, score : TRScore) {
+class TRRailroad(map : MapSso, score : TRScore) {
     private var _rails : [TRRail] = []
     def rails = _rails
     private var _switches : [TRSwitch] = []

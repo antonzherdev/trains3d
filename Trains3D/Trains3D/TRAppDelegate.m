@@ -4,7 +4,6 @@
 #import "TRLevelProcessor.h"
 #import "TRRailroad.h"
 #import "EGScene.h"
-#import "EGLayer.h"
 #import "EGMapIso.h"
 #import "TRScore.h"
 #import "TRTrain.h"

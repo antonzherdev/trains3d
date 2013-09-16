@@ -5,7 +5,7 @@ import com.antonzherdev.test._
 
 class TRDamageTest extends TestCase {
     def testMain {
-        val railroad = TRRailroad(EGMapSso(vec2i(4, 3)), TRScore(TRLevelFactory.scoreRules))
+        val railroad = TRRailroad(MapSso(vec2i(4, 3)), TRScore(TRLevelFactory.scoreRules))
 
         railroad.tryAdd(TRRail(vec2i(1, 1), TRRailForm.leftRight))
         railroad.addDamageAt(TRRailPoint(vec2i(1, 1), TRRailForm.leftRight, 0.2, false))

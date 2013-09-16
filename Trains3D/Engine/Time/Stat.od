@@ -1,0 +1,6 @@
+package com.antonzherdev.eg
+
+stub class Stat {
+    def draw
+    def tickWith(delta : float)
+}

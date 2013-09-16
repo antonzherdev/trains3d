@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "EGGL.h"
+#import "GL.h"
 
 @class EGMesh;
 @class EGMeshModel;

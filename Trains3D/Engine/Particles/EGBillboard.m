@@ -1,8 +1,8 @@
 #import "EGBillboard.h"
 
 #import "EGMesh.h"
-#import "EGGL.h"
-#import "EG.h"
+#import "GL.h"
+#import "EGContext.h"
 #import "EGTexture.h"
 @implementation EGBillboardShaderSystem
 static EGBillboardShaderSystem* _EGBillboardShaderSystem_instance;
@@ -194,8 +194,8 @@ static ODType* _EGBillboardShader_type;
     [_positionSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:3 valuesType:GL_FLOAT shift:0];
     [_modelSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(3 * 4))];
     [_colorSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:4 valuesType:GL_FLOAT shift:((NSUInteger)(5 * 4))];
-    [_wcUniform setMatrix:[EG.matrix.value wc]];
-    [_pUniform setMatrix:EG.matrix.value.p];
+    [_wcUniform setMatrix:[EGGlobal.matrix.value wc]];
+    [_pUniform setMatrix:EGGlobal.matrix.value.p];
     if(_texture) {
         [_uvSlot forEach:^void(EGShaderAttribute* _) {
             [_ setFromBufferWithStride:[vertexBuffer stride] valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(9 * 4))];

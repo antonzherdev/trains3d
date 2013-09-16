@@ -2,12 +2,12 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class TRLevelMenuProcessor(level : TRLevel) extends EGProcessor with EGMouseProcessor {
-    def process(event : EGEvent) : bool = {
+class TRLevelMenuProcessor(level : TRLevel) extends Processor with MouseProcessor {
+    def process(event : Event) : bool = {
         event.leftMouse(self)
     }
 
-    def mouseUp(event : EGEvent) : bool = {
+    def mouseUp(event : Event) : bool = {
         if(level.railroad.damagesPoints.isEmpty) return false
         if(level.repairer.isDefined) return false
 

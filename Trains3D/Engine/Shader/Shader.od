@@ -1,0 +1,118 @@
+package com.antonzherdev.eg
+
+class ShaderProgram(handle : GLuint) {
+    static def loadFromFiles(vertex : string, fragment : string) : ShaderProgram =
+        ShaderProgram(Bundle.readToString(vertex), Bundle.readToString(fragment))
+
+    static def apply(vertex : string, fragment : string) : ShaderProgram =  {
+        val vertexShader = compileShaderFor(GL_VERTEX_SHADER, vertex)
+        val fragmentShader = compileShaderFor(GL_FRAGMENT_SHADER, fragment)
+        val program = linkFromShaders(vertexShader, fragmentShader)
+        glDeleteShader(vertexShader)
+        glDeleteShader(fragmentShader)
+        program
+    }
+
+
+    static def linkFromShaders(vertex : GLuint, fragment : GLuint) : ShaderProgram = {
+        val handle = glCreateProgram
+        glAttachShader(handle, vertex)
+        glAttachShader(handle, fragment)
+        glLinkProgram(handle)
+        egGetProgramError(handle).for(throw "Error in shader program linking: " + _)
+        ShaderProgram(handle)
+    }
+
+    static def compileShaderFor(shaderType : GLenum, source : string) : GLuint = {
+        val shader = glCreateShader(shaderType)
+        egShaderSource(shader, source)
+        glCompileShader(shader)
+        egGetShaderError(shader).for(throw  "Error in shader compiling : " + _ + source)
+        shader
+    }
+
+    def dealoc {
+        glDeleteProgram(handle)
+    }
+
+    def set {
+        glUseProgram(handle)
+    }
+
+    def clear {
+        glUseProgram(0)
+    }
+
+    def apply(draw : () -> void) {
+        glUseProgram(handle)
+        draw()
+        glUseProgram(0)
+    }
+
+    def attributeFor(name : string ) : ShaderAttribute = {
+        val h = egGetAttribLocation(handle, name)
+        if(h < 0) throw "Could not found attribute for name " + name
+        val ret = ShaderAttribute(h)
+        ret
+    }
+    def uniformFor(name : string ) : ShaderUniform = {
+        val h = egGetUniformLocation(handle, name)
+        if(h < 0) throw "Could not found attribute for name " + name
+        ShaderUniform(h)
+    }
+}
+
+class Shader<M extends Material, D>(program : ShaderProgram) {
+    def draw(material : M, mesh : Mesh<D>) {
+        draw(material, mesh, 0, mesh.indexBuffer.count)
+    }
+
+    def draw(material : M, mesh : Mesh<D>, start : uint, count : uint) {
+        glUseProgram(program.handle)
+        mesh.vertexBuffer {
+            load(mesh.vertexBuffer, material)
+            mesh.indexBuffer.drawWith(start, count)
+            unload(material)
+        }
+        glUseProgram(0)
+    }
+
+    def load(vertexBuffer : VertexBuffer<D>, material : M)
+    def unload(material : M) {}
+
+    def attributeFor(name : string ) = program.attributeFor(name)
+    def uniformFor(name : string ) = program.uniformFor(name)
+}
+
+class ShaderAttribute(handle : GLuint) {
+    def setFromBufferWith(stride : uint, valuesCount : uint, valuesType : GLenum, shift : uint) {
+        glEnableVertexAttribArray(handle)
+        egVertexAttribPointer(handle, valuesCount, valuesType, GL_FALSE, stride, shift)
+    }
+}
+
+class ShaderUniform(handle : GLuint) {
+    def set(matrix : mat4) {
+        glUniformMatrix4fv(handle, 1, GL_FALSE, matrix.array)
+    }
+    def set(color : Color) {
+        egUniformColor(handle, color)
+    }
+    def set(vec3 : vec3) {
+        egUniformVec3(handle, vec3)
+    }
+    def set(number : float4) {
+        glUniform1f(handle, number)
+    }
+}
+
+class ShaderSystem<M extends Material> {
+    def draw(material : M, mesh : Mesh) {
+        val shader = shaderFor(material)
+        shader.draw(material, mesh)
+    }
+
+    def shaderFor(material : M) : Shader
+}
+
+

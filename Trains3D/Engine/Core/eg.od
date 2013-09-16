@@ -1,0 +1,11 @@
+package com.antonzherdev
+import com.antonzherdev.eg._
+
+stub object eg {
+    import com.antonzherdev.geometry._
+    import com.antonzherdev.gl._
+    import com.antonzherdev.gl.gl._
+    import com.antonzherdev.eg.Global._
+
+    val prefix = "EG"
+}

@@ -5,7 +5,7 @@
 @class EGMapSso;
 @class EGMatrixModel;
 @class GEMat4;
-@class EG;
+@class EGGlobal;
 @class EGMatrixStack;
 
 @class EGCameraIso;

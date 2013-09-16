@@ -1,6 +1,6 @@
 #import "objd.h"
 #import "EGTypes.h"
-#import "EGGL.h"
+#import "GL.h"
 @class EGTexture;
 @class EGShaderSystem;
 @class EGMesh;

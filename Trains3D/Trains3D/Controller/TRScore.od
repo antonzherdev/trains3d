@@ -7,7 +7,7 @@ class TRScoreRules(initialScore : int, railCost : int,
     delayPeriod : float, delayFine : (TRTrain, int) -> int,
     repairCost : int)
 
-class TRScore(rules : TRScoreRules) extends EGController {
+class TRScore(rules : TRScoreRules) extends Controller {
     private var _score : int = rules.initialScore
     def score : int = _score
 
@@ -40,7 +40,7 @@ class TRScore(rules : TRScoreRules) extends EGController {
     }
 }
 
-class TRTrainScore(train : TRTrain) extends EGController {
+class TRTrainScore(train : TRTrain) extends Controller {
     private var delayTime = 0.0
     private var fineCount = 0
 

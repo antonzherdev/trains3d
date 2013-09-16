@@ -5,7 +5,7 @@
 @class TRRailroadBuilder;
 @class EGMeshModel;
 @class TR3D;
-@class EG;
+@class EGGlobal;
 @class EGMaterial;
 @class EGColorSource;
 @class EGStandardMaterial;

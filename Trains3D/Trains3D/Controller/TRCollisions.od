@@ -4,7 +4,7 @@ import com.antonzherdev.eg._
 import core.math._
 
 class TRCollisionWorld {
-    private val world = EGCollisionWorld<TRCar>()
+    private val world = CollisionWorld<TRCar>()
 
     def add(train : TRTrain) {
         train.cars.for{car ->
@@ -39,10 +39,10 @@ class TRCollisionWorld {
 
 class TRCollision(cars : Pair<TRCar>, railPoint : TRRailPoint)
 
-class TRDynamicWorld extends EGController {
+class TRDynamicWorld extends Controller {
     private val world = {
-        val w = EGDynamicWorld<TRCar>(gravity = vec3(0, 0, -10))
-        val plane = EGRigidBody<TRCar>(nil, EGCollisionPlane(vec3(0, 0, 1), 0), false, 0)
+        val w = DynamicWorld<TRCar>(gravity = vec3(0, 0, -10))
+        val plane = RigidBody<TRCar>(nil, CollisionPlane(vec3(0, 0, 1), 0), false, 0)
         plane.friction = 0.4
         w.add(plane)
         w

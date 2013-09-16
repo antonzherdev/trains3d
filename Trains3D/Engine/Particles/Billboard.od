@@ -1,0 +1,122 @@
+package com.antonzherdev.eg
+
+class BillboardShaderSystem extends ShaderSystem<SimpleMaterial> {
+    static val instance = BillboardShaderSystem()
+
+    def shaderFor(material : SimpleMaterial) : BillboardShader = case(material.color)
+        ColorSourceColor(_) -> BillboardShader.instanceForColor
+        _ -> BillboardShader.instanceForTexture
+}
+
+class BillboardShader(program : ShaderProgram, texture : bool) extends Shader<SimpleMaterial, BillboardBufferData>(program) {
+    static lazy val instanceForColor = BillboardShader(ShaderProgram(
+        vertexTextWith(false, "", ""),
+        fragmentTextWith(false, "", "")), false)
+    static lazy val instanceForTexture = BillboardShader(ShaderProgram(
+        vertexTextWith(true, "", ""),
+        fragmentTextWith(true, "", "")), true)
+
+    static def vertexTextWith(texture : bool, parameters : string, code : string) =
+        "attribute vec3 position;
+         attribute vec2 model;
+         attribute vec2 vertexUV; $when(texture)
+         attribute vec4 vertexColor;
+
+         uniform mat4 wc;
+         uniform mat4 p;
+
+         varying vec2 UV; $when(texture)
+         varying vec4 fragColor;
+         $parameters
+
+         void main(void) {
+            float size = 0.03;
+            vec4 pos = wc*vec4(position, 1);
+            pos.x += model.x;
+            pos.y += model.y;
+            gl_Position = p*pos;
+            UV = vertexUV;
+            fragColor = vertexColor;
+            $code
+         }"
+    static def fragmentTextWith(texture : bool, parameters : string, code : string) =
+        "
+        $if(texture)
+         varying vec2 UV;
+         uniform sampler2D texture;
+        $else
+         uniform vec4 color;
+        $endif
+         varying vec4 fragColor;
+
+         $parameters
+         void main(void) {
+            gl_FragColor = fragColor * texture2D(texture, UV); $when(texture)
+            gl_FragColor = fragColor * color; $when(!texture)
+            $code
+         }"
+
+
+    val positionSlot = attributeFor("position")
+    val modelSlot = attributeFor("model")
+    val uvSlot : ShaderAttribute? = if(texture) attributeFor("vertexUV") else nil
+    val colorSlot = attributeFor("vertexColor")
+    val colorUniform : ShaderUniform? = if(texture) nil else uniformFor("color")
+
+    val wcUniform = uniformFor("wc")
+    val pUniform = uniformFor("p")
+
+    def load(vertexBuffer : VertexBuffer<BillboardBufferData>, material : SimpleMaterial) {
+        positionSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 3, GL_FLOAT, shift = 0)
+        modelSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 2, GL_FLOAT, shift = 3*4)
+        colorSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 4, GL_FLOAT, shift = 5*4)
+        wcUniform.set(matrix = matrix.value.wc)
+        pUniform.set(matrix = matrix.value.p)
+        if(texture) {
+            uvSlot.for(_.setFromBufferWith(vertexBuffer.stride, valuesCount = 2, GL_FLOAT, shift = 9*4))
+            material.color.cast<ColorSourceTexture>.texture.bind
+        } else {
+            colorUniform.get.set(color = material.color.cast<ColorSourceColor>.color)
+        }
+    }
+
+    def unload(material : SimpleMaterial) {
+        if(texture) Texture.unbind
+    }
+}
+
+struct BillboardBufferData(position : vec3, model : vec2, color : vec4, uv : vec2)
+
+
+class BillboardParticleSystem extends ParticleSystem<BillboardParticle>
+
+
+class BillboardParticle(lifeLength : float4) extends Particle(lifeLength) {
+    var position : vec3
+    var uv : Quad
+    var model : Quad
+    var color : vec4
+
+    def writeTo(array : VoidRefArray) : VoidRefArray = {
+        array
+            .write(BillboardBufferData, BillboardBufferData(position, model.p1, color, uv.p1))
+            .write(BillboardBufferData, BillboardBufferData(position, model.p2, color, uv.p2))
+            .write(BillboardBufferData, BillboardBufferData(position, model.p3, color, uv.p3))
+            .write(BillboardBufferData, BillboardBufferData(position, model.p4, color, uv.p4))
+    }
+}
+
+class BillboardParticleSystemView(maxCount : uint, material : SimpleMaterial, blendFunc : BlendFunction)
+    extends  ParticleSystemView<BillboardParticle, BillboardBufferData>(BillboardBufferData.type, maxCount, blendFunc)
+{
+    static def apply(maxCount : uint, material : SimpleMaterial) =
+        BillboardParticleSystemView(maxCount, material, BlendFunction.standard)
+    val shader : Shader =  BillboardShaderSystem.instance.shaderFor(material)
+    def vertexCount : uint = 4
+
+    def writeIndexesTo(indexPointer : VoidRefArray, i : uint4) : VoidRefArray = {
+        indexPointer
+            .write(uInt4 = i).write(uInt4 = i + 1).write(uInt4 = i + 2)
+            .write(uInt4 = i + 2).write(uInt4 = i).write(uInt4 = i + 3)
+    }
+}

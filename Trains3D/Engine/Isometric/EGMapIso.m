@@ -1,6 +1,6 @@
 #import "EGMapIso.h"
 
-#import "EGGL.h"
+#import "GL.h"
 #import "EGMaterial.h"
 @implementation EGMapSso{
     GEVec2i _size;

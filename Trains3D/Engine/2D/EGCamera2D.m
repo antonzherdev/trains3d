@@ -1,8 +1,8 @@
 #import "EGCamera2D.h"
 
-#import "EG.h"
+#import "EGContext.h"
 #import "GEMat4.h"
-#import "EGGL.h"
+#import "GL.h"
 @implementation EGCamera2D{
     GEVec2 _size;
     EGMatrixModel* _matrixModel;
@@ -43,7 +43,7 @@ static ODType* _EGCamera2D_type;
 
 - (void)focusForViewSize:(GEVec2)viewSize {
     egViewport(geRectIApplyRect([self viewportRectForViewSize:viewSize]));
-    EG.matrix.value = _matrixModel;
+    EGGlobal.matrix.value = _matrixModel;
 }
 
 - (GEVec2)translateWithViewSize:(GEVec2)viewSize viewPoint:(GEVec2)viewPoint {

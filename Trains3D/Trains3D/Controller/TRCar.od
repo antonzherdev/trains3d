@@ -30,18 +30,18 @@ enum TRCarType(
     val wheelToEnd = wheelToBack + backToEnd
     val fullLength : float = startToWheel + betweenWheels + wheelToEnd
     def isEngine : bool = engineType.isDefined
-    val collision2dShape : EGCollisionShape = EGCollisionBox2d((frontToWheel + betweenWheels + wheelToBack)/2, width/2)
-    val rigidShape : EGCollisionShape = EGCollisionBox((frontToWheel + betweenWheels + wheelToBack)/2, width/2, height/2)
+    val collision2dShape : CollisionShape = CollisionBox2d((frontToWheel + betweenWheels + wheelToBack)/2, width/2)
+    val rigidShape : CollisionShape = CollisionBox((frontToWheel + betweenWheels + wheelToBack)/2, width/2, height/2)
 }
 
 class TRCar(weak train : TRTrain, carType : TRCarType) {
-    val collisionBody = EGCollisionBody(self, carType.collision2dShape, isKinematic = true)
+    val collisionBody = CollisionBody(self, carType.collision2dShape, isKinematic = true)
     lazy val dynamicBody = {
         val line = position.line
         val len = line.length
         val vec = line.vec
         val mid = midPoint
-        val b = EGRigidBody.dynamic(self, carType.rigidShape, carType.weight)
+        val b = RigidBody.dynamic(self, carType.rigidShape, carType.weight)
         b.matrix = mat4.identity.translate(mid.x, mid.y, carType.height/2).rotate(line.degreeAngle, 0, 0, 1)
         val rnd = vec3(randomFloatGap(-0.1, 0.1), randomFloatGap(-0.1, 0.1), randomFloatGap(0, 5))
         val vel = vec3(vec.mul(train.speedFloat/len*2), 0).add(rnd)

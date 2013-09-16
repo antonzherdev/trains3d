@@ -1,0 +1,49 @@
+package com.antonzherdev.eg
+
+class ColorSource {
+    static def apply(color : Color) : ColorSource = ColorSourceColor(color)
+    static def apply(texture : Texture) : ColorSource = ColorSourceTexture(texture)
+}
+
+class ColorSourceColor(color : Color) extends ColorSource
+class ColorSourceTexture(texture : Texture) extends ColorSource
+
+
+class Material {
+    def shaderSystem : ShaderSystem<self>
+    def draw(mesh : Mesh) {
+        shaderSystem.draw(self, mesh)
+    }
+
+    static def apply(color : Color) : Material = StandardMaterial(color)
+    static def apply(texture : Texture) : Material = StandardMaterial(texture)
+}
+
+class SimpleMaterial(color : ColorSource) extends Material {
+    def shaderSystem : ShaderSystem<self> = SimpleShaderSystem.instance
+}
+
+class StandardMaterial(diffuse : ColorSource, specularColor : Color, specularSize : float)  extends Material {
+    static def apply(diffuse : ColorSource) = StandardMaterial(diffuse, Color(0, 0, 0, 1), 1)
+    def shaderSystem : ShaderSystem<self> = StandardShaderSystem.instance
+}
+
+class MeshModel(meshes : [(Mesh, Material)]) {
+    def draw {
+        meshes.for(p -> p.b.draw(mesh = p.a))
+    }
+}
+
+struct BlendFunction(source : GLenum, destination : GLenum) {
+    static val standard : BlendFunction = BlendFunction(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+    static val premultiplied : BlendFunction = BlendFunction(GL_ONE, GL_ONE_MINUS_SRC_ALPHA)
+    def apply(draw : () -> void) {
+        glEnable(GL_BLEND)
+        glBlendFunc(source, destination)
+
+        draw()
+        glDisable(GL_BLEND)
+    }
+}
+
+

@@ -3,26 +3,26 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg.EGMesh
 
 stub class TR3D {
-    static val railTies : EGMesh = nil
-    static val railGravel : EGMesh = nil
-    static val rails : EGMesh = nil
+    static val railTies : Mesh = nil
+    static val railGravel : Mesh = nil
+    static val rails : Mesh = nil
 
-    static val railTurnTies : EGMesh = nil
-    static val railTurnGravel : EGMesh = nil
-    static val railsTurn : EGMesh = nil
+    static val railTurnTies : Mesh = nil
+    static val railTurnGravel : Mesh = nil
+    static val railsTurn : Mesh = nil
 
-    static val switchStraight : EGMesh = nil
-    static val switchTurn : EGMesh = nil
-    static val light : EGMesh = nil
+    static val switchStraight : Mesh = nil
+    static val switchTurn : Mesh = nil
+    static val light : Mesh = nil
 
-    static val city : EGMesh = nil
+    static val city : Mesh = nil
 
-    static val car : EGMesh = nil
-    static val carBlack : EGMesh = nil
+    static val car : Mesh = nil
+    static val carBlack : Mesh = nil
 
-    static val engine : EGMesh = nil
-    static val engineBlack : EGMesh = nil
-    static val engineFloor : EGMesh = nil
+    static val engine : Mesh = nil
+    static val engineBlack : Mesh = nil
+    static val engineFloor : Mesh = nil
 
-    static val damage : EGMesh = nil
+    static val damage : Mesh = nil
 }

@@ -4,7 +4,7 @@
 #import "EGMaterial.h"
 #import "TRTrain.h"
 #import "TRTypes.h"
-#import "EG.h"
+#import "EGContext.h"
 #import "TRCar.h"
 #import "GEFigure.h"
 #import "GEMat4.h"
@@ -53,7 +53,7 @@ static ODType* _TRTrainView_type;
 - (void)drawTrain:(TRTrain*)train {
     EGMaterial* material = [self trainMaterialForColor:train.color.color];
     [[train cars] forEach:^void(TRCar* car) {
-        [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
+        [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
             return [[_ modifyW:^GEMat4*(GEMat4* w) {
                 GEVec2 mid = [[car position].line mid];
                 return [w translateX:mid.x y:mid.y z:0.04];
@@ -88,7 +88,7 @@ static ODType* _TRTrainView_type;
 - (void)drawDyingTrain:(TRTrain*)dyingTrain {
     EGMaterial* material = [self trainMaterialForColor:dyingTrain.color.color];
     [[dyingTrain cars] forEach:^void(TRCar* car) {
-        [EG.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
+        [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
             return [_ modifyM:^GEMat4*(GEMat4* m) {
                 return [[[car dynamicBody].matrix translateX:0.0 y:0.0 z:((float)(-car.carType.height / 2 + 0.04))] mulMatrix:[m rotateAngle:90.0 x:0.0 y:1.0 z:0.0]];
             }];

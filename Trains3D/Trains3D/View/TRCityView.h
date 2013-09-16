@@ -2,7 +2,7 @@
 #import "EGMesh.h"
 #import "GEVec.h"
 #import "EGTypes.h"
-@class EG;
+@class EGGlobal;
 @class TRCity;
 @class GEMat4;
 @class EGMatrixModel;

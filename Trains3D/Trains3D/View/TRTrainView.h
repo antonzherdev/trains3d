@@ -8,7 +8,7 @@
 @class TRTrain;
 @class TRSmoke;
 @class TRColor;
-@class EG;
+@class EGGlobal;
 @class TRCar;
 @class TRCarPosition;
 @class GELineSegment;

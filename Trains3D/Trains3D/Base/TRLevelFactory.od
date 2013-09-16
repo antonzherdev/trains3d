@@ -3,9 +3,9 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 
 class TRLevelFactory {
-    static def sceneFor(level : TRLevel) = EGScene(level, [
-        EGLayer(TRLevelView(level), TRLevelProcessor(level)),
-        EGLayer(TRLevelMenuView(level), TRLevelMenuProcessor(level))
+    static def sceneFor(level : TRLevel) = Scene(level, [
+        Layer(TRLevelView(level), TRLevelProcessor(level)),
+        Layer(TRLevelMenuView(level), TRLevelMenuProcessor(level))
     ])
 
     static val scoreRules = TRScoreRules(
@@ -33,5 +33,5 @@ class TRLevelFactory {
     static def levelWith(mapSize : vec2i) = TRLevel(TRLevelRules(mapSize, scoreRules, repairerSpeed = 30, []))
     static def sceneForLevelWith(number : uint) = sceneFor(levelWith(number))
     static def score = TRScore(scoreRules)
-    static def railroadWith(mapSize : vec2i) = TRRailroad(EGMapSso(mapSize), score)
+    static def railroadWith(mapSize : vec2i) = TRRailroad(MapSso(mapSize), score)
 }

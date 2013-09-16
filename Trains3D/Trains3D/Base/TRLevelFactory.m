@@ -6,7 +6,6 @@
 #import "EGScene.h"
 #import "TRLevelView.h"
 #import "TRLevelProcessor.h"
-#import "EGLayer.h"
 #import "TRLevelMenuView.h"
 #import "TRLevelMenuProcessor.h"
 #import "TRCar.h"

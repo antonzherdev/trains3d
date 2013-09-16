@@ -1,0 +1,59 @@
+package com.antonzherdev.eg
+
+
+
+class Director {
+    var scene : Scene
+    private var _isStarted = false
+    private var _isPaused = false
+    val time : Time = Time()
+
+    def drawWith(size : vec2) {
+        context.director = self
+        glClearColor(0.0, 0.0, 0.0, 1)
+        egClear
+        matrix.clear
+        glEnable(GL_DEPTH_TEST)
+        glEnable(GL_CULL_FACE)
+        scene.drawWith(size)
+        glDisable(GL_DEPTH_TEST)
+        _stat.for(_.draw)
+    }
+
+    def process(event : Event) {
+        scene.process(event)
+    }
+
+    def isStarted = _isStarted
+    def start {
+        _isStarted = true
+        time.start
+    }
+    def stop {
+        _isStarted = false
+    }
+
+    def isPaused = _isPaused
+    def pause {
+        _isPaused = true
+    }
+
+    def resume {
+        if(_isPaused) {
+            _isPaused = false
+            time.start
+        }
+    }
+
+    def tick {
+        time.tick
+        scene.updateWith(time.delta)
+        _stat.for(_.tickWith(time.delta))
+    }
+
+    private var _stat : Stat? = nil
+    def stat = _stat
+    def isDisplayingStats = _stat.isDefined
+    def displayStats {_stat = Stat()}
+    def cancelDisplayingStats {_stat = nil}
+}

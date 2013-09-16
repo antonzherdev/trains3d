@@ -1,0 +1,125 @@
+package com.antonzherdev.eg
+
+
+
+class MapSso(size : vec2i) {
+    static val ISO = 0.70710676908493
+
+    val limits = RectI.newXY((1 - size.y)/2 - 1,
+                         (2*size.x + size.y - 3)/2 + 1,
+                         (1 - size.x)/2 - 1,
+                         (size.x + 2*size.y - 3)/2 + 1)
+    val fullTiles : [vec2i] = allPosibleTiles.filter(isFull(_)).toArray
+    val partialTiles : [vec2i] = allPosibleTiles.filter(isPartial(_)).toArray
+    val allTiles : [vec2i] = fullTiles + partialTiles
+
+    def isFull(tile : vec2i) : bool =
+        tile.y + tile.x >= 0 //left
+        && tile.y - tile.x <= size.y - 1 //top
+        && tile.y + tile.x <= size.x + size.y - 2 //right
+        && tile.y - tile.x >= -size.x + 1
+
+    def isPartial(tile : vec2i) : bool =
+        tile.y + tile.x >= -1 //left
+        && tile.y - tile.x <= size.y //top
+        && tile.y + tile.x <= size.x + size.y - 1 //right
+        && tile.y - tile.x >= -size.x && (
+            tile.y + tile.x == -1 //left
+            || tile.y - tile.x == size.y //top
+            || tile.y + tile.x == size.x + size.y - 1 //right
+            || tile.y - tile.x == -size.x //bottom
+        )
+
+    private def allPosibleTiles : Chain<vec2i> =
+        Range(start = limits.x, end = limits.x2, step = 1).chain
+            .mul<int>(Range(start = limits.y, end = limits.y2, step = 1))
+            .map(vec2i(_.a, _.b))
+
+    private def tileCutAxis(less : int, more : int) : int =
+        if(less == more) 1
+        else if(less < more) 0
+        else 2
+
+    def cutRectFor(tile : vec2i) = RectI.newXY(
+        tileCutAxis(0, tile.x + tile.y),
+        tileCutAxis(tile.x + tile.y, size.x + size.y - 2),
+        tileCutAxis(tile.y - tile.x, size.y - 1),
+        tileCutAxis(-size.x + 1, tile.y - tile.x))
+}
+
+class MapSsoView(map : MapSso) {
+    def drawLayout {
+        /*glPushMatrix
+        egRotate(45, 0, 0, 1)
+        glBegin(GL_LINES)
+        {
+            val ISO = EGMapSso.ISO
+            val size = map.size
+            val left = -ISO
+            val top = ISO*size.height
+            val bottom = ISO*(-size.width)
+            val right = ISO*(size.width + size.height - 1)
+            egNormal3(0, 0, 1)
+            egVertex3(left, top, 0.0)
+            egVertex3(left, bottom, 0.0)
+
+            egVertex3(left, bottom, 0.0)
+            egVertex3(right, bottom, 0.0)
+
+            egVertex3(right, bottom, 0.0)
+            egVertex3(right, top, 0.0)
+
+            egVertex3(right, top, 0.0)
+            egVertex3(left, top, 0.0)
+        }
+        glEnd
+        glPopMatrix
+
+        egColor3(1.0, 1.0, 1.0)
+        glBegin(GL_LINES)
+        {
+            map.fullTiles.for(tile -> {
+                val p = tile
+                egNormal3(0, 0, 1)
+                egVertex3(p.x - 0.5, p.y - 0.5, 0.0)
+                egVertex3(p.x + 0.5, p.y - 0.5, 0.0)
+
+                egVertex3(p.x + 0.5, p.y - 0.5, 0.0)
+                egVertex3(p.x + 0.5, p.y + 0.5, 0.0)
+
+                egVertex3(p.x + 0.5, p.y + 0.5, 0.0)
+                egVertex3(p.x - 0.5, p.y + 0.5, 0.0)
+
+                egVertex3(p.x - 0.5, p.y + 0.5, 0.0)
+                egVertex3(p.x - 0.5, p.y - 0.5, 0.0)
+            })
+        }
+        glEnd
+        egMapDrawAxis   */
+    }
+
+
+    val plane  = createPlane
+    def createPlane : Mesh = {
+        val limits = map.limits
+        val l = limits.x - 2.5
+        val r = limits.x2 + 0.5
+        val t = limits.y - 2.5
+        val b = limits.y2 + 0.5
+        val w = limits.width + 3
+        val h = limits.height + 3
+        Mesh(MeshData.type, [
+            0, 0, 0, 1, 0, l, 0, b,
+            w, 0, 0, 1, 0, r, 0, b,
+            w, h, 0, 1, 0, r, 0, t,
+            0, h, 0, 1, 0, l, 0, t
+        ], [0, 1, 2,
+            2, 3, 0])
+    }
+
+    def drawPlaneWith(material : Material) {
+        glDisable(GL_CULL_FACE)
+        material.draw(plane)
+        glEnable(GL_CULL_FACE)
+    }
+}

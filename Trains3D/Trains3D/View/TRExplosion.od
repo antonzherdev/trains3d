@@ -2,10 +2,10 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 import core.math._
-import com.antonzherdev.eg.EGProgress._
+import com.antonzherdev.eg.Progress._
 
 
-class TRExplosion(position : vec3, size : float4) extends EGController {
+class TRExplosion(position : vec3, size : float4) extends Controller {
     val flame = TRExplosionFlame(position, size).init
     def updateWith(delta : float) {
         flame.updateWith(delta)
@@ -17,8 +17,8 @@ class TRExplosion(position : vec3, size : float4) extends EGController {
     }
 }
 
-class TRExplosionFlame(position : vec3, size : float4) extends EGBillboardParticleSystem {
-    def generateParticle : EGBillboardParticle = TRExplosionFlameParticle(position, size)
+class TRExplosionFlame(position : vec3, size : float4) extends BillboardParticleSystem {
+    def generateParticle : BillboardParticle = TRExplosionFlameParticle(position, size)
 
     def init : TRExplosionFlame = {
         4.range.for(emitParticle)
@@ -26,7 +26,7 @@ class TRExplosionFlame(position : vec3, size : float4) extends EGBillboardPartic
     }
 }
 
-class TRExplosionFlameParticle(size : float4, startShift : vec2, shift : vec2) extends EGBillboardParticle(2) {
+class TRExplosionFlameParticle(size : float4, startShift : vec2, shift : vec2) extends BillboardParticle(2) {
     static val startColor = vec4(1, 0.4, 0, 0.3)
     static val textureQuadrant : Quadrant = Quad.identity.mul(0.5).quadrant
     static def apply(position : vec3, size : float4) : TRExplosionFlameParticle = {
@@ -61,8 +61,8 @@ class TRExplosionFlameParticle(size : float4, startShift : vec2, shift : vec2) e
 }
 
 class TRExplosionView {
-    val material = EGSimpleMaterial(EG.textureFor("Explosion.png"))
-    val view = EGBillboardParticleSystemView(4, material, EGBlendFunction.premultiplied)
+    val material = SimpleMaterial(textureFor("Explosion.png"))
+    val view = BillboardParticleSystemView(4, material, BlendFunction.premultiplied)
 
     def draw(explosion : TRExplosion) {
         view.draw(explosion.flame)

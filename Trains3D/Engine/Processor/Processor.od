@@ -1,0 +1,49 @@
+package com.antonzherdev.eg
+
+trait Processor {
+    def process(event : Event) : bool
+}
+
+trait MouseProcessor {
+    def mouseDown(event : Event) : bool = false
+    def mouseDrag(event : Event)  : bool = false
+    def mouseUp(event : Event) : bool = false
+}
+
+trait TouchProcessor {
+    def touchBegan(event : Event) : bool = false
+    def touchMoved(event : Event) : bool = false
+    def touchEnded(event : Event) : bool = false
+    def touchCanceled(event : Event) : bool = false
+}
+
+class Event(viewSize : vec2, camera : Camera?) {
+    def set(camera : Camera?) : Event
+
+    def locationInView : vec2
+    def location = locationFor(0)
+    def locationFor(depth : float) : vec2 =
+        if(camera.isEmpty) locationInView
+        else camera.get.translateWith(viewSize, locationInView)
+
+    def isLeftMouseDown : bool
+    def isLeftMouseDrag : bool
+    def isLeftMouseUp : bool
+    def leftMouse(processor : MouseProcessor) : bool =
+        if(isLeftMouseDown) processor.mouseDown(self)
+        else if(isLeftMouseDrag) processor.mouseDrag(self)
+        else if(isLeftMouseUp) processor.mouseUp(self)
+        else false
+
+
+    def isTouchBegan : bool
+    def isTouchMoved : bool
+    def isTouchEnded : bool
+    def isTouchCanceled : bool
+    def touch(processor : TouchProcessor) : bool =
+        if(isTouchBegan) processor.touchBegan(self)
+        else if(isTouchMoved) processor.touchMoved(self)
+        else if(isTouchEnded) processor.touchEnded(self)
+        else if(isTouchCanceled) processor.touchCanceled(self)
+        else false
+}

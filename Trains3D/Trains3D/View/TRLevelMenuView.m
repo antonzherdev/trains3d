@@ -1,8 +1,9 @@
 #import "TRLevelMenuView.h"
 
 #import "TRLevel.h"
+#import "EGTypes.h"
 #import "EGCamera2D.h"
-#import "EGGL.h"
+#import "GL.h"
 #import "TRScore.h"
 #import "EGText.h"
 #import "EGSchedule.h"
@@ -43,8 +44,8 @@ static ODType* _TRLevelMenuView_type;
     }
 }
 
-- (EGEnvironment*)environment {
-    return EGEnvironment.aDefault;
+- (EGEGEnvironment*)environment {
+    return EGEGEnvironment.aDefault;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

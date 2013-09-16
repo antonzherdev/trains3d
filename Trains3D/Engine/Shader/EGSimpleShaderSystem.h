@@ -5,7 +5,7 @@
 @class EGColorSourceColor;
 @class EGColorSourceTexture;
 @class EGVertexBuffer;
-@class EG;
+@class EGGlobal;
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class EGTexture;

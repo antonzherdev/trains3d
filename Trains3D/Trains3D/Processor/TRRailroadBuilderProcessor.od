@@ -3,24 +3,24 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 import core.math._
 
-class TRRailroadBuilderProcessor(builder : TRRailroadBuilder) extends EGProcessor {
+class TRRailroadBuilderProcessor(builder : TRRailroadBuilder) extends Processor {
     private val mouseProcessor = TRRailroadBuilderMouseProcessor(builder)
-    private val touchProcessor = EGTwoFingerTouchToMouse(mouseProcessor)
+    private val touchProcessor = TwoFingerTouchToMouse(mouseProcessor)
 
-    def process(event : EGEvent) : bool = event.leftMouse(mouseProcessor) || event.touch(touchProcessor)
+    def process(event : Event) : bool = event.leftMouse(mouseProcessor) || event.touch(touchProcessor)
 }
 
 struct TRRailCorrection (tile : vec2i, start : vec2i, end : vec2i)
 
-class TRRailroadBuilderMouseProcessor(builder : TRRailroadBuilder) extends EGMouseProcessor {
+class TRRailroadBuilderMouseProcessor(builder : TRRailroadBuilder) extends MouseProcessor {
     private var startedPoint : vec2? = nil
 
-    def mouseDown(event : EGEvent) = {
+    def mouseDown(event : Event) = {
         startedPoint = event.location
         true
     }
 
-    def mouseDrag(event : EGEvent) = startedPoint.map(sp -> {
+    def mouseDrag(event : Event) = startedPoint.map(sp -> {
         val deltaVector = event.location.sub(sp)
         if(deltaVector.lengthSquare > 0.25) {
             val spTile : vec2i = sp
@@ -31,7 +31,7 @@ class TRRailroadBuilderMouseProcessor(builder : TRRailroadBuilder) extends EGMou
         true
     }).getOr(false)
 
-    def mouseUp(event : EGEvent) = startedPoint.map(point -> {
+    def mouseUp(event : Event) = startedPoint.map(point -> {
         builder.fix
         startedPoint = nil
         true

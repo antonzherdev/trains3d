@@ -1,0 +1,27 @@
+package com.antonzherdev.eg
+
+stub class DynamicWorld<T>(gravity : vec3) extends Controller {
+    private val _bodies = MutableArray<RigidBody<T>>()
+    def bodies : [RigidBody<T>] = _bodies
+    def add(body : RigidBody<T>) {
+        _bodies.add(body)
+    }
+    def remove(body : RigidBody<T>) {
+        _bodies.remove(body)
+    }
+}
+
+stub class RigidBody<T>(data : T, shape : CollisionShape, isKinematic : bool, mass : float4) {
+    var friction : float4
+    var bounciness : float4
+    var matrix : mat4
+    var velocity : vec3
+    var angularVelocity : vec3
+
+    val isDynamic = !isKinematic && mass > 0
+    val isStatic = !isKinematic && mass <= 0
+    static def kinematic<T>(data : T, shape : CollisionShape) = RigidBody<T>(data, shape, true, 0)
+    static def dynamic<T>(data : T, shape : CollisionShape, mass : float4) = RigidBody<T>(data, shape, false, mass)
+    static def statical<T>(data : T, shape : CollisionShape) = RigidBody<T>(data, shape, false, 0)
+    val obj : VoidRef = nil
+}

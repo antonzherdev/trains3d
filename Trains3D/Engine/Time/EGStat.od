@@ -1,6 +1,0 @@
-package com.antonzherdev.eg
-
-stub class EGStat {
-    def draw
-    def tickWith(delta : float)
-}

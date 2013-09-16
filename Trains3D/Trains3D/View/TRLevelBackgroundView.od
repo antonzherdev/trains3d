@@ -2,9 +2,9 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class TRLevelBackgroundView(map : EGMapSso) {
-    val mapView = EGMapSsoView(map)
-    val material = EGStandardMaterial(EG.textureFor("Grass.png"))
+class TRLevelBackgroundView(map : MapSso) {
+    val mapView = MapSsoView(map)
+    val material = StandardMaterial(textureFor("Grass.png"))
 
     def draw {
         mapView.drawPlaneWith(material)

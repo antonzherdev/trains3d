@@ -1,0 +1,29 @@
+package com.antonzherdev.eg
+
+import core.math._
+
+
+class Camera2D(size : vec2) extends Camera {
+    private def factorFor(viewSize : vec2) : float = min(viewSize.x/size.x, viewSize.y/size.y)
+    private def viewportRectFor(viewSize : vec2) : Rect = viewportRectFor(viewSize, factorFor(viewSize))
+    private def viewportRectFor(viewSize : vec2, factor : float) : Rect =
+        Rect(0, size.x*factor, 0, size.y*factor).moveToCenterFor(viewSize)
+
+    private val matrixModel : MatrixModel = MatrixModel(
+        m = mat4.identity,
+        w = mat4.identity,
+        c = mat4.identity,
+        p = mat4.ortho(0, size.x, 0, size.y, -1, 1)
+    )
+    def focusFor(viewSize : vec2) {
+        egViewport(viewportRectFor(viewSize))
+
+        matrix.value = matrixModel
+    }
+
+    def translateWith(viewSize : vec2, viewPoint : vec2) : vec2 = {
+        val factor = factorFor(viewSize)
+        val viewport = viewportRectFor(viewSize, factor)
+        viewPoint.sub(viewport.point).div(factor)
+    }
+}

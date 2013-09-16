@@ -8,7 +8,7 @@
 @class TREngineType;
 @class TRCarPosition;
 @class TRRailPoint;
-@class EG;
+@class EGGlobal;
 
 @class TRSmoke;
 @class TRSmokeParticle;
