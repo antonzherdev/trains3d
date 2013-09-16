@@ -39,7 +39,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)updateT:(float)t dt:(float)dt;
-+ (NSInteger)dragCoefficient;
++ (CGFloat)dragCoefficient;
 + (ODClassType*)type;
 @end
 

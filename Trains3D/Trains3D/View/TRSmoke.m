@@ -12,11 +12,11 @@
     CGFloat _emitTime;
 }
 static CGFloat _TRSmoke_zSpeed = 0.1;
-static CGFloat _TRSmoke_emitEvery = 0.005;
+static CGFloat _TRSmoke_emitEvery = 0.01;
 static float _TRSmoke_particleSize = 0.03;
 static GEQuad _TRSmoke_modelQuad;
 static GEQuadrant _TRSmoke_textureQuadrant;
-static GEVec4 _TRSmoke_defColor = {1.0, 1.0, 1.0, 0.7};
+static GEVec4 _TRSmoke_defColor = {0.3, 0.3, 0.3, 0.3};
 static ODClassType* _TRSmoke_type;
 @synthesize train = _train;
 
@@ -65,7 +65,7 @@ static ODClassType* _TRSmoke_type;
     p.model = _TRSmoke_modelQuad;
     p.uv = geQuadrantRandomQuad(_TRSmoke_textureQuadrant);
     GEVec3 s = geVec3ApplyVec2Z(geVec2SetLength((([_train isBack]) ? geVec2SubVec2(fPos, bPos) : delta), ((float)(_train.speedFloat))), ((float)(_TRSmoke_zSpeed)));
-    p.speed = GEVec3Make(-s.x * randomPercents(0.6), -s.y * randomPercents(0.6), s.z * randomPercents(0.6));
+    p.speed = GEVec3Make(-s.x * randomPercents(0.3), -s.y * randomPercents(0.3), s.z * randomPercents(0.3));
     return p;
 }
 
@@ -124,7 +124,7 @@ static ODClassType* _TRSmoke_type;
     GEVec3 _speed;
     void(^_animation)(float);
 }
-static NSInteger _TRSmokeParticle_dragCoefficient = 1;
+static CGFloat _TRSmokeParticle_dragCoefficient = 0.5;
 static ODClassType* _TRSmokeParticle_type;
 @synthesize speed = _speed;
 @synthesize animation = _animation;
@@ -134,7 +134,7 @@ static ODClassType* _TRSmokeParticle_type;
 }
 
 - (id)init {
-    self = [super initWithLifeLength:4.0];
+    self = [super initWithLifeLength:2.0];
     __weak TRSmokeParticle* _weakSelf = self;
     if(self) _animation = ^id() {
         id(^__l)(float) = ^id() {
@@ -145,7 +145,7 @@ static ODClassType* _TRSmokeParticle_type;
                     return __r(__l(_));
                 };
             }();
-            float(^__r)(float) = [EGProgress progressF4:1.0 f42:0.0];
+            float(^__r)(float) = [EGProgress progressF4:0.3 f42:0.0];
             return ^id(float _) {
                 return [__l(_) map:^id(id _) {
                     return numf4(__r(unumf4(_)));
@@ -153,7 +153,7 @@ static ODClassType* _TRSmokeParticle_type;
             };
         }();
         void(^__r)(float) = ^void(float _) {
-            _weakSelf.color = GEVec4Make(1.0, 1.0, 1.0, _);
+            _weakSelf.color = GEVec4Make(_, _, _, _);
         };
         return ^void(float _) {
             [__l(_) forEach:^void(id _) {
@@ -181,7 +181,7 @@ static ODClassType* _TRSmokeParticle_type;
     return [TRSmokeParticle type];
 }
 
-+ (NSInteger)dragCoefficient {
++ (CGFloat)dragCoefficient {
     return _TRSmokeParticle_dragCoefficient;
 }
 
@@ -220,7 +220,7 @@ static ODClassType* _TRSmokeView_type;
 }
 
 - (id)init {
-    self = [super initWithMaxCount:800 material:[EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Smoke.png"]]] blendFunc:egBlendFunctionStandard()];
+    self = [super initWithMaxCount:200 material:[EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Smoke.png"]]] blendFunc:egBlendFunctionPremultiplied()];
     
     return self;
 }

@@ -10,7 +10,7 @@ class Smoke(weak train : Train) extends BillboardParticleSystem {
     private val engine : Car = train.cars.head.get
     private val tubePos = engine.carType.engineType.get.tubePos
     private static val zSpeed = 0.1
-    private static val emitEvery = 0.005
+    private static val emitEvery = 0.01
     private var emitTime = 0.0
 
     def generateParticlesWith(delta : float) {
@@ -26,7 +26,7 @@ class Smoke(weak train : Train) extends BillboardParticleSystem {
     static val particleSize : float4 = 0.03
     static val modelQuad = Quad(particleSize)
     static val textureQuadrant : Quadrant = Quad.identity.quadrant
-    static val defColor = vec4(1, 1, 1, 0.7)
+    static val defColor = vec4(0.3, 0.3, 0.3, 0.3)
     def generateParticle : SmokeParticle =  {
         val pos = engine.position
         val fPos = pos.head.point
@@ -41,16 +41,16 @@ class Smoke(weak train : Train) extends BillboardParticleSystem {
         p.model = modelQuad
         p.uv = textureQuadrant.randomQuad
         val s = vec3((if(train.isBack) fPos.sub(bPos) else delta).set(length = train.speedFloat), zSpeed)
-        p.speed = vec3(-s.x * randomPercents(0.6), -s.y * randomPercents(0.6), s.z * randomPercents(0.6))
+        p.speed = vec3(-s.x * randomPercents(0.3), -s.y * randomPercents(0.3), s.z * randomPercents(0.3))
         p
     }
 }
 
-class SmokeParticle extends BillboardParticle(4) {
+class SmokeParticle extends BillboardParticle(2) {
     var speed : vec3
-    static val dragCoefficient = 1 // air resistance coefficient | a = -dragCoefficient * sqr(speed)
+    static val dragCoefficient = 0.5 // air resistance coefficient | a = -dragCoefficient * sqr(speed)
 
-    val animation = div(lifeLength) >> gap(0.75, 1) >> progress(f4 = 1, 0) >> color = vec4(1, 1, 1, _)
+    val animation = div(lifeLength) >> gap(0.75, 1) >> progress(f4 = 0.3, 0) >> color = vec4(_, _, _, _)
 
     def update(t : float4, dt : float4) {
         val a = speed.mul(-dragCoefficient)
@@ -61,4 +61,4 @@ class SmokeParticle extends BillboardParticle(4) {
 }
 
 
-class SmokeView extends BillboardParticleSystemView(800, SimpleMaterial(textureFor("Smoke.png")), BlendFunction.standard)
+class SmokeView extends BillboardParticleSystemView(200, SimpleMaterial(textureFor("Smoke.png")), BlendFunction.premultiplied)

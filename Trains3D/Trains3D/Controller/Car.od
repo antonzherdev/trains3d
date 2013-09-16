@@ -24,7 +24,7 @@ enum CarType(
         0.05, 0.08, 0.44, 0.08, 0.05, nil)
     engine(0.2, 0.3, 2,
         0.05, 0.14, 0.32, 0.22, 0.05,
-        EngineType(tubePos = vec3(-0.06, 0, 0.5)))
+        EngineType(tubePos = vec3(-0.10, 0, 0.5)))
 
     val startToWheel = startToFront + frontToWheel
     val wheelToEnd = wheelToBack + backToEnd
