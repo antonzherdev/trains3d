@@ -1,7 +1,7 @@
 package com.antonzherdev.eg
 
 stub class EGDynamicWorld<T>(gravity : vec3) extends EGController {
-    private val _bodies = CNMutableArray<EGRigidBody<T>>()
+    private val _bodies = MutableArray<EGRigidBody<T>>()
     def bodies : [EGRigidBody<T>] = _bodies
     def add(body : EGRigidBody<T>) {
         _bodies.add(body)

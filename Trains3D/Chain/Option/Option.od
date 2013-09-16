@@ -1,6 +1,6 @@
-package core
+package core.chain
 
-stub class CNOption<V> {
+stub class Option<V> {
     static def none<V> : V?
     static def some<V>(: V) : V?
 

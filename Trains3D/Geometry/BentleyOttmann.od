@@ -1,8 +1,8 @@
 package com.antonzherdev.geometry
 
 class BentleyOttmann {
-    static def intersectionsFor<T>(segments : [(T, LineSegment)]) : CNSet<Intersection<T>> =
-        if(segments.count < 2) CNHashSet<T>()
+    static def intersectionsFor<T>(segments : [(T, LineSegment)]) : Set<Intersection<T>> =
+        if(segments.count < 2) HashSet<T>()
         else {
             val sweepLine = SweepLine<T>()
             val queue = BentleyOttmannEventQueue.newWith(segments, sweepLine)
@@ -14,12 +14,12 @@ class BentleyOttmann {
             sweepLine.intersections.chain.flatMap(p ->
                 p.b.chain.combinations
                     .filter(comb -> !comb.a.isVertical || !comb.b.isVertical)
-                    .map(comb -> Intersection<T>(CNPair<T>.newWith(comb.a.data, comb.b.data), p.a.point))
+                    .map(comb -> Intersection<T>(Pair<T>.newWith(comb.a.data, comb.b.data), p.a.point))
             ).toSet
         }
 }
 
-class Intersection<T>(items : CNPair<T>, point : vec2)
+class Intersection<T>(items : Pair<T>, point : vec2)
 
 class BentleyOttmannEvent<T> {
     def point : vec2
@@ -42,7 +42,7 @@ class BentleyOttmannIntersectionEvent<T>(point : vec2) extends BentleyOttmannEve
 
 
 class BentleyOttmannEventQueue<T> {
-    val events = CNMutableTreeMap<vec2, CNMutableArray<BentleyOttmannEvent<T>>>((a, b) -> a.compare(b))
+    val events = MutableTreeMap<vec2, MutableArray<BentleyOttmannEvent<T>>>((a, b) -> a.compare(b))
 
     def isEmpty : bool = events.isEmpty
 
@@ -60,7 +60,7 @@ class BentleyOttmannEventQueue<T> {
     }
 
     def offer(point : vec2, event : BentleyOttmannEvent) {
-        events.objectFor(key = point, orUpdateWith = CNMutableArray<BentleyOttmannEvent<T>>() ).add(event)
+        events.objectFor(key = point, orUpdateWith = MutableArray<BentleyOttmannEvent<T>>() ).add(event)
     }
 
     def poll : [BentleyOttmannEvent] {
@@ -78,13 +78,13 @@ class SweepLine<T>
     */
 //    ignoreSegmentEndings : bool
 {
-    var events = CNMutableTreeSet.newWith<BentleyOttmannPointEvent<T>>((a, b) -> compareEvents(a, b))
+    var events = MutableTreeSet.newWith<BentleyOttmannPointEvent<T>>((a, b) -> compareEvents(a, b))
 
     /**
     * A map holding all intersection points mapped to the Events
     * that form these intersections.
     */
-    val intersections = CNMutableHashMap<PointClass, NSMutableSet<BentleyOttmannPointEvent<T>>>()
+    val intersections = MutableHashMap<PointClass, NSMutableSet<BentleyOttmannPointEvent<T>>>()
 
 
     /**

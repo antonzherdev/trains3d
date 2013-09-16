@@ -99,7 +99,7 @@ class EGBillboardParticle(lifeLength : float4) extends EGParticle(lifeLength) {
     var model : Quad
     var color : vec4
 
-    def writeTo(array : CNVoidRefArray) : CNVoidRefArray = {
+    def writeTo(array : VoidRefArray) : VoidRefArray = {
         array
             .write(EGBillboardBufferData, EGBillboardBufferData(position, model.p1, color, uv.p1))
             .write(EGBillboardBufferData, EGBillboardBufferData(position, model.p2, color, uv.p2))
@@ -116,7 +116,7 @@ class EGBillboardParticleSystemView(maxCount : uint, material : EGSimpleMaterial
     val shader : EGShader =  EGBillboardShaderSystem.instance.shaderFor(material)
     def vertexCount : uint = 4
 
-    def writeIndexesTo(indexPointer : CNVoidRefArray, i : uint4) : CNVoidRefArray = {
+    def writeIndexesTo(indexPointer : VoidRefArray, i : uint4) : VoidRefArray = {
         indexPointer
             .write(uInt4 = i).write(uInt4 = i + 1).write(uInt4 = i + 2)
             .write(uInt4 = i + 2).write(uInt4 = i).write(uInt4 = i + 3)

@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "CNTest.h"
+#import "TSTestCase.h"
 #import "GEVec.h"
 @class TRCarType;
 @class TRLevel;
@@ -18,7 +18,7 @@
 
 @class TRCollisionsTest;
 
-@interface TRCollisionsTest : CNTestCase
+@interface TRCollisionsTest : TSTestCase
 + (id)collisionsTest;
 - (id)init;
 - (ODClassType*)type;

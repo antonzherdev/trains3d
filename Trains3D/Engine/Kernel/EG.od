@@ -10,7 +10,7 @@ class EG {
 }
 
 class EGContext {
-    private val textureCache = CNMutableHashMap<string, EGFileTexture>()
+    private val textureCache = MutableHashMap<string, EGFileTexture>()
 
     def textureFor(file : string) : EGFileTexture = textureCache.objectFor(key = file, orUpdateWith = EGFileTexture(file))
 
@@ -20,16 +20,16 @@ class EGContext {
 }
 
 class EGMatrixStack {
-    private var stack = CNList<EGMatrixModel>()
+    private var stack = List<EGMatrixModel>()
     var value = EGMatrixModel.identity
 
     def clear {
         value = EGMatrixModel.identity
-        stack = CNList<EGMatrixModel>()
+        stack = List<EGMatrixModel>()
     }
 
     def push {
-        stack = CNList(value, stack)
+        stack = List(value, stack)
     }
 
     def pop {
@@ -46,16 +46,16 @@ class EGMatrixStack {
 }
 
 class EGMatrixModel(m : mat4, w : mat4, c : mat4, p : mat4,
-    _mw : CNLazy<mat4>, _mwc : CNLazy<mat4>, _mwcp : CNLazy<mat4>,
-    _cp : CNLazy<mat4>, _wcp : CNLazy<mat4>, _wc : CNLazy<mat4>)
+    _mw : Lazy<mat4>, _mwc : Lazy<mat4>, _mwcp : Lazy<mat4>,
+    _cp : Lazy<mat4>, _wcp : Lazy<mat4>, _wc : Lazy<mat4>)
 {
     static def apply(m : mat4, w : mat4, c : mat4, p : mat4) : EGMatrixModel = {
-        val _mw = CNLazy(w.mul(m))
-        val _mwc = CNLazy(c.mul(_mw.get))
-        val _cp = CNLazy(p.mul(c))
-        val _mwcp = CNLazy(_cp.get.mul(_mw.get))
-        val _wc = CNLazy(c.mul(w))
-        val _wcp = CNLazy(p.mul(_wc.get))
+        val _mw = Lazy(w.mul(m))
+        val _mwc = Lazy(c.mul(_mw.get))
+        val _cp = Lazy(p.mul(c))
+        val _mwcp = Lazy(_cp.get.mul(_mw.get))
+        val _wc = Lazy(c.mul(w))
+        val _wcp = Lazy(p.mul(_wc.get))
         EGMatrixModel(m, w, c, p, _mw, _mwc, _mwcp, _cp, _wcp, _wc)
     }
     static val identity = EGMatrixModel(mat4.identity, mat4.identity, mat4.identity, mat4.identity)
@@ -68,38 +68,38 @@ class EGMatrixModel(m : mat4, w : mat4, c : mat4, p : mat4,
 
     def modify(m : mat4 -> mat4) : EGMatrixModel = {
         val mm = m(self.m)
-        val _mw = CNLazy(w.mul(mm))
-        val _mwc = CNLazy(c.mul(_mw.get))
-        val _mwcp = CNLazy(_cp.get.mul(_mw.get))
+        val _mw = Lazy(w.mul(mm))
+        val _mwc = Lazy(c.mul(_mw.get))
+        val _mwcp = Lazy(_cp.get.mul(_mw.get))
         EGMatrixModel(mm, w, c, p, _mw, _mwc, _mwcp, _cp, _wcp, _wc)
     }
 
 
     def modify(w : mat4 -> mat4) : EGMatrixModel = {
         val ww = w(self.w)
-        val _mw = CNLazy(ww.mul(m))
-        val _mwc = CNLazy(c.mul(_mw.get))
-        val _mwcp = CNLazy(_cp.get.mul(_mw.get))
-        val _wc = CNLazy(c.mul(ww))
-        val _wcp = CNLazy(p.mul(_wc.get))
+        val _mw = Lazy(ww.mul(m))
+        val _mwc = Lazy(c.mul(_mw.get))
+        val _mwcp = Lazy(_cp.get.mul(_mw.get))
+        val _wc = Lazy(c.mul(ww))
+        val _wcp = Lazy(p.mul(_wc.get))
         EGMatrixModel(m, ww, c, p, _mw, _mwc, _mwcp, _cp, _wcp, _wc)
     }
 
     def modify(c : mat4 -> mat4) : EGMatrixModel = {
         val cc = c(self.c)
-        val _mwc = CNLazy(cc.mul(_mw.get))
-        val _cp = CNLazy(p.mul(cc))
-        val _mwcp = CNLazy(_cp.get.mul(_mw.get))
-        val _wc = CNLazy(cc.mul(w))
-        val _wcp = CNLazy(p.mul(_wc.get))
+        val _mwc = Lazy(cc.mul(_mw.get))
+        val _cp = Lazy(p.mul(cc))
+        val _mwcp = Lazy(_cp.get.mul(_mw.get))
+        val _wc = Lazy(cc.mul(w))
+        val _wcp = Lazy(p.mul(_wc.get))
         EGMatrixModel(m, w, cc, p, _mw, _mwc, _mwcp, _cp, _wcp, _wc)
     }
 
     def modify(p : mat4 -> mat4) : EGMatrixModel = {
         val pp = p(self.p)
-        val _cp = CNLazy(pp.mul(c))
-        val _mwcp = CNLazy(_cp.get.mul(_mw.get))
-        val _wcp = CNLazy(pp.mul(_wc.get))
+        val _cp = Lazy(pp.mul(c))
+        val _mwcp = Lazy(_cp.get.mul(_mw.get))
+        val _wcp = Lazy(pp.mul(_wc.get))
         EGMatrixModel(m, w, c, pp, _mw, _mwc, _mwcp, _cp, _wcp, _wc)
     }
 }

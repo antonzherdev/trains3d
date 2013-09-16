@@ -30,7 +30,7 @@ class EGFileTexture(file : string) extends EGTexture  {
     private var _size : vec2
 
     private def load {
-        _size = egLoadTextureFromFile(id, CNBundle.fileNameFor(file))
+        _size = egLoadTextureFromFile(id, Bundle.fileNameFor(file))
         _loaded = true
     }
 

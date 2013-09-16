@@ -4,14 +4,14 @@ import core.ODMath._
 import com.antonzherdev.eg.EGGL._
 
 class EGParticleSystem <P extends EGParticle> extends EGController {
-    private var _particles = CNList<P>()
+    private var _particles = List<P>()
     def particles : [P] = _particles
 
     def generateParticle : P
     def generateParticlesWith(delta : float) {}
 
     def emitParticle {
-        _particles = CNList(generateParticle, _particles)
+        _particles = List(generateParticle, _particles)
     }
 
     def updateWith(delta : float) {
@@ -28,7 +28,7 @@ class EGParticle(lifeLength : float4) extends EGController {
     private var _lifeTime : float4
     def lifeTime : float4 = _lifeTime
 
-    def writeTo(array : CNVoidRefArray) : CNVoidRefArray
+    def writeTo(array : VoidRefArray) : VoidRefArray
 
     def isLive : bool  = _lifeTime <= lifeLength
 
@@ -42,11 +42,11 @@ class EGParticle(lifeLength : float4) extends EGController {
 
 
 class EGParticleSystemView<P extends EGParticle, D>(dtp : ODPType<D>, maxCount : uint, blendFunc : EGBlendFunction) {
-    val vertexArr = CNVoidRefArray(dtp, maxCount*vertexCount)
+    val vertexArr = VoidRefArray(dtp, maxCount*vertexCount)
     val vertexBuffer = EGVertexBuffer<D>(dtp).set(array = vertexArr, usage = GL_DYNAMIC_DRAW)
-    val indexArr : CNVoidRefArray = {
+    val indexArr : VoidRefArray = {
         val vc = vertexCount
-        val ia = CNVoidRefArray(ODUInt4.type, maxCount*3*(vc - 2))
+        val ia = VoidRefArray(ODUInt4.type, maxCount*3*(vc - 2))
         var indexPointer = ia
         maxCount.range.for{i ->
             indexPointer = writeIndexesTo(indexPointer, i*vc)
@@ -57,7 +57,7 @@ class EGParticleSystemView<P extends EGParticle, D>(dtp : ODPType<D>, maxCount :
     val mesh = EGMesh(vertexBuffer = vertexBuffer, indexBuffer)
 
     def vertexCount : uint
-    def writeIndexesTo(indexPointer : CNVoidRefArray, i : uint4) : CNVoidRefArray
+    def writeIndexesTo(indexPointer : VoidRefArray, i : uint4) : VoidRefArray
     def shader : EGShader
     def material : EGMaterial
 

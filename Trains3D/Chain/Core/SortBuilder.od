@@ -1,21 +1,21 @@
 package core.chain
 
-class CNSortBuilder<A>(chain : CNChain<A>) {
-    private val functions = CNMutableArray<(A, A) -> int>()
+class SortBuilder<A>(chain : Chain<A>) {
+    private val functions = MutableArray<(A, A) -> int>()
 
-    def asc<B extends ODComparable<B>>(by : A -> B) : CNSortBuilder<A> = {
+    def asc<B extends ODComparable<B>>(by : A -> B) : SortBuilder<A> = {
         functions.add((x : A, y : A) -> by(x).compare(by(y)))
         self
     }
-    def desc<B extends ODComparable<B>>(by : A -> B) : CNSortBuilder<A> = {
+    def desc<B extends ODComparable<B>>(by : A -> B) : SortBuilder<A> = {
         functions.add((x : A, y : A) -> by(y).compare(by(x)))
         self
     }
-    def and(f : (A, A) -> int) : CNSortBuilder<A> = {
+    def and(f : (A, A) -> int) : SortBuilder<A> = {
         functions.add(f)
         self
     }
-    def endSort : CNChain<A> = {
+    def endSort : Chain<A> = {
         chain.sort((x, y) -> {
             var ret = 0
             val i = functions.iterator

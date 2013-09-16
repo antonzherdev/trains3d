@@ -1,6 +1,6 @@
 package core.chain
 
-class CNRange(start : int, end : int, step : int) extends CNSeq<int> {
+class Range(start : int, end : int, step : int) extends Seq<int> {
     val count : uint =
         if(step > 0) if(start <= end) (end - start)/step + 1 else 0
         else if(step < 0) if(start >= end) (end - start)/step + 1 else 0
@@ -8,16 +8,16 @@ class CNRange(start : int, end : int, step : int) extends CNSeq<int> {
     def apply(index : uint) : int? =
         if(index >= count) nil
         else start + step*index
-    def iterator : CNIterator<int> = CNRangeIterator(start, end, step)
+    def iterator : Iterator<int> = RangeIterator(start, end, step)
 
-    def set(step : int) : CNRange = CNRange(start, end, step)
+    def set(step : int) : Range = Range(start, end, step)
     def isEmpty : bool =
         if(step > 0) start > end
         else if(step < 0) start < end
         else false
 }
 
-class CNRangeIterator(start : int, end : int, step : int) extends CNIterator<int> {
+class RangeIterator(start : int, end : int, step : int) extends Iterator<int> {
     private var i = start
     def hasNext = (step > 0 && i <= end) || (step < 0 && i >= end)
     def next : int = {

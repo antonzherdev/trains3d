@@ -1,8 +1,8 @@
 package com.antonzherdev.eg
 
-import test._
+import com.antonzherdev.test._
 
-class EGDynamicTest extends CNTestCase {
+class EGDynamicTest extends TestCase {
     def runSecondIn(world : EGDynamicWorld<_>) {
         30.range.for(world.updateWith(delta = 1.0/30.0))
     }

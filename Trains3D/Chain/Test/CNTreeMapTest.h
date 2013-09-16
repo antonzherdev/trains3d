@@ -1,12 +1,12 @@
 #import "objdcore.h"
-#import "CNTest.h"
+#import "TSTestCase.h"
 @class CNMutableTreeMap;
 @class CNChain;
 @class CNTreeMapKeySet;
 
 @class CNTreeMapTest;
 
-@interface CNTreeMapTest : CNTestCase
+@interface CNTreeMapTest : TSTestCase
 + (id)treeMapTest;
 - (id)init;
 - (ODClassType*)type;

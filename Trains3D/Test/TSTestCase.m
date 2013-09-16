@@ -1,9 +1,9 @@
-#import "CNTest.h"
+#import "TSTestCase.h"
 
-@implementation CNTestCase
+@implementation TSTestCase
 
 + (id)testCase {
-    return [[CNTestCase alloc] init];
+    return [[TSTestCase alloc] init];
 }
 
 - (id)init {
@@ -27,7 +27,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNTestCase* o = ((CNTestCase*)other);
+    TSTestCase * o = ((TSTestCase *)other);
     return YES;
 }
 

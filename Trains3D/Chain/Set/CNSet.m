@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "CNSet.h"
 
+#import "ObjC.h"
 @implementation CNHashSetBuilder{
     NSMutableSet* _set;
 }

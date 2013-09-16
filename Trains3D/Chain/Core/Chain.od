@@ -1,0 +1,58 @@
+package core.chain
+
+stub class Chain<A> extends Iterable<A> {
+    static def chainWith<T>(collection:Traversable<T>) : Chain<T>
+
+    def filter(: A -> bool) : Chain<A>
+    def map<B>(: A -> B) : Chain<B>
+    def flatMap<B>(: A -> Traversable<B>) : Chain<B>
+    def filterCast<B>( : ClassType<B>) : Chain<B>
+
+    def combinations : Chain<(A, A)>
+    def uncombinations<B>(self : Chain<(B, B)>) : Chain<B>
+    def neighbors : Chain<(A, A)>
+    def neighborsRing : Chain<(A, A)>
+    def mul<B>(: Traversable<B>) : Chain<(A,B)>
+
+    def group<K>(by : A -> K) : Chain<(K, [A])>
+    def group<K, B>(by : A -> K, map : A -> B) : Chain<(K, [B])>
+    def group<K, C extends Traversable<K>>(by : A -> K, withBuilder : () -> Builder<A, C>) : Chain<(K, C<A>)>
+    def group<B, K, C extends Traversable<K>>(by : A -> K, map : A -> B, withBuilder : () -> Builder<B, C>) : Chain<(K, C<B>)>
+    def group<K, V>(by : A -> K, fold : (V, A) -> V, withStart : () -> V) : Chain<(K, V)>
+
+    def zip<B>(a: Iterable<B>) : Chain<(A, B)>
+    def zip<B, X>(a : Iterable<B>, by : (A, B) -> X) : Chain<X>
+    def zip3<B, C>(a: Iterable<B>, b : Iterable<C>) : Chain<(A, B, C)>
+    def zip3<B, C, X>(a : Iterable<B>, b : Iterable<C>, by : (A, B, C) -> X) : Chain<X>
+
+    def join<K, V1, V2>(self : Chain<(K, V1)>, chain : Iterable<(K, V2)>) : Chain<K, (V1, V2)>
+
+    def prepend(: Iterable<A>) : Chain<A>
+    def append(: Iterable<A>) : Chain<A>
+    def exclude(: Iterable<A>) : Chain<A>
+    def intersect(: Iterable<A>) : Chain<A>
+
+    def reverse : Chain<A>
+    def distinct : Chain<A>
+    def sort<B extends ODComparable<B>> (self : Chain<B>) : Chain<A>
+    def sortDesc<B extends ODComparable<B>> (self : Chain<B>) : Chain<A>
+    def sort(:(A, A) -> int) : Chain<A>
+    def sortBy : SortBuilder<A>
+
+    def fold<B>( : (B, A) -> B, withStart : B) : B
+    def count : uint
+    def for(each: A -> void)
+    def head : A?
+    def randomItem : A?
+    def find(: A -> bool) : A?
+    def isEmpty : bool
+    def gap<B extends ODComparable<B>> (self : Chain<B>) : (A, A)?
+    def min<B extends ODComparable<B>> (self : Chain<B>) : A?
+    def max<B extends ODComparable<B>> (self : Chain<B>) : A?
+    def toStringWith(start : string, delimiter : string, end : string) : string
+    def toStringWith(delimiter : string) : string
+
+    def toArray : [A]
+    def toSet : Set<A>
+    def toMap<K, V>(self : Chain<(K, V)>) : [K : V]
+}

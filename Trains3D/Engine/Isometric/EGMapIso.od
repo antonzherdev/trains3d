@@ -30,9 +30,9 @@ class EGMapSso(size : vec2i) {
             || tile.y - tile.x == -size.x //bottom
         )
 
-    private def allPosibleTiles : CNChain<vec2i> =
-        CNRange(start = limits.x, end = limits.x2, step = 1).chain
-            .mul<int>(CNRange(start = limits.y, end = limits.y2, step = 1))
+    private def allPosibleTiles : Chain<vec2i> =
+        Range(start = limits.x, end = limits.x2, step = 1).chain
+            .mul<int>(Range(start = limits.y, end = limits.y2, step = 1))
             .map(vec2i(_.a, _.b))
 
     private def tileCutAxis(less : int, more : int) : int =

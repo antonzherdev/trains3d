@@ -1,13 +1,13 @@
 package core.chain
 
-trait CNMap<K, V> extends CNIterable<(K, V)> {
+trait Map<K, V> extends Iterable<(K, V)> {
     def apply(key : K) : V?
-    def keys : CNIterable<K>
-    def values : CNIterable<V>
+    def keys : Iterable<K>
+    def values : Iterable<V>
     def contains(key : K) : bool = apply(key).isDefined
 }
 
-trait CNMutableMap<K, V> extends CNMap<K, V> with CNMutableIterable<(K, V)> {
+trait MutableMap<K, V> extends Map<K, V> with MutableIterable<(K, V)> {
     def set(value : V, forKey : K)
     def removeFor(key : K) : V?
     def objectFor(key: K, orUpdateWith: () -> V) : V = {
@@ -34,12 +34,12 @@ trait CNMutableMap<K, V> extends CNMap<K, V> with CNMutableIterable<(K, V)> {
     }
 }
 
-class CNMapDefault<K, V>(defaultFunc : K -> V, map : CNMutableMap<K, V>) extends CNMutableIterable<(K, V)> {
+class MapDefault<K, V>(defaultFunc : K -> V, map : MutableMap<K, V>) extends MutableIterable<(K, V)> {
     def count : uint = map.count
-    def iterator : CNIterator<(K, V)> = map.iterator
+    def iterator : Iterator<(K, V)> = map.iterator
     def apply(key : K) : V = map.objectFor(key, orUpdateWith = defaultFunc(key))
-    def keys : CNIterable<K> = map.keys
-    def values : CNIterable<V> = map.values
+    def keys : Iterable<K> = map.keys
+    def values : Iterable<V> = map.values
     def contains(key : K) : bool = map.contains(key)
     def set(value : V, forKey : K) {
         map.set(value, forKey)
@@ -56,10 +56,3 @@ class CNMapDefault<K, V>(defaultFunc : K -> V, map : CNMutableMap<K, V>) extends
         map.remove(item)
     }
 }
-
-stub class NSDictionary <K, V> extends CNMap<K, V>
-
-stub class NSMutableDictionary<K, V> extends CNMutableMap<K, V>
-
-type CNHashMap<K, V> = NSDictionary<K, V>
-type CNMutableHashMap<K, V> = NSMutableDictionary<K, V>

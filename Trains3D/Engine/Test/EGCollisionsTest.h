@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "CNTest.h"
+#import "TSTestCase.h"
 @class EGCollisionWorld;
 @class EGCollisionBox;
 @class EGCollisionBody;
@@ -7,7 +7,7 @@
 
 @class EGCollisionsTest;
 
-@interface EGCollisionsTest : CNTestCase
+@interface EGCollisionsTest : TSTestCase
 + (id)collisionsTest;
 - (id)init;
 - (ODClassType*)type;

@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "CNTest.h"
+#import "TSTestCase.h"
 #import "GEVec.h"
 #import "GERect.h"
 @class GELineSegment;
@@ -8,7 +8,7 @@
 
 @class GEFigureTest;
 
-@interface GEFigureTest : CNTestCase
+@interface GEFigureTest : TSTestCase
 + (id)figureTest;
 - (id)init;
 - (ODClassType*)type;

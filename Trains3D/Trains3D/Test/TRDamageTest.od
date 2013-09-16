@@ -1,9 +1,9 @@
 package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
-import test._
+import com.antonzherdev.test._
 
-class TRDamageTest extends CNTestCase {
+class TRDamageTest extends TestCase {
     def testMain {
         val railroad = TRRailroad(EGMapSso(vec2i(4, 3)), TRScore(TRLevelFactory.scoreRules))
 

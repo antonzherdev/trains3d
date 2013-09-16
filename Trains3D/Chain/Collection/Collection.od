@@ -1,20 +1,20 @@
 package core.chain
 
-trait CNIterator<T> {
+trait Iterator<T> {
    def hasNext : bool
    def next : T
 }
 
-trait CNBuilder<T, C extends CNTraversable<T>> {
+trait Builder<T, C extends Traversable<T>> {
     def add(item : T)
     def build : C
-    def addAll(item : CNTraversable<T>) {
+    def addAll(item : Traversable<T>) {
         item.for(add(_))
     }
 }
 
 
-trait CNTraversable<T> {
+trait Traversable<T> {
     def for(each : T -> void) {
         go(item -> {
             each(item)
@@ -24,8 +24,8 @@ trait CNTraversable<T> {
 
     def go(on : T -> bool) : bool
 
-    def chain : CNChain<T> = {
-        CNChain.chainWith<T>(self)
+    def chain : Chain<T> = {
+        Chain.chainWith<T>(self)
     }
 
     def find(where : T -> bool) : T? = {
@@ -42,18 +42,18 @@ trait CNTraversable<T> {
 
     def head : T?
 
-    def convertWith<C extends CNTraversable<T>>(builder : CNBuilder<T, C>) : C = {
+    def convertWith<C extends Traversable<T>>(builder : Builder<T, C>) : C = {
         for(x -> builder.add(x))
         builder.build
     }
 }
 
-trait CNMutableTraversable<T> extends CNTraversable<T> {
+trait MutableTraversable<T> extends Traversable<T> {
     def add(item : T)
     def remove(item : T)
 }
 
-trait CNIterable<T> extends CNTraversable<T> {
+trait Iterable<T> extends Traversable<T> {
     def count : uint = {
         val i = iterator
         var n : uint = 0
@@ -63,13 +63,13 @@ trait CNIterable<T> extends CNTraversable<T> {
         }
         n
     }
-    def iterator : CNIterator<T>
+    def iterator : Iterator<T>
 
     def head : T? = if(iterator.hasNext) iterator.next else nil
     def isEmpty : bool = !iterator.hasNext
 
-    def chain : CNChain<T> = {
-        CNChain.chainWith<T>(self)
+    def chain : Chain<T> = {
+        Chain.chainWith<T>(self)
     }
     def for(each : T -> void) {
         val i = iterator
@@ -101,4 +101,4 @@ trait CNIterable<T> extends CNTraversable<T> {
     }
 }
 
-trait CNMutableIterable<T> extends CNIterable<T> with CNMutableTraversable<T> {}
+trait MutableIterable<T> extends Iterable<T> with MutableTraversable<T> {}

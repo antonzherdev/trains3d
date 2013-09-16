@@ -1,0 +1,9 @@
+package core
+
+object chain {
+    val prefix = "CN"
+}
+
+object test {
+    val prefix = "TS"
+}

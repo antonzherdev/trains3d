@@ -1,10 +1,10 @@
 package core.chain
 
-import test._
+import com.antonzherdev.test._
 
-class CNTreeMapTest extends CNTestCase {
+class TreeMapTest extends TestCase {
     def testMain {
-        val map = CNMutableTreeMap<int, string>()
+        val map = MutableTreeMap<int, string>()
         assertEquals(0, map.count)
         assertTrue(map[0].isEmpty)
 

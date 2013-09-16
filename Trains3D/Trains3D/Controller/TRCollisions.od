@@ -33,11 +33,11 @@ class TRCollisionWorld {
                 .map(_.a)
                 .head
                 .get
-        TRCollision(CNPair(car1, car2), point)
+        TRCollision(Pair(car1, car2), point)
     }.toArray
 }
 
-class TRCollision(cars : CNPair<TRCar>, railPoint : TRRailPoint)
+class TRCollision(cars : Pair<TRCar>, railPoint : TRRailPoint)
 
 class TRDynamicWorld extends EGController {
     private val world = {

@@ -4,6 +4,6 @@ stub class EGCollisionWorld<T> {
     def add(body : EGCollisionBody<T>)
     def remove(body : EGCollisionBody<T>)
 
-    def detect : CNIterable<EGCollision<T>>
+    def detect : Iterable<EGCollision<T>>
 }
 

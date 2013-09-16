@@ -2,7 +2,7 @@ package core.chain
 
 import core.ODMath._
 
-trait CNSeq<T> extends CNIterable<T> {
+trait Seq<T> extends Iterable<T> {
     def apply(index : uint) : T? = {
         val i = iterator
         var n = index
@@ -18,19 +18,19 @@ trait CNSeq<T> extends CNIterable<T> {
         if(isEmpty) nil
         else apply(randomMax(count - 1))
 
-    def toSet : CNSet<T> = convertWith(CNHashSetBuilder<T>())
-    def arrayByAdding(item : T) : CNSeq<T> = {
-        val builder = CNArrayBuilder<T>()
+    def toSet : Set<T> = convertWith(HashSetBuilder<T>())
+    def arrayByAdding(item : T) : Seq<T> = {
+        val builder = ArrayBuilder<T>()
         builder.addAll(self)
         builder.add(item)
         builder.build
     }
 
-    def arrayByRemoving(item : T) : CNSeq<T> = {
+    def arrayByRemoving(item : T) : Seq<T> = {
         chain.filter(_ != item).toArray
     }
 
-    def isEqualTo(seq : CNSeq<T>) : bool = {
+    def isEqualTo(seq : Seq<T>) : bool = {
         if(self.count != seq.count) return false
         val ia = self.iterator
         val ib = seq.iterator
@@ -41,16 +41,10 @@ trait CNSeq<T> extends CNIterable<T> {
     }
 }
 
-trait CNMutableSeq<T> extends CNSeq<T> with CNMutableIterable<T>
+trait MutableSeq<T> extends Seq<T> with MutableIterable<T>
 
-stub class NSArray<T> extends CNSeq<T> {}
-stub class NSMutableArray<T> extends CNMutableSeq<T> {}
-
-type CNArray<T> = NSArray<T>
-type CNMutableArray<T> = NSMutableArray<T>
-
-class CNArrayBuilder<T> extends CNBuilder<T, CNArray<T>> {
-    val array = NSMutableArray<T>()
+class ArrayBuilder<T> extends Builder<T, Array<T>> {
+    val array = MutableArray<T>()
 
     def add(item : T) {
         array.add(item)
@@ -60,15 +54,15 @@ class CNArrayBuilder<T> extends CNBuilder<T, CNArray<T>> {
     def build : NSArray<T> = array
 }
 
-class CNIndexFunSeq<T>(count : uint, f : uint -> T) extends CNSeq<T> {
+class IndexFunSeq<T>(count : uint, f : uint -> T) extends Seq<T> {
     def apply(index : uint) : T? =
         if(index >= count) nil
         else f(index)
 
-    def iterator : CNIterator<T> = CNIndexFunSeqIterator<T>(count, f)
+    def iterator : Iterator<T> = IndexFunSeqIterator<T>(count, f)
 }
 
-class CNIndexFunSeqIterator<T>(count : uint, f : uint -> T) {
+class IndexFunSeqIterator<T>(count : uint, f : uint -> T) {
     var i : uint = 0
     def hasNext = i < count
 

@@ -1,11 +1,11 @@
 package core.chain
 
-class CNMutableTreeSet<T>(map : CNMutableTreeMap<T, ODObject>) extends CNMutableSet<T> {
-    static def newWith<T>(comparator : (T, T) -> int) : CNMutableTreeSet<T> = {
-        CNMutableTreeSet<T>(CNMutableTreeMap<T, ODObject>(comparator))
+class MutableTreeSet<T>(map : MutableTreeMap<T, ODObject>) extends MutableSet<T> {
+    static def newWith<T>(comparator : (T, T) -> int) : MutableTreeSet<T> = {
+        MutableTreeSet<T>(MutableTreeMap<T, ODObject>(comparator))
     }
 
-    static def apply<T> = CNMutableTreeSet<T>(CNMutableTreeMap<T, ODObject>())
+    static def apply<T> = MutableTreeSet<T>(MutableTreeMap<T, ODObject>())
     private static val obj = NSObject()
 
     def between(a : T, b : T) : [T]
@@ -32,12 +32,12 @@ class CNMutableTreeSet<T>(map : CNMutableTreeMap<T, ODObject>) extends CNMutable
         map.clear
     }
 
-    def addAll(objects : CNTraversable<T>) {
+    def addAll(objects : Traversable<T>) {
         objects.for(add(item = _))
     }
 
-    def reorder : CNMutableTreeSet<T> = {
-        val ret = CNMutableTreeSet<T>(CNMutableTreeMap<T, ODObject>(map.comparator))
+    def reorder : MutableTreeSet<T> = {
+        val ret = MutableTreeSet<T>(MutableTreeMap<T, ODObject>(map.comparator))
         ret.addAll(self)
         ret
     }

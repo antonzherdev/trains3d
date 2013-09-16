@@ -1,0 +1,22 @@
+package core.objc
+
+stub class NSSet<T> extends Set<T>
+
+stub class NSMutableSet<T> extends NSSet<T> with MutableSet<T>
+
+type HashSet<T> = NSSet<T>
+type MutableHashSet<T> = NSMutableSet<T>
+
+stub class NSArray<T> extends Seq<T> {}
+stub class NSMutableArray<T> extends MutableSeq<T> {}
+
+type Array<T> = NSArray<T>
+type MutableArray<T> = NSMutableArray<T>
+
+
+stub class NSDictionary <K, V> extends Map<K, V>
+
+stub class NSMutableDictionary<K, V> extends MutableMap<K, V>
+
+type HashMap<K, V> = NSDictionary<K, V>
+type MutableHashMap<K, V> = NSMutableDictionary<K, V>

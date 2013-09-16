@@ -59,9 +59,9 @@ class TRRailroad(map : EGMapSso, score : TRScore) {
     private var _lights : [TRLight] = []
     def lights = _lights
     val builder = TRRailroadBuilder(self)
-    private val connectorIndex = CNMapDefault(TREmptyConnector.instance, CNMutableHashMap<(vec2i, TRRailConnector), TRRailroadConnectorContent>())
-    private val damagesIndex = CNMutableHashMap<(vec2i, TRRailForm), [float]>()
-    private var _damagesPoints = CNMutableArray<TRRailPoint>()
+    private val connectorIndex = MapDefault(TREmptyConnector.instance, MutableHashMap<(vec2i, TRRailConnector), TRRailroadConnectorContent>())
+    private val damagesIndex = MutableHashMap<(vec2i, TRRailForm), [float]>()
+    private var _damagesPoints = MutableArray<TRRailPoint>()
     def damagesPoints : [TRRailPoint] = _damagesPoints
 
     def canAdd(rail : TRRail) : bool =

@@ -3,6 +3,7 @@
 
 #import "CNSet.h"
 #import "CNChain.h"
+#import "ObjC.h"
 @implementation CNArrayBuilder{
     NSMutableArray* _array;
 }

@@ -1,9 +1,9 @@
 package core.chain
 
-class CNMutableTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K, V> {
-    static def apply<K extends ODComparable<K>, V> = CNMutableTreeMap<K, V>((a : K, b : K) -> a.compare(b))
+class MutableTreeMap<K, V>(comparator : (K, K) -> int) extends MutableMap<K, V> {
+    static def apply<K extends ODComparable<K>, V> = MutableTreeMap<K, V>((a : K, b : K) -> a.compare(b))
 
-    private var root : CNTreeMapEntry<K, V> = nil
+    private var root : TreeMapEntry<K, V> = nil
     private var _size : uint = 0
 
     def count = _size
@@ -14,12 +14,12 @@ class CNMutableTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K,
         root = nil
     }
 
-    val keys : CNTreeMapKeySet<K> = CNTreeMapKeySet<K>(self)
-    val values : CNTreeMapValues<V> = CNTreeMapValues<V>(self)
-    def iterator : CNIterator<(K, V)> = CNTreeMapIterator<K, V>.new(self, firstEntry)
-    def iteratorHigherThan(key : K) = CNTreeMapIterator<K, V>.new(self, higherEntryThan(key).getOr(nil))
+    val keys : TreeMapKeySet<K> = TreeMapKeySet<K>(self)
+    val values : TreeMapValues<V> = TreeMapValues<V>(self)
+    def iterator : Iterator<(K, V)> = TreeMapIterator<K, V>.new(self, firstEntry)
+    def iteratorHigherThan(key : K) = TreeMapIterator<K, V>.new(self, higherEntryThan(key).getOr(nil))
 
-    private def entryFor(key : K) : CNTreeMapEntry<K, V> = {
+    private def entryFor(key : K) : TreeMapEntry<K, V> = {
         val p = root
         while (p != nil) {
             val cmp = comparator(key, p.key)
@@ -36,11 +36,11 @@ class CNMutableTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K,
     def set(value : V, forKey : K)  {
         val t = root
         if (t == nil) {
-            root = CNTreeMapEntry.newWith<K,V>(forKey, value, parent = nil)
+            root = TreeMapEntry.newWith<K,V>(forKey, value, parent = nil)
             _size = 1
         } else {
             val cmp : int = 0
-            val parent : CNTreeMapEntry<K, V> = nil
+            val parent : TreeMapEntry<K, V> = nil
 
             do {
                 parent = t
@@ -53,7 +53,7 @@ class CNMutableTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K,
                 }
             } while (t != nil)
 
-            val e =  CNTreeMapEntry.newWith<K,V>(forKey, value, parent)
+            val e =  TreeMapEntry.newWith<K,V>(forKey, value, parent)
             if (cmp < 0) parent.left = e
             else parent.right = e
             fixAfterInsertion(e)
@@ -67,7 +67,7 @@ class CNMutableTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K,
         else nil
     }
 
-    private def delete(entry : CNTreeMapEntry<K, V>) : V = {
+    private def delete(entry : TreeMapEntry<K, V>) : V = {
         val p = entry
         _size--
 
@@ -109,7 +109,7 @@ class CNMutableTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K,
         entry.value
     }
 
-    private def fixAfterInsertion(entry : CNTreeMapEntry<K, V>) {
+    private def fixAfterInsertion(entry : TreeMapEntry<K, V>) {
         var x = entry
         x.color = RED
         while (x != nil && x != root && x.parent.color == RED) {
@@ -150,7 +150,7 @@ class CNMutableTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K,
         root.color = BLACK
     }
 
-    private def fixAfterDeletion(entry : CNTreeMapEntry<K, V>) {
+    private def fixAfterDeletion(entry : TreeMapEntry<K, V>) {
         var x = entry
         while (x != root && x.color == BLACK) {
             if (x == x.parent.left) {
@@ -209,7 +209,7 @@ class CNMutableTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K,
     }
 
 
-    private def rotateLeft(p : CNTreeMapEntry<K, V>) {
+    private def rotateLeft(p : TreeMapEntry<K, V>) {
         if (p != nil) {
             val r = p.right
             p.right = r.left
@@ -223,7 +223,7 @@ class CNMutableTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K,
         }
     }
 
-    private def rotateRight(p : CNTreeMapEntry<K, V>) {
+    private def rotateRight(p : TreeMapEntry<K, V>) {
         if (p != nil) {
             val l = p.left
             p.left = l.right
@@ -237,13 +237,13 @@ class CNMutableTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K,
         }
     }
 
-    private def firstEntry : CNTreeMapEntry<K, V> = {
+    private def firstEntry : TreeMapEntry<K, V> = {
         val p = root
         if (p != nil) while (p.left != nil) p = p.left
         p
     }
 
-    private def lastEntry : CNTreeMapEntry<K, V> = {
+    private def lastEntry : TreeMapEntry<K, V> = {
         val p = root
         if (p != nil) while (p.right != nil) p = p.right
         p
@@ -264,7 +264,7 @@ class CNMutableTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K,
     def lowerKeyThan(key : K) : K? = lowerEntryThan(key).map(_.key)
     def higherKeyThan(key : K) : K? = higherEntryThan(key).map(_.key)
 
-    private def lowerEntryThan(key : K) : CNTreeMapEntry<K, V>? = {
+    private def lowerEntryThan(key : K) : TreeMapEntry<K, V>? = {
         val p = root
         while (p != nil) {
             val cmp = comparator(key, p.key)
@@ -288,7 +288,7 @@ class CNMutableTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K,
         nil
     }
 
-    private def higherEntryThan(key : K) : CNTreeMapEntry<K, V>? = {
+    private def higherEntryThan(key : K) : TreeMapEntry<K, V>? = {
         val p = root
         while (p != nil) {
             val cmp = comparator(key, p.key)
@@ -313,23 +313,23 @@ class CNMutableTreeMap<K, V>(comparator : (K, K) -> int) extends CNMutableMap<K,
     }
 }
 
-class CNTreeMapEntry<K, V> {
+class TreeMapEntry<K, V> {
     var key : K
     var value : V
-    var left : CNTreeMapEntry<K, V> = nil
-    var right : CNTreeMapEntry<K, V> = nil
+    var left : TreeMapEntry<K, V> = nil
+    var right : TreeMapEntry<K, V> = nil
     var color : int
-    weak var parent : CNTreeMapEntry<K, V>
+    weak var parent : TreeMapEntry<K, V>
 
-    static def newWith<K, V>(key : K, value : V, parent : CNTreeMapEntry<K, V>) : CNTreeMapEntry<K, V> = {
-        val r = CNTreeMapEntry<K, V>()
+    static def newWith<K, V>(key : K, value : V, parent : TreeMapEntry<K, V>) : TreeMapEntry<K, V> = {
+        val r = TreeMapEntry<K, V>()
         r.key = key
         r.value = value
         r.parent = parent
         r
     }
 
-    def next : CNTreeMapEntry<K, V> = {
+    def next : TreeMapEntry<K, V> = {
         if (right != nil) {
             var p = right
             while (p.left != nil) p = p.left
@@ -346,20 +346,20 @@ class CNTreeMapEntry<K, V> {
     }
 }
 
-class CNTreeMapKeySet<K>(map : CNMutableTreeMap<K, _>) extends CNIterable<K> {
+class TreeMapKeySet<K>(map : MutableTreeMap<K, _>) extends Iterable<K> {
     def count : uint = map.count
 
-    def iterator : CNIterator<K> = CNTreeMapKeyIterator<K>.new(map, map.firstEntry)
-    def iteratorHigherThan(key : K) : CNIterator<K> = CNTreeMapKeyIterator<K>.new(map, map.higherEntryThan(key).getOr(nil))
+    def iterator : Iterator<K> = TreeMapKeyIterator<K>.new(map, map.firstEntry)
+    def iteratorHigherThan(key : K) : Iterator<K> = TreeMapKeyIterator<K>.new(map, map.higherEntryThan(key).getOr(nil))
 }
 
-class CNTreeMapKeyIterator<K>(map : CNMutableTreeMap<K, _>) extends CNIterator<K> {
-   static def new<K>(map : CNMutableTreeMap<K, _>, entry : CNTreeMapEntry<K, _>) : CNTreeMapKeyIterator<K> = {
-       val ret = CNTreeMapKeyIterator<K>(map)
+class TreeMapKeyIterator<K>(map : MutableTreeMap<K, _>) extends Iterator<K> {
+   static def new<K>(map : MutableTreeMap<K, _>, entry : TreeMapEntry<K, _>) : TreeMapKeyIterator<K> = {
+       val ret = TreeMapKeyIterator<K>(map)
        ret.entry = entry
        ret
    }
-   var entry : CNTreeMapEntry<K, _>
+   var entry : TreeMapEntry<K, _>
    def hasNext : bool = entry != nil
    def next : K = {
         val ret = entry.key
@@ -368,19 +368,19 @@ class CNTreeMapKeyIterator<K>(map : CNMutableTreeMap<K, _>) extends CNIterator<K
    }
 }
 
-class CNTreeMapValues<V>(map : CNMutableTreeMap<_, V>) extends CNIterable<V> {
+class TreeMapValues<V>(map : MutableTreeMap<_, V>) extends Iterable<V> {
     def count : uint = map.count
 
-    def iterator : CNIterator<V> = CNTreeMapValuesIterator<V>.new(map, map.firstEntry)
+    def iterator : Iterator<V> = TreeMapValuesIterator<V>.new(map, map.firstEntry)
 }
 
-class CNTreeMapValuesIterator<V>(map : CNMutableTreeMap<_, V>) extends CNIterator<V> {
-    static def new<V>(map : CNMutableTreeMap<_, V>, entry : CNTreeMapEntry<_, V>) : CNTreeMapValuesIterator<V> = {
-        val ret = CNTreeMapValuesIterator<V>(map)
+class TreeMapValuesIterator<V>(map : MutableTreeMap<_, V>) extends Iterator<V> {
+    static def new<V>(map : MutableTreeMap<_, V>, entry : TreeMapEntry<_, V>) : TreeMapValuesIterator<V> = {
+        val ret = TreeMapValuesIterator<V>(map)
         ret.entry = entry
         ret
     }
-    var entry : CNTreeMapEntry<_, V>
+    var entry : TreeMapEntry<_, V>
     def hasNext : bool = entry != nil
     def next : V = {
         val ret = entry.value
@@ -389,14 +389,14 @@ class CNTreeMapValuesIterator<V>(map : CNMutableTreeMap<_, V>) extends CNIterato
     }
 }
 
-class CNTreeMapIterator<K, V>(map : CNMutableTreeMap<K, V>) extends CNIterator<(K, V)> {
-    static def new<K, V>(map : CNMutableTreeMap<K, V>, entry : CNTreeMapEntry<K, V>) : CNTreeMapIterator<K, V> = {
-        val ret = CNTreeMapIterator<K, V>(map)
+class TreeMapIterator<K, V>(map : MutableTreeMap<K, V>) extends Iterator<(K, V)> {
+    static def new<K, V>(map : MutableTreeMap<K, V>, entry : TreeMapEntry<K, V>) : TreeMapIterator<K, V> = {
+        val ret = TreeMapIterator<K, V>(map)
         ret.entry = entry
         ret
     }
     def hasNext : bool = entry != nil
-    var entry : CNTreeMapEntry<K, V>
+    var entry : TreeMapEntry<K, V>
 
     def next : V = {
         val ret = (entry.key, entry.value)

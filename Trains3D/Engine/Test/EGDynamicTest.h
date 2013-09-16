@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "CNTest.h"
+#import "TSTestCase.h"
 #import "GEVec.h"
 @class EGDynamicWorld;
 @class EGCollisionBox;
@@ -9,7 +9,7 @@
 
 @class EGDynamicTest;
 
-@interface EGDynamicTest : CNTestCase
+@interface EGDynamicTest : TSTestCase
 + (id)dynamicTest;
 - (id)init;
 - (ODClassType*)type;

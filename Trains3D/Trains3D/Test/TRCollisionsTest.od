@@ -1,16 +1,16 @@
 package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
-import test._
+import com.antonzherdev.test._
 
-class TRCollisionsTest extends CNTestCase {
+class TRCollisionsTest extends TestCase {
     static val carLen = TRCarType.car.fullLength
     static val carWidth = TRCarType.car.width
     static val carConLen = TRCarType.car.startToFront
     def newLevel = TRLevel(TRLevelRules(vec2i(5, 3), TRLevelFactory.scoreRules, 30, []))
 
 
-    def check(level : TRLevel) : CNSet<TRTrain> = level.detectCollisions.chain.flatMap(_.cars).map(_.train).toSet
+    def check(level : TRLevel) : Set<TRTrain> = level.detectCollisions.chain.flatMap(_.cars).map(_.train).toSet
 
     def testStraight {
         val level = newLevel

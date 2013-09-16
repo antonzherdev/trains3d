@@ -4,7 +4,7 @@ import com.antonzherdev.eg.EGGL._
 
 class EGShaderProgram(handle : GLuint) {
     static def loadFromFiles(vertex : string, fragment : string) : EGShaderProgram =
-        EGShaderProgram(CNBundle.readToString(vertex), CNBundle.readToString(fragment))
+        EGShaderProgram(Bundle.readToString(vertex), Bundle.readToString(fragment))
 
     static def apply(vertex : string, fragment : string) : EGShaderProgram =  {
         val vertexShader = compileShaderFor(GL_VERTEX_SHADER, vertex)

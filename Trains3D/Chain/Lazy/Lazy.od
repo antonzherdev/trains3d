@@ -1,6 +1,6 @@
-package core
+package core.chain
 
-class CNLazy<T>(f : () -> T) {
+class Lazy<T>(f : () -> T) {
     private var _value : T
     private var _calculated = false
     def isCalculated : bool =  _calculated

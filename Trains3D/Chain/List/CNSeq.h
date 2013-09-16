@@ -4,6 +4,7 @@
 @protocol CNSet;
 @class CNHashSetBuilder;
 @class CNChain;
+@class NSArray;
 
 @class CNArrayBuilder;
 @class CNIndexFunSeq;

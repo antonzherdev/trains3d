@@ -1,5 +1,6 @@
 #import "objdcore.h"
 #import "CNCollection.h"
+@class NSMutableSet;
 
 @class CNHashSetBuilder;
 @protocol CNSet;

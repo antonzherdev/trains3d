@@ -5,7 +5,7 @@ import com.antonzherdev.eg.EGGL._
 struct EGMeshData(uv : vec2, normal : vec3, position : vec3)
 
 class EGMesh<T>(vertexBuffer : EGVertexBuffer<T>, indexBuffer : EGIndexBuffer<uint4>) {
-    static def apply<T>(dataType : ODPType<T>, vertexData : CNPArray<T>, indexData : CNPArray<uint4>) : EGMesh =
+    static def apply<T>(dataType : ODPType<T>, vertexData : PArray<T>, indexData : PArray<uint4>) : EGMesh =
         EGMesh<T>(vertexBuffer = EGVertexBuffer<T>(dataType).set(vertexData),
             indexBuffer = EGIndexBuffer().set(indexData))
 
@@ -24,10 +24,10 @@ class EGBuffer<T>(dataType : ODPType<T>, bufferType : GLenum, handle : GLuint) {
         egDeleteBuffer(handle)
     }
 
-    def set(data : CNPArray<T>) : self = set(data = data, GL_STATIC_DRAW)
-    def set(array : CNVoidRefArray) : self = set(array = array, GL_STATIC_DRAW)
+    def set(data : PArray<T>) : self = set(data = data, GL_STATIC_DRAW)
+    def set(array : VoidRefArray) : self = set(array = array, GL_STATIC_DRAW)
 
-    def set(data : CNPArray<T>, usage : GLenum) : self = {
+    def set(data : PArray<T>, usage : GLenum) : self = {
         glBindBuffer(bufferType, handle)
         glBufferData(bufferType, data.length, data.bytes, GL_STATIC_DRAW)
         glBindBuffer(bufferType, 0)
@@ -36,7 +36,7 @@ class EGBuffer<T>(dataType : ODPType<T>, bufferType : GLenum, handle : GLuint) {
         self
     }
 
-    def set(array : CNVoidRefArray<T>, usage : GLenum) : self = {
+    def set(array : VoidRefArray<T>, usage : GLenum) : self = {
         glBindBuffer(bufferType, handle)
         glBufferData(bufferType, array.length, array.bytes, GL_STATIC_DRAW)
         glBindBuffer(bufferType, 0)
@@ -45,7 +45,7 @@ class EGBuffer<T>(dataType : ODPType<T>, bufferType : GLenum, handle : GLuint) {
         self
     }
 
-    def update(start : uint, count : uint, array : CNVoidRefArray<T>) : self = {
+    def update(start : uint, count : uint, array : VoidRefArray<T>) : self = {
         glBindBuffer(bufferType, handle)
         glBufferSubData(bufferType, start*dataType.size, count*dataType.size, array.bytes)
         glBindBuffer(bufferType, 0)

@@ -17,7 +17,7 @@ class TRLevelFactory {
         delayFine = (train, i) -> i*1000,
         repairCost = 2000
         )
-    private static def train(cars : CNRange, speed : CNRange) : TRLevel -> void = (level : TRLevel)->
+    private static def train(cars : Range, speed : Range) : TRLevel -> void = (level : TRLevel)->
         level.runTrainWith(TRTrainGenerator(TRTrainType.simple, cars, speed, [TRCarType.car, TRCarType.engine]))
     private static def createNewCity : TRLevel -> void = (level : TRLevel)->
         level.createNewCity

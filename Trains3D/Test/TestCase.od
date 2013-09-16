@@ -1,8 +1,8 @@
-package test
+package com.antonzherdev.test
 
 stub class SenTestCase
 
-stub class CNTestCase extends SenTestCase {
+stub class TestCase extends SenTestCase {
     def assertEquals<T>(a: T, b: T) : void
     def assertTrue(value: bool) :void
 }

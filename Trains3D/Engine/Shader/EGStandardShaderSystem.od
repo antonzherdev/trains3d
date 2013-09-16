@@ -12,7 +12,7 @@ class EGStandardShaderSystem extends EGShaderSystem<EGStandardMaterial> {
         shaders.objectFor(key, orUpdateWith = key.shader)
     }
 
-    private static val shaders = CNMutableHashMap<EGStandardShaderKey, EGStandardShader>()
+    private static val shaders = MutableHashMap<EGStandardShaderKey, EGStandardShader>()
 }
 
 class EGStandardShaderKey(directLightCount : uint, texture : bool) {

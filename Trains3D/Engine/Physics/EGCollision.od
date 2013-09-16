@@ -1,13 +1,13 @@
 package com.antonzherdev.eg
 
-class EGCollision<T>(bodies : CNPair<EGCollisionBody<T>>, contacts : [EGContact])
+class EGCollision<T>(bodies : Pair<EGCollisionBody<T>>, contacts : [EGContact])
 class EGContact(a : vec3, b : vec3)
 
-class EGIndexFunFilteredIterable<T>(maxCount : uint, f : uint -> T?) extends CNIterable<T> {
-    def iterator : CNIterator<T> = EGIndexFunFilteredIterator<T>(maxCount, f)
+class EGIndexFunFilteredIterable<T>(maxCount : uint, f : uint -> T?) extends Iterable<T> {
+    def iterator : Iterator<T> = EGIndexFunFilteredIterator<T>(maxCount, f)
 }
 
-class EGIndexFunFilteredIterator<T>(maxCount : uint, f : uint -> T?) extends CNIterator<T> {
+class EGIndexFunFilteredIterator<T>(maxCount : uint, f : uint -> T?) extends Iterator<T> {
     private var i : uint = 0
     private var _next : T? = roll
 

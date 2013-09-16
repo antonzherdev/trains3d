@@ -1,8 +1,8 @@
 package com.antonzherdev.eg
 
-import test._
+import com.antonzherdev.test._
 
-class EGCollisionsTest extends CNTestCase {
+class EGCollisionsTest extends TestCase {
     def testCollisions {
         val world = EGCollisionWorld<int>()
         val box1 = EGCollisionBody<int>(1, EGCollisionBox(1, 1, 1), isKinematic = true)

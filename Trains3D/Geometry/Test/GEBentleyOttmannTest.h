@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "CNTest.h"
+#import "TSTestCase.h"
 #import "GEVec.h"
 @class GELineSegment;
 @class GEBentleyOttmann;
@@ -7,7 +7,7 @@
 
 @class GEBentleyOttmannTest;
 
-@interface GEBentleyOttmannTest : CNTestCase
+@interface GEBentleyOttmannTest : TSTestCase
 + (id)bentleyOttmannTest;
 - (id)init;
 - (ODClassType*)type;

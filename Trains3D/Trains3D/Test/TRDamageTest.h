@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "CNTest.h"
+#import "TSTestCase.h"
 #import "GEVec.h"
 @class EGMapSso;
 @class TRLevelFactory;
@@ -14,7 +14,7 @@
 
 @class TRDamageTest;
 
-@interface TRDamageTest : CNTestCase
+@interface TRDamageTest : TSTestCase
 + (id)damageTest;
 - (id)init;
 - (ODClassType*)type;
