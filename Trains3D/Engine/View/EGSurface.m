@@ -125,7 +125,7 @@ static NSString* _EGFullScreenSurfaceShader_vertex = @"attribute vec2 position;\
     "varying vec2 UV;\n"
     "\n"
     "void main(void) {\n"
-    "   gl_Position = vec4(2.0*position.x - 1.0, 2.0*position.y - 1.0, 0.1, 1);\n"
+    "   gl_Position = vec4(2.0*position.x - 1.0, 2.0*position.y - 1.0, 0, 1);\n"
     "   UV = position;\n"
     "}";
 static NSString* _EGFullScreenSurfaceShader_fragment = @"varying vec2 UV;\n"

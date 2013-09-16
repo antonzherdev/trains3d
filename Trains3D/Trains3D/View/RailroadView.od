@@ -13,7 +13,6 @@ class RailroadView(railroad : Railroad) {
 
     def draw {
         railroadSurface.maybe(railroad.changed) {
-            glClearColor(1, 0, 0, 1)
             egClear
             backgroundView.draw
             railroad.rails.for(railView.draw(_))

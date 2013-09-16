@@ -47,7 +47,6 @@ static ODClassType* _TRRailroadView_type;
 
 - (void)draw {
     [_railroadSurface maybeForce:_railroad.changed draw:^void() {
-        glClearColor(1.0, 0.0, 0.0, 1.0);
         egClear();
         [_backgroundView draw];
         [[_railroad rails] forEach:^void(TRRail* _) {
