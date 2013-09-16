@@ -16,7 +16,7 @@
 + (id)cameraIsoWithTilesOnScreen:(GEVec2i)tilesOnScreen center:(GEVec2)center;
 - (id)initWithTilesOnScreen:(GEVec2i)tilesOnScreen center:(GEVec2)center;
 - (ODClassType*)type;
-- (GERecti)calculateViewportSizeWithViewSize:(GEVec2)viewSize;
+- (GERecti)viewportWithViewSize:(GEVec2)viewSize;
 - (void)focusForViewSize:(GEVec2)viewSize;
 - (GEVec2)translateWithViewSize:(GEVec2)viewSize viewPoint:(GEVec2)viewPoint;
 + (ODClassType*)type;

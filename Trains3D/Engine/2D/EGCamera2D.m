@@ -2,7 +2,6 @@
 
 #import "EGContext.h"
 #import "GEMat4.h"
-#import "GL.h"
 @implementation EGCamera2D{
     GEVec2 _size;
     EGMatrixModel* _matrixModel;
@@ -33,22 +32,21 @@ static ODClassType* _EGCamera2D_type;
     return ((float)(min(((CGFloat)(viewSize.x / _size.x)), ((CGFloat)(viewSize.y / _size.y)))));
 }
 
-- (GERecti)viewportRectForViewSize:(GEVec2)viewSize {
-    return [self viewportRectForViewSize:viewSize factor:[self factorForViewSize:viewSize]];
+- (GERecti)viewportWithViewSize:(GEVec2)viewSize {
+    return [self viewportWithViewSize:viewSize factor:[self factorForViewSize:viewSize]];
 }
 
-- (GERecti)viewportRectForViewSize:(GEVec2)viewSize factor:(float)factor {
+- (GERecti)viewportWithViewSize:(GEVec2)viewSize factor:(float)factor {
     return geRectiMoveToCenterForSize(geRectiApplyXYWidthHeight(0.0, 0.0, _size.x * factor, _size.y * factor), viewSize);
 }
 
 - (void)focusForViewSize:(GEVec2)viewSize {
-    egViewport([self viewportRectForViewSize:viewSize]);
     EGGlobal.matrix.value = _matrixModel;
 }
 
 - (GEVec2)translateWithViewSize:(GEVec2)viewSize viewPoint:(GEVec2)viewPoint {
     float factor = [self factorForViewSize:viewSize];
-    GERecti viewport = [self viewportRectForViewSize:viewSize factor:factor];
+    GERecti viewport = [self viewportWithViewSize:viewSize factor:factor];
     return geVec2DivValue(geVec2SubVec2(viewPoint, geVec2ApplyVec2i(viewport.origin)), factor);
 }
 

@@ -113,7 +113,9 @@ static ODClassType* _EGLayer_type;
 }
 
 - (void)drawWithViewSize:(GEVec2)viewSize {
-    [[_view camera] focusForViewSize:viewSize];
+    id<EGCamera> camera = [_view camera];
+    [EGGlobal.context setViewport:[camera viewportWithViewSize:viewSize]];
+    [camera focusForViewSize:viewSize];
     EGGlobal.context.environment = [_view environment];
     [_view drawView];
 }

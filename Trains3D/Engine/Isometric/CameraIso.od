@@ -6,7 +6,7 @@ import core.math._
 class CameraIso(tilesOnScreen : vec2i, center : vec2) extends Camera {
     private static val ISO = MapSso.ISO
 
-    def calculateViewportSizeWith(viewSize : vec2) : recti = {
+    def viewportWith(viewSize : vec2) : recti = {
         val ww = tilesOnScreen.x + tilesOnScreen.y
         val tileSize = min(viewSize.x / ww, 2*viewSize.y/ ww)
         val viewportWidth = tileSize * ww
@@ -31,14 +31,12 @@ class CameraIso(tilesOnScreen : vec2i, center : vec2) extends Camera {
     }
 
     def focusFor(viewSize : vec2) {
-        val vps = calculateViewportSizeWith(viewSize)
-        egViewport(vps)
         matrix.value = matrixModel
         glCullFace(GL_FRONT)
     }
 
     def translateWith(viewSize : vec2, viewPoint : vec2) : vec2 = {
-        val vps = calculateViewportSizeWith(viewSize)
+        val vps = viewportWith(viewSize)
         val x = viewPoint.x - vps.x
         val y = viewPoint.y - vps.y
         val vw = vps.size.x

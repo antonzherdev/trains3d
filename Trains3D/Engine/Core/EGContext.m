@@ -3,6 +3,7 @@
 #import "EGDirector.h"
 #import "EGTexture.h"
 #import "EGTypes.h"
+#import "GL.h"
 #import "GEMat4.h"
 @implementation EGGlobal
 static EGContext* _EGGlobal_context;
@@ -68,6 +69,7 @@ static ODClassType* _EGGlobal_type;
     EGDirector* _director;
     EGEnvironment* _environment;
     EGMatrixStack* _matrixStack;
+    GERecti __viewport;
 }
 static ODClassType* _EGContext_type;
 @synthesize director = _director;
@@ -98,6 +100,15 @@ static ODClassType* _EGContext_type;
     return ((EGFileTexture*)([_textureCache objectForKey:file orUpdateWith:^EGFileTexture*() {
         return [EGFileTexture fileTextureWithFile:file];
     }]));
+}
+
+- (GERecti)viewport {
+    return __viewport;
+}
+
+- (void)setViewport:(GERecti)viewport {
+    __viewport = viewport;
+    egViewport(viewport);
 }
 
 - (ODClassType*)type {

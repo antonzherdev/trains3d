@@ -40,7 +40,7 @@ static ODClassType* _EGCameraIso_type;
     _EGCameraIso_ISO = EGMapSso.ISO;
 }
 
-- (GERecti)calculateViewportSizeWithViewSize:(GEVec2)viewSize {
+- (GERecti)viewportWithViewSize:(GEVec2)viewSize {
     NSInteger ww = _tilesOnScreen.x + _tilesOnScreen.y;
     CGFloat tileSize = min(((CGFloat)(viewSize.x / ww)), ((CGFloat)(2 * viewSize.y / ww)));
     CGFloat viewportWidth = tileSize * ww;
@@ -49,14 +49,12 @@ static ODClassType* _EGCameraIso_type;
 }
 
 - (void)focusForViewSize:(GEVec2)viewSize {
-    GERecti vps = [self calculateViewportSizeWithViewSize:viewSize];
-    egViewport(vps);
     EGGlobal.matrix.value = _matrixModel;
     glCullFace(GL_FRONT);
 }
 
 - (GEVec2)translateWithViewSize:(GEVec2)viewSize viewPoint:(GEVec2)viewPoint {
-    GERecti vps = [self calculateViewportSizeWithViewSize:viewSize];
+    GERecti vps = [self viewportWithViewSize:viewSize];
     float x = viewPoint.x - geRectiX(vps);
     float y = viewPoint.y - geRectiY(vps);
     NSInteger vw = vps.size.x;

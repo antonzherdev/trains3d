@@ -1,4 +1,5 @@
 #import "objd.h"
+#import "GEVec.h"
 @class EGDirector;
 @class EGFileTexture;
 @class EGEnvironment;
@@ -28,6 +29,8 @@
 - (id)init;
 - (ODClassType*)type;
 - (EGFileTexture*)textureForFile:(NSString*)file;
+- (GERecti)viewport;
+- (void)setViewport:(GERecti)viewport;
 + (ODClassType*)type;
 @end
 
