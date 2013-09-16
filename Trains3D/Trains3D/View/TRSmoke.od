@@ -25,28 +25,28 @@ class TRSmoke(weak train : TRTrain) extends EGBillboardParticleSystem {
     static val particleSize : float4 = 0.03
     static val modelQuad = Quad(particleSize)
     static val textureQuadrant : Quadrant = Quad.identity.quadrant
-    static val defColor = Vec4(1, 1, 1, 0.7)
+    static val defColor = vec4(1, 1, 1, 0.7)
     def generateParticle : TRSmokeParticle =  {
         val pos = engine.position
         val fPos = pos.head.point
         val bPos = pos.tail.point
         val delta = bPos.sub(fPos)
         val tubeXY = fPos.add(delta.set(length = tubePos.x))
-        val emitterPos = Vec3(tubeXY, tubePos.z)
+        val emitterPos = vec3(tubeXY, tubePos.z)
 
         val p = TRSmokeParticle()
         p.color = defColor
-        p.position = Vec3(emitterPos.x + randomFloatGap(-0.01, 0.01), emitterPos.y + randomFloatGap(-0.01, 0.01), emitterPos.z)
+        p.position = vec3(emitterPos.x + randomFloatGap(-0.01, 0.01), emitterPos.y + randomFloatGap(-0.01, 0.01), emitterPos.z)
         p.model = modelQuad
         p.uv = textureQuadrant.randomQuad
-        val s = Vec3((if(train.isBack) fPos.sub(bPos) else delta).set(length = train.speedFloat), zSpeed)
-        p.speed = Vec3(-s.x * randomPercents(0.6), -s.y * randomPercents(0.6), s.z * randomPercents(0.6))
+        val s = vec3((if(train.isBack) fPos.sub(bPos) else delta).set(length = train.speedFloat), zSpeed)
+        p.speed = vec3(-s.x * randomPercents(0.6), -s.y * randomPercents(0.6), s.z * randomPercents(0.6))
         p
     }
 }
 
 class TRSmokeParticle extends EGBillboardParticle(4) {
-    var speed : Vec3
+    var speed : vec3
     static val dragCoefficient = 1 // air resistance coefficient | a = -dragCoefficient * sqr(speed)
 
     def update(t : float4, dt : float4) {
@@ -54,7 +54,7 @@ class TRSmokeParticle extends EGBillboardParticle(4) {
         speed = speed.add(a.mul(dt))
         position = position.add(speed.mul(dt))
         if(lifeTime > 3) {
-            color = Vec4(1, 1, 1, 2.8 - 0.7*lifeTime)
+            color = vec4(1, 1, 1, 2.8 - 0.7*lifeTime)
         }
     }
 }

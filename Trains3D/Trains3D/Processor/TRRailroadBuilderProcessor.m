@@ -150,9 +150,9 @@ static ODClassType* _TRRailroadBuilderMouseProcessor_type;
     return unumb([[_startedPoint map:^id(id sp) {
         GEVec2 deltaVector = geVec2SubVec2([event location], uwrap(GEVec2, sp));
         if(geVec2LengthSquare(deltaVector) > 0.25) {
-            GEVec2I spTile = geVec2IApplyVec2(uwrap(GEVec2, sp));
-            GEVec2I start = [self normPoint:geVec2SubVec2(uwrap(GEVec2, sp), geVec2ApplyVec2i(spTile))];
-            GEVec2I end = geVec2IAddVec2i(start, [self normPoint:geVec2SetLength(deltaVector, 0.7)]);
+            GEVec2i spTile = geVec2iApplyVec2(uwrap(GEVec2, sp));
+            GEVec2i start = [self normPoint:geVec2SubVec2(uwrap(GEVec2, sp), geVec2ApplyVec2i(spTile))];
+            GEVec2i end = geVec2iAddVec2i(start, [self normPoint:geVec2SetLength(deltaVector, 0.7)]);
             [_builder tryBuildRail:[self convertRail:[self correctRail:TRRailCorrectionMake(spTile, start, end)]]];
         }
         return @YES;
@@ -167,8 +167,8 @@ static ODClassType* _TRRailroadBuilderMouseProcessor_type;
     }] getOr:@NO]);
 }
 
-- (GEVec2I)normPoint:(GEVec2)point {
-    return GEVec2IMake([self nX:((CGFloat)(point.x))], [self nX:((CGFloat)(point.y))]);
+- (GEVec2i)normPoint:(GEVec2)point {
+    return GEVec2iMake([self nX:((CGFloat)(point.x))], [self nX:((CGFloat)(point.y))]);
 }
 
 - (NSInteger)nX:(CGFloat)x {
@@ -189,10 +189,10 @@ static ODClassType* _TRRailroadBuilderMouseProcessor_type;
                     return [self moveRail:rail x:0 y:-1];
                 } else {
                     if(rail.start.x == 0 && rail.start.y == 0) {
-                        return [self correctRail:TRRailCorrectionMake(rail.tile, geVec2INegate(rail.end), rail.end)];
+                        return [self correctRail:TRRailCorrectionMake(rail.tile, geVec2iNegate(rail.end), rail.end)];
                     } else {
                         if(rail.end.x == 0 && rail.end.y == 0) {
-                            return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, geVec2INegate(rail.start))];
+                            return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, geVec2iNegate(rail.start))];
                         } else {
                             if(rail.start.x > rail.end.x) {
                                 return [self correctRail:TRRailCorrectionMake(rail.tile, rail.end, rail.start)];
@@ -201,15 +201,15 @@ static ODClassType* _TRRailroadBuilderMouseProcessor_type;
                                     return [self correctRail:TRRailCorrectionMake(rail.tile, rail.end, rail.start)];
                                 } else {
                                     if(eqf(fabs(((CGFloat)(rail.start.x))), 1) && eqf(fabs(((CGFloat)(rail.start.y))), 1) && rail.start.x != rail.end.x) {
-                                        return [self correctRail:TRRailCorrectionMake(rail.tile, GEVec2IMake(rail.start.x, 0), rail.end)];
+                                        return [self correctRail:TRRailCorrectionMake(rail.tile, GEVec2iMake(rail.start.x, 0), rail.end)];
                                     } else {
                                         if(eqf(fabs(((CGFloat)(rail.start.x))), 1) && eqf(fabs(((CGFloat)(rail.start.y))), 1)) {
-                                            return [self correctRail:TRRailCorrectionMake(rail.tile, GEVec2IMake(0, rail.start.y), rail.end)];
+                                            return [self correctRail:TRRailCorrectionMake(rail.tile, GEVec2iMake(0, rail.start.y), rail.end)];
                                         } else {
                                             if(eqf(fabs(((CGFloat)(rail.end.x))), 1) && eqf(fabs(((CGFloat)(rail.end.y))), 1) && rail.start.x != rail.end.x) {
-                                                return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, GEVec2IMake(rail.end.x, 0))];
+                                                return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, GEVec2iMake(rail.end.x, 0))];
                                             } else {
-                                                if(eqf(fabs(((CGFloat)(rail.end.x))), 1) && eqf(fabs(((CGFloat)(rail.end.y))), 1)) return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, GEVec2IMake(0, rail.end.y))];
+                                                if(eqf(fabs(((CGFloat)(rail.end.x))), 1) && eqf(fabs(((CGFloat)(rail.end.y))), 1)) return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, GEVec2iMake(0, rail.end.y))];
                                                 else return rail;
                                             }
                                         }
@@ -225,7 +225,7 @@ static ODClassType* _TRRailroadBuilderMouseProcessor_type;
 }
 
 - (TRRailCorrection)moveRail:(TRRailCorrection)rail x:(NSInteger)x y:(NSInteger)y {
-    return [self correctRail:TRRailCorrectionMake(GEVec2IMake(rail.tile.x + x, rail.tile.y + y), GEVec2IMake(rail.start.x - 2 * x, rail.start.y - 2 * y), GEVec2IMake(rail.end.x - 2 * x, rail.end.y - 2 * y))];
+    return [self correctRail:TRRailCorrectionMake(GEVec2iMake(rail.tile.x + x, rail.tile.y + y), GEVec2iMake(rail.start.x - 2 * x, rail.start.y - 2 * y), GEVec2iMake(rail.end.x - 2 * x, rail.end.y - 2 * y))];
 }
 
 - (TRRail*)convertRail:(TRRailCorrection)rail {

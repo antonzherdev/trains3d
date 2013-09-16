@@ -1,7 +1,7 @@
 #import "EGDynamicWorld.h"
 
 #import "EGCollisionBody.h"
-#import "GEMatrix.h"
+#import "GEMat4.h"
 #include "btBulletDynamicsCommon.h"
 @implementation EGDynamicWorld{
     GEVec3 _gravity;
@@ -186,7 +186,7 @@ static ODClassType* _EGDynamicBody_type;
     _EGDynamicBody_type = [ODClassType classTypeWithCls:[EGRigidBody class]];
 }
 
-- (GEMatrix *)matrix {
+- (GEMat4 *)matrix {
     btTransform trans;
     if(_isKinematic) {
         _motionState->getWorldTransform(trans);
@@ -195,7 +195,7 @@ static ODClassType* _EGDynamicBody_type;
     }
     float matrix[16];
     trans.getOpenGLMatrix(matrix);
-    return [GEMatrix matrixWithArray:matrix];
+    return [GEMat4 matrixWithArray:matrix];
 }
 
 - (float)friction {
@@ -215,7 +215,7 @@ static ODClassType* _EGDynamicBody_type;
 }
 
 
-- (void)setMatrix:(GEMatrix *)matrix {
+- (void)setMatrix:(GEMat4 *)matrix {
     btTransform trans;
     trans.setFromOpenGLMatrix(matrix.array);
     if(_isKinematic) {

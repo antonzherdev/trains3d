@@ -37,7 +37,7 @@
 		6F3DF0D3AB2B3F1BF120266B /* btScaledBvhTriangleMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0B5CDE0ED7F04E617FD /* btScaledBvhTriangleMeshShape.cpp */; };
 		6F3DF0F45FB4F149D7F4AC4A /* NSObject+CNOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1997138C42914C3DD51 /* NSObject+CNOption.m */; };
 		6F3DF1022FCED6F43C044A45 /* compatibility.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF31DE3CB3DB50438682A /* compatibility.inl */; };
-		6F3DF111031CFB35EF30E05F /* GEMatrix.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFAFFF39546E7F666542D /* GEMatrix.mm */; };
+		6F3DF111031CFB35EF30E05F /* GEMat4.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFAFFF39546E7F666542D /* GEMat4.mm */; };
 		6F3DF118DFA689B45CE98728 /* type_mat2x4.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFEAC0152CBA88223924F /* type_mat2x4.inl */; };
 		6F3DF11DF40DF028D8B46A90 /* intrinsic_exponential.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF9E398A909CC2C890CB2 /* intrinsic_exponential.inl */; };
 		6F3DF12C2F1A7C5E5F3D399B /* inertia.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF3017B5CFE8A627EA2CB /* inertia.inl */; };
@@ -1194,7 +1194,7 @@
 		6F3DFA3414CC30A8B005B9C0 /* EGOpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOpenGLView.m; sourceTree = "<group>"; };
 		6F3DFA363E29E82F722687A6 /* CNTreeMapTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNTreeMapTest.h; sourceTree = "<group>"; };
 		6F3DFA380C0731D22C07F314 /* btDynamicsWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btDynamicsWorld.h; sourceTree = "<group>"; };
-		6F3DFA3869436D8838A39D39 /* GEMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GEMatrix.h; sourceTree = "<group>"; };
+		6F3DFA3869436D8838A39D39 /* GEMat4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GEMat4.h; sourceTree = "<group>"; };
 		6F3DFA39EC58E3D33B823745 /* TR3DEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TR3DEngine.h; sourceTree = "<group>"; };
 		6F3DFA403FBCACC14EC46D88 /* KWBlockNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWBlockNode.m; sourceTree = "<group>"; };
 		6F3DFA41C450594BF55A0AD2 /* number_precision.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = number_precision.hpp; sourceTree = "<group>"; };
@@ -1248,7 +1248,7 @@
 		6F3DFAF22153F6467AD1B5D2 /* btConvexPlaneCollisionAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btConvexPlaneCollisionAlgorithm.h; sourceTree = "<group>"; };
 		6F3DFAFE1B1B448B453E71AD /* btGeneric6DofSpringConstraint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btGeneric6DofSpringConstraint.cpp; sourceTree = "<group>"; };
 		6F3DFAFE4079AB5333910238 /* BentleyOttmannTest.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = BentleyOttmannTest.od; sourceTree = "<group>"; };
-		6F3DFAFFF39546E7F666542D /* GEMatrix.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GEMatrix.mm; sourceTree = "<group>"; };
+		6F3DFAFFF39546E7F666542D /* GEMat4.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GEMat4.mm; sourceTree = "<group>"; };
 		6F3DFB000969082C9EEAC6B0 /* matrix_access.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = matrix_access.inl; sourceTree = "<group>"; };
 		6F3DFB0076CEE44EB9582FAC /* btConvexHull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btConvexHull.h; sourceTree = "<group>"; };
 		6F3DFB05E97A007B73330075 /* KWTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWTestCase.h; sourceTree = "<group>"; };
@@ -2449,8 +2449,8 @@
 				6F3DFFB2C0271CD6551A20E3 /* GEBentleyOttmann.h */,
 				6F3DF8B29A47877E8DA46B03 /* GEBentleyOttmann.m */,
 				6F3DF565A6985F3E9296B4E4 /* Matrix.od */,
-				6F3DFA3869436D8838A39D39 /* GEMatrix.h */,
-				6F3DFAFFF39546E7F666542D /* GEMatrix.mm */,
+				6F3DFA3869436D8838A39D39 /* GEMat4.h */,
+				6F3DFAFFF39546E7F666542D /* GEMat4.mm */,
 				6F3DFFE1E6691AF6318014C6 /* Vec.od */,
 				6F3DF033B05D8955BEAAD5BF /* GEVec.h */,
 				6F3DF09B89B5EBBB20529EB7 /* GEVec.m */,
@@ -3655,7 +3655,7 @@
 				6F3DFC12DFAE5725796652EB /* EGDynamicWorld.mm in Sources */,
 				6F3DF30176D30E90331587EC /* TRCar.m in Sources */,
 				6F3DFC33CB5BAFC2861C4FF6 /* GEBentleyOttmann.m in Sources */,
-				6F3DF111031CFB35EF30E05F /* GEMatrix.mm in Sources */,
+				6F3DF111031CFB35EF30E05F /* GEMat4.mm in Sources */,
 				6F3DFAA754DDECC75CC8095D /* GEVec.m in Sources */,
 				6F3DF86EE1C1F2FF68B03D65 /* geometry.m in Sources */,
 				6F3DFB4F0B53D8C608D6A564 /* eg.m in Sources */,

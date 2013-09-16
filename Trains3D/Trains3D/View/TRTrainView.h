@@ -12,7 +12,7 @@
 @class TRCar;
 @class TRCarPosition;
 @class GELineSegment;
-@class GEMatrix;
+@class GEMat4;
 @class EGMatrixModel;
 @class EGMatrixStack;
 @class TRCarType;

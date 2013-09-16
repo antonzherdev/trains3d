@@ -22,7 +22,7 @@ class TRSwitchProcessor(level : TRLevel) extends EGMouseProcessor {
 
     def mouseDown(event : EGEvent) = {
         val location = event.location
-        val tile : Vec2I = location
+        val tile : vec2i = location
         val relPoint = location.sub(tile)
         downed = index[relPoint].flatMap(v -> {
             val content = level.railroad.contentIn(tile, connector = v.a)

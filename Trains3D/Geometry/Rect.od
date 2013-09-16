@@ -3,16 +3,16 @@ package com.antonzherdev.geometry
 import core.ODMath._
 
 struct Rect(x : float, width : float, y : float, height : float) {
-    def contains(point : Vec2) : bool = x <= point.x && point.x <= x + width && y <= point.y && point.y <= y + height
+    def contains(point : vec2) : bool = x <= point.x && point.x <= x + width && y <= point.y && point.y <= y + height
         def x2 : float = x + width
         def y2 : float = y + height
 
     static def newXY(x : float, x2: float, y : float, y2 : float) : Rect = Rect(x, x2 - x, y, y2 - y)
 
     def move(x : float, y : float) = Rect(self.x + x, width, self.y + y, height)
-    def moveToCenterFor(size : Vec2) = Rect((size.x - width)/2, width, (size.y - height)/2, height)
-    def point : Vec2 = Vec2(x, y)
-    def size : Vec2 = Vec2(width, height)
+    def moveToCenterFor(size : vec2) = Rect((size.x - width)/2, width, (size.y - height)/2, height)
+    def point : vec2 = vec2(x, y)
+    def size : vec2 = vec2(width, height)
 
     def intersects(rect : Rect) : bool =
         x <= rect.x2 && x2 >= rect.x &&

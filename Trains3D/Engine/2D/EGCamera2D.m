@@ -1,7 +1,7 @@
 #import "EGCamera2D.h"
 
 #import "EG.h"
-#import "GEMatrix.h"
+#import "GEMat4.h"
 #import "EGGL.h"
 @implementation EGCamera2D{
     GEVec2 _size;
@@ -18,7 +18,7 @@ static ODClassType* _EGCamera2D_type;
     self = [super init];
     if(self) {
         _size = size;
-        _matrixModel = [EGMatrixModel applyM:[GEMatrix identity] w:[GEMatrix identity] c:[GEMatrix identity] p:[GEMatrix orthoLeft:0.0 right:_size.x bottom:0.0 top:_size.y zNear:-1.0 zFar:1.0]];
+        _matrixModel = [EGMatrixModel applyM:[GEMat4 identity] w:[GEMat4 identity] c:[GEMat4 identity] p:[GEMat4 orthoLeft:0.0 right:_size.x bottom:0.0 top:_size.y zNear:-1.0 zFar:1.0]];
     }
     
     return self;

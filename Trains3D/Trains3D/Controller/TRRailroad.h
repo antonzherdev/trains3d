@@ -42,11 +42,11 @@
 
 
 @interface TRRail : TRRailroadConnectorContent
-@property (nonatomic, readonly) GEVec2I tile;
+@property (nonatomic, readonly) GEVec2i tile;
 @property (nonatomic, readonly) TRRailForm* form;
 
-+ (id)railWithTile:(GEVec2I)tile form:(TRRailForm*)form;
-- (id)initWithTile:(GEVec2I)tile form:(TRRailForm*)form;
++ (id)railWithTile:(GEVec2i)tile form:(TRRailForm*)form;
+- (id)initWithTile:(GEVec2i)tile form:(TRRailForm*)form;
 - (ODClassType*)type;
 - (BOOL)hasConnector:(TRRailConnector*)connector;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
@@ -58,14 +58,14 @@
 
 
 @interface TRSwitch : TRRailroadConnectorContent
-@property (nonatomic, readonly) GEVec2I tile;
+@property (nonatomic, readonly) GEVec2i tile;
 @property (nonatomic, readonly) TRRailConnector* connector;
 @property (nonatomic, readonly) TRRail* rail1;
 @property (nonatomic, readonly) TRRail* rail2;
 @property (nonatomic) BOOL firstActive;
 
-+ (id)switchWithTile:(GEVec2I)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
-- (id)initWithTile:(GEVec2I)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
++ (id)switchWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
+- (id)initWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
 - (ODClassType*)type;
 - (TRRail*)activeRail;
 - (void)turn;
@@ -78,13 +78,13 @@
 
 
 @interface TRLight : TRRailroadConnectorContent
-@property (nonatomic, readonly) GEVec2I tile;
+@property (nonatomic, readonly) GEVec2i tile;
 @property (nonatomic, readonly) TRRailConnector* connector;
 @property (nonatomic, readonly) TRRail* rail;
 @property (nonatomic) BOOL isGreen;
 
-+ (id)lightWithTile:(GEVec2I)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail;
-- (id)initWithTile:(GEVec2I)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail;
++ (id)lightWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail;
+- (id)initWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail;
 - (ODClassType*)type;
 - (void)turn;
 - (BOOL)canAddRail:(TRRail*)rail;
@@ -129,7 +129,7 @@
 - (id<CNSeq>)damagesPoints;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (BOOL)tryAddRail:(TRRail*)rail;
-- (TRRailroadConnectorContent*)contentInTile:(GEVec2I)tile connector:(TRRailConnector*)connector;
+- (TRRailroadConnectorContent*)contentInTile:(GEVec2i)tile connector:(TRRailConnector*)connector;
 - (TRRailPointCorrection*)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(CGFloat)forLength point:(TRRailPoint*)point;
 - (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint*)from to:(CGFloat)to;
 - (void)addDamageAtPoint:(TRRailPoint*)point;

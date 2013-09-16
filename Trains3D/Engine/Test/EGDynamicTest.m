@@ -2,7 +2,7 @@
 
 #import "EGDynamicWorld.h"
 #import "EGCollisionBody.h"
-#import "GEMatrix.h"
+#import "GEMat4.h"
 @implementation EGDynamicTest
 static ODClassType* _EGDynamicTest_type;
 
@@ -32,8 +32,8 @@ static ODClassType* _EGDynamicTest_type;
     EGCollisionBox* shape = [EGCollisionBox collisionBoxWithHalfSize:GEVec3Make(0.5, 0.5, 0.5)];
     EGRigidBody* body = [EGRigidBody dynamicData:@1 shape:shape mass:1.0];
     [world addBody:body];
-    body.matrix = [[GEMatrix identity] translateX:0.0 y:5.0 z:0.0];
-    GEMatrix* m = body.matrix;
+    body.matrix = [[GEMat4 identity] translateX:0.0 y:5.0 z:0.0];
+    GEMat4* m = body.matrix;
     [self assertTrueValue:eqf4([m array][13], 5)];
     GEVec3 v = body.velocity;
     [self assertEqualsA:wrap(GEVec3, v) b:wrap(GEVec3, GEVec3Make(0.0, 0.0, 0.0))];
@@ -52,7 +52,7 @@ static ODClassType* _EGDynamicTest_type;
     [world addBody:plane];
     EGRigidBody* body = [EGRigidBody dynamicData:@2 shape:[EGCollisionBox collisionBoxWithHalfSize:GEVec3Make(0.5, 0.5, 0.5)] mass:1.0];
     [world addBody:body];
-    body.matrix = [[GEMatrix identity] translateX:0.0 y:0.5 z:0.0];
+    body.matrix = [[GEMat4 identity] translateX:0.0 y:0.5 z:0.0];
     body.velocity = GEVec3Make(10.0, 0.0, 0.0);
     [self runSecondInWorld:world];
     GEVec3 v = body.velocity;

@@ -208,11 +208,11 @@ static ODClassType* _TRTrain_type;
 }
 
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch {
-    GEVec2I tile = theSwitch.tile;
-    GEVec2I nextTile = [theSwitch.connector nextTile:tile];
+    GEVec2i tile = theSwitch.tile;
+    GEVec2i nextTile = [theSwitch.connector nextTile:tile];
     return [[[self cars] findWhere:^BOOL(TRCar* car) {
         TRCarPosition* p = [car position];
-        return (GEVec2IEq(p.frontConnector.tile, tile) && GEVec2IEq(p.backConnector.tile, nextTile)) || (GEVec2IEq(p.frontConnector.tile, nextTile) && GEVec2IEq(p.backConnector.tile, tile));
+        return (GEVec2iEq(p.frontConnector.tile, tile) && GEVec2iEq(p.backConnector.tile, nextTile)) || (GEVec2iEq(p.frontConnector.tile, nextTile) && GEVec2iEq(p.backConnector.tile, tile));
     }] isDefined];
 }
 

@@ -8,18 +8,18 @@
 @class EGMapSsoView;
 
 @interface EGMapSso : NSObject
-@property (nonatomic, readonly) GEVec2I size;
+@property (nonatomic, readonly) GEVec2i size;
 @property (nonatomic, readonly) GERectI limits;
 @property (nonatomic, readonly) id<CNSeq> fullTiles;
 @property (nonatomic, readonly) id<CNSeq> partialTiles;
 @property (nonatomic, readonly) id<CNSeq> allTiles;
 
-+ (id)mapSsoWithSize:(GEVec2I)size;
-- (id)initWithSize:(GEVec2I)size;
++ (id)mapSsoWithSize:(GEVec2i)size;
+- (id)initWithSize:(GEVec2i)size;
 - (ODClassType*)type;
-- (BOOL)isFullTile:(GEVec2I)tile;
-- (BOOL)isPartialTile:(GEVec2I)tile;
-- (GERectI)cutRectForTile:(GEVec2I)tile;
+- (BOOL)isFullTile:(GEVec2i)tile;
+- (BOOL)isPartialTile:(GEVec2i)tile;
+- (GERectI)cutRectForTile:(GEVec2i)tile;
 + (CGFloat)ISO;
 + (ODClassType*)type;
 @end

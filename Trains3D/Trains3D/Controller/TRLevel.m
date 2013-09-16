@@ -11,7 +11,7 @@
 #import "TRCar.h"
 #import "TRTypes.h"
 @implementation TRLevelRules{
-    GEVec2I _mapSize;
+    GEVec2i _mapSize;
     TRScoreRules* _scoreRules;
     NSUInteger _repairerSpeed;
     id<CNSeq> _events;
@@ -22,11 +22,11 @@ static ODClassType* _TRLevelRules_type;
 @synthesize repairerSpeed = _repairerSpeed;
 @synthesize events = _events;
 
-+ (id)levelRulesWithMapSize:(GEVec2I)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
++ (id)levelRulesWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
     return [[TRLevelRules alloc] initWithMapSize:mapSize scoreRules:scoreRules repairerSpeed:repairerSpeed events:events];
 }
 
-- (id)initWithMapSize:(GEVec2I)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
+- (id)initWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
     self = [super init];
     if(self) {
         _mapSize = mapSize;
@@ -59,12 +59,12 @@ static ODClassType* _TRLevelRules_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRLevelRules* o = ((TRLevelRules*)(other));
-    return GEVec2IEq(self.mapSize, o.mapSize) && [self.scoreRules isEqual:o.scoreRules] && self.repairerSpeed == o.repairerSpeed && [self.events isEqual:o.events];
+    return GEVec2iEq(self.mapSize, o.mapSize) && [self.scoreRules isEqual:o.scoreRules] && self.repairerSpeed == o.repairerSpeed && [self.events isEqual:o.events];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2IHash(self.mapSize);
+    hash = hash * 31 + GEVec2iHash(self.mapSize);
     hash = hash * 31 + [self.scoreRules hash];
     hash = hash * 31 + self.repairerSpeed;
     hash = hash * 31 + [self.events hash];
@@ -73,7 +73,7 @@ static ODClassType* _TRLevelRules_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"mapSize=%@", GEVec2IDescription(self.mapSize)];
+    [description appendFormat:@"mapSize=%@", GEVec2iDescription(self.mapSize)];
     [description appendFormat:@", scoreRules=%@", self.scoreRules];
     [description appendFormat:@", repairerSpeed=%li", self.repairerSpeed];
     [description appendFormat:@", events=%@", self.events];
@@ -164,15 +164,15 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)createNewCity {
-    GEVec2I tile = uwrap(GEVec2I, [[[[_map.partialTiles chain] exclude:[[[self cities] chain] map:^id(TRCity* _) {
-        return wrap(GEVec2I, _.tile);
+    GEVec2i tile = uwrap(GEVec2i, [[[[_map.partialTiles chain] exclude:[[[self cities] chain] map:^id(TRCity* _) {
+        return wrap(GEVec2i, _.tile);
     }]] randomItem] get]);
     TRCity* city = [TRCity cityWithColor:[TRColor values][[[self cities] count]] tile:tile angle:[self randomCityDirectionForTile:tile]];
     [_railroad tryAddRail:[TRRail railWithTile:tile form:city.angle.form]];
     [__cities addItem:city];
 }
 
-- (TRCityAngle*)randomCityDirectionForTile:(GEVec2I)tile {
+- (TRCityAngle*)randomCityDirectionForTile:(GEVec2i)tile {
     GERectI cut = [_map cutRectForTile:tile];
     return ((TRCityAngle*)([[[[[TRCityAngle values] chain] filter:^BOOL(TRCityAngle* a) {
         NSInteger angle = a.angle;
@@ -233,9 +233,9 @@ static ODClassType* _TRLevel_type;
     }] isDefined];
 }
 
-- (id)cityForTile:(GEVec2I)tile {
+- (id)cityForTile:(GEVec2i)tile {
     return [__cities findWhere:^BOOL(TRCity* _) {
-        return GEVec2IEq(_.tile, tile);
+        return GEVec2iEq(_.tile, tile);
     }];
 }
 

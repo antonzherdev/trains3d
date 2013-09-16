@@ -1,4 +1,4 @@
-#import "GEMatrix.h"
+#import "GEMat4.h"
 
 //#if defined(__LP64__) && __LP64__
 //#define GLM_PRECISION_HIGHP_FLOAT
@@ -9,24 +9,24 @@
 #import "type_ptr.hpp"
 
 
-struct GEMatrixImpl {
+struct GEMat4Impl {
     glm::mat4 m;
 };
 
 
-@implementation GEMatrix {
+@implementation GEMat4 {
 @private
-    struct GEMatrixImpl *_impl;
+    struct GEMat4Impl *_impl;
 }
 
-static GEMatrix * _identity;
+static GEMat4 * _identity;
 
-- (struct GEMatrixImpl *)impl {
+- (struct GEMat4Impl *)impl {
     return _impl;
 }
 
 
-- (id)initWithImpl:(GEMatrixImpl *)m {
+- (id)initWithImpl:(GEMat4Impl *)m {
     self = [super init];
     if (self) {
         _impl = m;
@@ -35,28 +35,28 @@ static GEMatrix * _identity;
     return self;
 }
 
-+ (id)matrixWithImpl:(GEMatrixImpl *)m {
++ (id)matrixWithImpl:(GEMat4Impl *)m {
     return [[self alloc] initWithImpl:m];
 }
 
 + (id)matrixWithArray:(float [16])m {
-    GEMatrixImpl * impl = new GEMatrixImpl;
+    GEMat4Impl * impl = new GEMat4Impl;
     impl->m = glm::make_mat4(m);
-    return [GEMatrix matrixWithImpl:impl];
+    return [GEMat4 matrixWithImpl:impl];
 }
 
 
-- (GEMatrix *)mulMatrix:(GEMatrix *)matrix {
-    GEMatrixImpl * impl = new GEMatrixImpl;
+- (GEMat4 *)mulMatrix:(GEMat4 *)matrix {
+    GEMat4Impl * impl = new GEMat4Impl;
     impl->m = _impl->m * matrix.impl->m;
-    return [GEMatrix matrixWithImpl:impl];
+    return [GEMat4 matrixWithImpl:impl];
 }
 
 + (void)initialize {
     [super initialize];
-    GEMatrixImpl * impl = new GEMatrixImpl;
+    GEMat4Impl * impl = new GEMat4Impl;
     impl->m = glm::mat4(1.0);
-    _identity = [GEMatrix matrixWithImpl:impl];
+    _identity = [GEMat4 matrixWithImpl:impl];
 }
 
 
@@ -71,7 +71,7 @@ static GEMatrix * _identity;
 }
 
 
-+ (GEMatrix *)identity {
++ (GEMat4 *)identity {
     return _identity;
 }
 
@@ -79,10 +79,10 @@ static GEMatrix * _identity;
     return self;
 }
 
-+ (GEMatrix *)orthoLeft:(float)left right:(float)right bottom:(float)bottom top:(float)top zNear:(float)near zFar:(float)far {
-    GEMatrixImpl * impl = new GEMatrixImpl;
++ (GEMat4 *)orthoLeft:(float)left right:(float)right bottom:(float)bottom top:(float)top zNear:(float)near zFar:(float)far {
+    GEMat4Impl * impl = new GEMat4Impl;
     impl->m = glm::ortho(left, right, bottom, top, near, far);
-    return [GEMatrix matrixWithImpl:impl];
+    return [GEMat4 matrixWithImpl:impl];
 }
 
 - (void)dealloc {
@@ -92,7 +92,7 @@ static GEMatrix * _identity;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    GEMatrix * o = ((GEMatrix *)(other));
+    GEMat4 * o = ((GEMat4 *)(other));
     return memcmp(_impl, o.impl, sizeof(float[16])) == 0;
 }
 
@@ -100,22 +100,22 @@ static GEMatrix * _identity;
     return glm::value_ptr(_impl->m);
 }
 
-- (GEMatrix *)rotateAngle:(float)angle x:(float)x y:(float)y z:(float)z {
-    GEMatrixImpl * impl = new GEMatrixImpl;
+- (GEMat4 *)rotateAngle:(float)angle x:(float)x y:(float)y z:(float)z {
+    GEMat4Impl * impl = new GEMat4Impl;
     impl->m = glm::rotate(_impl->m, angle, glm::vec3(x, y, z));
-    return [GEMatrix matrixWithImpl:impl];
+    return [GEMat4 matrixWithImpl:impl];
 }
 
-- (GEMatrix *)scaleX:(float)x y:(float)y z:(float)z {
-    GEMatrixImpl * impl = new GEMatrixImpl;
+- (GEMat4 *)scaleX:(float)x y:(float)y z:(float)z {
+    GEMat4Impl * impl = new GEMat4Impl;
     impl->m = glm::scale(_impl->m, glm::vec3(x, y, z));
-    return [GEMatrix matrixWithImpl:impl];
+    return [GEMat4 matrixWithImpl:impl];
 }
 
-- (GEMatrix *)translateX:(float)x y:(float)y z:(float)z {
-    GEMatrixImpl * impl = new GEMatrixImpl;
+- (GEMat4 *)translateX:(float)x y:(float)y z:(float)z {
+    GEMat4Impl * impl = new GEMat4Impl;
     impl->m = glm::translate(_impl->m, glm::vec3(x, y, z));
-    return [GEMatrix matrixWithImpl:impl];
+    return [GEMat4 matrixWithImpl:impl];
 }
 
 - (NSString*)description {

@@ -41,8 +41,8 @@ class TRCollision(cars : CNPair<TRCar>, railPoint : TRRailPoint)
 
 class TRDynamicWorld extends EGController {
     private val world = {
-        val w = EGDynamicWorld<TRCar>(gravity = Vec3(0, 0, -10))
-        val plane = EGRigidBody<TRCar>(nil, EGCollisionPlane(Vec3(0, 0, 1), 0), false, 0)
+        val w = EGDynamicWorld<TRCar>(gravity = vec3(0, 0, -10))
+        val plane = EGRigidBody<TRCar>(nil, EGCollisionPlane(vec3(0, 0, 1), 0), false, 0)
         plane.friction = 0.4
         w.add(plane)
         w

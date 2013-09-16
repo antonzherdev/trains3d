@@ -10,7 +10,7 @@
 @class EGColorSource;
 @class EGStandardMaterial;
 @class TRRail;
-@class GEMatrix;
+@class GEMat4;
 @class EGMatrixModel;
 @class TRRailForm;
 @class EGMatrixStack;

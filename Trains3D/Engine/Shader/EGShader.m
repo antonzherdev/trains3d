@@ -1,7 +1,7 @@
 #import "EGShader.h"
 
 #import "EGMesh.h"
-#import "GEMatrix.h"
+#import "GEMat4.h"
 @implementation EGShaderProgram{
     GLuint _handle;
 }
@@ -294,7 +294,7 @@ static ODClassType* _EGShaderUniform_type;
     _EGShaderUniform_type = [ODClassType classTypeWithCls:[EGShaderUniform class]];
 }
 
-- (void)setMatrix:(GEMatrix*)matrix {
+- (void)setMatrix:(GEMat4*)matrix {
     glUniformMatrix4fv(_handle, 1, GL_FALSE, [matrix array]);
 }
 

@@ -25,10 +25,10 @@
 - (ODClassType*)type;
 + (EGScene*)sceneForLevel:(TRLevel*)level;
 + (TRLevel*)levelWithNumber:(NSUInteger)number;
-+ (TRLevel*)levelWithMapSize:(GEVec2I)mapSize;
++ (TRLevel*)levelWithMapSize:(GEVec2i)mapSize;
 + (EGScene*)sceneForLevelWithNumber:(NSUInteger)number;
 + (TRScore*)score;
-+ (TRRailroad*)railroadWithMapSize:(GEVec2I)mapSize;
++ (TRRailroad*)railroadWithMapSize:(GEVec2i)mapSize;
 + (TRScoreRules*)scoreRules;
 + (ODClassType*)type;
 @end

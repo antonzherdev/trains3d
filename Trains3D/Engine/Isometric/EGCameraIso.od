@@ -3,10 +3,10 @@ package com.antonzherdev.eg
 import com.antonzherdev.eg.EGGL._
 import core.ODMath._
 
-class EGCameraIso(tilesOnScreen : Vec2I, center : Vec2) extends EGCamera {
+class EGCameraIso(tilesOnScreen : vec2i, center : vec2) extends EGCamera {
     private static val ISO = EGMapSso.ISO
 
-    def calculateViewportSizeWith(viewSize : Vec2) : Rect = {
+    def calculateViewportSizeWith(viewSize : vec2) : Rect = {
         val ww = tilesOnScreen.x + tilesOnScreen.y
         val tileSize = min(viewSize.x / ww, 2*viewSize.y/ ww)
         val viewportWidth = tileSize * ww
@@ -21,24 +21,24 @@ class EGCameraIso(tilesOnScreen : Vec2I, center : Vec2) extends EGCamera {
         val isoWW4 = isoWW2/2
 
         EGMatrixModel(
-            m = Matrix.identity.rotate(90, 1, 0, 0),
-            w = Matrix.identity.rotate(-90, 1, 0, 0),
-            c = Matrix.identity
+            m = mat4.identity.rotate(90, 1, 0, 0),
+            w = mat4.identity.rotate(-90, 1, 0, 0),
+            c = mat4.identity
                     .translate(-isoWW2 + ISO, -ISO*(tilesOnScreen.y - tilesOnScreen.x)/4 + isoWW4, -1000)
                     .rotate(30, 1, 0, 0)
                     .rotate(-45.0, 0, 1, 0),
-            p = Matrix.ortho(-isoWW2, isoWW2, 0, isoWW2, 0.0, 2000.0)
+            p = mat4.ortho(-isoWW2, isoWW2, 0, isoWW2, 0.0, 2000.0)
         )
     }
 
-    def focusFor(viewSize : Vec2) {
+    def focusFor(viewSize : vec2) {
         val vps = calculateViewportSizeWith(viewSize)
         glViewport(vps.x, vps.y, vps.width, vps.height)
         EG.matrix.value = matrixModel
         glCullFace(GL_FRONT)
     }
 
-    def translateWith(viewSize : Vec2, viewPoint : Vec2) : Vec2 = {
+    def translateWith(viewSize : vec2, viewPoint : vec2) : vec2 = {
         val vps = calculateViewportSizeWith(viewSize)
         val x = viewPoint.x - vps.x
         val y = viewPoint.y - vps.y
@@ -46,7 +46,7 @@ class EGCameraIso(tilesOnScreen : Vec2I, center : Vec2) extends EGCamera {
         val vh = vps.size.y
         val ww2 : float = (tilesOnScreen.x + tilesOnScreen.y)/2.0
         val tw : float = tilesOnScreen.x
-        Vec2((x/vw - y/vh)*ww2 + tw/2 - 0.5 + center.x, (x/vw + y/vh)*ww2 - tw/2 - 0.5 + center.y)
+        vec2((x/vw - y/vh)*ww2 + tw/2 - 0.5 + center.x, (x/vw + y/vh)*ww2 - tw/2 - 0.5 + center.y)
     }
 }
 

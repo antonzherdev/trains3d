@@ -1,19 +1,19 @@
 #import "eg.h"
 
-@implementation eg
-static ODClassType* _eg_type;
+@implementation Eg
+static ODClassType* _Eg_type;
 
 + (void)initialize {
     [super initialize];
-    _eg_type = [ODClassType classTypeWithCls:[eg class]];
+    _Eg_type = [ODClassType classTypeWithCls:[Eg class]];
 }
 
 - (ODClassType*)type {
-    return [eg type];
+    return [Eg type];
 }
 
 + (ODClassType*)type {
-    return _eg_type;
+    return _Eg_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

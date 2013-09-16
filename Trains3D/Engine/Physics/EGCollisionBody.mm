@@ -1,6 +1,6 @@
 #import "EGCollisionBody.h"
 
-#import "GEMatrix.h"
+#import "GEMat4.h"
 
 #include "btBulletCollisionCommon.h"
 #include "btBox2dShape.h"
@@ -9,7 +9,7 @@
     id _data;
     id<EGCollisionShape> _shape;
     BOOL _isKinematic;
-    GEMatrix * __matrix;
+    GEMat4 * __matrix;
     btCollisionObject* _obj;
 }
 @synthesize shape = _shape;
@@ -32,7 +32,7 @@ static ODClassType* _EGCollisionBody_type;
         _shape = shape;
         _isKinematic = isKinematic;
         _obj = nil;
-        __matrix = [GEMatrix identity];
+        __matrix = [GEMat4 identity];
         _obj = new btCollisionObject;
         _obj->setUserPointer((__bridge void *)self);
         int f = _obj->getCollisionFlags();
@@ -51,11 +51,11 @@ static ODClassType* _EGCollisionBody_type;
     _EGCollisionBody_type = [ODClassType classTypeWithCls:[EGCollisionBody class]];
 }
 
-- (GEMatrix *)matrix {
+- (GEMat4 *)matrix {
     return __matrix;
 }
 
-- (void)setMatrix:(GEMatrix *)matrix {
+- (void)setMatrix:(GEMat4 *)matrix {
     __matrix = matrix;
     _obj->getWorldTransform().setFromOpenGLMatrix(__matrix.array);
 }

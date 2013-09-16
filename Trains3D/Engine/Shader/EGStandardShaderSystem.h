@@ -14,7 +14,7 @@
 @class EGColorSourceTexture;
 @class EGTexture;
 @class EGColorSourceColor;
-@class GEMatrix;
+@class GEMat4;
 @class EGSimpleMaterial;
 
 @class EGStandardShaderSystem;

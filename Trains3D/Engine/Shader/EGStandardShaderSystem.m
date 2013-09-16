@@ -6,7 +6,7 @@
 #import "EGMesh.h"
 #import "EGGL.h"
 #import "EGTexture.h"
-#import "GEMatrix.h"
+#import "GEMat4.h"
 @implementation EGStandardShaderSystem
 static EGStandardShaderSystem* _EGStandardShaderSystem_instance;
 static NSMutableDictionary* _EGStandardShaderSystem_shaders;

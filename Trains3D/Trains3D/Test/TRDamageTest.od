@@ -5,14 +5,14 @@ import test._
 
 class TRDamageTest extends CNTestCase {
     def testMain {
-        val railroad = TRRailroad(EGMapSso(Vec2I(4, 3)), TRScore(TRLevelFactory.scoreRules))
+        val railroad = TRRailroad(EGMapSso(vec2i(4, 3)), TRScore(TRLevelFactory.scoreRules))
 
-        railroad.tryAdd(TRRail(Vec2I(1, 1), TRRailForm.leftRight))
-        railroad.addDamageAt(TRRailPoint(Vec2I(1, 1), TRRailForm.leftRight, 0.2, false))
-        railroad.addDamageAt(TRRailPoint(Vec2I(1, 1), TRRailForm.leftRight, 0.6, true))
+        railroad.tryAdd(TRRail(vec2i(1, 1), TRRailForm.leftRight))
+        railroad.addDamageAt(TRRailPoint(vec2i(1, 1), TRRailForm.leftRight, 0.2, false))
+        railroad.addDamageAt(TRRailPoint(vec2i(1, 1), TRRailForm.leftRight, 0.6, true))
 
         var damagesCount : [float] = []
-        val p0 = TRRailPoint(Vec2I(1, 1), TRRailForm.leftRight, 0, false)
+        val p0 = TRRailPoint(vec2i(1, 1), TRRailForm.leftRight, 0, false)
         val p1 = railroad.moveWith(obstacleProcessor = o -> {
             if(o.obstacleType == TRObstacleType.damage) damagesCount += o.point.x
             true

@@ -3,7 +3,7 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 
 
-class TRLevelRules(mapSize : Vec2I, scoreRules : TRScoreRules, repairerSpeed : uint, events : [(float, (TRLevel) -> void)])
+class TRLevelRules(mapSize : vec2i, scoreRules : TRScoreRules, repairerSpeed : uint, events : [(float, (TRLevel) -> void)])
 
 class TRLevel(rules : TRLevelRules) extends EGController {
     val map : EGMapSso = EGMapSso(rules.mapSize)
@@ -42,7 +42,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
         _cities.add(city)
     }
 
-    private def randomCityDirectionFor(tile : Vec2I) = {
+    private def randomCityDirectionFor(tile : vec2i) = {
         val cut = map.cutRectFor(tile)
         TRCityAngle.values.chain.filter{a ->
             val angle = a.angle
@@ -97,7 +97,7 @@ class TRLevel(rules : TRLevelRules) extends EGController {
 
     private def isLocked(theSwitch : TRSwitch) : bool = _trains.find(_.isLocked(theSwitch)).isDefined
 
-    def cityFor(tile : Vec2I) : TRCity? = _cities.find(_.tile == tile)
+    def cityFor(tile : vec2i) : TRCity? = _cities.find(_.tile == tile)
 
     def arrived(train : TRTrain) {
         remove(train)

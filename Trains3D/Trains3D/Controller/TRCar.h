@@ -7,7 +7,7 @@
 @class EGCollisionBody;
 @class EGRigidBody;
 @class GELineSegment;
-@class GEMatrix;
+@class GEMat4;
 @class TRRailPoint;
 
 @class TREngineType;

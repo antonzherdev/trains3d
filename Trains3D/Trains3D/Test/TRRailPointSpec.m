@@ -10,7 +10,7 @@
 SPEC_BEGIN(TRRailPointSpec)
     describe(@"TRRailPoint", ^{
         describe(@"should translate itself to CGPoint", ^{
-            GEVec2I t0 = GEVec2IMake(0, 0);
+            GEVec2i t0 = GEVec2iMake(0, 0);
             CGFloat sin45_2 = sqrt(2.0)/4.0;
             CGFloat tl = [[TRRailForm leftTop] length];
             CGFloat tl2 = tl/2;

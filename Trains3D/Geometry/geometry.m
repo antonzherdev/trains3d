@@ -1,24 +1,24 @@
 #import "geometry.h"
 
-@implementation geometry
-static NSString* _geometry_prefix = @"GE";
-static ODClassType* _geometry_type;
+@implementation Geometry
+static NSString* _Geometry_prefix = @"GE";
+static ODClassType* _Geometry_type;
 
 + (void)initialize {
     [super initialize];
-    _geometry_type = [ODClassType classTypeWithCls:[geometry class]];
+    _Geometry_type = [ODClassType classTypeWithCls:[Geometry class]];
 }
 
 - (ODClassType*)type {
-    return [geometry type];
+    return [Geometry type];
 }
 
 + (NSString*)prefix {
-    return _geometry_prefix;
+    return _Geometry_prefix;
 }
 
 + (ODClassType*)type {
-    return _geometry_type;
+    return _Geometry_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

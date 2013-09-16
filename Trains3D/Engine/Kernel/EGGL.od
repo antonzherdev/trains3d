@@ -46,7 +46,7 @@ stub object EGGL {
     def glUniformMatrix4fv(location : GLuint, count : GLsizei, transpose : GLboolean, value : [float4])
     def glUniform1f(location : GLuint, f : float4)
     def egUniformColor(location : GLuint, color : EGColor)
-    def egUniformVec3(location : GLuint, color : Vec3)
+    def egUniformVec3(location : GLuint, color : vec3)
 
     def glCreateProgram : GLuint
     def glAttachShader(program : GLuint, shader : GLuint)
@@ -127,5 +127,5 @@ stub object EGGL {
     val GL_VIEWPORT_BIT : GLenum
     def glPopAttrib
 
-    def egLoadTextureFromFile(target : GLuint, file : string) : Vec2
+    def egLoadTextureFromFile(target : GLuint, file : string) : vec2
 }

@@ -13,7 +13,7 @@
 
 + (TRRailConnector*)connectorForX:(NSInteger)x y:(NSInteger)y;
 - (TRRailConnector*)otherSideConnector;
-- (GEVec2I)nextTile:(GEVec2I)tile;
+- (GEVec2i)nextTile:(GEVec2i)tile;
 + (TRRailConnector*)left;
 + (TRRailConnector*)bottom;
 + (TRRailConnector*)top;
@@ -41,14 +41,14 @@
 
 
 @interface TRRailPoint : NSObject
-@property (nonatomic, readonly) GEVec2I tile;
+@property (nonatomic, readonly) GEVec2i tile;
 @property (nonatomic, readonly) TRRailForm* form;
 @property (nonatomic, readonly) CGFloat x;
 @property (nonatomic, readonly) BOOL back;
 @property (nonatomic, readonly) GEVec2 point;
 
-+ (id)railPointWithTile:(GEVec2I)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back;
-- (id)initWithTile:(GEVec2I)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back;
++ (id)railPointWithTile:(GEVec2i)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back;
+- (id)initWithTile:(GEVec2i)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back;
 - (ODClassType*)type;
 - (TRRailPoint*)addX:(CGFloat)x;
 - (TRRailConnector*)startConnector;
@@ -57,7 +57,7 @@
 - (TRRailPointCorrection*)correct;
 - (TRRailPoint*)invert;
 - (TRRailPoint*)setX:(CGFloat)x;
-- (GEVec2I)nextTile;
+- (GEVec2i)nextTile;
 + (ODClassType*)type;
 @end
 

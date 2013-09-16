@@ -10,10 +10,10 @@ class TRRailroadBuilderProcessor(builder : TRRailroadBuilder) extends EGProcesso
     def process(event : EGEvent) : bool = event.leftMouse(mouseProcessor) || event.touch(touchProcessor)
 }
 
-struct TRRailCorrection (tile : Vec2I, start : Vec2I, end : Vec2I)
+struct TRRailCorrection (tile : vec2i, start : vec2i, end : vec2i)
 
 class TRRailroadBuilderMouseProcessor(builder : TRRailroadBuilder) extends EGMouseProcessor {
-    private var startedPoint : Vec2? = nil
+    private var startedPoint : vec2? = nil
 
     def mouseDown(event : EGEvent) = {
         startedPoint = event.location
@@ -23,7 +23,7 @@ class TRRailroadBuilderMouseProcessor(builder : TRRailroadBuilder) extends EGMou
     def mouseDrag(event : EGEvent) = startedPoint.map(sp -> {
         val deltaVector = event.location.sub(sp)
         if(deltaVector.lengthSquare > 0.25) {
-            val spTile : Vec2I = sp
+            val spTile : vec2i = sp
             val start = norm(sp.sub(spTile))
             val end = start.add(norm(deltaVector.set(length = 0.7)))
             builder.tryBuild(convert(correct(TRRailCorrection(spTile, start, end))))
@@ -37,7 +37,7 @@ class TRRailroadBuilderMouseProcessor(builder : TRRailroadBuilder) extends EGMou
         true
     }).getOr(false)
 
-    private def norm(point : Vec2) = Vec2I(n(point.x), n(point.y))
+    private def norm(point : vec2) = vec2i(n(point.x), n(point.y))
     private def n(x : float) : int = lround(x*2)
 
     private def correct(rail : TRRailCorrection) : TRRailCorrection =
@@ -49,16 +49,16 @@ class TRRailroadBuilderMouseProcessor(builder : TRRailroadBuilder) extends EGMou
         else if(rail.end.x == 0 && rail.end.y == 0) correct(TRRailCorrection(rail.tile, rail.start, rail.start.negate))
         else if(rail.start.x > rail.end.x) correct(TRRailCorrection(rail.tile, rail.end, rail.start))
         else if(rail.start.x == rail.end.x && rail.start.y > rail.end.y) correct(TRRailCorrection(rail.tile, rail.end, rail.start))
-        else if(fabs(rail.start.x) == 1 && fabs(rail.start.y) == 1 && rail.start.x != rail.end.x) correct(TRRailCorrection(rail.tile, Vec2I(rail.start.x, 0), rail.end))
-        else if(fabs(rail.start.x) == 1 && fabs(rail.start.y) == 1) correct(TRRailCorrection(rail.tile, Vec2I(0, rail.start.y), rail.end))
-        else if(fabs(rail.end.x) == 1 && fabs(rail.end.y) == 1 && rail.start.x != rail.end.x) correct(TRRailCorrection(rail.tile, rail.start, Vec2I(rail.end.x, 0)))
-        else if(fabs(rail.end.x) == 1 && fabs(rail.end.y) == 1) correct(TRRailCorrection(rail.tile, rail.start, Vec2I(0, rail.end.y)))
+        else if(fabs(rail.start.x) == 1 && fabs(rail.start.y) == 1 && rail.start.x != rail.end.x) correct(TRRailCorrection(rail.tile, vec2i(rail.start.x, 0), rail.end))
+        else if(fabs(rail.start.x) == 1 && fabs(rail.start.y) == 1) correct(TRRailCorrection(rail.tile, vec2i(0, rail.start.y), rail.end))
+        else if(fabs(rail.end.x) == 1 && fabs(rail.end.y) == 1 && rail.start.x != rail.end.x) correct(TRRailCorrection(rail.tile, rail.start, vec2i(rail.end.x, 0)))
+        else if(fabs(rail.end.x) == 1 && fabs(rail.end.y) == 1) correct(TRRailCorrection(rail.tile, rail.start, vec2i(0, rail.end.y)))
         else rail
 
     private def move(rail : TRRailCorrection, x : int, y : int) = correct(TRRailCorrection(
-        Vec2I(rail.tile.x + x, rail.tile.y + y),
-        Vec2I(rail.start.x - 2*x, rail.start.y - 2*y),
-        Vec2I(rail.end.x - 2*x, rail.end.y - 2*y)))
+        vec2i(rail.tile.x + x, rail.tile.y + y),
+        vec2i(rail.start.x - 2*x, rail.start.y - 2*y),
+        vec2i(rail.end.x - 2*x, rail.end.y - 2*y)))
 
     private def convert(rail : TRRailCorrection) = TRRail(rail.tile, TRRailForm.formFor(
         TRRailConnector.connectorFor(rail.start.x, rail.start.y),

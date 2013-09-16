@@ -87,17 +87,17 @@ class EGBillboardShader(program : EGShaderProgram, texture : bool) extends EGSha
     }
 }
 
-struct EGBillboardBufferData(position : Vec3, model : Vec2, color : Vec4, uv : Vec2)
+struct EGBillboardBufferData(position : vec3, model : vec2, color : vec4, uv : vec2)
 
 
 class EGBillboardParticleSystem extends EGParticleSystem<EGBillboardParticle>
 
 
 class EGBillboardParticle(lifeLength : float4) extends EGParticle(lifeLength) {
-    var position : Vec3
+    var position : vec3
     var uv : Quad
     var model : Quad
-    var color : Vec4
+    var color : vec4
 
     def writeTo(array : CNVoidRefArray) : CNVoidRefArray = {
         array

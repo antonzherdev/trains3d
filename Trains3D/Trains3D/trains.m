@@ -1,19 +1,19 @@
 #import "trains.h"
 
-@implementation trains
-static ODClassType* _trains_type;
+@implementation Trains
+static ODClassType* _Trains_type;
 
 + (void)initialize {
     [super initialize];
-    _trains_type = [ODClassType classTypeWithCls:[trains class]];
+    _Trains_type = [ODClassType classTypeWithCls:[Trains class]];
 }
 
 - (ODClassType*)type {
-    return [trains type];
+    return [Trains type];
 }
 
 + (ODClassType*)type {
-    return _trains_type;
+    return _Trains_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

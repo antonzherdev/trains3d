@@ -43,7 +43,7 @@ class EGSurface(width : uint, height : uint) {
     }
 
 
-    private lazy val fullScreenVertexBuffer = EGVertexBuffer(Vec2.type).set([0, 0, 1, 0, 1, 1, 0, 1])
+    private lazy val fullScreenVertexBuffer = EGVertexBuffer(vec2.type).set([0, 0, 1, 0, 1, 1, 0, 1])
     private lazy val fullScreenIndexBuffer = EGIndexBuffer().set([0, 1, 2, 2, 3, 0])
     private lazy val shader = EGSurfaceShader()
     def drawFullScreen {

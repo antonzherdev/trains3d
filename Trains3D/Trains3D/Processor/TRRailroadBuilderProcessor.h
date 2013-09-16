@@ -23,28 +23,28 @@ typedef struct TRRailCorrection TRRailCorrection;
 
 
 struct TRRailCorrection {
-    GEVec2I tile;
-    GEVec2I start;
-    GEVec2I end;
+    GEVec2i tile;
+    GEVec2i start;
+    GEVec2i end;
 };
-static inline TRRailCorrection TRRailCorrectionMake(GEVec2I tile, GEVec2I start, GEVec2I end) {
+static inline TRRailCorrection TRRailCorrectionMake(GEVec2i tile, GEVec2i start, GEVec2i end) {
     return (TRRailCorrection){tile, start, end};
 }
 static inline BOOL TRRailCorrectionEq(TRRailCorrection s1, TRRailCorrection s2) {
-    return GEVec2IEq(s1.tile, s2.tile) && GEVec2IEq(s1.start, s2.start) && GEVec2IEq(s1.end, s2.end);
+    return GEVec2iEq(s1.tile, s2.tile) && GEVec2iEq(s1.start, s2.start) && GEVec2iEq(s1.end, s2.end);
 }
 static inline NSUInteger TRRailCorrectionHash(TRRailCorrection self) {
     NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2IHash(self.tile);
-    hash = hash * 31 + GEVec2IHash(self.start);
-    hash = hash * 31 + GEVec2IHash(self.end);
+    hash = hash * 31 + GEVec2iHash(self.tile);
+    hash = hash * 31 + GEVec2iHash(self.start);
+    hash = hash * 31 + GEVec2iHash(self.end);
     return hash;
 }
 static inline NSString* TRRailCorrectionDescription(TRRailCorrection self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<TRRailCorrection: "];
-    [description appendFormat:@"tile=%@", GEVec2IDescription(self.tile)];
-    [description appendFormat:@", start=%@", GEVec2IDescription(self.start)];
-    [description appendFormat:@", end=%@", GEVec2IDescription(self.end)];
+    [description appendFormat:@"tile=%@", GEVec2iDescription(self.tile)];
+    [description appendFormat:@", start=%@", GEVec2iDescription(self.start)];
+    [description appendFormat:@", end=%@", GEVec2iDescription(self.end)];
     [description appendString:@">"];
     return description;
 }

@@ -2,7 +2,7 @@
 #import "EGTypes.h"
 #import "GERect.h"
 
-@class GEMatrix;
+@class GEMat4;
 
 static inline void egRotate(CGFloat angle, CGFloat x, CGFloat y, CGFloat z) {
     glRotated(angle, x, y, z);

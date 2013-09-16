@@ -68,8 +68,8 @@ static NSArray* _TRRailConnector_values;
     }
 }
 
-- (GEVec2I)nextTile:(GEVec2I)tile {
-    return GEVec2IMake(tile.x + _x, tile.y + _y);
+- (GEVec2i)nextTile:(GEVec2i)tile {
+    return GEVec2iMake(tile.x + _x, tile.y + _y);
 }
 
 + (TRRailConnector*)left {
@@ -216,7 +216,7 @@ static NSArray* _TRRailForm_values;
 
 
 @implementation TRRailPoint{
-    GEVec2I _tile;
+    GEVec2i _tile;
     TRRailForm* _form;
     CGFloat _x;
     BOOL _back;
@@ -229,11 +229,11 @@ static ODClassType* _TRRailPoint_type;
 @synthesize back = _back;
 @synthesize point = _point;
 
-+ (id)railPointWithTile:(GEVec2I)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back {
++ (id)railPointWithTile:(GEVec2i)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back {
     return [[TRRailPoint alloc] initWithTile:tile form:form x:x back:back];
 }
 
-- (id)initWithTile:(GEVec2I)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back {
+- (id)initWithTile:(GEVec2i)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back {
     self = [super init];
     if(self) {
         _tile = tile;
@@ -290,7 +290,7 @@ static ODClassType* _TRRailPoint_type;
     return [TRRailPoint railPointWithTile:_tile form:_form x:x back:_back];
 }
 
-- (GEVec2I)nextTile {
+- (GEVec2i)nextTile {
     return [[self endConnector] nextTile:_tile];
 }
 
@@ -310,12 +310,12 @@ static ODClassType* _TRRailPoint_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRRailPoint* o = ((TRRailPoint*)(other));
-    return GEVec2IEq(self.tile, o.tile) && self.form == o.form && eqf(self.x, o.x) && self.back == o.back;
+    return GEVec2iEq(self.tile, o.tile) && self.form == o.form && eqf(self.x, o.x) && self.back == o.back;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2IHash(self.tile);
+    hash = hash * 31 + GEVec2iHash(self.tile);
     hash = hash * 31 + [self.form ordinal];
     hash = hash * 31 + floatHash(self.x);
     hash = hash * 31 + self.back;
@@ -324,7 +324,7 @@ static ODClassType* _TRRailPoint_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"tile=%@", GEVec2IDescription(self.tile)];
+    [description appendFormat:@"tile=%@", GEVec2iDescription(self.tile)];
     [description appendFormat:@", form=%@", self.form];
     [description appendFormat:@", x=%f", self.x];
     [description appendFormat:@", back=%d", self.back];

@@ -1,5 +1,5 @@
 package com.antonzherdev.eg
 
 class EGRectIndex<T>(rects : [(Rect, T)]) {
-    def apply(point : Vec2) : T? = rects.find(_.a.contains(point)).map(_.b)
+    def apply(point : vec2) : T? = rects.find(_.a.contains(point)).map(_.b)
 }

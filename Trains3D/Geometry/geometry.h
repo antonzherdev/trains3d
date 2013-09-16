@@ -1,8 +1,8 @@
 #import "objd.h"
 
-@class geometry;
+@class Geometry;
 
-@interface geometry : NSObject
+@interface Geometry : NSObject
 - (ODClassType*)type;
 + (NSString*)prefix;
 + (ODClassType*)type;

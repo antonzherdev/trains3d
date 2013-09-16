@@ -3,36 +3,36 @@ package com.antonzherdev.geometry
 import core.ODMath._
 
 class Line {
-    static def apply(slope : float, point : Vec2) : Line = SlopeLine(slope, calculateConstantWith(slope, point))
-    static def apply(p0 : Vec2, p1 : Vec2) : Line =
+    static def apply(slope : float, point : vec2) : Line = SlopeLine(slope, calculateConstantWith(slope, point))
+    static def apply(p0 : vec2, p1 : vec2) : Line =
         if(p0.x == p1.x) VerticalLine(p0.x)
         else {
             val slope = calculateSlopeWith(p0, p1)
             SlopeLine(slope, calculateConstantWith(slope, p0))
         }
 
-    static def calculateSlopeWith(p0 : Vec2, p1 : Vec2) : float = (p1.y - p0.y)/(p1.x - p0.x)
-    static def calculateConstantWith(slope : float, point : Vec2) : float = point.y - slope*point.x
+    static def calculateSlopeWith(p0 : vec2, p1 : vec2) : float = (p1.y - p0.y)/(p1.x - p0.x)
+    static def calculateConstantWith(slope : float, point : vec2) : float = point.y - slope*point.x
 
-    def contains(point : Vec2) : bool
+    def contains(point : vec2) : bool
     def isVertical : bool
     def isHorizontal : bool
 
-    def intersectionWith(line : Line) : Vec2?
+    def intersectionWith(line : Line) : vec2?
     def xIntersectionWith(line : Line) : float
 
-    def isRight(point : Vec2) : bool
+    def isRight(point : vec2) : bool
     def slope : float
     def moveWith(distance : float) : self
 
     def angle : float
     def degreeAngle : float = angle*180/M_PI
 
-    def perpendicularWith(point : Vec2) : Line
+    def perpendicularWith(point : vec2) : Line
 }
 
 class SlopeLine(slope : float, constant : float) extends Line {
-    def contains(point : Vec2) : bool = point.y == slope*point.x + constant
+    def contains(point : vec2) : bool = point.y == slope*point.x + constant
     def isVertical : bool = false
     def isHorizontal : bool = slope == 0
     def xIntersectionWith(line : Line) : float =
@@ -44,14 +44,14 @@ class SlopeLine(slope : float, constant : float) extends Line {
     def yFor(x : float) : float = {
         return slope*x + constant
     }
-    def intersectionWith(line : Line) : Vec2? =
+    def intersectionWith(line : Line) : vec2? =
         if (!line.isVertical && line.cast<SlopeLine>.slope == slope) nil
         else {
             val xInt = xIntersectionWith(line)
-            Vec2(xInt, yFor(xInt))
+            vec2(xInt, yFor(xInt))
         }
 
-    def isRight(point : Vec2) : bool =
+    def isRight(point : vec2) : bool =
         if(contains(point)) false
         else point.y < yFor(point.x)
 
@@ -62,26 +62,26 @@ class SlopeLine(slope : float, constant : float) extends Line {
         if(a < 0) M_PI + a else a
     }
 
-    def perpendicularWith(point : Vec2) : Line =
+    def perpendicularWith(point : vec2) : Line =
         if(slope == 0) VerticalLine(point.x)
         else Line(slope = -slope, point = point)
 }
 
 class VerticalLine(x : float) extends Line {
-    def contains(point : Vec2) : bool = point.x == x
+    def contains(point : vec2) : bool = point.x == x
     def isVertical : bool = true
     def isHorizontal : bool = false
     def xIntersectionWith(line : Line) : float = x
-    def intersectionWith(line : Line) : Vec2? =
+    def intersectionWith(line : Line) : vec2? =
         if(line.isVertical) nil
         else line.intersectionWith(self)
 
-    def isRight(point : Vec2) : bool = point.x > x
+    def isRight(point : vec2) : bool = point.x > x
     def slope : float = DBL_MAX
     def moveWith(distance : float) : self = VerticalLine(x + distance)
     def angle : float = M_PI_2
 
-    def perpendicularWith(point : Vec2) : Line = SlopeLine(0, point.y)
+    def perpendicularWith(point : vec2) : Line = SlopeLine(0, point.y)
 }
 
 trait Figure {
@@ -90,11 +90,11 @@ trait Figure {
 }
 
 
-class LineSegment(p0 : Vec2, p1 : Vec2) extends Figure {
-    static def newWith(p0 : Vec2, p1 : Vec2) : LineSegment =
+class LineSegment(p0 : vec2, p1 : vec2) extends Figure {
+    static def newWith(p0 : vec2, p1 : vec2) : LineSegment =
         if(p0.compare(p1) < 0) LineSegment(p0, p1) else LineSegment(p1, p0)
     static def newWith(x1 : float, y1 : float, x2 : float, y2 : float) : LineSegment =
-        LineSegment.newWith(Vec2(x1, y1), Vec2(x2, y2))
+        LineSegment.newWith(vec2(x1, y1), vec2(x2, y2))
 
     private val dir : bool = p0.y < p1.y || (p0.y == p1.y && p0.x < p1.x)
     def isVertical : bool = p0.x == p1.x
@@ -107,25 +107,25 @@ class LineSegment(p0 : Vec2, p1 : Vec2) extends Figure {
     }
     val boundingRect : Rect = Rect.newXY(min(p0.x, p1.x), max(p0.x, p1.x), min(p0.y, p1.y), max(p0.y, p1.y))
 
-    def contains(point : Vec2) : bool = {
+    def contains(point : vec2) : bool = {
         p0 == point || p1 == point ||
         (line.contains(point) && boundingRect.contains(point))
     }
 
-    def containsInBoundingRect(point : Vec2) : bool = boundingRect.contains(point)
+    def containsInBoundingRect(point : vec2) : bool = boundingRect.contains(point)
 
-    def intersectionWith(segment : LineSegment) : Vec2? =
+    def intersectionWith(segment : LineSegment) : vec2? =
         if (p0 == segment.p1) p0
         else if (p1 == segment.p0) p1
         else if(p0 == segment.p0) if(line == segment.line) nil else p0
         else if(p1 == segment.p1) if(line == segment.line) nil else p1
         else line.intersectionWith(segment.line).filter(p -> containsInBoundingRect(p) && segment.containsInBoundingRect(p))
 
-    def endingsContain(point :Vec2) : bool = p0 == point || p1 == point
+    def endingsContain(point :vec2) : bool = p0 == point || p1 == point
     def segments : [LineSegment] = [self]
-    def moveWith(point : Vec2) : LineSegment = moveWith(point.x, point.y)
+    def moveWith(point : vec2) : LineSegment = moveWith(point.x, point.y)
     def moveWith(x : float, y : float) : LineSegment = {
-        val ret = LineSegment(Vec2(p0.x + x, p0.y + y), Vec2(p1.x + x, p1.y + y))
+        val ret = LineSegment(vec2(p0.x + x, p0.y + y), vec2(p1.x + x, p1.y + y))
         ret.set(line = line.moveWith(distance = x + y))
         ret
     }
@@ -133,15 +133,15 @@ class LineSegment(p0 : Vec2, p1 : Vec2) extends Figure {
         self._line = line
     }
 
-    def mid : Vec2 = p0.mid(p1)
+    def mid : vec2 = p0.mid(p1)
     def angle = if(dir) line.angle else M_PI + line.angle
     def degreeAngle = if(dir) line.degreeAngle else 180 + line.degreeAngle
     def length = p1.sub(p0).length
-    def vec : Vec2 = p1.sub(p0)
-    def vec1 : Vec2 = p0.sub(p1)
+    def vec : vec2 = p1.sub(p0)
+    def vec1 : vec2 = p0.sub(p1)
 }
 
-class Polygon(points : [Vec2]) extends Figure {
+class Polygon(points : [vec2]) extends Figure {
     def boundingRect : Rect = {
         var minX = DBL_MAX
         var maxX = DBL_MIN

@@ -1,8 +1,8 @@
 #import "objd.h"
 
-@class eg;
+@class Eg;
 
-@interface eg : NSObject
+@interface Eg : NSObject
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

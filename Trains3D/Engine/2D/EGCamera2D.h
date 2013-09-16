@@ -3,7 +3,7 @@
 #import "GEVec.h"
 #import "GERect.h"
 @class EGMatrixModel;
-@class GEMatrix;
+@class GEMat4;
 @class EG;
 @class EGMatrixStack;
 

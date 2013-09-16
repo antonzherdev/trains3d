@@ -47,7 +47,7 @@ static ODClassType* _TRCollisionWorld_type;
         TRRailPoint* point = ((TRRailPoint*)([[[[[[[[(@[[car1 position].head, [car1 position].tail]) chain] mul:(@[[car2 position].head, [car2 position].tail])] sortBy] ascBy:^id(CNTuple* pair) {
             TRRailPoint* x = ((TRRailPoint*)(pair.a));
             TRRailPoint* y = ((TRRailPoint*)(pair.b));
-            if(x.form == y.form && GEVec2IEq(x.tile, y.tile)) return numf(fabs(x.x - y.x));
+            if(x.form == y.form && GEVec2iEq(x.tile, y.tile)) return numf(fabs(x.x - y.x));
             else return @1000;
         }] endSort] map:^TRRailPoint*(CNTuple* _) {
             return ((TRRailPoint*)(_.a));

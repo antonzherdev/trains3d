@@ -16,7 +16,7 @@ class TREmptyConnector extends TRRailroadConnectorContent {
     def connect(rail : TRRail, to : TRRailConnector) : TRRailroadConnectorContent = rail
 }
 
-class TRRail(tile : Vec2I, form : TRRailForm) extends TRRailroadConnectorContent {
+class TRRail(tile : vec2i, form : TRRailForm) extends TRRailroadConnectorContent {
     def has(connector : TRRailConnector) : bool = form.start == connector || form.end == connector
     def connect(rail : TRRail, to : TRRailConnector) : TRRailroadConnectorContent = TRSwitch(rail.tile, to, self, rail)
     def rails : [TRRail] = [self]
@@ -24,7 +24,7 @@ class TRRail(tile : Vec2I, form : TRRailForm) extends TRRailroadConnectorContent
     def canAdd(rail : TRRail) : bool = rail.form != form
 }
 
-class TRSwitch(tile : Vec2I, connector : TRRailConnector, rail1 : TRRail, rail2 : TRRail) extends TRRailroadConnectorContent {
+class TRSwitch(tile : vec2i, connector : TRRailConnector, rail1 : TRRail, rail2 : TRRail) extends TRRailroadConnectorContent {
     var firstActive = true
     def activeRail : TRRail = if(firstActive) rail1 else rail2
     def turn { firstActive = !firstActive }
@@ -34,7 +34,7 @@ class TRSwitch(tile : Vec2I, connector : TRRailConnector, rail1 : TRRail, rail2 
     def buildLightIn(connector : TRRailConnector) : TRRailroadConnectorContent = self
 }
 
-class TRLight(tile : Vec2I, connector : TRRailConnector, rail : TRRail) extends TRRailroadConnectorContent {
+class TRLight(tile : vec2i, connector : TRRailConnector, rail : TRRail) extends TRRailroadConnectorContent {
     var isGreen = true
     def turn { isGreen = !isGreen }
     def canAdd(rail : TRRail) : bool = self.rail.canAdd(rail)
@@ -59,8 +59,8 @@ class TRRailroad(map : EGMapSso, score : TRScore) {
     private var _lights : [TRLight] = []
     def lights = _lights
     val builder = TRRailroadBuilder(self)
-    private val connectorIndex = CNMapDefault(TREmptyConnector.instance, CNMutableHashMap<(Vec2I, TRRailConnector), TRRailroadConnectorContent>())
-    private val damagesIndex = CNMutableHashMap<(Vec2I, TRRailForm), [float]>()
+    private val connectorIndex = CNMapDefault(TREmptyConnector.instance, CNMutableHashMap<(vec2i, TRRailConnector), TRRailroadConnectorContent>())
+    private val damagesIndex = CNMutableHashMap<(vec2i, TRRailForm), [float]>()
     private var _damagesPoints = CNMutableArray<TRRailPoint>()
     def damagesPoints : [TRRailPoint] = _damagesPoints
 
@@ -80,14 +80,14 @@ class TRRailroad(map : EGMapSso, score : TRScore) {
         } else false
     }
 
-    def contentIn(tile : Vec2I, connector : TRRailConnector) : TRRailroadConnectorContent =
+    def contentIn(tile : vec2i, connector : TRRailConnector) : TRRailroadConnectorContent =
         connectorIndex[(tile, connector)]
 
     private def connect(rail : TRRail, to : TRRailConnector) {
         connectorIndex.modify(by = _.connect(rail, to), forKey = (rail.tile, to))
     }
 
-    private def buildLightsFor(tile : Vec2I, connector : TRRailConnector) {
+    private def buildLightsFor(tile : vec2i, connector : TRRailConnector) {
         val nextTile = connector.next(tile)
         val otherSideConnector = connector.otherSideConnector
 
@@ -102,12 +102,12 @@ class TRRailroad(map : EGMapSso, score : TRScore) {
         }
     }
 
-    private def isTurnRailIn(tile : Vec2I, connector : TRRailConnector) : bool = {
+    private def isTurnRailIn(tile : vec2i, connector : TRRailConnector) : bool = {
         val rails = connectorIndex[(tile, connector)].rails
         rails.count == 1 && rails[0].form.isTurn
     }
 
-    private def buildLightIn(tile : Vec2I, connector : TRRailConnector) {
+    private def buildLightIn(tile : vec2i, connector : TRRailConnector) {
         connectorIndex.modify(by = _.buildLightIn(connector), forKey = (tile, connector))
     }
 
@@ -118,7 +118,7 @@ class TRRailroad(map : EGMapSso, score : TRScore) {
         _lights = connectorIndex.values.chain.filter(_.is<TRLight>).toArray
     }
 
-    private def activeRailFor(tile : Vec2I, connector : TRRailConnector) : TRRail? =
+    private def activeRailFor(tile : vec2i, connector : TRRailConnector) : TRRail? =
         connectorIndex[(tile, connector)].rails.head
 
 

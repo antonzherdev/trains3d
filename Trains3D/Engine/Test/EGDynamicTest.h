@@ -4,7 +4,7 @@
 @class EGDynamicWorld;
 @class EGCollisionBox;
 @class EGRigidBody;
-@class GEMatrix;
+@class GEMat4;
 @class EGCollisionPlane;
 
 @class EGDynamicTest;

@@ -1,8 +1,8 @@
 #import "objd.h"
 
-@class trains;
+@class Trains;
 
-@interface trains : NSObject
+@interface Trains : NSObject
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

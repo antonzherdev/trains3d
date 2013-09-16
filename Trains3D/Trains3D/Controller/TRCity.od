@@ -12,7 +12,7 @@ enum TRCityAngle(angle : int, form : TRRailForm, back : bool) {
 /*
  * angle - поворот по часовой стрелке. При 0 город направлен по оси x в положительном направлении
  */
-class TRCity(color : TRColor, tile : Vec2I, angle : TRCityAngle) extends EGController {
+class TRCity(color : TRColor, tile : vec2i, angle : TRCityAngle) extends EGController {
     def startPoint = TRRailPoint(tile, angle.form, 0, angle.back)
 
     var expectedTrainAnimation : EGAnimation?

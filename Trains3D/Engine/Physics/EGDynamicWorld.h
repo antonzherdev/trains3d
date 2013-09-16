@@ -2,7 +2,7 @@
 #import "EGTypes.h"
 #import "GEVec.h"
 @protocol EGCollisionShape;
-@class GEMatrix;
+@class GEMat4;
 
 @class EGDynamicWorld;
 @class EGRigidBody;
@@ -38,8 +38,8 @@
 + (EGRigidBody*)kinematicData:(id)data shape:(id<EGCollisionShape>)shape;
 + (EGRigidBody*)dynamicData:(id)data shape:(id<EGCollisionShape>)shape mass:(float)mass;
 + (EGRigidBody*)staticalData:(id)data shape:(id<EGCollisionShape>)shape;
-- (GEMatrix *)matrix;
-- (void)setMatrix:(GEMatrix *)matrix;
+- (GEMat4 *)matrix;
+- (void)setMatrix:(GEMat4 *)matrix;
 - (GEVec3)velocity;
 - (void)setVelocity:(GEVec3)velocity;
 + (ODClassType*)type;

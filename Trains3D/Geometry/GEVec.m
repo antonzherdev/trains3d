@@ -1,6 +1,6 @@
 #import "GEVec.h"
 
-GEVec2 geVec2ApplyVec2i(GEVec2I vec2i) {
+GEVec2 geVec2ApplyVec2i(GEVec2i vec2i) {
     return GEVec2Make(((float)(vec2i.x)), ((float)(vec2i.y)));
 }
 GEVec2 geVec2AddVec2(GEVec2 self, GEVec2 vec2) {
@@ -99,62 +99,62 @@ ODPType* geVec2Type() {
 
 
 
-GEVec2I geVec2IApplyVec2(GEVec2 vec2) {
-    return GEVec2IMake(lround(((CGFloat)(vec2.x))), lround(((CGFloat)(vec2.y))));
+GEVec2i geVec2iApplyVec2(GEVec2 vec2) {
+    return GEVec2iMake(lround(((CGFloat)(vec2.x))), lround(((CGFloat)(vec2.y))));
 }
-GEVec2I geVec2IAddVec2i(GEVec2I self, GEVec2I vec2i) {
-    return GEVec2IMake(self.x + vec2i.x, self.y + vec2i.y);
+GEVec2i geVec2iAddVec2i(GEVec2i self, GEVec2i vec2i) {
+    return GEVec2iMake(self.x + vec2i.x, self.y + vec2i.y);
 }
-GEVec2I geVec2ISubVec2i(GEVec2I self, GEVec2I vec2i) {
-    return GEVec2IMake(self.x - vec2i.x, self.y - vec2i.y);
+GEVec2i geVec2iSubVec2i(GEVec2i self, GEVec2i vec2i) {
+    return GEVec2iMake(self.x - vec2i.x, self.y - vec2i.y);
 }
-GEVec2I geVec2INegate(GEVec2I self) {
-    return GEVec2IMake(-self.x, -self.y);
+GEVec2i geVec2iNegate(GEVec2i self) {
+    return GEVec2iMake(-self.x, -self.y);
 }
-NSInteger geVec2ICompareTo(GEVec2I self, GEVec2I to) {
+NSInteger geVec2iCompareTo(GEVec2i self, GEVec2i to) {
     NSInteger dX = intCompareTo(self.x, to.x);
     if(dX != 0) return dX;
     else return intCompareTo(self.y, to.y);
 }
-ODPType* geVec2IType() {
+ODPType* geVec2iType() {
     static ODPType* _ret = nil;
-    if(_ret == nil) _ret = [ODPType typeWithCls:[GEVec2IWrap class] name:@"GEVec2I" size:sizeof(GEVec2I) wrap:^id(void* data, NSUInteger i) {
-        return wrap(GEVec2I, ((GEVec2I*)(data))[i]);
+    if(_ret == nil) _ret = [ODPType typeWithCls:[GEVec2iWrap class] name:@"GEVec2i" size:sizeof(GEVec2i) wrap:^id(void* data, NSUInteger i) {
+        return wrap(GEVec2i, ((GEVec2i*)(data))[i]);
     }];
     return _ret;
 }
-@implementation GEVec2IWrap{
-    GEVec2I _value;
+@implementation GEVec2iWrap{
+    GEVec2i _value;
 }
 @synthesize value = _value;
 
-+ (id)wrapWithValue:(GEVec2I)value {
-    return [[GEVec2IWrap alloc] initWithValue:value];
++ (id)wrapWithValue:(GEVec2i)value {
+    return [[GEVec2iWrap alloc] initWithValue:value];
 }
 
-- (id)initWithValue:(GEVec2I)value {
+- (id)initWithValue:(GEVec2i)value {
     self = [super init];
     if(self) _value = value;
     return self;
 }
 
 - (NSString*)description {
-    return GEVec2IDescription(_value);
+    return GEVec2iDescription(_value);
 }
 
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    GEVec2IWrap* o = ((GEVec2IWrap*)(other));
-    return GEVec2IEq(_value, o.value);
+    GEVec2iWrap* o = ((GEVec2iWrap*)(other));
+    return GEVec2iEq(_value, o.value);
 }
 
 - (NSUInteger)hash {
-    return GEVec2IHash(_value);
+    return GEVec2iHash(_value);
 }
 
-- (NSInteger)compareTo:(GEVec2IWrap*)to {
-    return geVec2ICompareTo(_value, to.value);
+- (NSInteger)compareTo:(GEVec2iWrap*)to {
+    return geVec2iCompareTo(_value, to.value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {

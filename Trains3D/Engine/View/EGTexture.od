@@ -27,14 +27,14 @@ class EGTexture {
 
 class EGFileTexture(file : string) extends EGTexture  {
     private var _loaded = false
-    private var _size : Vec2
+    private var _size : vec2
 
     private def load {
         _size = egLoadTextureFromFile(id, CNBundle.fileNameFor(file))
         _loaded = true
     }
 
-    def size : Vec2 = {
+    def size : vec2 = {
         if(!_loaded) load
         _size
     }

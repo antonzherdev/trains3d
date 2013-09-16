@@ -27,13 +27,13 @@
 @class TRLevel;
 
 @interface TRLevelRules : NSObject
-@property (nonatomic, readonly) GEVec2I mapSize;
+@property (nonatomic, readonly) GEVec2i mapSize;
 @property (nonatomic, readonly) TRScoreRules* scoreRules;
 @property (nonatomic, readonly) NSUInteger repairerSpeed;
 @property (nonatomic, readonly) id<CNSeq> events;
 
-+ (id)levelRulesWithMapSize:(GEVec2I)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
-- (id)initWithMapSize:(GEVec2I)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
++ (id)levelRulesWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
+- (id)initWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -60,7 +60,7 @@
 - (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch;
-- (id)cityForTile:(GEVec2I)tile;
+- (id)cityForTile:(GEVec2i)tile;
 - (void)arrivedTrain:(TRTrain*)train;
 - (void)processCollisions;
 - (id<CNSeq>)detectCollisions;

@@ -8,17 +8,17 @@ class EGDynamicTest extends CNTestCase {
     }
 
     def testSimple {
-        val world = EGDynamicWorld<int>(Vec3(0, -10, 0))
-        val shape = EGCollisionBox(Vec3(0.5, 0.5, 0.5))
+        val world = EGDynamicWorld<int>(vec3(0, -10, 0))
+        val shape = EGCollisionBox(vec3(0.5, 0.5, 0.5))
         val body = EGRigidBody.dynamic<int>(1, shape, 1)
         world.add(body)
-        body.matrix = Matrix.identity.translate(0, 5, 0)
+        body.matrix = mat4.identity.translate(0, 5, 0)
 
         var m = body.matrix
         assertTrue(m.array[13] == 5)
 
         var v = body.velocity
-        assertEquals(v, Vec3(0, 0, 0))
+        assertEquals(v, vec3(0, 0, 0))
 
         runSecondIn(world)
         m = body.matrix
@@ -31,13 +31,13 @@ class EGDynamicTest extends CNTestCase {
     }
 
     def testFriction {
-        val world = EGDynamicWorld<int>(Vec3(0, -10, 0))
-        val plane = EGRigidBody.statical<int>(1, EGCollisionPlane(Vec3(0, 1, 0), 0))
+        val world = EGDynamicWorld<int>(vec3(0, -10, 0))
+        val plane = EGRigidBody.statical<int>(1, EGCollisionPlane(vec3(0, 1, 0), 0))
         world.add(plane)
-        val body = EGRigidBody.dynamic<int>(2, EGCollisionBox(Vec3(0.5, 0.5, 0.5)), 1)
+        val body = EGRigidBody.dynamic<int>(2, EGCollisionBox(vec3(0.5, 0.5, 0.5)), 1)
         world.add(body)
-        body.matrix = Matrix.identity.translate(0, 0.5, 0)
-        body.velocity = Vec3(10, 0, 0)
+        body.matrix = mat4.identity.translate(0, 0.5, 0)
+        body.velocity = vec3(10, 0, 0)
 
         runSecondIn(world)
 //        val m = body.matrix

@@ -3,7 +3,7 @@
 #import "EGDirector.h"
 #import "EGTexture.h"
 #import "EGTypes.h"
-#import "GEMatrix.h"
+#import "GEMat4.h"
 @implementation EG
 static EGContext* _EG_context;
 static EGMatrixStack* _EG_matrix;
@@ -210,10 +210,10 @@ static ODClassType* _EGMatrixStack_type;
 
 
 @implementation EGMatrixModel{
-    GEMatrix* _m;
-    GEMatrix* _w;
-    GEMatrix* _c;
-    GEMatrix* _p;
+    GEMat4* _m;
+    GEMat4* _w;
+    GEMat4* _c;
+    GEMat4* _p;
     CNLazy* __mw;
     CNLazy* __mwc;
     CNLazy* __mwcp;
@@ -234,11 +234,11 @@ static ODClassType* _EGMatrixModel_type;
 @synthesize _wcp = __wcp;
 @synthesize _wc = __wc;
 
-+ (id)matrixModelWithM:(GEMatrix*)m w:(GEMatrix*)w c:(GEMatrix*)c p:(GEMatrix*)p _mw:(CNLazy*)_mw _mwc:(CNLazy*)_mwc _mwcp:(CNLazy*)_mwcp _cp:(CNLazy*)_cp _wcp:(CNLazy*)_wcp _wc:(CNLazy*)_wc {
++ (id)matrixModelWithM:(GEMat4*)m w:(GEMat4*)w c:(GEMat4*)c p:(GEMat4*)p _mw:(CNLazy*)_mw _mwc:(CNLazy*)_mwc _mwcp:(CNLazy*)_mwcp _cp:(CNLazy*)_cp _wcp:(CNLazy*)_wcp _wc:(CNLazy*)_wc {
     return [[EGMatrixModel alloc] initWithM:m w:w c:c p:p _mw:_mw _mwc:_mwc _mwcp:_mwcp _cp:_cp _wcp:_wcp _wc:_wc];
 }
 
-- (id)initWithM:(GEMatrix*)m w:(GEMatrix*)w c:(GEMatrix*)c p:(GEMatrix*)p _mw:(CNLazy*)_mw _mwc:(CNLazy*)_mwc _mwcp:(CNLazy*)_mwcp _cp:(CNLazy*)_cp _wcp:(CNLazy*)_wcp _wc:(CNLazy*)_wc {
+- (id)initWithM:(GEMat4*)m w:(GEMat4*)w c:(GEMat4*)c p:(GEMat4*)p _mw:(CNLazy*)_mw _mwc:(CNLazy*)_mwc _mwcp:(CNLazy*)_mwcp _cp:(CNLazy*)_cp _wcp:(CNLazy*)_wcp _wc:(CNLazy*)_wc {
     self = [super init];
     if(self) {
         _m = m;
@@ -259,119 +259,119 @@ static ODClassType* _EGMatrixModel_type;
 + (void)initialize {
     [super initialize];
     _EGMatrixModel_type = [ODClassType classTypeWithCls:[EGMatrixModel class]];
-    _EGMatrixModel_identity = [EGMatrixModel applyM:[GEMatrix identity] w:[GEMatrix identity] c:[GEMatrix identity] p:[GEMatrix identity]];
+    _EGMatrixModel_identity = [EGMatrixModel applyM:[GEMat4 identity] w:[GEMat4 identity] c:[GEMat4 identity] p:[GEMat4 identity]];
 }
 
-+ (EGMatrixModel*)applyM:(GEMatrix*)m w:(GEMatrix*)w c:(GEMatrix*)c p:(GEMatrix*)p {
-    CNLazy* _mw = [CNLazy lazyWithF:^GEMatrix*() {
++ (EGMatrixModel*)applyM:(GEMat4*)m w:(GEMat4*)w c:(GEMat4*)c p:(GEMat4*)p {
+    CNLazy* _mw = [CNLazy lazyWithF:^GEMat4*() {
         return [w mulMatrix:m];
     }];
-    CNLazy* _mwc = [CNLazy lazyWithF:^GEMatrix*() {
-        return [c mulMatrix:((GEMatrix*)([_mw get]))];
+    CNLazy* _mwc = [CNLazy lazyWithF:^GEMat4*() {
+        return [c mulMatrix:((GEMat4*)([_mw get]))];
     }];
-    CNLazy* _cp = [CNLazy lazyWithF:^GEMatrix*() {
+    CNLazy* _cp = [CNLazy lazyWithF:^GEMat4*() {
         return [p mulMatrix:c];
     }];
-    CNLazy* _mwcp = [CNLazy lazyWithF:^GEMatrix*() {
-        return [((GEMatrix*)([_cp get])) mulMatrix:((GEMatrix*)([_mw get]))];
+    CNLazy* _mwcp = [CNLazy lazyWithF:^GEMat4*() {
+        return [((GEMat4*)([_cp get])) mulMatrix:((GEMat4*)([_mw get]))];
     }];
-    CNLazy* _wc = [CNLazy lazyWithF:^GEMatrix*() {
+    CNLazy* _wc = [CNLazy lazyWithF:^GEMat4*() {
         return [c mulMatrix:w];
     }];
-    CNLazy* _wcp = [CNLazy lazyWithF:^GEMatrix*() {
-        return [p mulMatrix:((GEMatrix*)([_wc get]))];
+    CNLazy* _wcp = [CNLazy lazyWithF:^GEMat4*() {
+        return [p mulMatrix:((GEMat4*)([_wc get]))];
     }];
     return [EGMatrixModel matrixModelWithM:m w:w c:c p:p _mw:_mw _mwc:_mwc _mwcp:_mwcp _cp:_cp _wcp:_wcp _wc:_wc];
 }
 
-- (GEMatrix*)mw {
-    return ((GEMatrix*)([__mw get]));
+- (GEMat4*)mw {
+    return ((GEMat4*)([__mw get]));
 }
 
-- (GEMatrix*)mwc {
-    return ((GEMatrix*)([__mwc get]));
+- (GEMat4*)mwc {
+    return ((GEMat4*)([__mwc get]));
 }
 
-- (GEMatrix*)mwcp {
-    return ((GEMatrix*)([__mwcp get]));
+- (GEMat4*)mwcp {
+    return ((GEMat4*)([__mwcp get]));
 }
 
-- (GEMatrix*)cp {
-    return ((GEMatrix*)([__cp get]));
+- (GEMat4*)cp {
+    return ((GEMat4*)([__cp get]));
 }
 
-- (GEMatrix*)wcp {
-    return ((GEMatrix*)([__wcp get]));
+- (GEMat4*)wcp {
+    return ((GEMat4*)([__wcp get]));
 }
 
-- (GEMatrix*)wc {
-    return ((GEMatrix*)([__wc get]));
+- (GEMat4*)wc {
+    return ((GEMat4*)([__wc get]));
 }
 
-- (EGMatrixModel*)modifyM:(GEMatrix*(^)(GEMatrix*))m {
-    GEMatrix* mm = m(_m);
-    CNLazy* _mw = [CNLazy lazyWithF:^GEMatrix*() {
+- (EGMatrixModel*)modifyM:(GEMat4*(^)(GEMat4*))m {
+    GEMat4* mm = m(_m);
+    CNLazy* _mw = [CNLazy lazyWithF:^GEMat4*() {
         return [_w mulMatrix:mm];
     }];
-    CNLazy* _mwc = [CNLazy lazyWithF:^GEMatrix*() {
-        return [_c mulMatrix:((GEMatrix*)([_mw get]))];
+    CNLazy* _mwc = [CNLazy lazyWithF:^GEMat4*() {
+        return [_c mulMatrix:((GEMat4*)([_mw get]))];
     }];
-    CNLazy* _mwcp = [CNLazy lazyWithF:^GEMatrix*() {
-        return [((GEMatrix*)([__cp get])) mulMatrix:((GEMatrix*)([_mw get]))];
+    CNLazy* _mwcp = [CNLazy lazyWithF:^GEMat4*() {
+        return [((GEMat4*)([__cp get])) mulMatrix:((GEMat4*)([_mw get]))];
     }];
     return [EGMatrixModel matrixModelWithM:mm w:_w c:_c p:_p _mw:_mw _mwc:_mwc _mwcp:_mwcp _cp:__cp _wcp:__wcp _wc:__wc];
 }
 
-- (EGMatrixModel*)modifyW:(GEMatrix*(^)(GEMatrix*))w {
-    GEMatrix* ww = w(_w);
-    CNLazy* _mw = [CNLazy lazyWithF:^GEMatrix*() {
+- (EGMatrixModel*)modifyW:(GEMat4*(^)(GEMat4*))w {
+    GEMat4* ww = w(_w);
+    CNLazy* _mw = [CNLazy lazyWithF:^GEMat4*() {
         return [ww mulMatrix:_m];
     }];
-    CNLazy* _mwc = [CNLazy lazyWithF:^GEMatrix*() {
-        return [_c mulMatrix:((GEMatrix*)([_mw get]))];
+    CNLazy* _mwc = [CNLazy lazyWithF:^GEMat4*() {
+        return [_c mulMatrix:((GEMat4*)([_mw get]))];
     }];
-    CNLazy* _mwcp = [CNLazy lazyWithF:^GEMatrix*() {
-        return [((GEMatrix*)([__cp get])) mulMatrix:((GEMatrix*)([_mw get]))];
+    CNLazy* _mwcp = [CNLazy lazyWithF:^GEMat4*() {
+        return [((GEMat4*)([__cp get])) mulMatrix:((GEMat4*)([_mw get]))];
     }];
-    CNLazy* _wc = [CNLazy lazyWithF:^GEMatrix*() {
+    CNLazy* _wc = [CNLazy lazyWithF:^GEMat4*() {
         return [_c mulMatrix:ww];
     }];
-    CNLazy* _wcp = [CNLazy lazyWithF:^GEMatrix*() {
-        return [_p mulMatrix:((GEMatrix*)([_wc get]))];
+    CNLazy* _wcp = [CNLazy lazyWithF:^GEMat4*() {
+        return [_p mulMatrix:((GEMat4*)([_wc get]))];
     }];
     return [EGMatrixModel matrixModelWithM:_m w:ww c:_c p:_p _mw:_mw _mwc:_mwc _mwcp:_mwcp _cp:__cp _wcp:_wcp _wc:_wc];
 }
 
-- (EGMatrixModel*)modifyC:(GEMatrix*(^)(GEMatrix*))c {
-    GEMatrix* cc = c(_c);
-    CNLazy* _mwc = [CNLazy lazyWithF:^GEMatrix*() {
-        return [cc mulMatrix:((GEMatrix*)([__mw get]))];
+- (EGMatrixModel*)modifyC:(GEMat4*(^)(GEMat4*))c {
+    GEMat4* cc = c(_c);
+    CNLazy* _mwc = [CNLazy lazyWithF:^GEMat4*() {
+        return [cc mulMatrix:((GEMat4*)([__mw get]))];
     }];
-    CNLazy* _cp = [CNLazy lazyWithF:^GEMatrix*() {
+    CNLazy* _cp = [CNLazy lazyWithF:^GEMat4*() {
         return [_p mulMatrix:cc];
     }];
-    CNLazy* _mwcp = [CNLazy lazyWithF:^GEMatrix*() {
-        return [((GEMatrix*)([_cp get])) mulMatrix:((GEMatrix*)([__mw get]))];
+    CNLazy* _mwcp = [CNLazy lazyWithF:^GEMat4*() {
+        return [((GEMat4*)([_cp get])) mulMatrix:((GEMat4*)([__mw get]))];
     }];
-    CNLazy* _wc = [CNLazy lazyWithF:^GEMatrix*() {
+    CNLazy* _wc = [CNLazy lazyWithF:^GEMat4*() {
         return [cc mulMatrix:_w];
     }];
-    CNLazy* _wcp = [CNLazy lazyWithF:^GEMatrix*() {
-        return [_p mulMatrix:((GEMatrix*)([_wc get]))];
+    CNLazy* _wcp = [CNLazy lazyWithF:^GEMat4*() {
+        return [_p mulMatrix:((GEMat4*)([_wc get]))];
     }];
     return [EGMatrixModel matrixModelWithM:_m w:_w c:cc p:_p _mw:__mw _mwc:_mwc _mwcp:_mwcp _cp:_cp _wcp:_wcp _wc:_wc];
 }
 
-- (EGMatrixModel*)modifyP:(GEMatrix*(^)(GEMatrix*))p {
-    GEMatrix* pp = p(_p);
-    CNLazy* _cp = [CNLazy lazyWithF:^GEMatrix*() {
+- (EGMatrixModel*)modifyP:(GEMat4*(^)(GEMat4*))p {
+    GEMat4* pp = p(_p);
+    CNLazy* _cp = [CNLazy lazyWithF:^GEMat4*() {
         return [pp mulMatrix:_c];
     }];
-    CNLazy* _mwcp = [CNLazy lazyWithF:^GEMatrix*() {
-        return [((GEMatrix*)([_cp get])) mulMatrix:((GEMatrix*)([__mw get]))];
+    CNLazy* _mwcp = [CNLazy lazyWithF:^GEMat4*() {
+        return [((GEMat4*)([_cp get])) mulMatrix:((GEMat4*)([__mw get]))];
     }];
-    CNLazy* _wcp = [CNLazy lazyWithF:^GEMatrix*() {
-        return [pp mulMatrix:((GEMatrix*)([__wc get]))];
+    CNLazy* _wcp = [CNLazy lazyWithF:^GEMat4*() {
+        return [pp mulMatrix:((GEMat4*)([__wc get]))];
     }];
     return [EGMatrixModel matrixModelWithM:_m w:_w c:_c p:pp _mw:__mw _mwc:__mwc _mwcp:_mwcp _cp:_cp _wcp:_wcp _wc:__wc];
 }

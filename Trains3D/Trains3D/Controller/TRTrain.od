@@ -60,7 +60,7 @@ class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, _c
         }, head.invert)
     }
 
-    private def move(point : Vec2, length : float) = Vec2(point.x, point.y + length)
+    private def move(point : vec2, length : float) = vec2(point.x, point.y + length)
 
     def updateWith(delta : float) {
         correct(level.railroad.moveWith(obstacleProcessor = trainType.obstacleProcessor(level, self, _),

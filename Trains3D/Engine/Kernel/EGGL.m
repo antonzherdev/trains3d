@@ -1,5 +1,5 @@
 #import "EGGL.h"
-#import "GEMatrix.h"
+#import "GEMat4.h"
 
 id egGetProgramError(GLuint program) {
     GLint linkSuccess;

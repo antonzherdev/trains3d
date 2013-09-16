@@ -1,7 +1,7 @@
 #import "objd.h"
 
 typedef struct GEVec2 GEVec2;
-typedef struct GEVec2I GEVec2I;
+typedef struct GEVec2i GEVec2i;
 typedef struct GEVec3 GEVec3;
 typedef struct GEVec4 GEVec4;
 typedef struct GEQuad GEQuad;
@@ -30,7 +30,7 @@ static inline NSString* GEVec2Description(GEVec2 self) {
     [description appendString:@">"];
     return description;
 }
-GEVec2 geVec2ApplyVec2i(GEVec2I vec2i);
+GEVec2 geVec2ApplyVec2i(GEVec2i vec2i);
 GEVec2 geVec2AddVec2(GEVec2 self, GEVec2 vec2);
 GEVec2 geVec2SubVec2(GEVec2 self, GEVec2 vec2);
 GEVec2 geVec2Negate(GEVec2 self);
@@ -56,40 +56,40 @@ ODPType* geVec2Type();
 
 
 
-struct GEVec2I {
+struct GEVec2i {
     NSInteger x;
     NSInteger y;
 };
-static inline GEVec2I GEVec2IMake(NSInteger x, NSInteger y) {
-    return (GEVec2I){x, y};
+static inline GEVec2i GEVec2iMake(NSInteger x, NSInteger y) {
+    return (GEVec2i){x, y};
 }
-static inline BOOL GEVec2IEq(GEVec2I s1, GEVec2I s2) {
+static inline BOOL GEVec2iEq(GEVec2i s1, GEVec2i s2) {
     return s1.x == s2.x && s1.y == s2.y;
 }
-static inline NSUInteger GEVec2IHash(GEVec2I self) {
+static inline NSUInteger GEVec2iHash(GEVec2i self) {
     NSUInteger hash = 0;
     hash = hash * 31 + self.x;
     hash = hash * 31 + self.y;
     return hash;
 }
-static inline NSString* GEVec2IDescription(GEVec2I self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<GEVec2I: "];
+static inline NSString* GEVec2iDescription(GEVec2i self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<GEVec2i: "];
     [description appendFormat:@"x=%li", self.x];
     [description appendFormat:@", y=%li", self.y];
     [description appendString:@">"];
     return description;
 }
-GEVec2I geVec2IApplyVec2(GEVec2 vec2);
-GEVec2I geVec2IAddVec2i(GEVec2I self, GEVec2I vec2i);
-GEVec2I geVec2ISubVec2i(GEVec2I self, GEVec2I vec2i);
-GEVec2I geVec2INegate(GEVec2I self);
-NSInteger geVec2ICompareTo(GEVec2I self, GEVec2I to);
-ODPType* geVec2IType();
-@interface GEVec2IWrap : NSObject
-@property (readonly, nonatomic) GEVec2I value;
+GEVec2i geVec2iApplyVec2(GEVec2 vec2);
+GEVec2i geVec2iAddVec2i(GEVec2i self, GEVec2i vec2i);
+GEVec2i geVec2iSubVec2i(GEVec2i self, GEVec2i vec2i);
+GEVec2i geVec2iNegate(GEVec2i self);
+NSInteger geVec2iCompareTo(GEVec2i self, GEVec2i to);
+ODPType* geVec2iType();
+@interface GEVec2iWrap : NSObject
+@property (readonly, nonatomic) GEVec2i value;
 
-+ (id)wrapWithValue:(GEVec2I)value;
-- (id)initWithValue:(GEVec2I)value;
++ (id)wrapWithValue:(GEVec2i)value;
+- (id)initWithValue:(GEVec2i)value;
 @end
 
 

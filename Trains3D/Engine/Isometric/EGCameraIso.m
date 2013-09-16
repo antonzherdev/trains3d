@@ -2,10 +2,10 @@
 
 #import "EGMapIso.h"
 #import "EG.h"
-#import "GEMatrix.h"
+#import "GEMat4.h"
 #import "EGGL.h"
 @implementation EGCameraIso{
-    GEVec2I _tilesOnScreen;
+    GEVec2i _tilesOnScreen;
     GEVec2 _center;
     EGMatrixModel* _matrixModel;
 }
@@ -14,11 +14,11 @@ static ODClassType* _EGCameraIso_type;
 @synthesize tilesOnScreen = _tilesOnScreen;
 @synthesize center = _center;
 
-+ (id)cameraIsoWithTilesOnScreen:(GEVec2I)tilesOnScreen center:(GEVec2)center {
++ (id)cameraIsoWithTilesOnScreen:(GEVec2i)tilesOnScreen center:(GEVec2)center {
     return [[EGCameraIso alloc] initWithTilesOnScreen:tilesOnScreen center:center];
 }
 
-- (id)initWithTilesOnScreen:(GEVec2I)tilesOnScreen center:(GEVec2)center {
+- (id)initWithTilesOnScreen:(GEVec2i)tilesOnScreen center:(GEVec2)center {
     self = [super init];
     if(self) {
         _tilesOnScreen = tilesOnScreen;
@@ -27,7 +27,7 @@ static ODClassType* _EGCameraIso_type;
             CGFloat ww = ((CGFloat)(_tilesOnScreen.x + _tilesOnScreen.y));
             CGFloat isoWW2 = ww * _EGCameraIso_ISO / 2;
             CGFloat isoWW4 = isoWW2 / 2;
-            return [EGMatrixModel applyM:[[GEMatrix identity] rotateAngle:90.0 x:1.0 y:0.0 z:0.0] w:[[GEMatrix identity] rotateAngle:-90.0 x:1.0 y:0.0 z:0.0] c:[[[[GEMatrix identity] translateX:((float)(-isoWW2 + _EGCameraIso_ISO)) y:((float)(-_EGCameraIso_ISO * (_tilesOnScreen.y - _tilesOnScreen.x) / 4 + isoWW4)) z:-1000.0] rotateAngle:30.0 x:1.0 y:0.0 z:0.0] rotateAngle:-45.0 x:0.0 y:1.0 z:0.0] p:[GEMatrix orthoLeft:((float)(-isoWW2)) right:((float)(isoWW2)) bottom:0.0 top:((float)(isoWW2)) zNear:0.0 zFar:2000.0]];
+            return [EGMatrixModel applyM:[[GEMat4 identity] rotateAngle:90.0 x:1.0 y:0.0 z:0.0] w:[[GEMat4 identity] rotateAngle:-90.0 x:1.0 y:0.0 z:0.0] c:[[[[GEMat4 identity] translateX:((float)(-isoWW2 + _EGCameraIso_ISO)) y:((float)(-_EGCameraIso_ISO * (_tilesOnScreen.y - _tilesOnScreen.x) / 4 + isoWW4)) z:-1000.0] rotateAngle:30.0 x:1.0 y:0.0 z:0.0] rotateAngle:-45.0 x:0.0 y:1.0 z:0.0] p:[GEMat4 orthoLeft:((float)(-isoWW2)) right:((float)(isoWW2)) bottom:0.0 top:((float)(isoWW2)) zNear:0.0 zFar:2000.0]];
         }();
     }
     
@@ -82,19 +82,19 @@ static ODClassType* _EGCameraIso_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGCameraIso* o = ((EGCameraIso*)(other));
-    return GEVec2IEq(self.tilesOnScreen, o.tilesOnScreen) && GEVec2Eq(self.center, o.center);
+    return GEVec2iEq(self.tilesOnScreen, o.tilesOnScreen) && GEVec2Eq(self.center, o.center);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2IHash(self.tilesOnScreen);
+    hash = hash * 31 + GEVec2iHash(self.tilesOnScreen);
     hash = hash * 31 + GEVec2Hash(self.center);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"tilesOnScreen=%@", GEVec2IDescription(self.tilesOnScreen)];
+    [description appendFormat:@"tilesOnScreen=%@", GEVec2iDescription(self.tilesOnScreen)];
     [description appendFormat:@", center=%@", GEVec2Description(self.center)];
     [description appendString:@">"];
     return description;

@@ -19,16 +19,16 @@ class BentleyOttmann {
         }
 }
 
-class Intersection<T>(items : CNPair<T>, point : Vec2)
+class Intersection<T>(items : CNPair<T>, point : vec2)
 
 class BentleyOttmannEvent<T> {
-    def point : Vec2
+    def point : vec2
     def isIntersection : bool = false
     def isStart : bool = false
     def isEnd : bool = false
 }
 
-class BentleyOttmannPointEvent<T>(isStart : bool, data : T, segment : LineSegment, point : Vec2) extends BentleyOttmannEvent<T> {
+class BentleyOttmannPointEvent<T>(isStart : bool, data : T, segment : LineSegment, point : vec2) extends BentleyOttmannEvent<T> {
     def yFor(x : float) : float =
         if(segment.line.isVertical) if(isStart) segment.p0.y else segment.p1.y
         else segment.line.cast<SlopeLine>.yFor(x)
@@ -36,13 +36,13 @@ class BentleyOttmannPointEvent<T>(isStart : bool, data : T, segment : LineSegmen
     def isVertical : bool = segment.line.isVertical
     def isEnd : bool = !isStart
 }
-class BentleyOttmannIntersectionEvent<T>(point : Vec2) extends BentleyOttmannEvent<T> {
+class BentleyOttmannIntersectionEvent<T>(point : vec2) extends BentleyOttmannEvent<T> {
     def isIntersection = true
 }
 
 
 class BentleyOttmannEventQueue<T> {
-    val events = CNMutableTreeMap<Vec2, CNMutableArray<BentleyOttmannEvent<T>>>((a, b) -> a.compare(b))
+    val events = CNMutableTreeMap<vec2, CNMutableArray<BentleyOttmannEvent<T>>>((a, b) -> a.compare(b))
 
     def isEmpty : bool = events.isEmpty
 
@@ -59,7 +59,7 @@ class BentleyOttmannEventQueue<T> {
         ret
     }
 
-    def offer(point : Vec2, event : BentleyOttmannEvent) {
+    def offer(point : vec2, event : BentleyOttmannEvent) {
         events.objectFor(key = point, orUpdateWith = CNMutableArray<BentleyOttmannEvent<T>>() ).add(event)
     }
 
@@ -68,7 +68,7 @@ class BentleyOttmannEventQueue<T> {
     }
 }
 
-class PointClass(point : Vec2) {}
+class PointClass(point : vec2) {}
 
 
 class SweepLine<T>
@@ -90,7 +90,7 @@ class SweepLine<T>
     /**
     * The point of the current Event.
     */
-    private var currentEventPoint : Vec2
+    private var currentEventPoint : vec2
 
     /**
     * The queue associated with this sweep line.
@@ -119,7 +119,7 @@ class SweepLine<T>
                         val y = e.yFor(currentEventPoint.x)
                         if(y > maxY) break
                         if(y >= minY) {
-                            registerIntersection(pe, e, Vec2(currentEventPoint.x, y))
+                            registerIntersection(pe, e, vec2(currentEventPoint.x, y))
                         }
                     }
                 }
@@ -165,7 +165,7 @@ class SweepLine<T>
         }
     }
 
-    private def registerIntersection(a : BentleyOttmannPointEvent<T>, b : BentleyOttmannPointEvent<T>, point : Vec2) {
+    private def registerIntersection(a : BentleyOttmannPointEvent<T>, b : BentleyOttmannPointEvent<T>, point : vec2) {
         if(!a.segment.endingsContain(point) || !b.segment.endingsContain(point)) {
 
             // Add the intersection.

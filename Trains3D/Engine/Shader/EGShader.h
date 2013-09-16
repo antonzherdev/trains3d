@@ -5,7 +5,7 @@
 @class EGMesh;
 @class EGIndexBuffer;
 @class EGVertexBuffer;
-@class GEMatrix;
+@class GEMat4;
 
 @class EGShaderProgram;
 @class EGShader;
@@ -66,7 +66,7 @@
 + (id)shaderUniformWithHandle:(GLuint)handle;
 - (id)initWithHandle:(GLuint)handle;
 - (ODClassType*)type;
-- (void)setMatrix:(GEMatrix*)matrix;
+- (void)setMatrix:(GEMat4*)matrix;
 - (void)setColor:(EGColor)color;
 - (void)setVec3:(GEVec3)vec3;
 - (void)setNumber:(float)number;

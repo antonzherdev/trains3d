@@ -4,7 +4,7 @@
 #import "EGTypes.h"
 @class EG;
 @class TRCity;
-@class GEMatrix;
+@class GEMat4;
 @class EGMatrixModel;
 @class TRCityAngle;
 @class TRColor;

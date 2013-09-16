@@ -1,6 +1,6 @@
 #import "objd.h"
 #import "GEVec.h"
-@class GEMatrix;
+@class GEMat4;
 
 @class EGCollisionBody;
 @class EGCollisionBox;
@@ -17,8 +17,8 @@
 + (id)collisionBodyWithData:(id)data shape:(id<EGCollisionShape>)shape isKinematic:(BOOL)isKinematic;
 - (id)initWithData:(id)data shape:(id<EGCollisionShape>)shape isKinematic:(BOOL)isKinematic;
 - (ODClassType*)type;
-- (GEMatrix *)matrix;
-- (void)setMatrix:(GEMatrix *)matrix;
+- (GEMat4 *)matrix;
+- (void)setMatrix:(GEMat4 *)matrix;
 - (void)translateX:(float)x y:(float)y z:(float)z;
 - (void)rotateAngle:(float)angle x:(float)x y:(float)y z:(float)z;
 + (ODClassType*)type;
