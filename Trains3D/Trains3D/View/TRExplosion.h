@@ -22,7 +22,7 @@
 - (void)updateWithDelta:(CGFloat)delta;
 - (BOOL)isFinished;
 - (void)restart;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -35,7 +35,7 @@
 - (ODClassType*)type;
 - (EGBillboardParticle*)generateParticle;
 - (TRExplosionFlame*)init;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -52,7 +52,7 @@
 - (void)updateT:(float)t dt:(float)dt;
 + (GEVec4)startColor;
 + (GEQuadrant)textureQuadrant;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -64,7 +64,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)drawExplosion:(TRExplosion*)explosion;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

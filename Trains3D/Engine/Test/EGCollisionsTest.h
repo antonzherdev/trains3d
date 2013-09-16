@@ -13,7 +13,7 @@
 - (ODClassType*)type;
 - (void)testCollisions;
 - (void)testCollisions2d;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

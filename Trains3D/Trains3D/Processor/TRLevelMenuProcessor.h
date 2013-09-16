@@ -14,7 +14,7 @@
 - (ODClassType*)type;
 - (BOOL)processEvent:(EGEvent*)event;
 - (BOOL)mouseUpEvent:(EGEvent*)event;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

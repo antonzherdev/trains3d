@@ -4,7 +4,7 @@
 #import "EGMapIso.h"
 #import "TRScore.h"
 @implementation TRRailroadConnectorContent
-static ODClassType* _TRRailroadConnectorContent_type;
+static ODType* _TRRailroadConnectorContent_type;
 
 + (id)railroadConnectorContent {
     return [[TRRailroadConnectorContent alloc] init];
@@ -45,7 +45,7 @@ static ODClassType* _TRRailroadConnectorContent_type;
     return [TRRailroadConnectorContent type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRRailroadConnectorContent_type;
 }
 
@@ -74,7 +74,7 @@ static ODClassType* _TRRailroadConnectorContent_type;
 
 @implementation TREmptyConnector
 static TRRailroadConnectorContent* _TREmptyConnector_instance;
-static ODClassType* _TREmptyConnector_type;
+static ODType* _TREmptyConnector_type;
 
 + (id)emptyConnector {
     return [[TREmptyConnector alloc] init];
@@ -108,7 +108,7 @@ static ODClassType* _TREmptyConnector_type;
     return _TREmptyConnector_instance;
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TREmptyConnector_type;
 }
 
@@ -139,7 +139,7 @@ static ODClassType* _TREmptyConnector_type;
     GEVec2i _tile;
     TRRailForm* _form;
 }
-static ODClassType* _TRRail_type;
+static ODType* _TRRail_type;
 @synthesize tile = _tile;
 @synthesize form = _form;
 
@@ -186,7 +186,7 @@ static ODClassType* _TRRail_type;
     return [TRRail type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRRail_type;
 }
 
@@ -226,7 +226,7 @@ static ODClassType* _TRRail_type;
     TRRail* _rail2;
     BOOL _firstActive;
 }
-static ODClassType* _TRSwitch_type;
+static ODType* _TRSwitch_type;
 @synthesize tile = _tile;
 @synthesize connector = _connector;
 @synthesize rail1 = _rail1;
@@ -285,7 +285,7 @@ static ODClassType* _TRSwitch_type;
     return [TRSwitch type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRSwitch_type;
 }
 
@@ -328,7 +328,7 @@ static ODClassType* _TRSwitch_type;
     TRRail* _rail;
     BOOL _isGreen;
 }
-static ODClassType* _TRLight_type;
+static ODType* _TRLight_type;
 @synthesize tile = _tile;
 @synthesize connector = _connector;
 @synthesize rail = _rail;
@@ -379,7 +379,7 @@ static ODClassType* _TRLight_type;
     return [TRLight type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRLight_type;
 }
 
@@ -467,7 +467,7 @@ static NSArray* _TRObstacleType_values;
     TRObstacleType* _obstacleType;
     TRRailPoint* _point;
 }
-static ODClassType* _TRObstacle_type;
+static ODType* _TRObstacle_type;
 @synthesize obstacleType = _obstacleType;
 @synthesize point = _point;
 
@@ -494,7 +494,7 @@ static ODClassType* _TRObstacle_type;
     return [TRObstacle type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRObstacle_type;
 }
 
@@ -538,7 +538,7 @@ static ODClassType* _TRObstacle_type;
     NSMutableDictionary* _damagesIndex;
     NSMutableArray* __damagesPoints;
 }
-static ODClassType* _TRRailroad_type;
+static ODType* _TRRailroad_type;
 @synthesize map = _map;
 @synthesize score = _score;
 @synthesize builder = _builder;
@@ -735,7 +735,7 @@ static ODClassType* _TRRailroad_type;
     return [TRRailroad type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRRailroad_type;
 }
 
@@ -772,7 +772,7 @@ static ODClassType* _TRRailroad_type;
     __weak TRRailroad* _railroad;
     id __rail;
 }
-static ODClassType* _TRRailroadBuilder_type;
+static ODType* _TRRailroadBuilder_type;
 @synthesize railroad = _railroad;
 
 + (id)railroadBuilderWithRailroad:(TRRailroad*)railroad {
@@ -822,7 +822,7 @@ static ODClassType* _TRRailroadBuilder_type;
     return [TRRailroadBuilder type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRRailroadBuilder_type;
 }
 

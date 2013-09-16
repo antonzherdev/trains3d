@@ -16,7 +16,7 @@ static float _TRSmoke_particleSize = 0.03;
 static GEQuad _TRSmoke_modelQuad;
 static GEQuadrant _TRSmoke_textureQuadrant;
 static GEVec4 _TRSmoke_defColor = {1.0, 1.0, 1.0, 0.7};
-static ODClassType* _TRSmoke_type;
+static ODType* _TRSmoke_type;
 @synthesize train = _train;
 
 + (id)smokeWithTrain:(TRTrain*)train {
@@ -88,7 +88,7 @@ static ODClassType* _TRSmoke_type;
     return _TRSmoke_defColor;
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRSmoke_type;
 }
 
@@ -123,7 +123,7 @@ static ODClassType* _TRSmoke_type;
     GEVec3 _speed;
 }
 static NSInteger _TRSmokeParticle_dragCoefficient = 1;
-static ODClassType* _TRSmokeParticle_type;
+static ODType* _TRSmokeParticle_type;
 @synthesize speed = _speed;
 
 + (id)smokeParticle {
@@ -156,7 +156,7 @@ static ODClassType* _TRSmokeParticle_type;
     return _TRSmokeParticle_dragCoefficient;
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRSmokeParticle_type;
 }
 
@@ -174,7 +174,7 @@ static ODClassType* _TRSmokeParticle_type;
 
 
 @implementation TRSmokeView
-static ODClassType* _TRSmokeView_type;
+static ODType* _TRSmokeView_type;
 
 + (id)smokeView {
     return [[TRSmokeView alloc] init];
@@ -195,7 +195,7 @@ static ODClassType* _TRSmokeView_type;
     return [TRSmokeView type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRSmokeView_type;
 }
 

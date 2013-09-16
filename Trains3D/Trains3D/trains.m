@@ -1,7 +1,7 @@
 #import "trains.h"
 
 @implementation Trains
-static ODClassType* _Trains_type;
+static ODType* _Trains_type;
 
 + (void)initialize {
     [super initialize];
@@ -12,7 +12,7 @@ static ODClassType* _Trains_type;
     return [Trains type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _Trains_type;
 }
 

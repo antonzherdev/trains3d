@@ -1,12 +1,13 @@
 #import "objd.h"
 #import "CNLazy.h"
 
+#import "ODType.h"
 @implementation CNLazy{
     id(^_f)();
     id __value;
     BOOL __calculated;
 }
-static ODClassType* _CNLazy_type;
+static ODType* _CNLazy_type;
 @synthesize f = _f;
 
 + (id)lazyWithF:(id(^)())f {
@@ -46,7 +47,7 @@ static ODClassType* _CNLazy_type;
     return [CNLazy type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _CNLazy_type;
 }
 

@@ -1,14 +1,15 @@
 #import "objd.h"
 #import "CNTreeSet.h"
 
-#import "ODObject.h"
+#import "ObjC.h"
 #import "CNTreeMap.h"
 #import "CNCollection.h"
+#import "ODType.h"
 @implementation CNMutableTreeSet{
     CNMutableTreeMap* _map;
 }
 static NSObject* _CNMutableTreeSet_obj;
-static ODClassType* _CNMutableTreeSet_type;
+static ODType* _CNMutableTreeSet_type;
 @synthesize map = _map;
 
 + (id)mutableTreeSetWithMap:(CNMutableTreeMap*)map {
@@ -155,7 +156,7 @@ static ODClassType* _CNMutableTreeSet_type;
     return [CNMutableTreeSet type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _CNMutableTreeSet_type;
 }
 

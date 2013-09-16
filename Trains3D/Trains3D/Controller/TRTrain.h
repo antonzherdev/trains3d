@@ -50,7 +50,7 @@
 - (void)setHead:(TRRailPoint*)head;
 - (void)updateWithDelta:(CGFloat)delta;
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -65,7 +65,7 @@
 - (ODClassType*)type;
 - (id<CNSeq>)generateCarsForTrain:(TRTrain*)train;
 - (NSUInteger)generateSpeed;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

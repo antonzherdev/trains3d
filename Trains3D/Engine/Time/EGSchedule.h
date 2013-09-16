@@ -11,7 +11,7 @@
 - (void)scheduleAfter:(CGFloat)after event:(void(^)())event;
 - (void)updateWithDelta:(CGFloat)delta;
 - (CGFloat)time;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -26,7 +26,7 @@
 - (BOOL)isRun;
 - (BOOL)isStopped;
 - (void)updateWithDelta:(CGFloat)delta;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

@@ -1,6 +1,7 @@
 #import "objdcore.h"
 #import "CNSeq.h"
 #import "CNCollection.h"
+@class ODClassType;
 
 @class CNPArray;
 @class CNPArrayIterator;
@@ -20,7 +21,7 @@
 - (id<CNIterator>)iterator;
 - (id)applyIndex:(NSUInteger)index;
 - (void)dealloc;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -32,7 +33,7 @@
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

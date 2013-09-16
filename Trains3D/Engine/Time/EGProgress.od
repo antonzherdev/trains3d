@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-import core.ODMath._
+import core.math._
 
 object EGProgress {
     def randomVec2 : vec2 = vec2(2*randomFloat - 1, 2*randomFloat - 1)

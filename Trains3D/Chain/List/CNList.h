@@ -1,6 +1,7 @@
 #import "objdcore.h"
 #import "CNSeq.h"
 #import "CNCollection.h"
+@class ODClassType;
 
 @class CNList;
 @class CNFilledList;
@@ -17,7 +18,7 @@
 - (id<CNIterator>)iterator;
 - (CNList*)tail;
 - (CNList*)filterF:(BOOL(^)(id))f;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -32,7 +33,7 @@
 - (id)head;
 - (BOOL)isEmpty;
 - (CNList*)filterF:(BOOL(^)(id))f;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -46,7 +47,7 @@
 - (BOOL)isEmpty;
 - (CNList*)filterF:(BOOL(^)(id))f;
 + (CNEmptyList*)instance;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -58,7 +59,7 @@
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

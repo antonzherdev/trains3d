@@ -7,7 +7,7 @@
     id<EGController> _controller;
     id<CNSeq> _layers;
 }
-static ODClassType* _EGScene_type;
+static ODType* _EGScene_type;
 @synthesize controller = _controller;
 @synthesize layers = _layers;
 
@@ -53,7 +53,7 @@ static ODClassType* _EGScene_type;
     return [EGScene type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _EGScene_type;
 }
 

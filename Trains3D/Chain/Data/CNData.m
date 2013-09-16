@@ -2,6 +2,7 @@
 #import "CNData.h"
 
 #import "CNTypes.h"
+#import "ODType.h"
 @implementation CNPArray{
     NSUInteger _stride;
     id(^_wrap)(VoidRef, NSUInteger);
@@ -10,7 +11,7 @@
     VoidRef _bytes;
     BOOL _copied;
 }
-static ODClassType* _CNPArray_type;
+static ODType* _CNPArray_type;
 @synthesize stride = _stride;
 @synthesize wrap = _wrap;
 @synthesize count = _count;
@@ -163,7 +164,7 @@ static ODClassType* _CNPArray_type;
     return [CNPArray type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _CNPArray_type;
 }
 
@@ -185,7 +186,7 @@ static ODClassType* _CNPArray_type;
     CNPArray* _array;
     NSInteger _i;
 }
-static ODClassType* _CNPArrayIterator_type;
+static ODType* _CNPArrayIterator_type;
 @synthesize array = _array;
 
 + (id)arrayIteratorWithArray:(CNPArray*)array {
@@ -221,7 +222,7 @@ static ODClassType* _CNPArrayIterator_type;
     return [CNPArrayIterator type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _CNPArrayIterator_type;
 }
 

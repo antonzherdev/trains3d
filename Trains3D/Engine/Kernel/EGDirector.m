@@ -13,7 +13,7 @@
     EGTime* _time;
     id __stat;
 }
-static ODClassType* _EGDirector_type;
+static ODType* _EGDirector_type;
 @synthesize scene = _scene;
 @synthesize time = _time;
 
@@ -112,7 +112,7 @@ static ODClassType* _EGDirector_type;
     return [EGDirector type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _EGDirector_type;
 }
 

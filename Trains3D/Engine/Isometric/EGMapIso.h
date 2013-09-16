@@ -21,7 +21,7 @@
 - (BOOL)isPartialTile:(GEVec2i)tile;
 - (GERectI)cutRectForTile:(GEVec2i)tile;
 + (CGFloat)ISO;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -35,7 +35,7 @@
 - (void)drawLayout;
 - (EGMesh*)createPlane;
 - (void)drawPlaneWithMaterial:(EGMaterial*)material;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

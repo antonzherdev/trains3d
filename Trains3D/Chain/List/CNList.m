@@ -1,8 +1,9 @@
 #import "objd.h"
 #import "CNList.h"
 
+#import "ODType.h"
 @implementation CNList
-static ODClassType* _CNList_type;
+static ODType* _CNList_type;
 
 + (id)list {
     return [[CNList alloc] init];
@@ -170,7 +171,7 @@ static ODClassType* _CNList_type;
     return [CNList type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _CNList_type;
 }
 
@@ -193,7 +194,7 @@ static ODClassType* _CNList_type;
     CNList* _tail;
     NSUInteger _count;
 }
-static ODClassType* _CNFilledList_type;
+static ODType* _CNFilledList_type;
 @synthesize item = _item;
 @synthesize tail = _tail;
 @synthesize count = _count;
@@ -235,7 +236,7 @@ static ODClassType* _CNFilledList_type;
     return [CNFilledList type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _CNFilledList_type;
 }
 
@@ -270,7 +271,7 @@ static ODClassType* _CNFilledList_type;
 
 @implementation CNEmptyList
 static CNEmptyList* _CNEmptyList_instance;
-static ODClassType* _CNEmptyList_type;
+static ODType* _CNEmptyList_type;
 
 + (id)emptyList {
     return [[CNEmptyList alloc] init];
@@ -316,7 +317,7 @@ static ODClassType* _CNEmptyList_type;
     return _CNEmptyList_instance;
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _CNEmptyList_type;
 }
 
@@ -346,7 +347,7 @@ static ODClassType* _CNEmptyList_type;
 @implementation CNListIterator{
     CNList* _list;
 }
-static ODClassType* _CNListIterator_type;
+static ODType* _CNListIterator_type;
 @synthesize list = _list;
 
 + (id)listIterator {
@@ -378,7 +379,7 @@ static ODClassType* _CNListIterator_type;
     return [CNListIterator type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _CNListIterator_type;
 }
 

@@ -5,6 +5,7 @@
 @protocol CNIterator;
 @class CNTreeMapKeySet;
 @protocol CNTraversable;
+@class ODClassType;
 
 @class CNMutableTreeSet;
 
@@ -30,7 +31,7 @@
 - (void)clear;
 - (void)addAllObjects:(id<CNTraversable>)objects;
 - (CNMutableTreeSet*)reorder;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

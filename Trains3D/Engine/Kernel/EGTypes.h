@@ -39,7 +39,7 @@ static inline NSString* EGColorDescription(EGColor self) {
     return description;
 }
 EGColor egColorWhite();
-ODPType* egColorType();
+ODType* egColorType();
 @interface EGColorWrap : NSObject
 @property (readonly, nonatomic) EGColor value;
 
@@ -78,7 +78,7 @@ ODPType* egColorType();
 + (EGEnvironment*)applyLights:(id<CNSeq>)lights;
 + (EGEnvironment*)applyLight:(EGLight*)light;
 + (EGEnvironment*)aDefault;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -88,7 +88,7 @@ ODPType* egColorType();
 + (id)lightWithColor:(EGColor)color;
 - (id)initWithColor:(EGColor)color;
 - (ODClassType*)type;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -98,7 +98,7 @@ ODPType* egColorType();
 + (id)directLightWithColor:(EGColor)color direction:(GEVec3)direction;
 - (id)initWithColor:(EGColor)color direction:(GEVec3)direction;
 - (ODClassType*)type;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

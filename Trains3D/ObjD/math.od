@@ -1,0 +1,24 @@
+package core
+
+stub object math {
+    val DBL_MAX : float
+    val DBL_MIN : float
+    def max(a : float, b : float) : float
+    def min(a : float, b : float) : float
+    def randomMax(: uint) : uint
+    def randomFloat : float
+    def randomFloatGap(s : float, e : float) : float
+    def randomPercents(:float) : float
+
+    val M_PI : float
+    val M_PI_2 : float
+    val M_PI_4 : float
+    def round(: float) : float
+    def lround(: float) : int
+    def sin(:float) : float
+    def cos(:float) : float
+    def fabs(:float) : float
+    def atan2(:float, :float) : float
+    def atan(:float) : float
+    def sqrt(:float) : float
+}

@@ -222,7 +222,7 @@ static NSArray* _TRRailForm_values;
     BOOL _back;
     GEVec2 _point;
 }
-static ODClassType* _TRRailPoint_type;
+static ODType* _TRRailPoint_type;
 @synthesize tile = _tile;
 @synthesize form = _form;
 @synthesize x = _x;
@@ -298,7 +298,7 @@ static ODClassType* _TRRailPoint_type;
     return [TRRailPoint type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRRailPoint_type;
 }
 
@@ -339,7 +339,7 @@ static ODClassType* _TRRailPoint_type;
     TRRailPoint* _point;
     CGFloat _error;
 }
-static ODClassType* _TRRailPointCorrection_type;
+static ODType* _TRRailPointCorrection_type;
 @synthesize point = _point;
 @synthesize error = _error;
 
@@ -371,7 +371,7 @@ static ODClassType* _TRRailPointCorrection_type;
     return [TRRailPointCorrection type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRRailPointCorrection_type;
 }
 

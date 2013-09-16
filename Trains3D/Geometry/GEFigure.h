@@ -29,7 +29,7 @@
 - (CGFloat)angle;
 - (CGFloat)degreeAngle;
 - (GELine*)perpendicularWithPoint:(GEVec2)point;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -50,7 +50,7 @@
 - (id)moveWithDistance:(CGFloat)distance;
 - (CGFloat)angle;
 - (GELine*)perpendicularWithPoint:(GEVec2)point;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -70,7 +70,7 @@
 - (id)moveWithDistance:(CGFloat)distance;
 - (CGFloat)angle;
 - (GELine*)perpendicularWithPoint:(GEVec2)point;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -106,7 +106,7 @@
 - (CGFloat)length;
 - (GEVec2)vec;
 - (GEVec2)vec1;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -118,7 +118,7 @@
 - (id)initWithPoints:(id<CNSeq>)points;
 - (ODClassType*)type;
 - (GERect)boundingRect;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -132,7 +132,7 @@
 - (ODClassType*)type;
 - (GERect)boundingRect;
 - (id<CNSeq>)segments;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

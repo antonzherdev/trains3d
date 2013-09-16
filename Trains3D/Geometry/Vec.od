@@ -1,8 +1,8 @@
 package com.antonzherdev.geometry
 
-import core.ODMath._
+import core.math._
 
-struct vec2(x : float4, y : float4) extends ODComparable<vec2> {
+struct vec2(x : float4, y : float4) extends Comparable<vec2> {
     static def apply(vec2i : vec2i) = vec2(vec2i.x, vec2i.y)
 
     def add(vec2 : vec2) = vec2(x + vec2.x, y + vec2.y)
@@ -26,7 +26,7 @@ struct vec2(x : float4, y : float4) extends ODComparable<vec2> {
     }
 }
 
-struct vec2i(x : int, y : int) extends ODComparable<vec2i> {
+struct vec2i(x : int, y : int) extends Comparable<vec2i> {
     static def apply(vec2 : vec2) = vec2i(lround(vec2.x), lround(vec2.y))
 
     def add(vec2i : vec2i) = vec2i(x + vec2i.x, y + vec2i.y)

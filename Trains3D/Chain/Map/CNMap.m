@@ -1,11 +1,12 @@
 #import "objd.h"
 #import "CNMap.h"
 
+#import "ODType.h"
 @implementation CNMapDefault{
     id(^_defaultFunc)(id);
     id<CNMutableMap> _map;
 }
-static ODClassType* _CNMapDefault_type;
+static ODType* _CNMapDefault_type;
 @synthesize defaultFunc = _defaultFunc;
 @synthesize map = _map;
 
@@ -144,7 +145,7 @@ static ODClassType* _CNMapDefault_type;
     return [CNMapDefault type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _CNMapDefault_type;
 }
 

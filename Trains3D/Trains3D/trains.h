@@ -4,7 +4,7 @@
 
 @interface Trains : NSObject
 - (ODClassType*)type;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

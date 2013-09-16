@@ -1,5 +1,6 @@
 #import "objdcore.h"
 #import "ODObject.h"
+@class ODClassType;
 
 @class CNTuple;
 @class CNTuple3;
@@ -15,7 +16,7 @@
 - (NSInteger)compareTo:(CNTuple*)to;
 - (NSString*)description;
 + (id)unapplyTuple:(CNTuple*)tuple;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -30,7 +31,7 @@
 - (NSInteger)compareTo:(CNTuple3*)to;
 - (NSString*)description;
 + (id)unapplyTuple:(CNTuple3*)tuple;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -46,7 +47,7 @@
 - (NSInteger)compareTo:(CNTuple4*)to;
 - (NSString*)description;
 + (id)unapplyTuple:(CNTuple4*)tuple;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

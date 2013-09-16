@@ -1,5 +1,5 @@
 package com.antonzherdev
 
-object eg {
+stub object eg {
     import com.antonzherdev.geometry._
 }

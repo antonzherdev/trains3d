@@ -2,6 +2,7 @@
 #import "CNMap.h"
 #import "ODObject.h"
 #import "CNCollection.h"
+@class ODClassType;
 
 @class CNMutableTreeMap;
 @class CNTreeMapEntry;
@@ -35,7 +36,7 @@
 - (id)higherKeyThanKey:(id)key;
 + (NSInteger)BLACK;
 + (NSInteger)RED;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -52,7 +53,7 @@
 - (ODClassType*)type;
 + (CNTreeMapEntry*)newWithKey:(id)key value:(id)value parent:(CNTreeMapEntry*)parent;
 - (CNTreeMapEntry*)next;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -65,7 +66,7 @@
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
 - (id<CNIterator>)iteratorHigherThanKey:(id)key;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -79,7 +80,7 @@
 + (CNTreeMapKeyIterator*)newMap:(CNMutableTreeMap*)map entry:(CNTreeMapEntry*)entry;
 - (BOOL)hasNext;
 - (id)next;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -91,7 +92,7 @@
 - (ODClassType*)type;
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -105,7 +106,7 @@
 + (CNTreeMapValuesIterator*)newMap:(CNMutableTreeMap*)map entry:(CNTreeMapEntry*)entry;
 - (BOOL)hasNext;
 - (id)next;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -119,7 +120,7 @@
 + (CNTreeMapIterator*)newMap:(CNMutableTreeMap*)map entry:(CNTreeMapEntry*)entry;
 - (BOOL)hasNext;
 - (id)next;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

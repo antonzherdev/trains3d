@@ -13,7 +13,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)testThickLine;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

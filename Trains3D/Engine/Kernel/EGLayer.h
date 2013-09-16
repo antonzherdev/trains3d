@@ -18,7 +18,7 @@
 - (void)drawWithViewSize:(GEVec2)viewSize;
 - (BOOL)processEvent:(EGEvent*)event;
 - (void)updateWithDelta:(CGFloat)delta;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

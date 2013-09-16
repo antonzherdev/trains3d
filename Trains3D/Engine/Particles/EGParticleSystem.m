@@ -6,7 +6,7 @@
 @implementation EGParticleSystem{
     CNList* __particles;
 }
-static ODClassType* _EGParticleSystem_type;
+static ODType* _EGParticleSystem_type;
 
 + (id)particleSystem {
     return [[EGParticleSystem alloc] init];
@@ -57,7 +57,7 @@ static ODClassType* _EGParticleSystem_type;
     return [EGParticleSystem type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _EGParticleSystem_type;
 }
 
@@ -78,7 +78,7 @@ static ODClassType* _EGParticleSystem_type;
     float _lifeLength;
     float __lifeTime;
 }
-static ODClassType* _EGParticle_type;
+static ODType* _EGParticle_type;
 @synthesize lifeLength = _lifeLength;
 
 + (id)particleWithLifeLength:(float)lifeLength {
@@ -122,7 +122,7 @@ static ODClassType* _EGParticle_type;
     return [EGParticle type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _EGParticle_type;
 }
 
@@ -163,7 +163,7 @@ static ODClassType* _EGParticle_type;
     EGIndexBuffer* _indexBuffer;
     EGMesh* _mesh;
 }
-static ODClassType* _EGParticleSystemView_type;
+static ODType* _EGParticleSystemView_type;
 @synthesize dtp = _dtp;
 @synthesize maxCount = _maxCount;
 @synthesize blendFunc = _blendFunc;
@@ -253,7 +253,7 @@ static ODClassType* _EGParticleSystemView_type;
     return [EGParticleSystemView type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _EGParticleSystemView_type;
 }
 

@@ -21,7 +21,7 @@
 - (ODClassType*)type;
 - (void)drawView;
 - (void)updateWithDelta:(CGFloat)delta;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

@@ -2,7 +2,7 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg.EGGL._
 import com.antonzherdev.eg._
-import core.ODMath._
+import core.math._
 
 
 class TRSmoke(weak train : TRTrain) extends EGBillboardParticleSystem {

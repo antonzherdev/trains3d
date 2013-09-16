@@ -34,8 +34,8 @@ stub class Chain<A> extends Iterable<A> {
 
     def reverse : Chain<A>
     def distinct : Chain<A>
-    def sort<B extends ODComparable<B>> (self : Chain<B>) : Chain<A>
-    def sortDesc<B extends ODComparable<B>> (self : Chain<B>) : Chain<A>
+    def sort<B extends Comparable<B>> (self : Chain<B>) : Chain<A>
+    def sortDesc<B extends Comparable<B>> (self : Chain<B>) : Chain<A>
     def sort(:(A, A) -> int) : Chain<A>
     def sortBy : SortBuilder<A>
 
@@ -46,9 +46,9 @@ stub class Chain<A> extends Iterable<A> {
     def randomItem : A?
     def find(: A -> bool) : A?
     def isEmpty : bool
-    def gap<B extends ODComparable<B>> (self : Chain<B>) : (A, A)?
-    def min<B extends ODComparable<B>> (self : Chain<B>) : A?
-    def max<B extends ODComparable<B>> (self : Chain<B>) : A?
+    def gap<B extends Comparable<B>> (self : Chain<B>) : (A, A)?
+    def min<B extends Comparable<B>> (self : Chain<B>) : A?
+    def max<B extends Comparable<B>> (self : Chain<B>) : A?
     def toStringWith(start : string, delimiter : string, end : string) : string
     def toStringWith(delimiter : string) : string
 

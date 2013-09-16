@@ -16,7 +16,7 @@
 - (id)initWithMap:(EGMapSso*)map;
 - (ODClassType*)type;
 - (void)draw;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

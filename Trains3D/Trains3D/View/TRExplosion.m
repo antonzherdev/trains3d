@@ -7,7 +7,7 @@
     float _size;
     TRExplosionFlame* _flame;
 }
-static ODClassType* _TRExplosion_type;
+static ODType* _TRExplosion_type;
 @synthesize position = _position;
 @synthesize size = _size;
 @synthesize flame = _flame;
@@ -48,7 +48,7 @@ static ODClassType* _TRExplosion_type;
     return [TRExplosion type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRExplosion_type;
 }
 
@@ -85,7 +85,7 @@ static ODClassType* _TRExplosion_type;
     GEVec3 _position;
     float _size;
 }
-static ODClassType* _TRExplosionFlame_type;
+static ODType* _TRExplosionFlame_type;
 @synthesize position = _position;
 @synthesize size = _size;
 
@@ -123,7 +123,7 @@ static ODClassType* _TRExplosionFlame_type;
     return [TRExplosionFlame type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRExplosionFlame_type;
 }
 
@@ -164,7 +164,7 @@ static ODClassType* _TRExplosionFlame_type;
 }
 static GEVec4 _TRExplosionFlameParticle_startColor = {1.0, 0.4, 0.0, 0.3};
 static GEQuadrant _TRExplosionFlameParticle_textureQuadrant;
-static ODClassType* _TRExplosionFlameParticle_type;
+static ODType* _TRExplosionFlameParticle_type;
 @synthesize size = _size;
 @synthesize startShift = _startShift;
 @synthesize shift = _shift;
@@ -258,7 +258,7 @@ static ODClassType* _TRExplosionFlameParticle_type;
     return _TRExplosionFlameParticle_textureQuadrant;
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRExplosionFlameParticle_type;
 }
 
@@ -297,7 +297,7 @@ static ODClassType* _TRExplosionFlameParticle_type;
     EGSimpleMaterial* _material;
     EGBillboardParticleSystemView* _view;
 }
-static ODClassType* _TRExplosionView_type;
+static ODType* _TRExplosionView_type;
 @synthesize material = _material;
 @synthesize view = _view;
 
@@ -328,7 +328,7 @@ static ODClassType* _TRExplosionView_type;
     return [TRExplosionView type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRExplosionView_type;
 }
 

@@ -6,7 +6,7 @@
 #import "EGTexture.h"
 @implementation EGBillboardShaderSystem
 static EGBillboardShaderSystem* _EGBillboardShaderSystem_instance;
-static ODClassType* _EGBillboardShaderSystem_type;
+static ODType* _EGBillboardShaderSystem_type;
 
 + (id)billboardShaderSystem {
     return [[EGBillboardShaderSystem alloc] init];
@@ -61,7 +61,7 @@ static ODClassType* _EGBillboardShaderSystem_type;
     return _EGBillboardShaderSystem_instance;
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _EGBillboardShaderSystem_type;
 }
 
@@ -100,7 +100,7 @@ static ODClassType* _EGBillboardShaderSystem_type;
 }
 static CNLazy* _EGBillboardShader__lazy_instanceForColor;
 static CNLazy* _EGBillboardShader__lazy_instanceForTexture;
-static ODClassType* _EGBillboardShader_type;
+static ODType* _EGBillboardShader_type;
 @synthesize texture = _texture;
 @synthesize positionSlot = _positionSlot;
 @synthesize modelSlot = _modelSlot;
@@ -214,7 +214,7 @@ static ODClassType* _EGBillboardShader_type;
     return [EGBillboardShader type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _EGBillboardShader_type;
 }
 
@@ -247,8 +247,8 @@ static ODClassType* _EGBillboardShader_type;
 @end
 
 
-ODPType* egBillboardBufferDataType() {
-    static ODPType* _ret = nil;
+ODType* egBillboardBufferDataType() {
+    static ODType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[EGBillboardBufferDataWrap class] name:@"EGBillboardBufferData" size:sizeof(EGBillboardBufferData) wrap:^id(void* data, NSUInteger i) {
         return wrap(EGBillboardBufferData, ((EGBillboardBufferData*)(data))[i]);
     }];
@@ -293,7 +293,7 @@ ODPType* egBillboardBufferDataType() {
 
 
 @implementation EGBillboardParticleSystem
-static ODClassType* _EGBillboardParticleSystem_type;
+static ODType* _EGBillboardParticleSystem_type;
 
 + (id)billboardParticleSystem {
     return [[EGBillboardParticleSystem alloc] init];
@@ -314,7 +314,7 @@ static ODClassType* _EGBillboardParticleSystem_type;
     return [EGBillboardParticleSystem type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _EGBillboardParticleSystem_type;
 }
 
@@ -347,7 +347,7 @@ static ODClassType* _EGBillboardParticleSystem_type;
     GEQuad _model;
     GEVec4 _color;
 }
-static ODClassType* _EGBillboardParticle_type;
+static ODType* _EGBillboardParticle_type;
 @synthesize position = _position;
 @synthesize uv = _uv;
 @synthesize model = _model;
@@ -376,7 +376,7 @@ static ODClassType* _EGBillboardParticle_type;
     return [EGBillboardParticle type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _EGBillboardParticle_type;
 }
 
@@ -398,7 +398,7 @@ static ODClassType* _EGBillboardParticle_type;
     EGSimpleMaterial* _material;
     EGShader* _shader;
 }
-static ODClassType* _EGBillboardParticleSystemView_type;
+static ODType* _EGBillboardParticleSystemView_type;
 @synthesize material = _material;
 @synthesize shader = _shader;
 
@@ -437,7 +437,7 @@ static ODClassType* _EGBillboardParticleSystemView_type;
     return [EGBillboardParticleSystemView type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _EGBillboardParticleSystemView_type;
 }
 

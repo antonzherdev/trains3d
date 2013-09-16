@@ -1,5 +1,6 @@
 #import "objdcore.h"
 #import "CNCollection.h"
+@class ODClassType;
 @class NSMutableSet;
 
 @class CNHashSetBuilder;
@@ -22,7 +23,7 @@
 - (ODClassType*)type;
 - (void)addItem:(id)item;
 - (NSSet*)build;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

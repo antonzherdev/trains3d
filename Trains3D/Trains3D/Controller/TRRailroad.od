@@ -168,7 +168,7 @@ class TRRailroad(map : EGMapSso, score : TRScore) {
         val opt = damagesIndex[(from.tile, from.form)]
         if(opt.isEmpty) return nil
 
-        val on : ODFloat -> bool = x : ODFloat -> {
+        val on : Float -> bool = x : Float -> {
             !obstacleProcessor(TRObstacle(TRObstacleType.damage, from.set(x = x)))
         }
         val len = from.form.length

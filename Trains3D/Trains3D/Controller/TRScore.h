@@ -18,7 +18,7 @@
 + (id)scoreRulesWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost;
 - (id)initWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost;
 - (ODClassType*)type;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -35,7 +35,7 @@
 - (void)destroyedTrain:(TRTrain*)train;
 - (void)removeTrain:(TRTrain*)train;
 - (void)updateWithDelta:(CGFloat)delta;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -48,7 +48,7 @@
 - (void)updateWithDelta:(CGFloat)delta;
 - (BOOL)needFineWithDelayPeriod:(CGFloat)delayPeriod;
 - (NSInteger)fineWithRule:(NSInteger(^)(TRTrain*, NSInteger))rule;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

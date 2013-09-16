@@ -1,9 +1,9 @@
 package core
 
-object chain {
+stub object chain {
     val prefix = "CN"
 }
 
-object test {
-    val prefix = "TS"
+stub object lang {
+    val prefix = "OD"
 }

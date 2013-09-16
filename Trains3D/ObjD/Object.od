@@ -1,0 +1,59 @@
+package core.lang
+
+stub class Object {
+    def is<T> : bool
+    def as<T> : T?
+    def cast<T> : T
+    def description : string
+    def hash : uint
+    static def type : Type<self>
+    static def class : Class
+}
+
+
+stub trait Comparable<T> {
+    def compare(to : T) : int
+}
+
+stub struct Byte extends Comparable<byte> {
+    def compare(to : byte) : byte
+    def range : Range
+    def to(: byte) : Range
+    def between(from : byte, to : byte) : bool
+}
+
+
+stub struct Int extends Comparable<int> {
+    def compare(to : int) : int
+    def range : Range
+    def to(: int) : Range
+    def between( : int, : int) : bool
+}
+
+stub struct UInt extends Comparable<uint> {
+    def compare(to : uint) : int
+    def range : Range
+    def to(: uint) : Range
+    def between( : uint, : uint) : bool
+}
+
+stub struct UInt4 extends Comparable<uint4> {
+    def compare(to : uint4) : int
+    def range : Range
+    def to(: uint4) : Range
+    def between( : uint4, : uint4) : bool
+}
+
+stub struct Float extends Comparable<float> {
+    def compare(to : float) : int
+    def between( : float, : float) : bool
+}
+
+stub struct Float4 extends Comparable<float4> {
+    def compare(to : float4) : int
+    def between( : float4, : float4) : bool
+}
+
+
+
+

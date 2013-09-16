@@ -11,7 +11,7 @@
 - (id)initWithRects:(id<CNSeq>)rects;
 - (ODClassType*)type;
 - (id)applyPoint:(GEVec2)point;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

@@ -1,5 +1,6 @@
 #import "objdcore.h"
 #import "ODObject.h"
+@class ODClassType;
 @class CNChain;
 
 @protocol CNIterator;

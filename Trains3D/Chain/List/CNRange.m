@@ -1,13 +1,14 @@
 #import "objd.h"
 #import "CNRange.h"
 
+#import "ODType.h"
 @implementation CNRange{
     NSInteger _start;
     NSInteger _end;
     NSInteger _step;
     NSUInteger _count;
 }
-static ODClassType* _CNRange_type;
+static ODType* _CNRange_type;
 @synthesize start = _start;
 @synthesize end = _end;
 @synthesize step = _step;
@@ -156,7 +157,7 @@ static ODClassType* _CNRange_type;
     return [CNRange type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _CNRange_type;
 }
 
@@ -180,7 +181,7 @@ static ODClassType* _CNRange_type;
     NSInteger _step;
     NSInteger _i;
 }
-static ODClassType* _CNRangeIterator_type;
+static ODType* _CNRangeIterator_type;
 @synthesize start = _start;
 @synthesize end = _end;
 @synthesize step = _step;
@@ -220,7 +221,7 @@ static ODClassType* _CNRangeIterator_type;
     return [CNRangeIterator type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _CNRangeIterator_type;
 }
 

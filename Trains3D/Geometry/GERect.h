@@ -43,7 +43,7 @@ GEVec2 geRectPoint(GERect self);
 GEVec2 geRectSize(GERect self);
 BOOL geRectIntersectsRect(GERect self, GERect rect);
 GERect geRectThickenXY(GERect self, CGFloat x, CGFloat y);
-ODPType* geRectType();
+ODType* geRectType();
 @interface GERectWrap : NSObject
 @property (readonly, nonatomic) GERect value;
 
@@ -86,7 +86,7 @@ GERectI geRectIApplyRect(GERect rect);
 GERectI geRectINewXYXX2YY2(CGFloat x, CGFloat x2, CGFloat y, CGFloat y2);
 NSInteger geRectIX2(GERectI self);
 NSInteger geRectIY2(GERectI self);
-ODPType* geRectIType();
+ODType* geRectIType();
 @interface GERectIWrap : NSObject
 @property (readonly, nonatomic) GERectI value;
 

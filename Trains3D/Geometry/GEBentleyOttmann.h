@@ -18,7 +18,7 @@
 - (id)init;
 - (ODClassType*)type;
 + (id<CNSet>)intersectionsForSegments:(id<CNSeq>)segments;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -29,7 +29,7 @@
 + (id)intersectionWithItems:(CNPair*)items point:(GEVec2)point;
 - (id)initWithItems:(CNPair*)items point:(GEVec2)point;
 - (ODClassType*)type;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -41,7 +41,7 @@
 - (BOOL)isIntersection;
 - (BOOL)isStart;
 - (BOOL)isEnd;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -58,7 +58,7 @@
 - (CGFloat)slope;
 - (BOOL)isVertical;
 - (BOOL)isEnd;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -69,7 +69,7 @@
 - (id)initWithPoint:(GEVec2)point;
 - (ODClassType*)type;
 - (BOOL)isIntersection;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -83,7 +83,7 @@
 + (GEBentleyOttmannEventQueue*)newWithSegments:(id<CNSeq>)segments sweepLine:(GESweepLine*)sweepLine;
 - (void)offerPoint:(GEVec2)point event:(GEBentleyOttmannEvent*)event;
 - (id<CNSeq>)poll;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -93,7 +93,7 @@
 + (id)pointClassWithPoint:(GEVec2)point;
 - (id)initWithPoint:(GEVec2)point;
 - (ODClassType*)type;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -106,7 +106,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)handleEvents:(id<CNSeq>)events;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

@@ -1,13 +1,15 @@
 #import "objd.h"
 #import "CNSeq.h"
 
+#import "math.h"
 #import "CNSet.h"
 #import "CNChain.h"
+#import "ODType.h"
 #import "ObjC.h"
 @implementation CNArrayBuilder{
     NSMutableArray* _array;
 }
-static ODClassType* _CNArrayBuilder_type;
+static ODType* _CNArrayBuilder_type;
 @synthesize array = _array;
 
 + (id)arrayBuilder {
@@ -45,7 +47,7 @@ static ODClassType* _CNArrayBuilder_type;
     return [CNArrayBuilder type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _CNArrayBuilder_type;
 }
 
@@ -76,7 +78,7 @@ static ODClassType* _CNArrayBuilder_type;
     NSUInteger _count;
     id(^_f)(NSUInteger);
 }
-static ODClassType* _CNIndexFunSeq_type;
+static ODType* _CNIndexFunSeq_type;
 @synthesize count = _count;
 @synthesize f = _f;
 
@@ -212,7 +214,7 @@ static ODClassType* _CNIndexFunSeq_type;
     return [CNIndexFunSeq type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _CNIndexFunSeq_type;
 }
 
@@ -235,7 +237,7 @@ static ODClassType* _CNIndexFunSeq_type;
     id(^_f)(NSUInteger);
     NSUInteger _i;
 }
-static ODClassType* _CNIndexFunSeqIterator_type;
+static ODType* _CNIndexFunSeqIterator_type;
 @synthesize count = _count;
 @synthesize f = _f;
 @synthesize i = _i;
@@ -274,7 +276,7 @@ static ODClassType* _CNIndexFunSeqIterator_type;
     return [CNIndexFunSeqIterator type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _CNIndexFunSeqIterator_type;
 }
 

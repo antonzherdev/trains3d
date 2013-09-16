@@ -6,7 +6,7 @@
     id<EGView> _view;
     id _processor;
 }
-static ODClassType* _EGLayer_type;
+static ODType* _EGLayer_type;
 @synthesize view = _view;
 @synthesize processor = _processor;
 
@@ -50,7 +50,7 @@ static ODClassType* _EGLayer_type;
     return [EGLayer type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _EGLayer_type;
 }
 

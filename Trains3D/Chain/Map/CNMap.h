@@ -1,5 +1,6 @@
 #import "objdcore.h"
 #import "CNCollection.h"
+@class ODClassType;
 
 @class CNMapDefault;
 @protocol CNMap;
@@ -40,7 +41,7 @@
 - (id)modifyBy:(id(^)(id))by forKey:(id)forKey;
 - (void)addItem:(CNTuple*)item;
 - (void)removeItem:(CNTuple*)item;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

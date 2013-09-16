@@ -9,7 +9,7 @@
 @implementation TREngineType{
     GEVec3 _tubePos;
 }
-static ODClassType* _TREngineType_type;
+static ODType* _TREngineType_type;
 @synthesize tubePos = _tubePos;
 
 + (id)engineTypeWithTubePos:(GEVec3)tubePos {
@@ -32,7 +32,7 @@ static ODClassType* _TREngineType_type;
     return [TREngineType type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TREngineType_type;
 }
 
@@ -156,7 +156,7 @@ static NSArray* _TRCarType_values;
     CNLazy* __lazy_dynamicBody;
     TRCarPosition* __position;
 }
-static ODClassType* _TRCar_type;
+static ODType* _TRCar_type;
 @synthesize train = _train;
 @synthesize carType = _carType;
 @synthesize collisionBody = _collisionBody;
@@ -229,7 +229,7 @@ static ODClassType* _TRCar_type;
     return [TRCar type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRCar_type;
 }
 
@@ -269,7 +269,7 @@ static ODClassType* _TRCar_type;
     TRRailPoint* _backConnector;
     GELineSegment* _line;
 }
-static ODClassType* _TRCarPosition_type;
+static ODType* _TRCarPosition_type;
 @synthesize frontConnector = _frontConnector;
 @synthesize head = _head;
 @synthesize tail = _tail;
@@ -302,7 +302,7 @@ static ODClassType* _TRCarPosition_type;
     return [TRCarPosition type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRCarPosition_type;
 }
 

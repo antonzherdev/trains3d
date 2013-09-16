@@ -26,7 +26,7 @@
 + (GEQuad)modelQuad;
 + (GEQuadrant)textureQuadrant;
 + (GEVec4)defColor;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -38,7 +38,7 @@
 - (ODClassType*)type;
 - (void)updateT:(float)t dt:(float)dt;
 + (NSInteger)dragCoefficient;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -46,7 +46,7 @@
 + (id)smokeView;
 - (id)init;
 - (ODClassType*)type;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

@@ -18,7 +18,7 @@ typedef struct TRRailCorrection TRRailCorrection;
 - (id)initWithBuilder:(TRRailroadBuilder*)builder;
 - (ODClassType*)type;
 - (BOOL)processEvent:(EGEvent*)event;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -48,7 +48,7 @@ static inline NSString* TRRailCorrectionDescription(TRRailCorrection self) {
     [description appendString:@">"];
     return description;
 }
-ODPType* trRailCorrectionType();
+ODType* trRailCorrectionType();
 @interface TRRailCorrectionWrap : NSObject
 @property (readonly, nonatomic) TRRailCorrection value;
 
@@ -67,7 +67,7 @@ ODPType* trRailCorrectionType();
 - (BOOL)mouseDownEvent:(EGEvent*)event;
 - (BOOL)mouseDragEvent:(EGEvent*)event;
 - (BOOL)mouseUpEvent:(EGEvent*)event;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

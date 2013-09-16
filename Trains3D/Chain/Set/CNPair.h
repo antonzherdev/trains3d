@@ -1,6 +1,7 @@
 #import "objdcore.h"
 #import "CNSet.h"
 #import "CNCollection.h"
+@class ODClassType;
 
 @class CNPair;
 @class CNPairIterator;
@@ -17,7 +18,7 @@
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
 - (id)head;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -29,7 +30,7 @@
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

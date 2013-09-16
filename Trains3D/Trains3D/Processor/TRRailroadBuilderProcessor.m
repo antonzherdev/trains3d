@@ -8,7 +8,7 @@
     TRRailroadBuilderMouseProcessor* _mouseProcessor;
     EGTwoFingerTouchToMouse* _touchProcessor;
 }
-static ODClassType* _TRRailroadBuilderProcessor_type;
+static ODType* _TRRailroadBuilderProcessor_type;
 @synthesize builder = _builder;
 
 + (id)railroadBuilderProcessorWithBuilder:(TRRailroadBuilder*)builder {
@@ -39,7 +39,7 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
     return [TRRailroadBuilderProcessor type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRRailroadBuilderProcessor_type;
 }
 
@@ -70,8 +70,8 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
 @end
 
 
-ODPType* trRailCorrectionType() {
-    static ODPType* _ret = nil;
+ODType* trRailCorrectionType() {
+    static ODType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[TRRailCorrectionWrap class] name:@"TRRailCorrection" size:sizeof(TRRailCorrection) wrap:^id(void* data, NSUInteger i) {
         return wrap(TRRailCorrection, ((TRRailCorrection*)(data))[i]);
     }];
@@ -119,7 +119,7 @@ ODPType* trRailCorrectionType() {
     TRRailroadBuilder* _builder;
     id _startedPoint;
 }
-static ODClassType* _TRRailroadBuilderMouseProcessor_type;
+static ODType* _TRRailroadBuilderMouseProcessor_type;
 @synthesize builder = _builder;
 
 + (id)railroadBuilderMouseProcessorWithBuilder:(TRRailroadBuilder*)builder {
@@ -236,7 +236,7 @@ static ODClassType* _TRRailroadBuilderMouseProcessor_type;
     return [TRRailroadBuilderMouseProcessor type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRRailroadBuilderMouseProcessor_type;
 }
 

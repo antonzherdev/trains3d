@@ -1,7 +1,7 @@
 package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
-import core.ODMath._
+import core.math._
 import com.antonzherdev.eg.EGProgress._
 
 

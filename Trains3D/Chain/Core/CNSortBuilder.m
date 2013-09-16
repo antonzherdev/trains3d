@@ -3,11 +3,12 @@
 
 #import "CNChain.h"
 #import "CNCollection.h"
+#import "ODType.h"
 @implementation CNSortBuilder{
     CNChain* _chain;
     NSMutableArray* _functions;
 }
-static ODClassType* _CNSortBuilder_type;
+static ODType* _CNSortBuilder_type;
 @synthesize chain = _chain;
 
 + (id)sortBuilderWithChain:(CNChain*)chain {
@@ -64,7 +65,7 @@ static ODClassType* _CNSortBuilder_type;
     return [CNSortBuilder type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _CNSortBuilder_type;
 }
 

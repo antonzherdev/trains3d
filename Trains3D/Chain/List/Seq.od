@@ -1,6 +1,6 @@
 package core.chain
 
-import core.ODMath._
+import core.math._
 
 trait Seq<T> extends Iterable<T> {
     def apply(index : uint) : T? = {

@@ -5,7 +5,7 @@ import com.antonzherdev.eg.EGGL._
 struct EGMeshData(uv : vec2, normal : vec3, position : vec3)
 
 class EGMesh<T>(vertexBuffer : EGVertexBuffer<T>, indexBuffer : EGIndexBuffer<uint4>) {
-    static def apply<T>(dataType : ODPType<T>, vertexData : PArray<T>, indexData : PArray<uint4>) : EGMesh =
+    static def apply<T>(dataType : PType<T>, vertexData : PArray<T>, indexData : PArray<uint4>) : EGMesh =
         EGMesh<T>(vertexBuffer = EGVertexBuffer<T>(dataType).set(vertexData),
             indexBuffer = EGIndexBuffer().set(indexData))
 
@@ -13,12 +13,12 @@ class EGMesh<T>(vertexBuffer : EGVertexBuffer<T>, indexBuffer : EGIndexBuffer<ui
         EGMesh<T>(vertexBuffer, EGIndexBuffer().set([0, 1, 2, 2, 3, 0]))
 }
 
-class EGBuffer<T>(dataType : ODPType<T>, bufferType : GLenum, handle : GLuint) {
+class EGBuffer<T>(dataType : PType<T>, bufferType : GLenum, handle : GLuint) {
     private var _length : uint = 0
     private var _count : uint = 0
     def length : uint = _length
     def count : uint = _count
-    static def apply<T>(dataType : ODPType<T>, bufferType : GLenum) : EGBuffer = EGBuffer<T>(dataType, bufferType, egGenBuffer)
+    static def apply<T>(dataType : PType<T>, bufferType : GLenum) : EGBuffer = EGBuffer<T>(dataType, bufferType, egGenBuffer)
 
     def dealoc {
         egDeleteBuffer(handle)
@@ -69,11 +69,11 @@ class EGBuffer<T>(dataType : ODPType<T>, bufferType : GLenum, handle : GLuint) {
     def stride : uint = dataType.size
 }
 
-class EGVertexBuffer<T>(dataType : ODPType<T>, handle : GLuint) extends EGBuffer<T>(dataType, GL_ARRAY_BUFFER, handle) {
-    static def apply<T>(dataType : ODPType<T>) : EGVertexBuffer<T> = EGVertexBuffer<T>(dataType, egGenBuffer)
+class EGVertexBuffer<T>(dataType : PType<T>, handle : GLuint) extends EGBuffer<T>(dataType, GL_ARRAY_BUFFER, handle) {
+    static def apply<T>(dataType : PType<T>) : EGVertexBuffer<T> = EGVertexBuffer<T>(dataType, egGenBuffer)
 }
 
-class EGIndexBuffer(handle : GLuint) extends EGBuffer<uint4>(ODUInt4.type, GL_ELEMENT_ARRAY_BUFFER, handle) {
+class EGIndexBuffer(handle : GLuint) extends EGBuffer<uint4>(UInt4.type, GL_ELEMENT_ARRAY_BUFFER, handle) {
     static def apply : EGIndexBuffer = EGIndexBuffer(egGenBuffer)
 
     def draw {

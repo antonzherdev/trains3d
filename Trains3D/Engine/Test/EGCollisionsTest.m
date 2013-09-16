@@ -3,7 +3,7 @@
 #import "EGCollisionWorld.h"
 #import "EGCollisionBody.h"
 @implementation EGCollisionsTest
-static ODClassType* _EGCollisionsTest_type;
+static ODType* _EGCollisionsTest_type;
 
 + (id)collisionsTest {
     return [[EGCollisionsTest alloc] init];
@@ -52,7 +52,7 @@ static ODClassType* _EGCollisionsTest_type;
     return [EGCollisionsTest type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _EGCollisionsTest_type;
 }
 

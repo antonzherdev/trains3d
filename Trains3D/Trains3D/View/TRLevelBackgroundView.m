@@ -8,7 +8,7 @@
     EGMapSsoView* _mapView;
     EGStandardMaterial* _material;
 }
-static ODClassType* _TRLevelBackgroundView_type;
+static ODType* _TRLevelBackgroundView_type;
 @synthesize map = _map;
 @synthesize mapView = _mapView;
 @synthesize material = _material;
@@ -41,7 +41,7 @@ static ODClassType* _TRLevelBackgroundView_type;
     return [TRLevelBackgroundView type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRLevelBackgroundView_type;
 }
 

@@ -5,7 +5,7 @@
     GEVec2 _viewSize;
     id _camera;
 }
-static ODClassType* _EGEvent_type;
+static ODType* _EGEvent_type;
 @synthesize viewSize = _viewSize;
 @synthesize camera = _camera;
 
@@ -107,7 +107,7 @@ static ODClassType* _EGEvent_type;
     return [EGEvent type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _EGEvent_type;
 }
 

@@ -19,7 +19,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)testMain;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

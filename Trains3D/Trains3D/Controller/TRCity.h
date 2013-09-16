@@ -33,7 +33,7 @@
 - (ODClassType*)type;
 - (TRRailPoint*)startPoint;
 - (void)updateWithDelta:(CGFloat)delta;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

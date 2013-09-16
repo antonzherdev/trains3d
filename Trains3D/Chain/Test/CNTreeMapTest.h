@@ -3,6 +3,7 @@
 @class CNMutableTreeMap;
 @class CNChain;
 @class CNTreeMapKeySet;
+@class ODClassType;
 
 @class CNTreeMapTest;
 
@@ -11,7 +12,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)testMain;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

@@ -1,6 +1,6 @@
 package com.antonzherdev.geometry
 
-import core.ODMath._
+import core.math._
 
 struct Rect(x : float, width : float, y : float, height : float) {
     def contains(point : vec2) : bool = x <= point.x && point.x <= x + width && y <= point.y && point.y <= y + height

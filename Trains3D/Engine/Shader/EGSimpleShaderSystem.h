@@ -21,7 +21,7 @@
 - (ODClassType*)type;
 - (EGShader*)shaderForMaterial:(EGSimpleMaterial*)material;
 + (EGSimpleShaderSystem*)instance;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -31,7 +31,7 @@
 - (ODClassType*)type;
 + (NSInteger)UV_SHIFT;
 + (NSInteger)POSITION_SHIFT;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -46,7 +46,7 @@
 - (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material;
 + (NSString*)colorVertexProgram;
 + (NSString*)colorFragmentProgram;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -62,7 +62,7 @@
 - (void)unloadMaterial:(EGSimpleMaterial*)material;
 + (NSString*)textureVertexProgram;
 + (NSString*)textureFragmentProgram;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

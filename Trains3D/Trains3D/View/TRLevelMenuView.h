@@ -17,7 +17,7 @@
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)drawView;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

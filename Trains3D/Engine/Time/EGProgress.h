@@ -14,7 +14,7 @@
 + (GEVec4(^)(float))progressVec4:(GEVec4)vec4 vec42:(GEVec4)vec42;
 + (EGColor(^)(float))progressColor:(EGColor)color color2:(EGColor)color2;
 + (id(^)(float))gapT1:(float)t1 t2:(float)t2;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

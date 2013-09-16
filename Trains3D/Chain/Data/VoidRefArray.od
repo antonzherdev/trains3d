@@ -5,7 +5,7 @@ import core.chain.CNMemory._
 stub struct VoidRefArray(length : uint, bytes : VoidRef)
 {
     static def apply(length : uint) : VoidRefArray = VoidRefArray(length, malloc(length))
-    static def apply(tp: ODPType<_>, count : uint) : VoidRefArray = VoidRefArray(tp.size * count)
+    static def apply(tp: PType<_>, count : uint) : VoidRefArray = VoidRefArray(tp.size * count)
 
     def write(tp : any, item : any) : VoidRefArray
 

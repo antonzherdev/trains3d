@@ -46,7 +46,7 @@ CGFloat geVec2DistanceToVec2(GEVec2 self, GEVec2 vec2);
 GEVec2 geVec2SetLength(GEVec2 self, float length);
 GEVec2 geVec2Normalize(GEVec2 self);
 NSInteger geVec2CompareTo(GEVec2 self, GEVec2 to);
-ODPType* geVec2Type();
+ODType* geVec2Type();
 @interface GEVec2Wrap : NSObject
 @property (readonly, nonatomic) GEVec2 value;
 
@@ -84,7 +84,7 @@ GEVec2i geVec2iAddVec2i(GEVec2i self, GEVec2i vec2i);
 GEVec2i geVec2iSubVec2i(GEVec2i self, GEVec2i vec2i);
 GEVec2i geVec2iNegate(GEVec2i self);
 NSInteger geVec2iCompareTo(GEVec2i self, GEVec2i to);
-ODPType* geVec2iType();
+ODType* geVec2iType();
 @interface GEVec2iWrap : NSObject
 @property (readonly, nonatomic) GEVec2i value;
 
@@ -130,7 +130,7 @@ CGFloat geVec3LengthSquare(GEVec3 self);
 CGFloat geVec3Length(GEVec3 self);
 GEVec3 geVec3SetLength(GEVec3 self, CGFloat length);
 GEVec3 geVec3Normalize(GEVec3 self);
-ODPType* geVec3Type();
+ODType* geVec3Type();
 @interface GEVec3Wrap : NSObject
 @property (readonly, nonatomic) GEVec3 value;
 
@@ -176,7 +176,7 @@ CGFloat geVec4LengthSquare(GEVec4 self);
 CGFloat geVec4Length(GEVec4 self);
 GEVec4 geVec4SetLength(GEVec4 self, CGFloat length);
 GEVec4 geVec4Normalize(GEVec4 self);
-ODPType* geVec4Type();
+ODType* geVec4Type();
 @interface GEVec4Wrap : NSObject
 @property (readonly, nonatomic) GEVec4 value;
 
@@ -221,7 +221,7 @@ GEQuad geQuadAddVec2(GEQuad self, GEVec2 vec2);
 GEQuad geQuadAddXY(GEQuad self, float x, float y);
 GEQuadrant geQuadQuadrant(GEQuad self);
 GEQuad geQuadIdentity();
-ODPType* geQuadType();
+ODType* geQuadType();
 @interface GEQuadWrap : NSObject
 @property (readonly, nonatomic) GEQuad value;
 
@@ -252,7 +252,7 @@ static inline NSString* GEQuadrantDescription(GEQuadrant self) {
     return description;
 }
 GEQuad geQuadrantRandomQuad(GEQuadrant self);
-ODPType* geQuadrantType();
+ODType* geQuadrantType();
 @interface GEQuadrantWrap : NSObject
 @property (readonly, nonatomic) GEQuadrant value;
 

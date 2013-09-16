@@ -2,7 +2,7 @@
 
 #import "GEFigure.h"
 @implementation GEFigureTest
-static ODClassType* _GEFigureTest_type;
+static ODType* _GEFigureTest_type;
 
 + (id)figureTest {
     return [[GEFigureTest alloc] init];
@@ -39,7 +39,7 @@ static ODClassType* _GEFigureTest_type;
     return [GEFigureTest type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _GEFigureTest_type;
 }
 

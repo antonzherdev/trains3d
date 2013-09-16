@@ -5,7 +5,7 @@
     CGFloat __current;
     CGFloat __next;
 }
-static ODClassType* _EGSchedule_type;
+static ODType* _EGSchedule_type;
 
 + (id)schedule {
     return [[EGSchedule alloc] init];
@@ -54,7 +54,7 @@ static ODClassType* _EGSchedule_type;
     return [EGSchedule type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _EGSchedule_type;
 }
 
@@ -77,7 +77,7 @@ static ODClassType* _EGSchedule_type;
     CGFloat __time;
     BOOL __run;
 }
-static ODClassType* _EGAnimation_type;
+static ODType* _EGAnimation_type;
 @synthesize length = _length;
 @synthesize finish = _finish;
 
@@ -129,7 +129,7 @@ static ODClassType* _EGAnimation_type;
     return [EGAnimation type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _EGAnimation_type;
 }
 

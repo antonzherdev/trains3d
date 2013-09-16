@@ -2,6 +2,7 @@
 #import "ODObject.h"
 @class CNChain;
 @protocol CNIterator;
+@class ODClassType;
 
 @class CNSortBuilder;
 
@@ -15,7 +16,7 @@
 - (CNSortBuilder*)descBy:(id(^)(id))by;
 - (CNSortBuilder*)andF:(NSInteger(^)(id, id))f;
 - (CNChain*)endSort;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

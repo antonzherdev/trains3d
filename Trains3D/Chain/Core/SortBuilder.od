@@ -3,11 +3,11 @@ package core.chain
 class SortBuilder<A>(chain : Chain<A>) {
     private val functions = MutableArray<(A, A) -> int>()
 
-    def asc<B extends ODComparable<B>>(by : A -> B) : SortBuilder<A> = {
+    def asc<B extends Comparable<B>>(by : A -> B) : SortBuilder<A> = {
         functions.add((x : A, y : A) -> by(x).compare(by(y)))
         self
     }
-    def desc<B extends ODComparable<B>>(by : A -> B) : SortBuilder<A> = {
+    def desc<B extends Comparable<B>>(by : A -> B) : SortBuilder<A> = {
         functions.add((x : A, y : A) -> by(y).compare(by(x)))
         self
     }

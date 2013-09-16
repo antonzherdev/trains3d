@@ -3,7 +3,7 @@
 @implementation EGTexture{
     GLuint _id;
 }
-static ODClassType* _EGTexture_type;
+static ODType* _EGTexture_type;
 @synthesize id = _id;
 
 + (id)texture {
@@ -46,7 +46,7 @@ static ODClassType* _EGTexture_type;
     return [EGTexture type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _EGTexture_type;
 }
 
@@ -78,7 +78,7 @@ static ODClassType* _EGTexture_type;
     BOOL __loaded;
     GEVec2 __size;
 }
-static ODClassType* _EGFileTexture_type;
+static ODType* _EGFileTexture_type;
 @synthesize file = _file;
 
 + (id)fileTextureWithFile:(NSString*)file {
@@ -120,7 +120,7 @@ static ODClassType* _EGFileTexture_type;
     return [EGFileTexture type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _EGFileTexture_type;
 }
 

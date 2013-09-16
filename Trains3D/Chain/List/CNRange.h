@@ -1,6 +1,7 @@
 #import "objdcore.h"
 #import "CNSeq.h"
 #import "CNCollection.h"
+@class ODClassType;
 
 @class CNRange;
 @class CNRangeIterator;
@@ -18,7 +19,7 @@
 - (id<CNIterator>)iterator;
 - (CNRange*)setStep:(NSInteger)step;
 - (BOOL)isEmpty;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -32,7 +33,7 @@
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

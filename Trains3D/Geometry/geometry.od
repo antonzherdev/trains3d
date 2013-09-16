@@ -1,5 +1,5 @@
 package com.antonzherdev
 
-object geometry {
+stub object geometry {
     val prefix = "GE"
 }

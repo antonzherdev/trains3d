@@ -1,7 +1,7 @@
 #import "EGProgress.h"
 
 @implementation EGProgress
-static ODClassType* _EGProgress_type;
+static ODType* _EGProgress_type;
 
 + (void)initialize {
     [super initialize];
@@ -75,7 +75,7 @@ static ODClassType* _EGProgress_type;
     return [EGProgress type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _EGProgress_type;
 }
 

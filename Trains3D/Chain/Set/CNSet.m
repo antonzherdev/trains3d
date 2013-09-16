@@ -1,11 +1,12 @@
 #import "objd.h"
 #import "CNSet.h"
 
+#import "ODType.h"
 #import "ObjC.h"
 @implementation CNHashSetBuilder{
     NSMutableSet* _set;
 }
-static ODClassType* _CNHashSetBuilder_type;
+static ODType* _CNHashSetBuilder_type;
 @synthesize set = _set;
 
 + (id)hashSetBuilder {
@@ -43,7 +44,7 @@ static ODClassType* _CNHashSetBuilder_type;
     return [CNHashSetBuilder type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _CNHashSetBuilder_type;
 }
 

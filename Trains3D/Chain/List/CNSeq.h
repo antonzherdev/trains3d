@@ -4,6 +4,7 @@
 @protocol CNSet;
 @class CNHashSetBuilder;
 @class CNChain;
+@class ODClassType;
 @class NSArray;
 
 @class CNArrayBuilder;
@@ -34,7 +35,7 @@
 - (ODClassType*)type;
 - (void)addItem:(id)item;
 - (NSArray*)build;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -47,7 +48,7 @@
 - (ODClassType*)type;
 - (id)applyIndex:(NSUInteger)index;
 - (id<CNIterator>)iterator;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -61,7 +62,7 @@
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

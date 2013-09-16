@@ -30,7 +30,7 @@
 + (TRScore*)score;
 + (TRRailroad*)railroadWithMapSize:(GEVec2i)mapSize;
 + (TRScoreRules*)scoreRules;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

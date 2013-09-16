@@ -22,7 +22,7 @@ typedef struct EGBillboardBufferData EGBillboardBufferData;
 - (ODClassType*)type;
 - (EGBillboardShader*)shaderForMaterial:(EGSimpleMaterial*)material;
 + (EGBillboardShaderSystem*)instance;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -45,7 +45,7 @@ typedef struct EGBillboardBufferData EGBillboardBufferData;
 + (NSString*)fragmentTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code;
 - (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material;
 - (void)unloadMaterial:(EGSimpleMaterial*)material;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -78,7 +78,7 @@ static inline NSString* EGBillboardBufferDataDescription(EGBillboardBufferData s
     [description appendString:@">"];
     return description;
 }
-ODPType* egBillboardBufferDataType();
+ODType* egBillboardBufferDataType();
 @interface EGBillboardBufferDataWrap : NSObject
 @property (readonly, nonatomic) EGBillboardBufferData value;
 
@@ -92,7 +92,7 @@ ODPType* egBillboardBufferDataType();
 + (id)billboardParticleSystem;
 - (id)init;
 - (ODClassType*)type;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -106,7 +106,7 @@ ODPType* egBillboardBufferDataType();
 - (id)initWithLifeLength:(float)lifeLength;
 - (ODClassType*)type;
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -120,7 +120,7 @@ ODPType* egBillboardBufferDataType();
 + (EGBillboardParticleSystemView*)applyMaxCount:(NSUInteger)maxCount material:(EGSimpleMaterial*)material;
 - (NSUInteger)vertexCount;
 - (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

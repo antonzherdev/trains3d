@@ -9,7 +9,7 @@
     EGRectIndex* _index;
     id _downed;
 }
-static ODClassType* _TRSwitchProcessor_type;
+static ODType* _TRSwitchProcessor_type;
 @synthesize level = _level;
 
 + (id)switchProcessorWithLevel:(TRLevel*)level {
@@ -70,7 +70,7 @@ static ODClassType* _TRSwitchProcessor_type;
     return [TRSwitchProcessor type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRSwitchProcessor_type;
 }
 

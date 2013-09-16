@@ -21,7 +21,7 @@
 + (id)engineTypeWithTubePos:(GEVec3)tubePos;
 - (id)initWithTubePos:(GEVec3)tubePos;
 - (ODClassType*)type;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -60,7 +60,7 @@
 - (TRCarPosition*)position;
 - (void)setPosition:(TRCarPosition*)position;
 - (GEVec2)midPoint;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -74,7 +74,7 @@
 + (id)carPositionWithFrontConnector:(TRRailPoint*)frontConnector head:(TRRailPoint*)head tail:(TRRailPoint*)tail backConnector:(TRRailPoint*)backConnector;
 - (id)initWithFrontConnector:(TRRailPoint*)frontConnector head:(TRRailPoint*)head tail:(TRRailPoint*)tail backConnector:(TRRailPoint*)backConnector;
 - (ODClassType*)type;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

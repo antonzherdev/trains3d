@@ -20,3 +20,10 @@ stub class NSMutableDictionary<K, V> extends MutableMap<K, V>
 
 type HashMap<K, V> = NSDictionary<K, V>
 type MutableHashMap<K, V> = NSMutableDictionary<K, V>
+
+stub class NSObject {
+}
+
+stub object NSGeneric{
+    def NSStringFromClass(cls : Class) : string
+}

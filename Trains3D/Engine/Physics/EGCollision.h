@@ -13,7 +13,7 @@
 + (id)collisionWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
 - (id)initWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
 - (ODClassType*)type;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -24,7 +24,7 @@
 + (id)contactWithA:(GEVec3)a b:(GEVec3)b;
 - (id)initWithA:(GEVec3)a b:(GEVec3)b;
 - (ODClassType*)type;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -36,7 +36,7 @@
 - (id)initWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f;
 - (ODClassType*)type;
 - (id<CNIterator>)iterator;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -49,7 +49,7 @@
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

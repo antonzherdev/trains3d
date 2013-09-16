@@ -7,7 +7,7 @@
     GEVec2 _size;
     EGMatrixModel* _matrixModel;
 }
-static ODClassType* _EGCamera2D_type;
+static ODType* _EGCamera2D_type;
 @synthesize size = _size;
 
 + (id)camera2DWithSize:(GEVec2)size {
@@ -56,7 +56,7 @@ static ODClassType* _EGCamera2D_type;
     return [EGCamera2D type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _EGCamera2D_type;
 }
 

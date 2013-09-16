@@ -16,7 +16,7 @@
     NSUInteger _repairerSpeed;
     id<CNSeq> _events;
 }
-static ODClassType* _TRLevelRules_type;
+static ODType* _TRLevelRules_type;
 @synthesize mapSize = _mapSize;
 @synthesize scoreRules = _scoreRules;
 @synthesize repairerSpeed = _repairerSpeed;
@@ -47,7 +47,7 @@ static ODClassType* _TRLevelRules_type;
     return [TRLevelRules type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRLevelRules_type;
 }
 
@@ -97,7 +97,7 @@ static ODClassType* _TRLevelRules_type;
     TRDynamicWorld* _dynamicWorld;
     NSMutableArray* __dyingTrains;
 }
-static ODClassType* _TRLevel_type;
+static ODType* _TRLevel_type;
 @synthesize rules = _rules;
 @synthesize map = _map;
 @synthesize score = _score;
@@ -295,7 +295,7 @@ static ODClassType* _TRLevel_type;
     return [TRLevel type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRLevel_type;
 }
 

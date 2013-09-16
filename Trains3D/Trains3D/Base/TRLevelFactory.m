@@ -15,7 +15,7 @@
 @implementation TRLevelFactory
 static TRScoreRules* _TRLevelFactory_scoreRules;
 static id<CNSeq> _TRLevelFactory_rules;
-static ODClassType* _TRLevelFactory_type;
+static ODType* _TRLevelFactory_type;
 
 + (id)levelFactory {
     return [[TRLevelFactory alloc] init];
@@ -84,7 +84,7 @@ static ODClassType* _TRLevelFactory_type;
     return _TRLevelFactory_scoreRules;
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRLevelFactory_type;
 }
 

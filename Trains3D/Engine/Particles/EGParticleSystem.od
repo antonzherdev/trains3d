@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-import core.ODMath._
+import core.math._
 import com.antonzherdev.eg.EGGL._
 
 class EGParticleSystem <P extends EGParticle> extends EGController {
@@ -41,12 +41,12 @@ class EGParticle(lifeLength : float4) extends EGController {
 }
 
 
-class EGParticleSystemView<P extends EGParticle, D>(dtp : ODPType<D>, maxCount : uint, blendFunc : EGBlendFunction) {
+class EGParticleSystemView<P extends EGParticle, D>(dtp : PType<D>, maxCount : uint, blendFunc : EGBlendFunction) {
     val vertexArr = VoidRefArray(dtp, maxCount*vertexCount)
     val vertexBuffer = EGVertexBuffer<D>(dtp).set(array = vertexArr, usage = GL_DYNAMIC_DRAW)
     val indexArr : VoidRefArray = {
         val vc = vertexCount
-        val ia = VoidRefArray(ODUInt4.type, maxCount*3*(vc - 2))
+        val ia = VoidRefArray(UInt4.type, maxCount*3*(vc - 2))
         var indexPointer = ia
         maxCount.range.for{i ->
             indexPointer = writeIndexesTo(indexPointer, i*vc)

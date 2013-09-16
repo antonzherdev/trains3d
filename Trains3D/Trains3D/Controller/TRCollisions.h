@@ -23,7 +23,7 @@
 - (void)addTrain:(TRTrain*)train;
 - (void)removeTrain:(TRTrain*)train;
 - (id<CNSeq>)detect;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -34,7 +34,7 @@
 + (id)collisionWithCars:(CNPair*)cars railPoint:(TRRailPoint*)railPoint;
 - (id)initWithCars:(CNPair*)cars railPoint:(TRRailPoint*)railPoint;
 - (ODClassType*)type;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 
@@ -46,7 +46,7 @@
 - (void)dieTrain:(TRTrain*)train;
 - (void)removeTrain:(TRTrain*)train;
 - (void)updateWithDelta:(CGFloat)delta;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

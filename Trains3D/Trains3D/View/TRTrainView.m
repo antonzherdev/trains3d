@@ -14,7 +14,7 @@
     TRSmokeView* _smokeView;
     EGStandardMaterial* _blackMaterial;
 }
-static ODClassType* _TRTrainView_type;
+static ODType* _TRTrainView_type;
 @synthesize smokeView = _smokeView;
 @synthesize blackMaterial = _blackMaterial;
 
@@ -106,7 +106,7 @@ static ODClassType* _TRTrainView_type;
     return [TRTrainView type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRTrainView_type;
 }
 

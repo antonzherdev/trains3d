@@ -21,7 +21,7 @@
 - (BOOL)mouseDownEvent:(EGEvent*)event;
 - (BOOL)mouseDragEvent:(EGEvent*)event;
 - (BOOL)mouseUpEvent:(EGEvent*)event;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

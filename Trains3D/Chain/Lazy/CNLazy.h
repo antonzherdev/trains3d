@@ -1,5 +1,6 @@
 #import "objdcore.h"
 #import "ODObject.h"
+@class ODClassType;
 
 @class CNLazy;
 
@@ -11,7 +12,7 @@
 - (ODClassType*)type;
 - (BOOL)isCalculated;
 - (id)get;
-+ (ODClassType*)type;
++ (ODType*)type;
 @end
 
 

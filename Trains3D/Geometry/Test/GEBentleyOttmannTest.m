@@ -3,7 +3,7 @@
 #import "GEFigure.h"
 #import "GEBentleyOttmann.h"
 @implementation GEBentleyOttmannTest
-static ODClassType* _GEBentleyOttmannTest_type;
+static ODType* _GEBentleyOttmannTest_type;
 
 + (id)bentleyOttmannTest {
     return [[GEBentleyOttmannTest alloc] init];
@@ -70,7 +70,7 @@ static ODClassType* _GEBentleyOttmannTest_type;
     return [GEBentleyOttmannTest type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _GEBentleyOttmannTest_type;
 }
 

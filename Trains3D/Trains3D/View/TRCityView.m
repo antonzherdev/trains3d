@@ -10,7 +10,7 @@
 @implementation TRCityView{
     EGMesh* _expectedTrainModel;
 }
-static ODClassType* _TRCityView_type;
+static ODType* _TRCityView_type;
 @synthesize expectedTrainModel = _expectedTrainModel;
 
 + (id)cityView {
@@ -49,7 +49,7 @@ static ODClassType* _TRCityView_type;
     return [TRCityView type];
 }
 
-+ (ODClassType*)type {
++ (ODType*)type {
     return _TRCityView_type;
 }
 

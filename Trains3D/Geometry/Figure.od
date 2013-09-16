@@ -1,6 +1,6 @@
 package com.antonzherdev.geometry
 
-import core.ODMath._
+import core.math._
 
 class Line {
     static def apply(slope : float, point : vec2) : Line = SlopeLine(slope, calculateConstantWith(slope, point))
