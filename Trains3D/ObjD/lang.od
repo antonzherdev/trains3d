@@ -1,0 +1,5 @@
+package core
+
+stub object lang {
+    val prefix = "OD"
+}
