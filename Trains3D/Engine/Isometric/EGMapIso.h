@@ -1,7 +1,7 @@
 #import "objd.h"
 #import "GEVec.h"
 #import "GERect.h"
-@class EGMesh;
+#import "EGMesh.h"
 @class EGMaterial;
 
 @class EGMapSso;

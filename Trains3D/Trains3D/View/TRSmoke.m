@@ -181,7 +181,7 @@ static ODClassType* _TRSmokeView_type;
 }
 
 - (id)init {
-    self = [super initWithMaterial:[EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyTexture:[EG textureForFile:@"Smoke.png"]]] blendFunc:egBlendFunctionStandard()];
+    self = [super initWithMaxCount:800 material:[EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyTexture:[EG textureForFile:@"Smoke.png"]]] blendFunc:egBlendFunctionStandard()];
     
     return self;
 }

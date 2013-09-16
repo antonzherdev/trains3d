@@ -191,14 +191,14 @@ static ODClassType* _EGBillboardShader_type;
 }
 
 - (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material {
-    [_positionSlot setFromBufferWithStride:vertexBuffer.stride valuesCount:3 valuesType:GL_FLOAT shift:0];
-    [_modelSlot setFromBufferWithStride:vertexBuffer.stride valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(3 * 4))];
-    [_colorSlot setFromBufferWithStride:vertexBuffer.stride valuesCount:4 valuesType:GL_FLOAT shift:((NSUInteger)(5 * 4))];
+    [_positionSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:3 valuesType:GL_FLOAT shift:0];
+    [_modelSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(3 * 4))];
+    [_colorSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:4 valuesType:GL_FLOAT shift:((NSUInteger)(5 * 4))];
     [_wcUniform setMatrix:[EG.matrix.value wc]];
     [_pUniform setMatrix:EG.matrix.value.p];
     if(_texture) {
         [_uvSlot forEach:^void(EGShaderAttribute* _) {
-            [_ setFromBufferWithStride:vertexBuffer.stride valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(9 * 4))];
+            [_ setFromBufferWithStride:[vertexBuffer stride] valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(9 * 4))];
         }];
         [((EGColorSourceTexture*)(material.color)).texture bind];
     } else {
@@ -397,23 +397,20 @@ static ODClassType* _EGBillboardParticle_type;
 @implementation EGBillboardParticleSystemView{
     EGSimpleMaterial* _material;
     EGShader* _shader;
-    NSUInteger _vertexCount;
 }
 static ODClassType* _EGBillboardParticleSystemView_type;
 @synthesize material = _material;
 @synthesize shader = _shader;
-@synthesize vertexCount = _vertexCount;
 
-+ (id)billboardParticleSystemViewWithMaterial:(EGSimpleMaterial*)material blendFunc:(EGBlendFunction)blendFunc {
-    return [[EGBillboardParticleSystemView alloc] initWithMaterial:material blendFunc:blendFunc];
++ (id)billboardParticleSystemViewWithMaxCount:(NSUInteger)maxCount material:(EGSimpleMaterial*)material blendFunc:(EGBlendFunction)blendFunc {
+    return [[EGBillboardParticleSystemView alloc] initWithMaxCount:maxCount material:material blendFunc:blendFunc];
 }
 
-- (id)initWithMaterial:(EGSimpleMaterial*)material blendFunc:(EGBlendFunction)blendFunc {
-    self = [super initWithDtp:egBillboardBufferDataType() blendFunc:blendFunc];
+- (id)initWithMaxCount:(NSUInteger)maxCount material:(EGSimpleMaterial*)material blendFunc:(EGBlendFunction)blendFunc {
+    self = [super initWithDtp:egBillboardBufferDataType() maxCount:maxCount blendFunc:blendFunc];
     if(self) {
         _material = material;
         _shader = [EGBillboardShaderSystem.instance shaderForMaterial:_material];
-        _vertexCount = 4;
     }
     
     return self;
@@ -424,8 +421,12 @@ static ODClassType* _EGBillboardParticleSystemView_type;
     _EGBillboardParticleSystemView_type = [ODClassType classTypeWithCls:[EGBillboardParticleSystemView class]];
 }
 
-+ (EGBillboardParticleSystemView*)applyMaterial:(EGSimpleMaterial*)material {
-    return [EGBillboardParticleSystemView billboardParticleSystemViewWithMaterial:material blendFunc:egBlendFunctionStandard()];
++ (EGBillboardParticleSystemView*)applyMaxCount:(NSUInteger)maxCount material:(EGSimpleMaterial*)material {
+    return [EGBillboardParticleSystemView billboardParticleSystemViewWithMaxCount:maxCount material:material blendFunc:egBlendFunctionStandard()];
+}
+
+- (NSUInteger)vertexCount {
+    return 4;
 }
 
 - (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i {
@@ -448,11 +449,12 @@ static ODClassType* _EGBillboardParticleSystemView_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGBillboardParticleSystemView* o = ((EGBillboardParticleSystemView*)(other));
-    return [self.material isEqual:o.material] && EGBlendFunctionEq(self.blendFunc, o.blendFunc);
+    return self.maxCount == o.maxCount && [self.material isEqual:o.material] && EGBlendFunctionEq(self.blendFunc, o.blendFunc);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
+    hash = hash * 31 + self.maxCount;
     hash = hash * 31 + [self.material hash];
     hash = hash * 31 + EGBlendFunctionHash(self.blendFunc);
     return hash;
@@ -460,7 +462,8 @@ static ODClassType* _EGBillboardParticleSystemView_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"material=%@", self.material];
+    [description appendFormat:@"maxCount=%li", self.maxCount];
+    [description appendFormat:@", material=%@", self.material];
     [description appendFormat:@", blendFunc=%@", EGBlendFunctionDescription(self.blendFunc)];
     [description appendString:@">"];
     return description;

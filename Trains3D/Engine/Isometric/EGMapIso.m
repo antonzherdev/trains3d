@@ -1,6 +1,5 @@
 #import "EGMapIso.h"
 
-#import "EGMesh.h"
 #import "EGGL.h"
 #import "EGMaterial.h"
 @implementation EGMapSso{
@@ -149,7 +148,7 @@ static ODClassType* _EGMapSsoView_type;
     CGFloat b = geRectIY2(limits) + 0.5;
     NSInteger w = limits.width + 3;
     NSInteger h = limits.height + 3;
-    return [EGMesh applyVertexData:[ arrf4(32) {0, 0, 0, 1, 0, l, 0, b, w, 0, 0, 1, 0, r, 0, b, w, h, 0, 1, 0, r, 0, t, 0, h, 0, 1, 0, l, 0, t}] index:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
+    return [EGMesh applyDataType:egMeshDataType() vertexData:[ arrs(EGMeshData, 32) {0, 0, 0, 1, 0, l, 0, b, w, 0, 0, 1, 0, r, 0, b, w, h, 0, 1, 0, r, 0, t, 0, h, 0, 1, 0, l, 0, t}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
 }
 
 - (void)drawPlaneWithMaterial:(EGMaterial*)material {

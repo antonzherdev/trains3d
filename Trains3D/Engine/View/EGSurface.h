@@ -1,5 +1,6 @@
 #import "objd.h"
 #import "EGGL.h"
+#import "GEVec.h"
 @class EGTexture;
 @class EGVertexBuffer;
 @class EGIndexBuffer;

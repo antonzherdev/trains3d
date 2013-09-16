@@ -29,7 +29,7 @@ static ODClassType* _EGSurface_type;
         _frameBuffer = egGenFrameBuffer();
         _texture = [EGTexture texture];
         __lazy_fullScreenVertexBuffer = [CNLazy lazyWithF:^EGVertexBuffer*() {
-            return [[EGVertexBuffer applyStride:((NSUInteger)(2 * 4))] setData:[ arrf4(8) {0, 0, 1, 0, 1, 1, 0, 1}]];
+            return [[EGVertexBuffer applyDataType:geVec2Type()] setData:[ arrs(GEVec2, 8) {0, 0, 1, 0, 1, 1, 0, 1}]];
         }];
         __lazy_fullScreenIndexBuffer = [CNLazy lazyWithF:^EGIndexBuffer*() {
             return [[EGIndexBuffer apply] setData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];

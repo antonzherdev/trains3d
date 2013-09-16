@@ -309,7 +309,7 @@ static ODClassType* _TRExplosionView_type;
     self = [super init];
     if(self) {
         _material = [EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyTexture:[EG textureForFile:@"Explosion.png"]]];
-        _view = [EGBillboardParticleSystemView billboardParticleSystemViewWithMaterial:_material blendFunc:egBlendFunctionPremultiplied()];
+        _view = [EGBillboardParticleSystemView billboardParticleSystemViewWithMaxCount:4 material:_material blendFunc:egBlendFunctionPremultiplied()];
     }
     
     return self;

@@ -40,6 +40,7 @@
 - (id)initWithProgram:(EGShaderProgram*)program;
 - (ODClassType*)type;
 - (void)drawMaterial:(id)material mesh:(EGMesh*)mesh;
+- (void)drawMaterial:(id)material mesh:(EGMesh*)mesh start:(NSUInteger)start count:(NSUInteger)count;
 - (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(id)material;
 - (void)unloadMaterial:(id)material;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;

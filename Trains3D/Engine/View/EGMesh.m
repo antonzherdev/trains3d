@@ -1,5 +1,50 @@
 #import "EGMesh.h"
 
+ODPType* egMeshDataType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGMeshDataWrap class] name:@"EGMeshData" size:sizeof(EGMeshData) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGMeshData, ((EGMeshData*)(data))[i]);
+    }];
+    return _ret;
+}
+@implementation EGMeshDataWrap{
+    EGMeshData _value;
+}
+@synthesize value = _value;
+
++ (id)wrapWithValue:(EGMeshData)value {
+    return [[EGMeshDataWrap alloc] initWithValue:value];
+}
+
+- (id)initWithValue:(EGMeshData)value {
+    self = [super init];
+    if(self) _value = value;
+    return self;
+}
+
+- (NSString*)description {
+    return EGMeshDataDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGMeshDataWrap* o = ((EGMeshDataWrap*)(other));
+    return EGMeshDataEq(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return EGMeshDataHash(_value);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
+
+
 @implementation EGMesh{
     EGVertexBuffer* _vertexBuffer;
     EGIndexBuffer* _indexBuffer;
@@ -27,12 +72,12 @@ static ODClassType* _EGMesh_type;
     _EGMesh_type = [ODClassType classTypeWithCls:[EGMesh class]];
 }
 
-+ (EGMesh*)applyVertexData:(CNPArray*)vertexData index:(CNPArray*)index {
-    return [EGMesh meshWithVertexBuffer:[[EGVertexBuffer applyStride:((NSUInteger)(8 * 4))] setData:vertexData] indexBuffer:[[EGIndexBuffer apply] setData:index]];
++ (EGMesh*)applyDataType:(ODPType*)dataType vertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData {
+    return [EGMesh meshWithVertexBuffer:[[EGVertexBuffer applyDataType:dataType] setData:vertexData] indexBuffer:[[EGIndexBuffer apply] setData:indexData]];
 }
 
 + (EGMesh*)quadVertexBuffer:(EGVertexBuffer*)vertexBuffer {
-    return [EGMesh applyVertexData:vertexBuffer index:[[EGIndexBuffer apply] setData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]]];
+    return [EGMesh meshWithVertexBuffer:vertexBuffer indexBuffer:[[EGIndexBuffer apply] setData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]]];
 }
 
 - (ODClassType*)type {
@@ -73,22 +118,25 @@ static ODClassType* _EGMesh_type;
 
 
 @implementation EGBuffer{
+    ODPType* _dataType;
     GLenum _bufferType;
     GLuint _handle;
     NSUInteger __length;
     NSUInteger __count;
 }
 static ODClassType* _EGBuffer_type;
+@synthesize dataType = _dataType;
 @synthesize bufferType = _bufferType;
 @synthesize handle = _handle;
 
-+ (id)bufferWithBufferType:(GLenum)bufferType handle:(GLuint)handle {
-    return [[EGBuffer alloc] initWithBufferType:bufferType handle:handle];
++ (id)bufferWithDataType:(ODPType*)dataType bufferType:(GLenum)bufferType handle:(GLuint)handle {
+    return [[EGBuffer alloc] initWithDataType:dataType bufferType:bufferType handle:handle];
 }
 
-- (id)initWithBufferType:(GLenum)bufferType handle:(GLuint)handle {
+- (id)initWithDataType:(ODPType*)dataType bufferType:(GLenum)bufferType handle:(GLuint)handle {
     self = [super init];
     if(self) {
+        _dataType = dataType;
         _bufferType = bufferType;
         _handle = handle;
         __length = 0;
@@ -111,8 +159,8 @@ static ODClassType* _EGBuffer_type;
     return __count;
 }
 
-+ (EGBuffer*)applyBufferType:(GLenum)bufferType {
-    return [EGBuffer bufferWithBufferType:bufferType handle:egGenBuffer()];
++ (EGBuffer*)applyDataType:(ODPType*)dataType bufferType:(GLenum)bufferType {
+    return [EGBuffer bufferWithDataType:dataType bufferType:bufferType handle:egGenBuffer()];
 }
 
 - (void)dealoc {
@@ -123,8 +171,8 @@ static ODClassType* _EGBuffer_type;
     return [self setData:data usage:GL_STATIC_DRAW];
 }
 
-- (id)setTp:(ODPType*)tp array:(CNVoidRefArray)array {
-    return [self setTp:tp array:array usage:GL_STATIC_DRAW];
+- (id)setArray:(CNVoidRefArray)array {
+    return [self setArray:array usage:GL_STATIC_DRAW];
 }
 
 - (id)setData:(CNPArray*)data usage:(GLenum)usage {
@@ -136,12 +184,19 @@ static ODClassType* _EGBuffer_type;
     return self;
 }
 
-- (id)setTp:(ODPType*)tp array:(CNVoidRefArray)array usage:(GLenum)usage {
+- (id)setArray:(CNVoidRefArray)array usage:(GLenum)usage {
     glBindBuffer(_bufferType, _handle);
     glBufferData(_bufferType, array.length, array.bytes, GL_STATIC_DRAW);
     glBindBuffer(_bufferType, 0);
     __length = array.length;
-    __count = array.length / tp.size;
+    __count = array.length / _dataType.size;
+    return self;
+}
+
+- (id)updateStart:(NSUInteger)start count:(NSUInteger)count array:(CNVoidRefArray)array {
+    glBindBuffer(_bufferType, _handle);
+    glBufferSubData(_bufferType, start * _dataType.size, count * _dataType.size, array.bytes);
+    glBindBuffer(_bufferType, 0);
     return self;
 }
 
@@ -157,6 +212,10 @@ static ODClassType* _EGBuffer_type;
     [self bind];
     ((void(^)())(draw))();
     [self unbind];
+}
+
+- (NSUInteger)stride {
+    return _dataType.size;
 }
 
 - (ODClassType*)type {
@@ -175,11 +234,12 @@ static ODClassType* _EGBuffer_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGBuffer* o = ((EGBuffer*)(other));
-    return GLenumEq(self.bufferType, o.bufferType) && GLuintEq(self.handle, o.handle);
+    return [self.dataType isEqual:o.dataType] && GLenumEq(self.bufferType, o.bufferType) && GLuintEq(self.handle, o.handle);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
+    hash = hash * 31 + [self.dataType hash];
     hash = hash * 31 + GLenumHash(self.bufferType);
     hash = hash * 31 + GLuintHash(self.handle);
     return hash;
@@ -187,7 +247,8 @@ static ODClassType* _EGBuffer_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"bufferType=%@", GLenumDescription(self.bufferType)];
+    [description appendFormat:@"dataType=%@", self.dataType];
+    [description appendFormat:@", bufferType=%@", GLenumDescription(self.bufferType)];
     [description appendFormat:@", handle=%@", GLuintDescription(self.handle)];
     [description appendString:@">"];
     return description;
@@ -196,19 +257,15 @@ static ODClassType* _EGBuffer_type;
 @end
 
 
-@implementation EGVertexBuffer{
-    NSUInteger _stride;
-}
+@implementation EGVertexBuffer
 static ODClassType* _EGVertexBuffer_type;
-@synthesize stride = _stride;
 
-+ (id)vertexBufferWithStride:(NSUInteger)stride handle:(GLuint)handle {
-    return [[EGVertexBuffer alloc] initWithStride:stride handle:handle];
++ (id)vertexBufferWithDataType:(ODPType*)dataType handle:(GLuint)handle {
+    return [[EGVertexBuffer alloc] initWithDataType:dataType handle:handle];
 }
 
-- (id)initWithStride:(NSUInteger)stride handle:(GLuint)handle {
-    self = [super initWithBufferType:GL_ARRAY_BUFFER handle:handle];
-    if(self) _stride = stride;
+- (id)initWithDataType:(ODPType*)dataType handle:(GLuint)handle {
+    self = [super initWithDataType:dataType bufferType:GL_ARRAY_BUFFER handle:handle];
     
     return self;
 }
@@ -218,8 +275,8 @@ static ODClassType* _EGVertexBuffer_type;
     _EGVertexBuffer_type = [ODClassType classTypeWithCls:[EGVertexBuffer class]];
 }
 
-+ (EGVertexBuffer*)applyStride:(NSUInteger)stride {
-    return [EGVertexBuffer vertexBufferWithStride:stride handle:egGenBuffer()];
++ (EGVertexBuffer*)applyDataType:(ODPType*)dataType {
+    return [EGVertexBuffer vertexBufferWithDataType:dataType handle:egGenBuffer()];
 }
 
 - (ODClassType*)type {
@@ -238,19 +295,19 @@ static ODClassType* _EGVertexBuffer_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGVertexBuffer* o = ((EGVertexBuffer*)(other));
-    return self.stride == o.stride && GLuintEq(self.handle, o.handle);
+    return [self.dataType isEqual:o.dataType] && GLuintEq(self.handle, o.handle);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + self.stride;
+    hash = hash * 31 + [self.dataType hash];
     hash = hash * 31 + GLuintHash(self.handle);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"stride=%li", self.stride];
+    [description appendFormat:@"dataType=%@", self.dataType];
     [description appendFormat:@", handle=%@", GLuintDescription(self.handle)];
     [description appendString:@">"];
     return description;
@@ -267,7 +324,7 @@ static ODClassType* _EGIndexBuffer_type;
 }
 
 - (id)initWithHandle:(GLuint)handle {
-    self = [super initWithBufferType:GL_ELEMENT_ARRAY_BUFFER handle:handle];
+    self = [super initWithDataType:oduInt4Type() bufferType:GL_ELEMENT_ARRAY_BUFFER handle:handle];
     
     return self;
 }
@@ -284,6 +341,12 @@ static ODClassType* _EGIndexBuffer_type;
 - (void)draw {
     [self bind];
     glDrawElements(GL_TRIANGLES, [self count], GL_UNSIGNED_INT, 0);
+    [self unbind];
+}
+
+- (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
+    [self bind];
+    glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 4 * start);
     [self unbind];
 }
 

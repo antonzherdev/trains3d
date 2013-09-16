@@ -13,12 +13,12 @@ class EGSimpleShaderSystem extends EGShaderSystem<EGSimpleMaterial> {
 
 }
 
-class EGSimpleShader(program : EGShaderProgram) extends EGShader(program) {
+class EGSimpleShader(program : EGShaderProgram) extends EGShader<EGSimpleMaterial, EGMeshData>(program) {
     static val UV_SHIFT = 0
     static val POSITION_SHIFT = 5*4
 }
 
-class EGSimpleColorShader extends EGSimpleShader<EGSimpleMaterial>(EGShaderProgram(EGSimpleColorShader.colorVertexProgram, EGSimpleColorShader.colorFragmentProgram)) {
+class EGSimpleColorShader extends EGSimpleShader(EGShaderProgram(EGSimpleColorShader.colorVertexProgram, EGSimpleColorShader.colorFragmentProgram)) {
     static val colorVertexProgram =
         "attribute vec3 position;
          uniform mat4 mvp;

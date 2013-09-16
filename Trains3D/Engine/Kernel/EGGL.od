@@ -2,6 +2,7 @@ package com.antonzherdev.eg
 
 stub struct GLenum
 stub struct GLint
+stub struct GLintptr
 stub struct GLuint
 stub struct GLubyte
 stub struct GLsizei
@@ -70,6 +71,7 @@ stub object EGGL {
     def egDeleteBuffer(handle : GLuint)
     def glBindBuffer(target : GLenum, handle : GLuint) : GLuint
     def glBufferData(target : GLenum, size : GLsizeiptr, data : [void], usage : GLenum)
+    def glBufferSubData(target : GLenum, offset : GLintptr ,size : GLsizeiptr, data : [void])
     def egVertexAttribPointer(slot : GLuint, size : uint, tp : GLenum, normalized : GLboolean, stride : uint, shift : uint)
     def glDrawElements(mode : GLenum, count : GLsizei, tp : GLenum, indices : [void])
     def glDrawRangeElements(mode : GLenum, start : GLuint, end : GLuint, count : GLsizei, tp : GLenum, indices : [void])

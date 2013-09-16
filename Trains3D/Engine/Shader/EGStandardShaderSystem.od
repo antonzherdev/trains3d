@@ -79,7 +79,7 @@ class EGStandardShaderKey(directLightCount : uint, texture : bool) {
 
 }
 
-class EGStandardShader(key : EGStandardShaderKey, program : EGShaderProgram) extends EGShader<EGStandardMaterial>(program) {
+class EGStandardShader(key : EGStandardShaderKey, program : EGShaderProgram) extends EGShader<EGStandardMaterial, EGMeshData>(program) {
     static val UV_SHIFT = 0
     static val NORMAL_SHIFT = 2*4
     static val POSITION_SHIFT = 5*4

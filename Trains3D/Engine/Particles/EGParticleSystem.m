@@ -1,8 +1,8 @@
 #import "EGParticleSystem.h"
 
 #import "EGMesh.h"
-#import "EGShader.h"
 #import "EGGL.h"
+#import "EGShader.h"
 @implementation EGParticleSystem{
     CNList* __particles;
 }
@@ -40,10 +40,10 @@ static ODClassType* _EGParticleSystem_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    [self generateParticlesWithDelta:delta];
     __particles = [__particles filterF:^BOOL(id _) {
         return [_ isLive];
     }];
+    [self generateParticlesWithDelta:delta];
     [__particles forEach:^void(id _) {
         [_ updateWithDelta:delta];
     }];
@@ -155,27 +155,48 @@ static ODClassType* _EGParticle_type;
 
 @implementation EGParticleSystemView{
     ODPType* _dtp;
+    NSUInteger _maxCount;
     EGBlendFunction _blendFunc;
+    CNVoidRefArray _vertexArr;
     EGVertexBuffer* _vertexBuffer;
+    CNVoidRefArray _indexArr;
     EGIndexBuffer* _indexBuffer;
+    EGMesh* _mesh;
 }
 static ODClassType* _EGParticleSystemView_type;
 @synthesize dtp = _dtp;
+@synthesize maxCount = _maxCount;
 @synthesize blendFunc = _blendFunc;
+@synthesize vertexArr = _vertexArr;
 @synthesize vertexBuffer = _vertexBuffer;
+@synthesize indexArr = _indexArr;
 @synthesize indexBuffer = _indexBuffer;
+@synthesize mesh = _mesh;
 
-+ (id)particleSystemViewWithDtp:(ODPType*)dtp blendFunc:(EGBlendFunction)blendFunc {
-    return [[EGParticleSystemView alloc] initWithDtp:dtp blendFunc:blendFunc];
++ (id)particleSystemViewWithDtp:(ODPType*)dtp maxCount:(NSUInteger)maxCount blendFunc:(EGBlendFunction)blendFunc {
+    return [[EGParticleSystemView alloc] initWithDtp:dtp maxCount:maxCount blendFunc:blendFunc];
 }
 
-- (id)initWithDtp:(ODPType*)dtp blendFunc:(EGBlendFunction)blendFunc {
+- (id)initWithDtp:(ODPType*)dtp maxCount:(NSUInteger)maxCount blendFunc:(EGBlendFunction)blendFunc {
     self = [super init];
+    __weak EGParticleSystemView* _weakSelf = self;
     if(self) {
         _dtp = dtp;
+        _maxCount = maxCount;
         _blendFunc = blendFunc;
-        _vertexBuffer = [EGVertexBuffer applyStride:_dtp.size];
-        _indexBuffer = [EGIndexBuffer apply];
+        _vertexArr = cnVoidRefArrayApplyTpCount(_dtp, _maxCount * [self vertexCount]);
+        _vertexBuffer = [[EGVertexBuffer applyDataType:_dtp] setArray:_vertexArr usage:GL_DYNAMIC_DRAW];
+        _indexArr = ^CNVoidRefArray() {
+            NSUInteger vc = [self vertexCount];
+            CNVoidRefArray ia = cnVoidRefArrayApplyTpCount(oduInt4Type(), _maxCount * 3 * (vc - 2));
+            __block CNVoidRefArray indexPointer = ia;
+            [uintRange(_maxCount) forEach:^void(id i) {
+                indexPointer = [_weakSelf writeIndexesToIndexPointer:indexPointer i:((unsigned int)(unumi(i) * vc))];
+            }];
+            return ia;
+        }();
+        _indexBuffer = [[EGIndexBuffer apply] setArray:_indexArr usage:GL_STATIC_DRAW];
+        _mesh = [EGMesh meshWithVertexBuffer:_vertexBuffer indexBuffer:_indexBuffer];
     }
     
     return self;
@@ -204,30 +225,28 @@ static ODClassType* _EGParticleSystemView_type;
 
 - (void)drawSystem:(EGParticleSystem*)system {
     id<CNSeq> particles = [system particles];
-    NSUInteger n = [particles count];
-    if(n == 0) return ;
+    if([particles isEmpty]) return ;
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     egBlendFunctionApplyDraw(_blendFunc, ^void() {
-        NSUInteger vc = [self vertexCount];
-        CNVoidRefArray vertexArr = cnVoidRefArrayApplyTpCount(_dtp, n * vc);
-        CNVoidRefArray indexArr = cnVoidRefArrayApplyTpCount(oduInt4Type(), n * 3 * (vc - 2));
-        __block CNVoidRefArray indexPointer = indexArr;
-        __block CNVoidRefArray vertexPointer = vertexArr;
-        __block unsigned int index = 0;
+        __block NSInteger i = 0;
+        __block CNVoidRefArray vertexPointer = _vertexArr;
         [particles forEach:^void(id particle) {
-            vertexPointer = [particle writeToArray:vertexPointer];
-            indexPointer = [self writeIndexesToIndexPointer:indexPointer i:index];
-            index += ((unsigned int)(vc));
+            if(i < _maxCount) vertexPointer = [particle writeToArray:vertexPointer];
+            i++;
         }];
-        [_vertexBuffer setTp:_dtp array:vertexArr usage:GL_DYNAMIC_DRAW];
-        [_indexBuffer setTp:oduInt4Type() array:indexArr usage:GL_DYNAMIC_DRAW];
-        cnVoidRefArrayFree(vertexArr);
-        cnVoidRefArrayFree(indexArr);
-        [[self shader] drawMaterial:[self material] mesh:[EGMesh meshWithVertexBuffer:_vertexBuffer indexBuffer:_indexBuffer]];
+        CGFloat n = min(((CGFloat)([particles count])), ((CGFloat)(_maxCount)));
+        NSUInteger vc = [self vertexCount];
+        [_vertexBuffer setArray:_vertexArr usage:GL_DYNAMIC_DRAW];
+        [[self shader] drawMaterial:[self material] mesh:_mesh start:0 count:((NSUInteger)(n * 3 * (vc - 2)))];
     });
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
+}
+
+- (void)dealloc {
+    cnVoidRefArrayFree(_indexArr);
+    cnVoidRefArrayFree(_vertexArr);
 }
 
 - (ODClassType*)type {
@@ -246,12 +265,13 @@ static ODClassType* _EGParticleSystemView_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGParticleSystemView* o = ((EGParticleSystemView*)(other));
-    return [self.dtp isEqual:o.dtp] && EGBlendFunctionEq(self.blendFunc, o.blendFunc);
+    return [self.dtp isEqual:o.dtp] && self.maxCount == o.maxCount && EGBlendFunctionEq(self.blendFunc, o.blendFunc);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.dtp hash];
+    hash = hash * 31 + self.maxCount;
     hash = hash * 31 + EGBlendFunctionHash(self.blendFunc);
     return hash;
 }
@@ -259,6 +279,7 @@ static ODClassType* _EGParticleSystemView_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"dtp=%@", self.dtp];
+    [description appendFormat:@", maxCount=%li", self.maxCount];
     [description appendFormat:@", blendFunc=%@", EGBlendFunctionDescription(self.blendFunc)];
     [description appendString:@">"];
     return description;

@@ -4,7 +4,7 @@ import com.antonzherdev.eg.EGGL._
 import com.antonzherdev.eg._
 
 class TRCityView {
-    val expectedTrainModel = EGMesh([
+    val expectedTrainModel = EGMesh(EGMeshData.type, [
         0, 0, 0, 1, 0, -0.5, 0.001, -0.5,
         1, 0, 0, 1, 0, 0.5, 0.001, -0.5,
         1, 1, 0, 1, 0, 0.5, 0.001, 0.5,

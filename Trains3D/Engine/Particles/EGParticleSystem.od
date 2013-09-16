@@ -1,5 +1,6 @@
 package com.antonzherdev.eg
 
+import core.ODMath._
 import com.antonzherdev.eg.EGGL._
 
 class EGParticleSystem <P extends EGParticle> extends EGController {
@@ -14,9 +15,9 @@ class EGParticleSystem <P extends EGParticle> extends EGController {
     }
 
     def updateWith(delta : float) {
+        _particles = _particles.filter(_.isLive)
         generateParticlesWith(delta)
 
-        _particles = _particles.filter(_.isLive)
         _particles.for(_.updateWith(delta))
     }
 
@@ -40,9 +41,20 @@ class EGParticle(lifeLength : float4) extends EGController {
 }
 
 
-class EGParticleSystemView<P extends EGParticle>(dtp : ODPType<_>, blendFunc : EGBlendFunction) {
-    val vertexBuffer = EGVertexBuffer<float4>(dtp.size)
-    val indexBuffer = EGIndexBuffer<uint4>()
+class EGParticleSystemView<P extends EGParticle, D>(dtp : ODPType<D>, maxCount : uint, blendFunc : EGBlendFunction) {
+    val vertexArr = CNVoidRefArray(dtp, maxCount*vertexCount)
+    val vertexBuffer = EGVertexBuffer<D>(dtp).set(array = vertexArr, usage = GL_DYNAMIC_DRAW)
+    val indexArr : CNVoidRefArray = {
+        val vc = vertexCount
+        val ia = CNVoidRefArray(ODUInt4.type, maxCount*3*(vc - 2))
+        var indexPointer = ia
+        maxCount.range.for{i ->
+            indexPointer = writeIndexesTo(indexPointer, i*vc)
+        }
+        ia
+    }
+    val indexBuffer = EGIndexBuffer().set(array = indexArr, usage = GL_STATIC_DRAW)
+    val mesh = EGMesh(vertexBuffer = vertexBuffer, indexBuffer)
 
     def vertexCount : uint
     def writeIndexesTo(indexPointer : CNVoidRefArray, i : uint4) : CNVoidRefArray
@@ -51,31 +63,28 @@ class EGParticleSystemView<P extends EGParticle>(dtp : ODPType<_>, blendFunc : E
 
     def draw(system : EGParticleSystem<P>) {
         val particles = system.particles
-        val n = particles.count
-        if(n == 0) return nil
+        if(particles.isEmpty) return nil
 
         glDisable(GL_DEPTH_TEST)
         glDisable(GL_CULL_FACE)
         blendFunc {
-            val vc = vertexCount
-            val vertexArr = CNVoidRefArray(dtp, n*vc)
-            val indexArr = CNVoidRefArray(ODUInt4.type, n*3*(vc - 2))
-            var indexPointer = indexArr
+            var i = 0
             var vertexPointer = vertexArr
-            var index : uint4 = 0
             particles.for{particle ->
-                vertexPointer = particle.writeTo(vertexPointer)
-                indexPointer = writeIndexesTo(indexPointer, index)
-                index += vc
+                if(i < maxCount) vertexPointer = particle.writeTo(vertexPointer)
+                i++
             }
-            vertexBuffer.set(dtp, array = vertexArr, usage = GL_DYNAMIC_DRAW)
-            indexBuffer.set(ODUInt4.type, array = indexArr, usage = GL_DYNAMIC_DRAW)
-            vertexArr.free
-            indexArr.free
-
-            shader.draw(material, EGMesh(vertexBuffer = vertexBuffer, indexBuffer))
+            val n = min(particles.count, maxCount)
+            val vc = vertexCount
+            vertexBuffer.set(array = vertexArr, usage = GL_DYNAMIC_DRAW)
+            shader.draw(material, mesh, start = 0, count = n*3*(vc - 2))
         }
         glEnable(GL_CULL_FACE)
         glEnable(GL_DEPTH_TEST)
+    }
+
+    def dealloc {
+        indexArr.free
+        vertexArr.free
     }
 }

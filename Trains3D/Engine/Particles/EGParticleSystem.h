@@ -3,8 +3,8 @@
 #import "EGMaterial.h"
 @class EGVertexBuffer;
 @class EGIndexBuffer;
-@class EGShader;
 @class EGMesh;
+@class EGShader;
 
 @class EGParticleSystem;
 @class EGParticle;
@@ -41,18 +41,23 @@
 
 @interface EGParticleSystemView : NSObject
 @property (nonatomic, readonly) ODPType* dtp;
+@property (nonatomic, readonly) NSUInteger maxCount;
 @property (nonatomic, readonly) EGBlendFunction blendFunc;
+@property (nonatomic, readonly) CNVoidRefArray vertexArr;
 @property (nonatomic, readonly) EGVertexBuffer* vertexBuffer;
+@property (nonatomic, readonly) CNVoidRefArray indexArr;
 @property (nonatomic, readonly) EGIndexBuffer* indexBuffer;
+@property (nonatomic, readonly) EGMesh* mesh;
 
-+ (id)particleSystemViewWithDtp:(ODPType*)dtp blendFunc:(EGBlendFunction)blendFunc;
-- (id)initWithDtp:(ODPType*)dtp blendFunc:(EGBlendFunction)blendFunc;
++ (id)particleSystemViewWithDtp:(ODPType*)dtp maxCount:(NSUInteger)maxCount blendFunc:(EGBlendFunction)blendFunc;
+- (id)initWithDtp:(ODPType*)dtp maxCount:(NSUInteger)maxCount blendFunc:(EGBlendFunction)blendFunc;
 - (ODClassType*)type;
 - (NSUInteger)vertexCount;
 - (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i;
 - (EGShader*)shader;
 - (EGMaterial*)material;
 - (void)drawSystem:(EGParticleSystem*)system;
+- (void)dealloc;
 + (ODClassType*)type;
 @end
 

@@ -147,10 +147,14 @@ static ODClassType* _EGShader_type;
 }
 
 - (void)drawMaterial:(id)material mesh:(EGMesh*)mesh {
+    [self drawMaterial:material mesh:mesh start:0 count:[mesh.indexBuffer count]];
+}
+
+- (void)drawMaterial:(id)material mesh:(EGMesh*)mesh start:(NSUInteger)start count:(NSUInteger)count {
     glUseProgram(_program.handle);
     [mesh.vertexBuffer applyDraw:^void() {
         [self loadVertexBuffer:mesh.vertexBuffer material:material];
-        [mesh.indexBuffer draw];
+        [mesh.indexBuffer drawWithStart:start count:count];
         [self unloadMaterial:material];
     }];
     glUseProgram(0);

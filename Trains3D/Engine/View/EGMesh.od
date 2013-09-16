@@ -2,27 +2,30 @@ package com.antonzherdev.eg
 
 import com.antonzherdev.eg.EGGL._
 
-class EGMesh(vertexBuffer : EGVertexBuffer<float4>, indexBuffer : EGIndexBuffer<uint4>) {
-    static def apply(vertexData : CNPArray<float4>, index : CNPArray<uint4>) : EGMesh =
-        EGMesh(vertexBuffer = EGVertexBuffer<float4>(8*4).set(vertexData), indexBuffer = EGIndexBuffer<uint4>().set(index))
+struct EGMeshData(uv : Vec2, normal : Vec3, position : Vec3)
 
-    static def quad(vertexBuffer : EGVertexBuffer<float4>) : EGMesh =
-        EGMesh(vertexBuffer, EGIndexBuffer<uint4>().set([0, 1, 2, 2, 3, 0]))
+class EGMesh<T>(vertexBuffer : EGVertexBuffer<T>, indexBuffer : EGIndexBuffer<uint4>) {
+    static def apply<T>(dataType : ODPType<T>, vertexData : CNPArray<T>, indexData : CNPArray<uint4>) : EGMesh =
+        EGMesh<T>(vertexBuffer = EGVertexBuffer<T>(dataType).set(vertexData),
+            indexBuffer = EGIndexBuffer().set(indexData))
+
+    static def quad<T>(vertexBuffer : EGVertexBuffer<T>) : EGMesh =
+        EGMesh<T>(vertexBuffer, EGIndexBuffer().set([0, 1, 2, 2, 3, 0]))
 }
 
-class EGBuffer<T>(bufferType : GLenum, handle : GLuint) {
+class EGBuffer<T>(dataType : ODPType<T>, bufferType : GLenum, handle : GLuint) {
     private var _length : uint = 0
     private var _count : uint = 0
     def length : uint = _length
     def count : uint = _count
-    static def apply<T>(bufferType : GLenum) : EGBuffer = EGBuffer<T>(bufferType, egGenBuffer)
+    static def apply<T>(dataType : ODPType<T>, bufferType : GLenum) : EGBuffer = EGBuffer<T>(dataType, bufferType, egGenBuffer)
 
     def dealoc {
         egDeleteBuffer(handle)
     }
 
     def set(data : CNPArray<T>) : self = set(data = data, GL_STATIC_DRAW)
-    def set(tp : ODPType<T>, array : CNVoidRefArray) : self = set(tp, array = array, GL_STATIC_DRAW)
+    def set(array : CNVoidRefArray) : self = set(array = array, GL_STATIC_DRAW)
 
     def set(data : CNPArray<T>, usage : GLenum) : self = {
         glBindBuffer(bufferType, handle)
@@ -33,12 +36,19 @@ class EGBuffer<T>(bufferType : GLenum, handle : GLuint) {
         self
     }
 
-    def set(tp : ODPType<T>, array : CNVoidRefArray<T>, usage : GLenum) : self = {
+    def set(array : CNVoidRefArray<T>, usage : GLenum) : self = {
         glBindBuffer(bufferType, handle)
         glBufferData(bufferType, array.length, array.bytes, GL_STATIC_DRAW)
         glBindBuffer(bufferType, 0)
         _length = array.length
-        _count = array.length/tp.size
+        _count = array.length/dataType.size
+        self
+    }
+
+    def update(start : uint, count : uint, array : CNVoidRefArray<T>) : self = {
+        glBindBuffer(bufferType, handle)
+        glBufferSubData(bufferType, start*dataType.size, count*dataType.size, array.bytes)
+        glBindBuffer(bufferType, 0)
         self
     }
 
@@ -55,18 +65,26 @@ class EGBuffer<T>(bufferType : GLenum, handle : GLuint) {
         draw()
         unbind
     }
+
+    def stride : uint = dataType.size
 }
 
-class EGVertexBuffer<T>(stride : uint, handle : GLuint) extends EGBuffer<T>(GL_ARRAY_BUFFER, handle) {
-    static def apply<T>(stride : uint) : EGVertexBuffer<T> = EGVertexBuffer<T>(stride, egGenBuffer)
+class EGVertexBuffer<T>(dataType : ODPType<T>, handle : GLuint) extends EGBuffer<T>(dataType, GL_ARRAY_BUFFER, handle) {
+    static def apply<T>(dataType : ODPType<T>) : EGVertexBuffer<T> = EGVertexBuffer<T>(dataType, egGenBuffer)
 }
 
-class EGIndexBuffer<T>(handle : GLuint) extends EGBuffer<T>(GL_ELEMENT_ARRAY_BUFFER, handle) {
-    static def apply<T> : EGIndexBuffer<T> = EGIndexBuffer<T>(egGenBuffer)
+class EGIndexBuffer(handle : GLuint) extends EGBuffer<uint4>(ODUInt4.type, GL_ELEMENT_ARRAY_BUFFER, handle) {
+    static def apply : EGIndexBuffer = EGIndexBuffer(egGenBuffer)
 
     def draw {
         bind
         glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0)
+        unbind
+    }
+
+    def drawWith(start : uint, count : uint) {
+        bind
+        glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 4*start)
         unbind
     }
 

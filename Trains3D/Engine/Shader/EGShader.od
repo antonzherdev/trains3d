@@ -64,18 +64,22 @@ class EGShaderProgram(handle : GLuint) {
     }
 }
 
-class EGShader<M extends EGMaterial>(program : EGShaderProgram) {
-    def draw(material : M, mesh : EGMesh) {
+class EGShader<M extends EGMaterial, D>(program : EGShaderProgram) {
+    def draw(material : M, mesh : EGMesh<D>) {
+        draw(material, mesh, 0, mesh.indexBuffer.count)
+    }
+
+    def draw(material : M, mesh : EGMesh<D>, start : uint, count : uint) {
         glUseProgram(program.handle)
         mesh.vertexBuffer {
             load(mesh.vertexBuffer, material)
-            mesh.indexBuffer.draw
+            mesh.indexBuffer.drawWith(start, count)
             unload(material)
         }
         glUseProgram(0)
     }
 
-    def load(vertexBuffer : EGVertexBuffer<_>, material : M)
+    def load(vertexBuffer : EGVertexBuffer<D>, material : M)
     def unload(material : M) {}
 
     def attributeFor(name : string ) = program.attributeFor(name)

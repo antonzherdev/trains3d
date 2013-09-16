@@ -1,7 +1,7 @@
 #import "objd.h"
+#import "EGMesh.h"
 #import "GEVec.h"
 #import "EGTypes.h"
-@class EGMesh;
 @class EG;
 @class TRCity;
 @class GEMatrix;

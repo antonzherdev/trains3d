@@ -60,4 +60,4 @@ class TRSmokeParticle extends EGBillboardParticle(4) {
 }
 
 
-class TRSmokeView extends EGBillboardParticleSystemView(EGSimpleMaterial(EG.textureFor("Smoke.png")), EGBlendFunction.standard)
+class TRSmokeView extends EGBillboardParticleSystemView(800, EGSimpleMaterial(EG.textureFor("Smoke.png")), EGBlendFunction.standard)

@@ -62,7 +62,7 @@ class TRExplosionFlameParticle(size : float4, startShift : Vec2, shift : Vec2) e
 
 class TRExplosionView {
     val material = EGSimpleMaterial(EG.textureFor("Explosion.png"))
-    val view = EGBillboardParticleSystemView(material, EGBlendFunction.premultiplied)
+    val view = EGBillboardParticleSystemView(4, material, EGBlendFunction.premultiplied)
 
     def draw(explosion : TRExplosion) {
         view.draw(explosion.flame)

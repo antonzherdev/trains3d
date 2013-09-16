@@ -10,7 +10,7 @@ class EGBillboardShaderSystem extends EGShaderSystem<EGSimpleMaterial> {
         _ -> EGBillboardShader.instanceForTexture
 }
 
-class EGBillboardShader(program : EGShaderProgram, texture : bool) extends EGShader<EGSimpleMaterial>(program) {
+class EGBillboardShader(program : EGShaderProgram, texture : bool) extends EGShader<EGSimpleMaterial, EGBillboardBufferData>(program) {
     static lazy val instanceForColor = EGBillboardShader(EGShaderProgram(
         vertexTextWith(false, "", ""),
         fragmentTextWith(false, "", "")), false)
@@ -68,7 +68,7 @@ class EGBillboardShader(program : EGShaderProgram, texture : bool) extends EGSha
     val wcUniform = uniformFor("wc")
     val pUniform = uniformFor("p")
 
-    def load(vertexBuffer : EGVertexBuffer<_>, material : EGSimpleMaterial) {
+    def load(vertexBuffer : EGVertexBuffer<EGBillboardBufferData>, material : EGSimpleMaterial) {
         positionSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 3, GL_FLOAT, shift = 0)
         modelSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 2, GL_FLOAT, shift = 3*4)
         colorSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 4, GL_FLOAT, shift = 5*4)
@@ -108,12 +108,13 @@ class EGBillboardParticle(lifeLength : float4) extends EGParticle(lifeLength) {
     }
 }
 
-class EGBillboardParticleSystemView(material : EGSimpleMaterial, blendFunc : EGBlendFunction)
-    extends  EGParticleSystemView<EGBillboardParticle>(EGBillboardBufferData.type, blendFunc)
+class EGBillboardParticleSystemView(maxCount : uint, material : EGSimpleMaterial, blendFunc : EGBlendFunction)
+    extends  EGParticleSystemView<EGBillboardParticle, EGBillboardBufferData>(EGBillboardBufferData.type, maxCount, blendFunc)
 {
-    static def apply(material : EGSimpleMaterial)  = EGBillboardParticleSystemView(material, EGBlendFunction.standard)
+    static def apply(maxCount : uint, material : EGSimpleMaterial) =
+        EGBillboardParticleSystemView(maxCount, material, EGBlendFunction.standard)
     val shader : EGShader =  EGBillboardShaderSystem.instance.shaderFor(material)
-    val vertexCount : uint = 4
+    def vertexCount : uint = 4
 
     def writeIndexesTo(indexPointer : CNVoidRefArray, i : uint4) : CNVoidRefArray = {
         indexPointer

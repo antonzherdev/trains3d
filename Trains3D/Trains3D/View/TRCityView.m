@@ -1,6 +1,5 @@
 #import "TRCityView.h"
 
-#import "EGMesh.h"
 #import "EG.h"
 #import "TRCity.h"
 #import "GEMatrix.h"
@@ -20,7 +19,7 @@ static ODClassType* _TRCityView_type;
 
 - (id)init {
     self = [super init];
-    if(self) _expectedTrainModel = [EGMesh applyVertexData:[ arrf4(32) {0, 0, 0, 1, 0, -0.5, 0.001, -0.5, 1, 0, 0, 1, 0, 0.5, 0.001, -0.5, 1, 1, 0, 1, 0, 0.5, 0.001, 0.5, 0, 1, 0, 1, 0, -0.5, 0.001, 0.5}] index:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
+    if(self) _expectedTrainModel = [EGMesh applyDataType:egMeshDataType() vertexData:[ arrs(EGMeshData, 32) {0, 0, 0, 1, 0, -0.5, 0.001, -0.5, 1, 0, 0, 1, 0, 0.5, 0.001, -0.5, 1, 1, 0, 1, 0, 0.5, 0.001, 0.5, 0, 1, 0, 1, 0, -0.5, 0.001, 0.5}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
     
     return self;
 }
