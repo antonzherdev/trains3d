@@ -1,7 +1,6 @@
 #import "TRLevelView.h"
 
 #import "TRLevel.h"
-#import "TRLevelBackgroundView.h"
 #import "TRCityView.h"
 #import "TRRailroadView.h"
 #import "TRTrainView.h"
@@ -9,7 +8,6 @@
 #import "EGCameraIso.h"
 @implementation TRLevelView{
     TRLevel* _level;
-    TRLevelBackgroundView* _backgroundView;
     TRCityView* _cityView;
     TRRailroadView* _railroadView;
     TRTrainView* _trainView;
@@ -29,9 +27,8 @@ static ODClassType* _TRLevelView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _backgroundView = [TRLevelBackgroundView levelBackgroundViewWithMap:_level.map];
         _cityView = [TRCityView cityView];
-        _railroadView = [TRRailroadView railroadView];
+        _railroadView = [TRRailroadView railroadViewWithRailroad:_level.railroad];
         _trainView = [TRTrainView trainView];
         _environment = [EGEnvironment environmentWithAmbientColor:EGColorMake(0.4, 0.4, 0.4, 1.0) lights:(@[[EGDirectLight directLightWithColor:EGColorMake(1.0, 1.0, 1.0, 1.0) direction:GEVec3Make(-0.2, 0.2, -0.5)]])];
         _camera = [EGCameraIso cameraIsoWithTilesOnScreen:_level.map.size center:GEVec2Make(0.0, 0.0)];
@@ -46,11 +43,10 @@ static ODClassType* _TRLevelView_type;
 }
 
 - (void)drawView {
-    [_backgroundView draw];
     [[_level cities] forEach:^void(TRCity* city) {
         [_cityView drawCity:city];
     }];
-    [_railroadView drawRailroad:_level.railroad];
+    [_railroadView draw];
     [_trainView drawTrains:[_level trains]];
     [_trainView drawDyingTrains:[_level dyingTrains]];
 }

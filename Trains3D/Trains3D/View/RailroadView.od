@@ -3,14 +3,23 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class RailroadView {
+class RailroadView(railroad : Railroad) {
     private val railView = RailView()
     private val switchView = SwitchView()
     private val lightView = LightView()
     private val damageView = DamageView()
+    private val railroadSurface = FullScreenSurface(depth = true)
+    private val backgroundView = BackgroundView(railroad.map)
 
-    def draw(railroad : Railroad) {
-        railroad.rails.for(railView.draw(_))
+    def draw {
+        railroadSurface.maybe(railroad.changed) {
+            glClearColor(1, 0, 0, 1)
+            egClear
+            backgroundView.draw
+            railroad.rails.for(railView.draw(_))
+            railroad.changed = false
+        }
+        railroadSurface.draw
         railroad.switches.for(switchView.draw(_))
         railroad.lights.for(lightView.draw(_))
         railroad.builder.rail.for(railView.draw(_))
@@ -111,5 +120,14 @@ class DamageView {
         ) {
             model.draw
         }
+    }
+}
+
+class BackgroundView(map : MapSso) {
+    val mapView = MapSsoView(map)
+    val material = StandardMaterial(textureFor("Grass.png"))
+
+    def draw {
+        mapView.drawPlaneWith(material)
     }
 }

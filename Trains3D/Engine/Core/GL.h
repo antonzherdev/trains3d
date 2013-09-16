@@ -101,6 +101,16 @@ static inline void egDeleteFrameBuffer(GLuint handle) {
     glDeleteFramebuffers(1, &handle);
 }
 
+static inline GLuint egGenRenderBuffer() {
+    GLuint buffer;
+    glGenRenderbuffers(1, &buffer);
+    return buffer;
+}
+
+static inline void egDeleteRenderBuffer(GLuint handle) {
+    glDeleteRenderbuffers(1, &handle);
+}
+
 static inline GLuint egGenTexture() {
     GLuint buffer;
     glGenTextures(1, &buffer);

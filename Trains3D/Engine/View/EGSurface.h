@@ -1,40 +1,45 @@
 #import "objd.h"
 #import "GEVec.h"
 #import "GL.h"
+#import "EGShader.h"
 @class EGTexture;
+@class EGSimpleMaterial;
+@class EGColorSource;
+@class EGColorSourceTexture;
 @class EGVertexBuffer;
-@class EGIndexBuffer;
-@class EGShaderProgram;
-@class EGShaderAttribute;
+@class EGMesh;
+@class EGGlobal;
+@class EGContext;
 
 @class EGSurface;
-@class EGSurfaceShader;
+@class EGFullScreenSurfaceShader;
 @class EGFullScreenSurface;
 
 @interface EGSurface : NSObject
+@property (nonatomic, readonly) BOOL depth;
 @property (nonatomic, readonly) GEVec2i size;
 @property (nonatomic, readonly) EGTexture* texture;
+@property (nonatomic, readonly) EGSimpleMaterial* material;
 
-+ (id)surfaceWithSize:(GEVec2i)size;
-- (id)initWithSize:(GEVec2i)size;
++ (id)surfaceWithDepth:(BOOL)depth size:(GEVec2i)size;
+- (id)initWithDepth:(BOOL)depth size:(GEVec2i)size;
 - (ODClassType*)type;
 - (void)dealloc;
 - (void)applyDraw:(void(^)())draw;
 - (void)bind;
 - (void)unbind;
-- (void)drawFullScreen;
 + (ODClassType*)type;
 @end
 
 
-@interface EGSurfaceShader : NSObject
-@property (nonatomic, readonly) EGShaderProgram* program;
+@interface EGFullScreenSurfaceShader : EGShader
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 
-+ (id)surfaceShader;
++ (id)fullScreenSurfaceShader;
 - (id)init;
 - (ODClassType*)type;
-- (void)applyDraw:(void(^)())draw;
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material;
+- (void)unloadMaterial:(EGSimpleMaterial*)material;
 + (NSString*)vertex;
 + (NSString*)fragment;
 + (ODClassType*)type;
@@ -42,12 +47,18 @@
 
 
 @interface EGFullScreenSurface : NSObject
-+ (id)fullScreenSurface;
-- (id)init;
+@property (nonatomic, readonly) BOOL depth;
+
++ (id)fullScreenSurfaceWithDepth:(BOOL)depth;
+- (id)initWithDepth:(BOOL)depth;
 - (ODClassType*)type;
+- (BOOL)needRedraw;
 - (void)bind;
 - (void)applyDraw:(void(^)())draw;
+- (void)maybeDraw:(void(^)())draw;
+- (void)maybeForce:(BOOL)force draw:(void(^)())draw;
 - (void)unbind;
+- (void)draw;
 + (ODClassType*)type;
 @end
 

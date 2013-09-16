@@ -3,17 +3,15 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 
 class LevelView(level : Level) extends LayerView {
-    private val backgroundView = LevelBackgroundView(level.map)
     private val cityView = CityView()
-    private val railroadView = RailroadView()
+    private val railroadView = RailroadView(level.railroad)
     private val trainView = TrainView()
 
     val environment = Environment(ambientColor = Color(0.4, 0.4, 0.4, 1), lights = [DirectLight(Color(1, 1, 1, 1), vec3(-0.2, 0.2, -0.5))])
 
     def drawView {
-        backgroundView.draw
         level.cities.for(city -> cityView.draw(city))
-        railroadView.draw(level.railroad)
+        railroadView.draw
 
         trainView.draw(trains = level.trains)
         trainView.draw(dyingTrains = level.dyingTrains)

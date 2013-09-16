@@ -2,6 +2,7 @@
 #import "EGTypes.h"
 #import "GEVec.h"
 @class TRRailroad;
+@class EGFullScreenSurface;
 @class TRRailroadBuilder;
 @class EGMeshModel;
 @class TRModels;
@@ -18,18 +19,23 @@
 @class TRRailConnector;
 @class TRRailLight;
 @class TRRailPoint;
+@class EGMapSso;
+@class EGMapSsoView;
 
 @class TRRailroadView;
 @class TRRailView;
 @class TRSwitchView;
 @class TRLightView;
 @class TRDamageView;
+@class TRBackgroundView;
 
 @interface TRRailroadView : NSObject
-+ (id)railroadView;
-- (id)init;
+@property (nonatomic, readonly) TRRailroad* railroad;
+
++ (id)railroadViewWithRailroad:(TRRailroad*)railroad;
+- (id)initWithRailroad:(TRRailroad*)railroad;
 - (ODClassType*)type;
-- (void)drawRailroad:(TRRailroad*)railroad;
+- (void)draw;
 + (ODClassType*)type;
 @end
 
@@ -78,6 +84,19 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)drawPoint:(TRRailPoint*)point;
++ (ODClassType*)type;
+@end
+
+
+@interface TRBackgroundView : NSObject
+@property (nonatomic, readonly) EGMapSso* map;
+@property (nonatomic, readonly) EGMapSsoView* mapView;
+@property (nonatomic, readonly) EGStandardMaterial* material;
+
++ (id)backgroundViewWithMap:(EGMapSso*)map;
+- (id)initWithMap:(EGMapSso*)map;
+- (ODClassType*)type;
+- (void)draw;
 + (ODClassType*)type;
 @end
 

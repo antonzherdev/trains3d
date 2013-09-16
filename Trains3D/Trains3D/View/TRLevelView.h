@@ -3,7 +3,6 @@
 #import "EGTypes.h"
 #import "GEVec.h"
 @class TRLevel;
-@class TRLevelBackgroundView;
 @class TRCityView;
 @class TRRailroadView;
 @class TRTrainView;

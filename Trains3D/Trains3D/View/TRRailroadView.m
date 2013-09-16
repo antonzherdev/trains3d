@@ -1,30 +1,40 @@
 #import "TRRailroadView.h"
 
 #import "TRRailroad.h"
+#import "EGSurface.h"
+#import "GL.h"
 #import "EGMaterial.h"
 #import "TRModels.h"
 #import "EGContext.h"
 #import "GEMat4.h"
 #import "TRRailPoint.h"
+#import "EGMapIso.h"
 @implementation TRRailroadView{
+    TRRailroad* _railroad;
     TRRailView* _railView;
     TRSwitchView* _switchView;
     TRLightView* _lightView;
     TRDamageView* _damageView;
+    EGFullScreenSurface* _railroadSurface;
+    TRBackgroundView* _backgroundView;
 }
 static ODClassType* _TRRailroadView_type;
+@synthesize railroad = _railroad;
 
-+ (id)railroadView {
-    return [[TRRailroadView alloc] init];
++ (id)railroadViewWithRailroad:(TRRailroad*)railroad {
+    return [[TRRailroadView alloc] initWithRailroad:railroad];
 }
 
-- (id)init {
+- (id)initWithRailroad:(TRRailroad*)railroad {
     self = [super init];
     if(self) {
+        _railroad = railroad;
         _railView = [TRRailView railView];
         _switchView = [TRSwitchView switchView];
         _lightView = [TRLightView lightView];
         _damageView = [TRDamageView damageView];
+        _railroadSurface = [EGFullScreenSurface fullScreenSurfaceWithDepth:YES];
+        _backgroundView = [TRBackgroundView backgroundViewWithMap:_railroad.map];
     }
     
     return self;
@@ -35,20 +45,27 @@ static ODClassType* _TRRailroadView_type;
     _TRRailroadView_type = [ODClassType classTypeWithCls:[TRRailroadView class]];
 }
 
-- (void)drawRailroad:(TRRailroad*)railroad {
-    [[railroad rails] forEach:^void(TRRail* _) {
-        [_railView drawRail:_];
+- (void)draw {
+    [_railroadSurface maybeForce:_railroad.changed draw:^void() {
+        glClearColor(1.0, 0.0, 0.0, 1.0);
+        egClear();
+        [_backgroundView draw];
+        [[_railroad rails] forEach:^void(TRRail* _) {
+            [_railView drawRail:_];
+        }];
+        _railroad.changed = NO;
     }];
-    [[railroad switches] forEach:^void(TRSwitch* _) {
+    [_railroadSurface draw];
+    [[_railroad switches] forEach:^void(TRSwitch* _) {
         [_switchView drawTheSwitch:_];
     }];
-    [[railroad lights] forEach:^void(TRRailLight* _) {
+    [[_railroad lights] forEach:^void(TRRailLight* _) {
         [_lightView drawLight:_];
     }];
-    [[railroad.builder rail] forEach:^void(TRRail* _) {
+    [[_railroad.builder rail] forEach:^void(TRRail* _) {
         [_railView drawRail:_];
     }];
-    [[railroad damagesPoints] forEach:^void(TRRailPoint* _) {
+    [[_railroad damagesPoints] forEach:^void(TRRailPoint* _) {
         [_damageView drawPoint:_];
     }];
 }
@@ -68,15 +85,19 @@ static ODClassType* _TRRailroadView_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
+    TRRailroadView* o = ((TRRailroadView*)(other));
+    return [self.railroad isEqual:o.railroad];
 }
 
 - (NSUInteger)hash {
-    return 0;
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.railroad hash];
+    return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"railroad=%@", self.railroad];
     [description appendString:@">"];
     return description;
 }
@@ -383,6 +404,75 @@ static ODClassType* _TRDamageView_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRBackgroundView{
+    EGMapSso* _map;
+    EGMapSsoView* _mapView;
+    EGStandardMaterial* _material;
+}
+static ODClassType* _TRBackgroundView_type;
+@synthesize map = _map;
+@synthesize mapView = _mapView;
+@synthesize material = _material;
+
++ (id)backgroundViewWithMap:(EGMapSso*)map {
+    return [[TRBackgroundView alloc] initWithMap:map];
+}
+
+- (id)initWithMap:(EGMapSso*)map {
+    self = [super init];
+    if(self) {
+        _map = map;
+        _mapView = [EGMapSsoView mapSsoViewWithMap:_map];
+        _material = [EGStandardMaterial applyDiffuse:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Grass.png"]]];
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRBackgroundView_type = [ODClassType classTypeWithCls:[TRBackgroundView class]];
+}
+
+- (void)draw {
+    [_mapView drawPlaneWithMaterial:_material];
+}
+
+- (ODClassType*)type {
+    return [TRBackgroundView type];
+}
+
++ (ODClassType*)type {
+    return _TRBackgroundView_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRBackgroundView* o = ((TRBackgroundView*)(other));
+    return [self.map isEqual:o.map];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.map hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"map=%@", self.map];
     [description appendString:@">"];
     return description;
 }
