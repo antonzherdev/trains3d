@@ -1,4 +1,4 @@
-#import "TR3D.h"
+#import "TRModels.h"
 
 #import "EGMesh.h"
 #import "TR3DRail.h"
@@ -11,7 +11,7 @@
 #import "TR3DDamage.h"
 
 
-@implementation TR3D
+@implementation TRModels
 static EGMesh*_railTies = nil;
 static EGMesh*_railGravel = nil;
 static EGMesh*_rails = nil;
@@ -33,7 +33,7 @@ static EGMesh *_damage = nil;
 static ODClassType* _TR3D_type;
 
 + (id)r3D {
-    return [[TR3D alloc] init];
+    return [[TRModels alloc] init];
 }
 
 - (id)init {
@@ -44,7 +44,7 @@ static ODClassType* _TR3D_type;
 
 + (void)initialize {
     [super initialize];
-    _TR3D_type = [ODClassType classTypeWithCls:[TR3D class]];
+    _TR3D_type = [ODClassType classTypeWithCls:[TRModels class]];
     _railTies = egJasModel(RailTies);
     _railGravel = egJasModel(RailGravel);
     _rails = egJasModel(Rails);

@@ -2,11 +2,11 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class TRLevelView(level : TRLevel) extends LayerView {
-    private val backgroundView = TRLevelBackgroundView(level.map)
-    private val cityView = TRCityView()
-    private val railroadView = TRRailroadView()
-    private val trainView = TRTrainView()
+class LevelView(level : Level) extends LayerView {
+    private val backgroundView = LevelBackgroundView(level.map)
+    private val cityView = CityView()
+    private val railroadView = RailroadView()
+    private val trainView = TrainView()
 
     val environment = EGEnvironment(ambientColor = Color(0.4, 0.4, 0.4, 1), lights = [EGDirectLight(Color(1, 1, 1, 1), vec3(-0.2, 0.2, -0.5))])
 

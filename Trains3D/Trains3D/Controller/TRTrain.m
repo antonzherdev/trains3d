@@ -2,10 +2,9 @@
 
 #import "TRRailroad.h"
 #import "TRLevel.h"
-#import "TRTypes.h"
+#import "TRCity.h"
 #import "TRRailPoint.h"
 #import "TRCar.h"
-#import "TRCity.h"
 #import "EGMapIso.h"
 @implementation TRTrainType{
     BOOL(^_obstacleProcessor)(TRLevel*, TRTrain*, TRObstacle*);
@@ -79,7 +78,7 @@ static NSArray* _TRTrainType_values;
 @implementation TRTrain{
     __weak TRLevel* _level;
     TRTrainType* _trainType;
-    TRColor* _color;
+    TRCityColor* _color;
     id<CNSeq>(^__cars)(TRTrain*);
     NSUInteger _speed;
     id _viewData;
@@ -101,11 +100,11 @@ static ODType* _TRTrain_type;
 @synthesize speedFloat = _speedFloat;
 @synthesize isDying = _isDying;
 
-+ (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color _cars:(id<CNSeq>(^)(TRTrain*))_cars speed:(NSUInteger)speed {
++ (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color _cars:(id<CNSeq>(^)(TRTrain*))_cars speed:(NSUInteger)speed {
     return [[TRTrain alloc] initWithLevel:level trainType:trainType color:color _cars:_cars speed:speed];
 }
 
-- (id)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color _cars:(id<CNSeq>(^)(TRTrain*))_cars speed:(NSUInteger)speed {
+- (id)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color _cars:(id<CNSeq>(^)(TRTrain*))_cars speed:(NSUInteger)speed {
     self = [super init];
     __weak TRTrain* _weakSelf = self;
     if(self) {
@@ -187,7 +186,7 @@ static ODType* _TRTrain_type;
     if(!(eqf(correction.error, 0.0))) {
         BOOL isMoveToCity = [self isMoveToCityForPoint:correction.point];
         if(!(isMoveToCity) || correction.error >= _length) {
-            if(isMoveToCity && (_color == TRColor.grey || ((TRCity*)([[_level cityForTile:correction.point.tile] get])).color == _color)) {
+            if(isMoveToCity && (_color == TRCityColor.grey || ((TRCity*)([[_level cityForTile:correction.point.tile] get])).color == _color)) {
                 [_level arrivedTrain:self];
             } else {
                 _back = !(_back);

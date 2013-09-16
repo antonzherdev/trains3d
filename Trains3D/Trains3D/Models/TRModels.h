@@ -4,9 +4,9 @@
 @class EGMesh;
 @class EGMeshModel;
 
-@class TR3D;
+@class TRModels;
 
-@interface TR3D : NSObject
+@interface TRModels : NSObject
 + (id)r3D;
 - (id)init;
 - (ODType*)type;

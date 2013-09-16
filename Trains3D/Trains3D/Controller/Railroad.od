@@ -1,0 +1,216 @@
+package com.antonzherdev.trains
+
+import com.antonzherdev.eg._
+
+class RailroadConnectorContent {
+    def canAdd(rail : Rail) : bool = true
+    def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent
+    def buildLightIn(connector : RailConnector) : RailroadConnectorContent = self
+    def rails : [Rail]
+    def isGreen : bool = true
+}
+
+class EmptyConnector extends RailroadConnectorContent {
+    static val instance : RailroadConnectorContent = EmptyConnector()
+    def rails : [Rail] = []
+    def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = rail
+}
+
+class Rail(tile : vec2i, form : RailForm) extends RailroadConnectorContent {
+    def has(connector : RailConnector) : bool = form.start == connector || form.end == connector
+    def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = Switch(rail.tile, to, self, rail)
+    def rails : [Rail] = [self]
+    def buildLightIn(connector : RailConnector) : RailroadConnectorContent = Light(tile, connector, self)
+    def canAdd(rail : Rail) : bool = rail.form != form
+}
+
+class Switch(tile : vec2i, connector : RailConnector, rail1 : Rail, rail2 : Rail) extends RailroadConnectorContent {
+    var firstActive = true
+    def activeRail : Rail = if(firstActive) rail1 else rail2
+    def turn { firstActive = !firstActive }
+    def canAdd(rail : Rail) = false
+    def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = throw "Couldn't add rail to switch"
+    def rails : [Rail] = if(firstActive) [rail1, rail2] else [rail2, rail1]
+    def buildLightIn(connector : RailConnector) : RailroadConnectorContent = self
+}
+
+class Light(tile : vec2i, connector : RailConnector, rail : Rail) extends RailroadConnectorContent {
+    var isGreen = true
+    def turn { isGreen = !isGreen }
+    def canAdd(rail : Rail) : bool = self.rail.canAdd(rail)
+    def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = Switch(tile, to, self.rail, rail)
+    def rails : [Rail] = [rail]
+    def buildLightIn(connector : RailConnector) : RailroadConnectorContent = self
+}
+
+enum ObstacleType {
+    damage()
+    switch()
+    light()
+    end()
+}
+class Obstacle(obstacleType : ObstacleType, point : RailPoint) {}
+
+class Railroad(map : MapSso, score : Score) {
+    private var _rails : [Rail] = []
+    def rails = _rails
+    private var _switches : [Switch] = []
+    def switches = _switches
+    private var _lights : [Light] = []
+    def lights = _lights
+    val builder = RailroadBuilder(self)
+    private val connectorIndex = MapDefault(EmptyConnector.instance, MutableHashMap<(vec2i, RailConnector), RailroadConnectorContent>())
+    private val damagesIndex = MutableHashMap<(vec2i, RailForm), [float]>()
+    private var _damagesPoints = MutableArray<RailPoint>()
+    def damagesPoints : [RailPoint] = _damagesPoints
+
+    def canAdd(rail : Rail) : bool =
+        connectorIndex[(rail.tile, rail.form.start)].canAdd(rail)
+        && connectorIndex[(rail.tile, rail.form.end)].canAdd(rail)
+
+    def tryAdd(rail : Rail) : bool = {
+        if(canAdd(rail)) {
+            connect(rail, rail.form.start)
+            connect(rail, rail.form.end)
+            buildLightsFor(rail.tile, rail.form.start)
+            buildLightsFor(rail.tile, rail.form.end)
+            rebuildArrays
+            score.railBuilt
+            true
+        } else false
+    }
+
+    def contentIn(tile : vec2i, connector : RailConnector) : RailroadConnectorContent =
+        connectorIndex[(tile, connector)]
+
+    private def connect(rail : Rail, to : RailConnector) {
+        connectorIndex.modify(by = _.connect(rail, to), forKey = (rail.tile, to))
+    }
+
+    private def buildLightsFor(tile : vec2i, connector : RailConnector) {
+        val nextTile = connector.next(tile)
+        val otherSideConnector = connector.otherSideConnector
+
+        if(map.isFull(tile) && map.isPartial(nextTile)) {
+            buildLightIn(nextTile, otherSideConnector)
+        } else if (isTurnRailIn(nextTile, otherSideConnector)) {
+            buildLightIn(nextTile, otherSideConnector)
+        }
+
+        if(isTurnRailIn(tile, connector) && connectorIndex[(nextTile, otherSideConnector)].rails.count == 1) {
+            buildLightIn(tile, connector)
+        }
+    }
+
+    private def isTurnRailIn(tile : vec2i, connector : RailConnector) : bool = {
+        val rails = connectorIndex[(tile, connector)].rails
+        rails.count == 1 && rails[0].form.isTurn
+    }
+
+    private def buildLightIn(tile : vec2i, connector : RailConnector) {
+        connectorIndex.modify(by = _.buildLightIn(connector), forKey = (tile, connector))
+    }
+
+
+    private def rebuildArrays {
+        _rails = connectorIndex.values.chain.flatMap(_.rails).distinct.toArray
+        _switches = connectorIndex.values.chain.filter(_.is<Switch>).toArray
+        _lights = connectorIndex.values.chain.filter(_.is<Light>).toArray
+    }
+
+    private def activeRailFor(tile : vec2i, connector : RailConnector) : Rail? =
+        connectorIndex[(tile, connector)].rails.head
+
+
+    def moveWith(obstacleProcessor : Obstacle -> bool, forLength : float, point : RailPoint) : RailPointCorrection = {
+        val p = point.add(forLength)
+
+        val correction = p.correct
+        val damage = checkDamagesWith(obstacleProcessor, point, correction.point.x)
+        if(damage.isDefined) {
+            val x = damage.get
+            return RailPointCorrection(p.set(x = x), correction.error + correction.point.x - x)
+        }
+        if(correction.error == 0) return correction
+
+        val connector = p.endConnector
+        val connectorDesc = connectorIndex[(p.tile, connector)]
+        val activeRailOpt = connectorDesc.rails.head
+        if(activeRailOpt.isEmpty) return correction
+
+        if(!connectorDesc.isGreen) {
+            if(!obstacleProcessor(Obstacle(ObstacleType.light, correction.point))) {
+                return correction
+            }
+        }
+
+        if(activeRailOpt.get.form != p.form) {
+            obstacleProcessor(Obstacle(ObstacleType.switch, correction.point))
+            return correction
+        }
+
+        val nextTile = connector.next(p.tile)
+        val otherSideConnector = connector.otherSideConnector
+        val nextRail = activeRailFor(nextTile, otherSideConnector)
+
+        if(nextRail.isEmpty) {
+            obstacleProcessor(Obstacle(ObstacleType.end, correction.point))
+            return correction
+        }
+
+        val nextActiveRail = nextRail.get
+        val form = nextActiveRail.form
+        moveWith(obstacleProcessor, correction.error, RailPoint(nextTile, form, 0, form.end == otherSideConnector))
+    }
+
+    def checkDamagesWith(obstacleProcessor : Obstacle -> bool, from : RailPoint, to : float) : float? = {
+        if(from.x == to) return nil
+        val opt = damagesIndex[(from.tile, from.form)]
+        if(opt.isEmpty) return nil
+
+        val on : Float -> bool = x : Float -> {
+            !obstacleProcessor(Obstacle(ObstacleType.damage, from.set(x = x)))
+        }
+        val len = from.form.length
+        if(from.back) opt.get.chain.filter(_.between(len - to, len - from.x)).sortDesc.map(len - _).find(on)
+        else opt.get.chain.filter(_.between(from.x, to)).sort.find(on)
+    }
+
+    def addDamageAt(point : RailPoint) {
+        if(point.back) addDamageAt(point.invert)
+        else {
+            damagesIndex.modify(by = arr -> arr.map(_ + point.x).getOrElse([point.x]), forKey = (point.tile, point.form))
+            _damagesPoints.add(point)
+        }
+    }
+
+    def fixDamageAt(point : RailPoint) {
+        if(point.back) fixDamageAt(point.invert)
+        else {
+            damagesIndex.modify(by = arrOpt -> arrOpt.map(arr -> arr.chain.filter(_ != point.x).toArray), forKey = (point.tile, point.form))
+            _damagesPoints.remove(point)
+        }
+    }
+}
+
+class RailroadBuilder(weak railroad : Railroad) {
+    private var _rail : Rail? = nil
+    def rail = _rail
+
+    def tryBuild(rail : Rail) : bool = {
+        if(railroad.canAdd(rail)) {
+            _rail = rail
+            true
+        } else false
+    }
+
+    def clear {
+        _rail = nil
+    }
+
+    def fix {
+        _rail.for(r -> railroad.tryAdd(r))
+        _rail = nil
+    }
+}
+

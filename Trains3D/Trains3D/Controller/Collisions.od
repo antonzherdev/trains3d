@@ -3,22 +3,22 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 import core.math._
 
-class TRCollisionWorld {
-    private val world = CollisionWorld<TRCar>()
+class CollisionWorld {
+    private val world = CollisionWorld<Car>()
 
-    def add(train : TRTrain) {
+    def add(train : Train) {
         train.cars.for{car ->
             world.add(car.collisionBody)
         }
     }
 
-    def remove(train : TRTrain) {
+    def remove(train : Train) {
         train.cars.for{car ->
             world.remove(car.collisionBody)
         }
     }
 
-    def detect = world.detect.chain.map{collision ->
+    def detect : [CarsCollision] = world.detect.chain.map{collision ->
         val car1 = collision.bodies.a.data
         val car2 = collision.bodies.b.data
         val point =
@@ -33,31 +33,31 @@ class TRCollisionWorld {
                 .map(_.a)
                 .head
                 .get
-        TRCollision(Pair(car1, car2), point)
+        CarsCollision(Pair(car1, car2), point)
     }.toArray
 }
 
-class TRCollision(cars : Pair<TRCar>, railPoint : TRRailPoint)
+class CarsCollision(cars : Pair<Car>, railPoint : RailPoint)
 
-class TRDynamicWorld extends Controller {
+class DynamicWorld extends Controller {
     private val world = {
-        val w = DynamicWorld<TRCar>(gravity = vec3(0, 0, -10))
-        val plane = RigidBody<TRCar>(nil, CollisionPlane(vec3(0, 0, 1), 0), false, 0)
+        val w = DynamicWorld<Car>(gravity = vec3(0, 0, -10))
+        val plane = RigidBody<Car>(nil, CollisionPlane(vec3(0, 0, 1), 0), false, 0)
         plane.friction = 0.4
         w.add(plane)
         w
     }
 
-    def add(train : TRTrain) {
+    def add(train : Train) {
     }
 
-    def die(train : TRTrain) {
+    def die(train : Train) {
         train.cars.for{car ->
             world.add(car.dynamicBody)
         }
     }
 
-    def remove(train : TRTrain) {
+    def remove(train : Train) {
         train.cars.for{car ->
             world.remove(car.dynamicBody)
         }

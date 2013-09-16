@@ -1,8 +1,65 @@
 #import "TRCity.h"
 
+#import "GL.h"
 #import "TRRailPoint.h"
-#import "TRTypes.h"
 #import "EGSchedule.h"
+@implementation TRCityColor{
+    EGColor _color;
+}
+static TRCityColor* _TRCityColor_orange;
+static TRCityColor* _TRCityColor_green;
+static TRCityColor* _TRCityColor_purple;
+static TRCityColor* _TRCityColor_grey;
+static NSArray* _TRCityColor_values;
+@synthesize color = _color;
+
++ (id)cityColorWithOrdinal:(NSUInteger)ordinal name:(NSString*)name color:(EGColor)color {
+    return [[TRCityColor alloc] initWithOrdinal:ordinal name:name color:color];
+}
+
+- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name color:(EGColor)color {
+    self = [super initWithOrdinal:ordinal name:name];
+    if(self) _color = color;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRCityColor_orange = [TRCityColor cityColorWithOrdinal:0 name:@"orange" color:EGColorMake(1.0, 0.5, 0.0, 1.0)];
+    _TRCityColor_green = [TRCityColor cityColorWithOrdinal:1 name:@"green" color:EGColorMake(0.66, 0.9, 0.44, 1.0)];
+    _TRCityColor_purple = [TRCityColor cityColorWithOrdinal:2 name:@"purple" color:EGColorMake(0.9, 0.44, 0.66, 1.0)];
+    _TRCityColor_grey = [TRCityColor cityColorWithOrdinal:3 name:@"grey" color:EGColorMake(0.5, 0.5, 0.5, 1.0)];
+    _TRCityColor_values = (@[_TRCityColor_orange, _TRCityColor_green, _TRCityColor_purple, _TRCityColor_grey]);
+}
+
+- (void)set {
+    egColor(_color);
+}
+
++ (TRCityColor*)orange {
+    return _TRCityColor_orange;
+}
+
++ (TRCityColor*)green {
+    return _TRCityColor_green;
+}
+
++ (TRCityColor*)purple {
+    return _TRCityColor_purple;
+}
+
++ (TRCityColor*)grey {
+    return _TRCityColor_grey;
+}
+
++ (NSArray*)values {
+    return _TRCityColor_values;
+}
+
+@end
+
+
 @implementation TRCityAngle{
     NSInteger _angle;
     TRRailForm* _form;
@@ -65,7 +122,7 @@ static NSArray* _TRCityAngle_values;
 
 
 @implementation TRCity{
-    TRColor* _color;
+    TRCityColor* _color;
     GEVec2i _tile;
     TRCityAngle* _angle;
     id _expectedTrainAnimation;
@@ -76,11 +133,11 @@ static ODType* _TRCity_type;
 @synthesize angle = _angle;
 @synthesize expectedTrainAnimation = _expectedTrainAnimation;
 
-+ (id)cityWithColor:(TRColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle {
++ (id)cityWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle {
     return [[TRCity alloc] initWithColor:color tile:tile angle:angle];
 }
 
-- (id)initWithColor:(TRColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle {
+- (id)initWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle {
     self = [super init];
     if(self) {
         _color = color;

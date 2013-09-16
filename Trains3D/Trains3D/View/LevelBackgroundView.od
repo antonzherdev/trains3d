@@ -2,7 +2,7 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class TRLevelBackgroundView(map : MapSso) {
+class LevelBackgroundView(map : MapSso) {
     val mapView = MapSsoView(map)
     val material = StandardMaterial(textureFor("Grass.png"))
 

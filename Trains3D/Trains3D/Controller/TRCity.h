@@ -2,12 +2,24 @@
 #import "EGTypes.h"
 #import "GEVec.h"
 @class TRRailForm;
-@class TRColor;
 @class TRRailPoint;
 @class EGAnimation;
 
 @class TRCity;
+@class TRCityColor;
 @class TRCityAngle;
+
+@interface TRCityColor : ODEnum
+@property (nonatomic, readonly) EGColor color;
+
+- (void)set;
++ (TRCityColor*)orange;
++ (TRCityColor*)green;
++ (TRCityColor*)purple;
++ (TRCityColor*)grey;
++ (NSArray*)values;
+@end
+
 
 @interface TRCityAngle : ODEnum
 @property (nonatomic, readonly) NSInteger angle;
@@ -23,13 +35,13 @@
 
 
 @interface TRCity : NSObject<EGController>
-@property (nonatomic, readonly) TRColor* color;
+@property (nonatomic, readonly) TRCityColor* color;
 @property (nonatomic, readonly) GEVec2i tile;
 @property (nonatomic, readonly) TRCityAngle* angle;
 @property (nonatomic) id expectedTrainAnimation;
 
-+ (id)cityWithColor:(TRColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
-- (id)initWithColor:(TRColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
++ (id)cityWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
+- (id)initWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
 - (ODClassType*)type;
 - (TRRailPoint*)startPoint;
 - (void)updateWithDelta:(CGFloat)delta;

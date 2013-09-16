@@ -5,7 +5,7 @@
 @class TRObstacleType;
 @class TRLevel;
 @class TRRailroad;
-@class TRColor;
+@class TRCityColor;
 @class TRRailPoint;
 @class TRCar;
 @class TRCarType;
@@ -34,15 +34,15 @@
 @interface TRTrain : NSObject<EGController>
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) TRTrainType* trainType;
-@property (nonatomic, readonly) TRColor* color;
+@property (nonatomic, readonly) TRCityColor* color;
 @property (nonatomic, readonly) id<CNSeq>(^_cars)(TRTrain*);
 @property (nonatomic, readonly) NSUInteger speed;
 @property (nonatomic) id viewData;
 @property (nonatomic, readonly) CGFloat speedFloat;
 @property (nonatomic) BOOL isDying;
 
-+ (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color _cars:(id<CNSeq>(^)(TRTrain*))_cars speed:(NSUInteger)speed;
-- (id)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRColor*)color _cars:(id<CNSeq>(^)(TRTrain*))_cars speed:(NSUInteger)speed;
++ (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color _cars:(id<CNSeq>(^)(TRTrain*))_cars speed:(NSUInteger)speed;
+- (id)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color _cars:(id<CNSeq>(^)(TRTrain*))_cars speed:(NSUInteger)speed;
 - (ODClassType*)type;
 - (id<CNSeq>)cars;
 - (BOOL)isBack;

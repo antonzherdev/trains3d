@@ -7,7 +7,7 @@
 @class EGMaterial;
 @class TRTrain;
 @class TRSmoke;
-@class TRColor;
+@class TRCityColor;
 @class EGGlobal;
 @class TRCar;
 @class TRCarPosition;
@@ -16,7 +16,7 @@
 @class EGMatrixModel;
 @class EGMatrixStack;
 @class TRCarType;
-@class TR3D;
+@class TRModels;
 @class EGRigidBody;
 
 @class TRTrainView;

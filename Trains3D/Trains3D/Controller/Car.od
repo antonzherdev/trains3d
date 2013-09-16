@@ -3,11 +3,11 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 import core.math._
 
-class TREngineType(
+class EngineType(
     tubePos : vec3 //tube position relative to start of the car
 )
 
-enum TRCarType(
+enum CarType(
     width: float,
     height: float,
     weight : float,
@@ -18,13 +18,13 @@ enum TRCarType(
     wheelToBack : float,
     backToEnd : float,
 
-    engineType : TREngineType?)
+    engineType : EngineType?)
 {
     car(0.18, 0.3, 1,
         0.05, 0.08, 0.44, 0.08, 0.05, nil)
     engine(0.2, 0.3, 2,
         0.05, 0.14, 0.32, 0.22, 0.05,
-        TREngineType(tubePos = vec3(-0.06, 0, 0.5)))
+        EngineType(tubePos = vec3(-0.06, 0, 0.5)))
 
     val startToWheel = startToFront + frontToWheel
     val wheelToEnd = wheelToBack + backToEnd
@@ -34,7 +34,7 @@ enum TRCarType(
     val rigidShape : CollisionShape = CollisionBox((frontToWheel + betweenWheels + wheelToBack)/2, width/2, height/2)
 }
 
-class TRCar(weak train : TRTrain, carType : TRCarType) {
+class Car(weak train : Train, carType : CarType) {
     val collisionBody = CollisionBody(self, carType.collision2dShape, isKinematic = true)
     lazy val dynamicBody = {
         val line = position.line
@@ -51,9 +51,9 @@ class TRCar(weak train : TRTrain, carType : TRCarType) {
         b
     }
 
-    private var _position : TRCarPosition
-    def position : TRCarPosition = _position
-    def set(position : TRCarPosition) {
+    private var _position : CarPosition
+    def position : CarPosition = _position
+    def set(position : CarPosition) {
         _position = position
         val line = position.line
         val mid = midPoint
@@ -72,7 +72,7 @@ class TRCar(weak train : TRTrain, carType : TRCarType) {
         }
 }
 
-class TRCarPosition(frontConnector : TRRailPoint, head : TRRailPoint, tail : TRRailPoint, backConnector : TRRailPoint) {
+class CarPosition(frontConnector : RailPoint, head : RailPoint, tail : RailPoint, backConnector : RailPoint) {
     val line = LineSegment(tail.point, head.point)
 }
 

@@ -2,26 +2,25 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
+class LevelRules(mapSize : vec2i, scoreRules : ScoreRules, repairerSpeed : uint, events : [(float, (Level) -> void)])
 
-class TRLevelRules(mapSize : vec2i, scoreRules : TRScoreRules, repairerSpeed : uint, events : [(float, (TRLevel) -> void)])
-
-class TRLevel(rules : TRLevelRules) extends Controller {
+class Level(rules : LevelRules) extends Controller {
     val map : MapSso = MapSso(rules.mapSize)
-    val score : TRScore = TRScore(rules.scoreRules)
-    val railroad : TRRailroad = TRRailroad(map, score)
-    private var _cities = MutableArray<TRCity>()
+    val score : Score = Score(rules.scoreRules)
+    val railroad : Railroad = Railroad(map, score)
+    private var _cities = MutableArray<City>()
     val schedule : Schedule = createSchedule
-    def cities : [TRCity] = _cities
-    private var _trains : [TRTrain] = []
+    def cities : [City] = _cities
+    private var _trains : [Train] = []
     def trains = _trains
-    private var _repairer : TRTrain? = nil
+    private var _repairer : Train? = nil
     def repairer = _repairer
 
-    val collisionWorld = TRCollisionWorld()
-    val dynamicWorld = TRDynamicWorld()
+    val collisionWorld = CollisionWorld()
+    val dynamicWorld = DynamicWorld()
 
-    private var _dyingTrains = MutableArray<TRTrain>()
-    def dyingTrains : [TRTrain] = _dyingTrains
+    private var _dyingTrains = MutableArray<Train>()
+    def dyingTrains : [Train] = _dyingTrains
 
 
     private def createSchedule : Schedule = {
@@ -37,14 +36,14 @@ class TRLevel(rules : TRLevelRules) extends Controller {
 
     def createNewCity {
         val tile = map.partialTiles.chain.exclude(cities.chain.map(_.tile)).randomItem.get
-        val city = TRCity(TRColor[cities.count], tile, randomCityDirectionFor(tile))
-        railroad.tryAdd(TRRail(tile, city.angle.form))
+        val city = City(CityColor[cities.count], tile, randomCityDirectionFor(tile))
+        railroad.tryAdd(Rail(tile, city.angle.form))
         _cities.add(city)
     }
 
     private def randomCityDirectionFor(tile : vec2i) = {
         val cut = map.cutRectFor(tile)
-        TRCityAngle.values.chain.filter{a ->
+        CityAngle.values.chain.filter{a ->
             val angle = a.angle
             (angle == 0 && cut.x2 == 0 && cut.y2 == 0)
             || (angle == 90 && cut.x == 0 && cut.y2 == 0)
@@ -53,7 +52,7 @@ class TRLevel(rules : TRLevelRules) extends Controller {
         }.randomItem.get
     }
 
-    private def run(train : TRTrain, fromCity : TRCity) {
+    private def run(train : Train, fromCity : City) {
         fromCity.expectedTrainAnimation = Animation(3, {
             fromCity.expectedTrainAnimation = nil
             train.startFrom(fromCity)
@@ -61,20 +60,20 @@ class TRLevel(rules : TRLevelRules) extends Controller {
         })
     }
 
-    private def add(train : TRTrain) {
+    private def add(train : Train) {
         _trains += train
         score.run(train)
         collisionWorld.add(train)
         dynamicWorld.add(train)
     }
 
-    def runTrainWith(generator : TRTrainGenerator) {
+    def runTrainWith(generator : TrainGenerator) {
         val city = _cities.randomItem.get
-        val train = TRTrain(self, generator.trainType, city.color, generator.generateCarsFor(_), generator.generateSpeed)
+        val train = Train(self, generator.trainType, city.color, generator.generateCarsFor(_), generator.generateSpeed)
         run(train, fromCity = _cities.chain.filter(_ != city).randomItem.get)
     }
 
-    def testRun(train : TRTrain, fromPoint : TRRailPoint) {
+    def testRun(train : Train, fromPoint : RailPoint) {
         train.set(head = fromPoint)
         add(train)
     }
@@ -89,17 +88,17 @@ class TRLevel(rules : TRLevelRules) extends Controller {
         schedule.updateWith(delta)
     }
 
-    def tryTurn(theSwitch : TRSwitch) {
+    def tryTurn(theSwitch : Switch) {
         if(!isLocked(theSwitch)){
             theSwitch.turn
         }
     }
 
-    private def isLocked(theSwitch : TRSwitch) : bool = _trains.find(_.isLocked(theSwitch)).isDefined
+    private def isLocked(theSwitch : Switch) : bool = _trains.find(_.isLocked(theSwitch)).isDefined
 
-    def cityFor(tile : vec2i) : TRCity? = _cities.find(_.tile == tile)
+    def cityFor(tile : vec2i) : City? = _cities.find(_.tile == tile)
 
-    def arrived(train : TRTrain) {
+    def arrived(train : Train) {
         remove(train)
         score.arrived(train)
     }
@@ -113,7 +112,7 @@ class TRLevel(rules : TRLevelRules) extends Controller {
 
     def detectCollisions = collisionWorld.detect
 
-    def destroy(train : TRTrain) {
+    def destroy(train : Train) {
         if(_trains.contains(train)) {
             score.destroyed(train)
             train.isDying = true
@@ -127,7 +126,7 @@ class TRLevel(rules : TRLevelRules) extends Controller {
         }
     }
 
-    def remove(train : TRTrain) {
+    def remove(train : Train) {
         _trains -= train
         collisionWorld.remove(train)
         dynamicWorld.remove(train)
@@ -135,9 +134,9 @@ class TRLevel(rules : TRLevelRules) extends Controller {
         _repairer = _repairer.filter(_ != train)
     }
 
-    def runRepairerFrom(city : TRCity) {
+    def runRepairerFrom(city : City) {
         if(_repairer.isEmpty) {
-            val train = TRTrain(self, TRTrainType.repairer, TRColor.grey, [TRCar(_, TRCarType.engine)], rules.repairerSpeed)
+            val train = Train(self, TrainType.repairer, CityColor.grey, [Car(_, CarType.engine)], rules.repairerSpeed)
             run(train, city)
             _repairer = train
         }

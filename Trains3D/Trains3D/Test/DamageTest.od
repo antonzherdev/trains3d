@@ -3,18 +3,18 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 import com.antonzherdev.test._
 
-class TRDamageTest extends TestCase {
+class DamageTest extends TestCase {
     def testMain {
-        val railroad = TRRailroad(MapSso(vec2i(4, 3)), TRScore(TRLevelFactory.scoreRules))
+        val railroad = Railroad(MapSso(vec2i(4, 3)), Score(LevelFactory.scoreRules))
 
-        railroad.tryAdd(TRRail(vec2i(1, 1), TRRailForm.leftRight))
-        railroad.addDamageAt(TRRailPoint(vec2i(1, 1), TRRailForm.leftRight, 0.2, false))
-        railroad.addDamageAt(TRRailPoint(vec2i(1, 1), TRRailForm.leftRight, 0.6, true))
+        railroad.tryAdd(Rail(vec2i(1, 1), RailForm.leftRight))
+        railroad.addDamageAt(RailPoint(vec2i(1, 1), RailForm.leftRight, 0.2, false))
+        railroad.addDamageAt(RailPoint(vec2i(1, 1), RailForm.leftRight, 0.6, true))
 
         var damagesCount : [float] = []
-        val p0 = TRRailPoint(vec2i(1, 1), TRRailForm.leftRight, 0, false)
+        val p0 = RailPoint(vec2i(1, 1), RailForm.leftRight, 0, false)
         val p1 = railroad.moveWith(obstacleProcessor = o -> {
-            if(o.obstacleType == TRObstacleType.damage) damagesCount += o.point.x
+            if(o.obstacleType == ObstacleType.damage) damagesCount += o.point.x
             true
         }, forLength = 1, p0)
         assertEquals(damagesCount, [0.2, 0.4])
@@ -23,7 +23,7 @@ class TRDamageTest extends TestCase {
 
         damagesCount = []
         val p00 = railroad.moveWith(obstacleProcessor = o -> {
-            if(o.obstacleType == TRObstacleType.damage) damagesCount += o.point.x
+            if(o.obstacleType == ObstacleType.damage) damagesCount += o.point.x
             true
         }, forLength = 1, p1.point.invert)
         assertEquals(damagesCount, [0.6, 0.8])
@@ -32,7 +32,7 @@ class TRDamageTest extends TestCase {
 
         damagesCount = []
         val p01 = railroad.moveWith(obstacleProcessor = o -> {
-            if(o.obstacleType == TRObstacleType.damage) damagesCount += o.point.x
+            if(o.obstacleType == ObstacleType.damage) damagesCount += o.point.x
             false
         }, forLength = 1, p1.point.invert)
         assertEquals(damagesCount, [0.6])

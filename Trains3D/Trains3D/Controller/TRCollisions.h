@@ -13,7 +13,7 @@
 @class EGRigidBody;
 
 @class TRCollisionWorld;
-@class TRCollision;
+@class TRCarsCollision;
 @class TRDynamicWorld;
 
 @interface TRCollisionWorld : NSObject
@@ -27,11 +27,11 @@
 @end
 
 
-@interface TRCollision : NSObject
+@interface TRCarsCollision : NSObject
 @property (nonatomic, readonly) CNPair* cars;
 @property (nonatomic, readonly) TRRailPoint* railPoint;
 
-+ (id)collisionWithCars:(CNPair*)cars railPoint:(TRRailPoint*)railPoint;
++ (id)carsCollisionWithCars:(CNPair*)cars railPoint:(TRRailPoint*)railPoint;
 - (id)initWithCars:(CNPair*)cars railPoint:(TRRailPoint*)railPoint;
 - (ODClassType*)type;
 + (ODType*)type;

@@ -1,0 +1,79 @@
+package com.antonzherdev.trains
+
+import com.antonzherdev.eg._
+import core.math._
+
+enum RailConnector(x : int, y : int, angle : int) {
+    left(-1, 0, 0)
+    bottom(0, -1, 90)
+    top(0, 1, 270)
+    right(1, 0, 180)
+
+    static def connectorFor(x : int, y : int) : RailConnector =
+        if(x == -1 && y == 0) left
+        else if(x == 0 && y == -1) bottom
+        else if(x == 0 && y == 1) top
+        else if(x == 1 && y == 0) right
+        else throw "No rail connector"
+
+    def otherSideConnector =
+        if(self == left) right
+        else if(self == right) left
+        else if(self == top) bottom
+        else top
+
+    def next(tile : vec2i) = vec2i(tile.x + x, tile.y + y)
+}
+
+enum RailForm(start : RailConnector, end : RailConnector, isTurn : bool, length : float, pointFun : float -> vec2) {
+    leftBottom(RailConnector.left, RailConnector.bottom, true, M_PI_4, x -> vec2(-0.5 + 0.5*sin(x*2), -0.5 + 0.5*cos(x*2)))
+    leftRight(RailConnector.left, RailConnector.right, false, 1, x -> vec2(x - 0.5, 0))
+    leftTop(RailConnector.left, RailConnector.top, true, M_PI_4, x -> vec2(-0.5 + 0.5*sin(x*2), 0.5 - 0.5*cos(x*2)))
+    bottomTop(RailConnector.bottom, RailConnector.top, false, 1, x -> vec2(0, x - 0.5))
+    bottomRight(RailConnector.bottom, RailConnector.right, true, M_PI_4, x -> vec2(0.5 - 0.5*cos(x*2), -0.5 + 0.5*sin(x*2)))
+    topRight(RailConnector.top, RailConnector.right, true, M_PI_4, x -> vec2(0.5 - 0.5*cos(x*2), 0.5 - 0.5*sin(x*2)))
+
+    static def formFor(connector1 : RailConnector, connector2 : RailConnector) : RailForm =
+        if(connector1.ordinal > connector2.ordinal) formFor(connector2, connector1)
+        else if(connector1 == RailConnector.left && connector2 == RailConnector.right) leftRight
+        else if(connector1 == RailConnector.left && connector2 == RailConnector.bottom) leftBottom
+        else if(connector1 == RailConnector.left && connector2 == RailConnector.top) leftTop
+        else if(connector1 == RailConnector.bottom && connector2 == RailConnector.top) bottomTop
+        else if(connector1 == RailConnector.bottom && connector2 == RailConnector.right) bottomRight
+        else if(connector1 == RailConnector.top && connector2 == RailConnector.right) topRight
+        else throw "No form for connectors"
+
+}
+
+class RailPoint(tile : vec2i, form : RailForm, x : float, back : bool) {
+    def add(x : float) = RailPoint(tile, form, self.x + x, back)
+
+    def startConnector = if(back) form.end else form.start
+
+    def endConnector = if(back) form.start else form.end
+
+    def isValid = x >= 0 && x <= form.length
+
+    def correct : RailPointCorrection = {
+        val length = self.form.length
+        if(self.x > length) RailPointCorrection(RailPoint(self.tile, self.form, length, self.back), self.x - length)
+        else RailPointCorrection(self, 0)
+    }
+
+    val point : vec2 = calculatePoint
+    private def calculatePoint : vec2 = {
+        val x = if(back) form.length - self.x else self.x
+        val f = form.pointFun
+        val p : vec2 = f(x)
+        vec2(p.x + tile.x, p.y + tile.y)
+    }
+
+    def invert = RailPoint(tile, form, form.length - x, !back)
+    def set(x : float) = RailPoint(tile, form, x, back)
+
+    def nextTile : vec2i = endConnector.next(tile)
+}
+
+class RailPointCorrection(point : RailPoint, error : float) {
+    def addErrorToPoint : RailPoint = if(error == 0) point else point.add(error)
+}

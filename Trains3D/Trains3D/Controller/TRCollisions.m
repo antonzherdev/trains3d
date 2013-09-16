@@ -41,7 +41,7 @@ static ODType* _TRCollisionWorld_type;
 }
 
 - (id<CNSeq>)detect {
-    return [[[[_world detect] chain] map:^TRCollision*(EGCollision* collision) {
+    return [[[[_world detect] chain] map:^TRCarsCollision*(EGCollision* collision) {
         TRCar* car1 = ((TRCar*)(((EGCollisionBody*)(collision.bodies.a)).data));
         TRCar* car2 = ((TRCar*)(((EGCollisionBody*)(collision.bodies.b)).data));
         TRRailPoint* point = ((TRRailPoint*)([[[[[[[[(@[[car1 position].head, [car1 position].tail]) chain] mul:(@[[car2 position].head, [car2 position].tail])] sortBy] ascBy:^id(CNTuple* pair) {
@@ -52,7 +52,7 @@ static ODType* _TRCollisionWorld_type;
         }] endSort] map:^TRRailPoint*(CNTuple* _) {
             return ((TRRailPoint*)(_.a));
         }] head] get]));
-        return [TRCollision collisionWithCars:[CNPair pairWithA:car1 b:car2] railPoint:point];
+        return [TRCarsCollision carsCollisionWithCars:[CNPair pairWithA:car1 b:car2] railPoint:point];
     }] toArray];
 }
 
@@ -87,16 +87,16 @@ static ODType* _TRCollisionWorld_type;
 @end
 
 
-@implementation TRCollision{
+@implementation TRCarsCollision{
     CNPair* _cars;
     TRRailPoint* _railPoint;
 }
-static ODType* _TRCollision_type;
+static ODType* _TRCarsCollision_type;
 @synthesize cars = _cars;
 @synthesize railPoint = _railPoint;
 
-+ (id)collisionWithCars:(CNPair*)cars railPoint:(TRRailPoint*)railPoint {
-    return [[TRCollision alloc] initWithCars:cars railPoint:railPoint];
++ (id)carsCollisionWithCars:(CNPair*)cars railPoint:(TRRailPoint*)railPoint {
+    return [[TRCarsCollision alloc] initWithCars:cars railPoint:railPoint];
 }
 
 - (id)initWithCars:(CNPair*)cars railPoint:(TRRailPoint*)railPoint {
@@ -111,15 +111,15 @@ static ODType* _TRCollision_type;
 
 + (void)initialize {
     [super initialize];
-    _TRCollision_type = [ODClassType classTypeWithCls:[TRCollision class]];
+    _TRCarsCollision_type = [ODClassType classTypeWithCls:[TRCarsCollision class]];
 }
 
 - (ODClassType*)type {
-    return [TRCollision type];
+    return [TRCarsCollision type];
 }
 
 + (ODType*)type {
-    return _TRCollision_type;
+    return _TRCarsCollision_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -129,7 +129,7 @@ static ODType* _TRCollision_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRCollision* o = ((TRCollision*)(other));
+    TRCarsCollision* o = ((TRCarsCollision*)(other));
     return [self.cars isEqual:o.cars] && [self.railPoint isEqual:o.railPoint];
 }
 

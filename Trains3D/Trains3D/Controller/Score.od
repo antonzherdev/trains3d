@@ -2,12 +2,12 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class TRScoreRules(initialScore : int, railCost : int,
-    arrivedPrize : TRTrain -> int, destructionFine : TRTrain -> int,
-    delayPeriod : float, delayFine : (TRTrain, int) -> int,
+class ScoreRules(initialScore : int, railCost : int,
+    arrivedPrize : Train -> int, destructionFine : Train -> int,
+    delayPeriod : float, delayFine : (Train, int) -> int,
     repairCost : int)
 
-class TRScore(rules : TRScoreRules) extends Controller {
+class Score(rules : ScoreRules) extends Controller {
     private var _score : int = rules.initialScore
     def score : int = _score
 
@@ -15,19 +15,19 @@ class TRScore(rules : TRScoreRules) extends Controller {
         _score -= rules.railCost
     }
 
-    private var trains : [TRTrainScore] = []
-    def run(train : TRTrain) {
-        trains += TRTrainScore(train)
+    private var trains : [TrainScore] = []
+    def run(train : Train) {
+        trains += TrainScore(train)
     }
-    def arrived(train : TRTrain) {
+    def arrived(train : Train) {
         _score += rules.arrivedPrize(train)
         remove(train)
     }
-    def destroyed(train : TRTrain) {
+    def destroyed(train : Train) {
         _score -= rules.destructionFine(train)
         remove(train)
     }
-    def remove(train : TRTrain) {
+    def remove(train : Train) {
         trains = trains.chain.filter(_.train != train).toArray
     }
     def updateWith(delta : float) {
@@ -40,7 +40,7 @@ class TRScore(rules : TRScoreRules) extends Controller {
     }
 }
 
-class TRTrainScore(train : TRTrain) extends Controller {
+class TrainScore(train : Train) extends Controller {
     private var delayTime = 0.0
     private var fineCount = 0
 
@@ -50,7 +50,7 @@ class TRTrainScore(train : TRTrain) extends Controller {
 
     def needFineWith(delayPeriod : float) : bool = delayTime >= delayPeriod
 
-    def fineWith(rule : (TRTrain, int) -> int) : int = {
+    def fineWith(rule : (Train, int) -> int) : int = {
         fineCount++
         delayTime = 0
         rule(train, fineCount)

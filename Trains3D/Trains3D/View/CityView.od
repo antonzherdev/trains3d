@@ -3,7 +3,7 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class TRCityView {
+class CityView {
     val expectedTrainModel = Mesh(MeshData.type, [
         0, 0, 0, 1, 0, -0.5, 0.001, -0.5,
         1, 0, 0, 1, 0, 0.5, 0.001, -0.5,
@@ -11,12 +11,12 @@ class TRCityView {
         0, 1, 0, 1, 0, -0.5, 0.001, 0.5
         ], [0, 1, 2,
         2, 3, 0])
-    def draw(city : TRCity) {
+    def draw(city : City) {
         matrix(
             _.modify(w = w -> w.translate(city.tile.x, city.tile.y, 0))
              .modify(m = m -> m.rotate(city.angle.angle, 0, -1, 0))
         ) {
-            StandardMaterial(city.color.color).draw(TR3D.city)
+            StandardMaterial(city.color.color).draw(Models.city)
 
             city.expectedTrainAnimation.for(a -> {
                 val x = -a.time/2

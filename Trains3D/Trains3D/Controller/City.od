@@ -1,0 +1,36 @@
+package com.antonzherdev.trains
+
+import com.antonzherdev.eg._
+
+enum CityColor(color : Color) {
+    orange(Color(1.0, 0.5, 0.0, 1.0))
+    green(Color(0.66, 0.9, 0.44, 1.0))
+    purple(Color(0.9, 0.44, 0.66 , 1.0))
+
+    grey(Color(0.5, 0.5, 0.5 , 1.0))
+
+    def set {
+        egColor(color)
+    }
+}
+
+
+enum CityAngle(angle : int, form : RailForm, back : bool) {
+    angle0(0, RailForm.leftRight, false)
+    angle90(90, RailForm.bottomTop, true)
+    angle180(180, RailForm.leftRight, true)
+    angle270(270, RailForm.bottomTop, false)
+}
+
+/*
+ * angle - поворот по часовой стрелке. При 0 город направлен по оси x в положительном направлении
+ */
+class City(color : CityColor, tile : vec2i, angle : CityAngle) extends Controller {
+    def startPoint = RailPoint(tile, angle.form, 0, angle.back)
+
+    var expectedTrainAnimation : Animation?
+
+    def updateWith(delta : float) {
+        expectedTrainAnimation.for(_.updateWith(delta))
+    }
+}

@@ -3,12 +3,12 @@
 #import "TRSmoke.h"
 #import "EGMaterial.h"
 #import "TRTrain.h"
-#import "TRTypes.h"
+#import "TRCity.h"
 #import "EGContext.h"
 #import "TRCar.h"
 #import "GEFigure.h"
 #import "GEMat4.h"
-#import "TR3D.h"
+#import "TRModels.h"
 #import "EGDynamicWorld.h"
 @implementation TRTrainView{
     TRSmokeView* _smokeView;
@@ -68,12 +68,12 @@ static ODType* _TRTrainView_type;
 
 - (void)doDrawCar:(TRCar*)car material:(EGMaterial*)material {
     if(car.carType == TRCarType.car) {
-        [material drawMesh:TR3D.car];
-        [_blackMaterial drawMesh:TR3D.carBlack];
+        [material drawMesh:TRModels.car];
+        [_blackMaterial drawMesh:TRModels.carBlack];
     } else {
-        [material drawMesh:TR3D.engine];
-        [material drawMesh:TR3D.engineFloor];
-        [_blackMaterial drawMesh:TR3D.engineBlack];
+        [material drawMesh:TRModels.engine];
+        [material drawMesh:TRModels.engineFloor];
+        [_blackMaterial drawMesh:TRModels.engineBlack];
     }
 }
 

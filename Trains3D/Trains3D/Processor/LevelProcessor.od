@@ -1,0 +1,13 @@
+package com.antonzherdev.trains
+
+import com.antonzherdev.eg._
+
+class LevelProcessor(level : Level) extends Processor {
+    private val railroadBuilderProcessor = RailroadBuilderProcessor(level.railroad.builder)
+    private val switchProcessor = SwitchProcessor(level)
+
+    def process(event : Event) : bool =
+        switchProcessor.process(event)
+        || railroadBuilderProcessor.process(event)
+
+}

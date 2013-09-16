@@ -4,7 +4,7 @@ import com.antonzherdev.eg.Text._
 
 import com.antonzherdev.eg._
 
-class TRLevelMenuView(level : TRLevel) extends LayerView {
+class LevelMenuView(level : Level) extends LayerView {
     val camera : Camera = Camera2D(vec2(2, 1))
 
     def drawView {

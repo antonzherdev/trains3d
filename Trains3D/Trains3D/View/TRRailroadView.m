@@ -2,7 +2,7 @@
 
 #import "TRRailroad.h"
 #import "EGMaterial.h"
-#import "TR3D.h"
+#import "TRModels.h"
 #import "EGContext.h"
 #import "GEMat4.h"
 #import "TRRailPoint.h"
@@ -99,8 +99,8 @@ static ODType* _TRRailView_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _railModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.railGravel, ((EGMaterial*)([EGMaterial applyTexture:[EGGlobal textureForFile:@"Gravel.png"]]))), tuple(TR3D.railTies, ((EGMaterial*)([EGMaterial applyColor:EGColorMake(0.55, 0.45, 0.25, 1.0)]))), tuple(TR3D.rails, [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.45, 0.47, 0.55, 1.0)] specularColor:EGColorMake(0.5, 0.5, 0.5, 1.0) specularSize:1.0])])];
-        _railTurnModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.railTurnGravel, ((EGMaterial*)([EGMaterial applyTexture:[EGGlobal textureForFile:@"Gravel.png"]]))), tuple(TR3D.railTurnTies, ((EGMaterial*)([EGMaterial applyColor:EGColorMake(0.55, 0.45, 0.25, 1.0)]))), tuple(TR3D.railsTurn, [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.45, 0.47, 0.55, 1.0)] specularColor:EGColorMake(0.5, 0.5, 0.5, 1.0) specularSize:1.0])])];
+        _railModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.railGravel, ((EGMaterial*)([EGMaterial applyTexture:[EGGlobal textureForFile:@"Gravel.png"]]))), tuple(TRModels.railTies, ((EGMaterial*)([EGMaterial applyColor:EGColorMake(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.rails, [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.45, 0.47, 0.55, 1.0)] specularColor:EGColorMake(0.5, 0.5, 0.5, 1.0) specularSize:1.0])])];
+        _railTurnModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.railTurnGravel, ((EGMaterial*)([EGMaterial applyTexture:[EGGlobal textureForFile:@"Gravel.png"]]))), tuple(TRModels.railTurnTies, ((EGMaterial*)([EGMaterial applyColor:EGColorMake(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.railsTurn, [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.45, 0.47, 0.55, 1.0)] specularColor:EGColorMake(0.5, 0.5, 0.5, 1.0) specularSize:1.0])])];
     }
     
     return self;
@@ -187,8 +187,8 @@ static ODType* _TRSwitchView_type;
     self = [super init];
     if(self) {
         _material = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.07568, 0.61424, 0.07568, 1.0)] specularColor:EGColorMake(0.633, 0.727811, 0.633, 1.0) specularSize:1.0];
-        _switchStraightModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.switchStraight, _material)])];
-        _switchTurnModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.switchTurn, _material)])];
+        _switchStraightModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.switchStraight, _material)])];
+        _switchTurnModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.switchTurn, _material)])];
     }
     
     return self;
@@ -292,7 +292,7 @@ static ODType* _TRLightView_type;
             return [[m rotateAngle:((float)(light.connector.angle)) x:0.0 y:1.0 z:0.0] translateX:-0.45 y:0.0 z:-0.2];
         }];
     } f:^void() {
-        [((light.isGreen) ? _greenMaterial : _redMaterial) drawMesh:TR3D.light];
+        [((light.isGreen) ? _greenMaterial : _redMaterial) drawMesh:TRModels.light];
     }];
 }
 
@@ -339,7 +339,7 @@ static ODType* _TRDamageView_type;
 
 - (id)init {
     self = [super init];
-    if(self) _model = [EGMeshModel meshModelWithMeshes:(@[tuple(TR3D.damage, ((EGMaterial*)([EGMaterial applyColor:EGColorMake(1.0, 0.0, 0.0, 1.0)])))])];
+    if(self) _model = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.damage, ((EGMaterial*)([EGMaterial applyColor:EGColorMake(1.0, 0.0, 0.0, 1.0)])))])];
     
     return self;
 }

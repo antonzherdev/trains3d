@@ -5,8 +5,8 @@ import core.math._
 import com.antonzherdev.eg.Progress._
 
 
-class TRExplosion(position : vec3, size : float4) extends Controller {
-    val flame = TRExplosionFlame(position, size).init
+class Explosion(position : vec3, size : float4) extends Controller {
+    val flame = ExplosionFlame(position, size).init
     def updateWith(delta : float) {
         flame.updateWith(delta)
     }
@@ -17,21 +17,21 @@ class TRExplosion(position : vec3, size : float4) extends Controller {
     }
 }
 
-class TRExplosionFlame(position : vec3, size : float4) extends BillboardParticleSystem {
-    def generateParticle : BillboardParticle = TRExplosionFlameParticle(position, size)
+class ExplosionFlame(position : vec3, size : float4) extends BillboardParticleSystem {
+    def generateParticle : BillboardParticle = ExplosionFlameParticle(position, size)
 
-    def init : TRExplosionFlame = {
+    def init : ExplosionFlame = {
         4.range.for(emitParticle)
         self
     }
 }
 
-class TRExplosionFlameParticle(size : float4, startShift : vec2, shift : vec2) extends BillboardParticle(2) {
+class ExplosionFlameParticle(size : float4, startShift : vec2, shift : vec2) extends BillboardParticle(2) {
     static val startColor = vec4(1, 0.4, 0, 0.3)
     static val textureQuadrant : Quadrant = Quad.identity.mul(0.5).quadrant
-    static def apply(position : vec3, size : float4) : TRExplosionFlameParticle = {
+    static def apply(position : vec3, size : float4) : ExplosionFlameParticle = {
         val startShift = randomVec2.mul(size*0.2)
-        val ret = TRExplosionFlameParticle(size, startShift, shift = startShift.add(randomVec2.mul(size*0.2)))
+        val ret = ExplosionFlameParticle(size, startShift, shift = startShift.add(randomVec2.mul(size*0.2)))
         ret.position = position
         ret.color = startColor
         ret.uv = textureQuadrant.randomQuad
@@ -60,11 +60,11 @@ class TRExplosionFlameParticle(size : float4, startShift : vec2, shift : vec2) e
     }
 }
 
-class TRExplosionView {
+class ExplosionView {
     val material = SimpleMaterial(textureFor("Explosion.png"))
     val view = BillboardParticleSystemView(4, material, BlendFunction.premultiplied)
 
-    def draw(explosion : TRExplosion) {
+    def draw(explosion : Explosion) {
         view.draw(explosion.flame)
     }
 }

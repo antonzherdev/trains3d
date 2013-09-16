@@ -2,30 +2,30 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-enum TRTrainType(obstacleProcessor : (TRLevel, TRTrain, TRObstacle) -> bool) {
-    simple((level : TRLevel, train : TRTrain, o : TRObstacle) -> {
-        if(o.obstacleType ==  TRObstacleType.damage) level.destroy(train)
+enum TrainType(obstacleProcessor : (Level, Train, Obstacle) -> bool) {
+    simple((level : Level, train : Train, o : Obstacle) -> {
+        if(o.obstacleType ==  ObstacleType.damage) level.destroy(train)
         false
     })
-    crazy((level : TRLevel, train : TRTrain, o : TRObstacle) -> {
-        if(o.obstacleType ==  TRObstacleType.damage) level.destroy(train)
-        o.obstacleType ==  TRObstacleType.light
+    crazy((level : Level, train : Train, o : Obstacle) -> {
+        if(o.obstacleType ==  ObstacleType.damage) level.destroy(train)
+        o.obstacleType ==  ObstacleType.light
     })
-    fast((level : TRLevel, train : TRTrain, o : TRObstacle) -> {
-        if(o.obstacleType ==  TRObstacleType.damage || o.obstacleType == TRObstacleType.switch) level.destroy(train)
+    fast((level : Level, train : Train, o : Obstacle) -> {
+        if(o.obstacleType ==  ObstacleType.damage || o.obstacleType == ObstacleType.switch) level.destroy(train)
         false
     })
-    repairer((level : TRLevel, train : TRTrain, o : TRObstacle) -> {
-        if(o.obstacleType ==  TRObstacleType.damage) {
+    repairer((level : Level, train : Train, o : Obstacle) -> {
+        if(o.obstacleType ==  ObstacleType.damage) {
             level.railroad.fixDamageAt(o.point)
             true
         } else false
     })
 }
 
-class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, _cars : (TRTrain) ->[TRCar], speed : uint) extends Controller {
+class Train(weak level : Level, trainType : TrainType, color : CityColor, _cars : (Train) ->[Car], speed : uint) extends Controller {
     var viewData : any = nil
-    private var head : TRRailPoint
+    private var head : RailPoint
     private var back = false
     def isBack = back
     lazy val cars = _cars(self)
@@ -33,29 +33,29 @@ class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, _c
     val speedFloat : float = 0.01 * speed
     var isDying = false
 
-    def startFrom(city : TRCity) {
+    def startFrom(city : City) {
         head = city.startPoint
         calculateCarPositions
     }
 
-    def set(head : TRRailPoint) {
+    def set(head : RailPoint) {
         self.head = head
         calculateCarPositions
     }
-    private val carsObstacleProcessor : TRObstacle -> bool = (o : TRObstacle) ->
-        o.obstacleType ==  TRObstacleType.light
+    private val carsObstacleProcessor : Obstacle -> bool = (o : Obstacle) ->
+        o.obstacleType ==  ObstacleType.light
 
     private def calculateCarPositions {
         directedCars.chain.fold((frontConnector, car) -> {
-            val tp : TRCarType = car.carType
+            val tp : CarType = car.carType
             val fl = tp.startToWheel
             val bl = tp.wheelToEnd
             val head = level.railroad.moveWith(carsObstacleProcessor, if(back) bl else fl, frontConnector).addErrorToPoint
             val tail = level.railroad.moveWith(carsObstacleProcessor, tp.betweenWheels, head).addErrorToPoint
             val backConnector = level.railroad.moveWith(carsObstacleProcessor, if(back) fl else bl, tail).addErrorToPoint
             car.set(position =
-                if(back) TRCarPosition(backConnector, tail, head, frontConnector)
-                else TRCarPosition(frontConnector, head, tail, backConnector))
+                if(back) CarPosition(backConnector, tail, head, frontConnector)
+                else CarPosition(frontConnector, head, tail, backConnector))
             backConnector
         }, head.invert)
     }
@@ -67,13 +67,13 @@ class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, _c
             forLength = delta*speedFloat, point = head))
     }
 
-    private def directedCars : [TRCar] = if(back) cars.chain.reverse.toArray else cars
+    private def directedCars : [Car] = if(back) cars.chain.reverse.toArray else cars
 
-    private def correct(correction : TRRailPointCorrection) {
+    private def correct(correction : RailPointCorrection) {
         if(correction.error != 0.0) {
             val isMoveToCity = isMoveToCityFor(correction.point)
             if(!isMoveToCity || correction.error >= length) {
-                if(isMoveToCity && (color == TRColor.grey || level.cityFor(correction.point.tile).get.color == color)) {
+                if(isMoveToCity && (color == CityColor.grey || level.cityFor(correction.point.tile).get.color == color)) {
                     level.arrived(self)
                 } else {
                     back = !back
@@ -89,10 +89,10 @@ class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, _c
         calculateCarPositions
     }
 
-    private def isMoveToCityFor(point : TRRailPoint) : bool =
+    private def isMoveToCityFor(point : RailPoint) : bool =
         !(level.map.isFull(point.tile)) && !(level.map.isFull(point.nextTile))
 
-    def isLocked(theSwitch : TRSwitch) : bool = {
+    def isLocked(theSwitch : Switch) : bool = {
         val tile = theSwitch.tile
         val nextTile = theSwitch.connector.next(tile)
         cars.find{car ->
@@ -103,12 +103,12 @@ class TRTrain(weak level : TRLevel, trainType : TRTrainType, color : TRColor, _c
     }
 }
 
-class TRTrainGenerator(trainType : TRTrainType, carsCount : [int], speed : [int], carTypes : [TRCarType]) {
-    def generateCarsFor(train : TRTrain) : [TRCar] = {
+class TrainGenerator(trainType : TrainType, carsCount : [int], speed : [int], carTypes : [CarType]) {
+    def generateCarsFor(train : Train) : [Car] = {
         val count = carsCount.randomItem.get
-        val engine = TRCar(train, carTypes.chain.filter(_.isEngine).randomItem.get)
+        val engine = Car(train, carTypes.chain.filter(_.isEngine).randomItem.get)
         if(count <= 1) [engine]
-        else count.range.chain.map(i -> TRCar(train, carTypes.chain.filter(!_.isEngine).randomItem.get)).prepend([engine]).toArray
+        else count.range.chain.map(i -> Car(train, carTypes.chain.filter(!_.isEngine).randomItem.get)).prepend([engine]).toArray
     }
     def generateSpeed : uint = speed.randomItem.get
 }

@@ -17,10 +17,10 @@
 @class TRTrainGenerator;
 @class TRRailPoint;
 @class TRSwitch;
-@class TRCollision;
+@class TRCarsCollision;
 @class TRCar;
 @class TRTrainType;
-@class TRColor;
+@class TRCityColor;
 @class TRCarType;
 
 @class TRLevelRules;

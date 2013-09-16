@@ -9,7 +9,6 @@
 #import "TRTrain.h"
 #import "TRRailPoint.h"
 #import "TRCar.h"
-#import "TRTypes.h"
 @implementation TRLevelRules{
     GEVec2i _mapSize;
     TRScoreRules* _scoreRules;
@@ -167,7 +166,7 @@ static ODType* _TRLevel_type;
     GEVec2i tile = uwrap(GEVec2i, [[[[_map.partialTiles chain] exclude:[[[self cities] chain] map:^id(TRCity* _) {
         return wrap(GEVec2i, _.tile);
     }]] randomItem] get]);
-    TRCity* city = [TRCity cityWithColor:[TRColor values][[[self cities] count]] tile:tile angle:[self randomCityDirectionForTile:tile]];
+    TRCity* city = [TRCity cityWithColor:[TRCityColor values][[[self cities] count]] tile:tile angle:[self randomCityDirectionForTile:tile]];
     [_railroad tryAddRail:[TRRail railWithTile:tile form:city.angle.form]];
     [__cities addItem:city];
 }
@@ -245,7 +244,7 @@ static ODType* _TRLevel_type;
 }
 
 - (void)processCollisions {
-    [[self detectCollisions] forEach:^void(TRCollision* collision) {
+    [[self detectCollisions] forEach:^void(TRCarsCollision* collision) {
         [collision.cars forEach:^void(TRCar* _) {
             [self destroyTrain:_.train];
         }];
@@ -283,7 +282,7 @@ static ODType* _TRLevel_type;
 
 - (void)runRepairerFromCity:(TRCity*)city {
     if([__repairer isEmpty]) {
-        TRTrain* train = [TRTrain trainWithLevel:self trainType:TRTrainType.repairer color:TRColor.grey _cars:^id<CNSeq>(TRTrain* _) {
+        TRTrain* train = [TRTrain trainWithLevel:self trainType:TRTrainType.repairer color:TRCityColor.grey _cars:^id<CNSeq>(TRTrain* _) {
             return (@[[TRCar carWithTrain:_ carType:TRCarType.engine]]);
         } speed:_rules.repairerSpeed];
         [self runTrain:train fromCity:city];

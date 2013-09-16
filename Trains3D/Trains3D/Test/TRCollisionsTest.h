@@ -5,13 +5,13 @@
 @class TRLevel;
 @class TRLevelFactory;
 @class TRLevelRules;
-@class TRCollision;
+@class TRCarsCollision;
 @class TRCar;
 @class TRRailForm;
 @class TRRail;
 @class TRRailroad;
 @class TRTrainType;
-@class TRColor;
+@class TRCityColor;
 @class TRTrain;
 @class TRRailPoint;
 @class TRRailPointCorrection;

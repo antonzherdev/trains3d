@@ -2,7 +2,7 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class TRLevelMenuProcessor(level : TRLevel) extends Processor with MouseProcessor {
+class LevelMenuProcessor(level : Level) extends Processor with MouseProcessor {
     def process(event : Event) : bool = {
         event.leftMouse(self)
     }

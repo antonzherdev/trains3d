@@ -7,10 +7,10 @@
 @class GEMat4;
 @class EGMatrixModel;
 @class TRCityAngle;
-@class TRColor;
+@class TRCityColor;
 @class EGColorSource;
 @class EGStandardMaterial;
-@class TR3D;
+@class TRModels;
 @class EGAnimation;
 @class EGMatrixStack;
 
