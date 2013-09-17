@@ -121,6 +121,7 @@ stub object gl {
     val GL_READ_FRAMEBUFFER : GLenum
     val GL_READ_FRAMEBUFFER_EXT : GLenum
     val GL_COLOR_BUFFER_BIT : GLenum
+    val GL_DEPTH_BUFFER_BIT : GLenum
     def glBindTexture( : GLenum,handle : GLuint)
     val GL_TEXTURE_2D : GLenum
     val GL_TEXTURE_2D_MULTISAMPLE : GLenum

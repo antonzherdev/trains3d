@@ -106,7 +106,7 @@ class MultisamplingSurface(depth : bool, size : vec2i) extends Surface(depth, si
 
 class PairSurface(depth : bool, size : vec2i) extends  Surface(depth, size) {
     val multisampling = MultisamplingSurface(depth, size)
-    val simple = SimpleSurface(depth, size)
+    val simple = SimpleSurface(false, size)
 
     def bind {
         multisampling.bind
@@ -184,11 +184,17 @@ class FullScreenSurface(depth : bool, multisampling : bool) {
     }
 
     def maybe(draw : () -> void) {
-        if(needRedraw) apply(draw)
+        maybe(force = false, draw)
     }
 
+    private var redrawCounter = 0 // To prevent slow resizing
     def maybe(force : bool, draw : () -> void) {
-        if(force || needRedraw) apply(draw)
+        val nr = needRedraw
+        if(nr) redrawCounter++
+        if(force || (nr && redrawCounter > 10)) {
+            apply(draw)
+            redrawCounter = 0
+        }
     }
 
     def unbind {
@@ -212,16 +218,20 @@ class FullScreenSurface(depth : bool, multisampling : bool) {
     }
 
     def draw {
-//        glDisable(GL_DEPTH_TEST)
-//        glDisable(GL_CULL_FACE)
-//        shader.draw(FullScreenSurfaceShaderParam(texture, 0), fullScreenMesh)
-//        glEnable(GL_CULL_FACE)
-//        glEnable(GL_DEPTH_TEST)
-        glBindFramebufferEXT(GL_READ_FRAMEBUFFER_EXT, surface.get.frameBuffer)
-        val s = surface.get.size
-        val v = context.viewport
-        glBlitFramebufferEXT(0, 0, s.x, s.y, v.x, v.y, v.x2, v.y2, GL_COLOR_BUFFER_BIT, GL_NEAREST)
-        glBindFramebufferEXT(GL_READ_FRAMEBUFFER_EXT, 0)
+        if(surface.isEmpty) return nil
+        if(redrawCounter > 0) {
+            glDisable(GL_DEPTH_TEST)
+            glDisable(GL_CULL_FACE)
+            shader.draw(FullScreenSurfaceShaderParam(texture, 0), fullScreenMesh)
+            glEnable(GL_CULL_FACE)
+            glEnable(GL_DEPTH_TEST)
+        } else {
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, surface.get.frameBuffer)
+            val s = surface.get.size
+            val v = context.viewport
+            glBlitFramebuffer(0, 0, s.x, s.y, v.x, v.y, v.x2, v.y2, GL_COLOR_BUFFER_BIT, GL_NEAREST)
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, 0)
+        }
     }
 
 }

@@ -301,7 +301,7 @@ static ODClassType* _EGPairSurface_type;
     self = [super initWithDepth:depth size:size];
     if(self) {
         _multisampling = [EGMultisamplingSurface multisamplingSurfaceWithDepth:self.depth size:self.size];
-        _simple = [EGSimpleSurface simpleSurfaceWithDepth:self.depth size:self.size];
+        _simple = [EGSimpleSurface simpleSurfaceWithDepth:NO size:self.size];
     }
     
     return self;
@@ -530,6 +530,7 @@ static ODClassType* _EGFullScreenSurfaceShader_type;
     BOOL _depth;
     BOOL _multisampling;
     id _surface;
+    NSInteger _redrawCounter;
     CNLazy* __lazy_fullScreenMesh;
     CNLazy* __lazy_shader;
 }
@@ -547,6 +548,7 @@ static ODClassType* _EGFullScreenSurface_type;
         _depth = depth;
         _multisampling = multisampling;
         _surface = [CNOption none];
+        _redrawCounter = 0;
         __lazy_fullScreenMesh = [CNLazy lazyWithF:^EGMesh*() {
             return [EGMesh applyDataType:geVec2Type() vertexData:[ arrs(GEVec2, 4) {GEVec2Make(0.0, 0.0), GEVec2Make(1.0, 0.0), GEVec2Make(1.0, 1.0), GEVec2Make(0.0, 1.0)}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
         }];
@@ -591,11 +593,16 @@ static ODClassType* _EGFullScreenSurface_type;
 }
 
 - (void)maybeDraw:(void(^)())draw {
-    if([self needRedraw]) [self applyDraw:draw];
+    [self maybeForce:NO draw:draw];
 }
 
 - (void)maybeForce:(BOOL)force draw:(void(^)())draw {
-    if(force || [self needRedraw]) [self applyDraw:draw];
+    BOOL nr = [self needRedraw];
+    if(nr) _redrawCounter++;
+    if(force || (nr && _redrawCounter > 10)) {
+        [self applyDraw:draw];
+        _redrawCounter = 0;
+    }
 }
 
 - (void)unbind {
@@ -637,11 +644,20 @@ static ODClassType* _EGFullScreenSurface_type;
 }
 
 - (void)draw {
-    glBindFramebufferEXT(GL_READ_FRAMEBUFFER_EXT, [((EGSurface*)([_surface get])) frameBuffer]);
-    GEVec2i s = ((EGSurface*)([_surface get])).size;
-    GERecti v = [EGGlobal.context viewport];
-    glBlitFramebufferEXT(0, 0, s.x, s.y, geRectiX(v), geRectiY(v), geRectiX2(v), geRectiY2(v), GL_COLOR_BUFFER_BIT, GL_NEAREST);
-    glBindFramebufferEXT(GL_READ_FRAMEBUFFER_EXT, 0);
+    if([_surface isEmpty]) return ;
+    if(_redrawCounter > 0) {
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_CULL_FACE);
+        [[self shader] drawParam:[EGFullScreenSurfaceShaderParam fullScreenSurfaceShaderParamWithTexture:[self texture] z:0.0] mesh:[self fullScreenMesh]];
+        glEnable(GL_CULL_FACE);
+        glEnable(GL_DEPTH_TEST);
+    } else {
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, [((EGSurface*)([_surface get])) frameBuffer]);
+        GEVec2i s = ((EGSurface*)([_surface get])).size;
+        GERecti v = [EGGlobal.context viewport];
+        glBlitFramebuffer(0, 0, s.x, s.y, geRectiX(v), geRectiY(v), geRectiX2(v), geRectiY2(v), GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+    }
 }
 
 - (ODClassType*)type {
