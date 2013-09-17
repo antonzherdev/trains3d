@@ -238,7 +238,7 @@ static ODClassType* _EGParticleSystemView_type;
         CGFloat n = min(((CGFloat)([particles count])), ((CGFloat)(_maxCount)));
         NSUInteger vc = [self vertexCount];
         [_vertexBuffer setArray:_vertexArr usage:GL_DYNAMIC_DRAW];
-        [[self shader] drawMaterial:[self material] mesh:_mesh start:0 count:((NSUInteger)(n * 3 * (vc - 2)))];
+        [[self shader] drawParam:[self material] mesh:_mesh start:0 count:((NSUInteger)(n * 3 * (vc - 2)))];
     });
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);

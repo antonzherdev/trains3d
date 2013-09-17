@@ -51,13 +51,16 @@ class Surface(depth : bool, size : vec2i) {
 
 }
 
-class FullScreenSurfaceShader extends Shader<SimpleMaterial>(ShaderProgram(vertex, fragment)) {
+class FullScreenSurfaceShaderParam(texture : Texture, z : float4)
+
+class FullScreenSurfaceShader extends Shader<FullScreenSurfaceShaderParam>(ShaderProgram(vertex, fragment)) {
     static val vertex =
         "attribute vec2 position;
+         uniform float z;
          varying vec2 UV;
 
          void main(void) {
-            gl_Position = vec4(2.0*position.x - 1.0, 2.0*position.y - 1.0, 0, 1);
+            gl_Position = vec4(2.0*position.x - 1.0, 2.0*position.y - 1.0, z, 1);
             UV = position;
         }"
     static val fragment =
@@ -69,9 +72,11 @@ class FullScreenSurfaceShader extends Shader<SimpleMaterial>(ShaderProgram(verte
             gl_FragColor = texture2D(texture, UV);
          }"
     val positionSlot = program.attributeFor("position")
-    def load(vertexBuffer : VertexBuffer<vec2>, material : SimpleMaterial) {
-        material.color.cast<ColorSourceTexture>.texture.bind
+    val zUniform = program.uniformFor("z")
+    def load(vertexBuffer : VertexBuffer<vec2>, param : FullScreenSurfaceShaderParam) {
+        param.texture.bind
         positionSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 2, GL_FLOAT, shift = 0)
+        zUniform.set(f4 = param.z)
     }
 
     def unload(material : SimpleMaterial) {
@@ -118,10 +123,18 @@ class FullScreenSurface(depth : bool) {
         [0, 1, 2, 2, 3, 0])
     private lazy val shader = FullScreenSurfaceShader()
 
-    def draw {
+    def drawWith(z : float4) {
         glDisable(GL_CULL_FACE)
-        shader.draw(surface.get.material, fullScreenMesh)
+        shader.draw(FullScreenSurfaceShaderParam(texture, z), fullScreenMesh)
         glEnable(GL_CULL_FACE)
+    }
+
+    def draw {
+        glDisable(GL_DEPTH_TEST)
+        glDisable(GL_CULL_FACE)
+        shader.draw(FullScreenSurfaceShaderParam(texture, 0), fullScreenMesh)
+        glEnable(GL_CULL_FACE)
+        glEnable(GL_DEPTH_TEST)
     }
 
     def texture  = surface.get.texture

@@ -43,7 +43,7 @@ typedef struct EGBillboardBufferData EGBillboardBufferData;
 + (EGBillboardShader*)instanceForTexture;
 + (NSString*)vertexTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code;
 + (NSString*)fragmentTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code;
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material;
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGSimpleMaterial*)param;
 - (void)unloadMaterial:(EGSimpleMaterial*)material;
 + (ODClassType*)type;
 @end

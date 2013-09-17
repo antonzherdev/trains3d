@@ -118,14 +118,80 @@ static ODClassType* _EGSurface_type;
 @end
 
 
+@implementation EGFullScreenSurfaceShaderParam{
+    EGTexture* _texture;
+    float _z;
+}
+static ODClassType* _EGFullScreenSurfaceShaderParam_type;
+@synthesize texture = _texture;
+@synthesize z = _z;
+
++ (id)fullScreenSurfaceShaderParamWithTexture:(EGTexture*)texture z:(float)z {
+    return [[EGFullScreenSurfaceShaderParam alloc] initWithTexture:texture z:z];
+}
+
+- (id)initWithTexture:(EGTexture*)texture z:(float)z {
+    self = [super init];
+    if(self) {
+        _texture = texture;
+        _z = z;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGFullScreenSurfaceShaderParam_type = [ODClassType classTypeWithCls:[EGFullScreenSurfaceShaderParam class]];
+}
+
+- (ODClassType*)type {
+    return [EGFullScreenSurfaceShaderParam type];
+}
+
++ (ODClassType*)type {
+    return _EGFullScreenSurfaceShaderParam_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGFullScreenSurfaceShaderParam* o = ((EGFullScreenSurfaceShaderParam*)(other));
+    return [self.texture isEqual:o.texture] && eqf4(self.z, o.z);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.texture hash];
+    hash = hash * 31 + float4Hash(self.z);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"texture=%@", self.texture];
+    [description appendFormat:@", z=%f", self.z];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation EGFullScreenSurfaceShader{
     EGShaderAttribute* _positionSlot;
+    EGShaderUniform* _zUniform;
 }
 static NSString* _EGFullScreenSurfaceShader_vertex = @"attribute vec2 position;\n"
+    "uniform float z;\n"
     "varying vec2 UV;\n"
     "\n"
     "void main(void) {\n"
-    "   gl_Position = vec4(2.0*position.x - 1.0, 2.0*position.y - 1.0, 0, 1);\n"
+    "   gl_Position = vec4(2.0*position.x - 1.0, 2.0*position.y - 1.0, z, 1);\n"
     "   UV = position;\n"
     "}";
 static NSString* _EGFullScreenSurfaceShader_fragment = @"varying vec2 UV;\n"
@@ -137,6 +203,7 @@ static NSString* _EGFullScreenSurfaceShader_fragment = @"varying vec2 UV;\n"
     "}";
 static ODClassType* _EGFullScreenSurfaceShader_type;
 @synthesize positionSlot = _positionSlot;
+@synthesize zUniform = _zUniform;
 
 + (id)fullScreenSurfaceShader {
     return [[EGFullScreenSurfaceShader alloc] init];
@@ -144,7 +211,10 @@ static ODClassType* _EGFullScreenSurfaceShader_type;
 
 - (id)init {
     self = [super initWithProgram:[EGShaderProgram applyVertex:_EGFullScreenSurfaceShader_vertex fragment:_EGFullScreenSurfaceShader_fragment]];
-    if(self) _positionSlot = [self.program attributeForName:@"position"];
+    if(self) {
+        _positionSlot = [self.program attributeForName:@"position"];
+        _zUniform = [self.program uniformForName:@"z"];
+    }
     
     return self;
 }
@@ -154,9 +224,10 @@ static ODClassType* _EGFullScreenSurfaceShader_type;
     _EGFullScreenSurfaceShader_type = [ODClassType classTypeWithCls:[EGFullScreenSurfaceShader class]];
 }
 
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material {
-    [((EGColorSourceTexture*)(material.color)).texture bind];
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGFullScreenSurfaceShaderParam*)param {
+    [param.texture bind];
     [_positionSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:2 valuesType:GL_FLOAT shift:0];
+    [_zUniform setF4:param.z];
 }
 
 - (void)unloadMaterial:(EGSimpleMaterial*)material {
@@ -275,10 +346,18 @@ static ODClassType* _EGFullScreenSurface_type;
     [((EGSurface*)([_surface get])) unbind];
 }
 
-- (void)draw {
+- (void)drawWithZ:(float)z {
     glDisable(GL_CULL_FACE);
-    [[self shader] drawMaterial:((EGSurface*)([_surface get])).material mesh:[self fullScreenMesh]];
+    [[self shader] drawParam:[EGFullScreenSurfaceShaderParam fullScreenSurfaceShaderParamWithTexture:[self texture] z:z] mesh:[self fullScreenMesh]];
     glEnable(GL_CULL_FACE);
+}
+
+- (void)draw {
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
+    [[self shader] drawParam:[EGFullScreenSurfaceShaderParam fullScreenSurfaceShaderParamWithTexture:[self texture] z:0.0] mesh:[self fullScreenMesh]];
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
 }
 
 - (EGTexture*)texture {

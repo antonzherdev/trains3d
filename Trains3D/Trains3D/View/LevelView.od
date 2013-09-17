@@ -10,8 +10,8 @@ class LevelView(level : Level) extends LayerView {
     val environment = Environment(ambientColor = Color(0.4, 0.4, 0.4, 1), lights = [DirectLight(Color(1, 1, 1, 1), vec3(-0.2, 0.2, -0.5))])
 
     def drawView {
-        level.cities.for(city -> cityView.draw(city))
         railroadView.draw
+        level.cities.for(city -> cityView.draw(city))
 
         trainView.draw(trains = level.trains)
         trainView.draw(dyingTrains = level.dyingTrains)

@@ -98,17 +98,17 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
     val directLightDirections : [ShaderUniform] = key.directLightCount.range.chain.map{i -> uniformFor("dirLightDirection$i")}.toArray
     val directLightColors : [ShaderUniform] = key.directLightCount.range.chain.map{i -> uniformFor("dirLightColor$i")}.toArray
 
-    def load(vertexBuffer :VertexBuffer<_>, material : StandardMaterial) {
+    def load(vertexBuffer :VertexBuffer<_>, param : StandardMaterial) {
         positionSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 3, GL_FLOAT, POSITION_SHIFT)
         mwcpUniform.set(matrix = matrix.value.mwcp)
         if(key.texture) {
             uvSlot.get.setFromBufferWith(vertexBuffer.stride, valuesCount = 2, GL_FLOAT, UV_SHIFT)
-            material.diffuse.cast<ColorSourceTexture>.texture.bind
+            param.diffuse.cast<ColorSourceTexture>.texture.bind
         } else {
-            diffuseUniform.set(color = material.diffuse.cast<ColorSourceColor>.color)
+            diffuseUniform.set(color = param.diffuse.cast<ColorSourceColor>.color)
         }
-        specularColor.set(color = material.specularColor)
-        specularSize.set(number = material.specularSize)
+        specularColor.set(color = param.specularColor)
+        specularSize.set(f4 = param.specularSize)
         val env = context.environment
         ambientColor.set(color = env.ambientColor)
         if(key.directLightCount > 0) {

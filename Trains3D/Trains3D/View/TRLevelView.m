@@ -43,10 +43,10 @@ static ODClassType* _TRLevelView_type;
 }
 
 - (void)drawView {
+    [_railroadView draw];
     [[_level cities] forEach:^void(TRCity* city) {
         [_cityView drawCity:city];
     }];
-    [_railroadView draw];
     [_trainView drawTrains:[_level trains]];
     [_trainView drawDyingTrains:[_level dyingTrains]];
 }

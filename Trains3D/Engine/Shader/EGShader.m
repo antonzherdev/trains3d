@@ -146,25 +146,25 @@ static ODClassType* _EGShader_type;
     _EGShader_type = [ODClassType classTypeWithCls:[EGShader class]];
 }
 
-- (void)drawMaterial:(id)material mesh:(EGMesh*)mesh {
-    [self drawMaterial:material mesh:mesh start:0 count:[mesh.indexBuffer count]];
+- (void)drawParam:(id)param mesh:(EGMesh*)mesh {
+    [self drawParam:param mesh:mesh start:0 count:[mesh.indexBuffer count]];
 }
 
-- (void)drawMaterial:(id)material mesh:(EGMesh*)mesh start:(NSUInteger)start count:(NSUInteger)count {
+- (void)drawParam:(id)param mesh:(EGMesh*)mesh start:(NSUInteger)start count:(NSUInteger)count {
     glUseProgram(_program.handle);
     [mesh.vertexBuffer applyDraw:^void() {
-        [self loadVertexBuffer:mesh.vertexBuffer material:material];
+        [self loadVertexBuffer:mesh.vertexBuffer param:param];
         [mesh.indexBuffer drawWithStart:start count:count];
-        [self unloadMaterial:material];
+        [self unloadParam:param];
     }];
     glUseProgram(0);
 }
 
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(id)material {
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(id)param {
     @throw @"Method load is abstract";
 }
 
-- (void)unloadMaterial:(id)material {
+- (void)unloadParam:(id)param {
 }
 
 - (EGShaderAttribute*)attributeForName:(NSString*)name {
@@ -306,8 +306,8 @@ static ODClassType* _EGShaderUniform_type;
     egUniformVec3(_handle, vec3);
 }
 
-- (void)setNumber:(float)number {
-    glUniform1f(_handle, number);
+- (void)setF4:(float)f4 {
+    glUniform1f(_handle, f4);
 }
 
 - (ODClassType*)type {
@@ -365,7 +365,7 @@ static ODClassType* _EGShaderSystem_type;
 
 - (void)drawMaterial:(id)material mesh:(EGMesh*)mesh {
     EGShader* shader = [self shaderForMaterial:material];
-    [shader drawMaterial:material mesh:mesh];
+    [shader drawParam:material mesh:mesh];
 }
 
 - (EGShader*)shaderForMaterial:(id)material {

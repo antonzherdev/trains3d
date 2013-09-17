@@ -65,7 +65,7 @@
 + (id)standardShaderWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
 - (id)initWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
 - (ODClassType*)type;
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGStandardMaterial*)material;
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGStandardMaterial*)param;
 - (void)unloadMaterial:(EGSimpleMaterial*)material;
 + (NSInteger)UV_SHIFT;
 + (NSInteger)NORMAL_SHIFT;

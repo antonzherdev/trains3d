@@ -190,7 +190,7 @@ static ODClassType* _EGBillboardShader_type;
         "   gl_FragColor = fragColor * color; " : @""), code];
 }
 
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material {
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGSimpleMaterial*)param {
     [_positionSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:3 valuesType:GL_FLOAT shift:0];
     [_modelSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(3 * 4))];
     [_colorSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:4 valuesType:GL_FLOAT shift:((NSUInteger)(5 * 4))];
@@ -200,9 +200,9 @@ static ODClassType* _EGBillboardShader_type;
         [_uvSlot forEach:^void(EGShaderAttribute* _) {
             [_ setFromBufferWithStride:[vertexBuffer stride] valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(9 * 4))];
         }];
-        [((EGColorSourceTexture*)(material.color)).texture bind];
+        [((EGColorSourceTexture*)(param.color)).texture bind];
     } else {
-        [((EGShaderUniform*)([_colorUniform get])) setColor:((EGColorSourceColor*)(material.color)).color];
+        [((EGShaderUniform*)([_colorUniform get])) setColor:((EGColorSourceColor*)(param.color)).color];
     }
 }
 

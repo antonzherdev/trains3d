@@ -280,17 +280,17 @@ static ODClassType* _EGStandardShader_type;
     _EGStandardShader_POSITION_SHIFT = 5 * 4;
 }
 
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGStandardMaterial*)material {
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGStandardMaterial*)param {
     [_positionSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_POSITION_SHIFT))];
     [_mwcpUniform setMatrix:[EGGlobal.matrix.value mwcp]];
     if(_key.texture) {
         [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:[vertexBuffer stride] valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_UV_SHIFT))];
-        [((EGColorSourceTexture*)(material.diffuse)).texture bind];
+        [((EGColorSourceTexture*)(param.diffuse)).texture bind];
     } else {
-        [_diffuseUniform setColor:((EGColorSourceColor*)(material.diffuse)).color];
+        [_diffuseUniform setColor:((EGColorSourceColor*)(param.diffuse)).color];
     }
-    [_specularColor setColor:material.specularColor];
-    [_specularSize setNumber:((float)(material.specularSize))];
+    [_specularColor setColor:param.specularColor];
+    [_specularSize setF4:((float)(param.specularSize))];
     EGEnvironment* env = EGGlobal.context.environment;
     [_ambientColor setColor:env.ambientColor];
     if(_key.directLightCount > 0) {

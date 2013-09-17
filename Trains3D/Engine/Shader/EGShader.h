@@ -39,10 +39,10 @@
 + (id)shaderWithProgram:(EGShaderProgram*)program;
 - (id)initWithProgram:(EGShaderProgram*)program;
 - (ODClassType*)type;
-- (void)drawMaterial:(id)material mesh:(EGMesh*)mesh;
-- (void)drawMaterial:(id)material mesh:(EGMesh*)mesh start:(NSUInteger)start count:(NSUInteger)count;
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(id)material;
-- (void)unloadMaterial:(id)material;
+- (void)drawParam:(id)param mesh:(EGMesh*)mesh;
+- (void)drawParam:(id)param mesh:(EGMesh*)mesh start:(NSUInteger)start count:(NSUInteger)count;
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(id)param;
+- (void)unloadParam:(id)param;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
 - (EGShaderUniform*)uniformForName:(NSString*)name;
 + (ODClassType*)type;
@@ -69,7 +69,7 @@
 - (void)setMatrix:(GEMat4*)matrix;
 - (void)setColor:(EGColor)color;
 - (void)setVec3:(GEVec3)vec3;
-- (void)setNumber:(float)number;
+- (void)setF4:(float)f4;
 + (ODClassType*)type;
 @end
 

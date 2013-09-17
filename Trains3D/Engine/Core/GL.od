@@ -27,6 +27,7 @@ stub object gl {
     def glEnable(: uint)
     def glDisable(: uint)
     val GL_DEPTH_TEST : uint
+    val GL_MULTISAMPLE : uint
     val GL_CULL_FACE : uint
     val GL_BLEND : uint
 

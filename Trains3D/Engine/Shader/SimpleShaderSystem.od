@@ -34,10 +34,10 @@ class SimpleColorShader extends SimpleShader(ShaderProgram(SimpleColorShader.col
     val colorUniform = uniformFor("color")
     val mvpUniform = uniformFor("mvp")
 
-    def load(vertexBuffer : VertexBuffer<_>, material : SimpleMaterial) {
+    def load(vertexBuffer : VertexBuffer<_>, param : SimpleMaterial) {
         positionSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 3, GL_FLOAT, POSITION_SHIFT)
         mvpUniform.set(matrix = matrix.value.mwcp)
-        colorUniform.set(color = material.color.cast<ColorSourceColor>.color)
+        colorUniform.set(color = param.color.cast<ColorSourceColor>.color)
     }
 }
 
@@ -64,12 +64,12 @@ class SimpleTextureShader extends SimpleShader<SimpleMaterial>(ShaderProgram(Sim
     val positionSlot : ShaderAttribute = attributeFor("position")
     val mvpUniform = uniformFor("mvp")
 
-    def load(vertexBuffer : VertexBuffer<_>, material : SimpleMaterial) {
+    def load(vertexBuffer : VertexBuffer<_>, param : SimpleMaterial) {
         positionSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 3, GL_FLOAT, POSITION_SHIFT)
         mvpUniform.set(matrix = matrix.value.mwcp)
 
         uvSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 2, GL_FLOAT, UV_SHIFT)
-        material.color.cast<ColorSourceTexture>.texture.bind
+        param.color.cast<ColorSourceTexture>.texture.bind
     }
 
     def unload(material : SimpleMaterial) {

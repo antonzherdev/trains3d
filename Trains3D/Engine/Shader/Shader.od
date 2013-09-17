@@ -62,23 +62,23 @@ class ShaderProgram(handle : GLuint) {
     }
 }
 
-class Shader<M extends Material, D>(program : ShaderProgram) {
-    def draw(material : M, mesh : Mesh<D>) {
-        draw(material, mesh, 0, mesh.indexBuffer.count)
+class Shader<P, D>(program : ShaderProgram) {
+    def draw(param : P, mesh : Mesh<D>) {
+        draw(param, mesh, 0, mesh.indexBuffer.count)
     }
 
-    def draw(material : M, mesh : Mesh<D>, start : uint, count : uint) {
+    def draw(param : P, mesh : Mesh<D>, start : uint, count : uint) {
         glUseProgram(program.handle)
         mesh.vertexBuffer {
-            load(mesh.vertexBuffer, material)
+            load(mesh.vertexBuffer, param)
             mesh.indexBuffer.drawWith(start, count)
-            unload(material)
+            unload(param)
         }
         glUseProgram(0)
     }
 
-    def load(vertexBuffer : VertexBuffer<D>, material : M)
-    def unload(material : M) {}
+    def load(vertexBuffer : VertexBuffer<D>, param : P)
+    def unload(param : P) {}
 
     def attributeFor(name : string ) = program.attributeFor(name)
     def uniformFor(name : string ) = program.uniformFor(name)
@@ -101,8 +101,8 @@ class ShaderUniform(handle : GLuint) {
     def set(vec3 : vec3) {
         egUniformVec3(handle, vec3)
     }
-    def set(number : float4) {
-        glUniform1f(handle, number)
+    def set(f4 : float4) {
+        glUniform1f(handle, f4)
     }
 }
 

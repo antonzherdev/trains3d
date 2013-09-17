@@ -5,13 +5,13 @@
 @class EGTexture;
 @class EGSimpleMaterial;
 @class EGColorSource;
-@class EGColorSourceTexture;
 @class EGVertexBuffer;
 @class EGMesh;
 @class EGGlobal;
 @class EGContext;
 
 @class EGSurface;
+@class EGFullScreenSurfaceShaderParam;
 @class EGFullScreenSurfaceShader;
 @class EGFullScreenSurface;
 
@@ -32,13 +32,25 @@
 @end
 
 
+@interface EGFullScreenSurfaceShaderParam : NSObject
+@property (nonatomic, readonly) EGTexture* texture;
+@property (nonatomic, readonly) float z;
+
++ (id)fullScreenSurfaceShaderParamWithTexture:(EGTexture*)texture z:(float)z;
+- (id)initWithTexture:(EGTexture*)texture z:(float)z;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
 @interface EGFullScreenSurfaceShader : EGShader
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
+@property (nonatomic, readonly) EGShaderUniform* zUniform;
 
 + (id)fullScreenSurfaceShader;
 - (id)init;
 - (ODClassType*)type;
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material;
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGFullScreenSurfaceShaderParam*)param;
 - (void)unloadMaterial:(EGSimpleMaterial*)material;
 + (NSString*)vertex;
 + (NSString*)fragment;
@@ -58,6 +70,7 @@
 - (void)maybeDraw:(void(^)())draw;
 - (void)maybeForce:(BOOL)force draw:(void(^)())draw;
 - (void)unbind;
+- (void)drawWithZ:(float)z;
 - (void)draw;
 - (EGTexture*)texture;
 + (ODClassType*)type;

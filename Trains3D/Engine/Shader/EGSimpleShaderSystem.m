@@ -205,10 +205,10 @@ static ODClassType* _EGSimpleColorShader_type;
     _EGSimpleColorShader_type = [ODClassType classTypeWithCls:[EGSimpleColorShader class]];
 }
 
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material {
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGSimpleMaterial*)param {
     [_positionSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleColorShader POSITION_SHIFT]))];
     [_mvpUniform setMatrix:[EGGlobal.matrix.value mwcp]];
-    [_colorUniform setColor:((EGColorSourceColor*)(material.color)).color];
+    [_colorUniform setColor:((EGColorSourceColor*)(param.color)).color];
 }
 
 - (ODClassType*)type {
@@ -296,11 +296,11 @@ static ODClassType* _EGSimpleTextureShader_type;
     _EGSimpleTextureShader_type = [ODClassType classTypeWithCls:[EGSimpleTextureShader class]];
 }
 
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material {
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGSimpleMaterial*)param {
     [_positionSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleTextureShader POSITION_SHIFT]))];
     [_mvpUniform setMatrix:[EGGlobal.matrix.value mwcp]];
     [_uvSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleTextureShader UV_SHIFT]))];
-    [((EGColorSourceTexture*)(material.color)).texture bind];
+    [((EGColorSourceTexture*)(param.color)).texture bind];
 }
 
 - (void)unloadMaterial:(EGSimpleMaterial*)material {

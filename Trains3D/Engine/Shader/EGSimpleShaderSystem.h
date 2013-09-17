@@ -43,7 +43,7 @@
 + (id)simpleColorShader;
 - (id)init;
 - (ODClassType*)type;
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material;
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGSimpleMaterial*)param;
 + (NSString*)colorVertexProgram;
 + (NSString*)colorFragmentProgram;
 + (ODClassType*)type;
@@ -58,7 +58,7 @@
 + (id)simpleTextureShader;
 - (id)init;
 - (ODClassType*)type;
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer material:(EGSimpleMaterial*)material;
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGSimpleMaterial*)param;
 - (void)unloadMaterial:(EGSimpleMaterial*)material;
 + (NSString*)textureVertexProgram;
 + (NSString*)textureFragmentProgram;
