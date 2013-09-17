@@ -30,13 +30,13 @@ class RailroadView(railroad : Railroad) {
 class RailView {
     val railModel = MeshModel([
         (Models.railGravel, textureFor("Gravel.png")),
-        (Models.railTies, Color(0.55, 0.45, 0.25, 1)),
-        (Models.rails, StandardMaterial( Color(0.45, 0.47, 0.55, 1), Color(0.5, 0.5, 0.5, 1), 1))
+        (Models.railTies, vec4(0.55, 0.45, 0.25, 1)),
+        (Models.rails, StandardMaterial( vec4(0.45, 0.47, 0.55, 1), vec4(0.5, 0.5, 0.5, 1), 1))
     ])
     val railTurnModel = MeshModel([
         (Models.railTurnGravel, textureFor("Gravel.png")),
-        (Models.railTurnTies, Color(0.55, 0.45, 0.25, 1)),
-        (Models.railsTurn, StandardMaterial( Color(0.45, 0.47, 0.55, 1), Color(0.5, 0.5, 0.5, 1), 1))
+        (Models.railTurnTies, vec4(0.55, 0.45, 0.25, 1)),
+        (Models.railsTurn, StandardMaterial( vec4(0.45, 0.47, 0.55, 1), vec4(0.5, 0.5, 0.5, 1), 1))
     ])
     def draw(rail : Rail) {
         matrix(
@@ -62,7 +62,7 @@ class RailView {
 }
 
 class SwitchView {
-    val material = StandardMaterial( Color(0.07568, 0.61424, 0.07568, 1), Color(0.633, 0.727811, 0.633, 1), 1)
+    val material = StandardMaterial( vec4(0.07568, 0.61424, 0.07568, 1), vec4(0.633, 0.727811, 0.633, 1), 1)
     val switchStraightModel = MeshModel([
         (Models.switchStraight, material)
     ])
@@ -100,12 +100,12 @@ class SwitchView {
 }
 
 class LightView {
-    val greenMaterial = StandardMaterial( Color(0.07568, 0.61424, 0.07568, 1), Color(0.633, 0.727811, 0.633, 1), 1)
-    val redMaterial = StandardMaterial(Color(0.61424, 0.04136, 0.04136, 1), Color(0.727811, 0.626959, 0.626959, 1), 1)
-    val inactiveMaterial = StandardMaterial(Color(0.3, 0.3, 0.3, 1), Color(1, 1, 1, 1), 1)
-    val bodyMaterial = StandardMaterial(Color(0.1, 0.1, 0.1, 1), Color(0.1, 0.1, 0.1, 1), 1)
-    val greenGlowMaterial = SimpleMaterial(Color(0, 1, 0, 0.1))
-    val redGlowMaterial = SimpleMaterial(Color(1, 0, 0, 0.1))
+    val greenMaterial = StandardMaterial( vec4(0.07568, 0.61424, 0.07568, 1), vec4(0.633, 0.727811, 0.633, 1), 1)
+    val redMaterial = StandardMaterial(vec4(0.61424, 0.04136, 0.04136, 1), vec4(0.727811, 0.626959, 0.626959, 1), 1)
+    val inactiveMaterial = StandardMaterial(vec4(0.3, 0.3, 0.3, 1), vec4(1, 1, 1, 1), 1)
+    val bodyMaterial = StandardMaterial(vec4(0.1, 0.1, 0.1, 1), vec4(0.1, 0.1, 0.1, 1), 1)
+    val greenGlowMaterial = SimpleMaterial(vec4(0, 1, 0, 0.1))
+    val redGlowMaterial = SimpleMaterial(vec4(1, 0, 0, 0.1))
 
     def draw(light : RailLight) {
         matrix(
@@ -135,7 +135,7 @@ class LightView {
 }
 
 class DamageView {
-    val model = MeshModel([(Models.damage, Color(1, 0, 0, 1))])
+    val model = MeshModel([(Models.damage, vec4(1, 0, 0, 1))])
     def draw(point : RailPoint) {
         matrix(
             _.modify(w = w -> w.translate(point.point.x, point.point.y, 0.0))

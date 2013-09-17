@@ -30,7 +30,7 @@ static ODClassType* _EGBillboardShaderSystem_type;
     EGBillboardShader* __result__;
     if(__incomplete__) {
         BOOL __ok__ = YES;
-        EGColor _;
+        GEVec4 _;
         if([__case__ isKindOfClass:[EGColorSourceColor class]]) {
             EGColorSourceColor* __case1__ = ((EGColorSourceColor*)(__case__));
             _ = [__case1__ color];

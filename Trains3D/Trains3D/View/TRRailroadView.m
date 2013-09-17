@@ -118,8 +118,8 @@ static ODClassType* _TRRailView_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _railModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.railGravel, ((EGMaterial*)([EGMaterial applyTexture:[EGGlobal textureForFile:@"Gravel.png"]]))), tuple(TRModels.railTies, ((EGMaterial*)([EGMaterial applyColor:EGColorMake(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.rails, [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.45, 0.47, 0.55, 1.0)] specularColor:EGColorMake(0.5, 0.5, 0.5, 1.0) specularSize:1.0])])];
-        _railTurnModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.railTurnGravel, ((EGMaterial*)([EGMaterial applyTexture:[EGGlobal textureForFile:@"Gravel.png"]]))), tuple(TRModels.railTurnTies, ((EGMaterial*)([EGMaterial applyColor:EGColorMake(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.railsTurn, [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.45, 0.47, 0.55, 1.0)] specularColor:EGColorMake(0.5, 0.5, 0.5, 1.0) specularSize:1.0])])];
+        _railModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.railGravel, ((EGMaterial*)([EGMaterial applyTexture:[EGGlobal textureForFile:@"Gravel.png"]]))), tuple(TRModels.railTies, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.rails, [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.45, 0.47, 0.55, 1.0)] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:1.0])])];
+        _railTurnModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.railTurnGravel, ((EGMaterial*)([EGMaterial applyTexture:[EGGlobal textureForFile:@"Gravel.png"]]))), tuple(TRModels.railTurnTies, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.railsTurn, [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.45, 0.47, 0.55, 1.0)] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:1.0])])];
     }
     
     return self;
@@ -205,7 +205,7 @@ static ODClassType* _TRSwitchView_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _material = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.07568, 0.61424, 0.07568, 1.0)] specularColor:EGColorMake(0.633, 0.727811, 0.633, 1.0) specularSize:1.0];
+        _material = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.07568, 0.61424, 0.07568, 1.0)] specularColor:GEVec4Make(0.633, 0.727811, 0.633, 1.0) specularSize:1.0];
         _switchStraightModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.switchStraight, _material)])];
         _switchTurnModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.switchTurn, _material)])];
     }
@@ -299,12 +299,12 @@ static ODClassType* _TRLightView_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _greenMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.07568, 0.61424, 0.07568, 1.0)] specularColor:EGColorMake(0.633, 0.727811, 0.633, 1.0) specularSize:1.0];
-        _redMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.61424, 0.04136, 0.04136, 1.0)] specularColor:EGColorMake(0.727811, 0.626959, 0.626959, 1.0) specularSize:1.0];
-        _inactiveMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.3, 0.3, 0.3, 1.0)] specularColor:EGColorMake(1.0, 1.0, 1.0, 1.0) specularSize:1.0];
-        _bodyMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.1, 0.1, 0.1, 1.0)] specularColor:EGColorMake(0.1, 0.1, 0.1, 1.0) specularSize:1.0];
-        _greenGlowMaterial = [EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyColor:EGColorMake(0.0, 1.0, 0.0, 0.1)]];
-        _redGlowMaterial = [EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyColor:EGColorMake(1.0, 0.0, 0.0, 0.1)]];
+        _greenMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.07568, 0.61424, 0.07568, 1.0)] specularColor:GEVec4Make(0.633, 0.727811, 0.633, 1.0) specularSize:1.0];
+        _redMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.61424, 0.04136, 0.04136, 1.0)] specularColor:GEVec4Make(0.727811, 0.626959, 0.626959, 1.0) specularSize:1.0];
+        _inactiveMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.3, 0.3, 0.3, 1.0)] specularColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) specularSize:1.0];
+        _bodyMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.1, 0.1, 0.1, 1.0)] specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:1.0];
+        _greenGlowMaterial = [EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyColor:GEVec4Make(0.0, 1.0, 0.0, 0.1)]];
+        _redGlowMaterial = [EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyColor:GEVec4Make(1.0, 0.0, 0.0, 0.1)]];
     }
     
     return self;
@@ -387,7 +387,7 @@ static ODClassType* _TRDamageView_type;
 
 - (id)init {
     self = [super init];
-    if(self) _model = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.damage, ((EGMaterial*)([EGMaterial applyColor:EGColorMake(1.0, 0.0, 0.0, 1.0)])))])];
+    if(self) _model = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.damage, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(1.0, 0.0, 0.0, 1.0)])))])];
     
     return self;
 }

@@ -95,8 +95,8 @@ class ShaderUniform(handle : GLuint) {
     def set(matrix : mat4) {
         glUniformMatrix4fv(handle, 1, GL_FALSE, matrix.array)
     }
-    def set(color : Color) {
-        egUniformColor(handle, color)
+    def set(color : vec4) {
+        egUniformVec4(handle, color)
     }
     def set(vec3 : vec3) {
         egUniformVec3(handle, vec3)

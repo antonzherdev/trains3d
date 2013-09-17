@@ -53,16 +53,6 @@ static ODClassType* _EGProgress_type;
     };
 }
 
-+ (EGColor(^)(float))progressColor:(EGColor)color color2:(EGColor)color2 {
-    float(^r)(float) = [EGProgress progressF4:color.r f42:color2.r];
-    float(^g)(float) = [EGProgress progressF4:color.g f42:color2.g];
-    float(^b)(float) = [EGProgress progressF4:color.b f42:color2.b];
-    float(^a)(float) = [EGProgress progressF4:color.a f42:color2.a];
-    return ^EGColor(float t) {
-        return EGColorMake(r(t), g(t), b(t), a(t));
-    };
-}
-
 + (id(^)(float))gapT1:(float)t1 t2:(float)t2 {
     float l = t2 - t1;
     return ^id(float t) {

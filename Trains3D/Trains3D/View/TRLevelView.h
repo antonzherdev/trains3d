@@ -1,11 +1,13 @@
 #import "objd.h"
 #import "EGScene.h"
-#import "EGTypes.h"
 #import "GEVec.h"
 @class TRLevel;
 @class TRCityView;
 @class TRRailroadView;
 @class TRTrainView;
+@class EGEnvironment;
+@class EGDirectLight;
+@protocol EGCamera;
 @class EGMapSso;
 @class EGCameraIso;
 

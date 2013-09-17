@@ -1,11 +1,11 @@
 package com.antonzherdev.eg
 
 class ColorSource {
-    static def apply(color : Color) : ColorSource = ColorSourceColor(color)
+    static def apply(color : vec4) : ColorSource = ColorSourceColor(color)
     static def apply(texture : Texture) : ColorSource = ColorSourceTexture(texture)
 }
 
-class ColorSourceColor(color : Color) extends ColorSource
+class ColorSourceColor(color : vec4) extends ColorSource
 class ColorSourceTexture(texture : Texture) extends ColorSource
 
 
@@ -15,7 +15,7 @@ class Material {
         shaderSystem.draw(self, mesh)
     }
 
-    static def apply(color : Color) : Material = StandardMaterial(color)
+    static def apply(color : vec4) : Material = StandardMaterial(color)
     static def apply(texture : Texture) : Material = StandardMaterial(texture)
 }
 
@@ -23,8 +23,8 @@ class SimpleMaterial(color : ColorSource) extends Material {
     def shaderSystem : ShaderSystem<self> = SimpleShaderSystem.instance
 }
 
-class StandardMaterial(diffuse : ColorSource, specularColor : Color, specularSize : float)  extends Material {
-    static def apply(diffuse : ColorSource) = StandardMaterial(diffuse, Color(0, 0, 0, 1), 1)
+class StandardMaterial(diffuse : ColorSource, specularColor : vec4, specularSize : float)  extends Material {
+    static def apply(diffuse : ColorSource) = StandardMaterial(diffuse, vec4(0, 0, 0, 1), 1)
     def shaderSystem : ShaderSystem<self> = StandardShaderSystem.instance
 }
 

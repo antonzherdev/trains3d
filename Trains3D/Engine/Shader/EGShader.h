@@ -1,6 +1,5 @@
 #import "objd.h"
 #import "GL.h"
-#import "EGTypes.h"
 #import "GEVec.h"
 @class EGMesh;
 @class EGIndexBuffer;
@@ -67,7 +66,7 @@
 - (id)initWithHandle:(GLuint)handle;
 - (ODClassType*)type;
 - (void)setMatrix:(GEMat4*)matrix;
-- (void)setColor:(EGColor)color;
+- (void)setColor:(GEVec4)color;
 - (void)setVec3:(GEVec3)vec3;
 - (void)setF4:(float)f4;
 + (ODClassType*)type;

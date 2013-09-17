@@ -1,5 +1,4 @@
 #import "objd.h"
-#import "EGTypes.h"
 #import "GEVec.h"
 #import "EGMaterial.h"
 @class TRRailroad;

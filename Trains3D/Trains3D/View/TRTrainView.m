@@ -26,7 +26,7 @@ static ODClassType* _TRTrainView_type;
     self = [super init];
     if(self) {
         _smokeView = [TRSmokeView smokeView];
-        _blackMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.0, 0.0, 0.0, 1.0)] specularColor:EGColorMake(0.1, 0.1, 0.1, 1.0) specularSize:1.0];
+        _blackMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 1.0)] specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:1.0];
     }
     
     return self;
@@ -37,8 +37,8 @@ static ODClassType* _TRTrainView_type;
     _TRTrainView_type = [ODClassType classTypeWithCls:[TRTrainView class]];
 }
 
-- (EGMaterial*)trainMaterialForColor:(EGColor)color {
-    return [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:color] specularColor:EGColorMake(0.3, 0.3, 0.3, 1.0) specularSize:1.0];
+- (EGMaterial*)trainMaterialForColor:(GEVec4)color {
+    return [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:color] specularColor:GEVec4Make(0.3, 0.3, 0.3, 1.0) specularSize:1.0];
 }
 
 - (void)drawTrains:(id<CNSeq>)trains {

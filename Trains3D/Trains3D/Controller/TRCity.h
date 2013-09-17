@@ -1,6 +1,6 @@
 #import "objd.h"
-#import "EGTypes.h"
 #import "GEVec.h"
+#import "EGTypes.h"
 @class TRRailForm;
 @class TRRailPoint;
 @class EGAnimation;
@@ -10,7 +10,7 @@
 @class TRCityAngle;
 
 @interface TRCityColor : ODEnum
-@property (nonatomic, readonly) EGColor color;
+@property (nonatomic, readonly) GEVec4 color;
 
 - (void)set;
 + (TRCityColor*)orange;

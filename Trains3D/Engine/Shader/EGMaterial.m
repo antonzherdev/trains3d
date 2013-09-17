@@ -23,7 +23,7 @@ static ODClassType* _EGColorSource_type;
     _EGColorSource_type = [ODClassType classTypeWithCls:[EGColorSource class]];
 }
 
-+ (EGColorSource*)applyColor:(EGColor)color {
++ (EGColorSource*)applyColor:(GEVec4)color {
     return [EGColorSourceColor colorSourceColorWithColor:color];
 }
 
@@ -63,16 +63,16 @@ static ODClassType* _EGColorSource_type;
 
 
 @implementation EGColorSourceColor{
-    EGColor _color;
+    GEVec4 _color;
 }
 static ODClassType* _EGColorSourceColor_type;
 @synthesize color = _color;
 
-+ (id)colorSourceColorWithColor:(EGColor)color {
++ (id)colorSourceColorWithColor:(GEVec4)color {
     return [[EGColorSourceColor alloc] initWithColor:color];
 }
 
-- (id)initWithColor:(EGColor)color {
+- (id)initWithColor:(GEVec4)color {
     self = [super init];
     if(self) _color = color;
     
@@ -100,18 +100,18 @@ static ODClassType* _EGColorSourceColor_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGColorSourceColor* o = ((EGColorSourceColor*)(other));
-    return EGColorEq(self.color, o.color);
+    return GEVec4Eq(self.color, o.color);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + EGColorHash(self.color);
+    hash = hash * 31 + GEVec4Hash(self.color);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"color=%@", EGColorDescription(self.color)];
+    [description appendFormat:@"color=%@", GEVec4Description(self.color)];
     [description appendString:@">"];
     return description;
 }
@@ -202,7 +202,7 @@ static ODClassType* _EGMaterial_type;
     [[self shaderSystem] drawMaterial:self mesh:mesh];
 }
 
-+ (EGMaterial*)applyColor:(EGColor)color {
++ (EGMaterial*)applyColor:(GEVec4)color {
     return [EGStandardMaterial applyDiffuse:[EGColorSource applyColor:color]];
 }
 
@@ -304,7 +304,7 @@ static ODClassType* _EGSimpleMaterial_type;
 
 @implementation EGStandardMaterial{
     EGColorSource* _diffuse;
-    EGColor _specularColor;
+    GEVec4 _specularColor;
     CGFloat _specularSize;
 }
 static ODClassType* _EGStandardMaterial_type;
@@ -312,11 +312,11 @@ static ODClassType* _EGStandardMaterial_type;
 @synthesize specularColor = _specularColor;
 @synthesize specularSize = _specularSize;
 
-+ (id)standardMaterialWithDiffuse:(EGColorSource*)diffuse specularColor:(EGColor)specularColor specularSize:(CGFloat)specularSize {
++ (id)standardMaterialWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize {
     return [[EGStandardMaterial alloc] initWithDiffuse:diffuse specularColor:specularColor specularSize:specularSize];
 }
 
-- (id)initWithDiffuse:(EGColorSource*)diffuse specularColor:(EGColor)specularColor specularSize:(CGFloat)specularSize {
+- (id)initWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize {
     self = [super init];
     if(self) {
         _diffuse = diffuse;
@@ -333,7 +333,7 @@ static ODClassType* _EGStandardMaterial_type;
 }
 
 + (EGStandardMaterial*)applyDiffuse:(EGColorSource*)diffuse {
-    return [EGStandardMaterial standardMaterialWithDiffuse:diffuse specularColor:EGColorMake(0.0, 0.0, 0.0, 1.0) specularSize:1.0];
+    return [EGStandardMaterial standardMaterialWithDiffuse:diffuse specularColor:GEVec4Make(0.0, 0.0, 0.0, 1.0) specularSize:1.0];
 }
 
 - (EGShaderSystem*)shaderSystem {
@@ -356,13 +356,13 @@ static ODClassType* _EGStandardMaterial_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGStandardMaterial* o = ((EGStandardMaterial*)(other));
-    return [self.diffuse isEqual:o.diffuse] && EGColorEq(self.specularColor, o.specularColor) && eqf(self.specularSize, o.specularSize);
+    return [self.diffuse isEqual:o.diffuse] && GEVec4Eq(self.specularColor, o.specularColor) && eqf(self.specularSize, o.specularSize);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.diffuse hash];
-    hash = hash * 31 + EGColorHash(self.specularColor);
+    hash = hash * 31 + GEVec4Hash(self.specularColor);
     hash = hash * 31 + floatHash(self.specularSize);
     return hash;
 }
@@ -370,7 +370,7 @@ static ODClassType* _EGStandardMaterial_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"diffuse=%@", self.diffuse];
-    [description appendFormat:@", specularColor=%@", EGColorDescription(self.specularColor)];
+    [description appendFormat:@", specularColor=%@", GEVec4Description(self.specularColor)];
     [description appendFormat:@", specularSize=%f", self.specularSize];
     [description appendString:@">"];
     return description;

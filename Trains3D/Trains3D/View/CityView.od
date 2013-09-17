@@ -20,7 +20,7 @@ class CityView {
 
             city.expectedTrainAnimation.for(a -> {
                 val x = -a.time/2
-                StandardMaterial(Color(1.0, 0.5 - x, 0.5 - x, 1)).draw(expectedTrainModel)
+                StandardMaterial(vec4(1.0, 0.5 - x, 0.5 - x, 1)).draw(expectedTrainModel)
             })
         }
     }

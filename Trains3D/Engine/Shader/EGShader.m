@@ -298,8 +298,8 @@ static ODClassType* _EGShaderUniform_type;
     glUniformMatrix4fv(_handle, 1, GL_FALSE, [matrix array]);
 }
 
-- (void)setColor:(EGColor)color {
-    egUniformColor(_handle, color);
+- (void)setColor:(GEVec4)color {
+    egUniformVec4(_handle, color);
 }
 
 - (void)setVec3:(GEVec3)vec3 {

@@ -7,7 +7,7 @@ class LevelView(level : Level) extends LayerView {
     private val railroadView = RailroadView(level.railroad)
     private val trainView = TrainView()
 
-    val environment = Environment(ambientColor = Color(0.4, 0.4, 0.4, 1), lights = [DirectLight(Color(1, 1, 1, 1), vec3(-0.2, 0.2, -0.5))])
+    val environment = Environment(ambientColor = vec4(0.4, 0.4, 0.4, 1), lights = [DirectLight(vec4(1, 1, 1, 1), vec3(-0.2, 0.2, -0.5))])
 
     def drawView {
         railroadView.draw

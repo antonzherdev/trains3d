@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "EGTypes.h"
+#import "GEVec.h"
 #import "GL.h"
 @class EGTexture;
 @class EGShaderSystem;
@@ -20,17 +20,17 @@ typedef struct EGBlendFunction EGBlendFunction;
 + (id)colorSource;
 - (id)init;
 - (ODClassType*)type;
-+ (EGColorSource*)applyColor:(EGColor)color;
++ (EGColorSource*)applyColor:(GEVec4)color;
 + (EGColorSource*)applyTexture:(EGTexture*)texture;
 + (ODClassType*)type;
 @end
 
 
 @interface EGColorSourceColor : EGColorSource
-@property (nonatomic, readonly) EGColor color;
+@property (nonatomic, readonly) GEVec4 color;
 
-+ (id)colorSourceColorWithColor:(EGColor)color;
-- (id)initWithColor:(EGColor)color;
++ (id)colorSourceColorWithColor:(GEVec4)color;
+- (id)initWithColor:(GEVec4)color;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -52,7 +52,7 @@ typedef struct EGBlendFunction EGBlendFunction;
 - (ODClassType*)type;
 - (EGShaderSystem*)shaderSystem;
 - (void)drawMesh:(EGMesh*)mesh;
-+ (EGMaterial*)applyColor:(EGColor)color;
++ (EGMaterial*)applyColor:(GEVec4)color;
 + (EGMaterial*)applyTexture:(EGTexture*)texture;
 + (ODClassType*)type;
 @end
@@ -71,11 +71,11 @@ typedef struct EGBlendFunction EGBlendFunction;
 
 @interface EGStandardMaterial : EGMaterial
 @property (nonatomic, readonly) EGColorSource* diffuse;
-@property (nonatomic, readonly) EGColor specularColor;
+@property (nonatomic, readonly) GEVec4 specularColor;
 @property (nonatomic, readonly) CGFloat specularSize;
 
-+ (id)standardMaterialWithDiffuse:(EGColorSource*)diffuse specularColor:(EGColor)specularColor specularSize:(CGFloat)specularSize;
-- (id)initWithDiffuse:(EGColorSource*)diffuse specularColor:(EGColor)specularColor specularSize:(CGFloat)specularSize;
++ (id)standardMaterialWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize;
+- (id)initWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize;
 - (ODClassType*)type;
 + (EGStandardMaterial*)applyDiffuse:(EGColorSource*)diffuse;
 - (EGShaderSystem*)shaderSystem;

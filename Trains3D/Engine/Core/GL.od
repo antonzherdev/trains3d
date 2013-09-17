@@ -19,7 +19,7 @@ stub object gl {
     def egColor3(r : float, g : float, b : float)
     def egColor4(r : float, g : float, b : float, a : float)
     def glClearColor(r : float, g : float, b : float, a : float)
-    def egColor(color : Color)
+    def egColor(color : vec4)
 
     def glutSolidCube(size :float)
 
@@ -51,7 +51,7 @@ stub object gl {
     def glViewport (x : GLint, y : GLint, width : GLsizei, height : GLsizei)
     def glUniformMatrix4fv(location : GLuint, count : GLsizei, transpose : GLboolean, value : [float4])
     def glUniform1f(location : GLuint, f : float4)
-    def egUniformColor(location : GLuint, color : Color)
+    def egUniformVec4(location : GLuint, color : vec4)
     def egUniformVec3(location : GLuint, color : vec3)
 
     def glCreateProgram : GLuint

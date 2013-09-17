@@ -1,5 +1,4 @@
 #import "objd.h"
-#import "EGTypes.h"
 #import "GEVec.h"
 @class TRSmokeView;
 @class EGStandardMaterial;
@@ -28,7 +27,7 @@
 + (id)trainView;
 - (id)init;
 - (ODClassType*)type;
-- (EGMaterial*)trainMaterialForColor:(EGColor)color;
+- (EGMaterial*)trainMaterialForColor:(GEVec4)color;
 - (void)drawTrains:(id<CNSeq>)trains;
 - (void)drawDyingTrains:(id<CNSeq>)dyingTrains;
 - (void)updateWithDelta:(CGFloat)delta train:(TRTrain*)train;

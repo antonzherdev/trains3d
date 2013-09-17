@@ -33,14 +33,6 @@ object Progress {
         t : float4 -> {vec4(x(t), y(t), z(t), w(t))}
     }
 
-    def progress(color : Color, color2 : Color) : float4 -> Color = {
-        val r = progress(color.r, color2.r)
-        val g = progress(color.g, color2.g)
-        val b = progress(color.b, color2.b)
-        val a = progress(color.a, color2.a)
-        t : float4 -> {Color(r(t), g(t), b(t), a(t))}
-    }
-
     def gap(t1 : float4, t2 : float4) : float4 -> float4? = {
         val l = t2 - t1
         t : float4 ->

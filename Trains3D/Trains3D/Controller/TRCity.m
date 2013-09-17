@@ -4,7 +4,7 @@
 #import "TRRailPoint.h"
 #import "EGSchedule.h"
 @implementation TRCityColor{
-    EGColor _color;
+    GEVec4 _color;
 }
 static TRCityColor* _TRCityColor_orange;
 static TRCityColor* _TRCityColor_green;
@@ -13,11 +13,11 @@ static TRCityColor* _TRCityColor_grey;
 static NSArray* _TRCityColor_values;
 @synthesize color = _color;
 
-+ (id)cityColorWithOrdinal:(NSUInteger)ordinal name:(NSString*)name color:(EGColor)color {
++ (id)cityColorWithOrdinal:(NSUInteger)ordinal name:(NSString*)name color:(GEVec4)color {
     return [[TRCityColor alloc] initWithOrdinal:ordinal name:name color:color];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name color:(EGColor)color {
+- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name color:(GEVec4)color {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) _color = color;
     
@@ -26,10 +26,10 @@ static NSArray* _TRCityColor_values;
 
 + (void)initialize {
     [super initialize];
-    _TRCityColor_orange = [TRCityColor cityColorWithOrdinal:0 name:@"orange" color:EGColorMake(1.0, 0.5, 0.0, 1.0)];
-    _TRCityColor_green = [TRCityColor cityColorWithOrdinal:1 name:@"green" color:EGColorMake(0.66, 0.9, 0.44, 1.0)];
-    _TRCityColor_purple = [TRCityColor cityColorWithOrdinal:2 name:@"purple" color:EGColorMake(0.9, 0.44, 0.66, 1.0)];
-    _TRCityColor_grey = [TRCityColor cityColorWithOrdinal:3 name:@"grey" color:EGColorMake(0.5, 0.5, 0.5, 1.0)];
+    _TRCityColor_orange = [TRCityColor cityColorWithOrdinal:0 name:@"orange" color:GEVec4Make(1.0, 0.5, 0.0, 1.0)];
+    _TRCityColor_green = [TRCityColor cityColorWithOrdinal:1 name:@"green" color:GEVec4Make(0.66, 0.9, 0.44, 1.0)];
+    _TRCityColor_purple = [TRCityColor cityColorWithOrdinal:2 name:@"purple" color:GEVec4Make(0.9, 0.44, 0.66, 1.0)];
+    _TRCityColor_grey = [TRCityColor cityColorWithOrdinal:3 name:@"grey" color:GEVec4Make(0.5, 0.5, 0.5, 1.0)];
     _TRCityColor_values = (@[_TRCityColor_orange, _TRCityColor_green, _TRCityColor_purple, _TRCityColor_grey]);
 }
 

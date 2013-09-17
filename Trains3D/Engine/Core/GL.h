@@ -35,8 +35,8 @@ static inline void egViewport(GERecti rect) {
 }
 
 
-static inline void egUniformColor(GLuint location, EGColor color ) {
-    glUniform4f(location, (GLfloat) color.r, (GLfloat) color.g, (GLfloat) color.b, (GLfloat) color.a);
+static inline void egUniformVec4(GLuint location, GEVec4 color ) {
+    glUniform4f(location, (GLfloat) color.x, (GLfloat) color.y, (GLfloat) color.z, (GLfloat) color.w);
 }
 static inline void egUniformVec3(GLuint location, GEVec3 vec3 ) {
     glUniform3f(location, (GLfloat) vec3.x, (GLfloat) vec3.y, (GLfloat) vec3.z);
@@ -157,8 +157,8 @@ static inline void egVertexAttribPointer (GLuint index, NSUInteger size, GLenum 
     glVertexAttribPointer(index, (GLint)size, type, normalized, (GLsizei)stride, (GLvoid const *) pointer);
 }
 
-static inline void egColor(EGColor self) {
-    egColor4(self.r, self.g, self.b, self.a);
+static inline void egColor(GEVec4 self) {
+    egColor4(self.x, self.y, self.z, self.w);
 }
 
 

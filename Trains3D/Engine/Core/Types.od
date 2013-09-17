@@ -1,8 +1,5 @@
 package com.antonzherdev.eg
 
-struct Color(r : float4, g : float4, b : float4, a : float4) {
-    static val white = Color(1, 1, 1, 1)
-}
 
 trait Controller {
     def updateWith(delta : float)
@@ -17,13 +14,11 @@ trait Camera {
 }
 
 
-
-
-class Environment(ambientColor : Color, lights : [Light]) {
-    static val default = Environment(Color(1, 1, 1, 1), [])
-    static def apply(lights : [Light]) = Environment(Color(1, 1, 1, 1), lights)
-    static def apply(light : Light) = Environment(Color(1, 1, 1, 1), [light])
+class Environment(ambientColor : vec4, lights : [Light]) {
+    static val default = Environment(vec4(1, 1, 1, 1), [])
+    static def apply(lights : [Light]) = Environment(vec4(1, 1, 1, 1), lights)
+    static def apply(light : Light) = Environment(vec4(1, 1, 1, 1), [light])
 }
 
-class Light(color : Color)
-class DirectLight(color : Color, direction : vec3) extends Light(color)
+class Light(color : vec4)
+class DirectLight(color : vec4, direction : vec3) extends Light(color)
