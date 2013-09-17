@@ -35,7 +35,8 @@
     glPushMatrix();
     glLoadIdentity();
     NSString *string = [[NSString alloc] initWithFormat:@"%.1f", _frameRate];
-    
+
+    glBindTexture(GL_TEXTURE_2D, 0);
     glColor4f(1.0, 1.0, 1.0, 1.0);
     egTextGlutDraw(string, GLUT_BITMAP_HELVETICA_18, GEVec2Make(-0.99, -0.99));
 
