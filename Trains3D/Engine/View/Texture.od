@@ -4,8 +4,12 @@ class Texture {
     val id : GLuint = egGenTexture
 
     def bind {
-        glEnable(GL_TEXTURE_2D)
-        glBindTexture(GL_TEXTURE_2D, id)
+        bind(GL_TEXTURE_2D)
+    }
+
+    def bind(target : GLenum) {
+        glEnable(target)
+        glBindTexture(target, id)
     }
 
     def dealloc {
@@ -13,13 +17,22 @@ class Texture {
     }
 
     static def unbind {
-        glBindTexture(GL_TEXTURE_2D, 0)
-        glDisable(GL_TEXTURE_2D)
+        unbind(GL_TEXTURE_2D)
     }
+
+    static def unbind(target : GLenum) {
+        glBindTexture(target, 0)
+        glDisable(target)
+    }
+
     def apply(draw: () -> void) {
-        bind
+        apply(GL_TEXTURE_2D, draw)
+    }
+
+    def apply(target : GLenum, draw: () -> void) {
+        bind(target)
         draw()
-        unbind
+        unbind(target)
     }
 
     def saveTo(file : string) {
@@ -40,9 +53,9 @@ class FileTexture(file : string) extends Texture  {
         if(!_loaded) load
         _size
     }
-    def bind {
+    def bind(target : GLenum) {
         if(!_loaded) load
-        glEnable(GL_TEXTURE_2D)
-        glBindTexture(GL_TEXTURE_2D, id)
+        glEnable(target)
+        glBindTexture(target, id)
     }
 }

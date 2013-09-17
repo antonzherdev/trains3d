@@ -1,3 +1,4 @@
+#import <OpenGL/gl3.h>
 #import <GLUT/glut.h>
 #import "EGTypes.h"
 #import "GEVec.h"
@@ -97,8 +98,20 @@ static inline GLuint egGenFrameBuffer() {
     return buffer;
 }
 
+
+static inline GLuint egGenFrameBufferEXT() {
+    GLuint buffer;
+    glGenFramebuffersEXT(1, &buffer);
+    return buffer;
+}
+
 static inline void egDeleteFrameBuffer(GLuint handle) {
     glDeleteFramebuffers(1, &handle);
+}
+
+
+static inline void egDeleteFrameBufferEXT(GLuint handle) {
+    glDeleteFramebuffersEXT(1, &handle);
 }
 
 static inline GLuint egGenRenderBuffer() {
@@ -107,8 +120,19 @@ static inline GLuint egGenRenderBuffer() {
     return buffer;
 }
 
+static inline GLuint egGenRenderBufferEXT() {
+    GLuint buffer;
+    glGenRenderbuffersEXT(1, &buffer);
+    return buffer;
+}
+
+
 static inline void egDeleteRenderBuffer(GLuint handle) {
     glDeleteRenderbuffers(1, &handle);
+}
+
+static inline void egDeleteRenderBufferEXT(GLuint handle) {
+    glDeleteRenderbuffersEXT(1, &handle);
 }
 
 static inline GLuint egGenTexture() {

@@ -23,8 +23,12 @@ static ODClassType* _EGTexture_type;
 }
 
 - (void)bind {
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, _id);
+    [self bindTarget:GL_TEXTURE_2D];
+}
+
+- (void)bindTarget:(GLenum)target {
+    glEnable(target);
+    glBindTexture(target, _id);
 }
 
 - (void)dealloc {
@@ -32,14 +36,22 @@ static ODClassType* _EGTexture_type;
 }
 
 + (void)unbind {
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glDisable(GL_TEXTURE_2D);
+    [EGTexture unbindTarget:GL_TEXTURE_2D];
+}
+
++ (void)unbindTarget:(GLenum)target {
+    glBindTexture(target, 0);
+    glDisable(target);
 }
 
 - (void)applyDraw:(void(^)())draw {
-    [self bind];
+    [self applyTarget:GL_TEXTURE_2D draw:draw];
+}
+
+- (void)applyTarget:(GLenum)target draw:(void(^)())draw {
+    [self bindTarget:target];
     ((void(^)())(draw))();
-    [EGTexture unbind];
+    [EGTexture unbindTarget:target];
 }
 
 - (void)saveToFile:(NSString*)file {
@@ -114,10 +126,10 @@ static ODClassType* _EGFileTexture_type;
     return __size;
 }
 
-- (void)bind {
+- (void)bindTarget:(GLenum)target {
     if(!(__loaded)) [self load];
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, self.id);
+    glEnable(target);
+    glBindTexture(target, self.id);
 }
 
 - (ODClassType*)type {

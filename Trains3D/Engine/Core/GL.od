@@ -80,6 +80,7 @@ stub object gl {
     def glBufferSubData(target : GLenum, offset : GLintptr ,size : GLsizeiptr, data : [void])
     def egVertexAttribPointer(slot : GLuint, size : uint, tp : GLenum, normalized : GLboolean, stride : uint, shift : uint)
     def glDrawElements(mode : GLenum, count : GLsizei, tp : GLenum, indices : [void])
+    def glDrawElementsEXT(mode : GLenum, count : GLsizei, tp : GLenum, indices : [void])
     def glDrawRangeElements(mode : GLenum, start : GLuint, end : GLuint, count : GLsizei, tp : GLenum, indices : [void])
     def glDrawArrays(mode : GLenum, first : GLint, count : GLsizei)
     def glEnableVertexAttribArray(handle : GLint)
@@ -109,25 +110,52 @@ stub object gl {
 
 
     def egGenFrameBuffer : GLuint
+    def egGenFrameBufferEXT : GLuint
     def egDeleteFrameBuffer(handle : GLuint)
+    def egDeleteFrameBufferEXT(handle : GLuint)
     def glBindFramebuffer( : GLenum,handle : GLuint)
+    def glBindFramebufferEXT( : GLenum,handle : GLuint)
     val GL_FRAMEBUFFER : GLenum
+    val GL_FRAMEBUFFER_EXT : GLenum
+    val GL_DRAW_FRAMEBUFFER_EXT : GLenum
+    val GL_READ_FRAMEBUFFER : GLenum
+    val GL_READ_FRAMEBUFFER_EXT : GLenum
+    val GL_COLOR_BUFFER_BIT : GLenum
     def glBindTexture( : GLenum,handle : GLuint)
     val GL_TEXTURE_2D : GLenum
+    val GL_TEXTURE_2D_MULTISAMPLE : GLenum
     val GL_RGBA : GLenum
+    val GL_RGBA8 : GLenum
     def egGenTexture : GLuint
     def egDeleteTexture(handle : GLuint)
+    def glBlitFramebuffer(
+        srcX0 : GLint, srcY0 : GLint, srcX1 : GLint, srcY1 : GLint,
+        dstX0 : GLint, dstY0 : GLint, dstX1 : GLint, dstY1 : GLint,
+        mask : GLbitfield, filter : GLenum)
+    def glBlitFramebufferEXT(
+        srcX0 : GLint, srcY0 : GLint, srcX1 : GLint, srcY1 : GLint,
+        dstX0 : GLint, dstY0 : GLint, dstX1 : GLint, dstY1 : GLint,
+        mask : GLbitfield, filter : GLenum)
 
     def egGenRenderBuffer : GLuint
+    def egGenRenderBufferEXT : GLuint
     def egDeleteRenderBuffer(handle : GLuint) : GLuint
+    def egDeleteRenderBufferEXT(handle : GLuint) : GLuint
     def glBindRenderbuffer( : GLenum,handle : GLuint)
+    def glBindRenderbufferEXT( : GLenum,handle : GLuint)
     def glRenderbufferStorage( : GLenum, component : GLenum, width : GLsizei, height : GLsizei)
+    def glRenderbufferStorageEXT( : GLenum, component : GLenum, width : GLsizei, height : GLsizei)
+    def glRenderbufferStorageMultisampleEXT( : GLenum, samples : GLint, component : GLenum, width : GLsizei, height : GLsizei)
     val GL_RENDERBUFFER : GLenum
+    val GL_RENDERBUFFER_EXT : GLenum
     val GL_DEPTH_COMPONENT : GLenum
     def glFramebufferRenderbuffer(target : GLenum, attachment : GLenum, buftarget : GLenum, buffer : GLuint)
+    def glFramebufferRenderbufferEXT(target : GLenum, attachment : GLenum, buftarget : GLenum, buffer : GLuint)
     val GL_DEPTH_ATTACHMENT : GLenum
+    val GL_DEPTH_ATTACHMENT_EXT : GLenum
 
     def glTexImage2D(target : GLenum, level : GLint, internalformat  : GLint, width : GLsizei, height : GLsizei, border : GLint, format : GLenum, tp : GLenum, pixels : VoidRef)
+    def glTexImage2DMultisample(target : GLenum, samples : GLsizei, internalformat  : GLint, width : GLsizei, height : GLsizei, fixedsamplelocations : GLboolean)
     def glTexParameteri(target : GLenum, pname : GLenum, param : GLint)
     val GL_TEXTURE_WRAP_S : GLenum
     val GL_TEXTURE_WRAP_T : GLenum
@@ -135,8 +163,13 @@ stub object gl {
     val GL_NEAREST : GLenum
     val GL_TEXTURE_MIN_FILTER : GLenum
     val GL_TEXTURE_MAG_FILTER : GLenum
-    def glFramebufferTexture2D(target : GLenum, attachment : GLenum, textarget : GLenum, texture : GLuint, level : GLint)
+    def glFramebufferTexture(target : GLenum, attachment : GLenum, texture : GLuint, level : GLint)
+    def glCheckFramebufferStatus(target : GLenum) : int
+    def glCheckFramebufferStatusEXT(target : GLenum) : int
     val GL_COLOR_ATTACHMENT0 : GLenum
+    val GL_COLOR_ATTACHMENT0_EXT : GLenum
+    val GL_FRAMEBUFFER_COMPLETE : GLenum
+    val GL_FRAMEBUFFER_COMPLETE_EXT : GLenum
 
     def glPushAttrib(mask : GLbitfield)
     val GL_VIEWPORT_BIT : GLenum

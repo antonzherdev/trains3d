@@ -1,7 +1,21 @@
 package com.antonzherdev.eg
 
 class Surface(depth : bool, size : vec2i) {
-    private val frameBuffer = egGenFrameBuffer
+    def apply(draw : () -> void) {
+        bind
+        draw()
+        unbind
+    }
+
+    def bind
+
+    def unbind
+
+    def frameBuffer : GLint
+}
+
+class SimpleSurface(depth : bool, size : vec2i) extends Surface(depth, size) {
+    val frameBuffer = egGenFrameBuffer
     private val depthRenderBuffer : GLuint = if(depth) egGenRenderBuffer else 0
     val texture = {
         val t = Texture()
@@ -13,7 +27,7 @@ class Surface(depth : bool, size : vec2i) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0)
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, t.id, 0)
+        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, t.id, 0)
 
         if(depth) {
             glBindRenderbuffer(GL_RENDERBUFFER, depthRenderBuffer)
@@ -25,17 +39,10 @@ class Surface(depth : bool, size : vec2i) {
         glBindFramebuffer(GL_FRAMEBUFFER, 0)
         t
     }
-    val material = SimpleMaterial(texture)
 
     def dealloc {
         egDeleteFrameBuffer(frameBuffer)
         if(depth) egDeleteRenderBuffer(depthRenderBuffer)
-    }
-
-    def apply(draw : () -> void) {
-        bind
-        draw()
-        unbind
     }
 
     def bind {
@@ -49,6 +56,76 @@ class Surface(depth : bool, size : vec2i) {
         glPopAttrib
     }
 
+}
+
+class MultisamplingSurface(depth : bool, size : vec2i) extends Surface(depth, size) {
+    private val depthRenderBuffer : GLuint = if(depth) egGenRenderBufferEXT else 0
+    private val colorRenderBuffer : GLuint = egGenRenderBufferEXT
+    val frameBuffer = {
+        val fb = egGenFrameBufferEXT
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fb)
+        glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, colorRenderBuffer)
+        glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER_EXT, 4, GL_RGBA8, size.x, size.y)
+
+        glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_RENDERBUFFER_EXT, colorRenderBuffer)
+        val status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT)
+        if(status != GL_FRAMEBUFFER_COMPLETE_EXT) throw "Error in frame buffer color attachment: $status"
+
+        if(depth) {
+            glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, depthRenderBuffer)
+            glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER_EXT, 4, GL_DEPTH_COMPONENT, size.x, size.y)
+            glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, depthRenderBuffer)
+            val status1 = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT)
+            if(status1 != GL_FRAMEBUFFER_COMPLETE_EXT) throw "Error in frame buffer depth attachment: $status1"
+        }
+
+
+        glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0)
+        fb
+    }
+
+    def dealloc {
+        egDeleteFrameBufferEXT(frameBuffer)
+        egDeleteFrameBufferEXT(colorRenderBuffer)
+        if(depth) egDeleteRenderBufferEXT(depthRenderBuffer)
+    }
+
+
+
+    def bind {
+        glPushAttrib(GL_VIEWPORT_BIT)
+        glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER_EXT, frameBuffer)
+        glViewport(0, 0, size.x, size.y)
+    }
+
+    def unbind {
+        glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER_EXT, 0)
+        glPopAttrib
+    }
+}
+
+class PairSurface(depth : bool, size : vec2i) extends  Surface(depth, size) {
+    val multisampling = MultisamplingSurface(depth, size)
+    val simple = SimpleSurface(depth, size)
+
+    def bind {
+        multisampling.bind
+    }
+
+    def unbind {
+        multisampling.unbind
+
+        glBindFramebufferEXT(GL_READ_FRAMEBUFFER_EXT, multisampling.frameBuffer)
+        glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER_EXT, simple.frameBuffer)
+        val s = size
+        glBlitFramebufferEXT(0, 0, s.x, s.y, 0, 0, s.x, s.y, GL_COLOR_BUFFER_BIT, GL_NEAREST)
+        glBindFramebufferEXT(GL_READ_FRAMEBUFFER_EXT, 0)
+        glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER_EXT, 0)
+    }
+
+    def frameBuffer : GLint = simple.frameBuffer
+
+    def texture : Texture = simple.texture
 }
 
 class FullScreenSurfaceShaderParam(texture : Texture, z : float4)
@@ -84,12 +161,12 @@ class FullScreenSurfaceShader extends Shader<FullScreenSurfaceShaderParam>(Shade
     }
 }
 
-class FullScreenSurface(depth : bool) {
+class FullScreenSurface(depth : bool, multisampling : bool) {
     private var surface : Surface? = nil
 
     private def maybeRecreateSurface {
         if(needRedraw) {
-            surface = Surface(depth, context.viewport.size)
+            surface = if(multisampling) PairSurface(depth, context.viewport.size) else SimpleSurface(depth, context.viewport.size)
         }
     }
 
@@ -129,13 +206,22 @@ class FullScreenSurface(depth : bool) {
         glEnable(GL_CULL_FACE)
     }
 
-    def draw {
-        glDisable(GL_DEPTH_TEST)
-        glDisable(GL_CULL_FACE)
-        shader.draw(FullScreenSurfaceShaderParam(texture, 0), fullScreenMesh)
-        glEnable(GL_CULL_FACE)
-        glEnable(GL_DEPTH_TEST)
+    def texture : Texture = case(surface.get) {
+        i : SimpleSurface -> i.texture
+        i : PairSurface -> i.texture
     }
 
-    def texture  = surface.get.texture
+    def draw {
+//        glDisable(GL_DEPTH_TEST)
+//        glDisable(GL_CULL_FACE)
+//        shader.draw(FullScreenSurfaceShaderParam(texture, 0), fullScreenMesh)
+//        glEnable(GL_CULL_FACE)
+//        glEnable(GL_DEPTH_TEST)
+        glBindFramebufferEXT(GL_READ_FRAMEBUFFER_EXT, surface.get.frameBuffer)
+        val s = surface.get.size
+        val v = context.viewport
+        glBlitFramebufferEXT(0, 0, s.x, s.y, v.x, v.y, v.x2, v.y2, GL_COLOR_BUFFER_BIT, GL_NEAREST)
+        glBindFramebufferEXT(GL_READ_FRAMEBUFFER_EXT, 0)
+    }
+
 }

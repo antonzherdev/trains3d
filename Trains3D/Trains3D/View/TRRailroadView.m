@@ -33,7 +33,7 @@ static ODClassType* _TRRailroadView_type;
         _switchView = [TRSwitchView switchView];
         _lightView = [TRLightView lightView];
         _damageView = [TRDamageView damageView];
-        _railroadSurface = [EGFullScreenSurface fullScreenSurfaceWithDepth:YES];
+        _railroadSurface = [EGFullScreenSurface fullScreenSurfaceWithDepth:YES multisampling:YES];
         _backgroundView = [TRBackgroundView backgroundViewWithMap:_railroad.map];
     }
     
