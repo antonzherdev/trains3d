@@ -15,6 +15,8 @@ stub class Models {
     static val light : Mesh = nil
     static val lightGreen : Mesh = nil
     static val lightRed : Mesh = nil
+    static val lightGreenGlow : Mesh = nil
+    static val lightRedGlow : Mesh = nil
 
     static val city : Mesh = nil
 

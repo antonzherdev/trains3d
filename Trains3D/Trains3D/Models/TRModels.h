@@ -32,6 +32,10 @@
 + (EGMesh *)lightGreen;
 
 + (EGMesh *)lightRed;
+
++ (EGMesh *)lightGreenGlow;
+
++ (EGMesh *)lightRedGlow;
 @end
 
 

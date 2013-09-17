@@ -21,6 +21,42 @@
 // 	glDrawElements(GL_TRIANGLES,NAME_polygoncount*3,GL_UNSIGNED_INT,NAME_index);
 //
 
+#define LightRedGlow_vertexcount 	4
+#define LightRedGlow_polygoncount 	2
+
+
+float LightRedGlow_vertex[LightRedGlow_vertexcount][8]={
+		{0.00000, 0.00000, 1.00000, -0.00000, -0.00000, 0.00000, 0.19352, 0.00621},
+		{1.00000, 0.00000, 1.00000, -0.00000, -0.00000, 0.00000, 0.15311, 0.00621},
+		{1.00000, 1.00000, 1.00000, -0.00000, -0.00000, 0.00000, 0.13851, 0.12527},
+		{0.00000, 1.00000, 1.00000, -0.00000, -0.00000, 0.00000, 0.21298, 0.12527},
+		};
+
+
+int LightRedGlow_index[LightRedGlow_polygoncount][3]={
+		{0, 1, 2},
+		{2, 3, 0},
+		};
+
+
+#define LightGreenGlow_vertexcount 	4
+#define LightGreenGlow_polygoncount 	2
+
+
+float LightGreenGlow_vertex[LightGreenGlow_vertexcount][8]={
+		{0.00000, 0.00000, 1.00000, -0.00000, -0.00000, 0.00000, 0.14608, 0.00621},
+		{1.00000, 0.00000, 1.00000, -0.00000, -0.00000, 0.00000, 0.10567, 0.00621},
+		{1.00000, 1.00000, 1.00000, -0.00000, -0.00000, 0.00000, 0.09108, 0.12527},
+		{0.00000, 1.00000, 1.00000, -0.00000, -0.00000, 0.00000, 0.16554, 0.12527},
+		};
+
+
+int LightGreenGlow_index[LightGreenGlow_polygoncount][3]={
+		{0, 1, 2},
+		{2, 3, 0},
+		};
+
+
 #define Light_vertexcount 	48
 #define Light_polygoncount 	24
 

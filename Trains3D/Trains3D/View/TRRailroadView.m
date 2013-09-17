@@ -3,7 +3,6 @@
 #import "TRRailroad.h"
 #import "EGSurface.h"
 #import "GL.h"
-#import "EGMaterial.h"
 #import "TRModels.h"
 #import "EGContext.h"
 #import "GEMat4.h"
@@ -282,12 +281,16 @@ static ODClassType* _TRSwitchView_type;
     EGStandardMaterial* _redMaterial;
     EGStandardMaterial* _inactiveMaterial;
     EGStandardMaterial* _bodyMaterial;
+    EGSimpleMaterial* _greenGlowMaterial;
+    EGSimpleMaterial* _redGlowMaterial;
 }
 static ODClassType* _TRLightView_type;
 @synthesize greenMaterial = _greenMaterial;
 @synthesize redMaterial = _redMaterial;
 @synthesize inactiveMaterial = _inactiveMaterial;
 @synthesize bodyMaterial = _bodyMaterial;
+@synthesize greenGlowMaterial = _greenGlowMaterial;
+@synthesize redGlowMaterial = _redGlowMaterial;
 
 + (id)lightView {
     return [[TRLightView alloc] init];
@@ -300,6 +303,8 @@ static ODClassType* _TRLightView_type;
         _redMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.61424, 0.04136, 0.04136, 1.0)] specularColor:EGColorMake(0.727811, 0.626959, 0.626959, 1.0) specularSize:1.0];
         _inactiveMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.3, 0.3, 0.3, 1.0)] specularColor:EGColorMake(1.0, 1.0, 1.0, 1.0) specularSize:1.0];
         _bodyMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.1, 0.1, 0.1, 1.0)] specularColor:EGColorMake(0.1, 0.1, 0.1, 1.0) specularSize:1.0];
+        _greenGlowMaterial = [EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyColor:EGColorMake(0.0, 1.0, 0.0, 0.1)]];
+        _redGlowMaterial = [EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyColor:EGColorMake(1.0, 0.0, 0.0, 0.1)]];
     }
     
     return self;
@@ -319,8 +324,23 @@ static ODClassType* _TRLightView_type;
         }];
     } f:^void() {
         [_bodyMaterial drawMesh:TRModels.light];
-        [((light.isGreen) ? _greenMaterial : _inactiveMaterial) drawMesh:TRModels.lightGreen];
-        [((light.isGreen) ? _inactiveMaterial : _redMaterial) drawMesh:TRModels.lightRed];
+        if(light.isGreen) {
+            [_greenMaterial drawMesh:TRModels.lightGreen];
+            [_inactiveMaterial drawMesh:TRModels.lightRed];
+            glDisable(GL_CULL_FACE);
+            egBlendFunctionApplyDraw(egBlendFunctionPremultiplied(), ^void() {
+                [_greenGlowMaterial drawMesh:TRModels.lightGreenGlow];
+            });
+            glEnable(GL_CULL_FACE);
+        } else {
+            [_inactiveMaterial drawMesh:TRModels.lightGreen];
+            [_redMaterial drawMesh:TRModels.lightRed];
+            glDisable(GL_CULL_FACE);
+            egBlendFunctionApplyDraw(egBlendFunctionPremultiplied(), ^void() {
+                [_redGlowMaterial drawMesh:TRModels.lightRedGlow];
+            });
+            glEnable(GL_CULL_FACE);
+        }
     }];
 }
 

@@ -104,14 +104,32 @@ class LightView {
     val redMaterial = StandardMaterial(Color(0.61424, 0.04136, 0.04136, 1), Color(0.727811, 0.626959, 0.626959, 1), 1)
     val inactiveMaterial = StandardMaterial(Color(0.3, 0.3, 0.3, 1), Color(1, 1, 1, 1), 1)
     val bodyMaterial = StandardMaterial(Color(0.1, 0.1, 0.1, 1), Color(0.1, 0.1, 0.1, 1), 1)
+    val greenGlowMaterial = SimpleMaterial(Color(0, 1, 0, 0.1))
+    val redGlowMaterial = SimpleMaterial(Color(1, 0, 0, 0.1))
+
     def draw(light : RailLight) {
         matrix(
             _.modify(w = w -> w.translate(light.tile.x, light.tile.y, 0))
              .modify(m = m -> m.rotate(90 + light.connector.angle, 0, 1, 0).translate(0.2, 0, -0.45))
         ) {
             bodyMaterial.draw(Models.light)
-            (if(light.isGreen) greenMaterial else inactiveMaterial).draw(Models.lightGreen)
-            (if(light.isGreen) inactiveMaterial else redMaterial).draw(Models.lightRed)
+            if(light.isGreen) {
+                greenMaterial.draw(Models.lightGreen)
+                inactiveMaterial.draw(Models.lightRed)
+                glDisable(GL_CULL_FACE)
+                BlendFunction.premultiplied {
+                    greenGlowMaterial.draw(Models.lightGreenGlow)
+                }
+                glEnable(GL_CULL_FACE)
+            } else {
+                inactiveMaterial.draw(Models.lightGreen)
+                redMaterial.draw(Models.lightRed)
+                glDisable(GL_CULL_FACE)
+                BlendFunction.premultiplied {
+                    redGlowMaterial.draw(Models.lightRedGlow)
+                }
+                glEnable(GL_CULL_FACE)
+            }
         }
     }
 }

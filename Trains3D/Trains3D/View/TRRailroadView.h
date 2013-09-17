@@ -1,15 +1,12 @@
 #import "objd.h"
 #import "EGTypes.h"
 #import "GEVec.h"
+#import "EGMaterial.h"
 @class TRRailroad;
 @class EGFullScreenSurface;
 @class TRRailroadBuilder;
-@class EGMeshModel;
 @class TRModels;
 @class EGGlobal;
-@class EGMaterial;
-@class EGColorSource;
-@class EGStandardMaterial;
 @class TRRail;
 @class GEMat4;
 @class EGMatrixModel;
@@ -70,6 +67,8 @@
 @property (nonatomic, readonly) EGStandardMaterial* redMaterial;
 @property (nonatomic, readonly) EGStandardMaterial* inactiveMaterial;
 @property (nonatomic, readonly) EGStandardMaterial* bodyMaterial;
+@property (nonatomic, readonly) EGSimpleMaterial* greenGlowMaterial;
+@property (nonatomic, readonly) EGSimpleMaterial* redGlowMaterial;
 
 + (id)lightView;
 - (id)init;
