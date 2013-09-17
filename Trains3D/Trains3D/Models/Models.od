@@ -11,7 +11,10 @@ stub class Models {
 
     static val switchStraight : Mesh = nil
     static val switchTurn : Mesh = nil
+
     static val light : Mesh = nil
+    static val lightGreen : Mesh = nil
+    static val lightRed : Mesh = nil
 
     static val city : Mesh = nil
 

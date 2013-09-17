@@ -280,10 +280,14 @@ static ODClassType* _TRSwitchView_type;
 @implementation TRLightView{
     EGStandardMaterial* _greenMaterial;
     EGStandardMaterial* _redMaterial;
+    EGStandardMaterial* _inactiveMaterial;
+    EGStandardMaterial* _bodyMaterial;
 }
 static ODClassType* _TRLightView_type;
 @synthesize greenMaterial = _greenMaterial;
 @synthesize redMaterial = _redMaterial;
+@synthesize inactiveMaterial = _inactiveMaterial;
+@synthesize bodyMaterial = _bodyMaterial;
 
 + (id)lightView {
     return [[TRLightView alloc] init];
@@ -294,6 +298,8 @@ static ODClassType* _TRLightView_type;
     if(self) {
         _greenMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.07568, 0.61424, 0.07568, 1.0)] specularColor:EGColorMake(0.633, 0.727811, 0.633, 1.0) specularSize:1.0];
         _redMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.61424, 0.04136, 0.04136, 1.0)] specularColor:EGColorMake(0.727811, 0.626959, 0.626959, 1.0) specularSize:1.0];
+        _inactiveMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.3, 0.3, 0.3, 1.0)] specularColor:EGColorMake(1.0, 1.0, 1.0, 1.0) specularSize:1.0];
+        _bodyMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:EGColorMake(0.1, 0.1, 0.1, 1.0)] specularColor:EGColorMake(0.1, 0.1, 0.1, 1.0) specularSize:1.0];
     }
     
     return self;
@@ -309,10 +315,12 @@ static ODClassType* _TRLightView_type;
         return [[_ modifyW:^GEMat4*(GEMat4* w) {
             return [w translateX:((float)(light.tile.x)) y:((float)(light.tile.y)) z:0.0];
         }] modifyM:^GEMat4*(GEMat4* m) {
-            return [[m rotateAngle:((float)(light.connector.angle)) x:0.0 y:1.0 z:0.0] translateX:-0.45 y:0.0 z:-0.2];
+            return [[m rotateAngle:((float)(90 + light.connector.angle)) x:0.0 y:1.0 z:0.0] translateX:0.2 y:0.0 z:-0.45];
         }];
     } f:^void() {
-        [((light.isGreen) ? _greenMaterial : _redMaterial) drawMesh:TRModels.light];
+        [_bodyMaterial drawMesh:TRModels.light];
+        [((light.isGreen) ? _greenMaterial : _inactiveMaterial) drawMesh:TRModels.lightGreen];
+        [((light.isGreen) ? _inactiveMaterial : _redMaterial) drawMesh:TRModels.lightRed];
     }];
 }
 

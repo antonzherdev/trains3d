@@ -28,6 +28,10 @@
 + (EGMesh *)engineBlack;
 + (EGMesh *)engineFloor;
 + (EGMesh *)damage;
+
++ (EGMesh *)lightGreen;
+
++ (EGMesh *)lightRed;
 @end
 
 

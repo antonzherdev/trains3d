@@ -68,6 +68,8 @@
 @interface TRLightView : NSObject
 @property (nonatomic, readonly) EGStandardMaterial* greenMaterial;
 @property (nonatomic, readonly) EGStandardMaterial* redMaterial;
+@property (nonatomic, readonly) EGStandardMaterial* inactiveMaterial;
+@property (nonatomic, readonly) EGStandardMaterial* bodyMaterial;
 
 + (id)lightView;
 - (id)init;
