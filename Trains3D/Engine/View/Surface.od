@@ -123,4 +123,6 @@ class FullScreenSurface(depth : bool) {
         shader.draw(surface.get.material, fullScreenMesh)
         glEnable(GL_CULL_FACE)
     }
+
+    def texture  = surface.get.texture
 }

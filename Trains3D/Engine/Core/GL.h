@@ -144,3 +144,4 @@ static inline void egColor(EGColor self) {
     indexData: [arrp(unsigned int, numui4, NAME ## _polygoncount*3) NAME ## _index]]
 
 GEVec2 egLoadTextureFromFile(GLuint target, NSString* file);
+void egSaveTextureToFile(GLuint source, NSString* file);

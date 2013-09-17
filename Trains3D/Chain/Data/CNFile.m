@@ -26,3 +26,9 @@
     return [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:resource];
 }
 @end
+
+@implementation CNDirectory
++ (NSString *)sandbox {
+    return NSHomeDirectory();
+}
+@end

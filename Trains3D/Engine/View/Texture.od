@@ -21,6 +21,10 @@ class Texture {
         draw()
         unbind
     }
+
+    def saveTo(file : string) {
+        egSaveTextureToFile(id, file)
+    }
 }
 
 class FileTexture(file : string) extends Texture  {

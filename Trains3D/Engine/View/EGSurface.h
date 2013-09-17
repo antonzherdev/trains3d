@@ -59,6 +59,7 @@
 - (void)maybeForce:(BOOL)force draw:(void(^)())draw;
 - (void)unbind;
 - (void)draw;
+- (EGTexture*)texture;
 + (ODClassType*)type;
 @end
 

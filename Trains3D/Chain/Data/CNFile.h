@@ -14,3 +14,7 @@
 
 + (NSString *)fileNameForResource:(NSString *)resource;
 @end
+
+@interface CNDirectory : NSObject
++ (NSString*) sandbox;
+@end

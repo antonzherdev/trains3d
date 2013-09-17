@@ -42,6 +42,10 @@ static ODClassType* _EGTexture_type;
     [EGTexture unbind];
 }
 
+- (void)saveToFile:(NSString*)file {
+    egSaveTextureToFile(_id, file);
+}
+
 - (ODClassType*)type {
     return [EGTexture type];
 }

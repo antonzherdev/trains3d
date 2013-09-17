@@ -15,6 +15,7 @@
 - (void)dealloc;
 + (void)unbind;
 - (void)applyDraw:(void(^)())draw;
+- (void)saveToFile:(NSString*)file;
 + (ODClassType*)type;
 @end
 

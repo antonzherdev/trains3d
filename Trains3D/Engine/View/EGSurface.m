@@ -281,6 +281,10 @@ static ODClassType* _EGFullScreenSurface_type;
     glEnable(GL_CULL_FACE);
 }
 
+- (EGTexture*)texture {
+    return ((EGSurface*)([_surface get])).texture;
+}
+
 - (ODClassType*)type {
     return [EGFullScreenSurface type];
 }

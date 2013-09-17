@@ -142,4 +142,5 @@ stub object gl {
     def glPopAttrib
 
     def egLoadTextureFromFile(target : GLuint, file : string) : vec2
+    def egSaveTextureToFile(source : GLuint, file : string)
 }
