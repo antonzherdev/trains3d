@@ -4,7 +4,7 @@
 #import "TRCityView.h"
 #import "TRRailroadView.h"
 #import "TRTrainView.h"
-#import "EGTypes.h"
+#import "EGContext.h"
 #import "EGMapIso.h"
 #import "EGCameraIso.h"
 @implementation TRLevelView{

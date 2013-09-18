@@ -1,13 +1,13 @@
 #import "TRLevelMenuView.h"
 
 #import "TRLevel.h"
-#import "EGTypes.h"
 #import "EGCamera2D.h"
 #import "GL.h"
 #import "TRScore.h"
 #import "EGText.h"
 #import "EGSchedule.h"
 #import "TRRailroad.h"
+#import "EGContext.h"
 @implementation TRLevelMenuView{
     TRLevel* _level;
     id<EGCamera> _camera;

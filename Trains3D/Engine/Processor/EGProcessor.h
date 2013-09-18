@@ -39,6 +39,7 @@
 - (GEVec2)locationInView;
 - (GEVec2)location;
 - (GEVec2)locationForDepth:(CGFloat)depth;
+- (GEVec3)ray;
 - (BOOL)isLeftMouseDown;
 - (BOOL)isLeftMouseDrag;
 - (BOOL)isLeftMouseUp;

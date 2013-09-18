@@ -13,6 +13,7 @@ static CGFloat _EGCameraIso_ISO;
 static ODClassType* _EGCameraIso_type;
 @synthesize tilesOnScreen = _tilesOnScreen;
 @synthesize center = _center;
+@synthesize matrixModel = _matrixModel;
 
 + (id)cameraIsoWithTilesOnScreen:(GEVec2i)tilesOnScreen center:(GEVec2)center {
     return [[EGCameraIso alloc] initWithTilesOnScreen:tilesOnScreen center:center];
@@ -49,7 +50,6 @@ static ODClassType* _EGCameraIso_type;
 }
 
 - (void)focusForViewSize:(GEVec2)viewSize {
-    EGGlobal.matrix.value = _matrixModel;
     glCullFace(GL_FRONT);
 }
 

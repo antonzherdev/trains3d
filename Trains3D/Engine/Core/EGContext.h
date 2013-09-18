@@ -2,11 +2,13 @@
 #import "GEVec.h"
 @class EGDirector;
 @class EGFileTexture;
-@class EGEnvironment;
 @class GEMat4;
 
 @class EGGlobal;
 @class EGContext;
+@class EGEnvironment;
+@class EGLight;
+@class EGDirectLight;
 @class EGMatrixStack;
 @class EGMatrixModel;
 
@@ -31,6 +33,40 @@
 - (EGFileTexture*)textureForFile:(NSString*)file;
 - (GERecti)viewport;
 - (void)setViewport:(GERecti)viewport;
++ (ODClassType*)type;
+@end
+
+
+@interface EGEnvironment : NSObject
+@property (nonatomic, readonly) GEVec4 ambientColor;
+@property (nonatomic, readonly) id<CNSeq> lights;
+
++ (id)environmentWithAmbientColor:(GEVec4)ambientColor lights:(id<CNSeq>)lights;
+- (id)initWithAmbientColor:(GEVec4)ambientColor lights:(id<CNSeq>)lights;
+- (ODClassType*)type;
++ (EGEnvironment*)applyLights:(id<CNSeq>)lights;
++ (EGEnvironment*)applyLight:(EGLight*)light;
++ (EGEnvironment*)aDefault;
++ (ODClassType*)type;
+@end
+
+
+@interface EGLight : NSObject
+@property (nonatomic, readonly) GEVec4 color;
+
++ (id)lightWithColor:(GEVec4)color;
+- (id)initWithColor:(GEVec4)color;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface EGDirectLight : EGLight
+@property (nonatomic, readonly) GEVec3 direction;
+
++ (id)directLightWithColor:(GEVec4)color direction:(GEVec3)direction;
+- (id)initWithColor:(GEVec4)color direction:(GEVec3)direction;
+- (ODClassType*)type;
 + (ODClassType*)type;
 @end
 

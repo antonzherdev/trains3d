@@ -6,6 +6,9 @@
 @class CNTreeMapKeySet;
 @protocol CNTraversable;
 @class ODClassType;
+@protocol CNIterable;
+@class CNChain;
+@protocol CNBuilder;
 
 @class CNMutableTreeSet;
 

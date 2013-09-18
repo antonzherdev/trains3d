@@ -2,6 +2,9 @@
 #import "CNList.h"
 
 #import "ODType.h"
+#import "math.h"
+#import "CNSet.h"
+#import "CNChain.h"
 @implementation CNList
 static ODClassType* _CNList_type;
 

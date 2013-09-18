@@ -2,6 +2,9 @@
 #import "CNRange.h"
 
 #import "ODType.h"
+#import "math.h"
+#import "CNSet.h"
+#import "CNChain.h"
 @implementation CNRange{
     NSInteger _start;
     NSInteger _end;

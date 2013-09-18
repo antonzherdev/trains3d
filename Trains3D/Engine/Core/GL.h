@@ -1,6 +1,5 @@
 #import <OpenGL/gl3.h>
 #import <GLUT/glut.h>
-#import "EGTypes.h"
 #import "GEVec.h"
 
 @class GEMat4;

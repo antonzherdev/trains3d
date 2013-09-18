@@ -8,6 +8,7 @@
 }
 static ODClassType* _EGCamera2D_type;
 @synthesize size = _size;
+@synthesize matrixModel = _matrixModel;
 
 + (id)camera2DWithSize:(GEVec2)size {
     return [[EGCamera2D alloc] initWithSize:size];
@@ -40,14 +41,13 @@ static ODClassType* _EGCamera2D_type;
     return geRectiMoveToCenterForSize(geRectiApplyXYWidthHeight(0.0, 0.0, _size.x * factor, _size.y * factor), viewSize);
 }
 
-- (void)focusForViewSize:(GEVec2)viewSize {
-    EGGlobal.matrix.value = _matrixModel;
-}
-
 - (GEVec2)translateWithViewSize:(GEVec2)viewSize viewPoint:(GEVec2)viewPoint {
     float factor = [self factorForViewSize:viewSize];
     GERecti viewport = [self viewportWithViewSize:viewSize factor:factor];
     return geVec2DivValue(geVec2SubVec2(viewPoint, geVec2ApplyVec2i(viewport.origin)), factor);
+}
+
+- (void)focusForViewSize:(GEVec2)viewSize {
 }
 
 - (ODClassType*)type {

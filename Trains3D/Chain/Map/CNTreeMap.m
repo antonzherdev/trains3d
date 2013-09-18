@@ -2,6 +2,7 @@
 #import "CNTreeMap.h"
 
 #import "ODType.h"
+#import "CNChain.h"
 @implementation CNMutableTreeMap{
     NSInteger(^_comparator)(id, id);
     CNTreeMapEntry* _root;

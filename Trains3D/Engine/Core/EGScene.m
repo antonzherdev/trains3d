@@ -1,7 +1,7 @@
 #import "EGScene.h"
 
-#import "EGProcessor.h"
 #import "EGContext.h"
+#import "EGProcessor.h"
 @implementation EGScene{
     id<EGController> _controller;
     id<CNSeq> _layers;
@@ -115,6 +115,7 @@ static ODClassType* _EGLayer_type;
 - (void)drawWithViewSize:(GEVec2)viewSize {
     id<EGCamera> camera = [_view camera];
     [EGGlobal.context setViewport:[camera viewportWithViewSize:viewSize]];
+    EGGlobal.matrix.value = [camera matrixModel];
     [camera focusForViewSize:viewSize];
     EGGlobal.context.environment = [_view environment];
     [_view drawView];

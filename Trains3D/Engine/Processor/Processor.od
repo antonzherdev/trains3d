@@ -26,6 +26,12 @@ class Event(viewSize : vec2, camera : Camera?) {
         if(camera.isEmpty) locationInView
         else camera.get.translateWith(viewSize, locationInView)
 
+    def ray : vec3 =
+        if(camera.isEmpty) vec3(locationInView, 0)
+        else {
+            camera.get
+        }
+
     def isLeftMouseDown : bool
     def isLeftMouseDrag : bool
     def isLeftMouseUp : bool

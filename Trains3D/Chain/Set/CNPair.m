@@ -2,6 +2,7 @@
 #import "CNPair.h"
 
 #import "ODType.h"
+#import "CNChain.h"
 @implementation CNPair{
     id _a;
     id _b;

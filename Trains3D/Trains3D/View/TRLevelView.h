@@ -7,7 +7,6 @@
 @class TRTrainView;
 @class EGEnvironment;
 @class EGDirectLight;
-@protocol EGCamera;
 @class EGMapSso;
 @class EGCameraIso;
 

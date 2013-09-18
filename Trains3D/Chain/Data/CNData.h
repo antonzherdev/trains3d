@@ -2,6 +2,9 @@
 #import "CNSeq.h"
 #import "CNCollection.h"
 @class ODClassType;
+@protocol CNSet;
+@class CNHashSetBuilder;
+@class CNChain;
 
 @class CNPArray;
 @class CNPArrayIterator;

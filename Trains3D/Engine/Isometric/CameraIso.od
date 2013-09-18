@@ -14,7 +14,7 @@ class CameraIso(tilesOnScreen : vec2i, center : vec2) extends Camera {
         recti(0, 0, viewportWidth, viewportHeight).moveToCenterFor(viewSize)
     }
 
-    private val matrixModel : MatrixModel = {
+    val matrixModel : MatrixModel = {
         val ww : float = tilesOnScreen.x + tilesOnScreen.y
         val isoWW2 = ww*ISO/2
         val isoWW4 = isoWW2/2
@@ -31,7 +31,6 @@ class CameraIso(tilesOnScreen : vec2i, center : vec2) extends Camera {
     }
 
     def focusFor(viewSize : vec2) {
-        matrix.value = matrixModel
         glCullFace(GL_FRONT)
     }
 

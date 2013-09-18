@@ -2,6 +2,7 @@
 #import "CNMap.h"
 
 #import "ODType.h"
+#import "CNChain.h"
 @implementation CNMapDefault{
     id(^_defaultFunc)(id);
     id<CNMutableMap> _map;

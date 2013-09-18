@@ -1,5 +1,20 @@
 package com.antonzherdev.eg
 
+trait Controller {
+    def updateWith(delta : float)
+}
+
+trait Camera {
+    def focusFor(viewSize : vec2)  {}
+
+    def translateWith(viewSize : vec2, viewPoint : vec2) : vec2
+
+    def viewportWith(viewSize : vec2) : recti
+
+    def matrixModel : MatrixModel
+}
+
+
 class Scene(val controller : Controller, val layers : [Layer]) {
     def drawWith(viewSize : vec2) {
         layers.for(_.drawWith(viewSize))
@@ -17,6 +32,7 @@ class Layer(view : LayerView, processor : Processor?) extends Controller {
     def drawWith(viewSize : vec2) {
         val camera = view.camera
         context.set(viewport = camera.viewportWith(viewSize))
+        matrix.value = camera.matrixModel
         camera.focusFor(viewSize)
         context.environment = view.environment
         view.drawView

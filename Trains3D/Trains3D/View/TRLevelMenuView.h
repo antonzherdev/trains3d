@@ -2,11 +2,11 @@
 #import "EGScene.h"
 #import "GEVec.h"
 @class TRLevel;
-@protocol EGCamera;
 @class EGCamera2D;
 @class TRScore;
 @class EGSchedule;
 @class TRRailroad;
+@class EGEnvironment;
 
 @class TRLevelMenuView;
 

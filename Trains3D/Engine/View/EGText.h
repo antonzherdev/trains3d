@@ -1,5 +1,4 @@
 #import <Foundation/Foundation.h>
-#import "EGTypes.h"
 #import "GL.h"
 
 

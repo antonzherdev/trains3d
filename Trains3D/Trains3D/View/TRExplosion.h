@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "EGTypes.h"
+#import "EGScene.h"
 #import "GEVec.h"
 #import "EGBillboard.h"
 #import "EGMaterial.h"

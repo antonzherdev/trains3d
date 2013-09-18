@@ -2,6 +2,7 @@
 #import "CNSet.h"
 #import "CNCollection.h"
 @class ODClassType;
+@class CNChain;
 
 @class CNPair;
 @class CNPairIterator;

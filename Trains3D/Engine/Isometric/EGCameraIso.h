@@ -1,17 +1,16 @@
 #import "objd.h"
-#import "EGTypes.h"
+#import "EGScene.h"
 #import "GEVec.h"
 @class EGMapSso;
 @class EGMatrixModel;
 @class GEMat4;
-@class EGGlobal;
-@class EGMatrixStack;
 
 @class EGCameraIso;
 
 @interface EGCameraIso : NSObject<EGCamera>
 @property (nonatomic, readonly) GEVec2i tilesOnScreen;
 @property (nonatomic, readonly) GEVec2 center;
+@property (nonatomic, readonly) EGMatrixModel* matrixModel;
 
 + (id)cameraIsoWithTilesOnScreen:(GEVec2i)tilesOnScreen center:(GEVec2)center;
 - (id)initWithTilesOnScreen:(GEVec2i)tilesOnScreen center:(GEVec2)center;

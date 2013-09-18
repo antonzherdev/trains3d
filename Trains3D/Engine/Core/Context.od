@@ -24,6 +24,15 @@ class Context {
     }
 }
 
+class Environment(ambientColor : vec4, lights : [Light]) {
+    static val default = Environment(vec4(1, 1, 1, 1), [])
+    static def apply(lights : [Light]) = Environment(vec4(1, 1, 1, 1), lights)
+    static def apply(light : Light) = Environment(vec4(1, 1, 1, 1), [light])
+}
+
+class Light(color : vec4)
+class DirectLight(color : vec4, direction : vec3) extends Light(color)
+
 class MatrixStack {
     private var stack = List<MatrixModel>()
     var value = MatrixModel.identity

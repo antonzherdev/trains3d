@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "EGTypes.h"
+#import "EGScene.h"
 
 @class EGSchedule;
 @class EGAnimation;

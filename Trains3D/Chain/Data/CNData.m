@@ -3,6 +3,9 @@
 
 #import "CNTypes.h"
 #import "ODType.h"
+#import "math.h"
+#import "CNSet.h"
+#import "CNChain.h"
 @implementation CNPArray{
     NSUInteger _stride;
     id(^_wrap)(VoidRef, NSUInteger);

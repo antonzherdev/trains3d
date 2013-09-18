@@ -1,6 +1,6 @@
 #import "objd.h"
 #import "GEVec.h"
-#import "EGTypes.h"
+#import "EGScene.h"
 @class TRScoreRules;
 @class EGMapSso;
 @class TRScore;
