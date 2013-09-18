@@ -1,5 +1,6 @@
 #import "GEVec.h"
 
+#import "GEMat4.h"
 GEVec2 geVec2ApplyVec2i(GEVec2i vec2i) {
     return GEVec2Make(((float)(vec2i.x)), ((float)(vec2i.y)));
 }
@@ -177,6 +178,9 @@ GEVec3 geVec3ApplyVec2Z(GEVec2 vec2, float z) {
 GEVec3 geVec3AddV(GEVec3 self, GEVec3 v) {
     return GEVec3Make(self.x + v.x, self.y + v.y, self.z + v.z);
 }
+GEVec3 geVec3SubV(GEVec3 self, GEVec3 v) {
+    return GEVec3Make(self.x - v.x, self.y - v.y, self.z - v.z);
+}
 GEVec3 geVec3Sqr(GEVec3 self) {
     return geVec3MulK(self, ((float)(geVec3Length(self))));
 }
@@ -186,17 +190,17 @@ GEVec3 geVec3Negate(GEVec3 self) {
 GEVec3 geVec3MulK(GEVec3 self, float k) {
     return GEVec3Make(k * self.x, k * self.y, k * self.z);
 }
-CGFloat geVec3DotVec3(GEVec3 self, GEVec3 vec3) {
-    return ((CGFloat)(self.x * vec3.x + self.y * vec3.y + self.z * vec3.z));
+float geVec3DotVec3(GEVec3 self, GEVec3 vec3) {
+    return self.x * vec3.x + self.y * vec3.y + self.z * vec3.z;
 }
-CGFloat geVec3LengthSquare(GEVec3 self) {
-    return ((CGFloat)(self.x * self.x + self.y * self.y + self.z * self.z));
+float geVec3LengthSquare(GEVec3 self) {
+    return self.x * self.x + self.y * self.y + self.z * self.z;
 }
 CGFloat geVec3Length(GEVec3 self) {
-    return sqrt(geVec3LengthSquare(self));
+    return sqrt(((CGFloat)(geVec3LengthSquare(self))));
 }
-GEVec3 geVec3SetLength(GEVec3 self, CGFloat length) {
-    return geVec3MulK(self, ((float)(length / geVec3Length(self))));
+GEVec3 geVec3SetLength(GEVec3 self, float length) {
+    return geVec3MulK(self, length / geVec3Length(self));
 }
 GEVec3 geVec3Normalize(GEVec3 self) {
     return geVec3SetLength(self, 1.0);
@@ -255,14 +259,17 @@ GEVec3 geVec4Xyz(GEVec4 self) {
 GEVec4 geVec4MulK(GEVec4 self, float k) {
     return GEVec4Make(k * self.x, k * self.y, k * self.z, k * self.w);
 }
-CGFloat geVec4LengthSquare(GEVec4 self) {
-    return ((CGFloat)(self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w));
+GEVec4 geVec4DivMat4(GEVec4 self, GEMat4* mat4) {
+    return [mat4 divBySelfVec4:self];
+}
+float geVec4LengthSquare(GEVec4 self) {
+    return self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w;
 }
 CGFloat geVec4Length(GEVec4 self) {
-    return sqrt(geVec4LengthSquare(self));
+    return sqrt(((CGFloat)(geVec4LengthSquare(self))));
 }
-GEVec4 geVec4SetLength(GEVec4 self, CGFloat length) {
-    return geVec4MulK(self, ((float)(length / geVec4Length(self))));
+GEVec4 geVec4SetLength(GEVec4 self, float length) {
+    return geVec4MulK(self, length / geVec4Length(self));
 }
 GEVec4 geVec4Normalize(GEVec4 self) {
     return geVec4SetLength(self, 1.0);

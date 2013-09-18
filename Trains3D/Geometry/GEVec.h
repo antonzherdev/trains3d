@@ -1,4 +1,5 @@
 #import "objd.h"
+@class GEMat4;
 
 typedef struct GEVec2 GEVec2;
 typedef struct GEVec2i GEVec2i;
@@ -126,13 +127,14 @@ static inline NSString* GEVec3Description(GEVec3 self) {
 }
 GEVec3 geVec3ApplyVec2Z(GEVec2 vec2, float z);
 GEVec3 geVec3AddV(GEVec3 self, GEVec3 v);
+GEVec3 geVec3SubV(GEVec3 self, GEVec3 v);
 GEVec3 geVec3Sqr(GEVec3 self);
 GEVec3 geVec3Negate(GEVec3 self);
 GEVec3 geVec3MulK(GEVec3 self, float k);
-CGFloat geVec3DotVec3(GEVec3 self, GEVec3 vec3);
-CGFloat geVec3LengthSquare(GEVec3 self);
+float geVec3DotVec3(GEVec3 self, GEVec3 vec3);
+float geVec3LengthSquare(GEVec3 self);
 CGFloat geVec3Length(GEVec3 self);
-GEVec3 geVec3SetLength(GEVec3 self, CGFloat length);
+GEVec3 geVec3SetLength(GEVec3 self, float length);
 GEVec3 geVec3Normalize(GEVec3 self);
 ODPType* geVec3Type();
 @interface GEVec3Wrap : NSObject
@@ -176,9 +178,10 @@ static inline NSString* GEVec4Description(GEVec4 self) {
 GEVec4 geVec4ApplyVec3W(GEVec3 vec3, float w);
 GEVec3 geVec4Xyz(GEVec4 self);
 GEVec4 geVec4MulK(GEVec4 self, float k);
-CGFloat geVec4LengthSquare(GEVec4 self);
+GEVec4 geVec4DivMat4(GEVec4 self, GEMat4* mat4);
+float geVec4LengthSquare(GEVec4 self);
 CGFloat geVec4Length(GEVec4 self);
-GEVec4 geVec4SetLength(GEVec4 self, CGFloat length);
+GEVec4 geVec4SetLength(GEVec4 self, float length);
 GEVec4 geVec4Normalize(GEVec4 self);
 ODPType* geVec4Type();
 @interface GEVec4Wrap : NSObject

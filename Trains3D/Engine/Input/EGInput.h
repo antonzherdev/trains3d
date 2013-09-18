@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "GEVec.h"
 @protocol EGCamera;
+@class EGMatrixModel;
 
 @class EGEvent;
 @class EGRectIndex;
@@ -39,7 +40,7 @@
 - (GEVec2)locationInView;
 - (GEVec2)location;
 - (GEVec2)locationForDepth:(CGFloat)depth;
-- (GEVec3)ray;
+- (GEVec3)line;
 - (BOOL)isLeftMouseDown;
 - (BOOL)isLeftMouseDrag;
 - (BOOL)isLeftMouseUp;

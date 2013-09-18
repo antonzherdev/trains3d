@@ -131,6 +131,10 @@ static GEMat4 * _identity;
             m[3], m[7], m[11], m[15]];
 }
 
+- (GEVec4)divBySelfVec4:(GEVec4)vec4 {
+    glm::vec4 v4 = glm::vec4(vec4.x, vec4.y, vec4.z, vec4.w) / _impl->m;
+    return {v4.x, v4.y, v4.z, v4.w};
+}
 @end
 
 

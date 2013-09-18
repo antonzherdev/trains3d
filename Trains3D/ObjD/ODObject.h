@@ -72,6 +72,24 @@ static inline BOOL uintBetween(NSUInteger s, NSUInteger a, NSUInteger b) {
     return a <= s && s <= b;
 }
 
+static inline CGFloat floatAbs(CGFloat f) {
+    return f < 0 ? -f : f;
+}
+
+static inline float float4Abs(float f) {
+    return f < 0 ? -f : f;
+}
+
+
+static inline char byteAbs(char f) {
+    return f < 0 ? -f : f;
+}
+
+static inline int intAbs(int f) {
+    return f < 0 ? -f : f;
+}
+
+
 #define floatHash(f) [numf(f) hash]
 #define float4Hash(f) [numf4(f) hash]
 #define float8Hash(f) [numf8(f) hash]

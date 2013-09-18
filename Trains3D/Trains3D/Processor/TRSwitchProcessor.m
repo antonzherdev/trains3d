@@ -36,7 +36,9 @@ static ODClassType* _TRSwitchProcessor_type;
 }
 
 - (BOOL)mouseDownEvent:(EGEvent*)event {
+    GEVec3 line = [event line];
     GEVec2 location = [event location];
+    GEVec3 t = geVec3MulK(line, location.x / line.x);
     GEVec2i tile = geVec2iApplyVec2(location);
     GEVec2 relPoint = geVec2SubVec2(location, geVec2ApplyVec2i(tile));
     _downed = [[_index applyPoint:relPoint] flatMap:^id(CNTuple* v) {

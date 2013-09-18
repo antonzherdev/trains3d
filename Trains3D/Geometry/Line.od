@@ -1,0 +1,11 @@
+package com.antonzherdev.geometry
+
+struct line3(r0 : vec3, u : vec3) {
+    def r(t : float4) = r0 + u*t
+
+    def r(plane : plane) = r0 + u*( plane.n.dot(plane.p0 - r0)/plane.n.dot(u) )
+}
+
+struct plane(p0 : vec3, n : vec3) {
+    def contains(vec3 : vec3) = n.dot(vec3 - p0) == 0
+}

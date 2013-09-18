@@ -20,6 +20,7 @@ stub struct Byte extends Comparable<byte> {
     def range : Range
     def to(: byte) : Range
     def between(from : byte, to : byte) : bool
+    def abs : byte
 }
 
 
@@ -28,6 +29,7 @@ stub struct Int extends Comparable<int> {
     def range : Range
     def to(: int) : Range
     def between( : int, : int) : bool
+    def abs : int
 }
 
 stub struct UInt extends Comparable<uint> {
@@ -47,11 +49,13 @@ stub struct UInt4 extends Comparable<uint4> {
 stub struct Float extends Comparable<float> {
     def compare(to : float) : int
     def between( : float, : float) : bool
+    def abs : float
 }
 
 stub struct Float4 extends Comparable<float4> {
     def compare(to : float4) : int
     def between( : float4, : float4) : bool
+    def abs : float4
 }
 
 

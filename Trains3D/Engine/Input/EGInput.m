@@ -1,6 +1,7 @@
 #import "EGInput.h"
 
 #import "EGScene.h"
+#import "EGContext.h"
 @implementation EGEvent{
     GEVec2 _viewSize;
     id _camera;
@@ -45,9 +46,13 @@ static ODClassType* _EGEvent_type;
     else return [[_camera get] translateWithViewSize:_viewSize viewPoint:[self locationInView]];
 }
 
-- (GEVec3)ray {
-    if([_camera isEmpty]) return geVec3ApplyVec2Z([self locationInView], 0.0);
-    else return uwrap(GEVec3, [_camera get]);
+- (GEVec3)line {
+    if([_camera isEmpty]) {
+        return geVec3ApplyVec2Z([self locationInView], 0.0);
+    } else {
+        GEVec2 loc = [self locationInView];
+        return geVec4Xyz(geVec4DivMat4(GEVec4Make(loc.x, loc.y, 0.0, 1.0), [[[_camera get] matrixModel] mwcp]));
+    }
 }
 
 - (BOOL)isLeftMouseDown {
