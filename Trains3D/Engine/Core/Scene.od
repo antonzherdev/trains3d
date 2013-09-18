@@ -28,7 +28,7 @@ class Scene(val controller : Controller, val layers : [Layer]) {
     }
 }
 
-class Layer(view : LayerView, processor : Processor?) extends Controller {
+class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
     def drawWith(viewSize : vec2) {
         val camera = view.camera
         context.set(viewport = camera.viewportWith(viewSize))

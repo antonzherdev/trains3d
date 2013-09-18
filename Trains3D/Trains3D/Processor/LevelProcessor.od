@@ -2,7 +2,7 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class LevelProcessor(level : Level) extends Processor {
+class LevelProcessor(level : Level) extends InputProcessor {
     private val railroadBuilderProcessor = RailroadBuilderProcessor(level.railroad.builder)
     private val switchProcessor = SwitchProcessor(level)
 

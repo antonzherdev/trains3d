@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "EGProcessor.h"
+#import "EGInput.h"
 @class TRLevel;
 @class TRRailroadBuilderProcessor;
 @class TRRailroad;
@@ -7,7 +7,7 @@
 
 @class TRLevelProcessor;
 
-@interface TRLevelProcessor : NSObject<EGProcessor>
+@interface TRLevelProcessor : NSObject<EGInputProcessor>
 @property (nonatomic, readonly) TRLevel* level;
 
 + (id)levelProcessorWithLevel:(TRLevel*)level;

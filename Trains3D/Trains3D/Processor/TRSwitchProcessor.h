@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "EGProcessor.h"
+#import "EGInput.h"
 #import "GEVec.h"
 @class TRLevel;
 @class TRRailConnector;

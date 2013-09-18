@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "EGProcessor.h"
+#import "EGInput.h"
 #import "GEVec.h"
 @class TRRailroadBuilder;
 @class EGTwoFingerTouchToMouse;
@@ -11,7 +11,7 @@
 @class TRRailroadBuilderMouseProcessor;
 typedef struct TRRailCorrection TRRailCorrection;
 
-@interface TRRailroadBuilderProcessor : NSObject<EGProcessor>
+@interface TRRailroadBuilderProcessor : NSObject<EGInputProcessor>
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
 
 + (id)railroadBuilderProcessorWithBuilder:(TRRailroadBuilder*)builder;

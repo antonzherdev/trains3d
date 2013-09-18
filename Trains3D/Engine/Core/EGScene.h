@@ -5,7 +5,7 @@
 @class EGGlobal;
 @class EGContext;
 @class EGMatrixStack;
-@protocol EGProcessor;
+@protocol EGInputProcessor;
 @class EGEnvironment;
 
 @class EGScene;

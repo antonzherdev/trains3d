@@ -1,4 +1,4 @@
-#import "EGProcessor.h"
+#import "EGInput.h"
 
 #import "EGScene.h"
 @implementation EGEvent{

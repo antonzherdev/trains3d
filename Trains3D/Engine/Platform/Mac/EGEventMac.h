@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-#import "EGProcessor.h"
+#import "EGInput.h"
 
 @class EGOpenGLView;
 

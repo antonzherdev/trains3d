@@ -4,11 +4,11 @@
 
 @class EGEvent;
 @class EGRectIndex;
-@protocol EGProcessor;
+@protocol EGInputProcessor;
 @protocol EGMouseProcessor;
 @protocol EGTouchProcessor;
 
-@protocol EGProcessor<NSObject>
+@protocol EGInputProcessor<NSObject>
 - (BOOL)processEvent:(EGEvent*)event;
 @end
 

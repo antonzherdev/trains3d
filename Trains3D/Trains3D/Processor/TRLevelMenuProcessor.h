@@ -1,12 +1,12 @@
 #import "objd.h"
-#import "EGProcessor.h"
+#import "EGInput.h"
 #import "GEVec.h"
 @class TRLevel;
 @class TRRailroad;
 
 @class TRLevelMenuProcessor;
 
-@interface TRLevelMenuProcessor : NSObject<EGProcessor, EGMouseProcessor>
+@interface TRLevelMenuProcessor : NSObject<EGInputProcessor, EGMouseProcessor>
 @property (nonatomic, readonly) TRLevel* level;
 
 + (id)levelMenuProcessorWithLevel:(TRLevel*)level;

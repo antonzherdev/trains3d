@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-trait Processor {
+trait InputProcessor {
     def process(event : Event) : bool
 }
 

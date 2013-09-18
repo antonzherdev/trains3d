@@ -3,7 +3,7 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 import core.math._
 
-class RailroadBuilderProcessor(builder : RailroadBuilder) extends Processor {
+class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor {
     private val mouseProcessor = RailroadBuilderMouseProcessor(builder)
     private val touchProcessor = TwoFingerTouchToMouse(mouseProcessor)
 

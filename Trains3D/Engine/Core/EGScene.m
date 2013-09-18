@@ -1,7 +1,7 @@
 #import "EGScene.h"
 
 #import "EGContext.h"
-#import "EGProcessor.h"
+#import "EGInput.h"
 @implementation EGScene{
     id<EGController> _controller;
     id<CNSeq> _layers;
@@ -123,7 +123,7 @@ static ODClassType* _EGLayer_type;
 
 - (BOOL)processEvent:(EGEvent*)event {
     EGEvent* cameraEvent = [event setCamera:[CNOption opt:[_view camera]]];
-    return unumb([[_processor map:^id(id<EGProcessor> _) {
+    return unumb([[_processor map:^id(id<EGInputProcessor> _) {
         return numb([_ processEvent:cameraEvent]);
     }] getOr:@NO]);
 }
