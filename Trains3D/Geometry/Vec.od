@@ -44,8 +44,8 @@ struct vec2i(x : int, y : int) extends Comparable<vec2i> {
 
 struct vec3(x : float4, y : float4, z : float4) {
     static def apply(vec2 : vec2, z : float4) = vec3(vec2.x, vec2.y, z)
-    def add(v : vec3) = vec3(x + v.x, y + v.y, z + v.z)
-    def sub(v : vec3) = vec3(x - v.x, y - v.y, z - v.z)
+    def add(vec3 : vec3) = vec3(x + vec3.x, y + vec3.y, z + vec3.z)
+    def sub(vec3 : vec3) = vec3(x - vec3.x, y - vec3.y, z - vec3.z)
     def sqr = mul(length)
     def negate = vec3(-x, -y, -z)
     def mul(k : float4) = vec3(k*x, k*y, k*z)

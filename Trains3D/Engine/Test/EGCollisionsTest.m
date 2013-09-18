@@ -2,6 +2,7 @@
 
 #import "EGCollisionWorld.h"
 #import "EGCollisionBody.h"
+#import "EGCollision.h"
 @implementation EGCollisionsTest
 static ODClassType* _EGCollisionsTest_type;
 
@@ -46,6 +47,26 @@ static ODClassType* _EGCollisionsTest_type;
     [self assertTrueValue:[[world detect] count] == 1];
     [box1 translateX:0.2 y:0.2 z:0.0];
     [self assertTrueValue:[[world detect] isEmpty]];
+}
+
+- (void)testRay {
+    EGCollisionWorld* world = [EGCollisionWorld collisionWorld];
+    EGCollisionBody* box1 = [EGCollisionBody collisionBodyWithData:@1 shape:[EGCollisionBox2d applyX:0.5 y:0.5] isKinematic:NO];
+    EGCollisionBody* box2 = [EGCollisionBody collisionBodyWithData:@2 shape:[EGCollisionBox2d applyX:0.5 y:0.5] isKinematic:YES];
+    [box1 translateX:2.0 y:2.0 z:0.0];
+    [world addBody:box1];
+    [world addBody:box2];
+    GELine3 segment = GELine3Make(GEVec3Make(2.0, 2.0, 2.0), GEVec3Make(0.0, 0.0, -10.0));
+    id<CNSeq> r = [world crossPointsWithSegment:segment];
+    EGCrossPoint* p1 = [EGCrossPoint crossPointWithBody:box1 point:GEVec3Make(2.0, 2.0, 0.0)];
+    [self assertEqualsA:r b:(@[p1])];
+    [box2 translateX:2.0 y:2.0 z:-1.0];
+    r = [world crossPointsWithSegment:segment];
+    [self assertEqualsA:r b:(@[p1, [EGCrossPoint crossPointWithBody:box2 point:GEVec3Make(2.0, 2.0, -1.0)]])];
+    [self assertEqualsA:[world closestCrossPointWithSegment:segment] b:[CNOption opt:p1]];
+    [box2 translateX:0.0 y:0.0 z:-10.0];
+    r = [world crossPointsWithSegment:segment];
+    [self assertEqualsA:r b:(@[p1])];
 }
 
 - (ODClassType*)type {

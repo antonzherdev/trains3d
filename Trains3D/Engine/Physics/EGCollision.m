@@ -1,5 +1,6 @@
 #import "EGCollision.h"
 
+#import "EGCollisionBody.h"
 @implementation EGCollision{
     CNPair* _bodies;
     id<CNSeq> _contacts;
@@ -57,6 +58,70 @@ static ODClassType* _EGCollision_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"bodies=%@", self.bodies];
     [description appendFormat:@", contacts=%@", self.contacts];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGCrossPoint{
+    EGCollisionBody* _body;
+    GEVec3 _point;
+}
+static ODClassType* _EGCrossPoint_type;
+@synthesize body = _body;
+@synthesize point = _point;
+
++ (id)crossPointWithBody:(EGCollisionBody*)body point:(GEVec3)point {
+    return [[EGCrossPoint alloc] initWithBody:body point:point];
+}
+
+- (id)initWithBody:(EGCollisionBody*)body point:(GEVec3)point {
+    self = [super init];
+    if(self) {
+        _body = body;
+        _point = point;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGCrossPoint_type = [ODClassType classTypeWithCls:[EGCrossPoint class]];
+}
+
+- (ODClassType*)type {
+    return [EGCrossPoint type];
+}
+
++ (ODClassType*)type {
+    return _EGCrossPoint_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGCrossPoint* o = ((EGCrossPoint*)(other));
+    return [self.body isEqual:o.body] && GEVec3Eq(self.point, o.point);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.body hash];
+    hash = hash * 31 + GEVec3Hash(self.point);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"body=%@", self.body];
+    [description appendFormat:@", point=%@", GEVec3Description(self.point)];
     [description appendString:@">"];
     return description;
 }

@@ -126,8 +126,8 @@ static inline NSString* GEVec3Description(GEVec3 self) {
     return description;
 }
 GEVec3 geVec3ApplyVec2Z(GEVec2 vec2, float z);
-GEVec3 geVec3AddV(GEVec3 self, GEVec3 v);
-GEVec3 geVec3SubV(GEVec3 self, GEVec3 v);
+GEVec3 geVec3AddVec3(GEVec3 self, GEVec3 vec3);
+GEVec3 geVec3SubVec3(GEVec3 self, GEVec3 vec3);
 GEVec3 geVec3Sqr(GEVec3 self);
 GEVec3 geVec3Negate(GEVec3 self);
 GEVec3 geVec3MulK(GEVec3 self, float k);

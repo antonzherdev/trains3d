@@ -1,4 +1,6 @@
 #import "objd.h"
+#import "GELine.h"
+
 @class EGCollisionBody;
 
 @class EGCollisionWorld;
@@ -11,6 +13,9 @@
 - (void)removeBody:(EGCollisionBody*)body;
 - (id<CNIterable>)detect;
 + (ODClassType*)type;
+
+- (id <CNSeq>)crossPointsWithSegment:(GELine3)line3;
+- (id)closestCrossPointWithSegment:(GELine3)line3;
 @end
 
 

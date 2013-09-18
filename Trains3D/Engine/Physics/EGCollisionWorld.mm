@@ -4,6 +4,7 @@
 
 #include "btBulletCollisionCommon.h"
 #import "EGCollision.h"
+#import "GELine.h"
 
 @implementation EGCollisionWorld {
     btCollisionWorld * _world;
@@ -101,6 +102,29 @@ static ODClassType* _EGCollisionWorld_type;
     return description;
 }
 
+- (id <CNSeq>)crossPointsWithSegment:(GELine3)line3 {
+    btVector3 from = btVector3(line3.r0.x, line3.r0.y, line3.r0.z);
+    btVector3 to = btVector3(line3.r0.x + line3.u.x, line3.r0.y + line3.u.y, line3.r0.z + line3.u.z);
+    btCollisionWorld::AllHitsRayResultCallback results(from, to);
+    _world->rayTest(from, to, results);
+    
+    return [CNIndexFunSeq indexFunSeqWithCount:(NSUInteger) results.m_collisionObjects.size() f:^id(NSUInteger i) {
+        EGCollisionBody *body = (__bridge EGCollisionBody *) results.m_collisionObjects.at(i)->getUserPointer();
+        const btVector3 & p = results.m_hitPointWorld.at(i);
+        return [EGCrossPoint crossPointWithBody:body point:(GEVec3){p.x(), p.y(), p.z()}];
+    }];
+}
+
+- (id)closestCrossPointWithSegment:(GELine3)line3 {
+    btVector3 from = btVector3(line3.r0.x, line3.r0.y, line3.r0.z);
+    btVector3 to = btVector3(line3.r0.x + line3.u.x, line3.r0.y + line3.u.y, line3.r0.z + line3.u.z);
+    btCollisionWorld::ClosestRayResultCallback results(from, to);
+    _world->rayTest(from, to, results);
+    if(results.m_collisionObject == nil) return [CNOption none];
+    EGCollisionBody *body = (__bridge EGCollisionBody *) results.m_collisionObject->getUserPointer();
+    const btVector3 & p = results.m_hitPointWorld;
+    return [EGCrossPoint crossPointWithBody:body point:(GEVec3){p.x(), p.y(), p.z()}];
+}
 @end
 
 

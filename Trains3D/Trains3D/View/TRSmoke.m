@@ -172,8 +172,8 @@ static ODClassType* _TRSmokeParticle_type;
 
 - (void)updateT:(float)t dt:(float)dt {
     GEVec3 a = geVec3MulK(_speed, ((float)(-_TRSmokeParticle_dragCoefficient)));
-    _speed = geVec3AddV(_speed, geVec3MulK(a, dt));
-    self.position = geVec3AddV(self.position, geVec3MulK(_speed, dt));
+    _speed = geVec3AddVec3(_speed, geVec3MulK(a, dt));
+    self.position = geVec3AddVec3(self.position, geVec3MulK(_speed, dt));
     _animation(t);
 }
 

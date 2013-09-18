@@ -1,10 +1,10 @@
 #import "GELine.h"
 
 GEVec3 geLine3RT(GELine3 self, float t) {
-    return geVec3AddV(self.r0, geVec3MulK(self.u, t));
+    return geVec3AddVec3(self.r0, geVec3MulK(self.u, t));
 }
 GEVec3 geLine3RPlane(GELine3 self, GEPlane plane) {
-    return geVec3AddV(self.r0, geVec3MulK(self.u, geVec3DotVec3(plane.n, geVec3SubV(plane.p0, self.r0)) / geVec3DotVec3(plane.n, self.u)));
+    return geVec3AddVec3(self.r0, geVec3MulK(self.u, geVec3DotVec3(plane.n, geVec3SubVec3(plane.p0, self.r0)) / geVec3DotVec3(plane.n, self.u)));
 }
 ODPType* geLine3Type() {
     static ODPType* _ret = nil;
@@ -52,7 +52,7 @@ ODPType* geLine3Type() {
 
 
 BOOL gePlaneContainsVec3(GEPlane self, GEVec3 vec3) {
-    return eqf4(geVec3DotVec3(self.n, geVec3SubV(vec3, self.p0)), 0);
+    return eqf4(geVec3DotVec3(self.n, geVec3SubVec3(vec3, self.p0)), 0);
 }
 ODPType* gePlaneType() {
     static ODPType* _ret = nil;

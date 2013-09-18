@@ -1,7 +1,9 @@
 #import "objd.h"
 #import "GEVec.h"
+@class EGCollisionBody;
 
 @class EGCollision;
+@class EGCrossPoint;
 @class EGContact;
 @class EGIndexFunFilteredIterable;
 @class EGIndexFunFilteredIterator;
@@ -12,6 +14,17 @@
 
 + (id)collisionWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
 - (id)initWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface EGCrossPoint : NSObject
+@property (nonatomic, readonly) EGCollisionBody* body;
+@property (nonatomic, readonly) GEVec3 point;
+
++ (id)crossPointWithBody:(EGCollisionBody*)body point:(GEVec3)point;
+- (id)initWithBody:(EGCollisionBody*)body point:(GEVec3)point;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

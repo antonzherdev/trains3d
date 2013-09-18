@@ -175,11 +175,11 @@ ODPType* geVec2iType() {
 GEVec3 geVec3ApplyVec2Z(GEVec2 vec2, float z) {
     return GEVec3Make(vec2.x, vec2.y, z);
 }
-GEVec3 geVec3AddV(GEVec3 self, GEVec3 v) {
-    return GEVec3Make(self.x + v.x, self.y + v.y, self.z + v.z);
+GEVec3 geVec3AddVec3(GEVec3 self, GEVec3 vec3) {
+    return GEVec3Make(self.x + vec3.x, self.y + vec3.y, self.z + vec3.z);
 }
-GEVec3 geVec3SubV(GEVec3 self, GEVec3 v) {
-    return GEVec3Make(self.x - v.x, self.y - v.y, self.z - v.z);
+GEVec3 geVec3SubVec3(GEVec3 self, GEVec3 vec3) {
+    return GEVec3Make(self.x - vec3.x, self.y - vec3.y, self.z - vec3.z);
 }
 GEVec3 geVec3Sqr(GEVec3 self) {
     return geVec3MulK(self, ((float)(geVec3Length(self))));
