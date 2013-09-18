@@ -119,7 +119,6 @@
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRScore* score;
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
-@property (nonatomic) BOOL changed;
 
 + (id)railroadWithMap:(EGMapSso*)map score:(TRScore*)score;
 - (id)initWithMap:(EGMapSso*)map score:(TRScore*)score;
@@ -128,6 +127,7 @@
 - (id<CNSeq>)switches;
 - (id<CNSeq>)lights;
 - (id<CNSeq>)damagesPoints;
+- (void)addChangeListener:(void(^)())changeListener;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (BOOL)tryAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)contentInTile:(GEVec2i)tile connector:(TRRailConnector*)connector;

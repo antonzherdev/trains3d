@@ -16,6 +16,7 @@
     TRDamageView* _damageView;
     EGFullScreenSurface* _railroadSurface;
     TRBackgroundView* _backgroundView;
+    BOOL _changed;
 }
 static ODClassType* _TRRailroadView_type;
 @synthesize railroad = _railroad;
@@ -34,6 +35,8 @@ static ODClassType* _TRRailroadView_type;
         _damageView = [TRDamageView damageView];
         _railroadSurface = [EGFullScreenSurface fullScreenSurfaceWithDepth:YES multisampling:YES];
         _backgroundView = [TRBackgroundView backgroundViewWithMap:_railroad.map];
+        _changed = YES;
+        [self _init];
     }
     
     return self;
@@ -44,14 +47,20 @@ static ODClassType* _TRRailroadView_type;
     _TRRailroadView_type = [ODClassType classTypeWithCls:[TRRailroadView class]];
 }
 
+- (void)_init {
+    [_railroad addChangeListener:^void() {
+        _changed = YES;
+    }];
+}
+
 - (void)draw {
-    [_railroadSurface maybeForce:_railroad.changed draw:^void() {
+    [_railroadSurface maybeForce:_changed draw:^void() {
         egClear();
         [_backgroundView draw];
         [[_railroad rails] forEach:^void(TRRail* _) {
             [_railView drawRail:_];
         }];
-        _railroad.changed = NO;
+        _changed = NO;
     }];
     [_railroadSurface draw];
     [[_railroad switches] forEach:^void(TRSwitch* _) {

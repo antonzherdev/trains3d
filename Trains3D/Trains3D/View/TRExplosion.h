@@ -34,7 +34,7 @@
 - (id)initWithPosition:(GEVec3)position size:(float)size;
 - (ODClassType*)type;
 - (EGBillboardParticle*)generateParticle;
-- (TRExplosionFlame*)init;
+- (void)_init;
 + (ODClassType*)type;
 @end
 

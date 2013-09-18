@@ -534,16 +534,15 @@ static ODClassType* _TRObstacle_type;
     id<CNSeq> __switches;
     id<CNSeq> __lights;
     TRRailroadBuilder* _builder;
-    BOOL _changed;
     CNMapDefault* _connectorIndex;
     NSMutableDictionary* _damagesIndex;
     NSMutableArray* __damagesPoints;
+    id<CNSeq> __changeListeners;
 }
 static ODClassType* _TRRailroad_type;
 @synthesize map = _map;
 @synthesize score = _score;
 @synthesize builder = _builder;
-@synthesize changed = _changed;
 
 + (id)railroadWithMap:(EGMapSso*)map score:(TRScore*)score {
     return [[TRRailroad alloc] initWithMap:map score:score];
@@ -558,12 +557,12 @@ static ODClassType* _TRRailroad_type;
         __switches = (@[]);
         __lights = (@[]);
         _builder = [TRRailroadBuilder railroadBuilderWithRailroad:self];
-        _changed = NO;
         _connectorIndex = [CNMapDefault mapDefaultWithDefaultFunc:^TRRailroadConnectorContent*(CNTuple* _) {
             return TREmptyConnector.instance;
         } map:[NSMutableDictionary mutableDictionary]];
         _damagesIndex = [NSMutableDictionary mutableDictionary];
         __damagesPoints = [NSMutableArray mutableArray];
+        __changeListeners = (@[]);
     }
     
     return self;
@@ -588,6 +587,10 @@ static ODClassType* _TRRailroad_type;
 
 - (id<CNSeq>)damagesPoints {
     return __damagesPoints;
+}
+
+- (void)addChangeListener:(void(^)())changeListener {
+    __changeListeners = [__changeListeners arrayByAddingItem:changeListener];
 }
 
 - (BOOL)canAddRail:(TRRail*)rail {
@@ -650,7 +653,9 @@ static ODClassType* _TRRailroad_type;
     __lights = [[[[_connectorIndex values] chain] filter:^BOOL(TRRailroadConnectorContent* _) {
         return [_ isKindOfClass:[TRRailLight class]];
     }] toArray];
-    _changed = YES;
+    [__changeListeners forEach:^void(void(^_)()) {
+        ((void(^)())(_))();
+    }];
 }
 
 - (id)activeRailForTile:(GEVec2i)tile connector:(TRRailConnector*)connector {

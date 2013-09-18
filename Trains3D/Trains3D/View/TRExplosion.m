@@ -21,7 +21,7 @@ static ODClassType* _TRExplosion_type;
     if(self) {
         _position = position;
         _size = size;
-        _flame = [[TRExplosionFlame explosionFlameWithPosition:_position size:_size] init];
+        _flame = [TRExplosionFlame explosionFlameWithPosition:_position size:_size];
     }
     
     return self;
@@ -41,7 +41,7 @@ static ODClassType* _TRExplosion_type;
 }
 
 - (void)restart {
-    [_flame init];
+    [_flame _init];
 }
 
 - (ODClassType*)type {
@@ -98,6 +98,7 @@ static ODClassType* _TRExplosionFlame_type;
     if(self) {
         _position = position;
         _size = size;
+        [self _init];
     }
     
     return self;
@@ -112,11 +113,10 @@ static ODClassType* _TRExplosionFlame_type;
     return [TRExplosionFlameParticle applyPosition:_position size:_size];
 }
 
-- (TRExplosionFlame*)init {
+- (void)_init {
     [intRange(4) forEach:^void(id _) {
         [self emitParticle];
     }];
-    return self;
 }
 
 - (ODClassType*)type {

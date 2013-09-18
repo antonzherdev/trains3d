@@ -31,6 +31,7 @@
 + (id)railroadViewWithRailroad:(TRRailroad*)railroad;
 - (id)initWithRailroad:(TRRailroad*)railroad;
 - (ODClassType*)type;
+- (void)_init;
 - (void)draw;
 + (ODClassType*)type;
 @end

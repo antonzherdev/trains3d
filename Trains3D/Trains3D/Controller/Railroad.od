@@ -59,11 +59,15 @@ class Railroad(map : MapSso, score : Score) {
     private var _lights : [RailLight] = []
     def lights = _lights
     val builder = RailroadBuilder(self)
-    var changed = false
     private val connectorIndex = MapDefault(EmptyConnector.instance, MutableHashMap<(vec2i, RailConnector), RailroadConnectorContent>())
     private val damagesIndex = MutableHashMap<(vec2i, RailForm), [float]>()
     private var _damagesPoints = MutableArray<RailPoint>()
     def damagesPoints : [RailPoint] = _damagesPoints
+
+    private var _changeListeners : [() -> void] = []
+    def add(changeListener : () -> void) {
+        _changeListeners += changeListener
+    }
 
     def canAdd(rail : Rail) : bool =
         connectorIndex[(rail.tile, rail.form.start)].canAdd(rail)
@@ -117,7 +121,7 @@ class Railroad(map : MapSso, score : Score) {
         _rails = connectorIndex.values.chain.flatMap(_.rails).distinct.toArray
         _switches = connectorIndex.values.chain.filter(_.is<Switch>).toArray
         _lights = connectorIndex.values.chain.filter(_.is<RailLight>).toArray
-        changed = true
+        _changeListeners.for(_())
     }
 
     private def activeRailFor(tile : vec2i, connector : RailConnector) : Rail? =

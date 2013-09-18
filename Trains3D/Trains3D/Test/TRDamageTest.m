@@ -37,7 +37,7 @@ static ODClassType* _TRDamageTest_type;
     [self assertEqualsA:damagesCount b:[ arrf(2) {0.2, 0.4}]];
     [self assertEqualsA:numf(p1.error) b:@0.0];
     [self assertEqualsA:numf(p1.point.x) b:@1.0];
-    damagesCount = [ arrf(0) {}];
+    damagesCount = (@[]);
     TRRailPointCorrection* p00 = [railroad moveWithObstacleProcessor:^BOOL(TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount arrayByAddingItem:numf(o.point.x)];
         return YES;
@@ -45,7 +45,7 @@ static ODClassType* _TRDamageTest_type;
     [self assertEqualsA:damagesCount b:[ arrf(2) {0.6, 0.8}]];
     [self assertEqualsA:numf(p00.error) b:@0.0];
     [self assertEqualsA:numf(p00.point.x) b:@1.0];
-    damagesCount = [ arrf(0) {}];
+    damagesCount = (@[]);
     TRRailPointCorrection* p01 = [railroad moveWithObstacleProcessor:^BOOL(TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount arrayByAddingItem:numf(o.point.x)];
         return NO;

@@ -11,12 +11,17 @@ class RailroadView(railroad : Railroad) {
     private val railroadSurface = FullScreenSurface(depth = true, multisampling = true)
     private val backgroundView = BackgroundView(railroad.map)
 
+    private var changed = true
+    def init {
+        railroad.add(changeListener = changed = true)
+    }
+
     def draw {
-        railroadSurface.maybe(railroad.changed) {
+        railroadSurface.maybe(changed) {
             egClear
             backgroundView.draw
             railroad.rails.for(railView.draw(_))
-            railroad.changed = false
+            changed = false
             //railroadSurface.texture.saveTo("$(Directory.sandbox)/test.png")
         }
         railroadSurface.draw
