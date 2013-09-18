@@ -104,8 +104,8 @@ class LightView {
     val redMaterial = StandardMaterial(vec4(0.61424, 0.04136, 0.04136, 1), vec4(0.727811, 0.626959, 0.626959, 1), 1)
     val inactiveMaterial = StandardMaterial(vec4(0.3, 0.3, 0.3, 1), vec4(1, 1, 1, 1), 1)
     val bodyMaterial = StandardMaterial(vec4(0.1, 0.1, 0.1, 1), vec4(0.1, 0.1, 0.1, 1), 1)
-    val greenGlowMaterial = ColorSource(vec4(0, 1, 0, 0.1), textureFor("LightGlow.png"))
-    val redGlowMaterial = ColorSource(vec4(1, 0, 0, 0.1), textureFor("LightGlow.png"))
+    val greenGlowMaterial = ColorSource(vec4(0, 1, 0, 0.8), textureFor("LightGlow.png"))
+    val redGlowMaterial = ColorSource(vec4(1, 0, 0, 0.8), textureFor("LightGlow.png"))
 
     def draw(light : RailLight) {
         matrix(
@@ -117,7 +117,7 @@ class LightView {
                 greenMaterial.draw(Models.lightGreen)
                 inactiveMaterial.draw(Models.lightRed)
                 glDisable(GL_CULL_FACE)
-                BlendFunction.premultiplied {
+                BlendFunction.standard {
                     greenGlowMaterial.draw(Models.lightGreenGlow)
                 }
                 glEnable(GL_CULL_FACE)
@@ -125,7 +125,7 @@ class LightView {
                 inactiveMaterial.draw(Models.lightGreen)
                 redMaterial.draw(Models.lightRed)
                 glDisable(GL_CULL_FACE)
-                BlendFunction.premultiplied {
+                BlendFunction.standard {
                     redGlowMaterial.draw(Models.lightRedGlow)
                 }
                 glEnable(GL_CULL_FACE)
