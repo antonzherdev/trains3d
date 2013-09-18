@@ -1,17 +1,14 @@
 package com.antonzherdev.eg
 
-class SimpleShaderSystem extends ShaderSystem<SimpleMaterial> {
+class SimpleShaderSystem extends ShaderSystem<ColorSource> {
     static val instance = SimpleShaderSystem()
     private static val colorShader = SimpleColorShader()
     private static val textureShader = SimpleTextureShader()
 
-    def shaderFor(material : SimpleMaterial) : Shader = case(material.color)
-        ColorSourceColor(_) -> colorShader
-        ColorSourceTexture(_) -> textureShader
-
+    def shaderFor(material : ColorSource) : Shader = if(material.texture.isEmpty) colorShader else textureShader
 }
 
-class SimpleShader(program : ShaderProgram) extends Shader<SimpleMaterial, MeshData>(program) {
+class SimpleShader(program : ShaderProgram) extends Shader<ColorSource, MeshData>(program) {
     static val UV_SHIFT = 0
     static val POSITION_SHIFT = 5*4
 }
@@ -34,14 +31,14 @@ class SimpleColorShader extends SimpleShader(ShaderProgram(SimpleColorShader.col
     val colorUniform = uniformFor("color")
     val mvpUniform = uniformFor("mvp")
 
-    def load(vertexBuffer : VertexBuffer<_>, param : SimpleMaterial) {
+    def load(vertexBuffer : VertexBuffer<_>, param : ColorSource) {
         positionSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 3, GL_FLOAT, POSITION_SHIFT)
         mvpUniform.set(matrix = matrix.value.mwcp)
-        colorUniform.set(color = param.color.cast<ColorSourceColor>.color)
+        colorUniform.set(vec4 = param.color)
     }
 }
 
-class SimpleTextureShader extends SimpleShader<SimpleMaterial>(ShaderProgram(SimpleTextureShader.textureVertexProgram, SimpleTextureShader.textureFragmentProgram)) {
+class SimpleTextureShader extends SimpleShader<ColorSource>(ShaderProgram(SimpleTextureShader.textureVertexProgram, SimpleTextureShader.textureFragmentProgram)) {
     static val textureVertexProgram =
         "attribute vec2 vertexUV;
          attribute vec3 position;
@@ -56,23 +53,26 @@ class SimpleTextureShader extends SimpleShader<SimpleMaterial>(ShaderProgram(Sim
     static val textureFragmentProgram =
         "varying vec2 UV;
          uniform sampler2D texture;
+         uniform vec4 color;
 
          void main(void) {
-            gl_FragColor = texture2D(texture, UV);
+            gl_FragColor = color * texture2D(texture, UV);
          }"
     val uvSlot : ShaderAttribute = attributeFor("vertexUV")
     val positionSlot : ShaderAttribute = attributeFor("position")
     val mvpUniform = uniformFor("mvp")
+    val colorUniform = uniformFor("color")
 
-    def load(vertexBuffer : VertexBuffer<_>, param : SimpleMaterial) {
+    def load(vertexBuffer : VertexBuffer<_>, param : ColorSource) {
         positionSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 3, GL_FLOAT, POSITION_SHIFT)
         mvpUniform.set(matrix = matrix.value.mwcp)
 
         uvSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 2, GL_FLOAT, UV_SHIFT)
-        param.color.cast<ColorSourceTexture>.texture.bind
+        colorUniform.set(vec4 = param.color)
+        param.texture.get.bind
     }
 
-    def unload(material : SimpleMaterial) {
+    def unload(material : ColorSource) {
         Texture.unbind
     }
 }

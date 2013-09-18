@@ -61,7 +61,7 @@ class ExplosionFlameParticle(size : float4, startShift : vec2, shift : vec2) ext
 }
 
 class ExplosionView {
-    val material = SimpleMaterial(textureFor("Explosion.png"))
+    val material = ColorSource(texture = textureFor("Explosion.png"))
     val view = BillboardParticleSystemView(4, material, BlendFunction.premultiplied)
 
     def draw(explosion : Explosion) {

@@ -57,7 +57,7 @@
 
 
 @interface TRExplosionView : NSObject
-@property (nonatomic, readonly) EGSimpleMaterial* material;
+@property (nonatomic, readonly) EGColorSource* material;
 @property (nonatomic, readonly) EGBillboardParticleSystemView* view;
 
 + (id)explosionView;

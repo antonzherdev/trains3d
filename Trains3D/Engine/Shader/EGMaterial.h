@@ -1,50 +1,17 @@
 #import "objd.h"
 #import "GEVec.h"
 #import "GL.h"
-@class EGTexture;
 @class EGShaderSystem;
 @class EGMesh;
+@class EGTexture;
 @class EGSimpleShaderSystem;
 @class EGStandardShaderSystem;
 
-@class EGColorSource;
-@class EGColorSourceColor;
-@class EGColorSourceTexture;
 @class EGMaterial;
-@class EGSimpleMaterial;
+@class EGColorSource;
 @class EGStandardMaterial;
 @class EGMeshModel;
 typedef struct EGBlendFunction EGBlendFunction;
-
-@interface EGColorSource : NSObject
-+ (id)colorSource;
-- (id)init;
-- (ODClassType*)type;
-+ (EGColorSource*)applyColor:(GEVec4)color;
-+ (EGColorSource*)applyTexture:(EGTexture*)texture;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGColorSourceColor : EGColorSource
-@property (nonatomic, readonly) GEVec4 color;
-
-+ (id)colorSourceColorWithColor:(GEVec4)color;
-- (id)initWithColor:(GEVec4)color;
-- (ODClassType*)type;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGColorSourceTexture : EGColorSource
-@property (nonatomic, readonly) EGTexture* texture;
-
-+ (id)colorSourceTextureWithTexture:(EGTexture*)texture;
-- (id)initWithTexture:(EGTexture*)texture;
-- (ODClassType*)type;
-+ (ODClassType*)type;
-@end
-
 
 @interface EGMaterial : NSObject
 + (id)material;
@@ -58,12 +25,15 @@ typedef struct EGBlendFunction EGBlendFunction;
 @end
 
 
-@interface EGSimpleMaterial : EGMaterial
-@property (nonatomic, readonly) EGColorSource* color;
+@interface EGColorSource : EGMaterial
+@property (nonatomic, readonly) GEVec4 color;
+@property (nonatomic, readonly) id texture;
 
-+ (id)simpleMaterialWithColor:(EGColorSource*)color;
-- (id)initWithColor:(EGColorSource*)color;
++ (id)colorSourceWithColor:(GEVec4)color texture:(id)texture;
+- (id)initWithColor:(GEVec4)color texture:(id)texture;
 - (ODClassType*)type;
++ (EGColorSource*)applyColor:(GEVec4)color;
++ (EGColorSource*)applyTexture:(EGTexture*)texture;
 - (EGShaderSystem*)shaderSystem;
 + (ODClassType*)type;
 @end

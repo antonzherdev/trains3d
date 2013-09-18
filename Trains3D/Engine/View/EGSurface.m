@@ -2,7 +2,6 @@
 
 #import "EGTexture.h"
 #import "EGMesh.h"
-#import "EGMaterial.h"
 #import "EGContext.h"
 @implementation EGSurface{
     BOOL _depth;
@@ -483,7 +482,7 @@ static ODClassType* _EGFullScreenSurfaceShader_type;
     [_zUniform setF4:param.z];
 }
 
-- (void)unloadMaterial:(EGSimpleMaterial*)material {
+- (void)unloadParam:(EGFullScreenSurfaceShaderParam*)param {
     [EGTexture unbind];
 }
 

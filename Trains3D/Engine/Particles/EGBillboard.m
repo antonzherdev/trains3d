@@ -5,60 +5,20 @@
 #import "EGContext.h"
 #import "EGTexture.h"
 @implementation EGBillboardShaderSystem
-static EGBillboardShaderSystem* _EGBillboardShaderSystem_instance;
 static ODClassType* _EGBillboardShaderSystem_type;
-
-+ (id)billboardShaderSystem {
-    return [[EGBillboardShaderSystem alloc] init];
-}
-
-- (id)init {
-    self = [super init];
-    
-    return self;
-}
 
 + (void)initialize {
     [super initialize];
     _EGBillboardShaderSystem_type = [ODClassType classTypeWithCls:[EGBillboardShaderSystem class]];
-    _EGBillboardShaderSystem_instance = [EGBillboardShaderSystem billboardShaderSystem];
 }
 
-- (EGBillboardShader*)shaderForMaterial:(EGSimpleMaterial*)material {
-    EGColorSource* __case__ = material.color;
-    BOOL __incomplete__ = YES;
-    EGBillboardShader* __result__;
-    if(__incomplete__) {
-        BOOL __ok__ = YES;
-        GEVec4 _;
-        if([__case__ isKindOfClass:[EGColorSourceColor class]]) {
-            EGColorSourceColor* __case1__ = ((EGColorSourceColor*)(__case__));
-            _ = [__case1__ color];
-        } else {
-            __ok__ = NO;
-        }
-        if(__ok__) {
-            __result__ = [EGBillboardShader instanceForColor];
-            __incomplete__ = NO;
-        }
-    }
-    if(__incomplete__) {
-        BOOL __ok__ = YES;
-        if(__ok__) {
-            __result__ = [EGBillboardShader instanceForTexture];
-            __incomplete__ = NO;
-        }
-    }
-    if(__incomplete__) @throw @"Case incomplete";
-    return __result__;
++ (EGBillboardShader*)shaderForMaterial:(EGColorSource*)material {
+    if([material.texture isEmpty]) return [EGBillboardShader instanceForColor];
+    else return [EGBillboardShader instanceForTexture];
 }
 
 - (ODClassType*)type {
     return [EGBillboardShaderSystem type];
-}
-
-+ (EGBillboardShaderSystem*)instance {
-    return _EGBillboardShaderSystem_instance;
 }
 
 + (ODClassType*)type {
@@ -94,7 +54,7 @@ static ODClassType* _EGBillboardShaderSystem_type;
     EGShaderAttribute* _modelSlot;
     id _uvSlot;
     EGShaderAttribute* _colorSlot;
-    id _colorUniform;
+    EGShaderUniform* _colorUniform;
     EGShaderUniform* _wcUniform;
     EGShaderUniform* _pUniform;
 }
@@ -122,7 +82,7 @@ static ODClassType* _EGBillboardShader_type;
         _modelSlot = [self attributeForName:@"model"];
         _uvSlot = ((_texture) ? [CNOption opt:[self attributeForName:@"vertexUV"]] : [CNOption none]);
         _colorSlot = [self attributeForName:@"vertexColor"];
-        _colorUniform = ((_texture) ? [CNOption none] : [CNOption opt:[self uniformForName:@"color"]]);
+        _colorUniform = [self uniformForName:@"color"];
         _wcUniform = [self uniformForName:@"wc"];
         _pUniform = [self uniformForName:@"p"];
     }
@@ -177,6 +137,7 @@ static ODClassType* _EGBillboardShader_type;
 + (NSString*)fragmentTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code {
     return [NSString stringWithFormat:@"\n"
         "%@\n"
+        "uniform vec4 color;\n"
         "varying vec4 fragColor;\n"
         "\n"
         "%@\n"
@@ -184,13 +145,12 @@ static ODClassType* _EGBillboardShader_type;
         "   %@\n"
         "}", ((texture) ? @"\n"
         "varying vec2 UV;\n"
-        "uniform sampler2D texture;" : @"\n"
-        "uniform vec4 color;"), parameters, ((texture) ? @"\n"
-        "   gl_FragColor = fragColor * texture2D(texture, UV); " : @""), ((!(texture)) ? @"\n"
+        "uniform sampler2D texture;" : @""), parameters, ((texture) ? @"\n"
+        "   gl_FragColor = fragColor * color * texture2D(texture, UV); " : @""), ((!(texture)) ? @"\n"
         "   gl_FragColor = fragColor * color; " : @""), code];
 }
 
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGSimpleMaterial*)param {
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGColorSource*)param {
     [_positionSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:3 valuesType:GL_FLOAT shift:0];
     [_modelSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(3 * 4))];
     [_colorSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:4 valuesType:GL_FLOAT shift:((NSUInteger)(5 * 4))];
@@ -200,13 +160,12 @@ static ODClassType* _EGBillboardShader_type;
         [_uvSlot forEach:^void(EGShaderAttribute* _) {
             [_ setFromBufferWithStride:[vertexBuffer stride] valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(9 * 4))];
         }];
-        [((EGColorSourceTexture*)(param.color)).texture bind];
-    } else {
-        [((EGShaderUniform*)([_colorUniform get])) setColor:((EGColorSourceColor*)(param.color)).color];
+        [((EGTexture*)([param.texture get])) bind];
     }
+    [_colorUniform setVec4:param.color];
 }
 
-- (void)unloadMaterial:(EGSimpleMaterial*)material {
+- (void)unloadMaterial:(EGColorSource*)material {
     if(_texture) [EGTexture unbind];
 }
 
@@ -395,22 +354,22 @@ static ODClassType* _EGBillboardParticle_type;
 
 
 @implementation EGBillboardParticleSystemView{
-    EGSimpleMaterial* _material;
+    EGColorSource* _material;
     EGShader* _shader;
 }
 static ODClassType* _EGBillboardParticleSystemView_type;
 @synthesize material = _material;
 @synthesize shader = _shader;
 
-+ (id)billboardParticleSystemViewWithMaxCount:(NSUInteger)maxCount material:(EGSimpleMaterial*)material blendFunc:(EGBlendFunction)blendFunc {
++ (id)billboardParticleSystemViewWithMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction)blendFunc {
     return [[EGBillboardParticleSystemView alloc] initWithMaxCount:maxCount material:material blendFunc:blendFunc];
 }
 
-- (id)initWithMaxCount:(NSUInteger)maxCount material:(EGSimpleMaterial*)material blendFunc:(EGBlendFunction)blendFunc {
+- (id)initWithMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction)blendFunc {
     self = [super initWithDtp:egBillboardBufferDataType() maxCount:maxCount blendFunc:blendFunc];
     if(self) {
         _material = material;
-        _shader = [EGBillboardShaderSystem.instance shaderForMaterial:_material];
+        _shader = [EGBillboardShaderSystem shaderForMaterial:_material];
     }
     
     return self;
@@ -421,7 +380,7 @@ static ODClassType* _EGBillboardParticleSystemView_type;
     _EGBillboardParticleSystemView_type = [ODClassType classTypeWithCls:[EGBillboardParticleSystemView class]];
 }
 
-+ (EGBillboardParticleSystemView*)applyMaxCount:(NSUInteger)maxCount material:(EGSimpleMaterial*)material {
++ (EGBillboardParticleSystemView*)applyMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material {
     return [EGBillboardParticleSystemView billboardParticleSystemViewWithMaxCount:maxCount material:material blendFunc:egBlendFunctionStandard()];
 }
 

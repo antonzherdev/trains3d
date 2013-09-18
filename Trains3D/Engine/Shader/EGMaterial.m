@@ -1,181 +1,10 @@
 #import "EGMaterial.h"
 
-#import "EGTexture.h"
 #import "EGShader.h"
 #import "EGMesh.h"
+#import "EGTexture.h"
 #import "EGSimpleShaderSystem.h"
 #import "EGStandardShaderSystem.h"
-@implementation EGColorSource
-static ODClassType* _EGColorSource_type;
-
-+ (id)colorSource {
-    return [[EGColorSource alloc] init];
-}
-
-- (id)init {
-    self = [super init];
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _EGColorSource_type = [ODClassType classTypeWithCls:[EGColorSource class]];
-}
-
-+ (EGColorSource*)applyColor:(GEVec4)color {
-    return [EGColorSourceColor colorSourceColorWithColor:color];
-}
-
-+ (EGColorSource*)applyTexture:(EGTexture*)texture {
-    return [EGColorSourceTexture colorSourceTextureWithTexture:texture];
-}
-
-- (ODClassType*)type {
-    return [EGColorSource type];
-}
-
-+ (ODClassType*)type {
-    return _EGColorSource_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
-@implementation EGColorSourceColor{
-    GEVec4 _color;
-}
-static ODClassType* _EGColorSourceColor_type;
-@synthesize color = _color;
-
-+ (id)colorSourceColorWithColor:(GEVec4)color {
-    return [[EGColorSourceColor alloc] initWithColor:color];
-}
-
-- (id)initWithColor:(GEVec4)color {
-    self = [super init];
-    if(self) _color = color;
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _EGColorSourceColor_type = [ODClassType classTypeWithCls:[EGColorSourceColor class]];
-}
-
-- (ODClassType*)type {
-    return [EGColorSourceColor type];
-}
-
-+ (ODClassType*)type {
-    return _EGColorSourceColor_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGColorSourceColor* o = ((EGColorSourceColor*)(other));
-    return GEVec4Eq(self.color, o.color);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec4Hash(self.color);
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"color=%@", GEVec4Description(self.color)];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
-@implementation EGColorSourceTexture{
-    EGTexture* _texture;
-}
-static ODClassType* _EGColorSourceTexture_type;
-@synthesize texture = _texture;
-
-+ (id)colorSourceTextureWithTexture:(EGTexture*)texture {
-    return [[EGColorSourceTexture alloc] initWithTexture:texture];
-}
-
-- (id)initWithTexture:(EGTexture*)texture {
-    self = [super init];
-    if(self) _texture = texture;
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _EGColorSourceTexture_type = [ODClassType classTypeWithCls:[EGColorSourceTexture class]];
-}
-
-- (ODClassType*)type {
-    return [EGColorSourceTexture type];
-}
-
-+ (ODClassType*)type {
-    return _EGColorSourceTexture_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGColorSourceTexture* o = ((EGColorSourceTexture*)(other));
-    return [self.texture isEqual:o.texture];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.texture hash];
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"texture=%@", self.texture];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
 @implementation EGMaterial
 static ODClassType* _EGMaterial_type;
 
@@ -241,26 +70,39 @@ static ODClassType* _EGMaterial_type;
 @end
 
 
-@implementation EGSimpleMaterial{
-    EGColorSource* _color;
+@implementation EGColorSource{
+    GEVec4 _color;
+    id _texture;
 }
-static ODClassType* _EGSimpleMaterial_type;
+static ODClassType* _EGColorSource_type;
 @synthesize color = _color;
+@synthesize texture = _texture;
 
-+ (id)simpleMaterialWithColor:(EGColorSource*)color {
-    return [[EGSimpleMaterial alloc] initWithColor:color];
++ (id)colorSourceWithColor:(GEVec4)color texture:(id)texture {
+    return [[EGColorSource alloc] initWithColor:color texture:texture];
 }
 
-- (id)initWithColor:(EGColorSource*)color {
+- (id)initWithColor:(GEVec4)color texture:(id)texture {
     self = [super init];
-    if(self) _color = color;
+    if(self) {
+        _color = color;
+        _texture = texture;
+    }
     
     return self;
 }
 
 + (void)initialize {
     [super initialize];
-    _EGSimpleMaterial_type = [ODClassType classTypeWithCls:[EGSimpleMaterial class]];
+    _EGColorSource_type = [ODClassType classTypeWithCls:[EGColorSource class]];
+}
+
++ (EGColorSource*)applyColor:(GEVec4)color {
+    return [EGColorSource colorSourceWithColor:color texture:[CNOption none]];
+}
+
++ (EGColorSource*)applyTexture:(EGTexture*)texture {
+    return [EGColorSource colorSourceWithColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:[CNOption opt:texture]];
 }
 
 - (EGShaderSystem*)shaderSystem {
@@ -268,11 +110,11 @@ static ODClassType* _EGSimpleMaterial_type;
 }
 
 - (ODClassType*)type {
-    return [EGSimpleMaterial type];
+    return [EGColorSource type];
 }
 
 + (ODClassType*)type {
-    return _EGSimpleMaterial_type;
+    return _EGColorSource_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -282,19 +124,21 @@ static ODClassType* _EGSimpleMaterial_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSimpleMaterial* o = ((EGSimpleMaterial*)(other));
-    return [self.color isEqual:o.color];
+    EGColorSource* o = ((EGColorSource*)(other));
+    return GEVec4Eq(self.color, o.color) && [self.texture isEqual:o.texture];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [self.color hash];
+    hash = hash * 31 + GEVec4Hash(self.color);
+    hash = hash * 31 + [self.texture hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"color=%@", self.color];
+    [description appendFormat:@"color=%@", GEVec4Description(self.color)];
+    [description appendFormat:@", texture=%@", self.texture];
     [description appendString:@">"];
     return description;
 }

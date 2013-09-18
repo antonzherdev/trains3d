@@ -17,11 +17,8 @@
 typedef struct EGBillboardBufferData EGBillboardBufferData;
 
 @interface EGBillboardShaderSystem : EGShaderSystem
-+ (id)billboardShaderSystem;
-- (id)init;
 - (ODClassType*)type;
-- (EGBillboardShader*)shaderForMaterial:(EGSimpleMaterial*)material;
-+ (EGBillboardShaderSystem*)instance;
++ (EGBillboardShader*)shaderForMaterial:(EGColorSource*)material;
 + (ODClassType*)type;
 @end
 
@@ -32,7 +29,7 @@ typedef struct EGBillboardBufferData EGBillboardBufferData;
 @property (nonatomic, readonly) EGShaderAttribute* modelSlot;
 @property (nonatomic, readonly) id uvSlot;
 @property (nonatomic, readonly) EGShaderAttribute* colorSlot;
-@property (nonatomic, readonly) id colorUniform;
+@property (nonatomic, readonly) EGShaderUniform* colorUniform;
 @property (nonatomic, readonly) EGShaderUniform* wcUniform;
 @property (nonatomic, readonly) EGShaderUniform* pUniform;
 
@@ -43,8 +40,8 @@ typedef struct EGBillboardBufferData EGBillboardBufferData;
 + (EGBillboardShader*)instanceForTexture;
 + (NSString*)vertexTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code;
 + (NSString*)fragmentTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code;
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGSimpleMaterial*)param;
-- (void)unloadMaterial:(EGSimpleMaterial*)material;
+- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGColorSource*)param;
+- (void)unloadMaterial:(EGColorSource*)material;
 + (ODClassType*)type;
 @end
 
@@ -111,13 +108,13 @@ ODPType* egBillboardBufferDataType();
 
 
 @interface EGBillboardParticleSystemView : EGParticleSystemView
-@property (nonatomic, readonly) EGSimpleMaterial* material;
+@property (nonatomic, readonly) EGColorSource* material;
 @property (nonatomic, readonly) EGShader* shader;
 
-+ (id)billboardParticleSystemViewWithMaxCount:(NSUInteger)maxCount material:(EGSimpleMaterial*)material blendFunc:(EGBlendFunction)blendFunc;
-- (id)initWithMaxCount:(NSUInteger)maxCount material:(EGSimpleMaterial*)material blendFunc:(EGBlendFunction)blendFunc;
++ (id)billboardParticleSystemViewWithMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction)blendFunc;
+- (id)initWithMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction)blendFunc;
 - (ODClassType*)type;
-+ (EGBillboardParticleSystemView*)applyMaxCount:(NSUInteger)maxCount material:(EGSimpleMaterial*)material;
++ (EGBillboardParticleSystemView*)applyMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material;
 - (NSUInteger)vertexCount;
 - (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i;
 + (ODClassType*)type;

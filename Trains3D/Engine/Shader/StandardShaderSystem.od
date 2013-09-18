@@ -7,7 +7,7 @@ class StandardShaderSystem extends ShaderSystem<StandardMaterial> {
     def shaderFor(material : StandardMaterial) : Shader = {
         val lightMap = context.environment.lights.chain.group(_.type).toMap
         val directLights = lightMap[DirectLight.type].getOrElse([])
-        val key = StandardShaderKey(directLights.count, material.diffuse.is<ColorSourceTexture>)
+        val key = StandardShaderKey(directLights.count, material.diffuse.texture.isDefined)
 
         shaders.objectFor(key, orUpdateWith = key.shader)
     }
@@ -39,10 +39,9 @@ class StandardShaderKey(directLightCount : uint, texture : bool) {
             "
             $if(texture)
              varying vec2 UV;
-             uniform sampler2D diffuse;
-            $else
-             uniform vec4 diffuse;
+             uniform sampler2D diffuseTexture;
             $endif
+             uniform vec4 diffuseColor;
              uniform vec4 ambientColor;
              uniform vec4 specularColor;
              uniform float specularSize;
@@ -50,8 +49,8 @@ class StandardShaderKey(directLightCount : uint, texture : bool) {
              $lightsFragmentUniform
 
              void main(void) {
-                vec4 materialColor = diffuse; $when(!texture)
-                vec4 materialColor = texture2D(diffuse, UV); $when(texture)
+                vec4 materialColor = diffuseColor; $when(!texture)
+                vec4 materialColor = diffuseColor * texture2D(diffuseTexture, UV); $when(texture)
                 vec4 color = ambientColor * materialColor;
                 $lightsDiffuse
                 gl_FragColor = color;
@@ -91,7 +90,7 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
     val ambientColor : ShaderUniform = uniformFor("ambientColor")
     val specularColor : ShaderUniform = uniformFor("specularColor")
     val specularSize : ShaderUniform = uniformFor("specularSize")
-    val diffuseUniform : ShaderUniform = uniformFor("diffuse")
+    val diffuseColorUniform : ShaderUniform = uniformFor("diffuseColor")
     val mwcpUniform : ShaderUniform = uniformFor("mwcp")
     val mwcUniform : ShaderUniform? = if(key.directLightCount > 0) uniformFor("mwc") else nil
 
@@ -103,27 +102,26 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
         mwcpUniform.set(matrix = matrix.value.mwcp)
         if(key.texture) {
             uvSlot.get.setFromBufferWith(vertexBuffer.stride, valuesCount = 2, GL_FLOAT, UV_SHIFT)
-            param.diffuse.cast<ColorSourceTexture>.texture.bind
-        } else {
-            diffuseUniform.set(color = param.diffuse.cast<ColorSourceColor>.color)
+            param.diffuse.texture.get.bind
         }
-        specularColor.set(color = param.specularColor)
+        diffuseColorUniform.set(vec4 = param.diffuse.color)
+        specularColor.set(vec4 = param.specularColor)
         specularSize.set(f4 = param.specularSize)
         val env = context.environment
-        ambientColor.set(color = env.ambientColor)
+        ambientColor.set(vec4 = env.ambientColor)
         if(key.directLightCount > 0) {
             mwcUniform.get.set(matrix = context.matrixStack.value.mwc)
             normalSlot.get.setFromBufferWith(vertexBuffer.stride, valuesCount = 3, GL_FLOAT, NORMAL_SHIFT)
             env.lights.chain.filterCast(DirectLight.type).zip3(directLightDirections, directLightColors){light, dirSlot, colorSlot ->
                 val dir = matrix.value.wc.mul(vec3 = light.direction, 0).xyz
                 dirSlot.set(vec3 = dir)
-                colorSlot.set(color = light.color)
+                colorSlot.set(vec4 = light.color)
                 light
             }.count
         }
     }
 
-    def unload(material : SimpleMaterial) {
+    def unload(material : StandardMaterial) {
         if(key.texture) Texture.unbind
     }
 }

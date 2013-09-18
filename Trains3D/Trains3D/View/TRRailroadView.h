@@ -66,8 +66,8 @@
 @property (nonatomic, readonly) EGStandardMaterial* redMaterial;
 @property (nonatomic, readonly) EGStandardMaterial* inactiveMaterial;
 @property (nonatomic, readonly) EGStandardMaterial* bodyMaterial;
-@property (nonatomic, readonly) EGSimpleMaterial* greenGlowMaterial;
-@property (nonatomic, readonly) EGSimpleMaterial* redGlowMaterial;
+@property (nonatomic, readonly) EGColorSource* greenGlowMaterial;
+@property (nonatomic, readonly) EGColorSource* redGlowMaterial;
 
 + (id)lightView;
 - (id)init;

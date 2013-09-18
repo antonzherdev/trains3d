@@ -281,8 +281,8 @@ static ODClassType* _TRSwitchView_type;
     EGStandardMaterial* _redMaterial;
     EGStandardMaterial* _inactiveMaterial;
     EGStandardMaterial* _bodyMaterial;
-    EGSimpleMaterial* _greenGlowMaterial;
-    EGSimpleMaterial* _redGlowMaterial;
+    EGColorSource* _greenGlowMaterial;
+    EGColorSource* _redGlowMaterial;
 }
 static ODClassType* _TRLightView_type;
 @synthesize greenMaterial = _greenMaterial;
@@ -303,8 +303,8 @@ static ODClassType* _TRLightView_type;
         _redMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.61424, 0.04136, 0.04136, 1.0)] specularColor:GEVec4Make(0.727811, 0.626959, 0.626959, 1.0) specularSize:1.0];
         _inactiveMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.3, 0.3, 0.3, 1.0)] specularColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) specularSize:1.0];
         _bodyMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.1, 0.1, 0.1, 1.0)] specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:1.0];
-        _greenGlowMaterial = [EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyColor:GEVec4Make(0.0, 1.0, 0.0, 0.1)]];
-        _redGlowMaterial = [EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyColor:GEVec4Make(1.0, 0.0, 0.0, 0.1)]];
+        _greenGlowMaterial = [EGColorSource colorSourceWithColor:GEVec4Make(0.0, 1.0, 0.0, 0.1) texture:[CNOption opt:[EGGlobal textureForFile:@"LightGlow.png"]]];
+        _redGlowMaterial = [EGColorSource colorSourceWithColor:GEVec4Make(1.0, 0.0, 0.0, 0.1) texture:[CNOption opt:[EGGlobal textureForFile:@"LightGlow.png"]]];
     }
     
     return self;

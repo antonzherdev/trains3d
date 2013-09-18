@@ -11,11 +11,8 @@
 @class EGVertexBuffer;
 @class EGMatrixStack;
 @class EGMatrixModel;
-@class EGColorSourceTexture;
 @class EGTexture;
-@class EGColorSourceColor;
 @class GEMat4;
-@class EGSimpleMaterial;
 
 @class EGStandardShaderSystem;
 @class EGStandardShaderKey;
@@ -56,7 +53,7 @@
 @property (nonatomic, readonly) EGShaderUniform* ambientColor;
 @property (nonatomic, readonly) EGShaderUniform* specularColor;
 @property (nonatomic, readonly) EGShaderUniform* specularSize;
-@property (nonatomic, readonly) EGShaderUniform* diffuseUniform;
+@property (nonatomic, readonly) EGShaderUniform* diffuseColorUniform;
 @property (nonatomic, readonly) EGShaderUniform* mwcpUniform;
 @property (nonatomic, readonly) id mwcUniform;
 @property (nonatomic, readonly) id<CNSeq> directLightDirections;
@@ -66,7 +63,7 @@
 - (id)initWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
 - (ODClassType*)type;
 - (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGStandardMaterial*)param;
-- (void)unloadMaterial:(EGSimpleMaterial*)material;
+- (void)unloadMaterial:(EGStandardMaterial*)material;
 + (NSInteger)UV_SHIFT;
 + (NSInteger)NORMAL_SHIFT;
 + (NSInteger)POSITION_SHIFT;

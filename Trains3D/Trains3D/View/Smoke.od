@@ -61,4 +61,4 @@ class SmokeParticle extends BillboardParticle(2) {
 }
 
 
-class SmokeView extends BillboardParticleSystemView(200, SimpleMaterial(textureFor("Smoke.png")), BlendFunction.premultiplied)
+class SmokeView extends BillboardParticleSystemView(200, textureFor("Smoke.png"), BlendFunction.premultiplied)

@@ -324,7 +324,7 @@ static ODClassType* _TRExplosionFlameParticle_type;
 
 
 @implementation TRExplosionView{
-    EGSimpleMaterial* _material;
+    EGColorSource* _material;
     EGBillboardParticleSystemView* _view;
 }
 static ODClassType* _TRExplosionView_type;
@@ -338,7 +338,7 @@ static ODClassType* _TRExplosionView_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _material = [EGSimpleMaterial simpleMaterialWithColor:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Explosion.png"]]];
+        _material = [EGColorSource applyTexture:[EGGlobal textureForFile:@"Explosion.png"]];
         _view = [EGBillboardParticleSystemView billboardParticleSystemViewWithMaxCount:4 material:_material blendFunc:egBlendFunctionPremultiplied()];
     }
     

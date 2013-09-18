@@ -4,7 +4,6 @@
 #import "EGShader.h"
 @class EGTexture;
 @class EGVertexBuffer;
-@class EGSimpleMaterial;
 @class EGMesh;
 @class EGGlobal;
 @class EGContext;
@@ -93,7 +92,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGFullScreenSurfaceShaderParam*)param;
-- (void)unloadMaterial:(EGSimpleMaterial*)material;
+- (void)unloadParam:(EGFullScreenSurfaceShaderParam*)param;
 + (NSString*)vertex;
 + (NSString*)fragment;
 + (ODClassType*)type;

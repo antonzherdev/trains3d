@@ -66,7 +66,7 @@
 - (id)initWithHandle:(GLuint)handle;
 - (ODClassType*)type;
 - (void)setMatrix:(GEMat4*)matrix;
-- (void)setColor:(GEVec4)color;
+- (void)setVec4:(GEVec4)vec4;
 - (void)setVec3:(GEVec3)vec3;
 - (void)setF4:(float)f4;
 + (ODClassType*)type;
