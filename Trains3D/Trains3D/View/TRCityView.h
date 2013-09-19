@@ -2,8 +2,8 @@
 #import "GEVec.h"
 @class EGMesh;
 @class EGStandardMaterial;
-@class EGGlobal;
 @class EGColorSource;
+@class EGGlobal;
 @class TRCity;
 @class GEMat4;
 @class EGMatrixModel;
@@ -18,7 +18,6 @@
 
 @interface TRCityView : NSObject
 @property (nonatomic, readonly) EGMesh* expectedTrainModel;
-@property (nonatomic, readonly) EGStandardMaterial* roofMaterial;
 @property (nonatomic, readonly) EGStandardMaterial* windowMaterial;
 
 + (id)cityView;

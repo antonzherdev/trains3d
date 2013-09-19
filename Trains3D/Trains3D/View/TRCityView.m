@@ -10,12 +10,10 @@
 #import "EGSchedule.h"
 @implementation TRCityView{
     EGMesh* _expectedTrainModel;
-    EGStandardMaterial* _roofMaterial;
     EGStandardMaterial* _windowMaterial;
 }
 static ODClassType* _TRCityView_type;
 @synthesize expectedTrainModel = _expectedTrainModel;
-@synthesize roofMaterial = _roofMaterial;
 @synthesize windowMaterial = _windowMaterial;
 
 + (id)cityView {
@@ -26,7 +24,6 @@ static ODClassType* _TRCityView_type;
     self = [super init];
     if(self) {
         _expectedTrainModel = [EGMesh applyVertexData:[ arrs(EGMeshData, 32) {0, 0, 0, 1, 0, -0.5, 0.001, -0.5, 1, 0, 0, 1, 0, 0.5, 0.001, -0.5, 1, 1, 0, 1, 0, 0.5, 0.001, 0.5, 0, 1, 0, 1, 0, -0.5, 0.001, 0.5}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
-        _roofMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Roof.png"]] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:1.0];
         _windowMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(((float)(72.0 / 255)), ((float)(83.0 / 255)), ((float)(99.0 / 255)), 1.0)] specularColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) specularSize:1.0];
     }
     
@@ -48,7 +45,8 @@ static ODClassType* _TRCityView_type;
     } f:^void() {
         [[EGStandardMaterial applyColor:city.color.color] drawMesh:TRModels.cityBodies];
         glDisable(GL_CULL_FACE);
-        [_roofMaterial drawMesh:TRModels.cityRoofs];
+        EGStandardMaterial* roofMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource colorSourceWithColor:city.color.color texture:[CNOption opt:[EGGlobal textureForFile:@"Roof.png"]]] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:1.0];
+        [roofMaterial drawMesh:TRModels.cityRoofs];
         glEnable(GL_CULL_FACE);
         [_windowMaterial drawMesh:TRModels.cityWindows];
         [city.expectedTrainAnimation forEach:^void(EGAnimation* a) {
