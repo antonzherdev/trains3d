@@ -31,10 +31,10 @@
 
 
 @interface EGCollisionBox : NSObject<EGCollisionShape>
-@property (nonatomic, readonly) GEVec3 halfSize;
+@property (nonatomic, readonly) GEVec3 size;
 
-+ (id)collisionBoxWithHalfSize:(GEVec3)halfSize;
-- (id)initWithHalfSize:(GEVec3)halfSize;
++ (id)collisionBoxWithSize:(GEVec3)size;
+- (id)initWithSize:(GEVec3)size;
 - (ODClassType*)type;
 + (EGCollisionBox*)applyX:(float)x y:(float)y z:(float)z;
 + (ODClassType*)type;
@@ -42,10 +42,10 @@
 
 
 @interface EGCollisionBox2d : NSObject<EGCollisionShape>
-@property (nonatomic, readonly) GEVec2 halfSize;
+@property (nonatomic, readonly) GEVec2 size;
 
-+ (id)collisionBox2dWithHalfSize:(GEVec2)halfSize;
-- (id)initWithHalfSize:(GEVec2)halfSize;
++ (id)collisionBox2dWithSize:(GEVec2)size;
+- (id)initWithSize:(GEVec2)size;
 - (ODClassType*)type;
 + (EGCollisionBox2d*)applyX:(float)x y:(float)y;
 + (ODClassType*)type;

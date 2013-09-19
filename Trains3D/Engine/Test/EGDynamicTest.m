@@ -29,7 +29,7 @@ static ODClassType* _EGDynamicTest_type;
 
 - (void)testSimple {
     EGDynamicWorld* world = [EGDynamicWorld dynamicWorldWithGravity:GEVec3Make(0.0, -10.0, 0.0)];
-    EGCollisionBox* shape = [EGCollisionBox collisionBoxWithHalfSize:GEVec3Make(0.5, 0.5, 0.5)];
+    EGCollisionBox* shape = [EGCollisionBox applyX:1.0 y:1.0 z:1.0];
     EGRigidBody* body = [EGRigidBody dynamicData:@1 shape:shape mass:1.0];
     [world addBody:body];
     body.matrix = [[GEMat4 identity] translateX:0.0 y:5.0 z:0.0];
@@ -50,7 +50,7 @@ static ODClassType* _EGDynamicTest_type;
     EGDynamicWorld* world = [EGDynamicWorld dynamicWorldWithGravity:GEVec3Make(0.0, -10.0, 0.0)];
     EGRigidBody* plane = [EGRigidBody staticalData:@1 shape:[EGCollisionPlane collisionPlaneWithNormal:GEVec3Make(0.0, 1.0, 0.0) distance:0.0]];
     [world addBody:plane];
-    EGRigidBody* body = [EGRigidBody dynamicData:@2 shape:[EGCollisionBox collisionBoxWithHalfSize:GEVec3Make(0.5, 0.5, 0.5)] mass:1.0];
+    EGRigidBody* body = [EGRigidBody dynamicData:@2 shape:[EGCollisionBox applyX:1.0 y:1.0 z:1.0] mass:1.0];
     [world addBody:body];
     body.matrix = [[GEMat4 identity] translateX:0.0 y:0.5 z:0.0];
     body.velocity = GEVec3Make(10.0, 0.0, 0.0);

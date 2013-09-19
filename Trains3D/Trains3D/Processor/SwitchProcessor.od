@@ -20,7 +20,7 @@ class SwitchProcessor(level : Level) extends MouseProcessor {
     )
     private var downed : RailroadConnectorContent? = nil
     private val switchShape = CollisionBox2d(0.3, 0.2)
-    private val lightShape = CollisionBox2d(0.2, 0.1)
+    private val lightShape = CollisionBox2d(0.2, 0.06)
     private val world = CollisionWorld<RailroadConnectorContent>()
     def init {
         level.railroad.add(changeListener = {
@@ -33,10 +33,10 @@ class SwitchProcessor(level : Level) extends MouseProcessor {
                 world.add(body)
             }
             level.railroad.lights.for{light ->
-                val body = CollisionBody(light, switchShape, isKinematic = false)
-                body.translate(light.tile.x, light.tile.y - 0.4, 0)
+                val body = CollisionBody(light, lightShape, isKinematic = false)
+                body.translate(light.tile.x, light.tile.y, 0)
                 body.rotate(light.connector.angle, 0, 0, 1)
-                body.translate(-0.45, -0.2, 0.1)
+                body.translate(-0.45, 0.2, 0.1)
                 body.rotate(90, 0, 1, 0)
                 world.add(body)
             }
@@ -49,12 +49,7 @@ class SwitchProcessor(level : Level) extends MouseProcessor {
         val relPoint = location.sub(tile)
         val s = event.segment
         val pp = s.r(plane = plane(vec3(0,0,0), vec3(0, 0, 1)))
-        val cross = world.closestCrossPointWith(event.segment)
-        downed = index[relPoint].flatMap(v -> {
-            val content = level.railroad.contentIn(tile, connector = v.a)
-            if(v.b) content.as<RailLight>
-            else content.as<Switch>
-        })
+        downed = world.closestCrossPointWith(event.segment).map(_.body.data)
         downed.isDefined
     }
 

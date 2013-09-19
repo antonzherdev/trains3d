@@ -21,11 +21,11 @@ stub trait CollisionShape {
     def shape : VoidRef = nil
 }
 
-stub class CollisionBox(halfSize : vec3) extends CollisionShape {
+stub class CollisionBox(size : vec3) extends CollisionShape {
     static def apply(x : float4, y : float4, z : float4) = CollisionBox(vec3(x, y, z))
 }
 
-stub class CollisionBox2d(halfSize : vec2) extends CollisionShape {
+stub class CollisionBox2d(size : vec2) extends CollisionShape {
     static def apply(x : float4, y : float4) = CollisionBox2d(vec2(x, y))
 }
 

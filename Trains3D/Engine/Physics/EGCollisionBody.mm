@@ -35,7 +35,6 @@ static ODClassType* _EGCollisionBody_type;
         __matrix = [GEMat4 identity];
         _obj = new btCollisionObject;
         _obj->setUserPointer((__bridge void *)self);
-        int f = _obj->getCollisionFlags();
         if(isKinematic) {
             _obj->setCollisionFlags( _obj->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
             _obj->setActivationState(DISABLE_DEACTIVATION);
@@ -96,29 +95,29 @@ static ODClassType* _EGCollisionBody_type;
 
 
 @implementation EGCollisionBox{
-    GEVec3 _halfSize;
+    GEVec3 _size;
     btBoxShape* _box;
 }
 static ODClassType* _EGCollisionBox_type;
-@synthesize halfSize = _halfSize;
+@synthesize size = _size;
 
 
-+ (id)collisionBoxWithHalfSize:(GEVec3)halfSize {
-    return [[EGCollisionBox alloc] initWithHalfSize:halfSize];
++ (id)collisionBoxWithSize:(GEVec3)size {
+    return [[EGCollisionBox alloc] initWithSize:size];
 }
 
-- (id)initWithHalfSize:(GEVec3)halfSize {
+- (id)initWithSize:(GEVec3)size {
     self = [super init];
     if(self) {
-        _halfSize = halfSize;
-        _box = new btBoxShape(btVector3(halfSize.x, halfSize.y, halfSize.z));
+        _size = size;
+        _box = new btBoxShape(btVector3(size.x/2, size.y/2, size.z/2));
     }
 
     return self;
 }
 
 + (EGCollisionBox*)applyX:(float)x y:(float)y z:(float)z {
-    return [EGCollisionBox collisionBoxWithHalfSize:GEVec3Make(x, y, z)];
+    return [EGCollisionBox collisionBoxWithSize:GEVec3Make(x, y, z)];
 }
 
 - (VoidRef)shape {
@@ -150,18 +149,18 @@ static ODClassType* _EGCollisionBox_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGCollisionBox* o = ((EGCollisionBox*)(other));
-    return GEVec3Eq(self.halfSize, o.halfSize);
+    return GEVec3Eq(self.size, o.size);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + GEVec3Hash(self.halfSize);
+    hash = hash * 31 + GEVec3Hash(self.size);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"halfSize=%@", GEVec3Description(self.halfSize)];
+    [description appendFormat:@"halfSize=%@", GEVec3Description(self.size)];
     [description appendString:@">"];
     return description;
 }
@@ -169,29 +168,29 @@ static ODClassType* _EGCollisionBox_type;
 @end
 
 @implementation EGCollisionBox2d{
-    GEVec2 _halfSize;
+    GEVec2 _size;
     btBox2dShape* _box;
 }
 static ODClassType* _EGCollisionBox2d_type;
-@synthesize halfSize = _halfSize;
+@synthesize size = _size;
 
 
-+ (id)collisionBox2dWithHalfSize:(GEVec2)halfSize {
-    return [[EGCollisionBox2d alloc] initWithHalfSize:halfSize];
++ (id)collisionBox2dWithSize:(GEVec2)size {
+    return [[EGCollisionBox2d alloc] initWithSize:size];
 }
 
-- (id)initWithHalfSize:(GEVec2)halfSize {
+- (id)initWithSize:(GEVec2)size {
     self = [super init];
     if(self) {
-        _halfSize = halfSize;
-        _box = new btBox2dShape(btVector3(halfSize.x, halfSize.y, 0));
+        _size = size;
+        _box = new btBox2dShape(btVector3(size.x/2, size.y/2, 0));
     }
 
     return self;
 }
 
 + (EGCollisionBox2d*)applyX:(float)x y:(float)y{
-    return [EGCollisionBox2d collisionBox2dWithHalfSize:GEVec2Make(x, y)];
+    return [EGCollisionBox2d collisionBox2dWithSize:GEVec2Make(x, y)];
 }
 
 - (VoidRef)shape {
@@ -223,18 +222,18 @@ static ODClassType* _EGCollisionBox2d_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGCollisionBox2d* o = ((EGCollisionBox2d*)(other));
-    return GEVec2Eq(self.halfSize, o.halfSize);
+    return GEVec2Eq(self.size, o.size);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2Hash(self.halfSize);
+    hash = hash * 31 + GEVec2Hash(self.size);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"halfSize=%@", GEVec2Description(self.halfSize)];
+    [description appendFormat:@"halfSize=%@", GEVec2Description(self.size)];
     [description appendString:@">"];
     return description;
 }

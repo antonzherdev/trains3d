@@ -116,8 +116,8 @@ static NSArray* _TRCarType_values;
         _startToWheel = _startToFront + _frontToWheel;
         _wheelToEnd = _wheelToBack + _backToEnd;
         _fullLength = _startToWheel + _betweenWheels + _wheelToEnd;
-        _collision2dShape = [EGCollisionBox2d applyX:((float)((_frontToWheel + _betweenWheels + _wheelToBack) / 2)) y:((float)(_width / 2))];
-        _rigidShape = [EGCollisionBox applyX:((float)((_frontToWheel + _betweenWheels + _wheelToBack) / 2)) y:((float)(_width / 2)) z:((float)(_height / 2))];
+        _collision2dShape = [EGCollisionBox2d applyX:((float)(_frontToWheel + _betweenWheels + _wheelToBack)) y:((float)(_width))];
+        _rigidShape = [EGCollisionBox applyX:((float)(_frontToWheel + _betweenWheels + _wheelToBack)) y:((float)(_width)) z:((float)(_height))];
     }
     
     return self;

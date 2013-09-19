@@ -10,6 +10,7 @@
 @class EGCollisionBody;
 @class TRSwitch;
 @class TRRailLight;
+@class EGCrossPoint;
 @class TRRailroadConnectorContent;
 
 @class TRSwitchProcessor;

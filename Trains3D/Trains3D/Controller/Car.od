@@ -30,8 +30,8 @@ enum CarType(
     val wheelToEnd = wheelToBack + backToEnd
     val fullLength : float = startToWheel + betweenWheels + wheelToEnd
     def isEngine : bool = engineType.isDefined
-    val collision2dShape : CollisionShape = CollisionBox2d((frontToWheel + betweenWheels + wheelToBack)/2, width/2)
-    val rigidShape : CollisionShape = CollisionBox((frontToWheel + betweenWheels + wheelToBack)/2, width/2, height/2)
+    val collision2dShape : CollisionShape = CollisionBox2d(frontToWheel + betweenWheels + wheelToBack, width)
+    val rigidShape : CollisionShape = CollisionBox(frontToWheel + betweenWheels + wheelToBack, width, height)
 }
 
 class Car(weak train : Train, carType : CarType) {

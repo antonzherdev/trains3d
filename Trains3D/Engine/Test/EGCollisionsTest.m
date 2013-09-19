@@ -23,8 +23,8 @@ static ODClassType* _EGCollisionsTest_type;
 
 - (void)testCollisions {
     EGCollisionWorld* world = [EGCollisionWorld collisionWorld];
-    EGCollisionBody* box1 = [EGCollisionBody collisionBodyWithData:@1 shape:[EGCollisionBox applyX:1.0 y:1.0 z:1.0] isKinematic:YES];
-    EGCollisionBody* box2 = [EGCollisionBody collisionBodyWithData:@2 shape:[EGCollisionBox applyX:1.0 y:1.0 z:1.0] isKinematic:NO];
+    EGCollisionBody* box1 = [EGCollisionBody collisionBodyWithData:@1 shape:[EGCollisionBox applyX:2.0 y:2.0 z:2.0] isKinematic:YES];
+    EGCollisionBody* box2 = [EGCollisionBody collisionBodyWithData:@2 shape:[EGCollisionBox applyX:2.0 y:2.0 z:2.0] isKinematic:NO];
     [world addBody:box1];
     [world addBody:box2];
     [box1 translateX:1.8 y:1.8 z:0.0];
@@ -37,8 +37,8 @@ static ODClassType* _EGCollisionsTest_type;
 
 - (void)testCollisions2d {
     EGCollisionWorld* world = [EGCollisionWorld collisionWorld];
-    EGCollisionBody* box1 = [EGCollisionBody collisionBodyWithData:@1 shape:[EGCollisionBox2d applyX:1.0 y:1.0] isKinematic:YES];
-    EGCollisionBody* box2 = [EGCollisionBody collisionBodyWithData:@2 shape:[EGCollisionBox2d applyX:1.0 y:1.0] isKinematic:NO];
+    EGCollisionBody* box1 = [EGCollisionBody collisionBodyWithData:@1 shape:[EGCollisionBox2d applyX:2.0 y:2.0] isKinematic:YES];
+    EGCollisionBody* box2 = [EGCollisionBody collisionBodyWithData:@2 shape:[EGCollisionBox2d applyX:2.0 y:2.0] isKinematic:NO];
     [world addBody:box1];
     [world addBody:box2];
     [box1 translateX:1.8 y:1.8 z:0.0];
@@ -51,8 +51,8 @@ static ODClassType* _EGCollisionsTest_type;
 
 - (void)testRay {
     EGCollisionWorld* world = [EGCollisionWorld collisionWorld];
-    EGCollisionBody* box1 = [EGCollisionBody collisionBodyWithData:@1 shape:[EGCollisionBox2d applyX:0.5 y:0.5] isKinematic:NO];
-    EGCollisionBody* box2 = [EGCollisionBody collisionBodyWithData:@2 shape:[EGCollisionBox2d applyX:0.5 y:0.5] isKinematic:YES];
+    EGCollisionBody* box1 = [EGCollisionBody collisionBodyWithData:@1 shape:[EGCollisionBox2d applyX:1.0 y:1.0] isKinematic:NO];
+    EGCollisionBody* box2 = [EGCollisionBody collisionBodyWithData:@2 shape:[EGCollisionBox2d applyX:1.0 y:1.0] isKinematic:YES];
     [box1 translateX:2.0 y:2.0 z:0.0];
     [world addBody:box1];
     [world addBody:box2];

@@ -9,7 +9,7 @@ class DynamicTest extends TestCase {
 
     def testSimple {
         val world = DynamicWorld<int>(vec3(0, -10, 0))
-        val shape = CollisionBox(vec3(0.5, 0.5, 0.5))
+        val shape = CollisionBox(1, 1, 1)
         val body = RigidBody.dynamic<int>(1, shape, 1)
         world.add(body)
         body.matrix = mat4.identity.translate(0, 5, 0)
@@ -34,7 +34,7 @@ class DynamicTest extends TestCase {
         val world = DynamicWorld<int>(vec3(0, -10, 0))
         val plane = RigidBody.statical<int>(1, CollisionPlane(vec3(0, 1, 0), 0))
         world.add(plane)
-        val body = RigidBody.dynamic<int>(2, CollisionBox(vec3(0.5, 0.5, 0.5)), 1)
+        val body = RigidBody.dynamic<int>(2, CollisionBox(1, 1, 1), 1)
         world.add(body)
         body.matrix = mat4.identity.translate(0, 0.5, 0)
         body.velocity = vec3(10, 0, 0)
