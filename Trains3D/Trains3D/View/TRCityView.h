@@ -1,6 +1,6 @@
 #import "objd.h"
-#import "EGMesh.h"
 #import "GEVec.h"
+@class EGMesh;
 @class EGGlobal;
 @class TRCity;
 @class GEMat4;

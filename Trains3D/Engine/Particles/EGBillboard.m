@@ -151,14 +151,14 @@ static ODClassType* _EGBillboardShader_type;
 }
 
 - (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGColorSource*)param {
-    [_positionSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:3 valuesType:GL_FLOAT shift:0];
-    [_modelSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(3 * 4))];
-    [_colorSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:4 valuesType:GL_FLOAT shift:((NSUInteger)(5 * 4))];
+    [_positionSlot setFromBufferWithStride:((NSUInteger)([vertexBuffer stride])) valuesCount:3 valuesType:GL_FLOAT shift:0];
+    [_modelSlot setFromBufferWithStride:((NSUInteger)([vertexBuffer stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(3 * 4))];
+    [_colorSlot setFromBufferWithStride:((NSUInteger)([vertexBuffer stride])) valuesCount:4 valuesType:GL_FLOAT shift:((NSUInteger)(5 * 4))];
     [_wcUniform setMatrix:[EGGlobal.matrix.value wc]];
     [_pUniform setMatrix:EGGlobal.matrix.value.p];
     if(_texture) {
         [_uvSlot forEach:^void(EGShaderAttribute* _) {
-            [_ setFromBufferWithStride:[vertexBuffer stride] valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(9 * 4))];
+            [_ setFromBufferWithStride:((NSUInteger)([vertexBuffer stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(9 * 4))];
         }];
         [((EGTexture*)([param.texture get])) bind];
     }
@@ -357,6 +357,7 @@ static ODClassType* _EGBillboardParticle_type;
     EGColorSource* _material;
     EGShader* _shader;
 }
+static EGVertexBufferDesc* _EGBillboardParticleSystemView_vbDesc;
 static ODClassType* _EGBillboardParticleSystemView_type;
 @synthesize material = _material;
 @synthesize shader = _shader;
@@ -366,7 +367,7 @@ static ODClassType* _EGBillboardParticleSystemView_type;
 }
 
 - (id)initWithMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction)blendFunc {
-    self = [super initWithDtp:egBillboardBufferDataType() maxCount:maxCount blendFunc:blendFunc];
+    self = [super initWithVbDesc:EGBillboardParticleSystemView.vbDesc maxCount:maxCount blendFunc:blendFunc];
     if(self) {
         _material = material;
         _shader = [EGBillboardShaderSystem shaderForMaterial:_material];
@@ -378,6 +379,7 @@ static ODClassType* _EGBillboardParticleSystemView_type;
 + (void)initialize {
     [super initialize];
     _EGBillboardParticleSystemView_type = [ODClassType classTypeWithCls:[EGBillboardParticleSystemView class]];
+    _EGBillboardParticleSystemView_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:egBillboardBufferDataType() position:0 uv:((int)(9 * 4)) normal:-1 color:((int)(5 * 4)) model:((int)(3 * 4))];
 }
 
 + (EGBillboardParticleSystemView*)applyMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material {
@@ -394,6 +396,10 @@ static ODClassType* _EGBillboardParticleSystemView_type;
 
 - (ODClassType*)type {
     return [EGBillboardParticleSystemView type];
+}
+
++ (EGVertexBufferDesc*)vbDesc {
+    return _EGBillboardParticleSystemView_vbDesc;
 }
 
 + (ODClassType*)type {

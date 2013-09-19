@@ -8,6 +8,7 @@
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class EGTexture;
+@class EGVertexBufferDesc;
 
 @class EGBillboardShaderSystem;
 @class EGBillboardShader;
@@ -117,6 +118,7 @@ ODPType* egBillboardBufferDataType();
 + (EGBillboardParticleSystemView*)applyMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material;
 - (NSUInteger)vertexCount;
 - (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i;
++ (EGVertexBufferDesc*)vbDesc;
 + (ODClassType*)type;
 @end
 

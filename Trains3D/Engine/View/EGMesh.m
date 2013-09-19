@@ -72,12 +72,16 @@ static ODClassType* _EGMesh_type;
     _EGMesh_type = [ODClassType classTypeWithCls:[EGMesh class]];
 }
 
-+ (EGMesh*)applyDataType:(ODPType*)dataType vertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData {
-    return [EGMesh meshWithVertexBuffer:[[EGVertexBuffer applyDataType:dataType] setData:vertexData] indexBuffer:[[EGIndexBuffer apply] setData:indexData]];
++ (EGMesh*)vec2VertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData {
+    return [EGMesh meshWithVertexBuffer:[[EGVertexBuffer vec2] setData:vertexData] indexBuffer:[[EGIndexBuffer apply] setData:indexData]];
 }
 
-+ (EGMesh*)quadVertexBuffer:(EGVertexBuffer*)vertexBuffer {
-    return [EGMesh meshWithVertexBuffer:vertexBuffer indexBuffer:[[EGIndexBuffer apply] setData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]]];
++ (EGMesh*)applyVertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData {
+    return [EGMesh meshWithVertexBuffer:[[EGVertexBuffer mesh] setData:vertexData] indexBuffer:[[EGIndexBuffer apply] setData:indexData]];
+}
+
++ (EGMesh*)applyDesc:(EGVertexBufferDesc*)desc vertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData {
+    return [EGMesh meshWithVertexBuffer:[[EGVertexBuffer applyDesc:desc] setData:vertexData] indexBuffer:[[EGIndexBuffer apply] setData:indexData]];
 }
 
 - (ODClassType*)type {
@@ -214,8 +218,8 @@ static ODClassType* _EGBuffer_type;
     [self unbind];
 }
 
-- (NSUInteger)stride {
-    return _dataType.size;
+- (unsigned int)stride {
+    return ((unsigned int)(_dataType.size));
 }
 
 - (ODClassType*)type {
@@ -257,15 +261,119 @@ static ODClassType* _EGBuffer_type;
 @end
 
 
-@implementation EGVertexBuffer
-static ODClassType* _EGVertexBuffer_type;
+@implementation EGVertexBufferDesc{
+    ODPType* _dataType;
+    int _position;
+    int _uv;
+    int _normal;
+    int _color;
+    int _model;
+}
+static ODClassType* _EGVertexBufferDesc_type;
+@synthesize dataType = _dataType;
+@synthesize position = _position;
+@synthesize uv = _uv;
+@synthesize normal = _normal;
+@synthesize color = _color;
+@synthesize model = _model;
 
-+ (id)vertexBufferWithDataType:(ODPType*)dataType handle:(GLuint)handle {
-    return [[EGVertexBuffer alloc] initWithDataType:dataType handle:handle];
++ (id)vertexBufferDescWithDataType:(ODPType*)dataType position:(int)position uv:(int)uv normal:(int)normal color:(int)color model:(int)model {
+    return [[EGVertexBufferDesc alloc] initWithDataType:dataType position:position uv:uv normal:normal color:color model:model];
 }
 
-- (id)initWithDataType:(ODPType*)dataType handle:(GLuint)handle {
-    self = [super initWithDataType:dataType bufferType:GL_ARRAY_BUFFER handle:handle];
+- (id)initWithDataType:(ODPType*)dataType position:(int)position uv:(int)uv normal:(int)normal color:(int)color model:(int)model {
+    self = [super init];
+    if(self) {
+        _dataType = dataType;
+        _position = position;
+        _uv = uv;
+        _normal = normal;
+        _color = color;
+        _model = model;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGVertexBufferDesc_type = [ODClassType classTypeWithCls:[EGVertexBufferDesc class]];
+}
+
+- (unsigned int)stride {
+    return ((unsigned int)(_dataType.size));
+}
+
++ (EGVertexBufferDesc*)Vec2 {
+    return [EGVertexBufferDesc vertexBufferDescWithDataType:geVec2Type() position:-1 uv:0 normal:-1 color:-1 model:0];
+}
+
++ (EGVertexBufferDesc*)Vec3 {
+    return [EGVertexBufferDesc vertexBufferDescWithDataType:geVec3Type() position:0 uv:-1 normal:0 color:-1 model:-1];
+}
+
++ (EGVertexBufferDesc*)mesh {
+    return [EGVertexBufferDesc vertexBufferDescWithDataType:egMeshDataType() position:((int)(5 * 4)) uv:0 normal:((int)(2 * 4)) color:-1 model:-1];
+}
+
+- (ODClassType*)type {
+    return [EGVertexBufferDesc type];
+}
+
++ (ODClassType*)type {
+    return _EGVertexBufferDesc_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGVertexBufferDesc* o = ((EGVertexBufferDesc*)(other));
+    return [self.dataType isEqual:o.dataType] && self.position == o.position && self.uv == o.uv && self.normal == o.normal && self.color == o.color && self.model == o.model;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.dataType hash];
+    hash = hash * 31 + self.position;
+    hash = hash * 31 + self.uv;
+    hash = hash * 31 + self.normal;
+    hash = hash * 31 + self.color;
+    hash = hash * 31 + self.model;
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"dataType=%@", self.dataType];
+    [description appendFormat:@", position=%d", self.position];
+    [description appendFormat:@", uv=%d", self.uv];
+    [description appendFormat:@", normal=%d", self.normal];
+    [description appendFormat:@", color=%d", self.color];
+    [description appendFormat:@", model=%d", self.model];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGVertexBuffer{
+    EGVertexBufferDesc* _desc;
+}
+static ODClassType* _EGVertexBuffer_type;
+@synthesize desc = _desc;
+
++ (id)vertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle {
+    return [[EGVertexBuffer alloc] initWithDesc:desc handle:handle];
+}
+
+- (id)initWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle {
+    self = [super initWithDataType:desc.dataType bufferType:GL_ARRAY_BUFFER handle:handle];
+    if(self) _desc = desc;
     
     return self;
 }
@@ -275,8 +383,20 @@ static ODClassType* _EGVertexBuffer_type;
     _EGVertexBuffer_type = [ODClassType classTypeWithCls:[EGVertexBuffer class]];
 }
 
-+ (EGVertexBuffer*)applyDataType:(ODPType*)dataType {
-    return [EGVertexBuffer vertexBufferWithDataType:dataType handle:egGenBuffer()];
++ (EGVertexBuffer*)applyDesc:(EGVertexBufferDesc*)desc {
+    return [EGVertexBuffer vertexBufferWithDesc:desc handle:egGenBuffer()];
+}
+
++ (EGVertexBuffer*)vec2 {
+    return [EGVertexBuffer vertexBufferWithDesc:[EGVertexBufferDesc Vec2] handle:egGenBuffer()];
+}
+
++ (EGVertexBuffer*)vec3 {
+    return [EGVertexBuffer vertexBufferWithDesc:[EGVertexBufferDesc Vec3] handle:egGenBuffer()];
+}
+
++ (EGVertexBuffer*)mesh {
+    return [EGVertexBuffer vertexBufferWithDesc:[EGVertexBufferDesc mesh] handle:egGenBuffer()];
 }
 
 - (ODClassType*)type {
@@ -295,19 +415,19 @@ static ODClassType* _EGVertexBuffer_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGVertexBuffer* o = ((EGVertexBuffer*)(other));
-    return [self.dataType isEqual:o.dataType] && GLuintEq(self.handle, o.handle);
+    return [self.desc isEqual:o.desc] && GLuintEq(self.handle, o.handle);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [self.dataType hash];
+    hash = hash * 31 + [self.desc hash];
     hash = hash * 31 + GLuintHash(self.handle);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"dataType=%@", self.dataType];
+    [description appendFormat:@"desc=%@", self.desc];
     [description appendFormat:@", handle=%@", GLuintDescription(self.handle)];
     [description appendString:@">"];
     return description;

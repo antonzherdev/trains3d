@@ -280,10 +280,10 @@ static ODClassType* _EGStandardShader_type;
 }
 
 - (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGStandardMaterial*)param {
-    [_positionSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_POSITION_SHIFT))];
+    [_positionSlot setFromBufferWithStride:((NSUInteger)([vertexBuffer stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_POSITION_SHIFT))];
     [_mwcpUniform setMatrix:[EGGlobal.matrix.value mwcp]];
     if(_key.texture) {
-        [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:[vertexBuffer stride] valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_UV_SHIFT))];
+        [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:((NSUInteger)([vertexBuffer stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_UV_SHIFT))];
         [((EGTexture*)([param.diffuse.texture get])) bind];
     }
     [_diffuseColorUniform setVec4:param.diffuse.color];
@@ -293,7 +293,7 @@ static ODClassType* _EGStandardShader_type;
     [_ambientColor setVec4:env.ambientColor];
     if(_key.directLightCount > 0) {
         [((EGShaderUniform*)([_mwcUniform get])) setMatrix:[EGGlobal.context.matrixStack.value mwc]];
-        [((EGShaderAttribute*)([_normalSlot get])) setFromBufferWithStride:[vertexBuffer stride] valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_NORMAL_SHIFT))];
+        [((EGShaderAttribute*)([_normalSlot get])) setFromBufferWithStride:((NSUInteger)([vertexBuffer stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_NORMAL_SHIFT))];
         [[[[env.lights chain] filterCast:EGDirectLight.type] zip3A:_directLightDirections b:_directLightColors by:^EGDirectLight*(EGDirectLight* light, EGShaderUniform* dirSlot, EGShaderUniform* colorSlot) {
             GEVec3 dir = geVec4Xyz([[EGGlobal.matrix.value wc] mulVec3:light.direction w:0.0]);
             [dirSlot setVec3:dir];

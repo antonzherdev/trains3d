@@ -41,9 +41,9 @@ class Particle(lifeLength : float4) extends Controller {
 }
 
 
-class ParticleSystemView<P extends Particle, D>(dtp : PType<D>, maxCount : uint, blendFunc : BlendFunction) {
-    val vertexArr = VoidRefArray(dtp, maxCount*vertexCount)
-    val vertexBuffer = VertexBuffer<D>(dtp).set(array = vertexArr, usage = GL_DYNAMIC_DRAW)
+class ParticleSystemView<P extends Particle, D>(vbDesc : VertexBufferDesc<D>, maxCount : uint, blendFunc : BlendFunction) {
+    val vertexArr = VoidRefArray(vbDesc.dataType, maxCount*vertexCount)
+    val vertexBuffer = VertexBuffer<D>(vbDesc).set(array = vertexArr, usage = GL_DYNAMIC_DRAW)
     val indexArr : VoidRefArray = {
         val vc = vertexCount
         val ia = VoidRefArray(UInt4.type, maxCount*3*(vc - 2))

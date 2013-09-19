@@ -478,7 +478,7 @@ static ODClassType* _EGFullScreenSurfaceShader_type;
 
 - (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGFullScreenSurfaceShaderParam*)param {
     [param.texture bind];
-    [_positionSlot setFromBufferWithStride:[vertexBuffer stride] valuesCount:2 valuesType:GL_FLOAT shift:0];
+    [_positionSlot setFromBufferWithStride:((NSUInteger)([vertexBuffer stride])) valuesCount:2 valuesType:GL_FLOAT shift:0];
     [_zUniform setF4:param.z];
 }
 
@@ -549,7 +549,7 @@ static ODClassType* _EGFullScreenSurface_type;
         _surface = [CNOption none];
         _redrawCounter = 0;
         __lazy_fullScreenMesh = [CNLazy lazyWithF:^EGMesh*() {
-            return [EGMesh applyDataType:geVec2Type() vertexData:[ arrs(GEVec2, 4) {GEVec2Make(0.0, 0.0), GEVec2Make(1.0, 0.0), GEVec2Make(1.0, 1.0), GEVec2Make(0.0, 1.0)}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
+            return [EGMesh vec2VertexData:[ arrs(GEVec2, 4) {GEVec2Make(0.0, 0.0), GEVec2Make(1.0, 0.0), GEVec2Make(1.0, 1.0), GEVec2Make(0.0, 1.0)}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
         }];
         __lazy_shader = [CNLazy lazyWithF:^EGFullScreenSurfaceShader*() {
             return [EGFullScreenSurfaceShader fullScreenSurfaceShader];

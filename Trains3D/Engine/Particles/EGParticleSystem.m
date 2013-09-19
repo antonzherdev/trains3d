@@ -154,7 +154,7 @@ static ODClassType* _EGParticle_type;
 
 
 @implementation EGParticleSystemView{
-    ODPType* _dtp;
+    EGVertexBufferDesc* _vbDesc;
     NSUInteger _maxCount;
     EGBlendFunction _blendFunc;
     CNVoidRefArray _vertexArr;
@@ -164,7 +164,7 @@ static ODClassType* _EGParticle_type;
     EGMesh* _mesh;
 }
 static ODClassType* _EGParticleSystemView_type;
-@synthesize dtp = _dtp;
+@synthesize vbDesc = _vbDesc;
 @synthesize maxCount = _maxCount;
 @synthesize blendFunc = _blendFunc;
 @synthesize vertexArr = _vertexArr;
@@ -173,19 +173,19 @@ static ODClassType* _EGParticleSystemView_type;
 @synthesize indexBuffer = _indexBuffer;
 @synthesize mesh = _mesh;
 
-+ (id)particleSystemViewWithDtp:(ODPType*)dtp maxCount:(NSUInteger)maxCount blendFunc:(EGBlendFunction)blendFunc {
-    return [[EGParticleSystemView alloc] initWithDtp:dtp maxCount:maxCount blendFunc:blendFunc];
++ (id)particleSystemViewWithVbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount blendFunc:(EGBlendFunction)blendFunc {
+    return [[EGParticleSystemView alloc] initWithVbDesc:vbDesc maxCount:maxCount blendFunc:blendFunc];
 }
 
-- (id)initWithDtp:(ODPType*)dtp maxCount:(NSUInteger)maxCount blendFunc:(EGBlendFunction)blendFunc {
+- (id)initWithVbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount blendFunc:(EGBlendFunction)blendFunc {
     self = [super init];
     __weak EGParticleSystemView* _weakSelf = self;
     if(self) {
-        _dtp = dtp;
+        _vbDesc = vbDesc;
         _maxCount = maxCount;
         _blendFunc = blendFunc;
-        _vertexArr = cnVoidRefArrayApplyTpCount(_dtp, _maxCount * [self vertexCount]);
-        _vertexBuffer = [[EGVertexBuffer applyDataType:_dtp] setArray:_vertexArr usage:GL_DYNAMIC_DRAW];
+        _vertexArr = cnVoidRefArrayApplyTpCount(_vbDesc.dataType, _maxCount * [self vertexCount]);
+        _vertexBuffer = [[EGVertexBuffer applyDesc:_vbDesc] setArray:_vertexArr usage:GL_DYNAMIC_DRAW];
         _indexArr = ^CNVoidRefArray() {
             NSUInteger vc = [self vertexCount];
             CNVoidRefArray ia = cnVoidRefArrayApplyTpCount(oduInt4Type(), _maxCount * 3 * (vc - 2));
@@ -265,12 +265,12 @@ static ODClassType* _EGParticleSystemView_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGParticleSystemView* o = ((EGParticleSystemView*)(other));
-    return [self.dtp isEqual:o.dtp] && self.maxCount == o.maxCount && EGBlendFunctionEq(self.blendFunc, o.blendFunc);
+    return [self.vbDesc isEqual:o.vbDesc] && self.maxCount == o.maxCount && EGBlendFunctionEq(self.blendFunc, o.blendFunc);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [self.dtp hash];
+    hash = hash * 31 + [self.vbDesc hash];
     hash = hash * 31 + self.maxCount;
     hash = hash * 31 + EGBlendFunctionHash(self.blendFunc);
     return hash;
@@ -278,7 +278,7 @@ static ODClassType* _EGParticleSystemView_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"dtp=%@", self.dtp];
+    [description appendFormat:@"vbDesc=%@", self.vbDesc];
     [description appendFormat:@", maxCount=%li", self.maxCount];
     [description appendFormat:@", blendFunc=%@", EGBlendFunctionDescription(self.blendFunc)];
     [description appendString:@">"];

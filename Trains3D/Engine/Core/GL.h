@@ -162,8 +162,7 @@ static inline void egColor(GEVec4 self) {
 
 
 #define egJasModel(NAME) [EGMesh \
-    applyDataType: egMeshDataType()\
-    vertexData:[arrp(float, numf4, NAME ## _vertexcount*8) NAME ## _vertex] \
+    applyVertexData:[arrp(float, numf4, NAME ## _vertexcount*8) NAME ## _vertex] \
     indexData: [arrp(unsigned int, numui4, NAME ## _polygoncount*3) NAME ## _index]]
 
 GEVec2 egLoadTextureFromFile(GLuint target, NSString* file);

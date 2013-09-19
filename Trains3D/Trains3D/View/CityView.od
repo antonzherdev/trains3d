@@ -4,7 +4,7 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 
 class CityView {
-    val expectedTrainModel = Mesh(MeshData.type, [
+    val expectedTrainModel = Mesh([
         0, 0, 0, 1, 0, -0.5, 0.001, -0.5,
         1, 0, 0, 1, 0, 0.5, 0.001, -0.5,
         1, 1, 0, 1, 0, 0.5, 0.001, 0.5,

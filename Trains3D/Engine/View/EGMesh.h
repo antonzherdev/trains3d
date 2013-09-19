@@ -4,6 +4,7 @@
 
 @class EGMesh;
 @class EGBuffer;
+@class EGVertexBufferDesc;
 @class EGVertexBuffer;
 @class EGIndexBuffer;
 typedef struct EGMeshData EGMeshData;
@@ -51,8 +52,9 @@ ODPType* egMeshDataType();
 + (id)meshWithVertexBuffer:(EGVertexBuffer*)vertexBuffer indexBuffer:(EGIndexBuffer*)indexBuffer;
 - (id)initWithVertexBuffer:(EGVertexBuffer*)vertexBuffer indexBuffer:(EGIndexBuffer*)indexBuffer;
 - (ODClassType*)type;
-+ (EGMesh*)applyDataType:(ODPType*)dataType vertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;
-+ (EGMesh*)quadVertexBuffer:(EGVertexBuffer*)vertexBuffer;
++ (EGMesh*)vec2VertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;
++ (EGMesh*)applyVertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;
++ (EGMesh*)applyDesc:(EGVertexBufferDesc*)desc vertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;
 + (ODClassType*)type;
 @end
 
@@ -77,16 +79,40 @@ ODPType* egMeshDataType();
 - (void)bind;
 - (void)unbind;
 - (void)applyDraw:(void(^)())draw;
-- (NSUInteger)stride;
+- (unsigned int)stride;
++ (ODClassType*)type;
+@end
+
+
+@interface EGVertexBufferDesc : NSObject
+@property (nonatomic, readonly) ODPType* dataType;
+@property (nonatomic, readonly) int position;
+@property (nonatomic, readonly) int uv;
+@property (nonatomic, readonly) int normal;
+@property (nonatomic, readonly) int color;
+@property (nonatomic, readonly) int model;
+
++ (id)vertexBufferDescWithDataType:(ODPType*)dataType position:(int)position uv:(int)uv normal:(int)normal color:(int)color model:(int)model;
+- (id)initWithDataType:(ODPType*)dataType position:(int)position uv:(int)uv normal:(int)normal color:(int)color model:(int)model;
+- (ODClassType*)type;
+- (unsigned int)stride;
++ (EGVertexBufferDesc*)Vec2;
++ (EGVertexBufferDesc*)Vec3;
++ (EGVertexBufferDesc*)mesh;
 + (ODClassType*)type;
 @end
 
 
 @interface EGVertexBuffer : EGBuffer
-+ (id)vertexBufferWithDataType:(ODPType*)dataType handle:(GLuint)handle;
-- (id)initWithDataType:(ODPType*)dataType handle:(GLuint)handle;
+@property (nonatomic, readonly) EGVertexBufferDesc* desc;
+
++ (id)vertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle;
+- (id)initWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle;
 - (ODClassType*)type;
-+ (EGVertexBuffer*)applyDataType:(ODPType*)dataType;
++ (EGVertexBuffer*)applyDesc:(EGVertexBufferDesc*)desc;
++ (EGVertexBuffer*)vec2;
++ (EGVertexBuffer*)vec3;
++ (EGVertexBuffer*)mesh;
 + (ODClassType*)type;
 @end
 
