@@ -7,13 +7,13 @@
 #import "EGCollisionBody.h"
 #import "TRRailPoint.h"
 #import "EGDynamicWorld.h"
-@implementation TRCollisionWorld{
+@implementation TRTrainsCollisionWorld{
     EGCollisionWorld* _world;
 }
-static ODClassType* _TRCollisionWorld_type;
+static ODClassType* _TRTrainsCollisionWorld_type;
 
-+ (id)collisionWorld {
-    return [[TRCollisionWorld alloc] init];
++ (id)trainsCollisionWorld {
+    return [[TRTrainsCollisionWorld alloc] init];
 }
 
 - (id)init {
@@ -25,7 +25,7 @@ static ODClassType* _TRCollisionWorld_type;
 
 + (void)initialize {
     [super initialize];
-    _TRCollisionWorld_type = [ODClassType classTypeWithCls:[TRCollisionWorld class]];
+    _TRTrainsCollisionWorld_type = [ODClassType classTypeWithCls:[TRTrainsCollisionWorld class]];
 }
 
 - (void)addTrain:(TRTrain*)train {
@@ -57,11 +57,11 @@ static ODClassType* _TRCollisionWorld_type;
 }
 
 - (ODClassType*)type {
-    return [TRCollisionWorld type];
+    return [TRTrainsCollisionWorld type];
 }
 
 + (ODClassType*)type {
-    return _TRCollisionWorld_type;
+    return _TRTrainsCollisionWorld_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -151,13 +151,13 @@ static ODClassType* _TRCarsCollision_type;
 @end
 
 
-@implementation TRDynamicWorld{
+@implementation TRTrainsDynamicWorld{
     EGDynamicWorld* _world;
 }
-static ODClassType* _TRDynamicWorld_type;
+static ODClassType* _TRTrainsDynamicWorld_type;
 
-+ (id)dynamicWorld {
-    return [[TRDynamicWorld alloc] init];
++ (id)trainsDynamicWorld {
+    return [[TRTrainsDynamicWorld alloc] init];
 }
 
 - (id)init {
@@ -175,7 +175,7 @@ static ODClassType* _TRDynamicWorld_type;
 
 + (void)initialize {
     [super initialize];
-    _TRDynamicWorld_type = [ODClassType classTypeWithCls:[TRDynamicWorld class]];
+    _TRTrainsDynamicWorld_type = [ODClassType classTypeWithCls:[TRTrainsDynamicWorld class]];
 }
 
 - (void)addTrain:(TRTrain*)train {
@@ -198,11 +198,11 @@ static ODClassType* _TRDynamicWorld_type;
 }
 
 - (ODClassType*)type {
-    return [TRDynamicWorld type];
+    return [TRTrainsDynamicWorld type];
 }
 
 + (ODClassType*)type {
-    return _TRDynamicWorld_type;
+    return _TRTrainsDynamicWorld_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

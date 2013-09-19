@@ -31,8 +31,11 @@ CGFloat geVec2Length(GEVec2 self) {
 GEVec2 geVec2MulValue(GEVec2 self, float value) {
     return GEVec2Make(self.x * value, self.y * value);
 }
-GEVec2 geVec2DivValue(GEVec2 self, float value) {
-    return GEVec2Make(self.x / value, self.y / value);
+GEVec2 geVec2DivVec2(GEVec2 self, GEVec2 vec2) {
+    return GEVec2Make(self.x / vec2.x, self.y / vec2.y);
+}
+GEVec2 geVec2DivF4(GEVec2 self, float f4) {
+    return GEVec2Make(self.x / f4, self.y / f4);
 }
 GEVec2 geVec2MidVec2(GEVec2 self, GEVec2 vec2) {
     return geVec2MulValue(geVec2AddVec2(self, vec2), 0.5);

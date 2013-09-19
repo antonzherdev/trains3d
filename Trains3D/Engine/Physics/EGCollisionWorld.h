@@ -16,6 +16,8 @@
 
 - (id <CNSeq>)crossPointsWithSegment:(GELine3)line3;
 - (id)closestCrossPointWithSegment:(GELine3)line3;
+
+- (void)clear;
 @end
 
 

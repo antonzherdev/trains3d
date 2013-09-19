@@ -52,7 +52,10 @@ class MapSso(size : vec2i) {
 }
 
 class MapSsoView(map : MapSso) {
+//    lazy val axisVertexBuffer = VertexBuffer(vec3.type, [vec3(0, 0, 0), vec3(1, 0, 0), vec3(0, 1, 0), vec3(0, 0, 1)])
+
     def drawLayout {
+//        ColorSource(vec4(1, 0, 0, 1)).draw()
         /*glPushMatrix
         egRotate(45, 0, 0, 1)
         glBegin(GL_LINES)

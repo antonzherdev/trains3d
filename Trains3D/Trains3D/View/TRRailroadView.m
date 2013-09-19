@@ -479,6 +479,7 @@ static ODClassType* _TRBackgroundView_type;
 
 - (void)draw {
     [_mapView drawPlaneWithMaterial:_material];
+    [_mapView drawLayout];
 }
 
 - (ODClassType*)type {

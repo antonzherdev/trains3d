@@ -19,6 +19,6 @@ class Camera2D(size : vec2) extends Camera {
     def translateWith(viewSize : vec2, viewPoint : vec2) : vec2 = {
         val factor = factorFor(viewSize)
         val viewport = viewportWith(viewSize, factor)
-        viewPoint.sub(viewport.origin).div(factor)
+        viewPoint.sub(viewport.origin).div(f4 = factor)
     }
 }

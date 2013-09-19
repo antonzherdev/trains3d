@@ -168,3 +168,5 @@ static inline void egColor(GEVec4 self) {
 
 GEVec2 egLoadTextureFromFile(GLuint target, NSString* file);
 void egSaveTextureToFile(GLuint source, NSString* file);
+
+void egDrawAxis();

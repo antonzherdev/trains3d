@@ -12,12 +12,12 @@
 @class EGCollisionPlane;
 @class EGRigidBody;
 
-@class TRCollisionWorld;
+@class TRTrainsCollisionWorld;
 @class TRCarsCollision;
-@class TRDynamicWorld;
+@class TRTrainsDynamicWorld;
 
-@interface TRCollisionWorld : NSObject
-+ (id)collisionWorld;
+@interface TRTrainsCollisionWorld : NSObject
++ (id)trainsCollisionWorld;
 - (id)init;
 - (ODClassType*)type;
 - (void)addTrain:(TRTrain*)train;
@@ -38,8 +38,8 @@
 @end
 
 
-@interface TRDynamicWorld : NSObject<EGController>
-+ (id)dynamicWorld;
+@interface TRTrainsDynamicWorld : NSObject<EGController>
++ (id)trainsDynamicWorld;
 - (id)init;
 - (ODClassType*)type;
 - (void)addTrain:(TRTrain*)train;

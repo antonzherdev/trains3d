@@ -16,8 +16,8 @@ class Level(rules : LevelRules) extends Controller {
     private var _repairer : Train? = nil
     def repairer = _repairer
 
-    val collisionWorld = CollisionWorld()
-    val dynamicWorld = DynamicWorld()
+    val collisionWorld = TrainsCollisionWorld()
+    val dynamicWorld = TrainsDynamicWorld()
 
     private var _dyingTrains = MutableArray<Train>()
     def dyingTrains : [Train] = _dyingTrains

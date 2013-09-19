@@ -114,3 +114,21 @@ void egSaveTextureToFile(GLuint source, NSString* file) {
 
     glBindTexture(GL_TEXTURE_2D, 0);
 }
+
+void egDrawAxis() {
+    glBegin(GL_LINES);
+    {
+        glColor3f(1, 0, 0);
+        glVertex3d(0, 0, 0.0);
+        glVertex3d(1, 0, 0.0);
+
+        glColor3f(0, 1, 0);
+        glVertex3d(0, 0, 0.0);
+        glVertex3d(0, 1, 0.0);
+
+        glColor3f(0, 0, 1);
+        glVertex3d(0, 0, 0.0);
+        glVertex3d(0, 0, 1);
+    }
+    glEnd();
+}

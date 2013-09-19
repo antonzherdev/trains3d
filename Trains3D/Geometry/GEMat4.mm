@@ -135,6 +135,12 @@ static GEMat4 * _identity;
     glm::vec4 v4 = glm::vec4(vec4.x, vec4.y, vec4.z, vec4.w) / _impl->m;
     return {v4.x, v4.y, v4.z, v4.w};
 }
+
+- (GEMat4 *)inverse {
+    GEMat4Impl * impl = new GEMat4Impl;
+    impl->m = glm::inverse(_impl->m);
+    return [GEMat4 matrixWithImpl:impl];
+}
 @end
 
 

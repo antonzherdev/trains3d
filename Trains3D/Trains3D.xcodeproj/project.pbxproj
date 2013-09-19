@@ -380,7 +380,6 @@
 		6F3DFC33CB5BAFC2861C4FF6 /* GEBentleyOttmann.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8B29A47877E8DA46B03 /* GEBentleyOttmann.m */; };
 		6F3DFC48C192D26EBD007F28 /* btGhostObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB5441E6F155F2A4CAF7 /* btGhostObject.cpp */; };
 		6F3DFC4B1AC4F964D6F56006 /* KWProbePoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0255D0634FEBC03437A /* KWProbePoller.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		6F3DFC514C270517872D22C9 /* EGMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF00AC03B6A58770FAAE6 /* EGMap.m */; };
 		6F3DFC65B1A88F31BCAC3E37 /* noise.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFCB2330F2CC5433D3A0D /* noise.inl */; };
 		6F3DFC6775F74F61DBC4790B /* matrix_major_storage.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF9F07A9C081D18BFD288 /* matrix_major_storage.inl */; };
 		6F3DFC7067586699D3679403 /* TRSwitchProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF7BC684B734FD9A3AF81 /* TRSwitchProcessor.m */; };
@@ -516,7 +515,6 @@
 		0214B14F1773394500C03C71 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		024F434D1774A5C3005B6F82 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		6F3DF00312927A542D37D8A2 /* btUniversalConstraint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btUniversalConstraint.cpp; sourceTree = "<group>"; };
-		6F3DF00AC03B6A58770FAAE6 /* EGMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGMap.m; sourceTree = "<group>"; };
 		6F3DF0103DACAC74EFF729C5 /* func_geometric.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = func_geometric.inl; sourceTree = "<group>"; };
 		6F3DF01314FF9DD4CC6D8EBB /* btCollisionAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btCollisionAlgorithm.h; sourceTree = "<group>"; };
 		6F3DF0237FBF34B409C18893 /* simd_vec4.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = simd_vec4.inl; sourceTree = "<group>"; };
@@ -542,7 +540,6 @@
 		6F3DF06063B5F1A002BF4352 /* TRLevelSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRLevelSpec.m; sourceTree = "<group>"; };
 		6F3DF064200BEEE72DC5925F /* epsilon.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = epsilon.hpp; sourceTree = "<group>"; };
 		6F3DF065178712A566D14240 /* btList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btList.h; sourceTree = "<group>"; };
-		6F3DF06548F1F0497013D68C /* EGMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGMap.h; sourceTree = "<group>"; };
 		6F3DF065C06C25581423A443 /* gim_geom_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gim_geom_types.h; sourceTree = "<group>"; };
 		6F3DF0684569A583737D2655 /* TRModels.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRModels.m; sourceTree = "<group>"; };
 		6F3DF073C0C9253448C35A18 /* extend.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = extend.hpp; sourceTree = "<group>"; };
@@ -2561,8 +2558,6 @@
 				6F3DFF0C5251475D6FA8EB46 /* Texture.od */,
 				6F3DFDAA4AA0BEE1B1AF1D5B /* EGTexture.m */,
 				6F3DF37708111DAEB77D185F /* EGTexture.h */,
-				6F3DF06548F1F0497013D68C /* EGMap.h */,
-				6F3DF00AC03B6A58770FAAE6 /* EGMap.m */,
 				6F3DFFADDB980529C1D266D8 /* Text.od */,
 				6F3DF86689B5D7E4BE83874F /* EGText.h */,
 				6F3DF7386C7FDAEC32527DA1 /* EGText.m */,
@@ -3430,7 +3425,6 @@
 				6F3DF850F9BD7D4C5B8854D3 /* EGDirector.m in Sources */,
 				6F3DFDFABB2E1DDC72F63089 /* EGScene.m in Sources */,
 				6F3DF96C656936557219F5A6 /* EGTexture.m in Sources */,
-				6F3DFC514C270517872D22C9 /* EGMap.m in Sources */,
 				6F3DF9D3BFFED72CBC5C57D4 /* EGText.m in Sources */,
 				6F3DFECFE9453BA8B6ADAA6C /* CNChain.m in Sources */,
 				6F3DF4C5C874D3EF6E10D71C /* CNYield.m in Sources */,

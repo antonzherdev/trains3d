@@ -6,8 +6,8 @@
 @class TRScore;
 @class TRRailroad;
 @class EGSchedule;
-@class TRCollisionWorld;
-@class TRDynamicWorld;
+@class TRTrainsCollisionWorld;
+@class TRTrainsDynamicWorld;
 @class TRCity;
 @class TRCityAngle;
 @class TRRail;
@@ -44,8 +44,8 @@
 @property (nonatomic, readonly) TRScore* score;
 @property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic, readonly) EGSchedule* schedule;
-@property (nonatomic, readonly) TRCollisionWorld* collisionWorld;
-@property (nonatomic, readonly) TRDynamicWorld* dynamicWorld;
+@property (nonatomic, readonly) TRTrainsCollisionWorld* collisionWorld;
+@property (nonatomic, readonly) TRTrainsDynamicWorld* dynamicWorld;
 
 + (id)levelWithRules:(TRLevelRules*)rules;
 - (id)initWithRules:(TRLevelRules*)rules;

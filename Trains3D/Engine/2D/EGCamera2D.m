@@ -44,7 +44,7 @@ static ODClassType* _EGCamera2D_type;
 - (GEVec2)translateWithViewSize:(GEVec2)viewSize viewPoint:(GEVec2)viewPoint {
     float factor = [self factorForViewSize:viewSize];
     GERecti viewport = [self viewportWithViewSize:viewSize factor:factor];
-    return geVec2DivValue(geVec2SubVec2(viewPoint, geVec2ApplyVec2i(viewport.origin)), factor);
+    return geVec2DivF4(geVec2SubVec2(viewPoint, geVec2ApplyVec2i(viewport.origin)), factor);
 }
 
 - (void)focusForViewSize:(GEVec2)viewSize {

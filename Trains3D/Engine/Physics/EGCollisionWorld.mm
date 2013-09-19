@@ -125,6 +125,13 @@ static ODClassType* _EGCollisionWorld_type;
     const btVector3 & p = results.m_hitPointWorld;
     return [EGCrossPoint crossPointWithBody:body point:(GEVec3){p.x(), p.y(), p.z()}];
 }
+
+- (void)clear {
+    for(EGCollisionBody* body in _objects) {
+        _world->removeCollisionObject(static_cast<btCollisionObject*>(body.obj));
+    }
+    [_objects removeAllObjects];
+}
 @end
 
 

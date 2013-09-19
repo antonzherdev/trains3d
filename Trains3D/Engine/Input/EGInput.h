@@ -1,7 +1,11 @@
 #import "objd.h"
 #import "GEVec.h"
+#import "GELine.h"
 @protocol EGCamera;
+@class EGGlobal;
+@class EGContext;
 @class EGMatrixModel;
+@class GEMat4;
 
 @class EGEvent;
 @class EGRectIndex;
@@ -40,7 +44,7 @@
 - (GEVec2)locationInView;
 - (GEVec2)location;
 - (GEVec2)locationForDepth:(CGFloat)depth;
-- (GEVec3)line;
+- (GELine3)segment;
 - (BOOL)isLeftMouseDown;
 - (BOOL)isLeftMouseDrag;
 - (BOOL)isLeftMouseUp;

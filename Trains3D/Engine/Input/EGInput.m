@@ -2,6 +2,7 @@
 
 #import "EGScene.h"
 #import "EGContext.h"
+#import "GEMat4.h"
 @implementation EGEvent{
     GEVec2 _viewSize;
     id _camera;
@@ -46,12 +47,21 @@ static ODClassType* _EGEvent_type;
     else return [[_camera get] translateWithViewSize:_viewSize viewPoint:[self locationInView]];
 }
 
-- (GEVec3)line {
+- (GELine3)segment {
     if([_camera isEmpty]) {
-        return geVec3ApplyVec2Z([self locationInView], 0.0);
+        return GELine3Make(geVec3ApplyVec2Z([self locationInView], 0.0), GEVec3Make(0.0, 0.0, 1000.0));
     } else {
-        GEVec2 loc = [self locationInView];
-        return geVec4Xyz(geVec4DivMat4(GEVec4Make(loc.x, loc.y, 0.0, 1.0), [[[_camera get] matrixModel] mwcp]));
+        GEVec2 loc = geVec2SubVec2(geVec2MulValue(geVec2DivVec2(geVec2SubVec2([self locationInView], geVec2ApplyVec2i([EGGlobal.context viewport].origin)), geVec2ApplyVec2i([EGGlobal.context viewport].size)), 2.0), GEVec2Make(1.0, 1.0));
+        GEMat4* mat4 = [[[[_camera get] matrixModel] mwcp] inverse];
+        GEMat4* m = [[[_camera get] matrixModel] mwcp];
+        GEVec4 d1 = [m mulVec4:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
+        GEVec4 d2 = [mat4 mulVec4:d1];
+        GEVec4 p0 = [mat4 mulVec4:GEVec4Make(loc.x, loc.y, -1.0, 1.0)];
+        GEVec4 p1 = [mat4 mulVec4:GEVec4Make(loc.x, loc.y, 1.0, 1.0)];
+        GELine3 l = GELine3Make(geVec4Xyz(p0), geVec3SubVec3(geVec4Xyz(p1), geVec4Xyz(p0)));
+        GEVec3 d3 = geLine3RPlane(l, GEPlaneMake(GEVec3Make(0.0, 0.0, 0.0), GEVec3Make(0.0, 0.0, 1.0)));
+        GEVec4 d4 = [m mulVec4:geVec4ApplyVec3W(d3, 1.0)];
+        return l;
     }
 }
 

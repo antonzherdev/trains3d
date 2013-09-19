@@ -92,8 +92,8 @@ static ODClassType* _TRLevelRules_type;
     EGSchedule* _schedule;
     id<CNSeq> __trains;
     id __repairer;
-    TRCollisionWorld* _collisionWorld;
-    TRDynamicWorld* _dynamicWorld;
+    TRTrainsCollisionWorld* _collisionWorld;
+    TRTrainsDynamicWorld* _dynamicWorld;
     NSMutableArray* __dyingTrains;
 }
 static ODClassType* _TRLevel_type;
@@ -120,8 +120,8 @@ static ODClassType* _TRLevel_type;
         _schedule = [self createSchedule];
         __trains = (@[]);
         __repairer = [CNOption none];
-        _collisionWorld = [TRCollisionWorld collisionWorld];
-        _dynamicWorld = [TRDynamicWorld dynamicWorld];
+        _collisionWorld = [TRTrainsCollisionWorld trainsCollisionWorld];
+        _dynamicWorld = [TRTrainsDynamicWorld trainsDynamicWorld];
         __dyingTrains = [NSMutableArray mutableArray];
     }
     

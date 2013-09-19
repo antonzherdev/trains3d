@@ -1,11 +1,16 @@
 #import "objd.h"
 #import "EGInput.h"
 #import "GEVec.h"
+#import "GELine.h"
 @class TRLevel;
 @class TRRailConnector;
+@class EGCollisionBox2d;
+@class EGCollisionWorld;
 @class TRRailroad;
-@class TRRailroadConnectorContent;
+@class EGCollisionBody;
+@class TRSwitch;
 @class TRRailLight;
+@class TRRailroadConnectorContent;
 
 @class TRSwitchProcessor;
 
@@ -16,6 +21,7 @@
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (BOOL)processEvent:(EGEvent*)event;
+- (void)_init;
 - (BOOL)mouseDownEvent:(EGEvent*)event;
 - (BOOL)mouseDragEvent:(EGEvent*)event;
 - (BOOL)mouseUpEvent:(EGEvent*)event;

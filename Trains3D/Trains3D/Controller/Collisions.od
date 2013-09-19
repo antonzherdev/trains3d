@@ -3,7 +3,7 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 import core.math._
 
-class CollisionWorld {
+class TrainsCollisionWorld {
     private val world = CollisionWorld<Car>()
 
     def add(train : Train) {
@@ -39,7 +39,7 @@ class CollisionWorld {
 
 class CarsCollision(cars : Pair<Car>, railPoint : RailPoint)
 
-class DynamicWorld extends Controller {
+class TrainsDynamicWorld extends Controller {
     private val world = {
         val w = DynamicWorld<Car>(gravity = vec3(0, 0, -10))
         val plane = RigidBody<Car>(nil, CollisionPlane(vec3(0, 0, 1), 0), false, 0)
