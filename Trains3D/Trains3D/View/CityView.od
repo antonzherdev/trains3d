@@ -11,13 +11,18 @@ class CityView {
         0, 1, 0, 1, 0, -0.5, 0.001, 0.5
         ], [0, 1, 2,
         2, 3, 0])
+    val roofMaterial = StandardMaterial(vec4(95.0/255, 20.0/255, 20.0/255, 1), vec4(0.5, 0.5, 0.5, 1), 1)
+    val windowMaterial = StandardMaterial(vec4(72.0/255, 83.0/255, 99.0/255, 1), vec4(1, 1, 1, 1), 1)
     def draw(city : City) {
         matrix(
             _.modify(w = w -> w.translate(city.tile.x, city.tile.y, 0))
              .modify(m = m -> m.rotate(city.angle.angle, 0, -1, 0))
         ) {
-            StandardMaterial(city.color.color).draw(Models.city)
-
+            StandardMaterial(city.color.color).draw(Models.cityBodies)
+            glDisable(GL_CULL_FACE)
+            roofMaterial.draw(Models.cityRoofs)
+            glEnable(GL_CULL_FACE)
+            windowMaterial.draw(Models.cityWindows)
             city.expectedTrainAnimation.for(a -> {
                 val x = -a.time/2
                 StandardMaterial(vec4(1.0, 0.5 - x, 0.5 - x, 1)).draw(expectedTrainModel)

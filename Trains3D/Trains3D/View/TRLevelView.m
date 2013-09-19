@@ -51,6 +51,8 @@ static ODClassType* _TRLevelView_type;
     [_trainView drawTrains:[_level trains]];
     [_trainView drawDyingTrains:[_level dyingTrains]];
     [_railroadView drawForeground];
+    [_trainView drawSmokeTrains:[_level trains]];
+    [_trainView drawSmokeTrains:[_level dyingTrains]];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

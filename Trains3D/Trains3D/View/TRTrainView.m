@@ -50,6 +50,12 @@ static ODClassType* _TRTrainView_type;
     }];
 }
 
+- (void)drawSmokeTrains:(id<CNSeq>)trains {
+    [trains forEach:^void(TRTrain* train) {
+        [_smokeView drawSystem:train.viewData];
+    }];
+}
+
 - (void)drawTrain:(TRTrain*)train {
     EGMaterial* material = [self trainMaterialForColor:train.color.color];
     [[train cars] forEach:^void(TRCar* car) {
@@ -80,7 +86,6 @@ static ODClassType* _TRTrainView_type;
 - (void)drawDyingTrains:(id<CNSeq>)dyingTrains {
     if([dyingTrains isEmpty]) return ;
     [dyingTrains forEach:^void(TRTrain* train) {
-        [_smokeView drawSystem:train.viewData];
         [self drawDyingTrain:train];
     }];
 }

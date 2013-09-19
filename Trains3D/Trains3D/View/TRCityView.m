@@ -1,17 +1,22 @@
 #import "TRCityView.h"
 
 #import "EGMesh.h"
+#import "EGMaterial.h"
 #import "EGContext.h"
 #import "TRCity.h"
 #import "GEMat4.h"
-#import "EGMaterial.h"
 #import "TRModels.h"
+#import "GL.h"
 #import "EGSchedule.h"
 @implementation TRCityView{
     EGMesh* _expectedTrainModel;
+    EGStandardMaterial* _roofMaterial;
+    EGStandardMaterial* _windowMaterial;
 }
 static ODClassType* _TRCityView_type;
 @synthesize expectedTrainModel = _expectedTrainModel;
+@synthesize roofMaterial = _roofMaterial;
+@synthesize windowMaterial = _windowMaterial;
 
 + (id)cityView {
     return [[TRCityView alloc] init];
@@ -19,7 +24,11 @@ static ODClassType* _TRCityView_type;
 
 - (id)init {
     self = [super init];
-    if(self) _expectedTrainModel = [EGMesh applyVertexData:[ arrs(EGMeshData, 32) {0, 0, 0, 1, 0, -0.5, 0.001, -0.5, 1, 0, 0, 1, 0, 0.5, 0.001, -0.5, 1, 1, 0, 1, 0, 0.5, 0.001, 0.5, 0, 1, 0, 1, 0, -0.5, 0.001, 0.5}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
+    if(self) {
+        _expectedTrainModel = [EGMesh applyVertexData:[ arrs(EGMeshData, 32) {0, 0, 0, 1, 0, -0.5, 0.001, -0.5, 1, 0, 0, 1, 0, 0.5, 0.001, -0.5, 1, 1, 0, 1, 0, 0.5, 0.001, 0.5, 0, 1, 0, 1, 0, -0.5, 0.001, 0.5}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
+        _roofMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(((float)(95.0 / 255)), ((float)(20.0 / 255)), ((float)(20.0 / 255)), 1.0)] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:1.0];
+        _windowMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(((float)(72.0 / 255)), ((float)(83.0 / 255)), ((float)(99.0 / 255)), 1.0)] specularColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) specularSize:1.0];
+    }
     
     return self;
 }
@@ -37,7 +46,11 @@ static ODClassType* _TRCityView_type;
             return [m rotateAngle:((float)(city.angle.angle)) x:0.0 y:-1.0 z:0.0];
         }];
     } f:^void() {
-        [[EGStandardMaterial applyColor:city.color.color] drawMesh:TRModels.city];
+        [[EGStandardMaterial applyColor:city.color.color] drawMesh:TRModels.cityBodies];
+        glDisable(GL_CULL_FACE);
+        [_roofMaterial drawMesh:TRModels.cityRoofs];
+        glEnable(GL_CULL_FACE);
+        [_windowMaterial drawMesh:TRModels.cityWindows];
         [city.expectedTrainAnimation forEach:^void(EGAnimation* a) {
             CGFloat x = -[a time] / 2;
             [[EGStandardMaterial applyColor:GEVec4Make(1.0, ((float)(0.5 - x)), ((float)(0.5 - x)), 1.0)] drawMesh:_expectedTrainModel];

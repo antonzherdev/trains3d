@@ -17,6 +17,8 @@ class LevelView(level : Level) extends LayerView {
         trainView.draw(dyingTrains = level.dyingTrains)
 
         railroadView.drawForeground
+        trainView.drawSmoke(trains = level.trains)
+        trainView.drawSmoke(trains = level.dyingTrains)
     }
 
     val camera : Camera = CameraIso(level.map.size, vec2(0, 0))

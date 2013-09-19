@@ -21,7 +21,7 @@
 + (EGMesh*)light;
 + (ODType*)type;
 
-+ (EGMesh *)city;
++ (EGMesh *)cityBodies;
 + (EGMesh *)car;
 + (EGMesh *)carBlack;
 + (EGMesh *)engine;
@@ -36,6 +36,10 @@
 + (EGMesh *)lightGreenGlow;
 
 + (EGMesh *)lightRedGlow;
+
++ (EGMesh *)cityRoofs;
+
++ (EGMesh *)cityWindows;
 @end
 
 

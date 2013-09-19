@@ -35,15 +35,16 @@ class RailroadView(railroad : Railroad) {
 }
 
 class RailView {
+    static val railMaterial = StandardMaterial( vec4(0.45, 0.47, 0.55, 1), vec4(0.5, 0.5, 0.5, 1), 1)
     val railModel = MeshModel([
         (Models.railGravel, textureFor("Gravel.png")),
         (Models.railTies, vec4(0.55, 0.45, 0.25, 1)),
-        (Models.rails, StandardMaterial( vec4(0.45, 0.47, 0.55, 1), vec4(0.5, 0.5, 0.5, 1), 1))
+        (Models.rails, railMaterial)
     ])
     val railTurnModel = MeshModel([
         (Models.railTurnGravel, textureFor("Gravel.png")),
         (Models.railTurnTies, vec4(0.55, 0.45, 0.25, 1)),
-        (Models.railsTurn, StandardMaterial( vec4(0.45, 0.47, 0.55, 1), vec4(0.5, 0.5, 0.5, 1), 1))
+        (Models.railsTurn, railMaterial)
     ])
     def draw(rail : Rail) {
         matrix(
@@ -69,12 +70,11 @@ class RailView {
 }
 
 class SwitchView {
-    val material = StandardMaterial( vec4(0.07568, 0.61424, 0.07568, 1), vec4(0.633, 0.727811, 0.633, 1), 1)
     val switchStraightModel = MeshModel([
-        (Models.switchStraight, material)
+        (Models.switchStraight, RailView.railMaterial)
     ])
     val switchTurnModel = MeshModel([
-        (Models.switchTurn, material)
+        (Models.switchTurn, RailView.railMaterial)
     ])
 
     def draw(theSwitch : Switch) {

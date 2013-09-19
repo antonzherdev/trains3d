@@ -20,6 +20,10 @@ class TrainView {
         }
     }
 
+    def drawSmoke(trains : [Train]) {
+        trains.for {train -> smokeView.draw(train.viewData)}
+    }
+
     private def draw(train : Train) {
         val material = trainMaterialFor(train.color.color)
         train.cars.for{ car ->
@@ -51,7 +55,6 @@ class TrainView {
         if(dyingTrains.isEmpty) return nil
 
         dyingTrains.for {train ->
-            smokeView.draw(train.viewData)
             draw(dyingTrain = train)
         }
     }
