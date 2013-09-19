@@ -153,14 +153,14 @@ static ODClassType* _EGShader_type;
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh start:(NSUInteger)start count:(NSUInteger)count {
     glUseProgram(_program.handle);
     [mesh.vertexBuffer applyDraw:^void() {
-        [self loadVertexBuffer:mesh.vertexBuffer param:param];
+        [self loadVbDesc:mesh.vertexBuffer.desc param:param];
         [mesh.indexBuffer drawWithStart:start count:count];
         [self unloadParam:param];
     }];
     glUseProgram(0);
 }
 
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(id)param {
+- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(id)param {
     @throw @"Method load is abstract";
 }
 

@@ -226,9 +226,6 @@ static ODClassType* _EGStandardShaderKey_type;
     id<CNSeq> _directLightDirections;
     id<CNSeq> _directLightColors;
 }
-static NSInteger _EGStandardShader_UV_SHIFT = 0;
-static NSInteger _EGStandardShader_NORMAL_SHIFT;
-static NSInteger _EGStandardShader_POSITION_SHIFT;
 static ODClassType* _EGStandardShader_type;
 @synthesize key = _key;
 @synthesize positionSlot = _positionSlot;
@@ -275,15 +272,13 @@ static ODClassType* _EGStandardShader_type;
 + (void)initialize {
     [super initialize];
     _EGStandardShader_type = [ODClassType classTypeWithCls:[EGStandardShader class]];
-    _EGStandardShader_NORMAL_SHIFT = 2 * 4;
-    _EGStandardShader_POSITION_SHIFT = 5 * 4;
 }
 
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGStandardMaterial*)param {
-    [_positionSlot setFromBufferWithStride:((NSUInteger)([vertexBuffer stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_POSITION_SHIFT))];
+- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGStandardMaterial*)param {
+    [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
     [_mwcpUniform setMatrix:[EGGlobal.matrix.value mwcp]];
     if(_key.texture) {
-        [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:((NSUInteger)([vertexBuffer stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_UV_SHIFT))];
+        [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
         [((EGTexture*)([param.diffuse.texture get])) bind];
     }
     [_diffuseColorUniform setVec4:param.diffuse.color];
@@ -293,7 +288,7 @@ static ODClassType* _EGStandardShader_type;
     [_ambientColor setVec4:env.ambientColor];
     if(_key.directLightCount > 0) {
         [((EGShaderUniform*)([_mwcUniform get])) setMatrix:[EGGlobal.context.matrixStack.value mwc]];
-        [((EGShaderAttribute*)([_normalSlot get])) setFromBufferWithStride:((NSUInteger)([vertexBuffer stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(_EGStandardShader_NORMAL_SHIFT))];
+        [((EGShaderAttribute*)([_normalSlot get])) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.normal))];
         [[[[env.lights chain] filterCast:EGDirectLight.type] zip3A:_directLightDirections b:_directLightColors by:^EGDirectLight*(EGDirectLight* light, EGShaderUniform* dirSlot, EGShaderUniform* colorSlot) {
             GEVec3 dir = geVec4Xyz([[EGGlobal.matrix.value wc] mulVec3:light.direction w:0.0]);
             [dirSlot setVec3:dir];
@@ -309,18 +304,6 @@ static ODClassType* _EGStandardShader_type;
 
 - (ODClassType*)type {
     return [EGStandardShader type];
-}
-
-+ (NSInteger)UV_SHIFT {
-    return _EGStandardShader_UV_SHIFT;
-}
-
-+ (NSInteger)NORMAL_SHIFT {
-    return _EGStandardShader_NORMAL_SHIFT;
-}
-
-+ (NSInteger)POSITION_SHIFT {
-    return _EGStandardShader_POSITION_SHIFT;
 }
 
 + (ODClassType*)type {

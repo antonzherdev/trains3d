@@ -150,15 +150,15 @@ static ODClassType* _EGBillboardShader_type;
         "   gl_FragColor = fragColor * color; " : @""), code];
 }
 
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGColorSource*)param {
-    [_positionSlot setFromBufferWithStride:((NSUInteger)([vertexBuffer stride])) valuesCount:3 valuesType:GL_FLOAT shift:0];
-    [_modelSlot setFromBufferWithStride:((NSUInteger)([vertexBuffer stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(3 * 4))];
-    [_colorSlot setFromBufferWithStride:((NSUInteger)([vertexBuffer stride])) valuesCount:4 valuesType:GL_FLOAT shift:((NSUInteger)(5 * 4))];
+- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param {
+    [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
+    [_modelSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.model))];
+    [_colorSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:4 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.color))];
     [_wcUniform setMatrix:[EGGlobal.matrix.value wc]];
     [_pUniform setMatrix:EGGlobal.matrix.value.p];
     if(_texture) {
         [_uvSlot forEach:^void(EGShaderAttribute* _) {
-            [_ setFromBufferWithStride:((NSUInteger)([vertexBuffer stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(9 * 4))];
+            [_ setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
         }];
         [((EGTexture*)([param.texture get])) bind];
     }

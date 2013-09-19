@@ -3,12 +3,11 @@
 #import "GEVec.h"
 #import "EGParticleSystem.h"
 #import "EGMaterial.h"
-@class EGVertexBuffer;
+@class EGVertexBufferDesc;
 @class EGGlobal;
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class EGTexture;
-@class EGVertexBufferDesc;
 
 @class EGBillboardShaderSystem;
 @class EGBillboardShader;
@@ -41,7 +40,7 @@ typedef struct EGBillboardBufferData EGBillboardBufferData;
 + (EGBillboardShader*)instanceForTexture;
 + (NSString*)vertexTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code;
 + (NSString*)fragmentTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code;
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGColorSource*)param;
+- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param;
 - (void)unloadMaterial:(EGColorSource*)material;
 + (ODClassType*)type;
 @end

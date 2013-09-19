@@ -476,9 +476,9 @@ static ODClassType* _EGFullScreenSurfaceShader_type;
     _EGFullScreenSurfaceShader_type = [ODClassType classTypeWithCls:[EGFullScreenSurfaceShader class]];
 }
 
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGFullScreenSurfaceShaderParam*)param {
+- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGFullScreenSurfaceShaderParam*)param {
     [param.texture bind];
-    [_positionSlot setFromBufferWithStride:((NSUInteger)([vertexBuffer stride])) valuesCount:2 valuesType:GL_FLOAT shift:0];
+    [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.model))];
     [_zUniform setF4:param.z];
 }
 

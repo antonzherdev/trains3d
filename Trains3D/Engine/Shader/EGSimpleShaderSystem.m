@@ -69,70 +69,6 @@ static ODClassType* _EGSimpleShaderSystem_type;
 @end
 
 
-@implementation EGSimpleShader
-static NSInteger _EGSimpleShader_UV_SHIFT = 0;
-static NSInteger _EGSimpleShader_POSITION_SHIFT;
-static ODClassType* _EGSimpleShader_type;
-
-+ (id)simpleShaderWithProgram:(EGShaderProgram*)program {
-    return [[EGSimpleShader alloc] initWithProgram:program];
-}
-
-- (id)initWithProgram:(EGShaderProgram*)program {
-    self = [super initWithProgram:program];
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _EGSimpleShader_type = [ODClassType classTypeWithCls:[EGSimpleShader class]];
-    _EGSimpleShader_POSITION_SHIFT = 5 * 4;
-}
-
-- (ODClassType*)type {
-    return [EGSimpleShader type];
-}
-
-+ (NSInteger)UV_SHIFT {
-    return _EGSimpleShader_UV_SHIFT;
-}
-
-+ (NSInteger)POSITION_SHIFT {
-    return _EGSimpleShader_POSITION_SHIFT;
-}
-
-+ (ODClassType*)type {
-    return _EGSimpleShader_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSimpleShader* o = ((EGSimpleShader*)(other));
-    return [self.program isEqual:o.program];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.program hash];
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"program=%@", self.program];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
 @implementation EGSimpleColorShader{
     EGShaderAttribute* _positionSlot;
     EGShaderUniform* _colorUniform;
@@ -174,8 +110,8 @@ static ODClassType* _EGSimpleColorShader_type;
     _EGSimpleColorShader_type = [ODClassType classTypeWithCls:[EGSimpleColorShader class]];
 }
 
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGColorSource*)param {
-    [_positionSlot setFromBufferWithStride:((NSUInteger)([vertexBuffer stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleColorShader POSITION_SHIFT]))];
+- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param {
+    [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
     [_mvpUniform setMatrix:[EGGlobal.matrix.value mwcp]];
     [_colorUniform setVec4:param.color];
 }
@@ -269,10 +205,10 @@ static ODClassType* _EGSimpleTextureShader_type;
     _EGSimpleTextureShader_type = [ODClassType classTypeWithCls:[EGSimpleTextureShader class]];
 }
 
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGColorSource*)param {
-    [_positionSlot setFromBufferWithStride:((NSUInteger)([vertexBuffer stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleTextureShader POSITION_SHIFT]))];
+- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param {
+    [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
     [_mvpUniform setMatrix:[EGGlobal.matrix.value mwcp]];
-    [_uvSlot setFromBufferWithStride:((NSUInteger)([vertexBuffer stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)([EGSimpleTextureShader UV_SHIFT]))];
+    [_uvSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
     [_colorUniform setVec4:param.color];
     [((EGTexture*)([param.texture get])) bind];
 }

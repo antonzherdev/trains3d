@@ -4,6 +4,7 @@
 @class EGMesh;
 @class EGIndexBuffer;
 @class EGVertexBuffer;
+@class EGVertexBufferDesc;
 @class GEMat4;
 
 @class EGShaderProgram;
@@ -40,7 +41,7 @@
 - (ODClassType*)type;
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh;
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh start:(NSUInteger)start count:(NSUInteger)count;
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(id)param;
+- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(id)param;
 - (void)unloadParam:(id)param;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
 - (EGShaderUniform*)uniformForName:(NSString*)name;

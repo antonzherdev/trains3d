@@ -3,7 +3,7 @@
 #import "GL.h"
 #import "EGShader.h"
 @class EGTexture;
-@class EGVertexBuffer;
+@class EGVertexBufferDesc;
 @class EGMesh;
 @class EGGlobal;
 @class EGContext;
@@ -91,7 +91,7 @@
 + (id)fullScreenSurfaceShader;
 - (id)init;
 - (ODClassType*)type;
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGFullScreenSurfaceShaderParam*)param;
+- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGFullScreenSurfaceShaderParam*)param;
 - (void)unloadParam:(EGFullScreenSurfaceShaderParam*)param;
 + (NSString*)vertex;
 + (NSString*)fragment;

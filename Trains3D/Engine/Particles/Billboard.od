@@ -5,7 +5,7 @@ object BillboardShaderSystem extends ShaderSystem<ColorSource> {
         if(material.texture.isEmpty) BillboardShader.instanceForColor else BillboardShader.instanceForTexture
 }
 
-class BillboardShader(program : ShaderProgram, texture : bool) extends Shader<ColorSource, BillboardBufferData>(program) {
+class BillboardShader(program : ShaderProgram, texture : bool) extends Shader<ColorSource>(program) {
     static lazy val instanceForColor = BillboardShader(ShaderProgram(
         vertexTextWith(false, "", ""),
         fragmentTextWith(false, "", "")), false)
@@ -62,14 +62,14 @@ class BillboardShader(program : ShaderProgram, texture : bool) extends Shader<Co
     val wcUniform = uniformFor("wc")
     val pUniform = uniformFor("p")
 
-    def load(vertexBuffer : VertexBuffer<BillboardBufferData>, param : ColorSource) {
-        positionSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 3, GL_FLOAT, shift = 0)
-        modelSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 2, GL_FLOAT, shift = 3*4)
-        colorSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 4, GL_FLOAT, shift = 5*4)
+    def load(vbDesc : VertexBufferDesc<_>, param : ColorSource) {
+        positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, shift = vbDesc.position)
+        modelSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.model)
+        colorSlot.setFromBufferWith(vbDesc.stride, valuesCount = 4, GL_FLOAT, shift = vbDesc.color)
         wcUniform.set(matrix = matrix.value.wc)
         pUniform.set(matrix = matrix.value.p)
         if(texture) {
-            uvSlot.for(_.setFromBufferWith(vertexBuffer.stride, valuesCount = 2, GL_FLOAT, shift = 9*4))
+            uvSlot.for(_.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.uv))
             param.texture.get.bind
         }
         colorUniform.set(vec4 = param.color)

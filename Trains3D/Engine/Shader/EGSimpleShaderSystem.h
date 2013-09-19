@@ -1,14 +1,13 @@
 #import "objd.h"
 #import "EGShader.h"
 @class EGColorSource;
-@class EGVertexBuffer;
+@class EGVertexBufferDesc;
 @class EGGlobal;
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class EGTexture;
 
 @class EGSimpleShaderSystem;
-@class EGSimpleShader;
 @class EGSimpleColorShader;
 @class EGSimpleTextureShader;
 
@@ -22,17 +21,7 @@
 @end
 
 
-@interface EGSimpleShader : EGShader
-+ (id)simpleShaderWithProgram:(EGShaderProgram*)program;
-- (id)initWithProgram:(EGShaderProgram*)program;
-- (ODClassType*)type;
-+ (NSInteger)UV_SHIFT;
-+ (NSInteger)POSITION_SHIFT;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGSimpleColorShader : EGSimpleShader
+@interface EGSimpleColorShader : EGShader
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderUniform* colorUniform;
 @property (nonatomic, readonly) EGShaderUniform* mvpUniform;
@@ -40,14 +29,14 @@
 + (id)simpleColorShader;
 - (id)init;
 - (ODClassType*)type;
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGColorSource*)param;
+- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param;
 + (NSString*)colorVertexProgram;
 + (NSString*)colorFragmentProgram;
 + (ODClassType*)type;
 @end
 
 
-@interface EGSimpleTextureShader : EGSimpleShader
+@interface EGSimpleTextureShader : EGShader
 @property (nonatomic, readonly) EGShaderAttribute* uvSlot;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderUniform* mvpUniform;
@@ -56,7 +45,7 @@
 + (id)simpleTextureShader;
 - (id)init;
 - (ODClassType*)type;
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGColorSource*)param;
+- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param;
 - (void)unloadMaterial:(EGColorSource*)material;
 + (NSString*)textureVertexProgram;
 + (NSString*)textureFragmentProgram;

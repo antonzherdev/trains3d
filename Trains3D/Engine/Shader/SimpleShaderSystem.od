@@ -8,12 +8,8 @@ class SimpleShaderSystem extends ShaderSystem<ColorSource> {
     def shaderFor(material : ColorSource) : Shader = if(material.texture.isEmpty) colorShader else textureShader
 }
 
-class SimpleShader(program : ShaderProgram) extends Shader<ColorSource, MeshData>(program) {
-    static val UV_SHIFT = 0
-    static val POSITION_SHIFT = 5*4
-}
 
-class SimpleColorShader extends SimpleShader(ShaderProgram(SimpleColorShader.colorVertexProgram, SimpleColorShader.colorFragmentProgram)) {
+class SimpleColorShader extends Shader<ColorSource>(ShaderProgram(SimpleColorShader.colorVertexProgram, SimpleColorShader.colorFragmentProgram)) {
     static val colorVertexProgram =
         "attribute vec3 position;
          uniform mat4 mvp;
@@ -31,14 +27,14 @@ class SimpleColorShader extends SimpleShader(ShaderProgram(SimpleColorShader.col
     val colorUniform = uniformFor("color")
     val mvpUniform = uniformFor("mvp")
 
-    def load(vertexBuffer : VertexBuffer<_>, param : ColorSource) {
-        positionSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 3, GL_FLOAT, POSITION_SHIFT)
+    def load(vbDesc : VertexBufferDesc<_>, param : ColorSource) {
+        positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.position)
         mvpUniform.set(matrix = matrix.value.mwcp)
         colorUniform.set(vec4 = param.color)
     }
 }
 
-class SimpleTextureShader extends SimpleShader<ColorSource>(ShaderProgram(SimpleTextureShader.textureVertexProgram, SimpleTextureShader.textureFragmentProgram)) {
+class SimpleTextureShader extends Shader<ColorSource>(ShaderProgram(SimpleTextureShader.textureVertexProgram, SimpleTextureShader.textureFragmentProgram)) {
     static val textureVertexProgram =
         "attribute vec2 vertexUV;
          attribute vec3 position;
@@ -63,11 +59,11 @@ class SimpleTextureShader extends SimpleShader<ColorSource>(ShaderProgram(Simple
     val mvpUniform = uniformFor("mvp")
     val colorUniform = uniformFor("color")
 
-    def load(vertexBuffer : VertexBuffer<_>, param : ColorSource) {
-        positionSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 3, GL_FLOAT, POSITION_SHIFT)
+    def load(vbDesc : VertexBufferDesc<_>, param : ColorSource) {
+        positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.position)
         mvpUniform.set(matrix = matrix.value.mwcp)
 
-        uvSlot.setFromBufferWith(vertexBuffer.stride, valuesCount = 2, GL_FLOAT, UV_SHIFT)
+        uvSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.uv)
         colorUniform.set(vec4 = param.color)
         param.texture.get.bind
     }

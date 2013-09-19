@@ -8,7 +8,7 @@
 @class EGDirectLight;
 @class EGStandardMaterial;
 @class EGColorSource;
-@class EGVertexBuffer;
+@class EGVertexBufferDesc;
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class EGTexture;
@@ -62,11 +62,8 @@
 + (id)standardShaderWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
 - (id)initWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
 - (ODClassType*)type;
-- (void)loadVertexBuffer:(EGVertexBuffer*)vertexBuffer param:(EGStandardMaterial*)param;
+- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGStandardMaterial*)param;
 - (void)unloadMaterial:(EGStandardMaterial*)material;
-+ (NSInteger)UV_SHIFT;
-+ (NSInteger)NORMAL_SHIFT;
-+ (NSInteger)POSITION_SHIFT;
 + (ODClassType*)type;
 @end
 

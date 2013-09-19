@@ -62,22 +62,22 @@ class ShaderProgram(handle : GLuint) {
     }
 }
 
-class Shader<P, D>(program : ShaderProgram) {
-    def draw(param : P, mesh : Mesh<D>) {
+class Shader<P>(program : ShaderProgram) {
+    def draw(param : P, mesh : Mesh<_>) {
         draw(param, mesh, 0, mesh.indexBuffer.count)
     }
 
-    def draw(param : P, mesh : Mesh<D>, start : uint, count : uint) {
+    def draw(param : P, mesh : Mesh<_>, start : uint, count : uint) {
         glUseProgram(program.handle)
         mesh.vertexBuffer {
-            load(mesh.vertexBuffer, param)
+            load(mesh.vertexBuffer.desc, param)
             mesh.indexBuffer.drawWith(start, count)
             unload(param)
         }
         glUseProgram(0)
     }
 
-    def load(vertexBuffer : VertexBuffer<D>, param : P)
+    def load(vbDesc : VertexBufferDesc<_>, param : P)
     def unload(param : P) {}
 
     def attributeFor(name : string ) = program.attributeFor(name)
