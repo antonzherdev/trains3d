@@ -57,17 +57,6 @@ static ODClassType* _EGCameraIso_type;
     glCullFace(GL_FRONT);
 }
 
-- (GEVec2)translateWithViewSize:(GEVec2)viewSize viewPoint:(GEVec2)viewPoint {
-    GERecti vps = [self viewportWithViewSize:viewSize];
-    float x = viewPoint.x - geRectiX(vps);
-    float y = viewPoint.y - geRectiY(vps);
-    NSInteger vw = vps.size.x;
-    NSInteger vh = vps.size.y;
-    CGFloat ww2 = (_tilesOnScreen.x + _tilesOnScreen.y) / 2.0;
-    CGFloat tw = ((CGFloat)(_tilesOnScreen.x));
-    return GEVec2Make((x / vw - y / vh) * ww2 + tw / 2 - 0.5 + _center.x, (x / vw + y / vh) * ww2 - tw / 2 - 0.5 + _center.y);
-}
-
 - (ODClassType*)type {
     return [EGCameraIso type];
 }

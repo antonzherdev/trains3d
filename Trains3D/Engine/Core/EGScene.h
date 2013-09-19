@@ -21,7 +21,6 @@
 
 @protocol EGCamera<NSObject>
 - (void)focusForViewSize:(GEVec2)viewSize;
-- (GEVec2)translateWithViewSize:(GEVec2)viewSize viewPoint:(GEVec2)viewPoint;
 - (GERecti)viewportWithViewSize:(GEVec2)viewSize;
 - (EGMatrixModel*)matrixModel;
 @end

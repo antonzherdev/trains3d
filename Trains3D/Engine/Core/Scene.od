@@ -7,8 +7,6 @@ trait Controller {
 trait Camera {
     def focusFor(viewSize : vec2)  {}
 
-    def translateWith(viewSize : vec2, viewPoint : vec2) : vec2
-
     def viewportWith(viewSize : vec2) : recti
 
     def matrixModel : MatrixModel

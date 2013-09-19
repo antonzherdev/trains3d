@@ -14,7 +14,6 @@
 - (id)initWithSize:(GEVec2)size;
 - (ODClassType*)type;
 - (GERecti)viewportWithViewSize:(GEVec2)viewSize;
-- (GEVec2)translateWithViewSize:(GEVec2)viewSize viewPoint:(GEVec2)viewPoint;
 + (ODClassType*)type;
 @end
 

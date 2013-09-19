@@ -34,16 +34,5 @@ class CameraIso(tilesOnScreen : vec2i, center : vec2) extends Camera {
     def focusFor(viewSize : vec2) {
         glCullFace(GL_FRONT)
     }
-
-    def translateWith(viewSize : vec2, viewPoint : vec2) : vec2 = {
-        val vps = viewportWith(viewSize)
-        val x = viewPoint.x - vps.x
-        val y = viewPoint.y - vps.y
-        val vw = vps.size.x
-        val vh = vps.size.y
-        val ww2 : float = (tilesOnScreen.x + tilesOnScreen.y)/2.0
-        val tw : float = tilesOnScreen.x
-        vec2((x/vw - y/vh)*ww2 + tw/2 - 0.5 + center.x, (x/vw + y/vh)*ww2 - tw/2 - 0.5 + center.y)
-    }
 }
 
