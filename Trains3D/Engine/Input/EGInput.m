@@ -1,11 +1,12 @@
 #import "EGInput.h"
 
-#import "EGContext.h"
 #import "EGScene.h"
+#import "EGContext.h"
 #import "GEMat4.h"
 @implementation EGEvent{
     GEVec2 _viewSize;
     id _camera;
+    CNLazy* __lazy_segment;
 }
 static ODClassType* _EGEvent_type;
 @synthesize viewSize = _viewSize;
@@ -17,9 +18,20 @@ static ODClassType* _EGEvent_type;
 
 - (id)initWithViewSize:(GEVec2)viewSize camera:(id)camera {
     self = [super init];
+    __weak EGEvent* _weakSelf = self;
     if(self) {
         _viewSize = viewSize;
         _camera = camera;
+        __lazy_segment = [CNLazy lazyWithF:^id() {
+            return wrap(GELine3, (([_weakSelf.camera isEmpty]) ? GELine3Make(geVec3ApplyVec2Z([_weakSelf locationInView], 0.0), GEVec3Make(0.0, 0.0, 1000.0)) : ^GELine3() {
+                GERecti viewport = [[_weakSelf.camera get] viewportWithViewSize:_weakSelf.viewSize];
+                GEVec2 loc = geVec2SubVec2(geVec2MulValue(geVec2DivVec2(geVec2SubVec2([_weakSelf locationInView], geVec2ApplyVec2i(viewport.origin)), geVec2ApplyVec2i(viewport.size)), 2.0), GEVec2Make(1.0, 1.0));
+                GEMat4* mat4 = [[[[_weakSelf.camera get] matrixModel] wcp] inverse];
+                GEVec4 p0 = [mat4 mulVec4:GEVec4Make(loc.x, loc.y, -1.0, 1.0)];
+                GEVec4 p1 = [mat4 mulVec4:GEVec4Make(loc.x, loc.y, 1.0, 1.0)];
+                return GELine3Make(geVec4Xyz(p0), geVec3SubVec3(geVec4Xyz(p1), geVec4Xyz(p0)));
+            }()));
+        }];
     }
     
     return self;
@@ -28,6 +40,10 @@ static ODClassType* _EGEvent_type;
 + (void)initialize {
     [super initialize];
     _EGEvent_type = [ODClassType classTypeWithCls:[EGEvent class]];
+}
+
+- (GELine3)segment {
+    return uwrap(GELine3, [__lazy_segment get]);
 }
 
 - (EGEvent*)setCamera:(id)camera {
@@ -45,18 +61,6 @@ static ODClassType* _EGEvent_type;
 - (GEVec2)locationForDepth:(CGFloat)depth {
     if([_camera isEmpty]) return [self locationInView];
     else return geVec3Xy(geLine3RPlane([self segment], GEPlaneMake(GEVec3Make(0.0, 0.0, ((float)(depth))), GEVec3Make(0.0, 0.0, 1.0))));
-}
-
-- (GELine3)segment {
-    if([_camera isEmpty]) {
-        return GELine3Make(geVec3ApplyVec2Z([self locationInView], 0.0), GEVec3Make(0.0, 0.0, 1000.0));
-    } else {
-        GEVec2 loc = geVec2SubVec2(geVec2MulValue(geVec2DivVec2(geVec2SubVec2([self locationInView], geVec2ApplyVec2i([EGGlobal.context viewport].origin)), geVec2ApplyVec2i([EGGlobal.context viewport].size)), 2.0), GEVec2Make(1.0, 1.0));
-        GEMat4* mat4 = [[[[_camera get] matrixModel] wcp] inverse];
-        GEVec4 p0 = [mat4 mulVec4:GEVec4Make(loc.x, loc.y, -1.0, 1.0)];
-        GEVec4 p1 = [mat4 mulVec4:GEVec4Make(loc.x, loc.y, 1.0, 1.0)];
-        return GELine3Make(geVec4Xyz(p0), geVec3SubVec3(geVec4Xyz(p1), geVec4Xyz(p0)));
-    }
 }
 
 - (BOOL)isLeftMouseDown {

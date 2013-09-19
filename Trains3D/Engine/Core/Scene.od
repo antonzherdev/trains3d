@@ -37,8 +37,10 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
     }
 
     def process(event : Event) : bool = {
-        val cameraEvent = event.set(camera = view.camera)
-        processor.map(_.process(cameraEvent)).getOr(false)
+        processor.map{ p ->
+            val cameraEvent = event.set(camera = view.camera)
+            p.process(cameraEvent)
+        }.getOr(false)
     }
 
     def updateWith(delta : float) {

@@ -98,17 +98,17 @@ struct rect(origin : vec2, size : vec2) {
     def width : float4 = size.x
     def height : float4 = size.y
     def contains(point : vec2) : bool =
-    origin.x <= point.x
-    && point.x <= origin.x + size.x
-    && origin.y <= point.y
-    && point.y <= origin.y + size.y
+        origin.x <= point.x
+        && point.x <= origin.x + size.x
+        && origin.y <= point.y
+        && point.y <= origin.y + size.y
 
     def add(vec2 : vec2) = rect(origin.add(vec2), size)
-    def moveToCenterFor(size : vec2) = rect(size.sub(self.size).mul(0.5), self.size)
+    def moveToCenterFor(size : vec2) = rect((size - self.size)*0.5, self.size)
 
     def intersects(rect : rect) : bool =
-    origin.x <= rect.x2 && x2 >= rect.origin.x &&
-    origin.y <= rect.y2 && y2 >= rect.origin.y
+        origin.x <= rect.x2 && x2 >= rect.origin.x &&
+        origin.y <= rect.y2 && y2 >= rect.origin.y
 
     def thicken(halfSize : vec2) = rect(origin.sub(halfSize), size.add(halfSize.mul(2)))
 

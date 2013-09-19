@@ -1,7 +1,6 @@
 #import "objd.h"
 #import "EGInput.h"
 #import "GEVec.h"
-#import "GELine.h"
 @class TRLevel;
 @class TRRailConnector;
 @class EGCollisionBox2d;

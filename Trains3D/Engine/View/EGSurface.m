@@ -565,11 +565,11 @@ static ODClassType* _EGFullScreenSurface_type;
 }
 
 - (EGMesh*)fullScreenMesh {
-    return [__lazy_fullScreenMesh get];
+    return ((EGMesh*)([__lazy_fullScreenMesh get]));
 }
 
 - (EGFullScreenSurfaceShader*)shader {
-    return [__lazy_shader get];
+    return ((EGFullScreenSurfaceShader*)([__lazy_shader get]));
 }
 
 - (void)maybeRecreateSurface {

@@ -67,11 +67,6 @@ static ODClassType* _TRSwitchProcessor_type;
 }
 
 - (BOOL)mouseDownEvent:(EGEvent*)event {
-    GEVec2 location = [event location];
-    GEVec2i tile = geVec2iApplyVec2(location);
-    GEVec2 relPoint = geVec2SubVec2(location, geVec2ApplyVec2i(tile));
-    GELine3 s = [event segment];
-    GEVec3 pp = geLine3RPlane(s, GEPlaneMake(GEVec3Make(0.0, 0.0, 0.0), GEVec3Make(0.0, 0.0, 1.0)));
     _downed = [[_world closestCrossPointWithSegment:[event segment]] map:^TRRailroadConnectorContent*(EGCrossPoint* _) {
         return ((TRRailroadConnectorContent*)(_.body.data));
     }];

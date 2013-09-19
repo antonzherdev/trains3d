@@ -102,11 +102,11 @@ static ODClassType* _EGBillboardShader_type;
 }
 
 + (EGBillboardShader*)instanceForColor {
-    return [_EGBillboardShader__lazy_instanceForColor get];
+    return ((EGBillboardShader*)([_EGBillboardShader__lazy_instanceForColor get]));
 }
 
 + (EGBillboardShader*)instanceForTexture {
-    return [_EGBillboardShader__lazy_instanceForTexture get];
+    return ((EGBillboardShader*)([_EGBillboardShader__lazy_instanceForTexture get]));
 }
 
 + (NSString*)vertexTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code {

@@ -808,7 +808,7 @@ static ODClassType* _TRRailroadBuilder_type;
 }
 
 - (BOOL)tryBuildRail:(TRRail*)rail {
-    if([_railroad canAddRail:rail]) {
+    if([_railroad.map isFullTile:rail.tile] && [_railroad canAddRail:rail]) {
         __rail = [CNOption opt:rail];
         return YES;
     } else {

@@ -1,8 +1,6 @@
 #import "objd.h"
 #import "GEVec.h"
 #import "GELine.h"
-@class EGGlobal;
-@class EGContext;
 @protocol EGCamera;
 @class EGMatrixModel;
 @class GEMat4;
@@ -40,11 +38,11 @@
 + (id)eventWithViewSize:(GEVec2)viewSize camera:(id)camera;
 - (id)initWithViewSize:(GEVec2)viewSize camera:(id)camera;
 - (ODClassType*)type;
+- (GELine3)segment;
 - (EGEvent*)setCamera:(id)camera;
 - (GEVec2)locationInView;
 - (GEVec2)location;
 - (GEVec2)locationForDepth:(CGFloat)depth;
-- (GELine3)segment;
 - (BOOL)isLeftMouseDown;
 - (BOOL)isLeftMouseDrag;
 - (BOOL)isLeftMouseUp;

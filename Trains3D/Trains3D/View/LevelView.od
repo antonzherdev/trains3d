@@ -22,7 +22,7 @@ class LevelView(level : Level) extends LayerView {
         trainView.drawSmoke(trains = level.dyingTrains)
     }
 
-    val camera : Camera = CameraIso(level.map.size, vec2(0, 0))
+    val camera : Camera = CameraIso(level.map.size, zReserve = 0.2, vec2(0, 0))
 
     def updateWith(delta : float) {
         level.trains.for(trainView.updateWith(delta, _))

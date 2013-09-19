@@ -204,7 +204,7 @@ class RailroadBuilder(weak railroad : Railroad) {
     def rail = _rail
 
     def tryBuild(rail : Rail) : bool = {
-        if(railroad.canAdd(rail)) {
+        if(railroad.map.isFull(rail.tile) && railroad.canAdd(rail)) {
             _rail = rail
             true
         } else false
