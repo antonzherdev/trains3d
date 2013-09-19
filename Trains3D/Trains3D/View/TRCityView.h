@@ -2,8 +2,8 @@
 #import "GEVec.h"
 @class EGMesh;
 @class EGStandardMaterial;
-@class EGColorSource;
 @class EGGlobal;
+@class EGColorSource;
 @class TRCity;
 @class GEMat4;
 @class EGMatrixModel;
