@@ -41,6 +41,10 @@ static ODClassType* _TRRailroadConnectorContent_type;
     return YES;
 }
 
+- (BOOL)isEmpty {
+    return NO;
+}
+
 - (ODClassType*)type {
     return [TRRailroadConnectorContent type];
 }
@@ -98,6 +102,10 @@ static ODClassType* _TREmptyConnector_type;
 
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to {
     return rail;
+}
+
+- (BOOL)isEmpty {
+    return YES;
 }
 
 - (ODClassType*)type {
@@ -808,12 +816,17 @@ static ODClassType* _TRRailroadBuilder_type;
 }
 
 - (BOOL)tryBuildRail:(TRRail*)rail {
-    if([_railroad.map isFullTile:rail.tile] && [_railroad canAddRail:rail]) {
+    if([self checkCityTile:rail.tile connector:rail.form.start] && [self checkCityTile:rail.tile connector:rail.form.end] && [_railroad.map isFullTile:rail.tile] && [_railroad canAddRail:rail]) {
         __rail = [CNOption opt:rail];
         return YES;
     } else {
         return NO;
     }
+}
+
+- (BOOL)checkCityTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
+    GEVec2i nextTile = [connector nextTile:tile];
+    return [_railroad.map isFullTile:nextTile] || !([[_railroad contentInTile:nextTile connector:[connector otherSideConnector]] isEmpty]);
 }
 
 - (void)clear {

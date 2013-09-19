@@ -8,12 +8,14 @@ class RailroadConnectorContent {
     def buildLightIn(connector : RailConnector) : RailroadConnectorContent = self
     def rails : [Rail]
     def isGreen : bool = true
+    def isEmpty = false
 }
 
 class EmptyConnector extends RailroadConnectorContent {
     static val instance : RailroadConnectorContent = EmptyConnector()
     def rails : [Rail] = []
     def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = rail
+    def isEmpty = true
 }
 
 class Rail(tile : vec2i, form : RailForm) extends RailroadConnectorContent {
@@ -204,10 +206,20 @@ class RailroadBuilder(weak railroad : Railroad) {
     def rail = _rail
 
     def tryBuild(rail : Rail) : bool = {
-        if(railroad.map.isFull(rail.tile) && railroad.canAdd(rail)) {
+
+        if(checkCity(rail.tile, rail.form.start) &&
+           checkCity(rail.tile, rail.form.end) &&
+           railroad.map.isFull(rail.tile) &&
+           railroad.canAdd(rail)
+        ) {
             _rail = rail
             true
         } else false
+    }
+
+    def checkCity(tile : vec2i, connector : RailConnector) : bool = {
+        val nextTile = connector.next(tile)
+        railroad.map.isFull(nextTile) || !railroad.contentIn(nextTile, connector.otherSideConnector).isEmpty
     }
 
     def clear {

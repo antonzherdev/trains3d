@@ -26,6 +26,7 @@
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
 - (id<CNSeq>)rails;
 - (BOOL)isGreen;
+- (BOOL)isEmpty;
 + (ODClassType*)type;
 @end
 
@@ -36,6 +37,7 @@
 - (ODClassType*)type;
 - (id<CNSeq>)rails;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
+- (BOOL)isEmpty;
 + (TRRailroadConnectorContent*)instance;
 + (ODClassType*)type;
 @end
@@ -147,6 +149,7 @@
 - (ODClassType*)type;
 - (id)rail;
 - (BOOL)tryBuildRail:(TRRail*)rail;
+- (BOOL)checkCityTile:(GEVec2i)tile connector:(TRRailConnector*)connector;
 - (void)clear;
 - (void)fix;
 + (ODClassType*)type;
