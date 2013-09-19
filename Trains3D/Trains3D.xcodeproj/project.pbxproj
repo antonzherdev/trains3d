@@ -15,6 +15,7 @@
 		0214B1481773394500C03C71 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0214B1281773394400C03C71 /* Cocoa.framework */; };
 		0214B1501773394500C03C71 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0214B14E1773394500C03C71 /* InfoPlist.strings */; };
 		024F434E1774A5C3005B6F82 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 024F434D1774A5C3005B6F82 /* CoreVideo.framework */; };
+		6F3DF00239DEC95B9B099E02 /* Window.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF7A06EFC33D43D5EDF07 /* Window.png */; };
 		6F3DF00C590705DCF4E3E183 /* EGStandardShaderSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF709252BA04F53353AC7 /* EGStandardShaderSystem.m */; };
 		6F3DF01F319BEED7BF20877B /* type_half.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF627373554D9AC2430AF /* type_half.inl */; };
 		6F3DF025F43A016F771EBE7C /* KWUserDefinedMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF33077040522DF03AB06 /* KWUserDefinedMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -996,6 +997,7 @@
 		6F3DF788CCCB7F53F1F67EB5 /* epsilon.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = epsilon.inl; sourceTree = "<group>"; };
 		6F3DF79E56B52EA90418C91B /* CNAppendLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNAppendLink.m; sourceTree = "<group>"; };
 		6F3DF79FE213C9FFE8FFC53F /* btTriangleMeshShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btTriangleMeshShape.cpp; sourceTree = "<group>"; };
+		6F3DF7A06EFC33D43D5EDF07 /* Window.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Window.png; sourceTree = "<group>"; };
 		6F3DF7A662AE8EAD03F94024 /* hint.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = hint.hpp; sourceTree = "<group>"; };
 		6F3DF7AB16BBE40B687FE354 /* btBoxBoxDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btBoxBoxDetector.h; sourceTree = "<group>"; };
 		6F3DF7B69C5E95D9CE977E03 /* CNSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSet.h; sourceTree = "<group>"; };
@@ -2548,6 +2550,7 @@
 				6F3DFC3F0C7C282567ABE16A /* Explosion.png */,
 				6F3DFFAC2A07756845F41EED /* LightGlow.png */,
 				6F3DF066CCFCEAD6E99954B5 /* Roof.png */,
+				6F3DF7A06EFC33D43D5EDF07 /* Window.png */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -3368,6 +3371,7 @@
 				6F3DFC99321E27835B7D9875 /* LightGlow.png in Resources */,
 				6F3DF4EA34CB28669A5BC945 /* Line.od in Resources */,
 				6F3DF9712D8E597AB0FD9304 /* Roof.png in Resources */,
+				6F3DF00239DEC95B9B099E02 /* Window.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

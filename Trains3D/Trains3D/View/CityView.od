@@ -11,8 +11,8 @@ class CityView {
         0, 1, 0, 1, 0, -0.5, 0.001, 0.5
         ], [0, 1, 2,
         2, 3, 0])
-
-    val windowMaterial = StandardMaterial(vec4(72.0/255, 83.0/255, 99.0/255, 1), vec4(1, 1, 1, 1), 1)
+    val roofTexture = textureFor("Roof.png")
+    val windowMaterial = StandardMaterial(textureFor("Window.png"), vec4(1, 1, 1, 1), 1)
     def draw(city : City) {
         matrix(
             _.modify(w = w -> w.translate(city.tile.x, city.tile.y, 0))
@@ -20,7 +20,7 @@ class CityView {
         ) {
             StandardMaterial(city.color.color).draw(Models.cityBodies)
             glDisable(GL_CULL_FACE)
-            val roofMaterial = StandardMaterial(ColorSource(city.color.color, textureFor("Roof.png")), vec4(0.5, 0.5, 0.5, 1), 1)
+            val roofMaterial = StandardMaterial(ColorSource(city.color.color, roofTexture), vec4(0.5, 0.5, 0.5, 1), 1)
             roofMaterial.draw(Models.cityRoofs)
             glEnable(GL_CULL_FACE)
             windowMaterial.draw(Models.cityWindows)
