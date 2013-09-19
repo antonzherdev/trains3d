@@ -154,6 +154,8 @@ static ODClassType* _TRRailroadBuilderMouseProcessor_type;
             GEVec2i start = [self normPoint:geVec2SubVec2(uwrap(GEVec2, sp), geVec2ApplyVec2i(spTile))];
             GEVec2i end = geVec2iAddVec2i(start, [self normPoint:geVec2SetLength(deltaVector, 0.7)]);
             [_builder tryBuildRail:[self convertRail:[self correctRail:TRRailCorrectionMake(spTile, start, end)]]];
+        } else {
+            [_builder clear];
         }
         return @YES;
     }] getOr:@NO]);

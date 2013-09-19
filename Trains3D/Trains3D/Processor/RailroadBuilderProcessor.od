@@ -27,6 +27,8 @@ class RailroadBuilderMouseProcessor(builder : RailroadBuilder) extends MouseProc
             val start = norm(sp.sub(spTile))
             val end = start.add(norm(deltaVector.set(length = 0.7)))
             builder.tryBuild(convert(correct(RailCorrection(spTile, start, end))))
+        } else {
+            builder.clear
         }
         true
     }).getOr(false)
