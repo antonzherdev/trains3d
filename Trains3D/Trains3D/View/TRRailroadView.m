@@ -53,7 +53,7 @@ static ODClassType* _TRRailroadView_type;
     }];
 }
 
-- (void)draw {
+- (void)drawBackground {
     [_railroadSurface maybeForce:_changed draw:^void() {
         egClear();
         [_backgroundView draw];
@@ -66,14 +66,17 @@ static ODClassType* _TRRailroadView_type;
     [[_railroad switches] forEach:^void(TRSwitch* _) {
         [_switchView drawTheSwitch:_];
     }];
-    [[_railroad lights] forEach:^void(TRRailLight* _) {
-        [_lightView drawLight:_];
-    }];
     [[_railroad.builder rail] forEach:^void(TRRail* _) {
         [_railView drawRail:_];
     }];
     [[_railroad damagesPoints] forEach:^void(TRRailPoint* _) {
         [_damageView drawPoint:_];
+    }];
+}
+
+- (void)drawForeground {
+    [[_railroad lights] forEach:^void(TRRailLight* _) {
+        [_lightView drawLight:_];
     }];
 }
 

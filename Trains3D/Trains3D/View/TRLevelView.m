@@ -44,12 +44,13 @@ static ODClassType* _TRLevelView_type;
 }
 
 - (void)drawView {
-    [_railroadView draw];
+    [_railroadView drawBackground];
     [[_level cities] forEach:^void(TRCity* city) {
         [_cityView drawCity:city];
     }];
     [_trainView drawTrains:[_level trains]];
     [_trainView drawDyingTrains:[_level dyingTrains]];
+    [_railroadView drawForeground];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

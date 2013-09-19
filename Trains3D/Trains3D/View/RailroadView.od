@@ -16,19 +16,21 @@ class RailroadView(railroad : Railroad) {
         railroad.add(changeListener = changed = true)
     }
 
-    def draw {
+    def drawBackground {
         railroadSurface.maybe(changed) {
             egClear
             backgroundView.draw
             railroad.rails.for(railView.draw(_))
             changed = false
-            //railroadSurface.texture.saveTo("$(Directory.sandbox)/test.png")
         }
         railroadSurface.draw
         railroad.switches.for(switchView.draw(_))
-        railroad.lights.for(lightView.draw(_))
         railroad.builder.rail.for(railView.draw(_))
         railroad.damagesPoints.for(damageView.draw(_))
+    }
+
+    def drawForeground {
+        railroad.lights.for(lightView.draw(_))
     }
 }
 

@@ -32,7 +32,8 @@
 - (id)initWithRailroad:(TRRailroad*)railroad;
 - (ODClassType*)type;
 - (void)_init;
-- (void)draw;
+- (void)drawBackground;
+- (void)drawForeground;
 + (ODClassType*)type;
 @end
 

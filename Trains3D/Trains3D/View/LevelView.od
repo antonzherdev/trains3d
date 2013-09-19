@@ -10,11 +10,13 @@ class LevelView(level : Level) extends LayerView {
     val environment = Environment(ambientColor = vec4(0.4, 0.4, 0.4, 1), lights = [DirectLight(vec4(1, 1, 1, 1), vec3(-0.2, 0.2, -0.5))])
 
     def drawView {
-        railroadView.draw
+        railroadView.drawBackground
         level.cities.for(city -> cityView.draw(city))
 
         trainView.draw(trains = level.trains)
         trainView.draw(dyingTrains = level.dyingTrains)
+
+        railroadView.drawForeground
     }
 
     val camera : Camera = CameraIso(level.map.size, vec2(0, 0))
