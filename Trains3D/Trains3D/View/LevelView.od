@@ -15,8 +15,6 @@ class LevelView(level : Level) extends LayerView {
 
         trainView.draw(trains = level.trains)
         trainView.draw(dyingTrains = level.dyingTrains)
-//        egColor3(1.0, 1.0, 1.0)
-//        level.map.drawLayout
     }
 
     val camera : Camera = CameraIso(level.map.size, vec2(0, 0))

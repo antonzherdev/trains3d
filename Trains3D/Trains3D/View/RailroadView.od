@@ -156,6 +156,6 @@ class BackgroundView(map : MapSso) {
 
     def draw {
         mapView.drawPlaneWith(material)
-        mapView.drawLayout
+//        mapView.drawLayout
     }
 }
