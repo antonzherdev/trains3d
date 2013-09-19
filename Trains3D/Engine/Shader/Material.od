@@ -10,8 +10,8 @@ class Material {
         shaderSystem.draw(self, vb, index, mode)
     }
 
-    static def apply(color : vec4) : Material = StandardMaterial(color)
-    static def apply(texture : Texture) : Material = StandardMaterial(texture)
+    static def apply(color : vec4) : Material = StandardMaterial(diffuse = color)
+    static def apply(texture : Texture) : Material = StandardMaterial(diffuse = texture)
 }
 
 class ColorSource(color : vec4, texture : Texture?) extends Material {

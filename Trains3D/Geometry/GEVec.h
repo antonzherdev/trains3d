@@ -137,6 +137,7 @@ float geVec3LengthSquare(GEVec3 self);
 CGFloat geVec3Length(GEVec3 self);
 GEVec3 geVec3SetLength(GEVec3 self, float length);
 GEVec3 geVec3Normalize(GEVec3 self);
+GEVec2 geVec3Xy(GEVec3 self);
 ODPType* geVec3Type();
 @interface GEVec3Wrap : NSObject
 @property (readonly, nonatomic) GEVec3 value;

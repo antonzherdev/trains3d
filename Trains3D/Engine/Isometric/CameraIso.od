@@ -13,15 +13,16 @@ class CameraIso(tilesOnScreen : vec2i, center : vec2) extends Camera {
         val viewportHeight = tileSize * ww / 2
         recti(0, 0, viewportWidth, viewportHeight).moveToCenterFor(viewSize)
     }
-
+    static val m = mat4.identity.rotate(90, 1, 0, 0)
+    static val w = mat4.identity.rotate(-90, 1, 0, 0)
     val matrixModel : MatrixModel = {
         val ww : float = tilesOnScreen.x + tilesOnScreen.y
         val isoWW2 = ww*ISO/2
         val isoWW4 = isoWW2/2
 
         MatrixModel(
-            m = mat4.identity.rotate(90, 1, 0, 0),
-            w = mat4.identity.rotate(-90, 1, 0, 0),
+            m = m,
+            w = w,
             c = mat4.identity
                     .translate(-isoWW2 + ISO, -ISO*(tilesOnScreen.y - tilesOnScreen.x)/4 + isoWW4, -1000)
                     .rotate(30, 1, 0, 0)

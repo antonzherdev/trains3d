@@ -1,9 +1,9 @@
 #import "objd.h"
 #import "GEVec.h"
 #import "GELine.h"
-@protocol EGCamera;
 @class EGGlobal;
 @class EGContext;
+@protocol EGCamera;
 @class EGMatrixModel;
 @class GEMat4;
 

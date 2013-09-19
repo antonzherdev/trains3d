@@ -80,7 +80,8 @@ class VertexBufferDesc<T>(dataType : PType<T>, position : int4, uv : int4, norma
     def stride : uint4 = dataType.size
 
     static def Vec2 = VertexBufferDesc<vec2>(vec2.type, -1, 0, -1, -1, 0)
-    static def Vec3 = VertexBufferDesc<vec3>(vec3.type, 0, -1, 0, -1, -1)
+    static def Vec3 = VertexBufferDesc<vec3>(vec3.type, 0, 0, 0, -1, 0)
+    static def Vec4 = VertexBufferDesc<vec4>(vec4.type, 0, 0, 0, 0, 0)
     static def mesh = VertexBufferDesc<MeshData>(MeshData.type, position = 5*4, uv = 0, normal = 2*4, color = -1, model = -1)
 }
 
@@ -88,6 +89,7 @@ class VertexBuffer<T>(desc : VertexBufferDesc<T>, handle : GLuint) extends Buffe
     static def apply<T>(desc : VertexBufferDesc<T>) : VertexBuffer<T> = VertexBuffer<T>(desc, egGenBuffer)
     static def vec2 = VertexBuffer<vec2>(VertexBufferDesc.Vec2, egGenBuffer)
     static def vec3 = VertexBuffer<vec3>(VertexBufferDesc.Vec3, egGenBuffer)
+    static def vec4 = VertexBuffer<vec4>(VertexBufferDesc.Vec4, egGenBuffer)
     static def mesh = VertexBuffer<MeshData>(VertexBufferDesc.mesh, egGenBuffer)
 }
 

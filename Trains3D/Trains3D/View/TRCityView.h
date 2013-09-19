@@ -7,9 +7,9 @@
 @class EGMatrixModel;
 @class TRCityAngle;
 @class TRCityColor;
-@class EGColorSource;
 @class EGStandardMaterial;
 @class TRModels;
+@class EGMaterial;
 @class EGAnimation;
 @class EGMatrixStack;
 

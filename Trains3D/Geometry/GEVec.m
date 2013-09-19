@@ -208,6 +208,9 @@ GEVec3 geVec3SetLength(GEVec3 self, float length) {
 GEVec3 geVec3Normalize(GEVec3 self) {
     return geVec3SetLength(self, 1.0);
 }
+GEVec2 geVec3Xy(GEVec3 self) {
+    return GEVec2Make(self.x, self.y);
+}
 ODPType* geVec3Type() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[GEVec3Wrap class] name:@"GEVec3" size:sizeof(GEVec3) wrap:^id(void* data, NSUInteger i) {

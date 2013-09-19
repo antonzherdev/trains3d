@@ -2,8 +2,8 @@
 #import "EGScene.h"
 #import "GEVec.h"
 @class EGMapSso;
-@class EGMatrixModel;
 @class GEMat4;
+@class EGMatrixModel;
 
 @class EGCameraIso;
 
@@ -18,6 +18,8 @@
 - (GERecti)viewportWithViewSize:(GEVec2)viewSize;
 - (void)focusForViewSize:(GEVec2)viewSize;
 - (GEVec2)translateWithViewSize:(GEVec2)viewSize viewPoint:(GEVec2)viewPoint;
++ (GEMat4*)m;
++ (GEMat4*)w;
 + (ODClassType*)type;
 @end
 

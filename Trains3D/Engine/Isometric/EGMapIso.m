@@ -1,6 +1,8 @@
 #import "EGMapIso.h"
 
 #import "EGMesh.h"
+#import "EGCameraIso.h"
+#import "GEMat4.h"
 #import "EGMaterial.h"
 #import "GL.h"
 @implementation EGMapSso{
@@ -129,7 +131,10 @@ static ODClassType* _EGMapSsoView_type;
     if(self) {
         _map = map;
         __lazy_axisVertexBuffer = [CNLazy lazyWithF:^EGVertexBuffer*() {
-            return [[EGVertexBuffer vec3] setData:[ arrs(GEVec3, 4) {GEVec3Make(0.0, 0.0, 0.0), GEVec3Make(1.0, 0.0, 0.0), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(0.0, 0.0, 1.0)}]];
+            return ^EGVertexBuffer*() {
+                GEMat4* mi = [EGCameraIso.m inverse];
+                return [[EGVertexBuffer vec4] setData:[ arrs(GEVec4, 4) {[mi mulVec4:GEVec4Make(0.0, 0.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(1.0, 0.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(0.0, 1.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(0.0, 0.0, 1.0, 1.0)]}]];
+            }();
         }];
         _plane = [self createPlane];
     }

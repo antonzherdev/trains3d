@@ -1,5 +1,4 @@
 #import "Kiwi.h"
-#import "EGMap.h"
 #import "EGMapIso.h"
 #import "EGCameraIso.h"
 

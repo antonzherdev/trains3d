@@ -309,7 +309,11 @@ static ODClassType* _EGVertexBufferDesc_type;
 }
 
 + (EGVertexBufferDesc*)Vec3 {
-    return [EGVertexBufferDesc vertexBufferDescWithDataType:geVec3Type() position:0 uv:-1 normal:0 color:-1 model:-1];
+    return [EGVertexBufferDesc vertexBufferDescWithDataType:geVec3Type() position:0 uv:0 normal:0 color:-1 model:0];
+}
+
++ (EGVertexBufferDesc*)Vec4 {
+    return [EGVertexBufferDesc vertexBufferDescWithDataType:geVec4Type() position:0 uv:0 normal:0 color:0 model:0];
 }
 
 + (EGVertexBufferDesc*)mesh {
@@ -393,6 +397,10 @@ static ODClassType* _EGVertexBuffer_type;
 
 + (EGVertexBuffer*)vec3 {
     return [EGVertexBuffer vertexBufferWithDesc:[EGVertexBufferDesc Vec3] handle:egGenBuffer()];
+}
+
++ (EGVertexBuffer*)vec4 {
+    return [EGVertexBuffer vertexBufferWithDesc:[EGVertexBufferDesc Vec4] handle:egGenBuffer()];
 }
 
 + (EGVertexBuffer*)mesh {

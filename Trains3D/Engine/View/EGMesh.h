@@ -98,6 +98,7 @@ ODPType* egMeshDataType();
 - (unsigned int)stride;
 + (EGVertexBufferDesc*)Vec2;
 + (EGVertexBufferDesc*)Vec3;
++ (EGVertexBufferDesc*)Vec4;
 + (EGVertexBufferDesc*)mesh;
 + (ODClassType*)type;
 @end
@@ -112,6 +113,7 @@ ODPType* egMeshDataType();
 + (EGVertexBuffer*)applyDesc:(EGVertexBufferDesc*)desc;
 + (EGVertexBuffer*)vec2;
 + (EGVertexBuffer*)vec3;
++ (EGVertexBuffer*)vec4;
 + (EGVertexBuffer*)mesh;
 + (ODClassType*)type;
 @end

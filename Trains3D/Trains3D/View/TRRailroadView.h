@@ -92,7 +92,7 @@
 @interface TRBackgroundView : NSObject
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) EGMapSsoView* mapView;
-@property (nonatomic, readonly) EGStandardMaterial* material;
+@property (nonatomic, readonly) EGMaterial* material;
 
 + (id)backgroundViewWithMap:(EGMapSso*)map;
 - (id)initWithMap:(EGMapSso*)map;

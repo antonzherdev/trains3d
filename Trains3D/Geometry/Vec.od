@@ -55,6 +55,7 @@ struct vec3(x : float4, y : float4, z : float4) {
     def length = sqrt(lengthSquare)
     def set(length : float4) = mul(length/self.length)
     def normalize = set(length = 1.0)
+    def xy = vec2(x, y)
 }
 
 struct vec4(x : float4, y : float4, z : float4, w : float4) {
