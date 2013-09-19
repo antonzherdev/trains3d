@@ -1,6 +1,8 @@
 #import "objd.h"
 #import "GEVec.h"
+@class EGVertexBuffer;
 @class EGMesh;
+@class EGColorSource;
 @class EGMaterial;
 
 @class EGMapSso;
@@ -31,6 +33,7 @@
 + (id)mapSsoViewWithMap:(EGMapSso*)map;
 - (id)initWithMap:(EGMapSso*)map;
 - (ODClassType*)type;
+- (EGVertexBuffer*)axisVertexBuffer;
 - (void)drawLayout;
 - (EGMesh*)createPlane;
 - (void)drawPlaneWithMaterial:(EGMaterial*)material;

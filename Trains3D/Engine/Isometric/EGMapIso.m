@@ -1,8 +1,8 @@
 #import "EGMapIso.h"
 
 #import "EGMesh.h"
-#import "GL.h"
 #import "EGMaterial.h"
+#import "GL.h"
 @implementation EGMapSso{
     GEVec2i _size;
     GERecti _limits;
@@ -113,6 +113,7 @@ static ODClassType* _EGMapSso_type;
 
 @implementation EGMapSsoView{
     EGMapSso* _map;
+    CNLazy* __lazy_axisVertexBuffer;
     EGMesh* _plane;
 }
 static ODClassType* _EGMapSsoView_type;
@@ -127,6 +128,9 @@ static ODClassType* _EGMapSsoView_type;
     self = [super init];
     if(self) {
         _map = map;
+        __lazy_axisVertexBuffer = [CNLazy lazyWithF:^EGVertexBuffer*() {
+            return [[EGVertexBuffer vec3] setData:[ arrs(GEVec3, 4) {GEVec3Make(0.0, 0.0, 0.0), GEVec3Make(1.0, 0.0, 0.0), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(0.0, 0.0, 1.0)}]];
+        }];
         _plane = [self createPlane];
     }
     
@@ -138,7 +142,14 @@ static ODClassType* _EGMapSsoView_type;
     _EGMapSsoView_type = [ODClassType classTypeWithCls:[EGMapSsoView class]];
 }
 
+- (EGVertexBuffer*)axisVertexBuffer {
+    return [__lazy_axisVertexBuffer get];
+}
+
 - (void)drawLayout {
+    [[EGColorSource applyColor:GEVec4Make(1.0, 0.0, 0.0, 1.0)] drawVb:[self axisVertexBuffer] index:[ arrui4(2) {0, 1}] mode:GL_LINES];
+    [[EGColorSource applyColor:GEVec4Make(0.0, 1.0, 0.0, 1.0)] drawVb:[self axisVertexBuffer] index:[ arrui4(2) {0, 2}] mode:GL_LINES];
+    [[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 1.0, 1.0)] drawVb:[self axisVertexBuffer] index:[ arrui4(2) {0, 3}] mode:GL_LINES];
 }
 
 - (EGMesh*)createPlane {

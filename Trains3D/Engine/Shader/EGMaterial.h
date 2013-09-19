@@ -1,8 +1,9 @@
 #import "objd.h"
-#import "GEVec.h"
 #import "GL.h"
+#import "GEVec.h"
 @class EGShaderSystem;
 @class EGMesh;
+@class EGVertexBuffer;
 @class EGTexture;
 @class EGSimpleShaderSystem;
 @class EGStandardShaderSystem;
@@ -19,6 +20,7 @@ typedef struct EGBlendFunction EGBlendFunction;
 - (ODClassType*)type;
 - (EGShaderSystem*)shaderSystem;
 - (void)drawMesh:(EGMesh*)mesh;
+- (void)drawVb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(GLenum)mode;
 + (EGMaterial*)applyColor:(GEVec4)color;
 + (EGMaterial*)applyTexture:(EGTexture*)texture;
 + (ODClassType*)type;

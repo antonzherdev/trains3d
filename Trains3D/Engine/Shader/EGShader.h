@@ -41,6 +41,7 @@
 - (ODClassType*)type;
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh;
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh start:(NSUInteger)start count:(NSUInteger)count;
+- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(GLenum)mode;
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(id)param;
 - (void)unloadParam:(id)param;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
@@ -79,6 +80,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)drawMaterial:(id)material mesh:(EGMesh*)mesh;
+- (void)drawMaterial:(id)material vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(GLenum)mode;
 - (EGShader*)shaderForMaterial:(id)material;
 + (ODClassType*)type;
 @end

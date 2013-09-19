@@ -3,8 +3,11 @@ package com.antonzherdev.eg
 
 class Material {
     def shaderSystem : ShaderSystem<self>
-    def draw(mesh : Mesh) {
+    def draw(mesh : Mesh<_>) {
         shaderSystem.draw(self, mesh)
+    }
+    def draw(vb : VertexBuffer<_>, index : PArray<uint4>, mode : GLenum) {
+        shaderSystem.draw(self, vb, index, mode)
     }
 
     static def apply(color : vec4) : Material = StandardMaterial(color)

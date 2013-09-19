@@ -77,6 +77,16 @@ class Shader<P>(program : ShaderProgram) {
         glUseProgram(0)
     }
 
+    def draw(param : P, vb : VertexBuffer<_>, index : PArray<uint4>, mode : GLenum) {
+        glUseProgram(program.handle)
+        vb {
+            load(vb.desc, param)
+            glDrawElements(mode, index.count, GL_UNSIGNED_INT, index.bytes)
+            unload(param)
+        }
+        glUseProgram(0)
+    }
+
     def load(vbDesc : VertexBufferDesc<_>, param : P)
     def unload(param : P) {}
 
@@ -107,9 +117,14 @@ class ShaderUniform(handle : GLuint) {
 }
 
 class ShaderSystem<M extends Material> {
-    def draw(material : M, mesh : Mesh) {
+    def draw(material : M, mesh : Mesh<_>) {
         val shader = shaderFor(material)
         shader.draw(material, mesh)
+    }
+
+    def draw(material : M, vb : VertexBuffer<_>, index : PArray<uint4>, mode : GLenum) {
+        val shader = shaderFor(material)
+        shader.draw(material, vb = vb, index, mode)
     }
 
     def shaderFor(material : M) : Shader
