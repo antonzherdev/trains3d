@@ -5,8 +5,8 @@ class Range(start : int, end : int, step : int) extends Seq<int> {
         if(step > 0) if(start <= end) (end - start)/step + 1 else 0
         else if(step < 0) if(start >= end) (end - start)/step + 1 else 0
         else 1
-    def apply(index : uint) : int? =
-        if(index >= count) nil
+    def apply(index : uint) : Int =
+        if(index >= count) throw "Incorrect index"
         else start + step*index
     def iterator : Iterator<int> = RangeIterator(start, end, step)
 

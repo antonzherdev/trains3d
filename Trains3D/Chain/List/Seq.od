@@ -3,7 +3,7 @@ package core.chain
 import core.math._
 
 trait Seq<T> extends Iterable<T> {
-    def apply(index : uint) : T? = {
+    def apply(index : uint) : T = {
         val i = iterator
         var n = index
         while(i.hasNext) {
@@ -11,7 +11,7 @@ trait Seq<T> extends Iterable<T> {
             i.next
             n--
         }
-        nil
+        throw "Incorrect index"
     }
 
     def randomItem : T? =
@@ -39,6 +39,10 @@ trait Seq<T> extends Iterable<T> {
         }
         true
     }
+
+    def isEmpty : bool = count == 0
+
+    def head : T? = apply(0)
 }
 
 trait MutableSeq<T> extends Seq<T> with MutableIterable<T>
@@ -55,14 +59,14 @@ class ArrayBuilder<T> extends Builder<T, Array<T>> {
 }
 
 class IndexFunSeq<T>(count : uint, f : uint -> T) extends Seq<T> {
-    def apply(index : uint) : T? =
-        if(index >= count) nil
+    def apply(index : uint) : T =
+        if(index >= count) throw "Incorrect index"
         else f(index)
 
     def iterator : Iterator<T> = IndexFunSeqIterator<T>(count, f)
 }
 
-class IndexFunSeqIterator<T>(count : uint, f : uint -> T) {
+class IndexFunSeqIterator<T>(count : uint, f : uint -> T) extends Iterator<T> {
     var i : uint = 0
     def hasNext = i < count
 

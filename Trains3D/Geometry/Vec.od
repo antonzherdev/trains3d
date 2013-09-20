@@ -111,7 +111,12 @@ struct rect(origin : vec2, size : vec2) {
         origin.y <= rect.y2 && y2 >= rect.origin.y
 
     def thicken(halfSize : vec2) = rect(origin.sub(halfSize), size.add(halfSize.mul(2)))
+    def div(vec2 : vec2) = rect(origin/vec2, size/vec2)
 
+    def leftBottom = origin
+    def leftTop = vec2(origin.x, origin.y + size.y)
+    def rightTop = vec2(origin.x + size.y, origin.y + size.y)
+    def rightBottom = vec2(origin.x + size.y, origin.y)
 }
 struct recti(origin : vec2i, size : vec2i) {
     static def apply(x : float4, y : float4, width : float4, height : float4) = recti(vec2(x, y), vec2(width, height))

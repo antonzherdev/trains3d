@@ -52,6 +52,9 @@ extern id cnResolveCollection(id collection);
 #define unumf(expr) [expr floatValue]
 #endif
 
+#define nums(expr) [NSNumber numberWithUnsignedShort:expr]
+#define unums(expr) [expr unsignedShortValue]
+
 #define numb(expr) [NSNumber numberWithBool:expr]
 #define unumb(expr) [expr boolValue]
 

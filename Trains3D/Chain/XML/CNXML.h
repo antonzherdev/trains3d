@@ -37,7 +37,7 @@
 
 - (id)firstAttribute;
 - (id<CNIterable>)attributes;
-- (id)valueOfAttributeWithName:(NSString*)name;
+- (id)applyName:(NSString*)name;
 
 + (ODClassType*)type;
 

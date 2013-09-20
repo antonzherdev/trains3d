@@ -723,9 +723,9 @@ static ODClassType* _TRRailroad_type;
         [self addDamageAtPoint:[point invert]];
     } else {
         [_damagesIndex modifyBy:^id(id arr) {
-            return [CNOption opt:[[arr map:^id<CNSeq>(id<CNSeq> _) {
+            return [CNOption applyValue:[[arr mapF:^id<CNSeq>(id<CNSeq> _) {
                 return [_ arrayByAddingItem:numf(point.x)];
-            }] getOrElse:^id<CNSeq>() {
+            }] getOrElseF:^id<CNSeq>() {
                 return [ arrf(1) {point.x}];
             }]];
         } forKey:tuple(wrap(GEVec2i, point.tile), point.form)];
@@ -738,7 +738,7 @@ static ODClassType* _TRRailroad_type;
         [self fixDamageAtPoint:[point invert]];
     } else {
         [_damagesIndex modifyBy:^id(id arrOpt) {
-            return [arrOpt map:^id<CNSeq>(id<CNSeq> arr) {
+            return [arrOpt mapF:^id<CNSeq>(id<CNSeq> arr) {
                 return [[[arr chain] filter:^BOOL(id _) {
                     return !(eqf(unumf(_), point.x));
                 }] toArray];
@@ -817,7 +817,7 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (BOOL)tryBuildRail:(TRRail*)rail {
     if([self checkCityTile:rail.tile connector:rail.form.start] && [self checkCityTile:rail.tile connector:rail.form.end] && [_railroad.map isFullTile:rail.tile] && [_railroad canAddRail:rail]) {
-        __rail = [CNOption opt:rail];
+        __rail = [CNOption applyValue:rail];
         return YES;
     } else {
         return NO;

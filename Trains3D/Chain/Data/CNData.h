@@ -24,6 +24,7 @@
 - (id<CNIterator>)iterator;
 - (id)applyIndex:(NSUInteger)index;
 - (void)dealloc;
+- (id)unsafeApplyIndex:(NSUInteger)index;
 + (ODClassType*)type;
 @end
 

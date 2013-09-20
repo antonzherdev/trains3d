@@ -22,7 +22,7 @@ trait MutableMap<K, V> extends Map<K, V> with MutableIterable<(K, V)> {
     def modify(by : V? -> V?, forKey : K) : V? = {
         val newObject = by(apply(forKey))
         if(newObject.isEmpty) removeFor(forKey)
-        else set(newObject, forKey)
+        else set(newObject.get, forKey)
         newObject
     }
 

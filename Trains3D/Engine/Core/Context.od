@@ -5,12 +5,15 @@ object Global {
     val context : Context = Context()
     val matrix : MatrixStack = context.matrixStack
     def textureFor(file : string) : FileTexture = context.textureFor(file)
+    def fontWith(name : string, size : uint) : Font = context.fontWith(name, size)
 }
 
 class Context {
     private val textureCache = MutableHashMap<string, FileTexture>()
+    private val fontCache = MutableHashMap<(string, uint4), Font>()
 
     def textureFor(file : string) : FileTexture = textureCache.objectFor(key = file, orUpdateWith = FileTexture(file))
+    def fontWith(name : string, size : uint) : Font = textureCache.objectFor(key = (name, size), orUpdateWith = Font(name, size))
 
     var director : Director
     var environment = Environment.default

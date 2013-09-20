@@ -26,6 +26,10 @@ static ODClassType* _EGTexture_type;
     [self bindTarget:GL_TEXTURE_2D];
 }
 
+- (GEVec2)size {
+    @throw @"Method size is abstract";
+}
+
 - (void)bindTarget:(GLenum)target {
     glEnable(target);
     glBindTexture(target, _id);
@@ -91,20 +95,26 @@ static ODClassType* _EGTexture_type;
 
 @implementation EGFileTexture{
     NSString* _file;
+    GLenum _magFilter;
+    GLenum _minFilter;
     BOOL __loaded;
     GEVec2 __size;
 }
 static ODClassType* _EGFileTexture_type;
 @synthesize file = _file;
+@synthesize magFilter = _magFilter;
+@synthesize minFilter = _minFilter;
 
-+ (id)fileTextureWithFile:(NSString*)file {
-    return [[EGFileTexture alloc] initWithFile:file];
++ (id)fileTextureWithFile:(NSString*)file magFilter:(GLenum)magFilter minFilter:(GLenum)minFilter {
+    return [[EGFileTexture alloc] initWithFile:file magFilter:magFilter minFilter:minFilter];
 }
 
-- (id)initWithFile:(NSString*)file {
+- (id)initWithFile:(NSString*)file magFilter:(GLenum)magFilter minFilter:(GLenum)minFilter {
     self = [super init];
     if(self) {
         _file = file;
+        _magFilter = magFilter;
+        _minFilter = minFilter;
         __loaded = NO;
     }
     
@@ -116,8 +126,12 @@ static ODClassType* _EGFileTexture_type;
     _EGFileTexture_type = [ODClassType classTypeWithCls:[EGFileTexture class]];
 }
 
++ (EGFileTexture*)applyFile:(NSString*)file {
+    return [EGFileTexture fileTextureWithFile:file magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_LINEAR];
+}
+
 - (void)load {
-    __size = egLoadTextureFromFile(self.id, [CNBundle fileNameForResource:_file]);
+    __size = egLoadTextureFromFile(self.id, [CNBundle fileNameForResource:_file], _magFilter, _minFilter);
     __loaded = YES;
 }
 
@@ -148,18 +162,22 @@ static ODClassType* _EGFileTexture_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGFileTexture* o = ((EGFileTexture*)(other));
-    return [self.file isEqual:o.file];
+    return [self.file isEqual:o.file] && GLenumEq(self.magFilter, o.magFilter) && GLenumEq(self.minFilter, o.minFilter);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.file hash];
+    hash = hash * 31 + GLenumHash(self.magFilter);
+    hash = hash * 31 + GLenumHash(self.minFilter);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"file=%@", self.file];
+    [description appendFormat:@", magFilter=%@", GLenumDescription(self.magFilter)];
+    [description appendFormat:@", minFilter=%@", GLenumDescription(self.minFilter)];
     [description appendString:@">"];
     return description;
 }

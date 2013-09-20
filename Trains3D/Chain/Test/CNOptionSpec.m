@@ -3,7 +3,7 @@
 
 SPEC_BEGIN(CNOpionSpec)
     describe(@"CNOption", ^{
-        id some = [CNOption opt:@"test"];
+        id some = [CNOption applyValue:@"test"];
         id none = [CNOption none];
         it(@"should execute foreach one time for not null object and no one for null", ^{
             __block int ex = 0;
@@ -19,23 +19,16 @@ SPEC_BEGIN(CNOpionSpec)
             [[theValue(ex) should] equal:theValue(0)];
         });
 
-        it(@"should behave like nil with selectors when it empty", ^{
-            [[[some substringFromIndex:3] should] equal:@"t"];
-            [[theValue([some length]) should] equal:theValue(4)];
-
-            [[none substringFromIndex:3] shouldBeNil];
-            [[theValue([none length]) should] equal:theValue(0)];
-        });
         it(@"should return empty option with nil value", ^{
-            [[[CNOption opt:nil] should] equal:none];
+            [[[CNOption applyValue:nil] should] equal:none];
         });
         it(@".orValue and .or should return self if it's some or value if it's none", ^{
-            [[[some getOr:@"def"] should] equal:@"test"];
-            [[[none getOr:@"def"] should] equal:@"def"];
-            [[[some getOrElse:^id {
+            [[[some getOrValue:@"def"] should] equal:@"test"];
+            [[[none getOrValue:@"def"] should] equal:@"def"];
+            [[[some getOrElseF:^id {
                 return @"def";
             }] should] equal:@"test"];
-            [[[none getOrElse:^id {
+            [[[none getOrElseF:^id {
                 return @"def";
             }] should] equal:@"def"];
         });
@@ -46,8 +39,8 @@ SPEC_BEGIN(CNOpionSpec)
             [[theValue([none isDefined]) should] beNo];
         });
         it(@".map should return f(self) for some or none", ^{
-            [[[some map:^id(id x) {return [x substringFromIndex:2];}] should] equal:@"st"];
-            [[[none map:^id(id x) {return [x substringFromIndex:2];}] should] equal:none];
+            [[[some mapF:^id(id x) {return [x substringFromIndex:2];}] should] equal:[CNSome someWithValue:@"st"]];
+            [[[none mapF:^id(id x) {return [x substringFromIndex:2];}] should] equal:none];
         });
     });
 SPEC_END

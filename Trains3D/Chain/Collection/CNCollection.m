@@ -40,7 +40,7 @@ static ODClassType* _CNIterableF_type;
 }
 
 - (id)head {
-    if([[self iterator] hasNext]) return [CNOption opt:[[self iterator] next]];
+    if([[self iterator] hasNext]) return [CNOption applyValue:[[self iterator] next]];
     else return [CNOption none];
 }
 
@@ -92,7 +92,7 @@ static ODClassType* _CNIterableF_type;
     __block id ret = [CNOption none];
     [self goOn:^BOOL(id x) {
         if(where(ret)) {
-            ret = [CNOption opt:x];
+            ret = [CNOption applyValue:x];
             NO;
         }
         return YES;
@@ -130,6 +130,7 @@ static ODClassType* _CNIterableF_type;
 
 
 @implementation CNEmptyIterator
+static CNEmptyIterator* _CNEmptyIterator_instance;
 static ODClassType* _CNEmptyIterator_type;
 
 + (id)emptyIterator {
@@ -145,6 +146,7 @@ static ODClassType* _CNEmptyIterator_type;
 + (void)initialize {
     [super initialize];
     _CNEmptyIterator_type = [ODClassType classTypeWithCls:[CNEmptyIterator class]];
+    _CNEmptyIterator_instance = [CNEmptyIterator emptyIterator];
 }
 
 - (BOOL)hasNext {
@@ -157,6 +159,10 @@ static ODClassType* _CNEmptyIterator_type;
 
 - (ODClassType*)type {
     return [CNEmptyIterator type];
+}
+
++ (CNEmptyIterator*)instance {
+    return _CNEmptyIterator_instance;
 }
 
 + (ODClassType*)type {

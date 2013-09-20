@@ -476,6 +476,21 @@ BOOL geRectIntersectsRect(GERect self, GERect rect) {
 GERect geRectThickenHalfSize(GERect self, GEVec2 halfSize) {
     return GERectMake(geVec2SubVec2(self.origin, halfSize), geVec2AddVec2(self.size, geVec2MulValue(halfSize, 2.0)));
 }
+GERect geRectDivVec2(GERect self, GEVec2 vec2) {
+    return GERectMake(geVec2DivVec2(self.origin, vec2), geVec2DivVec2(self.size, vec2));
+}
+GEVec2 geRectLeftBottom(GERect self) {
+    return self.origin;
+}
+GEVec2 geRectLeftTop(GERect self) {
+    return GEVec2Make(self.origin.x, self.origin.y + self.size.y);
+}
+GEVec2 geRectRightTop(GERect self) {
+    return GEVec2Make(self.origin.x + self.size.y, self.origin.y + self.size.y);
+}
+GEVec2 geRectRightBottom(GERect self) {
+    return GEVec2Make(self.origin.x + self.size.y, self.origin.y);
+}
 ODPType* geRectType() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[GERectWrap class] name:@"GERect" size:sizeof(GERect) wrap:^id(void* data, NSUInteger i) {

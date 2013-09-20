@@ -18,7 +18,7 @@
 
 - (id)applyKey:(id)key {
     id ret = self[key];
-    return ret == nil ? [NSNull null] : ret;
+    return ret == nil ? [CNOption none] : [CNSome someWithValue:ret];
 }
 
 - (CNChain *)chain {
@@ -60,7 +60,7 @@
 }
 
 - (id)head {
-    if([[self iterator] hasNext]) return [CNOption opt:[[self iterator] next]];
+    if([[self iterator] hasNext]) return [CNOption applyValue:[[self iterator] next]];
     else return [CNOption none];
 }
 
@@ -69,7 +69,7 @@
     __block id ret = [CNOption none];
     [self goOn:^BOOL(id x) {
         if(where(ret)) {
-            ret = [CNOption opt:x];
+            ret = [CNOption applyValue:x];
             NO;
         }
         return YES;

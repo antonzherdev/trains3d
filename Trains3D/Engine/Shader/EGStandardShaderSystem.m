@@ -32,7 +32,7 @@ static ODClassType* _EGStandardShaderSystem_type;
     id<CNMap> lightMap = [[[EGGlobal.context.environment.lights chain] groupBy:^ODClassType*(EGLight* _) {
         return _.type;
     }] toMap];
-    id<CNSeq> directLights = [[lightMap applyKey:EGDirectLight.type] getOrElse:^id<CNSeq>() {
+    id<CNSeq> directLights = [[lightMap applyKey:EGDirectLight.type] getOrElseF:^id<CNSeq>() {
         return (@[]);
     }];
     EGStandardShaderKey* key = [EGStandardShaderKey standardShaderKeyWithDirectLightCount:[directLights count] texture:[material.diffuse.texture isDefined]];
@@ -250,14 +250,14 @@ static ODClassType* _EGStandardShader_type;
     if(self) {
         _key = key;
         _positionSlot = [self attributeForName:@"position"];
-        _normalSlot = ((_key.directLightCount > 0) ? [CNOption opt:[self attributeForName:@"normal"]] : [CNOption none]);
-        _uvSlot = ((_key.texture) ? [CNOption opt:[self attributeForName:@"vertexUV"]] : [CNOption none]);
+        _normalSlot = ((_key.directLightCount > 0) ? [CNOption applyValue:[self attributeForName:@"normal"]] : [CNOption none]);
+        _uvSlot = ((_key.texture) ? [CNOption applyValue:[self attributeForName:@"vertexUV"]] : [CNOption none]);
         _ambientColor = [self uniformForName:@"ambientColor"];
         _specularColor = [self uniformForName:@"specularColor"];
         _specularSize = [self uniformForName:@"specularSize"];
         _diffuseColorUniform = [self uniformForName:@"diffuseColor"];
         _mwcpUniform = [self uniformForName:@"mwcp"];
-        _mwcUniform = ((_key.directLightCount > 0) ? [CNOption opt:[self uniformForName:@"mwc"]] : [CNOption none]);
+        _mwcUniform = ((_key.directLightCount > 0) ? [CNOption applyValue:[self uniformForName:@"mwc"]] : [CNOption none]);
         _directLightDirections = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniform*(id i) {
             return [_weakSelf uniformForName:[NSString stringWithFormat:@"dirLightDirection%@", i]];
         }] toArray];

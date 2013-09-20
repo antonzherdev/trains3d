@@ -57,12 +57,12 @@ static ODClassType* _CNList_type;
         [i next];
         n--;
     }
-    return [CNOption none];
+    @throw @"Incorrect index";
 }
 
 - (id)randomItem {
     if([self isEmpty]) return [CNOption none];
-    else return [self applyIndex:randomMax([self count] - 1)];
+    else return [CNOption applyValue:[self applyIndex:randomMax([self count] - 1)]];
 }
 
 - (id<CNSet>)toSet {
@@ -92,6 +92,14 @@ static ODClassType* _CNList_type;
     return YES;
 }
 
+- (BOOL)isEmpty {
+    return [self count] == 0;
+}
+
+- (id)head {
+    return [CNOption applyValue:[self applyIndex:0]];
+}
+
 - (NSUInteger)count {
     id<CNIterator> i = [self iterator];
     NSUInteger n = 0;
@@ -100,15 +108,6 @@ static ODClassType* _CNList_type;
         n++;
     }
     return n;
-}
-
-- (id)head {
-    if([[self iterator] hasNext]) return [CNOption opt:[[self iterator] next]];
-    else return [CNOption none];
-}
-
-- (BOOL)isEmpty {
-    return !([[self iterator] hasNext]);
 }
 
 - (CNChain*)chain {
@@ -155,7 +154,7 @@ static ODClassType* _CNList_type;
     __block id ret = [CNOption none];
     [self goOn:^BOOL(id x) {
         if(where(ret)) {
-            ret = [CNOption opt:x];
+            ret = [CNOption applyValue:x];
             NO;
         }
         return YES;
@@ -223,7 +222,7 @@ static ODClassType* _CNFilledList_type;
 }
 
 - (id)head {
-    return [CNOption opt:_item];
+    return [CNOption applyValue:_item];
 }
 
 - (BOOL)isEmpty {

@@ -573,7 +573,7 @@ static ODClassType* _EGFullScreenSurface_type;
 }
 
 - (void)maybeRecreateSurface {
-    if([self needRedraw]) _surface = ((_multisampling) ? [CNOption opt:[EGPairSurface pairSurfaceWithDepth:_depth size:[EGGlobal.context viewport].size]] : [CNOption opt:[EGSimpleSurface simpleSurfaceWithDepth:_depth size:[EGGlobal.context viewport].size]]);
+    if([self needRedraw]) _surface = ((_multisampling) ? [CNOption applyValue:[EGPairSurface pairSurfaceWithDepth:_depth size:[EGGlobal.context viewport].size]] : [CNOption applyValue:[EGSimpleSurface simpleSurfaceWithDepth:_depth size:[EGGlobal.context viewport].size]]);
 }
 
 - (BOOL)needRedraw {

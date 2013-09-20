@@ -106,7 +106,7 @@ static ODClassType* _EGColorSource_type;
 }
 
 + (EGColorSource*)applyTexture:(EGTexture*)texture {
-    return [EGColorSource colorSourceWithColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:[CNOption opt:texture]];
+    return [EGColorSource colorSourceWithColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:[CNOption applyValue:texture]];
 }
 
 - (EGShaderSystem*)shaderSystem {

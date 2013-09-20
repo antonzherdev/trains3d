@@ -106,7 +106,7 @@
     CNYield *yield = [CNYield alloc];
     yield = [yield initWithBegin:nil yield:^CNYieldResult(id item) {
         if(predicate(item)) {
-            ret = item;
+            ret = [CNSome someWithValue:item];
             return cnYieldBreak;
         }
         return cnYieldContinue;
@@ -285,7 +285,7 @@
 - (id)head {
     __block id ret = [CNOption none];
     [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
-        ret = item;
+        ret = [CNSome someWithValue:item];
         return cnYieldBreak;
     } end:nil all:nil]];
     return ret;
@@ -302,7 +302,7 @@
     __block id ret = [CNOption none];
     [self goOn:^BOOL(id x) {
         if(where(ret)) {
-            ret = [CNOption opt:x];
+            ret = [CNOption applyValue:x];
             NO;
         }
         return YES;
@@ -317,7 +317,7 @@
         return [CNOption none];
     }
     NSUInteger n = randomMax(array.count - 1);
-    return [array objectAtIndex:n];
+    return [CNSome someWithValue:[array objectAtIndex:n]];
 }
 
 - (NSUInteger)count {
@@ -341,17 +341,19 @@
 }
 
 - (id)min {
-    return [self fold:^id(id r, id x) {
-        if([r isEmpty]) return x;
-        return [x compareTo:r] < 0 ? x : r;
-    } withStart:[CNOption none]];
+    __block id min = nil;
+    [self forEach:^(id x) {
+        if(min == nil || [x compareTo:min] < 0 ) min = x;
+    }];
+    return [CNOption applyValue:min];
 }
 
 - (id)max {
-    return [self fold:^id(id r, id x) {
-        if([r isEmpty]) return x;
-        return [x compareTo:r] > 0 ? x : r;
-    } withStart:[CNOption none]];
+    __block id max = nil;
+    [self forEach:^(id x) {
+        if(max == nil || [x compareTo:max] > 0 ) max = x;
+    }];
+    return [CNOption applyValue:max];
 }
 
 - (NSDictionary *)toMap {

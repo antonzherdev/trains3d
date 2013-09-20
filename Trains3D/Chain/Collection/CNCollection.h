@@ -76,6 +76,7 @@
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;
++ (CNEmptyIterator*)instance;
 + (ODClassType*)type;
 @end
 

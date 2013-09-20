@@ -122,10 +122,10 @@ static ODClassType* _EGLayer_type;
 }
 
 - (BOOL)processEvent:(EGEvent*)event {
-    return unumb([[_processor map:^id(id<EGInputProcessor> p) {
-        EGEvent* cameraEvent = [event setCamera:[CNOption opt:[_view camera]]];
+    return unumb([[_processor mapF:^id(id<EGInputProcessor> p) {
+        EGEvent* cameraEvent = [event setCamera:[CNOption applyValue:[_view camera]]];
         return numb([p processEvent:cameraEvent]);
-    }] getOr:@NO]);
+    }] getOrValue:@NO]);
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

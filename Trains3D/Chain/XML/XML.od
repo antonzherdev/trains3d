@@ -18,7 +18,7 @@ stub class XMLElement {
 
     def attributes : Iterable<XMLAttribute>
     def firstAttribute : XMLAttribute?
-    def valueOfAttributeWith(name : string) : string?
+    def apply(name : string) : string?
 }
 
 stub class XMLAttribute {

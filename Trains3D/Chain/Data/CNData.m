@@ -56,16 +56,20 @@ static ODClassType* _CNPArray_type;
 
 - (id)applyIndex:(NSUInteger)index {
     if(index >= _count) return [CNOption none];
-    else return [CNOption opt:_wrap(_bytes, index)];
+    else return [CNOption applyValue:_wrap(_bytes, index)];
 }
 
 - (void)dealloc {
     if(_copied) free(_bytes);
 }
 
+- (id)unsafeApplyIndex:(NSUInteger)index {
+    return _wrap(_bytes, index);
+}
+
 - (id)randomItem {
     if([self isEmpty]) return [CNOption none];
-    else return [self applyIndex:randomMax([self count] - 1)];
+    else return [CNOption applyValue:[self applyIndex:randomMax([self count] - 1)]];
 }
 
 - (id<CNSet>)toSet {
@@ -95,13 +99,12 @@ static ODClassType* _CNPArray_type;
     return YES;
 }
 
-- (id)head {
-    if([[self iterator] hasNext]) return [CNOption opt:[[self iterator] next]];
-    else return [CNOption none];
+- (BOOL)isEmpty {
+    return [self count] == 0;
 }
 
-- (BOOL)isEmpty {
-    return !([[self iterator] hasNext]);
+- (id)head {
+    return [CNOption applyValue:[self applyIndex:0]];
 }
 
 - (CNChain*)chain {
@@ -148,7 +151,7 @@ static ODClassType* _CNPArray_type;
     __block id ret = [CNOption none];
     [self goOn:^BOOL(id x) {
         if(where(ret)) {
-            ret = [CNOption opt:x];
+            ret = [CNOption applyValue:x];
             NO;
         }
         return YES;
@@ -216,7 +219,7 @@ static ODClassType* _CNPArrayIterator_type;
 }
 
 - (id)next {
-    id ret = [_array applyIndex:((NSUInteger)(_i))];
+    id ret = [_array unsafeApplyIndex:((NSUInteger)(_i))];
     _i++;
     return ret;
 }

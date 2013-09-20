@@ -101,7 +101,7 @@ static ODClassType* _EGDirector_type;
 }
 
 - (void)displayStats {
-    __stat = [CNOption opt:[EGStat stat]];
+    __stat = [CNOption applyValue:[EGStat stat]];
 }
 
 - (void)cancelDisplayingStats {

@@ -180,7 +180,7 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)runTrain:(TRTrain*)train fromCity:(TRCity*)fromCity {
-    fromCity.expectedTrainAnimation = [CNOption opt:[EGAnimation animationWithLength:3.0 finish:^void() {
+    fromCity.expectedTrainAnimation = [CNOption applyValue:[EGAnimation animationWithLength:3.0 finish:^void() {
         fromCity.expectedTrainAnimation = [CNOption none];
         [train startFromCity:fromCity];
         [self addTrain:train];
@@ -275,7 +275,7 @@ static ODClassType* _TRLevel_type;
     [_collisionWorld removeTrain:train];
     [_dynamicWorld removeTrain:train];
     [__dyingTrains removeItem:train];
-    __repairer = [__repairer filter:^BOOL(TRTrain* _) {
+    __repairer = [__repairer filterF:^BOOL(TRTrain* _) {
         return !([_ isEqual:train]);
     }];
 }
@@ -286,7 +286,7 @@ static ODClassType* _TRLevel_type;
             return (@[[TRCar carWithTrain:_ carType:TRCarType.engine]]);
         } speed:_rules.repairerSpeed];
         [self runTrain:train fromCity:city];
-        __repairer = [CNOption opt:train];
+        __repairer = [CNOption applyValue:train];
     }
 }
 

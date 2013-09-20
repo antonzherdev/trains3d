@@ -189,7 +189,7 @@ static ODClassType* _TRExplosionFlameParticle_type;
                         id(^__l)(float) = [EGProgress gapT1:0.0 t2:0.1];
                         float(^__r)(float) = [EGProgress progressF4:0.0 f42:_size];
                         return ^id(float _) {
-                            return [__l(_) map:^id(id _) {
+                            return [__l(_) mapF:^id(id _) {
                                 return numf4(__r(unumf4(_)));
                             }];
                         };
@@ -208,7 +208,7 @@ static ODClassType* _TRExplosionFlameParticle_type;
                         id(^__l)(float) = [EGProgress gapT1:0.1 t2:1.0];
                         GEVec2(^__r)(float) = [EGProgress progressVec2:_startShift vec22:_shift];
                         return ^id(float _) {
-                            return [__l(_) map:^id(id _) {
+                            return [__l(_) mapF:^id(id _) {
                                 return wrap(GEVec2, __r(unumf4(_)));
                             }];
                         };
@@ -232,7 +232,7 @@ static ODClassType* _TRExplosionFlameParticle_type;
                     id(^__l)(float) = [EGProgress gapT1:0.05 t2:1.0];
                     GEVec4(^__r)(float) = [EGProgress progressVec4:_TRExplosionFlameParticle_startColor vec42:GEVec4Make(0.0, 0.0, 0.0, 0.0)];
                     return ^id(float _) {
-                        return [__l(_) map:^id(id _) {
+                        return [__l(_) mapF:^id(id _) {
                             return wrap(GEVec4, __r(unumf4(_)));
                         }];
                     };

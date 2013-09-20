@@ -556,8 +556,8 @@ static ODClassType* _GESweepLine_type;
             }
         } else {
             [_events addItem:event];
-            [self checkIntersectionA:[CNOption opt:event] b:[self aboveEvent:event]];
-            [self checkIntersectionA:[CNOption opt:event] b:[self belowEvent:event]];
+            [self checkIntersectionA:[CNOption applyValue:event] b:[self aboveEvent:event]];
+            [self checkIntersectionA:[CNOption applyValue:event] b:[self belowEvent:event]];
         }
     } else {
         if([event isEnd]) {
@@ -576,8 +576,8 @@ static ODClassType* _GESweepLine_type;
             [self sweepToEvent:event];
             [toInsert forEach:^void(GEBentleyOttmannPointEvent* e) {
                 [_events addItem:e];
-                [self checkIntersectionA:[CNOption opt:e] b:[self aboveEvent:e]];
-                [self checkIntersectionA:[CNOption opt:e] b:[self belowEvent:e]];
+                [self checkIntersectionA:[CNOption applyValue:e] b:[self aboveEvent:e]];
+                [self checkIntersectionA:[CNOption applyValue:e] b:[self belowEvent:e]];
             }];
         }
     }

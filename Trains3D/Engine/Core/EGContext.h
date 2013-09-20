@@ -2,6 +2,7 @@
 #import "GEVec.h"
 @class EGDirector;
 @class EGFileTexture;
+@class EGFont;
 @class GEMat4;
 
 @class EGGlobal;
@@ -16,6 +17,7 @@
 - (ODClassType*)type;
 + (EGDirector*)director;
 + (EGFileTexture*)textureForFile:(NSString*)file;
++ (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size;
 + (EGContext*)context;
 + (EGMatrixStack*)matrix;
 + (ODClassType*)type;
@@ -31,6 +33,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (EGFileTexture*)textureForFile:(NSString*)file;
+- (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size;
 - (GERecti)viewport;
 - (void)setViewport:(GERecti)viewport;
 + (ODClassType*)type;

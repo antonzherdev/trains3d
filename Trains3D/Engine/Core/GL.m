@@ -27,12 +27,12 @@ id egGetShaderError(GLuint shader) {
         NSLog(@"GLSL Program Error");
         GLchar messages[1024];
         glGetShaderInfoLog(shader, sizeof(messages), 0, &messages[0]);
-        return [NSString stringWithCString:messages encoding:NSUTF8StringEncoding];
+        return [CNOption someValue:[NSString stringWithCString:messages encoding:NSUTF8StringEncoding]];
     }
     return [CNOption none];
 }
 
-GEVec2 egLoadTextureFromFile(GLuint target, NSString* file) {
+GEVec2 egLoadTextureFromFile(GLuint target, NSString* file, GLenum magFilter, GLenum minFilter) {
     CFURLRef url = (__bridge CFURLRef)[NSURL fileURLWithPath:file];
     CGImageSourceRef myImageSourceRef = CGImageSourceCreateWithURL(url, NULL);
     CGImageRef myImageRef = CGImageSourceCreateImageAtIndex (myImageSourceRef, 0, NULL);
@@ -54,11 +54,11 @@ GEVec2 egLoadTextureFromFile(GLuint target, NSString* file) {
     glPixelStorei(GL_UNPACK_ROW_LENGTH, (GLint)width);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glBindTexture(GL_TEXTURE_2D, target);
-    glTexParameteri   ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    glTexParameteri   ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
-
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)width, (GLsizei)height, 0, GL_BGRA, GL_UNSIGNED_BYTE, myData);
-    glGenerateMipmap(GL_TEXTURE_2D);
+    if(minFilter == GL_LINEAR_MIPMAP_LINEAR) glGenerateMipmap(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     CFRelease(myImageSourceRef);
     CFRelease(myImageRef);

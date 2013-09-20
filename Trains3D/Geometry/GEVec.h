@@ -306,6 +306,11 @@ GERect geRectAddVec2(GERect self, GEVec2 vec2);
 GERect geRectMoveToCenterForSize(GERect self, GEVec2 size);
 BOOL geRectIntersectsRect(GERect self, GERect rect);
 GERect geRectThickenHalfSize(GERect self, GEVec2 halfSize);
+GERect geRectDivVec2(GERect self, GEVec2 vec2);
+GEVec2 geRectLeftBottom(GERect self);
+GEVec2 geRectLeftTop(GERect self);
+GEVec2 geRectRightTop(GERect self);
+GEVec2 geRectRightBottom(GERect self);
 ODPType* geRectType();
 @interface GERectWrap : NSObject
 @property (readonly, nonatomic) GERect value;

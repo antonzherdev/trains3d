@@ -13,7 +13,7 @@ class XMLTest extends TestCase {
     def testAttributes {
         val root = XML.str("<root a1=\"v1\" a2=\"v2\"></root>")
         assertEquals(2, root.attributes.count)
-        assertEquals("v1", root.valueOfAttributeWith(name = "a1"))
-        assertEquals("v2", root.valueOfAttributeWith(name = "a2"))
+        assertEquals("v1", root("a1").get)
+        assertEquals("v2", root("a2").get)
     }
 }

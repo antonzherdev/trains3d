@@ -176,7 +176,7 @@ static ODClassType* _CNXMLElement_type;
 }
 
 - (id)parent {
-   if(_element->parentElement) return [CNXMLElement elementWithXML:_xml element:_element->parentElement];
+   if(_element->parentElement) return [CNOption someValue:[CNXMLElement elementWithXML:_xml element:_element->parentElement]];
    else return [CNOption none];
 }
 
@@ -188,35 +188,35 @@ static ODClassType* _CNXMLElement_type;
 }
 
 - (id)firstChild {
-    if(_element->firstChild) return [CNXMLElement elementWithXML:_xml element:_element->firstChild];
+    if(_element->firstChild) return [CNOption someValue:[CNXMLElement elementWithXML:_xml element:_element->firstChild]];
     else return [CNOption none];
 }
 
 
 - (id)previousSibling {
-    if(_element->previousSibling) return [CNXMLElement elementWithXML:_xml element:_element->previousSibling];
+    if(_element->previousSibling) return [CNOption someValue:[CNXMLElement elementWithXML:_xml element:_element->previousSibling]];
     else return [CNOption none];
 }
 
 - (id)nextSibling {
-    if(_element->nextSibling) return [CNXMLElement elementWithXML:_xml element:_element->nextSibling];
+    if(_element->nextSibling) return [CNOption someValue:[CNXMLElement elementWithXML:_xml element:_element->nextSibling]];
     else return [CNOption none];
 }
 
 - (id)childWithName:(NSString*)name {
     TBXMLElement *e = [TBXML childElementNamed:name parentElement:_element];
-    if(e) return [CNXMLElement elementWithXML:_xml element:e];
+    if(e)return [CNOption someValue:[CNXMLElement elementWithXML:_xml element:e]];
     else return [CNOption none];
 }
 
 - (id)nextSiblingWithName:(NSString*)name {
     TBXMLElement *e = [TBXML nextSiblingNamed:name searchFromElement:_element];
-    if(e) return [CNXMLElement elementWithXML:_xml element:e];
+    if(e) return [CNOption someValue:[CNXMLElement elementWithXML:_xml element:e]];
     else return [CNOption none];
 }
 
 - (id)firstAttribute {
-    if(_element->firstAttribute) return [CNXMLAttribute attributeWithXML:_xml attribute:_element->firstAttribute];
+    if(_element->firstAttribute) return [CNOption someValue:[CNXMLAttribute attributeWithXML:_xml attribute:_element->firstAttribute]];
     else return [CNOption none];
 }
 
@@ -227,8 +227,8 @@ static ODClassType* _CNXMLElement_type;
     }];
 }
 
-- (id)valueOfAttributeWithName:(NSString*)name {
-    return [CNOption opt:[TBXML valueOfAttributeNamed:name forElement:_element]];
+- (id)applyName:(NSString*)name {
+    return [CNOption applyValue:[TBXML valueOfAttributeNamed:name forElement:_element]];
 }
 
 - (ODClassType*)type {
@@ -297,7 +297,7 @@ static ODClassType* _CNXMLAttribute_type;
 }
 
 - (id)next {
-    if(_attribute->next) return [CNXMLAttribute attributeWithXML:_xml attribute:_attribute->next];
+    if(_attribute->next) return [CNOption someValue:[CNXMLAttribute attributeWithXML:_xml attribute:_attribute->next]];
     else return [CNOption none];
 }
 

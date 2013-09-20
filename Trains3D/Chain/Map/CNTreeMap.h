@@ -2,6 +2,7 @@
 #import "CNMap.h"
 #import "ODObject.h"
 #import "CNCollection.h"
+@class CNSome;
 @class ODClassType;
 @class CNChain;
 

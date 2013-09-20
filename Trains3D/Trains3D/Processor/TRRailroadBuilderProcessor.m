@@ -142,12 +142,12 @@ static ODClassType* _TRRailroadBuilderMouseProcessor_type;
 }
 
 - (BOOL)mouseDownEvent:(EGEvent*)event {
-    _startedPoint = [CNOption opt:wrap(GEVec2, [event location])];
+    _startedPoint = [CNOption applyValue:wrap(GEVec2, [event location])];
     return YES;
 }
 
 - (BOOL)mouseDragEvent:(EGEvent*)event {
-    return unumb([[_startedPoint map:^id(id sp) {
+    return unumb([[_startedPoint mapF:^id(id sp) {
         GEVec2 deltaVector = geVec2SubVec2([event location], uwrap(GEVec2, sp));
         if(geVec2LengthSquare(deltaVector) > 0.25) {
             GEVec2i spTile = geVec2iApplyVec2(uwrap(GEVec2, sp));
@@ -158,15 +158,15 @@ static ODClassType* _TRRailroadBuilderMouseProcessor_type;
             [_builder clear];
         }
         return @YES;
-    }] getOr:@NO]);
+    }] getOrValue:@NO]);
 }
 
 - (BOOL)mouseUpEvent:(EGEvent*)event {
-    return unumb([[_startedPoint map:^id(id point) {
+    return unumb([[_startedPoint mapF:^id(id point) {
         [_builder fix];
         _startedPoint = [CNOption none];
         return @YES;
-    }] getOr:@NO]);
+    }] getOrValue:@NO]);
 }
 
 - (GEVec2i)normPoint:(GEVec2)point {

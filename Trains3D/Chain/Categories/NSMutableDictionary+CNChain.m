@@ -17,7 +17,7 @@
 }
 
 - (id)applyKey:(id)key {
-    return [CNOption opt:[self objectForKey:key]];
+    return [CNOption applyValue:[self objectForKey:key]];
 }
 
 - (id)objectForKey:(id)key orUpdateWith:(id (^)())with {
@@ -33,7 +33,7 @@
     if([v isEmpty]) {
         [self removeObjectForKey:v];
     } else {
-        [self setObject:v forKey:key];
+        [self setObject:[v get] forKey:key];
     }
     return v;
 }

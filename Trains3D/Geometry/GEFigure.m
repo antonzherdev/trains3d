@@ -171,7 +171,7 @@ static ODClassType* _GESlopeLine_type;
         return [CNOption none];
     } else {
         CGFloat xInt = [self xIntersectionWithLine:line];
-        return [CNOption opt:wrap(GEVec2, GEVec2Make(((float)(xInt)), ((float)([self yForX:xInt]))))];
+        return [CNOption applyValue:wrap(GEVec2, GEVec2Make(((float)(xInt)), ((float)([self yForX:xInt]))))];
     }
 }
 
@@ -395,20 +395,20 @@ static ODClassType* _GELineSegment_type;
 
 - (id)intersectionWithSegment:(GELineSegment*)segment {
     if(GEVec2Eq(_p0, segment.p1)) {
-        return [CNOption opt:wrap(GEVec2, _p0)];
+        return [CNOption applyValue:wrap(GEVec2, _p0)];
     } else {
         if(GEVec2Eq(_p1, segment.p0)) {
-            return [CNOption opt:wrap(GEVec2, _p1)];
+            return [CNOption applyValue:wrap(GEVec2, _p1)];
         } else {
             if(GEVec2Eq(_p0, segment.p0)) {
                 if([[self line] isEqual:[segment line]]) return [CNOption none];
-                else return [CNOption opt:wrap(GEVec2, _p0)];
+                else return [CNOption applyValue:wrap(GEVec2, _p0)];
             } else {
                 if(GEVec2Eq(_p1, segment.p1)) {
                     if([[self line] isEqual:[segment line]]) return [CNOption none];
-                    else return [CNOption opt:wrap(GEVec2, _p1)];
+                    else return [CNOption applyValue:wrap(GEVec2, _p1)];
                 } else {
-                    return [[[self line] intersectionWithLine:[segment line]] filter:^BOOL(id p) {
+                    return [[[self line] intersectionWithLine:[segment line]] filterF:^BOOL(id p) {
                         return [self containsInBoundingRectPoint:uwrap(GEVec2, p)] && [segment containsInBoundingRectPoint:uwrap(GEVec2, p)];
                     }];
                 }

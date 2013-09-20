@@ -67,7 +67,7 @@ static ODClassType* _TRSwitchProcessor_type;
 }
 
 - (BOOL)mouseDownEvent:(EGEvent*)event {
-    _downed = [[_world closestCrossPointWithSegment:[event segment]] map:^TRRailroadConnectorContent*(EGCrossPoint* _) {
+    _downed = [[_world closestCrossPointWithSegment:[event segment]] mapF:^TRRailroadConnectorContent*(EGCrossPoint* _) {
         return ((TRRailroadConnectorContent*)(_.body.data));
     }];
     return [_downed isDefined];

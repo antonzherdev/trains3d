@@ -63,14 +63,14 @@ static ODClassType* _EGCollisionWorld_type;
         if(pManifold->getNumContacts() == 0) return [CNOption none];
         EGCollisionBody *body0 = (__bridge EGCollisionBody *) pManifold->getBody0()->getUserPointer();
         EGCollisionBody *body1 = (__bridge EGCollisionBody *) pManifold->getBody1()->getUserPointer();
-        return [EGCollision collisionWithBodies:[CNPair newWithA:body0 b:body1]
-                                 contacts:[CNIndexFunSeq indexFunSeqWithCount:(NSUInteger) pManifold->getNumContacts() f:^id(NSUInteger i) {
-                                     btManifoldPoint & p = pManifold->getContactPoint(i);
-                                     btVector3 const & a = p.getPositionWorldOnA();
-                                     btVector3 const & b = p.getPositionWorldOnB();
-                                     return [EGContact contactWithA:GEVec3Make(a.x(), a.y(), a.z())
-                                                                  b:GEVec3Make(b.x(), b.y(), b.z())];
-                                 }]];
+        return [CNSome someWithValue:[EGCollision collisionWithBodies:[CNPair newWithA:body0 b:body1]
+                                contacts:[CNIndexFunSeq indexFunSeqWithCount:(NSUInteger) pManifold->getNumContacts() f:^id(NSUInteger i) {
+                                    btManifoldPoint & p = pManifold->getContactPoint(i);
+                                    btVector3 const & a = p.getPositionWorldOnA();
+                                    btVector3 const & b = p.getPositionWorldOnB();
+                                    return [EGContact contactWithA:GEVec3Make(a.x(), a.y(), a.z())
+                                                                 b:GEVec3Make(b.x(), b.y(), b.z())];
+                                }]]];
     }];
 }
 
@@ -123,7 +123,7 @@ static ODClassType* _EGCollisionWorld_type;
     if(results.m_collisionObject == nil) return [CNOption none];
     EGCollisionBody *body = (__bridge EGCollisionBody *) results.m_collisionObject->getUserPointer();
     const btVector3 & p = results.m_hitPointWorld;
-    return [EGCrossPoint crossPointWithBody:body point:(GEVec3){p.x(), p.y(), p.z()}];
+    return [CNSome someWithValue:[EGCrossPoint crossPointWithBody:body point:(GEVec3) {p.x(), p.y(), p.z()}]];
 }
 
 - (void)clear {

@@ -39,8 +39,8 @@ static ODClassType* _CNRange_type;
 }
 
 - (id)applyIndex:(NSUInteger)index {
-    if(index >= _count) return [CNOption none];
-    else return [CNOption opt:numi(_start + _step * index)];
+    if(index >= _count) @throw @"Incorrect index";
+    else return numi(_start + _step * index);
 }
 
 - (id<CNIterator>)iterator {
@@ -62,7 +62,7 @@ static ODClassType* _CNRange_type;
 
 - (id)randomItem {
     if([self isEmpty]) return [CNOption none];
-    else return [self applyIndex:randomMax([self count] - 1)];
+    else return [CNOption applyValue:[self applyIndex:randomMax([self count] - 1)]];
 }
 
 - (id<CNSet>)toSet {
@@ -93,8 +93,7 @@ static ODClassType* _CNRange_type;
 }
 
 - (id)head {
-    if([[self iterator] hasNext]) return [CNOption opt:[[self iterator] next]];
-    else return [CNOption none];
+    return [CNOption applyValue:[self applyIndex:0]];
 }
 
 - (CNChain*)chain {
@@ -141,7 +140,7 @@ static ODClassType* _CNRange_type;
     __block id ret = [CNOption none];
     [self goOn:^BOOL(id x) {
         if(where(ret)) {
-            ret = [CNOption opt:x];
+            ret = [CNOption applyValue:x];
             NO;
         }
         return YES;

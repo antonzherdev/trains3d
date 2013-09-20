@@ -1,12 +1,15 @@
-#import <GLUT/glut.h>
 #import "EGStat.h"
-#import "EGText.h"
 
+#import "EGText2.h"
+#import "EGContext.h"
 @implementation EGStat{
     CGFloat _accumDelta;
-    NSInteger _framesCount;
-    CGFloat _frameRate;
+    NSUInteger _framesCount;
+    NSUInteger __frameRate;
+    EGFont* _font;
 }
+static ODClassType* _EGStat_type;
+@synthesize font = _font;
 
 + (id)stat {
     return [[EGStat alloc] init];
@@ -14,49 +17,60 @@
 
 - (id)init {
     self = [super init];
-    if(self) {
-        _accumDelta = 0.0;
-        _framesCount = 0;
-        _frameRate = 0.0;
-    }
+    if(self) _font = [EGGlobal fontWithName:@"helvetica" size:14];
     
     return self;
 }
 
++ (void)initialize {
+    [super initialize];
+    _EGStat_type = [ODClassType classTypeWithCls:[EGStat class]];
+}
+
+- (NSUInteger)frameRate {
+    return __frameRate;
+}
+
 - (void)draw {
-    glPushAttrib(GL_VIEWPORT_BIT);
-    glViewport(0, 0, 100, 100);
-
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glLoadIdentity();
-
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glLoadIdentity();
-    NSString *string = [[NSString alloc] initWithFormat:@"%.1f", _frameRate];
-
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glColor4f(1.0, 1.0, 1.0, 1.0);
-    egTextGlutDraw(string, GLUT_BITMAP_HELVETICA_18, GEVec2Make(-0.99, -0.99));
-
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
-
-    glPopAttrib();
+    [_font drawText:[NSString stringWithFormat:@"%li", lround(((CGFloat)(__frameRate)))] at:GEVec2Make(-1.0, -1.0) color:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
 }
 
 - (void)tickWithDelta:(CGFloat)delta {
     _accumDelta += delta;
     _framesCount++;
     if(_accumDelta > 0.1) {
-        _frameRate = _framesCount / _accumDelta;
-        _accumDelta = 0;
+        __frameRate = ((NSUInteger)(_framesCount / _accumDelta));
+        _accumDelta = 0.0;
         _framesCount = 0;
     }
+}
+
+- (ODClassType*)type {
+    return [EGStat type];
+}
+
++ (ODClassType*)type {
+    return _EGStat_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
 }
 
 @end

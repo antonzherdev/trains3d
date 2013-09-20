@@ -1,6 +1,5 @@
 #import "objdcore.h"
 #import "CNCollection.h"
-#import "ODObject.h"
 @protocol CNSet;
 @class CNHashSetBuilder;
 @class CNChain;
@@ -20,6 +19,8 @@
 - (id<CNSeq>)arrayByAddingItem:(id)item;
 - (id<CNSeq>)arrayByRemovingItem:(id)item;
 - (BOOL)isEqualToSeq:(id<CNSeq>)seq;
+- (BOOL)isEmpty;
+- (id)head;
 @end
 
 
@@ -52,7 +53,7 @@
 @end
 
 
-@interface CNIndexFunSeqIterator : NSObject
+@interface CNIndexFunSeqIterator : NSObject<CNIterator>
 @property (nonatomic, readonly) NSUInteger count;
 @property (nonatomic, readonly) id(^f)(NSUInteger);
 @property (nonatomic) NSUInteger i;

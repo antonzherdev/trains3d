@@ -50,7 +50,7 @@ class CollisionsTest extends TestCase {
         r = world.crossPointsWith(segment)
         assertEquals(r, [p1, CrossPoint<int>(box2, vec3(2, 2, -1))])
 
-        assertEquals(world.closestCrossPointWith(segment), p1)
+        assertEquals(world.closestCrossPointWith(segment).get, p1)
 
         box2.translate(0, 0, -10)
         r = world.crossPointsWith(segment)

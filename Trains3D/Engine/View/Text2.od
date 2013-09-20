@@ -1,5 +1,120 @@
 package com.antonzherdev.eg
 
-class Font(name : string, size : int) {
+class Font(name : string, size : uint4) {
+    private val texture = FileTexture("$(name)_$(size).png", GL_NEAREST, GL_NEAREST)
+    private val symbols : [char : FontSymbolDesc]
+    private val height : int
+    def init {
+        val font = XML.file("$(name)_$(size).xml")
+        height = font("height").get
+        symbols = font.children.chain.map{ch ->
+            val code : char = ch("code").get.head.getOr(0)
+            val width : float4 = ch("width").get
+            val offset =  parse(offset = ch("offset").get)
+            val r = parse(_rect = ch("rect").get)
+            (code, FontSymbolDesc(width, offset, r.size, r/texture.size))
+        }.toMap
+    }
 
+    private def parse(offset : string) : vec2i = {
+        val t = offset.tuple(" ").get
+        vec2i(t.a, t.b)
+    }
+
+    private def parse(_rect : string) : rect = {
+        val parts = _rect.split(" ").chain.toArray
+        val y : int = parts[1]
+        val h : int = parts[3]
+        rect(parts[0], y - h, parts[2], h)
+    }
+
+    private static val vbDesc = VertexBufferDesc(FontPrintData.type, position = 0, uv = 2*4, normal = -1, color = -1, model = -1)
+    private val vb = VertexBuffer(vbDesc)
+    private val ib = IndexBuffer()
+    private val mesh = Mesh(vb, ib)
+    def draw(text : string, at : vec2, color : vec4) {
+        val symbolsArr = text.chain.flatMap<FontSymbolDesc>(symbols[_]).toArray
+        val vertexes = VoidRefArray(FontPrintData.type, symbolsArr.count * 4)
+        val indexes = VoidRefArray(UInt4.type, symbolsArr.count * 6)
+        val vpSize = context.viewport.size
+
+        var vp = vertexes
+        var ip = indexes
+        var x = at.x
+        var n = 0
+        symbolsArr.for {s ->
+            val size = s.size/vpSize
+            val tr = s.textureRect
+            val v0 = vec2(x + s.offset.x/vpSize.x, at.y + height - s.offset.y/vpSize.y)
+
+            vp = vp.write(vec2, v0)
+            vp = vp.write(vec2, tr.leftTop)
+
+            vp = vp.write(vec2, vec2(v0.x, v0.y - size.y))
+            vp = vp.write(vec2, tr.leftBottom)
+
+            vp = vp.write(vec2, vec2(v0.x + size.x, v0.y - size.y))
+            vp = vp.write(vec2, tr.rightBottom)
+
+            vp = vp.write(vec2, vec2(v0.x + size.x, v0.y))
+            vp = vp.write(vec2, tr.rightTop)
+
+            ip = ip.write(uInt4 = n)
+            ip = ip.write(uInt4 = n + 1)
+            ip = ip.write(uInt4 = n + 2)
+            ip = ip.write(uInt4 = n + 2)
+            ip = ip.write(uInt4 = n + 3)
+            ip = ip.write(uInt4 = n)
+
+            x += s.width/vpSize.x
+            n += 6
+        }
+        vb.set(vertexes, GL_DYNAMIC_DRAW)
+        ib.set(indexes, GL_DYNAMIC_DRAW)
+
+        BlendFunction.standard {
+            FontShader.instance.draw(FontShaderParam(texture, color), mesh)
+        }
+
+    }
 }
+
+class FontShaderParam(texture : Texture, color : vec4)
+
+class FontShader extends Shader<FontShaderParam>(ShaderProgram(FontShader.vertex, FontShader.fragment)) {
+    static val instance = FontShader()
+    static val vertex =
+        "attribute vec2 position;
+         attribute vec2 vertexUV;
+
+         varying vec2 UV;
+
+         void main(void) {
+            gl_Position = vec4(position.x, position.y, 0, 1);
+            UV = vertexUV;
+         }"
+    static val fragment =
+        "varying vec2 UV;
+         uniform sampler2D texture;
+         uniform vec4 color;
+
+         void main(void) {
+            gl_FragColor = color * texture2D(texture, UV);
+         }"
+
+    val uvSlot : ShaderAttribute = attributeFor("vertexUV")
+    val positionSlot : ShaderAttribute = attributeFor("position")
+    val colorUniform = uniformFor("color")
+    def load(vbDesc : VertexBufferDesc<_>, param : FontShaderParam) {
+        param.texture.bind
+        positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.position)
+        uvSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.uv)
+        colorUniform.set(vec4 = param.color)
+    }
+    def unload(param : FontShaderParam) {
+        Texture.unbind
+    }
+}
+
+class FontSymbolDesc(width : float4, offset : vec2, size : vec2, textureRect : rect)
+struct FontPrintData(position : vec2, uv : vec2)

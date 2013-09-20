@@ -80,7 +80,7 @@ static ODClassType* _EGBillboardShader_type;
         _texture = texture;
         _positionSlot = [self attributeForName:@"position"];
         _modelSlot = [self attributeForName:@"model"];
-        _uvSlot = ((_texture) ? [CNOption opt:[self attributeForName:@"vertexUV"]] : [CNOption none]);
+        _uvSlot = ((_texture) ? [CNOption applyValue:[self attributeForName:@"vertexUV"]] : [CNOption none]);
         _colorSlot = [self attributeForName:@"vertexColor"];
         _colorUniform = [self uniformForName:@"color"];
         _wcUniform = [self uniformForName:@"wc"];

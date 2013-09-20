@@ -38,7 +38,7 @@ SPEC_BEGIN(CNChainSpec)
           [[r should] equal:@[@2, @4]];
       });
       it(@".head should return first value or nil", ^{
-          [[[[[s chain] filter:LESS_THAN_3] head] should] equal:@1];
+          [[[[[[s chain] filter:LESS_THAN_3] head] get] should] equal:@1];
           BOOL isNil = [[[[s chain] filter:^BOOL(id x) {
               return NO;
           }] head] isEmpty];
@@ -91,7 +91,7 @@ SPEC_BEGIN(CNChainSpec)
           [[r should] equal: @[@1, @2]];
       });
       it(@".randomItem should return one random item", ^{
-          int i = [[s randomItem] intValue];
+          int i = [[[s randomItem] get] intValue];
           BOOL b = i == 1 || i == 2 || i == 3;
           [[theValue(b) should] beTrue];
       });
@@ -124,7 +124,7 @@ SPEC_BEGIN(CNChainSpec)
           [[r should] equal:@6];
       });
       it(@".find should find first compatilable items or none", ^{
-          [[[[s chain] find:LESS_THAN_3] should] equal:@1];
+          [[[[[s chain] find:LESS_THAN_3] get] should] equal:@1];
           BOOL isNil = [[[s chain] find:^BOOL(id x) {
               return NO;
           }] isEmpty];
@@ -151,11 +151,11 @@ SPEC_BEGIN(CNChainSpec)
       });
       it(@".min should return min value", ^{
           id r = [[s chain] min];
-          [[r should] equal:@1];
+          [[r should] equal:[CNSome someWithValue:@1]];
       });
       it(@".max should return max value", ^{
           id r = [[s chain] max];
-          [[r should] equal:@3];
+          [[r should] equal:[CNSome someWithValue:@3]];
       });
       it(@".neighbours should neighbours", ^{
           id r = [[[[s chain] neighbors] map:^id(CNTuple * x) {

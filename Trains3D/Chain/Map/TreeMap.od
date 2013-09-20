@@ -270,7 +270,7 @@ class MutableTreeMap<K, V>(comparator : (K, K) -> int) extends MutableMap<K, V> 
             val cmp = comparator(key, p.key)
             if (cmp > 0) {
                 if (p.right != nil) p = p.right
-                else return p
+                else return Some(p)
             } else {
                 if (p.left != nil) {
                     p = p.left
@@ -281,7 +281,7 @@ class MutableTreeMap<K, V>(comparator : (K, K) -> int) extends MutableMap<K, V> 
                         ch = parent
                         parent = parent.parent
                     }
-                    return parent
+                    return Some(parent)
                 }
             }
         }
@@ -294,7 +294,7 @@ class MutableTreeMap<K, V>(comparator : (K, K) -> int) extends MutableMap<K, V> 
             val cmp = comparator(key, p.key)
             if (cmp < 0) {
                 if (p.left != nil) p = p.left
-                else return p
+                else return Some(p)
             } else {
                 if (p.right != nil) {
                     p = p.right
@@ -305,7 +305,7 @@ class MutableTreeMap<K, V>(comparator : (K, K) -> int) extends MutableMap<K, V> 
                         ch = parent
                         parent = parent.parent
                     }
-                    return parent
+                    return Some(parent)
                 }
             }
         }

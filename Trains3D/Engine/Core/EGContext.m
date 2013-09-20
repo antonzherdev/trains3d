@@ -2,6 +2,7 @@
 
 #import "EGDirector.h"
 #import "EGTexture.h"
+#import "EGText2.h"
 #import "GL.h"
 #import "GEMat4.h"
 @implementation EGGlobal
@@ -22,6 +23,10 @@ static ODClassType* _EGGlobal_type;
 
 + (EGFileTexture*)textureForFile:(NSString*)file {
     return [_EGGlobal_context textureForFile:file];
+}
+
++ (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size {
+    return [_EGGlobal_context fontWithName:name size:size];
 }
 
 - (ODClassType*)type {
@@ -65,6 +70,7 @@ static ODClassType* _EGGlobal_type;
 
 @implementation EGContext{
     NSMutableDictionary* _textureCache;
+    NSMutableDictionary* _fontCache;
     EGDirector* _director;
     EGEnvironment* _environment;
     EGMatrixStack* _matrixStack;
@@ -83,6 +89,7 @@ static ODClassType* _EGContext_type;
     self = [super init];
     if(self) {
         _textureCache = [NSMutableDictionary mutableDictionary];
+        _fontCache = [NSMutableDictionary mutableDictionary];
         _environment = EGEnvironment.aDefault;
         _matrixStack = [EGMatrixStack matrixStack];
     }
@@ -97,7 +104,13 @@ static ODClassType* _EGContext_type;
 
 - (EGFileTexture*)textureForFile:(NSString*)file {
     return ((EGFileTexture*)([_textureCache objectForKey:file orUpdateWith:^EGFileTexture*() {
-        return [EGFileTexture fileTextureWithFile:file];
+        return [EGFileTexture applyFile:file];
+    }]));
+}
+
+- (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size {
+    return ((EGFileTexture*)([_textureCache objectForKey:tuple(name, numui(size)) orUpdateWith:^EGFileTexture*() {
+        return [EGFont fontWithName:name size:((unsigned int)(size))];
     }]));
 }
 

@@ -103,3 +103,8 @@ ODPType * odByteType();
 ODPType * odInt4Type();
 ODPType * oduInt4Type();
 ODPType * odFloat4Type();
+
+@interface NSObject(ODObject)
+- (id)asKindOfClass:(Class)pClass;
++ (id)object;
+@end

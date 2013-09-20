@@ -40,7 +40,7 @@ static ODClassType* _CNTuple_type;
 }
 
 + (id)unapplyTuple:(CNTuple*)tuple {
-    return [CNOption opt:tuple];
+    return [CNOption applyValue:tuple];
 }
 
 - (ODClassType*)type {
@@ -118,7 +118,7 @@ static ODClassType* _CNTuple3_type;
 }
 
 + (id)unapplyTuple:(CNTuple3*)tuple {
-    return [CNOption opt:tuple];
+    return [CNOption applyValue:tuple];
 }
 
 - (ODClassType*)type {
@@ -205,7 +205,7 @@ static ODClassType* _CNTuple4_type;
 }
 
 + (id)unapplyTuple:(CNTuple4*)tuple {
-    return [CNOption opt:tuple];
+    return [CNOption applyValue:tuple];
 }
 
 - (ODClassType*)type {

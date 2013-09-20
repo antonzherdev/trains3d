@@ -48,7 +48,7 @@ static ODClassType* _CNPair_type;
 }
 
 - (id)head {
-    return [CNOption opt:_a];
+    return [CNOption applyValue:_a];
 }
 
 - (BOOL)isEmpty {
@@ -91,7 +91,7 @@ static ODClassType* _CNPair_type;
     __block id ret = [CNOption none];
     [self goOn:^BOOL(id x) {
         if(where(ret)) {
-            ret = [CNOption opt:x];
+            ret = [CNOption applyValue:x];
             NO;
         }
         return YES;

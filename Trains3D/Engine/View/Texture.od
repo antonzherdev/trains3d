@@ -7,6 +7,8 @@ class Texture {
         bind(GL_TEXTURE_2D)
     }
 
+    def size : vec2
+
     def bind(target : GLenum) {
         glEnable(target)
         glBindTexture(target, id)
@@ -40,12 +42,14 @@ class Texture {
     }
 }
 
-class FileTexture(file : string) extends Texture  {
+class FileTexture(file : string, magFilter : GLenum, minFilter : GLenum) extends Texture {
     private var _loaded = false
     private var _size : vec2
 
+    static def apply(file : string) = FileTexture(file, GL_LINEAR, GL_LINEAR_MIPMAP_LINEAR)
+
     private def load {
-        _size = egLoadTextureFromFile(id, Bundle.fileNameFor(file))
+        _size = egLoadTextureFromFile(id, Bundle.fileNameFor(file), magFilter, minFilter)
         _loaded = true
     }
 

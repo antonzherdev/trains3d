@@ -183,7 +183,7 @@ static ODClassType* _EGRectIndex_type;
 - (id)applyPoint:(GEVec2)point {
     return [[_rects findWhere:^BOOL(CNTuple* _) {
         return geRectContainsPoint(uwrap(GERect, _.a), point);
-    }] map:^CNTuple*(CNTuple* _) {
+    }] mapF:^CNTuple*(CNTuple* _) {
         return ((CNTuple*)(_.b));
     }];
 }

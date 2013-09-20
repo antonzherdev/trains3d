@@ -40,7 +40,7 @@ static ODClassType* _TRLevelFactory_type;
 }
 
 + (EGScene*)sceneForLevel:(TRLevel*)level {
-    return [EGScene sceneWithController:level layers:(@[[EGLayer layerWithView:[TRLevelView levelViewWithLevel:level] processor:[CNOption opt:[TRLevelProcessor levelProcessorWithLevel:level]]], [EGLayer layerWithView:[TRLevelMenuView levelMenuViewWithLevel:level] processor:[CNOption opt:[TRLevelMenuProcessor levelMenuProcessorWithLevel:level]]]])];
+    return [EGScene sceneWithController:level layers:(@[[EGLayer layerWithView:[TRLevelView levelViewWithLevel:level] processor:[CNOption applyValue:[TRLevelProcessor levelProcessorWithLevel:level]]], [EGLayer layerWithView:[TRLevelMenuView levelMenuViewWithLevel:level] processor:[CNOption applyValue:[TRLevelMenuProcessor levelMenuProcessorWithLevel:level]]]])];
 }
 
 + (void(^)(TRLevel*))trainCars:(CNRange*)cars speed:(CNRange*)speed {

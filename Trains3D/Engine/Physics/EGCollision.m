@@ -235,7 +235,7 @@ static ODClassType* _EGIndexFunFilteredIterable_type;
 }
 
 - (id)head {
-    if([[self iterator] hasNext]) return [CNOption opt:[[self iterator] next]];
+    if([[self iterator] hasNext]) return [CNOption applyValue:[[self iterator] next]];
     else return [CNOption none];
 }
 
@@ -287,7 +287,7 @@ static ODClassType* _EGIndexFunFilteredIterable_type;
     __block id ret = [CNOption none];
     [self goOn:^BOOL(id x) {
         if(where(ret)) {
-            ret = [CNOption opt:x];
+            ret = [CNOption applyValue:x];
             NO;
         }
         return YES;

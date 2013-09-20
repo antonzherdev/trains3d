@@ -160,6 +160,8 @@ stub object gl {
     def glTexParameteri(target : GLenum, pname : GLenum, param : GLint)
     val GL_TEXTURE_WRAP_S : GLenum
     val GL_TEXTURE_WRAP_T : GLenum
+    val GL_LINEAR : GLenum
+    val GL_LINEAR_MIPMAP_LINEAR : GLenum
     val GL_CLAMP_TO_EDGE : GLenum
     val GL_NEAREST : GLenum
     val GL_TEXTURE_MIN_FILTER : GLenum
@@ -171,12 +173,13 @@ stub object gl {
     val GL_COLOR_ATTACHMENT0_EXT : GLenum
     val GL_FRAMEBUFFER_COMPLETE : GLenum
     val GL_FRAMEBUFFER_COMPLETE_EXT : GLenum
+    def glGenerateMipmap(target : GLenum)
 
     def glPushAttrib(mask : GLbitfield)
     val GL_VIEWPORT_BIT : GLenum
     def glPopAttrib
 
-    def egLoadTextureFromFile(target : GLuint, file : string) : vec2
+    def egLoadTextureFromFile(target : GLuint, file : string, magFilter : GLenum, minFilter : GLenum) : vec2
     def egSaveTextureToFile(source : GLuint, file : string)
     def egDrawAxis
 }

@@ -108,6 +108,7 @@ class IterableF<T>(iteratorF : () -> Iterator<T>) extends Iterable<T> {
 }
 
 class EmptyIterator<T> extends Iterator<T> {
+    static val instance = EmptyIterator<any>()
     def hasNext : bool = false
     def next : T = throw "Iterator is empty"
 }

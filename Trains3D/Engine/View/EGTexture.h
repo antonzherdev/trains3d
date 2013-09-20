@@ -12,6 +12,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)bind;
+- (GEVec2)size;
 - (void)bindTarget:(GLenum)target;
 - (void)dealloc;
 + (void)unbind;
@@ -25,10 +26,13 @@
 
 @interface EGFileTexture : EGTexture
 @property (nonatomic, readonly) NSString* file;
+@property (nonatomic, readonly) GLenum magFilter;
+@property (nonatomic, readonly) GLenum minFilter;
 
-+ (id)fileTextureWithFile:(NSString*)file;
-- (id)initWithFile:(NSString*)file;
++ (id)fileTextureWithFile:(NSString*)file magFilter:(GLenum)magFilter minFilter:(GLenum)minFilter;
+- (id)initWithFile:(NSString*)file magFilter:(GLenum)magFilter minFilter:(GLenum)minFilter;
 - (ODClassType*)type;
++ (EGFileTexture*)applyFile:(NSString*)file;
 - (GEVec2)size;
 - (void)bindTarget:(GLenum)target;
 + (ODClassType*)type;

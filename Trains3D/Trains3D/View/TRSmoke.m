@@ -147,7 +147,7 @@ static ODClassType* _TRSmokeParticle_type;
             }();
             float(^__r)(float) = [EGProgress progressF4:0.3 f42:0.0];
             return ^id(float _) {
-                return [__l(_) map:^id(id _) {
+                return [__l(_) mapF:^id(id _) {
                     return numf4(__r(unumf4(_)));
                 }];
             };

@@ -27,7 +27,7 @@
 
 - (id)head {
     if(self.count == 0) return [CNOption none];
-    return [self objectAtIndex : 0];
+    return [CNSome someWithValue:[self objectAtIndex :0]];
 }
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {
@@ -40,14 +40,14 @@
 
 - (id)randomItem {
     if([self isEmpty]) return [CNOption none];
-    else return [self objectAtIndex:randomMax([self count] - 1)];
+    else return [CNSome someWithValue:[self objectAtIndex:randomMax([self count] - 1)]];
 }
 
 - (id)findWhere:(BOOL(^)(id))where {
     id ret = [CNOption none];
     for(id item in self)  {
         if(where(item)) {
-            ret = item;
+            ret = [CNSome someWithValue:item];
             break;
         }
     }
@@ -114,7 +114,7 @@
 
 
 - (id)applyIndex:(NSUInteger)index {
-    if(index >= self.count) return [CNOption none];
+    if(index >= self.count) @throw @"Incorrect index";
     return [self objectAtIndex:index];
 }
 
