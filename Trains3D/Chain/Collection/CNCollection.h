@@ -3,6 +3,8 @@
 @class ODClassType;
 @class CNChain;
 
+@class CNIterableF;
+@class CNEmptyIterator;
 @protocol CNIterator;
 @protocol CNBuilder;
 @protocol CNTraversable;
@@ -54,6 +56,27 @@
 
 
 @protocol CNMutableIterable<CNIterable, CNMutableTraversable>
+@end
+
+
+@interface CNIterableF : NSObject<CNIterable>
+@property (nonatomic, readonly) id<CNIterator>(^iteratorF)();
+
++ (id)iterableFWithIteratorF:(id<CNIterator>(^)())iteratorF;
+- (id)initWithIteratorF:(id<CNIterator>(^)())iteratorF;
+- (ODClassType*)type;
+- (id<CNIterator>)iterator;
++ (ODClassType*)type;
+@end
+
+
+@interface CNEmptyIterator : NSObject<CNIterator>
++ (id)emptyIterator;
+- (id)init;
+- (ODClassType*)type;
+- (BOOL)hasNext;
+- (id)next;
++ (ODClassType*)type;
 @end
 
 

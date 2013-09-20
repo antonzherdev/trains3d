@@ -1,0 +1,28 @@
+package core.chain
+
+stub class XML {
+    static def file(name : string) : XMLElement
+    static def str(data : string) : XMLElement
+}
+
+stub class XMLElement {
+    def name : string
+    def text : string
+    def parent : XMLElement?
+    def firstChild : XMLElement?
+    def children : Iterable<XMLElement>
+    def previousSibling : XMLElement?
+    def nextSibling : XMLElement?
+    def childWith(name : string) : XMLElement?
+    def nextSiblingWith(name : string) : XMLElement?
+
+    def attributes : Iterable<XMLAttribute>
+    def firstAttribute : XMLAttribute?
+    def valueOfAttributeWith(name : string) : string?
+}
+
+stub class XMLAttribute {
+    def name : string
+    def value : string
+    def next : XMLAttribute?
+}

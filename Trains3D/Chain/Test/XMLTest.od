@@ -1,0 +1,19 @@
+package core.chain
+
+import com.antonzherdev.test._
+
+class XMLTest extends TestCase {
+    def testChild {
+        val root = XML.str("<root><c1/><c2></c2></root>")
+        assertEquals("root", root.name)
+        assertEquals(2, root.children.count)
+        assertEquals(root.childWith(name = "c1"), root.firstChild)
+    }
+
+    def testAttributes {
+        val root = XML.str("<root a1=\"v1\" a2=\"v2\"></root>")
+        assertEquals(2, root.attributes.count)
+        assertEquals("v1", root.valueOfAttributeWith(name = "a1"))
+        assertEquals("v2", root.valueOfAttributeWith(name = "a2"))
+    }
+}
