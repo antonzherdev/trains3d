@@ -1,5 +1,13 @@
 package com.antonzherdev.eg
 
+struct TextAlignment(x : float4, y : float4, baseline : bool) {
+    static def apply(x : float4, y : float4) = TextAlignment(x, y, false)
+    static def baseline(x : float4) = TextAlignment(x, 0, true)
+    static val left = TextAlignment(-1, 0, true)
+    static val right = TextAlignment(1, 0, true)
+    static val center = TextAlignment(0, 0, true)
+}
+
 class Font(name : string, size : uint4) {
     private val texture = FileTexture("$(name)_$(size).png", GL_NEAREST, GL_NEAREST)
     private val symbols : [char : FontSymbolDesc]
@@ -33,7 +41,7 @@ class Font(name : string, size : uint4) {
     private val vb = VertexBuffer(vbDesc)
     private val ib = IndexBuffer()
     private val mesh = Mesh(vb, ib)
-    def draw(text : string, at : vec2, color : vec4) {
+    def draw(text : string, color : vec4, at : vec2, alignment : TextAlignment) {
         val pos = (context.matrixStack.value.wcp * vec4(at.x, at.y, 0, 1)).xy
         val symbolsArr = text.chain.flatMap<FontSymbolDesc>(symbols[_]).toArray
         val vertexes = VoidRefArray(FontPrintData.type, symbolsArr.count * 4)
@@ -42,13 +50,23 @@ class Font(name : string, size : uint4) {
 
         var vp = vertexes
         var ip = indexes
-        var x = pos.x
         var n = 0
-        val h = height.cast<float4>/vpSize.y
+
+        var x =
+            if(alignment.x == -1) pos.x
+            else {
+                var fullWidth = 0
+                symbolsArr.for{s -> fullWidth += s.width}
+                pos.x - fullWidth*(alignment.x/2 + 0.5)
+            }
+        val y =
+            if(alignment.baseline) pos.y + (height - size).cast<float4>/vpSize.y
+            else pos.y - height.cast<float4>/vpSize.y*alignment.y
+
         symbolsArr.for {s ->
             val size = s.size/vpSize
             val tr = s.textureRect
-            val v0 = vec2(x + s.offset.x/vpSize.x, pos.y + h - s.offset.y/vpSize.y)
+            val v0 = vec2(x + s.offset.x/vpSize.x, y - s.offset.y/vpSize.y)
 
             vp = vp.write(vec2, v0)
             vp = vp.write(vec2, tr.leftBottom)

@@ -1,9 +1,9 @@
 #import "objd.h"
 #import "EGScene.h"
 #import "GEVec.h"
+#import "EGFont.h"
 @class TRLevel;
 @class EGCamera2D;
-@class EGFont;
 @class EGGlobal;
 @class TRScore;
 @class EGSchedule;
@@ -16,6 +16,7 @@
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) id<EGCamera> camera;
 @property (nonatomic, readonly) EGFont* font;
+@property (nonatomic, readonly) GERect viewportLayout;
 
 + (id)levelMenuViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;

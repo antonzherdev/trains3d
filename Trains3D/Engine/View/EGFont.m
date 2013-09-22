@@ -5,6 +5,69 @@
 #import "GL.h"
 #import "EGContext.h"
 #import "GEMat4.h"
+EGTextAlignment egTextAlignmentApplyXY(float x, float y) {
+    return EGTextAlignmentMake(x, y, NO);
+}
+EGTextAlignment egTextAlignmentBaselineX(float x) {
+    return EGTextAlignmentMake(x, 0.0, YES);
+}
+EGTextAlignment egTextAlignmentLeft() {
+    static EGTextAlignment _ret = {-1.0, 0.0, YES};
+    return _ret;
+}
+EGTextAlignment egTextAlignmentRight() {
+    static EGTextAlignment _ret = {1.0, 0.0, YES};
+    return _ret;
+}
+EGTextAlignment egTextAlignmentCenter() {
+    static EGTextAlignment _ret = {0.0, 0.0, YES};
+    return _ret;
+}
+ODPType* egTextAlignmentType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGTextAlignmentWrap class] name:@"EGTextAlignment" size:sizeof(EGTextAlignment) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGTextAlignment, ((EGTextAlignment*)(data))[i]);
+    }];
+    return _ret;
+}
+@implementation EGTextAlignmentWrap{
+    EGTextAlignment _value;
+}
+@synthesize value = _value;
+
++ (id)wrapWithValue:(EGTextAlignment)value {
+    return [[EGTextAlignmentWrap alloc] initWithValue:value];
+}
+
+- (id)initWithValue:(EGTextAlignment)value {
+    self = [super init];
+    if(self) _value = value;
+    return self;
+}
+
+- (NSString*)description {
+    return EGTextAlignmentDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGTextAlignmentWrap* o = ((EGTextAlignmentWrap*)(other));
+    return EGTextAlignmentEq(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return EGTextAlignmentHash(_value);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
+
+
 @implementation EGFont{
     NSString* _name;
     unsigned int _size;
@@ -70,7 +133,7 @@ static ODClassType* _EGFont_type;
     return geRectApplyXYWidthHeight(((float)([[parts applyIndex:0] toFloat])), ((float)(y)), ((float)([[parts applyIndex:2] toFloat])), ((float)(h)));
 }
 
-- (void)drawText:(NSString*)text at:(GEVec2)at color:(GEVec4)color {
+- (void)drawText:(NSString*)text color:(GEVec4)color at:(GEVec2)at alignment:(EGTextAlignment)alignment {
     GEVec2 pos = geVec4Xy([[EGGlobal.context.matrixStack.value wcp] mulVec4:GEVec4Make(at.x, at.y, 0.0, 1.0)]);
     id<CNSeq> symbolsArr = [[[text chain] flatMap:^id(id _) {
         return [_symbols applyKey:_];
@@ -80,13 +143,19 @@ static ODClassType* _EGFont_type;
     GEVec2 vpSize = geVec2iDivF([EGGlobal.context viewport].size, 2.0);
     __block CNVoidRefArray vp = vertexes;
     __block CNVoidRefArray ip = indexes;
-    __block float x = pos.x;
     __block NSInteger n = 0;
-    float h = ((float)(_height)) / vpSize.y;
+    __block float x = ((eqf4(alignment.x, -1)) ? pos.x : ^float() {
+        __block NSInteger fullWidth = 0;
+        [symbolsArr forEach:^void(EGFontSymbolDesc* s) {
+            fullWidth += ((NSInteger)(s.width));
+        }];
+        return pos.x - fullWidth * (alignment.x / 2 + 0.5);
+    }());
+    float y = ((alignment.baseline) ? pos.y + ((float)(_height - _size)) / vpSize.y : pos.y - ((float)(_height)) / vpSize.y * alignment.y);
     [symbolsArr forEach:^void(EGFontSymbolDesc* s) {
         GEVec2 size = geVec2DivVec2(s.size, vpSize);
         GERect tr = s.textureRect;
-        GEVec2 v0 = GEVec2Make(x + s.offset.x / vpSize.x, pos.y + h - s.offset.y / vpSize.y);
+        GEVec2 v0 = GEVec2Make(x + s.offset.x / vpSize.x, y - s.offset.y / vpSize.y);
         vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, v0);
         vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, geRectLeftBottom(tr));
         vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, GEVec2Make(v0.x, v0.y - size.y));

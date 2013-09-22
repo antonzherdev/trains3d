@@ -1,6 +1,6 @@
 #import "objd.h"
 #import "GEVec.h"
-@class EGFont;
+#import "EGFont.h"
 @class EGGlobal;
 
 @class EGStat;

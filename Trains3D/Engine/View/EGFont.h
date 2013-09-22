@@ -18,7 +18,49 @@
 @class EGFontShaderParam;
 @class EGFontShader;
 @class EGFontSymbolDesc;
+typedef struct EGTextAlignment EGTextAlignment;
 typedef struct EGFontPrintData EGFontPrintData;
+
+struct EGTextAlignment {
+    float x;
+    float y;
+    BOOL baseline;
+};
+static inline EGTextAlignment EGTextAlignmentMake(float x, float y, BOOL baseline) {
+    return (EGTextAlignment){x, y, baseline};
+}
+static inline BOOL EGTextAlignmentEq(EGTextAlignment s1, EGTextAlignment s2) {
+    return eqf4(s1.x, s2.x) && eqf4(s1.y, s2.y) && s1.baseline == s2.baseline;
+}
+static inline NSUInteger EGTextAlignmentHash(EGTextAlignment self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + float4Hash(self.x);
+    hash = hash * 31 + float4Hash(self.y);
+    hash = hash * 31 + self.baseline;
+    return hash;
+}
+static inline NSString* EGTextAlignmentDescription(EGTextAlignment self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<EGTextAlignment: "];
+    [description appendFormat:@"x=%f", self.x];
+    [description appendFormat:@", y=%f", self.y];
+    [description appendFormat:@", baseline=%d", self.baseline];
+    [description appendString:@">"];
+    return description;
+}
+EGTextAlignment egTextAlignmentApplyXY(float x, float y);
+EGTextAlignment egTextAlignmentBaselineX(float x);
+EGTextAlignment egTextAlignmentLeft();
+EGTextAlignment egTextAlignmentRight();
+EGTextAlignment egTextAlignmentCenter();
+ODPType* egTextAlignmentType();
+@interface EGTextAlignmentWrap : NSObject
+@property (readonly, nonatomic) EGTextAlignment value;
+
++ (id)wrapWithValue:(EGTextAlignment)value;
+- (id)initWithValue:(EGTextAlignment)value;
+@end
+
+
 
 @interface EGFont : NSObject
 @property (nonatomic, readonly) NSString* name;
@@ -28,7 +70,7 @@ typedef struct EGFontPrintData EGFontPrintData;
 - (id)initWithName:(NSString*)name size:(unsigned int)size;
 - (ODClassType*)type;
 - (void)_init;
-- (void)drawText:(NSString*)text at:(GEVec2)at color:(GEVec4)color;
+- (void)drawText:(NSString*)text color:(GEVec4)color at:(GEVec2)at alignment:(EGTextAlignment)alignment;
 + (ODClassType*)type;
 @end
 

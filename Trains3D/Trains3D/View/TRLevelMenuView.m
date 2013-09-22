@@ -2,7 +2,6 @@
 
 #import "TRLevel.h"
 #import "EGCamera2D.h"
-#import "EGFont.h"
 #import "EGContext.h"
 #import "TRScore.h"
 #import "EGSchedule.h"
@@ -11,11 +10,13 @@
     TRLevel* _level;
     id<EGCamera> _camera;
     EGFont* _font;
+    GERect _viewportLayout;
 }
 static ODClassType* _TRLevelMenuView_type;
 @synthesize level = _level;
 @synthesize camera = _camera;
 @synthesize font = _font;
+@synthesize viewportLayout = _viewportLayout;
 
 + (id)levelMenuViewWithLevel:(TRLevel*)level {
     return [[TRLevelMenuView alloc] initWithLevel:level];
@@ -27,6 +28,7 @@ static ODClassType* _TRLevelMenuView_type;
         _level = level;
         _camera = [EGCamera2D camera2DWithSize:GEVec2Make(16.0, 9.0)];
         _font = [EGGlobal fontWithName:@"helvetica" size:14];
+        _viewportLayout = geRectApplyXYWidthHeight(0.0, -1.0, 1.0, 1.0);
     }
     
     return self;
@@ -38,9 +40,9 @@ static ODClassType* _TRLevelMenuView_type;
 }
 
 - (void)drawView {
-    [_font drawText:[NSString stringWithFormat:@"%li", [_level.score score]] at:GEVec2Make(0.2, 8.6) color:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
+    [_font drawText:[NSString stringWithFormat:@"%li", [_level.score score]] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(0.0, 8.0) alignment:egTextAlignmentApplyXY(-1.0, -1.0)];
     NSInteger seconds = ((NSInteger)([_level.schedule time]));
-    [_font drawText:[NSString stringWithFormat:@"%li", seconds] at:GEVec2Make(15.0, 8.6) color:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
+    [_font drawText:[NSString stringWithFormat:@"%li", seconds] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(16.0, 8.0) alignment:egTextAlignmentApplyXY(1.0, -1.0)];
     if(!([[_level.railroad damagesPoints] isEmpty]) && [[_level repairer] isEmpty]) {
     }
 }
@@ -50,10 +52,6 @@ static ODClassType* _TRLevelMenuView_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-}
-
-- (GERect)viewportLayout {
-    return geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0);
 }
 
 - (ODClassType*)type {

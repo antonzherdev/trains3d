@@ -8,7 +8,7 @@ class Stat {
     def frameRate = _frameRate
 
     def draw {
-        font.draw(text = math.lround(_frameRate), at = vec2(-0.98, -0.99), color = vec4(1, 1, 1, 1))
+        font.draw(text = math.lround(_frameRate), color = vec4(1, 1, 1, 1), at = vec2(-0.98, -0.99), TextAlignment.left)
     }
     def tickWith(delta : float) {
         accumDelta += delta
