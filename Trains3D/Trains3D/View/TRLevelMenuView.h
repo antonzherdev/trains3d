@@ -3,6 +3,8 @@
 #import "GEVec.h"
 @class TRLevel;
 @class EGCamera2D;
+@class EGFont;
+@class EGGlobal;
 @class TRScore;
 @class EGSchedule;
 @class TRRailroad;
@@ -13,6 +15,7 @@
 @interface TRLevelMenuView : NSObject<EGLayerView>
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) id<EGCamera> camera;
+@property (nonatomic, readonly) EGFont* font;
 
 + (id)levelMenuViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;

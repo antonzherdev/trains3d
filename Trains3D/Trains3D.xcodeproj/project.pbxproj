@@ -254,7 +254,6 @@
 		6F3DF8784CC3ABA3DEE7980C /* CNReverseLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF5D30EBF50722D5A00BA /* CNReverseLink.m */; };
 		6F3DF87D43F1A1FCB3AB948C /* CNMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD83C8390308493AEA05 /* CNMap.m */; };
 		6F3DF88D2FFFAACA5D7F9181 /* btUniformScalingShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF65E2A2B0B13825D9D7F /* btUniformScalingShape.cpp */; };
-		6F3DF88D48BDBB5132575C47 /* Text.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFFADDB980529C1D266D8 /* Text.od */; };
 		6F3DF88D8C49BE36FA685A24 /* intrinsic_common.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFDC4525793E1A263E8CE /* intrinsic_common.inl */; };
 		6F3DF88ECC2AD74EEACD16F4 /* btBoxBoxCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBDEFBDBD5D27BA449BA /* btBoxBoxCollisionAlgorithm.cpp */; };
 		6F3DF89C8872876229AD774A /* CNMapLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBF9CB73172393811F54 /* CNMapLink.m */; };
@@ -1548,7 +1547,6 @@
 		6F3DFFA33FCA2F616291C726 /* KWBeBetweenMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeBetweenMatcher.h; sourceTree = "<group>"; };
 		6F3DFFA478BD42A9E971DDE8 /* KWBeNilMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeNilMatcher.h; sourceTree = "<group>"; };
 		6F3DFFAC2A07756845F41EED /* LightGlow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LightGlow.png; sourceTree = "<group>"; };
-		6F3DFFADDB980529C1D266D8 /* Text.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Text.od; sourceTree = "<group>"; };
 		6F3DFFB2C0271CD6551A20E3 /* GEBentleyOttmann.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GEBentleyOttmann.h; sourceTree = "<group>"; };
 		6F3DFFB34A5F66AA174ECC65 /* CNUncombinationsLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNUncombinationsLink.m; sourceTree = "<group>"; };
 		6F3DFFB54D4A905F58B99AC6 /* btBoxCollision.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btBoxCollision.h; sourceTree = "<group>"; };
@@ -2616,7 +2614,6 @@
 				6F3DFF0C5251475D6FA8EB46 /* Texture.od */,
 				6F3DFDAA4AA0BEE1B1AF1D5B /* EGTexture.m */,
 				6F3DF37708111DAEB77D185F /* EGTexture.h */,
-				6F3DFFADDB980529C1D266D8 /* Text.od */,
 				6F3DF86689B5D7E4BE83874F /* EGText.h */,
 				6F3DF7386C7FDAEC32527DA1 /* EGText.m */,
 				6F3DFC80E9DA8CD643DB08D2 /* Mesh.od */,
@@ -3290,7 +3287,6 @@
 				6F3DFE603C4608416BE18791 /* Scene.od in Resources */,
 				6F3DF2A409115C42355E8143 /* Director.od in Resources */,
 				6F3DFB12D27D50FA671E2D3A /* Texture.od in Resources */,
-				6F3DF88D48BDBB5132575C47 /* Text.od in Resources */,
 				6F3DFAEB6B8EC20A5224593C /* LevelProcessor.od in Resources */,
 				6F3DF844B1B29FA809B4EA43 /* MapIso.od in Resources */,
 				6F3DF8735E29864F38A6AD83 /* CameraIso.od in Resources */,
