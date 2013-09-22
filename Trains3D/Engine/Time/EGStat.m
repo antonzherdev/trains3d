@@ -32,7 +32,7 @@ static ODClassType* _EGStat_type;
 }
 
 - (void)draw {
-    [_font drawText:[NSString stringWithFormat:@"%li", lround(((CGFloat)(__frameRate)))] at:GEVec2Make(-1.0, -1.0) color:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
+    [_font drawText:[NSString stringWithFormat:@"%li", lround(((CGFloat)(__frameRate)))] at:GEVec2Make(-0.98, -0.99) color:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
 }
 
 - (void)tickWithDelta:(CGFloat)delta {

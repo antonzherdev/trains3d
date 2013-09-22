@@ -3,16 +3,17 @@ package com.antonzherdev.eg
 class Font(name : string, size : uint4) {
     private val texture = FileTexture("$(name)_$(size).png", GL_NEAREST, GL_NEAREST)
     private val symbols : [char : FontSymbolDesc]
-    private val height : int
+    private val height : uint
     def init {
         val font = XML.file("$(name)_$(size).xml")
-        height = font("height").get
+        height = font("height").get.toUInt
+        val ts = texture.size
         symbols = font.children.chain.map{ch ->
             val code : char = ch("code").get.head.getOr(0)
             val width : float4 = ch("width").get
             val offset =  parse(offset = ch("offset").get)
             val r = parse(_rect = ch("rect").get)
-            (code, FontSymbolDesc(width, offset, r.size, r/texture.size))
+            (code, FontSymbolDesc(width, offset, r.size, r/ts))
         }.toMap
     }
 
@@ -23,9 +24,9 @@ class Font(name : string, size : uint4) {
 
     private def parse(_rect : string) : rect = {
         val parts = _rect.split(" ").chain.toArray
-        val y : int = parts[1]
-        val h : int = parts[3]
-        rect(parts[0], y - h, parts[2], h)
+        val y = parts[1].toFloat
+        val h = parts[3].toFloat
+        rect(parts[0].toFloat, y, parts[2].toFloat, h)
     }
 
     private static val vbDesc = VertexBufferDesc(FontPrintData.type, position = 0, uv = 2*4, normal = -1, color = -1, model = -1)
@@ -36,28 +37,29 @@ class Font(name : string, size : uint4) {
         val symbolsArr = text.chain.flatMap<FontSymbolDesc>(symbols[_]).toArray
         val vertexes = VoidRefArray(FontPrintData.type, symbolsArr.count * 4)
         val indexes = VoidRefArray(UInt4.type, symbolsArr.count * 6)
-        val vpSize = context.viewport.size
+        val vpSize = context.viewport.size/2.0
 
         var vp = vertexes
         var ip = indexes
         var x = at.x
         var n = 0
+        val h = height.cast<float4>/vpSize.y
         symbolsArr.for {s ->
             val size = s.size/vpSize
             val tr = s.textureRect
-            val v0 = vec2(x + s.offset.x/vpSize.x, at.y + height - s.offset.y/vpSize.y)
+            val v0 = vec2(x + s.offset.x/vpSize.x, at.y + h - s.offset.y/vpSize.y)
 
             vp = vp.write(vec2, v0)
-            vp = vp.write(vec2, tr.leftTop)
-
-            vp = vp.write(vec2, vec2(v0.x, v0.y - size.y))
             vp = vp.write(vec2, tr.leftBottom)
 
+            vp = vp.write(vec2, vec2(v0.x, v0.y - size.y))
+            vp = vp.write(vec2, tr.leftTop)
+
             vp = vp.write(vec2, vec2(v0.x + size.x, v0.y - size.y))
-            vp = vp.write(vec2, tr.rightBottom)
+            vp = vp.write(vec2, tr.rightTop)
 
             vp = vp.write(vec2, vec2(v0.x + size.x, v0.y))
-            vp = vp.write(vec2, tr.rightTop)
+            vp = vp.write(vec2, tr.rightBottom)
 
             ip = ip.write(uInt4 = n)
             ip = ip.write(uInt4 = n + 1)
@@ -67,13 +69,15 @@ class Font(name : string, size : uint4) {
             ip = ip.write(uInt4 = n)
 
             x += s.width/vpSize.x
-            n += 6
+            n += 4
         }
         vb.set(vertexes, GL_DYNAMIC_DRAW)
         ib.set(indexes, GL_DYNAMIC_DRAW)
 
         BlendFunction.standard {
+            glDisable(GL_CULL_FACE)
             FontShader.instance.draw(FontShaderParam(texture, color), mesh)
+            glEnable(GL_CULL_FACE)
         }
 
     }

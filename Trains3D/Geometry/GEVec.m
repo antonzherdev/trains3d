@@ -115,6 +115,15 @@ GEVec2i geVec2iAddVec2i(GEVec2i self, GEVec2i vec2i) {
 GEVec2i geVec2iSubVec2i(GEVec2i self, GEVec2i vec2i) {
     return GEVec2iMake(self.x - vec2i.x, self.y - vec2i.y);
 }
+GEVec2 geVec2iDivF4(GEVec2i self, float f4) {
+    return GEVec2Make(((float)(self.x)) / f4, ((float)(self.y)) / f4);
+}
+GEVec2 geVec2iDivF(GEVec2i self, CGFloat f) {
+    return GEVec2Make(((float)(self.x)) / f, ((float)(self.y)) / f);
+}
+GEVec2i geVec2iDivI(GEVec2i self, NSInteger i) {
+    return GEVec2iMake(self.x / i, self.y / i);
+}
 GEVec2i geVec2iNegate(GEVec2i self) {
     return GEVec2iMake(-self.x, -self.y);
 }
@@ -486,10 +495,10 @@ GEVec2 geRectLeftTop(GERect self) {
     return GEVec2Make(self.origin.x, self.origin.y + self.size.y);
 }
 GEVec2 geRectRightTop(GERect self) {
-    return GEVec2Make(self.origin.x + self.size.y, self.origin.y + self.size.y);
+    return GEVec2Make(self.origin.x + self.size.x, self.origin.y + self.size.y);
 }
 GEVec2 geRectRightBottom(GERect self) {
-    return GEVec2Make(self.origin.x + self.size.y, self.origin.y);
+    return GEVec2Make(self.origin.x + self.size.x, self.origin.y);
 }
 ODPType* geRectType() {
     static ODPType* _ret = nil;

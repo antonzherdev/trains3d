@@ -4,4 +4,8 @@ stub class String extends Seq<char> {
     def head : char?
     def tuple(by : string) : (string, string)?
     def split(by : string) : Iterable<string>
+
+    def toUInt : uint
+    def toInt : int
+    def toFloat : float
 }

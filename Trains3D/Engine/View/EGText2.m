@@ -9,7 +9,7 @@
     unsigned int _size;
     EGFileTexture* _texture;
     id<CNMap> _symbols;
-    NSInteger _height;
+    NSUInteger _height;
     EGVertexBuffer* _vb;
     EGIndexBuffer* _ib;
     EGMesh* _mesh;
@@ -46,13 +46,14 @@ static ODClassType* _EGFont_type;
 
 - (void)_init {
     CNXMLElement* font = [CNXML fileName:[NSString stringWithFormat:@"%@_%d.xml", _name, _size]];
-    _height = unumi([[font applyName:@"height"] get]);
+    _height = [[[font applyName:@"height"] get] toUInt];
+    GEVec2 ts = [_texture size];
     _symbols = [[[[font children] chain] map:^CNTuple*(CNXMLElement* ch) {
         unichar code = unums([[[[ch applyName:@"code"] get] head] getOrValue:@0]);
         float width = unumf4([[ch applyName:@"width"] get]);
         GEVec2i offset = [self parseOffset:[[ch applyName:@"offset"] get]];
         GERect r = [self parse_rect:[[ch applyName:@"rect"] get]];
-        return tuple(nums(code), [EGFontSymbolDesc fontSymbolDescWithWidth:width offset:geVec2ApplyVec2i(offset) size:r.size textureRect:geRectDivVec2(r, [_texture size])]);
+        return tuple(nums(code), [EGFontSymbolDesc fontSymbolDescWithWidth:width offset:geVec2ApplyVec2i(offset) size:r.size textureRect:geRectDivVec2(r, ts)]);
     }] toMap];
 }
 
@@ -63,9 +64,9 @@ static ODClassType* _EGFont_type;
 
 - (GERect)parse_rect:(NSString*)_rect {
     id<CNSeq> parts = [[[_rect splitBy:@" "] chain] toArray];
-    NSInteger y = unumi([parts applyIndex:1]);
-    NSInteger h = unumi([parts applyIndex:3]);
-    return geRectApplyXYWidthHeight(unumf4([parts applyIndex:0]), ((float)(y - h)), unumf4([parts applyIndex:2]), ((float)(h)));
+    CGFloat y = [[parts applyIndex:1] toFloat];
+    CGFloat h = [[parts applyIndex:3] toFloat];
+    return geRectApplyXYWidthHeight(((float)([[parts applyIndex:0] toFloat])), ((float)(y)), ((float)([[parts applyIndex:2] toFloat])), ((float)(h)));
 }
 
 - (void)drawText:(NSString*)text at:(GEVec2)at color:(GEVec4)color {
@@ -74,23 +75,24 @@ static ODClassType* _EGFont_type;
     }] toArray];
     CNVoidRefArray vertexes = cnVoidRefArrayApplyTpCount(egFontPrintDataType(), [symbolsArr count] * 4);
     CNVoidRefArray indexes = cnVoidRefArrayApplyTpCount(oduInt4Type(), [symbolsArr count] * 6);
-    GEVec2i vpSize = [EGGlobal.context viewport].size;
+    GEVec2 vpSize = geVec2iDivF([EGGlobal.context viewport].size, 2.0);
     __block CNVoidRefArray vp = vertexes;
     __block CNVoidRefArray ip = indexes;
     __block float x = at.x;
     __block NSInteger n = 0;
+    float h = ((float)(_height)) / vpSize.y;
     [symbolsArr forEach:^void(EGFontSymbolDesc* s) {
-        GEVec2 size = geVec2DivVec2(s.size, geVec2ApplyVec2i(vpSize));
+        GEVec2 size = geVec2DivVec2(s.size, vpSize);
         GERect tr = s.textureRect;
-        GEVec2 v0 = GEVec2Make(x + s.offset.x / vpSize.x, at.y + _height - s.offset.y / vpSize.y);
+        GEVec2 v0 = GEVec2Make(x + s.offset.x / vpSize.x, at.y + h - s.offset.y / vpSize.y);
         vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, v0);
-        vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, geRectLeftTop(tr));
-        vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, GEVec2Make(v0.x, v0.y - size.y));
         vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, geRectLeftBottom(tr));
+        vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, GEVec2Make(v0.x, v0.y - size.y));
+        vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, geRectLeftTop(tr));
         vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, GEVec2Make(v0.x + size.x, v0.y - size.y));
-        vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, geRectRightBottom(tr));
-        vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, GEVec2Make(v0.x + size.x, v0.y));
         vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, geRectRightTop(tr));
+        vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, GEVec2Make(v0.x + size.x, v0.y));
+        vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, geRectRightBottom(tr));
         ip = cnVoidRefArrayWriteUInt4(ip, ((unsigned int)(n)));
         ip = cnVoidRefArrayWriteUInt4(ip, ((unsigned int)(n + 1)));
         ip = cnVoidRefArrayWriteUInt4(ip, ((unsigned int)(n + 2)));
@@ -98,12 +100,14 @@ static ODClassType* _EGFont_type;
         ip = cnVoidRefArrayWriteUInt4(ip, ((unsigned int)(n + 3)));
         ip = cnVoidRefArrayWriteUInt4(ip, ((unsigned int)(n)));
         x += s.width / vpSize.x;
-        n += 6;
+        n += 4;
     }];
     [_vb setArray:vertexes usage:GL_DYNAMIC_DRAW];
     [_ib setArray:indexes usage:GL_DYNAMIC_DRAW];
     egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
+        glDisable(GL_CULL_FACE);
         [EGFontShader.instance drawParam:[EGFontShaderParam fontShaderParamWithTexture:_texture color:color] mesh:_mesh];
+        glEnable(GL_CULL_FACE);
     });
 }
 

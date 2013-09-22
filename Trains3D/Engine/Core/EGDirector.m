@@ -47,6 +47,7 @@ static ODClassType* _EGDirector_type;
     glEnable(GL_CULL_FACE);
     [_scene drawWithViewSize:size];
     glDisable(GL_DEPTH_TEST);
+    [EGGlobal.context setViewport:geRectiApplyRect(GERectMake(GEVec2Make(0.0, 0.0), size))];
     [__stat forEach:^void(EGStat* _) {
         [_ draw];
     }];

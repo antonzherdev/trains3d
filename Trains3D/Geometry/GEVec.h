@@ -87,6 +87,9 @@ static inline NSString* GEVec2iDescription(GEVec2i self) {
 GEVec2i geVec2iApplyVec2(GEVec2 vec2);
 GEVec2i geVec2iAddVec2i(GEVec2i self, GEVec2i vec2i);
 GEVec2i geVec2iSubVec2i(GEVec2i self, GEVec2i vec2i);
+GEVec2 geVec2iDivF4(GEVec2i self, float f4);
+GEVec2 geVec2iDivF(GEVec2i self, CGFloat f);
+GEVec2i geVec2iDivI(GEVec2i self, NSInteger i);
 GEVec2i geVec2iNegate(GEVec2i self);
 NSInteger geVec2iCompareTo(GEVec2i self, GEVec2i to);
 GERecti geVec2iRectToVec2i(GEVec2i self, GEVec2i vec2i);

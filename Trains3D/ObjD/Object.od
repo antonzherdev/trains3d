@@ -32,6 +32,15 @@ stub struct Int extends Comparable<int> {
     def abs : int
 }
 
+stub struct Int4 extends Comparable<int4> {
+    def compare(to : int4) : int4
+    def range : Range
+    def to(: int4) : Range
+    def between( : int4, : int4) : bool
+    def abs : int4
+}
+
+
 stub struct UInt extends Comparable<uint> {
     def compare(to : uint) : int
     def range : Range

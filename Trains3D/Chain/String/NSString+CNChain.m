@@ -62,6 +62,19 @@
     }];
 }
 
+- (CGFloat)toFloat {
+    return [self floatValue];
+}
+
+- (NSInteger)toInt {
+    return [self integerValue];
+}
+
+- (NSUInteger)toUInt {
+    return (NSUInteger) [self integerValue];
+}
+
+
 - (id)applyIndex:(NSUInteger)index1 {
     if(index1 >= [self length]) @throw @"Incorrect index";
     return nums([self characterAtIndex:index1]);

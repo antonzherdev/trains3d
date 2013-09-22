@@ -7,4 +7,7 @@
 - (id)tupleBy:(NSString *)by;
 
 - (id <CNIterable>)splitBy:(NSString *)by;
+- (NSUInteger) toUInt;
+- (NSInteger) toInt;
+- (CGFloat) toFloat;
 @end
