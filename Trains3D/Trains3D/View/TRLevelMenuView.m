@@ -4,7 +4,6 @@
 #import "EGCamera2D.h"
 #import "EGFont.h"
 #import "EGContext.h"
-#import "GL.h"
 #import "TRScore.h"
 #import "EGSchedule.h"
 #import "TRRailroad.h"
@@ -39,10 +38,9 @@ static ODClassType* _TRLevelMenuView_type;
 }
 
 - (void)drawView {
-    egColor3(1.0, 1.0, 1.0);
-    [_font drawText:[NSString stringWithFormat:@"%li", [_level.score score]] at:GEVec2Make(1.0, 1.0) color:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
+    [_font drawText:[NSString stringWithFormat:@"%li", [_level.score score]] at:GEVec2Make(1.0, 0.95) color:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
     NSInteger seconds = ((NSInteger)([_level.schedule time]));
-    [_font drawText:[NSString stringWithFormat:@"%li", [_level.score score]] at:GEVec2Make(1.5, 1.0) color:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
+    [_font drawText:[NSString stringWithFormat:@"%li", seconds] at:GEVec2Make(1.5, 0.95) color:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
     if(!([[_level.railroad damagesPoints] isEmpty]) && [[_level repairer] isEmpty]) {
     }
 }

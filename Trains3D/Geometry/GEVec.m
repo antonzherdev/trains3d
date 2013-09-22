@@ -271,6 +271,9 @@ GEVec4 geVec4ApplyVec3W(GEVec3 vec3, float w) {
 GEVec3 geVec4Xyz(GEVec4 self) {
     return GEVec3Make(self.x, self.y, self.z);
 }
+GEVec2 geVec4Xy(GEVec4 self) {
+    return GEVec2Make(self.x, self.y);
+}
 GEVec4 geVec4MulK(GEVec4 self, float k) {
     return GEVec4Make(k * self.x, k * self.y, k * self.z, k * self.w);
 }

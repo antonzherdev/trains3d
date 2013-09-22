@@ -9,6 +9,9 @@
 @class EGMesh;
 @class EGGlobal;
 @class EGContext;
+@class EGMatrixStack;
+@class EGMatrixModel;
+@class GEMat4;
 @class EGTexture;
 
 @class EGFont;

@@ -4,6 +4,7 @@
 #import "EGTexture.h"
 #import "GL.h"
 #import "EGContext.h"
+#import "GEMat4.h"
 @implementation EGFont{
     NSString* _name;
     unsigned int _size;
@@ -70,6 +71,7 @@ static ODClassType* _EGFont_type;
 }
 
 - (void)drawText:(NSString*)text at:(GEVec2)at color:(GEVec4)color {
+    GEVec2 pos = geVec4Xy([[EGGlobal.context.matrixStack.value wcp] mulVec4:GEVec4Make(at.x, at.y, 0.0, 1.0)]);
     id<CNSeq> symbolsArr = [[[text chain] flatMap:^id(id _) {
         return [_symbols applyKey:_];
     }] toArray];
@@ -78,13 +80,13 @@ static ODClassType* _EGFont_type;
     GEVec2 vpSize = geVec2iDivF([EGGlobal.context viewport].size, 2.0);
     __block CNVoidRefArray vp = vertexes;
     __block CNVoidRefArray ip = indexes;
-    __block float x = at.x;
+    __block float x = pos.x;
     __block NSInteger n = 0;
     float h = ((float)(_height)) / vpSize.y;
     [symbolsArr forEach:^void(EGFontSymbolDesc* s) {
         GEVec2 size = geVec2DivVec2(s.size, vpSize);
         GERect tr = s.textureRect;
-        GEVec2 v0 = GEVec2Make(x + s.offset.x / vpSize.x, at.y + h - s.offset.y / vpSize.y);
+        GEVec2 v0 = GEVec2Make(x + s.offset.x / vpSize.x, pos.y + h - s.offset.y / vpSize.y);
         vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, v0);
         vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, geRectLeftBottom(tr));
         vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, GEVec2Make(v0.x, v0.y - size.y));

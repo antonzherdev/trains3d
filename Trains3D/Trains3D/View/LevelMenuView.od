@@ -8,11 +8,9 @@ class LevelMenuView(level : Level) extends LayerView {
     val camera : Camera = Camera2D(vec2(2, 1))
     val font = fontWith(name = "helvetica", size = 14)
     def drawView {
-        egColor3(1, 1, 1)
-
-        font.draw(text = level.score.score, at = vec2(1, 1), color = vec4(1, 1, 1, 1))
+        font.draw(text = level.score.score, at = vec2(1, 0.95), color = vec4(1, 1, 1, 1))
         val seconds : int = level.schedule.time
-        font.draw(text = level.score.score, at = vec2(1.5, 1), color = vec4(1, 1, 1, 1))
+        font.draw(text = seconds, at = vec2(1.5, 0.95), color = vec4(1, 1, 1, 1))
 
         if(!level.railroad.damagesPoints.isEmpty && level.repairer.isEmpty) {
             /*glPushMatrix

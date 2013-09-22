@@ -182,6 +182,7 @@ static inline NSString* GEVec4Description(GEVec4 self) {
 }
 GEVec4 geVec4ApplyVec3W(GEVec3 vec3, float w);
 GEVec3 geVec4Xyz(GEVec4 self);
+GEVec2 geVec4Xy(GEVec4 self);
 GEVec4 geVec4MulK(GEVec4 self, float k);
 GEVec4 geVec4DivMat4(GEVec4 self, GEMat4* mat4);
 float geVec4LengthSquare(GEVec4 self);

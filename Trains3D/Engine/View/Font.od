@@ -34,6 +34,7 @@ class Font(name : string, size : uint4) {
     private val ib = IndexBuffer()
     private val mesh = Mesh(vb, ib)
     def draw(text : string, at : vec2, color : vec4) {
+        val pos = (context.matrixStack.value.wcp * vec4(at.x, at.y, 0, 1)).xy
         val symbolsArr = text.chain.flatMap<FontSymbolDesc>(symbols[_]).toArray
         val vertexes = VoidRefArray(FontPrintData.type, symbolsArr.count * 4)
         val indexes = VoidRefArray(UInt4.type, symbolsArr.count * 6)
@@ -41,13 +42,13 @@ class Font(name : string, size : uint4) {
 
         var vp = vertexes
         var ip = indexes
-        var x = at.x
+        var x = pos.x
         var n = 0
         val h = height.cast<float4>/vpSize.y
         symbolsArr.for {s ->
             val size = s.size/vpSize
             val tr = s.textureRect
-            val v0 = vec2(x + s.offset.x/vpSize.x, at.y + h - s.offset.y/vpSize.y)
+            val v0 = vec2(x + s.offset.x/vpSize.x, pos.y + h - s.offset.y/vpSize.y)
 
             vp = vp.write(vec2, v0)
             vp = vp.write(vec2, tr.leftBottom)
