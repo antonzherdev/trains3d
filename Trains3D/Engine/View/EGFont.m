@@ -1,4 +1,4 @@
-#import "EGText2.h"
+#import "EGFont.h"
 
 #import "EGMesh.h"
 #import "EGTexture.h"

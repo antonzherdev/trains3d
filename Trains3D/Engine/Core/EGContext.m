@@ -2,7 +2,7 @@
 
 #import "EGDirector.h"
 #import "EGTexture.h"
-#import "EGText2.h"
+#import "EGFont.h"
 #import "GL.h"
 #import "GEMat4.h"
 @implementation EGGlobal

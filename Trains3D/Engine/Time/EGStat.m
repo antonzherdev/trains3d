@@ -1,6 +1,6 @@
 #import "EGStat.h"
 
-#import "EGText2.h"
+#import "EGFont.h"
 #import "EGContext.h"
 @implementation EGStat{
     CGFloat _accumDelta;

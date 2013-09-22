@@ -2,7 +2,7 @@
 
 #import "TRLevel.h"
 #import "EGCamera2D.h"
-#import "EGText2.h"
+#import "EGFont.h"
 #import "EGContext.h"
 #import "GL.h"
 #import "TRScore.h"
