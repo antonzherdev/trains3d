@@ -263,8 +263,8 @@ static ODClassType* _TRExplosionFlameParticle_type;
 }
 
 + (TRExplosionFlameParticle*)applyPosition:(GEVec3)position size:(float)size {
-    GEVec2 startShift = geVec2MulValue([EGProgress randomVec2], size * 0.2);
-    TRExplosionFlameParticle* ret = [TRExplosionFlameParticle explosionFlameParticleWithSize:size startShift:startShift shift:geVec2AddVec2(startShift, geVec2MulValue([EGProgress randomVec2], size * 0.2))];
+    GEVec2 startShift = geVec2MulF4([EGProgress randomVec2], size * 0.2);
+    TRExplosionFlameParticle* ret = [TRExplosionFlameParticle explosionFlameParticleWithSize:size startShift:startShift shift:geVec2AddVec2(startShift, geVec2MulF4([EGProgress randomVec2], size * 0.2))];
     ret.position = position;
     ret.color = _TRExplosionFlameParticle_startColor;
     ret.uv = geQuadrantRandomQuad(_TRExplosionFlameParticle_textureQuadrant);

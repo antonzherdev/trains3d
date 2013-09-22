@@ -12,11 +12,13 @@
     TRCityView* _cityView;
     TRRailroadView* _railroadView;
     TRTrainView* _trainView;
+    GERect _viewportLayout;
     EGEnvironment* _environment;
     id<EGCamera> _camera;
 }
 static ODClassType* _TRLevelView_type;
 @synthesize level = _level;
+@synthesize viewportLayout = _viewportLayout;
 @synthesize environment = _environment;
 @synthesize camera = _camera;
 
@@ -31,6 +33,7 @@ static ODClassType* _TRLevelView_type;
         _cityView = [TRCityView cityView];
         _railroadView = [TRRailroadView railroadViewWithRailroad:_level.railroad];
         _trainView = [TRTrainView trainView];
+        _viewportLayout = geRectApplyXYWidthHeight(0.0, -1.0, 1.0, 1.0);
         _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.4, 0.4, 0.4, 1.0) lights:(@[[EGDirectLight directLightWithColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) direction:geVec3Normalize(GEVec3Make(-0.15, 0.25, -0.5))]])];
         _camera = [EGCameraIso cameraIsoWithTilesOnScreen:_level.map.size zReserve:0.3 center:GEVec2Make(0.0, 0.0)];
     }

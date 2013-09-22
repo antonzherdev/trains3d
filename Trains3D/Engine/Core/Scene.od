@@ -49,10 +49,13 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
     }
 
     def viewportWith(viewSize : vec2) : rect = {
+        val layout = view.viewportLayout
         val vpr = view.camera.viewportRatio
-        val srt =  viewSize/vpr
-        val vpSize = if(viewSize.x/viewSize.y < vpr) vec2(viewSize.x, viewSize.x/vpr) else vec2(viewSize.y*vpr, viewSize.y)
-        vpSize.rectInCenterWith(viewSize)
+
+        val size = viewSize*layout.size
+        val vpSize = if(size.x/size.y < vpr) vec2(size.x, size.x/vpr) else vec2(size.y*vpr, size.y)
+        val po = layout.origin/2 + 0.5
+        rect((viewSize - vpSize) * po, vpSize)
     }
 }
 
@@ -64,4 +67,6 @@ trait LayerView extends Controller {
     def environment = Environment.default
 
     def updateWith(delta : float) {}
+
+    def viewportLayout : rect = rect(0, 0, 1, 1)
 }

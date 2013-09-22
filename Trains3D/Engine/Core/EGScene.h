@@ -63,6 +63,7 @@
 - (void)drawView;
 - (EGEnvironment*)environment;
 - (void)updateWithDelta:(CGFloat)delta;
+- (GERect)viewportLayout;
 @end
 
 

@@ -181,7 +181,7 @@ static ODClassType* _TRCar_type;
                 EGRigidBody* b = [EGRigidBody dynamicData:self shape:_weakSelf.carType.rigidShape mass:((float)(_weakSelf.carType.weight))];
                 b.matrix = [[[GEMat4 identity] translateX:mid.x y:mid.y z:((float)(_weakSelf.carType.height / 2))] rotateAngle:((float)([line degreeAngle])) x:0.0 y:0.0 z:1.0];
                 GEVec3 rnd = GEVec3Make(((float)(randomFloatGap(-0.1, 0.1))), ((float)(randomFloatGap(-0.1, 0.1))), ((float)(randomFloatGap(0.0, 5.0))));
-                GEVec3 vel = geVec3AddVec3(geVec3ApplyVec2Z(geVec2MulValue(vec, ((float)(_weakSelf.train.speedFloat / len * 2))), 0.0), rnd);
+                GEVec3 vel = geVec3AddVec3(geVec3ApplyVec2Z(geVec2MulF(vec, _weakSelf.train.speedFloat / len * 2), 0.0), rnd);
                 b.velocity = (([_weakSelf.train isBack]) ? geVec3Negate(vel) : vel);
                 b.angularVelocity = GEVec3Make(((float)(randomFloatGap(-5.0, 5.0))), ((float)(randomFloatGap(-5.0, 5.0))), ((float)(randomFloatGap(-5.0, 5.0))));
                 return b;
@@ -219,9 +219,9 @@ static ODClassType* _TRCar_type;
         GELineSegment* line = [self position].line;
         CGFloat len = [line length];
         GEVec2 vec = [line vec];
-        GEVec2 dh = geVec2MulValue(vec, ((float)(_carType.frontToWheel / len)));
-        GEVec2 dt = geVec2MulValue(vec, ((float)(_carType.wheelToBack / len)));
-        return [[line moveWithPoint:geVec2MulValue(geVec2SubVec2(dh, dt), 0.5)] mid];
+        GEVec2 dh = geVec2MulF(vec, _carType.frontToWheel / len);
+        GEVec2 dt = geVec2MulF(vec, _carType.wheelToBack / len);
+        return [[line moveWithPoint:geVec2MulF(geVec2SubVec2(dh, dt), 0.5)] mid];
     }
 }
 

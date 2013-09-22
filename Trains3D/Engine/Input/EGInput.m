@@ -87,7 +87,7 @@ static ODClassType* _EGEvent_type;
         __lazy_segment = [CNLazy lazyWithF:^id() {
             return wrap(GELine3, (([_weakSelf.camera isEmpty]) ? GELine3Make(geVec3ApplyVec2Z([_weakSelf locationInView], 0.0), GEVec3Make(0.0, 0.0, 1000.0)) : ^GELine3() {
                 GERect viewport = ((EGEventCamera*)([_weakSelf.camera get])).viewport;
-                GEVec2 loc = geVec2SubVec2(geVec2MulValue(geVec2DivVec2(geVec2SubVec2([_weakSelf locationInView], viewport.origin), viewport.size), 2.0), GEVec2Make(1.0, 1.0));
+                GEVec2 loc = geVec2SubVec2(geVec2MulI(geVec2DivVec2(geVec2SubVec2([_weakSelf locationInView], viewport.origin), viewport.size), 2), GEVec2Make(1.0, 1.0));
                 GEMat4* mat4 = ((EGEventCamera*)([_weakSelf.camera get])).inverseMatrix;
                 GEVec4 p0 = [mat4 mulVec4:GEVec4Make(loc.x, loc.y, -1.0, 1.0)];
                 GEVec4 p1 = [mat4 mulVec4:GEVec4Make(loc.x, loc.y, 1.0, 1.0)];

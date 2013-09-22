@@ -140,10 +140,12 @@ static ODClassType* _EGLayer_type;
 }
 
 - (GERect)viewportWithViewSize:(GEVec2)viewSize {
+    GERect layout = [_view viewportLayout];
     CGFloat vpr = [[_view camera] viewportRatio];
-    GEVec2 srt = geVec2DivF(viewSize, vpr);
-    GEVec2 vpSize = ((viewSize.x / viewSize.y < vpr) ? GEVec2Make(viewSize.x, viewSize.x / vpr) : GEVec2Make(viewSize.y * vpr, viewSize.y));
-    return geVec2RectInCenterWithSize(vpSize, viewSize);
+    GEVec2 size = geVec2MulVec2(viewSize, layout.size);
+    GEVec2 vpSize = ((size.x / size.y < vpr) ? GEVec2Make(size.x, size.x / vpr) : GEVec2Make(size.y * vpr, size.y));
+    GEVec2 po = geVec2AddF(geVec2DivI(layout.origin, 2), 0.5);
+    return GERectMake(geVec2MulVec2(geVec2SubVec2(viewSize, vpSize), po), vpSize);
 }
 
 - (ODClassType*)type {

@@ -52,6 +52,10 @@ static ODClassType* _TRLevelMenuView_type;
 - (void)updateWithDelta:(CGFloat)delta {
 }
 
+- (GERect)viewportLayout {
+    return geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0);
+}
+
 - (ODClassType*)type {
     return [TRLevelMenuView type];
 }

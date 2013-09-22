@@ -6,17 +6,32 @@ struct vec2(x : float4, y : float4) extends Comparable<vec2> {
     static def apply(vec2i : vec2i) = vec2(vec2i.x, vec2i.y)
 
     def add(vec2 : vec2) = vec2(x + vec2.x, y + vec2.y)
+    def add(f4 : float4) = vec2(x + f4, y + f4)
+    def add(f : float) = vec2(x + f, y + f)
+    def add(i : int) = vec2(x + i, y + i)
+
     def sub(vec2 : vec2) = vec2(x - vec2.x, y - vec2.y)
+    def sub(f4 : float4) = vec2(x - f4, y - f4)
+    def sub(f : float) = vec2(x - f, y - f)
+    def sub(i : int) = vec2(x - i, y - i)
+
+    def mul(vec2 : vec2) = vec2(x*vec2.x, y*vec2.y)
+    def mul(f4 : float4) = vec2(x*f4, y*f4)
+    def mul(f : float) = vec2(x*f, y*f)
+    def mul(i : int) = vec2(x*i, y*i)
+
+    def div(vec2 : vec2) = vec2(x/vec2.x, y/vec2.y)
+    def div(f4 : float4) = vec2(x/f4, y/f4)
+    def div(f : float) = vec2(x/f, y/f)
+    def div(i : int) = vec2(x/i, y/i)
+
     def negate = vec2(-x, -y)
     def degreeAngle : float4 = 180.0 / M_PI * atan2(y, x)
     def angle : float4 = atan2(y, x)
     def dot(vec2 : vec2) : float4 = x*vec2.x + y*vec2.y
     def lengthSquare : float4 = dot(self)
     def length = sqrt(lengthSquare)
-    def mul(value : float4) = vec2(x*value, y*value)
-    def div(vec2 : vec2) = vec2(x/vec2.x, y/vec2.y)
-    def div(f4 : float4) = vec2(x/f4, y/f4)
-    def div(f : float) = vec2(x/f, y/f)
+
     def mid(vec2 : vec2) = add(vec2).mul(0.5)
     def distanceTo(vec2 : vec2) = sub(vec2).length
     def set(length : float4) = mul(length/self.length)
@@ -114,7 +129,6 @@ struct rect(origin : vec2, size : vec2) {
         && point.y <= origin.y + size.y
 
     def add(vec2 : vec2) = rect(origin.add(vec2), size)
-    def moveToCenterFor(size : vec2) = rect((size - self.size)*0.5, self.size)
 
     def intersects(rect : rect) : bool =
         origin.x <= rect.x2 && x2 >= rect.origin.x &&
