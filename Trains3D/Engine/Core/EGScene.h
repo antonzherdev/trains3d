@@ -5,6 +5,8 @@
 @class EGGlobal;
 @class EGContext;
 @class EGMatrixStack;
+@class GEMat4;
+@class EGEventCamera;
 @protocol EGInputProcessor;
 @class EGEnvironment;
 
@@ -20,9 +22,9 @@
 
 
 @protocol EGCamera<NSObject>
-- (void)focusForViewSize:(GEVec2)viewSize;
-- (GERecti)viewportWithViewSize:(GEVec2)viewSize;
+- (void)focus;
 - (EGMatrixModel*)matrixModel;
+- (CGFloat)viewportRatio;
 @end
 
 
@@ -51,6 +53,7 @@
 - (void)drawWithViewSize:(GEVec2)viewSize;
 - (BOOL)processEvent:(EGEvent*)event;
 - (void)updateWithDelta:(CGFloat)delta;
+- (GERect)viewportWithViewSize:(GEVec2)viewSize;
 + (ODClassType*)type;
 @end
 

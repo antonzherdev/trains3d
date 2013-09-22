@@ -2,6 +2,7 @@
 
 #import "EGContext.h"
 #import "EGInput.h"
+#import "GEMat4.h"
 @implementation EGScene{
     GEVec4 _backgroundColor;
     id<EGController> _controller;
@@ -118,23 +119,31 @@ static ODClassType* _EGLayer_type;
 }
 
 - (void)drawWithViewSize:(GEVec2)viewSize {
-    id<EGCamera> camera = [_view camera];
-    [EGGlobal.context setViewport:[camera viewportWithViewSize:viewSize]];
-    EGGlobal.matrix.value = [camera matrixModel];
-    [camera focusForViewSize:viewSize];
     EGGlobal.context.environment = [_view environment];
+    id<EGCamera> camera = [_view camera];
+    [EGGlobal.context setViewport:geRectiApplyRect([self viewportWithViewSize:viewSize])];
+    EGGlobal.matrix.value = [camera matrixModel];
+    [camera focus];
     [_view drawView];
 }
 
 - (BOOL)processEvent:(EGEvent*)event {
     return unumb([[_processor mapF:^id(id<EGInputProcessor> p) {
-        EGEvent* cameraEvent = [event setCamera:[CNOption applyValue:[_view camera]]];
-        return numb([p processEvent:cameraEvent]);
+        EGEventCamera* cam = [EGEventCamera eventCameraWithInverseMatrix:[[[[_view camera] matrixModel] wcp] inverse] viewport:[self viewportWithViewSize:event.viewSize]];
+        EGEvent* e = [event setCamera:[CNOption applyValue:cam]];
+        return numb([p processEvent:e]);
     }] getOrValue:@NO]);
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
     [_view updateWithDelta:delta];
+}
+
+- (GERect)viewportWithViewSize:(GEVec2)viewSize {
+    CGFloat vpr = [[_view camera] viewportRatio];
+    GEVec2 srt = geVec2DivF(viewSize, vpr);
+    GEVec2 vpSize = ((viewSize.x / viewSize.y < vpr) ? GEVec2Make(viewSize.x, viewSize.x / vpr) : GEVec2Make(viewSize.y * vpr, viewSize.y));
+    return geVec2RectInCenterWithSize(vpSize, viewSize);
 }
 
 - (ODClassType*)type {

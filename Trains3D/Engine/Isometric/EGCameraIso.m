@@ -11,6 +11,7 @@
     CGFloat _ww;
     CGFloat _isoWW2;
     float _yReserve;
+    CGFloat _viewportRatio;
     EGMatrixModel* _matrixModel;
 }
 static CGFloat _EGCameraIso_ISO;
@@ -20,6 +21,7 @@ static ODClassType* _EGCameraIso_type;
 @synthesize tilesOnScreen = _tilesOnScreen;
 @synthesize zReserve = _zReserve;
 @synthesize center = _center;
+@synthesize viewportRatio = _viewportRatio;
 @synthesize matrixModel = _matrixModel;
 
 + (id)cameraIsoWithTilesOnScreen:(GEVec2i)tilesOnScreen zReserve:(float)zReserve center:(GEVec2)center {
@@ -35,6 +37,7 @@ static ODClassType* _EGCameraIso_type;
         _ww = ((CGFloat)(_tilesOnScreen.x + _tilesOnScreen.y));
         _isoWW2 = _ww * _EGCameraIso_ISO / 2;
         _yReserve = _zReserve * 0.612372;
+        _viewportRatio = 2 * _ww / (_yReserve * 2 + _ww);
         _matrixModel = [EGMatrixModel applyM:_EGCameraIso_m w:_EGCameraIso_w c:[[[[GEMat4 identity] translateX:((float)(-_isoWW2 + _EGCameraIso_ISO)) y:((float)(-_EGCameraIso_ISO * (_tilesOnScreen.y - _tilesOnScreen.x) / 4 + _isoWW2 / 2)) z:-1000.0] rotateAngle:30.0 x:1.0 y:0.0 z:0.0] rotateAngle:-45.0 x:0.0 y:1.0 z:0.0] p:[GEMat4 orthoLeft:((float)(-_isoWW2)) right:((float)(_isoWW2)) bottom:0.0 top:((float)((_ww + 2 * _yReserve) * _EGCameraIso_ISO / 2)) zNear:0.0 zFar:2000.0]];
     }
     
@@ -49,15 +52,7 @@ static ODClassType* _EGCameraIso_type;
     _EGCameraIso_w = [[GEMat4 identity] rotateAngle:-90.0 x:1.0 y:0.0 z:0.0];
 }
 
-- (GERecti)viewportWithViewSize:(GEVec2)viewSize {
-    float tw = viewSize.x / _ww;
-    float th = 2 * viewSize.y / (_ww + _yReserve * 2);
-    CGFloat tileSize = min(((CGFloat)(tw)), ((CGFloat)(th)));
-    float ry = _yReserve * tileSize;
-    return geRectiMoveToCenterForSize(geRectiApplyXYWidthHeight(0.0, 0.0, ((float)(tileSize * _ww)), (_yReserve * 2 + _ww) * tileSize / 2), viewSize);
-}
-
-- (void)focusForViewSize:(GEVec2)viewSize {
+- (void)focus {
     glCullFace(GL_FRONT);
 }
 

@@ -5,11 +5,11 @@ trait Controller {
 }
 
 trait Camera {
-    def focusFor(viewSize : vec2)  {}
-
-    def viewportWith(viewSize : vec2) : recti
+    def focus {}
 
     def matrixModel : MatrixModel
+
+    def viewportRatio : float //width/height
 }
 
 
@@ -28,23 +28,31 @@ class Scene(backgroundColor : vec4, controller : Controller, layers : [Layer]) {
 
 class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
     def drawWith(viewSize : vec2) {
-        val camera = view.camera
-        context.set(viewport = camera.viewportWith(viewSize))
-        matrix.value = camera.matrixModel
-        camera.focusFor(viewSize)
         context.environment = view.environment
+        val camera = view.camera
+        context.set(viewport = viewportWith(viewSize))
+        matrix.value = camera.matrixModel
+        camera.focus
         view.drawView
     }
 
     def process(event : Event) : bool = {
         processor.map{ p ->
-            val cameraEvent = event.set(camera = view.camera)
-            p.process(cameraEvent)
+            val cam = EventCamera(inverseMatrix = view.camera.matrixModel.wcp.inverse, viewportWith(event.viewSize))
+            val e = event.set(camera = cam)
+            p.process(e)
         }.getOr(false)
     }
 
     def updateWith(delta : float) {
         view.updateWith(delta)
+    }
+
+    def viewportWith(viewSize : vec2) : rect = {
+        val vpr = view.camera.viewportRatio
+        val srt =  viewSize/vpr
+        val vpSize = if(viewSize.x/viewSize.y < vpr) vec2(viewSize.x, viewSize.x/vpr) else vec2(viewSize.y*vpr, viewSize.y)
+        vpSize.rectInCenterWith(viewSize)
     }
 }
 

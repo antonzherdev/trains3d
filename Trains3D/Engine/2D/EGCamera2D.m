@@ -4,10 +4,12 @@
 #import "GEMat4.h"
 @implementation EGCamera2D{
     GEVec2 _size;
+    CGFloat _viewportRatio;
     EGMatrixModel* _matrixModel;
 }
 static ODClassType* _EGCamera2D_type;
 @synthesize size = _size;
+@synthesize viewportRatio = _viewportRatio;
 @synthesize matrixModel = _matrixModel;
 
 + (id)camera2DWithSize:(GEVec2)size {
@@ -18,6 +20,7 @@ static ODClassType* _EGCamera2D_type;
     self = [super init];
     if(self) {
         _size = size;
+        _viewportRatio = ((CGFloat)(_size.x / _size.y));
         _matrixModel = [EGMatrixModel applyM:[GEMat4 identity] w:[GEMat4 identity] c:[GEMat4 identity] p:[GEMat4 orthoLeft:0.0 right:_size.x bottom:0.0 top:_size.y zNear:-1.0 zFar:1.0]];
     }
     
@@ -29,19 +32,7 @@ static ODClassType* _EGCamera2D_type;
     _EGCamera2D_type = [ODClassType classTypeWithCls:[EGCamera2D class]];
 }
 
-- (float)factorForViewSize:(GEVec2)viewSize {
-    return ((float)(min(((CGFloat)(viewSize.x / _size.x)), ((CGFloat)(viewSize.y / _size.y)))));
-}
-
-- (GERecti)viewportWithViewSize:(GEVec2)viewSize {
-    return [self viewportWithViewSize:viewSize factor:[self factorForViewSize:viewSize]];
-}
-
-- (GERecti)viewportWithViewSize:(GEVec2)viewSize factor:(float)factor {
-    return geRectiMoveToCenterForSize(geRectiApplyXYWidthHeight(0.0, 0.0, _size.x * factor, _size.y * factor), viewSize);
-}
-
-- (void)focusForViewSize:(GEVec2)viewSize {
+- (void)focus {
 }
 
 - (ODClassType*)type {

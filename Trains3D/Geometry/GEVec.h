@@ -45,12 +45,14 @@ CGFloat geVec2Length(GEVec2 self);
 GEVec2 geVec2MulValue(GEVec2 self, float value);
 GEVec2 geVec2DivVec2(GEVec2 self, GEVec2 vec2);
 GEVec2 geVec2DivF4(GEVec2 self, float f4);
+GEVec2 geVec2DivF(GEVec2 self, CGFloat f);
 GEVec2 geVec2MidVec2(GEVec2 self, GEVec2 vec2);
 CGFloat geVec2DistanceToVec2(GEVec2 self, GEVec2 vec2);
 GEVec2 geVec2SetLength(GEVec2 self, float length);
 GEVec2 geVec2Normalize(GEVec2 self);
 NSInteger geVec2CompareTo(GEVec2 self, GEVec2 to);
 GERect geVec2RectToVec2(GEVec2 self, GEVec2 vec2);
+GERect geVec2RectInCenterWithSize(GEVec2 self, GEVec2 size);
 ODPType* geVec2Type();
 @interface GEVec2Wrap : NSObject
 @property (readonly, nonatomic) GEVec2 value;

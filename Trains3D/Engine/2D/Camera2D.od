@@ -4,10 +4,7 @@ import core.math._
 
 
 class Camera2D(size : vec2) extends Camera {
-    private def factorFor(viewSize : vec2) : float4 = min(viewSize.x/size.x, viewSize.y/size.y)
-    def viewportWith(viewSize : vec2) : recti = viewportWith(viewSize, factorFor(viewSize))
-    private def viewportWith(viewSize : vec2, factor : float4) : recti =
-        recti(0, 0, size.x*factor, size.y*factor).moveToCenterFor(viewSize)
+    val viewportRatio : float = size.x/size.y
 
     val matrixModel : MatrixModel = MatrixModel(
         m = mat4.identity,

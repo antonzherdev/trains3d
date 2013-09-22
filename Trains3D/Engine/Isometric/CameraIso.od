@@ -9,14 +9,7 @@ class CameraIso(tilesOnScreen : vec2i, zReserve : float4, center : vec2) extends
     private val ww : float = tilesOnScreen.x + tilesOnScreen.y
     private val isoWW2 = ww*ISO/2
     private val yReserve = zReserve * 0.612372
-
-    def viewportWith(viewSize : vec2) : recti = {
-        val tw = viewSize.x / ww
-        val th = 2*viewSize.y/ (ww + yReserve*2)
-        val tileSize = min(tw, th)
-        val ry = yReserve * tileSize
-        recti(0, 0, tileSize * ww, (yReserve*2 + ww) * tileSize/2).moveToCenterFor(viewSize)
-    }
+    val viewportRatio : float = 2*ww/(yReserve*2 + ww)
 
     static val m = mat4.identity.rotate(90, 1, 0, 0)
     static val w = mat4.identity.rotate(-90, 1, 0, 0)
@@ -30,9 +23,7 @@ class CameraIso(tilesOnScreen : vec2i, zReserve : float4, center : vec2) extends
         p = mat4.ortho(-isoWW2, isoWW2, 0, (ww + 2*yReserve)*ISO/2, 0.0, 2000.0)
     )
 
-
-
-    def focusFor(viewSize : vec2) {
+    def focus {
         glCullFace(GL_FRONT)
     }
 }

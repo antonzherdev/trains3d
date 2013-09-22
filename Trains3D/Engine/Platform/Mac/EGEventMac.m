@@ -56,7 +56,7 @@
 
 - (GEVec2)locationInView {
     NSPoint point = [_view convertPoint:[_event locationInWindow] fromView:nil];
-    return GEVec2Make(point.x, point.y);
+    return GEVec2Make((float) point.x, (float) point.y);
 }
 
 - (EGEvent *)setCamera:(id)camera {

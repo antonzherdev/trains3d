@@ -16,6 +16,7 @@ struct vec2(x : float4, y : float4) extends Comparable<vec2> {
     def mul(value : float4) = vec2(x*value, y*value)
     def div(vec2 : vec2) = vec2(x/vec2.x, y/vec2.y)
     def div(f4 : float4) = vec2(x/f4, y/f4)
+    def div(f : float) = vec2(x/f, y/f)
     def mid(vec2 : vec2) = add(vec2).mul(0.5)
     def distanceTo(vec2 : vec2) = sub(vec2).length
     def set(length : float4) = mul(length/self.length)
@@ -27,6 +28,7 @@ struct vec2(x : float4, y : float4) extends Comparable<vec2> {
     }
 
     def rectTo(vec2 : vec2) : rect = rect(self, vec2.sub(self))
+    def rectInCenterWith(size : vec2) : rect = rect((size - self)*0.5, self)
 }
 
 struct vec2i(x : int, y : int) extends Comparable<vec2i> {

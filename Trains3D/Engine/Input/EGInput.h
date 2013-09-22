@@ -1,10 +1,9 @@
 #import "objd.h"
 #import "GEVec.h"
 #import "GELine.h"
-@protocol EGCamera;
-@class EGMatrixModel;
 @class GEMat4;
 
+@class EGEventCamera;
 @class EGEvent;
 @class EGRectIndex;
 @protocol EGInputProcessor;
@@ -28,6 +27,17 @@
 - (BOOL)touchMovedEvent:(EGEvent*)event;
 - (BOOL)touchEndedEvent:(EGEvent*)event;
 - (BOOL)touchCanceledEvent:(EGEvent*)event;
+@end
+
+
+@interface EGEventCamera : NSObject
+@property (nonatomic, readonly) GEMat4* inverseMatrix;
+@property (nonatomic, readonly) GERect viewport;
+
++ (id)eventCameraWithInverseMatrix:(GEMat4*)inverseMatrix viewport:(GERect)viewport;
+- (id)initWithInverseMatrix:(GEMat4*)inverseMatrix viewport:(GERect)viewport;
+- (ODClassType*)type;
++ (ODClassType*)type;
 @end
 
 

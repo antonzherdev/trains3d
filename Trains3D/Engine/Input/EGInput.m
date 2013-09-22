@@ -1,8 +1,70 @@
 #import "EGInput.h"
 
-#import "EGScene.h"
-#import "EGContext.h"
 #import "GEMat4.h"
+@implementation EGEventCamera{
+    GEMat4* _inverseMatrix;
+    GERect _viewport;
+}
+static ODClassType* _EGEventCamera_type;
+@synthesize inverseMatrix = _inverseMatrix;
+@synthesize viewport = _viewport;
+
++ (id)eventCameraWithInverseMatrix:(GEMat4*)inverseMatrix viewport:(GERect)viewport {
+    return [[EGEventCamera alloc] initWithInverseMatrix:inverseMatrix viewport:viewport];
+}
+
+- (id)initWithInverseMatrix:(GEMat4*)inverseMatrix viewport:(GERect)viewport {
+    self = [super init];
+    if(self) {
+        _inverseMatrix = inverseMatrix;
+        _viewport = viewport;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGEventCamera_type = [ODClassType classTypeWithCls:[EGEventCamera class]];
+}
+
+- (ODClassType*)type {
+    return [EGEventCamera type];
+}
+
++ (ODClassType*)type {
+    return _EGEventCamera_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGEventCamera* o = ((EGEventCamera*)(other));
+    return [self.inverseMatrix isEqual:o.inverseMatrix] && GERectEq(self.viewport, o.viewport);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.inverseMatrix hash];
+    hash = hash * 31 + GERectHash(self.viewport);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"inverseMatrix=%@", self.inverseMatrix];
+    [description appendFormat:@", viewport=%@", GERectDescription(self.viewport)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation EGEvent{
     GEVec2 _viewSize;
     id _camera;
@@ -24,9 +86,9 @@ static ODClassType* _EGEvent_type;
         _camera = camera;
         __lazy_segment = [CNLazy lazyWithF:^id() {
             return wrap(GELine3, (([_weakSelf.camera isEmpty]) ? GELine3Make(geVec3ApplyVec2Z([_weakSelf locationInView], 0.0), GEVec3Make(0.0, 0.0, 1000.0)) : ^GELine3() {
-                GERecti viewport = [[_weakSelf.camera get] viewportWithViewSize:_weakSelf.viewSize];
-                GEVec2 loc = geVec2SubVec2(geVec2MulValue(geVec2DivVec2(geVec2SubVec2([_weakSelf locationInView], geVec2ApplyVec2i(viewport.origin)), geVec2ApplyVec2i(viewport.size)), 2.0), GEVec2Make(1.0, 1.0));
-                GEMat4* mat4 = [[[[_weakSelf.camera get] matrixModel] wcp] inverse];
+                GERect viewport = ((EGEventCamera*)([_weakSelf.camera get])).viewport;
+                GEVec2 loc = geVec2SubVec2(geVec2MulValue(geVec2DivVec2(geVec2SubVec2([_weakSelf locationInView], viewport.origin), viewport.size), 2.0), GEVec2Make(1.0, 1.0));
+                GEMat4* mat4 = ((EGEventCamera*)([_weakSelf.camera get])).inverseMatrix;
                 GEVec4 p0 = [mat4 mulVec4:GEVec4Make(loc.x, loc.y, -1.0, 1.0)];
                 GEVec4 p1 = [mat4 mulVec4:GEVec4Make(loc.x, loc.y, 1.0, 1.0)];
                 return GELine3Make(geVec4Xyz(p0), geVec3SubVec3(geVec4Xyz(p1), geVec4Xyz(p0)));

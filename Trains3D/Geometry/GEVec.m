@@ -37,6 +37,9 @@ GEVec2 geVec2DivVec2(GEVec2 self, GEVec2 vec2) {
 GEVec2 geVec2DivF4(GEVec2 self, float f4) {
     return GEVec2Make(self.x / f4, self.y / f4);
 }
+GEVec2 geVec2DivF(GEVec2 self, CGFloat f) {
+    return GEVec2Make(self.x / f, self.y / f);
+}
 GEVec2 geVec2MidVec2(GEVec2 self, GEVec2 vec2) {
     return geVec2MulValue(geVec2AddVec2(self, vec2), 0.5);
 }
@@ -56,6 +59,9 @@ NSInteger geVec2CompareTo(GEVec2 self, GEVec2 to) {
 }
 GERect geVec2RectToVec2(GEVec2 self, GEVec2 vec2) {
     return GERectMake(self, geVec2SubVec2(vec2, self));
+}
+GERect geVec2RectInCenterWithSize(GEVec2 self, GEVec2 size) {
+    return GERectMake(geVec2MulValue(geVec2SubVec2(size, self), 0.5), self);
 }
 ODPType* geVec2Type() {
     static ODPType* _ret = nil;
