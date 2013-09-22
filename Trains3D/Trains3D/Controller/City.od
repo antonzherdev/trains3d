@@ -8,10 +8,6 @@ enum CityColor(color : vec4) {
     purple(vec4(0.9, 0.44, 0.66 , 1.0))
 
     grey(vec4(0.5, 0.5, 0.5 , 1.0))
-
-    def set {
-        egColor(color)
-    }
 }
 
 

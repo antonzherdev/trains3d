@@ -12,7 +12,6 @@
 @interface TRCityColor : ODEnum
 @property (nonatomic, readonly) GEVec4 color;
 
-- (void)set;
 + (TRCityColor*)orange;
 + (TRCityColor*)green;
 + (TRCityColor*)purple;

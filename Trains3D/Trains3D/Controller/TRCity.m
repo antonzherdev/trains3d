@@ -1,6 +1,5 @@
 #import "TRCity.h"
 
-#import "GL.h"
 #import "TRRailPoint.h"
 #import "EGSchedule.h"
 @implementation TRCityColor{
@@ -31,10 +30,6 @@ static NSArray* _TRCityColor_values;
     _TRCityColor_purple = [TRCityColor cityColorWithOrdinal:2 name:@"purple" color:GEVec4Make(0.9, 0.44, 0.66, 1.0)];
     _TRCityColor_grey = [TRCityColor cityColorWithOrdinal:3 name:@"grey" color:GEVec4Make(0.5, 0.5, 0.5, 1.0)];
     _TRCityColor_values = (@[_TRCityColor_orange, _TRCityColor_green, _TRCityColor_purple, _TRCityColor_grey]);
-}
-
-- (void)set {
-    egColor(_color);
 }
 
 + (TRCityColor*)orange {

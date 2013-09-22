@@ -3,27 +3,6 @@
 
 @class GEMat4;
 
-static inline void egRotate(CGFloat angle, CGFloat x, CGFloat y, CGFloat z) {
-    glRotated(angle, x, y, z);
-}
-
-static inline void egScale (CGFloat x, CGFloat y, CGFloat z) {
-    glScaled(x, y, z);
-}
-
-static inline void egTranslate(CGFloat x, CGFloat y, CGFloat z) {
-    glTranslated(x, y, z);
-}
-
-static inline void egColor3(CGFloat red, CGFloat green, CGFloat blue) {
-    glColor3d(red, green, blue);
-}
-
-static inline void egColor4(CGFloat red, CGFloat green, CGFloat blue, CGFloat alpha) {
-    glColor4d(red, green, blue, alpha);
-}
-
-
 static inline void egClear() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
@@ -154,11 +133,6 @@ static inline GLint egGetUniformLocation(GLuint program, NSString* name) {
 static inline void egVertexAttribPointer (GLuint index, NSUInteger size, GLenum type, GLboolean normalized, NSUInteger stride, NSUInteger pointer) {
     glVertexAttribPointer(index, (GLint)size, type, normalized, (GLsizei)stride, (GLvoid const *) pointer);
 }
-
-static inline void egColor(GEVec4 self) {
-    egColor4(self.x, self.y, self.z, self.w);
-}
-
 
 #define egJasModel(NAME) [EGMesh \
     applyVertexData:[arrp(float, numf4, NAME ## _vertexcount*8) NAME ## _vertex] \

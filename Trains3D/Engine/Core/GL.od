@@ -15,14 +15,7 @@ stub struct GLbitfield
 
 stub object gl {
     def egClear
-
-    def egColor3(r : float, g : float, b : float)
-    def egColor4(r : float, g : float, b : float, a : float)
     def glClearColor(r : float, g : float, b : float, a : float)
-    def egColor(color : vec4)
-
-    def glutSolidCube(size :float)
-
 
     def glEnable(: uint)
     def glDisable(: uint)
@@ -35,15 +28,9 @@ stub object gl {
     val GL_FRONT : uint
     val GL_BACK : uint
     val GL_FRONT_AND_BACK : uint
-
     def glFrontFace(: uint)
     val GL_CW : uint
     val GL_CWW : uint
-
-    def glBegin(: uint)
-    def glEnd
-    val GL_QUADS : uint
-    val GL_LINES : uint
 
     def glGetError : GLenum
 
@@ -90,6 +77,7 @@ stub object gl {
     val GL_STATIC_DRAW : GLenum
     val GL_DYNAMIC_DRAW : GLenum
     val GL_TRIANGLES : GLenum
+    val GL_LINES : uint
 
     val GL_FLOAT : GLenum
     val GL_DOUBLE : GLenum
