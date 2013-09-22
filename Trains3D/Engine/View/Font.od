@@ -57,12 +57,11 @@ class Font(name : string, size : uint4) {
             else {
                 var fullWidth = 0
                 symbolsArr.for{s -> fullWidth += s.width}
-                pos.x - fullWidth*(alignment.x/2 + 0.5)
+                pos.x - fullWidth/vpSize.x*(alignment.x/2 + 0.5)
             }
         val y =
-            if(alignment.baseline) pos.y + (height - size).cast<float4>/vpSize.y
-            else pos.y - height.cast<float4>/vpSize.y*alignment.y
-
+            if(alignment.baseline) pos.y + height.cast<float4>/vpSize.y
+            else pos.y - height.cast<float4>/vpSize.y*(alignment.y/2 - 0.5)
         symbolsArr.for {s ->
             val size = s.size/vpSize
             val tr = s.textureRect

@@ -3,10 +3,11 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 
 class LevelFactory {
-    static def sceneFor(level : Level) = Scene(vec4(21, 40, 10, 255)/255, level, [
-        Layer(LevelView(level), LevelProcessor(level)),
-        Layer(LevelMenuView(level), LevelMenuProcessor(level))
-    ])
+    static def sceneFor(level : Level) = Scene(vec4(21, 40, 10, 255)/255, level,
+        VerticalLayout([
+            Layer(LevelView(level), LevelProcessor(level)),
+            Layer(LevelMenuView(level), LevelMenuProcessor(level))
+        ], viewportLayout = rect(0, -1, 1, 1)))
 
     static val scoreRules = ScoreRules(
         initialScore = 100000,

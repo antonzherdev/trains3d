@@ -76,7 +76,7 @@ static ODClassType* _GELine_type;
 }
 
 - (CGFloat)degreeAngle {
-    return [self angle] * 180 / M_PI;
+    return ([self angle] * 180) / M_PI;
 }
 
 - (GELine*)perpendicularWithPoint:(GEVec2)point {

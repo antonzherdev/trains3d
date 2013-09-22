@@ -39,7 +39,7 @@ stub class Chain<A> extends Iterable<A> {
     def sort(:(A, A) -> int) : Chain<A>
     def sortBy : SortBuilder<A>
 
-    def fold<B>( : (B, A) -> B, withStart : B) : B
+    def fold<B>(start : B, by : (B, A) -> B) : B
     def count : uint
     def for(each: A -> void)
     def head : A?

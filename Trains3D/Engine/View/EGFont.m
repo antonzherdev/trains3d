@@ -149,9 +149,9 @@ static ODClassType* _EGFont_type;
         [symbolsArr forEach:^void(EGFontSymbolDesc* s) {
             fullWidth += ((NSInteger)(s.width));
         }];
-        return pos.x - fullWidth * (alignment.x / 2 + 0.5);
+        return pos.x - fullWidth / vpSize.x * (alignment.x / 2 + 0.5);
     }());
-    float y = ((alignment.baseline) ? pos.y + ((float)(_height - _size)) / vpSize.y : pos.y - ((float)(_height)) / vpSize.y * alignment.y);
+    float y = ((alignment.baseline) ? pos.y + ((float)(_height)) / vpSize.y : pos.y - ((float)(_height)) / vpSize.y * (alignment.y / 2 - 0.5));
     [symbolsArr forEach:^void(EGFontSymbolDesc* s) {
         GEVec2 size = geVec2DivVec2(s.size, vpSize);
         GERect tr = s.textureRect;

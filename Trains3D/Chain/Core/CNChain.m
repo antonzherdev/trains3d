@@ -90,11 +90,11 @@
     return ret;
 }
 
-- (id)fold:(cnF2)f withStart:(id)start {
+- (id)foldStart:(id)start by:(cnF2)by {
     __block id ret = start;
     CNYield *yield = [CNYield alloc];
     yield = [yield initWithBegin:nil yield:^CNYieldResult(id item) {
-        ret = f(ret, item);
+        ret = by(ret, item);
         return cnYieldContinue;
     } end:nil all:nil];
     [self apply:yield];

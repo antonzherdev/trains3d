@@ -28,8 +28,8 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, _cars 
     private var head : RailPoint
     private var back = false
     def isBack = back
-    lazy val cars = _cars(self)
-    private val length : float = cars.chain.fold(((r, car) -> car.carType.fullLength + r), 0.0)
+    lazy val cars : [Car] = _cars(self)
+    private val length : float = cars.chain.fold(0.0, (r, car) -> car.carType.fullLength + r)
     val speedFloat : float = 0.01 * speed
     var isDying = false
 
@@ -46,7 +46,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, _cars 
         o.obstacleType ==  ObstacleType.light
 
     private def calculateCarPositions {
-        directedCars.chain.fold((frontConnector, car) -> {
+        directedCars.chain.fold(head.invert, (frontConnector, car) -> {
             val tp : CarType = car.carType
             val fl = tp.startToWheel
             val bl = tp.wheelToEnd
@@ -57,7 +57,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, _cars 
                 if(back) CarPosition(backConnector, tail, head, frontConnector)
                 else CarPosition(frontConnector, head, tail, backConnector))
             backConnector
-        }, head.invert)
+        })
     }
 
     private def move(point : vec2, length : float) = vec2(point.x, point.y + length)

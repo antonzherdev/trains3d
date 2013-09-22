@@ -118,9 +118,9 @@ SPEC_BEGIN(CNChainSpec)
           [[[[[s chain] reverse] toArray] should] equal:@[@2, @3, @1]];
       });
       it(@".fold should make fold", ^{
-          id r = [[s chain] fold:^id(id x, id y) {
+          id r = [[s chain] foldStart:@0 by:^id(id x, id y) {
               return numi(unumi(x) + unumi(y));
-          } withStart:@0];
+          }];
           [[r should] equal:@6];
       });
       it(@".find should find first compatilable items or none", ^{

@@ -118,9 +118,9 @@ static ODClassType* _TRTrain_type;
         __lazy_cars = [CNLazy lazyWithF:^id<CNSeq>() {
             return _weakSelf._cars(self);
         }];
-        _length = unumf([[[self cars] chain] fold:^id(id r, TRCar* car) {
+        _length = unumf([[[self cars] chain] foldStart:@0.0 by:^id(id r, TRCar* car) {
             return numf(car.carType.fullLength + unumf(r));
-        } withStart:@0.0]);
+        }]);
         _speedFloat = 0.01 * _speed;
         _isDying = NO;
         _carsObstacleProcessor = ^BOOL(TRObstacle* o) {
@@ -155,7 +155,7 @@ static ODClassType* _TRTrain_type;
 }
 
 - (void)calculateCarPositions {
-    ((TRRailPoint*)([[[self directedCars] chain] fold:^TRRailPoint*(TRRailPoint* frontConnector, TRCar* car) {
+    ((TRRailPoint*)([[[self directedCars] chain] foldStart:[_head invert] by:^TRRailPoint*(TRRailPoint* frontConnector, TRCar* car) {
         TRCarType* tp = car.carType;
         CGFloat fl = tp.startToWheel;
         CGFloat bl = tp.wheelToEnd;
@@ -164,7 +164,7 @@ static ODClassType* _TRTrain_type;
         TRRailPoint* backConnector = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((_back) ? fl : bl) point:tail] addErrorToPoint];
         [car setPosition:((_back) ? [TRCarPosition carPositionWithFrontConnector:backConnector head:tail tail:head backConnector:frontConnector] : [TRCarPosition carPositionWithFrontConnector:frontConnector head:head tail:tail backConnector:backConnector])];
         return backConnector;
-    } withStart:[_head invert]]));
+    }]));
 }
 
 - (GEVec2)movePoint:(GEVec2)point length:(CGFloat)length {

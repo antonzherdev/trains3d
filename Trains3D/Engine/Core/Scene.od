@@ -13,32 +13,32 @@ trait Camera {
 }
 
 
-class Scene(backgroundColor : vec4, controller : Controller, layers : [Layer]) {
+class Scene(backgroundColor : vec4, controller : Controller, layersLayout : LayersLayout) {
     def drawWith(viewSize : vec2) {
-        layers.for(_.drawWith(viewSize))
+        layersLayout.drawWith(viewSize)
     }
 
-    def process(event : Event) = layers.chain.reverse.fold((r, layer) -> r || layer.process(event), false)
+    def process(event : Event) : bool = layersLayout.process(event)
 
     def updateWith(delta : float) {
         controller.updateWith(delta)
-        layers.for(_.updateWith(delta))
+        layersLayout.updateWith(delta)
     }
 }
 
 class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
-    def drawWith(viewSize : vec2) {
+    def drawWith(viewport : rect) {
         context.environment = view.environment
         val camera = view.camera
-        context.set(viewport = viewportWith(viewSize))
+        context.set(viewport = viewport)
         matrix.value = camera.matrixModel
         camera.focus
         view.drawView
     }
 
-    def process(event : Event) : bool = {
+    def process(event : Event, viewport : rect) : bool = {
         processor.map{ p ->
-            val cam = EventCamera(inverseMatrix = view.camera.matrixModel.wcp.inverse, viewportWith(event.viewSize))
+            val cam = EventCamera(inverseMatrix = view.camera.matrixModel.wcp.inverse, viewport)
             val e = event.set(camera = cam)
             p.process(e)
         }.getOr(false)
@@ -47,17 +47,87 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
     def updateWith(delta : float) {
         view.updateWith(delta)
     }
+}
+
+class LayersLayout(viewportLayout : rect) {
+    def drawWith(viewSize : vec2) {
+        drawWith(viewport = viewportWith(viewSize))
+    }
+
+    def drawWith(viewport : rect) {
+        go(viewport, (item, vp) -> item.drawWith(viewport = vp))
+    }
+
+    def go(viewport : rect, f : (LayersLayout, rect) -> void)
+
+    def process(event : Event) : bool =
+        process(event, viewportWith(event.viewSize))
+
+    def process(event : Event, viewport : rect) : bool = {
+        var r = false
+        go(viewport, (item, vp) -> r = (r || item.process(event, viewport = vp)))
+        r
+    }
+
+    def updateWith(delta : float)
 
     def viewportWith(viewSize : vec2) : rect = {
-        val layout = view.viewportLayout
-        val vpr = view.camera.viewportRatio
+        val layout = viewportLayout
+        val vpr = viewportRatio
 
         val size = viewSize*layout.size
         val vpSize = if(size.x/size.y < vpr) vec2(size.x, size.x/vpr) else vec2(size.y*vpr, size.y)
         val po = layout.origin/2 + 0.5
         rect((viewSize - vpSize) * po, vpSize)
     }
+
+    def viewportRatio : float4
+
+    static val defaultViewportLayout = rect(0, 0, 1, 1)
+
+    static def apply(layer : Layer)  = SimpleLayout(layer, defaultViewportLayout)
 }
+
+class SimpleLayout(layer : Layer, viewportLayout : rect) extends LayersLayout(viewportLayout) {
+    def viewportRatio : float4 = layer.view.camera.viewportRatio
+
+    def drawWith(viewport : rect) {
+        layer.drawWith(viewport)
+    }
+
+    def updateWith(delta : float) {
+        layer.updateWith(delta)
+    }
+
+    def process(event : Event, viewport : rect) : bool =  layer.process(event, viewport)
+
+    static def apply(layer : Layer)  = SimpleLayout(layer, defaultViewportLayout)
+}
+
+class VerticalLayout(items : [LayersLayout], viewportLayout : rect) extends LayersLayout(viewportLayout) {
+    val viewportRatio : float4 =
+        items.chain.fold(0.0, (r, item) -> if(r == 0) item.viewportRatio else {
+            val b = item.viewportRatio
+            2*r*b/(r + b)
+        })
+    def go(viewport : rect, f : (LayersLayout, rect) -> void) {
+        var y = viewport.y
+        items.for{item ->
+            val v = item.viewportWith(viewSize = viewport.size)
+            f(item, rect(vec2(viewport.x, y), v.size))
+            y += v.height
+        }
+    }
+
+    def updateWith(delta : float) {
+        items.for(_.updateWith(delta))
+    }
+
+    static def apply(items : [LayersLayout]) = VerticalLayout(items, defaultViewportLayout)
+
+}
+
+
 
 trait LayerView extends Controller {
     def camera : Camera
@@ -67,6 +137,4 @@ trait LayerView extends Controller {
     def environment = Environment.default
 
     def updateWith(delta : float) {}
-
-    def viewportLayout : rect = rect(0, 0, 1, 1)
 }

@@ -6,7 +6,6 @@ class LevelView(level : Level) extends LayerView {
     private val cityView = CityView()
     private val railroadView = RailroadView(level.railroad)
     private val trainView = TrainView()
-    val viewportLayout : rect = rect(0, -1, 1, 1)
 
     val environment = Environment(ambientColor = vec4(0.4, 0.4, 0.4, 1), lights = [
         DirectLight(vec4(1, 1, 1, 1), vec3(-0.15, 0.25, -0.5).normalize)])

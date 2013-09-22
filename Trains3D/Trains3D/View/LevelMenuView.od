@@ -5,13 +5,12 @@ import com.antonzherdev.eg.Text._
 import com.antonzherdev.eg._
 
 class LevelMenuView(level : Level) extends LayerView {
-    val camera : Camera = Camera2D(vec2(16, 9))
+    val camera : Camera = Camera2D(vec2(16, 1))
     val font = fontWith(name = "helvetica", size = 14)
-    val viewportLayout : rect = rect(0, -1, 1, 1)
     def drawView {
-        font.draw(text = level.score.score, color = vec4(1, 1, 1, 1), at = vec2(0, 8), TextAlignment(-1, -1))
+        font.draw(text = level.score.score, color = vec4(1, 1, 1, 1), at = vec2(0, 0), TextAlignment(-1, -1))
         val seconds : int = level.schedule.time
-        font.draw(text = seconds, color = vec4(1, 1, 1, 1), at = vec2(16, 8), TextAlignment(1, -1))
+        font.draw(text = seconds, color = vec4(1, 1, 1, 1), at = vec2(16, 0), TextAlignment(1, -1))
 
         if(!level.railroad.damagesPoints.isEmpty && level.repairer.isEmpty) {
             /*glPushMatrix

@@ -7,8 +7,10 @@
 @class TRLevelView;
 @class TRLevelProcessor;
 @class EGLayer;
+@class EGLayersLayout;
 @class TRLevelMenuView;
 @class TRLevelMenuProcessor;
+@class EGVerticalLayout;
 @class TRLevel;
 @class TRTrainType;
 @class TRCarType;

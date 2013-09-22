@@ -59,7 +59,8 @@
 - (NSUInteger)count;
 - (NSArray*)toArray;
 - (NSSet*)toSet;
-- (id)fold:(cnF2)f withStart:(id)start;
+
+- (id)foldStart:(id)start by:(cnF2)by;
 - (id)find:(cnPredicate)predicate;
 - (id)min;
 - (id)max;
