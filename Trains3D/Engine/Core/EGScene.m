@@ -3,20 +3,23 @@
 #import "EGContext.h"
 #import "EGInput.h"
 @implementation EGScene{
+    GEVec4 _backgroundColor;
     id<EGController> _controller;
     id<CNSeq> _layers;
 }
 static ODClassType* _EGScene_type;
+@synthesize backgroundColor = _backgroundColor;
 @synthesize controller = _controller;
 @synthesize layers = _layers;
 
-+ (id)sceneWithController:(id<EGController>)controller layers:(id<CNSeq>)layers {
-    return [[EGScene alloc] initWithController:controller layers:layers];
++ (id)sceneWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(id<CNSeq>)layers {
+    return [[EGScene alloc] initWithBackgroundColor:backgroundColor controller:controller layers:layers];
 }
 
-- (id)initWithController:(id<EGController>)controller layers:(id<CNSeq>)layers {
+- (id)initWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(id<CNSeq>)layers {
     self = [super init];
     if(self) {
+        _backgroundColor = backgroundColor;
         _controller = controller;
         _layers = layers;
     }
@@ -64,11 +67,12 @@ static ODClassType* _EGScene_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGScene* o = ((EGScene*)(other));
-    return [self.controller isEqual:o.controller] && [self.layers isEqual:o.layers];
+    return GEVec4Eq(self.backgroundColor, o.backgroundColor) && [self.controller isEqual:o.controller] && [self.layers isEqual:o.layers];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
+    hash = hash * 31 + GEVec4Hash(self.backgroundColor);
     hash = hash * 31 + [self.controller hash];
     hash = hash * 31 + [self.layers hash];
     return hash;
@@ -76,7 +80,8 @@ static ODClassType* _EGScene_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"controller=%@", self.controller];
+    [description appendFormat:@"backgroundColor=%@", GEVec4Description(self.backgroundColor)];
+    [description appendFormat:@", controller=%@", self.controller];
     [description appendFormat:@", layers=%@", self.layers];
     [description appendString:@">"];
     return description;

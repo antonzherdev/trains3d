@@ -13,7 +13,7 @@ trait Camera {
 }
 
 
-class Scene(val controller : Controller, val layers : [Layer]) {
+class Scene(backgroundColor : vec4, controller : Controller, layers : [Layer]) {
     def drawWith(viewSize : vec2) {
         layers.for(_.drawWith(viewSize))
     }

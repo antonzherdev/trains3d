@@ -25,7 +25,7 @@ static ODClassType* _TRLevelMenuView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _camera = [EGCamera2D camera2DWithSize:GEVec2Make(2.0, 1.0)];
+        _camera = [EGCamera2D camera2DWithSize:GEVec2Make(16.0, 9.0)];
         _font = [EGGlobal fontWithName:@"helvetica" size:14];
     }
     
@@ -38,9 +38,9 @@ static ODClassType* _TRLevelMenuView_type;
 }
 
 - (void)drawView {
-    [_font drawText:[NSString stringWithFormat:@"%li", [_level.score score]] at:GEVec2Make(1.0, 0.95) color:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
+    [_font drawText:[NSString stringWithFormat:@"%li", [_level.score score]] at:GEVec2Make(0.2, 8.6) color:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
     NSInteger seconds = ((NSInteger)([_level.schedule time]));
-    [_font drawText:[NSString stringWithFormat:@"%li", seconds] at:GEVec2Make(1.5, 0.95) color:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
+    [_font drawText:[NSString stringWithFormat:@"%li", seconds] at:GEVec2Make(15.0, 8.6) color:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
     if(!([[_level.railroad damagesPoints] isEmpty]) && [[_level repairer] isEmpty]) {
     }
 }

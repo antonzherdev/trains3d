@@ -10,7 +10,8 @@ class Director {
 
     def drawWith(size : vec2) {
         context.director = self
-        glClearColor(0.0, 0.0, 0.0, 1)
+        val color = scene.backgroundColor
+        glClearColor(color.x, color.y, color.z, color.w)
         egClear
         matrix.clear
         glEnable(GL_DEPTH_TEST)

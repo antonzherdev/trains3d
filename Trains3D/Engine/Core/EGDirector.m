@@ -40,7 +40,8 @@ static ODClassType* _EGDirector_type;
 
 - (void)drawWithSize:(GEVec2)size {
     EGGlobal.context.director = self;
-    glClearColor(0.0, 0.0, 0.0, 1.0);
+    GEVec4 color = _scene.backgroundColor;
+    glClearColor(((CGFloat)(color.x)), ((CGFloat)(color.y)), ((CGFloat)(color.z)), ((CGFloat)(color.w)));
     egClear();
     [EGGlobal.matrix clear];
     glEnable(GL_DEPTH_TEST);

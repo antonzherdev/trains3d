@@ -280,6 +280,15 @@ GEVec4 geVec4MulK(GEVec4 self, float k) {
 GEVec4 geVec4DivMat4(GEVec4 self, GEMat4* mat4) {
     return [mat4 divBySelfVec4:self];
 }
+GEVec4 geVec4DivF4(GEVec4 self, float f4) {
+    return GEVec4Make(self.x / f4, self.y / f4, self.z / f4, self.w / f4);
+}
+GEVec4 geVec4DivF(GEVec4 self, CGFloat f) {
+    return GEVec4Make(self.x / f, self.y / f, self.z / f, self.w / f);
+}
+GEVec4 geVec4DivI(GEVec4 self, NSInteger i) {
+    return GEVec4Make(self.x / i, self.y / i, self.z / i, self.w / i);
+}
 float geVec4LengthSquare(GEVec4 self) {
     return self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w;
 }

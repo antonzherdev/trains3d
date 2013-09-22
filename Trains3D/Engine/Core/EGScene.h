@@ -27,11 +27,12 @@
 
 
 @interface EGScene : NSObject
+@property (nonatomic, readonly) GEVec4 backgroundColor;
 @property (nonatomic, readonly) id<EGController> controller;
 @property (nonatomic, readonly) id<CNSeq> layers;
 
-+ (id)sceneWithController:(id<EGController>)controller layers:(id<CNSeq>)layers;
-- (id)initWithController:(id<EGController>)controller layers:(id<CNSeq>)layers;
++ (id)sceneWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(id<CNSeq>)layers;
+- (id)initWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(id<CNSeq>)layers;
 - (ODClassType*)type;
 - (void)drawWithViewSize:(GEVec2)viewSize;
 - (BOOL)processEvent:(EGEvent*)event;
