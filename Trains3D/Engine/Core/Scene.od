@@ -111,11 +111,13 @@ class VerticalLayout(items : [LayersLayout], viewportLayout : rect) extends Laye
             2*r*b/(r + b)
         })
     def go(viewport : rect, f : (LayersLayout, rect) -> void) {
+        var h = 0.0
         var y = viewport.y
         items.for{item ->
-            val v = item.viewportWith(viewSize = viewport.size)
+            val v = item.viewportWith(viewSize = vec2(viewport.size.x, viewport.size.y - h))
             f(item, rect(vec2(viewport.x, y), v.size))
             y += v.height
+            h += v.height
         }
     }
 

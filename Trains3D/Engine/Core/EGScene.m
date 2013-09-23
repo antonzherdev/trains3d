@@ -394,11 +394,13 @@ static ODClassType* _EGVerticalLayout_type;
 }
 
 - (void)goViewport:(GERect)viewport f:(void(^)(EGLayersLayout*, GERect))f {
+    __block CGFloat h = 0.0;
     __block float y = geRectY(viewport);
     [_items forEach:^void(EGLayersLayout* item) {
-        GERect v = [item viewportWithViewSize:viewport.size];
+        GERect v = [item viewportWithViewSize:GEVec2Make(viewport.size.x, viewport.size.y - h)];
         f(item, GERectMake(GEVec2Make(geRectX(viewport), y), v.size));
         y += geRectHeight(v);
+        h += ((CGFloat)(geRectHeight(v)));
     }];
 }
 
