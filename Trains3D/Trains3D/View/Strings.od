@@ -3,16 +3,25 @@ package com.antonzherdev.trains
 
 trait  Strings {
     def railBuilt(cost : int) : string
+    def trainArrived(cost : int) : string
+    def trainDestroyed(cost : int) : string
+    def trainDelayedFine(cost : int) : string
 
     def format(cost : int) : string = "$cost"
 }
 
 class EnStrings extends Strings {
     def railBuilt(cost : int) : string = "-$(format(cost)): For the railroad building"
+    def trainArrived(cost : int) : string = "+$(format(cost)): For the arrived train"
+    def trainDestroyed(cost : int) : string = "-$(format(cost)): For the train destroying"
+    def trainDelayedFine(cost : int) : string = "-$(format(cost)): Fine for the delayed train"
 }
 
 class RuStrings extends Strings{
     def railBuilt(cost : int) : string = "-$(format(cost)): За постройку железной дороги"
+    def trainArrived(cost : int) : string = "+$(format(cost)): За прибывший поезд"
+    def trainDestroyed(cost : int) : string = "-$(format(cost)): За уничтожение поезда"
+    def trainDelayedFine(cost : int) : string = "-$(format(cost)): Штраф за задерживающийся поезд"
 }
 
 object Str {

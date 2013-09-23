@@ -7,6 +7,9 @@
 
 @protocol TRStrings<NSObject>
 - (NSString*)railBuiltCost:(NSInteger)cost;
+- (NSString*)trainArrivedCost:(NSInteger)cost;
+- (NSString*)trainDestroyedCost:(NSInteger)cost;
+- (NSString*)trainDelayedFineCost:(NSInteger)cost;
 - (NSString*)formatCost:(NSInteger)cost;
 @end
 
@@ -16,6 +19,9 @@
 - (id)init;
 - (ODClassType*)type;
 - (NSString*)railBuiltCost:(NSInteger)cost;
+- (NSString*)trainArrivedCost:(NSInteger)cost;
+- (NSString*)trainDestroyedCost:(NSInteger)cost;
+- (NSString*)trainDelayedFineCost:(NSInteger)cost;
 + (ODClassType*)type;
 @end
 
@@ -25,6 +31,9 @@
 - (id)init;
 - (ODClassType*)type;
 - (NSString*)railBuiltCost:(NSInteger)cost;
+- (NSString*)trainArrivedCost:(NSInteger)cost;
+- (NSString*)trainDestroyedCost:(NSInteger)cost;
+- (NSString*)trainDelayedFineCost:(NSInteger)cost;
 + (ODClassType*)type;
 @end
 

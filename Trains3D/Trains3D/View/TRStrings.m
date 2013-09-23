@@ -22,6 +22,18 @@ static ODClassType* _TREnStrings_type;
     return [NSString stringWithFormat:@"-%@: For the railroad building", [self formatCost:cost]];
 }
 
+- (NSString*)trainArrivedCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"+%@: For the arrived train", [self formatCost:cost]];
+}
+
+- (NSString*)trainDestroyedCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: For the train destroying", [self formatCost:cost]];
+}
+
+- (NSString*)trainDelayedFineCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: Fine for the delayed train", [self formatCost:cost]];
+}
+
 - (NSString*)formatCost:(NSInteger)cost {
     return [NSString stringWithFormat:@"%li", cost];
 }
@@ -77,6 +89,18 @@ static ODClassType* _TRRuStrings_type;
 
 - (NSString*)railBuiltCost:(NSInteger)cost {
     return [NSString stringWithFormat:@"-%@: За постройку железной дороги", [self formatCost:cost]];
+}
+
+- (NSString*)trainArrivedCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"+%@: За прибывший поезд", [self formatCost:cost]];
+}
+
+- (NSString*)trainDestroyedCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: За уничтожение поезда", [self formatCost:cost]];
+}
+
+- (NSString*)trainDelayedFineCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся поезд", [self formatCost:cost]];
 }
 
 - (NSString*)formatCost:(NSInteger)cost {

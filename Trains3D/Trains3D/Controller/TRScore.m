@@ -135,11 +135,13 @@ static ODClassType* _TRScore_type;
 
 - (void)arrivedTrain:(TRTrain*)train {
     __score += _rules.arrivedPrize(train);
+    [_notifications notifyNotification:[TRStr.Strs trainArrivedCost:_rules.railCost]];
     [self removeTrain:train];
 }
 
 - (void)destroyedTrain:(TRTrain*)train {
     __score -= _rules.destructionFine(train);
+    [_notifications notifyNotification:[TRStr.Strs trainDestroyedCost:_rules.railCost]];
     [self removeTrain:train];
 }
 
@@ -152,7 +154,10 @@ static ODClassType* _TRScore_type;
 - (void)updateWithDelta:(CGFloat)delta {
     [_trains forEach:^void(TRTrainScore* train) {
         [train updateWithDelta:delta];
-        if([train needFineWithDelayPeriod:_rules.delayPeriod]) __score -= [train fineWithRule:_rules.delayFine];
+        if([train needFineWithDelayPeriod:_rules.delayPeriod]) {
+            __score -= [train fineWithRule:_rules.delayFine];
+            [_notifications notifyNotification:[TRStr.Strs trainDelayedFineCost:_rules.railCost]];
+        }
     }];
 }
 
