@@ -49,6 +49,10 @@ static ODClassType* _CNList_type;
     @throw @"Method filter is abstract";
 }
 
+- (CNList*)reverse {
+    @throw @"Method reverse is abstract";
+}
+
 - (id)applyIndex:(NSUInteger)index {
     id<CNIterator> i = [self iterator];
     NSUInteger n = index;
@@ -234,6 +238,16 @@ static ODClassType* _CNFilledList_type;
     else return [_tail filterF:f];
 }
 
+- (CNList*)reverse {
+    CNFilledList* ret = [CNFilledList filledListWithItem:_item tail:CNEmptyList.instance];
+    CNList* list = _tail;
+    while(!([list isEmpty])) {
+        ret = [CNFilledList filledListWithItem:((CNFilledList*)(list)).item tail:ret];
+        list = [list tail];
+    }
+    return ret;
+}
+
 - (ODClassType*)type {
     return [CNFilledList type];
 }
@@ -308,6 +322,10 @@ static ODClassType* _CNEmptyList_type;
 }
 
 - (CNList*)filterF:(BOOL(^)(id))f {
+    return self;
+}
+
+- (CNList*)reverse {
     return self;
 }
 

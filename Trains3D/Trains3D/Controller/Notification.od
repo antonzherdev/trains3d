@@ -1,0 +1,8 @@
+package com.antonzherdev.trains
+
+class Notifications {
+    private var list = List<Notification>
+
+}
+
+trait Notification

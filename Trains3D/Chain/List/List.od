@@ -12,6 +12,7 @@ class List<T> extends Seq<T> {
     }
     def tail : List<T>
     def filter(f : T -> bool) : List<T>
+    def reverse : List<T>
 }
 
 class FilledList<T>(item : T, tail : List<T>) extends List<T> {
@@ -21,6 +22,16 @@ class FilledList<T>(item : T, tail : List<T>) extends List<T> {
     def filter(f : T -> bool) : List<T> =
         if(f(item)) FilledList<T>(item, tail.filter(f))
         else tail.filter(f)
+
+    def reverse : List<T> = {
+        var ret = FilledList<T>(item, EmptyList.instance)
+        var list = tail
+        while(!list.isEmpty) {
+            ret = FilledList<T>(list.cast<FilledList<T>>.item, ret)
+            list = list.tail
+        }
+        ret
+    }
 }
 
 class EmptyList<T> extends List<T> {
@@ -31,6 +42,7 @@ class EmptyList<T> extends List<T> {
 
     static val instance = EmptyList<int>()
     def filter(f : T -> bool) : List<T> = self
+    def reverse : List<T> = self
 }
 
 class ListIterator<T> extends Iterator<T> {
