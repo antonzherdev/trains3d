@@ -11,7 +11,8 @@
 @implementation TRLevelMenuView{
     TRLevel* _level;
     id<EGCamera> _camera;
-    EGFont* _font;
+    EGFont* _smallFont;
+    EGFont* _bigFont;
     GEVec4(^_notificationProgress)(float);
     NSString* _notificationText;
     EGCounter* _notificationAnimation;
@@ -19,7 +20,8 @@
 static ODClassType* _TRLevelMenuView_type;
 @synthesize level = _level;
 @synthesize camera = _camera;
-@synthesize font = _font;
+@synthesize smallFont = _smallFont;
+@synthesize bigFont = _bigFont;
 @synthesize notificationProgress = _notificationProgress;
 
 + (id)levelMenuViewWithLevel:(TRLevel*)level {
@@ -31,7 +33,8 @@ static ODClassType* _TRLevelMenuView_type;
     if(self) {
         _level = level;
         _camera = [EGCamera2D camera2DWithSize:GEVec2Make(16.0, 1.0)];
-        _font = [EGGlobal fontWithName:@"helvetica" size:14];
+        _smallFont = [EGGlobal fontWithName:@"verdana" size:14];
+        _bigFont = [EGGlobal fontWithName:@"verdana" size:28];
         _notificationProgress = ^id() {
             float(^__l)(float) = [EGProgress gap2T1:0.7 t2:1.0];
             GEVec4(^__r)(float) = ^GEVec4(float _) {
@@ -53,12 +56,17 @@ static ODClassType* _TRLevelMenuView_type;
     _TRLevelMenuView_type = [ODClassType classTypeWithCls:[TRLevelMenuView class]];
 }
 
+- (EGFont*)font {
+    if([EGGlobal.context viewport].size.y > 50) return _bigFont;
+    else return _smallFont;
+}
+
 - (void)drawView {
-    [_font drawText:[NSString stringWithFormat:@"%li", [_level.score score]] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(0.0, 0.0) alignment:egTextAlignmentApplyXY(-1.0, -1.0)];
+    [[self font] drawText:[NSString stringWithFormat:@"%li", [_level.score score]] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(0.0, 0.0) alignment:egTextAlignmentApplyXY(-1.0, -1.0)];
     NSInteger seconds = ((NSInteger)([_level.schedule time]));
-    [_font drawText:[NSString stringWithFormat:@"%li", seconds] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(16.0, 0.0) alignment:egTextAlignmentApplyXY(1.0, -1.0)];
+    [[self font] drawText:[NSString stringWithFormat:@"%li", seconds] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(16.0, 0.0) alignment:egTextAlignmentApplyXY(1.0, -1.0)];
     [_notificationAnimation forF:^void(CGFloat t) {
-        [_font drawText:_notificationText color:_notificationProgress(((float)(t))) at:GEVec2Make(8.0, 0.0) alignment:egTextAlignmentApplyXY(0.0, -1.0)];
+        [[self font] drawText:_notificationText color:_notificationProgress(((float)(t))) at:GEVec2Make(8.0, 0.0) alignment:egTextAlignmentApplyXY(0.0, -1.0)];
     }];
     if(!([[_level.railroad damagesPoints] isEmpty]) && [[_level repairer] isEmpty]) {
     }

@@ -16,7 +16,7 @@ static ODClassType* _EGStat_type;
 
 - (id)init {
     self = [super init];
-    if(self) _font = [EGGlobal fontWithName:@"helvetica" size:14];
+    if(self) _font = [EGGlobal fontWithName:@"verdana" size:14];
     
     return self;
 }

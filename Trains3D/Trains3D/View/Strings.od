@@ -12,8 +12,7 @@ class EnStrings extends Strings {
 }
 
 class RuStrings extends Strings{
-//    def railBuilt(cost : int) : string = "-$(format(cost)): За постройку железной дороги"
-    def railBuilt(cost : int) : string = "RU: -$(format(cost)): For the railroad building"
+    def railBuilt(cost : int) : string = "-$(format(cost)): За постройку железной дороги"
 }
 
 object Str {

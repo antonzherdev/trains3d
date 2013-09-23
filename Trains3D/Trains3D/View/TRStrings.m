@@ -76,7 +76,7 @@ static ODClassType* _TRRuStrings_type;
 }
 
 - (NSString*)railBuiltCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"RU: -%@: For the railroad building", [self formatCost:cost]];
+    return [NSString stringWithFormat:@"-%@: За постройку железной дороги", [self formatCost:cost]];
 }
 
 - (NSString*)formatCost:(NSInteger)cost {
