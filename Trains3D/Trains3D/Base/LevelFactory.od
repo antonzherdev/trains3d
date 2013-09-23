@@ -3,11 +3,7 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 
 class LevelFactory {
-    static def sceneFor(level : Level) = Scene(vec4(21, 40, 10, 255)/255, level,
-        VerticalLayout([
-            Layer(LevelView(level), LevelProcessor(level)),
-            Layer(LevelMenuView(level), LevelMenuProcessor(level))
-        ], viewportLayout = rect(0, -1, 1, 1)))
+    static def sceneFor(level : Level) = Scene(vec4(21, 40, 10, 255)/255, level, TrainLayers(level))
 
     static val scoreRules = ScoreRules(
         initialScore = 100000,
@@ -35,4 +31,16 @@ class LevelFactory {
     static def sceneForLevelWith(number : uint) = sceneFor(levelWith(number))
     static def score = Score(scoreRules)
     static def railroadWith(mapSize : vec2i) = Railroad(MapSso(mapSize), score)
+}
+
+class TrainLayers(level : Level) extends Layers {
+    val levelLayer = Layer(LevelView(level), LevelProcessor(level))
+    val menuLayer = Layer(LevelMenuView(level), LevelMenuProcessor(level))
+
+
+    def layers : [Layer] = [levelLayer, menuLayer]
+    def viewportsWith(viewSize : vec2) = {
+        [(levelLayer, rect(0, 0, viewSize.x, viewSize.y - 46)),
+         (menuLayer, rect(0, viewSize.y - 46, viewSize.x, 46))]
+    }
 }

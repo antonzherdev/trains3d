@@ -3,7 +3,7 @@ package com.antonzherdev.eg
 
 import core.math._
 
-class CameraIso(tilesOnScreen : vec2i, zReserve : float4, center : vec2) extends CachedCamera {
+class CameraIso(tilesOnScreen : vec2i, zReserve : float4, center : vec2) extends Camera {
     private static val ISO = MapSso.ISO
 
     private val ww : float = tilesOnScreen.x + tilesOnScreen.y
@@ -14,7 +14,7 @@ class CameraIso(tilesOnScreen : vec2i, zReserve : float4, center : vec2) extends
     static val m = mat4.identity.rotate(90, 1, 0, 0)
     static val w = mat4.identity.rotate(-90, 1, 0, 0)
 
-    def calculateMatrixModelWith(viewport : rect) : MatrixModel = MatrixModel(
+    val matrixModel : MatrixModel = MatrixModel(
         m = m,
         w = w,
         c = mat4.identity

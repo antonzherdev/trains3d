@@ -7,36 +7,50 @@ trait Controller {
 trait Camera {
     def focus {}
 
-    def matrixModelWith(viewport : rect) : MatrixModel
+    def matrixModel : MatrixModel
 
     def viewportRatio : float //width/height
 }
 
-class CachedCamera extends Camera {
-    private var _lastViewport : rect
-    private var _lastMatrixModel : MatrixModel
-    def matrixModelWith(viewport : rect) : MatrixModel =
-        if(_lastViewport == viewport) _lastMatrixModel
-        else {
-            _lastMatrixModel = calculateMatrixModelWith(viewport)
-            _lastMatrixModel
-        }
 
-    def calculateMatrixModelWith(viewport : rect) : MatrixModel
-}
-
-
-class Scene(backgroundColor : vec4, controller : Controller, layersLayout : LayersLayout) {
+class Scene(backgroundColor : vec4, controller : Controller, layers : Layers) {
     def drawWith(viewSize : vec2) {
-        layersLayout.drawWith(viewSize)
+        layers.drawWith(viewSize)
     }
 
-    def process(event : Event) : bool = layersLayout.process(event)
+    def process(event : Event) : bool = layers.process(event)
 
     def updateWith(delta : float) {
         controller.updateWith(delta)
-        layersLayout.updateWith(delta)
+        layers.updateWith(delta)
     }
+}
+
+class Layers {
+    static def apply(layer : Layer) = SingleLayer(layer)
+
+    def layers : [Layer]
+
+    def viewportsWith(viewSize : vec2) : [(Layer, rect)]
+
+    def drawWith(viewSize : vec2) {
+        viewportsWith(viewSize).for{p -> p.a.drawWith(viewport = p.b)}
+    }
+
+    def process(event : Event) : bool = {
+        var r = false
+        viewportsWith(event.viewSize).for{p -> r = (r || p.a.process(event, viewport = p.b))}
+        r
+    }
+
+    def updateWith(delta : float) {
+        layers.for(_.updateWith(delta))
+    }
+}
+
+class SingleLayer(layer : Layer) extends Layers {
+    val layers = [layer]
+    def viewportsWith(viewSize : vec2) = [(layer, layer.viewportWith(viewSize))]
 }
 
 class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
@@ -44,14 +58,14 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
         context.environment = view.environment
         val camera = view.camera
         context.set(viewport = viewport)
-        matrix.value = camera.matrixModelWith(viewport)
+        matrix.value = camera.matrixModel
         camera.focus
         view.drawView
     }
 
     def process(event : Event, viewport : rect) : bool = {
         processor.map{ p ->
-            val cam = EventCamera(inverseMatrix = view.camera.matrixModelWith(viewport).wcp.inverse, viewport)
+            val cam = EventCamera(inverseMatrix = view.camera.matrixModel.wcp.inverse, viewport)
             val e = event.set(camera = cam)
             p.process(e)
         }.getOr(false)
@@ -60,89 +74,23 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
     def updateWith(delta : float) {
         view.updateWith(delta)
     }
-}
 
-class LayersLayout(viewportLayout : rect) {
-    def drawWith(viewSize : vec2) {
-        drawWith(viewport = viewportWith(viewSize))
-    }
+    def viewportWith(viewSize : vec2) = viewportWith(viewSize, viewportLayout = rect(0, 0, 1, 1))
 
-    def drawWith(viewport : rect) {
-        go(viewport, (item, vp) -> item.drawWith(viewport = vp))
-    }
-
-    def go(viewport : rect, f : (LayersLayout, rect) -> void)
-
-    def process(event : Event) : bool =
-        process(event, viewportWith(event.viewSize))
-
-    def process(event : Event, viewport : rect) : bool = {
-        var r = false
-        go(viewport, (item, vp) -> r = (r || item.process(event, viewport = vp)))
-        r
-    }
-
-    def updateWith(delta : float)
-
-    def viewportWith(viewSize : vec2) : rect = {
+    def viewportWith(viewSize : vec2, viewportLayout : rect) : rect = {
         val layout = viewportLayout
-        val vpr = viewportRatio
+        val vpr = view.camera.viewportRatio
 
-        val size = viewSize*layout.size
-        val vpSize = if(size.x/size.y < vpr) vec2(size.x, size.x/vpr) else vec2(size.y*vpr, size.y)
-        val po = layout.origin/2 + 0.5
+        val size = viewSize*viewportLayout.size
+        val vpSize =
+        if(size.x == 0 && size.y == 0) vec2(viewSize.x, viewSize.y)
+        else if(size.x == 0) vec2(viewSize.x, size.y)
+        else if(size.y == 0) vec2(size.x, viewSize.y)
+        else if(size.x/size.y < vpr) vec2(size.x, size.x/vpr) else vec2(size.y*vpr, size.y)
+        val po = viewportLayout.origin/2 + 0.5
         rect((viewSize - vpSize) * po, vpSize)
     }
-
-    def viewportRatio : float4
-
-    static val defaultViewportLayout = rect(0, 0, 1, 1)
-
-    static def apply(layer : Layer)  = SimpleLayout(layer, defaultViewportLayout)
 }
-
-class SimpleLayout(layer : Layer, viewportLayout : rect) extends LayersLayout(viewportLayout) {
-    def viewportRatio : float4 = layer.view.camera.viewportRatio
-
-    def drawWith(viewport : rect) {
-        layer.drawWith(viewport)
-    }
-
-    def updateWith(delta : float) {
-        layer.updateWith(delta)
-    }
-
-    def process(event : Event, viewport : rect) : bool =  layer.process(event, viewport)
-
-    static def apply(layer : Layer)  = SimpleLayout(layer, defaultViewportLayout)
-}
-
-class VerticalLayout(items : [LayersLayout], viewportLayout : rect) extends LayersLayout(viewportLayout) {
-    val viewportRatio : float4 =
-        items.chain.fold(0.0, (r, item) -> if(r == 0) item.viewportRatio else {
-            val b = item.viewportRatio
-            2*r*b/(r + b)
-        })
-    def go(viewport : rect, f : (LayersLayout, rect) -> void) {
-        var h = 0.0
-        var y = viewport.y
-        items.for{item ->
-            val v = item.viewportWith(viewSize = vec2(viewport.size.x, viewport.size.y - h))
-            f(item, rect(vec2(viewport.x, y), v.size))
-            y += v.height
-            h += v.height
-        }
-    }
-
-    def updateWith(delta : float) {
-        items.for(_.updateWith(delta))
-    }
-
-    static def apply(items : [LayersLayout]) = VerticalLayout(items, defaultViewportLayout)
-
-}
-
-
 
 trait LayerView extends Controller {
     def camera : Camera

@@ -10,12 +10,10 @@
 @protocol EGInputProcessor;
 @class EGEnvironment;
 
-@class EGCachedCamera;
 @class EGScene;
+@class EGLayers;
+@class EGSingleLayer;
 @class EGLayer;
-@class EGLayersLayout;
-@class EGSimpleLayout;
-@class EGVerticalLayout;
 @protocol EGController;
 @protocol EGCamera;
 @protocol EGLayerView;
@@ -27,32 +25,48 @@
 
 @protocol EGCamera<NSObject>
 - (void)focus;
-- (EGMatrixModel*)matrixModelWithViewport:(GERect)viewport;
+- (EGMatrixModel*)matrixModel;
 - (CGFloat)viewportRatio;
-@end
-
-
-@interface EGCachedCamera : NSObject<EGCamera>
-+ (id)cachedCamera;
-- (id)init;
-- (ODClassType*)type;
-- (EGMatrixModel*)matrixModelWithViewport:(GERect)viewport;
-- (EGMatrixModel*)calculateMatrixModelWithViewport:(GERect)viewport;
-+ (ODClassType*)type;
 @end
 
 
 @interface EGScene : NSObject
 @property (nonatomic, readonly) GEVec4 backgroundColor;
 @property (nonatomic, readonly) id<EGController> controller;
-@property (nonatomic, readonly) EGLayersLayout* layersLayout;
+@property (nonatomic, readonly) EGLayers* layers;
 
-+ (id)sceneWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layersLayout:(EGLayersLayout*)layersLayout;
-- (id)initWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layersLayout:(EGLayersLayout*)layersLayout;
++ (id)sceneWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers;
+- (id)initWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers;
 - (ODClassType*)type;
 - (void)drawWithViewSize:(GEVec2)viewSize;
 - (BOOL)processEvent:(EGEvent*)event;
 - (void)updateWithDelta:(CGFloat)delta;
++ (ODClassType*)type;
+@end
+
+
+@interface EGLayers : NSObject
++ (id)layers;
+- (id)init;
+- (ODClassType*)type;
++ (EGSingleLayer*)applyLayer:(EGLayer*)layer;
+- (id<CNSeq>)layers;
+- (id<CNSeq>)viewportsWithViewSize:(GEVec2)viewSize;
+- (void)drawWithViewSize:(GEVec2)viewSize;
+- (BOOL)processEvent:(EGEvent*)event;
+- (void)updateWithDelta:(CGFloat)delta;
++ (ODClassType*)type;
+@end
+
+
+@interface EGSingleLayer : EGLayers
+@property (nonatomic, readonly) EGLayer* layer;
+@property (nonatomic, readonly) id<CNSeq> layers;
+
++ (id)singleLayerWithLayer:(EGLayer*)layer;
+- (id)initWithLayer:(EGLayer*)layer;
+- (ODClassType*)type;
+- (id<CNSeq>)viewportsWithViewSize:(GEVec2)viewSize;
 + (ODClassType*)type;
 @end
 
@@ -67,55 +81,8 @@
 - (void)drawWithViewport:(GERect)viewport;
 - (BOOL)processEvent:(EGEvent*)event viewport:(GERect)viewport;
 - (void)updateWithDelta:(CGFloat)delta;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGLayersLayout : NSObject
-@property (nonatomic, readonly) GERect viewportLayout;
-
-+ (id)layersLayoutWithViewportLayout:(GERect)viewportLayout;
-- (id)initWithViewportLayout:(GERect)viewportLayout;
-- (ODClassType*)type;
-- (void)drawWithViewSize:(GEVec2)viewSize;
-- (void)drawWithViewport:(GERect)viewport;
-- (void)goViewport:(GERect)viewport f:(void(^)(EGLayersLayout*, GERect))f;
-- (BOOL)processEvent:(EGEvent*)event;
-- (BOOL)processEvent:(EGEvent*)event viewport:(GERect)viewport;
-- (void)updateWithDelta:(CGFloat)delta;
 - (GERect)viewportWithViewSize:(GEVec2)viewSize;
-- (float)viewportRatio;
-+ (EGSimpleLayout*)applyLayer:(EGLayer*)layer;
-+ (GERect)defaultViewportLayout;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGSimpleLayout : EGLayersLayout
-@property (nonatomic, readonly) EGLayer* layer;
-
-+ (id)simpleLayoutWithLayer:(EGLayer*)layer viewportLayout:(GERect)viewportLayout;
-- (id)initWithLayer:(EGLayer*)layer viewportLayout:(GERect)viewportLayout;
-- (ODClassType*)type;
-- (float)viewportRatio;
-- (void)drawWithViewport:(GERect)viewport;
-- (void)updateWithDelta:(CGFloat)delta;
-- (BOOL)processEvent:(EGEvent*)event viewport:(GERect)viewport;
-+ (EGSimpleLayout*)applyLayer:(EGLayer*)layer;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGVerticalLayout : EGLayersLayout
-@property (nonatomic, readonly) id<CNSeq> items;
-@property (nonatomic, readonly) float viewportRatio;
-
-+ (id)verticalLayoutWithItems:(id<CNSeq>)items viewportLayout:(GERect)viewportLayout;
-- (id)initWithItems:(id<CNSeq>)items viewportLayout:(GERect)viewportLayout;
-- (ODClassType*)type;
-- (void)goViewport:(GERect)viewport f:(void(^)(EGLayersLayout*, GERect))f;
-- (void)updateWithDelta:(CGFloat)delta;
-+ (EGVerticalLayout*)applyItems:(id<CNSeq>)items;
+- (GERect)viewportWithViewSize:(GEVec2)viewSize viewportLayout:(GERect)viewportLayout;
 + (ODClassType*)type;
 @end
 

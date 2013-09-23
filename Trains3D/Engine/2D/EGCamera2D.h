@@ -14,7 +14,6 @@
 + (id)camera2DWithSize:(GEVec2)size;
 - (id)initWithSize:(GEVec2)size;
 - (ODClassType*)type;
-- (EGMatrixModel*)matrixModelWithViewport:(GERect)viewport;
 + (ODClassType*)type;
 @end
 
