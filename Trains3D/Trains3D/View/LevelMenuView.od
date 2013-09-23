@@ -1,16 +1,20 @@
 package com.antonzherdev.trains
 
 import com.antonzherdev.eg.Text._
-
-import com.antonzherdev.eg._
+import com.antonzherdev.eg.Progress._
 
 class LevelMenuView(level : Level) extends LayerView {
     val camera : Camera = Camera2D(vec2(16, 1))
     val font = fontWith(name = "helvetica", size = 14)
+    val notificationProgress = gap2(0.7, 1) >> vec4(1, 1, 1, 1 - _)
     def drawView {
         font.draw(text = level.score.score, color = vec4(1, 1, 1, 1), at = vec2(0, 0), TextAlignment(-1, -1))
         val seconds : int = level.schedule.time
         font.draw(text = seconds, color = vec4(1, 1, 1, 1), at = vec2(16, 0), TextAlignment(1, -1))
+
+        notificationAnimation.for{t ->
+            font.draw(text = notificationText, notificationProgress(t), at = vec2(8,0), TextAlignment(0, -1))
+        }
 
         if(!level.railroad.damagesPoints.isEmpty && level.repairer.isEmpty) {
             /*glPushMatrix
@@ -20,6 +24,17 @@ class LevelMenuView(level : Level) extends LayerView {
                 egTranslate(0.1, 0, 0)
             })
             glPopMatrix*/
+        }
+    }
+
+    private var notificationText = ""
+    private var notificationAnimation = Counter()
+
+    def updateWith(delta : float) {
+        if(notificationAnimation.isRun) notificationAnimation.updateWith(delta)
+        else if(!level.notifications.isEmpty) {
+            notificationText = level.notifications.take.get
+            notificationAnimation = Counter(1)
         }
     }
 

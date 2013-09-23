@@ -61,6 +61,18 @@ static ODClassType* _EGProgress_type;
     };
 }
 
++ (float(^)(float))gap2T1:(float)t1 t2:(float)t2 {
+    float l = t2 - t1;
+    return ^float(float t) {
+        if(t <= t1) {
+            return ((float)(0.0));
+        } else {
+            if(t >= t2) return ((float)(1.0));
+            else return (t - t1) / l;
+        }
+    };
+}
+
 + (float(^)(float))divOn:(float)on {
     return ^float(float t) {
         return t / on;

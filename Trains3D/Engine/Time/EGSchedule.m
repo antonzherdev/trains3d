@@ -71,25 +71,159 @@ static ODClassType* _EGSchedule_type;
 @end
 
 
-@implementation EGAnimation{
+@implementation EGCounter
+static ODClassType* _EGCounter_type;
+
++ (id)counter {
+    return [[EGCounter alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGCounter_type = [ODClassType classTypeWithCls:[EGCounter class]];
+}
+
+- (BOOL)isRun {
+    @throw @"Method isRun is abstract";
+}
+
+- (CGFloat)time {
+    @throw @"Method time is abstract";
+}
+
+- (BOOL)isStopped {
+    return !([self isRun]);
+}
+
+- (void)forF:(void(^)(CGFloat))f {
+    if([self isRun]) f([self time]);
+}
+
++ (EGCounter*)applyLength:(CGFloat)length {
+    return [EGLengthCounter lengthCounterWithLength:length];
+}
+
++ (EGCounter*)applyLength:(CGFloat)length finish:(void(^)())finish {
+    return [EGFinisher finisherWithCounter:[EGLengthCounter lengthCounterWithLength:length] finish:finish];
+}
+
++ (EGCounter*)apply {
+    return [EGEmptyCounter emptyCounter];
+}
+
+- (ODClassType*)type {
+    return [EGCounter type];
+}
+
++ (ODClassType*)type {
+    return _EGCounter_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGEmptyCounter
+static ODClassType* _EGEmptyCounter_type;
+
++ (id)emptyCounter {
+    return [[EGEmptyCounter alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGEmptyCounter_type = [ODClassType classTypeWithCls:[EGEmptyCounter class]];
+}
+
+- (BOOL)isRun {
+    return NO;
+}
+
+- (CGFloat)time {
+    return 0.0;
+}
+
+- (void)updateWithDelta:(CGFloat)delta {
+}
+
+- (ODClassType*)type {
+    return [EGEmptyCounter type];
+}
+
++ (ODClassType*)type {
+    return _EGEmptyCounter_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGLengthCounter{
     CGFloat _length;
-    void(^_finish)();
     CGFloat __time;
     BOOL __run;
 }
-static ODClassType* _EGAnimation_type;
+static ODClassType* _EGLengthCounter_type;
 @synthesize length = _length;
-@synthesize finish = _finish;
 
-+ (id)animationWithLength:(CGFloat)length finish:(void(^)())finish {
-    return [[EGAnimation alloc] initWithLength:length finish:finish];
++ (id)lengthCounterWithLength:(CGFloat)length {
+    return [[EGLengthCounter alloc] initWithLength:length];
 }
 
-- (id)initWithLength:(CGFloat)length finish:(void(^)())finish {
+- (id)initWithLength:(CGFloat)length {
     self = [super init];
     if(self) {
         _length = length;
-        _finish = finish;
         __time = 0.0;
         __run = YES;
     }
@@ -99,7 +233,7 @@ static ODClassType* _EGAnimation_type;
 
 + (void)initialize {
     [super initialize];
-    _EGAnimation_type = [ODClassType classTypeWithCls:[EGAnimation class]];
+    _EGLengthCounter_type = [ODClassType classTypeWithCls:[EGLengthCounter class]];
 }
 
 - (CGFloat)time {
@@ -110,27 +244,22 @@ static ODClassType* _EGAnimation_type;
     return __run;
 }
 
-- (BOOL)isStopped {
-    return !(__run);
-}
-
 - (void)updateWithDelta:(CGFloat)delta {
     if(__run) {
         __time += delta / _length;
         if(__time >= 1.0) {
             __time = 1.0;
             __run = NO;
-            ((void(^)())(_finish))();
         }
     }
 }
 
 - (ODClassType*)type {
-    return [EGAnimation type];
+    return [EGLengthCounter type];
 }
 
 + (ODClassType*)type {
-    return _EGAnimation_type;
+    return _EGLengthCounter_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -140,20 +269,97 @@ static ODClassType* _EGAnimation_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGAnimation* o = ((EGAnimation*)(other));
-    return eqf(self.length, o.length) && [self.finish isEqual:o.finish];
+    EGLengthCounter* o = ((EGLengthCounter*)(other));
+    return eqf(self.length, o.length);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + floatHash(self.length);
-    hash = hash * 31 + [self.finish hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"length=%f", self.length];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGFinisher{
+    EGCounter* _counter;
+    void(^_finish)();
+}
+static ODClassType* _EGFinisher_type;
+@synthesize counter = _counter;
+@synthesize finish = _finish;
+
++ (id)finisherWithCounter:(EGCounter*)counter finish:(void(^)())finish {
+    return [[EGFinisher alloc] initWithCounter:counter finish:finish];
+}
+
+- (id)initWithCounter:(EGCounter*)counter finish:(void(^)())finish {
+    self = [super init];
+    if(self) {
+        _counter = counter;
+        _finish = finish;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGFinisher_type = [ODClassType classTypeWithCls:[EGFinisher class]];
+}
+
+- (BOOL)isRun {
+    return [_counter isRun];
+}
+
+- (CGFloat)time {
+    return [_counter time];
+}
+
+- (void)updateWithDelta:(CGFloat)delta {
+    if([_counter isRun]) {
+        [_counter updateWithDelta:delta];
+        if([_counter isStopped]) ((void(^)())(_finish))();
+    }
+}
+
+- (ODClassType*)type {
+    return [EGFinisher type];
+}
+
++ (ODClassType*)type {
+    return _EGFinisher_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGFinisher* o = ((EGFinisher*)(other));
+    return [self.counter isEqual:o.counter] && [self.finish isEqual:o.finish];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.counter hash];
+    hash = hash * 31 + [self.finish hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"counter=%@", self.counter];
     [description appendString:@">"];
     return description;
 }

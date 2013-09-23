@@ -40,5 +40,13 @@ object Progress {
             else Option.none<float4>
     }
 
+    def gap2(t1 : float4, t2 : float4) : float4 -> float4 = {
+        val l = t2 - t1
+        t : float4 ->
+            if(t <= t1) 0.0.cast<float4>
+            else if(t >= t2) 1.0.cast<float4>
+            else (t - t1)/l
+    }
+
     def div(on : float4) : float4 -> float4 = t : float4 -> (t/on)
 }

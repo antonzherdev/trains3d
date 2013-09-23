@@ -24,9 +24,9 @@ enum CityAngle(angle : int, form : RailForm, back : bool) {
 class City(color : CityColor, tile : vec2i, angle : CityAngle) extends Controller {
     def startPoint = RailPoint(tile, angle.form, 0, angle.back)
 
-    var expectedTrainAnimation : Animation?
+    var expectedTrainCounter = Counter()
 
     def updateWith(delta : float) {
-        expectedTrainAnimation.for(_.updateWith(delta))
+        expectedTrainCounter.updateWith(delta)
     }
 }

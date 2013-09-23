@@ -1,8 +1,19 @@
 package com.antonzherdev.trains
 
 class Notifications {
-    private var list = List<Notification>
+    private var queue = Queue<string>()
+
+    def notify(notification : string) {
+        queue = queue.enqueue(notification)
+    }
+
+    def isEmpty = queue.isEmpty
+
+    def take : string? = {
+        val p = queue.dequeue
+        queue = p.b
+        p.a
+    }
 
 }
 
-trait Notification

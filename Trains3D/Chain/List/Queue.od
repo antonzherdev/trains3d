@@ -4,8 +4,6 @@ class Queue<T>(in : List<T>, out : List<T>) extends Seq<T> {
     static def apply<T> : Queue<T> = empty
     private static val empty : Queue<any> = Queue<any>(List<any>(), List<any>())
 
-    def enqueue<T>(item : T) : Queue<T> = Queue<T>(List<T>(item, in), out)
-
     def iterator : Iterator<T> = QueueIterator<T>(in, out)
     def isEmpty = in.isEmpty && out.isEmpty
     def count = in.count + out.count

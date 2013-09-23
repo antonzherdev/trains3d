@@ -2,8 +2,8 @@
 #import "GEVec.h"
 #import "EGScene.h"
 @class TRRailForm;
+@class EGCounter;
 @class TRRailPoint;
-@class EGAnimation;
 
 @class TRCity;
 @class TRCityColor;
@@ -37,7 +37,7 @@
 @property (nonatomic, readonly) TRCityColor* color;
 @property (nonatomic, readonly) GEVec2i tile;
 @property (nonatomic, readonly) TRCityAngle* angle;
-@property (nonatomic) id expectedTrainAnimation;
+@property (nonatomic, retain) EGCounter* expectedTrainCounter;
 
 + (id)cityWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
 - (id)initWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;

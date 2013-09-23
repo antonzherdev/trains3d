@@ -1,0 +1,22 @@
+package com.antonzherdev.trains
+
+
+trait  Strings {
+    def railBuilt(cost : int) : string
+
+    def format(cost : int) : string = "$cost"
+}
+
+class EnStrings extends Strings {
+    def railBuilt(cost : int) : string = "-$(format(cost)): For the railroad building"
+}
+
+class RuStrings extends Strings{
+//    def railBuilt(cost : int) : string = "-$(format(cost)): За постройку железной дороги"
+    def railBuilt(cost : int) : string = "RU: -$(format(cost)): For the railroad building"
+}
+
+object Str {
+    private val locales : [string : Strings] = [("en", EnStrings()), ("ru", RuStrings())].chain.toMap
+    val Strs : Strings = locales[Locale.currentLanguageId].getOrElse(EnStrings())
+}

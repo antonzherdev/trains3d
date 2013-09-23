@@ -18,3 +18,7 @@
 @interface CNDirectory : NSObject
 + (NSString*) sandbox;
 @end
+
+@interface CNLocale : NSObject
++ (NSString*) currentLanguageId;
+@end

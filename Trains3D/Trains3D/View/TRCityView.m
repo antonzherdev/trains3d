@@ -53,8 +53,8 @@ static ODClassType* _TRCityView_type;
         [roofMaterial drawMesh:TRModels.cityRoofs];
         glEnable(GL_CULL_FACE);
         [_windowMaterial drawMesh:TRModels.cityWindows];
-        [city.expectedTrainAnimation forEach:^void(EGAnimation* a) {
-            CGFloat x = -[a time] / 2;
+        [city.expectedTrainCounter forF:^void(CGFloat time) {
+            CGFloat x = -time / 2;
             [[EGStandardMaterial applyColor:GEVec4Make(1.0, ((float)(0.5 - x)), ((float)(0.5 - x)), 1.0)] drawMesh:_expectedTrainModel];
         }];
     }];

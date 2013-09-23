@@ -2,6 +2,7 @@
 
 #import "TRScore.h"
 #import "EGMapIso.h"
+#import "TRNotification.h"
 #import "TRRailroad.h"
 #import "EGSchedule.h"
 #import "TRCollisions.h"
@@ -86,6 +87,7 @@ static ODClassType* _TRLevelRules_type;
 @implementation TRLevel{
     TRLevelRules* _rules;
     EGMapSso* _map;
+    TRNotifications* _notifications;
     TRScore* _score;
     TRRailroad* _railroad;
     NSMutableArray* __cities;
@@ -99,6 +101,7 @@ static ODClassType* _TRLevelRules_type;
 static ODClassType* _TRLevel_type;
 @synthesize rules = _rules;
 @synthesize map = _map;
+@synthesize notifications = _notifications;
 @synthesize score = _score;
 @synthesize railroad = _railroad;
 @synthesize schedule = _schedule;
@@ -114,7 +117,8 @@ static ODClassType* _TRLevel_type;
     if(self) {
         _rules = rules;
         _map = [EGMapSso mapSsoWithSize:_rules.mapSize];
-        _score = [TRScore scoreWithRules:_rules.scoreRules];
+        _notifications = [TRNotifications notifications];
+        _score = [TRScore scoreWithRules:_rules.scoreRules notifications:_notifications];
         _railroad = [TRRailroad railroadWithMap:_map score:_score];
         __cities = [NSMutableArray mutableArray];
         _schedule = [self createSchedule];
@@ -180,11 +184,10 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)runTrain:(TRTrain*)train fromCity:(TRCity*)fromCity {
-    fromCity.expectedTrainAnimation = [CNOption applyValue:[EGAnimation animationWithLength:3.0 finish:^void() {
-        fromCity.expectedTrainAnimation = [CNOption none];
+    fromCity.expectedTrainCounter = [EGCounter applyLength:3.0 finish:^void() {
         [train startFromCity:fromCity];
         [self addTrain:train];
-    }]];
+    }];
 }
 
 - (void)addTrain:(TRTrain*)train {

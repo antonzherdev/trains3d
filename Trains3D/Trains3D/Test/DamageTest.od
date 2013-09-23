@@ -5,7 +5,7 @@ import com.antonzherdev.test._
 
 class DamageTest extends TestCase {
     def testMain {
-        val railroad = Railroad(MapSso(vec2i(4, 3)), Score(LevelFactory.scoreRules))
+        val railroad = Railroad(MapSso(vec2i(4, 3)), Score(LevelFactory.scoreRules, Notifications()))
 
         railroad.tryAdd(Rail(vec2i(1, 1), RailForm.leftRight))
         railroad.addDamageAt(RailPoint(vec2i(1, 1), RailForm.leftRight, 0.2, false))

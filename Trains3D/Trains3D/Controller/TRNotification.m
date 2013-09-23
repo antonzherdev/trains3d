@@ -1,7 +1,7 @@
 #import "TRNotification.h"
 
 @implementation TRNotifications{
-    List#C.class _list;
+    CNQueue* _queue;
 }
 static ODClassType* _TRNotifications_type;
 
@@ -11,7 +11,7 @@ static ODClassType* _TRNotifications_type;
 
 - (id)init {
     self = [super init];
-    if(self) _list = CNList;
+    if(self) _queue = [CNQueue apply];
     
     return self;
 }
@@ -19,6 +19,20 @@ static ODClassType* _TRNotifications_type;
 + (void)initialize {
     [super initialize];
     _TRNotifications_type = [ODClassType classTypeWithCls:[TRNotifications class]];
+}
+
+- (void)notifyNotification:(NSString*)notification {
+    _queue = [_queue enqueueItem:notification];
+}
+
+- (BOOL)isEmpty {
+    return [_queue isEmpty];
+}
+
+- (id)take {
+    CNTuple* p = [_queue dequeue];
+    _queue = ((CNQueue*)(p.b));
+    return p.a;
 }
 
 - (ODClassType*)type {

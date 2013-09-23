@@ -40,10 +40,6 @@ static ODClassType* _CNQueue_type;
     return _CNQueue_empty;
 }
 
-- (CNQueue*)enqueueItem:(id)item {
-    return [CNQueue queueWithIn:[CNList applyItem:item tail:_in] out:_out];
-}
-
 - (id<CNIterator>)iterator {
     return [CNQueueIterator queueIteratorWithIn:_in out:_out];
 }
@@ -63,6 +59,11 @@ static ODClassType* _CNQueue_type;
         if(index < [_out count] + [_in count]) return [_in applyIndex:[_in count] - index + [_out count]];
         else @throw [NSString stringWithFormat:@"Incorrect index=%li", index];
     }
+}
+
+- (CNQueue*)enqueueItem:(id)item {
+    if([self isEmpty]) return [CNQueue queueWithIn:[CNList apply] out:[CNList applyItem:item]];
+    else return [CNQueue queueWithIn:[CNList applyItem:item tail:_in] out:_out];
 }
 
 - (CNTuple*)dequeue {

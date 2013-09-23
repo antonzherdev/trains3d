@@ -4,6 +4,7 @@
 #import "TRTrain.h"
 #import "TRLevel.h"
 #import "TRCar.h"
+#import "TRNotification.h"
 #import "TRRailroad.h"
 #import "EGMapIso.h"
 #import "TRLevelView.h"
@@ -67,7 +68,7 @@ static ODClassType* _TRLevelFactory_type;
 }
 
 + (TRScore*)score {
-    return [TRScore scoreWithRules:_TRLevelFactory_scoreRules];
+    return [TRScore scoreWithRules:_TRLevelFactory_scoreRules notifications:[TRNotifications notifications]];
 }
 
 + (TRRailroad*)railroadWithMapSize:(GEVec2i)mapSize {

@@ -24,10 +24,10 @@ class CityView {
             roofMaterial.draw(Models.cityRoofs)
             glEnable(GL_CULL_FACE)
             windowMaterial.draw(Models.cityWindows)
-            city.expectedTrainAnimation.for(a -> {
-                val x = -a.time/2
+            city.expectedTrainCounter.for{time ->
+                val x = -time/2
                 StandardMaterial(vec4(1.0, 0.5 - x, 0.5 - x, 1)).draw(expectedTrainModel)
-            })
+            }
         }
     }
 }

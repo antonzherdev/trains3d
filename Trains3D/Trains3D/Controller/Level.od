@@ -6,7 +6,8 @@ class LevelRules(mapSize : vec2i, scoreRules : ScoreRules, repairerSpeed : uint,
 
 class Level(rules : LevelRules) extends Controller {
     val map : MapSso = MapSso(rules.mapSize)
-    val score : Score = Score(rules.scoreRules)
+    val notifications = Notifications()
+    val score : Score = Score(rules.scoreRules, notifications)
     val railroad : Railroad = Railroad(map, score)
     private var _cities = MutableArray<City>()
     val schedule : Schedule = createSchedule
@@ -15,6 +16,7 @@ class Level(rules : LevelRules) extends Controller {
     def trains = _trains
     private var _repairer : Train? = nil
     def repairer = _repairer
+
 
     val collisionWorld = TrainsCollisionWorld()
     val dynamicWorld = TrainsDynamicWorld()
@@ -53,8 +55,7 @@ class Level(rules : LevelRules) extends Controller {
     }
 
     private def run(train : Train, fromCity : City) {
-        fromCity.expectedTrainAnimation = Animation(3, {
-            fromCity.expectedTrainAnimation = nil
+        fromCity.expectedTrainCounter = Counter(3, finish = {
             train.startFrom(fromCity)
             add(train)
         })

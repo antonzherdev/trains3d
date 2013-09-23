@@ -9,6 +9,7 @@
 @class TRCarType;
 @class TRTrainGenerator;
 @class TRScore;
+@class TRNotifications;
 @class TRRailroad;
 @class EGMapSso;
 @class TRLevelView;

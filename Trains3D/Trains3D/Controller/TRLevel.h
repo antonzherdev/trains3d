@@ -3,6 +3,7 @@
 #import "EGScene.h"
 @class TRScoreRules;
 @class EGMapSso;
+@class TRNotifications;
 @class TRScore;
 @class TRRailroad;
 @class EGSchedule;
@@ -12,7 +13,7 @@
 @class TRCityAngle;
 @class TRRail;
 @class TRTrain;
-@class EGAnimation;
+@class EGCounter;
 @class TRTrainGenerator;
 @class TRRailPoint;
 @class TRSwitch;
@@ -41,6 +42,7 @@
 @interface TRLevel : NSObject<EGController>
 @property (nonatomic, readonly) TRLevelRules* rules;
 @property (nonatomic, readonly) EGMapSso* map;
+@property (nonatomic, readonly) TRNotifications* notifications;
 @property (nonatomic, readonly) TRScore* score;
 @property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic, readonly) EGSchedule* schedule;

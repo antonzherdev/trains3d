@@ -19,7 +19,6 @@
 - (id)initWithIn:(CNList*)in out:(CNList*)out;
 - (ODClassType*)type;
 + (CNQueue*)apply;
-- (CNQueue*)enqueueItem:(id)item;
 - (id<CNIterator>)iterator;
 - (BOOL)isEmpty;
 - (NSUInteger)count;

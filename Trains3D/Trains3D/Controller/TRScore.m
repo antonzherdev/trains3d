@@ -1,5 +1,7 @@
 #import "TRScore.h"
 
+#import "TRNotification.h"
+#import "TRStrings.h"
 #import "TRTrain.h"
 @implementation TRScoreRules{
     NSInteger _initialScore;
@@ -89,20 +91,23 @@ static ODClassType* _TRScoreRules_type;
 
 @implementation TRScore{
     TRScoreRules* _rules;
+    TRNotifications* _notifications;
     NSInteger __score;
     id<CNSeq> _trains;
 }
 static ODClassType* _TRScore_type;
 @synthesize rules = _rules;
+@synthesize notifications = _notifications;
 
-+ (id)scoreWithRules:(TRScoreRules*)rules {
-    return [[TRScore alloc] initWithRules:rules];
++ (id)scoreWithRules:(TRScoreRules*)rules notifications:(TRNotifications*)notifications {
+    return [[TRScore alloc] initWithRules:rules notifications:notifications];
 }
 
-- (id)initWithRules:(TRScoreRules*)rules {
+- (id)initWithRules:(TRScoreRules*)rules notifications:(TRNotifications*)notifications {
     self = [super init];
     if(self) {
         _rules = rules;
+        _notifications = notifications;
         __score = _rules.initialScore;
         _trains = (@[]);
     }
@@ -121,6 +126,7 @@ static ODClassType* _TRScore_type;
 
 - (void)railBuilt {
     __score -= _rules.railCost;
+    [_notifications notifyNotification:[TRStr.Strs railBuiltCost:_rules.railCost]];
 }
 
 - (void)runTrain:(TRTrain*)train {
@@ -166,18 +172,20 @@ static ODClassType* _TRScore_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRScore* o = ((TRScore*)(other));
-    return [self.rules isEqual:o.rules];
+    return [self.rules isEqual:o.rules] && self.notifications == o.notifications;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.rules hash];
+    hash = hash * 31 + [self.notifications hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"rules=%@", self.rules];
+    [description appendFormat:@", notifications=%@", self.notifications];
     [description appendString:@">"];
     return description;
 }

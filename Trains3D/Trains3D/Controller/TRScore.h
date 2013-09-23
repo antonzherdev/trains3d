@@ -1,5 +1,8 @@
 #import "objd.h"
 #import "EGScene.h"
+@class TRNotifications;
+@class TRStr;
+@protocol TRStrings;
 @class TRTrain;
 
 @class TRScoreRules;
@@ -24,9 +27,10 @@
 
 @interface TRScore : NSObject<EGController>
 @property (nonatomic, readonly) TRScoreRules* rules;
+@property (nonatomic, readonly) TRNotifications* notifications;
 
-+ (id)scoreWithRules:(TRScoreRules*)rules;
-- (id)initWithRules:(TRScoreRules*)rules;
++ (id)scoreWithRules:(TRScoreRules*)rules notifications:(TRNotifications*)notifications;
+- (id)initWithRules:(TRScoreRules*)rules notifications:(TRNotifications*)notifications;
 - (ODClassType*)type;
 - (NSInteger)score;
 - (void)railBuilt;

@@ -6,7 +6,7 @@
 //
 
 
-#import "CNFile.h"
+#import "CNPlatform.h"
 
 
 @implementation CNBundle {
@@ -31,4 +31,12 @@
 + (NSString *)sandbox {
     return NSHomeDirectory();
 }
+@end
+
+
+@implementation CNLocale
++ (NSString *)currentLanguageId {
+    return [[[NSLocale currentLocale] localeIdentifier] substringToIndex:2];
+}
+
 @end

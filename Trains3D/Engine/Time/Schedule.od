@@ -23,12 +23,32 @@ class Schedule extends Controller {
     def time : float = _current
 }
 
-class Animation(length : float, finish : void -> void) extends Controller {
+class Counter extends Controller {
+    def isRun : bool
+    def time : float
+    def isStopped : bool = !isRun
+
+    def for(f : float -> void) {
+        if(isRun) f(time)
+    }
+
+    static def apply(length : float) : Counter = LengthCounter(length)
+    static def apply(length : float, finish : void -> void) : Counter = Finisher(LengthCounter(length), finish)
+    static def apply : Counter = EmptyCounter()
+}
+
+class EmptyCounter extends Counter {
+    def isRun : bool = false
+    def time : float = 0
+    def updateWith(delta : float) {
+    }
+}
+
+class LengthCounter(length : float) extends Counter {
     private var _time : float = 0.0
     private var _run : bool = true
     def time : float = _time
     def isRun : bool = _run
-    def isStopped : bool = !_run
 
     def updateWith(delta : float) {
         if(_run) {
@@ -36,6 +56,19 @@ class Animation(length : float, finish : void -> void) extends Controller {
             if(_time >= 1.0) {
                 _time = 1.0
                 _run = false
+            }
+        }
+    }
+}
+
+class Finisher(counter : Counter, finish : void -> void) extends Counter {
+    def isRun : bool = counter.isRun
+    def time : float = counter.time
+
+    def updateWith(delta : float) {
+        if(counter.isRun) {
+            counter.updateWith(delta)
+            if(counter.isStopped) {
                 finish()
             }
         }

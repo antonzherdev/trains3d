@@ -7,12 +7,13 @@ class ScoreRules(initialScore : int, railCost : int,
     delayPeriod : float, delayFine : (Train, int) -> int,
     repairCost : int)
 
-class Score(rules : ScoreRules) extends Controller {
+class Score(rules : ScoreRules, notifications : Notifications) extends Controller {
     private var _score : int = rules.initialScore
     def score : int = _score
 
     def railBuilt {
         _score -= rules.railCost
+        notifications.notify(Strs.railBuilt(rules.railCost))
     }
 
     private var trains : [TrainScore] = []

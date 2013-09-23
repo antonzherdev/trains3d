@@ -120,13 +120,13 @@ static NSArray* _TRCityAngle_values;
     TRCityColor* _color;
     GEVec2i _tile;
     TRCityAngle* _angle;
-    id _expectedTrainAnimation;
+    EGCounter* _expectedTrainCounter;
 }
 static ODClassType* _TRCity_type;
 @synthesize color = _color;
 @synthesize tile = _tile;
 @synthesize angle = _angle;
-@synthesize expectedTrainAnimation = _expectedTrainAnimation;
+@synthesize expectedTrainCounter = _expectedTrainCounter;
 
 + (id)cityWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle {
     return [[TRCity alloc] initWithColor:color tile:tile angle:angle];
@@ -138,6 +138,7 @@ static ODClassType* _TRCity_type;
         _color = color;
         _tile = tile;
         _angle = angle;
+        _expectedTrainCounter = [EGCounter apply];
     }
     
     return self;
@@ -153,9 +154,7 @@ static ODClassType* _TRCity_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    [_expectedTrainAnimation forEach:^void(EGAnimation* _) {
-        [_ updateWithDelta:delta];
-    }];
+    [_expectedTrainCounter updateWithDelta:delta];
 }
 
 - (ODClassType*)type {

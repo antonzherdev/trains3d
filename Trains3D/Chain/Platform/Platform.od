@@ -8,3 +8,7 @@ stub class Bundle {
 stub class Directory {
     static def sandbox : string
 }
+
+stub class Locale {
+    static def currentLanguageId : string
+}

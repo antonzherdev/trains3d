@@ -3,18 +3,24 @@
 #import "TRLevel.h"
 #import "EGCamera2D.h"
 #import "EGContext.h"
-#import "TRScore.h"
+#import "EGProgress.h"
 #import "EGSchedule.h"
+#import "TRScore.h"
 #import "TRRailroad.h"
+#import "TRNotification.h"
 @implementation TRLevelMenuView{
     TRLevel* _level;
     id<EGCamera> _camera;
     EGFont* _font;
+    GEVec4(^_notificationProgress)(float);
+    NSString* _notificationText;
+    EGCounter* _notificationAnimation;
 }
 static ODClassType* _TRLevelMenuView_type;
 @synthesize level = _level;
 @synthesize camera = _camera;
 @synthesize font = _font;
+@synthesize notificationProgress = _notificationProgress;
 
 + (id)levelMenuViewWithLevel:(TRLevel*)level {
     return [[TRLevelMenuView alloc] initWithLevel:level];
@@ -26,6 +32,17 @@ static ODClassType* _TRLevelMenuView_type;
         _level = level;
         _camera = [EGCamera2D camera2DWithSize:GEVec2Make(16.0, 1.0)];
         _font = [EGGlobal fontWithName:@"helvetica" size:14];
+        _notificationProgress = ^id() {
+            float(^__l)(float) = [EGProgress gap2T1:0.7 t2:1.0];
+            GEVec4(^__r)(float) = ^GEVec4(float _) {
+                return GEVec4Make(1.0, 1.0, 1.0, 1 - _);
+            };
+            return ^GEVec4(float _) {
+                return __r(__l(_));
+            };
+        }();
+        _notificationText = @"";
+        _notificationAnimation = [EGCounter apply];
     }
     
     return self;
@@ -40,15 +57,26 @@ static ODClassType* _TRLevelMenuView_type;
     [_font drawText:[NSString stringWithFormat:@"%li", [_level.score score]] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(0.0, 0.0) alignment:egTextAlignmentApplyXY(-1.0, -1.0)];
     NSInteger seconds = ((NSInteger)([_level.schedule time]));
     [_font drawText:[NSString stringWithFormat:@"%li", seconds] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(16.0, 0.0) alignment:egTextAlignmentApplyXY(1.0, -1.0)];
+    [_notificationAnimation forF:^void(CGFloat t) {
+        [_font drawText:_notificationText color:_notificationProgress(((float)(t))) at:GEVec2Make(8.0, 0.0) alignment:egTextAlignmentApplyXY(0.0, -1.0)];
+    }];
     if(!([[_level.railroad damagesPoints] isEmpty]) && [[_level repairer] isEmpty]) {
+    }
+}
+
+- (void)updateWithDelta:(CGFloat)delta {
+    if([_notificationAnimation isRun]) {
+        [_notificationAnimation updateWithDelta:delta];
+    } else {
+        if(!([_level.notifications isEmpty])) {
+            _notificationText = [[_level.notifications take] get];
+            _notificationAnimation = [EGCounter applyLength:1.0];
+        }
     }
 }
 
 - (EGEnvironment*)environment {
     return EGEnvironment.aDefault;
-}
-
-- (void)updateWithDelta:(CGFloat)delta {
 }
 
 - (ODClassType*)type {

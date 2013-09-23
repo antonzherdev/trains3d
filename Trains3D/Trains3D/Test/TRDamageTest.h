@@ -3,6 +3,7 @@
 #import "GEVec.h"
 @class EGMapSso;
 @class TRLevelFactory;
+@class TRNotifications;
 @class TRScore;
 @class TRRailroad;
 @class TRRailForm;

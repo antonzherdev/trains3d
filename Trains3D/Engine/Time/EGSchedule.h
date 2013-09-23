@@ -2,7 +2,10 @@
 #import "EGScene.h"
 
 @class EGSchedule;
-@class EGAnimation;
+@class EGCounter;
+@class EGEmptyCounter;
+@class EGLengthCounter;
+@class EGFinisher;
 
 @interface EGSchedule : NSObject<EGController>
 + (id)schedule;
@@ -15,16 +18,54 @@
 @end
 
 
-@interface EGAnimation : NSObject<EGController>
-@property (nonatomic, readonly) CGFloat length;
-@property (nonatomic, readonly) void(^finish)();
+@interface EGCounter : NSObject<EGController>
++ (id)counter;
+- (id)init;
+- (ODClassType*)type;
+- (BOOL)isRun;
+- (CGFloat)time;
+- (BOOL)isStopped;
+- (void)forF:(void(^)(CGFloat))f;
++ (EGCounter*)applyLength:(CGFloat)length;
++ (EGCounter*)applyLength:(CGFloat)length finish:(void(^)())finish;
++ (EGCounter*)apply;
++ (ODClassType*)type;
+@end
 
-+ (id)animationWithLength:(CGFloat)length finish:(void(^)())finish;
-- (id)initWithLength:(CGFloat)length finish:(void(^)())finish;
+
+@interface EGEmptyCounter : EGCounter
++ (id)emptyCounter;
+- (id)init;
+- (ODClassType*)type;
+- (BOOL)isRun;
+- (CGFloat)time;
+- (void)updateWithDelta:(CGFloat)delta;
++ (ODClassType*)type;
+@end
+
+
+@interface EGLengthCounter : EGCounter
+@property (nonatomic, readonly) CGFloat length;
+
++ (id)lengthCounterWithLength:(CGFloat)length;
+- (id)initWithLength:(CGFloat)length;
 - (ODClassType*)type;
 - (CGFloat)time;
 - (BOOL)isRun;
-- (BOOL)isStopped;
+- (void)updateWithDelta:(CGFloat)delta;
++ (ODClassType*)type;
+@end
+
+
+@interface EGFinisher : EGCounter
+@property (nonatomic, readonly) EGCounter* counter;
+@property (nonatomic, readonly) void(^finish)();
+
++ (id)finisherWithCounter:(EGCounter*)counter finish:(void(^)())finish;
+- (id)initWithCounter:(EGCounter*)counter finish:(void(^)())finish;
+- (ODClassType*)type;
+- (BOOL)isRun;
+- (CGFloat)time;
 - (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
 @end

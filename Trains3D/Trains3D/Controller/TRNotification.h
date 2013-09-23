@@ -1,17 +1,15 @@
 #import "objd.h"
 
 @class TRNotifications;
-@protocol TRNotification;
 
 @interface TRNotifications : NSObject
 + (id)notifications;
 - (id)init;
 - (ODClassType*)type;
+- (void)notifyNotification:(NSString*)notification;
+- (BOOL)isEmpty;
+- (id)take;
 + (ODClassType*)type;
-@end
-
-
-@protocol TRNotification<NSObject>
 @end
 
 
