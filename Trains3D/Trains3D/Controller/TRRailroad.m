@@ -607,16 +607,20 @@ static ODClassType* _TRRailroad_type;
 
 - (BOOL)tryAddRail:(TRRail*)rail {
     if([self canAddRail:rail]) {
-        [self connectRail:rail to:rail.form.start];
-        [self connectRail:rail to:rail.form.end];
-        [self buildLightsForTile:rail.tile connector:rail.form.start];
-        [self buildLightsForTile:rail.tile connector:rail.form.end];
-        [self rebuildArrays];
+        [self addRail:rail];
         [_score railBuilt];
         return YES;
     } else {
         return NO;
     }
+}
+
+- (void)addRail:(TRRail*)rail {
+    [self connectRail:rail to:rail.form.start];
+    [self connectRail:rail to:rail.form.end];
+    [self buildLightsForTile:rail.tile connector:rail.form.start];
+    [self buildLightsForTile:rail.tile connector:rail.form.end];
+    [self rebuildArrays];
 }
 
 - (TRRailroadConnectorContent*)contentInTile:(GEVec2i)tile connector:(TRRailConnector*)connector {

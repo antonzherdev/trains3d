@@ -171,7 +171,7 @@ static ODClassType* _TRLevel_type;
         return wrap(GEVec2i, _.tile);
     }]] randomItem] get]);
     TRCity* city = [TRCity cityWithColor:[TRCityColor values][[[self cities] count]] tile:tile angle:[self randomCityDirectionForTile:tile]];
-    [_railroad tryAddRail:[TRRail railWithTile:tile form:city.angle.form]];
+    [_railroad addRail:[TRRail railWithTile:tile form:city.angle.form]];
     [__cities addItem:city];
 }
 

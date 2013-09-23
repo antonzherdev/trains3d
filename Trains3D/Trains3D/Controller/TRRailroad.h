@@ -132,6 +132,7 @@
 - (void)addChangeListener:(void(^)())changeListener;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (BOOL)tryAddRail:(TRRail*)rail;
+- (void)addRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)contentInTile:(GEVec2i)tile connector:(TRRailConnector*)connector;
 - (TRRailPointCorrection*)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(CGFloat)forLength point:(TRRailPoint*)point;
 - (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint*)from to:(CGFloat)to;

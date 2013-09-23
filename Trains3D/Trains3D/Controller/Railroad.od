@@ -77,14 +77,18 @@ class Railroad(map : MapSso, score : Score) {
 
     def tryAdd(rail : Rail) : bool = {
         if(canAdd(rail)) {
-            connect(rail, rail.form.start)
-            connect(rail, rail.form.end)
-            buildLightsFor(rail.tile, rail.form.start)
-            buildLightsFor(rail.tile, rail.form.end)
-            rebuildArrays
+            add(rail)
             score.railBuilt
             true
         } else false
+    }
+
+    def add(rail : Rail) {
+        connect(rail, rail.form.start)
+        connect(rail, rail.form.end)
+        buildLightsFor(rail.tile, rail.form.start)
+        buildLightsFor(rail.tile, rail.form.end)
+        rebuildArrays
     }
 
     def contentIn(tile : vec2i, connector : RailConnector) : RailroadConnectorContent =

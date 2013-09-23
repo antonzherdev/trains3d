@@ -39,7 +39,7 @@ class Level(rules : LevelRules) extends Controller {
     def createNewCity {
         val tile = map.partialTiles.chain.exclude(cities.chain.map(_.tile)).randomItem.get
         val city = City(CityColor[cities.count], tile, randomCityDirectionFor(tile))
-        railroad.tryAdd(Rail(tile, city.angle.form))
+        railroad.add(Rail(tile, city.angle.form))
         _cities.add(city)
     }
 
