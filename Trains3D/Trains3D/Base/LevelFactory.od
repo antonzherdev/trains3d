@@ -40,7 +40,12 @@ class TrainLayers(level : Level) extends Layers {
 
     def layers : [Layer] = [levelLayer, menuLayer]
     def viewportsWith(viewSize : vec2) = {
-        [(levelLayer, rect(0, 0, viewSize.x, viewSize.y - 46)),
-         (menuLayer, rect(0, viewSize.y - 46, viewSize.x, 46))]
+        if(viewSize.y > 1279) {
+            [(levelLayer, rect(0, 0, viewSize.x, viewSize.y - 92)),
+            (menuLayer, rect(0, viewSize.y - 92, viewSize.x, 92))]
+        } else {
+            [(levelLayer, rect(0, 0, viewSize.x, viewSize.y - 46)),
+             (menuLayer, rect(0, viewSize.y - 46, viewSize.x, 46))]
+        }
     }
 }
