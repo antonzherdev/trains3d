@@ -3,6 +3,64 @@
 #import "EGContext.h"
 #import "EGInput.h"
 #import "GEMat4.h"
+@implementation EGCachedCamera{
+    GERect __lastViewport;
+    EGMatrixModel* __lastMatrixModel;
+}
+static ODClassType* _EGCachedCamera_type;
+
++ (id)cachedCamera {
+    return [[EGCachedCamera alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGCachedCamera_type = [ODClassType classTypeWithCls:[EGCachedCamera class]];
+}
+
+- (EGMatrixModel*)matrixModelWithViewport:(GERect)viewport {
+    if(GERectEq(__lastViewport, viewport)) {
+        return __lastMatrixModel;
+    } else {
+        __lastMatrixModel = [self calculateMatrixModelWithViewport:viewport];
+        return __lastMatrixModel;
+    }
+}
+
+- (EGMatrixModel*)calculateMatrixModelWithViewport:(GERect)viewport {
+    @throw @"Method calculateMatrixModelWith is abstract";
+}
+
+- (void)focus {
+}
+
+- (ODClassType*)type {
+    return [EGCachedCamera type];
+}
+
++ (ODClassType*)type {
+    return _EGCachedCamera_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation EGScene{
     GEVec4 _backgroundColor;
     id<EGController> _controller;

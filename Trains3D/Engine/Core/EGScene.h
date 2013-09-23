@@ -10,6 +10,7 @@
 @protocol EGInputProcessor;
 @class EGEnvironment;
 
+@class EGCachedCamera;
 @class EGScene;
 @class EGLayer;
 @class EGLayersLayout;
@@ -28,6 +29,16 @@
 - (void)focus;
 - (EGMatrixModel*)matrixModelWithViewport:(GERect)viewport;
 - (CGFloat)viewportRatio;
+@end
+
+
+@interface EGCachedCamera : NSObject<EGCamera>
++ (id)cachedCamera;
+- (id)init;
+- (ODClassType*)type;
+- (EGMatrixModel*)matrixModelWithViewport:(GERect)viewport;
+- (EGMatrixModel*)calculateMatrixModelWithViewport:(GERect)viewport;
++ (ODClassType*)type;
 @end
 
 

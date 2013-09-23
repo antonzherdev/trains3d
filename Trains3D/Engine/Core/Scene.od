@@ -12,6 +12,19 @@ trait Camera {
     def viewportRatio : float //width/height
 }
 
+class CachedCamera extends Camera {
+    private var _lastViewport : rect
+    private var _lastMatrixModel : MatrixModel
+    def matrixModelWith(viewport : rect) : MatrixModel =
+        if(_lastViewport == viewport) _lastMatrixModel
+        else {
+            _lastMatrixModel = calculateMatrixModelWith(viewport)
+            _lastMatrixModel
+        }
+
+    def calculateMatrixModelWith(viewport : rect) : MatrixModel
+}
+
 
 class Scene(backgroundColor : vec4, controller : Controller, layersLayout : LayersLayout) {
     def drawWith(viewSize : vec2) {

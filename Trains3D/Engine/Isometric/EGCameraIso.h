@@ -7,17 +7,16 @@
 
 @class EGCameraIso;
 
-@interface EGCameraIso : NSObject<EGCamera>
+@interface EGCameraIso : EGCachedCamera
 @property (nonatomic, readonly) GEVec2i tilesOnScreen;
 @property (nonatomic, readonly) float zReserve;
 @property (nonatomic, readonly) GEVec2 center;
 @property (nonatomic, readonly) CGFloat viewportRatio;
-@property (nonatomic, readonly) EGMatrixModel* matrixModel;
 
 + (id)cameraIsoWithTilesOnScreen:(GEVec2i)tilesOnScreen zReserve:(float)zReserve center:(GEVec2)center;
 - (id)initWithTilesOnScreen:(GEVec2i)tilesOnScreen zReserve:(float)zReserve center:(GEVec2)center;
 - (ODClassType*)type;
-- (EGMatrixModel*)matrixModelWithViewport:(GERect)viewport;
+- (EGMatrixModel*)calculateMatrixModelWithViewport:(GERect)viewport;
 - (void)focus;
 + (GEMat4*)m;
 + (GEMat4*)w;
