@@ -12,4 +12,6 @@ class Camera2D(size : vec2) extends Camera {
         c = mat4.identity,
         p = mat4.ortho(0, size.x, 0, size.y, -1, 1)
     )
+
+    def matrixModelWith(viewport : rect) : MatrixModel = matrixModel
 }

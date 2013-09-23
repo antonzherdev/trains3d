@@ -32,6 +32,10 @@ static ODClassType* _EGCamera2D_type;
     _EGCamera2D_type = [ODClassType classTypeWithCls:[EGCamera2D class]];
 }
 
+- (EGMatrixModel*)matrixModelWithViewport:(GERect)viewport {
+    return _matrixModel;
+}
+
 - (void)focus {
 }
 

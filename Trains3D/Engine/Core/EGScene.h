@@ -26,7 +26,7 @@
 
 @protocol EGCamera<NSObject>
 - (void)focus;
-- (EGMatrixModel*)matrixModel;
+- (EGMatrixModel*)matrixModelWithViewport:(GERect)viewport;
 - (CGFloat)viewportRatio;
 @end
 

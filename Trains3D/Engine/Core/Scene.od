@@ -7,7 +7,7 @@ trait Controller {
 trait Camera {
     def focus {}
 
-    def matrixModel : MatrixModel
+    def matrixModelWith(viewport : rect) : MatrixModel
 
     def viewportRatio : float //width/height
 }
@@ -31,14 +31,14 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
         context.environment = view.environment
         val camera = view.camera
         context.set(viewport = viewport)
-        matrix.value = camera.matrixModel
+        matrix.value = camera.matrixModelWith(viewport)
         camera.focus
         view.drawView
     }
 
     def process(event : Event, viewport : rect) : bool = {
         processor.map{ p ->
-            val cam = EventCamera(inverseMatrix = view.camera.matrixModel.wcp.inverse, viewport)
+            val cam = EventCamera(inverseMatrix = view.camera.matrixModelWith(viewport).wcp.inverse, viewport)
             val e = event.set(camera = cam)
             p.process(e)
         }.getOr(false)
