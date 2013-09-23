@@ -6,6 +6,8 @@
 #import "EGProgress.h"
 #import "EGSchedule.h"
 #import "TRScore.h"
+#import "EGMaterial.h"
+#import "EGSprite.h"
 #import "TRRailroad.h"
 #import "TRNotification.h"
 @implementation TRLevelMenuView{
@@ -64,7 +66,8 @@ static ODClassType* _TRLevelMenuView_type;
 - (void)drawView {
     [[self font] drawText:[NSString stringWithFormat:@"%li", [_level.score score]] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(0.0, 0.0) alignment:egTextAlignmentApplyXY(-1.0, -1.0)];
     NSInteger seconds = ((NSInteger)([_level.schedule time]));
-    [[self font] drawText:[NSString stringWithFormat:@"%li", seconds] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(16.0, 0.0) alignment:egTextAlignmentApplyXY(1.0, -1.0)];
+    [[self font] drawText:[NSString stringWithFormat:@"%li", seconds] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(15.0, 0.0) alignment:egTextAlignmentApplyXY(1.0, -1.0)];
+    [EGSprite drawMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 0.0, 0.0, 1.0)] in:geRectApplyXYWidthHeight(15.0, 0.0, 1.0, 1.0)];
     [_notificationAnimation forF:^void(CGFloat t) {
         [[self font] drawText:_notificationText color:_notificationProgress(((float)(t))) at:GEVec2Make(8.0, 0.0) alignment:egTextAlignmentApplyXY(0.0, -1.0)];
     }];

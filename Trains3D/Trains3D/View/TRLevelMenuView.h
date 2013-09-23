@@ -10,6 +10,8 @@
 @class EGContext;
 @class TRScore;
 @class EGSchedule;
+@class EGColorSource;
+@class EGSprite;
 @class TRRailroad;
 @class TRNotifications;
 @class EGEnvironment;

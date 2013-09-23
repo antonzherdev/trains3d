@@ -35,6 +35,10 @@ static ODClassType* _EGMaterial_type;
     [[self shaderSystem] drawMaterial:self vb:vb index:index mode:mode];
 }
 
+- (void)drawVb:(EGVertexBuffer*)vb mode:(GLenum)mode {
+    [[self shaderSystem] drawMaterial:self vb:vb mode:mode];
+}
+
 + (EGMaterial*)applyColor:(GEVec4)color {
     return [EGStandardMaterial applyDiffuse:[EGColorSource applyColor:color]];
 }

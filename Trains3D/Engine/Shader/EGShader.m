@@ -170,6 +170,16 @@ static ODClassType* _EGShader_type;
     glUseProgram(0);
 }
 
+- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb mode:(GLenum)mode {
+    glUseProgram(_program.handle);
+    [vb applyDraw:^void() {
+        [self loadVbDesc:vb.desc param:param];
+        glDrawArrays(mode, 0, [vb count]);
+        [self unloadParam:param];
+    }];
+    glUseProgram(0);
+}
+
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(id)param {
     @throw @"Method load is abstract";
 }
@@ -381,6 +391,11 @@ static ODClassType* _EGShaderSystem_type;
 - (void)drawMaterial:(id)material vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(GLenum)mode {
     EGShader* shader = [self shaderForMaterial:material];
     [shader drawParam:material vb:vb index:index mode:mode];
+}
+
+- (void)drawMaterial:(id)material vb:(EGVertexBuffer*)vb mode:(GLenum)mode {
+    EGShader* shader = [self shaderForMaterial:material];
+    [shader drawParam:material vb:vb mode:mode];
 }
 
 - (EGShader*)shaderForMaterial:(id)material {

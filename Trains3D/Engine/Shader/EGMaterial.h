@@ -21,6 +21,7 @@ typedef struct EGBlendFunction EGBlendFunction;
 - (EGShaderSystem*)shaderSystem;
 - (void)drawMesh:(EGMesh*)mesh;
 - (void)drawVb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(GLenum)mode;
+- (void)drawVb:(EGVertexBuffer*)vb mode:(GLenum)mode;
 + (EGMaterial*)applyColor:(GEVec4)color;
 + (EGMaterial*)applyTexture:(EGTexture*)texture;
 + (ODClassType*)type;

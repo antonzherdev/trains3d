@@ -1,0 +1,22 @@
+package com.antonzherdev.eg
+
+object Sprite {
+    private val vertexes = VoidRefArray(MeshData.type, 4)
+    private val vb = VertexBuffer.mesh
+    def draw(material : Material, in : rect) {
+        draw(material, in, rect(0, 0, 1, 1))
+    }
+
+    def draw(material : Material, in : rect, uv : rect) {
+        var v = vertexes
+        v = v.write(MeshData, MeshData(uv.leftBottom, vec3(0, 0, 1), vec3(in.leftBottom, 0)))
+        v = v.write(MeshData, MeshData(uv.leftTop, vec3(0, 0, 1), vec3(in.leftTop, 0)))
+        v = v.write(MeshData, MeshData(uv.rightBottom, vec3(0, 0, 1), vec3(in.rightBottom, 0)))
+        v = v.write(MeshData, MeshData(uv.rightTop, vec3(0, 0, 1), vec3(in.rightTop, 0)))
+        vb.set(vertexes)
+
+        glDisable(GL_CULL_FACE)
+        material.draw(vb, GL_TRIANGLE_STRIP)
+        glEnable(GL_CULL_FACE)
+    }
+}
