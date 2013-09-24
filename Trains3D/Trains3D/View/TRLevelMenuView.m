@@ -38,7 +38,7 @@ static ODClassType* _TRLevelMenuView_type;
         _smallFont = [EGGlobal fontWithName:@"verdana" size:14];
         _bigFont = [EGGlobal fontWithName:@"verdana" size:28];
         _notificationProgress = ^id() {
-            float(^__l)(float) = [EGProgress gap2T1:0.7 t2:1.0];
+            float(^__l)(float) = [EGProgress gapT1:0.7 t2:1.0];
             GEVec4(^__r)(float) = ^GEVec4(float _) {
                 return GEVec4Make(1.0, 1.0, 1.0, 1 - _);
             };

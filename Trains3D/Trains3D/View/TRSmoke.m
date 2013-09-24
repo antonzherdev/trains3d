@@ -140,7 +140,7 @@ static ODClassType* _TRSmokeParticle_type;
         id(^__l)(float) = ^id() {
             id(^__l)(float) = ^id() {
                 float(^__l)(float) = [EGProgress divOn:self.lifeLength];
-                id(^__r)(float) = [EGProgress gapT1:0.75 t2:1.0];
+                id(^__r)(float) = [EGProgress gapOptT1:0.75 t2:1.0];
                 return ^id(float _) {
                     return __r(__l(_));
                 };

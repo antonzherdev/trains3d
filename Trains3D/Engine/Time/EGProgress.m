@@ -53,7 +53,7 @@ static ODClassType* _EGProgress_type;
     };
 }
 
-+ (id(^)(float))gapT1:(float)t1 t2:(float)t2 {
++ (id(^)(float))gapOptT1:(float)t1 t2:(float)t2 {
     float l = t2 - t1;
     return ^id(float t) {
         if(float4Between(t, t1, t2)) return [CNOption someValue:numf4((t - t1) / l)];
@@ -61,7 +61,7 @@ static ODClassType* _EGProgress_type;
     };
 }
 
-+ (float(^)(float))gap2T1:(float)t1 t2:(float)t2 {
++ (float(^)(float))gapT1:(float)t1 t2:(float)t2 {
     float l = t2 - t1;
     return ^float(float t) {
         if(t <= t1) {
