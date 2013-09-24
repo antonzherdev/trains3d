@@ -19,12 +19,4 @@ object Sprite {
         material.draw(vb, GL_TRIANGLE_STRIP)
         glEnable(GL_CULL_FACE)
     }
-
-    def fixedDraw(material : ColorSource, uv : rect, at : vec2, alignment : vec2) {
-        val size = material.texture.get.size * uv.size / context.viewport.size * 2
-        val m = context.matrixStack.value
-        context.matrixStack.value = MatrixModel.identity
-        draw(material, in = rect((m.mwcp*vec4(at.x, at.y, 0, 1)).xy - size*(alignment/2 + 0.5), size), uv)
-        context.matrixStack.value = m
-    }
 }

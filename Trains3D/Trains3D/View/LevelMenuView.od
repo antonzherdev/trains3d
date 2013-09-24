@@ -4,23 +4,24 @@ import com.antonzherdev.eg.Text._
 import com.antonzherdev.eg.Progress._
 
 class LevelMenuView(level : Level) extends LayerView {
-    val camera : Camera = Camera2D(vec2(16, 1))
+    def cameraWith(viewport : rect) : Camera = res.cameraWith(viewport)
 
     lazy val res1x = LevelMenuViewRes1x()
     lazy val res2x = LevelMenuViewRes2x()
-    def res : LevelMenuViewRes  = if(context.viewport.size.y > 46) res2x else res1x
+    def res : LevelMenuViewRes = if(context.viewport.size.y > 47) res2x else res1x
     def font : Font = res.font
 
     val notificationProgress = gap(0.7, 1) >> vec4(1, 1, 1, 1 - _)
-    def drawView {
+    def draw {
+        val w = context.viewport.size.x/res.pixelsInPoint
         font.draw(text = level.score.score, color = vec4(1, 1, 1, 1), at = vec2(0, 0), TextAlignment(-1, -1))
         val seconds : int = level.schedule.time
-        font.draw(text = seconds, color = vec4(1, 1, 1, 1), at = vec2(15, 0), TextAlignment(1, -1))
+        font.draw(text = seconds, color = vec4(1, 1, 1, 1), at = vec2(w - 46, 0), TextAlignment(1, -1))
 
-        Sprite.fixedDraw(ColorSource(res.pause), uv = res.pauseUV, at = vec2(16, 0), alignment = vec2(1, -1))
+        Sprite.draw(ColorSource(res.pause), in = rect(w - 46, 0, 46, 46), uv = res.pauseUV)
 
         notificationAnimation.for{t ->
-            font.draw(text = notificationText, notificationProgress(t), at = vec2(8,0), TextAlignment(0, -1))
+            font.draw(text = notificationText, notificationProgress(t), at = vec2(w/2, 0), TextAlignment(0, -1))
         }
 
         if(!level.railroad.damagesPoints.isEmpty && level.repairer.isEmpty) {
@@ -46,20 +47,33 @@ class LevelMenuView(level : Level) extends LayerView {
     }
 }
 
-trait LevelMenuViewRes {
+class LevelMenuViewRes {
     def font : Font
     def pause : Texture
     def pauseUV : rect
+    def pixelsInPoint : float4
+
+    private var _lastViewportSize : vec2 = vec2(0, 0)
+    private var _lastCamera : Camera
+    def cameraWith(viewport : rect) : Camera =
+        if(viewport.size == _lastViewportSize) _lastCamera
+        else {
+            _lastViewportSize = viewport.size
+            _lastCamera = Camera2D(vec2(viewport.width/pixelsInPoint, 46))
+            _lastCamera
+        }
 }
 
 class LevelMenuViewRes1x extends LevelMenuViewRes {
     val font = fontWith(name = "verdana", size = 14)
     val pause = nearestTextureFor("Pause.png")
     def pauseUV = pause.uv(0, 0, 46, 46)
+    def pixelsInPoint : float4 = 1
 }
 
 class LevelMenuViewRes2x extends LevelMenuViewRes {
     val font = fontWith(name = "verdana", size = 28)
     val pause = nearestTextureFor("Pause_2x.png")
     def pauseUV = pause.uv(0, 0, 92, 92)
+    def pixelsInPoint : float4 = 2
 }

@@ -3,7 +3,6 @@
 #import "GEVec.h"
 #import "EGFont.h"
 @class TRLevel;
-@class EGCamera2D;
 @class EGProgress;
 @class EGCounter;
 @class EGGlobal;
@@ -16,16 +15,16 @@
 @class TRNotifications;
 @class EGEnvironment;
 @class EGTexture;
+@class EGCamera2D;
 @class EGFileTexture;
 
 @class TRLevelMenuView;
+@class TRLevelMenuViewRes;
 @class TRLevelMenuViewRes1x;
 @class TRLevelMenuViewRes2x;
-@protocol TRLevelMenuViewRes;
 
 @interface TRLevelMenuView : NSObject<EGLayerView>
 @property (nonatomic, readonly) TRLevel* level;
-@property (nonatomic, readonly) id<EGCamera> camera;
 @property (nonatomic, readonly) GEVec4(^notificationProgress)(float);
 
 + (id)levelMenuViewWithLevel:(TRLevel*)level;
@@ -33,22 +32,29 @@
 - (ODClassType*)type;
 - (TRLevelMenuViewRes1x*)res1x;
 - (TRLevelMenuViewRes2x*)res2x;
-- (id<TRLevelMenuViewRes>)res;
+- (id<EGCamera>)cameraWithViewport:(GERect)viewport;
+- (TRLevelMenuViewRes*)res;
 - (EGFont*)font;
-- (void)drawView;
+- (void)draw;
 - (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
 @end
 
 
-@protocol TRLevelMenuViewRes<NSObject>
+@interface TRLevelMenuViewRes : NSObject
++ (id)levelMenuViewRes;
+- (id)init;
+- (ODClassType*)type;
 - (EGFont*)font;
 - (EGTexture*)pause;
 - (GERect)pauseUV;
+- (float)pixelsInPoint;
+- (id<EGCamera>)cameraWithViewport:(GERect)viewport;
++ (ODClassType*)type;
 @end
 
 
-@interface TRLevelMenuViewRes1x : NSObject<TRLevelMenuViewRes>
+@interface TRLevelMenuViewRes1x : TRLevelMenuViewRes
 @property (nonatomic, readonly) EGFont* font;
 @property (nonatomic, readonly) EGFileTexture* pause;
 
@@ -56,11 +62,12 @@
 - (id)init;
 - (ODClassType*)type;
 - (GERect)pauseUV;
+- (float)pixelsInPoint;
 + (ODClassType*)type;
 @end
 
 
-@interface TRLevelMenuViewRes2x : NSObject<TRLevelMenuViewRes>
+@interface TRLevelMenuViewRes2x : TRLevelMenuViewRes
 @property (nonatomic, readonly) EGFont* font;
 @property (nonatomic, readonly) EGFileTexture* pause;
 
@@ -68,6 +75,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (GERect)pauseUV;
+- (float)pixelsInPoint;
 + (ODClassType*)type;
 @end
 

@@ -88,7 +88,8 @@
 
 @protocol EGLayerView<EGController>
 - (id<EGCamera>)camera;
-- (void)drawView;
+- (id<EGCamera>)cameraWithViewport:(GERect)viewport;
+- (void)draw;
 - (EGEnvironment*)environment;
 - (void)updateWithDelta:(CGFloat)delta;
 @end

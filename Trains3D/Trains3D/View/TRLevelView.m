@@ -43,7 +43,7 @@ static ODClassType* _TRLevelView_type;
     _TRLevelView_type = [ODClassType classTypeWithCls:[TRLevelView class]];
 }
 
-- (void)drawView {
+- (void)draw {
     [_railroadView drawBackground];
     [[_level cities] forEach:^void(TRCity* city) {
         [_cityView drawCity:city];
@@ -53,6 +53,10 @@ static ODClassType* _TRLevelView_type;
     [_railroadView drawForeground];
     [_trainView drawSmokeTrains:[_level trains]];
     [_trainView drawSmokeTrains:[_level dyingTrains]];
+}
+
+- (id<EGCamera>)cameraWithViewport:(GERect)viewport {
+    return _camera;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

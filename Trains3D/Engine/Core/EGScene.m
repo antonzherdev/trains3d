@@ -260,16 +260,16 @@ static ODClassType* _EGLayer_type;
 
 - (void)drawWithViewport:(GERect)viewport {
     EGGlobal.context.environment = [_view environment];
-    id<EGCamera> camera = [_view camera];
     [EGGlobal.context setViewport:geRectiApplyRect(viewport)];
+    id<EGCamera> camera = [_view cameraWithViewport:viewport];
     EGGlobal.matrix.value = [camera matrixModel];
     [camera focus];
-    [_view drawView];
+    [_view draw];
 }
 
 - (BOOL)processEvent:(EGEvent*)event viewport:(GERect)viewport {
     return unumb([[_processor mapF:^id(id<EGInputProcessor> p) {
-        EGEventCamera* cam = [EGEventCamera eventCameraWithMatrix:[[[_view camera] matrixModel] wcp] viewport:viewport];
+        EGEventCamera* cam = [EGEventCamera eventCameraWithMatrix:[[[_view cameraWithViewport:viewport] matrixModel] wcp] viewport:viewport];
         EGEvent* e = [event setCamera:[CNOption applyValue:cam]];
         return numb([p processEvent:e]);
     }] getOrValue:@NO]);

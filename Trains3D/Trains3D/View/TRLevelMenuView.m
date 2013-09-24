@@ -1,7 +1,6 @@
 #import "TRLevelMenuView.h"
 
 #import "TRLevel.h"
-#import "EGCamera2D.h"
 #import "EGProgress.h"
 #import "EGSchedule.h"
 #import "EGContext.h"
@@ -11,9 +10,9 @@
 #import "TRRailroad.h"
 #import "TRNotification.h"
 #import "EGTexture.h"
+#import "EGCamera2D.h"
 @implementation TRLevelMenuView{
     TRLevel* _level;
-    id<EGCamera> _camera;
     CNLazy* __lazy_res1x;
     CNLazy* __lazy_res2x;
     GEVec4(^_notificationProgress)(float);
@@ -22,7 +21,6 @@
 }
 static ODClassType* _TRLevelMenuView_type;
 @synthesize level = _level;
-@synthesize camera = _camera;
 @synthesize notificationProgress = _notificationProgress;
 
 + (id)levelMenuViewWithLevel:(TRLevel*)level {
@@ -33,7 +31,6 @@ static ODClassType* _TRLevelMenuView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _camera = [EGCamera2D camera2DWithSize:GEVec2Make(16.0, 1.0)];
         __lazy_res1x = [CNLazy lazyWithF:^TRLevelMenuViewRes1x*() {
             return [TRLevelMenuViewRes1x levelMenuViewRes1x];
         }];
@@ -69,8 +66,12 @@ static ODClassType* _TRLevelMenuView_type;
     return ((TRLevelMenuViewRes2x*)([__lazy_res2x get]));
 }
 
-- (id<TRLevelMenuViewRes>)res {
-    if([EGGlobal.context viewport].size.y > 46) return [self res2x];
+- (id<EGCamera>)cameraWithViewport:(GERect)viewport {
+    return [[self res] cameraWithViewport:viewport];
+}
+
+- (TRLevelMenuViewRes*)res {
+    if([EGGlobal.context viewport].size.y > 47) return [self res2x];
     else return [self res1x];
 }
 
@@ -78,13 +79,14 @@ static ODClassType* _TRLevelMenuView_type;
     return [[self res] font];
 }
 
-- (void)drawView {
+- (void)draw {
+    float w = [EGGlobal.context viewport].size.x / [[self res] pixelsInPoint];
     [[self font] drawText:[NSString stringWithFormat:@"%li", [_level.score score]] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(0.0, 0.0) alignment:egTextAlignmentApplyXY(-1.0, -1.0)];
     NSInteger seconds = ((NSInteger)([_level.schedule time]));
-    [[self font] drawText:[NSString stringWithFormat:@"%li", seconds] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(15.0, 0.0) alignment:egTextAlignmentApplyXY(1.0, -1.0)];
-    [EGSprite fixedDrawMaterial:[EGColorSource applyTexture:[[self res] pause]] uv:[[self res] pauseUV] at:GEVec2Make(16.0, 0.0) alignment:GEVec2Make(1.0, -1.0)];
+    [[self font] drawText:[NSString stringWithFormat:@"%li", seconds] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(w - 46, 0.0) alignment:egTextAlignmentApplyXY(1.0, -1.0)];
+    [EGSprite drawMaterial:[EGColorSource applyTexture:[[self res] pause]] in:geRectApplyXYWidthHeight(w - 46, 0.0, 46.0, 46.0) uv:[[self res] pauseUV]];
     [_notificationAnimation forF:^void(CGFloat t) {
-        [[self font] drawText:_notificationText color:_notificationProgress(((float)(t))) at:GEVec2Make(8.0, 0.0) alignment:egTextAlignmentApplyXY(0.0, -1.0)];
+        [[self font] drawText:_notificationText color:_notificationProgress(((float)(t))) at:GEVec2Make(w / 2, 0.0) alignment:egTextAlignmentApplyXY(0.0, -1.0)];
     }];
     if(!([[_level.railroad damagesPoints] isEmpty]) && [[_level repairer] isEmpty]) {
     }
@@ -99,6 +101,10 @@ static ODClassType* _TRLevelMenuView_type;
             _notificationAnimation = [EGCounter applyLength:1.0];
         }
     }
+}
+
+- (id<EGCamera>)camera {
+    return [self cameraWithViewport:geRectApplyXYWidthHeight(-1.0, -1.0, 2.0, 2.0)];
 }
 
 - (EGEnvironment*)environment {
@@ -140,6 +146,75 @@ static ODClassType* _TRLevelMenuView_type;
 @end
 
 
+@implementation TRLevelMenuViewRes{
+    GEVec2 __lastViewportSize;
+    id<EGCamera> __lastCamera;
+}
+static ODClassType* _TRLevelMenuViewRes_type;
+
++ (id)levelMenuViewRes {
+    return [[TRLevelMenuViewRes alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    if(self) __lastViewportSize = GEVec2Make(0.0, 0.0);
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRLevelMenuViewRes_type = [ODClassType classTypeWithCls:[TRLevelMenuViewRes class]];
+}
+
+- (EGFont*)font {
+    @throw @"Method font is abstract";
+}
+
+- (EGTexture*)pause {
+    @throw @"Method pause is abstract";
+}
+
+- (GERect)pauseUV {
+    @throw @"Method pauseUV is abstract";
+}
+
+- (float)pixelsInPoint {
+    @throw @"Method pixelsInPoint is abstract";
+}
+
+- (id<EGCamera>)cameraWithViewport:(GERect)viewport {
+    if(GEVec2Eq(viewport.size, __lastViewportSize)) {
+        return __lastCamera;
+    } else {
+        __lastViewportSize = viewport.size;
+        __lastCamera = [EGCamera2D camera2DWithSize:GEVec2Make(geRectWidth(viewport) / [self pixelsInPoint], 46.0)];
+        return __lastCamera;
+    }
+}
+
+- (ODClassType*)type {
+    return [TRLevelMenuViewRes type];
+}
+
++ (ODClassType*)type {
+    return _TRLevelMenuViewRes_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation TRLevelMenuViewRes1x{
     EGFont* _font;
     EGFileTexture* _pause;
@@ -169,6 +244,10 @@ static ODClassType* _TRLevelMenuViewRes1x_type;
 
 - (GERect)pauseUV {
     return [_pause uvX:0.0 y:0.0 width:46.0 height:46.0];
+}
+
+- (float)pixelsInPoint {
+    return 1.0;
 }
 
 - (ODClassType*)type {
@@ -231,6 +310,10 @@ static ODClassType* _TRLevelMenuViewRes2x_type;
 
 - (GERect)pauseUV {
     return [_pause uvX:0.0 y:0.0 width:92.0 height:92.0];
+}
+
+- (float)pixelsInPoint {
+    return 2.0;
 }
 
 - (ODClassType*)type {

@@ -2,9 +2,6 @@
 
 #import "EGMaterial.h"
 #import "GL.h"
-#import "EGTexture.h"
-#import "EGContext.h"
-#import "GEMat4.h"
 @implementation EGSprite
 static CNVoidRefArray _EGSprite_vertexes;
 static EGVertexBuffer* _EGSprite_vb;
@@ -31,14 +28,6 @@ static ODClassType* _EGSprite_type;
     glDisable(GL_CULL_FACE);
     [material drawVb:_EGSprite_vb mode:GL_TRIANGLE_STRIP];
     glEnable(GL_CULL_FACE);
-}
-
-+ (void)fixedDrawMaterial:(EGColorSource*)material uv:(GERect)uv at:(GEVec2)at alignment:(GEVec2)alignment {
-    GEVec2 size = geVec2MulI(geVec2DivVec2(geVec2MulVec2([((EGTexture*)([material.texture get])) size], uv.size), geVec2ApplyVec2i([EGGlobal.context viewport].size)), 2);
-    EGMatrixModel* m = EGGlobal.context.matrixStack.value;
-    EGGlobal.context.matrixStack.value = EGMatrixModel.identity;
-    [EGSprite drawMaterial:material in:GERectMake(geVec2SubVec2(geVec4Xy([[m mwcp] mulVec4:GEVec4Make(at.x, at.y, 0.0, 1.0)]), geVec2MulVec2(size, geVec2AddF(geVec2DivI(alignment, 2), 0.5))), size) uv:uv];
-    EGGlobal.context.matrixStack.value = m;
 }
 
 - (ODClassType*)type {

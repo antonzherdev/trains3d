@@ -56,16 +56,16 @@ class SingleLayer(layer : Layer) extends Layers {
 class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
     def drawWith(viewport : rect) {
         context.environment = view.environment
-        val camera = view.camera
         context.set(viewport = viewport)
+        val camera = view.cameraWith(viewport)
         matrix.value = camera.matrixModel
         camera.focus
-        view.drawView
+        view.draw
     }
 
     def process(event : Event, viewport : rect) : bool = {
         processor.map{ p ->
-            val cam = EventCamera(matrix = view.camera.matrixModel.wcp, viewport)
+            val cam = EventCamera(matrix = view.cameraWith(viewport).matrixModel.wcp, viewport)
             val e = event.set(camera = cam)
             p.process(e)
         }.getOr(false)
@@ -93,9 +93,11 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
 }
 
 trait LayerView extends Controller {
-    def camera : Camera
+    def camera : Camera = cameraWith(viewport = rect(-1, -1, 2, 2))
 
-    def drawView
+    def cameraWith(viewport : rect) : Camera = camera
+
+    def draw
 
     def environment = Environment.default
 

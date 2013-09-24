@@ -20,7 +20,8 @@
 + (id)levelViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
-- (void)drawView;
+- (void)draw;
+- (id<EGCamera>)cameraWithViewport:(GERect)viewport;
 - (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
 @end
