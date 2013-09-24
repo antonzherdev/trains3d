@@ -50,7 +50,7 @@ class SmokeParticle extends BillboardParticle(2) {
     var speed : vec3
     static val dragCoefficient = 0.5 // air resistance coefficient | a = -dragCoefficient * sqr(speed)
 
-    val animation = div(lifeLength) >> gap(0.75, 1) >> progress(f4 = 0.3, 0) >> color = vec4(_, _, _, _)
+    val animation = div(lifeLength) >> gapOpt(0.75, 1) >> progress(f4 = 0.3, 0) >> color = vec4(_, _, _, _)
 
     def update(t : float4, dt : float4) {
         val a = speed.mul(-dragCoefficient)

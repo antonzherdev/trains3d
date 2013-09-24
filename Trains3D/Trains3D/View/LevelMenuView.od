@@ -9,7 +9,7 @@ class LevelMenuView(level : Level) extends LayerView {
     val bigFont = fontWith(name = "verdana", size = 28)
     def font = if(context.viewport.size.y > 50) bigFont else smallFont
 
-    val notificationProgress = gap2(0.7, 1) >> vec4(1, 1, 1, 1 - _)
+    val notificationProgress = gap(0.7, 1) >> vec4(1, 1, 1, 1 - _)
     def drawView {
         font.draw(text = level.score.score, color = vec4(1, 1, 1, 1), at = vec2(0, 0), TextAlignment(-1, -1))
         val seconds : int = level.schedule.time

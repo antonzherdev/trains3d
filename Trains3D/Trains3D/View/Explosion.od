@@ -50,9 +50,9 @@ class ExplosionFlameParticle(size : float4, startShift : vec2, shift : vec2) ext
     val animation =
     {
         val bigQuad = Quad(size)
-            gap(0, 0.1) >> progress(f4 = 0, size) >> model = Quad(_).add(startShift)
-        *|* gap(0.1, 1) >> progress(vec2 = startShift, shift) >> model = bigQuad.add(_)
-        *|* gap(0.05, 1) >> progress(vec4 = startColor, vec4(0, 0, 0, 0)) >> color = _
+            gapOpt(0, 0.1) >> progress(f4 = 0, size) >> model = Quad(_).add(startShift)
+        *|* gapOpt(0.1, 1) >> progress(vec2 = startShift, shift) >> model = bigQuad.add(_)
+        *|* gapOpt(0.05, 1) >> progress(vec4 = startColor, vec4(0, 0, 0, 0)) >> color = _
     }
     def update(t : float4, dt : float4) {
         animation(t)
