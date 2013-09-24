@@ -2,6 +2,8 @@
 
 #import "TRRailroad.h"
 #import "EGTwoFingerTouchToMouse.h"
+#import "EGContext.h"
+#import "EGDirector.h"
 #import "TRRailPoint.h"
 @implementation TRRailroadBuilderProcessor{
     TRRailroadBuilder* _builder;
@@ -33,6 +35,10 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
 
 - (BOOL)processEvent:(EGEvent*)event {
     return [event leftMouseProcessor:_mouseProcessor] || [event touchProcessor:_touchProcessor];
+}
+
+- (BOOL)isProcessorActive {
+    return !([[EGGlobal director] isPaused]);
 }
 
 - (ODClassType*)type {

@@ -110,13 +110,18 @@ static ODClassType* _TRLevelMenuView_type;
     }
 }
 
+- (BOOL)isProcessorActive {
+    return YES;
+}
+
 - (BOOL)processEvent:(EGEvent*)event {
     return [event leftMouseProcessor:self];
 }
 
 - (BOOL)mouseUpEvent:(EGEvent*)event {
     GEVec2 p = [event location];
-    if([[[self resHeight:geRectHeight(((EGEventCamera*)([event.camera get])).viewport)] pauseSprite] containsVec2:p]) [[EGGlobal director] pause];
+    if([[[self resHeight:geRectHeight(((EGEventCamera*)([event.camera get])).viewport)] pauseSprite] containsVec2:p]) if([[EGGlobal director] isPaused]) [[EGGlobal director] resume];
+    else [[EGGlobal director] pause];
     return NO;
 }
 

@@ -1,6 +1,8 @@
 #import "objd.h"
 #import "GEVec.h"
 #import "GELine.h"
+@class EGGlobal;
+@class EGDirector;
 @class GEMat4;
 
 @class EGEventCamera;
@@ -10,6 +12,7 @@
 @protocol EGTouchProcessor;
 
 @protocol EGInputProcessor<NSObject>
+- (BOOL)isProcessorActive;
 - (BOOL)processEvent:(EGEvent*)event;
 @end
 

@@ -4,6 +4,8 @@
 #import "TRRailroadBuilderProcessor.h"
 #import "TRRailroad.h"
 #import "TRSwitchProcessor.h"
+#import "EGContext.h"
+#import "EGDirector.h"
 @implementation TRLevelProcessor{
     TRLevel* _level;
     TRRailroadBuilderProcessor* _railroadBuilderProcessor;
@@ -34,6 +36,10 @@ static ODClassType* _TRLevelProcessor_type;
 
 - (BOOL)processEvent:(EGEvent*)event {
     return [_switchProcessor processEvent:event] || [_railroadBuilderProcessor processEvent:event];
+}
+
+- (BOOL)isProcessorActive {
+    return !([[EGGlobal director] isPaused]);
 }
 
 - (ODClassType*)type {

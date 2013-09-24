@@ -1,5 +1,7 @@
 #import "EGInput.h"
 
+#import "EGContext.h"
+#import "EGDirector.h"
 #import "GEMat4.h"
 @implementation EGEventCamera{
     GEMat4* _matrix;

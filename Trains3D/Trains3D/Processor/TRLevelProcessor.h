@@ -4,6 +4,8 @@
 @class TRRailroadBuilderProcessor;
 @class TRRailroad;
 @class TRSwitchProcessor;
+@class EGGlobal;
+@class EGDirector;
 
 @class TRLevelProcessor;
 

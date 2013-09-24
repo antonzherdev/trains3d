@@ -49,6 +49,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor with Mo
         }
     }
 
+    def isProcessorActive : bool = true
     def process(event : Event) : bool = {
         event.leftMouse(self)
     }
@@ -56,7 +57,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor with Mo
     def mouseUp(event : Event) : bool = {
         val p = event.location
         if(res(event.camera.get.viewport.height).pauseSprite.contains(p)) {
-            director.pause
+            if(director.isPaused) director.resume else director.pause
         }
         false
     }

@@ -67,9 +67,11 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
 
     def process(event : Event, viewport : rect) : bool = {
         processor.map{ p ->
-            val cam = EventCamera(matrix = view.cameraWith(viewport).matrixModel.wcp, viewport)
-            val e = event.set(camera = cam)
-            p.process(e)
+            if(p.isProcessorActive) {
+                val cam = EventCamera(matrix = view.cameraWith(viewport).matrixModel.wcp, viewport)
+                val e = event.set(camera = cam)
+                p.process(e)
+            } else false
         }.getOr(false)
     }
 
