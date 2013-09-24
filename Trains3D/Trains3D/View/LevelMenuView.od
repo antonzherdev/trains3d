@@ -5,9 +5,11 @@ import com.antonzherdev.eg.Progress._
 
 class LevelMenuView(level : Level) extends LayerView {
     val camera : Camera = Camera2D(vec2(16, 1))
-    val smallFont = fontWith(name = "verdana", size = 14)
-    val bigFont = fontWith(name = "verdana", size = 28)
-    def font = if(context.viewport.size.y > 50) bigFont else smallFont
+
+    lazy val res1x = LevelMenuViewRes1x()
+    lazy val res2x = LevelMenuViewRes2x()
+    def res : LevelMenuViewRes  = if(context.viewport.size.y > 46) res2x else res1x
+    def font : Font = res.font
 
     val notificationProgress = gap(0.7, 1) >> vec4(1, 1, 1, 1 - _)
     def drawView {
@@ -42,5 +44,16 @@ class LevelMenuView(level : Level) extends LayerView {
             notificationAnimation = Counter(1)
         }
     }
+}
 
+trait LevelMenuViewRes {
+    def font : Font
+}
+
+class LevelMenuViewRes1x extends LevelMenuViewRes {
+    val font = fontWith(name = "verdana", size = 14)
+}
+
+class LevelMenuViewRes2x extends LevelMenuViewRes {
+    val font = fontWith(name = "verdana", size = 28)
 }
