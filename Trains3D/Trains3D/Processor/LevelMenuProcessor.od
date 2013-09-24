@@ -8,16 +8,7 @@ class LevelMenuProcessor(level : Level) extends InputProcessor with MouseProcess
     }
 
     def mouseUp(event : Event) : bool = {
-        if(level.railroad.damagesPoints.isEmpty) return false
-        if(level.repairer.isDefined) return false
-
         val p = event.location
-        if(p.y > 0.1) return false
-
-        val cityNumber : uint = p.x/0.1
-        if(cityNumber >= level.cities.count) return false
-
-        level.runRepairerFrom(level.cities[cityNumber])
-        true
+        false
     }
 }

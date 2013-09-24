@@ -30,12 +30,13 @@
 
 
 @interface EGEventCamera : NSObject
-@property (nonatomic, readonly) GEMat4* inverseMatrix;
+@property (nonatomic, readonly) GEMat4* matrix;
 @property (nonatomic, readonly) GERect viewport;
 
-+ (id)eventCameraWithInverseMatrix:(GEMat4*)inverseMatrix viewport:(GERect)viewport;
-- (id)initWithInverseMatrix:(GEMat4*)inverseMatrix viewport:(GERect)viewport;
++ (id)eventCameraWithMatrix:(GEMat4*)matrix viewport:(GERect)viewport;
+- (id)initWithMatrix:(GEMat4*)matrix viewport:(GERect)viewport;
 - (ODClassType*)type;
+- (GEMat4*)inverseMatrix;
 + (ODClassType*)type;
 @end
 

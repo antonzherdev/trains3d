@@ -1,8 +1,6 @@
 #import "objd.h"
 #import "EGInput.h"
-#import "GEVec.h"
 @class TRLevel;
-@class TRRailroad;
 
 @class TRLevelMenuProcessor;
 

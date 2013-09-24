@@ -17,7 +17,9 @@ trait TouchProcessor {
     def touchCanceled(event : Event) : bool = false
 }
 
-class EventCamera(inverseMatrix : mat4, viewport : rect)
+class EventCamera(matrix : mat4, viewport : rect) {
+    lazy val inverseMatrix = matrix.inverse
+}
 
 class Event(viewSize : vec2, camera : EventCamera?) {
     def set(camera : EventCamera?) : Event

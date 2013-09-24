@@ -2,7 +2,6 @@
 
 #import "EGContext.h"
 #import "EGInput.h"
-#import "GEMat4.h"
 @implementation EGScene{
     GEVec4 _backgroundColor;
     id<EGController> _controller;
@@ -270,7 +269,7 @@ static ODClassType* _EGLayer_type;
 
 - (BOOL)processEvent:(EGEvent*)event viewport:(GERect)viewport {
     return unumb([[_processor mapF:^id(id<EGInputProcessor> p) {
-        EGEventCamera* cam = [EGEventCamera eventCameraWithInverseMatrix:[[[[_view camera] matrixModel] wcp] inverse] viewport:viewport];
+        EGEventCamera* cam = [EGEventCamera eventCameraWithMatrix:[[[_view camera] matrixModel] wcp] viewport:viewport];
         EGEvent* e = [event setCamera:[CNOption applyValue:cam]];
         return numb([p processEvent:e]);
     }] getOrValue:@NO]);
