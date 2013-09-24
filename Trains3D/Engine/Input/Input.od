@@ -61,7 +61,3 @@ class Event(viewSize : vec2, camera : EventCamera?) {
         else if(isTouchCanceled) processor.touchCanceled(self)
         else false
 }
-
-class RectIndex<T>(rects : [(rect, T)]) {
-    def apply(point : vec2) : T? = rects.find(_.a.contains(point)).map(_.b)
-}

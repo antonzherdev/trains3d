@@ -2,12 +2,12 @@
 #import "EGInput.h"
 #import "GEVec.h"
 @class TRLevel;
-@class TRRailConnector;
 @class EGCollisionBox2d;
 @class EGCollisionWorld;
 @class TRRailroad;
 @class EGCollisionBody;
 @class TRSwitch;
+@class TRRailConnector;
 @class TRRailLight;
 @class EGCrossPoint;
 @class TRRailroadConnectorContent;

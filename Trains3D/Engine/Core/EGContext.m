@@ -102,14 +102,14 @@ static ODClassType* _EGContext_type;
     _EGContext_type = [ODClassType classTypeWithCls:[EGContext class]];
 }
 
-- (EGFileTexture*)textureForFile:(NSString*)file {
+- (EGTexture*)textureForFile:(NSString*)file {
     return ((EGFileTexture*)([_textureCache objectForKey:file orUpdateWith:^EGFileTexture*() {
         return [EGFileTexture applyFile:file];
     }]));
 }
 
 - (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size {
-    return ((EGFileTexture*)([_textureCache objectForKey:tuple(name, numui(size)) orUpdateWith:^EGFileTexture*() {
+    return ((EGFont*)([_fontCache objectForKey:tuple(name, numui4(((unsigned int)(size)))) orUpdateWith:^EGFont*() {
         return [EGFont fontWithName:name size:((unsigned int)(size))];
     }]));
 }

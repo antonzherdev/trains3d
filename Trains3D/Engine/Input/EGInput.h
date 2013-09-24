@@ -5,7 +5,6 @@
 
 @class EGEventCamera;
 @class EGEvent;
-@class EGRectIndex;
 @protocol EGInputProcessor;
 @protocol EGMouseProcessor;
 @protocol EGTouchProcessor;
@@ -62,17 +61,6 @@
 - (BOOL)isTouchEnded;
 - (BOOL)isTouchCanceled;
 - (BOOL)touchProcessor:(id<EGTouchProcessor>)processor;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGRectIndex : NSObject
-@property (nonatomic, readonly) id<CNSeq> rects;
-
-+ (id)rectIndexWithRects:(id<CNSeq>)rects;
-- (id)initWithRects:(id<CNSeq>)rects;
-- (ODClassType*)type;
-- (id)applyPoint:(GEVec2)point;
 + (ODClassType*)type;
 @end
 

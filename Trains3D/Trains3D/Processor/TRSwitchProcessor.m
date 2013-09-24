@@ -1,14 +1,13 @@
 #import "TRSwitchProcessor.h"
 
 #import "TRLevel.h"
-#import "TRRailPoint.h"
 #import "EGCollisionBody.h"
 #import "EGCollisionWorld.h"
 #import "TRRailroad.h"
+#import "TRRailPoint.h"
 #import "EGCollision.h"
 @implementation TRSwitchProcessor{
     TRLevel* _level;
-    EGRectIndex* _index;
     id _downed;
     EGCollisionBox2d* _switchShape;
     EGCollisionBox2d* _lightShape;
@@ -25,7 +24,6 @@ static ODClassType* _TRSwitchProcessor_type;
     self = [super init];
     if(self) {
         _level = level;
-        _index = [EGRectIndex rectIndexWithRects:(@[tuple(wrap(GERect, geRectApplyXYWidthHeight(-0.1, 0.2, 0.2, 0.3)), tuple(TRRailConnector.top, @NO)), tuple(wrap(GERect, geRectApplyXYWidthHeight(-0.1, -0.5, 0.2, 0.3)), tuple(TRRailConnector.bottom, @NO)), tuple(wrap(GERect, geRectApplyXYWidthHeight(-0.5, -0.1, 0.3, 0.2)), tuple(TRRailConnector.left, @NO)), tuple(wrap(GERect, geRectApplyXYWidthHeight(0.2, -0.1, 0.3, 0.2)), tuple(TRRailConnector.right, @NO)), tuple(wrap(GERect, geRectApplyXYWidthHeight(0.15, 0.4, 0.1, 0.1)), tuple(TRRailConnector.top, @YES)), tuple(wrap(GERect, geRectApplyXYWidthHeight(-0.25, -0.5, 0.1, 0.1)), tuple(TRRailConnector.bottom, @YES)), tuple(wrap(GERect, geRectApplyXYWidthHeight(-0.5, 0.15, 0.1, 0.1)), tuple(TRRailConnector.left, @YES)), tuple(wrap(GERect, geRectApplyXYWidthHeight(0.4, -0.25, 0.1, 0.1)), tuple(TRRailConnector.right, @YES))])];
         _downed = [CNOption none];
         _switchShape = [EGCollisionBox2d applyX:0.3 y:0.2];
         _lightShape = [EGCollisionBox2d applyX:0.2 y:0.06];

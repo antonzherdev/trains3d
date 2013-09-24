@@ -3,6 +3,7 @@
 @class EGDirector;
 @class EGFileTexture;
 @class EGFont;
+@class EGTexture;
 @class GEMat4;
 
 @class EGGlobal;
@@ -32,7 +33,7 @@
 + (id)context;
 - (id)init;
 - (ODClassType*)type;
-- (EGFileTexture*)textureForFile:(NSString*)file;
+- (EGTexture*)textureForFile:(NSString*)file;
 - (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size;
 - (GERecti)viewport;
 - (void)setViewport:(GERecti)viewport;
