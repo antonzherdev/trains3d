@@ -16,6 +16,7 @@
 		0214B1501773394500C03C71 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0214B14E1773394500C03C71 /* InfoPlist.strings */; };
 		024F434E1774A5C3005B6F82 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 024F434D1774A5C3005B6F82 /* CoreVideo.framework */; };
 		6F3DF00239DEC95B9B099E02 /* Window.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF7A06EFC33D43D5EDF07 /* Window.png */; };
+		6F3DF00BEE276C3A31BFCB45 /* LevelPauseMenuView.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFC7754B42602CE8010CB /* LevelPauseMenuView.od */; };
 		6F3DF00C590705DCF4E3E183 /* EGStandardShaderSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF709252BA04F53353AC7 /* EGStandardShaderSystem.m */; };
 		6F3DF01F319BEED7BF20877B /* type_half.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF627373554D9AC2430AF /* type_half.inl */; };
 		6F3DF025F43A016F771EBE7C /* KWUserDefinedMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF33077040522DF03AB06 /* KWUserDefinedMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -435,6 +436,7 @@
 		6F3DFDACBAC6B7686AFC151E /* CNTreeSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1FCDA8956456CFE3E95 /* CNTreeSet.m */; };
 		6F3DFDB6587C6A732AD7091E /* KWStringContainsMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD3D4C186302DCCB0952 /* KWStringContainsMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DFDBD45DC593E28F64318 /* KWConformToProtocolMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC2E6FC9971DD03EBBBC /* KWConformToProtocolMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		6F3DFDC5752CCC15736FC866 /* TRLevelPauseMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9A49929839D076B62AC /* TRLevelPauseMenuView.m */; };
 		6F3DFDCC1A062CB7B7BD1FCA /* btInternalEdgeUtility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF818C044E47538801BF0 /* btInternalEdgeUtility.cpp */; };
 		6F3DFDCC3E374A25D30430F9 /* XML.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFB9AED97BF093C6F6BB7 /* XML.od */; };
 		6F3DFDCD49B846740B61BD50 /* KWIntercept.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF65614649C256027E3AF /* KWIntercept.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -939,6 +941,7 @@
 		6F3DF60ECAA9379C28ECB35A /* btStridingMeshInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btStridingMeshInterface.h; sourceTree = "<group>"; };
 		6F3DF6144A9964C632AD02EA /* KWMessageSpying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWMessageSpying.h; sourceTree = "<group>"; };
 		6F3DF6174E247570ACD10897 /* EGCollisionWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGCollisionWorld.h; sourceTree = "<group>"; };
+		6F3DF617B4EDC854D9F10CD7 /* TRLevelPauseMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRLevelPauseMenuView.h; sourceTree = "<group>"; };
 		6F3DF61CB7EB96A0C4FCF6C4 /* btDefaultCollisionConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btDefaultCollisionConfiguration.h; sourceTree = "<group>"; };
 		6F3DF61DE27FAAD6930E8F61 /* btRigidBody.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btRigidBody.cpp; sourceTree = "<group>"; };
 		6F3DF61F3D1BD41D81C2483B /* btConvexPlaneCollisionAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btConvexPlaneCollisionAlgorithm.cpp; sourceTree = "<group>"; };
@@ -1164,6 +1167,7 @@
 		6F3DF995908565F2E36557FA /* NSMutableArray+CNChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+CNChain.m"; sourceTree = "<group>"; };
 		6F3DF9A26FCDA3F88381FAF0 /* btDiscreteDynamicsWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btDiscreteDynamicsWorld.h; sourceTree = "<group>"; };
 		6F3DF9A2807799E9A7261FAC /* KWAfterEachNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWAfterEachNode.m; sourceTree = "<group>"; };
+		6F3DF9A49929839D076B62AC /* TRLevelPauseMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRLevelPauseMenuView.m; sourceTree = "<group>"; };
 		6F3DF9A89BD4CD965D8B51EF /* matrix_query.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = matrix_query.inl; sourceTree = "<group>"; };
 		6F3DF9AB1EFCD0C77A21525C /* Seq.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Seq.od; sourceTree = "<group>"; };
 		6F3DF9AF54A0CAE5E3EB6282 /* TRLevelFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRLevelFactory.m; sourceTree = "<group>"; };
@@ -1368,6 +1372,7 @@
 		6F3DFC506DF7AFF339438CBF /* KWGenericMatchEvaluator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWGenericMatchEvaluator.m; sourceTree = "<group>"; };
 		6F3DFC5A74CDB3AB3E4A9866 /* _vectorize.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = _vectorize.hpp; sourceTree = "<group>"; };
 		6F3DFC6A1C0E2F6DFE3D2A5F /* KWFailure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWFailure.h; sourceTree = "<group>"; };
+		6F3DFC7754B42602CE8010CB /* LevelPauseMenuView.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = LevelPauseMenuView.od; sourceTree = "<group>"; };
 		6F3DFC7949AE36A333A09765 /* KWRegisterMatchersNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWRegisterMatchersNode.h; sourceTree = "<group>"; };
 		6F3DFC7B3085F8A807BFB401 /* KWExampleNodeVisitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWExampleNodeVisitor.h; sourceTree = "<group>"; };
 		6F3DFC7D49C726D36BDAE222 /* extented_min_max.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = extented_min_max.hpp; sourceTree = "<group>"; };
@@ -3234,6 +3239,9 @@
 				6F3DF6953012A4C12B3BFF97 /* Strings.od */,
 				6F3DF4CB3D788F74A150AEA6 /* TRStrings.h */,
 				6F3DFE4D47C0C15FEF085AD0 /* TRStrings.m */,
+				6F3DFC7754B42602CE8010CB /* LevelPauseMenuView.od */,
+				6F3DF617B4EDC854D9F10CD7 /* TRLevelPauseMenuView.h */,
+				6F3DF9A49929839D076B62AC /* TRLevelPauseMenuView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -3500,6 +3508,7 @@
 				6F3DFC798E30B47BE1453B23 /* Pause.png in Resources */,
 				6F3DF496AA13DBFF2CD2E204 /* Sprite.od in Resources */,
 				6F3DF1E7FA5160EB52013885 /* Pause_2x.png in Resources */,
+				6F3DF00BEE276C3A31BFCB45 /* LevelPauseMenuView.od in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3775,6 +3784,7 @@
 				6F3DFEB6141C2B88BF966074 /* TRStrings.m in Sources */,
 				6F3DF6EA224A8FE0BCF67E9F /* TRNotification.m in Sources */,
 				6F3DF78A5BBFE9A2657251F9 /* EGSprite.m in Sources */,
+				6F3DFDC5752CCC15736FC866 /* TRLevelPauseMenuView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

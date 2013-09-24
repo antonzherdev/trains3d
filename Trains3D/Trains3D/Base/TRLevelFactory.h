@@ -15,6 +15,7 @@
 @class TRLevelView;
 @class TRLevelProcessor;
 @class TRLevelMenuView;
+@class TRLevelPauseMenuView;
 
 @class TRLevelFactory;
 @class TRTrainLayers;
@@ -38,6 +39,7 @@
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) EGLayer* levelLayer;
 @property (nonatomic, readonly) EGLayer* menuLayer;
+@property (nonatomic, readonly) EGLayer* pauseMenuLayer;
 
 + (id)trainLayersWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;

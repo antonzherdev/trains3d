@@ -1,0 +1,33 @@
+package com.antonzherdev.trains
+
+class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor with MouseProcessor {
+    private var _lastViewportSize : vec2 = vec2(0, 0)
+    private var _lastCamera : Camera
+    def cameraWith(viewport : rect) : Camera =
+        if(viewport.size == _lastViewportSize) _lastCamera
+        else {
+            _lastViewportSize = viewport.size
+            _lastCamera = Camera2D(vec2(viewport.width, viewport.height))
+            _lastCamera
+        }
+
+    def draw {
+        if(!director.isPaused) return nil
+
+        BlendFunction.standard {
+            glDisable(GL_DEPTH_TEST)
+            Sprite.draw(material = vec4(0, 0, 0, 0.5), in = rect(vec2(0, 0), context.viewport.size))
+            glEnable(GL_DEPTH_TEST)
+        }
+    }
+
+
+    def isProcessorActive : bool = director.isPaused
+    def process(event : Event) : bool = {
+        event.leftMouse(self)
+    }
+
+    def mouseUp(event : Event) : bool = {
+        false
+    }
+}

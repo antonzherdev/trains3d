@@ -10,6 +10,7 @@
 #import "TRLevelView.h"
 #import "TRLevelProcessor.h"
 #import "TRLevelMenuView.h"
+#import "TRLevelPauseMenuView.h"
 @implementation TRLevelFactory
 static TRScoreRules* _TRLevelFactory_scoreRules;
 static id<CNSeq> _TRLevelFactory_rules;
@@ -113,11 +114,13 @@ static ODClassType* _TRLevelFactory_type;
     TRLevel* _level;
     EGLayer* _levelLayer;
     EGLayer* _menuLayer;
+    EGLayer* _pauseMenuLayer;
 }
 static ODClassType* _TRTrainLayers_type;
 @synthesize level = _level;
 @synthesize levelLayer = _levelLayer;
 @synthesize menuLayer = _menuLayer;
+@synthesize pauseMenuLayer = _pauseMenuLayer;
 
 + (id)trainLayersWithLevel:(TRLevel*)level {
     return [[TRTrainLayers alloc] initWithLevel:level];
@@ -129,6 +132,7 @@ static ODClassType* _TRTrainLayers_type;
         _level = level;
         _levelLayer = [EGLayer layerWithView:[TRLevelView levelViewWithLevel:_level] processor:[CNOption applyValue:[TRLevelProcessor levelProcessorWithLevel:_level]]];
         _menuLayer = [EGLayer applyView:[TRLevelMenuView levelMenuViewWithLevel:_level]];
+        _pauseMenuLayer = [EGLayer applyView:[TRLevelPauseMenuView levelPauseMenuViewWithLevel:_level]];
     }
     
     return self;
@@ -140,12 +144,12 @@ static ODClassType* _TRTrainLayers_type;
 }
 
 - (id<CNSeq>)layers {
-    return (@[_levelLayer, _menuLayer]);
+    return (@[_levelLayer, _menuLayer, _pauseMenuLayer]);
 }
 
 - (id<CNSeq>)viewportsWithViewSize:(GEVec2)viewSize {
-    if(viewSize.y > 1279) return (@[tuple(_levelLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, 0.0, viewSize.x, viewSize.y - 92))), tuple(_menuLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, viewSize.y - 92, viewSize.x, 92.0)))]);
-    else return (@[tuple(_levelLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, 0.0, viewSize.x, viewSize.y - 46))), tuple(_menuLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, viewSize.y - 46, viewSize.x, 46.0)))]);
+    if(viewSize.y > 1279) return (@[tuple(_levelLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, 0.0, viewSize.x, viewSize.y - 92))), tuple(_menuLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, viewSize.y - 92, viewSize.x, 92.0))), tuple(_pauseMenuLayer, wrap(GERect, GERectMake(GEVec2Make(0.0, 0.0), viewSize)))]);
+    else return (@[tuple(_levelLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, 0.0, viewSize.x, viewSize.y - 46))), tuple(_menuLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, viewSize.y - 46, viewSize.x, 46.0))), tuple(_pauseMenuLayer, wrap(GERect, GERectMake(GEVec2Make(0.0, 0.0), viewSize)))]);
 }
 
 - (ODClassType*)type {

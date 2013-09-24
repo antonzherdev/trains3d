@@ -36,16 +36,19 @@ class LevelFactory {
 class TrainLayers(level : Level) extends Layers {
     val levelLayer = Layer(LevelView(level), LevelProcessor(level))
     val menuLayer = Layer(LevelMenuView(level))
+    val pauseMenuLayer = Layer(LevelPauseMenuView(level))
 
 
-    def layers : [Layer] = [levelLayer, menuLayer]
+    def layers : [Layer] = [levelLayer, menuLayer, pauseMenuLayer]
     def viewportsWith(viewSize : vec2) = {
         if(viewSize.y > 1279) {
             [(levelLayer, rect(0, 0, viewSize.x, viewSize.y - 92)),
-            (menuLayer, rect(0, viewSize.y - 92, viewSize.x, 92))]
+            (menuLayer, rect(0, viewSize.y - 92, viewSize.x, 92)),
+            (pauseMenuLayer, rect(vec2(0, 0), viewSize))]
         } else {
             [(levelLayer, rect(0, 0, viewSize.x, viewSize.y - 46)),
-             (menuLayer, rect(0, viewSize.y - 46, viewSize.x, 46))]
+             (menuLayer, rect(0, viewSize.y - 46, viewSize.x, 46)),
+             (pauseMenuLayer, rect(vec2(0, 0), viewSize))]
         }
     }
 }
