@@ -3,7 +3,6 @@
 #import "EGDirector.h"
 #import "EGTexture.h"
 #import "EGFont.h"
-#import "GL.h"
 #import "GEMat4.h"
 @implementation EGGlobal
 static EGContext* _EGGlobal_context;
@@ -22,7 +21,15 @@ static ODClassType* _EGGlobal_type;
 }
 
 + (EGFileTexture*)textureForFile:(NSString*)file {
-    return [_EGGlobal_context textureForFile:file];
+    return [_EGGlobal_context textureForFile:file magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_LINEAR];
+}
+
++ (EGFileTexture*)nearestTextureForFile:(NSString*)file {
+    return [_EGGlobal_context textureForFile:file magFilter:GL_NEAREST minFilter:GL_NEAREST];
+}
+
++ (EGTexture*)textureForFile:(NSString*)file magFilter:(GLenum)magFilter minFilter:(GLenum)minFilter {
+    return [_EGGlobal_context textureForFile:file magFilter:magFilter minFilter:minFilter];
 }
 
 + (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size {
@@ -102,9 +109,9 @@ static ODClassType* _EGContext_type;
     _EGContext_type = [ODClassType classTypeWithCls:[EGContext class]];
 }
 
-- (EGTexture*)textureForFile:(NSString*)file {
-    return ((EGFileTexture*)([_textureCache objectForKey:file orUpdateWith:^EGFileTexture*() {
-        return [EGFileTexture applyFile:file];
+- (EGTexture*)textureForFile:(NSString*)file magFilter:(GLenum)magFilter minFilter:(GLenum)minFilter {
+    return ((EGFileTexture*)([_textureCache objectForKey:tuple3(file, numui4(((unsigned int)(magFilter))), numui4(((unsigned int)(minFilter)))) orUpdateWith:^EGFileTexture*() {
+        return [EGFileTexture fileTextureWithFile:file magFilter:magFilter minFilter:minFilter];
     }]));
 }
 

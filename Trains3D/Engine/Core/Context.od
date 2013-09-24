@@ -4,15 +4,18 @@ object Global {
     def director : Director = context.director
     val context : Context = Context()
     val matrix : MatrixStack = context.matrixStack
-    def textureFor(file : string) : FileTexture = context.textureFor(file)
+    def textureFor(file : string) : FileTexture = context.textureFor(file, GL_LINEAR, GL_LINEAR_MIPMAP_LINEAR)
+    def nearestTextureFor(file : string) : FileTexture = context.textureFor(file, GL_NEAREST, GL_NEAREST)
+    def textureFor(file : string, magFilter : GLenum, minFilter : GLenum) : Texture = context.textureFor(file, magFilter, minFilter)
     def fontWith(name : string, size : uint) : Font = context.fontWith(name, size)
 }
 
 class Context {
-    private val textureCache = MutableHashMap<string, FileTexture>()
+    private val textureCache = MutableHashMap<(string, uint4, uint4), FileTexture>()
     private val fontCache = MutableHashMap<(string, uint4), Font>()
 
-    def textureFor(file : string) : Texture = textureCache.objectFor(key = file, orUpdateWith = FileTexture(file))
+    def textureFor(file : string, magFilter : GLenum, minFilter : GLenum) : Texture =
+        textureCache.objectFor(key = (file, magFilter.cast<uint4>, minFilter.cast<uint4>), orUpdateWith = FileTexture(file, magFilter, minFilter))
     def fontWith(name : string, size : uint) : Font = fontCache.objectFor(key = (name, size), orUpdateWith = Font(name, size))
 
     var director : Director

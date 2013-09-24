@@ -17,7 +17,7 @@ class LevelMenuView(level : Level) extends LayerView {
         val seconds : int = level.schedule.time
         font.draw(text = seconds, color = vec4(1, 1, 1, 1), at = vec2(15, 0), TextAlignment(1, -1))
 
-        Sprite.draw(ColorSource(vec4(1, 0, 0, 1)), in = rect(15, 0, 1, 1))
+        Sprite.draw(ColorSource(res.pause), in = rect(15, 0, 1, 1), uv = res.pauseUV)
 
         notificationAnimation.for{t ->
             font.draw(text = notificationText, notificationProgress(t), at = vec2(8,0), TextAlignment(0, -1))
@@ -48,12 +48,18 @@ class LevelMenuView(level : Level) extends LayerView {
 
 trait LevelMenuViewRes {
     def font : Font
+    def pause : Texture
+    def pauseUV : rect
 }
 
 class LevelMenuViewRes1x extends LevelMenuViewRes {
     val font = fontWith(name = "verdana", size = 14)
+    val pause = nearestTextureFor("Pause.png")
+    def pauseUV = pause.uv(0, 0, 46, 46)
 }
 
 class LevelMenuViewRes2x extends LevelMenuViewRes {
     val font = fontWith(name = "verdana", size = 28)
+    val pause = nearestTextureFor("Pause_2x.png")
+    def pauseUV = pause.uv(0, 0, 92, 92)
 }

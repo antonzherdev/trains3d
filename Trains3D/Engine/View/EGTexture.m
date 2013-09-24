@@ -62,6 +62,14 @@ static ODClassType* _EGTexture_type;
     egSaveTextureToFile(_id, file);
 }
 
+- (GERect)uvRect:(GERect)rect {
+    return geRectDivVec2(rect, [self size]);
+}
+
+- (GERect)uvX:(float)x y:(float)y width:(float)width height:(float)height {
+    return geRectDivVec2(geRectApplyXYWidthHeight(x, y, width, height), [self size]);
+}
+
 - (ODClassType*)type {
     return [EGTexture type];
 }

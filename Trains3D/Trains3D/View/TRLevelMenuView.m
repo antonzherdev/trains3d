@@ -10,6 +10,7 @@
 #import "EGSprite.h"
 #import "TRRailroad.h"
 #import "TRNotification.h"
+#import "EGTexture.h"
 @implementation TRLevelMenuView{
     TRLevel* _level;
     id<EGCamera> _camera;
@@ -81,7 +82,7 @@ static ODClassType* _TRLevelMenuView_type;
     [[self font] drawText:[NSString stringWithFormat:@"%li", [_level.score score]] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(0.0, 0.0) alignment:egTextAlignmentApplyXY(-1.0, -1.0)];
     NSInteger seconds = ((NSInteger)([_level.schedule time]));
     [[self font] drawText:[NSString stringWithFormat:@"%li", seconds] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(15.0, 0.0) alignment:egTextAlignmentApplyXY(1.0, -1.0)];
-    [EGSprite drawMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 0.0, 0.0, 1.0)] in:geRectApplyXYWidthHeight(15.0, 0.0, 1.0, 1.0)];
+    [EGSprite drawMaterial:[EGColorSource applyTexture:[[self res] pause]] in:geRectApplyXYWidthHeight(15.0, 0.0, 1.0, 1.0) uv:[[self res] pauseUV]];
     [_notificationAnimation forF:^void(CGFloat t) {
         [[self font] drawText:_notificationText color:_notificationProgress(((float)(t))) at:GEVec2Make(8.0, 0.0) alignment:egTextAlignmentApplyXY(0.0, -1.0)];
     }];
@@ -141,9 +142,11 @@ static ODClassType* _TRLevelMenuView_type;
 
 @implementation TRLevelMenuViewRes1x{
     EGFont* _font;
+    EGFileTexture* _pause;
 }
 static ODClassType* _TRLevelMenuViewRes1x_type;
 @synthesize font = _font;
+@synthesize pause = _pause;
 
 + (id)levelMenuViewRes1x {
     return [[TRLevelMenuViewRes1x alloc] init];
@@ -151,7 +154,10 @@ static ODClassType* _TRLevelMenuViewRes1x_type;
 
 - (id)init {
     self = [super init];
-    if(self) _font = [EGGlobal fontWithName:@"verdana" size:14];
+    if(self) {
+        _font = [EGGlobal fontWithName:@"verdana" size:14];
+        _pause = [EGGlobal nearestTextureForFile:@"Pause.png"];
+    }
     
     return self;
 }
@@ -159,6 +165,10 @@ static ODClassType* _TRLevelMenuViewRes1x_type;
 + (void)initialize {
     [super initialize];
     _TRLevelMenuViewRes1x_type = [ODClassType classTypeWithCls:[TRLevelMenuViewRes1x class]];
+}
+
+- (GERect)pauseUV {
+    return [_pause uvX:0.0 y:0.0 width:46.0 height:46.0];
 }
 
 - (ODClassType*)type {
@@ -194,9 +204,11 @@ static ODClassType* _TRLevelMenuViewRes1x_type;
 
 @implementation TRLevelMenuViewRes2x{
     EGFont* _font;
+    EGFileTexture* _pause;
 }
 static ODClassType* _TRLevelMenuViewRes2x_type;
 @synthesize font = _font;
+@synthesize pause = _pause;
 
 + (id)levelMenuViewRes2x {
     return [[TRLevelMenuViewRes2x alloc] init];
@@ -204,7 +216,10 @@ static ODClassType* _TRLevelMenuViewRes2x_type;
 
 - (id)init {
     self = [super init];
-    if(self) _font = [EGGlobal fontWithName:@"verdana" size:28];
+    if(self) {
+        _font = [EGGlobal fontWithName:@"verdana" size:28];
+        _pause = [EGGlobal nearestTextureForFile:@"Pause_2x.png"];
+    }
     
     return self;
 }
@@ -212,6 +227,10 @@ static ODClassType* _TRLevelMenuViewRes2x_type;
 + (void)initialize {
     [super initialize];
     _TRLevelMenuViewRes2x_type = [ODClassType classTypeWithCls:[TRLevelMenuViewRes2x class]];
+}
+
+- (GERect)pauseUV {
+    return [_pause uvX:0.0 y:0.0 width:92.0 height:92.0];
 }
 
 - (ODClassType*)type {

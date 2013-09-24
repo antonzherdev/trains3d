@@ -15,6 +15,8 @@
 @class TRRailroad;
 @class TRNotifications;
 @class EGEnvironment;
+@class EGTexture;
+@class EGFileTexture;
 
 @class TRLevelMenuView;
 @class TRLevelMenuViewRes1x;
@@ -41,25 +43,31 @@
 
 @protocol TRLevelMenuViewRes<NSObject>
 - (EGFont*)font;
+- (EGTexture*)pause;
+- (GERect)pauseUV;
 @end
 
 
 @interface TRLevelMenuViewRes1x : NSObject<TRLevelMenuViewRes>
 @property (nonatomic, readonly) EGFont* font;
+@property (nonatomic, readonly) EGFileTexture* pause;
 
 + (id)levelMenuViewRes1x;
 - (id)init;
 - (ODClassType*)type;
+- (GERect)pauseUV;
 + (ODClassType*)type;
 @end
 
 
 @interface TRLevelMenuViewRes2x : NSObject<TRLevelMenuViewRes>
 @property (nonatomic, readonly) EGFont* font;
+@property (nonatomic, readonly) EGFileTexture* pause;
 
 + (id)levelMenuViewRes2x;
 - (id)init;
 - (ODClassType*)type;
+- (GERect)pauseUV;
 + (ODClassType*)type;
 @end
 
