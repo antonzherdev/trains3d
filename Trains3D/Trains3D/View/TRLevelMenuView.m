@@ -5,12 +5,11 @@
 #import "EGSchedule.h"
 #import "EGContext.h"
 #import "TRScore.h"
-#import "EGMaterial.h"
 #import "EGSprite.h"
 #import "TRRailroad.h"
 #import "TRNotification.h"
-#import "EGTexture.h"
 #import "EGCamera2D.h"
+#import "EGMaterial.h"
 @implementation TRLevelMenuView{
     TRLevel* _level;
     CNLazy* __lazy_res1x;
@@ -84,7 +83,9 @@ static ODClassType* _TRLevelMenuView_type;
     [[self font] drawText:[NSString stringWithFormat:@"%li", [_level.score score]] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(0.0, 0.0) alignment:egTextAlignmentApplyXY(-1.0, -1.0)];
     NSInteger seconds = ((NSInteger)([_level.schedule time]));
     [[self font] drawText:[NSString stringWithFormat:@"%li", seconds] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(w - 46, 0.0) alignment:egTextAlignmentApplyXY(1.0, -1.0)];
-    [EGSprite drawMaterial:[EGColorSource applyTexture:[[self res] pause]] in:geRectApplyXYWidthHeight(w - 46, 0.0, 46.0, 46.0) uv:[[self res] pauseUV]];
+    EGSprite* pauseSprite = [[self res] pauseSprite];
+    pauseSprite.position = GEVec2Make(w - 46, 0.0);
+    [pauseSprite draw];
     [_notificationAnimation forF:^void(CGFloat t) {
         [[self font] drawText:_notificationText color:_notificationProgress(((float)(t))) at:GEVec2Make(w / 2, 0.0) alignment:egTextAlignmentApplyXY(0.0, -1.0)];
     }];
@@ -172,12 +173,8 @@ static ODClassType* _TRLevelMenuViewRes_type;
     @throw @"Method font is abstract";
 }
 
-- (EGTexture*)pause {
-    @throw @"Method pause is abstract";
-}
-
-- (GERect)pauseUV {
-    @throw @"Method pauseUV is abstract";
+- (EGSprite*)pauseSprite {
+    @throw @"Method pauseSprite is abstract";
 }
 
 - (float)pixelsInPoint {
@@ -217,11 +214,13 @@ static ODClassType* _TRLevelMenuViewRes_type;
 
 @implementation TRLevelMenuViewRes1x{
     EGFont* _font;
-    EGFileTexture* _pause;
+    float _pixelsInPoint;
+    EGSprite* _pauseSprite;
 }
 static ODClassType* _TRLevelMenuViewRes1x_type;
 @synthesize font = _font;
-@synthesize pause = _pause;
+@synthesize pixelsInPoint = _pixelsInPoint;
+@synthesize pauseSprite = _pauseSprite;
 
 + (id)levelMenuViewRes1x {
     return [[TRLevelMenuViewRes1x alloc] init];
@@ -231,7 +230,8 @@ static ODClassType* _TRLevelMenuViewRes1x_type;
     self = [super init];
     if(self) {
         _font = [EGGlobal fontWithName:@"verdana" size:14];
-        _pause = [EGGlobal nearestTextureForFile:@"Pause.png"];
+        _pixelsInPoint = 1.0;
+        _pauseSprite = [EGSprite applyMaterial:[EGColorSource applyTexture:[EGGlobal nearestTextureForFile:@"Pause.png"]] uv:geRectApplyXYWidthHeight(0.0, 0.0, 46.0, 46.0) pixelsInPoint:1.0];
     }
     
     return self;
@@ -240,14 +240,6 @@ static ODClassType* _TRLevelMenuViewRes1x_type;
 + (void)initialize {
     [super initialize];
     _TRLevelMenuViewRes1x_type = [ODClassType classTypeWithCls:[TRLevelMenuViewRes1x class]];
-}
-
-- (GERect)pauseUV {
-    return [_pause uvX:0.0 y:0.0 width:46.0 height:46.0];
-}
-
-- (float)pixelsInPoint {
-    return 1.0;
 }
 
 - (ODClassType*)type {
@@ -283,11 +275,13 @@ static ODClassType* _TRLevelMenuViewRes1x_type;
 
 @implementation TRLevelMenuViewRes2x{
     EGFont* _font;
-    EGFileTexture* _pause;
+    float _pixelsInPoint;
+    EGSprite* _pauseSprite;
 }
 static ODClassType* _TRLevelMenuViewRes2x_type;
 @synthesize font = _font;
-@synthesize pause = _pause;
+@synthesize pixelsInPoint = _pixelsInPoint;
+@synthesize pauseSprite = _pauseSprite;
 
 + (id)levelMenuViewRes2x {
     return [[TRLevelMenuViewRes2x alloc] init];
@@ -297,7 +291,8 @@ static ODClassType* _TRLevelMenuViewRes2x_type;
     self = [super init];
     if(self) {
         _font = [EGGlobal fontWithName:@"verdana" size:28];
-        _pause = [EGGlobal nearestTextureForFile:@"Pause_2x.png"];
+        _pixelsInPoint = 2.0;
+        _pauseSprite = [EGSprite applyMaterial:[EGColorSource applyTexture:[EGGlobal nearestTextureForFile:@"Pause_2x.png"]] uv:geRectApplyXYWidthHeight(0.0, 0.0, 92.0, 92.0) pixelsInPoint:2.0];
     }
     
     return self;
@@ -306,14 +301,6 @@ static ODClassType* _TRLevelMenuViewRes2x_type;
 + (void)initialize {
     [super initialize];
     _TRLevelMenuViewRes2x_type = [ODClassType classTypeWithCls:[TRLevelMenuViewRes2x class]];
-}
-
-- (GERect)pauseUV {
-    return [_pause uvX:0.0 y:0.0 width:92.0 height:92.0];
-}
-
-- (float)pixelsInPoint {
-    return 2.0;
 }
 
 - (ODClassType*)type {

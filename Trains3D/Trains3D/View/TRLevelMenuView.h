@@ -9,14 +9,12 @@
 @class EGContext;
 @class TRScore;
 @class EGSchedule;
-@class EGColorSource;
 @class EGSprite;
 @class TRRailroad;
 @class TRNotifications;
 @class EGEnvironment;
-@class EGTexture;
 @class EGCamera2D;
-@class EGFileTexture;
+@class EGColorSource;
 
 @class TRLevelMenuView;
 @class TRLevelMenuViewRes;
@@ -46,8 +44,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (EGFont*)font;
-- (EGTexture*)pause;
-- (GERect)pauseUV;
+- (EGSprite*)pauseSprite;
 - (float)pixelsInPoint;
 - (id<EGCamera>)cameraWithViewport:(GERect)viewport;
 + (ODClassType*)type;
@@ -56,26 +53,24 @@
 
 @interface TRLevelMenuViewRes1x : TRLevelMenuViewRes
 @property (nonatomic, readonly) EGFont* font;
-@property (nonatomic, readonly) EGFileTexture* pause;
+@property (nonatomic, readonly) float pixelsInPoint;
+@property (nonatomic, readonly) EGSprite* pauseSprite;
 
 + (id)levelMenuViewRes1x;
 - (id)init;
 - (ODClassType*)type;
-- (GERect)pauseUV;
-- (float)pixelsInPoint;
 + (ODClassType*)type;
 @end
 
 
 @interface TRLevelMenuViewRes2x : TRLevelMenuViewRes
 @property (nonatomic, readonly) EGFont* font;
-@property (nonatomic, readonly) EGFileTexture* pause;
+@property (nonatomic, readonly) float pixelsInPoint;
+@property (nonatomic, readonly) EGSprite* pauseSprite;
 
 + (id)levelMenuViewRes2x;
 - (id)init;
 - (ODClassType*)type;
-- (GERect)pauseUV;
-- (float)pixelsInPoint;
 + (ODClassType*)type;
 @end
 

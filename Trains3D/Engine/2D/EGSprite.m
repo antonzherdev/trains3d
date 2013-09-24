@@ -2,10 +2,35 @@
 
 #import "EGMaterial.h"
 #import "GL.h"
-@implementation EGSprite
+#import "EGTexture.h"
+@implementation EGSprite{
+    EGColorSource* _material;
+    GERect _uv;
+    GEVec2 _position;
+    GEVec2 _size;
+}
 static CNVoidRefArray _EGSprite_vertexes;
 static EGVertexBuffer* _EGSprite_vb;
 static ODClassType* _EGSprite_type;
+@synthesize material = _material;
+@synthesize uv = _uv;
+@synthesize position = _position;
+@synthesize size = _size;
+
++ (id)sprite {
+    return [[EGSprite alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    if(self) {
+        _uv = geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0);
+        _position = GEVec2Make(0.0, 0.0);
+        _size = GEVec2Make(1.0, 1.0);
+    }
+    
+    return self;
+}
 
 + (void)initialize {
     [super initialize];
@@ -30,6 +55,18 @@ static ODClassType* _EGSprite_type;
     glEnable(GL_CULL_FACE);
 }
 
+- (void)draw {
+    [EGSprite drawMaterial:_material in:GERectMake(_position, _size) uv:_uv];
+}
+
++ (EGSprite*)applyMaterial:(EGColorSource*)material uv:(GERect)uv pixelsInPoint:(float)pixelsInPoint {
+    EGSprite* s = [EGSprite sprite];
+    s.material = material;
+    s.uv = [((EGTexture*)([material.texture get])) uvRect:uv];
+    s.size = geVec2DivF4(uv.size, pixelsInPoint);
+    return s;
+}
+
 - (ODClassType*)type {
     return [EGSprite type];
 }
@@ -40,16 +77,6 @@ static ODClassType* _EGSprite_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {
