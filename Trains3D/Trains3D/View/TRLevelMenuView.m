@@ -82,7 +82,7 @@ static ODClassType* _TRLevelMenuView_type;
     [[self font] drawText:[NSString stringWithFormat:@"%li", [_level.score score]] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(0.0, 0.0) alignment:egTextAlignmentApplyXY(-1.0, -1.0)];
     NSInteger seconds = ((NSInteger)([_level.schedule time]));
     [[self font] drawText:[NSString stringWithFormat:@"%li", seconds] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(15.0, 0.0) alignment:egTextAlignmentApplyXY(1.0, -1.0)];
-    [EGSprite drawMaterial:[EGColorSource applyTexture:[[self res] pause]] in:geRectApplyXYWidthHeight(15.0, 0.0, 1.0, 1.0) uv:[[self res] pauseUV]];
+    [EGSprite fixedDrawMaterial:[EGColorSource applyTexture:[[self res] pause]] uv:[[self res] pauseUV] at:GEVec2Make(16.0, 0.0) alignment:GEVec2Make(1.0, -1.0)];
     [_notificationAnimation forF:^void(CGFloat t) {
         [[self font] drawText:_notificationText color:_notificationProgress(((float)(t))) at:GEVec2Make(8.0, 0.0) alignment:egTextAlignmentApplyXY(0.0, -1.0)];
     }];

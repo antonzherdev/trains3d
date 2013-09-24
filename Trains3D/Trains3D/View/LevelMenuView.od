@@ -17,7 +17,7 @@ class LevelMenuView(level : Level) extends LayerView {
         val seconds : int = level.schedule.time
         font.draw(text = seconds, color = vec4(1, 1, 1, 1), at = vec2(15, 0), TextAlignment(1, -1))
 
-        Sprite.draw(ColorSource(res.pause), in = rect(15, 0, 1, 1), uv = res.pauseUV)
+        Sprite.fixedDraw(ColorSource(res.pause), uv = res.pauseUV, at = vec2(16, 0), alignment = vec2(1, -1))
 
         notificationAnimation.for{t ->
             font.draw(text = notificationText, notificationProgress(t), at = vec2(8,0), TextAlignment(0, -1))
