@@ -8,6 +8,7 @@
 #import "EGSprite.h"
 #import "TRRailroad.h"
 #import "TRNotification.h"
+#import "EGDirector.h"
 #import "EGCamera2D.h"
 #import "EGMaterial.h"
 @implementation TRLevelMenuView{
@@ -66,11 +67,16 @@ static ODClassType* _TRLevelMenuView_type;
 }
 
 - (id<EGCamera>)cameraWithViewport:(GERect)viewport {
-    return [[self res] cameraWithViewport:viewport];
+    return [[self resHeight:geRectHeight(viewport)] cameraWithViewport:viewport];
 }
 
 - (TRLevelMenuViewRes*)res {
     if([EGGlobal.context viewport].size.y > 47) return [self res2x];
+    else return [self res1x];
+}
+
+- (TRLevelMenuViewRes*)resHeight:(float)height {
+    if(height > 47) return [self res2x];
     else return [self res1x];
 }
 
@@ -104,12 +110,30 @@ static ODClassType* _TRLevelMenuView_type;
     }
 }
 
+- (BOOL)processEvent:(EGEvent*)event {
+    return [event leftMouseProcessor:self];
+}
+
+- (BOOL)mouseUpEvent:(EGEvent*)event {
+    GEVec2 p = [event location];
+    if([[[self resHeight:geRectHeight(((EGEventCamera*)([event.camera get])).viewport)] pauseSprite] containsVec2:p]) [[EGGlobal director] pause];
+    return NO;
+}
+
 - (id<EGCamera>)camera {
     return [self cameraWithViewport:geRectApplyXYWidthHeight(-1.0, -1.0, 2.0, 2.0)];
 }
 
 - (EGEnvironment*)environment {
     return EGEnvironment.aDefault;
+}
+
+- (BOOL)mouseDownEvent:(EGEvent*)event {
+    return NO;
+}
+
+- (BOOL)mouseDragEvent:(EGEvent*)event {
+    return NO;
 }
 
 - (ODClassType*)type {

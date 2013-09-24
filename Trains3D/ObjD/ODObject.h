@@ -105,6 +105,10 @@ ODPType * oduInt4Type();
 ODPType * odFloat4Type();
 
 @interface NSObject(ODObject)
-- (id)asKindOfClass:(Class)pClass;
 + (id)object;
+@end
+
+@interface ODObject : NSObject
++ (id)asKindOfClass:(Class)pClass object:(id)obj;
++ (id)asKindOfProtocol:(Protocol *)protocol object:(id)obj;
 @end

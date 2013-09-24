@@ -35,7 +35,7 @@ class LevelFactory {
 
 class TrainLayers(level : Level) extends Layers {
     val levelLayer = Layer(LevelView(level), LevelProcessor(level))
-    val menuLayer = Layer(LevelMenuView(level), LevelMenuProcessor(level))
+    val menuLayer = Layer(LevelMenuView(level))
 
 
     def layers : [Layer] = [levelLayer, menuLayer]

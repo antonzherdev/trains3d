@@ -77,10 +77,10 @@ static ODClassType* _TRSwitchProcessor_type;
 
 - (BOOL)mouseUpEvent:(EGEvent*)event {
     if([_downed isDefined]) {
-        [[((TRRailroadConnectorContent*)([_downed get])) asKindOfClass:[TRSwitch class]] forEach:^void(TRSwitch* _) {
+        [[ODObject asKindOfClass:[TRSwitch class] object:((TRRailroadConnectorContent*)([_downed get]))] forEach:^void(TRSwitch* _) {
             [_level tryTurnTheSwitch:_];
         }];
-        [[((TRRailroadConnectorContent*)([_downed get])) asKindOfClass:[TRRailLight class]] forEach:^void(TRRailLight* _) {
+        [[ODObject asKindOfClass:[TRRailLight class] object:((TRRailroadConnectorContent*)([_downed get]))] forEach:^void(TRRailLight* _) {
             [_ turn];
         }];
         return YES;

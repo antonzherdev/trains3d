@@ -83,5 +83,21 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     [super stop];
 }
 
+- (void)pause {
+    if(!self.isStarted || self.isPaused) return;
+
+    CVDisplayLinkStop(_displayLink);
+
+
+    [super pause];
+}
+
+- (void) resume {
+    if(!self.isStarted || !self.isPaused) return;
+    CVDisplayLinkStart(_displayLink);
+
+    [super resume];
+}
+
 
 @end

@@ -3,12 +3,13 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg.Text._
 import com.antonzherdev.eg.Progress._
 
-class LevelMenuView(level : Level) extends LayerView {
-    def cameraWith(viewport : rect) : Camera = res.cameraWith(viewport)
+class LevelMenuView(level : Level) extends LayerView with InputProcessor with MouseProcessor {
+    def cameraWith(viewport : rect) : Camera = res(viewport.height).cameraWith(viewport)
 
     lazy val res1x = LevelMenuViewRes1x()
     lazy val res2x = LevelMenuViewRes2x()
     def res : LevelMenuViewRes = if(context.viewport.size.y > 47) res2x else res1x
+    def res(height : float4) : LevelMenuViewRes = if(height > 47) res2x else res1x
     def font : Font = res.font
 
     val notificationProgress = gap(0.7, 1) >> vec4(1, 1, 1, 1 - _)
@@ -46,6 +47,18 @@ class LevelMenuView(level : Level) extends LayerView {
             notificationText = level.notifications.take.get
             notificationAnimation = Counter(1)
         }
+    }
+
+    def process(event : Event) : bool = {
+        event.leftMouse(self)
+    }
+
+    def mouseUp(event : Event) : bool = {
+        val p = event.location
+        if(res(event.camera.get.viewport.height).pauseSprite.contains(p)) {
+            director.pause
+        }
+        false
     }
 }
 

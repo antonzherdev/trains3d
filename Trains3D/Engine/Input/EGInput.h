@@ -53,6 +53,7 @@
 - (GEVec2)locationInView;
 - (GEVec2)location;
 - (GEVec2)locationForDepth:(CGFloat)depth;
+- (BOOL)checkViewport;
 - (BOOL)isLeftMouseDown;
 - (BOOL)isLeftMouseDrag;
 - (BOOL)isLeftMouseUp;

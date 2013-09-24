@@ -37,4 +37,6 @@ class Sprite {
         s.size = uv.size/pixelsInPoint
         s
     }
+
+    def contains(vec2 : vec2) : bool = rect(position, size).contains(vec2)
 }

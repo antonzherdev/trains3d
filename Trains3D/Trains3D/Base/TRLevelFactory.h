@@ -15,7 +15,6 @@
 @class TRLevelView;
 @class TRLevelProcessor;
 @class TRLevelMenuView;
-@class TRLevelMenuProcessor;
 
 @class TRLevelFactory;
 @class TRTrainLayers;

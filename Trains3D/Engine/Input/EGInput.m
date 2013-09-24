@@ -134,6 +134,10 @@ static ODClassType* _EGEvent_type;
     else return geVec3Xy(geLine3RPlane([self segment], GEPlaneMake(GEVec3Make(0.0, 0.0, ((float)(depth))), GEVec3Make(0.0, 0.0, 1.0))));
 }
 
+- (BOOL)checkViewport {
+    return [_camera isEmpty] || geRectContainsVec2(((EGEventCamera*)([_camera get])).viewport, [self locationInView]);
+}
+
 - (BOOL)isLeftMouseDown {
     @throw @"Method isLeftMouseDown is abstract";
 }
@@ -147,14 +151,18 @@ static ODClassType* _EGEvent_type;
 }
 
 - (BOOL)leftMouseProcessor:(id<EGMouseProcessor>)processor {
-    if([self isLeftMouseDown]) {
-        return [processor mouseDownEvent:self];
+    if(!([self checkViewport])) {
+        return NO;
     } else {
-        if([self isLeftMouseDrag]) {
-            return [processor mouseDragEvent:self];
+        if([self isLeftMouseDown]) {
+            return [processor mouseDownEvent:self];
         } else {
-            if([self isLeftMouseUp]) return [processor mouseUpEvent:self];
-            else return NO;
+            if([self isLeftMouseDrag]) {
+                return [processor mouseDragEvent:self];
+            } else {
+                if([self isLeftMouseUp]) return [processor mouseUpEvent:self];
+                else return NO;
+            }
         }
     }
 }
@@ -176,17 +184,21 @@ static ODClassType* _EGEvent_type;
 }
 
 - (BOOL)touchProcessor:(id<EGTouchProcessor>)processor {
-    if([self isTouchBegan]) {
-        return [processor touchBeganEvent:self];
+    if(!([self checkViewport])) {
+        return NO;
     } else {
-        if([self isTouchMoved]) {
-            return [processor touchMovedEvent:self];
+        if([self isTouchBegan]) {
+            return [processor touchBeganEvent:self];
         } else {
-            if([self isTouchEnded]) {
-                return [processor touchEndedEvent:self];
+            if([self isTouchMoved]) {
+                return [processor touchMovedEvent:self];
             } else {
-                if([self isTouchCanceled]) return [processor touchCanceledEvent:self];
-                else return NO;
+                if([self isTouchEnded]) {
+                    return [processor touchEndedEvent:self];
+                } else {
+                    if([self isTouchCanceled]) return [processor touchCanceledEvent:self];
+                    else return NO;
+                }
             }
         }
     }

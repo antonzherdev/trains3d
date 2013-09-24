@@ -122,11 +122,11 @@ struct rect(origin : vec2, size : vec2) {
     def y2 : float4 = origin.y + size.y
     def width : float4 = size.x
     def height : float4 = size.y
-    def contains(point : vec2) : bool =
-        origin.x <= point.x
-        && point.x <= origin.x + size.x
-        && origin.y <= point.y
-        && point.y <= origin.y + size.y
+    def contains(vec2 : vec2) : bool =
+        origin.x <= vec2.x
+        && vec2.x <= origin.x + size.x
+        && origin.y <= vec2.y
+        && vec2.y <= origin.y + size.y
 
     def add(vec2 : vec2) = rect(origin.add(vec2), size)
 

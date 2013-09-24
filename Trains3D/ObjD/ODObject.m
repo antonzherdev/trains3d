@@ -65,11 +65,18 @@ ODPType * odFloat4Type() {
 }
 
 @implementation NSObject(ODObject)
-- (id)asKindOfClass:(Class)pClass {
-    return [self isKindOfClass:pClass] ? [CNSome someWithValue:self] : [CNOption none];
-}
-
 + (id)object {
     return [NSObject new];
+}
+@end
+
+@implementation ODObject
+
++ (id)asKindOfClass:(Class)pClass object:(id)obj{
+    return [obj isKindOfClass:pClass] ? [CNSome someWithValue:obj] : [CNOption none];
+}
+
++ (id)asKindOfProtocol:(Protocol *)protocol object:(id)obj {
+    return [obj conformsToProtocol:protocol] ? [CNSome someWithValue:obj] : [CNOption none];
 }
 @end

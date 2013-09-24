@@ -386,11 +386,11 @@ static ODClassType* _GELineSegment_type;
 }
 
 - (BOOL)containsPoint:(GEVec2)point {
-    return GEVec2Eq(_p0, point) || GEVec2Eq(_p1, point) || ([[self line] containsPoint:point] && geRectContainsPoint(_boundingRect, point));
+    return GEVec2Eq(_p0, point) || GEVec2Eq(_p1, point) || ([[self line] containsPoint:point] && geRectContainsVec2(_boundingRect, point));
 }
 
 - (BOOL)containsInBoundingRectPoint:(GEVec2)point {
-    return geRectContainsPoint(_boundingRect, point);
+    return geRectContainsVec2(_boundingRect, point);
 }
 
 - (id)intersectionWithSegment:(GELineSegment*)segment {

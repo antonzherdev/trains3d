@@ -77,6 +77,7 @@
 + (id)layerWithView:(id<EGLayerView>)view processor:(id)processor;
 - (id)initWithView:(id<EGLayerView>)view processor:(id)processor;
 - (ODClassType*)type;
++ (EGLayer*)applyView:(id<EGLayerView>)view;
 - (void)drawWithViewport:(GERect)viewport;
 - (BOOL)processEvent:(EGEvent*)event viewport:(GERect)viewport;
 - (void)updateWithDelta:(CGFloat)delta;

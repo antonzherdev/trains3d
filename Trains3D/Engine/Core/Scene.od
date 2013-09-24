@@ -54,6 +54,8 @@ class SingleLayer(layer : Layer) extends Layers {
 }
 
 class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
+    static def apply(view : LayerView) : Layer = Layer(view, view.as<InputProcessor>)
+
     def drawWith(viewport : rect) {
         context.environment = view.environment
         context.set(viewport = viewport)

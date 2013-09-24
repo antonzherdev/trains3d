@@ -1,5 +1,6 @@
 #import "objd.h"
 #import "EGScene.h"
+#import "EGInput.h"
 #import "GEVec.h"
 #import "EGFont.h"
 @class TRLevel;
@@ -12,6 +13,7 @@
 @class EGSprite;
 @class TRRailroad;
 @class TRNotifications;
+@class EGDirector;
 @class EGEnvironment;
 @class EGCamera2D;
 @class EGColorSource;
@@ -21,7 +23,7 @@
 @class TRLevelMenuViewRes1x;
 @class TRLevelMenuViewRes2x;
 
-@interface TRLevelMenuView : NSObject<EGLayerView>
+@interface TRLevelMenuView : NSObject<EGLayerView, EGInputProcessor, EGMouseProcessor>
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) GEVec4(^notificationProgress)(float);
 
@@ -32,9 +34,12 @@
 - (TRLevelMenuViewRes2x*)res2x;
 - (id<EGCamera>)cameraWithViewport:(GERect)viewport;
 - (TRLevelMenuViewRes*)res;
+- (TRLevelMenuViewRes*)resHeight:(float)height;
 - (EGFont*)font;
 - (void)draw;
 - (void)updateWithDelta:(CGFloat)delta;
+- (BOOL)processEvent:(EGEvent*)event;
+- (BOOL)mouseUpEvent:(EGEvent*)event;
 + (ODClassType*)type;
 @end
 

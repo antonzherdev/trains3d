@@ -518,8 +518,8 @@ float geRectWidth(GERect self) {
 float geRectHeight(GERect self) {
     return self.size.y;
 }
-BOOL geRectContainsPoint(GERect self, GEVec2 point) {
-    return self.origin.x <= point.x && point.x <= self.origin.x + self.size.x && self.origin.y <= point.y && point.y <= self.origin.y + self.size.y;
+BOOL geRectContainsVec2(GERect self, GEVec2 vec2) {
+    return self.origin.x <= vec2.x && vec2.x <= self.origin.x + self.size.x && self.origin.y <= vec2.y && vec2.y <= self.origin.y + self.size.y;
 }
 GERect geRectAddVec2(GERect self, GEVec2 vec2) {
     return GERectMake(geVec2AddVec2(self.origin, vec2), self.size);

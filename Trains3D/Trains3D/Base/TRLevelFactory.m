@@ -10,7 +10,6 @@
 #import "TRLevelView.h"
 #import "TRLevelProcessor.h"
 #import "TRLevelMenuView.h"
-#import "TRLevelMenuProcessor.h"
 @implementation TRLevelFactory
 static TRScoreRules* _TRLevelFactory_scoreRules;
 static id<CNSeq> _TRLevelFactory_rules;
@@ -129,7 +128,7 @@ static ODClassType* _TRTrainLayers_type;
     if(self) {
         _level = level;
         _levelLayer = [EGLayer layerWithView:[TRLevelView levelViewWithLevel:_level] processor:[CNOption applyValue:[TRLevelProcessor levelProcessorWithLevel:_level]]];
-        _menuLayer = [EGLayer layerWithView:[TRLevelMenuView levelMenuViewWithLevel:_level] processor:[CNOption applyValue:[TRLevelMenuProcessor levelMenuProcessorWithLevel:_level]]];
+        _menuLayer = [EGLayer applyView:[TRLevelMenuView levelMenuViewWithLevel:_level]];
     }
     
     return self;

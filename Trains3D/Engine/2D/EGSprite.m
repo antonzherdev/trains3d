@@ -67,6 +67,10 @@ static ODClassType* _EGSprite_type;
     return s;
 }
 
+- (BOOL)containsVec2:(GEVec2)vec2 {
+    return geRectContainsVec2(GERectMake(_position, _size), vec2);
+}
+
 - (ODClassType*)type {
     return [EGSprite type];
 }

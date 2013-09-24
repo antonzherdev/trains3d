@@ -41,12 +41,14 @@ class Event(viewSize : vec2, camera : EventCamera?) {
             val p1 = mat4.mul(vec4 = vec4(loc.x, loc.y, 1, 1))
             line3(p0.xyz, p1.xyz - p0.xyz)
         }
+    def checkViewport : bool = camera.isEmpty || camera.get.viewport.contains(locationInView)
 
     def isLeftMouseDown : bool
     def isLeftMouseDrag : bool
     def isLeftMouseUp : bool
     def leftMouse(processor : MouseProcessor) : bool =
-        if(isLeftMouseDown) processor.mouseDown(self)
+        if(!checkViewport) false
+        else if(isLeftMouseDown) processor.mouseDown(self)
         else if(isLeftMouseDrag) processor.mouseDrag(self)
         else if(isLeftMouseUp) processor.mouseUp(self)
         else false
@@ -57,7 +59,8 @@ class Event(viewSize : vec2, camera : EventCamera?) {
     def isTouchEnded : bool
     def isTouchCanceled : bool
     def touch(processor : TouchProcessor) : bool =
-        if(isTouchBegan) processor.touchBegan(self)
+        if(!checkViewport) false
+        else if(isTouchBegan) processor.touchBegan(self)
         else if(isTouchMoved) processor.touchMoved(self)
         else if(isTouchEnded) processor.touchEnded(self)
         else if(isTouchCanceled) processor.touchCanceled(self)

@@ -258,6 +258,10 @@ static ODClassType* _EGLayer_type;
     _EGLayer_type = [ODClassType classTypeWithCls:[EGLayer class]];
 }
 
++ (EGLayer*)applyView:(id<EGLayerView>)view {
+    return [EGLayer layerWithView:view processor:[ODObject asKindOfProtocol:@protocol(EGInputProcessor) object:view]];
+}
+
 - (void)drawWithViewport:(GERect)viewport {
     EGGlobal.context.environment = [_view environment];
     [EGGlobal.context setViewport:geRectiApplyRect(viewport)];
