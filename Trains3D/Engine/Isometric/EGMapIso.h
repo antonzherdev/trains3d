@@ -12,7 +12,7 @@
 
 @interface EGMapSso : NSObject
 @property (nonatomic, readonly) GEVec2i size;
-@property (nonatomic, readonly) GERecti limits;
+@property (nonatomic, readonly) GERectI limits;
 @property (nonatomic, readonly) id<CNSeq> fullTiles;
 @property (nonatomic, readonly) id<CNSeq> partialTiles;
 @property (nonatomic, readonly) id<CNSeq> allTiles;
@@ -22,7 +22,7 @@
 - (ODClassType*)type;
 - (BOOL)isFullTile:(GEVec2i)tile;
 - (BOOL)isPartialTile:(GEVec2i)tile;
-- (GERecti)cutRectForTile:(GEVec2i)tile;
+- (GERectI)cutRectForTile:(GEVec2i)tile;
 + (CGFloat)ISO;
 + (ODClassType*)type;
 @end

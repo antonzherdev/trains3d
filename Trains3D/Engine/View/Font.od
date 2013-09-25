@@ -28,18 +28,18 @@ class Font(name : string) {
                 val code : char = map("id").toInt
                 val width : float4 = map("xadvance").toFloat
                 val offset =  vec2i(map("xoffset").toInt, map("yoffset").toInt)
-                val r = rect(map("x").toFloat, map("y").toFloat, map("width").toFloat, map("height").toFloat)
+                val r = Rect(map("x").toFloat, map("y").toFloat, map("width").toFloat, map("height").toFloat)
                 charMap.set(value = FontSymbolDesc(width, offset, r.size, r/ts), forKey = code)
             }
         }
         symbols = charMap
     }
 
-    private def parse(_rect : string) : rect = {
+    private def parse(_rect : string) : Rect = {
         val parts = _rect.split(" ").chain.toArray
         val y = parts[1].toFloat
         val h = parts[3].toFloat
-        rect(parts[0].toFloat, y, parts[2].toFloat, h)
+        Rect(parts[0].toFloat, y, parts[2].toFloat, h)
     }
 
     private static val vbDesc = VertexBufferDesc(FontPrintData.type, position = 0, uv = 2*4, normal = -1, color = -1, model = -1)
@@ -143,5 +143,5 @@ class FontShader extends Shader<FontShaderParam>(ShaderProgram(FontShader.vertex
     }
 }
 
-class FontSymbolDesc(width : float4, offset : vec2, size : vec2, textureRect : rect)
+class FontSymbolDesc(width : float4, offset : vec2, size : vec2, textureRect : Rect)
 struct FontPrintData(position : vec2, uv : vec2)

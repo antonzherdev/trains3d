@@ -7,7 +7,7 @@ static inline void egClear() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-static inline void egViewport(GERecti rect) {
+static inline void egViewport(GERectI rect) {
     glViewport((GLint)rect.origin.x, (GLint)rect.origin.y, (GLsizei)rect.size.x, (GLsizei)rect.size.y);
 }
 

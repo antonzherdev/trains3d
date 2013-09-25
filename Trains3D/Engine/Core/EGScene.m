@@ -264,7 +264,7 @@ static ODClassType* _EGLayer_type;
 
 - (void)drawWithViewport:(GERect)viewport {
     EGGlobal.context.environment = [_view environment];
-    [EGGlobal.context setViewport:geRectiApplyRect(viewport)];
+    [EGGlobal.context setViewport:geRectIApplyRect(viewport)];
     id<EGCamera> camera = [_view cameraWithViewport:viewport];
     EGGlobal.matrix.value = [camera matrixModel];
     [camera focus];

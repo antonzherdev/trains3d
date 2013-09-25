@@ -34,7 +34,7 @@ stub object gl {
 
     def glGetError : GLenum
 
-    def egViewport(rect : recti)
+    def egViewport(rect : RectI)
     def glViewport (x : GLint, y : GLint, width : GLsizei, height : GLsizei)
     def glUniformMatrix4fv(location : GLuint, count : GLsizei, transpose : GLboolean, value : [float4])
     def glUniform1f(location : GLuint, f : float4)

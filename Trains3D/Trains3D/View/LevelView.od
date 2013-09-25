@@ -23,7 +23,7 @@ class LevelView(level : Level) extends LayerView {
     }
 
     val camera : Camera = CameraIso(level.map.size, zReserve = 0.3, vec2(0, 0))
-    def cameraWith(viewport : rect) : Camera = camera
+    def cameraWith(viewport : Rect) : Camera = camera
 
     def updateWith(delta : float) {
         level.trains.for(trainView.updateWith(delta, _))

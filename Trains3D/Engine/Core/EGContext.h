@@ -38,8 +38,8 @@
 - (ODClassType*)type;
 - (EGTexture*)textureForFile:(NSString*)file magFilter:(GLenum)magFilter minFilter:(GLenum)minFilter;
 - (EGFont*)fontWithName:(NSString*)name;
-- (GERecti)viewport;
-- (void)setViewport:(GERecti)viewport;
+- (GERectI)viewport;
+- (void)setViewport:(GERectI)viewport;
 + (ODClassType*)type;
 @end
 

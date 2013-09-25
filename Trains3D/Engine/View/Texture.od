@@ -41,8 +41,8 @@ class Texture {
         egSaveTextureToFile(id, file)
     }
 
-    def uv(rect : rect) : rect = rect/size
-    def uv(x : float4, y : float4, width : float4, height : float4) : rect = rect(x, y, width, height)/size
+    def uv(rect : Rect) : Rect = rect/size
+    def uv(x : float4, y : float4, width : float4, height : float4) : Rect = Rect(x, y, width, height)/size
 }
 
 class FileTexture(file : string, magFilter : GLenum, minFilter : GLenum) extends Texture {

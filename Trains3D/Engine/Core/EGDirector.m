@@ -49,7 +49,7 @@ static ODClassType* _EGDirector_type;
     [_scene drawWithViewSize:size];
     glDisable(GL_DEPTH_TEST);
     [EGGlobal.context.matrixStack clear];
-    [EGGlobal.context setViewport:geRectiApplyRect(GERectMake(GEVec2Make(0.0, 0.0), size))];
+    [EGGlobal.context setViewport:geRectIApplyRect(GERectMake(GEVec2Make(0.0, 0.0), size))];
     [__stat forEach:^void(EGStat* _) {
         [_ draw];
     }];

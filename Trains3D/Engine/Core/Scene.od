@@ -31,7 +31,7 @@ class Layers {
 
     def layers : [Layer]
 
-    def viewportsWith(viewSize : vec2) : [(Layer, rect)]
+    def viewportsWith(viewSize : vec2) : [(Layer, Rect)]
 
     def drawWith(viewSize : vec2) {
         viewportsWith(viewSize).for{p -> p.a.drawWith(viewport = p.b)}
@@ -56,7 +56,7 @@ class SingleLayer(layer : Layer) extends Layers {
 class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
     static def apply(view : LayerView) : Layer = Layer(view, view.as<InputProcessor>)
 
-    def drawWith(viewport : rect) {
+    def drawWith(viewport : Rect) {
         context.environment = view.environment
         context.set(viewport = viewport)
         val camera = view.cameraWith(viewport)
@@ -65,7 +65,7 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
         view.draw
     }
 
-    def process(event : Event, viewport : rect) : bool = {
+    def process(event : Event, viewport : Rect) : bool = {
         processor.map{ p ->
             if(p.isProcessorActive) {
                 val cam = EventCamera(matrix = view.cameraWith(viewport).matrixModel.wcp, viewport)
@@ -79,9 +79,9 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
         view.updateWith(delta)
     }
 
-    def viewportWith(viewSize : vec2) = viewportWith(viewSize, viewportLayout = rect(0, 0, 1, 1))
+    def viewportWith(viewSize : vec2) = viewportWith(viewSize, viewportLayout = Rect(0, 0, 1, 1))
 
-    def viewportWith(viewSize : vec2, viewportLayout : rect) : rect = {
+    def viewportWith(viewSize : vec2, viewportLayout : Rect) : Rect = {
         val layout = viewportLayout
         val vpr = view.camera.viewportRatio
 
@@ -92,14 +92,14 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
         else if(size.y == 0) vec2(size.x, viewSize.y)
         else if(size.x/size.y < vpr) vec2(size.x, size.x/vpr) else vec2(size.y*vpr, size.y)
         val po = viewportLayout.origin/2 + 0.5
-        rect((viewSize - vpSize) * po, vpSize)
+        Rect((viewSize - vpSize) * po, vpSize)
     }
 }
 
 trait LayerView extends Controller {
-    def camera : Camera = cameraWith(viewport = rect(-1, -1, 2, 2))
+    def camera : Camera = cameraWith(viewport = Rect(-1, -1, 2, 2))
 
-    def cameraWith(viewport : rect) : Camera = camera
+    def cameraWith(viewport : Rect) : Camera = camera
 
     def draw
 

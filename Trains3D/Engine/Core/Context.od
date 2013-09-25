@@ -22,9 +22,9 @@ class Context {
     var environment = Environment.default
     val matrixStack = MatrixStack()
 
-    private var _viewport : recti
+    private var _viewport : RectI
     def viewport = _viewport
-    def set(viewport : recti) {
+    def set(viewport : RectI) {
         _viewport = viewport
         egViewport(viewport)
     }

@@ -3,11 +3,11 @@ package com.antonzherdev.eg
 class Sprite {
     private static val vertexes = VoidRefArray(MeshData.type, 4)
     private static val vb = VertexBuffer.mesh
-    static def draw(material : ColorSource, in : rect) {
-        draw(material, in, rect(0, 0, 1, 1))
+    static def draw(material : ColorSource, in : Rect) {
+        draw(material, in, Rect(0, 0, 1, 1))
     }
 
-    static def draw(material : ColorSource, in : rect, uv : rect) {
+    static def draw(material : ColorSource, in : Rect, uv : Rect) {
         var v = vertexes
         v = v.write(MeshData, MeshData(uv.leftBottom, vec3(0, 0, 1), vec3(in.leftBottom, 0)))
         v = v.write(MeshData, MeshData(uv.leftTop, vec3(0, 0, 1), vec3(in.leftTop, 0)))
@@ -21,10 +21,10 @@ class Sprite {
     }
 
     var material : ColorSource
-    var uv : rect = rect(0, 0, 1, 1)
+    var uv : Rect = Rect(0, 0, 1, 1)
 
     def draw {
-        draw(material, in = rect(position, size), uv)
+        draw(material, in = Rect(position, size), uv)
     }
 
     var position : vec2 = vec2(0, 0)
@@ -37,7 +37,7 @@ class Sprite {
         s
     }
 
-    static def apply(material : ColorSource, uv : rect, pixelsInPoint : float4) : Sprite = {
+    static def apply(material : ColorSource, uv : Rect, pixelsInPoint : float4) : Sprite = {
         val s = Sprite()
         s.material = material
         s.uv = material.texture.get.uv(uv)
@@ -45,5 +45,5 @@ class Sprite {
         s
     }
 
-    def contains(vec2 : vec2) : bool = rect(position, size).contains(vec2)
+    def contains(vec2 : vec2) : bool = Rect(position, size).contains(vec2)
 }

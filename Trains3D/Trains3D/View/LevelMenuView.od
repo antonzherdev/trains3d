@@ -4,7 +4,7 @@ import com.antonzherdev.eg.Text._
 import com.antonzherdev.eg.Progress._
 
 class LevelMenuView(level : Level) extends LayerView with InputProcessor with MouseProcessor {
-    def cameraWith(viewport : rect) : Camera = res(viewport.height).cameraWith(viewport)
+    def cameraWith(viewport : Rect) : Camera = res(viewport.height).cameraWith(viewport)
 
     lazy val res1x = LevelMenuViewRes1x()
     lazy val res2x = LevelMenuViewRes2x()
@@ -83,20 +83,20 @@ class LevelMenuViewRes {
     def pauseSprite : Sprite
     def pixelsInPoint : float4
 
-    val cameraCache = Cache<rect, Camera>(viewport -> Camera2D(vec2(viewport.width/pixelsInPoint, 46)))
-    def cameraWith(viewport : rect) : Camera = cameraCache(viewport)
+    val cameraCache = Cache<Rect, Camera>(viewport -> Camera2D(vec2(viewport.width/pixelsInPoint, 46)))
+    def cameraWith(viewport : Rect) : Camera = cameraCache(viewport)
 }
 
 class LevelMenuViewRes1x extends LevelMenuViewRes {
     val font = fontWith(name = "lucida_grande_24")
     val notificationFont = fontWith(name = "lucida_grande_16")
     val pixelsInPoint : float4 = 1
-    val pauseSprite : Sprite = Sprite(nearestTextureFor("Pause.png"), rect(0, 0, 46, 46), 1)
+    val pauseSprite : Sprite = Sprite(nearestTextureFor("Pause.png"), Rect(0, 0, 46, 46), 1)
 }
 
 class LevelMenuViewRes2x extends LevelMenuViewRes {
     val font = fontWith(name = "lucida_grande_48")
     val notificationFont = fontWith(name = "lucida_grande_32")
     val pixelsInPoint : float4 = 2
-    val pauseSprite : Sprite = Sprite(nearestTextureFor("Pause_2x.png"), rect(0, 0, 92, 92), 2)
+    val pauseSprite : Sprite = Sprite(nearestTextureFor("Pause_2x.png"), Rect(0, 0, 92, 92), 2)
 }

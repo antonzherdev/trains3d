@@ -653,8 +653,8 @@ static ODClassType* _EGFullScreenSurface_type;
     } else {
         glBindFramebuffer(GL_READ_FRAMEBUFFER, [((EGSurface*)([_surface get])) frameBuffer]);
         GEVec2i s = ((EGSurface*)([_surface get])).size;
-        GERecti v = [EGGlobal.context viewport];
-        glBlitFramebuffer(0, 0, s.x, s.y, geRectiX(v), geRectiY(v), geRectiX2(v), geRectiY2(v), GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        GERectI v = [EGGlobal.context viewport];
+        glBlitFramebuffer(0, 0, s.x, s.y, geRectIX(v), geRectIY(v), geRectIX2(v), geRectIY2(v), GL_COLOR_BUFFER_BIT, GL_NEAREST);
         glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
     }
 }

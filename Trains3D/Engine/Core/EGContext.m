@@ -81,7 +81,7 @@ static ODClassType* _EGGlobal_type;
     EGDirector* _director;
     EGEnvironment* _environment;
     EGMatrixStack* _matrixStack;
-    GERecti __viewport;
+    GERectI __viewport;
 }
 static ODClassType* _EGContext_type;
 @synthesize director = _director;
@@ -121,11 +121,11 @@ static ODClassType* _EGContext_type;
     }]));
 }
 
-- (GERecti)viewport {
+- (GERectI)viewport {
     return __viewport;
 }
 
-- (void)setViewport:(GERecti)viewport {
+- (void)setViewport:(GERectI)viewport {
     __viewport = viewport;
     egViewport(viewport);
 }

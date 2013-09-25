@@ -42,8 +42,8 @@ struct vec2(x : float4, y : float4) extends Comparable<vec2> {
         if(dX != 0) dX else y.compare(to.y)
     }
 
-    def rectTo(vec2 : vec2) : rect = rect(self, vec2.sub(self))
-    def rectInCenterWith(size : vec2) : rect = rect((size - self)*0.5, self)
+    def rectTo(vec2 : vec2) : Rect = Rect(self, vec2.sub(self))
+    def rectInCenterWith(size : vec2) : Rect = Rect((size - self)*0.5, self)
 }
 
 struct vec2i(x : int, y : int) extends Comparable<vec2i> {
@@ -60,7 +60,7 @@ struct vec2i(x : int, y : int) extends Comparable<vec2i> {
         val dX = x.compare(to.x)
         if(dX != 0) dX else y.compare(to.y)
     }
-    def rectTo(vec2i : vec2i) : recti = recti(self, vec2i.sub(self))
+    def rectTo(vec2i : vec2i) : RectI = RectI(self, vec2i.sub(self))
 }
 
 struct vec3(x : float4, y : float4, z : float4) {
@@ -113,8 +113,8 @@ struct Quadrant(quads : Quad[4]) {
     def randomQuad = quads[randomMax(3)]
 }
 
-struct rect(origin : vec2, size : vec2) {
-    static def apply(x : float4, y : float4, width : float4, height : float4) = rect(vec2(x, y), vec2(width, height))
+struct Rect(origin : vec2, size : vec2) {
+    static def apply(x : float4, y : float4, width : float4, height : float4) = Rect(vec2(x, y), vec2(width, height))
 
     def x = origin.x
     def y = origin.y
@@ -128,28 +128,28 @@ struct rect(origin : vec2, size : vec2) {
         && origin.y <= vec2.y
         && vec2.y <= origin.y + size.y
 
-    def add(vec2 : vec2) = rect(origin.add(vec2), size)
+    def add(vec2 : vec2) = Rect(origin.add(vec2), size)
 
-    def intersects(rect : rect) : bool =
+    def intersects(rect : Rect) : bool =
         origin.x <= rect.x2 && x2 >= rect.origin.x &&
         origin.y <= rect.y2 && y2 >= rect.origin.y
 
-    def thicken(halfSize : vec2) = rect(origin.sub(halfSize), size.add(halfSize.mul(2)))
-    def div(vec2 : vec2) = rect(origin/vec2, size/vec2)
+    def thicken(halfSize : vec2) = Rect(origin.sub(halfSize), size.add(halfSize.mul(2)))
+    def div(vec2 : vec2) = Rect(origin/vec2, size/vec2)
 
     def leftBottom = origin
     def leftTop = vec2(origin.x, origin.y + size.y)
     def rightTop = vec2(origin.x + size.x, origin.y + size.y)
     def rightBottom = vec2(origin.x + size.x, origin.y)
 }
-struct recti(origin : vec2i, size : vec2i) {
-    static def apply(x : float4, y : float4, width : float4, height : float4) = recti(vec2(x, y), vec2(width, height))
-    static def apply(rect : rect) = recti(rect.origin, rect.size)
+struct RectI(origin : vec2i, size : vec2i) {
+    static def apply(x : float4, y : float4, width : float4, height : float4) = RectI(vec2(x, y), vec2(width, height))
+    static def apply(rect : Rect) = RectI(rect.origin, rect.size)
     def x = origin.x
     def y = origin.y
     def x2 : int = origin.x + size.x
     def y2 : int = origin.y + size.y
     def width : int = size.x
     def height : int = size.y
-    def moveToCenterFor(size : vec2) = recti(size.sub(self.size).mul(0.5), self.size)
+    def moveToCenterFor(size : vec2) = RectI(size.sub(self.size).mul(0.5), self.size)
 }

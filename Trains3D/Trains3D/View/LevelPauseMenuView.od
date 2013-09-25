@@ -4,8 +4,8 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor wi
     private var _lastViewportSize : vec2 = vec2(0, 0)
     private var _lastCamera : Camera
 
-    private val cameraCache = Cache<rect, Camera>(viewport -> Camera2D(vec2(viewport.width, viewport.height)))
-    def cameraWith(viewport : rect) : Camera = cameraCache(viewport)
+    private val cameraCache = Cache<Rect, Camera>(viewport -> Camera2D(vec2(viewport.width, viewport.height)))
+    def cameraWith(viewport : Rect) : Camera = cameraCache(viewport)
     val menuBackSprite = Sprite(ColorSource(vec4(220, 220, 220, 255)/255), vec2(300, 150))
 
     def draw {
@@ -13,7 +13,7 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor wi
 
         BlendFunction.standard {
             glDisable(GL_DEPTH_TEST)
-            Sprite.draw(material = vec4(0, 0, 0, 0.5), in = rect(vec2(0, 0), context.viewport.size))
+            Sprite.draw(material = vec4(0, 0, 0, 0.5), in = Rect(vec2(0, 0), context.viewport.size))
             glEnable(GL_DEPTH_TEST)
         }
 

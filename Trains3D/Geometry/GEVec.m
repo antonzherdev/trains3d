@@ -168,8 +168,8 @@ NSInteger geVec2iCompareTo(GEVec2i self, GEVec2i to) {
     if(dX != 0) return dX;
     else return intCompareTo(self.y, to.y);
 }
-GERecti geVec2iRectToVec2i(GEVec2i self, GEVec2i vec2i) {
-    return GERectiMake(self, geVec2iSubVec2i(vec2i, self));
+GERectI geVec2iRectToVec2i(GEVec2i self, GEVec2i vec2i) {
+    return GERectIMake(self, geVec2iSubVec2i(vec2i, self));
 }
 ODPType* geVec2iType() {
     static ODPType* _ret = nil;
@@ -590,68 +590,68 @@ ODPType* geRectType() {
 
 
 
-GERecti geRectiApplyXYWidthHeight(float x, float y, float width, float height) {
-    return GERectiMake(geVec2iApplyVec2(GEVec2Make(x, y)), geVec2iApplyVec2(GEVec2Make(width, height)));
+GERectI geRectIApplyXYWidthHeight(float x, float y, float width, float height) {
+    return GERectIMake(geVec2iApplyVec2(GEVec2Make(x, y)), geVec2iApplyVec2(GEVec2Make(width, height)));
 }
-GERecti geRectiApplyRect(GERect rect) {
-    return GERectiMake(geVec2iApplyVec2(rect.origin), geVec2iApplyVec2(rect.size));
+GERectI geRectIApplyRect(GERect rect) {
+    return GERectIMake(geVec2iApplyVec2(rect.origin), geVec2iApplyVec2(rect.size));
 }
-NSInteger geRectiX(GERecti self) {
+NSInteger geRectIX(GERectI self) {
     return self.origin.x;
 }
-NSInteger geRectiY(GERecti self) {
+NSInteger geRectIY(GERectI self) {
     return self.origin.y;
 }
-NSInteger geRectiX2(GERecti self) {
+NSInteger geRectIX2(GERectI self) {
     return self.origin.x + self.size.x;
 }
-NSInteger geRectiY2(GERecti self) {
+NSInteger geRectIY2(GERectI self) {
     return self.origin.y + self.size.y;
 }
-NSInteger geRectiWidth(GERecti self) {
+NSInteger geRectIWidth(GERectI self) {
     return self.size.x;
 }
-NSInteger geRectiHeight(GERecti self) {
+NSInteger geRectIHeight(GERectI self) {
     return self.size.y;
 }
-GERecti geRectiMoveToCenterForSize(GERecti self, GEVec2 size) {
-    return GERectiMake(geVec2iApplyVec2(geVec2MulF(geVec2SubVec2(size, geVec2ApplyVec2i(self.size)), 0.5)), self.size);
+GERectI geRectIMoveToCenterForSize(GERectI self, GEVec2 size) {
+    return GERectIMake(geVec2iApplyVec2(geVec2MulF(geVec2SubVec2(size, geVec2ApplyVec2i(self.size)), 0.5)), self.size);
 }
-ODPType* geRectiType() {
+ODPType* geRectIType() {
     static ODPType* _ret = nil;
-    if(_ret == nil) _ret = [ODPType typeWithCls:[GERectiWrap class] name:@"GERecti" size:sizeof(GERecti) wrap:^id(void* data, NSUInteger i) {
-        return wrap(GERecti, ((GERecti*)(data))[i]);
+    if(_ret == nil) _ret = [ODPType typeWithCls:[GERectIWrap class] name:@"GERectI" size:sizeof(GERectI) wrap:^id(void* data, NSUInteger i) {
+        return wrap(GERectI, ((GERectI*)(data))[i]);
     }];
     return _ret;
 }
-@implementation GERectiWrap{
-    GERecti _value;
+@implementation GERectIWrap{
+    GERectI _value;
 }
 @synthesize value = _value;
 
-+ (id)wrapWithValue:(GERecti)value {
-    return [[GERectiWrap alloc] initWithValue:value];
++ (id)wrapWithValue:(GERectI)value {
+    return [[GERectIWrap alloc] initWithValue:value];
 }
 
-- (id)initWithValue:(GERecti)value {
+- (id)initWithValue:(GERectI)value {
     self = [super init];
     if(self) _value = value;
     return self;
 }
 
 - (NSString*)description {
-    return GERectiDescription(_value);
+    return GERectIDescription(_value);
 }
 
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    GERectiWrap* o = ((GERectiWrap*)(other));
-    return GERectiEq(_value, o.value);
+    GERectIWrap* o = ((GERectIWrap*)(other));
+    return GERectIEq(_value, o.value);
 }
 
 - (NSUInteger)hash {
-    return GERectiHash(_value);
+    return GERectIHash(_value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {
