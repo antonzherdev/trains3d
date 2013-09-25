@@ -55,4 +55,5 @@ stub class Chain<A> extends Iterable<A> {
     def toArray : [A]
     def toSet : Set<A>
     def toMap<K, V>(self : Chain<(K, V)>) : [K : V]
+    def charsToString(self : Chain<char>) : string
 }

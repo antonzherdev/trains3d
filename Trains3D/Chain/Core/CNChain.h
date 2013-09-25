@@ -69,4 +69,6 @@
 - (CNYieldResult)apply:(CNYield *)yield;
 - (NSString *)toStringWithDelimiter:(NSString *)delimiter;
 - (NSString *)toStringWithStart:(NSString *)string delimiter:(NSString *)delimiter end:(NSString *)end;
+
+- (NSString *)charsToString;
 @end

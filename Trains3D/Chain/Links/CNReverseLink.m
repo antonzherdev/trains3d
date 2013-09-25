@@ -21,9 +21,9 @@
         return cnYieldContinue;
     } end:^CNYieldResult(CNYieldResult result) {
         if(result != cnYieldBreak) {
-            [yield yieldAll:ret];
+            return [yield yieldAll:ret];
         }
-        return [yield endYieldWithResult:result];
+        return result;
     } all:nil];
 }
 

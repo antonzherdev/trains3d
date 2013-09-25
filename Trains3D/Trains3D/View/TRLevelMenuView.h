@@ -10,7 +10,6 @@
 @class EGGlobal;
 @class EGContext;
 @class TRScore;
-@class EGSchedule;
 @class EGSprite;
 @class TRRailroad;
 @class TRNotifications;

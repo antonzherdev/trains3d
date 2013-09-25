@@ -403,6 +403,14 @@
     [s appendString:end];
     return s;
 }
+
+- (NSString *)charsToString {
+    NSMutableString * s = [NSMutableString string];
+    [self forEach:^(id x) {
+        [s appendFormat:@"%C", [x unsignedShortValue] ];
+    }];
+    return s;
+}
 @end
 
 id cnResolveCollection(id collection) {

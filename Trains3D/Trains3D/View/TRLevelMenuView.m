@@ -85,23 +85,28 @@ static ODClassType* _TRLevelMenuView_type;
 
 - (void)draw {
     float w = [EGGlobal.context viewport].size.x / [[self res] pixelsInPoint];
-    [[[self res] font] drawText:[self formatScore:[_level.score score]] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec2Make(0.0, 10.0) alignment:egTextAlignmentBaselineX(-1.0)];
-    NSInteger seconds = ((NSInteger)([_level.schedule time]));
-    [[[self res] font] drawText:[NSString stringWithFormat:@"%li", seconds] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec2Make(w - 56, 10.0) alignment:egTextAlignmentBaselineX(1.0)];
+    [[[self res] font] drawText:[self formatScore:[_level.score score]] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec2Make(10.0, 10.0) alignment:egTextAlignmentBaselineX(-1.0)];
     EGSprite* pauseSprite = [[self res] pauseSprite];
     pauseSprite.position = GEVec2Make(w - 46, 0.0);
     egBlendFunctionApplyDraw(egBlendFunctionPremultiplied(), ^void() {
         [pauseSprite draw];
     });
     [_notificationAnimation forF:^void(CGFloat t) {
-        [[[self res] notificationFont] drawText:_notificationText color:_notificationProgress(((float)(t))) at:GEVec2Make(w / 2, 10.0) alignment:egTextAlignmentBaselineX(0.0)];
+        [[[self res] notificationFont] drawText:_notificationText color:_notificationProgress(((float)(t))) at:GEVec2Make(w / 2, 12.0) alignment:egTextAlignmentBaselineX(0.0)];
     }];
     if(!([[_level.railroad damagesPoints] isEmpty]) && [[_level repairer] isEmpty]) {
     }
 }
 
 - (NSString*)formatScore:(NSInteger)score {
-    return [NSString stringWithFormat:@"$%li", score];
+    __block NSInteger i = 0;
+    unichar a = unums([[@"'" head] get]);
+    NSString* str = [[[[[[NSString stringWithFormat:@"%li", score] chain] reverse] flatMap:^CNList*(id s) {
+        i++;
+        if(i == 3) return [CNList applyItem:s tail:[CNList applyItem:nums(a)]];
+        else return [CNOption applyValue:s];
+    }] reverse] charsToString];
+    return [NSString stringWithFormat:@"$%@", str];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
