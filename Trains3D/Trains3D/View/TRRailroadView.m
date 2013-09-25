@@ -116,11 +116,12 @@ static ODClassType* _TRRailroadView_type;
 
 
 @implementation TRRailView{
+    EGStandardMaterial* _railMaterial;
     EGMeshModel* _railModel;
     EGMeshModel* _railTurnModel;
 }
-static EGStandardMaterial* _TRRailView_railMaterial;
 static ODClassType* _TRRailView_type;
+@synthesize railMaterial = _railMaterial;
 @synthesize railModel = _railModel;
 @synthesize railTurnModel = _railTurnModel;
 
@@ -131,8 +132,9 @@ static ODClassType* _TRRailView_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _railModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.railGravel, ((EGMaterial*)([EGMaterial applyTexture:[EGGlobal textureForFile:@"Gravel.png"]]))), tuple(TRModels.railTies, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.rails, _TRRailView_railMaterial)])];
-        _railTurnModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.railTurnGravel, ((EGMaterial*)([EGMaterial applyTexture:[EGGlobal textureForFile:@"Gravel.png"]]))), tuple(TRModels.railTurnTies, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.railsTurn, _TRRailView_railMaterial)])];
+        _railMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.45, 0.47, 0.55, 1.0)] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:1.0];
+        _railModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.railGravel, ((EGMaterial*)([EGMaterial applyTexture:[EGGlobal textureForFile:@"Gravel.png"]]))), tuple(TRModels.railTies, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.rails, _railMaterial)])];
+        _railTurnModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.railTurnGravel, ((EGMaterial*)([EGMaterial applyTexture:[EGGlobal textureForFile:@"Gravel.png"]]))), tuple(TRModels.railTurnTies, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.railsTurn, _railMaterial)])];
     }
     
     return self;
@@ -141,7 +143,6 @@ static ODClassType* _TRRailView_type;
 + (void)initialize {
     [super initialize];
     _TRRailView_type = [ODClassType classTypeWithCls:[TRRailView class]];
-    _TRRailView_railMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.45, 0.47, 0.55, 1.0)] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:1.0];
 }
 
 - (void)drawRail:(TRRail*)rail {
@@ -175,10 +176,6 @@ static ODClassType* _TRRailView_type;
     return [TRRailView type];
 }
 
-+ (EGStandardMaterial*)railMaterial {
-    return _TRRailView_railMaterial;
-}
-
 + (ODClassType*)type {
     return _TRRailView_type;
 }
@@ -207,10 +204,12 @@ static ODClassType* _TRRailView_type;
 
 
 @implementation TRSwitchView{
+    EGStandardMaterial* _material;
     EGMeshModel* _switchStraightModel;
     EGMeshModel* _switchTurnModel;
 }
 static ODClassType* _TRSwitchView_type;
+@synthesize material = _material;
 @synthesize switchStraightModel = _switchStraightModel;
 @synthesize switchTurnModel = _switchTurnModel;
 
@@ -221,8 +220,9 @@ static ODClassType* _TRSwitchView_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _switchStraightModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.switchStraight, TRRailView.railMaterial)])];
-        _switchTurnModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.switchTurn, TRRailView.railMaterial)])];
+        _material = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.2, 0.5, 0.15, 1.0)] specularColor:GEVec4Make(0.5, 1.0, 0.5, 1.0) specularSize:1.0];
+        _switchStraightModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.switchStraight, _material)])];
+        _switchTurnModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.switchTurn, _material)])];
     }
     
     return self;
@@ -237,6 +237,7 @@ static ODClassType* _TRSwitchView_type;
     TRRailConnector* connector = theSwitch.connector;
     TRRail* rail = [theSwitch activeRail];
     TRRailForm* form = rail.form;
+    __block BOOL ref = NO;
     [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
         return [[_ modifyW:^GEMat4*(GEMat4* w) {
             return [w translateX:((float)(theSwitch.tile.x)) y:((float)(theSwitch.tile.y)) z:0.03];
@@ -248,15 +249,22 @@ static ODClassType* _TRSwitchView_type;
                 NSInteger y = connector.y;
                 NSInteger ox = otherConnector.x;
                 NSInteger oy = otherConnector.y;
-                if((x == -1 && oy == -1) || (y == 1 && ox == -1) || (y == -1 && ox == 1) || (x == 1 && oy == 1)) return [m2 scaleX:1.0 y:1.0 z:-1.0];
-                else return m2;
+                if((x == -1 && oy == -1) || (y == 1 && ox == -1) || (y == -1 && ox == 1) || (x == 1 && oy == 1)) {
+                    ref = YES;
+                    return [m2 scaleX:1.0 y:1.0 z:-1.0];
+                } else {
+                    return m2;
+                }
             } else {
                 return m2;
             }
         }];
     } f:^void() {
+        GEMat4* m = [EGGlobal.matrix.value wc];
+        if(ref) glCullFace(GL_BACK);
         if(form.start.x + form.end.x == 0) [_switchStraightModel draw];
         else [_switchTurnModel draw];
+        if(ref) glCullFace(GL_FRONT);
     }];
 }
 

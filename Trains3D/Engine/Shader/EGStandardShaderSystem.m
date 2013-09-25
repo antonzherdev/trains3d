@@ -157,8 +157,8 @@ static ODClassType* _EGStandardShaderKey_type;
 
 - (NSString*)lightsCalculateVaryings {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return [NSString stringWithFormat:@"dirLightDirectionCos%@= max(dot(normalMWC, -normalize(dirLightDirection%@)), 0.0);\n"
-            "dirLightDirectionCosA%@= max(dot(eyeDirection, reflect(normalize(dirLightDirection%@), normalMWC)), 0.0);\n", i, i, i, i];
+        return [NSString stringWithFormat:@"dirLightDirectionCos%@= max(dot(normalMWC, -dirLightDirection%@), 0.0);\n"
+            "dirLightDirectionCosA%@= max(dot(eyeDirection, reflect(dirLightDirection%@, normalMWC)), 0.0);\n", i, i, i, i];
     }] toStringWithDelimiter:@"\n"];
 }
 
@@ -291,7 +291,7 @@ static ODClassType* _EGStandardShader_type;
         [((EGShaderAttribute*)([_normalSlot get])) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.normal))];
         [[[[env.lights chain] filterCast:EGDirectLight.type] zip3A:_directLightDirections b:_directLightColors by:^EGDirectLight*(EGDirectLight* light, EGShaderUniform* dirSlot, EGShaderUniform* colorSlot) {
             GEVec3 dir = geVec4Xyz([[EGGlobal.matrix.value wc] mulVec3:light.direction w:0.0]);
-            [dirSlot setVec3:dir];
+            [dirSlot setVec3:geVec3Normalize(dir)];
             [colorSlot setVec4:light.color];
             return light;
         }] count];

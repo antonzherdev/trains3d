@@ -39,6 +39,7 @@
 
 
 @interface TRRailView : NSObject
+@property (nonatomic, readonly) EGStandardMaterial* railMaterial;
 @property (nonatomic, readonly) EGMeshModel* railModel;
 @property (nonatomic, readonly) EGMeshModel* railTurnModel;
 
@@ -46,12 +47,12 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)drawRail:(TRRail*)rail;
-+ (EGStandardMaterial*)railMaterial;
 + (ODClassType*)type;
 @end
 
 
 @interface TRSwitchView : NSObject
+@property (nonatomic, readonly) EGStandardMaterial* material;
 @property (nonatomic, readonly) EGMeshModel* switchStraightModel;
 @property (nonatomic, readonly) EGMeshModel* switchTurnModel;
 

@@ -35,7 +35,7 @@ class RailroadView(railroad : Railroad) {
 }
 
 class RailView {
-    static val railMaterial = StandardMaterial( vec4(0.45, 0.47, 0.55, 1), vec4(0.5, 0.5, 0.5, 1), 1)
+    val railMaterial = StandardMaterial( vec4(0.45, 0.47, 0.55, 1), vec4(0.5, 0.5, 0.5, 1), 1)
     val railModel = MeshModel([
         (Models.railGravel, textureFor("Gravel.png")),
         (Models.railTies, vec4(0.55, 0.45, 0.25, 1)),
@@ -70,17 +70,19 @@ class RailView {
 }
 
 class SwitchView {
+    val material = StandardMaterial( vec4(0.2, 0.5, 0.15, 1), vec4(0.5, 1, 0.5, 1), 1)
     val switchStraightModel = MeshModel([
-        (Models.switchStraight, RailView.railMaterial)
+        (Models.switchStraight, material)
     ])
     val switchTurnModel = MeshModel([
-        (Models.switchTurn, RailView.railMaterial)
+        (Models.switchTurn, material)
     ])
 
     def draw(theSwitch : Switch) {
         val connector = theSwitch.connector
         val rail = theSwitch.activeRail
         val form = rail.form
+        var ref = false
         matrix(
             _.modify(w = w -> w.translate(theSwitch.tile.x, theSwitch.tile.y, 0.03))
              .modify(m = m -> {
@@ -92,16 +94,20 @@ class SwitchView {
                     val ox = otherConnector.x
                     val oy = otherConnector.y
                     if(x == -1 && oy == -1 || y == 1 && ox == -1 || y == -1 && ox == 1 || x == 1 && oy == 1) {
+                        ref = true
                         m2.scale(1, 1, -1)
                     } else m2
                 } else m2
              })
         ) {
+            val m = matrix.value.wc
+            if(ref) glCullFace(GL_BACK)
             if(form.start.x + form.end.x == 0) {
                 switchStraightModel.draw
             } else {
                 switchTurnModel.draw
             }
+            if(ref) glCullFace(GL_FRONT)
         }
     }
 }
