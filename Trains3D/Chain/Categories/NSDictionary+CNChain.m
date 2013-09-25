@@ -18,6 +18,12 @@
 
 - (id)applyKey:(id)key {
     id ret = self[key];
+    if(ret == nil) @throw [NSString stringWithFormat:@"No value for key %@", key];
+    return ret;
+}
+
+- (id)optKey:(id)key {
+    id ret = self[key];
     return ret == nil ? [CNOption none] : [CNSome someWithValue:ret];
 }
 

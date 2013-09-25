@@ -8,26 +8,31 @@ struct TextAlignment(x : float4, y : float4, baseline : bool) {
     static val center = TextAlignment(0, 0, true)
 }
 
-class Font(name : string, size : uint4) {
-    private val texture = FileTexture("$(name)_$(size).png", GL_NEAREST, GL_NEAREST)
+class Font(name : string) {
+    private val texture = FileTexture("$(name).png", GL_NEAREST, GL_NEAREST)
     private val symbols : [char : FontSymbolDesc]
-    private val height : uint
+    val height : uint
+    val size : uint
     def init {
-        val font = XML.file("$(name)_$(size).xml")
-        height = font("height").get.toUInt
+        val charMap = MutableHashMap<char, FontSymbolDesc>()
         val ts = texture.size
-        symbols = font.children.chain.map{ch ->
-            val code : char = ch("code").get.head.getOr(0)
-            val width : float4 = ch("width").get
-            val offset =  parse(offset = ch("offset").get)
-            val r = parse(_rect = ch("rect").get)
-            (code, FontSymbolDesc(width, offset, r.size, r/ts))
-        }.toMap
-    }
-
-    private def parse(offset : string) : vec2i = {
-        val t = offset.tuple(" ").get
-        vec2i(t.a, t.b)
+        Bundle.readToString("$(name).fnt").split("\n").for{line : string ->
+            val t = line.tuple(" ").get
+            val name = t.a
+            val map : [string : string] = t.b.split(" ").chain.flatMap<(string, string)>(_.tuple("=")).toMap
+            if(name == "info") {
+                size = map("size").toUInt
+            } else if(name == "common") {
+                height = map("lineHeight").toUInt
+            } else if(name == "char") {
+                val code : char = map("id").toInt
+                val width : float4 = map("xadvance").toFloat
+                val offset =  vec2i(map("xoffset").toInt, map("yoffset").toInt)
+                val r = rect(map("x").toFloat, map("y").toFloat, map("width").toFloat, map("height").toFloat)
+                charMap.set(value = FontSymbolDesc(width, offset, r.size, r/ts), forKey = code)
+            }
+        }
+        symbols = charMap
     }
 
     private def parse(_rect : string) : rect = {
@@ -43,7 +48,7 @@ class Font(name : string, size : uint4) {
     private val mesh = Mesh(vb, ib)
     def draw(text : string, color : vec4, at : vec2, alignment : TextAlignment) {
         val pos = (context.matrixStack.value.wcp * vec4(at.x, at.y, 0, 1)).xy
-        val symbolsArr = text.chain.flatMap<FontSymbolDesc>(symbols[_]).toArray
+        val symbolsArr = text.chain.flatMap<FontSymbolDesc>(symbols.opt(_)).toArray
         val vertexes = VoidRefArray(FontPrintData.type, symbolsArr.count * 4)
         val indexes = VoidRefArray(UInt4.type, symbolsArr.count * 6)
         val vpSize = context.viewport.size/2.0

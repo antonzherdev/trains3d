@@ -9,6 +9,7 @@
 
 @protocol CNMap<CNIterable>
 - (id)applyKey:(id)key;
+- (id)optKey:(id)key;
 - (id<CNIterable>)keys;
 - (id<CNIterable>)values;
 - (BOOL)containsKey:(id)key;

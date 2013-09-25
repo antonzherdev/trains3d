@@ -73,13 +73,13 @@ class LevelMenuViewRes {
 }
 
 class LevelMenuViewRes1x extends LevelMenuViewRes {
-    val font = fontWith(name = "verdana", size = 14)
+    val font = fontWith(name = "lucida_grande_18")
     val pixelsInPoint : float4 = 1
     val pauseSprite : Sprite = Sprite(nearestTextureFor("Pause.png"), rect(0, 0, 46, 46), 1)
 }
 
 class LevelMenuViewRes2x extends LevelMenuViewRes {
-    val font = fontWith(name = "verdana", size = 28)
+    val font = fontWith(name = "lucida_grande_36")
     val pixelsInPoint : float4 = 2
     val pauseSprite : Sprite = Sprite(nearestTextureFor("Pause_2x.png"), rect(0, 0, 92, 92), 2)
 }

@@ -64,10 +64,11 @@ ODPType* egTextAlignmentType();
 
 @interface EGFont : NSObject
 @property (nonatomic, readonly) NSString* name;
-@property (nonatomic, readonly) unsigned int size;
+@property (nonatomic, readonly) NSUInteger height;
+@property (nonatomic, readonly) NSUInteger size;
 
-+ (id)fontWithName:(NSString*)name size:(unsigned int)size;
-- (id)initWithName:(NSString*)name size:(unsigned int)size;
++ (id)fontWithName:(NSString*)name;
+- (id)initWithName:(NSString*)name;
 - (ODClassType*)type;
 - (void)_init;
 - (void)drawText:(NSString*)text color:(GEVec4)color at:(GEVec2)at alignment:(EGTextAlignment)alignment;

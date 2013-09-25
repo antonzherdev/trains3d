@@ -8,7 +8,11 @@ class MutableTreeMap<K, V>(comparator : (K, K) -> int) extends MutableMap<K, V> 
 
     def count = _size
     def isEmpty : bool = root == nil
-    def apply(key : K) : V? = entryFor(key).value
+    def apply(key : K) : V = entryFor(key).value
+    def opt(key : K) : V? = {
+        val e = entryFor(key)
+        if(e == nil) nil else e.value
+    }
     def clear {
         _size = 0
         root = nil

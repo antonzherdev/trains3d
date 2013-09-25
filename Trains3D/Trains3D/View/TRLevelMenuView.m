@@ -265,7 +265,7 @@ static ODClassType* _TRLevelMenuViewRes1x_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _font = [EGGlobal fontWithName:@"verdana" size:14];
+        _font = [EGGlobal fontWithName:@"lucida_grande_18"];
         _pixelsInPoint = 1.0;
         _pauseSprite = [EGSprite applyMaterial:[EGColorSource applyTexture:[EGGlobal nearestTextureForFile:@"Pause.png"]] uv:geRectApplyXYWidthHeight(0.0, 0.0, 46.0, 46.0) pixelsInPoint:1.0];
     }
@@ -326,7 +326,7 @@ static ODClassType* _TRLevelMenuViewRes2x_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _font = [EGGlobal fontWithName:@"verdana" size:28];
+        _font = [EGGlobal fontWithName:@"lucida_grande_36"];
         _pixelsInPoint = 2.0;
         _pauseSprite = [EGSprite applyMaterial:[EGColorSource applyTexture:[EGGlobal nearestTextureForFile:@"Pause_2x.png"]] uv:geRectApplyXYWidthHeight(0.0, 0.0, 92.0, 92.0) pixelsInPoint:2.0];
     }

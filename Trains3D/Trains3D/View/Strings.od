@@ -26,5 +26,5 @@ class RuStrings extends Strings{
 
 object Str {
     private val locales : [string : Strings] = [("en", EnStrings()), ("ru", RuStrings())].chain.toMap
-    val Strs : Strings = locales[Locale.currentLanguageId].getOrElse(EnStrings())
+    val Strs : Strings = locales.opt(Locale.currentLanguageId).getOrElse(EnStrings())
 }

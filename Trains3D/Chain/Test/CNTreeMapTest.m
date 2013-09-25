@@ -25,22 +25,22 @@ static ODClassType* _CNTreeMapTest_type;
 - (void)testMain {
     CNMutableTreeMap* map = [CNMutableTreeMap apply];
     [self assertEqualsA:@0 b:numi(((NSInteger)([map count])))];
-    [self assertTrueValue:[[map applyKey:@0] isEmpty]];
+    [self assertTrueValue:[[map optKey:@0] isEmpty]];
     [map setValue:@"test" forKey:@0];
-    [self assertEqualsA:@"test" b:[[map applyKey:@0] get]];
+    [self assertEqualsA:@"test" b:[map applyKey:@0]];
     id<CNSeq> tests = [ arri(11) {-10, -20, -30, 10, 20, -15, 20, 0, 11, 13, -18}];
     [tests forEach:^void(id i) {
         [map setValue:[@"test" stringByAppendingFormat:@"%li", unumi(i)] forKey:i];
     }];
     [self assertEqualsA:numui([[[tests chain] distinct] count]) b:numui([map count])];
     [[[tests chain] distinct] forEach:^void(id i) {
-        [self assertEqualsA:[@"test" stringByAppendingFormat:@"%li", unumi(i)] b:[[map applyKey:i] get]];
+        [self assertEqualsA:[@"test" stringByAppendingFormat:@"%li", unumi(i)] b:[map applyKey:i]];
     }];
     [self assertEqualsA:(@[@-30, @-20, @-18, @-15, @-10, @0, @10, @11, @13, @20]) b:[[map.keys chain] toArray]];
     [[[tests chain] distinct] forEach:^void(id i) {
-        [self assertEqualsA:[@"test" stringByAppendingFormat:@"%li", unumi(i)] b:[[map applyKey:i] get]];
+        [self assertEqualsA:[@"test" stringByAppendingFormat:@"%li", unumi(i)] b:[map applyKey:i]];
         [map removeForKey:i];
-        [self assertTrueValue:[[map applyKey:i] isEmpty]];
+        [self assertTrueValue:[[map optKey:i] isEmpty]];
     }];
     [self assertEqualsA:@0 b:numi(((NSInteger)([map count])))];
 }

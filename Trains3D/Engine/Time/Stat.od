@@ -4,7 +4,7 @@ class Stat {
     private var accumDelta : float
     private var framesCount : uint
     private var _frameRate : uint
-    val font = fontWith(name = "verdana", size = 14)
+    val font = fontWith(name = "lucida_grande_18")
     def frameRate = _frameRate
 
     def draw {

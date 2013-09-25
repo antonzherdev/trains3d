@@ -145,7 +145,7 @@ static ODClassType* _EGBillboardShader_type;
         "   %@\n"
         "}", ((texture) ? @"\n"
         "varying vec2 UV;\n"
-        "uniform sampler2D texture;" : @""), parameters, ((texture) ? @"\n"
+        "uniform sampler2D texture;\n" : @""), parameters, ((texture) ? @"\n"
         "   gl_FragColor = fragColor * color * texture2D(texture, UV); " : @""), ((!(texture)) ? @"\n"
         "   gl_FragColor = fragColor * color; " : @""), code];
 }

@@ -137,7 +137,7 @@ class SweepLine<T>
                 checkIntersection(a, b)
             }
         } else {
-            val set = intersections[PointClass(event.point)].get
+            val set = intersections[PointClass(event.point)]
             val toInsert = set.chain.filter(events.remove(_)).toArray
             sweepTo(event)
             toInsert.for(e -> {

@@ -569,7 +569,7 @@ static ODClassType* _GESweepLine_type;
                 [self checkIntersectionA:a b:b];
             }
         } else {
-            NSMutableSet* set = ((NSMutableSet*)([[_intersections applyKey:[GEPointClass pointClassWithPoint:[event point]]] get]));
+            NSMutableSet* set = ((NSMutableSet*)([_intersections applyKey:[GEPointClass pointClassWithPoint:[event point]]]));
             id<CNSeq> toInsert = [[[set chain] filter:^BOOL(GEBentleyOttmannPointEvent* _) {
                 return [_events removeItem:_];
             }] toArray];

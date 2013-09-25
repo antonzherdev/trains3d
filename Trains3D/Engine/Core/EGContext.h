@@ -21,7 +21,7 @@
 + (EGTexture*)textureForFile:(NSString*)file;
 + (EGTexture*)nearestTextureForFile:(NSString*)file;
 + (EGTexture*)textureForFile:(NSString*)file magFilter:(GLenum)magFilter minFilter:(GLenum)minFilter;
-+ (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size;
++ (EGFont*)fontWithName:(NSString*)name;
 + (EGContext*)context;
 + (EGMatrixStack*)matrix;
 + (ODClassType*)type;
@@ -37,7 +37,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (EGTexture*)textureForFile:(NSString*)file magFilter:(GLenum)magFilter minFilter:(GLenum)minFilter;
-- (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size;
+- (EGFont*)fontWithName:(NSString*)name;
 - (GERecti)viewport;
 - (void)setViewport:(GERecti)viewport;
 + (ODClassType*)type;

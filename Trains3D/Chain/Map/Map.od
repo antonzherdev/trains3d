@@ -1,17 +1,18 @@
 package core.chain
 
 trait Map<K, V> extends Iterable<(K, V)> {
-    def apply(key : K) : V?
+    def apply(key : K) : V
+    def opt(key : K) : V?
     def keys : Iterable<K>
     def values : Iterable<V>
-    def contains(key : K) : bool = apply(key).isDefined
+    def contains(key : K) : bool = opt(key).isDefined
 }
 
 trait MutableMap<K, V> extends Map<K, V> with MutableIterable<(K, V)> {
     def set(value : V, forKey : K)
     def removeFor(key : K) : V?
     def objectFor(key: K, orUpdateWith: () -> V) : V = {
-        val o = apply(key)
+        val o = opt(key)
         if(o.isDefined) o.get
         else {
             val init : V = orUpdateWith

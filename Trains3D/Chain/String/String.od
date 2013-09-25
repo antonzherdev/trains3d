@@ -8,4 +8,7 @@ stub class String extends Seq<char> {
     def toUInt : uint
     def toInt : int
     def toFloat : float
+
+    def has(prefix : string) : bool
+    def has(suffix : string) : bool
 }

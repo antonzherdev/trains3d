@@ -7,17 +7,13 @@
 }
 
 - (id)removeForKey:(id)key {
-    id ret = [self applyKey:key];
+    id ret = [self optKey:key];
     [self removeObjectForKey:key];
     return ret;
 }
 
 + (NSMutableDictionary *)mutableDictionary {
     return [NSMutableDictionary dictionary];
-}
-
-- (id)applyKey:(id)key {
-    return [CNOption applyValue:[self objectForKey:key]];
 }
 
 - (id)objectForKey:(id)key orUpdateWith:(id (^)())with {
@@ -29,7 +25,7 @@
 }
 
 - (id)modifyBy:(id (^)(id))with forKey:(id)key {
-    id v = with([self applyKey:key]);
+    id v = with([self optKey:key]);
     if([v isEmpty]) {
         [self removeObjectForKey:v];
     } else {

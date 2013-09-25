@@ -7,16 +7,16 @@ object Global {
     def textureFor(file : string) : Texture = context.textureFor(file, GL_LINEAR, GL_LINEAR_MIPMAP_LINEAR)
     def nearestTextureFor(file : string) : Texture = context.textureFor(file, GL_NEAREST, GL_NEAREST)
     def textureFor(file : string, magFilter : GLenum, minFilter : GLenum) : Texture = context.textureFor(file, magFilter, minFilter)
-    def fontWith(name : string, size : uint) : Font = context.fontWith(name, size)
+    def fontWith(name : string) : Font = context.fontWith(name)
 }
 
 class Context {
     private val textureCache = MutableHashMap<(string, uint4, uint4), FileTexture>()
-    private val fontCache = MutableHashMap<(string, uint4), Font>()
+    private val fontCache = MutableHashMap<string, Font>()
 
     def textureFor(file : string, magFilter : GLenum, minFilter : GLenum) : Texture =
         textureCache.objectFor(key = (file, magFilter.cast<uint4>, minFilter.cast<uint4>), orUpdateWith = FileTexture(file, magFilter, minFilter))
-    def fontWith(name : string, size : uint) : Font = fontCache.objectFor(key = (name, size), orUpdateWith = Font(name, size))
+    def fontWith(name : string) : Font = fontCache.objectFor(key = name, orUpdateWith = Font(name))
 
     var director : Director
     var environment = Environment.default

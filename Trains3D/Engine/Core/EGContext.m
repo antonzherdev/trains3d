@@ -32,8 +32,8 @@ static ODClassType* _EGGlobal_type;
     return [_EGGlobal_context textureForFile:file magFilter:magFilter minFilter:minFilter];
 }
 
-+ (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size {
-    return [_EGGlobal_context fontWithName:name size:size];
++ (EGFont*)fontWithName:(NSString*)name {
+    return [_EGGlobal_context fontWithName:name];
 }
 
 - (ODClassType*)type {
@@ -115,9 +115,9 @@ static ODClassType* _EGContext_type;
     }]));
 }
 
-- (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size {
-    return ((EGFont*)([_fontCache objectForKey:tuple(name, numui4(((unsigned int)(size)))) orUpdateWith:^EGFont*() {
-        return [EGFont fontWithName:name size:((unsigned int)(size))];
+- (EGFont*)fontWithName:(NSString*)name {
+    return ((EGFont*)([_fontCache objectForKey:name orUpdateWith:^EGFont*() {
+        return [EGFont fontWithName:name];
     }]));
 }
 

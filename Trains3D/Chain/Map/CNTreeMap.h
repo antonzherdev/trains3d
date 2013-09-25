@@ -26,6 +26,7 @@
 - (NSUInteger)count;
 - (BOOL)isEmpty;
 - (id)applyKey:(id)key;
+- (id)optKey:(id)key;
 - (void)clear;
 - (id<CNIterator>)iterator;
 - (CNTreeMapIterator*)iteratorHigherThanKey:(id)key;

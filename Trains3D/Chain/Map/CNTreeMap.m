@@ -55,7 +55,13 @@ static ODClassType* _CNMutableTreeMap_type;
 }
 
 - (id)applyKey:(id)key {
-    return [CNOption applyValue:[self entryForKey:key].value];
+    return [self entryForKey:key].value;
+}
+
+- (id)optKey:(id)key {
+    CNTreeMapEntry* e = [self entryForKey:key];
+    if(e == nil) return [CNOption none];
+    else return [CNOption applyValue:e.value];
 }
 
 - (void)clear {
@@ -389,7 +395,7 @@ static ODClassType* _CNMutableTreeMap_type;
 }
 
 - (id)objectForKey:(id)key orUpdateWith:(id(^)())orUpdateWith {
-    id o = [self applyKey:key];
+    id o = [self optKey:key];
     if([o isDefined]) {
         return [o get];
     } else {
@@ -400,7 +406,7 @@ static ODClassType* _CNMutableTreeMap_type;
 }
 
 - (id)modifyBy:(id(^)(id))by forKey:(id)forKey {
-    id newObject = by([self applyKey:forKey]);
+    id newObject = by([CNOption applyValue:[self applyKey:forKey]]);
     if([newObject isEmpty]) [self removeForKey:forKey];
     else [self setValue:[newObject get] forKey:forKey];
     return newObject;
@@ -415,7 +421,7 @@ static ODClassType* _CNMutableTreeMap_type;
 }
 
 - (BOOL)containsKey:(id)key {
-    return [[self applyKey:key] isDefined];
+    return [[self optKey:key] isDefined];
 }
 
 - (id)head {

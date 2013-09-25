@@ -70,10 +70,10 @@ ODPType* egTextAlignmentType() {
 
 @implementation EGFont{
     NSString* _name;
-    unsigned int _size;
     EGFileTexture* _texture;
     id<CNMap> _symbols;
     NSUInteger _height;
+    NSUInteger _size;
     EGVertexBuffer* _vb;
     EGIndexBuffer* _ib;
     EGMesh* _mesh;
@@ -81,18 +81,18 @@ ODPType* egTextAlignmentType() {
 static EGVertexBufferDesc* _EGFont_vbDesc;
 static ODClassType* _EGFont_type;
 @synthesize name = _name;
+@synthesize height = _height;
 @synthesize size = _size;
 
-+ (id)fontWithName:(NSString*)name size:(unsigned int)size {
-    return [[EGFont alloc] initWithName:name size:size];
++ (id)fontWithName:(NSString*)name {
+    return [[EGFont alloc] initWithName:name];
 }
 
-- (id)initWithName:(NSString*)name size:(unsigned int)size {
+- (id)initWithName:(NSString*)name {
     self = [super init];
     if(self) {
         _name = name;
-        _size = size;
-        _texture = [EGFileTexture fileTextureWithFile:[NSString stringWithFormat:@"%@_%d.png", _name, _size] magFilter:GL_NEAREST minFilter:GL_NEAREST];
+        _texture = [EGFileTexture fileTextureWithFile:[NSString stringWithFormat:@"%@.png", _name] magFilter:GL_NEAREST minFilter:GL_NEAREST];
         _vb = [EGVertexBuffer applyDesc:_EGFont_vbDesc];
         _ib = [EGIndexBuffer apply];
         _mesh = [EGMesh meshWithVertexBuffer:_vb indexBuffer:_ib];
@@ -109,21 +109,31 @@ static ODClassType* _EGFont_type;
 }
 
 - (void)_init {
-    CNXMLElement* font = [CNXML fileName:[NSString stringWithFormat:@"%@_%d.xml", _name, _size]];
-    _height = [[[font applyName:@"height"] get] toUInt];
+    NSMutableDictionary* charMap = [NSMutableDictionary mutableDictionary];
     GEVec2 ts = [_texture size];
-    _symbols = [[[[font children] chain] map:^CNTuple*(CNXMLElement* ch) {
-        unichar code = unums([[[[ch applyName:@"code"] get] head] getOrValue:@0]);
-        float width = unumf4([[ch applyName:@"width"] get]);
-        GEVec2i offset = [self parseOffset:[[ch applyName:@"offset"] get]];
-        GERect r = [self parse_rect:[[ch applyName:@"rect"] get]];
-        return tuple(nums(code), [EGFontSymbolDesc fontSymbolDescWithWidth:width offset:geVec2ApplyVec2i(offset) size:r.size textureRect:geRectDivVec2(r, ts)]);
-    }] toMap];
-}
-
-- (GEVec2i)parseOffset:(NSString*)offset {
-    CNTuple* t = ((CNTuple*)([[offset tupleBy:@" "] get]));
-    return GEVec2iMake(unumi(t.a), unumi(t.b));
+    [[[CNBundle readToStringResource:[NSString stringWithFormat:@"%@.fnt", _name]] splitBy:@"\n"] forEach:^void(NSString* line) {
+        CNTuple* t = ((CNTuple*)([[line tupleBy:@" "] get]));
+        NSString* name = t.a;
+        id<CNMap> map = [[[[t.b splitBy:@" "] chain] flatMap:^id(NSString* _) {
+            return [_ tupleBy:@"="];
+        }] toMap];
+        if([name isEqual:@"info"]) {
+            _size = [[map applyKey:@"size"] toUInt];
+        } else {
+            if([name isEqual:@"common"]) {
+                _height = [[map applyKey:@"lineHeight"] toUInt];
+            } else {
+                if([name isEqual:@"char"]) {
+                    unichar code = [[map applyKey:@"id"] toInt];
+                    float width = ((float)([[map applyKey:@"xadvance"] toFloat]));
+                    GEVec2i offset = GEVec2iMake([[map applyKey:@"xoffset"] toInt], [[map applyKey:@"yoffset"] toInt]);
+                    GERect r = geRectApplyXYWidthHeight(((float)([[map applyKey:@"x"] toFloat])), ((float)([[map applyKey:@"y"] toFloat])), ((float)([[map applyKey:@"width"] toFloat])), ((float)([[map applyKey:@"height"] toFloat])));
+                    [charMap setValue:[EGFontSymbolDesc fontSymbolDescWithWidth:width offset:geVec2ApplyVec2i(offset) size:r.size textureRect:geRectDivVec2(r, ts)] forKey:nums(code)];
+                }
+            }
+        }
+    }];
+    _symbols = charMap;
 }
 
 - (GERect)parse_rect:(NSString*)_rect {
@@ -136,7 +146,7 @@ static ODClassType* _EGFont_type;
 - (void)drawText:(NSString*)text color:(GEVec4)color at:(GEVec2)at alignment:(EGTextAlignment)alignment {
     GEVec2 pos = geVec4Xy([[EGGlobal.context.matrixStack.value wcp] mulVec4:GEVec4Make(at.x, at.y, 0.0, 1.0)]);
     id<CNSeq> symbolsArr = [[[text chain] flatMap:^id(id _) {
-        return [_symbols applyKey:_];
+        return [_symbols optKey:_];
     }] toArray];
     CNVoidRefArray vertexes = cnVoidRefArrayApplyTpCount(egFontPrintDataType(), [symbolsArr count] * 4);
     CNVoidRefArray indexes = cnVoidRefArrayApplyTpCount(oduInt4Type(), [symbolsArr count] * 6);
@@ -198,20 +208,18 @@ static ODClassType* _EGFont_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGFont* o = ((EGFont*)(other));
-    return [self.name isEqual:o.name] && self.size == o.size;
+    return [self.name isEqual:o.name];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.name hash];
-    hash = hash * 31 + self.size;
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"name=%@", self.name];
-    [description appendFormat:@", size=%d", self.size];
     [description appendString:@">"];
     return description;
 }
