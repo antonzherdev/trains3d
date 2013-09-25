@@ -14,6 +14,7 @@
 @class EGD2D;
 @class TRStr;
 @protocol TRStrings;
+@class TRLevelFactory;
 @class EGEnvironment;
 
 @class TRLevelPauseMenuView;

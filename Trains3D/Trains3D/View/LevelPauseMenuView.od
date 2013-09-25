@@ -56,6 +56,10 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor wi
         val p = event.location
         if(menuBackSprite.contains(p)) {
             if(p.y > resumeLine.p0.y) director.resume
+            else if(p.y > restartLine.p0.y) {
+                LevelFactory.restartLevel
+                director.resume
+            }
             true
         } else false
     }

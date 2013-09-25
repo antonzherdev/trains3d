@@ -5,6 +5,8 @@
 @class TRTrain;
 @class TRLevelRules;
 @class TRLevel;
+@class EGGlobal;
+@class EGDirector;
 @class TRTrainType;
 @class TRCarType;
 @class TRTrainGenerator;
@@ -25,6 +27,7 @@
 - (id)init;
 - (ODClassType*)type;
 + (EGScene*)sceneForLevel:(TRLevel*)level;
++ (void)restartLevel;
 + (TRLevel*)levelWithNumber:(NSUInteger)number;
 + (TRLevel*)levelWithMapSize:(GEVec2i)mapSize;
 + (EGScene*)sceneForLevelWithNumber:(NSUInteger)number;

@@ -7,6 +7,7 @@
 #import "EGDirector.h"
 #import "GL.h"
 #import "TRStrings.h"
+#import "TRLevelFactory.h"
 @implementation TRLevelPauseMenuView{
     TRLevel* _level;
     GEVec2 __lastViewportSize;
@@ -97,7 +98,14 @@ static ODClassType* _TRLevelPauseMenuView_type;
 - (BOOL)mouseUpEvent:(EGEvent*)event {
     GEVec2 p = [event location];
     if([_menuBackSprite containsVec2:p]) {
-        if(p.y > _resumeLine.p0.y) [[EGGlobal director] resume];
+        if(p.y > _resumeLine.p0.y) {
+            [[EGGlobal director] resume];
+        } else {
+            if(p.y > _restartLine.p0.y) {
+                [TRLevelFactory restartLevel];
+                [[EGGlobal director] resume];
+            }
+        }
         return YES;
     } else {
         return NO;

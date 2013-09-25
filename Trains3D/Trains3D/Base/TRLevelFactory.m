@@ -3,6 +3,8 @@
 #import "TRScore.h"
 #import "TRTrain.h"
 #import "TRLevel.h"
+#import "EGContext.h"
+#import "EGDirector.h"
 #import "TRCar.h"
 #import "TRNotification.h"
 #import "TRRailroad.h"
@@ -41,6 +43,12 @@ static ODClassType* _TRLevelFactory_type;
 
 + (EGScene*)sceneForLevel:(TRLevel*)level {
     return [EGScene sceneWithBackgroundColor:geVec4DivI(GEVec4Make(215.0, 230.0, 195.0, 255.0), 255) controller:level layers:[TRTrainLayers trainLayersWithLevel:level]];
+}
+
++ (void)restartLevel {
+    [[ODObject asKindOfClass:[TRLevel class] object:[EGGlobal director].scene.controller] forEach:^void(TRLevel* level) {
+        [EGGlobal director].scene = [TRLevelFactory sceneForLevel:[TRLevel levelWithRules:level.rules]];
+    }];
 }
 
 + (void(^)(TRLevel*))trainCars:(CNRange*)cars speed:(CNRange*)speed {
