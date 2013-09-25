@@ -18,6 +18,7 @@
 + (void)drawMaterial:(EGColorSource*)material in:(GERect)in;
 + (void)drawMaterial:(EGColorSource*)material in:(GERect)in uv:(GERect)uv;
 - (void)draw;
+- (GERect)rect;
 + (EGSprite*)applyMaterial:(EGColorSource*)material size:(GEVec2)size;
 + (EGSprite*)applyMaterial:(EGColorSource*)material uv:(GERect)uv pixelsInPoint:(float)pixelsInPoint;
 - (BOOL)containsVec2:(GEVec2)vec2;

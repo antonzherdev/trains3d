@@ -51,6 +51,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
         [EGSprite drawMaterial:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 0.5)] in:GERectMake(GEVec2Make(0.0, 0.0), geVec2ApplyVec2i([EGGlobal.context viewport].size))];
         glEnable(GL_DEPTH_TEST);
     });
+    _menuBackSprite.position = geRectMoveToCenterForSize([_menuBackSprite rect], geVec2ApplyVec2i([EGGlobal.context viewport].size)).origin;
     [_menuBackSprite draw];
 }
 

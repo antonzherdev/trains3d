@@ -16,7 +16,7 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor wi
             Sprite.draw(material = vec4(0, 0, 0, 0.5), in = Rect(vec2(0, 0), context.viewport.size))
             glEnable(GL_DEPTH_TEST)
         }
-
+        menuBackSprite.position =  menuBackSprite.rect.moveToCenterFor(context.viewport.size).origin
         menuBackSprite.draw
     }
 

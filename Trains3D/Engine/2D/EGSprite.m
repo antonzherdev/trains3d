@@ -59,6 +59,10 @@ static ODClassType* _EGSprite_type;
     [EGSprite drawMaterial:_material in:GERectMake(_position, _size) uv:_uv];
 }
 
+- (GERect)rect {
+    return GERectMake(_position, _size);
+}
+
 + (EGSprite*)applyMaterial:(EGColorSource*)material size:(GEVec2)size {
     EGSprite* s = [EGSprite sprite];
     s.material = material;
