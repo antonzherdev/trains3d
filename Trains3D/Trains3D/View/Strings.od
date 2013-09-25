@@ -6,6 +6,9 @@ trait  Strings {
     def trainArrived(cost : int) : string
     def trainDestroyed(cost : int) : string
     def trainDelayedFine(cost : int) : string
+    def resumeGame : string
+    def restartLevel : string
+    def mainMenu : string
 
     def format(cost : int) : string = "$cost"
 }
@@ -15,6 +18,9 @@ class EnStrings extends Strings {
     def trainArrived(cost : int) : string = "+$(format(cost)): For the arrived train"
     def trainDestroyed(cost : int) : string = "-$(format(cost)): For the train destroying"
     def trainDelayedFine(cost : int) : string = "-$(format(cost)): Fine for the delayed train"
+    def resumeGame : string = "Continue the game"
+    def restartLevel : string = "Restart the level"
+    def mainMenu : string = "Main menu"
 }
 
 class RuStrings extends Strings{
@@ -22,9 +28,12 @@ class RuStrings extends Strings{
     def trainArrived(cost : int) : string = "+$(format(cost)): За прибывший поезд"
     def trainDestroyed(cost : int) : string = "-$(format(cost)): За уничтожение поезда"
     def trainDelayedFine(cost : int) : string = "-$(format(cost)): Штраф за задерживающийся поезд"
+    def resumeGame : string = "Продолжить игру"
+    def restartLevel : string = "Начать уровень заново"
+    def mainMenu : string = "Основное меню"
 }
 
 object Str {
     private val locales : [string : Strings] = [("en", EnStrings()), ("ru", RuStrings())].chain.toMap
-    val Strs : Strings = locales.opt(Locale.currentLanguageId).getOrElse(EnStrings())
+    val Loc : Strings = locales.opt(Locale.currentLanguageId).getOrElse(EnStrings())
 }

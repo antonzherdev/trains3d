@@ -6,18 +6,43 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor wi
 
     private val cameraCache = Cache<Rect, Camera>(viewport -> Camera2D(vec2(viewport.width, viewport.height)))
     def cameraWith(viewport : Rect) : Camera = cameraCache(viewport)
-    val menuBackSprite = Sprite(ColorSource(vec4(220, 220, 220, 255)/255), vec2(300, 150))
+
+    val width = 350
+    val menuBackSprite = Sprite(ColorSource(vec4(220, 220, 220, 255)/255), vec2(width, 150))
+    val resumeLine = Line2d(vec4(49, 90, 3, 255)/255)
+    val restartLine = Line2d(vec4(248, 149, 21, 255)/255)
+    val mainMenuLine = Line2d(vec4(211, 131, 235, 255)/255)
+    val font = fontWith(name = "lucida_grande_24")
 
     def draw {
         if(!director.isPaused) return nil
 
         BlendFunction.standard {
             glDisable(GL_DEPTH_TEST)
-            Sprite.draw(material = vec4(0, 0, 0, 0.5), in = Rect(vec2(0, 0), context.viewport.size))
+            D2D.drawSprite(material = vec4(0, 0, 0, 0.5), in = Rect(vec2(0, 0), context.viewport.size))
+            val p = menuBackSprite.rect.moveToCenterFor(context.viewport.size).origin
+            menuBackSprite.position = p
+            menuBackSprite.draw
+
+            resumeLine.p0 = vec2(p.x, p.y + 100)
+            resumeLine.p1 = vec2(p.x + width, p.y + 100)
+            resumeLine.draw
+            font.draw(text = Loc.resumeGame, color = vec4(0, 0, 0, 1), at = vec2(p.x + 35, p.y + 112), TextAlignment.baseline(-1))
+
+
+            restartLine.p0 = vec2(p.x, p.y + 50)
+            restartLine.p1 = vec2(p.x + width, p.y + 50)
+            restartLine.draw
+            font.draw(text = Loc.restartLevel, color = vec4(0, 0, 0, 1), at = vec2(p.x + 35, p.y + 62), TextAlignment.baseline(-1))
+
+            mainMenuLine.p0 = vec2(p.x, p.y)
+            mainMenuLine.p1 = vec2(p.x + width, p.y)
+            mainMenuLine.draw
+            font.draw(text = Loc.mainMenu, color = vec4(0, 0, 0, 1), at = vec2(p.x + 35, p.y + 12), TextAlignment.baseline(-1))
+
             glEnable(GL_DEPTH_TEST)
         }
-        menuBackSprite.position =  menuBackSprite.rect.moveToCenterFor(context.viewport.size).origin
-        menuBackSprite.draw
+
     }
 
 

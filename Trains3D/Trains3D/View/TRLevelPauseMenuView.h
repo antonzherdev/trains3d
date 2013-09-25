@@ -3,19 +3,29 @@
 #import "EGInput.h"
 #import "GEVec.h"
 #import "EGMaterial.h"
+#import "EGFont.h"
 @class TRLevel;
 @class EGCamera2D;
 @class EGSprite;
+@class EGLine2d;
 @class EGGlobal;
 @class EGDirector;
 @class EGContext;
+@class EGD2D;
+@class TRStr;
+@protocol TRStrings;
 @class EGEnvironment;
 
 @class TRLevelPauseMenuView;
 
 @interface TRLevelPauseMenuView : NSObject<EGLayerView, EGInputProcessor, EGMouseProcessor>
 @property (nonatomic, readonly) TRLevel* level;
+@property (nonatomic, readonly) NSInteger width;
 @property (nonatomic, readonly) EGSprite* menuBackSprite;
+@property (nonatomic, readonly) EGLine2d* resumeLine;
+@property (nonatomic, readonly) EGLine2d* restartLine;
+@property (nonatomic, readonly) EGLine2d* mainMenuLine;
+@property (nonatomic, readonly) EGFont* font;
 
 + (id)levelPauseMenuViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;

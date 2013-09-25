@@ -34,6 +34,18 @@ static ODClassType* _TREnStrings_type;
     return [NSString stringWithFormat:@"-%@: Fine for the delayed train", [self formatCost:cost]];
 }
 
+- (NSString*)resumeGame {
+    return @"Continue the game";
+}
+
+- (NSString*)restartLevel {
+    return @"Restart the level";
+}
+
+- (NSString*)mainMenu {
+    return @"Main menu";
+}
+
 - (NSString*)formatCost:(NSInteger)cost {
     return [NSString stringWithFormat:@"%li", cost];
 }
@@ -103,6 +115,18 @@ static ODClassType* _TRRuStrings_type;
     return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся поезд", [self formatCost:cost]];
 }
 
+- (NSString*)resumeGame {
+    return @"Продолжить игру";
+}
+
+- (NSString*)restartLevel {
+    return @"Начать уровень заново";
+}
+
+- (NSString*)mainMenu {
+    return @"Основное меню";
+}
+
 - (NSString*)formatCost:(NSInteger)cost {
     return [NSString stringWithFormat:@"%li", cost];
 }
@@ -140,14 +164,14 @@ static ODClassType* _TRRuStrings_type;
 
 @implementation TRStr
 static id<CNMap> _TRStr_locales;
-static id<TRStrings> _TRStr_Strs;
+static id<TRStrings> _TRStr_Loc;
 static ODClassType* _TRStr_type;
 
 + (void)initialize {
     [super initialize];
     _TRStr_type = [ODClassType classTypeWithCls:[TRStr class]];
     _TRStr_locales = [[(@[tuple(@"en", [TREnStrings enStrings]), tuple(@"ru", [TRRuStrings ruStrings])]) chain] toMap];
-    _TRStr_Strs = [[_TRStr_locales optKey:[CNLocale currentLanguageId]] getOrElseF:^id<TRStrings>() {
+    _TRStr_Loc = [[_TRStr_locales optKey:[CNLocale currentLanguageId]] getOrElseF:^id<TRStrings>() {
         return [TREnStrings enStrings];
     }];
 }
@@ -156,8 +180,8 @@ static ODClassType* _TRStr_type;
     return [TRStr type];
 }
 
-+ (id<TRStrings>)Strs {
-    return _TRStr_Strs;
++ (id<TRStrings>)Loc {
+    return _TRStr_Loc;
 }
 
 + (ODClassType*)type {

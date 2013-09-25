@@ -10,6 +10,9 @@
 - (NSString*)trainArrivedCost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
 - (NSString*)trainDelayedFineCost:(NSInteger)cost;
+- (NSString*)resumeGame;
+- (NSString*)restartLevel;
+- (NSString*)mainMenu;
 - (NSString*)formatCost:(NSInteger)cost;
 @end
 
@@ -22,6 +25,9 @@
 - (NSString*)trainArrivedCost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
 - (NSString*)trainDelayedFineCost:(NSInteger)cost;
+- (NSString*)resumeGame;
+- (NSString*)restartLevel;
+- (NSString*)mainMenu;
 + (ODClassType*)type;
 @end
 
@@ -34,13 +40,16 @@
 - (NSString*)trainArrivedCost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
 - (NSString*)trainDelayedFineCost:(NSInteger)cost;
+- (NSString*)resumeGame;
+- (NSString*)restartLevel;
+- (NSString*)mainMenu;
 + (ODClassType*)type;
 @end
 
 
 @interface TRStr : NSObject
 - (ODClassType*)type;
-+ (id<TRStrings>)Strs;
++ (id<TRStrings>)Loc;
 + (ODClassType*)type;
 @end
 
