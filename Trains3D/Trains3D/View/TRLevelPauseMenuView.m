@@ -64,6 +64,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
     if(!([[EGGlobal director] isPaused])) return ;
     egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
         glDisable(GL_DEPTH_TEST);
+        glLineWidth(2.0);
         [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 0.5)] in:GERectMake(GEVec2Make(0.0, 0.0), geVec2ApplyVec2i([EGGlobal.context viewport].size))];
         GEVec2 p = geRectMoveToCenterForSize([_menuBackSprite rect], geVec2ApplyVec2i([EGGlobal.context viewport].size)).origin;
         _menuBackSprite.position = p;
@@ -80,6 +81,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
         _mainMenuLine.p1 = GEVec2Make(p.x + _width, p.y);
         [_mainMenuLine draw];
         [_font drawText:[TRStr.Loc mainMenu] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec2Make(p.x + 35, p.y + 12) alignment:egTextAlignmentBaselineX(-1.0)];
+        glLineWidth(1.0);
         glEnable(GL_DEPTH_TEST);
     });
 }
@@ -93,7 +95,13 @@ static ODClassType* _TRLevelPauseMenuView_type;
 }
 
 - (BOOL)mouseUpEvent:(EGEvent*)event {
-    return NO;
+    GEVec2 p = [event location];
+    if([_menuBackSprite containsVec2:p]) {
+        if(p.y > _resumeLine.p0.y) [[EGGlobal director] resume];
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 - (id<EGCamera>)camera {

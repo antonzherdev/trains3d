@@ -19,6 +19,7 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor wi
 
         BlendFunction.standard {
             glDisable(GL_DEPTH_TEST)
+            glLineWidth(2)
             D2D.drawSprite(material = vec4(0, 0, 0, 0.5), in = Rect(vec2(0, 0), context.viewport.size))
             val p = menuBackSprite.rect.moveToCenterFor(context.viewport.size).origin
             menuBackSprite.position = p
@@ -39,7 +40,7 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor wi
             mainMenuLine.p1 = vec2(p.x + width, p.y)
             mainMenuLine.draw
             font.draw(text = Loc.mainMenu, color = vec4(0, 0, 0, 1), at = vec2(p.x + 35, p.y + 12), TextAlignment.baseline(-1))
-
+            glLineWidth(1)
             glEnable(GL_DEPTH_TEST)
         }
 
@@ -52,6 +53,10 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor wi
     }
 
     def mouseUp(event : Event) : bool = {
-        false
+        val p = event.location
+        if(menuBackSprite.contains(p)) {
+            if(p.y > resumeLine.p0.y) director.resume
+            true
+        } else false
     }
 }

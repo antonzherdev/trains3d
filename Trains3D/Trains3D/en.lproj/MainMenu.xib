@@ -657,7 +657,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="960" height="640"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <openGLView policy="maximum" depthSize="24bit" stencilSize="8bit" samplingRate="" useAuxiliaryDepthBufferStencil="NO" useDoubleBufferingEnabled="YES" allowOffline="YES" translatesAutoresizingMaskIntoConstraints="NO" id="536" customClass="EGOpenGLView">
+                    <openGLView policy="maximum" depthSize="24bit" stencilSize="8bit" useAuxiliaryDepthBufferStencil="NO" useDoubleBufferingEnabled="YES" allowOffline="YES" translatesAutoresizingMaskIntoConstraints="NO" id="536" customClass="EGOpenGLView">
                         <rect key="frame" x="0.0" y="0.0" width="960" height="640"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </openGLView>

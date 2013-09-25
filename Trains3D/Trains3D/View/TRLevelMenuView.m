@@ -120,10 +120,6 @@ static ODClassType* _TRLevelMenuView_type;
     }
 }
 
-- (BOOL)isProcessorActive {
-    return YES;
-}
-
 - (BOOL)processEvent:(EGEvent*)event {
     return [event leftMouseProcessor:self];
 }
@@ -141,6 +137,10 @@ static ODClassType* _TRLevelMenuView_type;
 
 - (EGEnvironment*)environment {
     return EGEnvironment.aDefault;
+}
+
+- (BOOL)isProcessorActive {
+    return !([[EGGlobal director] isPaused]);
 }
 
 - (BOOL)mouseDownEvent:(EGEvent*)event {

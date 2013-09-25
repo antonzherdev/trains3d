@@ -38,7 +38,6 @@
 - (void)draw;
 - (NSString*)formatScore:(NSInteger)score;
 - (void)updateWithDelta:(CGFloat)delta;
-- (BOOL)isProcessorActive;
 - (BOOL)processEvent:(EGEvent*)event;
 - (BOOL)mouseUpEvent:(EGEvent*)event;
 + (ODClassType*)type;
