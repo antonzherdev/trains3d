@@ -1,6 +1,7 @@
 #import "EGOpenGLView.h"
 #import "EGDirectorMac.h"
 #import "EGEventMac.h"
+#import "KWExample.h"
 
 
 @implementation EGOpenGLView {
@@ -64,7 +65,7 @@
     [self lockOpenGLContext];
     @try {
         CGSize nsSize = self.bounds.size;
-        _viewSize = GEVec2Make(nsSize.width, nsSize.height);
+        _viewSize = GEVec2Make((float) nsSize.width, (float) nsSize.height);
         [_director drawWithSize:_viewSize];
 
         [self.openGLContext flushBuffer];

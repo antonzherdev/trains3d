@@ -23,6 +23,10 @@ stub object gl {
     val GL_MULTISAMPLE : uint
     val GL_CULL_FACE : uint
     val GL_BLEND : uint
+    def glHint(: GLenum, : GLenum)
+    val GL_LINE_SMOOTH_HINT : GLenum
+    val GL_POLYGON_SMOOTH_HINT : GLenum
+    val GL_NICEST : GLenum
 
     def glCullFace(: uint)
     val GL_FRONT : uint

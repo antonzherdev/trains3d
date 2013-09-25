@@ -16,6 +16,9 @@ class Director {
         matrix.clear
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_CULL_FACE)
+        glEnable(GL_MULTISAMPLE)
+        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
+        glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST)
         scene.drawWith(size)
         glDisable(GL_DEPTH_TEST)
         context.matrixStack.clear
