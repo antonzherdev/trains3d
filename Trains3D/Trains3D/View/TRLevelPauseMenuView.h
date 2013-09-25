@@ -5,16 +5,17 @@
 #import "EGMaterial.h"
 @class TRLevel;
 @class EGCamera2D;
+@class EGSprite;
 @class EGGlobal;
 @class EGDirector;
 @class EGContext;
-@class EGSprite;
 @class EGEnvironment;
 
 @class TRLevelPauseMenuView;
 
 @interface TRLevelPauseMenuView : NSObject<EGLayerView, EGInputProcessor, EGMouseProcessor>
 @property (nonatomic, readonly) TRLevel* level;
+@property (nonatomic, readonly) EGSprite* menuBackSprite;
 
 + (id)levelPauseMenuViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;

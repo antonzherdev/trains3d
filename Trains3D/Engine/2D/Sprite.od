@@ -30,6 +30,13 @@ class Sprite {
     var position : vec2 = vec2(0, 0)
     var size : vec2 = vec2(1, 1)
 
+    static def apply(material : ColorSource, size : vec2) : Sprite = {
+        val s = Sprite()
+        s.material = material
+        s.size = size
+        s
+    }
+
     static def apply(material : ColorSource, uv : rect, pixelsInPoint : float4) : Sprite = {
         val s = Sprite()
         s.material = material

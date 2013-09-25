@@ -2,18 +2,20 @@
 
 #import "TRLevel.h"
 #import "EGCamera2D.h"
+#import "EGSprite.h"
 #import "EGContext.h"
 #import "EGDirector.h"
 #import "GL.h"
-#import "EGSprite.h"
 @implementation TRLevelPauseMenuView{
     TRLevel* _level;
     GEVec2 __lastViewportSize;
     id<EGCamera> __lastCamera;
     CNCache* _cameraCache;
+    EGSprite* _menuBackSprite;
 }
 static ODClassType* _TRLevelPauseMenuView_type;
 @synthesize level = _level;
+@synthesize menuBackSprite = _menuBackSprite;
 
 + (id)levelPauseMenuViewWithLevel:(TRLevel*)level {
     return [[TRLevelPauseMenuView alloc] initWithLevel:level];
@@ -27,6 +29,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
         _cameraCache = [CNCache cacheWithF:^EGCamera2D*(id viewport) {
             return [EGCamera2D camera2DWithSize:GEVec2Make(geRectWidth(uwrap(GERect, viewport)), geRectHeight(uwrap(GERect, viewport)))];
         }];
+        _menuBackSprite = [EGSprite applyMaterial:[EGColorSource applyColor:geVec4DivI(GEVec4Make(220.0, 220.0, 220.0, 255.0), 255)] size:GEVec2Make(300.0, 150.0)];
     }
     
     return self;
@@ -48,6 +51,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
         [EGSprite drawMaterial:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 0.5)] in:GERectMake(GEVec2Make(0.0, 0.0), geVec2ApplyVec2i([EGGlobal.context viewport].size))];
         glEnable(GL_DEPTH_TEST);
     });
+    [_menuBackSprite draw];
 }
 
 - (BOOL)isProcessorActive {
