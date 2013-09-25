@@ -10,6 +10,7 @@
     TRLevel* _level;
     GEVec2 __lastViewportSize;
     id<EGCamera> __lastCamera;
+    CNCache* _cameraCache;
 }
 static ODClassType* _TRLevelPauseMenuView_type;
 @synthesize level = _level;
@@ -23,6 +24,9 @@ static ODClassType* _TRLevelPauseMenuView_type;
     if(self) {
         _level = level;
         __lastViewportSize = GEVec2Make(0.0, 0.0);
+        _cameraCache = [CNCache cacheWithF:^EGCamera2D*(id viewport) {
+            return [EGCamera2D camera2DWithSize:GEVec2Make(geRectWidth(uwrap(GERect, viewport)), geRectHeight(uwrap(GERect, viewport)))];
+        }];
     }
     
     return self;
@@ -34,13 +38,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
 }
 
 - (id<EGCamera>)cameraWithViewport:(GERect)viewport {
-    if(GEVec2Eq(viewport.size, __lastViewportSize)) {
-        return __lastCamera;
-    } else {
-        __lastViewportSize = viewport.size;
-        __lastCamera = [EGCamera2D camera2DWithSize:GEVec2Make(geRectWidth(viewport), geRectHeight(viewport))];
-        return __lastCamera;
-    }
+    return [_cameraCache applyX:wrap(GERect, viewport)];
 }
 
 - (void)draw {

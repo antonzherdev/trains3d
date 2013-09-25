@@ -46,6 +46,8 @@
 
 
 @interface TRLevelMenuViewRes : NSObject
+@property (nonatomic, readonly) CNCache* cameraCache;
+
 + (id)levelMenuViewRes;
 - (id)init;
 - (ODClassType*)type;

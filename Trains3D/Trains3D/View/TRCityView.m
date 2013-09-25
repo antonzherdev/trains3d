@@ -11,7 +11,7 @@
 #import "EGSchedule.h"
 @implementation TRCityView{
     EGMesh* _expectedTrainModel;
-    EGFileTexture* _roofTexture;
+    EGTexture* _roofTexture;
     EGStandardMaterial* _windowMaterial;
 }
 static ODClassType* _TRCityView_type;

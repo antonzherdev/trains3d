@@ -20,11 +20,11 @@ static ODClassType* _EGGlobal_type;
     return _EGGlobal_context.director;
 }
 
-+ (EGFileTexture*)textureForFile:(NSString*)file {
++ (EGTexture*)textureForFile:(NSString*)file {
     return [_EGGlobal_context textureForFile:file magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_LINEAR];
 }
 
-+ (EGFileTexture*)nearestTextureForFile:(NSString*)file {
++ (EGTexture*)nearestTextureForFile:(NSString*)file {
     return [_EGGlobal_context textureForFile:file magFilter:GL_NEAREST minFilter:GL_NEAREST];
 }
 

@@ -177,10 +177,10 @@ static ODClassType* _TRLevelMenuView_type;
 
 
 @implementation TRLevelMenuViewRes{
-    GEVec2 __lastViewportSize;
-    id<EGCamera> __lastCamera;
+    CNCache* _cameraCache;
 }
 static ODClassType* _TRLevelMenuViewRes_type;
+@synthesize cameraCache = _cameraCache;
 
 + (id)levelMenuViewRes {
     return [[TRLevelMenuViewRes alloc] init];
@@ -188,7 +188,10 @@ static ODClassType* _TRLevelMenuViewRes_type;
 
 - (id)init {
     self = [super init];
-    if(self) __lastViewportSize = GEVec2Make(0.0, 0.0);
+    __weak TRLevelMenuViewRes* _weakSelf = self;
+    if(self) _cameraCache = [CNCache cacheWithF:^EGCamera2D*(id viewport) {
+        return [EGCamera2D camera2DWithSize:GEVec2Make(geRectWidth(uwrap(GERect, viewport)) / [_weakSelf pixelsInPoint], 46.0)];
+    }];
     
     return self;
 }
@@ -211,13 +214,7 @@ static ODClassType* _TRLevelMenuViewRes_type;
 }
 
 - (id<EGCamera>)cameraWithViewport:(GERect)viewport {
-    if(GEVec2Eq(viewport.size, __lastViewportSize)) {
-        return __lastCamera;
-    } else {
-        __lastViewportSize = viewport.size;
-        __lastCamera = [EGCamera2D camera2DWithSize:GEVec2Make(geRectWidth(viewport) / [self pixelsInPoint], 46.0)];
-        return __lastCamera;
-    }
+    return [_cameraCache applyX:wrap(GERect, viewport)];
 }
 
 - (ODClassType*)type {
@@ -230,6 +227,16 @@ static ODClassType* _TRLevelMenuViewRes_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
 }
 
 - (NSString*)description {

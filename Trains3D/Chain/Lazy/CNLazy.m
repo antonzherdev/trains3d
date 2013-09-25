@@ -77,3 +77,71 @@ static ODClassType* _CNLazy_type;
 @end
 
 
+@implementation CNCache{
+    id(^_f)(id);
+    id __lastX;
+    id __lastF;
+}
+static ODClassType* _CNCache_type;
+@synthesize f = _f;
+
++ (id)cacheWithF:(id(^)(id))f {
+    return [[CNCache alloc] initWithF:f];
+}
+
+- (id)initWithF:(id(^)(id))f {
+    self = [super init];
+    if(self) _f = f;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _CNCache_type = [ODClassType classTypeWithCls:[CNCache class]];
+}
+
+- (id)applyX:(id)x {
+    if([x isEqual:__lastX]) {
+        return __lastF;
+    } else {
+        __lastX = x;
+        __lastF = _f(x);
+        return __lastF;
+    }
+}
+
+- (ODClassType*)type {
+    return [CNCache type];
+}
+
++ (ODClassType*)type {
+    return _CNCache_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    CNCache* o = ((CNCache*)(other));
+    return [self.f isEqual:o.f];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.f hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+

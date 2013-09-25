@@ -4,8 +4,8 @@ object Global {
     def director : Director = context.director
     val context : Context = Context()
     val matrix : MatrixStack = context.matrixStack
-    def textureFor(file : string) : FileTexture = context.textureFor(file, GL_LINEAR, GL_LINEAR_MIPMAP_LINEAR)
-    def nearestTextureFor(file : string) : FileTexture = context.textureFor(file, GL_NEAREST, GL_NEAREST)
+    def textureFor(file : string) : Texture = context.textureFor(file, GL_LINEAR, GL_LINEAR_MIPMAP_LINEAR)
+    def nearestTextureFor(file : string) : Texture = context.textureFor(file, GL_NEAREST, GL_NEAREST)
     def textureFor(file : string, magFilter : GLenum, minFilter : GLenum) : Texture = context.textureFor(file, magFilter, minFilter)
     def fontWith(name : string, size : uint) : Font = context.fontWith(name, size)
 }

@@ -68,15 +68,8 @@ class LevelMenuViewRes {
     def pauseSprite : Sprite
     def pixelsInPoint : float4
 
-    private var _lastViewportSize : vec2 = vec2(0, 0)
-    private var _lastCamera : Camera
-    def cameraWith(viewport : rect) : Camera =
-        if(viewport.size == _lastViewportSize) _lastCamera
-        else {
-            _lastViewportSize = viewport.size
-            _lastCamera = Camera2D(vec2(viewport.width/pixelsInPoint, 46))
-            _lastCamera
-        }
+    val cameraCache = Cache<rect, Camera>(viewport -> Camera2D(vec2(viewport.width/pixelsInPoint, 46)))
+    def cameraWith(viewport : rect) : Camera = cameraCache(viewport)
 }
 
 class LevelMenuViewRes1x extends LevelMenuViewRes {
