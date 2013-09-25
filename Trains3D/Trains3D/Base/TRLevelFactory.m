@@ -40,7 +40,7 @@ static ODClassType* _TRLevelFactory_type;
 }
 
 + (EGScene*)sceneForLevel:(TRLevel*)level {
-    return [EGScene sceneWithBackgroundColor:geVec4DivI(GEVec4Make(21.0, 40.0, 10.0, 255.0), 255) controller:level layers:[TRTrainLayers trainLayersWithLevel:level]];
+    return [EGScene sceneWithBackgroundColor:geVec4DivI(GEVec4Make(215.0, 230.0, 195.0, 255.0), 255) controller:level layers:[TRTrainLayers trainLayersWithLevel:level]];
 }
 
 + (void(^)(TRLevel*))trainCars:(CNRange*)cars speed:(CNRange*)speed {

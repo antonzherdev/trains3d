@@ -10,7 +10,6 @@
 #import "TRNotification.h"
 #import "EGDirector.h"
 #import "EGCamera2D.h"
-#import "EGMaterial.h"
 @implementation TRLevelMenuView{
     TRLevel* _level;
     CNLazy* __lazy_res1x;
@@ -40,7 +39,7 @@ static ODClassType* _TRLevelMenuView_type;
         _notificationProgress = ^id() {
             float(^__l)(float) = [EGProgress gapT1:0.7 t2:1.0];
             GEVec4(^__r)(float) = ^GEVec4(float _) {
-                return GEVec4Make(1.0, 1.0, 1.0, 1 - _);
+                return GEVec4Make(0.0, 0.0, 0.0, 1 - _);
             };
             return ^GEVec4(float _) {
                 return __r(__l(_));
@@ -86,17 +85,23 @@ static ODClassType* _TRLevelMenuView_type;
 
 - (void)draw {
     float w = [EGGlobal.context viewport].size.x / [[self res] pixelsInPoint];
-    [[self font] drawText:[NSString stringWithFormat:@"%li", [_level.score score]] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(0.0, 0.0) alignment:egTextAlignmentApplyXY(-1.0, -1.0)];
+    [[[self res] font] drawText:[self formatScore:[_level.score score]] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec2Make(0.0, 10.0) alignment:egTextAlignmentBaselineX(-1.0)];
     NSInteger seconds = ((NSInteger)([_level.schedule time]));
-    [[self font] drawText:[NSString stringWithFormat:@"%li", seconds] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(w - 46, 0.0) alignment:egTextAlignmentApplyXY(1.0, -1.0)];
+    [[[self res] font] drawText:[NSString stringWithFormat:@"%li", seconds] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec2Make(w - 56, 10.0) alignment:egTextAlignmentBaselineX(1.0)];
     EGSprite* pauseSprite = [[self res] pauseSprite];
     pauseSprite.position = GEVec2Make(w - 46, 0.0);
-    [pauseSprite draw];
+    egBlendFunctionApplyDraw(egBlendFunctionPremultiplied(), ^void() {
+        [pauseSprite draw];
+    });
     [_notificationAnimation forF:^void(CGFloat t) {
-        [[self font] drawText:_notificationText color:_notificationProgress(((float)(t))) at:GEVec2Make(w / 2, 0.0) alignment:egTextAlignmentApplyXY(0.0, -1.0)];
+        [[[self res] notificationFont] drawText:_notificationText color:_notificationProgress(((float)(t))) at:GEVec2Make(w / 2, 10.0) alignment:egTextAlignmentBaselineX(0.0)];
     }];
     if(!([[_level.railroad damagesPoints] isEmpty]) && [[_level repairer] isEmpty]) {
     }
+}
+
+- (NSString*)formatScore:(NSInteger)score {
+    return [NSString stringWithFormat:@"$%li", score];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -205,6 +210,10 @@ static ODClassType* _TRLevelMenuViewRes_type;
     @throw @"Method font is abstract";
 }
 
+- (EGFont*)notificationFont {
+    @throw @"Method notificationFont is abstract";
+}
+
 - (EGSprite*)pauseSprite {
     @throw @"Method pauseSprite is abstract";
 }
@@ -250,11 +259,13 @@ static ODClassType* _TRLevelMenuViewRes_type;
 
 @implementation TRLevelMenuViewRes1x{
     EGFont* _font;
+    EGFont* _notificationFont;
     float _pixelsInPoint;
     EGSprite* _pauseSprite;
 }
 static ODClassType* _TRLevelMenuViewRes1x_type;
 @synthesize font = _font;
+@synthesize notificationFont = _notificationFont;
 @synthesize pixelsInPoint = _pixelsInPoint;
 @synthesize pauseSprite = _pauseSprite;
 
@@ -265,7 +276,8 @@ static ODClassType* _TRLevelMenuViewRes1x_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _font = [EGGlobal fontWithName:@"lucida_grande_18"];
+        _font = [EGGlobal fontWithName:@"lucida_grande_24"];
+        _notificationFont = [EGGlobal fontWithName:@"lucida_grande_16"];
         _pixelsInPoint = 1.0;
         _pauseSprite = [EGSprite applyMaterial:[EGColorSource applyTexture:[EGGlobal nearestTextureForFile:@"Pause.png"]] uv:geRectApplyXYWidthHeight(0.0, 0.0, 46.0, 46.0) pixelsInPoint:1.0];
     }
@@ -311,11 +323,13 @@ static ODClassType* _TRLevelMenuViewRes1x_type;
 
 @implementation TRLevelMenuViewRes2x{
     EGFont* _font;
+    EGFont* _notificationFont;
     float _pixelsInPoint;
     EGSprite* _pauseSprite;
 }
 static ODClassType* _TRLevelMenuViewRes2x_type;
 @synthesize font = _font;
+@synthesize notificationFont = _notificationFont;
 @synthesize pixelsInPoint = _pixelsInPoint;
 @synthesize pauseSprite = _pauseSprite;
 
@@ -326,7 +340,8 @@ static ODClassType* _TRLevelMenuViewRes2x_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _font = [EGGlobal fontWithName:@"lucida_grande_36"];
+        _font = [EGGlobal fontWithName:@"lucida_grande_48"];
+        _notificationFont = [EGGlobal fontWithName:@"lucida_grande_32"];
         _pixelsInPoint = 2.0;
         _pauseSprite = [EGSprite applyMaterial:[EGColorSource applyTexture:[EGGlobal nearestTextureForFile:@"Pause_2x.png"]] uv:geRectApplyXYWidthHeight(0.0, 0.0, 92.0, 92.0) pixelsInPoint:2.0];
     }

@@ -3,6 +3,7 @@
 #import "EGInput.h"
 #import "GEVec.h"
 #import "EGFont.h"
+#import "EGMaterial.h"
 @class TRLevel;
 @class EGProgress;
 @class EGCounter;
@@ -16,7 +17,6 @@
 @class EGDirector;
 @class EGEnvironment;
 @class EGCamera2D;
-@class EGColorSource;
 
 @class TRLevelMenuView;
 @class TRLevelMenuViewRes;
@@ -37,6 +37,7 @@
 - (TRLevelMenuViewRes*)resHeight:(float)height;
 - (EGFont*)font;
 - (void)draw;
+- (NSString*)formatScore:(NSInteger)score;
 - (void)updateWithDelta:(CGFloat)delta;
 - (BOOL)isProcessorActive;
 - (BOOL)processEvent:(EGEvent*)event;
@@ -52,6 +53,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (EGFont*)font;
+- (EGFont*)notificationFont;
 - (EGSprite*)pauseSprite;
 - (float)pixelsInPoint;
 - (id<EGCamera>)cameraWithViewport:(GERect)viewport;
@@ -61,6 +63,7 @@
 
 @interface TRLevelMenuViewRes1x : TRLevelMenuViewRes
 @property (nonatomic, readonly) EGFont* font;
+@property (nonatomic, readonly) EGFont* notificationFont;
 @property (nonatomic, readonly) float pixelsInPoint;
 @property (nonatomic, readonly) EGSprite* pauseSprite;
 
@@ -73,6 +76,7 @@
 
 @interface TRLevelMenuViewRes2x : TRLevelMenuViewRes
 @property (nonatomic, readonly) EGFont* font;
+@property (nonatomic, readonly) EGFont* notificationFont;
 @property (nonatomic, readonly) float pixelsInPoint;
 @property (nonatomic, readonly) EGSprite* pauseSprite;
 

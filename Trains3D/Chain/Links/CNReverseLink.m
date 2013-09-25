@@ -1,4 +1,5 @@
 #import "CNReverseLink.h"
+#import "CNList.h"
 
 
 @implementation CNReverseLink {
@@ -14,13 +15,9 @@
 }
 
 - (CNYield *)buildYield:(CNYield *)yield {
-    __block NSMutableArray* ret;
-    return [CNYield decorateYield: yield begin:^CNYieldResult(NSUInteger size) {
-        ret = [NSMutableArray arrayWithCapacity:size];
-        return [yield beginYieldWithSize:size];
-
-    } yield:^CNYieldResult(id item) {
-        [ret insertObject:item atIndex:0];
+    __block CNList* ret = [CNList apply];
+    return [CNYield decorateYield: yield begin:nil yield:^CNYieldResult(id item) {
+        ret = [CNList applyItem:item tail:ret];
         return cnYieldContinue;
     } end:^CNYieldResult(CNYieldResult result) {
         if(result != cnYieldBreak) {
