@@ -8,12 +8,14 @@
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class EGTexture;
+@class EGVertexBuffer;
 
 @class EGBillboardShaderSystem;
 @class EGBillboardShader;
 @class EGBillboardParticleSystem;
 @class EGBillboardParticle;
 @class EGBillboardParticleSystemView;
+@class EGBillboard;
 typedef struct EGBillboardBufferData EGBillboardBufferData;
 
 @interface EGBillboardShaderSystem : EGShaderSystem
@@ -117,6 +119,14 @@ ODPType* egBillboardBufferDataType();
 + (EGBillboardParticleSystemView*)applyMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material;
 - (NSUInteger)vertexCount;
 - (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i;
++ (ODClassType*)type;
+@end
+
+
+@interface EGBillboard : NSObject
+- (ODClassType*)type;
++ (void)drawMaterial:(EGColorSource*)material at:(GEVec3)at rect:(GERect)rect;
++ (void)drawMaterial:(EGColorSource*)material at:(GEVec3)at quad:(GEQuad)quad uv:(GEQuad)uv;
 + (EGVertexBufferDesc*)vbDesc;
 + (ODClassType*)type;
 @end

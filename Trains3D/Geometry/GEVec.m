@@ -548,6 +548,15 @@ GEVec2 geRectRightBottom(GERect self) {
 GERect geRectMoveToCenterForSize(GERect self, GEVec2 size) {
     return GERectMake(geVec2MulF(geVec2SubVec2(size, self.size), 0.5), self.size);
 }
+GEQuad geRectQuad(GERect self) {
+    return GEQuadMake(geRectLeftBottom(self), geRectLeftTop(self), geRectRightBottom(self), geRectRightTop(self));
+}
+GERect geRectCenterX(GERect self) {
+    return GERectMake(GEVec2Make(self.origin.x + self.size.x / 2, self.origin.y), self.size);
+}
+GERect geRectCenterY(GERect self) {
+    return GERectMake(GEVec2Make(self.origin.x, self.origin.y + self.size.y / 2), self.size);
+}
 ODPType* geRectType() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[GERectWrap class] name:@"GERect" size:sizeof(GERect) wrap:^id(void* data, NSUInteger i) {

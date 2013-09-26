@@ -6,6 +6,7 @@ class LevelView(level : Level) extends LayerView {
     private val cityView = CityView()
     private val railroadView = RailroadView(level.railroad)
     private val trainView = TrainView()
+    private val treeView = TreeView()
 
     val environment = Environment(ambientColor = vec4(0.4, 0.4, 0.4, 1), lights = [
         DirectLight(vec4(1, 1, 1, 1), vec3(-0.15, 0.25, -0.5).normalize)])
@@ -20,6 +21,8 @@ class LevelView(level : Level) extends LayerView {
         railroadView.drawForeground
         trainView.drawSmoke(trains = level.trains)
         trainView.drawSmoke(trains = level.dyingTrains)
+
+        treeView.draw(Tree(vec2(0, 0)))
     }
 
     val camera : Camera = CameraIso(level.map.size, zReserve = 0.3, vec2(0, 0))

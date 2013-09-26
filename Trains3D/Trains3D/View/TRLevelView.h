@@ -5,10 +5,12 @@
 @class TRCityView;
 @class TRRailroadView;
 @class TRTrainView;
+@class TRTreeView;
 @class EGEnvironment;
 @class EGDirectLight;
 @class EGMapSso;
 @class EGCameraIso;
+@class TRTree;
 
 @class TRLevelView;
 

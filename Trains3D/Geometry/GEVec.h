@@ -330,6 +330,9 @@ GEVec2 geRectLeftTop(GERect self);
 GEVec2 geRectRightTop(GERect self);
 GEVec2 geRectRightBottom(GERect self);
 GERect geRectMoveToCenterForSize(GERect self, GEVec2 size);
+GEQuad geRectQuad(GERect self);
+GERect geRectCenterX(GERect self);
+GERect geRectCenterY(GERect self);
 ODPType* geRectType();
 @interface GERectWrap : NSObject
 @property (readonly, nonatomic) GERect value;

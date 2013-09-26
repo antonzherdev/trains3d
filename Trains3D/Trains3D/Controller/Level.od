@@ -143,3 +143,5 @@ class Level(rules : LevelRules) extends Controller {
         }
     }
 }
+
+class Tree(position : vec2)

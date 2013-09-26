@@ -328,3 +328,60 @@ static ODClassType* _TRLevel_type;
 @end
 
 
+@implementation TRTree{
+    GEVec2 _position;
+}
+static ODClassType* _TRTree_type;
+@synthesize position = _position;
+
++ (id)treeWithPosition:(GEVec2)position {
+    return [[TRTree alloc] initWithPosition:position];
+}
+
+- (id)initWithPosition:(GEVec2)position {
+    self = [super init];
+    if(self) _position = position;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRTree_type = [ODClassType classTypeWithCls:[TRTree class]];
+}
+
+- (ODClassType*)type {
+    return [TRTree type];
+}
+
++ (ODClassType*)type {
+    return _TRTree_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRTree* o = ((TRTree*)(other));
+    return GEVec2Eq(self.position, o.position);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + GEVec2Hash(self.position);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"position=%@", GEVec2Description(self.position)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+

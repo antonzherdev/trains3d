@@ -142,6 +142,9 @@ struct Rect(origin : vec2, size : vec2) {
     def rightTop = vec2(origin.x + size.x, origin.y + size.y)
     def rightBottom = vec2(origin.x + size.x, origin.y)
     def moveToCenterFor(size : vec2) = Rect((size - self.size)*0.5, self.size)
+    def quad = Quad(leftBottom, leftTop, rightBottom, rightTop)
+    def centerX = Rect(vec2(origin.x + size.x/2, origin.y), size)
+    def centerY = Rect(vec2(origin.x, origin.y + size.y/2), size)
 }
 struct RectI(origin : vec2i, size : vec2i) {
     static def apply(x : float4, y : float4, width : float4, height : float4) = RectI(vec2(x, y), vec2(width, height))

@@ -102,10 +102,9 @@ class BillboardParticle(lifeLength : float4) extends Particle(lifeLength) {
 }
 
 class BillboardParticleSystemView(maxCount : uint, material : ColorSource, blendFunc : BlendFunction)
-    extends  ParticleSystemView<BillboardParticle, BillboardBufferData>(BillboardParticleSystemView.vbDesc, maxCount, blendFunc)
+    extends  ParticleSystemView<BillboardParticle, BillboardBufferData>(Billboard.vbDesc, maxCount, blendFunc)
 {
-    static val vbDesc = VertexBufferDesc<BillboardBufferData>(BillboardBufferData.type,
-        position = 0, uv = 9*4, normal = -1, color = 5*4, model = 3*4)
+
     static def apply(maxCount : uint, material : ColorSource) =
         BillboardParticleSystemView(maxCount, material, BlendFunction.standard)
     val shader : Shader =  BillboardShaderSystem.shaderFor(material)
@@ -115,5 +114,28 @@ class BillboardParticleSystemView(maxCount : uint, material : ColorSource, blend
         indexPointer
             .write(uInt4 = i).write(uInt4 = i + 1).write(uInt4 = i + 2)
             .write(uInt4 = i + 2).write(uInt4 = i).write(uInt4 = i + 3)
+    }
+}
+
+object Billboard {
+    static val vbDesc = VertexBufferDesc<BillboardBufferData>(BillboardBufferData.type,
+        position = 0, uv = 9*4, normal = -1, color = 5*4, model = 3*4)
+    private val vertexes = VoidRefArray(BillboardBufferData.type, 4)
+    private val vb = VertexBuffer(vbDesc)
+    def draw(material : ColorSource, at : vec3, rect : Rect) {
+        draw(material, at, rect.quad, Rect(1, 1, -1, -1).quad)
+    }
+
+    def draw(material : ColorSource, at : vec3, quad : Quad, uv : Quad) {
+        var v = vertexes
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p1, material.color, uv.p1))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p2, material.color, uv.p2))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p3, material.color, uv.p3))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p4, material.color, uv.p4))
+        vb.set(vertexes)
+
+        glDisable(GL_CULL_FACE)
+        BillboardShaderSystem.shaderFor(material).draw(material, vb, GL_TRIANGLE_STRIP)
+        glEnable(GL_CULL_FACE)
     }
 }

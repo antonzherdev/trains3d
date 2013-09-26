@@ -357,7 +357,6 @@ static ODClassType* _EGBillboardParticle_type;
     EGColorSource* _material;
     EGShader* _shader;
 }
-static EGVertexBufferDesc* _EGBillboardParticleSystemView_vbDesc;
 static ODClassType* _EGBillboardParticleSystemView_type;
 @synthesize material = _material;
 @synthesize shader = _shader;
@@ -367,7 +366,7 @@ static ODClassType* _EGBillboardParticleSystemView_type;
 }
 
 - (id)initWithMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction)blendFunc {
-    self = [super initWithVbDesc:EGBillboardParticleSystemView.vbDesc maxCount:maxCount blendFunc:blendFunc];
+    self = [super initWithVbDesc:EGBillboard.vbDesc maxCount:maxCount blendFunc:blendFunc];
     if(self) {
         _material = material;
         _shader = [EGBillboardShaderSystem shaderForMaterial:_material];
@@ -379,7 +378,6 @@ static ODClassType* _EGBillboardParticleSystemView_type;
 + (void)initialize {
     [super initialize];
     _EGBillboardParticleSystemView_type = [ODClassType classTypeWithCls:[EGBillboardParticleSystemView class]];
-    _EGBillboardParticleSystemView_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:egBillboardBufferDataType() position:0 uv:((int)(9 * 4)) normal:-1 color:((int)(5 * 4)) model:((int)(3 * 4))];
 }
 
 + (EGBillboardParticleSystemView*)applyMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material {
@@ -396,10 +394,6 @@ static ODClassType* _EGBillboardParticleSystemView_type;
 
 - (ODClassType*)type {
     return [EGBillboardParticleSystemView type];
-}
-
-+ (EGVertexBufferDesc*)vbDesc {
-    return _EGBillboardParticleSystemView_vbDesc;
 }
 
 + (ODClassType*)type {
@@ -430,6 +424,71 @@ static ODClassType* _EGBillboardParticleSystemView_type;
     [description appendFormat:@"maxCount=%li", self.maxCount];
     [description appendFormat:@", material=%@", self.material];
     [description appendFormat:@", blendFunc=%@", EGBlendFunctionDescription(self.blendFunc)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGBillboard
+static EGVertexBufferDesc* _EGBillboard_vbDesc;
+static CNVoidRefArray _EGBillboard_vertexes;
+static EGVertexBuffer* _EGBillboard_vb;
+static ODClassType* _EGBillboard_type;
+
++ (void)initialize {
+    [super initialize];
+    _EGBillboard_type = [ODClassType classTypeWithCls:[EGBillboard class]];
+    _EGBillboard_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:egBillboardBufferDataType() position:0 uv:((int)(9 * 4)) normal:-1 color:((int)(5 * 4)) model:((int)(3 * 4))];
+    _EGBillboard_vertexes = cnVoidRefArrayApplyTpCount(egBillboardBufferDataType(), 4);
+    _EGBillboard_vb = [EGVertexBuffer applyDesc:_EGBillboard_vbDesc];
+}
+
++ (void)drawMaterial:(EGColorSource*)material at:(GEVec3)at rect:(GERect)rect {
+    [EGBillboard drawMaterial:material at:at quad:geRectQuad(rect) uv:geRectQuad(geRectApplyXYWidthHeight(1.0, 1.0, -1.0, -1.0))];
+}
+
++ (void)drawMaterial:(EGColorSource*)material at:(GEVec3)at quad:(GEQuad)quad uv:(GEQuad)uv {
+    CNVoidRefArray v = _EGBillboard_vertexes;
+    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p1, material.color, uv.p1));
+    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p2, material.color, uv.p2));
+    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p3, material.color, uv.p3));
+    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p4, material.color, uv.p4));
+    [_EGBillboard_vb setArray:_EGBillboard_vertexes];
+    glDisable(GL_CULL_FACE);
+    [[EGBillboardShaderSystem shaderForMaterial:material] drawParam:material vb:_EGBillboard_vb mode:GL_TRIANGLE_STRIP];
+    glEnable(GL_CULL_FACE);
+}
+
+- (ODClassType*)type {
+    return [EGBillboard type];
+}
+
++ (EGVertexBufferDesc*)vbDesc {
+    return _EGBillboard_vbDesc;
+}
+
++ (ODClassType*)type {
+    return _EGBillboard_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
     return description;
 }

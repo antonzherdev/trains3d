@@ -25,6 +25,7 @@
 
 @class TRLevelRules;
 @class TRLevel;
+@class TRTree;
 
 @interface TRLevelRules : NSObject
 @property (nonatomic, readonly) GEVec2i mapSize;
@@ -68,6 +69,16 @@
 - (void)destroyTrain:(TRTrain*)train;
 - (void)removeTrain:(TRTrain*)train;
 - (void)runRepairerFromCity:(TRCity*)city;
++ (ODClassType*)type;
+@end
+
+
+@interface TRTree : NSObject
+@property (nonatomic, readonly) GEVec2 position;
+
++ (id)treeWithPosition:(GEVec2)position;
+- (id)initWithPosition:(GEVec2)position;
+- (ODClassType*)type;
 + (ODClassType*)type;
 @end
 
