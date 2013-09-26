@@ -46,6 +46,9 @@
 @interface TRTreeType : ODEnum
 + (TRTreeType*)pine;
 + (TRTreeType*)tree1;
++ (TRTreeType*)tree2;
++ (TRTreeType*)tree3;
++ (TRTreeType*)yellow;
 + (NSArray*)values;
 @end
 

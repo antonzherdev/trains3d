@@ -213,6 +213,9 @@ static ODClassType* _TRTree_type;
 @implementation TRTreeType
 static TRTreeType* _TRTreeType_pine;
 static TRTreeType* _TRTreeType_tree1;
+static TRTreeType* _TRTreeType_tree2;
+static TRTreeType* _TRTreeType_tree3;
+static TRTreeType* _TRTreeType_yellow;
 static NSArray* _TRTreeType_values;
 
 + (id)treeTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
@@ -229,7 +232,10 @@ static NSArray* _TRTreeType_values;
     [super initialize];
     _TRTreeType_pine = [TRTreeType treeTypeWithOrdinal:0 name:@"pine"];
     _TRTreeType_tree1 = [TRTreeType treeTypeWithOrdinal:1 name:@"tree1"];
-    _TRTreeType_values = (@[_TRTreeType_pine, _TRTreeType_tree1]);
+    _TRTreeType_tree2 = [TRTreeType treeTypeWithOrdinal:2 name:@"tree2"];
+    _TRTreeType_tree3 = [TRTreeType treeTypeWithOrdinal:3 name:@"tree3"];
+    _TRTreeType_yellow = [TRTreeType treeTypeWithOrdinal:4 name:@"yellow"];
+    _TRTreeType_values = (@[_TRTreeType_pine, _TRTreeType_tree1, _TRTreeType_tree2, _TRTreeType_tree3, _TRTreeType_yellow]);
 }
 
 + (TRTreeType*)pine {
@@ -238,6 +244,18 @@ static NSArray* _TRTreeType_values;
 
 + (TRTreeType*)tree1 {
     return _TRTreeType_tree1;
+}
+
++ (TRTreeType*)tree2 {
+    return _TRTreeType_tree2;
+}
+
++ (TRTreeType*)tree3 {
+    return _TRTreeType_tree3;
+}
+
++ (TRTreeType*)yellow {
+    return _TRTreeType_yellow;
 }
 
 + (NSArray*)values {

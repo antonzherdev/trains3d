@@ -22,7 +22,7 @@ static ODClassType* _TRTreeView_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _textures = (@[[EGGlobal textureForFile:@"Pine.png"], [EGGlobal textureForFile:@"Tree1.png"]]);
+        _textures = (@[[EGGlobal textureForFile:@"Pine.png"], [EGGlobal textureForFile:@"Tree1.png"], [EGGlobal textureForFile:@"Tree2.png"], [EGGlobal textureForFile:@"Tree3.png"], [EGGlobal textureForFile:@"YellowTree.png"]]);
         _materials = [[[_textures chain] map:^EGColorSource*(EGTexture* _) {
             return [EGColorSource applyTexture:_];
         }] toArray];

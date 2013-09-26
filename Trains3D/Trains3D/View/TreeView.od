@@ -2,7 +2,8 @@ package com.antonzherdev.trains
 
 
 class TreeView {
-    val textures = [textureFor("Pine.png"), textureFor("Tree1.png")]
+    val textures = [textureFor("Pine.png"), textureFor("Tree1.png"), textureFor("Tree2.png"), textureFor("Tree3.png")
+        , textureFor("YellowTree.png")]
     val materials = textures.chain.map(ColorSource(_)).toArray
     val rects = textures.chain.map(Rect(vec2(0, 0), _.size/(_.size.y*2))).toArray
 
