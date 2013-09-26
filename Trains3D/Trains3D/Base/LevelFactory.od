@@ -19,13 +19,13 @@ class LevelFactory {
         repairCost = 2000
         )
 
-    static val treeRules = TreesRules(thickness = 1)
+    static val treeRules = ForestRules(types = TreeType.values, thickness = 1)
     private static def train(cars : Range, speed : Range) : Level -> void = (level : Level)->
         level.runTrainWith(TrainGenerator(TrainType.simple, cars, speed, [CarType.car, CarType.engine]))
     private static def createNewCity : Level -> void = (level : Level)->
         level.createNewCity
     private static val rules = [
-        LevelRules(vec2i(5, 3), scoreRules, TreesRules(thickness = 1), repairerSpeed = 30, [
+        LevelRules(vec2i(5, 3), scoreRules, ForestRules(types = TreeType.values, thickness = 1), repairerSpeed = 30, [
             (1, train(cars = 2.to(4), speed = 50.to(60).set(step = 10))),
 //            (10, train(cars = 2.to(4), speed = 50.to(60).set(step = 10))),
             (15, createNewCity)//,

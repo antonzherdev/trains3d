@@ -2,19 +2,21 @@ package com.antonzherdev.trains
 
 
 class TreeView {
-    val pineTexture = textureFor("Pine.png")
-    val pine = ColorSource(pineTexture)
-    val pineRect = Rect(vec2(0, 0), pineTexture.size/(pineTexture.size.y*2))
-    def draw(trees : Trees) {
+    val textures = [textureFor("Pine.png"), textureFor("Tree1.png")]
+    val materials = textures.chain.map(ColorSource(_)).toArray
+    val rects = textures.chain.map(Rect(vec2(0, 0), _.size/(_.size.y*2))).toArray
+
+    def draw(forest : Forest) {
         glAlphaFunc(GL_GREATER, 0.2)
         glEnable(GL_ALPHA_TEST)
         BlendFunction.standard {
-            trees.trees.for(draw(_))
+            forest.trees.for(draw(_))
         }
         glDisable(GL_ALPHA_TEST)
     }
 
     private def draw(tree : Tree) {
-        Billboard.draw(pine, at = vec3(tree.position, 0), (pineRect*tree.size).centerX)
+        val tp = tree.treeType.ordinal
+        Billboard.draw(textures(tp), at = vec3(tree.position, 0), (rects(tp)*tree.size).centerX)
     }
 }

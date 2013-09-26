@@ -14,7 +14,7 @@
 @implementation TRLevelRules{
     GEVec2i _mapSize;
     TRScoreRules* _scoreRules;
-    TRTreesRules* _treesRules;
+    TRForestRules* _treesRules;
     NSUInteger _repairerSpeed;
     id<CNSeq> _events;
 }
@@ -25,11 +25,11 @@ static ODClassType* _TRLevelRules_type;
 @synthesize repairerSpeed = _repairerSpeed;
 @synthesize events = _events;
 
-+ (id)levelRulesWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules treesRules:(TRTreesRules*)treesRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
++ (id)levelRulesWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules treesRules:(TRForestRules*)treesRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
     return [[TRLevelRules alloc] initWithMapSize:mapSize scoreRules:scoreRules treesRules:treesRules repairerSpeed:repairerSpeed events:events];
 }
 
-- (id)initWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules treesRules:(TRTreesRules*)treesRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
+- (id)initWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules treesRules:(TRForestRules*)treesRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
     self = [super init];
     if(self) {
         _mapSize = mapSize;
@@ -100,7 +100,7 @@ static ODClassType* _TRLevelRules_type;
     EGSchedule* _schedule;
     id<CNSeq> __trains;
     id __repairer;
-    TRTrees* _trees;
+    TRForest* _forest;
     TRTrainsCollisionWorld* _collisionWorld;
     TRTrainsDynamicWorld* _dynamicWorld;
     NSMutableArray* __dyingTrains;
@@ -112,7 +112,7 @@ static ODClassType* _TRLevel_type;
 @synthesize score = _score;
 @synthesize railroad = _railroad;
 @synthesize schedule = _schedule;
-@synthesize trees = _trees;
+@synthesize forest = _forest;
 @synthesize collisionWorld = _collisionWorld;
 @synthesize dynamicWorld = _dynamicWorld;
 
@@ -132,7 +132,7 @@ static ODClassType* _TRLevel_type;
         _schedule = [self createSchedule];
         __trains = (@[]);
         __repairer = [CNOption none];
-        _trees = [TRTrees treesWithMap:_map rules:_rules.treesRules];
+        _forest = [TRForest forestWithMap:_map rules:_rules.treesRules];
         _collisionWorld = [TRTrainsCollisionWorld trainsCollisionWorld];
         _dynamicWorld = [TRTrainsDynamicWorld trainsDynamicWorld];
         __dyingTrains = [NSMutableArray mutableArray];

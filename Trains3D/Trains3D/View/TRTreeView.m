@@ -1,19 +1,19 @@
 #import "TRTreeView.h"
 
-#import "EGTexture.h"
 #import "EGContext.h"
+#import "EGTexture.h"
 #import "GL.h"
 #import "TRTree.h"
 #import "EGBillboard.h"
 @implementation TRTreeView{
-    EGTexture* _pineTexture;
-    EGColorSource* _pine;
-    GERect _pineRect;
+    id<CNSeq> _textures;
+    id<CNSeq> _materials;
+    id<CNSeq> _rects;
 }
 static ODClassType* _TRTreeView_type;
-@synthesize pineTexture = _pineTexture;
-@synthesize pine = _pine;
-@synthesize pineRect = _pineRect;
+@synthesize textures = _textures;
+@synthesize materials = _materials;
+@synthesize rects = _rects;
 
 + (id)treeView {
     return [[TRTreeView alloc] init];
@@ -22,9 +22,13 @@ static ODClassType* _TRTreeView_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _pineTexture = [EGGlobal textureForFile:@"Pine.png"];
-        _pine = [EGColorSource applyTexture:_pineTexture];
-        _pineRect = GERectMake(GEVec2Make(0.0, 0.0), geVec2DivF4([_pineTexture size], [_pineTexture size].y * 2));
+        _textures = (@[[EGGlobal textureForFile:@"Pine.png"], [EGGlobal textureForFile:@"Tree1.png"]]);
+        _materials = [[[_textures chain] map:^EGColorSource*(EGTexture* _) {
+            return [EGColorSource applyTexture:_];
+        }] toArray];
+        _rects = [[[_textures chain] map:^id(EGTexture* _) {
+            return wrap(GERect, GERectMake(GEVec2Make(0.0, 0.0), geVec2DivF4([_ size], [_ size].y * 2)));
+        }] toArray];
     }
     
     return self;
@@ -35,11 +39,11 @@ static ODClassType* _TRTreeView_type;
     _TRTreeView_type = [ODClassType classTypeWithCls:[TRTreeView class]];
 }
 
-- (void)drawTrees:(TRTrees*)trees {
+- (void)drawForest:(TRForest*)forest {
     glAlphaFunc(GL_GREATER, 0.2);
     glEnable(GL_ALPHA_TEST);
     egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
-        [trees.trees forEach:^void(TRTree* _) {
+        [forest.trees forEach:^void(TRTree* _) {
             [self drawTree:_];
         }];
     });
@@ -47,7 +51,8 @@ static ODClassType* _TRTreeView_type;
 }
 
 - (void)drawTree:(TRTree*)tree {
-    [EGBillboard drawMaterial:_pine at:geVec3ApplyVec2Z(tree.position, 0.0) rect:geRectCenterX(geRectMulVec2(_pineRect, tree.size))];
+    NSUInteger tp = tree.treeType.ordinal;
+    [EGBillboard drawMaterial:[EGColorSource applyTexture:((EGTexture*)([_textures applyIndex:tp]))] at:geVec3ApplyVec2Z(tree.position, 0.0) rect:geRectCenterX(geRectMulVec2(uwrap(GERect, [_rects applyIndex:tp]), tree.size))];
 }
 
 - (ODClassType*)type {

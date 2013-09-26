@@ -2,13 +2,13 @@
 #import "GEVec.h"
 #import "EGScene.h"
 @class TRScoreRules;
-@class TRTreesRules;
+@class TRForestRules;
 @class EGMapSso;
 @class TRNotifications;
 @class TRScore;
 @class TRRailroad;
 @class EGSchedule;
-@class TRTrees;
+@class TRForest;
 @class TRTrainsCollisionWorld;
 @class TRTrainsDynamicWorld;
 @class TRCity;
@@ -31,12 +31,12 @@
 @interface TRLevelRules : NSObject
 @property (nonatomic, readonly) GEVec2i mapSize;
 @property (nonatomic, readonly) TRScoreRules* scoreRules;
-@property (nonatomic, readonly) TRTreesRules* treesRules;
+@property (nonatomic, readonly) TRForestRules* treesRules;
 @property (nonatomic, readonly) NSUInteger repairerSpeed;
 @property (nonatomic, readonly) id<CNSeq> events;
 
-+ (id)levelRulesWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules treesRules:(TRTreesRules*)treesRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
-- (id)initWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules treesRules:(TRTreesRules*)treesRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
++ (id)levelRulesWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules treesRules:(TRForestRules*)treesRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
+- (id)initWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules treesRules:(TRForestRules*)treesRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -49,7 +49,7 @@
 @property (nonatomic, readonly) TRScore* score;
 @property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic, readonly) EGSchedule* schedule;
-@property (nonatomic, readonly) TRTrees* trees;
+@property (nonatomic, readonly) TRForest* forest;
 @property (nonatomic, readonly) TRTrainsCollisionWorld* collisionWorld;
 @property (nonatomic, readonly) TRTrainsDynamicWorld* dynamicWorld;
 

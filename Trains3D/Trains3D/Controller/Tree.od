@@ -1,19 +1,25 @@
 package com.antonzherdev.trains
 
 
-class TreesRules(
+class ForestRules(
+    types : [TreeType],
     thickness : float //count on tile
 )
 
-class Trees( map : MapSso, rules : TreesRules) {
+class Forest( map : MapSso, rules : ForestRules) {
     val trees = (rules.thickness * map.allTiles.count).cast<int>.range.chain.map{ _ ->
         val tile = map.allTiles.randomItem.get
         val pos = vec2(math.randomFloatGap(-0.5, 0.5), math.randomFloatGap(-0.5, 0.5))
-        Tree(pos + tile, vec2(math.randomFloatGap(0.8, 1.2), math.randomFloatGap(0.8, 1.2)))
+        Tree(rules.types.randomItem.get, pos + tile, vec2(math.randomFloatGap(0.8, 1.2), math.randomFloatGap(0.8, 1.2)))
     }.sort.toArray
 }
 
 
-class Tree(position : vec2, size : vec2) extends Comparable<Tree> {
+class Tree(treeType : TreeType, position : vec2, size : vec2) extends Comparable<Tree> {
     def compare(to : Tree) : int = -(position.y - position.x).compare(to.position.y - to.position.x)
+}
+
+enum TreeType {
+    pine()
+    tree1()
 }
