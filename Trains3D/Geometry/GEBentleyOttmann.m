@@ -399,7 +399,7 @@ static ODClassType* _GEBentleyOttmannEventQueue_type;
 - (void)offerPoint:(GEVec2)point event:(GEBentleyOttmannEvent*)event {
     [[_events objectForKey:wrap(GEVec2, point) orUpdateWith:^NSMutableArray*() {
         return [NSMutableArray mutableArray];
-    }] addItem:event];
+    }] appendItem:event];
 }
 
 - (id<CNSeq>)poll {
@@ -555,7 +555,7 @@ static ODClassType* _GESweepLine_type;
                 }
             }
         } else {
-            [_events addItem:event];
+            [_events appendItem:event];
             [self checkIntersectionA:[CNOption applyValue:event] b:[self aboveEvent:event]];
             [self checkIntersectionA:[CNOption applyValue:event] b:[self belowEvent:event]];
         }
@@ -575,7 +575,7 @@ static ODClassType* _GESweepLine_type;
             }] toArray];
             [self sweepToEvent:event];
             [toInsert forEach:^void(GEBentleyOttmannPointEvent* e) {
-                [_events addItem:e];
+                [_events appendItem:e];
                 [self checkIntersectionA:[CNOption applyValue:e] b:[self aboveEvent:e]];
                 [self checkIntersectionA:[CNOption applyValue:e] b:[self belowEvent:e]];
             }];
@@ -606,8 +606,8 @@ static ODClassType* _GESweepLine_type;
         NSMutableSet* existing = ((NSMutableSet*)([_intersections objectForKey:[GEPointClass pointClassWithPoint:point] orUpdateWith:^NSMutableSet*() {
             return [NSMutableSet mutableSet];
         }]));
-        [existing addItem:a];
-        [existing addItem:b];
+        [existing appendItem:a];
+        [existing appendItem:b];
         if(point.x > _currentEventPoint.x || (eqf4(point.x, _currentEventPoint.x) && point.y > _currentEventPoint.y)) {
             GEBentleyOttmannIntersectionEvent* intersection = [GEBentleyOttmannIntersectionEvent bentleyOttmannIntersectionEventWithPoint:point];
             [_queue offerPoint:point event:intersection];

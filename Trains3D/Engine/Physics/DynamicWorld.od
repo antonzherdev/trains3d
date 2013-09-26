@@ -4,7 +4,7 @@ stub class DynamicWorld<T>(gravity : vec3) extends Controller {
     private val _bodies = MutableArray<RigidBody<T>>()
     def bodies : [RigidBody<T>] = _bodies
     def add(body : RigidBody<T>) {
-        _bodies.add(body)
+        _bodies.append(body)
     }
     def remove(body : RigidBody<T>) {
         _bodies.remove(body)

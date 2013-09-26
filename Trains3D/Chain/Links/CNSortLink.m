@@ -34,7 +34,7 @@
 - (CNYield *)buildYield:(CNYield *)yield {
     __block CNMutableTreeSet* ret = [CNMutableTreeSet newWithComparator:_comparator];
     return [CNYield decorateYield: yield begin:nil yield:^CNYieldResult(id item) {
-        [ret addItem:item];
+        [ret appendItem:item];
         return cnYieldContinue;
     } end:^CNYieldResult(CNYieldResult result) {
         if(result != cnYieldBreak) {

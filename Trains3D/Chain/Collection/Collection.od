@@ -6,10 +6,10 @@ trait Iterator<T> {
 }
 
 trait Builder<T, C extends Traversable<T>> {
-    def add(item : T)
+    def append(item : T)
     def build : C
-    def addAll(item : Traversable<T>) {
-        item.for(add(_))
+    def appendAll(items : Traversable<T>) {
+        items.for(append(_))
     }
 }
 
@@ -43,13 +43,13 @@ trait Traversable<T> {
     def head : T?
 
     def convertWith<C extends Traversable<T>>(builder : Builder<T, C>) : C = {
-        for(x -> builder.add(x))
+        for(x -> builder.append(x))
         builder.build
     }
 }
 
 trait MutableTraversable<T> extends Traversable<T> {
-    def add(item : T)
+    def append(item : T)
     def remove(item : T)
 }
 

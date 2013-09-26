@@ -66,8 +66,8 @@ static ODClassType* _CNMapDefault_type;
     return value;
 }
 
-- (void)addItem:(CNTuple*)item {
-    [_map addItem:item];
+- (void)appendItem:(CNTuple*)item {
+    [_map appendItem:item];
 }
 
 - (void)removeItem:(CNTuple*)item {
@@ -137,7 +137,7 @@ static ODClassType* _CNMapDefault_type;
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {
     [self forEach:^void(id x) {
-        [builder addItem:x];
+        [builder appendItem:x];
     }];
     return [builder build];
 }

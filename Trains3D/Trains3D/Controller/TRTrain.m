@@ -137,7 +137,7 @@ static ODClassType* _TRTrain_type;
 }
 
 - (id<CNSeq>)cars {
-    return [__lazy_cars get];
+    return ((id<CNSeq>)([__lazy_cars get]));
 }
 
 - (BOOL)isBack {

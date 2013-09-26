@@ -598,7 +598,7 @@ static ODClassType* _TRRailroad_type;
 }
 
 - (void)addChangeListener:(void(^)())changeListener {
-    __changeListeners = [__changeListeners arrayByAddingItem:changeListener];
+    __changeListeners = [__changeListeners addItem:changeListener];
 }
 
 - (BOOL)canAddRail:(TRRail*)rail {
@@ -712,12 +712,12 @@ static ODClassType* _TRRailroad_type;
         return !(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.damage point:[from setX:unumf(x)]]));
     };
     CGFloat len = from.form.length;
-    if(from.back) return [[[[[[opt get] chain] filter:^BOOL(id _) {
+    if(from.back) return [[[[[((id<CNSeq>)([opt get])) chain] filter:^BOOL(id _) {
         return floatBetween(unumf(_), len - to, len - from.x);
     }] sortDesc] map:^id(id _) {
         return numf(len - unumf(_));
     }] find:on];
-    else return [[[[[opt get] chain] filter:^BOOL(id _) {
+    else return [[[[((id<CNSeq>)([opt get])) chain] filter:^BOOL(id _) {
         return floatBetween(unumf(_), from.x, to);
     }] sort] find:on];
 }
@@ -728,12 +728,12 @@ static ODClassType* _TRRailroad_type;
     } else {
         [_damagesIndex modifyBy:^id(id arr) {
             return [CNOption applyValue:[[arr mapF:^id<CNSeq>(id<CNSeq> _) {
-                return [_ arrayByAddingItem:numf(point.x)];
+                return [_ addItem:numf(point.x)];
             }] getOrElseF:^id<CNSeq>() {
-                return [ arrf(1) {point.x}];
+                return (@[numf(point.x)]);
             }]];
         } forKey:tuple(wrap(GEVec2i, point.tile), point.form)];
-        [__damagesPoints addItem:point];
+        [__damagesPoints appendItem:point];
     }
 }
 

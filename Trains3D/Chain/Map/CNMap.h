@@ -21,7 +21,7 @@
 - (id)removeForKey:(id)key;
 - (id)objectForKey:(id)key orUpdateWith:(id(^)())orUpdateWith;
 - (id)modifyBy:(id(^)(id))by forKey:(id)forKey;
-- (void)addItem:(CNTuple*)item;
+- (void)appendItem:(CNTuple*)item;
 - (void)removeItem:(CNTuple*)item;
 @end
 
@@ -41,7 +41,7 @@
 - (BOOL)containsKey:(id)key;
 - (void)setValue:(id)value forKey:(id)forKey;
 - (id)modifyBy:(id(^)(id))by forKey:(id)forKey;
-- (void)addItem:(CNTuple*)item;
+- (void)appendItem:(CNTuple*)item;
 - (void)removeItem:(CNTuple*)item;
 + (ODClassType*)type;
 @end

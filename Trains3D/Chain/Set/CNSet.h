@@ -22,7 +22,7 @@
 + (id)hashSetBuilder;
 - (id)init;
 - (ODClassType*)type;
-- (void)addItem:(id)item;
+- (void)appendItem:(id)item;
 - (NSSet*)build;
 + (ODClassType*)type;
 @end

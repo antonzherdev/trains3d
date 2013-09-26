@@ -29,9 +29,9 @@ static ODClassType* _EGSchedule_type;
 
 - (void)scheduleAfter:(CGFloat)after event:(void(^)())event {
     [__map modifyBy:^id(id _) {
-        return [CNOption applyValue:[[_ getOrElseF:^id<CNSeq>() {
+        return [CNOption applyValue:[((id<CNSeq>)([_ getOrElseF:^id<CNSeq>() {
             return (@[]);
-        }] arrayByAddingItem:event]];
+        }])) addItem:event]];
     } forKey:numf(__current + after)];
     __next = unumf([[__map firstKey] get]);
 }
@@ -39,7 +39,7 @@ static ODClassType* _EGSchedule_type;
 - (void)updateWithDelta:(CGFloat)delta {
     __current += delta;
     while(__next > 0 && __current > __next) {
-        [((CNTuple*)([[__map pollFirst] get])).b forEach:^void(void(^event)()) {
+        [((id<CNSeq>)(((CNTuple*)([[__map pollFirst] get])).b)) forEach:^void(void(^event)()) {
             ((void(^)())(event))();
         }];
         __next = unumf([[__map firstKey] getOrValue:@-1.0]);

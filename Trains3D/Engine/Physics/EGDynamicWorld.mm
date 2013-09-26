@@ -66,7 +66,7 @@ static ODClassType* _EGDynamicWorld_type;
 }
 
 - (void)addBody:(EGRigidBody *)body {
-    [__bodies addItem:body];
+    [__bodies addObject:body];
     _world->addRigidBody(static_cast<btRigidBody*>(body.obj));
 }
 

@@ -75,5 +75,5 @@ class RailPoint(tile : vec2i, form : RailForm, x : float, back : bool) {
 }
 
 class RailPointCorrection(point : RailPoint, error : float) {
-    def addErrorToPoint : RailPoint = if(error == 0) point else point.add(error)
+    def addErrorToPoint : RailPoint = if(error == 0) point else point + error
 }

@@ -95,14 +95,21 @@ static ODClassType* _CNOption_type;
     return [self convertWithBuilder:[CNHashSetBuilder hashSetBuilder]];
 }
 
-- (id<CNSeq>)arrayByAddingItem:(id)item {
+- (id<CNSeq>)addItem:(id)item {
     CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
-    [builder addAllItem:self];
-    [builder addItem:item];
+    [builder appendAllItems:self];
+    [builder appendItem:item];
     return ((NSArray*)([builder build]));
 }
 
-- (id<CNSeq>)arrayByRemovingItem:(id)item {
+- (id<CNSeq>)addSeq:(id<CNSeq>)seq {
+    CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
+    [builder appendAllItems:self];
+    [builder appendAllItems:seq];
+    return ((NSArray*)([builder build]));
+}
+
+- (id<CNSeq>)subItem:(id)item {
     return [[[self chain] filter:^BOOL(id _) {
         return !([_ isEqual:item]);
     }] toArray];
@@ -179,7 +186,7 @@ static ODClassType* _CNOption_type;
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {
     [self forEach:^void(id x) {
-        [builder addItem:x];
+        [builder appendItem:x];
     }];
     return [builder build];
 }

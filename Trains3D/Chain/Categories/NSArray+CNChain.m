@@ -32,7 +32,7 @@
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {
     for(id x in self)  {
-        [builder addItem:x];
+        [builder appendItem:x];
     }
     return [builder build];
 }
@@ -99,6 +99,22 @@
 - (id <CNSet>)toSet {
     return [NSSet setWithArray:self];
 }
+
+- (id <CNSeq>)addItem:(id)item {
+    return [self arrayByAddingObject:item];
+}
+
+- (id<CNSeq>)addSeq:(id<CNSeq>)seq {
+    CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
+    [builder appendAllItems:self];
+    [builder appendAllItems:seq];
+    return ((NSArray*)([builder build]));
+}
+
+- (id <CNSeq>)subItem:(id)item {
+    return [self arrayByRemovingObject:item];
+}
+
 
 - (id <CNSeq>)arrayByAddingItem:(id)item {
     return [self arrayByAddingObject:item];

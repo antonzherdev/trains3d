@@ -32,9 +32,9 @@ static ODClassType* _EGStandardShaderSystem_type;
     id<CNMap> lightMap = [[[EGGlobal.context.environment.lights chain] groupBy:^ODClassType*(EGLight* _) {
         return _.type;
     }] toMap];
-    id<CNSeq> directLights = [[lightMap optKey:EGDirectLight.type] getOrElseF:^id<CNSeq>() {
+    id<CNSeq> directLights = ((id<CNSeq>)([[lightMap optKey:EGDirectLight.type] getOrElseF:^id<CNSeq>() {
         return (@[]);
-    }];
+    }]));
     EGStandardShaderKey* key = [EGStandardShaderKey standardShaderKeyWithDirectLightCount:[directLights count] texture:[material.diffuse.texture isDefined]];
     return ((EGStandardShader*)([_EGStandardShaderSystem_shaders objectForKey:key orUpdateWith:^EGStandardShader*() {
         return [key shader];

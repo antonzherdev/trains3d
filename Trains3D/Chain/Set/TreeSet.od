@@ -10,7 +10,7 @@ class MutableTreeSet<T>(map : MutableTreeMap<T, Object>) extends MutableSet<T> {
 
     def between(a : T, b : T) : [T]
 
-    def add(item : T) {
+    def append(item : T) {
         map.set(value = obj, forKey = item)
     }
 
@@ -33,7 +33,7 @@ class MutableTreeSet<T>(map : MutableTreeMap<T, Object>) extends MutableSet<T> {
     }
 
     def addAll(objects : Traversable<T>) {
-        objects.for(add(item = _))
+        objects.for(append(item = _))
     }
 
     def reorder : MutableTreeSet<T> = {

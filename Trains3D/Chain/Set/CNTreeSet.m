@@ -42,7 +42,7 @@ static ODClassType* _CNMutableTreeSet_type;
     @throw @"Method between is abstract";
 }
 
-- (void)addItem:(id)item {
+- (void)appendItem:(id)item {
     [_map setValue:_CNMutableTreeSet_obj forKey:item];
 }
 
@@ -88,7 +88,7 @@ static ODClassType* _CNMutableTreeSet_type;
 
 - (void)addAllObjects:(id<CNTraversable>)objects {
     [objects forEach:^void(id _) {
-        [self addItem:_];
+        [self appendItem:_];
     }];
 }
 
@@ -148,7 +148,7 @@ static ODClassType* _CNMutableTreeSet_type;
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {
     [self forEach:^void(id x) {
-        [builder addItem:x];
+        [builder appendItem:x];
     }];
     return [builder build];
 }

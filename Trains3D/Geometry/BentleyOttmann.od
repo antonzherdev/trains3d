@@ -60,7 +60,7 @@ class BentleyOttmannEventQueue<T> {
     }
 
     def offer(point : vec2, event : BentleyOttmannEvent) {
-        events.objectFor(key = point, orUpdateWith = MutableArray<BentleyOttmannEvent<T>>() ).add(event)
+        events.objectFor(key = point, orUpdateWith = MutableArray<BentleyOttmannEvent<T>>() ).append(event)
     }
 
     def poll : [BentleyOttmannEvent] {
@@ -124,7 +124,7 @@ class SweepLine<T>
                     }
                 }
             } else {
-                events.add(event)
+                events.append(event)
                 checkIntersection(event, above(event))
                 checkIntersection(event, below(event))
             }
@@ -141,7 +141,7 @@ class SweepLine<T>
             val toInsert = set.chain.filter(events.remove(_)).toArray
             sweepTo(event)
             toInsert.for(e -> {
-                events.add(e)
+                events.append(e)
                 checkIntersection(e, above(e))
                 checkIntersection(e, below(e))
             })
@@ -170,8 +170,8 @@ class SweepLine<T>
 
             // Add the intersection.
             val existing = intersections.objectFor(key = PointClass(point), orUpdateWith = NSMutableSet<BentleyOttmannPointEvent<T>>())
-            existing.add(a)
-            existing.add(b)
+            existing.append(a)
+            existing.append(b)
 
             // If the intersection occurs to the right of the sweep line, OR
             // if the intersection is on the sweep line and it's above the

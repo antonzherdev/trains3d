@@ -34,7 +34,7 @@
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {
     for(id x in self)  {
-        [builder addItem:x];
+        [builder appendItem:x];
     }
     return [builder build];
 }

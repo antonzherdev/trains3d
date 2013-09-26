@@ -44,7 +44,7 @@ class Car(weak train : Train, carType : CarType) {
         val b = RigidBody.dynamic(self, carType.rigidShape, carType.weight)
         b.matrix = mat4.identity.translate(mid.x, mid.y, carType.height/2).rotate(line.degreeAngle, 0, 0, 1)
         val rnd = vec3(randomFloatGap(-0.1, 0.1), randomFloatGap(-0.1, 0.1), randomFloatGap(0, 5))
-        val vel = vec3(vec.mul(train.speedFloat/len*2), 0).add(rnd)
+        val vel = vec3(vec.mul(train.speedFloat/len*2), 0) + rnd
 //        val vel = Vec3(vec.mul(train.speedFloat/len*2), 0)
         b.velocity = if(train.isBack) vel.negate else vel
         b.angularVelocity = vec3(randomFloatGap(-5, 5), randomFloatGap(-5, 5), randomFloatGap(-5, 5))

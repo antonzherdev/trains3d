@@ -181,7 +181,7 @@ static ODClassType* _TRLevel_type;
     }]] randomItem] get]);
     TRCity* city = [TRCity cityWithColor:[TRCityColor values][[[self cities] count]] tile:tile angle:[self randomCityDirectionForTile:tile]];
     [_railroad addRail:[TRRail railWithTile:tile form:city.angle.form]];
-    [__cities addItem:city];
+    [__cities appendItem:city];
 }
 
 - (TRCityAngle*)randomCityDirectionForTile:(GEVec2i)tile {
@@ -200,7 +200,7 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)addTrain:(TRTrain*)train {
-    __trains = [__trains arrayByAddingItem:train];
+    __trains = [__trains addItem:train];
     [_score runTrain:train];
     [_collisionWorld addTrain:train];
     [_dynamicWorld addTrain:train];
@@ -272,9 +272,9 @@ static ODClassType* _TRLevel_type;
     if([__trains containsItem:train]) {
         [_score destroyedTrain:train];
         train.isDying = YES;
-        __trains = [__trains arrayByRemovingItem:train];
+        __trains = [__trains subItem:train];
         [_collisionWorld removeTrain:train];
-        [__dyingTrains addItem:train];
+        [__dyingTrains appendItem:train];
         [_dynamicWorld dieTrain:train];
         [_schedule scheduleAfter:5.0 event:^void() {
             [self removeTrain:train];
@@ -283,7 +283,7 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)removeTrain:(TRTrain*)train {
-    __trains = [__trains arrayByRemovingItem:train];
+    __trains = [__trains subItem:train];
     [_collisionWorld removeTrain:train];
     [_dynamicWorld removeTrain:train];
     [__dyingTrains removeItem:train];

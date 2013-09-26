@@ -7,7 +7,7 @@
     return [NSMutableArray array];
 }
 
-- (void)addItem:(id)object {
+- (void)appendItem:(id)object {
     [self addObject:object];
 }
 

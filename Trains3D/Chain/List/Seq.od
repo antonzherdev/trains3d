@@ -19,14 +19,21 @@ trait Seq<T> extends Iterable<T> {
         else apply(randomMax(count - 1))
 
     def toSet : Set<T> = convertWith(HashSetBuilder<T>())
-    def arrayByAdding(item : T) : Seq<T> = {
+    def add(item : T) : Seq<T> = {
         val builder = ArrayBuilder<T>()
-        builder.addAll(self)
-        builder.add(item)
+        builder.appendAll(self)
+        builder.append(item)
         builder.build
     }
 
-    def arrayByRemoving(item : T) : Seq<T> = {
+    def add(seq : Seq<T>) : Seq<T> = {
+        val builder = ArrayBuilder<T>()
+        builder.appendAll(self)
+        builder.appendAll(seq)
+        builder.build
+    }
+
+    def sub(item : T) : Seq<T> = {
         chain.filter(_ != item).toArray
     }
 
@@ -50,8 +57,8 @@ trait MutableSeq<T> extends Seq<T> with MutableIterable<T>
 class ArrayBuilder<T> extends Builder<T, Array<T>> {
     val array = MutableArray<T>()
 
-    def add(item : T) {
-        array.add(item)
+    def append(item : T) {
+        array.append(item)
         self
     }
 

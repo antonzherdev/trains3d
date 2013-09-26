@@ -41,7 +41,7 @@ class Level(rules : LevelRules) extends Controller {
         val tile = map.partialTiles.chain.exclude(cities.chain.map(_.tile)).randomItem.get
         val city = City(CityColor[cities.count], tile, randomCityDirectionFor(tile))
         railroad.add(Rail(tile, city.angle.form))
-        _cities.add(city)
+        _cities.append(city)
     }
 
     private def randomCityDirectionFor(tile : vec2i) = {
@@ -120,7 +120,7 @@ class Level(rules : LevelRules) extends Controller {
             train.isDying = true
             _trains -= train
             collisionWorld.remove(train)
-            _dyingTrains.add(train)
+            _dyingTrains.append(train)
             dynamicWorld.die(train)
             schedule.schedule(after = 5) {
                 remove(train)

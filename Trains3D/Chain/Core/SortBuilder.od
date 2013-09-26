@@ -4,15 +4,15 @@ class SortBuilder<A>(chain : Chain<A>) {
     private val functions = MutableArray<(A, A) -> int>()
 
     def asc<B extends Comparable<B>>(by : A -> B) : SortBuilder<A> = {
-        functions.add((x : A, y : A) -> by(x).compare(by(y)))
+        functions.append((x : A, y : A) -> by(x).compare(by(y)))
         self
     }
     def desc<B extends Comparable<B>>(by : A -> B) : SortBuilder<A> = {
-        functions.add((x : A, y : A) -> by(y).compare(by(x)))
+        functions.append((x : A, y : A) -> by(y).compare(by(x)))
         self
     }
     def and(f : (A, A) -> int) : SortBuilder<A> = {
-        functions.add(f)
+        functions.append(f)
         self
     }
     def endSort : Chain<A> = {

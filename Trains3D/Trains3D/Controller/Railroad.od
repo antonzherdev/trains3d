@@ -135,7 +135,7 @@ class Railroad(map : MapSso, score : Score) {
 
 
     def moveWith(obstacleProcessor : Obstacle -> bool, forLength : float, point : RailPoint) : RailPointCorrection = {
-        val p = point.add(forLength)
+        val p = point + forLength
 
         val correction = p.correct
         val damage = checkDamagesWith(obstacleProcessor, point, correction.point.x)
@@ -192,7 +192,7 @@ class Railroad(map : MapSso, score : Score) {
         if(point.back) addDamageAt(point.invert)
         else {
             damagesIndex.modify(by = arr -> arr.map(_ + point.x).getOrElse([point.x]), forKey = (point.tile, point.form))
-            _damagesPoints.add(point)
+            _damagesPoints.append(point)
         }
     }
 

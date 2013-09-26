@@ -34,7 +34,7 @@
     return v;
 }
 
-- (void)addItem:(CNTuple *)object {
+- (void)appendItem:(CNTuple *)object {
     [self setObject:object.b forKey:object.a];
 }
 

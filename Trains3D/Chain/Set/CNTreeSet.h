@@ -21,7 +21,7 @@
 + (CNMutableTreeSet*)newWithComparator:(NSInteger(^)(id, id))comparator;
 + (CNMutableTreeSet*)apply;
 - (id<CNSeq>)betweenA:(id)a b:(id)b;
-- (void)addItem:(id)item;
+- (void)appendItem:(id)item;
 - (BOOL)removeItem:(id)item;
 - (id)higherThanItem:(id)item;
 - (id)lowerThanItem:(id)item;

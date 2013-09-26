@@ -19,9 +19,9 @@
 
 
 @protocol CNBuilder<NSObject>
-- (void)addItem:(id)item;
+- (void)appendItem:(id)item;
 - (id)build;
-- (void)addAllItem:(id<CNTraversable>)item;
+- (void)appendAllItems:(id<CNTraversable>)items;
 @end
 
 
@@ -36,7 +36,7 @@
 
 
 @protocol CNMutableTraversable<CNTraversable>
-- (void)addItem:(id)item;
+- (void)appendItem:(id)item;
 - (void)removeItem:(id)item;
 @end
 

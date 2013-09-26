@@ -101,7 +101,7 @@ static ODClassType* _CNPair_type;
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {
     [self forEach:^void(id x) {
-        [builder addItem:x];
+        [builder appendItem:x];
     }];
     return [builder build];
 }

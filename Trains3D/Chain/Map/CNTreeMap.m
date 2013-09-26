@@ -412,7 +412,7 @@ static ODClassType* _CNMutableTreeMap_type;
     return newObject;
 }
 
-- (void)addItem:(CNTuple*)item {
+- (void)appendItem:(CNTuple*)item {
     [self setValue:item.a forKey:item.b];
 }
 
@@ -483,7 +483,7 @@ static ODClassType* _CNMutableTreeMap_type;
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {
     [self forEach:^void(id x) {
-        [builder addItem:x];
+        [builder appendItem:x];
     }];
     return [builder build];
 }
@@ -697,7 +697,7 @@ static ODClassType* _CNTreeMapKeySet_type;
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {
     [self forEach:^void(id x) {
-        [builder addItem:x];
+        [builder appendItem:x];
     }];
     return [builder build];
 }
@@ -892,7 +892,7 @@ static ODClassType* _CNTreeMapValues_type;
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {
     [self forEach:^void(id x) {
-        [builder addItem:x];
+        [builder appendItem:x];
     }];
     return [builder build];
 }

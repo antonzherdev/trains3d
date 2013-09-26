@@ -16,8 +16,9 @@
 - (id)applyIndex:(NSUInteger)index;
 - (id)randomItem;
 - (id<CNSet>)toSet;
-- (id<CNSeq>)arrayByAddingItem:(id)item;
-- (id<CNSeq>)arrayByRemovingItem:(id)item;
+- (id<CNSeq>)addItem:(id)item;
+- (id<CNSeq>)addSeq:(id<CNSeq>)seq;
+- (id<CNSeq>)subItem:(id)item;
 - (BOOL)isEqualToSeq:(id<CNSeq>)seq;
 - (BOOL)isEmpty;
 - (id)head;
@@ -34,7 +35,7 @@
 + (id)arrayBuilder;
 - (id)init;
 - (ODClassType*)type;
-- (void)addItem:(id)item;
+- (void)appendItem:(id)item;
 - (NSArray*)build;
 + (ODClassType*)type;
 @end
