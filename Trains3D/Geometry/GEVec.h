@@ -322,6 +322,8 @@ float geRectWidth(GERect self);
 float geRectHeight(GERect self);
 BOOL geRectContainsVec2(GERect self, GEVec2 vec2);
 GERect geRectAddVec2(GERect self, GEVec2 vec2);
+GERect geRectMulF(GERect self, CGFloat f);
+GERect geRectMulVec2(GERect self, GEVec2 vec2);
 BOOL geRectIntersectsRect(GERect self, GERect rect);
 GERect geRectThickenHalfSize(GERect self, GEVec2 halfSize);
 GERect geRectDivVec2(GERect self, GEVec2 vec2);

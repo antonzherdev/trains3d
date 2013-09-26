@@ -129,6 +129,8 @@ struct Rect(origin : vec2, size : vec2) {
         && vec2.y <= origin.y + size.y
 
     def add(vec2 : vec2) = Rect(origin + vec2, size)
+    def mul(f : float) = Rect(origin*f, size*f)
+    def mul(vec2 : vec2) = Rect(origin*vec2, size*vec2)
 
     def intersects(rect : Rect) : bool =
         origin.x <= rect.x2 && x2 >= rect.origin.x &&

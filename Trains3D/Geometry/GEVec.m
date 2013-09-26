@@ -524,6 +524,12 @@ BOOL geRectContainsVec2(GERect self, GEVec2 vec2) {
 GERect geRectAddVec2(GERect self, GEVec2 vec2) {
     return GERectMake(geVec2AddVec2(self.origin, vec2), self.size);
 }
+GERect geRectMulF(GERect self, CGFloat f) {
+    return GERectMake(geVec2MulF(self.origin, f), geVec2MulF(self.size, f));
+}
+GERect geRectMulVec2(GERect self, GEVec2 vec2) {
+    return GERectMake(geVec2MulVec2(self.origin, vec2), geVec2MulVec2(self.size, vec2));
+}
 BOOL geRectIntersectsRect(GERect self, GERect rect) {
     return self.origin.x <= geRectX2(rect) && geRectX2(self) >= rect.origin.x && self.origin.y <= geRectY2(rect) && geRectY2(self) >= rect.origin.y;
 }

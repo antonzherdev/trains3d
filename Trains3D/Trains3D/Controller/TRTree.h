@@ -30,9 +30,10 @@
 
 @interface TRTree : NSObject<ODComparable>
 @property (nonatomic, readonly) GEVec2 position;
+@property (nonatomic, readonly) GEVec2 size;
 
-+ (id)treeWithPosition:(GEVec2)position;
-- (id)initWithPosition:(GEVec2)position;
++ (id)treeWithPosition:(GEVec2)position size:(GEVec2)size;
+- (id)initWithPosition:(GEVec2)position size:(GEVec2)size;
 - (ODClassType*)type;
 - (NSInteger)compareTo:(TRTree*)to;
 + (ODClassType*)type;

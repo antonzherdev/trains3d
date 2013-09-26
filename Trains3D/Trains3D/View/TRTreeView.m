@@ -24,7 +24,7 @@ static ODClassType* _TRTreeView_type;
     if(self) {
         _pineTexture = [EGGlobal textureForFile:@"Pine.png"];
         _pine = [EGColorSource applyTexture:_pineTexture];
-        _pineRect = geRectCenterX(GERectMake(GEVec2Make(0.0, 0.0), geVec2DivF4([_pineTexture size], [_pineTexture size].y * 2)));
+        _pineRect = GERectMake(GEVec2Make(0.0, 0.0), geVec2DivF4([_pineTexture size], [_pineTexture size].y * 2));
     }
     
     return self;
@@ -47,7 +47,7 @@ static ODClassType* _TRTreeView_type;
 }
 
 - (void)drawTree:(TRTree*)tree {
-    [EGBillboard drawMaterial:_pine at:geVec3ApplyVec2Z(tree.position, 0.0) rect:_pineRect];
+    [EGBillboard drawMaterial:_pine at:geVec3ApplyVec2Z(tree.position, 0.0) rect:geRectCenterX(geRectMulVec2(_pineRect, tree.size))];
 }
 
 - (ODClassType*)type {

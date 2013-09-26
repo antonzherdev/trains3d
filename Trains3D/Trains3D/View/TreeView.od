@@ -4,7 +4,7 @@ package com.antonzherdev.trains
 class TreeView {
     val pineTexture = textureFor("Pine.png")
     val pine = ColorSource(pineTexture)
-    val pineRect = Rect(vec2(0, 0), pineTexture.size/(pineTexture.size.y*2)).centerX
+    val pineRect = Rect(vec2(0, 0), pineTexture.size/(pineTexture.size.y*2))
     def draw(trees : Trees) {
         glAlphaFunc(GL_GREATER, 0.2)
         glEnable(GL_ALPHA_TEST)
@@ -15,6 +15,6 @@ class TreeView {
     }
 
     private def draw(tree : Tree) {
-        Billboard.draw(pine, at = vec3(tree.position, 0), pineRect)
+        Billboard.draw(pine, at = vec3(tree.position, 0), (pineRect*tree.size).centerX)
     }
 }

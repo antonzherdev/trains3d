@@ -81,7 +81,7 @@ static ODClassType* _TRTrees_type;
         _trees = [[[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count]))) chain] map:^TRTree*(id _) {
             GEVec2i tile = uwrap(GEVec2i, [[_weakSelf.map.allTiles randomItem] get]);
             GEVec2 pos = GEVec2Make(((float)(randomFloatGap(-0.5, 0.5))), ((float)(randomFloatGap(-0.5, 0.5))));
-            return [TRTree treeWithPosition:geVec2AddVec2(pos, geVec2ApplyVec2i(tile))];
+            return [TRTree treeWithPosition:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make(((float)(randomFloatGap(0.8, 1.2))), ((float)(randomFloatGap(0.8, 1.2))))];
         }] sort] toArray];
     }
     
@@ -132,17 +132,22 @@ static ODClassType* _TRTrees_type;
 
 @implementation TRTree{
     GEVec2 _position;
+    GEVec2 _size;
 }
 static ODClassType* _TRTree_type;
 @synthesize position = _position;
+@synthesize size = _size;
 
-+ (id)treeWithPosition:(GEVec2)position {
-    return [[TRTree alloc] initWithPosition:position];
++ (id)treeWithPosition:(GEVec2)position size:(GEVec2)size {
+    return [[TRTree alloc] initWithPosition:position size:size];
 }
 
-- (id)initWithPosition:(GEVec2)position {
+- (id)initWithPosition:(GEVec2)position size:(GEVec2)size {
     self = [super init];
-    if(self) _position = position;
+    if(self) {
+        _position = position;
+        _size = size;
+    }
     
     return self;
 }
@@ -172,18 +177,20 @@ static ODClassType* _TRTree_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRTree* o = ((TRTree*)(other));
-    return GEVec2Eq(self.position, o.position);
+    return GEVec2Eq(self.position, o.position) && GEVec2Eq(self.size, o.size);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + GEVec2Hash(self.position);
+    hash = hash * 31 + GEVec2Hash(self.size);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"position=%@", GEVec2Description(self.position)];
+    [description appendFormat:@", size=%@", GEVec2Description(self.size)];
     [description appendString:@">"];
     return description;
 }
