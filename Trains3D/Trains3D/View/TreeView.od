@@ -6,9 +6,12 @@ class TreeView {
     val pine = ColorSource(pineTexture)
     val pineRect = Rect(vec2(0, 0), pineTexture.size/(pineTexture.size.y*2)).centerX
     def draw(trees : Trees) {
+        glAlphaFunc(GL_GREATER, 0.2)
+        glEnable(GL_ALPHA_TEST)
         BlendFunction.standard {
             trees.trees.for(draw(_))
         }
+        glDisable(GL_ALPHA_TEST)
     }
 
     private def draw(tree : Tree) {

@@ -10,8 +10,10 @@ class Trees( map : MapSso, rules : TreesRules) {
         val tile = map.allTiles.randomItem.get
         val pos = vec2(math.randomFloatGap(-0.5, 0.5), math.randomFloatGap(-0.5, 0.5))
         Tree(pos + tile)
-    }.toArray
+    }.sort.toArray
 }
 
 
-class Tree(position : vec2)
+class Tree(position : vec2) extends Comparable<Tree> {
+    def compare(to : Tree) : int = -(position.y - position.x).compare(to.position.y - to.position.x)
+}

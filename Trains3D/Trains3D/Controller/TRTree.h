@@ -28,12 +28,13 @@
 @end
 
 
-@interface TRTree : NSObject
+@interface TRTree : NSObject<ODComparable>
 @property (nonatomic, readonly) GEVec2 position;
 
 + (id)treeWithPosition:(GEVec2)position;
 - (id)initWithPosition:(GEVec2)position;
 - (ODClassType*)type;
+- (NSInteger)compareTo:(TRTree*)to;
 + (ODClassType*)type;
 @end
 

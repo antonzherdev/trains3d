@@ -2,6 +2,7 @@
 
 #import "EGTexture.h"
 #import "EGContext.h"
+#import "GL.h"
 #import "TRTree.h"
 #import "EGBillboard.h"
 @implementation TRTreeView{
@@ -35,11 +36,14 @@ static ODClassType* _TRTreeView_type;
 }
 
 - (void)drawTrees:(TRTrees*)trees {
+    glAlphaFunc(GL_GREATER, 0.2);
+    glEnable(GL_ALPHA_TEST);
     egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
         [trees.trees forEach:^void(TRTree* _) {
             [self drawTree:_];
         }];
     });
+    glDisable(GL_ALPHA_TEST);
 }
 
 - (void)drawTree:(TRTree*)tree {

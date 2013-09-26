@@ -78,11 +78,11 @@ static ODClassType* _TRTrees_type;
     if(self) {
         _map = map;
         _rules = rules;
-        _trees = [[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count]))) chain] map:^TRTree*(id _) {
+        _trees = [[[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count]))) chain] map:^TRTree*(id _) {
             GEVec2i tile = uwrap(GEVec2i, [[_weakSelf.map.allTiles randomItem] get]);
             GEVec2 pos = GEVec2Make(((float)(randomFloatGap(-0.5, 0.5))), ((float)(randomFloatGap(-0.5, 0.5))));
             return [TRTree treeWithPosition:geVec2AddVec2(pos, geVec2ApplyVec2i(tile))];
-        }] toArray];
+        }] sort] toArray];
     }
     
     return self;
@@ -150,6 +150,10 @@ static ODClassType* _TRTree_type;
 + (void)initialize {
     [super initialize];
     _TRTree_type = [ODClassType classTypeWithCls:[TRTree class]];
+}
+
+- (NSInteger)compareTo:(TRTree*)to {
+    return -float4CompareTo(_position.y - _position.x, to.position.y - to.position.x);
 }
 
 - (ODClassType*)type {
