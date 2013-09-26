@@ -1,6 +1,7 @@
 #import "TRLevel.h"
 
 #import "TRScore.h"
+#import "TRTree.h"
 #import "EGMapIso.h"
 #import "TRNotification.h"
 #import "TRRailroad.h"
@@ -13,24 +14,27 @@
 @implementation TRLevelRules{
     GEVec2i _mapSize;
     TRScoreRules* _scoreRules;
+    TRTreesRules* _treesRules;
     NSUInteger _repairerSpeed;
     id<CNSeq> _events;
 }
 static ODClassType* _TRLevelRules_type;
 @synthesize mapSize = _mapSize;
 @synthesize scoreRules = _scoreRules;
+@synthesize treesRules = _treesRules;
 @synthesize repairerSpeed = _repairerSpeed;
 @synthesize events = _events;
 
-+ (id)levelRulesWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
-    return [[TRLevelRules alloc] initWithMapSize:mapSize scoreRules:scoreRules repairerSpeed:repairerSpeed events:events];
++ (id)levelRulesWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules treesRules:(TRTreesRules*)treesRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
+    return [[TRLevelRules alloc] initWithMapSize:mapSize scoreRules:scoreRules treesRules:treesRules repairerSpeed:repairerSpeed events:events];
 }
 
-- (id)initWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
+- (id)initWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules treesRules:(TRTreesRules*)treesRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
     self = [super init];
     if(self) {
         _mapSize = mapSize;
         _scoreRules = scoreRules;
+        _treesRules = treesRules;
         _repairerSpeed = repairerSpeed;
         _events = events;
     }
@@ -59,13 +63,14 @@ static ODClassType* _TRLevelRules_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRLevelRules* o = ((TRLevelRules*)(other));
-    return GEVec2iEq(self.mapSize, o.mapSize) && [self.scoreRules isEqual:o.scoreRules] && self.repairerSpeed == o.repairerSpeed && [self.events isEqual:o.events];
+    return GEVec2iEq(self.mapSize, o.mapSize) && [self.scoreRules isEqual:o.scoreRules] && [self.treesRules isEqual:o.treesRules] && self.repairerSpeed == o.repairerSpeed && [self.events isEqual:o.events];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + GEVec2iHash(self.mapSize);
     hash = hash * 31 + [self.scoreRules hash];
+    hash = hash * 31 + [self.treesRules hash];
     hash = hash * 31 + self.repairerSpeed;
     hash = hash * 31 + [self.events hash];
     return hash;
@@ -75,6 +80,7 @@ static ODClassType* _TRLevelRules_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"mapSize=%@", GEVec2iDescription(self.mapSize)];
     [description appendFormat:@", scoreRules=%@", self.scoreRules];
+    [description appendFormat:@", treesRules=%@", self.treesRules];
     [description appendFormat:@", repairerSpeed=%li", self.repairerSpeed];
     [description appendFormat:@", events=%@", self.events];
     [description appendString:@">"];
@@ -94,6 +100,7 @@ static ODClassType* _TRLevelRules_type;
     EGSchedule* _schedule;
     id<CNSeq> __trains;
     id __repairer;
+    TRTrees* _trees;
     TRTrainsCollisionWorld* _collisionWorld;
     TRTrainsDynamicWorld* _dynamicWorld;
     NSMutableArray* __dyingTrains;
@@ -105,6 +112,7 @@ static ODClassType* _TRLevel_type;
 @synthesize score = _score;
 @synthesize railroad = _railroad;
 @synthesize schedule = _schedule;
+@synthesize trees = _trees;
 @synthesize collisionWorld = _collisionWorld;
 @synthesize dynamicWorld = _dynamicWorld;
 
@@ -124,6 +132,7 @@ static ODClassType* _TRLevel_type;
         _schedule = [self createSchedule];
         __trains = (@[]);
         __repairer = [CNOption none];
+        _trees = [TRTrees treesWithMap:_map rules:_rules.treesRules];
         _collisionWorld = [TRTrainsCollisionWorld trainsCollisionWorld];
         _dynamicWorld = [TRTrainsDynamicWorld trainsDynamicWorld];
         __dyingTrains = [NSMutableArray mutableArray];
@@ -321,63 +330,6 @@ static ODClassType* _TRLevel_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"rules=%@", self.rules];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
-@implementation TRTree{
-    GEVec2 _position;
-}
-static ODClassType* _TRTree_type;
-@synthesize position = _position;
-
-+ (id)treeWithPosition:(GEVec2)position {
-    return [[TRTree alloc] initWithPosition:position];
-}
-
-- (id)initWithPosition:(GEVec2)position {
-    self = [super init];
-    if(self) _position = position;
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _TRTree_type = [ODClassType classTypeWithCls:[TRTree class]];
-}
-
-- (ODClassType*)type {
-    return [TRTree type];
-}
-
-+ (ODClassType*)type {
-    return _TRTree_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRTree* o = ((TRTree*)(other));
-    return GEVec2Eq(self.position, o.position);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2Hash(self.position);
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"position=%@", GEVec2Description(self.position)];
     [description appendString:@">"];
     return description;
 }

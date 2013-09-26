@@ -2,11 +2,13 @@
 #import "GEVec.h"
 #import "EGScene.h"
 @class TRScoreRules;
+@class TRTreesRules;
 @class EGMapSso;
 @class TRNotifications;
 @class TRScore;
 @class TRRailroad;
 @class EGSchedule;
+@class TRTrees;
 @class TRTrainsCollisionWorld;
 @class TRTrainsDynamicWorld;
 @class TRCity;
@@ -25,16 +27,16 @@
 
 @class TRLevelRules;
 @class TRLevel;
-@class TRTree;
 
 @interface TRLevelRules : NSObject
 @property (nonatomic, readonly) GEVec2i mapSize;
 @property (nonatomic, readonly) TRScoreRules* scoreRules;
+@property (nonatomic, readonly) TRTreesRules* treesRules;
 @property (nonatomic, readonly) NSUInteger repairerSpeed;
 @property (nonatomic, readonly) id<CNSeq> events;
 
-+ (id)levelRulesWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
-- (id)initWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
++ (id)levelRulesWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules treesRules:(TRTreesRules*)treesRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
+- (id)initWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules treesRules:(TRTreesRules*)treesRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -47,6 +49,7 @@
 @property (nonatomic, readonly) TRScore* score;
 @property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic, readonly) EGSchedule* schedule;
+@property (nonatomic, readonly) TRTrees* trees;
 @property (nonatomic, readonly) TRTrainsCollisionWorld* collisionWorld;
 @property (nonatomic, readonly) TRTrainsDynamicWorld* dynamicWorld;
 
@@ -69,16 +72,6 @@
 - (void)destroyTrain:(TRTrain*)train;
 - (void)removeTrain:(TRTrain*)train;
 - (void)runRepairerFromCity:(TRCity*)city;
-+ (ODClassType*)type;
-@end
-
-
-@interface TRTree : NSObject
-@property (nonatomic, readonly) GEVec2 position;
-
-+ (id)treeWithPosition:(GEVec2)position;
-- (id)initWithPosition:(GEVec2)position;
-- (ODClassType*)type;
 + (ODClassType*)type;
 @end
 

@@ -3,6 +3,7 @@
 #import "EGMaterial.h"
 @class EGTexture;
 @class EGGlobal;
+@class TRTrees;
 @class TRTree;
 @class EGBillboard;
 
@@ -16,7 +17,7 @@
 + (id)treeView;
 - (id)init;
 - (ODClassType*)type;
-- (void)drawTree:(TRTree*)tree;
+- (void)drawTrees:(TRTrees*)trees;
 + (ODClassType*)type;
 @end
 

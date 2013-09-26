@@ -2,7 +2,7 @@
 
 #import "EGTexture.h"
 #import "EGContext.h"
-#import "TRLevel.h"
+#import "TRTree.h"
 #import "EGBillboard.h"
 @implementation TRTreeView{
     EGTexture* _pineTexture;
@@ -34,10 +34,16 @@ static ODClassType* _TRTreeView_type;
     _TRTreeView_type = [ODClassType classTypeWithCls:[TRTreeView class]];
 }
 
-- (void)drawTree:(TRTree*)tree {
+- (void)drawTrees:(TRTrees*)trees {
     egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
-        [EGBillboard drawMaterial:_pine at:geVec3ApplyVec2Z(tree.position, 0.0) rect:_pineRect];
+        [trees.trees forEach:^void(TRTree* _) {
+            [self drawTree:_];
+        }];
     });
+}
+
+- (void)drawTree:(TRTree*)tree {
+    [EGBillboard drawMaterial:_pine at:geVec3ApplyVec2Z(tree.position, 0.0) rect:_pineRect];
 }
 
 - (ODClassType*)type {

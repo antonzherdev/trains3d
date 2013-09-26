@@ -56,7 +56,7 @@ static ODClassType* _TRLevelView_type;
     [_railroadView drawForeground];
     [_trainView drawSmokeTrains:[_level trains]];
     [_trainView drawSmokeTrains:[_level dyingTrains]];
-    [_treeView drawTree:[TRTree treeWithPosition:GEVec2Make(0.0, 0.0)]];
+    [_treeView drawTrees:_level.trees];
 }
 
 - (id<EGCamera>)cameraWithViewport:(GERect)viewport {

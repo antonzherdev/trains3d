@@ -22,7 +22,7 @@ class LevelView(level : Level) extends LayerView {
         trainView.drawSmoke(trains = level.trains)
         trainView.drawSmoke(trains = level.dyingTrains)
 
-        treeView.draw(Tree(vec2(0, 0)))
+        treeView.draw(level.trees)
     }
 
     val camera : Camera = CameraIso(level.map.size, zReserve = 0.3, vec2(0, 0))

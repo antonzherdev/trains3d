@@ -2,6 +2,7 @@
 
 #import "TRScore.h"
 #import "TRTrain.h"
+#import "TRTree.h"
 #import "TRLevel.h"
 #import "EGContext.h"
 #import "EGDirector.h"
@@ -15,6 +16,7 @@
 #import "TRLevelPauseMenuView.h"
 @implementation TRLevelFactory
 static TRScoreRules* _TRLevelFactory_scoreRules;
+static TRTreesRules* _TRLevelFactory_treeRules;
 static id<CNSeq> _TRLevelFactory_rules;
 static ODClassType* _TRLevelFactory_type;
 
@@ -38,7 +40,8 @@ static ODClassType* _TRLevelFactory_type;
     } delayPeriod:10.0 delayFine:^NSInteger(TRTrain* train, NSInteger i) {
         return i * 1000;
     } repairCost:2000];
-    _TRLevelFactory_rules = (@[[TRLevelRules levelRulesWithMapSize:GEVec2iMake(5, 3) scoreRules:_TRLevelFactory_scoreRules repairerSpeed:30 events:(@[tuple(@1.0, [TRLevelFactory trainCars:intTo(2, 4) speed:[intTo(50, 60) setStep:10]]), tuple(@15.0, [TRLevelFactory createNewCity])])]]);
+    _TRLevelFactory_treeRules = [TRTreesRules treesRulesWithThickness:1.0];
+    _TRLevelFactory_rules = (@[[TRLevelRules levelRulesWithMapSize:GEVec2iMake(5, 3) scoreRules:_TRLevelFactory_scoreRules treesRules:[TRTreesRules treesRulesWithThickness:1.0] repairerSpeed:30 events:(@[tuple(@1.0, [TRLevelFactory trainCars:intTo(2, 4) speed:[intTo(50, 60) setStep:10]]), tuple(@15.0, [TRLevelFactory createNewCity])])]]);
 }
 
 + (EGScene*)sceneForLevel:(TRLevel*)level {
@@ -68,7 +71,7 @@ static ODClassType* _TRLevelFactory_type;
 }
 
 + (TRLevel*)levelWithMapSize:(GEVec2i)mapSize {
-    return [TRLevel levelWithRules:[TRLevelRules levelRulesWithMapSize:mapSize scoreRules:_TRLevelFactory_scoreRules repairerSpeed:30 events:(@[])]];
+    return [TRLevel levelWithRules:[TRLevelRules levelRulesWithMapSize:mapSize scoreRules:_TRLevelFactory_scoreRules treesRules:_TRLevelFactory_treeRules repairerSpeed:30 events:(@[])]];
 }
 
 + (EGScene*)sceneForLevelWithNumber:(NSUInteger)number {
@@ -89,6 +92,10 @@ static ODClassType* _TRLevelFactory_type;
 
 + (TRScoreRules*)scoreRules {
     return _TRLevelFactory_scoreRules;
+}
+
++ (TRTreesRules*)treeRules {
+    return _TRLevelFactory_treeRules;
 }
 
 + (ODClassType*)type {

@@ -3,6 +3,7 @@
 #import "EGScene.h"
 @class TRScoreRules;
 @class TRTrain;
+@class TRTreesRules;
 @class TRLevelRules;
 @class TRLevel;
 @class EGGlobal;
@@ -34,6 +35,7 @@
 + (TRScore*)score;
 + (TRRailroad*)railroadWithMapSize:(GEVec2i)mapSize;
 + (TRScoreRules*)scoreRules;
++ (TRTreesRules*)treeRules;
 + (ODClassType*)type;
 @end
 

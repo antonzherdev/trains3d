@@ -5,9 +5,13 @@ class TreeView {
     val pineTexture = textureFor("Pine.png")
     val pine = ColorSource(pineTexture)
     val pineRect = Rect(vec2(0, 0), pineTexture.size/(pineTexture.size.y*2)).centerX
-    def draw(tree : Tree) {
+    def draw(trees : Trees) {
         BlendFunction.standard {
-            Billboard.draw(pine, at = vec3(tree.position, 0), pineRect)
+            trees.trees.for(draw(_))
         }
+    }
+
+    private def draw(tree : Tree) {
+        Billboard.draw(pine, at = vec3(tree.position, 0), pineRect)
     }
 }

@@ -10,7 +10,6 @@
 @class EGDirectLight;
 @class EGMapSso;
 @class EGCameraIso;
-@class TRTree;
 
 @class TRLevelView;
 

@@ -2,7 +2,7 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class LevelRules(mapSize : vec2i, scoreRules : ScoreRules, repairerSpeed : uint, events : [(float, (Level) -> void)])
+class LevelRules(mapSize : vec2i, scoreRules : ScoreRules, treesRules : TreesRules, repairerSpeed : uint, events : [(float, (Level) -> void)])
 
 class Level(rules : LevelRules) extends Controller {
     val map : MapSso = MapSso(rules.mapSize)
@@ -16,6 +16,7 @@ class Level(rules : LevelRules) extends Controller {
     def trains = _trains
     private var _repairer : Train? = nil
     def repairer = _repairer
+    val trees = Trees(map, rules.treesRules)
 
 
     val collisionWorld = TrainsCollisionWorld()
@@ -144,4 +145,3 @@ class Level(rules : LevelRules) extends Controller {
     }
 }
 
-class Tree(position : vec2)

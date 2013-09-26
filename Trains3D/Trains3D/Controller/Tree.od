@@ -1,0 +1,17 @@
+package com.antonzherdev.trains
+
+
+class TreesRules(
+    thickness : float //count on tile
+)
+
+class Trees( map : MapSso, rules : TreesRules) {
+    val trees = (rules.thickness * map.allTiles.count).cast<int>.range.chain.map{ _ ->
+        val tile = map.allTiles.randomItem.get
+        val pos = vec2(math.randomFloatGap(-0.5, 0.5), math.randomFloatGap(-0.5, 0.5))
+        Tree(pos + tile)
+    }.toArray
+}
+
+
+class Tree(position : vec2)
