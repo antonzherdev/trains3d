@@ -443,6 +443,22 @@ GEQuadrant geQuadQuadrant(GEQuad self) {
 GEVec2 geQuadApplyIndex(GEQuad self, NSUInteger index) {
     return self.p[index];
 }
+GERect geQuadBoundingRect(GEQuad self) {
+    CGFloat minX = DBL_MAX;
+    CGFloat maxX = DBL_MIN;
+    CGFloat minY = DBL_MAX;
+    CGFloat maxY = DBL_MIN;
+    NSInteger i = 0;
+    while(i < 4) {
+        GEVec2 pp = self.p[i];
+        if(pp.x < minX) minX = ((CGFloat)(pp.x));
+        if(pp.x > maxX) maxX = ((CGFloat)(pp.x));
+        if(pp.y < minY) minY = ((CGFloat)(pp.y));
+        if(pp.y > maxY) maxY = ((CGFloat)(pp.y));
+        i++;
+    }
+    return geVec2RectToVec2(GEVec2Make(((float)(minX)), ((float)(minY))), GEVec2Make(((float)(maxX)), ((float)(maxY))));
+}
 GEQuad geQuadIdentity() {
     static GEQuad _ret = (GEQuad){{{0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}, {0.0, 1.0}}};
     return _ret;
@@ -579,6 +595,9 @@ BOOL geRectContainsVec2(GERect self, GEVec2 vec2) {
 }
 GERect geRectAddVec2(GERect self, GEVec2 vec2) {
     return GERectMake(geVec2AddVec2(self.origin, vec2), self.size);
+}
+GERect geRectSubVec2(GERect self, GEVec2 vec2) {
+    return GERectMake(geVec2SubVec2(self.origin, vec2), self.size);
 }
 GERect geRectMulF(GERect self, CGFloat f) {
     return GERectMake(geVec2MulF(self.origin, f), geVec2MulF(self.size, f));

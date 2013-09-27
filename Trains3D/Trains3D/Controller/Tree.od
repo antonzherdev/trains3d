@@ -16,15 +16,19 @@ class Forest( map : MapSso, rules : ForestRules) {
     def trees = _trees
 
     def cutDown(tile : vec2i) {
-        _trees = _trees.chain.filter(vec2i(_.position) != tile).toArray
+        cutDown(rect = Rect(tile, vec2(1.4, 1.4)) - vec2(0.7, 0.7))
     }
 
     def cutDownFor(rail : Rail) {
         val s = rail.form.start.vec/2.0
         val e = rail.form.end.vec/2.0
-        val ds = if(s.x == 0) vec2(0, 0.2) else vec2(0.2, 0)
-        val de = if(e.x == 0) vec2(0, 0.2) else vec2(0.2, 0)
-        Quad(s - ds, s + ds, e - de, e + de)
+        val ds = if(s.x == 0) vec2(0.3, 0) else vec2(0, 0.3)
+        val de = if(e.x == 0) vec2(0.3, 0) else vec2(0, 0.3)
+        cutDown(rect = Quad(s - ds, s + ds, e - de, e + de).boundingRect + rail.tile)
+    }
+
+    def cutDown(rect : Rect) {
+        _trees = _trees.chain.filter(!rect.contains(_.position)).toArray
     }
 }
 

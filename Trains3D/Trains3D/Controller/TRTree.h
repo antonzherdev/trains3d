@@ -31,6 +31,7 @@
 - (id<CNSeq>)trees;
 - (void)cutDownTile:(GEVec2i)tile;
 - (void)cutDownForRail:(TRRail*)rail;
+- (void)cutDownRect:(GERect)rect;
 + (ODClassType*)type;
 @end
 

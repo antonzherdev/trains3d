@@ -106,17 +106,21 @@ static ODClassType* _TRForest_type;
 }
 
 - (void)cutDownTile:(GEVec2i)tile {
-    __trees = [[[__trees chain] filter:^BOOL(TRTree* _) {
-        return !(GEVec2iEq(geVec2iApplyVec2(_.position), tile));
-    }] toArray];
+    [self cutDownRect:geRectSubVec2(GERectMake(geVec2ApplyVec2i(tile), GEVec2Make(1.4, 1.4)), GEVec2Make(0.7, 0.7))];
 }
 
 - (void)cutDownForRail:(TRRail*)rail {
     GEVec2 s = geVec2iDivF([rail.form.start vec], 2.0);
     GEVec2 e = geVec2iDivF([rail.form.end vec], 2.0);
-    GEVec2 ds = ((eqf4(s.x, 0)) ? GEVec2Make(0.0, 0.2) : GEVec2Make(0.2, 0.0));
-    GEVec2 de = ((eqf4(e.x, 0)) ? GEVec2Make(0.0, 0.2) : GEVec2Make(0.2, 0.0));
-    geQuadApplyP0P1P2P3(geVec2SubVec2(s, ds), geVec2AddVec2(s, ds), geVec2SubVec2(e, de), geVec2AddVec2(e, de));
+    GEVec2 ds = ((eqf4(s.x, 0)) ? GEVec2Make(0.3, 0.0) : GEVec2Make(0.0, 0.3));
+    GEVec2 de = ((eqf4(e.x, 0)) ? GEVec2Make(0.3, 0.0) : GEVec2Make(0.0, 0.3));
+    [self cutDownRect:geRectAddVec2(geQuadBoundingRect(geQuadApplyP0P1P2P3(geVec2SubVec2(s, ds), geVec2AddVec2(s, ds), geVec2SubVec2(e, de), geVec2AddVec2(e, de))), geVec2ApplyVec2i(rail.tile))];
+}
+
+- (void)cutDownRect:(GERect)rect {
+    __trees = [[[__trees chain] filter:^BOOL(TRTree* _) {
+        return !(geRectContainsVec2(rect, _.position));
+    }] toArray];
 }
 
 - (ODClassType*)type {

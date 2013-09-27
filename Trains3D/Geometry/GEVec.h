@@ -209,6 +209,7 @@ GEQuad geQuadAddVec2(GEQuad self, GEVec2 vec2);
 GEQuad geQuadAddXY(GEQuad self, float x, float y);
 GEQuadrant geQuadQuadrant(GEQuad self);
 GEVec2 geQuadApplyIndex(GEQuad self, NSUInteger index);
+GERect geQuadBoundingRect(GEQuad self);
 GEQuad geQuadIdentity();
 ODPType* geQuadType();
 @interface GEQuadWrap : NSObject
@@ -272,6 +273,7 @@ float geRectWidth(GERect self);
 float geRectHeight(GERect self);
 BOOL geRectContainsVec2(GERect self, GEVec2 vec2);
 GERect geRectAddVec2(GERect self, GEVec2 vec2);
+GERect geRectSubVec2(GERect self, GEVec2 vec2);
 GERect geRectMulF(GERect self, CGFloat f);
 GERect geRectMulVec2(GERect self, GEVec2 vec2);
 BOOL geRectIntersectsRect(GERect self, GERect rect);

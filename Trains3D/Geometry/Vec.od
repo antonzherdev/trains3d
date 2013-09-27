@@ -109,6 +109,22 @@ struct Quad(p : vec2[4]) {
         Quadrant([q, q.add(x, 0), q.add(x, y), q.add(0, y)])
     }
     def apply(index : uint) : vec2 = p[index]
+    def boundingRect : Rect = {
+        var minX = DBL_MAX
+        var maxX = DBL_MIN
+        var minY = DBL_MAX
+        var maxY = DBL_MIN
+        var i = 0
+        while(i < 4) {
+            val pp = p[i]
+            if(pp.x < minX) minX = pp.x
+            if(pp.x > maxX) maxX = pp.x
+            if(pp.y < minY) minY = pp.y
+            if(pp.y > maxY) maxY = pp.y
+            i++
+        }
+        vec2(minX, minY).rectTo(vec2(maxX, maxY))
+    }
 }
 
 struct Quadrant(quads : Quad[4]) {
@@ -131,6 +147,7 @@ struct Rect(origin : vec2, size : vec2) {
         && vec2.y <= origin.y + size.y
 
     def add(vec2 : vec2) = Rect(origin + vec2, size)
+    def sub(vec2 : vec2) = Rect(origin - vec2, size)
     def mul(f : float) = Rect(origin*f, size*f)
     def mul(vec2 : vec2) = Rect(origin*vec2, size*vec2)
 
