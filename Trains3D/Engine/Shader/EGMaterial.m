@@ -301,11 +301,11 @@ void egBlendFunctionApplyDraw(EGBlendFunction self, void(^draw)()) {
     glDisable(GL_BLEND);
 }
 EGBlendFunction egBlendFunctionStandard() {
-    static EGBlendFunction _ret = {GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA};
+    static EGBlendFunction _ret = (EGBlendFunction){GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA};
     return _ret;
 }
 EGBlendFunction egBlendFunctionPremultiplied() {
-    static EGBlendFunction _ret = {GL_ONE, GL_ONE_MINUS_SRC_ALPHA};
+    static EGBlendFunction _ret = (EGBlendFunction){GL_ONE, GL_ONE_MINUS_SRC_ALPHA};
     return _ret;
 }
 ODPType* egBlendFunctionType() {

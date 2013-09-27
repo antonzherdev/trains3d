@@ -385,9 +385,6 @@ ODPType* geVec4Type() {
 GEQuad geQuadApplyP0P1P2P3(GEVec2 p0, GEVec2 p1, GEVec2 p2, GEVec2 p3) {
     return GEQuadMake((GEVec2[]){p0, p1, p2, p3});
 }
-GEQuad geQuadIdentity() {
-    return GEQuadMake((GEVec2[]){GEVec2Make(0.0, 0.0), GEVec2Make(1.0, 0.0), GEVec2Make(1.0, 1.0), GEVec2Make(0.0, 1.0)});
-}
 GEQuad geQuadApplySize(float size) {
     return GEQuadMake((GEVec2[]){GEVec2Make(-size, -size), GEVec2Make(size, -size), GEVec2Make(size, size), GEVec2Make(-size, size)});
 }
@@ -408,6 +405,10 @@ GEQuadrant geQuadQuadrant(GEQuad self) {
 }
 GEVec2 geQuadApplyIndex(GEQuad self, NSUInteger index) {
     return self.p[index];
+}
+GEQuad geQuadIdentity() {
+    static GEQuad _ret = (GEQuad){{{0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}, {0.0, 1.0}}};
+    return _ret;
 }
 ODPType* geQuadType() {
     static ODPType* _ret = nil;

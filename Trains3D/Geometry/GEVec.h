@@ -235,13 +235,13 @@ static inline NSString* GEQuadDescription(GEQuad self) {
     return description;
 }
 GEQuad geQuadApplyP0P1P2P3(GEVec2 p0, GEVec2 p1, GEVec2 p2, GEVec2 p3);
-GEQuad geQuadIdentity();
 GEQuad geQuadApplySize(float size);
 GEQuad geQuadMulValue(GEQuad self, float value);
 GEQuad geQuadAddVec2(GEQuad self, GEVec2 vec2);
 GEQuad geQuadAddXY(GEQuad self, float x, float y);
 GEQuadrant geQuadQuadrant(GEQuad self);
 GEVec2 geQuadApplyIndex(GEQuad self, NSUInteger index);
+GEQuad geQuadIdentity();
 ODPType* geQuadType();
 @interface GEQuadWrap : NSObject
 @property (readonly, nonatomic) GEQuad value;

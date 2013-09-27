@@ -96,7 +96,7 @@ struct vec4(x : float4, y : float4, z : float4, w : float4) {
 
 struct Quad(p : vec2[4]) {
     static def apply(p0 : vec2, p1 : vec2, p2 : vec2, p3 : vec2) : Quad = Quad(p = [p0, p1, p2, p3])
-    static def identity : Quad = Quad(p = [vec2(0, 0), vec2(1, 0), vec2(1, 1), vec2(0, 1)])
+    static val identity : Quad = Quad(p = [vec2(0, 0), vec2(1, 0), vec2(1, 1), vec2(0, 1)])
     static def apply(size : float4) : Quad = Quad(p = [vec2(-size, -size), vec2(size, -size), vec2(size, size), vec2(-size, size)])
     def mul(value : float4) : Quad = Quad(p =[p[0].mul(value), p[1].mul(value), p[2].mul(value), p[3].mul(value)])
     def add(vec2 : vec2) : Quad = Quad(p = [p[0] + vec2, p[1] + vec2, p[2] + vec2, p[3] + vec2])

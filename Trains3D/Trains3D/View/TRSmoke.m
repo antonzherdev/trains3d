@@ -16,7 +16,7 @@ static CGFloat _TRSmoke_emitEvery = 0.01;
 static float _TRSmoke_particleSize = 0.03;
 static GEQuad _TRSmoke_modelQuad;
 static GEQuadrant _TRSmoke_textureQuadrant;
-static GEVec4 _TRSmoke_defColor = {0.3, 0.3, 0.3, 0.3};
+static GEVec4 _TRSmoke_defColor = (GEVec4){0.3, 0.3, 0.3, 0.3};
 static ODClassType* _TRSmoke_type;
 @synthesize train = _train;
 

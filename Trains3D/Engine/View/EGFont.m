@@ -12,15 +12,15 @@ EGTextAlignment egTextAlignmentBaselineX(float x) {
     return EGTextAlignmentMake(x, 0.0, YES);
 }
 EGTextAlignment egTextAlignmentLeft() {
-    static EGTextAlignment _ret = {-1.0, 0.0, YES};
+    static EGTextAlignment _ret = (EGTextAlignment){-1.0, 0.0, YES};
     return _ret;
 }
 EGTextAlignment egTextAlignmentRight() {
-    static EGTextAlignment _ret = {1.0, 0.0, YES};
+    static EGTextAlignment _ret = (EGTextAlignment){1.0, 0.0, YES};
     return _ret;
 }
 EGTextAlignment egTextAlignmentCenter() {
-    static EGTextAlignment _ret = {0.0, 0.0, YES};
+    static EGTextAlignment _ret = (EGTextAlignment){0.0, 0.0, YES};
     return _ret;
 }
 ODPType* egTextAlignmentType() {

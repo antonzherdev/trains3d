@@ -162,7 +162,7 @@ static ODClassType* _TRExplosionFlame_type;
     GEVec2 _shift;
     void(^_animation)(float);
 }
-static GEVec4 _TRExplosionFlameParticle_startColor = {1.0, 0.4, 0.0, 0.3};
+static GEVec4 _TRExplosionFlameParticle_startColor = (GEVec4){1.0, 0.4, 0.0, 0.3};
 static GEQuadrant _TRExplosionFlameParticle_textureQuadrant;
 static ODClassType* _TRExplosionFlameParticle_type;
 @synthesize size = _size;
