@@ -382,27 +382,32 @@ ODPType* geVec4Type() {
 
 
 
+GEQuad geQuadApplyP0P1P2P3(GEVec2 p0, GEVec2 p1, GEVec2 p2, GEVec2 p3) {
+    return GEQuadMake((GEVec2[]){p0, p1, p2, p3});
+}
+GEQuad geQuadIdentity() {
+    return GEQuadMake((GEVec2[]){GEVec2Make(0.0, 0.0), GEVec2Make(1.0, 0.0), GEVec2Make(1.0, 1.0), GEVec2Make(0.0, 1.0)});
+}
 GEQuad geQuadApplySize(float size) {
-    return GEQuadMake(GEVec2Make(-size, -size), GEVec2Make(size, -size), GEVec2Make(size, size), GEVec2Make(-size, size));
+    return GEQuadMake((GEVec2[]){GEVec2Make(-size, -size), GEVec2Make(size, -size), GEVec2Make(size, size), GEVec2Make(-size, size)});
 }
 GEQuad geQuadMulValue(GEQuad self, float value) {
-    return GEQuadMake(geVec2MulF4(self.p1, value), geVec2MulF4(self.p2, value), geVec2MulF4(self.p3, value), geVec2MulF4(self.p4, value));
+    return GEQuadMake((GEVec2[]){geVec2MulF4(self.p[0], value), geVec2MulF4(self.p[1], value), geVec2MulF4(self.p[2], value), geVec2MulF4(self.p[3], value)});
 }
 GEQuad geQuadAddVec2(GEQuad self, GEVec2 vec2) {
-    return GEQuadMake(geVec2AddVec2(self.p1, vec2), geVec2AddVec2(self.p2, vec2), geVec2AddVec2(self.p3, vec2), geVec2AddVec2(self.p4, vec2));
+    return GEQuadMake((GEVec2[]){geVec2AddVec2(self.p[0], vec2), geVec2AddVec2(self.p[1], vec2), geVec2AddVec2(self.p[2], vec2), geVec2AddVec2(self.p[3], vec2)});
 }
 GEQuad geQuadAddXY(GEQuad self, float x, float y) {
     return geQuadAddVec2(self, GEVec2Make(x, y));
 }
 GEQuadrant geQuadQuadrant(GEQuad self) {
-    float x = (self.p2.x - self.p1.x) / 2;
-    float y = (self.p4.y - self.p1.y) / 2;
-    GEQuad q = geQuadAddVec2(geQuadMulValue(self, 0.5), self.p1);
+    float x = (self.p[1].x - self.p[0].x) / 2;
+    float y = (self.p[3].y - self.p[0].y) / 2;
+    GEQuad q = geQuadAddVec2(geQuadMulValue(self, 0.5), self.p[0]);
     return GEQuadrantMake((GEQuad[]){q, geQuadAddXY(q, x, 0.0), geQuadAddXY(q, x, y), geQuadAddXY(q, 0.0, y)});
 }
-GEQuad geQuadIdentity() {
-    static GEQuad _ret = {{0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}, {0.0, 1.0}};
-    return _ret;
+GEVec2 geQuadApplyIndex(GEQuad self, NSUInteger index) {
+    return self.p[index];
 }
 ODPType* geQuadType() {
     static ODPType* _ret = nil;
@@ -555,7 +560,7 @@ GERect geRectMoveToCenterForSize(GERect self, GEVec2 size) {
     return GERectMake(geVec2MulF(geVec2SubVec2(size, self.size), 0.5), self.size);
 }
 GEQuad geRectQuad(GERect self) {
-    return GEQuadMake(geRectLeftBottom(self), geRectLeftTop(self), geRectRightBottom(self), geRectRightTop(self));
+    return geQuadApplyP0P1P2P3(geRectLeftBottom(self), geRectLeftTop(self), geRectRightBottom(self), geRectRightTop(self));
 }
 GERect geRectCenterX(GERect self) {
     return GERectMake(GEVec2Make(self.origin.x + self.size.x / 2, self.origin.y), self.size);

@@ -16,6 +16,7 @@
 @class TRNotifications;
 @class TRRailroad;
 @class EGMapSso;
+@class TRForest;
 @class TRLevelView;
 @class TRLevelProcessor;
 @class TRLevelMenuView;
@@ -36,7 +37,7 @@
 + (TRScore*)score;
 + (TRRailroad*)railroadWithMapSize:(GEVec2i)mapSize;
 + (TRScoreRules*)scoreRules;
-+ (TRForestRules*)treeRules;
++ (TRForestRules*)forestRules;
 + (ODClassType*)type;
 @end
 

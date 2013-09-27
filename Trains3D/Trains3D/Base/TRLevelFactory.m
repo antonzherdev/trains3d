@@ -16,7 +16,7 @@
 #import "TRLevelPauseMenuView.h"
 @implementation TRLevelFactory
 static TRScoreRules* _TRLevelFactory_scoreRules;
-static TRForestRules* _TRLevelFactory_treeRules;
+static TRForestRules* _TRLevelFactory_forestRules;
 static id<CNSeq> _TRLevelFactory_rules;
 static ODClassType* _TRLevelFactory_type;
 
@@ -40,8 +40,8 @@ static ODClassType* _TRLevelFactory_type;
     } delayPeriod:10.0 delayFine:^NSInteger(TRTrain* train, NSInteger i) {
         return i * 1000;
     } repairCost:2000];
-    _TRLevelFactory_treeRules = [TRForestRules forestRulesWithTypes:[TRTreeType values] thickness:1.0];
-    _TRLevelFactory_rules = (@[[TRLevelRules levelRulesWithMapSize:GEVec2iMake(5, 3) scoreRules:_TRLevelFactory_scoreRules treesRules:[TRForestRules forestRulesWithTypes:[TRTreeType values] thickness:1.0] repairerSpeed:30 events:(@[tuple(@1.0, [TRLevelFactory trainCars:intTo(2, 4) speed:[intTo(50, 60) setStep:10]]), tuple(@15.0, [TRLevelFactory createNewCity])])]]);
+    _TRLevelFactory_forestRules = [TRForestRules forestRulesWithTypes:[TRTreeType values] thickness:1.0];
+    _TRLevelFactory_rules = (@[[TRLevelRules levelRulesWithMapSize:GEVec2iMake(5, 3) scoreRules:_TRLevelFactory_scoreRules forestRules:[TRForestRules forestRulesWithTypes:[TRTreeType values] thickness:1.0] repairerSpeed:30 events:(@[tuple(@1.0, [TRLevelFactory trainCars:intTo(2, 4) speed:[intTo(50, 60) setStep:10]]), tuple(@15.0, [TRLevelFactory createNewCity])])]]);
 }
 
 + (EGScene*)sceneForLevel:(TRLevel*)level {
@@ -71,7 +71,7 @@ static ODClassType* _TRLevelFactory_type;
 }
 
 + (TRLevel*)levelWithMapSize:(GEVec2i)mapSize {
-    return [TRLevel levelWithRules:[TRLevelRules levelRulesWithMapSize:mapSize scoreRules:_TRLevelFactory_scoreRules treesRules:_TRLevelFactory_treeRules repairerSpeed:30 events:(@[])]];
+    return [TRLevel levelWithRules:[TRLevelRules levelRulesWithMapSize:mapSize scoreRules:_TRLevelFactory_scoreRules forestRules:_TRLevelFactory_forestRules repairerSpeed:30 events:(@[])]];
 }
 
 + (EGScene*)sceneForLevelWithNumber:(NSUInteger)number {
@@ -83,7 +83,8 @@ static ODClassType* _TRLevelFactory_type;
 }
 
 + (TRRailroad*)railroadWithMapSize:(GEVec2i)mapSize {
-    return [TRRailroad railroadWithMap:[EGMapSso mapSsoWithSize:mapSize] score:[TRLevelFactory score]];
+    EGMapSso* map = [EGMapSso mapSsoWithSize:mapSize];
+    return [TRRailroad railroadWithMap:map score:[TRLevelFactory score] forest:[TRForest forestWithMap:map rules:_TRLevelFactory_forestRules]];
 }
 
 - (ODClassType*)type {
@@ -94,8 +95,8 @@ static ODClassType* _TRLevelFactory_type;
     return _TRLevelFactory_scoreRules;
 }
 
-+ (TRForestRules*)treeRules {
-    return _TRLevelFactory_treeRules;
++ (TRForestRules*)forestRules {
+    return _TRLevelFactory_forestRules;
 }
 
 + (ODClassType*)type {

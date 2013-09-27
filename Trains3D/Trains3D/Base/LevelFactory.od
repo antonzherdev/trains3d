@@ -19,7 +19,7 @@ class LevelFactory {
         repairCost = 2000
         )
 
-    static val treeRules = ForestRules(types = TreeType.values, thickness = 1)
+    static val forestRules = ForestRules(types = TreeType.values, thickness = 1)
     private static def train(cars : Range, speed : Range) : Level -> void = (level : Level)->
         level.runTrainWith(TrainGenerator(TrainType.simple, cars, speed, [CarType.car, CarType.engine]))
     private static def createNewCity : Level -> void = (level : Level)->
@@ -33,10 +33,13 @@ class LevelFactory {
         ])
     ]
     static def levelWith(number : uint) = Level(rules[number - 1])
-    static def levelWith(mapSize : vec2i) = Level(LevelRules(mapSize, scoreRules, treeRules, repairerSpeed = 30, []))
+    static def levelWith(mapSize : vec2i) = Level(LevelRules(mapSize, scoreRules, forestRules, repairerSpeed = 30, []))
     static def sceneForLevelWith(number : uint) = sceneFor(levelWith(number))
     static def score = Score(scoreRules, Notifications())
-    static def railroadWith(mapSize : vec2i) = Railroad(MapSso(mapSize), score)
+    static def railroadWith(mapSize : vec2i) = {
+        val map = MapSso(mapSize)
+        Railroad(map, score, Forest(map, forestRules))
+    }
 }
 
 class TrainLayers(level : Level) extends Layers {

@@ -5,6 +5,7 @@
 @class TRRailPoint;
 @class EGMapSso;
 @class TRScore;
+@class TRForest;
 @class TRRailPointCorrection;
 
 @class TRRailroadConnectorContent;
@@ -120,10 +121,11 @@
 @interface TRRailroad : NSObject
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRScore* score;
+@property (nonatomic, readonly) TRForest* forest;
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
 
-+ (id)railroadWithMap:(EGMapSso*)map score:(TRScore*)score;
-- (id)initWithMap:(EGMapSso*)map score:(TRScore*)score;
++ (id)railroadWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest;
+- (id)initWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest;
 - (ODClassType*)type;
 - (id<CNSeq>)rails;
 - (id<CNSeq>)switches;

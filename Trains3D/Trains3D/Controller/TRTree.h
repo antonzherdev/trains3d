@@ -1,6 +1,9 @@
 #import "objd.h"
 #import "GEVec.h"
 @class EGMapSso;
+@class TRRail;
+@class TRRailForm;
+@class TRRailConnector;
 
 @class TRForestRules;
 @class TRForest;
@@ -21,11 +24,13 @@
 @interface TRForest : NSObject
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRForestRules* rules;
-@property (nonatomic, readonly) id<CNSeq> trees;
 
 + (id)forestWithMap:(EGMapSso*)map rules:(TRForestRules*)rules;
 - (id)initWithMap:(EGMapSso*)map rules:(TRForestRules*)rules;
 - (ODClassType*)type;
+- (id<CNSeq>)trees;
+- (void)cutDownTile:(GEVec2i)tile;
+- (void)cutDownForRail:(TRRail*)rail;
 + (ODClassType*)type;
 @end
 

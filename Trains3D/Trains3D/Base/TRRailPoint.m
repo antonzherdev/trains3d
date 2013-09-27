@@ -72,6 +72,10 @@ static NSArray* _TRRailConnector_values;
     return GEVec2iMake(tile.x + _x, tile.y + _y);
 }
 
+- (GEVec2i)vec {
+    return GEVec2iMake(_x, _y);
+}
+
 + (TRRailConnector*)left {
     return _TRRailConnector_left;
 }

@@ -94,19 +94,21 @@ struct vec4(x : float4, y : float4, z : float4, w : float4) {
     def normalize = set(length = 1.0)
 }
 
-struct Quad(p1 : vec2, p2 : vec2, p3 : vec2, p4 : vec2) {
-    static val identity = Quad(vec2(0, 0), vec2(1, 0), vec2(1, 1), vec2(0, 1))
-    static def apply(size : float4) = Quad(vec2(-size, -size), vec2(size, -size), vec2(size, size), vec2(-size, size))
-    def mul(value : float4) = Quad(p1.mul(value), p2.mul(value), p3.mul(value), p4.mul(value))
-    def add(vec2 : vec2) = Quad(p1 + vec2, p2 + vec2, p3 + vec2, p4 + vec2)
-    def add(x : float4, y : float4) = add(vec2(x, y))
+struct Quad(p : vec2[4]) {
+    static def apply(p0 : vec2, p1 : vec2, p2 : vec2, p3 : vec2) : Quad = Quad(p = [p0, p1, p2, p3])
+    static def identity : Quad = Quad(p = [vec2(0, 0), vec2(1, 0), vec2(1, 1), vec2(0, 1)])
+    static def apply(size : float4) : Quad = Quad(p = [vec2(-size, -size), vec2(size, -size), vec2(size, size), vec2(-size, size)])
+    def mul(value : float4) : Quad = Quad(p =[p[0].mul(value), p[1].mul(value), p[2].mul(value), p[3].mul(value)])
+    def add(vec2 : vec2) : Quad = Quad(p = [p[0] + vec2, p[1] + vec2, p[2] + vec2, p[3] + vec2])
+    def add(x : float4, y : float4) : Quad = add(vec2(x, y))
 
     def quadrant :Quadrant = {
-        val x = (p2.x - p1.x)/2
-        val y = (p4.y - p1.y)/2
-        val q = self*0.5 + p1
+        val x = (p[1].x - p[0].x)/2
+        val y = (p[3].y - p[0].y)/2
+        val q = self*0.5 + p[0]
         Quadrant([q, q.add(x, 0), q.add(x, y), q.add(0, y)])
     }
+    def apply(index : uint) : vec2 = p[index]
 }
 
 struct Quadrant(quads : Quad[4]) {

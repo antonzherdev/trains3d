@@ -1,13 +1,10 @@
 #import "objd.h"
 #import "TSTestCase.h"
 #import "GEVec.h"
-@class EGMapSso;
 @class TRLevelFactory;
-@class TRNotifications;
-@class TRScore;
-@class TRRailroad;
 @class TRRailForm;
 @class TRRail;
+@class TRRailroad;
 @class TRRailPoint;
 @class TRObstacle;
 @class TRObstacleType;

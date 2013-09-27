@@ -23,6 +23,8 @@ enum RailConnector(x : int, y : int, angle : int) {
         else top
 
     def next(tile : vec2i) = vec2i(tile.x + x, tile.y + y)
+
+    def vec : vec2i = vec2i(x, y)
 }
 
 enum RailForm(start : RailConnector, end : RailConnector, isTurn : bool, length : float, pointFun : float -> vec2) {

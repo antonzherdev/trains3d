@@ -1,6 +1,8 @@
 #import "TRTree.h"
 
 #import "EGMapIso.h"
+#import "TRRailroad.h"
+#import "TRRailPoint.h"
 @implementation TRForestRules{
     id<CNSeq> _types;
     CGFloat _thickness;
@@ -68,12 +70,11 @@ static ODClassType* _TRForestRules_type;
 @implementation TRForest{
     EGMapSso* _map;
     TRForestRules* _rules;
-    id<CNSeq> _trees;
+    id<CNSeq> __trees;
 }
 static ODClassType* _TRForest_type;
 @synthesize map = _map;
 @synthesize rules = _rules;
-@synthesize trees = _trees;
 
 + (id)forestWithMap:(EGMapSso*)map rules:(TRForestRules*)rules {
     return [[TRForest alloc] initWithMap:map rules:rules];
@@ -85,7 +86,7 @@ static ODClassType* _TRForest_type;
     if(self) {
         _map = map;
         _rules = rules;
-        _trees = [[[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count]))) chain] map:^TRTree*(id _) {
+        __trees = [[[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count]))) chain] map:^TRTree*(id _) {
             GEVec2i tile = uwrap(GEVec2i, [[_weakSelf.map.allTiles randomItem] get]);
             GEVec2 pos = GEVec2Make(((float)(randomFloatGap(-0.5, 0.5))), ((float)(randomFloatGap(-0.5, 0.5))));
             return [TRTree treeWithTreeType:((TRTreeType*)([[_weakSelf.rules.types randomItem] get])) position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make(((float)(randomFloatGap(0.8, 1.2))), ((float)(randomFloatGap(0.8, 1.2))))];
@@ -98,6 +99,24 @@ static ODClassType* _TRForest_type;
 + (void)initialize {
     [super initialize];
     _TRForest_type = [ODClassType classTypeWithCls:[TRForest class]];
+}
+
+- (id<CNSeq>)trees {
+    return __trees;
+}
+
+- (void)cutDownTile:(GEVec2i)tile {
+    __trees = [[[__trees chain] filter:^BOOL(TRTree* _) {
+        return !(GEVec2iEq(geVec2iApplyVec2(_.position), tile));
+    }] toArray];
+}
+
+- (void)cutDownForRail:(TRRail*)rail {
+    GEVec2 s = geVec2iDivF([rail.form.start vec], 2.0);
+    GEVec2 e = geVec2iDivF([rail.form.end vec], 2.0);
+    GEVec2 ds = ((eqf4(s.x, 0)) ? GEVec2Make(0.0, 0.2) : GEVec2Make(0.2, 0.0));
+    GEVec2 de = ((eqf4(e.x, 0)) ? GEVec2Make(0.0, 0.2) : GEVec2Make(0.2, 0.0));
+    geQuadApplyP0P1P2P3(geVec2SubVec2(s, ds), geVec2AddVec2(s, ds), geVec2SubVec2(e, de), geVec2AddVec2(e, de));
 }
 
 - (ODClassType*)type {

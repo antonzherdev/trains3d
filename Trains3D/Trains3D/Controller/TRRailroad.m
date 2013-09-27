@@ -3,6 +3,7 @@
 #import "TRRailPoint.h"
 #import "EGMapIso.h"
 #import "TRScore.h"
+#import "TRTree.h"
 @implementation TRRailroadConnectorContent
 static ODClassType* _TRRailroadConnectorContent_type;
 
@@ -538,6 +539,7 @@ static ODClassType* _TRObstacle_type;
 @implementation TRRailroad{
     EGMapSso* _map;
     TRScore* _score;
+    TRForest* _forest;
     id<CNSeq> __rails;
     id<CNSeq> __switches;
     id<CNSeq> __lights;
@@ -550,17 +552,19 @@ static ODClassType* _TRObstacle_type;
 static ODClassType* _TRRailroad_type;
 @synthesize map = _map;
 @synthesize score = _score;
+@synthesize forest = _forest;
 @synthesize builder = _builder;
 
-+ (id)railroadWithMap:(EGMapSso*)map score:(TRScore*)score {
-    return [[TRRailroad alloc] initWithMap:map score:score];
++ (id)railroadWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest {
+    return [[TRRailroad alloc] initWithMap:map score:score forest:forest];
 }
 
-- (id)initWithMap:(EGMapSso*)map score:(TRScore*)score {
+- (id)initWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest {
     self = [super init];
     if(self) {
         _map = map;
         _score = score;
+        _forest = forest;
         __rails = (@[]);
         __switches = (@[]);
         __lights = (@[]);
@@ -620,6 +624,7 @@ static ODClassType* _TRRailroad_type;
     [self connectRail:rail to:rail.form.end];
     [self buildLightsForTile:rail.tile connector:rail.form.start];
     [self buildLightsForTile:rail.tile connector:rail.form.end];
+    [_forest cutDownForRail:rail];
     [self rebuildArrays];
 }
 
@@ -768,13 +773,14 @@ static ODClassType* _TRRailroad_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRRailroad* o = ((TRRailroad*)(other));
-    return [self.map isEqual:o.map] && [self.score isEqual:o.score];
+    return [self.map isEqual:o.map] && [self.score isEqual:o.score] && [self.forest isEqual:o.forest];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.map hash];
     hash = hash * 31 + [self.score hash];
+    hash = hash * 31 + [self.forest hash];
     return hash;
 }
 
@@ -782,6 +788,7 @@ static ODClassType* _TRRailroad_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"map=%@", self.map];
     [description appendFormat:@", score=%@", self.score];
+    [description appendFormat:@", forest=%@", self.forest];
     [description appendString:@">"];
     return description;
 }

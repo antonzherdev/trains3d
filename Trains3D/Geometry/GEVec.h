@@ -215,40 +215,33 @@ ODPType* geVec4Type();
 
 
 struct GEQuad {
-    GEVec2 p1;
-    GEVec2 p2;
-    GEVec2 p3;
-    GEVec2 p4;
+    GEVec2 p[4];
 };
-static inline GEQuad GEQuadMake(GEVec2 p1, GEVec2 p2, GEVec2 p3, GEVec2 p4) {
-    return (GEQuad){p1, p2, p3, p4};
+static inline GEQuad GEQuadMake(GEVec2 p[4]) {
+    return (GEQuad){{p[0], p[1], p[2], p[3]}};
 }
 static inline BOOL GEQuadEq(GEQuad s1, GEQuad s2) {
-    return GEVec2Eq(s1.p1, s2.p1) && GEVec2Eq(s1.p2, s2.p2) && GEVec2Eq(s1.p3, s2.p3) && GEVec2Eq(s1.p4, s2.p4);
+    return s1.p == s2.p;
 }
 static inline NSUInteger GEQuadHash(GEQuad self) {
     NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2Hash(self.p1);
-    hash = hash * 31 + GEVec2Hash(self.p2);
-    hash = hash * 31 + GEVec2Hash(self.p3);
-    hash = hash * 31 + GEVec2Hash(self.p4);
+    hash = hash * 31 + 13 * (13 * (13 * GEVec2Hash(self.p[0]) + GEVec2Hash(self.p[1])) + GEVec2Hash(self.p[2])) + GEVec2Hash(self.p[3]);
     return hash;
 }
 static inline NSString* GEQuadDescription(GEQuad self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<GEQuad: "];
-    [description appendFormat:@"p1=%@", GEVec2Description(self.p1)];
-    [description appendFormat:@", p2=%@", GEVec2Description(self.p2)];
-    [description appendFormat:@", p3=%@", GEVec2Description(self.p3)];
-    [description appendFormat:@", p4=%@", GEVec2Description(self.p4)];
+    [description appendFormat:@"p=[%@, %@, %@, %@]", GEVec2Description(self.p[0]), GEVec2Description(self.p[1]), GEVec2Description(self.p[2]), GEVec2Description(self.p[3])];
     [description appendString:@">"];
     return description;
 }
+GEQuad geQuadApplyP0P1P2P3(GEVec2 p0, GEVec2 p1, GEVec2 p2, GEVec2 p3);
+GEQuad geQuadIdentity();
 GEQuad geQuadApplySize(float size);
 GEQuad geQuadMulValue(GEQuad self, float value);
 GEQuad geQuadAddVec2(GEQuad self, GEVec2 vec2);
 GEQuad geQuadAddXY(GEQuad self, float x, float y);
 GEQuadrant geQuadQuadrant(GEQuad self);
-GEQuad geQuadIdentity();
+GEVec2 geQuadApplyIndex(GEQuad self, NSUInteger index);
 ODPType* geQuadType();
 @interface GEQuadWrap : NSObject
 @property (readonly, nonatomic) GEQuad value;

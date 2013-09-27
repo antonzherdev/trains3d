@@ -94,10 +94,10 @@ class BillboardParticle(lifeLength : float4) extends Particle(lifeLength) {
 
     def writeTo(array : VoidRefArray) : VoidRefArray = {
         array
-            .write(BillboardBufferData, BillboardBufferData(position, model.p1, color, uv.p1))
-            .write(BillboardBufferData, BillboardBufferData(position, model.p2, color, uv.p2))
-            .write(BillboardBufferData, BillboardBufferData(position, model.p3, color, uv.p3))
-            .write(BillboardBufferData, BillboardBufferData(position, model.p4, color, uv.p4))
+            .write(BillboardBufferData, BillboardBufferData(position, model.p[0], color, uv.p[0]))
+            .write(BillboardBufferData, BillboardBufferData(position, model.p[1], color, uv.p[1]))
+            .write(BillboardBufferData, BillboardBufferData(position, model.p[2], color, uv.p[2]))
+            .write(BillboardBufferData, BillboardBufferData(position, model.p[3], color, uv.p[3]))
     }
 }
 
@@ -128,10 +128,10 @@ object Billboard {
 
     def draw(material : ColorSource, at : vec3, quad : Quad, uv : Quad) {
         var v = vertexes
-        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p1, material.color, uv.p1))
-        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p2, material.color, uv.p2))
-        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p3, material.color, uv.p3))
-        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p4, material.color, uv.p4))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[0], material.color, uv.p[0]))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[1], material.color, uv.p[1]))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[2], material.color, uv.p[2]))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[3], material.color, uv.p[3]))
         vb.set(vertexes)
 
         glDisable(GL_CULL_FACE)

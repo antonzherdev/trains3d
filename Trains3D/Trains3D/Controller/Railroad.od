@@ -53,7 +53,7 @@ enum ObstacleType {
 }
 class Obstacle(obstacleType : ObstacleType, point : RailPoint) {}
 
-class Railroad(map : MapSso, score : Score) {
+class Railroad(map : MapSso, score : Score, forest : Forest) {
     private var _rails : [Rail] = []
     def rails = _rails
     private var _switches : [Switch] = []
@@ -88,6 +88,7 @@ class Railroad(map : MapSso, score : Score) {
         connect(rail, rail.form.end)
         buildLightsFor(rail.tile, rail.form.start)
         buildLightsFor(rail.tile, rail.form.end)
+        forest.cutDownFor(rail)
         rebuildArrays
     }
 

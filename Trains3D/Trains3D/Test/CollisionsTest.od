@@ -7,7 +7,7 @@ class CollisionsTest extends TestCase {
     static val carLen = CarType.car.fullLength
     static val carWidth = CarType.car.width
     static val carConLen = CarType.car.startToFront
-    def newLevel = Level(LevelRules(vec2i(5, 3), LevelFactory.scoreRules, LevelFactory.treeRules, 30, []))
+    def newLevel = Level(LevelRules(vec2i(5, 3), LevelFactory.scoreRules, LevelFactory.forestRules, 30, []))
 
 
     def check(level : Level) : Set<Train> = level.detectCollisions.chain.flatMap(_.cars).map(_.train).toSet

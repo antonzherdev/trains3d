@@ -43,7 +43,7 @@ static ODClassType* _TRTreeView_type;
     glAlphaFunc(GL_GREATER, 0.2);
     glEnable(GL_ALPHA_TEST);
     egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
-        [forest.trees forEach:^void(TRTree* _) {
+        [[forest trees] forEach:^void(TRTree* _) {
             [self drawTree:_];
         }];
     });

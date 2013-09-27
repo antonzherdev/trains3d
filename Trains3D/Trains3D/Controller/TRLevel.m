@@ -14,27 +14,27 @@
 @implementation TRLevelRules{
     GEVec2i _mapSize;
     TRScoreRules* _scoreRules;
-    TRForestRules* _treesRules;
+    TRForestRules* _forestRules;
     NSUInteger _repairerSpeed;
     id<CNSeq> _events;
 }
 static ODClassType* _TRLevelRules_type;
 @synthesize mapSize = _mapSize;
 @synthesize scoreRules = _scoreRules;
-@synthesize treesRules = _treesRules;
+@synthesize forestRules = _forestRules;
 @synthesize repairerSpeed = _repairerSpeed;
 @synthesize events = _events;
 
-+ (id)levelRulesWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules treesRules:(TRForestRules*)treesRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
-    return [[TRLevelRules alloc] initWithMapSize:mapSize scoreRules:scoreRules treesRules:treesRules repairerSpeed:repairerSpeed events:events];
++ (id)levelRulesWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules forestRules:(TRForestRules*)forestRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
+    return [[TRLevelRules alloc] initWithMapSize:mapSize scoreRules:scoreRules forestRules:forestRules repairerSpeed:repairerSpeed events:events];
 }
 
-- (id)initWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules treesRules:(TRForestRules*)treesRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
+- (id)initWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules forestRules:(TRForestRules*)forestRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
     self = [super init];
     if(self) {
         _mapSize = mapSize;
         _scoreRules = scoreRules;
-        _treesRules = treesRules;
+        _forestRules = forestRules;
         _repairerSpeed = repairerSpeed;
         _events = events;
     }
@@ -63,14 +63,14 @@ static ODClassType* _TRLevelRules_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRLevelRules* o = ((TRLevelRules*)(other));
-    return GEVec2iEq(self.mapSize, o.mapSize) && [self.scoreRules isEqual:o.scoreRules] && [self.treesRules isEqual:o.treesRules] && self.repairerSpeed == o.repairerSpeed && [self.events isEqual:o.events];
+    return GEVec2iEq(self.mapSize, o.mapSize) && [self.scoreRules isEqual:o.scoreRules] && [self.forestRules isEqual:o.forestRules] && self.repairerSpeed == o.repairerSpeed && [self.events isEqual:o.events];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + GEVec2iHash(self.mapSize);
     hash = hash * 31 + [self.scoreRules hash];
-    hash = hash * 31 + [self.treesRules hash];
+    hash = hash * 31 + [self.forestRules hash];
     hash = hash * 31 + self.repairerSpeed;
     hash = hash * 31 + [self.events hash];
     return hash;
@@ -80,7 +80,7 @@ static ODClassType* _TRLevelRules_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"mapSize=%@", GEVec2iDescription(self.mapSize)];
     [description appendFormat:@", scoreRules=%@", self.scoreRules];
-    [description appendFormat:@", treesRules=%@", self.treesRules];
+    [description appendFormat:@", forestRules=%@", self.forestRules];
     [description appendFormat:@", repairerSpeed=%li", self.repairerSpeed];
     [description appendFormat:@", events=%@", self.events];
     [description appendString:@">"];
@@ -95,12 +95,12 @@ static ODClassType* _TRLevelRules_type;
     EGMapSso* _map;
     TRNotifications* _notifications;
     TRScore* _score;
+    TRForest* _forest;
     TRRailroad* _railroad;
     NSMutableArray* __cities;
     EGSchedule* _schedule;
     id<CNSeq> __trains;
     id __repairer;
-    TRForest* _forest;
     TRTrainsCollisionWorld* _collisionWorld;
     TRTrainsDynamicWorld* _dynamicWorld;
     NSMutableArray* __dyingTrains;
@@ -110,9 +110,9 @@ static ODClassType* _TRLevel_type;
 @synthesize map = _map;
 @synthesize notifications = _notifications;
 @synthesize score = _score;
+@synthesize forest = _forest;
 @synthesize railroad = _railroad;
 @synthesize schedule = _schedule;
-@synthesize forest = _forest;
 @synthesize collisionWorld = _collisionWorld;
 @synthesize dynamicWorld = _dynamicWorld;
 
@@ -127,12 +127,12 @@ static ODClassType* _TRLevel_type;
         _map = [EGMapSso mapSsoWithSize:_rules.mapSize];
         _notifications = [TRNotifications notifications];
         _score = [TRScore scoreWithRules:_rules.scoreRules notifications:_notifications];
-        _railroad = [TRRailroad railroadWithMap:_map score:_score];
+        _forest = [TRForest forestWithMap:_map rules:_rules.forestRules];
+        _railroad = [TRRailroad railroadWithMap:_map score:_score forest:_forest];
         __cities = [NSMutableArray mutableArray];
         _schedule = [self createSchedule];
         __trains = (@[]);
         __repairer = [CNOption none];
-        _forest = [TRForest forestWithMap:_map rules:_rules.treesRules];
         _collisionWorld = [TRTrainsCollisionWorld trainsCollisionWorld];
         _dynamicWorld = [TRTrainsDynamicWorld trainsDynamicWorld];
         __dyingTrains = [NSMutableArray mutableArray];
@@ -180,6 +180,7 @@ static ODClassType* _TRLevel_type;
         return wrap(GEVec2i, _.tile);
     }]] randomItem] get]);
     TRCity* city = [TRCity cityWithColor:[TRCityColor values][[[self cities] count]] tile:tile angle:[self randomCityDirectionForTile:tile]];
+    [_forest cutDownTile:tile];
     [_railroad addRail:[TRRail railWithTile:tile form:city.angle.form]];
     [__cities appendItem:city];
 }

@@ -2,13 +2,14 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class LevelRules(mapSize : vec2i, scoreRules : ScoreRules, treesRules : ForestRules, repairerSpeed : uint, events : [(float, (Level) -> void)])
+class LevelRules(mapSize : vec2i, scoreRules : ScoreRules, forestRules : ForestRules, repairerSpeed : uint, events : [(float, (Level) -> void)])
 
 class Level(rules : LevelRules) extends Controller {
     val map : MapSso = MapSso(rules.mapSize)
     val notifications = Notifications()
     val score : Score = Score(rules.scoreRules, notifications)
-    val railroad : Railroad = Railroad(map, score)
+    val forest = Forest(map, rules.forestRules)
+    val railroad : Railroad = Railroad(map, score, forest)
     private var _cities = MutableArray<City>()
     val schedule : Schedule = createSchedule
     def cities : [City] = _cities
@@ -16,7 +17,7 @@ class Level(rules : LevelRules) extends Controller {
     def trains = _trains
     private var _repairer : Train? = nil
     def repairer = _repairer
-    val forest = Forest(map, rules.treesRules)
+
 
 
     val collisionWorld = TrainsCollisionWorld()
@@ -40,6 +41,7 @@ class Level(rules : LevelRules) extends Controller {
     def createNewCity {
         val tile = map.partialTiles.chain.exclude(cities.chain.map(_.tile)).randomItem.get
         val city = City(CityColor[cities.count], tile, randomCityDirectionFor(tile))
+        forest.cutDown(tile)
         railroad.add(Rail(tile, city.angle.form))
         _cities.append(city)
     }

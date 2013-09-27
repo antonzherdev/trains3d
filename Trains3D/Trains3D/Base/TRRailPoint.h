@@ -14,6 +14,7 @@
 + (TRRailConnector*)connectorForX:(NSInteger)x y:(NSInteger)y;
 - (TRRailConnector*)otherSideConnector;
 - (GEVec2i)nextTile:(GEVec2i)tile;
+- (GEVec2i)vec;
 + (TRRailConnector*)left;
 + (TRRailConnector*)bottom;
 + (TRRailConnector*)top;

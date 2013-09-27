@@ -1,11 +1,8 @@
 #import "TRDamageTest.h"
 
-#import "EGMapIso.h"
 #import "TRLevelFactory.h"
-#import "TRNotification.h"
-#import "TRScore.h"
-#import "TRRailroad.h"
 #import "TRRailPoint.h"
+#import "TRRailroad.h"
 @implementation TRDamageTest
 static ODClassType* _TRDamageTest_type;
 
@@ -25,7 +22,7 @@ static ODClassType* _TRDamageTest_type;
 }
 
 - (void)testMain {
-    TRRailroad* railroad = [TRRailroad railroadWithMap:[EGMapSso mapSsoWithSize:GEVec2iMake(4, 3)] score:[TRScore scoreWithRules:TRLevelFactory.scoreRules notifications:[TRNotifications notifications]]];
+    TRRailroad* railroad = [TRLevelFactory railroadWithMapSize:GEVec2iMake(4, 3)];
     [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 1) form:TRRailForm.leftRight]];
     [railroad addDamageAtPoint:[TRRailPoint railPointWithTile:GEVec2iMake(1, 1) form:TRRailForm.leftRight x:0.2 back:NO]];
     [railroad addDamageAtPoint:[TRRailPoint railPointWithTile:GEVec2iMake(1, 1) form:TRRailForm.leftRight x:0.6 back:YES]];

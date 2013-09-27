@@ -328,7 +328,7 @@ static ODClassType* _EGBillboardParticle_type;
 }
 
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array {
-    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p1, _color, _uv.p1)), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p2, _color, _uv.p2)), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p3, _color, _uv.p3)), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p4, _color, _uv.p4));
+    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p[0], _color, _uv.p[0])), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p[1], _color, _uv.p[1])), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p[2], _color, _uv.p[2])), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p[3], _color, _uv.p[3]));
 }
 
 - (ODClassType*)type {
@@ -451,10 +451,10 @@ static ODClassType* _EGBillboard_type;
 
 + (void)drawMaterial:(EGColorSource*)material at:(GEVec3)at quad:(GEQuad)quad uv:(GEQuad)uv {
     CNVoidRefArray v = _EGBillboard_vertexes;
-    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p1, material.color, uv.p1));
-    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p2, material.color, uv.p2));
-    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p3, material.color, uv.p3));
-    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p4, material.color, uv.p4));
+    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[0], material.color, uv.p[0]));
+    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[1], material.color, uv.p[1]));
+    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[2], material.color, uv.p[2]));
+    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[3], material.color, uv.p[3]));
     [_EGBillboard_vb setArray:_EGBillboard_vertexes];
     glDisable(GL_CULL_FACE);
     [[EGBillboardShaderSystem shaderForMaterial:material] drawParam:material vb:_EGBillboard_vb mode:GL_TRIANGLE_STRIP];
