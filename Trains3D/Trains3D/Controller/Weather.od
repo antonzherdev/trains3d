@@ -1,0 +1,14 @@
+package com.antonzherdev.trains
+
+class WeatherRules(
+    windStrength : float
+)
+
+class Weather(rules : WeatherRules) extends Controller {
+    private var _wind : vec3
+    def wind : vec3 = _wind
+
+    def updateWith(delta : float) {
+
+    }
+}

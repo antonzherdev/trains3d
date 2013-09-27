@@ -40,7 +40,7 @@ class CollisionsTest extends TestCase {
         box1.translate(2, 2, 0)
         world.add(box1)
         world.add(box2)
-        val segment = line3(vec3(2, 2, 2), vec3(0, 0, -10))
+        val segment = Line3(vec3(2, 2, 2), vec3(0, 0, -10))
 
         var r = world.crossPointsWith(segment)
         val p1 = CrossPoint<int>(box1, vec3(2, 2, 0))

@@ -6,7 +6,7 @@ stub class CollisionWorld<T> {
     def clear
 
     def detect : Iterable<Collision<T>>
-    def closestCrossPointWith(segment : line3) : CrossPoint<T>?
-    def crossPointsWith(segment : line3) : [CrossPoint<T>]
+    def closestCrossPointWith(segment : Line3) : CrossPoint<T>?
+    def crossPointsWith(segment : Line3) : [CrossPoint<T>]
 }
 
