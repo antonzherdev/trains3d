@@ -20,13 +20,7 @@ static inline NSUInteger GELine3Hash(GELine3 self) {
     hash = hash * 31 + GEVec3Hash(self.u);
     return hash;
 }
-static inline NSString* GELine3Description(GELine3 self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<GELine3: "];
-    [description appendFormat:@"r0=%@", GEVec3Description(self.r0)];
-    [description appendFormat:@", u=%@", GEVec3Description(self.u)];
-    [description appendString:@">"];
-    return description;
-}
+NSString* GELine3Description(GELine3 self);
 GEVec3 geLine3RT(GELine3 self, float t);
 GEVec3 geLine3RPlane(GELine3 self, GEPlane plane);
 ODPType* geLine3Type();
@@ -55,13 +49,7 @@ static inline NSUInteger GEPlaneHash(GEPlane self) {
     hash = hash * 31 + GEVec3Hash(self.n);
     return hash;
 }
-static inline NSString* GEPlaneDescription(GEPlane self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<GEPlane: "];
-    [description appendFormat:@"p0=%@", GEVec3Description(self.p0)];
-    [description appendFormat:@", n=%@", GEVec3Description(self.n)];
-    [description appendString:@">"];
-    return description;
-}
+NSString* GEPlaneDescription(GEPlane self);
 BOOL gePlaneContainsVec3(GEPlane self, GEVec3 vec3);
 ODPType* gePlaneType();
 @interface GEPlaneWrap : NSObject

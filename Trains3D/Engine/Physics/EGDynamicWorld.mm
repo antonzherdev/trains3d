@@ -102,7 +102,7 @@ static ODClassType* _EGDynamicWorld_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"gravity=%@", GEVec3Description(self.gravity)];
+    [description appendFormat:@"gravity=<%f, %f, %f>", self.gravity.x, self.gravity.y, self.gravity.z];
     [description appendString:@">"];
     return description;
 }

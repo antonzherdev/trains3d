@@ -5,6 +5,14 @@
 #import "GL.h"
 #import "EGContext.h"
 #import "GEMat4.h"
+NSString* EGTextAlignmentDescription(EGTextAlignment self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<EGTextAlignment: "];
+    [description appendFormat:@"x=%f", self.x];
+    [description appendFormat:@", y=%f", self.y];
+    [description appendFormat:@", baseline=%d", self.baseline];
+    [description appendString:@">"];
+    return description;
+}
 EGTextAlignment egTextAlignmentApplyXY(float x, float y) {
     return EGTextAlignmentMake(x, y, NO);
 }
@@ -467,6 +475,13 @@ static ODClassType* _EGFontSymbolDesc_type;
 @end
 
 
+NSString* EGFontPrintDataDescription(EGFontPrintData self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<EGFontPrintData: "];
+    [description appendFormat:@"position=%@", GEVec2Description(self.position)];
+    [description appendFormat:@", uv=%@", GEVec2Description(self.uv)];
+    [description appendString:@">"];
+    return description;
+}
 ODPType* egFontPrintDataType() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[EGFontPrintDataWrap class] name:@"EGFontPrintData" size:sizeof(EGFontPrintData) wrap:^id(void* data, NSUInteger i) {

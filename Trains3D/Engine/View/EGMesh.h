@@ -27,14 +27,7 @@ static inline NSUInteger EGMeshDataHash(EGMeshData self) {
     hash = hash * 31 + GEVec3Hash(self.position);
     return hash;
 }
-static inline NSString* EGMeshDataDescription(EGMeshData self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<EGMeshData: "];
-    [description appendFormat:@"uv=%@", GEVec2Description(self.uv)];
-    [description appendFormat:@", normal=%@", GEVec3Description(self.normal)];
-    [description appendFormat:@", position=%@", GEVec3Description(self.position)];
-    [description appendString:@">"];
-    return description;
-}
+NSString* EGMeshDataDescription(EGMeshData self);
 ODPType* egMeshDataType();
 @interface EGMeshDataWrap : NSObject
 @property (readonly, nonatomic) EGMeshData value;

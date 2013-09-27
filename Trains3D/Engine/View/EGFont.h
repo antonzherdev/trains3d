@@ -39,14 +39,7 @@ static inline NSUInteger EGTextAlignmentHash(EGTextAlignment self) {
     hash = hash * 31 + self.baseline;
     return hash;
 }
-static inline NSString* EGTextAlignmentDescription(EGTextAlignment self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<EGTextAlignment: "];
-    [description appendFormat:@"x=%f", self.x];
-    [description appendFormat:@", y=%f", self.y];
-    [description appendFormat:@", baseline=%d", self.baseline];
-    [description appendString:@">"];
-    return description;
-}
+NSString* EGTextAlignmentDescription(EGTextAlignment self);
 EGTextAlignment egTextAlignmentApplyXY(float x, float y);
 EGTextAlignment egTextAlignmentBaselineX(float x);
 EGTextAlignment egTextAlignmentLeft();
@@ -133,13 +126,7 @@ static inline NSUInteger EGFontPrintDataHash(EGFontPrintData self) {
     hash = hash * 31 + GEVec2Hash(self.uv);
     return hash;
 }
-static inline NSString* EGFontPrintDataDescription(EGFontPrintData self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<EGFontPrintData: "];
-    [description appendFormat:@"position=%@", GEVec2Description(self.position)];
-    [description appendFormat:@", uv=%@", GEVec2Description(self.uv)];
-    [description appendString:@">"];
-    return description;
-}
+NSString* EGFontPrintDataDescription(EGFontPrintData self);
 ODPType* egFontPrintDataType();
 @interface EGFontPrintDataWrap : NSObject
 @property (readonly, nonatomic) EGFontPrintData value;

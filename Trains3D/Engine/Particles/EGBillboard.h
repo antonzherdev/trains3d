@@ -68,15 +68,7 @@ static inline NSUInteger EGBillboardBufferDataHash(EGBillboardBufferData self) {
     hash = hash * 31 + GEVec2Hash(self.uv);
     return hash;
 }
-static inline NSString* EGBillboardBufferDataDescription(EGBillboardBufferData self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<EGBillboardBufferData: "];
-    [description appendFormat:@"position=%@", GEVec3Description(self.position)];
-    [description appendFormat:@", model=%@", GEVec2Description(self.model)];
-    [description appendFormat:@", color=%@", GEVec4Description(self.color)];
-    [description appendFormat:@", uv=%@", GEVec2Description(self.uv)];
-    [description appendString:@">"];
-    return description;
-}
+NSString* EGBillboardBufferDataDescription(EGBillboardBufferData self);
 ODPType* egBillboardBufferDataType();
 @interface EGBillboardBufferDataWrap : NSObject
 @property (readonly, nonatomic) EGBillboardBufferData value;

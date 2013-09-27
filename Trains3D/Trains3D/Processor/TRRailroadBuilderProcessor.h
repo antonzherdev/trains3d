@@ -42,14 +42,7 @@ static inline NSUInteger TRRailCorrectionHash(TRRailCorrection self) {
     hash = hash * 31 + GEVec2iHash(self.end);
     return hash;
 }
-static inline NSString* TRRailCorrectionDescription(TRRailCorrection self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<TRRailCorrection: "];
-    [description appendFormat:@"tile=%@", GEVec2iDescription(self.tile)];
-    [description appendFormat:@", start=%@", GEVec2iDescription(self.start)];
-    [description appendFormat:@", end=%@", GEVec2iDescription(self.end)];
-    [description appendString:@">"];
-    return description;
-}
+NSString* TRRailCorrectionDescription(TRRailCorrection self);
 ODPType* trRailCorrectionType();
 @interface TRRailCorrectionWrap : NSObject
 @property (readonly, nonatomic) TRRailCorrection value;

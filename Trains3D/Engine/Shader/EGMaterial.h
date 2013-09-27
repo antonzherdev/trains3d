@@ -83,13 +83,7 @@ static inline NSUInteger EGBlendFunctionHash(EGBlendFunction self) {
     hash = hash * 31 + GLenumHash(self.destination);
     return hash;
 }
-static inline NSString* EGBlendFunctionDescription(EGBlendFunction self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<EGBlendFunction: "];
-    [description appendFormat:@"source=%@", GLenumDescription(self.source)];
-    [description appendFormat:@", destination=%@", GLenumDescription(self.destination)];
-    [description appendString:@">"];
-    return description;
-}
+NSString* EGBlendFunctionDescription(EGBlendFunction self);
 void egBlendFunctionApplyDraw(EGBlendFunction self, void(^draw)());
 EGBlendFunction egBlendFunctionStandard();
 EGBlendFunction egBlendFunctionPremultiplied();

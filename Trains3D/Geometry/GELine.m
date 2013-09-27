@@ -1,5 +1,12 @@
 #import "GELine.h"
 
+NSString* GELine3Description(GELine3 self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<GELine3: "];
+    [description appendFormat:@"r0=%@", GEVec3Description(self.r0)];
+    [description appendFormat:@", u=%@", GEVec3Description(self.u)];
+    [description appendString:@">"];
+    return description;
+}
 GEVec3 geLine3RT(GELine3 self, float t) {
     return geVec3AddVec3(self.r0, geVec3MulK(self.u, t));
 }
@@ -51,6 +58,13 @@ ODPType* geLine3Type() {
 
 
 
+NSString* GEPlaneDescription(GEPlane self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<GEPlane: "];
+    [description appendFormat:@"p0=%@", GEVec3Description(self.p0)];
+    [description appendFormat:@", n=%@", GEVec3Description(self.n)];
+    [description appendString:@">"];
+    return description;
+}
 BOOL gePlaneContainsVec3(GEPlane self, GEVec3 vec3) {
     return eqf4(geVec3DotVec3(self.n, geVec3SubVec3(vec3, self.p0)), 0);
 }

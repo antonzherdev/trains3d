@@ -206,6 +206,15 @@ static ODClassType* _EGBillboardShader_type;
 @end
 
 
+NSString* EGBillboardBufferDataDescription(EGBillboardBufferData self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<EGBillboardBufferData: "];
+    [description appendFormat:@"position=%@", GEVec3Description(self.position)];
+    [description appendFormat:@", model=%@", GEVec2Description(self.model)];
+    [description appendFormat:@", color=%@", GEVec4Description(self.color)];
+    [description appendFormat:@", uv=%@", GEVec2Description(self.uv)];
+    [description appendString:@">"];
+    return description;
+}
 ODPType* egBillboardBufferDataType() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[EGBillboardBufferDataWrap class] name:@"EGBillboardBufferData" size:sizeof(EGBillboardBufferData) wrap:^id(void* data, NSUInteger i) {

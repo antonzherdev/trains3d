@@ -1,6 +1,13 @@
 #import "GEVec.h"
 
 #import "GEMat4.h"
+NSString* GEVec2Description(GEVec2 self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<GEVec2: "];
+    [description appendFormat:@"x=%f", self.x];
+    [description appendFormat:@", y=%f", self.y];
+    [description appendString:@">"];
+    return description;
+}
 GEVec2 geVec2ApplyVec2i(GEVec2i vec2i) {
     return GEVec2Make(((float)(vec2i.x)), ((float)(vec2i.y)));
 }
@@ -142,6 +149,13 @@ ODPType* geVec2Type() {
 
 
 
+NSString* GEVec2iDescription(GEVec2i self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<GEVec2i: "];
+    [description appendFormat:@"x=%li", self.x];
+    [description appendFormat:@", y=%li", self.y];
+    [description appendString:@">"];
+    return description;
+}
 GEVec2i geVec2iApplyVec2(GEVec2 vec2) {
     return GEVec2iMake(lround(((CGFloat)(vec2.x))), lround(((CGFloat)(vec2.y))));
 }
@@ -220,6 +234,14 @@ ODPType* geVec2iType() {
 
 
 
+NSString* GEVec3Description(GEVec3 self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<GEVec3: "];
+    [description appendFormat:@"x=%f", self.x];
+    [description appendFormat:@", y=%f", self.y];
+    [description appendFormat:@", z=%f", self.z];
+    [description appendString:@">"];
+    return description;
+}
 GEVec3 geVec3ApplyVec2Z(GEVec2 vec2, float z) {
     return GEVec3Make(vec2.x, vec2.y, z);
 }
@@ -301,6 +323,15 @@ ODPType* geVec3Type() {
 
 
 
+NSString* GEVec4Description(GEVec4 self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<GEVec4: "];
+    [description appendFormat:@"x=%f", self.x];
+    [description appendFormat:@", y=%f", self.y];
+    [description appendFormat:@", z=%f", self.z];
+    [description appendFormat:@", w=%f", self.w];
+    [description appendString:@">"];
+    return description;
+}
 GEVec4 geVec4ApplyVec3W(GEVec3 vec3, float w) {
     return GEVec4Make(vec3.x, vec3.y, vec3.z, w);
 }
@@ -382,6 +413,12 @@ ODPType* geVec4Type() {
 
 
 
+NSString* GEQuadDescription(GEQuad self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<GEQuad: "];
+    [description appendFormat:@"p=[%@, %@, %@, %@]", GEVec2Description(self.p[0]), GEVec2Description(self.p[1]), GEVec2Description(self.p[2]), GEVec2Description(self.p[3])];
+    [description appendString:@">"];
+    return description;
+}
 GEQuad geQuadApplyP0P1P2P3(GEVec2 p0, GEVec2 p1, GEVec2 p2, GEVec2 p3) {
     return GEQuadMake((GEVec2[]){p0, p1, p2, p3});
 }
@@ -455,6 +492,12 @@ ODPType* geQuadType() {
 
 
 
+NSString* GEQuadrantDescription(GEQuadrant self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<GEQuadrant: "];
+    [description appendFormat:@"quads=[%@, %@, %@, %@]", GEQuadDescription(self.quads[0]), GEQuadDescription(self.quads[1]), GEQuadDescription(self.quads[2]), GEQuadDescription(self.quads[3])];
+    [description appendString:@">"];
+    return description;
+}
 GEQuad geQuadrantRandomQuad(GEQuadrant self) {
     return self.quads[randomMax(3)];
 }
@@ -503,6 +546,13 @@ ODPType* geQuadrantType() {
 
 
 
+NSString* GERectDescription(GERect self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<GERect: "];
+    [description appendFormat:@"origin=%@", GEVec2Description(self.origin)];
+    [description appendFormat:@", size=%@", GEVec2Description(self.size)];
+    [description appendString:@">"];
+    return description;
+}
 GERect geRectApplyXYWidthHeight(float x, float y, float width, float height) {
     return GERectMake(GEVec2Make(x, y), GEVec2Make(width, height));
 }
@@ -614,6 +664,13 @@ ODPType* geRectType() {
 
 
 
+NSString* GERectIDescription(GERectI self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<GERectI: "];
+    [description appendFormat:@"origin=%@", GEVec2iDescription(self.origin)];
+    [description appendFormat:@", size=%@", GEVec2iDescription(self.size)];
+    [description appendString:@">"];
+    return description;
+}
 GERectI geRectIApplyXYWidthHeight(float x, float y, float width, float height) {
     return GERectIMake(geVec2iApplyVec2(GEVec2Make(x, y)), geVec2iApplyVec2(GEVec2Make(width, height)));
 }

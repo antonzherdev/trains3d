@@ -160,7 +160,7 @@ static ODClassType* _EGCollisionBox_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"halfSize=%@", GEVec3Description(self.size)];
+    [description appendFormat:@"size=<%f, %f, %f>", self.size.x, self.size.y, self.size.z];
     [description appendString:@">"];
     return description;
 }
@@ -233,7 +233,7 @@ static ODClassType* _EGCollisionBox2d_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"halfSize=%@", GEVec2Description(self.size)];
+    [description appendFormat:@"size=<%f, %f>", self.size.x, self.size.y];
     [description appendString:@">"];
     return description;
 }
@@ -306,7 +306,7 @@ static ODClassType* _EGCollisionPlane_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"normal=%@", GEVec3Description(self.normal)];
+    [description appendFormat:@"normal=<%f, %f, %f>", self.normal.x, self.normal.y, self.normal.z];
     [description appendFormat:@", distance=%f", self.distance];
     [description appendString:@">"];
     return description;

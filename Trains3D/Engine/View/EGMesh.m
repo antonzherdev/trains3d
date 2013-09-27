@@ -1,5 +1,13 @@
 #import "EGMesh.h"
 
+NSString* EGMeshDataDescription(EGMeshData self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<EGMeshData: "];
+    [description appendFormat:@"uv=%@", GEVec2Description(self.uv)];
+    [description appendFormat:@", normal=%@", GEVec3Description(self.normal)];
+    [description appendFormat:@", position=%@", GEVec3Description(self.position)];
+    [description appendString:@">"];
+    return description;
+}
 ODPType* egMeshDataType() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[EGMeshDataWrap class] name:@"EGMeshData" size:sizeof(EGMeshData) wrap:^id(void* data, NSUInteger i) {

@@ -26,13 +26,7 @@ static inline NSUInteger GEVec2Hash(GEVec2 self) {
     hash = hash * 31 + float4Hash(self.y);
     return hash;
 }
-static inline NSString* GEVec2Description(GEVec2 self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<GEVec2: "];
-    [description appendFormat:@"x=%f", self.x];
-    [description appendFormat:@", y=%f", self.y];
-    [description appendString:@">"];
-    return description;
-}
+NSString* GEVec2Description(GEVec2 self);
 GEVec2 geVec2ApplyVec2i(GEVec2i vec2i);
 GEVec2 geVec2AddVec2(GEVec2 self, GEVec2 vec2);
 GEVec2 geVec2AddF4(GEVec2 self, float f4);
@@ -89,13 +83,7 @@ static inline NSUInteger GEVec2iHash(GEVec2i self) {
     hash = hash * 31 + self.y;
     return hash;
 }
-static inline NSString* GEVec2iDescription(GEVec2i self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<GEVec2i: "];
-    [description appendFormat:@"x=%li", self.x];
-    [description appendFormat:@", y=%li", self.y];
-    [description appendString:@">"];
-    return description;
-}
+NSString* GEVec2iDescription(GEVec2i self);
 GEVec2i geVec2iApplyVec2(GEVec2 vec2);
 GEVec2i geVec2iAddVec2i(GEVec2i self, GEVec2i vec2i);
 GEVec2i geVec2iSubVec2i(GEVec2i self, GEVec2i vec2i);
@@ -133,14 +121,7 @@ static inline NSUInteger GEVec3Hash(GEVec3 self) {
     hash = hash * 31 + float4Hash(self.z);
     return hash;
 }
-static inline NSString* GEVec3Description(GEVec3 self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<GEVec3: "];
-    [description appendFormat:@"x=%f", self.x];
-    [description appendFormat:@", y=%f", self.y];
-    [description appendFormat:@", z=%f", self.z];
-    [description appendString:@">"];
-    return description;
-}
+NSString* GEVec3Description(GEVec3 self);
 GEVec3 geVec3ApplyVec2Z(GEVec2 vec2, float z);
 GEVec3 geVec3AddVec3(GEVec3 self, GEVec3 vec3);
 GEVec3 geVec3SubVec3(GEVec3 self, GEVec3 vec3);
@@ -183,15 +164,7 @@ static inline NSUInteger GEVec4Hash(GEVec4 self) {
     hash = hash * 31 + float4Hash(self.w);
     return hash;
 }
-static inline NSString* GEVec4Description(GEVec4 self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<GEVec4: "];
-    [description appendFormat:@"x=%f", self.x];
-    [description appendFormat:@", y=%f", self.y];
-    [description appendFormat:@", z=%f", self.z];
-    [description appendFormat:@", w=%f", self.w];
-    [description appendString:@">"];
-    return description;
-}
+NSString* GEVec4Description(GEVec4 self);
 GEVec4 geVec4ApplyVec3W(GEVec3 vec3, float w);
 GEVec3 geVec4Xyz(GEVec4 self);
 GEVec2 geVec4Xy(GEVec4 self);
@@ -228,12 +201,7 @@ static inline NSUInteger GEQuadHash(GEQuad self) {
     hash = hash * 31 + 13 * (13 * (13 * GEVec2Hash(self.p[0]) + GEVec2Hash(self.p[1])) + GEVec2Hash(self.p[2])) + GEVec2Hash(self.p[3]);
     return hash;
 }
-static inline NSString* GEQuadDescription(GEQuad self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<GEQuad: "];
-    [description appendFormat:@"p=[%@, %@, %@, %@]", GEVec2Description(self.p[0]), GEVec2Description(self.p[1]), GEVec2Description(self.p[2]), GEVec2Description(self.p[3])];
-    [description appendString:@">"];
-    return description;
-}
+NSString* GEQuadDescription(GEQuad self);
 GEQuad geQuadApplyP0P1P2P3(GEVec2 p0, GEVec2 p1, GEVec2 p2, GEVec2 p3);
 GEQuad geQuadApplySize(float size);
 GEQuad geQuadMulValue(GEQuad self, float value);
@@ -266,12 +234,7 @@ static inline NSUInteger GEQuadrantHash(GEQuadrant self) {
     hash = hash * 31 + 13 * (13 * (13 * GEQuadHash(self.quads[0]) + GEQuadHash(self.quads[1])) + GEQuadHash(self.quads[2])) + GEQuadHash(self.quads[3]);
     return hash;
 }
-static inline NSString* GEQuadrantDescription(GEQuadrant self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<GEQuadrant: "];
-    [description appendFormat:@"quads=[%@, %@, %@, %@]", GEQuadDescription(self.quads[0]), GEQuadDescription(self.quads[1]), GEQuadDescription(self.quads[2]), GEQuadDescription(self.quads[3])];
-    [description appendString:@">"];
-    return description;
-}
+NSString* GEQuadrantDescription(GEQuadrant self);
 GEQuad geQuadrantRandomQuad(GEQuadrant self);
 ODPType* geQuadrantType();
 @interface GEQuadrantWrap : NSObject
@@ -299,13 +262,7 @@ static inline NSUInteger GERectHash(GERect self) {
     hash = hash * 31 + GEVec2Hash(self.size);
     return hash;
 }
-static inline NSString* GERectDescription(GERect self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<GERect: "];
-    [description appendFormat:@"origin=%@", GEVec2Description(self.origin)];
-    [description appendFormat:@", size=%@", GEVec2Description(self.size)];
-    [description appendString:@">"];
-    return description;
-}
+NSString* GERectDescription(GERect self);
 GERect geRectApplyXYWidthHeight(float x, float y, float width, float height);
 float geRectX(GERect self);
 float geRectY(GERect self);
@@ -354,13 +311,7 @@ static inline NSUInteger GERectIHash(GERectI self) {
     hash = hash * 31 + GEVec2iHash(self.size);
     return hash;
 }
-static inline NSString* GERectIDescription(GERectI self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<GERectI: "];
-    [description appendFormat:@"origin=%@", GEVec2iDescription(self.origin)];
-    [description appendFormat:@", size=%@", GEVec2iDescription(self.size)];
-    [description appendString:@">"];
-    return description;
-}
+NSString* GERectIDescription(GERectI self);
 GERectI geRectIApplyXYWidthHeight(float x, float y, float width, float height);
 GERectI geRectIApplyRect(GERect rect);
 NSInteger geRectIX(GERectI self);

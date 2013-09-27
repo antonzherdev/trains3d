@@ -76,6 +76,14 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
 @end
 
 
+NSString* TRRailCorrectionDescription(TRRailCorrection self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<TRRailCorrection: "];
+    [description appendFormat:@"tile=%@", GEVec2iDescription(self.tile)];
+    [description appendFormat:@", start=%@", GEVec2iDescription(self.start)];
+    [description appendFormat:@", end=%@", GEVec2iDescription(self.end)];
+    [description appendString:@">"];
+    return description;
+}
 ODPType* trRailCorrectionType() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[TRRailCorrectionWrap class] name:@"TRRailCorrection" size:sizeof(TRRailCorrection) wrap:^id(void* data, NSUInteger i) {

@@ -294,6 +294,13 @@ static ODClassType* _EGMeshModel_type;
 @end
 
 
+NSString* EGBlendFunctionDescription(EGBlendFunction self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<EGBlendFunction: "];
+    [description appendFormat:@"source=%@", GLenumDescription(self.source)];
+    [description appendFormat:@", destination=%@", GLenumDescription(self.destination)];
+    [description appendString:@">"];
+    return description;
+}
 void egBlendFunctionApplyDraw(EGBlendFunction self, void(^draw)()) {
     glEnable(GL_BLEND);
     glBlendFunc(self.source, self.destination);
