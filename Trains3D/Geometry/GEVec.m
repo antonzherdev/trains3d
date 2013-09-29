@@ -642,10 +642,10 @@ GEQuad geRectUpsideDownQuad(GERect self) {
     return geQuadApplyP0P1P2P3(geRectP1(self), self.p0, geRectP3(self), geRectP2(self));
 }
 GERect geRectCenterX(GERect self) {
-    return GERectMake(GEVec2Make(self.p0.x + self.size.x / 2, self.p0.y), self.size);
+    return GERectMake(GEVec2Make(self.p0.x - self.size.x / 2, self.p0.y), self.size);
 }
 GERect geRectCenterY(GERect self) {
-    return GERectMake(GEVec2Make(self.p0.x, self.p0.y + self.size.y / 2), self.size);
+    return GERectMake(GEVec2Make(self.p0.x, self.p0.y - self.size.y / 2), self.size);
 }
 ODPType* geRectType() {
     static ODPType* _ret = nil;

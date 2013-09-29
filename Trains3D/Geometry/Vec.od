@@ -167,8 +167,8 @@ struct Rect(p0 : vec2, size : vec2) {
     def moveToCenterFor(size : vec2) = Rect((size - self.size)*0.5, self.size)
     def quad = Quad(p0, p1, p2, p3)
     def upsideDownQuad = Quad(p1, p0, p3, p2)
-    def centerX = Rect(vec2(p0.x + size.x/2, p0.y), size)
-    def centerY = Rect(vec2(p0.x, p0.y + size.y/2), size)
+    def centerX = Rect(vec2(p0.x - size.x/2, p0.y), size)
+    def centerY = Rect(vec2(p0.x, p0.y - size.y/2), size)
 }
 struct RectI(origin : vec2i, size : vec2i) {
     static def apply(x : float4, y : float4, width : float4, height : float4) = RectI(vec2(x, y), vec2(width, height))
