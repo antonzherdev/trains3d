@@ -453,10 +453,10 @@ GEVec2 geQuadApplyIndex(GEQuad self, NSUInteger index) {
     return self.p[index];
 }
 GERect geQuadBoundingRect(GEQuad self) {
-    CGFloat minX = DBL_MAX;
-    CGFloat maxX = DBL_MIN;
-    CGFloat minY = DBL_MAX;
-    CGFloat maxY = DBL_MIN;
+    CGFloat minX = odFloatMax();
+    CGFloat maxX = odFloatMin();
+    CGFloat minY = odFloatMax();
+    CGFloat maxY = odFloatMin();
     NSInteger i = 0;
     while(i < 4) {
         GEVec2 pp = self.p[i];

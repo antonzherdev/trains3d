@@ -280,7 +280,7 @@ static ODClassType* _GEVerticalLine_type;
 }
 
 - (CGFloat)slope {
-    return DBL_MAX;
+    return odFloatMax();
 }
 
 - (id)moveWithDistance:(CGFloat)distance {
@@ -532,10 +532,10 @@ static ODClassType* _GEPolygon_type;
 }
 
 - (GERect)boundingRect {
-    __block CGFloat minX = DBL_MAX;
-    __block CGFloat maxX = DBL_MIN;
-    __block CGFloat minY = DBL_MAX;
-    __block CGFloat maxY = DBL_MIN;
+    __block CGFloat minX = odFloatMax();
+    __block CGFloat maxX = odFloatMin();
+    __block CGFloat minY = odFloatMax();
+    __block CGFloat maxY = odFloatMin();
     [_points forEach:^void(id p) {
         if(uwrap(GEVec2, p).x < minX) minX = ((CGFloat)(uwrap(GEVec2, p).x));
         if(uwrap(GEVec2, p).x > maxX) maxX = ((CGFloat)(uwrap(GEVec2, p).x));

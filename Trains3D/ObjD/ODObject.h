@@ -101,6 +101,14 @@ static inline NSUInteger oduIntRndMax(NSUInteger max) {
 }
 
 
+static inline CGFloat odFloatMax() {
+    return DBL_MAX;
+}
+
+static inline CGFloat odFloatMin() {
+    return DBL_MIN;
+}
+
 
 static inline char byteAbs(char f) {
     return f < 0 ? -f : f;

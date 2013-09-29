@@ -113,10 +113,10 @@ struct Quad(p : vec2[4]) {
     }
     def apply(index : uint) : vec2 = p[index]
     def boundingRect : Rect = {
-        var minX = DBL_MAX
-        var maxX = DBL_MIN
-        var minY = DBL_MAX
-        var maxY = DBL_MIN
+        var minX = Float.max
+        var maxX = Float.min
+        var minY = Float.max
+        var maxY = Float.min
         var i = 0
         while(i < 4) {
             val pp = p[i]

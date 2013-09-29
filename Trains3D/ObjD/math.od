@@ -1,8 +1,6 @@
 package core
 
 stub object math {
-    val DBL_MAX : float
-    val DBL_MIN : float
     def max(a : float, b : float) : float
     def min(a : float, b : float) : float
 

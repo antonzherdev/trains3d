@@ -77,7 +77,7 @@ class VerticalLine(x : float) extends Line {
         else line.intersectionWith(self)
 
     def isRight(point : vec2) : bool = point.x > x
-    def slope : float = DBL_MAX
+    def slope : float = Float.max
     def moveWith(distance : float) : self = VerticalLine(x + distance)
     def angle : float = M_PI_2
 
@@ -143,10 +143,10 @@ class LineSegment(p0 : vec2, p1 : vec2) extends Figure {
 
 class Polygon(points : [vec2]) extends Figure {
     def boundingRect : Rect = {
-        var minX = DBL_MAX
-        var maxX = DBL_MIN
-        var minY = DBL_MAX
-        var maxY = DBL_MIN
+        var minX = Float.max
+        var maxX = Float.min
+        var minY = Float.max
+        var maxY = Float.min
         points.for(p -> {
             if(p.x < minX) minX = p.x
             if(p.x > maxX) maxX = p.x

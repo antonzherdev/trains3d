@@ -57,6 +57,9 @@ stub struct UInt4 extends Comparable<uint4> {
 }
 
 stub struct Float extends Comparable<float> {
+    static val max : float
+    static val min : float
+
     def compare(to : float) : int
     def between( : float, : float) : bool
     def abs : float
@@ -64,6 +67,9 @@ stub struct Float extends Comparable<float> {
     def noise(percents : float) : float
     static def rnd : float
     static def rnd(min : float, max : float) : float
+
+    def max(b : float) : float
+    def min(b : float) : float
 }
 
 stub struct Float4 extends Comparable<float4> {
