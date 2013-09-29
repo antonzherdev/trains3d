@@ -37,7 +37,7 @@ class Event(viewSize : vec2, camera : EventCamera?) {
         else {
             val viewport = camera.get.viewport
 
-            val loc = (locationInView - viewport.origin)/viewport.size*2 - vec2(1, 1)
+            val loc = (locationInView - viewport.p0)/viewport.size*2 - vec2(1, 1)
             val mat4 = camera.get.inverseMatrix
             val p0 = mat4.mul(vec4 = vec4(loc.x, loc.y, -1, 1))
             val p1 = mat4.mul(vec4 = vec4(loc.x, loc.y, 1, 1))

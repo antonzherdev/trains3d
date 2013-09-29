@@ -5,6 +5,7 @@
 @class TRTrain;
 @class TRForestRules;
 @class TRTreeType;
+@class TRWeatherRules;
 @class TRLevelRules;
 @class TRLevel;
 @class EGGlobal;
@@ -16,6 +17,7 @@
 @class TRNotifications;
 @class TRRailroad;
 @class EGMapSso;
+@class TRWeather;
 @class TRForest;
 @class TRLevelView;
 @class TRLevelProcessor;
@@ -38,6 +40,7 @@
 + (TRRailroad*)railroadWithMapSize:(GEVec2i)mapSize;
 + (TRScoreRules*)scoreRules;
 + (TRForestRules*)forestRules;
++ (TRWeatherRules*)weatherRules;
 + (ODClassType*)type;
 @end
 

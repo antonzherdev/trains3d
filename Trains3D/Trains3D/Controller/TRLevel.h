@@ -3,9 +3,11 @@
 #import "EGScene.h"
 @class TRScoreRules;
 @class TRForestRules;
+@class TRWeatherRules;
 @class EGMapSso;
 @class TRNotifications;
 @class TRScore;
+@class TRWeather;
 @class TRForest;
 @class TRRailroad;
 @class EGSchedule;
@@ -32,11 +34,12 @@
 @property (nonatomic, readonly) GEVec2i mapSize;
 @property (nonatomic, readonly) TRScoreRules* scoreRules;
 @property (nonatomic, readonly) TRForestRules* forestRules;
+@property (nonatomic, readonly) TRWeatherRules* weatherRules;
 @property (nonatomic, readonly) NSUInteger repairerSpeed;
 @property (nonatomic, readonly) id<CNSeq> events;
 
-+ (id)levelRulesWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules forestRules:(TRForestRules*)forestRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
-- (id)initWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules forestRules:(TRForestRules*)forestRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
++ (id)levelRulesWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules forestRules:(TRForestRules*)forestRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
+- (id)initWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules forestRules:(TRForestRules*)forestRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -47,6 +50,7 @@
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRNotifications* notifications;
 @property (nonatomic, readonly) TRScore* score;
+@property (nonatomic, readonly) TRWeather* weather;
 @property (nonatomic, readonly) TRForest* forest;
 @property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic, readonly) EGSchedule* schedule;

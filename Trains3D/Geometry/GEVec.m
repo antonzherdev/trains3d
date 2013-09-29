@@ -263,6 +263,9 @@ GEVec3 geVec3MulK(GEVec3 self, float k) {
 float geVec3DotVec3(GEVec3 self, GEVec3 vec3) {
     return self.x * vec3.x + self.y * vec3.y + self.z * vec3.z;
 }
+GEVec3 geVec3CrossVec3(GEVec3 self, GEVec3 vec3) {
+    return GEVec3Make(self.y * vec3.z - self.z * vec3.y, self.x * vec3.z - vec3.x * self.z, self.x * vec3.y - vec3.x * self.y);
+}
 float geVec3LengthSquare(GEVec3 self) {
     return self.x * self.x + self.y * self.y + self.z * self.z;
 }
@@ -564,7 +567,7 @@ ODPType* geQuadrantType() {
 
 NSString* GERectDescription(GERect self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<GERect: "];
-    [description appendFormat:@"origin=%@", GEVec2Description(self.origin)];
+    [description appendFormat:@"p0=%@", GEVec2Description(self.p0)];
     [description appendFormat:@", size=%@", GEVec2Description(self.size)];
     [description appendString:@">"];
     return description;
@@ -573,16 +576,16 @@ GERect geRectApplyXYWidthHeight(float x, float y, float width, float height) {
     return GERectMake(GEVec2Make(x, y), GEVec2Make(width, height));
 }
 float geRectX(GERect self) {
-    return self.origin.x;
+    return self.p0.x;
 }
 float geRectY(GERect self) {
-    return self.origin.y;
+    return self.p0.y;
 }
 float geRectX2(GERect self) {
-    return self.origin.x + self.size.x;
+    return self.p0.x + self.size.x;
 }
 float geRectY2(GERect self) {
-    return self.origin.y + self.size.y;
+    return self.p0.y + self.size.y;
 }
 float geRectWidth(GERect self) {
     return self.size.x;
@@ -591,55 +594,52 @@ float geRectHeight(GERect self) {
     return self.size.y;
 }
 BOOL geRectContainsVec2(GERect self, GEVec2 vec2) {
-    return self.origin.x <= vec2.x && vec2.x <= self.origin.x + self.size.x && self.origin.y <= vec2.y && vec2.y <= self.origin.y + self.size.y;
+    return self.p0.x <= vec2.x && vec2.x <= self.p0.x + self.size.x && self.p0.y <= vec2.y && vec2.y <= self.p0.y + self.size.y;
 }
 GERect geRectAddVec2(GERect self, GEVec2 vec2) {
-    return GERectMake(geVec2AddVec2(self.origin, vec2), self.size);
+    return GERectMake(geVec2AddVec2(self.p0, vec2), self.size);
 }
 GERect geRectSubVec2(GERect self, GEVec2 vec2) {
-    return GERectMake(geVec2SubVec2(self.origin, vec2), self.size);
+    return GERectMake(geVec2SubVec2(self.p0, vec2), self.size);
 }
 GERect geRectMulF(GERect self, CGFloat f) {
-    return GERectMake(geVec2MulF(self.origin, f), geVec2MulF(self.size, f));
+    return GERectMake(geVec2MulF(self.p0, f), geVec2MulF(self.size, f));
 }
 GERect geRectMulVec2(GERect self, GEVec2 vec2) {
-    return GERectMake(geVec2MulVec2(self.origin, vec2), geVec2MulVec2(self.size, vec2));
+    return GERectMake(geVec2MulVec2(self.p0, vec2), geVec2MulVec2(self.size, vec2));
 }
 BOOL geRectIntersectsRect(GERect self, GERect rect) {
-    return self.origin.x <= geRectX2(rect) && geRectX2(self) >= rect.origin.x && self.origin.y <= geRectY2(rect) && geRectY2(self) >= rect.origin.y;
+    return self.p0.x <= geRectX2(rect) && geRectX2(self) >= rect.p0.x && self.p0.y <= geRectY2(rect) && geRectY2(self) >= rect.p0.y;
 }
 GERect geRectThickenHalfSize(GERect self, GEVec2 halfSize) {
-    return GERectMake(geVec2SubVec2(self.origin, halfSize), geVec2AddVec2(self.size, geVec2MulI(halfSize, 2)));
+    return GERectMake(geVec2SubVec2(self.p0, halfSize), geVec2AddVec2(self.size, geVec2MulI(halfSize, 2)));
 }
 GERect geRectDivVec2(GERect self, GEVec2 vec2) {
-    return GERectMake(geVec2DivVec2(self.origin, vec2), geVec2DivVec2(self.size, vec2));
+    return GERectMake(geVec2DivVec2(self.p0, vec2), geVec2DivVec2(self.size, vec2));
 }
-GEVec2 geRectLeftBottom(GERect self) {
-    return self.origin;
+GEVec2 geRectP1(GERect self) {
+    return GEVec2Make(self.p0.x, self.p0.y + self.size.y);
 }
-GEVec2 geRectLeftTop(GERect self) {
-    return GEVec2Make(self.origin.x, self.origin.y + self.size.y);
+GEVec2 geRectP2(GERect self) {
+    return GEVec2Make(self.p0.x + self.size.x, self.p0.y);
 }
-GEVec2 geRectRightTop(GERect self) {
-    return GEVec2Make(self.origin.x + self.size.x, self.origin.y + self.size.y);
-}
-GEVec2 geRectRightBottom(GERect self) {
-    return GEVec2Make(self.origin.x + self.size.x, self.origin.y);
+GEVec2 geRectP3(GERect self) {
+    return GEVec2Make(self.p0.x + self.size.x, self.p0.y + self.size.y);
 }
 GERect geRectMoveToCenterForSize(GERect self, GEVec2 size) {
     return GERectMake(geVec2MulF(geVec2SubVec2(size, self.size), 0.5), self.size);
 }
 GEQuad geRectQuad(GERect self) {
-    return geQuadApplyP0P1P2P3(geRectLeftBottom(self), geRectLeftTop(self), geRectRightBottom(self), geRectRightTop(self));
+    return geQuadApplyP0P1P2P3(self.p0, geRectP1(self), geRectP2(self), geRectP3(self));
 }
 GEQuad geRectUpsideDownQuad(GERect self) {
-    return geQuadApplyP0P1P2P3(geRectLeftTop(self), geRectLeftBottom(self), geRectRightTop(self), geRectRightBottom(self));
+    return geQuadApplyP0P1P2P3(geRectP1(self), self.p0, geRectP3(self), geRectP2(self));
 }
 GERect geRectCenterX(GERect self) {
-    return GERectMake(GEVec2Make(self.origin.x + self.size.x / 2, self.origin.y), self.size);
+    return GERectMake(GEVec2Make(self.p0.x + self.size.x / 2, self.p0.y), self.size);
 }
 GERect geRectCenterY(GERect self) {
-    return GERectMake(GEVec2Make(self.origin.x, self.origin.y + self.size.y / 2), self.size);
+    return GERectMake(GEVec2Make(self.p0.x, self.p0.y + self.size.y / 2), self.size);
 }
 ODPType* geRectType() {
     static ODPType* _ret = nil;
@@ -697,7 +697,7 @@ GERectI geRectIApplyXYWidthHeight(float x, float y, float width, float height) {
     return GERectIMake(geVec2iApplyVec2(GEVec2Make(x, y)), geVec2iApplyVec2(GEVec2Make(width, height)));
 }
 GERectI geRectIApplyRect(GERect rect) {
-    return GERectIMake(geVec2iApplyVec2(rect.origin), geVec2iApplyVec2(rect.size));
+    return GERectIMake(geVec2iApplyVec2(rect.p0), geVec2iApplyVec2(rect.size));
 }
 NSInteger geRectIX(GERectI self) {
     return self.origin.x;

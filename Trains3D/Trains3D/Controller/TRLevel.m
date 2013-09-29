@@ -2,6 +2,7 @@
 
 #import "TRScore.h"
 #import "TRTree.h"
+#import "TRWeather.h"
 #import "EGMapIso.h"
 #import "TRNotification.h"
 #import "TRRailroad.h"
@@ -15,6 +16,7 @@
     GEVec2i _mapSize;
     TRScoreRules* _scoreRules;
     TRForestRules* _forestRules;
+    TRWeatherRules* _weatherRules;
     NSUInteger _repairerSpeed;
     id<CNSeq> _events;
 }
@@ -22,19 +24,21 @@ static ODClassType* _TRLevelRules_type;
 @synthesize mapSize = _mapSize;
 @synthesize scoreRules = _scoreRules;
 @synthesize forestRules = _forestRules;
+@synthesize weatherRules = _weatherRules;
 @synthesize repairerSpeed = _repairerSpeed;
 @synthesize events = _events;
 
-+ (id)levelRulesWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules forestRules:(TRForestRules*)forestRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
-    return [[TRLevelRules alloc] initWithMapSize:mapSize scoreRules:scoreRules forestRules:forestRules repairerSpeed:repairerSpeed events:events];
++ (id)levelRulesWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules forestRules:(TRForestRules*)forestRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
+    return [[TRLevelRules alloc] initWithMapSize:mapSize scoreRules:scoreRules forestRules:forestRules weatherRules:weatherRules repairerSpeed:repairerSpeed events:events];
 }
 
-- (id)initWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules forestRules:(TRForestRules*)forestRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
+- (id)initWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules forestRules:(TRForestRules*)forestRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
     self = [super init];
     if(self) {
         _mapSize = mapSize;
         _scoreRules = scoreRules;
         _forestRules = forestRules;
+        _weatherRules = weatherRules;
         _repairerSpeed = repairerSpeed;
         _events = events;
     }
@@ -63,7 +67,7 @@ static ODClassType* _TRLevelRules_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRLevelRules* o = ((TRLevelRules*)(other));
-    return GEVec2iEq(self.mapSize, o.mapSize) && [self.scoreRules isEqual:o.scoreRules] && [self.forestRules isEqual:o.forestRules] && self.repairerSpeed == o.repairerSpeed && [self.events isEqual:o.events];
+    return GEVec2iEq(self.mapSize, o.mapSize) && [self.scoreRules isEqual:o.scoreRules] && [self.forestRules isEqual:o.forestRules] && [self.weatherRules isEqual:o.weatherRules] && self.repairerSpeed == o.repairerSpeed && [self.events isEqual:o.events];
 }
 
 - (NSUInteger)hash {
@@ -71,6 +75,7 @@ static ODClassType* _TRLevelRules_type;
     hash = hash * 31 + GEVec2iHash(self.mapSize);
     hash = hash * 31 + [self.scoreRules hash];
     hash = hash * 31 + [self.forestRules hash];
+    hash = hash * 31 + [self.weatherRules hash];
     hash = hash * 31 + self.repairerSpeed;
     hash = hash * 31 + [self.events hash];
     return hash;
@@ -81,6 +86,7 @@ static ODClassType* _TRLevelRules_type;
     [description appendFormat:@"mapSize=%@", GEVec2iDescription(self.mapSize)];
     [description appendFormat:@", scoreRules=%@", self.scoreRules];
     [description appendFormat:@", forestRules=%@", self.forestRules];
+    [description appendFormat:@", weatherRules=%@", self.weatherRules];
     [description appendFormat:@", repairerSpeed=%li", self.repairerSpeed];
     [description appendFormat:@", events=%@", self.events];
     [description appendString:@">"];
@@ -95,6 +101,7 @@ static ODClassType* _TRLevelRules_type;
     EGMapSso* _map;
     TRNotifications* _notifications;
     TRScore* _score;
+    TRWeather* _weather;
     TRForest* _forest;
     TRRailroad* _railroad;
     NSMutableArray* __cities;
@@ -110,6 +117,7 @@ static ODClassType* _TRLevel_type;
 @synthesize map = _map;
 @synthesize notifications = _notifications;
 @synthesize score = _score;
+@synthesize weather = _weather;
 @synthesize forest = _forest;
 @synthesize railroad = _railroad;
 @synthesize schedule = _schedule;
@@ -127,7 +135,8 @@ static ODClassType* _TRLevel_type;
         _map = [EGMapSso mapSsoWithSize:_rules.mapSize];
         _notifications = [TRNotifications notifications];
         _score = [TRScore scoreWithRules:_rules.scoreRules notifications:_notifications];
-        _forest = [TRForest forestWithMap:_map rules:_rules.forestRules];
+        _weather = [TRWeather weatherWithRules:_rules.weatherRules];
+        _forest = [TRForest forestWithMap:_map rules:_rules.forestRules weather:_weather];
         _railroad = [TRRailroad railroadWithMap:_map score:_score forest:_forest];
         __cities = [NSMutableArray mutableArray];
         _schedule = [self createSchedule];
@@ -233,6 +242,7 @@ static ODClassType* _TRLevel_type;
     if(!([[self trains] isEmpty])) [self processCollisions];
     [_dynamicWorld updateWithDelta:delta];
     [_schedule updateWithDelta:delta];
+    [_weather updateWithDelta:delta];
     [_forest updateWithDelta:delta];
 }
 

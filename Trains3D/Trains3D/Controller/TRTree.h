@@ -2,6 +2,7 @@
 #import "EGScene.h"
 #import "GEVec.h"
 @class EGMapSso;
+@class TRWeather;
 @class TRRail;
 @class TRRailForm;
 @class TRRailConnector;
@@ -25,9 +26,10 @@
 @interface TRForest : NSObject<EGController>
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRForestRules* rules;
+@property (nonatomic, readonly) TRWeather* weather;
 
-+ (id)forestWithMap:(EGMapSso*)map rules:(TRForestRules*)rules;
-- (id)initWithMap:(EGMapSso*)map rules:(TRForestRules*)rules;
++ (id)forestWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
+- (id)initWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
 - (ODClassType*)type;
 - (id<CNSeq>)trees;
 - (void)cutDownTile:(GEVec2i)tile;

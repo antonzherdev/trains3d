@@ -4,7 +4,6 @@
 @class TRCarType;
 @class TRLevel;
 @class TRLevelFactory;
-@class TRLevelRules;
 @class TRCarsCollision;
 @class TRCar;
 @class TRRailForm;

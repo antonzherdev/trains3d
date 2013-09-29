@@ -71,6 +71,7 @@ struct vec3(x : float4, y : float4, z : float4) {
     def negate = vec3(-x, -y, -z)
     def mul(k : float4) = vec3(k*x, k*y, k*z)
     def dot(vec3 : vec3) : float4 = x*vec3.x + y*vec3.y + z*vec3.z
+    def cross(vec3 : vec3) : vec3 = vec3(y*vec3.z - z*vec3.y, x*vec3.z - vec3.x*z, x*vec3.y - vec3.x*y)
     def lengthSquare : float4 = x*x + y*y + z*z
     def length = sqrt(lengthSquare)
     def set(length : float4) = mul(length/self.length)
@@ -131,46 +132,45 @@ struct Quadrant(quads : Quad[4]) {
     def randomQuad = quads[randomMax(3)]
 }
 
-struct Rect(origin : vec2, size : vec2) {
+struct Rect(p0 : vec2, size : vec2) {
     static def apply(x : float4, y : float4, width : float4, height : float4) = Rect(vec2(x, y), vec2(width, height))
 
-    def x = origin.x
-    def y = origin.y
-    def x2 : float4 = origin.x + size.x
-    def y2 : float4 = origin.y + size.y
+    def x = p0.x
+    def y = p0.y
+    def x2 : float4 = p0.x + size.x
+    def y2 : float4 = p0.y + size.y
     def width : float4 = size.x
     def height : float4 = size.y
     def contains(vec2 : vec2) : bool =
-        origin.x <= vec2.x
-        && vec2.x <= origin.x + size.x
-        && origin.y <= vec2.y
-        && vec2.y <= origin.y + size.y
+        p0.x <= vec2.x
+        && vec2.x <= p0.x + size.x
+        && p0.y <= vec2.y
+        && vec2.y <= p0.y + size.y
 
-    def add(vec2 : vec2) = Rect(origin + vec2, size)
-    def sub(vec2 : vec2) = Rect(origin - vec2, size)
-    def mul(f : float) = Rect(origin*f, size*f)
-    def mul(vec2 : vec2) = Rect(origin*vec2, size*vec2)
+    def add(vec2 : vec2) = Rect(p0 + vec2, size)
+    def sub(vec2 : vec2) = Rect(p0 - vec2, size)
+    def mul(f : float) = Rect(p0*f, size*f)
+    def mul(vec2 : vec2) = Rect(p0*vec2, size*vec2)
 
     def intersects(rect : Rect) : bool =
-        origin.x <= rect.x2 && x2 >= rect.origin.x &&
-        origin.y <= rect.y2 && y2 >= rect.origin.y
+        p0.x <= rect.x2 && x2 >= rect.p0.x &&
+        p0.y <= rect.y2 && y2 >= rect.p0.y
 
-    def thicken(halfSize : vec2) = Rect(origin.sub(halfSize), size + halfSize*2)
-    def div(vec2 : vec2) = Rect(origin/vec2, size/vec2)
+    def thicken(halfSize : vec2) = Rect(p0.sub(halfSize), size + halfSize*2)
+    def div(vec2 : vec2) = Rect(p0/vec2, size/vec2)
 
-    def leftBottom = origin
-    def leftTop = vec2(origin.x, origin.y + size.y)
-    def rightTop = vec2(origin.x + size.x, origin.y + size.y)
-    def rightBottom = vec2(origin.x + size.x, origin.y)
+    def p1 = vec2(p0.x, p0.y + size.y)
+    def p2 = vec2(p0.x + size.x, p0.y)
+    def p3 = vec2(p0.x + size.x, p0.y + size.y)
     def moveToCenterFor(size : vec2) = Rect((size - self.size)*0.5, self.size)
-    def quad = Quad(leftBottom, leftTop, rightBottom, rightTop)
-    def upsideDownQuad = Quad(leftTop, leftBottom, rightTop, rightBottom)
-    def centerX = Rect(vec2(origin.x + size.x/2, origin.y), size)
-    def centerY = Rect(vec2(origin.x, origin.y + size.y/2), size)
+    def quad = Quad(p0, p1, p2, p3)
+    def upsideDownQuad = Quad(p1, p0, p3, p2)
+    def centerX = Rect(vec2(p0.x + size.x/2, p0.y), size)
+    def centerY = Rect(vec2(p0.x, p0.y + size.y/2), size)
 }
 struct RectI(origin : vec2i, size : vec2i) {
     static def apply(x : float4, y : float4, width : float4, height : float4) = RectI(vec2(x, y), vec2(width, height))
-    static def apply(rect : Rect) = RectI(rect.origin, rect.size)
+    static def apply(rect : Rect) = RectI(rect.p0, rect.size)
     def x = origin.x
     def y = origin.y
     def x2 : int = origin.x + size.x

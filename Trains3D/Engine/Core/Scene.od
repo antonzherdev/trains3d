@@ -91,7 +91,7 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
         else if(size.x == 0) vec2(viewSize.x, size.y)
         else if(size.y == 0) vec2(size.x, viewSize.y)
         else if(size.x/size.y < vpr) vec2(size.x, size.x/vpr) else vec2(size.y*vpr, size.y)
-        val po = viewportLayout.origin/2 + 0.5
+        val po = viewportLayout.p0/2 + 0.5
         Rect((viewSize - vpSize) * po, vpSize)
     }
 }

@@ -5,7 +5,7 @@ class WeatherRules(
 )
 
 class Weather(rules : WeatherRules) extends Controller {
-    private var _wind : vec2
+    private var _wind : vec2 = vec2(0, 0)
     def wind : vec2 = _wind
 
     def updateWith(delta : float) {

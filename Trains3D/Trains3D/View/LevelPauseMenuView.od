@@ -21,7 +21,7 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor wi
             glDisable(GL_DEPTH_TEST)
             glLineWidth(2)
             D2D.drawSprite(material = vec4(0, 0, 0, 0.5), in = Rect(vec2(0, 0), context.viewport.size))
-            val p = menuBackSprite.rect.moveToCenterFor(context.viewport.size).origin
+            val p = menuBackSprite.rect.moveToCenterFor(context.viewport.size).p0
             menuBackSprite.position = p
             menuBackSprite.draw
 

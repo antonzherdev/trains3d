@@ -6,7 +6,7 @@ class ForestRules(
     thickness : float //count on tile
 )
 
-class Forest( map : MapSso, rules : ForestRules) extends Controller {
+class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Controller {
     private var _trees = (rules.thickness * map.allTiles.count).cast<int>.range.chain.map{ _ ->
         val tile = map.allTiles.randomItem.get
         val pos = vec2(math.randomFloatGap(-0.5, 0.5), math.randomFloatGap(-0.5, 0.5))

@@ -1,6 +1,7 @@
 #import "TRTree.h"
 
 #import "EGMapIso.h"
+#import "TRWeather.h"
 #import "TRRailroad.h"
 #import "TRRailPoint.h"
 @implementation TRForestRules{
@@ -70,22 +71,25 @@ static ODClassType* _TRForestRules_type;
 @implementation TRForest{
     EGMapSso* _map;
     TRForestRules* _rules;
+    TRWeather* _weather;
     id<CNSeq> __trees;
 }
 static ODClassType* _TRForest_type;
 @synthesize map = _map;
 @synthesize rules = _rules;
+@synthesize weather = _weather;
 
-+ (id)forestWithMap:(EGMapSso*)map rules:(TRForestRules*)rules {
-    return [[TRForest alloc] initWithMap:map rules:rules];
++ (id)forestWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather {
+    return [[TRForest alloc] initWithMap:map rules:rules weather:weather];
 }
 
-- (id)initWithMap:(EGMapSso*)map rules:(TRForestRules*)rules {
+- (id)initWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather {
     self = [super init];
     __weak TRForest* _weakSelf = self;
     if(self) {
         _map = map;
         _rules = rules;
+        _weather = weather;
         __trees = [[[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count]))) chain] map:^TRTree*(id _) {
             GEVec2i tile = uwrap(GEVec2i, [[_weakSelf.map.allTiles randomItem] get]);
             GEVec2 pos = GEVec2Make(((float)(randomFloatGap(-0.5, 0.5))), ((float)(randomFloatGap(-0.5, 0.5))));
@@ -147,13 +151,14 @@ static ODClassType* _TRForest_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRForest* o = ((TRForest*)(other));
-    return [self.map isEqual:o.map] && [self.rules isEqual:o.rules];
+    return [self.map isEqual:o.map] && [self.rules isEqual:o.rules] && [self.weather isEqual:o.weather];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.map hash];
     hash = hash * 31 + [self.rules hash];
+    hash = hash * 31 + [self.weather hash];
     return hash;
 }
 
@@ -161,6 +166,7 @@ static ODClassType* _TRForest_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"map=%@", self.map];
     [description appendFormat:@", rules=%@", self.rules];
+    [description appendFormat:@", weather=%@", self.weather];
     [description appendString:@">"];
     return description;
 }

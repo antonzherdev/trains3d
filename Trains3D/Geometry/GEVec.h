@@ -129,6 +129,7 @@ GEVec3 geVec3Sqr(GEVec3 self);
 GEVec3 geVec3Negate(GEVec3 self);
 GEVec3 geVec3MulK(GEVec3 self, float k);
 float geVec3DotVec3(GEVec3 self, GEVec3 vec3);
+GEVec3 geVec3CrossVec3(GEVec3 self, GEVec3 vec3);
 float geVec3LengthSquare(GEVec3 self);
 CGFloat geVec3Length(GEVec3 self);
 GEVec3 geVec3SetLength(GEVec3 self, float length);
@@ -248,18 +249,18 @@ ODPType* geQuadrantType();
 
 
 struct GERect {
-    GEVec2 origin;
+    GEVec2 p0;
     GEVec2 size;
 };
-static inline GERect GERectMake(GEVec2 origin, GEVec2 size) {
-    return (GERect){origin, size};
+static inline GERect GERectMake(GEVec2 p0, GEVec2 size) {
+    return (GERect){p0, size};
 }
 static inline BOOL GERectEq(GERect s1, GERect s2) {
-    return GEVec2Eq(s1.origin, s2.origin) && GEVec2Eq(s1.size, s2.size);
+    return GEVec2Eq(s1.p0, s2.p0) && GEVec2Eq(s1.size, s2.size);
 }
 static inline NSUInteger GERectHash(GERect self) {
     NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2Hash(self.origin);
+    hash = hash * 31 + GEVec2Hash(self.p0);
     hash = hash * 31 + GEVec2Hash(self.size);
     return hash;
 }
@@ -279,10 +280,9 @@ GERect geRectMulVec2(GERect self, GEVec2 vec2);
 BOOL geRectIntersectsRect(GERect self, GERect rect);
 GERect geRectThickenHalfSize(GERect self, GEVec2 halfSize);
 GERect geRectDivVec2(GERect self, GEVec2 vec2);
-GEVec2 geRectLeftBottom(GERect self);
-GEVec2 geRectLeftTop(GERect self);
-GEVec2 geRectRightTop(GERect self);
-GEVec2 geRectRightBottom(GERect self);
+GEVec2 geRectP1(GERect self);
+GEVec2 geRectP2(GERect self);
+GEVec2 geRectP3(GERect self);
 GERect geRectMoveToCenterForSize(GERect self, GEVec2 size);
 GEQuad geRectQuad(GERect self);
 GEQuad geRectUpsideDownQuad(GERect self);

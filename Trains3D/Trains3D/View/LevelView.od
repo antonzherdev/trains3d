@@ -6,7 +6,7 @@ class LevelView(level : Level) extends LayerView {
     private val cityView = CityView()
     private val railroadView = RailroadView(level.railroad)
     private val trainView = TrainView()
-    private val treeView = TreeView()
+    private val treeView = TreeView(level.forest)
 
     val environment = Environment(ambientColor = vec4(0.4, 0.4, 0.4, 1), lights = [
         DirectLight(vec4(1, 1, 1, 1), vec3(-0.15, 0.25, -0.5).normalize)])
@@ -19,7 +19,7 @@ class LevelView(level : Level) extends LayerView {
         trainView.draw(dyingTrains = level.dyingTrains)
 
         railroadView.drawForeground
-        treeView.draw(level.forest)
+        treeView.draw
 
         trainView.drawSmoke(trains = level.trains)
         trainView.drawSmoke(trains = level.dyingTrains)

@@ -23,10 +23,10 @@ static ODClassType* _EGD2D_type;
 
 + (void)drawSpriteMaterial:(EGColorSource*)material in:(GERect)in uv:(GERect)uv {
     CNVoidRefArray v = _EGD2D_vertexes;
-    v = cnVoidRefArrayWriteTpItem(v, EGMeshData, EGMeshDataMake(geRectLeftBottom(uv), GEVec3Make(0.0, 0.0, 1.0), geVec3ApplyVec2Z(geRectLeftBottom(in), 0.0)));
-    v = cnVoidRefArrayWriteTpItem(v, EGMeshData, EGMeshDataMake(geRectLeftTop(uv), GEVec3Make(0.0, 0.0, 1.0), geVec3ApplyVec2Z(geRectLeftTop(in), 0.0)));
-    v = cnVoidRefArrayWriteTpItem(v, EGMeshData, EGMeshDataMake(geRectRightBottom(uv), GEVec3Make(0.0, 0.0, 1.0), geVec3ApplyVec2Z(geRectRightBottom(in), 0.0)));
-    v = cnVoidRefArrayWriteTpItem(v, EGMeshData, EGMeshDataMake(geRectRightTop(uv), GEVec3Make(0.0, 0.0, 1.0), geVec3ApplyVec2Z(geRectRightTop(in), 0.0)));
+    v = cnVoidRefArrayWriteTpItem(v, EGMeshData, EGMeshDataMake(uv.p0, GEVec3Make(0.0, 0.0, 1.0), geVec3ApplyVec2Z(in.p0, 0.0)));
+    v = cnVoidRefArrayWriteTpItem(v, EGMeshData, EGMeshDataMake(geRectP1(uv), GEVec3Make(0.0, 0.0, 1.0), geVec3ApplyVec2Z(geRectP1(in), 0.0)));
+    v = cnVoidRefArrayWriteTpItem(v, EGMeshData, EGMeshDataMake(geRectP2(uv), GEVec3Make(0.0, 0.0, 1.0), geVec3ApplyVec2Z(geRectP2(in), 0.0)));
+    v = cnVoidRefArrayWriteTpItem(v, EGMeshData, EGMeshDataMake(geRectP3(uv), GEVec3Make(0.0, 0.0, 1.0), geVec3ApplyVec2Z(geRectP3(in), 0.0)));
     [_EGD2D_vb setArray:_EGD2D_vertexes];
     glDisable(GL_CULL_FACE);
     [material drawVb:_EGD2D_vb mode:GL_TRIANGLE_STRIP];

@@ -1,9 +1,11 @@
 #import "objd.h"
 #import "GEVec.h"
+#import "GELine.h"
 #import "EGMaterial.h"
+@class TRForest;
 @class EGGlobal;
 @class EGTexture;
-@class TRForest;
+@class TRWeather;
 @class TRTree;
 @class TRTreeType;
 @class EGBillboard;
@@ -11,14 +13,15 @@
 @class TRTreeView;
 
 @interface TRTreeView : NSObject
+@property (nonatomic, readonly) TRForest* forest;
 @property (nonatomic, readonly) id<CNSeq> textures;
 @property (nonatomic, readonly) id<CNSeq> materials;
 @property (nonatomic, readonly) id<CNSeq> rects;
 
-+ (id)treeView;
-- (id)init;
++ (id)treeViewWithForest:(TRForest*)forest;
+- (id)initWithForest:(TRForest*)forest;
 - (ODClassType*)type;
-- (void)drawForest:(TRForest*)forest;
+- (void)draw;
 + (ODClassType*)type;
 @end
 

@@ -9,10 +9,10 @@ object D2D {
 
     def drawSprite(material : ColorSource, in : Rect, uv : Rect) {
         var v = vertexes
-        v = v.write(MeshData, MeshData(uv.leftBottom, vec3(0, 0, 1), vec3(in.leftBottom, 0)))
-        v = v.write(MeshData, MeshData(uv.leftTop, vec3(0, 0, 1), vec3(in.leftTop, 0)))
-        v = v.write(MeshData, MeshData(uv.rightBottom, vec3(0, 0, 1), vec3(in.rightBottom, 0)))
-        v = v.write(MeshData, MeshData(uv.rightTop, vec3(0, 0, 1), vec3(in.rightTop, 0)))
+        v = v.write(MeshData, MeshData(uv.p0, vec3(0, 0, 1), vec3(in.p0, 0)))
+        v = v.write(MeshData, MeshData(uv.p1, vec3(0, 0, 1), vec3(in.p1, 0)))
+        v = v.write(MeshData, MeshData(uv.p2, vec3(0, 0, 1), vec3(in.p2, 0)))
+        v = v.write(MeshData, MeshData(uv.p3, vec3(0, 0, 1), vec3(in.p3, 0)))
         vb.set(vertexes)
 
         glDisable(GL_CULL_FACE)

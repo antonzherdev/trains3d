@@ -70,7 +70,10 @@ static ODClassType* _TRWeather_type;
 
 - (id)initWithRules:(TRWeatherRules*)rules {
     self = [super init];
-    if(self) _rules = rules;
+    if(self) {
+        _rules = rules;
+        __wind = GEVec2Make(0.0, 0.0);
+    }
     
     return self;
 }
