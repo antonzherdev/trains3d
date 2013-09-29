@@ -188,7 +188,7 @@ static ODClassType* _TRRailroadBuilderMouseProcessor_type;
 }
 
 - (NSInteger)nX:(CGFloat)x {
-    return lround(x * 2);
+    return floatRound(x * 2);
 }
 
 - (TRRailCorrection)correctRail:(TRRailCorrection)rail {

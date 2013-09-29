@@ -119,6 +119,14 @@ static inline CGFloat floatMinB(CGFloat self, CGFloat b) {
     return min(self, b);
 }
 
+static inline NSInteger floatRound(CGFloat self) {
+    return lround(self);
+}
+
+static inline NSInteger float4Round(float self) {
+    return lroundf(self);
+}
+
 
 static inline NSUInteger oduIntRndMax(NSUInteger max) {
     return arc4random_uniform((u_int32_t)(max + 1));

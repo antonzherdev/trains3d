@@ -48,7 +48,7 @@ struct vec2(x : float4, y : float4) extends Comparable<vec2> {
 }
 
 struct vec2i(x : int, y : int) extends Comparable<vec2i> {
-    static def apply(vec2 : vec2) = vec2i(lround(vec2.x), lround(vec2.y))
+    static def apply(vec2 : vec2) = vec2i(vec2.x.round, vec2.y.round)
 
     def add(vec2i : vec2i) = vec2i(x + vec2i.x, y + vec2i.y)
     def sub(vec2i : vec2i) = vec2i(x - vec2i.x, y - vec2i.y)

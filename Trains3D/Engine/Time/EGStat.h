@@ -11,7 +11,7 @@
 + (id)stat;
 - (id)init;
 - (ODClassType*)type;
-- (NSUInteger)frameRate;
+- (CGFloat)frameRate;
 - (void)draw;
 - (void)tickWithDelta:(CGFloat)delta;
 + (ODClassType*)type;

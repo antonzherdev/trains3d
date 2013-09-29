@@ -73,6 +73,7 @@ stub struct Float extends Comparable<float> {
 
     def max(b : float) : float
     def min(b : float) : float
+    def round : int
 }
 
 stub struct Float4 extends Comparable<float4> {
@@ -83,6 +84,7 @@ stub struct Float4 extends Comparable<float4> {
 
     def max(b : float4) : float4
     def min(b : float4) : float4
+    def round : int
 }
 
 

@@ -160,7 +160,7 @@ NSString* GEVec2iDescription(GEVec2i self) {
     return description;
 }
 GEVec2i geVec2iApplyVec2(GEVec2 vec2) {
-    return GEVec2iMake(lround(((CGFloat)(vec2.x))), lround(((CGFloat)(vec2.y))));
+    return GEVec2iMake(float4Round(vec2.x), float4Round(vec2.y));
 }
 GEVec2i geVec2iAddVec2i(GEVec2i self, GEVec2i vec2i) {
     return GEVec2iMake(self.x + vec2i.x, self.y + vec2i.y);

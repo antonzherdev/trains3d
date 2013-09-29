@@ -40,7 +40,7 @@ class RailroadBuilderMouseProcessor(builder : RailroadBuilder) extends MouseProc
     }).getOr(false)
 
     private def norm(point : vec2) = vec2i(n(point.x), n(point.y))
-    private def n(x : float) : int = lround(x*2)
+    private def n(x : float) : int = (x*2).round
 
     private def correct(rail : RailCorrection) : RailCorrection =
         if(rail.end.x > 1) move(rail, 1, 0)

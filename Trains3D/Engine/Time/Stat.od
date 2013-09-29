@@ -3,12 +3,12 @@ package com.antonzherdev.eg
 class Stat {
     private var accumDelta : float
     private var framesCount : uint
-    private var _frameRate : uint
+    private var _frameRate : float
     val font = fontWith(name = "lucida_grande_18")
     def frameRate = _frameRate
 
     def draw {
-        font.draw(text = math.lround(_frameRate), color = vec4(1, 1, 1, 1), at = vec2(-0.98, -0.99), TextAlignment.left)
+        font.draw(text = _frameRate.round, color = vec4(1, 1, 1, 1), at = vec2(-0.98, -0.99), TextAlignment.left)
     }
     def tickWith(delta : float) {
         accumDelta += delta

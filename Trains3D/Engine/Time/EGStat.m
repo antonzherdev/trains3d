@@ -4,7 +4,7 @@
 @implementation EGStat{
     CGFloat _accumDelta;
     NSUInteger _framesCount;
-    NSUInteger __frameRate;
+    CGFloat __frameRate;
     EGFont* _font;
 }
 static ODClassType* _EGStat_type;
@@ -26,19 +26,19 @@ static ODClassType* _EGStat_type;
     _EGStat_type = [ODClassType classTypeWithCls:[EGStat class]];
 }
 
-- (NSUInteger)frameRate {
+- (CGFloat)frameRate {
     return __frameRate;
 }
 
 - (void)draw {
-    [_font drawText:[NSString stringWithFormat:@"%li", lround(((CGFloat)(__frameRate)))] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(-0.98, -0.99) alignment:egTextAlignmentLeft()];
+    [_font drawText:[NSString stringWithFormat:@"%li", floatRound(__frameRate)] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec2Make(-0.98, -0.99) alignment:egTextAlignmentLeft()];
 }
 
 - (void)tickWithDelta:(CGFloat)delta {
     _accumDelta += delta;
     _framesCount++;
     if(_accumDelta > 0.1) {
-        __frameRate = ((NSUInteger)(_framesCount / _accumDelta));
+        __frameRate = _framesCount / _accumDelta;
         _accumDelta = 0.0;
         _framesCount = 0;
     }

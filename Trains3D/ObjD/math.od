@@ -4,8 +4,6 @@ stub object math {
     val M_PI : float
     val M_PI_2 : float
     val M_PI_4 : float
-    def round(: float) : float
-    def lround(: float) : int
     def sin(:float) : float
     def cos(:float) : float
     def fabs(:float) : float
