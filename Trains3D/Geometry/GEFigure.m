@@ -352,7 +352,7 @@ static ODClassType* _GELineSegment_type;
         _p0 = p0;
         _p1 = p1;
         _dir = _p0.y < _p1.y || (eqf4(_p0.y, _p1.y) && _p0.x < _p1.x);
-        _boundingRect = geVec2RectToVec2(GEVec2Make(((float)(min(((CGFloat)(_p0.x)), ((CGFloat)(_p1.x))))), ((float)(min(((CGFloat)(_p0.y)), ((CGFloat)(_p1.y)))))), GEVec2Make(((float)(max(((CGFloat)(_p0.x)), ((CGFloat)(_p1.x))))), ((float)(max(((CGFloat)(_p0.y)), ((CGFloat)(_p1.y)))))));
+        _boundingRect = geVec2RectToVec2(GEVec2Make(float4MinB(_p0.x, _p1.x), float4MinB(_p0.y, _p1.y)), GEVec2Make(float4MaxB(_p0.x, _p1.x), float4MaxB(_p0.y, _p1.y)));
     }
     
     return self;

@@ -1,9 +1,6 @@
 package core
 
 stub object math {
-    def max(a : float, b : float) : float
-    def min(a : float, b : float) : float
-
     val M_PI : float
     val M_PI_2 : float
     val M_PI_4 : float

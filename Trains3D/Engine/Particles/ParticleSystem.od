@@ -74,7 +74,7 @@ class ParticleSystemView<P extends Particle, D>(vbDesc : VertexBufferDesc<D>, ma
                 if(i < maxCount) vertexPointer = particle.writeTo(vertexPointer)
                 i++
             }
-            val n = min(particles.count, maxCount)
+            val n = particles.count.min(maxCount)
             val vc = vertexCount
             vertexBuffer.set(array = vertexArr, usage = GL_DYNAMIC_DRAW)
             shader.draw(material, mesh, start = 0, count = n*3*(vc - 2))

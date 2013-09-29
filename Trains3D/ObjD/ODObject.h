@@ -95,6 +95,30 @@ static inline float float4NoisePercents(float self, float o) {
     return self*(1 + o - 2*o*(float)drand48());
 }
 
+static inline float float4MaxB(float self, float b) {
+    return max(self, b);
+}
+
+static inline NSUInteger uintMaxB(NSUInteger self, NSUInteger b) {
+    return max(self, b);
+}
+
+static inline CGFloat floatMaxB(CGFloat self, CGFloat b) {
+    return max(self, b);
+}
+
+static inline float float4MinB(float self, float b) {
+    return min(self, b);
+}
+
+static inline NSUInteger uintMinB(NSUInteger self, NSUInteger b) {
+    return min(self, b);
+}
+
+static inline CGFloat floatMinB(CGFloat self, CGFloat b) {
+    return min(self, b);
+}
+
 
 static inline NSUInteger oduIntRndMax(NSUInteger max) {
     return arc4random_uniform((u_int32_t)(max + 1));

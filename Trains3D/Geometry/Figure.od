@@ -105,7 +105,7 @@ class LineSegment(p0 : vec2, p1 : vec2) extends Figure {
         if(_line == nil) _line = Line(p0 = p0, p1 = p1)
         _line
     }
-    val boundingRect : Rect = vec2(min(p0.x, p1.x), min(p0.y, p1.y)).rectTo(vec2(max(p0.x, p1.x), max(p0.y, p1.y)))
+    val boundingRect : Rect = vec2(p0.x.min(p1.x), p0.y.min(p1.y)).rectTo(vec2(p0.x.max(p1.x), p0.y.max(p1.y)))
 
     def contains(point : vec2) : bool = {
         p0 == point || p1 == point ||
