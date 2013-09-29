@@ -10,25 +10,26 @@ NSString* EGTextAlignmentDescription(EGTextAlignment self) {
     [description appendFormat:@"x=%f", self.x];
     [description appendFormat:@", y=%f", self.y];
     [description appendFormat:@", baseline=%d", self.baseline];
+    [description appendFormat:@", shift=%@", GEVec3Description(self.shift)];
     [description appendString:@">"];
     return description;
 }
 EGTextAlignment egTextAlignmentApplyXY(float x, float y) {
-    return EGTextAlignmentMake(x, y, NO);
+    return EGTextAlignmentMake(x, y, NO, GEVec3Make(0.0, 0.0, 0.0));
 }
 EGTextAlignment egTextAlignmentBaselineX(float x) {
-    return EGTextAlignmentMake(x, 0.0, YES);
+    return EGTextAlignmentMake(x, 0.0, YES, GEVec3Make(0.0, 0.0, 0.0));
 }
 EGTextAlignment egTextAlignmentLeft() {
-    static EGTextAlignment _ret = (EGTextAlignment){-1.0, 0.0, YES};
+    static EGTextAlignment _ret = (EGTextAlignment){-1.0, 0.0, YES, {0.0, 0.0, 0.0}};
     return _ret;
 }
 EGTextAlignment egTextAlignmentRight() {
-    static EGTextAlignment _ret = (EGTextAlignment){1.0, 0.0, YES};
+    static EGTextAlignment _ret = (EGTextAlignment){1.0, 0.0, YES, {0.0, 0.0, 0.0}};
     return _ret;
 }
 EGTextAlignment egTextAlignmentCenter() {
-    static EGTextAlignment _ret = (EGTextAlignment){0.0, 0.0, YES};
+    static EGTextAlignment _ret = (EGTextAlignment){0.0, 0.0, YES, {0.0, 0.0, 0.0}};
     return _ret;
 }
 ODPType* egTextAlignmentType() {
@@ -151,8 +152,8 @@ static ODClassType* _EGFont_type;
     return geRectApplyXYWidthHeight(((float)([[parts applyIndex:0] toFloat])), ((float)(y)), ((float)([[parts applyIndex:2] toFloat])), ((float)(h)));
 }
 
-- (void)drawText:(NSString*)text color:(GEVec4)color at:(GEVec2)at alignment:(EGTextAlignment)alignment {
-    GEVec2 pos = geVec4Xy([[EGGlobal.context.matrixStack.value wcp] mulVec4:GEVec4Make(at.x, at.y, 0.0, 1.0)]);
+- (void)drawText:(NSString*)text color:(GEVec4)color at:(GEVec3)at alignment:(EGTextAlignment)alignment {
+    GEVec2 pos = ((geVec3IsEmpty(alignment.shift)) ? geVec4Xy([[EGGlobal.matrix wcp] mulVec4:geVec4ApplyVec3W(at, 1.0)]) : geVec4Xy([[EGGlobal.matrix p] mulVec4:geVec4AddVec3([[EGGlobal.matrix wc] mulVec4:geVec4ApplyVec3W(at, 1.0)], alignment.shift)]));
     id<CNSeq> symbolsArr = [[[text chain] flatMap:^id(id _) {
         return [_symbols optKey:_];
     }] toArray];

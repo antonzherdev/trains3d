@@ -1,10 +1,10 @@
 #import "objd.h"
 #import "GEVec.h"
 #import "EGScene.h"
+#import "EGMapIso.h"
 @class TRScoreRules;
 @class TRForestRules;
 @class TRWeatherRules;
-@class EGMapSso;
 @class TRNotifications;
 @class TRScore;
 @class TRWeather;

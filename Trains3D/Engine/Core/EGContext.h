@@ -88,6 +88,16 @@
 - (void)push;
 - (void)pop;
 - (void)applyModify:(EGMatrixModel*(^)(EGMatrixModel*))modify f:(void(^)())f;
+- (GEMat4*)m;
+- (GEMat4*)w;
+- (GEMat4*)c;
+- (GEMat4*)p;
+- (GEMat4*)mw;
+- (GEMat4*)mwc;
+- (GEMat4*)mwcp;
+- (GEMat4*)wc;
+- (GEMat4*)wcp;
+- (GEMat4*)cp;
 + (ODClassType*)type;
 @end
 

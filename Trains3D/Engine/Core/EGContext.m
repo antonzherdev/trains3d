@@ -402,6 +402,46 @@ static ODClassType* _EGMatrixStack_type;
     [self pop];
 }
 
+- (GEMat4*)m {
+    return _value.m;
+}
+
+- (GEMat4*)w {
+    return _value.w;
+}
+
+- (GEMat4*)c {
+    return _value.c;
+}
+
+- (GEMat4*)p {
+    return _value.p;
+}
+
+- (GEMat4*)mw {
+    return [_value mw];
+}
+
+- (GEMat4*)mwc {
+    return [_value mwc];
+}
+
+- (GEMat4*)mwcp {
+    return [_value mwcp];
+}
+
+- (GEMat4*)wc {
+    return [_value wc];
+}
+
+- (GEMat4*)wcp {
+    return [_value wcp];
+}
+
+- (GEMat4*)cp {
+    return [_value cp];
+}
+
 - (ODClassType*)type {
     return [EGMatrixStack type];
 }

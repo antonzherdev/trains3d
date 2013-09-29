@@ -32,7 +32,7 @@ class BillboardShader(program : ShaderProgram, texture : bool) extends Shader<Co
             pos.x += model.x;
             pos.y += model.y;
             gl_Position = p*pos;
-            UV = vertexUV;
+            UV = vertexUV;$when(texture)
             fragColor = vertexColor;
             $code
          }"

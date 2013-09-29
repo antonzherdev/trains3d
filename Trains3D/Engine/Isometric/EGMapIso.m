@@ -70,8 +70,8 @@ static ODClassType* _EGMapSso_type;
     }
 }
 
-- (GERectI)cutRectForTile:(GEVec2i)tile {
-    return geVec2iRectToVec2i(GEVec2iMake([self tileCutAxisLess:0 more:tile.x + tile.y], [self tileCutAxisLess:tile.y - tile.x more:_size.y - 1]), GEVec2iMake([self tileCutAxisLess:tile.x + tile.y more:_size.x + _size.y - 2], [self tileCutAxisLess:-_size.x + 1 more:tile.y - tile.x]));
+- (EGMapTileCutState)cutStateForTile:(GEVec2i)tile {
+    return EGMapTileCutStateMake([self tileCutAxisLess:0 more:tile.x + tile.y], [self tileCutAxisLess:tile.y - tile.x more:_size.y - 1], [self tileCutAxisLess:tile.x + tile.y more:_size.x + _size.y - 2], [self tileCutAxisLess:-_size.x + 1 more:tile.y - tile.x]);
 }
 
 - (ODClassType*)type {
@@ -111,6 +111,60 @@ static ODClassType* _EGMapSso_type;
 }
 
 @end
+
+
+NSString* EGMapTileCutStateDescription(EGMapTileCutState self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<EGMapTileCutState: "];
+    [description appendFormat:@"x=%li", self.x];
+    [description appendFormat:@", y=%li", self.y];
+    [description appendFormat:@", x2=%li", self.x2];
+    [description appendFormat:@", y2=%li", self.y2];
+    [description appendString:@">"];
+    return description;
+}
+ODPType* egMapTileCutStateType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGMapTileCutStateWrap class] name:@"EGMapTileCutState" size:sizeof(EGMapTileCutState) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGMapTileCutState, ((EGMapTileCutState*)(data))[i]);
+    }];
+    return _ret;
+}
+@implementation EGMapTileCutStateWrap{
+    EGMapTileCutState _value;
+}
+@synthesize value = _value;
+
++ (id)wrapWithValue:(EGMapTileCutState)value {
+    return [[EGMapTileCutStateWrap alloc] initWithValue:value];
+}
+
+- (id)initWithValue:(EGMapTileCutState)value {
+    self = [super init];
+    if(self) _value = value;
+    return self;
+}
+
+- (NSString*)description {
+    return EGMapTileCutStateDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGMapTileCutStateWrap* o = ((EGMapTileCutStateWrap*)(other));
+    return EGMapTileCutStateEq(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return EGMapTileCutStateHash(_value);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
 
 
 @implementation EGMapSsoView{

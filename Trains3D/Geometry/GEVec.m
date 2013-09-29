@@ -103,6 +103,9 @@ GERect geVec2RectInCenterWithSize(GEVec2 self, GEVec2 size) {
 GEVec2 geVec2Rnd() {
     return GEVec2Make(odFloat4Rnd() - 0.5, odFloat4Rnd() - 0.5);
 }
+BOOL geVec2IsEmpty(GEVec2 self) {
+    return eqf4(self.x, 0) && eqf4(self.y, 0);
+}
 ODPType* geVec2Type() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[GEVec2Wrap class] name:@"GEVec2" size:sizeof(GEVec2) wrap:^id(void* data, NSUInteger i) {
@@ -287,6 +290,9 @@ GEVec2 geVec3Xy(GEVec3 self) {
 GEVec3 geVec3Rnd() {
     return GEVec3Make(odFloat4Rnd() - 0.5, odFloat4Rnd() - 0.5, odFloat4Rnd() - 0.5);
 }
+BOOL geVec3IsEmpty(GEVec3 self) {
+    return eqf4(self.x, 0) && eqf4(self.y, 0) && eqf4(self.z, 0);
+}
 ODPType* geVec3Type() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[GEVec3Wrap class] name:@"GEVec3" size:sizeof(GEVec3) wrap:^id(void* data, NSUInteger i) {
@@ -343,6 +349,12 @@ NSString* GEVec4Description(GEVec4 self) {
 }
 GEVec4 geVec4ApplyVec3W(GEVec3 vec3, float w) {
     return GEVec4Make(vec3.x, vec3.y, vec3.z, w);
+}
+GEVec4 geVec4AddVec3(GEVec4 self, GEVec3 vec3) {
+    return GEVec4Make(self.x + vec3.x, self.y + vec3.y, self.z + vec3.z, self.w);
+}
+GEVec4 geVec4AddVec4(GEVec4 self, GEVec4 vec4) {
+    return GEVec4Make(self.x + vec4.x, self.y + vec4.y, self.z + vec4.z, self.w + vec4.w);
 }
 GEVec3 geVec4Xyz(GEVec4 self) {
     return GEVec3Make(self.x, self.y, self.z);

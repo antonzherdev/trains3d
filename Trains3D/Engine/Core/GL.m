@@ -46,11 +46,9 @@ GEVec2 egLoadTextureFromFile(GLuint target, NSString* file, GLenum magFilter, GL
             width, height, 8,
             width*4, space,
             kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst);
-    CFRelease(space);
 
     CGContextSetBlendMode(myBitmapContext, kCGBlendModeCopy);
     CGContextDrawImage(myBitmapContext, rect, myImageRef);
-    CGContextRelease(myBitmapContext);
     glPixelStorei(GL_UNPACK_ROW_LENGTH, (GLint)width);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glBindTexture(GL_TEXTURE_2D, target);
@@ -60,8 +58,10 @@ GEVec2 egLoadTextureFromFile(GLuint target, NSString* file, GLenum magFilter, GL
     if(minFilter == GL_LINEAR_MIPMAP_LINEAR) glGenerateMipmap(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, 0);
 
+    CGContextRelease(myBitmapContext);
     CFRelease(myImageSourceRef);
     CFRelease(myImageRef);
+    CFRelease(space);
     free(myData);
     return GEVec2Make(width, height);
 

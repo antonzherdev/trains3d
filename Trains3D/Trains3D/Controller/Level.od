@@ -49,7 +49,7 @@ class Level(rules : LevelRules) extends Controller {
     }
 
     private def randomCityDirectionFor(tile : vec2i) = {
-        val cut = map.cutRectFor(tile)
+        val cut = map.cutStateFor(tile)
         CityAngle.values.chain.filter{a ->
             val angle = a.angle
             (angle == 0 && cut.x2 == 0 && cut.y2 == 0)

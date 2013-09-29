@@ -8,10 +8,9 @@
 @class EGIndexBuffer;
 @class EGMesh;
 @class EGGlobal;
-@class EGContext;
 @class EGMatrixStack;
-@class EGMatrixModel;
 @class GEMat4;
+@class EGContext;
 @class EGTexture;
 
 @class EGFont;
@@ -25,18 +24,20 @@ struct EGTextAlignment {
     float x;
     float y;
     BOOL baseline;
+    GEVec3 shift;
 };
-static inline EGTextAlignment EGTextAlignmentMake(float x, float y, BOOL baseline) {
-    return (EGTextAlignment){x, y, baseline};
+static inline EGTextAlignment EGTextAlignmentMake(float x, float y, BOOL baseline, GEVec3 shift) {
+    return (EGTextAlignment){x, y, baseline, shift};
 }
 static inline BOOL EGTextAlignmentEq(EGTextAlignment s1, EGTextAlignment s2) {
-    return eqf4(s1.x, s2.x) && eqf4(s1.y, s2.y) && s1.baseline == s2.baseline;
+    return eqf4(s1.x, s2.x) && eqf4(s1.y, s2.y) && s1.baseline == s2.baseline && GEVec3Eq(s1.shift, s2.shift);
 }
 static inline NSUInteger EGTextAlignmentHash(EGTextAlignment self) {
     NSUInteger hash = 0;
     hash = hash * 31 + float4Hash(self.x);
     hash = hash * 31 + float4Hash(self.y);
     hash = hash * 31 + self.baseline;
+    hash = hash * 31 + GEVec3Hash(self.shift);
     return hash;
 }
 NSString* EGTextAlignmentDescription(EGTextAlignment self);
@@ -64,7 +65,7 @@ ODPType* egTextAlignmentType();
 - (id)initWithName:(NSString*)name;
 - (ODClassType*)type;
 - (void)_init;
-- (void)drawText:(NSString*)text color:(GEVec4)color at:(GEVec2)at alignment:(EGTextAlignment)alignment;
+- (void)drawText:(NSString*)text color:(GEVec4)color at:(GEVec3)at alignment:(EGTextAlignment)alignment;
 + (ODClassType*)type;
 @end
 

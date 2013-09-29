@@ -6,7 +6,6 @@
 #import "EGContext.h"
 #import "TRScore.h"
 #import "EGSprite.h"
-#import "TRRailroad.h"
 #import "TRNotification.h"
 #import "EGDirector.h"
 #import "EGCamera2D.h"
@@ -85,17 +84,15 @@ static ODClassType* _TRLevelMenuView_type;
 
 - (void)draw {
     float w = [EGGlobal.context viewport].size.x / [[self res] pixelsInPoint];
-    [[[self res] font] drawText:[self formatScore:[_level.score score]] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec2Make(10.0, 10.0) alignment:egTextAlignmentBaselineX(-1.0)];
+    [[[self res] font] drawText:[self formatScore:[_level.score score]] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec3Make(10.0, 10.0, 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
     EGSprite* pauseSprite = [[self res] pauseSprite];
     pauseSprite.position = GEVec2Make(w - 46, 0.0);
     egBlendFunctionApplyDraw(egBlendFunctionPremultiplied(), ^void() {
         [pauseSprite draw];
     });
     [_notificationAnimation forF:^void(CGFloat t) {
-        [[[self res] notificationFont] drawText:_notificationText color:_notificationProgress(((float)(t))) at:GEVec2Make(w / 2, 12.0) alignment:egTextAlignmentBaselineX(0.0)];
+        [[[self res] notificationFont] drawText:_notificationText color:_notificationProgress(((float)(t))) at:GEVec3Make(w / 2, 12.0, 0.0) alignment:egTextAlignmentBaselineX(0.0)];
     }];
-    if(!([[_level.railroad damagesPoints] isEmpty]) && [[_level repairer] isEmpty]) {
-    }
 }
 
 - (NSString*)formatScore:(NSInteger)score {

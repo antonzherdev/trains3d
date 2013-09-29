@@ -3,7 +3,6 @@
 #import "TRScore.h"
 #import "TRTree.h"
 #import "TRWeather.h"
-#import "EGMapIso.h"
 #import "TRNotification.h"
 #import "TRRailroad.h"
 #import "EGSchedule.h"
@@ -195,10 +194,10 @@ static ODClassType* _TRLevel_type;
 }
 
 - (TRCityAngle*)randomCityDirectionForTile:(GEVec2i)tile {
-    GERectI cut = [_map cutRectForTile:tile];
+    EGMapTileCutState cut = [_map cutStateForTile:tile];
     return ((TRCityAngle*)([[[[[TRCityAngle values] chain] filter:^BOOL(TRCityAngle* a) {
         NSInteger angle = a.angle;
-        return (angle == 0 && geRectIX2(cut) == 0 && geRectIY2(cut) == 0) || (angle == 90 && geRectIX(cut) == 0 && geRectIY2(cut) == 0) || (angle == 180 && geRectIX(cut) == 0 && geRectIY(cut) == 0) || (angle == 270 && geRectIX2(cut) == 0 && geRectIY(cut) == 0);
+        return (angle == 0 && cut.x2 == 0 && cut.y2 == 0) || (angle == 90 && cut.x == 0 && cut.y2 == 0) || (angle == 180 && cut.x == 0 && cut.y == 0) || (angle == 270 && cut.x2 == 0 && cut.y == 0);
     }] randomItem] get]));
 }
 

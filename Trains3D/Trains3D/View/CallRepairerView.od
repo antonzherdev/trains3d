@@ -1,0 +1,33 @@
+package com.antonzherdev.trains
+
+class CallRepairerView(level : Level) {
+    def draw {
+        if(!level.railroad.damagesPoints.isEmpty && level.repairer.isEmpty) {
+            glDisable(GL_DEPTH_TEST)
+            BlendFunction.standard {
+                level.cities.for(drawButtonFor(_))
+            }
+            glEnable(GL_DEPTH_TEST)
+        }
+    }
+
+    private static val buttonSize = vec2(1, 0.3)
+    private val font = fontWith(name = "lucida_grande_18")
+    def drawButtonFor(city : City) {
+        val cut = level.map.cutStateFor(city.tile)
+
+        var p : vec2
+        if(cut.x != 0 && cut.y == 0 && cut.y2 == 0) p = vec2(0, MapSso.ISO/4 + buttonSize.y)
+        else if(cut.y != 0)
+            if(cut.x2 != 0) p = vec2(-MapSso.ISO/2 - buttonSize.x, -buttonSize.y)
+            else p = vec2(MapSso.ISO/2, -buttonSize.y)
+        else if(cut.y2 != 0)
+            if(cut.x2 != 0) p = vec2(-MapSso.ISO/2 - buttonSize.x, 0)
+            else p = vec2(MapSso.ISO/2, 0)
+        else p = vec2(-buttonSize.x, MapSso.ISO/4 + buttonSize.y)
+
+        val at = vec3(city.tile, 0)
+        Billboard.draw(vec4(city.color.color.xyz, 0.8), at, Rect(p, buttonSize))
+        font.draw(Loc.callRepairer, color = vec4(0.1, 0.1, 0.1, 1), at, TextAlignment(0, 0, false, vec3(p + buttonSize/2, 0)))
+    }
+}

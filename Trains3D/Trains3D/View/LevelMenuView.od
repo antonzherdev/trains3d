@@ -15,7 +15,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor with Mo
     val notificationProgress = gap(0.7, 1) >> vec4(0, 0, 0, 1 - _)
     def draw {
         val w = context.viewport.size.x/res.pixelsInPoint
-        res.font.draw(text = format(level.score.score), color = vec4(0, 0, 0, 1), at = vec2(10, 10), TextAlignment.baseline(-1))
+        res.font.draw(text = format(level.score.score), color = vec4(0, 0, 0, 1), at = vec3(10, 10, 0), TextAlignment.baseline(-1))
 //        val seconds : int = level.schedule.time
 //        res.font.draw(text = seconds, color = vec4(0, 0, 0, 1), at = vec2(w - 56, 10), TextAlignment.baseline(1))
 
@@ -26,17 +26,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor with Mo
         }
 
         notificationAnimation.for{t ->
-            res.notificationFont.draw(text = notificationText, notificationProgress(t), at = vec2(w/2, 12), TextAlignment.baseline(0))
-        }
-
-        if(!level.railroad.damagesPoints.isEmpty && level.repairer.isEmpty) {
-            /*glPushMatrix
-            level.cities.for(city -> {
-                city.color.set
-                egRect(0, 0, 0.1, 0.1)
-                egTranslate(0.1, 0, 0)
-            })
-            glPopMatrix*/
+            res.notificationFont.draw(text = notificationText, notificationProgress(t), at = vec3(w/2, 12, 0), TextAlignment.baseline(0))
         }
     }
 

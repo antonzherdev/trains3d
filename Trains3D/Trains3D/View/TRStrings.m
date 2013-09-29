@@ -46,6 +46,10 @@ static ODClassType* _TREnStrings_type;
     return @"Main menu";
 }
 
+- (NSString*)callRepairer {
+    return @"Call repairers";
+}
+
 - (NSString*)formatCost:(NSInteger)cost {
     return [NSString stringWithFormat:@"%li", cost];
 }
@@ -125,6 +129,10 @@ static ODClassType* _TRRuStrings_type;
 
 - (NSString*)mainMenu {
     return @"Основное меню";
+}
+
+- (NSString*)callRepairer {
+    return @"Вызвать ремонтников";
 }
 
 - (NSString*)formatCost:(NSInteger)cost {

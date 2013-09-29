@@ -63,6 +63,17 @@ class MatrixStack {
         f()
         pop
     }
+
+    def m = value.m
+    def w = value.w
+    def c = value.c
+    def p = value.p
+    def mw = value.mw
+    def mwc = value.mwc
+    def mwcp = value.mwcp
+    def wc = value.wc
+    def wcp = value.wcp
+    def cp = value.cp
 }
 
 class MatrixModel(m : mat4, w : mat4, c : mat4, p : mat4,

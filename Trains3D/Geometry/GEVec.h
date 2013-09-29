@@ -58,6 +58,7 @@ NSInteger geVec2CompareTo(GEVec2 self, GEVec2 to);
 GERect geVec2RectToVec2(GEVec2 self, GEVec2 vec2);
 GERect geVec2RectInCenterWithSize(GEVec2 self, GEVec2 size);
 GEVec2 geVec2Rnd();
+BOOL geVec2IsEmpty(GEVec2 self);
 ODPType* geVec2Type();
 @interface GEVec2Wrap : NSObject
 @property (readonly, nonatomic) GEVec2 value;
@@ -137,6 +138,7 @@ GEVec3 geVec3SetLength(GEVec3 self, float length);
 GEVec3 geVec3Normalize(GEVec3 self);
 GEVec2 geVec3Xy(GEVec3 self);
 GEVec3 geVec3Rnd();
+BOOL geVec3IsEmpty(GEVec3 self);
 ODPType* geVec3Type();
 @interface GEVec3Wrap : NSObject
 @property (readonly, nonatomic) GEVec3 value;
@@ -169,6 +171,8 @@ static inline NSUInteger GEVec4Hash(GEVec4 self) {
 }
 NSString* GEVec4Description(GEVec4 self);
 GEVec4 geVec4ApplyVec3W(GEVec3 vec3, float w);
+GEVec4 geVec4AddVec3(GEVec4 self, GEVec3 vec3);
+GEVec4 geVec4AddVec4(GEVec4 self, GEVec4 vec4);
 GEVec3 geVec4Xyz(GEVec4 self);
 GEVec2 geVec4Xy(GEVec4 self);
 GEVec4 geVec4MulK(GEVec4 self, float k);

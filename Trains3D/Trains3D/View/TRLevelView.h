@@ -6,6 +6,7 @@
 @class TRRailroadView;
 @class TRTrainView;
 @class TRTreeView;
+@class TRCallRepairerView;
 @class EGEnvironment;
 @class EGDirectLight;
 @class EGMapSso;

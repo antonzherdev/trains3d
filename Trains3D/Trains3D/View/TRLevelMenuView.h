@@ -11,7 +11,6 @@
 @class EGContext;
 @class TRScore;
 @class EGSprite;
-@class TRRailroad;
 @class TRNotifications;
 @class EGDirector;
 @class EGEnvironment;

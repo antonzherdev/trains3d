@@ -13,6 +13,7 @@
 - (NSString*)resumeGame;
 - (NSString*)restartLevel;
 - (NSString*)mainMenu;
+- (NSString*)callRepairer;
 - (NSString*)formatCost:(NSInteger)cost;
 @end
 
@@ -28,6 +29,7 @@
 - (NSString*)resumeGame;
 - (NSString*)restartLevel;
 - (NSString*)mainMenu;
+- (NSString*)callRepairer;
 + (ODClassType*)type;
 @end
 
@@ -43,6 +45,7 @@
 - (NSString*)resumeGame;
 - (NSString*)restartLevel;
 - (NSString*)mainMenu;
+- (NSString*)callRepairer;
 + (ODClassType*)type;
 @end
 

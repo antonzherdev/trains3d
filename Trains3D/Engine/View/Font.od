@@ -1,11 +1,11 @@
 package com.antonzherdev.eg
 
-struct TextAlignment(x : float4, y : float4, baseline : bool) {
-    static def apply(x : float4, y : float4) = TextAlignment(x, y, false)
-    static def baseline(x : float4) = TextAlignment(x, 0, true)
-    static val left = TextAlignment(-1, 0, true)
-    static val right = TextAlignment(1, 0, true)
-    static val center = TextAlignment(0, 0, true)
+struct TextAlignment(x : float4, y : float4, baseline : bool, shift : vec3) {
+    static def apply(x : float4, y : float4) = TextAlignment(x, y, false, vec3(0, 0, 0))
+    static def baseline(x : float4) = TextAlignment(x, 0, true, vec3(0, 0, 0))
+    static val left = TextAlignment(-1, 0, true, vec3(0, 0, 0))
+    static val right = TextAlignment(1, 0, true, vec3(0, 0, 0))
+    static val center = TextAlignment(0, 0, true, vec3(0, 0, 0))
 }
 
 class Font(name : string) {
@@ -46,8 +46,10 @@ class Font(name : string) {
     private val vb = VertexBuffer(vbDesc)
     private val ib = IndexBuffer()
     private val mesh = Mesh(vb, ib)
-    def draw(text : string, color : vec4, at : vec2, alignment : TextAlignment) {
-        val pos = (context.matrixStack.value.wcp * vec4(at.x, at.y, 0, 1)).xy
+    def draw(text : string, color : vec4, at : vec3, alignment : TextAlignment) {
+        val pos =
+            if(alignment.shift.isEmpty) matrix.wcp.mul(vec4(at, 1)).xy
+            else matrix.p.mul(matrix.wc.mul(vec4(at, 1)) + alignment.shift).xy
         val symbolsArr = text.chain.flatMap<FontSymbolDesc>(symbols.opt(_)).toArray
         val vertexes = VoidRefArray(FontPrintData.type, symbolsArr.count * 4)
         val indexes = VoidRefArray(UInt4.type, symbolsArr.count * 6)

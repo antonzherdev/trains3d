@@ -42,14 +42,11 @@ class MapSso(size : vec2i) {
         else if(less < more) 0
         else 2
 
-    def cutRectFor(tile : vec2i) =
-        vec2i(
-            tileCutAxis(0, tile.x + tile.y),
-            tileCutAxis(tile.y - tile.x, size.y - 1)
-        ).rectTo(vec2i(
-            tileCutAxis(tile.x + tile.y, size.x + size.y - 2),
-            tileCutAxis(-size.x + 1, tile.y - tile.x)))
+    def cutStateFor(tile : vec2i) : MapTileCutState = MapTileCutState(tileCutAxis(0, tile.x + tile.y), tileCutAxis(tile.y - tile.x, size.y - 1),
+         tileCutAxis(tile.x + tile.y, size.x + size.y - 2), tileCutAxis(-size.x + 1, tile.y - tile.x))
 }
+
+struct MapTileCutState(x : int, y : int, x2 : int, y2 : int)
 
 class MapSsoView(map : MapSso) {
     lazy val axisVertexBuffer = {

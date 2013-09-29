@@ -125,13 +125,13 @@ static ODClassType* _EGBillboardShader_type;
         "   vec4 pos = wc*vec4(position, 1);\n"
         "   pos.x += model.x;\n"
         "   pos.y += model.y;\n"
-        "   gl_Position = p*pos;\n"
-        "   UV = vertexUV;\n"
+        "   gl_Position = p*pos;%@\n"
         "   fragColor = vertexColor;\n"
         "   %@\n"
         "}", ((texture) ? @"\n"
         "attribute vec2 vertexUV; " : @""), ((texture) ? @"\n"
-        "varying vec2 UV; " : @""), parameters, code];
+        "varying vec2 UV; " : @""), parameters, ((texture) ? @"\n"
+        "   UV = vertexUV;" : @""), code];
 }
 
 + (NSString*)fragmentTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code {
