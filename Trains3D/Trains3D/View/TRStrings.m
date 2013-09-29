@@ -47,7 +47,8 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)callRepairer {
-    return @"Call repairers";
+    return @"Call\n"
+        "repairers";
 }
 
 - (NSString*)formatCost:(NSInteger)cost {
@@ -132,7 +133,8 @@ static ODClassType* _TRRuStrings_type;
 }
 
 - (NSString*)callRepairer {
-    return @"Вызвать ремонтников";
+    return @"Вызвать\n"
+        "ремонтников";
 }
 
 - (NSString*)formatCost:(NSInteger)cost {

@@ -2,8 +2,8 @@
 #import "EGScene.h"
 #import "EGInput.h"
 #import "GEVec.h"
-#import "EGFont.h"
 #import "EGMaterial.h"
+#import "EGFont.h"
 @class TRLevel;
 @class EGProgress;
 @class EGCounter;

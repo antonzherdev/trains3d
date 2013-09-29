@@ -1,6 +1,5 @@
 #import "objd.h"
 #import "GEVec.h"
-#import "EGMaterial.h"
 #import "EGShader.h"
 @class EGVertexBufferDesc;
 @class EGFileTexture;
@@ -103,9 +102,10 @@ ODPType* egTextAlignmentType();
 @property (nonatomic, readonly) GEVec2 offset;
 @property (nonatomic, readonly) GEVec2 size;
 @property (nonatomic, readonly) GERect textureRect;
+@property (nonatomic, readonly) BOOL isNewLine;
 
-+ (id)fontSymbolDescWithWidth:(float)width offset:(GEVec2)offset size:(GEVec2)size textureRect:(GERect)textureRect;
-- (id)initWithWidth:(float)width offset:(GEVec2)offset size:(GEVec2)size textureRect:(GERect)textureRect;
++ (id)fontSymbolDescWithWidth:(float)width offset:(GEVec2)offset size:(GEVec2)size textureRect:(GERect)textureRect isNewLine:(BOOL)isNewLine;
+- (id)initWithWidth:(float)width offset:(GEVec2)offset size:(GEVec2)size textureRect:(GERect)textureRect isNewLine:(BOOL)isNewLine;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

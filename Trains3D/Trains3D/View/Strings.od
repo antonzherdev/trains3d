@@ -22,7 +22,7 @@ class EnStrings extends Strings {
     def resumeGame : string = "Continue the game"
     def restartLevel : string = "Restart the level"
     def mainMenu : string = "Main menu"
-    def callRepairer : string = "Call repairers"
+    def callRepairer : string = "Call\nrepairers"
 }
 
 class RuStrings extends Strings{
@@ -33,7 +33,7 @@ class RuStrings extends Strings{
     def resumeGame : string = "Продолжить игру"
     def restartLevel : string = "Начать уровень заново"
     def mainMenu : string = "Основное меню"
-    def callRepairer : string = "Вызвать ремонтников"
+    def callRepairer : string = "Вызвать\nремонтников"
 }
 
 object Str {

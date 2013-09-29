@@ -29,11 +29,13 @@ class Font(name : string) {
                 val width : float4 = map("xadvance").toFloat
                 val offset =  vec2i(map("xoffset").toInt, map("yoffset").toInt)
                 val r = Rect(map("x").toFloat, map("y").toFloat, map("width").toFloat, map("height").toFloat)
-                charMap.set(value = FontSymbolDesc(width, offset, r.size, r/ts), forKey = code)
+                charMap.set(value = FontSymbolDesc(width, offset, r.size, r/ts, isNewLine = false), forKey = code)
             }
         }
         symbols = charMap
     }
+
+    private static val newLineDesc = FontSymbolDesc(0, vec2(0, 0), vec2(0, 0), Rect(0, 0, 0, 0), true)
 
     private def parse(_rect : string) : Rect = {
         val parts = _rect.split(" ").chain.toArray
@@ -50,61 +52,85 @@ class Font(name : string) {
         val pos =
             if(alignment.shift.isEmpty) matrix.wcp.mul(vec4(at, 1)).xy
             else matrix.p.mul(matrix.wc.mul(vec4(at, 1)) + alignment.shift).xy
-        val symbolsArr = text.chain.flatMap<FontSymbolDesc>(symbols.opt(_)).toArray
-        val vertexes = VoidRefArray(FontPrintData.type, symbolsArr.count * 4)
-        val indexes = VoidRefArray(UInt4.type, symbolsArr.count * 6)
+        var newLines = 0
+        val symbolsArr = text.chain.flatMap<FontSymbolDesc>{s ->
+            if(s == 10) {
+                newLines++
+                Option.some(newLineDesc)
+            } else symbols.opt(s)
+        }.toArray
+        val symbolsCount = symbolsArr.count - newLines
+        val vertexes = VoidRefArray(FontPrintData.type, symbolsCount * 4)
+        val indexes = VoidRefArray(UInt4.type, symbolsCount * 6)
         val vpSize = context.viewport.size/2.0
 
         var vp = vertexes
         var ip = indexes
         var n = 0
 
-        var x =
-            if(alignment.x == -1) pos.x
-            else {
-                var fullWidth = 0
-                symbolsArr.for{s -> fullWidth += s.width}
-                pos.x - fullWidth/vpSize.x*(alignment.x/2 + 0.5)
+        var linesWidth = MutableArray<int>()
+        val linesWidthIterator : Iterator<int>
+        var x =  pos.x
+        if(alignment.x != -1) {
+            var fullWidth = 0
+            var lineWidth = 0
+            symbolsArr.for{s ->
+                if(s.isNewLine) {
+                    linesWidth.append(lineWidth)
+                    if(lineWidth > fullWidth) fullWidth = lineWidth
+                    lineWidth = 0
+                } else {
+                    lineWidth += s.width
+                }
             }
-        val y =
-            if(alignment.baseline) pos.y + height.cast<float4>/vpSize.y
-            else pos.y - height.cast<float4>/vpSize.y*(alignment.y/2 - 0.5)
+            linesWidth.append(lineWidth)
+            linesWidthIterator = linesWidth.iterator
+            x = pos.x - linesWidthIterator.next/vpSize.x*(alignment.x/2 + 0.5)
+        }
+        val hh = height.cast<float4>/vpSize.y
+        var y =
+            if(alignment.baseline) pos.y + size.cast<float4>/vpSize.y
+            else pos.y - hh*(newLines + 1)*(alignment.y/2 - 0.5)
+
         symbolsArr.for {s ->
-            val size = s.size/vpSize
-            val tr = s.textureRect
-            val v0 = vec2(x + s.offset.x/vpSize.x, y - s.offset.y/vpSize.y)
+            if(s.isNewLine) {
+                x = if(alignment.x == -1) pos.x
+                    else pos.x - linesWidthIterator.next/vpSize.x*(alignment.x/2 + 0.5)
+                y -= hh
+            } else {
+                val size = s.size/vpSize
+                val tr = s.textureRect
+                val v0 = vec2(x + s.offset.x/vpSize.x, y - s.offset.y/vpSize.y)
 
-            vp = vp.write(vec2, v0)
-            vp = vp.write(vec2, tr.p0)
+                vp = vp.write(vec2, v0)
+                vp = vp.write(vec2, tr.p0)
 
-            vp = vp.write(vec2, vec2(v0.x, v0.y - size.y))
-            vp = vp.write(vec2, tr.p1)
+                vp = vp.write(vec2, vec2(v0.x, v0.y - size.y))
+                vp = vp.write(vec2, tr.p1)
 
-            vp = vp.write(vec2, vec2(v0.x + size.x, v0.y - size.y))
-            vp = vp.write(vec2, tr.p3)
+                vp = vp.write(vec2, vec2(v0.x + size.x, v0.y - size.y))
+                vp = vp.write(vec2, tr.p3)
 
-            vp = vp.write(vec2, vec2(v0.x + size.x, v0.y))
-            vp = vp.write(vec2, tr.p2)
+                vp = vp.write(vec2, vec2(v0.x + size.x, v0.y))
+                vp = vp.write(vec2, tr.p2)
 
-            ip = ip.write(uInt4 = n)
-            ip = ip.write(uInt4 = n + 1)
-            ip = ip.write(uInt4 = n + 2)
-            ip = ip.write(uInt4 = n + 2)
-            ip = ip.write(uInt4 = n + 3)
-            ip = ip.write(uInt4 = n)
+                ip = ip.write(uInt4 = n)
+                ip = ip.write(uInt4 = n + 1)
+                ip = ip.write(uInt4 = n + 2)
+                ip = ip.write(uInt4 = n + 2)
+                ip = ip.write(uInt4 = n + 3)
+                ip = ip.write(uInt4 = n)
 
-            x += s.width/vpSize.x
-            n += 4
+                x += s.width/vpSize.x
+                n += 4
+            }
         }
         vb.set(vertexes, GL_DYNAMIC_DRAW)
         ib.set(indexes, GL_DYNAMIC_DRAW)
 
-        BlendFunction.standard {
-            glDisable(GL_CULL_FACE)
-            FontShader.instance.draw(FontShaderParam(texture, color), mesh)
-            glEnable(GL_CULL_FACE)
-        }
-
+        glDisable(GL_CULL_FACE)
+        FontShader.instance.draw(FontShaderParam(texture, color), mesh)
+        glEnable(GL_CULL_FACE)
     }
 }
 
@@ -145,5 +171,5 @@ class FontShader extends Shader<FontShaderParam>(ShaderProgram(FontShader.vertex
     }
 }
 
-class FontSymbolDesc(width : float4, offset : vec2, size : vec2, textureRect : Rect)
+class FontSymbolDesc(width : float4, offset : vec2, size : vec2, textureRect : Rect, isNewLine : bool)
 struct FontPrintData(position : vec2, uv : vec2)

@@ -87,6 +87,7 @@ ODPType* egTextAlignmentType() {
     EGIndexBuffer* _ib;
     EGMesh* _mesh;
 }
+static EGFontSymbolDesc* _EGFont_newLineDesc;
 static EGVertexBufferDesc* _EGFont_vbDesc;
 static ODClassType* _EGFont_type;
 @synthesize name = _name;
@@ -114,6 +115,7 @@ static ODClassType* _EGFont_type;
 + (void)initialize {
     [super initialize];
     _EGFont_type = [ODClassType classTypeWithCls:[EGFont class]];
+    _EGFont_newLineDesc = [EGFontSymbolDesc fontSymbolDescWithWidth:0.0 offset:GEVec2Make(0.0, 0.0) size:GEVec2Make(0.0, 0.0) textureRect:geRectApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0) isNewLine:YES];
     _EGFont_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:egFontPrintDataType() position:0 uv:((int)(2 * 4)) normal:-1 color:-1 model:-1];
 }
 
@@ -137,7 +139,7 @@ static ODClassType* _EGFont_type;
                     float width = ((float)([[map applyKey:@"xadvance"] toFloat]));
                     GEVec2i offset = GEVec2iMake([[map applyKey:@"xoffset"] toInt], [[map applyKey:@"yoffset"] toInt]);
                     GERect r = geRectApplyXYWidthHeight(((float)([[map applyKey:@"x"] toFloat])), ((float)([[map applyKey:@"y"] toFloat])), ((float)([[map applyKey:@"width"] toFloat])), ((float)([[map applyKey:@"height"] toFloat])));
-                    [charMap setValue:[EGFontSymbolDesc fontSymbolDescWithWidth:width offset:geVec2ApplyVec2i(offset) size:r.size textureRect:geRectDivVec2(r, ts)] forKey:nums(code)];
+                    [charMap setValue:[EGFontSymbolDesc fontSymbolDescWithWidth:width offset:geVec2ApplyVec2i(offset) size:r.size textureRect:geRectDivVec2(r, ts) isNewLine:NO] forKey:nums(code)];
                 }
             }
         }
@@ -154,51 +156,74 @@ static ODClassType* _EGFont_type;
 
 - (void)drawText:(NSString*)text color:(GEVec4)color at:(GEVec3)at alignment:(EGTextAlignment)alignment {
     GEVec2 pos = ((geVec3IsEmpty(alignment.shift)) ? geVec4Xy([[EGGlobal.matrix wcp] mulVec4:geVec4ApplyVec3W(at, 1.0)]) : geVec4Xy([[EGGlobal.matrix p] mulVec4:geVec4AddVec3([[EGGlobal.matrix wc] mulVec4:geVec4ApplyVec3W(at, 1.0)], alignment.shift)]));
-    id<CNSeq> symbolsArr = [[[text chain] flatMap:^id(id _) {
-        return [_symbols optKey:_];
+    __block NSInteger newLines = 0;
+    id<CNSeq> symbolsArr = [[[text chain] flatMap:^id(id s) {
+        if(unumi(s) == 10) {
+            newLines++;
+            return [CNOption someValue:_EGFont_newLineDesc];
+        } else {
+            return [_symbols optKey:s];
+        }
     }] toArray];
-    CNVoidRefArray vertexes = cnVoidRefArrayApplyTpCount(egFontPrintDataType(), [symbolsArr count] * 4);
-    CNVoidRefArray indexes = cnVoidRefArrayApplyTpCount(oduInt4Type(), [symbolsArr count] * 6);
+    NSUInteger symbolsCount = [symbolsArr count] - newLines;
+    CNVoidRefArray vertexes = cnVoidRefArrayApplyTpCount(egFontPrintDataType(), symbolsCount * 4);
+    CNVoidRefArray indexes = cnVoidRefArrayApplyTpCount(oduInt4Type(), symbolsCount * 6);
     GEVec2 vpSize = geVec2iDivF([EGGlobal.context viewport].size, 2.0);
     __block CNVoidRefArray vp = vertexes;
     __block CNVoidRefArray ip = indexes;
     __block NSInteger n = 0;
-    __block float x = ((eqf4(alignment.x, -1)) ? pos.x : ^float() {
+    NSMutableArray* linesWidth = [NSMutableArray mutableArray];
+    id<CNIterator> linesWidthIterator;
+    __block float x = pos.x;
+    if(!(eqf4(alignment.x, -1))) {
         __block NSInteger fullWidth = 0;
+        __block NSInteger lineWidth = 0;
         [symbolsArr forEach:^void(EGFontSymbolDesc* s) {
-            fullWidth += ((NSInteger)(s.width));
+            if(s.isNewLine) {
+                [linesWidth appendItem:numi(lineWidth)];
+                if(lineWidth > fullWidth) fullWidth = lineWidth;
+                lineWidth = 0;
+            } else {
+                lineWidth += ((NSInteger)(s.width));
+            }
         }];
-        return pos.x - fullWidth / vpSize.x * (alignment.x / 2 + 0.5);
-    }());
-    float y = ((alignment.baseline) ? pos.y + ((float)(_height)) / vpSize.y : pos.y - ((float)(_height)) / vpSize.y * (alignment.y / 2 - 0.5));
+        [linesWidth appendItem:numi(lineWidth)];
+        linesWidthIterator = [linesWidth iterator];
+        x = pos.x - unumi([linesWidthIterator next]) / vpSize.x * (alignment.x / 2 + 0.5);
+    }
+    float hh = ((float)(_height)) / vpSize.y;
+    __block float y = ((alignment.baseline) ? pos.y + ((float)(_size)) / vpSize.y : pos.y - hh * (newLines + 1) * (alignment.y / 2 - 0.5));
     [symbolsArr forEach:^void(EGFontSymbolDesc* s) {
-        GEVec2 size = geVec2DivVec2(s.size, vpSize);
-        GERect tr = s.textureRect;
-        GEVec2 v0 = GEVec2Make(x + s.offset.x / vpSize.x, y - s.offset.y / vpSize.y);
-        vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, v0);
-        vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, tr.p0);
-        vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, GEVec2Make(v0.x, v0.y - size.y));
-        vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, geRectP1(tr));
-        vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, GEVec2Make(v0.x + size.x, v0.y - size.y));
-        vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, geRectP3(tr));
-        vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, GEVec2Make(v0.x + size.x, v0.y));
-        vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, geRectP2(tr));
-        ip = cnVoidRefArrayWriteUInt4(ip, ((unsigned int)(n)));
-        ip = cnVoidRefArrayWriteUInt4(ip, ((unsigned int)(n + 1)));
-        ip = cnVoidRefArrayWriteUInt4(ip, ((unsigned int)(n + 2)));
-        ip = cnVoidRefArrayWriteUInt4(ip, ((unsigned int)(n + 2)));
-        ip = cnVoidRefArrayWriteUInt4(ip, ((unsigned int)(n + 3)));
-        ip = cnVoidRefArrayWriteUInt4(ip, ((unsigned int)(n)));
-        x += s.width / vpSize.x;
-        n += 4;
+        if(s.isNewLine) {
+            x = ((eqf4(alignment.x, -1)) ? pos.x : pos.x - unumi([linesWidthIterator next]) / vpSize.x * (alignment.x / 2 + 0.5));
+            y -= hh;
+        } else {
+            GEVec2 size = geVec2DivVec2(s.size, vpSize);
+            GERect tr = s.textureRect;
+            GEVec2 v0 = GEVec2Make(x + s.offset.x / vpSize.x, y - s.offset.y / vpSize.y);
+            vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, v0);
+            vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, tr.p0);
+            vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, GEVec2Make(v0.x, v0.y - size.y));
+            vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, geRectP1(tr));
+            vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, GEVec2Make(v0.x + size.x, v0.y - size.y));
+            vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, geRectP3(tr));
+            vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, GEVec2Make(v0.x + size.x, v0.y));
+            vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, geRectP2(tr));
+            ip = cnVoidRefArrayWriteUInt4(ip, ((unsigned int)(n)));
+            ip = cnVoidRefArrayWriteUInt4(ip, ((unsigned int)(n + 1)));
+            ip = cnVoidRefArrayWriteUInt4(ip, ((unsigned int)(n + 2)));
+            ip = cnVoidRefArrayWriteUInt4(ip, ((unsigned int)(n + 2)));
+            ip = cnVoidRefArrayWriteUInt4(ip, ((unsigned int)(n + 3)));
+            ip = cnVoidRefArrayWriteUInt4(ip, ((unsigned int)(n)));
+            x += s.width / vpSize.x;
+            n += 4;
+        }
     }];
     [_vb setArray:vertexes usage:GL_DYNAMIC_DRAW];
     [_ib setArray:indexes usage:GL_DYNAMIC_DRAW];
-    egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
-        glDisable(GL_CULL_FACE);
-        [EGFontShader.instance drawParam:[EGFontShaderParam fontShaderParamWithTexture:_texture color:color] mesh:_mesh];
-        glEnable(GL_CULL_FACE);
-    });
+    glDisable(GL_CULL_FACE);
+    [EGFontShader.instance drawParam:[EGFontShaderParam fontShaderParamWithTexture:_texture color:color] mesh:_mesh];
+    glEnable(GL_CULL_FACE);
 }
 
 - (ODClassType*)type {
@@ -407,24 +432,27 @@ static ODClassType* _EGFontShader_type;
     GEVec2 _offset;
     GEVec2 _size;
     GERect _textureRect;
+    BOOL _isNewLine;
 }
 static ODClassType* _EGFontSymbolDesc_type;
 @synthesize width = _width;
 @synthesize offset = _offset;
 @synthesize size = _size;
 @synthesize textureRect = _textureRect;
+@synthesize isNewLine = _isNewLine;
 
-+ (id)fontSymbolDescWithWidth:(float)width offset:(GEVec2)offset size:(GEVec2)size textureRect:(GERect)textureRect {
-    return [[EGFontSymbolDesc alloc] initWithWidth:width offset:offset size:size textureRect:textureRect];
++ (id)fontSymbolDescWithWidth:(float)width offset:(GEVec2)offset size:(GEVec2)size textureRect:(GERect)textureRect isNewLine:(BOOL)isNewLine {
+    return [[EGFontSymbolDesc alloc] initWithWidth:width offset:offset size:size textureRect:textureRect isNewLine:isNewLine];
 }
 
-- (id)initWithWidth:(float)width offset:(GEVec2)offset size:(GEVec2)size textureRect:(GERect)textureRect {
+- (id)initWithWidth:(float)width offset:(GEVec2)offset size:(GEVec2)size textureRect:(GERect)textureRect isNewLine:(BOOL)isNewLine {
     self = [super init];
     if(self) {
         _width = width;
         _offset = offset;
         _size = size;
         _textureRect = textureRect;
+        _isNewLine = isNewLine;
     }
     
     return self;
@@ -451,7 +479,7 @@ static ODClassType* _EGFontSymbolDesc_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGFontSymbolDesc* o = ((EGFontSymbolDesc*)(other));
-    return eqf4(self.width, o.width) && GEVec2Eq(self.offset, o.offset) && GEVec2Eq(self.size, o.size) && GERectEq(self.textureRect, o.textureRect);
+    return eqf4(self.width, o.width) && GEVec2Eq(self.offset, o.offset) && GEVec2Eq(self.size, o.size) && GERectEq(self.textureRect, o.textureRect) && self.isNewLine == o.isNewLine;
 }
 
 - (NSUInteger)hash {
@@ -460,6 +488,7 @@ static ODClassType* _EGFontSymbolDesc_type;
     hash = hash * 31 + GEVec2Hash(self.offset);
     hash = hash * 31 + GEVec2Hash(self.size);
     hash = hash * 31 + GERectHash(self.textureRect);
+    hash = hash * 31 + self.isNewLine;
     return hash;
 }
 
@@ -469,6 +498,7 @@ static ODClassType* _EGFontSymbolDesc_type;
     [description appendFormat:@", offset=%@", GEVec2Description(self.offset)];
     [description appendFormat:@", size=%@", GEVec2Description(self.size)];
     [description appendFormat:@", textureRect=%@", GERectDescription(self.textureRect)];
+    [description appendFormat:@", isNewLine=%d", self.isNewLine];
     [description appendString:@">"];
     return description;
 }

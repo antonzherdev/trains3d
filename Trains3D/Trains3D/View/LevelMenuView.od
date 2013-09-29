@@ -14,19 +14,20 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor with Mo
 
     val notificationProgress = gap(0.7, 1) >> vec4(0, 0, 0, 1 - _)
     def draw {
-        val w = context.viewport.size.x/res.pixelsInPoint
-        res.font.draw(text = format(level.score.score), color = vec4(0, 0, 0, 1), at = vec3(10, 10, 0), TextAlignment.baseline(-1))
-//        val seconds : int = level.schedule.time
-//        res.font.draw(text = seconds, color = vec4(0, 0, 0, 1), at = vec2(w - 56, 10), TextAlignment.baseline(1))
-
-        val pauseSprite = res.pauseSprite
-        pauseSprite.position = vec2(w - 46, 0)
         BlendFunction.premultiplied {
-            pauseSprite.draw
-        }
+            val w = context.viewport.size.x/res.pixelsInPoint
+            res.font.draw(text = format(level.score.score), color = vec4(0, 0, 0, 1), at = vec3(10, 14, 0), TextAlignment.baseline(-1))
+    //        val seconds : int = level.schedule.time
+    //        res.font.draw(text = seconds, color = vec4(0, 0, 0, 1), at = vec2(w - 56, 10), TextAlignment.baseline(1))
 
-        notificationAnimation.for{t ->
-            res.notificationFont.draw(text = notificationText, notificationProgress(t), at = vec3(w/2, 12, 0), TextAlignment.baseline(0))
+            val pauseSprite = res.pauseSprite
+            pauseSprite.position = vec2(w - 46, 0)
+            pauseSprite.draw
+
+
+            notificationAnimation.for{t ->
+                res.notificationFont.draw(text = notificationText, notificationProgress(t), at = vec3(w/2, 15, 0), TextAlignment.baseline(0))
+            }
         }
     }
 

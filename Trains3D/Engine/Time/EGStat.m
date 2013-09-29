@@ -31,7 +31,9 @@ static ODClassType* _EGStat_type;
 }
 
 - (void)draw {
-    [_font drawText:[NSString stringWithFormat:@"%li", floatRound(__frameRate)] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec3Make(-0.98, -0.99, 0.0) alignment:egTextAlignmentLeft()];
+    egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
+        [_font drawText:[NSString stringWithFormat:@"%li", floatRound(__frameRate)] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec3Make(-0.98, -0.99, 0.0) alignment:egTextAlignmentLeft()];
+    });
 }
 
 - (void)tickWithDelta:(CGFloat)delta {
