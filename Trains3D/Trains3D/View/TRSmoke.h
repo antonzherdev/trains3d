@@ -3,6 +3,7 @@
 #import "GEVec.h"
 #import "EGMaterial.h"
 @class TRTrain;
+@class TRWeather;
 @class TRCar;
 @class TRCarType;
 @class TREngineType;
@@ -17,9 +18,10 @@
 
 @interface TRSmoke : EGBillboardParticleSystem
 @property (nonatomic, readonly, weak) TRTrain* train;
+@property (nonatomic, readonly, weak) TRWeather* weather;
 
-+ (id)smokeWithTrain:(TRTrain*)train;
-- (id)initWithTrain:(TRTrain*)train;
++ (id)smokeWithTrain:(TRTrain*)train weather:(TRWeather*)weather;
+- (id)initWithTrain:(TRTrain*)train weather:(TRWeather*)weather;
 - (ODClassType*)type;
 - (void)generateParticlesWithDelta:(CGFloat)delta;
 - (TRSmokeParticle*)generateParticle;
@@ -32,11 +34,12 @@
 
 
 @interface TRSmokeParticle : EGBillboardParticle
+@property (nonatomic, readonly, weak) TRWeather* weather;
 @property (nonatomic) GEVec3 speed;
 @property (nonatomic, readonly) void(^animation)(float);
 
-+ (id)smokeParticle;
-- (id)init;
++ (id)smokeParticleWithWeather:(TRWeather*)weather;
+- (id)initWithWeather:(TRWeather*)weather;
 - (ODClassType*)type;
 - (void)updateT:(float)t dt:(float)dt;
 + (CGFloat)dragCoefficient;

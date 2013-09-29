@@ -4,18 +4,29 @@ package com.antonzherdev.trains
 import core.math._
 import com.antonzherdev.eg._
 
-class TrainView {
+class TrainView(level : Level) {
     val smokeView = SmokeView()
 
     val blackMaterial = StandardMaterial(vec4(0, 0, 0, 1), vec4(0.1, 0.1, 0.1, 1), 1)
 
     def trainMaterialFor(color : vec4) : Material = StandardMaterial(color, vec4(0.3, 0.3, 0.3, 1), 1)
+
+    def draw {
+        draw(trains = level.trains)
+        draw(dyingTrains = level.dyingTrains)
+    }
+
+    def drawSmoke {
+        drawSmoke(trains = level.trains)
+        drawSmoke(trains = level.dyingTrains)
+    }
+
     def draw(trains : [Train]) {
         if(trains.isEmpty) return nil
 
         trains.for {train ->
             draw(train = train)
-            if(train.viewData == nil) train.viewData = Smoke(train)
+            if(train.viewData == nil) train.viewData = Smoke(train, level.weather)
             smokeView.draw(train.viewData)
         }
     }

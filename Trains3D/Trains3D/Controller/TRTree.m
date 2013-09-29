@@ -93,9 +93,7 @@ static ODClassType* _TRForest_type;
         __trees = [[[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count]))) chain] map:^TRTree*(id _) {
             GEVec2i tile = uwrap(GEVec2i, [[_weakSelf.map.allTiles randomItem] get]);
             GEVec2 pos = GEVec2Make(((float)(odFloatRndMinMax(-0.5, 0.5))), ((float)(odFloatRndMinMax(-0.5, 0.5))));
-            TRTree* tree = [TRTree treeWithTreeType:((TRTreeType*)([[_weakSelf.rules.types randomItem] get])) position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make(((float)(odFloatRndMinMax(0.8, 1.2))), ((float)(odFloatRndMinMax(0.8, 1.2))))];
-            tree.rustle = odFloatRndMinMax(-1.0, 1.0);
-            return tree;
+            return [TRTree treeWithTreeType:((TRTreeType*)([[_weakSelf.rules.types randomItem] get])) position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make(((float)(odFloatRndMinMax(0.8, 1.2))), ((float)(odFloatRndMinMax(0.8, 1.2))))];
         }] sort] toArray];
     }
     
@@ -225,14 +223,14 @@ static ODClassType* _TRTree_type;
 }
 
 - (void)updateWithWind:(GEVec2)wind delta:(CGFloat)delta {
-    GEVec2 mw = geVec2MulF(geVec2MulF(wind, 0.1), _rigidity);
+    GEVec2 mw = geVec2MulF(geVec2MulF(wind, 0.3), _rigidity);
     float mws = float4Abs(mw.x) + float4Abs(mw.y);
     if(__rustleUp) {
-        _rustle += delta * 7;
+        _rustle += delta * mws * mws * 65;
         if(_rustle > mws) __rustleUp = NO;
     } else {
-        _rustle -= delta * 7;
-        if(_rustle < mws) __rustleUp = YES;
+        _rustle -= delta * mws * mws * 65;
+        if(_rustle < -mws) __rustleUp = YES;
     }
     if(__inclineUp) {
         __incline = geVec2MulF(__incline, 1.0 - delta);

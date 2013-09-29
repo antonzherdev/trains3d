@@ -10,9 +10,7 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Contr
     private var _trees = (rules.thickness * map.allTiles.count).cast<int>.range.chain.map{ _ ->
         val tile = map.allTiles.randomItem.get
         val pos = vec2(Float.rnd(-0.5, 0.5), Float.rnd(-0.5, 0.5))
-        val tree = Tree(rules.types.randomItem.get, pos + tile, vec2(Float.rnd(0.8, 1.2), Float.rnd(0.8, 1.2)))
-        tree.rustle = Float.rnd(-1, 1)
-        tree
+        Tree(rules.types.randomItem.get, pos + tile, vec2(Float.rnd(0.8, 1.2), Float.rnd(0.8, 1.2)))
     }.sort.toArray
     def trees = _trees
 
@@ -49,14 +47,14 @@ class Tree(treeType : TreeType, position : vec2, size : vec2) extends Comparable
     def incline = _incline
 
     def updateWith(wind : vec2, delta : float) {
-        val mw = wind*0.1*rigidity
+        val mw = wind*0.3*rigidity
         val mws = mw.x.abs + mw.y.abs
         if(_rustleUp) {
-            rustle += delta*7
+            rustle += delta*mws*mws*65
             if(rustle > mws) _rustleUp = false
         } else {
-            rustle -= delta*7
-            if(rustle < mws) _rustleUp = true
+            rustle -= delta*mws*mws*65
+            if(rustle < -mws) _rustleUp = true
         }
 
 

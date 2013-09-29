@@ -65,7 +65,7 @@ static ODClassType* _TRTreeView_type;
     GEQuad3 quad3 = GEQuad3Make(mPlaneCoord, quad);
     GEQuad mQuad = geQuadApplyP0P1P2P3(geVec3Xy(geQuad3P0(quad3)), geVec3Xy(geQuad3P1(quad3)), geVec3Xy(geQuad3P2(quad3)), geVec3Xy(geQuad3P3(quad3)));
     [EGBillboard drawMaterial:((EGColorSource*)([_materials applyIndex:tp])) at:geVec3ApplyVec2Z(tree.position, 0.0) quad:mQuad uv:_mainUv];
-    CGFloat r = tree.rustle * 0.03;
+    CGFloat r = tree.rustle * 0.05;
     GEPlaneCoord rPlaneCoord = gePlaneCoordSetX(mPlaneCoord, geVec3AddVec3(mPlaneCoord.x, GEVec3Make(0.0, ((float)(r)), 0.0)));
     GEQuad3 rQuad3 = GEQuad3Make(rPlaneCoord, quad);
     [EGBillboard drawMaterial:[EGColorSource applyTexture:((EGTexture*)([_textures applyIndex:tp]))] at:geVec3ApplyVec2Z(tree.position, 0.0) quad:geQuadApplyP0P1P2P3(geVec3Xy(geQuad3P0(rQuad3)), geVec3Xy(geQuad3P1(rQuad3)), geVec3Xy(geQuad3P2(rQuad3)), geVec3Xy(geQuad3P3(rQuad3))) uv:_rustleUv];

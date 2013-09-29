@@ -1,5 +1,6 @@
 #import "objd.h"
 #import "GEVec.h"
+@class TRLevel;
 @class TRSmokeView;
 @class EGStandardMaterial;
 @class EGColorSource;
@@ -21,13 +22,16 @@
 @class TRTrainView;
 
 @interface TRTrainView : NSObject
+@property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) TRSmokeView* smokeView;
 @property (nonatomic, readonly) EGStandardMaterial* blackMaterial;
 
-+ (id)trainView;
-- (id)init;
++ (id)trainViewWithLevel:(TRLevel*)level;
+- (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (EGMaterial*)trainMaterialForColor:(GEVec4)color;
+- (void)draw;
+- (void)drawSmoke;
 - (void)drawTrains:(id<CNSeq>)trains;
 - (void)drawSmokeTrains:(id<CNSeq>)trains;
 - (void)drawDyingTrains:(id<CNSeq>)dyingTrains;

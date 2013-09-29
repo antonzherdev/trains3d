@@ -1,5 +1,6 @@
 #import "TRTrainView.h"
 
+#import "TRLevel.h"
 #import "TRSmoke.h"
 #import "EGMaterial.h"
 #import "TRTrain.h"
@@ -11,20 +12,23 @@
 #import "TRModels.h"
 #import "EGDynamicWorld.h"
 @implementation TRTrainView{
+    TRLevel* _level;
     TRSmokeView* _smokeView;
     EGStandardMaterial* _blackMaterial;
 }
 static ODClassType* _TRTrainView_type;
+@synthesize level = _level;
 @synthesize smokeView = _smokeView;
 @synthesize blackMaterial = _blackMaterial;
 
-+ (id)trainView {
-    return [[TRTrainView alloc] init];
++ (id)trainViewWithLevel:(TRLevel*)level {
+    return [[TRTrainView alloc] initWithLevel:level];
 }
 
-- (id)init {
+- (id)initWithLevel:(TRLevel*)level {
     self = [super init];
     if(self) {
+        _level = level;
         _smokeView = [TRSmokeView smokeView];
         _blackMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 1.0)] specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:1.0];
     }
@@ -41,11 +45,21 @@ static ODClassType* _TRTrainView_type;
     return [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:color] specularColor:GEVec4Make(0.3, 0.3, 0.3, 1.0) specularSize:1.0];
 }
 
+- (void)draw {
+    [self drawTrains:[_level trains]];
+    [self drawDyingTrains:[_level dyingTrains]];
+}
+
+- (void)drawSmoke {
+    [self drawSmokeTrains:[_level trains]];
+    [self drawSmokeTrains:[_level dyingTrains]];
+}
+
 - (void)drawTrains:(id<CNSeq>)trains {
     if([trains isEmpty]) return ;
     [trains forEach:^void(TRTrain* train) {
         [self drawTrain:train];
-        if(train.viewData == nil) train.viewData = [TRSmoke smokeWithTrain:train];
+        if(train.viewData == nil) train.viewData = [TRSmoke smokeWithTrain:train weather:_level.weather];
         [_smokeView drawSystem:train.viewData];
     }];
 }
@@ -122,15 +136,19 @@ static ODClassType* _TRTrainView_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
+    TRTrainView* o = ((TRTrainView*)(other));
+    return [self.level isEqual:o.level];
 }
 
 - (NSUInteger)hash {
-    return 0;
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.level hash];
+    return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"level=%@", self.level];
     [description appendString:@">"];
     return description;
 }

@@ -29,7 +29,7 @@ class LevelFactory {
     private static val rules = [
         LevelRules(vec2i(5, 3), scoreRules,
             ForestRules(types = [TreeType.pine], thickness = 2),
-            WeatherRules(windStrength = 1, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 1),
+            WeatherRules(windStrength = 0.3, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3),
             repairerSpeed = 30, [
             (1, train(cars = 2.to(4), speed = 50.to(60).set(step = 10))),
 //            (10, train(cars = 2.to(4), speed = 50.to(60).set(step = 10))),

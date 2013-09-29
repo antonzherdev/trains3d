@@ -1,12 +1,14 @@
 #import "TRSmoke.h"
 
 #import "TRTrain.h"
+#import "TRWeather.h"
 #import "TRCar.h"
 #import "TRRailPoint.h"
 #import "EGProgress.h"
 #import "EGContext.h"
 @implementation TRSmoke{
     __weak TRTrain* _train;
+    __weak TRWeather* _weather;
     TRCar* _engine;
     GEVec3 _tubePos;
     CGFloat _emitTime;
@@ -19,15 +21,17 @@ static GEQuadrant _TRSmoke_textureQuadrant;
 static GEVec4 _TRSmoke_defColor = (GEVec4){0.3, 0.3, 0.3, 0.3};
 static ODClassType* _TRSmoke_type;
 @synthesize train = _train;
+@synthesize weather = _weather;
 
-+ (id)smokeWithTrain:(TRTrain*)train {
-    return [[TRSmoke alloc] initWithTrain:train];
++ (id)smokeWithTrain:(TRTrain*)train weather:(TRWeather*)weather {
+    return [[TRSmoke alloc] initWithTrain:train weather:weather];
 }
 
-- (id)initWithTrain:(TRTrain*)train {
+- (id)initWithTrain:(TRTrain*)train weather:(TRWeather*)weather {
     self = [super init];
     if(self) {
         _train = train;
+        _weather = weather;
         _engine = ((TRCar*)([[[_train cars] head] get]));
         _tubePos = ((TREngineType*)([_engine.carType.engineType get])).tubePos;
         _emitTime = 0.0;
@@ -59,7 +63,7 @@ static ODClassType* _TRSmoke_type;
     GEVec2 delta = geVec2SubVec2(bPos, fPos);
     GEVec2 tubeXY = geVec2AddVec2(fPos, geVec2SetLength(delta, _tubePos.x));
     GEVec3 emitterPos = geVec3ApplyVec2Z(tubeXY, _tubePos.z);
-    TRSmokeParticle* p = [TRSmokeParticle smokeParticle];
+    TRSmokeParticle* p = [TRSmokeParticle smokeParticleWithWeather:_weather];
     p.color = _TRSmoke_defColor;
     p.position = GEVec3Make(emitterPos.x + odFloatRndMinMax(-0.01, 0.01), emitterPos.y + odFloatRndMinMax(-0.01, 0.01), emitterPos.z);
     p.model = _TRSmoke_modelQuad;
@@ -101,18 +105,20 @@ static ODClassType* _TRSmoke_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRSmoke* o = ((TRSmoke*)(other));
-    return [self.train isEqual:o.train];
+    return [self.train isEqual:o.train] && [self.weather isEqual:o.weather];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.train hash];
+    hash = hash * 31 + [self.weather hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"train=%@", self.train];
+    [description appendFormat:@", weather=%@", self.weather];
     [description appendString:@">"];
     return description;
 }
@@ -121,46 +127,51 @@ static ODClassType* _TRSmoke_type;
 
 
 @implementation TRSmokeParticle{
+    __weak TRWeather* _weather;
     GEVec3 _speed;
     void(^_animation)(float);
 }
 static CGFloat _TRSmokeParticle_dragCoefficient = 0.5;
 static ODClassType* _TRSmokeParticle_type;
+@synthesize weather = _weather;
 @synthesize speed = _speed;
 @synthesize animation = _animation;
 
-+ (id)smokeParticle {
-    return [[TRSmokeParticle alloc] init];
++ (id)smokeParticleWithWeather:(TRWeather*)weather {
+    return [[TRSmokeParticle alloc] initWithWeather:weather];
 }
 
-- (id)init {
+- (id)initWithWeather:(TRWeather*)weather {
     self = [super initWithLifeLength:2.0];
     __weak TRSmokeParticle* _weakSelf = self;
-    if(self) _animation = ^id() {
-        id(^__l)(float) = ^id() {
+    if(self) {
+        _weather = weather;
+        _animation = ^id() {
             id(^__l)(float) = ^id() {
-                float(^__l)(float) = [EGProgress divOn:self.lifeLength];
-                id(^__r)(float) = [EGProgress gapOptT1:0.75 t2:1.0];
+                id(^__l)(float) = ^id() {
+                    float(^__l)(float) = [EGProgress divOn:self.lifeLength];
+                    id(^__r)(float) = [EGProgress gapOptT1:0.75 t2:1.0];
+                    return ^id(float _) {
+                        return __r(__l(_));
+                    };
+                }();
+                float(^__r)(float) = [EGProgress progressF4:0.3 f42:0.0];
                 return ^id(float _) {
-                    return __r(__l(_));
+                    return [__l(_) mapF:^id(id _) {
+                        return numf4(__r(unumf4(_)));
+                    }];
                 };
             }();
-            float(^__r)(float) = [EGProgress progressF4:0.3 f42:0.0];
-            return ^id(float _) {
-                return [__l(_) mapF:^id(id _) {
-                    return numf4(__r(unumf4(_)));
+            void(^__r)(float) = ^void(float _) {
+                _weakSelf.color = GEVec4Make(_, _, _, _);
+            };
+            return ^void(float _) {
+                [__l(_) forEach:^void(id _) {
+                    __r(unumf4(_));
                 }];
             };
         }();
-        void(^__r)(float) = ^void(float _) {
-            _weakSelf.color = GEVec4Make(_, _, _, _);
-        };
-        return ^void(float _) {
-            [__l(_) forEach:^void(id _) {
-                __r(unumf4(_));
-            }];
-        };
-    }();
+    }
     
     return self;
 }
@@ -173,7 +184,7 @@ static ODClassType* _TRSmokeParticle_type;
 - (void)updateT:(float)t dt:(float)dt {
     GEVec3 a = geVec3MulK(_speed, ((float)(-_TRSmokeParticle_dragCoefficient)));
     _speed = geVec3AddVec3(_speed, geVec3MulK(a, dt));
-    self.position = geVec3AddVec3(self.position, geVec3MulK(_speed, dt));
+    self.position = geVec3AddVec3(self.position, geVec3MulK(geVec3AddVec3(_speed, geVec3ApplyVec2Z([_weather wind], 0.0)), dt));
     _animation(t);
 }
 
@@ -196,15 +207,19 @@ static ODClassType* _TRSmokeParticle_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
+    TRSmokeParticle* o = ((TRSmokeParticle*)(other));
+    return [self.weather isEqual:o.weather];
 }
 
 - (NSUInteger)hash {
-    return 0;
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.weather hash];
+    return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"weather=%@", self.weather];
     [description appendString:@">"];
     return description;
 }
