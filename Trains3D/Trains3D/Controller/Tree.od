@@ -6,13 +6,14 @@ class ForestRules(
     thickness : float //count on tile
 )
 
-class Forest( map : MapSso, rules : ForestRules) {
+class Forest( map : MapSso, rules : ForestRules) extends Controller {
     private var _trees = (rules.thickness * map.allTiles.count).cast<int>.range.chain.map{ _ ->
         val tile = map.allTiles.randomItem.get
         val pos = vec2(math.randomFloatGap(-0.5, 0.5), math.randomFloatGap(-0.5, 0.5))
-        Tree(rules.types.randomItem.get, pos + tile, vec2(math.randomFloatGap(0.8, 1.2), math.randomFloatGap(0.8, 1.2)))
+        val tree = Tree(rules.types.randomItem.get, pos + tile, vec2(math.randomFloatGap(0.8, 1.2), math.randomFloatGap(0.8, 1.2)))
+        tree.rustle = math.randomFloatGap(-1, 1)
+        tree
     }.sort.toArray
-
     def trees = _trees
 
     def cutDown(tile : vec2i) {
@@ -30,11 +31,29 @@ class Forest( map : MapSso, rules : ForestRules) {
     def cutDown(rect : Rect) {
         _trees = _trees.chain.filter(!rect.contains(_.position)).toArray
     }
+
+    def updateWith(delta : float) {
+        _trees.for(_.updateWith(delta))
+    }
 }
 
 
-class Tree(treeType : TreeType, position : vec2, size : vec2) extends Comparable<Tree> {
+class Tree(treeType : TreeType, position : vec2, size : vec2) extends Comparable<Tree> with Controller {
     def compare(to : Tree) : int = -(position.y - position.x).compare(to.position.y - to.position.x)
+
+
+    private var _rustleUp : bool = true
+    var rustle : float = 0.0
+
+    def updateWith(delta : float) {
+        if(_rustleUp) {
+            rustle += delta*7
+            if(rustle > 1) _rustleUp = false
+        } else {
+            rustle -= delta*7
+            if(rustle < -1) _rustleUp = true
+        }
+    }
 }
 
 enum TreeType {

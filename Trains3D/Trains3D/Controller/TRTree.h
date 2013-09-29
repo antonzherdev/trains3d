@@ -1,4 +1,5 @@
 #import "objd.h"
+#import "EGScene.h"
 #import "GEVec.h"
 @class EGMapSso;
 @class TRRail;
@@ -21,7 +22,7 @@
 @end
 
 
-@interface TRForest : NSObject
+@interface TRForest : NSObject<EGController>
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRForestRules* rules;
 
@@ -32,19 +33,22 @@
 - (void)cutDownTile:(GEVec2i)tile;
 - (void)cutDownForRail:(TRRail*)rail;
 - (void)cutDownRect:(GERect)rect;
+- (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
 @end
 
 
-@interface TRTree : NSObject<ODComparable>
+@interface TRTree : NSObject<ODComparable, EGController>
 @property (nonatomic, readonly) TRTreeType* treeType;
 @property (nonatomic, readonly) GEVec2 position;
 @property (nonatomic, readonly) GEVec2 size;
+@property (nonatomic) CGFloat rustle;
 
 + (id)treeWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size;
 - (id)initWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size;
 - (ODClassType*)type;
 - (NSInteger)compareTo:(TRTree*)to;
+- (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
 @end
 

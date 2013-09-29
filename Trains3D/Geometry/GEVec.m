@@ -632,6 +632,9 @@ GERect geRectMoveToCenterForSize(GERect self, GEVec2 size) {
 GEQuad geRectQuad(GERect self) {
     return geQuadApplyP0P1P2P3(geRectLeftBottom(self), geRectLeftTop(self), geRectRightBottom(self), geRectRightTop(self));
 }
+GEQuad geRectUpsideDownQuad(GERect self) {
+    return geQuadApplyP0P1P2P3(geRectLeftTop(self), geRectLeftBottom(self), geRectRightTop(self), geRectRightBottom(self));
+}
 GERect geRectCenterX(GERect self) {
     return GERectMake(GEVec2Make(self.origin.x + self.size.x / 2, self.origin.y), self.size);
 }

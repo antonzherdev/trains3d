@@ -5,10 +5,10 @@ class TreeView {
     val textures = [textureFor("Pine.png"), textureFor("Tree1.png"), textureFor("Tree2.png"), textureFor("Tree3.png")
         , textureFor("YellowTree.png")]
     val materials = textures.chain.map(ColorSource(_)).toArray
-    val rects = textures.chain.map(Rect(vec2(0, 0), _.size/(_.size.y*2))).toArray
+    val rects = textures.chain.map(Rect(0, 0, _.size.x/(_.size.y*4), _.size.y/(_.size.y*2)).centerX).toArray
 
     def draw(forest : Forest) {
-        glAlphaFunc(GL_GREATER, 0.2)
+        glAlphaFunc(GL_GREATER, 0.3)
         glEnable(GL_ALPHA_TEST)
         BlendFunction.standard {
             forest.trees.for(draw(_))
@@ -18,6 +18,13 @@ class TreeView {
 
     private def draw(tree : Tree) {
         val tp = tree.treeType.ordinal
-        Billboard.draw(textures(tp), at = vec3(tree.position, 0), (rects(tp)*tree.size).centerX)
+        val quad = (rects(tp)*tree.size).quad
+        Billboard.draw(textures(tp), at = vec3(tree.position, 0), quad, uv = Rect(0, 0, 0.5, 1).upsideDownQuad)
+
+        val r = tree.rustle*0.001
+        Billboard.draw(textures(tp), at = vec3(tree.position, 0), Quad(
+            quad.p[0] + vec2(r, r), quad.p[1] + vec2(-r, r),
+            quad.p[2] + vec2(r, -r), quad.p[3] + vec2(-r, -r)
+        ), uv = Rect(0.5, 0, 0.5, 1).upsideDownQuad)
     }
 }

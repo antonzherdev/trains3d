@@ -59,7 +59,7 @@ static ODClassType* _TRWeatherRules_type;
 
 @implementation TRWeather{
     TRWeatherRules* _rules;
-    GEVec3 __wind;
+    GEVec2 __wind;
 }
 static ODClassType* _TRWeather_type;
 @synthesize rules = _rules;
@@ -80,7 +80,7 @@ static ODClassType* _TRWeather_type;
     _TRWeather_type = [ODClassType classTypeWithCls:[TRWeather class]];
 }
 
-- (GEVec3)wind {
+- (GEVec2)wind {
     return __wind;
 }
 

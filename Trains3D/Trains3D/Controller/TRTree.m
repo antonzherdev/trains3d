@@ -89,7 +89,9 @@ static ODClassType* _TRForest_type;
         __trees = [[[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count]))) chain] map:^TRTree*(id _) {
             GEVec2i tile = uwrap(GEVec2i, [[_weakSelf.map.allTiles randomItem] get]);
             GEVec2 pos = GEVec2Make(((float)(randomFloatGap(-0.5, 0.5))), ((float)(randomFloatGap(-0.5, 0.5))));
-            return [TRTree treeWithTreeType:((TRTreeType*)([[_weakSelf.rules.types randomItem] get])) position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make(((float)(randomFloatGap(0.8, 1.2))), ((float)(randomFloatGap(0.8, 1.2))))];
+            TRTree* tree = [TRTree treeWithTreeType:((TRTreeType*)([[_weakSelf.rules.types randomItem] get])) position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make(((float)(randomFloatGap(0.8, 1.2))), ((float)(randomFloatGap(0.8, 1.2))))];
+            tree.rustle = randomFloatGap(-1.0, 1.0);
+            return tree;
         }] sort] toArray];
     }
     
@@ -121,6 +123,12 @@ static ODClassType* _TRForest_type;
     __trees = [[[__trees chain] filter:^BOOL(TRTree* _) {
         return !(geRectContainsVec2(rect, _.position));
     }] toArray];
+}
+
+- (void)updateWithDelta:(CGFloat)delta {
+    [__trees forEach:^void(TRTree* _) {
+        [_ updateWithDelta:delta];
+    }];
 }
 
 - (ODClassType*)type {
@@ -164,11 +172,14 @@ static ODClassType* _TRForest_type;
     TRTreeType* _treeType;
     GEVec2 _position;
     GEVec2 _size;
+    BOOL __rustleUp;
+    CGFloat _rustle;
 }
 static ODClassType* _TRTree_type;
 @synthesize treeType = _treeType;
 @synthesize position = _position;
 @synthesize size = _size;
+@synthesize rustle = _rustle;
 
 + (id)treeWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size {
     return [[TRTree alloc] initWithTreeType:treeType position:position size:size];
@@ -180,6 +191,8 @@ static ODClassType* _TRTree_type;
         _treeType = treeType;
         _position = position;
         _size = size;
+        __rustleUp = YES;
+        _rustle = 0.0;
     }
     
     return self;
@@ -192,6 +205,16 @@ static ODClassType* _TRTree_type;
 
 - (NSInteger)compareTo:(TRTree*)to {
     return -float4CompareTo(_position.y - _position.x, to.position.y - to.position.x);
+}
+
+- (void)updateWithDelta:(CGFloat)delta {
+    if(__rustleUp) {
+        _rustle += delta * 7;
+        if(_rustle > 1) __rustleUp = NO;
+    } else {
+        _rustle -= delta * 7;
+        if(_rustle < -1) __rustleUp = YES;
+    }
 }
 
 - (ODClassType*)type {

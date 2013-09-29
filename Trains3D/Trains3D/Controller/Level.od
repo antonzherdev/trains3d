@@ -90,6 +90,7 @@ class Level(rules : LevelRules) extends Controller {
 //        if(!_dyingTrains.isEmpty) dynamicWorld.updateWith(delta)
         dynamicWorld.updateWith(delta)
         schedule.updateWith(delta)
+        forest.updateWith(delta)
     }
 
     def tryTurn(theSwitch : Switch) {

@@ -21,7 +21,7 @@
 + (id)weatherWithRules:(TRWeatherRules*)rules;
 - (id)initWithRules:(TRWeatherRules*)rules;
 - (ODClassType*)type;
-- (GEVec3)wind;
+- (GEVec2)wind;
 - (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
 @end

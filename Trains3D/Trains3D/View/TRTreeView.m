@@ -27,7 +27,7 @@ static ODClassType* _TRTreeView_type;
             return [EGColorSource applyTexture:_];
         }] toArray];
         _rects = [[[_textures chain] map:^id(EGTexture* _) {
-            return wrap(GERect, GERectMake(GEVec2Make(0.0, 0.0), geVec2DivF4([_ size], [_ size].y * 2)));
+            return wrap(GERect, geRectCenterX(geRectApplyXYWidthHeight(0.0, 0.0, [_ size].x / ([_ size].y * 4), [_ size].y / ([_ size].y * 2))));
         }] toArray];
     }
     
@@ -40,7 +40,7 @@ static ODClassType* _TRTreeView_type;
 }
 
 - (void)drawForest:(TRForest*)forest {
-    glAlphaFunc(GL_GREATER, 0.2);
+    glAlphaFunc(GL_GREATER, 0.3);
     glEnable(GL_ALPHA_TEST);
     egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
         [[forest trees] forEach:^void(TRTree* _) {
@@ -52,7 +52,10 @@ static ODClassType* _TRTreeView_type;
 
 - (void)drawTree:(TRTree*)tree {
     NSUInteger tp = tree.treeType.ordinal;
-    [EGBillboard drawMaterial:[EGColorSource applyTexture:((EGTexture*)([_textures applyIndex:tp]))] at:geVec3ApplyVec2Z(tree.position, 0.0) rect:geRectCenterX(geRectMulVec2(uwrap(GERect, [_rects applyIndex:tp]), tree.size))];
+    GEQuad quad = geRectQuad(geRectMulVec2(uwrap(GERect, [_rects applyIndex:tp]), tree.size));
+    [EGBillboard drawMaterial:[EGColorSource applyTexture:((EGTexture*)([_textures applyIndex:tp]))] at:geVec3ApplyVec2Z(tree.position, 0.0) quad:quad uv:geRectUpsideDownQuad(geRectApplyXYWidthHeight(0.0, 0.0, 0.5, 1.0))];
+    CGFloat r = tree.rustle * 0.001;
+    [EGBillboard drawMaterial:[EGColorSource applyTexture:((EGTexture*)([_textures applyIndex:tp]))] at:geVec3ApplyVec2Z(tree.position, 0.0) quad:geQuadApplyP0P1P2P3(geVec2AddVec2(quad.p[0], GEVec2Make(((float)(r)), ((float)(r)))), geVec2AddVec2(quad.p[1], GEVec2Make(((float)(-r)), ((float)(r)))), geVec2AddVec2(quad.p[2], GEVec2Make(((float)(r)), ((float)(-r)))), geVec2AddVec2(quad.p[3], GEVec2Make(((float)(-r)), ((float)(-r))))) uv:geRectUpsideDownQuad(geRectApplyXYWidthHeight(0.5, 0.0, 0.5, 1.0))];
 }
 
 - (ODClassType*)type {

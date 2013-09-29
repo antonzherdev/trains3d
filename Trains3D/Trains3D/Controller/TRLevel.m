@@ -233,6 +233,7 @@ static ODClassType* _TRLevel_type;
     if(!([[self trains] isEmpty])) [self processCollisions];
     [_dynamicWorld updateWithDelta:delta];
     [_schedule updateWithDelta:delta];
+    [_forest updateWithDelta:delta];
 }
 
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch {

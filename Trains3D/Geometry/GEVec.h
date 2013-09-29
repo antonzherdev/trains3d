@@ -285,6 +285,7 @@ GEVec2 geRectRightTop(GERect self);
 GEVec2 geRectRightBottom(GERect self);
 GERect geRectMoveToCenterForSize(GERect self, GEVec2 size);
 GEQuad geRectQuad(GERect self);
+GEQuad geRectUpsideDownQuad(GERect self);
 GERect geRectCenterX(GERect self);
 GERect geRectCenterY(GERect self);
 ODPType* geRectType();
