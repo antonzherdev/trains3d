@@ -87,6 +87,15 @@ static inline CGFloat odFloatRnd() {
     return (CGFloat)drand48();
 }
 
+static inline float odFloat4RndMinMax(float s, float e) {
+    return (float)drand48() * (e - s) + s;
+}
+
+static inline float odFloat4Rnd() {
+    return (float)drand48();
+}
+
+
 static inline CGFloat floatNoisePercents(CGFloat self, CGFloat o) {
     return self*(1 + o - 2*o*(CGFloat)drand48());
 }

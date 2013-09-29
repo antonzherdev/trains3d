@@ -131,7 +131,7 @@ static ODClassType* _TRForest_type;
 
 - (void)updateWithDelta:(CGFloat)delta {
     [__trees forEach:^void(TRTree* _) {
-        [_ updateWithDelta:delta];
+        [_ updateWithWind:[_weather wind] delta:delta];
     }];
 }
 
@@ -178,13 +178,17 @@ static ODClassType* _TRForest_type;
     TRTreeType* _treeType;
     GEVec2 _position;
     GEVec2 _size;
+    CGFloat _rigidity;
     BOOL __rustleUp;
     CGFloat _rustle;
+    GEVec2 __incline;
+    BOOL __inclineUp;
 }
 static ODClassType* _TRTree_type;
 @synthesize treeType = _treeType;
 @synthesize position = _position;
 @synthesize size = _size;
+@synthesize rigidity = _rigidity;
 @synthesize rustle = _rustle;
 
 + (id)treeWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size {
@@ -197,8 +201,11 @@ static ODClassType* _TRTree_type;
         _treeType = treeType;
         _position = position;
         _size = size;
+        _rigidity = odFloatRndMinMax(0.5, 1.5);
         __rustleUp = YES;
         _rustle = 0.0;
+        __incline = GEVec2Make(0.0, 0.0);
+        __inclineUp = NO;
     }
     
     return self;
@@ -213,13 +220,26 @@ static ODClassType* _TRTree_type;
     return -float4CompareTo(_position.y - _position.x, to.position.y - to.position.x);
 }
 
-- (void)updateWithDelta:(CGFloat)delta {
+- (GEVec2)incline {
+    return __incline;
+}
+
+- (void)updateWithWind:(GEVec2)wind delta:(CGFloat)delta {
+    GEVec2 mw = geVec2MulF(geVec2MulF(wind, 0.1), _rigidity);
+    float mws = float4Abs(mw.x) + float4Abs(mw.y);
     if(__rustleUp) {
         _rustle += delta * 7;
-        if(_rustle > 1) __rustleUp = NO;
+        if(_rustle > mws) __rustleUp = NO;
     } else {
         _rustle -= delta * 7;
-        if(_rustle < -1) __rustleUp = YES;
+        if(_rustle < mws) __rustleUp = YES;
+    }
+    if(__inclineUp) {
+        __incline = geVec2MulF(__incline, 1.0 - delta);
+        if(float4Abs(__incline.x) + float4Abs(__incline.y) < mws * 0.8) __inclineUp = NO;
+    } else {
+        __incline = geVec2AddVec2(__incline, geVec2MulF(wind, delta));
+        if(float4Abs(__incline.x) + float4Abs(__incline.y) > mws) __inclineUp = YES;
     }
 }
 

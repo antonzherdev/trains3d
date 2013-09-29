@@ -1,11 +1,10 @@
 #import "objd.h"
 #import "GEVec.h"
-#import "GELine.h"
 #import "EGMaterial.h"
+#import "GELine.h"
 @class TRForest;
 @class EGGlobal;
 @class EGTexture;
-@class TRWeather;
 @class TRTree;
 @class TRTreeType;
 @class EGBillboard;

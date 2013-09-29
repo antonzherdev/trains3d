@@ -40,17 +40,19 @@
 @end
 
 
-@interface TRTree : NSObject<ODComparable, EGController>
+@interface TRTree : NSObject<ODComparable>
 @property (nonatomic, readonly) TRTreeType* treeType;
 @property (nonatomic, readonly) GEVec2 position;
 @property (nonatomic, readonly) GEVec2 size;
+@property (nonatomic, readonly) CGFloat rigidity;
 @property (nonatomic) CGFloat rustle;
 
 + (id)treeWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size;
 - (id)initWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size;
 - (ODClassType*)type;
 - (NSInteger)compareTo:(TRTree*)to;
-- (void)updateWithDelta:(CGFloat)delta;
+- (GEVec2)incline;
+- (void)updateWithWind:(GEVec2)wind delta:(CGFloat)delta;
 + (ODClassType*)type;
 @end
 

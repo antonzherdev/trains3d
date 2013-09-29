@@ -33,25 +33,43 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Contr
     }
 
     def updateWith(delta : float) {
-        _trees.for(_.updateWith(delta))
+        _trees.for(_.updateWith(weather.wind, delta))
     }
 }
 
 
-class Tree(treeType : TreeType, position : vec2, size : vec2) extends Comparable<Tree> with Controller {
+class Tree(treeType : TreeType, position : vec2, size : vec2) extends Comparable<Tree> {
     def compare(to : Tree) : int = -(position.y - position.x).compare(to.position.y - to.position.x)
 
-
+    val rigidity = Float.rnd(0.5, 1.5)
     private var _rustleUp : bool = true
     var rustle : float = 0.0
+    private var _incline : vec2 = vec2(0, 0)
+    private var _inclineUp : bool = false
+    def incline = _incline
 
-    def updateWith(delta : float) {
+    def updateWith(wind : vec2, delta : float) {
+        val mw = wind*0.1*rigidity
+        val mws = mw.x.abs + mw.y.abs
         if(_rustleUp) {
             rustle += delta*7
-            if(rustle > 1) _rustleUp = false
+            if(rustle > mws) _rustleUp = false
         } else {
             rustle -= delta*7
-            if(rustle < -1) _rustleUp = true
+            if(rustle < mws) _rustleUp = true
+        }
+
+
+        if(_inclineUp) {
+            _incline = _incline*(1.0 - delta)
+            if(_incline.x.abs + _incline.y.abs < mws*0.8) {
+                _inclineUp = false
+            }
+        } else {
+            _incline += wind*delta
+            if(_incline.x.abs + _incline.y.abs > mws) {
+                _inclineUp = true
+            }
         }
     }
 }

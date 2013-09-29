@@ -101,7 +101,7 @@ GERect geVec2RectInCenterWithSize(GEVec2 self, GEVec2 size) {
     return GERectMake(geVec2MulF(geVec2SubVec2(size, self), 0.5), self);
 }
 GEVec2 geVec2Rnd() {
-    return GEVec2Make(((float)(odFloatRnd() - 0.5)), ((float)(odFloatRnd() - 0.5)));
+    return GEVec2Make(odFloat4Rnd() - 0.5, odFloat4Rnd() - 0.5);
 }
 ODPType* geVec2Type() {
     static ODPType* _ret = nil;
@@ -285,7 +285,7 @@ GEVec2 geVec3Xy(GEVec3 self) {
     return GEVec2Make(self.x, self.y);
 }
 GEVec3 geVec3Rnd() {
-    return GEVec3Make(((float)(odFloatRnd() - 0.5)), ((float)(odFloatRnd() - 0.5)), ((float)(odFloatRnd() - 0.5)));
+    return GEVec3Make(odFloat4Rnd() - 0.5, odFloat4Rnd() - 0.5, odFloat4Rnd() - 0.5);
 }
 ODPType* geVec3Type() {
     static ODPType* _ret = nil;

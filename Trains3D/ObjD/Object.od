@@ -85,6 +85,9 @@ stub struct Float4 extends Comparable<float4> {
     def max(b : float4) : float4
     def min(b : float4) : float4
     def round : int
+
+    static def rnd : float4
+    static def rnd(min : float4, max : float4) : float4
 }
 
 

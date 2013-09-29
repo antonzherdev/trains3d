@@ -4,7 +4,6 @@
 #import "EGContext.h"
 #import "EGTexture.h"
 #import "GL.h"
-#import "TRWeather.h"
 #import "EGBillboard.h"
 @implementation TRTreeView{
     TRForest* _forest;
@@ -50,25 +49,24 @@ static ODClassType* _TRTreeView_type;
 - (void)draw {
     glAlphaFunc(GL_GREATER, 0.3);
     glEnable(GL_ALPHA_TEST);
-    GEVec2 wind = [_forest.weather wind];
-    GEPlaneCoord planeCoord = GEPlaneCoordMake(GEPlaneMake(GEVec3Make(0.0, 0.0, 0.0), GEVec3Make(0.0, 0.0, 1.0)), GEVec3Make(1.0, 0.0, 0.0), GEVec3Make(0.0, 1.0, 0.0));
-    GEPlaneCoord mPlaneCoord = gePlaneCoordSetY(planeCoord, geVec3Normalize(geVec3AddVec3(planeCoord.y, GEVec3Make(wind.x, 0.0, wind.y))));
     egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
         [[_forest trees] forEach:^void(TRTree* _) {
-            [self drawTree:_ planeCoord:mPlaneCoord];
+            [self drawTree:_];
         }];
     });
     glDisable(GL_ALPHA_TEST);
 }
 
-- (void)drawTree:(TRTree*)tree planeCoord:(GEPlaneCoord)planeCoord {
+- (void)drawTree:(TRTree*)tree {
+    GEPlaneCoord planeCoord = GEPlaneCoordMake(GEPlaneMake(GEVec3Make(0.0, 0.0, 0.0), GEVec3Make(0.0, 0.0, 1.0)), GEVec3Make(1.0, 0.0, 0.0), GEVec3Make(0.0, 1.0, 0.0));
+    GEPlaneCoord mPlaneCoord = gePlaneCoordSetY(planeCoord, geVec3Normalize(geVec3AddVec3(planeCoord.y, GEVec3Make([tree incline].x, 0.0, [tree incline].y))));
     NSUInteger tp = tree.treeType.ordinal;
     GEQuad quad = geRectQuad(geRectMulVec2(uwrap(GERect, [_rects applyIndex:tp]), tree.size));
-    GEQuad3 quad3 = GEQuad3Make(planeCoord, quad);
+    GEQuad3 quad3 = GEQuad3Make(mPlaneCoord, quad);
     GEQuad mQuad = geQuadApplyP0P1P2P3(geVec3Xy(geQuad3P0(quad3)), geVec3Xy(geQuad3P1(quad3)), geVec3Xy(geQuad3P2(quad3)), geVec3Xy(geQuad3P3(quad3)));
     [EGBillboard drawMaterial:((EGColorSource*)([_materials applyIndex:tp])) at:geVec3ApplyVec2Z(tree.position, 0.0) quad:mQuad uv:_mainUv];
-    CGFloat r = tree.rustle * 0.003;
-    GEPlaneCoord rPlaneCoord = gePlaneCoordSetX(planeCoord, geVec3AddVec3(planeCoord.x, GEVec3Make(0.0, ((float)(r)), 0.0)));
+    CGFloat r = tree.rustle * 0.03;
+    GEPlaneCoord rPlaneCoord = gePlaneCoordSetX(mPlaneCoord, geVec3AddVec3(mPlaneCoord.x, GEVec3Make(0.0, ((float)(r)), 0.0)));
     GEQuad3 rQuad3 = GEQuad3Make(rPlaneCoord, quad);
     [EGBillboard drawMaterial:[EGColorSource applyTexture:((EGTexture*)([_textures applyIndex:tp]))] at:geVec3ApplyVec2Z(tree.position, 0.0) quad:geQuadApplyP0P1P2P3(geVec3Xy(geQuad3P0(rQuad3)), geVec3Xy(geQuad3P1(rQuad3)), geVec3Xy(geQuad3P2(rQuad3)), geVec3Xy(geQuad3P3(rQuad3))) uv:_rustleUv];
 }

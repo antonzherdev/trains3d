@@ -1,14 +1,58 @@
 package com.antonzherdev.trains
 
+import com.antonzherdev.eg.Progress._
+
 class WeatherRules(
-    windStrength : float
+    windStrength : float, //maximum wind strength in cell/second
+    blastness : float, //count of blasts in second
+    blastMinLength : float, blastMaxLength : float,//blast length gap in seconds
+    blastStrength : float //maximum wind strength in cell/second
 )
 
 class Weather(rules : WeatherRules) extends Controller {
-    private var _wind : vec2 = vec2(0, 0)
-    def wind : vec2 = _wind
+    private var _constantWind : vec2 = vec2.rnd*rules.windStrength
+    private var _blast : vec2 = vec2(0, 0)
+    def wind : vec2 = _constantWind + _blast
+    private var _nextBlast = rndBlast
+    private var _currentBlast : Blast
+    private var _blastWaitCounter : float = 0.0
+    private var _blastCounter : float = 0.0
+    private var _hasBlast = false
 
     def updateWith(delta : float) {
-
+        _blastWaitCounter += delta
+        if(_blastWaitCounter > _nextBlast.start) {
+            _blastWaitCounter = 0
+            if(!_hasBlast) {
+                _hasBlast = true
+                _currentBlast = _nextBlast
+            }
+            _nextBlast = rndBlast
+        }
+        if(_hasBlast) {
+            _blastCounter += delta
+            if(_blastCounter > _currentBlast.length) {
+                _blastCounter = 0
+                _hasBlast = false
+                _blast = vec2(0, 0)
+            } else {
+                _blast = blastAnimation(_blastCounter)
+            }
+        }
     }
+
+    private def blastAnimation(t : float) = {
+        if(t < 0.01) {
+            val f = progress(vec2(0, 0), _currentBlast.dir)
+            f(t/0.01)
+        } else if(t > _currentBlast.length - 0.01) {
+            val f = progress(_currentBlast.dir, vec2(0, 0))
+            f((t - _currentBlast.length + 0.01)/0.01)
+        }
+        else _currentBlast.dir
+    }
+    private def rndBlast = Blast(Float.rnd*2/rules.blastness, Float.rnd(rules.blastMinLength, rules.blastMaxLength),
+        vec2.rnd*rules.blastStrength)
 }
+
+struct Blast(start : float, length : float, dir : vec2)
