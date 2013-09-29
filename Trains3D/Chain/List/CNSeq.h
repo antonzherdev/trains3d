@@ -1,5 +1,6 @@
 #import "objdcore.h"
 #import "CNCollection.h"
+#import "ODObject.h"
 @protocol CNSet;
 @class CNHashSetBuilder;
 @class CNChain;

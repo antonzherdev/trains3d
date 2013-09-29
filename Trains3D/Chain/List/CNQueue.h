@@ -1,5 +1,6 @@
 #import "objdcore.h"
 #import "CNSeq.h"
+#import "ODObject.h"
 #import "CNCollection.h"
 @class CNList;
 @class CNOption;

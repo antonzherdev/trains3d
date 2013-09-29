@@ -8,14 +8,6 @@ static ODClassType* _EGProgress_type;
     _EGProgress_type = [ODClassType classTypeWithCls:[EGProgress class]];
 }
 
-+ (GEVec2)randomVec2 {
-    return GEVec2Make(((float)(2 * randomFloat() - 1)), ((float)(2 * randomFloat() - 1)));
-}
-
-+ (GEVec3)randomVec3 {
-    return GEVec3Make(((float)(2 * randomFloat() - 1)), ((float)(2 * randomFloat() - 1)), ((float)(2 * randomFloat() - 1)));
-}
-
 + (float(^)(float))progressF4:(float)f4 f42:(float)f42 {
     float k = f42 - f4;
     if(eqf4(k, 0)) return ^float(float t) {

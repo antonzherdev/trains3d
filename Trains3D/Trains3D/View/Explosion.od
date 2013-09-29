@@ -29,11 +29,11 @@ class ExplosionFlameParticle(size : float4, startShift : vec2, shift : vec2) ext
     static val startColor = vec4(1, 0.4, 0, 0.3)
     static val textureQuadrant : Quadrant = Quad.identity.mul(0.5).quadrant
     static def apply(position : vec3, size : float4) : ExplosionFlameParticle = {
-        val startShift = randomVec2.mul(size*0.2)
-        val ret = ExplosionFlameParticle(size, startShift, shift = startShift.add(randomVec2.mul(size*0.2)))
+        val startShift = vec2.rnd.mul(size*0.4)
+        val ret = ExplosionFlameParticle(size, startShift, shift = startShift.add(vec2.rnd.mul(size*0.4)))
         ret.position = position
         ret.color = startColor
-        ret.uv = textureQuadrant.randomQuad
+        ret.uv = textureQuadrant.rndQuad
         ret.model = Quad(0)
         ret
     }

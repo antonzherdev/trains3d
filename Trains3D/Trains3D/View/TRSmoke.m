@@ -61,11 +61,11 @@ static ODClassType* _TRSmoke_type;
     GEVec3 emitterPos = geVec3ApplyVec2Z(tubeXY, _tubePos.z);
     TRSmokeParticle* p = [TRSmokeParticle smokeParticle];
     p.color = _TRSmoke_defColor;
-    p.position = GEVec3Make(emitterPos.x + randomFloatGap(-0.01, 0.01), emitterPos.y + randomFloatGap(-0.01, 0.01), emitterPos.z);
+    p.position = GEVec3Make(emitterPos.x + odFloatRndMinMax(-0.01, 0.01), emitterPos.y + odFloatRndMinMax(-0.01, 0.01), emitterPos.z);
     p.model = _TRSmoke_modelQuad;
-    p.uv = geQuadrantRandomQuad(_TRSmoke_textureQuadrant);
+    p.uv = geQuadrantRndQuad(_TRSmoke_textureQuadrant);
     GEVec3 s = geVec3ApplyVec2Z(geVec2SetLength((([_train isBack]) ? geVec2SubVec2(fPos, bPos) : delta), ((float)(_train.speedFloat))), ((float)(_TRSmoke_zSpeed)));
-    p.speed = GEVec3Make(-s.x * randomPercents(0.3), -s.y * randomPercents(0.3), s.z * randomPercents(0.3));
+    p.speed = GEVec3Make(((float)(-float4NoisePercents(s.x, 0.3))), ((float)(-float4NoisePercents(s.y, 0.3))), ((float)(float4NoisePercents(s.z, 0.3))));
     return p;
 }
 

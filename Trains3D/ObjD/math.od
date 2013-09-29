@@ -5,10 +5,6 @@ stub object math {
     val DBL_MIN : float
     def max(a : float, b : float) : float
     def min(a : float, b : float) : float
-    def randomMax(: uint) : uint
-    def randomFloat : float
-    def randomFloatGap(s : float, e : float) : float
-    def randomPercents(:float) : float
 
     val M_PI : float
     val M_PI_2 : float

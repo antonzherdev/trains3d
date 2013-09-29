@@ -316,7 +316,7 @@
     if(array.count == 0) {
         return [CNOption none];
     }
-    NSUInteger n = randomMax(array.count - 1);
+    NSUInteger n = oduIntRndMax(array.count - 1);
     return [CNSome someWithValue:[array objectAtIndex:n]];
 }
 

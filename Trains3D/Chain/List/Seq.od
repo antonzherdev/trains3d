@@ -16,7 +16,7 @@ trait Seq<T> extends Iterable<T> {
 
     def randomItem : T? =
         if(isEmpty) nil
-        else apply(randomMax(count - 1))
+        else apply(UInt.rnd(count - 1))
 
     def toSet : Set<T> = convertWith(HashSetBuilder<T>())
     def add(item : T) : Seq<T> = {

@@ -79,6 +79,27 @@ static inline CGFloat floatAbs(CGFloat f) {
 static inline float float4Abs(float f) {
     return f < 0 ? -f : f;
 }
+static inline CGFloat odFloatRndMinMax(CGFloat s, CGFloat e) {
+    return (CGFloat)drand48() * (e - s) + s;
+}
+
+static inline CGFloat odFloatRnd() {
+    return (CGFloat)drand48();
+}
+
+static inline CGFloat floatNoisePercents(CGFloat self, CGFloat o) {
+    return self*(1 + o - 2*o*(CGFloat)drand48());
+}
+
+static inline float float4NoisePercents(float self, float o) {
+    return self*(1 + o - 2*o*(float)drand48());
+}
+
+
+static inline NSUInteger oduIntRndMax(NSUInteger max) {
+    return arc4random_uniform((u_int32_t)(max + 1));
+}
+
 
 
 static inline char byteAbs(char f) {

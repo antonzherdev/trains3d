@@ -46,6 +46,7 @@ stub struct UInt extends Comparable<uint> {
     def range : Range
     def to(: uint) : Range
     def between( : uint, : uint) : bool
+    static def rnd(max : uint) : uint
 }
 
 stub struct UInt4 extends Comparable<uint4> {
@@ -59,12 +60,17 @@ stub struct Float extends Comparable<float> {
     def compare(to : float) : int
     def between( : float, : float) : bool
     def abs : float
+
+    def noise(percents : float) : float
+    static def rnd : float
+    static def rnd(min : float, max : float) : float
 }
 
 stub struct Float4 extends Comparable<float4> {
     def compare(to : float4) : int
     def between( : float4, : float4) : bool
     def abs : float4
+    def noise(percents : float) : float
 }
 
 

@@ -2,7 +2,6 @@
 #import "CNRange.h"
 
 #import "ODType.h"
-#import "math.h"
 #import "CNSet.h"
 #import "CNChain.h"
 @implementation CNRange{
@@ -62,7 +61,7 @@ static ODClassType* _CNRange_type;
 
 - (id)randomItem {
     if([self isEmpty]) return [CNOption none];
-    else return [CNOption applyValue:[self applyIndex:randomMax([self count] - 1)]];
+    else return [CNOption applyValue:[self applyIndex:oduIntRndMax([self count] - 1)]];
 }
 
 - (id<CNSet>)toSet {

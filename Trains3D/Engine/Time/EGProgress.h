@@ -5,8 +5,6 @@
 
 @interface EGProgress : NSObject
 - (ODClassType*)type;
-+ (GEVec2)randomVec2;
-+ (GEVec3)randomVec3;
 + (float(^)(float))progressF4:(float)f4 f42:(float)f42;
 + (GEVec2(^)(float))progressVec2:(GEVec2)vec2 vec22:(GEVec2)vec22;
 + (GEVec3(^)(float))progressVec3:(GEVec3)vec3 vec32:(GEVec3)vec32;

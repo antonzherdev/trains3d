@@ -44,6 +44,7 @@ struct vec2(x : float4, y : float4) extends Comparable<vec2> {
 
     def rectTo(vec2 : vec2) : Rect = Rect(self, vec2.sub(self))
     def rectInCenterWith(size : vec2) : Rect = Rect((size - self)*0.5, self)
+    static def rnd = vec2(Float.rnd - 0.5, Float.rnd - 0.5)
 }
 
 struct vec2i(x : int, y : int) extends Comparable<vec2i> {
@@ -77,6 +78,7 @@ struct vec3(x : float4, y : float4, z : float4) {
     def set(length : float4) = mul(length/self.length)
     def normalize = set(length = 1.0)
     def xy = vec2(x, y)
+    static def rnd = vec3(Float.rnd - 0.5, Float.rnd - 0.5, Float.rnd - 0.5)
 }
 
 struct vec4(x : float4, y : float4, z : float4, w : float4) {
@@ -129,7 +131,7 @@ struct Quad(p : vec2[4]) {
 }
 
 struct Quadrant(quads : Quad[4]) {
-    def randomQuad = quads[randomMax(3)]
+    def rndQuad = quads[UInt.rnd(3)]
 }
 
 struct Rect(p0 : vec2, size : vec2) {

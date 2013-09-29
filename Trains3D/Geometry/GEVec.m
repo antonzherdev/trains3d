@@ -100,6 +100,9 @@ GERect geVec2RectToVec2(GEVec2 self, GEVec2 vec2) {
 GERect geVec2RectInCenterWithSize(GEVec2 self, GEVec2 size) {
     return GERectMake(geVec2MulF(geVec2SubVec2(size, self), 0.5), self);
 }
+GEVec2 geVec2Rnd() {
+    return GEVec2Make(((float)(odFloatRnd() - 0.5)), ((float)(odFloatRnd() - 0.5)));
+}
 ODPType* geVec2Type() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[GEVec2Wrap class] name:@"GEVec2" size:sizeof(GEVec2) wrap:^id(void* data, NSUInteger i) {
@@ -280,6 +283,9 @@ GEVec3 geVec3Normalize(GEVec3 self) {
 }
 GEVec2 geVec3Xy(GEVec3 self) {
     return GEVec2Make(self.x, self.y);
+}
+GEVec3 geVec3Rnd() {
+    return GEVec3Make(((float)(odFloatRnd() - 0.5)), ((float)(odFloatRnd() - 0.5)), ((float)(odFloatRnd() - 0.5)));
 }
 ODPType* geVec3Type() {
     static ODPType* _ret = nil;
@@ -517,8 +523,8 @@ NSString* GEQuadrantDescription(GEQuadrant self) {
     [description appendString:@">"];
     return description;
 }
-GEQuad geQuadrantRandomQuad(GEQuadrant self) {
-    return self.quads[randomMax(3)];
+GEQuad geQuadrantRndQuad(GEQuadrant self) {
+    return self.quads[oduIntRndMax(3)];
 }
 ODPType* geQuadrantType() {
     static ODPType* _ret = nil;

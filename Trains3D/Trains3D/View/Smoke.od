@@ -37,11 +37,11 @@ class Smoke(weak train : Train) extends BillboardParticleSystem {
 
         val p = SmokeParticle()
         p.color = defColor
-        p.position = vec3(emitterPos.x + randomFloatGap(-0.01, 0.01), emitterPos.y + randomFloatGap(-0.01, 0.01), emitterPos.z)
+        p.position = vec3(emitterPos.x + Float.rnd(-0.01, 0.01), emitterPos.y + Float.rnd(-0.01, 0.01), emitterPos.z)
         p.model = modelQuad
-        p.uv = textureQuadrant.randomQuad
+        p.uv = textureQuadrant.rndQuad
         val s = vec3((if(train.isBack) fPos.sub(bPos) else delta).set(length = train.speedFloat), zSpeed)
-        p.speed = vec3(-s.x * randomPercents(0.3), -s.y * randomPercents(0.3), s.z * randomPercents(0.3))
+        p.speed = vec3(-s.x.noise(0.3), -s.y.noise(0.3), s.z.noise(0.3))
         p
     }
 }

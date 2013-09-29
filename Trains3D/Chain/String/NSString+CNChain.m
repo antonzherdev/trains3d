@@ -92,7 +92,7 @@
 
 - (id)randomItem {
     if([self isEmpty]) return [CNOption none];
-    else return [CNSome someWithValue:[self applyIndex:randomMax([self count] - 1)]];
+    else return [CNSome someWithValue:[self applyIndex:oduIntRndMax([self count] - 1)]];
 }
 
 - (id<CNSet>)toSet {

@@ -263,11 +263,11 @@ static ODClassType* _TRExplosionFlameParticle_type;
 }
 
 + (TRExplosionFlameParticle*)applyPosition:(GEVec3)position size:(float)size {
-    GEVec2 startShift = geVec2MulF4([EGProgress randomVec2], size * 0.2);
-    TRExplosionFlameParticle* ret = [TRExplosionFlameParticle explosionFlameParticleWithSize:size startShift:startShift shift:geVec2AddVec2(startShift, geVec2MulF4([EGProgress randomVec2], size * 0.2))];
+    GEVec2 startShift = geVec2MulF4(geVec2Rnd(), size * 0.4);
+    TRExplosionFlameParticle* ret = [TRExplosionFlameParticle explosionFlameParticleWithSize:size startShift:startShift shift:geVec2AddVec2(startShift, geVec2MulF4(geVec2Rnd(), size * 0.4))];
     ret.position = position;
     ret.color = _TRExplosionFlameParticle_startColor;
-    ret.uv = geQuadrantRandomQuad(_TRExplosionFlameParticle_textureQuadrant);
+    ret.uv = geQuadrantRndQuad(_TRExplosionFlameParticle_textureQuadrant);
     ret.model = geQuadApplySize(0.0);
     return ret;
 }

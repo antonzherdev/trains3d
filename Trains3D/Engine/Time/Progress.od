@@ -3,9 +3,6 @@ package com.antonzherdev.eg
 import core.math._
 
 object Progress {
-    def randomVec2 : vec2 = vec2(2*randomFloat - 1, 2*randomFloat - 1)
-    def randomVec3 : vec3 = vec3(2*randomFloat - 1, 2*randomFloat - 1, 2*randomFloat - 1)
-
     def progress(f4 : float4, f42 : float4) : float4 -> float4 = {
         val k = (f42 - f4)
         if(k == 0) t : float4 -> {f4}
