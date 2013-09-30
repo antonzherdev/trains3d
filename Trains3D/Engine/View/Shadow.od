@@ -8,7 +8,7 @@ class ShadowMapSurface(size : vec2i) extends Surface(size) {
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
         glBindTexture(GL_TEXTURE_2D, t.id)
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, size.x, size.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, size.x, size.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
@@ -16,7 +16,6 @@ class ShadowMapSurface(size : vec2i) extends Surface(size) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE)
         glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, t.id, 0)
-        glDrawBuffer(GL_NONE)
 
         val status = glCheckFramebufferStatus(GL_FRAMEBUFFER)
         if(status != GL_FRAMEBUFFER_COMPLETE) throw "Error in shadow map frame buffer: $status"
@@ -34,6 +33,7 @@ class ShadowMapSurface(size : vec2i) extends Surface(size) {
         glPushAttrib(GL_VIEWPORT_BIT )
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
         glViewport(0, 0, size.x, size.y)
+        glDrawBuffer(GL_NONE)
     }
 
     def unbind {
@@ -46,4 +46,66 @@ class ShadowMap extends BaseViewportSurface {
     def createSurface : Surface = ShadowMapSurface(context.viewport.size)
 
     def texture : Texture = surface.get.cast<ShadowMapSurface>.texture
+}
+
+object ShadowShaderSystem extends ShaderSystem<ColorSource> {
+    def shaderFor(param : ColorSource) : ShadowShader =
+        if(isColorShaderFor(param)) ShadowShader.instanceForColor else ShadowShader.instanceForTexture
+    def isColorShaderFor(param : ColorSource) = param.texture.isEmpty || param.alphaTestLevel == 0
+}
+
+
+class ShadowShader(texture : bool, program : ShaderProgram) extends Shader<ColorSource>(program) {
+    static val instanceForColor = ShadowShader(false, ShaderProgram(vertexProgram(false), fragmentProgram(false)))
+    static val instanceForTexture = ShadowShader(true, ShaderProgram(vertexProgram(true), fragmentProgram(true)))
+
+    private static def vertexProgram(texture : bool) =
+        "#version 150
+         in vec2 vertexUV;$when(texture)
+         in vec3 position;
+         uniform mat4 mwcp;
+
+         out vec2 UV;$when(texture)
+
+         void main(void) {
+             gl_Position = mwcp * vec4(position, 1);
+             UV = vertexUV;$when(texture)
+         }"
+    private static def fragmentProgram(texture : bool) =
+        "#version 150
+        $if(texture)
+         in vec2 UV;
+         uniform sampler2D texture;
+         uniform float alphaTestLevel;
+        $endif
+         out float depth;
+
+         void main(void) {
+        $if(texture)
+             if(texture(texture, UV).a < alphaTestLevel) {
+                 discard;
+             }
+        $endif
+             depth = gl_FragCoord.z;
+         }"
+    val uvSlot : ShaderAttribute? = if(texture) attributeFor("vertexUV") else nil
+    val positionSlot : ShaderAttribute = attributeFor("position")
+    val mvpUniform = uniformFor("mwcp")
+    val alphaTestLevelUniform : ShaderUniform? = if(texture) uniformFor("alphaTestLevel") else nil
+
+    def load(vbDesc : VertexBufferDesc<_>, param : ColorSource) {
+        positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.position)
+        mvpUniform.set(matrix = matrix.value.mwcp)
+        if(texture) {
+            uvSlot.get.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.uv)
+            alphaTestLevelUniform.get.set(f4 = param.alphaTestLevel)
+            param.texture.get.bind
+        }
+    }
+
+    def unload(param : ColorSource) {
+        Texture.unbind
+        positionSlot.unbind
+        uvSlot.for(_.unbind)
+    }
 }

@@ -2,6 +2,7 @@
 
 #import "EGContext.h"
 #import "EGMaterial.h"
+#import "EGShadow.h"
 #import "EGMesh.h"
 #import "GL.h"
 #import "EGTexture.h"
@@ -29,16 +30,21 @@ static ODClassType* _EGStandardShaderSystem_type;
 }
 
 - (EGShader*)shaderForParam:(EGStandardMaterial*)param {
-    id<CNMap> lightMap = [[[EGGlobal.context.environment.lights chain] groupBy:^ODClassType*(EGLight* _) {
-        return _.type;
-    }] toMap];
-    id<CNSeq> directLights = ((id<CNSeq>)([[lightMap optKey:EGDirectLight.type] getOrElseF:^id<CNSeq>() {
-        return (@[]);
-    }]));
-    EGStandardShaderKey* key = [EGStandardShaderKey standardShaderKeyWithDirectLightCount:[directLights count] texture:[param.diffuse.texture isDefined]];
-    return ((EGStandardShader*)([_EGStandardShaderSystem_shaders objectForKey:key orUpdateWith:^EGStandardShader*() {
-        return [key shader];
-    }]));
+    if(EGGlobal.context.isShadowsDrawing) {
+        if([EGShadowShaderSystem isColorShaderForParam:param.diffuse]) return EGStandardShadowShader.instanceForColor;
+        else return EGStandardShadowShader.instanceForTexture;
+    } else {
+        id<CNMap> lightMap = [[[EGGlobal.context.environment.lights chain] groupBy:^ODClassType*(EGLight* _) {
+            return _.type;
+        }] toMap];
+        id<CNSeq> directLights = ((id<CNSeq>)([[lightMap optKey:EGDirectLight.type] getOrElseF:^id<CNSeq>() {
+            return (@[]);
+        }]));
+        EGStandardShaderKey* key = [EGStandardShaderKey standardShaderKeyWithDirectLightCount:[directLights count] texture:[param.diffuse.texture isDefined]];
+        return ((EGStandardShader*)([_EGStandardShaderSystem_shaders objectForKey:key orUpdateWith:^EGStandardShader*() {
+            return [key shader];
+        }]));
+    }
 }
 
 - (ODClassType*)type {
@@ -69,6 +75,83 @@ static ODClassType* _EGStandardShaderSystem_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGStandardShadowShader{
+    EGShadowShader* _shadowShader;
+}
+static EGStandardShadowShader* _EGStandardShadowShader_instanceForColor;
+static EGStandardShadowShader* _EGStandardShadowShader_instanceForTexture;
+static ODClassType* _EGStandardShadowShader_type;
+@synthesize shadowShader = _shadowShader;
+
++ (id)standardShadowShaderWithShadowShader:(EGShadowShader*)shadowShader {
+    return [[EGStandardShadowShader alloc] initWithShadowShader:shadowShader];
+}
+
+- (id)initWithShadowShader:(EGShadowShader*)shadowShader {
+    self = [super init];
+    if(self) _shadowShader = shadowShader;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGStandardShadowShader_type = [ODClassType classTypeWithCls:[EGStandardShadowShader class]];
+    _EGStandardShadowShader_instanceForColor = [EGStandardShadowShader standardShadowShaderWithShadowShader:EGShadowShader.instanceForColor];
+    _EGStandardShadowShader_instanceForTexture = [EGStandardShadowShader standardShadowShaderWithShadowShader:EGShadowShader.instanceForTexture];
+}
+
+- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGStandardMaterial*)param {
+    [_shadowShader loadVbDesc:vbDesc param:param.diffuse];
+}
+
+- (void)unloadParam:(EGStandardMaterial*)param {
+    [_shadowShader unloadParam:param.diffuse];
+}
+
+- (ODClassType*)type {
+    return [EGStandardShadowShader type];
+}
+
++ (EGStandardShadowShader*)instanceForColor {
+    return _EGStandardShadowShader_instanceForColor;
+}
+
++ (EGStandardShadowShader*)instanceForTexture {
+    return _EGStandardShadowShader_instanceForTexture;
+}
+
++ (ODClassType*)type {
+    return _EGStandardShadowShader_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGStandardShadowShader* o = ((EGStandardShadowShader*)(other));
+    return [self.shadowShader isEqual:o.shadowShader];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.shadowShader hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"shadowShader=%@", self.shadowShader];
     [description appendString:@">"];
     return description;
 }

@@ -74,11 +74,24 @@ void egSaveTextureToFile(GLuint source, NSString* file) {
     GLfloat height;
     glGetTexLevelParameterfv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
     glGetTexLevelParameterfv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
-    void * data = calloc((size_t) (width * 4), (size_t) height);
-    glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA, GL_UNSIGNED_BYTE, data);
+    GLint format;
+    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &format);
+    BOOL depth = format == GL_DEPTH_COMPONENT16 || format == GL_DEPTH_COMPONENT24 || format == GL_DEPTH_COMPONENT32;
+    void * data = depth ? calloc((size_t) width, (size_t) height) : calloc((size_t) width*4, (size_t) height);
 
-    CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
-    CGContextRef bitmapContext = CGBitmapContextCreate (data,
+    if(depth) {
+        glGetTexImage(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, data);
+    } else {
+        glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA, GL_UNSIGNED_BYTE, data);
+    }
+
+    CGColorSpaceRef space = depth ? CGColorSpaceCreateDeviceGray() : CGColorSpaceCreateDeviceRGB();
+    CGContextRef bitmapContext = depth ?
+            CGBitmapContextCreate (data,
+                    (size_t) width, (size_t) height, 8,
+                    (size_t) (width), space,
+                    kCGImageAlphaNone)
+            : CGBitmapContextCreate (data,
             (size_t) width, (size_t) height, 8,
             (size_t) (width*4), space,
             kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst);

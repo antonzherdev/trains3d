@@ -3,11 +3,13 @@
 #import "GEVec.h"
 @class EGGlobal;
 @class EGContext;
+@class EGStandardMaterial;
+@class EGShadowShaderSystem;
 @class EGEnvironment;
 @class EGLight;
 @class EGDirectLight;
-@class EGStandardMaterial;
 @class EGColorSource;
+@class EGShadowShader;
 @class EGVertexBufferDesc;
 @class EGMatrixStack;
 @class EGMatrixModel;
@@ -15,6 +17,7 @@
 @class GEMat4;
 
 @class EGStandardShaderSystem;
+@class EGStandardShadowShader;
 @class EGStandardShaderKey;
 @class EGStandardShader;
 
@@ -24,6 +27,20 @@
 - (ODClassType*)type;
 - (EGShader*)shaderForParam:(EGStandardMaterial*)param;
 + (EGStandardShaderSystem*)instance;
++ (ODClassType*)type;
+@end
+
+
+@interface EGStandardShadowShader : EGShader
+@property (nonatomic, readonly) EGShadowShader* shadowShader;
+
++ (id)standardShadowShaderWithShadowShader:(EGShadowShader*)shadowShader;
+- (id)initWithShadowShader:(EGShadowShader*)shadowShader;
+- (ODClassType*)type;
+- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGStandardMaterial*)param;
+- (void)unloadParam:(EGStandardMaterial*)param;
++ (EGStandardShadowShader*)instanceForColor;
++ (EGStandardShadowShader*)instanceForTexture;
 + (ODClassType*)type;
 @end
 

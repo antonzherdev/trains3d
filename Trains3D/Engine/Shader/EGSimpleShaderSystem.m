@@ -1,9 +1,10 @@
 #import "EGSimpleShaderSystem.h"
 
+#import "EGContext.h"
+#import "EGShadow.h"
 #import "EGMaterial.h"
 #import "EGMesh.h"
 #import "GL.h"
-#import "EGContext.h"
 #import "EGTexture.h"
 @implementation EGSimpleShaderSystem
 static EGSimpleShaderSystem* _EGSimpleShaderSystem_instance;
@@ -30,8 +31,12 @@ static ODClassType* _EGSimpleShaderSystem_type;
 }
 
 - (EGShader*)shaderForParam:(EGColorSource*)param {
-    if([param.texture isEmpty]) return _EGSimpleShaderSystem_colorShader;
-    else return _EGSimpleShaderSystem_textureShader;
+    if(EGGlobal.context.isShadowsDrawing) {
+        return [EGShadowShaderSystem shaderForParam:param];
+    } else {
+        if([param.texture isEmpty]) return _EGSimpleShaderSystem_colorShader;
+        else return _EGSimpleShaderSystem_textureShader;
+    }
 }
 
 - (ODClassType*)type {

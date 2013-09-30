@@ -1,8 +1,10 @@
 #import "objd.h"
 #import "EGShader.h"
+@class EGGlobal;
+@class EGContext;
+@class EGShadowShaderSystem;
 @class EGColorSource;
 @class EGVertexBufferDesc;
-@class EGGlobal;
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class EGTexture;
