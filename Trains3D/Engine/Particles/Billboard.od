@@ -14,16 +14,17 @@ class BillboardShader(program : ShaderProgram, texture : bool) extends Shader<Co
         fragmentTextWith(true, "", "")), true)
 
     static def vertexTextWith(texture : bool, parameters : string, code : string) =
-        "attribute vec3 position;
-         attribute vec2 model;
-         attribute vec2 vertexUV; $when(texture)
-         attribute vec4 vertexColor;
+        "#version 150
+         in vec3 position;
+         in vec2 model;
+         in vec2 vertexUV; $when(texture)
+         in vec4 vertexColor;
 
          uniform mat4 wc;
          uniform mat4 p;
 
-         varying vec2 UV; $when(texture)
-         varying vec4 fragColor;
+         out vec2 UV; $when(texture)
+         out vec4 fragColor;
          $parameters
 
          void main(void) {
@@ -37,19 +38,25 @@ class BillboardShader(program : ShaderProgram, texture : bool) extends Shader<Co
             $code
          }"
     static def fragmentTextWith(texture : bool, parameters : string, code : string) =
-        "
+        "#version 150
         $if(texture)
-         varying vec2 UV;
+         in vec2 UV;
          uniform sampler2D texture;
         $endif
          uniform vec4 color;
-         varying vec4 fragColor;
+         uniform float alphaTestLevel;
+         in vec4 fragColor;
+         out vec4 outColor;
 
          $parameters
          void main(void) {
-            gl_FragColor = fragColor * color * texture2D(texture, UV); $when(texture)
-            gl_FragColor = fragColor * color; $when(!texture)
-            $code
+            outColor = fragColor * color * texture(texture, UV); $when(texture)
+            outColor = fragColor * color; $when(!texture)
+            if(outColor.a < alphaTestLevel) {
+                discard;
+            }
+
+        $code
          }"
 
 
@@ -58,6 +65,7 @@ class BillboardShader(program : ShaderProgram, texture : bool) extends Shader<Co
     val uvSlot : ShaderAttribute? = if(texture) attributeFor("vertexUV") else nil
     val colorSlot = attributeFor("vertexColor")
     val colorUniform : ShaderUniform = uniformFor("color")
+    val alphaTestLevelUniform : ShaderUniform = uniformFor("alphaTestLevel")
 
     val wcUniform = uniformFor("wc")
     val pUniform = uniformFor("p")
@@ -68,6 +76,7 @@ class BillboardShader(program : ShaderProgram, texture : bool) extends Shader<Co
         colorSlot.setFromBufferWith(vbDesc.stride, valuesCount = 4, GL_FLOAT, shift = vbDesc.color)
         wcUniform.set(matrix = matrix.value.wc)
         pUniform.set(matrix = matrix.value.p)
+        alphaTestLevelUniform.set(f4 = param.alphaTestLevel)
         if(texture) {
             uvSlot.for(_.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.uv))
             param.texture.get.bind
@@ -75,8 +84,11 @@ class BillboardShader(program : ShaderProgram, texture : bool) extends Shader<Co
         colorUniform.set(vec4 = param.color)
     }
 
-    def unload(material : ColorSource) {
+    def unload(param : ColorSource) {
         if(texture) Texture.unbind
+        positionSlot.unbind
+        modelSlot.unbind
+        colorSlot.unbind
     }
 }
 

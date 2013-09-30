@@ -185,6 +185,7 @@ static ODClassType* _EGShader_type;
 }
 
 - (void)unloadParam:(id)param {
+    @throw @"Method unload is abstract";
 }
 
 - (EGShaderAttribute*)attributeForName:(NSString*)name {
@@ -255,6 +256,10 @@ static ODClassType* _EGShaderAttribute_type;
 - (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(GLenum)valuesType shift:(NSUInteger)shift {
     glEnableVertexAttribArray(_handle);
     egVertexAttribPointer(_handle, valuesCount, valuesType, GL_FALSE, stride, shift);
+}
+
+- (void)unbind {
+    glDisableVertexAttribArray(_handle);
 }
 
 - (ODClassType*)type {

@@ -1,3 +1,4 @@
+#import <OpenGL/gl3.h>
 #import "EGOpenGLView.h"
 #import "EGDirectorMac.h"
 #import "EGEventMac.h"
@@ -18,7 +19,7 @@
 - (id)initWithFrame:(NSRect)frame
 {
     CGLPixelFormatAttribute attribs[17] = {
-            kCGLPFAOpenGLProfile, (CGLPixelFormatAttribute)kCGLOGLPVersion_Legacy, // This sets the context to 3.2
+            kCGLPFAOpenGLProfile, (CGLPixelFormatAttribute)kCGLOGLPVersion_3_2_Core, // This sets the context to 3.2
             kCGLPFAColorSize,     (CGLPixelFormatAttribute)24,
             kCGLPFAAlphaSize,     (CGLPixelFormatAttribute)8,
 //            kCGLPFAAccelerated,
@@ -94,6 +95,10 @@
     GLint swapInt = 1;
     [[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
 
+
+    GLuint VertexArrayID;
+    glGenVertexArrays(1, &VertexArrayID);
+    glBindVertexArray(VertexArrayID);
 //	GLint order = -1;
 //	[[self openGLContext] setValues:&order forParameter:NSOpenGLCPSurfaceOrder];
 }

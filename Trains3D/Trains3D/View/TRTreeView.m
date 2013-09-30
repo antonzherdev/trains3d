@@ -3,7 +3,6 @@
 #import "TRTree.h"
 #import "EGContext.h"
 #import "EGTexture.h"
-#import "GL.h"
 #import "EGBillboard.h"
 @implementation TRTreeView{
     TRForest* _forest;
@@ -29,7 +28,7 @@ static ODClassType* _TRTreeView_type;
         _forest = forest;
         _textures = (@[[EGGlobal textureForFile:@"Pine.png"], [EGGlobal textureForFile:@"Tree1.png"], [EGGlobal textureForFile:@"Tree2.png"], [EGGlobal textureForFile:@"Tree3.png"], [EGGlobal textureForFile:@"YellowTree.png"]]);
         _materials = [[[_textures chain] map:^EGColorSource*(EGTexture* _) {
-            return [EGColorSource applyTexture:_];
+            return [EGColorSource colorSourceWithColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:[CNOption applyValue:_] alphaTestLevel:0.3];
         }] toArray];
         _rects = [[[_textures chain] map:^id(EGTexture* _) {
             return wrap(GERect, geRectCenterX(geRectApplyXYWidthHeight(0.0, 0.0, [_ size].x / ([_ size].y * 4), [_ size].y / ([_ size].y * 2))));
@@ -47,14 +46,11 @@ static ODClassType* _TRTreeView_type;
 }
 
 - (void)draw {
-    glAlphaFunc(GL_GREATER, 0.3);
-    glEnable(GL_ALPHA_TEST);
     egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
         [[_forest trees] forEach:^void(TRTree* _) {
             [self drawTree:_];
         }];
     });
-    glDisable(GL_ALPHA_TEST);
 }
 
 - (void)drawTree:(TRTree*)tree {

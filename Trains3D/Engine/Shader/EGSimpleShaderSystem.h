@@ -30,6 +30,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param;
+- (void)unloadParam:(EGColorSource*)param;
 + (NSString*)colorVertexProgram;
 + (NSString*)colorFragmentProgram;
 + (ODClassType*)type;
@@ -46,7 +47,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param;
-- (void)unloadMaterial:(EGColorSource*)material;
+- (void)unloadParam:(EGColorSource*)param;
 + (NSString*)textureVertexProgram;
 + (NSString*)textureFragmentProgram;
 + (ODClassType*)type;

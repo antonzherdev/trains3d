@@ -10,7 +10,7 @@ class Texture {
     def size : vec2
 
     def bind(target : GLenum) {
-        glEnable(target)
+//        glEnable(target)
         glBindTexture(target, id)
     }
 
@@ -24,7 +24,7 @@ class Texture {
 
     static def unbind(target : GLenum) {
         glBindTexture(target, 0)
-        glDisable(target)
+//        glDisable(target)
     }
 
     def apply(draw: () -> void) {
@@ -62,7 +62,7 @@ class FileTexture(file : string, magFilter : GLenum, minFilter : GLenum) extends
     }
     def bind(target : GLenum) {
         if(!_loaded) load
-        glEnable(target)
+//        glEnable(target)
         glBindTexture(target, id)
     }
 }

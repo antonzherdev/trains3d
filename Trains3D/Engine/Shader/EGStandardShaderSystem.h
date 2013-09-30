@@ -37,7 +37,8 @@
 - (ODClassType*)type;
 - (EGStandardShader*)shader;
 - (NSString*)lightsVertexUniform;
-- (NSString*)lightsVaryings;
+- (NSString*)lightsIn;
+- (NSString*)lightsOut;
 - (NSString*)lightsCalculateVaryings;
 - (NSString*)lightsFragmentUniform;
 - (NSString*)lightsDiffuse;
@@ -63,7 +64,7 @@
 - (id)initWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
 - (ODClassType*)type;
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGStandardMaterial*)param;
-- (void)unloadMaterial:(EGStandardMaterial*)material;
+- (void)unloadParam:(EGStandardMaterial*)param;
 + (ODClassType*)type;
 @end
 

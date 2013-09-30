@@ -149,6 +149,7 @@ stub object gl {
     val GL_RENDERBUFFER : GLenum
     val GL_RENDERBUFFER_EXT : GLenum
     val GL_DEPTH_COMPONENT : GLenum
+    val GL_DEPTH_COMPONENT24 : GLenum
     def glFramebufferRenderbuffer(target : GLenum, attachment : GLenum, buftarget : GLenum, buffer : GLuint)
     def glFramebufferRenderbufferEXT(target : GLenum, attachment : GLenum, buftarget : GLenum, buffer : GLuint)
     val GL_DEPTH_ATTACHMENT : GLenum

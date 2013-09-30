@@ -55,6 +55,7 @@ static ODClassType* _EGBillboardShaderSystem_type;
     id _uvSlot;
     EGShaderAttribute* _colorSlot;
     EGShaderUniform* _colorUniform;
+    EGShaderUniform* _alphaTestLevelUniform;
     EGShaderUniform* _wcUniform;
     EGShaderUniform* _pUniform;
 }
@@ -67,6 +68,7 @@ static ODClassType* _EGBillboardShader_type;
 @synthesize uvSlot = _uvSlot;
 @synthesize colorSlot = _colorSlot;
 @synthesize colorUniform = _colorUniform;
+@synthesize alphaTestLevelUniform = _alphaTestLevelUniform;
 @synthesize wcUniform = _wcUniform;
 @synthesize pUniform = _pUniform;
 
@@ -83,6 +85,7 @@ static ODClassType* _EGBillboardShader_type;
         _uvSlot = ((_texture) ? [CNOption applyValue:[self attributeForName:@"vertexUV"]] : [CNOption none]);
         _colorSlot = [self attributeForName:@"vertexColor"];
         _colorUniform = [self uniformForName:@"color"];
+        _alphaTestLevelUniform = [self uniformForName:@"alphaTestLevel"];
         _wcUniform = [self uniformForName:@"wc"];
         _pUniform = [self uniformForName:@"p"];
     }
@@ -110,14 +113,15 @@ static ODClassType* _EGBillboardShader_type;
 }
 
 + (NSString*)vertexTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code {
-    return [NSString stringWithFormat:@"attribute vec3 position;\n"
-        "attribute vec2 model;%@\n"
-        "attribute vec4 vertexColor;\n"
+    return [NSString stringWithFormat:@"#version 150\n"
+        "in vec3 position;\n"
+        "in vec2 model;%@\n"
+        "in vec4 vertexColor;\n"
         "\n"
         "uniform mat4 wc;\n"
         "uniform mat4 p;\n"
         "%@\n"
-        "varying vec4 fragColor;\n"
+        "out vec4 fragColor;\n"
         "%@\n"
         "\n"
         "void main(void) {\n"
@@ -129,25 +133,31 @@ static ODClassType* _EGBillboardShader_type;
         "   fragColor = vertexColor;\n"
         "   %@\n"
         "}", ((texture) ? @"\n"
-        "attribute vec2 vertexUV; " : @""), ((texture) ? @"\n"
-        "varying vec2 UV; " : @""), parameters, ((texture) ? @"\n"
+        "in vec2 vertexUV; " : @""), ((texture) ? @"\n"
+        "out vec2 UV; " : @""), parameters, ((texture) ? @"\n"
         "   UV = vertexUV;" : @""), code];
 }
 
 + (NSString*)fragmentTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code {
-    return [NSString stringWithFormat:@"\n"
+    return [NSString stringWithFormat:@"#version 150\n"
         "%@\n"
         "uniform vec4 color;\n"
-        "varying vec4 fragColor;\n"
+        "uniform float alphaTestLevel;\n"
+        "in vec4 fragColor;\n"
+        "out vec4 outColor;\n"
         "\n"
         "%@\n"
         "void main(void) {%@%@\n"
-        "   %@\n"
+        "   if(outColor.a < alphaTestLevel) {\n"
+        "       discard;\n"
+        "   }\n"
+        "\n"
+        "%@\n"
         "}", ((texture) ? @"\n"
-        "varying vec2 UV;\n"
+        "in vec2 UV;\n"
         "uniform sampler2D texture;\n" : @""), parameters, ((texture) ? @"\n"
-        "   gl_FragColor = fragColor * color * texture2D(texture, UV); " : @""), ((!(texture)) ? @"\n"
-        "   gl_FragColor = fragColor * color; " : @""), code];
+        "   outColor = fragColor * color * texture(texture, UV); " : @""), ((!(texture)) ? @"\n"
+        "   outColor = fragColor * color; " : @""), code];
 }
 
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param {
@@ -156,6 +166,7 @@ static ODClassType* _EGBillboardShader_type;
     [_colorSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:4 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.color))];
     [_wcUniform setMatrix:[EGGlobal.matrix.value wc]];
     [_pUniform setMatrix:EGGlobal.matrix.value.p];
+    [_alphaTestLevelUniform setF4:param.alphaTestLevel];
     if(_texture) {
         [_uvSlot forEach:^void(EGShaderAttribute* _) {
             [_ setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
@@ -165,8 +176,11 @@ static ODClassType* _EGBillboardShader_type;
     [_colorUniform setVec4:param.color];
 }
 
-- (void)unloadMaterial:(EGColorSource*)material {
+- (void)unloadParam:(EGColorSource*)param {
     if(_texture) [EGTexture unbind];
+    [_positionSlot unbind];
+    [_modelSlot unbind];
+    [_colorSlot unbind];
 }
 
 - (ODClassType*)type {

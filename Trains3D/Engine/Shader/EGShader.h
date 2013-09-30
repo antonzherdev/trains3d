@@ -58,6 +58,7 @@
 - (id)initWithHandle:(GLuint)handle;
 - (ODClassType*)type;
 - (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(GLenum)valuesType shift:(NSUInteger)shift;
+- (void)unbind;
 + (ODClassType*)type;
 @end
 

@@ -354,21 +354,24 @@ static ODClassType* _EGFontShaderParam_type;
     EGShaderUniform* _colorUniform;
 }
 static EGFontShader* _EGFontShader_instance;
-static NSString* _EGFontShader_vertex = @"attribute vec2 position;\n"
-    "attribute vec2 vertexUV;\n"
+static NSString* _EGFontShader_vertex = @"#version 150\n"
+    "in vec2 position;\n"
+    "in vec2 vertexUV;\n"
     "\n"
-    "varying vec2 UV;\n"
+    "out vec2 UV;\n"
     "\n"
     "void main(void) {\n"
     "   gl_Position = vec4(position.x, position.y, 0, 1);\n"
     "   UV = vertexUV;\n"
     "}";
-static NSString* _EGFontShader_fragment = @"varying vec2 UV;\n"
+static NSString* _EGFontShader_fragment = @"#version 150\n"
+    "in vec2 UV;\n"
     "uniform sampler2D texture;\n"
     "uniform vec4 color;\n"
+    "out vec4 outColor;\n"
     "\n"
     "void main(void) {\n"
-    "   gl_FragColor = color * texture2D(texture, UV);\n"
+    "    outColor = color * texture(texture, UV);\n"
     "}";
 static ODClassType* _EGFontShader_type;
 @synthesize uvSlot = _uvSlot;
@@ -405,6 +408,8 @@ static ODClassType* _EGFontShader_type;
 
 - (void)unloadParam:(EGFontShaderParam*)param {
     [EGTexture unbind];
+    [_positionSlot unbind];
+    [_uvSlot unbind];
 }
 
 - (ODClassType*)type {

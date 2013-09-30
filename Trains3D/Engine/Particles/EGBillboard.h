@@ -32,6 +32,7 @@ typedef struct EGBillboardBufferData EGBillboardBufferData;
 @property (nonatomic, readonly) id uvSlot;
 @property (nonatomic, readonly) EGShaderAttribute* colorSlot;
 @property (nonatomic, readonly) EGShaderUniform* colorUniform;
+@property (nonatomic, readonly) EGShaderUniform* alphaTestLevelUniform;
 @property (nonatomic, readonly) EGShaderUniform* wcUniform;
 @property (nonatomic, readonly) EGShaderUniform* pUniform;
 
@@ -43,7 +44,7 @@ typedef struct EGBillboardBufferData EGBillboardBufferData;
 + (NSString*)vertexTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code;
 + (NSString*)fragmentTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code;
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param;
-- (void)unloadMaterial:(EGColorSource*)material;
+- (void)unloadParam:(EGColorSource*)param;
 + (ODClassType*)type;
 @end
 

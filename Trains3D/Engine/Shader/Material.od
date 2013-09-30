@@ -18,9 +18,10 @@ class Material {
     static def apply(texture : Texture) : Material = StandardMaterial(diffuse = texture)
 }
 
-class ColorSource(color : vec4, texture : Texture?) extends Material {
-    static def apply(color : vec4) : ColorSource = ColorSource(color, nil)
-    static def apply(texture : Texture) : ColorSource = ColorSource(vec4(1, 1, 1, 1), texture)
+class ColorSource(color : vec4, texture : Texture?, alphaTestLevel : float4) extends Material {
+    static def apply(color : vec4, texture : Texture) : ColorSource = ColorSource(color, texture, -1)
+    static def apply(color : vec4) : ColorSource = ColorSource(color, nil, -1)
+    static def apply(texture : Texture) : ColorSource = ColorSource(vec4(1, 1, 1, 1), texture, -1)
     def shaderSystem : ShaderSystem<self> = SimpleShaderSystem.instance
 }
 

@@ -161,22 +161,25 @@ class FontShaderParam(texture : Texture, color : vec4)
 class FontShader extends Shader<FontShaderParam>(ShaderProgram(FontShader.vertex, FontShader.fragment)) {
     static val instance = FontShader()
     static val vertex =
-        "attribute vec2 position;
-         attribute vec2 vertexUV;
+        "#version 150
+         in vec2 position;
+         in vec2 vertexUV;
 
-         varying vec2 UV;
+         out vec2 UV;
 
          void main(void) {
             gl_Position = vec4(position.x, position.y, 0, 1);
             UV = vertexUV;
          }"
     static val fragment =
-        "varying vec2 UV;
+        "#version 150
+         in vec2 UV;
          uniform sampler2D texture;
          uniform vec4 color;
+         out vec4 outColor;
 
          void main(void) {
-            gl_FragColor = color * texture2D(texture, UV);
+             outColor = color * texture(texture, UV);
          }"
 
     val uvSlot : ShaderAttribute = attributeFor("vertexUV")
@@ -190,6 +193,8 @@ class FontShader extends Shader<FontShaderParam>(ShaderProgram(FontShader.vertex
     }
     def unload(param : FontShaderParam) {
         Texture.unbind
+        positionSlot.unbind
+        uvSlot.unbind
     }
 }
 

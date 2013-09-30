@@ -11,17 +11,19 @@ class SimpleShaderSystem extends ShaderSystem<ColorSource> {
 
 class SimpleColorShader extends Shader<ColorSource>(ShaderProgram(SimpleColorShader.colorVertexProgram, SimpleColorShader.colorFragmentProgram)) {
     static val colorVertexProgram =
-        "attribute vec3 position;
+        "#version 150
+         in vec3 position;
          uniform mat4 mvp;
 
          void main(void) {
             gl_Position = mvp * vec4(position, 1);
          }"
     static val colorFragmentProgram =
-        "uniform vec4 color;
-
+        "#version 150
+         uniform vec4 color;
+         out vec4 outColor;
          void main(void) {
-             gl_FragColor = color;
+             outColor = color;
          }"
     val positionSlot : ShaderAttribute = attributeFor("position")
     val colorUniform = uniformFor("color")
@@ -32,27 +34,34 @@ class SimpleColorShader extends Shader<ColorSource>(ShaderProgram(SimpleColorSha
         mvpUniform.set(matrix = matrix.value.mwcp)
         colorUniform.set(vec4 = param.color)
     }
+
+    def unload(param : ColorSource) {
+        positionSlot.unbind
+    }
 }
 
 class SimpleTextureShader extends Shader<ColorSource>(ShaderProgram(SimpleTextureShader.textureVertexProgram, SimpleTextureShader.textureFragmentProgram)) {
     static val textureVertexProgram =
-        "attribute vec2 vertexUV;
-         attribute vec3 position;
+        "#version 150
+         in vec2 vertexUV;
+         in vec3 position;
          uniform mat4 mvp;
 
-         varying vec2 UV;
+         out vec2 UV;
 
          void main(void) {
             gl_Position = mvp * vec4(position, 1);
             UV = vertexUV;
          }"
     static val textureFragmentProgram =
-        "varying vec2 UV;
+        "#version 150
+         in vec2 UV;
          uniform sampler2D texture;
          uniform vec4 color;
+         out vec4 outColor;
 
          void main(void) {
-            gl_FragColor = color * texture2D(texture, UV);
+             outColor = color * texture(texture, UV);
          }"
     val uvSlot : ShaderAttribute = attributeFor("vertexUV")
     val positionSlot : ShaderAttribute = attributeFor("position")
@@ -68,7 +77,9 @@ class SimpleTextureShader extends Shader<ColorSource>(ShaderProgram(SimpleTextur
         param.texture.get.bind
     }
 
-    def unload(material : ColorSource) {
+    def unload(param : ColorSource) {
         Texture.unbind
+        positionSlot.unbind
+        uvSlot.unbind
     }
 }

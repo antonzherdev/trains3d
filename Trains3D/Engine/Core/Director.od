@@ -9,6 +9,8 @@ class Director {
     val time : Time = Time()
 
     def drawWith(size : vec2) {
+        if(size.x <= 0 || size.y <= 0) return nil
+
         context.director = self
         val color = scene.backgroundColor
         glClearColor(color.x, color.y, color.z, color.w)

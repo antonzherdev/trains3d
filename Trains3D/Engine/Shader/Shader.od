@@ -98,7 +98,7 @@ class Shader<P>(program : ShaderProgram) {
     }
 
     def load(vbDesc : VertexBufferDesc<_>, param : P)
-    def unload(param : P) {}
+    def unload(param : P)
 
     def attributeFor(name : string ) = program.attributeFor(name)
     def uniformFor(name : string ) = program.uniformFor(name)
@@ -108,6 +108,10 @@ class ShaderAttribute(handle : GLuint) {
     def setFromBufferWith(stride : uint, valuesCount : uint, valuesType : GLenum, shift : uint) {
         glEnableVertexAttribArray(handle)
         egVertexAttribPointer(handle, valuesCount, valuesType, GL_FALSE, stride, shift)
+    }
+
+    def unbind {
+        glDisableVertexAttribArray(handle)
     }
 }
 

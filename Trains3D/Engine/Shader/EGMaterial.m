@@ -81,20 +81,23 @@ static ODClassType* _EGMaterial_type;
 @implementation EGColorSource{
     GEVec4 _color;
     id _texture;
+    float _alphaTestLevel;
 }
 static ODClassType* _EGColorSource_type;
 @synthesize color = _color;
 @synthesize texture = _texture;
+@synthesize alphaTestLevel = _alphaTestLevel;
 
-+ (id)colorSourceWithColor:(GEVec4)color texture:(id)texture {
-    return [[EGColorSource alloc] initWithColor:color texture:texture];
++ (id)colorSourceWithColor:(GEVec4)color texture:(id)texture alphaTestLevel:(float)alphaTestLevel {
+    return [[EGColorSource alloc] initWithColor:color texture:texture alphaTestLevel:alphaTestLevel];
 }
 
-- (id)initWithColor:(GEVec4)color texture:(id)texture {
+- (id)initWithColor:(GEVec4)color texture:(id)texture alphaTestLevel:(float)alphaTestLevel {
     self = [super init];
     if(self) {
         _color = color;
         _texture = texture;
+        _alphaTestLevel = alphaTestLevel;
     }
     
     return self;
@@ -105,12 +108,16 @@ static ODClassType* _EGColorSource_type;
     _EGColorSource_type = [ODClassType classTypeWithCls:[EGColorSource class]];
 }
 
++ (EGColorSource*)applyColor:(GEVec4)color texture:(EGTexture*)texture {
+    return [EGColorSource colorSourceWithColor:color texture:[CNOption applyValue:texture] alphaTestLevel:-1.0];
+}
+
 + (EGColorSource*)applyColor:(GEVec4)color {
-    return [EGColorSource colorSourceWithColor:color texture:[CNOption none]];
+    return [EGColorSource colorSourceWithColor:color texture:[CNOption none] alphaTestLevel:-1.0];
 }
 
 + (EGColorSource*)applyTexture:(EGTexture*)texture {
-    return [EGColorSource colorSourceWithColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:[CNOption applyValue:texture]];
+    return [EGColorSource colorSourceWithColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:[CNOption applyValue:texture] alphaTestLevel:-1.0];
 }
 
 - (EGShaderSystem*)shaderSystem {
@@ -133,13 +140,14 @@ static ODClassType* _EGColorSource_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGColorSource* o = ((EGColorSource*)(other));
-    return GEVec4Eq(self.color, o.color) && [self.texture isEqual:o.texture];
+    return GEVec4Eq(self.color, o.color) && [self.texture isEqual:o.texture] && eqf4(self.alphaTestLevel, o.alphaTestLevel);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + GEVec4Hash(self.color);
     hash = hash * 31 + [self.texture hash];
+    hash = hash * 31 + float4Hash(self.alphaTestLevel);
     return hash;
 }
 
@@ -147,6 +155,7 @@ static ODClassType* _EGColorSource_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"color=%@", GEVec4Description(self.color)];
     [description appendFormat:@", texture=%@", self.texture];
+    [description appendFormat:@", alphaTestLevel=%f", self.alphaTestLevel];
     [description appendString:@">"];
     return description;
 }

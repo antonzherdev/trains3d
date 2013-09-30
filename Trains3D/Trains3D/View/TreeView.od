@@ -4,16 +4,13 @@ package com.antonzherdev.trains
 class TreeView(forest : Forest) {
     val textures = [textureFor("Pine.png"), textureFor("Tree1.png"), textureFor("Tree2.png"), textureFor("Tree3.png")
         , textureFor("YellowTree.png")]
-    val materials = textures.chain.map(ColorSource(_)).toArray
+    val materials = textures.chain.map(ColorSource(vec4(1, 1, 1, 1), _, 0.3)).toArray
     val rects = textures.chain.map(Rect(0, 0, _.size.x/(_.size.y*4), _.size.y/(_.size.y*2)).centerX).toArray
 
     def draw {
-        glAlphaFunc(GL_GREATER, 0.3)
-        glEnable(GL_ALPHA_TEST)
         BlendFunction.standard {
             forest.trees.for(draw(_))
         }
-        glDisable(GL_ALPHA_TEST)
     }
 
     private val mainUv = Rect(0, 0, 0.5, 1).upsideDownQuad

@@ -39,6 +39,7 @@ static ODClassType* _EGDirector_type;
 }
 
 - (void)drawWithSize:(GEVec2)size {
+    if(size.x <= 0 || size.y <= 0) return ;
     EGGlobal.context.director = self;
     GEVec4 color = _scene.backgroundColor;
     glClearColor(((CGFloat)(color.x)), ((CGFloat)(color.y)), ((CGFloat)(color.z)), ((CGFloat)(color.w)));

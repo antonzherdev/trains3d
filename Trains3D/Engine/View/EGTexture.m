@@ -31,7 +31,6 @@ static ODClassType* _EGTexture_type;
 }
 
 - (void)bindTarget:(GLenum)target {
-    glEnable(target);
     glBindTexture(target, _id);
 }
 
@@ -45,7 +44,6 @@ static ODClassType* _EGTexture_type;
 
 + (void)unbindTarget:(GLenum)target {
     glBindTexture(target, 0);
-    glDisable(target);
 }
 
 - (void)applyDraw:(void(^)())draw {
@@ -150,7 +148,6 @@ static ODClassType* _EGFileTexture_type;
 
 - (void)bindTarget:(GLenum)target {
     if(!(__loaded)) [self load];
-    glEnable(target);
     glBindTexture(target, self.id);
 }
 

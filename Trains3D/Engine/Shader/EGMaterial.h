@@ -31,10 +31,12 @@ typedef struct EGBlendFunction EGBlendFunction;
 @interface EGColorSource : EGMaterial
 @property (nonatomic, readonly) GEVec4 color;
 @property (nonatomic, readonly) id texture;
+@property (nonatomic, readonly) float alphaTestLevel;
 
-+ (id)colorSourceWithColor:(GEVec4)color texture:(id)texture;
-- (id)initWithColor:(GEVec4)color texture:(id)texture;
++ (id)colorSourceWithColor:(GEVec4)color texture:(id)texture alphaTestLevel:(float)alphaTestLevel;
+- (id)initWithColor:(GEVec4)color texture:(id)texture alphaTestLevel:(float)alphaTestLevel;
 - (ODClassType*)type;
++ (EGColorSource*)applyColor:(GEVec4)color texture:(EGTexture*)texture;
 + (EGColorSource*)applyColor:(GEVec4)color;
 + (EGColorSource*)applyTexture:(EGTexture*)texture;
 - (EGShaderSystem*)shaderSystem;

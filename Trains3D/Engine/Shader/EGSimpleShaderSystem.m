@@ -74,16 +74,18 @@ static ODClassType* _EGSimpleShaderSystem_type;
     EGShaderUniform* _colorUniform;
     EGShaderUniform* _mvpUniform;
 }
-static NSString* _EGSimpleColorShader_colorVertexProgram = @"attribute vec3 position;\n"
+static NSString* _EGSimpleColorShader_colorVertexProgram = @"#version 150\n"
+    "in vec3 position;\n"
     "uniform mat4 mvp;\n"
     "\n"
     "void main(void) {\n"
     "   gl_Position = mvp * vec4(position, 1);\n"
     "}";
-static NSString* _EGSimpleColorShader_colorFragmentProgram = @"uniform vec4 color;\n"
-    "\n"
+static NSString* _EGSimpleColorShader_colorFragmentProgram = @"#version 150\n"
+    "uniform vec4 color;\n"
+    "out vec4 outColor;\n"
     "void main(void) {\n"
-    "    gl_FragColor = color;\n"
+    "    outColor = color;\n"
     "}";
 static ODClassType* _EGSimpleColorShader_type;
 @synthesize positionSlot = _positionSlot;
@@ -114,6 +116,10 @@ static ODClassType* _EGSimpleColorShader_type;
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
     [_mvpUniform setMatrix:[EGGlobal.matrix.value mwcp]];
     [_colorUniform setVec4:param.color];
+}
+
+- (void)unloadParam:(EGColorSource*)param {
+    [_positionSlot unbind];
 }
 
 - (ODClassType*)type {
@@ -161,22 +167,25 @@ static ODClassType* _EGSimpleColorShader_type;
     EGShaderUniform* _mvpUniform;
     EGShaderUniform* _colorUniform;
 }
-static NSString* _EGSimpleTextureShader_textureVertexProgram = @"attribute vec2 vertexUV;\n"
-    "attribute vec3 position;\n"
+static NSString* _EGSimpleTextureShader_textureVertexProgram = @"#version 150\n"
+    "in vec2 vertexUV;\n"
+    "in vec3 position;\n"
     "uniform mat4 mvp;\n"
     "\n"
-    "varying vec2 UV;\n"
+    "out vec2 UV;\n"
     "\n"
     "void main(void) {\n"
     "   gl_Position = mvp * vec4(position, 1);\n"
     "   UV = vertexUV;\n"
     "}";
-static NSString* _EGSimpleTextureShader_textureFragmentProgram = @"varying vec2 UV;\n"
+static NSString* _EGSimpleTextureShader_textureFragmentProgram = @"#version 150\n"
+    "in vec2 UV;\n"
     "uniform sampler2D texture;\n"
     "uniform vec4 color;\n"
+    "out vec4 outColor;\n"
     "\n"
     "void main(void) {\n"
-    "   gl_FragColor = color * texture2D(texture, UV);\n"
+    "    outColor = color * texture(texture, UV);\n"
     "}";
 static ODClassType* _EGSimpleTextureShader_type;
 @synthesize uvSlot = _uvSlot;
@@ -213,8 +222,10 @@ static ODClassType* _EGSimpleTextureShader_type;
     [((EGTexture*)([param.texture get])) bind];
 }
 
-- (void)unloadMaterial:(EGColorSource*)material {
+- (void)unloadParam:(EGColorSource*)param {
     [EGTexture unbind];
+    [_positionSlot unbind];
+    [_uvSlot unbind];
 }
 
 - (ODClassType*)type {

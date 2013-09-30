@@ -18,15 +18,16 @@ class StandardShaderSystem extends ShaderSystem<StandardMaterial> {
 class StandardShaderKey(directLightCount : uint, texture : bool) {
     def shader : StandardShader = {
         val vertexShader =
-            "attribute vec3 normal;
-             attribute vec2 vertexUV; $when(texture)
-             attribute vec3 position;
+            "#version 150
+             in vec3 normal;
+             in vec2 vertexUV; $when(texture)
+             in vec3 position;
              uniform mat4 mwcp;
              uniform mat4 mwc;
              $lightsVertexUniform
 
-             varying vec2 UV; $when(texture)
-             $lightsVaryings
+             out vec2 UV; $when(texture)
+             $lightsOut
 
              void main(void) {
                 vec3 normalMWC = normalize((mwc * vec4(normal, 0)).xyz);
@@ -36,32 +37,36 @@ class StandardShaderKey(directLightCount : uint, texture : bool) {
                 $lightsCalculateVaryings
              }"
         val fragmentShader =
-            "
+            "#version 150
             $if(texture)
-             varying vec2 UV;
+             in vec2 UV;
              uniform sampler2D diffuseTexture;
             $endif
              uniform vec4 diffuseColor;
              uniform vec4 ambientColor;
              uniform vec4 specularColor;
              uniform float specularSize;
-             $lightsVaryings
+             $lightsIn
              $lightsFragmentUniform
+             out vec4 outColor;
 
              void main(void) {
                 vec4 materialColor = diffuseColor; $when(!texture)
-                vec4 materialColor = diffuseColor * texture2D(diffuseTexture, UV); $when(texture)
+                vec4 materialColor = diffuseColor * texture(diffuseTexture, UV); $when(texture)
                 vec4 color = ambientColor * materialColor;
                 $lightsDiffuse
-                gl_FragColor = color;
+                outColor = color;
              }"
         StandardShader(self, ShaderProgram(vertexShader, fragmentShader))
     }
 
     def lightsVertexUniform : string = directLightCount.range.chain.map{i -> "uniform vec3 dirLightDirection$i;"}.toStringWith("\n")
-    def lightsVaryings : string = directLightCount.range.chain.map{i ->
-        "varying float dirLightDirectionCos$i;
-         varying float dirLightDirectionCosA$i;"}.toStringWith("\n")
+    def lightsIn : string = directLightCount.range.chain.map{i ->
+        "in float dirLightDirectionCos$i;
+         in float dirLightDirectionCosA$i;"}.toStringWith("\n")
+    def lightsOut : string = directLightCount.range.chain.map{i ->
+        "out float dirLightDirectionCos$i;
+         out float dirLightDirectionCosA$i;"}.toStringWith("\n")
     def lightsCalculateVaryings : string = directLightCount.range.chain.map{i ->
         "dirLightDirectionCos$i = max(dot(normalMWC, -dirLightDirection$i), 0.0);
          dirLightDirectionCosA$i = max(dot(eyeDirection, reflect(dirLightDirection$i, normalMWC)), 0.0);
@@ -117,7 +122,14 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
         }
     }
 
-    def unload(material : StandardMaterial) {
-        if(key.texture) Texture.unbind
+    def unload(param : StandardMaterial) {
+        if(key.texture) {
+            Texture.unbind
+            uvSlot.get.unbind
+        }
+        if(key.directLightCount > 0) {
+            normalSlot.get.unbind
+        }
+        positionSlot.unbind
     }
 }
