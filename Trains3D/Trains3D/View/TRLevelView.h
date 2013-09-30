@@ -11,6 +11,8 @@
 @class EGDirectLight;
 @class EGMapSso;
 @class EGCameraIso;
+@class EGGlobal;
+@class EGContext;
 
 @class TRLevelView;
 

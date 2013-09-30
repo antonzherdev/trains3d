@@ -69,7 +69,7 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
                 val shadowMap = i.next
                 shadowMap.maybe(true, view.draw)
 
-//               shadowMap.texture.saveTo("$(Directory.sandbox)/dev/test.png")
+               shadowMap.texture.saveTo("$(Directory.sandbox)/dev/test.png")
             }
             context.isShadowsDrawing = false
         }

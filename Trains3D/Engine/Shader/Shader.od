@@ -130,23 +130,23 @@ class ShaderUniform(handle : GLuint) {
     }
 }
 
-class ShaderSystem<M extends Material> {
-    def draw(material : M, mesh : Mesh<_>) {
-        val shader = shaderFor(material)
-        shader.draw(material, mesh)
+class ShaderSystem<P> {
+    def draw(param : P, mesh : Mesh<_>) {
+        val shader = shaderFor(param)
+        shader.draw(param, mesh)
     }
 
-    def draw(material : M, vb : VertexBuffer<_>, index : PArray<uint4>, mode : uint4) {
-        val shader = shaderFor(material)
-        shader.draw(material, vb = vb, index, mode)
+    def draw(param : P, vb : VertexBuffer<_>, index : PArray<uint4>, mode : uint4) {
+        val shader = shaderFor(param)
+        shader.draw(param, vb = vb, index, mode)
     }
 
-    def draw(material : M, vb : VertexBuffer<_>, mode : uint4) {
-        val shader = shaderFor(material)
-        shader.draw(material, vb = vb, mode)
+    def draw(param : P, vb : VertexBuffer<_>, mode : uint4) {
+        val shader = shaderFor(param)
+        shader.draw(param, vb = vb, mode)
     }
 
-    def shaderFor(material : M) : Shader
+    def shaderFor(param : P) : Shader<_>
 }
 
 

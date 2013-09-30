@@ -15,7 +15,7 @@
 + (id)simpleShaderSystem;
 - (id)init;
 - (ODClassType*)type;
-- (EGShader*)shaderForMaterial:(EGColorSource*)material;
+- (EGShader*)shaderForParam:(EGColorSource*)param;
 + (EGSimpleShaderSystem*)instance;
 + (ODClassType*)type;
 @end

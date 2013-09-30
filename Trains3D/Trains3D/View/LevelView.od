@@ -13,7 +13,8 @@ class LevelView(level : Level) extends LayerView {
         DirectLight(color = vec4(1, 1, 1, 1), hasShadows = true, direction = vec3(-0.15, 0.25, -0.5).normalize)])
 
     def draw {
-        railroadView.drawBackground
+        val shadows = context.isShadowsDrawing
+        if(!shadows) railroadView.drawBackground
         level.cities.for(city -> cityView.draw(city))
 
         trainView.draw
@@ -21,8 +22,10 @@ class LevelView(level : Level) extends LayerView {
         railroadView.drawForeground
         treeView.draw
 
-        trainView.drawSmoke
-        callRepairerView.draw
+        if(!shadows) {
+            trainView.drawSmoke
+            callRepairerView.draw
+        }
     }
 
     val camera : Camera = CameraIso(level.map.size, zReserve = 0.3, vec2(0, 0))

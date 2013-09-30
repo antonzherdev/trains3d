@@ -388,22 +388,22 @@ static ODClassType* _EGShaderSystem_type;
     _EGShaderSystem_type = [ODClassType classTypeWithCls:[EGShaderSystem class]];
 }
 
-- (void)drawMaterial:(id)material mesh:(EGMesh*)mesh {
-    EGShader* shader = [self shaderForMaterial:material];
-    [shader drawParam:material mesh:mesh];
+- (void)drawParam:(id)param mesh:(EGMesh*)mesh {
+    EGShader* shader = [self shaderForParam:param];
+    [shader drawParam:param mesh:mesh];
 }
 
-- (void)drawMaterial:(id)material vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode {
-    EGShader* shader = [self shaderForMaterial:material];
-    [shader drawParam:material vb:vb index:index mode:mode];
+- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode {
+    EGShader* shader = [self shaderForParam:param];
+    [shader drawParam:param vb:vb index:index mode:mode];
 }
 
-- (void)drawMaterial:(id)material vb:(EGVertexBuffer*)vb mode:(unsigned int)mode {
-    EGShader* shader = [self shaderForMaterial:material];
-    [shader drawParam:material vb:vb mode:mode];
+- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb mode:(unsigned int)mode {
+    EGShader* shader = [self shaderForParam:param];
+    [shader drawParam:param vb:vb mode:mode];
 }
 
-- (EGShader*)shaderForMaterial:(id)material {
+- (EGShader*)shaderForParam:(id)param {
     @throw @"Method shaderFor is abstract";
 }
 

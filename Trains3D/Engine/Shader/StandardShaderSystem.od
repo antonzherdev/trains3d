@@ -4,10 +4,10 @@ package com.antonzherdev.eg
 
 class StandardShaderSystem extends ShaderSystem<StandardMaterial> {
     static val instance = StandardShaderSystem()
-    def shaderFor(material : StandardMaterial) : Shader = {
+    def shaderFor(param : StandardMaterial) : Shader<Material> = {
         val lightMap = context.environment.lights.chain.group(_.type).toMap
         val directLights = lightMap.opt(DirectLight.type).getOrElse([])
-        val key = StandardShaderKey(directLights.count, material.diffuse.texture.isDefined)
+        val key = StandardShaderKey(directLights.count, param.diffuse.texture.isDefined)
 
         shaders.objectFor(key, orUpdateWith = key.shader)
     }

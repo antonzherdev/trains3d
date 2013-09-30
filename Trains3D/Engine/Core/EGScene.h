@@ -7,6 +7,7 @@
 @class EGEnvironment;
 @class EGLight;
 @class EGShadowMap;
+@class EGTexture;
 @class EGMatrixStack;
 @protocol EGInputProcessor;
 @class EGEventCamera;

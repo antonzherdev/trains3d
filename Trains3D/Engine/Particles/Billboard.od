@@ -1,8 +1,8 @@
 package com.antonzherdev.eg
 
 object BillboardShaderSystem extends ShaderSystem<ColorSource> {
-    def shaderFor(material : ColorSource) : BillboardShader =
-        if(material.texture.isEmpty) BillboardShader.instanceForColor else BillboardShader.instanceForTexture
+    def shaderFor(param : ColorSource) : BillboardShader =
+        if(param.texture.isEmpty) BillboardShader.instanceForColor else BillboardShader.instanceForTexture
 }
 
 class BillboardShader(program : ShaderProgram, texture : bool) extends Shader<ColorSource>(program) {

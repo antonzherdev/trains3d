@@ -12,8 +12,8 @@ static ODClassType* _EGBillboardShaderSystem_type;
     _EGBillboardShaderSystem_type = [ODClassType classTypeWithCls:[EGBillboardShaderSystem class]];
 }
 
-+ (EGBillboardShader*)shaderForMaterial:(EGColorSource*)material {
-    if([material.texture isEmpty]) return [EGBillboardShader instanceForColor];
++ (EGBillboardShader*)shaderForParam:(EGColorSource*)param {
+    if([param.texture isEmpty]) return [EGBillboardShader instanceForColor];
     else return [EGBillboardShader instanceForTexture];
 }
 
@@ -392,7 +392,7 @@ static ODClassType* _EGBillboardParticleSystemView_type;
     self = [super initWithVbDesc:EGBillboard.vbDesc maxCount:maxCount blendFunc:blendFunc];
     if(self) {
         _material = material;
-        _shader = [EGBillboardShaderSystem shaderForMaterial:_material];
+        _shader = [EGBillboardShaderSystem shaderForParam:_material];
     }
     
     return self;
@@ -480,7 +480,7 @@ static ODClassType* _EGBillboard_type;
     v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[3], material.color, uv.p[3]));
     [_EGBillboard_vb setArray:_EGBillboard_vertexes];
     glDisable(GL_CULL_FACE);
-    [[EGBillboardShaderSystem shaderForMaterial:material] drawParam:material vb:_EGBillboard_vb mode:GL_TRIANGLE_STRIP];
+    [[EGBillboardShaderSystem shaderForParam:material] drawParam:material vb:_EGBillboard_vb mode:GL_TRIANGLE_STRIP];
     glEnable(GL_CULL_FACE);
 }
 

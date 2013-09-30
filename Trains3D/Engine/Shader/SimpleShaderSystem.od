@@ -5,7 +5,7 @@ class SimpleShaderSystem extends ShaderSystem<ColorSource> {
     private static val colorShader = SimpleColorShader()
     private static val textureShader = SimpleTextureShader()
 
-    def shaderFor(material : ColorSource) : Shader = if(material.texture.isEmpty) colorShader else textureShader
+    def shaderFor(param : ColorSource) : Shader<Material> = if(param.texture.isEmpty) colorShader else textureShader
 }
 
 

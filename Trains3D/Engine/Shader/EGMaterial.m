@@ -29,15 +29,15 @@ static ODClassType* _EGMaterial_type;
 }
 
 - (void)drawMesh:(EGMesh*)mesh {
-    [[self shaderSystem] drawMaterial:self mesh:mesh];
+    [[self shaderSystem] drawParam:self mesh:mesh];
 }
 
 - (void)drawVb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode {
-    [[self shaderSystem] drawMaterial:self vb:vb index:index mode:mode];
+    [[self shaderSystem] drawParam:self vb:vb index:index mode:mode];
 }
 
 - (void)drawVb:(EGVertexBuffer*)vb mode:(unsigned int)mode {
-    [[self shaderSystem] drawMaterial:self vb:vb mode:mode];
+    [[self shaderSystem] drawParam:self vb:vb mode:mode];
 }
 
 + (EGMaterial*)applyColor:(GEVec4)color {

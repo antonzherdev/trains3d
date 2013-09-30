@@ -81,10 +81,10 @@
 + (id)shaderSystem;
 - (id)init;
 - (ODClassType*)type;
-- (void)drawMaterial:(id)material mesh:(EGMesh*)mesh;
-- (void)drawMaterial:(id)material vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode;
-- (void)drawMaterial:(id)material vb:(EGVertexBuffer*)vb mode:(unsigned int)mode;
-- (EGShader*)shaderForMaterial:(id)material;
+- (void)drawParam:(id)param mesh:(EGMesh*)mesh;
+- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode;
+- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb mode:(unsigned int)mode;
+- (EGShader*)shaderForParam:(id)param;
 + (ODClassType*)type;
 @end
 

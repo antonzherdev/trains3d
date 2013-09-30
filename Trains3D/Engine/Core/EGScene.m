@@ -3,6 +3,7 @@
 #import "EGContext.h"
 #import "EGInput.h"
 #import "EGShadow.h"
+#import "EGTexture.h"
 @implementation EGScene{
     GEVec4 _backgroundColor;
     id<EGController> _controller;
@@ -283,6 +284,7 @@ static ODClassType* _EGLayer_type;
             [shadowMap maybeForce:YES draw:^void() {
                 [_view draw];
             }];
+            [[shadowMap texture] saveToFile:[NSString stringWithFormat:@"%@/dev/test.png", [CNDirectory sandbox]]];
         }];
         EGGlobal.context.isShadowsDrawing = NO;
     }

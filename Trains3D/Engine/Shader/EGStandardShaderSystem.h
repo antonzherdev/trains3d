@@ -22,7 +22,7 @@
 + (id)standardShaderSystem;
 - (id)init;
 - (ODClassType*)type;
-- (EGShader*)shaderForMaterial:(EGStandardMaterial*)material;
+- (EGShader*)shaderForParam:(EGStandardMaterial*)param;
 + (EGStandardShaderSystem*)instance;
 + (ODClassType*)type;
 @end

@@ -20,7 +20,7 @@ typedef struct EGBillboardBufferData EGBillboardBufferData;
 
 @interface EGBillboardShaderSystem : EGShaderSystem
 - (ODClassType*)type;
-+ (EGBillboardShader*)shaderForMaterial:(EGColorSource*)material;
++ (EGBillboardShader*)shaderForParam:(EGColorSource*)param;
 + (ODClassType*)type;
 @end
 
