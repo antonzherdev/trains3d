@@ -8,7 +8,7 @@ class RailroadView(railroad : Railroad) {
     private val switchView = SwitchView()
     private val lightView = LightView()
     private val damageView = DamageView()
-    private val railroadSurface = FullScreenSurface(depth = true, multisampling = true)
+    private val railroadSurface = ViewportSurface(depth = true, multisampling = true)
     private val backgroundView = BackgroundView(railroad.map)
 
     private var changed = true

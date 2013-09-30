@@ -4,9 +4,9 @@
 #import "EGShader.h"
 @class EGTexture;
 @class EGVertexBufferDesc;
-@class EGMesh;
 @class EGGlobal;
 @class EGContext;
+@class EGMesh;
 
 @class EGSurface;
 @class EGSimpleSurface;
@@ -14,14 +14,14 @@
 @class EGPairSurface;
 @class EGFullScreenSurfaceShaderParam;
 @class EGFullScreenSurfaceShader;
-@class EGFullScreenSurface;
+@class EGBaseViewportSurface;
+@class EGViewportSurface;
 
 @interface EGSurface : NSObject
-@property (nonatomic, readonly) BOOL depth;
 @property (nonatomic, readonly) GEVec2i size;
 
-+ (id)surfaceWithDepth:(BOOL)depth size:(GEVec2i)size;
-- (id)initWithDepth:(BOOL)depth size:(GEVec2i)size;
++ (id)surfaceWithSize:(GEVec2i)size;
+- (id)initWithSize:(GEVec2i)size;
 - (ODClassType*)type;
 - (void)applyDraw:(void(^)())draw;
 - (void)bind;
@@ -32,11 +32,12 @@
 
 
 @interface EGSimpleSurface : EGSurface
+@property (nonatomic, readonly) BOOL depth;
 @property (nonatomic, readonly) GLuint frameBuffer;
 @property (nonatomic, readonly) EGTexture* texture;
 
-+ (id)simpleSurfaceWithDepth:(BOOL)depth size:(GEVec2i)size;
-- (id)initWithDepth:(BOOL)depth size:(GEVec2i)size;
++ (id)simpleSurfaceWithSize:(GEVec2i)size depth:(BOOL)depth;
+- (id)initWithSize:(GEVec2i)size depth:(BOOL)depth;
 - (ODClassType*)type;
 - (void)dealloc;
 - (void)bind;
@@ -46,10 +47,11 @@
 
 
 @interface EGMultisamplingSurface : EGSurface
+@property (nonatomic, readonly) BOOL depth;
 @property (nonatomic, readonly) GLuint frameBuffer;
 
-+ (id)multisamplingSurfaceWithDepth:(BOOL)depth size:(GEVec2i)size;
-- (id)initWithDepth:(BOOL)depth size:(GEVec2i)size;
++ (id)multisamplingSurfaceWithSize:(GEVec2i)size depth:(BOOL)depth;
+- (id)initWithSize:(GEVec2i)size depth:(BOOL)depth;
 - (ODClassType*)type;
 - (void)dealloc;
 - (void)bind;
@@ -59,11 +61,12 @@
 
 
 @interface EGPairSurface : EGSurface
+@property (nonatomic, readonly) BOOL depth;
 @property (nonatomic, readonly) EGMultisamplingSurface* multisampling;
 @property (nonatomic, readonly) EGSimpleSurface* simple;
 
-+ (id)pairSurfaceWithDepth:(BOOL)depth size:(GEVec2i)size;
-- (id)initWithDepth:(BOOL)depth size:(GEVec2i)size;
++ (id)pairSurfaceWithSize:(GEVec2i)size depth:(BOOL)depth;
+- (id)initWithSize:(GEVec2i)size depth:(BOOL)depth;
 - (ODClassType*)type;
 - (void)bind;
 - (void)unbind;
@@ -99,19 +102,30 @@
 @end
 
 
-@interface EGFullScreenSurface : NSObject
-@property (nonatomic, readonly) BOOL depth;
-@property (nonatomic, readonly) BOOL multisampling;
-
-+ (id)fullScreenSurfaceWithDepth:(BOOL)depth multisampling:(BOOL)multisampling;
-- (id)initWithDepth:(BOOL)depth multisampling:(BOOL)multisampling;
+@interface EGBaseViewportSurface : NSObject
++ (id)baseViewportSurface;
+- (id)init;
 - (ODClassType*)type;
+- (id)surface;
+- (EGSurface*)createSurface;
 - (BOOL)needRedraw;
 - (void)bind;
 - (void)applyDraw:(void(^)())draw;
 - (void)maybeDraw:(void(^)())draw;
 - (void)maybeForce:(BOOL)force draw:(void(^)())draw;
 - (void)unbind;
++ (ODClassType*)type;
+@end
+
+
+@interface EGViewportSurface : EGBaseViewportSurface
+@property (nonatomic, readonly) BOOL depth;
+@property (nonatomic, readonly) BOOL multisampling;
+
++ (id)viewportSurfaceWithDepth:(BOOL)depth multisampling:(BOOL)multisampling;
+- (id)initWithDepth:(BOOL)depth multisampling:(BOOL)multisampling;
+- (ODClassType*)type;
+- (EGSurface*)createSurface;
 - (void)drawWithZ:(float)z;
 - (EGTexture*)texture;
 - (void)draw;

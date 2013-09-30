@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-class Surface(depth : bool, size : vec2i) {
+class Surface(size : vec2i) {
     def apply(draw : () -> void) {
         bind
         draw()
@@ -14,7 +14,7 @@ class Surface(depth : bool, size : vec2i) {
     def frameBuffer : GLint
 }
 
-class SimpleSurface(depth : bool, size : vec2i) extends Surface(depth, size) {
+class SimpleSurface(size : vec2i, depth : bool) extends Surface(size) {
     val frameBuffer = egGenFrameBuffer
     private val depthRenderBuffer : GLuint = if(depth) egGenRenderBuffer else 0
     val texture = {
@@ -58,7 +58,7 @@ class SimpleSurface(depth : bool, size : vec2i) extends Surface(depth, size) {
 
 }
 
-class MultisamplingSurface(depth : bool, size : vec2i) extends Surface(depth, size) {
+class MultisamplingSurface(size : vec2i, depth : bool) extends Surface(size) {
     private val depthRenderBuffer : GLuint = if(depth) egGenRenderBufferEXT else 0
     private val colorRenderBuffer : GLuint = egGenRenderBufferEXT
     val frameBuffer = {
@@ -104,9 +104,9 @@ class MultisamplingSurface(depth : bool, size : vec2i) extends Surface(depth, si
     }
 }
 
-class PairSurface(depth : bool, size : vec2i) extends  Surface(depth, size) {
-    val multisampling = MultisamplingSurface(depth, size)
-    val simple = SimpleSurface(false, size)
+class PairSurface(size : vec2i, depth : bool) extends  Surface(size) {
+    val multisampling = MultisamplingSurface(size, depth)
+    val simple = SimpleSurface(size, false)
 
     def bind {
         multisampling.bind
@@ -161,20 +161,23 @@ class FullScreenSurfaceShader extends Shader<FullScreenSurfaceShaderParam>(Shade
     }
 }
 
-class FullScreenSurface(depth : bool, multisampling : bool) {
-    private var surface : Surface? = nil
+class BaseViewportSurface {
+    private var _surface : Surface? = nil
+    def surface : Surface? = _surface
 
     private def maybeRecreateSurface {
         if(needRedraw) {
-            surface = if(multisampling) PairSurface(depth, context.viewport.size) else SimpleSurface(depth, context.viewport.size)
+            _surface = createSurface
         }
     }
 
-    def needRedraw : bool = surface.isEmpty || surface.get.size != context.viewport.size
+    def createSurface : Surface
+
+    def needRedraw : bool = _surface.isEmpty || _surface.get.size != context.viewport.size
 
     def bind {
         maybeRecreateSurface
-        surface.get.bind
+        _surface.get.bind
     }
 
     def apply(draw : () -> void) {
@@ -198,8 +201,14 @@ class FullScreenSurface(depth : bool, multisampling : bool) {
     }
 
     def unbind {
-        surface.get.unbind
+        _surface.get.unbind
     }
+}
+
+class ViewportSurface(depth : bool, multisampling : bool) extends BaseViewportSurface {
+    def createSurface : Surface =
+        if(multisampling) PairSurface(context.viewport.size, depth)
+        else SimpleSurface(context.viewport.size, depth)
 
     private lazy val fullScreenMesh = Mesh.vec2(
         [vec2(0, 0), vec2(1, 0), vec2(1, 1), vec2(0, 1)],
@@ -219,7 +228,7 @@ class FullScreenSurface(depth : bool, multisampling : bool) {
 
     def draw {
         if(surface.isEmpty) return nil
-        if(redrawCounter > 0) {
+        if(needRedraw) {
             glDisable(GL_DEPTH_TEST)
             glDisable(GL_CULL_FACE)
             shader.draw(FullScreenSurfaceShaderParam(texture, 0), fullScreenMesh)
@@ -233,5 +242,4 @@ class FullScreenSurface(depth : bool, multisampling : bool) {
             glBindFramebuffer(GL_READ_FRAMEBUFFER, 0)
         }
     }
-
 }

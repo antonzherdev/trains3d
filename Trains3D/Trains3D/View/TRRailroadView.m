@@ -14,7 +14,7 @@
     TRSwitchView* _switchView;
     TRLightView* _lightView;
     TRDamageView* _damageView;
-    EGFullScreenSurface* _railroadSurface;
+    EGViewportSurface* _railroadSurface;
     TRBackgroundView* _backgroundView;
     BOOL _changed;
 }
@@ -33,7 +33,7 @@ static ODClassType* _TRRailroadView_type;
         _switchView = [TRSwitchView switchView];
         _lightView = [TRLightView lightView];
         _damageView = [TRDamageView damageView];
-        _railroadSurface = [EGFullScreenSurface fullScreenSurfaceWithDepth:YES multisampling:YES];
+        _railroadSurface = [EGViewportSurface viewportSurfaceWithDepth:YES multisampling:YES];
         _backgroundView = [TRBackgroundView backgroundViewWithMap:_railroad.map];
         _changed = YES;
         [self _init];

@@ -2,7 +2,7 @@
 #import "GEVec.h"
 #import "EGMaterial.h"
 @class TRRailroad;
-@class EGFullScreenSurface;
+@class EGViewportSurface;
 @class TRRailroadBuilder;
 @class TRModels;
 @class EGGlobal;

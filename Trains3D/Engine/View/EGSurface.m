@@ -4,23 +4,18 @@
 #import "EGMesh.h"
 #import "EGContext.h"
 @implementation EGSurface{
-    BOOL _depth;
     GEVec2i _size;
 }
 static ODClassType* _EGSurface_type;
-@synthesize depth = _depth;
 @synthesize size = _size;
 
-+ (id)surfaceWithDepth:(BOOL)depth size:(GEVec2i)size {
-    return [[EGSurface alloc] initWithDepth:depth size:size];
++ (id)surfaceWithSize:(GEVec2i)size {
+    return [[EGSurface alloc] initWithSize:size];
 }
 
-- (id)initWithDepth:(BOOL)depth size:(GEVec2i)size {
+- (id)initWithSize:(GEVec2i)size {
     self = [super init];
-    if(self) {
-        _depth = depth;
-        _size = size;
-    }
+    if(self) _size = size;
     
     return self;
 }
@@ -64,20 +59,18 @@ static ODClassType* _EGSurface_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGSurface* o = ((EGSurface*)(other));
-    return self.depth == o.depth && GEVec2iEq(self.size, o.size);
+    return GEVec2iEq(self.size, o.size);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + self.depth;
     hash = hash * 31 + GEVec2iHash(self.size);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"depth=%d", self.depth];
-    [description appendFormat:@", size=%@", GEVec2iDescription(self.size)];
+    [description appendFormat:@"size=%@", GEVec2iDescription(self.size)];
     [description appendString:@">"];
     return description;
 }
@@ -86,23 +79,26 @@ static ODClassType* _EGSurface_type;
 
 
 @implementation EGSimpleSurface{
+    BOOL _depth;
     GLuint _frameBuffer;
     GLuint _depthRenderBuffer;
     EGTexture* _texture;
 }
 static ODClassType* _EGSimpleSurface_type;
+@synthesize depth = _depth;
 @synthesize frameBuffer = _frameBuffer;
 @synthesize texture = _texture;
 
-+ (id)simpleSurfaceWithDepth:(BOOL)depth size:(GEVec2i)size {
-    return [[EGSimpleSurface alloc] initWithDepth:depth size:size];
++ (id)simpleSurfaceWithSize:(GEVec2i)size depth:(BOOL)depth {
+    return [[EGSimpleSurface alloc] initWithSize:size depth:depth];
 }
 
-- (id)initWithDepth:(BOOL)depth size:(GEVec2i)size {
-    self = [super initWithDepth:depth size:size];
+- (id)initWithSize:(GEVec2i)size depth:(BOOL)depth {
+    self = [super initWithSize:size];
     if(self) {
+        _depth = depth;
         _frameBuffer = egGenFrameBuffer();
-        _depthRenderBuffer = ((self.depth) ? egGenRenderBuffer() : 0);
+        _depthRenderBuffer = ((_depth) ? egGenRenderBuffer() : 0);
         _texture = ^EGTexture*() {
             EGTexture* t = [EGTexture texture];
             glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
@@ -113,7 +109,7 @@ static ODClassType* _EGSimpleSurface_type;
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self.size.x, self.size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
             glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, t.id, 0);
-            if(self.depth) {
+            if(_depth) {
                 glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
                 glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, self.size.x, self.size.y);
                 glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
@@ -134,7 +130,7 @@ static ODClassType* _EGSimpleSurface_type;
 
 - (void)dealloc {
     egDeleteFrameBuffer(_frameBuffer);
-    if(self.depth) egDeleteRenderBuffer(_depthRenderBuffer);
+    if(_depth) egDeleteRenderBuffer(_depthRenderBuffer);
 }
 
 - (void)bind {
@@ -164,20 +160,20 @@ static ODClassType* _EGSimpleSurface_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGSimpleSurface* o = ((EGSimpleSurface*)(other));
-    return self.depth == o.depth && GEVec2iEq(self.size, o.size);
+    return GEVec2iEq(self.size, o.size) && self.depth == o.depth;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + self.depth;
     hash = hash * 31 + GEVec2iHash(self.size);
+    hash = hash * 31 + self.depth;
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"depth=%d", self.depth];
-    [description appendFormat:@", size=%@", GEVec2iDescription(self.size)];
+    [description appendFormat:@"size=%@", GEVec2iDescription(self.size)];
+    [description appendFormat:@", depth=%d", self.depth];
     [description appendString:@">"];
     return description;
 }
@@ -186,21 +182,24 @@ static ODClassType* _EGSimpleSurface_type;
 
 
 @implementation EGMultisamplingSurface{
+    BOOL _depth;
     GLuint _depthRenderBuffer;
     GLuint _colorRenderBuffer;
     GLuint _frameBuffer;
 }
 static ODClassType* _EGMultisamplingSurface_type;
+@synthesize depth = _depth;
 @synthesize frameBuffer = _frameBuffer;
 
-+ (id)multisamplingSurfaceWithDepth:(BOOL)depth size:(GEVec2i)size {
-    return [[EGMultisamplingSurface alloc] initWithDepth:depth size:size];
++ (id)multisamplingSurfaceWithSize:(GEVec2i)size depth:(BOOL)depth {
+    return [[EGMultisamplingSurface alloc] initWithSize:size depth:depth];
 }
 
-- (id)initWithDepth:(BOOL)depth size:(GEVec2i)size {
-    self = [super initWithDepth:depth size:size];
+- (id)initWithSize:(GEVec2i)size depth:(BOOL)depth {
+    self = [super initWithSize:size];
     if(self) {
-        _depthRenderBuffer = ((self.depth) ? egGenRenderBufferEXT() : 0);
+        _depth = depth;
+        _depthRenderBuffer = ((_depth) ? egGenRenderBufferEXT() : 0);
         _colorRenderBuffer = egGenRenderBufferEXT();
         _frameBuffer = ^GLuint() {
             GLuint fb = egGenFrameBufferEXT();
@@ -210,7 +209,7 @@ static ODClassType* _EGMultisamplingSurface_type;
             glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_RENDERBUFFER_EXT, _colorRenderBuffer);
             NSInteger status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
             if(status != GL_FRAMEBUFFER_COMPLETE_EXT) @throw [NSString stringWithFormat:@"Error in frame buffer color attachment: %li", status];
-            if(self.depth) {
+            if(_depth) {
                 glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, _depthRenderBuffer);
                 glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER_EXT, 4, GL_DEPTH_COMPONENT, self.size.x, self.size.y);
                 glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, _depthRenderBuffer);
@@ -233,7 +232,7 @@ static ODClassType* _EGMultisamplingSurface_type;
 - (void)dealloc {
     egDeleteFrameBufferEXT(_frameBuffer);
     egDeleteFrameBufferEXT(_colorRenderBuffer);
-    if(self.depth) egDeleteRenderBufferEXT(_depthRenderBuffer);
+    if(_depth) egDeleteRenderBufferEXT(_depthRenderBuffer);
 }
 
 - (void)bind {
@@ -263,20 +262,20 @@ static ODClassType* _EGMultisamplingSurface_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGMultisamplingSurface* o = ((EGMultisamplingSurface*)(other));
-    return self.depth == o.depth && GEVec2iEq(self.size, o.size);
+    return GEVec2iEq(self.size, o.size) && self.depth == o.depth;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + self.depth;
     hash = hash * 31 + GEVec2iHash(self.size);
+    hash = hash * 31 + self.depth;
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"depth=%d", self.depth];
-    [description appendFormat:@", size=%@", GEVec2iDescription(self.size)];
+    [description appendFormat:@"size=%@", GEVec2iDescription(self.size)];
+    [description appendFormat:@", depth=%d", self.depth];
     [description appendString:@">"];
     return description;
 }
@@ -285,22 +284,25 @@ static ODClassType* _EGMultisamplingSurface_type;
 
 
 @implementation EGPairSurface{
+    BOOL _depth;
     EGMultisamplingSurface* _multisampling;
     EGSimpleSurface* _simple;
 }
 static ODClassType* _EGPairSurface_type;
+@synthesize depth = _depth;
 @synthesize multisampling = _multisampling;
 @synthesize simple = _simple;
 
-+ (id)pairSurfaceWithDepth:(BOOL)depth size:(GEVec2i)size {
-    return [[EGPairSurface alloc] initWithDepth:depth size:size];
++ (id)pairSurfaceWithSize:(GEVec2i)size depth:(BOOL)depth {
+    return [[EGPairSurface alloc] initWithSize:size depth:depth];
 }
 
-- (id)initWithDepth:(BOOL)depth size:(GEVec2i)size {
-    self = [super initWithDepth:depth size:size];
+- (id)initWithSize:(GEVec2i)size depth:(BOOL)depth {
+    self = [super initWithSize:size];
     if(self) {
-        _multisampling = [EGMultisamplingSurface multisamplingSurfaceWithDepth:self.depth size:self.size];
-        _simple = [EGSimpleSurface simpleSurfaceWithDepth:NO size:self.size];
+        _depth = depth;
+        _multisampling = [EGMultisamplingSurface multisamplingSurfaceWithSize:self.size depth:_depth];
+        _simple = [EGSimpleSurface simpleSurfaceWithSize:self.size depth:NO];
     }
     
     return self;
@@ -349,20 +351,20 @@ static ODClassType* _EGPairSurface_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGPairSurface* o = ((EGPairSurface*)(other));
-    return self.depth == o.depth && GEVec2iEq(self.size, o.size);
+    return GEVec2iEq(self.size, o.size) && self.depth == o.depth;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + self.depth;
     hash = hash * 31 + GEVec2iHash(self.size);
+    hash = hash * 31 + self.depth;
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"depth=%d", self.depth];
-    [description appendFormat:@", size=%@", GEVec2iDescription(self.size)];
+    [description appendFormat:@"size=%@", GEVec2iDescription(self.size)];
+    [description appendFormat:@", depth=%d", self.depth];
     [description appendString:@">"];
     return description;
 }
@@ -525,35 +527,21 @@ static ODClassType* _EGFullScreenSurfaceShader_type;
 @end
 
 
-@implementation EGFullScreenSurface{
-    BOOL _depth;
-    BOOL _multisampling;
-    id _surface;
+@implementation EGBaseViewportSurface{
+    id __surface;
     NSInteger _redrawCounter;
-    CNLazy* __lazy_fullScreenMesh;
-    CNLazy* __lazy_shader;
 }
-static ODClassType* _EGFullScreenSurface_type;
-@synthesize depth = _depth;
-@synthesize multisampling = _multisampling;
+static ODClassType* _EGBaseViewportSurface_type;
 
-+ (id)fullScreenSurfaceWithDepth:(BOOL)depth multisampling:(BOOL)multisampling {
-    return [[EGFullScreenSurface alloc] initWithDepth:depth multisampling:multisampling];
++ (id)baseViewportSurface {
+    return [[EGBaseViewportSurface alloc] init];
 }
 
-- (id)initWithDepth:(BOOL)depth multisampling:(BOOL)multisampling {
+- (id)init {
     self = [super init];
     if(self) {
-        _depth = depth;
-        _multisampling = multisampling;
-        _surface = [CNOption none];
+        __surface = [CNOption none];
         _redrawCounter = 0;
-        __lazy_fullScreenMesh = [CNLazy lazyWithF:^EGMesh*() {
-            return [EGMesh vec2VertexData:[ arrs(GEVec2, 4) {GEVec2Make(0.0, 0.0), GEVec2Make(1.0, 0.0), GEVec2Make(1.0, 1.0), GEVec2Make(0.0, 1.0)}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
-        }];
-        __lazy_shader = [CNLazy lazyWithF:^EGFullScreenSurfaceShader*() {
-            return [EGFullScreenSurfaceShader fullScreenSurfaceShader];
-        }];
     }
     
     return self;
@@ -561,28 +549,28 @@ static ODClassType* _EGFullScreenSurface_type;
 
 + (void)initialize {
     [super initialize];
-    _EGFullScreenSurface_type = [ODClassType classTypeWithCls:[EGFullScreenSurface class]];
+    _EGBaseViewportSurface_type = [ODClassType classTypeWithCls:[EGBaseViewportSurface class]];
 }
 
-- (EGMesh*)fullScreenMesh {
-    return ((EGMesh*)([__lazy_fullScreenMesh get]));
-}
-
-- (EGFullScreenSurfaceShader*)shader {
-    return ((EGFullScreenSurfaceShader*)([__lazy_shader get]));
+- (id)surface {
+    return __surface;
 }
 
 - (void)maybeRecreateSurface {
-    if([self needRedraw]) _surface = ((_multisampling) ? [CNOption applyValue:[EGPairSurface pairSurfaceWithDepth:_depth size:[EGGlobal.context viewport].size]] : [CNOption applyValue:[EGSimpleSurface simpleSurfaceWithDepth:_depth size:[EGGlobal.context viewport].size]]);
+    if([self needRedraw]) __surface = [CNOption applyValue:[self createSurface]];
+}
+
+- (EGSurface*)createSurface {
+    @throw @"Method createSurface is abstract";
 }
 
 - (BOOL)needRedraw {
-    return [_surface isEmpty] || !(GEVec2iEq(((EGSurface*)([_surface get])).size, [EGGlobal.context viewport].size));
+    return [__surface isEmpty] || !(GEVec2iEq(((EGSurface*)([__surface get])).size, [EGGlobal.context viewport].size));
 }
 
 - (void)bind {
     [self maybeRecreateSurface];
-    [((EGSurface*)([_surface get])) bind];
+    [((EGSurface*)([__surface get])) bind];
 }
 
 - (void)applyDraw:(void(^)())draw {
@@ -605,7 +593,76 @@ static ODClassType* _EGFullScreenSurface_type;
 }
 
 - (void)unbind {
-    [((EGSurface*)([_surface get])) unbind];
+    [((EGSurface*)([__surface get])) unbind];
+}
+
+- (ODClassType*)type {
+    return [EGBaseViewportSurface type];
+}
+
++ (ODClassType*)type {
+    return _EGBaseViewportSurface_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGViewportSurface{
+    BOOL _depth;
+    BOOL _multisampling;
+    CNLazy* __lazy_fullScreenMesh;
+    CNLazy* __lazy_shader;
+}
+static ODClassType* _EGViewportSurface_type;
+@synthesize depth = _depth;
+@synthesize multisampling = _multisampling;
+
++ (id)viewportSurfaceWithDepth:(BOOL)depth multisampling:(BOOL)multisampling {
+    return [[EGViewportSurface alloc] initWithDepth:depth multisampling:multisampling];
+}
+
+- (id)initWithDepth:(BOOL)depth multisampling:(BOOL)multisampling {
+    self = [super init];
+    if(self) {
+        _depth = depth;
+        _multisampling = multisampling;
+        __lazy_fullScreenMesh = [CNLazy lazyWithF:^EGMesh*() {
+            return [EGMesh vec2VertexData:[ arrs(GEVec2, 4) {GEVec2Make(0.0, 0.0), GEVec2Make(1.0, 0.0), GEVec2Make(1.0, 1.0), GEVec2Make(0.0, 1.0)}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
+        }];
+        __lazy_shader = [CNLazy lazyWithF:^EGFullScreenSurfaceShader*() {
+            return [EGFullScreenSurfaceShader fullScreenSurfaceShader];
+        }];
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGViewportSurface_type = [ODClassType classTypeWithCls:[EGViewportSurface class]];
+}
+
+- (EGMesh*)fullScreenMesh {
+    return ((EGMesh*)([__lazy_fullScreenMesh get]));
+}
+
+- (EGFullScreenSurfaceShader*)shader {
+    return ((EGFullScreenSurfaceShader*)([__lazy_shader get]));
+}
+
+- (EGSurface*)createSurface {
+    if(_multisampling) return [EGPairSurface pairSurfaceWithSize:[EGGlobal.context viewport].size depth:_depth];
+    else return [EGSimpleSurface simpleSurfaceWithSize:[EGGlobal.context viewport].size depth:_depth];
 }
 
 - (void)drawWithZ:(float)z {
@@ -615,7 +672,7 @@ static ODClassType* _EGFullScreenSurface_type;
 }
 
 - (EGTexture*)texture {
-    EGSurface* __case__ = ((EGSurface*)([_surface get]));
+    EGSurface* __case__ = ((EGSurface*)([[self surface] get]));
     BOOL __incomplete__ = YES;
     EGTexture* __result__;
     if(__incomplete__) {
@@ -643,16 +700,16 @@ static ODClassType* _EGFullScreenSurface_type;
 }
 
 - (void)draw {
-    if([_surface isEmpty]) return ;
-    if(_redrawCounter > 0) {
+    if([[self surface] isEmpty]) return ;
+    if([self needRedraw]) {
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_CULL_FACE);
         [[self shader] drawParam:[EGFullScreenSurfaceShaderParam fullScreenSurfaceShaderParamWithTexture:[self texture] z:0.0] mesh:[self fullScreenMesh]];
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
     } else {
-        glBindFramebuffer(GL_READ_FRAMEBUFFER, [((EGSurface*)([_surface get])) frameBuffer]);
-        GEVec2i s = ((EGSurface*)([_surface get])).size;
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, [((EGSurface*)([[self surface] get])) frameBuffer]);
+        GEVec2i s = ((EGSurface*)([[self surface] get])).size;
         GERectI v = [EGGlobal.context viewport];
         glBlitFramebuffer(0, 0, s.x, s.y, geRectIX(v), geRectIY(v), geRectIX2(v), geRectIY2(v), GL_COLOR_BUFFER_BIT, GL_NEAREST);
         glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
@@ -660,11 +717,11 @@ static ODClassType* _EGFullScreenSurface_type;
 }
 
 - (ODClassType*)type {
-    return [EGFullScreenSurface type];
+    return [EGViewportSurface type];
 }
 
 + (ODClassType*)type {
-    return _EGFullScreenSurface_type;
+    return _EGViewportSurface_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -674,7 +731,7 @@ static ODClassType* _EGFullScreenSurface_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGFullScreenSurface* o = ((EGFullScreenSurface*)(other));
+    EGViewportSurface* o = ((EGViewportSurface*)(other));
     return self.depth == o.depth && self.multisampling == o.multisampling;
 }
 

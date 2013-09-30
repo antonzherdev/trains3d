@@ -71,6 +71,7 @@
 		6F3DF1CA2C262A948774A73F /* CNQueueTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDF3311CBAFFA1A4AE27 /* CNQueueTest.m */; };
 		6F3DF1EA784B0CF29B2CA273 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF3C68061209BBC632F6E /* MainMenu.xib */; };
 		6F3DF1F588A640AAB936E135 /* NSInvocation+OCMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF6724E0DD2F9948EB7B5 /* NSInvocation+OCMAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		6F3DF1F70903E2E1FC2EADDF /* Shadow.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF210D3D13A9BC84A82EA /* Shadow.od */; };
 		6F3DF20098080399174371BB /* KWBeNilMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF551B72D813646EAD499 /* KWBeNilMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF20B7EE7AC6A990E30CB /* NSMutableSet+CNChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF3654424ECD20B74F55D /* NSMutableSet+CNChain.m */; };
 		6F3DF21F0863C26F89C80F95 /* KWBeEmptyMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8E69EF7B469E1914894 /* KWBeEmptyMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -713,6 +714,7 @@
 		6F3DF2043672B015D90D21EA /* btSubSimplexConvexCast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btSubSimplexConvexCast.cpp; sourceTree = "<group>"; };
 		6F3DF208CA871BAF91CF2323 /* lucida_grande_24.fnt */ = {isa = PBXFileReference; lastKnownFileType = file.fnt; path = lucida_grande_24.fnt; sourceTree = "<group>"; };
 		6F3DF208D47F9A3F62B0DD57 /* perpendicular.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = perpendicular.hpp; sourceTree = "<group>"; };
+		6F3DF210D3D13A9BC84A82EA /* Shadow.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Shadow.od; sourceTree = "<group>"; };
 		6F3DF212FCB3DEA0A5F72BDF /* CNGroupByLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNGroupByLink.m; sourceTree = "<group>"; };
 		6F3DF216A1B6A687560C0E50 /* Pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pause.png; sourceTree = "<group>"; };
 		6F3DF219474143ECAFBA6FBB /* KWIntercept.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWIntercept.h; sourceTree = "<group>"; };
@@ -2757,6 +2759,7 @@
 				6F3DF6B7855B84AA289BBC32 /* D3D.od */,
 				6F3DF240F068F829D354CFF7 /* EGD3D.h */,
 				6F3DF876E8F7B26E967791B3 /* EGD3D.m */,
+				6F3DF210D3D13A9BC84A82EA /* Shadow.od */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -3623,6 +3626,7 @@
 				6F3DF14661943AAC4D3BA008 /* Perlin.od in Resources */,
 				6F3DF688140B272246330874 /* PerlinTest.od in Resources */,
 				6F3DFCB509FD55ACC1C50C38 /* CallRepairerView.od in Resources */,
+				6F3DF1F70903E2E1FC2EADDF /* Shadow.od in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
