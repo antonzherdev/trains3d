@@ -54,20 +54,20 @@ ODPType* egMeshDataType();
 
 @interface EGBuffer : NSObject
 @property (nonatomic, readonly) ODPType* dataType;
-@property (nonatomic, readonly) GLenum bufferType;
+@property (nonatomic, readonly) unsigned int bufferType;
 @property (nonatomic, readonly) GLuint handle;
 
-+ (id)bufferWithDataType:(ODPType*)dataType bufferType:(GLenum)bufferType handle:(GLuint)handle;
-- (id)initWithDataType:(ODPType*)dataType bufferType:(GLenum)bufferType handle:(GLuint)handle;
++ (id)bufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(GLuint)handle;
+- (id)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(GLuint)handle;
 - (ODClassType*)type;
 - (NSUInteger)length;
 - (NSUInteger)count;
-+ (EGBuffer*)applyDataType:(ODPType*)dataType bufferType:(GLenum)bufferType;
++ (EGBuffer*)applyDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType;
 - (void)dealoc;
 - (id)setData:(CNPArray*)data;
 - (id)setArray:(CNVoidRefArray)array;
-- (id)setData:(CNPArray*)data usage:(GLenum)usage;
-- (id)setArray:(CNVoidRefArray)array usage:(GLenum)usage;
+- (id)setData:(CNPArray*)data usage:(unsigned int)usage;
+- (id)setArray:(CNVoidRefArray)array usage:(unsigned int)usage;
 - (id)updateStart:(NSUInteger)start count:(NSUInteger)count array:(CNVoidRefArray)array;
 - (void)bind;
 - (void)unbind;

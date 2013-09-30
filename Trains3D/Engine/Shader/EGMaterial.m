@@ -5,6 +5,7 @@
 #import "EGTexture.h"
 #import "EGSimpleShaderSystem.h"
 #import "EGStandardShaderSystem.h"
+#import "GL.h"
 @implementation EGMaterial
 static ODClassType* _EGMaterial_type;
 
@@ -31,11 +32,11 @@ static ODClassType* _EGMaterial_type;
     [[self shaderSystem] drawMaterial:self mesh:mesh];
 }
 
-- (void)drawVb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(GLenum)mode {
+- (void)drawVb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode {
     [[self shaderSystem] drawMaterial:self vb:vb index:index mode:mode];
 }
 
-- (void)drawVb:(EGVertexBuffer*)vb mode:(GLenum)mode {
+- (void)drawVb:(EGVertexBuffer*)vb mode:(unsigned int)mode {
     [[self shaderSystem] drawMaterial:self vb:vb mode:mode];
 }
 
@@ -305,8 +306,8 @@ static ODClassType* _EGMeshModel_type;
 
 NSString* EGBlendFunctionDescription(EGBlendFunction self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<EGBlendFunction: "];
-    [description appendFormat:@"source=%@", GLenumDescription(self.source)];
-    [description appendFormat:@", destination=%@", GLenumDescription(self.destination)];
+    [description appendFormat:@"source=%d", self.source];
+    [description appendFormat:@", destination=%d", self.destination];
     [description appendString:@">"];
     return description;
 }
@@ -317,11 +318,11 @@ void egBlendFunctionApplyDraw(EGBlendFunction self, void(^draw)()) {
     glDisable(GL_BLEND);
 }
 EGBlendFunction egBlendFunctionStandard() {
-    static EGBlendFunction _ret = (EGBlendFunction){GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA};
+    static EGBlendFunction _ret = (EGBlendFunction){((unsigned int)(GL_SRC_ALPHA)), ((unsigned int)(GL_ONE_MINUS_SRC_ALPHA))};
     return _ret;
 }
 EGBlendFunction egBlendFunctionPremultiplied() {
-    static EGBlendFunction _ret = (EGBlendFunction){GL_ONE, GL_ONE_MINUS_SRC_ALPHA};
+    static EGBlendFunction _ret = (EGBlendFunction){((unsigned int)(GL_ONE)), ((unsigned int)(GL_ONE_MINUS_SRC_ALPHA))};
     return _ret;
 }
 ODPType* egBlendFunctionType() {

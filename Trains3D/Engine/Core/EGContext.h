@@ -1,5 +1,4 @@
 #import "objd.h"
-#import "GL.h"
 #import "GEVec.h"
 @class EGDirector;
 @class EGTexture;
@@ -20,7 +19,7 @@
 + (EGDirector*)director;
 + (EGTexture*)textureForFile:(NSString*)file;
 + (EGTexture*)nearestTextureForFile:(NSString*)file;
-+ (EGTexture*)textureForFile:(NSString*)file magFilter:(GLenum)magFilter minFilter:(GLenum)minFilter;
++ (EGTexture*)textureForFile:(NSString*)file magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
 + (EGFont*)fontWithName:(NSString*)name;
 + (EGContext*)context;
 + (EGMatrixStack*)matrix;
@@ -37,7 +36,7 @@
 + (id)context;
 - (id)init;
 - (ODClassType*)type;
-- (EGTexture*)textureForFile:(NSString*)file magFilter:(GLenum)magFilter minFilter:(GLenum)minFilter;
+- (EGTexture*)textureForFile:(NSString*)file magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
 - (EGFont*)fontWithName:(NSString*)name;
 - (GERectI)viewport;
 - (void)setViewport:(GERectI)viewport;

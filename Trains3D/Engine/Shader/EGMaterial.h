@@ -1,5 +1,4 @@
 #import "objd.h"
-#import "GL.h"
 #import "GEVec.h"
 @class EGShaderSystem;
 @class EGMesh;
@@ -20,8 +19,8 @@ typedef struct EGBlendFunction EGBlendFunction;
 - (ODClassType*)type;
 - (EGShaderSystem*)shaderSystem;
 - (void)drawMesh:(EGMesh*)mesh;
-- (void)drawVb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(GLenum)mode;
-- (void)drawVb:(EGVertexBuffer*)vb mode:(GLenum)mode;
+- (void)drawVb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode;
+- (void)drawVb:(EGVertexBuffer*)vb mode:(unsigned int)mode;
 + (EGMaterial*)applyColor:(GEVec4)color;
 + (EGMaterial*)applyTexture:(EGTexture*)texture;
 + (ODClassType*)type;
@@ -70,19 +69,19 @@ typedef struct EGBlendFunction EGBlendFunction;
 
 
 struct EGBlendFunction {
-    GLenum source;
-    GLenum destination;
+    unsigned int source;
+    unsigned int destination;
 };
-static inline EGBlendFunction EGBlendFunctionMake(GLenum source, GLenum destination) {
+static inline EGBlendFunction EGBlendFunctionMake(unsigned int source, unsigned int destination) {
     return (EGBlendFunction){source, destination};
 }
 static inline BOOL EGBlendFunctionEq(EGBlendFunction s1, EGBlendFunction s2) {
-    return GLenumEq(s1.source, s2.source) && GLenumEq(s1.destination, s2.destination);
+    return s1.source == s2.source && s1.destination == s2.destination;
 }
 static inline NSUInteger EGBlendFunctionHash(EGBlendFunction self) {
     NSUInteger hash = 0;
-    hash = hash * 31 + GLenumHash(self.source);
-    hash = hash * 31 + GLenumHash(self.destination);
+    hash = hash * 31 + self.source;
+    hash = hash * 31 + self.destination;
     return hash;
 }
 NSString* EGBlendFunctionDescription(EGBlendFunction self);

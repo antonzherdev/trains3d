@@ -115,7 +115,7 @@ static ODClassType* _EGSimpleSurface_type;
             EGTexture* t = [EGTexture texture];
             glGetError();
             glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-            GLenum tg = ((_multisampling) ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D);
+            unsigned int tg = ((_multisampling) ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D);
             glBindTexture(tg, t.id);
             if(_multisampling) {
                 glTexImage2DMultisample(tg, 4, GL_RGBA, self.size.x, self.size.y, GL_FALSE);
@@ -126,7 +126,7 @@ static ODClassType* _EGSimpleSurface_type;
                 glTexParameteri(tg, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                 glTexImage2D(tg, 0, GL_RGBA, self.size.x, self.size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
             }
-            if(!(GLenumEq(glGetError(), 0))) {
+            if(glGetError() != 0) {
                 NSString* e = [NSString stringWithFormat:@"Error in texture creation for surface with size %lix%li", self.size.x, self.size.y];
                 @throw e;
             }

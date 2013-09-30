@@ -48,7 +48,7 @@ static ODClassType* _EGShaderProgram_type;
     return [EGShaderProgram shaderProgramWithHandle:handle];
 }
 
-+ (GLuint)compileShaderForShaderType:(GLenum)shaderType source:(NSString*)source {
++ (GLuint)compileShaderForShaderType:(unsigned int)shaderType source:(NSString*)source {
     GLuint shader = glCreateShader(shaderType);
     egShaderSource(shader, source);
     glCompileShader(shader);
@@ -160,7 +160,7 @@ static ODClassType* _EGShader_type;
     glUseProgram(0);
 }
 
-- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(GLenum)mode {
+- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode {
     glUseProgram(_program.handle);
     [vb applyDraw:^void() {
         [self loadVbDesc:vb.desc param:param];
@@ -170,7 +170,7 @@ static ODClassType* _EGShader_type;
     glUseProgram(0);
 }
 
-- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb mode:(GLenum)mode {
+- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb mode:(unsigned int)mode {
     glUseProgram(_program.handle);
     [vb applyDraw:^void() {
         [self loadVbDesc:vb.desc param:param];
@@ -253,7 +253,7 @@ static ODClassType* _EGShaderAttribute_type;
     _EGShaderAttribute_type = [ODClassType classTypeWithCls:[EGShaderAttribute class]];
 }
 
-- (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(GLenum)valuesType shift:(NSUInteger)shift {
+- (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(unsigned int)valuesType shift:(NSUInteger)shift {
     glEnableVertexAttribArray(_handle);
     egVertexAttribPointer(_handle, valuesCount, valuesType, GL_FALSE, stride, shift);
 }
@@ -393,12 +393,12 @@ static ODClassType* _EGShaderSystem_type;
     [shader drawParam:material mesh:mesh];
 }
 
-- (void)drawMaterial:(id)material vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(GLenum)mode {
+- (void)drawMaterial:(id)material vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode {
     EGShader* shader = [self shaderForMaterial:material];
     [shader drawParam:material vb:vb index:index mode:mode];
 }
 
-- (void)drawMaterial:(id)material vb:(EGVertexBuffer*)vb mode:(GLenum)mode {
+- (void)drawMaterial:(id)material vb:(EGVertexBuffer*)vb mode:(unsigned int)mode {
     EGShader* shader = [self shaderForMaterial:material];
     [shader drawParam:material vb:vb mode:mode];
 }

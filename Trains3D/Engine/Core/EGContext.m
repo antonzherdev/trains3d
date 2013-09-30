@@ -2,6 +2,7 @@
 
 #import "EGDirector.h"
 #import "EGTexture.h"
+#import "GL.h"
 #import "EGFont.h"
 #import "GEMat4.h"
 @implementation EGGlobal
@@ -28,7 +29,7 @@ static ODClassType* _EGGlobal_type;
     return [_EGGlobal_context textureForFile:file magFilter:GL_NEAREST minFilter:GL_NEAREST];
 }
 
-+ (EGTexture*)textureForFile:(NSString*)file magFilter:(GLenum)magFilter minFilter:(GLenum)minFilter {
++ (EGTexture*)textureForFile:(NSString*)file magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
     return [_EGGlobal_context textureForFile:file magFilter:magFilter minFilter:minFilter];
 }
 
@@ -112,7 +113,7 @@ static ODClassType* _EGContext_type;
     _EGContext_type = [ODClassType classTypeWithCls:[EGContext class]];
 }
 
-- (EGTexture*)textureForFile:(NSString*)file magFilter:(GLenum)magFilter minFilter:(GLenum)minFilter {
+- (EGTexture*)textureForFile:(NSString*)file magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
     return ((EGFileTexture*)([_textureCache objectForKey:tuple3(file, numui4(((unsigned int)(magFilter))), numui4(((unsigned int)(minFilter)))) orUpdateWith:^EGFileTexture*() {
         return [EGFileTexture fileTextureWithFile:file magFilter:magFilter minFilter:minFilter];
     }]));

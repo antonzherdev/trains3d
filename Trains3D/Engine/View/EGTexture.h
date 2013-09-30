@@ -13,12 +13,12 @@
 - (ODClassType*)type;
 - (void)bind;
 - (GEVec2)size;
-- (void)bindTarget:(GLenum)target;
+- (void)bindTarget:(unsigned int)target;
 - (void)dealloc;
 + (void)unbind;
-+ (void)unbindTarget:(GLenum)target;
++ (void)unbindTarget:(unsigned int)target;
 - (void)applyDraw:(void(^)())draw;
-- (void)applyTarget:(GLenum)target draw:(void(^)())draw;
+- (void)applyTarget:(unsigned int)target draw:(void(^)())draw;
 - (void)saveToFile:(NSString*)file;
 - (GERect)uvRect:(GERect)rect;
 - (GERect)uvX:(float)x y:(float)y width:(float)width height:(float)height;
@@ -28,15 +28,15 @@
 
 @interface EGFileTexture : EGTexture
 @property (nonatomic, readonly) NSString* file;
-@property (nonatomic, readonly) GLenum magFilter;
-@property (nonatomic, readonly) GLenum minFilter;
+@property (nonatomic, readonly) unsigned int magFilter;
+@property (nonatomic, readonly) unsigned int minFilter;
 
-+ (id)fileTextureWithFile:(NSString*)file magFilter:(GLenum)magFilter minFilter:(GLenum)minFilter;
-- (id)initWithFile:(NSString*)file magFilter:(GLenum)magFilter minFilter:(GLenum)minFilter;
++ (id)fileTextureWithFile:(NSString*)file magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
+- (id)initWithFile:(NSString*)file magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
 - (ODClassType*)type;
 + (EGFileTexture*)applyFile:(NSString*)file;
 - (GEVec2)size;
-- (void)bindTarget:(GLenum)target;
+- (void)bindTarget:(unsigned int)target;
 + (ODClassType*)type;
 @end
 

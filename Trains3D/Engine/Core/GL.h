@@ -134,6 +134,10 @@ static inline void egVertexAttribPointer (GLuint index, NSUInteger size, GLenum 
     glVertexAttribPointer(index, (GLint)size, type, normalized, (GLsizei)stride, (GLvoid const *) pointer);
 }
 
+static inline void egDrawBuffers(CNPArray* arr) {
+    glDrawBuffers(arr.count, arr.bytes);
+}
+
 #define egJasModel(NAME) [EGMesh \
     applyVertexData:[arrp(float, numf4, NAME ## _vertexcount*8) NAME ## _vertex] \
     indexData: [arrp(unsigned int, numui4, NAME ## _polygoncount*3) NAME ## _index]]

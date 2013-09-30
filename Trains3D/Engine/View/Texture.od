@@ -9,7 +9,7 @@ class Texture {
 
     def size : vec2
 
-    def bind(target : GLenum) {
+    def bind(target : uint4) {
 //        glEnable(target)
         glBindTexture(target, id)
     }
@@ -22,7 +22,7 @@ class Texture {
         unbind(GL_TEXTURE_2D)
     }
 
-    static def unbind(target : GLenum) {
+    static def unbind(target : uint4) {
         glBindTexture(target, 0)
 //        glDisable(target)
     }
@@ -31,7 +31,7 @@ class Texture {
         apply(GL_TEXTURE_2D, draw)
     }
 
-    def apply(target : GLenum, draw: () -> void) {
+    def apply(target : uint4, draw: () -> void) {
         bind(target)
         draw()
         unbind(target)
@@ -45,7 +45,7 @@ class Texture {
     def uv(x : float4, y : float4, width : float4, height : float4) : Rect = Rect(x, y, width, height)/size
 }
 
-class FileTexture(file : string, magFilter : GLenum, minFilter : GLenum) extends Texture {
+class FileTexture(file : string, magFilter : uint4, minFilter : uint4) extends Texture {
     private var _loaded = false
     private var _size : vec2
 
@@ -60,7 +60,7 @@ class FileTexture(file : string, magFilter : GLenum, minFilter : GLenum) extends
         if(!_loaded) load
         _size
     }
-    def bind(target : GLenum) {
+    def bind(target : uint4) {
         if(!_loaded) load
 //        glEnable(target)
         glBindTexture(target, id)

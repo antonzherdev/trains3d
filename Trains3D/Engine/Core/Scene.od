@@ -60,18 +60,19 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
         val env = view.environment
         context.environment = env
         context.set(viewport = viewport)
-//        val shadowLights = env.lights.chain.filter(_.hasShadows).toArray
-//        if(!shadowLights.isEmpty) {
-//            while(_shadowMaps.count < shadowLights.count) _shadowMaps = List(ShadowMap(), _shadowMaps)
-//            context.isShadowsDrawing = true
-//            val i = _shadowMaps.iterator
-//            shadowLights.for {light ->
-//                val shadowMap = i.next
-//                shadowMap.maybe(true, view.draw)
-//                shadowMap.texture.saveTo("~/dev/test.png")
-//            }
-//            context.isShadowsDrawing = false
-//        }
+        val shadowLights = env.lights.chain.filter(_.hasShadows).toArray
+        if(!shadowLights.isEmpty) {
+            while(_shadowMaps.count < shadowLights.count) _shadowMaps = List(ShadowMap(), _shadowMaps)
+            context.isShadowsDrawing = true
+            val i = _shadowMaps.iterator
+            shadowLights.for {light ->
+                val shadowMap = i.next
+                shadowMap.maybe(true, view.draw)
+
+//               shadowMap.texture.saveTo("$(Directory.sandbox)/dev/test.png")
+            }
+            context.isShadowsDrawing = false
+        }
         val camera = view.cameraWith(viewport)
         matrix.value = camera.matrixModel
         camera.focus

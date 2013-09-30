@@ -22,7 +22,7 @@
 + (EGShaderProgram*)loadFromFilesVertex:(NSString*)vertex fragment:(NSString*)fragment;
 + (EGShaderProgram*)applyVertex:(NSString*)vertex fragment:(NSString*)fragment;
 + (EGShaderProgram*)linkFromShadersVertex:(GLuint)vertex fragment:(GLuint)fragment;
-+ (GLuint)compileShaderForShaderType:(GLenum)shaderType source:(NSString*)source;
++ (GLuint)compileShaderForShaderType:(unsigned int)shaderType source:(NSString*)source;
 - (void)dealoc;
 - (void)set;
 - (void)clear;
@@ -41,8 +41,8 @@
 - (ODClassType*)type;
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh;
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh start:(NSUInteger)start count:(NSUInteger)count;
-- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(GLenum)mode;
-- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb mode:(GLenum)mode;
+- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode;
+- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb mode:(unsigned int)mode;
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(id)param;
 - (void)unloadParam:(id)param;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
@@ -57,7 +57,7 @@
 + (id)shaderAttributeWithHandle:(GLuint)handle;
 - (id)initWithHandle:(GLuint)handle;
 - (ODClassType*)type;
-- (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(GLenum)valuesType shift:(NSUInteger)shift;
+- (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(unsigned int)valuesType shift:(NSUInteger)shift;
 - (void)unbind;
 + (ODClassType*)type;
 @end
@@ -82,8 +82,8 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)drawMaterial:(id)material mesh:(EGMesh*)mesh;
-- (void)drawMaterial:(id)material vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(GLenum)mode;
-- (void)drawMaterial:(id)material vb:(EGVertexBuffer*)vb mode:(GLenum)mode;
+- (void)drawMaterial:(id)material vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode;
+- (void)drawMaterial:(id)material vb:(EGVertexBuffer*)vb mode:(unsigned int)mode;
 - (EGShader*)shaderForMaterial:(id)material;
 + (ODClassType*)type;
 @end

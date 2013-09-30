@@ -17,6 +17,7 @@ class RailroadView(railroad : Railroad) {
     }
 
     def drawBackground {
+        if(context.isShadowsDrawing) return nil
         railroadSurface.maybe(changed) {
             egClear
             backgroundView.draw

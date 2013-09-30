@@ -23,7 +23,7 @@ class ShaderProgram(handle : GLuint) {
         ShaderProgram(handle)
     }
 
-    static def compileShaderFor(shaderType : GLenum, source : string) : GLuint = {
+    static def compileShaderFor(shaderType : uint4, source : string) : GLuint = {
         val shader = glCreateShader(shaderType)
         egShaderSource(shader, source)
         glCompileShader(shader)
@@ -77,7 +77,7 @@ class Shader<P>(program : ShaderProgram) {
         glUseProgram(0)
     }
 
-    def draw(param : P, vb : VertexBuffer<_>, index : PArray<uint4>, mode : GLenum) {
+    def draw(param : P, vb : VertexBuffer<_>, index : PArray<uint4>, mode : uint4) {
         glUseProgram(program.handle)
         vb {
             load(vb.desc, param)
@@ -87,7 +87,7 @@ class Shader<P>(program : ShaderProgram) {
         glUseProgram(0)
     }
 
-    def draw(param : P, vb : VertexBuffer<_>, mode : GLenum) {
+    def draw(param : P, vb : VertexBuffer<_>, mode : uint4) {
         glUseProgram(program.handle)
         vb {
             load(vb.desc, param)
@@ -105,7 +105,7 @@ class Shader<P>(program : ShaderProgram) {
 }
 
 class ShaderAttribute(handle : GLuint) {
-    def setFromBufferWith(stride : uint, valuesCount : uint, valuesType : GLenum, shift : uint) {
+    def setFromBufferWith(stride : uint, valuesCount : uint, valuesType : uint4, shift : uint) {
         glEnableVertexAttribArray(handle)
         egVertexAttribPointer(handle, valuesCount, valuesType, GL_FALSE, stride, shift)
     }
@@ -136,12 +136,12 @@ class ShaderSystem<M extends Material> {
         shader.draw(material, mesh)
     }
 
-    def draw(material : M, vb : VertexBuffer<_>, index : PArray<uint4>, mode : GLenum) {
+    def draw(material : M, vb : VertexBuffer<_>, index : PArray<uint4>, mode : uint4) {
         val shader = shaderFor(material)
         shader.draw(material, vb = vb, index, mode)
     }
 
-    def draw(material : M, vb : VertexBuffer<_>, mode : GLenum) {
+    def draw(material : M, vb : VertexBuffer<_>, mode : uint4) {
         val shader = shaderFor(material)
         shader.draw(material, vb = vb, mode)
     }

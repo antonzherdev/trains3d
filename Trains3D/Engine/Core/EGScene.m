@@ -2,6 +2,7 @@
 
 #import "EGContext.h"
 #import "EGInput.h"
+#import "EGShadow.h"
 @implementation EGScene{
     GEVec4 _backgroundColor;
     id<EGController> _controller;
@@ -268,6 +269,23 @@ static ODClassType* _EGLayer_type;
     EGEnvironment* env = [_view environment];
     EGGlobal.context.environment = env;
     [EGGlobal.context setViewport:geRectIApplyRect(viewport)];
+    id<CNSeq> shadowLights = [[[env.lights chain] filter:^BOOL(EGLight* _) {
+        return _.hasShadows;
+    }] toArray];
+    if(!([shadowLights isEmpty])) {
+        while([__shadowMaps count] < [shadowLights count]) {
+            __shadowMaps = [CNList applyItem:[EGShadowMap shadowMap] tail:__shadowMaps];
+        }
+        EGGlobal.context.isShadowsDrawing = YES;
+        id<CNIterator> i = [__shadowMaps iterator];
+        [shadowLights forEach:^void(EGLight* light) {
+            EGShadowMap* shadowMap = ((EGShadowMap*)([i next]));
+            [shadowMap maybeForce:YES draw:^void() {
+                [_view draw];
+            }];
+        }];
+        EGGlobal.context.isShadowsDrawing = NO;
+    }
     id<EGCamera> camera = [_view cameraWithViewport:viewport];
     EGGlobal.matrix.value = [camera matrixModel];
     [camera focus];

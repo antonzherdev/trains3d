@@ -39,7 +39,7 @@ static ODClassType* _EGD2D_type;
     v = cnVoidRefArrayWriteTpItem(v, EGMeshData, EGMeshDataMake(GEVec2Make(1.0, 1.0), GEVec3Make(0.0, 0.0, 1.0), geVec3ApplyVec2Z(p1, 0.0)));
     [_EGD2D_vb setArray:_EGD2D_lineVertexes];
     glDisable(GL_CULL_FACE);
-    [material drawVb:_EGD2D_vb mode:GL_LINES];
+    [material drawVb:_EGD2D_vb mode:((unsigned int)(GL_LINES))];
     glEnable(GL_CULL_FACE);
 }
 

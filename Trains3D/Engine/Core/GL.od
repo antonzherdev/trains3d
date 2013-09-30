@@ -3,7 +3,6 @@ package com.antonzherdev.gl
 import com.antonzherdev.geometry._
 import com.antonzherdev.eg._
 
-stub struct GLenum
 stub struct GLint
 stub struct GLintptr
 stub struct GLuint
@@ -17,19 +16,19 @@ stub object gl {
     def egClear
     def glClearColor(r : float, g : float, b : float, a : float)
 
-    def glEnable(: GLenum)
-    def glDisable(: GLenum)
-    val GL_DEPTH_TEST : GLenum
-    val GL_MULTISAMPLE : GLenum
-    val GL_CULL_FACE : GLenum
-    val GL_BLEND : GLenum
-    val GL_ALPHA_TEST : GLenum
-    def glHint(: GLenum, : GLenum)
-    val GL_LINE_SMOOTH_HINT : GLenum
-    val GL_POLYGON_SMOOTH_HINT : GLenum
-    val GL_NICEST : GLenum
-    def glAlphaFunc(: GLenum, : float4)
-    val GL_GREATER : GLenum
+    def glEnable(: uint4)
+    def glDisable(: uint4)
+    val GL_DEPTH_TEST : uint4
+    val GL_MULTISAMPLE : uint4
+    val GL_CULL_FACE : uint4
+    val GL_BLEND : uint4
+    val GL_ALPHA_TEST : uint4
+    def glHint(: uint4, : uint4)
+    val GL_LINE_SMOOTH_HINT : uint4
+    val GL_POLYGON_SMOOTH_HINT : uint4
+    val GL_NICEST : uint4
+    def glAlphaFunc(: uint4, : float4)
+    val GL_GREATER : uint4
 
     def glCullFace(: uint)
     val GL_FRONT : uint
@@ -39,7 +38,7 @@ stub object gl {
     val GL_CW : uint
     val GL_CWW : uint
 
-    def glGetError : GLenum
+    def glGetError : uint4
 
     def glLineWidth(width : float4)
     def egViewport(rect : RectI)
@@ -60,46 +59,46 @@ stub object gl {
     def egGetProgramError(program : GLuint) : string?
 
     def glDeleteShader(shader : GLuint)
-    def glCreateShader(shaderType : GLenum) : GLuint
+    def glCreateShader(shaderType : uint4) : GLuint
     def egShaderSource(shader : GLuint, source : string)
     def glCompileShader(shader : GLuint)
     def egGetShaderError(shader : GLuint) : string?
 
-    val GL_VERTEX_SHADER : GLenum
-    val GL_FRAGMENT_SHADER : GLenum
+    val GL_VERTEX_SHADER : uint4
+    val GL_FRAGMENT_SHADER : uint4
 
     def egGenBuffer : GLuint
     def egDeleteBuffer(handle : GLuint)
-    def glBindBuffer(target : GLenum, handle : GLuint) : GLuint
-    def glBufferData(target : GLenum, size : GLsizeiptr, data : [void], usage : GLenum)
-    def glBufferSubData(target : GLenum, offset : GLintptr ,size : GLsizeiptr, data : [void])
-    def egVertexAttribPointer(slot : GLuint, size : uint, tp : GLenum, normalized : GLboolean, stride : uint, shift : uint)
-    def glDrawElements(mode : GLenum, count : GLsizei, tp : GLenum, indices : [void])
-    def glDrawElementsEXT(mode : GLenum, count : GLsizei, tp : GLenum, indices : [void])
-    def glDrawRangeElements(mode : GLenum, start : GLuint, end : GLuint, count : GLsizei, tp : GLenum, indices : [void])
-    def glDrawArrays(mode : GLenum, first : GLint, count : GLsizei)
+    def glBindBuffer(target : uint4, handle : GLuint) : GLuint
+    def glBufferData(target : uint4, size : GLsizeiptr, data : [void], usage : uint4)
+    def glBufferSubData(target : uint4, offset : GLintptr ,size : GLsizeiptr, data : [void])
+    def egVertexAttribPointer(slot : GLuint, size : uint, tp : uint4, normalized : GLboolean, stride : uint, shift : uint)
+    def glDrawElements(mode : uint4, count : GLsizei, tp : uint4, indices : [void])
+    def glDrawElementsEXT(mode : uint4, count : GLsizei, tp : uint4, indices : [void])
+    def glDrawRangeElements(mode : uint4, start : GLuint, end : GLuint, count : GLsizei, tp : uint4, indices : [void])
+    def glDrawArrays(mode : uint4, first : GLint, count : GLsizei)
     def glEnableVertexAttribArray(handle : GLint)
     def glDisableVertexAttribArray(handle : GLint)
-    val GL_ARRAY_BUFFER : GLenum
-    val GL_ELEMENT_ARRAY_BUFFER : GLenum
-    val GL_STATIC_DRAW : GLenum
-    val GL_DYNAMIC_DRAW : GLenum
-    val GL_TRIANGLES : GLenum
-    val GL_TRIANGLE_STRIP : GLenum
+    val GL_ARRAY_BUFFER : uint4
+    val GL_ELEMENT_ARRAY_BUFFER : uint4
+    val GL_STATIC_DRAW : uint4
+    val GL_DYNAMIC_DRAW : uint4
+    val GL_TRIANGLES : uint4
+    val GL_TRIANGLE_STRIP : uint4
     val GL_LINES : uint
 
-    val GL_FLOAT : GLenum
-    val GL_DOUBLE : GLenum
-    val GL_BYTE : GLenum
-    val GL_UNSIGNED_BYTE : GLenum
-    val GL_INT : GLenum
-    val GL_UNSIGNED_INT : GLenum
+    val GL_FLOAT : uint4
+    val GL_DOUBLE : uint4
+    val GL_BYTE : uint4
+    val GL_UNSIGNED_BYTE : uint4
+    val GL_INT : uint4
+    val GL_UNSIGNED_INT : uint4
 
     val GL_TRUE : GLboolean
     val GL_FALSE : GLboolean
 
-    def glBlendFunc(sfactor : GLenum, dfactor : GLenum)
-    def glBlendFuncSeparate(srcRGB : GLenum, dstRGB : GLenum, stcAlpha : GLenum, dstAlpha : GLenum)
+    def glBlendFunc(sfactor : uint4, dfactor : uint4)
+    def glBlendFuncSeparate(srcRGB : uint4, dstRGB : uint4, stcAlpha : uint4, dstAlpha : uint4)
     val GL_ZERO : uint
     val GL_ONE : uint
     val GL_SRC_ALPHA : uint
@@ -110,81 +109,83 @@ stub object gl {
     def egGenFrameBufferEXT : GLuint
     def egDeleteFrameBuffer(handle : GLuint)
     def egDeleteFrameBufferEXT(handle : GLuint)
-    def glBindFramebuffer( : GLenum,handle : GLuint)
-    def glBindFramebufferEXT( : GLenum,handle : GLuint)
-    val GL_FRAMEBUFFER : GLenum
-    val GL_FRAMEBUFFER_EXT : GLenum
-    val GL_DRAW_FRAMEBUFFER_EXT : GLenum
-    val GL_READ_FRAMEBUFFER : GLenum
-    val GL_READ_FRAMEBUFFER_EXT : GLenum
-    val GL_COLOR_BUFFER_BIT : GLenum
-    val GL_DEPTH_BUFFER_BIT : GLenum
-    def glBindTexture( : GLenum,handle : GLuint)
-    val GL_TEXTURE_2D : GLenum
-    val GL_TEXTURE_2D_MULTISAMPLE : GLenum
-    val GL_RGBA : GLenum
-    val GL_DEPTH_COMPONENT16 : GLenum
-    val GL_RGBA8 : GLenum
-    val GL_NONE : GLenum
+    def glBindFramebuffer( : uint4,handle : GLuint)
+    def glBindFramebufferEXT( : uint4,handle : GLuint)
+    val GL_FRAMEBUFFER : uint4
+    val GL_FRAMEBUFFER_EXT : uint4
+    val GL_DRAW_FRAMEBUFFER_EXT : uint4
+    val GL_READ_FRAMEBUFFER : uint4
+    val GL_READ_FRAMEBUFFER_EXT : uint4
+    val GL_COLOR_BUFFER_BIT : uint4
+    val GL_DEPTH_BUFFER_BIT : uint4
+    def glBindTexture( : uint4,handle : GLuint)
+    val GL_TEXTURE_2D : uint4
+    val GL_TEXTURE_2D_MULTISAMPLE : uint4
+    val GL_RGBA : uint4
+    val GL_DEPTH_COMPONENT16 : uint4
+    val GL_RGBA8 : uint4
+    val GL_NONE : uint4
     def egGenTexture : GLuint
     def egDeleteTexture(handle : GLuint)
     def glBlitFramebuffer(
         srcX0 : GLint, srcY0 : GLint, srcX1 : GLint, srcY1 : GLint,
         dstX0 : GLint, dstY0 : GLint, dstX1 : GLint, dstY1 : GLint,
-        mask : GLbitfield, filter : GLenum)
+        mask : GLbitfield, filter : uint4)
     def glBlitFramebufferEXT(
         srcX0 : GLint, srcY0 : GLint, srcX1 : GLint, srcY1 : GLint,
         dstX0 : GLint, dstY0 : GLint, dstX1 : GLint, dstY1 : GLint,
-        mask : GLbitfield, filter : GLenum)
+        mask : GLbitfield, filter : uint4)
 
     def egGenRenderBuffer : GLuint
     def egGenRenderBufferEXT : GLuint
     def egDeleteRenderBuffer(handle : GLuint) : GLuint
     def egDeleteRenderBufferEXT(handle : GLuint) : GLuint
-    def glBindRenderbuffer( : GLenum,handle : GLuint)
-    def glBindRenderbufferEXT( : GLenum,handle : GLuint)
-    def glRenderbufferStorage( : GLenum, component : GLenum, width : GLsizei, height : GLsizei)
-    def glRenderbufferStorageEXT( : GLenum, component : GLenum, width : GLsizei, height : GLsizei)
-    def glRenderbufferStorageMultisampleEXT( : GLenum, samples : GLint, component : GLenum, width : GLsizei, height : GLsizei)
-    val GL_RENDERBUFFER : GLenum
-    val GL_RENDERBUFFER_EXT : GLenum
-    val GL_DEPTH_COMPONENT : GLenum
-    val GL_DEPTH_COMPONENT24 : GLenum
-    def glFramebufferRenderbuffer(target : GLenum, attachment : GLenum, buftarget : GLenum, buffer : GLuint)
-    def glFramebufferRenderbufferEXT(target : GLenum, attachment : GLenum, buftarget : GLenum, buffer : GLuint)
-    val GL_DEPTH_ATTACHMENT : GLenum
-    val GL_DEPTH_ATTACHMENT_EXT : GLenum
+    def glBindRenderbuffer( : uint4,handle : GLuint)
+    def glBindRenderbufferEXT( : uint4,handle : GLuint)
+    def glRenderbufferStorage( : uint4, component : uint4, width : GLsizei, height : GLsizei)
+    def glRenderbufferStorageEXT( : uint4, component : uint4, width : GLsizei, height : GLsizei)
+    def glRenderbufferStorageMultisampleEXT( : uint4, samples : GLint, component : uint4, width : GLsizei, height : GLsizei)
+    val GL_RENDERBUFFER : uint4
+    val GL_RENDERBUFFER_EXT : uint4
+    val GL_DEPTH_COMPONENT : uint4
+    val GL_DEPTH_COMPONENT24 : uint4
+    def glFramebufferRenderbuffer(target : uint4, attachment : uint4, buftarget : uint4, buffer : GLuint)
+    def glFramebufferRenderbufferEXT(target : uint4, attachment : uint4, buftarget : uint4, buffer : GLuint)
+    val GL_DEPTH_ATTACHMENT : uint4
+    val GL_DEPTH_ATTACHMENT_EXT : uint4
 
-    def glTexImage2D(target : GLenum, level : GLint, internalformat  : GLint, width : GLsizei, height : GLsizei, border : GLint, format : GLenum, tp : GLenum, pixels : VoidRef)
-    def glTexImage2DMultisample(target : GLenum, samples : GLsizei, internalformat  : GLint, width : GLsizei, height : GLsizei, fixedsamplelocations : GLboolean)
-    def glTexParameteri(target : GLenum, pname : GLenum, param : GLint)
-    val GL_TEXTURE_WRAP_S : GLenum
-    val GL_TEXTURE_WRAP_T : GLenum
-    val GL_TEXTURE_COMPARE_FUNC : GLenum
-    val GL_TEXTURE_COMPARE_MODE : GLenum
-    val GL_LINEAR : GLenum
-    val GL_LINEAR_MIPMAP_LINEAR : GLenum
-    val GL_CLAMP_TO_EDGE : GLenum
-    val GL_LEQUAL : GLenum
-    val GL_COMPARE_R_TO_TEXTURE : GLenum
-    val GL_NEAREST : GLenum
-    val GL_TEXTURE_MIN_FILTER : GLenum
-    val GL_TEXTURE_MAG_FILTER : GLenum
-    def glFramebufferTexture(target : GLenum, attachment : GLenum, texture : GLuint, level : GLint)
-    def glDrawBuffer(:GLenum)
-    def glCheckFramebufferStatus(target : GLenum) : int
-    def glCheckFramebufferStatusEXT(target : GLenum) : int
-    val GL_COLOR_ATTACHMENT0 : GLenum
-    val GL_COLOR_ATTACHMENT0_EXT : GLenum
-    val GL_FRAMEBUFFER_COMPLETE : GLenum
-    val GL_FRAMEBUFFER_COMPLETE_EXT : GLenum
-    def glGenerateMipmap(target : GLenum)
+    def glTexImage2D(target : uint4, level : GLint, internalformat  : GLint, width : GLsizei, height : GLsizei, border : GLint, format : uint4, tp : uint4, pixels : VoidRef)
+    def glTexImage2DMultisample(target : uint4, samples : GLsizei, internalformat  : GLint, width : GLsizei, height : GLsizei, fixedsamplelocations : GLboolean)
+    def glTexParameteri(target : uint4, pname : uint4, param : GLint)
+    val GL_TEXTURE_WRAP_S : uint4
+    val GL_TEXTURE_WRAP_T : uint4
+    val GL_TEXTURE_COMPARE_FUNC : uint4
+    val GL_TEXTURE_COMPARE_MODE : uint4
+    val GL_LINEAR : uint4
+    val GL_LINEAR_MIPMAP_LINEAR : uint4
+    val GL_CLAMP_TO_EDGE : uint4
+    val GL_LEQUAL : uint4
+    val GL_COMPARE_R_TO_TEXTURE : uint4
+    val GL_NEAREST : uint4
+    val GL_TEXTURE_MIN_FILTER : uint4
+    val GL_TEXTURE_MAG_FILTER : uint4
+    def glFramebufferTexture(target : uint4, attachment : uint4, texture : GLuint, level : GLint)
+    def glDrawBuffer(:uint4)
+    def egDrawBuffers(:[uint4])
+    def glCheckFramebufferStatus(target : uint4) : int
+    def glCheckFramebufferStatusEXT(target : uint4) : int
+    val GL_COLOR_ATTACHMENT0 : uint4
+    val GL_COLOR_ATTACHMENT0_EXT : uint4
+    val GL_FRAMEBUFFER_COMPLETE : uint4
+    val GL_FRAMEBUFFER_COMPLETE_EXT : uint4
+    def glGenerateMipmap(target : uint4)
 
     def glPushAttrib(mask : GLbitfield)
-    val GL_VIEWPORT_BIT : GLenum
+    val GL_VIEWPORT_BIT : uint4
+    val GL_COLOR_BUFFER_BIT : uint4
     def glPopAttrib
 
-    def egLoadTextureFromFile(target : GLuint, file : string, magFilter : GLenum, minFilter : GLenum) : vec2
+    def egLoadTextureFromFile(target : GLuint, file : string, magFilter : uint4, minFilter : uint4) : vec2
     def egSaveTextureToFile(source : GLuint, file : string)
     def egDrawAxis
 }

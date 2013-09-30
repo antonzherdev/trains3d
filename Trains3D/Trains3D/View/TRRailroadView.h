@@ -3,9 +3,10 @@
 #import "EGMaterial.h"
 @class TRRailroad;
 @class EGViewportSurface;
+@class EGGlobal;
+@class EGContext;
 @class TRRailroadBuilder;
 @class TRModels;
-@class EGGlobal;
 @class TRRail;
 @class GEMat4;
 @class EGMatrixModel;

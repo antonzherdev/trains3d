@@ -2,9 +2,9 @@
 
 #import "TRRailroad.h"
 #import "EGSurface.h"
+#import "EGContext.h"
 #import "GL.h"
 #import "TRModels.h"
-#import "EGContext.h"
 #import "GEMat4.h"
 #import "TRRailPoint.h"
 #import "EGMapIso.h"
@@ -54,6 +54,7 @@ static ODClassType* _TRRailroadView_type;
 }
 
 - (void)drawBackground {
+    if(EGGlobal.context.isShadowsDrawing) return ;
     [_railroadSurface maybeForce:_changed draw:^void() {
         egClear();
         [_backgroundView draw];

@@ -4,10 +4,12 @@
 @class EGEvent;
 @class EGGlobal;
 @class EGContext;
+@class EGEnvironment;
+@class EGLight;
+@class EGShadowMap;
 @class EGMatrixStack;
 @protocol EGInputProcessor;
 @class EGEventCamera;
-@class EGEnvironment;
 
 @class EGScene;
 @class EGLayers;

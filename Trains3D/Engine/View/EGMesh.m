@@ -131,7 +131,7 @@ static ODClassType* _EGMesh_type;
 
 @implementation EGBuffer{
     ODPType* _dataType;
-    GLenum _bufferType;
+    unsigned int _bufferType;
     GLuint _handle;
     NSUInteger __length;
     NSUInteger __count;
@@ -141,11 +141,11 @@ static ODClassType* _EGBuffer_type;
 @synthesize bufferType = _bufferType;
 @synthesize handle = _handle;
 
-+ (id)bufferWithDataType:(ODPType*)dataType bufferType:(GLenum)bufferType handle:(GLuint)handle {
++ (id)bufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(GLuint)handle {
     return [[EGBuffer alloc] initWithDataType:dataType bufferType:bufferType handle:handle];
 }
 
-- (id)initWithDataType:(ODPType*)dataType bufferType:(GLenum)bufferType handle:(GLuint)handle {
+- (id)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(GLuint)handle {
     self = [super init];
     if(self) {
         _dataType = dataType;
@@ -171,7 +171,7 @@ static ODClassType* _EGBuffer_type;
     return __count;
 }
 
-+ (EGBuffer*)applyDataType:(ODPType*)dataType bufferType:(GLenum)bufferType {
++ (EGBuffer*)applyDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType {
     return [EGBuffer bufferWithDataType:dataType bufferType:bufferType handle:egGenBuffer()];
 }
 
@@ -187,7 +187,7 @@ static ODClassType* _EGBuffer_type;
     return [self setArray:array usage:GL_STATIC_DRAW];
 }
 
-- (id)setData:(CNPArray*)data usage:(GLenum)usage {
+- (id)setData:(CNPArray*)data usage:(unsigned int)usage {
     glBindBuffer(_bufferType, _handle);
     glBufferData(_bufferType, data.length, data.bytes, GL_STATIC_DRAW);
     glBindBuffer(_bufferType, 0);
@@ -196,7 +196,7 @@ static ODClassType* _EGBuffer_type;
     return self;
 }
 
-- (id)setArray:(CNVoidRefArray)array usage:(GLenum)usage {
+- (id)setArray:(CNVoidRefArray)array usage:(unsigned int)usage {
     glBindBuffer(_bufferType, _handle);
     glBufferData(_bufferType, array.length, array.bytes, GL_STATIC_DRAW);
     glBindBuffer(_bufferType, 0);
@@ -246,13 +246,13 @@ static ODClassType* _EGBuffer_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGBuffer* o = ((EGBuffer*)(other));
-    return [self.dataType isEqual:o.dataType] && GLenumEq(self.bufferType, o.bufferType) && GLuintEq(self.handle, o.handle);
+    return [self.dataType isEqual:o.dataType] && self.bufferType == o.bufferType && GLuintEq(self.handle, o.handle);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.dataType hash];
-    hash = hash * 31 + GLenumHash(self.bufferType);
+    hash = hash * 31 + self.bufferType;
     hash = hash * 31 + GLuintHash(self.handle);
     return hash;
 }
@@ -260,7 +260,7 @@ static ODClassType* _EGBuffer_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"dataType=%@", self.dataType];
-    [description appendFormat:@", bufferType=%@", GLenumDescription(self.bufferType)];
+    [description appendFormat:@", bufferType=%d", self.bufferType];
     [description appendFormat:@", handle=%@", GLuintDescription(self.handle)];
     [description appendString:@">"];
     return description;

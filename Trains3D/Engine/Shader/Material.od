@@ -6,11 +6,11 @@ class Material {
     def draw(mesh : Mesh<_>) {
         shaderSystem.draw(self, mesh)
     }
-    def draw(vb : VertexBuffer<_>, index : PArray<uint4>, mode : GLenum) {
+    def draw(vb : VertexBuffer<_>, index : PArray<uint4>, mode : uint4) {
         shaderSystem.draw(self, vb, index, mode)
     }
 
-    def draw(vb : VertexBuffer<_>, mode : GLenum) {
+    def draw(vb : VertexBuffer<_>, mode : uint4) {
         shaderSystem.draw(self, vb, mode)
     }
 
@@ -36,7 +36,7 @@ class MeshModel(meshes : [(Mesh, Material)]) {
     }
 }
 
-struct BlendFunction(source : GLenum, destination : GLenum) {
+struct BlendFunction(source : uint4, destination : uint4) {
     static val standard : BlendFunction = BlendFunction(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
     static val premultiplied : BlendFunction = BlendFunction(GL_ONE, GL_ONE_MINUS_SRC_ALPHA)
     def apply(draw : () -> void) {

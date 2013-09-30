@@ -19,12 +19,12 @@ class Mesh<T>(vertexBuffer : VertexBuffer<T>, indexBuffer : IndexBuffer<uint4>) 
 //        Mesh<T>(vertexBuffer, IndexBuffer().set([0, 1, 2, 2, 3, 0]))
 }
 
-class Buffer<T>(dataType : PType<T>, bufferType : GLenum, handle : GLuint) {
+class Buffer<T>(dataType : PType<T>, bufferType : uint4, handle : GLuint) {
     private var _length : uint = 0
     private var _count : uint = 0
     def length : uint = _length
     def count : uint = _count
-    static def apply<T>(dataType : PType<T>, bufferType : GLenum) : Buffer = Buffer<T>(dataType, bufferType, egGenBuffer)
+    static def apply<T>(dataType : PType<T>, bufferType : uint4) : Buffer = Buffer<T>(dataType, bufferType, egGenBuffer)
 
     def dealoc {
         egDeleteBuffer(handle)
@@ -33,7 +33,7 @@ class Buffer<T>(dataType : PType<T>, bufferType : GLenum, handle : GLuint) {
     def set(data : PArray<T>) : self = set(data = data, GL_STATIC_DRAW)
     def set(array : VoidRefArray) : self = set(array = array, GL_STATIC_DRAW)
 
-    def set(data : PArray<T>, usage : GLenum) : self = {
+    def set(data : PArray<T>, usage : uint4) : self = {
         glBindBuffer(bufferType, handle)
         glBufferData(bufferType, data.length, data.bytes, GL_STATIC_DRAW)
         glBindBuffer(bufferType, 0)
@@ -42,7 +42,7 @@ class Buffer<T>(dataType : PType<T>, bufferType : GLenum, handle : GLuint) {
         self
     }
 
-    def set(array : VoidRefArray<T>, usage : GLenum) : self = {
+    def set(array : VoidRefArray<T>, usage : uint4) : self = {
         glBindBuffer(bufferType, handle)
         glBufferData(bufferType, array.length, array.bytes, GL_STATIC_DRAW)
         glBindBuffer(bufferType, 0)
