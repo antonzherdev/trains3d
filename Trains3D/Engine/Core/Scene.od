@@ -56,6 +56,8 @@ class SingleLayer(layer : Layer) extends Layers {
 class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
     static def apply(view : LayerView) : Layer = Layer(view, view.as<InputProcessor>)
     private var _shadowMaps = List<ShadowMap>()
+
+    var saveCounter : int
     def drawWith(viewport : Rect) {
         val env = view.environment
         context.environment = env
@@ -72,9 +74,13 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
             shadowLights.for {light ->
                 val shadowMap = i.next
                 shadowMap.maybe(true) {
-                    egClear
+                    glClear(GL_DEPTH_BUFFER_BIT)
                     view.draw
-//                    shadowMap.texture.saveTo("$(Directory.sandbox)/dev/test.png")
+                }
+                saveCounter++
+                if(saveCounter > 60) {
+                    shadowMap.texture.saveTo("$(Directory.sandbox)/dev/test.png")
+                    saveCounter = 0
                 }
             }
             context.isShadowsDrawing = false

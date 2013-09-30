@@ -18,7 +18,7 @@ class RailroadView(railroad : Railroad) {
 
     def drawBackground {
         railroadSurface.maybe(changed) {
-            egClear
+            glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
             backgroundView.draw
             railroad.rails.for(railView.draw(_))
             changed = false

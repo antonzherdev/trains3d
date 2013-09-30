@@ -13,8 +13,10 @@ stub struct GLsizeiptr
 stub struct GLbitfield
 
 stub object gl {
-    def egClear
+    def glClear(: uint4)
     def glClearColor(r : float, g : float, b : float, a : float)
+    def glClearDepth( : float)
+    def glDepthMask( : GLboolean)
 
     def glEnable(: uint4)
     def glDisable(: uint4)
@@ -112,10 +114,8 @@ stub object gl {
     def glBindFramebuffer( : uint4,handle : GLuint)
     def glBindFramebufferEXT( : uint4,handle : GLuint)
     val GL_FRAMEBUFFER : uint4
-    val GL_FRAMEBUFFER_EXT : uint4
-    val GL_DRAW_FRAMEBUFFER_EXT : uint4
     val GL_READ_FRAMEBUFFER : uint4
-    val GL_READ_FRAMEBUFFER_EXT : uint4
+    val GL_DRAW_FRAMEBUFFER : uint4
     val GL_COLOR_BUFFER_BIT : uint4
     val GL_DEPTH_BUFFER_BIT : uint4
     def glBindTexture( : uint4,handle : GLuint)
@@ -133,28 +133,16 @@ stub object gl {
         srcX0 : GLint, srcY0 : GLint, srcX1 : GLint, srcY1 : GLint,
         dstX0 : GLint, dstY0 : GLint, dstX1 : GLint, dstY1 : GLint,
         mask : GLbitfield, filter : uint4)
-    def glBlitFramebufferEXT(
-        srcX0 : GLint, srcY0 : GLint, srcX1 : GLint, srcY1 : GLint,
-        dstX0 : GLint, dstY0 : GLint, dstX1 : GLint, dstY1 : GLint,
-        mask : GLbitfield, filter : uint4)
 
     def egGenRenderBuffer : GLuint
-    def egGenRenderBufferEXT : GLuint
     def egDeleteRenderBuffer(handle : GLuint) : GLuint
-    def egDeleteRenderBufferEXT(handle : GLuint) : GLuint
     def glBindRenderbuffer( : uint4,handle : GLuint)
-    def glBindRenderbufferEXT( : uint4,handle : GLuint)
     def glRenderbufferStorage( : uint4, component : uint4, width : GLsizei, height : GLsizei)
-    def glRenderbufferStorageEXT( : uint4, component : uint4, width : GLsizei, height : GLsizei)
-    def glRenderbufferStorageMultisampleEXT( : uint4, samples : GLint, component : uint4, width : GLsizei, height : GLsizei)
     val GL_RENDERBUFFER : uint4
-    val GL_RENDERBUFFER_EXT : uint4
     val GL_DEPTH_COMPONENT : uint4
     val GL_DEPTH_COMPONENT24 : uint4
     def glFramebufferRenderbuffer(target : uint4, attachment : uint4, buftarget : uint4, buffer : GLuint)
-    def glFramebufferRenderbufferEXT(target : uint4, attachment : uint4, buftarget : uint4, buffer : GLuint)
     val GL_DEPTH_ATTACHMENT : uint4
-    val GL_DEPTH_ATTACHMENT_EXT : uint4
 
     def glTexImage2D(target : uint4, level : GLint, internalformat  : GLint, width : GLsizei, height : GLsizei, border : GLint, format : uint4, tp : uint4, pixels : VoidRef)
     def glTexImage2DMultisample(target : uint4, samples : GLsizei, internalformat  : GLint, width : GLsizei, height : GLsizei, fixedsamplelocations : GLboolean)
@@ -175,17 +163,9 @@ stub object gl {
     def glDrawBuffer(:uint4)
     def egDrawBuffers(:[uint4])
     def glCheckFramebufferStatus(target : uint4) : int
-    def glCheckFramebufferStatusEXT(target : uint4) : int
     val GL_COLOR_ATTACHMENT0 : uint4
-    val GL_COLOR_ATTACHMENT0_EXT : uint4
     val GL_FRAMEBUFFER_COMPLETE : uint4
-    val GL_FRAMEBUFFER_COMPLETE_EXT : uint4
     def glGenerateMipmap(target : uint4)
-
-    def glPushAttrib(mask : GLbitfield)
-    val GL_VIEWPORT_BIT : uint4
-    val GL_COLOR_BUFFER_BIT : uint4
-    def glPopAttrib
 
     def egLoadTextureFromFile(target : GLuint, file : string, magFilter : uint4, minFilter : uint4) : vec2
     def egSaveTextureToFile(source : GLuint, file : string)

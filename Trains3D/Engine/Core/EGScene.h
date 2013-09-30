@@ -8,6 +8,7 @@
 @class EGEnvironment;
 @class EGLight;
 @class EGShadowMap;
+@class EGTexture;
 @protocol EGInputProcessor;
 @class EGEventCamera;
 
@@ -75,6 +76,7 @@
 @interface EGLayer : NSObject<EGController>
 @property (nonatomic, readonly) id<EGLayerView> view;
 @property (nonatomic, readonly) id processor;
+@property (nonatomic) NSInteger saveCounter;
 
 + (id)layerWithView:(id<EGLayerView>)view processor:(id)processor;
 - (id)initWithView:(id<EGLayerView>)view processor:(id)processor;

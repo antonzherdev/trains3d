@@ -43,7 +43,7 @@ static ODClassType* _EGDirector_type;
     EGGlobal.context.director = self;
     GEVec4 color = _scene.backgroundColor;
     glClearColor(((CGFloat)(color.x)), ((CGFloat)(color.y)), ((CGFloat)(color.z)), ((CGFloat)(color.w)));
-    egClear();
+    glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
     [EGGlobal.matrix clear];
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);

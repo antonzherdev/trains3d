@@ -52,11 +52,11 @@ static ODClassType* _TRLevelView_type;
 - (void)draw {
     BOOL shadows = EGGlobal.context.isShadowsDrawing;
     if(!(shadows)) [_railroadView drawBackground];
-    [[_level cities] forEach:^void(TRCity* city) {
+    if(!(shadows)) [[_level cities] forEach:^void(TRCity* city) {
         [_cityView drawCity:city];
     }];
-    [_trainView draw];
-    [_railroadView drawForeground];
+    if(!(shadows)) [_trainView draw];
+    if(!(shadows)) [_railroadView drawForeground];
     [_treeView draw];
     if(!(shadows)) {
         [_trainView drawSmoke];

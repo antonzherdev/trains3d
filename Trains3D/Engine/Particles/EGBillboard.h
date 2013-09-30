@@ -3,8 +3,10 @@
 #import "GEVec.h"
 #import "EGParticleSystem.h"
 #import "EGMaterial.h"
-@class EGVertexBufferDesc;
 @class EGGlobal;
+@class EGContext;
+@class EGShadowShaderSystem;
+@class EGVertexBufferDesc;
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class EGTexture;
@@ -27,6 +29,7 @@ typedef struct EGBillboardBufferData EGBillboardBufferData;
 
 @interface EGBillboardShader : EGShader
 @property (nonatomic, readonly) BOOL texture;
+@property (nonatomic, readonly) BOOL shadow;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderAttribute* modelSlot;
 @property (nonatomic, readonly) id uvSlot;
@@ -36,13 +39,15 @@ typedef struct EGBillboardBufferData EGBillboardBufferData;
 @property (nonatomic, readonly) EGShaderUniform* wcUniform;
 @property (nonatomic, readonly) EGShaderUniform* pUniform;
 
-+ (id)billboardShaderWithProgram:(EGShaderProgram*)program texture:(BOOL)texture;
-- (id)initWithProgram:(EGShaderProgram*)program texture:(BOOL)texture;
++ (id)billboardShaderWithProgram:(EGShaderProgram*)program texture:(BOOL)texture shadow:(BOOL)shadow;
+- (id)initWithProgram:(EGShaderProgram*)program texture:(BOOL)texture shadow:(BOOL)shadow;
 - (ODClassType*)type;
 + (EGBillboardShader*)instanceForColor;
 + (EGBillboardShader*)instanceForTexture;
-+ (NSString*)vertexTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code;
-+ (NSString*)fragmentTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code;
++ (EGBillboardShader*)instanceForColorShadow;
++ (EGBillboardShader*)instanceForTextureShadow;
++ (NSString*)vertexTextWithTexture:(BOOL)texture shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code;
++ (NSString*)fragmentTextWithTexture:(BOOL)texture shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code;
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param;
 - (void)unloadParam:(EGColorSource*)param;
 + (ODClassType*)type;

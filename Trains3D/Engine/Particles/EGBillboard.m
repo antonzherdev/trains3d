@@ -1,8 +1,9 @@
 #import "EGBillboard.h"
 
+#import "EGContext.h"
+#import "EGShadow.h"
 #import "EGMesh.h"
 #import "GL.h"
-#import "EGContext.h"
 #import "EGTexture.h"
 @implementation EGBillboardShaderSystem
 static ODClassType* _EGBillboardShaderSystem_type;
@@ -13,8 +14,13 @@ static ODClassType* _EGBillboardShaderSystem_type;
 }
 
 + (EGBillboardShader*)shaderForParam:(EGColorSource*)param {
-    if([param.texture isEmpty]) return [EGBillboardShader instanceForColor];
-    else return [EGBillboardShader instanceForTexture];
+    if(EGGlobal.context.isShadowsDrawing) {
+        if([EGShadowShaderSystem isColorShaderForParam:param]) return [EGBillboardShader instanceForColorShadow];
+        else return [EGBillboardShader instanceForTextureShadow];
+    } else {
+        if([param.texture isEmpty]) return [EGBillboardShader instanceForColor];
+        else return [EGBillboardShader instanceForTexture];
+    }
 }
 
 - (ODClassType*)type {
@@ -50,6 +56,7 @@ static ODClassType* _EGBillboardShaderSystem_type;
 
 @implementation EGBillboardShader{
     BOOL _texture;
+    BOOL _shadow;
     EGShaderAttribute* _positionSlot;
     EGShaderAttribute* _modelSlot;
     id _uvSlot;
@@ -61,8 +68,11 @@ static ODClassType* _EGBillboardShaderSystem_type;
 }
 static CNLazy* _EGBillboardShader__lazy_instanceForColor;
 static CNLazy* _EGBillboardShader__lazy_instanceForTexture;
+static CNLazy* _EGBillboardShader__lazy_instanceForColorShadow;
+static CNLazy* _EGBillboardShader__lazy_instanceForTextureShadow;
 static ODClassType* _EGBillboardShader_type;
 @synthesize texture = _texture;
+@synthesize shadow = _shadow;
 @synthesize positionSlot = _positionSlot;
 @synthesize modelSlot = _modelSlot;
 @synthesize uvSlot = _uvSlot;
@@ -72,14 +82,15 @@ static ODClassType* _EGBillboardShader_type;
 @synthesize wcUniform = _wcUniform;
 @synthesize pUniform = _pUniform;
 
-+ (id)billboardShaderWithProgram:(EGShaderProgram*)program texture:(BOOL)texture {
-    return [[EGBillboardShader alloc] initWithProgram:program texture:texture];
++ (id)billboardShaderWithProgram:(EGShaderProgram*)program texture:(BOOL)texture shadow:(BOOL)shadow {
+    return [[EGBillboardShader alloc] initWithProgram:program texture:texture shadow:shadow];
 }
 
-- (id)initWithProgram:(EGShaderProgram*)program texture:(BOOL)texture {
+- (id)initWithProgram:(EGShaderProgram*)program texture:(BOOL)texture shadow:(BOOL)shadow {
     self = [super initWithProgram:program];
     if(self) {
         _texture = texture;
+        _shadow = shadow;
         _positionSlot = [self attributeForName:@"position"];
         _modelSlot = [self attributeForName:@"model"];
         _uvSlot = ((_texture) ? [CNOption applyValue:[self attributeForName:@"vertexUV"]] : [CNOption none]);
@@ -97,10 +108,16 @@ static ODClassType* _EGBillboardShader_type;
     [super initialize];
     _EGBillboardShader_type = [ODClassType classTypeWithCls:[EGBillboardShader class]];
     _EGBillboardShader__lazy_instanceForColor = [CNLazy lazyWithF:^EGBillboardShader*() {
-        return [EGBillboardShader billboardShaderWithProgram:[EGShaderProgram applyVertex:[EGBillboardShader vertexTextWithTexture:NO parameters:@"" code:@""] fragment:[EGBillboardShader fragmentTextWithTexture:NO parameters:@"" code:@""]] texture:NO];
+        return [EGBillboardShader billboardShaderWithProgram:[EGShaderProgram applyVertex:[EGBillboardShader vertexTextWithTexture:NO shadow:NO parameters:@"" code:@""] fragment:[EGBillboardShader fragmentTextWithTexture:NO shadow:NO parameters:@"" code:@""]] texture:NO shadow:NO];
     }];
     _EGBillboardShader__lazy_instanceForTexture = [CNLazy lazyWithF:^EGBillboardShader*() {
-        return [EGBillboardShader billboardShaderWithProgram:[EGShaderProgram applyVertex:[EGBillboardShader vertexTextWithTexture:YES parameters:@"" code:@""] fragment:[EGBillboardShader fragmentTextWithTexture:YES parameters:@"" code:@""]] texture:YES];
+        return [EGBillboardShader billboardShaderWithProgram:[EGShaderProgram applyVertex:[EGBillboardShader vertexTextWithTexture:YES shadow:NO parameters:@"" code:@""] fragment:[EGBillboardShader fragmentTextWithTexture:YES shadow:NO parameters:@"" code:@""]] texture:YES shadow:NO];
+    }];
+    _EGBillboardShader__lazy_instanceForColorShadow = [CNLazy lazyWithF:^EGBillboardShader*() {
+        return [EGBillboardShader billboardShaderWithProgram:[EGShaderProgram applyVertex:[EGBillboardShader vertexTextWithTexture:NO shadow:YES parameters:@"" code:@""] fragment:[EGBillboardShader fragmentTextWithTexture:NO shadow:YES parameters:@"" code:@""]] texture:NO shadow:YES];
+    }];
+    _EGBillboardShader__lazy_instanceForTextureShadow = [CNLazy lazyWithF:^EGBillboardShader*() {
+        return [EGBillboardShader billboardShaderWithProgram:[EGShaderProgram applyVertex:[EGBillboardShader vertexTextWithTexture:YES shadow:YES parameters:@"" code:@""] fragment:[EGBillboardShader fragmentTextWithTexture:YES shadow:YES parameters:@"" code:@""]] texture:YES shadow:YES];
     }];
 }
 
@@ -112,7 +129,15 @@ static ODClassType* _EGBillboardShader_type;
     return ((EGBillboardShader*)([_EGBillboardShader__lazy_instanceForTexture get]));
 }
 
-+ (NSString*)vertexTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code {
++ (EGBillboardShader*)instanceForColorShadow {
+    return ((EGBillboardShader*)([_EGBillboardShader__lazy_instanceForColorShadow get]));
+}
+
++ (EGBillboardShader*)instanceForTextureShadow {
+    return ((EGBillboardShader*)([_EGBillboardShader__lazy_instanceForTextureShadow get]));
+}
+
++ (NSString*)vertexTextWithTexture:(BOOL)texture shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code {
     return [NSString stringWithFormat:@"#version 150\n"
         "in vec3 position;\n"
         "in vec2 model;%@\n"
@@ -138,26 +163,28 @@ static ODClassType* _EGBillboardShader_type;
         "   UV = vertexUV;" : @""), code];
 }
 
-+ (NSString*)fragmentTextWithTexture:(BOOL)texture parameters:(NSString*)parameters code:(NSString*)code {
++ (NSString*)fragmentTextWithTexture:(BOOL)texture shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code {
     return [NSString stringWithFormat:@"#version 150\n"
         "%@\n"
         "uniform vec4 color;\n"
         "uniform float alphaTestLevel;\n"
-        "in vec4 fragColor;\n"
-        "out vec4 outColor;\n"
+        "in vec4 fragColor;%@%@\n"
         "\n"
         "%@\n"
-        "void main(void) {%@%@\n"
+        "void main(void) {%@%@%@\n"
         "   if(outColor.a < alphaTestLevel) {\n"
         "       discard;\n"
-        "   }\n"
-        "\n"
+        "   }%@\n"
         "%@\n"
         "}", ((texture) ? @"\n"
         "in vec2 UV;\n"
-        "uniform sampler2D texture;\n" : @""), parameters, ((texture) ? @"\n"
+        "uniform sampler2D texture;\n" : @""), ((shadow) ? @"\n"
+        "out float depth;" : @""), ((!(shadow)) ? @"\n"
+        "out vec4 outColor;" : @""), parameters, ((shadow) ? @"\n"
+        "   vec4 outColor;" : @""), ((texture) ? @"\n"
         "   outColor = fragColor * color * texture(texture, UV); " : @""), ((!(texture)) ? @"\n"
-        "   outColor = fragColor * color; " : @""), code];
+        "   outColor = fragColor * color; " : @""), ((shadow) ? @"\n"
+        "   depth = gl_FragCoord.z;" : @""), code];
 }
 
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param {
@@ -199,13 +226,14 @@ static ODClassType* _EGBillboardShader_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGBillboardShader* o = ((EGBillboardShader*)(other));
-    return [self.program isEqual:o.program] && self.texture == o.texture;
+    return [self.program isEqual:o.program] && self.texture == o.texture && self.shadow == o.shadow;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.program hash];
     hash = hash * 31 + self.texture;
+    hash = hash * 31 + self.shadow;
     return hash;
 }
 
@@ -213,6 +241,7 @@ static ODClassType* _EGBillboardShader_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"program=%@", self.program];
     [description appendFormat:@", texture=%d", self.texture];
+    [description appendFormat:@", shadow=%d", self.shadow];
     [description appendString:@">"];
     return description;
 }

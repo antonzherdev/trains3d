@@ -8,15 +8,17 @@ class ShadowMapSurface(size : vec2i) extends Surface(size) {
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
         glBindTexture(GL_TEXTURE_2D, t.id)
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, size.x, size.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, size.x, size.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0)
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE)
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL)
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE)
         glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, t.id, 0)
-
+        glDrawBuffer(GL_NONE)
         val status = glCheckFramebufferStatus(GL_FRAMEBUFFER)
         if(status != GL_FRAMEBUFFER_COMPLETE) throw "Error in shadow map frame buffer: $status"
 
@@ -30,15 +32,13 @@ class ShadowMapSurface(size : vec2i) extends Surface(size) {
     }
 
     def bind {
-        glPushAttrib(GL_VIEWPORT_BIT )
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
+        texture.bind
         glViewport(0, 0, size.x, size.y)
-        glDrawBuffer(GL_NONE)
     }
 
     def unbind {
         glBindFramebuffer(GL_FRAMEBUFFER, 0)
-        glPopAttrib
     }
 }
 
@@ -51,7 +51,7 @@ class ShadowMap extends BaseViewportSurface {
 object ShadowShaderSystem extends ShaderSystem<ColorSource> {
     def shaderFor(param : ColorSource) : ShadowShader =
         if(isColorShaderFor(param)) ShadowShader.instanceForColor else ShadowShader.instanceForTexture
-    def isColorShaderFor(param : ColorSource) = param.texture.isEmpty || param.alphaTestLevel == 0
+    def isColorShaderFor(param : ColorSource) = param.texture.isEmpty || param.alphaTestLevel < 0
 }
 
 

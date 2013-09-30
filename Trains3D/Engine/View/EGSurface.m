@@ -170,14 +170,12 @@ static ODClassType* _EGSimpleSurface_type;
 }
 
 - (void)bind {
-    glPushAttrib(GL_VIEWPORT_BIT);
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
     glViewport(0, 0, self.size.x, self.size.y);
 }
 
 - (void)unbind {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glPopAttrib();
 }
 
 - (ODClassType*)type {
@@ -255,12 +253,12 @@ static ODClassType* _EGPairSurface_type;
 
 - (void)unbind {
     [_multisampling unbind];
-    glBindFramebufferEXT(GL_READ_FRAMEBUFFER_EXT, _multisampling.frameBuffer);
-    glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER_EXT, _simple.frameBuffer);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, _multisampling.frameBuffer);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _simple.frameBuffer);
     GEVec2i s = self.size;
-    glBlitFramebufferEXT(0, 0, s.x, s.y, 0, 0, s.x, s.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-    glBindFramebufferEXT(GL_READ_FRAMEBUFFER_EXT, 0);
-    glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER_EXT, 0);
+    glBlitFramebuffer(0, 0, s.x, s.y, 0, 0, s.x, s.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
 
 - (GLint)frameBuffer {

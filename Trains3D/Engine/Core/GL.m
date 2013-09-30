@@ -76,22 +76,30 @@ void egSaveTextureToFile(GLuint source, NSString* file) {
     glGetTexLevelParameterfv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
     GLint format;
     glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &format);
-    BOOL depth = format == GL_DEPTH_COMPONENT16 || format == GL_DEPTH_COMPONENT24 || format == GL_DEPTH_COMPONENT32;
-    void * data = depth ? calloc((size_t) width, (size_t) height) : calloc((size_t) width*4, (size_t) height);
+    BOOL depth = format == GL_DEPTH_COMPONENT32F || format == GL_DEPTH_COMPONENT16 || format == GL_DEPTH_COMPONENT24 || format == GL_DEPTH_COMPONENT32;
+    void * data = depth ? calloc((size_t) width*4, (size_t) height) : calloc((size_t) width*4, (size_t) height);
 
     if(depth) {
-        glGetTexImage(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, data);
+        glGetTexImage(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, GL_FLOAT, data);
+        unsigned char*dt = data;
+        for(int y = 0; y < height; y++)
+            for(int x = 0; x < width; x++) {
+                unsigned char v = (unsigned char) (255 * (*(float*)dt));
+                *dt = v;
+                dt++;
+                *dt = v;
+                dt++;
+                *dt = v;
+                dt++;
+                *dt = 0xff;
+                dt++;
+            }
     } else {
         glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA, GL_UNSIGNED_BYTE, data);
     }
 
-    CGColorSpaceRef space = depth ? CGColorSpaceCreateDeviceGray() : CGColorSpaceCreateDeviceRGB();
-    CGContextRef bitmapContext = depth ?
-            CGBitmapContextCreate (data,
-                    (size_t) width, (size_t) height, 8,
-                    (size_t) (width), space,
-                    kCGImageAlphaNone)
-            : CGBitmapContextCreate (data,
+    CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
+    CGContextRef bitmapContext = CGBitmapContextCreate (data,
             (size_t) width, (size_t) height, 8,
             (size_t) (width*4), space,
             kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst);

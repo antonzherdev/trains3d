@@ -2,18 +2,27 @@ package com.antonzherdev.eg
 
 object BillboardShaderSystem extends ShaderSystem<ColorSource> {
     def shaderFor(param : ColorSource) : BillboardShader =
-        if(param.texture.isEmpty) BillboardShader.instanceForColor else BillboardShader.instanceForTexture
+        if(context.isShadowsDrawing)
+            if(ShadowShaderSystem.isColorShaderFor(param)) BillboardShader.instanceForColorShadow
+            else BillboardShader.instanceForTextureShadow
+        else if(param.texture.isEmpty) BillboardShader.instanceForColor else BillboardShader.instanceForTexture
 }
 
-class BillboardShader(program : ShaderProgram, texture : bool) extends Shader<ColorSource>(program) {
+class BillboardShader(program : ShaderProgram, texture : bool, shadow : bool) extends Shader<ColorSource>(program) {
     static lazy val instanceForColor = BillboardShader(ShaderProgram(
-        vertexTextWith(false, "", ""),
-        fragmentTextWith(false, "", "")), false)
+        vertexTextWith(false, false, "", ""),
+        fragmentTextWith(false, false, "", "")), false, false)
     static lazy val instanceForTexture = BillboardShader(ShaderProgram(
-        vertexTextWith(true, "", ""),
-        fragmentTextWith(true, "", "")), true)
+        vertexTextWith(true, false, "", ""),
+        fragmentTextWith(true, false, "", "")), true, false)
+    static lazy val instanceForColorShadow = BillboardShader(ShaderProgram(
+        vertexTextWith(false, true, "", ""),
+        fragmentTextWith(false, true, "", "")), false, true)
+    static lazy val instanceForTextureShadow = BillboardShader(ShaderProgram(
+        vertexTextWith(true, true, "", ""),
+        fragmentTextWith(true, true, "", "")), true, true)
 
-    static def vertexTextWith(texture : bool, parameters : string, code : string) =
+    static def vertexTextWith(texture : bool, shadow : bool, parameters : string, code : string) =
         "#version 150
          in vec3 position;
          in vec2 model;
@@ -37,7 +46,7 @@ class BillboardShader(program : ShaderProgram, texture : bool) extends Shader<Co
             fragColor = vertexColor;
             $code
          }"
-    static def fragmentTextWith(texture : bool, parameters : string, code : string) =
+    static def fragmentTextWith(texture : bool, shadow : bool, parameters : string, code : string) =
         "#version 150
         $if(texture)
          in vec2 UV;
@@ -46,16 +55,18 @@ class BillboardShader(program : ShaderProgram, texture : bool) extends Shader<Co
          uniform vec4 color;
          uniform float alphaTestLevel;
          in vec4 fragColor;
-         out vec4 outColor;
+         out float depth;$when(shadow)
+         out vec4 outColor;$when(!shadow)
 
          $parameters
          void main(void) {
+            vec4 outColor;$when(shadow)
             outColor = fragColor * color * texture(texture, UV); $when(texture)
             outColor = fragColor * color; $when(!texture)
             if(outColor.a < alphaTestLevel) {
                 discard;
             }
-
+            depth = gl_FragCoord.z;$when(shadow)
         $code
          }"
 
