@@ -7,9 +7,9 @@
 @class EGIndexBuffer;
 @class EGMesh;
 @class EGGlobal;
+@class EGContext;
 @class EGMatrixStack;
 @class GEMat4;
-@class EGContext;
 @class EGTexture;
 
 @class EGFont;
@@ -64,6 +64,7 @@ ODPType* egTextAlignmentType();
 - (id)initWithName:(NSString*)name;
 - (ODClassType*)type;
 - (void)_init;
+- (GEVec2)measureText:(NSString*)text;
 - (void)drawText:(NSString*)text color:(GEVec4)color at:(GEVec3)at alignment:(EGTextAlignment)alignment;
 + (ODClassType*)type;
 @end

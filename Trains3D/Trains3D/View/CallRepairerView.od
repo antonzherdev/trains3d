@@ -11,23 +11,28 @@ class CallRepairerView(level : Level) {
         }
     }
 
-    private static val buttonSize = vec2(1, 0.3)
-    private val font = fontWith(name = "lucida_grande_18")
+    val font = fontWith(name = "lucida_grande_18")
+    private lazy val buttonSize : vec2 = {
+        val textSize = font.measure(Loc.callRepairer)
+        matrix.p.divBySelf(vec4(textSize * 1.2, 0, 0)).xy
+    }
+
     def drawButtonFor(city : City) {
         val cut = level.map.cutStateFor(city.tile)
 
+        val bs = buttonSize
         var p : vec2
-        if(cut.x != 0 && cut.y == 0 && cut.y2 == 0) p = vec2(0, MapSso.ISO/4 + buttonSize.y)
+        if(cut.x != 0 && cut.y == 0 && cut.y2 == 0) p = vec2(0, MapSso.ISO/4 + bs.y)
         else if(cut.y != 0)
-            if(cut.x2 != 0) p = vec2(-MapSso.ISO/2 - buttonSize.x, -buttonSize.y)
-            else p = vec2(MapSso.ISO/2, -buttonSize.y)
+            if(cut.x2 != 0) p = vec2(-MapSso.ISO/2 - bs.x, -bs.y)
+            else p = vec2(MapSso.ISO/2, -bs.y)
         else if(cut.y2 != 0)
-            if(cut.x2 != 0) p = vec2(-MapSso.ISO/2 - buttonSize.x, 0)
+            if(cut.x2 != 0) p = vec2(-MapSso.ISO/2 - bs.x, 0)
             else p = vec2(MapSso.ISO/2, 0)
-        else p = vec2(-buttonSize.x, MapSso.ISO/4 + buttonSize.y)
+        else p = vec2(-bs.x, MapSso.ISO/4 + bs.y)
 
         val at = vec3(city.tile, 0)
-        Billboard.draw(vec4(city.color.color.xyz, 0.8), at, Rect(p, buttonSize))
-        font.draw(Loc.callRepairer, color = vec4(0.1, 0.1, 0.1, 1), at, TextAlignment(0, 0, false, vec3(p + buttonSize/2, 0)))
+        Billboard.draw(vec4(city.color.color.xyz, 0.8), at, Rect(p, bs))
+        font.draw(Loc.callRepairer, color = vec4(0.1, 0.1, 0.1, 1), at, TextAlignment(0, 0, false, vec3(p + bs/2, 0)))
     }
 }

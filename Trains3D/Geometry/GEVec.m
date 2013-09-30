@@ -350,6 +350,9 @@ NSString* GEVec4Description(GEVec4 self) {
 GEVec4 geVec4ApplyVec3W(GEVec3 vec3, float w) {
     return GEVec4Make(vec3.x, vec3.y, vec3.z, w);
 }
+GEVec4 geVec4ApplyVec2ZW(GEVec2 vec2, float z, float w) {
+    return GEVec4Make(vec2.x, vec2.y, z, w);
+}
 GEVec4 geVec4AddVec3(GEVec4 self, GEVec3 vec3) {
     return GEVec4Make(self.x + vec3.x, self.y + vec3.y, self.z + vec3.z, self.w);
 }

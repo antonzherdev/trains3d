@@ -2,18 +2,20 @@
 
 #import "TRLevel.h"
 #import "EGContext.h"
+#import "TRStrings.h"
+#import "GEMat4.h"
 #import "TRRailroad.h"
 #import "GL.h"
 #import "TRCity.h"
 #import "EGBillboard.h"
-#import "TRStrings.h"
 @implementation TRCallRepairerView{
     TRLevel* _level;
     EGFont* _font;
+    CNLazy* __lazy_buttonSize;
 }
-static GEVec2 _TRCallRepairerView_buttonSize = (GEVec2){1.0, 0.3};
 static ODClassType* _TRCallRepairerView_type;
 @synthesize level = _level;
+@synthesize font = _font;
 
 + (id)callRepairerViewWithLevel:(TRLevel*)level {
     return [[TRCallRepairerView alloc] initWithLevel:level];
@@ -21,9 +23,16 @@ static ODClassType* _TRCallRepairerView_type;
 
 - (id)initWithLevel:(TRLevel*)level {
     self = [super init];
+    __weak TRCallRepairerView* _weakSelf = self;
     if(self) {
         _level = level;
         _font = [EGGlobal fontWithName:@"lucida_grande_18"];
+        __lazy_buttonSize = [CNLazy lazyWithF:^id() {
+            return wrap(GEVec2, ^GEVec2() {
+                GEVec2 textSize = [_weakSelf.font measureText:[TRStr.Loc callRepairer]];
+                return geVec4Xy([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW(geVec2MulF(textSize, 1.2), 0.0, 0.0)]);
+            }());
+        }];
     }
     
     return self;
@@ -32,6 +41,10 @@ static ODClassType* _TRCallRepairerView_type;
 + (void)initialize {
     [super initialize];
     _TRCallRepairerView_type = [ODClassType classTypeWithCls:[TRCallRepairerView class]];
+}
+
+- (GEVec2)buttonSize {
+    return uwrap(GEVec2, [__lazy_buttonSize get]);
 }
 
 - (void)draw {
@@ -48,25 +61,26 @@ static ODClassType* _TRCallRepairerView_type;
 
 - (void)drawButtonForCity:(TRCity*)city {
     EGMapTileCutState cut = [_level.map cutStateForTile:city.tile];
+    GEVec2 bs = [self buttonSize];
     GEVec2 p;
     if(cut.x != 0 && cut.y == 0 && cut.y2 == 0) {
-        p = GEVec2Make(0.0, ((float)(EGMapSso.ISO / 4 + _TRCallRepairerView_buttonSize.y)));
+        p = GEVec2Make(0.0, ((float)(EGMapSso.ISO / 4 + bs.y)));
     } else {
         if(cut.y != 0) {
-            if(cut.x2 != 0) p = GEVec2Make(((float)(-EGMapSso.ISO / 2 - _TRCallRepairerView_buttonSize.x)), -_TRCallRepairerView_buttonSize.y);
-            else p = GEVec2Make(((float)(EGMapSso.ISO / 2)), -_TRCallRepairerView_buttonSize.y);
+            if(cut.x2 != 0) p = GEVec2Make(((float)(-EGMapSso.ISO / 2 - bs.x)), -bs.y);
+            else p = GEVec2Make(((float)(EGMapSso.ISO / 2)), -bs.y);
         } else {
             if(cut.y2 != 0) {
-                if(cut.x2 != 0) p = GEVec2Make(((float)(-EGMapSso.ISO / 2 - _TRCallRepairerView_buttonSize.x)), 0.0);
+                if(cut.x2 != 0) p = GEVec2Make(((float)(-EGMapSso.ISO / 2 - bs.x)), 0.0);
                 else p = GEVec2Make(((float)(EGMapSso.ISO / 2)), 0.0);
             } else {
-                p = GEVec2Make(-_TRCallRepairerView_buttonSize.x, ((float)(EGMapSso.ISO / 4 + _TRCallRepairerView_buttonSize.y)));
+                p = GEVec2Make(-bs.x, ((float)(EGMapSso.ISO / 4 + bs.y)));
             }
         }
     }
     GEVec3 at = geVec3ApplyVec2Z(geVec2ApplyVec2i(city.tile), 0.0);
-    [EGBillboard drawMaterial:[EGColorSource applyColor:geVec4ApplyVec3W(geVec4Xyz(city.color.color), 0.8)] at:at rect:GERectMake(p, _TRCallRepairerView_buttonSize)];
-    [_font drawText:[TRStr.Loc callRepairer] color:GEVec4Make(0.1, 0.1, 0.1, 1.0) at:at alignment:EGTextAlignmentMake(0.0, 0.0, NO, geVec3ApplyVec2Z(geVec2AddVec2(p, geVec2DivI(_TRCallRepairerView_buttonSize, 2)), 0.0))];
+    [EGBillboard drawMaterial:[EGColorSource applyColor:geVec4ApplyVec3W(geVec4Xyz(city.color.color), 0.8)] at:at rect:GERectMake(p, bs)];
+    [_font drawText:[TRStr.Loc callRepairer] color:GEVec4Make(0.1, 0.1, 0.1, 1.0) at:at alignment:EGTextAlignmentMake(0.0, 0.0, NO, geVec3ApplyVec2Z(geVec2AddVec2(p, geVec2DivI(bs, 2)), 0.0))];
 }
 
 - (ODClassType*)type {

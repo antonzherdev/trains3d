@@ -5,17 +5,20 @@
 #import "EGFont.h"
 @class TRLevel;
 @class EGGlobal;
+@class TRStr;
+@protocol TRStrings;
+@class EGMatrixStack;
+@class GEMat4;
 @class TRRailroad;
 @class TRCity;
 @class TRCityColor;
 @class EGBillboard;
-@class TRStr;
-@protocol TRStrings;
 
 @class TRCallRepairerView;
 
 @interface TRCallRepairerView : NSObject
 @property (nonatomic, readonly) TRLevel* level;
+@property (nonatomic, readonly) EGFont* font;
 
 + (id)callRepairerViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;

@@ -44,6 +44,30 @@ class Font(name : string) {
         Rect(parts[0].toFloat, y, parts[2].toFloat, h)
     }
 
+    //return size of text in projection space
+    def measure(text : string) : vec2 = {
+        var newLines = 0
+        val symbolsArr = text.chain.flatMap<FontSymbolDesc>{s ->
+            if(s == 10) {
+                newLines++
+                Option.some(newLineDesc)
+            } else symbols.opt(s)
+        }.toArray
+        var fullWidth = 0
+        var lineWidth = 0
+        symbolsArr.for{s ->
+            if(s.isNewLine) {
+                if(lineWidth > fullWidth) fullWidth = lineWidth
+                lineWidth = 0
+            } else {
+                lineWidth += s.width
+            }
+        }
+        if(lineWidth > fullWidth) fullWidth = lineWidth
+        val vpSize = context.viewport.size/2.0
+        vec2(fullWidth.cast<float4>/vpSize.x, height.cast<float4>/vpSize.y*(newLines + 1))
+    }
+
     private static val vbDesc = VertexBufferDesc(FontPrintData.type, position = 0, uv = 2*4, normal = -1, color = -1, model = -1)
     private val vb = VertexBuffer(vbDesc)
     private val ib = IndexBuffer()
@@ -72,12 +96,10 @@ class Font(name : string) {
         val linesWidthIterator : Iterator<int>
         var x =  pos.x
         if(alignment.x != -1) {
-            var fullWidth = 0
             var lineWidth = 0
             symbolsArr.for{s ->
                 if(s.isNewLine) {
                     linesWidth.append(lineWidth)
-                    if(lineWidth > fullWidth) fullWidth = lineWidth
                     lineWidth = 0
                 } else {
                     lineWidth += s.width

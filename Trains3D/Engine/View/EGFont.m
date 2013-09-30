@@ -154,6 +154,31 @@ static ODClassType* _EGFont_type;
     return geRectApplyXYWidthHeight(((float)([[parts applyIndex:0] toFloat])), ((float)(y)), ((float)([[parts applyIndex:2] toFloat])), ((float)(h)));
 }
 
+- (GEVec2)measureText:(NSString*)text {
+    __block NSInteger newLines = 0;
+    id<CNSeq> symbolsArr = [[[text chain] flatMap:^id(id s) {
+        if(unumi(s) == 10) {
+            newLines++;
+            return [CNOption someValue:_EGFont_newLineDesc];
+        } else {
+            return [_symbols optKey:s];
+        }
+    }] toArray];
+    __block NSInteger fullWidth = 0;
+    __block NSInteger lineWidth = 0;
+    [symbolsArr forEach:^void(EGFontSymbolDesc* s) {
+        if(s.isNewLine) {
+            if(lineWidth > fullWidth) fullWidth = lineWidth;
+            lineWidth = 0;
+        } else {
+            lineWidth += ((NSInteger)(s.width));
+        }
+    }];
+    if(lineWidth > fullWidth) fullWidth = lineWidth;
+    GEVec2 vpSize = geVec2iDivF([EGGlobal.context viewport].size, 2.0);
+    return GEVec2Make(((float)(fullWidth)) / vpSize.x, ((float)(_height)) / vpSize.y * (newLines + 1));
+}
+
 - (void)drawText:(NSString*)text color:(GEVec4)color at:(GEVec3)at alignment:(EGTextAlignment)alignment {
     GEVec2 pos = ((geVec3IsEmpty(alignment.shift)) ? geVec4Xy([[EGGlobal.matrix wcp] mulVec4:geVec4ApplyVec3W(at, 1.0)]) : geVec4Xy([[EGGlobal.matrix p] mulVec4:geVec4AddVec3([[EGGlobal.matrix wc] mulVec4:geVec4ApplyVec3W(at, 1.0)], alignment.shift)]));
     __block NSInteger newLines = 0;
@@ -176,12 +201,10 @@ static ODClassType* _EGFont_type;
     id<CNIterator> linesWidthIterator;
     __block float x = pos.x;
     if(!(eqf4(alignment.x, -1))) {
-        __block NSInteger fullWidth = 0;
         __block NSInteger lineWidth = 0;
         [symbolsArr forEach:^void(EGFontSymbolDesc* s) {
             if(s.isNewLine) {
                 [linesWidth appendItem:numi(lineWidth)];
-                if(lineWidth > fullWidth) fullWidth = lineWidth;
                 lineWidth = 0;
             } else {
                 lineWidth += ((NSInteger)(s.width));
