@@ -32,6 +32,7 @@
 @property (nonatomic, retain) EGDirector* director;
 @property (nonatomic, retain) EGEnvironment* environment;
 @property (nonatomic, readonly) EGMatrixStack* matrixStack;
+@property (nonatomic) BOOL isShadowsDrawing;
 
 + (id)context;
 - (id)init;
@@ -60,9 +61,10 @@
 
 @interface EGLight : NSObject
 @property (nonatomic, readonly) GEVec4 color;
+@property (nonatomic, readonly) BOOL hasShadows;
 
-+ (id)lightWithColor:(GEVec4)color;
-- (id)initWithColor:(GEVec4)color;
++ (id)lightWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows;
+- (id)initWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -71,8 +73,8 @@
 @interface EGDirectLight : EGLight
 @property (nonatomic, readonly) GEVec3 direction;
 
-+ (id)directLightWithColor:(GEVec4)color direction:(GEVec3)direction;
-- (id)initWithColor:(GEVec4)color direction:(GEVec3)direction;
++ (id)directLightWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows direction:(GEVec3)direction;
+- (id)initWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows direction:(GEVec3)direction;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

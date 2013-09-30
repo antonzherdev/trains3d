@@ -10,7 +10,7 @@ class LevelView(level : Level) extends LayerView {
     private val callRepairerView = CallRepairerView(level)
 
     val environment = Environment(ambientColor = vec4(0.4, 0.4, 0.4, 1), lights = [
-        DirectLight(vec4(1, 1, 1, 1), vec3(-0.15, 0.25, -0.5).normalize)])
+        DirectLight(color = vec4(1, 1, 1, 1), hasShadows = true, direction = vec3(-0.15, 0.25, -0.5).normalize)])
 
     def draw {
         railroadView.drawBackground

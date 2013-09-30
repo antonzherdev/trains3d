@@ -123,7 +123,9 @@ stub object gl {
     val GL_TEXTURE_2D : GLenum
     val GL_TEXTURE_2D_MULTISAMPLE : GLenum
     val GL_RGBA : GLenum
+    val GL_DEPTH_COMPONENT16 : GLenum
     val GL_RGBA8 : GLenum
+    val GL_NONE : GLenum
     def egGenTexture : GLuint
     def egDeleteTexture(handle : GLuint)
     def glBlitFramebuffer(
@@ -157,13 +159,18 @@ stub object gl {
     def glTexParameteri(target : GLenum, pname : GLenum, param : GLint)
     val GL_TEXTURE_WRAP_S : GLenum
     val GL_TEXTURE_WRAP_T : GLenum
+    val GL_TEXTURE_COMPARE_FUNC : GLenum
+    val GL_TEXTURE_COMPARE_MODE : GLenum
     val GL_LINEAR : GLenum
     val GL_LINEAR_MIPMAP_LINEAR : GLenum
     val GL_CLAMP_TO_EDGE : GLenum
+    val GL_LEQUAL : GLenum
+    val GL_COMPARE_R_TO_TEXTURE : GLenum
     val GL_NEAREST : GLenum
     val GL_TEXTURE_MIN_FILTER : GLenum
     val GL_TEXTURE_MAG_FILTER : GLenum
     def glFramebufferTexture(target : GLenum, attachment : GLenum, texture : GLuint, level : GLint)
+    def glDrawBuffer(:GLenum)
     def glCheckFramebufferStatus(target : GLenum) : int
     def glCheckFramebufferStatusEXT(target : GLenum) : int
     val GL_COLOR_ATTACHMENT0 : GLenum

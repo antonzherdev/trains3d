@@ -21,6 +21,7 @@ class Context {
     var director : Director
     var environment = Environment.default
     val matrixStack = MatrixStack()
+    var isShadowsDrawing = false
 
     private var _viewport : RectI
     def viewport = _viewport
@@ -36,8 +37,8 @@ class Environment(ambientColor : vec4, lights : [Light]) {
     static def apply(light : Light) = Environment(vec4(1, 1, 1, 1), [light])
 }
 
-class Light(color : vec4)
-class DirectLight(color : vec4, direction : vec3) extends Light(color)
+class Light(color : vec4, hasShadows : bool)
+class DirectLight(color : vec4, hasShadows : bool, direction : vec3) extends Light(color, hasShadows)
 
 class MatrixStack {
     private var stack = List<MatrixModel>()

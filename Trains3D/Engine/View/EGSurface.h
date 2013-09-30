@@ -12,8 +12,8 @@
 @class EGSimpleSurface;
 @class EGMultisamplingSurface;
 @class EGPairSurface;
-@class EGFullScreenSurfaceShaderParam;
-@class EGFullScreenSurfaceShader;
+@class EGViewportSurfaceShaderParam;
+@class EGViewportSurfaceShader;
 @class EGBaseViewportSurface;
 @class EGViewportSurface;
 
@@ -76,26 +76,26 @@
 @end
 
 
-@interface EGFullScreenSurfaceShaderParam : NSObject
+@interface EGViewportSurfaceShaderParam : NSObject
 @property (nonatomic, readonly) EGTexture* texture;
 @property (nonatomic, readonly) float z;
 
-+ (id)fullScreenSurfaceShaderParamWithTexture:(EGTexture*)texture z:(float)z;
++ (id)viewportSurfaceShaderParamWithTexture:(EGTexture*)texture z:(float)z;
 - (id)initWithTexture:(EGTexture*)texture z:(float)z;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
 
 
-@interface EGFullScreenSurfaceShader : EGShader
+@interface EGViewportSurfaceShader : EGShader
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderUniform* zUniform;
 
-+ (id)fullScreenSurfaceShader;
++ (id)viewportSurfaceShader;
 - (id)init;
 - (ODClassType*)type;
-- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGFullScreenSurfaceShaderParam*)param;
-- (void)unloadParam:(EGFullScreenSurfaceShaderParam*)param;
+- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGViewportSurfaceShaderParam*)param;
+- (void)unloadParam:(EGViewportSurfaceShaderParam*)param;
 + (NSString*)vertex;
 + (NSString*)fragment;
 + (ODClassType*)type;

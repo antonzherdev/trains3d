@@ -207,6 +207,7 @@
 		6F3DF63C77E5E49C2E54ED61 /* NSSet+CNChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0CF799BED6D9CCA4ACA /* NSSet+CNChain.m */; };
 		6F3DF64A243F1F31EADB9726 /* type_precision.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFF30E32DBDA55B15DE4D /* type_precision.inl */; };
 		6F3DF64CBEEA5554B46EACA5 /* matrix_transform.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF695E56983B497F2BB47 /* matrix_transform.inl */; };
+		6F3DF656FDA2566E11484CA2 /* EGShadow.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC4B4C5CB925B3B6F0D2 /* EGShadow.m */; };
 		6F3DF658E173D2B79F6CB0E7 /* btDiscreteDynamicsWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD5D9998BAB8454EE8B0 /* btDiscreteDynamicsWorld.cpp */; };
 		6F3DF65C3F1A4EF6EE557A13 /* NSMutableArray+CNChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF995908565F2E36557FA /* NSMutableArray+CNChain.m */; };
 		6F3DF65D24D22A853BDA447B /* btAlignedAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2BFF8A305F53D6234FE /* btAlignedAllocator.cpp */; };
@@ -958,6 +959,7 @@
 		6F3DF5AFBEAA67FA3D76D1B4 /* btQuantizedBvh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btQuantizedBvh.cpp; sourceTree = "<group>"; };
 		6F3DF5B22734236BB2347398 /* CNTuple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNTuple.m; sourceTree = "<group>"; };
 		6F3DF5B9F4E0A19BA7B96BFC /* EGStat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGStat.h; sourceTree = "<group>"; };
+		6F3DF5C03BD25F9E4342458C /* EGShadow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGShadow.h; sourceTree = "<group>"; };
 		6F3DF5C0D9A5DE62F1DD0882 /* type_float.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_float.hpp; sourceTree = "<group>"; };
 		6F3DF5C69B656279BA967540 /* half_float.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = half_float.inl; sourceTree = "<group>"; };
 		6F3DF5C9B58E04CB16E3604B /* type_vec4.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_vec4.hpp; sourceTree = "<group>"; };
@@ -1424,6 +1426,7 @@
 		6F3DFC4637A9A62409EAEF35 /* func_matrix.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = func_matrix.inl; sourceTree = "<group>"; };
 		6F3DFC491E4211783669089B /* CNCombinationsLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNCombinationsLink.h; sourceTree = "<group>"; };
 		6F3DFC49C114D0F76FDB8ADB /* func_integer.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = func_integer.inl; sourceTree = "<group>"; };
+		6F3DFC4B4C5CB925B3B6F0D2 /* EGShadow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGShadow.m; sourceTree = "<group>"; };
 		6F3DFC506DF7AFF339438CBF /* KWGenericMatchEvaluator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWGenericMatchEvaluator.m; sourceTree = "<group>"; };
 		6F3DFC5A74CDB3AB3E4A9866 /* _vectorize.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = _vectorize.hpp; sourceTree = "<group>"; };
 		6F3DFC6A1C0E2F6DFE3D2A5F /* KWFailure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWFailure.h; sourceTree = "<group>"; };
@@ -2760,6 +2763,8 @@
 				6F3DF240F068F829D354CFF7 /* EGD3D.h */,
 				6F3DF876E8F7B26E967791B3 /* EGD3D.m */,
 				6F3DF210D3D13A9BC84A82EA /* Shadow.od */,
+				6F3DF5C03BD25F9E4342458C /* EGShadow.h */,
+				6F3DFC4B4C5CB925B3B6F0D2 /* EGShadow.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -3910,6 +3915,7 @@
 				6F3DFBEBB5E3854B5761E875 /* EGD3D.m in Sources */,
 				6F3DF5B7323E98A46829B9CA /* TRWeather.m in Sources */,
 				6F3DF2D86B878E88404A014C /* TRCallRepairerView.m in Sources */,
+				6F3DF656FDA2566E11484CA2 /* EGShadow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

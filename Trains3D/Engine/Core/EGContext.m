@@ -81,12 +81,14 @@ static ODClassType* _EGGlobal_type;
     EGDirector* _director;
     EGEnvironment* _environment;
     EGMatrixStack* _matrixStack;
+    BOOL _isShadowsDrawing;
     GERectI __viewport;
 }
 static ODClassType* _EGContext_type;
 @synthesize director = _director;
 @synthesize environment = _environment;
 @synthesize matrixStack = _matrixStack;
+@synthesize isShadowsDrawing = _isShadowsDrawing;
 
 + (id)context {
     return [[EGContext alloc] init];
@@ -99,6 +101,7 @@ static ODClassType* _EGContext_type;
         _fontCache = [NSMutableDictionary mutableDictionary];
         _environment = EGEnvironment.aDefault;
         _matrixStack = [EGMatrixStack matrixStack];
+        _isShadowsDrawing = NO;
     }
     
     return self;
@@ -241,17 +244,22 @@ static ODClassType* _EGEnvironment_type;
 
 @implementation EGLight{
     GEVec4 _color;
+    BOOL _hasShadows;
 }
 static ODClassType* _EGLight_type;
 @synthesize color = _color;
+@synthesize hasShadows = _hasShadows;
 
-+ (id)lightWithColor:(GEVec4)color {
-    return [[EGLight alloc] initWithColor:color];
++ (id)lightWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows {
+    return [[EGLight alloc] initWithColor:color hasShadows:hasShadows];
 }
 
-- (id)initWithColor:(GEVec4)color {
+- (id)initWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows {
     self = [super init];
-    if(self) _color = color;
+    if(self) {
+        _color = color;
+        _hasShadows = hasShadows;
+    }
     
     return self;
 }
@@ -277,18 +285,20 @@ static ODClassType* _EGLight_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGLight* o = ((EGLight*)(other));
-    return GEVec4Eq(self.color, o.color);
+    return GEVec4Eq(self.color, o.color) && self.hasShadows == o.hasShadows;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + GEVec4Hash(self.color);
+    hash = hash * 31 + self.hasShadows;
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"color=%@", GEVec4Description(self.color)];
+    [description appendFormat:@", hasShadows=%d", self.hasShadows];
     [description appendString:@">"];
     return description;
 }
@@ -302,12 +312,12 @@ static ODClassType* _EGLight_type;
 static ODClassType* _EGDirectLight_type;
 @synthesize direction = _direction;
 
-+ (id)directLightWithColor:(GEVec4)color direction:(GEVec3)direction {
-    return [[EGDirectLight alloc] initWithColor:color direction:direction];
++ (id)directLightWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows direction:(GEVec3)direction {
+    return [[EGDirectLight alloc] initWithColor:color hasShadows:hasShadows direction:direction];
 }
 
-- (id)initWithColor:(GEVec4)color direction:(GEVec3)direction {
-    self = [super initWithColor:color];
+- (id)initWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows direction:(GEVec3)direction {
+    self = [super initWithColor:color hasShadows:hasShadows];
     if(self) _direction = direction;
     
     return self;
@@ -334,12 +344,13 @@ static ODClassType* _EGDirectLight_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGDirectLight* o = ((EGDirectLight*)(other));
-    return GEVec4Eq(self.color, o.color) && GEVec3Eq(self.direction, o.direction);
+    return GEVec4Eq(self.color, o.color) && self.hasShadows == o.hasShadows && GEVec3Eq(self.direction, o.direction);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + GEVec4Hash(self.color);
+    hash = hash * 31 + self.hasShadows;
     hash = hash * 31 + GEVec3Hash(self.direction);
     return hash;
 }
@@ -347,6 +358,7 @@ static ODClassType* _EGDirectLight_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"color=%@", GEVec4Description(self.color)];
+    [description appendFormat:@", hasShadows=%d", self.hasShadows];
     [description appendFormat:@", direction=%@", GEVec3Description(self.direction)];
     [description appendString:@">"];
     return description;

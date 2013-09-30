@@ -234,6 +234,7 @@ static ODClassType* _EGSingleLayer_type;
 @implementation EGLayer{
     id<EGLayerView> _view;
     id _processor;
+    CNList* __shadowMaps;
 }
 static ODClassType* _EGLayer_type;
 @synthesize view = _view;
@@ -248,6 +249,7 @@ static ODClassType* _EGLayer_type;
     if(self) {
         _view = view;
         _processor = processor;
+        __shadowMaps = [CNList apply];
     }
     
     return self;
@@ -263,7 +265,8 @@ static ODClassType* _EGLayer_type;
 }
 
 - (void)drawWithViewport:(GERect)viewport {
-    EGGlobal.context.environment = [_view environment];
+    EGEnvironment* env = [_view environment];
+    EGGlobal.context.environment = env;
     [EGGlobal.context setViewport:geRectIApplyRect(viewport)];
     id<EGCamera> camera = [_view cameraWithViewport:viewport];
     EGGlobal.matrix.value = [camera matrixModel];

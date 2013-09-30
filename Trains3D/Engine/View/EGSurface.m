@@ -109,10 +109,14 @@ static ODClassType* _EGSimpleSurface_type;
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self.size.x, self.size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
             glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, t.id, 0);
+            NSInteger status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+            if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer color attachment: %li", status];
             if(_depth) {
                 glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
                 glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, self.size.x, self.size.y);
                 glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
+                NSInteger status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+                if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %li", status];
             }
             glBindTexture(GL_TEXTURE_2D, 0);
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -208,13 +212,13 @@ static ODClassType* _EGMultisamplingSurface_type;
             glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER_EXT, 4, GL_RGBA8, self.size.x, self.size.y);
             glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_RENDERBUFFER_EXT, _colorRenderBuffer);
             NSInteger status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
-            if(status != GL_FRAMEBUFFER_COMPLETE_EXT) @throw [NSString stringWithFormat:@"Error in frame buffer color attachment: %li", status];
+            if(status != GL_FRAMEBUFFER_COMPLETE_EXT) @throw [NSString stringWithFormat:@"Error in multisampling frame buffer color attachment: %li", status];
             if(_depth) {
                 glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, _depthRenderBuffer);
                 glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER_EXT, 4, GL_DEPTH_COMPONENT, self.size.x, self.size.y);
                 glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, _depthRenderBuffer);
                 NSInteger status1 = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
-                if(status1 != GL_FRAMEBUFFER_COMPLETE_EXT) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %li", status1];
+                if(status1 != GL_FRAMEBUFFER_COMPLETE_EXT) @throw [NSString stringWithFormat:@"Error in multisampling frame buffer depth attachment: %li", status1];
             }
             glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
             return fb;
@@ -372,16 +376,16 @@ static ODClassType* _EGPairSurface_type;
 @end
 
 
-@implementation EGFullScreenSurfaceShaderParam{
+@implementation EGViewportSurfaceShaderParam{
     EGTexture* _texture;
     float _z;
 }
-static ODClassType* _EGFullScreenSurfaceShaderParam_type;
+static ODClassType* _EGViewportSurfaceShaderParam_type;
 @synthesize texture = _texture;
 @synthesize z = _z;
 
-+ (id)fullScreenSurfaceShaderParamWithTexture:(EGTexture*)texture z:(float)z {
-    return [[EGFullScreenSurfaceShaderParam alloc] initWithTexture:texture z:z];
++ (id)viewportSurfaceShaderParamWithTexture:(EGTexture*)texture z:(float)z {
+    return [[EGViewportSurfaceShaderParam alloc] initWithTexture:texture z:z];
 }
 
 - (id)initWithTexture:(EGTexture*)texture z:(float)z {
@@ -396,15 +400,15 @@ static ODClassType* _EGFullScreenSurfaceShaderParam_type;
 
 + (void)initialize {
     [super initialize];
-    _EGFullScreenSurfaceShaderParam_type = [ODClassType classTypeWithCls:[EGFullScreenSurfaceShaderParam class]];
+    _EGViewportSurfaceShaderParam_type = [ODClassType classTypeWithCls:[EGViewportSurfaceShaderParam class]];
 }
 
 - (ODClassType*)type {
-    return [EGFullScreenSurfaceShaderParam type];
+    return [EGViewportSurfaceShaderParam type];
 }
 
 + (ODClassType*)type {
-    return _EGFullScreenSurfaceShaderParam_type;
+    return _EGViewportSurfaceShaderParam_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -414,7 +418,7 @@ static ODClassType* _EGFullScreenSurfaceShaderParam_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGFullScreenSurfaceShaderParam* o = ((EGFullScreenSurfaceShaderParam*)(other));
+    EGViewportSurfaceShaderParam* o = ((EGViewportSurfaceShaderParam*)(other));
     return [self.texture isEqual:o.texture] && eqf4(self.z, o.z);
 }
 
@@ -436,11 +440,11 @@ static ODClassType* _EGFullScreenSurfaceShaderParam_type;
 @end
 
 
-@implementation EGFullScreenSurfaceShader{
+@implementation EGViewportSurfaceShader{
     EGShaderAttribute* _positionSlot;
     EGShaderUniform* _zUniform;
 }
-static NSString* _EGFullScreenSurfaceShader_vertex = @"attribute vec2 position;\n"
+static NSString* _EGViewportSurfaceShader_vertex = @"attribute vec2 position;\n"
     "uniform float z;\n"
     "varying vec2 UV;\n"
     "\n"
@@ -448,23 +452,23 @@ static NSString* _EGFullScreenSurfaceShader_vertex = @"attribute vec2 position;\
     "   gl_Position = vec4(2.0*position.x - 1.0, 2.0*position.y - 1.0, z, 1);\n"
     "   UV = position;\n"
     "}";
-static NSString* _EGFullScreenSurfaceShader_fragment = @"varying vec2 UV;\n"
+static NSString* _EGViewportSurfaceShader_fragment = @"varying vec2 UV;\n"
     "\n"
     "uniform sampler2D texture;\n"
     "\n"
     "void main(void) {\n"
     "   gl_FragColor = texture2D(texture, UV);\n"
     "}";
-static ODClassType* _EGFullScreenSurfaceShader_type;
+static ODClassType* _EGViewportSurfaceShader_type;
 @synthesize positionSlot = _positionSlot;
 @synthesize zUniform = _zUniform;
 
-+ (id)fullScreenSurfaceShader {
-    return [[EGFullScreenSurfaceShader alloc] init];
++ (id)viewportSurfaceShader {
+    return [[EGViewportSurfaceShader alloc] init];
 }
 
 - (id)init {
-    self = [super initWithProgram:[EGShaderProgram applyVertex:_EGFullScreenSurfaceShader_vertex fragment:_EGFullScreenSurfaceShader_fragment]];
+    self = [super initWithProgram:[EGShaderProgram applyVertex:_EGViewportSurfaceShader_vertex fragment:_EGViewportSurfaceShader_fragment]];
     if(self) {
         _positionSlot = [self.program attributeForName:@"position"];
         _zUniform = [self.program uniformForName:@"z"];
@@ -475,33 +479,33 @@ static ODClassType* _EGFullScreenSurfaceShader_type;
 
 + (void)initialize {
     [super initialize];
-    _EGFullScreenSurfaceShader_type = [ODClassType classTypeWithCls:[EGFullScreenSurfaceShader class]];
+    _EGViewportSurfaceShader_type = [ODClassType classTypeWithCls:[EGViewportSurfaceShader class]];
 }
 
-- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGFullScreenSurfaceShaderParam*)param {
+- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGViewportSurfaceShaderParam*)param {
     [param.texture bind];
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.model))];
     [_zUniform setF4:param.z];
 }
 
-- (void)unloadParam:(EGFullScreenSurfaceShaderParam*)param {
+- (void)unloadParam:(EGViewportSurfaceShaderParam*)param {
     [EGTexture unbind];
 }
 
 - (ODClassType*)type {
-    return [EGFullScreenSurfaceShader type];
+    return [EGViewportSurfaceShader type];
 }
 
 + (NSString*)vertex {
-    return _EGFullScreenSurfaceShader_vertex;
+    return _EGViewportSurfaceShader_vertex;
 }
 
 + (NSString*)fragment {
-    return _EGFullScreenSurfaceShader_fragment;
+    return _EGViewportSurfaceShader_fragment;
 }
 
 + (ODClassType*)type {
-    return _EGFullScreenSurfaceShader_type;
+    return _EGViewportSurfaceShader_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -585,8 +589,8 @@ static ODClassType* _EGBaseViewportSurface_type;
 
 - (void)maybeForce:(BOOL)force draw:(void(^)())draw {
     BOOL nr = [self needRedraw];
-    if(nr) _redrawCounter++;
-    if(force || (nr && _redrawCounter > 10)) {
+    if(nr || _redrawCounter > 0) _redrawCounter++;
+    if((force && !(nr)) || _redrawCounter > 10 || [__surface isEmpty]) {
         [self applyDraw:draw];
         _redrawCounter = 0;
     }
@@ -639,8 +643,8 @@ static ODClassType* _EGViewportSurface_type;
         __lazy_fullScreenMesh = [CNLazy lazyWithF:^EGMesh*() {
             return [EGMesh vec2VertexData:[ arrs(GEVec2, 4) {GEVec2Make(0.0, 0.0), GEVec2Make(1.0, 0.0), GEVec2Make(1.0, 1.0), GEVec2Make(0.0, 1.0)}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
         }];
-        __lazy_shader = [CNLazy lazyWithF:^EGFullScreenSurfaceShader*() {
-            return [EGFullScreenSurfaceShader fullScreenSurfaceShader];
+        __lazy_shader = [CNLazy lazyWithF:^EGViewportSurfaceShader*() {
+            return [EGViewportSurfaceShader viewportSurfaceShader];
         }];
     }
     
@@ -656,8 +660,8 @@ static ODClassType* _EGViewportSurface_type;
     return ((EGMesh*)([__lazy_fullScreenMesh get]));
 }
 
-- (EGFullScreenSurfaceShader*)shader {
-    return ((EGFullScreenSurfaceShader*)([__lazy_shader get]));
+- (EGViewportSurfaceShader*)shader {
+    return ((EGViewportSurfaceShader*)([__lazy_shader get]));
 }
 
 - (EGSurface*)createSurface {
@@ -667,7 +671,7 @@ static ODClassType* _EGViewportSurface_type;
 
 - (void)drawWithZ:(float)z {
     glDisable(GL_CULL_FACE);
-    [[self shader] drawParam:[EGFullScreenSurfaceShaderParam fullScreenSurfaceShaderParamWithTexture:[self texture] z:z] mesh:[self fullScreenMesh]];
+    [[self shader] drawParam:[EGViewportSurfaceShaderParam viewportSurfaceShaderParamWithTexture:[self texture] z:z] mesh:[self fullScreenMesh]];
     glEnable(GL_CULL_FACE);
 }
 
@@ -704,7 +708,7 @@ static ODClassType* _EGViewportSurface_type;
     if([self needRedraw]) {
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_CULL_FACE);
-        [[self shader] drawParam:[EGFullScreenSurfaceShaderParam fullScreenSurfaceShaderParamWithTexture:[self texture] z:0.0] mesh:[self fullScreenMesh]];
+        [[self shader] drawParam:[EGViewportSurfaceShaderParam viewportSurfaceShaderParamWithTexture:[self texture] z:0.0] mesh:[self fullScreenMesh]];
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
     } else {

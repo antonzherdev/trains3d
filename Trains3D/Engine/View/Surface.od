@@ -28,11 +28,14 @@ class SimpleSurface(size : vec2i, depth : bool) extends Surface(size) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0)
         glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, t.id, 0)
-
+        val status = glCheckFramebufferStatus(GL_FRAMEBUFFER)
+        if(status != GL_FRAMEBUFFER_COMPLETE) throw "Error in frame buffer color attachment: $status"
         if(depth) {
             glBindRenderbuffer(GL_RENDERBUFFER, depthRenderBuffer)
             glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, size.x, size.y)
             glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer)
+            val status = glCheckFramebufferStatus(GL_FRAMEBUFFER)
+            if(status != GL_FRAMEBUFFER_COMPLETE) throw "Error in frame buffer depth attachment: $status"
         }
 
         glBindTexture(GL_TEXTURE_2D, 0)
@@ -69,14 +72,14 @@ class MultisamplingSurface(size : vec2i, depth : bool) extends Surface(size) {
 
         glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_RENDERBUFFER_EXT, colorRenderBuffer)
         val status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT)
-        if(status != GL_FRAMEBUFFER_COMPLETE_EXT) throw "Error in frame buffer color attachment: $status"
+        if(status != GL_FRAMEBUFFER_COMPLETE_EXT) throw "Error in multisampling frame buffer color attachment: $status"
 
         if(depth) {
             glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, depthRenderBuffer)
             glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER_EXT, 4, GL_DEPTH_COMPONENT, size.x, size.y)
             glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, depthRenderBuffer)
             val status1 = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT)
-            if(status1 != GL_FRAMEBUFFER_COMPLETE_EXT) throw "Error in frame buffer depth attachment: $status1"
+            if(status1 != GL_FRAMEBUFFER_COMPLETE_EXT) throw "Error in multisampling frame buffer depth attachment: $status1"
         }
 
 
@@ -128,9 +131,9 @@ class PairSurface(size : vec2i, depth : bool) extends  Surface(size) {
     def texture : Texture = simple.texture
 }
 
-class FullScreenSurfaceShaderParam(texture : Texture, z : float4)
+class ViewportSurfaceShaderParam(texture : Texture, z : float4)
 
-class FullScreenSurfaceShader extends Shader<FullScreenSurfaceShaderParam>(ShaderProgram(vertex, fragment)) {
+class ViewportSurfaceShader extends Shader<ViewportSurfaceShaderParam>(ShaderProgram(vertex, fragment)) {
     static val vertex =
         "attribute vec2 position;
          uniform float z;
@@ -150,13 +153,13 @@ class FullScreenSurfaceShader extends Shader<FullScreenSurfaceShaderParam>(Shade
          }"
     val positionSlot = program.attributeFor("position")
     val zUniform = program.uniformFor("z")
-    def load(vbDesc : VertexBufferDesc<_>, param : FullScreenSurfaceShaderParam) {
+    def load(vbDesc : VertexBufferDesc<_>, param : ViewportSurfaceShaderParam) {
         param.texture.bind
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.model)
         zUniform.set(f4 = param.z)
     }
 
-    def unload(param : FullScreenSurfaceShaderParam) {
+    def unload(param : ViewportSurfaceShaderParam) {
         Texture.unbind
     }
 }
@@ -193,8 +196,8 @@ class BaseViewportSurface {
     private var redrawCounter = 0 // To prevent slow resizing
     def maybe(force : bool, draw : () -> void) {
         val nr = needRedraw
-        if(nr) redrawCounter++
-        if(force || (nr && redrawCounter > 10)) {
+        if(nr || redrawCounter > 0) redrawCounter++
+        if((force && !nr) || redrawCounter > 10 || _surface.isEmpty) {
             apply(draw)
             redrawCounter = 0
         }
@@ -213,11 +216,11 @@ class ViewportSurface(depth : bool, multisampling : bool) extends BaseViewportSu
     private lazy val fullScreenMesh = Mesh.vec2(
         [vec2(0, 0), vec2(1, 0), vec2(1, 1), vec2(0, 1)],
         [0, 1, 2, 2, 3, 0])
-    private lazy val shader = FullScreenSurfaceShader()
+    private lazy val shader = ViewportSurfaceShader()
 
     def drawWith(z : float4) {
         glDisable(GL_CULL_FACE)
-        shader.draw(FullScreenSurfaceShaderParam(texture, z), fullScreenMesh)
+        shader.draw(ViewportSurfaceShaderParam(texture, z), fullScreenMesh)
         glEnable(GL_CULL_FACE)
     }
 
@@ -231,7 +234,7 @@ class ViewportSurface(depth : bool, multisampling : bool) extends BaseViewportSu
         if(needRedraw) {
             glDisable(GL_DEPTH_TEST)
             glDisable(GL_CULL_FACE)
-            shader.draw(FullScreenSurfaceShaderParam(texture, 0), fullScreenMesh)
+            shader.draw(ViewportSurfaceShaderParam(texture, 0), fullScreenMesh)
             glEnable(GL_CULL_FACE)
             glEnable(GL_DEPTH_TEST)
         } else {
