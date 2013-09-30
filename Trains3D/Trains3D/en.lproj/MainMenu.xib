@@ -656,23 +656,10 @@
             <view key="contentView" id="372">
                 <rect key="frame" x="0.0" y="0.0" width="960" height="640"/>
                 <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <openGLView policy="maximum" depthSize="24bit" antiAliasingType="multisample" samplingRate="8" useAuxiliaryDepthBufferStencil="NO" useDoubleBufferingEnabled="YES" allowOffline="YES" translatesAutoresizingMaskIntoConstraints="NO" id="536" customClass="EGOpenGLView">
-                        <rect key="frame" x="0.0" y="0.0" width="960" height="640"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    </openGLView>
-                </subviews>
-                <constraints>
-                    <constraint firstItem="536" firstAttribute="leading" secondItem="372" secondAttribute="leading" id="542"/>
-                    <constraint firstItem="536" firstAttribute="trailing" secondItem="372" secondAttribute="trailing" id="573"/>
-                    <constraint firstItem="536" firstAttribute="top" secondItem="372" secondAttribute="top" id="575"/>
-                    <constraint firstItem="536" firstAttribute="bottom" secondItem="372" secondAttribute="bottom" id="576"/>
-                </constraints>
             </view>
         </window>
         <customObject id="494" customClass="TRAppDelegate">
             <connections>
-                <outlet property="view" destination="536" id="545"/>
                 <outlet property="window" destination="371" id="532"/>
             </connections>
         </customObject>

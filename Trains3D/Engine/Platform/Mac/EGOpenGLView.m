@@ -17,12 +17,20 @@
 
 - (id)initWithFrame:(NSRect)frame
 {
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self doInit];
-    }
-
-    return self;
+    CGLPixelFormatAttribute attribs[17] = {
+            kCGLPFAOpenGLProfile, (CGLPixelFormatAttribute)kCGLOGLPVersion_Legacy, // This sets the context to 3.2
+            kCGLPFAColorSize,     (CGLPixelFormatAttribute)24,
+            kCGLPFAAlphaSize,     (CGLPixelFormatAttribute)8,
+//            kCGLPFAAccelerated,
+            kCGLPFADoubleBuffer,
+            kCGLPFASampleBuffers, (CGLPixelFormatAttribute)1,
+            kCGLPFASamples,       (CGLPixelFormatAttribute)4,
+            kCGLPFADepthSize,     (CGLPixelFormatAttribute)24,
+            kCGLPFAStencilSize, (CGLPixelFormatAttribute)0,
+            (CGLPixelFormatAttribute)0
+    };
+    NSOpenGLPixelFormat *pix = [[NSOpenGLPixelFormat alloc] initWithAttributes:(NSOpenGLPixelFormatAttribute const *) attribs];
+    return [self initWithFrame:frame pixelFormat:pix];
 }
 
 - (id)initWithFrame:(NSRect)frameRect pixelFormat:(NSOpenGLPixelFormat *)format {

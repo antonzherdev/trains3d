@@ -14,6 +14,11 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+    NSRect rect = [_window.contentView frame];
+    self.view = [[EGOpenGLView alloc] initWithFrame:rect];
+    _window.contentView = self.view;
+
+
     TRLevel *level = [TRLevelFactory levelWithNumber:1];
 //    [level runSample];
     EGScene *scene = [TRLevelFactory sceneForLevel:level];

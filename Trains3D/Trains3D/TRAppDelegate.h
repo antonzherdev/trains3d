@@ -12,6 +12,6 @@
 @interface TRAppDelegate : NSObject <NSApplicationDelegate>
 
 @property (assign) IBOutlet NSWindow *window;
-@property (assign) IBOutlet EGOpenGLView *view;
+@property (retain) EGOpenGLView *view;
 
 @end
