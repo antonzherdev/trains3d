@@ -22,7 +22,7 @@
             kCGLPFAOpenGLProfile, (CGLPixelFormatAttribute)kCGLOGLPVersion_3_2_Core, // This sets the context to 3.2
             kCGLPFAColorSize,     (CGLPixelFormatAttribute)24,
             kCGLPFAAlphaSize,     (CGLPixelFormatAttribute)8,
-//            kCGLPFAAccelerated,
+            kCGLPFAAccelerated,
             kCGLPFADoubleBuffer,
             kCGLPFASampleBuffers, (CGLPixelFormatAttribute)1,
             kCGLPFASamples,       (CGLPixelFormatAttribute)4,
