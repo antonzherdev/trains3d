@@ -335,6 +335,10 @@ static ODClassType* _EGShaderUniform_type;
     glUniform1f(_handle, f4);
 }
 
+- (void)setI4:(int)i4 {
+    glUniform1i(_handle, i4);
+}
+
 - (ODClassType*)type {
     return [EGShaderUniform type];
 }

@@ -128,6 +128,10 @@ class ShaderUniform(handle : GLuint) {
     def set(f4 : float4) {
         glUniform1f(handle, f4)
     }
+
+    def set(i4 : int4) {
+        glUniform1i(handle, i4)
+    }
 }
 
 class ShaderSystem<P> {

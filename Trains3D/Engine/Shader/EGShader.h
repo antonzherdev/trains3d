@@ -73,6 +73,7 @@
 - (void)setVec4:(GEVec4)vec4;
 - (void)setVec3:(GEVec3)vec3;
 - (void)setF4:(float)f4;
+- (void)setI4:(int)i4;
 + (ODClassType*)type;
 @end
 

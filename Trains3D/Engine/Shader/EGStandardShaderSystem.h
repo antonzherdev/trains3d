@@ -7,14 +7,15 @@
 @class EGShadowShaderSystem;
 @class EGEnvironment;
 @class EGLight;
-@class EGDirectLight;
 @class EGColorSource;
 @class EGShadowShader;
 @class EGVertexBufferDesc;
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class EGTexture;
+@class EGDirectLight;
 @class GEMat4;
+@class EGShadowMap;
 
 @class EGStandardShaderSystem;
 @class EGStandardShadowShader;
@@ -46,11 +47,13 @@
 
 
 @interface EGStandardShaderKey : NSObject
-@property (nonatomic, readonly) NSUInteger directLightCount;
+@property (nonatomic, readonly) NSUInteger directLightWithShadowsCount;
+@property (nonatomic, readonly) NSUInteger directLightWithoutShadowsCount;
 @property (nonatomic, readonly) BOOL texture;
+@property (nonatomic, readonly) NSUInteger directLightCount;
 
-+ (id)standardShaderKeyWithDirectLightCount:(NSUInteger)directLightCount texture:(BOOL)texture;
-- (id)initWithDirectLightCount:(NSUInteger)directLightCount texture:(BOOL)texture;
++ (id)standardShaderKeyWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture;
+- (id)initWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture;
 - (ODClassType*)type;
 - (EGStandardShader*)shader;
 - (NSString*)lightsVertexUniform;
@@ -68,6 +71,7 @@
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) id normalSlot;
 @property (nonatomic, readonly) id uvSlot;
+@property (nonatomic, readonly) id diffuseTexture;
 @property (nonatomic, readonly) EGShaderUniform* ambientColor;
 @property (nonatomic, readonly) EGShaderUniform* specularColor;
 @property (nonatomic, readonly) EGShaderUniform* specularSize;
@@ -76,6 +80,7 @@
 @property (nonatomic, readonly) id mwcUniform;
 @property (nonatomic, readonly) id<CNSeq> directLightDirections;
 @property (nonatomic, readonly) id<CNSeq> directLightColors;
+@property (nonatomic, readonly) id<CNSeq> directLightShadows;
 
 + (id)standardShaderWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
 - (id)initWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;

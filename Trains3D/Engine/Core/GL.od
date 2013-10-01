@@ -47,6 +47,7 @@ stub object gl {
     def glViewport (x : GLint, y : GLint, width : GLsizei, height : GLsizei)
     def glUniformMatrix4fv(location : GLuint, count : GLsizei, transpose : GLboolean, value : [float4])
     def glUniform1f(location : GLuint, f : float4)
+    def glUniform1i(location : GLuint, f : int4)
     def egUniformVec4(location : GLuint, color : vec4)
     def egUniformVec3(location : GLuint, color : vec3)
 
@@ -166,6 +167,12 @@ stub object gl {
     val GL_COLOR_ATTACHMENT0 : uint4
     val GL_FRAMEBUFFER_COMPLETE : uint4
     def glGenerateMipmap(target : uint4)
+    def glActiveTexture(: uint4)
+    val GL_TEXTURE0 : uint4
+    val GL_TEXTURE1 : uint4
+    val GL_TEXTURE2 : uint4
+    val GL_TEXTURE3 : uint4
+    val GL_TEXTURE4 : uint4
 
     def egLoadTextureFromFile(target : GLuint, file : string, magFilter : uint4, minFilter : uint4) : vec2
     def egSaveTextureToFile(source : GLuint, file : string)
