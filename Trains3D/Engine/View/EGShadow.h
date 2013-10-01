@@ -18,7 +18,7 @@
 
 @interface EGShadowMap : EGSurface
 @property (nonatomic, readonly) GLuint frameBuffer;
-@property (nonatomic, retain) GEMat4* biasDepthMwcp;
+@property (nonatomic, retain) GEMat4* biasDepthCp;
 @property (nonatomic, readonly) EGTexture* texture;
 
 + (id)shadowMapWithSize:(GEVec2i)size;

@@ -7,14 +7,14 @@
 #import "EGContext.h"
 @implementation EGShadowMap{
     GLuint _frameBuffer;
-    GEMat4* _biasDepthMwcp;
+    GEMat4* _biasDepthCp;
     EGTexture* _texture;
     CNLazy* __lazy_shader;
 }
 static GEMat4* _EGShadowMap_biasMatrix;
 static ODClassType* _EGShadowMap_type;
 @synthesize frameBuffer = _frameBuffer;
-@synthesize biasDepthMwcp = _biasDepthMwcp;
+@synthesize biasDepthCp = _biasDepthCp;
 @synthesize texture = _texture;
 
 + (id)shadowMapWithSize:(GEVec2i)size {
@@ -25,7 +25,7 @@ static ODClassType* _EGShadowMap_type;
     self = [super initWithSize:size];
     if(self) {
         _frameBuffer = egGenFrameBuffer();
-        _biasDepthMwcp = [GEMat4 identity];
+        _biasDepthCp = [GEMat4 identity];
         _texture = ^EGTexture*() {
             glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
             EGTexture* t = [EGTexture texture];

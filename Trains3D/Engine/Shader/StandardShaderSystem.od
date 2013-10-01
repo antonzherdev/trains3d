@@ -69,6 +69,7 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
              out vec4 outColor;
 
              void main(void) {
+                float visibility;$when(directLightWithShadowsCount > 0)
                 vec4 materialColor = diffuseColor; $when(!texture)
                 vec4 materialColor = diffuseColor * texture(diffuseTexture, UV); $when(texture)
                 vec4 color = ambientColor * materialColor;
@@ -114,10 +115,18 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
          uniform sampler2D dirLightShadow$i;
         $endif"}.toStringWith("\n")
     def lightsDiffuse : string =  directLightCount.range.chain.map{i ->
-        "color += dirLightDirectionCos$i * (materialColor * dirLightColor$i);
-         color += specularColor * dirLightColor$i * pow(dirLightDirectionCosA$i, 5.0/specularSize);
+        "
         $if(i < directLightWithShadowsCount)
-         color += texture(dirLightShadow$i, dirLightShadowCoord$i.xy);
+         visibility = 1.0;
+         if(texture(dirLightShadow$i, dirLightShadowCoord$i.xy).x < dirLightShadowCoord$i.z + 0.2) {
+             visibility = 0.5;
+         }
+         color += visibility * dirLightDirectionCos$i * (materialColor * dirLightColor$i);
+         color += visibility * specularColor * dirLightColor$i * pow(dirLightDirectionCosA$i, 5.0/specularSize);
+//         color = vec4(texture(dirLightShadow$i, dirLightShadowCoord$i.xy).x, dirLightShadowCoord$i.z, 0, 1);
+        $else
+         color += dirLightDirectionCos$i * (materialColor * dirLightColor$i);
+         color += specularColor * dirLightColor$i * pow(dirLightDirectionCosA$i, 5.0/specularSize);
         $endif
         "
     }.toStringWith("\n")
@@ -158,13 +167,13 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
         if(key.directLightCount > 0) {
             mwcUniform.get.set(matrix = context.matrixStack.value.mwc)
             normalSlot.get.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.normal)
-            var i = 0
+            var i : uint = 0
             if(key.directLightWithShadowsCount > 0) {
                 env.lights.chain.filter(_.is<DirectLight> && _.hasShadows).for { light ->
                     val dir = matrix.value.wc.mul(vec3 = light.cast<DirectLight>.direction, 0).xyz
                     directLightDirections[i].set(vec3 = dir.normalize)
                     directLightColors[i].set(vec4 = light.color)
-                    directLightDepthMwcp[i].set(matrix = light.shadowMap.biasDepthMwcp)
+                    directLightDepthMwcp[i].set(matrix = light.shadowMap.biasDepthCp * matrix.mw)
                     directLightShadows[i].set(i4 = i + 1)
                     glActiveTexture(GL_TEXTURE0 + i + 1)
                     light.shadowMap.texture.bind

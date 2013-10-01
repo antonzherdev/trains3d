@@ -278,7 +278,7 @@ static ODClassType* _EGLayer_type;
         EGGlobal.context.isShadowsDrawing = YES;
         EGGlobal.context.shadowLight = [CNOption applyValue:light];
         EGGlobal.matrix.value = [light shadowMatrixModel:[camera matrixModel]];
-        [light shadowMap].biasDepthMwcp = [EGShadowMap.biasMatrix mulMatrix:[EGGlobal.matrix.value mwcp]];
+        [light shadowMap].biasDepthCp = [EGShadowMap.biasMatrix mulMatrix:[EGGlobal.matrix.value cp]];
         [camera focus];
         [[light shadowMap] applyDraw:^void() {
             glClear(GL_DEPTH_BUFFER_BIT);
