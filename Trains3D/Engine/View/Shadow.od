@@ -3,11 +3,23 @@ package com.antonzherdev.eg
 class ShadowMapSurface(size : vec2i) extends Surface(size) {
     val frameBuffer = egGenFrameBuffer
 
-    val texture : Texture = {
-        val t = Texture()
-        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
-        glBindTexture(GL_TEXTURE_2D, t.id)
+    val it = Texture()
 
+    val texture : Texture = {
+
+        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
+
+
+        glBindTexture(GL_TEXTURE_2D, it.id)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, it.id, 0)
+
+        val t = Texture()
+        glBindTexture(GL_TEXTURE_2D, t.id)
         glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, size.x, size.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0)
 //        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 //        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
@@ -42,10 +54,44 @@ class ShadowMapSurface(size : vec2i) extends Surface(size) {
     }
 }
 
+class ShadowSurfaceShader extends Shader<ColorSource>(ShaderProgram(ViewportSurfaceShader.vertex, fragment)) {
+    static val fragment =
+    "#version 150
+     in vec2 UV;
+
+     uniform sampler2D texture;
+     out vec4 outColor;
+
+     void main(void) {
+        vec4 col = texture(texture, UV);
+        outColor = vec4(col.x, col.x, col.x, 1);
+     }"
+    val positionSlot = program.attributeFor("position")
+    def load(vbDesc : VertexBufferDesc<_>, param : ColorSource) {
+        param.texture.get.bind
+        positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.model)
+    }
+
+    def unload(param : ViewportSurfaceShaderParam) {
+        Texture.unbind
+        positionSlot.unbind
+    }
+}
+
+
 class ShadowMap extends BaseViewportSurface {
     def createSurface : Surface = ShadowMapSurface(context.viewport.size)
 
+    def shadowMapSurface = surface.get.cast<ShadowMapSurface>
     def texture : Texture = surface.get.cast<ShadowMapSurface>.texture
+    var matrix : mat4
+
+    private lazy val shader = ShadowSurfaceShader()
+    def draw {
+        glDisable(GL_CULL_FACE)
+        shader.draw(ColorSource(texture), fullScreenMesh)
+        glEnable(GL_CULL_FACE)
+    }
 }
 
 object ShadowShaderSystem extends ShaderSystem<ColorSource> {

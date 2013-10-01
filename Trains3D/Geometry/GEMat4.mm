@@ -89,6 +89,12 @@ static GEMat4 * _identity;
     delete _impl;
 }
 
++ (GEMat4 *)lookAtEye:(GEVec3)eye center:(GEVec3)center up:(GEVec3)up {
+    GEMat4Impl * impl = new GEMat4Impl;
+    impl->m = glm::lookAt(glm::vec3(eye.x, eye.y, eye.z), glm::vec3(center.x, center.y, center.z), glm::vec3(up.x, up.y, up.z));
+    return [GEMat4 matrixWithImpl:impl];
+}
+
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;

@@ -4,9 +4,9 @@
 #import "EGShader.h"
 @class EGTexture;
 @class EGVertexBufferDesc;
+@class EGMesh;
 @class EGGlobal;
 @class EGContext;
-@class EGMesh;
 
 @class EGSurface;
 @class EGSimpleSurface;
@@ -93,6 +93,7 @@
 + (id)baseViewportSurface;
 - (id)init;
 - (ODClassType*)type;
++ (EGMesh*)fullScreenMesh;
 - (id)surface;
 - (EGSurface*)createSurface;
 - (BOOL)needRedraw;

@@ -22,6 +22,7 @@ class Context {
     var environment = Environment.default
     val matrixStack = MatrixStack()
     var isShadowsDrawing = false
+    var shadowLight : Light? = nil
 
     private var _viewport : RectI
     def viewport = _viewport
@@ -37,8 +38,12 @@ class Environment(ambientColor : vec4, lights : [Light]) {
     static def apply(light : Light) = Environment(vec4(1, 1, 1, 1), [light])
 }
 
-class Light(color : vec4, hasShadows : bool)
-class DirectLight(color : vec4, hasShadows : bool, direction : vec3) extends Light(color, hasShadows)
+class Light(color : vec4, hasShadows : bool) {
+    def shadowMatrix : mat4 = throw "Shadows are not supported for $(self.type)"
+}
+class DirectLight(color : vec4, hasShadows : bool, direction : vec3) extends Light(color, hasShadows) {
+    val shadowMatrix = mat4.ortho(-10,10,-10,10,-10,20) * mat4.lookAt(direction, vec3(0, 0, 0), vec3(0, 1, 0))
+}
 
 class MatrixStack {
     private var stack = List<MatrixModel>()

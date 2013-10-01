@@ -137,10 +137,6 @@ static ODClassType* _EGSimpleSurface_type;
                 if(_multisampling) {
                     glBindTexture(tg, ((EGTexture*)([_depthTexture get])).id);
                     glTexImage2DMultisample(tg, 4, GL_DEPTH_COMPONENT24, self.size.x, self.size.y, GL_FALSE);
-                    glTexParameteri(tg, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                    glTexParameteri(tg, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-                    glTexParameteri(tg, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-                    glTexParameteri(tg, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
                     glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, ((EGTexture*)([_depthTexture get])).id, 0);
                 } else {
                     glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
@@ -469,6 +465,7 @@ static ODClassType* _EGViewportSurfaceShader_type;
     id __surface;
     NSInteger _redrawCounter;
 }
+static CNLazy* _EGBaseViewportSurface__lazy_fullScreenMesh;
 static ODClassType* _EGBaseViewportSurface_type;
 
 + (id)baseViewportSurface {
@@ -488,6 +485,13 @@ static ODClassType* _EGBaseViewportSurface_type;
 + (void)initialize {
     [super initialize];
     _EGBaseViewportSurface_type = [ODClassType classTypeWithCls:[EGBaseViewportSurface class]];
+    _EGBaseViewportSurface__lazy_fullScreenMesh = [CNLazy lazyWithF:^EGMesh*() {
+        return [EGMesh vec2VertexData:[ arrs(GEVec2, 4) {GEVec2Make(0.0, 0.0), GEVec2Make(1.0, 0.0), GEVec2Make(1.0, 1.0), GEVec2Make(0.0, 1.0)}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
+    }];
+}
+
++ (EGMesh*)fullScreenMesh {
+    return ((EGMesh*)([_EGBaseViewportSurface__lazy_fullScreenMesh get]));
 }
 
 - (id)surface {
@@ -558,7 +562,6 @@ static ODClassType* _EGBaseViewportSurface_type;
 @implementation EGViewportSurface{
     BOOL _depth;
     BOOL _multisampling;
-    CNLazy* __lazy_fullScreenMesh;
     CNLazy* __lazy_shader;
 }
 static ODClassType* _EGViewportSurface_type;
@@ -574,9 +577,6 @@ static ODClassType* _EGViewportSurface_type;
     if(self) {
         _depth = depth;
         _multisampling = multisampling;
-        __lazy_fullScreenMesh = [CNLazy lazyWithF:^EGMesh*() {
-            return [EGMesh vec2VertexData:[ arrs(GEVec2, 4) {GEVec2Make(0.0, 0.0), GEVec2Make(1.0, 0.0), GEVec2Make(1.0, 1.0), GEVec2Make(0.0, 1.0)}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
-        }];
         __lazy_shader = [CNLazy lazyWithF:^EGViewportSurfaceShader*() {
             return [EGViewportSurfaceShader viewportSurfaceShader];
         }];
@@ -590,10 +590,6 @@ static ODClassType* _EGViewportSurface_type;
     _EGViewportSurface_type = [ODClassType classTypeWithCls:[EGViewportSurface class]];
 }
 
-- (EGMesh*)fullScreenMesh {
-    return ((EGMesh*)([__lazy_fullScreenMesh get]));
-}
-
 - (EGViewportSurfaceShader*)shader {
     return ((EGViewportSurfaceShader*)([__lazy_shader get]));
 }
@@ -605,7 +601,7 @@ static ODClassType* _EGViewportSurface_type;
 
 - (void)drawWithZ:(float)z {
     glDisable(GL_CULL_FACE);
-    [[self shader] drawParam:[EGViewportSurfaceShaderParam viewportSurfaceShaderParamWithTexture:[self texture] z:z] mesh:[self fullScreenMesh]];
+    [[self shader] drawParam:[EGViewportSurfaceShaderParam viewportSurfaceShaderParamWithTexture:[self texture] z:z] mesh:[EGViewportSurface fullScreenMesh]];
     glEnable(GL_CULL_FACE);
 }
 
@@ -642,7 +638,7 @@ static ODClassType* _EGViewportSurface_type;
     if([self needRedraw]) {
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_CULL_FACE);
-        [[self shader] drawParam:[EGViewportSurfaceShaderParam viewportSurfaceShaderParamWithTexture:[self texture] z:0.0] mesh:[self fullScreenMesh]];
+        [[self shader] drawParam:[EGViewportSurfaceShaderParam viewportSurfaceShaderParamWithTexture:[self texture] z:0.0] mesh:[EGViewportSurface fullScreenMesh]];
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
     } else {

@@ -83,6 +83,7 @@ static ODClassType* _EGGlobal_type;
     EGEnvironment* _environment;
     EGMatrixStack* _matrixStack;
     BOOL _isShadowsDrawing;
+    id _shadowLight;
     GERectI __viewport;
 }
 static ODClassType* _EGContext_type;
@@ -90,6 +91,7 @@ static ODClassType* _EGContext_type;
 @synthesize environment = _environment;
 @synthesize matrixStack = _matrixStack;
 @synthesize isShadowsDrawing = _isShadowsDrawing;
+@synthesize shadowLight = _shadowLight;
 
 + (id)context {
     return [[EGContext alloc] init];
@@ -103,6 +105,7 @@ static ODClassType* _EGContext_type;
         _environment = EGEnvironment.aDefault;
         _matrixStack = [EGMatrixStack matrixStack];
         _isShadowsDrawing = NO;
+        _shadowLight = [CNOption none];
     }
     
     return self;
@@ -270,6 +273,10 @@ static ODClassType* _EGLight_type;
     _EGLight_type = [ODClassType classTypeWithCls:[EGLight class]];
 }
 
+- (GEMat4*)shadowMatrix {
+    @throw [NSString stringWithFormat:@"Shadows are not supported for %@", _EGLight_type];
+}
+
 - (ODClassType*)type {
     return [EGLight type];
 }
@@ -309,9 +316,11 @@ static ODClassType* _EGLight_type;
 
 @implementation EGDirectLight{
     GEVec3 _direction;
+    GEMat4* _shadowMatrix;
 }
 static ODClassType* _EGDirectLight_type;
 @synthesize direction = _direction;
+@synthesize shadowMatrix = _shadowMatrix;
 
 + (id)directLightWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows direction:(GEVec3)direction {
     return [[EGDirectLight alloc] initWithColor:color hasShadows:hasShadows direction:direction];
@@ -319,7 +328,10 @@ static ODClassType* _EGDirectLight_type;
 
 - (id)initWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows direction:(GEVec3)direction {
     self = [super initWithColor:color hasShadows:hasShadows];
-    if(self) _direction = direction;
+    if(self) {
+        _direction = direction;
+        _shadowMatrix = [[GEMat4 orthoLeft:-10.0 right:10.0 bottom:-10.0 top:10.0 zNear:-10.0 zFar:20.0] mulMatrix:[GEMat4 lookAtEye:_direction center:GEVec3Make(0.0, 0.0, 0.0) up:GEVec3Make(0.0, 1.0, 0.0)]];
+    }
     
     return self;
 }

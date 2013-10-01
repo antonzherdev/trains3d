@@ -32,6 +32,7 @@
 @property (nonatomic, retain) EGEnvironment* environment;
 @property (nonatomic, readonly) EGMatrixStack* matrixStack;
 @property (nonatomic) BOOL isShadowsDrawing;
+@property (nonatomic) id shadowLight;
 
 + (id)context;
 - (id)init;
@@ -65,12 +66,14 @@
 + (id)lightWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows;
 - (id)initWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows;
 - (ODClassType*)type;
+- (GEMat4*)shadowMatrix;
 + (ODClassType*)type;
 @end
 
 
 @interface EGDirectLight : EGLight
 @property (nonatomic, readonly) GEVec3 direction;
+@property (nonatomic, readonly) GEMat4* shadowMatrix;
 
 + (id)directLightWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows direction:(GEVec3)direction;
 - (id)initWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows direction:(GEVec3)direction;

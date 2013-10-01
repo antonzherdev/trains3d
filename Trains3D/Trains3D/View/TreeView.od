@@ -27,7 +27,7 @@ class TreeView(forest : Forest) {
         val r = tree.rustle*0.04
         val rPlaneCoord = mPlaneCoord.set(x = mPlaneCoord.x + vec3(0, r, 0))
         val rQuad3 = Quad3(rPlaneCoord, quad)
-        Billboard.draw(textures(tp), at = vec3(tree.position, 0),
+        Billboard.draw(materials[tp], at = vec3(tree.position, 0),
             Quad(rQuad3.p0.xy, rQuad3.p1.xy, rQuad3.p2.xy, rQuad3.p3.xy),
             uv = rustleUv)
     }

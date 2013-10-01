@@ -25,6 +25,8 @@ typedef struct GEMat4Impl GEMat4Impl;
 
 - (GEMat4 *)rotateAngle:(float)angle x:(float)x y:(float)y z:(float)z;
 
++ (GEMat4 *)lookAtEye:(GEVec3)vec3 center:(GEVec3)center up:(GEVec3)up;
+
 - (GEMat4 *)scaleX:(float)x y:(float)y z:(float)z;
 
 - (GEMat4 *)translateX:(float)x y:(float)y z:(float)z;

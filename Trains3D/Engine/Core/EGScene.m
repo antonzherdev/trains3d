@@ -4,7 +4,6 @@
 #import "EGInput.h"
 #import "EGShadow.h"
 #import "GL.h"
-#import "EGTexture.h"
 @implementation EGScene{
     GEVec4 _backgroundColor;
     id<EGController> _controller;
@@ -238,12 +237,10 @@ static ODClassType* _EGSingleLayer_type;
     id<EGLayerView> _view;
     id _processor;
     CNList* __shadowMaps;
-    NSInteger _saveCounter;
 }
 static ODClassType* _EGLayer_type;
 @synthesize view = _view;
 @synthesize processor = _processor;
-@synthesize saveCounter = _saveCounter;
 
 + (id)layerWithView:(id<EGLayerView>)view processor:(id)processor {
     return [[EGLayer alloc] initWithView:view processor:processor];
@@ -287,16 +284,13 @@ static ODClassType* _EGLayer_type;
         id<CNIterator> i = [__shadowMaps iterator];
         [shadowLights forEach:^void(EGLight* light) {
             EGShadowMap* shadowMap = ((EGShadowMap*)([i next]));
+            EGGlobal.context.shadowLight = [CNOption applyValue:light];
             [shadowMap maybeForce:YES draw:^void() {
                 glClear(GL_DEPTH_BUFFER_BIT);
                 [_view draw];
             }];
-            _saveCounter++;
-            if(_saveCounter > 60) {
-                [[shadowMap texture] saveToFile:[NSString stringWithFormat:@"%@/dev/test.png", [CNDirectory sandbox]]];
-                _saveCounter = 0;
-            }
         }];
+        EGGlobal.context.shadowLight = [CNOption none];
         EGGlobal.context.isShadowsDrawing = NO;
     }
     [_view draw];

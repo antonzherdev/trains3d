@@ -1,15 +1,18 @@
 #import "EGShadow.h"
 
 #import "EGTexture.h"
-#import "EGContext.h"
 #import "EGMaterial.h"
 #import "EGMesh.h"
+#import "GEMat4.h"
+#import "EGContext.h"
 @implementation EGShadowMapSurface{
     GLuint _frameBuffer;
+    EGTexture* _it;
     EGTexture* _texture;
 }
 static ODClassType* _EGShadowMapSurface_type;
 @synthesize frameBuffer = _frameBuffer;
+@synthesize it = _it;
 @synthesize texture = _texture;
 
 + (id)shadowMapSurfaceWithSize:(GEVec2i)size {
@@ -20,9 +23,17 @@ static ODClassType* _EGShadowMapSurface_type;
     self = [super initWithSize:size];
     if(self) {
         _frameBuffer = egGenFrameBuffer();
+        _it = [EGTexture texture];
         _texture = ^EGTexture*() {
-            EGTexture* t = [EGTexture texture];
             glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+            glBindTexture(GL_TEXTURE_2D, _it.id);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self.size.x, self.size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, _it.id, 0);
+            EGTexture* t = [EGTexture texture];
             glBindTexture(GL_TEXTURE_2D, t.id);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, self.size.x, self.size.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -96,8 +107,89 @@ static ODClassType* _EGShadowMapSurface_type;
 @end
 
 
-@implementation EGShadowMap
+@implementation EGShadowSurfaceShader{
+    EGShaderAttribute* _positionSlot;
+}
+static NSString* _EGShadowSurfaceShader_fragment = @"#version 150\n"
+    "in vec2 UV;\n"
+    "\n"
+    "uniform sampler2D texture;\n"
+    "out vec4 outColor;\n"
+    "\n"
+    "void main(void) {\n"
+    "   vec4 col = texture(texture, UV);\n"
+    "   outColor = vec4(col.x, col.x, col.x, 1);\n"
+    "}";
+static ODClassType* _EGShadowSurfaceShader_type;
+@synthesize positionSlot = _positionSlot;
+
++ (id)shadowSurfaceShader {
+    return [[EGShadowSurfaceShader alloc] init];
+}
+
+- (id)init {
+    self = [super initWithProgram:[EGShaderProgram applyVertex:EGViewportSurfaceShader.vertex fragment:_EGShadowSurfaceShader_fragment]];
+    if(self) _positionSlot = [self.program attributeForName:@"position"];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGShadowSurfaceShader_type = [ODClassType classTypeWithCls:[EGShadowSurfaceShader class]];
+}
+
+- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param {
+    [((EGTexture*)([param.texture get])) bind];
+    [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.model))];
+}
+
+- (void)unloadParam:(EGViewportSurfaceShaderParam*)param {
+    [EGTexture unbind];
+    [_positionSlot unbind];
+}
+
+- (ODClassType*)type {
+    return [EGShadowSurfaceShader type];
+}
+
++ (NSString*)fragment {
+    return _EGShadowSurfaceShader_fragment;
+}
+
++ (ODClassType*)type {
+    return _EGShadowSurfaceShader_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGShadowMap{
+    GEMat4* _matrix;
+    CNLazy* __lazy_shader;
+}
 static ODClassType* _EGShadowMap_type;
+@synthesize matrix = _matrix;
 
 + (id)shadowMap {
     return [[EGShadowMap alloc] init];
@@ -105,6 +197,9 @@ static ODClassType* _EGShadowMap_type;
 
 - (id)init {
     self = [super init];
+    if(self) __lazy_shader = [CNLazy lazyWithF:^EGShadowSurfaceShader*() {
+        return [EGShadowSurfaceShader shadowSurfaceShader];
+    }];
     
     return self;
 }
@@ -114,12 +209,26 @@ static ODClassType* _EGShadowMap_type;
     _EGShadowMap_type = [ODClassType classTypeWithCls:[EGShadowMap class]];
 }
 
+- (EGShadowSurfaceShader*)shader {
+    return ((EGShadowSurfaceShader*)([__lazy_shader get]));
+}
+
 - (EGSurface*)createSurface {
     return [EGShadowMapSurface shadowMapSurfaceWithSize:[EGGlobal.context viewport].size];
 }
 
+- (EGShadowMapSurface*)shadowMapSurface {
+    return ((EGShadowMapSurface*)(((EGSurface*)([[self surface] get]))));
+}
+
 - (EGTexture*)texture {
     return ((EGShadowMapSurface*)(((EGSurface*)([[self surface] get])))).texture;
+}
+
+- (void)draw {
+    glDisable(GL_CULL_FACE);
+    [[self shader] drawParam:[EGColorSource applyTexture:[self texture]] mesh:[EGShadowMap fullScreenMesh]];
+    glEnable(GL_CULL_FACE);
 }
 
 - (ODClassType*)type {

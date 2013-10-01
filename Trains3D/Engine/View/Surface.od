@@ -49,11 +49,6 @@ class SimpleSurface(size : vec2i, depth : bool, multisampling : bool) extends Su
             if(multisampling) {
                 glBindTexture(tg, depthTexture.get.id)
                 glTexImage2DMultisample(tg, 4, GL_DEPTH_COMPONENT24, size.x, size.y, GL_FALSE)
-//                glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, size.x, size.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0)
-                glTexParameteri(tg, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-                glTexParameteri(tg, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-                glTexParameteri(tg, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
-                glTexParameteri(tg, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
                 glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexture.get.id, 0)
             } else {
                 glBindRenderbuffer(GL_RENDERBUFFER, depthRenderBuffer)
@@ -189,6 +184,10 @@ class BaseViewportSurface {
     def unbind {
         _surface.get.unbind
     }
+
+    static lazy val fullScreenMesh = Mesh.vec2(
+        [vec2(0, 0), vec2(1, 0), vec2(1, 1), vec2(0, 1)],
+        [0, 1, 2, 2, 3, 0])
 }
 
 class ViewportSurface(depth : bool, multisampling : bool) extends BaseViewportSurface {
@@ -196,9 +195,6 @@ class ViewportSurface(depth : bool, multisampling : bool) extends BaseViewportSu
         if(multisampling) PairSurface(context.viewport.size, depth)
         else SimpleSurface(context.viewport.size, depth, false)
 
-    private lazy val fullScreenMesh = Mesh.vec2(
-        [vec2(0, 0), vec2(1, 0), vec2(1, 1), vec2(0, 1)],
-        [0, 1, 2, 2, 3, 0])
     private lazy val shader = ViewportSurfaceShader()
 
     def drawWith(z : float4) {
