@@ -3,20 +3,20 @@
 #import "EGTexture.h"
 #import "EGMaterial.h"
 #import "EGMesh.h"
-#import "GEMat4.h"
 #import "EGContext.h"
-@implementation EGShadowMapSurface{
+@implementation EGShadowMap{
     GLuint _frameBuffer;
     EGTexture* _it;
     EGTexture* _texture;
+    CNLazy* __lazy_shader;
 }
-static ODClassType* _EGShadowMapSurface_type;
+static ODClassType* _EGShadowMap_type;
 @synthesize frameBuffer = _frameBuffer;
 @synthesize it = _it;
 @synthesize texture = _texture;
 
-+ (id)shadowMapSurfaceWithSize:(GEVec2i)size {
-    return [[EGShadowMapSurface alloc] initWithSize:size];
++ (id)shadowMapWithSize:(GEVec2i)size {
+    return [[EGShadowMap alloc] initWithSize:size];
 }
 
 - (id)initWithSize:(GEVec2i)size {
@@ -48,6 +48,9 @@ static ODClassType* _EGShadowMapSurface_type;
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
             return t;
         }();
+        __lazy_shader = [CNLazy lazyWithF:^EGShadowSurfaceShader*() {
+            return [EGShadowSurfaceShader shadowSurfaceShader];
+        }];
     }
     
     return self;
@@ -55,7 +58,11 @@ static ODClassType* _EGShadowMapSurface_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShadowMapSurface_type = [ODClassType classTypeWithCls:[EGShadowMapSurface class]];
+    _EGShadowMap_type = [ODClassType classTypeWithCls:[EGShadowMap class]];
+}
+
+- (EGShadowSurfaceShader*)shader {
+    return ((EGShadowSurfaceShader*)([__lazy_shader get]));
 }
 
 - (void)dealloc {
@@ -72,12 +79,18 @@ static ODClassType* _EGShadowMapSurface_type;
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+- (void)draw {
+    glDisable(GL_CULL_FACE);
+    [[self shader] drawParam:[EGColorSource applyTexture:_texture] mesh:[EGBaseViewportSurface fullScreenMesh]];
+    glEnable(GL_CULL_FACE);
+}
+
 - (ODClassType*)type {
-    return [EGShadowMapSurface type];
+    return [EGShadowMap type];
 }
 
 + (ODClassType*)type {
-    return _EGShadowMapSurface_type;
+    return _EGShadowMap_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -87,7 +100,7 @@ static ODClassType* _EGShadowMapSurface_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShadowMapSurface* o = ((EGShadowMapSurface*)(other));
+    EGShadowMap* o = ((EGShadowMap*)(other));
     return GEVec2iEq(self.size, o.size);
 }
 
@@ -159,84 +172,6 @@ static ODClassType* _EGShadowSurfaceShader_type;
 
 + (ODClassType*)type {
     return _EGShadowSurfaceShader_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
-@implementation EGShadowMap{
-    GEMat4* _matrix;
-    CNLazy* __lazy_shader;
-}
-static ODClassType* _EGShadowMap_type;
-@synthesize matrix = _matrix;
-
-+ (id)shadowMap {
-    return [[EGShadowMap alloc] init];
-}
-
-- (id)init {
-    self = [super init];
-    if(self) __lazy_shader = [CNLazy lazyWithF:^EGShadowSurfaceShader*() {
-        return [EGShadowSurfaceShader shadowSurfaceShader];
-    }];
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _EGShadowMap_type = [ODClassType classTypeWithCls:[EGShadowMap class]];
-}
-
-- (EGShadowSurfaceShader*)shader {
-    return ((EGShadowSurfaceShader*)([__lazy_shader get]));
-}
-
-- (EGSurface*)createSurface {
-    return [EGShadowMapSurface shadowMapSurfaceWithSize:[EGGlobal.context viewport].size];
-}
-
-- (EGShadowMapSurface*)shadowMapSurface {
-    return ((EGShadowMapSurface*)(((EGSurface*)([[self surface] get]))));
-}
-
-- (EGTexture*)texture {
-    return ((EGShadowMapSurface*)(((EGSurface*)([[self surface] get])))).texture;
-}
-
-- (void)draw {
-    glDisable(GL_CULL_FACE);
-    [[self shader] drawParam:[EGColorSource applyTexture:[self texture]] mesh:[EGShadowMap fullScreenMesh]];
-    glEnable(GL_CULL_FACE);
-}
-
-- (ODClassType*)type {
-    return [EGShadowMap type];
-}
-
-+ (ODClassType*)type {
-    return _EGShadowMap_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

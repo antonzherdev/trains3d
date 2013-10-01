@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-class ShadowMapSurface(size : vec2i) extends Surface(size) {
+class ShadowMap(size : vec2i) extends Surface(size) {
     val frameBuffer = egGenFrameBuffer
 
     val it = Texture()
@@ -52,6 +52,13 @@ class ShadowMapSurface(size : vec2i) extends Surface(size) {
     def unbind {
         glBindFramebuffer(GL_FRAMEBUFFER, 0)
     }
+
+    private lazy val shader = ShadowSurfaceShader()
+    def draw {
+        glDisable(GL_CULL_FACE)
+        shader.draw(ColorSource(texture), BaseViewportSurface.fullScreenMesh)
+        glEnable(GL_CULL_FACE)
+    }
 }
 
 class ShadowSurfaceShader extends Shader<ColorSource>(ShaderProgram(ViewportSurfaceShader.vertex, fragment)) {
@@ -78,21 +85,6 @@ class ShadowSurfaceShader extends Shader<ColorSource>(ShaderProgram(ViewportSurf
     }
 }
 
-
-class ShadowMap extends BaseViewportSurface {
-    def createSurface : Surface = ShadowMapSurface(context.viewport.size)
-
-    def shadowMapSurface = surface.get.cast<ShadowMapSurface>
-    def texture : Texture = surface.get.cast<ShadowMapSurface>.texture
-    var matrix : mat4
-
-    private lazy val shader = ShadowSurfaceShader()
-    def draw {
-        glDisable(GL_CULL_FACE)
-        shader.draw(ColorSource(texture), fullScreenMesh)
-        glEnable(GL_CULL_FACE)
-    }
-}
 
 object ShadowShaderSystem extends ShaderSystem<ColorSource> {
     def shaderFor(param : ColorSource) : ShadowShader =

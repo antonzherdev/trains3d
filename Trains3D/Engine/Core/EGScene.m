@@ -2,8 +2,8 @@
 
 #import "EGContext.h"
 #import "EGInput.h"
-#import "EGShadow.h"
 #import "GL.h"
+#import "EGShadow.h"
 @implementation EGScene{
     GEVec4 _backgroundColor;
     id<EGController> _controller;
@@ -236,7 +236,6 @@ static ODClassType* _EGSingleLayer_type;
 @implementation EGLayer{
     id<EGLayerView> _view;
     id _processor;
-    CNList* __shadowMaps;
 }
 static ODClassType* _EGLayer_type;
 @synthesize view = _view;
@@ -251,7 +250,6 @@ static ODClassType* _EGLayer_type;
     if(self) {
         _view = view;
         _processor = processor;
-        __shadowMaps = [CNList apply];
     }
     
     return self;
@@ -269,33 +267,27 @@ static ODClassType* _EGLayer_type;
 - (void)drawWithViewport:(GERect)viewport {
     EGEnvironment* env = [_view environment];
     EGGlobal.context.environment = env;
-    [EGGlobal.context setViewport:geRectIApplyRect(viewport)];
     id<EGCamera> camera = [_view cameraWithViewport:viewport];
-    EGGlobal.matrix.value = [camera matrixModel];
-    [camera focus];
     id<CNSeq> shadowLights = [[[env.lights chain] filter:^BOOL(EGLight* _) {
         return _.hasShadows;
     }] toArray];
-    if(!([shadowLights isEmpty])) {
-        while([__shadowMaps count] < [shadowLights count]) {
-            __shadowMaps = [CNList applyItem:[EGShadowMap shadowMap] tail:__shadowMaps];
-        }
+    [[[env.lights chain] filter:^BOOL(EGLight* _) {
+        return _.hasShadows;
+    }] forEach:^void(EGLight* light) {
         EGGlobal.context.isShadowsDrawing = YES;
-        id<CNIterator> i = [__shadowMaps iterator];
-        [shadowLights forEach:^void(EGLight* light) {
-            EGShadowMap* shadowMap = ((EGShadowMap*)([i next]));
-            EGGlobal.context.shadowLight = [CNOption applyValue:light];
-            EGGlobal.matrix.value = [light shadowMatrixModel:[camera matrixModel]];
-            [shadowMap maybeForce:YES draw:^void() {
-                glClear(GL_DEPTH_BUFFER_BIT);
-                [_view draw];
-            }];
+        EGGlobal.context.shadowLight = [CNOption applyValue:light];
+        EGGlobal.matrix.value = [light shadowMatrixModel:[camera matrixModel]];
+        [camera focus];
+        [[light shadowMap] applyDraw:^void() {
+            glClear(GL_DEPTH_BUFFER_BIT);
+            [_view draw];
         }];
         EGGlobal.context.shadowLight = [CNOption none];
         EGGlobal.context.isShadowsDrawing = NO;
-        EGGlobal.matrix.value = [camera matrixModel];
-        [camera focus];
-    }
+    }];
+    [EGGlobal.context setViewport:geRectIApplyRect(viewport)];
+    EGGlobal.matrix.value = [camera matrixModel];
+    [camera focus];
     [_view draw];
 }
 

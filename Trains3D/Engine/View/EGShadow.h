@@ -6,29 +6,27 @@
 @class EGTexture;
 @class EGColorSource;
 @class EGVertexBufferDesc;
-@class GEMat4;
 @class EGGlobal;
-@class EGContext;
 @class EGMatrixStack;
 @class EGMatrixModel;
 
-@class EGShadowMapSurface;
-@class EGShadowSurfaceShader;
 @class EGShadowMap;
+@class EGShadowSurfaceShader;
 @class EGShadowShaderSystem;
 @class EGShadowShader;
 
-@interface EGShadowMapSurface : EGSurface
+@interface EGShadowMap : EGSurface
 @property (nonatomic, readonly) GLuint frameBuffer;
 @property (nonatomic, readonly) EGTexture* it;
 @property (nonatomic, readonly) EGTexture* texture;
 
-+ (id)shadowMapSurfaceWithSize:(GEVec2i)size;
++ (id)shadowMapWithSize:(GEVec2i)size;
 - (id)initWithSize:(GEVec2i)size;
 - (ODClassType*)type;
 - (void)dealloc;
 - (void)bind;
 - (void)unbind;
+- (void)draw;
 + (ODClassType*)type;
 @end
 
@@ -42,20 +40,6 @@
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param;
 - (void)unloadParam:(EGViewportSurfaceShaderParam*)param;
 + (NSString*)fragment;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGShadowMap : EGBaseViewportSurface
-@property (nonatomic, retain) GEMat4* matrix;
-
-+ (id)shadowMap;
-- (id)init;
-- (ODClassType*)type;
-- (EGSurface*)createSurface;
-- (EGShadowMapSurface*)shadowMapSurface;
-- (EGTexture*)texture;
-- (void)draw;
 + (ODClassType*)type;
 @end
 

@@ -39,6 +39,8 @@ class Environment(ambientColor : vec4, lights : [Light]) {
 }
 
 class Light(color : vec4, hasShadows : bool) {
+    lazy val shadowMap : ShadowMap = ShadowMap(vec2(1024, 1024))
+
     def shadowMatrix(model : MatrixModel) : MatrixModel = throw "Shadows are not supported for $(self.type)"
 }
 class DirectLight(color : vec4, direction : vec3, hasShadows : bool, shadowsProjectionMatrix : mat4) extends Light(color, hasShadows) {

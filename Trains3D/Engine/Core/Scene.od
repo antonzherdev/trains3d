@@ -55,36 +55,28 @@ class SingleLayer(layer : Layer) extends Layers {
 
 class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
     static def apply(view : LayerView) : Layer = Layer(view, view.as<InputProcessor>)
-    private var _shadowMaps = List<ShadowMap>()
-
     def drawWith(viewport : Rect) {
         val env = view.environment
         context.environment = env
-        context.set(viewport = viewport)
         val camera = view.cameraWith(viewport)
-        matrix.value = camera.matrixModel
-        camera.focus
 
         val shadowLights = env.lights.chain.filter(_.hasShadows).toArray
-        if(!shadowLights.isEmpty) {
-            while(_shadowMaps.count < shadowLights.count) _shadowMaps = List(ShadowMap(), _shadowMaps)
+        env.lights.chain.filter(_.hasShadows).for{light ->
             context.isShadowsDrawing = true
-            val i = _shadowMaps.iterator
-            shadowLights.for {light ->
-                val shadowMap = i.next
-                context.shadowLight = light
-                matrix.value = light.shadowMatrix(camera.matrixModel)
-                shadowMap.maybe(true) {
-                    glClear(GL_DEPTH_BUFFER_BIT)
-                    view.draw
-                }
-//                shadowMap.draw
+            context.shadowLight = light
+            matrix.value = light.shadowMatrix(camera.matrixModel)
+            camera.focus
+            light.shadowMap{
+                glClear(GL_DEPTH_BUFFER_BIT)
+                view.draw
             }
+//            light.shadowMap.draw
             context.shadowLight = nil
             context.isShadowsDrawing = false
-            matrix.value = camera.matrixModel
-            camera.focus
         }
+        context.set(viewport = viewport)
+        matrix.value = camera.matrixModel
+        camera.focus
         view.draw
     }
 

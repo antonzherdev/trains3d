@@ -4,6 +4,7 @@
 @class EGTexture;
 @class EGFont;
 @class EGFileTexture;
+@class EGShadowMap;
 @class GEMat4;
 
 @class EGGlobal;
@@ -66,6 +67,7 @@
 + (id)lightWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows;
 - (id)initWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows;
 - (ODClassType*)type;
+- (EGShadowMap*)shadowMap;
 - (EGMatrixModel*)shadowMatrixModel:(EGMatrixModel*)model;
 + (ODClassType*)type;
 @end

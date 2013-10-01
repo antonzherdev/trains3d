@@ -4,6 +4,7 @@
 #import "EGTexture.h"
 #import "GL.h"
 #import "EGFont.h"
+#import "EGShadow.h"
 #import "GEMat4.h"
 @implementation EGGlobal
 static EGContext* _EGGlobal_context;
@@ -249,6 +250,7 @@ static ODClassType* _EGEnvironment_type;
 @implementation EGLight{
     GEVec4 _color;
     BOOL _hasShadows;
+    CNLazy* __lazy_shadowMap;
 }
 static ODClassType* _EGLight_type;
 @synthesize color = _color;
@@ -263,6 +265,9 @@ static ODClassType* _EGLight_type;
     if(self) {
         _color = color;
         _hasShadows = hasShadows;
+        __lazy_shadowMap = [CNLazy lazyWithF:^EGShadowMap*() {
+            return [EGShadowMap shadowMapWithSize:geVec2iApplyVec2(GEVec2Make(1024.0, 1024.0))];
+        }];
     }
     
     return self;
@@ -271,6 +276,10 @@ static ODClassType* _EGLight_type;
 + (void)initialize {
     [super initialize];
     _EGLight_type = [ODClassType classTypeWithCls:[EGLight class]];
+}
+
+- (EGShadowMap*)shadowMap {
+    return ((EGShadowMap*)([__lazy_shadowMap get]));
 }
 
 - (EGMatrixModel*)shadowMatrixModel:(EGMatrixModel*)model {
