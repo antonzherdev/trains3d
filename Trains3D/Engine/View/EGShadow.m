@@ -1,18 +1,20 @@
 #import "EGShadow.h"
 
+#import "GEMat4.h"
 #import "EGTexture.h"
 #import "EGMaterial.h"
 #import "EGMesh.h"
 #import "EGContext.h"
 @implementation EGShadowMap{
     GLuint _frameBuffer;
-    EGTexture* _it;
+    GEMat4* _biasDepthMwcp;
     EGTexture* _texture;
     CNLazy* __lazy_shader;
 }
+static GEMat4* _EGShadowMap_biasMatrix;
 static ODClassType* _EGShadowMap_type;
 @synthesize frameBuffer = _frameBuffer;
-@synthesize it = _it;
+@synthesize biasDepthMwcp = _biasDepthMwcp;
 @synthesize texture = _texture;
 
 + (id)shadowMapWithSize:(GEVec2i)size {
@@ -23,16 +25,9 @@ static ODClassType* _EGShadowMap_type;
     self = [super initWithSize:size];
     if(self) {
         _frameBuffer = egGenFrameBuffer();
-        _it = [EGTexture texture];
+        _biasDepthMwcp = [GEMat4 identity];
         _texture = ^EGTexture*() {
             glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-            glBindTexture(GL_TEXTURE_2D, _it.id);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self.size.x, self.size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, _it.id, 0);
             EGTexture* t = [EGTexture texture];
             glBindTexture(GL_TEXTURE_2D, t.id);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, self.size.x, self.size.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
@@ -59,6 +54,7 @@ static ODClassType* _EGShadowMap_type;
 + (void)initialize {
     [super initialize];
     _EGShadowMap_type = [ODClassType classTypeWithCls:[EGShadowMap class]];
+    _EGShadowMap_biasMatrix = [[[GEMat4 identity] translateX:0.5 y:0.5 z:0.5] scaleX:0.5 y:0.5 z:0.5];
 }
 
 - (EGShadowSurfaceShader*)shader {
@@ -87,6 +83,10 @@ static ODClassType* _EGShadowMap_type;
 
 - (ODClassType*)type {
     return [EGShadowMap type];
+}
+
++ (GEMat4*)biasMatrix {
+    return _EGShadowMap_biasMatrix;
 }
 
 + (ODClassType*)type {

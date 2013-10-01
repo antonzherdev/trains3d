@@ -81,6 +81,7 @@
 @property (nonatomic, readonly) id<CNSeq> directLightDirections;
 @property (nonatomic, readonly) id<CNSeq> directLightColors;
 @property (nonatomic, readonly) id<CNSeq> directLightShadows;
+@property (nonatomic, readonly) id<CNSeq> directLightDepthMwcp;
 
 + (id)standardShaderWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
 - (id)initWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;

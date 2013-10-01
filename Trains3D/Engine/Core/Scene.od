@@ -65,6 +65,7 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
             context.isShadowsDrawing = true
             context.shadowLight = light
             matrix.value = light.shadowMatrix(camera.matrixModel)
+            light.shadowMap.biasDepthMwcp = ShadowMap.biasMatrix *matrix.value.mwcp
             camera.focus
             light.shadowMap{
                 glClear(GL_DEPTH_BUFFER_BIT)

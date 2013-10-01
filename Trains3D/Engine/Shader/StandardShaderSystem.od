@@ -78,16 +78,32 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
         StandardShader(self, ShaderProgram(vertexShader, fragmentShader))
     }
 
-    def lightsVertexUniform : string = directLightCount.range.chain.map{i -> "uniform vec3 dirLightDirection$i;"}.toStringWith("\n")
+    def lightsVertexUniform : string = directLightCount.range.chain.map{i ->
+        "uniform vec3 dirLightDirection$i;
+        $if(i < directLightWithShadowsCount)
+         uniform mat4 dirLightDepthMwcp$i;
+        $endif
+        "}.toStringWith("\n")
     def lightsIn : string = directLightCount.range.chain.map{i ->
         "in float dirLightDirectionCos$i;
-         in float dirLightDirectionCosA$i;"}.toStringWith("\n")
+         in float dirLightDirectionCosA$i;
+        $if(i < directLightWithShadowsCount)
+         in vec3 dirLightShadowCoord$i;
+        $endif
+        "}.toStringWith("\n")
     def lightsOut : string = directLightCount.range.chain.map{i ->
         "out float dirLightDirectionCos$i;
-         out float dirLightDirectionCosA$i;"}.toStringWith("\n")
+         out float dirLightDirectionCosA$i;
+        $if(i < directLightWithShadowsCount)
+         out vec3 dirLightShadowCoord$i;
+        $endif
+        "}.toStringWith("\n")
     def lightsCalculateVaryings : string = directLightCount.range.chain.map{i ->
         "dirLightDirectionCos$i = max(dot(normalMWC, -dirLightDirection$i), 0.0);
          dirLightDirectionCosA$i = max(dot(eyeDirection, reflect(dirLightDirection$i, normalMWC)), 0.0);
+        $if(i < directLightWithShadowsCount)
+         dirLightShadowCoord$i = (dirLightDepthMwcp$i * vec4(position, 1)).xyz;
+        $endif
         "
     }.toStringWith("\n")
 
@@ -101,7 +117,7 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
         "color += dirLightDirectionCos$i * (materialColor * dirLightColor$i);
          color += specularColor * dirLightColor$i * pow(dirLightDirectionCosA$i, 5.0/specularSize);
         $if(i < directLightWithShadowsCount)
-         color += texture(dirLightShadow$i, vec2(gl_FragCoord.x/1024, gl_FragCoord.y/1024));
+         color += texture(dirLightShadow$i, dirLightShadowCoord$i.xy);
         $endif
         "
     }.toStringWith("\n")
@@ -124,6 +140,7 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
     val directLightDirections : [ShaderUniform] = key.directLightCount.range.chain.map{i -> uniformFor("dirLightDirection$i")}.toArray
     val directLightColors : [ShaderUniform] = key.directLightCount.range.chain.map{i -> uniformFor("dirLightColor$i")}.toArray
     val directLightShadows : [ShaderUniform] = key.directLightWithShadowsCount.range.chain.map{i -> uniformFor("dirLightShadow$i")}.toArray
+    val directLightDepthMwcp : [ShaderUniform] = key.directLightWithShadowsCount.range.chain.map{i -> uniformFor("dirLightDepthMwcp$i")}.toArray
 
     def load(vbDesc :VertexBufferDesc<_>, param : StandardMaterial) {
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.position)
@@ -147,6 +164,7 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
                     val dir = matrix.value.wc.mul(vec3 = light.cast<DirectLight>.direction, 0).xyz
                     directLightDirections[i].set(vec3 = dir.normalize)
                     directLightColors[i].set(vec4 = light.color)
+                    directLightDepthMwcp[i].set(matrix = light.shadowMap.biasDepthMwcp)
                     directLightShadows[i].set(i4 = i + 1)
                     glActiveTexture(GL_TEXTURE0 + i + 1)
                     light.shadowMap.texture.bind

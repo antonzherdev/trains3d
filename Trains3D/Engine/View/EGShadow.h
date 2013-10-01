@@ -3,6 +3,7 @@
 #import "GL.h"
 #import "GEVec.h"
 #import "EGShader.h"
+@class GEMat4;
 @class EGTexture;
 @class EGColorSource;
 @class EGVertexBufferDesc;
@@ -17,7 +18,7 @@
 
 @interface EGShadowMap : EGSurface
 @property (nonatomic, readonly) GLuint frameBuffer;
-@property (nonatomic, readonly) EGTexture* it;
+@property (nonatomic, retain) GEMat4* biasDepthMwcp;
 @property (nonatomic, readonly) EGTexture* texture;
 
 + (id)shadowMapWithSize:(GEVec2i)size;
@@ -27,6 +28,7 @@
 - (void)bind;
 - (void)unbind;
 - (void)draw;
++ (GEMat4*)biasMatrix;
 + (ODClassType*)type;
 @end
 

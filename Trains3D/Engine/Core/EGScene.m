@@ -2,8 +2,9 @@
 
 #import "EGContext.h"
 #import "EGInput.h"
-#import "GL.h"
 #import "EGShadow.h"
+#import "GEMat4.h"
+#import "GL.h"
 @implementation EGScene{
     GEVec4 _backgroundColor;
     id<EGController> _controller;
@@ -277,6 +278,7 @@ static ODClassType* _EGLayer_type;
         EGGlobal.context.isShadowsDrawing = YES;
         EGGlobal.context.shadowLight = [CNOption applyValue:light];
         EGGlobal.matrix.value = [light shadowMatrixModel:[camera matrixModel]];
+        [light shadowMap].biasDepthMwcp = [EGShadowMap.biasMatrix mulMatrix:[EGGlobal.matrix.value mwcp]];
         [camera focus];
         [[light shadowMap] applyDraw:^void() {
             glClear(GL_DEPTH_BUFFER_BIT);

@@ -8,6 +8,7 @@
 @class EGLight;
 @class EGMatrixStack;
 @class EGShadowMap;
+@class GEMat4;
 @protocol EGInputProcessor;
 @class EGEventCamera;
 
