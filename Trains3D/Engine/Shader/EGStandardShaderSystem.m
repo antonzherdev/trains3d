@@ -96,7 +96,7 @@ static ODClassType* _EGStandardShadowShader_type;
 }
 
 - (id)initWithShadowShader:(EGShadowShader*)shadowShader {
-    self = [super init];
+    self = [super initWithProgram:shadowShader.program];
     if(self) _shadowShader = shadowShader;
     
     return self;

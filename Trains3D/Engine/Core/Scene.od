@@ -71,7 +71,6 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
                 glClear(GL_DEPTH_BUFFER_BIT)
                 view.draw
             }
-//            light.shadowMap.draw
             context.shadowLight = nil
             context.isShadowsDrawing = false
         }
@@ -79,6 +78,8 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
         matrix.value = camera.matrixModel
         camera.focus
         view.draw
+//        if(director.isPaused) { if(!env.lights.isEmpty)env.lights[0].shadowMap.draw}
+//        else view.draw
     }
 
     def process(event : Event, viewport : Rect) : bool = {

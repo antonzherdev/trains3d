@@ -20,7 +20,7 @@ class StandardShaderSystem extends ShaderSystem<StandardMaterial> {
     private static val shaders = MutableHashMap<StandardShaderKey, StandardShader>()
 }
 
-class StandardShadowShader(shadowShader : ShadowShader) extends Shader<StandardMaterial> {
+class StandardShadowShader(shadowShader : ShadowShader) extends Shader<StandardMaterial>(shadowShader.program) {
     static val instanceForColor = StandardShadowShader(ShadowShader.instanceForColor)
     static val instanceForTexture = StandardShadowShader(ShadowShader.instanceForTexture)
 
@@ -123,7 +123,7 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
          }
          color += visibility * dirLightDirectionCos$i * (materialColor * dirLightColor$i);
          color += visibility * specularColor * dirLightColor$i * pow(dirLightDirectionCosA$i, 5.0/specularSize);
-//         color = vec4(texture(dirLightShadow$i, dirLightShadowCoord$i.xy).x, dirLightShadowCoord$i.z, 0, 1);
+//         color = color*0.5 + 0.5*vec4(texture(dirLightShadow$i, dirLightShadowCoord$i.xy).x, dirLightShadowCoord$i.z, 0, 1);
         $else
          color += dirLightDirectionCos$i * (materialColor * dirLightColor$i);
          color += specularColor * dirLightColor$i * pow(dirLightDirectionCosA$i, 5.0/specularSize);

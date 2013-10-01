@@ -16,9 +16,9 @@ class LevelView(level : Level) extends LayerView {
     def draw {
         val shadows = context.isShadowsDrawing
         if(!shadows) railroadView.drawBackground
-        if(!shadows) level.cities.for(city -> cityView.draw(city))
+        level.cities.for(city -> cityView.draw(city))
 
-        if(!shadows) trainView.draw
+        trainView.draw
 
         if(!shadows) railroadView.drawForeground
         treeView.draw
