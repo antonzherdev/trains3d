@@ -73,6 +73,7 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
             shadowLights.for {light ->
                 val shadowMap = i.next
                 context.shadowLight = light
+                matrix.value = light.shadowMatrix(camera.matrixModel)
                 shadowMap.maybe(true) {
                     glClear(GL_DEPTH_BUFFER_BIT)
                     view.draw
@@ -81,6 +82,8 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
             }
             context.shadowLight = nil
             context.isShadowsDrawing = false
+            matrix.value = camera.matrixModel
+            camera.focus
         }
         view.draw
     }

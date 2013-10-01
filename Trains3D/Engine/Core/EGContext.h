@@ -66,18 +66,21 @@
 + (id)lightWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows;
 - (id)initWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows;
 - (ODClassType*)type;
-- (GEMat4*)shadowMatrix;
+- (EGMatrixModel*)shadowMatrixModel:(EGMatrixModel*)model;
 + (ODClassType*)type;
 @end
 
 
 @interface EGDirectLight : EGLight
 @property (nonatomic, readonly) GEVec3 direction;
-@property (nonatomic, readonly) GEMat4* shadowMatrix;
+@property (nonatomic, readonly) GEMat4* shadowsProjectionMatrix;
 
-+ (id)directLightWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows direction:(GEVec3)direction;
-- (id)initWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows direction:(GEVec3)direction;
++ (id)directLightWithColor:(GEVec4)color direction:(GEVec3)direction hasShadows:(BOOL)hasShadows shadowsProjectionMatrix:(GEMat4*)shadowsProjectionMatrix;
+- (id)initWithColor:(GEVec4)color direction:(GEVec3)direction hasShadows:(BOOL)hasShadows shadowsProjectionMatrix:(GEMat4*)shadowsProjectionMatrix;
 - (ODClassType*)type;
++ (EGDirectLight*)applyColor:(GEVec4)color direction:(GEVec3)direction;
++ (EGDirectLight*)applyColor:(GEVec4)color direction:(GEVec3)direction shadowsProjectionMatrix:(GEMat4*)shadowsProjectionMatrix;
+- (EGMatrixModel*)shadowMatrixModel:(EGMatrixModel*)model;
 + (ODClassType*)type;
 @end
 

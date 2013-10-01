@@ -8,6 +8,7 @@
 @class TRTreeView;
 @class TRCallRepairerView;
 @class EGEnvironment;
+@class GEMat4;
 @class EGDirectLight;
 @class EGMapSso;
 @class EGCameraIso;

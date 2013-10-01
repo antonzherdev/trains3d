@@ -7,6 +7,7 @@
 #import "TRTreeView.h"
 #import "TRCallRepairerView.h"
 #import "EGContext.h"
+#import "GEMat4.h"
 #import "EGMapIso.h"
 #import "EGCameraIso.h"
 @implementation TRLevelView{
@@ -37,7 +38,7 @@ static ODClassType* _TRLevelView_type;
         _trainView = [TRTrainView trainViewWithLevel:_level];
         _treeView = [TRTreeView treeViewWithForest:_level.forest];
         _callRepairerView = [TRCallRepairerView callRepairerViewWithLevel:_level];
-        _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.4, 0.4, 0.4, 1.0) lights:(@[[EGDirectLight directLightWithColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) hasShadows:YES direction:geVec3Normalize(GEVec3Make(-0.15, 0.25, -0.5))]])];
+        _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.4, 0.4, 0.4, 1.0) lights:(@[[EGDirectLight applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) direction:geVec3Normalize(GEVec3Make(-0.15, 0.25, -0.5)) shadowsProjectionMatrix:[GEMat4 orthoLeft:-3.0 right:8.0 bottom:-2.0 top:2.0 zNear:0.0 zFar:10.0]]])];
         _camera = [EGCameraIso cameraIsoWithTilesOnScreen:_level.map.size zReserve:0.3 center:GEVec2Make(0.0, 0.0)];
     }
     

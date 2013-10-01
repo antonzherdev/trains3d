@@ -285,6 +285,7 @@ static ODClassType* _EGLayer_type;
         [shadowLights forEach:^void(EGLight* light) {
             EGShadowMap* shadowMap = ((EGShadowMap*)([i next]));
             EGGlobal.context.shadowLight = [CNOption applyValue:light];
+            EGGlobal.matrix.value = [light shadowMatrixModel:[camera matrixModel]];
             [shadowMap maybeForce:YES draw:^void() {
                 glClear(GL_DEPTH_BUFFER_BIT);
                 [_view draw];
@@ -292,6 +293,8 @@ static ODClassType* _EGLayer_type;
         }];
         EGGlobal.context.shadowLight = [CNOption none];
         EGGlobal.context.isShadowsDrawing = NO;
+        EGGlobal.matrix.value = [camera matrixModel];
+        [camera focus];
     }
     [_view draw];
 }

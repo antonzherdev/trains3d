@@ -273,7 +273,7 @@ static ODClassType* _EGLight_type;
     _EGLight_type = [ODClassType classTypeWithCls:[EGLight class]];
 }
 
-- (GEMat4*)shadowMatrix {
+- (EGMatrixModel*)shadowMatrixModel:(EGMatrixModel*)model {
     @throw [NSString stringWithFormat:@"Shadows are not supported for %@", _EGLight_type];
 }
 
@@ -316,21 +316,21 @@ static ODClassType* _EGLight_type;
 
 @implementation EGDirectLight{
     GEVec3 _direction;
-    GEMat4* _shadowMatrix;
+    GEMat4* _shadowsProjectionMatrix;
 }
 static ODClassType* _EGDirectLight_type;
 @synthesize direction = _direction;
-@synthesize shadowMatrix = _shadowMatrix;
+@synthesize shadowsProjectionMatrix = _shadowsProjectionMatrix;
 
-+ (id)directLightWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows direction:(GEVec3)direction {
-    return [[EGDirectLight alloc] initWithColor:color hasShadows:hasShadows direction:direction];
++ (id)directLightWithColor:(GEVec4)color direction:(GEVec3)direction hasShadows:(BOOL)hasShadows shadowsProjectionMatrix:(GEMat4*)shadowsProjectionMatrix {
+    return [[EGDirectLight alloc] initWithColor:color direction:direction hasShadows:hasShadows shadowsProjectionMatrix:shadowsProjectionMatrix];
 }
 
-- (id)initWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows direction:(GEVec3)direction {
+- (id)initWithColor:(GEVec4)color direction:(GEVec3)direction hasShadows:(BOOL)hasShadows shadowsProjectionMatrix:(GEMat4*)shadowsProjectionMatrix {
     self = [super initWithColor:color hasShadows:hasShadows];
     if(self) {
         _direction = direction;
-        _shadowMatrix = [[GEMat4 orthoLeft:-10.0 right:10.0 bottom:-10.0 top:10.0 zNear:-10.0 zFar:20.0] mulMatrix:[GEMat4 lookAtEye:_direction center:GEVec3Make(0.0, 0.0, 0.0) up:GEVec3Make(0.0, 1.0, 0.0)]];
+        _shadowsProjectionMatrix = shadowsProjectionMatrix;
     }
     
     return self;
@@ -339,6 +339,22 @@ static ODClassType* _EGDirectLight_type;
 + (void)initialize {
     [super initialize];
     _EGDirectLight_type = [ODClassType classTypeWithCls:[EGDirectLight class]];
+}
+
++ (EGDirectLight*)applyColor:(GEVec4)color direction:(GEVec3)direction {
+    return [EGDirectLight directLightWithColor:color direction:direction hasShadows:NO shadowsProjectionMatrix:[GEMat4 identity]];
+}
+
++ (EGDirectLight*)applyColor:(GEVec4)color direction:(GEVec3)direction shadowsProjectionMatrix:(GEMat4*)shadowsProjectionMatrix {
+    return [EGDirectLight directLightWithColor:color direction:direction hasShadows:YES shadowsProjectionMatrix:shadowsProjectionMatrix];
+}
+
+- (EGMatrixModel*)shadowMatrixModel:(EGMatrixModel*)model {
+    return [[model modifyC:^GEMat4*(GEMat4* _) {
+        return [GEMat4 lookAtEye:geVec3Negate(_direction) center:GEVec3Make(0.0, 0.0, 0.0) up:GEVec3Make(0.0, 1.0, 0.0)];
+    }] modifyP:^GEMat4*(GEMat4* _) {
+        return _shadowsProjectionMatrix;
+    }];
 }
 
 - (ODClassType*)type {
@@ -357,22 +373,24 @@ static ODClassType* _EGDirectLight_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGDirectLight* o = ((EGDirectLight*)(other));
-    return GEVec4Eq(self.color, o.color) && self.hasShadows == o.hasShadows && GEVec3Eq(self.direction, o.direction);
+    return GEVec4Eq(self.color, o.color) && GEVec3Eq(self.direction, o.direction) && self.hasShadows == o.hasShadows && [self.shadowsProjectionMatrix isEqual:o.shadowsProjectionMatrix];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + GEVec4Hash(self.color);
-    hash = hash * 31 + self.hasShadows;
     hash = hash * 31 + GEVec3Hash(self.direction);
+    hash = hash * 31 + self.hasShadows;
+    hash = hash * 31 + [self.shadowsProjectionMatrix hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"color=%@", GEVec4Description(self.color)];
-    [description appendFormat:@", hasShadows=%d", self.hasShadows];
     [description appendFormat:@", direction=%@", GEVec3Description(self.direction)];
+    [description appendFormat:@", hasShadows=%d", self.hasShadows];
+    [description appendFormat:@", shadowsProjectionMatrix=%@", self.shadowsProjectionMatrix];
     [description appendString:@">"];
     return description;
 }
