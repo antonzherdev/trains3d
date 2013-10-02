@@ -54,15 +54,11 @@ static ODClassType* _TRRailroadView_type;
 }
 
 - (void)drawBackground {
-    [_railroadSurface maybeForce:_changed draw:^void() {
-        glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
-        [_backgroundView draw];
-        [[_railroad rails] forEach:^void(TRRail* _) {
-            [_railView drawRail:_];
-        }];
-        _changed = NO;
+    glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
+    [_backgroundView draw];
+    [[_railroad rails] forEach:^void(TRRail* _) {
+        [_railView drawRail:_];
     }];
-    [_railroadSurface draw];
     [[_railroad switches] forEach:^void(TRSwitch* _) {
         [_switchView drawTheSwitch:_];
     }];
@@ -132,7 +128,7 @@ static ODClassType* _TRRailView_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _railMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.45, 0.47, 0.55, 1.0)] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:1.0];
+        _railMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.6, 1.0)] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:0.3];
         _railModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.railGravel, ((EGMaterial*)([EGMaterial applyTexture:[EGGlobal textureForFile:@"Gravel.png"]]))), tuple(TRModels.railTies, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.rails, _railMaterial)])];
         _railTurnModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.railTurnGravel, ((EGMaterial*)([EGMaterial applyTexture:[EGGlobal textureForFile:@"Gravel.png"]]))), tuple(TRModels.railTurnTies, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.railsTurn, _railMaterial)])];
     }

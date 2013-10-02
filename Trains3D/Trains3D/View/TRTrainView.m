@@ -42,7 +42,7 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (EGMaterial*)trainMaterialForColor:(GEVec4)color {
-    return [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:color] specularColor:GEVec4Make(0.3, 0.3, 0.3, 1.0) specularSize:1.0];
+    return [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:color] specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:0.1];
 }
 
 - (void)draw {

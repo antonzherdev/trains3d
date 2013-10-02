@@ -38,7 +38,7 @@ static ODClassType* _TRLevelView_type;
         _trainView = [TRTrainView trainViewWithLevel:_level];
         _treeView = [TRTreeView treeViewWithForest:_level.forest];
         _callRepairerView = [TRCallRepairerView callRepairerViewWithLevel:_level];
-        _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.7, 0.7, 0.7, 1.0) lights:(@[[EGDirectLight applyColor:GEVec4Make(0.6, 0.6, 0.6, 1.0) direction:geVec3Normalize(GEVec3Make(-0.15, 0.35, -0.3)) shadowsProjectionMatrix:[GEMat4 orthoLeft:-2.0 right:6.0 bottom:-2.0 top:4.0 zNear:0.0 zFar:10.0]]])];
+        _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.7, 0.7, 0.7, 1.0) lights:(@[[EGDirectLight applyColor:GEVec4Make(0.6, 0.6, 0.6, 1.0) direction:geVec3Normalize(GEVec3Make(-0.15, 0.35, -0.3)) shadowsProjectionMatrix:[GEMat4 orthoLeft:-2.0 right:7.0 bottom:-3.0 top:4.0 zNear:-3.0 zFar:10.0]]])];
         _camera = [EGCameraIso cameraIsoWithTilesOnScreen:_level.map.size zReserve:0.3 center:GEVec2Make(0.0, 0.0)];
     }
     

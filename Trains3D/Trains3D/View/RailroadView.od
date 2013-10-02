@@ -17,13 +17,13 @@ class RailroadView(railroad : Railroad) {
     }
 
     def drawBackground {
-        railroadSurface.maybe(changed) {
+//        railroadSurface.maybe(changed) {
             glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
             backgroundView.draw
             railroad.rails.for(railView.draw(_))
-            changed = false
-        }
-        railroadSurface.draw
+//            changed = false
+//        }
+//        railroadSurface.draw
         railroad.switches.for(switchView.draw(_))
         railroad.builder.rail.for(railView.draw(_))
         railroad.damagesPoints.for(damageView.draw(_))
@@ -35,7 +35,7 @@ class RailroadView(railroad : Railroad) {
 }
 
 class RailView {
-    val railMaterial = StandardMaterial( vec4(0.45, 0.47, 0.55, 1), vec4(0.5, 0.5, 0.5, 1), 1)
+    val railMaterial = StandardMaterial(vec4(0.5, 0.5, 0.6, 1), vec4(0.5, 0.5, 0.5, 1), 0.3)
     val railModel = MeshModel([
         (Models.railGravel, textureFor("Gravel.png")),
         (Models.railTies, vec4(0.55, 0.45, 0.25, 1)),
