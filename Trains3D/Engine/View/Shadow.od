@@ -137,3 +137,122 @@ class ShadowShader(texture : bool, program : ShaderProgram) extends Shader<Color
         uvSlot.for(_.unbind)
     }
 }
+
+class ShadowSub(color : ColorSource, percents : [float4])
+
+class ShadowSubShaderSystem extends ShaderSystem<ShadowSub> {
+    static val instance = StandardShaderSystem()
+    def shaderFor(param : ColorSource) : Shader<ShadowSub> = {
+        val lights = context.environment.lights
+        val directLightsCount = lights.chain.filter(_.is<DirectLight> && _.hasShadows).count
+        val key = ShadowSubShaderKey(directLightsCount, param.texture.isDefined)
+
+        shaders.objectFor(key, orUpdateWith = key.shader)
+    }
+
+    private static val shaders = MutableHashMap<ShadowSubShaderKey, ShadowSubShader>()
+}
+class ShadowSubShaderKey(directLightCount : uint, texture : bool)  {
+    def shader : StandardShader = {
+        val vertexShader =
+            "#version 150
+             in vec2 vertexUV; $when(texture)
+             in vec3 position;
+             uniform mat4 mwcp;
+             $lightsVertexUniform
+
+             out vec2 UV; $when(texture)
+             $lightsOut
+
+             void main(void) {
+                gl_Position = mwcp * vec4(position, 1);
+                UV = vertexUV; $when(texture)
+                $lightsCalculateVaryings
+             }"
+        val fragmentShader =
+            "#version 150
+            $if(texture)
+             in vec2 UV;
+             uniform sampler2D texture;
+            $endif
+             uniform vec4 color;
+             $lightsIn
+             $lightsFragmentUniform
+             out vec4 outColor;
+
+             void main(void) {
+                vec4 col = color; $when(!texture)
+                vec4 col = color * texture(texture, UV); $when(texture)
+                outColor = col;
+                $lightsDiffuse
+
+            }"
+        ShadowSubShader(self, ShaderProgram(vertexShader, fragmentShader))
+    }
+
+    def lightsVertexUniform : string = directLightCount.range.chain.map{i ->
+        "uniform mat4 dirLightDepthMwcp$i;"}.toStringWith("\n")
+    def lightsIn : string = directLightCount.range.chain.map{i ->
+        "in vec3 dirLightShadowCoord$i;"}.toStringWith("\n")
+    def lightsOut : string = directLightCount.range.chain.map{i ->
+        "out vec3 dirLightShadowCoord$i;"}.toStringWith("\n")
+    def lightsCalculateVaryings : string = directLightCount.range.chain.map{i ->
+        "dirLightShadowCoord$i = (dirLightDepthMwcp$i * vec4(position, 1)).xyz;"
+    }.toStringWith("\n")
+
+
+    def lightsFragmentUniform : string = directLightCount.range.chain.map{i ->
+        "uniform float dirLightPercent$i;
+         uniform sampler2DShadow dirLightShadow$i;"}.toStringWith("\n")
+    def lightsDiffuse : string =  directLightCount.range.chain.map{i ->
+        "
+        visibility = texture(dirLightShadow$i, vec3(dirLightShadowCoord$i.xy, dirLightShadowCoord$i.z - 0.005));
+        outColor -= (1 - visibility)*dirLightPercent$i*col;
+        "
+    }.toStringWith("\n")
+
+}
+
+class ShadowSubShader(key : ShadowSubShaderKey, program : ShaderProgram) extends Shader<ShadowSub>(program) {
+    val positionSlot : ShaderAttribute = attributeFor("position")
+    val uvSlot : ShaderAttribute? = if(key.texture) attributeFor("vertexUV") else nil
+
+    val diffuseTexture : ShaderUniform? = if(key.texture) uniformFor("texture") else nil
+    val diffuseColorUniform : ShaderUniform = uniformFor("color")
+    val mwcpUniform : ShaderUniform = uniformFor("mwcp")
+
+    val directLightPercents : [ShaderUniform] = key.directLightCount.range.chain.map{i -> uniformFor("dirLightPercent$i")}.toArray
+    val directLightDepthMwcp : [ShaderUniform] = key.directLightCount.range.chain.map{i -> uniformFor("dirLightDepthMwcp$i")}.toArray
+    val directLightShadows : [ShaderUniform] = key.directLightCount.range.chain.map{i -> uniformFor("dirLightShadow$i")}.toArray
+
+    def load(vbDesc :VertexBufferDesc<_>, param : ShadowSub) {
+        positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.position)
+        mwcpUniform.set(matrix = matrix.value.mwcp)
+        if(key.texture) {
+            uvSlot.get.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.uv)
+            param.color.texture.get.bind
+            diffuseTexture.get.set(i4 = 0)
+        }
+        diffuseColorUniform.set(vec4 = param.color.color)
+        val env = context.environment
+        var i : uint = 0
+        env.lights.chain.filter(_.is<DirectLight> && _.hasShadows).for { light ->
+            val p : float4 = param.percents(i)
+            directLightPercents[i].set(f4 = p)
+            directLightDepthMwcp[i].set(matrix = light.shadowMap.biasDepthCp * matrix.mw)
+            directLightShadows[i].set(i4 = i + 1)
+            glActiveTexture(GL_TEXTURE0 + i + 1)
+            light.shadowMap.texture.bind
+            glActiveTexture(GL_TEXTURE0)
+            i++
+        }
+    }
+
+    def unload(param : ShadowSub) {
+        if(key.texture) {
+            Texture.unbind
+            uvSlot.get.unbind
+        }
+        positionSlot.unbind
+    }
+}

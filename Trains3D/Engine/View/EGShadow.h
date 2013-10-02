@@ -10,11 +10,20 @@
 @class EGGlobal;
 @class EGMatrixStack;
 @class EGMatrixModel;
+@class EGStandardShaderSystem;
+@class EGContext;
+@class EGEnvironment;
+@class EGLight;
+@class EGStandardShader;
 
 @class EGShadowMap;
 @class EGShadowSurfaceShader;
 @class EGShadowShaderSystem;
 @class EGShadowShader;
+@class EGShadowSub;
+@class EGShadowSubShaderSystem;
+@class EGShadowSubShaderKey;
+@class EGShadowSubShader;
 
 @interface EGShadowMap : EGSurface
 @property (nonatomic, readonly) GLuint frameBuffer;
@@ -68,6 +77,65 @@
 - (void)unloadParam:(EGColorSource*)param;
 + (EGShadowShader*)instanceForColor;
 + (EGShadowShader*)instanceForTexture;
++ (ODClassType*)type;
+@end
+
+
+@interface EGShadowSub : NSObject
+@property (nonatomic, readonly) EGColorSource* color;
+@property (nonatomic, readonly) id<CNSeq> percents;
+
++ (id)shadowSubWithColor:(EGColorSource*)color percents:(id<CNSeq>)percents;
+- (id)initWithColor:(EGColorSource*)color percents:(id<CNSeq>)percents;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface EGShadowSubShaderSystem : EGShaderSystem
++ (id)shadowSubShaderSystem;
+- (id)init;
+- (ODClassType*)type;
+- (EGShader*)shaderForParam:(EGColorSource*)param;
++ (EGStandardShaderSystem*)instance;
++ (ODClassType*)type;
+@end
+
+
+@interface EGShadowSubShaderKey : NSObject
+@property (nonatomic, readonly) NSUInteger directLightCount;
+@property (nonatomic, readonly) BOOL texture;
+
++ (id)shadowSubShaderKeyWithDirectLightCount:(NSUInteger)directLightCount texture:(BOOL)texture;
+- (id)initWithDirectLightCount:(NSUInteger)directLightCount texture:(BOOL)texture;
+- (ODClassType*)type;
+- (EGStandardShader*)shader;
+- (NSString*)lightsVertexUniform;
+- (NSString*)lightsIn;
+- (NSString*)lightsOut;
+- (NSString*)lightsCalculateVaryings;
+- (NSString*)lightsFragmentUniform;
+- (NSString*)lightsDiffuse;
++ (ODClassType*)type;
+@end
+
+
+@interface EGShadowSubShader : EGShader
+@property (nonatomic, readonly) EGShadowSubShaderKey* key;
+@property (nonatomic, readonly) EGShaderAttribute* positionSlot;
+@property (nonatomic, readonly) id uvSlot;
+@property (nonatomic, readonly) id diffuseTexture;
+@property (nonatomic, readonly) EGShaderUniform* diffuseColorUniform;
+@property (nonatomic, readonly) EGShaderUniform* mwcpUniform;
+@property (nonatomic, readonly) id<CNSeq> directLightPercents;
+@property (nonatomic, readonly) id<CNSeq> directLightDepthMwcp;
+@property (nonatomic, readonly) id<CNSeq> directLightShadows;
+
++ (id)shadowSubShaderWithKey:(EGShadowSubShaderKey*)key program:(EGShaderProgram*)program;
+- (id)initWithKey:(EGShadowSubShaderKey*)key program:(EGShaderProgram*)program;
+- (ODClassType*)type;
+- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGShadowSub*)param;
+- (void)unloadParam:(EGShadowSub*)param;
 + (ODClassType*)type;
 @end
 

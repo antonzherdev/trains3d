@@ -5,6 +5,7 @@
 #import "EGMaterial.h"
 #import "EGMesh.h"
 #import "EGContext.h"
+#import "EGStandardShaderSystem.h"
 @implementation EGShadowMap{
     GLuint _frameBuffer;
     GEMat4* _biasDepthCp;
@@ -373,6 +374,400 @@ static ODClassType* _EGShadowShader_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"texture=%d", self.texture];
+    [description appendFormat:@", program=%@", self.program];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGShadowSub{
+    EGColorSource* _color;
+    id<CNSeq> _percents;
+}
+static ODClassType* _EGShadowSub_type;
+@synthesize color = _color;
+@synthesize percents = _percents;
+
++ (id)shadowSubWithColor:(EGColorSource*)color percents:(id<CNSeq>)percents {
+    return [[EGShadowSub alloc] initWithColor:color percents:percents];
+}
+
+- (id)initWithColor:(EGColorSource*)color percents:(id<CNSeq>)percents {
+    self = [super init];
+    if(self) {
+        _color = color;
+        _percents = percents;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGShadowSub_type = [ODClassType classTypeWithCls:[EGShadowSub class]];
+}
+
+- (ODClassType*)type {
+    return [EGShadowSub type];
+}
+
++ (ODClassType*)type {
+    return _EGShadowSub_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGShadowSub* o = ((EGShadowSub*)(other));
+    return [self.color isEqual:o.color] && self.percents == o.percents;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.color hash];
+    hash = hash * 31 + 0;
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"color=%@", self.color];
+    [description appendFormat:@", percents=[]"];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGShadowSubShaderSystem
+static EGStandardShaderSystem* _EGShadowSubShaderSystem_instance;
+static NSMutableDictionary* _EGShadowSubShaderSystem_shaders;
+static ODClassType* _EGShadowSubShaderSystem_type;
+
++ (id)shadowSubShaderSystem {
+    return [[EGShadowSubShaderSystem alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGShadowSubShaderSystem_type = [ODClassType classTypeWithCls:[EGShadowSubShaderSystem class]];
+    _EGShadowSubShaderSystem_instance = [EGStandardShaderSystem standardShaderSystem];
+    _EGShadowSubShaderSystem_shaders = [NSMutableDictionary mutableDictionary];
+}
+
+- (EGShader*)shaderForParam:(EGColorSource*)param {
+    id<CNSeq> lights = EGGlobal.context.environment.lights;
+    NSUInteger directLightsCount = [[[lights chain] filter:^BOOL(EGLight* _) {
+        return [_ isKindOfClass:[EGDirectLight class]] && _.hasShadows;
+    }] count];
+    EGShadowSubShaderKey* key = [EGShadowSubShaderKey shadowSubShaderKeyWithDirectLightCount:directLightsCount texture:[param.texture isDefined]];
+    return ((EGShadowSubShader*)([_EGShadowSubShaderSystem_shaders objectForKey:key orUpdateWith:^EGShadowSubShader*() {
+        return [key shader];
+    }]));
+}
+
+- (ODClassType*)type {
+    return [EGShadowSubShaderSystem type];
+}
+
++ (EGStandardShaderSystem*)instance {
+    return _EGShadowSubShaderSystem_instance;
+}
+
++ (ODClassType*)type {
+    return _EGShadowSubShaderSystem_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGShadowSubShaderKey{
+    NSUInteger _directLightCount;
+    BOOL _texture;
+}
+static ODClassType* _EGShadowSubShaderKey_type;
+@synthesize directLightCount = _directLightCount;
+@synthesize texture = _texture;
+
++ (id)shadowSubShaderKeyWithDirectLightCount:(NSUInteger)directLightCount texture:(BOOL)texture {
+    return [[EGShadowSubShaderKey alloc] initWithDirectLightCount:directLightCount texture:texture];
+}
+
+- (id)initWithDirectLightCount:(NSUInteger)directLightCount texture:(BOOL)texture {
+    self = [super init];
+    if(self) {
+        _directLightCount = directLightCount;
+        _texture = texture;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGShadowSubShaderKey_type = [ODClassType classTypeWithCls:[EGShadowSubShaderKey class]];
+}
+
+- (EGStandardShader*)shader {
+    NSString* vertexShader = [NSString stringWithFormat:@"#version 150%@\n"
+        "in vec3 position;\n"
+        "uniform mat4 mwcp;\n"
+        "%@\n"
+        "%@\n"
+        "%@\n"
+        "\n"
+        "void main(void) {\n"
+        "   gl_Position = mwcp * vec4(position, 1);%@\n"
+        "   %@\n"
+        "}", ((_texture) ? @"\n"
+        "in vec2 vertexUV; " : @""), [self lightsVertexUniform], ((_texture) ? @"\n"
+        "out vec2 UV; " : @""), [self lightsOut], ((_texture) ? @"\n"
+        "   UV = vertexUV; " : @""), [self lightsCalculateVaryings]];
+    NSString* fragmentShader = [NSString stringWithFormat:@"#version 150\n"
+        "%@\n"
+        "uniform vec4 color;\n"
+        "%@\n"
+        "%@\n"
+        "out vec4 outColor;\n"
+        "\n"
+        "void main(void) {%@%@\n"
+        "   outColor = col;\n"
+        "   %@\n"
+        "\n"
+        "}", ((_texture) ? @"\n"
+        "in vec2 UV;\n"
+        "uniform sampler2D texture;\n" : @""), [self lightsIn], [self lightsFragmentUniform], ((!(_texture)) ? @"\n"
+        "   vec4 col = color; " : @""), ((_texture) ? @"\n"
+        "   vec4 col = color * texture(texture, UV); " : @""), [self lightsDiffuse]];
+    return [EGShadowSubShader shadowSubShaderWithKey:self program:[EGShaderProgram applyVertex:vertexShader fragment:fragmentShader]];
+}
+
+- (NSString*)lightsVertexUniform {
+    return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
+        return [NSString stringWithFormat:@"uniform mat4 dirLightDepthMwcp%@;", i];
+    }] toStringWithDelimiter:@"\n"];
+}
+
+- (NSString*)lightsIn {
+    return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
+        return [NSString stringWithFormat:@"in vec3 dirLightShadowCoord%@;", i];
+    }] toStringWithDelimiter:@"\n"];
+}
+
+- (NSString*)lightsOut {
+    return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
+        return [NSString stringWithFormat:@"out vec3 dirLightShadowCoord%@;", i];
+    }] toStringWithDelimiter:@"\n"];
+}
+
+- (NSString*)lightsCalculateVaryings {
+    return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
+        return [NSString stringWithFormat:@"dirLightShadowCoord%@= (dirLightDepthMwcp%@* vec4(position, 1)).xyz;", i, i];
+    }] toStringWithDelimiter:@"\n"];
+}
+
+- (NSString*)lightsFragmentUniform {
+    return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
+        return [NSString stringWithFormat:@"uniform float dirLightPercent%@;\n"
+            "uniform sampler2DShadow dirLightShadow%@;", i, i];
+    }] toStringWithDelimiter:@"\n"];
+}
+
+- (NSString*)lightsDiffuse {
+    return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
+        return [NSString stringWithFormat:@"\n"
+            "visibility = texture(dirLightShadow%@, vec3(dirLightShadowCoord%@.xy, dirLightShadowCoord%@.z - 0.005));\n"
+            "outColor -= (1 - visibility)*dirLightPercent%@*col;\n", i, i, i, i];
+    }] toStringWithDelimiter:@"\n"];
+}
+
+- (ODClassType*)type {
+    return [EGShadowSubShaderKey type];
+}
+
++ (ODClassType*)type {
+    return _EGShadowSubShaderKey_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGShadowSubShaderKey* o = ((EGShadowSubShaderKey*)(other));
+    return self.directLightCount == o.directLightCount && self.texture == o.texture;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.directLightCount;
+    hash = hash * 31 + self.texture;
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"directLightCount=%li", self.directLightCount];
+    [description appendFormat:@", texture=%d", self.texture];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGShadowSubShader{
+    EGShadowSubShaderKey* _key;
+    EGShaderAttribute* _positionSlot;
+    id _uvSlot;
+    id _diffuseTexture;
+    EGShaderUniform* _diffuseColorUniform;
+    EGShaderUniform* _mwcpUniform;
+    id<CNSeq> _directLightPercents;
+    id<CNSeq> _directLightDepthMwcp;
+    id<CNSeq> _directLightShadows;
+}
+static ODClassType* _EGShadowSubShader_type;
+@synthesize key = _key;
+@synthesize positionSlot = _positionSlot;
+@synthesize uvSlot = _uvSlot;
+@synthesize diffuseTexture = _diffuseTexture;
+@synthesize diffuseColorUniform = _diffuseColorUniform;
+@synthesize mwcpUniform = _mwcpUniform;
+@synthesize directLightPercents = _directLightPercents;
+@synthesize directLightDepthMwcp = _directLightDepthMwcp;
+@synthesize directLightShadows = _directLightShadows;
+
++ (id)shadowSubShaderWithKey:(EGShadowSubShaderKey*)key program:(EGShaderProgram*)program {
+    return [[EGShadowSubShader alloc] initWithKey:key program:program];
+}
+
+- (id)initWithKey:(EGShadowSubShaderKey*)key program:(EGShaderProgram*)program {
+    self = [super initWithProgram:program];
+    __weak EGShadowSubShader* _weakSelf = self;
+    if(self) {
+        _key = key;
+        _positionSlot = [self attributeForName:@"position"];
+        _uvSlot = ((_key.texture) ? [CNOption applyValue:[self attributeForName:@"vertexUV"]] : [CNOption none]);
+        _diffuseTexture = ((_key.texture) ? [CNOption applyValue:[self uniformForName:@"texture"]] : [CNOption none]);
+        _diffuseColorUniform = [self uniformForName:@"color"];
+        _mwcpUniform = [self uniformForName:@"mwcp"];
+        _directLightPercents = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniform*(id i) {
+            return [_weakSelf uniformForName:[NSString stringWithFormat:@"dirLightPercent%@", i]];
+        }] toArray];
+        _directLightDepthMwcp = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniform*(id i) {
+            return [_weakSelf uniformForName:[NSString stringWithFormat:@"dirLightDepthMwcp%@", i]];
+        }] toArray];
+        _directLightShadows = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniform*(id i) {
+            return [_weakSelf uniformForName:[NSString stringWithFormat:@"dirLightShadow%@", i]];
+        }] toArray];
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGShadowSubShader_type = [ODClassType classTypeWithCls:[EGShadowSubShader class]];
+}
+
+- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGShadowSub*)param {
+    [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
+    [_mwcpUniform setMatrix:[EGGlobal.matrix.value mwcp]];
+    if(_key.texture) {
+        [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
+        [((EGTexture*)([param.color.texture get])) bind];
+        [((EGShaderUniform*)([_diffuseTexture get])) setI4:0];
+    }
+    [_diffuseColorUniform setVec4:param.color.color];
+    EGEnvironment* env = EGGlobal.context.environment;
+    __block NSUInteger i = 0;
+    [[[env.lights chain] filter:^BOOL(EGLight* _) {
+        return [_ isKindOfClass:[EGDirectLight class]] && _.hasShadows;
+    }] forEach:^void(EGLight* light) {
+        float p = unumf4([param.percents applyIndex:i]);
+        [((EGShaderUniform*)([_directLightPercents applyIndex:i])) setF4:p];
+        [((EGShaderUniform*)([_directLightDepthMwcp applyIndex:i])) setMatrix:[[light shadowMap].biasDepthCp mulMatrix:[EGGlobal.matrix mw]]];
+        [((EGShaderUniform*)([_directLightShadows applyIndex:i])) setI4:((int)(i + 1))];
+        glActiveTexture(GL_TEXTURE0 + i + 1);
+        [[light shadowMap].texture bind];
+        glActiveTexture(GL_TEXTURE0);
+        i++;
+    }];
+}
+
+- (void)unloadParam:(EGShadowSub*)param {
+    if(_key.texture) {
+        [EGTexture unbind];
+        [((EGShaderAttribute*)([_uvSlot get])) unbind];
+    }
+    [_positionSlot unbind];
+}
+
+- (ODClassType*)type {
+    return [EGShadowSubShader type];
+}
+
++ (ODClassType*)type {
+    return _EGShadowSubShader_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGShadowSubShader* o = ((EGShadowSubShader*)(other));
+    return [self.key isEqual:o.key] && [self.program isEqual:o.program];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.key hash];
+    hash = hash * 31 + [self.program hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"key=%@", self.key];
     [description appendFormat:@", program=%@", self.program];
     [description appendString:@">"];
     return description;
