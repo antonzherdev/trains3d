@@ -17,13 +17,19 @@ class RailroadView(railroad : Railroad) {
     }
 
     def drawBackground {
-//        railroadSurface.maybe(changed) {
+        railroadSurface.maybe(changed) {
+            glClearColor(0, 0, 0, 0)
             glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
-            backgroundView.draw
             railroad.rails.for(railView.draw(_))
-//            changed = false
-//        }
+            changed = false
+        }
+        backgroundView.draw
 //        railroadSurface.draw
+        BlendFunction.standard {
+            glDisable(GL_DEPTH_TEST)
+            railroadSurface.drawWith(z = 0)
+            glEnable(GL_DEPTH_TEST)
+        }
         railroad.switches.for(switchView.draw(_))
         railroad.builder.rail.for(railView.draw(_))
         railroad.damagesPoints.for(damageView.draw(_))

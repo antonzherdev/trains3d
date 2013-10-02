@@ -12,6 +12,7 @@
 @class TRCityColor;
 @class TRModels;
 @class EGMaterial;
+@class EGContext;
 @class EGCounter;
 @class EGMatrixStack;
 

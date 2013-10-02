@@ -24,8 +24,6 @@ class CameraIso(tilesOnScreen : vec2i, zReserve : float4, center : vec2) extends
         p = mat4.ortho(-isoWW2, isoWW2, 0, (ww + 2*yReserve)*ISO/2, 0.0, 2000.0)
     )
 
-    def focus {
-        glCullFace(GL_FRONT)
-    }
+    def cullFace : uint = GL_FRONT
 }
 

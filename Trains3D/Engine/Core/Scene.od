@@ -5,7 +5,7 @@ trait Controller {
 }
 
 trait Camera {
-    def focus {}
+    def cullFace : uint = GL_NONE
 
     def matrixModel : MatrixModel
 
@@ -59,6 +59,8 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
         val env = view.environment
         context.environment = env
         val camera = view.cameraWith(viewport)
+        val cullFace = camera.cullFace
+        if(cullFace != GL_NONE) glEnable(GL_CULL_FACE)
 
         val shadowLights = env.lights.chain.filter(_.hasShadows).toArray
         env.lights.chain.filter(_.hasShadows).for{light ->
@@ -66,9 +68,9 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
             context.shadowLight = light
             matrix.value = light.shadowMatrix(camera.matrixModel)
             light.shadowMap.biasDepthCp = ShadowMap.biasMatrix *matrix.value.cp
-            camera.focus
             light.shadowMap{
                 glClear(GL_DEPTH_BUFFER_BIT)
+                if(cullFace != GL_NONE) glCullFace(if(cullFace == GL_BACK) GL_FRONT else GL_BACK)
                 view.draw
             }
             context.shadowLight = nil
@@ -77,8 +79,10 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
         }
         context.set(viewport = viewport)
         matrix.value = camera.matrixModel
-        camera.focus
+        if(cullFace != GL_NONE) glCullFace(cullFace)
+
         view.draw
+        if(cullFace != GL_NONE) glDisable(GL_CULL_FACE)
 //        if(director.isPaused) { if(!env.lights.isEmpty)env.lights[0].shadowMap.draw}
 //        else view.draw
     }

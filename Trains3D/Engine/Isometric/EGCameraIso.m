@@ -52,8 +52,8 @@ static ODClassType* _EGCameraIso_type;
     _EGCameraIso_w = [[GEMat4 identity] rotateAngle:-90.0 x:1.0 y:0.0 z:0.0];
 }
 
-- (void)focus {
-    glCullFace(GL_FRONT);
+- (NSUInteger)cullFace {
+    return GL_FRONT;
 }
 
 - (ODClassType*)type {

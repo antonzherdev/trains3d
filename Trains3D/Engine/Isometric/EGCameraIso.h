@@ -17,7 +17,7 @@
 + (id)cameraIsoWithTilesOnScreen:(GEVec2i)tilesOnScreen zReserve:(float)zReserve center:(GEVec2)center;
 - (id)initWithTilesOnScreen:(GEVec2i)tilesOnScreen zReserve:(float)zReserve center:(GEVec2)center;
 - (ODClassType*)type;
-- (void)focus;
+- (NSUInteger)cullFace;
 + (GEMat4*)m;
 + (GEMat4*)w;
 + (ODClassType*)type;

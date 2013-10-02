@@ -54,11 +54,20 @@ static ODClassType* _TRRailroadView_type;
 }
 
 - (void)drawBackground {
-    glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
-    [_backgroundView draw];
-    [[_railroad rails] forEach:^void(TRRail* _) {
-        [_railView drawRail:_];
+    [_railroadSurface maybeForce:_changed draw:^void() {
+        glClearColor(0.0, 0.0, 0.0, 0.0);
+        glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
+        [[_railroad rails] forEach:^void(TRRail* _) {
+            [_railView drawRail:_];
+        }];
+        _changed = NO;
     }];
+    [_backgroundView draw];
+    egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
+        glDisable(GL_DEPTH_TEST);
+        [_railroadSurface drawWithZ:0.0];
+        glEnable(GL_DEPTH_TEST);
+    });
     [[_railroad switches] forEach:^void(TRSwitch* _) {
         [_switchView drawTheSwitch:_];
     }];

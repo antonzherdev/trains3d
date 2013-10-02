@@ -2,6 +2,7 @@
 
 #import "EGContext.h"
 #import "GEMat4.h"
+#import "GL.h"
 @implementation EGCamera2D{
     GEVec2 _size;
     CGFloat _viewportRatio;
@@ -32,7 +33,8 @@ static ODClassType* _EGCamera2D_type;
     _EGCamera2D_type = [ODClassType classTypeWithCls:[EGCamera2D class]];
 }
 
-- (void)focus {
+- (NSUInteger)cullFace {
+    return ((NSUInteger)(GL_NONE));
 }
 
 - (ODClassType*)type {

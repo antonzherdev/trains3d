@@ -48,15 +48,17 @@ static ODClassType* _TRCityView_type;
         }];
     } f:^void() {
         [[EGStandardMaterial applyColor:city.color.color] drawMesh:TRModels.cityBodies];
-        glDisable(GL_CULL_FACE);
-        EGStandardMaterial* roofMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:city.color.color texture:_roofTexture] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:1.0];
-        [roofMaterial drawMesh:TRModels.cityRoofs];
-        glEnable(GL_CULL_FACE);
-        [_windowMaterial drawMesh:TRModels.cityWindows];
-        [city.expectedTrainCounter forF:^void(CGFloat time) {
-            CGFloat x = -time / 2;
-            [[EGStandardMaterial applyColor:GEVec4Make(1.0, ((float)(0.5 - x)), ((float)(0.5 - x)), 1.0)] drawMesh:_expectedTrainModel];
-        }];
+        if(!(EGGlobal.context.isShadowsDrawing)) {
+            glDisable(GL_CULL_FACE);
+            EGStandardMaterial* roofMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:city.color.color texture:_roofTexture] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:1.0];
+            [roofMaterial drawMesh:TRModels.cityRoofs];
+            glEnable(GL_CULL_FACE);
+            [_windowMaterial drawMesh:TRModels.cityWindows];
+            [city.expectedTrainCounter forF:^void(CGFloat time) {
+                CGFloat x = -time / 2;
+                [[EGStandardMaterial applyColor:GEVec4Make(1.0, ((float)(0.5 - x)), ((float)(0.5 - x)), 1.0)] drawMesh:_expectedTrainModel];
+            }];
+        }
     }];
 }
 

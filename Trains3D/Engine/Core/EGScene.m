@@ -1,10 +1,10 @@
 #import "EGScene.h"
 
+#import "GL.h"
 #import "EGContext.h"
 #import "EGInput.h"
 #import "EGShadow.h"
 #import "GEMat4.h"
-#import "GL.h"
 @implementation EGScene{
     GEVec4 _backgroundColor;
     id<EGController> _controller;
@@ -269,6 +269,8 @@ static ODClassType* _EGLayer_type;
     EGEnvironment* env = [_view environment];
     EGGlobal.context.environment = env;
     id<EGCamera> camera = [_view cameraWithViewport:viewport];
+    NSUInteger cullFace = [camera cullFace];
+    if(cullFace != GL_NONE) glEnable(GL_CULL_FACE);
     id<CNSeq> shadowLights = [[[env.lights chain] filter:^BOOL(EGLight* _) {
         return _.hasShadows;
     }] toArray];
@@ -279,9 +281,9 @@ static ODClassType* _EGLayer_type;
         EGGlobal.context.shadowLight = [CNOption applyValue:light];
         EGGlobal.matrix.value = [light shadowMatrixModel:[camera matrixModel]];
         [light shadowMap].biasDepthCp = [EGShadowMap.biasMatrix mulMatrix:[EGGlobal.matrix.value cp]];
-        [camera focus];
         [[light shadowMap] applyDraw:^void() {
             glClear(GL_DEPTH_BUFFER_BIT);
+            if(cullFace != GL_NONE) glCullFace(((cullFace == GL_BACK) ? GL_FRONT : GL_BACK));
             [_view draw];
         }];
         EGGlobal.context.shadowLight = [CNOption none];
@@ -289,8 +291,9 @@ static ODClassType* _EGLayer_type;
     }];
     [EGGlobal.context setViewport:geRectIApplyRect(viewport)];
     EGGlobal.matrix.value = [camera matrixModel];
-    [camera focus];
+    if(cullFace != GL_NONE) glCullFace(cullFace);
     [_view draw];
+    if(cullFace != GL_NONE) glDisable(GL_CULL_FACE);
 }
 
 - (BOOL)processEvent:(EGEvent*)event viewport:(GERect)viewport {
