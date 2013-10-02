@@ -360,7 +360,7 @@ static ODClassType* _EGDirectLight_type;
 
 - (EGMatrixModel*)shadowMatrixModel:(EGMatrixModel*)model {
     return [[model modifyC:^GEMat4*(GEMat4* _) {
-        return [GEMat4 lookAtEye:geVec3Negate(_direction) center:GEVec3Make(0.0, 0.0, 0.0) up:GEVec3Make(0.0, 1.0, 0.0)];
+        return [GEMat4 lookAtEye:geVec3Negate(geVec3Normalize(geVec4Xyz([model.w mulVec4:geVec4ApplyVec3W(_direction, 0.0)]))) center:GEVec3Make(0.0, 0.0, 0.0) up:GEVec3Make(0.0, 1.0, 0.0)];
     }] modifyP:^GEMat4*(GEMat4* _) {
         return _shadowsProjectionMatrix;
     }];

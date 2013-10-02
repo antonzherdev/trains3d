@@ -118,7 +118,7 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
         "
         $if(i < directLightWithShadowsCount)
          visibility = 1.0;
-         if(texture(dirLightShadow$i, dirLightShadowCoord$i.xy).x < dirLightShadowCoord$i.z + 0.2) {
+         if(texture(dirLightShadow$i, dirLightShadowCoord$i.xy).x < dirLightShadowCoord$i.z - 0.005) {
              visibility = 0.5;
          }
          color += visibility * dirLightDirectionCos$i * (materialColor * dirLightColor$i);

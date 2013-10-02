@@ -47,7 +47,7 @@ class DirectLight(color : vec4, direction : vec3, hasShadows : bool, shadowsProj
     static def apply(color : vec4, direction : vec3) = DirectLight(color, direction, false, mat4.identity)
     static def apply(color : vec4, direction : vec3, shadowsProjectionMatrix : mat4) = DirectLight(color, direction, true, shadowsProjectionMatrix)
     def shadowMatrix(model : MatrixModel) : MatrixModel =
-        model.modify(c = mat4.lookAt(direction.negate, vec3(0, 0, 0), vec3(0, 1, 0)))
+        model.modify(c = mat4.lookAt((model.w * vec4(direction, 0)).xyz.normalize.negate, vec3(0, 0, 0), vec3(0, 1, 0)))
              .modify(p = shadowsProjectionMatrix)
 }
 

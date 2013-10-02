@@ -73,6 +73,7 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
             }
             context.shadowLight = nil
             context.isShadowsDrawing = false
+//            light.shadowMap.draw
         }
         context.set(viewport = viewport)
         matrix.value = camera.matrixModel
