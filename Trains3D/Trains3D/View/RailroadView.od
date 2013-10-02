@@ -126,22 +126,24 @@ class LightView {
              .modify(m = m -> m.rotate(90 + light.connector.angle, 0, 1, 0).translate(0.2, 0, -0.45))
         ) {
             bodyMaterial.draw(Models.light)
-            if(light.isGreen) {
-                greenMaterial.draw(Models.lightGreen)
-                inactiveMaterial.draw(Models.lightRed)
-                glDisable(GL_CULL_FACE)
-                BlendFunction.standard {
-                    greenGlowMaterial.draw(Models.lightGreenGlow)
+            if(!context.isShadowsDrawing) {
+                if(light.isGreen) {
+                    greenMaterial.draw(Models.lightGreen)
+                    inactiveMaterial.draw(Models.lightRed)
+                    glDisable(GL_CULL_FACE)
+                    BlendFunction.standard {
+                        greenGlowMaterial.draw(Models.lightGreenGlow)
+                    }
+                    glEnable(GL_CULL_FACE)
+                } else {
+                    inactiveMaterial.draw(Models.lightGreen)
+                    redMaterial.draw(Models.lightRed)
+                    glDisable(GL_CULL_FACE)
+                    BlendFunction.standard {
+                        redGlowMaterial.draw(Models.lightRedGlow)
+                    }
+                    glEnable(GL_CULL_FACE)
                 }
-                glEnable(GL_CULL_FACE)
-            } else {
-                inactiveMaterial.draw(Models.lightGreen)
-                redMaterial.draw(Models.lightRed)
-                glDisable(GL_CULL_FACE)
-                BlendFunction.standard {
-                    redGlowMaterial.draw(Models.lightRedGlow)
-                }
-                glEnable(GL_CULL_FACE)
             }
         }
     }

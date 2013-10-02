@@ -343,7 +343,7 @@ static ODClassType* _TRLightView_type;
         }];
     } f:^void() {
         [_bodyMaterial drawMesh:TRModels.light];
-        if(light.isGreen) {
+        if(!(EGGlobal.context.isShadowsDrawing)) if(light.isGreen) {
             [_greenMaterial drawMesh:TRModels.lightGreen];
             [_inactiveMaterial drawMesh:TRModels.lightRed];
             glDisable(GL_CULL_FACE);

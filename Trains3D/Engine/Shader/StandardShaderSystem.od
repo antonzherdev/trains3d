@@ -112,15 +112,12 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
     def lightsFragmentUniform : string = directLightCount.range.chain.map{i ->
         "uniform vec4 dirLightColor$i;
         $if(i < directLightWithShadowsCount)
-         uniform sampler2D dirLightShadow$i;
+         uniform sampler2DShadow dirLightShadow$i;
         $endif"}.toStringWith("\n")
     def lightsDiffuse : string =  directLightCount.range.chain.map{i ->
         "
         $if(i < directLightWithShadowsCount)
-         visibility = 1.0;
-         if(texture(dirLightShadow$i, dirLightShadowCoord$i.xy).x < dirLightShadowCoord$i.z - 0.005) {
-             visibility = 0.3;
-         }
+         visibility = texture(dirLightShadow$i, vec3(dirLightShadowCoord$i.xy, dirLightShadowCoord$i.z - 0.005));
          color += visibility * dirLightDirectionCos$i * (materialColor * dirLightColor$i);
          color += visibility * specularColor * dirLightColor$i * pow(dirLightDirectionCosA$i, 5.0/specularSize);
         $else

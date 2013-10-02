@@ -14,6 +14,7 @@
 @class TRSwitch;
 @class TRRailConnector;
 @class TRRailLight;
+@class EGContext;
 @class TRRailPoint;
 @class EGMapSso;
 @class EGMapSsoView;

@@ -20,7 +20,7 @@ class LevelView(level : Level) extends LayerView {
 
         trainView.draw
 
-        if(!shadows) railroadView.drawForeground
+        railroadView.drawForeground
         treeView.draw
 
         if(!shadows) {

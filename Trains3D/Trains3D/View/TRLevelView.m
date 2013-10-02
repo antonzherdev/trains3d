@@ -57,7 +57,7 @@ static ODClassType* _TRLevelView_type;
         [_cityView drawCity:city];
     }];
     [_trainView draw];
-    if(!(shadows)) [_railroadView drawForeground];
+    [_railroadView drawForeground];
     [_treeView draw];
     if(!(shadows)) {
         [_trainView drawSmoke];
