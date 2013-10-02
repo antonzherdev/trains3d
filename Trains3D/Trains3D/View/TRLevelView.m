@@ -56,7 +56,7 @@ static ODClassType* _TRLevelView_type;
     if(!(shadows)) [[_level cities] forEach:^void(TRCity* city) {
         [_cityView drawCity:city];
     }];
-    if(!(shadows)) [_trainView draw];
+    [_trainView draw];
     [_railroadView drawForeground];
     [_treeView draw];
     if(!(shadows)) {
