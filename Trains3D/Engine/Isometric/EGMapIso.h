@@ -69,7 +69,6 @@ ODPType* egMapTileCutStateType();
 - (ODClassType*)type;
 - (EGVertexBuffer*)axisVertexBuffer;
 - (void)drawLayout;
-- (EGMesh*)createPlane;
 - (void)drawPlaneWithMaterial:(EGMaterial*)material;
 + (ODClassType*)type;
 @end

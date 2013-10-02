@@ -10,7 +10,6 @@
 @class EGGlobal;
 @class EGMatrixStack;
 @class EGMatrixModel;
-@class EGStandardShaderSystem;
 @class EGContext;
 @class EGEnvironment;
 @class EGLight;
@@ -20,10 +19,10 @@
 @class EGShadowSurfaceShader;
 @class EGShadowShaderSystem;
 @class EGShadowShader;
-@class EGShadowSub;
-@class EGShadowSubShaderSystem;
-@class EGShadowSubShaderKey;
-@class EGShadowSubShader;
+@class EGShadowDrawParam;
+@class EGShadowDrawShaderSystem;
+@class EGShadowDrawShaderKey;
+@class EGShadowDrawShader;
 
 @interface EGShadowMap : EGSurface
 @property (nonatomic, readonly) GLuint frameBuffer;
@@ -81,33 +80,28 @@
 @end
 
 
-@interface EGShadowSub : NSObject
-@property (nonatomic, readonly) EGColorSource* color;
+@interface EGShadowDrawParam : NSObject
 @property (nonatomic, readonly) id<CNSeq> percents;
 
-+ (id)shadowSubWithColor:(EGColorSource*)color percents:(id<CNSeq>)percents;
-- (id)initWithColor:(EGColorSource*)color percents:(id<CNSeq>)percents;
++ (id)shadowDrawParamWithPercents:(id<CNSeq>)percents;
+- (id)initWithPercents:(id<CNSeq>)percents;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
 
 
-@interface EGShadowSubShaderSystem : EGShaderSystem
-+ (id)shadowSubShaderSystem;
-- (id)init;
+@interface EGShadowDrawShaderSystem : EGShaderSystem
 - (ODClassType*)type;
-- (EGShader*)shaderForParam:(EGColorSource*)param;
-+ (EGStandardShaderSystem*)instance;
++ (EGShader*)shaderForParam:(EGShadowDrawParam*)param;
 + (ODClassType*)type;
 @end
 
 
-@interface EGShadowSubShaderKey : NSObject
+@interface EGShadowDrawShaderKey : NSObject
 @property (nonatomic, readonly) NSUInteger directLightCount;
-@property (nonatomic, readonly) BOOL texture;
 
-+ (id)shadowSubShaderKeyWithDirectLightCount:(NSUInteger)directLightCount texture:(BOOL)texture;
-- (id)initWithDirectLightCount:(NSUInteger)directLightCount texture:(BOOL)texture;
++ (id)shadowDrawShaderKeyWithDirectLightCount:(NSUInteger)directLightCount;
+- (id)initWithDirectLightCount:(NSUInteger)directLightCount;
 - (ODClassType*)type;
 - (EGStandardShader*)shader;
 - (NSString*)lightsVertexUniform;
@@ -120,22 +114,19 @@
 @end
 
 
-@interface EGShadowSubShader : EGShader
-@property (nonatomic, readonly) EGShadowSubShaderKey* key;
+@interface EGShadowDrawShader : EGShader
+@property (nonatomic, readonly) EGShadowDrawShaderKey* key;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
-@property (nonatomic, readonly) id uvSlot;
-@property (nonatomic, readonly) id diffuseTexture;
-@property (nonatomic, readonly) EGShaderUniform* diffuseColorUniform;
 @property (nonatomic, readonly) EGShaderUniform* mwcpUniform;
 @property (nonatomic, readonly) id<CNSeq> directLightPercents;
 @property (nonatomic, readonly) id<CNSeq> directLightDepthMwcp;
 @property (nonatomic, readonly) id<CNSeq> directLightShadows;
 
-+ (id)shadowSubShaderWithKey:(EGShadowSubShaderKey*)key program:(EGShaderProgram*)program;
-- (id)initWithKey:(EGShadowSubShaderKey*)key program:(EGShaderProgram*)program;
++ (id)shadowDrawShaderWithKey:(EGShadowDrawShaderKey*)key program:(EGShaderProgram*)program;
+- (id)initWithKey:(EGShadowDrawShaderKey*)key program:(EGShaderProgram*)program;
 - (ODClassType*)type;
-- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGShadowSub*)param;
-- (void)unloadParam:(EGShadowSub*)param;
+- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGShadowDrawParam*)param;
+- (void)unloadParam:(EGShadowDrawParam*)param;
 + (ODClassType*)type;
 @end
 

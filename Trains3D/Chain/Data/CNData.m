@@ -54,8 +54,8 @@ static ODClassType* _CNPArray_type;
 }
 
 - (id)applyIndex:(NSUInteger)index {
-    if(index >= _count) return [CNOption none];
-    else return [CNOption applyValue:_wrap(_bytes, index)];
+    if(index >= _count) return nil;
+    else return _wrap(_bytes, index);
 }
 
 - (void)dealloc {

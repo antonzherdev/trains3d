@@ -190,7 +190,16 @@ static ODClassType* _EGMapSsoView_type;
                 return [[EGVertexBuffer vec4] setData:[ arrs(GEVec4, 4) {[mi mulVec4:GEVec4Make(0.0, 0.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(1.0, 0.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(0.0, 1.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(0.0, 0.0, 1.0, 1.0)]}]];
             }();
         }];
-        _plane = [self createPlane];
+        _plane = ^EGMesh*() {
+            GERectI limits = _map.limits;
+            CGFloat l = geRectIX(limits) - 2.5;
+            CGFloat r = geRectIX2(limits) + 0.5;
+            CGFloat t = geRectIY(limits) - 2.5;
+            CGFloat b = geRectIY2(limits) + 0.5;
+            NSInteger w = geRectIWidth(limits) + 3;
+            NSInteger h = geRectIHeight(limits) + 3;
+            return [EGMesh applyVertexData:[ arrs(EGMeshData, 32) {0, 0, 0, 1, 0, l, 0, b, w, 0, 0, 1, 0, r, 0, b, w, h, 0, 1, 0, r, 0, t, 0, h, 0, 1, 0, l, 0, t}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
+        }();
     }
     
     return self;
@@ -209,17 +218,6 @@ static ODClassType* _EGMapSsoView_type;
     [[EGColorSource applyColor:GEVec4Make(1.0, 0.0, 0.0, 1.0)] drawVb:[self axisVertexBuffer] index:[ arrui4(2) {0, 1}] mode:((unsigned int)(GL_LINES))];
     [[EGColorSource applyColor:GEVec4Make(0.0, 1.0, 0.0, 1.0)] drawVb:[self axisVertexBuffer] index:[ arrui4(2) {0, 2}] mode:((unsigned int)(GL_LINES))];
     [[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 1.0, 1.0)] drawVb:[self axisVertexBuffer] index:[ arrui4(2) {0, 3}] mode:((unsigned int)(GL_LINES))];
-}
-
-- (EGMesh*)createPlane {
-    GERectI limits = _map.limits;
-    CGFloat l = geRectIX(limits) - 2.5;
-    CGFloat r = geRectIX2(limits) + 0.5;
-    CGFloat t = geRectIY(limits) - 2.5;
-    CGFloat b = geRectIY2(limits) + 0.5;
-    NSInteger w = geRectIWidth(limits) + 3;
-    NSInteger h = geRectIHeight(limits) + 3;
-    return [EGMesh applyVertexData:[ arrs(EGMeshData, 32) {0, 0, 0, 1, 0, l, 0, b, w, 0, 0, 1, 0, r, 0, b, w, h, 0, 1, 0, r, 0, t, 0, h, 0, 1, 0, l, 0, t}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
 }
 
 - (void)drawPlaneWithMaterial:(EGMaterial*)material {

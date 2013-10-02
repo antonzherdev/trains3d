@@ -11,7 +11,7 @@ class PArray<T>(stride : uint, wrap : (VoidRef, uint) -> T, count : uint, length
 
     def iterator : Iterator<T> = PArrayIterator<T>(self)
 
-    def apply(index : uint) : T? =
+    def apply(index : uint) : T =
         if(index >= count) nil
         else wrap(bytes, index)
 

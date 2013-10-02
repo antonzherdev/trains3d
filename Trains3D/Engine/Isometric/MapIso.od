@@ -108,8 +108,7 @@ class MapSsoView(map : MapSso) {
     }
 
 
-    val plane  = createPlane
-    def createPlane : Mesh = {
+    val plane : Mesh = {
         val limits = map.limits
         val l = limits.x - 2.5
         val r = limits.x2 + 0.5

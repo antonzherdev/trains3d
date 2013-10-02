@@ -1,6 +1,6 @@
 #import "objd.h"
-#import "EGMaterial.h"
 #import "GEVec.h"
+#import "EGMaterial.h"
 @class TRRailroad;
 @class EGViewportSurface;
 @class EGGlobal;
@@ -19,6 +19,9 @@
 @class TRRailPoint;
 @class EGMapSso;
 @class EGMapSsoView;
+@class EGShadowDrawParam;
+@class EGShadowDrawShaderSystem;
+@class EGShader;
 
 @class TRRailroadView;
 @class TRRailView;
@@ -102,6 +105,7 @@
 - (id)initWithMap:(EGMapSso*)map;
 - (ODClassType*)type;
 - (void)draw;
+- (void)drawShadow;
 + (ODClassType*)type;
 @end
 

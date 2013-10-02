@@ -8,6 +8,8 @@
 #import "GEMat4.h"
 #import "TRRailPoint.h"
 #import "EGMapIso.h"
+#import "EGShadow.h"
+#import "EGShader.h"
 @implementation TRRailroadView{
     TRRailroad* _railroad;
     TRRailView* _railView;
@@ -58,18 +60,15 @@ static ODClassType* _TRRailroadView_type;
         glClearColor(0.0, 0.0, 0.0, 0.0);
         glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
         EGGlobal.context.considerShadows = NO;
+        [_backgroundView draw];
         [[_railroad rails] forEach:^void(TRRail* _) {
             [_railView drawRail:_];
         }];
         EGGlobal.context.considerShadows = YES;
         _changed = NO;
     }];
-    [_backgroundView draw];
-    egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
-        glDisable(GL_DEPTH_TEST);
-        [_railroadSurface drawWithZ:0.0];
-        glEnable(GL_DEPTH_TEST);
-    });
+    [_railroadSurface draw];
+    [_backgroundView drawShadow];
     [[_railroad switches] forEach:^void(TRSwitch* _) {
         [_switchView drawTheSwitch:_];
     }];
@@ -500,6 +499,17 @@ static ODClassType* _TRBackgroundView_type;
 
 - (void)draw {
     [_mapView drawPlaneWithMaterial:_material];
+}
+
+- (void)drawShadow {
+    egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
+        glDisable(GL_CULL_FACE);
+        glDisable(GL_DEPTH_TEST);
+        EGShadowDrawParam* param = [EGShadowDrawParam shadowDrawParamWithPercents:(@[@0.3])];
+        [[EGShadowDrawShaderSystem shaderForParam:param] drawParam:param mesh:_mapView.plane];
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
+    });
 }
 
 - (ODClassType*)type {

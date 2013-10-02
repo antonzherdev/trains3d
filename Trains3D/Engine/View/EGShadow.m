@@ -382,39 +382,34 @@ static ODClassType* _EGShadowShader_type;
 @end
 
 
-@implementation EGShadowSub{
-    EGColorSource* _color;
+@implementation EGShadowDrawParam{
     id<CNSeq> _percents;
 }
-static ODClassType* _EGShadowSub_type;
-@synthesize color = _color;
+static ODClassType* _EGShadowDrawParam_type;
 @synthesize percents = _percents;
 
-+ (id)shadowSubWithColor:(EGColorSource*)color percents:(id<CNSeq>)percents {
-    return [[EGShadowSub alloc] initWithColor:color percents:percents];
++ (id)shadowDrawParamWithPercents:(id<CNSeq>)percents {
+    return [[EGShadowDrawParam alloc] initWithPercents:percents];
 }
 
-- (id)initWithColor:(EGColorSource*)color percents:(id<CNSeq>)percents {
+- (id)initWithPercents:(id<CNSeq>)percents {
     self = [super init];
-    if(self) {
-        _color = color;
-        _percents = percents;
-    }
+    if(self) _percents = percents;
     
     return self;
 }
 
 + (void)initialize {
     [super initialize];
-    _EGShadowSub_type = [ODClassType classTypeWithCls:[EGShadowSub class]];
+    _EGShadowDrawParam_type = [ODClassType classTypeWithCls:[EGShadowDrawParam class]];
 }
 
 - (ODClassType*)type {
-    return [EGShadowSub type];
+    return [EGShadowDrawParam type];
 }
 
 + (ODClassType*)type {
-    return _EGShadowSub_type;
+    return _EGShadowDrawParam_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -424,21 +419,19 @@ static ODClassType* _EGShadowSub_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShadowSub* o = ((EGShadowSub*)(other));
-    return [self.color isEqual:o.color] && self.percents == o.percents;
+    EGShadowDrawParam* o = ((EGShadowDrawParam*)(other));
+    return [self.percents isEqual:o.percents];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [self.color hash];
-    hash = hash * 31 + 0;
+    hash = hash * 31 + [self.percents hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"color=%@", self.color];
-    [description appendFormat:@", percents=[]"];
+    [description appendFormat:@"percents=%@", self.percents];
     [description appendString:@">"];
     return description;
 }
@@ -446,49 +439,33 @@ static ODClassType* _EGShadowSub_type;
 @end
 
 
-@implementation EGShadowSubShaderSystem
-static EGStandardShaderSystem* _EGShadowSubShaderSystem_instance;
-static NSMutableDictionary* _EGShadowSubShaderSystem_shaders;
-static ODClassType* _EGShadowSubShaderSystem_type;
-
-+ (id)shadowSubShaderSystem {
-    return [[EGShadowSubShaderSystem alloc] init];
-}
-
-- (id)init {
-    self = [super init];
-    
-    return self;
-}
+@implementation EGShadowDrawShaderSystem
+static NSMutableDictionary* _EGShadowDrawShaderSystem_shaders;
+static ODClassType* _EGShadowDrawShaderSystem_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShadowSubShaderSystem_type = [ODClassType classTypeWithCls:[EGShadowSubShaderSystem class]];
-    _EGShadowSubShaderSystem_instance = [EGStandardShaderSystem standardShaderSystem];
-    _EGShadowSubShaderSystem_shaders = [NSMutableDictionary mutableDictionary];
+    _EGShadowDrawShaderSystem_type = [ODClassType classTypeWithCls:[EGShadowDrawShaderSystem class]];
+    _EGShadowDrawShaderSystem_shaders = [NSMutableDictionary mutableDictionary];
 }
 
-- (EGShader*)shaderForParam:(EGColorSource*)param {
++ (EGShader*)shaderForParam:(EGShadowDrawParam*)param {
     id<CNSeq> lights = EGGlobal.context.environment.lights;
     NSUInteger directLightsCount = [[[lights chain] filter:^BOOL(EGLight* _) {
         return [_ isKindOfClass:[EGDirectLight class]] && _.hasShadows;
     }] count];
-    EGShadowSubShaderKey* key = [EGShadowSubShaderKey shadowSubShaderKeyWithDirectLightCount:directLightsCount texture:[param.texture isDefined]];
-    return ((EGShadowSubShader*)([_EGShadowSubShaderSystem_shaders objectForKey:key orUpdateWith:^EGShadowSubShader*() {
+    EGShadowDrawShaderKey* key = [EGShadowDrawShaderKey shadowDrawShaderKeyWithDirectLightCount:directLightsCount];
+    return ((EGShadowDrawShader*)([_EGShadowDrawShaderSystem_shaders objectForKey:key orUpdateWith:^EGShadowDrawShader*() {
         return [key shader];
     }]));
 }
 
 - (ODClassType*)type {
-    return [EGShadowSubShaderSystem type];
-}
-
-+ (EGStandardShaderSystem*)instance {
-    return _EGShadowSubShaderSystem_instance;
+    return [EGShadowDrawShaderSystem type];
 }
 
 + (ODClassType*)type {
-    return _EGShadowSubShaderSystem_type;
+    return _EGShadowDrawShaderSystem_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -514,65 +491,51 @@ static ODClassType* _EGShadowSubShaderSystem_type;
 @end
 
 
-@implementation EGShadowSubShaderKey{
+@implementation EGShadowDrawShaderKey{
     NSUInteger _directLightCount;
-    BOOL _texture;
 }
-static ODClassType* _EGShadowSubShaderKey_type;
+static ODClassType* _EGShadowDrawShaderKey_type;
 @synthesize directLightCount = _directLightCount;
-@synthesize texture = _texture;
 
-+ (id)shadowSubShaderKeyWithDirectLightCount:(NSUInteger)directLightCount texture:(BOOL)texture {
-    return [[EGShadowSubShaderKey alloc] initWithDirectLightCount:directLightCount texture:texture];
++ (id)shadowDrawShaderKeyWithDirectLightCount:(NSUInteger)directLightCount {
+    return [[EGShadowDrawShaderKey alloc] initWithDirectLightCount:directLightCount];
 }
 
-- (id)initWithDirectLightCount:(NSUInteger)directLightCount texture:(BOOL)texture {
+- (id)initWithDirectLightCount:(NSUInteger)directLightCount {
     self = [super init];
-    if(self) {
-        _directLightCount = directLightCount;
-        _texture = texture;
-    }
+    if(self) _directLightCount = directLightCount;
     
     return self;
 }
 
 + (void)initialize {
     [super initialize];
-    _EGShadowSubShaderKey_type = [ODClassType classTypeWithCls:[EGShadowSubShaderKey class]];
+    _EGShadowDrawShaderKey_type = [ODClassType classTypeWithCls:[EGShadowDrawShaderKey class]];
 }
 
 - (EGStandardShader*)shader {
-    NSString* vertexShader = [NSString stringWithFormat:@"#version 150%@\n"
+    NSString* vertexShader = [NSString stringWithFormat:@"#version 150\n"
         "in vec3 position;\n"
         "uniform mat4 mwcp;\n"
         "%@\n"
         "%@\n"
-        "%@\n"
         "\n"
         "void main(void) {\n"
-        "   gl_Position = mwcp * vec4(position, 1);%@\n"
+        "   gl_Position = mwcp * vec4(position, 1);\n"
         "   %@\n"
-        "}", ((_texture) ? @"\n"
-        "in vec2 vertexUV; " : @""), [self lightsVertexUniform], ((_texture) ? @"\n"
-        "out vec2 UV; " : @""), [self lightsOut], ((_texture) ? @"\n"
-        "   UV = vertexUV; " : @""), [self lightsCalculateVaryings]];
+        "}", [self lightsVertexUniform], [self lightsOut], [self lightsCalculateVaryings]];
     NSString* fragmentShader = [NSString stringWithFormat:@"#version 150\n"
-        "%@\n"
-        "uniform vec4 color;\n"
         "%@\n"
         "%@\n"
         "out vec4 outColor;\n"
         "\n"
-        "void main(void) {%@%@\n"
-        "   outColor = col;\n"
+        "void main(void) {\n"
+        "   float visibility;\n"
+        "   float a = 0;\n"
         "   %@\n"
-        "\n"
-        "}", ((_texture) ? @"\n"
-        "in vec2 UV;\n"
-        "uniform sampler2D texture;\n" : @""), [self lightsIn], [self lightsFragmentUniform], ((!(_texture)) ? @"\n"
-        "   vec4 col = color; " : @""), ((_texture) ? @"\n"
-        "   vec4 col = color * texture(texture, UV); " : @""), [self lightsDiffuse]];
-    return [EGShadowSubShader shadowSubShaderWithKey:self program:[EGShaderProgram applyVertex:vertexShader fragment:fragmentShader]];
+        "   outColor = vec4(0, 0, 0, a);\n"
+        "}", [self lightsIn], [self lightsFragmentUniform], [self lightsDiffuse]];
+    return [EGShadowDrawShader shadowDrawShaderWithKey:self program:[EGShaderProgram applyVertex:vertexShader fragment:fragmentShader]];
 }
 
 - (NSString*)lightsVertexUniform {
@@ -610,16 +573,16 @@ static ODClassType* _EGShadowSubShaderKey_type;
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
         return [NSString stringWithFormat:@"\n"
             "visibility = texture(dirLightShadow%@, vec3(dirLightShadowCoord%@.xy, dirLightShadowCoord%@.z - 0.005));\n"
-            "outColor -= (1 - visibility)*dirLightPercent%@*col;\n", i, i, i, i];
+            "a += (1 - visibility)*dirLightPercent%@;\n", i, i, i, i];
     }] toStringWithDelimiter:@"\n"];
 }
 
 - (ODClassType*)type {
-    return [EGShadowSubShaderKey type];
+    return [EGShadowDrawShaderKey type];
 }
 
 + (ODClassType*)type {
-    return _EGShadowSubShaderKey_type;
+    return _EGShadowDrawShaderKey_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -629,21 +592,19 @@ static ODClassType* _EGShadowSubShaderKey_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShadowSubShaderKey* o = ((EGShadowSubShaderKey*)(other));
-    return self.directLightCount == o.directLightCount && self.texture == o.texture;
+    EGShadowDrawShaderKey* o = ((EGShadowDrawShaderKey*)(other));
+    return self.directLightCount == o.directLightCount;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + self.directLightCount;
-    hash = hash * 31 + self.texture;
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"directLightCount=%li", self.directLightCount];
-    [description appendFormat:@", texture=%d", self.texture];
     [description appendString:@">"];
     return description;
 }
@@ -651,41 +612,32 @@ static ODClassType* _EGShadowSubShaderKey_type;
 @end
 
 
-@implementation EGShadowSubShader{
-    EGShadowSubShaderKey* _key;
+@implementation EGShadowDrawShader{
+    EGShadowDrawShaderKey* _key;
     EGShaderAttribute* _positionSlot;
-    id _uvSlot;
-    id _diffuseTexture;
-    EGShaderUniform* _diffuseColorUniform;
     EGShaderUniform* _mwcpUniform;
     id<CNSeq> _directLightPercents;
     id<CNSeq> _directLightDepthMwcp;
     id<CNSeq> _directLightShadows;
 }
-static ODClassType* _EGShadowSubShader_type;
+static ODClassType* _EGShadowDrawShader_type;
 @synthesize key = _key;
 @synthesize positionSlot = _positionSlot;
-@synthesize uvSlot = _uvSlot;
-@synthesize diffuseTexture = _diffuseTexture;
-@synthesize diffuseColorUniform = _diffuseColorUniform;
 @synthesize mwcpUniform = _mwcpUniform;
 @synthesize directLightPercents = _directLightPercents;
 @synthesize directLightDepthMwcp = _directLightDepthMwcp;
 @synthesize directLightShadows = _directLightShadows;
 
-+ (id)shadowSubShaderWithKey:(EGShadowSubShaderKey*)key program:(EGShaderProgram*)program {
-    return [[EGShadowSubShader alloc] initWithKey:key program:program];
++ (id)shadowDrawShaderWithKey:(EGShadowDrawShaderKey*)key program:(EGShaderProgram*)program {
+    return [[EGShadowDrawShader alloc] initWithKey:key program:program];
 }
 
-- (id)initWithKey:(EGShadowSubShaderKey*)key program:(EGShaderProgram*)program {
+- (id)initWithKey:(EGShadowDrawShaderKey*)key program:(EGShaderProgram*)program {
     self = [super initWithProgram:program];
-    __weak EGShadowSubShader* _weakSelf = self;
+    __weak EGShadowDrawShader* _weakSelf = self;
     if(self) {
         _key = key;
         _positionSlot = [self attributeForName:@"position"];
-        _uvSlot = ((_key.texture) ? [CNOption applyValue:[self attributeForName:@"vertexUV"]] : [CNOption none]);
-        _diffuseTexture = ((_key.texture) ? [CNOption applyValue:[self uniformForName:@"texture"]] : [CNOption none]);
-        _diffuseColorUniform = [self uniformForName:@"color"];
         _mwcpUniform = [self uniformForName:@"mwcp"];
         _directLightPercents = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniform*(id i) {
             return [_weakSelf uniformForName:[NSString stringWithFormat:@"dirLightPercent%@", i]];
@@ -703,18 +655,12 @@ static ODClassType* _EGShadowSubShader_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShadowSubShader_type = [ODClassType classTypeWithCls:[EGShadowSubShader class]];
+    _EGShadowDrawShader_type = [ODClassType classTypeWithCls:[EGShadowDrawShader class]];
 }
 
-- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGShadowSub*)param {
+- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGShadowDrawParam*)param {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
     [_mwcpUniform setMatrix:[EGGlobal.matrix.value mwcp]];
-    if(_key.texture) {
-        [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
-        [((EGTexture*)([param.color.texture get])) bind];
-        [((EGShaderUniform*)([_diffuseTexture get])) setI4:0];
-    }
-    [_diffuseColorUniform setVec4:param.color.color];
     EGEnvironment* env = EGGlobal.context.environment;
     __block NSUInteger i = 0;
     [[[env.lights chain] filter:^BOOL(EGLight* _) {
@@ -731,20 +677,16 @@ static ODClassType* _EGShadowSubShader_type;
     }];
 }
 
-- (void)unloadParam:(EGShadowSub*)param {
-    if(_key.texture) {
-        [EGTexture unbind];
-        [((EGShaderAttribute*)([_uvSlot get])) unbind];
-    }
+- (void)unloadParam:(EGShadowDrawParam*)param {
     [_positionSlot unbind];
 }
 
 - (ODClassType*)type {
-    return [EGShadowSubShader type];
+    return [EGShadowDrawShader type];
 }
 
 + (ODClassType*)type {
-    return _EGShadowSubShader_type;
+    return _EGShadowDrawShader_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -754,7 +696,7 @@ static ODClassType* _EGShadowSubShader_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShadowSubShader* o = ((EGShadowSubShader*)(other));
+    EGShadowDrawShader* o = ((EGShadowDrawShader*)(other));
     return [self.key isEqual:o.key] && [self.program isEqual:o.program];
 }
 
