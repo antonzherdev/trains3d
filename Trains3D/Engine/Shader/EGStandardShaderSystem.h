@@ -3,6 +3,7 @@
 #import "GEVec.h"
 @class EGGlobal;
 @class EGContext;
+@class EGRenderTarget;
 @class EGStandardMaterial;
 @class EGShadowShaderSystem;
 @class EGEnvironment;

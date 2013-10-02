@@ -13,6 +13,7 @@
 @class TRModels;
 @class EGMaterial;
 @class EGContext;
+@class EGRenderTarget;
 @class EGCounter;
 @class EGMatrixStack;
 

@@ -3,8 +3,8 @@
 #import "TRRailroad.h"
 #import "EGSurface.h"
 #import "GL.h"
-#import "TRModels.h"
 #import "EGContext.h"
+#import "TRModels.h"
 #import "GEMat4.h"
 #import "TRRailPoint.h"
 #import "EGMapIso.h"
@@ -57,9 +57,11 @@ static ODClassType* _TRRailroadView_type;
     [_railroadSurface maybeForce:_changed draw:^void() {
         glClearColor(0.0, 0.0, 0.0, 0.0);
         glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
+        EGGlobal.context.considerShadows = NO;
         [[_railroad rails] forEach:^void(TRRail* _) {
             [_railView drawRail:_];
         }];
+        EGGlobal.context.considerShadows = YES;
         _changed = NO;
     }];
     [_backgroundView draw];
@@ -352,7 +354,7 @@ static ODClassType* _TRLightView_type;
         }];
     } f:^void() {
         [_bodyMaterial drawMesh:TRModels.light];
-        if(!(EGGlobal.context.isShadowsDrawing)) if(light.isGreen) {
+        if(!([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]])) if(light.isGreen) {
             [_greenMaterial drawMesh:TRModels.lightGreen];
             [_inactiveMaterial drawMesh:TRModels.lightRed];
             glDisable(GL_CULL_FACE);

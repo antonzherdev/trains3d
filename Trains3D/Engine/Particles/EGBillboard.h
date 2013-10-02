@@ -5,6 +5,7 @@
 #import "EGMaterial.h"
 @class EGGlobal;
 @class EGContext;
+@class EGRenderTarget;
 @class EGShadowShaderSystem;
 @class EGVertexBufferDesc;
 @class EGMatrixStack;

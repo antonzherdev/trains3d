@@ -31,7 +31,7 @@ static ODClassType* _EGSimpleShaderSystem_type;
 }
 
 - (EGShader*)shaderForParam:(EGColorSource*)param {
-    if(EGGlobal.context.isShadowsDrawing) {
+    if([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]]) {
         return [EGShadowShaderSystem shaderForParam:param];
     } else {
         if([param.texture isEmpty]) return _EGSimpleShaderSystem_colorShader;

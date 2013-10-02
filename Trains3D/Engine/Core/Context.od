@@ -21,8 +21,8 @@ class Context {
     var director : Director
     var environment = Environment.default
     val matrixStack = MatrixStack()
-    var isShadowsDrawing = false
-    var shadowLight : Light? = nil
+    var renderTarget : RenderTarget = SceneRenderTarget()
+    var considerShadows = true
 
     private var _viewport : RectI
     def viewport = _viewport
@@ -31,6 +31,10 @@ class Context {
         egViewport(viewport)
     }
 }
+
+class RenderTarget
+class SceneRenderTarget extends RenderTarget
+class ShadowRenderTarget(shadowLight : Light) extends RenderTarget
 
 class Environment(ambientColor : vec4, lights : [Light]) {
     static val default = Environment(vec4(1, 1, 1, 1), [])

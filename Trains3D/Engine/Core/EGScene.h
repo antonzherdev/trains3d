@@ -6,9 +6,11 @@
 @class EGContext;
 @class EGEnvironment;
 @class EGLight;
+@class EGShadowRenderTarget;
 @class EGMatrixStack;
 @class EGShadowMap;
 @class GEMat4;
+@class EGSceneRenderTarget;
 @protocol EGInputProcessor;
 @class EGEventCamera;
 

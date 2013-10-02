@@ -2,7 +2,7 @@ package com.antonzherdev.eg
 
 object BillboardShaderSystem extends ShaderSystem<ColorSource> {
     def shaderFor(param : ColorSource) : BillboardShader =
-        if(context.isShadowsDrawing)
+        if(context.renderTarget.is<ShadowRenderTarget>)
             if(ShadowShaderSystem.isColorShaderFor(param)) BillboardShader.instanceForColorShadow
             else BillboardShader.instanceForTextureShadow
         else if(param.texture.isEmpty) BillboardShader.instanceForColor else BillboardShader.instanceForTexture

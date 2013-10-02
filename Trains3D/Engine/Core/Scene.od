@@ -64,8 +64,7 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
 
         val shadowLights = env.lights.chain.filter(_.hasShadows).toArray
         env.lights.chain.filter(_.hasShadows).for{light ->
-            context.isShadowsDrawing = true
-            context.shadowLight = light
+            context.renderTarget = ShadowRenderTarget(light)
             matrix.value = light.shadowMatrix(camera.matrixModel)
             light.shadowMap.biasDepthCp = ShadowMap.biasMatrix *matrix.value.cp
             light.shadowMap{
@@ -73,10 +72,9 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
                 if(cullFace != GL_NONE) glCullFace(if(cullFace == GL_BACK) GL_FRONT else GL_BACK)
                 view.draw
             }
-            context.shadowLight = nil
-            context.isShadowsDrawing = false
 //            light.shadowMap.draw
         }
+        context.renderTarget = SceneRenderTarget()
         context.set(viewport = viewport)
         matrix.value = camera.matrixModel
         if(cullFace != GL_NONE) glCullFace(cullFace)

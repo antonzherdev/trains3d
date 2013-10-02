@@ -5,14 +5,16 @@ package com.antonzherdev.eg
 class StandardShaderSystem extends ShaderSystem<StandardMaterial> {
     static val instance = StandardShaderSystem()
     def shaderFor(param : StandardMaterial) : Shader<Material> =
-        if(context.isShadowsDrawing)
+        if(context.renderTarget.is<ShadowRenderTarget>)
             if(ShadowShaderSystem.isColorShaderFor(param.diffuse)) StandardShadowShader.instanceForColor
             else StandardShadowShader.instanceForTexture
         else {
             val lights = context.environment.lights
             val directLightsWithShadowsCount = lights.chain.filter(_.is<DirectLight> && _.hasShadows).count
             val directLightsWithoutShadowsCount = lights.chain.filter(_.is<DirectLight> && !_.hasShadows).count
-            val key = StandardShaderKey(directLightsWithShadowsCount, directLightsWithoutShadowsCount, param.diffuse.texture.isDefined)
+            val key =
+                if(context.considerShadows) StandardShaderKey(directLightsWithShadowsCount, directLightsWithoutShadowsCount, param.diffuse.texture.isDefined)
+                else StandardShaderKey(0, directLightsWithShadowsCount + directLightsWithoutShadowsCount, param.diffuse.texture.isDefined)
 
             shaders.objectFor(key, orUpdateWith = key.shader)
         }
@@ -178,7 +180,7 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
                 }
             }
             if(key.directLightWithoutShadowsCount > 0) {
-                env.lights.chain.filter(_.is<DirectLight> && !_.hasShadows).for { light ->
+                env.lights.chain.filter(_.is<DirectLight> && (!_.hasShadows || !context.considerShadows)).for { light ->
                     val dir = matrix.value.wc.mul(vec3 = light.cast<DirectLight>.direction, 0).xyz
                     directLightDirections[i].set(vec3 = dir.normalize)
                     directLightColors[i].set(vec4 = light.color)

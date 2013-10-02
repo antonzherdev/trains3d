@@ -14,7 +14,7 @@ static ODClassType* _EGBillboardShaderSystem_type;
 }
 
 + (EGBillboardShader*)shaderForParam:(EGColorSource*)param {
-    if(EGGlobal.context.isShadowsDrawing) {
+    if([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]]) {
         if([EGShadowShaderSystem isColorShaderForParam:param]) return [EGBillboardShader instanceForColorShadow];
         else return [EGBillboardShader instanceForTextureShadow];
     } else {

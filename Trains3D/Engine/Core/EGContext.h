@@ -9,6 +9,9 @@
 
 @class EGGlobal;
 @class EGContext;
+@class EGRenderTarget;
+@class EGSceneRenderTarget;
+@class EGShadowRenderTarget;
 @class EGEnvironment;
 @class EGLight;
 @class EGDirectLight;
@@ -32,8 +35,8 @@
 @property (nonatomic, retain) EGDirector* director;
 @property (nonatomic, retain) EGEnvironment* environment;
 @property (nonatomic, readonly) EGMatrixStack* matrixStack;
-@property (nonatomic) BOOL isShadowsDrawing;
-@property (nonatomic) id shadowLight;
+@property (nonatomic, retain) EGRenderTarget* renderTarget;
+@property (nonatomic) BOOL considerShadows;
 
 + (id)context;
 - (id)init;
@@ -42,6 +45,32 @@
 - (EGFont*)fontWithName:(NSString*)name;
 - (GERectI)viewport;
 - (void)setViewport:(GERectI)viewport;
++ (ODClassType*)type;
+@end
+
+
+@interface EGRenderTarget : NSObject
++ (id)renderTarget;
+- (id)init;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface EGSceneRenderTarget : EGRenderTarget
++ (id)sceneRenderTarget;
+- (id)init;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface EGShadowRenderTarget : EGRenderTarget
+@property (nonatomic, readonly) EGLight* shadowLight;
+
++ (id)shadowRenderTargetWithShadowLight:(EGLight*)shadowLight;
+- (id)initWithShadowLight:(EGLight*)shadowLight;
+- (ODClassType*)type;
 + (ODClassType*)type;
 @end
 

@@ -3,9 +3,10 @@
 #import "GEVec.h"
 @class TRRailroad;
 @class EGViewportSurface;
+@class EGGlobal;
+@class EGContext;
 @class TRRailroadBuilder;
 @class TRModels;
-@class EGGlobal;
 @class TRRail;
 @class GEMat4;
 @class EGMatrixModel;
@@ -14,7 +15,7 @@
 @class TRSwitch;
 @class TRRailConnector;
 @class TRRailLight;
-@class EGContext;
+@class EGRenderTarget;
 @class TRRailPoint;
 @class EGMapSso;
 @class EGMapSsoView;

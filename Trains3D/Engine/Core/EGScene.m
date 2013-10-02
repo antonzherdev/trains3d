@@ -277,8 +277,7 @@ static ODClassType* _EGLayer_type;
     [[[env.lights chain] filter:^BOOL(EGLight* _) {
         return _.hasShadows;
     }] forEach:^void(EGLight* light) {
-        EGGlobal.context.isShadowsDrawing = YES;
-        EGGlobal.context.shadowLight = [CNOption applyValue:light];
+        EGGlobal.context.renderTarget = [EGShadowRenderTarget shadowRenderTargetWithShadowLight:light];
         EGGlobal.matrix.value = [light shadowMatrixModel:[camera matrixModel]];
         [light shadowMap].biasDepthCp = [EGShadowMap.biasMatrix mulMatrix:[EGGlobal.matrix.value cp]];
         [[light shadowMap] applyDraw:^void() {
@@ -286,9 +285,8 @@ static ODClassType* _EGLayer_type;
             if(cullFace != GL_NONE) glCullFace(((cullFace == GL_BACK) ? GL_FRONT : GL_BACK));
             [_view draw];
         }];
-        EGGlobal.context.shadowLight = [CNOption none];
-        EGGlobal.context.isShadowsDrawing = NO;
     }];
+    EGGlobal.context.renderTarget = [EGSceneRenderTarget sceneRenderTarget];
     [EGGlobal.context setViewport:geRectIApplyRect(viewport)];
     EGGlobal.matrix.value = [camera matrixModel];
     if(cullFace != GL_NONE) glCullFace(cullFace);

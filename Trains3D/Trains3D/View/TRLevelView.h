@@ -14,6 +14,7 @@
 @class EGCameraIso;
 @class EGGlobal;
 @class EGContext;
+@class EGRenderTarget;
 
 @class TRLevelView;
 

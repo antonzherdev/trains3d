@@ -2,6 +2,7 @@
 #import "EGShader.h"
 @class EGGlobal;
 @class EGContext;
+@class EGRenderTarget;
 @class EGShadowShaderSystem;
 @class EGColorSource;
 @class EGVertexBufferDesc;

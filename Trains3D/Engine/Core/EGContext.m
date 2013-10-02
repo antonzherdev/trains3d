@@ -83,16 +83,16 @@ static ODClassType* _EGGlobal_type;
     EGDirector* _director;
     EGEnvironment* _environment;
     EGMatrixStack* _matrixStack;
-    BOOL _isShadowsDrawing;
-    id _shadowLight;
+    EGRenderTarget* _renderTarget;
+    BOOL _considerShadows;
     GERectI __viewport;
 }
 static ODClassType* _EGContext_type;
 @synthesize director = _director;
 @synthesize environment = _environment;
 @synthesize matrixStack = _matrixStack;
-@synthesize isShadowsDrawing = _isShadowsDrawing;
-@synthesize shadowLight = _shadowLight;
+@synthesize renderTarget = _renderTarget;
+@synthesize considerShadows = _considerShadows;
 
 + (id)context {
     return [[EGContext alloc] init];
@@ -105,8 +105,8 @@ static ODClassType* _EGContext_type;
         _fontCache = [NSMutableDictionary mutableDictionary];
         _environment = EGEnvironment.aDefault;
         _matrixStack = [EGMatrixStack matrixStack];
-        _isShadowsDrawing = NO;
-        _shadowLight = [CNOption none];
+        _renderTarget = [EGSceneRenderTarget sceneRenderTarget];
+        _considerShadows = YES;
     }
     
     return self;
@@ -162,6 +162,161 @@ static ODClassType* _EGContext_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGRenderTarget
+static ODClassType* _EGRenderTarget_type;
+
++ (id)renderTarget {
+    return [[EGRenderTarget alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGRenderTarget_type = [ODClassType classTypeWithCls:[EGRenderTarget class]];
+}
+
+- (ODClassType*)type {
+    return [EGRenderTarget type];
+}
+
++ (ODClassType*)type {
+    return _EGRenderTarget_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGSceneRenderTarget
+static ODClassType* _EGSceneRenderTarget_type;
+
++ (id)sceneRenderTarget {
+    return [[EGSceneRenderTarget alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGSceneRenderTarget_type = [ODClassType classTypeWithCls:[EGSceneRenderTarget class]];
+}
+
+- (ODClassType*)type {
+    return [EGSceneRenderTarget type];
+}
+
++ (ODClassType*)type {
+    return _EGSceneRenderTarget_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGShadowRenderTarget{
+    EGLight* _shadowLight;
+}
+static ODClassType* _EGShadowRenderTarget_type;
+@synthesize shadowLight = _shadowLight;
+
++ (id)shadowRenderTargetWithShadowLight:(EGLight*)shadowLight {
+    return [[EGShadowRenderTarget alloc] initWithShadowLight:shadowLight];
+}
+
+- (id)initWithShadowLight:(EGLight*)shadowLight {
+    self = [super init];
+    if(self) _shadowLight = shadowLight;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGShadowRenderTarget_type = [ODClassType classTypeWithCls:[EGShadowRenderTarget class]];
+}
+
+- (ODClassType*)type {
+    return [EGShadowRenderTarget type];
+}
+
++ (ODClassType*)type {
+    return _EGShadowRenderTarget_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGShadowRenderTarget* o = ((EGShadowRenderTarget*)(other));
+    return [self.shadowLight isEqual:o.shadowLight];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.shadowLight hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"shadowLight=%@", self.shadowLight];
     [description appendString:@">"];
     return description;
 }

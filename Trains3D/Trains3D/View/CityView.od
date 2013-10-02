@@ -19,7 +19,7 @@ class CityView {
              .modify(m = m -> m.rotate(city.angle.angle, 0, -1, 0))
         ) {
             StandardMaterial(city.color.color).draw(Models.cityBodies)
-            if(!context.isShadowsDrawing) {
+            if(!context.renderTarget.is<ShadowRenderTarget>) {
                 glDisable(GL_CULL_FACE)
                 val roofMaterial = StandardMaterial(ColorSource(city.color.color, roofTexture), vec4(0.5, 0.5, 0.5, 1), 1)
                 roofMaterial.draw(Models.cityRoofs)
