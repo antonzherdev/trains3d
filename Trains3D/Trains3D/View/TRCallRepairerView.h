@@ -10,6 +10,7 @@
 @protocol TRStrings;
 @class EGMatrixStack;
 @class GEMat4;
+@class TRRailroad;
 @class TRCity;
 @class EGContext;
 @class TRCityColor;

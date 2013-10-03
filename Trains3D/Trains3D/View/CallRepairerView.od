@@ -2,15 +2,15 @@ package com.antonzherdev.trains
 
 class CallRepairerView(level : Level) extends InputProcessor with MouseProcessor {
     def draw {
-//        if(!level.railroad.damagesPoints.isEmpty && level.repairer.isEmpty) {
+        if(!level.railroad.damagesPoints.isEmpty && level.repairer.isEmpty) {
             glDisable(GL_DEPTH_TEST)
             BlendFunction.standard {
                 level.cities.for(drawButtonFor(_))
             }
             glEnable(GL_DEPTH_TEST)
-//        } else if(!buttons.isEmpty) {
-//            buttons.clear
-//        }
+        } else if(!buttons.isEmpty) {
+            buttons.clear
+        }
     }
 
     val font = fontWith(name = "lucida_grande_18")
