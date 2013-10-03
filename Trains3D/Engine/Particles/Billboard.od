@@ -140,25 +140,24 @@ class BillboardParticleSystemView(maxCount : uint, material : ColorSource, blend
     }
 }
 
-object Billboard {
+class Billboard {
     static val vbDesc = VertexBufferDesc<BillboardBufferData>(BillboardBufferData.type,
         position = 0, uv = 9*4, normal = -1, color = 5*4, model = 3*4)
-    private val vertexes = VoidRefArray(BillboardBufferData.type, 4)
-    private val vb = VertexBuffer(vbDesc)
-    def draw(material : ColorSource, at : vec3, rect : Rect) {
-        draw(material, at, rect.quad, Rect(1, 1, -1, -1).quad)
+    var material : ColorSource
+    var uv : Rect = Rect(0, 0, 1, 1)
+
+    def draw {
+        D2D.drawSprite(material, at = position, rect.quad, uv.quad)
     }
 
-    def draw(material : ColorSource, at : vec3, quad : Quad, uv : Quad) {
-        var v = vertexes
-        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[0], material.color, uv.p[0]))
-        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[1], material.color, uv.p[1]))
-        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[2], material.color, uv.p[2]))
-        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[3], material.color, uv.p[3]))
-        vb.set(vertexes)
+    var position : vec3 = vec3(0, 0, 0)
+    var rect : Rect = Rect(0, 0, 0, 0)
 
-        glDisable(GL_CULL_FACE)
-        BillboardShaderSystem.shaderFor(material).draw(material, vb, GL_TRIANGLE_STRIP)
-        glEnable(GL_CULL_FACE)
+    static def apply(material : ColorSource) : Billboard = {
+        val ret = Billboard()
+        ret.material = material
+        ret
     }
+
+    def contains(vec2 : vec2) : bool = matrix.value.p.mul(rect + matrix.value.c.mul(vec4(position, 1)).xy).contains(vec2)
 }

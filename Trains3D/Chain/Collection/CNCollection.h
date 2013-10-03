@@ -38,6 +38,7 @@
 @protocol CNMutableTraversable<CNTraversable>
 - (void)appendItem:(id)item;
 - (void)removeItem:(id)item;
+- (void)clear;
 @end
 
 

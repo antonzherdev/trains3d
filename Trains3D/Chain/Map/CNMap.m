@@ -74,6 +74,10 @@ static ODClassType* _CNMapDefault_type;
     [_map removeItem:item];
 }
 
+- (void)clear {
+    [_map clear];
+}
+
 - (id)head {
     if([[self iterator] hasNext]) return [CNOption applyValue:[[self iterator] next]];
     else return [CNOption none];

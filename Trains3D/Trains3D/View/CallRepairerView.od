@@ -8,6 +8,8 @@ class CallRepairerView(level : Level) {
                 level.cities.for(drawButtonFor(_))
             }
             glEnable(GL_DEPTH_TEST)
+        } else if(!buttons.isEmpty) {
+            buttons.clear
         }
     }
 
@@ -16,6 +18,7 @@ class CallRepairerView(level : Level) {
         val textSize = font.measure(Loc.callRepairer)
         matrix.p.divBySelf(vec4(textSize * 1.2, 0, 0)).xy
     }
+    private var buttons = MutableHashMap<City, Billboard>()
 
     def drawButtonFor(city : City) {
         val cut = level.map.cutStateFor(city.tile)
@@ -31,8 +34,10 @@ class CallRepairerView(level : Level) {
             else p = vec2(MapSso.ISO/2, 0)
         else p = vec2(-bs.x, MapSso.ISO/4 + bs.y)
 
-        val at = vec3(city.tile, 0)
-        Billboard.draw(vec4(city.color.color.xyz, 0.8), at, Rect(p, bs))
-        font.draw(Loc.callRepairer, color = vec4(0.1, 0.1, 0.1, 1), at, TextAlignment(0, 0, false, vec3(p + bs/2, 0)))
+        val billboard = buttons.objectFor(city, orUpdateWith = Billboard(material = vec4(city.color.color.xyz, 0.8)))
+        billboard.position = vec3(city.tile, 0)
+        billboard.rect = Rect(p, bs)
+        billboard.draw
+        font.draw(Loc.callRepairer, color = vec4(0.1, 0.1, 0.1, 1), billboard.position, TextAlignment(0, 0, false, vec3(p + bs/2, 0)))
     }
 }

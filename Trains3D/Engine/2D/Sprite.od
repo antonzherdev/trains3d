@@ -1,34 +1,35 @@
 package com.antonzherdev.eg
 
 object D2D {
-    private val vertexes = VoidRefArray(MeshData.type, 4)
-    private val vb = VertexBuffer.mesh
-    def drawSprite(material : ColorSource, in : Rect) {
-        drawSprite(material, in, Rect(0, 0, 1, 1))
+    private val vertexes = VoidRefArray(BillboardBufferData.type, 4)
+    private val vb = VertexBuffer(Billboard.vbDesc)
+    def drawSprite(material : ColorSource, at : vec3, rect : Rect) {
+        drawSprite(material, at, rect.quad, Rect(1, 1, -1, -1).quad)
     }
 
-    def drawSprite(material : ColorSource, in : Rect, uv : Rect) {
+    def drawSprite(material : ColorSource, at : vec3, quad : Quad, uv : Quad) {
         var v = vertexes
-        v = v.write(MeshData, MeshData(uv.p0, vec3(0, 0, 1), vec3(in.p0, 0)))
-        v = v.write(MeshData, MeshData(uv.p1, vec3(0, 0, 1), vec3(in.p1, 0)))
-        v = v.write(MeshData, MeshData(uv.p2, vec3(0, 0, 1), vec3(in.p2, 0)))
-        v = v.write(MeshData, MeshData(uv.p3, vec3(0, 0, 1), vec3(in.p3, 0)))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[0], material.color, uv.p[0]))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[1], material.color, uv.p[1]))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[2], material.color, uv.p[2]))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[3], material.color, uv.p[3]))
         vb.set(vertexes)
 
         glDisable(GL_CULL_FACE)
-        material.draw(vb, GL_TRIANGLE_STRIP)
+        BillboardShaderSystem.shaderFor(material).draw(material, vb, GL_TRIANGLE_STRIP)
         glEnable(GL_CULL_FACE)
     }
 
+    private val lineVb = VertexBuffer.mesh
     private val lineVertexes = VoidRefArray(MeshData.type, 2)
     def drawLine(material : ColorSource, p0 : vec2, p1 : vec2) {
         var v = lineVertexes
         v = v.write(MeshData, MeshData(vec2(0, 0), vec3(0, 0, 1), vec3(p0, 0)))
         v = v.write(MeshData, MeshData(vec2(1, 1), vec3(0, 0, 1), vec3(p1, 0)))
-        vb.set(lineVertexes)
+        lineVb.set(lineVertexes)
 
         glDisable(GL_CULL_FACE)
-        material.draw(vb, GL_LINES)
+        material.draw(lineVb, GL_LINES)
         glEnable(GL_CULL_FACE)
     }
 }
@@ -38,7 +39,7 @@ class Sprite {
     var uv : Rect = Rect(0, 0, 1, 1)
 
     def draw {
-        D2D.drawSprite(material, in = Rect(position, size), uv)
+        D2D.drawSprite(material, at = vec3(position, 0), Rect(vec2(0, 0), size).quad, uv.quad)
     }
 
     var position : vec2 = vec2(0, 0)

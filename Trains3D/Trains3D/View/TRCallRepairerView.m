@@ -12,6 +12,7 @@
     TRLevel* _level;
     EGFont* _font;
     CNLazy* __lazy_buttonSize;
+    NSMutableDictionary* _buttons;
 }
 static ODClassType* _TRCallRepairerView_type;
 @synthesize level = _level;
@@ -33,6 +34,7 @@ static ODClassType* _TRCallRepairerView_type;
                 return geVec4Xy([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW(geVec2MulF(textSize, 1.2), 0.0, 0.0)]);
             }());
         }];
+        _buttons = [NSMutableDictionary mutableDictionary];
     }
     
     return self;
@@ -56,6 +58,8 @@ static ODClassType* _TRCallRepairerView_type;
             }];
         });
         glEnable(GL_DEPTH_TEST);
+    } else {
+        if(!([_buttons isEmpty])) [_buttons clear];
     }
 }
 
@@ -78,9 +82,13 @@ static ODClassType* _TRCallRepairerView_type;
             }
         }
     }
-    GEVec3 at = geVec3ApplyVec2Z(geVec2ApplyVec2i(city.tile), 0.0);
-    [EGBillboard drawMaterial:[EGColorSource applyColor:geVec4ApplyVec3W(geVec4Xyz(city.color.color), 0.8)] at:at rect:GERectMake(p, bs)];
-    [_font drawText:[TRStr.Loc callRepairer] color:GEVec4Make(0.1, 0.1, 0.1, 1.0) at:at alignment:EGTextAlignmentMake(0.0, 0.0, NO, geVec3ApplyVec2Z(geVec2AddVec2(p, geVec2DivI(bs, 2)), 0.0))];
+    EGBillboard* billboard = ((EGBillboard*)([_buttons objectForKey:city orUpdateWith:^EGBillboard*() {
+        return [EGBillboard applyMaterial:[EGColorSource applyColor:geVec4ApplyVec3W(geVec4Xyz(city.color.color), 0.8)]];
+    }]));
+    billboard.position = geVec3ApplyVec2Z(geVec2ApplyVec2i(city.tile), 0.0);
+    billboard.rect = GERectMake(p, bs);
+    [billboard draw];
+    [_font drawText:[TRStr.Loc callRepairer] color:GEVec4Make(0.1, 0.1, 0.1, 1.0) at:billboard.position alignment:EGTextAlignmentMake(0.0, 0.0, NO, geVec3ApplyVec2Z(geVec2AddVec2(p, geVec2DivI(bs, 2)), 0.0))];
 }
 
 - (ODClassType*)type {

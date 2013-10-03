@@ -34,6 +34,8 @@ typedef struct GEMat4Impl GEMat4Impl;
 - (GEVec4)divBySelfVec4:(GEVec4)vec4;
 
 - (GEMat4 *)inverse;
+
+- (GERect)mulRect:(GERect)rect;
 @end
 
 

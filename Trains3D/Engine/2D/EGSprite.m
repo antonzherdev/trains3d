@@ -6,30 +6,32 @@
 @implementation EGD2D
 static CNVoidRefArray _EGD2D_vertexes;
 static EGVertexBuffer* _EGD2D_vb;
+static EGVertexBuffer* _EGD2D_lineVb;
 static CNVoidRefArray _EGD2D_lineVertexes;
 static ODClassType* _EGD2D_type;
 
 + (void)initialize {
     [super initialize];
     _EGD2D_type = [ODClassType classTypeWithCls:[EGD2D class]];
-    _EGD2D_vertexes = cnVoidRefArrayApplyTpCount(egMeshDataType(), 4);
-    _EGD2D_vb = [EGVertexBuffer mesh];
+    _EGD2D_vertexes = cnVoidRefArrayApplyTpCount(egBillboardBufferDataType(), 4);
+    _EGD2D_vb = [EGVertexBuffer applyDesc:EGBillboard.vbDesc];
+    _EGD2D_lineVb = [EGVertexBuffer mesh];
     _EGD2D_lineVertexes = cnVoidRefArrayApplyTpCount(egMeshDataType(), 2);
 }
 
-+ (void)drawSpriteMaterial:(EGColorSource*)material in:(GERect)in {
-    [EGD2D drawSpriteMaterial:material in:in uv:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)];
++ (void)drawSpriteMaterial:(EGColorSource*)material at:(GEVec3)at rect:(GERect)rect {
+    [EGD2D drawSpriteMaterial:material at:at quad:geRectQuad(rect) uv:geRectQuad(geRectApplyXYWidthHeight(1.0, 1.0, -1.0, -1.0))];
 }
 
-+ (void)drawSpriteMaterial:(EGColorSource*)material in:(GERect)in uv:(GERect)uv {
++ (void)drawSpriteMaterial:(EGColorSource*)material at:(GEVec3)at quad:(GEQuad)quad uv:(GEQuad)uv {
     CNVoidRefArray v = _EGD2D_vertexes;
-    v = cnVoidRefArrayWriteTpItem(v, EGMeshData, EGMeshDataMake(uv.p0, GEVec3Make(0.0, 0.0, 1.0), geVec3ApplyVec2Z(in.p0, 0.0)));
-    v = cnVoidRefArrayWriteTpItem(v, EGMeshData, EGMeshDataMake(geRectP1(uv), GEVec3Make(0.0, 0.0, 1.0), geVec3ApplyVec2Z(geRectP1(in), 0.0)));
-    v = cnVoidRefArrayWriteTpItem(v, EGMeshData, EGMeshDataMake(geRectP2(uv), GEVec3Make(0.0, 0.0, 1.0), geVec3ApplyVec2Z(geRectP2(in), 0.0)));
-    v = cnVoidRefArrayWriteTpItem(v, EGMeshData, EGMeshDataMake(geRectP3(uv), GEVec3Make(0.0, 0.0, 1.0), geVec3ApplyVec2Z(geRectP3(in), 0.0)));
+    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[0], material.color, uv.p[0]));
+    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[1], material.color, uv.p[1]));
+    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[2], material.color, uv.p[2]));
+    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[3], material.color, uv.p[3]));
     [_EGD2D_vb setArray:_EGD2D_vertexes];
     glDisable(GL_CULL_FACE);
-    [material drawVb:_EGD2D_vb mode:GL_TRIANGLE_STRIP];
+    [[EGBillboardShaderSystem shaderForParam:material] drawParam:material vb:_EGD2D_vb mode:GL_TRIANGLE_STRIP];
     glEnable(GL_CULL_FACE);
 }
 
@@ -37,9 +39,9 @@ static ODClassType* _EGD2D_type;
     CNVoidRefArray v = _EGD2D_lineVertexes;
     v = cnVoidRefArrayWriteTpItem(v, EGMeshData, EGMeshDataMake(GEVec2Make(0.0, 0.0), GEVec3Make(0.0, 0.0, 1.0), geVec3ApplyVec2Z(p0, 0.0)));
     v = cnVoidRefArrayWriteTpItem(v, EGMeshData, EGMeshDataMake(GEVec2Make(1.0, 1.0), GEVec3Make(0.0, 0.0, 1.0), geVec3ApplyVec2Z(p1, 0.0)));
-    [_EGD2D_vb setArray:_EGD2D_lineVertexes];
+    [_EGD2D_lineVb setArray:_EGD2D_lineVertexes];
     glDisable(GL_CULL_FACE);
-    [material drawVb:_EGD2D_vb mode:((unsigned int)(GL_LINES))];
+    [material drawVb:_EGD2D_lineVb mode:((unsigned int)(GL_LINES))];
     glEnable(GL_CULL_FACE);
 }
 
@@ -107,7 +109,7 @@ static ODClassType* _EGSprite_type;
 }
 
 - (void)draw {
-    [EGD2D drawSpriteMaterial:_material in:GERectMake(_position, _size) uv:_uv];
+    [EGD2D drawSpriteMaterial:_material at:geVec3ApplyVec2Z(_position, 0.0) quad:geRectQuad(GERectMake(GEVec2Make(0.0, 0.0), _size)) uv:geRectQuad(_uv)];
 }
 
 - (GERect)rect {

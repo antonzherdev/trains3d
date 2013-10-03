@@ -5,6 +5,8 @@
 #import "EGMesh.h"
 #import "GL.h"
 #import "EGTexture.h"
+#import "EGSprite.h"
+#import "GEMat4.h"
 @implementation EGBillboardShaderSystem
 static ODClassType* _EGBillboardShaderSystem_type;
 
@@ -483,34 +485,52 @@ static ODClassType* _EGBillboardParticleSystemView_type;
 @end
 
 
-@implementation EGBillboard
+@implementation EGBillboard{
+    EGColorSource* _material;
+    GERect _uv;
+    GEVec3 _position;
+    GERect _rect;
+}
 static EGVertexBufferDesc* _EGBillboard_vbDesc;
-static CNVoidRefArray _EGBillboard_vertexes;
-static EGVertexBuffer* _EGBillboard_vb;
 static ODClassType* _EGBillboard_type;
+@synthesize material = _material;
+@synthesize uv = _uv;
+@synthesize position = _position;
+@synthesize rect = _rect;
+
++ (id)billboard {
+    return [[EGBillboard alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    if(self) {
+        _uv = geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0);
+        _position = GEVec3Make(0.0, 0.0, 0.0);
+        _rect = geRectApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0);
+    }
+    
+    return self;
+}
 
 + (void)initialize {
     [super initialize];
     _EGBillboard_type = [ODClassType classTypeWithCls:[EGBillboard class]];
     _EGBillboard_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:egBillboardBufferDataType() position:0 uv:((int)(9 * 4)) normal:-1 color:((int)(5 * 4)) model:((int)(3 * 4))];
-    _EGBillboard_vertexes = cnVoidRefArrayApplyTpCount(egBillboardBufferDataType(), 4);
-    _EGBillboard_vb = [EGVertexBuffer applyDesc:_EGBillboard_vbDesc];
 }
 
-+ (void)drawMaterial:(EGColorSource*)material at:(GEVec3)at rect:(GERect)rect {
-    [EGBillboard drawMaterial:material at:at quad:geRectQuad(rect) uv:geRectQuad(geRectApplyXYWidthHeight(1.0, 1.0, -1.0, -1.0))];
+- (void)draw {
+    [EGD2D drawSpriteMaterial:_material at:_position quad:geRectQuad(_rect) uv:geRectQuad(_uv)];
 }
 
-+ (void)drawMaterial:(EGColorSource*)material at:(GEVec3)at quad:(GEQuad)quad uv:(GEQuad)uv {
-    CNVoidRefArray v = _EGBillboard_vertexes;
-    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[0], material.color, uv.p[0]));
-    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[1], material.color, uv.p[1]));
-    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[2], material.color, uv.p[2]));
-    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[3], material.color, uv.p[3]));
-    [_EGBillboard_vb setArray:_EGBillboard_vertexes];
-    glDisable(GL_CULL_FACE);
-    [[EGBillboardShaderSystem shaderForParam:material] drawParam:material vb:_EGBillboard_vb mode:GL_TRIANGLE_STRIP];
-    glEnable(GL_CULL_FACE);
++ (EGBillboard*)applyMaterial:(EGColorSource*)material {
+    EGBillboard* ret = [EGBillboard billboard];
+    ret.material = material;
+    return ret;
+}
+
+- (BOOL)containsVec2:(GEVec2)vec2 {
+    return geRectContainsVec2([EGGlobal.matrix.value.p mulRect:geRectAddVec2(_rect, geVec4Xy([EGGlobal.matrix.value.c mulVec4:geVec4ApplyVec3W(_position, 1.0)]))], vec2);
 }
 
 - (ODClassType*)type {
@@ -527,16 +547,6 @@ static ODClassType* _EGBillboard_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {

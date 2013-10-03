@@ -22,12 +22,12 @@ class TreeView(forest : Forest) {
         val quad = (rects(tp)*tree.size).quad
         val quad3 = Quad3(mPlaneCoord, quad)
         val mQuad = Quad(quad3.p0.xy, quad3.p1.xy, quad3.p2.xy, quad3.p3.xy)
-        Billboard.draw(materials[tp], at = vec3(tree.position, 0), mQuad, uv = mainUv)
+        D2D.drawSprite(materials[tp], at = vec3(tree.position, 0), mQuad, uv = mainUv)
 
         val r = tree.rustle*0.04
         val rPlaneCoord = mPlaneCoord.set(x = mPlaneCoord.x + vec3(0, r, 0))
         val rQuad3 = Quad3(rPlaneCoord, quad)
-        Billboard.draw(materials[tp], at = vec3(tree.position, 0),
+        D2D.drawSprite(materials[tp], at = vec3(tree.position, 0),
             Quad(rQuad3.p0.xy, rQuad3.p1.xy, rQuad3.p2.xy, rQuad3.p3.xy),
             uv = rustleUv)
     }

@@ -51,6 +51,7 @@ trait Traversable<T> {
 trait MutableTraversable<T> extends Traversable<T> {
     def append(item : T)
     def remove(item : T)
+    def clear
 }
 
 trait Iterable<T> extends Traversable<T> {

@@ -7,7 +7,7 @@
 @class EGTexture;
 @class TRTree;
 @class TRTreeType;
-@class EGBillboard;
+@class EGD2D;
 
 @class TRTreeView;
 

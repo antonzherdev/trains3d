@@ -66,7 +66,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
     egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
         glDisable(GL_DEPTH_TEST);
         glLineWidth(2.0);
-        [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 0.5)] in:GERectMake(GEVec2Make(0.0, 0.0), geVec2ApplyVec2i([EGGlobal.context viewport].size))];
+        [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 0.5)] at:GEVec3Make(0.0, 0.0, 0.0) rect:GERectMake(GEVec2Make(0.0, 0.0), geVec2ApplyVec2i([EGGlobal.context viewport].size))];
         GEVec2 p = geRectMoveToCenterForSize([_menuBackSprite rect], geVec2ApplyVec2i([EGGlobal.context viewport].size)).p0;
         _menuBackSprite.position = p;
         [_menuBackSprite draw];

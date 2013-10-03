@@ -147,6 +147,13 @@ static GEMat4 * _identity;
     impl->m = glm::inverse(_impl->m);
     return [GEMat4 matrixWithImpl:impl];
 }
+
+- (GERect)mulRect:(GERect)rect {
+    glm::vec4 v0 = _impl->m* glm::vec4(rect.p0.x, rect.p0.y, 0, 1);
+    GEVec2 p3 = {rect.p0.x + rect.size.x, rect.p0.y + rect.size.y};
+    glm::vec4 v3 = _impl->m* glm::vec4(p3.x, p3.y, 0, 1);
+    return {v0.x, v0.y, v3.x - v0.x, v3.y - v0.y};
+}
 @end
 
 

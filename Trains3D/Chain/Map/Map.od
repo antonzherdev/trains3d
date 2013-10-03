@@ -56,4 +56,7 @@ class MapDefault<K, V>(defaultFunc : K -> V, map : MutableMap<K, V>) extends Mut
     def remove(item : (K, V)) {
         map.remove(item)
     }
+    def clear {
+        map.clear
+    }
 }

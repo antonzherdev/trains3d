@@ -1,4 +1,5 @@
 #import "objd.h"
+#import "EGBillboard.h"
 #import "EGMesh.h"
 #import "GEVec.h"
 @class EGColorSource;
@@ -10,8 +11,8 @@
 
 @interface EGD2D : NSObject
 - (ODClassType*)type;
-+ (void)drawSpriteMaterial:(EGColorSource*)material in:(GERect)in;
-+ (void)drawSpriteMaterial:(EGColorSource*)material in:(GERect)in uv:(GERect)uv;
++ (void)drawSpriteMaterial:(EGColorSource*)material at:(GEVec3)at rect:(GERect)rect;
++ (void)drawSpriteMaterial:(EGColorSource*)material at:(GEVec3)at quad:(GEQuad)quad uv:(GEQuad)uv;
 + (void)drawLineMaterial:(EGColorSource*)material p0:(GEVec2)p0 p1:(GEVec2)p1;
 + (ODClassType*)type;
 @end

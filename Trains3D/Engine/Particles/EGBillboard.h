@@ -11,7 +11,8 @@
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class EGTexture;
-@class EGVertexBuffer;
+@class EGD2D;
+@class GEMat4;
 
 @class EGBillboardShaderSystem;
 @class EGBillboardShader;
@@ -123,9 +124,17 @@ ODPType* egBillboardBufferDataType();
 
 
 @interface EGBillboard : NSObject
+@property (nonatomic, retain) EGColorSource* material;
+@property (nonatomic) GERect uv;
+@property (nonatomic) GEVec3 position;
+@property (nonatomic) GERect rect;
+
++ (id)billboard;
+- (id)init;
 - (ODClassType*)type;
-+ (void)drawMaterial:(EGColorSource*)material at:(GEVec3)at rect:(GERect)rect;
-+ (void)drawMaterial:(EGColorSource*)material at:(GEVec3)at quad:(GEQuad)quad uv:(GEQuad)uv;
+- (void)draw;
++ (EGBillboard*)applyMaterial:(EGColorSource*)material;
+- (BOOL)containsVec2:(GEVec2)vec2;
 + (EGVertexBufferDesc*)vbDesc;
 + (ODClassType*)type;
 @end
