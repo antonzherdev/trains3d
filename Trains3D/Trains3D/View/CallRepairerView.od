@@ -24,15 +24,11 @@ class CallRepairerView(level : Level) extends InputProcessor with MouseProcessor
         val cut = level.map.cutStateFor(city.tile)
 
         val bs = buttonSize(context.viewport)
-        var p : vec2
-        if(cut.x != 0 && cut.y == 0 && cut.y2 == 0) p = vec2(0, MapSso.ISO/4 + bs.y)
-        else if(cut.y != 0)
-            if(cut.x2 != 0) p = vec2(-MapSso.ISO/2 - bs.x, -bs.y)
-            else p = vec2(MapSso.ISO/2, -bs.y)
-        else if(cut.y2 != 0)
-            if(cut.x2 != 0) p = vec2(-MapSso.ISO/2 - bs.x, 0)
-            else p = vec2(MapSso.ISO/2, 0)
-        else p = vec2(-bs.x, MapSso.ISO/4 + bs.y)
+        var p = vec2(0, 0)
+        if(cut.x != 0) p += vec2(0.5, 0)
+        if(cut.x2 != 0) p += vec2(-0.5 - bs.x, 0)
+        if(cut.y != 0) p += vec2(0, -0.25 - bs.y)
+        if(cut.y2 != 0) p += vec2(0, 0.25)
 
         val billboard = buttons.objectFor(city, orUpdateWith = Billboard(material = vec4(city.color.color.xyz, 0.8)))
         billboard.position = vec3(city.tile, 0)

@@ -61,22 +61,11 @@ static ODClassType* _TRCallRepairerView_type;
 - (void)drawButtonForCity:(TRCity*)city {
     EGMapTileCutState cut = [_level.map cutStateForTile:city.tile];
     GEVec2 bs = uwrap(GEVec2, [_buttonSize applyX:wrap(GERectI, [EGGlobal.context viewport])]);
-    GEVec2 p;
-    if(cut.x != 0 && cut.y == 0 && cut.y2 == 0) {
-        p = GEVec2Make(0.0, ((float)(EGMapSso.ISO / 4 + bs.y)));
-    } else {
-        if(cut.y != 0) {
-            if(cut.x2 != 0) p = GEVec2Make(((float)(-EGMapSso.ISO / 2 - bs.x)), -bs.y);
-            else p = GEVec2Make(((float)(EGMapSso.ISO / 2)), -bs.y);
-        } else {
-            if(cut.y2 != 0) {
-                if(cut.x2 != 0) p = GEVec2Make(((float)(-EGMapSso.ISO / 2 - bs.x)), 0.0);
-                else p = GEVec2Make(((float)(EGMapSso.ISO / 2)), 0.0);
-            } else {
-                p = GEVec2Make(-bs.x, ((float)(EGMapSso.ISO / 4 + bs.y)));
-            }
-        }
-    }
+    GEVec2 p = GEVec2Make(0.0, 0.0);
+    if(cut.x != 0) p = geVec2AddVec2(p, GEVec2Make(0.5, 0.0));
+    if(cut.x2 != 0) p = geVec2AddVec2(p, GEVec2Make(((float)(-0.5 - bs.x)), 0.0));
+    if(cut.y != 0) p = geVec2AddVec2(p, GEVec2Make(0.0, ((float)(-0.25 - bs.y))));
+    if(cut.y2 != 0) p = geVec2AddVec2(p, GEVec2Make(0.0, 0.25));
     EGBillboard* billboard = ((EGBillboard*)([_buttons objectForKey:city orUpdateWith:^EGBillboard*() {
         return [EGBillboard applyMaterial:[EGColorSource applyColor:geVec4ApplyVec3W(geVec4Xyz(city.color.color), 0.8)]];
     }]));
