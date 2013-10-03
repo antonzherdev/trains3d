@@ -42,4 +42,9 @@
     [self removeObjectForKey:object.a];
 }
 
+- (void)clear {
+    [self removeAllObjects];
+}
+
+
 @end

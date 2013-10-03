@@ -12,7 +12,6 @@
 #import "TRRailroad.h"
 #import "EGMapIso.h"
 #import "TRLevelView.h"
-#import "TRLevelProcessor.h"
 #import "TRLevelMenuView.h"
 #import "TRLevelPauseMenuView.h"
 @implementation TRLevelFactory
@@ -153,7 +152,7 @@ static ODClassType* _TRTrainLayers_type;
     self = [super init];
     if(self) {
         _level = level;
-        _levelLayer = [EGLayer layerWithView:[TRLevelView levelViewWithLevel:_level] processor:[CNOption applyValue:[TRLevelProcessor levelProcessorWithLevel:_level]]];
+        _levelLayer = [EGLayer applyView:[TRLevelView levelViewWithLevel:_level]];
         _menuLayer = [EGLayer applyView:[TRLevelMenuView levelMenuViewWithLevel:_level]];
         _pauseMenuLayer = [EGLayer applyView:[TRLevelPauseMenuView levelPauseMenuViewWithLevel:_level]];
     }

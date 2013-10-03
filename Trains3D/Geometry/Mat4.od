@@ -9,6 +9,7 @@ stub class mat4 {
     def mul(vec4 : vec4) : vec4
     def mul(vec3 : vec3, w : float4) : vec4
     def mul(rect : Rect) : Rect
+    def mul(rect : Rect, z : float4) : Rect
     def divBySelf(vec4 : vec4) : vec4
     def rotate(angle : float4, x : float4, y : float4, z : float4) : mat4
     def scale(x : float4, y : float4, z : float4) : mat4

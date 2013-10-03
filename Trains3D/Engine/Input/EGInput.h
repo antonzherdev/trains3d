@@ -3,6 +3,7 @@
 #import "GELine.h"
 @class EGGlobal;
 @class EGDirector;
+@class EGMatrixModel;
 @class GEMat4;
 
 @class EGEventCamera;
@@ -33,13 +34,12 @@
 
 
 @interface EGEventCamera : NSObject
-@property (nonatomic, readonly) GEMat4* matrix;
+@property (nonatomic, readonly) EGMatrixModel* matrixModel;
 @property (nonatomic, readonly) GERect viewport;
 
-+ (id)eventCameraWithMatrix:(GEMat4*)matrix viewport:(GERect)viewport;
-- (id)initWithMatrix:(GEMat4*)matrix viewport:(GERect)viewport;
++ (id)eventCameraWithMatrixModel:(EGMatrixModel*)matrixModel viewport:(GERect)viewport;
+- (id)initWithMatrixModel:(EGMatrixModel*)matrixModel viewport:(GERect)viewport;
 - (ODClassType*)type;
-- (GEMat4*)inverseMatrix;
 + (ODClassType*)type;
 @end
 
@@ -55,6 +55,7 @@
 - (EGEvent*)setCamera:(id)camera;
 - (GEVec2)locationInView;
 - (GEVec2)location;
+- (GEVec2)locationInViewport;
 - (GEVec2)locationForDepth:(CGFloat)depth;
 - (BOOL)checkViewport;
 - (BOOL)isLeftMouseDown;

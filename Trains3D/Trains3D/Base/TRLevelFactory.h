@@ -20,7 +20,6 @@
 @class TRWeather;
 @class TRForest;
 @class TRLevelView;
-@class TRLevelProcessor;
 @class TRLevelMenuView;
 @class TRLevelPauseMenuView;
 

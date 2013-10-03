@@ -530,7 +530,8 @@ static ODClassType* _EGBillboard_type;
 }
 
 - (BOOL)containsVec2:(GEVec2)vec2 {
-    return geRectContainsVec2([EGGlobal.matrix.value.p mulRect:geRectAddVec2(_rect, geVec4Xy([EGGlobal.matrix.value.c mulVec4:geVec4ApplyVec3W(_position, 1.0)]))], vec2);
+    GEVec4 pp = [[EGGlobal.matrix.value wc] mulVec4:geVec4ApplyVec3W(_position, 1.0)];
+    return geRectContainsVec2([EGGlobal.matrix.value.p mulRect:geRectAddVec2(_rect, geVec4Xy(pp)) z:pp.z], vec2);
 }
 
 - (ODClassType*)type {

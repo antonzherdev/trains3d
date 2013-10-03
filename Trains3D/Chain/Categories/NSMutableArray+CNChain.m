@@ -15,4 +15,9 @@
     [self removeObject:object];
 }
 
+- (void)clear {
+    [self removeAllObjects];
+}
+
+
 @end

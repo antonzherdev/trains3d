@@ -1,4 +1,5 @@
 #import "objd.h"
+#import "EGInput.h"
 #import "GEVec.h"
 #import "EGMaterial.h"
 #import "EGMapIso.h"
@@ -9,14 +10,15 @@
 @protocol TRStrings;
 @class EGMatrixStack;
 @class GEMat4;
-@class TRRailroad;
 @class TRCity;
+@class EGContext;
 @class TRCityColor;
 @class EGBillboard;
+@class EGDirector;
 
 @class TRCallRepairerView;
 
-@interface TRCallRepairerView : NSObject
+@interface TRCallRepairerView : NSObject<EGInputProcessor, EGMouseProcessor>
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) EGFont* font;
 
@@ -25,6 +27,8 @@
 - (ODClassType*)type;
 - (void)draw;
 - (void)drawButtonForCity:(TRCity*)city;
+- (BOOL)processEvent:(EGEvent*)event;
+- (BOOL)mouseDownEvent:(EGEvent*)event;
 + (ODClassType*)type;
 @end
 

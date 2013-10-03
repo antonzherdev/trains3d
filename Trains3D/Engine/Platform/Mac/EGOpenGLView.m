@@ -125,8 +125,11 @@
     CGLUnlockContext([glContext CGLContextObj]);
 }
 
-#define DISPATCH_EVENT(theEvent, tp) [_director processEvent:\
-    [EGEventMac eventMacWithEvent:theEvent type:tp view:self camera:[CNOption none]]];
+#define DISPATCH_EVENT(theEvent, tp) {\
+[self lockOpenGLContext];\
+[_director processEvent:[EGEventMac eventMacWithEvent:theEvent type:tp view:self camera:[CNOption none]]];\
+[self unlockOpenGLContext];\
+}
 
 #pragma mark CCGLView - Mouse events
 

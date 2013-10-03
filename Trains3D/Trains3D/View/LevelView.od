@@ -2,7 +2,7 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class LevelView(level : Level) extends LayerView {
+class LevelView(level : Level) extends LayerView with InputProcessor {
     private val cityView = CityView()
     private val railroadView = RailroadView(level.railroad)
     private val trainView = TrainView(level)
@@ -37,4 +37,12 @@ class LevelView(level : Level) extends LayerView {
         level.trains.for(trainView.updateWith(delta, _))
         level.dyingTrains.for(trainView.updateWith(delta, _))
     }
+
+    private val railroadBuilderProcessor = RailroadBuilderProcessor(level.railroad.builder)
+    private val switchProcessor = SwitchProcessor(level)
+
+    def process(event : Event) : bool =
+        callRepairerView.process(event)
+        || switchProcessor.process(event)
+        || railroadBuilderProcessor.process(event)
 }

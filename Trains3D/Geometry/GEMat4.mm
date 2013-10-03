@@ -154,6 +154,13 @@ static GEMat4 * _identity;
     glm::vec4 v3 = _impl->m* glm::vec4(p3.x, p3.y, 0, 1);
     return {v0.x, v0.y, v3.x - v0.x, v3.y - v0.y};
 }
+
+- (GERect)mulRect:(GERect)rect z:(float)z {
+    glm::vec4 v0 = _impl->m* glm::vec4(rect.p0.x, rect.p0.y, z, 1);
+    GEVec2 p3 = {rect.p0.x + rect.size.x, rect.p0.y + rect.size.y};
+    glm::vec4 v3 = _impl->m* glm::vec4(p3.x, p3.y, z, 1);
+    return {v0.x, v0.y, v3.x - v0.x, v3.y - v0.y};
+}
 @end
 
 

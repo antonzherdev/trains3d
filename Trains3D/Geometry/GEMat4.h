@@ -36,6 +36,8 @@ typedef struct GEMat4Impl GEMat4Impl;
 - (GEMat4 *)inverse;
 
 - (GERect)mulRect:(GERect)rect;
+
+- (GERect)mulRect:(GERect)rect z:(float)z;
 @end
 
 

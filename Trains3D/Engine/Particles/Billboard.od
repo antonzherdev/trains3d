@@ -159,5 +159,8 @@ class Billboard {
         ret
     }
 
-    def contains(vec2 : vec2) : bool = matrix.value.p.mul(rect + matrix.value.c.mul(vec4(position, 1)).xy).contains(vec2)
+    def contains(vec2 : vec2) : bool = {
+        val pp = matrix.value.wc.mul(vec4(position, 1))
+        matrix.value.p.mul(rect + pp.xy, pp.z).contains(vec2)
+    }
 }

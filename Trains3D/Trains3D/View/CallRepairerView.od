@@ -1,20 +1,20 @@
 package com.antonzherdev.trains
 
-class CallRepairerView(level : Level) {
+class CallRepairerView(level : Level) extends InputProcessor with MouseProcessor {
     def draw {
-        if(!level.railroad.damagesPoints.isEmpty && level.repairer.isEmpty) {
+//        if(!level.railroad.damagesPoints.isEmpty && level.repairer.isEmpty) {
             glDisable(GL_DEPTH_TEST)
             BlendFunction.standard {
                 level.cities.for(drawButtonFor(_))
             }
             glEnable(GL_DEPTH_TEST)
-        } else if(!buttons.isEmpty) {
-            buttons.clear
-        }
+//        } else if(!buttons.isEmpty) {
+//            buttons.clear
+//        }
     }
 
     val font = fontWith(name = "lucida_grande_18")
-    private lazy val buttonSize : vec2 = {
+    private val buttonSize = Cache<Rect, vec2>{vp ->
         val textSize = font.measure(Loc.callRepairer)
         matrix.p.divBySelf(vec4(textSize * 1.2, 0, 0)).xy
     }
@@ -23,7 +23,7 @@ class CallRepairerView(level : Level) {
     def drawButtonFor(city : City) {
         val cut = level.map.cutStateFor(city.tile)
 
-        val bs = buttonSize
+        val bs = buttonSize(context.viewport)
         var p : vec2
         if(cut.x != 0 && cut.y == 0 && cut.y2 == 0) p = vec2(0, MapSso.ISO/4 + bs.y)
         else if(cut.y != 0)
@@ -39,5 +39,16 @@ class CallRepairerView(level : Level) {
         billboard.rect = Rect(p, bs)
         billboard.draw
         font.draw(Loc.callRepairer, color = vec4(0.1, 0.1, 0.1, 1), billboard.position, TextAlignment(0, 0, false, vec3(p + bs/2, 0)))
+    }
+
+    def process(event : Event) : bool = {
+        event.leftMouse(self)
+    }
+
+    def mouseDown(event : Event) : bool = {
+        val p = event.locationInViewport
+        val b = buttons.chain.find(_.b.contains(p))
+        b.for{kv -> level.runRepairerFrom(kv.a)}
+        b.isDefined
     }
 }

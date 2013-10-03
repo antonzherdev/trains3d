@@ -10,6 +10,10 @@
 #import "GEMat4.h"
 #import "EGMapIso.h"
 #import "EGCameraIso.h"
+#import "TRRailroadBuilderProcessor.h"
+#import "TRRailroad.h"
+#import "TRSwitchProcessor.h"
+#import "EGDirector.h"
 @implementation TRLevelView{
     TRLevel* _level;
     TRCityView* _cityView;
@@ -19,6 +23,8 @@
     TRCallRepairerView* _callRepairerView;
     EGEnvironment* _environment;
     id<EGCamera> _camera;
+    TRRailroadBuilderProcessor* _railroadBuilderProcessor;
+    TRSwitchProcessor* _switchProcessor;
 }
 static ODClassType* _TRLevelView_type;
 @synthesize level = _level;
@@ -40,6 +46,8 @@ static ODClassType* _TRLevelView_type;
         _callRepairerView = [TRCallRepairerView callRepairerViewWithLevel:_level];
         _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.7, 0.7, 0.7, 1.0) lights:(@[[EGDirectLight applyColor:GEVec4Make(0.6, 0.6, 0.6, 1.0) direction:geVec3Normalize(GEVec3Make(-0.15, 0.35, -0.3)) shadowsProjectionMatrix:[GEMat4 orthoLeft:-2.0 right:7.0 bottom:-3.0 top:4.0 zNear:-3.0 zFar:10.0]]])];
         _camera = [EGCameraIso cameraIsoWithTilesOnScreen:_level.map.size zReserve:0.3 center:GEVec2Make(0.0, 0.0)];
+        _railroadBuilderProcessor = [TRRailroadBuilderProcessor railroadBuilderProcessorWithBuilder:_level.railroad.builder];
+        _switchProcessor = [TRSwitchProcessor switchProcessorWithLevel:_level];
     }
     
     return self;
@@ -76,6 +84,14 @@ static ODClassType* _TRLevelView_type;
     [[_level dyingTrains] forEach:^void(TRTrain* _) {
         [_trainView updateWithDelta:delta train:_];
     }];
+}
+
+- (BOOL)processEvent:(EGEvent*)event {
+    return [_callRepairerView processEvent:event] || [_switchProcessor processEvent:event] || [_railroadBuilderProcessor processEvent:event];
+}
+
+- (BOOL)isProcessorActive {
+    return !([[EGGlobal director] isPaused]);
 }
 
 - (ODClassType*)type {

@@ -297,7 +297,9 @@ static ODClassType* _EGLayer_type;
 - (BOOL)processEvent:(EGEvent*)event viewport:(GERect)viewport {
     return unumb([[_processor mapF:^id(id<EGInputProcessor> p) {
         if([p isProcessorActive]) {
-            EGEventCamera* cam = [EGEventCamera eventCameraWithMatrix:[[[_view cameraWithViewport:viewport] matrixModel] wcp] viewport:viewport];
+            id<EGCamera> camera = [_view cameraWithViewport:viewport];
+            EGGlobal.matrix.value = [camera matrixModel];
+            EGEventCamera* cam = [EGEventCamera eventCameraWithMatrixModel:[camera matrixModel] viewport:viewport];
             EGEvent* e = [event setCamera:[CNOption applyValue:cam]];
             return numb([p processEvent:e]);
         } else {
