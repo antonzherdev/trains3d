@@ -1,9 +1,17 @@
 package com.antonzherdev.trains
 
-class TreeSound(forest : Forest) extends BackgroundSoundPlayer(Sound("Rustle.wav")) {
+class TreeSound(forest : Forest) extends SoundPlayersCollection(
+    [WindSound(forest)
+    ,SporadicSoundPlayer(Sound("Nightingale.mp3", 0.2), 10)
+    ])
+
+class WindSound(forest : Forest) extends BackgroundSoundPlayer(Sound("Rustle.wav", 0)) {
+
     def updateWith(delta : float) {
-//        val w = forest.weather.wind
-//        sound.volume = w.length*10
+        val w = forest.weather.wind
+        sound.volume = w.lengthSquare
 //        log("$(sound.volume)")
     }
 }
+
+

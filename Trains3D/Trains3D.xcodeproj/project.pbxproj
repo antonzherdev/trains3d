@@ -498,6 +498,7 @@
 		6F3DFE7A04CA9354F78BF86C /* multiple.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFF1E464C00F46127B442 /* multiple.inl */; };
 		6F3DFE8078E4B9C7D01C47FC /* lucida_grande_24.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF208CA871BAF91CF2323 /* lucida_grande_24.fnt */; };
 		6F3DFE856B2DA6CD51DD11C5 /* btUniversalConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF00312927A542D37D8A2 /* btUniversalConstraint.cpp */; };
+		6F3DFE9AF1BD70C8AB6F498A /* Nightingale.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF23F3060C73098441B6D /* Nightingale.mp3 */; };
 		6F3DFEB009F6DD590345E2CB /* gim_contact.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4930B18032DBD17F203 /* gim_contact.cpp */; };
 		6F3DFEB6141C2B88BF966074 /* TRStrings.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE4D47C0C15FEF085AD0 /* TRStrings.m */; };
 		6F3DFEBE81A29B563FF1FE5E /* CNXMLTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF096651818601E8713B /* CNXMLTest.m */; };
@@ -735,6 +736,7 @@
 		6F3DF2284D15E25DD88DF99F /* btMaterial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btMaterial.h; sourceTree = "<group>"; };
 		6F3DF230674EDAD926358B6E /* chain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = chain.h; sourceTree = "<group>"; };
 		6F3DF23AF40817619C054E55 /* btMinkowskiPenetrationDepthSolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btMinkowskiPenetrationDepthSolver.cpp; sourceTree = "<group>"; };
+		6F3DF23F3060C73098441B6D /* Nightingale.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Nightingale.mp3; sourceTree = "<group>"; };
 		6F3DF240F068F829D354CFF7 /* EGD3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGD3D.h; sourceTree = "<group>"; };
 		6F3DF243AB557FE1997F021E /* gim_linear_math.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gim_linear_math.h; sourceTree = "<group>"; };
 		6F3DF24521C0AA6E8283CBE9 /* CNXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNXML.h; sourceTree = "<group>"; };
@@ -3198,6 +3200,7 @@
 				6F3DF9B90D4ED6C36397AD8F /* TRLevelSound.m */,
 				6F3DFB60BE7C2C8A4C8E0872 /* TRTreeSound.h */,
 				6F3DF3BBCE3CFC0BD2F31CCF /* TRTreeSound.m */,
+				6F3DF23F3060C73098441B6D /* Nightingale.mp3 */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -3722,6 +3725,7 @@
 				6F3DF80642FF2867DE0ED79D /* TreeSound.od in Resources */,
 				6F3DF86E525DEFBFC1DF3500 /* LevelSound.od in Resources */,
 				6F3DFDDE59C71B6DDAA55A06 /* Log.od in Resources */,
+				6F3DFE9AF1BD70C8AB6F498A /* Nightingale.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

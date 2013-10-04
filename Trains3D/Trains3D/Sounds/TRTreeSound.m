@@ -2,6 +2,7 @@
 
 #import "SDSound.h"
 #import "TRTree.h"
+#import "TRWeather.h"
 @implementation TRTreeSound{
     TRForest* _forest;
 }
@@ -13,7 +14,7 @@ static ODClassType* _TRTreeSound_type;
 }
 
 - (id)initWithForest:(TRForest*)forest {
-    self = [super initWithSound:[SDSound applyFile:@"Rustle.wav"]];
+    self = [super initWithPlayers:(@[[TRWindSound windSoundWithForest:forest], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Nightingale.mp3" volume:0.3] secondsBetween:10.0]])];
     if(self) _forest = forest;
     
     return self;
@@ -22,9 +23,6 @@ static ODClassType* _TRTreeSound_type;
 + (void)initialize {
     [super initialize];
     _TRTreeSound_type = [ODClassType classTypeWithCls:[TRTreeSound class]];
-}
-
-- (void)updateWithDelta:(CGFloat)delta {
 }
 
 - (ODClassType*)type {
@@ -43,6 +41,68 @@ static ODClassType* _TRTreeSound_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRTreeSound* o = ((TRTreeSound*)(other));
+    return [self.forest isEqual:o.forest];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.forest hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"forest=%@", self.forest];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRWindSound{
+    TRForest* _forest;
+}
+static ODClassType* _TRWindSound_type;
+@synthesize forest = _forest;
+
++ (id)windSoundWithForest:(TRForest*)forest {
+    return [[TRWindSound alloc] initWithForest:forest];
+}
+
+- (id)initWithForest:(TRForest*)forest {
+    self = [super initWithSound:[SDSound applyFile:@"Rustle.wav" volume:0.0]];
+    if(self) _forest = forest;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRWindSound_type = [ODClassType classTypeWithCls:[TRWindSound class]];
+}
+
+- (void)updateWithDelta:(CGFloat)delta {
+    GEVec2 w = [_forest.weather wind];
+    self.sound.volume = geVec2LengthSquare(w);
+}
+
+- (ODClassType*)type {
+    return [TRWindSound type];
+}
+
++ (ODClassType*)type {
+    return _TRWindSound_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRWindSound* o = ((TRWindSound*)(other));
     return [self.forest isEqual:o.forest];
 }
 

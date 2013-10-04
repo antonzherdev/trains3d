@@ -2,6 +2,7 @@ package com.antonzherdev.sound
 
 stub class Sound {
     static def apply(file : string) : Sound
+    static def apply(file : string, volume : float4) : Sound
     var pan : float4 = 0.0 //stereo position
     var volume : float4 = 1.0 //volume 1.0 - normal. You can only decrease sound
     var time : float = 0.0 //current time in seconds

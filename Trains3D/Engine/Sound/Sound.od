@@ -40,3 +40,29 @@ class SoundPlayersCollection(players : [SoundPlayer]) extends SoundPlayer {
         players.for(_.updateWith(delta))
     }
 }
+
+class SporadicSoundPlayer(sound : Sound, secondsBetween : float/*average seconds amount between playings*/) extends SoundPlayer {
+    private var _timeToNextPlaying : float = 0
+
+    def start {
+        _timeToNextPlaying = Float.rnd(0, secondsBetween*2)
+    }
+    def stop {
+        sound.stop
+    }
+    def pause {
+        sound.pause
+    }
+    def resume {
+        sound.play
+    }
+    def updateWith(delta : float) {
+        if(!sound.isPlaying) {
+            _timeToNextPlaying -= delta
+            if(_timeToNextPlaying <= 0) {
+                sound.play
+                _timeToNextPlaying = Float.rnd(0, secondsBetween*2)
+            }
+        }
+    }
+}

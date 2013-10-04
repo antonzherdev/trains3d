@@ -22,7 +22,8 @@ static ODClassType* _SDSound_type;
     self = [super init];
     if (self) {
         _player = player;
-        [player prepareToPlay];
+        [player play];
+        [player pause];
     }
 
     return self;
@@ -112,6 +113,12 @@ static ODClassType* _SDSound_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
++ (SDSound *)applyFile:(NSString *)string volume:(float)volume {
+    SDSound *sound = [SDSound applyFile:string];
+    sound.volume = volume;
+    return sound;
 }
 
 - (NSString*)description {
