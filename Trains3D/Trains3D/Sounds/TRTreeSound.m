@@ -14,7 +14,7 @@ static ODClassType* _TRTreeSound_type;
 }
 
 - (id)initWithForest:(TRForest*)forest {
-    self = [super initWithPlayers:(@[[TRWindSound windSoundWithForest:forest], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Nightingale.mp3" volume:0.3] secondsBetween:10.0]])];
+    self = [super initWithPlayers:(@[[TRWindSound windSoundWithForest:forest], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Nightingale.mp3" volume:0.15] secondsBetween:300.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crow.mp3" volume:0.4] secondsBetween:150.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crows.mp3" volume:0.4] secondsBetween:300.0]])];
     if(self) _forest = forest;
     
     return self;
@@ -71,7 +71,7 @@ static ODClassType* _TRWindSound_type;
 }
 
 - (id)initWithForest:(TRForest*)forest {
-    self = [super initWithSound:[SDSound applyFile:@"Rustle.wav" volume:0.0]];
+    self = [super initWithSound:[SDSound applyFile:@"Rustle.mp3" volume:0.0]];
     if(self) _forest = forest;
     
     return self;
