@@ -1,0 +1,4 @@
+package com.antonzherdev.trains
+
+
+class LevelSound(level : Level) extends SoundPlayersCollection([TreeSound(level.forest)])

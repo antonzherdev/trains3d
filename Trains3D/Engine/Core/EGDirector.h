@@ -1,7 +1,7 @@
 #import "objd.h"
 #import "GEVec.h"
-@class EGScene;
 @class EGTime;
+@class EGScene;
 @class EGGlobal;
 @class EGContext;
 @class EGMatrixStack;
@@ -11,12 +11,13 @@
 @class EGDirector;
 
 @interface EGDirector : NSObject
-@property (nonatomic, retain) EGScene* scene;
 @property (nonatomic, readonly) EGTime* time;
 
 + (id)director;
 - (id)init;
 - (ODClassType*)type;
+- (id)scene;
+- (void)setScene:(EGScene*)scene;
 - (void)drawWithSize:(GEVec2)size;
 - (void)processEvent:(EGEvent*)event;
 - (BOOL)isStarted;

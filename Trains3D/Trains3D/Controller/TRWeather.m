@@ -144,13 +144,13 @@ static ODClassType* _TRWeather_type;
 }
 
 - (GEVec2)blastAnimationT:(CGFloat)t {
-    if(t < 0.01) {
+    if(t < 0.2) {
         GEVec2(^f)(float) = [EGProgress progressVec2:GEVec2Make(0.0, 0.0) vec22:__currentBlast.dir];
-        return f(((float)(t / 0.01)));
+        return f(((float)(t / 0.2)));
     } else {
-        if(t > __currentBlast.length - 0.01) {
+        if(t > __currentBlast.length - 0.2) {
             GEVec2(^f)(float) = [EGProgress progressVec2:__currentBlast.dir vec22:GEVec2Make(0.0, 0.0)];
-            return f(((float)((t - __currentBlast.length + 0.01) / 0.01)));
+            return f(((float)((t - __currentBlast.length + 0.2) / 0.2)));
         } else {
             return __currentBlast.dir;
         }

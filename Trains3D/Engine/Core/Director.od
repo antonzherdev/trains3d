@@ -3,16 +3,23 @@ package com.antonzherdev.eg
 
 
 class Director {
-    var scene : Scene
+    private var _scene : Scene? = nil
     private var _isStarted = false
     private var _isPaused = false
     val time : Time = Time()
+    def scene = _scene
+    def set(scene : Scene) {
+        if(_scene.isDefined) _scene.get.stop
+        _scene = scene
+        scene.start
+    }
 
     def drawWith(size : vec2) {
+        if(_scene.isEmpty) return nil
         if(size.x <= 0 || size.y <= 0) return nil
 
         context.director = self
-        val color = scene.backgroundColor
+        val color = _scene.get.backgroundColor
         glClearColor(color.x, color.y, color.z, color.w)
         glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
         matrix.clear
@@ -20,7 +27,7 @@ class Director {
         glEnable(GL_MULTISAMPLE)
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
         glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST)
-        scene.drawWith(size)
+        _scene.get.drawWith(size)
         glDisable(GL_DEPTH_TEST)
         context.matrixStack.clear
         context.set(viewport = Rect(vec2(0, 0), size))
@@ -28,7 +35,7 @@ class Director {
     }
 
     def process(event : Event) {
-        scene.process(event)
+        _scene.for(_.process(event))
     }
 
     def isStarted = _isStarted
@@ -43,18 +50,20 @@ class Director {
     def isPaused = _isPaused
     def pause {
         _isPaused = true
+        _scene.for(_.pause)
     }
 
     def resume {
         if(_isPaused) {
             _isPaused = false
             time.start
+            _scene.for(_.resume)
         }
     }
 
     def tick {
         time.tick
-        scene.updateWith(time.delta)
+        _scene.for(_.updateWith(time.delta))
         _stat.for(_.tickWith(time.delta))
     }
 

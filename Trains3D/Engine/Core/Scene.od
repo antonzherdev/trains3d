@@ -13,7 +13,7 @@ trait Camera {
 }
 
 
-class Scene(backgroundColor : vec4, controller : Controller, layers : Layers) {
+class Scene(backgroundColor : vec4, controller : Controller, layers : Layers, soundPlayer : SoundPlayer?) {
     def drawWith(viewSize : vec2) {
         layers.drawWith(viewSize)
     }
@@ -23,6 +23,23 @@ class Scene(backgroundColor : vec4, controller : Controller, layers : Layers) {
     def updateWith(delta : float) {
         controller.updateWith(delta)
         layers.updateWith(delta)
+        soundPlayer.for(_.updateWith(delta))
+    }
+
+    def start {
+        soundPlayer.for(_.start)
+    }
+
+    def stop {
+        soundPlayer.for(_.stop)
+    }
+
+    def pause {
+        soundPlayer.for(_.pause)
+    }
+
+    def resume {
+        soundPlayer.for(_.resume)
     }
 }
 
@@ -53,7 +70,7 @@ class SingleLayer(layer : Layer) extends Layers {
     def viewportsWith(viewSize : vec2) = [(layer, layer.viewportWith(viewSize))]
 }
 
-class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
+class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controller {
     static def apply(view : LayerView) : Layer = Layer(view, view.as<InputProcessor>)
     def drawWith(viewport : Rect) {
         val env = view.environment
@@ -86,7 +103,7 @@ class Layer(view : LayerView, processor : InputProcessor?) extends Controller {
     }
 
     def process(event : Event, viewport : Rect) : bool = {
-        processor.map{ p ->
+        inputProcessor.map{ p ->
             if(p.isProcessorActive) {
                 val camera = view.cameraWith(viewport)
                 matrix.value = camera.matrixModel

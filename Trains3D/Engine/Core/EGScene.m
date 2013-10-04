@@ -3,28 +3,32 @@
 #import "GL.h"
 #import "EGContext.h"
 #import "EGInput.h"
+#import "EGSound.h"
 #import "EGShadow.h"
 #import "GEMat4.h"
 @implementation EGScene{
     GEVec4 _backgroundColor;
     id<EGController> _controller;
     EGLayers* _layers;
+    id _soundPlayer;
 }
 static ODClassType* _EGScene_type;
 @synthesize backgroundColor = _backgroundColor;
 @synthesize controller = _controller;
 @synthesize layers = _layers;
+@synthesize soundPlayer = _soundPlayer;
 
-+ (id)sceneWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers {
-    return [[EGScene alloc] initWithBackgroundColor:backgroundColor controller:controller layers:layers];
++ (id)sceneWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id)soundPlayer {
+    return [[EGScene alloc] initWithBackgroundColor:backgroundColor controller:controller layers:layers soundPlayer:soundPlayer];
 }
 
-- (id)initWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers {
+- (id)initWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id)soundPlayer {
     self = [super init];
     if(self) {
         _backgroundColor = backgroundColor;
         _controller = controller;
         _layers = layers;
+        _soundPlayer = soundPlayer;
     }
     
     return self;
@@ -46,6 +50,33 @@ static ODClassType* _EGScene_type;
 - (void)updateWithDelta:(CGFloat)delta {
     [_controller updateWithDelta:delta];
     [_layers updateWithDelta:delta];
+    [_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
+        [_ updateWithDelta:delta];
+    }];
+}
+
+- (void)start {
+    [_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
+        [_ start];
+    }];
+}
+
+- (void)stop {
+    [_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
+        [_ stop];
+    }];
+}
+
+- (void)pause {
+    [_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
+        [_ pause];
+    }];
+}
+
+- (void)resume {
+    [_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
+        [_ resume];
+    }];
 }
 
 - (ODClassType*)type {
@@ -64,7 +95,7 @@ static ODClassType* _EGScene_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGScene* o = ((EGScene*)(other));
-    return GEVec4Eq(self.backgroundColor, o.backgroundColor) && [self.controller isEqual:o.controller] && [self.layers isEqual:o.layers];
+    return GEVec4Eq(self.backgroundColor, o.backgroundColor) && [self.controller isEqual:o.controller] && [self.layers isEqual:o.layers] && [self.soundPlayer isEqual:o.soundPlayer];
 }
 
 - (NSUInteger)hash {
@@ -72,6 +103,7 @@ static ODClassType* _EGScene_type;
     hash = hash * 31 + GEVec4Hash(self.backgroundColor);
     hash = hash * 31 + [self.controller hash];
     hash = hash * 31 + [self.layers hash];
+    hash = hash * 31 + [self.soundPlayer hash];
     return hash;
 }
 
@@ -80,6 +112,7 @@ static ODClassType* _EGScene_type;
     [description appendFormat:@"backgroundColor=%@", GEVec4Description(self.backgroundColor)];
     [description appendFormat:@", controller=%@", self.controller];
     [description appendFormat:@", layers=%@", self.layers];
+    [description appendFormat:@", soundPlayer=%@", self.soundPlayer];
     [description appendString:@">"];
     return description;
 }
@@ -236,21 +269,21 @@ static ODClassType* _EGSingleLayer_type;
 
 @implementation EGLayer{
     id<EGLayerView> _view;
-    id _processor;
+    id _inputProcessor;
 }
 static ODClassType* _EGLayer_type;
 @synthesize view = _view;
-@synthesize processor = _processor;
+@synthesize inputProcessor = _inputProcessor;
 
-+ (id)layerWithView:(id<EGLayerView>)view processor:(id)processor {
-    return [[EGLayer alloc] initWithView:view processor:processor];
++ (id)layerWithView:(id<EGLayerView>)view inputProcessor:(id)inputProcessor {
+    return [[EGLayer alloc] initWithView:view inputProcessor:inputProcessor];
 }
 
-- (id)initWithView:(id<EGLayerView>)view processor:(id)processor {
+- (id)initWithView:(id<EGLayerView>)view inputProcessor:(id)inputProcessor {
     self = [super init];
     if(self) {
         _view = view;
-        _processor = processor;
+        _inputProcessor = inputProcessor;
     }
     
     return self;
@@ -262,7 +295,7 @@ static ODClassType* _EGLayer_type;
 }
 
 + (EGLayer*)applyView:(id<EGLayerView>)view {
-    return [EGLayer layerWithView:view processor:[ODObject asKindOfProtocol:@protocol(EGInputProcessor) object:view]];
+    return [EGLayer layerWithView:view inputProcessor:[ODObject asKindOfProtocol:@protocol(EGInputProcessor) object:view]];
 }
 
 - (void)drawWithViewport:(GERect)viewport {
@@ -295,7 +328,7 @@ static ODClassType* _EGLayer_type;
 }
 
 - (BOOL)processEvent:(EGEvent*)event viewport:(GERect)viewport {
-    return unumb([[_processor mapF:^id(id<EGInputProcessor> p) {
+    return unumb([[_inputProcessor mapF:^id(id<EGInputProcessor> p) {
         if([p isProcessorActive]) {
             id<EGCamera> camera = [_view cameraWithViewport:viewport];
             EGGlobal.matrix.value = [camera matrixModel];
@@ -341,20 +374,20 @@ static ODClassType* _EGLayer_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGLayer* o = ((EGLayer*)(other));
-    return [self.view isEqual:o.view] && [self.processor isEqual:o.processor];
+    return [self.view isEqual:o.view] && [self.inputProcessor isEqual:o.inputProcessor];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.view hash];
-    hash = hash * 31 + [self.processor hash];
+    hash = hash * 31 + [self.inputProcessor hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"view=%@", self.view];
-    [description appendFormat:@", processor=%@", self.processor];
+    [description appendFormat:@", inputProcessor=%@", self.inputProcessor];
     [description appendString:@">"];
     return description;
 }

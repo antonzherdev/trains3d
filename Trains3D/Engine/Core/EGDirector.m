@@ -1,20 +1,19 @@
 #import "EGDirector.h"
 
-#import "EGScene.h"
 #import "EGTime.h"
+#import "EGScene.h"
 #import "EGContext.h"
 #import "GL.h"
 #import "EGStat.h"
 #import "EGInput.h"
 @implementation EGDirector{
-    EGScene* _scene;
+    id __scene;
     BOOL __isStarted;
     BOOL __isPaused;
     EGTime* _time;
     id __stat;
 }
 static ODClassType* _EGDirector_type;
-@synthesize scene = _scene;
 @synthesize time = _time;
 
 + (id)director {
@@ -24,6 +23,7 @@ static ODClassType* _EGDirector_type;
 - (id)init {
     self = [super init];
     if(self) {
+        __scene = [CNOption none];
         __isStarted = NO;
         __isPaused = NO;
         _time = [EGTime time];
@@ -38,10 +38,21 @@ static ODClassType* _EGDirector_type;
     _EGDirector_type = [ODClassType classTypeWithCls:[EGDirector class]];
 }
 
+- (id)scene {
+    return __scene;
+}
+
+- (void)setScene:(EGScene*)scene {
+    if([__scene isDefined]) [((EGScene*)([__scene get])) stop];
+    __scene = [CNOption applyValue:scene];
+    [scene start];
+}
+
 - (void)drawWithSize:(GEVec2)size {
+    if([__scene isEmpty]) return ;
     if(size.x <= 0 || size.y <= 0) return ;
     EGGlobal.context.director = self;
-    GEVec4 color = _scene.backgroundColor;
+    GEVec4 color = ((EGScene*)([__scene get])).backgroundColor;
     glClearColor(((CGFloat)(color.x)), ((CGFloat)(color.y)), ((CGFloat)(color.z)), ((CGFloat)(color.w)));
     glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
     [EGGlobal.matrix clear];
@@ -49,7 +60,7 @@ static ODClassType* _EGDirector_type;
     glEnable(GL_MULTISAMPLE);
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
     glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-    [_scene drawWithViewSize:size];
+    [((EGScene*)([__scene get])) drawWithViewSize:size];
     glDisable(GL_DEPTH_TEST);
     [EGGlobal.context.matrixStack clear];
     [EGGlobal.context setViewport:geRectIApplyRect(GERectMake(GEVec2Make(0.0, 0.0), size))];
@@ -59,7 +70,9 @@ static ODClassType* _EGDirector_type;
 }
 
 - (void)processEvent:(EGEvent*)event {
-    [_scene processEvent:event];
+    [__scene forEach:^void(EGScene* _) {
+        [_ processEvent:event];
+    }];
 }
 
 - (BOOL)isStarted {
@@ -81,18 +94,26 @@ static ODClassType* _EGDirector_type;
 
 - (void)pause {
     __isPaused = YES;
+    [__scene forEach:^void(EGScene* _) {
+        [_ pause];
+    }];
 }
 
 - (void)resume {
     if(__isPaused) {
         __isPaused = NO;
         [_time start];
+        [__scene forEach:^void(EGScene* _) {
+            [_ resume];
+        }];
     }
 }
 
 - (void)tick {
     [_time tick];
-    [_scene updateWithDelta:_time.delta];
+    [__scene forEach:^void(EGScene* _) {
+        [_ updateWithDelta:_time.delta];
+    }];
     [__stat forEach:^void(EGStat* _) {
         [_ tickWithDelta:_time.delta];
     }];

@@ -1,0 +1,5 @@
+package com.antonzherdev
+
+stub object sound {
+    val prefix = "SD"
+}

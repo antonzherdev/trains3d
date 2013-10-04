@@ -6,6 +6,7 @@ stub object trains {
     import com.antonzherdev.eg.Global._
     import com.antonzherdev.gl._
     import com.antonzherdev.gl.gl._
+    import com.antonzherdev.sound._
     import com.antonzherdev.trains.Str._
 
     val prefix = "TR"

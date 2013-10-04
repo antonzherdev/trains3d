@@ -7,6 +7,7 @@
 @class TRTreeType;
 @class TRWeatherRules;
 @class TRLevelRules;
+@class TRLevelSound;
 @class TRLevel;
 @class EGGlobal;
 @class EGDirector;

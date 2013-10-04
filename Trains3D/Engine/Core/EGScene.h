@@ -2,6 +2,7 @@
 #import "GEVec.h"
 @class EGMatrixModel;
 @class EGEvent;
+@protocol EGSoundPlayer;
 @class EGGlobal;
 @class EGContext;
 @class EGEnvironment;
@@ -38,13 +39,18 @@
 @property (nonatomic, readonly) GEVec4 backgroundColor;
 @property (nonatomic, readonly) id<EGController> controller;
 @property (nonatomic, readonly) EGLayers* layers;
+@property (nonatomic, readonly) id soundPlayer;
 
-+ (id)sceneWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers;
-- (id)initWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers;
++ (id)sceneWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id)soundPlayer;
+- (id)initWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id)soundPlayer;
 - (ODClassType*)type;
 - (void)drawWithViewSize:(GEVec2)viewSize;
 - (BOOL)processEvent:(EGEvent*)event;
 - (void)updateWithDelta:(CGFloat)delta;
+- (void)start;
+- (void)stop;
+- (void)pause;
+- (void)resume;
 + (ODClassType*)type;
 @end
 
@@ -77,10 +83,10 @@
 
 @interface EGLayer : NSObject<EGController>
 @property (nonatomic, readonly) id<EGLayerView> view;
-@property (nonatomic, readonly) id processor;
+@property (nonatomic, readonly) id inputProcessor;
 
-+ (id)layerWithView:(id<EGLayerView>)view processor:(id)processor;
-- (id)initWithView:(id<EGLayerView>)view processor:(id)processor;
++ (id)layerWithView:(id<EGLayerView>)view inputProcessor:(id)inputProcessor;
+- (id)initWithView:(id<EGLayerView>)view inputProcessor:(id)inputProcessor;
 - (ODClassType*)type;
 + (EGLayer*)applyView:(id<EGLayerView>)view;
 - (void)drawWithViewport:(GERect)viewport;

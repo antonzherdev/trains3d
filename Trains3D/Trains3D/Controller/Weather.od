@@ -42,12 +42,12 @@ class Weather(rules : WeatherRules) extends Controller {
     }
 
     private def blastAnimation(t : float) = {
-        if(t < 0.01) {
+        if(t < 0.2) {
             val f = progress(vec2(0, 0), _currentBlast.dir)
-            f(t/0.01)
-        } else if(t > _currentBlast.length - 0.01) {
+            f(t/0.2)
+        } else if(t > _currentBlast.length - 0.2) {
             val f = progress(_currentBlast.dir, vec2(0, 0))
-            f((t - _currentBlast.length + 0.01)/0.01)
+            f((t - _currentBlast.length + 0.2)/0.2)
         }
         else _currentBlast.dir
     }

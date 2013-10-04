@@ -5,6 +5,7 @@
 #import "TRTree.h"
 #import "TRWeather.h"
 #import "TRLevel.h"
+#import "TRLevelSound.h"
 #import "EGContext.h"
 #import "EGDirector.h"
 #import "TRCar.h"
@@ -47,12 +48,12 @@ static ODClassType* _TRLevelFactory_type;
 }
 
 + (EGScene*)sceneForLevel:(TRLevel*)level {
-    return [EGScene sceneWithBackgroundColor:geVec4DivI(GEVec4Make(215.0, 230.0, 195.0, 255.0), 255) controller:level layers:[TRTrainLayers trainLayersWithLevel:level]];
+    return [EGScene sceneWithBackgroundColor:geVec4DivI(GEVec4Make(215.0, 230.0, 195.0, 255.0), 255) controller:level layers:[TRTrainLayers trainLayersWithLevel:level] soundPlayer:[CNOption applyValue:[TRLevelSound levelSoundWithLevel:level]]];
 }
 
 + (void)restartLevel {
-    [[ODObject asKindOfClass:[TRLevel class] object:[EGGlobal director].scene.controller] forEach:^void(TRLevel* level) {
-        [EGGlobal director].scene = [TRLevelFactory sceneForLevel:[TRLevel levelWithRules:level.rules]];
+    [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGGlobal director] scene] get])).controller] forEach:^void(TRLevel* level) {
+        [[EGGlobal director] setScene:[TRLevelFactory sceneForLevel:[TRLevel levelWithRules:level.rules]]];
     }];
 }
 
