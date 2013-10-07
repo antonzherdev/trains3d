@@ -37,6 +37,13 @@
 
     // Enable multisampling
     view.drawableMultisample = GLKViewDrawableMultisample4X;
+
+    [EAGLContext setCurrentContext:view.context];
+    [self prepareOpenGL];
+}
+
+- (void)prepareOpenGL {
+
 }
 
 - (void)lockOpenGLContext {

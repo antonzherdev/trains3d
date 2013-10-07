@@ -1,6 +1,5 @@
 #import "EGMapIso.h"
 
-#import "EGMesh.h"
 #import "EGCameraIso.h"
 #import "GEMat4.h"
 #import "EGMaterial.h"
@@ -198,7 +197,7 @@ static ODClassType* _EGMapSsoView_type;
             CGFloat b = geRectIY2(limits) + 0.5;
             NSInteger w = geRectIWidth(limits) + 3;
             NSInteger h = geRectIHeight(limits) + 3;
-            return [EGMesh applyVertexData:[ arrs(EGMeshData, 32) {0, 0, 0, 1, 0, l, 0, b, w, 0, 0, 1, 0, r, 0, b, w, h, 0, 1, 0, r, 0, t, 0, h, 0, 1, 0, l, 0, t}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
+            return [EGMesh applyVertexData:[ arrs(EGMeshData, 4) {EGMeshDataMake(GEVec2Make(0.0, 0.0), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(l)), 0.0, ((float)(b)))), EGMeshDataMake(GEVec2Make(((float)(w)), 0.0), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(r)), 0.0, ((float)(b)))), EGMeshDataMake(GEVec2Make(((float)(w)), ((float)(h))), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(r)), 0.0, ((float)(t)))), EGMeshDataMake(GEVec2Make(0.0, ((float)(h))), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(l)), 0.0, ((float)(t))))}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
         }();
     }
     

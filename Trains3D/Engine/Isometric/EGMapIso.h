@@ -1,9 +1,8 @@
 #import "objd.h"
 #import "GEVec.h"
-@class EGVertexBuffer;
+#import "EGMesh.h"
 @class EGCameraIso;
 @class GEMat4;
-@class EGMesh;
 @class EGColorSource;
 @class EGMaterial;
 

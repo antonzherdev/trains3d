@@ -117,10 +117,10 @@ class MapSsoView(map : MapSso) {
         val w = limits.width + 3
         val h = limits.height + 3
         Mesh([
-            0, 0, 0, 1, 0, l, 0, b,
-            w, 0, 0, 1, 0, r, 0, b,
-            w, h, 0, 1, 0, r, 0, t,
-            0, h, 0, 1, 0, l, 0, t
+            MeshData(vec2(0, 0), vec3(0, 1, 0), vec3(l, 0, b)),
+            MeshData(vec2(w, 0), vec3(0, 1, 0), vec3(r, 0, b)),
+            MeshData(vec2(w, h), vec3(0, 1, 0), vec3(r, 0, t)),
+            MeshData(vec2(0, h), vec3(0, 1, 0), vec3(l, 0, t))
         ], [0, 1, 2,
             2, 3, 0])
     }
