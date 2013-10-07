@@ -196,9 +196,9 @@ static ODClassType* _EGStandardShaderKey_type;
 
 - (EGStandardShader*)shader {
     NSString* vertexShader = [NSString stringWithFormat:@"%@\n"
-        "%@                                                                       vec3 normal;\n"
+        "%@ mediump vec3 normal;\n"
         "\n"
-        "%@ vec3 position;\n"
+        "%@ highp vec3 position;\n"
         "uniform mat4 mwcp;\n"
         "uniform mat4 mwc;\n"
         "%@\n"
@@ -211,36 +211,38 @@ static ODClassType* _EGStandardShaderKey_type;
         "   vec3 eyeDirection = normalize(-(mwc * vec4(position, 1)).xyz);\n"
         "   gl_Position = mwcp * vec4(position, 1);%@\n"
         "   %@\n"
-        "}", [self versionString], [self ain], [self ain], [self lightsVertexUniform], ((_texture) ? [NSString stringWithFormat:@"\n"
-        "%@ vec2 vertexUV;\n"
-        "%@ vec2 UV;\n", [self ain], [self out]] : @""), [self lightsOut], ((_texture) ? @"\n"
+        "}", [self vertexHeader], [self ain], [self ain], [self lightsVertexUniform], ((_texture) ? [NSString stringWithFormat:@"\n"
+        "%@ mediump vec2 vertexUV;\n"
+        "%@ mediump vec2 UV;\n", [self ain], [self out]] : @""), [self lightsOut], ((_texture) ? @"\n"
         "   UV = vertexUV; " : @""), [self lightsCalculateVaryings]];
     NSString* fragmentShader = [NSString stringWithFormat:@"%@\n"
         "%@\n"
-        "uniform vec4 diffuseColor;\n"
-        "uniform vec4 ambientColor;\n"
-        "uniform vec4 specularColor;\n"
-        "uniform float specularSize;\n"
+        "uniform lowp vec4 diffuseColor;\n"
+        "uniform lowp vec4 ambientColor;\n"
+        "uniform lowp vec4 specularColor;\n"
+        "uniform lowp float specularSize;\n"
         "%@\n"
         "%@\n"
-        "%@ vec4 outColor;\n"
         "\n"
-        "void main(void) {%@%@%@\n"
-        "   vec4 color = ambientColor * materialColor;\n"
+        "void main(void) {%@\n"
+        "  %@\n"
+        "   lowp vec4 color = ambientColor * materialColor;\n"
         "   %@\n"
-        "   outColor = color;\n"
-        "}", [self versionString], ((_texture) ? [NSString stringWithFormat:@"\n"
-        "%@ vec2 UV;\n"
-        "uniform sampler2D diffuseTexture;\n", [self in]] : @""), [self lightsIn], [self lightsFragmentUniform], [self out], ((_directLightWithShadowsCount > 0) ? @"\n"
-        "   float visibility;" : @""), ((!(_texture)) ? @"\n"
-        "   vec4 materialColor = diffuseColor; " : @""), ((_texture) ? @"\n"
-        "   vec4 materialColor = diffuseColor * texture(diffuseTexture, UV); " : @""), [self lightsDiffuse]];
+        "   %@ = color;\n"
+        "}", [self fragmentHeader], ((_texture) ? [NSString stringWithFormat:@"\n"
+        "%@ mediump vec2 UV;\n"
+        "uniform lowp sampler2D diffuseTexture;\n", [self in]] : @""), [self lightsIn], [self lightsFragmentUniform], ((_directLightWithShadowsCount > 0) ? @"\n"
+        "   mediump float visibility;" : @""), ((_texture) ? [NSString stringWithFormat:@"\n"
+        "   lowp vec4 materialColor = diffuseColor * %@(diffuseTexture, UV);\n"
+        "  ", [self texture2D]] : @"\n"
+        "   lowp vec4 materialColor = diffuseColor;\n"
+        "  "), [self lightsDiffuse], [self fragColor]];
     return [EGStandardShader standardShaderWithKey:self program:[EGShaderProgram applyVertex:vertexShader fragment:fragmentShader]];
 }
 
 - (NSString*)lightsVertexUniform {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return [NSString stringWithFormat:@"uniform vec3 dirLightDirection%@;\n"
+        return [NSString stringWithFormat:@"uniform mediump vec3 dirLightDirection%@;\n"
             "%@\n", i, ((i < numui(_directLightWithShadowsCount)) ? [NSString stringWithFormat:@"\n"
             "uniform mat4 dirLightDepthMwcp%@;\n", i] : @"")];
     }] toStringWithDelimiter:@"\n"];
@@ -248,19 +250,19 @@ static ODClassType* _EGStandardShaderKey_type;
 
 - (NSString*)lightsIn {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return [NSString stringWithFormat:@"%@ float dirLightDirectionCos%@;\n"
-            "%@ float dirLightDirectionCosA%@;\n"
+        return [NSString stringWithFormat:@"%@ mediump float dirLightDirectionCos%@;\n"
+            "%@ mediump float dirLightDirectionCosA%@;\n"
             "%@\n", [self in], i, [self in], i, ((i < numui(_directLightWithShadowsCount)) ? [NSString stringWithFormat:@"\n"
-            "%@ vec3 dirLightShadowCoord%@;\n", [self in], i] : @"")];
+            "%@ mediump vec3 dirLightShadowCoord%@;\n", [self in], i] : @"")];
     }] toStringWithDelimiter:@"\n"];
 }
 
 - (NSString*)lightsOut {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return [NSString stringWithFormat:@"%@ float dirLightDirectionCos%@;\n"
-            "%@ float dirLightDirectionCosA%@;\n"
+        return [NSString stringWithFormat:@"%@ mediump float dirLightDirectionCos%@;\n"
+            "%@ mediump float dirLightDirectionCosA%@;\n"
             "%@\n", [self out], i, [self out], i, ((i < numui(_directLightWithShadowsCount)) ? [NSString stringWithFormat:@"\n"
-            "%@ vec3 dirLightShadowCoord%@;\n", [self out], i] : @"")];
+            "%@ mediump vec3 dirLightShadowCoord%@;\n", [self out], i] : @"")];
     }] toStringWithDelimiter:@"\n"];
 }
 
@@ -275,9 +277,9 @@ static ODClassType* _EGStandardShaderKey_type;
 
 - (NSString*)lightsFragmentUniform {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return [NSString stringWithFormat:@"uniform vec4 dirLightColor%@;\n"
+        return [NSString stringWithFormat:@"uniform lowp vec4 dirLightColor%@;\n"
             "%@", i, ((i < numui(_directLightWithShadowsCount)) ? [NSString stringWithFormat:@"\n"
-            "uniform sampler2DShadow dirLightShadow%@;\n", i] : @"")];
+            "uniform mediump sampler2DShadow dirLightShadow%@;\n", i] : @"")];
     }] toStringWithDelimiter:@"\n"];
 }
 
@@ -294,7 +296,17 @@ static ODClassType* _EGStandardShaderKey_type;
 }
 
 - (NSString*)versionString {
-    return EGShaderProgram.versionString;
+    return [NSString stringWithFormat:@"#version %li", [self version]];
+}
+
+- (NSString*)vertexHeader {
+    return [NSString stringWithFormat:@"#version %li", [self version]];
+}
+
+- (NSString*)fragmentHeader {
+    return [NSString stringWithFormat:@"#version %li\n"
+        "%@", [self version], ((EGShaderProgram.version > 100) ? @"\n"
+        "out lowp vec4 fragColor;\n" : @"")];
 }
 
 - (NSInteger)version {
@@ -314,6 +326,16 @@ static ODClassType* _EGStandardShaderKey_type;
 - (NSString*)out {
     if([self version] < 150) return @"varying";
     else return @"out";
+}
+
+- (NSString*)fragColor {
+    if([self version] > 100) return @"fragColor";
+    else return @"gl_FragColor";
+}
+
+- (NSString*)texture2D {
+    if([self version] > 100) return @"texture";
+    else return @"texture2D";
 }
 
 - (ODClassType*)type {

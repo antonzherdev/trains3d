@@ -39,17 +39,17 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
     val directLightCount = directLightWithShadowsCount + directLightWithoutShadowsCount
     def shader : StandardShader = {
         val vertexShader =
-            "$versionString
-             $ain                                                                       vec3 normal;
+            "$vertexHeader
+             $ain mediump vec3 normal;
 
-             $ain vec3 position;
+             $ain highp vec3 position;
              uniform mat4 mwcp;
              uniform mat4 mwc;
              $lightsVertexUniform
 
             $if(texture)
-             $ain vec2 vertexUV;
-             $out vec2 UV;
+             $ain mediump vec2 vertexUV;
+             $out mediump vec2 UV;
             $endif
              $lightsOut
 
@@ -61,48 +61,50 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
                 $lightsCalculateVaryings
              }"
         val fragmentShader =
-            "$versionString
+            "$fragmentHeader
             $if(texture)
-             $in vec2 UV;
-             uniform sampler2D diffuseTexture;
+             $in mediump vec2 UV;
+             uniform lowp sampler2D diffuseTexture;
             $endif
-             uniform vec4 diffuseColor;
-             uniform vec4 ambientColor;
-             uniform vec4 specularColor;
-             uniform float specularSize;
+             uniform lowp vec4 diffuseColor;
+             uniform lowp vec4 ambientColor;
+             uniform lowp vec4 specularColor;
+             uniform lowp float specularSize;
              $lightsIn
              $lightsFragmentUniform
-             $out vec4 outColor;
 
              void main(void) {
-                float visibility;$when(directLightWithShadowsCount > 0)
-                vec4 materialColor = diffuseColor; $when(!texture)
-                vec4 materialColor = diffuseColor * texture(diffuseTexture, UV); $when(texture)
-                vec4 color = ambientColor * materialColor;
+                mediump float visibility;$when(directLightWithShadowsCount > 0)
+               $if(texture)
+                lowp vec4 materialColor = diffuseColor * $texture2D\(diffuseTexture, UV);
+               $else
+                lowp vec4 materialColor = diffuseColor;
+               $endif
+                lowp vec4 color = ambientColor * materialColor;
                 $lightsDiffuse
-                outColor = color;
+                $fragColor = color;
              }"
         StandardShader(self, ShaderProgram(vertexShader, fragmentShader))
     }
 
     def lightsVertexUniform : string = directLightCount.range.chain.map{i ->
-        "uniform vec3 dirLightDirection$i;
+        "uniform mediump vec3 dirLightDirection$i;
         $if(i < directLightWithShadowsCount)
          uniform mat4 dirLightDepthMwcp$i;
         $endif
         "}.toStringWith("\n")
     def lightsIn : string = directLightCount.range.chain.map{i ->
-        "$in float dirLightDirectionCos$i;
-         $in float dirLightDirectionCosA$i;
+        "$in mediump float dirLightDirectionCos$i;
+         $in mediump float dirLightDirectionCosA$i;
         $if(i < directLightWithShadowsCount)
-         $in vec3 dirLightShadowCoord$i;
+         $in mediump vec3 dirLightShadowCoord$i;
         $endif
         "}.toStringWith("\n")
     def lightsOut : string = directLightCount.range.chain.map{i ->
-        "$out float dirLightDirectionCos$i;
-         $out float dirLightDirectionCosA$i;
+        "$out mediump float dirLightDirectionCos$i;
+         $out mediump float dirLightDirectionCosA$i;
         $if(i < directLightWithShadowsCount)
-         $out vec3 dirLightShadowCoord$i;
+         $out mediump vec3 dirLightShadowCoord$i;
         $endif
         "}.toStringWith("\n")
     def lightsCalculateVaryings : string = directLightCount.range.chain.map{i ->
@@ -116,9 +118,9 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
 
 
     def lightsFragmentUniform : string = directLightCount.range.chain.map{i ->
-        "uniform vec4 dirLightColor$i;
+        "uniform lowp vec4 dirLightColor$i;
         $if(i < directLightWithShadowsCount)
-         uniform sampler2DShadow dirLightShadow$i;
+         uniform mediump sampler2DShadow dirLightShadow$i;
         $endif"}.toStringWith("\n")
     def lightsDiffuse : string =  directLightCount.range.chain.map{i ->
         "

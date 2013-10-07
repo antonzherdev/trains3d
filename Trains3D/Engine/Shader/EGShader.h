@@ -31,7 +31,6 @@
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
 - (EGShaderUniform*)uniformForName:(NSString*)name;
 + (NSInteger)version;
-+ (NSString*)versionString;
 + (ODClassType*)type;
 @end
 
@@ -95,10 +94,14 @@
 
 @protocol EGShaderTextBuilder<NSObject>
 - (NSString*)versionString;
+- (NSString*)vertexHeader;
+- (NSString*)fragmentHeader;
 - (NSInteger)version;
 - (NSString*)ain;
 - (NSString*)in;
 - (NSString*)out;
+- (NSString*)fragColor;
+- (NSString*)texture2D;
 @end
 
 

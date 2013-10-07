@@ -6,7 +6,6 @@
     GLuint _handle;
 }
 static NSInteger _EGShaderProgram_version;
-static NSString* _EGShaderProgram_versionString;
 static ODClassType* _EGShaderProgram_type;
 @synthesize handle = _handle;
 
@@ -25,7 +24,6 @@ static ODClassType* _EGShaderProgram_type;
     [super initialize];
     _EGShaderProgram_type = [ODClassType classTypeWithCls:[EGShaderProgram class]];
     _EGShaderProgram_version = ((NSInteger)(egGLSLVersion()));
-    _EGShaderProgram_versionString = [NSString stringWithFormat:@"#version %li", _EGShaderProgram_version];
 }
 
 + (EGShaderProgram*)loadFromFilesVertex:(NSString*)vertex fragment:(NSString*)fragment {
@@ -99,10 +97,6 @@ static ODClassType* _EGShaderProgram_type;
 
 + (NSInteger)version {
     return _EGShaderProgram_version;
-}
-
-+ (NSString*)versionString {
-    return _EGShaderProgram_versionString;
 }
 
 + (ODClassType*)type {
