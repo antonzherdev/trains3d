@@ -172,5 +172,5 @@ stub object gl {
 
     def egLoadTextureFromFile(target : GLuint, file : string, magFilter : uint4, minFilter : uint4) : vec2
     def egSaveTextureToFile(source : GLuint, file : string)
-    def egDrawAxis
+    def egPlatform : Platform
 }

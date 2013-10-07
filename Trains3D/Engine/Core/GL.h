@@ -4,8 +4,10 @@
 #import <OpenGL/gl3.h>
 #endif
 #import "GEVec.h"
+#import "EGPlatform.h"
 
 @class GEMat4;
+
 
 static inline void egViewport(GERectI rect) {
     glViewport((GLint)rect.origin.x, (GLint)rect.origin.y, (GLsizei)rect.size.x, (GLsizei)rect.size.y);
@@ -133,5 +135,13 @@ static inline void egInitShadowTexture() {
 #elif TARGET_OS_MAC
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+#endif
+}
+
+static inline EGPlatform* egPlatform() {
+#if TARGET_OS_IPHONE
+    return [EGPlatform iOS];
+#elif TARGET_OS_MAC
+    return [EGPlatform MacOS];
 #endif
 }

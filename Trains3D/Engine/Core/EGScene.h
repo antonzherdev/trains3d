@@ -5,6 +5,7 @@
 @protocol EGSoundPlayer;
 @class EGGlobal;
 @class EGContext;
+@class EGPlatform;
 @class EGEnvironment;
 @class EGLight;
 @class EGShadowRenderTarget;

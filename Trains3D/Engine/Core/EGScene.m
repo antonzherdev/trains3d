@@ -4,6 +4,7 @@
 #import "EGContext.h"
 #import "EGInput.h"
 #import "EGSound.h"
+#import "EGPlatform.h"
 #import "EGShadow.h"
 #import "GEMat4.h"
 @implementation EGScene{
@@ -304,21 +305,23 @@ static ODClassType* _EGLayer_type;
     id<EGCamera> camera = [_view cameraWithViewport:viewport];
     NSUInteger cullFace = [camera cullFace];
     if(cullFace != GL_NONE) glEnable(GL_CULL_FACE);
-    id<CNSeq> shadowLights = [[[env.lights chain] filter:^BOOL(EGLight* _) {
-        return _.hasShadows;
-    }] toArray];
-    [[[env.lights chain] filter:^BOOL(EGLight* _) {
-        return _.hasShadows;
-    }] forEach:^void(EGLight* light) {
-        EGGlobal.context.renderTarget = [EGShadowRenderTarget shadowRenderTargetWithShadowLight:light];
-        EGGlobal.matrix.value = [light shadowMatrixModel:[camera matrixModel]];
-        [light shadowMap].biasDepthCp = [EGShadowMap.biasMatrix mulMatrix:[EGGlobal.matrix.value cp]];
-        [[light shadowMap] applyDraw:^void() {
-            glClear(GL_DEPTH_BUFFER_BIT);
-            if(cullFace != GL_NONE) glCullFace(((cullFace == GL_BACK) ? GL_FRONT : GL_BACK));
-            [_view draw];
+    if(egPlatform().shadows) {
+        id<CNSeq> shadowLights = [[[env.lights chain] filter:^BOOL(EGLight* _) {
+            return _.hasShadows;
+        }] toArray];
+        [[[env.lights chain] filter:^BOOL(EGLight* _) {
+            return _.hasShadows;
+        }] forEach:^void(EGLight* light) {
+            EGGlobal.context.renderTarget = [EGShadowRenderTarget shadowRenderTargetWithShadowLight:light];
+            EGGlobal.matrix.value = [light shadowMatrixModel:[camera matrixModel]];
+            [light shadowMap].biasDepthCp = [EGShadowMap.biasMatrix mulMatrix:[EGGlobal.matrix.value cp]];
+            [[light shadowMap] applyDraw:^void() {
+                glClear(GL_DEPTH_BUFFER_BIT);
+                if(cullFace != GL_NONE) glCullFace(((cullFace == GL_BACK) ? GL_FRONT : GL_BACK));
+                [_view draw];
+            }];
         }];
-    }];
+    }
     EGGlobal.context.renderTarget = [EGSceneRenderTarget sceneRenderTarget];
     [EGGlobal.context setViewport:geRectIApplyRect(viewport)];
     EGGlobal.matrix.value = [camera matrixModel];

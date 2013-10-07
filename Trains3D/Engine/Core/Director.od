@@ -1,7 +1,5 @@
 package com.antonzherdev.eg
 
-
-
 class Director {
     private var _scene : Scene? = nil
     private var _isStarted = false
