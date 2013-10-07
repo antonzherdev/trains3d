@@ -43,9 +43,19 @@ static ODClassType* _EGDirector_type;
 }
 
 - (void)setScene:(EGScene*)scene {
+    [self lock];
     if([__scene isDefined]) [((EGScene*)([__scene get])) stop];
     __scene = [CNOption applyValue:scene];
     [scene start];
+    [self unlock];
+}
+
+- (void)lock {
+    @throw @"Method lock is abstract";
+}
+
+- (void)unlock {
+    @throw @"Method unlock is abstract";
 }
 
 - (void)drawWithSize:(GEVec2)size {
@@ -53,7 +63,7 @@ static ODClassType* _EGDirector_type;
     if(size.x <= 0 || size.y <= 0) return ;
     EGGlobal.context.director = self;
     GEVec4 color = ((EGScene*)([__scene get])).backgroundColor;
-    glClearColor(((CGFloat)(color.x)), ((CGFloat)(color.y)), ((CGFloat)(color.z)), ((CGFloat)(color.w)));
+    glClearColor(color.x, color.y, color.z, color.w);
     glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
     [EGGlobal.matrix clear];
     glEnable(GL_DEPTH_TEST);

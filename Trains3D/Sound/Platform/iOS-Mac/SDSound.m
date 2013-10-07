@@ -22,7 +22,7 @@ static ODClassType* _SDSound_type;
     self = [super init];
     if (self) {
         _player = player;
-        [player play];
+        [player prepareToPlay];
         [player pause];
     }
 

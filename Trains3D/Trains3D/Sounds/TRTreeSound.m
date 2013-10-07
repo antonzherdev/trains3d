@@ -14,7 +14,7 @@ static ODClassType* _TRTreeSound_type;
 }
 
 - (id)initWithForest:(TRForest*)forest {
-    self = [super initWithPlayers:(@[[TRWindSound windSoundWithForest:forest], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Nightingale.mp3" volume:0.1] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crow.mp3" volume:0.1] secondsBetween:60.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crows.mp3" volume:0.1] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Woodpecker.mp3" volume:0.4] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Cuckoo.mp3" volume:0.4] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Grouse.mp3" volume:0.35] secondsBetween:120.0]])];
+    self = [super initWithPlayers:(@[[TRWindSound windSoundWithForest:forest], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Nightingale.mp3" volume:0.1] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crow.mp3" volume:0.1] secondsBetween:60.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crows.mp3" volume:0.05] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Woodpecker.mp3" volume:0.4] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Cuckoo.mp3" volume:0.4] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Grouse.mp3" volume:0.35] secondsBetween:120.0]])];
     if(self) _forest = forest;
     
     return self;

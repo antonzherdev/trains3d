@@ -23,6 +23,14 @@
     return [[self alloc] initWithView:view];
 }
 
+- (void)lock {
+    [self.view lockOpenGLContext];
+}
+
+- (void)unlock {
+    [self.view unlockOpenGLContext];
+}
+
 
 - (CVReturn) getFrameForTime:(const CVTimeStamp*)outputTime
 {

@@ -14,8 +14,8 @@ stub struct GLbitfield
 
 stub object gl {
     def glClear(: uint4)
-    def glClearColor(r : float, g : float, b : float, a : float)
-    def glClearDepth( : float)
+    def glClearColor(r : float4, g : float4, b : float4, a : float4)
+    def glClearDepth( : float4)
     def glDepthMask( : GLboolean)
 
     def glEnable(: uint4)

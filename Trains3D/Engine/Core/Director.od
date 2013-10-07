@@ -9,10 +9,15 @@ class Director {
     val time : Time = Time()
     def scene = _scene
     def set(scene : Scene) {
+        lock
         if(_scene.isDefined) _scene.get.stop
         _scene = scene
         scene.start
+        unlock
     }
+
+    def lock
+    def unlock
 
     def drawWith(size : vec2) {
         if(_scene.isEmpty) return nil
