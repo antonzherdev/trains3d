@@ -32,9 +32,7 @@
     _director = [EGDirectorIOS directorWithView:self];
     // Create an OpenGL ES context and assign it to the view loaded from storyboard
     GLKView *view = (GLKView *)self.view;
-    CGSize size = view.bounds.size;
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    _viewSize = GEVec2Make(size.width*scale, size.height*scale);
+    [self updateViewSize];
     self.paused = YES;
     view.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
 
@@ -51,6 +49,24 @@
     [self prepareOpenGL];
     [_director start];
 }
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    [self updateViewSize];
+}
+
+- (void)updateViewSize {
+    GLKView *view = (GLKView *) self.view;
+    CGSize size = view.bounds.size;
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    if(UIInterfaceOrientationIsLandscape(orientation)) {
+        _viewSize = GEVec2Make(size.height*scale, size.width*scale);
+    } else {
+        _viewSize = GEVec2Make(size.width*scale, size.height*scale);
+    }
+}
+
 
 - (void)prepareOpenGL {
 
