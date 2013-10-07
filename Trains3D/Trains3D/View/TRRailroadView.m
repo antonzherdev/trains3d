@@ -1,7 +1,7 @@
 #import "TRRailroadView.h"
 
 #import "TRRailroad.h"
-#import "EGSurface.h"
+#import "EGMultisamplingSurface.h"
 #import "GL.h"
 #import "EGContext.h"
 #import "TRModels.h"

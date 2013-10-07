@@ -189,6 +189,7 @@
 		6F3DF43CAAB339F6B2E62F11 /* TRLevelSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF06063B5F1A002BF4352 /* TRLevelSpec.m */; };
 		6F3DF447A23EADCEADF06AD6 /* btSphereShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1905568DA625694DAB1 /* btSphereShape.cpp */; };
 		6F3DF44BCFB810B239BF3A9D /* lucida_grande_48.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF980DF1413A5A4FE4187 /* lucida_grande_48.fnt */; };
+		6F3DF44D648FE4C966A4E093 /* EGMultisamplingSurface.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFADA2C3CC961C4886045 /* EGMultisamplingSurface.m */; };
 		6F3DF455E53E6D41F9192518 /* CNFlatMapLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9B9CFB60AC2B50B34FE /* CNFlatMapLink.m */; };
 		6F3DF482E137BD6194F71092 /* btPersistentManifold.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFC87DD4F9A005E94449 /* btPersistentManifold.cpp */; };
 		6F3DF484A3EF88BD2D81C120 /* lucida_grande_36.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFDDF4E4F1DF3AD286ABB /* lucida_grande_36.png */; };
@@ -473,6 +474,7 @@
 		6F3DFB47047E813C3FD91AC6 /* func_packing.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFBA7FB84688E7CB8353D /* func_packing.inl */; };
 		6F3DFB47DBE4C0BDC8BDDF0F /* lucida_grande_32.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF13D0E1AE8F3C0AD7B98 /* lucida_grande_32.fnt */; };
 		6F3DFB549F9E08CC4D9E727F /* btGjkConvexCast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFCA18A108F1783012ACC /* btGjkConvexCast.cpp */; };
+		6F3DFB5A91DAB53B1F6B26B0 /* EGMultisamplingSurface.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF78B4312FF39C8C15954 /* EGMultisamplingSurface.m */; };
 		6F3DFB5B57E47C603E3FE71F /* KWBeforeEachNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9326AEED29A07D1AD9A /* KWBeforeEachNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DFB6871ECF4948AA7C0E2 /* TRRailroadSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF6FEF8E53E79DBAD1A73 /* TRRailroadSpec.m */; };
 		6F3DFB7610D3B97263DC6E0A /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F3DF8BE3569365CA633DF43 /* OpenGL.framework */; };
@@ -929,6 +931,7 @@
 		6F3DF2FDE37F1F5896D12246 /* btMultiSapBroadphase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btMultiSapBroadphase.h; sourceTree = "<group>"; };
 		6F3DF3017B5CFE8A627EA2CB /* inertia.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = inertia.inl; sourceTree = "<group>"; };
 		6F3DF3018D3902963D9A9486 /* type_mat3x2.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = type_mat3x2.inl; sourceTree = "<group>"; };
+		6F3DF301F65F2DD194181547 /* EGMultisamplingSurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGMultisamplingSurface.h; sourceTree = "<group>"; };
 		6F3DF30410FD719CA0FBC620 /* type_mat3x4.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_mat3x4.hpp; sourceTree = "<group>"; };
 		6F3DF3041BB60BCEA4E496EB /* KWWorkarounds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWWorkarounds.h; sourceTree = "<group>"; };
 		6F3DF307504747634D59E3B1 /* intersect.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = intersect.inl; sourceTree = "<group>"; };
@@ -1235,6 +1238,7 @@
 		6F3DF784ED37D5A77ED749F9 /* EGCameraIso.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGCameraIso.h; sourceTree = "<group>"; };
 		6F3DF788CCCB7F53F1F67EB5 /* epsilon.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = epsilon.inl; sourceTree = "<group>"; };
 		6F3DF78A2C2A5E472CC36676 /* GEPerlin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GEPerlin.m; sourceTree = "<group>"; };
+		6F3DF78B4312FF39C8C15954 /* EGMultisamplingSurface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGMultisamplingSurface.m; sourceTree = "<group>"; };
 		6F3DF79E56B52EA90418C91B /* CNAppendLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNAppendLink.m; sourceTree = "<group>"; };
 		6F3DF79FE213C9FFE8FFC53F /* btTriangleMeshShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btTriangleMeshShape.cpp; sourceTree = "<group>"; };
 		6F3DF7A06EFC33D43D5EDF07 /* Window.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Window.png; sourceTree = "<group>"; };
@@ -1478,6 +1482,7 @@
 		6F3DFAD2FACC37188342FBA7 /* btInternalEdgeUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btInternalEdgeUtility.h; sourceTree = "<group>"; };
 		6F3DFAD7387FA7F934FE74AD /* BentleyOttmann.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = BentleyOttmann.od; sourceTree = "<group>"; };
 		6F3DFAD8BBC5828D593E69F0 /* TRNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRNotification.h; sourceTree = "<group>"; };
+		6F3DFADA2C3CC961C4886045 /* EGMultisamplingSurface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGMultisamplingSurface.m; sourceTree = "<group>"; };
 		6F3DFADB73A59D0F013A83E7 /* NSMethodSignature+KiwiAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMethodSignature+KiwiAdditions.h"; sourceTree = "<group>"; };
 		6F3DFADB9FB1D4A2DC7F75D0 /* fast_trigonometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fast_trigonometry.hpp; sourceTree = "<group>"; };
 		6F3DFADD38CDC3C6A066F69E /* KWBeNonNilMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeNonNilMatcher.h; sourceTree = "<group>"; };
@@ -1745,6 +1750,7 @@
 		6F3DFEC18617F545F2EF268A /* CNMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNMap.h; sourceTree = "<group>"; };
 		6F3DFEC45454CDB86BE7788B /* TRCityView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRCityView.m; sourceTree = "<group>"; };
 		6F3DFEC7773538E209182D21 /* ODType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ODType.h; sourceTree = "<group>"; };
+		6F3DFECBDB37FF81E194F90F /* MultisamplingSurface.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = MultisamplingSurface.od; sourceTree = "<group>"; };
 		6F3DFECD152E6663E1237419 /* btHeightfieldTerrainShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btHeightfieldTerrainShape.cpp; sourceTree = "<group>"; };
 		6F3DFECD6A8242E84B6FAA6E /* epsilon.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = epsilon.hpp; sourceTree = "<group>"; };
 		6F3DFED12F6B44D3D971ABF7 /* type_mat2x2.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = type_mat2x2.inl; sourceTree = "<group>"; };
@@ -2098,6 +2104,7 @@
 				6F3DFB4130140E277A84ADC8 /* EGTwoFingerTouchToMouse.h */,
 				6F3DF907E5D6035B8B4DA76D /* TwoFingerTouchToMouse.od */,
 				6F3DF36ED0CD1DB20CE24A6A /* GLPlatform.m */,
+				6F3DFADA2C3CC961C4886045 /* EGMultisamplingSurface.m */,
 			);
 			path = Mac;
 			sourceTree = "<group>";
@@ -2819,6 +2826,7 @@
 			isa = PBXGroup;
 			children = (
 				6F3DFC92E1B0643A646A5A28 /* GLPlatform.m */,
+				6F3DF78B4312FF39C8C15954 /* EGMultisamplingSurface.m */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -3601,6 +3609,8 @@
 			children = (
 				6F3DF0F9A59C9CB59A62D4A3 /* Mac */,
 				6F3DFA88AC60D8497112CE51 /* iOS */,
+				6F3DFECBDB37FF81E194F90F /* MultisamplingSurface.od */,
+				6F3DF301F65F2DD194181547 /* EGMultisamplingSurface.h */,
 			);
 			path = Platform;
 			sourceTree = "<group>";
@@ -3671,7 +3681,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0214B1561773394500C03C71 /* Build configuration list for PBXNativeTarget "Trains3D" */;
 			buildPhases = (
-				024372D917E726490065F3AF /* ShellScript */,
+				024372D917E726490065F3AF /* Run Script */,
 				0214B1211773394400C03C71 /* Sources */,
 				0214B1221773394400C03C71 /* Frameworks */,
 				0214B1231773394400C03C71 /* Resources */,
@@ -3708,6 +3718,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02C70A8A1802A3E600007F50 /* Build configuration list for PBXNativeTarget "Trains3Di" */;
 			buildPhases = (
+				02C70A8C1802B03C00007F50 /* ShellScript */,
 				02C70A491802A3E500007F50 /* Sources */,
 				02C70A4A1802A3E500007F50 /* Frameworks */,
 				02C70A4B1802A3E500007F50 /* Resources */,
@@ -4010,7 +4021,21 @@
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
 		};
-		024372D917E726490065F3AF /* ShellScript */ = {
+		024372D917E726490065F3AF /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "~/bin/ObjD";
+		};
+		02C70A8C1802B03C00007F50 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -4270,6 +4295,7 @@
 				6F3DFED9351231996805C27B /* EGSound.m in Sources */,
 				6F3DFC9783EBF590721CA914 /* CNLog.m in Sources */,
 				6F3DF3F8E942F16B41C0202E /* GLPlatform.m in Sources */,
+				6F3DF44D648FE4C966A4E093 /* EGMultisamplingSurface.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4466,6 +4492,7 @@
 				6F3DF5742AFF551ACC9E67A0 /* EGMesh.m in Sources */,
 				6F3DF5F872974E3BAF4196F3 /* EGFont.m in Sources */,
 				6F3DF94F474D220118F038E6 /* GLPlatform.m in Sources */,
+				6F3DFB5A91DAB53B1F6B26B0 /* EGMultisamplingSurface.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4755,6 +4782,7 @@
 				02C70A871802A3E600007F50 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

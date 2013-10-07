@@ -119,3 +119,11 @@ static inline void egVertexAttribPointer (GLuint index, NSUInteger size, GLenum 
 
 GEVec2 egLoadTextureFromFile(GLuint target, NSString* file, GLenum magFilter, GLenum minFilter);
 void egSaveTextureToFile(GLuint source, NSString* file);
+
+static inline void egFramebufferTexture(GLenum target, GLenum attachment, GLuint texture, GLint level) {
+#if TARGET_OS_IPHONE
+    glFramebufferTexture2D(target, attachment, GL_TEXTURE_2D, texture, level);
+#elif TARGET_OS_MAC
+    glFramebufferTexture(target, attachment, texture, level);
+#endif
+}

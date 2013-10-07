@@ -1,0 +1,77 @@
+package com.antonzherdev.eg
+
+stub class FirstMultisamplingSurface(size : vec2i, depth : bool) extends Surface(size) {
+    val frameBuffer = egGenFrameBuffer
+    private val depthTexture : Texture? = if(depth) Texture() else nil
+    private val texture = {
+        val t = Texture()
+        glGetError
+        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
+        glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, t.id)
+        glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGBA, size.x, size.y, GL_FALSE)
+        if(glGetError != 0) {
+            val e = "Error in texture creation for surface with size $(size.x)x$(size.y)"
+            throw e
+        }
+        egFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, t.id, 0)
+        val status = glCheckFramebufferStatus(GL_FRAMEBUFFER)
+        if(status != GL_FRAMEBUFFER_COMPLETE) throw "Error in frame buffer color attachment: $status"
+        if(depth) {
+            glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, depthTexture.get.id)
+            glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_DEPTH_COMPONENT24, size.x, size.y, GL_FALSE)
+            egFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexture.get.id, 0)
+            val status = glCheckFramebufferStatus(GL_FRAMEBUFFER)
+            if(status != GL_FRAMEBUFFER_COMPLETE) throw "Error in frame buffer depth attachment: $status"
+        }
+
+        glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0)
+        glBindFramebuffer(GL_FRAMEBUFFER, 0)
+        t
+    }
+
+    def dealloc {
+        egDeleteFrameBuffer(frameBuffer)
+    }
+
+    def bind {
+        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
+        glViewport(0, 0, size.x, size.y)
+    }
+
+    def unbind {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0)
+    }
+
+}
+
+stub class MultisamplingSurface(size : vec2i, depth : bool) extends  Surface(size) {
+    def bind
+
+    def unbind
+
+    def frameBuffer : GLint
+
+    def texture : Texture
+}
+
+
+stub class ViewportSurface(depth : bool, multisampling : bool) extends BaseViewportSurface {
+    def createSurface : Surface =
+    if(multisampling) MultisamplingSurface(context.viewport.size, depth)
+    else SimpleSurface(context.viewport.size, depth)
+
+    private lazy val shader = ViewportSurfaceShader()
+
+    def drawWith(z : float4) {
+        glDisable(GL_CULL_FACE)
+        shader.draw(ViewportSurfaceShaderParam(texture, z), fullScreenMesh)
+        glEnable(GL_CULL_FACE)
+    }
+
+    def texture : Texture = case(surface.get) {
+    i : SimpleSurface -> i.texture
+    i : MultisamplingSurface -> i.texture
+    }
+
+    def draw
+}

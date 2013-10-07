@@ -10,12 +10,9 @@
 
 @class EGSurface;
 @class EGSimpleSurface;
-@class EGMultisamplingSurface;
-@class EGPairSurface;
 @class EGViewportSurfaceShaderParam;
 @class EGViewportSurfaceShader;
 @class EGBaseViewportSurface;
-@class EGViewportSurface;
 
 @interface EGSurface : NSObject
 @property (nonatomic, readonly) GEVec2i size;
@@ -43,37 +40,6 @@
 - (void)dealloc;
 - (void)bind;
 - (void)unbind;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGMultisamplingSurface : EGSurface
-@property (nonatomic, readonly) BOOL depth;
-@property (nonatomic, readonly) GLuint frameBuffer;
-@property (nonatomic, readonly) EGTexture* texture;
-
-+ (id)multisamplingSurfaceWithSize:(GEVec2i)size depth:(BOOL)depth;
-- (id)initWithSize:(GEVec2i)size depth:(BOOL)depth;
-- (ODClassType*)type;
-- (void)dealloc;
-- (void)bind;
-- (void)unbind;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGPairSurface : EGSurface
-@property (nonatomic, readonly) BOOL depth;
-@property (nonatomic, readonly) EGMultisamplingSurface* multisampling;
-@property (nonatomic, readonly) EGSimpleSurface* simple;
-
-+ (id)pairSurfaceWithSize:(GEVec2i)size depth:(BOOL)depth;
-- (id)initWithSize:(GEVec2i)size depth:(BOOL)depth;
-- (ODClassType*)type;
-- (void)bind;
-- (void)unbind;
-- (GLint)frameBuffer;
-- (EGTexture*)texture;
 + (ODClassType*)type;
 @end
 
@@ -117,21 +83,6 @@
 - (void)maybeDraw:(void(^)())draw;
 - (void)maybeForce:(BOOL)force draw:(void(^)())draw;
 - (void)unbind;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGViewportSurface : EGBaseViewportSurface
-@property (nonatomic, readonly) BOOL depth;
-@property (nonatomic, readonly) BOOL multisampling;
-
-+ (id)viewportSurfaceWithDepth:(BOOL)depth multisampling:(BOOL)multisampling;
-- (id)initWithDepth:(BOOL)depth multisampling:(BOOL)multisampling;
-- (ODClassType*)type;
-- (EGSurface*)createSurface;
-- (void)drawWithZ:(float)z;
-- (EGTexture*)texture;
-- (void)draw;
 + (ODClassType*)type;
 @end
 

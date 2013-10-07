@@ -130,10 +130,6 @@ stub object gl {
     val GL_NONE : uint4
     def egGenTexture : GLuint
     def egDeleteTexture(handle : GLuint)
-    def glBlitFramebuffer(
-        srcX0 : GLint, srcY0 : GLint, srcX1 : GLint, srcY1 : GLint,
-        dstX0 : GLint, dstY0 : GLint, dstX1 : GLint, dstY1 : GLint,
-        mask : GLbitfield, filter : uint4)
 
     def egGenRenderBuffer : GLuint
     def egDeleteRenderBuffer(handle : GLuint) : GLuint
@@ -160,7 +156,7 @@ stub object gl {
     val GL_NEAREST : uint4
     val GL_TEXTURE_MIN_FILTER : uint4
     val GL_TEXTURE_MAG_FILTER : uint4
-    def glFramebufferTexture(target : uint4, attachment : uint4, texture : GLuint, level : GLint)
+    def egFramebufferTexture(target : uint4, attachment : uint4, texture : GLuint, level : GLint)
     def glDrawBuffer(:uint4)
     def glCheckFramebufferStatus(target : uint4) : int
     val GL_COLOR_ATTACHMENT0 : uint4
