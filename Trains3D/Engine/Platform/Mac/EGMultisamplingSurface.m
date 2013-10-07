@@ -198,7 +198,7 @@ static ODClassType* _EGMultisamplingSurface_type;
 @implementation EGViewportSurface{
     BOOL _depth;
     BOOL _multisampling;
-    CNLazy* __lazy_shader;
+    EGViewportSurfaceShader* _shader;
 }
 static ODClassType* _EGViewportSurface_type;
 @synthesize depth = _depth;
@@ -213,9 +213,7 @@ static ODClassType* _EGViewportSurface_type;
     if(self) {
         _depth = depth;
         _multisampling = multisampling;
-        __lazy_shader = [CNLazy lazyWithF:^EGViewportSurfaceShader*() {
-            return [EGViewportSurfaceShader viewportSurfaceShader];
-        }];
+        _shader = [EGViewportSurfaceShader instance];
     }
 
     return self;
@@ -227,7 +225,7 @@ static ODClassType* _EGViewportSurface_type;
 }
 
 - (EGViewportSurfaceShader*)shader {
-    return ((EGViewportSurfaceShader*)([__lazy_shader get]));
+    return _shader;
 }
 
 - (EGSurface*)createSurface {

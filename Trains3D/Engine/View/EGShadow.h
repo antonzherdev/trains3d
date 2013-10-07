@@ -16,6 +16,7 @@
 @class EGStandardShader;
 
 @class EGShadowMap;
+@class EGShadowSurfaceShaderBuilder;
 @class EGShadowSurfaceShader;
 @class EGShadowShaderSystem;
 @class EGShadowShader;
@@ -41,6 +42,15 @@
 @end
 
 
+@interface EGShadowSurfaceShaderBuilder : EGViewportShaderBuilder
++ (id)shadowSurfaceShaderBuilder;
+- (id)init;
+- (ODClassType*)type;
+- (NSString*)fragment;
++ (ODClassType*)type;
+@end
+
+
 @interface EGShadowSurfaceShader : EGShader
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 
@@ -49,7 +59,6 @@
 - (ODClassType*)type;
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param;
 - (void)unloadParam:(EGViewportSurfaceShaderParam*)param;
-+ (NSString*)fragment;
 + (ODClassType*)type;
 @end
 

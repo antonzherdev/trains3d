@@ -69,27 +69,32 @@ class SimpleSurface(size : vec2i, depth : bool) extends Surface(size) {
 
 class ViewportSurfaceShaderParam(texture : Texture, z : float4)
 
-class ViewportSurfaceShader extends Shader<ViewportSurfaceShaderParam>(ShaderProgram(vertex, fragment)) {
-    static val vertex =
-        "#version 150
-         in vec2 position;
-         uniform float z;
-         out vec2 UV;
+class ViewportShaderBuilder extends ShaderTextBuilder {
+    def vertex =
+       "$vertexHeader
 
-         void main(void) {
-            gl_Position = vec4(2.0*position.x - 1.0, 2.0*position.y - 1.0, z, 1);
-            UV = position;
+        $ain highp vec2 position;
+        uniform lowp float z;
+        $out mediump vec2 UV;
+
+        void main(void) {
+           gl_Position = vec4(2.0*position.x - 1.0, 2.0*position.y - 1.0, z, 1);
+           UV = position;
         }"
-    static val fragment =
-        "#version 150
-         in vec2 UV;
+    def fragment =
+       "$fragmentHeader
+        $in mediump vec2 UV;
 
-         uniform sampler2D texture;
-         out vec4 outColor;
+        uniform lowp sampler2D texture;
 
-         void main(void) {
-            outColor = texture(texture, UV);
-         }"
+        void main(void) {
+            $fragColor = $texture2D\(texture, UV);
+        }"
+    def program = ShaderProgram(vertex, fragment)
+}
+
+class ViewportSurfaceShader extends Shader<ViewportSurfaceShaderParam>(ViewportShaderBuilder().program) {
+    static val instance = ViewportSurfaceShader()
     val positionSlot = program.attributeFor("position")
     val zUniform = program.uniformFor("z")
     def load(vbDesc : VertexBufferDesc<_>, param : ViewportSurfaceShaderParam) {

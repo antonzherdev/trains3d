@@ -8,6 +8,7 @@
 #import "GEMat4.h"
 #import "TRRailPoint.h"
 #import "EGMapIso.h"
+#import "EGPlatform.h"
 #import "EGShadow.h"
 #import "EGShader.h"
 @implementation TRRailroadView{
@@ -502,7 +503,7 @@ static ODClassType* _TRBackgroundView_type;
 }
 
 - (void)drawShadow {
-    egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
+    if(egPlatform().shadows) egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
         glDisable(GL_CULL_FACE);
         glDisable(GL_DEPTH_TEST);
         EGShadowDrawParam* param = [EGShadowDrawParam shadowDrawParamWithPercents:(@[@0.3])];

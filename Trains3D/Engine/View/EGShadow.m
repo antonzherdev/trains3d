@@ -121,19 +121,70 @@ static ODClassType* _EGShadowMap_type;
 @end
 
 
+@implementation EGShadowSurfaceShaderBuilder
+static ODClassType* _EGShadowSurfaceShaderBuilder_type;
+
++ (id)shadowSurfaceShaderBuilder {
+    return [[EGShadowSurfaceShaderBuilder alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGShadowSurfaceShaderBuilder_type = [ODClassType classTypeWithCls:[EGShadowSurfaceShaderBuilder class]];
+}
+
+- (NSString*)fragment {
+    return [NSString stringWithFormat:@"%@\n"
+        "%@ vec2 UV;\n"
+        "\n"
+        "uniform sampler2D texture;\n"
+        "\n"
+        "void main(void) {\n"
+        "    vec4 col = %@(texture, UV);\n"
+        "    %@ = vec4(col.x, col.x, col.x, 1);\n"
+        "}", [self fragmentHeader], [self in], [self texture2D], [self fragColor]];
+}
+
+- (ODClassType*)type {
+    return [EGShadowSurfaceShaderBuilder type];
+}
+
++ (ODClassType*)type {
+    return _EGShadowSurfaceShaderBuilder_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation EGShadowSurfaceShader{
     EGShaderAttribute* _positionSlot;
 }
-static NSString* _EGShadowSurfaceShader_fragment = @"#version 150\n"
-    "in vec2 UV;\n"
-    "\n"
-    "uniform sampler2D texture;\n"
-    "out vec4 outColor;\n"
-    "\n"
-    "void main(void) {\n"
-    "   vec4 col = texture(texture, UV);\n"
-    "   outColor = vec4(col.x, col.x, col.x, 1);\n"
-    "}";
 static ODClassType* _EGShadowSurfaceShader_type;
 @synthesize positionSlot = _positionSlot;
 
@@ -142,7 +193,7 @@ static ODClassType* _EGShadowSurfaceShader_type;
 }
 
 - (id)init {
-    self = [super initWithProgram:[EGShaderProgram applyVertex:EGViewportSurfaceShader.vertex fragment:_EGShadowSurfaceShader_fragment]];
+    self = [super initWithProgram:[[EGShadowSurfaceShaderBuilder shadowSurfaceShaderBuilder] program]];
     if(self) _positionSlot = [self.program attributeForName:@"position"];
     
     return self;
@@ -165,10 +216,6 @@ static ODClassType* _EGShadowSurfaceShader_type;
 
 - (ODClassType*)type {
     return [EGShadowSurfaceShader type];
-}
-
-+ (NSString*)fragment {
-    return _EGShadowSurfaceShader_fragment;
 }
 
 + (ODClassType*)type {

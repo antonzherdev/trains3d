@@ -19,6 +19,7 @@
 @class TRRailPoint;
 @class EGMapSso;
 @class EGMapSsoView;
+@class EGPlatform;
 @class EGShadowDrawParam;
 @class EGShadowDrawShaderSystem;
 @class EGShader;

@@ -11,6 +11,7 @@
 @class EGSurface;
 @class EGSimpleSurface;
 @class EGViewportSurfaceShaderParam;
+@class EGViewportShaderBuilder;
 @class EGViewportSurfaceShader;
 @class EGBaseViewportSurface;
 
@@ -55,6 +56,17 @@
 @end
 
 
+@interface EGViewportShaderBuilder : NSObject<EGShaderTextBuilder>
++ (id)viewportShaderBuilder;
+- (id)init;
+- (ODClassType*)type;
+- (NSString*)vertex;
+- (NSString*)fragment;
+- (EGShaderProgram*)program;
++ (ODClassType*)type;
+@end
+
+
 @interface EGViewportSurfaceShader : EGShader
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderUniform* zUniform;
@@ -64,8 +76,7 @@
 - (ODClassType*)type;
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGViewportSurfaceShaderParam*)param;
 - (void)unloadParam:(EGViewportSurfaceShaderParam*)param;
-+ (NSString*)vertex;
-+ (NSString*)fragment;
++ (EGViewportSurfaceShader*)instance;
 + (ODClassType*)type;
 @end
 

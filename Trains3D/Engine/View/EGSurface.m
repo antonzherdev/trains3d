@@ -259,28 +259,139 @@ static ODClassType* _EGViewportSurfaceShaderParam_type;
 @end
 
 
+@implementation EGViewportShaderBuilder
+static ODClassType* _EGViewportShaderBuilder_type;
+
++ (id)viewportShaderBuilder {
+    return [[EGViewportShaderBuilder alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGViewportShaderBuilder_type = [ODClassType classTypeWithCls:[EGViewportShaderBuilder class]];
+}
+
+- (NSString*)vertex {
+    return [NSString stringWithFormat:@"%@\n"
+        "\n"
+        "%@ highp vec2 position;\n"
+        "uniform lowp float z;\n"
+        "%@ mediump vec2 UV;\n"
+        "\n"
+        "void main(void) {\n"
+        "   gl_Position = vec4(2.0*position.x - 1.0, 2.0*position.y - 1.0, z, 1);\n"
+        "   UV = position;\n"
+        "}", [self vertexHeader], [self ain], [self out]];
+}
+
+- (NSString*)fragment {
+    return [NSString stringWithFormat:@"%@\n"
+        "%@ mediump vec2 UV;\n"
+        "\n"
+        "uniform lowp sampler2D texture;\n"
+        "\n"
+        "void main(void) {\n"
+        "    %@ = %@(texture, UV);\n"
+        "}", [self fragmentHeader], [self in], [self fragColor], [self texture2D]];
+}
+
+- (EGShaderProgram*)program {
+    return [EGShaderProgram applyVertex:[self vertex] fragment:[self fragment]];
+}
+
+- (NSString*)versionString {
+    return [NSString stringWithFormat:@"#version %li", [self version]];
+}
+
+- (NSString*)vertexHeader {
+    return [NSString stringWithFormat:@"#version %li", [self version]];
+}
+
+- (NSString*)fragmentHeader {
+    return [NSString stringWithFormat:@"#version %li\n"
+        "%@", [self version], [self fragColorDeclaration]];
+}
+
+- (NSString*)fragColorDeclaration {
+    if([self isFragColorDeclared]) return @"";
+    else return @"out lowp vec4 fragColor;";
+}
+
+- (BOOL)isFragColorDeclared {
+    return EGShaderProgram.version < 110;
+}
+
+- (NSInteger)version {
+    return EGShaderProgram.version;
+}
+
+- (NSString*)ain {
+    if([self version] < 150) return @"attribute";
+    else return @"in";
+}
+
+- (NSString*)in {
+    if([self version] < 150) return @"varying";
+    else return @"in";
+}
+
+- (NSString*)out {
+    if([self version] < 150) return @"varying";
+    else return @"out";
+}
+
+- (NSString*)fragColor {
+    if([self version] > 100) return @"fragColor";
+    else return @"gl_FragColor";
+}
+
+- (NSString*)texture2D {
+    if([self version] > 100) return @"texture";
+    else return @"texture2D";
+}
+
+- (ODClassType*)type {
+    return [EGViewportShaderBuilder type];
+}
+
++ (ODClassType*)type {
+    return _EGViewportShaderBuilder_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation EGViewportSurfaceShader{
     EGShaderAttribute* _positionSlot;
     EGShaderUniform* _zUniform;
 }
-static NSString* _EGViewportSurfaceShader_vertex = @"#version 150\n"
-    "in vec2 position;\n"
-    "uniform float z;\n"
-    "out vec2 UV;\n"
-    "\n"
-    "void main(void) {\n"
-    "   gl_Position = vec4(2.0*position.x - 1.0, 2.0*position.y - 1.0, z, 1);\n"
-    "   UV = position;\n"
-    "}";
-static NSString* _EGViewportSurfaceShader_fragment = @"#version 150\n"
-    "in vec2 UV;\n"
-    "\n"
-    "uniform sampler2D texture;\n"
-    "out vec4 outColor;\n"
-    "\n"
-    "void main(void) {\n"
-    "   outColor = texture(texture, UV);\n"
-    "}";
+static EGViewportSurfaceShader* _EGViewportSurfaceShader_instance;
 static ODClassType* _EGViewportSurfaceShader_type;
 @synthesize positionSlot = _positionSlot;
 @synthesize zUniform = _zUniform;
@@ -290,7 +401,7 @@ static ODClassType* _EGViewportSurfaceShader_type;
 }
 
 - (id)init {
-    self = [super initWithProgram:[EGShaderProgram applyVertex:_EGViewportSurfaceShader_vertex fragment:_EGViewportSurfaceShader_fragment]];
+    self = [super initWithProgram:[[EGViewportShaderBuilder viewportShaderBuilder] program]];
     if(self) {
         _positionSlot = [self.program attributeForName:@"position"];
         _zUniform = [self.program uniformForName:@"z"];
@@ -302,6 +413,7 @@ static ODClassType* _EGViewportSurfaceShader_type;
 + (void)initialize {
     [super initialize];
     _EGViewportSurfaceShader_type = [ODClassType classTypeWithCls:[EGViewportSurfaceShader class]];
+    _EGViewportSurfaceShader_instance = [EGViewportSurfaceShader viewportSurfaceShader];
 }
 
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGViewportSurfaceShaderParam*)param {
@@ -319,12 +431,8 @@ static ODClassType* _EGViewportSurfaceShader_type;
     return [EGViewportSurfaceShader type];
 }
 
-+ (NSString*)vertex {
-    return _EGViewportSurfaceShader_vertex;
-}
-
-+ (NSString*)fragment {
-    return _EGViewportSurfaceShader_fragment;
++ (EGViewportSurfaceShader*)instance {
+    return _EGViewportSurfaceShader_instance;
 }
 
 + (ODClassType*)type {
