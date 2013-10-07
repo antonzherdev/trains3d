@@ -39,7 +39,7 @@
 }
 
 - (void)start {
-    if(!self.isStarted) return;
+    if(self.isStarted) return;
     _view.paused = NO;
     [super start];
 }

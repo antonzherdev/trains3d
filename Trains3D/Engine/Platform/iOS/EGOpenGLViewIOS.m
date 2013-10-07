@@ -33,6 +33,7 @@
     // Configure renderbuffers created by the view
     view.drawableColorFormat = GLKViewDrawableColorFormatRGBA8888;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
+    self.preferredFramesPerSecond = 60;
 //    view.drawableStencilFormat = GLKViewDrawableStencilFormat8;
 
     // Enable multisampling
@@ -40,6 +41,7 @@
 
     [EAGLContext setCurrentContext:view.context];
     [self prepareOpenGL];
+    [_director start];
 }
 
 - (void)prepareOpenGL {
