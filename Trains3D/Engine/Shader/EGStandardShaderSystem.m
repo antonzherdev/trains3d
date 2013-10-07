@@ -196,11 +196,13 @@ static ODClassType* _EGStandardShaderKey_type;
 
 - (EGStandardShader*)shader {
     NSString* vertexShader = [NSString stringWithFormat:@"%@\n"
-        "in vec3 normal;%@\n"
-        "in vec3 position;\n"
+        "%@                                                                       vec3 normal;\n"
+        "\n"
+        "%@ vec3 position;\n"
         "uniform mat4 mwcp;\n"
         "uniform mat4 mwc;\n"
         "%@\n"
+        "\n"
         "%@\n"
         "%@\n"
         "\n"
@@ -209,9 +211,9 @@ static ODClassType* _EGStandardShaderKey_type;
         "   vec3 eyeDirection = normalize(-(mwc * vec4(position, 1)).xyz);\n"
         "   gl_Position = mwcp * vec4(position, 1);%@\n"
         "   %@\n"
-        "}", [self versionString], ((_texture) ? @"\n"
-        "in vec2 vertexUV; " : @""), [self lightsVertexUniform], ((_texture) ? @"\n"
-        "out vec2 UV; " : @""), [self lightsOut], ((_texture) ? @"\n"
+        "}", [self versionString], [self ain], [self ain], [self lightsVertexUniform], ((_texture) ? [NSString stringWithFormat:@"\n"
+        "%@ vec2 vertexUV;\n"
+        "%@ vec2 UV;\n", [self ain], [self out]] : @""), [self lightsOut], ((_texture) ? @"\n"
         "   UV = vertexUV; " : @""), [self lightsCalculateVaryings]];
     NSString* fragmentShader = [NSString stringWithFormat:@"%@\n"
         "%@\n"
@@ -221,15 +223,15 @@ static ODClassType* _EGStandardShaderKey_type;
         "uniform float specularSize;\n"
         "%@\n"
         "%@\n"
-        "out vec4 outColor;\n"
+        "%@ vec4 outColor;\n"
         "\n"
         "void main(void) {%@%@%@\n"
         "   vec4 color = ambientColor * materialColor;\n"
         "   %@\n"
         "   outColor = color;\n"
-        "}", [self versionString], ((_texture) ? @"\n"
-        "in vec2 UV;\n"
-        "uniform sampler2D diffuseTexture;\n" : @""), [self lightsIn], [self lightsFragmentUniform], ((_directLightWithShadowsCount > 0) ? @"\n"
+        "}", [self versionString], ((_texture) ? [NSString stringWithFormat:@"\n"
+        "%@ vec2 UV;\n"
+        "uniform sampler2D diffuseTexture;\n", [self in]] : @""), [self lightsIn], [self lightsFragmentUniform], [self out], ((_directLightWithShadowsCount > 0) ? @"\n"
         "   float visibility;" : @""), ((!(_texture)) ? @"\n"
         "   vec4 materialColor = diffuseColor; " : @""), ((_texture) ? @"\n"
         "   vec4 materialColor = diffuseColor * texture(diffuseTexture, UV); " : @""), [self lightsDiffuse]];
@@ -246,28 +248,28 @@ static ODClassType* _EGStandardShaderKey_type;
 
 - (NSString*)lightsIn {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return [NSString stringWithFormat:@"in float dirLightDirectionCos%@;\n"
-            "in float dirLightDirectionCosA%@;\n"
-            "%@\n", i, i, ((i < numui(_directLightWithShadowsCount)) ? [NSString stringWithFormat:@"\n"
-            "in vec3 dirLightShadowCoord%@;\n", i] : @"")];
+        return [NSString stringWithFormat:@"%@ float dirLightDirectionCos%@;\n"
+            "%@ float dirLightDirectionCosA%@;\n"
+            "%@\n", [self in], i, [self in], i, ((i < numui(_directLightWithShadowsCount)) ? [NSString stringWithFormat:@"\n"
+            "%@ vec3 dirLightShadowCoord%@;\n", [self in], i] : @"")];
     }] toStringWithDelimiter:@"\n"];
 }
 
 - (NSString*)lightsOut {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return [NSString stringWithFormat:@"out float dirLightDirectionCos%@;\n"
-            "out float dirLightDirectionCosA%@;\n"
-            "%@\n", i, i, ((i < numui(_directLightWithShadowsCount)) ? [NSString stringWithFormat:@"\n"
-            "out vec3 dirLightShadowCoord%@;\n", i] : @"")];
+        return [NSString stringWithFormat:@"%@ float dirLightDirectionCos%@;\n"
+            "%@ float dirLightDirectionCosA%@;\n"
+            "%@\n", [self out], i, [self out], i, ((i < numui(_directLightWithShadowsCount)) ? [NSString stringWithFormat:@"\n"
+            "%@ vec3 dirLightShadowCoord%@;\n", [self out], i] : @"")];
     }] toStringWithDelimiter:@"\n"];
 }
 
 - (NSString*)lightsCalculateVaryings {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return [NSString stringWithFormat:@"dirLightDirectionCos%@= max(dot(normalMWC, -dirLightDirection%@), 0.0);\n"
-            "dirLightDirectionCosA%@= max(dot(eyeDirection, reflect(dirLightDirection%@, normalMWC)), 0.0);\n"
+        return [NSString stringWithFormat:@"dirLightDirectionCos%@ = max(dot(normalMWC, -dirLightDirection%@), 0.0);\n"
+            "dirLightDirectionCosA%@ = max(dot(eyeDirection, reflect(dirLightDirection%@, normalMWC)), 0.0);\n"
             "%@\n", i, i, i, i, ((i < numui(_directLightWithShadowsCount)) ? [NSString stringWithFormat:@"\n"
-            "dirLightShadowCoord%@= (dirLightDepthMwcp%@* vec4(position, 1)).xyz;\n", i, i] : @"")];
+            "dirLightShadowCoord%@ = (dirLightDepthMwcp%@ * vec4(position, 1)).xyz;\n", i, i] : @"")];
     }] toStringWithDelimiter:@"\n"];
 }
 
@@ -284,10 +286,10 @@ static ODClassType* _EGStandardShaderKey_type;
         return [NSString stringWithFormat:@"\n"
             "%@\n", ((i < numui(_directLightWithShadowsCount)) ? [NSString stringWithFormat:@"\n"
             "visibility = texture(dirLightShadow%@, vec3(dirLightShadowCoord%@.xy, dirLightShadowCoord%@.z - 0.005));\n"
-            "color += visibility * dirLightDirectionCos%@* (materialColor * dirLightColor%@);\n"
-            "color += visibility * specularColor * dirLightColor%@* pow(dirLightDirectionCosA%@, 5.0/specularSize);\n", i, i, i, i, i, i, i] : [NSString stringWithFormat:@"\n"
-            "color += dirLightDirectionCos%@* (materialColor * dirLightColor%@);\n"
-            "color += specularColor * dirLightColor%@* pow(dirLightDirectionCosA%@, 5.0/specularSize);\n", i, i, i, i])];
+            "color += visibility * dirLightDirectionCos%@ * (materialColor * dirLightColor%@);\n"
+            "color += visibility * specularColor * dirLightColor%@ * pow(dirLightDirectionCosA%@, 5.0/specularSize);\n", i, i, i, i, i, i, i] : [NSString stringWithFormat:@"\n"
+            "color += dirLightDirectionCos%@ * (materialColor * dirLightColor%@);\n"
+            "color += specularColor * dirLightColor%@ * pow(dirLightDirectionCosA%@, 5.0/specularSize);\n", i, i, i, i])];
     }] toStringWithDelimiter:@"\n"];
 }
 
@@ -297,6 +299,21 @@ static ODClassType* _EGStandardShaderKey_type;
 
 - (NSInteger)version {
     return EGShaderProgram.version;
+}
+
+- (NSString*)ain {
+    if([self version] < 150) return @"attribute";
+    else return @"in";
+}
+
+- (NSString*)in {
+    if([self version] < 150) return @"varying";
+    else return @"in";
+}
+
+- (NSString*)out {
+    if([self version] < 150) return @"varying";
+    else return @"out";
 }
 
 - (ODClassType*)type {

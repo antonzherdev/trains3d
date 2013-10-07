@@ -40,14 +40,17 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
     def shader : StandardShader = {
         val vertexShader =
             "$versionString
-             in vec3 normal;
-             in vec2 vertexUV; $when(texture)
-             in vec3 position;
+             $ain                                                                       vec3 normal;
+
+             $ain vec3 position;
              uniform mat4 mwcp;
              uniform mat4 mwc;
              $lightsVertexUniform
 
-             out vec2 UV; $when(texture)
+            $if(texture)
+             $ain vec2 vertexUV;
+             $out vec2 UV;
+            $endif
              $lightsOut
 
              void main(void) {
@@ -60,7 +63,7 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
         val fragmentShader =
             "$versionString
             $if(texture)
-             in vec2 UV;
+             $in vec2 UV;
              uniform sampler2D diffuseTexture;
             $endif
              uniform vec4 diffuseColor;
@@ -69,7 +72,7 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
              uniform float specularSize;
              $lightsIn
              $lightsFragmentUniform
-             out vec4 outColor;
+             $out vec4 outColor;
 
              void main(void) {
                 float visibility;$when(directLightWithShadowsCount > 0)
@@ -89,17 +92,17 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
         $endif
         "}.toStringWith("\n")
     def lightsIn : string = directLightCount.range.chain.map{i ->
-        "in float dirLightDirectionCos$i;
-         in float dirLightDirectionCosA$i;
+        "$in float dirLightDirectionCos$i;
+         $in float dirLightDirectionCosA$i;
         $if(i < directLightWithShadowsCount)
-         in vec3 dirLightShadowCoord$i;
+         $in vec3 dirLightShadowCoord$i;
         $endif
         "}.toStringWith("\n")
     def lightsOut : string = directLightCount.range.chain.map{i ->
-        "out float dirLightDirectionCos$i;
-         out float dirLightDirectionCosA$i;
+        "$out float dirLightDirectionCos$i;
+         $out float dirLightDirectionCosA$i;
         $if(i < directLightWithShadowsCount)
-         out vec3 dirLightShadowCoord$i;
+         $out vec3 dirLightShadowCoord$i;
         $endif
         "}.toStringWith("\n")
     def lightsCalculateVaryings : string = directLightCount.range.chain.map{i ->

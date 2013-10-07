@@ -96,6 +96,9 @@
 @protocol EGShaderTextBuilder<NSObject>
 - (NSString*)versionString;
 - (NSInteger)version;
+- (NSString*)ain;
+- (NSString*)in;
+- (NSString*)out;
 @end
 
 

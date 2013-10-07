@@ -162,4 +162,8 @@ trait ShaderTextBuilder {
     def versionString = ShaderProgram.versionString
 
     def version : int = ShaderProgram.version
+
+    def ain = if(version < 150) "attribute" else "in"
+    def in = if(version < 150) "varying" else "in"
+    def out = if(version < 150) "varying" else "out"
 }
