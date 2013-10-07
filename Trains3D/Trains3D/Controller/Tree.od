@@ -72,10 +72,10 @@ class Tree(treeType : TreeType, position : vec2, size : vec2) extends Comparable
     }
 }
 
-enum TreeType {
-    pine()
-    tree1()
-    tree2()
-    tree3()
-    yellow()
+enum TreeType(width : float, height : float) {
+    pine(200.0/512, 1)
+    tree1(1, 1)
+    tree2(1, 1)
+    tree3(1, 1)
+    yellow(1, 1)
 }

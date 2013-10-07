@@ -9,8 +9,6 @@
     id<CNSeq> _textures;
     id<CNSeq> _materials;
     id<CNSeq> _rects;
-    GEQuad _mainUv;
-    GEQuad _rustleUv;
 }
 static ODClassType* _TRTreeView_type;
 @synthesize forest = _forest;
@@ -33,8 +31,6 @@ static ODClassType* _TRTreeView_type;
         _rects = [[[_textures chain] map:^id(EGTexture* _) {
             return wrap(GERect, geRectCenterX(geRectApplyXYWidthHeight(0.0, 0.0, [_ size].x / ([_ size].y * 4), [_ size].y / ([_ size].y * 2))));
         }] toArray];
-        _mainUv = geRectUpsideDownQuad(geRectApplyXYWidthHeight(0.0, 0.0, 0.5, 1.0));
-        _rustleUv = geRectUpsideDownQuad(geRectApplyXYWidthHeight(0.5, 0.0, 0.5, 1.0));
     }
     
     return self;
@@ -54,17 +50,20 @@ static ODClassType* _TRTreeView_type;
 }
 
 - (void)drawTree:(TRTree*)tree {
+    CGFloat uvw = tree.treeType.width;
+    GEQuad mainUv = geRectUpsideDownQuad(geRectApplyXYWidthHeight(0.0, 0.0, ((float)(uvw)), 1.0));
+    GEQuad rustleUv = geQuadAddVec2(mainUv, GEVec2Make(((float)(uvw)), 0.0));
     GEPlaneCoord planeCoord = GEPlaneCoordMake(GEPlaneMake(GEVec3Make(0.0, 0.0, 0.0), GEVec3Make(0.0, 0.0, 1.0)), GEVec3Make(1.0, 0.0, 0.0), GEVec3Make(0.0, 1.0, 0.0));
     GEPlaneCoord mPlaneCoord = gePlaneCoordSetY(planeCoord, geVec3Normalize(geVec3AddVec3(planeCoord.y, GEVec3Make([tree incline].x, 0.0, [tree incline].y))));
     NSUInteger tp = tree.treeType.ordinal;
     GEQuad quad = geRectQuad(geRectMulVec2(uwrap(GERect, [_rects applyIndex:tp]), tree.size));
     GEQuad3 quad3 = GEQuad3Make(mPlaneCoord, quad);
     GEQuad mQuad = geQuadApplyP0P1P2P3(geVec3Xy(geQuad3P0(quad3)), geVec3Xy(geQuad3P1(quad3)), geVec3Xy(geQuad3P2(quad3)), geVec3Xy(geQuad3P3(quad3)));
-    [EGD2D drawSpriteMaterial:((EGColorSource*)([_materials applyIndex:tp])) at:geVec3ApplyVec2Z(tree.position, 0.0) quad:mQuad uv:_mainUv];
+    [EGD2D drawSpriteMaterial:((EGColorSource*)([_materials applyIndex:tp])) at:geVec3ApplyVec2Z(tree.position, 0.0) quad:mQuad uv:mainUv];
     CGFloat r = tree.rustle * 0.04;
     GEPlaneCoord rPlaneCoord = gePlaneCoordSetX(mPlaneCoord, geVec3AddVec3(mPlaneCoord.x, GEVec3Make(0.0, ((float)(r)), 0.0)));
     GEQuad3 rQuad3 = GEQuad3Make(rPlaneCoord, quad);
-    [EGD2D drawSpriteMaterial:((EGColorSource*)([_materials applyIndex:tp])) at:geVec3ApplyVec2Z(tree.position, 0.0) quad:geQuadApplyP0P1P2P3(geVec3Xy(geQuad3P0(rQuad3)), geVec3Xy(geQuad3P1(rQuad3)), geVec3Xy(geQuad3P2(rQuad3)), geVec3Xy(geQuad3P3(rQuad3))) uv:_rustleUv];
+    [EGD2D drawSpriteMaterial:((EGColorSource*)([_materials applyIndex:tp])) at:geVec3ApplyVec2Z(tree.position, 0.0) quad:geQuadApplyP0P1P2P3(geVec3Xy(geQuad3P0(rQuad3)), geVec3Xy(geQuad3P1(rQuad3)), geVec3Xy(geQuad3P2(rQuad3)), geVec3Xy(geQuad3P3(rQuad3))) uv:rustleUv];
 }
 
 - (ODClassType*)type {

@@ -58,6 +58,9 @@
 
 
 @interface TRTreeType : ODEnum
+@property (nonatomic, readonly) CGFloat width;
+@property (nonatomic, readonly) CGFloat height;
+
 + (TRTreeType*)pine;
 + (TRTreeType*)tree1;
 + (TRTreeType*)tree2;

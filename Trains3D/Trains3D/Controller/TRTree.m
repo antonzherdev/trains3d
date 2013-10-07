@@ -280,31 +280,40 @@ static ODClassType* _TRTree_type;
 @end
 
 
-@implementation TRTreeType
+@implementation TRTreeType{
+    CGFloat _width;
+    CGFloat _height;
+}
 static TRTreeType* _TRTreeType_pine;
 static TRTreeType* _TRTreeType_tree1;
 static TRTreeType* _TRTreeType_tree2;
 static TRTreeType* _TRTreeType_tree3;
 static TRTreeType* _TRTreeType_yellow;
 static NSArray* _TRTreeType_values;
+@synthesize width = _width;
+@synthesize height = _height;
 
-+ (id)treeTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
-    return [[TRTreeType alloc] initWithOrdinal:ordinal name:name];
++ (id)treeTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name width:(CGFloat)width height:(CGFloat)height {
+    return [[TRTreeType alloc] initWithOrdinal:ordinal name:name width:width height:height];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
+- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name width:(CGFloat)width height:(CGFloat)height {
     self = [super initWithOrdinal:ordinal name:name];
+    if(self) {
+        _width = width;
+        _height = height;
+    }
     
     return self;
 }
 
 + (void)initialize {
     [super initialize];
-    _TRTreeType_pine = [TRTreeType treeTypeWithOrdinal:0 name:@"pine"];
-    _TRTreeType_tree1 = [TRTreeType treeTypeWithOrdinal:1 name:@"tree1"];
-    _TRTreeType_tree2 = [TRTreeType treeTypeWithOrdinal:2 name:@"tree2"];
-    _TRTreeType_tree3 = [TRTreeType treeTypeWithOrdinal:3 name:@"tree3"];
-    _TRTreeType_yellow = [TRTreeType treeTypeWithOrdinal:4 name:@"yellow"];
+    _TRTreeType_pine = [TRTreeType treeTypeWithOrdinal:0 name:@"pine" width:200.0 / 512 height:1.0];
+    _TRTreeType_tree1 = [TRTreeType treeTypeWithOrdinal:1 name:@"tree1" width:1.0 height:1.0];
+    _TRTreeType_tree2 = [TRTreeType treeTypeWithOrdinal:2 name:@"tree2" width:1.0 height:1.0];
+    _TRTreeType_tree3 = [TRTreeType treeTypeWithOrdinal:3 name:@"tree3" width:1.0 height:1.0];
+    _TRTreeType_yellow = [TRTreeType treeTypeWithOrdinal:4 name:@"yellow" width:1.0 height:1.0];
     _TRTreeType_values = (@[_TRTreeType_pine, _TRTreeType_tree1, _TRTreeType_tree2, _TRTreeType_tree3, _TRTreeType_yellow]);
 }
 
