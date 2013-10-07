@@ -29,15 +29,15 @@ class Director {
         glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
         matrix.clear
         glEnable(GL_DEPTH_TEST)
-        glEnable(GL_MULTISAMPLE)
-        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
-        glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST)
+        beforeDraw
         _scene.get.drawWith(size)
         glDisable(GL_DEPTH_TEST)
         context.matrixStack.clear
         context.set(viewport = Rect(vec2(0, 0), size))
         _stat.for(_.draw)
     }
+
+    def beforeDraw
 
     def process(event : Event) {
         _scene.for(_.process(event))

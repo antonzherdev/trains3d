@@ -1,4 +1,8 @@
+#if TARGET_OS_IPHONE
+#import <OpenGLES/EAGL.h>
+#elif TARGET_OS_MAC
 #import <OpenGL/gl3.h>
+#endif
 #import "GEVec.h"
 
 @class GEMat4;
@@ -72,19 +76,8 @@ static inline GLuint egGenFrameBuffer() {
 }
 
 
-static inline GLuint egGenFrameBufferEXT() {
-    GLuint buffer;
-    glGenFramebuffersEXT(1, &buffer);
-    return buffer;
-}
-
 static inline void egDeleteFrameBuffer(GLuint handle) {
     glDeleteFramebuffers(1, &handle);
-}
-
-
-static inline void egDeleteFrameBufferEXT(GLuint handle) {
-    glDeleteFramebuffersEXT(1, &handle);
 }
 
 static inline GLuint egGenRenderBuffer() {
@@ -93,19 +86,9 @@ static inline GLuint egGenRenderBuffer() {
     return buffer;
 }
 
-static inline GLuint egGenRenderBufferEXT() {
-    GLuint buffer;
-    glGenRenderbuffersEXT(1, &buffer);
-    return buffer;
-}
-
 
 static inline void egDeleteRenderBuffer(GLuint handle) {
     glDeleteRenderbuffers(1, &handle);
-}
-
-static inline void egDeleteRenderBufferEXT(GLuint handle) {
-    glDeleteRenderbuffersEXT(1, &handle);
 }
 
 static inline GLuint egGenTexture() {
@@ -130,15 +113,9 @@ static inline void egVertexAttribPointer (GLuint index, NSUInteger size, GLenum 
     glVertexAttribPointer(index, (GLint)size, type, normalized, (GLsizei)stride, (GLvoid const *) pointer);
 }
 
-static inline void egDrawBuffers(CNPArray* arr) {
-    glDrawBuffers(arr.count, arr.bytes);
-}
-
 #define egJasModel(NAME) [EGMesh \
     applyVertexData:[arrp(float, numf4, NAME ## _vertexcount*8) NAME ## _vertex] \
     indexData: [arrp(unsigned int, numui4, NAME ## _polygoncount*3) NAME ## _index]]
 
 GEVec2 egLoadTextureFromFile(GLuint target, NSString* file, GLenum magFilter, GLenum minFilter);
 void egSaveTextureToFile(GLuint source, NSString* file);
-
-void egDrawAxis();

@@ -67,9 +67,7 @@ static ODClassType* _EGDirector_type;
     glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
     [EGGlobal.matrix clear];
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_MULTISAMPLE);
-    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-    glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+    [self beforeDraw];
     [((EGScene*)([__scene get])) drawWithViewSize:size];
     glDisable(GL_DEPTH_TEST);
     [EGGlobal.context.matrixStack clear];
@@ -77,6 +75,10 @@ static ODClassType* _EGDirector_type;
     [__stat forEach:^void(EGStat* _) {
         [_ draw];
     }];
+}
+
+- (void)beforeDraw {
+    @throw @"Method beforeDraw is abstract";
 }
 
 - (void)processEvent:(EGEvent*)event {

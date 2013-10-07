@@ -10,6 +10,7 @@
 
 @class EGSurface;
 @class EGSimpleSurface;
+@class EGMultisamplingSurface;
 @class EGPairSurface;
 @class EGViewportSurfaceShaderParam;
 @class EGViewportSurfaceShader;
@@ -33,12 +34,26 @@
 
 @interface EGSimpleSurface : EGSurface
 @property (nonatomic, readonly) BOOL depth;
-@property (nonatomic, readonly) BOOL multisampling;
 @property (nonatomic, readonly) GLuint frameBuffer;
 @property (nonatomic, readonly) EGTexture* texture;
 
-+ (id)simpleSurfaceWithSize:(GEVec2i)size depth:(BOOL)depth multisampling:(BOOL)multisampling;
-- (id)initWithSize:(GEVec2i)size depth:(BOOL)depth multisampling:(BOOL)multisampling;
++ (id)simpleSurfaceWithSize:(GEVec2i)size depth:(BOOL)depth;
+- (id)initWithSize:(GEVec2i)size depth:(BOOL)depth;
+- (ODClassType*)type;
+- (void)dealloc;
+- (void)bind;
+- (void)unbind;
++ (ODClassType*)type;
+@end
+
+
+@interface EGMultisamplingSurface : EGSurface
+@property (nonatomic, readonly) BOOL depth;
+@property (nonatomic, readonly) GLuint frameBuffer;
+@property (nonatomic, readonly) EGTexture* texture;
+
++ (id)multisamplingSurfaceWithSize:(GEVec2i)size depth:(BOOL)depth;
+- (id)initWithSize:(GEVec2i)size depth:(BOOL)depth;
 - (ODClassType*)type;
 - (void)dealloc;
 - (void)bind;
@@ -49,7 +64,7 @@
 
 @interface EGPairSurface : EGSurface
 @property (nonatomic, readonly) BOOL depth;
-@property (nonatomic, readonly) EGSimpleSurface* multisampling;
+@property (nonatomic, readonly) EGMultisamplingSurface* multisampling;
 @property (nonatomic, readonly) EGSimpleSurface* simple;
 
 + (id)pairSurfaceWithSize:(GEVec2i)size depth:(BOOL)depth;

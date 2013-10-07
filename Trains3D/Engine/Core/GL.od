@@ -162,7 +162,6 @@ stub object gl {
     val GL_TEXTURE_MAG_FILTER : uint4
     def glFramebufferTexture(target : uint4, attachment : uint4, texture : GLuint, level : GLint)
     def glDrawBuffer(:uint4)
-    def egDrawBuffers(:[uint4])
     def glCheckFramebufferStatus(target : uint4) : int
     val GL_COLOR_ATTACHMENT0 : uint4
     val GL_FRAMEBUFFER_COMPLETE : uint4

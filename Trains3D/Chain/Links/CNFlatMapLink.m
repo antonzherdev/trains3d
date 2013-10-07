@@ -29,7 +29,7 @@
         id o = _f(item);
         if([o isKindOfClass:[CNChain class]]) {
             __block CNYieldResult ret = cnYieldContinue;
-            [o apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id x) {
+            [((CNChain*)o) apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id x) {
                 ret = [yield yieldItem:x];
                 return ret;
             } end:nil all:nil]];

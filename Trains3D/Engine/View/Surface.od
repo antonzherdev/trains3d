@@ -18,26 +18,19 @@ class Surface(size : vec2i) {
     }
 }
 
-class SimpleSurface(size : vec2i, depth : bool, multisampling : bool) extends Surface(size) {
+class SimpleSurface(size : vec2i, depth : bool) extends Surface(size) {
     val frameBuffer = egGenFrameBuffer
-    private val depthRenderBuffer : GLuint = if(depth && !multisampling) egGenRenderBuffer else 0
-    private val depthTexture : Texture? = if(depth && multisampling) Texture() else nil
+    private val depthRenderBuffer : GLuint = if(depth) egGenRenderBuffer else 0
     val texture = {
         val t = Texture()
         glGetError
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
-        val tg = if(multisampling) GL_TEXTURE_2D_MULTISAMPLE else GL_TEXTURE_2D
-        glBindTexture(tg, t.id)
-
-        if(multisampling) {
-            glTexImage2DMultisample(tg, 4, GL_RGBA, size.x, size.y, GL_FALSE)
-        } else {
-            glTexParameteri(tg, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
-            glTexParameteri(tg, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
-            glTexParameteri(tg, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-            glTexParameteri(tg, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-            glTexImage2D(tg, 0, GL_RGBA, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0)
-        }
+        glBindTexture(GL_TEXTURE_2D, t.id)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0)
         if(glGetError != 0) {
             val e = "Error in texture creation for surface with size $(size.x)x$(size.y)"
             throw e
@@ -46,20 +39,14 @@ class SimpleSurface(size : vec2i, depth : bool, multisampling : bool) extends Su
         val status = glCheckFramebufferStatus(GL_FRAMEBUFFER)
         if(status != GL_FRAMEBUFFER_COMPLETE) throw "Error in frame buffer color attachment: $status"
         if(depth) {
-            if(multisampling) {
-                glBindTexture(tg, depthTexture.get.id)
-                glTexImage2DMultisample(tg, 4, GL_DEPTH_COMPONENT24, size.x, size.y, GL_FALSE)
-                glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexture.get.id, 0)
-            } else {
-                glBindRenderbuffer(GL_RENDERBUFFER, depthRenderBuffer)
-                glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, size.x, size.y)
-                glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer)
-            }
+            glBindRenderbuffer(GL_RENDERBUFFER, depthRenderBuffer)
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, size.x, size.y)
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer)
             val status = glCheckFramebufferStatus(GL_FRAMEBUFFER)
             if(status != GL_FRAMEBUFFER_COMPLETE) throw "Error in frame buffer depth attachment: $status"
         }
 
-        glBindTexture(tg, 0)
+        glBindTexture(GL_TEXTURE_2D, 0)
         glBindFramebuffer(GL_FRAMEBUFFER, 0)
         t
     }
@@ -72,7 +59,6 @@ class SimpleSurface(size : vec2i, depth : bool, multisampling : bool) extends Su
     def bind {
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
         glViewport(0, 0, size.x, size.y)
-//        egDrawBuffers([GL_COLOR_ATTACHMENT0])
     }
 
     def unbind {
@@ -81,9 +67,54 @@ class SimpleSurface(size : vec2i, depth : bool, multisampling : bool) extends Su
 
 }
 
+class MultisamplingSurface(size : vec2i, depth : bool) extends Surface(size) {
+    val frameBuffer = egGenFrameBuffer
+    private val depthTexture : Texture? = if(depth) Texture() else nil
+    val texture = {
+        val t = Texture()
+        glGetError
+        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
+        glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, t.id)
+        glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGBA, size.x, size.y, GL_FALSE)
+        if(glGetError != 0) {
+            val e = "Error in texture creation for surface with size $(size.x)x$(size.y)"
+            throw e
+        }
+        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, t.id, 0)
+        val status = glCheckFramebufferStatus(GL_FRAMEBUFFER)
+        if(status != GL_FRAMEBUFFER_COMPLETE) throw "Error in frame buffer color attachment: $status"
+        if(depth) {
+            glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, depthTexture.get.id)
+            glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_DEPTH_COMPONENT24, size.x, size.y, GL_FALSE)
+            glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexture.get.id, 0)
+            val status = glCheckFramebufferStatus(GL_FRAMEBUFFER)
+            if(status != GL_FRAMEBUFFER_COMPLETE) throw "Error in frame buffer depth attachment: $status"
+        }
+
+        glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0)
+        glBindFramebuffer(GL_FRAMEBUFFER, 0)
+        t
+    }
+
+    def dealloc {
+        egDeleteFrameBuffer(frameBuffer)
+    }
+
+    def bind {
+        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
+        glViewport(0, 0, size.x, size.y)
+    }
+
+    def unbind {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0)
+    }
+
+}
+
+
 class PairSurface(size : vec2i, depth : bool) extends  Surface(size) {
-    val multisampling = SimpleSurface(size, depth, true)
-    val simple = SimpleSurface(size, false, false)
+    val multisampling = MultisamplingSurface(size, depth)
+    val simple = SimpleSurface(size, false)
 
     def bind {
         multisampling.bind
@@ -193,7 +224,7 @@ class BaseViewportSurface {
 class ViewportSurface(depth : bool, multisampling : bool) extends BaseViewportSurface {
     def createSurface : Surface =
         if(multisampling) PairSurface(context.viewport.size, depth)
-        else SimpleSurface(context.viewport.size, depth, false)
+        else SimpleSurface(context.viewport.size, depth)
 
     private lazy val shader = ViewportSurfaceShader()
 
