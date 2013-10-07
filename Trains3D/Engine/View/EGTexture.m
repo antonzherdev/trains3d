@@ -137,7 +137,7 @@ static ODClassType* _EGFileTexture_type;
 }
 
 - (void)load {
-    __size = egLoadTextureFromFile(self.id, [CNBundle fileNameForResource:_file], _magFilter, _minFilter);
+    __size = egLoadTextureFromFile(self.id, [OSBundle fileNameForResource:_file], _magFilter, _minFilter);
     __loaded = YES;
 }
 

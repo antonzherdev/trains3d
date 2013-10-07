@@ -6,14 +6,14 @@
 //
 
 
-#import "CNPlatform.h"
+#import "OSPlatform.h"
 
 
-@implementation CNBundle {
+@implementation OSBundle {
 
 }
 + (NSString *)readToStringResource:(NSString *)resource {
-    NSString* file = [CNBundle fileNameForResource:resource];
+    NSString* file = [OSBundle fileNameForResource:resource];
     NSError* error;
     NSString *string = [NSString stringWithContentsOfFile:file encoding:NSUTF8StringEncoding error:&error];
     if(!string) {
@@ -27,14 +27,14 @@
 }
 @end
 
-@implementation CNDirectory
+@implementation OSDirectory
 + (NSString *)sandbox {
     return NSHomeDirectory();
 }
 @end
 
 
-@implementation CNLocale
+@implementation OSLocale
 + (NSString *)currentLanguageId {
     return [[[NSLocale currentLocale] localeIdentifier] substringToIndex:2];
 }

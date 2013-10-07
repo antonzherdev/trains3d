@@ -10,7 +10,7 @@
 #import "CNData.h"
 #import "CNRange.h"
 #import "CNSortBuilder.h"
-#import "CNPlatform.h"
+#import "OSPlatform.h"
 #import "CNQueue.h"
 #import "CNVoidRefArray.h"
 #import "CNTreeMap.h"

@@ -25,7 +25,7 @@ static ODClassType* _EGShaderProgram_type;
 }
 
 + (EGShaderProgram*)loadFromFilesVertex:(NSString*)vertex fragment:(NSString*)fragment {
-    return [EGShaderProgram applyVertex:[CNBundle readToStringResource:vertex] fragment:[CNBundle readToStringResource:fragment]];
+    return [EGShaderProgram applyVertex:[OSBundle readToStringResource:vertex] fragment:[OSBundle readToStringResource:fragment]];
 }
 
 + (EGShaderProgram*)applyVertex:(NSString*)vertex fragment:(NSString*)fragment {

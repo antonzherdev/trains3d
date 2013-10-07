@@ -1,4 +1,4 @@
-package core.chain
+package core.os
 
 stub class Bundle {
     static def fileNameFor(resource : string) : string

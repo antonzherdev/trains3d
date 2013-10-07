@@ -18,7 +18,7 @@ GEVec2 egLoadTextureFromFile(GLuint target, NSString* file, GLenum magFilter, GL
 
     CGContextSetBlendMode(myBitmapContext, kCGBlendModeCopy);
     CGContextDrawImage(myBitmapContext, rect, myImageRef);
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, (GLint)width);
+//    glPixelStorei(GL_UNPACK_ROW_LENGTH, (GLint)width);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glBindTexture(GL_TEXTURE_2D, target);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);

@@ -41,7 +41,7 @@ static ODClassType* _SDSound_type;
 
 + (SDSound*)applyFile:(NSString*)file {
     NSError * error;
-    NSURL *url = [NSURL fileURLWithPath:[CNBundle fileNameForResource:file]];
+    NSURL *url = [NSURL fileURLWithPath:[OSBundle fileNameForResource:file]];
     AVAudioPlayer *player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
     if(error != nil) @throw [error description];
     return [SDSound soundWithPlayer:player];

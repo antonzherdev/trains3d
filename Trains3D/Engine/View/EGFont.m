@@ -122,7 +122,7 @@ static ODClassType* _EGFont_type;
 - (void)_init {
     NSMutableDictionary* charMap = [NSMutableDictionary mutableDictionary];
     GEVec2 ts = [_texture size];
-    [[[CNBundle readToStringResource:[NSString stringWithFormat:@"%@.fnt", _name]] splitBy:@"\n"] forEach:^void(NSString* line) {
+    [[[OSBundle readToStringResource:[NSString stringWithFormat:@"%@.fnt", _name]] splitBy:@"\n"] forEach:^void(NSString* line) {
         CNTuple* t = ((CNTuple*)([[line tupleBy:@" "] get]));
         NSString* name = t.a;
         id<CNMap> map = [[[[t.b splitBy:@" "] chain] flatMap:^id(NSString* _) {

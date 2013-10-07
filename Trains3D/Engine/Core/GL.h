@@ -127,3 +127,11 @@ static inline void egFramebufferTexture(GLenum target, GLenum attachment, GLuint
     glFramebufferTexture(target, attachment, texture, level);
 #endif
 }
+
+static inline void egInitShadowTexture() {
+#if TARGET_OS_IPHONE
+#elif TARGET_OS_MAC
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+#endif
+}
