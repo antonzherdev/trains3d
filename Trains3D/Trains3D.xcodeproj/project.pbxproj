@@ -10,7 +10,6 @@
 		0214B1291773394400C03C71 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0214B1281773394400C03C71 /* Cocoa.framework */; };
 		0214B1471773394500C03C71 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0214B1461773394500C03C71 /* SenTestingKit.framework */; };
 		0214B1481773394500C03C71 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0214B1281773394400C03C71 /* Cocoa.framework */; };
-		0214B1501773394500C03C71 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0214B14E1773394500C03C71 /* InfoPlist.strings */; };
 		024F434E1774A5C3005B6F82 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 024F434D1774A5C3005B6F82 /* CoreVideo.framework */; };
 		02C70A4F1802A3E500007F50 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C70A4E1802A3E500007F50 /* Foundation.framework */; };
 		02C70A511802A3E500007F50 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C70A501802A3E500007F50 /* CoreGraphics.framework */; };
@@ -857,8 +856,6 @@
 		0214B12D1773394400C03C71 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0214B1451773394500C03C71 /* Trains3DTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Trains3DTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0214B1461773394500C03C71 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		0214B14D1773394500C03C71 /* Trains3DTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Trains3DTests-Info.plist"; sourceTree = "<group>"; };
-		0214B14F1773394500C03C71 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		024F434D1774A5C3005B6F82 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		02C70A4D1802A3E500007F50 /* Trains3Di.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Trains3Di.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02C70A4E1802A3E500007F50 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -1517,6 +1514,7 @@
 		6F3DF92DCB374701A37E3C32 /* test.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = test.od; sourceTree = "<group>"; };
 		6F3DF931521EC276FAF397DC /* btMinkowskiPenetrationDepthSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btMinkowskiPenetrationDepthSolver.h; sourceTree = "<group>"; };
 		6F3DF9326AEED29A07D1AD9A /* KWBeforeEachNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWBeforeEachNode.m; sourceTree = "<group>"; };
+		6F3DF932F1559D4C8623EFFD /* Trains3DTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = "Trains3DTests-Info.plist"; sourceTree = "<group>"; };
 		6F3DF93AC35433C6311DF5C6 /* btCollisionShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btCollisionShape.cpp; sourceTree = "<group>"; };
 		6F3DF93EF832E1C156FF7B3C /* color_space.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = color_space.hpp; sourceTree = "<group>"; };
 		6F3DF941611C64E76051A4FC /* KWInvocationCapturer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWInvocationCapturer.h; sourceTree = "<group>"; };
@@ -2069,7 +2067,6 @@
 			children = (
 				024F434D1774A5C3005B6F82 /* CoreVideo.framework */,
 				0214B12E1773394400C03C71 /* Trains3D */,
-				0214B14B1773394500C03C71 /* Trains3DTests */,
 				0214B1271773394400C03C71 /* Frameworks */,
 				0214B1261773394400C03C71 /* Products */,
 				6F3DF59FFFDE7F8B42964292 /* Engine */,
@@ -2134,23 +2131,6 @@
 				6F3DFEDDA532379BE67A715A /* Platform */,
 			);
 			path = Trains3D;
-			sourceTree = "<group>";
-		};
-		0214B14B1773394500C03C71 /* Trains3DTests */ = {
-			isa = PBXGroup;
-			children = (
-				0214B14C1773394500C03C71 /* Supporting Files */,
-			);
-			path = Trains3DTests;
-			sourceTree = "<group>";
-		};
-		0214B14C1773394500C03C71 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				0214B14D1773394500C03C71 /* Trains3DTests-Info.plist */,
-				0214B14E1773394500C03C71 /* InfoPlist.strings */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		6F3DF002AC84BE0B2416BC7C /* Categories */ = {
@@ -3329,6 +3309,7 @@
 				6F3DF1085CD447541E1E60C5 /* DamageTest.od */,
 				6F3DF6CDBAB78277173B82B6 /* TRDamageTest.h */,
 				6F3DF13A0F942D1FB32C0111 /* TRDamageTest.m */,
+				6F3DF932F1559D4C8623EFFD /* Trains3DTests-Info.plist */,
 			);
 			path = Test;
 			sourceTree = "<group>";
@@ -4170,7 +4151,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0214B1501773394500C03C71 /* InfoPlist.strings in Resources */,
 				6F3DF2A81A99996160B1937F /* Strings.od in Resources */,
 				6F3DF3F7A8DE5360EFE802FF /* D3D.od in Resources */,
 			);
@@ -4877,14 +4857,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		0214B14E1773394500C03C71 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				0214B14F1773394500C03C71 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		6F3DF00DB170E5F80CE1B4CD /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -5028,8 +5000,8 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Trains3D/Trains3D-Prefix.pch";
-				INFOPLIST_FILE = "Trains3DTests/Trains3DTests-Info.plist";
+				GCC_PREFIX_HEADER = "Trains3D/Platform/Mac/Trains3D-Prefix.pch";
+				INFOPLIST_FILE = "Trains3D/Test/Trains3DTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
@@ -5043,8 +5015,8 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Trains3D/Trains3D-Prefix.pch";
-				INFOPLIST_FILE = "Trains3DTests/Trains3DTests-Info.plist";
+				GCC_PREFIX_HEADER = "Trains3D/Platform/Mac/Trains3D-Prefix.pch";
+				INFOPLIST_FILE = "Trains3D/Test/Trains3DTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
