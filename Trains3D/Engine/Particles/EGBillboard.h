@@ -15,6 +15,7 @@
 @class GEMat4;
 
 @class EGBillboardShaderSystem;
+@class EGBillboardShaderBuilder;
 @class EGBillboardShader;
 @class EGBillboardParticleSystem;
 @class EGBillboardParticle;
@@ -25,6 +26,22 @@ typedef struct EGBillboardBufferData EGBillboardBufferData;
 @interface EGBillboardShaderSystem : EGShaderSystem
 - (ODClassType*)type;
 + (EGBillboardShader*)shaderForParam:(EGColorSource*)param;
++ (ODClassType*)type;
+@end
+
+
+@interface EGBillboardShaderBuilder : NSObject<EGShaderTextBuilder>
+@property (nonatomic, readonly) BOOL texture;
+@property (nonatomic, readonly) BOOL shadow;
+@property (nonatomic, readonly) NSString* parameters;
+@property (nonatomic, readonly) NSString* code;
+
++ (id)billboardShaderBuilderWithTexture:(BOOL)texture shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code;
+- (id)initWithTexture:(BOOL)texture shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code;
+- (ODClassType*)type;
+- (NSString*)vertex;
+- (NSString*)fragment;
+- (EGShaderProgram*)program;
 + (ODClassType*)type;
 @end
 
@@ -48,8 +65,6 @@ typedef struct EGBillboardBufferData EGBillboardBufferData;
 + (EGBillboardShader*)instanceForTexture;
 + (EGBillboardShader*)instanceForColorShadow;
 + (EGBillboardShader*)instanceForTextureShadow;
-+ (NSString*)vertexTextWithTexture:(BOOL)texture shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code;
-+ (NSString*)fragmentTextWithTexture:(BOOL)texture shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code;
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param;
 - (void)unloadParam:(EGColorSource*)param;
 + (ODClassType*)type;

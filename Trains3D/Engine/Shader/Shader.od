@@ -162,9 +162,9 @@ trait ShaderTextBuilder {
     def vertexHeader = "#version $version"
     def fragmentHeader =
         "#version $version
-        $if(ShaderProgram.version > 100)
-         out lowp vec4 fragColor;
-        $endif"
+         $fragColorDeclaration"
+    def fragColorDeclaration = if(isFragColorDeclared) "" else "out lowp vec4 fragColor;"
+    def isFragColorDeclared = ShaderProgram.version < 110
 
     def version : int = ShaderProgram.version
 

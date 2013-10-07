@@ -96,6 +96,8 @@
 - (NSString*)versionString;
 - (NSString*)vertexHeader;
 - (NSString*)fragmentHeader;
+- (NSString*)fragColorDeclaration;
+- (BOOL)isFragColorDeclared;
 - (NSInteger)version;
 - (NSString*)ain;
 - (NSString*)in;

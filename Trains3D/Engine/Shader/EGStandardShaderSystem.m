@@ -305,8 +305,16 @@ static ODClassType* _EGStandardShaderKey_type;
 
 - (NSString*)fragmentHeader {
     return [NSString stringWithFormat:@"#version %li\n"
-        "%@", [self version], ((EGShaderProgram.version > 100) ? @"\n"
-        "out lowp vec4 fragColor;\n" : @"")];
+        "%@", [self version], [self fragColorDeclaration]];
+}
+
+- (NSString*)fragColorDeclaration {
+    if([self isFragColorDeclared]) return @"";
+    else return @"out lowp vec4 fragColor;";
+}
+
+- (BOOL)isFragColorDeclared {
+    return EGShaderProgram.version < 110;
 }
 
 - (NSInteger)version {

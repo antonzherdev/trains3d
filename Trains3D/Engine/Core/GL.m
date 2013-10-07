@@ -34,5 +34,9 @@ id egGetShaderError(GLuint shader) {
 
 NSUInteger egGLSLVersion() {
     const GLubyte* pVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
-    return pVersion == nil ? 100 :  ((NSUInteger) pVersion[0] - '0')*100 + (pVersion[2] - '0') *10 + pVersion[3]  - '0';
+    if(pVersion == nil) return 100;
+    if(pVersion[0] == 'O' && pVersion[1] == 'p' && pVersion[15] == 'E') {
+        return ((NSUInteger) pVersion[18] - '0')*100 + (pVersion[20] - '0') *10 + pVersion[21]  - '0';
+    }
+    return ((NSUInteger) pVersion[0] - '0')*100 + (pVersion[2] - '0') *10 + pVersion[3]  - '0';
 }

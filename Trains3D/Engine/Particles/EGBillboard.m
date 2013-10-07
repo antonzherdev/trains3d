@@ -56,6 +56,189 @@ static ODClassType* _EGBillboardShaderSystem_type;
 @end
 
 
+@implementation EGBillboardShaderBuilder{
+    BOOL _texture;
+    BOOL _shadow;
+    NSString* _parameters;
+    NSString* _code;
+}
+static ODClassType* _EGBillboardShaderBuilder_type;
+@synthesize texture = _texture;
+@synthesize shadow = _shadow;
+@synthesize parameters = _parameters;
+@synthesize code = _code;
+
++ (id)billboardShaderBuilderWithTexture:(BOOL)texture shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code {
+    return [[EGBillboardShaderBuilder alloc] initWithTexture:texture shadow:shadow parameters:parameters code:code];
+}
+
+- (id)initWithTexture:(BOOL)texture shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code {
+    self = [super init];
+    if(self) {
+        _texture = texture;
+        _shadow = shadow;
+        _parameters = parameters;
+        _code = code;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGBillboardShaderBuilder_type = [ODClassType classTypeWithCls:[EGBillboardShaderBuilder class]];
+}
+
+- (NSString*)vertex {
+    return [NSString stringWithFormat:@"%@\n"
+        "%@ highp vec3 position;\n"
+        "%@ lowp vec2 model;\n"
+        "%@\n"
+        "%@ lowp vec4 vertexColor;\n"
+        "\n"
+        "uniform mat4 wc;\n"
+        "uniform mat4 p;\n"
+        "%@ vec4 fColor;\n"
+        "%@\n"
+        "\n"
+        "void main(void) {\n"
+        "    highp vec4 pos = wc*vec4(position, 1);\n"
+        "    pos.x += model.x;\n"
+        "    pos.y += model.y;\n"
+        "    gl_Position = p*pos;%@\n"
+        "    fColor = vertexColor;\n"
+        "    %@\n"
+        "}", [self vertexHeader], [self ain], [self ain], ((_texture) ? [NSString stringWithFormat:@"\n"
+        "%@ mediump vec2 vertexUV;\n"
+        "%@ mediump vec2 UV;\n", [self ain], [self out]] : @""), [self ain], [self out], _parameters, ((_texture) ? @"\n"
+        "    UV = vertexUV;" : @""), _code];
+}
+
+- (NSString*)fragment {
+    return [NSString stringWithFormat:@"%@\n"
+        "\n"
+        "%@\n"
+        "uniform lowp vec4 color;\n"
+        "uniform lowp float alphaTestLevel;\n"
+        "%@ lowp vec4 fColor;\n"
+        "%@\n"
+        "\n"
+        "%@\n"
+        "void main(void) {%@\n"
+        "   %@\n"
+        "    if(%@.a < alphaTestLevel) {\n"
+        "        discard;\n"
+        "    }%@\n"
+        "    %@\n"
+        "}", [self versionString], ((_texture) ? [NSString stringWithFormat:@"\n"
+        "%@ mediump vec2 UV;\n"
+        "uniform lowp sampler2D texture;\n", [self in]] : @""), [self in], ((_shadow) ? @"\n"
+        "out float depth;\n" : [NSString stringWithFormat:@"\n"
+        "%@\n", [self fragColorDeclaration]]), _parameters, ((_shadow && !([self isFragColorDeclared])) ? @"\n"
+        "    lowp vec4 fragColor;" : @""), ((_texture) ? [NSString stringWithFormat:@"\n"
+        "    %@ = fColor * color * %@(texture, UV);\n"
+        "   ", [self fragColor], [self texture2D]] : [NSString stringWithFormat:@"\n"
+        "    %@ = fColor * color;\n"
+        "   ", [self fragColor]]), [self fragColor], ((_shadow) ? @"\n"
+        "    depth = gl_FragCoord.z;" : @""), _code];
+}
+
+- (EGShaderProgram*)program {
+    return [EGShaderProgram applyVertex:[self vertex] fragment:[self fragment]];
+}
+
+- (NSString*)versionString {
+    return [NSString stringWithFormat:@"#version %li", [self version]];
+}
+
+- (NSString*)vertexHeader {
+    return [NSString stringWithFormat:@"#version %li", [self version]];
+}
+
+- (NSString*)fragmentHeader {
+    return [NSString stringWithFormat:@"#version %li\n"
+        "%@", [self version], [self fragColorDeclaration]];
+}
+
+- (NSString*)fragColorDeclaration {
+    if([self isFragColorDeclared]) return @"";
+    else return @"out lowp vec4 fragColor;";
+}
+
+- (BOOL)isFragColorDeclared {
+    return EGShaderProgram.version < 110;
+}
+
+- (NSInteger)version {
+    return EGShaderProgram.version;
+}
+
+- (NSString*)ain {
+    if([self version] < 150) return @"attribute";
+    else return @"in";
+}
+
+- (NSString*)in {
+    if([self version] < 150) return @"varying";
+    else return @"in";
+}
+
+- (NSString*)out {
+    if([self version] < 150) return @"varying";
+    else return @"out";
+}
+
+- (NSString*)fragColor {
+    if([self version] > 100) return @"fragColor";
+    else return @"gl_FragColor";
+}
+
+- (NSString*)texture2D {
+    if([self version] > 100) return @"texture";
+    else return @"texture2D";
+}
+
+- (ODClassType*)type {
+    return [EGBillboardShaderBuilder type];
+}
+
++ (ODClassType*)type {
+    return _EGBillboardShaderBuilder_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGBillboardShaderBuilder* o = ((EGBillboardShaderBuilder*)(other));
+    return self.texture == o.texture && self.shadow == o.shadow && [self.parameters isEqual:o.parameters] && [self.code isEqual:o.code];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.texture;
+    hash = hash * 31 + self.shadow;
+    hash = hash * 31 + [self.parameters hash];
+    hash = hash * 31 + [self.code hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"texture=%d", self.texture];
+    [description appendFormat:@", shadow=%d", self.shadow];
+    [description appendFormat:@", parameters=%@", self.parameters];
+    [description appendFormat:@", code=%@", self.code];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation EGBillboardShader{
     BOOL _texture;
     BOOL _shadow;
@@ -110,16 +293,16 @@ static ODClassType* _EGBillboardShader_type;
     [super initialize];
     _EGBillboardShader_type = [ODClassType classTypeWithCls:[EGBillboardShader class]];
     _EGBillboardShader__lazy_instanceForColor = [CNLazy lazyWithF:^EGBillboardShader*() {
-        return [EGBillboardShader billboardShaderWithProgram:[EGShaderProgram applyVertex:[EGBillboardShader vertexTextWithTexture:NO shadow:NO parameters:@"" code:@""] fragment:[EGBillboardShader fragmentTextWithTexture:NO shadow:NO parameters:@"" code:@""]] texture:NO shadow:NO];
+        return [EGBillboardShader billboardShaderWithProgram:[[EGBillboardShaderBuilder billboardShaderBuilderWithTexture:NO shadow:NO parameters:@"" code:@""] program] texture:NO shadow:NO];
     }];
     _EGBillboardShader__lazy_instanceForTexture = [CNLazy lazyWithF:^EGBillboardShader*() {
-        return [EGBillboardShader billboardShaderWithProgram:[EGShaderProgram applyVertex:[EGBillboardShader vertexTextWithTexture:YES shadow:NO parameters:@"" code:@""] fragment:[EGBillboardShader fragmentTextWithTexture:YES shadow:NO parameters:@"" code:@""]] texture:YES shadow:NO];
+        return [EGBillboardShader billboardShaderWithProgram:[[EGBillboardShaderBuilder billboardShaderBuilderWithTexture:YES shadow:NO parameters:@"" code:@""] program] texture:YES shadow:NO];
     }];
     _EGBillboardShader__lazy_instanceForColorShadow = [CNLazy lazyWithF:^EGBillboardShader*() {
-        return [EGBillboardShader billboardShaderWithProgram:[EGShaderProgram applyVertex:[EGBillboardShader vertexTextWithTexture:NO shadow:YES parameters:@"" code:@""] fragment:[EGBillboardShader fragmentTextWithTexture:NO shadow:YES parameters:@"" code:@""]] texture:NO shadow:YES];
+        return [EGBillboardShader billboardShaderWithProgram:[[EGBillboardShaderBuilder billboardShaderBuilderWithTexture:NO shadow:YES parameters:@"" code:@""] program] texture:NO shadow:YES];
     }];
     _EGBillboardShader__lazy_instanceForTextureShadow = [CNLazy lazyWithF:^EGBillboardShader*() {
-        return [EGBillboardShader billboardShaderWithProgram:[EGShaderProgram applyVertex:[EGBillboardShader vertexTextWithTexture:YES shadow:YES parameters:@"" code:@""] fragment:[EGBillboardShader fragmentTextWithTexture:YES shadow:YES parameters:@"" code:@""]] texture:YES shadow:YES];
+        return [EGBillboardShader billboardShaderWithProgram:[[EGBillboardShaderBuilder billboardShaderBuilderWithTexture:YES shadow:YES parameters:@"" code:@""] program] texture:YES shadow:YES];
     }];
 }
 
@@ -137,56 +320,6 @@ static ODClassType* _EGBillboardShader_type;
 
 + (EGBillboardShader*)instanceForTextureShadow {
     return ((EGBillboardShader*)([_EGBillboardShader__lazy_instanceForTextureShadow get]));
-}
-
-+ (NSString*)vertexTextWithTexture:(BOOL)texture shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code {
-    return [NSString stringWithFormat:@"#version 150\n"
-        "in vec3 position;\n"
-        "in vec2 model;%@\n"
-        "in vec4 vertexColor;\n"
-        "\n"
-        "uniform mat4 wc;\n"
-        "uniform mat4 p;\n"
-        "%@\n"
-        "out vec4 fragColor;\n"
-        "%@\n"
-        "\n"
-        "void main(void) {\n"
-        "   float size = 0.03;\n"
-        "   vec4 pos = wc*vec4(position, 1);\n"
-        "   pos.x += model.x;\n"
-        "   pos.y += model.y;\n"
-        "   gl_Position = p*pos;%@\n"
-        "   fragColor = vertexColor;\n"
-        "   %@\n"
-        "}", ((texture) ? @"\n"
-        "in vec2 vertexUV; " : @""), ((texture) ? @"\n"
-        "out vec2 UV; " : @""), parameters, ((texture) ? @"\n"
-        "   UV = vertexUV;" : @""), code];
-}
-
-+ (NSString*)fragmentTextWithTexture:(BOOL)texture shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code {
-    return [NSString stringWithFormat:@"#version 150\n"
-        "%@\n"
-        "uniform vec4 color;\n"
-        "uniform float alphaTestLevel;\n"
-        "in vec4 fragColor;%@%@\n"
-        "\n"
-        "%@\n"
-        "void main(void) {%@%@%@\n"
-        "   if(outColor.a < alphaTestLevel) {\n"
-        "       discard;\n"
-        "   }%@\n"
-        "%@\n"
-        "}", ((texture) ? @"\n"
-        "in vec2 UV;\n"
-        "uniform sampler2D texture;\n" : @""), ((shadow) ? @"\n"
-        "out float depth;" : @""), ((!(shadow)) ? @"\n"
-        "out vec4 outColor;" : @""), parameters, ((shadow) ? @"\n"
-        "   vec4 outColor;" : @""), ((texture) ? @"\n"
-        "   outColor = fragColor * color * texture(texture, UV); " : @""), ((!(texture)) ? @"\n"
-        "   outColor = fragColor * color; " : @""), ((shadow) ? @"\n"
-        "   depth = gl_FragCoord.z;" : @""), code];
 }
 
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param {
