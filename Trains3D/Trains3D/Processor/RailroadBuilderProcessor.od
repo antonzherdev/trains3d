@@ -5,7 +5,7 @@ import core.math._
 
 class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor {
     private val mouseProcessor = RailroadBuilderMouseProcessor(builder)
-    private val touchProcessor = TwoFingerTouchToMouse(mouseProcessor)
+    private val touchProcessor = TouchToMouse(mouseProcessor)
 
     def process(event : Event) : bool = event.leftMouse(mouseProcessor) || event.touch(touchProcessor)
 }

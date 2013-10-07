@@ -1,12 +1,12 @@
 #import "objd.h"
 #import "EGInput.h"
 
-@class EGTwoFingerTouchToMouse;
+@class EGTouchToMouse;
 
-@interface EGTwoFingerTouchToMouse : NSObject<EGTouchProcessor>
+@interface EGTouchToMouse : NSObject<EGTouchProcessor>
 @property (nonatomic, readonly) id processor;
 
-+ (id)twoFingerTouchToMouseWithProcessor:(id)processor;
++ (id)touchToMouseWithProcessor:(id)processor;
 - (id)initWithProcessor:(id)processor;
 - (BOOL)touchBeganEvent:(EGEvent*)event;
 - (BOOL)touchMovedEvent:(EGEvent*)event;

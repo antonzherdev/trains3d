@@ -2,7 +2,7 @@
 #import "EGInput.h"
 #import "GEVec.h"
 @class TRRailroadBuilder;
-@class EGTwoFingerTouchToMouse;
+@class EGTouchToMouse;
 @class EGGlobal;
 @class EGDirector;
 @class TRRail;

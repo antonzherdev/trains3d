@@ -1,14 +1,14 @@
 #import "TRRailroadBuilderProcessor.h"
 
 #import "TRRailroad.h"
-#import "EGTwoFingerTouchToMouse.h"
+#import "EGTouchToMouse.h"
 #import "EGContext.h"
 #import "EGDirector.h"
 #import "TRRailPoint.h"
 @implementation TRRailroadBuilderProcessor{
     TRRailroadBuilder* _builder;
     TRRailroadBuilderMouseProcessor* _mouseProcessor;
-    EGTwoFingerTouchToMouse* _touchProcessor;
+    EGTouchToMouse* _touchProcessor;
 }
 static ODClassType* _TRRailroadBuilderProcessor_type;
 @synthesize builder = _builder;
@@ -22,7 +22,7 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
     if(self) {
         _builder = builder;
         _mouseProcessor = [TRRailroadBuilderMouseProcessor railroadBuilderMouseProcessorWithBuilder:_builder];
-        _touchProcessor = [EGTwoFingerTouchToMouse twoFingerTouchToMouseWithProcessor:_mouseProcessor];
+        _touchProcessor = [EGTouchToMouse touchToMouseWithProcessor:_mouseProcessor];
     }
     
     return self;

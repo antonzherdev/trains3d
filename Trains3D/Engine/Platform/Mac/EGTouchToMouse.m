@@ -1,8 +1,8 @@
-#import "EGTwoFingerTouchToMouse.h"
+#import "EGTouchToMouse.h"
 #import "EGEventMac.h"
 #import "EGOpenGLView.h"
 
-@implementation EGTwoFingerTouchToMouse{
+@implementation EGTouchToMouse {
     id _processor;
     BOOL _touching;
     NSTouch* _startTouches[2];
@@ -12,8 +12,8 @@
 }
 @synthesize processor = _processor;
 
-+ (id)twoFingerTouchToMouseWithProcessor:(id)processor {
-    return [[EGTwoFingerTouchToMouse alloc] initWithProcessor:processor];
++ (id)touchToMouseWithProcessor:(id)processor {
+    return [[EGTouchToMouse alloc] initWithProcessor:processor];
 }
 
 - (id)initWithProcessor:(id)processor {
