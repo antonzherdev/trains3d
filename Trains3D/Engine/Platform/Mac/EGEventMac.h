@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 #import "EGInput.h"
 
-@class EGOpenGLView;
+@class EGOpenGLViewMac;
 
 enum EGEventMacType {
     EGEventTouchBegan = 0x100,
@@ -12,9 +12,9 @@ enum EGEventMacType {
 
 @interface EGEventMac : EGEvent
 @property (readonly, nonatomic) NSEvent* event;
-@property (readonly, nonatomic, weak) EGOpenGLView* view;
+@property (readonly, nonatomic, weak) EGOpenGLViewMac * view;
 
-- (id)initWithEvent:(NSEvent *)event type:(NSUInteger)type view:(EGOpenGLView *)view camera:(id)camera;
+- (id)initWithEvent:(NSEvent *)event type:(NSUInteger)type view:(EGOpenGLViewMac *)view camera:(id)camera;
 
-+ (id)eventMacWithEvent:(NSEvent *)event type:(NSUInteger)type view:(EGOpenGLView *)view camera:(id)camera;
++ (id)eventMacWithEvent:(NSEvent *)event type:(NSUInteger)type view:(EGOpenGLViewMac *)view camera:(id)camera;
 @end

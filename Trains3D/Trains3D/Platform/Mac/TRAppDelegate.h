@@ -7,11 +7,11 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "EGOpenGLView.h"
+#import "EGOpenGLViewMac.h"
 
 @interface TRAppDelegate : NSObject <NSApplicationDelegate>
 
 @property (assign) IBOutlet NSWindow *window;
-@property (retain) EGOpenGLView *view;
+@property (retain) EGOpenGLViewMac *view;
 
 @end

@@ -1,16 +1,16 @@
 #import "EGDirectorMac.h"
-#import "EGOpenGLView.h"
+#import "EGOpenGLViewMac.h"
 
 
 @implementation EGDirectorMac {
 @private
     CVDisplayLinkRef _displayLink;
-    __unsafe_unretained EGOpenGLView *_view;
+    __unsafe_unretained EGOpenGLViewMac *_view;
 }
 
 @synthesize view = _view;
 
-- (id)initWithView:(__unsafe_unretained EGOpenGLView *)view {
+- (id)initWithView:(__unsafe_unretained EGOpenGLViewMac *)view {
     self = [super init];
     if (self) {
         _view = view;
@@ -24,7 +24,7 @@
     glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 }
 
-+ (id)directorWithView:(__unsafe_unretained EGOpenGLView *)view {
++ (id)directorWithView:(__unsafe_unretained EGOpenGLViewMac *)view {
     return [[self alloc] initWithView:view];
 }
 
@@ -72,7 +72,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     CVDisplayLinkSetOutputCallback(_displayLink, &MyDisplayLinkCallback, (__bridge void*)self);
 
     // Set the display link for the current renderer
-    EGOpenGLView *openGLView = self.view;
+    EGOpenGLViewMac *openGLView = self.view;
     CGLContextObj cglContext = [[openGLView openGLContext] CGLContextObj];
     CGLPixelFormatObj cglPixelFormat = [[openGLView pixelFormat] CGLPixelFormatObj];
     CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(_displayLink, cglContext, cglPixelFormat);

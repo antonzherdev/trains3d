@@ -1,17 +1,17 @@
 #import "EGEventMac.h"
-#import "EGOpenGLView.h"
+#import "EGOpenGLViewMac.h"
 
 
 @implementation EGEventMac {
     NSEvent* _event;
     NSEventType _type;
-    __weak EGOpenGLView* _view;
+    __weak EGOpenGLViewMac * _view;
 }
 
 @synthesize event = _event;
 @synthesize view = _view;
 
-- (id)initWithEvent:(NSEvent *)event type:(NSUInteger)type view:(EGOpenGLView *)view camera:(id)camera {
+- (id)initWithEvent:(NSEvent *)event type:(NSUInteger)type view:(EGOpenGLViewMac *)view camera:(id)camera {
     self = [super initWithViewSize:[view viewSize] camera: camera];
     if (self) {
         _event = event;
@@ -22,7 +22,7 @@
     return self;
 }
 
-+ (id)eventMacWithEvent:(NSEvent *)event type:(NSUInteger)type view:(EGOpenGLView *)view camera:(id)camera {
++ (id)eventMacWithEvent:(NSEvent *)event type:(NSUInteger)type view:(EGOpenGLViewMac *)view camera:(id)camera {
     return [[self alloc] initWithEvent:event type:type view:view camera:camera];
 }
 

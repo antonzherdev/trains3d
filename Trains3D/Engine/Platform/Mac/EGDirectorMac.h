@@ -1,13 +1,13 @@
 #import <Foundation/Foundation.h>
 #import "EGDirector.h"
 
-@class EGOpenGLView;
+@class EGOpenGLViewMac;
 
 @interface EGDirectorMac : EGDirector
-@property (readonly, assign) EGOpenGLView* view;
+@property (readonly, assign) EGOpenGLViewMac * view;
 
-- (id)initWithView:(__unsafe_unretained EGOpenGLView *)view;
+- (id)initWithView:(__unsafe_unretained EGOpenGLViewMac *)view;
 
-+ (id)directorWithView:(__unsafe_unretained EGOpenGLView *)view;
++ (id)directorWithView:(__unsafe_unretained EGOpenGLViewMac *)view;
 
 @end

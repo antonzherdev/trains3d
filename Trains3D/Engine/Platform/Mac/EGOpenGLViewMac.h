@@ -2,7 +2,7 @@
 
 #import "EGDirector.h"
 
-@interface EGOpenGLView : NSOpenGLView
+@interface EGOpenGLViewMac : NSOpenGLView
 @property (readonly, nonatomic) EGDirector * director;
 @property (readonly, nonatomic) GEVec2 viewSize;
 

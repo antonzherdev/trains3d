@@ -14,7 +14,7 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     NSRect rect = [_window.contentView frame];
-    self.view = [[EGOpenGLView alloc] initWithFrame:rect];
+    self.view = [[EGOpenGLViewMac alloc] initWithFrame:rect];
     _window.contentView = self.view;
 
 

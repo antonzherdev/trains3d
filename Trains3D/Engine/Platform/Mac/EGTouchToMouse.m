@@ -1,6 +1,6 @@
 #import "EGTouchToMouse.h"
 #import "EGEventMac.h"
-#import "EGOpenGLView.h"
+#import "EGOpenGLViewMac.h"
 
 @implementation EGTouchToMouse {
     id _processor;

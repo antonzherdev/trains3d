@@ -1,11 +1,11 @@
 #import <OpenGL/gl3.h>
-#import "EGOpenGLView.h"
+#import "EGOpenGLViewMac.h"
 #import "EGDirectorMac.h"
 #import "EGEventMac.h"
 #import "KWExample.h"
 
 
-@implementation EGOpenGLView {
+@implementation EGOpenGLViewMac {
 
 @private
     EGDirector *_director;
