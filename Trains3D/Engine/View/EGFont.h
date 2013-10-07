@@ -14,6 +14,7 @@
 
 @class EGFont;
 @class EGFontShaderParam;
+@class EGFontShaderBuilder;
 @class EGFontShader;
 @class EGFontSymbolDesc;
 typedef struct EGTextAlignment EGTextAlignment;
@@ -81,6 +82,17 @@ ODPType* egTextAlignmentType();
 @end
 
 
+@interface EGFontShaderBuilder : NSObject<EGShaderTextBuilder>
++ (id)fontShaderBuilder;
+- (id)init;
+- (ODClassType*)type;
+- (NSString*)vertex;
+- (NSString*)fragment;
+- (EGShaderProgram*)program;
++ (ODClassType*)type;
+@end
+
+
 @interface EGFontShader : EGShader
 @property (nonatomic, readonly) EGShaderAttribute* uvSlot;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
@@ -92,8 +104,6 @@ ODPType* egTextAlignmentType();
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGFontShaderParam*)param;
 - (void)unloadParam:(EGFontShaderParam*)param;
 + (EGFontShader*)instance;
-+ (NSString*)vertex;
-+ (NSString*)fragment;
 + (ODClassType*)type;
 @end
 

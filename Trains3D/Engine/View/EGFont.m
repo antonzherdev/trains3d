@@ -348,31 +348,140 @@ static ODClassType* _EGFontShaderParam_type;
 @end
 
 
+@implementation EGFontShaderBuilder
+static ODClassType* _EGFontShaderBuilder_type;
+
++ (id)fontShaderBuilder {
+    return [[EGFontShaderBuilder alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGFontShaderBuilder_type = [ODClassType classTypeWithCls:[EGFontShaderBuilder class]];
+}
+
+- (NSString*)vertex {
+    return [NSString stringWithFormat:@"%@\n"
+        "%@ highp vec2 position;\n"
+        "%@ mediump vec2 vertexUV;\n"
+        "\n"
+        "%@ mediump vec2 UV;\n"
+        "\n"
+        "void main(void) {\n"
+        "    gl_Position = vec4(position.x, position.y, 0, 1);\n"
+        "    UV = vertexUV;\n"
+        "}", [self vertexHeader], [self ain], [self ain], [self out]];
+}
+
+- (NSString*)fragment {
+    return [NSString stringWithFormat:@"%@\n"
+        "%@ mediump vec2 UV;\n"
+        "uniform lowp sampler2D texture;\n"
+        "uniform lowp vec4 color;\n"
+        "\n"
+        "void main(void) {\n"
+        "    %@ = color * %@(texture, UV);\n"
+        "}", [self fragmentHeader], [self in], [self fragColor], [self texture2D]];
+}
+
+- (EGShaderProgram*)program {
+    return [EGShaderProgram applyVertex:[self vertex] fragment:[self fragment]];
+}
+
+- (NSString*)versionString {
+    return [NSString stringWithFormat:@"#version %li", [self version]];
+}
+
+- (NSString*)vertexHeader {
+    return [NSString stringWithFormat:@"#version %li", [self version]];
+}
+
+- (NSString*)fragmentHeader {
+    return [NSString stringWithFormat:@"#version %li\n"
+        "%@", [self version], [self fragColorDeclaration]];
+}
+
+- (NSString*)fragColorDeclaration {
+    if([self isFragColorDeclared]) return @"";
+    else return @"out lowp vec4 fragColor;";
+}
+
+- (BOOL)isFragColorDeclared {
+    return EGShaderProgram.version < 110;
+}
+
+- (NSInteger)version {
+    return EGShaderProgram.version;
+}
+
+- (NSString*)ain {
+    if([self version] < 150) return @"attribute";
+    else return @"in";
+}
+
+- (NSString*)in {
+    if([self version] < 150) return @"varying";
+    else return @"in";
+}
+
+- (NSString*)out {
+    if([self version] < 150) return @"varying";
+    else return @"out";
+}
+
+- (NSString*)fragColor {
+    if([self version] > 100) return @"fragColor";
+    else return @"gl_FragColor";
+}
+
+- (NSString*)texture2D {
+    if([self version] > 100) return @"texture";
+    else return @"texture2D";
+}
+
+- (ODClassType*)type {
+    return [EGFontShaderBuilder type];
+}
+
++ (ODClassType*)type {
+    return _EGFontShaderBuilder_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation EGFontShader{
     EGShaderAttribute* _uvSlot;
     EGShaderAttribute* _positionSlot;
     EGShaderUniform* _colorUniform;
 }
 static EGFontShader* _EGFontShader_instance;
-static NSString* _EGFontShader_vertex = @"#version 150\n"
-    "in vec2 position;\n"
-    "in vec2 vertexUV;\n"
-    "\n"
-    "out vec2 UV;\n"
-    "\n"
-    "void main(void) {\n"
-    "   gl_Position = vec4(position.x, position.y, 0, 1);\n"
-    "   UV = vertexUV;\n"
-    "}";
-static NSString* _EGFontShader_fragment = @"#version 150\n"
-    "in vec2 UV;\n"
-    "uniform sampler2D texture;\n"
-    "uniform vec4 color;\n"
-    "out vec4 outColor;\n"
-    "\n"
-    "void main(void) {\n"
-    "    outColor = color * texture(texture, UV);\n"
-    "}";
 static ODClassType* _EGFontShader_type;
 @synthesize uvSlot = _uvSlot;
 @synthesize positionSlot = _positionSlot;
@@ -383,7 +492,7 @@ static ODClassType* _EGFontShader_type;
 }
 
 - (id)init {
-    self = [super initWithProgram:[EGShaderProgram applyVertex:EGFontShader.vertex fragment:EGFontShader.fragment]];
+    self = [super initWithProgram:[[EGFontShaderBuilder fontShaderBuilder] program]];
     if(self) {
         _uvSlot = [self attributeForName:@"vertexUV"];
         _positionSlot = [self attributeForName:@"position"];
@@ -418,14 +527,6 @@ static ODClassType* _EGFontShader_type;
 
 + (EGFontShader*)instance {
     return _EGFontShader_instance;
-}
-
-+ (NSString*)vertex {
-    return _EGFontShader_vertex;
-}
-
-+ (NSString*)fragment {
-    return _EGFontShader_fragment;
 }
 
 + (ODClassType*)type {
