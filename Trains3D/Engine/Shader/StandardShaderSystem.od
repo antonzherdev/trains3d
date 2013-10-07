@@ -13,7 +13,8 @@ class StandardShaderSystem extends ShaderSystem<StandardMaterial> {
             val directLightsWithShadowsCount = lights.chain.filter(_.is<DirectLight> && _.hasShadows).count
             val directLightsWithoutShadowsCount = lights.chain.filter(_.is<DirectLight> && !_.hasShadows).count
             val key =
-                if(context.considerShadows) StandardShaderKey(directLightsWithShadowsCount, directLightsWithoutShadowsCount, param.diffuse.texture.isDefined)
+                if(egPlatform.shadows && context.considerShadows)
+                    StandardShaderKey(directLightsWithShadowsCount, directLightsWithoutShadowsCount, param.diffuse.texture.isDefined)
                 else StandardShaderKey(0, directLightsWithShadowsCount + directLightsWithoutShadowsCount, param.diffuse.texture.isDefined)
 
             shaders.objectFor(key, orUpdateWith = key.shader)
@@ -34,11 +35,11 @@ class StandardShadowShader(shadowShader : ShadowShader) extends Shader<StandardM
     }
 }
 
-class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutShadowsCount : uint, texture : bool) {
+class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutShadowsCount : uint, texture : bool) extends ShaderTextBuilder {
     val directLightCount = directLightWithShadowsCount + directLightWithoutShadowsCount
     def shader : StandardShader = {
         val vertexShader =
-            "#version 150
+            "$versionString
              in vec3 normal;
              in vec2 vertexUV; $when(texture)
              in vec3 position;
@@ -57,7 +58,7 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
                 $lightsCalculateVaryings
              }"
         val fragmentShader =
-            "#version 150
+            "$versionString
             $if(texture)
              in vec2 UV;
              uniform sampler2D diffuseTexture;

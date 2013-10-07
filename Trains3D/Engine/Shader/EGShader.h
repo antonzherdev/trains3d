@@ -12,6 +12,7 @@
 @class EGShaderAttribute;
 @class EGShaderUniform;
 @class EGShaderSystem;
+@protocol EGShaderTextBuilder;
 
 @interface EGShaderProgram : NSObject
 @property (nonatomic, readonly) GLuint handle;
@@ -29,6 +30,8 @@
 - (void)applyDraw:(void(^)())draw;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
 - (EGShaderUniform*)uniformForName:(NSString*)name;
++ (NSInteger)version;
++ (NSString*)versionString;
 + (ODClassType*)type;
 @end
 
@@ -87,6 +90,12 @@
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb mode:(unsigned int)mode;
 - (EGShader*)shaderForParam:(id)param;
 + (ODClassType*)type;
+@end
+
+
+@protocol EGShaderTextBuilder<NSObject>
+- (NSString*)versionString;
+- (NSInteger)version;
 @end
 
 

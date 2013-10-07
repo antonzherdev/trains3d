@@ -8,6 +8,7 @@
 @class EGShadowShaderSystem;
 @class EGEnvironment;
 @class EGLight;
+@class EGPlatform;
 @class EGColorSource;
 @class EGShadowShader;
 @class EGVertexBufferDesc;
@@ -47,7 +48,7 @@
 @end
 
 
-@interface EGStandardShaderKey : NSObject
+@interface EGStandardShaderKey : NSObject<EGShaderTextBuilder>
 @property (nonatomic, readonly) NSUInteger directLightWithShadowsCount;
 @property (nonatomic, readonly) NSUInteger directLightWithoutShadowsCount;
 @property (nonatomic, readonly) BOOL texture;

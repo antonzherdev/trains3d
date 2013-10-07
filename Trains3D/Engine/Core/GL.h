@@ -145,3 +145,5 @@ static inline EGPlatform* egPlatform() {
     return [EGPlatform MacOS];
 #endif
 }
+
+NSUInteger egGLSLVersion();

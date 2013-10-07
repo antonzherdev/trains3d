@@ -3,8 +3,9 @@
 #import "EGContext.h"
 #import "EGMaterial.h"
 #import "EGShadow.h"
-#import "EGMesh.h"
 #import "GL.h"
+#import "EGPlatform.h"
+#import "EGMesh.h"
 #import "EGTexture.h"
 #import "GEMat4.h"
 @implementation EGStandardShaderSystem
@@ -41,7 +42,7 @@ static ODClassType* _EGStandardShaderSystem_type;
         NSUInteger directLightsWithoutShadowsCount = [[[lights chain] filter:^BOOL(EGLight* _) {
             return [_ isKindOfClass:[EGDirectLight class]] && !(_.hasShadows);
         }] count];
-        EGStandardShaderKey* key = ((EGGlobal.context.considerShadows) ? [EGStandardShaderKey standardShaderKeyWithDirectLightWithShadowsCount:directLightsWithShadowsCount directLightWithoutShadowsCount:directLightsWithoutShadowsCount texture:[param.diffuse.texture isDefined]] : [EGStandardShaderKey standardShaderKeyWithDirectLightWithShadowsCount:0 directLightWithoutShadowsCount:directLightsWithShadowsCount + directLightsWithoutShadowsCount texture:[param.diffuse.texture isDefined]]);
+        EGStandardShaderKey* key = ((egPlatform().shadows && EGGlobal.context.considerShadows) ? [EGStandardShaderKey standardShaderKeyWithDirectLightWithShadowsCount:directLightsWithShadowsCount directLightWithoutShadowsCount:directLightsWithoutShadowsCount texture:[param.diffuse.texture isDefined]] : [EGStandardShaderKey standardShaderKeyWithDirectLightWithShadowsCount:0 directLightWithoutShadowsCount:directLightsWithShadowsCount + directLightsWithoutShadowsCount texture:[param.diffuse.texture isDefined]]);
         return ((EGStandardShader*)([_EGStandardShaderSystem_shaders objectForKey:key orUpdateWith:^EGStandardShader*() {
             return [key shader];
         }]));
@@ -194,7 +195,7 @@ static ODClassType* _EGStandardShaderKey_type;
 }
 
 - (EGStandardShader*)shader {
-    NSString* vertexShader = [NSString stringWithFormat:@"#version 150\n"
+    NSString* vertexShader = [NSString stringWithFormat:@"%@\n"
         "in vec3 normal;%@\n"
         "in vec3 position;\n"
         "uniform mat4 mwcp;\n"
@@ -208,11 +209,11 @@ static ODClassType* _EGStandardShaderKey_type;
         "   vec3 eyeDirection = normalize(-(mwc * vec4(position, 1)).xyz);\n"
         "   gl_Position = mwcp * vec4(position, 1);%@\n"
         "   %@\n"
-        "}", ((_texture) ? @"\n"
+        "}", [self versionString], ((_texture) ? @"\n"
         "in vec2 vertexUV; " : @""), [self lightsVertexUniform], ((_texture) ? @"\n"
         "out vec2 UV; " : @""), [self lightsOut], ((_texture) ? @"\n"
         "   UV = vertexUV; " : @""), [self lightsCalculateVaryings]];
-    NSString* fragmentShader = [NSString stringWithFormat:@"#version 150\n"
+    NSString* fragmentShader = [NSString stringWithFormat:@"%@\n"
         "%@\n"
         "uniform vec4 diffuseColor;\n"
         "uniform vec4 ambientColor;\n"
@@ -226,7 +227,7 @@ static ODClassType* _EGStandardShaderKey_type;
         "   vec4 color = ambientColor * materialColor;\n"
         "   %@\n"
         "   outColor = color;\n"
-        "}", ((_texture) ? @"\n"
+        "}", [self versionString], ((_texture) ? @"\n"
         "in vec2 UV;\n"
         "uniform sampler2D diffuseTexture;\n" : @""), [self lightsIn], [self lightsFragmentUniform], ((_directLightWithShadowsCount > 0) ? @"\n"
         "   float visibility;" : @""), ((!(_texture)) ? @"\n"
@@ -288,6 +289,14 @@ static ODClassType* _EGStandardShaderKey_type;
             "color += dirLightDirectionCos%@* (materialColor * dirLightColor%@);\n"
             "color += specularColor * dirLightColor%@* pow(dirLightDirectionCosA%@, 5.0/specularSize);\n", i, i, i, i])];
     }] toStringWithDelimiter:@"\n"];
+}
+
+- (NSString*)versionString {
+    return EGShaderProgram.versionString;
+}
+
+- (NSInteger)version {
+    return EGShaderProgram.version;
 }
 
 - (ODClassType*)type {

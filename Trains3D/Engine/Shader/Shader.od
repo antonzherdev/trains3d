@@ -60,6 +60,9 @@ class ShaderProgram(handle : GLuint) {
         if(h < 0) throw "Could not found attribute for name " + name
         ShaderUniform(h)
     }
+
+    static val version : int = egGLSLVersion
+    static val versionString = "#version $version"
 }
 
 class Shader<P>(program : ShaderProgram) {
@@ -154,3 +157,9 @@ class ShaderSystem<P> {
 }
 
 
+
+trait ShaderTextBuilder {
+    def versionString = ShaderProgram.versionString
+
+    def version : int = ShaderProgram.version
+}
