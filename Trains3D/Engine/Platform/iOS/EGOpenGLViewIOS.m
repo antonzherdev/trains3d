@@ -21,6 +21,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
+        // iOS 7
+        [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)];
+    } else {
+        // iOS 6
+        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+    }
+
     _director = [EGDirectorIOS directorWithView:self];
     // Create an OpenGL ES context and assign it to the view loaded from storyboard
     GLKView *view = (GLKView *)self.view;
@@ -62,6 +70,10 @@
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
     [_director drawWithSize:_viewSize];
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return YES;
 }
 
 @end
