@@ -19,16 +19,19 @@
 }
 
 - (BOOL)touchBeganEvent:(EGEvent*)event {
-    return NO;
+    return [_processor mouseDownEvent:[EGEventEmulateMouseMove
+            eventWithType:0 locationInView:[event locationInView] viewSize:[event viewSize] camera:[event camera]]];
 }
 
 - (BOOL)touchMovedEvent:(EGEvent*)event {
-    return NO;
+    return [_processor mouseDragEvent:[EGEventEmulateMouseMove
+            eventWithType:1 locationInView:[event locationInView] viewSize:[event viewSize] camera:[event camera]]];;
 }
 
 
 - (BOOL)touchEndedEvent:(EGEvent*)event {
-    return NO;
+    return [_processor mouseUpEvent:[EGEventEmulateMouseMove
+            eventWithType:2 locationInView:[event locationInView] viewSize:[event viewSize] camera:[event camera]]];;
 }
 
 - (BOOL)touchCanceledEvent:(EGEvent*)event {

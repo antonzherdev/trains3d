@@ -9,6 +9,7 @@
 #import "EGOpenGLViewIOS.h"
 #import "EGDirector.h"
 #import "EGDirectorIOS.h"
+#import "EGEventIOS.h"
 
 
 @implementation EGOpenGLViewIOS {
@@ -90,6 +91,26 @@
 
 - (BOOL)prefersStatusBarHidden {
     return YES;
+}
+
+#define DISPATCH_EVENT(theEvent, tp) {\
+[_director processEvent:[EGEventIOS eventIOSWithEvent:theEvent type:tp view:self camera:[CNOption none]]];\
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+    DISPATCH_EVENT(event, EGEventTouchCanceled)
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    DISPATCH_EVENT(event, EGEventTouchBegan)
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    DISPATCH_EVENT(event, EGEventTouchMoved)
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    DISPATCH_EVENT(event, EGEventTouchEnded)
 }
 
 @end

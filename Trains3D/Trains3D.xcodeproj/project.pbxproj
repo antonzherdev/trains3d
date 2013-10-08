@@ -45,6 +45,7 @@
 		6F3DF0C20A875DEA9BBD7D1E /* btAxisSweep3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC2349E253F04434E70A /* btAxisSweep3.cpp */; };
 		6F3DF0C41B1AE0C692C22C09 /* DamageTest.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF1085CD447541E1E60C5 /* DamageTest.od */; };
 		6F3DF0CCBB3A100E2183DD0A /* btStaticPlaneShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA0904ED6E27D4A1D647 /* btStaticPlaneShape.cpp */; };
+		6F3DF0CF7BB4DBB37599EE30 /* EGEventIOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFEBAAA2D36A9D7E417B7 /* EGEventIOS.m */; };
 		6F3DF0D3AB2B3F1BF120266B /* btScaledBvhTriangleMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0B5CDE0ED7F04E617FD /* btScaledBvhTriangleMeshShape.cpp */; };
 		6F3DF0F380C8014CD326B708 /* btEmptyShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2997ADD58DA7B090DDC /* btEmptyShape.cpp */; };
 		6F3DF0FBACA1CB88517EB0C8 /* ODType.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBD7D0D9B35B241BF676 /* ODType.m */; };
@@ -925,6 +926,7 @@
 		6F3DF0BFC1AC2D31B49B3F8D /* TRLevelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRLevelView.h; sourceTree = "<group>"; };
 		6F3DF0C19B11DB521A56DEA1 /* ext.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ext.hpp; sourceTree = "<group>"; };
 		6F3DF0C41B6CEA9D3BADE23E /* type_mat4x3.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = type_mat4x3.inl; sourceTree = "<group>"; };
+		6F3DF0C5392DD007E79F7356 /* EGEventIOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGEventIOS.h; sourceTree = "<group>"; };
 		6F3DF0C686B576496A1C863F /* KWAny.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWAny.m; sourceTree = "<group>"; };
 		6F3DF0CC00FD6CE31C2CE2D0 /* NSObject+KiwiVerifierAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+KiwiVerifierAdditions.m"; sourceTree = "<group>"; };
 		6F3DF0CF799BED6D9CCA4ACA /* NSSet+CNChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSSet+CNChain.m"; sourceTree = "<group>"; };
@@ -1924,6 +1926,7 @@
 		6F3DFEAC738568E52F76F5AF /* TBXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBXML.h; sourceTree = "<group>"; };
 		6F3DFEAEBDA77BBFC5F7BFBC /* Line.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Line.od; sourceTree = "<group>"; };
 		6F3DFEAEF336912A5D856EAD /* KWPendingNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWPendingNode.m; sourceTree = "<group>"; };
+		6F3DFEBAAA2D36A9D7E417B7 /* EGEventIOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGEventIOS.m; sourceTree = "<group>"; };
 		6F3DFEBC9B18EDD49B56EB30 /* vector_angle.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = vector_angle.inl; sourceTree = "<group>"; };
 		6F3DFEC18617F545F2EF268A /* CNMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNMap.h; sourceTree = "<group>"; };
 		6F3DFEC45454CDB86BE7788B /* TRCityView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRCityView.m; sourceTree = "<group>"; };
@@ -2970,6 +2973,8 @@
 				6F3DF3FF6A3103165340889E /* EGOpenGLViewIOS.h */,
 				6F3DFB88A07C355504C6E137 /* EGDirectorIOS.h */,
 				6F3DFA70C4F3D88F2A08978C /* EGDirectorIOS.m */,
+				6F3DFEBAAA2D36A9D7E417B7 /* EGEventIOS.m */,
+				6F3DF0C5392DD007E79F7356 /* EGEventIOS.h */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -4843,6 +4848,7 @@
 				6F3DF03AA3CDEEE06023DB60 /* main.m in Sources */,
 				6F3DF9E97A77927F7D7B1D13 /* TRViewController.m in Sources */,
 				6F3DFB0AFED88014C79CEAA9 /* TRAppDelegate.m in Sources */,
+				6F3DF0CF7BB4DBB37599EE30 /* EGEventIOS.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
