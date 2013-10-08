@@ -35,7 +35,7 @@ class Buffer<T>(dataType : PType<T>, bufferType : uint4, handle : GLuint) {
 
     def set(data : PArray<T>, usage : uint4) : self = {
         glBindBuffer(bufferType, handle)
-        glBufferData(bufferType, data.length, data.bytes, GL_STATIC_DRAW)
+        glBufferData(bufferType, data.length, data.bytes, usage)
         glBindBuffer(bufferType, 0)
         _length = data.length
         _count = data.count
@@ -44,7 +44,7 @@ class Buffer<T>(dataType : PType<T>, bufferType : uint4, handle : GLuint) {
 
     def set(array : VoidRefArray<T>, usage : uint4) : self = {
         glBindBuffer(bufferType, handle)
-        glBufferData(bufferType, array.length, array.bytes, GL_STATIC_DRAW)
+        glBufferData(bufferType, array.length, array.bytes, usage)
         glBindBuffer(bufferType, 0)
         _length = array.length
         _count = array.length/dataType.size

@@ -20,6 +20,20 @@ object D2D {
         glEnable(GL_CULL_FACE)
     }
 
+    def writeSprite(in : VoidRefArray, material : ColorSource, at : vec3, quad : Quad, uv : Quad) : VoidRefArray = {
+        var v = in.write(BillboardBufferData, BillboardBufferData(at, quad.p[0], material.color, uv.p[0]))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[1], material.color, uv.p[1]))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[2], material.color, uv.p[2]))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[3], material.color, uv.p[3]))
+        v
+    }
+
+    def writeQuadIndex(in : VoidRefArray, i : uint4) : VoidRefArray = {
+        in
+            .write(uInt4 = i).write(uInt4 = i + 1).write(uInt4 = i + 2)
+            .write(uInt4 = i + 1).write(uInt4 = i + 2).write(uInt4 = i + 3)
+    }
+
     private val lineVb = VertexBuffer.mesh
     private val lineVertexes = VoidRefArray(MeshData.type, 2)
     def drawLine(material : ColorSource, p0 : vec2, p1 : vec2) {

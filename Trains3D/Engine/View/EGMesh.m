@@ -189,7 +189,7 @@ static ODClassType* _EGBuffer_type;
 
 - (id)setData:(CNPArray*)data usage:(unsigned int)usage {
     glBindBuffer(_bufferType, _handle);
-    glBufferData(_bufferType, data.length, data.bytes, GL_STATIC_DRAW);
+    glBufferData(_bufferType, data.length, data.bytes, usage);
     glBindBuffer(_bufferType, 0);
     __length = data.length;
     __count = data.count;
@@ -198,7 +198,7 @@ static ODClassType* _EGBuffer_type;
 
 - (id)setArray:(CNVoidRefArray)array usage:(unsigned int)usage {
     glBindBuffer(_bufferType, _handle);
-    glBufferData(_bufferType, array.length, array.bytes, GL_STATIC_DRAW);
+    glBufferData(_bufferType, array.length, array.bytes, usage);
     glBindBuffer(_bufferType, 0);
     __length = array.length;
     __count = array.length / _dataType.size;

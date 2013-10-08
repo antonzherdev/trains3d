@@ -26,7 +26,6 @@ class RailroadView(railroad : Railroad) {
             context.considerShadows = true
             changed = false
         }
-        glFinish
         railroadSurface.draw
         backgroundView.drawShadow
         railroad.switches.for(switchView.draw(_))

@@ -176,6 +176,16 @@ static ODClassType* _EGShader_type;
     glUseProgram(0);
 }
 
+- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb indexRef:(CNVoidRefArray)indexRef mode:(unsigned int)mode {
+    glUseProgram(_program.handle);
+    [vb applyDraw:^void() {
+        [self loadVbDesc:vb.desc param:param];
+        glDrawElements(mode, indexRef.length / 4, GL_UNSIGNED_INT, indexRef.bytes);
+        [self unloadParam:param];
+    }];
+    glUseProgram(0);
+}
+
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb mode:(unsigned int)mode {
     glUseProgram(_program.handle);
     [vb applyDraw:^void() {

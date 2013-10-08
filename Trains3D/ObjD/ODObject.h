@@ -144,13 +144,15 @@ static inline NSUInteger oduIntRndMax(NSUInteger max) {
     return arc4random_uniform((u_int32_t)(max + 1));
 }
 
+#define OD_DBL_MAX 1.7976931348623157E+308
+#define OD_DBL_MIN 2.2250738585072014E-308
 
 static inline CGFloat odFloatMax() {
-    return DBL_MAX;
+    return OD_DBL_MAX;
 }
 
 static inline CGFloat odFloatMin() {
-    return DBL_MIN;
+    return OD_DBL_MIN;
 }
 
 

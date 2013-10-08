@@ -4,16 +4,37 @@ package com.antonzherdev.trains
 class TreeView(forest : Forest) {
     val textures = [textureFor("Pine.png"), textureFor("Tree1.png"), textureFor("Tree2.png"), textureFor("Tree3.png")
         , textureFor("YellowTree.png")]
+    val material = ColorSource(vec4(1, 1, 1, 1), textureFor("Pine.png"), 0.3)
     val materials = textures.chain.map(ColorSource(vec4(1, 1, 1, 1), _, 0.3)).toArray
     val rects = textures.chain.map(Rect(0, 0, _.size.x/(_.size.y*4), _.size.y/(_.size.y*2)).centerX).toArray
+    private val vb = VertexBuffer(Billboard.vbDesc)
+    private val ib = IndexBuffer()
 
     def draw {
-        BlendFunction.standard {
-            forest.trees.for(draw(_))
+        val ar = VoidRefArray(BillboardBufferData.type, 8 * forest.trees.count)
+        val iar = VoidRefArray(UInt4.type, 12 * forest.trees.count)
+        var a = ar
+        var ia = iar
+        var i : uint4 = 0
+        forest.trees.for{tree ->
+            a = write(a, tree)
+            ia = D2D.writeQuadIndex(ia, i)
+            ia = D2D.writeQuadIndex(ia, i + 4)
+            i += 8
         }
+        vb.set(ar, GL_DYNAMIC_DRAW)
+        ib.set(iar, GL_DYNAMIC_DRAW)
+        BlendFunction.standard {
+            glDisable(GL_CULL_FACE)
+//            BillboardShaderSystem.shaderFor(material).draw(material, vb, iar, GL_TRIANGLES)
+            BillboardShaderSystem.shaderFor(material).draw(material, Mesh(vb, ib))
+            glEnable(GL_CULL_FACE)
+        }
+        ar.free
+        iar.free
     }
 
-    private def draw(tree : Tree) {
+    private def write(a :VoidRefArray, tree : Tree) : VoidRefArray = {
         val uvw = tree.treeType.width
         val mainUv = Rect(0, 0, uvw, 1).upsideDownQuad
         val rustleUv = mainUv + vec2(uvw, 0)
@@ -24,13 +45,14 @@ class TreeView(forest : Forest) {
         val quad = (rects(tp)*tree.size).quad
         val quad3 = Quad3(mPlaneCoord, quad)
         val mQuad = Quad(quad3.p0.xy, quad3.p1.xy, quad3.p2.xy, quad3.p3.xy)
-        D2D.drawSprite(materials[tp], at = vec3(tree.position, 0), mQuad, uv = mainUv)
+        a = D2D.writeSprite(a, materials[tp], at = vec3(tree.position, 0), mQuad, uv = mainUv)
 
         val r = tree.rustle*0.04
         val rPlaneCoord = mPlaneCoord.set(x = mPlaneCoord.x + vec3(0, r, 0))
         val rQuad3 = Quad3(rPlaneCoord, quad)
-        D2D.drawSprite(materials[tp], at = vec3(tree.position, 0),
+        a = D2D.writeSprite(a, materials[tp], at = vec3(tree.position, 0),
             Quad(rQuad3.p0.xy, rQuad3.p1.xy, rQuad3.p2.xy, rQuad3.p3.xy),
             uv = rustleUv)
+        a
     }
 }

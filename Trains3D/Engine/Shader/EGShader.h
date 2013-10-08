@@ -44,6 +44,7 @@
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh;
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh start:(NSUInteger)start count:(NSUInteger)count;
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode;
+- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb indexRef:(CNVoidRefArray)indexRef mode:(unsigned int)mode;
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb mode:(unsigned int)mode;
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(id)param;
 - (void)unloadParam:(id)param;

@@ -89,6 +89,16 @@ class Shader<P>(program : ShaderProgram) {
         glUseProgram(0)
     }
 
+    def draw(param : P, vb : VertexBuffer<_>, indexRef : VoidRefArray, mode : uint4) {
+        glUseProgram(program.handle)
+        vb {
+            load(vb.desc, param)
+            glDrawElements(mode, indexRef.length/4, GL_UNSIGNED_INT, indexRef.bytes)
+            unload(param)
+        }
+        glUseProgram(0)
+    }
+
     def draw(param : P, vb : VertexBuffer<_>, mode : uint4) {
         glUseProgram(program.handle)
         vb {
