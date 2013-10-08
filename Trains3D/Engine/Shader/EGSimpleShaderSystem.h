@@ -11,6 +11,7 @@
 @class EGTexture;
 
 @class EGSimpleShaderSystem;
+@class EGSimpleShaderBuilder;
 @class EGSimpleColorShader;
 @class EGSimpleTextureShader;
 
@@ -20,6 +21,19 @@
 - (ODClassType*)type;
 - (EGShader*)shaderForParam:(EGColorSource*)param;
 + (EGSimpleShaderSystem*)instance;
++ (ODClassType*)type;
+@end
+
+
+@interface EGSimpleShaderBuilder : NSObject<EGShaderTextBuilder>
+@property (nonatomic, readonly) BOOL texture;
+@property (nonatomic, readonly) NSString* fragment;
+
++ (id)simpleShaderBuilderWithTexture:(BOOL)texture;
+- (id)initWithTexture:(BOOL)texture;
+- (ODClassType*)type;
+- (NSString*)vertex;
+- (EGShaderProgram*)program;
 + (ODClassType*)type;
 @end
 
@@ -34,8 +48,6 @@
 - (ODClassType*)type;
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param;
 - (void)unloadParam:(EGColorSource*)param;
-+ (NSString*)colorVertexProgram;
-+ (NSString*)colorFragmentProgram;
 + (ODClassType*)type;
 @end
 
@@ -51,8 +63,6 @@
 - (ODClassType*)type;
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param;
 - (void)unloadParam:(EGColorSource*)param;
-+ (NSString*)textureVertexProgram;
-+ (NSString*)textureFragmentProgram;
 + (ODClassType*)type;
 @end
 

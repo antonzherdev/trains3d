@@ -74,24 +74,155 @@ static ODClassType* _EGSimpleShaderSystem_type;
 @end
 
 
+@implementation EGSimpleShaderBuilder{
+    BOOL _texture;
+    NSString* _fragment;
+}
+static ODClassType* _EGSimpleShaderBuilder_type;
+@synthesize texture = _texture;
+@synthesize fragment = _fragment;
+
++ (id)simpleShaderBuilderWithTexture:(BOOL)texture {
+    return [[EGSimpleShaderBuilder alloc] initWithTexture:texture];
+}
+
+- (id)initWithTexture:(BOOL)texture {
+    self = [super init];
+    if(self) {
+        _texture = texture;
+        _fragment = [NSString stringWithFormat:@"%@\n"
+            "%@\n"
+            "uniform lowp vec4 color;\n"
+            "\n"
+            "void main(void) {\n"
+            "   %@\n"
+            "}", [self fragmentHeader], ((_texture) ? [NSString stringWithFormat:@"\n"
+            "%@ mediump vec2 UV;\n"
+            "uniform lowp sampler2D texture;\n", [self in]] : @""), ((_texture) ? [NSString stringWithFormat:@"\n"
+            "    %@ = color * %@(texture, UV);\n"
+            "   ", [self fragColor], [self texture2D]] : [NSString stringWithFormat:@"\n"
+            "    %@ = color;\n"
+            "   ", [self fragColor]])];
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGSimpleShaderBuilder_type = [ODClassType classTypeWithCls:[EGSimpleShaderBuilder class]];
+}
+
+- (NSString*)vertex {
+    return [NSString stringWithFormat:@"%@\n"
+        "%@ highp vec3 position;\n"
+        "uniform mat4 mvp;\n"
+        "\n"
+        "%@\n"
+        "\n"
+        "void main(void) {\n"
+        "    gl_Position = mvp * vec4(position, 1);%@\n"
+        "}", [self vertexHeader], [self ain], ((_texture) ? [NSString stringWithFormat:@"\n"
+        "%@ mediump vec2 vertexUV;\n"
+        "%@ mediump vec2 UV;\n", [self ain], [self out]] : @""), ((_texture) ? @"\n"
+        "    UV = vertexUV; " : @"")];
+}
+
+- (EGShaderProgram*)program {
+    return [EGShaderProgram applyVertex:[self vertex] fragment:_fragment];
+}
+
+- (NSString*)versionString {
+    return [NSString stringWithFormat:@"#version %li", [self version]];
+}
+
+- (NSString*)vertexHeader {
+    return [NSString stringWithFormat:@"#version %li", [self version]];
+}
+
+- (NSString*)fragmentHeader {
+    return [NSString stringWithFormat:@"#version %li\n"
+        "%@", [self version], [self fragColorDeclaration]];
+}
+
+- (NSString*)fragColorDeclaration {
+    if([self isFragColorDeclared]) return @"";
+    else return @"out lowp vec4 fragColor;";
+}
+
+- (BOOL)isFragColorDeclared {
+    return EGShaderProgram.version < 110;
+}
+
+- (NSInteger)version {
+    return EGShaderProgram.version;
+}
+
+- (NSString*)ain {
+    if([self version] < 150) return @"attribute";
+    else return @"in";
+}
+
+- (NSString*)in {
+    if([self version] < 150) return @"varying";
+    else return @"in";
+}
+
+- (NSString*)out {
+    if([self version] < 150) return @"varying";
+    else return @"out";
+}
+
+- (NSString*)fragColor {
+    if([self version] > 100) return @"fragColor";
+    else return @"gl_FragColor";
+}
+
+- (NSString*)texture2D {
+    if([self version] > 100) return @"texture";
+    else return @"texture2D";
+}
+
+- (ODClassType*)type {
+    return [EGSimpleShaderBuilder type];
+}
+
++ (ODClassType*)type {
+    return _EGSimpleShaderBuilder_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGSimpleShaderBuilder* o = ((EGSimpleShaderBuilder*)(other));
+    return self.texture == o.texture;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.texture;
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"texture=%d", self.texture];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation EGSimpleColorShader{
     EGShaderAttribute* _positionSlot;
     EGShaderUniform* _colorUniform;
     EGShaderUniform* _mvpUniform;
 }
-static NSString* _EGSimpleColorShader_colorVertexProgram = @"#version 150\n"
-    "in vec3 position;\n"
-    "uniform mat4 mvp;\n"
-    "\n"
-    "void main(void) {\n"
-    "   gl_Position = mvp * vec4(position, 1);\n"
-    "}";
-static NSString* _EGSimpleColorShader_colorFragmentProgram = @"#version 150\n"
-    "uniform vec4 color;\n"
-    "out vec4 outColor;\n"
-    "void main(void) {\n"
-    "    outColor = color;\n"
-    "}";
 static ODClassType* _EGSimpleColorShader_type;
 @synthesize positionSlot = _positionSlot;
 @synthesize colorUniform = _colorUniform;
@@ -102,7 +233,7 @@ static ODClassType* _EGSimpleColorShader_type;
 }
 
 - (id)init {
-    self = [super initWithProgram:[EGShaderProgram applyVertex:EGSimpleColorShader.colorVertexProgram fragment:EGSimpleColorShader.colorFragmentProgram]];
+    self = [super initWithProgram:[[EGSimpleShaderBuilder simpleShaderBuilderWithTexture:NO] program]];
     if(self) {
         _positionSlot = [self attributeForName:@"position"];
         _colorUniform = [self uniformForName:@"color"];
@@ -129,14 +260,6 @@ static ODClassType* _EGSimpleColorShader_type;
 
 - (ODClassType*)type {
     return [EGSimpleColorShader type];
-}
-
-+ (NSString*)colorVertexProgram {
-    return _EGSimpleColorShader_colorVertexProgram;
-}
-
-+ (NSString*)colorFragmentProgram {
-    return _EGSimpleColorShader_colorFragmentProgram;
 }
 
 + (ODClassType*)type {
@@ -172,26 +295,6 @@ static ODClassType* _EGSimpleColorShader_type;
     EGShaderUniform* _mvpUniform;
     EGShaderUniform* _colorUniform;
 }
-static NSString* _EGSimpleTextureShader_textureVertexProgram = @"#version 150\n"
-    "in vec2 vertexUV;\n"
-    "in vec3 position;\n"
-    "uniform mat4 mvp;\n"
-    "\n"
-    "out vec2 UV;\n"
-    "\n"
-    "void main(void) {\n"
-    "   gl_Position = mvp * vec4(position, 1);\n"
-    "   UV = vertexUV;\n"
-    "}";
-static NSString* _EGSimpleTextureShader_textureFragmentProgram = @"#version 150\n"
-    "in vec2 UV;\n"
-    "uniform sampler2D texture;\n"
-    "uniform vec4 color;\n"
-    "out vec4 outColor;\n"
-    "\n"
-    "void main(void) {\n"
-    "    outColor = color * texture(texture, UV);\n"
-    "}";
 static ODClassType* _EGSimpleTextureShader_type;
 @synthesize uvSlot = _uvSlot;
 @synthesize positionSlot = _positionSlot;
@@ -203,7 +306,7 @@ static ODClassType* _EGSimpleTextureShader_type;
 }
 
 - (id)init {
-    self = [super initWithProgram:[EGShaderProgram applyVertex:EGSimpleTextureShader.textureVertexProgram fragment:EGSimpleTextureShader.textureFragmentProgram]];
+    self = [super initWithProgram:[[EGSimpleShaderBuilder simpleShaderBuilderWithTexture:YES] program]];
     if(self) {
         _uvSlot = [self attributeForName:@"vertexUV"];
         _positionSlot = [self attributeForName:@"position"];
@@ -235,14 +338,6 @@ static ODClassType* _EGSimpleTextureShader_type;
 
 - (ODClassType*)type {
     return [EGSimpleTextureShader type];
-}
-
-+ (NSString*)textureVertexProgram {
-    return _EGSimpleTextureShader_textureVertexProgram;
-}
-
-+ (NSString*)textureFragmentProgram {
-    return _EGSimpleTextureShader_textureFragmentProgram;
 }
 
 + (ODClassType*)type {
