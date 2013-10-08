@@ -24,7 +24,7 @@ class ShadowMap(size : vec2i) extends Surface(size) {
         if(status != GL_FRAMEBUFFER_COMPLETE) throw "Error in shadow map frame buffer: $status"
 
         glBindTexture(GL_TEXTURE_2D, 0)
-        glBindFramebuffer(GL_FRAMEBUFFER, 0)
+        context.restoreDefaultFramebuffer
         t
     }
 
@@ -35,11 +35,14 @@ class ShadowMap(size : vec2i) extends Surface(size) {
     def bind {
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
         texture.bind
-        glViewport(0, 0, size.x, size.y)
+        context.pushViewport
+        context.set(viewport = RectI(0, 0, size.x, size.y))
     }
 
     def unbind {
-        glBindFramebuffer(GL_FRAMEBUFFER, 0)
+        glFlush
+        context.restoreDefaultFramebuffer
+        context.popViewport
     }
 
     private lazy val shader = ShadowSurfaceShader()

@@ -10,6 +10,7 @@
 #import "EGDirector.h"
 #import "EGDirectorIOS.h"
 #import "EGEventIOS.h"
+#import "EGContext.h"
 
 
 @implementation EGOpenGLViewIOS {
@@ -86,6 +87,9 @@
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
+    GLint defaultFBO;
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING_OES, &defaultFBO);
+    [[EGGlobal context] setDefaultFramebuffer:defaultFBO];
     [_director drawWithSize:_viewSize];
 }
 

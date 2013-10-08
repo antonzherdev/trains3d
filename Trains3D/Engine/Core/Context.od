@@ -11,6 +11,7 @@ object Global {
 }
 
 class Context {
+    var defaultFramebuffer : GLint = 0
     private val textureCache = MutableHashMap<(string, uint4, uint4), FileTexture>()
     private val fontCache = MutableHashMap<string, Font>()
 
@@ -37,6 +38,9 @@ class Context {
     def popViewport {
         set(viewport = _viewportStack.head.get)
         _viewportStack = _viewportStack.tail
+    }
+    def restoreDefaultFramebuffer {
+        glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer)
     }
 }
 

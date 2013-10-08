@@ -75,6 +75,7 @@ static ODClassType* _EGDirector_type;
     [__stat forEach:^void(EGStat* _) {
         [_ draw];
     }];
+    glFlush();
 }
 
 - (void)beforeDraw {

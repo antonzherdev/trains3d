@@ -2,7 +2,6 @@
 
 #import "EGDirector.h"
 #import "EGTexture.h"
-#import "GL.h"
 #import "EGFont.h"
 #import "EGShadow.h"
 #import "GEMat4.h"
@@ -78,6 +77,7 @@ static ODClassType* _EGGlobal_type;
 
 
 @implementation EGContext{
+    GLint _defaultFramebuffer;
     NSMutableDictionary* _textureCache;
     NSMutableDictionary* _fontCache;
     EGDirector* _director;
@@ -89,6 +89,7 @@ static ODClassType* _EGGlobal_type;
     GERectI __viewport;
 }
 static ODClassType* _EGContext_type;
+@synthesize defaultFramebuffer = _defaultFramebuffer;
 @synthesize director = _director;
 @synthesize environment = _environment;
 @synthesize matrixStack = _matrixStack;
@@ -102,6 +103,7 @@ static ODClassType* _EGContext_type;
 - (id)init {
     self = [super init];
     if(self) {
+        _defaultFramebuffer = 0;
         _textureCache = [NSMutableDictionary mutableDictionary];
         _fontCache = [NSMutableDictionary mutableDictionary];
         _environment = EGEnvironment.aDefault;
@@ -147,6 +149,10 @@ static ODClassType* _EGContext_type;
 - (void)popViewport {
     [self setViewport:uwrap(GERectI, [[__viewportStack head] get])];
     __viewportStack = [__viewportStack tail];
+}
+
+- (void)restoreDefaultFramebuffer {
+    glBindFramebuffer(GL_FRAMEBUFFER, _defaultFramebuffer);
 }
 
 - (ODClassType*)type {

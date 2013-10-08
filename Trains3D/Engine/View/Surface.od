@@ -47,7 +47,7 @@ class SimpleSurface(size : vec2i, depth : bool) extends Surface(size) {
         }
 
         glBindTexture(GL_TEXTURE_2D, 0)
-        glBindFramebuffer(GL_FRAMEBUFFER, 0)
+        context.restoreDefaultFramebuffer
         t
     }
 
@@ -63,7 +63,8 @@ class SimpleSurface(size : vec2i, depth : bool) extends Surface(size) {
     }
 
     def unbind {
-        glBindFramebuffer(GL_FRAMEBUFFER, 0)
+        glFlush
+        context.restoreDefaultFramebuffer
         context.popViewport
     }
 

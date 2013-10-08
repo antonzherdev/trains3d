@@ -1,4 +1,5 @@
 #import "objd.h"
+#import "GL.h"
 #import "GEVec.h"
 @class EGDirector;
 @class EGTexture;
@@ -32,6 +33,7 @@
 
 
 @interface EGContext : NSObject
+@property (nonatomic) GLint defaultFramebuffer;
 @property (nonatomic, retain) EGDirector* director;
 @property (nonatomic, retain) EGEnvironment* environment;
 @property (nonatomic, readonly) EGMatrixStack* matrixStack;
@@ -47,6 +49,7 @@
 - (void)setViewport:(GERectI)viewport;
 - (void)pushViewport;
 - (void)popViewport;
+- (void)restoreDefaultFramebuffer;
 + (ODClassType*)type;
 @end
 

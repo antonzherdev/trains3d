@@ -18,6 +18,8 @@ stub object gl {
     def glClearDepth( : float4)
     def glDepthMask( : GLboolean)
 
+    def glFlush
+    def glFinish
     def glEnable(: uint4)
     def glDisable(: uint4)
     val GL_DEPTH_TEST : uint4

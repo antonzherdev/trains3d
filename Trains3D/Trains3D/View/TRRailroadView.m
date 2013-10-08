@@ -68,6 +68,7 @@ static ODClassType* _TRRailroadView_type;
         EGGlobal.context.considerShadows = YES;
         _changed = NO;
     }];
+    glFinish();
     [_railroadSurface draw];
     [_backgroundView drawShadow];
     [[_railroad switches] forEach:^void(TRSwitch* _) {

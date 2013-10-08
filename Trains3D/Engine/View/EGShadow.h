@@ -5,12 +5,12 @@
 #import "EGShader.h"
 @class GEMat4;
 @class EGTexture;
+@class EGGlobal;
+@class EGContext;
 @class EGColorSource;
 @class EGVertexBufferDesc;
-@class EGGlobal;
 @class EGMatrixStack;
 @class EGMatrixModel;
-@class EGContext;
 @class EGEnvironment;
 @class EGLight;
 @class EGStandardShader;

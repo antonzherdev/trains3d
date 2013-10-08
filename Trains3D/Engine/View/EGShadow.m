@@ -2,9 +2,9 @@
 
 #import "GEMat4.h"
 #import "EGTexture.h"
+#import "EGContext.h"
 #import "EGMaterial.h"
 #import "EGMesh.h"
-#import "EGContext.h"
 #import "EGStandardShaderSystem.h"
 @implementation EGShadowMap{
     GLuint _frameBuffer;
@@ -41,7 +41,7 @@ static ODClassType* _EGShadowMap_type;
             NSInteger status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
             if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in shadow map frame buffer: %li", status];
             glBindTexture(GL_TEXTURE_2D, 0);
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            [EGGlobal.context restoreDefaultFramebuffer];
             return t;
         }();
         __lazy_shader = [CNLazy lazyWithF:^EGShadowSurfaceShader*() {
@@ -69,11 +69,14 @@ static ODClassType* _EGShadowMap_type;
 - (void)bind {
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
     [_texture bind];
-    glViewport(0, 0, self.size.x, self.size.y);
+    [EGGlobal.context pushViewport];
+    [EGGlobal.context setViewport:geRectIApplyXYWidthHeight(0.0, 0.0, ((float)(self.size.x)), ((float)(self.size.y)))];
 }
 
 - (void)unbind {
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glFlush();
+    [EGGlobal.context restoreDefaultFramebuffer];
+    [EGGlobal.context popViewport];
 }
 
 - (void)draw {
