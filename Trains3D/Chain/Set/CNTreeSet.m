@@ -43,7 +43,7 @@ static ODClassType* _CNMutableTreeSet_type;
 }
 
 - (void)appendItem:(id)item {
-    [_map setValue:_CNMutableTreeSet_obj forKey:item];
+    [_map setKey:item value:_CNMutableTreeSet_obj];
 }
 
 - (BOOL)removeItem:(id)item {

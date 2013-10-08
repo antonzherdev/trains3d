@@ -30,7 +30,7 @@
 - (void)clear;
 - (id<CNIterator>)iterator;
 - (CNTreeMapIterator*)iteratorHigherThanKey:(id)key;
-- (void)setValue:(id)value forKey:(id)forKey;
+- (void)setKey:(id)key value:(id)value;
 - (id)removeForKey:(id)key;
 - (id)pollFirst;
 - (id)firstKey;

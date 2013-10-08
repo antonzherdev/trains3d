@@ -2,8 +2,8 @@
 
 
 @implementation NSMutableDictionary (CNChain)
-- (void)setValue:(id)value forKey:(id)forKey {
-    [self setObject:value forKey:forKey];
+- (void)setKey:(id)key value:(id)value {
+    [self setObject:value forKey:key];
 }
 
 - (id)removeForKey:(id)key {

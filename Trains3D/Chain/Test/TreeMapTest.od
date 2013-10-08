@@ -8,11 +8,11 @@ class TreeMapTest extends TestCase {
         assertEquals(0, map.count)
         assertTrue(map.opt(0).isEmpty)
 
-        map.set(value = "test", forKey = 0)
+        map.set(0, "test")
         assertEquals("test", map[0])
 
         val tests : [int] = [-10, -20, -30, 10, 20, -15, 20, 0, 11, 13, -18]
-        tests.for(i -> map.set(value = "test" + i, forKey = i))
+        tests.for(i -> map.set(i, "test" + i))
         assertEquals(tests.chain.distinct.count, map.count)
         tests.chain.distinct.for(i -> assertEquals("test" + i, map[i]))
 

@@ -37,10 +37,10 @@ class MutableTreeMap<K, V>(comparator : (K, K) -> int) extends MutableMap<K, V> 
     static val BLACK = 0
     static val RED = 1
 
-    def set(value : V, forKey : K)  {
+    def set(key : K, value : V)  {
         val t = root
         if (t == nil) {
-            root = TreeMapEntry.newWith<K,V>(forKey, value, parent = nil)
+            root = TreeMapEntry.newWith<K,V>(key, value, parent = nil)
             _size = 1
         } else {
             val cmp : int = 0
@@ -48,7 +48,7 @@ class MutableTreeMap<K, V>(comparator : (K, K) -> int) extends MutableMap<K, V> 
 
             do {
                 parent = t
-                cmp = comparator(forKey, t.key)
+                cmp = comparator(key, t.key)
                 if (cmp < 0) t = t.left
                 else if (cmp > 0) t = t.right
                 else {
@@ -57,7 +57,7 @@ class MutableTreeMap<K, V>(comparator : (K, K) -> int) extends MutableMap<K, V> 
                 }
             } while (t != nil)
 
-            val e =  TreeMapEntry.newWith<K,V>(forKey, value, parent)
+            val e =  TreeMapEntry.newWith<K,V>(key, value, parent)
             if (cmp < 0) parent.left = e
             else parent.right = e
             fixAfterInsertion(e)

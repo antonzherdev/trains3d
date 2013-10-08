@@ -56,13 +56,13 @@ static ODClassType* _CNMapDefault_type;
     return [_map containsKey:key];
 }
 
-- (void)setValue:(id)value forKey:(id)forKey {
-    [_map setValue:value forKey:forKey];
+- (void)setKey:(id)key value:(id)value {
+    [_map setKey:key value:value];
 }
 
 - (id)modifyBy:(id(^)(id))by forKey:(id)forKey {
     id value = by([self applyKey:forKey]);
-    [_map setValue:value forKey:forKey];
+    [_map setKey:forKey value:value];
     return value;
 }
 

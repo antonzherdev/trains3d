@@ -9,26 +9,26 @@ trait Map<K, V> extends Iterable<(K, V)> {
 }
 
 trait MutableMap<K, V> extends Map<K, V> with MutableIterable<(K, V)> {
-    def set(value : V, forKey : K)
+    def set(key : K, value : V)
     def removeFor(key : K) : V?
     def objectFor(key: K, orUpdateWith: () -> V) : V = {
         val o = opt(key)
         if(o.isDefined) o.get
         else {
             val init : V = orUpdateWith
-            set(init, forKey = key)
+            set(key, init)
             init
         }
     }
     def modify(by : V? -> V?, forKey : K) : V? = {
         val newObject = by(apply(forKey))
         if(newObject.isEmpty) removeFor(forKey)
-        else set(newObject.get, forKey)
+        else set(forKey, newObject.get)
         newObject
     }
 
     def append(item : (K, V)) {
-        set(item.a, item.b)
+        set(item.b, item.a)
     }
     def remove(item : (K, V)) {
         removeFor(item.a)
@@ -42,12 +42,12 @@ class MapDefault<K, V>(defaultFunc : K -> V, map : MutableMap<K, V>) extends Mut
     def keys : Iterable<K> = map.keys
     def values : Iterable<V> = map.values
     def contains(key : K) : bool = map.contains(key)
-    def set(value : V, forKey : K) {
-        map.set(value, forKey)
+    def set(key : K, value : V) {
+        map.set(key, value)
     }
     def modify(by : V -> V, forKey : K) : V {
         val value = by(apply(forKey))
-        map.set(value, forKey)
+        map.set(forKey, value)
         value
     }
     def append(item : (K, V)) {

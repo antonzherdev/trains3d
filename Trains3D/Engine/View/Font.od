@@ -29,7 +29,7 @@ class Font(name : string) {
                 val width : float4 = map("xadvance").toFloat
                 val offset =  vec2i(map("xoffset").toInt, map("yoffset").toInt)
                 val r = Rect(map("x").toFloat, map("y").toFloat, map("width").toFloat, map("height").toFloat)
-                charMap.set(value = FontSymbolDesc(width, offset, r.size, r/ts, isNewLine = false), forKey = code)
+                charMap.set(code, value = FontSymbolDesc(width, offset, r.size, r/ts, isNewLine = false))
             }
         }
         symbols = charMap

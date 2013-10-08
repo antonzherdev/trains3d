@@ -10,13 +10,14 @@
 #import "EGDirector.h"
 #import "TRLevel.h"
 #import "TRLevelFactory.h"
+#import "TRSceneFactory.h"
 
 @implementation TRViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     TRLevel *level = [TRLevelFactory levelWithNumber:1];
-    EGScene *scene = [TRLevelFactory sceneForLevel:level];
+    EGScene *scene = [TRSceneFactory sceneForLevel:level];
     self.director.scene = scene;
     [self.director displayStats];
 }

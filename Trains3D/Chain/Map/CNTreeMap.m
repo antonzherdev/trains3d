@@ -91,17 +91,17 @@ static ODClassType* _CNMutableTreeMap_type;
     return p;
 }
 
-- (void)setValue:(id)value forKey:(id)forKey {
+- (void)setKey:(id)key value:(id)value {
     CNTreeMapEntry* t = _root;
     if(t == nil) {
-        _root = [CNTreeMapEntry newWithKey:forKey value:value parent:nil];
+        _root = [CNTreeMapEntry newWithKey:key value:value parent:nil];
         __size = 1;
     } else {
         NSInteger cmp = 0;
         CNTreeMapEntry* parent = nil;
         do {
             parent = t;
-            cmp = _comparator(forKey, t.key);
+            cmp = _comparator(key, t.key);
             if(cmp < 0) {
                 t = t.left;
             } else {
@@ -113,7 +113,7 @@ static ODClassType* _CNMutableTreeMap_type;
                 }
             }
         } while(t != nil);
-        CNTreeMapEntry* e = [CNTreeMapEntry newWithKey:forKey value:value parent:parent];
+        CNTreeMapEntry* e = [CNTreeMapEntry newWithKey:key value:value parent:parent];
         if(cmp < 0) parent.left = e;
         else parent.right = e;
         [self fixAfterInsertionEntry:e];
@@ -400,7 +400,7 @@ static ODClassType* _CNMutableTreeMap_type;
         return [o get];
     } else {
         id init = orUpdateWith();
-        [self setValue:init forKey:key];
+        [self setKey:key value:init];
         return init;
     }
 }
@@ -408,12 +408,12 @@ static ODClassType* _CNMutableTreeMap_type;
 - (id)modifyBy:(id(^)(id))by forKey:(id)forKey {
     id newObject = by([CNOption applyValue:[self applyKey:forKey]]);
     if([newObject isEmpty]) [self removeForKey:forKey];
-    else [self setValue:[newObject get] forKey:forKey];
+    else [self setKey:forKey value:[newObject get]];
     return newObject;
 }
 
 - (void)appendItem:(CNTuple*)item {
-    [self setValue:item.a forKey:item.b];
+    [self setKey:item.b value:item.a];
 }
 
 - (void)removeItem:(CNTuple*)item {
