@@ -135,6 +135,10 @@
 }
 
 - (id)head {
+    return nums([self characterAtIndex:0]);
+}
+
+- (id)headOpt {
     if([self length] == 0) return [CNOption none];
     return [CNOption someValue:nums([self characterAtIndex:0])];
 }

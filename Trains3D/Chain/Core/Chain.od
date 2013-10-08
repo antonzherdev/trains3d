@@ -42,7 +42,8 @@ stub class Chain<A> extends Iterable<A> {
     def fold<B>(start : B, by : (B, A) -> B) : B
     def count : uint
     def for(each: A -> void)
-    def head : A?
+    def head : A
+    def headOpt : A?
     def randomItem : A?
     def find(: A -> bool) : A?
     def isEmpty : bool

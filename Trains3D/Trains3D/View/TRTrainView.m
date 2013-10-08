@@ -87,14 +87,19 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (void)doDrawCar:(TRCar*)car material:(EGMaterial*)material {
-    if(car.carType == TRCarType.car) {
-        [material drawMesh:TRModels.car];
-        [_blackMaterial drawMesh:TRModels.carBlack];
-    } else {
-        [material drawMesh:TRModels.engine];
-        [material drawMesh:TRModels.engineFloor];
-        [_blackMaterial drawMesh:TRModels.engineBlack];
-    }
+    if(car.carType == TRCarType.car) [self drawCar1Material:material];
+    else [self drawEngine1Material:material];
+}
+
+- (void)drawCar1Material:(EGMaterial*)material {
+    [material drawMesh:TRModels.car];
+    [_blackMaterial drawMesh:TRModels.carBlack];
+}
+
+- (void)drawEngine1Material:(EGMaterial*)material {
+    [material drawMesh:TRModels.engine];
+    [material drawMesh:TRModels.engineFloor];
+    [_blackMaterial drawMesh:TRModels.engineBlack];
 }
 
 - (void)drawDyingTrains:(id<CNSeq>)dyingTrains {

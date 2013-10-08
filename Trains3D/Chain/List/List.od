@@ -15,19 +15,19 @@ class List<T> extends Seq<T> {
     def reverse : List<T>
 }
 
-class FilledList<T>(item : T, tail : List<T>) extends List<T> {
-    def head : T? = item
+class FilledList<T>(head : T, tail : List<T>) extends List<T> {
+    def headOpt : T? = head
     val count : uint = tail.count + 1
     def isEmpty = false
     def filter(f : T -> bool) : List<T> =
-        if(f(item)) FilledList<T>(item, tail.filter(f))
+        if(f(head)) FilledList<T>(head, tail.filter(f))
         else tail.filter(f)
 
     def reverse : List<T> = {
-        var ret = FilledList<T>(item, EmptyList.instance)
+        var ret = FilledList<T>(head, EmptyList.instance)
         var list = tail
         while(!list.isEmpty) {
-            ret = FilledList<T>(list.cast<FilledList<T>>.item, ret)
+            ret = FilledList<T>(list.cast<FilledList<T>>.head, ret)
             list = list.tail
         }
         ret
@@ -36,7 +36,8 @@ class FilledList<T>(item : T, tail : List<T>) extends List<T> {
 
 class EmptyList<T> extends List<T> {
     def count : uint = 0
-    def head : T? = nil
+    def head : T = throw "List is empty"
+    def headOpt : T? = nil
     def tail : List<T> = self
     def isEmpty = true
 
@@ -50,7 +51,7 @@ class ListIterator<T> extends Iterator<T> {
     def hasNext = !list.isEmpty
 
     def next : T = {
-        val ret = list.head.get
+        val ret = list.head
         list = list.tail
         ret
     }

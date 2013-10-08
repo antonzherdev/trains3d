@@ -1,13 +1,7 @@
 #import "objd.h"
 #import "GEVec.h"
-#import "EGMesh.h"
-@class EGCameraIso;
-@class GEMat4;
-@class EGColorSource;
-@class EGMaterial;
 
 @class EGMapSso;
-@class EGMapSsoView;
 typedef struct EGMapTileCutState EGMapTileCutState;
 
 @interface EGMapSso : NSObject
@@ -57,19 +51,5 @@ ODPType* egMapTileCutStateType();
 - (id)initWithValue:(EGMapTileCutState)value;
 @end
 
-
-
-@interface EGMapSsoView : NSObject
-@property (nonatomic, readonly) EGMapSso* map;
-@property (nonatomic, readonly) EGMesh* plane;
-
-+ (id)mapSsoViewWithMap:(EGMapSso*)map;
-- (id)initWithMap:(EGMapSso*)map;
-- (ODClassType*)type;
-- (EGVertexBuffer*)axisVertexBuffer;
-- (void)drawLayout;
-- (void)drawPlaneWithMaterial:(EGMaterial*)material;
-+ (ODClassType*)type;
-@end
 
 

@@ -132,7 +132,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) {
     }
 
     private def activeRailFor(tile : vec2i, connector : RailConnector) : Rail? =
-        connectorIndex[(tile, connector)].rails.head
+        connectorIndex[(tile, connector)].rails.headOpt
 
 
     def moveWith(obstacleProcessor : Obstacle -> bool, forLength : float, point : RailPoint) : RailPointCorrection = {
@@ -148,7 +148,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) {
 
         val connector = p.endConnector
         val connectorDesc = connectorIndex[(p.tile, connector)]
-        val activeRailOpt = connectorDesc.rails.head
+        val activeRailOpt = connectorDesc.rails.headOpt
         if(activeRailOpt.isEmpty) return correction
 
         if(!connectorDesc.isGreen) {

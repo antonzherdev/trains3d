@@ -38,7 +38,7 @@ class Context {
         _viewportStack = List(viewport, _viewportStack)
     }
     def popViewport {
-        set(viewport = _viewportStack.head.get)
+        set(viewport = _viewportStack.head)
         _viewportStack = _viewportStack.tail
     }
     def restoreDefaultFramebuffer {
@@ -83,7 +83,7 @@ class MatrixStack {
     }
 
     def pop {
-        value = stack.head.get
+        value = stack.head
         stack = stack.tail
     }
 

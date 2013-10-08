@@ -676,7 +676,7 @@ static ODClassType* _TRRailroad_type;
 }
 
 - (id)activeRailForTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
-    return [[((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(GEVec2i, tile), connector)])) rails] head];
+    return [[((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(GEVec2i, tile), connector)])) rails] headOpt];
 }
 
 - (TRRailPointCorrection*)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(CGFloat)forLength point:(TRRailPoint*)point {
@@ -690,7 +690,7 @@ static ODClassType* _TRRailroad_type;
     if(eqf(correction.error, 0)) return correction;
     TRRailConnector* connector = [p endConnector];
     TRRailroadConnectorContent* connectorDesc = ((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(GEVec2i, p.tile), connector)]));
-    id activeRailOpt = [[connectorDesc rails] head];
+    id activeRailOpt = [[connectorDesc rails] headOpt];
     if([activeRailOpt isEmpty]) return correction;
     if(!([connectorDesc isGreen])) if(!(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.light point:correction.point]))) return correction;
     if(((TRRail*)([activeRailOpt get])).form != p.form) {

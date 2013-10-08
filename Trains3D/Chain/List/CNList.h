@@ -28,14 +28,14 @@
 
 
 @interface CNFilledList : CNList
-@property (nonatomic, readonly) id item;
+@property (nonatomic, readonly) id head;
 @property (nonatomic, readonly) CNList* tail;
 @property (nonatomic, readonly) NSUInteger count;
 
-+ (id)filledListWithItem:(id)item tail:(CNList*)tail;
-- (id)initWithItem:(id)item tail:(CNList*)tail;
++ (id)filledListWithHead:(id)head tail:(CNList*)tail;
+- (id)initWithHead:(id)head tail:(CNList*)tail;
 - (ODClassType*)type;
-- (id)head;
+- (id)headOpt;
 - (BOOL)isEmpty;
 - (CNList*)filterF:(BOOL(^)(id))f;
 - (CNList*)reverse;
@@ -49,6 +49,7 @@
 - (ODClassType*)type;
 - (NSUInteger)count;
 - (id)head;
+- (id)headOpt;
 - (CNList*)tail;
 - (BOOL)isEmpty;
 - (CNList*)filterF:(BOOL(^)(id))f;

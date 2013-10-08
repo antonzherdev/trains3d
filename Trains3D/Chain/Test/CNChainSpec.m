@@ -37,11 +37,11 @@ SPEC_BEGIN(CNChainSpec)
                   toArray];
           [[r should] equal:@[@2, @4]];
       });
-      it(@".head should return first value or nil", ^{
-          [[[[[[s chain] filter:LESS_THAN_3] head] get] should] equal:@1];
+      it(@".headOpt should return first value or nil", ^{
+          [[[[[s chain] filter:LESS_THAN_3] head]  should] equal:@1];
           BOOL isNil = [[[[s chain] filter:^BOOL(id x) {
               return NO;
-          }] head] isEmpty];
+          }] headOpt] isEmpty];
           [[theValue(isNil) should] beTrue];
       });
       it(@".set should return set", ^{

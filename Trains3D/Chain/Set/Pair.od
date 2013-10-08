@@ -7,7 +7,8 @@ class Pair<T>(a : T, b : T) extends Set<T> {
     def contains(item : T) : bool = a == item || b == item
     def count : uint = 2
     def iterator : Iterator<T> = PairIterator<T>(self)
-    def head : T? = a
+    def head : T = a
+    def headOpt : T? = a
 }
 
 class PairIterator<T>(pair : Pair<T>) extends Iterator<T> {

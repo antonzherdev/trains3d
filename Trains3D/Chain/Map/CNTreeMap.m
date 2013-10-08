@@ -425,8 +425,12 @@ static ODClassType* _CNMutableTreeMap_type;
 }
 
 - (id)head {
-    if([[self iterator] hasNext]) return [CNOption applyValue:[[self iterator] next]];
-    else return [CNOption none];
+    return [[self iterator] next];
+}
+
+- (id)headOpt {
+    if([self isEmpty]) return [CNOption none];
+    else return [CNOption applyValue:[self head]];
 }
 
 - (CNChain*)chain {
@@ -635,8 +639,12 @@ static ODClassType* _CNTreeMapKeySet_type;
 }
 
 - (id)head {
-    if([[self iterator] hasNext]) return [CNOption applyValue:[[self iterator] next]];
-    else return [CNOption none];
+    return [[self iterator] next];
+}
+
+- (id)headOpt {
+    if([self isEmpty]) return [CNOption none];
+    else return [CNOption applyValue:[self head]];
 }
 
 - (BOOL)isEmpty {
@@ -830,8 +838,12 @@ static ODClassType* _CNTreeMapValues_type;
 }
 
 - (id)head {
-    if([[self iterator] hasNext]) return [CNOption applyValue:[[self iterator] next]];
-    else return [CNOption none];
+    return [[self iterator] next];
+}
+
+- (id)headOpt {
+    if([self isEmpty]) return [CNOption none];
+    else return [CNOption applyValue:[self head]];
 }
 
 - (BOOL)isEmpty {

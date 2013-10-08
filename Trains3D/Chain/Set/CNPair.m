@@ -48,6 +48,10 @@ static ODClassType* _CNPair_type;
 }
 
 - (id)head {
+    return _a;
+}
+
+- (id)headOpt {
     return [CNOption applyValue:_a];
 }
 

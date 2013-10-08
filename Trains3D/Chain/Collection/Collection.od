@@ -40,7 +40,24 @@ trait Traversable<T> {
         ret
     }
 
-    def head : T?
+    def head : T = {
+        var ret : T
+        go{on ->
+            ret = on
+            false
+        }
+        if(ret == nil) throw "Traversable is empty"
+        ret
+    }
+
+    def headOpt : T? = {
+        var ret : T
+        go{on ->
+            ret = on
+            false
+        }
+        ret
+    }
 
     def convertWith<C extends Traversable<T>>(builder : Builder<T, C>) : C = {
         for(x -> builder.append(x))
@@ -66,7 +83,8 @@ trait Iterable<T> extends Traversable<T> {
     }
     def iterator : Iterator<T>
 
-    def head : T? = if(iterator.hasNext) iterator.next else nil
+    def head : T = iterator.next
+    def headOpt : T? = if(isEmpty) nil else head
     def isEmpty : bool = !iterator.hasNext
 
     def chain : Chain<T> = {

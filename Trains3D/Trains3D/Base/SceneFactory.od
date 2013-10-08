@@ -1,0 +1,34 @@
+package com.antonzherdev.trains
+
+class SceneFactory {
+    static def sceneFor(level : Level) = Scene(vec4(215, 230, 195, 255)/255, level, TrainLayers(level), LevelSound(level))
+
+    static def restartLevel = {
+        director.scene.get.controller.as<Level>.for{level ->
+        director.set(scene = sceneFor(Level(level.rules)))
+        }
+    }
+
+    static def sceneForLevelWith(number : uint) = sceneFor(LevelFactory.levelWith(number))
+}
+
+
+class TrainLayers(level : Level) extends Layers {
+    val levelLayer = Layer(LevelView(level))
+    val menuLayer = Layer(LevelMenuView(level))
+    val pauseMenuLayer = Layer(LevelPauseMenuView(level))
+
+
+    def layers : [Layer] = [levelLayer, menuLayer, pauseMenuLayer]
+    def viewportsWith(viewSize : vec2) = {
+        if(viewSize.y > 1279) {
+            [(levelLayer, Rect(0, 0, viewSize.x, viewSize.y - 92)),
+            (menuLayer, Rect(0, viewSize.y - 92, viewSize.x, 92)),
+            (pauseMenuLayer, Rect(vec2(0, 0), viewSize))]
+        } else {
+            [(levelLayer, Rect(0, 0, viewSize.x, viewSize.y - 46)),
+            (menuLayer, Rect(0, viewSize.y - 46, viewSize.x, 46)),
+            (pauseMenuLayer, Rect(vec2(0, 0), viewSize))]
+        }
+    }
+}

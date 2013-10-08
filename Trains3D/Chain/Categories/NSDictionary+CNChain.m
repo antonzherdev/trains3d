@@ -66,7 +66,11 @@
 }
 
 - (id)head {
-    if([[self iterator] hasNext]) return [CNOption applyValue:[[self iterator] next]];
+    return [[self iterator] next];
+}
+
+- (id)headOpt {
+    if(![self isEmpty]) return [CNOption applyValue:[[self iterator] next]];
     else return [CNOption none];
 }
 

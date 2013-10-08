@@ -1,14 +1,6 @@
 package com.antonzherdev.trains
 
-import com.antonzherdev.eg._
-
 class LevelFactory {
-    static def sceneFor(level : Level) = Scene(vec4(215, 230, 195, 255)/255, level, TrainLayers(level), LevelSound(level))
-    static def restartLevel = {
-        director.scene.get.controller.as<Level>.for{level ->
-            director.set(scene = sceneFor(Level(level.rules)))
-        }
-    }
     static val scoreRules = ScoreRules(
         initialScore = 100000,
         railCost = 1000,
@@ -39,30 +31,9 @@ class LevelFactory {
     ]
     static def levelWith(number : uint) = Level(rules[number - 1])
     static def levelWith(mapSize : vec2i) = Level(LevelRules(mapSize, scoreRules, forestRules, weatherRules, repairerSpeed = 30, []))
-    static def sceneForLevelWith(number : uint) = sceneFor(levelWith(number))
     static def score = Score(scoreRules, Notifications())
     static def railroadWith(mapSize : vec2i) = {
         val map = MapSso(mapSize)
         Railroad(map, score, Forest(map, forestRules, Weather(weatherRules)))
-    }
-}
-
-class TrainLayers(level : Level) extends Layers {
-    val levelLayer = Layer(LevelView(level))
-    val menuLayer = Layer(LevelMenuView(level))
-    val pauseMenuLayer = Layer(LevelPauseMenuView(level))
-
-
-    def layers : [Layer] = [levelLayer, menuLayer, pauseMenuLayer]
-    def viewportsWith(viewSize : vec2) = {
-        if(viewSize.y > 1279) {
-            [(levelLayer, Rect(0, 0, viewSize.x, viewSize.y - 92)),
-            (menuLayer, Rect(0, viewSize.y - 92, viewSize.x, 92)),
-            (pauseMenuLayer, Rect(vec2(0, 0), viewSize))]
-        } else {
-            [(levelLayer, Rect(0, 0, viewSize.x, viewSize.y - 46)),
-             (menuLayer, Rect(0, viewSize.y - 46, viewSize.x, 46)),
-             (pauseMenuLayer, Rect(vec2(0, 0), viewSize))]
-        }
     }
 }

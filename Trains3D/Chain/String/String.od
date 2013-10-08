@@ -1,7 +1,6 @@
 package core.lang
 
 stub class String extends Seq<char> {
-    def head : char?
     def tuple(by : string) : (string, string)?
     def split(by : string) : Iterable<string>
 

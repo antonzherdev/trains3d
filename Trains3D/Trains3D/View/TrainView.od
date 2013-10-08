@@ -53,13 +53,21 @@ class TrainView(level : Level) {
 
     private def doDraw(car : Car, material : Material) {
         if(car.carType == CarType.car) {
-            material.draw(Models.car)
-            blackMaterial.draw(Models.carBlack)
+            drawCar1(material)
         } else {
-            material.draw(Models.engine)
-            material.draw(Models.engineFloor)
-            blackMaterial.draw(Models.engineBlack)
+            drawEngine1(material)
         }
+    }
+
+    private def drawCar1(material : Material) {
+        material.draw(Models.car)
+        blackMaterial.draw(Models.carBlack)
+    }
+
+    private def drawEngine1(material : Material) {
+        material.draw(Models.engine)
+        material.draw(Models.engineFloor)
+        blackMaterial.draw(Models.engineBlack)
     }
 
     def draw(dyingTrains : [Train]) {

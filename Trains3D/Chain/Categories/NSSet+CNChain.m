@@ -10,7 +10,12 @@
 }
 
 - (id)head {
-    return [[self iterator] next];
+    return [self anyObject];
+}
+
+- (id)headOpt {
+    if(self.count == 0) return [CNOption none];
+    return [CNOption someValue:[self anyObject]];
 }
 
 - (BOOL)isEmpty {

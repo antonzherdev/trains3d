@@ -190,7 +190,7 @@ static ODClassType* _TRTrain_type;
                 [_level arrivedTrain:self];
             } else {
                 _back = !(_back);
-                TRCar* lastCar = ((TRCar*)([[[self directedCars] head] get]));
+                TRCar* lastCar = ((TRCar*)([[self directedCars] head]));
                 _head = ((_back) ? [lastCar position].backConnector : [lastCar position].frontConnector);
             }
         } else {

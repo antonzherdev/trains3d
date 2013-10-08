@@ -25,9 +25,13 @@
     return self.count == 0;
 }
 
-- (id)head {
+- (id)headOpt {
     if(self.count == 0) return [CNOption none];
     return [CNSome someWithValue:[self objectAtIndex :0]];
+}
+
+- (id)head {
+    return [self objectAtIndex :0];
 }
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {

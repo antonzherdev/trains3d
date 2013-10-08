@@ -15,6 +15,7 @@
 
 @protocol CNSeq<CNIterable>
 - (id)applyIndex:(NSUInteger)index;
+- (id)optIndex:(NSUInteger)index;
 - (id)randomItem;
 - (id<CNSet>)toSet;
 - (id<CNSeq>)addItem:(id)item;
@@ -23,6 +24,7 @@
 - (BOOL)isEqualToSeq:(id<CNSeq>)seq;
 - (BOOL)isEmpty;
 - (id)head;
+- (id)headOpt;
 @end
 
 

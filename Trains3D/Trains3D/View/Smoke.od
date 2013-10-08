@@ -7,7 +7,7 @@ import com.antonzherdev.eg.Progress._
 
 
 class Smoke(weak train : Train, weak weather : Weather) extends BillboardParticleSystem {
-    private val engine : Car = train.cars.head.get
+    private val engine : Car = train.cars.head
     private val tubePos = engine.carType.engineType.get.tubePos
     private static val zSpeed = 0.1
     private static val emitEvery = 0.01

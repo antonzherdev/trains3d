@@ -149,7 +149,7 @@ static ODClassType* _EGContext_type;
 }
 
 - (void)popViewport {
-    [self setViewport:uwrap(GERectI, [[__viewportStack head] get])];
+    [self setViewport:uwrap(GERectI, [__viewportStack head])];
     __viewportStack = [__viewportStack tail];
 }
 
@@ -617,7 +617,7 @@ static ODClassType* _EGMatrixStack_type;
 }
 
 - (void)pop {
-    _value = ((EGMatrixModel*)([[_stack head] get]));
+    _value = ((EGMatrixModel*)([_stack head]));
     _stack = [_stack tail];
 }
 

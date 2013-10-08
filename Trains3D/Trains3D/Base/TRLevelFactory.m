@@ -5,16 +5,10 @@
 #import "TRTree.h"
 #import "TRWeather.h"
 #import "TRLevel.h"
-#import "TRLevelSound.h"
-#import "EGContext.h"
-#import "EGDirector.h"
 #import "TRCar.h"
 #import "TRNotification.h"
 #import "TRRailroad.h"
 #import "EGMapIso.h"
-#import "TRLevelView.h"
-#import "TRLevelMenuView.h"
-#import "TRLevelPauseMenuView.h"
 @implementation TRLevelFactory
 static TRScoreRules* _TRLevelFactory_scoreRules;
 static TRForestRules* _TRLevelFactory_forestRules;
@@ -47,16 +41,6 @@ static ODClassType* _TRLevelFactory_type;
     _TRLevelFactory_rules = (@[[TRLevelRules levelRulesWithMapSize:GEVec2iMake(5, 3) scoreRules:_TRLevelFactory_scoreRules forestRules:[TRForestRules forestRulesWithTypes:(@[TRTreeType.pine]) thickness:2.0] weatherRules:[TRWeatherRules weatherRulesWithWindStrength:0.3 blastness:0.1 blastMinLength:1.0 blastMaxLength:3.0 blastStrength:0.3] repairerSpeed:30 events:(@[tuple(@1.0, [TRLevelFactory trainCars:intTo(2, 4) speed:[intTo(50, 60) setStep:10]]), tuple(@10.0, [TRLevelFactory trainCars:intTo(2, 3) speed:[intTo(50, 60) setStep:10]]), tuple(@15.0, [TRLevelFactory createNewCity])])]]);
 }
 
-+ (EGScene*)sceneForLevel:(TRLevel*)level {
-    return [EGScene sceneWithBackgroundColor:geVec4DivI(GEVec4Make(215.0, 230.0, 195.0, 255.0), 255) controller:level layers:[TRTrainLayers trainLayersWithLevel:level] soundPlayer:[CNOption applyValue:[TRLevelSound levelSoundWithLevel:level]]];
-}
-
-+ (void)restartLevel {
-    [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGGlobal director] scene] get])).controller] forEach:^void(TRLevel* level) {
-        [[EGGlobal director] setScene:[TRLevelFactory sceneForLevel:[TRLevel levelWithRules:level.rules]]];
-    }];
-}
-
 + (void(^)(TRLevel*))trainCars:(CNRange*)cars speed:(CNRange*)speed {
     return ^void(TRLevel* level) {
         [level runTrainWithGenerator:[TRTrainGenerator trainGeneratorWithTrainType:TRTrainType.simple carsCount:cars speed:speed carTypes:(@[TRCarType.car, TRCarType.engine])]];
@@ -75,10 +59,6 @@ static ODClassType* _TRLevelFactory_type;
 
 + (TRLevel*)levelWithMapSize:(GEVec2i)mapSize {
     return [TRLevel levelWithRules:[TRLevelRules levelRulesWithMapSize:mapSize scoreRules:_TRLevelFactory_scoreRules forestRules:_TRLevelFactory_forestRules weatherRules:_TRLevelFactory_weatherRules repairerSpeed:30 events:(@[])]];
-}
-
-+ (EGScene*)sceneForLevelWithNumber:(NSUInteger)number {
-    return [TRLevelFactory sceneForLevel:[TRLevelFactory levelWithNumber:number]];
 }
 
 + (TRScore*)score {
@@ -126,83 +106,6 @@ static ODClassType* _TRLevelFactory_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
-@implementation TRTrainLayers{
-    TRLevel* _level;
-    EGLayer* _levelLayer;
-    EGLayer* _menuLayer;
-    EGLayer* _pauseMenuLayer;
-}
-static ODClassType* _TRTrainLayers_type;
-@synthesize level = _level;
-@synthesize levelLayer = _levelLayer;
-@synthesize menuLayer = _menuLayer;
-@synthesize pauseMenuLayer = _pauseMenuLayer;
-
-+ (id)trainLayersWithLevel:(TRLevel*)level {
-    return [[TRTrainLayers alloc] initWithLevel:level];
-}
-
-- (id)initWithLevel:(TRLevel*)level {
-    self = [super init];
-    if(self) {
-        _level = level;
-        _levelLayer = [EGLayer applyView:[TRLevelView levelViewWithLevel:_level]];
-        _menuLayer = [EGLayer applyView:[TRLevelMenuView levelMenuViewWithLevel:_level]];
-        _pauseMenuLayer = [EGLayer applyView:[TRLevelPauseMenuView levelPauseMenuViewWithLevel:_level]];
-    }
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _TRTrainLayers_type = [ODClassType classTypeWithCls:[TRTrainLayers class]];
-}
-
-- (id<CNSeq>)layers {
-    return (@[_levelLayer, _menuLayer, _pauseMenuLayer]);
-}
-
-- (id<CNSeq>)viewportsWithViewSize:(GEVec2)viewSize {
-    if(viewSize.y > 1279) return (@[tuple(_levelLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, 0.0, viewSize.x, viewSize.y - 92))), tuple(_menuLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, viewSize.y - 92, viewSize.x, 92.0))), tuple(_pauseMenuLayer, wrap(GERect, GERectMake(GEVec2Make(0.0, 0.0), viewSize)))]);
-    else return (@[tuple(_levelLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, 0.0, viewSize.x, viewSize.y - 46))), tuple(_menuLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, viewSize.y - 46, viewSize.x, 46.0))), tuple(_pauseMenuLayer, wrap(GERect, GERectMake(GEVec2Make(0.0, 0.0), viewSize)))]);
-}
-
-- (ODClassType*)type {
-    return [TRTrainLayers type];
-}
-
-+ (ODClassType*)type {
-    return _TRTrainLayers_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRTrainLayers* o = ((TRTrainLayers*)(other));
-    return [self.level isEqual:o.level];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.level hash];
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"level=%@", self.level];
     [description appendString:@">"];
     return description;
 }

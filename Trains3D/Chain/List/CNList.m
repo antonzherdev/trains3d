@@ -27,11 +27,11 @@ static ODClassType* _CNList_type;
 }
 
 + (CNList*)applyItem:(id)item {
-    return [CNFilledList filledListWithItem:item tail:CNEmptyList.instance];
+    return [CNFilledList filledListWithHead:item tail:CNEmptyList.instance];
 }
 
 + (CNList*)applyItem:(id)item tail:(CNList*)tail {
-    return [CNFilledList filledListWithItem:item tail:tail];
+    return [CNFilledList filledListWithHead:item tail:tail];
 }
 
 - (id<CNIterator>)iterator {
@@ -61,6 +61,11 @@ static ODClassType* _CNList_type;
         n--;
     }
     @throw @"Incorrect index";
+}
+
+- (id)optIndex:(NSUInteger)index {
+    if(index >= [self count]) return [CNOption none];
+    else return [CNOption applyValue:[self applyIndex:index]];
 }
 
 - (id)randomItem {
@@ -107,7 +112,11 @@ static ODClassType* _CNList_type;
 }
 
 - (id)head {
-    return [CNOption applyValue:[self applyIndex:0]];
+    return [self applyIndex:0];
+}
+
+- (id)headOpt {
+    return [self optIndex:0];
 }
 
 - (NSUInteger)count {
@@ -202,23 +211,23 @@ static ODClassType* _CNList_type;
 
 
 @implementation CNFilledList{
-    id _item;
+    id _head;
     CNList* _tail;
     NSUInteger _count;
 }
 static ODClassType* _CNFilledList_type;
-@synthesize item = _item;
+@synthesize head = _head;
 @synthesize tail = _tail;
 @synthesize count = _count;
 
-+ (id)filledListWithItem:(id)item tail:(CNList*)tail {
-    return [[CNFilledList alloc] initWithItem:item tail:tail];
++ (id)filledListWithHead:(id)head tail:(CNList*)tail {
+    return [[CNFilledList alloc] initWithHead:head tail:tail];
 }
 
-- (id)initWithItem:(id)item tail:(CNList*)tail {
+- (id)initWithHead:(id)head tail:(CNList*)tail {
     self = [super init];
     if(self) {
-        _item = item;
+        _head = head;
         _tail = tail;
         _count = [_tail count] + 1;
     }
@@ -231,8 +240,8 @@ static ODClassType* _CNFilledList_type;
     _CNFilledList_type = [ODClassType classTypeWithCls:[CNFilledList class]];
 }
 
-- (id)head {
-    return [CNOption applyValue:_item];
+- (id)headOpt {
+    return [CNOption applyValue:_head];
 }
 
 - (BOOL)isEmpty {
@@ -240,15 +249,15 @@ static ODClassType* _CNFilledList_type;
 }
 
 - (CNList*)filterF:(BOOL(^)(id))f {
-    if(f(_item)) return [CNFilledList filledListWithItem:_item tail:[_tail filterF:f]];
+    if(f(_head)) return [CNFilledList filledListWithHead:_head tail:[_tail filterF:f]];
     else return [_tail filterF:f];
 }
 
 - (CNList*)reverse {
-    CNFilledList* ret = [CNFilledList filledListWithItem:_item tail:CNEmptyList.instance];
+    CNFilledList* ret = [CNFilledList filledListWithHead:_head tail:CNEmptyList.instance];
     CNList* list = _tail;
     while(!([list isEmpty])) {
-        ret = [CNFilledList filledListWithItem:((CNFilledList*)(list)).item tail:ret];
+        ret = [CNFilledList filledListWithHead:((CNFilledList*)(list)).head tail:ret];
         list = [list tail];
     }
     return ret;
@@ -270,19 +279,19 @@ static ODClassType* _CNFilledList_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     CNFilledList* o = ((CNFilledList*)(other));
-    return [self.item isEqual:o.item] && [self.tail isEqual:o.tail];
+    return [self.head isEqual:o.head] && [self.tail isEqual:o.tail];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [self.item hash];
+    hash = hash * 31 + [self.head hash];
     hash = hash * 31 + [self.tail hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"item=%@", self.item];
+    [description appendFormat:@"head=%@", self.head];
     [description appendFormat:@", tail=%@", self.tail];
     [description appendString:@">"];
     return description;
@@ -316,6 +325,10 @@ static ODClassType* _CNEmptyList_type;
 }
 
 - (id)head {
+    @throw @"List is empty";
+}
+
+- (id)headOpt {
     return [CNOption none];
 }
 
@@ -396,7 +409,7 @@ static ODClassType* _CNListIterator_type;
 }
 
 - (id)next {
-    id ret = [[_list head] get];
+    id ret = [_list head];
     _list = [_list tail];
     return ret;
 }

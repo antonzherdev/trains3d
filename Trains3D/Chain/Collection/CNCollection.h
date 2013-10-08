@@ -31,6 +31,7 @@
 - (CNChain*)chain;
 - (id)findWhere:(BOOL(^)(id))where;
 - (id)head;
+- (id)headOpt;
 - (id)convertWithBuilder:(id<CNBuilder>)builder;
 @end
 
@@ -46,6 +47,7 @@
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
 - (id)head;
+- (id)headOpt;
 - (BOOL)isEmpty;
 - (CNChain*)chain;
 - (void)forEach:(void(^)(id))each;

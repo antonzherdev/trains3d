@@ -55,6 +55,7 @@
 
 - (void)forEach:(cnP)p;
 - (id)head;
+- (id)headOpt;
 - (id)randomItem;
 - (NSUInteger)count;
 - (NSArray*)toArray;

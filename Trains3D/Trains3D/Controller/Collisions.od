@@ -32,7 +32,6 @@ class TrainsCollisionWorld {
                 }.endSort
                 .map(_.a)
                 .head
-                .get
         CarsCollision(Pair(car1, car2), point)
     }.toArray
 }

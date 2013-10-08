@@ -235,8 +235,12 @@ static ODClassType* _EGIndexFunFilteredIterable_type;
 }
 
 - (id)head {
-    if([[self iterator] hasNext]) return [CNOption applyValue:[[self iterator] next]];
-    else return [CNOption none];
+    return [[self iterator] next];
+}
+
+- (id)headOpt {
+    if([self isEmpty]) return [CNOption none];
+    else return [CNOption applyValue:[self head]];
 }
 
 - (BOOL)isEmpty {

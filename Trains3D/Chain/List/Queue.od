@@ -17,11 +17,11 @@ class Queue<T>(in : List<T>, out : List<T>) extends Seq<T> {
         else Queue<T>(List(item, in), out)
 
     def dequeue : (T?, Queue<T>) =
-        if(!out.isEmpty) (out.head, Queue<T>(in, out.tail))
+        if(!out.isEmpty) (out.headOpt, Queue<T>(in, out.tail))
         else if(in.isEmpty) (Option.none<T>, self)
         else {
             val rev = in.reverse
-            (rev.head, Queue<T>(List<T>(), rev.tail))
+            (rev.headOpt, Queue<T>(List<T>(), rev.tail))
         }
 }
 

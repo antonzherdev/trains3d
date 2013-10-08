@@ -33,7 +33,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor with Mo
 
     def format(score : int) : string = {
         var i = 0
-        val a = "'".head.get
+        val a = "'".head
         val str = "$score".chain.reverse.flatMap{s ->
             i++
             if(i == 3) List(s, List(a))

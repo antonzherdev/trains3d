@@ -283,6 +283,16 @@
 
 
 - (id)head {
+    __block id ret = nil;
+    [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
+        ret = item;
+        return cnYieldBreak;
+    } end:nil all:nil]];
+    if(ret == nil) @throw @"Chain is empty";
+    return ret;
+}
+
+- (id)headOpt {
     __block id ret = [CNOption none];
     [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
         ret = [CNSome someWithValue:item];

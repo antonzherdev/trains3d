@@ -9,6 +9,7 @@
 #import "GEMat4.h"
 #import "TRRailPoint.h"
 #import "EGMapIso.h"
+#import "EGMapIsoView.h"
 #import "EGPlatform.h"
 #import "EGShadow.h"
 #import "EGShader.h"

@@ -8,7 +8,7 @@
 #import "EGDirector.h"
 #import "GL.h"
 #import "TRStrings.h"
-#import "TRLevelFactory.h"
+#import "TRSceneFactory.h"
 @implementation TRLevelPauseMenuView{
     TRLevel* _level;
     GEVec2 __lastViewportSize;
@@ -103,7 +103,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
             [[EGGlobal director] resume];
         } else {
             if(p.y > _restartLine.p0.y) {
-                [TRLevelFactory restartLevel];
+                [TRSceneFactory restartLevel];
                 [[EGGlobal director] resume];
             }
         }

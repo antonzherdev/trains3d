@@ -71,6 +71,10 @@ static ODClassType* _CNMutableTreeSet_type;
 }
 
 - (id)head {
+    return [[_map firstKey] get];
+}
+
+- (id)headOpt {
     return [_map firstKey];
 }
 

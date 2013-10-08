@@ -67,15 +67,20 @@ static ODClassType* _CNQueue_type;
 
 - (CNTuple*)dequeue {
     if(!([_out isEmpty])) {
-        return tuple([_out head], [CNQueue queueWithIn:_in out:[_out tail]]);
+        return tuple([_out headOpt], [CNQueue queueWithIn:_in out:[_out tail]]);
     } else {
         if([_in isEmpty]) {
             return tuple([CNOption none], self);
         } else {
             CNList* rev = [_in reverse];
-            return tuple([rev head], [CNQueue queueWithIn:[CNList apply] out:[rev tail]]);
+            return tuple([rev headOpt], [CNQueue queueWithIn:[CNList apply] out:[rev tail]]);
         }
     }
+}
+
+- (id)optIndex:(NSUInteger)index {
+    if(index >= [self count]) return [CNOption none];
+    else return [CNOption applyValue:[self applyIndex:index]];
 }
 
 - (id)randomItem {
@@ -118,7 +123,11 @@ static ODClassType* _CNQueue_type;
 }
 
 - (id)head {
-    return [CNOption applyValue:[self applyIndex:0]];
+    return [self applyIndex:0];
+}
+
+- (id)headOpt {
+    return [self optIndex:0];
 }
 
 - (CNChain*)chain {

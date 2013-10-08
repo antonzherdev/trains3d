@@ -8,6 +8,7 @@
 #import "TRTrain.h"
 #import "TRLevelFactory.h"
 #import "TRRailPoint.h"
+#import "TRSceneFactory.h"
 
 @implementation TRAppDelegate
 
@@ -19,7 +20,7 @@
 
 
     TRLevel *level = [TRLevelFactory levelWithNumber:1];
-    EGScene *scene = [TRLevelFactory sceneForLevel:level];
+    EGScene *scene = [TRSceneFactory sceneForLevel:level];
     _view.director.scene = scene;
     [_view.director displayStats];
 }

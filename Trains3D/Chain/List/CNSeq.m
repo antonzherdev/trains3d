@@ -109,6 +109,11 @@ static ODClassType* _CNIndexFunSeq_type;
     return [CNIndexFunSeqIterator indexFunSeqIteratorWithCount:_count f:_f];
 }
 
+- (id)optIndex:(NSUInteger)index {
+    if(index >= [self count]) return [CNOption none];
+    else return [CNOption applyValue:[self applyIndex:index]];
+}
+
 - (id)randomItem {
     if([self isEmpty]) return [CNOption none];
     else return [CNOption applyValue:[self applyIndex:oduIntRndMax([self count] - 1)]];
@@ -153,7 +158,11 @@ static ODClassType* _CNIndexFunSeq_type;
 }
 
 - (id)head {
-    return [CNOption applyValue:[self applyIndex:0]];
+    return [self applyIndex:0];
+}
+
+- (id)headOpt {
+    return [self optIndex:0];
 }
 
 - (CNChain*)chain {

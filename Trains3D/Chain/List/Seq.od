@@ -14,6 +14,10 @@ trait Seq<T> extends Iterable<T> {
         throw "Incorrect index"
     }
 
+    def opt(index : uint) : T? =
+        if(index >= count) nil
+        else apply(index)
+
     def randomItem : T? =
         if(isEmpty) nil
         else apply(UInt.rnd(count - 1))
@@ -49,7 +53,8 @@ trait Seq<T> extends Iterable<T> {
 
     def isEmpty : bool = count == 0
 
-    def head : T? = apply(0)
+    def head : T = apply(0)
+    def headOpt : T? = opt(0)
 }
 
 trait MutableSeq<T> extends Seq<T> with MutableIterable<T>
