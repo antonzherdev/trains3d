@@ -85,6 +85,7 @@ static ODClassType* _EGGlobal_type;
     EGMatrixStack* _matrixStack;
     EGRenderTarget* _renderTarget;
     BOOL _considerShadows;
+    CNList* __viewportStack;
     GERectI __viewport;
 }
 static ODClassType* _EGContext_type;
@@ -107,6 +108,7 @@ static ODClassType* _EGContext_type;
         _matrixStack = [EGMatrixStack matrixStack];
         _renderTarget = [EGSceneRenderTarget sceneRenderTarget];
         _considerShadows = YES;
+        __viewportStack = [CNList apply];
     }
     
     return self;
@@ -136,6 +138,15 @@ static ODClassType* _EGContext_type;
 - (void)setViewport:(GERectI)viewport {
     __viewport = viewport;
     egViewport(viewport);
+}
+
+- (void)pushViewport {
+    __viewportStack = [CNList applyItem:wrap(GERectI, [self viewport]) tail:__viewportStack];
+}
+
+- (void)popViewport {
+    [self setViewport:uwrap(GERectI, [[__viewportStack head] get])];
+    __viewportStack = [__viewportStack tail];
 }
 
 - (ODClassType*)type {

@@ -45,6 +45,8 @@
 - (EGFont*)fontWithName:(NSString*)name;
 - (GERectI)viewport;
 - (void)setViewport:(GERectI)viewport;
+- (void)pushViewport;
+- (void)popViewport;
 + (ODClassType*)type;
 @end
 

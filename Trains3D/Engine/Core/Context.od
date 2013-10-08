@@ -24,11 +24,19 @@ class Context {
     var renderTarget : RenderTarget = SceneRenderTarget()
     var considerShadows = true
 
+    private var _viewportStack = List<RectI>()
     private var _viewport : RectI
     def viewport = _viewport
     def set(viewport : RectI) {
         _viewport = viewport
         egViewport(viewport)
+    }
+    def pushViewport {
+        _viewportStack = List(viewport, _viewportStack)
+    }
+    def popViewport {
+        set(viewport = _viewportStack.head.get)
+        _viewportStack = _viewportStack.tail
     }
 }
 

@@ -58,11 +58,13 @@ class SimpleSurface(size : vec2i, depth : bool) extends Surface(size) {
 
     def bind {
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
-        glViewport(0, 0, size.x, size.y)
+        context.pushViewport
+        context.set(viewport = RectI(0, 0, size.x, size.y))
     }
 
     def unbind {
         glBindFramebuffer(GL_FRAMEBUFFER, 0)
+        context.popViewport
     }
 
 }

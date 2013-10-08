@@ -3,10 +3,10 @@
 #import "GL.h"
 #import "EGShader.h"
 @class EGTexture;
-@class EGVertexBufferDesc;
-@class EGMesh;
 @class EGGlobal;
 @class EGContext;
+@class EGVertexBufferDesc;
+@class EGMesh;
 
 @class EGSurface;
 @class EGSimpleSurface;

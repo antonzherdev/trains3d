@@ -63,11 +63,13 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
 
 - (void)bind {
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-    glViewport(0, 0, self.size.x, self.size.y);
+    [EGGlobal.context pushViewport];
+    [EGGlobal.context setViewport:geRectIApplyXYWidthHeight(0.0, 0.0, ((float)(self.size.x)), ((float)(self.size.y)))];
 }
 
 - (void)unbind {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    [EGGlobal.context popViewport];
 }
 
 - (ODClassType*)type {
