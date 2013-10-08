@@ -1,26 +1,22 @@
 #import "TRTreeView.h"
 
 #import "TRTree.h"
-#import "EGContext.h"
 #import "EGTexture.h"
+#import "EGContext.h"
 #import "EGMesh.h"
 #import "EGSprite.h"
 #import "GL.h"
 @implementation TRTreeView{
     TRForest* _forest;
-    id<CNSeq> _textures;
+    EGTexture* _texture;
     EGColorSource* _material;
-    id<CNSeq> _materials;
-    id<CNSeq> _rects;
     EGVertexBuffer* _vb;
     EGIndexBuffer* _ib;
 }
 static ODClassType* _TRTreeView_type;
 @synthesize forest = _forest;
-@synthesize textures = _textures;
+@synthesize texture = _texture;
 @synthesize material = _material;
-@synthesize materials = _materials;
-@synthesize rects = _rects;
 
 + (id)treeViewWithForest:(TRForest*)forest {
     return [[TRTreeView alloc] initWithForest:forest];
@@ -30,14 +26,8 @@ static ODClassType* _TRTreeView_type;
     self = [super init];
     if(self) {
         _forest = forest;
-        _textures = (@[[EGGlobal textureForFile:@"Pine.png"], [EGGlobal textureForFile:@"Tree1.png"], [EGGlobal textureForFile:@"Tree2.png"], [EGGlobal textureForFile:@"Tree3.png"], [EGGlobal textureForFile:@"YellowTree.png"]]);
+        _texture = [EGGlobal textureForFile:@"Pine.png"];
         _material = [EGColorSource colorSourceWithColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:[CNOption applyValue:[EGGlobal textureForFile:@"Pine.png"]] alphaTestLevel:0.3];
-        _materials = [[[_textures chain] map:^EGColorSource*(EGTexture* _) {
-            return [EGColorSource colorSourceWithColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:[CNOption applyValue:_] alphaTestLevel:0.3];
-        }] toArray];
-        _rects = [[[_textures chain] map:^id(EGTexture* _) {
-            return wrap(GERect, geRectCenterX(geRectApplyXYWidthHeight(0.0, 0.0, [_ size].x / ([_ size].y * 4), [_ size].y / ([_ size].y * 2))));
-        }] toArray];
         _vb = [EGVertexBuffer applyDesc:EGBillboard.vbDesc];
         _ib = [EGIndexBuffer apply];
     }
@@ -80,14 +70,14 @@ static ODClassType* _TRTreeView_type;
     GEPlaneCoord planeCoord = GEPlaneCoordMake(GEPlaneMake(GEVec3Make(0.0, 0.0, 0.0), GEVec3Make(0.0, 0.0, 1.0)), GEVec3Make(1.0, 0.0, 0.0), GEVec3Make(0.0, 1.0, 0.0));
     GEPlaneCoord mPlaneCoord = gePlaneCoordSetY(planeCoord, geVec3Normalize(geVec3AddVec3(planeCoord.y, GEVec3Make([tree incline].x, 0.0, [tree incline].y))));
     NSUInteger tp = tree.treeType.ordinal;
-    GEQuad quad = geRectQuad(geRectMulVec2(uwrap(GERect, [_rects applyIndex:tp]), tree.size));
+    GEQuad quad = geRectQuad(geRectMulVec2(geRectCenterX(geRectApplyXYWidthHeight(0.0, 0.0, [_texture size].x / ([_texture size].y * 4), 0.5)), tree.size));
     GEQuad3 quad3 = GEQuad3Make(mPlaneCoord, quad);
     GEQuad mQuad = geQuadApplyP0P1P2P3(geVec3Xy(geQuad3P0(quad3)), geVec3Xy(geQuad3P1(quad3)), geVec3Xy(geQuad3P2(quad3)), geVec3Xy(geQuad3P3(quad3)));
-    a = [EGD2D writeSpriteIn:a material:((EGColorSource*)([_materials applyIndex:tp])) at:geVec3ApplyVec2Z(tree.position, 0.0) quad:mQuad uv:mainUv];
+    a = [EGD2D writeSpriteIn:a material:_material at:geVec3ApplyVec2Z(tree.position, 0.0) quad:mQuad uv:mainUv];
     CGFloat r = tree.rustle * 0.04;
     GEPlaneCoord rPlaneCoord = gePlaneCoordSetX(mPlaneCoord, geVec3AddVec3(mPlaneCoord.x, GEVec3Make(0.0, ((float)(r)), 0.0)));
     GEQuad3 rQuad3 = GEQuad3Make(rPlaneCoord, quad);
-    a = [EGD2D writeSpriteIn:a material:((EGColorSource*)([_materials applyIndex:tp])) at:geVec3ApplyVec2Z(tree.position, 0.0) quad:geQuadApplyP0P1P2P3(geVec3Xy(geQuad3P0(rQuad3)), geVec3Xy(geQuad3P1(rQuad3)), geVec3Xy(geQuad3P2(rQuad3)), geVec3Xy(geQuad3P3(rQuad3))) uv:rustleUv];
+    a = [EGD2D writeSpriteIn:a material:_material at:geVec3ApplyVec2Z(tree.position, 0.0) quad:geQuadApplyP0P1P2P3(geVec3Xy(geQuad3P0(rQuad3)), geVec3Xy(geQuad3P1(rQuad3)), geVec3Xy(geQuad3P2(rQuad3)), geVec3Xy(geQuad3P3(rQuad3))) uv:rustleUv];
     return a;
 }
 
