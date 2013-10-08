@@ -41,7 +41,6 @@
 - (id)initWithShadowShader:(EGShadowShader*)shadowShader;
 - (ODClassType*)type;
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGStandardMaterial*)param;
-- (void)unloadParam:(EGStandardMaterial*)param;
 + (EGStandardShadowShader*)instanceForColor;
 + (EGStandardShadowShader*)instanceForTexture;
 + (ODClassType*)type;
@@ -89,7 +88,6 @@
 - (id)initWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
 - (ODClassType*)type;
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGStandardMaterial*)param;
-- (void)unloadParam:(EGStandardMaterial*)param;
 + (ODClassType*)type;
 @end
 

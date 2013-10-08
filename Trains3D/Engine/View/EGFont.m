@@ -515,12 +515,6 @@ static ODClassType* _EGFontShader_type;
     [_colorUniform setVec4:param.color];
 }
 
-- (void)unloadParam:(EGFontShaderParam*)param {
-    [EGTexture unbind];
-    [_positionSlot unbind];
-    [_uvSlot unbind];
-}
-
 - (ODClassType*)type {
     return [EGFontShader type];
 }

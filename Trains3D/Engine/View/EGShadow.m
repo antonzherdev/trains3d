@@ -212,11 +212,6 @@ static ODClassType* _EGShadowSurfaceShader_type;
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.model))];
 }
 
-- (void)unloadParam:(EGViewportSurfaceShaderParam*)param {
-    [EGTexture unbind];
-    [_positionSlot unbind];
-}
-
 - (ODClassType*)type {
     return [EGShadowSurfaceShader type];
 }
@@ -375,14 +370,6 @@ static ODClassType* _EGShadowShader_type;
         [((EGShaderUniform*)([_alphaTestLevelUniform get])) setF4:param.alphaTestLevel];
         [((EGTexture*)([param.texture get])) bind];
     }
-}
-
-- (void)unloadParam:(EGColorSource*)param {
-    [EGTexture unbind];
-    [_positionSlot unbind];
-    [_uvSlot forEach:^void(EGShaderAttribute* _) {
-        [_ unbind];
-    }];
 }
 
 - (ODClassType*)type {
@@ -723,10 +710,6 @@ static ODClassType* _EGShadowDrawShader_type;
         glActiveTexture(GL_TEXTURE0);
         i++;
     }];
-}
-
-- (void)unloadParam:(EGShadowDrawParam*)param {
-    [_positionSlot unbind];
 }
 
 - (ODClassType*)type {

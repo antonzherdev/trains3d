@@ -267,7 +267,6 @@ static ODClassType* _TRSwitchView_type;
             }
         }];
     } f:^void() {
-        GEMat4* m = [EGGlobal.matrix.value wc];
         if(ref) glCullFace(GL_BACK);
         if(form.start.x + form.end.x == 0) [_switchStraightModel draw];
         else [_switchTurnModel draw];

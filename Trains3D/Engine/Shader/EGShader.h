@@ -47,7 +47,6 @@
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb indexRef:(CNVoidRefArray)indexRef mode:(unsigned int)mode;
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb mode:(unsigned int)mode;
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(id)param;
-- (void)unloadParam:(id)param;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
 - (EGShaderUniform*)uniformForName:(NSString*)name;
 + (ODClassType*)type;
@@ -60,8 +59,8 @@
 + (id)shaderAttributeWithHandle:(GLuint)handle;
 - (id)initWithHandle:(GLuint)handle;
 - (ODClassType*)type;
+- (void)_init;
 - (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(unsigned int)valuesType shift:(NSUInteger)shift;
-- (void)unbind;
 + (ODClassType*)type;
 @end
 

@@ -338,13 +338,6 @@ static ODClassType* _EGBillboardShader_type;
     [_colorUniform setVec4:param.color];
 }
 
-- (void)unloadParam:(EGColorSource*)param {
-    if(_texture) [EGTexture unbind];
-    [_positionSlot unbind];
-    [_modelSlot unbind];
-    [_colorSlot unbind];
-}
-
 - (ODClassType*)type {
     return [EGBillboardShader type];
 }

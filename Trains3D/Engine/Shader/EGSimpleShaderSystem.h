@@ -47,7 +47,6 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param;
-- (void)unloadParam:(EGColorSource*)param;
 + (ODClassType*)type;
 @end
 
@@ -62,7 +61,6 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param;
-- (void)unloadParam:(EGColorSource*)param;
 + (ODClassType*)type;
 @end
 

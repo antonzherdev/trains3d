@@ -425,11 +425,6 @@ static ODClassType* _EGViewportSurfaceShader_type;
     [_zUniform setF4:param.z];
 }
 
-- (void)unloadParam:(EGViewportSurfaceShaderParam*)param {
-    [EGTexture unbind];
-    [_positionSlot unbind];
-}
-
 - (ODClassType*)type {
     return [EGViewportSurfaceShader type];
 }

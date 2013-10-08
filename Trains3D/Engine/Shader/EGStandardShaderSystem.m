@@ -114,10 +114,6 @@ static ODClassType* _EGStandardShadowShader_type;
     [_shadowShader loadVbDesc:vbDesc param:param.diffuse];
 }
 
-- (void)unloadParam:(EGStandardMaterial*)param {
-    [_shadowShader unloadParam:param.diffuse];
-}
-
 - (ODClassType*)type {
     return [EGStandardShadowShader type];
 }
@@ -498,15 +494,6 @@ static ODClassType* _EGStandardShader_type;
             [((EGShaderUniform*)([_directLightColors applyIndex:i])) setVec4:light.color];
         }];
     }
-}
-
-- (void)unloadParam:(EGStandardMaterial*)param {
-    if(_key.texture) {
-        [EGTexture unbind];
-        [((EGShaderAttribute*)([_uvSlot get])) unbind];
-    }
-    if(_key.directLightCount > 0) [((EGShaderAttribute*)([_normalSlot get])) unbind];
-    [_positionSlot unbind];
 }
 
 - (ODClassType*)type {

@@ -66,7 +66,6 @@ typedef struct EGBillboardBufferData EGBillboardBufferData;
 + (EGBillboardShader*)instanceForColorShadow;
 + (EGBillboardShader*)instanceForTextureShadow;
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param;
-- (void)unloadParam:(EGColorSource*)param;
 + (ODClassType*)type;
 @end
 

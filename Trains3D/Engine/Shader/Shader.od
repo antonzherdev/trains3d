@@ -74,7 +74,6 @@ class Shader<P>(program : ShaderProgram) {
         mesh.vertexBuffer {
             load(mesh.vertexBuffer.desc, param)
             mesh.indexBuffer.drawWith(start, count)
-            unload(param)
         }
         glUseProgram(0)
     }
@@ -84,7 +83,6 @@ class Shader<P>(program : ShaderProgram) {
         vb {
             load(vb.desc, param)
             glDrawElements(mode, index.count, GL_UNSIGNED_INT, index.bytes)
-            unload(param)
         }
         glUseProgram(0)
     }
@@ -94,7 +92,6 @@ class Shader<P>(program : ShaderProgram) {
         vb {
             load(vb.desc, param)
             glDrawElements(mode, indexRef.length/4, GL_UNSIGNED_INT, indexRef.bytes)
-            unload(param)
         }
         glUseProgram(0)
     }
@@ -104,26 +101,23 @@ class Shader<P>(program : ShaderProgram) {
         vb {
             load(vb.desc, param)
             glDrawArrays(mode, 0, vb.count)
-            unload(param)
         }
         glUseProgram(0)
     }
 
     def load(vbDesc : VertexBufferDesc<_>, param : P)
-    def unload(param : P)
 
     def attributeFor(name : string ) = program.attributeFor(name)
     def uniformFor(name : string ) = program.uniformFor(name)
 }
 
 class ShaderAttribute(handle : GLuint) {
-    def setFromBufferWith(stride : uint, valuesCount : uint, valuesType : uint4, shift : uint) {
+    def init {
         glEnableVertexAttribArray(handle)
-        egVertexAttribPointer(handle, valuesCount, valuesType, GL_FALSE, stride, shift)
     }
 
-    def unbind {
-        glDisableVertexAttribArray(handle)
+    def setFromBufferWith(stride : uint, valuesCount : uint, valuesType : uint4, shift : uint) {
+        egVertexAttribPointer(handle, valuesCount, valuesType, GL_FALSE, stride, shift)
     }
 }
 

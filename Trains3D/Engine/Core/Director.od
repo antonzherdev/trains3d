@@ -33,7 +33,6 @@ class Director {
         context.matrixStack.clear
         context.set(viewport = Rect(vec2(0, 0), size))
         _stat.for(_.draw)
-        glFlush
     }
 
     def beforeDraw

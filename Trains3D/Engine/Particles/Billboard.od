@@ -96,13 +96,6 @@ class BillboardShader(program : ShaderProgram, texture : bool, shadow : bool) ex
         }
         colorUniform.set(vec4 = param.color)
     }
-
-    def unload(param : ColorSource) {
-        if(texture) Texture.unbind
-        positionSlot.unbind
-        modelSlot.unbind
-        colorSlot.unbind
-    }
 }
 
 struct BillboardBufferData(position : vec3, model : vec2, color : vec4, uv : vec2)

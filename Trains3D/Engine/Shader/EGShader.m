@@ -161,7 +161,6 @@ static ODClassType* _EGShader_type;
     [mesh.vertexBuffer applyDraw:^void() {
         [self loadVbDesc:mesh.vertexBuffer.desc param:param];
         [mesh.indexBuffer drawWithStart:start count:count];
-        [self unloadParam:param];
     }];
     glUseProgram(0);
 }
@@ -171,7 +170,6 @@ static ODClassType* _EGShader_type;
     [vb applyDraw:^void() {
         [self loadVbDesc:vb.desc param:param];
         glDrawElements(mode, index.count, GL_UNSIGNED_INT, index.bytes);
-        [self unloadParam:param];
     }];
     glUseProgram(0);
 }
@@ -181,7 +179,6 @@ static ODClassType* _EGShader_type;
     [vb applyDraw:^void() {
         [self loadVbDesc:vb.desc param:param];
         glDrawElements(mode, indexRef.length / 4, GL_UNSIGNED_INT, indexRef.bytes);
-        [self unloadParam:param];
     }];
     glUseProgram(0);
 }
@@ -191,17 +188,12 @@ static ODClassType* _EGShader_type;
     [vb applyDraw:^void() {
         [self loadVbDesc:vb.desc param:param];
         glDrawArrays(mode, 0, [vb count]);
-        [self unloadParam:param];
     }];
     glUseProgram(0);
 }
 
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(id)param {
     @throw @"Method load is abstract";
-}
-
-- (void)unloadParam:(id)param {
-    @throw @"Method unload is abstract";
 }
 
 - (EGShaderAttribute*)attributeForName:(NSString*)name {
@@ -259,7 +251,10 @@ static ODClassType* _EGShaderAttribute_type;
 
 - (id)initWithHandle:(GLuint)handle {
     self = [super init];
-    if(self) _handle = handle;
+    if(self) {
+        _handle = handle;
+        [self _init];
+    }
     
     return self;
 }
@@ -269,13 +264,12 @@ static ODClassType* _EGShaderAttribute_type;
     _EGShaderAttribute_type = [ODClassType classTypeWithCls:[EGShaderAttribute class]];
 }
 
-- (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(unsigned int)valuesType shift:(NSUInteger)shift {
+- (void)_init {
     glEnableVertexAttribArray(_handle);
-    egVertexAttribPointer(_handle, valuesCount, valuesType, GL_FALSE, stride, shift);
 }
 
-- (void)unbind {
-    glDisableVertexAttribArray(_handle);
+- (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(unsigned int)valuesType shift:(NSUInteger)shift {
+    egVertexAttribPointer(_handle, valuesCount, valuesType, GL_FALSE, stride, shift);
 }
 
 - (ODClassType*)type {

@@ -30,9 +30,6 @@ class StandardShadowShader(shadowShader : ShadowShader) extends Shader<StandardM
     def load(vbDesc : VertexBufferDesc<_>, param : StandardMaterial) {
         shadowShader.load(vbDesc, param.diffuse)
     }
-    def unload(param : StandardMaterial) {
-        shadowShader.unload(param.diffuse)
-    }
 }
 
 class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutShadowsCount : uint, texture : bool) extends ShaderTextBuilder {
@@ -193,16 +190,5 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
                 }
             }
         }
-    }
-
-    def unload(param : StandardMaterial) {
-        if(key.texture) {
-            Texture.unbind
-            uvSlot.get.unbind
-        }
-        if(key.directLightCount > 0) {
-            normalSlot.get.unbind
-        }
-        positionSlot.unbind
     }
 }

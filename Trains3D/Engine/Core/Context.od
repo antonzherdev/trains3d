@@ -29,8 +29,10 @@ class Context {
     private var _viewport : RectI
     def viewport = _viewport
     def set(viewport : RectI) {
-        _viewport = viewport
-        egViewport(viewport)
+        if(_viewport != viewport) {
+            _viewport = viewport
+            egViewport(viewport)
+        }
     }
     def pushViewport {
         _viewportStack = List(viewport, _viewportStack)

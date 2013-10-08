@@ -138,8 +138,10 @@ static ODClassType* _EGContext_type;
 }
 
 - (void)setViewport:(GERectI)viewport {
-    __viewport = viewport;
-    egViewport(viewport);
+    if(!(GERectIEq(__viewport, viewport))) {
+        __viewport = viewport;
+        egViewport(viewport);
+    }
 }
 
 - (void)pushViewport {

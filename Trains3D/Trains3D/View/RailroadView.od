@@ -104,7 +104,6 @@ class SwitchView {
                 } else m2
              })
         ) {
-            val m = matrix.value.wc
             if(ref) glCullFace(GL_BACK)
             if(form.start.x + form.end.x == 0) {
                 switchStraightModel.draw

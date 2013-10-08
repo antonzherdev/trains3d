@@ -254,10 +254,6 @@ static ODClassType* _EGSimpleColorShader_type;
     [_colorUniform setVec4:param.color];
 }
 
-- (void)unloadParam:(EGColorSource*)param {
-    [_positionSlot unbind];
-}
-
 - (ODClassType*)type {
     return [EGSimpleColorShader type];
 }
@@ -328,12 +324,6 @@ static ODClassType* _EGSimpleTextureShader_type;
     [_uvSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
     [_colorUniform setVec4:param.color];
     [((EGTexture*)([param.texture get])) bind];
-}
-
-- (void)unloadParam:(EGColorSource*)param {
-    [EGTexture unbind];
-    [_positionSlot unbind];
-    [_uvSlot unbind];
 }
 
 - (ODClassType*)type {

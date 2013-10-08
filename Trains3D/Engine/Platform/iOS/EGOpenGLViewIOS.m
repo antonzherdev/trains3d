@@ -41,7 +41,7 @@
     // Configure renderbuffers created by the view
     view.drawableColorFormat = GLKViewDrawableColorFormatRGBA8888;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
-    self.preferredFramesPerSecond = 60;
+    self.preferredFramesPerSecond = 30;
 //    view.drawableStencilFormat = GLKViewDrawableStencilFormat8;
 
     // Enable multisampling
