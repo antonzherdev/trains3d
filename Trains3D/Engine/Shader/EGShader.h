@@ -10,7 +10,11 @@
 @class EGShaderProgram;
 @class EGShader;
 @class EGShaderAttribute;
-@class EGShaderUniform;
+@class EGShaderUniformMat4;
+@class EGShaderUniformVec4;
+@class EGShaderUniformVec3;
+@class EGShaderUniformF4;
+@class EGShaderUniformI4;
 @class EGShaderSystem;
 @protocol EGShaderTextBuilder;
 
@@ -29,7 +33,6 @@
 - (void)clear;
 - (void)applyDraw:(void(^)())draw;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
-- (EGShaderUniform*)uniformForName:(NSString*)name;
 + (NSInteger)version;
 + (ODClassType*)type;
 @end
@@ -47,8 +50,12 @@
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb indexRef:(CNVoidRefArray)indexRef mode:(unsigned int)mode;
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb mode:(unsigned int)mode;
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(id)param;
+- (EGShaderUniformMat4*)uniformMat4Name:(NSString*)name;
+- (EGShaderUniformVec4*)uniformVec4Name:(NSString*)name;
+- (EGShaderUniformVec3*)uniformVec3Name:(NSString*)name;
+- (EGShaderUniformF4*)uniformF4Name:(NSString*)name;
+- (EGShaderUniformI4*)uniformI4Name:(NSString*)name;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
-- (EGShaderUniform*)uniformForName:(NSString*)name;
 + (ODClassType*)type;
 @end
 
@@ -65,17 +72,57 @@
 @end
 
 
-@interface EGShaderUniform : NSObject
+@interface EGShaderUniformMat4 : NSObject
 @property (nonatomic, readonly) GLuint handle;
 
-+ (id)shaderUniformWithHandle:(GLuint)handle;
++ (id)shaderUniformMat4WithHandle:(GLuint)handle;
 - (id)initWithHandle:(GLuint)handle;
 - (ODClassType*)type;
-- (void)setMatrix:(GEMat4*)matrix;
-- (void)setVec4:(GEVec4)vec4;
-- (void)setVec3:(GEVec3)vec3;
-- (void)setF4:(float)f4;
-- (void)setI4:(int)i4;
+- (void)applyMatrix:(GEMat4*)matrix;
++ (ODClassType*)type;
+@end
+
+
+@interface EGShaderUniformVec4 : NSObject
+@property (nonatomic, readonly) GLuint handle;
+
++ (id)shaderUniformVec4WithHandle:(GLuint)handle;
+- (id)initWithHandle:(GLuint)handle;
+- (ODClassType*)type;
+- (void)applyVec4:(GEVec4)vec4;
++ (ODClassType*)type;
+@end
+
+
+@interface EGShaderUniformVec3 : NSObject
+@property (nonatomic, readonly) GLuint handle;
+
++ (id)shaderUniformVec3WithHandle:(GLuint)handle;
+- (id)initWithHandle:(GLuint)handle;
+- (ODClassType*)type;
+- (void)applyVec3:(GEVec3)vec3;
++ (ODClassType*)type;
+@end
+
+
+@interface EGShaderUniformF4 : NSObject
+@property (nonatomic, readonly) GLuint handle;
+
++ (id)shaderUniformF4WithHandle:(GLuint)handle;
+- (id)initWithHandle:(GLuint)handle;
+- (ODClassType*)type;
+- (void)applyF4:(float)f4;
++ (ODClassType*)type;
+@end
+
+
+@interface EGShaderUniformI4 : NSObject
+@property (nonatomic, readonly) GLuint handle;
+
++ (id)shaderUniformI4WithHandle:(GLuint)handle;
+- (id)initWithHandle:(GLuint)handle;
+- (ODClassType*)type;
+- (void)applyI4:(int)i4;
 + (ODClassType*)type;
 @end
 

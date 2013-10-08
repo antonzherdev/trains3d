@@ -53,10 +53,10 @@ typedef struct EGBillboardBufferData EGBillboardBufferData;
 @property (nonatomic, readonly) EGShaderAttribute* modelSlot;
 @property (nonatomic, readonly) id uvSlot;
 @property (nonatomic, readonly) EGShaderAttribute* colorSlot;
-@property (nonatomic, readonly) EGShaderUniform* colorUniform;
-@property (nonatomic, readonly) EGShaderUniform* alphaTestLevelUniform;
-@property (nonatomic, readonly) EGShaderUniform* wcUniform;
-@property (nonatomic, readonly) EGShaderUniform* pUniform;
+@property (nonatomic, readonly) EGShaderUniformVec4* colorUniform;
+@property (nonatomic, readonly) EGShaderUniformF4* alphaTestLevelUniform;
+@property (nonatomic, readonly) EGShaderUniformMat4* wcUniform;
+@property (nonatomic, readonly) EGShaderUniformMat4* pUniform;
 
 + (id)billboardShaderWithProgram:(EGShaderProgram*)program texture:(BOOL)texture shadow:(BOOL)shadow;
 - (id)initWithProgram:(EGShaderProgram*)program texture:(BOOL)texture shadow:(BOOL)shadow;

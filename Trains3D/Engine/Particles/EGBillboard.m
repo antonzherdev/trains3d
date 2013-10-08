@@ -246,10 +246,10 @@ static ODClassType* _EGBillboardShaderBuilder_type;
     EGShaderAttribute* _modelSlot;
     id _uvSlot;
     EGShaderAttribute* _colorSlot;
-    EGShaderUniform* _colorUniform;
-    EGShaderUniform* _alphaTestLevelUniform;
-    EGShaderUniform* _wcUniform;
-    EGShaderUniform* _pUniform;
+    EGShaderUniformVec4* _colorUniform;
+    EGShaderUniformF4* _alphaTestLevelUniform;
+    EGShaderUniformMat4* _wcUniform;
+    EGShaderUniformMat4* _pUniform;
 }
 static CNLazy* _EGBillboardShader__lazy_instanceForColor;
 static CNLazy* _EGBillboardShader__lazy_instanceForTexture;
@@ -280,10 +280,10 @@ static ODClassType* _EGBillboardShader_type;
         _modelSlot = [self attributeForName:@"model"];
         _uvSlot = ((_texture) ? [CNOption applyValue:[self attributeForName:@"vertexUV"]] : [CNOption none]);
         _colorSlot = [self attributeForName:@"vertexColor"];
-        _colorUniform = [self uniformForName:@"color"];
-        _alphaTestLevelUniform = [self uniformForName:@"alphaTestLevel"];
-        _wcUniform = [self uniformForName:@"wc"];
-        _pUniform = [self uniformForName:@"p"];
+        _colorUniform = [self uniformVec4Name:@"color"];
+        _alphaTestLevelUniform = [self uniformF4Name:@"alphaTestLevel"];
+        _wcUniform = [self uniformMat4Name:@"wc"];
+        _pUniform = [self uniformMat4Name:@"p"];
     }
     
     return self;
@@ -326,16 +326,16 @@ static ODClassType* _EGBillboardShader_type;
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
     [_modelSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.model))];
     [_colorSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:4 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.color))];
-    [_wcUniform setMatrix:[EGGlobal.matrix.value wc]];
-    [_pUniform setMatrix:EGGlobal.matrix.value.p];
-    [_alphaTestLevelUniform setF4:param.alphaTestLevel];
+    [_wcUniform applyMatrix:[EGGlobal.matrix.value wc]];
+    [_pUniform applyMatrix:EGGlobal.matrix.value.p];
+    [_alphaTestLevelUniform applyF4:param.alphaTestLevel];
     if(_texture) {
         [_uvSlot forEach:^void(EGShaderAttribute* _) {
             [_ setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
         }];
         [((EGTexture*)([param.texture get])) bind];
     }
-    [_colorUniform setVec4:param.color];
+    [_colorUniform applyVec4:param.color];
 }
 
 - (ODClassType*)type {

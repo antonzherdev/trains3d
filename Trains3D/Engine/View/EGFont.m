@@ -479,7 +479,7 @@ static ODClassType* _EGFontShaderBuilder_type;
 @implementation EGFontShader{
     EGShaderAttribute* _uvSlot;
     EGShaderAttribute* _positionSlot;
-    EGShaderUniform* _colorUniform;
+    EGShaderUniformVec4* _colorUniform;
 }
 static EGFontShader* _EGFontShader_instance;
 static ODClassType* _EGFontShader_type;
@@ -496,7 +496,7 @@ static ODClassType* _EGFontShader_type;
     if(self) {
         _uvSlot = [self attributeForName:@"vertexUV"];
         _positionSlot = [self attributeForName:@"position"];
-        _colorUniform = [self uniformForName:@"color"];
+        _colorUniform = [self uniformVec4Name:@"color"];
     }
     
     return self;
@@ -512,7 +512,7 @@ static ODClassType* _EGFontShader_type;
     [param.texture bind];
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
     [_uvSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
-    [_colorUniform setVec4:param.color];
+    [_colorUniform applyVec4:param.color];
 }
 
 - (ODClassType*)type {

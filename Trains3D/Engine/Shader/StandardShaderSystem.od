@@ -139,43 +139,43 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
     val normalSlot : ShaderAttribute? = if(key.directLightCount > 0) attributeFor("normal") else nil
     val uvSlot : ShaderAttribute? = if(key.texture) attributeFor("vertexUV") else nil
 
-    val diffuseTexture : ShaderUniform? = if(key.texture) uniformFor("diffuseTexture") else nil
-    val ambientColor : ShaderUniform = uniformFor("ambientColor")
-    val specularColor : ShaderUniform = uniformFor("specularColor")
-    val specularSize : ShaderUniform = uniformFor("specularSize")
-    val diffuseColorUniform : ShaderUniform = uniformFor("diffuseColor")
-    val mwcpUniform : ShaderUniform = uniformFor("mwcp")
-    val mwcUniform : ShaderUniform? = if(key.directLightCount > 0) uniformFor("mwc") else nil
+    val diffuseTexture : ShaderUniformI4? = if(key.texture) uniformI4("diffuseTexture") else nil
+    val ambientColor = uniformVec4("ambientColor")
+    val specularColor = uniformVec4("specularColor")
+    val specularSize = uniformF4("specularSize")
+    val diffuseColorUniform = uniformVec4("diffuseColor")
+    val mwcpUniform = uniformMat4("mwcp")
+    val mwcUniform : ShaderUniformMat4? = if(key.directLightCount > 0) uniformMat4("mwc") else nil
 
-    val directLightDirections : [ShaderUniform] = key.directLightCount.range.chain.map{i -> uniformFor("dirLightDirection$i")}.toArray
-    val directLightColors : [ShaderUniform] = key.directLightCount.range.chain.map{i -> uniformFor("dirLightColor$i")}.toArray
-    val directLightShadows : [ShaderUniform] = key.directLightWithShadowsCount.range.chain.map{i -> uniformFor("dirLightShadow$i")}.toArray
-    val directLightDepthMwcp : [ShaderUniform] = key.directLightWithShadowsCount.range.chain.map{i -> uniformFor("dirLightDepthMwcp$i")}.toArray
+    val directLightDirections : [ShaderUniformVec3] = key.directLightCount.range.chain.map{i -> uniformVec3("dirLightDirection$i")}.toArray
+    val directLightColors : [ShaderUniformVec4] = key.directLightCount.range.chain.map{i -> uniformVec4("dirLightColor$i")}.toArray
+    val directLightShadows : [ShaderUniformI4] = key.directLightWithShadowsCount.range.chain.map{i -> uniformI4("dirLightShadow$i")}.toArray
+    val directLightDepthMwcp : [ShaderUniformMat4] = key.directLightWithShadowsCount.range.chain.map{i -> uniformMat4("dirLightDepthMwcp$i")}.toArray
 
     def load(vbDesc :VertexBufferDesc<_>, param : StandardMaterial) {
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.position)
-        mwcpUniform.set(matrix = matrix.value.mwcp)
+        mwcpUniform(matrix = matrix.value.mwcp)
         if(key.texture) {
             uvSlot.get.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.uv)
             param.diffuse.texture.get.bind
-            diffuseTexture.get.set(i4 = 0)
+            diffuseTexture.get.apply(i4 = 0)
         }
-        diffuseColorUniform.set(vec4 = param.diffuse.color)
-        specularColor.set(vec4 = param.specularColor)
-        specularSize.set(f4 = param.specularSize)
+        diffuseColorUniform(vec4 = param.diffuse.color)
+        specularColor(vec4 = param.specularColor)
+        specularSize(f4 = param.specularSize)
         val env = context.environment
-        ambientColor.set(vec4 = env.ambientColor)
+        ambientColor(vec4 = env.ambientColor)
         if(key.directLightCount > 0) {
-            mwcUniform.get.set(matrix = context.matrixStack.value.mwc)
+            mwcUniform.get(matrix = context.matrixStack.value.mwc)
             normalSlot.get.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.normal)
             var i : uint = 0
             if(key.directLightWithShadowsCount > 0) {
                 env.lights.chain.filter(_.is<DirectLight> && _.hasShadows).for { light ->
                     val dir = matrix.value.wc.mul(vec3 = light.cast<DirectLight>.direction, 0).xyz
-                    directLightDirections[i].set(vec3 = dir.normalize)
-                    directLightColors[i].set(vec4 = light.color)
-                    directLightDepthMwcp[i].set(matrix = light.shadowMap.biasDepthCp * matrix.mw)
-                    directLightShadows[i].set(i4 = i + 1)
+                    directLightDirections[i].apply(vec3 = dir.normalize)
+                    directLightColors[i].apply(vec4 = light.color)
+                    directLightDepthMwcp[i].apply(matrix = light.shadowMap.biasDepthCp * matrix.mw)
+                    directLightShadows[i].apply(i4 = i + 1)
                     glActiveTexture(GL_TEXTURE0 + i + 1)
                     light.shadowMap.texture.bind
                     glActiveTexture(GL_TEXTURE0)
@@ -185,8 +185,8 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
             if(key.directLightWithoutShadowsCount > 0) {
                 env.lights.chain.filter(_.is<DirectLight> && (!_.hasShadows || !context.considerShadows)).for { light ->
                     val dir = matrix.value.wc.mul(vec3 = light.cast<DirectLight>.direction, 0).xyz
-                    directLightDirections[i].set(vec3 = dir.normalize)
-                    directLightColors[i].set(vec4 = light.color)
+                    directLightDirections[i].apply(vec3 = dir.normalize)
+                    directLightColors[i].apply(vec4 = light.color)
                 }
             }
         }

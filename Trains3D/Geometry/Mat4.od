@@ -4,6 +4,7 @@ stub class mat4 {
     def array : float4[16]
 
     static def identity : mat4
+    static def null : mat4
     def inverse : mat4
     def mul(matrix : mat4) : mat4
     def mul(vec4 : vec4) : vec4

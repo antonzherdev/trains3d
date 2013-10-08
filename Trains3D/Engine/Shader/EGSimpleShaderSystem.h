@@ -40,8 +40,8 @@
 
 @interface EGSimpleColorShader : EGShader
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
-@property (nonatomic, readonly) EGShaderUniform* colorUniform;
-@property (nonatomic, readonly) EGShaderUniform* mvpUniform;
+@property (nonatomic, readonly) EGShaderUniformVec4* colorUniform;
+@property (nonatomic, readonly) EGShaderUniformMat4* mvpUniform;
 
 + (id)simpleColorShader;
 - (id)init;
@@ -54,8 +54,8 @@
 @interface EGSimpleTextureShader : EGShader
 @property (nonatomic, readonly) EGShaderAttribute* uvSlot;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
-@property (nonatomic, readonly) EGShaderUniform* mvpUniform;
-@property (nonatomic, readonly) EGShaderUniform* colorUniform;
+@property (nonatomic, readonly) EGShaderUniformMat4* mvpUniform;
+@property (nonatomic, readonly) EGShaderUniformVec4* colorUniform;
 
 + (id)simpleTextureShader;
 - (id)init;

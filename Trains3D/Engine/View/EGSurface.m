@@ -392,7 +392,7 @@ static ODClassType* _EGViewportShaderBuilder_type;
 
 @implementation EGViewportSurfaceShader{
     EGShaderAttribute* _positionSlot;
-    EGShaderUniform* _zUniform;
+    EGShaderUniformF4* _zUniform;
 }
 static EGViewportSurfaceShader* _EGViewportSurfaceShader_instance;
 static ODClassType* _EGViewportSurfaceShader_type;
@@ -406,8 +406,8 @@ static ODClassType* _EGViewportSurfaceShader_type;
 - (id)init {
     self = [super initWithProgram:[[EGViewportShaderBuilder viewportShaderBuilder] program]];
     if(self) {
-        _positionSlot = [self.program attributeForName:@"position"];
-        _zUniform = [self.program uniformForName:@"z"];
+        _positionSlot = [self attributeForName:@"position"];
+        _zUniform = [self uniformF4Name:@"z"];
     }
     
     return self;
@@ -422,7 +422,7 @@ static ODClassType* _EGViewportSurfaceShader_type;
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGViewportSurfaceShaderParam*)param {
     [param.texture bind];
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.model))];
-    [_zUniform setF4:param.z];
+    [_zUniform applyF4:param.z];
 }
 
 - (ODClassType*)type {

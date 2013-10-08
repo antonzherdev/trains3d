@@ -55,11 +55,6 @@ class ShaderProgram(handle : GLuint) {
         val ret = ShaderAttribute(h)
         ret
     }
-    def uniformFor(name : string ) : ShaderUniform = {
-        val h = egGetUniformLocation(handle, name)
-        if(h < 0) throw "Could not found attribute for name " + name
-        ShaderUniform(h)
-    }
 
     static val version : int = egGLSLVersion
 }
@@ -107,8 +102,18 @@ class Shader<P>(program : ShaderProgram) {
 
     def load(vbDesc : VertexBufferDesc<_>, param : P)
 
+    private def uniform(name : string) = {
+        val h = egGetUniformLocation(program.handle, name)
+        if(h < 0) throw "Could not found attribute for name " + name
+        h
+    }
+
+    def uniformMat4(name : string ) = ShaderUniformMat4(uniform(name))
+    def uniformVec4(name : string ) = ShaderUniformVec4(uniform(name))
+    def uniformVec3(name : string ) = ShaderUniformVec3(uniform(name))
+    def uniformF4(name : string ) = ShaderUniformF4(uniform(name))
+    def uniformI4(name : string ) = ShaderUniformI4(uniform(name))
     def attributeFor(name : string ) = program.attributeFor(name)
-    def uniformFor(name : string ) = program.uniformFor(name)
 }
 
 class ShaderAttribute(handle : GLuint) {
@@ -121,22 +126,54 @@ class ShaderAttribute(handle : GLuint) {
     }
 }
 
-class ShaderUniform(handle : GLuint) {
-    def set(matrix : mat4) {
-        glUniformMatrix4fv(handle, 1, GL_FALSE, matrix.array)
-    }
-    def set(vec4 : vec4) {
-        egUniformVec4(handle, vec4)
-    }
-    def set(vec3 : vec3) {
-        egUniformVec3(handle, vec3)
-    }
-    def set(f4 : float4) {
-        glUniform1f(handle, f4)
-    }
+class ShaderUniformMat4(handle : GLuint) {
+    private var _last = mat4.null
 
-    def set(i4 : int4) {
-        glUniform1i(handle, i4)
+    def apply(matrix : mat4) {
+        if(matrix != _last) {
+            _last = matrix
+            glUniformMatrix4fv(handle, 1, GL_FALSE, matrix.array)
+        }
+    }
+}
+
+class ShaderUniformVec4(handle : GLuint) {
+    private var _last = vec4(0, 0, 0, 0)
+    def apply(vec4 : vec4) {
+        if(vec4 != _last) {
+            egUniformVec4(handle, vec4)
+            _last = vec4
+        }
+    }
+}
+
+class ShaderUniformVec3(handle : GLuint) {
+    private var _last = vec3(0, 0, 0)
+    def apply(vec3 : vec3) {
+        if(vec3 != _last) {
+            egUniformVec3(handle, vec3)
+            _last = vec3
+        }
+    }
+}
+
+class ShaderUniformF4(handle : GLuint) {
+    private var _last : float4 = 0
+    def apply(f4 : float4) {
+        if(f4 != _last) {
+            glUniform1f(handle, f4)
+            _last = f4
+        }
+    }
+}
+
+class ShaderUniformI4(handle : GLuint) {
+    private var _last : int4 = 0
+    def apply(i4 : int4) {
+        if(i4 != _last) {
+            glUniform1i(handle, i4)
+            _last = i4
+        }
     }
 }
 

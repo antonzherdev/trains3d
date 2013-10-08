@@ -69,7 +69,7 @@
 
 @interface EGViewportSurfaceShader : EGShader
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
-@property (nonatomic, readonly) EGShaderUniform* zUniform;
+@property (nonatomic, readonly) EGShaderUniformF4* zUniform;
 
 + (id)viewportSurfaceShader;
 - (id)init;

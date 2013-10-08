@@ -96,7 +96,7 @@ ODPType* egTextAlignmentType();
 @interface EGFontShader : EGShader
 @property (nonatomic, readonly) EGShaderAttribute* uvSlot;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
-@property (nonatomic, readonly) EGShaderUniform* colorUniform;
+@property (nonatomic, readonly) EGShaderUniformVec4* colorUniform;
 
 + (id)fontShader;
 - (id)init;

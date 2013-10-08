@@ -74,7 +74,7 @@
 @property (nonatomic, readonly) BOOL texture;
 @property (nonatomic, readonly) id uvSlot;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
-@property (nonatomic, readonly) EGShaderUniform* mvpUniform;
+@property (nonatomic, readonly) EGShaderUniformMat4* mvpUniform;
 @property (nonatomic, readonly) id alphaTestLevelUniform;
 
 + (id)shadowShaderWithTexture:(BOOL)texture program:(EGShaderProgram*)program;
@@ -124,7 +124,7 @@
 @interface EGShadowDrawShader : EGShader
 @property (nonatomic, readonly) EGShadowDrawShaderKey* key;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
-@property (nonatomic, readonly) EGShaderUniform* mwcpUniform;
+@property (nonatomic, readonly) EGShaderUniformMat4* mwcpUniform;
 @property (nonatomic, readonly) id<CNSeq> directLightPercents;
 @property (nonatomic, readonly) id<CNSeq> directLightDepthMwcp;
 @property (nonatomic, readonly) id<CNSeq> directLightShadows;

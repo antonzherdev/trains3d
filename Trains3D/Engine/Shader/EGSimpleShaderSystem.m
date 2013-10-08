@@ -220,8 +220,8 @@ static ODClassType* _EGSimpleShaderBuilder_type;
 
 @implementation EGSimpleColorShader{
     EGShaderAttribute* _positionSlot;
-    EGShaderUniform* _colorUniform;
-    EGShaderUniform* _mvpUniform;
+    EGShaderUniformVec4* _colorUniform;
+    EGShaderUniformMat4* _mvpUniform;
 }
 static ODClassType* _EGSimpleColorShader_type;
 @synthesize positionSlot = _positionSlot;
@@ -236,8 +236,8 @@ static ODClassType* _EGSimpleColorShader_type;
     self = [super initWithProgram:[[EGSimpleShaderBuilder simpleShaderBuilderWithTexture:NO] program]];
     if(self) {
         _positionSlot = [self attributeForName:@"position"];
-        _colorUniform = [self uniformForName:@"color"];
-        _mvpUniform = [self uniformForName:@"mvp"];
+        _colorUniform = [self uniformVec4Name:@"color"];
+        _mvpUniform = [self uniformMat4Name:@"mvp"];
     }
     
     return self;
@@ -250,8 +250,8 @@ static ODClassType* _EGSimpleColorShader_type;
 
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
-    [_mvpUniform setMatrix:[EGGlobal.matrix.value mwcp]];
-    [_colorUniform setVec4:param.color];
+    [_mvpUniform applyMatrix:[EGGlobal.matrix.value mwcp]];
+    [_colorUniform applyVec4:param.color];
 }
 
 - (ODClassType*)type {
@@ -288,8 +288,8 @@ static ODClassType* _EGSimpleColorShader_type;
 @implementation EGSimpleTextureShader{
     EGShaderAttribute* _uvSlot;
     EGShaderAttribute* _positionSlot;
-    EGShaderUniform* _mvpUniform;
-    EGShaderUniform* _colorUniform;
+    EGShaderUniformMat4* _mvpUniform;
+    EGShaderUniformVec4* _colorUniform;
 }
 static ODClassType* _EGSimpleTextureShader_type;
 @synthesize uvSlot = _uvSlot;
@@ -306,8 +306,8 @@ static ODClassType* _EGSimpleTextureShader_type;
     if(self) {
         _uvSlot = [self attributeForName:@"vertexUV"];
         _positionSlot = [self attributeForName:@"position"];
-        _mvpUniform = [self uniformForName:@"mvp"];
-        _colorUniform = [self uniformForName:@"color"];
+        _mvpUniform = [self uniformMat4Name:@"mvp"];
+        _colorUniform = [self uniformVec4Name:@"color"];
     }
     
     return self;
@@ -320,9 +320,9 @@ static ODClassType* _EGSimpleTextureShader_type;
 
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
-    [_mvpUniform setMatrix:[EGGlobal.matrix.value mwcp]];
+    [_mvpUniform applyMatrix:[EGGlobal.matrix.value mwcp]];
     [_uvSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
-    [_colorUniform setVec4:param.color];
+    [_colorUniform applyVec4:param.color];
     [((EGTexture*)([param.texture get])) bind];
 }
 

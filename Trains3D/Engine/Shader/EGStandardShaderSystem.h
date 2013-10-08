@@ -73,11 +73,11 @@
 @property (nonatomic, readonly) id normalSlot;
 @property (nonatomic, readonly) id uvSlot;
 @property (nonatomic, readonly) id diffuseTexture;
-@property (nonatomic, readonly) EGShaderUniform* ambientColor;
-@property (nonatomic, readonly) EGShaderUniform* specularColor;
-@property (nonatomic, readonly) EGShaderUniform* specularSize;
-@property (nonatomic, readonly) EGShaderUniform* diffuseColorUniform;
-@property (nonatomic, readonly) EGShaderUniform* mwcpUniform;
+@property (nonatomic, readonly) EGShaderUniformVec4* ambientColor;
+@property (nonatomic, readonly) EGShaderUniformVec4* specularColor;
+@property (nonatomic, readonly) EGShaderUniformF4* specularSize;
+@property (nonatomic, readonly) EGShaderUniformVec4* diffuseColorUniform;
+@property (nonatomic, readonly) EGShaderUniformMat4* mwcpUniform;
 @property (nonatomic, readonly) id mwcUniform;
 @property (nonatomic, readonly) id<CNSeq> directLightDirections;
 @property (nonatomic, readonly) id<CNSeq> directLightColors;

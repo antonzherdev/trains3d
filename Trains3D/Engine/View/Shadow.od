@@ -117,15 +117,15 @@ class ShadowShader(texture : bool, program : ShaderProgram) extends Shader<Color
          }"
     val uvSlot : ShaderAttribute? = if(texture) attributeFor("vertexUV") else nil
     val positionSlot : ShaderAttribute = attributeFor("position")
-    val mvpUniform = uniformFor("mwcp")
-    val alphaTestLevelUniform : ShaderUniform? = if(texture) uniformFor("alphaTestLevel") else nil
+    val mvpUniform = uniformMat4("mwcp")
+    val alphaTestLevelUniform : ShaderUniformF4? = if(texture) uniformF4("alphaTestLevel") else nil
 
     def load(vbDesc : VertexBufferDesc<_>, param : ColorSource) {
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.position)
-        mvpUniform.set(matrix = matrix.value.mwcp)
+        mvpUniform(matrix = matrix.value.mwcp)
         if(texture) {
             uvSlot.get.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.uv)
-            alphaTestLevelUniform.get.set(f4 = param.alphaTestLevel)
+            alphaTestLevelUniform.get.apply(f4 = param.alphaTestLevel)
             param.texture.get.bind
         }
     }
@@ -198,22 +198,22 @@ class ShadowDrawShaderKey(directLightCount : uint)  {
 class ShadowDrawShader(key : ShadowDrawShaderKey, program : ShaderProgram) extends Shader<ShadowDrawParam>(program) {
     val positionSlot : ShaderAttribute = attributeFor("position")
 
-    val mwcpUniform : ShaderUniform = uniformFor("mwcp")
+    val mwcpUniform = uniformMat4("mwcp")
 
-    val directLightPercents : [ShaderUniform] = key.directLightCount.range.chain.map{i -> uniformFor("dirLightPercent$i")}.toArray
-    val directLightDepthMwcp : [ShaderUniform] = key.directLightCount.range.chain.map{i -> uniformFor("dirLightDepthMwcp$i")}.toArray
-    val directLightShadows : [ShaderUniform] = key.directLightCount.range.chain.map{i -> uniformFor("dirLightShadow$i")}.toArray
+    val directLightPercents : [ShaderUniformF4] = key.directLightCount.range.chain.map{i -> uniformF4("dirLightPercent$i")}.toArray
+    val directLightDepthMwcp : [ShaderUniformMat4] = key.directLightCount.range.chain.map{i -> uniformMat4("dirLightDepthMwcp$i")}.toArray
+    val directLightShadows : [ShaderUniformI4] = key.directLightCount.range.chain.map{i -> uniformI4("dirLightShadow$i")}.toArray
 
     def load(vbDesc :VertexBufferDesc<_>, param : ShadowDrawParam) {
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.position)
-        mwcpUniform.set(matrix = matrix.value.mwcp)
+        mwcpUniform(matrix = matrix.value.mwcp)
         val env = context.environment
         var i : uint = 0
         env.lights.chain.filter(_.is<DirectLight> && _.hasShadows).for { light ->
             val p : float4 = param.percents(i)
-            directLightPercents[i].set(f4 = p)
-            directLightDepthMwcp[i].set(matrix = light.shadowMap.biasDepthCp * matrix.mw)
-            directLightShadows[i].set(i4 = i + 1)
+            directLightPercents[i].apply(f4 = p)
+            directLightDepthMwcp[i].apply(matrix = light.shadowMap.biasDepthCp * matrix.mw)
+            directLightShadows[i].apply(i4 = i + 1)
             glActiveTexture(GL_TEXTURE0 + i + 1)
             light.shadowMap.texture.bind
             glActiveTexture(GL_TEXTURE0)

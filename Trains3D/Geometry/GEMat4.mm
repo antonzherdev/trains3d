@@ -20,6 +20,7 @@ struct GEMat4Impl {
 }
 
 static GEMat4 * _identity;
+static GEMat4 * _null;
 
 - (struct GEMat4Impl *)impl {
     return _impl;
@@ -57,6 +58,9 @@ static GEMat4 * _identity;
     GEMat4Impl * impl = new GEMat4Impl;
     impl->m = glm::mat4(1.0);
     _identity = [GEMat4 matrixWithImpl:impl];
+    impl = new GEMat4Impl;
+    impl->m = glm::mat4(0.0);
+    _null = [GEMat4 matrixWithImpl:impl];
 }
 
 
@@ -100,6 +104,10 @@ static GEMat4 * _identity;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     GEMat4 * o = ((GEMat4 *)(other));
     return memcmp(_impl, o.impl, sizeof(float[16])) == 0;
+}
+
++ (GEMat4 *)null {
+    return _null;
 }
 
 - (float const *)array {

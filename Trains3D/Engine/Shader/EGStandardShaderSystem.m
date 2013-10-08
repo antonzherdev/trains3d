@@ -387,11 +387,11 @@ static ODClassType* _EGStandardShaderKey_type;
     id _normalSlot;
     id _uvSlot;
     id _diffuseTexture;
-    EGShaderUniform* _ambientColor;
-    EGShaderUniform* _specularColor;
-    EGShaderUniform* _specularSize;
-    EGShaderUniform* _diffuseColorUniform;
-    EGShaderUniform* _mwcpUniform;
+    EGShaderUniformVec4* _ambientColor;
+    EGShaderUniformVec4* _specularColor;
+    EGShaderUniformF4* _specularSize;
+    EGShaderUniformVec4* _diffuseColorUniform;
+    EGShaderUniformMat4* _mwcpUniform;
     id _mwcUniform;
     id<CNSeq> _directLightDirections;
     id<CNSeq> _directLightColors;
@@ -427,24 +427,24 @@ static ODClassType* _EGStandardShader_type;
         _positionSlot = [self attributeForName:@"position"];
         _normalSlot = ((_key.directLightCount > 0) ? [CNOption applyValue:[self attributeForName:@"normal"]] : [CNOption none]);
         _uvSlot = ((_key.texture) ? [CNOption applyValue:[self attributeForName:@"vertexUV"]] : [CNOption none]);
-        _diffuseTexture = ((_key.texture) ? [CNOption applyValue:[self uniformForName:@"diffuseTexture"]] : [CNOption none]);
-        _ambientColor = [self uniformForName:@"ambientColor"];
-        _specularColor = [self uniformForName:@"specularColor"];
-        _specularSize = [self uniformForName:@"specularSize"];
-        _diffuseColorUniform = [self uniformForName:@"diffuseColor"];
-        _mwcpUniform = [self uniformForName:@"mwcp"];
-        _mwcUniform = ((_key.directLightCount > 0) ? [CNOption applyValue:[self uniformForName:@"mwc"]] : [CNOption none]);
-        _directLightDirections = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniform*(id i) {
-            return [_weakSelf uniformForName:[NSString stringWithFormat:@"dirLightDirection%@", i]];
+        _diffuseTexture = ((_key.texture) ? [CNOption applyValue:[self uniformI4Name:@"diffuseTexture"]] : [CNOption none]);
+        _ambientColor = [self uniformVec4Name:@"ambientColor"];
+        _specularColor = [self uniformVec4Name:@"specularColor"];
+        _specularSize = [self uniformF4Name:@"specularSize"];
+        _diffuseColorUniform = [self uniformVec4Name:@"diffuseColor"];
+        _mwcpUniform = [self uniformMat4Name:@"mwcp"];
+        _mwcUniform = ((_key.directLightCount > 0) ? [CNOption applyValue:[self uniformMat4Name:@"mwc"]] : [CNOption none]);
+        _directLightDirections = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniformVec3*(id i) {
+            return [_weakSelf uniformVec3Name:[NSString stringWithFormat:@"dirLightDirection%@", i]];
         }] toArray];
-        _directLightColors = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniform*(id i) {
-            return [_weakSelf uniformForName:[NSString stringWithFormat:@"dirLightColor%@", i]];
+        _directLightColors = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniformVec4*(id i) {
+            return [_weakSelf uniformVec4Name:[NSString stringWithFormat:@"dirLightColor%@", i]];
         }] toArray];
-        _directLightShadows = [[[uintRange(_key.directLightWithShadowsCount) chain] map:^EGShaderUniform*(id i) {
-            return [_weakSelf uniformForName:[NSString stringWithFormat:@"dirLightShadow%@", i]];
+        _directLightShadows = [[[uintRange(_key.directLightWithShadowsCount) chain] map:^EGShaderUniformI4*(id i) {
+            return [_weakSelf uniformI4Name:[NSString stringWithFormat:@"dirLightShadow%@", i]];
         }] toArray];
-        _directLightDepthMwcp = [[[uintRange(_key.directLightWithShadowsCount) chain] map:^EGShaderUniform*(id i) {
-            return [_weakSelf uniformForName:[NSString stringWithFormat:@"dirLightDepthMwcp%@", i]];
+        _directLightDepthMwcp = [[[uintRange(_key.directLightWithShadowsCount) chain] map:^EGShaderUniformMat4*(id i) {
+            return [_weakSelf uniformMat4Name:[NSString stringWithFormat:@"dirLightDepthMwcp%@", i]];
         }] toArray];
     }
     
@@ -458,29 +458,29 @@ static ODClassType* _EGStandardShader_type;
 
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGStandardMaterial*)param {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
-    [_mwcpUniform setMatrix:[EGGlobal.matrix.value mwcp]];
+    [_mwcpUniform applyMatrix:[EGGlobal.matrix.value mwcp]];
     if(_key.texture) {
         [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
         [((EGTexture*)([param.diffuse.texture get])) bind];
-        [((EGShaderUniform*)([_diffuseTexture get])) setI4:0];
+        [((EGShaderUniformI4*)([_diffuseTexture get])) applyI4:0];
     }
-    [_diffuseColorUniform setVec4:param.diffuse.color];
-    [_specularColor setVec4:param.specularColor];
-    [_specularSize setF4:((float)(param.specularSize))];
+    [_diffuseColorUniform applyVec4:param.diffuse.color];
+    [_specularColor applyVec4:param.specularColor];
+    [_specularSize applyF4:((float)(param.specularSize))];
     EGEnvironment* env = EGGlobal.context.environment;
-    [_ambientColor setVec4:env.ambientColor];
+    [_ambientColor applyVec4:env.ambientColor];
     if(_key.directLightCount > 0) {
-        [((EGShaderUniform*)([_mwcUniform get])) setMatrix:[EGGlobal.context.matrixStack.value mwc]];
+        [((EGShaderUniformMat4*)([_mwcUniform get])) applyMatrix:[EGGlobal.context.matrixStack.value mwc]];
         [((EGShaderAttribute*)([_normalSlot get])) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.normal))];
         __block NSUInteger i = 0;
         if(_key.directLightWithShadowsCount > 0) [[[env.lights chain] filter:^BOOL(EGLight* _) {
             return [_ isKindOfClass:[EGDirectLight class]] && _.hasShadows;
         }] forEach:^void(EGLight* light) {
             GEVec3 dir = geVec4Xyz([[EGGlobal.matrix.value wc] mulVec3:((EGDirectLight*)(light)).direction w:0.0]);
-            [((EGShaderUniform*)([_directLightDirections applyIndex:i])) setVec3:geVec3Normalize(dir)];
-            [((EGShaderUniform*)([_directLightColors applyIndex:i])) setVec4:light.color];
-            [((EGShaderUniform*)([_directLightDepthMwcp applyIndex:i])) setMatrix:[[light shadowMap].biasDepthCp mulMatrix:[EGGlobal.matrix mw]]];
-            [((EGShaderUniform*)([_directLightShadows applyIndex:i])) setI4:((int)(i + 1))];
+            [((EGShaderUniformVec3*)([_directLightDirections applyIndex:i])) applyVec3:geVec3Normalize(dir)];
+            [((EGShaderUniformVec4*)([_directLightColors applyIndex:i])) applyVec4:light.color];
+            [((EGShaderUniformMat4*)([_directLightDepthMwcp applyIndex:i])) applyMatrix:[[light shadowMap].biasDepthCp mulMatrix:[EGGlobal.matrix mw]]];
+            [((EGShaderUniformI4*)([_directLightShadows applyIndex:i])) applyI4:((int)(i + 1))];
             glActiveTexture(GL_TEXTURE0 + i + 1);
             [[light shadowMap].texture bind];
             glActiveTexture(GL_TEXTURE0);
@@ -490,8 +490,8 @@ static ODClassType* _EGStandardShader_type;
             return [_ isKindOfClass:[EGDirectLight class]] && (!(_.hasShadows) || !(EGGlobal.context.considerShadows));
         }] forEach:^void(EGLight* light) {
             GEVec3 dir = geVec4Xyz([[EGGlobal.matrix.value wc] mulVec3:((EGDirectLight*)(light)).direction w:0.0]);
-            [((EGShaderUniform*)([_directLightDirections applyIndex:i])) setVec3:geVec3Normalize(dir)];
-            [((EGShaderUniform*)([_directLightColors applyIndex:i])) setVec4:light.color];
+            [((EGShaderUniformVec3*)([_directLightDirections applyIndex:i])) applyVec3:geVec3Normalize(dir)];
+            [((EGShaderUniformVec4*)([_directLightColors applyIndex:i])) applyVec4:light.color];
         }];
     }
 }
