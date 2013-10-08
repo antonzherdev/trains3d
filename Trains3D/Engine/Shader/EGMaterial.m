@@ -304,69 +304,90 @@ static ODClassType* _EGMeshModel_type;
 @end
 
 
-NSString* EGBlendFunctionDescription(EGBlendFunction self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<EGBlendFunction: "];
-    [description appendFormat:@"source=%d", self.source];
-    [description appendFormat:@", destination=%d", self.destination];
-    [description appendString:@">"];
-    return description;
+@implementation EGBlendFunction{
+    unsigned int _source;
+    unsigned int _destination;
 }
-void egBlendFunctionApplyDraw(EGBlendFunction self, void(^draw)()) {
-    glEnable(GL_BLEND);
-    glBlendFunc(self.source, self.destination);
-    ((void(^)())(draw))();
-    glDisable(GL_BLEND);
-}
-EGBlendFunction egBlendFunctionStandard() {
-    static EGBlendFunction _ret = (EGBlendFunction){((unsigned int)(GL_SRC_ALPHA)), ((unsigned int)(GL_ONE_MINUS_SRC_ALPHA))};
-    return _ret;
-}
-EGBlendFunction egBlendFunctionPremultiplied() {
-    static EGBlendFunction _ret = (EGBlendFunction){((unsigned int)(GL_ONE)), ((unsigned int)(GL_ONE_MINUS_SRC_ALPHA))};
-    return _ret;
-}
-ODPType* egBlendFunctionType() {
-    static ODPType* _ret = nil;
-    if(_ret == nil) _ret = [ODPType typeWithCls:[EGBlendFunctionWrap class] name:@"EGBlendFunction" size:sizeof(EGBlendFunction) wrap:^id(void* data, NSUInteger i) {
-        return wrap(EGBlendFunction, ((EGBlendFunction*)(data))[i]);
-    }];
-    return _ret;
-}
-@implementation EGBlendFunctionWrap{
-    EGBlendFunction _value;
-}
-@synthesize value = _value;
+static EGBlendFunction* _EGBlendFunction_standard;
+static EGBlendFunction* _EGBlendFunction_premultiplied;
+static EGBlendFunction* _EGBlendFunction__lastFunction;
+static ODClassType* _EGBlendFunction_type;
+@synthesize source = _source;
+@synthesize destination = _destination;
 
-+ (id)wrapWithValue:(EGBlendFunction)value {
-    return [[EGBlendFunctionWrap alloc] initWithValue:value];
++ (id)blendFunctionWithSource:(unsigned int)source destination:(unsigned int)destination {
+    return [[EGBlendFunction alloc] initWithSource:source destination:destination];
 }
 
-- (id)initWithValue:(EGBlendFunction)value {
+- (id)initWithSource:(unsigned int)source destination:(unsigned int)destination {
     self = [super init];
-    if(self) _value = value;
+    if(self) {
+        _source = source;
+        _destination = destination;
+    }
+    
     return self;
 }
 
-- (NSString*)description {
-    return EGBlendFunctionDescription(_value);
++ (void)initialize {
+    [super initialize];
+    _EGBlendFunction_type = [ODClassType classTypeWithCls:[EGBlendFunction class]];
+    _EGBlendFunction_standard = [EGBlendFunction blendFunctionWithSource:((unsigned int)(GL_SRC_ALPHA)) destination:((unsigned int)(GL_ONE_MINUS_SRC_ALPHA))];
+    _EGBlendFunction_premultiplied = [EGBlendFunction blendFunctionWithSource:((unsigned int)(GL_ONE)) destination:((unsigned int)(GL_ONE_MINUS_SRC_ALPHA))];
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGBlendFunctionWrap* o = ((EGBlendFunctionWrap*)(other));
-    return EGBlendFunctionEq(_value, o.value);
+- (void)applyDraw:(void(^)())draw {
+    glEnable(GL_BLEND);
+    if(!([_EGBlendFunction__lastFunction isEqual:self])) {
+        glBlendFunc(_source, _destination);
+        _EGBlendFunction__lastFunction = self;
+    }
+    ((void(^)())(draw))();
+    glDisable(GL_BLEND);
 }
 
-- (NSUInteger)hash {
-    return EGBlendFunctionHash(_value);
+- (ODClassType*)type {
+    return [EGBlendFunction type];
+}
+
++ (EGBlendFunction*)standard {
+    return _EGBlendFunction_standard;
+}
+
++ (EGBlendFunction*)premultiplied {
+    return _EGBlendFunction_premultiplied;
+}
+
++ (ODClassType*)type {
+    return _EGBlendFunction_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
 
-@end
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGBlendFunction* o = ((EGBlendFunction*)(other));
+    return self.source == o.source && self.destination == o.destination;
+}
 
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.source;
+    hash = hash * 31 + self.destination;
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"source=%d", self.source];
+    [description appendFormat:@", destination=%d", self.destination];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
 
 

@@ -2,19 +2,20 @@
 #import "EGScene.h"
 #import "EGInput.h"
 #import "GEVec.h"
-#import "EGMaterial.h"
 #import "EGFont.h"
 @class TRLevel;
 @class EGProgress;
 @class EGCounter;
 @class EGGlobal;
 @class EGContext;
+@class EGBlendFunction;
 @class TRScore;
 @class EGSprite;
 @class TRNotifications;
 @class EGDirector;
 @class EGEnvironment;
 @class EGCamera2D;
+@class EGColorSource;
 
 @class TRLevelMenuView;
 @class TRLevelMenuViewRes;

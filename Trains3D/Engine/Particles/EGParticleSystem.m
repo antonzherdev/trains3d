@@ -1,6 +1,7 @@
 #import "EGParticleSystem.h"
 
 #import "EGMesh.h"
+#import "EGMaterial.h"
 #import "GL.h"
 #import "EGShader.h"
 @implementation EGParticleSystem{
@@ -156,7 +157,7 @@ static ODClassType* _EGParticle_type;
 @implementation EGParticleSystemView{
     EGVertexBufferDesc* _vbDesc;
     NSUInteger _maxCount;
-    EGBlendFunction _blendFunc;
+    EGBlendFunction* _blendFunc;
     CNVoidRefArray _vertexArr;
     EGVertexBuffer* _vertexBuffer;
     CNVoidRefArray _indexArr;
@@ -173,11 +174,11 @@ static ODClassType* _EGParticleSystemView_type;
 @synthesize indexBuffer = _indexBuffer;
 @synthesize mesh = _mesh;
 
-+ (id)particleSystemViewWithVbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount blendFunc:(EGBlendFunction)blendFunc {
++ (id)particleSystemViewWithVbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount blendFunc:(EGBlendFunction*)blendFunc {
     return [[EGParticleSystemView alloc] initWithVbDesc:vbDesc maxCount:maxCount blendFunc:blendFunc];
 }
 
-- (id)initWithVbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount blendFunc:(EGBlendFunction)blendFunc {
+- (id)initWithVbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount blendFunc:(EGBlendFunction*)blendFunc {
     self = [super init];
     __weak EGParticleSystemView* _weakSelf = self;
     if(self) {
@@ -228,7 +229,7 @@ static ODClassType* _EGParticleSystemView_type;
     if([particles isEmpty]) return ;
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
-    egBlendFunctionApplyDraw(_blendFunc, ^void() {
+    [_blendFunc applyDraw:^void() {
         __block NSInteger i = 0;
         __block CNVoidRefArray vertexPointer = _vertexArr;
         [particles forEach:^void(id particle) {
@@ -239,7 +240,7 @@ static ODClassType* _EGParticleSystemView_type;
         NSUInteger vc = [self vertexCount];
         [_vertexBuffer setArray:_vertexArr usage:GL_DYNAMIC_DRAW];
         [[self shader] drawParam:[self material] mesh:_mesh start:0 count:n * 3 * (vc - 2)];
-    });
+    }];
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
 }
@@ -265,14 +266,14 @@ static ODClassType* _EGParticleSystemView_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGParticleSystemView* o = ((EGParticleSystemView*)(other));
-    return [self.vbDesc isEqual:o.vbDesc] && self.maxCount == o.maxCount && EGBlendFunctionEq(self.blendFunc, o.blendFunc);
+    return [self.vbDesc isEqual:o.vbDesc] && self.maxCount == o.maxCount && [self.blendFunc isEqual:o.blendFunc];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.vbDesc hash];
     hash = hash * 31 + self.maxCount;
-    hash = hash * 31 + EGBlendFunctionHash(self.blendFunc);
+    hash = hash * 31 + [self.blendFunc hash];
     return hash;
 }
 
@@ -280,7 +281,7 @@ static ODClassType* _EGParticleSystemView_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"vbDesc=%@", self.vbDesc];
     [description appendFormat:@", maxCount=%li", self.maxCount];
-    [description appendFormat:@", blendFunc=%@", EGBlendFunctionDescription(self.blendFunc)];
+    [description appendFormat:@", blendFunc=%@", self.blendFunc];
     [description appendString:@">"];
     return description;
 }

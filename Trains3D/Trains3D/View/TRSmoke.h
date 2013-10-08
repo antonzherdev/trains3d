@@ -1,7 +1,6 @@
 #import "objd.h"
 #import "EGBillboard.h"
 #import "GEVec.h"
-#import "EGMaterial.h"
 @class TRTrain;
 @class TRWeather;
 @class TRCar;
@@ -11,6 +10,8 @@
 @class TRRailPoint;
 @class EGProgress;
 @class EGGlobal;
+@class EGColorSource;
+@class EGBlendFunction;
 
 @class TRSmoke;
 @class TRSmokeParticle;

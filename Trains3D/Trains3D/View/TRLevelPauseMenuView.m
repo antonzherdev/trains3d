@@ -3,6 +3,7 @@
 #import "TRLevel.h"
 #import "EGCamera2D.h"
 #import "EGSprite.h"
+#import "EGMaterial.h"
 #import "EGContext.h"
 #import "EGDirector.h"
 #import "GL.h"
@@ -63,7 +64,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
 
 - (void)draw {
     if(!([[EGGlobal director] isPaused])) return ;
-    egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
+    [EGBlendFunction.standard applyDraw:^void() {
         glDisable(GL_DEPTH_TEST);
         glLineWidth(2.0);
         [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 0.5)] at:GEVec3Make(0.0, 0.0, 0.0) rect:GERectMake(GEVec2Make(0.0, 0.0), geVec2ApplyVec2i([EGGlobal.context viewport].size))];
@@ -84,7 +85,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
         [_font drawText:[TRStr.Loc mainMenu] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec3Make(p.x + 35, p.y + 18, 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
         glLineWidth(1.0);
         glEnable(GL_DEPTH_TEST);
-    });
+    }];
 }
 
 - (BOOL)isProcessorActive {

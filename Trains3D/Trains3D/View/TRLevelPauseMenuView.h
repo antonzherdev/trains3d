@@ -2,14 +2,15 @@
 #import "EGScene.h"
 #import "EGInput.h"
 #import "GEVec.h"
-#import "EGMaterial.h"
 #import "EGFont.h"
 @class TRLevel;
 @class EGCamera2D;
 @class EGSprite;
+@class EGColorSource;
 @class EGLine2d;
 @class EGGlobal;
 @class EGDirector;
+@class EGBlendFunction;
 @class EGContext;
 @class EGD2D;
 @class TRStr;

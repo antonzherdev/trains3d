@@ -1,6 +1,7 @@
 #import "TRExplosion.h"
 
 #import "EGProgress.h"
+#import "EGMaterial.h"
 #import "EGContext.h"
 @implementation TRExplosion{
     GEVec3 _position;
@@ -339,7 +340,7 @@ static ODClassType* _TRExplosionView_type;
     self = [super init];
     if(self) {
         _material = [EGColorSource applyTexture:[EGGlobal textureForFile:@"Explosion.png"]];
-        _view = [EGBillboardParticleSystemView billboardParticleSystemViewWithMaxCount:4 material:_material blendFunc:egBlendFunctionPremultiplied()];
+        _view = [EGBillboardParticleSystemView billboardParticleSystemViewWithMaxCount:4 material:_material blendFunc:EGBlendFunction.premultiplied];
     }
     
     return self;

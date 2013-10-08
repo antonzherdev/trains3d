@@ -1,11 +1,12 @@
 #import "objd.h"
 #import "EGScene.h"
-#import "EGMaterial.h"
 @class EGVertexBufferDesc;
+@class EGBlendFunction;
 @class EGVertexBuffer;
 @class EGIndexBuffer;
 @class EGMesh;
 @class EGShader;
+@class EGMaterial;
 
 @class EGParticleSystem;
 @class EGParticle;
@@ -43,15 +44,15 @@
 @interface EGParticleSystemView : NSObject
 @property (nonatomic, readonly) EGVertexBufferDesc* vbDesc;
 @property (nonatomic, readonly) NSUInteger maxCount;
-@property (nonatomic, readonly) EGBlendFunction blendFunc;
+@property (nonatomic, readonly) EGBlendFunction* blendFunc;
 @property (nonatomic, readonly) CNVoidRefArray vertexArr;
 @property (nonatomic, readonly) EGVertexBuffer* vertexBuffer;
 @property (nonatomic, readonly) CNVoidRefArray indexArr;
 @property (nonatomic, readonly) EGIndexBuffer* indexBuffer;
 @property (nonatomic, readonly) EGMesh* mesh;
 
-+ (id)particleSystemViewWithVbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount blendFunc:(EGBlendFunction)blendFunc;
-- (id)initWithVbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount blendFunc:(EGBlendFunction)blendFunc;
++ (id)particleSystemViewWithVbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount blendFunc:(EGBlendFunction*)blendFunc;
+- (id)initWithVbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount blendFunc:(EGBlendFunction*)blendFunc;
 - (ODClassType*)type;
 - (NSUInteger)vertexCount;
 - (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i;

@@ -1,12 +1,15 @@
 #import "objd.h"
 #import "GEVec.h"
-#import "EGMaterial.h"
 @class TRRailroad;
 @class EGViewportSurface;
 @class EGGlobal;
 @class EGContext;
 @class TRRailroadBuilder;
+@class EGStandardMaterial;
+@class EGColorSource;
+@class EGMeshModel;
 @class TRModels;
+@class EGMaterial;
 @class TRRail;
 @class GEMat4;
 @class EGMatrixModel;
@@ -16,6 +19,7 @@
 @class TRRailConnector;
 @class TRRailLight;
 @class EGRenderTarget;
+@class EGBlendFunction;
 @class TRRailPoint;
 @class EGMapSso;
 @class EGMapSsoView;

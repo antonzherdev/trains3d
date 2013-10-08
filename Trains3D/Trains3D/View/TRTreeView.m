@@ -3,6 +3,7 @@
 #import "TRTree.h"
 #import "EGTexture.h"
 #import "EGContext.h"
+#import "EGMaterial.h"
 #import "EGMesh.h"
 #import "EGSprite.h"
 #import "GL.h"
@@ -54,11 +55,11 @@ static ODClassType* _TRTreeView_type;
     }];
     [_vb setArray:ar usage:GL_DYNAMIC_DRAW];
     [_ib setArray:iar usage:GL_DYNAMIC_DRAW];
-    egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
+    [EGBlendFunction.standard applyDraw:^void() {
         glDisable(GL_CULL_FACE);
         [[EGBillboardShaderSystem shaderForParam:_material] drawParam:_material mesh:[EGMesh meshWithVertexBuffer:_vb indexBuffer:_ib]];
         glEnable(GL_CULL_FACE);
-    });
+    }];
     cnVoidRefArrayFree(ar);
     cnVoidRefArrayFree(iar);
 }

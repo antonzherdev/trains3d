@@ -1,14 +1,15 @@
 #import "objd.h"
 #import "GEVec.h"
 #import "EGBillboard.h"
-#import "EGMaterial.h"
 #import "GELine.h"
 @class TRForest;
 @class EGTexture;
 @class EGGlobal;
+@class EGColorSource;
 @class EGVertexBuffer;
 @class EGIndexBuffer;
 @class EGD2D;
+@class EGBlendFunction;
 @class EGMesh;
 @class TRTree;
 @class TRTreeType;

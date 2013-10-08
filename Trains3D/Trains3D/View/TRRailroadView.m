@@ -4,6 +4,7 @@
 #import "EGMultisamplingSurface.h"
 #import "GL.h"
 #import "EGContext.h"
+#import "EGMaterial.h"
 #import "TRModels.h"
 #import "GEMat4.h"
 #import "TRRailPoint.h"
@@ -357,17 +358,17 @@ static ODClassType* _TRLightView_type;
             [_greenMaterial drawMesh:TRModels.lightGreen];
             [_inactiveMaterial drawMesh:TRModels.lightRed];
             glDisable(GL_CULL_FACE);
-            egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
+            [EGBlendFunction.standard applyDraw:^void() {
                 [_greenGlowMaterial drawMesh:TRModels.lightGreenGlow];
-            });
+            }];
             glEnable(GL_CULL_FACE);
         } else {
             [_inactiveMaterial drawMesh:TRModels.lightGreen];
             [_redMaterial drawMesh:TRModels.lightRed];
             glDisable(GL_CULL_FACE);
-            egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
+            [EGBlendFunction.standard applyDraw:^void() {
                 [_redGlowMaterial drawMesh:TRModels.lightRedGlow];
-            });
+            }];
             glEnable(GL_CULL_FACE);
         }
     }];
@@ -502,14 +503,14 @@ static ODClassType* _TRBackgroundView_type;
 }
 
 - (void)drawShadow {
-    if(egPlatform().shadows) egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
+    if(egPlatform().shadows) [EGBlendFunction.standard applyDraw:^void() {
         glDisable(GL_CULL_FACE);
         glDisable(GL_DEPTH_TEST);
         EGShadowDrawParam* param = [EGShadowDrawParam shadowDrawParamWithPercents:(@[@0.3])];
         [[EGShadowDrawShaderSystem shaderForParam:param] drawParam:param mesh:_mapView.plane];
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
-    });
+    }];
 }
 
 - (ODClassType*)type {

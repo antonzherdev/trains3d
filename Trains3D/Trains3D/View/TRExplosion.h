@@ -2,9 +2,10 @@
 #import "EGScene.h"
 #import "GEVec.h"
 #import "EGBillboard.h"
-#import "EGMaterial.h"
 @class EGProgress;
+@class EGColorSource;
 @class EGGlobal;
+@class EGBlendFunction;
 
 @class TRExplosion;
 @class TRExplosionFlame;

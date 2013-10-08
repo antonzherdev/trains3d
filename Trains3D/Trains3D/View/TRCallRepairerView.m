@@ -6,6 +6,7 @@
 #import "GEMat4.h"
 #import "TRRailroad.h"
 #import "GL.h"
+#import "EGMaterial.h"
 #import "TRCity.h"
 #import "EGBillboard.h"
 #import "EGDirector.h"
@@ -47,11 +48,11 @@ static ODClassType* _TRCallRepairerView_type;
 - (void)draw {
     if(!([[_level.railroad damagesPoints] isEmpty]) && [[_level repairer] isEmpty]) {
         glDisable(GL_DEPTH_TEST);
-        egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
+        [EGBlendFunction.standard applyDraw:^void() {
             [[_level cities] forEach:^void(TRCity* _) {
                 [self drawButtonForCity:_];
             }];
-        });
+        }];
         glEnable(GL_DEPTH_TEST);
     } else {
         if(!([_buttons isEmpty])) [_buttons clear];

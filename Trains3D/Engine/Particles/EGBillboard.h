@@ -2,15 +2,16 @@
 #import "EGShader.h"
 #import "GEVec.h"
 #import "EGParticleSystem.h"
-#import "EGMaterial.h"
 @class EGGlobal;
 @class EGContext;
 @class EGRenderTarget;
 @class EGShadowShaderSystem;
+@class EGColorSource;
 @class EGVertexBufferDesc;
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class EGTexture;
+@class EGBlendFunction;
 @class EGD2D;
 @class GEMat4;
 
@@ -127,8 +128,8 @@ ODPType* egBillboardBufferDataType();
 @property (nonatomic, readonly) EGColorSource* material;
 @property (nonatomic, readonly) EGShader* shader;
 
-+ (id)billboardParticleSystemViewWithMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction)blendFunc;
-- (id)initWithMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction)blendFunc;
++ (id)billboardParticleSystemViewWithMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
+- (id)initWithMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
 - (ODClassType*)type;
 + (EGBillboardParticleSystemView*)applyMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material;
 - (NSUInteger)vertexCount;

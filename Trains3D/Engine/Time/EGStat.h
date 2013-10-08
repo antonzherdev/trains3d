@@ -1,8 +1,8 @@
 #import "objd.h"
-#import "EGMaterial.h"
 #import "GEVec.h"
 #import "EGFont.h"
 @class EGGlobal;
+@class EGBlendFunction;
 
 @class EGStat;
 

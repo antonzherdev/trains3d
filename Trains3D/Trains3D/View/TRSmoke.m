@@ -6,6 +6,7 @@
 #import "TRRailPoint.h"
 #import "EGProgress.h"
 #import "EGContext.h"
+#import "EGMaterial.h"
 @implementation TRSmoke{
     __weak TRTrain* _train;
     __weak TRWeather* _weather;
@@ -235,7 +236,7 @@ static ODClassType* _TRSmokeView_type;
 }
 
 - (id)init {
-    self = [super initWithMaxCount:200 material:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Smoke.png"]] blendFunc:egBlendFunctionPremultiplied()];
+    self = [super initWithMaxCount:200 material:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Smoke.png"]] blendFunc:EGBlendFunction.premultiplied];
     
     return self;
 }

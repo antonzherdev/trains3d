@@ -1,7 +1,6 @@
 #import "objd.h"
 #import "EGInput.h"
 #import "GEVec.h"
-#import "EGMaterial.h"
 #import "EGMapIso.h"
 #import "EGFont.h"
 @class TRLevel;
@@ -11,9 +10,11 @@
 @class EGMatrixStack;
 @class GEMat4;
 @class TRRailroad;
+@class EGBlendFunction;
 @class TRCity;
 @class EGContext;
 @class TRCityColor;
+@class EGColorSource;
 @class EGBillboard;
 @class EGDirector;
 

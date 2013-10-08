@@ -36,12 +36,16 @@ class MeshModel(meshes : [(Mesh, Material)]) {
     }
 }
 
-struct BlendFunction(source : uint4, destination : uint4) {
+class BlendFunction(source : uint4, destination : uint4) {
     static val standard : BlendFunction = BlendFunction(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
     static val premultiplied : BlendFunction = BlendFunction(GL_ONE, GL_ONE_MINUS_SRC_ALPHA)
+    static private var _lastFunction : BlendFunction
     def apply(draw : () -> void) {
         glEnable(GL_BLEND)
-        glBlendFunc(source, destination)
+        if(_lastFunction != self) {
+            glBlendFunc(source, destination)
+            _lastFunction = self
+        }
 
         draw()
         glDisable(GL_BLEND)

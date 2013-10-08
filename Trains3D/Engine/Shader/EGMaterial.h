@@ -11,7 +11,7 @@
 @class EGColorSource;
 @class EGStandardMaterial;
 @class EGMeshModel;
-typedef struct EGBlendFunction EGBlendFunction;
+@class EGBlendFunction;
 
 @interface EGMaterial : NSObject
 + (id)material;
@@ -68,33 +68,17 @@ typedef struct EGBlendFunction EGBlendFunction;
 @end
 
 
-struct EGBlendFunction {
-    unsigned int source;
-    unsigned int destination;
-};
-static inline EGBlendFunction EGBlendFunctionMake(unsigned int source, unsigned int destination) {
-    return (EGBlendFunction){source, destination};
-}
-static inline BOOL EGBlendFunctionEq(EGBlendFunction s1, EGBlendFunction s2) {
-    return s1.source == s2.source && s1.destination == s2.destination;
-}
-static inline NSUInteger EGBlendFunctionHash(EGBlendFunction self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.source;
-    hash = hash * 31 + self.destination;
-    return hash;
-}
-NSString* EGBlendFunctionDescription(EGBlendFunction self);
-void egBlendFunctionApplyDraw(EGBlendFunction self, void(^draw)());
-EGBlendFunction egBlendFunctionStandard();
-EGBlendFunction egBlendFunctionPremultiplied();
-ODPType* egBlendFunctionType();
-@interface EGBlendFunctionWrap : NSObject
-@property (readonly, nonatomic) EGBlendFunction value;
+@interface EGBlendFunction : NSObject
+@property (nonatomic, readonly) unsigned int source;
+@property (nonatomic, readonly) unsigned int destination;
 
-+ (id)wrapWithValue:(EGBlendFunction)value;
-- (id)initWithValue:(EGBlendFunction)value;
++ (id)blendFunctionWithSource:(unsigned int)source destination:(unsigned int)destination;
+- (id)initWithSource:(unsigned int)source destination:(unsigned int)destination;
+- (ODClassType*)type;
+- (void)applyDraw:(void(^)())draw;
++ (EGBlendFunction*)standard;
++ (EGBlendFunction*)premultiplied;
++ (ODClassType*)type;
 @end
-
 
 

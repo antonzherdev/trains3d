@@ -1,6 +1,7 @@
 #import "EGStat.h"
 
 #import "EGContext.h"
+#import "EGMaterial.h"
 @implementation EGStat{
     CGFloat _accumDelta;
     NSUInteger _framesCount;
@@ -31,9 +32,9 @@ static ODClassType* _EGStat_type;
 }
 
 - (void)draw {
-    egBlendFunctionApplyDraw(egBlendFunctionStandard(), ^void() {
+    [EGBlendFunction.standard applyDraw:^void() {
         [_font drawText:[NSString stringWithFormat:@"%li", floatRound(__frameRate)] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec3Make(-0.98, -0.99, 0.0) alignment:egTextAlignmentLeft()];
-    });
+    }];
 }
 
 - (void)tickWithDelta:(CGFloat)delta {
