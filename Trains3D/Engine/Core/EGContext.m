@@ -22,7 +22,7 @@ static ODClassType* _EGGlobal_type;
 }
 
 + (EGTexture*)textureForFile:(NSString*)file {
-    return [_EGGlobal_context textureForFile:file magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_LINEAR];
+    return [_EGGlobal_context textureForFile:file magFilter:GL_LINEAR minFilter:GL_LINEAR];
 }
 
 + (EGTexture*)nearestTextureForFile:(NSString*)file {
