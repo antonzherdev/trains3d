@@ -4,11 +4,15 @@ object BillboardShaderSystem extends ShaderSystem<ColorSource> {
     def shaderFor(param : ColorSource) : BillboardShader =
         if(context.renderTarget.is<ShadowRenderTarget>)
             if(ShadowShaderSystem.isColorShaderFor(param)) BillboardShader.instanceForColorShadow
+            else if(param.alphaTestLevel > -0.1) BillboardShader.instanceForAlphaShadow
             else BillboardShader.instanceForTextureShadow
-        else if(param.texture.isEmpty) BillboardShader.instanceForColor else BillboardShader.instanceForTexture
+        else
+            if(param.texture.isEmpty) BillboardShader.instanceForColor
+            else if(param.alphaTestLevel > -0.1) BillboardShader.instanceForAlpha
+            else BillboardShader.instanceForTexture
 }
 
-class BillboardShaderBuilder(texture : bool, shadow : bool, parameters : string, code : string) extends ShaderTextBuilder {
+class BillboardShaderBuilder(texture : bool, alpha : bool, shadow : bool, parameters : string, code : string) extends ShaderTextBuilder {
     def vertex =
         "$vertexHeader
          $ain highp vec3 position;
@@ -57,9 +61,11 @@ class BillboardShaderBuilder(texture : bool, shadow : bool, parameters : string,
             $else
              $fragColor = fColor * color;
             $endif
+            $if(alpha)
              if($fragColor.a < alphaTestLevel) {
                  discard;
              }
+            $endif
              depth = gl_FragCoord.z;$when(shadow)
              $code
          }"
@@ -67,18 +73,20 @@ class BillboardShaderBuilder(texture : bool, shadow : bool, parameters : string,
     def program = ShaderProgram(vertex, fragment)
 }
 
-class BillboardShader(program : ShaderProgram, texture : bool, shadow : bool) extends Shader<ColorSource>(program) {
-    static lazy val instanceForColor = BillboardShader(BillboardShaderBuilder(false, false, "", "").program, false, false)
-    static lazy val instanceForTexture = BillboardShader(BillboardShaderBuilder(true, false, "", "").program, true, false)
-    static lazy val instanceForColorShadow = BillboardShader(BillboardShaderBuilder(false, true, "", "").program, false, true)
-    static lazy val instanceForTextureShadow = BillboardShader(BillboardShaderBuilder(true, true, "", "").program, true, true)
+class BillboardShader(program : ShaderProgram, texture : bool, alpha : bool, shadow : bool) extends Shader<ColorSource>(program) {
+    static lazy val instanceForColor = BillboardShader(BillboardShaderBuilder(false, false, false, "", "").program, false, false, false)
+    static lazy val instanceForTexture = BillboardShader(BillboardShaderBuilder(true, false, false, "", "").program, true, false, false)
+    static lazy val instanceForAlpha = BillboardShader(BillboardShaderBuilder(true, true, false, "", "").program, true, true, false)
+    static lazy val instanceForColorShadow = BillboardShader(BillboardShaderBuilder(false, false, true, "", "").program, false, false, true)
+    static lazy val instanceForTextureShadow = BillboardShader(BillboardShaderBuilder(true, false, true, "", "").program, true, false, true)
+    static lazy val instanceForAlphaShadow = BillboardShader(BillboardShaderBuilder(true, true, true, "", "").program, true, true, true)
 
     val positionSlot = attributeFor("position")
     val modelSlot = attributeFor("model")
     val uvSlot : ShaderAttribute? = if(texture) attributeFor("vertexUV") else nil
     val colorSlot = attributeFor("vertexColor")
     val colorUniform = uniformVec4("color")
-    val alphaTestLevelUniform = uniformF4("alphaTestLevel")
+    val alphaTestLevelUniform : ShaderUniformF4? = if(alpha) uniformF4("alphaTestLevel") else nil
 
     val wcUniform = uniformMat4("wc")
     val pUniform = uniformMat4("p")
@@ -89,7 +97,9 @@ class BillboardShader(program : ShaderProgram, texture : bool, shadow : bool) ex
         colorSlot.setFromBufferWith(vbDesc.stride, valuesCount = 4, GL_FLOAT, shift = vbDesc.color)
         wcUniform(matrix = matrix.value.wc)
         pUniform(matrix = matrix.value.p)
-        alphaTestLevelUniform(f4 = param.alphaTestLevel)
+        if(alpha) {
+            alphaTestLevelUniform.get.apply(f4 = param.alphaTestLevel)
+        }
         if(texture) {
             uvSlot.for(_.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.uv))
             param.texture.get.bind

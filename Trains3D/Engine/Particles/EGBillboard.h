@@ -33,12 +33,13 @@ typedef struct EGBillboardBufferData EGBillboardBufferData;
 
 @interface EGBillboardShaderBuilder : NSObject<EGShaderTextBuilder>
 @property (nonatomic, readonly) BOOL texture;
+@property (nonatomic, readonly) BOOL alpha;
 @property (nonatomic, readonly) BOOL shadow;
 @property (nonatomic, readonly) NSString* parameters;
 @property (nonatomic, readonly) NSString* code;
 
-+ (id)billboardShaderBuilderWithTexture:(BOOL)texture shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code;
-- (id)initWithTexture:(BOOL)texture shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code;
++ (id)billboardShaderBuilderWithTexture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code;
+- (id)initWithTexture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code;
 - (ODClassType*)type;
 - (NSString*)vertex;
 - (NSString*)fragment;
@@ -49,23 +50,26 @@ typedef struct EGBillboardBufferData EGBillboardBufferData;
 
 @interface EGBillboardShader : EGShader
 @property (nonatomic, readonly) BOOL texture;
+@property (nonatomic, readonly) BOOL alpha;
 @property (nonatomic, readonly) BOOL shadow;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderAttribute* modelSlot;
 @property (nonatomic, readonly) id uvSlot;
 @property (nonatomic, readonly) EGShaderAttribute* colorSlot;
 @property (nonatomic, readonly) EGShaderUniformVec4* colorUniform;
-@property (nonatomic, readonly) EGShaderUniformF4* alphaTestLevelUniform;
+@property (nonatomic, readonly) id alphaTestLevelUniform;
 @property (nonatomic, readonly) EGShaderUniformMat4* wcUniform;
 @property (nonatomic, readonly) EGShaderUniformMat4* pUniform;
 
-+ (id)billboardShaderWithProgram:(EGShaderProgram*)program texture:(BOOL)texture shadow:(BOOL)shadow;
-- (id)initWithProgram:(EGShaderProgram*)program texture:(BOOL)texture shadow:(BOOL)shadow;
++ (id)billboardShaderWithProgram:(EGShaderProgram*)program texture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow;
+- (id)initWithProgram:(EGShaderProgram*)program texture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow;
 - (ODClassType*)type;
 + (EGBillboardShader*)instanceForColor;
 + (EGBillboardShader*)instanceForTexture;
++ (EGBillboardShader*)instanceForAlpha;
 + (EGBillboardShader*)instanceForColorShadow;
 + (EGBillboardShader*)instanceForTextureShadow;
++ (EGBillboardShader*)instanceForAlphaShadow;
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param;
 + (ODClassType*)type;
 @end
