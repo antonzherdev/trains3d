@@ -59,9 +59,9 @@
     UIView *view = [_view view];
     UITouch* touch = [[_event touchesForView:view] anyObject];
     CGPoint point = [touch locationInView:view];
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     CGFloat scale = [[UIScreen mainScreen] scale];
-    return GEVec2Make(scale* (float) point.y, scale*(float) point.x);
+    float sy = [_view viewSize].y;
+    return GEVec2Make(scale* (float) point.x, sy - scale*(float) point.y);
 }
 
 - (EGEvent *)setCamera:(id)camera {

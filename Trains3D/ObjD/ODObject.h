@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 #import <math.h>
+#import <float.h>
 #import "ODType.h"
 
 @class CNRange;
