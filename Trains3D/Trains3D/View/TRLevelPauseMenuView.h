@@ -15,6 +15,7 @@
 @class EGD2D;
 @class TRStr;
 @protocol TRStrings;
+@class EGEnablingState;
 @class TRSceneFactory;
 @class EGEnvironment;
 

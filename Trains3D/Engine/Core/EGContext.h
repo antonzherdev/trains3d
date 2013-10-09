@@ -45,6 +45,7 @@
 @property (nonatomic) BOOL considerShadows;
 @property (nonatomic, readonly) EGEnablingState* cullFace;
 @property (nonatomic, readonly) EGEnablingState* blend;
+@property (nonatomic, readonly) EGEnablingState* depthTest;
 
 + (id)context;
 - (id)init;

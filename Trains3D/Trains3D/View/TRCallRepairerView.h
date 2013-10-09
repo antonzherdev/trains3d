@@ -10,9 +10,10 @@
 @class EGMatrixStack;
 @class GEMat4;
 @class TRRailroad;
-@class EGBlendFunction;
-@class TRCity;
 @class EGContext;
+@class EGBlendFunction;
+@class EGEnablingState;
+@class TRCity;
 @class TRCityColor;
 @class EGColorSource;
 @class EGBillboard;

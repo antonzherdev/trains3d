@@ -111,9 +111,11 @@ class Context {
 
     val cullFace : EnablingState = EnablingState(GL_CULL_FACE)
     val blend : EnablingState = EnablingState(GL_BLEND)
+    val depthTest : EnablingState = EnablingState(GL_DEPTH_TEST)
     def draw {
         cullFace.draw
         blend.draw
+        depthTest.draw
     }
 }
 

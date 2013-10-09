@@ -183,14 +183,10 @@ class BackgroundView(map : MapSso) {
 
     def drawShadow {
         if(egPlatform.shadows) {
-            BlendFunction.standard {
-                context.cullFace.disabled {
-                    glDisable(GL_DEPTH_TEST)
-                    val param = ShadowDrawParam([0.3])
-                    ShadowDrawShaderSystem.shaderFor(param).draw(param, mapView.plane)
-                    glEnable(GL_DEPTH_TEST)
-                }
-            }
+            BlendFunction.standard{ context.cullFace.disabled{ context.depthTest.disabled {
+                val param = ShadowDrawParam([0.3])
+                ShadowDrawShaderSystem.shaderFor(param).draw(param, mapView.plane)
+            }}}
         }
     }
 }

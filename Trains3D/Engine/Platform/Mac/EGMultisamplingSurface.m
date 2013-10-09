@@ -272,11 +272,11 @@ static ODClassType* _EGViewportSurface_type;
 - (void)draw {
     if([[self surface] isEmpty]) return ;
     if([self needRedraw]) {
-        glDisable(GL_DEPTH_TEST);
-        [EGGlobal.context.cullFace disabledF:^void() {
-            [[self shader] drawParam:[EGViewportSurfaceShaderParam viewportSurfaceShaderParamWithTexture:[self texture] z:0.0] mesh:[EGViewportSurface fullScreenMesh]];
+        [EGGlobal.context.depthTest disabledF:^void() {
+            [EGGlobal.context.cullFace disabledF:^void() {
+                [[self shader] drawParam:[EGViewportSurfaceShaderParam viewportSurfaceShaderParamWithTexture:[self texture] z:0.0] mesh:[EGViewportSurface fullScreenMesh]];
+            }];
         }];
-        glEnable(GL_DEPTH_TEST);
     } else {
         glBindFramebuffer(GL_READ_FRAMEBUFFER, [((EGSurface*)([[self surface] get])) frameBuffer]);
         GEVec2i s = ((EGSurface*)([[self surface] get])).size;

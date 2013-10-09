@@ -509,10 +509,10 @@ static ODClassType* _TRBackgroundView_type;
 - (void)drawShadow {
     if(egPlatform().shadows) [EGBlendFunction.standard applyDraw:^void() {
         [EGGlobal.context.cullFace disabledF:^void() {
-            glDisable(GL_DEPTH_TEST);
-            EGShadowDrawParam* param = [EGShadowDrawParam shadowDrawParamWithPercents:(@[@0.3])];
-            [[EGShadowDrawShaderSystem shaderForParam:param] drawParam:param mesh:_mapView.plane];
-            glEnable(GL_DEPTH_TEST);
+            [EGGlobal.context.depthTest disabledF:^void() {
+                EGShadowDrawParam* param = [EGShadowDrawParam shadowDrawParamWithPercents:(@[@0.3])];
+                [[EGShadowDrawShaderSystem shaderForParam:param] drawParam:param mesh:_mapView.plane];
+            }];
         }];
     }];
 }

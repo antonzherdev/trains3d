@@ -228,22 +228,22 @@ static ODClassType* _EGParticleSystemView_type;
 - (void)drawSystem:(EGParticleSystem*)system {
     id<CNSeq> particles = [system particles];
     if([particles isEmpty]) return ;
-    glDisable(GL_DEPTH_TEST);
-    [EGGlobal.context.cullFace disabledF:^void() {
-        [_blendFunc applyDraw:^void() {
-            __block NSInteger i = 0;
-            __block CNVoidRefArray vertexPointer = _vertexArr;
-            [particles forEach:^void(id particle) {
-                if(i < _maxCount) vertexPointer = [particle writeToArray:vertexPointer];
-                i++;
+    [EGGlobal.context.depthTest disabledF:^void() {
+        [EGGlobal.context.cullFace disabledF:^void() {
+            [_blendFunc applyDraw:^void() {
+                __block NSInteger i = 0;
+                __block CNVoidRefArray vertexPointer = _vertexArr;
+                [particles forEach:^void(id particle) {
+                    if(i < _maxCount) vertexPointer = [particle writeToArray:vertexPointer];
+                    i++;
+                }];
+                NSUInteger n = uintMinB([particles count], _maxCount);
+                NSUInteger vc = [self vertexCount];
+                [_vertexBuffer setArray:_vertexArr usage:GL_DYNAMIC_DRAW];
+                [[self shader] drawParam:[self material] mesh:_mesh start:0 count:n * 3 * (vc - 2)];
             }];
-            NSUInteger n = uintMinB([particles count], _maxCount);
-            NSUInteger vc = [self vertexCount];
-            [_vertexBuffer setArray:_vertexArr usage:GL_DYNAMIC_DRAW];
-            [[self shader] drawParam:[self material] mesh:_mesh start:0 count:n * 3 * (vc - 2)];
         }];
     }];
-    glEnable(GL_DEPTH_TEST);
 }
 
 - (void)dealloc {

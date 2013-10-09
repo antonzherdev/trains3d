@@ -65,26 +65,26 @@ static ODClassType* _TRLevelPauseMenuView_type;
 - (void)draw {
     if(!([[EGGlobal director] isPaused])) return ;
     [EGBlendFunction.standard applyDraw:^void() {
-        glDisable(GL_DEPTH_TEST);
-        glLineWidth(2.0);
-        [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 0.5)] at:GEVec3Make(0.0, 0.0, 0.0) rect:GERectMake(GEVec2Make(0.0, 0.0), geVec2ApplyVec2i([EGGlobal.context viewport].size))];
-        GEVec2 p = geRectMoveToCenterForSize([_menuBackSprite rect], geVec2ApplyVec2i([EGGlobal.context viewport].size)).p0;
-        _menuBackSprite.position = p;
-        [_menuBackSprite draw];
-        _resumeLine.p0 = GEVec2Make(p.x, p.y + 100);
-        _resumeLine.p1 = GEVec2Make(p.x + _width, p.y + 100);
-        [_resumeLine draw];
-        [_font drawText:[TRStr.Loc resumeGame] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec3Make(p.x + 35, p.y + 118, 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
-        _restartLine.p0 = GEVec2Make(p.x, p.y + 50);
-        _restartLine.p1 = GEVec2Make(p.x + _width, p.y + 50);
-        [_restartLine draw];
-        [_font drawText:[TRStr.Loc restartLevel] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec3Make(p.x + 35, p.y + 68, 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
-        _mainMenuLine.p0 = GEVec2Make(p.x, p.y);
-        _mainMenuLine.p1 = GEVec2Make(p.x + _width, p.y);
-        [_mainMenuLine draw];
-        [_font drawText:[TRStr.Loc mainMenu] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec3Make(p.x + 35, p.y + 18, 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
-        glLineWidth(1.0);
-        glEnable(GL_DEPTH_TEST);
+        [EGGlobal.context.depthTest disabledF:^void() {
+            glLineWidth(2.0);
+            [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 0.5)] at:GEVec3Make(0.0, 0.0, 0.0) rect:GERectMake(GEVec2Make(0.0, 0.0), geVec2ApplyVec2i([EGGlobal.context viewport].size))];
+            GEVec2 p = geRectMoveToCenterForSize([_menuBackSprite rect], geVec2ApplyVec2i([EGGlobal.context viewport].size)).p0;
+            _menuBackSprite.position = p;
+            [_menuBackSprite draw];
+            _resumeLine.p0 = GEVec2Make(p.x, p.y + 100);
+            _resumeLine.p1 = GEVec2Make(p.x + _width, p.y + 100);
+            [_resumeLine draw];
+            [_font drawText:[TRStr.Loc resumeGame] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec3Make(p.x + 35, p.y + 118, 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
+            _restartLine.p0 = GEVec2Make(p.x, p.y + 50);
+            _restartLine.p1 = GEVec2Make(p.x + _width, p.y + 50);
+            [_restartLine draw];
+            [_font drawText:[TRStr.Loc restartLevel] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec3Make(p.x + 35, p.y + 68, 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
+            _mainMenuLine.p0 = GEVec2Make(p.x, p.y);
+            _mainMenuLine.p1 = GEVec2Make(p.x + _width, p.y);
+            [_mainMenuLine draw];
+            [_font drawText:[TRStr.Loc mainMenu] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec3Make(p.x + 35, p.y + 18, 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
+            glLineWidth(1.0);
+        }];
     }];
 }
 

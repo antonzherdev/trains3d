@@ -95,6 +95,7 @@ static ODClassType* _EGGlobal_type;
     GLuint __lastIndexBuffer;
     EGEnablingState* _cullFace;
     EGEnablingState* _blend;
+    EGEnablingState* _depthTest;
 }
 static ODClassType* _EGContext_type;
 @synthesize defaultFramebuffer = _defaultFramebuffer;
@@ -105,6 +106,7 @@ static ODClassType* _EGContext_type;
 @synthesize considerShadows = _considerShadows;
 @synthesize cullFace = _cullFace;
 @synthesize blend = _blend;
+@synthesize depthTest = _depthTest;
 
 + (id)context {
     return [[EGContext alloc] init];
@@ -127,6 +129,7 @@ static ODClassType* _EGContext_type;
         __lastIndexBuffer = 0;
         _cullFace = [EGEnablingState enablingStateWithTp:GL_CULL_FACE];
         _blend = [EGEnablingState enablingStateWithTp:GL_BLEND];
+        _depthTest = [EGEnablingState enablingStateWithTp:GL_DEPTH_TEST];
     }
     
     return self;
@@ -244,6 +247,7 @@ static ODClassType* _EGContext_type;
 - (void)draw {
     [_cullFace draw];
     [_blend draw];
+    [_depthTest draw];
 }
 
 - (ODClassType*)type {

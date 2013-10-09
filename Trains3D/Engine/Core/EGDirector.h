@@ -4,6 +4,7 @@
 @class EGScene;
 @class EGGlobal;
 @class EGContext;
+@class EGEnablingState;
 @class EGMatrixStack;
 @class EGStat;
 @class EGEvent;

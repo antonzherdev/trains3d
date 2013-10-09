@@ -26,10 +26,10 @@ class Director {
         val color = _scene.get.backgroundColor
         glClearColor(color.x, color.y, color.z, color.w)
         glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
-        glEnable(GL_DEPTH_TEST)
+        context.depthTest.enable
         beforeDraw
         _scene.get.drawWith(size)
-        glDisable(GL_DEPTH_TEST)
+        context.depthTest.disable
         matrix.clear
         context.set(viewport = Rect(vec2(0, 0), size))
         _stat.for(_.draw)

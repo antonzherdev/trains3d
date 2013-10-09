@@ -66,10 +66,10 @@ static ODClassType* _EGDirector_type;
     GEVec4 color = ((EGScene*)([__scene get])).backgroundColor;
     glClearColor(color.x, color.y, color.z, color.w);
     glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
+    [EGGlobal.context.depthTest enable];
     [self beforeDraw];
     [((EGScene*)([__scene get])) drawWithViewSize:size];
-    glDisable(GL_DEPTH_TEST);
+    [EGGlobal.context.depthTest disable];
     [EGGlobal.matrix clear];
     [EGGlobal.context setViewport:geRectIApplyRect(GERectMake(GEVec2Make(0.0, 0.0), size))];
     [__stat forEach:^void(EGStat* _) {
