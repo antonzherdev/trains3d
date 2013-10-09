@@ -157,7 +157,7 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
         mwcpUniform(matrix = matrix.value.mwcp)
         if(key.texture) {
             uvSlot.get.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.uv)
-            param.diffuse.texture.get.bind
+            context.bindTexture(param.diffuse.texture.get)
             diffuseTexture.get.apply(i4 = 0)
         }
         diffuseColorUniform(vec4 = param.diffuse.color)
@@ -176,9 +176,7 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
                     directLightColors[i].apply(vec4 = light.color)
                     directLightDepthMwcp[i].apply(matrix = light.shadowMap.biasDepthCp * matrix.mw)
                     directLightShadows[i].apply(i4 = i + 1)
-                    glActiveTexture(GL_TEXTURE0 + i + 1)
-                    light.shadowMap.texture.bind
-                    glActiveTexture(GL_TEXTURE0)
+                    context.bindTexture(GL_TEXTURE0 + i + 1, GL_TEXTURE_2D, light.shadowMap.texture)
                     i++
                 }
             }

@@ -8,7 +8,6 @@
 @class EGVertexBufferDesc;
 @class EGMatrixStack;
 @class EGMatrixModel;
-@class EGTexture;
 
 @class EGSimpleShaderSystem;
 @class EGSimpleShaderBuilder;

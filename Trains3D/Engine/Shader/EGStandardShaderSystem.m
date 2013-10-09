@@ -6,7 +6,6 @@
 #import "GL.h"
 #import "EGPlatform.h"
 #import "EGMesh.h"
-#import "EGTexture.h"
 #import "GEMat4.h"
 @implementation EGStandardShaderSystem
 static EGStandardShaderSystem* _EGStandardShaderSystem_instance;
@@ -461,7 +460,7 @@ static ODClassType* _EGStandardShader_type;
     [_mwcpUniform applyMatrix:[EGGlobal.matrix.value mwcp]];
     if(_key.texture) {
         [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
-        [((EGTexture*)([param.diffuse.texture get])) bind];
+        [EGGlobal.context bindTextureTexture:((EGTexture*)([param.diffuse.texture get]))];
         [((EGShaderUniformI4*)([_diffuseTexture get])) applyI4:0];
     }
     [_diffuseColorUniform applyVec4:param.diffuse.color];
@@ -481,9 +480,7 @@ static ODClassType* _EGStandardShader_type;
             [((EGShaderUniformVec4*)([_directLightColors applyIndex:i])) applyVec4:light.color];
             [((EGShaderUniformMat4*)([_directLightDepthMwcp applyIndex:i])) applyMatrix:[[light shadowMap].biasDepthCp mulMatrix:[EGGlobal.matrix mw]]];
             [((EGShaderUniformI4*)([_directLightShadows applyIndex:i])) applyI4:((int)(i + 1))];
-            glActiveTexture(GL_TEXTURE0 + i + 1);
-            [[light shadowMap].texture bind];
-            glActiveTexture(GL_TEXTURE0);
+            [EGGlobal.context bindTextureSlot:GL_TEXTURE0 + i + 1 target:GL_TEXTURE_2D texture:[light shadowMap].texture];
             i++;
         }];
         if(_key.directLightWithoutShadowsCount > 0) [[[env.lights chain] filter:^BOOL(EGLight* _) {

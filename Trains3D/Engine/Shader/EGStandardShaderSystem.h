@@ -14,7 +14,6 @@
 @class EGVertexBufferDesc;
 @class EGMatrixStack;
 @class EGMatrixModel;
-@class EGTexture;
 @class EGDirectLight;
 @class GEMat4;
 @class EGShadowMap;

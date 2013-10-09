@@ -11,14 +11,8 @@
 + (id)texture;
 - (id)init;
 - (ODClassType*)type;
-- (void)bind;
 - (GEVec2)size;
-- (void)bindTarget:(unsigned int)target;
 - (void)dealloc;
-+ (void)unbind;
-+ (void)unbindTarget:(unsigned int)target;
-- (void)applyDraw:(void(^)())draw;
-- (void)applyTarget:(unsigned int)target draw:(void(^)())draw;
 - (void)saveToFile:(NSString*)file;
 - (GERect)uvRect:(GERect)rect;
 - (GERect)uvX:(float)x y:(float)y width:(float)width height:(float)height;
@@ -35,8 +29,8 @@
 - (id)initWithFile:(NSString*)file magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
 - (ODClassType*)type;
 + (EGFileTexture*)applyFile:(NSString*)file;
+- (void)_init;
 - (GEVec2)size;
-- (void)bindTarget:(unsigned int)target;
 + (ODClassType*)type;
 @end
 

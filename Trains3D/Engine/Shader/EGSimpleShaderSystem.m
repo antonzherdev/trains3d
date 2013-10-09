@@ -5,7 +5,6 @@
 #import "EGMaterial.h"
 #import "EGMesh.h"
 #import "GL.h"
-#import "EGTexture.h"
 @implementation EGSimpleShaderSystem
 static EGSimpleShaderSystem* _EGSimpleShaderSystem_instance;
 static EGSimpleColorShader* _EGSimpleShaderSystem_colorShader;
@@ -323,7 +322,7 @@ static ODClassType* _EGSimpleTextureShader_type;
     [_mvpUniform applyMatrix:[EGGlobal.matrix.value mwcp]];
     [_uvSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
     [_colorUniform applyVec4:param.color];
-    [((EGTexture*)([param.texture get])) bind];
+    [EGGlobal.context bindTextureTexture:((EGTexture*)([param.texture get]))];
 }
 
 - (ODClassType*)type {

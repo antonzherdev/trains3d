@@ -22,38 +22,12 @@ static ODClassType* _EGTexture_type;
     _EGTexture_type = [ODClassType classTypeWithCls:[EGTexture class]];
 }
 
-- (void)bind {
-    [self bindTarget:GL_TEXTURE_2D];
-}
-
 - (GEVec2)size {
     @throw @"Method size is abstract";
 }
 
-- (void)bindTarget:(unsigned int)target {
-    glBindTexture(target, _id);
-}
-
 - (void)dealloc {
     egDeleteTexture(_id);
-}
-
-+ (void)unbind {
-    [EGTexture unbindTarget:GL_TEXTURE_2D];
-}
-
-+ (void)unbindTarget:(unsigned int)target {
-    glBindTexture(target, 0);
-}
-
-- (void)applyDraw:(void(^)())draw {
-    [self applyTarget:GL_TEXTURE_2D draw:draw];
-}
-
-- (void)applyTarget:(unsigned int)target draw:(void(^)())draw {
-    [self bindTarget:target];
-    ((void(^)())(draw))();
-    [EGTexture unbindTarget:target];
 }
 
 - (void)saveToFile:(NSString*)file {
@@ -122,6 +96,7 @@ static ODClassType* _EGFileTexture_type;
         _magFilter = magFilter;
         _minFilter = minFilter;
         __loaded = NO;
+        [self _init];
     }
     
     return self;
@@ -136,19 +111,13 @@ static ODClassType* _EGFileTexture_type;
     return [EGFileTexture fileTextureWithFile:file magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_LINEAR];
 }
 
-- (void)load {
+- (void)_init {
     __size = egLoadTextureFromFile(self.id, [OSBundle fileNameForResource:_file], _magFilter, _minFilter);
     __loaded = YES;
 }
 
 - (GEVec2)size {
-    if(!(__loaded)) [self load];
     return __size;
-}
-
-- (void)bindTarget:(unsigned int)target {
-    if(!(__loaded)) [self load];
-    glBindTexture(target, self.id);
 }
 
 - (ODClassType*)type {

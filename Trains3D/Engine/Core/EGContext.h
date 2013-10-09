@@ -45,11 +45,14 @@
 - (ODClassType*)type;
 - (EGTexture*)textureForFile:(NSString*)file magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
 - (EGFont*)fontWithName:(NSString*)name;
+- (void)clear;
 - (GERectI)viewport;
 - (void)setViewport:(GERectI)viewport;
 - (void)pushViewport;
 - (void)popViewport;
 - (void)restoreDefaultFramebuffer;
+- (void)bindTextureTexture:(EGTexture*)texture;
+- (void)bindTextureSlot:(unsigned int)slot target:(unsigned int)target texture:(EGTexture*)texture;
 + (ODClassType*)type;
 @end
 

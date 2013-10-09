@@ -420,7 +420,7 @@ static ODClassType* _EGViewportSurfaceShader_type;
 }
 
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGViewportSurfaceShaderParam*)param {
-    [param.texture bind];
+    [EGGlobal.context bindTextureTexture:param.texture];
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.model))];
     [_zUniform applyF4:param.z];
 }

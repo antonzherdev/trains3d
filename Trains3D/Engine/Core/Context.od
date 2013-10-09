@@ -25,6 +25,13 @@ class Context {
     var renderTarget : RenderTarget = SceneRenderTarget()
     var considerShadows = true
 
+    def clear {
+        matrixStack.clear
+        considerShadows = true
+        _viewport = RectI(0, 0, 0, 0)
+        _lastTexture2D = 0
+    }
+
     private var _viewportStack = List<RectI>()
     private var _viewport : RectI
     def viewport = _viewport
@@ -43,6 +50,31 @@ class Context {
     }
     def restoreDefaultFramebuffer {
         glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer)
+    }
+
+    private var _lastTexture2D : GLuint = 0
+    def bindTexture(texture : Texture) {
+        val id = texture.id
+        if(_lastTexture2D != id) {
+            _lastTexture2D = id
+            glBindTexture(GL_TEXTURE_2D, id)
+        }
+    }
+
+    def bindTexture(slot : uint4, target : uint4, texture : Texture) {
+        val id = texture.id
+        if(slot != GL_TEXTURE0) {
+            glActiveTexture(slot)
+            glBindTexture(target, id)
+            glActiveTexture(GL_TEXTURE0)
+        } else {
+            if(target == GL_TEXTURE_2D) {
+                if(_lastTexture2D != id) {
+                    _lastTexture2D = id
+                    glBindTexture(target, id)
+                }
+            } else glBindTexture(target, id)
+        }
     }
 }
 

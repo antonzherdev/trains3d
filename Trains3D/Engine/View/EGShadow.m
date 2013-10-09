@@ -68,7 +68,7 @@ static ODClassType* _EGShadowMap_type;
 
 - (void)bind {
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-    [_texture bind];
+    [EGGlobal.context bindTextureTexture:_texture];
     [EGGlobal.context pushViewport];
     [EGGlobal.context setViewport:geRectIApplyXYWidthHeight(0.0, 0.0, ((float)(self.size.x)), ((float)(self.size.y)))];
 }
@@ -208,7 +208,7 @@ static ODClassType* _EGShadowSurfaceShader_type;
 }
 
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param {
-    [((EGTexture*)([param.texture get])) bind];
+    [EGGlobal.context bindTextureTexture:((EGTexture*)([param.texture get]))];
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.model))];
 }
 
@@ -368,7 +368,7 @@ static ODClassType* _EGShadowShader_type;
     if(_texture) {
         [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
         [((EGShaderUniformF4*)([_alphaTestLevelUniform get])) applyF4:param.alphaTestLevel];
-        [((EGTexture*)([param.texture get])) bind];
+        [EGGlobal.context bindTextureTexture:((EGTexture*)([param.texture get]))];
     }
 }
 
@@ -705,9 +705,7 @@ static ODClassType* _EGShadowDrawShader_type;
         [((EGShaderUniformF4*)([_directLightPercents applyIndex:i])) applyF4:p];
         [((EGShaderUniformMat4*)([_directLightDepthMwcp applyIndex:i])) applyMatrix:[[light shadowMap].biasDepthCp mulMatrix:[EGGlobal.matrix mw]]];
         [((EGShaderUniformI4*)([_directLightShadows applyIndex:i])) applyI4:((int)(i + 1))];
-        glActiveTexture(GL_TEXTURE0 + i + 1);
-        [[light shadowMap].texture bind];
-        glActiveTexture(GL_TEXTURE0);
+        [EGGlobal.context bindTextureSlot:GL_TEXTURE0 + i + 1 target:GL_TEXTURE_2D texture:[light shadowMap].texture];
         i++;
     }];
 }

@@ -34,7 +34,7 @@ class ShadowMap(size : vec2i) extends Surface(size) {
 
     def bind {
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
-        texture.bind
+        context.bindTexture(texture)
         context.pushViewport
         context.set(viewport = RectI(0, 0, size.x, size.y))
     }
@@ -69,7 +69,7 @@ class ShadowSurfaceShaderBuilder extends ViewportShaderBuilder {
 class ShadowSurfaceShader extends Shader<ColorSource>(ShadowSurfaceShaderBuilder().program) {
     val positionSlot = program.attributeFor("position")
     def load(vbDesc : VertexBufferDesc<_>, param : ColorSource) {
-        param.texture.get.bind
+        context.bindTexture(param.texture.get)
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.model)
     }
 }
@@ -126,7 +126,7 @@ class ShadowShader(texture : bool, program : ShaderProgram) extends Shader<Color
         if(texture) {
             uvSlot.get.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.uv)
             alphaTestLevelUniform.get.apply(f4 = param.alphaTestLevel)
-            param.texture.get.bind
+            context.bindTexture(param.texture.get)
         }
     }
 }
@@ -214,9 +214,7 @@ class ShadowDrawShader(key : ShadowDrawShaderKey, program : ShaderProgram) exten
             directLightPercents[i].apply(f4 = p)
             directLightDepthMwcp[i].apply(matrix = light.shadowMap.biasDepthCp * matrix.mw)
             directLightShadows[i].apply(i4 = i + 1)
-            glActiveTexture(GL_TEXTURE0 + i + 1)
-            light.shadowMap.texture.bind
-            glActiveTexture(GL_TEXTURE0)
+            context.bindTexture(GL_TEXTURE0 + i + 1, GL_TEXTURE_2D, light.shadowMap.texture)
             i++
         }
     }

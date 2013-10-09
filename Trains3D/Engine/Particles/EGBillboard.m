@@ -5,7 +5,6 @@
 #import "EGMaterial.h"
 #import "EGMesh.h"
 #import "GL.h"
-#import "EGTexture.h"
 #import "EGSprite.h"
 #import "GEMat4.h"
 @implementation EGBillboardShaderSystem
@@ -368,7 +367,7 @@ static ODClassType* _EGBillboardShader_type;
         [_uvSlot forEach:^void(EGShaderAttribute* _) {
             [_ setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
         }];
-        [((EGTexture*)([param.texture get])) bind];
+        [EGGlobal.context bindTextureTexture:((EGTexture*)([param.texture get]))];
     }
     [_colorUniform applyVec4:param.color];
 }

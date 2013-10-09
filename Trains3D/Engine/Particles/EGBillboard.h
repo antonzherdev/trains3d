@@ -10,7 +10,6 @@
 @class EGVertexBufferDesc;
 @class EGMatrixStack;
 @class EGMatrixModel;
-@class EGTexture;
 @class EGBlendFunction;
 @class EGD2D;
 @class GEMat4;

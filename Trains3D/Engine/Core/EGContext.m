@@ -87,6 +87,7 @@ static ODClassType* _EGGlobal_type;
     BOOL _considerShadows;
     CNList* __viewportStack;
     GERectI __viewport;
+    GLuint __lastTexture2D;
 }
 static ODClassType* _EGContext_type;
 @synthesize defaultFramebuffer = _defaultFramebuffer;
@@ -111,6 +112,7 @@ static ODClassType* _EGContext_type;
         _renderTarget = [EGSceneRenderTarget sceneRenderTarget];
         _considerShadows = YES;
         __viewportStack = [CNList apply];
+        __lastTexture2D = 0;
     }
     
     return self;
@@ -131,6 +133,13 @@ static ODClassType* _EGContext_type;
     return ((EGFont*)([_fontCache objectForKey:name orUpdateWith:^EGFont*() {
         return [EGFont fontWithName:name];
     }]));
+}
+
+- (void)clear {
+    [_matrixStack clear];
+    _considerShadows = YES;
+    __viewport = geRectIApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0);
+    __lastTexture2D = 0;
 }
 
 - (GERectI)viewport {
@@ -155,6 +164,32 @@ static ODClassType* _EGContext_type;
 
 - (void)restoreDefaultFramebuffer {
     glBindFramebuffer(GL_FRAMEBUFFER, _defaultFramebuffer);
+}
+
+- (void)bindTextureTexture:(EGTexture*)texture {
+    GLuint id = texture.id;
+    if(!(GLuintEq(__lastTexture2D, id))) {
+        __lastTexture2D = id;
+        glBindTexture(GL_TEXTURE_2D, id);
+    }
+}
+
+- (void)bindTextureSlot:(unsigned int)slot target:(unsigned int)target texture:(EGTexture*)texture {
+    GLuint id = texture.id;
+    if(slot != GL_TEXTURE0) {
+        glActiveTexture(slot);
+        glBindTexture(target, id);
+        glActiveTexture(GL_TEXTURE0);
+    } else {
+        if(target == GL_TEXTURE_2D) {
+            if(!(GLuintEq(__lastTexture2D, id))) {
+                __lastTexture2D = id;
+                glBindTexture(target, id);
+            }
+        } else {
+            glBindTexture(target, id);
+        }
+    }
 }
 
 - (ODClassType*)type {
