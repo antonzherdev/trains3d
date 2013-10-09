@@ -31,6 +31,8 @@ class Context {
         _viewport = RectI(0, 0, 0, 0)
         _lastTexture2D = 0
         _lastShaderProgram = 0
+        _lastIndexBuffer = 0
+        _lastVertexBuffer = 0
     }
 
     private var _viewportStack = List<RectI>()
@@ -86,6 +88,26 @@ class Context {
             glUseProgram(id)
         }
     }
+
+    private var _lastVertexBuffer : GLuint = 0
+    def bindVertexBuffer(buffer : VertexBuffer<_>) {
+        val id = buffer.handle
+        if(id != _lastVertexBuffer) {
+            _lastVertexBuffer = id
+            glBindBuffer(GL_ARRAY_BUFFER, id)
+        }
+    }
+    def vertexBufferId : GLuint = _lastVertexBuffer
+
+    private var _lastIndexBuffer : GLuint = 0
+    def bindIndexBuffer(buffer : IndexBuffer) {
+        val id = buffer.handle
+        if(id != _lastIndexBuffer) {
+            _lastIndexBuffer = id
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id)
+        }
+    }
+    def indexBufferId : GLuint = _lastIndexBuffer
 }
 
 class RenderTarget

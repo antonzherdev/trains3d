@@ -1,6 +1,8 @@
 #import "objd.h"
 #import "GEVec.h"
 #import "GL.h"
+@class EGGlobal;
+@class EGContext;
 
 @class EGMesh;
 @class EGBuffer;
@@ -70,8 +72,6 @@ ODPType* egMeshDataType();
 - (id)setArray:(CNVoidRefArray)array usage:(unsigned int)usage;
 - (id)updateStart:(NSUInteger)start count:(NSUInteger)count array:(CNVoidRefArray)array;
 - (void)bind;
-- (void)unbind;
-- (void)applyDraw:(void(^)())draw;
 - (unsigned int)stride;
 + (ODClassType*)type;
 @end
@@ -108,6 +108,7 @@ ODPType* egMeshDataType();
 + (EGVertexBuffer*)vec3;
 + (EGVertexBuffer*)vec4;
 + (EGVertexBuffer*)mesh;
+- (void)bind;
 + (ODClassType*)type;
 @end
 
@@ -120,6 +121,7 @@ ODPType* egMeshDataType();
 - (void)draw;
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
 - (void)drawByQuads;
+- (void)bind;
 + (ODClassType*)type;
 @end
 

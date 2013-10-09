@@ -139,34 +139,30 @@ static ODClassType* _EGShader_type;
 
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh start:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context bindShaderProgramProgram:_program];
-    [mesh.vertexBuffer applyDraw:^void() {
-        [self loadVbDesc:mesh.vertexBuffer.desc param:param];
-        [mesh.indexBuffer drawWithStart:start count:count];
-    }];
+    [mesh.vertexBuffer bind];
+    [self loadVbDesc:mesh.vertexBuffer.desc param:param];
+    [mesh.indexBuffer drawWithStart:start count:count];
 }
 
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode {
     [EGGlobal.context bindShaderProgramProgram:_program];
-    [vb applyDraw:^void() {
-        [self loadVbDesc:vb.desc param:param];
-        glDrawElements(mode, index.count, GL_UNSIGNED_INT, index.bytes);
-    }];
+    [vb bind];
+    [self loadVbDesc:vb.desc param:param];
+    glDrawElements(mode, index.count, GL_UNSIGNED_INT, index.bytes);
 }
 
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb indexRef:(CNVoidRefArray)indexRef mode:(unsigned int)mode {
     [EGGlobal.context bindShaderProgramProgram:_program];
-    [vb applyDraw:^void() {
-        [self loadVbDesc:vb.desc param:param];
-        glDrawElements(mode, indexRef.length / 4, GL_UNSIGNED_INT, indexRef.bytes);
-    }];
+    [vb bind];
+    [self loadVbDesc:vb.desc param:param];
+    glDrawElements(mode, indexRef.length / 4, GL_UNSIGNED_INT, indexRef.bytes);
 }
 
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb mode:(unsigned int)mode {
     [EGGlobal.context bindShaderProgramProgram:_program];
-    [vb applyDraw:^void() {
-        [self loadVbDesc:vb.desc param:param];
-        glDrawArrays(mode, 0, [vb count]);
-    }];
+    [vb bind];
+    [self loadVbDesc:vb.desc param:param];
+    glDrawArrays(mode, 0, [vb count]);
 }
 
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(id)param {

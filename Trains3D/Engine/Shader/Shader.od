@@ -52,34 +52,30 @@ class Shader<P>(program : ShaderProgram) {
 
     def draw(param : P, mesh : Mesh<_>, start : uint, count : uint) {
         context.bindShaderProgram(program)
-        mesh.vertexBuffer {
-            load(mesh.vertexBuffer.desc, param)
-            mesh.indexBuffer.drawWith(start, count)
-        }
+        mesh.vertexBuffer.bind
+        load(mesh.vertexBuffer.desc, param)
+        mesh.indexBuffer.drawWith(start, count)
     }
 
     def draw(param : P, vb : VertexBuffer<_>, index : PArray<uint4>, mode : uint4) {
         context.bindShaderProgram(program)
-        vb {
-            load(vb.desc, param)
-            glDrawElements(mode, index.count, GL_UNSIGNED_INT, index.bytes)
-        }
+        vb.bind
+        load(vb.desc, param)
+        glDrawElements(mode, index.count, GL_UNSIGNED_INT, index.bytes)
     }
 
     def draw(param : P, vb : VertexBuffer<_>, indexRef : VoidRefArray, mode : uint4) {
         context.bindShaderProgram(program)
-        vb {
-            load(vb.desc, param)
-            glDrawElements(mode, indexRef.length/4, GL_UNSIGNED_INT, indexRef.bytes)
-        }
+        vb.bind
+        load(vb.desc, param)
+        glDrawElements(mode, indexRef.length/4, GL_UNSIGNED_INT, indexRef.bytes)
     }
 
     def draw(param : P, vb : VertexBuffer<_>, mode : uint4) {
         context.bindShaderProgram(program)
-        vb {
-            load(vb.desc, param)
-            glDrawArrays(mode, 0, vb.count)
-        }
+        vb.bind
+        load(vb.desc, param)
+        glDrawArrays(mode, 0, vb.count)
     }
 
     def load(vbDesc : VertexBufferDesc<_>, param : P)
@@ -103,8 +99,15 @@ class ShaderAttribute(handle : GLuint) {
         glEnableVertexAttribArray(handle)
     }
 
+//    private var _lastStride : uint = 0
+//    private var _lastShift : uint = 0
+
     def setFromBufferWith(stride : uint, valuesCount : uint, valuesType : uint4, shift : uint) {
-        egVertexAttribPointer(handle, valuesCount, valuesType, GL_FALSE, stride, shift)
+//        if(_lastStride != stride || _lastShift != shift) {
+//            _lastStride = stride
+//            _lastShift = shift
+            egVertexAttribPointer(handle, valuesCount, valuesType, GL_FALSE, stride, shift)
+//        }
     }
 }
 

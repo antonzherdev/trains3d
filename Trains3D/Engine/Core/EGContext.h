@@ -6,6 +6,8 @@
 @class EGFont;
 @class EGFileTexture;
 @class EGShaderProgram;
+@class EGVertexBuffer;
+@class EGIndexBuffer;
 @class EGShadowMap;
 @class GEMat4;
 
@@ -55,6 +57,10 @@
 - (void)bindTextureTexture:(EGTexture*)texture;
 - (void)bindTextureSlot:(unsigned int)slot target:(unsigned int)target texture:(EGTexture*)texture;
 - (void)bindShaderProgramProgram:(EGShaderProgram*)program;
+- (void)bindVertexBufferBuffer:(EGVertexBuffer*)buffer;
+- (GLuint)vertexBufferId;
+- (void)bindIndexBufferBuffer:(EGIndexBuffer*)buffer;
+- (GLuint)indexBufferId;
 + (ODClassType*)type;
 @end
 

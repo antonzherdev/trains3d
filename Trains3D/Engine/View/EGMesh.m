@@ -1,5 +1,6 @@
 #import "EGMesh.h"
 
+#import "EGContext.h"
 NSString* EGMeshDataDescription(EGMeshData self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<EGMeshData: "];
     [description appendFormat:@"uv=%@", GEVec2Description(self.uv)];
@@ -188,42 +189,29 @@ static ODClassType* _EGBuffer_type;
 }
 
 - (id)setData:(CNPArray*)data usage:(unsigned int)usage {
-    glBindBuffer(_bufferType, _handle);
+    [self bind];
     glBufferData(_bufferType, data.length, data.bytes, usage);
-    glBindBuffer(_bufferType, 0);
     __length = data.length;
     __count = data.count;
     return self;
 }
 
 - (id)setArray:(CNVoidRefArray)array usage:(unsigned int)usage {
-    glBindBuffer(_bufferType, _handle);
+    [self bind];
     glBufferData(_bufferType, array.length, array.bytes, usage);
-    glBindBuffer(_bufferType, 0);
     __length = array.length;
     __count = array.length / _dataType.size;
     return self;
 }
 
 - (id)updateStart:(NSUInteger)start count:(NSUInteger)count array:(CNVoidRefArray)array {
-    glBindBuffer(_bufferType, _handle);
+    [self bind];
     glBufferSubData(_bufferType, start * _dataType.size, count * _dataType.size, array.bytes);
-    glBindBuffer(_bufferType, 0);
     return self;
 }
 
 - (void)bind {
     glBindBuffer(_bufferType, _handle);
-}
-
-- (void)unbind {
-    glBindBuffer(_bufferType, 0);
-}
-
-- (void)applyDraw:(void(^)())draw {
-    [self bind];
-    ((void(^)())(draw))();
-    [self unbind];
 }
 
 - (unsigned int)stride {
@@ -415,6 +403,10 @@ static ODClassType* _EGVertexBuffer_type;
     return [EGVertexBuffer vertexBufferWithDesc:[EGVertexBufferDesc mesh] handle:egGenBuffer()];
 }
 
+- (void)bind {
+    [EGGlobal.context bindVertexBufferBuffer:self];
+}
+
 - (ODClassType*)type {
     return [EGVertexBuffer type];
 }
@@ -477,13 +469,11 @@ static ODClassType* _EGIndexBuffer_type;
 - (void)draw {
     [self bind];
     glDrawElements(GL_TRIANGLES, [self count], GL_UNSIGNED_INT, 0);
-    [self unbind];
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [self bind];
     glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 4 * start);
-    [self unbind];
 }
 
 - (void)drawByQuads {
@@ -493,7 +483,10 @@ static ODClassType* _EGIndexBuffer_type;
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 4 * i);
         i += 6;
     }
-    [self unbind];
+}
+
+- (void)bind {
+    [EGGlobal.context bindIndexBufferBuffer:self];
 }
 
 - (ODClassType*)type {

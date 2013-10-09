@@ -4,6 +4,7 @@
 #import "EGTexture.h"
 #import "EGFont.h"
 #import "EGShader.h"
+#import "EGMesh.h"
 #import "EGShadow.h"
 #import "GEMat4.h"
 @implementation EGGlobal
@@ -90,6 +91,8 @@ static ODClassType* _EGGlobal_type;
     GERectI __viewport;
     GLuint __lastTexture2D;
     GLuint __lastShaderProgram;
+    GLuint __lastVertexBuffer;
+    GLuint __lastIndexBuffer;
 }
 static ODClassType* _EGContext_type;
 @synthesize defaultFramebuffer = _defaultFramebuffer;
@@ -116,6 +119,8 @@ static ODClassType* _EGContext_type;
         __viewportStack = [CNList apply];
         __lastTexture2D = 0;
         __lastShaderProgram = 0;
+        __lastVertexBuffer = 0;
+        __lastIndexBuffer = 0;
     }
     
     return self;
@@ -144,6 +149,8 @@ static ODClassType* _EGContext_type;
     __viewport = geRectIApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0);
     __lastTexture2D = 0;
     __lastShaderProgram = 0;
+    __lastIndexBuffer = 0;
+    __lastVertexBuffer = 0;
 }
 
 - (GERectI)viewport {
@@ -202,6 +209,30 @@ static ODClassType* _EGContext_type;
         __lastShaderProgram = id;
         glUseProgram(id);
     }
+}
+
+- (void)bindVertexBufferBuffer:(EGVertexBuffer*)buffer {
+    GLuint id = buffer.handle;
+    if(!(GLuintEq(id, __lastVertexBuffer))) {
+        __lastVertexBuffer = id;
+        glBindBuffer(GL_ARRAY_BUFFER, id);
+    }
+}
+
+- (GLuint)vertexBufferId {
+    return __lastVertexBuffer;
+}
+
+- (void)bindIndexBufferBuffer:(EGIndexBuffer*)buffer {
+    GLuint id = buffer.handle;
+    if(!(GLuintEq(id, __lastIndexBuffer))) {
+        __lastIndexBuffer = id;
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
+    }
+}
+
+- (GLuint)indexBufferId {
+    return __lastIndexBuffer;
 }
 
 - (ODClassType*)type {

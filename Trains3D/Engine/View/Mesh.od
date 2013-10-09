@@ -34,42 +34,29 @@ class Buffer<T>(dataType : PType<T>, bufferType : uint4, handle : GLuint) {
     def set(array : VoidRefArray) : self = set(array = array, GL_STATIC_DRAW)
 
     def set(data : PArray<T>, usage : uint4) : self = {
-        glBindBuffer(bufferType, handle)
+        bind
         glBufferData(bufferType, data.length, data.bytes, usage)
-        glBindBuffer(bufferType, 0)
         _length = data.length
         _count = data.count
         self
     }
 
     def set(array : VoidRefArray<T>, usage : uint4) : self = {
-        glBindBuffer(bufferType, handle)
+        bind
         glBufferData(bufferType, array.length, array.bytes, usage)
-        glBindBuffer(bufferType, 0)
         _length = array.length
         _count = array.length/dataType.size
         self
     }
 
     def update(start : uint, count : uint, array : VoidRefArray<T>) : self = {
-        glBindBuffer(bufferType, handle)
+        bind
         glBufferSubData(bufferType, start*dataType.size, count*dataType.size, array.bytes)
-        glBindBuffer(bufferType, 0)
         self
     }
 
     def bind {
         glBindBuffer(bufferType, handle)
-    }
-
-    def unbind {
-        glBindBuffer(bufferType, 0)
-    }
-
-    def apply(draw : () -> void) {
-        bind
-        draw()
-        unbind
     }
 
     def stride : uint4 = dataType.size
@@ -91,6 +78,10 @@ class VertexBuffer<T>(desc : VertexBufferDesc<T>, handle : GLuint) extends Buffe
     static def vec3 = VertexBuffer<vec3>(VertexBufferDesc.Vec3, egGenBuffer)
     static def vec4 = VertexBuffer<vec4>(VertexBufferDesc.Vec4, egGenBuffer)
     static def mesh = VertexBuffer<MeshData>(VertexBufferDesc.mesh, egGenBuffer)
+
+    def bind {
+        context.bindVertexBuffer(self)
+    }
 }
 
 class IndexBuffer(handle : GLuint) extends Buffer<uint4>(UInt4.type, GL_ELEMENT_ARRAY_BUFFER, handle) {
@@ -99,13 +90,11 @@ class IndexBuffer(handle : GLuint) extends Buffer<uint4>(UInt4.type, GL_ELEMENT_
     def draw {
         bind
         glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0)
-        unbind
     }
 
     def drawWith(start : uint, count : uint) {
         bind
         glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 4*start)
-        unbind
     }
 
     def drawByQuads {
@@ -115,7 +104,10 @@ class IndexBuffer(handle : GLuint) extends Buffer<uint4>(UInt4.type, GL_ELEMENT_
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 4*i)
             i += 6
         }
-        unbind
+    }
+
+    def bind {
+        context.bindIndexBuffer(self)
     }
 }
 
