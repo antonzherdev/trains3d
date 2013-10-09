@@ -5,6 +5,7 @@
 @class EGTexture;
 @class EGFont;
 @class EGFileTexture;
+@class EGShaderProgram;
 @class EGShadowMap;
 @class GEMat4;
 
@@ -53,6 +54,7 @@
 - (void)restoreDefaultFramebuffer;
 - (void)bindTextureTexture:(EGTexture*)texture;
 - (void)bindTextureSlot:(unsigned int)slot target:(unsigned int)target texture:(EGTexture*)texture;
+- (void)bindShaderProgramProgram:(EGShaderProgram*)program;
 + (ODClassType*)type;
 @end
 

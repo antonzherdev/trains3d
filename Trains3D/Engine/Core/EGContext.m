@@ -3,6 +3,7 @@
 #import "EGDirector.h"
 #import "EGTexture.h"
 #import "EGFont.h"
+#import "EGShader.h"
 #import "EGShadow.h"
 #import "GEMat4.h"
 @implementation EGGlobal
@@ -88,6 +89,7 @@ static ODClassType* _EGGlobal_type;
     CNList* __viewportStack;
     GERectI __viewport;
     GLuint __lastTexture2D;
+    GLuint __lastShaderProgram;
 }
 static ODClassType* _EGContext_type;
 @synthesize defaultFramebuffer = _defaultFramebuffer;
@@ -113,6 +115,7 @@ static ODClassType* _EGContext_type;
         _considerShadows = YES;
         __viewportStack = [CNList apply];
         __lastTexture2D = 0;
+        __lastShaderProgram = 0;
     }
     
     return self;
@@ -140,6 +143,7 @@ static ODClassType* _EGContext_type;
     _considerShadows = YES;
     __viewport = geRectIApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0);
     __lastTexture2D = 0;
+    __lastShaderProgram = 0;
 }
 
 - (GERectI)viewport {
@@ -189,6 +193,14 @@ static ODClassType* _EGContext_type;
         } else {
             glBindTexture(target, id);
         }
+    }
+}
+
+- (void)bindShaderProgramProgram:(EGShaderProgram*)program {
+    GLuint id = program.handle;
+    if(!(GLuintEq(id, __lastShaderProgram))) {
+        __lastShaderProgram = id;
+        glUseProgram(id);
     }
 }
 

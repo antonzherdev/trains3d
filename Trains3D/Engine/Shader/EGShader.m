@@ -1,6 +1,7 @@
 #import "EGShader.h"
 
 #import "EGMesh.h"
+#import "EGContext.h"
 #import "GEMat4.h"
 @implementation EGShaderProgram{
     GLuint _handle;
@@ -62,20 +63,6 @@ static ODClassType* _EGShaderProgram_type;
 
 - (void)dealoc {
     glDeleteProgram(_handle);
-}
-
-- (void)set {
-    glUseProgram(_handle);
-}
-
-- (void)clear {
-    glUseProgram(0);
-}
-
-- (void)applyDraw:(void(^)())draw {
-    glUseProgram(_handle);
-    ((void(^)())(draw))();
-    glUseProgram(0);
 }
 
 - (EGShaderAttribute*)attributeForName:(NSString*)name {
@@ -151,39 +138,35 @@ static ODClassType* _EGShader_type;
 }
 
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh start:(NSUInteger)start count:(NSUInteger)count {
-    glUseProgram(_program.handle);
+    [EGGlobal.context bindShaderProgramProgram:_program];
     [mesh.vertexBuffer applyDraw:^void() {
         [self loadVbDesc:mesh.vertexBuffer.desc param:param];
         [mesh.indexBuffer drawWithStart:start count:count];
     }];
-    glUseProgram(0);
 }
 
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode {
-    glUseProgram(_program.handle);
+    [EGGlobal.context bindShaderProgramProgram:_program];
     [vb applyDraw:^void() {
         [self loadVbDesc:vb.desc param:param];
         glDrawElements(mode, index.count, GL_UNSIGNED_INT, index.bytes);
     }];
-    glUseProgram(0);
 }
 
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb indexRef:(CNVoidRefArray)indexRef mode:(unsigned int)mode {
-    glUseProgram(_program.handle);
+    [EGGlobal.context bindShaderProgramProgram:_program];
     [vb applyDraw:^void() {
         [self loadVbDesc:vb.desc param:param];
         glDrawElements(mode, indexRef.length / 4, GL_UNSIGNED_INT, indexRef.bytes);
     }];
-    glUseProgram(0);
 }
 
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb mode:(unsigned int)mode {
-    glUseProgram(_program.handle);
+    [EGGlobal.context bindShaderProgramProgram:_program];
     [vb applyDraw:^void() {
         [self loadVbDesc:vb.desc param:param];
         glDrawArrays(mode, 0, [vb count]);
     }];
-    glUseProgram(0);
 }
 
 - (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(id)param {

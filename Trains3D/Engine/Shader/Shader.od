@@ -35,20 +35,6 @@ class ShaderProgram(handle : GLuint) {
         glDeleteProgram(handle)
     }
 
-    def set {
-        glUseProgram(handle)
-    }
-
-    def clear {
-        glUseProgram(0)
-    }
-
-    def apply(draw : () -> void) {
-        glUseProgram(handle)
-        draw()
-        glUseProgram(0)
-    }
-
     def attributeFor(name : string ) : ShaderAttribute = {
         val h = egGetAttribLocation(handle, name)
         if(h < 0) throw "Could not found attribute for name " + name
@@ -65,39 +51,35 @@ class Shader<P>(program : ShaderProgram) {
     }
 
     def draw(param : P, mesh : Mesh<_>, start : uint, count : uint) {
-        glUseProgram(program.handle)
+        context.bindShaderProgram(program)
         mesh.vertexBuffer {
             load(mesh.vertexBuffer.desc, param)
             mesh.indexBuffer.drawWith(start, count)
         }
-        glUseProgram(0)
     }
 
     def draw(param : P, vb : VertexBuffer<_>, index : PArray<uint4>, mode : uint4) {
-        glUseProgram(program.handle)
+        context.bindShaderProgram(program)
         vb {
             load(vb.desc, param)
             glDrawElements(mode, index.count, GL_UNSIGNED_INT, index.bytes)
         }
-        glUseProgram(0)
     }
 
     def draw(param : P, vb : VertexBuffer<_>, indexRef : VoidRefArray, mode : uint4) {
-        glUseProgram(program.handle)
+        context.bindShaderProgram(program)
         vb {
             load(vb.desc, param)
             glDrawElements(mode, indexRef.length/4, GL_UNSIGNED_INT, indexRef.bytes)
         }
-        glUseProgram(0)
     }
 
     def draw(param : P, vb : VertexBuffer<_>, mode : uint4) {
-        glUseProgram(program.handle)
+        context.bindShaderProgram(program)
         vb {
             load(vb.desc, param)
             glDrawArrays(mode, 0, vb.count)
         }
-        glUseProgram(0)
     }
 
     def load(vbDesc : VertexBufferDesc<_>, param : P)

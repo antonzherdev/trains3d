@@ -3,6 +3,8 @@
 #import "GEVec.h"
 @class EGMesh;
 @class EGIndexBuffer;
+@class EGGlobal;
+@class EGContext;
 @class EGVertexBuffer;
 @class EGVertexBufferDesc;
 @class GEMat4;
@@ -29,9 +31,6 @@
 + (EGShaderProgram*)linkFromShadersVertex:(GLuint)vertex fragment:(GLuint)fragment;
 + (GLuint)compileShaderForShaderType:(unsigned int)shaderType source:(NSString*)source;
 - (void)dealoc;
-- (void)set;
-- (void)clear;
-- (void)applyDraw:(void(^)())draw;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
 + (NSInteger)version;
 + (ODClassType*)type;

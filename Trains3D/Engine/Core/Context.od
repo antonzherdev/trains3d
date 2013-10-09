@@ -30,6 +30,7 @@ class Context {
         considerShadows = true
         _viewport = RectI(0, 0, 0, 0)
         _lastTexture2D = 0
+        _lastShaderProgram = 0
     }
 
     private var _viewportStack = List<RectI>()
@@ -74,6 +75,15 @@ class Context {
                     glBindTexture(target, id)
                 }
             } else glBindTexture(target, id)
+        }
+    }
+
+    private var _lastShaderProgram : GLuint = 0
+    def bindShaderProgram(program : ShaderProgram) {
+        val id = program.handle
+        if(id != _lastShaderProgram) {
+            _lastShaderProgram = id
+            glUseProgram(id)
         }
     }
 }
