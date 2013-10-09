@@ -66,8 +66,7 @@ class ParticleSystemView<P extends Particle, D>(vbDesc : VertexBufferDesc<D>, ma
         if(particles.isEmpty) return nil
 
         glDisable(GL_DEPTH_TEST)
-        glDisable(GL_CULL_FACE)
-        blendFunc {
+        context.cullFace.disabled{ blendFunc {
             var i = 0
             var vertexPointer = vertexArr
             particles.for{particle ->
@@ -78,8 +77,7 @@ class ParticleSystemView<P extends Particle, D>(vbDesc : VertexBufferDesc<D>, ma
             val vc = vertexCount
             vertexBuffer.set(array = vertexArr, usage = GL_DYNAMIC_DRAW)
             shader.draw(material, mesh, start = 0, count = n*3*(vc - 2))
-        }
-        glEnable(GL_CULL_FACE)
+        }}
         glEnable(GL_DEPTH_TEST)
     }
 

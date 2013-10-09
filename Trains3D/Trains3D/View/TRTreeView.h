@@ -10,7 +10,9 @@
 @class EGIndexBuffer;
 @class EGD2D;
 @class EGBlendFunction;
+@class EGContext;
 @class EGMesh;
+@class EGEnablingState;
 @class TRTree;
 @class TRTreeType;
 

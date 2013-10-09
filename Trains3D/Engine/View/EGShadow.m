@@ -80,9 +80,9 @@ static ODClassType* _EGShadowMap_type;
 }
 
 - (void)draw {
-    glDisable(GL_CULL_FACE);
-    [[self shader] drawParam:[EGColorSource applyTexture:_texture] mesh:[EGBaseViewportSurface fullScreenMesh]];
-    glEnable(GL_CULL_FACE);
+    [EGGlobal.context.cullFace disabledF:^void() {
+        [[self shader] drawParam:[EGColorSource applyTexture:_texture] mesh:[EGBaseViewportSurface fullScreenMesh]];
+    }];
 }
 
 - (ODClassType*)type {

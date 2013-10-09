@@ -33,6 +33,7 @@ class Context {
         _lastShaderProgram = 0
         _lastIndexBuffer = 0
         _lastVertexBuffer = 0
+        cullFace.clear
     }
 
     private var _viewportStack = List<RectI>()
@@ -108,6 +109,56 @@ class Context {
         }
     }
     def indexBufferId : GLuint = _lastIndexBuffer
+
+    val cullFace : EnablingState = EnablingState(GL_CULL_FACE)
+    def draw {
+        cullFace.draw
+    }
+}
+
+class EnablingState(tp: uint4) {
+    private var _last : bool = false
+    private var _coming : bool = false
+
+    def enable {
+        _coming = true
+    }
+
+    def disable {
+        _coming = false
+    }
+
+    def draw {
+        if(_last != _coming) {
+            if(_coming) glEnable(tp)
+            else glDisable(tp)
+        }
+    }
+
+    def clear {
+        _last = false
+        _coming = false
+    }
+
+    def disabled(f : () -> void) {
+        if(_coming) {
+            _coming = false
+            f()
+            _coming = true
+        } else {
+            f()
+        }
+    }
+
+    def enabled(f : () -> void) {
+        if(!_coming) {
+            _coming = true
+            f()
+            _coming = false
+        } else {
+            f()
+        }
+    }
 }
 
 class RenderTarget

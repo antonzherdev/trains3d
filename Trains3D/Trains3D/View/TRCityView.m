@@ -7,7 +7,6 @@
 #import "TRCity.h"
 #import "GEMat4.h"
 #import "TRModels.h"
-#import "GL.h"
 #import "EGSchedule.h"
 @implementation TRCityView{
     EGMesh* _expectedTrainModel;
@@ -49,10 +48,10 @@ static ODClassType* _TRCityView_type;
     } f:^void() {
         [[EGStandardMaterial applyColor:city.color.color] drawMesh:TRModels.cityBodies];
         if(!([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]])) {
-            glDisable(GL_CULL_FACE);
-            EGStandardMaterial* roofMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:city.color.color texture:_roofTexture] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:1.0];
-            [roofMaterial drawMesh:TRModels.cityRoofs];
-            glEnable(GL_CULL_FACE);
+            [EGGlobal.context.cullFace disabledF:^void() {
+                EGStandardMaterial* roofMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:city.color.color texture:_roofTexture] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:1.0];
+                [roofMaterial drawMesh:TRModels.cityRoofs];
+            }];
             [_windowMaterial drawMesh:TRModels.cityWindows];
             [city.expectedTrainCounter forF:^void(CGFloat time) {
                 CGFloat x = -time / 2;

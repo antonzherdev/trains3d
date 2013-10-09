@@ -1,6 +1,7 @@
 #import "EGSprite.h"
 
 #import "EGMaterial.h"
+#import "EGContext.h"
 #import "GL.h"
 #import "EGTexture.h"
 @implementation EGD2D
@@ -30,9 +31,9 @@ static ODClassType* _EGD2D_type;
     v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[2], material.color, uv.p[2]));
     v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[3], material.color, uv.p[3]));
     [_EGD2D_vb setArray:_EGD2D_vertexes];
-    glDisable(GL_CULL_FACE);
-    [[EGBillboardShaderSystem shaderForParam:material] drawParam:material vb:_EGD2D_vb mode:GL_TRIANGLE_STRIP];
-    glEnable(GL_CULL_FACE);
+    [EGGlobal.context.cullFace disabledF:^void() {
+        [[EGBillboardShaderSystem shaderForParam:material] drawParam:material vb:_EGD2D_vb mode:GL_TRIANGLE_STRIP];
+    }];
 }
 
 + (CNVoidRefArray)writeSpriteIn:(CNVoidRefArray)in material:(EGColorSource*)material at:(GEVec3)at quad:(GEQuad)quad uv:(GEQuad)uv {
@@ -52,9 +53,9 @@ static ODClassType* _EGD2D_type;
     v = cnVoidRefArrayWriteTpItem(v, EGMeshData, EGMeshDataMake(GEVec2Make(0.0, 0.0), GEVec3Make(0.0, 0.0, 1.0), geVec3ApplyVec2Z(p0, 0.0)));
     v = cnVoidRefArrayWriteTpItem(v, EGMeshData, EGMeshDataMake(GEVec2Make(1.0, 1.0), GEVec3Make(0.0, 0.0, 1.0), geVec3ApplyVec2Z(p1, 0.0)));
     [_EGD2D_lineVb setArray:_EGD2D_lineVertexes];
-    glDisable(GL_CULL_FACE);
-    [material drawVb:_EGD2D_lineVb mode:((unsigned int)(GL_LINES))];
-    glEnable(GL_CULL_FACE);
+    [EGGlobal.context.cullFace disabledF:^void() {
+        [material drawVb:_EGD2D_lineVb mode:((unsigned int)(GL_LINES))];
+    }];
 }
 
 - (ODClassType*)type {

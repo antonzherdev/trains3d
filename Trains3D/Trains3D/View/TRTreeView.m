@@ -56,9 +56,9 @@ static ODClassType* _TRTreeView_type;
     [_vb setArray:ar usage:GL_DYNAMIC_DRAW];
     [_ib setArray:iar usage:GL_DYNAMIC_DRAW];
     [EGBlendFunction.standard applyDraw:^void() {
-        glDisable(GL_CULL_FACE);
-        [[EGBillboardShaderSystem shaderForParam:_material] drawParam:_material mesh:[EGMesh meshWithVertexBuffer:_vb indexBuffer:_ib]];
-        glEnable(GL_CULL_FACE);
+        [EGGlobal.context.cullFace disabledF:^void() {
+            [[EGBillboardShaderSystem shaderForParam:_material] drawParam:_material mesh:[EGMesh meshWithVertexBuffer:_vb indexBuffer:_ib]];
+        }];
     }];
     cnVoidRefArrayFree(ar);
     cnVoidRefArrayFree(iar);

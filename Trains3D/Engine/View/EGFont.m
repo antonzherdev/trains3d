@@ -244,9 +244,9 @@ static ODClassType* _EGFont_type;
     }];
     [_vb setArray:vertexes usage:GL_DYNAMIC_DRAW];
     [_ib setArray:indexes usage:GL_DYNAMIC_DRAW];
-    glDisable(GL_CULL_FACE);
-    [EGFontShader.instance drawParam:[EGFontShaderParam fontShaderParamWithTexture:_texture color:color] mesh:_mesh];
-    glEnable(GL_CULL_FACE);
+    [EGGlobal.context.cullFace disabledF:^void() {
+        [EGFontShader.instance drawParam:[EGFontShaderParam fontShaderParamWithTexture:_texture color:color] mesh:_mesh];
+    }];
 }
 
 - (ODClassType*)type {

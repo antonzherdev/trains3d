@@ -236,9 +236,9 @@ static ODClassType* _EGViewportSurface_type;
 }
 
 - (void)drawWithZ:(float)z {
-    glDisable(GL_CULL_FACE);
-    [[self shader] drawParam:[EGViewportSurfaceShaderParam viewportSurfaceShaderParamWithTexture:[self texture] z:z] mesh:[EGViewportSurface fullScreenMesh]];
-    glEnable(GL_CULL_FACE);
+    [EGGlobal.context.cullFace disabledF:^void() {
+        [[self shader] drawParam:[EGViewportSurfaceShaderParam viewportSurfaceShaderParamWithTexture:[self texture] z:z] mesh:[EGViewportSurface fullScreenMesh]];
+    }];
 }
 
 - (EGTexture*)texture {
@@ -273,9 +273,9 @@ static ODClassType* _EGViewportSurface_type;
     if([[self surface] isEmpty]) return ;
     if([self needRedraw]) {
         glDisable(GL_DEPTH_TEST);
-        glDisable(GL_CULL_FACE);
-        [[self shader] drawParam:[EGViewportSurfaceShaderParam viewportSurfaceShaderParamWithTexture:[self texture] z:0.0] mesh:[EGViewportSurface fullScreenMesh]];
-        glEnable(GL_CULL_FACE);
+        [EGGlobal.context.cullFace disabledF:^void() {
+            [[self shader] drawParam:[EGViewportSurfaceShaderParam viewportSurfaceShaderParamWithTexture:[self texture] z:0.0] mesh:[EGViewportSurface fullScreenMesh]];
+        }];
         glEnable(GL_DEPTH_TEST);
     } else {
         glBindFramebuffer(GL_READ_FRAMEBUFFER, [((EGSurface*)([[self surface] get])) frameBuffer]);

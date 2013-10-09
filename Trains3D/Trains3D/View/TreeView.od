@@ -25,10 +25,10 @@ class TreeView(forest : Forest) {
         vb.set(ar, GL_DYNAMIC_DRAW)
         ib.set(iar, GL_DYNAMIC_DRAW)
         BlendFunction.standard {
-            glDisable(GL_CULL_FACE)
+            context.cullFace.disabled {
 //            BillboardShaderSystem.shaderFor(material).draw(material, vb, iar, GL_TRIANGLES)
-            BillboardShaderSystem.shaderFor(material).draw(material, Mesh(vb, ib))
-            glEnable(GL_CULL_FACE)
+                BillboardShaderSystem.shaderFor(material).draw(material, Mesh(vb, ib))
+            }
         }
         ar.free
         iar.free

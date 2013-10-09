@@ -5,7 +5,10 @@
 @class EGCameraIso;
 @class GEMat4;
 @class EGColorSource;
+@class EGGlobal;
+@class EGContext;
 @class EGMaterial;
+@class EGEnablingState;
 
 @class EGMapSsoView;
 

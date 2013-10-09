@@ -79,8 +79,8 @@ class MapSsoView(map : MapSso) {
     }
 
     def drawPlaneWith(material : Material) {
-        glDisable(GL_CULL_FACE)
-        material.draw(plane)
-        glEnable(GL_CULL_FACE)
+        context.cullFace.disabled {
+            material.draw(plane)
+        }
     }
 }

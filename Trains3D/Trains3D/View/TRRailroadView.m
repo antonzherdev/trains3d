@@ -84,9 +84,7 @@ static ODClassType* _TRRailroadView_type;
 }
 
 - (void)drawForeground {
-    [[_railroad lights] forEach:^void(TRRailLight* _) {
-        [_lightView drawLight:_];
-    }];
+    [_lightView drawLights:[_railroad lights]];
 }
 
 - (ODClassType*)type {
@@ -346,33 +344,38 @@ static ODClassType* _TRLightView_type;
     _TRLightView_type = [ODClassType classTypeWithCls:[TRLightView class]];
 }
 
-- (void)drawLight:(TRRailLight*)light {
-    [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
-        return [[_ modifyW:^GEMat4*(GEMat4* w) {
+- (void)drawLights:(id<CNSeq>)lights {
+    if([lights isEmpty]) return ;
+    [EGGlobal.matrix push];
+    id<CNSeq> arr = [[[lights chain] map:^CNTuple*(TRRailLight* light) {
+        return tuple([[EGGlobal.matrix.value modifyW:^GEMat4*(GEMat4* w) {
             return [w translateX:((float)(light.tile.x)) y:((float)(light.tile.y)) z:0.0];
         }] modifyM:^GEMat4*(GEMat4* m) {
             return [[m rotateAngle:((float)(90 + light.connector.angle)) x:0.0 y:1.0 z:0.0] translateX:0.2 y:0.0 z:-0.45];
-        }];
-    } f:^void() {
+        }], numb(light.isGreen));
+    }] toArray];
+    BOOL shadow = [EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]];
+    [arr forEach:^void(CNTuple* p) {
+        EGGlobal.matrix.value = ((EGMatrixModel*)(p.a));
         [_bodyMaterial drawMesh:TRModels.light];
-        if(!([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]])) if(light.isGreen) {
+        if(!(shadow)) if(unumb(p.b)) {
             [_greenMaterial drawMesh:TRModels.lightGreen];
             [_inactiveMaterial drawMesh:TRModels.lightRed];
-            glDisable(GL_CULL_FACE);
-            [EGBlendFunction.standard applyDraw:^void() {
-                [_greenGlowMaterial drawMesh:TRModels.lightGreenGlow];
-            }];
-            glEnable(GL_CULL_FACE);
         } else {
             [_inactiveMaterial drawMesh:TRModels.lightGreen];
             [_redMaterial drawMesh:TRModels.lightRed];
-            glDisable(GL_CULL_FACE);
-            [EGBlendFunction.standard applyDraw:^void() {
-                [_redGlowMaterial drawMesh:TRModels.lightRedGlow];
-            }];
-            glEnable(GL_CULL_FACE);
         }
     }];
+    if(!(shadow)) [EGGlobal.context.cullFace disabledF:^void() {
+        [EGBlendFunction.standard applyDraw:^void() {
+            [arr forEach:^void(CNTuple* p) {
+                EGGlobal.matrix.value = ((EGMatrixModel*)(p.a));
+                if(unumb(p.b)) [_greenGlowMaterial drawMesh:TRModels.lightGreenGlow];
+                else [_redGlowMaterial drawMesh:TRModels.lightRedGlow];
+            }];
+        }];
+    }];
+    [EGGlobal.matrix pop];
 }
 
 - (ODClassType*)type {
@@ -505,12 +508,12 @@ static ODClassType* _TRBackgroundView_type;
 
 - (void)drawShadow {
     if(egPlatform().shadows) [EGBlendFunction.standard applyDraw:^void() {
-        glDisable(GL_CULL_FACE);
-        glDisable(GL_DEPTH_TEST);
-        EGShadowDrawParam* param = [EGShadowDrawParam shadowDrawParamWithPercents:(@[@0.3])];
-        [[EGShadowDrawShaderSystem shaderForParam:param] drawParam:param mesh:_mapView.plane];
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_CULL_FACE);
+        [EGGlobal.context.cullFace disabledF:^void() {
+            glDisable(GL_DEPTH_TEST);
+            EGShadowDrawParam* param = [EGShadowDrawParam shadowDrawParamWithPercents:(@[@0.3])];
+            [[EGShadowDrawShaderSystem shaderForParam:param] drawParam:param mesh:_mapView.plane];
+            glEnable(GL_DEPTH_TEST);
+        }];
     }];
 }
 

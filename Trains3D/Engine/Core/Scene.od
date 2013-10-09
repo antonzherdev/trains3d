@@ -77,7 +77,7 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
         context.environment = env
         val camera = view.cameraWith(viewport)
         val cullFace = camera.cullFace
-        if(cullFace != GL_NONE) glEnable(GL_CULL_FACE)
+        if(cullFace != GL_NONE) context.cullFace.enable
 
         if(egPlatform.shadows) {
             val shadowLights = env.lights.chain.filter(_.hasShadows).toArray
@@ -99,7 +99,6 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
         if(cullFace != GL_NONE) glCullFace(cullFace)
 
         view.draw
-        if(cullFace != GL_NONE) glDisable(GL_CULL_FACE)
 //        if(director.isPaused) { if(!env.lights.isEmpty)env.lights[0].shadowMap.draw}
 //        else view.draw
     }

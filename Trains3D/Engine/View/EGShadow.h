@@ -8,6 +8,7 @@
 @class EGGlobal;
 @class EGContext;
 @class EGColorSource;
+@class EGEnablingState;
 @class EGVertexBufferDesc;
 @class EGMatrixStack;
 @class EGMatrixModel;

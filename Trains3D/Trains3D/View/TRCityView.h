@@ -14,6 +14,7 @@
 @class EGMaterial;
 @class EGContext;
 @class EGRenderTarget;
+@class EGEnablingState;
 @class EGCounter;
 @class EGMatrixStack;
 

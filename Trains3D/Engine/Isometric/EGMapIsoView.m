@@ -5,6 +5,7 @@
 #import "GEMat4.h"
 #import "EGMaterial.h"
 #import "GL.h"
+#import "EGContext.h"
 @implementation EGMapSsoView{
     EGMapSso* _map;
     CNLazy* __lazy_axisVertexBuffer;
@@ -59,9 +60,9 @@ static ODClassType* _EGMapSsoView_type;
 }
 
 - (void)drawPlaneWithMaterial:(EGMaterial*)material {
-    glDisable(GL_CULL_FACE);
-    [material drawMesh:_plane];
-    glEnable(GL_CULL_FACE);
+    [EGGlobal.context.cullFace disabledF:^void() {
+        [material drawMesh:_plane];
+    }];
 }
 
 - (ODClassType*)type {

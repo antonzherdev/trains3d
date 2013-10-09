@@ -304,7 +304,7 @@ static ODClassType* _EGLayer_type;
     EGGlobal.context.environment = env;
     id<EGCamera> camera = [_view cameraWithViewport:viewport];
     NSUInteger cullFace = [camera cullFace];
-    if(cullFace != GL_NONE) glEnable(GL_CULL_FACE);
+    if(cullFace != GL_NONE) [EGGlobal.context.cullFace enable];
     if(egPlatform().shadows) {
         id<CNSeq> shadowLights = [[[env.lights chain] filter:^BOOL(EGLight* _) {
             return _.hasShadows;
@@ -327,7 +327,6 @@ static ODClassType* _EGLayer_type;
     EGGlobal.matrix.value = [camera matrixModel];
     if(cullFace != GL_NONE) glCullFace(cullFace);
     [_view draw];
-    if(cullFace != GL_NONE) glDisable(GL_CULL_FACE);
 }
 
 - (BOOL)processEvent:(EGEvent*)event viewport:(GERect)viewport {

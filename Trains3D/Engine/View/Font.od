@@ -150,9 +150,9 @@ class Font(name : string) {
         vb.set(vertexes, GL_DYNAMIC_DRAW)
         ib.set(indexes, GL_DYNAMIC_DRAW)
 
-        glDisable(GL_CULL_FACE)
-        FontShader.instance.draw(FontShaderParam(texture, color), mesh)
-        glEnable(GL_CULL_FACE)
+        context.cullFace.disabled {
+            FontShader.instance.draw(FontShaderParam(texture, color), mesh)
+        }
     }
 }
 

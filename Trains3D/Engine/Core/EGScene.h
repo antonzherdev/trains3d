@@ -5,6 +5,7 @@
 @protocol EGSoundPlayer;
 @class EGGlobal;
 @class EGContext;
+@class EGEnablingState;
 @class EGPlatform;
 @class EGEnvironment;
 @class EGLight;

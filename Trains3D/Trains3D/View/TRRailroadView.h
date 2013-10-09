@@ -20,6 +20,7 @@
 @class TRRailLight;
 @class EGRenderTarget;
 @class EGBlendFunction;
+@class EGEnablingState;
 @class TRRailPoint;
 @class EGMapSso;
 @class EGMapSsoView;
@@ -85,7 +86,7 @@
 + (id)lightView;
 - (id)init;
 - (ODClassType*)type;
-- (void)drawLight:(TRRailLight*)light;
+- (void)drawLights:(id<CNSeq>)lights;
 + (ODClassType*)type;
 @end
 

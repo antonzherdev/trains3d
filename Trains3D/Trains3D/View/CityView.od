@@ -20,10 +20,10 @@ class CityView {
         ) {
             StandardMaterial(city.color.color).draw(Models.cityBodies)
             if(!context.renderTarget.is<ShadowRenderTarget>) {
-                glDisable(GL_CULL_FACE)
-                val roofMaterial = StandardMaterial(ColorSource(city.color.color, roofTexture), vec4(0.5, 0.5, 0.5, 1), 1)
-                roofMaterial.draw(Models.cityRoofs)
-                glEnable(GL_CULL_FACE)
+                context.cullFace.disabled {
+                    val roofMaterial = StandardMaterial(ColorSource(city.color.color, roofTexture), vec4(0.5, 0.5, 0.5, 1), 1)
+                    roofMaterial.draw(Models.cityRoofs)
+                }
                 windowMaterial.draw(Models.cityWindows)
                 city.expectedTrainCounter.for{time ->
                     val x = -time/2

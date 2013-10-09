@@ -7,6 +7,9 @@
 @class EGMesh;
 @class EGShader;
 @class EGMaterial;
+@class EGGlobal;
+@class EGContext;
+@class EGEnablingState;
 
 @class EGParticleSystem;
 @class EGParticle;

@@ -3,6 +3,9 @@
 #import "GEVec.h"
 #import "GELine.h"
 @class EGColorSource;
+@class EGGlobal;
+@class EGContext;
+@class EGEnablingState;
 
 @class EGD3D;
 

@@ -14,10 +14,9 @@ object D2D {
         v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[2], material.color, uv.p[2]))
         v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[3], material.color, uv.p[3]))
         vb.set(vertexes)
-
-        glDisable(GL_CULL_FACE)
-        BillboardShaderSystem.shaderFor(material).draw(material, vb, GL_TRIANGLE_STRIP)
-        glEnable(GL_CULL_FACE)
+        context.cullFace.disabled {
+            BillboardShaderSystem.shaderFor(material).draw(material, vb, GL_TRIANGLE_STRIP)
+        }
     }
 
     def writeSprite(in : VoidRefArray, material : ColorSource, at : vec3, quad : Quad, uv : Quad) : VoidRefArray = {
@@ -42,9 +41,9 @@ object D2D {
         v = v.write(MeshData, MeshData(vec2(1, 1), vec3(0, 0, 1), vec3(p1, 0)))
         lineVb.set(lineVertexes)
 
-        glDisable(GL_CULL_FACE)
-        material.draw(lineVb, GL_LINES)
-        glEnable(GL_CULL_FACE)
+        context.cullFace.disabled {
+            material.draw(lineVb, GL_LINES)
+        }
     }
 }
 

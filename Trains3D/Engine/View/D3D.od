@@ -17,9 +17,9 @@ object D3D {
         v = v.write(MeshData, MeshData(uv.p[3], quad3.planeCoord.plane.n, quad3.p3))
         vb.set(vertexes)
 
-        glDisable(GL_CULL_FACE)
-        material.draw(vb, GL_TRIANGLE_STRIP)
-        glEnable(GL_CULL_FACE)
+        context.cullFace.disabled {
+            material.draw(vb, GL_TRIANGLE_STRIP)
+        }
     }
 
 

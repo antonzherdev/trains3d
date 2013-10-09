@@ -99,15 +99,8 @@ class ShaderAttribute(handle : GLuint) {
         glEnableVertexAttribArray(handle)
     }
 
-//    private var _lastStride : uint = 0
-//    private var _lastShift : uint = 0
-
     def setFromBufferWith(stride : uint, valuesCount : uint, valuesType : uint4, shift : uint) {
-//        if(_lastStride != stride || _lastShift != shift) {
-//            _lastStride = stride
-//            _lastShift = shift
-            egVertexAttribPointer(handle, valuesCount, valuesType, GL_FALSE, stride, shift)
-//        }
+        egVertexAttribPointer(handle, valuesCount, valuesType, GL_FALSE, stride, shift)
     }
 }
 

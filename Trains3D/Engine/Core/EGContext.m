@@ -93,6 +93,7 @@ static ODClassType* _EGGlobal_type;
     GLuint __lastShaderProgram;
     GLuint __lastVertexBuffer;
     GLuint __lastIndexBuffer;
+    EGEnablingState* _cullFace;
 }
 static ODClassType* _EGContext_type;
 @synthesize defaultFramebuffer = _defaultFramebuffer;
@@ -101,6 +102,7 @@ static ODClassType* _EGContext_type;
 @synthesize matrixStack = _matrixStack;
 @synthesize renderTarget = _renderTarget;
 @synthesize considerShadows = _considerShadows;
+@synthesize cullFace = _cullFace;
 
 + (id)context {
     return [[EGContext alloc] init];
@@ -121,6 +123,7 @@ static ODClassType* _EGContext_type;
         __lastShaderProgram = 0;
         __lastVertexBuffer = 0;
         __lastIndexBuffer = 0;
+        _cullFace = [EGEnablingState enablingStateWithTp:GL_CULL_FACE];
     }
     
     return self;
@@ -151,6 +154,7 @@ static ODClassType* _EGContext_type;
     __lastShaderProgram = 0;
     __lastIndexBuffer = 0;
     __lastVertexBuffer = 0;
+    [_cullFace clear];
 }
 
 - (GERectI)viewport {
@@ -235,6 +239,10 @@ static ODClassType* _EGContext_type;
     return __lastIndexBuffer;
 }
 
+- (void)draw {
+    [_cullFace draw];
+}
+
 - (ODClassType*)type {
     return [EGContext type];
 }
@@ -259,6 +267,107 @@ static ODClassType* _EGContext_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGEnablingState{
+    unsigned int _tp;
+    BOOL __last;
+    BOOL __coming;
+}
+static ODClassType* _EGEnablingState_type;
+@synthesize tp = _tp;
+
++ (id)enablingStateWithTp:(unsigned int)tp {
+    return [[EGEnablingState alloc] initWithTp:tp];
+}
+
+- (id)initWithTp:(unsigned int)tp {
+    self = [super init];
+    if(self) {
+        _tp = tp;
+        __last = NO;
+        __coming = NO;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGEnablingState_type = [ODClassType classTypeWithCls:[EGEnablingState class]];
+}
+
+- (void)enable {
+    __coming = YES;
+}
+
+- (void)disable {
+    __coming = NO;
+}
+
+- (void)draw {
+    if(__last != __coming) if(__coming) glEnable(_tp);
+    else glDisable(_tp);
+}
+
+- (void)clear {
+    __last = NO;
+    __coming = NO;
+}
+
+- (void)disabledF:(void(^)())f {
+    if(__coming) {
+        __coming = NO;
+        ((void(^)())(f))();
+        __coming = YES;
+    } else {
+        ((void(^)())(f))();
+    }
+}
+
+- (void)enabledF:(void(^)())f {
+    if(!(__coming)) {
+        __coming = YES;
+        ((void(^)())(f))();
+        __coming = NO;
+    } else {
+        ((void(^)())(f))();
+    }
+}
+
+- (ODClassType*)type {
+    return [EGEnablingState type];
+}
+
++ (ODClassType*)type {
+    return _EGEnablingState_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGEnablingState* o = ((EGEnablingState*)(other));
+    return self.tp == o.tp;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.tp;
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"tp=%d", self.tp];
     [description appendString:@">"];
     return description;
 }

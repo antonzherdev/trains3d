@@ -10,6 +10,7 @@
 @class EGContext;
 @class EGMatrixStack;
 @class GEMat4;
+@class EGEnablingState;
 @class EGTexture;
 
 @class EGFont;

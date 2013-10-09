@@ -34,14 +34,14 @@ stub class ViewportSurface(depth : bool, multisampling : bool) extends BaseViewp
     private lazy val shader = ViewportSurfaceShader()
 
     def drawWith(z : float4) {
-        glDisable(GL_CULL_FACE)
-        shader.draw(ViewportSurfaceShaderParam(texture, z), fullScreenMesh)
-        glEnable(GL_CULL_FACE)
+        context.cullFace.disabled {
+            shader.draw(ViewportSurfaceShaderParam(texture, z), fullScreenMesh)
+        }
     }
 
     def texture : Texture = case(surface.get) {
-    i : SimpleSurface -> i.texture
-    i : MultisamplingSurface -> i.texture
+        i : SimpleSurface -> i.texture
+        i : MultisamplingSurface -> i.texture
     }
 
     def draw

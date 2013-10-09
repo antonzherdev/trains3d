@@ -34,7 +34,7 @@ class RailroadView(railroad : Railroad) {
     }
 
     def drawForeground {
-        railroad.lights.for(lightView.draw(_))
+        lightView.draw(railroad.lights)
     }
 }
 
@@ -123,32 +123,41 @@ class LightView {
     val greenGlowMaterial = ColorSource(vec4(0, 1, 0, 0.8), textureFor("LightGlow.png"))
     val redGlowMaterial = ColorSource(vec4(1, 0, 0, 0.8), textureFor("LightGlow.png"))
 
-    def draw(light : RailLight) {
-        matrix(
-            _.modify(w = w -> w.translate(light.tile.x, light.tile.y, 0))
-             .modify(m = m -> m.rotate(90 + light.connector.angle, 0, 1, 0).translate(0.2, 0, -0.45))
-        ) {
+    def draw(lights : [RailLight]) {
+        if(lights.isEmpty) return nil
+
+        matrix.push
+        val arr = lights.chain.map{light ->
+            (matrix.value
+                .modify(w = w -> w.translate(light.tile.x, light.tile.y, 0))
+                .modify(m = m -> m.rotate(90 + light.connector.angle, 0, 1, 0).translate(0.2, 0, -0.45))
+            , light.isGreen)
+        }.toArray
+
+        val shadow = context.renderTarget.is<ShadowRenderTarget>
+        arr.for { p ->
+            matrix.value = p.a
             bodyMaterial.draw(Models.light)
-            if(!context.renderTarget.is<ShadowRenderTarget>) {
-                if(light.isGreen) {
+            if(!shadow) {
+                if(p.b) {
                     greenMaterial.draw(Models.lightGreen)
                     inactiveMaterial.draw(Models.lightRed)
-                    glDisable(GL_CULL_FACE)
-                    BlendFunction.standard {
-                        greenGlowMaterial.draw(Models.lightGreenGlow)
-                    }
-                    glEnable(GL_CULL_FACE)
                 } else {
                     inactiveMaterial.draw(Models.lightGreen)
                     redMaterial.draw(Models.lightRed)
-                    glDisable(GL_CULL_FACE)
-                    BlendFunction.standard {
-                        redGlowMaterial.draw(Models.lightRedGlow)
-                    }
-                    glEnable(GL_CULL_FACE)
                 }
             }
         }
+        if(!shadow) {
+            context.cullFace.disabled{ BlendFunction.standard{
+                arr.for { p ->
+                    matrix.value = p.a
+                    if(p.b) greenGlowMaterial.draw(Models.lightGreenGlow)
+                    else redGlowMaterial.draw(Models.lightRedGlow)
+                }
+            }}
+        }
+        matrix.pop
     }
 }
 
@@ -175,12 +184,12 @@ class BackgroundView(map : MapSso) {
     def drawShadow {
         if(egPlatform.shadows) {
             BlendFunction.standard {
-                glDisable(GL_CULL_FACE)
-                glDisable(GL_DEPTH_TEST)
-                val param = ShadowDrawParam([0.3])
-                ShadowDrawShaderSystem.shaderFor(param).draw(param, mapView.plane)
-                glEnable(GL_DEPTH_TEST)
-                glEnable(GL_CULL_FACE)
+                context.cullFace.disabled {
+                    glDisable(GL_DEPTH_TEST)
+                    val param = ShadowDrawParam([0.3])
+                    ShadowDrawShaderSystem.shaderFor(param).draw(param, mapView.plane)
+                    glEnable(GL_DEPTH_TEST)
+                }
             }
         }
     }

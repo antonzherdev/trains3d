@@ -13,6 +13,7 @@
 
 @class EGGlobal;
 @class EGContext;
+@class EGEnablingState;
 @class EGRenderTarget;
 @class EGSceneRenderTarget;
 @class EGShadowRenderTarget;
@@ -42,6 +43,7 @@
 @property (nonatomic, readonly) EGMatrixStack* matrixStack;
 @property (nonatomic, retain) EGRenderTarget* renderTarget;
 @property (nonatomic) BOOL considerShadows;
+@property (nonatomic, readonly) EGEnablingState* cullFace;
 
 + (id)context;
 - (id)init;
@@ -61,6 +63,23 @@
 - (GLuint)vertexBufferId;
 - (void)bindIndexBufferBuffer:(EGIndexBuffer*)buffer;
 - (GLuint)indexBufferId;
+- (void)draw;
++ (ODClassType*)type;
+@end
+
+
+@interface EGEnablingState : NSObject
+@property (nonatomic, readonly) unsigned int tp;
+
++ (id)enablingStateWithTp:(unsigned int)tp;
+- (id)initWithTp:(unsigned int)tp;
+- (ODClassType*)type;
+- (void)enable;
+- (void)disable;
+- (void)draw;
+- (void)clear;
+- (void)disabledF:(void(^)())f;
+- (void)enabledF:(void(^)())f;
 + (ODClassType*)type;
 @end
 

@@ -3,6 +3,9 @@
 #import "EGMesh.h"
 #import "GEVec.h"
 @class EGColorSource;
+@class EGGlobal;
+@class EGContext;
+@class EGEnablingState;
 @class EGTexture;
 
 @class EGD2D;
