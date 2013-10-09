@@ -116,10 +116,9 @@ class SwitchView {
 }
 
 class LightView {
-    val greenMaterial = StandardMaterial( vec4(0.07568, 0.61424, 0.07568, 1), vec4(0.633, 0.727811, 0.633, 1), 1)
-    val redMaterial = StandardMaterial(vec4(0.61424, 0.04136, 0.04136, 1), vec4(0.727811, 0.626959, 0.626959, 1), 1)
-    val inactiveMaterial = StandardMaterial(vec4(0.3, 0.3, 0.3, 1), vec4(1, 1, 1, 1), 1)
-    val bodyMaterial = StandardMaterial(vec4(0.1, 0.1, 0.1, 1), vec4(0.1, 0.1, 0.1, 1), 1)
+    val texture = textureFor("Light.png", GL_LINEAR, GL_LINEAR_MIPMAP_LINEAR)
+    val redBodyMaterial = StandardMaterial(TextureRegion(texture, Rect(0.5, 0, 1, 1)))
+    val greenBodyMaterial = StandardMaterial(texture)
     val greenGlowMaterial = ColorSource(vec4(0, 1, 0, 0.8), textureFor("LightGlow.png"))
     val redGlowMaterial = ColorSource(vec4(1, 0, 0, 0.8), textureFor("LightGlow.png"))
 
@@ -137,16 +136,7 @@ class LightView {
         val shadow = context.renderTarget.is<ShadowRenderTarget>
         arr.for { p ->
             matrix.value = p.a
-            bodyMaterial.draw(Models.light)
-            if(!shadow) {
-                if(p.b) {
-                    greenMaterial.draw(Models.lightGreen)
-                    inactiveMaterial.draw(Models.lightRed)
-                } else {
-                    inactiveMaterial.draw(Models.lightGreen)
-                    redMaterial.draw(Models.lightRed)
-                }
-            }
+            (if(p.b)greenBodyMaterial else redBodyMaterial).draw(Models.light)
         }
         if(!shadow) {
             context.cullFace.disabled{ BlendFunction.standard{

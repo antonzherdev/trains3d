@@ -1,10 +1,7 @@
 #import "EGTexture.h"
 
-@implementation EGTexture{
-    GLuint _id;
-}
+@implementation EGTexture
 static ODClassType* _EGTexture_type;
-@synthesize id = _id;
 
 + (id)texture {
     return [[EGTexture alloc] init];
@@ -12,7 +9,6 @@ static ODClassType* _EGTexture_type;
 
 - (id)init {
     self = [super init];
-    if(self) _id = egGenTexture();
     
     return self;
 }
@@ -22,16 +18,20 @@ static ODClassType* _EGTexture_type;
     _EGTexture_type = [ODClassType classTypeWithCls:[EGTexture class]];
 }
 
+- (GLuint)id {
+    @throw @"Method id is abstract";
+}
+
 - (GEVec2)size {
     @throw @"Method size is abstract";
 }
 
 - (void)dealloc {
-    egDeleteTexture(_id);
+    egDeleteTexture([self id]);
 }
 
 - (void)saveToFile:(NSString*)file {
-    egSaveTextureToFile(_id, file);
+    egSaveTextureToFile([self id], file);
 }
 
 - (GERect)uvRect:(GERect)rect {
@@ -73,17 +73,80 @@ static ODClassType* _EGTexture_type;
 @end
 
 
+@implementation EGEmptyTexture{
+    GEVec2 _size;
+    GLuint _id;
+}
+static ODClassType* _EGEmptyTexture_type;
+@synthesize size = _size;
+@synthesize id = _id;
+
++ (id)emptyTextureWithSize:(GEVec2)size {
+    return [[EGEmptyTexture alloc] initWithSize:size];
+}
+
+- (id)initWithSize:(GEVec2)size {
+    self = [super init];
+    if(self) {
+        _size = size;
+        _id = egGenTexture();
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGEmptyTexture_type = [ODClassType classTypeWithCls:[EGEmptyTexture class]];
+}
+
+- (ODClassType*)type {
+    return [EGEmptyTexture type];
+}
+
++ (ODClassType*)type {
+    return _EGEmptyTexture_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGEmptyTexture* o = ((EGEmptyTexture*)(other));
+    return GEVec2Eq(self.size, o.size);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + GEVec2Hash(self.size);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"size=%@", GEVec2Description(self.size)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation EGFileTexture{
     NSString* _file;
     unsigned int _magFilter;
     unsigned int _minFilter;
-    BOOL __loaded;
+    GLuint _id;
     GEVec2 __size;
 }
 static ODClassType* _EGFileTexture_type;
 @synthesize file = _file;
 @synthesize magFilter = _magFilter;
 @synthesize minFilter = _minFilter;
+@synthesize id = _id;
 
 + (id)fileTextureWithFile:(NSString*)file magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
     return [[EGFileTexture alloc] initWithFile:file magFilter:magFilter minFilter:minFilter];
@@ -95,7 +158,7 @@ static ODClassType* _EGFileTexture_type;
         _file = file;
         _magFilter = magFilter;
         _minFilter = minFilter;
-        __loaded = NO;
+        _id = egGenTexture();
         [self _init];
     }
     
@@ -108,12 +171,11 @@ static ODClassType* _EGFileTexture_type;
 }
 
 + (EGFileTexture*)applyFile:(NSString*)file {
-    return [EGFileTexture fileTextureWithFile:file magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_LINEAR];
+    return [EGFileTexture fileTextureWithFile:file magFilter:GL_LINEAR minFilter:GL_LINEAR];
 }
 
 - (void)_init {
-    __size = egLoadTextureFromFile(self.id, [OSBundle fileNameForResource:_file], _magFilter, _minFilter);
-    __loaded = YES;
+    __size = egLoadTextureFromFile(_id, [OSBundle fileNameForResource:_file], _magFilter, _minFilter);
 }
 
 - (GEVec2)size {
@@ -152,6 +214,82 @@ static ODClassType* _EGFileTexture_type;
     [description appendFormat:@"file=%@", self.file];
     [description appendFormat:@", magFilter=%d", self.magFilter];
     [description appendFormat:@", minFilter=%d", self.minFilter];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGTextureRegion{
+    EGTexture* _texture;
+    GERect _rect;
+}
+static ODClassType* _EGTextureRegion_type;
+@synthesize texture = _texture;
+@synthesize rect = _rect;
+
++ (id)textureRegionWithTexture:(EGTexture*)texture rect:(GERect)rect {
+    return [[EGTextureRegion alloc] initWithTexture:texture rect:rect];
+}
+
+- (id)initWithTexture:(EGTexture*)texture rect:(GERect)rect {
+    self = [super init];
+    if(self) {
+        _texture = texture;
+        _rect = rect;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGTextureRegion_type = [ODClassType classTypeWithCls:[EGTextureRegion class]];
+}
+
++ (EGTextureRegion*)applyTexture:(EGTexture*)texture {
+    return [EGTextureRegion textureRegionWithTexture:texture rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)];
+}
+
+- (GLuint)id {
+    return [_texture id];
+}
+
+- (GEVec2)size {
+    return [_texture size];
+}
+
+- (ODClassType*)type {
+    return [EGTextureRegion type];
+}
+
++ (ODClassType*)type {
+    return _EGTextureRegion_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGTextureRegion* o = ((EGTextureRegion*)(other));
+    return [self.texture isEqual:o.texture] && GERectEq(self.rect, o.rect);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.texture hash];
+    hash = hash * 31 + GERectHash(self.rect);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"texture=%@", self.texture];
+    [description appendFormat:@", rect=%@", GERectDescription(self.rect)];
     [description appendString:@">"];
     return description;
 }

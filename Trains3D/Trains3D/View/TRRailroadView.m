@@ -8,6 +8,7 @@
 #import "TRModels.h"
 #import "GEMat4.h"
 #import "TRRailPoint.h"
+#import "EGTexture.h"
 #import "EGMapIso.h"
 #import "EGMapIsoView.h"
 #import "EGPlatform.h"
@@ -306,18 +307,16 @@ static ODClassType* _TRSwitchView_type;
 
 
 @implementation TRLightView{
-    EGStandardMaterial* _greenMaterial;
-    EGStandardMaterial* _redMaterial;
-    EGStandardMaterial* _inactiveMaterial;
-    EGStandardMaterial* _bodyMaterial;
+    EGTexture* _texture;
+    EGMaterial* _redBodyMaterial;
+    EGMaterial* _greenBodyMaterial;
     EGColorSource* _greenGlowMaterial;
     EGColorSource* _redGlowMaterial;
 }
 static ODClassType* _TRLightView_type;
-@synthesize greenMaterial = _greenMaterial;
-@synthesize redMaterial = _redMaterial;
-@synthesize inactiveMaterial = _inactiveMaterial;
-@synthesize bodyMaterial = _bodyMaterial;
+@synthesize texture = _texture;
+@synthesize redBodyMaterial = _redBodyMaterial;
+@synthesize greenBodyMaterial = _greenBodyMaterial;
 @synthesize greenGlowMaterial = _greenGlowMaterial;
 @synthesize redGlowMaterial = _redGlowMaterial;
 
@@ -328,10 +327,9 @@ static ODClassType* _TRLightView_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _greenMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.07568, 0.61424, 0.07568, 1.0)] specularColor:GEVec4Make(0.633, 0.727811, 0.633, 1.0) specularSize:1.0];
-        _redMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.61424, 0.04136, 0.04136, 1.0)] specularColor:GEVec4Make(0.727811, 0.626959, 0.626959, 1.0) specularSize:1.0];
-        _inactiveMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.3, 0.3, 0.3, 1.0)] specularColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) specularSize:1.0];
-        _bodyMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.1, 0.1, 0.1, 1.0)] specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:1.0];
+        _texture = [EGGlobal textureForFile:@"Light.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_LINEAR];
+        _redBodyMaterial = [EGStandardMaterial applyTexture:[EGTextureRegion textureRegionWithTexture:_texture rect:geRectApplyXYWidthHeight(0.5, 0.0, 1.0, 1.0)]];
+        _greenBodyMaterial = [EGStandardMaterial applyTexture:_texture];
         _greenGlowMaterial = [EGColorSource applyColor:GEVec4Make(0.0, 1.0, 0.0, 0.8) texture:[EGGlobal textureForFile:@"LightGlow.png"]];
         _redGlowMaterial = [EGColorSource applyColor:GEVec4Make(1.0, 0.0, 0.0, 0.8) texture:[EGGlobal textureForFile:@"LightGlow.png"]];
     }
@@ -357,14 +355,7 @@ static ODClassType* _TRLightView_type;
     BOOL shadow = [EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]];
     [arr forEach:^void(CNTuple* p) {
         EGGlobal.matrix.value = ((EGMatrixModel*)(p.a));
-        [_bodyMaterial drawMesh:TRModels.light];
-        if(!(shadow)) if(unumb(p.b)) {
-            [_greenMaterial drawMesh:TRModels.lightGreen];
-            [_inactiveMaterial drawMesh:TRModels.lightRed];
-        } else {
-            [_inactiveMaterial drawMesh:TRModels.lightGreen];
-            [_redMaterial drawMesh:TRModels.lightRed];
-        }
+        [((unumb(p.b)) ? _greenBodyMaterial : _redBodyMaterial) drawMesh:TRModels.light];
     }];
     if(!(shadow)) [EGGlobal.context.cullFace disabledF:^void() {
         [EGBlendFunction.standard applyDraw:^void() {

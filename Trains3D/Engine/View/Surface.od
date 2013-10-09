@@ -22,7 +22,7 @@ class SimpleSurface(size : vec2i, depth : bool) extends Surface(size) {
     val frameBuffer = egGenFrameBuffer
     private val depthRenderBuffer : GLuint = if(depth) egGenRenderBuffer else 0
     val texture = {
-        val t = Texture()
+        val t = EmptyTexture(size)
         glGetError
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
         glBindTexture(GL_TEXTURE_2D, t.id)

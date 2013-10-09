@@ -27,9 +27,9 @@ static ODClassType* _EGShadowMap_type;
     if(self) {
         _frameBuffer = egGenFrameBuffer();
         _biasDepthCp = [GEMat4 identity];
-        _texture = ^EGTexture*() {
+        _texture = ^EGEmptyTexture*() {
             glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-            EGTexture* t = [EGTexture texture];
+            EGEmptyTexture* t = [EGEmptyTexture emptyTextureWithSize:geVec2ApplyVec2i(self.size)];
             glBindTexture(GL_TEXTURE_2D, t.id);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, self.size.x, self.size.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

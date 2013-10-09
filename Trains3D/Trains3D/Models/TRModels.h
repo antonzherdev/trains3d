@@ -18,7 +18,6 @@
 + (EGMesh*)railsTurn;
 + (EGMesh*)switchStraight;
 + (EGMesh*)switchTurn;
-+ (EGMesh*)light;
 + (ODType*)type;
 
 + (EGMesh *)cityBodies;
@@ -29,12 +28,8 @@
 + (EGMesh *)engineFloor;
 + (EGMesh *)damage;
 
-+ (EGMesh *)lightGreen;
-
-+ (EGMesh *)lightRed;
-
++ (EGMesh *)light;
 + (EGMesh *)lightGreenGlow;
-
 + (EGMesh *)lightRedGlow;
 
 + (EGMesh *)cityRoofs;

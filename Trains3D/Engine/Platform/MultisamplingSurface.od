@@ -2,7 +2,7 @@ package com.antonzherdev.eg
 
 stub class FirstMultisamplingSurface(size : vec2i, depth : bool) extends Surface(size) {
     val frameBuffer = egGenFrameBuffer
-    private val depthTexture : Texture? = if(depth) Texture() else nil
+    private val depthTexture : Texture?
     private val texture
 
     def dealloc {

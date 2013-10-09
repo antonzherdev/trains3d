@@ -30,8 +30,6 @@ static EGMesh *_engine = nil;
 static EGMesh *_carBlack = nil;
 static EGMesh *_car = nil;
 static EGMesh *_damage = nil;
-static EGMesh *_lightGreen = nil;
-static EGMesh *_lightRed = nil;
 static EGMesh *_lightGreenGlow = nil;
 static EGMesh *_lightRedGlow = nil;
 
@@ -60,8 +58,6 @@ static ODClassType* _TR3D_type;
     _switchStraight = egJasModel(SwitchStraight);
     _switchTurn = egJasModel(SwitchTurn);
     _light = egJasModel(Light);
-    _lightGreen = egJasModel(LightGreen);
-    _lightRed = egJasModel(LightRed);
     _lightGreenGlow = egJasModel(LightGreenGlow);
     _lightRedGlow = egJasModel(LightRedGlow);
     _cityBodies = egJasModel(CityBodies);
@@ -159,16 +155,8 @@ static ODClassType* _TR3D_type;
     return YES;
 }
 
-+ (EGMesh *)lightGreen {
-    return _lightGreen;
-}
-
 - (NSUInteger)hash {
     return 0;
-}
-
-+ (EGMesh *)lightRed {
-    return _lightRed;
 }
 
 - (NSString*)description {

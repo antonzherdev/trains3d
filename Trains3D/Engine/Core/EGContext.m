@@ -187,7 +187,7 @@ static ODClassType* _EGContext_type;
 }
 
 - (void)bindTextureTexture:(EGTexture*)texture {
-    GLuint id = texture.id;
+    GLuint id = [texture id];
     if(!(GLuintEq(__lastTexture2D, id))) {
         __lastTexture2D = id;
         glBindTexture(GL_TEXTURE_2D, id);
@@ -195,7 +195,7 @@ static ODClassType* _EGContext_type;
 }
 
 - (void)bindTextureSlot:(unsigned int)slot target:(unsigned int)target texture:(EGTexture*)texture {
-    GLuint id = texture.id;
+    GLuint id = [texture id];
     if(slot != GL_TEXTURE0) {
         glActiveTexture(slot);
         glBindTexture(target, id);

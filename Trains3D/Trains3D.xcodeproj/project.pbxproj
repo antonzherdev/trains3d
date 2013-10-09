@@ -255,6 +255,7 @@
 		6F3DF3A7BF73B2B658307C33 /* geometry.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF63252AB4FDB83A6F8A7 /* geometry.od */; };
 		6F3DF3A91FA62535CA949BA3 /* btTriangleMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF79FE213C9FFE8FFC53F /* btTriangleMeshShape.cpp */; };
 		6F3DF3AF0F9267CCDB6B2E10 /* btCylinderShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFAAED030E8616AA27D3A /* btCylinderShape.cpp */; };
+		6F3DF3CA08C9AD91D14F0AC8 /* Light.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFABCF7502FE5A61A37D2 /* Light.png */; };
 		6F3DF3D00F3DBE1E36B461EF /* btScaledBvhTriangleMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0B5CDE0ED7F04E617FD /* btScaledBvhTriangleMeshShape.cpp */; };
 		6F3DF3D165FD591CF46D296D /* TRExplosion.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4F25E785972FAFEC88D /* TRExplosion.m */; };
 		6F3DF3D3FD50B90CC6026F14 /* spline.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFD30F469519D8F47F283 /* spline.inl */; };
@@ -1042,6 +1043,7 @@
 		6F3DFF6529D9A0E5F13DFF04 /* TRLevelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF19940EBD57ECE70B0FB /* TRLevelView.m */; };
 		6F3DFF6611B0FBC5A79DE770 /* NSProxy+KiwiVerifierAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE6E93BDB3DCD2C17930 /* NSProxy+KiwiVerifierAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DFF6BEE366F0380C3B2BA /* btConvexPolyhedron.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFAA87D3E4A7FEA5DBC8A /* btConvexPolyhedron.cpp */; };
+		6F3DFF6D1F99511DC1448955 /* Light.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFABCF7502FE5A61A37D2 /* Light.png */; };
 		6F3DFF7D723ADE473F6914A8 /* CNLazy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBC4F2017FB62101E7DF /* CNLazy.m */; };
 		6F3DFF82E444549B58C5B7BE /* btStaticPlaneShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA0904ED6E27D4A1D647 /* btStaticPlaneShape.cpp */; };
 		6F3DFF861A5265A644C637ED /* EGParticleSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF5D4862C372F8FC524C6 /* EGParticleSystem.m */; };
@@ -1882,6 +1884,7 @@
 		6F3DFAB118CE7DB84AA730CC /* CollisionsTest.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = CollisionsTest.od; sourceTree = "<group>"; };
 		6F3DFAB1C6A88F5899C66335 /* TRTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRTree.h; sourceTree = "<group>"; };
 		6F3DFAB6E2519CB5A9B3A1A6 /* type_vec2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_vec2.hpp; sourceTree = "<group>"; };
+		6F3DFABCF7502FE5A61A37D2 /* Light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Light.png; sourceTree = "<group>"; };
 		6F3DFABD7B8930470C5D863E /* SphereTriangleDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SphereTriangleDetector.cpp; sourceTree = "<group>"; };
 		6F3DFAC54B844E230985CADA /* btSolve2LinearConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btSolve2LinearConstraint.h; sourceTree = "<group>"; };
 		6F3DFAC879A80882AEC74964 /* btCollisionAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btCollisionAlgorithm.cpp; sourceTree = "<group>"; };
@@ -3433,6 +3436,7 @@
 				6F3DFA9DA40E26F1341C204B /* Tree2.png */,
 				6F3DF395D42D5F70D0084342 /* Tree3.png */,
 				6F3DF8BAC3EAE789B65670CB /* YellowTree.png */,
+				6F3DFABCF7502FE5A61A37D2 /* Light.png */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -4404,6 +4408,7 @@
 				6F3DF1EF1DCC47C6880E0A0B /* MainMenu.xib in Resources */,
 				6F3DFE538F3C5ED6B13A8534 /* Credits.rtf in Resources */,
 				6F3DF9E17460D5B4B6BEFF68 /* Log.od in Resources */,
+				6F3DFF6D1F99511DC1448955 /* Light.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4507,6 +4512,7 @@
 				6F3DF16015B3AA6879EA9F4F /* Main_iPad.storyboard in Resources */,
 				6F3DF8EF3A1802ABCCDA8A05 /* Images.xcassets in Resources */,
 				6F3DF1B5B45B998F80774411 /* Collection.od in Resources */,
+				6F3DF3CA08C9AD91D14F0AC8 /* Light.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

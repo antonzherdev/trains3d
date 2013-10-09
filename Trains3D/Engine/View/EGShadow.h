@@ -5,6 +5,7 @@
 #import "EGShader.h"
 @class GEMat4;
 @class EGTexture;
+@class EGEmptyTexture;
 @class EGGlobal;
 @class EGContext;
 @class EGColorSource;

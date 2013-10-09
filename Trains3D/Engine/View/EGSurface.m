@@ -89,7 +89,7 @@ static ODClassType* _EGSurface_type;
     BOOL _depth;
     GLuint _frameBuffer;
     GLuint _depthRenderBuffer;
-    EGTexture* _texture;
+    EGEmptyTexture* _texture;
 }
 static ODClassType* _EGSimpleSurface_type;
 @synthesize depth = _depth;
@@ -106,8 +106,8 @@ static ODClassType* _EGSimpleSurface_type;
         _depth = depth;
         _frameBuffer = egGenFrameBuffer();
         _depthRenderBuffer = ((_depth) ? egGenRenderBuffer() : 0);
-        _texture = ^EGTexture*() {
-            EGTexture* t = [EGTexture texture];
+        _texture = ^EGEmptyTexture*() {
+            EGEmptyTexture* t = [EGEmptyTexture emptyTextureWithSize:geVec2ApplyVec2i(self.size)];
             glGetError();
             glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
             glBindTexture(GL_TEXTURE_2D, t.id);

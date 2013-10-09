@@ -1,7 +1,7 @@
 package com.antonzherdev.eg
 
 class Texture {
-    val id : GLuint = egGenTexture
+    def id : GLuint
     def size : vec2
 
     def dealloc {
@@ -16,16 +16,25 @@ class Texture {
     def uv(x : float4, y : float4, width : float4, height : float4) : Rect = Rect(x, y, width, height)/size
 }
 
+class EmptyTexture(size : vec2) extends Texture {
+    val id : GLuint = egGenTexture
+}
+
 class FileTexture(file : string, magFilter : uint4, minFilter : uint4) extends Texture {
-    private var _loaded = false
+    val id : GLuint = egGenTexture
     private var _size : vec2
 
-    static def apply(file : string) = FileTexture(file, GL_LINEAR, GL_LINEAR_MIPMAP_LINEAR)
+    static def apply(file : string) = FileTexture(file, GL_LINEAR, GL_LINEAR)
 
     def init {
         _size = egLoadTextureFromFile(id, Bundle.fileNameFor(file), magFilter, minFilter)
-        _loaded = true
     }
 
     def size : vec2 = _size
+}
+
+class TextureRegion(texture : Texture, rect : Rect) extends Texture {
+    static def apply(texture : Texture) : TextureRegion = TextureRegion(texture, Rect(0, 0, 1, 1))
+    def id : GLuint = texture.id
+    def size : vec2 = texture.size
 }

@@ -24,7 +24,7 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
         _frameBuffer = egGenFrameBuffer();
         _depthRenderBuffer = ((_depth) ? egGenRenderBuffer() : 0);
         _texture = ^EGTexture*() {
-            EGTexture* t = [EGTexture texture];
+            EGTexture* t = [EGEmptyTexture emptyTextureWithSize:geVec2ApplyVec2i(size)];
             glGetError();
             glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
             glBindTexture(GL_TEXTURE_2D, t.id);
@@ -134,7 +134,7 @@ static ODClassType* _EGMultisamplingSurface_type;
         _frameBuffer = egGenFrameBuffer();
         _depthRenderBuffer = ((_depth) ? egGenRenderBuffer() : 0);
         _texture = ^EGTexture*() {
-            EGTexture* t = [EGTexture texture];
+            EGTexture* t = [EGEmptyTexture emptyTextureWithSize:geVec2ApplyVec2i(size)];
             glGetError();
             glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
             glBindTexture(GL_TEXTURE_2D, t.id);

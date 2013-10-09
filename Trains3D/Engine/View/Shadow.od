@@ -8,7 +8,7 @@ class ShadowMap(size : vec2i) extends Surface(size) {
     val texture : Texture = {
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
 
-        val t = Texture()
+        val t = EmptyTexture(size)
         glBindTexture(GL_TEXTURE_2D, t.id)
         glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, size.x, size.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
