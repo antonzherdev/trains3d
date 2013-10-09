@@ -8,12 +8,14 @@
 @class EGShadowShaderSystem;
 @class EGEnvironment;
 @class EGLight;
-@class EGPlatform;
 @class EGColorSource;
+@class EGTexture;
+@class EGPlatform;
 @class EGShadowShader;
 @class EGVertexBufferDesc;
 @class EGMatrixStack;
 @class EGMatrixModel;
+@class EGTextureRegion;
 @class EGDirectLight;
 @class GEMat4;
 @class EGShadowMap;
@@ -50,10 +52,11 @@
 @property (nonatomic, readonly) NSUInteger directLightWithShadowsCount;
 @property (nonatomic, readonly) NSUInteger directLightWithoutShadowsCount;
 @property (nonatomic, readonly) BOOL texture;
+@property (nonatomic, readonly) BOOL region;
 @property (nonatomic, readonly) NSUInteger directLightCount;
 
-+ (id)standardShaderKeyWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture;
-- (id)initWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture;
++ (id)standardShaderKeyWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture region:(BOOL)region;
+- (id)initWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture region:(BOOL)region;
 - (ODClassType*)type;
 - (EGStandardShader*)shader;
 - (NSString*)lightsVertexUniform;
@@ -72,6 +75,8 @@
 @property (nonatomic, readonly) id normalSlot;
 @property (nonatomic, readonly) id uvSlot;
 @property (nonatomic, readonly) id diffuseTexture;
+@property (nonatomic, readonly) id uvScale;
+@property (nonatomic, readonly) id uvShift;
 @property (nonatomic, readonly) EGShaderUniformVec4* ambientColor;
 @property (nonatomic, readonly) EGShaderUniformVec4* specularColor;
 @property (nonatomic, readonly) EGShaderUniformF4* specularSize;

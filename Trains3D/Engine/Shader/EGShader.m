@@ -190,6 +190,10 @@ static ODClassType* _EGShader_type;
     return [EGShaderUniformVec3 shaderUniformVec3WithHandle:[self uniformName:name]];
 }
 
+- (EGShaderUniformVec2*)uniformVec2Name:(NSString*)name {
+    return [EGShaderUniformVec2 shaderUniformVec2WithHandle:[self uniformName:name]];
+}
+
 - (EGShaderUniformF4*)uniformF4Name:(NSString*)name {
     return [EGShaderUniformF4 shaderUniformF4WithHandle:[self uniformName:name]];
 }
@@ -490,6 +494,74 @@ static ODClassType* _EGShaderUniformVec3_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGShaderUniformVec3* o = ((EGShaderUniformVec3*)(other));
+    return GLuintEq(self.handle, o.handle);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + GLuintHash(self.handle);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"handle=%@", GLuintDescription(self.handle)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGShaderUniformVec2{
+    GLuint _handle;
+    GEVec2 __last;
+}
+static ODClassType* _EGShaderUniformVec2_type;
+@synthesize handle = _handle;
+
++ (id)shaderUniformVec2WithHandle:(GLuint)handle {
+    return [[EGShaderUniformVec2 alloc] initWithHandle:handle];
+}
+
+- (id)initWithHandle:(GLuint)handle {
+    self = [super init];
+    if(self) {
+        _handle = handle;
+        __last = GEVec2Make(0.0, 0.0);
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGShaderUniformVec2_type = [ODClassType classTypeWithCls:[EGShaderUniformVec2 class]];
+}
+
+- (void)applyVec2:(GEVec2)vec2 {
+    if(!(GEVec2Eq(vec2, __last))) {
+        egUniformVec2(_handle, vec2);
+        __last = vec2;
+    }
+}
+
+- (ODClassType*)type {
+    return [EGShaderUniformVec2 type];
+}
+
++ (ODClassType*)type {
+    return _EGShaderUniformVec2_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGShaderUniformVec2* o = ((EGShaderUniformVec2*)(other));
     return GLuintEq(self.handle, o.handle);
 }
 

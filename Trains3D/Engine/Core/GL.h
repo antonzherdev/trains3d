@@ -20,6 +20,9 @@ static inline void egUniformVec4(GLuint location, GEVec4 color ) {
 static inline void egUniformVec3(GLuint location, GEVec3 vec3 ) {
     glUniform3f(location, (GLfloat) vec3.x, (GLfloat) vec3.y, (GLfloat) vec3.z);
 }
+static inline void egUniformVec2(GLuint location, GEVec2 vec2 ) {
+    glUniform2f(location, (GLfloat) vec2.x, (GLfloat) vec2.y);
+}
 
 id egGetProgramError(GLuint program);
 void egShaderSource(GLuint shader, NSString* source);

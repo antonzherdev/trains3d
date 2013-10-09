@@ -12,10 +12,13 @@ class StandardShaderSystem extends ShaderSystem<StandardMaterial> {
             val lights = context.environment.lights
             val directLightsWithShadowsCount = lights.chain.filter(_.is<DirectLight> && _.hasShadows).count
             val directLightsWithoutShadowsCount = lights.chain.filter(_.is<DirectLight> && !_.hasShadows).count
+            val texture = param.diffuse.texture
+            val t = texture.isDefined
+            val region = t && texture.get.is<TextureRegion>
             val key =
                 if(egPlatform.shadows && context.considerShadows)
-                    StandardShaderKey(directLightsWithShadowsCount, directLightsWithoutShadowsCount, param.diffuse.texture.isDefined)
-                else StandardShaderKey(0, directLightsWithShadowsCount + directLightsWithoutShadowsCount, param.diffuse.texture.isDefined)
+                    StandardShaderKey(directLightsWithShadowsCount, directLightsWithoutShadowsCount, t, region)
+                else StandardShaderKey(0, directLightsWithShadowsCount + directLightsWithoutShadowsCount, t, region)
 
             shaders.objectFor(key, orUpdateWith = key.shader)
         }
@@ -32,7 +35,7 @@ class StandardShadowShader(shadowShader : ShadowShader) extends Shader<StandardM
     }
 }
 
-class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutShadowsCount : uint, texture : bool) extends ShaderTextBuilder {
+class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutShadowsCount : uint, texture : bool, region : bool) extends ShaderTextBuilder {
     val directLightCount = directLightWithShadowsCount + directLightWithoutShadowsCount
     def shader : StandardShader = {
         val vertexShader =
@@ -42,6 +45,10 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
              $ain highp vec3 position;
              uniform mat4 mwcp;
              uniform mat4 mwc;
+            $if(region)
+             uniform mediump vec2 uvShift;
+             uniform mediump vec2 uvScale;
+            $endif
              $lightsVertexUniform
 
             $if(texture)
@@ -54,7 +61,11 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
                 vec3 normalMWC = normalize((mwc * vec4(normal, 0)).xyz);
                 vec3 eyeDirection = normalize(-(mwc * vec4(position, 1)).xyz);
                 gl_Position = mwcp * vec4(position, 1);
+             $if(texture && region)
+                UV = uvScale*vertexUV + uvShift;
+             $else
                 UV = vertexUV; $when(texture)
+             $endif
                 $lightsCalculateVaryings
              }"
         val fragmentShader =
@@ -140,6 +151,8 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
     val uvSlot : ShaderAttribute? = if(key.texture) attributeFor("vertexUV") else nil
 
     val diffuseTexture : ShaderUniformI4? = if(key.texture) uniformI4("diffuseTexture") else nil
+    val uvScale : ShaderUniformVec2? = if(key.region) uniformVec2("uvScale") else nil
+    val uvShift : ShaderUniformVec2? = if(key.region) uniformVec2("uvShift") else nil
     val ambientColor = uniformVec4("ambientColor")
     val specularColor = uniformVec4("specularColor")
     val specularSize = uniformF4("specularSize")
@@ -157,8 +170,14 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
         mwcpUniform(matrix = matrix.value.mwcp)
         if(key.texture) {
             uvSlot.get.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.uv)
-            context.bindTexture(param.diffuse.texture.get)
+            val tex = param.diffuse.texture.get
+            context.bindTexture(tex)
             diffuseTexture.get.apply(i4 = 0)
+            if(key.region) {
+                val r = tex.cast<TextureRegion>.rect
+                uvShift.get.apply(vec2 = r.p0)
+                uvScale.get.apply(vec2 = r.size)
+            }
         }
         diffuseColorUniform(vec4 = param.diffuse.color)
         specularColor(vec4 = param.specularColor)

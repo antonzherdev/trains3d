@@ -15,6 +15,7 @@
 @class EGShaderUniformMat4;
 @class EGShaderUniformVec4;
 @class EGShaderUniformVec3;
+@class EGShaderUniformVec2;
 @class EGShaderUniformF4;
 @class EGShaderUniformI4;
 @class EGShaderSystem;
@@ -52,6 +53,7 @@
 - (EGShaderUniformMat4*)uniformMat4Name:(NSString*)name;
 - (EGShaderUniformVec4*)uniformVec4Name:(NSString*)name;
 - (EGShaderUniformVec3*)uniformVec3Name:(NSString*)name;
+- (EGShaderUniformVec2*)uniformVec2Name:(NSString*)name;
 - (EGShaderUniformF4*)uniformF4Name:(NSString*)name;
 - (EGShaderUniformI4*)uniformI4Name:(NSString*)name;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
@@ -100,6 +102,17 @@
 - (id)initWithHandle:(GLuint)handle;
 - (ODClassType*)type;
 - (void)applyVec3:(GEVec3)vec3;
++ (ODClassType*)type;
+@end
+
+
+@interface EGShaderUniformVec2 : NSObject
+@property (nonatomic, readonly) GLuint handle;
+
++ (id)shaderUniformVec2WithHandle:(GLuint)handle;
+- (id)initWithHandle:(GLuint)handle;
+- (ODClassType*)type;
+- (void)applyVec2:(GEVec2)vec2;
 + (ODClassType*)type;
 @end
 

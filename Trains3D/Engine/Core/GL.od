@@ -52,6 +52,7 @@ stub object gl {
     def glUniform1i(location : GLuint, f : int4)
     def egUniformVec4(location : GLuint, color : vec4)
     def egUniformVec3(location : GLuint, color : vec3)
+    def egUniformVec2(location : GLuint, color : vec3)
 
     def glCreateProgram : GLuint
     def glAttachShader(program : GLuint, shader : GLuint)

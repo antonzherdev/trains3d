@@ -92,6 +92,7 @@ class Shader<P>(program : ShaderProgram) {
     def uniformMat4(name : string ) = ShaderUniformMat4(uniform(name))
     def uniformVec4(name : string ) = ShaderUniformVec4(uniform(name))
     def uniformVec3(name : string ) = ShaderUniformVec3(uniform(name))
+    def uniformVec2(name : string ) = ShaderUniformVec2(uniform(name))
     def uniformF4(name : string ) = ShaderUniformF4(uniform(name))
     def uniformI4(name : string ) = ShaderUniformI4(uniform(name))
     def attributeFor(name : string ) = program.attributeFor(name)
@@ -134,6 +135,16 @@ class ShaderUniformVec3(handle : GLuint) {
         if(vec3 != _last) {
             egUniformVec3(handle, vec3)
             _last = vec3
+        }
+    }
+}
+
+class ShaderUniformVec2(handle : GLuint) {
+    private var _last = vec2(0, 0)
+    def apply(vec2 : vec2) {
+        if(vec2 != _last) {
+            egUniformVec2(handle, vec2)
+            _last = vec2
         }
     }
 }
