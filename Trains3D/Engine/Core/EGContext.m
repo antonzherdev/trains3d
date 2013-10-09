@@ -94,6 +94,7 @@ static ODClassType* _EGGlobal_type;
     GLuint __lastVertexBuffer;
     GLuint __lastIndexBuffer;
     EGEnablingState* _cullFace;
+    EGEnablingState* _blend;
 }
 static ODClassType* _EGContext_type;
 @synthesize defaultFramebuffer = _defaultFramebuffer;
@@ -103,6 +104,7 @@ static ODClassType* _EGContext_type;
 @synthesize renderTarget = _renderTarget;
 @synthesize considerShadows = _considerShadows;
 @synthesize cullFace = _cullFace;
+@synthesize blend = _blend;
 
 + (id)context {
     return [[EGContext alloc] init];
@@ -124,6 +126,7 @@ static ODClassType* _EGContext_type;
         __lastVertexBuffer = 0;
         __lastIndexBuffer = 0;
         _cullFace = [EGEnablingState enablingStateWithTp:GL_CULL_FACE];
+        _blend = [EGEnablingState enablingStateWithTp:GL_BLEND];
     }
     
     return self;
@@ -154,7 +157,6 @@ static ODClassType* _EGContext_type;
     __lastShaderProgram = 0;
     __lastIndexBuffer = 0;
     __lastVertexBuffer = 0;
-    [_cullFace clear];
 }
 
 - (GERectI)viewport {
@@ -241,6 +243,7 @@ static ODClassType* _EGContext_type;
 
 - (void)draw {
     [_cullFace draw];
+    [_blend draw];
 }
 
 - (ODClassType*)type {
@@ -311,8 +314,11 @@ static ODClassType* _EGEnablingState_type;
 }
 
 - (void)draw {
-    if(__last != __coming) if(__coming) glEnable(_tp);
-    else glDisable(_tp);
+    if(__last != __coming) {
+        if(__coming) glEnable(_tp);
+        else glDisable(_tp);
+        __last = __coming;
+    }
 }
 
 - (void)clear {

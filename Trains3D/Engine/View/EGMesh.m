@@ -468,16 +468,19 @@ static ODClassType* _EGIndexBuffer_type;
 
 - (void)draw {
     [self bind];
+    [EGGlobal.context draw];
     glDrawElements(GL_TRIANGLES, [self count], GL_UNSIGNED_INT, 0);
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [self bind];
+    [EGGlobal.context draw];
     glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 4 * start);
 }
 
 - (void)drawByQuads {
     [self bind];
+    [EGGlobal.context draw];
     NSInteger i = 0;
     while(i + 6 <= [self count]) {
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 4 * i);

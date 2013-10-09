@@ -41,14 +41,13 @@ class BlendFunction(source : uint4, destination : uint4) {
     static val premultiplied : BlendFunction = BlendFunction(GL_ONE, GL_ONE_MINUS_SRC_ALPHA)
     static private var _lastFunction : BlendFunction
     def apply(draw : () -> void) {
-        glEnable(GL_BLEND)
+        context.blend.enable
         if(_lastFunction != self) {
             glBlendFunc(source, destination)
             _lastFunction = self
         }
-
         draw()
-        glDisable(GL_BLEND)
+        context.blend.disable
     }
 }
 

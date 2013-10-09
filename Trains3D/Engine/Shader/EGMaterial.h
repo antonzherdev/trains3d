@@ -6,6 +6,9 @@
 @class EGTexture;
 @class EGSimpleShaderSystem;
 @class EGStandardShaderSystem;
+@class EGGlobal;
+@class EGContext;
+@class EGEnablingState;
 
 @class EGMaterial;
 @class EGColorSource;

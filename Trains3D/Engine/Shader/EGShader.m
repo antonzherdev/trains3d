@@ -148,6 +148,7 @@ static ODClassType* _EGShader_type;
     [EGGlobal.context bindShaderProgramProgram:_program];
     [vb bind];
     [self loadVbDesc:vb.desc param:param];
+    [EGGlobal.context draw];
     glDrawElements(mode, index.count, GL_UNSIGNED_INT, index.bytes);
 }
 
@@ -155,6 +156,7 @@ static ODClassType* _EGShader_type;
     [EGGlobal.context bindShaderProgramProgram:_program];
     [vb bind];
     [self loadVbDesc:vb.desc param:param];
+    [EGGlobal.context draw];
     glDrawElements(mode, indexRef.length / 4, GL_UNSIGNED_INT, indexRef.bytes);
 }
 
@@ -162,6 +164,7 @@ static ODClassType* _EGShader_type;
     [EGGlobal.context bindShaderProgramProgram:_program];
     [vb bind];
     [self loadVbDesc:vb.desc param:param];
+    [EGGlobal.context draw];
     glDrawArrays(mode, 0, [vb count]);
 }
 

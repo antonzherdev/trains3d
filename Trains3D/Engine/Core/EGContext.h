@@ -44,6 +44,7 @@
 @property (nonatomic, retain) EGRenderTarget* renderTarget;
 @property (nonatomic) BOOL considerShadows;
 @property (nonatomic, readonly) EGEnablingState* cullFace;
+@property (nonatomic, readonly) EGEnablingState* blend;
 
 + (id)context;
 - (id)init;

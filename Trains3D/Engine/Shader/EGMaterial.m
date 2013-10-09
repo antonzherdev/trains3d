@@ -6,6 +6,7 @@
 #import "EGSimpleShaderSystem.h"
 #import "EGStandardShaderSystem.h"
 #import "GL.h"
+#import "EGContext.h"
 @implementation EGMaterial
 static ODClassType* _EGMaterial_type;
 
@@ -337,13 +338,13 @@ static ODClassType* _EGBlendFunction_type;
 }
 
 - (void)applyDraw:(void(^)())draw {
-    glEnable(GL_BLEND);
+    [EGGlobal.context.blend enable];
     if(!([_EGBlendFunction__lastFunction isEqual:self])) {
         glBlendFunc(_source, _destination);
         _EGBlendFunction__lastFunction = self;
     }
     ((void(^)())(draw))();
-    glDisable(GL_BLEND);
+    [EGGlobal.context.blend disable];
 }
 
 - (ODClassType*)type {

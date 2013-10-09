@@ -61,6 +61,7 @@ class Shader<P>(program : ShaderProgram) {
         context.bindShaderProgram(program)
         vb.bind
         load(vb.desc, param)
+        context.draw
         glDrawElements(mode, index.count, GL_UNSIGNED_INT, index.bytes)
     }
 
@@ -68,6 +69,7 @@ class Shader<P>(program : ShaderProgram) {
         context.bindShaderProgram(program)
         vb.bind
         load(vb.desc, param)
+        context.draw
         glDrawElements(mode, indexRef.length/4, GL_UNSIGNED_INT, indexRef.bytes)
     }
 
@@ -75,6 +77,7 @@ class Shader<P>(program : ShaderProgram) {
         context.bindShaderProgram(program)
         vb.bind
         load(vb.desc, param)
+        context.draw
         glDrawArrays(mode, 0, vb.count)
     }
 

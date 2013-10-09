@@ -89,16 +89,19 @@ class IndexBuffer(handle : GLuint) extends Buffer<uint4>(UInt4.type, GL_ELEMENT_
 
     def draw {
         bind
+        context.draw
         glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0)
     }
 
     def drawWith(start : uint, count : uint) {
         bind
+        context.draw
         glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 4*start)
     }
 
     def drawByQuads {
         bind
+        context.draw
         var i = 0
         while(i + 6 <= count) {
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 4*i)
