@@ -69,9 +69,9 @@ class Font(name : string) {
     }
 
     private static val vbDesc = VertexBufferDesc(FontPrintData.type, position = 0, uv = 2*4, normal = -1, color = -1, model = -1)
-    private val vb = VertexBuffer(vbDesc)
-    private val ib = IndexBuffer()
-    private val mesh = Mesh(vb, ib)
+    private val vb = MutableVertexBuffer(vbDesc)
+    private val ib = MutableIndexBuffer()
+    private val mesh = Mesh<FontPrintData>(vertexBuffer = vb, ib)
     def draw(text : string, color : vec4, at : vec3, alignment : TextAlignment) {
         val pos =
             if(alignment.shift.isEmpty) matrix.wcp.mul(vec4(at, 1)).xy
@@ -147,8 +147,8 @@ class Font(name : string) {
                 n += 4
             }
         }
-        vb.set(vertexes, GL_DYNAMIC_DRAW)
-        ib.set(indexes, GL_DYNAMIC_DRAW)
+        vb.set(vertexes)
+        ib.set(indexes)
 
         context.cullFace.disabled {
             FontShader.instance.draw(FontShaderParam(texture, color), mesh)

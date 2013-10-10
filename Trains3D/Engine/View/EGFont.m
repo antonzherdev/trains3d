@@ -85,8 +85,8 @@ ODPType* egTextAlignmentType() {
     id<CNMap> _symbols;
     NSUInteger _height;
     NSUInteger _size;
-    EGVertexBuffer* _vb;
-    EGIndexBuffer* _ib;
+    EGMutableVertexBuffer* _vb;
+    EGMutableIndexBuffer* _ib;
     EGMesh* _mesh;
 }
 static EGFontSymbolDesc* _EGFont_newLineDesc;
@@ -105,8 +105,8 @@ static ODClassType* _EGFont_type;
     if(self) {
         _name = name;
         _texture = [EGFileTexture fileTextureWithFile:[NSString stringWithFormat:@"%@.png", _name] magFilter:GL_NEAREST minFilter:GL_NEAREST];
-        _vb = [EGVertexBuffer applyDesc:_EGFont_vbDesc];
-        _ib = [EGIndexBuffer apply];
+        _vb = [EGMutableVertexBuffer applyDesc:_EGFont_vbDesc];
+        _ib = [EGMutableIndexBuffer apply];
         _mesh = [EGMesh meshWithVertexBuffer:_vb indexBuffer:_ib];
         [self _init];
     }
@@ -244,8 +244,8 @@ static ODClassType* _EGFont_type;
             n += 4;
         }
     }];
-    [_vb setArray:vertexes usage:GL_DYNAMIC_DRAW];
-    [_ib setArray:indexes usage:GL_DYNAMIC_DRAW];
+    [_vb setArray:vertexes];
+    [_ib setArray:indexes];
     [EGGlobal.context.cullFace disabledF:^void() {
         [EGFontShader.instance drawParam:[EGFontShaderParam fontShaderParamWithTexture:_texture color:color] mesh:_mesh];
     }];

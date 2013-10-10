@@ -2,7 +2,7 @@
 #import "EGBillboard.h"
 #import "EGMesh.h"
 #import "GEVec.h"
-@class EGVertexBuffer;
+@class EGMutableVertexBuffer;
 @class EGColorSource;
 @class EGGlobal;
 @class EGContext;

@@ -2,7 +2,7 @@ package com.antonzherdev.eg
 
 object D2D {
     private val vertexes = VoidRefArray(BillboardBufferData.type, 4)
-    private val vb = VertexBuffer(Billboard.vbDesc)
+    private val vb = MutableVertexBuffer(Billboard.vbDesc)
     def drawSprite(material : ColorSource, at : vec3, rect : Rect) {
         drawSprite(material, at, rect.quad, Rect(1, 1, -1, -1).quad)
     }
@@ -33,7 +33,7 @@ object D2D {
             .write(uInt4 = i + 1).write(uInt4 = i + 2).write(uInt4 = i + 3)
     }
 
-    private val lineVb = VertexBuffer.mesh
+    private val lineVb = MutableVertexBuffer.mesh
     private val lineVertexes = VoidRefArray(MeshData.type, 2)
     def drawLine(material : ColorSource, p0 : vec2, p1 : vec2) {
         var v = lineVertexes

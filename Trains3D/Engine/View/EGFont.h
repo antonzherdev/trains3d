@@ -3,8 +3,8 @@
 #import "EGShader.h"
 @class EGVertexBufferDesc;
 @class EGFileTexture;
-@class EGVertexBuffer;
-@class EGIndexBuffer;
+@class EGMutableVertexBuffer;
+@class EGMutableIndexBuffer;
 @class EGMesh;
 @class EGGlobal;
 @class EGContext;

@@ -2,7 +2,7 @@
 #import "EGMesh.h"
 #import "GEVec.h"
 #import "GELine.h"
-@class EGVertexBuffer;
+@class EGMutableVertexBuffer;
 @class EGColorSource;
 @class EGGlobal;
 @class EGContext;

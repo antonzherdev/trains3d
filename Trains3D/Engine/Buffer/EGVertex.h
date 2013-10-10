@@ -9,6 +9,7 @@
 
 @class EGVertexBufferDesc;
 @class EGVertexBuffer;
+@class EGMutableVertexBuffer;
 @class EGVertexArray;
 @protocol EGVertexSource;
 
@@ -41,15 +42,36 @@
 
 @interface EGVertexBuffer : EGBuffer<EGVertexSource>
 @property (nonatomic, readonly) EGVertexBufferDesc* desc;
+@property (nonatomic, readonly) NSUInteger length;
+@property (nonatomic, readonly) NSUInteger count;
 
-+ (id)vertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle;
++ (id)vertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle length:(NSUInteger)length count:(NSUInteger)count;
+- (id)initWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle length:(NSUInteger)length count:(NSUInteger)count;
+- (ODClassType*)type;
++ (EGVertexBuffer*)applyDesc:(EGVertexBufferDesc*)desc array:(CNVoidRefArray)array;
++ (EGVertexBuffer*)applyDesc:(EGVertexBufferDesc*)desc data:(CNPArray*)data;
++ (EGVertexBuffer*)vec4Data:(CNPArray*)data;
++ (EGVertexBuffer*)vec4Data:(CNPArray*)data;
++ (EGVertexBuffer*)vec2Data:(CNPArray*)data;
++ (EGVertexBuffer*)meshData:(CNPArray*)data;
+- (void)bind;
+- (void)bindWithShader:(EGShader*)shader;
++ (ODClassType*)type;
+@end
+
+
+@interface EGMutableVertexBuffer : EGMutableBuffer<EGVertexSource>
+@property (nonatomic, readonly) EGVertexBufferDesc* desc;
+@property (nonatomic, readonly) GLuint handle;
+
++ (id)mutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle;
 - (id)initWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle;
 - (ODClassType*)type;
-+ (EGVertexBuffer*)applyDesc:(EGVertexBufferDesc*)desc;
-+ (EGVertexBuffer*)vec2;
-+ (EGVertexBuffer*)vec3;
-+ (EGVertexBuffer*)vec4;
-+ (EGVertexBuffer*)mesh;
++ (EGMutableVertexBuffer*)applyDesc:(EGVertexBufferDesc*)desc;
++ (EGMutableVertexBuffer*)vec2;
++ (EGMutableVertexBuffer*)vec3;
++ (EGMutableVertexBuffer*)vec4;
++ (EGMutableVertexBuffer*)mesh;
 - (void)bind;
 - (void)bindWithShader:(EGShader*)shader;
 + (ODClassType*)type;

@@ -4,8 +4,6 @@
     ODPType* _dataType;
     unsigned int _bufferType;
     GLuint _handle;
-    NSUInteger __length;
-    NSUInteger __count;
 }
 static ODClassType* _EGBuffer_type;
 @synthesize dataType = _dataType;
@@ -22,8 +20,6 @@ static ODClassType* _EGBuffer_type;
         _dataType = dataType;
         _bufferType = bufferType;
         _handle = handle;
-        __length = 0;
-        __count = 0;
     }
     
     return self;
@@ -35,11 +31,11 @@ static ODClassType* _EGBuffer_type;
 }
 
 - (NSUInteger)length {
-    return __length;
+    @throw @"Method length is abstract";
 }
 
 - (NSUInteger)count {
-    return __count;
+    @throw @"Method count is abstract";
 }
 
 + (EGBuffer*)applyDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType {
@@ -48,36 +44,6 @@ static ODClassType* _EGBuffer_type;
 
 - (void)dealoc {
     egDeleteBuffer(_handle);
-}
-
-- (id)setData:(CNPArray*)data {
-    return [self setData:data usage:GL_STATIC_DRAW];
-}
-
-- (id)setArray:(CNVoidRefArray)array {
-    return [self setArray:array usage:GL_STATIC_DRAW];
-}
-
-- (id)setData:(CNPArray*)data usage:(unsigned int)usage {
-    [self bind];
-    glBufferData(_bufferType, data.length, data.bytes, usage);
-    __length = data.length;
-    __count = data.count;
-    return self;
-}
-
-- (id)setArray:(CNVoidRefArray)array usage:(unsigned int)usage {
-    [self bind];
-    glBufferData(_bufferType, array.length, array.bytes, usage);
-    __length = array.length;
-    __count = array.length / _dataType.size;
-    return self;
-}
-
-- (id)updateStart:(NSUInteger)start count:(NSUInteger)count array:(CNVoidRefArray)array {
-    [self bind];
-    glBufferSubData(_bufferType, start * _dataType.size, count * _dataType.size, array.bytes);
-    return self;
 }
 
 - (void)bind {
@@ -113,6 +79,85 @@ static ODClassType* _EGBuffer_type;
     hash = hash * 31 + self.bufferType;
     hash = hash * 31 + GLuintHash(self.handle);
     return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"dataType=%@", self.dataType];
+    [description appendFormat:@", bufferType=%d", self.bufferType];
+    [description appendFormat:@", handle=%@", GLuintDescription(self.handle)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGMutableBuffer{
+    NSUInteger __length;
+    NSUInteger __count;
+}
+static ODClassType* _EGMutableBuffer_type;
+
++ (id)mutableBufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(GLuint)handle {
+    return [[EGMutableBuffer alloc] initWithDataType:dataType bufferType:bufferType handle:handle];
+}
+
+- (id)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(GLuint)handle {
+    self = [super initWithDataType:dataType bufferType:bufferType handle:handle];
+    if(self) {
+        __length = 0;
+        __count = 0;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGMutableBuffer_type = [ODClassType classTypeWithCls:[EGMutableBuffer class]];
+}
+
+- (NSUInteger)length {
+    return __length;
+}
+
+- (NSUInteger)count {
+    return __count;
+}
+
+- (id)setData:(CNPArray*)data {
+    [self bind];
+    glBufferData(self.bufferType, data.length, data.bytes, GL_DYNAMIC_DRAW);
+    __length = data.length;
+    __count = data.count;
+    return self;
+}
+
+- (id)setArray:(CNVoidRefArray)array {
+    [self bind];
+    glBufferData(self.bufferType, array.length, array.bytes, GL_DYNAMIC_DRAW);
+    __length = array.length;
+    __count = array.length / self.dataType.size;
+    return self;
+}
+
+- (id)updateStart:(NSUInteger)start count:(NSUInteger)count array:(CNVoidRefArray)array {
+    [self bind];
+    glBufferSubData(self.bufferType, start * self.dataType.size, count * self.dataType.size, array.bytes);
+    return self;
+}
+
+- (ODClassType*)type {
+    return [EGMutableBuffer type];
+}
+
++ (ODClassType*)type {
+    return _EGMutableBuffer_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 - (NSString*)description {

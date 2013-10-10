@@ -28,7 +28,7 @@ static ODClassType* _EGMapSsoView_type;
         __lazy_axisVertexBuffer = [CNLazy lazyWithF:^EGVertexBuffer*() {
             return ^EGVertexBuffer*() {
                 GEMat4* mi = [EGCameraIso.m inverse];
-                return [[EGVertexBuffer vec4] setData:[ arrs(GEVec4, 4) {[mi mulVec4:GEVec4Make(0.0, 0.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(1.0, 0.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(0.0, 1.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(0.0, 0.0, 1.0, 1.0)]}]];
+                return [EGVertexBuffer vec4Data:[ arrs(GEVec4, 4) {[mi mulVec4:GEVec4Make(0.0, 0.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(1.0, 0.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(0.0, 1.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(0.0, 0.0, 1.0, 1.0)]}]];
             }();
         }];
         _plane = ^EGMesh*() {

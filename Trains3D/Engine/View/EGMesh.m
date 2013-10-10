@@ -83,15 +83,15 @@ static ODClassType* _EGMesh_type;
 }
 
 + (EGMesh*)vec2VertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData {
-    return [EGMesh meshWithVertexBuffer:[[EGVertexBuffer vec2] setData:vertexData] indexBuffer:[[EGIndexBuffer apply] setData:indexData]];
+    return [EGMesh meshWithVertexBuffer:[EGVertexBuffer vec2Data:vertexData] indexBuffer:[EGIndexBuffer applyData:indexData]];
 }
 
 + (EGMesh*)applyVertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData {
-    return [EGMesh meshWithVertexBuffer:[[EGVertexBuffer mesh] setData:vertexData] indexBuffer:[[EGIndexBuffer apply] setData:indexData]];
+    return [EGMesh meshWithVertexBuffer:[EGVertexBuffer meshData:vertexData] indexBuffer:[EGIndexBuffer applyData:indexData]];
 }
 
 + (EGMesh*)applyDesc:(EGVertexBufferDesc*)desc vertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData {
-    return [EGMesh meshWithVertexBuffer:[[EGVertexBuffer applyDesc:desc] setData:vertexData] indexBuffer:[[EGIndexBuffer apply] setData:indexData]];
+    return [EGMesh meshWithVertexBuffer:[EGVertexBuffer applyDesc:desc data:vertexData] indexBuffer:[EGIndexBuffer applyData:indexData]];
 }
 
 - (ODClassType*)type {

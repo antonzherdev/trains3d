@@ -7,8 +7,8 @@ class TreeView(forest : Forest) {
     val material = ColorSource(vec4(1, 1, 1, 1), textureFor("Pine.png"), 0.3)
 //    val materials = textures.chain.map(ColorSource(vec4(1, 1, 1, 1), _, 0.3)).toArray
 //    val rects = textures.chain.map(Rect(0, 0, _.size.x/(_.size.y*4), _.size.y/(_.size.y*2)).centerX).toArray
-    private val vb = VertexBuffer(Billboard.vbDesc)
-    private val ib = IndexBuffer()
+    private val vb = MutableVertexBuffer(Billboard.vbDesc)
+    private val ib = MutableIndexBuffer()
 
     def draw {
         val ar = VoidRefArray(BillboardBufferData.type, 8 * forest.trees.count)
@@ -22,12 +22,11 @@ class TreeView(forest : Forest) {
             ia = D2D.writeQuadIndex(ia, i + 4)
             i += 8
         }
-        vb.set(ar, GL_DYNAMIC_DRAW)
-        ib.set(iar, GL_DYNAMIC_DRAW)
+        vb.set(ar)
+        ib.set(iar)
         BlendFunction.standard {
             context.cullFace.disabled {
-//            BillboardShaderSystem.shaderFor(material).draw(material, vb, iar, GL_TRIANGLES)
-                BillboardShaderSystem.shaderFor(material).draw(material, Mesh(vb, ib))
+                BillboardShaderSystem.shaderFor(material).draw(material, vb, ib)
             }
         }
         ar.free

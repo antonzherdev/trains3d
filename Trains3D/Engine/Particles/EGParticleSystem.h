@@ -2,7 +2,7 @@
 #import "EGScene.h"
 @class EGVertexBufferDesc;
 @class EGBlendFunction;
-@class EGVertexBuffer;
+@class EGMutableVertexBuffer;
 @class EGIndexBuffer;
 @class EGMesh;
 @class EGShader;
@@ -50,8 +50,7 @@
 @property (nonatomic, readonly) NSUInteger maxCount;
 @property (nonatomic, readonly) EGBlendFunction* blendFunc;
 @property (nonatomic, readonly) CNVoidRefArray vertexArr;
-@property (nonatomic, readonly) EGVertexBuffer* vertexBuffer;
-@property (nonatomic, readonly) CNVoidRefArray indexArr;
+@property (nonatomic, readonly) EGMutableVertexBuffer* vertexBuffer;
 @property (nonatomic, readonly) EGIndexBuffer* indexBuffer;
 @property (nonatomic, readonly) EGMesh* mesh;
 

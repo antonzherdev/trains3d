@@ -2,7 +2,6 @@
 
 #import "EGVertex.h"
 #import "EGMaterial.h"
-#import "GL.h"
 #import "EGIndex.h"
 #import "EGMesh.h"
 #import "EGShader.h"
@@ -162,8 +161,7 @@ static ODClassType* _EGParticle_type;
     NSUInteger _maxCount;
     EGBlendFunction* _blendFunc;
     CNVoidRefArray _vertexArr;
-    EGVertexBuffer* _vertexBuffer;
-    CNVoidRefArray _indexArr;
+    EGMutableVertexBuffer* _vertexBuffer;
     EGIndexBuffer* _indexBuffer;
     EGMesh* _mesh;
 }
@@ -173,7 +171,6 @@ static ODClassType* _EGParticleSystemView_type;
 @synthesize blendFunc = _blendFunc;
 @synthesize vertexArr = _vertexArr;
 @synthesize vertexBuffer = _vertexBuffer;
-@synthesize indexArr = _indexArr;
 @synthesize indexBuffer = _indexBuffer;
 @synthesize mesh = _mesh;
 
@@ -189,17 +186,18 @@ static ODClassType* _EGParticleSystemView_type;
         _maxCount = maxCount;
         _blendFunc = blendFunc;
         _vertexArr = cnVoidRefArrayApplyTpCount(_vbDesc.dataType, _maxCount * [self vertexCount]);
-        _vertexBuffer = [[EGVertexBuffer applyDesc:_vbDesc] setArray:_vertexArr usage:GL_DYNAMIC_DRAW];
-        _indexArr = ^CNVoidRefArray() {
+        _vertexBuffer = [EGMutableVertexBuffer applyDesc:_vbDesc];
+        _indexBuffer = ^EGIndexBuffer*() {
             NSUInteger vc = [self vertexCount];
             CNVoidRefArray ia = cnVoidRefArrayApplyTpCount(oduInt4Type(), _maxCount * 3 * (vc - 2));
             __block CNVoidRefArray indexPointer = ia;
             [uintRange(_maxCount) forEach:^void(id i) {
                 indexPointer = [_weakSelf writeIndexesToIndexPointer:indexPointer i:((unsigned int)(unumi(i) * vc))];
             }];
-            return ia;
+            EGIndexBuffer* ib = [EGIndexBuffer applyArray:ia];
+            cnVoidRefArrayFree(ia);
+            return ib;
         }();
-        _indexBuffer = [[EGIndexBuffer apply] setArray:_indexArr usage:GL_STATIC_DRAW];
         _mesh = [EGMesh meshWithVertexBuffer:_vertexBuffer indexBuffer:_indexBuffer];
     }
     
@@ -241,7 +239,7 @@ static ODClassType* _EGParticleSystemView_type;
                 }];
                 NSUInteger n = uintMinB([particles count], _maxCount);
                 NSUInteger vc = [self vertexCount];
-                [_vertexBuffer setArray:_vertexArr usage:GL_DYNAMIC_DRAW];
+                [_vertexBuffer setArray:_vertexArr];
                 [[self shader] drawParam:[self material] vertex:_vertexBuffer index:[EGIndexSourceGap indexSourceGapWithSource:_indexBuffer start:0 count:((unsigned int)(n * 3 * (vc - 2)))]];
             }];
         }];
@@ -249,7 +247,6 @@ static ODClassType* _EGParticleSystemView_type;
 }
 
 - (void)dealloc {
-    cnVoidRefArrayFree(_indexArr);
     cnVoidRefArrayFree(_vertexArr);
 }
 

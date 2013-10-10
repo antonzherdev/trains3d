@@ -43,18 +43,19 @@ class Particle(lifeLength : float4) extends Controller {
 
 class ParticleSystemView<P extends Particle, D>(vbDesc : VertexBufferDesc<D>, maxCount : uint, blendFunc : BlendFunction) {
     val vertexArr = VoidRefArray(vbDesc.dataType, maxCount*vertexCount)
-    val vertexBuffer = VertexBuffer<D>(vbDesc).set(array = vertexArr, usage = GL_DYNAMIC_DRAW)
-    val indexArr : VoidRefArray = {
+    val vertexBuffer = MutableVertexBuffer<D>(vbDesc)
+    val indexBuffer : IndexBuffer = {
         val vc = vertexCount
         val ia = VoidRefArray(UInt4.type, maxCount*3*(vc - 2))
         var indexPointer = ia
         maxCount.range.for{i ->
             indexPointer = writeIndexesTo(indexPointer, i*vc)
         }
-        ia
+        val ib = IndexBuffer(ia)
+        ia.free
+        ib
     }
-    val indexBuffer = IndexBuffer().set(array = indexArr, usage = GL_STATIC_DRAW)
-    val mesh = Mesh(vertexBuffer = vertexBuffer, indexBuffer)
+    val mesh = Mesh<D>(vertexBuffer = vertexBuffer, indexBuffer)
 
     def vertexCount : uint
     def writeIndexesTo(indexPointer : VoidRefArray, i : uint4) : VoidRefArray
@@ -74,13 +75,12 @@ class ParticleSystemView<P extends Particle, D>(vbDesc : VertexBufferDesc<D>, ma
             }
             val n = particles.count.min(maxCount)
             val vc = vertexCount
-            vertexBuffer.set(array = vertexArr, usage = GL_DYNAMIC_DRAW)
+            vertexBuffer.set(array = vertexArr)
             shader.draw(material, vertexBuffer, IndexSourceGap(indexBuffer, 0, n*3*(vc - 2)))
         }}}
     }
 
     def dealloc {
-        indexArr.free
         vertexArr.free
     }
 }

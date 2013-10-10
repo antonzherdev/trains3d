@@ -4,17 +4,25 @@
 #import "EGVertex.h"
 @implementation EGIndexBuffer{
     unsigned int _mode;
+    NSUInteger _length;
+    NSUInteger _count;
 }
 static ODClassType* _EGIndexBuffer_type;
 @synthesize mode = _mode;
+@synthesize length = _length;
+@synthesize count = _count;
 
-+ (id)indexBufferWithHandle:(GLuint)handle mode:(unsigned int)mode {
-    return [[EGIndexBuffer alloc] initWithHandle:handle mode:mode];
++ (id)indexBufferWithHandle:(GLuint)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count {
+    return [[EGIndexBuffer alloc] initWithHandle:handle mode:mode length:length count:count];
 }
 
-- (id)initWithHandle:(GLuint)handle mode:(unsigned int)mode {
+- (id)initWithHandle:(GLuint)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count {
     self = [super initWithDataType:oduInt4Type() bufferType:GL_ELEMENT_ARRAY_BUFFER handle:handle];
-    if(self) _mode = mode;
+    if(self) {
+        _mode = mode;
+        _length = length;
+        _count = count;
+    }
     
     return self;
 }
@@ -24,14 +32,24 @@ static ODClassType* _EGIndexBuffer_type;
     _EGIndexBuffer_type = [ODClassType classTypeWithCls:[EGIndexBuffer class]];
 }
 
-+ (EGIndexBuffer*)apply {
-    return [EGIndexBuffer indexBufferWithHandle:egGenBuffer() mode:GL_TRIANGLES];
++ (EGIndexBuffer*)applyArray:(CNVoidRefArray)array {
+    EGIndexBuffer* ib = [EGIndexBuffer indexBufferWithHandle:egGenBuffer() mode:GL_TRIANGLES length:array.length count:array.length / 4];
+    [ib bind];
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, array.length, array.bytes, GL_STATIC_DRAW);
+    return ib;
+}
+
++ (EGIndexBuffer*)applyData:(CNPArray*)data {
+    EGIndexBuffer* ib = [EGIndexBuffer indexBufferWithHandle:egGenBuffer() mode:GL_TRIANGLES length:data.length count:data.count];
+    [ib bind];
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.length, data.bytes, GL_STATIC_DRAW);
+    return ib;
 }
 
 - (void)draw {
     [self bind];
     [EGGlobal.context draw];
-    glDrawElements(_mode, [self count], GL_UNSIGNED_INT, 0);
+    glDrawElements(_mode, _count, GL_UNSIGNED_INT, 0);
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
@@ -60,6 +78,98 @@ static ODClassType* _EGIndexBuffer_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGIndexBuffer* o = ((EGIndexBuffer*)(other));
+    return GLuintEq(self.handle, o.handle) && self.mode == o.mode && self.length == o.length && self.count == o.count;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + GLuintHash(self.handle);
+    hash = hash * 31 + self.mode;
+    hash = hash * 31 + self.length;
+    hash = hash * 31 + self.count;
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"handle=%@", GLuintDescription(self.handle)];
+    [description appendFormat:@", mode=%d", self.mode];
+    [description appendFormat:@", length=%li", self.length];
+    [description appendFormat:@", count=%li", self.count];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGMutableIndexBuffer{
+    GLuint _handle;
+    unsigned int _mode;
+}
+static ODClassType* _EGMutableIndexBuffer_type;
+@synthesize handle = _handle;
+@synthesize mode = _mode;
+
++ (id)mutableIndexBufferWithHandle:(GLuint)handle mode:(unsigned int)mode {
+    return [[EGMutableIndexBuffer alloc] initWithHandle:handle mode:mode];
+}
+
+- (id)initWithHandle:(GLuint)handle mode:(unsigned int)mode {
+    self = [super initWithDataType:oduInt4Type() bufferType:GL_ELEMENT_ARRAY_BUFFER handle:handle];
+    if(self) {
+        _handle = handle;
+        _mode = mode;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGMutableIndexBuffer_type = [ODClassType classTypeWithCls:[EGMutableIndexBuffer class]];
+}
+
++ (EGMutableIndexBuffer*)apply {
+    return [EGMutableIndexBuffer mutableIndexBufferWithHandle:egGenBuffer() mode:GL_TRIANGLES];
+}
+
++ (EGMutableIndexBuffer*)applyMode:(unsigned int)mode {
+    return [EGMutableIndexBuffer mutableIndexBufferWithHandle:egGenBuffer() mode:mode];
+}
+
+- (void)draw {
+    [self bind];
+    [EGGlobal.context draw];
+    glDrawElements(_mode, [self count], GL_UNSIGNED_INT, 0);
+}
+
+- (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
+    [self bind];
+    [EGGlobal.context draw];
+    glDrawElements(_mode, count, GL_UNSIGNED_INT, 4 * start);
+}
+
+- (void)bind {
+    [EGGlobal.context bindIndexBufferHandle:_handle];
+}
+
+- (ODClassType*)type {
+    return [EGMutableIndexBuffer type];
+}
+
++ (ODClassType*)type {
+    return _EGMutableIndexBuffer_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGMutableIndexBuffer* o = ((EGMutableIndexBuffer*)(other));
     return GLuintEq(self.handle, o.handle) && self.mode == o.mode;
 }
 

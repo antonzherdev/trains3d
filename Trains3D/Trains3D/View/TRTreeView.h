@@ -6,12 +6,11 @@
 @class EGTexture;
 @class EGGlobal;
 @class EGColorSource;
-@class EGVertexBuffer;
-@class EGIndexBuffer;
+@class EGMutableVertexBuffer;
+@class EGMutableIndexBuffer;
 @class EGD2D;
 @class EGBlendFunction;
 @class EGContext;
-@class EGMesh;
 @class EGEnablingState;
 @class TRTree;
 @class TRTreeType;
