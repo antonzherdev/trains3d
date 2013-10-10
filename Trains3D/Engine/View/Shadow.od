@@ -77,10 +77,11 @@ class ShadowSurfaceShader extends Shader<ColorSource>(ShadowSurfaceShaderBuilder
 }
 
 
-object ShadowShaderSystem extends ShaderSystem<ColorSource> {
+class ShadowShaderSystem extends ShaderSystem<ColorSource> {
+    static val instance = ShadowShaderSystem()
     def shaderFor(param : ColorSource) : ShadowShader =
         if(isColorShaderFor(param)) ShadowShader.instanceForColor else ShadowShader.instanceForTexture
-    def isColorShaderFor(param : ColorSource) = param.texture.isEmpty || param.alphaTestLevel < 0
+    static def isColorShaderFor(param : ColorSource) = param.texture.isEmpty || param.alphaTestLevel < 0
 }
 
 

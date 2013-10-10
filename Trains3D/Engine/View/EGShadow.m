@@ -247,14 +247,26 @@ static ODClassType* _EGShadowSurfaceShader_type;
 
 
 @implementation EGShadowShaderSystem
+static EGShadowShaderSystem* _EGShadowShaderSystem_instance;
 static ODClassType* _EGShadowShaderSystem_type;
+
++ (id)shadowShaderSystem {
+    return [[EGShadowShaderSystem alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
 
 + (void)initialize {
     [super initialize];
     _EGShadowShaderSystem_type = [ODClassType classTypeWithCls:[EGShadowShaderSystem class]];
+    _EGShadowShaderSystem_instance = [EGShadowShaderSystem shadowShaderSystem];
 }
 
-+ (EGShadowShader*)shaderForParam:(EGColorSource*)param {
+- (EGShadowShader*)shaderForParam:(EGColorSource*)param {
     if([EGShadowShaderSystem isColorShaderForParam:param]) return EGShadowShader.instanceForColor;
     else return EGShadowShader.instanceForTexture;
 }
@@ -265,6 +277,10 @@ static ODClassType* _EGShadowShaderSystem_type;
 
 - (ODClassType*)type {
     return [EGShadowShaderSystem type];
+}
+
++ (EGShadowShaderSystem*)instance {
+    return _EGShadowShaderSystem_instance;
 }
 
 + (ODClassType*)type {

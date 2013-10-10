@@ -66,9 +66,12 @@
 
 
 @interface EGShadowShaderSystem : EGShaderSystem
++ (id)shadowShaderSystem;
+- (id)init;
 - (ODClassType*)type;
-+ (EGShadowShader*)shaderForParam:(EGColorSource*)param;
+- (EGShadowShader*)shaderForParam:(EGColorSource*)param;
 + (BOOL)isColorShaderForParam:(EGColorSource*)param;
++ (EGShadowShaderSystem*)instance;
 + (ODClassType*)type;
 @end
 

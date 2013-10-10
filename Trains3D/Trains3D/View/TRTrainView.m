@@ -5,6 +5,7 @@
 #import "EGMaterial.h"
 #import "EGMesh.h"
 #import "TRModels.h"
+#import "EGShadow.h"
 #import "TRTrain.h"
 #import "TRCity.h"
 #import "EGContext.h"
@@ -16,8 +17,9 @@
     TRLevel* _level;
     TRSmokeView* _smokeView;
     EGStandardMaterial* _blackMaterial;
-    EGMaterial* _defMat;
+    EGStandardMaterial* _defMat;
     EGMesh* _vaoCar1;
+    EGMesh* _vaoShadowCar1;
 }
 static ODClassType* _TRTrainView_type;
 @synthesize level = _level;
@@ -25,6 +27,7 @@ static ODClassType* _TRTrainView_type;
 @synthesize blackMaterial = _blackMaterial;
 @synthesize defMat = _defMat;
 @synthesize vaoCar1 = _vaoCar1;
+@synthesize vaoShadowCar1 = _vaoShadowCar1;
 
 + (id)trainViewWithLevel:(TRLevel*)level {
     return [[TRTrainView alloc] initWithLevel:level];
@@ -38,6 +41,7 @@ static ODClassType* _TRTrainView_type;
         _blackMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 1.0)] specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:1.0];
         _defMat = [self trainMaterialForColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
         _vaoCar1 = [TRModels.car vaoWithMaterial:_defMat];
+        _vaoShadowCar1 = [TRModels.car vaoWithShaderSystem:EGShadowShaderSystem.instance material:_defMat.diffuse];
     }
     
     return self;
@@ -48,7 +52,7 @@ static ODClassType* _TRTrainView_type;
     _TRTrainView_type = [ODClassType classTypeWithCls:[TRTrainView class]];
 }
 
-- (EGMaterial*)trainMaterialForColor:(GEVec4)color {
+- (EGStandardMaterial*)trainMaterialForColor:(GEVec4)color {
     return [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:color] specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:0.1];
 }
 
@@ -78,7 +82,7 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (void)drawTrain:(TRTrain*)train {
-    EGMaterial* material = [self trainMaterialForColor:train.color.color];
+    EGStandardMaterial* material = [self trainMaterialForColor:train.color.color];
     [[train cars] forEach:^void(TRCar* car) {
         [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
             return [[_ modifyW:^GEMat4*(GEMat4* w) {
@@ -99,7 +103,8 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (void)drawCar1Material:(EGMaterial*)material {
-    if(!([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]])) [material drawMesh:_vaoCar1];
+    if([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]]) [material drawMesh:_vaoShadowCar1];
+    else [material drawMesh:_vaoCar1];
     [_blackMaterial drawMesh:TRModels.carBlack];
 }
 
@@ -117,7 +122,7 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (void)drawDyingTrain:(TRTrain*)dyingTrain {
-    EGMaterial* material = [self trainMaterialForColor:dyingTrain.color.color];
+    EGStandardMaterial* material = [self trainMaterialForColor:dyingTrain.color.color];
     [[dyingTrain cars] forEach:^void(TRCar* car) {
         [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
             return [_ modifyM:^GEMat4*(GEMat4* m) {

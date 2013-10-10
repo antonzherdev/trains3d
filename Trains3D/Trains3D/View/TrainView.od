@@ -9,7 +9,7 @@ class TrainView(level : Level) {
 
     val blackMaterial = StandardMaterial(vec4(0, 0, 0, 1), vec4(0.1, 0.1, 0.1, 1), 1)
 
-    def trainMaterialFor(color : vec4) : Material = StandardMaterial(color, vec4(0.1, 0.1, 0.1, 1), 0.1)
+    def trainMaterialFor(color : vec4) = StandardMaterial(color, vec4(0.1, 0.1, 0.1, 1), 0.1)
 
     def draw {
         draw(trains = level.trains)
@@ -61,8 +61,11 @@ class TrainView(level : Level) {
 
     val defMat = trainMaterialFor(vec4(1, 1, 1, 1))
     val vaoCar1 = Models.car.vaoWith(defMat)
+    val vaoShadowCar1 = Models.car.vaoWith(ShadowShaderSystem.instance, defMat.diffuse)
     private def drawCar1(material : Material) {
-        if(!context.renderTarget.is<ShadowRenderTarget>) {
+        if(context.renderTarget.is<ShadowRenderTarget>) {
+            material.draw(vaoShadowCar1)
+        } else {
             material.draw(vaoCar1)
         }
 //        material.draw(Models.car)
