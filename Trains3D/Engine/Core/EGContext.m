@@ -249,6 +249,8 @@ static ODClassType* _EGContext_type;
 - (void)bindVertexArrayHandle:(GLuint)handle {
     if(!(GLuintEq(handle, __lastVertexArray))) {
         __lastVertexArray = handle;
+        __lastVertexBuffer = 0;
+        __lastIndexBuffer = 0;
         egBindVertexArray(handle);
     }
 }
@@ -256,6 +258,8 @@ static ODClassType* _EGContext_type;
 - (void)bindDefaultVertexArray {
     if(!(GLuintEq(__lastVertexArray, _defaultVertexArray))) {
         __lastVertexArray = _defaultVertexArray;
+        __lastVertexBuffer = 0;
+        __lastIndexBuffer = 0;
         egBindVertexArray(_defaultVertexArray);
     }
 }
