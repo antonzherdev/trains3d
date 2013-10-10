@@ -91,7 +91,7 @@ class Context {
 
     private var _lastVertexBuffer : GLuint = 0
     private var _lastVertexSource : VertexSource
-    def bindVertexBuffer(buffer : VertexBuffer<_>) {
+    def bindVertexBuffer(buffer : VertexSource) {
         val id = buffer.handle
         if(id != _lastVertexBuffer) {
             _lastVertexSource = buffer

@@ -226,9 +226,9 @@ static ODClassType* _EGContext_type;
     }
 }
 
-- (void)bindVertexBufferBuffer:(EGVertexBuffer*)buffer {
-    GLuint id = buffer.handle;
-    if(!(GLuintEq(id, __lastVertexBuffer))) {
+- (void)bindVertexBufferBuffer:(id<EGVertexSource>)buffer {
+    unsigned int id = [buffer handle];
+    if(id != __lastVertexBuffer) {
         __lastVertexSource = buffer;
         __lastVertexBuffer = id;
         glBindBuffer(GL_ARRAY_BUFFER, id);

@@ -3,11 +3,11 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 
 class LevelView(level : Level) extends LayerView with InputProcessor {
-    private val cityView = CityView()
-    private val railroadView = RailroadView(level.railroad)
+    private val cityView : CityView
+    private val railroadView : RailroadView
     private val trainView : TrainView
-    private val treeView = TreeView(level.forest)
-    private val callRepairerView = CallRepairerView(level)
+    private val treeView : TreeView
+    private val callRepairerView : CallRepairerView
 
     val environment = Environment(ambientColor = vec4(0.7, 0.7, 0.7, 1), lights = [
         DirectLight(color = vec4(0.6, 0.6, 0.6, 1), direction = vec3(-0.15, 0.35, -0.3).normalize
@@ -17,6 +17,10 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     def init {
         context.environment = environment
         trainView = TrainView(level)
+        treeView = TreeView(level.forest)
+        railroadView = RailroadView(level.railroad)
+        cityView = CityView()
+        callRepairerView = CallRepairerView(level)
     }
 
     def draw {

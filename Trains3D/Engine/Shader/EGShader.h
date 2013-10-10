@@ -145,6 +145,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)drawParam:(id)param vertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index;
+- (void)drawParam:(id)param mesh:(EGMesh*)mesh;
 - (EGShader*)shaderForParam:(id)param;
 - (EGShader*)shaderForParam:(id)param renderTarget:(EGRenderTarget*)renderTarget;
 - (EGVertexArray*)vaoWithParam:(id)param vbo:(EGVertexBuffer*)vbo;

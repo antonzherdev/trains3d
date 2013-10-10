@@ -4,6 +4,7 @@ trait VertexSource {
     def bindWith(shader : Shader<_>)
     def unbindWith(shader : Shader<_>) {}
     def count : uint
+    def handle : uint4
 }
 
 class VertexBufferDesc<T>(dataType : PType<T>, position : int4, uv : int4, normal : int4, color : int4, model : int4)

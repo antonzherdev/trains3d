@@ -1,16 +1,16 @@
 #import "objd.h"
 #import "GEVec.h"
 @class EGMesh;
+@class EGStandardMaterial;
 @class EGTexture;
 @class EGGlobal;
-@class EGStandardMaterial;
 @class EGColorSource;
+@class TRModels;
 @class TRCity;
 @class GEMat4;
 @class EGMatrixModel;
 @class TRCityAngle;
 @class TRCityColor;
-@class TRModels;
 @class EGMaterial;
 @class EGContext;
 @class EGRenderTarget;
@@ -24,6 +24,9 @@
 @property (nonatomic, readonly) EGMesh* expectedTrainModel;
 @property (nonatomic, readonly) EGTexture* roofTexture;
 @property (nonatomic, readonly) EGStandardMaterial* windowMaterial;
+@property (nonatomic, readonly) EGMesh* vaoBody;
+@property (nonatomic, readonly) EGMesh* vaoRoof;
+@property (nonatomic, readonly) EGMesh* vaoWindows;
 
 + (id)cityView;
 - (id)init;

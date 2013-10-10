@@ -17,6 +17,7 @@
 - (void)bindWithShader:(EGShader*)shader;
 - (void)unbindWithShader:(EGShader*)shader;
 - (NSUInteger)count;
+- (unsigned int)handle;
 @end
 
 

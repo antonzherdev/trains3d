@@ -8,10 +8,11 @@
 @class EGColorSource;
 @class EGMutableVertexBuffer;
 @class EGMutableIndexBuffer;
+@class EGSimpleMesh;
+@class EGMesh;
 @class EGD2D;
 @class EGBlendFunction;
 @class EGContext;
-@class EGShader;
 @class EGEnablingState;
 @class TRTree;
 @class TRTreeType;

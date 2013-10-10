@@ -143,7 +143,6 @@ static ODClassType* _EGShader_type;
     [EGGlobal.context bindShaderProgramProgram:_program];
     [vertex bindWithShader:self];
     [self loadUniformsParam:param];
-    [EGGlobal.context draw];
     [index draw];
     [vertex unbindWithShader:self];
 }
@@ -725,6 +724,11 @@ static ODClassType* _EGShaderSystem_type;
 - (void)drawParam:(id)param vertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index {
     EGShader* shader = [self shaderForParam:param];
     [shader drawParam:param vertex:vertex index:index];
+}
+
+- (void)drawParam:(id)param mesh:(EGMesh*)mesh {
+    EGShader* shader = [self shaderForParam:param];
+    [shader drawParam:param mesh:mesh];
 }
 
 - (EGShader*)shaderForParam:(id)param {

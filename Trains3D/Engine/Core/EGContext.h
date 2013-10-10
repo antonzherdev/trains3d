@@ -7,7 +7,6 @@
 @protocol EGVertexSource;
 @class EGFileTexture;
 @class EGShaderProgram;
-@class EGVertexBuffer;
 @class EGShadowMap;
 @class GEMat4;
 
@@ -62,7 +61,7 @@
 - (void)bindTextureTexture:(EGTexture*)texture;
 - (void)bindTextureSlot:(unsigned int)slot target:(unsigned int)target texture:(EGTexture*)texture;
 - (void)bindShaderProgramProgram:(EGShaderProgram*)program;
-- (void)bindVertexBufferBuffer:(EGVertexBuffer*)buffer;
+- (void)bindVertexBufferBuffer:(id<EGVertexSource>)buffer;
 - (id<EGVertexSource>)vertexSource;
 - (void)bindIndexBufferHandle:(GLuint)handle;
 - (void)bindVertexArrayHandle:(GLuint)handle;

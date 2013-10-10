@@ -10,21 +10,25 @@ class CityView {
         1, 1, 0, 1, 0, 0.5, 0.001, 0.5,
         0, 1, 0, 1, 0, -0.5, 0.001, 0.5
         ], [0, 1, 2,
-        2, 3, 0])
+        2, 3, 0]).vaoWith(StandardMaterial(vec4(1, 1, 1, 1)), shadow = false)
     val roofTexture = textureFor("Roof.png")
     val windowMaterial = StandardMaterial(textureFor("Window.png"), vec4(1, 1, 1, 1), 1)
+    val vaoBody = Models.cityBodies.vaoWith(StandardMaterial(vec4(1, 1, 1, 1)), shadow = false)
+    val vaoRoof = Models.cityRoofs.vaoWith(StandardMaterial(roofTexture), shadow = false)
+    val vaoWindows = Models.cityWindows.vaoWith(windowMaterial, shadow = false)
+
     def draw(city : City) {
         matrix(
             _.modify(w = w -> w.translate(city.tile.x, city.tile.y, 0))
              .modify(m = m -> m.rotate(city.angle.angle, 0, -1, 0))
         ) {
-            StandardMaterial(city.color.color).draw(Models.cityBodies)
+            StandardMaterial(city.color.color).draw(vaoBody)
             if(!context.renderTarget.is<ShadowRenderTarget>) {
                 context.cullFace.disabled {
                     val roofMaterial = StandardMaterial(ColorSource(city.color.color, roofTexture), vec4(0.5, 0.5, 0.5, 1), 1)
-                    roofMaterial.draw(Models.cityRoofs)
+                    roofMaterial.draw(vaoRoof)
                 }
-                windowMaterial.draw(Models.cityWindows)
+                windowMaterial.draw(vaoWindows)
                 city.expectedTrainCounter.for{time ->
                     val x = -time/2
                     StandardMaterial(vec4(1.0, 0.5 - x, 0.5 - x, 1)).draw(expectedTrainModel)

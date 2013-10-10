@@ -1,22 +1,28 @@
 #import "TRCityView.h"
 
 #import "EGMesh.h"
+#import "EGMaterial.h"
 #import "EGTexture.h"
 #import "EGContext.h"
-#import "EGMaterial.h"
+#import "TRModels.h"
 #import "TRCity.h"
 #import "GEMat4.h"
-#import "TRModels.h"
 #import "EGSchedule.h"
 @implementation TRCityView{
     EGMesh* _expectedTrainModel;
     EGTexture* _roofTexture;
     EGStandardMaterial* _windowMaterial;
+    EGMesh* _vaoBody;
+    EGMesh* _vaoRoof;
+    EGMesh* _vaoWindows;
 }
 static ODClassType* _TRCityView_type;
 @synthesize expectedTrainModel = _expectedTrainModel;
 @synthesize roofTexture = _roofTexture;
 @synthesize windowMaterial = _windowMaterial;
+@synthesize vaoBody = _vaoBody;
+@synthesize vaoRoof = _vaoRoof;
+@synthesize vaoWindows = _vaoWindows;
 
 + (id)cityView {
     return [[TRCityView alloc] init];
@@ -25,9 +31,12 @@ static ODClassType* _TRCityView_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _expectedTrainModel = [EGMesh applyVertexData:[ arrs(EGMeshData, 32) {0, 0, 0, 1, 0, -0.5, 0.001, -0.5, 1, 0, 0, 1, 0, 0.5, 0.001, -0.5, 1, 1, 0, 1, 0, 0.5, 0.001, 0.5, 0, 1, 0, 1, 0, -0.5, 0.001, 0.5}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
+        _expectedTrainModel = [[EGMesh applyVertexData:[ arrs(EGMeshData, 32) {0, 0, 0, 1, 0, -0.5, 0.001, -0.5, 1, 0, 0, 1, 0, 0.5, 0.001, -0.5, 1, 1, 0, 1, 0, 0.5, 0.001, 0.5, 0, 1, 0, 1, 0, -0.5, 0.001, 0.5}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]] vaoWithMaterial:[EGStandardMaterial applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)] shadow:NO];
         _roofTexture = [EGGlobal textureForFile:@"Roof.png"];
         _windowMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Window.png"]] specularColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) specularSize:1.0];
+        _vaoBody = [TRModels.cityBodies vaoWithMaterial:[EGStandardMaterial applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)] shadow:NO];
+        _vaoRoof = [TRModels.cityRoofs vaoWithMaterial:[EGStandardMaterial applyTexture:_roofTexture] shadow:NO];
+        _vaoWindows = [TRModels.cityWindows vaoWithMaterial:_windowMaterial shadow:NO];
     }
     
     return self;
@@ -46,13 +55,13 @@ static ODClassType* _TRCityView_type;
             return [m rotateAngle:((float)(city.angle.angle)) x:0.0 y:-1.0 z:0.0];
         }];
     } f:^void() {
-        [[EGStandardMaterial applyColor:city.color.color] drawMesh:TRModels.cityBodies];
+        [[EGStandardMaterial applyColor:city.color.color] drawMesh:_vaoBody];
         if(!([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]])) {
             [EGGlobal.context.cullFace disabledF:^void() {
                 EGStandardMaterial* roofMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:city.color.color texture:_roofTexture] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:1.0];
-                [roofMaterial drawMesh:TRModels.cityRoofs];
+                [roofMaterial drawMesh:_vaoRoof];
             }];
-            [_windowMaterial drawMesh:TRModels.cityWindows];
+            [_windowMaterial drawMesh:_vaoWindows];
             [city.expectedTrainCounter forF:^void(CGFloat time) {
                 CGFloat x = -time / 2;
                 [[EGStandardMaterial applyColor:GEVec4Make(1.0, ((float)(0.5 - x)), ((float)(0.5 - x)), 1.0)] drawMesh:_expectedTrainModel];

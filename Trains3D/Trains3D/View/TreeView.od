@@ -9,6 +9,8 @@ class TreeView(forest : Forest) {
 //    val rects = textures.chain.map(Rect(0, 0, _.size.x/(_.size.y*4), _.size.y/(_.size.y*2)).centerX).toArray
     private val vb = MutableVertexBuffer(Billboard.vbDesc)
     private val ib = MutableIndexBuffer()
+    private val mesh = Mesh(vertex = vb, ib)
+//    private val mesh = Mesh(vertex = vb, ib).vaoWith(BillboardShaderSystem.instance, material, shadow = true)
 
     def draw {
         val ar = VoidRefArray(BillboardBufferData.type, 8 * forest.trees.count)
@@ -26,7 +28,7 @@ class TreeView(forest : Forest) {
         ib.set(iar)
         BlendFunction.standard {
             context.cullFace.disabled {
-                BillboardShaderSystem.instance.shaderFor(material).draw(material, vb, ib)
+                BillboardShaderSystem.instance.draw(material, mesh)
             }
         }
         ar.free

@@ -54,7 +54,6 @@ class Shader<P>(program : ShaderProgram) {
         context.bindShaderProgram(program)
         vertex.bindWith(shader = self)
         loadUniforms(param)
-        context.draw
         index.draw
         vertex.unbindWith(shader = self)
     }
@@ -158,6 +157,11 @@ class ShaderSystem<P> {
     def draw(param : P, vertex : VertexSource, index : IndexSource) {
         val shader = shaderFor(param)
         shader.draw(param, vertex, index)
+    }
+
+    def draw(param : P, mesh : Mesh) {
+        val shader = shaderFor(param)
+        shader.draw(param, mesh)
     }
 
     def shaderFor(param : P) : Shader<_> = shaderFor(param, context.renderTarget)

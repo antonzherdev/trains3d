@@ -6,14 +6,15 @@
 #import "EGMaterial.h"
 #import "EGVertex.h"
 #import "EGIndex.h"
+#import "EGMesh.h"
 #import "EGSprite.h"
-#import "EGShader.h"
 @implementation TRTreeView{
     TRForest* _forest;
     EGTexture* _texture;
     EGColorSource* _material;
     EGMutableVertexBuffer* _vb;
     EGMutableIndexBuffer* _ib;
+    EGSimpleMesh* _mesh;
 }
 static ODClassType* _TRTreeView_type;
 @synthesize forest = _forest;
@@ -32,6 +33,7 @@ static ODClassType* _TRTreeView_type;
         _material = [EGColorSource colorSourceWithColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:[CNOption applyValue:[EGGlobal textureForFile:@"Pine.png"]] alphaTestLevel:0.3];
         _vb = [EGMutableVertexBuffer applyDesc:EGBillboard.vbDesc];
         _ib = [EGMutableIndexBuffer apply];
+        _mesh = [EGMesh applyVertex:_vb index:_ib];
     }
     
     return self;
@@ -58,7 +60,7 @@ static ODClassType* _TRTreeView_type;
     [_ib setArray:iar];
     [EGBlendFunction.standard applyDraw:^void() {
         [EGGlobal.context.cullFace disabledF:^void() {
-            [[EGBillboardShaderSystem.instance shaderForParam:_material] drawParam:_material vertex:_vb index:_ib];
+            [EGBillboardShaderSystem.instance drawParam:_material mesh:_mesh];
         }];
     }];
     cnVoidRefArrayFree(ar);
