@@ -1,6 +1,9 @@
 package core.chain
 
-stub struct VoidRef
+stub struct VoidRef {
+    def sss : int
+    def add(shift : int) : VoidRef
+}
 
 stub object Memory {
     def sizeof(bytes : VoidRef) : uint

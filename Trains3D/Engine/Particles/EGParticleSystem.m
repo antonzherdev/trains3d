@@ -240,7 +240,7 @@ static ODClassType* _EGParticleSystemView_type;
                 NSUInteger n = uintMinB([particles count], _maxCount);
                 NSUInteger vc = [self vertexCount];
                 [_vertexBuffer setArray:_vertexArr usage:GL_DYNAMIC_DRAW];
-                [[self shader] drawParam:[self material] mesh:_mesh start:0 count:n * 3 * (vc - 2)];
+                [[self shader] drawParam:[self material] vertex:_vertexBuffer index:[EGIndexSourceGap indexSourceGapWithSource:_indexBuffer start:0 count:((unsigned int)(n * 3 * (vc - 2)))]];
             }];
         }];
     }];

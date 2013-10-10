@@ -9,6 +9,7 @@
 @class EGMaterial;
 @class EGGlobal;
 @class EGContext;
+@class EGIndexSourceGap;
 @class EGEnablingState;
 
 @class EGParticleSystem;

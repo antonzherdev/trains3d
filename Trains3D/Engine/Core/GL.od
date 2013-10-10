@@ -100,6 +100,7 @@ stub object gl {
     val GL_DOUBLE : uint4
     val GL_BYTE : uint4
     val GL_UNSIGNED_BYTE : uint4
+    val GL_UNSIGNED_SHORT : uint4
     val GL_INT : uint4
     val GL_UNSIGNED_INT : uint4
 

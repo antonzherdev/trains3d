@@ -47,51 +47,16 @@ class ShaderProgram(handle : GLuint) {
 
 class Shader<P>(program : ShaderProgram) {
     def draw(param : P, mesh : Mesh<_>) {
-        draw(param, mesh, 0, mesh.indexBuffer.count)
+        draw(param, mesh.vertexBuffer, mesh.indexBuffer)
     }
 
-    def draw(param : P, mesh : Mesh<_>, start : uint, count : uint) {
+    def draw(param : P, vertex : VertexSource, index : IndexSource) {
         context.bindShaderProgram(program)
-        mesh.vertexBuffer.bind
-        loadAttributes(mesh.vertexBuffer.desc)
-        loadUniforms(param)
-        mesh.indexBuffer.drawWith(start, count)
-    }
-
-    def draw(param : P, vb : VertexBuffer<_>, index : PArray<uint4>, mode : uint4) {
-        context.bindShaderProgram(program)
-        vb.bind
-        loadAttributes(vb.desc)
-        loadUniforms(param)
-        context.draw
-        glDrawElements(mode, index.count, GL_UNSIGNED_INT, index.bytes)
-    }
-
-    def draw(param : P, vb : VertexBuffer<_>, indexRef : VoidRefArray, mode : uint4) {
-        context.bindShaderProgram(program)
-        vb.bind
-        loadAttributes(vb.desc)
-        loadUniforms(param)
-        context.draw
-        glDrawElements(mode, indexRef.length/4, GL_UNSIGNED_INT, indexRef.bytes)
-    }
-
-    def draw(param : P, vb : VertexBuffer<_>, mode : uint4) {
-        context.bindShaderProgram(program)
-        vb.bind
-        loadAttributes(vb.desc)
-        loadUniforms(param)
-        context.draw
-        glDrawArrays(mode, 0, vb.count)
-    }
-
-    def draw(param : P, vao : VertexArray, index : IndexBuffer) {
-        context.bindShaderProgram(program)
-        vao.bind
+        vertex.bindWith(shader = self)
         loadUniforms(param)
         context.draw
         index.draw
-        context.bindDefaultVertexArray
+        vertex.unbindWith(shader = self)
     }
 
     def loadAttributes(vbDesc : VertexBufferDesc<_>)
@@ -181,24 +146,9 @@ class ShaderUniformI4(handle : GLuint) {
 }
 
 class ShaderSystem<P> {
-    def draw(param : P, mesh : Mesh<_>) {
+    def draw(param : P, vertex : VertexSource, index : IndexSource) {
         val shader = shaderFor(param)
-        shader.draw(param, mesh)
-    }
-
-    def draw(param : P, vb : VertexBuffer<_>, index : PArray<uint4>, mode : uint4) {
-        val shader = shaderFor(param)
-        shader.draw(param, vb = vb, index, mode)
-    }
-
-    def draw(param : P, vb : VertexBuffer<_>, mode : uint4) {
-        val shader = shaderFor(param)
-        shader.draw(param, vb = vb, mode)
-    }
-
-    def draw(param : P, vao : VertexArray, indexBuffer : IndexBuffer) {
-        val shader = shaderFor(param)
-        shader.draw(param, vao = vao, indexBuffer)
+        shader.draw(param, vertex, index)
     }
 
     def shaderFor(param : P) : Shader<_>

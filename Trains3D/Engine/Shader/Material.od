@@ -4,17 +4,11 @@ package com.antonzherdev.eg
 class Material {
     def shaderSystem : ShaderSystem<self>
     def draw(mesh : Mesh<_>) {
-        shaderSystem.draw(self, mesh)
-    }
-    def draw(vb : VertexBuffer<_>, index : PArray<uint4>, mode : uint4) {
-        shaderSystem.draw(self, vb, index, mode)
+        shaderSystem.draw(self, mesh.vertexBuffer, mesh.indexBuffer)
     }
 
-    def draw(vb : VertexBuffer<_>, mode : uint4) {
-        shaderSystem.draw(self, vb, mode)
-    }
-    def draw(vao : VertexArray, indexBuffer : IndexBuffer) {
-        shaderSystem.draw(self, vao = vao, indexBuffer)
+    def draw(vertex : VertexSource, index : IndexSource) {
+        shaderSystem.draw(self, vertex, index)
     }
 
     static def apply(color : vec4) : Material = StandardMaterial(diffuse = color)

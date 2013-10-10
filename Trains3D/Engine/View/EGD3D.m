@@ -2,7 +2,6 @@
 
 #import "EGMaterial.h"
 #import "EGContext.h"
-#import "GL.h"
 @implementation EGD3D
 static CNVoidRefArray _EGD3D_vertexes;
 static EGVertexBuffer* _EGD3D_vb;
@@ -29,7 +28,7 @@ static ODClassType* _EGD3D_type;
     v = cnVoidRefArrayWriteTpItem(v, EGMeshData, EGMeshDataMake(uv.p[3], quad3.planeCoord.plane.n, geQuad3P3(quad3)));
     [_EGD3D_vb setArray:_EGD3D_vertexes];
     [EGGlobal.context.cullFace disabledF:^void() {
-        [material drawVb:_EGD3D_vb mode:GL_TRIANGLE_STRIP];
+        [material drawVertex:_EGD3D_vb index:EGEmptyIndexSource.triangleStrip];
     }];
 }
 

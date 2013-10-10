@@ -90,20 +90,22 @@ class Context {
     }
 
     private var _lastVertexBuffer : GLuint = 0
+    private var _lastVertexSource : VertexSource
     def bindVertexBuffer(buffer : VertexBuffer<_>) {
         val id = buffer.handle
         if(id != _lastVertexBuffer) {
+            _lastVertexSource = buffer
             _lastVertexBuffer = id
             glBindBuffer(GL_ARRAY_BUFFER, id)
         }
     }
+    def vertexSource : VertexSource = _lastVertexSource
 
     private var _lastIndexBuffer : GLuint = 0
-    def bindIndexBuffer(buffer : IndexBuffer) {
-        val id = buffer.handle
-        if(id != _lastIndexBuffer) {
-            _lastIndexBuffer = id
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id)
+    def bindIndexBuffer(handle : GLuint) {
+        if(handle != _lastIndexBuffer) {
+            _lastIndexBuffer = handle
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle)
         }
     }
 

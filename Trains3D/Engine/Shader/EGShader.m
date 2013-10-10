@@ -134,51 +134,16 @@ static ODClassType* _EGShader_type;
 }
 
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh {
-    [self drawParam:param mesh:mesh start:0 count:[mesh.indexBuffer count]];
+    [self drawParam:param vertex:mesh.vertexBuffer index:mesh.indexBuffer];
 }
 
-- (void)drawParam:(id)param mesh:(EGMesh*)mesh start:(NSUInteger)start count:(NSUInteger)count {
+- (void)drawParam:(id)param vertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index {
     [EGGlobal.context bindShaderProgramProgram:_program];
-    [mesh.vertexBuffer bind];
-    [self loadAttributesVbDesc:mesh.vertexBuffer.desc];
-    [self loadUniformsParam:param];
-    [mesh.indexBuffer drawWithStart:start count:count];
-}
-
-- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode {
-    [EGGlobal.context bindShaderProgramProgram:_program];
-    [vb bind];
-    [self loadAttributesVbDesc:vb.desc];
-    [self loadUniformsParam:param];
-    [EGGlobal.context draw];
-    glDrawElements(mode, index.count, GL_UNSIGNED_INT, index.bytes);
-}
-
-- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb indexRef:(CNVoidRefArray)indexRef mode:(unsigned int)mode {
-    [EGGlobal.context bindShaderProgramProgram:_program];
-    [vb bind];
-    [self loadAttributesVbDesc:vb.desc];
-    [self loadUniformsParam:param];
-    [EGGlobal.context draw];
-    glDrawElements(mode, indexRef.length / 4, GL_UNSIGNED_INT, indexRef.bytes);
-}
-
-- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb mode:(unsigned int)mode {
-    [EGGlobal.context bindShaderProgramProgram:_program];
-    [vb bind];
-    [self loadAttributesVbDesc:vb.desc];
-    [self loadUniformsParam:param];
-    [EGGlobal.context draw];
-    glDrawArrays(mode, 0, [vb count]);
-}
-
-- (void)drawParam:(id)param vao:(EGVertexArray*)vao index:(EGIndexBuffer*)index {
-    [EGGlobal.context bindShaderProgramProgram:_program];
-    [vao bind];
+    [vertex bindWithShader:self];
     [self loadUniformsParam:param];
     [EGGlobal.context draw];
     [index draw];
-    [EGGlobal.context bindDefaultVertexArray];
+    [vertex unbindWithShader:self];
 }
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
@@ -746,24 +711,9 @@ static ODClassType* _EGShaderSystem_type;
     _EGShaderSystem_type = [ODClassType classTypeWithCls:[EGShaderSystem class]];
 }
 
-- (void)drawParam:(id)param mesh:(EGMesh*)mesh {
+- (void)drawParam:(id)param vertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index {
     EGShader* shader = [self shaderForParam:param];
-    [shader drawParam:param mesh:mesh];
-}
-
-- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode {
-    EGShader* shader = [self shaderForParam:param];
-    [shader drawParam:param vb:vb index:index mode:mode];
-}
-
-- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb mode:(unsigned int)mode {
-    EGShader* shader = [self shaderForParam:param];
-    [shader drawParam:param vb:vb mode:mode];
-}
-
-- (void)drawParam:(id)param vao:(EGVertexArray*)vao indexBuffer:(EGIndexBuffer*)indexBuffer {
-    EGShader* shader = [self shaderForParam:param];
-    [shader drawParam:param vao:vao index:indexBuffer];
+    [shader drawParam:param vertex:vertex index:index];
 }
 
 - (EGShader*)shaderForParam:(id)param {

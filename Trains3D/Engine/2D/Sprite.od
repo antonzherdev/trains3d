@@ -15,7 +15,7 @@ object D2D {
         v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[3], material.color, uv.p[3]))
         vb.set(vertexes)
         context.cullFace.disabled {
-            BillboardShaderSystem.shaderFor(material).draw(material, vb, GL_TRIANGLE_STRIP)
+            BillboardShaderSystem.shaderFor(material).draw(material, vb, EmptyIndexSource.triangleStrip)
         }
     }
 
@@ -42,7 +42,7 @@ object D2D {
         lineVb.set(lineVertexes)
 
         context.cullFace.disabled {
-            material.draw(lineVb, GL_LINES)
+            material.draw(lineVb,  EmptyIndexSource.lines)
         }
     }
 }

@@ -103,7 +103,7 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (void)drawCar1Material:(EGMaterial*)material {
-    if(!([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]])) [material drawVao:[self car1Vao] indexBuffer:TRModels.car.indexBuffer];
+    if(!([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]])) [material drawVertex:[self car1Vao] index:TRModels.car.indexBuffer];
     [_blackMaterial drawMesh:TRModels.carBlack];
 }
 

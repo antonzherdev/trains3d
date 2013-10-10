@@ -18,7 +18,7 @@ object D3D {
         vb.set(vertexes)
 
         context.cullFace.disabled {
-            material.draw(vb, GL_TRIANGLE_STRIP)
+            material.draw(vb, EmptyIndexSource.triangleStrip)
         }
     }
 

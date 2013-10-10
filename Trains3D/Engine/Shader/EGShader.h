@@ -2,11 +2,10 @@
 #import "GL.h"
 #import "GEVec.h"
 @class EGMesh;
-@class EGIndexBuffer;
 @class EGGlobal;
 @class EGContext;
-@class EGVertexBuffer;
-@class EGVertexArray;
+@protocol EGVertexSource;
+@protocol EGIndexSource;
 @class EGVertexBufferDesc;
 @class GEMat4;
 
@@ -46,11 +45,7 @@
 - (id)initWithProgram:(EGShaderProgram*)program;
 - (ODClassType*)type;
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh;
-- (void)drawParam:(id)param mesh:(EGMesh*)mesh start:(NSUInteger)start count:(NSUInteger)count;
-- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode;
-- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb indexRef:(CNVoidRefArray)indexRef mode:(unsigned int)mode;
-- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb mode:(unsigned int)mode;
-- (void)drawParam:(id)param vao:(EGVertexArray*)vao index:(EGIndexBuffer*)index;
+- (void)drawParam:(id)param vertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(id)param;
 - (EGShaderUniformMat4*)uniformMat4Name:(NSString*)name;
@@ -145,10 +140,7 @@
 + (id)shaderSystem;
 - (id)init;
 - (ODClassType*)type;
-- (void)drawParam:(id)param mesh:(EGMesh*)mesh;
-- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode;
-- (void)drawParam:(id)param vb:(EGVertexBuffer*)vb mode:(unsigned int)mode;
-- (void)drawParam:(id)param vao:(EGVertexArray*)vao indexBuffer:(EGIndexBuffer*)indexBuffer;
+- (void)drawParam:(id)param vertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index;
 - (EGShader*)shaderForParam:(id)param;
 + (ODClassType*)type;
 @end

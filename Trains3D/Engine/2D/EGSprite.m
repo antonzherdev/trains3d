@@ -2,7 +2,6 @@
 
 #import "EGMaterial.h"
 #import "EGContext.h"
-#import "GL.h"
 #import "EGTexture.h"
 @implementation EGD2D
 static CNVoidRefArray _EGD2D_vertexes;
@@ -32,7 +31,7 @@ static ODClassType* _EGD2D_type;
     v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[3], material.color, uv.p[3]));
     [_EGD2D_vb setArray:_EGD2D_vertexes];
     [EGGlobal.context.cullFace disabledF:^void() {
-        [[EGBillboardShaderSystem shaderForParam:material] drawParam:material vb:_EGD2D_vb mode:GL_TRIANGLE_STRIP];
+        [[EGBillboardShaderSystem shaderForParam:material] drawParam:material vertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip];
     }];
 }
 
@@ -54,7 +53,7 @@ static ODClassType* _EGD2D_type;
     v = cnVoidRefArrayWriteTpItem(v, EGMeshData, EGMeshDataMake(GEVec2Make(1.0, 1.0), GEVec3Make(0.0, 0.0, 1.0), geVec3ApplyVec2Z(p1, 0.0)));
     [_EGD2D_lineVb setArray:_EGD2D_lineVertexes];
     [EGGlobal.context.cullFace disabledF:^void() {
-        [material drawVb:_EGD2D_lineVb mode:((unsigned int)(GL_LINES))];
+        [material drawVertex:_EGD2D_lineVb index:EGEmptyIndexSource.lines];
     }];
 }
 

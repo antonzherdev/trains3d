@@ -3,8 +3,8 @@
 #import "EGDirector.h"
 #import "EGTexture.h"
 #import "EGFont.h"
-#import "EGShader.h"
 #import "EGMesh.h"
+#import "EGShader.h"
 #import "EGShadow.h"
 #import "GEMat4.h"
 @implementation EGGlobal
@@ -92,6 +92,7 @@ static ODClassType* _EGGlobal_type;
     GLuint __lastTexture2D;
     GLuint __lastShaderProgram;
     GLuint __lastVertexBuffer;
+    id<EGVertexSource> __lastVertexSource;
     GLuint __lastIndexBuffer;
     GLuint __lastVertexArray;
     GLuint _defaultVertexArray;
@@ -228,16 +229,20 @@ static ODClassType* _EGContext_type;
 - (void)bindVertexBufferBuffer:(EGVertexBuffer*)buffer {
     GLuint id = buffer.handle;
     if(!(GLuintEq(id, __lastVertexBuffer))) {
+        __lastVertexSource = buffer;
         __lastVertexBuffer = id;
         glBindBuffer(GL_ARRAY_BUFFER, id);
     }
 }
 
-- (void)bindIndexBufferBuffer:(EGIndexBuffer*)buffer {
-    GLuint id = buffer.handle;
-    if(!(GLuintEq(id, __lastIndexBuffer))) {
-        __lastIndexBuffer = id;
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
+- (id<EGVertexSource>)vertexSource {
+    return __lastVertexSource;
+}
+
+- (void)bindIndexBufferHandle:(GLuint)handle {
+    if(!(GLuintEq(handle, __lastIndexBuffer))) {
+        __lastIndexBuffer = handle;
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle);
     }
 }
 

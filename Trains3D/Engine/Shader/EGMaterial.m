@@ -30,19 +30,11 @@ static ODClassType* _EGMaterial_type;
 }
 
 - (void)drawMesh:(EGMesh*)mesh {
-    [[self shaderSystem] drawParam:self mesh:mesh];
+    [[self shaderSystem] drawParam:self vertex:mesh.vertexBuffer index:mesh.indexBuffer];
 }
 
-- (void)drawVb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode {
-    [[self shaderSystem] drawParam:self vb:vb index:index mode:mode];
-}
-
-- (void)drawVb:(EGVertexBuffer*)vb mode:(unsigned int)mode {
-    [[self shaderSystem] drawParam:self vb:vb mode:mode];
-}
-
-- (void)drawVao:(EGVertexArray*)vao indexBuffer:(EGIndexBuffer*)indexBuffer {
-    [[self shaderSystem] drawParam:self vao:vao indexBuffer:indexBuffer];
+- (void)drawVertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index {
+    [[self shaderSystem] drawParam:self vertex:vertex index:index];
 }
 
 + (EGMaterial*)applyColor:(GEVec4)color {
