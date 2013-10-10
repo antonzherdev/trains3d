@@ -29,8 +29,8 @@ static ODClassType* _EGSimpleShaderSystem_type;
     _EGSimpleShaderSystem_textureShader = [EGSimpleTextureShader simpleTextureShader];
 }
 
-- (EGShader*)shaderForParam:(EGColorSource*)param {
-    if([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]]) {
+- (EGShader*)shaderForParam:(EGColorSource*)param renderTarget:(EGRenderTarget*)renderTarget {
+    if([renderTarget isKindOfClass:[EGShadowRenderTarget class]]) {
         return [EGShadowShaderSystem.instance shaderForParam:param];
     } else {
         if([param.texture isEmpty]) return _EGSimpleShaderSystem_colorShader;

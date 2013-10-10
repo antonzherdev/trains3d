@@ -160,7 +160,8 @@ class ShaderSystem<P> {
         shader.draw(param, vertex, index)
     }
 
-    def shaderFor(param : P) : Shader<_>
+    def shaderFor(param : P) : Shader<_> = shaderFor(param, context.renderTarget)
+    def shaderFor(param : P, renderTarget : RenderTarget) : Shader<_>
 
     def vaoWith(param : P, vbo : VertexBuffer<_>) : VertexArray = shaderFor(param).vaoWith(vbo)
 }

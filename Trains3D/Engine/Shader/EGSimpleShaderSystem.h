@@ -1,13 +1,13 @@
 #import "objd.h"
 #import "EGShader.h"
-@class EGGlobal;
-@class EGContext;
 @class EGRenderTarget;
 @class EGShadowShaderSystem;
 @class EGColorSource;
 @class EGVertexBufferDesc;
+@class EGGlobal;
 @class EGMatrixStack;
 @class EGMatrixModel;
+@class EGContext;
 
 @class EGSimpleShaderSystem;
 @class EGSimpleShaderBuilder;
@@ -18,7 +18,7 @@
 + (id)simpleShaderSystem;
 - (id)init;
 - (ODClassType*)type;
-- (EGShader*)shaderForParam:(EGColorSource*)param;
+- (EGShader*)shaderForParam:(EGColorSource*)param renderTarget:(EGRenderTarget*)renderTarget;
 + (EGSimpleShaderSystem*)instance;
 + (ODClassType*)type;
 @end

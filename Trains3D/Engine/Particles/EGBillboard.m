@@ -8,15 +8,27 @@
 #import "EGSprite.h"
 #import "GEMat4.h"
 @implementation EGBillboardShaderSystem
+static EGBillboardShaderSystem* _EGBillboardShaderSystem_instance;
 static ODClassType* _EGBillboardShaderSystem_type;
+
++ (id)billboardShaderSystem {
+    return [[EGBillboardShaderSystem alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
 
 + (void)initialize {
     [super initialize];
     _EGBillboardShaderSystem_type = [ODClassType classTypeWithCls:[EGBillboardShaderSystem class]];
+    _EGBillboardShaderSystem_instance = [EGBillboardShaderSystem billboardShaderSystem];
 }
 
-+ (EGBillboardShader*)shaderForParam:(EGColorSource*)param {
-    if([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]]) {
+- (EGBillboardShader*)shaderForParam:(EGColorSource*)param renderTarget:(EGRenderTarget*)renderTarget {
+    if([renderTarget isKindOfClass:[EGShadowRenderTarget class]]) {
         if([EGShadowShaderSystem isColorShaderForParam:param]) {
             return [EGBillboardShader instanceForColorShadow];
         } else {
@@ -35,6 +47,10 @@ static ODClassType* _EGBillboardShaderSystem_type;
 
 - (ODClassType*)type {
     return [EGBillboardShaderSystem type];
+}
+
++ (EGBillboardShaderSystem*)instance {
+    return _EGBillboardShaderSystem_instance;
 }
 
 + (ODClassType*)type {
@@ -586,7 +602,7 @@ static ODClassType* _EGBillboardParticleSystemView_type;
     self = [super initWithVbDesc:EGBillboard.vbDesc maxCount:maxCount blendFunc:blendFunc];
     if(self) {
         _material = material;
-        _shader = [EGBillboardShaderSystem shaderForParam:_material];
+        _shader = [EGBillboardShaderSystem.instance shaderForParam:_material];
     }
     
     return self;

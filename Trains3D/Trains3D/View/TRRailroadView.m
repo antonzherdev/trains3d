@@ -502,7 +502,7 @@ static ODClassType* _TRBackgroundView_type;
         [EGGlobal.context.cullFace disabledF:^void() {
             [EGGlobal.context.depthTest disabledF:^void() {
                 EGShadowDrawParam* param = [EGShadowDrawParam shadowDrawParamWithPercents:(@[@0.3])];
-                [[EGShadowDrawShaderSystem shaderForParam:param] drawParam:param mesh:_mapView.plane];
+                [[EGShadowDrawShaderSystem.instance shaderForParam:param] drawParam:param mesh:_mapView.plane];
             }];
         }];
     }];

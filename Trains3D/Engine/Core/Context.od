@@ -183,7 +183,9 @@ class EnablingState(tp: uint4) {
 
 class RenderTarget
 class SceneRenderTarget extends RenderTarget
-class ShadowRenderTarget(shadowLight : Light) extends RenderTarget
+class ShadowRenderTarget(shadowLight : Light) extends RenderTarget {
+    static val default = ShadowRenderTarget(Light.default)
+}
 
 class Environment(ambientColor : vec4, lights : [Light]) {
     static val default = Environment(vec4(1, 1, 1, 1), [])
@@ -193,6 +195,7 @@ class Environment(ambientColor : vec4, lights : [Light]) {
 
 class Light(color : vec4, hasShadows : bool) {
     lazy val shadowMap : ShadowMap = ShadowMap(vec2(1024, 1024))
+    static val default = Light(vec4(1, 1, 1, 1), true)
 
     def shadowMatrix(model : MatrixModel) : MatrixModel = throw "Shadows are not supported for $(self.type)"
 }

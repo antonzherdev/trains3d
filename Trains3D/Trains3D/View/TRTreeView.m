@@ -7,6 +7,7 @@
 #import "EGVertex.h"
 #import "EGIndex.h"
 #import "EGSprite.h"
+#import "EGShader.h"
 @implementation TRTreeView{
     TRForest* _forest;
     EGTexture* _texture;
@@ -57,7 +58,7 @@ static ODClassType* _TRTreeView_type;
     [_ib setArray:iar];
     [EGBlendFunction.standard applyDraw:^void() {
         [EGGlobal.context.cullFace disabledF:^void() {
-            [[EGBillboardShaderSystem shaderForParam:_material] drawParam:_material vertex:_vb index:_ib];
+            [[EGBillboardShaderSystem.instance shaderForParam:_material] drawParam:_material vertex:_vb index:_ib];
         }];
     }];
     cnVoidRefArrayFree(ar);

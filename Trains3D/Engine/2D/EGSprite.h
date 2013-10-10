@@ -7,6 +7,7 @@
 @class EGGlobal;
 @class EGContext;
 @class EGEmptyIndexSource;
+@class EGShader;
 @class EGEnablingState;
 @class EGTexture;
 

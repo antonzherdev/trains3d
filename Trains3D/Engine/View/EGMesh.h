@@ -7,9 +7,15 @@
 @class EGVertexBufferDesc;
 @class EGShader;
 @class EGMaterial;
+@class EGShadowRenderTarget;
 @class EGShaderSystem;
+@class EGGlobal;
+@class EGContext;
+@class EGRenderTarget;
 
 @class EGMesh;
+@class EGSimpleMesh;
+@class EGRouteMesh;
 typedef struct EGMeshData EGMeshData;
 
 struct EGMeshData {
@@ -42,18 +48,42 @@ ODPType* egMeshDataType();
 
 
 @interface EGMesh : NSObject
-@property (nonatomic, readonly) id<EGVertexSource> vertex;
-@property (nonatomic, readonly) id<EGIndexSource> index;
-
-+ (id)meshWithVertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index;
-- (id)initWithVertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index;
++ (id)mesh;
+- (id)init;
 - (ODClassType*)type;
+- (id<EGVertexSource>)vertex;
+- (id<EGIndexSource>)index;
 + (EGMesh*)vec2VertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;
 + (EGMesh*)applyVertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;
 + (EGMesh*)applyDesc:(EGVertexBufferDesc*)desc vertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;
++ (EGSimpleMesh*)applyVertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index;
 - (EGMesh*)vaoWithShader:(EGShader*)shader;
-- (EGMesh*)vaoWithMaterial:(EGMaterial*)material;
-- (EGMesh*)vaoWithShaderSystem:(EGShaderSystem*)shaderSystem material:(id)material;
+- (EGMesh*)vaoWithMaterial:(EGMaterial*)material shadow:(BOOL)shadow;
+- (EGMesh*)vaoWithShaderSystem:(EGShaderSystem*)shaderSystem material:(id)material shadow:(BOOL)shadow;
++ (ODClassType*)type;
+@end
+
+
+@interface EGSimpleMesh : EGMesh
+@property (nonatomic, readonly) id<EGVertexSource> vertex;
+@property (nonatomic, readonly) id<EGIndexSource> index;
+
++ (id)simpleMeshWithVertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index;
+- (id)initWithVertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface EGRouteMesh : EGMesh
+@property (nonatomic, readonly) id<EGIndexSource> index;
+@property (nonatomic, readonly) id<EGVertexSource> standard;
+@property (nonatomic, readonly) id<EGVertexSource> shadow;
+
++ (id)routeMeshWithIndex:(id<EGIndexSource>)index standard:(id<EGVertexSource>)standard shadow:(id<EGVertexSource>)shadow;
+- (id)initWithIndex:(id<EGIndexSource>)index standard:(id<EGVertexSource>)standard shadow:(id<EGVertexSource>)shadow;
+- (ODClassType*)type;
+- (id<EGVertexSource>)vertex;
 + (ODClassType*)type;
 @end
 

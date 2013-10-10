@@ -11,6 +11,7 @@
 @class EGD2D;
 @class EGBlendFunction;
 @class EGContext;
+@class EGShader;
 @class EGEnablingState;
 @class TRTree;
 @class TRTreeType;

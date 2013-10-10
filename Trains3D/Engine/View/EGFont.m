@@ -87,7 +87,7 @@ ODPType* egTextAlignmentType() {
     NSUInteger _size;
     EGMutableVertexBuffer* _vb;
     EGMutableIndexBuffer* _ib;
-    EGMesh* _mesh;
+    EGSimpleMesh* _mesh;
 }
 static EGFontSymbolDesc* _EGFont_newLineDesc;
 static EGVertexBufferDesc* _EGFont_vbDesc;
@@ -107,7 +107,7 @@ static ODClassType* _EGFont_type;
         _texture = [EGFileTexture fileTextureWithFile:[NSString stringWithFormat:@"%@.png", _name] magFilter:GL_NEAREST minFilter:GL_NEAREST];
         _vb = [EGMutableVertexBuffer applyDesc:_EGFont_vbDesc];
         _ib = [EGMutableIndexBuffer apply];
-        _mesh = [EGMesh meshWithVertex:_vb index:_ib];
+        _mesh = [EGMesh applyVertex:_vb index:_ib];
         [self _init];
     }
     

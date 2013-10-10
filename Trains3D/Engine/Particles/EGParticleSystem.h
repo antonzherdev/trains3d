@@ -4,6 +4,7 @@
 @class EGBlendFunction;
 @class EGMutableVertexBuffer;
 @class EGIndexBuffer;
+@class EGSimpleMesh;
 @class EGMesh;
 @class EGShader;
 @class EGMaterial;
@@ -52,7 +53,7 @@
 @property (nonatomic, readonly) CNVoidRefArray vertexArr;
 @property (nonatomic, readonly) EGMutableVertexBuffer* vertexBuffer;
 @property (nonatomic, readonly) EGIndexBuffer* indexBuffer;
-@property (nonatomic, readonly) EGMesh* mesh;
+@property (nonatomic, readonly) EGSimpleMesh* mesh;
 
 + (id)particleSystemViewWithVbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount blendFunc:(EGBlendFunction*)blendFunc;
 - (id)initWithVbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount blendFunc:(EGBlendFunction*)blendFunc;

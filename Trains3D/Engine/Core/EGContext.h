@@ -110,6 +110,7 @@
 + (id)shadowRenderTargetWithShadowLight:(EGLight*)shadowLight;
 - (id)initWithShadowLight:(EGLight*)shadowLight;
 - (ODClassType*)type;
++ (EGShadowRenderTarget*)aDefault;
 + (ODClassType*)type;
 @end
 
@@ -137,6 +138,7 @@
 - (ODClassType*)type;
 - (EGShadowMap*)shadowMap;
 - (EGMatrixModel*)shadowMatrixModel:(EGMatrixModel*)model;
++ (EGLight*)aDefault;
 + (ODClassType*)type;
 @end
 

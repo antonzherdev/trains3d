@@ -79,7 +79,7 @@ class ShadowSurfaceShader extends Shader<ColorSource>(ShadowSurfaceShaderBuilder
 
 class ShadowShaderSystem extends ShaderSystem<ColorSource> {
     static val instance = ShadowShaderSystem()
-    def shaderFor(param : ColorSource) : ShadowShader =
+    def shaderFor(param : ColorSource, renderTarget : RenderTarget) : ShadowShader =
         if(isColorShaderFor(param)) ShadowShader.instanceForColor else ShadowShader.instanceForTexture
     static def isColorShaderFor(param : ColorSource) = param.texture.isEmpty || param.alphaTestLevel < 0
 }
@@ -140,8 +140,9 @@ class ShadowShader(texture : bool, program : ShaderProgram) extends Shader<Color
 
 class ShadowDrawParam(percents : Seq<float4>)
 
-object ShadowDrawShaderSystem extends ShaderSystem<ShadowDrawParam> {
-    def shaderFor(param : ShadowDrawParam) : Shader<ShadowDrawParam> = {
+class ShadowDrawShaderSystem extends ShaderSystem<ShadowDrawParam> {
+    static val instance = ShadowDrawShaderSystem()
+    def shaderFor(param : ShadowDrawParam, renderTarget : RenderTarget) : Shader<ShadowDrawParam> = {
         val lights = context.environment.lights
         val directLightsCount = lights.chain.filter(_.is<DirectLight> && _.hasShadows).count
         val key = ShadowDrawShaderKey(directLightsCount)

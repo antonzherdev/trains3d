@@ -10,6 +10,7 @@
 @class EGVertexArray;
 @class EGVertexBuffer;
 @class GEMat4;
+@class EGRenderTarget;
 
 @class EGShaderProgram;
 @class EGShader;
@@ -145,6 +146,7 @@
 - (ODClassType*)type;
 - (void)drawParam:(id)param vertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index;
 - (EGShader*)shaderForParam:(id)param;
+- (EGShader*)shaderForParam:(id)param renderTarget:(EGRenderTarget*)renderTarget;
 - (EGVertexArray*)vaoWithParam:(id)param vbo:(EGVertexBuffer*)vbo;
 + (ODClassType*)type;
 @end

@@ -2,14 +2,14 @@
 #import "EGShader.h"
 #import "GEVec.h"
 #import "EGParticleSystem.h"
-@class EGGlobal;
-@class EGContext;
 @class EGRenderTarget;
 @class EGShadowShaderSystem;
 @class EGColorSource;
 @class EGVertexBufferDesc;
+@class EGGlobal;
 @class EGMatrixStack;
 @class EGMatrixModel;
+@class EGContext;
 @class EGBlendFunction;
 @class EGD2D;
 @class GEMat4;
@@ -24,8 +24,11 @@
 typedef struct EGBillboardBufferData EGBillboardBufferData;
 
 @interface EGBillboardShaderSystem : EGShaderSystem
++ (id)billboardShaderSystem;
+- (id)init;
 - (ODClassType*)type;
-+ (EGBillboardShader*)shaderForParam:(EGColorSource*)param;
+- (EGBillboardShader*)shaderForParam:(EGColorSource*)param renderTarget:(EGRenderTarget*)renderTarget;
++ (EGBillboardShaderSystem*)instance;
 + (ODClassType*)type;
 @end
 

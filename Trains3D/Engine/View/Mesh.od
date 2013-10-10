@@ -2,24 +2,47 @@ package com.antonzherdev.eg
 
 struct MeshData(uv : vec2, normal : vec3, position : vec3)
 
+class Mesh {
+    def vertex : VertexSource
+    def index : IndexSource
 
-class Mesh(vertex : VertexSource, index : IndexSource) {
-    static def vec2(vertexData : PArray<vec2>, indexData : PArray<uint4>) : Mesh = Mesh(
+    static def vec2(vertexData : PArray<vec2>, indexData : PArray<uint4>) : Mesh = SimpleMesh(
             vertex = VertexBuffer.vec2(vertexData),
             index = IndexBuffer(indexData))
 
-    static def apply(vertexData : PArray<MeshData>, indexData : PArray<uint4>) : Mesh = Mesh(
+    static def apply(vertexData : PArray<MeshData>, indexData : PArray<uint4>) : Mesh = SimpleMesh(
             vertex = VertexBuffer.mesh(vertexData),
             index = IndexBuffer(indexData))
 
-    static def apply<T>(desc : VertexBufferDesc<T>, vertexData : PArray<T>, indexData : PArray<uint4>) : Mesh = Mesh(
+    static def apply<T>(desc : VertexBufferDesc<T>, vertexData : PArray<T>, indexData : PArray<uint4>) : Mesh = SimpleMesh(
             vertex = VertexBuffer<T>(desc, vertexData),
             index = IndexBuffer(indexData))
+    static def apply(vertex : VertexSource, index : IndexSource) = SimpleMesh(vertex, index)
 
-    def vaoWith(shader : Shader<_>) : Mesh = Mesh(shader.vaoWith(vertex.cast<VertexBuffer<_>>), index)
-    def vaoWith(material : Material) : Mesh = Mesh(material.shader.vaoWith(vertex.cast<VertexBuffer<_>>), index)
-    def vaoWith<P>(shaderSystem : ShaderSystem<P>, material : P) : Mesh =
-        Mesh(shaderSystem.vaoWith(material, vertex.cast<VertexBuffer<_>>), index)
+
+    def vaoWith(shader : Shader<_>) : Mesh = SimpleMesh(shader.vaoWith(vertex.cast<VertexBuffer<_>>), index)
+    def vaoWith(material : Material, shadow : bool) : Mesh = {
+        val std = material.shader.vaoWith(vertex.cast<VertexBuffer<_>>)
+        if(shadow)
+            RouteMesh(index, std,
+                material.shaderSystem.shaderFor(material, ShadowRenderTarget.default).vaoWith(vertex.cast<VertexBuffer<_>>))
+        else Mesh(std, index)
+    }
+    def vaoWith<P>(shaderSystem : ShaderSystem<P>, material : P, shadow : bool) : Mesh = {
+        val std = shaderSystem.shaderFor(material).vaoWith(vertex.cast<VertexBuffer<_>>)
+        if(shadow)
+            RouteMesh(index, std,
+                shaderSystem.shaderFor(material, ShadowRenderTarget.default).vaoWith(vertex.cast<VertexBuffer<_>>))
+        else Mesh(std, index)
+    }
+}
+
+class SimpleMesh(vertex : VertexSource, index : IndexSource) extends Mesh
+
+class RouteMesh(index : IndexSource, standard : VertexSource, shadow : VertexSource) extends Mesh {
+    def vertex : VertexSource =
+        if(context.renderTarget.is<ShadowRenderTarget>) shadow
+        else standard
 }
 
 

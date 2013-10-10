@@ -5,6 +5,7 @@
 @class EGFileTexture;
 @class EGMutableVertexBuffer;
 @class EGMutableIndexBuffer;
+@class EGSimpleMesh;
 @class EGMesh;
 @class EGGlobal;
 @class EGContext;

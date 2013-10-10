@@ -136,7 +136,7 @@ static ODClassType* _EGShader_type;
 }
 
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh {
-    [self drawParam:param vertex:mesh.vertex index:mesh.index];
+    [self drawParam:param vertex:[mesh vertex] index:[mesh index]];
 }
 
 - (void)drawParam:(id)param vertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index {
@@ -728,6 +728,10 @@ static ODClassType* _EGShaderSystem_type;
 }
 
 - (EGShader*)shaderForParam:(id)param {
+    return [self shaderForParam:param renderTarget:EGGlobal.context.renderTarget];
+}
+
+- (EGShader*)shaderForParam:(id)param renderTarget:(EGRenderTarget*)renderTarget {
     @throw @"Method shaderFor is abstract";
 }
 

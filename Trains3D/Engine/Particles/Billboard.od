@@ -1,8 +1,9 @@
 package com.antonzherdev.eg
 
-object BillboardShaderSystem extends ShaderSystem<ColorSource> {
-    def shaderFor(param : ColorSource) : BillboardShader =
-        if(context.renderTarget.is<ShadowRenderTarget>)
+class BillboardShaderSystem extends ShaderSystem<ColorSource> {
+    static val instance = BillboardShaderSystem()
+    def shaderFor(param : ColorSource, renderTarget : RenderTarget) : BillboardShader =
+        if(renderTarget.is<ShadowRenderTarget>)
             if(ShadowShaderSystem.isColorShaderFor(param)) BillboardShader.instanceForColorShadow
             else if(param.alphaTestLevel > -0.1) BillboardShader.instanceForAlphaShadow
             else BillboardShader.instanceForTextureShadow
@@ -140,7 +141,7 @@ class BillboardParticleSystemView(maxCount : uint, material : ColorSource, blend
 
     static def apply(maxCount : uint, material : ColorSource) =
         BillboardParticleSystemView(maxCount, material, BlendFunction.standard)
-    val shader : Shader =  BillboardShaderSystem.shaderFor(material)
+    val shader : Shader =  BillboardShaderSystem.instance.shaderFor(material)
     def vertexCount : uint = 4
 
     def writeIndexesTo(indexPointer : VoidRefArray, i : uint4) : VoidRefArray = {

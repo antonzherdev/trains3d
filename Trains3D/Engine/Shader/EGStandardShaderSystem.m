@@ -30,8 +30,8 @@ static ODClassType* _EGStandardShaderSystem_type;
     _EGStandardShaderSystem_shaders = [NSMutableDictionary mutableDictionary];
 }
 
-- (EGShader*)shaderForParam:(EGStandardMaterial*)param {
-    if([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]]) {
+- (EGShader*)shaderForParam:(EGStandardMaterial*)param renderTarget:(EGRenderTarget*)renderTarget {
+    if([renderTarget isKindOfClass:[EGShadowRenderTarget class]]) {
         if([EGShadowShaderSystem isColorShaderForParam:param.diffuse]) return EGStandardShadowShader.instanceForColor;
         else return EGStandardShadowShader.instanceForTexture;
     } else {

@@ -502,6 +502,7 @@ static ODClassType* _EGSceneRenderTarget_type;
 @implementation EGShadowRenderTarget{
     EGLight* _shadowLight;
 }
+static EGShadowRenderTarget* _EGShadowRenderTarget_default;
 static ODClassType* _EGShadowRenderTarget_type;
 @synthesize shadowLight = _shadowLight;
 
@@ -519,10 +520,15 @@ static ODClassType* _EGShadowRenderTarget_type;
 + (void)initialize {
     [super initialize];
     _EGShadowRenderTarget_type = [ODClassType classTypeWithCls:[EGShadowRenderTarget class]];
+    _EGShadowRenderTarget_default = [EGShadowRenderTarget shadowRenderTargetWithShadowLight:EGLight.aDefault];
 }
 
 - (ODClassType*)type {
     return [EGShadowRenderTarget type];
+}
+
++ (EGShadowRenderTarget*)aDefault {
+    return _EGShadowRenderTarget_default;
 }
 
 + (ODClassType*)type {
@@ -639,6 +645,7 @@ static ODClassType* _EGEnvironment_type;
     BOOL _hasShadows;
     CNLazy* __lazy_shadowMap;
 }
+static EGLight* _EGLight_default;
 static ODClassType* _EGLight_type;
 @synthesize color = _color;
 @synthesize hasShadows = _hasShadows;
@@ -663,6 +670,7 @@ static ODClassType* _EGLight_type;
 + (void)initialize {
     [super initialize];
     _EGLight_type = [ODClassType classTypeWithCls:[EGLight class]];
+    _EGLight_default = [EGLight lightWithColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) hasShadows:YES];
 }
 
 - (EGShadowMap*)shadowMap {
@@ -675,6 +683,10 @@ static ODClassType* _EGLight_type;
 
 - (ODClassType*)type {
     return [EGLight type];
+}
+
++ (EGLight*)aDefault {
+    return _EGLight_default;
 }
 
 + (ODClassType*)type {

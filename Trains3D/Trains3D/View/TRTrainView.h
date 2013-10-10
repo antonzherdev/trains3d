@@ -6,7 +6,6 @@
 @class EGColorSource;
 @class EGMesh;
 @class TRModels;
-@class EGShadowShaderSystem;
 @class TRTrain;
 @class TRSmoke;
 @class TRCityColor;
@@ -19,8 +18,6 @@
 @class EGMatrixStack;
 @class TRCarType;
 @class EGMaterial;
-@class EGContext;
-@class EGRenderTarget;
 @class EGRigidBody;
 
 @class TRTrainView;
@@ -31,7 +28,6 @@
 @property (nonatomic, readonly) EGStandardMaterial* blackMaterial;
 @property (nonatomic, readonly) EGStandardMaterial* defMat;
 @property (nonatomic, readonly) EGMesh* vaoCar1;
-@property (nonatomic, readonly) EGMesh* vaoShadowCar1;
 
 + (id)trainViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;

@@ -11,6 +11,7 @@
 @class EGColorSource;
 @class EGEnablingState;
 @class EGVertexBufferDesc;
+@class EGRenderTarget;
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class EGEnvironment;
@@ -69,7 +70,7 @@
 + (id)shadowShaderSystem;
 - (id)init;
 - (ODClassType*)type;
-- (EGShadowShader*)shaderForParam:(EGColorSource*)param;
+- (EGShadowShader*)shaderForParam:(EGColorSource*)param renderTarget:(EGRenderTarget*)renderTarget;
 + (BOOL)isColorShaderForParam:(EGColorSource*)param;
 + (EGShadowShaderSystem*)instance;
 + (ODClassType*)type;
@@ -105,8 +106,11 @@
 
 
 @interface EGShadowDrawShaderSystem : EGShaderSystem
++ (id)shadowDrawShaderSystem;
+- (id)init;
 - (ODClassType*)type;
-+ (EGShader*)shaderForParam:(EGShadowDrawParam*)param;
+- (EGShader*)shaderForParam:(EGShadowDrawParam*)param renderTarget:(EGRenderTarget*)renderTarget;
++ (EGShadowDrawShaderSystem*)instance;
 + (ODClassType*)type;
 @end
 

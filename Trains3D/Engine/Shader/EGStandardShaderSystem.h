@@ -1,11 +1,11 @@
 #import "objd.h"
 #import "EGShader.h"
 #import "GEVec.h"
-@class EGGlobal;
-@class EGContext;
 @class EGRenderTarget;
 @class EGStandardMaterial;
 @class EGShadowShaderSystem;
+@class EGGlobal;
+@class EGContext;
 @class EGEnvironment;
 @class EGLight;
 @class EGColorSource;
@@ -29,7 +29,7 @@
 + (id)standardShaderSystem;
 - (id)init;
 - (ODClassType*)type;
-- (EGShader*)shaderForParam:(EGStandardMaterial*)param;
+- (EGShader*)shaderForParam:(EGStandardMaterial*)param renderTarget:(EGRenderTarget*)renderTarget;
 + (EGStandardShaderSystem*)instance;
 + (ODClassType*)type;
 @end

@@ -266,7 +266,7 @@ static ODClassType* _EGShadowShaderSystem_type;
     _EGShadowShaderSystem_instance = [EGShadowShaderSystem shadowShaderSystem];
 }
 
-- (EGShadowShader*)shaderForParam:(EGColorSource*)param {
+- (EGShadowShader*)shaderForParam:(EGColorSource*)param renderTarget:(EGRenderTarget*)renderTarget {
     if([EGShadowShaderSystem isColorShaderForParam:param]) return EGShadowShader.instanceForColor;
     else return EGShadowShader.instanceForTexture;
 }
@@ -497,16 +497,28 @@ static ODClassType* _EGShadowDrawParam_type;
 
 
 @implementation EGShadowDrawShaderSystem
+static EGShadowDrawShaderSystem* _EGShadowDrawShaderSystem_instance;
 static NSMutableDictionary* _EGShadowDrawShaderSystem_shaders;
 static ODClassType* _EGShadowDrawShaderSystem_type;
+
++ (id)shadowDrawShaderSystem {
+    return [[EGShadowDrawShaderSystem alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
 
 + (void)initialize {
     [super initialize];
     _EGShadowDrawShaderSystem_type = [ODClassType classTypeWithCls:[EGShadowDrawShaderSystem class]];
+    _EGShadowDrawShaderSystem_instance = [EGShadowDrawShaderSystem shadowDrawShaderSystem];
     _EGShadowDrawShaderSystem_shaders = [NSMutableDictionary mutableDictionary];
 }
 
-+ (EGShader*)shaderForParam:(EGShadowDrawParam*)param {
+- (EGShader*)shaderForParam:(EGShadowDrawParam*)param renderTarget:(EGRenderTarget*)renderTarget {
     id<CNSeq> lights = EGGlobal.context.environment.lights;
     NSUInteger directLightsCount = [[[lights chain] filter:^BOOL(EGLight* _) {
         return [_ isKindOfClass:[EGDirectLight class]] && _.hasShadows;
@@ -519,6 +531,10 @@ static ODClassType* _EGShadowDrawShaderSystem_type;
 
 - (ODClassType*)type {
     return [EGShadowDrawShaderSystem type];
+}
+
++ (EGShadowDrawShaderSystem*)instance {
+    return _EGShadowDrawShaderSystem_instance;
 }
 
 + (ODClassType*)type {
