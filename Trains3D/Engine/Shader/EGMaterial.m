@@ -41,6 +41,10 @@ static ODClassType* _EGMaterial_type;
     [[self shaderSystem] drawParam:self vb:vb mode:mode];
 }
 
+- (void)drawVao:(EGVertexArray*)vao indexBuffer:(EGIndexBuffer*)indexBuffer {
+    [[self shaderSystem] drawParam:self vao:vao indexBuffer:indexBuffer];
+}
+
 + (EGMaterial*)applyColor:(GEVec4)color {
     return [EGStandardMaterial applyDiffuse:[EGColorSource applyColor:color]];
 }

@@ -172,6 +172,15 @@ static ODClassType* _EGShader_type;
     glDrawArrays(mode, 0, [vb count]);
 }
 
+- (void)drawParam:(id)param vao:(EGVertexArray*)vao index:(EGIndexBuffer*)index {
+    [EGGlobal.context bindShaderProgramProgram:_program];
+    [vao bind];
+    [self loadUniformsParam:param];
+    [EGGlobal.context draw];
+    [index draw];
+    [EGGlobal.context bindDefaultVertexArray];
+}
+
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
     @throw @"Method loadAttributes is abstract";
 }
@@ -750,6 +759,11 @@ static ODClassType* _EGShaderSystem_type;
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb mode:(unsigned int)mode {
     EGShader* shader = [self shaderForParam:param];
     [shader drawParam:param vb:vb mode:mode];
+}
+
+- (void)drawParam:(id)param vao:(EGVertexArray*)vao indexBuffer:(EGIndexBuffer*)indexBuffer {
+    EGShader* shader = [self shaderForParam:param];
+    [shader drawParam:param vao:vao index:indexBuffer];
 }
 
 - (EGShader*)shaderForParam:(id)param {

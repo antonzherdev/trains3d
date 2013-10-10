@@ -85,6 +85,15 @@ class Shader<P>(program : ShaderProgram) {
         glDrawArrays(mode, 0, vb.count)
     }
 
+    def draw(param : P, vao : VertexArray, index : IndexBuffer) {
+        context.bindShaderProgram(program)
+        vao.bind
+        loadUniforms(param)
+        context.draw
+        index.draw
+        context.bindDefaultVertexArray
+    }
+
     def loadAttributes(vbDesc : VertexBufferDesc<_>)
     def loadUniforms(param : P)
 
@@ -185,6 +194,11 @@ class ShaderSystem<P> {
     def draw(param : P, vb : VertexBuffer<_>, mode : uint4) {
         val shader = shaderFor(param)
         shader.draw(param, vb = vb, mode)
+    }
+
+    def draw(param : P, vao : VertexArray, indexBuffer : IndexBuffer) {
+        val shader = shaderFor(param)
+        shader.draw(param, vao = vao, indexBuffer)
     }
 
     def shaderFor(param : P) : Shader<_>

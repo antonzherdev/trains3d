@@ -3,18 +3,21 @@
 #import "TRLevel.h"
 #import "TRSmoke.h"
 #import "EGMaterial.h"
+#import "EGMesh.h"
+#import "EGStandardShaderSystem.h"
+#import "TRModels.h"
 #import "TRTrain.h"
 #import "TRCity.h"
 #import "EGContext.h"
 #import "TRCar.h"
 #import "GEFigure.h"
 #import "GEMat4.h"
-#import "TRModels.h"
 #import "EGDynamicWorld.h"
 @implementation TRTrainView{
     TRLevel* _level;
     TRSmokeView* _smokeView;
     EGStandardMaterial* _blackMaterial;
+    CNLazy* __lazy_car1Vao;
 }
 static ODClassType* _TRTrainView_type;
 @synthesize level = _level;
@@ -27,10 +30,14 @@ static ODClassType* _TRTrainView_type;
 
 - (id)initWithLevel:(TRLevel*)level {
     self = [super init];
+    __weak TRTrainView* _weakSelf = self;
     if(self) {
         _level = level;
         _smokeView = [TRSmokeView smokeView];
         _blackMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 1.0)] specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:1.0];
+        __lazy_car1Vao = [CNLazy lazyWithF:^EGVertexArray*() {
+            return [EGVertexArray applyShader:[EGStandardShaderSystem.instance shaderForParam:[_weakSelf trainMaterialForColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)]] buffer:TRModels.car.vertexBuffer];
+        }];
     }
     
     return self;
@@ -39,6 +46,10 @@ static ODClassType* _TRTrainView_type;
 + (void)initialize {
     [super initialize];
     _TRTrainView_type = [ODClassType classTypeWithCls:[TRTrainView class]];
+}
+
+- (EGVertexArray*)car1Vao {
+    return ((EGVertexArray*)([__lazy_car1Vao get]));
 }
 
 - (EGMaterial*)trainMaterialForColor:(GEVec4)color {
@@ -92,7 +103,7 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (void)drawCar1Material:(EGMaterial*)material {
-    [material drawMesh:TRModels.car];
+    if(!([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]])) [material drawVao:[self car1Vao] indexBuffer:TRModels.car.indexBuffer];
     [_blackMaterial drawMesh:TRModels.carBlack];
 }
 

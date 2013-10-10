@@ -136,6 +136,7 @@ ODPType* egMeshDataType();
 - (id)initWithHandle:(GLuint)handle buffers:(id<CNSeq>)buffers;
 - (ODClassType*)type;
 + (EGVertexArray*)applyShader:(EGShader*)shader buffer:(EGVertexBuffer*)buffer;
+- (void)bind;
 + (ODClassType*)type;
 @end
 

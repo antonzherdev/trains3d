@@ -564,6 +564,10 @@ static ODClassType* _EGVertexArray_type;
     return [EGVertexArray vertexArrayWithHandle:h buffers:(@[buffer])];
 }
 
+- (void)bind {
+    [EGGlobal.context bindVertexArrayHandle:_handle];
+}
+
 - (ODClassType*)type {
     return [EGVertexArray type];
 }

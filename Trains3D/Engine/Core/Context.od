@@ -115,7 +115,7 @@ class Context {
         }
     }
 
-    private var defaultVertexArray : GLuint = 0
+    var defaultVertexArray : GLuint = 0
     def bindDefaultVertexArray {
         if(_lastVertexArray != defaultVertexArray) {
             _lastVertexArray = defaultVertexArray

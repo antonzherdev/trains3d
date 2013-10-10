@@ -106,6 +106,7 @@ static ODClassType* _EGContext_type;
 @synthesize matrixStack = _matrixStack;
 @synthesize renderTarget = _renderTarget;
 @synthesize considerShadows = _considerShadows;
+@synthesize defaultVertexArray = _defaultVertexArray;
 @synthesize cullFace = _cullFace;
 @synthesize blend = _blend;
 @synthesize depthTest = _depthTest;

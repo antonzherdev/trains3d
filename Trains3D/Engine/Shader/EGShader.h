@@ -6,6 +6,7 @@
 @class EGGlobal;
 @class EGContext;
 @class EGVertexBuffer;
+@class EGVertexArray;
 @class EGVertexBufferDesc;
 @class GEMat4;
 
@@ -49,6 +50,7 @@
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode;
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb indexRef:(CNVoidRefArray)indexRef mode:(unsigned int)mode;
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb mode:(unsigned int)mode;
+- (void)drawParam:(id)param vao:(EGVertexArray*)vao index:(EGIndexBuffer*)index;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(id)param;
 - (EGShaderUniformMat4*)uniformMat4Name:(NSString*)name;
@@ -146,6 +148,7 @@
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh;
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode;
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb mode:(unsigned int)mode;
+- (void)drawParam:(id)param vao:(EGVertexArray*)vao indexBuffer:(EGIndexBuffer*)indexBuffer;
 - (EGShader*)shaderForParam:(id)param;
 + (ODClassType*)type;
 @end

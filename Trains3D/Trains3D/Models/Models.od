@@ -20,7 +20,7 @@ stub class Models {
     static val cityWindows : Mesh = nil
     static val cityRoofs : Mesh = nil
 
-    static val car : Mesh = nil
+    static val car : Mesh<MeshData> = nil
     static val carBlack : Mesh = nil
 
     static val engine : Mesh = nil

@@ -59,8 +59,12 @@ class TrainView(level : Level) {
         }
     }
 
+    lazy val car1Vao = VertexArray(StandardShaderSystem.instance.shaderFor(trainMaterialFor(vec4(1, 1, 1, 1))), Models.car.vertexBuffer)
     private def drawCar1(material : Material) {
-        material.draw(Models.car)
+        if(!context.renderTarget.is<ShadowRenderTarget>) {
+            material.draw(car1Vao, Models.car.indexBuffer)
+        }
+//        material.draw(Models.car)
         blackMaterial.draw(Models.carBlack)
     }
 

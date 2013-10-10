@@ -3,6 +3,7 @@
 #import "EGDirectorMac.h"
 #import "EGEventMac.h"
 #import "KWExample.h"
+#import "EGContext.h"
 
 
 @implementation EGOpenGLViewMac {
@@ -96,9 +97,10 @@
     [[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
 
 
-    GLuint VertexArrayID;
-    glGenVertexArrays(1, &VertexArrayID);
-    glBindVertexArray(VertexArrayID);
+    GLuint vertexArray;
+    glGenVertexArrays(1, &vertexArray);
+    glBindVertexArray(vertexArray);
+    [EGGlobal context].defaultVertexArray = vertexArray;
 //	GLint order = -1;
 //	[[self openGLContext] setValues:&order forParameter:NSOpenGLCPSurfaceOrder];
 }

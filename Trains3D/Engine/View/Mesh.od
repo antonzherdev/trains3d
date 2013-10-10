@@ -126,4 +126,7 @@ class VertexArray(handle : GLuint, buffers : [VertexBuffer<_>]) {
         VertexArray(h, [buffer])
     }
 
+    def bind {
+        context.bindVertexArray(handle)
+    }
 }

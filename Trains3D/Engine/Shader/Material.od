@@ -13,6 +13,9 @@ class Material {
     def draw(vb : VertexBuffer<_>, mode : uint4) {
         shaderSystem.draw(self, vb, mode)
     }
+    def draw(vao : VertexArray, indexBuffer : IndexBuffer) {
+        shaderSystem.draw(self, vao = vao, indexBuffer)
+    }
 
     static def apply(color : vec4) : Material = StandardMaterial(diffuse = color)
     static def apply(texture : Texture) : Material = StandardMaterial(diffuse = texture)

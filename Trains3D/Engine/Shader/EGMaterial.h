@@ -3,6 +3,8 @@
 @class EGShaderSystem;
 @class EGMesh;
 @class EGVertexBuffer;
+@class EGVertexArray;
+@class EGIndexBuffer;
 @class EGTexture;
 @class EGSimpleShaderSystem;
 @class EGStandardShaderSystem;
@@ -24,6 +26,7 @@
 - (void)drawMesh:(EGMesh*)mesh;
 - (void)drawVb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode;
 - (void)drawVb:(EGVertexBuffer*)vb mode:(unsigned int)mode;
+- (void)drawVao:(EGVertexArray*)vao indexBuffer:(EGIndexBuffer*)indexBuffer;
 + (EGMaterial*)applyColor:(GEVec4)color;
 + (EGMaterial*)applyTexture:(EGTexture*)texture;
 + (ODClassType*)type;

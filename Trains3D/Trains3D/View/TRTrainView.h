@@ -4,6 +4,10 @@
 @class TRSmokeView;
 @class EGStandardMaterial;
 @class EGColorSource;
+@class EGVertexArray;
+@class EGStandardShaderSystem;
+@class TRModels;
+@class EGMesh;
 @class EGMaterial;
 @class TRTrain;
 @class TRSmoke;
@@ -16,7 +20,8 @@
 @class EGMatrixModel;
 @class EGMatrixStack;
 @class TRCarType;
-@class TRModels;
+@class EGContext;
+@class EGRenderTarget;
 @class EGRigidBody;
 
 @class TRTrainView;
@@ -29,6 +34,7 @@
 + (id)trainViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
+- (EGVertexArray*)car1Vao;
 - (EGMaterial*)trainMaterialForColor:(GEVec4)color;
 - (void)draw;
 - (void)drawSmoke;
