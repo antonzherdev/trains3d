@@ -45,7 +45,8 @@
 + (id)simpleColorShader;
 - (id)init;
 - (ODClassType*)type;
-- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param;
+- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
+- (void)loadUniformsParam:(EGColorSource*)param;
 + (ODClassType*)type;
 @end
 
@@ -59,7 +60,8 @@
 + (id)simpleTextureShader;
 - (id)init;
 - (ODClassType*)type;
-- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param;
+- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
+- (void)loadUniformsParam:(EGColorSource*)param;
 + (ODClassType*)type;
 @end
 

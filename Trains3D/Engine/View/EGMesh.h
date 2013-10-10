@@ -3,12 +3,14 @@
 #import "GL.h"
 @class EGGlobal;
 @class EGContext;
+@class EGShader;
 
 @class EGMesh;
 @class EGBuffer;
 @class EGVertexBufferDesc;
 @class EGVertexBuffer;
 @class EGIndexBuffer;
+@class EGVertexArray;
 typedef struct EGMeshData EGMeshData;
 
 struct EGMeshData {
@@ -122,6 +124,18 @@ ODPType* egMeshDataType();
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
 - (void)drawByQuads;
 - (void)bind;
++ (ODClassType*)type;
+@end
+
+
+@interface EGVertexArray : NSObject
+@property (nonatomic, readonly) GLuint handle;
+@property (nonatomic, readonly) id<CNSeq> buffers;
+
++ (id)vertexArrayWithHandle:(GLuint)handle buffers:(id<CNSeq>)buffers;
+- (id)initWithHandle:(GLuint)handle buffers:(id<CNSeq>)buffers;
+- (ODClassType*)type;
++ (EGVertexArray*)applyShader:(EGShader*)shader buffer:(EGVertexBuffer*)buffer;
 + (ODClassType*)type;
 @end
 

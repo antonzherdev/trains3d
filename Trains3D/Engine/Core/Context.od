@@ -97,7 +97,6 @@ class Context {
             glBindBuffer(GL_ARRAY_BUFFER, id)
         }
     }
-    def vertexBufferId : GLuint = _lastVertexBuffer
 
     private var _lastIndexBuffer : GLuint = 0
     def bindIndexBuffer(buffer : IndexBuffer) {
@@ -107,7 +106,22 @@ class Context {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id)
         }
     }
-    def indexBufferId : GLuint = _lastIndexBuffer
+
+    private var _lastVertexArray : GLuint = 0
+    def bindVertexArray(handle : GLuint) {
+        if(handle != _lastVertexArray) {
+            _lastVertexArray = handle
+            egBindVertexArray(handle)
+        }
+    }
+
+    private var defaultVertexArray : GLuint = 0
+    def bindDefaultVertexArray {
+        if(_lastVertexArray != defaultVertexArray) {
+            _lastVertexArray = defaultVertexArray
+            egBindVertexArray(defaultVertexArray)
+        }
+    }
 
     val cullFace : EnablingState = EnablingState(GL_CULL_FACE)
     val blend : EnablingState = EnablingState(GL_BLEND)

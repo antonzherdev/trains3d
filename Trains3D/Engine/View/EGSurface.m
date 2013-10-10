@@ -419,9 +419,12 @@ static ODClassType* _EGViewportSurfaceShader_type;
     _EGViewportSurfaceShader_instance = [EGViewportSurfaceShader viewportSurfaceShader];
 }
 
-- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGViewportSurfaceShaderParam*)param {
-    [EGGlobal.context bindTextureTexture:param.texture];
+- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.model))];
+}
+
+- (void)loadUniformsParam:(EGViewportSurfaceShaderParam*)param {
+    [EGGlobal.context bindTextureTexture:param.texture];
     [_zUniform applyF4:param.z];
 }
 

@@ -114,3 +114,16 @@ class IndexBuffer(handle : GLuint) extends Buffer<uint4>(UInt4.type, GL_ELEMENT_
     }
 }
 
+
+
+class VertexArray(handle : GLuint, buffers : [VertexBuffer<_>]) {
+    static def apply(shader : Shader<_>, buffer : VertexBuffer<_>) = {
+        val h = egGenVertexArray
+        context.bindVertexArray(h)
+        buffer.bind
+        shader.loadAttributes(buffer.desc)
+        context.bindDefaultVertexArray
+        VertexArray(h, [buffer])
+    }
+
+}

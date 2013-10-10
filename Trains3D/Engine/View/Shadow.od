@@ -68,9 +68,11 @@ class ShadowSurfaceShaderBuilder extends ViewportShaderBuilder {
 
 class ShadowSurfaceShader extends Shader<ColorSource>(ShadowSurfaceShaderBuilder().program) {
     val positionSlot = program.attributeFor("position")
-    def load(vbDesc : VertexBufferDesc<_>, param : ColorSource) {
-        context.bindTexture(param.texture.get)
+    def loadAttributes(vbDesc : VertexBufferDesc<_>) {
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.model)
+    }
+    def loadUniforms(param : ColorSource) {
+        context.bindTexture(param.texture.get)
     }
 }
 
@@ -120,11 +122,15 @@ class ShadowShader(texture : bool, program : ShaderProgram) extends Shader<Color
     val mvpUniform = uniformMat4("mwcp")
     val alphaTestLevelUniform : ShaderUniformF4? = if(texture) uniformF4("alphaTestLevel") else nil
 
-    def load(vbDesc : VertexBufferDesc<_>, param : ColorSource) {
+    def loadAttributes(vbDesc : VertexBufferDesc<_>) {
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.position)
-        mvpUniform(matrix = matrix.value.mwcp)
         if(texture) {
             uvSlot.get.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.uv)
+        }
+    }
+    def loadUniforms(param : ColorSource) {
+        mvpUniform(matrix = matrix.value.mwcp)
+        if(texture) {
             alphaTestLevelUniform.get.apply(f4 = param.alphaTestLevel)
             context.bindTexture(param.texture.get)
         }
@@ -204,13 +210,16 @@ class ShadowDrawShader(key : ShadowDrawShaderKey, program : ShaderProgram) exten
     val directLightDepthMwcp : [ShaderUniformMat4] = key.directLightCount.range.chain.map{i -> uniformMat4("dirLightDepthMwcp$i")}.toArray
     val directLightShadows : [ShaderUniformI4] = key.directLightCount.range.chain.map{i -> uniformI4("dirLightShadow$i")}.toArray
 
-    def load(vbDesc :VertexBufferDesc<_>, param : ShadowDrawParam) {
+
+    def loadAttributes(vbDesc : VertexBufferDesc<_>) {
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.position)
+    }
+    def loadUniforms(param : ShadowDrawParam) {
         mwcpUniform(matrix = matrix.value.mwcp)
         val env = context.environment
         var i : uint = 0
         env.lights.chain.filter(_.is<DirectLight> && _.hasShadows).for { light ->
-            val p : float4 = param.percents(i)
+            val p : float4  = param.percents(i)
             directLightPercents[i].apply(f4 = p)
             directLightDepthMwcp[i].apply(matrix = light.shadowMap.biasDepthCp * matrix.mw)
             directLightShadows[i].apply(i4 = i + 1)

@@ -113,8 +113,12 @@ static ODClassType* _EGStandardShadowShader_type;
     _EGStandardShadowShader_instanceForTexture = [EGStandardShadowShader standardShadowShaderWithShadowShader:EGShadowShader.instanceForTexture];
 }
 
-- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGStandardMaterial*)param {
-    [_shadowShader loadVbDesc:vbDesc param:param.diffuse];
+- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
+    [_shadowShader loadAttributesVbDesc:vbDesc];
+}
+
+- (void)loadUniformsParam:(EGStandardMaterial*)param {
+    [_shadowShader loadUniformsParam:param.diffuse];
 }
 
 - (ODClassType*)type {
@@ -475,11 +479,15 @@ static ODClassType* _EGStandardShader_type;
     _EGStandardShader_type = [ODClassType classTypeWithCls:[EGStandardShader class]];
 }
 
-- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGStandardMaterial*)param {
+- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
+    if(_key.texture) [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
+    if(_key.directLightCount > 0) [((EGShaderAttribute*)([_normalSlot get])) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.normal))];
+}
+
+- (void)loadUniformsParam:(EGStandardMaterial*)param {
     [_mwcpUniform applyMatrix:[EGGlobal.matrix.value mwcp]];
     if(_key.texture) {
-        [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
         EGTexture* tex = ((EGTexture*)([param.diffuse.texture get]));
         [EGGlobal.context bindTextureTexture:tex];
         [((EGShaderUniformI4*)([_diffuseTexture get])) applyI4:0];
@@ -496,7 +504,6 @@ static ODClassType* _EGStandardShader_type;
     [_ambientColor applyVec4:env.ambientColor];
     if(_key.directLightCount > 0) {
         [((EGShaderUniformMat4*)([_mwcUniform get])) applyMatrix:[EGGlobal.context.matrixStack.value mwc]];
-        [((EGShaderAttribute*)([_normalSlot get])) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.normal))];
         __block NSUInteger i = 0;
         if(_key.directLightWithShadowsCount > 0) [[[env.lights chain] filter:^BOOL(EGLight* _) {
             return [_ isKindOfClass:[EGDirectLight class]] && _.hasShadows;

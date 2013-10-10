@@ -100,9 +100,12 @@ class ViewportSurfaceShader extends Shader<ViewportSurfaceShaderParam>(ViewportS
     static val instance = ViewportSurfaceShader()
     val positionSlot = attributeFor("position")
     val zUniform = uniformF4("z")
-    def load(vbDesc : VertexBufferDesc<_>, param : ViewportSurfaceShaderParam) {
-        context.bindTexture(param.texture)
+    def loadAttributes(vbDesc : VertexBufferDesc<_>) {
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.model)
+    }
+
+    def loadUniforms(param : ViewportSurfaceShaderParam) {
+        context.bindTexture(param.texture)
         zUniform(f4 = param.z)
     }
 }

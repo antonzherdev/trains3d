@@ -102,7 +102,8 @@ ODPType* egTextAlignmentType();
 + (id)fontShader;
 - (id)init;
 - (ODClassType*)type;
-- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGFontShaderParam*)param;
+- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
+- (void)loadUniformsParam:(EGFontShaderParam*)param;
 + (EGFontShader*)instance;
 + (ODClassType*)type;
 @end

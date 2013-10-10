@@ -207,9 +207,12 @@ static ODClassType* _EGShadowSurfaceShader_type;
     _EGShadowSurfaceShader_type = [ODClassType classTypeWithCls:[EGShadowSurfaceShader class]];
 }
 
-- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param {
-    [EGGlobal.context bindTextureTexture:((EGTexture*)([param.texture get]))];
+- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.model))];
+}
+
+- (void)loadUniformsParam:(EGColorSource*)param {
+    [EGGlobal.context bindTextureTexture:((EGTexture*)([param.texture get]))];
 }
 
 - (ODClassType*)type {
@@ -362,11 +365,14 @@ static ODClassType* _EGShadowShader_type;
         "    }\n" : @"")];
 }
 
-- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param {
+- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
+    if(_texture) [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
+}
+
+- (void)loadUniformsParam:(EGColorSource*)param {
     [_mvpUniform applyMatrix:[EGGlobal.matrix.value mwcp]];
     if(_texture) {
-        [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
         [((EGShaderUniformF4*)([_alphaTestLevelUniform get])) applyF4:param.alphaTestLevel];
         [EGGlobal.context bindTextureTexture:((EGTexture*)([param.texture get]))];
     }
@@ -693,8 +699,11 @@ static ODClassType* _EGShadowDrawShader_type;
     _EGShadowDrawShader_type = [ODClassType classTypeWithCls:[EGShadowDrawShader class]];
 }
 
-- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGShadowDrawParam*)param {
+- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
+}
+
+- (void)loadUniformsParam:(EGShadowDrawParam*)param {
     [_mwcpUniform applyMatrix:[EGGlobal.matrix.value mwcp]];
     EGEnvironment* env = EGGlobal.context.environment;
     __block NSUInteger i = 0;

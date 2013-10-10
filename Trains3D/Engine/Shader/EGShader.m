@@ -140,14 +140,16 @@ static ODClassType* _EGShader_type;
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh start:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context bindShaderProgramProgram:_program];
     [mesh.vertexBuffer bind];
-    [self loadVbDesc:mesh.vertexBuffer.desc param:param];
+    [self loadAttributesVbDesc:mesh.vertexBuffer.desc];
+    [self loadUniformsParam:param];
     [mesh.indexBuffer drawWithStart:start count:count];
 }
 
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb index:(CNPArray*)index mode:(unsigned int)mode {
     [EGGlobal.context bindShaderProgramProgram:_program];
     [vb bind];
-    [self loadVbDesc:vb.desc param:param];
+    [self loadAttributesVbDesc:vb.desc];
+    [self loadUniformsParam:param];
     [EGGlobal.context draw];
     glDrawElements(mode, index.count, GL_UNSIGNED_INT, index.bytes);
 }
@@ -155,7 +157,8 @@ static ODClassType* _EGShader_type;
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb indexRef:(CNVoidRefArray)indexRef mode:(unsigned int)mode {
     [EGGlobal.context bindShaderProgramProgram:_program];
     [vb bind];
-    [self loadVbDesc:vb.desc param:param];
+    [self loadAttributesVbDesc:vb.desc];
+    [self loadUniformsParam:param];
     [EGGlobal.context draw];
     glDrawElements(mode, indexRef.length / 4, GL_UNSIGNED_INT, indexRef.bytes);
 }
@@ -163,13 +166,18 @@ static ODClassType* _EGShader_type;
 - (void)drawParam:(id)param vb:(EGVertexBuffer*)vb mode:(unsigned int)mode {
     [EGGlobal.context bindShaderProgramProgram:_program];
     [vb bind];
-    [self loadVbDesc:vb.desc param:param];
+    [self loadAttributesVbDesc:vb.desc];
+    [self loadUniformsParam:param];
     [EGGlobal.context draw];
     glDrawArrays(mode, 0, [vb count]);
 }
 
-- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(id)param {
-    @throw @"Method load is abstract";
+- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
+    @throw @"Method loadAttributes is abstract";
+}
+
+- (void)loadUniformsParam:(id)param {
+    @throw @"Method loadUniforms is abstract";
 }
 
 - (GLint)uniformName:(NSString*)name {
@@ -253,10 +261,7 @@ static ODClassType* _EGShaderAttribute_type;
 
 - (id)initWithHandle:(GLuint)handle {
     self = [super init];
-    if(self) {
-        _handle = handle;
-        [self _init];
-    }
+    if(self) _handle = handle;
     
     return self;
 }
@@ -266,11 +271,8 @@ static ODClassType* _EGShaderAttribute_type;
     _EGShaderAttribute_type = [ODClassType classTypeWithCls:[EGShaderAttribute class]];
 }
 
-- (void)_init {
-    glEnableVertexAttribArray(_handle);
-}
-
 - (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(unsigned int)valuesType shift:(NSUInteger)shift {
+    glEnableVertexAttribArray(_handle);
     egVertexAttribPointer(_handle, valuesCount, valuesType, GL_FALSE, stride, shift);
 }
 

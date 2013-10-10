@@ -30,8 +30,11 @@ class StandardShadowShader(shadowShader : ShadowShader) extends Shader<StandardM
     static val instanceForColor = StandardShadowShader(ShadowShader.instanceForColor)
     static val instanceForTexture = StandardShadowShader(ShadowShader.instanceForTexture)
 
-    def load(vbDesc : VertexBufferDesc<_>, param : StandardMaterial) {
-        shadowShader.load(vbDesc, param.diffuse)
+    def loadAttributes(vbDesc : VertexBufferDesc<_>) {
+        shadowShader.loadAttributes(vbDesc)
+    }
+    def loadUniforms(param : StandardMaterial) {
+        shadowShader.loadUniforms(param.diffuse)
     }
 }
 
@@ -165,11 +168,20 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
     val directLightShadows : [ShaderUniformI4] = key.directLightWithShadowsCount.range.chain.map{i -> uniformI4("dirLightShadow$i")}.toArray
     val directLightDepthMwcp : [ShaderUniformMat4] = key.directLightWithShadowsCount.range.chain.map{i -> uniformMat4("dirLightDepthMwcp$i")}.toArray
 
-    def load(vbDesc :VertexBufferDesc<_>, param : StandardMaterial) {
+
+    def loadAttributes(vbDesc : VertexBufferDesc<_>) {
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.position)
-        mwcpUniform(matrix = matrix.value.mwcp)
         if(key.texture) {
             uvSlot.get.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.uv)
+        }
+        if(key.directLightCount > 0) {
+            normalSlot.get.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.normal)
+        }
+    }
+
+    def loadUniforms(param : StandardMaterial) {
+        mwcpUniform(matrix = matrix.value.mwcp)
+        if(key.texture) {
             val tex = param.diffuse.texture.get
             context.bindTexture(tex)
             diffuseTexture.get.apply(i4 = 0)
@@ -186,7 +198,6 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
         ambientColor(vec4 = env.ambientColor)
         if(key.directLightCount > 0) {
             mwcUniform.get(matrix = context.matrixStack.value.mwc)
-            normalSlot.get.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.normal)
             var i : uint = 0
             if(key.directLightWithShadowsCount > 0) {
                 env.lights.chain.filter(_.is<DirectLight> && _.hasShadows).for { light ->

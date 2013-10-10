@@ -74,6 +74,35 @@ static inline void egDeleteBuffer(GLuint handle) {
     glDeleteBuffers(1, &handle);
 }
 
+static inline GLuint egGenVertexArray() {
+#if TARGET_OS_IPHONE
+    GLuint buffer;
+    glGenVertexArraysOES(1, &buffer);
+    return buffer;
+#else
+    GLuint buffer;
+    glGenVertexArrays(1, &buffer);
+    return buffer;
+#endif
+}
+
+static inline void egDeleteVertexArray(GLuint handle) {
+#if TARGET_OS_IPHONE
+    glGenVertexArraysOES(1, &handle);
+#else
+    glDeleteVertexArrays(1, &handle);
+#endif
+}
+
+
+static inline void egBindVertexArray(GLuint handle) {
+#if TARGET_OS_IPHONE
+    glBindVertexArrayOES(handle);
+#else
+    glBindVertexArray(handle);
+#endif
+}
+
 static inline GLuint egGenFrameBuffer() {
     GLuint buffer;
     glGenFramebuffers(1, &buffer);

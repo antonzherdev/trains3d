@@ -247,8 +247,11 @@ static ODClassType* _EGSimpleColorShader_type;
     _EGSimpleColorShader_type = [ODClassType classTypeWithCls:[EGSimpleColorShader class]];
 }
 
-- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param {
+- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
+}
+
+- (void)loadUniformsParam:(EGColorSource*)param {
     [_mvpUniform applyMatrix:[EGGlobal.matrix.value mwcp]];
     [_colorUniform applyVec4:param.color];
 }
@@ -317,10 +320,13 @@ static ODClassType* _EGSimpleTextureShader_type;
     _EGSimpleTextureShader_type = [ODClassType classTypeWithCls:[EGSimpleTextureShader class]];
 }
 
-- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param {
+- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
-    [_mvpUniform applyMatrix:[EGGlobal.matrix.value mwcp]];
     [_uvSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
+}
+
+- (void)loadUniformsParam:(EGColorSource*)param {
+    [_mvpUniform applyMatrix:[EGGlobal.matrix.value mwcp]];
     [_colorUniform applyVec4:param.color];
     [EGGlobal.context bindTextureTexture:((EGTexture*)([param.texture get]))];
 }

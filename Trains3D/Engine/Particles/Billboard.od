@@ -91,17 +91,22 @@ class BillboardShader(program : ShaderProgram, texture : bool, alpha : bool, sha
     val wcUniform = uniformMat4("wc")
     val pUniform = uniformMat4("p")
 
-    def load(vbDesc : VertexBufferDesc<_>, param : ColorSource) {
+    def loadAttributes(vbDesc : VertexBufferDesc<_>) {
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, shift = vbDesc.position)
         modelSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.model)
         colorSlot.setFromBufferWith(vbDesc.stride, valuesCount = 4, GL_FLOAT, shift = vbDesc.color)
+        if(texture) {
+            uvSlot.for(_.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.uv))
+        }
+    }
+    def loadUniforms(param : ColorSource) {
+
         wcUniform(matrix = matrix.value.wc)
         pUniform(matrix = matrix.value.p)
         if(alpha) {
             alphaTestLevelUniform.get.apply(f4 = param.alphaTestLevel)
         }
         if(texture) {
-            uvSlot.for(_.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.uv))
             context.bindTexture(param.texture.get)
         }
         colorUniform(vec4 = param.color)

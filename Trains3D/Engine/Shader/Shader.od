@@ -53,14 +53,16 @@ class Shader<P>(program : ShaderProgram) {
     def draw(param : P, mesh : Mesh<_>, start : uint, count : uint) {
         context.bindShaderProgram(program)
         mesh.vertexBuffer.bind
-        load(mesh.vertexBuffer.desc, param)
+        loadAttributes(mesh.vertexBuffer.desc)
+        loadUniforms(param)
         mesh.indexBuffer.drawWith(start, count)
     }
 
     def draw(param : P, vb : VertexBuffer<_>, index : PArray<uint4>, mode : uint4) {
         context.bindShaderProgram(program)
         vb.bind
-        load(vb.desc, param)
+        loadAttributes(vb.desc)
+        loadUniforms(param)
         context.draw
         glDrawElements(mode, index.count, GL_UNSIGNED_INT, index.bytes)
     }
@@ -68,7 +70,8 @@ class Shader<P>(program : ShaderProgram) {
     def draw(param : P, vb : VertexBuffer<_>, indexRef : VoidRefArray, mode : uint4) {
         context.bindShaderProgram(program)
         vb.bind
-        load(vb.desc, param)
+        loadAttributes(vb.desc)
+        loadUniforms(param)
         context.draw
         glDrawElements(mode, indexRef.length/4, GL_UNSIGNED_INT, indexRef.bytes)
     }
@@ -76,12 +79,14 @@ class Shader<P>(program : ShaderProgram) {
     def draw(param : P, vb : VertexBuffer<_>, mode : uint4) {
         context.bindShaderProgram(program)
         vb.bind
-        load(vb.desc, param)
+        loadAttributes(vb.desc)
+        loadUniforms(param)
         context.draw
         glDrawArrays(mode, 0, vb.count)
     }
 
-    def load(vbDesc : VertexBufferDesc<_>, param : P)
+    def loadAttributes(vbDesc : VertexBufferDesc<_>)
+    def loadUniforms(param : P)
 
     private def uniform(name : string) = {
         val h = egGetUniformLocation(program.handle, name)
@@ -99,11 +104,8 @@ class Shader<P>(program : ShaderProgram) {
 }
 
 class ShaderAttribute(handle : GLuint) {
-    def init {
-        glEnableVertexAttribArray(handle)
-    }
-
     def setFromBufferWith(stride : uint, valuesCount : uint, valuesType : uint4, shift : uint) {
+        glEnableVertexAttribArray(handle)
         egVertexAttribPointer(handle, valuesCount, valuesType, GL_FALSE, stride, shift)
     }
 }

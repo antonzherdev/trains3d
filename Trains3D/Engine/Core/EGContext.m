@@ -93,6 +93,8 @@ static ODClassType* _EGGlobal_type;
     GLuint __lastShaderProgram;
     GLuint __lastVertexBuffer;
     GLuint __lastIndexBuffer;
+    GLuint __lastVertexArray;
+    GLuint _defaultVertexArray;
     EGEnablingState* _cullFace;
     EGEnablingState* _blend;
     EGEnablingState* _depthTest;
@@ -127,6 +129,8 @@ static ODClassType* _EGContext_type;
         __lastShaderProgram = 0;
         __lastVertexBuffer = 0;
         __lastIndexBuffer = 0;
+        __lastVertexArray = 0;
+        _defaultVertexArray = 0;
         _cullFace = [EGEnablingState enablingStateWithTp:GL_CULL_FACE];
         _blend = [EGEnablingState enablingStateWithTp:GL_BLEND];
         _depthTest = [EGEnablingState enablingStateWithTp:GL_DEPTH_TEST];
@@ -228,10 +232,6 @@ static ODClassType* _EGContext_type;
     }
 }
 
-- (GLuint)vertexBufferId {
-    return __lastVertexBuffer;
-}
-
 - (void)bindIndexBufferBuffer:(EGIndexBuffer*)buffer {
     GLuint id = buffer.handle;
     if(!(GLuintEq(id, __lastIndexBuffer))) {
@@ -240,8 +240,18 @@ static ODClassType* _EGContext_type;
     }
 }
 
-- (GLuint)indexBufferId {
-    return __lastIndexBuffer;
+- (void)bindVertexArrayHandle:(GLuint)handle {
+    if(!(GLuintEq(handle, __lastVertexArray))) {
+        __lastVertexArray = handle;
+        egBindVertexArray(handle);
+    }
+}
+
+- (void)bindDefaultVertexArray {
+    if(!(GLuintEq(__lastVertexArray, _defaultVertexArray))) {
+        __lastVertexArray = _defaultVertexArray;
+        egBindVertexArray(_defaultVertexArray);
+    }
 }
 
 - (void)draw {

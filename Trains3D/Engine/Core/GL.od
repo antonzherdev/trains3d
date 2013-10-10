@@ -75,6 +75,9 @@ stub object gl {
 
     def egGenBuffer : GLuint
     def egDeleteBuffer(handle : GLuint)
+    def egGenVertexArray : GLuint
+    def egDeleteVertexArray(handle : GLuint)
+    def egBindVertexArray(handle : GLuint)
     def glBindBuffer(target : uint4, handle : GLuint) : GLuint
     def glBufferData(target : uint4, size : GLsizeiptr, data : [void], usage : uint4)
     def glBufferSubData(target : uint4, offset : GLintptr ,size : GLsizeiptr, data : [void])

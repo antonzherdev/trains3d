@@ -508,10 +508,13 @@ static ODClassType* _EGFontShader_type;
     _EGFontShader_instance = [EGFontShader fontShader];
 }
 
-- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGFontShaderParam*)param {
-    [EGGlobal.context bindTextureTexture:param.texture];
+- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
     [_uvSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
+}
+
+- (void)loadUniformsParam:(EGFontShaderParam*)param {
+    [EGGlobal.context bindTextureTexture:param.texture];
     [_colorUniform applyVec4:param.color];
 }
 

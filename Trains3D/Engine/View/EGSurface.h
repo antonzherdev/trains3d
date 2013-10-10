@@ -75,7 +75,8 @@
 + (id)viewportSurfaceShader;
 - (id)init;
 - (ODClassType*)type;
-- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGViewportSurfaceShaderParam*)param;
+- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
+- (void)loadUniformsParam:(EGViewportSurfaceShaderParam*)param;
 + (EGViewportSurfaceShader*)instance;
 + (ODClassType*)type;
 @end

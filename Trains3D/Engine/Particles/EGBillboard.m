@@ -356,19 +356,20 @@ static ODClassType* _EGBillboardShader_type;
     return ((EGBillboardShader*)([_EGBillboardShader__lazy_instanceForAlphaShadow get]));
 }
 
-- (void)loadVbDesc:(EGVertexBufferDesc*)vbDesc param:(EGColorSource*)param {
+- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
     [_modelSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.model))];
     [_colorSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:4 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.color))];
+    if(_texture) [_uvSlot forEach:^void(EGShaderAttribute* _) {
+        [_ setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
+    }];
+}
+
+- (void)loadUniformsParam:(EGColorSource*)param {
     [_wcUniform applyMatrix:[EGGlobal.matrix.value wc]];
     [_pUniform applyMatrix:EGGlobal.matrix.value.p];
     if(_alpha) [((EGShaderUniformF4*)([_alphaTestLevelUniform get])) applyF4:param.alphaTestLevel];
-    if(_texture) {
-        [_uvSlot forEach:^void(EGShaderAttribute* _) {
-            [_ setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
-        }];
-        [EGGlobal.context bindTextureTexture:((EGTexture*)([param.texture get]))];
-    }
+    if(_texture) [EGGlobal.context bindTextureTexture:((EGTexture*)([param.texture get]))];
     [_colorUniform applyVec4:param.color];
 }
 
