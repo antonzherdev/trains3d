@@ -1,0 +1,66 @@
+package com.antonzherdev.eg
+
+trait VertexSource {
+    def bindWith(shader : Shader<_>)
+    def unbindWith(shader : Shader<_>) {}
+    def count : uint
+}
+
+class VertexBufferDesc<T>(dataType : PType<T>, position : int4, uv : int4, normal : int4, color : int4, model : int4)
+{
+    def stride : uint4 = dataType.size
+
+    static def Vec2 = VertexBufferDesc<vec2>(vec2.type, -1, 0, -1, -1, 0)
+    static def Vec3 = VertexBufferDesc<vec3>(vec3.type, 0, 0, 0, -1, 0)
+    static def Vec4 = VertexBufferDesc<vec4>(vec4.type, 0, 0, 0, 0, 0)
+    static def mesh = VertexBufferDesc<MeshData>(MeshData.type, position = 5*4, uv = 0, normal = 2*4, color = -1, model = -1)
+}
+
+
+class VertexBuffer<T>(desc : VertexBufferDesc<T>, handle : GLuint) extends Buffer<T>(desc.dataType, GL_ARRAY_BUFFER, handle) with VertexSource {
+    static def apply<T>(desc : VertexBufferDesc<T>) : VertexBuffer<T> = VertexBuffer<T>(desc, egGenBuffer)
+    static def vec2 = VertexBuffer<vec2>(VertexBufferDesc.Vec2, egGenBuffer)
+    static def vec3 = VertexBuffer<vec3>(VertexBufferDesc.Vec3, egGenBuffer)
+    static def vec4 = VertexBuffer<vec4>(VertexBufferDesc.Vec4, egGenBuffer)
+    static def mesh = VertexBuffer<MeshData>(VertexBufferDesc.mesh, egGenBuffer)
+
+    def bind {
+        context.bindVertexBuffer(self)
+    }
+
+    def bindWith(shader : Shader<_>) {
+        context.bindVertexBuffer(self)
+        shader.loadAttributes(desc)
+    }
+}
+
+
+
+class VertexArray(handle : GLuint, buffers : [VertexBuffer<_>]) extends VertexSource {
+    static def apply(shader : Shader<_>, buffer : VertexBuffer<_>) = {
+        val h = egGenVertexArray
+        context.bindVertexArray(h)
+        buffer.bind
+        shader.loadAttributes(buffer.desc)
+        context.bindDefaultVertexArray
+        VertexArray(h, [buffer])
+    }
+
+    def bind {
+        context.bindVertexArray(handle)
+    }
+
+    def bindWith(shader : Shader<_>) {
+        context.bindVertexArray(handle)
+    }
+
+    def unbindWith(shader : Shader<_>) {
+        context.bindDefaultVertexArray
+    }
+
+    def dealloc {
+        egDeleteVertexArray(handle)
+    }
+
+    def count = buffers.head.count
+}

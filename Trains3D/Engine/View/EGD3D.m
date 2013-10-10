@@ -1,7 +1,9 @@
 #import "EGD3D.h"
 
+#import "EGVertex.h"
 #import "EGMaterial.h"
 #import "EGContext.h"
+#import "EGIndex.h"
 @implementation EGD3D
 static CNVoidRefArray _EGD3D_vertexes;
 static EGVertexBuffer* _EGD3D_vb;

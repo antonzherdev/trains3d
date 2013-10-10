@@ -1,0 +1,44 @@
+package com.antonzherdev.eg
+
+class Buffer<T>(dataType : PType<T>, bufferType : uint4, handle : GLuint) {
+    private var _length : uint = 0
+    private var _count : uint = 0
+    def length : uint = _length
+    def count : uint = _count
+    static def apply<T>(dataType : PType<T>, bufferType : uint4) : Buffer = Buffer<T>(dataType, bufferType, egGenBuffer)
+
+    def dealoc {
+        egDeleteBuffer(handle)
+    }
+
+    def set(data : PArray<T>) : self = set(data = data, GL_STATIC_DRAW)
+    def set(array : VoidRefArray) : self = set(array = array, GL_STATIC_DRAW)
+
+    def set(data : PArray<T>, usage : uint4) : self = {
+        bind
+        glBufferData(bufferType, data.length, data.bytes, usage)
+        _length = data.length
+        _count = data.count
+        self
+    }
+
+    def set(array : VoidRefArray<T>, usage : uint4) : self = {
+        bind
+        glBufferData(bufferType, array.length, array.bytes, usage)
+        _length = array.length
+        _count = array.length/dataType.size
+        self
+    }
+
+    def update(start : uint, count : uint, array : VoidRefArray<T>) : self = {
+        bind
+        glBufferSubData(bufferType, start*dataType.size, count*dataType.size, array.bytes)
+        self
+    }
+
+    def bind {
+        glBindBuffer(bufferType, handle)
+    }
+
+    def stride : uint4 = dataType.size
+}

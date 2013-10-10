@@ -3,7 +3,7 @@
 #import "EGDirector.h"
 #import "EGTexture.h"
 #import "EGFont.h"
-#import "EGMesh.h"
+#import "EGVertex.h"
 #import "EGShader.h"
 #import "EGShadow.h"
 #import "GEMat4.h"

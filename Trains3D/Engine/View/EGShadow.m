@@ -4,7 +4,7 @@
 #import "EGTexture.h"
 #import "EGContext.h"
 #import "EGMaterial.h"
-#import "EGMesh.h"
+#import "EGVertex.h"
 #import "EGStandardShaderSystem.h"
 @implementation EGShadowMap{
     GLuint _frameBuffer;

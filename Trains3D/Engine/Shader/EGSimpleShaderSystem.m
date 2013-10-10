@@ -3,7 +3,7 @@
 #import "EGContext.h"
 #import "EGShadow.h"
 #import "EGMaterial.h"
-#import "EGMesh.h"
+#import "EGVertex.h"
 #import "GL.h"
 @implementation EGSimpleShaderSystem
 static EGSimpleShaderSystem* _EGSimpleShaderSystem_instance;

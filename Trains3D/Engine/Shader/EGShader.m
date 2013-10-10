@@ -2,6 +2,8 @@
 
 #import "EGMesh.h"
 #import "EGContext.h"
+#import "EGVertex.h"
+#import "EGIndex.h"
 #import "GEMat4.h"
 @implementation EGShaderProgram{
     GLuint _handle;

@@ -1,8 +1,10 @@
 #import "EGParticleSystem.h"
 
-#import "EGMesh.h"
+#import "EGVertex.h"
 #import "EGMaterial.h"
 #import "GL.h"
+#import "EGIndex.h"
+#import "EGMesh.h"
 #import "EGShader.h"
 #import "EGContext.h"
 @implementation EGParticleSystem{

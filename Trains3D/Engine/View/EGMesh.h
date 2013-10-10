@@ -1,22 +1,10 @@
 #import "objd.h"
 #import "GEVec.h"
-#import "GL.h"
-@class EGShader;
-@class EGGlobal;
-@class EGContext;
-
-@class EGMesh;
-@class EGBuffer;
-@class EGVertexBufferDesc;
 @class EGVertexBuffer;
 @class EGIndexBuffer;
-@class EGEmptyIndexSource;
-@class EGArrayIndexSource;
-@class EGVoidRefArrayIndexSource;
-@class EGIndexSourceGap;
-@class EGVertexArray;
-@protocol EGVertexSource;
-@protocol EGIndexSource;
+@class EGVertexBufferDesc;
+
+@class EGMesh;
 typedef struct EGMeshData EGMeshData;
 
 struct EGMeshData {
@@ -48,19 +36,6 @@ ODPType* egMeshDataType();
 
 
 
-@protocol EGVertexSource<NSObject>
-- (void)bindWithShader:(EGShader*)shader;
-- (void)unbindWithShader:(EGShader*)shader;
-- (NSUInteger)count;
-@end
-
-
-@protocol EGIndexSource<NSObject>
-- (void)draw;
-- (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
-@end
-
-
 @interface EGMesh : NSObject
 @property (nonatomic, readonly) EGVertexBuffer* vertexBuffer;
 @property (nonatomic, readonly) EGIndexBuffer* indexBuffer;
@@ -71,152 +46,6 @@ ODPType* egMeshDataType();
 + (EGMesh*)vec2VertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;
 + (EGMesh*)applyVertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;
 + (EGMesh*)applyDesc:(EGVertexBufferDesc*)desc vertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGBuffer : NSObject
-@property (nonatomic, readonly) ODPType* dataType;
-@property (nonatomic, readonly) unsigned int bufferType;
-@property (nonatomic, readonly) GLuint handle;
-
-+ (id)bufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(GLuint)handle;
-- (id)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(GLuint)handle;
-- (ODClassType*)type;
-- (NSUInteger)length;
-- (NSUInteger)count;
-+ (EGBuffer*)applyDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType;
-- (void)dealoc;
-- (id)setData:(CNPArray*)data;
-- (id)setArray:(CNVoidRefArray)array;
-- (id)setData:(CNPArray*)data usage:(unsigned int)usage;
-- (id)setArray:(CNVoidRefArray)array usage:(unsigned int)usage;
-- (id)updateStart:(NSUInteger)start count:(NSUInteger)count array:(CNVoidRefArray)array;
-- (void)bind;
-- (unsigned int)stride;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGVertexBufferDesc : NSObject
-@property (nonatomic, readonly) ODPType* dataType;
-@property (nonatomic, readonly) int position;
-@property (nonatomic, readonly) int uv;
-@property (nonatomic, readonly) int normal;
-@property (nonatomic, readonly) int color;
-@property (nonatomic, readonly) int model;
-
-+ (id)vertexBufferDescWithDataType:(ODPType*)dataType position:(int)position uv:(int)uv normal:(int)normal color:(int)color model:(int)model;
-- (id)initWithDataType:(ODPType*)dataType position:(int)position uv:(int)uv normal:(int)normal color:(int)color model:(int)model;
-- (ODClassType*)type;
-- (unsigned int)stride;
-+ (EGVertexBufferDesc*)Vec2;
-+ (EGVertexBufferDesc*)Vec3;
-+ (EGVertexBufferDesc*)Vec4;
-+ (EGVertexBufferDesc*)mesh;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGVertexBuffer : EGBuffer<EGVertexSource>
-@property (nonatomic, readonly) EGVertexBufferDesc* desc;
-
-+ (id)vertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle;
-- (id)initWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle;
-- (ODClassType*)type;
-+ (EGVertexBuffer*)applyDesc:(EGVertexBufferDesc*)desc;
-+ (EGVertexBuffer*)vec2;
-+ (EGVertexBuffer*)vec3;
-+ (EGVertexBuffer*)vec4;
-+ (EGVertexBuffer*)mesh;
-- (void)bind;
-- (void)bindWithShader:(EGShader*)shader;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGIndexBuffer : EGBuffer<EGIndexSource>
-@property (nonatomic, readonly) unsigned int mode;
-
-+ (id)indexBufferWithHandle:(GLuint)handle mode:(unsigned int)mode;
-- (id)initWithHandle:(GLuint)handle mode:(unsigned int)mode;
-- (ODClassType*)type;
-+ (EGIndexBuffer*)apply;
-- (void)draw;
-- (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
-- (void)bind;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGEmptyIndexSource : NSObject<EGIndexSource>
-@property (nonatomic, readonly) unsigned int mode;
-
-+ (id)emptyIndexSourceWithMode:(unsigned int)mode;
-- (id)initWithMode:(unsigned int)mode;
-- (ODClassType*)type;
-- (void)draw;
-- (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
-+ (EGEmptyIndexSource*)triangleStrip;
-+ (EGEmptyIndexSource*)triangles;
-+ (EGEmptyIndexSource*)lines;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGArrayIndexSource : NSObject<EGIndexSource>
-@property (nonatomic, readonly) CNPArray* array;
-@property (nonatomic, readonly) unsigned int mode;
-
-+ (id)arrayIndexSourceWithArray:(CNPArray*)array mode:(unsigned int)mode;
-- (id)initWithArray:(CNPArray*)array mode:(unsigned int)mode;
-- (ODClassType*)type;
-- (void)draw;
-- (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGVoidRefArrayIndexSource : NSObject<EGIndexSource>
-@property (nonatomic, readonly) CNVoidRefArray array;
-@property (nonatomic, readonly) unsigned int mode;
-
-+ (id)voidRefArrayIndexSourceWithArray:(CNVoidRefArray)array mode:(unsigned int)mode;
-- (id)initWithArray:(CNVoidRefArray)array mode:(unsigned int)mode;
-- (ODClassType*)type;
-- (void)draw;
-- (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGIndexSourceGap : NSObject<EGIndexSource>
-@property (nonatomic, readonly) id<EGIndexSource> source;
-@property (nonatomic, readonly) unsigned int start;
-@property (nonatomic, readonly) unsigned int count;
-
-+ (id)indexSourceGapWithSource:(id<EGIndexSource>)source start:(unsigned int)start count:(unsigned int)count;
-- (id)initWithSource:(id<EGIndexSource>)source start:(unsigned int)start count:(unsigned int)count;
-- (ODClassType*)type;
-- (void)draw;
-- (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGVertexArray : NSObject<EGVertexSource>
-@property (nonatomic, readonly) GLuint handle;
-@property (nonatomic, readonly) id<CNSeq> buffers;
-
-+ (id)vertexArrayWithHandle:(GLuint)handle buffers:(id<CNSeq>)buffers;
-- (id)initWithHandle:(GLuint)handle buffers:(id<CNSeq>)buffers;
-- (ODClassType*)type;
-+ (EGVertexArray*)applyShader:(EGShader*)shader buffer:(EGVertexBuffer*)buffer;
-- (void)bind;
-- (void)bindWithShader:(EGShader*)shader;
-- (void)unbindWithShader:(EGShader*)shader;
-- (void)dealloc;
-- (NSUInteger)count;
 + (ODClassType*)type;
 @end
 

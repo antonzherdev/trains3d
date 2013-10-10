@@ -2,9 +2,11 @@
 #import "GEVec.h"
 #import "EGMesh.h"
 @class EGMapSso;
+@class EGVertexBuffer;
 @class EGCameraIso;
 @class GEMat4;
 @class EGColorSource;
+@class EGArrayIndexSource;
 @class EGGlobal;
 @class EGContext;
 @class EGMaterial;

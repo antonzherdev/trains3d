@@ -4,9 +4,11 @@
 #import "EGTexture.h"
 #import "EGContext.h"
 #import "EGMaterial.h"
-#import "EGMesh.h"
+#import "EGVertex.h"
+#import "EGIndex.h"
 #import "EGSprite.h"
 #import "GL.h"
+#import "EGMesh.h"
 @implementation TRTreeView{
     TRForest* _forest;
     EGTexture* _texture;

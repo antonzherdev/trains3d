@@ -2,6 +2,8 @@
 
 #import "EGShader.h"
 #import "EGMesh.h"
+#import "EGVertex.h"
+#import "EGIndex.h"
 #import "EGTexture.h"
 #import "EGSimpleShaderSystem.h"
 #import "EGStandardShaderSystem.h"

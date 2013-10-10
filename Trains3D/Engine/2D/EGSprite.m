@@ -1,7 +1,9 @@
 #import "EGSprite.h"
 
+#import "EGVertex.h"
 #import "EGMaterial.h"
 #import "EGContext.h"
+#import "EGIndex.h"
 #import "EGTexture.h"
 @implementation EGD2D
 static CNVoidRefArray _EGD2D_vertexes;

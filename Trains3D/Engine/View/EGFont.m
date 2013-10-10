@@ -1,8 +1,10 @@
 #import "EGFont.h"
 
-#import "EGMesh.h"
+#import "EGVertex.h"
 #import "EGTexture.h"
 #import "GL.h"
+#import "EGIndex.h"
+#import "EGMesh.h"
 #import "EGContext.h"
 #import "GEMat4.h"
 NSString* EGTextAlignmentDescription(EGTextAlignment self) {

@@ -1,10 +1,12 @@
 #import "EGMapIsoView.h"
 
 #import "EGMapIso.h"
+#import "EGVertex.h"
 #import "EGCameraIso.h"
 #import "GEMat4.h"
 #import "EGMaterial.h"
 #import "GL.h"
+#import "EGIndex.h"
 #import "EGContext.h"
 @implementation EGMapSsoView{
     EGMapSso* _map;

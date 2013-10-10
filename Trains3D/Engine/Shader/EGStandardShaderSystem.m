@@ -6,7 +6,7 @@
 #import "EGTexture.h"
 #import "GL.h"
 #import "EGPlatform.h"
-#import "EGMesh.h"
+#import "EGVertex.h"
 #import "GEMat4.h"
 @implementation EGStandardShaderSystem
 static EGStandardShaderSystem* _EGStandardShaderSystem_instance;

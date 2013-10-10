@@ -2,6 +2,7 @@
 
 #import "EGTexture.h"
 #import "EGContext.h"
+#import "EGVertex.h"
 #import "EGMesh.h"
 @implementation EGSurface{
     GEVec2i _size;

@@ -3,7 +3,7 @@
 #import "EGContext.h"
 #import "EGShadow.h"
 #import "EGMaterial.h"
-#import "EGMesh.h"
+#import "EGVertex.h"
 #import "GL.h"
 #import "EGSprite.h"
 #import "GEMat4.h"
