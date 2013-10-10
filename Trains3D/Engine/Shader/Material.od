@@ -4,12 +4,13 @@ package com.antonzherdev.eg
 class Material {
     def shaderSystem : ShaderSystem<self>
     def draw(mesh : Mesh<_>) {
-        shaderSystem.draw(self, mesh.vertexBuffer, mesh.indexBuffer)
+        shaderSystem.draw(self, mesh.vertex, mesh.index)
     }
 
     def draw(vertex : VertexSource, index : IndexSource) {
         shaderSystem.draw(self, vertex, index)
     }
+    def shader : Shader<self> = shaderSystem.shaderFor(self)
 
     static def apply(color : vec4) : Material = StandardMaterial(diffuse = color)
     static def apply(texture : Texture) : Material = StandardMaterial(diffuse = texture)

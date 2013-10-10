@@ -57,7 +57,7 @@
 - (EGShaderUniformF4*)uniformF4Name:(NSString*)name;
 - (EGShaderUniformI4*)uniformI4Name:(NSString*)name;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
-- (EGVertexArray*)vaoWithParam:(id)param vbo:(EGVertexBuffer*)vbo;
+- (EGVertexArray*)vaoWithVbo:(EGVertexBuffer*)vbo;
 + (ODClassType*)type;
 @end
 

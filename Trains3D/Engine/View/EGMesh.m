@@ -2,6 +2,8 @@
 
 #import "EGVertex.h"
 #import "EGIndex.h"
+#import "EGShader.h"
+#import "EGMaterial.h"
 NSString* EGMeshDataDescription(EGMeshData self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<EGMeshData: "];
     [description appendFormat:@"uv=%@", GEVec2Description(self.uv)];
@@ -56,22 +58,22 @@ ODPType* egMeshDataType() {
 
 
 @implementation EGMesh{
-    EGVertexBuffer* _vertexBuffer;
-    EGIndexBuffer* _indexBuffer;
+    id<EGVertexSource> _vertex;
+    id<EGIndexSource> _index;
 }
 static ODClassType* _EGMesh_type;
-@synthesize vertexBuffer = _vertexBuffer;
-@synthesize indexBuffer = _indexBuffer;
+@synthesize vertex = _vertex;
+@synthesize index = _index;
 
-+ (id)meshWithVertexBuffer:(EGVertexBuffer*)vertexBuffer indexBuffer:(EGIndexBuffer*)indexBuffer {
-    return [[EGMesh alloc] initWithVertexBuffer:vertexBuffer indexBuffer:indexBuffer];
++ (id)meshWithVertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index {
+    return [[EGMesh alloc] initWithVertex:vertex index:index];
 }
 
-- (id)initWithVertexBuffer:(EGVertexBuffer*)vertexBuffer indexBuffer:(EGIndexBuffer*)indexBuffer {
+- (id)initWithVertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index {
     self = [super init];
     if(self) {
-        _vertexBuffer = vertexBuffer;
-        _indexBuffer = indexBuffer;
+        _vertex = vertex;
+        _index = index;
     }
     
     return self;
@@ -83,15 +85,27 @@ static ODClassType* _EGMesh_type;
 }
 
 + (EGMesh*)vec2VertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData {
-    return [EGMesh meshWithVertexBuffer:[EGVertexBuffer vec2Data:vertexData] indexBuffer:[EGIndexBuffer applyData:indexData]];
+    return [EGMesh meshWithVertex:[EGVertexBuffer vec2Data:vertexData] index:[EGIndexBuffer applyData:indexData]];
 }
 
 + (EGMesh*)applyVertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData {
-    return [EGMesh meshWithVertexBuffer:[EGVertexBuffer meshData:vertexData] indexBuffer:[EGIndexBuffer applyData:indexData]];
+    return [EGMesh meshWithVertex:[EGVertexBuffer meshData:vertexData] index:[EGIndexBuffer applyData:indexData]];
 }
 
 + (EGMesh*)applyDesc:(EGVertexBufferDesc*)desc vertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData {
-    return [EGMesh meshWithVertexBuffer:[EGVertexBuffer applyDesc:desc data:vertexData] indexBuffer:[EGIndexBuffer applyData:indexData]];
+    return [EGMesh meshWithVertex:[EGVertexBuffer applyDesc:desc data:vertexData] index:[EGIndexBuffer applyData:indexData]];
+}
+
+- (EGMesh*)vaoWithShader:(EGShader*)shader {
+    return [EGMesh meshWithVertex:[shader vaoWithVbo:((EGVertexBuffer*)(_vertex))] index:_index];
+}
+
+- (EGMesh*)vaoWithMaterial:(EGMaterial*)material {
+    return [EGMesh meshWithVertex:[[material shader] vaoWithVbo:((EGVertexBuffer*)(_vertex))] index:_index];
+}
+
+- (EGMesh*)vaoWithShaderSystem:(EGShaderSystem*)shaderSystem material:(id)material {
+    return [EGMesh meshWithVertex:[shaderSystem vaoWithParam:material vbo:((EGVertexBuffer*)(_vertex))] index:_index];
 }
 
 - (ODClassType*)type {
@@ -110,20 +124,20 @@ static ODClassType* _EGMesh_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGMesh* o = ((EGMesh*)(other));
-    return [self.vertexBuffer isEqual:o.vertexBuffer] && [self.indexBuffer isEqual:o.indexBuffer];
+    return [self.vertex isEqual:o.vertex] && [self.index isEqual:o.index];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [self.vertexBuffer hash];
-    hash = hash * 31 + [self.indexBuffer hash];
+    hash = hash * 31 + [self.vertex hash];
+    hash = hash * 31 + [self.index hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"vertexBuffer=%@", self.vertexBuffer];
-    [description appendFormat:@", indexBuffer=%@", self.indexBuffer];
+    [description appendFormat:@"vertex=%@", self.vertex];
+    [description appendFormat:@", index=%@", self.index];
     [description appendString:@">"];
     return description;
 }

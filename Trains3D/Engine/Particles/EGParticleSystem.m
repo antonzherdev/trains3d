@@ -198,7 +198,7 @@ static ODClassType* _EGParticleSystemView_type;
             cnVoidRefArrayFree(ia);
             return ib;
         }();
-        _mesh = [EGMesh meshWithVertexBuffer:_vertexBuffer indexBuffer:_indexBuffer];
+        _mesh = [EGMesh meshWithVertex:_vertexBuffer index:_indexBuffer];
     }
     
     return self;

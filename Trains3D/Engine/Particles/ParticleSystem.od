@@ -55,7 +55,7 @@ class ParticleSystemView<P extends Particle, D>(vbDesc : VertexBufferDesc<D>, ma
         ia.free
         ib
     }
-    val mesh = Mesh<D>(vertexBuffer = vertexBuffer, indexBuffer)
+    val mesh = Mesh<D>(vertex = vertexBuffer, indexBuffer)
 
     def vertexCount : uint
     def writeIndexesTo(indexPointer : VoidRefArray, i : uint4) : VoidRefArray

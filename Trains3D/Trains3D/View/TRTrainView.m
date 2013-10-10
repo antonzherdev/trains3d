@@ -3,10 +3,8 @@
 #import "TRLevel.h"
 #import "TRSmoke.h"
 #import "EGMaterial.h"
-#import "EGVertex.h"
-#import "EGStandardShaderSystem.h"
-#import "TRModels.h"
 #import "EGMesh.h"
+#import "TRModels.h"
 #import "TRTrain.h"
 #import "TRCity.h"
 #import "EGContext.h"
@@ -19,14 +17,14 @@
     TRSmokeView* _smokeView;
     EGStandardMaterial* _blackMaterial;
     EGMaterial* _defMat;
-    EGVertexArray* _car1Vao;
+    EGMesh* _vaoCar1;
 }
 static ODClassType* _TRTrainView_type;
 @synthesize level = _level;
 @synthesize smokeView = _smokeView;
 @synthesize blackMaterial = _blackMaterial;
 @synthesize defMat = _defMat;
-@synthesize car1Vao = _car1Vao;
+@synthesize vaoCar1 = _vaoCar1;
 
 + (id)trainViewWithLevel:(TRLevel*)level {
     return [[TRTrainView alloc] initWithLevel:level];
@@ -39,7 +37,7 @@ static ODClassType* _TRTrainView_type;
         _smokeView = [TRSmokeView smokeView];
         _blackMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 1.0)] specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:1.0];
         _defMat = [self trainMaterialForColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
-        _car1Vao = [EGStandardShaderSystem.instance vaoWithParam:_defMat vbo:TRModels.car.vertexBuffer];
+        _vaoCar1 = [TRModels.car vaoWithMaterial:_defMat];
     }
     
     return self;
@@ -101,7 +99,7 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (void)drawCar1Material:(EGMaterial*)material {
-    if(!([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]])) [material drawVertex:_car1Vao index:TRModels.car.indexBuffer];
+    if(!([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]])) [material drawMesh:_vaoCar1];
     [_blackMaterial drawMesh:TRModels.carBlack];
 }
 

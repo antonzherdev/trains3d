@@ -60,10 +60,10 @@ class TrainView(level : Level) {
     }
 
     val defMat = trainMaterialFor(vec4(1, 1, 1, 1))
-    val car1Vao = StandardShaderSystem.instance.vaoWith(defMat, Models.car.vertexBuffer)
+    val vaoCar1 = Models.car.vaoWith(defMat)
     private def drawCar1(material : Material) {
         if(!context.renderTarget.is<ShadowRenderTarget>) {
-            material.draw(car1Vao, Models.car.indexBuffer)
+            material.draw(vaoCar1)
         }
 //        material.draw(Models.car)
         blackMaterial.draw(Models.carBlack)

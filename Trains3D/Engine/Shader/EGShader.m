@@ -136,7 +136,7 @@ static ODClassType* _EGShader_type;
 }
 
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh {
-    [self drawParam:param vertex:mesh.vertexBuffer index:mesh.indexBuffer];
+    [self drawParam:param vertex:mesh.vertex index:mesh.index];
 }
 
 - (void)drawParam:(id)param vertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index {
@@ -190,7 +190,7 @@ static ODClassType* _EGShader_type;
     return [_program attributeForName:name];
 }
 
-- (EGVertexArray*)vaoWithParam:(id)param vbo:(EGVertexBuffer*)vbo {
+- (EGVertexArray*)vaoWithVbo:(EGVertexBuffer*)vbo {
     EGVertexArray* vao = [EGVertexArray applyBuffers:(@[vbo])];
     [vao bind];
     [vbo bind];
@@ -732,7 +732,7 @@ static ODClassType* _EGShaderSystem_type;
 }
 
 - (EGVertexArray*)vaoWithParam:(id)param vbo:(EGVertexBuffer*)vbo {
-    return [[self shaderForParam:param] vaoWithParam:param vbo:vbo];
+    return [[self shaderForParam:param] vaoWithVbo:vbo];
 }
 
 - (ODClassType*)type {

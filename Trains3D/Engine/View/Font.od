@@ -71,7 +71,7 @@ class Font(name : string) {
     private static val vbDesc = VertexBufferDesc(FontPrintData.type, position = 0, uv = 2*4, normal = -1, color = -1, model = -1)
     private val vb = MutableVertexBuffer(vbDesc)
     private val ib = MutableIndexBuffer()
-    private val mesh = Mesh<FontPrintData>(vertexBuffer = vb, ib)
+    private val mesh = Mesh<FontPrintData>(vertex = vb, ib)
     def draw(text : string, color : vec4, at : vec3, alignment : TextAlignment) {
         val pos =
             if(alignment.shift.isEmpty) matrix.wcp.mul(vec4(at, 1)).xy

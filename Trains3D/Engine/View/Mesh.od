@@ -3,19 +3,23 @@ package com.antonzherdev.eg
 struct MeshData(uv : vec2, normal : vec3, position : vec3)
 
 
-class Mesh<T>(vertexBuffer : VertexBuffer<T>, indexBuffer : IndexBuffer<uint4>) {
-    static def vec2(vertexData : PArray<vec2>, indexData : PArray<uint4>) : Mesh<vec2> = Mesh<vec2>(
-            vertexBuffer = VertexBuffer.vec2(vertexData),
-            indexBuffer = IndexBuffer(indexData))
+class Mesh(vertex : VertexSource, index : IndexSource) {
+    static def vec2(vertexData : PArray<vec2>, indexData : PArray<uint4>) : Mesh = Mesh(
+            vertex = VertexBuffer.vec2(vertexData),
+            index = IndexBuffer(indexData))
 
-    static def apply(vertexData : PArray<MeshData>, indexData : PArray<uint4>) : Mesh<MeshData> = Mesh<MeshData>(
-            vertexBuffer = VertexBuffer.mesh(vertexData),
-            indexBuffer = IndexBuffer(indexData))
+    static def apply(vertexData : PArray<MeshData>, indexData : PArray<uint4>) : Mesh = Mesh(
+            vertex = VertexBuffer.mesh(vertexData),
+            index = IndexBuffer(indexData))
 
-    static def apply<T>(desc : VertexBufferDesc<T>, vertexData : PArray<T>, indexData : PArray<uint4>) : Mesh<T> = Mesh<T>(
-            vertexBuffer = VertexBuffer<T>(desc, vertexData),
-            indexBuffer = IndexBuffer(indexData))
+    static def apply<T>(desc : VertexBufferDesc<T>, vertexData : PArray<T>, indexData : PArray<uint4>) : Mesh = Mesh(
+            vertex = VertexBuffer<T>(desc, vertexData),
+            index = IndexBuffer(indexData))
 
+    def vaoWith(shader : Shader<_>) : Mesh = Mesh(shader.vaoWith(vertex.cast<VertexBuffer<_>>), index)
+    def vaoWith(material : Material) : Mesh = Mesh(material.shader.vaoWith(vertex.cast<VertexBuffer<_>>), index)
+    def vaoWith<P>(shaderSystem : ShaderSystem<P>, material : P) : Mesh =
+        Mesh(shaderSystem.vaoWith(material, vertex.cast<VertexBuffer<_>>), index)
 }
 
 

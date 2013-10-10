@@ -1,8 +1,13 @@
 #import "objd.h"
 #import "GEVec.h"
+@protocol EGVertexSource;
+@protocol EGIndexSource;
 @class EGVertexBuffer;
 @class EGIndexBuffer;
 @class EGVertexBufferDesc;
+@class EGShader;
+@class EGMaterial;
+@class EGShaderSystem;
 
 @class EGMesh;
 typedef struct EGMeshData EGMeshData;
@@ -37,15 +42,18 @@ ODPType* egMeshDataType();
 
 
 @interface EGMesh : NSObject
-@property (nonatomic, readonly) EGVertexBuffer* vertexBuffer;
-@property (nonatomic, readonly) EGIndexBuffer* indexBuffer;
+@property (nonatomic, readonly) id<EGVertexSource> vertex;
+@property (nonatomic, readonly) id<EGIndexSource> index;
 
-+ (id)meshWithVertexBuffer:(EGVertexBuffer*)vertexBuffer indexBuffer:(EGIndexBuffer*)indexBuffer;
-- (id)initWithVertexBuffer:(EGVertexBuffer*)vertexBuffer indexBuffer:(EGIndexBuffer*)indexBuffer;
++ (id)meshWithVertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index;
+- (id)initWithVertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index;
 - (ODClassType*)type;
 + (EGMesh*)vec2VertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;
 + (EGMesh*)applyVertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;
 + (EGMesh*)applyDesc:(EGVertexBufferDesc*)desc vertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;
+- (EGMesh*)vaoWithShader:(EGShader*)shader;
+- (EGMesh*)vaoWithMaterial:(EGMaterial*)material;
+- (EGMesh*)vaoWithShaderSystem:(EGShaderSystem*)shaderSystem material:(id)material;
 + (ODClassType*)type;
 @end
 

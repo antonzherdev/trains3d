@@ -4,6 +4,7 @@
 @class EGMesh;
 @protocol EGVertexSource;
 @protocol EGIndexSource;
+@class EGShader;
 @class EGTexture;
 @class EGSimpleShaderSystem;
 @class EGStandardShaderSystem;
@@ -24,6 +25,7 @@
 - (EGShaderSystem*)shaderSystem;
 - (void)drawMesh:(EGMesh*)mesh;
 - (void)drawVertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index;
+- (EGShader*)shader;
 + (EGMaterial*)applyColor:(GEVec4)color;
 + (EGMaterial*)applyTexture:(EGTexture*)texture;
 + (ODClassType*)type;
