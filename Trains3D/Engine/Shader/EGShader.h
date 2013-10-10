@@ -7,6 +7,8 @@
 @protocol EGVertexSource;
 @protocol EGIndexSource;
 @class EGVertexBufferDesc;
+@class EGVertexArray;
+@class EGVertexBuffer;
 @class GEMat4;
 
 @class EGShaderProgram;
@@ -55,6 +57,7 @@
 - (EGShaderUniformF4*)uniformF4Name:(NSString*)name;
 - (EGShaderUniformI4*)uniformI4Name:(NSString*)name;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
+- (EGVertexArray*)vaoWithParam:(id)param vbo:(EGVertexBuffer*)vbo;
 + (ODClassType*)type;
 @end
 
@@ -142,6 +145,7 @@
 - (ODClassType*)type;
 - (void)drawParam:(id)param vertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index;
 - (EGShader*)shaderForParam:(id)param;
+- (EGVertexArray*)vaoWithParam:(id)param vbo:(EGVertexBuffer*)vbo;
 + (ODClassType*)type;
 @end
 

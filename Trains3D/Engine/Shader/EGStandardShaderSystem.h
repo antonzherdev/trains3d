@@ -79,8 +79,8 @@
 @property (nonatomic, readonly) id uvScale;
 @property (nonatomic, readonly) id uvShift;
 @property (nonatomic, readonly) EGShaderUniformVec4* ambientColor;
-@property (nonatomic, readonly) EGShaderUniformVec4* specularColor;
-@property (nonatomic, readonly) EGShaderUniformF4* specularSize;
+@property (nonatomic, readonly) id specularColor;
+@property (nonatomic, readonly) id specularSize;
 @property (nonatomic, readonly) EGShaderUniformVec4* diffuseColorUniform;
 @property (nonatomic, readonly) EGShaderUniformMat4* mwcpUniform;
 @property (nonatomic, readonly) id mwcUniform;

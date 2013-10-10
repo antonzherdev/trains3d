@@ -157,8 +157,8 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
     val uvScale : ShaderUniformVec2? = if(key.region) uniformVec2("uvScale") else nil
     val uvShift : ShaderUniformVec2? = if(key.region) uniformVec2("uvShift") else nil
     val ambientColor = uniformVec4("ambientColor")
-    val specularColor = uniformVec4("specularColor")
-    val specularSize = uniformF4("specularSize")
+    val specularColor : ShaderUniformVec4? = if(key.directLightCount > 0) uniformVec4("specularColor") else nil
+    val specularSize : ShaderUniformF4? = if(key.directLightCount > 0) uniformF4("specularSize") else nil
     val diffuseColorUniform = uniformVec4("diffuseColor")
     val mwcpUniform = uniformMat4("mwcp")
     val mwcUniform : ShaderUniformMat4? = if(key.directLightCount > 0) uniformMat4("mwc") else nil
@@ -192,11 +192,11 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
             }
         }
         diffuseColorUniform(vec4 = param.diffuse.color)
-        specularColor(vec4 = param.specularColor)
-        specularSize(f4 = param.specularSize)
         val env = context.environment
         ambientColor(vec4 = env.ambientColor)
         if(key.directLightCount > 0) {
+            specularColor.get.apply(vec4 = param.specularColor)
+            specularSize.get.apply(f4 = param.specularSize)
             mwcUniform.get(matrix = context.matrixStack.value.mwc)
             var i : uint = 0
             if(key.directLightWithShadowsCount > 0) {

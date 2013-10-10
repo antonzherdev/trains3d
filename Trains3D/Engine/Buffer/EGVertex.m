@@ -338,13 +338,8 @@ static ODClassType* _EGVertexArray_type;
     _EGVertexArray_type = [ODClassType classTypeWithCls:[EGVertexArray class]];
 }
 
-+ (EGVertexArray*)applyShader:(EGShader*)shader buffer:(EGVertexBuffer*)buffer {
-    GLuint h = egGenVertexArray();
-    [EGGlobal.context bindVertexArrayHandle:h];
-    [buffer bind];
-    [shader loadAttributesVbDesc:buffer.desc];
-    [EGGlobal.context bindDefaultVertexArray];
-    return [EGVertexArray vertexArrayWithHandle:h buffers:(@[buffer])];
++ (EGVertexArray*)applyBuffers:(id<CNSeq>)buffers {
+    return [EGVertexArray vertexArrayWithHandle:egGenVertexArray() buffers:buffers];
 }
 
 - (void)bind {
@@ -356,6 +351,10 @@ static ODClassType* _EGVertexArray_type;
 }
 
 - (void)unbindWithShader:(EGShader*)shader {
+    [EGGlobal.context bindDefaultVertexArray];
+}
+
+- (void)unbind {
     [EGGlobal.context bindDefaultVertexArray];
 }
 

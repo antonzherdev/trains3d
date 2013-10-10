@@ -75,6 +75,15 @@ class Shader<P>(program : ShaderProgram) {
     def uniformF4(name : string ) = ShaderUniformF4(uniform(name))
     def uniformI4(name : string ) = ShaderUniformI4(uniform(name))
     def attributeFor(name : string ) = program.attributeFor(name)
+
+    def vaoWith(param : P, vbo : VertexBuffer<_>) : VertexArray = {
+        val vao = VertexArray([vbo])
+        vao.bind
+        vbo.bind
+        loadAttributes(vbo.desc)
+        vao.unbind
+        vao
+    }
 }
 
 class ShaderAttribute(handle : GLuint) {
@@ -152,6 +161,8 @@ class ShaderSystem<P> {
     }
 
     def shaderFor(param : P) : Shader<_>
+
+    def vaoWith(param : P, vbo : VertexBuffer<_>) : VertexArray = shaderFor(param).vaoWith(param, vbo)
 }
 
 

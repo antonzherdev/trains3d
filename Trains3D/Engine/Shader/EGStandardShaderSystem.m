@@ -407,8 +407,8 @@ static ODClassType* _EGStandardShaderKey_type;
     id _uvScale;
     id _uvShift;
     EGShaderUniformVec4* _ambientColor;
-    EGShaderUniformVec4* _specularColor;
-    EGShaderUniformF4* _specularSize;
+    id _specularColor;
+    id _specularSize;
     EGShaderUniformVec4* _diffuseColorUniform;
     EGShaderUniformMat4* _mwcpUniform;
     id _mwcUniform;
@@ -452,8 +452,8 @@ static ODClassType* _EGStandardShader_type;
         _uvScale = ((_key.region) ? [CNOption applyValue:[self uniformVec2Name:@"uvScale"]] : [CNOption none]);
         _uvShift = ((_key.region) ? [CNOption applyValue:[self uniformVec2Name:@"uvShift"]] : [CNOption none]);
         _ambientColor = [self uniformVec4Name:@"ambientColor"];
-        _specularColor = [self uniformVec4Name:@"specularColor"];
-        _specularSize = [self uniformF4Name:@"specularSize"];
+        _specularColor = ((_key.directLightCount > 0) ? [CNOption applyValue:[self uniformVec4Name:@"specularColor"]] : [CNOption none]);
+        _specularSize = ((_key.directLightCount > 0) ? [CNOption applyValue:[self uniformF4Name:@"specularSize"]] : [CNOption none]);
         _diffuseColorUniform = [self uniformVec4Name:@"diffuseColor"];
         _mwcpUniform = [self uniformMat4Name:@"mwcp"];
         _mwcUniform = ((_key.directLightCount > 0) ? [CNOption applyValue:[self uniformMat4Name:@"mwc"]] : [CNOption none]);
@@ -498,11 +498,11 @@ static ODClassType* _EGStandardShader_type;
         }
     }
     [_diffuseColorUniform applyVec4:param.diffuse.color];
-    [_specularColor applyVec4:param.specularColor];
-    [_specularSize applyF4:((float)(param.specularSize))];
     EGEnvironment* env = EGGlobal.context.environment;
     [_ambientColor applyVec4:env.ambientColor];
     if(_key.directLightCount > 0) {
+        [((EGShaderUniformVec4*)([_specularColor get])) applyVec4:param.specularColor];
+        [((EGShaderUniformF4*)([_specularSize get])) applyF4:((float)(param.specularSize))];
         [((EGShaderUniformMat4*)([_mwcUniform get])) applyMatrix:[EGGlobal.context.matrixStack.value mwc]];
         __block NSUInteger i = 0;
         if(_key.directLightWithShadowsCount > 0) [[[env.lights chain] filter:^BOOL(EGLight* _) {

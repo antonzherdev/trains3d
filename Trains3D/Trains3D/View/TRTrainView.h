@@ -4,11 +4,11 @@
 @class TRSmokeView;
 @class EGStandardMaterial;
 @class EGColorSource;
+@class EGMaterial;
 @class EGVertexArray;
 @class EGStandardShaderSystem;
 @class TRModels;
 @class EGMesh;
-@class EGMaterial;
 @class TRTrain;
 @class TRSmoke;
 @class TRCityColor;
@@ -30,11 +30,12 @@
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) TRSmokeView* smokeView;
 @property (nonatomic, readonly) EGStandardMaterial* blackMaterial;
+@property (nonatomic, readonly) EGMaterial* defMat;
+@property (nonatomic, readonly) EGVertexArray* car1Vao;
 
 + (id)trainViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
-- (EGVertexArray*)car1Vao;
 - (EGMaterial*)trainMaterialForColor:(GEVec4)color;
 - (void)draw;
 - (void)drawSmoke;

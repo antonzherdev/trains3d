@@ -70,14 +70,7 @@ class MutableVertexBuffer<T>(desc : VertexBufferDesc<T>, handle : GLuint)
 
 
 class VertexArray(handle : GLuint, buffers : [VertexBuffer<_>]) extends VertexSource {
-    static def apply(shader : Shader<_>, buffer : VertexBuffer<_>) = {
-        val h = egGenVertexArray
-        context.bindVertexArray(h)
-        buffer.bind
-        shader.loadAttributes(buffer.desc)
-        context.bindDefaultVertexArray
-        VertexArray(h, [buffer])
-    }
+    static def apply(buffers : [VertexBuffer<_>]) = VertexArray(egGenVertexArray, buffers)
 
     def bind {
         context.bindVertexArray(handle)
@@ -88,6 +81,10 @@ class VertexArray(handle : GLuint, buffers : [VertexBuffer<_>]) extends VertexSo
     }
 
     def unbindWith(shader : Shader<_>) {
+        context.bindDefaultVertexArray
+    }
+
+    def unbind {
         context.bindDefaultVertexArray
     }
 

@@ -85,10 +85,11 @@
 + (id)vertexArrayWithHandle:(GLuint)handle buffers:(id<CNSeq>)buffers;
 - (id)initWithHandle:(GLuint)handle buffers:(id<CNSeq>)buffers;
 - (ODClassType*)type;
-+ (EGVertexArray*)applyShader:(EGShader*)shader buffer:(EGVertexBuffer*)buffer;
++ (EGVertexArray*)applyBuffers:(id<CNSeq>)buffers;
 - (void)bind;
 - (void)bindWithShader:(EGShader*)shader;
 - (void)unbindWithShader:(EGShader*)shader;
+- (void)unbind;
 - (void)dealloc;
 - (NSUInteger)count;
 + (ODClassType*)type;
