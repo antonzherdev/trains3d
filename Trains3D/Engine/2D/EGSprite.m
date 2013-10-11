@@ -5,11 +5,12 @@
 #import "EGSimpleShaderSystem.h"
 #import "EGMaterial.h"
 #import "EGContext.h"
-#import "EGShader.h"
 #import "EGTexture.h"
 @implementation EGD2D
 static CNVoidRefArray _EGD2D_vertexes;
 static EGMutableVertexBuffer* _EGD2D_vb;
+static EGVertexArray* _EGD2D_vaoForColor;
+static EGVertexArray* _EGD2D_vaoForTexture;
 static EGMutableVertexBuffer* _EGD2D_lineVb;
 static CNVoidRefArray _EGD2D_lineVertexes;
 static EGVertexArray* _EGD2D_lineVao;
@@ -20,6 +21,8 @@ static ODClassType* _EGD2D_type;
     _EGD2D_type = [ODClassType classTypeWithCls:[EGD2D class]];
     _EGD2D_vertexes = cnVoidRefArrayApplyTpCount(egBillboardBufferDataType(), 4);
     _EGD2D_vb = [EGVBO mutDesc:EGBillboard.vbDesc];
+    _EGD2D_vaoForColor = [[EGMesh meshWithVertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGBillboardShader instanceForColor]];
+    _EGD2D_vaoForTexture = [[EGMesh meshWithVertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGBillboardShader instanceForTexture]];
     _EGD2D_lineVb = [EGVBO mutMesh];
     _EGD2D_lineVertexes = cnVoidRefArrayApplyTpCount(egMeshDataType(), 2);
     _EGD2D_lineVao = [[EGMesh meshWithVertex:_EGD2D_lineVb index:EGEmptyIndexSource.lines] vaoShader:EGSimpleShaderSystem.colorShader];
@@ -37,7 +40,8 @@ static ODClassType* _EGD2D_type;
     v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[3], material.color, uv.p[3]));
     [_EGD2D_vb setArray:_EGD2D_vertexes];
     [EGGlobal.context.cullFace disabledF:^void() {
-        [[EGBillboardShaderSystem.instance shaderForParam:material] drawParam:material vertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip];
+        if([material.texture isEmpty]) [_EGD2D_vaoForColor drawParam:material];
+        else [_EGD2D_vaoForTexture drawParam:material];
     }];
 }
 

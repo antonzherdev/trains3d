@@ -9,7 +9,6 @@
 @class EGColorSource;
 @class EGGlobal;
 @class EGContext;
-@class EGShader;
 @class EGEnablingState;
 @class EGTexture;
 

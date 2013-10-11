@@ -3,6 +3,8 @@ package com.antonzherdev.eg
 object D2D {
     private val vertexes = VoidRefArray(BillboardBufferData.type, 4)
     private val vb = VBO.mut(Billboard.vbDesc)
+    private val vaoForColor = Mesh(vb, EmptyIndexSource.triangleStrip).vao(BillboardShader.instanceForColor)
+    private val vaoForTexture = Mesh(vb, EmptyIndexSource.triangleStrip).vao(BillboardShader.instanceForTexture)
     def drawSprite(material : ColorSource, at : vec3, rect : Rect) {
         drawSprite(material, at, rect.quad, Rect(1, 1, -1, -1).quad)
     }
@@ -15,7 +17,8 @@ object D2D {
         v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[3], material.color, uv.p[3]))
         vb.set(vertexes)
         context.cullFace.disabled {
-            BillboardShaderSystem.instance.shaderFor(material).draw(material, vb, EmptyIndexSource.triangleStrip)
+            if(material.texture.isEmpty) vaoForColor.draw(material)
+            else vaoForTexture.draw(material)
         }
     }
 
