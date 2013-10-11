@@ -60,18 +60,18 @@ ODPType* egMeshDataType() {
 
 
 @implementation EGMesh{
-    EGVertexBuffer* _vertex;
+    id<EGVertexBuffer> _vertex;
     EGIndexBuffer* _index;
 }
 static ODClassType* _EGMesh_type;
 @synthesize vertex = _vertex;
 @synthesize index = _index;
 
-+ (id)meshWithVertex:(EGVertexBuffer*)vertex index:(EGIndexBuffer*)index {
++ (id)meshWithVertex:(id<EGVertexBuffer>)vertex index:(EGIndexBuffer*)index {
     return [[EGMesh alloc] initWithVertex:vertex index:index];
 }
 
-- (id)initWithVertex:(EGVertexBuffer*)vertex index:(EGIndexBuffer*)index {
+- (id)initWithVertex:(id<EGVertexBuffer>)vertex index:(EGIndexBuffer*)index {
     self = [super init];
     if(self) {
         _vertex = vertex;
@@ -87,15 +87,15 @@ static ODClassType* _EGMesh_type;
 }
 
 + (EGMesh*)vec2VertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData {
-    return [EGMesh meshWithVertex:[EGVertexBuffer vec2Data:vertexData] index:[EGIndexBuffer applyData:indexData]];
+    return [EGMesh meshWithVertex:[EGVBO vec2Data:vertexData] index:[EGIndexBuffer applyData:indexData]];
 }
 
 + (EGMesh*)applyVertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData {
-    return [EGMesh meshWithVertex:[EGVertexBuffer meshData:vertexData] index:[EGIndexBuffer applyData:indexData]];
+    return [EGMesh meshWithVertex:[EGVBO meshData:vertexData] index:[EGIndexBuffer applyData:indexData]];
 }
 
 + (EGMesh*)applyDesc:(EGVertexBufferDesc*)desc vertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData {
-    return [EGMesh meshWithVertex:[EGVertexBuffer applyDesc:desc data:vertexData] index:[EGIndexBuffer applyData:indexData]];
+    return [EGMesh meshWithVertex:[EGVBO applyDesc:desc data:vertexData] index:[EGIndexBuffer applyData:indexData]];
 }
 
 - (EGVertexArray*)vaoShader:(EGShader*)shader {
@@ -109,7 +109,7 @@ static ODClassType* _EGMesh_type;
 }
 
 - (EGVertexArray*)vaoShaderSystem:(EGShaderSystem*)shaderSystem material:(id)material shadow:(BOOL)shadow {
-    EGSimpleVertexArray* std = [[shaderSystem shaderForParam:material] vaoVbo:((EGVertexBuffer*)(_vertex)) ibo:((EGIndexBuffer*)(_index))];
+    EGSimpleVertexArray* std = [[shaderSystem shaderForParam:material] vaoVbo:_vertex ibo:_index];
     if(shadow && egPlatform().shadows) return [EGRouteVertexArray routeVertexArrayWithStandard:std shadow:[[shaderSystem shaderForParam:material renderTarget:EGShadowRenderTarget.aDefault] vaoVbo:_vertex ibo:_index]];
     else return std;
 }
@@ -331,7 +331,7 @@ static ODClassType* _EGSimpleVertexArray_type;
 }
 
 - (NSUInteger)count {
-    return ((EGVertexBuffer*)([_buffers head])).count;
+    return [((id<EGVertexBuffer>)([_buffers head])) count];
 }
 
 - (void)drawParam:(id)param {

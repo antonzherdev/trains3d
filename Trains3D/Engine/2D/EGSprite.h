@@ -3,6 +3,7 @@
 #import "EGMesh.h"
 #import "GEVec.h"
 @class EGMutableVertexBuffer;
+@class EGVBO;
 @class EGColorSource;
 @class EGGlobal;
 @class EGContext;

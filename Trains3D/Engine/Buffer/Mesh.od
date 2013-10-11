@@ -4,15 +4,15 @@ struct MeshData(uv : vec2, normal : vec3, position : vec3)
 
 class Mesh(vertex : VertexBuffer<_>, index : IndexBuffer) {
     static def vec2(vertexData : PArray<vec2>, indexData : PArray<uint4>) : Mesh = Mesh(
-            vertex = VertexBuffer.vec2(vertexData),
+            vertex = VBO.vec2(vertexData),
             index = IndexBuffer(indexData))
 
     static def apply(vertexData : PArray<MeshData>, indexData : PArray<uint4>) : Mesh = Mesh(
-            vertex = VertexBuffer.mesh(vertexData),
+            vertex = VBO.mesh(vertexData),
             index = IndexBuffer(indexData))
 
     static def apply<T>(desc : VertexBufferDesc<T>, vertexData : PArray<T>, indexData : PArray<uint4>) : Mesh = Mesh(
-            vertex = VertexBuffer<T>(desc, vertexData),
+            vertex = VBO<T>(desc, vertexData),
             index = IndexBuffer(indexData))
 
     def vao<N>(shader : Shader<N>) : VertexArray<N> = shader.vao(vertex, index)
@@ -22,7 +22,7 @@ class Mesh(vertex : VertexBuffer<_>, index : IndexBuffer) {
         else std
     }
     def vao<N>(shaderSystem : ShaderSystem<N>, material : N, shadow : bool) : VertexArray<N> = {
-        val std = shaderSystem.shaderFor(material).vao(vertex.cast<VertexBuffer<_>>, index.cast<IndexBuffer<_>>)
+        val std = shaderSystem.shaderFor(material).vao(vertex, index)
         if(shadow && egPlatform.shadows) RouteVertexArray(std, shaderSystem.shaderFor(material, ShadowRenderTarget.default).vao(vertex, index))
         else std
     }

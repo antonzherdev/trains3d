@@ -3,6 +3,7 @@
 @class EGVertexBufferDesc;
 @class EGBlendFunction;
 @class EGMutableVertexBuffer;
+@class EGVBO;
 @class EGIndexBuffer;
 @class EGMesh;
 @class EGShader;

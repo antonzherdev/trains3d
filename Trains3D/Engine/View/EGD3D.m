@@ -14,7 +14,7 @@ static ODClassType* _EGD3D_type;
     [super initialize];
     _EGD3D_type = [ODClassType classTypeWithCls:[EGD3D class]];
     _EGD3D_vertexes = cnVoidRefArrayApplyTpCount(egMeshDataType(), 4);
-    _EGD3D_vb = [EGMutableVertexBuffer mesh];
+    _EGD3D_vb = [EGVBO mutMesh];
     _EGD3D_defaultQuadUv = geQuadApplyP0P1P2P3(GEVec2Make(0.0, 0.0), GEVec2Make(0.0, 1.0), GEVec2Make(1.0, 0.0), GEVec2Make(1.0, 1.0));
 }
 

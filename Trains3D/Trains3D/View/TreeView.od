@@ -7,7 +7,7 @@ class TreeView(forest : Forest) {
     val material = ColorSource(vec4(1, 1, 1, 1), textureFor("Pine.png"), 0.3)
 //    val materials = textures.chain.map(ColorSource(vec4(1, 1, 1, 1), _, 0.3)).toArray
 //    val rects = textures.chain.map(Rect(0, 0, _.size.x/(_.size.y*4), _.size.y/(_.size.y*2)).centerX).toArray
-    private val vb = MutableVertexBuffer(Billboard.vbDesc)
+    private val vb = VBO.mut(Billboard.vbDesc)
     private val ib = MutableIndexBuffer()
     private val mesh = Mesh(vertex = vb, ib)
 //    private val mesh = Mesh(vertex = vb, ib).vaoWith(BillboardShaderSystem.instance, material, shadow = true)

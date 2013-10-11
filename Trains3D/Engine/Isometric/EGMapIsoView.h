@@ -2,9 +2,10 @@
 #import "GEVec.h"
 #import "EGMesh.h"
 @class EGMapSso;
-@class EGVertexBuffer;
+@protocol EGVertexBuffer;
 @class EGCameraIso;
 @class GEMat4;
+@class EGVBO;
 @class EGColorSource;
 @class EGArrayIndexSource;
 @class EGGlobal;
@@ -21,7 +22,7 @@
 + (id)mapSsoViewWithMap:(EGMapSso*)map;
 - (id)initWithMap:(EGMapSso*)map;
 - (ODClassType*)type;
-- (EGVertexBuffer*)axisVertexBuffer;
+- (id<EGVertexBuffer>)axisVertexBuffer;
 - (void)drawLayout;
 - (void)drawPlaneWithMaterial:(EGMaterial*)material;
 + (ODClassType*)type;

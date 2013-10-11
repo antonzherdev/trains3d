@@ -3,7 +3,7 @@
 #import "GEVec.h"
 @class EGGlobal;
 @class EGContext;
-@class EGVertexBuffer;
+@protocol EGVertexBuffer;
 @protocol EGIndexSource;
 @class EGMesh;
 @class EGSimpleVertexArray;
@@ -48,7 +48,7 @@
 + (id)shaderWithProgram:(EGShaderProgram*)program;
 - (id)initWithProgram:(EGShaderProgram*)program;
 - (ODClassType*)type;
-- (void)drawParam:(id)param vertex:(EGVertexBuffer*)vertex index:(id<EGIndexSource>)index;
+- (void)drawParam:(id)param vertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index;
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh;
 - (void)drawParam:(id)param vao:(EGSimpleVertexArray*)vao;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
@@ -60,7 +60,7 @@
 - (EGShaderUniformF4*)uniformF4Name:(NSString*)name;
 - (EGShaderUniformI4*)uniformI4Name:(NSString*)name;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
-- (EGSimpleVertexArray*)vaoVbo:(EGVertexBuffer*)vbo ibo:(EGIndexBuffer*)ibo;
+- (EGSimpleVertexArray*)vaoVbo:(id<EGVertexBuffer>)vbo ibo:(EGIndexBuffer*)ibo;
 + (ODClassType*)type;
 @end
 
@@ -146,12 +146,12 @@
 + (id)shaderSystem;
 - (id)init;
 - (ODClassType*)type;
-- (void)drawParam:(id)param vertex:(EGVertexBuffer*)vertex index:(id<EGIndexSource>)index;
+- (void)drawParam:(id)param vertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index;
 - (void)drawParam:(id)param vao:(EGVertexArray*)vao;
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh;
 - (EGShader*)shaderForParam:(id)param;
 - (EGShader*)shaderForParam:(id)param renderTarget:(EGRenderTarget*)renderTarget;
-- (EGVertexArray*)vaoParam:(id)param vbo:(EGVertexBuffer*)vbo ibo:(EGIndexBuffer*)ibo;
+- (EGVertexArray*)vaoParam:(id)param vbo:(id<EGVertexBuffer>)vbo ibo:(EGIndexBuffer*)ibo;
 + (ODClassType*)type;
 @end
 

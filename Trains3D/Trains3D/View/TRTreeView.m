@@ -31,7 +31,7 @@ static ODClassType* _TRTreeView_type;
         _forest = forest;
         _texture = [EGGlobal textureForFile:@"Pine.png"];
         _material = [EGColorSource colorSourceWithColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:[CNOption applyValue:[EGGlobal textureForFile:@"Pine.png"]] alphaTestLevel:0.3];
-        _vb = [EGMutableVertexBuffer applyDesc:EGBillboard.vbDesc];
+        _vb = [EGVBO mutDesc:EGBillboard.vbDesc];
         _ib = [EGMutableIndexBuffer apply];
         _mesh = [EGMesh meshWithVertex:_vb index:_ib];
     }

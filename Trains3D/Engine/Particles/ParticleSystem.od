@@ -43,7 +43,7 @@ class Particle(lifeLength : float4) extends Controller {
 
 class ParticleSystemView<P extends Particle, D>(vbDesc : VertexBufferDesc<D>, maxCount : uint, blendFunc : BlendFunction) {
     val vertexArr = VoidRefArray(vbDesc.dataType, maxCount*vertexCount)
-    val vertexBuffer = MutableVertexBuffer<D>(vbDesc)
+    val vertexBuffer = VBO.mut<D>(vbDesc)
     val indexBuffer : IndexBuffer = {
         val vc = vertexCount
         val ia = VoidRefArray(UInt4.type, maxCount*3*(vc - 2))

@@ -186,7 +186,7 @@ static ODClassType* _EGParticleSystemView_type;
         _maxCount = maxCount;
         _blendFunc = blendFunc;
         _vertexArr = cnVoidRefArrayApplyTpCount(_vbDesc.dataType, _maxCount * [self vertexCount]);
-        _vertexBuffer = [EGMutableVertexBuffer applyDesc:_vbDesc];
+        _vertexBuffer = [EGVBO mutDesc:_vbDesc];
         _indexBuffer = ^EGIndexBuffer*() {
             NSUInteger vc = [self vertexCount];
             CNVoidRefArray ia = cnVoidRefArrayApplyTpCount(oduInt4Type(), _maxCount * 3 * (vc - 2));

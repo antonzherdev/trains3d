@@ -11,44 +11,48 @@ class VertexBufferDesc<T>(dataType : PType<T>, position : int4, uv : int4, norma
     static def mesh = VertexBufferDesc<MeshData>(MeshData.type, position = 5*4, uv = 0, normal = 2*4, color = -1, model = -1)
 }
 
-
-class VertexBuffer<T>(desc : VertexBufferDesc<T>, handle : GLuint, length : uint, count : uint)
-    extends Buffer<T>(desc.dataType, GL_ARRAY_BUFFER, handle)
-{
+object VBO {
     static def apply<T>(desc : VertexBufferDesc<T>, array : VoidRefArray<T>) : VertexBuffer<T> = {
-        val vb = VertexBuffer<T>(desc, egGenBuffer, array.length, array.length/desc.dataType.size)
+        val vb = ImmutableVertexBuffer<T>(desc, egGenBuffer, array.length, array.length/desc.dataType.size)
         vb.bind
         glBufferData(GL_ARRAY_BUFFER, array.length, array.bytes, GL_STATIC_DRAW)
         vb
     }
 
     static def apply<T>(desc : VertexBufferDesc<T>, data : PArray<T>) : VertexBuffer<T> = {
-        val vb = VertexBuffer<T>(desc, egGenBuffer, data.length, data.count)
+        val vb = ImmutableVertexBuffer<T>(desc, egGenBuffer, data.length, data.count)
         vb.bind
         glBufferData(GL_ARRAY_BUFFER, data.length, data.bytes, GL_STATIC_DRAW)
         vb
     }
-    static def vec4(data : PArray<vec4>) = VertexBuffer<vec4>(VertexBufferDesc.Vec4, data)
-    static def vec4(data : PArray<vec3>) = VertexBuffer<vec3>(VertexBufferDesc.Vec3, data)
-    static def vec2(data : PArray<vec2>) = VertexBuffer<vec2>(VertexBufferDesc.Vec4, data)
-    static def mesh(data : PArray<MeshData>) = VertexBuffer<MeshData>(VertexBufferDesc.mesh, data)
+    static def vec4(data : PArray<vec4>) = VBO<vec4>(VertexBufferDesc.Vec4, data)
+    static def vec4(data : PArray<vec3>) = VBO<vec3>(VertexBufferDesc.Vec3, data)
+    static def vec2(data : PArray<vec2>) = VBO<vec2>(VertexBufferDesc.Vec4, data)
+    static def mesh(data : PArray<MeshData>) = VBO<MeshData>(VertexBufferDesc.mesh, data)
 
+    static def mut<T>(desc : VertexBufferDesc<T>) : MutableVertexBuffer<T> = MutableVertexBuffer<T>(desc, egGenBuffer)
+    static def mutVec2 = MutableVertexBuffer<vec2>(VertexBufferDesc.Vec2, egGenBuffer)
+    static def mutVec3 = MutableVertexBuffer<vec3>(VertexBufferDesc.Vec3, egGenBuffer)
+    static def mutVec4 = MutableVertexBuffer<vec4>(VertexBufferDesc.Vec4, egGenBuffer)
+    static def mutMesh = MutableVertexBuffer<MeshData>(VertexBufferDesc.mesh, egGenBuffer)
+}
+
+
+trait VertexBuffer<T> {
+    def desc : VertexBufferDesc<T>
     def bind {
         context.bindVertexBuffer(self)
     }
+    def count : uint
+    def handle : GLuint
 }
+
+class ImmutableVertexBuffer<T>(desc : VertexBufferDesc<T>, handle : GLuint, length : uint, count : uint)
+    extends Buffer<T>(desc.dataType, GL_ARRAY_BUFFER, handle)
+    with VertexBuffer<T>
+
 
 class MutableVertexBuffer<T>(desc : VertexBufferDesc<T>, handle : GLuint)
     extends MutableBuffer<T>(desc.dataType, GL_ARRAY_BUFFER, handle)
-{
-    static def apply<T>(desc : VertexBufferDesc<T>) : MutableVertexBuffer<T> = MutableVertexBuffer<T>(desc, egGenBuffer)
-    static def vec2 = MutableVertexBuffer<vec2>(VertexBufferDesc.Vec2, egGenBuffer)
-    static def vec3 = MutableVertexBuffer<vec3>(VertexBufferDesc.Vec3, egGenBuffer)
-    static def vec4 = MutableVertexBuffer<vec4>(VertexBufferDesc.Vec4, egGenBuffer)
-    static def mesh = MutableVertexBuffer<MeshData>(VertexBufferDesc.mesh, egGenBuffer)
-
-    def bind {
-        context.bindVertexBuffer(self)
-    }
-}
+    with VertexBuffer<T>
 

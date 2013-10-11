@@ -3,6 +3,7 @@
 #import "GEVec.h"
 #import "GELine.h"
 @class EGMutableVertexBuffer;
+@class EGVBO;
 @class EGColorSource;
 @class EGGlobal;
 @class EGContext;

@@ -92,7 +92,7 @@ static ODClassType* _EGGlobal_type;
     GLuint __lastTexture2D;
     GLuint __lastShaderProgram;
     GLuint __lastVertexBufferId;
-    EGVertexBuffer* __vertexBuffer;
+    id<EGVertexBuffer> __vertexBuffer;
     GLuint __lastIndexBuffer;
     GLuint __lastVertexArray;
     GLuint _defaultVertexArray;
@@ -226,8 +226,8 @@ static ODClassType* _EGContext_type;
     }
 }
 
-- (void)bindVertexBufferBuffer:(EGVertexBuffer*)buffer {
-    GLuint handle = buffer.handle;
+- (void)bindVertexBufferBuffer:(id<EGVertexBuffer>)buffer {
+    GLuint handle = [buffer handle];
     if(!(GLuintEq(handle, __lastVertexBufferId))) {
         __lastVertexBufferId = handle;
         __vertexBuffer = buffer;
@@ -235,7 +235,7 @@ static ODClassType* _EGContext_type;
     }
 }
 
-- (EGVertexBuffer*)vertexBuffer {
+- (id<EGVertexBuffer>)vertexBuffer {
     return __vertexBuffer;
 }
 

@@ -105,18 +105,103 @@ static ODClassType* _EGVertexBufferDesc_type;
 @end
 
 
-@implementation EGVertexBuffer{
+@implementation EGVBO
+static ODClassType* _EGVBO_type;
+
++ (void)initialize {
+    [super initialize];
+    _EGVBO_type = [ODClassType classTypeWithCls:[EGVBO class]];
+}
+
++ (id<EGVertexBuffer>)applyDesc:(EGVertexBufferDesc*)desc array:(CNVoidRefArray)array {
+    EGImmutableVertexBuffer* vb = [EGImmutableVertexBuffer immutableVertexBufferWithDesc:desc handle:egGenBuffer() length:array.length count:array.length / desc.dataType.size];
+    [vb bind];
+    glBufferData(GL_ARRAY_BUFFER, array.length, array.bytes, GL_STATIC_DRAW);
+    return vb;
+}
+
++ (id<EGVertexBuffer>)applyDesc:(EGVertexBufferDesc*)desc data:(CNPArray*)data {
+    EGImmutableVertexBuffer* vb = [EGImmutableVertexBuffer immutableVertexBufferWithDesc:desc handle:egGenBuffer() length:data.length count:data.count];
+    [vb bind];
+    glBufferData(GL_ARRAY_BUFFER, data.length, data.bytes, GL_STATIC_DRAW);
+    return vb;
+}
+
++ (id<EGVertexBuffer>)vec4Data:(CNPArray*)data {
+    return [EGVBO applyDesc:[EGVertexBufferDesc Vec4] data:data];
+}
+
++ (id<EGVertexBuffer>)vec2Data:(CNPArray*)data {
+    return [EGVBO applyDesc:[EGVertexBufferDesc Vec4] data:data];
+}
+
++ (id<EGVertexBuffer>)meshData:(CNPArray*)data {
+    return [EGVBO applyDesc:[EGVertexBufferDesc mesh] data:data];
+}
+
++ (EGMutableVertexBuffer*)mutDesc:(EGVertexBufferDesc*)desc {
+    return [EGMutableVertexBuffer mutableVertexBufferWithDesc:desc handle:egGenBuffer()];
+}
+
++ (EGMutableVertexBuffer*)mutVec2 {
+    return [EGMutableVertexBuffer mutableVertexBufferWithDesc:[EGVertexBufferDesc Vec2] handle:egGenBuffer()];
+}
+
++ (EGMutableVertexBuffer*)mutVec3 {
+    return [EGMutableVertexBuffer mutableVertexBufferWithDesc:[EGVertexBufferDesc Vec3] handle:egGenBuffer()];
+}
+
++ (EGMutableVertexBuffer*)mutVec4 {
+    return [EGMutableVertexBuffer mutableVertexBufferWithDesc:[EGVertexBufferDesc Vec4] handle:egGenBuffer()];
+}
+
++ (EGMutableVertexBuffer*)mutMesh {
+    return [EGMutableVertexBuffer mutableVertexBufferWithDesc:[EGVertexBufferDesc mesh] handle:egGenBuffer()];
+}
+
+- (ODClassType*)type {
+    return [EGVBO type];
+}
+
++ (ODClassType*)type {
+    return _EGVBO_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGImmutableVertexBuffer{
     EGVertexBufferDesc* _desc;
     NSUInteger _length;
     NSUInteger _count;
 }
-static ODClassType* _EGVertexBuffer_type;
+static ODClassType* _EGImmutableVertexBuffer_type;
 @synthesize desc = _desc;
 @synthesize length = _length;
 @synthesize count = _count;
 
-+ (id)vertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle length:(NSUInteger)length count:(NSUInteger)count {
-    return [[EGVertexBuffer alloc] initWithDesc:desc handle:handle length:length count:count];
++ (id)immutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle length:(NSUInteger)length count:(NSUInteger)count {
+    return [[EGImmutableVertexBuffer alloc] initWithDesc:desc handle:handle length:length count:count];
 }
 
 - (id)initWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle length:(NSUInteger)length count:(NSUInteger)count {
@@ -132,33 +217,7 @@ static ODClassType* _EGVertexBuffer_type;
 
 + (void)initialize {
     [super initialize];
-    _EGVertexBuffer_type = [ODClassType classTypeWithCls:[EGVertexBuffer class]];
-}
-
-+ (EGVertexBuffer*)applyDesc:(EGVertexBufferDesc*)desc array:(CNVoidRefArray)array {
-    EGVertexBuffer* vb = [EGVertexBuffer vertexBufferWithDesc:desc handle:egGenBuffer() length:array.length count:array.length / desc.dataType.size];
-    [vb bind];
-    glBufferData(GL_ARRAY_BUFFER, array.length, array.bytes, GL_STATIC_DRAW);
-    return vb;
-}
-
-+ (EGVertexBuffer*)applyDesc:(EGVertexBufferDesc*)desc data:(CNPArray*)data {
-    EGVertexBuffer* vb = [EGVertexBuffer vertexBufferWithDesc:desc handle:egGenBuffer() length:data.length count:data.count];
-    [vb bind];
-    glBufferData(GL_ARRAY_BUFFER, data.length, data.bytes, GL_STATIC_DRAW);
-    return vb;
-}
-
-+ (EGVertexBuffer*)vec4Data:(CNPArray*)data {
-    return [EGVertexBuffer applyDesc:[EGVertexBufferDesc Vec4] data:data];
-}
-
-+ (EGVertexBuffer*)vec2Data:(CNPArray*)data {
-    return [EGVertexBuffer applyDesc:[EGVertexBufferDesc Vec4] data:data];
-}
-
-+ (EGVertexBuffer*)meshData:(CNPArray*)data {
-    return [EGVertexBuffer applyDesc:[EGVertexBufferDesc mesh] data:data];
+    _EGImmutableVertexBuffer_type = [ODClassType classTypeWithCls:[EGImmutableVertexBuffer class]];
 }
 
 - (void)bind {
@@ -166,11 +225,11 @@ static ODClassType* _EGVertexBuffer_type;
 }
 
 - (ODClassType*)type {
-    return [EGVertexBuffer type];
+    return [EGImmutableVertexBuffer type];
 }
 
 + (ODClassType*)type {
-    return _EGVertexBuffer_type;
+    return _EGImmutableVertexBuffer_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -180,7 +239,7 @@ static ODClassType* _EGVertexBuffer_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGVertexBuffer* o = ((EGVertexBuffer*)(other));
+    EGImmutableVertexBuffer* o = ((EGImmutableVertexBuffer*)(other));
     return [self.desc isEqual:o.desc] && GLuintEq(self.handle, o.handle) && self.length == o.length && self.count == o.count;
 }
 
@@ -231,26 +290,6 @@ static ODClassType* _EGMutableVertexBuffer_type;
 + (void)initialize {
     [super initialize];
     _EGMutableVertexBuffer_type = [ODClassType classTypeWithCls:[EGMutableVertexBuffer class]];
-}
-
-+ (EGMutableVertexBuffer*)applyDesc:(EGVertexBufferDesc*)desc {
-    return [EGMutableVertexBuffer mutableVertexBufferWithDesc:desc handle:egGenBuffer()];
-}
-
-+ (EGMutableVertexBuffer*)vec2 {
-    return [EGMutableVertexBuffer mutableVertexBufferWithDesc:[EGVertexBufferDesc Vec2] handle:egGenBuffer()];
-}
-
-+ (EGMutableVertexBuffer*)vec3 {
-    return [EGMutableVertexBuffer mutableVertexBufferWithDesc:[EGVertexBufferDesc Vec3] handle:egGenBuffer()];
-}
-
-+ (EGMutableVertexBuffer*)vec4 {
-    return [EGMutableVertexBuffer mutableVertexBufferWithDesc:[EGVertexBufferDesc Vec4] handle:egGenBuffer()];
-}
-
-+ (EGMutableVertexBuffer*)mesh {
-    return [EGMutableVertexBuffer mutableVertexBufferWithDesc:[EGVertexBufferDesc mesh] handle:egGenBuffer()];
 }
 
 - (void)bind {

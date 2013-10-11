@@ -732,11 +732,11 @@ static ODClassType* _TRRailroad_type;
         [self addDamageAtPoint:[point invert]];
     } else {
         [_damagesIndex modifyBy:^id(id arr) {
-            return [CNOption applyValue:[[arr mapF:^id<CNSeq>(id<CNSeq> _) {
+            return [CNOption applyValue:((id<CNSeq>)([[arr mapF:^id<CNSeq>(id<CNSeq> _) {
                 return [_ addItem:numf(point.x)];
             }] getOrElseF:^id<CNSeq>() {
                 return (@[numf(point.x)]);
-            }]];
+            }]))];
         } forKey:tuple(wrap(GEVec2i, point.tile), point.form)];
         [__damagesPoints appendItem:point];
     }

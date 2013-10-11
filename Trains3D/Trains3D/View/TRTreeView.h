@@ -7,6 +7,7 @@
 @class EGGlobal;
 @class EGColorSource;
 @class EGMutableVertexBuffer;
+@class EGVBO;
 @class EGMutableIndexBuffer;
 @class EGMesh;
 @class EGD2D;

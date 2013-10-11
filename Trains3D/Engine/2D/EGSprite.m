@@ -17,8 +17,8 @@ static ODClassType* _EGD2D_type;
     [super initialize];
     _EGD2D_type = [ODClassType classTypeWithCls:[EGD2D class]];
     _EGD2D_vertexes = cnVoidRefArrayApplyTpCount(egBillboardBufferDataType(), 4);
-    _EGD2D_vb = [EGMutableVertexBuffer applyDesc:EGBillboard.vbDesc];
-    _EGD2D_lineVb = [EGMutableVertexBuffer mesh];
+    _EGD2D_vb = [EGVBO mutDesc:EGBillboard.vbDesc];
+    _EGD2D_lineVb = [EGVBO mutMesh];
     _EGD2D_lineVertexes = cnVoidRefArrayApplyTpCount(egMeshDataType(), 2);
 }
 

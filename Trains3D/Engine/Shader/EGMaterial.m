@@ -35,7 +35,7 @@ static ODClassType* _EGMaterial_type;
     [[self shaderSystem] drawParam:self vertex:mesh.vertex index:mesh.index];
 }
 
-- (void)drawVertex:(EGVertexBuffer*)vertex index:(id<EGIndexSource>)index {
+- (void)drawVertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index {
     [[self shaderSystem] drawParam:self vertex:vertex index:index];
 }
 

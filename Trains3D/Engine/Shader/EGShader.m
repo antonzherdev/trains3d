@@ -135,10 +135,10 @@ static ODClassType* _EGShader_type;
     _EGShader_type = [ODClassType classTypeWithCls:[EGShader class]];
 }
 
-- (void)drawParam:(id)param vertex:(EGVertexBuffer*)vertex index:(id<EGIndexSource>)index {
+- (void)drawParam:(id)param vertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index {
     [EGGlobal.context bindShaderProgramProgram:_program];
     [vertex bind];
-    [self loadAttributesVbDesc:vertex.desc];
+    [self loadAttributesVbDesc:[vertex desc]];
     [self loadUniformsParam:param];
     [index bind];
     [index draw];
@@ -198,12 +198,12 @@ static ODClassType* _EGShader_type;
     return [_program attributeForName:name];
 }
 
-- (EGSimpleVertexArray*)vaoVbo:(EGVertexBuffer*)vbo ibo:(EGIndexBuffer*)ibo {
+- (EGSimpleVertexArray*)vaoVbo:(id<EGVertexBuffer>)vbo ibo:(EGIndexBuffer*)ibo {
     EGSimpleVertexArray* vao = [EGSimpleVertexArray applyShader:self buffers:(@[vbo]) index:ibo];
     [vao bind];
     [vbo bind];
     [ibo bind];
-    [self loadAttributesVbDesc:vbo.desc];
+    [self loadAttributesVbDesc:[vbo desc]];
     [vao unbind];
     return vao;
 }
@@ -731,7 +731,7 @@ static ODClassType* _EGShaderSystem_type;
     _EGShaderSystem_type = [ODClassType classTypeWithCls:[EGShaderSystem class]];
 }
 
-- (void)drawParam:(id)param vertex:(EGVertexBuffer*)vertex index:(id<EGIndexSource>)index {
+- (void)drawParam:(id)param vertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index {
     EGShader* shader = [self shaderForParam:param];
     [shader drawParam:param vertex:vertex index:index];
 }
@@ -754,7 +754,7 @@ static ODClassType* _EGShaderSystem_type;
     @throw @"Method shaderFor is abstract";
 }
 
-- (EGVertexArray*)vaoParam:(id)param vbo:(EGVertexBuffer*)vbo ibo:(EGIndexBuffer*)ibo {
+- (EGVertexArray*)vaoParam:(id)param vbo:(id<EGVertexBuffer>)vbo ibo:(EGIndexBuffer*)ibo {
     return [[self shaderForParam:param] vaoVbo:vbo ibo:ibo];
 }
 

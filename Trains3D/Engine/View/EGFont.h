@@ -4,6 +4,7 @@
 @class EGVertexBufferDesc;
 @class EGFileTexture;
 @class EGMutableVertexBuffer;
+@class EGVBO;
 @class EGMutableIndexBuffer;
 @class EGSimpleVertexArray;
 @class EGGlobal;

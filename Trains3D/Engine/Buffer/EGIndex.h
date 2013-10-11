@@ -3,7 +3,7 @@
 #import "GL.h"
 @class EGGlobal;
 @class EGContext;
-@class EGVertexBuffer;
+@protocol EGVertexBuffer;
 
 @class EGIndexBuffer;
 @class EGMutableIndexBuffer;

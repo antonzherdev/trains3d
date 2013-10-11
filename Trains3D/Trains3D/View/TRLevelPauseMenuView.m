@@ -59,7 +59,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
 }
 
 - (id<EGCamera>)cameraWithViewport:(GERect)viewport {
-    return [_cameraCache applyX:wrap(GERect, viewport)];
+    return ((id<EGCamera>)([_cameraCache applyX:wrap(GERect, viewport)]));
 }
 
 - (void)draw {

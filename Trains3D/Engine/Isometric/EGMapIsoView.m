@@ -25,10 +25,10 @@ static ODClassType* _EGMapSsoView_type;
     self = [super init];
     if(self) {
         _map = map;
-        __lazy_axisVertexBuffer = [CNLazy lazyWithF:^EGVertexBuffer*() {
-            return ^EGVertexBuffer*() {
+        __lazy_axisVertexBuffer = [CNLazy lazyWithF:^id<EGVertexBuffer>() {
+            return ^id<EGVertexBuffer>() {
                 GEMat4* mi = [EGCameraIso.m inverse];
-                return [EGVertexBuffer vec4Data:[ arrs(GEVec4, 4) {[mi mulVec4:GEVec4Make(0.0, 0.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(1.0, 0.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(0.0, 1.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(0.0, 0.0, 1.0, 1.0)]}]];
+                return [EGVBO vec4Data:[ arrs(GEVec4, 4) {[mi mulVec4:GEVec4Make(0.0, 0.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(1.0, 0.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(0.0, 1.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(0.0, 0.0, 1.0, 1.0)]}]];
             }();
         }];
         _plane = ^EGMesh*() {
@@ -51,8 +51,8 @@ static ODClassType* _EGMapSsoView_type;
     _EGMapSsoView_type = [ODClassType classTypeWithCls:[EGMapSsoView class]];
 }
 
-- (EGVertexBuffer*)axisVertexBuffer {
-    return ((EGVertexBuffer*)([__lazy_axisVertexBuffer get]));
+- (id<EGVertexBuffer>)axisVertexBuffer {
+    return ((id<EGVertexBuffer>)([__lazy_axisVertexBuffer get]));
 }
 
 - (void)drawLayout {

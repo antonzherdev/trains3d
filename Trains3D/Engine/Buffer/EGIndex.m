@@ -217,7 +217,7 @@ static ODClassType* _EGEmptyIndexSource_type;
 
 - (void)draw {
     [EGGlobal.context draw];
-    glDrawArrays(_mode, 0, [EGGlobal.context vertexBuffer].count);
+    glDrawArrays(_mode, 0, [[EGGlobal.context vertexBuffer] count]);
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
