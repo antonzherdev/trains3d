@@ -96,6 +96,7 @@ static ODClassType* _EGGlobal_type;
     GLuint __lastIndexBuffer;
     GLuint __lastVertexArray;
     GLuint _defaultVertexArray;
+    BOOL __needBindDefaultVertexArray;
     EGEnablingState* _cullFace;
     EGEnablingState* _blend;
     EGEnablingState* _depthTest;
@@ -134,6 +135,7 @@ static ODClassType* _EGContext_type;
         __lastIndexBuffer = 0;
         __lastVertexArray = 0;
         _defaultVertexArray = 0;
+        __needBindDefaultVertexArray = NO;
         _cullFace = [EGEnablingState enablingStateWithTp:GL_CULL_FACE];
         _blend = [EGEnablingState enablingStateWithTp:GL_BLEND];
         _depthTest = [EGEnablingState enablingStateWithTp:GL_DEPTH_TEST];
@@ -231,6 +233,7 @@ static ODClassType* _EGContext_type;
 - (void)bindVertexBufferBuffer:(id<EGVertexBuffer>)buffer {
     GLuint handle = [buffer handle];
     if(!(GLuintEq(handle, __lastVertexBufferId))) {
+        [self checkBindDefaultVertexArray];
         __lastVertexBufferId = handle;
         __lastVertexBufferCount = ((unsigned int)([buffer count]));
         glBindBuffer(GL_ARRAY_BUFFER, handle);
@@ -243,6 +246,7 @@ static ODClassType* _EGContext_type;
 
 - (void)bindIndexBufferHandle:(GLuint)handle {
     if(!(GLuintEq(handle, __lastIndexBuffer))) {
+        [self checkBindDefaultVertexArray];
         __lastIndexBuffer = handle;
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle);
     }
@@ -251,20 +255,28 @@ static ODClassType* _EGContext_type;
 - (void)bindVertexArrayHandle:(GLuint)handle vertexCount:(unsigned int)vertexCount {
     if(!(GLuintEq(handle, __lastVertexArray))) {
         __lastVertexArray = handle;
-        __lastVertexBufferCount = vertexCount;
         __lastVertexBufferId = 0;
         __lastIndexBuffer = 0;
         egBindVertexArray(handle);
     }
+    __needBindDefaultVertexArray = NO;
+    __lastVertexBufferCount = vertexCount;
 }
 
 - (void)bindDefaultVertexArray {
     if(!(GLuintEq(__lastVertexArray, _defaultVertexArray))) {
         __lastVertexArray = _defaultVertexArray;
-        __lastVertexBufferId = 0;
         __lastIndexBuffer = 0;
         __lastVertexBufferCount = 0;
+        __lastVertexBufferId = 0;
+        __needBindDefaultVertexArray = YES;
+    }
+}
+
+- (void)checkBindDefaultVertexArray {
+    if(__needBindDefaultVertexArray) {
         egBindVertexArray(_defaultVertexArray);
+        __needBindDefaultVertexArray = NO;
     }
 }
 

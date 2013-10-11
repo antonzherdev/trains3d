@@ -95,6 +95,7 @@ class Context {
     def bindVertexBuffer(buffer : VertexBuffer<_>) {
         val handle = buffer.handle
         if(handle != _lastVertexBufferId) {
+            checkBindDefaultVertexArray
             _lastVertexBufferId = handle
             _lastVertexBufferCount = buffer.count
             glBindBuffer(GL_ARRAY_BUFFER, handle)
@@ -105,6 +106,7 @@ class Context {
     private var _lastIndexBuffer : GLuint = 0
     def bindIndexBuffer(handle : GLuint) {
         if(handle != _lastIndexBuffer) {
+            checkBindDefaultVertexArray
             _lastIndexBuffer = handle
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle)
         }
@@ -114,21 +116,29 @@ class Context {
     def bindVertexArray(handle : GLuint, vertexCount : uint4) {
         if(handle != _lastVertexArray) {
             _lastVertexArray = handle
-            _lastVertexBufferCount = vertexCount
             _lastVertexBufferId = 0
             _lastIndexBuffer = 0
             egBindVertexArray(handle)
         }
+        _needBindDefaultVertexArray = false
+        _lastVertexBufferCount = vertexCount
     }
 
     var defaultVertexArray : GLuint = 0
+    private var _needBindDefaultVertexArray = false
     def bindDefaultVertexArray {
         if(_lastVertexArray != defaultVertexArray) {
             _lastVertexArray = defaultVertexArray
-            _lastVertexBufferId = 0
             _lastIndexBuffer = 0
             _lastVertexBufferCount = 0
+            _lastVertexBufferId = 0
+            _needBindDefaultVertexArray = true
+        }
+    }
+    def checkBindDefaultVertexArray {
+        if(_needBindDefaultVertexArray) {
             egBindVertexArray(defaultVertexArray)
+            _needBindDefaultVertexArray = false
         }
     }
 

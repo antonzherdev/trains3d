@@ -66,6 +66,7 @@
 - (void)bindIndexBufferHandle:(GLuint)handle;
 - (void)bindVertexArrayHandle:(GLuint)handle vertexCount:(unsigned int)vertexCount;
 - (void)bindDefaultVertexArray;
+- (void)checkBindDefaultVertexArray;
 - (void)draw;
 + (ODClassType*)type;
 @end
