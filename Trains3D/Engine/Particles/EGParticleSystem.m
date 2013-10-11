@@ -162,7 +162,7 @@ static ODClassType* _EGParticle_type;
     EGBlendFunction* _blendFunc;
     CNVoidRefArray _vertexArr;
     EGMutableVertexBuffer* _vertexBuffer;
-    EGIndexBuffer* _indexBuffer;
+    id<EGIndexBuffer> _indexBuffer;
     EGMesh* _mesh;
 }
 static ODClassType* _EGParticleSystemView_type;
@@ -187,14 +187,14 @@ static ODClassType* _EGParticleSystemView_type;
         _blendFunc = blendFunc;
         _vertexArr = cnVoidRefArrayApplyTpCount(_vbDesc.dataType, _maxCount * [self vertexCount]);
         _vertexBuffer = [EGVBO mutDesc:_vbDesc];
-        _indexBuffer = ^EGIndexBuffer*() {
+        _indexBuffer = ^EGImmutableIndexBuffer*() {
             NSUInteger vc = [self vertexCount];
             CNVoidRefArray ia = cnVoidRefArrayApplyTpCount(oduInt4Type(), _maxCount * 3 * (vc - 2));
             __block CNVoidRefArray indexPointer = ia;
             [uintRange(_maxCount) forEach:^void(id i) {
                 indexPointer = [_weakSelf writeIndexesToIndexPointer:indexPointer i:((unsigned int)(unumi(i) * vc))];
             }];
-            EGIndexBuffer* ib = [EGIndexBuffer applyArray:ia];
+            EGImmutableIndexBuffer* ib = [EGIBO applyArray:ia];
             cnVoidRefArrayFree(ia);
             return ib;
         }();

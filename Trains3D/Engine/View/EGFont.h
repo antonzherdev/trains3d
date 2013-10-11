@@ -6,6 +6,7 @@
 @class EGMutableVertexBuffer;
 @class EGVBO;
 @class EGMutableIndexBuffer;
+@class EGIBO;
 @class EGSimpleVertexArray;
 @class EGGlobal;
 @class EGContext;

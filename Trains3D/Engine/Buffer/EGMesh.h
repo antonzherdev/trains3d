@@ -2,8 +2,9 @@
 #import "GEVec.h"
 #import "GL.h"
 @protocol EGVertexBuffer;
-@class EGIndexBuffer;
+@protocol EGIndexBuffer;
 @class EGVBO;
+@class EGIBO;
 @class EGVertexBufferDesc;
 @class EGShader;
 @class EGPlatform;
@@ -52,10 +53,10 @@ ODPType* egMeshDataType();
 
 @interface EGMesh : NSObject
 @property (nonatomic, readonly) id<EGVertexBuffer> vertex;
-@property (nonatomic, readonly) EGIndexBuffer* index;
+@property (nonatomic, readonly) id<EGIndexBuffer> index;
 
-+ (id)meshWithVertex:(id<EGVertexBuffer>)vertex index:(EGIndexBuffer*)index;
-- (id)initWithVertex:(id<EGVertexBuffer>)vertex index:(EGIndexBuffer*)index;
++ (id)meshWithVertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexBuffer>)index;
+- (id)initWithVertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexBuffer>)index;
 - (ODClassType*)type;
 + (EGMesh*)vec2VertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;
 + (EGMesh*)applyVertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;

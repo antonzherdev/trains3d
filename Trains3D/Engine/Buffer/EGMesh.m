@@ -61,17 +61,17 @@ ODPType* egMeshDataType() {
 
 @implementation EGMesh{
     id<EGVertexBuffer> _vertex;
-    EGIndexBuffer* _index;
+    id<EGIndexBuffer> _index;
 }
 static ODClassType* _EGMesh_type;
 @synthesize vertex = _vertex;
 @synthesize index = _index;
 
-+ (id)meshWithVertex:(id<EGVertexBuffer>)vertex index:(EGIndexBuffer*)index {
++ (id)meshWithVertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexBuffer>)index {
     return [[EGMesh alloc] initWithVertex:vertex index:index];
 }
 
-- (id)initWithVertex:(id<EGVertexBuffer>)vertex index:(EGIndexBuffer*)index {
+- (id)initWithVertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexBuffer>)index {
     self = [super init];
     if(self) {
         _vertex = vertex;
@@ -87,15 +87,15 @@ static ODClassType* _EGMesh_type;
 }
 
 + (EGMesh*)vec2VertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData {
-    return [EGMesh meshWithVertex:[EGVBO vec2Data:vertexData] index:[EGIndexBuffer applyData:indexData]];
+    return [EGMesh meshWithVertex:[EGVBO vec2Data:vertexData] index:[EGIBO applyData:indexData]];
 }
 
 + (EGMesh*)applyVertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData {
-    return [EGMesh meshWithVertex:[EGVBO meshData:vertexData] index:[EGIndexBuffer applyData:indexData]];
+    return [EGMesh meshWithVertex:[EGVBO meshData:vertexData] index:[EGIBO applyData:indexData]];
 }
 
 + (EGMesh*)applyDesc:(EGVertexBufferDesc*)desc vertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData {
-    return [EGMesh meshWithVertex:[EGVBO applyDesc:desc data:vertexData] index:[EGIndexBuffer applyData:indexData]];
+    return [EGMesh meshWithVertex:[EGVBO applyDesc:desc data:vertexData] index:[EGIBO applyData:indexData]];
 }
 
 - (EGVertexArray*)vaoShader:(EGShader*)shader {

@@ -51,7 +51,7 @@ class ParticleSystemView<P extends Particle, D>(vbDesc : VertexBufferDesc<D>, ma
         maxCount.range.for{i ->
             indexPointer = writeIndexesTo(indexPointer, i*vc)
         }
-        val ib = IndexBuffer(ia)
+        val ib = IBO(ia)
         ia.free
         ib
     }

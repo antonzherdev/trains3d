@@ -9,6 +9,7 @@
 @class EGMutableVertexBuffer;
 @class EGVBO;
 @class EGMutableIndexBuffer;
+@class EGIBO;
 @class EGMesh;
 @class EGD2D;
 @class EGBlendFunction;

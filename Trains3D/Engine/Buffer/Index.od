@@ -6,23 +6,30 @@ trait IndexSource {
     def drawWith(start : uint, count : uint)
 }
 
-class IndexBuffer(handle : GLuint, mode : uint4, length : uint, count : uint)
-    extends Buffer<uint4>(UInt4.type, GL_ELEMENT_ARRAY_BUFFER, handle) with IndexSource
-{
-    static def apply(array : VoidRefArray<uint4>) : IndexBuffer = {
-        val ib = IndexBuffer(egGenBuffer, GL_TRIANGLES, array.length, array.length/4)
+object IBO {
+    static def apply(array : VoidRefArray<uint4>) : ImmutableIndexBuffer = {
+        val ib = ImmutableIndexBuffer(egGenBuffer, GL_TRIANGLES, array.length, array.length/4)
         ib.bind
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, array.length, array.bytes, GL_STATIC_DRAW)
         ib
     }
 
-    static def apply(data : PArray<uint4>) : IndexBuffer = {
-        val ib = IndexBuffer(egGenBuffer, GL_TRIANGLES, data.length, data.count)
+    static def apply(data : PArray<uint4>) : ImmutableIndexBuffer = {
+        val ib = ImmutableIndexBuffer(egGenBuffer, GL_TRIANGLES, data.length, data.count)
         ib.bind
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.length, data.bytes, GL_STATIC_DRAW)
         ib
     }
 
+    static def mut : MutableIndexBuffer = MutableIndexBuffer(egGenBuffer, GL_TRIANGLES)
+    static def mut(mode : uint4) : MutableIndexBuffer = MutableIndexBuffer(egGenBuffer, mode)
+}
+
+trait IndexBuffer extends IndexSource {
+    def handle : GLuint
+    def mode : uint4
+    def count : uint
+
     def draw {
         context.draw
         glDrawElements(mode, count, GL_UNSIGNED_INT, 0)
@@ -38,24 +45,14 @@ class IndexBuffer(handle : GLuint, mode : uint4, length : uint, count : uint)
     }
 }
 
-class MutableIndexBuffer(handle : GLuint, mode : uint4) extends MutableBuffer<uint4>(UInt4.type, GL_ELEMENT_ARRAY_BUFFER, handle) with IndexSource {
-    static def apply : MutableIndexBuffer = MutableIndexBuffer(egGenBuffer, GL_TRIANGLES)
-    static def apply(mode : uint4) : MutableIndexBuffer = MutableIndexBuffer(egGenBuffer, mode)
+class ImmutableIndexBuffer(handle : GLuint, mode : uint4, length : uint, count : uint)
+    extends Buffer<uint4>(UInt4.type, GL_ELEMENT_ARRAY_BUFFER, handle)
+    with IndexBuffer
 
-    def draw {
-        context.draw
-        glDrawElements(mode, count, GL_UNSIGNED_INT, 0)
-    }
 
-    def drawWith(start : uint, count : uint) {
-        context.draw
-        glDrawElements(mode, count, GL_UNSIGNED_INT, 4*start)
-    }
-
-    def bind {
-        context.bindIndexBuffer(handle)
-    }
-}
+class MutableIndexBuffer(handle : GLuint, mode : uint4)
+    extends MutableBuffer<uint4>(UInt4.type, GL_ELEMENT_ARRAY_BUFFER, handle)
+    with IndexBuffer
 
 class EmptyIndexSource(mode : uint4) extends IndexSource {
     static val triangleStrip = EmptyIndexSource(GL_TRIANGLE_STRIP)

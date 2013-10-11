@@ -5,15 +5,15 @@ struct MeshData(uv : vec2, normal : vec3, position : vec3)
 class Mesh(vertex : VertexBuffer<_>, index : IndexBuffer) {
     static def vec2(vertexData : PArray<vec2>, indexData : PArray<uint4>) : Mesh = Mesh(
             vertex = VBO.vec2(vertexData),
-            index = IndexBuffer(indexData))
+            index = IBO(indexData))
 
     static def apply(vertexData : PArray<MeshData>, indexData : PArray<uint4>) : Mesh = Mesh(
             vertex = VBO.mesh(vertexData),
-            index = IndexBuffer(indexData))
+            index = IBO(indexData))
 
     static def apply<T>(desc : VertexBufferDesc<T>, vertexData : PArray<T>, indexData : PArray<uint4>) : Mesh = Mesh(
             vertex = VBO<T>(desc, vertexData),
-            index = IndexBuffer(indexData))
+            index = IBO(indexData))
 
     def vao<N>(shader : Shader<N>) : VertexArray<N> = shader.vao(vertex, index)
     def vao<N extends Material>(material : N, shadow : bool) : VertexArray<N> = {

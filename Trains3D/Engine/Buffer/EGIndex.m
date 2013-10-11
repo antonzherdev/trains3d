@@ -2,18 +2,79 @@
 
 #import "EGContext.h"
 #import "EGVertex.h"
-@implementation EGIndexBuffer{
+@implementation EGIBO
+static ODClassType* _EGIBO_type;
+
++ (void)initialize {
+    [super initialize];
+    _EGIBO_type = [ODClassType classTypeWithCls:[EGIBO class]];
+}
+
++ (EGImmutableIndexBuffer*)applyArray:(CNVoidRefArray)array {
+    EGImmutableIndexBuffer* ib = [EGImmutableIndexBuffer immutableIndexBufferWithHandle:egGenBuffer() mode:GL_TRIANGLES length:array.length count:array.length / 4];
+    [ib bind];
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, array.length, array.bytes, GL_STATIC_DRAW);
+    return ib;
+}
+
++ (EGImmutableIndexBuffer*)applyData:(CNPArray*)data {
+    EGImmutableIndexBuffer* ib = [EGImmutableIndexBuffer immutableIndexBufferWithHandle:egGenBuffer() mode:GL_TRIANGLES length:data.length count:data.count];
+    [ib bind];
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.length, data.bytes, GL_STATIC_DRAW);
+    return ib;
+}
+
++ (EGMutableIndexBuffer*)mut {
+    return [EGMutableIndexBuffer mutableIndexBufferWithHandle:egGenBuffer() mode:GL_TRIANGLES];
+}
+
++ (EGMutableIndexBuffer*)mutMode:(unsigned int)mode {
+    return [EGMutableIndexBuffer mutableIndexBufferWithHandle:egGenBuffer() mode:mode];
+}
+
+- (ODClassType*)type {
+    return [EGIBO type];
+}
+
++ (ODClassType*)type {
+    return _EGIBO_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGImmutableIndexBuffer{
     unsigned int _mode;
     NSUInteger _length;
     NSUInteger _count;
 }
-static ODClassType* _EGIndexBuffer_type;
+static ODClassType* _EGImmutableIndexBuffer_type;
 @synthesize mode = _mode;
 @synthesize length = _length;
 @synthesize count = _count;
 
-+ (id)indexBufferWithHandle:(GLuint)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count {
-    return [[EGIndexBuffer alloc] initWithHandle:handle mode:mode length:length count:count];
++ (id)immutableIndexBufferWithHandle:(GLuint)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count {
+    return [[EGImmutableIndexBuffer alloc] initWithHandle:handle mode:mode length:length count:count];
 }
 
 - (id)initWithHandle:(GLuint)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count {
@@ -29,43 +90,29 @@ static ODClassType* _EGIndexBuffer_type;
 
 + (void)initialize {
     [super initialize];
-    _EGIndexBuffer_type = [ODClassType classTypeWithCls:[EGIndexBuffer class]];
-}
-
-+ (EGIndexBuffer*)applyArray:(CNVoidRefArray)array {
-    EGIndexBuffer* ib = [EGIndexBuffer indexBufferWithHandle:egGenBuffer() mode:GL_TRIANGLES length:array.length count:array.length / 4];
-    [ib bind];
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, array.length, array.bytes, GL_STATIC_DRAW);
-    return ib;
-}
-
-+ (EGIndexBuffer*)applyData:(CNPArray*)data {
-    EGIndexBuffer* ib = [EGIndexBuffer indexBufferWithHandle:egGenBuffer() mode:GL_TRIANGLES length:data.length count:data.count];
-    [ib bind];
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.length, data.bytes, GL_STATIC_DRAW);
-    return ib;
+    _EGImmutableIndexBuffer_type = [ODClassType classTypeWithCls:[EGImmutableIndexBuffer class]];
 }
 
 - (void)draw {
     [EGGlobal.context draw];
-    glDrawElements(_mode, _count, GL_UNSIGNED_INT, 0);
+    glDrawElements([self mode], [self count], GL_UNSIGNED_INT, 0);
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context draw];
-    glDrawElements(_mode, count, GL_UNSIGNED_INT, 4 * start);
+    glDrawElements([self mode], count, GL_UNSIGNED_INT, 4 * start);
 }
 
 - (void)bind {
-    [EGGlobal.context bindIndexBufferHandle:self.handle];
+    [EGGlobal.context bindIndexBufferHandle:[self handle]];
 }
 
 - (ODClassType*)type {
-    return [EGIndexBuffer type];
+    return [EGImmutableIndexBuffer type];
 }
 
 + (ODClassType*)type {
-    return _EGIndexBuffer_type;
+    return _EGImmutableIndexBuffer_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -75,7 +122,7 @@ static ODClassType* _EGIndexBuffer_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGIndexBuffer* o = ((EGIndexBuffer*)(other));
+    EGImmutableIndexBuffer* o = ((EGImmutableIndexBuffer*)(other));
     return GLuintEq(self.handle, o.handle) && self.mode == o.mode && self.length == o.length && self.count == o.count;
 }
 
@@ -128,26 +175,18 @@ static ODClassType* _EGMutableIndexBuffer_type;
     _EGMutableIndexBuffer_type = [ODClassType classTypeWithCls:[EGMutableIndexBuffer class]];
 }
 
-+ (EGMutableIndexBuffer*)apply {
-    return [EGMutableIndexBuffer mutableIndexBufferWithHandle:egGenBuffer() mode:GL_TRIANGLES];
-}
-
-+ (EGMutableIndexBuffer*)applyMode:(unsigned int)mode {
-    return [EGMutableIndexBuffer mutableIndexBufferWithHandle:egGenBuffer() mode:mode];
-}
-
 - (void)draw {
     [EGGlobal.context draw];
-    glDrawElements(_mode, [self count], GL_UNSIGNED_INT, 0);
+    glDrawElements([self mode], [self count], GL_UNSIGNED_INT, 0);
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context draw];
-    glDrawElements(_mode, count, GL_UNSIGNED_INT, 4 * start);
+    glDrawElements([self mode], count, GL_UNSIGNED_INT, 4 * start);
 }
 
 - (void)bind {
-    [EGGlobal.context bindIndexBufferHandle:_handle];
+    [EGGlobal.context bindIndexBufferHandle:[self handle]];
 }
 
 - (ODClassType*)type {

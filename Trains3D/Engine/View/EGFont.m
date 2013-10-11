@@ -106,7 +106,7 @@ static ODClassType* _EGFont_type;
         _name = name;
         _texture = [EGFileTexture fileTextureWithFile:[NSString stringWithFormat:@"%@.png", _name] magFilter:GL_NEAREST minFilter:GL_NEAREST];
         _vb = [EGVBO mutDesc:_EGFont_vbDesc];
-        _ib = [EGMutableIndexBuffer apply];
+        _ib = [EGIBO mut];
         _mesh = [EGFontShader.instance vaoVbo:_vb ibo:_ib];
         [self _init];
     }

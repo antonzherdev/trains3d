@@ -1,17 +1,19 @@
 #import "objd.h"
-#import "EGBuffer.h"
 #import "GL.h"
+#import "EGBuffer.h"
 @class EGGlobal;
 @class EGContext;
 @protocol EGVertexBuffer;
 
-@class EGIndexBuffer;
+@class EGIBO;
+@class EGImmutableIndexBuffer;
 @class EGMutableIndexBuffer;
 @class EGEmptyIndexSource;
 @class EGArrayIndexSource;
 @class EGVoidRefArrayIndexSource;
 @class EGIndexSourceGap;
 @protocol EGIndexSource;
+@protocol EGIndexBuffer;
 
 @protocol EGIndexSource<NSObject>
 - (void)bind;
@@ -20,35 +22,45 @@
 @end
 
 
-@interface EGIndexBuffer : EGBuffer<EGIndexSource>
-@property (nonatomic, readonly) unsigned int mode;
-@property (nonatomic, readonly) NSUInteger length;
-@property (nonatomic, readonly) NSUInteger count;
-
-+ (id)indexBufferWithHandle:(GLuint)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count;
-- (id)initWithHandle:(GLuint)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count;
+@interface EGIBO : NSObject
 - (ODClassType*)type;
-+ (EGIndexBuffer*)applyArray:(CNVoidRefArray)array;
-+ (EGIndexBuffer*)applyData:(CNPArray*)data;
-- (void)draw;
-- (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
-- (void)bind;
++ (EGImmutableIndexBuffer*)applyArray:(CNVoidRefArray)array;
++ (EGImmutableIndexBuffer*)applyData:(CNPArray*)data;
++ (EGMutableIndexBuffer*)mut;
++ (EGMutableIndexBuffer*)mutMode:(unsigned int)mode;
 + (ODClassType*)type;
 @end
 
 
-@interface EGMutableIndexBuffer : EGMutableBuffer<EGIndexSource>
+@protocol EGIndexBuffer<EGIndexSource>
+- (GLuint)handle;
+- (unsigned int)mode;
+- (NSUInteger)count;
+- (void)draw;
+- (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
+- (void)bind;
+@end
+
+
+@interface EGImmutableIndexBuffer : EGBuffer<EGIndexBuffer>
+@property (nonatomic, readonly) unsigned int mode;
+@property (nonatomic, readonly) NSUInteger length;
+@property (nonatomic, readonly) NSUInteger count;
+
++ (id)immutableIndexBufferWithHandle:(GLuint)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count;
+- (id)initWithHandle:(GLuint)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface EGMutableIndexBuffer : EGMutableBuffer<EGIndexBuffer>
 @property (nonatomic, readonly) GLuint handle;
 @property (nonatomic, readonly) unsigned int mode;
 
 + (id)mutableIndexBufferWithHandle:(GLuint)handle mode:(unsigned int)mode;
 - (id)initWithHandle:(GLuint)handle mode:(unsigned int)mode;
 - (ODClassType*)type;
-+ (EGMutableIndexBuffer*)apply;
-+ (EGMutableIndexBuffer*)applyMode:(unsigned int)mode;
-- (void)draw;
-- (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
-- (void)bind;
 + (ODClassType*)type;
 @end
 
