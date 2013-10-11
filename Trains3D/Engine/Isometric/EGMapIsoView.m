@@ -1,30 +1,34 @@
 #import "EGMapIsoView.h"
 
 #import "EGMapIso.h"
+#import "EGMaterial.h"
 #import "EGVertex.h"
 #import "EGCameraIso.h"
 #import "GEMat4.h"
-#import "EGMaterial.h"
 #import "GL.h"
 #import "EGIndex.h"
 #import "EGContext.h"
 @implementation EGMapSsoView{
     EGMapSso* _map;
+    EGMaterial* _material;
     CNLazy* __lazy_axisVertexBuffer;
     EGMesh* _plane;
+    EGVertexArray* _planeVao;
 }
 static ODClassType* _EGMapSsoView_type;
 @synthesize map = _map;
+@synthesize material = _material;
 @synthesize plane = _plane;
 
-+ (id)mapSsoViewWithMap:(EGMapSso*)map {
-    return [[EGMapSsoView alloc] initWithMap:map];
++ (id)mapSsoViewWithMap:(EGMapSso*)map material:(EGMaterial*)material {
+    return [[EGMapSsoView alloc] initWithMap:map material:material];
 }
 
-- (id)initWithMap:(EGMapSso*)map {
+- (id)initWithMap:(EGMapSso*)map material:(EGMaterial*)material {
     self = [super init];
     if(self) {
         _map = map;
+        _material = material;
         __lazy_axisVertexBuffer = [CNLazy lazyWithF:^id<EGVertexBuffer>() {
             return ^id<EGVertexBuffer>() {
                 GEMat4* mi = [EGCameraIso.m inverse];
@@ -41,6 +45,7 @@ static ODClassType* _EGMapSsoView_type;
             NSInteger h = geRectIHeight(limits) + 3;
             return [EGMesh applyVertexData:[ arrs(EGMeshData, 4) {EGMeshDataMake(GEVec2Make(0.0, 0.0), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(l)), 0.0, ((float)(b)))), EGMeshDataMake(GEVec2Make(((float)(w)), 0.0), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(r)), 0.0, ((float)(b)))), EGMeshDataMake(GEVec2Make(((float)(w)), ((float)(h))), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(r)), 0.0, ((float)(t)))), EGMeshDataMake(GEVec2Make(0.0, ((float)(h))), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(l)), 0.0, ((float)(t))))}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
         }();
+        _planeVao = [_plane vaoMaterial:_material shadow:NO];
     }
     
     return self;
@@ -61,9 +66,9 @@ static ODClassType* _EGMapSsoView_type;
     [[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 1.0, 1.0)] drawVertex:[self axisVertexBuffer] index:[EGArrayIndexSource arrayIndexSourceWithArray:[ arrui4(2) {0, 3}] mode:((unsigned int)(GL_LINES))]];
 }
 
-- (void)drawPlaneWithMaterial:(EGMaterial*)material {
+- (void)draw {
     [EGGlobal.context.cullFace disabledF:^void() {
-        [material drawMesh:_plane];
+        [_planeVao draw];
     }];
 }
 
@@ -83,18 +88,20 @@ static ODClassType* _EGMapSsoView_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGMapSsoView* o = ((EGMapSsoView*)(other));
-    return [self.map isEqual:o.map];
+    return [self.map isEqual:o.map] && [self.material isEqual:o.material];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.map hash];
+    hash = hash * 31 + [self.material hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"map=%@", self.map];
+    [description appendFormat:@", material=%@", self.material];
     [description appendString:@">"];
     return description;
 }

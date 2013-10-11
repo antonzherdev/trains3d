@@ -2,8 +2,8 @@
 
 #import "TRRailroad.h"
 #import "EGMultisamplingSurface.h"
-#import "GL.h"
 #import "EGContext.h"
+#import "GL.h"
 #import "EGMaterial.h"
 #import "EGMesh.h"
 #import "TRModels.h"
@@ -12,9 +12,8 @@
 #import "EGTexture.h"
 #import "EGMapIso.h"
 #import "EGMapIsoView.h"
-#import "EGPlatform.h"
 #import "EGShadow.h"
-#import "EGShader.h"
+#import "EGPlatform.h"
 @implementation TRRailroadView{
     TRRailroad* _railroad;
     TRRailView* _railView;
@@ -36,12 +35,10 @@ static ODClassType* _TRRailroadView_type;
     self = [super init];
     if(self) {
         _railroad = railroad;
-        _railView = [TRRailView railView];
         _switchView = [TRSwitchView switchView];
         _lightView = [TRLightView lightView];
         _damageView = [TRDamageView damageView];
         _railroadSurface = [EGViewportSurface viewportSurfaceWithDepth:YES multisampling:YES];
-        _backgroundView = [TRBackgroundView backgroundViewWithMap:_railroad.map];
         _changed = YES;
         [self _init];
     }
@@ -58,6 +55,10 @@ static ODClassType* _TRRailroadView_type;
     [_railroad addChangeListener:^void() {
         _changed = YES;
     }];
+    EGGlobal.context.considerShadows = NO;
+    _backgroundView = [TRBackgroundView backgroundViewWithMap:_railroad.map];
+    _railView = [TRRailView railView];
+    EGGlobal.context.considerShadows = YES;
 }
 
 - (void)drawBackground {
@@ -467,12 +468,14 @@ static ODClassType* _TRDamageView_type;
 @implementation TRBackgroundView{
     EGMapSso* _map;
     EGMapSsoView* _mapView;
-    EGMaterial* _material;
+    EGShadowDrawParam* _shadowParam;
+    EGVertexArray* _shadowVao;
 }
 static ODClassType* _TRBackgroundView_type;
 @synthesize map = _map;
 @synthesize mapView = _mapView;
-@synthesize material = _material;
+@synthesize shadowParam = _shadowParam;
+@synthesize shadowVao = _shadowVao;
 
 + (id)backgroundViewWithMap:(EGMapSso*)map {
     return [[TRBackgroundView alloc] initWithMap:map];
@@ -482,8 +485,9 @@ static ODClassType* _TRBackgroundView_type;
     self = [super init];
     if(self) {
         _map = map;
-        _mapView = [EGMapSsoView mapSsoViewWithMap:_map];
-        _material = [EGStandardMaterial applyTexture:[EGGlobal textureForFile:@"Grass.png"]];
+        _mapView = [EGMapSsoView mapSsoViewWithMap:_map material:[EGStandardMaterial applyTexture:[EGGlobal textureForFile:@"Grass.png"]]];
+        _shadowParam = [EGShadowDrawParam shadowDrawParamWithPercents:(@[@0.3])];
+        _shadowVao = [_mapView.plane vaoShader:[EGShadowDrawShaderSystem.instance shaderForParam:_shadowParam]];
     }
     
     return self;
@@ -495,15 +499,14 @@ static ODClassType* _TRBackgroundView_type;
 }
 
 - (void)draw {
-    [_mapView drawPlaneWithMaterial:_material];
+    [_mapView draw];
 }
 
 - (void)drawShadow {
     if(egPlatform().shadows) [EGBlendFunction.standard applyDraw:^void() {
         [EGGlobal.context.cullFace disabledF:^void() {
             [EGGlobal.context.depthTest disabledF:^void() {
-                EGShadowDrawParam* param = [EGShadowDrawParam shadowDrawParamWithPercents:(@[@0.3])];
-                [[EGShadowDrawShaderSystem.instance shaderForParam:param] drawParam:param mesh:_mapView.plane];
+                [_shadowVao drawParam:_shadowParam];
             }];
         }];
     }];

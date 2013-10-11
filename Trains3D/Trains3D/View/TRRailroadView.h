@@ -28,10 +28,9 @@
 @class TRRailPoint;
 @class EGMapSso;
 @class EGMapSsoView;
-@class EGPlatform;
 @class EGShadowDrawParam;
 @class EGShadowDrawShaderSystem;
-@class EGShader;
+@class EGPlatform;
 
 @class TRRailroadView;
 @class TRRailView;
@@ -108,7 +107,8 @@
 @interface TRBackgroundView : NSObject
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) EGMapSsoView* mapView;
-@property (nonatomic, readonly) EGMaterial* material;
+@property (nonatomic, readonly) EGShadowDrawParam* shadowParam;
+@property (nonatomic, readonly) EGVertexArray* shadowVao;
 
 + (id)backgroundViewWithMap:(EGMapSso*)map;
 - (id)initWithMap:(EGMapSso*)map;

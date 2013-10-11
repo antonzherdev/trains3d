@@ -4,16 +4,20 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 
 class RailroadView(railroad : Railroad) {
-    private val railView = RailView()
+    private val railView : RailView
     private val switchView = SwitchView()
     private val lightView = LightView()
     private val damageView = DamageView()
     private val railroadSurface = ViewportSurface(depth = true, multisampling = true)
-    private val backgroundView = BackgroundView(railroad.map)
+    private val backgroundView : BackgroundView
 
     private var changed = true
     def init {
         railroad.add(changeListener = changed = true)
+        context.considerShadows = false
+        backgroundView = BackgroundView(railroad.map)
+        railView = RailView()
+        context.considerShadows = true
     }
 
     def drawBackground {
@@ -50,6 +54,7 @@ class RailView {
         (Models.railTurnTies, vec4(0.55, 0.45, 0.25, 1)),
         (Models.railsTurn, railMaterial)
     ])
+
     def draw(rail : Rail) {
         matrix(
             _.modify(w = w -> w.translate(rail.tile.x, rail.tile.y, 0.001))
@@ -163,19 +168,18 @@ class DamageView {
 }
 
 class BackgroundView(map : MapSso) {
-    val mapView = MapSsoView(map)
-    val material = StandardMaterial(textureFor("Grass.png"))
-
+    val mapView = MapSsoView(map, StandardMaterial(textureFor("Grass.png")))
+    val shadowParam = ShadowDrawParam([0.3])
+    val shadowVao =  mapView.plane.vao(ShadowDrawShaderSystem.instance.shaderFor(shadowParam))
     def draw {
-        mapView.drawPlaneWith(material)
+        mapView.draw
 //        mapView.drawLayout
     }
 
     def drawShadow {
         if(egPlatform.shadows) {
             BlendFunction.standard{ context.cullFace.disabled{ context.depthTest.disabled {
-                val param = ShadowDrawParam([0.3])
-                ShadowDrawShaderSystem.instance.shaderFor(param).draw(param, mapView.plane)
+                shadowVao.draw(shadowParam)
             }}}
         }
     }
