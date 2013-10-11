@@ -309,17 +309,17 @@ static ODClassType* _TRSwitchView_type;
 
 @implementation TRLightView{
     EGTexture* _texture;
-    EGMaterial* _redBodyMaterial;
-    EGMaterial* _greenBodyMaterial;
-    EGColorSource* _greenGlowMaterial;
-    EGColorSource* _redGlowMaterial;
+    EGVertexArray* _redBodyVao;
+    EGVertexArray* _greenBodyVao;
+    EGVertexArray* _greenGlowVao;
+    EGVertexArray* _redGlowVao;
 }
 static ODClassType* _TRLightView_type;
 @synthesize texture = _texture;
-@synthesize redBodyMaterial = _redBodyMaterial;
-@synthesize greenBodyMaterial = _greenBodyMaterial;
-@synthesize greenGlowMaterial = _greenGlowMaterial;
-@synthesize redGlowMaterial = _redGlowMaterial;
+@synthesize redBodyVao = _redBodyVao;
+@synthesize greenBodyVao = _greenBodyVao;
+@synthesize greenGlowVao = _greenGlowVao;
+@synthesize redGlowVao = _redGlowVao;
 
 + (id)lightView {
     return [[TRLightView alloc] init];
@@ -329,10 +329,10 @@ static ODClassType* _TRLightView_type;
     self = [super init];
     if(self) {
         _texture = [EGGlobal textureForFile:@"Light.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_LINEAR];
-        _redBodyMaterial = [EGStandardMaterial applyTexture:[EGTextureRegion textureRegionWithTexture:_texture rect:geRectApplyXYWidthHeight(0.5, 0.0, 1.0, 1.0)]];
-        _greenBodyMaterial = [EGStandardMaterial applyTexture:_texture];
-        _greenGlowMaterial = [EGColorSource applyColor:GEVec4Make(0.0, 1.0, 0.0, 0.8) texture:[EGGlobal textureForFile:@"LightGlow.png"]];
-        _redGlowMaterial = [EGColorSource applyColor:GEVec4Make(1.0, 0.0, 0.0, 0.8) texture:[EGGlobal textureForFile:@"LightGlow.png"]];
+        _redBodyVao = [TRModels.light vaoMaterial:[EGStandardMaterial applyTexture:[EGTextureRegion textureRegionWithTexture:_texture rect:geRectApplyXYWidthHeight(0.5, 0.0, 1.0, 1.0)]] shadow:NO];
+        _greenBodyVao = [TRModels.light vaoMaterial:[EGStandardMaterial applyTexture:_texture] shadow:NO];
+        _greenGlowVao = [TRModels.lightGreenGlow vaoMaterial:[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:GEVec4Make(0.0, 1.0, 0.0, 0.8) texture:[EGGlobal textureForFile:@"LightGlow.png"]]] shadow:NO];
+        _redGlowVao = [TRModels.lightRedGlow vaoMaterial:[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:GEVec4Make(1.0, 0.0, 0.0, 0.8) texture:[EGGlobal textureForFile:@"LightGlow.png"]]] shadow:NO];
     }
     
     return self;
@@ -356,14 +356,14 @@ static ODClassType* _TRLightView_type;
     BOOL shadow = [EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]];
     [arr forEach:^void(CNTuple* p) {
         EGGlobal.matrix.value = ((EGMatrixModel*)(p.a));
-        [((unumb(p.b)) ? _greenBodyMaterial : _redBodyMaterial) drawMesh:TRModels.light];
+        [((unumb(p.b)) ? _greenBodyVao : _redBodyVao) draw];
     }];
     if(!(shadow)) [EGGlobal.context.cullFace disabledF:^void() {
         [EGBlendFunction.standard applyDraw:^void() {
             [arr forEach:^void(CNTuple* p) {
                 EGGlobal.matrix.value = ((EGMatrixModel*)(p.a));
-                if(unumb(p.b)) [_greenGlowMaterial drawMesh:TRModels.lightGreenGlow];
-                else [_redGlowMaterial drawMesh:TRModels.lightRedGlow];
+                if(unumb(p.b)) [_greenGlowVao draw];
+                else [_redGlowVao draw];
             }];
         }];
     }];

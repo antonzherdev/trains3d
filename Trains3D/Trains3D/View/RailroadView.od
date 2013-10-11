@@ -117,10 +117,10 @@ class SwitchView {
 
 class LightView {
     val texture = textureFor("Light.png", GL_LINEAR, GL_LINEAR_MIPMAP_LINEAR)
-    val redBodyMaterial = StandardMaterial(TextureRegion(texture, Rect(0.5, 0, 1, 1)))
-    val greenBodyMaterial = StandardMaterial(texture)
-    val greenGlowMaterial = ColorSource(vec4(0, 1, 0, 0.8), textureFor("LightGlow.png"))
-    val redGlowMaterial = ColorSource(vec4(1, 0, 0, 0.8), textureFor("LightGlow.png"))
+    val redBodyVao = Models.light.vao(StandardMaterial(TextureRegion(texture, Rect(0.5, 0, 1, 1))), false)
+    val greenBodyVao = Models.light.vao(StandardMaterial(texture), false)
+    val greenGlowVao = Models.lightGreenGlow.vao(StandardMaterial(ColorSource(vec4(0, 1, 0, 0.8), textureFor("LightGlow.png"))), false)
+    val redGlowVao = Models.lightRedGlow.vao(StandardMaterial(ColorSource(vec4(1, 0, 0, 0.8), textureFor("LightGlow.png"))), false)
 
     def draw(lights : [RailLight]) {
         if(lights.isEmpty) return nil
@@ -136,14 +136,14 @@ class LightView {
         val shadow = context.renderTarget.is<ShadowRenderTarget>
         arr.for { p ->
             matrix.value = p.a
-            (if(p.b)greenBodyMaterial else redBodyMaterial).draw(Models.light)
+            (if(p.b)greenBodyVao else redBodyVao).draw
         }
         if(!shadow) {
             context.cullFace.disabled{ BlendFunction.standard{
                 arr.for { p ->
                     matrix.value = p.a
-                    if(p.b) greenGlowMaterial.draw(Models.lightGreenGlow)
-                    else redGlowMaterial.draw(Models.lightRedGlow)
+                    if(p.b) greenGlowVao.draw
+                    else redGlowVao.draw
                 }
             }}
         }

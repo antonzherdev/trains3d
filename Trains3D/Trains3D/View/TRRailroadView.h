@@ -18,7 +18,9 @@
 @class TRSwitch;
 @class TRRailConnector;
 @class EGTexture;
+@class EGVertexArray;
 @class EGTextureRegion;
+@class EGMesh;
 @class TRRailLight;
 @class EGRenderTarget;
 @class EGBlendFunction;
@@ -79,10 +81,10 @@
 
 @interface TRLightView : NSObject
 @property (nonatomic, readonly) EGTexture* texture;
-@property (nonatomic, readonly) EGMaterial* redBodyMaterial;
-@property (nonatomic, readonly) EGMaterial* greenBodyMaterial;
-@property (nonatomic, readonly) EGColorSource* greenGlowMaterial;
-@property (nonatomic, readonly) EGColorSource* redGlowMaterial;
+@property (nonatomic, readonly) EGVertexArray* redBodyVao;
+@property (nonatomic, readonly) EGVertexArray* greenBodyVao;
+@property (nonatomic, readonly) EGVertexArray* greenGlowVao;
+@property (nonatomic, readonly) EGVertexArray* redGlowVao;
 
 + (id)lightView;
 - (id)init;
