@@ -42,7 +42,7 @@ class SimpleShaderBuilder(texture : bool) extends ShaderTextBuilder {
            $endif
         }"
 
-    def program = ShaderProgram(vertex, fragment)
+    def program = ShaderProgram("Simple", vertex, fragment)
 }
 
 

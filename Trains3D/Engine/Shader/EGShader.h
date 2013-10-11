@@ -26,15 +26,17 @@
 @protocol EGShaderTextBuilder;
 
 @interface EGShaderProgram : NSObject
+@property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) GLuint handle;
 
-+ (id)shaderProgramWithHandle:(GLuint)handle;
-- (id)initWithHandle:(GLuint)handle;
++ (id)shaderProgramWithName:(NSString*)name handle:(GLuint)handle;
+- (id)initWithName:(NSString*)name handle:(GLuint)handle;
 - (ODClassType*)type;
-+ (EGShaderProgram*)loadFromFilesVertex:(NSString*)vertex fragment:(NSString*)fragment;
-+ (EGShaderProgram*)applyVertex:(NSString*)vertex fragment:(NSString*)fragment;
-+ (EGShaderProgram*)linkFromShadersVertex:(GLuint)vertex fragment:(GLuint)fragment;
++ (EGShaderProgram*)loadFromFilesName:(NSString*)name vertex:(NSString*)vertex fragment:(NSString*)fragment;
++ (EGShaderProgram*)applyName:(NSString*)name vertex:(NSString*)vertex fragment:(NSString*)fragment;
++ (EGShaderProgram*)linkFromShadersName:(NSString*)name vertex:(GLuint)vertex fragment:(GLuint)fragment;
 + (GLuint)compileShaderForShaderType:(unsigned int)shaderType source:(NSString*)source;
+- (void)_init;
 - (void)dealoc;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
 + (NSInteger)version;

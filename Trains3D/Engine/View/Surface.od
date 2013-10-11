@@ -93,7 +93,7 @@ class ViewportShaderBuilder extends ShaderTextBuilder {
         void main(void) {
             $fragColor = $texture2D\(texture, UV);
         }"
-    def program = ShaderProgram(vertex, fragment)
+    def program = ShaderProgram("Viewport", vertex, fragment)
 }
 
 class ViewportSurfaceShader extends Shader<ViewportSurfaceShaderParam>(ViewportShaderBuilder().program) {

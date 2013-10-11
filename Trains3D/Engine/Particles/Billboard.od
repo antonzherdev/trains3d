@@ -71,7 +71,7 @@ class BillboardShaderBuilder(texture : bool, alpha : bool, shadow : bool, parame
              $code
          }"
 
-    def program = ShaderProgram(vertex, fragment)
+    def program = ShaderProgram("Billboard", vertex, fragment)
 }
 
 class BillboardShader(program : ShaderProgram, texture : bool, alpha : bool, shadow : bool) extends Shader<ColorSource>(program) {

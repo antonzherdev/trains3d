@@ -6,19 +6,25 @@
 #import "EGMesh.h"
 #import "GEMat4.h"
 @implementation EGShaderProgram{
+    NSString* _name;
     GLuint _handle;
 }
 static NSInteger _EGShaderProgram_version;
 static ODClassType* _EGShaderProgram_type;
+@synthesize name = _name;
 @synthesize handle = _handle;
 
-+ (id)shaderProgramWithHandle:(GLuint)handle {
-    return [[EGShaderProgram alloc] initWithHandle:handle];
++ (id)shaderProgramWithName:(NSString*)name handle:(GLuint)handle {
+    return [[EGShaderProgram alloc] initWithName:name handle:handle];
 }
 
-- (id)initWithHandle:(GLuint)handle {
+- (id)initWithName:(NSString*)name handle:(GLuint)handle {
     self = [super init];
-    if(self) _handle = handle;
+    if(self) {
+        _name = name;
+        _handle = handle;
+        [self _init];
+    }
     
     return self;
 }
@@ -29,20 +35,20 @@ static ODClassType* _EGShaderProgram_type;
     _EGShaderProgram_version = ((NSInteger)(egGLSLVersion()));
 }
 
-+ (EGShaderProgram*)loadFromFilesVertex:(NSString*)vertex fragment:(NSString*)fragment {
-    return [EGShaderProgram applyVertex:[OSBundle readToStringResource:vertex] fragment:[OSBundle readToStringResource:fragment]];
++ (EGShaderProgram*)loadFromFilesName:(NSString*)name vertex:(NSString*)vertex fragment:(NSString*)fragment {
+    return [EGShaderProgram applyName:name vertex:[OSBundle readToStringResource:vertex] fragment:[OSBundle readToStringResource:fragment]];
 }
 
-+ (EGShaderProgram*)applyVertex:(NSString*)vertex fragment:(NSString*)fragment {
++ (EGShaderProgram*)applyName:(NSString*)name vertex:(NSString*)vertex fragment:(NSString*)fragment {
     GLuint vertexShader = [EGShaderProgram compileShaderForShaderType:GL_VERTEX_SHADER source:vertex];
     GLuint fragmentShader = [EGShaderProgram compileShaderForShaderType:GL_FRAGMENT_SHADER source:fragment];
-    EGShaderProgram* program = [EGShaderProgram linkFromShadersVertex:vertexShader fragment:fragmentShader];
+    EGShaderProgram* program = [EGShaderProgram linkFromShadersName:name vertex:vertexShader fragment:fragmentShader];
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
     return program;
 }
 
-+ (EGShaderProgram*)linkFromShadersVertex:(GLuint)vertex fragment:(GLuint)fragment {
++ (EGShaderProgram*)linkFromShadersName:(NSString*)name vertex:(GLuint)vertex fragment:(GLuint)fragment {
     GLuint handle = glCreateProgram();
     glAttachShader(handle, vertex);
     glAttachShader(handle, fragment);
@@ -50,7 +56,7 @@ static ODClassType* _EGShaderProgram_type;
     [egGetProgramError(handle) forEach:^void(NSString* _) {
         @throw [@"Error in shader program linking: " stringByAppendingString:_];
     }];
-    return [EGShaderProgram shaderProgramWithHandle:handle];
+    return [EGShaderProgram shaderProgramWithName:name handle:handle];
 }
 
 + (GLuint)compileShaderForShaderType:(unsigned int)shaderType source:(NSString*)source {
@@ -61,6 +67,10 @@ static ODClassType* _EGShaderProgram_type;
         @throw [[@"Error in shader compiling : " stringByAppendingString:_] stringByAppendingString:source];
     }];
     return shader;
+}
+
+- (void)_init {
+    egLabelShaderProgram(_handle, _name);
 }
 
 - (void)dealoc {
@@ -94,18 +104,20 @@ static ODClassType* _EGShaderProgram_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGShaderProgram* o = ((EGShaderProgram*)(other));
-    return GLuintEq(self.handle, o.handle);
+    return [self.name isEqual:o.name] && GLuintEq(self.handle, o.handle);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
+    hash = hash * 31 + [self.name hash];
     hash = hash * 31 + GLuintHash(self.handle);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"handle=%@", GLuintDescription(self.handle)];
+    [description appendFormat:@"name=%@", self.name];
+    [description appendFormat:@", handle=%@", GLuintDescription(self.handle)];
     [description appendString:@">"];
     return description;
 }

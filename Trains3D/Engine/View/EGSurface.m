@@ -307,7 +307,7 @@ static ODClassType* _EGViewportShaderBuilder_type;
 }
 
 - (EGShaderProgram*)program {
-    return [EGShaderProgram applyVertex:[self vertex] fragment:[self fragment]];
+    return [EGShaderProgram applyName:@"Viewport" vertex:[self vertex] fragment:[self fragment]];
 }
 
 - (NSString*)versionString {

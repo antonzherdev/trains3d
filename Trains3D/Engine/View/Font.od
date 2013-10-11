@@ -180,7 +180,7 @@ class FontShaderBuilder extends ShaderTextBuilder {
             $fragColor = color * $texture2D\(texture, UV);
         }"
 
-    def program = ShaderProgram(vertex, fragment)
+    def program = ShaderProgram("Font", vertex, fragment)
 }
 
 class FontShader extends Shader<FontShaderParam>(FontShaderBuilder().program) {

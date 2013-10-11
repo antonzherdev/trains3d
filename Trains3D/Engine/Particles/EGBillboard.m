@@ -173,7 +173,7 @@ static ODClassType* _EGBillboardShaderBuilder_type;
 }
 
 - (EGShaderProgram*)program {
-    return [EGShaderProgram applyVertex:[self vertex] fragment:[self fragment]];
+    return [EGShaderProgram applyName:@"Billboard" vertex:[self vertex] fragment:[self fragment]];
 }
 
 - (NSString*)versionString {

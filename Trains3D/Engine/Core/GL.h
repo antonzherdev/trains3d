@@ -182,3 +182,12 @@ static inline EGPlatform* egPlatform() {
 }
 
 NSUInteger egGLSLVersion();
+
+
+static inline void egLabelShaderProgram(GLuint handle, NSString* name) {
+#if DEBUG
+#if TARGET_OS_IPHONE
+    glLabelObjectEXT(GL_PROGRAM_OBJECT_EXT, handle, 0, [name cStringUsingEncoding:NSUTF8StringEncoding]);
+#endif
+#endif
+}

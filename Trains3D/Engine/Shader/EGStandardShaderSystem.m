@@ -248,7 +248,7 @@ static ODClassType* _EGStandardShaderKey_type;
         "  ", [self texture2D]] : @"\n"
         "   lowp vec4 materialColor = diffuseColor;\n"
         "  "), [self lightsDiffuse], [self fragColor]];
-    return [EGStandardShader standardShaderWithKey:self program:[EGShaderProgram applyVertex:vertexShader fragment:fragmentShader]];
+    return [EGStandardShader standardShaderWithKey:self program:[EGShaderProgram applyName:@"Standard" vertex:vertexShader fragment:fragmentShader]];
 }
 
 - (NSString*)lightsVertexUniform {

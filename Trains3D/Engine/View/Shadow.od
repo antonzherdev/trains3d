@@ -87,8 +87,8 @@ class ShadowShaderSystem extends ShaderSystem<ColorSource> {
 
 
 class ShadowShader(texture : bool, program : ShaderProgram) extends Shader<ColorSource>(program) {
-    static val instanceForColor = ShadowShader(false, ShaderProgram(vertexProgram(false), fragmentProgram(false)))
-    static val instanceForTexture = ShadowShader(true, ShaderProgram(vertexProgram(true), fragmentProgram(true)))
+    static val instanceForColor = ShadowShader(false, ShaderProgram("ShadowColor", vertexProgram(false), fragmentProgram(false)))
+    static val instanceForTexture = ShadowShader(true, ShaderProgram("ShadowTexture", vertexProgram(true), fragmentProgram(true)))
 
     private static def vertexProgram(texture : bool) =
         "#version 150
@@ -178,7 +178,7 @@ class ShadowDrawShaderKey(directLightCount : uint)  {
                 $lightsDiffuse
                 outColor = vec4(0, 0, 0, a);
             }"
-        ShadowDrawShader(self, ShaderProgram(vertexShader, fragmentShader))
+        ShadowDrawShader(self, ShaderProgram("ShadowDraw", vertexShader, fragmentShader))
     }
 
     def lightsVertexUniform : string = directLightCount.range.chain.map{i ->

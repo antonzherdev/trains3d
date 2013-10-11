@@ -136,7 +136,7 @@ static ODClassType* _EGSimpleShaderBuilder_type;
 }
 
 - (EGShaderProgram*)program {
-    return [EGShaderProgram applyVertex:[self vertex] fragment:_fragment];
+    return [EGShaderProgram applyName:@"Simple" vertex:[self vertex] fragment:_fragment];
 }
 
 - (NSString*)versionString {

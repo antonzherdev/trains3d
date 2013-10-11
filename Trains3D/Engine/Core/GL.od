@@ -181,4 +181,6 @@ stub object gl {
     def egSaveTextureToFile(source : GLuint, file : string)
     def egPlatform : Platform
     def egGLSLVersion : uint
+
+    def egLabelShaderProgram(handle : GLuint, name : string)
 }

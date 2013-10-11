@@ -393,7 +393,7 @@ static ODClassType* _EGFontShaderBuilder_type;
 }
 
 - (EGShaderProgram*)program {
-    return [EGShaderProgram applyVertex:[self vertex] fragment:[self fragment]];
+    return [EGShaderProgram applyName:@"Font" vertex:[self vertex] fragment:[self fragment]];
 }
 
 - (NSString*)versionString {

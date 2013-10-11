@@ -355,8 +355,8 @@ static ODClassType* _EGShadowShader_type;
 + (void)initialize {
     [super initialize];
     _EGShadowShader_type = [ODClassType classTypeWithCls:[EGShadowShader class]];
-    _EGShadowShader_instanceForColor = [EGShadowShader shadowShaderWithTexture:NO program:[EGShaderProgram applyVertex:[EGShadowShader vertexProgramTexture:NO] fragment:[EGShadowShader fragmentProgramTexture:NO]]];
-    _EGShadowShader_instanceForTexture = [EGShadowShader shadowShaderWithTexture:YES program:[EGShaderProgram applyVertex:[EGShadowShader vertexProgramTexture:YES] fragment:[EGShadowShader fragmentProgramTexture:YES]]];
+    _EGShadowShader_instanceForColor = [EGShadowShader shadowShaderWithTexture:NO program:[EGShaderProgram applyName:@"ShadowColor" vertex:[EGShadowShader vertexProgramTexture:NO] fragment:[EGShadowShader fragmentProgramTexture:NO]]];
+    _EGShadowShader_instanceForTexture = [EGShadowShader shadowShaderWithTexture:YES program:[EGShaderProgram applyName:@"ShadowTexture" vertex:[EGShadowShader vertexProgramTexture:YES] fragment:[EGShadowShader fragmentProgramTexture:YES]]];
 }
 
 + (NSString*)vertexProgramTexture:(BOOL)texture {
@@ -617,7 +617,7 @@ static ODClassType* _EGShadowDrawShaderKey_type;
         "   %@\n"
         "   outColor = vec4(0, 0, 0, a);\n"
         "}", [self lightsIn], [self lightsFragmentUniform], [self lightsDiffuse]];
-    return [EGShadowDrawShader shadowDrawShaderWithKey:self program:[EGShaderProgram applyVertex:vertexShader fragment:fragmentShader]];
+    return [EGShadowDrawShader shadowDrawShaderWithKey:self program:[EGShaderProgram applyName:@"ShadowDraw" vertex:vertexShader fragment:fragmentShader]];
 }
 
 - (NSString*)lightsVertexUniform {

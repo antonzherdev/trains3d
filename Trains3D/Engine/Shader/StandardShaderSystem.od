@@ -95,7 +95,7 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
                 $lightsDiffuse
                 $fragColor = color;
              }"
-        StandardShader(self, ShaderProgram(vertexShader, fragmentShader))
+        StandardShader(self, ShaderProgram("Standard", vertexShader, fragmentShader))
     }
 
     def lightsVertexUniform : string = directLightCount.range.chain.map{i ->
