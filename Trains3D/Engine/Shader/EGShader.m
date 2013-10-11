@@ -1,9 +1,9 @@
 #import "EGShader.h"
 
-#import "EGMesh.h"
 #import "EGContext.h"
 #import "EGVertex.h"
 #import "EGIndex.h"
+#import "EGMesh.h"
 #import "GEMat4.h"
 @implementation EGShaderProgram{
     GLuint _handle;
@@ -135,16 +135,25 @@ static ODClassType* _EGShader_type;
     _EGShader_type = [ODClassType classTypeWithCls:[EGShader class]];
 }
 
-- (void)drawParam:(id)param mesh:(EGMesh*)mesh {
-    [self drawParam:param vertex:[mesh vertex] index:[mesh index]];
+- (void)drawParam:(id)param vertex:(EGVertexBuffer*)vertex index:(id<EGIndexSource>)index {
+    [EGGlobal.context bindShaderProgramProgram:_program];
+    [vertex bind];
+    [self loadAttributesVbDesc:vertex.desc];
+    [self loadUniformsParam:param];
+    [index bind];
+    [index draw];
 }
 
-- (void)drawParam:(id)param vertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index {
+- (void)drawParam:(id)param mesh:(EGMesh*)mesh {
+    [self drawParam:param vertex:mesh.vertex index:mesh.index];
+}
+
+- (void)drawParam:(id)param vao:(EGSimpleVertexArray*)vao {
+    [vao bind];
     [EGGlobal.context bindShaderProgramProgram:_program];
-    [vertex bindWithShader:self];
     [self loadUniformsParam:param];
-    [index draw];
-    [vertex unbindWithShader:self];
+    [vao.index draw];
+    [vao unbind];
 }
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
@@ -189,10 +198,11 @@ static ODClassType* _EGShader_type;
     return [_program attributeForName:name];
 }
 
-- (EGVertexArray*)vaoWithVbo:(EGVertexBuffer*)vbo {
-    EGVertexArray* vao = [EGVertexArray applyBuffers:(@[vbo])];
+- (EGSimpleVertexArray*)vaoVbo:(EGVertexBuffer*)vbo ibo:(EGIndexBuffer*)ibo {
+    EGSimpleVertexArray* vao = [EGSimpleVertexArray applyShader:self buffers:(@[vbo]) index:ibo];
     [vao bind];
     [vbo bind];
+    [ibo bind];
     [self loadAttributesVbDesc:vbo.desc];
     [vao unbind];
     return vao;
@@ -721,9 +731,14 @@ static ODClassType* _EGShaderSystem_type;
     _EGShaderSystem_type = [ODClassType classTypeWithCls:[EGShaderSystem class]];
 }
 
-- (void)drawParam:(id)param vertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index {
+- (void)drawParam:(id)param vertex:(EGVertexBuffer*)vertex index:(id<EGIndexSource>)index {
     EGShader* shader = [self shaderForParam:param];
     [shader drawParam:param vertex:vertex index:index];
+}
+
+- (void)drawParam:(id)param vao:(EGVertexArray*)vao {
+    EGShader* shader = [self shaderForParam:param];
+    [shader drawParam:param mesh:vao];
 }
 
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh {
@@ -739,8 +754,8 @@ static ODClassType* _EGShaderSystem_type;
     @throw @"Method shaderFor is abstract";
 }
 
-- (EGVertexArray*)vaoWithParam:(id)param vbo:(EGVertexBuffer*)vbo {
-    return [[self shaderForParam:param] vaoWithVbo:vbo];
+- (EGVertexArray*)vaoParam:(id)param vbo:(EGVertexBuffer*)vbo ibo:(EGIndexBuffer*)ibo {
+    return [[self shaderForParam:param] vaoVbo:vbo ibo:ibo];
 }
 
 - (ODClassType*)type {

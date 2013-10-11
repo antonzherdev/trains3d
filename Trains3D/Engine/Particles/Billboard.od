@@ -136,7 +136,7 @@ class BillboardParticle(lifeLength : float4) extends Particle(lifeLength) {
 }
 
 class BillboardParticleSystemView(maxCount : uint, material : ColorSource, blendFunc : BlendFunction)
-    extends  ParticleSystemView<BillboardParticle, BillboardBufferData>(Billboard.vbDesc, maxCount, blendFunc)
+    extends ParticleSystemView<BillboardParticle, BillboardBufferData>(Billboard.vbDesc, maxCount, blendFunc)
 {
 
     static def apply(maxCount : uint, material : ColorSource) =

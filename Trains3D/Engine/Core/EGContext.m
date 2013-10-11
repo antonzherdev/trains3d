@@ -91,8 +91,8 @@ static ODClassType* _EGGlobal_type;
     GERectI __viewport;
     GLuint __lastTexture2D;
     GLuint __lastShaderProgram;
-    GLuint __lastVertexBuffer;
-    id<EGVertexSource> __lastVertexSource;
+    GLuint __lastVertexBufferId;
+    EGVertexBuffer* __vertexBuffer;
     GLuint __lastIndexBuffer;
     GLuint __lastVertexArray;
     GLuint _defaultVertexArray;
@@ -129,7 +129,7 @@ static ODClassType* _EGContext_type;
         __viewportStack = [CNList apply];
         __lastTexture2D = 0;
         __lastShaderProgram = 0;
-        __lastVertexBuffer = 0;
+        __lastVertexBufferId = 0;
         __lastIndexBuffer = 0;
         __lastVertexArray = 0;
         _defaultVertexArray = 0;
@@ -165,7 +165,7 @@ static ODClassType* _EGContext_type;
     __lastTexture2D = 0;
     __lastShaderProgram = 0;
     __lastIndexBuffer = 0;
-    __lastVertexBuffer = 0;
+    __lastVertexBufferId = 0;
 }
 
 - (GERectI)viewport {
@@ -226,17 +226,17 @@ static ODClassType* _EGContext_type;
     }
 }
 
-- (void)bindVertexBufferBuffer:(id<EGVertexSource>)buffer {
-    unsigned int id = [buffer handle];
-    if(id != __lastVertexBuffer) {
-        __lastVertexSource = buffer;
-        __lastVertexBuffer = id;
-        glBindBuffer(GL_ARRAY_BUFFER, id);
+- (void)bindVertexBufferBuffer:(EGVertexBuffer*)buffer {
+    GLuint handle = buffer.handle;
+    if(!(GLuintEq(handle, __lastVertexBufferId))) {
+        __lastVertexBufferId = handle;
+        __vertexBuffer = buffer;
+        glBindBuffer(GL_ARRAY_BUFFER, handle);
     }
 }
 
-- (id<EGVertexSource>)vertexSource {
-    return __lastVertexSource;
+- (EGVertexBuffer*)vertexBuffer {
+    return __vertexBuffer;
 }
 
 - (void)bindIndexBufferHandle:(GLuint)handle {
@@ -249,7 +249,7 @@ static ODClassType* _EGContext_type;
 - (void)bindVertexArrayHandle:(GLuint)handle {
     if(!(GLuintEq(handle, __lastVertexArray))) {
         __lastVertexArray = handle;
-        __lastVertexBuffer = 0;
+        __lastVertexBufferId = 0;
         __lastIndexBuffer = 0;
         egBindVertexArray(handle);
     }
@@ -258,7 +258,7 @@ static ODClassType* _EGContext_type;
 - (void)bindDefaultVertexArray {
     if(!(GLuintEq(__lastVertexArray, _defaultVertexArray))) {
         __lastVertexArray = _defaultVertexArray;
-        __lastVertexBuffer = 0;
+        __lastVertexBufferId = 0;
         __lastIndexBuffer = 0;
         egBindVertexArray(_defaultVertexArray);
     }

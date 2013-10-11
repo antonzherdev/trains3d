@@ -32,7 +32,7 @@ class Context {
         _lastTexture2D = 0
         _lastShaderProgram = 0
         _lastIndexBuffer = 0
-        _lastVertexBuffer = 0
+        _lastVertexBufferId = 0
     }
 
     private var _viewportStack = List<RectI>()
@@ -89,17 +89,17 @@ class Context {
         }
     }
 
-    private var _lastVertexBuffer : GLuint = 0
-    private var _lastVertexSource : VertexSource
-    def bindVertexBuffer(buffer : VertexSource) {
-        val id = buffer.handle
-        if(id != _lastVertexBuffer) {
-            _lastVertexSource = buffer
-            _lastVertexBuffer = id
-            glBindBuffer(GL_ARRAY_BUFFER, id)
+    private var _lastVertexBufferId : GLuint = 0
+    private var _vertexBuffer : VertexBuffer<_>
+    def bindVertexBuffer(buffer : VertexBuffer<_>) {
+        val handle = buffer.handle
+        if(handle != _lastVertexBufferId) {
+            _lastVertexBufferId = handle
+            _vertexBuffer = buffer
+            glBindBuffer(GL_ARRAY_BUFFER, handle)
         }
     }
-    def vertexSource : VertexSource = _lastVertexSource
+    def vertexBuffer : VertexBuffer<_> = _vertexBuffer
 
     private var _lastIndexBuffer : GLuint = 0
     def bindIndexBuffer(handle : GLuint) {
@@ -113,7 +113,7 @@ class Context {
     def bindVertexArray(handle : GLuint) {
         if(handle != _lastVertexArray) {
             _lastVertexArray = handle
-            _lastVertexBuffer = 0
+            _lastVertexBufferId = 0
             _lastIndexBuffer = 0
             egBindVertexArray(handle)
         }
@@ -123,7 +123,7 @@ class Context {
     def bindDefaultVertexArray {
         if(_lastVertexArray != defaultVertexArray) {
             _lastVertexArray = defaultVertexArray
-            _lastVertexBuffer = 0
+            _lastVertexBufferId = 0
             _lastIndexBuffer = 0
             egBindVertexArray(defaultVertexArray)
         }

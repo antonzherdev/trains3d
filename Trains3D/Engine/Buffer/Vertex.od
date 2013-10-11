@@ -1,11 +1,5 @@
 package com.antonzherdev.eg
 
-trait VertexSource {
-    def bindWith(shader : Shader<_>)
-    def unbindWith(shader : Shader<_>) {}
-    def count : uint
-    def handle : uint4
-}
 
 class VertexBufferDesc<T>(dataType : PType<T>, position : int4, uv : int4, normal : int4, color : int4, model : int4)
 {
@@ -19,7 +13,7 @@ class VertexBufferDesc<T>(dataType : PType<T>, position : int4, uv : int4, norma
 
 
 class VertexBuffer<T>(desc : VertexBufferDesc<T>, handle : GLuint, length : uint, count : uint)
-    extends Buffer<T>(desc.dataType, GL_ARRAY_BUFFER, handle) with VertexSource
+    extends Buffer<T>(desc.dataType, GL_ARRAY_BUFFER, handle)
 {
     static def apply<T>(desc : VertexBufferDesc<T>, array : VoidRefArray<T>) : VertexBuffer<T> = {
         val vb = VertexBuffer<T>(desc, egGenBuffer, array.length, array.length/desc.dataType.size)
@@ -42,15 +36,10 @@ class VertexBuffer<T>(desc : VertexBufferDesc<T>, handle : GLuint, length : uint
     def bind {
         context.bindVertexBuffer(self)
     }
-
-    def bindWith(shader : Shader<_>) {
-        context.bindVertexBuffer(self)
-        shader.loadAttributes(desc)
-    }
 }
 
 class MutableVertexBuffer<T>(desc : VertexBufferDesc<T>, handle : GLuint)
-    extends MutableBuffer<T>(desc.dataType, GL_ARRAY_BUFFER, handle) with VertexSource
+    extends MutableBuffer<T>(desc.dataType, GL_ARRAY_BUFFER, handle)
 {
     static def apply<T>(desc : VertexBufferDesc<T>) : MutableVertexBuffer<T> = MutableVertexBuffer<T>(desc, egGenBuffer)
     static def vec2 = MutableVertexBuffer<vec2>(VertexBufferDesc.Vec2, egGenBuffer)
@@ -61,37 +50,5 @@ class MutableVertexBuffer<T>(desc : VertexBufferDesc<T>, handle : GLuint)
     def bind {
         context.bindVertexBuffer(self)
     }
-
-    def bindWith(shader : Shader<_>) {
-        context.bindVertexBuffer(self)
-        shader.loadAttributes(desc)
-    }
 }
 
-
-
-class VertexArray(handle : GLuint, buffers : [VertexBuffer<_>]) extends VertexSource {
-    static def apply(buffers : [VertexBuffer<_>]) = VertexArray(egGenVertexArray, buffers)
-
-    def bind {
-        context.bindVertexArray(handle)
-    }
-
-    def bindWith(shader : Shader<_>) {
-        context.bindVertexArray(handle)
-    }
-
-    def unbindWith(shader : Shader<_>) {
-        context.bindDefaultVertexArray
-    }
-
-    def unbind {
-        context.bindDefaultVertexArray
-    }
-
-    def dealloc {
-        egDeleteVertexArray(handle)
-    }
-
-    def count = buffers.head.count
-}

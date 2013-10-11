@@ -27,22 +27,8 @@ stub class MultisamplingSurface(size : vec2i, depth : bool) extends  Surface(siz
 
 
 stub class ViewportSurface(depth : bool, multisampling : bool) extends BaseViewportSurface {
-    def createSurface : Surface =
-    if(multisampling) MultisamplingSurface(context.viewport.size, depth)
-    else SimpleSurface(context.viewport.size, depth)
-
-    private lazy val shader = ViewportSurfaceShader()
-
-    def drawWith(z : float4) {
-        context.cullFace.disabled {
-            shader.draw(ViewportSurfaceShaderParam(texture, z), fullScreenMesh)
-        }
-    }
-
-    def texture : Texture = case(surface.get) {
-        i : SimpleSurface -> i.texture
-        i : MultisamplingSurface -> i.texture
-    }
-
+    def createSurface : Surface
+    def drawWith(z : float4)
+    def texture : Texture
     def draw
 }

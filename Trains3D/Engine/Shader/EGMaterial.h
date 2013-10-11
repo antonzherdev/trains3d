@@ -2,7 +2,7 @@
 #import "GEVec.h"
 @class EGShaderSystem;
 @class EGMesh;
-@protocol EGVertexSource;
+@class EGVertexBuffer;
 @protocol EGIndexSource;
 @class EGShader;
 @class EGTexture;
@@ -24,7 +24,7 @@
 - (ODClassType*)type;
 - (EGShaderSystem*)shaderSystem;
 - (void)drawMesh:(EGMesh*)mesh;
-- (void)drawVertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index;
+- (void)drawVertex:(EGVertexBuffer*)vertex index:(id<EGIndexSource>)index;
 - (EGShader*)shader;
 + (EGMaterial*)applyColor:(GEVec4)color;
 + (EGMaterial*)applyTexture:(EGTexture*)texture;

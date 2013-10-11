@@ -7,7 +7,7 @@ class Material {
         shaderSystem.draw(self, mesh.vertex, mesh.index)
     }
 
-    def draw(vertex : VertexSource, index : IndexSource) {
+    def draw(vertex : VertexBuffer<_>, index : IndexSource) {
         shaderSystem.draw(self, vertex, index)
     }
     def shader : Shader<self> = shaderSystem.shaderFor(self)

@@ -60,9 +60,9 @@ class TrainView(level : Level) {
     }
 
     val defMat = trainMaterialFor(vec4(1, 1, 1, 1))
-    val vaoCar1 = Models.car.vaoWith(defMat, shadow = true)
+    val vaoCar1 = Models.car.vao(defMat, shadow = true)
     private def drawCar1(material : Material) {
-        material.draw(vaoCar1)
+        vaoCar1.draw(material)
 //        material.draw(Models.car)
         blackMaterial.draw(Models.carBlack)
     }

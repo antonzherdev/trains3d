@@ -3,23 +3,12 @@
 #import "EGMesh.h"
 #import "EGBuffer.h"
 #import "GL.h"
-@class EGShader;
 @class EGGlobal;
 @class EGContext;
 
 @class EGVertexBufferDesc;
 @class EGVertexBuffer;
 @class EGMutableVertexBuffer;
-@class EGVertexArray;
-@protocol EGVertexSource;
-
-@protocol EGVertexSource<NSObject>
-- (void)bindWithShader:(EGShader*)shader;
-- (void)unbindWithShader:(EGShader*)shader;
-- (NSUInteger)count;
-- (unsigned int)handle;
-@end
-
 
 @interface EGVertexBufferDesc : NSObject
 @property (nonatomic, readonly) ODPType* dataType;
@@ -41,7 +30,7 @@
 @end
 
 
-@interface EGVertexBuffer : EGBuffer<EGVertexSource>
+@interface EGVertexBuffer : EGBuffer
 @property (nonatomic, readonly) EGVertexBufferDesc* desc;
 @property (nonatomic, readonly) NSUInteger length;
 @property (nonatomic, readonly) NSUInteger count;
@@ -56,12 +45,11 @@
 + (EGVertexBuffer*)vec2Data:(CNPArray*)data;
 + (EGVertexBuffer*)meshData:(CNPArray*)data;
 - (void)bind;
-- (void)bindWithShader:(EGShader*)shader;
 + (ODClassType*)type;
 @end
 
 
-@interface EGMutableVertexBuffer : EGMutableBuffer<EGVertexSource>
+@interface EGMutableVertexBuffer : EGMutableBuffer
 @property (nonatomic, readonly) EGVertexBufferDesc* desc;
 @property (nonatomic, readonly) GLuint handle;
 
@@ -74,25 +62,6 @@
 + (EGMutableVertexBuffer*)vec4;
 + (EGMutableVertexBuffer*)mesh;
 - (void)bind;
-- (void)bindWithShader:(EGShader*)shader;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGVertexArray : NSObject<EGVertexSource>
-@property (nonatomic, readonly) GLuint handle;
-@property (nonatomic, readonly) id<CNSeq> buffers;
-
-+ (id)vertexArrayWithHandle:(GLuint)handle buffers:(id<CNSeq>)buffers;
-- (id)initWithHandle:(GLuint)handle buffers:(id<CNSeq>)buffers;
-- (ODClassType*)type;
-+ (EGVertexArray*)applyBuffers:(id<CNSeq>)buffers;
-- (void)bind;
-- (void)bindWithShader:(EGShader*)shader;
-- (void)unbindWithShader:(EGShader*)shader;
-- (void)unbind;
-- (void)dealloc;
-- (NSUInteger)count;
 + (ODClassType*)type;
 @end
 

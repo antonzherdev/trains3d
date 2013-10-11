@@ -8,7 +8,6 @@
 @class EGColorSource;
 @class EGMutableVertexBuffer;
 @class EGMutableIndexBuffer;
-@class EGSimpleMesh;
 @class EGMesh;
 @class EGD2D;
 @class EGBlendFunction;

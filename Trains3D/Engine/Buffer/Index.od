@@ -1,6 +1,7 @@
 package com.antonzherdev.eg
 
 trait IndexSource {
+    def bind {}
     def draw
     def drawWith(start : uint, count : uint)
 }
@@ -23,13 +24,11 @@ class IndexBuffer(handle : GLuint, mode : uint4, length : uint, count : uint)
     }
 
     def draw {
-        bind
         context.draw
         glDrawElements(mode, count, GL_UNSIGNED_INT, 0)
     }
 
     def drawWith(start : uint, count : uint) {
-        bind
         context.draw
         glDrawElements(mode, count, GL_UNSIGNED_INT, 4*start)
     }
@@ -44,13 +43,11 @@ class MutableIndexBuffer(handle : GLuint, mode : uint4) extends MutableBuffer<ui
     static def apply(mode : uint4) : MutableIndexBuffer = MutableIndexBuffer(egGenBuffer, mode)
 
     def draw {
-        bind
         context.draw
         glDrawElements(mode, count, GL_UNSIGNED_INT, 0)
     }
 
     def drawWith(start : uint, count : uint) {
-        bind
         context.draw
         glDrawElements(mode, count, GL_UNSIGNED_INT, 4*start)
     }
@@ -66,10 +63,12 @@ class EmptyIndexSource(mode : uint4) extends IndexSource {
     static val lines = EmptyIndexSource(GL_LINES)
 
     def draw {
-        glDrawArrays(mode, 0, context.vertexSource.count)
+        context.draw
+        glDrawArrays(mode, 0, context.vertexBuffer.count)
     }
 
     def drawWith(start : uint, count : uint) {
+        context.draw
         glDrawArrays(mode, start, count)
     }
 }
@@ -87,18 +86,26 @@ class ArrayIndexSource(array : PArray<uint4>, mode : uint4) extends IndexSource 
 }
 
 class VoidRefArrayIndexSource(array : VoidRefArray, mode : uint4) extends IndexSource {
-    def draw {
+    def bind {
         context.bindIndexBuffer(0)
+    }
+
+    def draw {
+        context.draw
         glDrawElements(mode, array.length/4, GL_UNSIGNED_INT, array.bytes)
     }
 
     def drawWith(start : uint, count : uint) {
-        context.bindIndexBuffer(0)
+        context.draw
         glDrawElements(mode, count, GL_UNSIGNED_INT, array.bytes + 4*start)
     }
 }
 
 class IndexSourceGap(source : IndexSource, start : uint4, count : uint4) extends IndexSource {
+    def bind {
+        source.bind
+    }
+
     def draw {
         source.drawWith(start, count)
     }

@@ -17,7 +17,7 @@
     TRSmokeView* _smokeView;
     EGStandardMaterial* _blackMaterial;
     EGStandardMaterial* _defMat;
-    EGMesh* _vaoCar1;
+    EGVertexArray* _vaoCar1;
 }
 static ODClassType* _TRTrainView_type;
 @synthesize level = _level;
@@ -37,7 +37,7 @@ static ODClassType* _TRTrainView_type;
         _smokeView = [TRSmokeView smokeView];
         _blackMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 1.0)] specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:1.0];
         _defMat = [self trainMaterialForColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
-        _vaoCar1 = [TRModels.car vaoWithMaterial:_defMat shadow:YES];
+        _vaoCar1 = [TRModels.car vaoMaterial:_defMat shadow:YES];
     }
     
     return self;
@@ -99,7 +99,7 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (void)drawCar1Material:(EGMaterial*)material {
-    [material drawMesh:_vaoCar1];
+    [_vaoCar1 drawParam:material];
     [_blackMaterial drawMesh:TRModels.carBlack];
 }
 

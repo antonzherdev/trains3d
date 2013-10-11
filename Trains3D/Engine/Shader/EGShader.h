@@ -1,15 +1,16 @@
 #import "objd.h"
 #import "GL.h"
 #import "GEVec.h"
-@class EGMesh;
 @class EGGlobal;
 @class EGContext;
-@protocol EGVertexSource;
-@protocol EGIndexSource;
-@class EGVertexBufferDesc;
-@class EGVertexArray;
 @class EGVertexBuffer;
+@protocol EGIndexSource;
+@class EGMesh;
+@class EGSimpleVertexArray;
+@class EGVertexBufferDesc;
+@class EGIndexBuffer;
 @class GEMat4;
+@class EGVertexArray;
 @class EGRenderTarget;
 
 @class EGShaderProgram;
@@ -47,8 +48,9 @@
 + (id)shaderWithProgram:(EGShaderProgram*)program;
 - (id)initWithProgram:(EGShaderProgram*)program;
 - (ODClassType*)type;
+- (void)drawParam:(id)param vertex:(EGVertexBuffer*)vertex index:(id<EGIndexSource>)index;
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh;
-- (void)drawParam:(id)param vertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index;
+- (void)drawParam:(id)param vao:(EGSimpleVertexArray*)vao;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(id)param;
 - (EGShaderUniformMat4*)uniformMat4Name:(NSString*)name;
@@ -58,7 +60,7 @@
 - (EGShaderUniformF4*)uniformF4Name:(NSString*)name;
 - (EGShaderUniformI4*)uniformI4Name:(NSString*)name;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
-- (EGVertexArray*)vaoWithVbo:(EGVertexBuffer*)vbo;
+- (EGSimpleVertexArray*)vaoVbo:(EGVertexBuffer*)vbo ibo:(EGIndexBuffer*)ibo;
 + (ODClassType*)type;
 @end
 
@@ -144,11 +146,12 @@
 + (id)shaderSystem;
 - (id)init;
 - (ODClassType*)type;
-- (void)drawParam:(id)param vertex:(id<EGVertexSource>)vertex index:(id<EGIndexSource>)index;
+- (void)drawParam:(id)param vertex:(EGVertexBuffer*)vertex index:(id<EGIndexSource>)index;
+- (void)drawParam:(id)param vao:(EGVertexArray*)vao;
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh;
 - (EGShader*)shaderForParam:(id)param;
 - (EGShader*)shaderForParam:(id)param renderTarget:(EGRenderTarget*)renderTarget;
-- (EGVertexArray*)vaoWithParam:(id)param vbo:(EGVertexBuffer*)vbo;
+- (EGVertexArray*)vaoParam:(id)param vbo:(EGVertexBuffer*)vbo ibo:(EGIndexBuffer*)ibo;
 + (ODClassType*)type;
 @end
 

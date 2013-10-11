@@ -1,6 +1,5 @@
 #import "EGVertex.h"
 
-#import "EGShader.h"
 #import "EGContext.h"
 @implementation EGVertexBufferDesc{
     ODPType* _dataType;
@@ -166,14 +165,6 @@ static ODClassType* _EGVertexBuffer_type;
     [EGGlobal.context bindVertexBufferBuffer:self];
 }
 
-- (void)bindWithShader:(EGShader*)shader {
-    [EGGlobal.context bindVertexBufferBuffer:self];
-    [shader loadAttributesVbDesc:_desc];
-}
-
-- (void)unbindWithShader:(EGShader*)shader {
-}
-
 - (ODClassType*)type {
     return [EGVertexBuffer type];
 }
@@ -266,14 +257,6 @@ static ODClassType* _EGMutableVertexBuffer_type;
     [EGGlobal.context bindVertexBufferBuffer:self];
 }
 
-- (void)bindWithShader:(EGShader*)shader {
-    [EGGlobal.context bindVertexBufferBuffer:self];
-    [shader loadAttributesVbDesc:_desc];
-}
-
-- (void)unbindWithShader:(EGShader*)shader {
-}
-
 - (ODClassType*)type {
     return [EGMutableVertexBuffer type];
 }
@@ -304,98 +287,6 @@ static ODClassType* _EGMutableVertexBuffer_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"desc=%@", self.desc];
     [description appendFormat:@", handle=%@", GLuintDescription(self.handle)];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
-@implementation EGVertexArray{
-    GLuint _handle;
-    id<CNSeq> _buffers;
-}
-static ODClassType* _EGVertexArray_type;
-@synthesize handle = _handle;
-@synthesize buffers = _buffers;
-
-+ (id)vertexArrayWithHandle:(GLuint)handle buffers:(id<CNSeq>)buffers {
-    return [[EGVertexArray alloc] initWithHandle:handle buffers:buffers];
-}
-
-- (id)initWithHandle:(GLuint)handle buffers:(id<CNSeq>)buffers {
-    self = [super init];
-    if(self) {
-        _handle = handle;
-        _buffers = buffers;
-    }
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _EGVertexArray_type = [ODClassType classTypeWithCls:[EGVertexArray class]];
-}
-
-+ (EGVertexArray*)applyBuffers:(id<CNSeq>)buffers {
-    return [EGVertexArray vertexArrayWithHandle:egGenVertexArray() buffers:buffers];
-}
-
-- (void)bind {
-    [EGGlobal.context bindVertexArrayHandle:_handle];
-}
-
-- (void)bindWithShader:(EGShader*)shader {
-    [EGGlobal.context bindVertexArrayHandle:_handle];
-}
-
-- (void)unbindWithShader:(EGShader*)shader {
-    [EGGlobal.context bindDefaultVertexArray];
-}
-
-- (void)unbind {
-    [EGGlobal.context bindDefaultVertexArray];
-}
-
-- (void)dealloc {
-    egDeleteVertexArray(_handle);
-}
-
-- (NSUInteger)count {
-    return ((EGVertexBuffer*)([_buffers head])).count;
-}
-
-- (ODClassType*)type {
-    return [EGVertexArray type];
-}
-
-+ (ODClassType*)type {
-    return _EGVertexArray_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGVertexArray* o = ((EGVertexArray*)(other));
-    return GLuintEq(self.handle, o.handle) && [self.buffers isEqual:o.buffers];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GLuintHash(self.handle);
-    hash = hash * 31 + [self.buffers hash];
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"handle=%@", GLuintDescription(self.handle)];
-    [description appendFormat:@", buffers=%@", self.buffers];
     [description appendString:@">"];
     return description;
 }

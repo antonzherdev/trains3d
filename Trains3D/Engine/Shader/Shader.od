@@ -46,16 +46,25 @@ class ShaderProgram(handle : GLuint) {
 }
 
 class Shader<P>(program : ShaderProgram) {
-    def draw(param : P, mesh : Mesh<_>) {
+    def draw(param : P, vertex : VertexBuffer<_>, index : IndexSource) {
+        context.bindShaderProgram(program)
+        vertex.bind
+        loadAttributes(vertex.desc)
+        loadUniforms(param)
+        index.bind
+        index.draw
+    }
+
+    def draw(param : P, mesh : Mesh) {
         draw(param, mesh.vertex, mesh.index)
     }
 
-    def draw(param : P, vertex : VertexSource, index : IndexSource) {
+    def draw(param : P, vao : SimpleVertexArray<P>) {
+        vao.bind
         context.bindShaderProgram(program)
-        vertex.bindWith(shader = self)
         loadUniforms(param)
-        index.draw
-        vertex.unbindWith(shader = self)
+        vao.index.draw
+        vao.unbind
     }
 
     def loadAttributes(vbDesc : VertexBufferDesc<_>)
@@ -75,10 +84,11 @@ class Shader<P>(program : ShaderProgram) {
     def uniformI4(name : string ) = ShaderUniformI4(uniform(name))
     def attributeFor(name : string ) = program.attributeFor(name)
 
-    def vaoWith(vbo : VertexBuffer<_>) : VertexArray = {
-        val vao = VertexArray([vbo])
+    def vao(vbo : VertexBuffer<_>, ibo : IndexBuffer) : SimpleVertexArray<P> = {
+        val vao = SimpleVertexArray<P>(self, [vbo], ibo)
         vao.bind
         vbo.bind
+        ibo.bind
         loadAttributes(vbo.desc)
         vao.unbind
         vao
@@ -154,9 +164,14 @@ class ShaderUniformI4(handle : GLuint) {
 }
 
 class ShaderSystem<P> {
-    def draw(param : P, vertex : VertexSource, index : IndexSource) {
+    def draw(param : P, vertex : VertexBuffer<_>, index : IndexSource) {
         val shader = shaderFor(param)
         shader.draw(param, vertex, index)
+    }
+
+    def draw(param : P, vao : VertexArray<P>) {
+        val shader = shaderFor(param)
+        shader.draw(param, vao)
     }
 
     def draw(param : P, mesh : Mesh) {
@@ -167,7 +182,7 @@ class ShaderSystem<P> {
     def shaderFor(param : P) : Shader<_> = shaderFor(param, context.renderTarget)
     def shaderFor(param : P, renderTarget : RenderTarget) : Shader<_>
 
-    def vaoWith(param : P, vbo : VertexBuffer<_>) : VertexArray = shaderFor(param).vaoWith(vbo)
+    def vao(param : P, vbo : VertexBuffer<_>, ibo : IndexBuffer) : VertexArray = shaderFor(param).vao(vbo, ibo)
 }
 
 

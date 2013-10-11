@@ -14,7 +14,7 @@
     EGColorSource* _material;
     EGMutableVertexBuffer* _vb;
     EGMutableIndexBuffer* _ib;
-    EGSimpleMesh* _mesh;
+    EGMesh* _mesh;
 }
 static ODClassType* _TRTreeView_type;
 @synthesize forest = _forest;
@@ -33,7 +33,7 @@ static ODClassType* _TRTreeView_type;
         _material = [EGColorSource colorSourceWithColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:[CNOption applyValue:[EGGlobal textureForFile:@"Pine.png"]] alphaTestLevel:0.3];
         _vb = [EGMutableVertexBuffer applyDesc:EGBillboard.vbDesc];
         _ib = [EGMutableIndexBuffer apply];
-        _mesh = [EGMesh applyVertex:_vb index:_ib];
+        _mesh = [EGMesh meshWithVertex:_vb index:_ib];
     }
     
     return self;

@@ -47,13 +47,11 @@ static ODClassType* _EGIndexBuffer_type;
 }
 
 - (void)draw {
-    [self bind];
     [EGGlobal.context draw];
     glDrawElements(_mode, _count, GL_UNSIGNED_INT, 0);
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
-    [self bind];
     [EGGlobal.context draw];
     glDrawElements(_mode, count, GL_UNSIGNED_INT, 4 * start);
 }
@@ -139,13 +137,11 @@ static ODClassType* _EGMutableIndexBuffer_type;
 }
 
 - (void)draw {
-    [self bind];
     [EGGlobal.context draw];
     glDrawElements(_mode, [self count], GL_UNSIGNED_INT, 0);
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
-    [self bind];
     [EGGlobal.context draw];
     glDrawElements(_mode, count, GL_UNSIGNED_INT, 4 * start);
 }
@@ -220,11 +216,16 @@ static ODClassType* _EGEmptyIndexSource_type;
 }
 
 - (void)draw {
-    glDrawArrays(_mode, 0, [[EGGlobal.context vertexSource] count]);
+    [EGGlobal.context draw];
+    glDrawArrays(_mode, 0, [EGGlobal.context vertexBuffer].count);
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
+    [EGGlobal.context draw];
     glDrawArrays(_mode, start, count);
+}
+
+- (void)bind {
 }
 
 - (ODClassType*)type {
@@ -311,6 +312,9 @@ static ODClassType* _EGArrayIndexSource_type;
     glDrawElements(_mode, count, GL_UNSIGNED_INT, _array.bytes + 4 * start);
 }
 
+- (void)bind {
+}
+
 - (ODClassType*)type {
     return [EGArrayIndexSource type];
 }
@@ -375,13 +379,17 @@ static ODClassType* _EGVoidRefArrayIndexSource_type;
     _EGVoidRefArrayIndexSource_type = [ODClassType classTypeWithCls:[EGVoidRefArrayIndexSource class]];
 }
 
-- (void)draw {
+- (void)bind {
     [EGGlobal.context bindIndexBufferHandle:0];
+}
+
+- (void)draw {
+    [EGGlobal.context draw];
     glDrawElements(_mode, _array.length / 4, GL_UNSIGNED_INT, _array.bytes);
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
-    [EGGlobal.context bindIndexBufferHandle:0];
+    [EGGlobal.context draw];
     glDrawElements(_mode, count, GL_UNSIGNED_INT, _array.bytes + 4 * start);
 }
 
@@ -450,6 +458,10 @@ static ODClassType* _EGIndexSourceGap_type;
 + (void)initialize {
     [super initialize];
     _EGIndexSourceGap_type = [ODClassType classTypeWithCls:[EGIndexSourceGap class]];
+}
+
+- (void)bind {
+    [_source bind];
 }
 
 - (void)draw {

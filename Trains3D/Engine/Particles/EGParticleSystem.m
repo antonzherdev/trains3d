@@ -163,7 +163,7 @@ static ODClassType* _EGParticle_type;
     CNVoidRefArray _vertexArr;
     EGMutableVertexBuffer* _vertexBuffer;
     EGIndexBuffer* _indexBuffer;
-    EGSimpleMesh* _mesh;
+    EGMesh* _mesh;
 }
 static ODClassType* _EGParticleSystemView_type;
 @synthesize vbDesc = _vbDesc;
@@ -198,7 +198,7 @@ static ODClassType* _EGParticleSystemView_type;
             cnVoidRefArrayFree(ia);
             return ib;
         }();
-        _mesh = [EGMesh applyVertex:_vertexBuffer index:_indexBuffer];
+        _mesh = [EGMesh meshWithVertex:_vertexBuffer index:_indexBuffer];
     }
     
     return self;

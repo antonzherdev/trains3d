@@ -3,7 +3,7 @@
 #import "GL.h"
 @class EGGlobal;
 @class EGContext;
-@protocol EGVertexSource;
+@class EGVertexBuffer;
 
 @class EGIndexBuffer;
 @class EGMutableIndexBuffer;
@@ -14,6 +14,7 @@
 @protocol EGIndexSource;
 
 @protocol EGIndexSource<NSObject>
+- (void)bind;
 - (void)draw;
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
 @end
@@ -87,6 +88,7 @@
 + (id)voidRefArrayIndexSourceWithArray:(CNVoidRefArray)array mode:(unsigned int)mode;
 - (id)initWithArray:(CNVoidRefArray)array mode:(unsigned int)mode;
 - (ODClassType*)type;
+- (void)bind;
 - (void)draw;
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
 + (ODClassType*)type;
@@ -101,6 +103,7 @@
 + (id)indexSourceGapWithSource:(id<EGIndexSource>)source start:(unsigned int)start count:(unsigned int)count;
 - (id)initWithSource:(id<EGIndexSource>)source start:(unsigned int)start count:(unsigned int)count;
 - (ODClassType*)type;
+- (void)bind;
 - (void)draw;
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
 + (ODClassType*)type;

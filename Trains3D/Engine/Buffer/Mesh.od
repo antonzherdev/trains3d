@@ -1,0 +1,71 @@
+package com.antonzherdev.eg
+
+struct MeshData(uv : vec2, normal : vec3, position : vec3)
+
+class Mesh(vertex : VertexBuffer<_>, index : IndexBuffer) {
+    static def vec2(vertexData : PArray<vec2>, indexData : PArray<uint4>) : Mesh = Mesh(
+            vertex = VertexBuffer.vec2(vertexData),
+            index = IndexBuffer(indexData))
+
+    static def apply(vertexData : PArray<MeshData>, indexData : PArray<uint4>) : Mesh = Mesh(
+            vertex = VertexBuffer.mesh(vertexData),
+            index = IndexBuffer(indexData))
+
+    static def apply<T>(desc : VertexBufferDesc<T>, vertexData : PArray<T>, indexData : PArray<uint4>) : Mesh = Mesh(
+            vertex = VertexBuffer<T>(desc, vertexData),
+            index = IndexBuffer(indexData))
+
+    def vao<N>(shader : Shader<N>) : VertexArray<N> = shader.vao(vertex, index)
+    def vao<N extends Material>(material : N, shadow : bool) : VertexArray<N> = {
+        val std = material.shader.vao(vertex, index)
+        if(shadow && egPlatform.shadows) RouteVertexArray(std, material.shaderSystem.shaderFor(material, ShadowRenderTarget.default).vao(vertex, index))
+        else std
+    }
+    def vao<N>(shaderSystem : ShaderSystem<N>, material : N, shadow : bool) : VertexArray<N> = {
+        val std = shaderSystem.shaderFor(material).vao(vertex.cast<VertexBuffer<_>>, index.cast<IndexBuffer<_>>)
+        if(shadow && egPlatform.shadows) RouteVertexArray(std, shaderSystem.shaderFor(material, ShadowRenderTarget.default).vao(vertex, index))
+        else std
+    }
+
+    def draw(material : Material) {
+        material.draw(self)
+    }
+}
+
+class VertexArray<P> {
+    def draw(param : P)
+}
+
+class RouteVertexArray<P>(standard : VertexArray<P>, shadow : VertexArray<P>) extends VertexArray<P> {
+    def mesh : VertexArray<P> =
+        if(context.renderTarget.is<ShadowRenderTarget>) shadow
+        else standard
+
+    def draw(param : P) {
+        mesh.draw(param)
+    }
+}
+
+
+class SimpleVertexArray<P>(handle : GLuint, shader : Shader<P>, buffers : [VertexBuffer<_>], index : IndexSource) extends VertexArray<P> {
+    static def apply<P>(shader : Shader<P>, buffers : [VertexBuffer<_>], index : IndexSource) : SimpleVertexArray<P> =
+        SimpleVertexArray<P>(egGenVertexArray, shader, buffers, index)
+
+    def bind {
+        context.bindVertexArray(handle)
+    }
+
+    def unbind {
+        context.bindDefaultVertexArray
+    }
+
+    def dealloc {
+        egDeleteVertexArray(handle)
+    }
+
+    def count = buffers.head.count
+
+    def draw(param : P) {
+        shader.draw(param, self)
+    }
+}
