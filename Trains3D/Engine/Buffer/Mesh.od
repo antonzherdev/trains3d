@@ -34,6 +34,17 @@ class Mesh(vertex : VertexBuffer<_>, index : IndexSource) {
     }
 }
 
+class MeshModel(arrays : [VertexArray<Material>]) {
+    static def apply(meshes : [(Mesh, Material)]) : MeshModel = MeshModel(false, meshes)
+    static def apply(shadow : bool, meshes : [(Mesh, Material)]) : MeshModel = MeshModel(arrays = meshes.chain.map{p ->
+        p.a.vao(p.b, shadow)
+    }.toArray)
+    def draw {
+        arrays.for(_.draw)
+    }
+}
+
+
 class VertexArray<P> {
     def draw(param : P)
 

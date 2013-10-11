@@ -5,6 +5,7 @@
 #import "GL.h"
 #import "EGContext.h"
 #import "EGMaterial.h"
+#import "EGMesh.h"
 #import "TRModels.h"
 #import "GEMat4.h"
 #import "TRRailPoint.h"
@@ -141,8 +142,8 @@ static ODClassType* _TRRailView_type;
     self = [super init];
     if(self) {
         _railMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.6, 1.0)] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:0.3];
-        _railModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.railGravel, ((EGMaterial*)([EGMaterial applyTexture:[EGGlobal textureForFile:@"Gravel.png"]]))), tuple(TRModels.railTies, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.rails, _railMaterial)])];
-        _railTurnModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.railTurnGravel, ((EGMaterial*)([EGMaterial applyTexture:[EGGlobal textureForFile:@"Gravel.png"]]))), tuple(TRModels.railTurnTies, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.railsTurn, _railMaterial)])];
+        _railModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railGravel, ((EGMaterial*)([EGMaterial applyTexture:[EGGlobal textureForFile:@"Gravel.png"]]))), tuple(TRModels.railTies, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.rails, _railMaterial)])];
+        _railTurnModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railTurnGravel, ((EGMaterial*)([EGMaterial applyTexture:[EGGlobal textureForFile:@"Gravel.png"]]))), tuple(TRModels.railTurnTies, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.railsTurn, _railMaterial)])];
     }
     
     return self;
@@ -229,8 +230,8 @@ static ODClassType* _TRSwitchView_type;
     self = [super init];
     if(self) {
         _material = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.2, 0.5, 0.15, 1.0)] specularColor:GEVec4Make(0.5, 1.0, 0.5, 1.0) specularSize:1.0];
-        _switchStraightModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.switchStraight, _material)])];
-        _switchTurnModel = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.switchTurn, _material)])];
+        _switchStraightModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.switchStraight, _material)])];
+        _switchTurnModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.switchTurn, _material)])];
     }
     
     return self;
@@ -412,7 +413,7 @@ static ODClassType* _TRDamageView_type;
 
 - (id)init {
     self = [super init];
-    if(self) _model = [EGMeshModel meshModelWithMeshes:(@[tuple(TRModels.damage, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(1.0, 0.0, 0.0, 1.0)])))])];
+    if(self) _model = [EGMeshModel applyMeshes:(@[tuple(TRModels.damage, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(1.0, 0.0, 0.0, 1.0)])))])];
     
     return self;
 }

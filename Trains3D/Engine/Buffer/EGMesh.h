@@ -16,6 +16,7 @@
 @class EGRenderTarget;
 
 @class EGMesh;
+@class EGMeshModel;
 @class EGVertexArray;
 @class EGRouteVertexArray;
 @class EGSimpleVertexArray;
@@ -65,6 +66,19 @@ ODPType* egMeshDataType();
 - (EGVertexArray*)vaoMaterial:(id)material shadow:(BOOL)shadow;
 - (EGVertexArray*)vaoShaderSystem:(EGShaderSystem*)shaderSystem material:(id)material shadow:(BOOL)shadow;
 - (void)drawMaterial:(EGMaterial*)material;
++ (ODClassType*)type;
+@end
+
+
+@interface EGMeshModel : NSObject
+@property (nonatomic, readonly) id<CNSeq> arrays;
+
++ (id)meshModelWithArrays:(id<CNSeq>)arrays;
+- (id)initWithArrays:(id<CNSeq>)arrays;
+- (ODClassType*)type;
++ (EGMeshModel*)applyMeshes:(id<CNSeq>)meshes;
++ (EGMeshModel*)applyShadow:(BOOL)shadow meshes:(id<CNSeq>)meshes;
+- (void)draw;
 + (ODClassType*)type;
 @end
 

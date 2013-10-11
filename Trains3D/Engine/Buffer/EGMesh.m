@@ -155,6 +155,79 @@ static ODClassType* _EGMesh_type;
 @end
 
 
+@implementation EGMeshModel{
+    id<CNSeq> _arrays;
+}
+static ODClassType* _EGMeshModel_type;
+@synthesize arrays = _arrays;
+
++ (id)meshModelWithArrays:(id<CNSeq>)arrays {
+    return [[EGMeshModel alloc] initWithArrays:arrays];
+}
+
+- (id)initWithArrays:(id<CNSeq>)arrays {
+    self = [super init];
+    if(self) _arrays = arrays;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGMeshModel_type = [ODClassType classTypeWithCls:[EGMeshModel class]];
+}
+
++ (EGMeshModel*)applyMeshes:(id<CNSeq>)meshes {
+    return [EGMeshModel applyShadow:NO meshes:meshes];
+}
+
++ (EGMeshModel*)applyShadow:(BOOL)shadow meshes:(id<CNSeq>)meshes {
+    return [EGMeshModel meshModelWithArrays:[[[meshes chain] map:^EGVertexArray*(CNTuple* p) {
+        return [((EGMesh*)(p.a)) vaoMaterial:((EGMaterial*)(p.b)) shadow:shadow];
+    }] toArray]];
+}
+
+- (void)draw {
+    [_arrays forEach:^void(EGVertexArray* _) {
+        [_ draw];
+    }];
+}
+
+- (ODClassType*)type {
+    return [EGMeshModel type];
+}
+
++ (ODClassType*)type {
+    return _EGMeshModel_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGMeshModel* o = ((EGMeshModel*)(other));
+    return [self.arrays isEqual:o.arrays];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.arrays hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"arrays=%@", self.arrays];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation EGVertexArray
 static ODClassType* _EGVertexArray_type;
 

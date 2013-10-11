@@ -244,69 +244,6 @@ static ODClassType* _EGStandardMaterial_type;
 @end
 
 
-@implementation EGMeshModel{
-    id<CNSeq> _meshes;
-}
-static ODClassType* _EGMeshModel_type;
-@synthesize meshes = _meshes;
-
-+ (id)meshModelWithMeshes:(id<CNSeq>)meshes {
-    return [[EGMeshModel alloc] initWithMeshes:meshes];
-}
-
-- (id)initWithMeshes:(id<CNSeq>)meshes {
-    self = [super init];
-    if(self) _meshes = meshes;
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _EGMeshModel_type = [ODClassType classTypeWithCls:[EGMeshModel class]];
-}
-
-- (void)draw {
-    [_meshes forEach:^void(CNTuple* p) {
-        [((EGMaterial*)(p.b)) drawMesh:((EGMesh*)(p.a))];
-    }];
-}
-
-- (ODClassType*)type {
-    return [EGMeshModel type];
-}
-
-+ (ODClassType*)type {
-    return _EGMeshModel_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGMeshModel* o = ((EGMeshModel*)(other));
-    return [self.meshes isEqual:o.meshes];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.meshes hash];
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"meshes=%@", self.meshes];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
 @implementation EGBlendFunction{
     unsigned int _source;
     unsigned int _destination;

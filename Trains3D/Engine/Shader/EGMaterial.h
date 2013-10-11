@@ -15,7 +15,6 @@
 @class EGMaterial;
 @class EGColorSource;
 @class EGStandardMaterial;
-@class EGMeshModel;
 @class EGBlendFunction;
 
 @interface EGMaterial : NSObject
@@ -58,17 +57,6 @@
 - (ODClassType*)type;
 + (EGStandardMaterial*)applyDiffuse:(EGColorSource*)diffuse;
 - (EGShaderSystem*)shaderSystem;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGMeshModel : NSObject
-@property (nonatomic, readonly) id<CNSeq> meshes;
-
-+ (id)meshModelWithMeshes:(id<CNSeq>)meshes;
-- (id)initWithMeshes:(id<CNSeq>)meshes;
-- (ODClassType*)type;
-- (void)draw;
 + (ODClassType*)type;
 @end
 
