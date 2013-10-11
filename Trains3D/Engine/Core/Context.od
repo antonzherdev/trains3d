@@ -127,16 +127,13 @@ class Context {
     var defaultVertexArray : GLuint = 0
     private var _needBindDefaultVertexArray = false
     def bindDefaultVertexArray {
-        if(_lastVertexArray != defaultVertexArray) {
-            _lastVertexArray = defaultVertexArray
-            _lastIndexBuffer = 0
-            _lastVertexBufferCount = 0
-            _lastVertexBufferId = 0
-            _needBindDefaultVertexArray = true
-        }
+        _needBindDefaultVertexArray = true
     }
     def checkBindDefaultVertexArray {
         if(_needBindDefaultVertexArray) {
+            _lastIndexBuffer = 0
+            _lastVertexBufferCount = 0
+            _lastVertexBufferId = 0
             egBindVertexArray(defaultVertexArray)
             _needBindDefaultVertexArray = false
         }

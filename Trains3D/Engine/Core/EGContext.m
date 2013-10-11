@@ -264,17 +264,14 @@ static ODClassType* _EGContext_type;
 }
 
 - (void)bindDefaultVertexArray {
-    if(!(GLuintEq(__lastVertexArray, _defaultVertexArray))) {
-        __lastVertexArray = _defaultVertexArray;
-        __lastIndexBuffer = 0;
-        __lastVertexBufferCount = 0;
-        __lastVertexBufferId = 0;
-        __needBindDefaultVertexArray = YES;
-    }
+    __needBindDefaultVertexArray = YES;
 }
 
 - (void)checkBindDefaultVertexArray {
     if(__needBindDefaultVertexArray) {
+        __lastIndexBuffer = 0;
+        __lastVertexBufferCount = 0;
+        __lastVertexBufferId = 0;
         egBindVertexArray(_defaultVertexArray);
         __needBindDefaultVertexArray = NO;
     }
