@@ -103,14 +103,14 @@ static ODClassType* _EGMesh_type;
 }
 
 - (EGVertexArray*)vaoMaterial:(id)material shadow:(BOOL)shadow {
-    EGSimpleVertexArray* std = [[material shader] vaoVbo:_vertex ibo:_index];
-    if(shadow && egPlatform().shadows) return [EGRouteVertexArray routeVertexArrayWithStandard:std shadow:[[[material shaderSystem] shaderForParam:material renderTarget:EGShadowRenderTarget.aDefault] vaoVbo:_vertex ibo:_index]];
+    EGMaterialVertexArray* std = [EGMaterialVertexArray materialVertexArrayWithVao:[[material shader] vaoVbo:_vertex ibo:_index] material:material];
+    if(shadow && egPlatform().shadows) return [EGRouteVertexArray routeVertexArrayWithStandard:std shadow:[EGMaterialVertexArray materialVertexArrayWithVao:[[[material shaderSystem] shaderForParam:material renderTarget:EGShadowRenderTarget.aDefault] vaoVbo:_vertex ibo:_index] material:material]];
     else return std;
 }
 
 - (EGVertexArray*)vaoShaderSystem:(EGShaderSystem*)shaderSystem material:(id)material shadow:(BOOL)shadow {
-    EGSimpleVertexArray* std = [[shaderSystem shaderForParam:material] vaoVbo:_vertex ibo:_index];
-    if(shadow && egPlatform().shadows) return [EGRouteVertexArray routeVertexArrayWithStandard:std shadow:[[shaderSystem shaderForParam:material renderTarget:EGShadowRenderTarget.aDefault] vaoVbo:_vertex ibo:_index]];
+    EGMaterialVertexArray* std = [EGMaterialVertexArray materialVertexArrayWithVao:[[shaderSystem shaderForParam:material] vaoVbo:_vertex ibo:_index] material:material];
+    if(shadow && egPlatform().shadows) return [EGRouteVertexArray routeVertexArrayWithStandard:std shadow:[EGMaterialVertexArray materialVertexArrayWithVao:[[shaderSystem shaderForParam:material renderTarget:EGShadowRenderTarget.aDefault] vaoVbo:_vertex ibo:_index] material:material]];
     else return std;
 }
 
@@ -174,6 +174,10 @@ static ODClassType* _EGVertexArray_type;
 }
 
 - (void)drawParam:(id)param {
+    @throw @"Method draw is abstract";
+}
+
+- (void)draw {
     @throw @"Method draw is abstract";
 }
 
@@ -242,6 +246,10 @@ static ODClassType* _EGRouteVertexArray_type;
 
 - (void)drawParam:(id)param {
     [[self mesh] drawParam:param];
+}
+
+- (void)draw {
+    [[self mesh] draw];
 }
 
 - (ODClassType*)type {
@@ -338,6 +346,10 @@ static ODClassType* _EGSimpleVertexArray_type;
     [_shader drawParam:param vao:self];
 }
 
+- (void)draw {
+    @throw @"No default material";
+}
+
 - (ODClassType*)type {
     return [EGSimpleVertexArray type];
 }
@@ -372,6 +384,78 @@ static ODClassType* _EGSimpleVertexArray_type;
     [description appendFormat:@", shader=%@", self.shader];
     [description appendFormat:@", buffers=%@", self.buffers];
     [description appendFormat:@", index=%@", self.index];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGMaterialVertexArray{
+    EGVertexArray* _vao;
+    id _material;
+}
+static ODClassType* _EGMaterialVertexArray_type;
+@synthesize vao = _vao;
+@synthesize material = _material;
+
++ (id)materialVertexArrayWithVao:(EGVertexArray*)vao material:(id)material {
+    return [[EGMaterialVertexArray alloc] initWithVao:vao material:material];
+}
+
+- (id)initWithVao:(EGVertexArray*)vao material:(id)material {
+    self = [super init];
+    if(self) {
+        _vao = vao;
+        _material = material;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGMaterialVertexArray_type = [ODClassType classTypeWithCls:[EGMaterialVertexArray class]];
+}
+
+- (void)draw {
+    [_vao drawParam:_material];
+}
+
+- (void)drawParam:(id)param {
+    [_vao drawParam:param];
+}
+
+- (ODClassType*)type {
+    return [EGMaterialVertexArray type];
+}
+
++ (ODClassType*)type {
+    return _EGMaterialVertexArray_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGMaterialVertexArray* o = ((EGMaterialVertexArray*)(other));
+    return [self.vao isEqual:o.vao] && [self.material isEqual:o.material];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.vao hash];
+    hash = hash * 31 + [self.material hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"vao=%@", self.vao];
+    [description appendFormat:@", material=%@", self.material];
     [description appendString:@">"];
     return description;
 }

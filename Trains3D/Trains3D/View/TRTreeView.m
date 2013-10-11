@@ -14,7 +14,7 @@
     EGColorSource* _material;
     EGMutableVertexBuffer* _vb;
     EGMutableIndexBuffer* _ib;
-    EGMesh* _mesh;
+    EGVertexArray* _mesh;
 }
 static ODClassType* _TRTreeView_type;
 @synthesize forest = _forest;
@@ -33,7 +33,7 @@ static ODClassType* _TRTreeView_type;
         _material = [EGColorSource colorSourceWithColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:[CNOption applyValue:[EGGlobal textureForFile:@"Pine.png"]] alphaTestLevel:0.3];
         _vb = [EGVBO mutDesc:EGBillboard.vbDesc];
         _ib = [EGIBO mut];
-        _mesh = [EGMesh meshWithVertex:_vb index:_ib];
+        _mesh = [[EGMesh meshWithVertex:_vb index:_ib] vaoShaderSystem:EGBillboardShaderSystem.instance material:_material shadow:YES];
     }
     
     return self;
@@ -60,7 +60,7 @@ static ODClassType* _TRTreeView_type;
     [_ib setArray:iar];
     [EGBlendFunction.standard applyDraw:^void() {
         [EGGlobal.context.cullFace disabledF:^void() {
-            [EGBillboardShaderSystem.instance drawParam:_material mesh:_mesh];
+            [_mesh draw];
         }];
     }];
     cnVoidRefArrayFree(ar);

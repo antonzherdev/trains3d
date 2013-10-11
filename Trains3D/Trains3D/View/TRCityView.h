@@ -5,8 +5,8 @@
 @class EGStandardMaterial;
 @class EGTexture;
 @class EGGlobal;
-@class EGColorSource;
 @class TRModels;
+@class EGColorSource;
 @class TRCity;
 @class GEMat4;
 @class EGMatrixModel;
@@ -23,7 +23,6 @@
 @interface TRCityView : NSObject
 @property (nonatomic, readonly) EGVertexArray* expectedTrainModel;
 @property (nonatomic, readonly) EGTexture* roofTexture;
-@property (nonatomic, readonly) EGStandardMaterial* windowMaterial;
 @property (nonatomic, readonly) EGVertexArray* vaoBody;
 @property (nonatomic, readonly) EGVertexArray* vaoRoof;
 @property (nonatomic, readonly) EGVertexArray* vaoWindows;

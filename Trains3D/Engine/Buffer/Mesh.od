@@ -17,13 +17,15 @@ class Mesh(vertex : VertexBuffer<_>, index : IndexBuffer) {
 
     def vao<N>(shader : Shader<N>) : VertexArray<N> = shader.vao(vertex, index)
     def vao<N extends Material>(material : N, shadow : bool) : VertexArray<N> = {
-        val std = material.shader.vao(vertex, index)
-        if(shadow && egPlatform.shadows) RouteVertexArray(std, material.shaderSystem.shaderFor(material, ShadowRenderTarget.default).vao(vertex, index))
+        val std = MaterialVertexArray(material.shader.vao(vertex, index), material)
+        if(shadow && egPlatform.shadows) RouteVertexArray(std,
+            MaterialVertexArray(material.shaderSystem.shaderFor(material, ShadowRenderTarget.default).vao(vertex, index), material))
         else std
     }
     def vao<N>(shaderSystem : ShaderSystem<N>, material : N, shadow : bool) : VertexArray<N> = {
-        val std = shaderSystem.shaderFor(material).vao(vertex, index)
-        if(shadow && egPlatform.shadows) RouteVertexArray(std, shaderSystem.shaderFor(material, ShadowRenderTarget.default).vao(vertex, index))
+        val std = MaterialVertexArray(shaderSystem.shaderFor(material).vao(vertex, index), material)
+        if(shadow && egPlatform.shadows) RouteVertexArray(std,
+            MaterialVertexArray(shaderSystem.shaderFor(material, ShadowRenderTarget.default).vao(vertex, index), material))
         else std
     }
 
@@ -34,6 +36,8 @@ class Mesh(vertex : VertexBuffer<_>, index : IndexBuffer) {
 
 class VertexArray<P> {
     def draw(param : P)
+
+    def draw
 }
 
 class RouteVertexArray<P>(standard : VertexArray<P>, shadow : VertexArray<P>) extends VertexArray<P> {
@@ -43,6 +47,10 @@ class RouteVertexArray<P>(standard : VertexArray<P>, shadow : VertexArray<P>) ex
 
     def draw(param : P) {
         mesh.draw(param)
+    }
+
+    def draw {
+        mesh.draw
     }
 }
 
@@ -67,5 +75,20 @@ class SimpleVertexArray<P>(handle : GLuint, shader : Shader<P>, buffers : [Verte
 
     def draw(param : P) {
         shader.draw(param, self)
+    }
+
+    def draw {
+        throw "No default material"
+    }
+}
+
+class MaterialVertexArray<P>(vao : VertexArray<P>, material : P) extends VertexArray<P>
+{
+    def draw {
+        vao.draw(material)
+    }
+
+    def draw(param : P) {
+        vao.draw(param)
     }
 }

@@ -11,7 +11,6 @@
 @implementation TRCityView{
     EGVertexArray* _expectedTrainModel;
     EGTexture* _roofTexture;
-    EGStandardMaterial* _windowMaterial;
     EGVertexArray* _vaoBody;
     EGVertexArray* _vaoRoof;
     EGVertexArray* _vaoWindows;
@@ -19,7 +18,6 @@
 static ODClassType* _TRCityView_type;
 @synthesize expectedTrainModel = _expectedTrainModel;
 @synthesize roofTexture = _roofTexture;
-@synthesize windowMaterial = _windowMaterial;
 @synthesize vaoBody = _vaoBody;
 @synthesize vaoRoof = _vaoRoof;
 @synthesize vaoWindows = _vaoWindows;
@@ -33,10 +31,9 @@ static ODClassType* _TRCityView_type;
     if(self) {
         _expectedTrainModel = [[EGMesh applyVertexData:[ arrs(EGMeshData, 32) {0, 0, 0, 1, 0, -0.5, 0.001, -0.5, 1, 0, 0, 1, 0, 0.5, 0.001, -0.5, 1, 1, 0, 1, 0, 0.5, 0.001, 0.5, 0, 1, 0, 1, 0, -0.5, 0.001, 0.5}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]] vaoMaterial:[EGStandardMaterial applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)] shadow:NO];
         _roofTexture = [EGGlobal textureForFile:@"Roof.png"];
-        _windowMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Window.png"]] specularColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) specularSize:1.0];
         _vaoBody = [TRModels.cityBodies vaoMaterial:[EGStandardMaterial applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)] shadow:NO];
         _vaoRoof = [TRModels.cityRoofs vaoMaterial:[EGStandardMaterial applyTexture:_roofTexture] shadow:NO];
-        _vaoWindows = [TRModels.cityWindows vaoMaterial:_windowMaterial shadow:NO];
+        _vaoWindows = [TRModels.cityWindows vaoMaterial:[EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Window.png"]] specularColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) specularSize:1.0] shadow:NO];
     }
     
     return self;
@@ -61,7 +58,7 @@ static ODClassType* _TRCityView_type;
                 EGStandardMaterial* roofMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:city.color.color texture:_roofTexture] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:1.0];
                 [_vaoRoof drawParam:roofMaterial];
             }];
-            [_vaoWindows drawParam:_windowMaterial];
+            [_vaoWindows draw];
             [city.expectedTrainCounter forF:^void(CGFloat time) {
                 CGFloat x = -time / 2;
                 [_expectedTrainModel drawParam:[EGStandardMaterial applyColor:GEVec4Make(1.0, ((float)(0.5 - x)), ((float)(0.5 - x)), 1.0)]];

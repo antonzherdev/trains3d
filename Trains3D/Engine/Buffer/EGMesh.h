@@ -20,6 +20,7 @@
 @class EGVertexArray;
 @class EGRouteVertexArray;
 @class EGSimpleVertexArray;
+@class EGMaterialVertexArray;
 typedef struct EGMeshData EGMeshData;
 
 struct EGMeshData {
@@ -74,6 +75,7 @@ ODPType* egMeshDataType();
 - (id)init;
 - (ODClassType*)type;
 - (void)drawParam:(id)param;
+- (void)draw;
 + (ODClassType*)type;
 @end
 
@@ -87,6 +89,7 @@ ODPType* egMeshDataType();
 - (ODClassType*)type;
 - (EGVertexArray*)mesh;
 - (void)drawParam:(id)param;
+- (void)draw;
 + (ODClassType*)type;
 @end
 
@@ -105,6 +108,20 @@ ODPType* egMeshDataType();
 - (void)unbind;
 - (void)dealloc;
 - (NSUInteger)count;
+- (void)drawParam:(id)param;
+- (void)draw;
++ (ODClassType*)type;
+@end
+
+
+@interface EGMaterialVertexArray : EGVertexArray
+@property (nonatomic, readonly) EGVertexArray* vao;
+@property (nonatomic, readonly) id material;
+
++ (id)materialVertexArrayWithVao:(EGVertexArray*)vao material:(id)material;
+- (id)initWithVao:(EGVertexArray*)vao material:(id)material;
+- (ODClassType*)type;
+- (void)draw;
 - (void)drawParam:(id)param;
 + (ODClassType*)type;
 @end
