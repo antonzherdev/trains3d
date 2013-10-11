@@ -71,7 +71,7 @@ class SimpleVertexArray<P>(handle : GLuint, shader : Shader<P>, buffers : [Verte
         SimpleVertexArray<P>(egGenVertexArray, shader, buffers, index)
 
     def bind {
-        context.bindVertexArray(handle)
+        context.bindVertexArray(handle, buffers.head.count)
     }
 
     def unbind {

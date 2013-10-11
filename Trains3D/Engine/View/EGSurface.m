@@ -4,6 +4,7 @@
 #import "EGContext.h"
 #import "EGVertex.h"
 #import "EGMesh.h"
+#import "EGIndex.h"
 @implementation EGSurface{
     GEVec2i _size;
 }
@@ -469,6 +470,7 @@ static ODClassType* _EGViewportSurfaceShader_type;
     NSInteger _redrawCounter;
 }
 static CNLazy* _EGBaseViewportSurface__lazy_fullScreenMesh;
+static CNLazy* _EGBaseViewportSurface__lazy_fullScreenVao;
 static ODClassType* _EGBaseViewportSurface_type;
 
 + (id)baseViewportSurface {
@@ -489,12 +491,19 @@ static ODClassType* _EGBaseViewportSurface_type;
     [super initialize];
     _EGBaseViewportSurface_type = [ODClassType classTypeWithCls:[EGBaseViewportSurface class]];
     _EGBaseViewportSurface__lazy_fullScreenMesh = [CNLazy lazyWithF:^EGMesh*() {
-        return [EGMesh vec2VertexData:[ arrs(GEVec2, 4) {GEVec2Make(0.0, 0.0), GEVec2Make(1.0, 0.0), GEVec2Make(1.0, 1.0), GEVec2Make(0.0, 1.0)}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
+        return [EGMesh meshWithVertex:[EGVBO vec2Data:[ arrs(GEVec2, 4) {GEVec2Make(0.0, 0.0), GEVec2Make(1.0, 0.0), GEVec2Make(0.0, 1.0), GEVec2Make(1.0, 1.0)}]] index:EGEmptyIndexSource.triangleStrip];
+    }];
+    _EGBaseViewportSurface__lazy_fullScreenVao = [CNLazy lazyWithF:^EGVertexArray*() {
+        return [[EGBaseViewportSurface fullScreenMesh] vaoShader:EGViewportSurfaceShader.instance];
     }];
 }
 
 + (EGMesh*)fullScreenMesh {
     return ((EGMesh*)([_EGBaseViewportSurface__lazy_fullScreenMesh get]));
+}
+
++ (EGVertexArray*)fullScreenVao {
+    return ((EGVertexArray*)([_EGBaseViewportSurface__lazy_fullScreenVao get]));
 }
 
 - (id)surface {

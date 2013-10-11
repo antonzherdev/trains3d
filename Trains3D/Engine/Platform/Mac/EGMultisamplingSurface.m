@@ -2,6 +2,7 @@
 
 #import "EGTexture.h"
 #import "EGContext.h"
+#import "EGMesh.h"
 
 @implementation EGFirstMultisamplingSurface {
     BOOL _depth;
@@ -200,7 +201,6 @@ static ODClassType* _EGMultisamplingSurface_type;
 @implementation EGViewportSurface{
     BOOL _depth;
     BOOL _multisampling;
-    EGViewportSurfaceShader* _shader;
 }
 static ODClassType* _EGViewportSurface_type;
 @synthesize depth = _depth;
@@ -215,7 +215,6 @@ static ODClassType* _EGViewportSurface_type;
     if(self) {
         _depth = depth;
         _multisampling = multisampling;
-        _shader = [EGViewportSurfaceShader instance];
     }
 
     return self;
@@ -226,10 +225,6 @@ static ODClassType* _EGViewportSurface_type;
     _EGViewportSurface_type = [ODClassType classTypeWithCls:[EGViewportSurface class]];
 }
 
-- (EGViewportSurfaceShader*)shader {
-    return _shader;
-}
-
 - (EGSurface*)createSurface {
     if(_multisampling) return [EGMultisamplingSurface multisamplingSurfaceWithSize:[EGGlobal.context viewport].size depth:_depth];
     else return [EGSimpleSurface simpleSurfaceWithSize:[EGGlobal.context viewport].size depth:_depth];
@@ -237,7 +232,7 @@ static ODClassType* _EGViewportSurface_type;
 
 - (void)drawWithZ:(float)z {
     [EGGlobal.context.cullFace disabledF:^void() {
-        [[self shader] drawParam:[EGViewportSurfaceShaderParam viewportSurfaceShaderParamWithTexture:[self texture] z:z] mesh:[EGViewportSurface fullScreenMesh]];
+        [[EGViewportSurface fullScreenVao] drawParam:[EGViewportSurfaceShaderParam viewportSurfaceShaderParamWithTexture:[self texture] z:z]];
     }];
 }
 
@@ -274,7 +269,7 @@ static ODClassType* _EGViewportSurface_type;
     if([self needRedraw]) {
         [EGGlobal.context.depthTest disabledF:^void() {
             [EGGlobal.context.cullFace disabledF:^void() {
-                [[self shader] drawParam:[EGViewportSurfaceShaderParam viewportSurfaceShaderParamWithTexture:[self texture] z:0.0] mesh:[EGViewportSurface fullScreenMesh]];
+                [[EGViewportSurface fullScreenVao] drawParam:[EGViewportSurfaceShaderParam viewportSurfaceShaderParamWithTexture:[self texture] z:0.0]];
             }];
         }];
     } else {

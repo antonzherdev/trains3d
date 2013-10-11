@@ -3,6 +3,7 @@
 #import "GEMat4.h"
 #import "EGTexture.h"
 #import "EGContext.h"
+#import "EGMesh.h"
 #import "EGMaterial.h"
 #import "EGVertex.h"
 #import "EGStandardShaderSystem.h"
@@ -11,6 +12,7 @@
     GEMat4* _biasDepthCp;
     EGTexture* _texture;
     CNLazy* __lazy_shader;
+    CNLazy* __lazy_vao;
 }
 static GEMat4* _EGShadowMap_biasMatrix;
 static ODClassType* _EGShadowMap_type;
@@ -47,6 +49,9 @@ static ODClassType* _EGShadowMap_type;
         __lazy_shader = [CNLazy lazyWithF:^EGShadowSurfaceShader*() {
             return [EGShadowSurfaceShader shadowSurfaceShader];
         }];
+        __lazy_vao = [CNLazy lazyWithF:^EGVertexArray*() {
+            return [[EGBaseViewportSurface fullScreenMesh] vaoShader:[EGShadowSurfaceShader shadowSurfaceShader]];
+        }];
     }
     
     return self;
@@ -60,6 +65,10 @@ static ODClassType* _EGShadowMap_type;
 
 - (EGShadowSurfaceShader*)shader {
     return ((EGShadowSurfaceShader*)([__lazy_shader get]));
+}
+
+- (EGVertexArray*)vao {
+    return ((EGVertexArray*)([__lazy_vao get]));
 }
 
 - (void)dealloc {
@@ -81,7 +90,7 @@ static ODClassType* _EGShadowMap_type;
 
 - (void)draw {
     [EGGlobal.context.cullFace disabledF:^void() {
-        [[self shader] drawParam:[EGColorSource applyTexture:_texture] mesh:[EGBaseViewportSurface fullScreenMesh]];
+        [[self vao] drawParam:[EGColorSource applyTexture:_texture]];
     }];
 }
 

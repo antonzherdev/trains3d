@@ -8,6 +8,8 @@
 @class EGEmptyTexture;
 @class EGGlobal;
 @class EGContext;
+@class EGVertexArray;
+@class EGMesh;
 @class EGColorSource;
 @class EGEnablingState;
 @class EGVertexBufferDesc;

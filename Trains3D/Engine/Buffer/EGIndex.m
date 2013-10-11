@@ -1,7 +1,6 @@
 #import "EGIndex.h"
 
 #import "EGContext.h"
-#import "EGVertex.h"
 @implementation EGIBO
 static ODClassType* _EGIBO_type;
 
@@ -256,7 +255,7 @@ static ODClassType* _EGEmptyIndexSource_type;
 
 - (void)draw {
     [EGGlobal.context draw];
-    glDrawArrays(_mode, 0, [[EGGlobal.context vertexBuffer] count]);
+    glDrawArrays(_mode, 0, [EGGlobal.context vertexBufferCount]);
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {

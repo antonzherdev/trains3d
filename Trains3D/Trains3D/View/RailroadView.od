@@ -170,7 +170,7 @@ class DamageView {
 class BackgroundView(map : MapSso) {
     val mapView = MapSsoView(map, StandardMaterial(textureFor("Grass.png")))
     val shadowParam = ShadowDrawParam([0.3])
-    val shadowVao =  mapView.plane.vao(ShadowDrawShaderSystem.instance.shaderFor(shadowParam))
+    val shadowVao : VertexArray<_>? =  if(egPlatform.shadows) mapView.plane.vao(ShadowDrawShaderSystem.instance.shaderFor(shadowParam)) else nil
     def draw {
         mapView.draw
 //        mapView.drawLayout
@@ -179,7 +179,7 @@ class BackgroundView(map : MapSso) {
     def drawShadow {
         if(egPlatform.shadows) {
             BlendFunction.standard{ context.cullFace.disabled{ context.depthTest.disabled {
-                shadowVao.draw(shadowParam)
+                shadowVao.get.draw(shadowParam)
             }}}
         }
     }

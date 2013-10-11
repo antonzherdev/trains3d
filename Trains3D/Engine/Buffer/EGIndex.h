@@ -3,7 +3,6 @@
 #import "EGBuffer.h"
 @class EGGlobal;
 @class EGContext;
-@protocol EGVertexBuffer;
 
 @class EGIBO;
 @class EGImmutableIndexBuffer;

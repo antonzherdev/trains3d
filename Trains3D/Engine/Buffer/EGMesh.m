@@ -400,7 +400,7 @@ static ODClassType* _EGSimpleVertexArray_type;
 }
 
 - (void)bind {
-    [EGGlobal.context bindVertexArrayHandle:_handle];
+    [EGGlobal.context bindVertexArrayHandle:_handle vertexCount:((unsigned int)([((id<EGVertexBuffer>)([_buffers head])) count]))];
 }
 
 - (void)unbind {

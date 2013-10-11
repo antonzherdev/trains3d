@@ -8,6 +8,9 @@
 @class EGTexture;
 @class EGVertexBufferDesc;
 @class EGMesh;
+@class EGVBO;
+@class EGEmptyIndexSource;
+@class EGVertexArray;
 
 @class EGSurface;
 @class EGSimpleSurface;
@@ -87,6 +90,7 @@
 - (id)init;
 - (ODClassType*)type;
 + (EGMesh*)fullScreenMesh;
++ (EGVertexArray*)fullScreenVao;
 - (id)surface;
 - (EGSurface*)createSurface;
 - (BOOL)needRedraw;

@@ -5,8 +5,8 @@
 #import "EGVertex.h"
 #import "EGCameraIso.h"
 #import "GEMat4.h"
-#import "GL.h"
 #import "EGIndex.h"
+#import "GL.h"
 #import "EGContext.h"
 @implementation EGMapSsoView{
     EGMapSso* _map;
@@ -43,7 +43,7 @@ static ODClassType* _EGMapSsoView_type;
             CGFloat b = geRectIY2(limits) + 0.5;
             NSInteger w = geRectIWidth(limits) + 3;
             NSInteger h = geRectIHeight(limits) + 3;
-            return [EGMesh applyVertexData:[ arrs(EGMeshData, 4) {EGMeshDataMake(GEVec2Make(0.0, 0.0), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(l)), 0.0, ((float)(b)))), EGMeshDataMake(GEVec2Make(((float)(w)), 0.0), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(r)), 0.0, ((float)(b)))), EGMeshDataMake(GEVec2Make(((float)(w)), ((float)(h))), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(r)), 0.0, ((float)(t)))), EGMeshDataMake(GEVec2Make(0.0, ((float)(h))), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(l)), 0.0, ((float)(t))))}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]];
+            return [EGMesh meshWithVertex:[EGVBO meshData:[ arrs(EGMeshData, 4) {EGMeshDataMake(GEVec2Make(0.0, 0.0), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(l)), 0.0, ((float)(b)))), EGMeshDataMake(GEVec2Make(((float)(w)), 0.0), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(r)), 0.0, ((float)(b)))), EGMeshDataMake(GEVec2Make(0.0, ((float)(h))), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(l)), 0.0, ((float)(t)))), EGMeshDataMake(GEVec2Make(((float)(w)), ((float)(h))), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(r)), 0.0, ((float)(t))))}]] index:EGEmptyIndexSource.triangleStrip];
         }();
         _planeVao = [_plane vaoMaterial:_material shadow:NO];
     }

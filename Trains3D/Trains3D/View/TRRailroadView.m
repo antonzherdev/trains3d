@@ -469,7 +469,7 @@ static ODClassType* _TRDamageView_type;
     EGMapSso* _map;
     EGMapSsoView* _mapView;
     EGShadowDrawParam* _shadowParam;
-    EGVertexArray* _shadowVao;
+    id _shadowVao;
 }
 static ODClassType* _TRBackgroundView_type;
 @synthesize map = _map;
@@ -487,7 +487,7 @@ static ODClassType* _TRBackgroundView_type;
         _map = map;
         _mapView = [EGMapSsoView mapSsoViewWithMap:_map material:[EGStandardMaterial applyTexture:[EGGlobal textureForFile:@"Grass.png"]]];
         _shadowParam = [EGShadowDrawParam shadowDrawParamWithPercents:(@[@0.3])];
-        _shadowVao = [_mapView.plane vaoShader:[EGShadowDrawShaderSystem.instance shaderForParam:_shadowParam]];
+        _shadowVao = ((egPlatform().shadows) ? [CNOption applyValue:[_mapView.plane vaoShader:[EGShadowDrawShaderSystem.instance shaderForParam:_shadowParam]]] : [CNOption none]);
     }
     
     return self;
@@ -506,7 +506,7 @@ static ODClassType* _TRBackgroundView_type;
     if(egPlatform().shadows) [EGBlendFunction.standard applyDraw:^void() {
         [EGGlobal.context.cullFace disabledF:^void() {
             [EGGlobal.context.depthTest disabledF:^void() {
-                [_shadowVao drawParam:_shadowParam];
+                [((EGVertexArray*)([_shadowVao get])) drawParam:_shadowParam];
             }];
         }];
     }];

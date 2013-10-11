@@ -3,8 +3,8 @@
 #import "EGDirector.h"
 #import "EGTexture.h"
 #import "EGFont.h"
-#import "EGVertex.h"
 #import "EGShader.h"
+#import "EGVertex.h"
 #import "EGShadow.h"
 #import "GEMat4.h"
 @implementation EGGlobal
@@ -92,7 +92,7 @@ static ODClassType* _EGGlobal_type;
     GLuint __lastTexture2D;
     GLuint __lastShaderProgram;
     GLuint __lastVertexBufferId;
-    id<EGVertexBuffer> __vertexBuffer;
+    unsigned int __lastVertexBufferCount;
     GLuint __lastIndexBuffer;
     GLuint __lastVertexArray;
     GLuint _defaultVertexArray;
@@ -130,6 +130,7 @@ static ODClassType* _EGContext_type;
         __lastTexture2D = 0;
         __lastShaderProgram = 0;
         __lastVertexBufferId = 0;
+        __lastVertexBufferCount = 0;
         __lastIndexBuffer = 0;
         __lastVertexArray = 0;
         _defaultVertexArray = 0;
@@ -166,6 +167,7 @@ static ODClassType* _EGContext_type;
     __lastShaderProgram = 0;
     __lastIndexBuffer = 0;
     __lastVertexBufferId = 0;
+    __lastVertexBufferCount = 0;
 }
 
 - (GERectI)viewport {
@@ -230,13 +232,13 @@ static ODClassType* _EGContext_type;
     GLuint handle = [buffer handle];
     if(!(GLuintEq(handle, __lastVertexBufferId))) {
         __lastVertexBufferId = handle;
-        __vertexBuffer = buffer;
+        __lastVertexBufferCount = ((unsigned int)([buffer count]));
         glBindBuffer(GL_ARRAY_BUFFER, handle);
     }
 }
 
-- (id<EGVertexBuffer>)vertexBuffer {
-    return __vertexBuffer;
+- (unsigned int)vertexBufferCount {
+    return __lastVertexBufferCount;
 }
 
 - (void)bindIndexBufferHandle:(GLuint)handle {
@@ -246,9 +248,10 @@ static ODClassType* _EGContext_type;
     }
 }
 
-- (void)bindVertexArrayHandle:(GLuint)handle {
+- (void)bindVertexArrayHandle:(GLuint)handle vertexCount:(unsigned int)vertexCount {
     if(!(GLuintEq(handle, __lastVertexArray))) {
         __lastVertexArray = handle;
+        __lastVertexBufferCount = vertexCount;
         __lastVertexBufferId = 0;
         __lastIndexBuffer = 0;
         egBindVertexArray(handle);
@@ -260,6 +263,7 @@ static ODClassType* _EGContext_type;
         __lastVertexArray = _defaultVertexArray;
         __lastVertexBufferId = 0;
         __lastIndexBuffer = 0;
+        __lastVertexBufferCount = 0;
         egBindVertexArray(_defaultVertexArray);
     }
 }

@@ -61,7 +61,7 @@ class EmptyIndexSource(mode : uint4) extends IndexSource {
 
     def draw {
         context.draw
-        glDrawArrays(mode, 0, context.vertexBuffer.count)
+        glDrawArrays(mode, 0, context.vertexBufferCount)
     }
 
     def drawWith(start : uint, count : uint) {

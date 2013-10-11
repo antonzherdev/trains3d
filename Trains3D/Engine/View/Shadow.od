@@ -46,9 +46,10 @@ class ShadowMap(size : vec2i) extends Surface(size) {
     }
 
     private lazy val shader = ShadowSurfaceShader()
+    private lazy val vao = BaseViewportSurface.fullScreenMesh.vao(ShadowSurfaceShader())
     def draw {
         context.cullFace.disabled {
-            shader.draw(ColorSource(texture), BaseViewportSurface.fullScreenMesh)
+            vao.draw(ColorSource(texture))
         }
     }
 }

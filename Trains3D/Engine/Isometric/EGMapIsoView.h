@@ -7,6 +7,7 @@
 @class EGCameraIso;
 @class GEMat4;
 @class EGVBO;
+@class EGEmptyIndexSource;
 @class EGColorSource;
 @class EGArrayIndexSource;
 @class EGGlobal;

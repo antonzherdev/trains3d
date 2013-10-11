@@ -29,8 +29,8 @@
 @class EGMapSso;
 @class EGMapSsoView;
 @class EGShadowDrawParam;
-@class EGShadowDrawShaderSystem;
 @class EGPlatform;
+@class EGShadowDrawShaderSystem;
 
 @class TRRailroadView;
 @class TRRailView;
@@ -108,7 +108,7 @@
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) EGMapSsoView* mapView;
 @property (nonatomic, readonly) EGShadowDrawParam* shadowParam;
-@property (nonatomic, readonly) EGVertexArray* shadowVao;
+@property (nonatomic, readonly) id shadowVao;
 
 + (id)backgroundViewWithMap:(EGMapSso*)map;
 - (id)initWithMap:(EGMapSso*)map;
