@@ -3,6 +3,7 @@
 #import "EGMesh.h"
 #import "EGMaterial.h"
 #import "EGTexture.h"
+#import "GL.h"
 #import "EGContext.h"
 #import "TRModels.h"
 #import "TRCity.h"
@@ -30,7 +31,7 @@ static ODClassType* _TRCityView_type;
     self = [super init];
     if(self) {
         _expectedTrainModel = [[EGMesh applyVertexData:[ arrs(EGMeshData, 32) {0, 0, 0, 1, 0, -0.5, 0.001, -0.5, 1, 0, 0, 1, 0, 0.5, 0.001, -0.5, 1, 1, 0, 1, 0, 0.5, 0.001, 0.5, 0, 1, 0, 1, 0, -0.5, 0.001, 0.5}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]] vaoMaterial:[EGStandardMaterial applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)] shadow:NO];
-        _roofTexture = [EGGlobal textureForFile:@"Roof.png"];
+        _roofTexture = [EGGlobal textureForFile:@"Roof.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_LINEAR];
         _vaoBody = [TRModels.cityBodies vaoMaterial:[EGStandardMaterial applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)] shadow:NO];
         _vaoRoof = [TRModels.cityRoofs vaoMaterial:[EGStandardMaterial applyTexture:_roofTexture] shadow:NO];
         _vaoWindows = [TRModels.cityWindows vaoMaterial:[EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Window.png"]] specularColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) specularSize:1.0] shadow:NO];

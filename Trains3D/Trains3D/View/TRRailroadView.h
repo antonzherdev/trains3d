@@ -7,6 +7,7 @@
 @class TRRailroadBuilder;
 @class EGStandardMaterial;
 @class EGColorSource;
+@class EGTexture;
 @class EGMeshModel;
 @class TRModels;
 @class EGMaterial;
@@ -17,7 +18,6 @@
 @class EGMatrixStack;
 @class TRSwitch;
 @class TRRailConnector;
-@class EGTexture;
 @class EGVertexArray;
 @class EGTextureRegion;
 @class EGMesh;
@@ -55,6 +55,7 @@
 
 @interface TRRailView : NSObject
 @property (nonatomic, readonly) EGStandardMaterial* railMaterial;
+@property (nonatomic, readonly) EGTexture* gravel;
 @property (nonatomic, readonly) EGMeshModel* railModel;
 @property (nonatomic, readonly) EGMeshModel* railTurnModel;
 

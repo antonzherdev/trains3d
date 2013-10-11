@@ -73,7 +73,6 @@ static ODClassType* _TRTrainView_type;
     [trains forEach:^void(TRTrain* train) {
         [self drawTrain:train];
         if(train.viewData == nil) train.viewData = [TRSmoke smokeWithTrain:train weather:_level.weather];
-        [_smokeView drawSystem:train.viewData];
     }];
 }
 

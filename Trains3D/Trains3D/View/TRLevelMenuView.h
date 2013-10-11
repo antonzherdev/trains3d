@@ -11,6 +11,7 @@
 @class EGBlendFunction;
 @class TRScore;
 @class EGSprite;
+@class EGEnablingState;
 @class TRNotifications;
 @class EGDirector;
 @class EGEnvironment;

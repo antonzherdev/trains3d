@@ -14,7 +14,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor with Mo
 
     val notificationProgress = gap(0.7, 1) >> vec4(0, 0, 0, 1 - _)
     def draw {
-        BlendFunction.premultiplied {
+        context.depthTest.disabled { BlendFunction.premultiplied {
             val w = context.viewport.size.x/res.pixelsInPoint
             res.font.draw(text = format(level.score.score), color = vec4(0, 0, 0, 1), at = vec3(10, 14, 0), TextAlignment.baseline(-1))
     //        val seconds : int = level.schedule.time
@@ -28,7 +28,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor with Mo
             notificationAnimation.for{t ->
                 res.notificationFont.draw(text = notificationText, notificationProgress(t), at = vec3(w/2, 15, 0), TextAlignment.baseline(0))
             }
-        }
+        }}
     }
 
     def format(score : int) : string = {

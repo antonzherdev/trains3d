@@ -84,14 +84,16 @@ static ODClassType* _TRLevelMenuView_type;
 }
 
 - (void)draw {
-    [EGBlendFunction.premultiplied applyDraw:^void() {
-        float w = [EGGlobal.context viewport].size.x / [[self res] pixelsInPoint];
-        [[[self res] font] drawText:[self formatScore:[_level.score score]] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec3Make(10.0, 14.0, 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
-        EGSprite* pauseSprite = [[self res] pauseSprite];
-        pauseSprite.position = GEVec2Make(w - 46, 0.0);
-        [pauseSprite draw];
-        [_notificationAnimation forF:^void(CGFloat t) {
-            [[[self res] notificationFont] drawText:_notificationText color:_notificationProgress(((float)(t))) at:GEVec3Make(w / 2, 15.0, 0.0) alignment:egTextAlignmentBaselineX(0.0)];
+    [EGGlobal.context.depthTest disabledF:^void() {
+        [EGBlendFunction.premultiplied applyDraw:^void() {
+            float w = [EGGlobal.context viewport].size.x / [[self res] pixelsInPoint];
+            [[[self res] font] drawText:[self formatScore:[_level.score score]] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec3Make(10.0, 14.0, 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
+            EGSprite* pauseSprite = [[self res] pauseSprite];
+            pauseSprite.position = GEVec2Make(w - 46, 0.0);
+            [pauseSprite draw];
+            [_notificationAnimation forF:^void(CGFloat t) {
+                [[[self res] notificationFont] drawText:_notificationText color:_notificationProgress(((float)(t))) at:GEVec3Make(w / 2, 15.0, 0.0) alignment:egTextAlignmentBaselineX(0.0)];
+            }];
         }];
     }];
 }

@@ -27,7 +27,6 @@ class TrainView(level : Level) {
         trains.for {train ->
             draw(train = train)
             if(train.viewData == nil) train.viewData = Smoke(train, level.weather)
-            smokeView.draw(train.viewData)
         }
     }
 

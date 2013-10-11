@@ -5,11 +5,11 @@
 #import "EGContext.h"
 #import "GL.h"
 #import "EGMaterial.h"
+#import "EGTexture.h"
 #import "EGMesh.h"
 #import "TRModels.h"
 #import "GEMat4.h"
 #import "TRRailPoint.h"
-#import "EGTexture.h"
 #import "EGMapIso.h"
 #import "EGMapIsoView.h"
 #import "EGShadow.h"
@@ -131,11 +131,13 @@ static ODClassType* _TRRailroadView_type;
 
 @implementation TRRailView{
     EGStandardMaterial* _railMaterial;
+    EGTexture* _gravel;
     EGMeshModel* _railModel;
     EGMeshModel* _railTurnModel;
 }
 static ODClassType* _TRRailView_type;
 @synthesize railMaterial = _railMaterial;
+@synthesize gravel = _gravel;
 @synthesize railModel = _railModel;
 @synthesize railTurnModel = _railTurnModel;
 
@@ -147,8 +149,9 @@ static ODClassType* _TRRailView_type;
     self = [super init];
     if(self) {
         _railMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.6, 1.0)] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:0.3];
-        _railModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railGravel, ((EGMaterial*)([EGMaterial applyTexture:[EGGlobal textureForFile:@"Gravel.png"]]))), tuple(TRModels.railTies, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.rails, _railMaterial)])];
-        _railTurnModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railTurnGravel, ((EGMaterial*)([EGMaterial applyTexture:[EGGlobal textureForFile:@"Gravel.png"]]))), tuple(TRModels.railTurnTies, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.railsTurn, _railMaterial)])];
+        _gravel = [EGGlobal textureForFile:@"Gravel.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_LINEAR];
+        _railModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railGravel, ((EGMaterial*)([EGMaterial applyTexture:_gravel]))), tuple(TRModels.railTies, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.rails, _railMaterial)])];
+        _railTurnModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railTurnGravel, ((EGMaterial*)([EGMaterial applyTexture:_gravel]))), tuple(TRModels.railTurnTies, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.railsTurn, _railMaterial)])];
     }
     
     return self;
