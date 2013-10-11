@@ -6,7 +6,7 @@ import com.antonzherdev.eg._
 class RailroadView(railroad : Railroad) {
     private val railView : RailView
     private val switchView = SwitchView()
-    private val lightView = LightView()
+    private val lightView = LightView(railroad)
     private val damageView = DamageView()
     private val railroadSurface = ViewportSurface(depth = true, multisampling = true)
     private val backgroundView : BackgroundView
@@ -35,11 +35,14 @@ class RailroadView(railroad : Railroad) {
         railroad.switches.for(switchView.draw(_))
         railroad.builder.rail.for(railView.draw(_))
         railroad.damagesPoints.for(damageView.draw(_))
+        lightView.drawBodies
     }
 
     def drawForeground {
-        lightView.draw(railroad.lights)
+        lightView.drawGlows
     }
+
+    def prepare {}
 }
 
 class RailView {
@@ -120,39 +123,45 @@ class SwitchView {
     }
 }
 
-class LightView {
+class LightView(railroad : Railroad) {
     val texture = textureFor("Light.png", GL_LINEAR, GL_LINEAR_MIPMAP_LINEAR)
     val redBodyVao = Models.light.vao(StandardMaterial(TextureRegion(texture, Rect(0.5, 0, 1, 1))), false)
     val greenBodyVao = Models.light.vao(StandardMaterial(texture), false)
     val greenGlowVao = Models.lightGreenGlow.vao(StandardMaterial(ColorSource(vec4(0, 1, 0, 0.8), textureFor("LightGlow.png"))), false)
     val redGlowVao = Models.lightRedGlow.vao(StandardMaterial(ColorSource(vec4(1, 0, 0, 0.8), textureFor("LightGlow.png"))), false)
 
-    def draw(lights : [RailLight]) {
-        if(lights.isEmpty) return nil
-
-        matrix.push
-        val arr = lights.chain.map{light ->
+    private var _matrixArr : [(MatrixModel, bool)] = []
+    def prepare {
+        _matrixArr = railroad.lights.chain.map{light ->
             (matrix.value
                 .modify(w = w -> w.translate(light.tile.x, light.tile.y, 0))
                 .modify(m = m -> m.rotate(90 + light.connector.angle, 0, 1, 0).translate(0.2, 0, -0.45))
-            , light.isGreen)
+        , light.isGreen)
         }.toArray
+    }
 
-        val shadow = context.renderTarget.is<ShadowRenderTarget>
-        arr.for { p ->
+    def drawBodies {
+        prepare
+        matrix.push
+        _matrixArr.for { p ->
             matrix.value = p.a
             (if(p.b)greenBodyVao else redBodyVao).draw
         }
-        if(!shadow) {
+        matrix.pop
+    }
+
+    def drawGlows {
+        if(!context.renderTarget.is<ShadowRenderTarget>) {
+            matrix.push
             context.cullFace.disabled{ BlendFunction.standard{
-                arr.for { p ->
+                _matrixArr.for { p ->
                     matrix.value = p.a
                     if(p.b) greenGlowVao.draw
                     else redGlowVao.draw
                 }
             }}
+            matrix.pop
         }
-        matrix.pop
     }
 }
 

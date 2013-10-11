@@ -305,6 +305,7 @@ static ODClassType* _EGLayer_type;
     id<EGCamera> camera = [_view cameraWithViewport:viewport];
     NSUInteger cullFace = [camera cullFace];
     if(cullFace != GL_NONE) [EGGlobal.context.cullFace enable];
+    [_view prepare];
     if(egPlatform().shadows) {
         id<CNSeq> shadowLights = [[[env.lights chain] filter:^BOOL(EGLight* _) {
             return _.hasShadows;

@@ -11,27 +11,30 @@ class TreeView(forest : Forest) {
     private val ib = IBO.mut
     private val mesh = Mesh(vertex = vb, ib).vao(BillboardShaderSystem.instance, material, shadow = true)
 
-    def draw {
+    def prepare {
         val ar = VoidRefArray(BillboardBufferData.type, 8 * forest.trees.count)
         val iar = VoidRefArray(UInt4.type, 12 * forest.trees.count)
         var a = ar
         var ia = iar
         var i : uint4 = 0
         forest.trees.for{tree ->
-            a = write(a, tree)
-            ia = D2D.writeQuadIndex(ia, i)
-            ia = D2D.writeQuadIndex(ia, i + 4)
-            i += 8
+        a = write(a, tree)
+        ia = D2D.writeQuadIndex(ia, i)
+        ia = D2D.writeQuadIndex(ia, i + 4)
+        i += 8
         }
         vb.set(ar)
         ib.set(iar)
+        ar.free
+        iar.free
+    }
+
+    def draw {
         BlendFunction.standard {
             context.cullFace.disabled {
                 mesh.draw
             }
         }
-        ar.free
-        iar.free
     }
 
     private def write(a :VoidRefArray, tree : Tree) : VoidRefArray = {

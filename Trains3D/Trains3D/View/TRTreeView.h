@@ -29,6 +29,7 @@
 + (id)treeViewWithForest:(TRForest*)forest;
 - (id)initWithForest:(TRForest*)forest;
 - (ODClassType*)type;
+- (void)prepare;
 - (void)draw;
 + (ODClassType*)type;
 @end

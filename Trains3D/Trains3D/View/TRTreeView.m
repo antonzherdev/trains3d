@@ -44,7 +44,7 @@ static ODClassType* _TRTreeView_type;
     _TRTreeView_type = [ODClassType classTypeWithCls:[TRTreeView class]];
 }
 
-- (void)draw {
+- (void)prepare {
     CNVoidRefArray ar = cnVoidRefArrayApplyTpCount(egBillboardBufferDataType(), ((NSUInteger)(8 * [[_forest trees] count])));
     CNVoidRefArray iar = cnVoidRefArrayApplyTpCount(oduInt4Type(), ((NSUInteger)(12 * [[_forest trees] count])));
     __block CNVoidRefArray a = ar;
@@ -58,13 +58,16 @@ static ODClassType* _TRTreeView_type;
     }];
     [_vb setArray:ar];
     [_ib setArray:iar];
+    cnVoidRefArrayFree(ar);
+    cnVoidRefArrayFree(iar);
+}
+
+- (void)draw {
     [EGBlendFunction.standard applyDraw:^void() {
         [EGGlobal.context.cullFace disabledF:^void() {
             [_mesh draw];
         }];
     }];
-    cnVoidRefArrayFree(ar);
-    cnVoidRefArrayFree(iar);
 }
 
 - (CNVoidRefArray)writeA:(CNVoidRefArray)a tree:(TRTree*)tree {

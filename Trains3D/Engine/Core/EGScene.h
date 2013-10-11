@@ -103,6 +103,7 @@
 @protocol EGLayerView<EGController>
 - (id<EGCamera>)camera;
 - (id<EGCamera>)cameraWithViewport:(GERect)viewport;
+- (void)prepare;
 - (void)draw;
 - (EGEnvironment*)environment;
 - (void)updateWithDelta:(CGFloat)delta;

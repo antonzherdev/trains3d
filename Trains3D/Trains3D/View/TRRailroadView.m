@@ -36,7 +36,7 @@ static ODClassType* _TRRailroadView_type;
     if(self) {
         _railroad = railroad;
         _switchView = [TRSwitchView switchView];
-        _lightView = [TRLightView lightView];
+        _lightView = [TRLightView lightViewWithRailroad:_railroad];
         _damageView = [TRDamageView damageView];
         _railroadSurface = [EGViewportSurface viewportSurfaceWithDepth:YES multisampling:YES];
         _changed = YES;
@@ -84,10 +84,14 @@ static ODClassType* _TRRailroadView_type;
     [[_railroad damagesPoints] forEach:^void(TRRailPoint* _) {
         [_damageView drawPoint:_];
     }];
+    [_lightView drawBodies];
 }
 
 - (void)drawForeground {
-    [_lightView drawLights:[_railroad lights]];
+    [_lightView drawGlows];
+}
+
+- (void)prepare {
 }
 
 - (ODClassType*)type {
@@ -309,31 +313,36 @@ static ODClassType* _TRSwitchView_type;
 
 
 @implementation TRLightView{
+    TRRailroad* _railroad;
     EGTexture* _texture;
     EGVertexArray* _redBodyVao;
     EGVertexArray* _greenBodyVao;
     EGVertexArray* _greenGlowVao;
     EGVertexArray* _redGlowVao;
+    id<CNSeq> __matrixArr;
 }
 static ODClassType* _TRLightView_type;
+@synthesize railroad = _railroad;
 @synthesize texture = _texture;
 @synthesize redBodyVao = _redBodyVao;
 @synthesize greenBodyVao = _greenBodyVao;
 @synthesize greenGlowVao = _greenGlowVao;
 @synthesize redGlowVao = _redGlowVao;
 
-+ (id)lightView {
-    return [[TRLightView alloc] init];
++ (id)lightViewWithRailroad:(TRRailroad*)railroad {
+    return [[TRLightView alloc] initWithRailroad:railroad];
 }
 
-- (id)init {
+- (id)initWithRailroad:(TRRailroad*)railroad {
     self = [super init];
     if(self) {
+        _railroad = railroad;
         _texture = [EGGlobal textureForFile:@"Light.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_LINEAR];
         _redBodyVao = [TRModels.light vaoMaterial:[EGStandardMaterial applyTexture:[EGTextureRegion textureRegionWithTexture:_texture rect:geRectApplyXYWidthHeight(0.5, 0.0, 1.0, 1.0)]] shadow:NO];
         _greenBodyVao = [TRModels.light vaoMaterial:[EGStandardMaterial applyTexture:_texture] shadow:NO];
         _greenGlowVao = [TRModels.lightGreenGlow vaoMaterial:[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:GEVec4Make(0.0, 1.0, 0.0, 0.8) texture:[EGGlobal textureForFile:@"LightGlow.png"]]] shadow:NO];
         _redGlowVao = [TRModels.lightRedGlow vaoMaterial:[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:GEVec4Make(1.0, 0.0, 0.0, 0.8) texture:[EGGlobal textureForFile:@"LightGlow.png"]]] shadow:NO];
+        __matrixArr = (@[]);
     }
     
     return self;
@@ -344,31 +353,40 @@ static ODClassType* _TRLightView_type;
     _TRLightView_type = [ODClassType classTypeWithCls:[TRLightView class]];
 }
 
-- (void)drawLights:(id<CNSeq>)lights {
-    if([lights isEmpty]) return ;
-    [EGGlobal.matrix push];
-    id<CNSeq> arr = [[[lights chain] map:^CNTuple*(TRRailLight* light) {
+- (void)prepare {
+    __matrixArr = [[[[_railroad lights] chain] map:^CNTuple*(TRRailLight* light) {
         return tuple([[EGGlobal.matrix.value modifyW:^GEMat4*(GEMat4* w) {
             return [w translateX:((float)(light.tile.x)) y:((float)(light.tile.y)) z:0.0];
         }] modifyM:^GEMat4*(GEMat4* m) {
             return [[m rotateAngle:((float)(90 + light.connector.angle)) x:0.0 y:1.0 z:0.0] translateX:0.2 y:0.0 z:-0.45];
         }], numb(light.isGreen));
     }] toArray];
-    BOOL shadow = [EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]];
-    [arr forEach:^void(CNTuple* p) {
+}
+
+- (void)drawBodies {
+    [self prepare];
+    [EGGlobal.matrix push];
+    [__matrixArr forEach:^void(CNTuple* p) {
         EGGlobal.matrix.value = ((EGMatrixModel*)(p.a));
         [((unumb(p.b)) ? _greenBodyVao : _redBodyVao) draw];
     }];
-    if(!(shadow)) [EGGlobal.context.cullFace disabledF:^void() {
-        [EGBlendFunction.standard applyDraw:^void() {
-            [arr forEach:^void(CNTuple* p) {
-                EGGlobal.matrix.value = ((EGMatrixModel*)(p.a));
-                if(unumb(p.b)) [_greenGlowVao draw];
-                else [_redGlowVao draw];
+    [EGGlobal.matrix pop];
+}
+
+- (void)drawGlows {
+    if(!([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]])) {
+        [EGGlobal.matrix push];
+        [EGGlobal.context.cullFace disabledF:^void() {
+            [EGBlendFunction.standard applyDraw:^void() {
+                [__matrixArr forEach:^void(CNTuple* p) {
+                    EGGlobal.matrix.value = ((EGMatrixModel*)(p.a));
+                    if(unumb(p.b)) [_greenGlowVao draw];
+                    else [_redGlowVao draw];
+                }];
             }];
         }];
-    }];
-    [EGGlobal.matrix pop];
+        [EGGlobal.matrix pop];
+    }
 }
 
 - (ODClassType*)type {
@@ -386,15 +404,19 @@ static ODClassType* _TRLightView_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
+    TRLightView* o = ((TRLightView*)(other));
+    return [self.railroad isEqual:o.railroad];
 }
 
 - (NSUInteger)hash {
-    return 0;
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.railroad hash];
+    return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"railroad=%@", self.railroad];
     [description appendString:@">"];
     return description;
 }

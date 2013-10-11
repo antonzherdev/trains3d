@@ -48,6 +48,7 @@
 - (void)_init;
 - (void)drawBackground;
 - (void)drawForeground;
+- (void)prepare;
 + (ODClassType*)type;
 @end
 
@@ -79,16 +80,19 @@
 
 
 @interface TRLightView : NSObject
+@property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic, readonly) EGTexture* texture;
 @property (nonatomic, readonly) EGVertexArray* redBodyVao;
 @property (nonatomic, readonly) EGVertexArray* greenBodyVao;
 @property (nonatomic, readonly) EGVertexArray* greenGlowVao;
 @property (nonatomic, readonly) EGVertexArray* redGlowVao;
 
-+ (id)lightView;
-- (id)init;
++ (id)lightViewWithRailroad:(TRRailroad*)railroad;
+- (id)initWithRailroad:(TRRailroad*)railroad;
 - (ODClassType*)type;
-- (void)drawLights:(id<CNSeq>)lights;
+- (void)prepare;
+- (void)drawBodies;
+- (void)drawGlows;
 + (ODClassType*)type;
 @end
 

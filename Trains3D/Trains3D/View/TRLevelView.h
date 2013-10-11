@@ -32,6 +32,7 @@
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)_init;
+- (void)prepare;
 - (void)draw;
 - (id<EGCamera>)cameraWithViewport:(GERect)viewport;
 - (void)updateWithDelta:(CGFloat)delta;

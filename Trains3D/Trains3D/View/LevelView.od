@@ -23,6 +23,11 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
         callRepairerView = CallRepairerView(level)
     }
 
+    def prepare {
+        treeView.prepare
+        railroadView.prepare
+    }
+
     def draw {
         val shadows = context.renderTarget.is<ShadowRenderTarget>
         if(!shadows) railroadView.drawBackground
@@ -30,8 +35,8 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
 
         trainView.draw
 
-        railroadView.drawForeground
         treeView.draw
+        railroadView.drawForeground
 
         if(!shadows) {
             trainView.drawSmoke

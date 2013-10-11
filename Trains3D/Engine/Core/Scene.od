@@ -78,6 +78,7 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
         val camera = view.cameraWith(viewport)
         val cullFace = camera.cullFace
         if(cullFace != GL_NONE) context.cullFace.enable
+        view.prepare
 
         if(egPlatform.shadows) {
             val shadowLights = env.lights.chain.filter(_.hasShadows).toArray
@@ -140,6 +141,8 @@ trait LayerView extends Controller {
     def camera : Camera = cameraWith(viewport = Rect(-1, -1, 2, 2))
 
     def cameraWith(viewport : Rect) : Camera = camera
+
+    def prepare {}
 
     def draw
 

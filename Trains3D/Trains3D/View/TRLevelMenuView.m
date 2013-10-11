@@ -133,6 +133,9 @@ static ODClassType* _TRLevelMenuView_type;
     return [self cameraWithViewport:geRectApplyXYWidthHeight(-1.0, -1.0, 2.0, 2.0)];
 }
 
+- (void)prepare {
+}
+
 - (EGEnvironment*)environment {
     return EGEnvironment.aDefault;
 }
