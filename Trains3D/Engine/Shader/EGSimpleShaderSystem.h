@@ -20,6 +20,8 @@
 - (ODClassType*)type;
 - (EGShader*)shaderForParam:(EGColorSource*)param renderTarget:(EGRenderTarget*)renderTarget;
 + (EGSimpleShaderSystem*)instance;
++ (EGSimpleColorShader*)colorShader;
++ (EGSimpleTextureShader*)textureShader;
 + (ODClassType*)type;
 @end
 

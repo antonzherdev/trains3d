@@ -4,10 +4,11 @@
 #import "GEVec.h"
 @class EGMutableVertexBuffer;
 @class EGVBO;
+@class EGEmptyIndexSource;
+@class EGSimpleShaderSystem;
 @class EGColorSource;
 @class EGGlobal;
 @class EGContext;
-@class EGEmptyIndexSource;
 @class EGShader;
 @class EGEnablingState;
 @class EGTexture;

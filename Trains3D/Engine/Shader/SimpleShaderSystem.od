@@ -2,8 +2,8 @@ package com.antonzherdev.eg
 
 class SimpleShaderSystem extends ShaderSystem<ColorSource> {
     static val instance = SimpleShaderSystem()
-    private static val colorShader = SimpleColorShader()
-    private static val textureShader = SimpleTextureShader()
+    static val colorShader = SimpleColorShader()
+    static val textureShader = SimpleTextureShader()
 
     def shaderFor(param : ColorSource, renderTarget : RenderTarget) : Shader<Material> =
         if(renderTarget.is<ShadowRenderTarget>) ShadowShaderSystem.instance.shaderFor(param)

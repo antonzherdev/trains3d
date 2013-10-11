@@ -1,9 +1,10 @@
 #import "EGSprite.h"
 
 #import "EGVertex.h"
+#import "EGIndex.h"
+#import "EGSimpleShaderSystem.h"
 #import "EGMaterial.h"
 #import "EGContext.h"
-#import "EGIndex.h"
 #import "EGShader.h"
 #import "EGTexture.h"
 @implementation EGD2D
@@ -11,6 +12,7 @@ static CNVoidRefArray _EGD2D_vertexes;
 static EGMutableVertexBuffer* _EGD2D_vb;
 static EGMutableVertexBuffer* _EGD2D_lineVb;
 static CNVoidRefArray _EGD2D_lineVertexes;
+static EGVertexArray* _EGD2D_lineVao;
 static ODClassType* _EGD2D_type;
 
 + (void)initialize {
@@ -20,6 +22,7 @@ static ODClassType* _EGD2D_type;
     _EGD2D_vb = [EGVBO mutDesc:EGBillboard.vbDesc];
     _EGD2D_lineVb = [EGVBO mutMesh];
     _EGD2D_lineVertexes = cnVoidRefArrayApplyTpCount(egMeshDataType(), 2);
+    _EGD2D_lineVao = [[EGMesh meshWithVertex:_EGD2D_lineVb index:EGEmptyIndexSource.lines] vaoShader:EGSimpleShaderSystem.colorShader];
 }
 
 + (void)drawSpriteMaterial:(EGColorSource*)material at:(GEVec3)at rect:(GERect)rect {
@@ -56,7 +59,7 @@ static ODClassType* _EGD2D_type;
     v = cnVoidRefArrayWriteTpItem(v, EGMeshData, EGMeshDataMake(GEVec2Make(1.0, 1.0), GEVec3Make(0.0, 0.0, 1.0), geVec3ApplyVec2Z(p1, 0.0)));
     [_EGD2D_lineVb setArray:_EGD2D_lineVertexes];
     [EGGlobal.context.cullFace disabledF:^void() {
-        [material drawVertex:_EGD2D_lineVb index:EGEmptyIndexSource.lines];
+        [_EGD2D_lineVao drawParam:material];
     }];
 }
 

@@ -46,6 +46,14 @@ static ODClassType* _EGSimpleShaderSystem_type;
     return _EGSimpleShaderSystem_instance;
 }
 
++ (EGSimpleColorShader*)colorShader {
+    return _EGSimpleShaderSystem_colorShader;
+}
+
++ (EGSimpleTextureShader*)textureShader {
+    return _EGSimpleShaderSystem_textureShader;
+}
+
 + (ODClassType*)type {
     return _EGSimpleShaderSystem_type;
 }

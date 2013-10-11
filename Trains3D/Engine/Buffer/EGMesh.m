@@ -61,17 +61,17 @@ ODPType* egMeshDataType() {
 
 @implementation EGMesh{
     id<EGVertexBuffer> _vertex;
-    id<EGIndexBuffer> _index;
+    id<EGIndexSource> _index;
 }
 static ODClassType* _EGMesh_type;
 @synthesize vertex = _vertex;
 @synthesize index = _index;
 
-+ (id)meshWithVertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexBuffer>)index {
++ (id)meshWithVertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index {
     return [[EGMesh alloc] initWithVertex:vertex index:index];
 }
 
-- (id)initWithVertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexBuffer>)index {
+- (id)initWithVertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index {
     self = [super init];
     if(self) {
         _vertex = vertex;
