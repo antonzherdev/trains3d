@@ -27,8 +27,6 @@
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) TRSmokeView* smokeView;
 @property (nonatomic, readonly) EGStandardMaterial* blackMaterial;
-@property (nonatomic, readonly) EGStandardMaterial* defMat;
-@property (nonatomic, readonly) EGVertexArray* vaoCar1;
 
 + (id)trainViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;

@@ -53,24 +53,27 @@ class TrainView(level : Level) {
 
     private def doDraw(car : Car, material : Material) {
         if(car.carType == CarType.car) {
-            drawCar1(material)
+            drawCar(material)
         } else {
-            drawEngine1(material)
+            drawEngine(material)
         }
     }
 
-    val defMat = trainMaterialFor(vec4(1, 1, 1, 1))
-    val vaoCar1 = Models.car.vao(defMat, shadow = true)
-    private def drawCar1(material : Material) {
-        vaoCar1.draw(material)
-//        material.draw(Models.car)
-        blackMaterial.draw(Models.carBlack)
+    private val defMat = trainMaterialFor(vec4(1, 1, 1, 1))
+    private val vaoCar = Models.car.vao(defMat, shadow = true)
+    private val vaoCarBlack = Models.carBlack.vao(blackMaterial, shadow = true)
+    private def drawCar(material : Material) {
+        vaoCar.draw(material)
+        vaoCarBlack.draw
     }
 
-    private def drawEngine1(material : Material) {
-        material.draw(Models.engine)
-        material.draw(Models.engineFloor)
-        blackMaterial.draw(Models.engineBlack)
+    private val vaoEngine = Models.engine.vao(defMat, shadow = true)
+    private val vaoEngineFloor = Models.engineFloor.vao(defMat, shadow = true)
+    private val vaoEngineBlack = Models.engineBlack.vao(blackMaterial, shadow = true)
+    private def drawEngine(material : Material) {
+        vaoEngine.draw(material)
+        vaoEngineFloor.draw(material)
+        vaoEngineBlack.draw
     }
 
     def draw(dyingTrains : [Train]) {

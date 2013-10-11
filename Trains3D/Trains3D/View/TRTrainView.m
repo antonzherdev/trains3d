@@ -17,14 +17,16 @@
     TRSmokeView* _smokeView;
     EGStandardMaterial* _blackMaterial;
     EGStandardMaterial* _defMat;
-    EGVertexArray* _vaoCar1;
+    EGVertexArray* _vaoCar;
+    EGVertexArray* _vaoCarBlack;
+    EGVertexArray* _vaoEngine;
+    EGVertexArray* _vaoEngineFloor;
+    EGVertexArray* _vaoEngineBlack;
 }
 static ODClassType* _TRTrainView_type;
 @synthesize level = _level;
 @synthesize smokeView = _smokeView;
 @synthesize blackMaterial = _blackMaterial;
-@synthesize defMat = _defMat;
-@synthesize vaoCar1 = _vaoCar1;
 
 + (id)trainViewWithLevel:(TRLevel*)level {
     return [[TRTrainView alloc] initWithLevel:level];
@@ -37,7 +39,11 @@ static ODClassType* _TRTrainView_type;
         _smokeView = [TRSmokeView smokeView];
         _blackMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 1.0)] specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:1.0];
         _defMat = [self trainMaterialForColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
-        _vaoCar1 = [TRModels.car vaoMaterial:_defMat shadow:YES];
+        _vaoCar = [TRModels.car vaoMaterial:_defMat shadow:YES];
+        _vaoCarBlack = [TRModels.carBlack vaoMaterial:_blackMaterial shadow:YES];
+        _vaoEngine = [TRModels.engine vaoMaterial:_defMat shadow:YES];
+        _vaoEngineFloor = [TRModels.engineFloor vaoMaterial:_defMat shadow:YES];
+        _vaoEngineBlack = [TRModels.engineBlack vaoMaterial:_blackMaterial shadow:YES];
     }
     
     return self;
@@ -94,19 +100,19 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (void)doDrawCar:(TRCar*)car material:(EGMaterial*)material {
-    if(car.carType == TRCarType.car) [self drawCar1Material:material];
-    else [self drawEngine1Material:material];
+    if(car.carType == TRCarType.car) [self drawCarMaterial:material];
+    else [self drawEngineMaterial:material];
 }
 
-- (void)drawCar1Material:(EGMaterial*)material {
-    [_vaoCar1 drawParam:material];
-    [_blackMaterial drawMesh:TRModels.carBlack];
+- (void)drawCarMaterial:(EGMaterial*)material {
+    [_vaoCar drawParam:material];
+    [_vaoCarBlack draw];
 }
 
-- (void)drawEngine1Material:(EGMaterial*)material {
-    [material drawMesh:TRModels.engine];
-    [material drawMesh:TRModels.engineFloor];
-    [_blackMaterial drawMesh:TRModels.engineBlack];
+- (void)drawEngineMaterial:(EGMaterial*)material {
+    [_vaoEngine drawParam:material];
+    [_vaoEngineFloor drawParam:material];
+    [_vaoEngineBlack draw];
 }
 
 - (void)drawDyingTrains:(id<CNSeq>)dyingTrains {
