@@ -1,6 +1,8 @@
 package com.antonzherdev.trains
 
 class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor with MouseProcessor {
+    val name = "LevelPauseMenu"
+
     private var _lastViewportSize : vec2 = vec2(0, 0)
     private var _lastCamera : Camera
 

@@ -101,6 +101,7 @@
 
 
 @protocol EGLayerView<EGController>
+- (NSString*)name;
 - (id<EGCamera>)camera;
 - (id<EGCamera>)cameraWithViewport:(GERect)viewport;
 - (void)prepare;

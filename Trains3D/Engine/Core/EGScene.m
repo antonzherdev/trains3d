@@ -300,6 +300,7 @@ static ODClassType* _EGLayer_type;
 }
 
 - (void)drawWithViewport:(GERect)viewport {
+    egPushGroupMarker([_view name]);
     EGEnvironment* env = [_view environment];
     EGGlobal.context.environment = env;
     id<EGCamera> camera = [_view cameraWithViewport:viewport];
@@ -313,6 +314,7 @@ static ODClassType* _EGLayer_type;
         [[[env.lights chain] filter:^BOOL(EGLight* _) {
             return _.hasShadows;
         }] forEach:^void(EGLight* light) {
+            egPushGroupMarker(@"Shadow");
             EGGlobal.context.renderTarget = [EGShadowRenderTarget shadowRenderTargetWithShadowLight:light];
             EGGlobal.matrix.value = [light shadowMatrixModel:[camera matrixModel]];
             [light shadowMap].biasDepthCp = [EGShadowMap.biasMatrix mulMatrix:[EGGlobal.matrix.value cp]];
@@ -321,6 +323,7 @@ static ODClassType* _EGLayer_type;
                 if(cullFace != GL_NONE) glCullFace(((cullFace == GL_BACK) ? GL_FRONT : GL_BACK));
                 [_view draw];
             }];
+            egPopGroupMarker();
         }];
     }
     EGGlobal.context.renderTarget = [EGSceneRenderTarget sceneRenderTarget];
@@ -328,6 +331,7 @@ static ODClassType* _EGLayer_type;
     EGGlobal.matrix.value = [camera matrixModel];
     if(cullFace != GL_NONE) glCullFace(cullFace);
     [_view draw];
+    egPopGroupMarker();
 }
 
 - (BOOL)processEvent:(EGEvent*)event viewport:(GERect)viewport {

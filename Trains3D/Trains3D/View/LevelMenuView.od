@@ -4,6 +4,8 @@ import com.antonzherdev.eg.Text._
 import com.antonzherdev.eg.Progress._
 
 class LevelMenuView(level : Level) extends LayerView with InputProcessor with MouseProcessor {
+    val name = "LevelMenu"
+
     def cameraWith(viewport : Rect) : Camera = res(viewport.height).cameraWith(viewport)
 
     lazy val res1x = LevelMenuViewRes1x()

@@ -11,6 +11,7 @@
 #import "TRSceneFactory.h"
 @implementation TRLevelPauseMenuView{
     TRLevel* _level;
+    NSString* _name;
     GEVec2 __lastViewportSize;
     id<EGCamera> __lastCamera;
     CNCache* _cameraCache;
@@ -23,6 +24,7 @@
 }
 static ODClassType* _TRLevelPauseMenuView_type;
 @synthesize level = _level;
+@synthesize name = _name;
 @synthesize width = _width;
 @synthesize menuBackSprite = _menuBackSprite;
 @synthesize resumeLine = _resumeLine;
@@ -38,6 +40,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
     self = [super init];
     if(self) {
         _level = level;
+        _name = @"LevelPauseMenu";
         __lastViewportSize = GEVec2Make(0.0, 0.0);
         _cameraCache = [CNCache cacheWithF:^EGCamera2D*(id viewport) {
             return [EGCamera2D camera2DWithSize:GEVec2Make(geRectWidth(uwrap(GERect, viewport)), geRectHeight(uwrap(GERect, viewport)))];

@@ -23,6 +23,7 @@
 
 @interface TRLevelPauseMenuView : NSObject<EGLayerView, EGInputProcessor, EGMouseProcessor>
 @property (nonatomic, readonly) TRLevel* level;
+@property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) NSInteger width;
 @property (nonatomic, readonly) EGSprite* menuBackSprite;
 @property (nonatomic, readonly) EGLine2d* resumeLine;

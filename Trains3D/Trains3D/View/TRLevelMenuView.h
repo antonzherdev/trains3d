@@ -25,6 +25,7 @@
 
 @interface TRLevelMenuView : NSObject<EGLayerView, EGInputProcessor, EGMouseProcessor>
 @property (nonatomic, readonly) TRLevel* level;
+@property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) GEVec4(^notificationProgress)(float);
 
 + (id)levelMenuViewWithLevel:(TRLevel*)level;

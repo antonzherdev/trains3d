@@ -183,4 +183,6 @@ stub object gl {
     def egGLSLVersion : uint
 
     def egLabelShaderProgram(handle : GLuint, name : string)
+    def egPushGroupMarker(name : string)
+    def egPopGroupMarker
 }

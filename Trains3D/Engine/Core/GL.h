@@ -191,3 +191,19 @@ static inline void egLabelShaderProgram(GLuint handle, NSString* name) {
 #endif
 #endif
 }
+
+static inline void egPushGroupMarker(NSString* name) {
+#if DEBUG
+#if TARGET_OS_IPHONE
+    glPushGroupMarkerEXT(0, [name cStringUsingEncoding:NSUTF8StringEncoding]);
+#endif
+#endif
+}
+
+static inline void egPopGroupMarker() {
+#if DEBUG
+#if TARGET_OS_IPHONE
+    glPopGroupMarkerEXT();
+#endif
+#endif
+}

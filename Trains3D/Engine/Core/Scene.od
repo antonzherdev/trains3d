@@ -73,6 +73,7 @@ class SingleLayer(layer : Layer) extends Layers {
 class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controller {
     static def apply(view : LayerView) : Layer = Layer(view, view.as<InputProcessor>)
     def drawWith(viewport : Rect) {
+        egPushGroupMarker(view.name)
         val env = view.environment
         context.environment = env
         val camera = view.cameraWith(viewport)
@@ -83,6 +84,7 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
         if(egPlatform.shadows) {
             val shadowLights = env.lights.chain.filter(_.hasShadows).toArray
             env.lights.chain.filter(_.hasShadows).for{light ->
+                egPushGroupMarker("Shadow")
                 context.renderTarget = ShadowRenderTarget(light)
                 matrix.value = light.shadowMatrix(camera.matrixModel)
                 light.shadowMap.biasDepthCp = ShadowMap.biasMatrix *matrix.value.cp
@@ -91,6 +93,7 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
                     if(cullFace != GL_NONE) glCullFace(if(cullFace == GL_BACK) GL_FRONT else GL_BACK)
                     view.draw
                 }
+                egPopGroupMarker
     //            light.shadowMap.draw
             }
         }
@@ -100,6 +103,7 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
         if(cullFace != GL_NONE) glCullFace(cullFace)
 
         view.draw
+        egPopGroupMarker
 //        if(director.isPaused) { if(!env.lights.isEmpty)env.lights[0].shadowMap.draw}
 //        else view.draw
     }
@@ -138,6 +142,8 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
 }
 
 trait LayerView extends Controller {
+    def name : string
+
     def camera : Camera = cameraWith(viewport = Rect(-1, -1, 2, 2))
 
     def cameraWith(viewport : Rect) : Camera = camera

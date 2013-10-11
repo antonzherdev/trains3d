@@ -12,6 +12,7 @@
 #import "EGCamera2D.h"
 @implementation TRLevelMenuView{
     TRLevel* _level;
+    NSString* _name;
     CNLazy* __lazy_res1x;
     CNLazy* __lazy_res2x;
     GEVec4(^_notificationProgress)(float);
@@ -20,6 +21,7 @@
 }
 static ODClassType* _TRLevelMenuView_type;
 @synthesize level = _level;
+@synthesize name = _name;
 @synthesize notificationProgress = _notificationProgress;
 
 + (id)levelMenuViewWithLevel:(TRLevel*)level {
@@ -30,6 +32,7 @@ static ODClassType* _TRLevelMenuView_type;
     self = [super init];
     if(self) {
         _level = level;
+        _name = @"LevelMenu";
         __lazy_res1x = [CNLazy lazyWithF:^TRLevelMenuViewRes1x*() {
             return [TRLevelMenuViewRes1x levelMenuViewRes1x];
         }];

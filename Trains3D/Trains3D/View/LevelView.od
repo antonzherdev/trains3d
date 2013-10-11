@@ -3,6 +3,7 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 
 class LevelView(level : Level) extends LayerView with InputProcessor {
+    val name = "Level"
     private val cityView : CityView
     private val railroadView : RailroadView
     private val trainView : TrainView
