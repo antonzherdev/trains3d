@@ -260,7 +260,6 @@
 		6F3DF3AF0F9267CCDB6B2E10 /* btCylinderShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFAAED030E8616AA27D3A /* btCylinderShape.cpp */; };
 		6F3DF3CA08C9AD91D14F0AC8 /* Light.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFABCF7502FE5A61A37D2 /* Light.png */; };
 		6F3DF3D00F3DBE1E36B461EF /* btScaledBvhTriangleMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0B5CDE0ED7F04E617FD /* btScaledBvhTriangleMeshShape.cpp */; };
-		6F3DF3D165FD591CF46D296D /* TRExplosion.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4F25E785972FAFEC88D /* TRExplosion.m */; };
 		6F3DF3D3FD50B90CC6026F14 /* spline.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFD30F469519D8F47F283 /* spline.inl */; };
 		6F3DF3D88E43E1EA8FF196C5 /* btGeometryUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1261B9F474CD7B32A91 /* btGeometryUtil.cpp */; };
 		6F3DF3E82DB856CBA68C7295 /* Tree1.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFD25AE165CAAB984D8E3 /* Tree1.png */; };
@@ -290,7 +289,6 @@
 		6F3DF44AE2A12B3B9251020C /* EGVertex.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE4F7777B39EA1438760 /* EGVertex.m */; };
 		6F3DF44BCFB810B239BF3A9D /* lucida_grande_48.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF980DF1413A5A4FE4187 /* lucida_grande_48.fnt */; };
 		6F3DF44D648FE4C966A4E093 /* EGMultisamplingSurface.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFADA2C3CC961C4886045 /* EGMultisamplingSurface.m */; };
-		6F3DF453B7A5D68496565A7F /* TRExplosion.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4F25E785972FAFEC88D /* TRExplosion.m */; };
 		6F3DF455E53E6D41F9192518 /* CNFlatMapLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9B9CFB60AC2B50B34FE /* CNFlatMapLink.m */; };
 		6F3DF4593B0B623F1E870114 /* TreeMap.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFF22EC3CF3AAA6F80BA8 /* TreeMap.od */; };
 		6F3DF4627CF29EE019E8F0A9 /* btGearConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF4E1E5FE7CA8E634748 /* btGearConstraint.cpp */; };
@@ -298,7 +296,6 @@
 		6F3DF46A8F18ADE2C3701E05 /* btTriangleCallback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1C842FC3A9CEFEA96CE /* btTriangleCallback.cpp */; };
 		6F3DF46BFA06F07E148B8EC8 /* btCapsuleShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF3143CA33E1C5C49F69 /* btCapsuleShape.cpp */; };
 		6F3DF46DD464325F16962754 /* Bullet-C-API.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF3B25D1AF1CF03BBD333 /* Bullet-C-API.cpp */; };
-		6F3DF47562CEAC375B47763E /* Explosion.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFC3F0C7C282567ABE16A /* Explosion.png */; };
 		6F3DF48029D9A500446B06D9 /* btTriangleCallback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1C842FC3A9CEFEA96CE /* btTriangleCallback.cpp */; };
 		6F3DF482E137BD6194F71092 /* btPersistentManifold.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFC87DD4F9A005E94449 /* btPersistentManifold.cpp */; };
 		6F3DF484A3EF88BD2D81C120 /* lucida_grande_36.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFDDF4E4F1DF3AD286ABB /* lucida_grande_36.png */; };
@@ -420,7 +417,6 @@
 		6F3DF61DD10CB8DA575AA8EB /* CNTreeMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF61F6AC6163A38816654 /* CNTreeMap.m */; };
 		6F3DF61E44E3767F14F657E3 /* CNNeighboursLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2E04DF68D352A206E1C /* CNNeighboursLink.m */; };
 		6F3DF622C822AFCC5E947522 /* ulp.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFB99B7E36081D62842D8 /* ulp.inl */; };
-		6F3DF6239F501B4DB7D547FE /* Explosion.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFC3F0C7C282567ABE16A /* Explosion.png */; };
 		6F3DF6244616A93BB09A255C /* GEVec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF09B89B5EBBB20529EB7 /* GEVec.m */; };
 		6F3DF62FCE2AB9738765FD89 /* func_vector_relational.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF75CD850170EC75153BB /* func_vector_relational.inl */; };
 		6F3DF6307F3FEE715DF1BFF3 /* GELine.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8A8A187792223296827 /* GELine.m */; };
@@ -590,7 +586,6 @@
 		6F3DF8AF9BB229B7635F54A0 /* unsigned_int.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF9CC8725187552B6E63B /* unsigned_int.inl */; };
 		6F3DF8B4C769EB6C4F0A3BA9 /* TrainView.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFD46EA054E41A43C6F17 /* TrainView.od */; };
 		6F3DF8B667CAF32427A98B10 /* CNSourceLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF71A717A6FD3CAA174BA /* CNSourceLink.m */; };
-		6F3DF8B8903DC8FC9CBCA7D0 /* Explosion.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF3B0B448A2ACE946A93D /* Explosion.od */; };
 		6F3DF8BC36F94738BFC1A209 /* Smoke.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF776EA78287C3A55E403 /* Smoke.png */; };
 		6F3DF8BCFC3F6053F643250B /* btConvexPointCloudShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2C0E1DABF4C3773EBE3 /* btConvexPointCloudShape.cpp */; };
 		6F3DF8C1DADD5AF81B504C0C /* type_mat2x2.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFED12F6B44D3D971ABF7 /* type_mat2x2.inl */; };
@@ -1389,7 +1384,6 @@
 		6F3DF3AA0BD46B8102F64FBA /* KWProbePoller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWProbePoller.h; sourceTree = "<group>"; };
 		6F3DF3AB7C81313CB705D3DB /* TR3DEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TR3DEngine.h; sourceTree = "<group>"; };
 		6F3DF3B068EA82E62D4D7599 /* CNLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNLog.h; sourceTree = "<group>"; };
-		6F3DF3B0B448A2ACE946A93D /* Explosion.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Explosion.od; sourceTree = "<group>"; };
 		6F3DF3B25D1AF1CF03BBD333 /* Bullet-C-API.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "Bullet-C-API.cpp"; sourceTree = "<group>"; };
 		6F3DF3B28EDF7690F0C5A980 /* KWMatchVerifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWMatchVerifier.m; sourceTree = "<group>"; };
 		6F3DF3B47262109D576780AB /* EGShader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGShader.m; sourceTree = "<group>"; };
@@ -1481,7 +1475,6 @@
 		6F3DF4EE54D39E636C655F30 /* btTetrahedronShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btTetrahedronShape.h; sourceTree = "<group>"; };
 		6F3DF4EE6798321A20414A22 /* lucida_grande_32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lucida_grande_32.png; sourceTree = "<group>"; };
 		6F3DF4EE86B9FB7E6A32D957 /* TRRailPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRRailPoint.h; sourceTree = "<group>"; };
-		6F3DF4F25E785972FAFEC88D /* TRExplosion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRExplosion.m; sourceTree = "<group>"; };
 		6F3DF4F5AC8338B855D5BA61 /* CNRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNRange.h; sourceTree = "<group>"; };
 		6F3DF4FAA15963195E4F8796 /* EGTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGTime.h; sourceTree = "<group>"; };
 		6F3DF4FECA63670199B82631 /* intrinsic_trigonometric.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = intrinsic_trigonometric.hpp; sourceTree = "<group>"; };
@@ -1702,7 +1695,6 @@
 		6F3DF8320673FFAA668A5132 /* ObjC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjC.h; sourceTree = "<group>"; };
 		6F3DF8330F146DC202FE17DD /* intrinsic_exponential.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = intrinsic_exponential.hpp; sourceTree = "<group>"; };
 		6F3DF834266145B7F6EDDB7B /* color_space_YCoCg.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = color_space_YCoCg.inl; sourceTree = "<group>"; };
-		6F3DF835631400EB083B98F9 /* TRExplosion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRExplosion.h; sourceTree = "<group>"; };
 		6F3DF835F81FFE0C7D97DC7A /* Lazy.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Lazy.od; sourceTree = "<group>"; };
 		6F3DF83611A12F17B71FACB3 /* Score.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Score.od; sourceTree = "<group>"; };
 		6F3DF83859B81D93F4F25B10 /* KWContextNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWContextNode.m; sourceTree = "<group>"; };
@@ -2023,13 +2015,11 @@
 		6F3DFC180D7EC00938BC166B /* Context.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Context.od; sourceTree = "<group>"; };
 		6F3DFC1EA5E595C9632E5574 /* KWBeSubclassOfClassMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWBeSubclassOfClassMatcher.m; sourceTree = "<group>"; };
 		6F3DFC2349E253F04434E70A /* btAxisSweep3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btAxisSweep3.cpp; sourceTree = "<group>"; };
-		6F3DFC2419D093653021BC38 /* Textures.sbs */ = {isa = PBXFileReference; lastKnownFileType = file.sbs; path = Textures.sbs; sourceTree = "<group>"; };
 		6F3DFC2AD7E12F72F6A1A770 /* gradient_paint.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = gradient_paint.inl; sourceTree = "<group>"; };
 		6F3DFC2DF92415D6518A84C5 /* Time.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Time.od; sourceTree = "<group>"; };
 		6F3DFC2E6FC9971DD03EBBBC /* KWConformToProtocolMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWConformToProtocolMatcher.m; sourceTree = "<group>"; };
 		6F3DFC388FE27E1C23A1EB41 /* btGImpactMassUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btGImpactMassUtil.h; sourceTree = "<group>"; };
 		6F3DFC39B9FE426A92D7784F /* KWExample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWExample.m; sourceTree = "<group>"; };
-		6F3DFC3F0C7C282567ABE16A /* Explosion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Explosion.png; sourceTree = "<group>"; };
 		6F3DFC402FDA95273ACD7A56 /* GEPerlin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GEPerlin.h; sourceTree = "<group>"; };
 		6F3DFC4637A9A62409EAEF35 /* func_matrix.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = func_matrix.inl; sourceTree = "<group>"; };
 		6F3DFC491E4211783669089B /* CNCombinationsLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNCombinationsLink.h; sourceTree = "<group>"; };
@@ -3465,8 +3455,6 @@
 				6F3DFFF9400018F723315E62 /* TR3DDamage.jas */,
 				6F3DF1324BE87DB49A184D85 /* TR3DDamage.h */,
 				6F3DF776EA78287C3A55E403 /* Smoke.png */,
-				6F3DFC2419D093653021BC38 /* Textures.sbs */,
-				6F3DFC3F0C7C282567ABE16A /* Explosion.png */,
 				6F3DFFAC2A07756845F41EED /* LightGlow.png */,
 				6F3DF066CCFCEAD6E99954B5 /* Roof.png */,
 				6F3DF7A06EFC33D43D5EDF07 /* Window.png */,
@@ -4111,9 +4099,6 @@
 				6F3DF538007ABB42BAA049AD /* Smoke.od */,
 				6F3DFA524BE52473B7B4ACFA /* TRSmoke.h */,
 				6F3DF1D0F040BB4977D9F1A0 /* TRSmoke.m */,
-				6F3DF3B0B448A2ACE946A93D /* Explosion.od */,
-				6F3DF835631400EB083B98F9 /* TRExplosion.h */,
-				6F3DF4F25E785972FAFEC88D /* TRExplosion.m */,
 				6F3DF6953012A4C12B3BFF97 /* Strings.od */,
 				6F3DF4CB3D788F74A150AEA6 /* TRStrings.h */,
 				6F3DFE4D47C0C15FEF085AD0 /* TRStrings.m */,
@@ -4370,7 +4355,6 @@
 				6F3DF8FE2FF416801D0C0F71 /* StandardShaderSystem.od in Resources */,
 				6F3DF55F6C735C679A03099F /* Type.od in Resources */,
 				6F3DFDD47A0124F3E9F5F6F9 /* Surface.od in Resources */,
-				6F3DF8B8903DC8FC9CBCA7D0 /* Explosion.od in Resources */,
 				6F3DF8E7877B4527AD5F3FC9 /* Billboard.od in Resources */,
 				6F3DF2C53BCEBE96EBFEE8B8 /* ParticleSystem.od in Resources */,
 				6F3DF5C5233B98B0C83893A7 /* Progress.od in Resources */,
@@ -4392,7 +4376,6 @@
 				6F3DFCCCE899C4DE26608E48 /* Grass.png in Resources */,
 				6F3DF7EF4E00121402360A3D /* Models.od in Resources */,
 				6F3DFD63D706B282D983C4B8 /* Smoke.png in Resources */,
-				6F3DF6239F501B4DB7D547FE /* Explosion.png in Resources */,
 				6F3DF9DBFB8EA7C94C109645 /* eg.od in Resources */,
 				6F3DFC99321E27835B7D9875 /* LightGlow.png in Resources */,
 				6F3DF4EA34CB28669A5BC945 /* Line.od in Resources */,
@@ -4537,7 +4520,6 @@
 				6F3DF0AFDB3412D19F5736E7 /* Roof.png in Resources */,
 				6F3DF5935E77D73D927A9824 /* Gravel.png in Resources */,
 				6F3DF5DF991704CE96AEA20C /* Pause.png in Resources */,
-				6F3DF47562CEAC375B47763E /* Explosion.png in Resources */,
 				6F3DF3E82DB856CBA68C7295 /* Tree1.png in Resources */,
 				6F3DFF4DE4570FC79ED32779 /* Window.png in Resources */,
 				6F3DFFD0390D1D2C94C0EF17 /* Pause_2x.png in Resources */,
@@ -4686,7 +4668,6 @@
 				6F3DFD1CEBE145B1581C61EF /* EGBillboard.m in Sources */,
 				6F3DFF861A5265A644C637ED /* EGParticleSystem.m in Sources */,
 				6F3DF73DF156A2CE68F03ADC /* CNVoidRefArray.m in Sources */,
-				6F3DF3D165FD591CF46D296D /* TRExplosion.m in Sources */,
 				6F3DF866312F16371AE001CB /* EGProgress.m in Sources */,
 				6F3DFE5FDF9264861B31C350 /* btVector3.cpp in Sources */,
 				6F3DFDA0750BF8F9D6823646 /* btQuickprof.cpp in Sources */,
@@ -5391,7 +5372,6 @@
 				6F3DFF6529D9A0E5F13DFF04 /* TRLevelView.m in Sources */,
 				6F3DFC95E2F3AC8A3DCFC5EA /* TRTrainView.m in Sources */,
 				6F3DFA87251B38710DA54D90 /* TRTreeView.m in Sources */,
-				6F3DF453B7A5D68496565A7F /* TRExplosion.m in Sources */,
 				6F3DFC032F36B60763B7135C /* TRLevelMenuView.m in Sources */,
 				6F3DF9A10482B6B3AB31AA78 /* TRLevelPauseMenuView.m in Sources */,
 				6F3DFFCFAEF8158F7F8075DC /* EGTouchToMouse.m in Sources */,
