@@ -41,10 +41,13 @@ class Particle(lifeLength : float4) extends Controller {
 }
 
 
-class ParticleSystemView<P extends Particle, D>(vbDesc : VertexBufferDesc<D>, maxCount : uint, blendFunc : BlendFunction) {
+class ParticleSystemView<P extends Particle, D>(
+    vbDesc : VertexBufferDesc<D>, maxCount : uint,
+    shader : Shader<_>, material : Material, blendFunc : BlendFunction)
+{
     val vertexArr = VoidRefArray(vbDesc.dataType, maxCount*vertexCount)
     val vertexBuffer = VBO.mut<D>(vbDesc)
-    val indexBuffer : IndexBuffer = {
+    val index : MutableIndexSourceGap = {
         val vc = vertexCount
         val ia = VoidRefArray(UInt4.type, maxCount*3*(vc - 2))
         var indexPointer = ia
@@ -53,14 +56,12 @@ class ParticleSystemView<P extends Particle, D>(vbDesc : VertexBufferDesc<D>, ma
         }
         val ib = IBO(ia)
         ia.free
-        ib
+        MutableIndexSourceGap(ib)
     }
-    val mesh = Mesh<D>(vertex = vertexBuffer, indexBuffer)
+    val vao = Mesh<D>(vertex = vertexBuffer, index).vao(shader)
 
     def vertexCount : uint
     def writeIndexesTo(indexPointer : VoidRefArray, i : uint4) : VoidRefArray
-    def shader : Shader
-    def material : Material
 
     def draw(system : ParticleSystem<P>) {
         val particles = system.particles
@@ -76,7 +77,8 @@ class ParticleSystemView<P extends Particle, D>(vbDesc : VertexBufferDesc<D>, ma
             val n = particles.count.min(maxCount)
             val vc = vertexCount
             vertexBuffer.set(array = vertexArr)
-            shader.draw(material, vertexBuffer, IndexSourceGap(indexBuffer, 0, n*3*(vc - 2)))
+            index.count = n*3*(vc - 2)
+            vao.draw(material)
         }}}
     }
 

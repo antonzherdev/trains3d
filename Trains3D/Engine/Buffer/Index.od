@@ -111,3 +111,19 @@ class IndexSourceGap(source : IndexSource, start : uint4, count : uint4) extends
         source.drawWith(self.start + start, count)
     }
 }
+
+class MutableIndexSourceGap(source : IndexSource) extends IndexSource {
+    var start : uint4
+    var count : uint4
+    def bind {
+        source.bind
+    }
+
+    def draw {
+        source.drawWith(start, count)
+    }
+
+    def drawWith(start : uint, count : uint) {
+        source.drawWith(self.start + start, count)
+    }
+}

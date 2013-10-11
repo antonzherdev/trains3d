@@ -132,9 +132,6 @@ ODPType* egBillboardBufferDataType();
 
 
 @interface EGBillboardParticleSystemView : EGParticleSystemView
-@property (nonatomic, readonly) EGColorSource* material;
-@property (nonatomic, readonly) EGShader* shader;
-
 + (id)billboardParticleSystemViewWithMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
 - (id)initWithMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
 - (ODClassType*)type;

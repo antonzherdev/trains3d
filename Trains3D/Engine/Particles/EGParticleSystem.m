@@ -1,10 +1,10 @@
 #import "EGParticleSystem.h"
 
 #import "EGVertex.h"
+#import "EGShader.h"
 #import "EGMaterial.h"
 #import "EGIndex.h"
 #import "EGMesh.h"
-#import "EGShader.h"
 #import "EGContext.h"
 @implementation EGParticleSystem{
     CNList* __particles;
@@ -159,35 +159,41 @@ static ODClassType* _EGParticle_type;
 @implementation EGParticleSystemView{
     EGVertexBufferDesc* _vbDesc;
     NSUInteger _maxCount;
+    EGShader* _shader;
+    EGMaterial* _material;
     EGBlendFunction* _blendFunc;
     CNVoidRefArray _vertexArr;
     EGMutableVertexBuffer* _vertexBuffer;
-    id<EGIndexBuffer> _indexBuffer;
-    EGMesh* _mesh;
+    EGMutableIndexSourceGap* _index;
+    EGVertexArray* _vao;
 }
 static ODClassType* _EGParticleSystemView_type;
 @synthesize vbDesc = _vbDesc;
 @synthesize maxCount = _maxCount;
+@synthesize shader = _shader;
+@synthesize material = _material;
 @synthesize blendFunc = _blendFunc;
 @synthesize vertexArr = _vertexArr;
 @synthesize vertexBuffer = _vertexBuffer;
-@synthesize indexBuffer = _indexBuffer;
-@synthesize mesh = _mesh;
+@synthesize index = _index;
+@synthesize vao = _vao;
 
-+ (id)particleSystemViewWithVbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount blendFunc:(EGBlendFunction*)blendFunc {
-    return [[EGParticleSystemView alloc] initWithVbDesc:vbDesc maxCount:maxCount blendFunc:blendFunc];
++ (id)particleSystemViewWithVbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount shader:(EGShader*)shader material:(EGMaterial*)material blendFunc:(EGBlendFunction*)blendFunc {
+    return [[EGParticleSystemView alloc] initWithVbDesc:vbDesc maxCount:maxCount shader:shader material:material blendFunc:blendFunc];
 }
 
-- (id)initWithVbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount blendFunc:(EGBlendFunction*)blendFunc {
+- (id)initWithVbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount shader:(EGShader*)shader material:(EGMaterial*)material blendFunc:(EGBlendFunction*)blendFunc {
     self = [super init];
     __weak EGParticleSystemView* _weakSelf = self;
     if(self) {
         _vbDesc = vbDesc;
         _maxCount = maxCount;
+        _shader = shader;
+        _material = material;
         _blendFunc = blendFunc;
         _vertexArr = cnVoidRefArrayApplyTpCount(_vbDesc.dataType, _maxCount * [self vertexCount]);
         _vertexBuffer = [EGVBO mutDesc:_vbDesc];
-        _indexBuffer = ^EGImmutableIndexBuffer*() {
+        _index = ^EGMutableIndexSourceGap*() {
             NSUInteger vc = [self vertexCount];
             CNVoidRefArray ia = cnVoidRefArrayApplyTpCount(oduInt4Type(), _maxCount * 3 * (vc - 2));
             __block CNVoidRefArray indexPointer = ia;
@@ -196,9 +202,9 @@ static ODClassType* _EGParticleSystemView_type;
             }];
             EGImmutableIndexBuffer* ib = [EGIBO applyArray:ia];
             cnVoidRefArrayFree(ia);
-            return ib;
+            return [EGMutableIndexSourceGap mutableIndexSourceGapWithSource:ib];
         }();
-        _mesh = [EGMesh meshWithVertex:_vertexBuffer index:_indexBuffer];
+        _vao = [[EGMesh meshWithVertex:_vertexBuffer index:_index] vaoShader:_shader];
     }
     
     return self;
@@ -217,14 +223,6 @@ static ODClassType* _EGParticleSystemView_type;
     @throw @"Method writeIndexesTo is abstract";
 }
 
-- (EGShader*)shader {
-    @throw @"Method shader is abstract";
-}
-
-- (EGMaterial*)material {
-    @throw @"Method material is abstract";
-}
-
 - (void)drawSystem:(EGParticleSystem*)system {
     id<CNSeq> particles = [system particles];
     if([particles isEmpty]) return ;
@@ -240,7 +238,8 @@ static ODClassType* _EGParticleSystemView_type;
                 NSUInteger n = uintMinB([particles count], _maxCount);
                 NSUInteger vc = [self vertexCount];
                 [_vertexBuffer setArray:_vertexArr];
-                [[self shader] drawParam:[self material] vertex:_vertexBuffer index:[EGIndexSourceGap indexSourceGapWithSource:_indexBuffer start:0 count:((unsigned int)(n * 3 * (vc - 2)))]];
+                _index.count = ((unsigned int)(n * 3 * (vc - 2)));
+                [_vao drawParam:_material];
             }];
         }];
     }];
@@ -266,13 +265,15 @@ static ODClassType* _EGParticleSystemView_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGParticleSystemView* o = ((EGParticleSystemView*)(other));
-    return [self.vbDesc isEqual:o.vbDesc] && self.maxCount == o.maxCount && [self.blendFunc isEqual:o.blendFunc];
+    return [self.vbDesc isEqual:o.vbDesc] && self.maxCount == o.maxCount && [self.shader isEqual:o.shader] && [self.material isEqual:o.material] && [self.blendFunc isEqual:o.blendFunc];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.vbDesc hash];
     hash = hash * 31 + self.maxCount;
+    hash = hash * 31 + [self.shader hash];
+    hash = hash * 31 + [self.material hash];
     hash = hash * 31 + [self.blendFunc hash];
     return hash;
 }
@@ -281,6 +282,8 @@ static ODClassType* _EGParticleSystemView_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"vbDesc=%@", self.vbDesc];
     [description appendFormat:@", maxCount=%li", self.maxCount];
+    [description appendFormat:@", shader=%@", self.shader];
+    [description appendFormat:@", material=%@", self.material];
     [description appendFormat:@", blendFunc=%@", self.blendFunc];
     [description appendString:@">"];
     return description;

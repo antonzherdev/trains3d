@@ -12,6 +12,7 @@
 @class EGArrayIndexSource;
 @class EGVoidRefArrayIndexSource;
 @class EGIndexSourceGap;
+@class EGMutableIndexSourceGap;
 @protocol EGIndexSource;
 @protocol EGIndexBuffer;
 
@@ -114,6 +115,21 @@
 
 + (id)indexSourceGapWithSource:(id<EGIndexSource>)source start:(unsigned int)start count:(unsigned int)count;
 - (id)initWithSource:(id<EGIndexSource>)source start:(unsigned int)start count:(unsigned int)count;
+- (ODClassType*)type;
+- (void)bind;
+- (void)draw;
+- (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
++ (ODClassType*)type;
+@end
+
+
+@interface EGMutableIndexSourceGap : NSObject<EGIndexSource>
+@property (nonatomic, readonly) id<EGIndexSource> source;
+@property (nonatomic) unsigned int start;
+@property (nonatomic) unsigned int count;
+
++ (id)mutableIndexSourceGapWithSource:(id<EGIndexSource>)source;
+- (id)initWithSource:(id<EGIndexSource>)source;
 - (ODClassType*)type;
 - (void)bind;
 - (void)draw;

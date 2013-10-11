@@ -136,12 +136,15 @@ class BillboardParticle(lifeLength : float4) extends Particle(lifeLength) {
 }
 
 class BillboardParticleSystemView(maxCount : uint, material : ColorSource, blendFunc : BlendFunction)
-    extends ParticleSystemView<BillboardParticle, BillboardBufferData>(Billboard.vbDesc, maxCount, blendFunc)
+    extends ParticleSystemView<BillboardParticle, BillboardBufferData>(
+        Billboard.vbDesc, maxCount,
+        BillboardShaderSystem.instance.shaderFor(material), material,
+        blendFunc
+    )
 {
 
     static def apply(maxCount : uint, material : ColorSource) =
         BillboardParticleSystemView(maxCount, material, BlendFunction.standard)
-    val shader : Shader =  BillboardShaderSystem.instance.shaderFor(material)
     def vertexCount : uint = 4
 
     def writeIndexesTo(indexPointer : VoidRefArray, i : uint4) : VoidRefArray = {

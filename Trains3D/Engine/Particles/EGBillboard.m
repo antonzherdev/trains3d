@@ -586,24 +586,15 @@ static ODClassType* _EGBillboardParticle_type;
 @end
 
 
-@implementation EGBillboardParticleSystemView{
-    EGColorSource* _material;
-    EGShader* _shader;
-}
+@implementation EGBillboardParticleSystemView
 static ODClassType* _EGBillboardParticleSystemView_type;
-@synthesize material = _material;
-@synthesize shader = _shader;
 
 + (id)billboardParticleSystemViewWithMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
     return [[EGBillboardParticleSystemView alloc] initWithMaxCount:maxCount material:material blendFunc:blendFunc];
 }
 
 - (id)initWithMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
-    self = [super initWithVbDesc:EGBillboard.vbDesc maxCount:maxCount blendFunc:blendFunc];
-    if(self) {
-        _material = material;
-        _shader = [EGBillboardShaderSystem.instance shaderForParam:_material];
-    }
+    self = [super initWithVbDesc:EGBillboard.vbDesc maxCount:maxCount shader:[EGBillboardShaderSystem.instance shaderForParam:material] material:material blendFunc:blendFunc];
     
     return self;
 }

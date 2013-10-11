@@ -550,3 +550,76 @@ static ODClassType* _EGIndexSourceGap_type;
 @end
 
 
+@implementation EGMutableIndexSourceGap{
+    id<EGIndexSource> _source;
+    unsigned int _start;
+    unsigned int _count;
+}
+static ODClassType* _EGMutableIndexSourceGap_type;
+@synthesize source = _source;
+@synthesize start = _start;
+@synthesize count = _count;
+
++ (id)mutableIndexSourceGapWithSource:(id<EGIndexSource>)source {
+    return [[EGMutableIndexSourceGap alloc] initWithSource:source];
+}
+
+- (id)initWithSource:(id<EGIndexSource>)source {
+    self = [super init];
+    if(self) _source = source;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGMutableIndexSourceGap_type = [ODClassType classTypeWithCls:[EGMutableIndexSourceGap class]];
+}
+
+- (void)bind {
+    [_source bind];
+}
+
+- (void)draw {
+    [_source drawWithStart:((NSUInteger)(_start)) count:((NSUInteger)(_count))];
+}
+
+- (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
+    [_source drawWithStart:((NSUInteger)(_start + start)) count:count];
+}
+
+- (ODClassType*)type {
+    return [EGMutableIndexSourceGap type];
+}
+
++ (ODClassType*)type {
+    return _EGMutableIndexSourceGap_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGMutableIndexSourceGap* o = ((EGMutableIndexSourceGap*)(other));
+    return [self.source isEqual:o.source];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.source hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"source=%@", self.source];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
