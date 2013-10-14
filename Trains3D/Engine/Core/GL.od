@@ -159,6 +159,9 @@ stub object gl {
     val GL_TEXTURE_COMPARE_MODE : uint4
     val GL_LINEAR : uint4
     val GL_LINEAR_MIPMAP_LINEAR : uint4
+    val GL_LINEAR_MIPMAP_NEAREST : uint4
+    val GL_NEAREST_MIPMAP_LINEAR : uint4
+    val GL_NEAREST_MIPMAP_NEAREST : uint4
     val GL_CLAMP_TO_EDGE : uint4
     val GL_LEQUAL : uint4
     val GL_COMPARE_R_TO_TEXTURE : uint4

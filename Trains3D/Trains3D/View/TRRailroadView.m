@@ -153,7 +153,7 @@ static ODClassType* _TRRailView_type;
     self = [super init];
     if(self) {
         _railMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.6, 1.0)] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:0.3];
-        _gravel = [EGGlobal textureForFile:@"Gravel.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_LINEAR];
+        _gravel = [EGGlobal textureForFile:@"Gravel.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST];
         _railModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railGravel, ((EGMaterial*)([EGMaterial applyTexture:_gravel]))), tuple(TRModels.railTies, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.rails, _railMaterial)])];
         _railTurnModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railTurnGravel, ((EGMaterial*)([EGMaterial applyTexture:_gravel]))), tuple(TRModels.railTurnTies, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.railsTurn, _railMaterial)])];
     }
@@ -344,7 +344,7 @@ static ODClassType* _TRLightView_type;
     self = [super init];
     if(self) {
         _railroad = railroad;
-        _texture = [EGGlobal textureForFile:@"Light.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_LINEAR];
+        _texture = [EGGlobal textureForFile:@"Light.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST];
         _redBodyVao = [TRModels.light vaoMaterial:[EGStandardMaterial applyTexture:[EGTextureRegion textureRegionWithTexture:_texture rect:geRectApplyXYWidthHeight(0.5, 0.0, 1.0, 1.0)]] shadow:NO];
         _greenBodyVao = [TRModels.light vaoMaterial:[EGStandardMaterial applyTexture:_texture] shadow:NO];
         _greenGlowVao = [TRModels.lightGreenGlow vaoMaterial:[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:GEVec4Make(0.0, 1.0, 0.0, 0.8) texture:[EGGlobal textureForFile:@"LightGlow.png"]]] shadow:NO];

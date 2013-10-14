@@ -11,10 +11,11 @@ class CityView(level : Level) {
         0, 1, 0, 1, 0, -0.5, 0.001, 0.5
         ], [0, 1, 2,
         2, 3, 0]).vao(StandardMaterial(vec4(1, 1, 1, 1)), shadow = false)
-    val roofTexture = textureFor("Roof.png", GL_LINEAR, GL_LINEAR_MIPMAP_LINEAR)
+    val roofTexture = textureFor("Roof.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
     val vaoBody = Models.cityBodies.vao(StandardMaterial(vec4(1, 1, 1, 1)), shadow = false)
     val vaoRoof = Models.cityRoofs.vao(StandardMaterial(roofTexture), shadow = false)
-    val vaoWindows = Models.cityWindows.vao(StandardMaterial(textureFor("Window.png"), vec4(1, 1, 1, 1), 1), shadow = false)
+    val vaoWindows = Models.cityWindows.vao(StandardMaterial(textureFor("Window.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST),
+        vec4(1, 1, 1, 1), 1), shadow = false)
 
     def draw {
         egPushGroupMarker("Cities")

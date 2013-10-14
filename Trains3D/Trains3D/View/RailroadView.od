@@ -51,7 +51,7 @@ class RailroadView(railroad : Railroad) {
 
 class RailView {
     val railMaterial = StandardMaterial(vec4(0.5, 0.5, 0.6, 1), vec4(0.5, 0.5, 0.5, 1), 0.3)
-    val gravel = textureFor("Gravel.png", GL_LINEAR, GL_LINEAR_MIPMAP_LINEAR)
+    val gravel = textureFor("Gravel.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
     val railModel = MeshModel([
         (Models.railGravel, gravel),
         (Models.railTies, vec4(0.55, 0.45, 0.25, 1)),
@@ -129,7 +129,7 @@ class SwitchView {
 }
 
 class LightView(railroad : Railroad) {
-    val texture = textureFor("Light.png", GL_LINEAR, GL_LINEAR_MIPMAP_LINEAR)
+    val texture = textureFor("Light.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
     val redBodyVao = Models.light.vao(StandardMaterial(TextureRegion(texture, Rect(0.5, 0, 1, 1))), false)
     val greenBodyVao = Models.light.vao(StandardMaterial(texture), false)
     val greenGlowVao = Models.lightGreenGlow.vao(StandardMaterial(ColorSource(vec4(0, 1, 0, 0.8), textureFor("LightGlow.png"))), false)

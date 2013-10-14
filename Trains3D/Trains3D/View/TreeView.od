@@ -3,7 +3,7 @@ package com.antonzherdev.trains
 
 class TreeView(forest : Forest) {
 //    val textures = [textureFor("Pine.png"), textureFor("Tree1.png"), textureFor("Tree2.png"), textureFor("Tree3.png"), textureFor("YellowTree.png")]
-    val texture = textureFor("Pine.png", GL_LINEAR, GL_LINEAR_MIPMAP_LINEAR)
+    val texture = textureFor("Pine.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
     val material = ColorSource(vec4(1, 1, 1, 1), texture, 0.3)
 //    val materials = textures.chain.map(ColorSource(vec4(1, 1, 1, 1), _, 0.3)).toArray
 //    val rects = textures.chain.map(Rect(0, 0, _.size.x/(_.size.y*4), _.size.y/(_.size.y*2)).centerX).toArray
