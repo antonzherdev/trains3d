@@ -5,6 +5,7 @@
 #import "EGMaterial.h"
 #import "EGMesh.h"
 #import "TRModels.h"
+#import "GL.h"
 #import "TRTrain.h"
 #import "TRCity.h"
 #import "EGContext.h"
@@ -59,13 +60,17 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (void)draw {
+    egPushGroupMarker(@"Trains");
     [self drawTrains:[_level trains]];
     [self drawDyingTrains:[_level dyingTrains]];
+    egPopGroupMarker();
 }
 
 - (void)drawSmoke {
+    egPushGroupMarker(@"Smoke");
     [self drawSmokeTrains:[_level trains]];
     [self drawSmokeTrains:[_level dyingTrains]];
+    egPopGroupMarker();
 }
 
 - (void)drawTrains:(id<CNSeq>)trains {

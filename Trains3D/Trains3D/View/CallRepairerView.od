@@ -3,9 +3,11 @@ package com.antonzherdev.trains
 class CallRepairerView(level : Level) extends InputProcessor with MouseProcessor {
     def draw {
         if(!level.railroad.damagesPoints.isEmpty && level.repairer.isEmpty) {
+            egPushGroupMarker("Call repairer")
             context.depthTest.disabled { BlendFunction.standard {
                 level.cities.for(drawButtonFor(_))
             }}
+            egPopGroupMarker
         } else if(!buttons.isEmpty) {
             buttons.clear
         }

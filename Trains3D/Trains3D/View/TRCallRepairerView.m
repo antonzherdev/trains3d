@@ -5,6 +5,7 @@
 #import "TRStrings.h"
 #import "GEMat4.h"
 #import "TRRailroad.h"
+#import "GL.h"
 #import "EGMaterial.h"
 #import "TRCity.h"
 #import "EGBillboard.h"
@@ -46,6 +47,7 @@ static ODClassType* _TRCallRepairerView_type;
 
 - (void)draw {
     if(!([[_level.railroad damagesPoints] isEmpty]) && [[_level repairer] isEmpty]) {
+        egPushGroupMarker(@"Call repairer");
         [EGGlobal.context.depthTest disabledF:^void() {
             [EGBlendFunction.standard applyDraw:^void() {
                 [[_level cities] forEach:^void(TRCity* _) {
@@ -53,6 +55,7 @@ static ODClassType* _TRCallRepairerView_type;
                 }];
             }];
         }];
+        egPopGroupMarker();
     } else {
         if(!([_buttons isEmpty])) [_buttons clear];
     }

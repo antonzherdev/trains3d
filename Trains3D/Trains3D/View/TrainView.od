@@ -12,13 +12,17 @@ class TrainView(level : Level) {
     def trainMaterialFor(color : vec4) = StandardMaterial(color, vec4(0.1, 0.1, 0.1, 1), 0.1)
 
     def draw {
+        egPushGroupMarker("Trains")
         draw(trains = level.trains)
         draw(dyingTrains = level.dyingTrains)
+        egPopGroupMarker
     }
 
     def drawSmoke {
+        egPushGroupMarker("Smoke")
         drawSmoke(trains = level.trains)
         drawSmoke(trains = level.dyingTrains)
+        egPopGroupMarker
     }
 
     def draw(trains : [Train]) {

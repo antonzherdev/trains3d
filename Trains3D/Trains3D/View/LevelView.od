@@ -20,7 +20,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
         trainView = TrainView(level)
         treeView = TreeView(level.forest)
         railroadView = RailroadView(level.railroad)
-        cityView = CityView()
+        cityView = CityView(level)
         callRepairerView = CallRepairerView(level)
     }
 
@@ -32,7 +32,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     def draw {
         val shadows = context.renderTarget.is<ShadowRenderTarget>
         if(!shadows) railroadView.drawBackground
-        if(!shadows) level.cities.for(city -> cityView.draw(city))
+        if(!shadows) cityView.draw
 
         trainView.draw
 

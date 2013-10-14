@@ -1,5 +1,6 @@
 #import "objd.h"
 #import "GEVec.h"
+@class TRLevel;
 @class EGVertexArray;
 @class EGMesh;
 @class EGStandardMaterial;
@@ -21,16 +22,17 @@
 @class TRCityView;
 
 @interface TRCityView : NSObject
+@property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) EGVertexArray* expectedTrainModel;
 @property (nonatomic, readonly) EGTexture* roofTexture;
 @property (nonatomic, readonly) EGVertexArray* vaoBody;
 @property (nonatomic, readonly) EGVertexArray* vaoRoof;
 @property (nonatomic, readonly) EGVertexArray* vaoWindows;
 
-+ (id)cityView;
-- (id)init;
++ (id)cityViewWithLevel:(TRLevel*)level;
+- (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
-- (void)drawCity:(TRCity*)city;
+- (void)draw;
 + (ODClassType*)type;
 @end
 

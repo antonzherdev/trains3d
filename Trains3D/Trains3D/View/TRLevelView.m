@@ -62,7 +62,7 @@ static ODClassType* _TRLevelView_type;
     _trainView = [TRTrainView trainViewWithLevel:_level];
     _treeView = [TRTreeView treeViewWithForest:_level.forest];
     _railroadView = [TRRailroadView railroadViewWithRailroad:_level.railroad];
-    _cityView = [TRCityView cityView];
+    _cityView = [TRCityView cityViewWithLevel:_level];
     _callRepairerView = [TRCallRepairerView callRepairerViewWithLevel:_level];
 }
 
@@ -74,9 +74,7 @@ static ODClassType* _TRLevelView_type;
 - (void)draw {
     BOOL shadows = [EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]];
     if(!(shadows)) [_railroadView drawBackground];
-    if(!(shadows)) [[_level cities] forEach:^void(TRCity* city) {
-        [_cityView drawCity:city];
-    }];
+    if(!(shadows)) [_cityView draw];
     [_trainView draw];
     [_treeView draw];
     [_railroadView drawForeground];
