@@ -1,20 +1,5 @@
 package com.antonzherdev.eg
 
-stub class FirstMultisamplingSurface(size : vec2i, depth : bool) extends Surface(size) {
-    val frameBuffer = egGenFrameBuffer
-    private val depthTexture : Texture?
-    private val texture
-
-    def dealloc {
-        egDeleteFrameBuffer(frameBuffer)
-    }
-
-    def bind
-
-    def unbind
-
-}
-
 stub class MultisamplingSurface(size : vec2i, depth : bool) extends  Surface(size) {
     def bind
 

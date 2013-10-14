@@ -88,7 +88,7 @@
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
     GLint defaultFBO;
-    glGetIntegerv(GL_FRAMEBUFFER_BINDING_OES, &defaultFBO);
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBO);
     [[EGGlobal context] setDefaultFramebuffer:defaultFBO];
     [_director drawWithSize:_viewSize];
 }

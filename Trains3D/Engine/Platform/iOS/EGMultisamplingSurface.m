@@ -7,8 +7,8 @@
 @implementation EGFirstMultisamplingSurface {
     BOOL _depth;
     GLuint _frameBuffer;
+    GLuint _renderBuffer;
     GLuint _depthRenderBuffer;
-    EGTexture* _texture;
 }
 static ODClassType* _EGFirstMultisamplingSurface_type;
 @synthesize depth = _depth;
@@ -23,35 +23,28 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
     if(self) {
         _depth = depth;
         _frameBuffer = egGenFrameBuffer();
+        _renderBuffer = egGenRenderBuffer();
         _depthRenderBuffer = ((_depth) ? egGenRenderBuffer() : 0);
-        _texture = ^EGTexture*() {
-            EGTexture* t = [EGEmptyTexture emptyTextureWithSize:geVec2ApplyVec2i(size)];
-            glGetError();
-            glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-            glBindTexture(GL_TEXTURE_2D, t.id);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self.size.x, self.size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-            if(glGetError() != 0) {
-                NSString* e = [NSString stringWithFormat:@"Error in texture creation for surface with size %lix%li", self.size.x, self.size.y];
-                @throw e;
-            }
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, t.id, 0);
-            NSInteger status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-            if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer color attachment: %li", status];
-            if(_depth) {
-                glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
-                glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, self.size.x, self.size.y);
-                glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
-                NSInteger status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-                if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %li", status];
-            }
-            glBindTexture(GL_TEXTURE_2D, 0);
-            [EGGlobal.context restoreDefaultFramebuffer];
-            return t;
-        }();
+        glGenFramebuffers(1, &_frameBuffer);
+        glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+
+        glBindRenderbuffer(GL_RENDERBUFFER, _renderBuffer);
+        glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, 4, GL_RGBA8_OES, self.size.x, self.size.y);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _renderBuffer);
+
+        egCheckError();
+        NSInteger status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer color attachment: %li", status];
+        if(depth) {
+            glGenRenderbuffers(1, &_depthRenderBuffer);
+            glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
+            glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, 4, GL_DEPTH_COMPONENT16,  self.size.x, self.size.y);
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
+            egCheckError();
+            status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+            if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %li", status];
+        }
+        [EGGlobal.context restoreDefaultFramebuffer];
     }
 
     return self;
@@ -64,6 +57,8 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
 
 - (void)dealloc {
     egDeleteFrameBuffer(_frameBuffer);
+    egDeleteRenderBuffer(_renderBuffer);
+    if(_depth)egDeleteRenderBuffer(_depthRenderBuffer);
 }
 
 - (void)bind {
@@ -116,13 +111,13 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
 
 @implementation EGMultisamplingSurface{
     BOOL _depth;
-    GLuint _frameBuffer;
-    GLuint _depthRenderBuffer;
-    EGTexture* _texture;
+    EGFirstMultisamplingSurface * _multisampling;
+    EGSimpleSurface* _simple;
+    GLint _defaultDrawFBO;
+    GLint _defaultReadFBO;
 }
 static ODClassType* _EGMultisamplingSurface_type;
 @synthesize depth = _depth;
-
 
 + (id)multisamplingSurfaceWithSize:(GEVec2i)size depth:(BOOL)depth {
     return [[EGMultisamplingSurface alloc] initWithSize:size depth:depth];
@@ -132,37 +127,10 @@ static ODClassType* _EGMultisamplingSurface_type;
     self = [super initWithSize:size];
     if(self) {
         _depth = depth;
-        _frameBuffer = egGenFrameBuffer();
-        _depthRenderBuffer = ((_depth) ? egGenRenderBuffer() : 0);
-        _texture = ^EGTexture*() {
-            EGTexture* t = [EGEmptyTexture emptyTextureWithSize:geVec2ApplyVec2i(size)];
-            glGetError();
-            glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-            glBindTexture(GL_TEXTURE_2D, t.id);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self.size.x, self.size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-            if(glGetError() != 0) {
-                NSString* e = [NSString stringWithFormat:@"Error in texture creation for surface with size %lix%li", self.size.x, self.size.y];
-                @throw e;
-            }
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, t.id, 0);
-            NSInteger status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-            if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer color attachment: %li", status];
-            if(_depth) {
-                glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
-                glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.size.x, self.size.y);
-                glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
-                status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-                if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %li", status];
-            }
-            glBindTexture(GL_TEXTURE_2D, 0);
-            [EGGlobal.context restoreDefaultFramebuffer];
-            return t;
-        }();
+        _multisampling = [EGFirstMultisamplingSurface firstMultisamplingSurfaceWithSize:self.size depth:_depth];
+        _simple = [EGSimpleSurface simpleSurfaceWithSize:self.size depth:NO];
     }
+
     return self;
 }
 
@@ -172,25 +140,33 @@ static ODClassType* _EGMultisamplingSurface_type;
 }
 
 - (void)bind {
-    glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-    [EGGlobal.context pushViewport];
-    [EGGlobal.context setViewport:geRectIApplyXYWidthHeight(0.0, 0.0, ((float)(self.size.x)), ((float)(self.size.y)))];
+    glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING_APPLE, &_defaultDrawFBO);
+    glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING_APPLE, &_defaultReadFBO);
+    [_multisampling bind];
 }
 
 - (void)unbind {
-    glFlush();
-    [EGGlobal.context restoreDefaultFramebuffer];
-    [EGGlobal.context popViewport];
+    [_multisampling unbind];
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, _simple.frameBuffer);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, _multisampling.frameBuffer);
+    glResolveMultisampleFramebufferAPPLE();
+//    glFlush();
+//    const GLenum discards[]  = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
+//    glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER_APPLE, 2, discards);
+//    const GLenum discards2[]  = {GL_COLOR_ATTACHMENT0};
+//    glDiscardFramebufferEXT(GL_DRAW_FRAMEBUFFER_APPLE, 1, discards2);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, (GLuint) _defaultDrawFBO);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, (GLuint) _defaultReadFBO);
+    egCheckError();
 }
 
 - (GLint)frameBuffer {
-    return _frameBuffer;
+    return _simple.frameBuffer;
 }
 
-- (EGTexture *)texture {
-    return _texture;
+- (EGTexture*)texture {
+    return _simple.texture;
 }
-
 
 - (ODClassType*)type {
     return [EGMultisamplingSurface type];
@@ -225,7 +201,6 @@ static ODClassType* _EGMultisamplingSurface_type;
     [description appendString:@">"];
     return description;
 }
-
 @end
 
 
