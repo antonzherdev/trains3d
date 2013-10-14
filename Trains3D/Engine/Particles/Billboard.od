@@ -48,7 +48,7 @@ class BillboardShaderBuilder(texture : bool, alpha : bool, shadow : bool, parame
          uniform lowp vec4 color;
          uniform lowp float alphaTestLevel;
          $in lowp vec4 fColor;
-        $if(shadow)
+        $if(shadow && version > 100)
          out float depth;
         $else
          $fragColorDeclaration
@@ -67,7 +67,7 @@ class BillboardShaderBuilder(texture : bool, alpha : bool, shadow : bool, parame
                  discard;
              }
             $endif
-             depth = gl_FragCoord.z;$when(shadow)
+             depth = gl_FragCoord.z;$when(shadow && version > 100)
              $code
          }"
 

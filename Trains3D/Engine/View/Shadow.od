@@ -10,14 +10,8 @@ class ShadowMap(size : vec2i) extends Surface(size) {
 
         val t = EmptyTexture(size)
         glBindTexture(GL_TEXTURE_2D, t.id)
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, size.x, size.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
-        egInitShadowTexture
+        egInitShadowTexture(size)
+        egCheckError
         egFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, t.id, 0)
 //        glDrawBuffer(GL_NONE)
         val status = glCheckFramebufferStatus(GL_FRAMEBUFFER)
@@ -86,39 +80,50 @@ class ShadowShaderSystem extends ShaderSystem<ColorSource> {
 }
 
 
+class ShadowShaderText(texture : bool) extends ShaderTextBuilder {
+    def vertex =
+       "$vertexHeader
+       $if(texture)
+        $ain mediump vec2 vertexUV;
+        $out mediump vec2 UV;
+       $endif
+        $ain highp vec3 position;
+        uniform mat4 mwcp;
+
+        void main(void) {
+            gl_Position = mwcp * vec4(position, 1);
+            UV = vertexUV;$when(texture)
+        }"
+
+    def fragment =
+       "#version $version
+       $if(texture)
+        $in mediump vec2 UV;
+        uniform lowp sampler2D texture;
+        uniform lowp float alphaTestLevel;
+       $endif
+       $if(version > 100)
+        out float depth;
+       $endif
+
+        void main(void) {
+           $if(texture)
+            if($texture2D\(texture, UV).a < alphaTestLevel) {
+                discard;
+            }
+           $endif
+           $if(version > 100)
+            depth = gl_FragCoord.z;
+           $endif
+        }"
+
+    def program = ShaderProgram("Shadow", vertex, fragment)
+}
+
 class ShadowShader(texture : bool, program : ShaderProgram) extends Shader<ColorSource>(program) {
-    static val instanceForColor = ShadowShader(false, ShaderProgram("ShadowColor", vertexProgram(false), fragmentProgram(false)))
-    static val instanceForTexture = ShadowShader(true, ShaderProgram("ShadowTexture", vertexProgram(true), fragmentProgram(true)))
+    static val instanceForColor = ShadowShader(false, ShadowShaderText(false).program)
+    static val instanceForTexture = ShadowShader(true, ShadowShaderText(true).program)
 
-    private static def vertexProgram(texture : bool) =
-        "#version 150
-         in vec2 vertexUV;$when(texture)
-         in vec3 position;
-         uniform mat4 mwcp;
-
-         out vec2 UV;$when(texture)
-
-         void main(void) {
-             gl_Position = mwcp * vec4(position, 1);
-             UV = vertexUV;$when(texture)
-         }"
-    private static def fragmentProgram(texture : bool) =
-        "#version 150
-        $if(texture)
-         in vec2 UV;
-         uniform sampler2D texture;
-         uniform float alphaTestLevel;
-        $endif
-         out float depth;
-
-         void main(void) {
-        $if(texture)
-             if(texture(texture, UV).a < alphaTestLevel) {
-                 discard;
-             }
-        $endif
-             depth = gl_FragCoord.z;
-         }"
     val uvSlot : ShaderAttribute? = if(texture) attributeFor("vertexUV") else nil
     val positionSlot : ShaderAttribute = attributeFor("position")
     val mvpUniform = uniformMat4("mwcp")
@@ -153,11 +158,11 @@ class ShadowDrawShaderSystem extends ShaderSystem<ShadowDrawParam> {
 
     private static val shaders = MutableHashMap<ShadowDrawShaderKey, ShadowDrawShader>()
 }
-class ShadowDrawShaderKey(directLightCount : uint)  {
+class ShadowDrawShaderKey(directLightCount : uint) extends ShaderTextBuilder {
     def shader : StandardShader = {
         val vertexShader =
-            "#version 150
-             in vec3 position;
+            "$vertexHeader
+             $ain highp vec3 position;
              uniform mat4 mwcp;
              $lightsVertexUniform
              $lightsOut
@@ -167,16 +172,16 @@ class ShadowDrawShaderKey(directLightCount : uint)  {
                 $lightsCalculateVaryings
              }"
         val fragmentShader =
-            "#version 150
+            "$fragmentHeader
+             $shadowExt
              $lightsIn
              $lightsFragmentUniform
-             out vec4 outColor;
 
              void main(void) {
-                float visibility;
-                float a = 0;
+                lowp float visibility;
+                lowp float a = 0.0;
                 $lightsDiffuse
-                outColor = vec4(0, 0, 0, a);
+                $fragColor = vec4(0, 0, 0, a);
             }"
         ShadowDrawShader(self, ShaderProgram("ShadowDraw", vertexShader, fragmentShader))
     }
@@ -184,21 +189,21 @@ class ShadowDrawShaderKey(directLightCount : uint)  {
     def lightsVertexUniform : string = directLightCount.range.chain.map{i ->
         "uniform mat4 dirLightDepthMwcp$i;"}.toStringWith("\n")
     def lightsIn : string = directLightCount.range.chain.map{i ->
-        "in vec3 dirLightShadowCoord$i;"}.toStringWith("\n")
+        "$in mediump vec3 dirLightShadowCoord$i;"}.toStringWith("\n")
     def lightsOut : string = directLightCount.range.chain.map{i ->
-        "out vec3 dirLightShadowCoord$i;"}.toStringWith("\n")
+        "$out mediump vec3 dirLightShadowCoord$i;"}.toStringWith("\n")
     def lightsCalculateVaryings : string = directLightCount.range.chain.map{i ->
         "dirLightShadowCoord$i = (dirLightDepthMwcp$i * vec4(position, 1)).xyz;"
     }.toStringWith("\n")
 
 
     def lightsFragmentUniform : string = directLightCount.range.chain.map{i ->
-        "uniform float dirLightPercent$i;
-         uniform sampler2DShadow dirLightShadow$i;"}.toStringWith("\n")
+        "uniform lowp float dirLightPercent$i;
+         uniform mediump sampler2DShadow dirLightShadow$i;"}.toStringWith("\n")
     def lightsDiffuse : string =  directLightCount.range.chain.map{i ->
         "
-        visibility = texture(dirLightShadow$i, vec3(dirLightShadowCoord$i.xy, dirLightShadowCoord$i.z - 0.005));
-        a += (1 - visibility)*dirLightPercent$i;
+        visibility = $shadow2D\(dirLightShadow$i, vec3(dirLightShadowCoord$i.xy, dirLightShadowCoord$i.z - 0.005));
+        a += (1.0 - visibility)*dirLightPercent$i;
         "
     }.toStringWith("\n")
 

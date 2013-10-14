@@ -24,6 +24,7 @@
 @class EGShadowSurfaceShaderBuilder;
 @class EGShadowSurfaceShader;
 @class EGShadowShaderSystem;
+@class EGShadowShaderText;
 @class EGShadowShader;
 @class EGShadowDrawParam;
 @class EGShadowDrawShaderSystem;
@@ -79,6 +80,19 @@
 @end
 
 
+@interface EGShadowShaderText : NSObject<EGShaderTextBuilder>
+@property (nonatomic, readonly) BOOL texture;
+
++ (id)shadowShaderTextWithTexture:(BOOL)texture;
+- (id)initWithTexture:(BOOL)texture;
+- (ODClassType*)type;
+- (NSString*)vertex;
+- (NSString*)fragment;
+- (EGShaderProgram*)program;
++ (ODClassType*)type;
+@end
+
+
 @interface EGShadowShader : EGShader
 @property (nonatomic, readonly) BOOL texture;
 @property (nonatomic, readonly) id uvSlot;
@@ -117,7 +131,7 @@
 @end
 
 
-@interface EGShadowDrawShaderKey : NSObject
+@interface EGShadowDrawShaderKey : NSObject<EGShaderTextBuilder>
 @property (nonatomic, readonly) NSUInteger directLightCount;
 
 + (id)shadowDrawShaderKeyWithDirectLightCount:(NSUInteger)directLightCount;

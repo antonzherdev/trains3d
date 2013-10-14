@@ -22,7 +22,7 @@ static NSArray* _EGPlatform_values;
 + (void)initialize {
     [super initialize];
     _EGPlatform_MacOS = [EGPlatform platformWithOrdinal:0 name:@"MacOS" shadows:YES];
-    _EGPlatform_iOS = [EGPlatform platformWithOrdinal:1 name:@"iOS" shadows:NO];
+    _EGPlatform_iOS = [EGPlatform platformWithOrdinal:1 name:@"iOS" shadows:YES];
     _EGPlatform_values = (@[_EGPlatform_MacOS, _EGPlatform_iOS]);
 }
 

@@ -228,6 +228,7 @@ static ODClassType* _EGStandardShaderKey_type;
         "   UV = vertexUV; " : @"")]), [self lightsCalculateVaryings]];
     NSString* fragmentShader = [NSString stringWithFormat:@"%@\n"
         "%@\n"
+        "%@\n"
         "uniform lowp vec4 diffuseColor;\n"
         "uniform lowp vec4 ambientColor;\n"
         "uniform lowp vec4 specularColor;\n"
@@ -240,7 +241,7 @@ static ODClassType* _EGStandardShaderKey_type;
         "   lowp vec4 color = ambientColor * materialColor;\n"
         "   %@\n"
         "   %@ = color;\n"
-        "}", [self fragmentHeader], ((_texture) ? [NSString stringWithFormat:@"\n"
+        "}", [self fragmentHeader], [self shadowExt], ((_texture) ? [NSString stringWithFormat:@"\n"
         "%@ mediump vec2 UV;\n"
         "uniform lowp sampler2D diffuseTexture;\n", [self in]] : @""), [self lightsIn], [self lightsFragmentUniform], ((_directLightWithShadowsCount > 0) ? @"\n"
         "   mediump float visibility;" : @""), ((_texture) ? [NSString stringWithFormat:@"\n"
@@ -254,7 +255,7 @@ static ODClassType* _EGStandardShaderKey_type;
 - (NSString*)lightsVertexUniform {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
         return [NSString stringWithFormat:@"uniform mediump vec3 dirLightDirection%@;\n"
-            "%@\n", i, ((i < numui(_directLightWithShadowsCount)) ? [NSString stringWithFormat:@"\n"
+            "%@\n", i, ((unumi(i) < _directLightWithShadowsCount) ? [NSString stringWithFormat:@"\n"
             "uniform mat4 dirLightDepthMwcp%@;\n", i] : @"")];
     }] toStringWithDelimiter:@"\n"];
 }
@@ -263,7 +264,7 @@ static ODClassType* _EGStandardShaderKey_type;
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
         return [NSString stringWithFormat:@"%@ mediump float dirLightDirectionCos%@;\n"
             "%@ mediump float dirLightDirectionCosA%@;\n"
-            "%@\n", [self in], i, [self in], i, ((i < numui(_directLightWithShadowsCount)) ? [NSString stringWithFormat:@"\n"
+            "%@\n", [self in], i, [self in], i, ((unumi(i) < _directLightWithShadowsCount) ? [NSString stringWithFormat:@"\n"
             "%@ mediump vec3 dirLightShadowCoord%@;\n", [self in], i] : @"")];
     }] toStringWithDelimiter:@"\n"];
 }
@@ -272,7 +273,7 @@ static ODClassType* _EGStandardShaderKey_type;
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
         return [NSString stringWithFormat:@"%@ mediump float dirLightDirectionCos%@;\n"
             "%@ mediump float dirLightDirectionCosA%@;\n"
-            "%@\n", [self out], i, [self out], i, ((i < numui(_directLightWithShadowsCount)) ? [NSString stringWithFormat:@"\n"
+            "%@\n", [self out], i, [self out], i, ((unumi(i) < _directLightWithShadowsCount) ? [NSString stringWithFormat:@"\n"
             "%@ mediump vec3 dirLightShadowCoord%@;\n", [self out], i] : @"")];
     }] toStringWithDelimiter:@"\n"];
 }
@@ -281,7 +282,7 @@ static ODClassType* _EGStandardShaderKey_type;
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
         return [NSString stringWithFormat:@"dirLightDirectionCos%@ = max(dot(normalMWC, -dirLightDirection%@), 0.0);\n"
             "dirLightDirectionCosA%@ = max(dot(eyeDirection, reflect(dirLightDirection%@, normalMWC)), 0.0);\n"
-            "%@\n", i, i, i, i, ((i < numui(_directLightWithShadowsCount)) ? [NSString stringWithFormat:@"\n"
+            "%@\n", i, i, i, i, ((unumi(i) < _directLightWithShadowsCount) ? [NSString stringWithFormat:@"\n"
             "dirLightShadowCoord%@ = (dirLightDepthMwcp%@ * vec4(position, 1)).xyz;\n", i, i] : @"")];
     }] toStringWithDelimiter:@"\n"];
 }
@@ -289,7 +290,7 @@ static ODClassType* _EGStandardShaderKey_type;
 - (NSString*)lightsFragmentUniform {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
         return [NSString stringWithFormat:@"uniform lowp vec4 dirLightColor%@;\n"
-            "%@", i, ((i < numui(_directLightWithShadowsCount)) ? [NSString stringWithFormat:@"\n"
+            "%@", i, ((unumi(i) < _directLightWithShadowsCount) ? [NSString stringWithFormat:@"\n"
             "uniform mediump sampler2DShadow dirLightShadow%@;\n", i] : @"")];
     }] toStringWithDelimiter:@"\n"];
 }
@@ -297,10 +298,10 @@ static ODClassType* _EGStandardShaderKey_type;
 - (NSString*)lightsDiffuse {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
         return [NSString stringWithFormat:@"\n"
-            "%@\n", ((i < numui(_directLightWithShadowsCount)) ? [NSString stringWithFormat:@"\n"
-            "visibility = texture(dirLightShadow%@, vec3(dirLightShadowCoord%@.xy, dirLightShadowCoord%@.z - 0.005));\n"
+            "%@\n", ((unumi(i) < _directLightWithShadowsCount) ? [NSString stringWithFormat:@"\n"
+            "visibility = %@(dirLightShadow%@, vec3(dirLightShadowCoord%@.xy, dirLightShadowCoord%@.z - 0.005));\n"
             "color += visibility * dirLightDirectionCos%@ * (materialColor * dirLightColor%@);\n"
-            "color += visibility * specularColor * dirLightColor%@ * pow(dirLightDirectionCosA%@, 5.0/specularSize);\n", i, i, i, i, i, i, i] : [NSString stringWithFormat:@"\n"
+            "color += visibility * specularColor * dirLightColor%@ * pow(dirLightDirectionCosA%@, 5.0/specularSize);\n", [self shadow2D], i, i, i, i, i, i, i] : [NSString stringWithFormat:@"\n"
             "color += dirLightDirectionCos%@ * (materialColor * dirLightColor%@);\n"
             "color += specularColor * dirLightColor%@ * pow(dirLightDirectionCosA%@, 5.0/specularSize);\n", i, i, i, i])];
     }] toStringWithDelimiter:@"\n"];
@@ -355,6 +356,16 @@ static ODClassType* _EGStandardShaderKey_type;
 - (NSString*)texture2D {
     if([self version] > 100) return @"texture";
     else return @"texture2D";
+}
+
+- (NSString*)shadowExt {
+    if([self version] == 100) return @"#extension GL_EXT_shadow_samplers : require";
+    else return @"";
+}
+
+- (NSString*)shadow2D {
+    if([self version] == 100) return @"shadow2DEXT";
+    else return @"texture";
 }
 
 - (ODClassType*)type {

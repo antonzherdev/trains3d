@@ -157,7 +157,7 @@ static ODClassType* _EGBillboardShaderBuilder_type;
         "    %@\n"
         "}", [self versionString], ((_texture) ? [NSString stringWithFormat:@"\n"
         "%@ mediump vec2 UV;\n"
-        "uniform lowp sampler2D texture;\n", [self in]] : @""), [self in], ((_shadow) ? @"\n"
+        "uniform lowp sampler2D texture;\n", [self in]] : @""), [self in], ((_shadow && [self version] > 100) ? @"\n"
         "out float depth;\n" : [NSString stringWithFormat:@"\n"
         "%@\n", [self fragColorDeclaration]]), _parameters, ((_shadow && !([self isFragColorDeclared])) ? @"\n"
         "    lowp vec4 fragColor;" : @""), ((_texture) ? [NSString stringWithFormat:@"\n"
@@ -168,7 +168,7 @@ static ODClassType* _EGBillboardShaderBuilder_type;
         "    if(%@.a < alphaTestLevel) {\n"
         "        discard;\n"
         "    }\n"
-        "   ", [self fragColor]] : @""), ((_shadow) ? @"\n"
+        "   ", [self fragColor]] : @""), ((_shadow && [self version] > 100) ? @"\n"
         "    depth = gl_FragCoord.z;" : @""), _code];
 }
 
@@ -225,6 +225,16 @@ static ODClassType* _EGBillboardShaderBuilder_type;
 - (NSString*)texture2D {
     if([self version] > 100) return @"texture";
     else return @"texture2D";
+}
+
+- (NSString*)shadowExt {
+    if([self version] == 100) return @"#extension GL_EXT_shadow_samplers : require";
+    else return @"";
+}
+
+- (NSString*)shadow2D {
+    if([self version] == 100) return @"shadow2DEXT";
+    else return @"texture";
 }
 
 - (ODClassType*)type {

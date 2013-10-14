@@ -165,13 +165,7 @@ static inline void egFramebufferTexture(GLenum target, GLenum attachment, GLuint
 #endif
 }
 
-static inline void egInitShadowTexture() {
-#if TARGET_OS_IPHONE
-#elif TARGET_OS_MAC
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
-#endif
-}
+void egInitShadowTexture(GEVec2i size);
 
 static inline EGPlatform* egPlatform() {
 #if TARGET_OS_IPHONE

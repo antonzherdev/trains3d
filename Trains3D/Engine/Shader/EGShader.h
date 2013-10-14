@@ -170,6 +170,8 @@
 - (NSString*)out;
 - (NSString*)fragColor;
 - (NSString*)texture2D;
+- (NSString*)shadowExt;
+- (NSString*)shadow2D;
 @end
 
 

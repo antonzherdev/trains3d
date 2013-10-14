@@ -190,6 +190,16 @@ static ODClassType* _EGSimpleShaderBuilder_type;
     else return @"texture2D";
 }
 
+- (NSString*)shadowExt {
+    if([self version] == 100) return @"#extension GL_EXT_shadow_samplers : require";
+    else return @"";
+}
+
+- (NSString*)shadow2D {
+    if([self version] == 100) return @"shadow2DEXT";
+    else return @"texture";
+}
+
 - (ODClassType*)type {
     return [EGSimpleShaderBuilder type];
 }

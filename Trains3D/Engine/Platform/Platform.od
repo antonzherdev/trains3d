@@ -2,5 +2,5 @@ package com.antonzherdev.eg
 
 enum Platform(shadows : bool) {
     MacOS(true)
-    iOS(false)
+    iOS(true)
 }

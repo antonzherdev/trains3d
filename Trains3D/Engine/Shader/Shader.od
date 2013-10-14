@@ -207,4 +207,7 @@ trait ShaderTextBuilder {
     def out = if(version < 150) "varying" else "out"
     def fragColor = if(version > 100) "fragColor" else "gl_FragColor"
     def texture2D = if(version > 100) "texture" else "texture2D"
+
+    def shadowExt = if(version == 100) "#extension GL_EXT_shadow_samplers : require" else ""
+    def shadow2D = if(version == 100) "shadow2DEXT" else "texture"
 }

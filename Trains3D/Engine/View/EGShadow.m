@@ -33,12 +33,8 @@ static ODClassType* _EGShadowMap_type;
             glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
             EGEmptyTexture* t = [EGEmptyTexture emptyTextureWithSize:geVec2ApplyVec2i(self.size)];
             glBindTexture(GL_TEXTURE_2D, t.id);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, self.size.x, self.size.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            egInitShadowTexture();
+            egInitShadowTexture(self.size);
+            egCheckError();
             egFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, t.id, 0);
             NSInteger status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
             if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in shadow map frame buffer: %li", status];
@@ -319,6 +315,163 @@ static ODClassType* _EGShadowShaderSystem_type;
 @end
 
 
+@implementation EGShadowShaderText{
+    BOOL _texture;
+}
+static ODClassType* _EGShadowShaderText_type;
+@synthesize texture = _texture;
+
++ (id)shadowShaderTextWithTexture:(BOOL)texture {
+    return [[EGShadowShaderText alloc] initWithTexture:texture];
+}
+
+- (id)initWithTexture:(BOOL)texture {
+    self = [super init];
+    if(self) _texture = texture;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGShadowShaderText_type = [ODClassType classTypeWithCls:[EGShadowShaderText class]];
+}
+
+- (NSString*)vertex {
+    return [NSString stringWithFormat:@"%@\n"
+        "%@\n"
+        "%@ highp vec3 position;\n"
+        "uniform mat4 mwcp;\n"
+        "\n"
+        "void main(void) {\n"
+        "    gl_Position = mwcp * vec4(position, 1);%@\n"
+        "}", [self vertexHeader], ((_texture) ? [NSString stringWithFormat:@"\n"
+        "%@ mediump vec2 vertexUV;\n"
+        "%@ mediump vec2 UV;\n", [self ain], [self out]] : @""), [self ain], ((_texture) ? @"\n"
+        "    UV = vertexUV;" : @"")];
+}
+
+- (NSString*)fragment {
+    return [NSString stringWithFormat:@"#version %li\n"
+        "%@\n"
+        "%@\n"
+        "\n"
+        "void main(void) {\n"
+        "   %@\n"
+        "   %@\n"
+        "}", [self version], ((_texture) ? [NSString stringWithFormat:@"\n"
+        "%@ mediump vec2 UV;\n"
+        "uniform lowp sampler2D texture;\n"
+        "uniform lowp float alphaTestLevel;\n", [self in]] : @""), (([self version] > 100) ? @"\n"
+        "out float depth;\n" : @""), ((_texture) ? [NSString stringWithFormat:@"\n"
+        "    if(%@(texture, UV).a < alphaTestLevel) {\n"
+        "        discard;\n"
+        "    }\n"
+        "   ", [self texture2D]] : @""), (([self version] > 100) ? @"\n"
+        "    depth = gl_FragCoord.z;\n"
+        "   " : @"")];
+}
+
+- (EGShaderProgram*)program {
+    return [EGShaderProgram applyName:@"Shadow" vertex:[self vertex] fragment:[self fragment]];
+}
+
+- (NSString*)versionString {
+    return [NSString stringWithFormat:@"#version %li", [self version]];
+}
+
+- (NSString*)vertexHeader {
+    return [NSString stringWithFormat:@"#version %li", [self version]];
+}
+
+- (NSString*)fragmentHeader {
+    return [NSString stringWithFormat:@"#version %li\n"
+        "%@", [self version], [self fragColorDeclaration]];
+}
+
+- (NSString*)fragColorDeclaration {
+    if([self isFragColorDeclared]) return @"";
+    else return @"out lowp vec4 fragColor;";
+}
+
+- (BOOL)isFragColorDeclared {
+    return EGShaderProgram.version < 110;
+}
+
+- (NSInteger)version {
+    return EGShaderProgram.version;
+}
+
+- (NSString*)ain {
+    if([self version] < 150) return @"attribute";
+    else return @"in";
+}
+
+- (NSString*)in {
+    if([self version] < 150) return @"varying";
+    else return @"in";
+}
+
+- (NSString*)out {
+    if([self version] < 150) return @"varying";
+    else return @"out";
+}
+
+- (NSString*)fragColor {
+    if([self version] > 100) return @"fragColor";
+    else return @"gl_FragColor";
+}
+
+- (NSString*)texture2D {
+    if([self version] > 100) return @"texture";
+    else return @"texture2D";
+}
+
+- (NSString*)shadowExt {
+    if([self version] == 100) return @"#extension GL_EXT_shadow_samplers : require";
+    else return @"";
+}
+
+- (NSString*)shadow2D {
+    if([self version] == 100) return @"shadow2DEXT";
+    else return @"texture";
+}
+
+- (ODClassType*)type {
+    return [EGShadowShaderText type];
+}
+
++ (ODClassType*)type {
+    return _EGShadowShaderText_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGShadowShaderText* o = ((EGShadowShaderText*)(other));
+    return self.texture == o.texture;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.texture;
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"texture=%d", self.texture];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation EGShadowShader{
     BOOL _texture;
     id _uvSlot;
@@ -355,39 +508,8 @@ static ODClassType* _EGShadowShader_type;
 + (void)initialize {
     [super initialize];
     _EGShadowShader_type = [ODClassType classTypeWithCls:[EGShadowShader class]];
-    _EGShadowShader_instanceForColor = [EGShadowShader shadowShaderWithTexture:NO program:[EGShaderProgram applyName:@"ShadowColor" vertex:[EGShadowShader vertexProgramTexture:NO] fragment:[EGShadowShader fragmentProgramTexture:NO]]];
-    _EGShadowShader_instanceForTexture = [EGShadowShader shadowShaderWithTexture:YES program:[EGShaderProgram applyName:@"ShadowTexture" vertex:[EGShadowShader vertexProgramTexture:YES] fragment:[EGShadowShader fragmentProgramTexture:YES]]];
-}
-
-+ (NSString*)vertexProgramTexture:(BOOL)texture {
-    return [NSString stringWithFormat:@"#version 150%@\n"
-        "in vec3 position;\n"
-        "uniform mat4 mwcp;\n"
-        "%@\n"
-        "\n"
-        "void main(void) {\n"
-        "    gl_Position = mwcp * vec4(position, 1);%@\n"
-        "}", ((texture) ? @"\n"
-        "in vec2 vertexUV;" : @""), ((texture) ? @"\n"
-        "out vec2 UV;" : @""), ((texture) ? @"\n"
-        "    UV = vertexUV;" : @"")];
-}
-
-+ (NSString*)fragmentProgramTexture:(BOOL)texture {
-    return [NSString stringWithFormat:@"#version 150\n"
-        "%@\n"
-        "out float depth;\n"
-        "\n"
-        "void main(void) {\n"
-        "%@\n"
-        "    depth = gl_FragCoord.z;\n"
-        "}", ((texture) ? @"\n"
-        "in vec2 UV;\n"
-        "uniform sampler2D texture;\n"
-        "uniform float alphaTestLevel;\n" : @""), ((texture) ? @"\n"
-        "    if(texture(texture, UV).a < alphaTestLevel) {\n"
-        "        discard;\n"
-        "    }\n" : @"")];
+    _EGShadowShader_instanceForColor = [EGShadowShader shadowShaderWithTexture:NO program:[[EGShadowShaderText shadowShaderTextWithTexture:NO] program]];
+    _EGShadowShader_instanceForTexture = [EGShadowShader shadowShaderWithTexture:YES program:[[EGShadowShaderText shadowShaderTextWithTexture:YES] program]];
 }
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
@@ -596,8 +718,8 @@ static ODClassType* _EGShadowDrawShaderKey_type;
 }
 
 - (EGStandardShader*)shader {
-    NSString* vertexShader = [NSString stringWithFormat:@"#version 150\n"
-        "in vec3 position;\n"
+    NSString* vertexShader = [NSString stringWithFormat:@"%@\n"
+        "%@ highp vec3 position;\n"
         "uniform mat4 mwcp;\n"
         "%@\n"
         "%@\n"
@@ -605,18 +727,18 @@ static ODClassType* _EGShadowDrawShaderKey_type;
         "void main(void) {\n"
         "   gl_Position = mwcp * vec4(position, 1);\n"
         "   %@\n"
-        "}", [self lightsVertexUniform], [self lightsOut], [self lightsCalculateVaryings]];
-    NSString* fragmentShader = [NSString stringWithFormat:@"#version 150\n"
+        "}", [self vertexHeader], [self ain], [self lightsVertexUniform], [self lightsOut], [self lightsCalculateVaryings]];
+    NSString* fragmentShader = [NSString stringWithFormat:@"%@\n"
         "%@\n"
         "%@\n"
-        "out vec4 outColor;\n"
+        "%@\n"
         "\n"
         "void main(void) {\n"
-        "   float visibility;\n"
-        "   float a = 0;\n"
+        "   lowp float visibility;\n"
+        "   lowp float a = 0.0;\n"
         "   %@\n"
-        "   outColor = vec4(0, 0, 0, a);\n"
-        "}", [self lightsIn], [self lightsFragmentUniform], [self lightsDiffuse]];
+        "   %@ = vec4(0, 0, 0, a);\n"
+        "}", [self fragmentHeader], [self shadowExt], [self lightsIn], [self lightsFragmentUniform], [self lightsDiffuse], [self fragColor]];
     return [EGShadowDrawShader shadowDrawShaderWithKey:self program:[EGShaderProgram applyName:@"ShadowDraw" vertex:vertexShader fragment:fragmentShader]];
 }
 
@@ -628,13 +750,13 @@ static ODClassType* _EGShadowDrawShaderKey_type;
 
 - (NSString*)lightsIn {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return [NSString stringWithFormat:@"in vec3 dirLightShadowCoord%@;", i];
+        return [NSString stringWithFormat:@"%@ mediump vec3 dirLightShadowCoord%@;", [self in], i];
     }] toStringWithDelimiter:@"\n"];
 }
 
 - (NSString*)lightsOut {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return [NSString stringWithFormat:@"out vec3 dirLightShadowCoord%@;", i];
+        return [NSString stringWithFormat:@"%@ mediump vec3 dirLightShadowCoord%@;", [self out], i];
     }] toStringWithDelimiter:@"\n"];
 }
 
@@ -646,17 +768,78 @@ static ODClassType* _EGShadowDrawShaderKey_type;
 
 - (NSString*)lightsFragmentUniform {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return [NSString stringWithFormat:@"uniform float dirLightPercent%@;\n"
-            "uniform sampler2DShadow dirLightShadow%@;", i, i];
+        return [NSString stringWithFormat:@"uniform lowp float dirLightPercent%@;\n"
+            "uniform mediump sampler2DShadow dirLightShadow%@;", i, i];
     }] toStringWithDelimiter:@"\n"];
 }
 
 - (NSString*)lightsDiffuse {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
         return [NSString stringWithFormat:@"\n"
-            "visibility = texture(dirLightShadow%@, vec3(dirLightShadowCoord%@.xy, dirLightShadowCoord%@.z - 0.005));\n"
-            "a += (1 - visibility)*dirLightPercent%@;\n", i, i, i, i];
+            "visibility = %@(dirLightShadow%@, vec3(dirLightShadowCoord%@.xy, dirLightShadowCoord%@.z - 0.005));\n"
+            "a += (1.0 - visibility)*dirLightPercent%@;\n", [self shadow2D], i, i, i, i];
     }] toStringWithDelimiter:@"\n"];
+}
+
+- (NSString*)versionString {
+    return [NSString stringWithFormat:@"#version %li", [self version]];
+}
+
+- (NSString*)vertexHeader {
+    return [NSString stringWithFormat:@"#version %li", [self version]];
+}
+
+- (NSString*)fragmentHeader {
+    return [NSString stringWithFormat:@"#version %li\n"
+        "%@", [self version], [self fragColorDeclaration]];
+}
+
+- (NSString*)fragColorDeclaration {
+    if([self isFragColorDeclared]) return @"";
+    else return @"out lowp vec4 fragColor;";
+}
+
+- (BOOL)isFragColorDeclared {
+    return EGShaderProgram.version < 110;
+}
+
+- (NSInteger)version {
+    return EGShaderProgram.version;
+}
+
+- (NSString*)ain {
+    if([self version] < 150) return @"attribute";
+    else return @"in";
+}
+
+- (NSString*)in {
+    if([self version] < 150) return @"varying";
+    else return @"in";
+}
+
+- (NSString*)out {
+    if([self version] < 150) return @"varying";
+    else return @"out";
+}
+
+- (NSString*)fragColor {
+    if([self version] > 100) return @"fragColor";
+    else return @"gl_FragColor";
+}
+
+- (NSString*)texture2D {
+    if([self version] > 100) return @"texture";
+    else return @"texture2D";
+}
+
+- (NSString*)shadowExt {
+    if([self version] == 100) return @"#extension GL_EXT_shadow_samplers : require";
+    else return @"";
+}
+
+- (NSString*)shadow2D {
+    if([self version] == 100) return @"shadow2DEXT";
+    else return @"texture";
 }
 
 - (ODClassType*)type {
