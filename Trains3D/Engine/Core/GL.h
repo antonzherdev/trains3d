@@ -207,3 +207,13 @@ static inline void egPopGroupMarker() {
 #endif
 #endif
 }
+
+
+static inline void egCheckError() {
+#if DEBUG
+    GLenum err = glGetError();
+    if(err != GL_NO_ERROR) {
+        @throw [NSString stringWithFormat:@"OpenGL error: %i", err];
+    }
+#endif    
+}

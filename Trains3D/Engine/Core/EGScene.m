@@ -323,6 +323,7 @@ static ODClassType* _EGLayer_type;
                 if(cullFace != GL_NONE) glCullFace(((cullFace == GL_BACK) ? GL_FRONT : GL_BACK));
                 [_view draw];
             }];
+            egCheckError();
             egPopGroupMarker();
         }];
     }
@@ -331,6 +332,7 @@ static ODClassType* _EGLayer_type;
     EGGlobal.matrix.value = [camera matrixModel];
     if(cullFace != GL_NONE) glCullFace(cullFace);
     [_view draw];
+    egCheckError();
     egPopGroupMarker();
 }
 

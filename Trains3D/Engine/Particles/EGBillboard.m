@@ -589,12 +589,12 @@ static ODClassType* _EGBillboardParticle_type;
 @implementation EGBillboardParticleSystemView
 static ODClassType* _EGBillboardParticleSystemView_type;
 
-+ (id)billboardParticleSystemViewWithMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
-    return [[EGBillboardParticleSystemView alloc] initWithMaxCount:maxCount material:material blendFunc:blendFunc];
++ (id)billboardParticleSystemViewWithSystem:(EGBillboardParticleSystem*)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
+    return [[EGBillboardParticleSystemView alloc] initWithSystem:system maxCount:maxCount material:material blendFunc:blendFunc];
 }
 
-- (id)initWithMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
-    self = [super initWithVbDesc:EGBillboard.vbDesc maxCount:maxCount shader:[EGBillboardShaderSystem.instance shaderForParam:material] material:material blendFunc:blendFunc];
+- (id)initWithSystem:(EGBillboardParticleSystem*)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
+    self = [super initWithSystem:system vbDesc:EGBillboard.vbDesc maxCount:maxCount shader:[EGBillboardShaderSystem.instance shaderForParam:material] material:material blendFunc:blendFunc];
     
     return self;
 }
@@ -604,8 +604,8 @@ static ODClassType* _EGBillboardParticleSystemView_type;
     _EGBillboardParticleSystemView_type = [ODClassType classTypeWithCls:[EGBillboardParticleSystemView class]];
 }
 
-+ (EGBillboardParticleSystemView*)applyMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material {
-    return [EGBillboardParticleSystemView billboardParticleSystemViewWithMaxCount:maxCount material:material blendFunc:EGBlendFunction.standard];
++ (EGBillboardParticleSystemView*)applySystem:(EGBillboardParticleSystem*)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material {
+    return [EGBillboardParticleSystemView billboardParticleSystemViewWithSystem:system maxCount:maxCount material:material blendFunc:EGBlendFunction.standard];
 }
 
 - (NSUInteger)vertexCount {
@@ -632,11 +632,12 @@ static ODClassType* _EGBillboardParticleSystemView_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGBillboardParticleSystemView* o = ((EGBillboardParticleSystemView*)(other));
-    return self.maxCount == o.maxCount && [self.material isEqual:o.material] && [self.blendFunc isEqual:o.blendFunc];
+    return [self.system isEqual:o.system] && self.maxCount == o.maxCount && [self.material isEqual:o.material] && [self.blendFunc isEqual:o.blendFunc];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
+    hash = hash * 31 + [self.system hash];
     hash = hash * 31 + self.maxCount;
     hash = hash * 31 + [self.material hash];
     hash = hash * 31 + [self.blendFunc hash];
@@ -645,7 +646,8 @@ static ODClassType* _EGBillboardParticleSystemView_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"maxCount=%li", self.maxCount];
+    [description appendFormat:@"system=%@", self.system];
+    [description appendFormat:@", maxCount=%li", self.maxCount];
     [description appendFormat:@", material=%@", self.material];
     [description appendFormat:@", blendFunc=%@", self.blendFunc];
     [description appendString:@">"];

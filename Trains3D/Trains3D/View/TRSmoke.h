@@ -49,8 +49,10 @@
 
 
 @interface TRSmokeView : EGBillboardParticleSystemView
-+ (id)smokeView;
-- (id)init;
+@property (nonatomic, readonly) TRSmoke* system;
+
++ (id)smokeViewWithSystem:(TRSmoke*)system;
+- (id)initWithSystem:(TRSmoke*)system;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

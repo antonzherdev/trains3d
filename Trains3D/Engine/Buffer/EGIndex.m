@@ -95,11 +95,13 @@ static ODClassType* _EGImmutableIndexBuffer_type;
 - (void)draw {
     [EGGlobal.context draw];
     glDrawElements([self mode], [self count], GL_UNSIGNED_INT, 0);
+    egCheckError();
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context draw];
     glDrawElements([self mode], count, GL_UNSIGNED_INT, 4 * start);
+    egCheckError();
 }
 
 - (void)bind {
@@ -177,11 +179,13 @@ static ODClassType* _EGMutableIndexBuffer_type;
 - (void)draw {
     [EGGlobal.context draw];
     glDrawElements([self mode], [self count], GL_UNSIGNED_INT, 0);
+    egCheckError();
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context draw];
     glDrawElements([self mode], count, GL_UNSIGNED_INT, 4 * start);
+    egCheckError();
 }
 
 - (void)bind {
@@ -256,11 +260,13 @@ static ODClassType* _EGEmptyIndexSource_type;
 - (void)draw {
     [EGGlobal.context draw];
     glDrawArrays(_mode, 0, [EGGlobal.context vertexBufferCount]);
+    egCheckError();
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context draw];
     glDrawArrays(_mode, start, count);
+    egCheckError();
 }
 
 - (void)bind {
@@ -343,11 +349,13 @@ static ODClassType* _EGArrayIndexSource_type;
 - (void)draw {
     [EGGlobal.context bindIndexBufferHandle:0];
     glDrawElements(_mode, _array.count, GL_UNSIGNED_INT, _array.bytes);
+    egCheckError();
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context bindIndexBufferHandle:0];
     glDrawElements(_mode, count, GL_UNSIGNED_INT, _array.bytes + 4 * start);
+    egCheckError();
 }
 
 - (void)bind {
@@ -429,6 +437,7 @@ static ODClassType* _EGVoidRefArrayIndexSource_type;
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context draw];
     glDrawElements(_mode, count, GL_UNSIGNED_INT, _array.bytes + 4 * start);
+    egCheckError();
 }
 
 - (ODClassType*)type {

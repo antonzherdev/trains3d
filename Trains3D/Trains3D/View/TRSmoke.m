@@ -228,15 +228,19 @@ static ODClassType* _TRSmokeParticle_type;
 @end
 
 
-@implementation TRSmokeView
+@implementation TRSmokeView{
+    TRSmoke* _system;
+}
 static ODClassType* _TRSmokeView_type;
+@synthesize system = _system;
 
-+ (id)smokeView {
-    return [[TRSmokeView alloc] init];
++ (id)smokeViewWithSystem:(TRSmoke*)system {
+    return [[TRSmokeView alloc] initWithSystem:system];
 }
 
-- (id)init {
-    self = [super initWithMaxCount:200 material:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Smoke.png"]] blendFunc:EGBlendFunction.premultiplied];
+- (id)initWithSystem:(TRSmoke*)system {
+    self = [super initWithSystem:system maxCount:200 material:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Smoke.png"]] blendFunc:EGBlendFunction.premultiplied];
+    if(self) _system = system;
     
     return self;
 }
@@ -261,15 +265,19 @@ static ODClassType* _TRSmokeView_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
+    TRSmokeView* o = ((TRSmokeView*)(other));
+    return [self.system isEqual:o.system];
 }
 
 - (NSUInteger)hash {
-    return 0;
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.system hash];
+    return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"system=%@", self.system];
     [description appendString:@">"];
     return description;
 }

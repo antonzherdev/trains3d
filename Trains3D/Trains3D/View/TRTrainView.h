@@ -1,7 +1,6 @@
 #import "objd.h"
 #import "GEVec.h"
 @class TRLevel;
-@class TRSmokeView;
 @class EGStandardMaterial;
 @class EGColorSource;
 @class EGVertexArray;
@@ -9,6 +8,7 @@
 @class EGMesh;
 @class TRTrain;
 @class TRSmoke;
+@class TRSmokeView;
 @class TRCityColor;
 @class EGGlobal;
 @class TRCar;
@@ -25,7 +25,6 @@
 
 @interface TRTrainView : NSObject
 @property (nonatomic, readonly) TRLevel* level;
-@property (nonatomic, readonly) TRSmokeView* smokeView;
 @property (nonatomic, readonly) EGStandardMaterial* blackMaterial;
 
 + (id)trainViewWithLevel:(TRLevel*)level;

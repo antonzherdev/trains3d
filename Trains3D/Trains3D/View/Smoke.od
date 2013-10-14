@@ -61,4 +61,4 @@ class SmokeParticle(weak weather : Weather) extends BillboardParticle(2) {
 }
 
 
-class SmokeView extends BillboardParticleSystemView(200, textureFor("Smoke.png"), BlendFunction.premultiplied)
+class SmokeView(system : Smoke) extends BillboardParticleSystemView(system, 200, textureFor("Smoke.png"), BlendFunction.premultiplied)

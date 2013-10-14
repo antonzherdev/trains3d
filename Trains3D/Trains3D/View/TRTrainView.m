@@ -1,12 +1,12 @@
 #import "TRTrainView.h"
 
 #import "TRLevel.h"
-#import "TRSmoke.h"
 #import "EGMaterial.h"
 #import "EGMesh.h"
 #import "TRModels.h"
 #import "GL.h"
 #import "TRTrain.h"
+#import "TRSmoke.h"
 #import "TRCity.h"
 #import "EGContext.h"
 #import "TRCar.h"
@@ -15,7 +15,6 @@
 #import "EGDynamicWorld.h"
 @implementation TRTrainView{
     TRLevel* _level;
-    TRSmokeView* _smokeView;
     EGStandardMaterial* _blackMaterial;
     EGStandardMaterial* _defMat;
     EGVertexArray* _vaoCar;
@@ -26,7 +25,6 @@
 }
 static ODClassType* _TRTrainView_type;
 @synthesize level = _level;
-@synthesize smokeView = _smokeView;
 @synthesize blackMaterial = _blackMaterial;
 
 + (id)trainViewWithLevel:(TRLevel*)level {
@@ -37,7 +35,6 @@ static ODClassType* _TRTrainView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _smokeView = [TRSmokeView smokeView];
         _blackMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 1.0)] specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:1.0];
         _defMat = [self trainMaterialForColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
         _vaoCar = [TRModels.car vaoMaterial:_defMat shadow:YES];
@@ -77,13 +74,17 @@ static ODClassType* _TRTrainView_type;
     if([trains isEmpty]) return ;
     [trains forEach:^void(TRTrain* train) {
         [self drawTrain:train];
-        if(train.viewData == nil) train.viewData = [TRSmoke smokeWithTrain:train weather:_level.weather];
     }];
 }
 
 - (void)drawSmokeTrains:(id<CNSeq>)trains {
     [trains forEach:^void(TRTrain* train) {
-        [_smokeView drawSystem:train.viewData];
+        TRSmokeView* smoke = ((TRSmokeView*)(train.viewData));
+        if(train.viewData == nil) {
+            smoke = [TRSmokeView smokeViewWithSystem:[TRSmoke smokeWithTrain:train weather:_level.weather]];
+            train.viewData = smoke;
+        }
+        [smoke draw];
     }];
 }
 
@@ -140,7 +141,7 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta train:(TRTrain*)train {
-    [((TRSmoke*)(train.viewData)) updateWithDelta:delta];
+    [((TRSmokeView*)(train.viewData)).system updateWithDelta:delta];
 }
 
 - (ODClassType*)type {

@@ -42,7 +42,7 @@ class Particle(lifeLength : float4) extends Controller {
 
 
 class ParticleSystemView<P extends Particle, D>(
-    vbDesc : VertexBufferDesc<D>, maxCount : uint,
+    system : ParticleSystem<P>, vbDesc : VertexBufferDesc<D>, maxCount : uint,
     shader : Shader<_>, material : Material, blendFunc : BlendFunction)
 {
     val vertexArr = VoidRefArray(vbDesc.dataType, maxCount*vertexCount)
@@ -63,7 +63,7 @@ class ParticleSystemView<P extends Particle, D>(
     def vertexCount : uint
     def writeIndexesTo(indexPointer : VoidRefArray, i : uint4) : VoidRefArray
 
-    def draw(system : ParticleSystem<P>) {
+    def draw {
         val particles = system.particles
         if(particles.isEmpty) return nil
 

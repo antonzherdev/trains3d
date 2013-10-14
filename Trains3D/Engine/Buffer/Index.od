@@ -33,11 +33,13 @@ trait IndexBuffer extends IndexSource {
     def draw {
         context.draw
         glDrawElements(mode, count, GL_UNSIGNED_INT, 0)
+        egCheckError
     }
 
     def drawWith(start : uint, count : uint) {
         context.draw
         glDrawElements(mode, count, GL_UNSIGNED_INT, 4*start)
+        egCheckError
     }
 
     def bind {
@@ -62,11 +64,13 @@ class EmptyIndexSource(mode : uint4) extends IndexSource {
     def draw {
         context.draw
         glDrawArrays(mode, 0, context.vertexBufferCount)
+        egCheckError
     }
 
     def drawWith(start : uint, count : uint) {
         context.draw
         glDrawArrays(mode, start, count)
+        egCheckError
     }
 }
 
@@ -74,11 +78,13 @@ class ArrayIndexSource(array : PArray<uint4>, mode : uint4) extends IndexSource 
     def draw {
         context.bindIndexBuffer(0)
         glDrawElements(mode, array.count, GL_UNSIGNED_INT, array.bytes)
+        egCheckError
     }
 
     def drawWith(start : uint, count : uint) {
         context.bindIndexBuffer(0)
         glDrawElements(mode, count, GL_UNSIGNED_INT, array.bytes + 4*start)
+        egCheckError
     }
 }
 
@@ -95,6 +101,7 @@ class VoidRefArrayIndexSource(array : VoidRefArray, mode : uint4) extends IndexS
     def drawWith(start : uint, count : uint) {
         context.draw
         glDrawElements(mode, count, GL_UNSIGNED_INT, array.bytes + 4*start)
+        egCheckError
     }
 }
 

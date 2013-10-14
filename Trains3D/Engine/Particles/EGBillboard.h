@@ -132,10 +132,10 @@ ODPType* egBillboardBufferDataType();
 
 
 @interface EGBillboardParticleSystemView : EGParticleSystemView
-+ (id)billboardParticleSystemViewWithMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
-- (id)initWithMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
++ (id)billboardParticleSystemViewWithSystem:(EGBillboardParticleSystem*)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
+- (id)initWithSystem:(EGBillboardParticleSystem*)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
 - (ODClassType*)type;
-+ (EGBillboardParticleSystemView*)applyMaxCount:(NSUInteger)maxCount material:(EGColorSource*)material;
++ (EGBillboardParticleSystemView*)applySystem:(EGBillboardParticleSystem*)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material;
 - (NSUInteger)vertexCount;
 - (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i;
 + (ODClassType*)type;

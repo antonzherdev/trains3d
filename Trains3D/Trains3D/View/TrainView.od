@@ -5,8 +5,6 @@ import core.math._
 import com.antonzherdev.eg._
 
 class TrainView(level : Level) {
-    val smokeView = SmokeView()
-
     val blackMaterial = StandardMaterial(vec4(0, 0, 0, 1), vec4(0.1, 0.1, 0.1, 1), 1)
 
     def trainMaterialFor(color : vec4) = StandardMaterial(color, vec4(0.1, 0.1, 0.1, 1), 0.1)
@@ -28,14 +26,18 @@ class TrainView(level : Level) {
     def draw(trains : [Train]) {
         if(trains.isEmpty) return nil
 
-        trains.for {train ->
-            draw(train = train)
-            if(train.viewData == nil) train.viewData = Smoke(train, level.weather)
-        }
+        trains.for {train -> draw(train = train)}
     }
 
     def drawSmoke(trains : [Train]) {
-        trains.for {train -> smokeView.draw(train.viewData)}
+        trains.for {train ->
+            var smoke = train.viewData.cast<SmokeView>
+            if(train.viewData == nil) {
+                smoke = SmokeView(Smoke(train, level.weather))
+                train.viewData = smoke
+            }
+            smoke.draw
+        }
     }
 
     private def draw(train : Train) {
@@ -102,6 +104,6 @@ class TrainView(level : Level) {
 
 
     def updateWith(delta : float, train : Train) {
-        train.viewData.cast<Smoke>.updateWith(delta)
+        train.viewData.cast<SmokeView>.system.updateWith(delta)
     }
 }
