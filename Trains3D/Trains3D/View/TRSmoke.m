@@ -5,6 +5,7 @@
 #import "TRCar.h"
 #import "TRRailPoint.h"
 #import "EGProgress.h"
+#import "GL.h"
 #import "EGContext.h"
 #import "EGMaterial.h"
 @implementation TRSmoke{
@@ -239,7 +240,7 @@ static ODClassType* _TRSmokeView_type;
 }
 
 - (id)initWithSystem:(TRSmoke*)system {
-    self = [super initWithSystem:system maxCount:200 material:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Smoke.png"]] blendFunc:EGBlendFunction.premultiplied];
+    self = [super initWithSystem:system maxCount:200 material:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Smoke.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST]] blendFunc:EGBlendFunction.premultiplied];
     if(self) _system = system;
     
     return self;
