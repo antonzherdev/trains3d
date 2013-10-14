@@ -65,19 +65,24 @@ class Context {
         }
     }
 
+    private val _lastTextures = MutableHashMap<uint4, uint4>()
     def bindTexture(slot : uint4, target : uint4, texture : Texture) {
-        val id = texture.id
-        if(slot != GL_TEXTURE0) {
-            glActiveTexture(slot)
-            glBindTexture(target, id)
-            glActiveTexture(GL_TEXTURE0)
+        val id : uint4 = texture.id
+        if(slot == GL_TEXTURE0 && target == GL_TEXTURE_2D) {
+            if(_lastTexture2D != id) {
+                _lastTexture2D = id
+                glBindTexture(target, id)
+            }
         } else {
-            if(target == GL_TEXTURE_2D) {
-                if(_lastTexture2D != id) {
-                    _lastTexture2D = id
+            val key = slot*13 + target
+            if(!_lastTextures.isValueEqual(key, id)) {
+                if(slot != GL_TEXTURE0) {
+                    glActiveTexture(slot)
                     glBindTexture(target, id)
-                }
-            } else glBindTexture(target, id)
+                    glActiveTexture(GL_TEXTURE0)
+                } else glBindTexture(target, id)
+                _lastTextures.set(key, id)
+            }
         }
     }
 

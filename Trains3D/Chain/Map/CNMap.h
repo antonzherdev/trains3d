@@ -13,6 +13,7 @@
 - (id<CNIterable>)keys;
 - (id<CNIterable>)values;
 - (BOOL)containsKey:(id)key;
+- (BOOL)isValueEqualKey:(id)key value:(id)value;
 @end
 
 

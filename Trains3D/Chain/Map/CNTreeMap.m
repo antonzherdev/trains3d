@@ -424,6 +424,12 @@ static ODClassType* _CNMutableTreeMap_type;
     return [[self optKey:key] isDefined];
 }
 
+- (BOOL)isValueEqualKey:(id)key value:(id)value {
+    id v = [self optKey:key];
+    if([v isEmpty]) return NO;
+    else return [value isEqual:[v get]];
+}
+
 - (id)head {
     return [[self iterator] next];
 }

@@ -61,6 +61,12 @@
     return [self objectForKey:key] != nil;
 }
 
+- (BOOL)isValueEqualKey:(id)key value:(id)value {
+    id v = [self objectForKey:key];
+    return v != nil && [v isEqual:value];
+}
+
+
 - (id <CNIterable>)keys {
     return [self allKeys];
 }

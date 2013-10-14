@@ -90,6 +90,7 @@ static ODClassType* _EGGlobal_type;
     CNList* __viewportStack;
     GERectI __viewport;
     GLuint __lastTexture2D;
+    NSMutableDictionary* __lastTextures;
     GLuint __lastShaderProgram;
     GLuint __lastVertexBufferId;
     unsigned int __lastVertexBufferCount;
@@ -129,6 +130,7 @@ static ODClassType* _EGContext_type;
         _considerShadows = YES;
         __viewportStack = [CNList apply];
         __lastTexture2D = 0;
+        __lastTextures = [NSMutableDictionary mutableDictionary];
         __lastShaderProgram = 0;
         __lastVertexBufferId = 0;
         __lastVertexBufferCount = 0;
@@ -205,19 +207,23 @@ static ODClassType* _EGContext_type;
 }
 
 - (void)bindTextureSlot:(unsigned int)slot target:(unsigned int)target texture:(EGTexture*)texture {
-    GLuint id = [texture id];
-    if(slot != GL_TEXTURE0) {
-        glActiveTexture(slot);
-        glBindTexture(target, id);
-        glActiveTexture(GL_TEXTURE0);
+    unsigned int id = [texture id];
+    if(slot == GL_TEXTURE0 && target == GL_TEXTURE_2D) {
+        if(!(GLuintEq(__lastTexture2D, id))) {
+            __lastTexture2D = id;
+            glBindTexture(target, id);
+        }
     } else {
-        if(target == GL_TEXTURE_2D) {
-            if(!(GLuintEq(__lastTexture2D, id))) {
-                __lastTexture2D = id;
+        unsigned int key = slot * 13 + target;
+        if(!([__lastTextures isValueEqualKey:numui4(key) value:numui4(id)])) {
+            if(slot != GL_TEXTURE0) {
+                glActiveTexture(slot);
+                glBindTexture(target, id);
+                glActiveTexture(GL_TEXTURE0);
+            } else {
                 glBindTexture(target, id);
             }
-        } else {
-            glBindTexture(target, id);
+            [__lastTextures setKey:numui4(key) value:numui4(id)];
         }
     }
 }
