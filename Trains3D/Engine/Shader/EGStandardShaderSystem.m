@@ -299,9 +299,9 @@ static ODClassType* _EGStandardShaderKey_type;
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
         return [NSString stringWithFormat:@"\n"
             "%@\n", ((unumi(i) < _directLightWithShadowsCount) ? [NSString stringWithFormat:@"\n"
-            "visibility = %@(dirLightShadow%@, vec3(dirLightShadowCoord%@.xy, dirLightShadowCoord%@.z - 0.005));\n"
+            "visibility = %@(dirLightShadow%@, dirLightShadowCoord%@);\n"
             "color += visibility * dirLightDirectionCos%@ * (materialColor * dirLightColor%@);\n"
-            "color += visibility * specularColor * dirLightColor%@ * pow(dirLightDirectionCosA%@, 5.0/specularSize);\n", [self shadow2D], i, i, i, i, i, i, i] : [NSString stringWithFormat:@"\n"
+            "color += visibility * specularColor * dirLightColor%@ * pow(dirLightDirectionCosA%@, 5.0/specularSize);\n", [self shadow2D], i, i, i, i, i, i] : [NSString stringWithFormat:@"\n"
             "color += dirLightDirectionCos%@ * (materialColor * dirLightColor%@);\n"
             "color += specularColor * dirLightColor%@ * pow(dirLightDirectionCosA%@, 5.0/specularSize);\n", i, i, i, i])];
     }] toStringWithDelimiter:@"\n"];

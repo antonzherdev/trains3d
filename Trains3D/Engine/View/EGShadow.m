@@ -776,8 +776,8 @@ static ODClassType* _EGShadowDrawShaderKey_type;
 - (NSString*)lightsDiffuse {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
         return [NSString stringWithFormat:@"\n"
-            "visibility = %@(dirLightShadow%@, vec3(dirLightShadowCoord%@.xy, dirLightShadowCoord%@.z - 0.005));\n"
-            "a += (1.0 - visibility)*dirLightPercent%@;\n", [self shadow2D], i, i, i, i];
+            "visibility = %@(dirLightShadow%@, dirLightShadowCoord%@);\n"
+            "a += (1.0 - visibility)*dirLightPercent%@;\n", [self shadow2D], i, i, i];
     }] toStringWithDelimiter:@"\n"];
 }
 

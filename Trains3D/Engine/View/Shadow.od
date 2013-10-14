@@ -202,7 +202,7 @@ class ShadowDrawShaderKey(directLightCount : uint) extends ShaderTextBuilder {
          uniform mediump sampler2DShadow dirLightShadow$i;"}.toStringWith("\n")
     def lightsDiffuse : string =  directLightCount.range.chain.map{i ->
         "
-        visibility = $shadow2D\(dirLightShadow$i, vec3(dirLightShadowCoord$i.xy, dirLightShadowCoord$i.z - 0.005));
+        visibility = $shadow2D\(dirLightShadow$i, dirLightShadowCoord$i);
         a += (1.0 - visibility)*dirLightPercent$i;
         "
     }.toStringWith("\n")
