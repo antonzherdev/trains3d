@@ -314,17 +314,7 @@ static ODClassType* _EGLayer_type;
         [[[env.lights chain] filter:^BOOL(EGLight* _) {
             return _.hasShadows;
         }] forEach:^void(EGLight* light) {
-            egPushGroupMarker(@"Shadow");
-            EGGlobal.context.renderTarget = [EGShadowRenderTarget shadowRenderTargetWithShadowLight:light];
-            EGGlobal.matrix.value = [light shadowMatrixModel:[camera matrixModel]];
-            [light shadowMap].biasDepthCp = [EGShadowMap.biasMatrix mulMatrix:[EGGlobal.matrix.value cp]];
-            [[light shadowMap] applyDraw:^void() {
-                glClear(GL_DEPTH_BUFFER_BIT);
-                if(cullFace != GL_NONE) glCullFace(((cullFace == GL_BACK) ? GL_FRONT : GL_BACK));
-                [_view draw];
-            }];
-            egCheckError();
-            egPopGroupMarker();
+            [self drawShadowForCamera:camera light:light];
         }];
     }
     EGGlobal.context.renderTarget = [EGSceneRenderTarget sceneRenderTarget];
@@ -332,6 +322,21 @@ static ODClassType* _EGLayer_type;
     EGGlobal.matrix.value = [camera matrixModel];
     if(cullFace != GL_NONE) glCullFace(cullFace);
     [_view draw];
+    egCheckError();
+    egPopGroupMarker();
+}
+
+- (void)drawShadowForCamera:(id<EGCamera>)camera light:(EGLight*)light {
+    egPushGroupMarker(@"Shadow");
+    EGGlobal.context.renderTarget = [EGShadowRenderTarget shadowRenderTargetWithShadowLight:light];
+    EGGlobal.matrix.value = [light shadowMatrixModel:[camera matrixModel]];
+    [light shadowMap].biasDepthCp = [EGShadowMap.biasMatrix mulMatrix:[EGGlobal.matrix.value cp]];
+    [[light shadowMap] applyDraw:^void() {
+        glClear(GL_DEPTH_BUFFER_BIT);
+        NSUInteger cullFace = [camera cullFace];
+        if(cullFace != GL_NONE) glCullFace(((cullFace == GL_BACK) ? GL_FRONT : GL_BACK));
+        [_view draw];
+    }];
     egCheckError();
     egPopGroupMarker();
 }

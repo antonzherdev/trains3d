@@ -82,6 +82,7 @@ static ODClassType* _EGShadowMap_type;
     glFlush();
     [EGGlobal.context restoreDefaultFramebuffer];
     [EGGlobal.context popViewport];
+    egCheckError();
 }
 
 - (void)draw {

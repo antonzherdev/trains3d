@@ -35,8 +35,10 @@ class ShadowMap(size : vec2i) extends Surface(size) {
 
     def unbind {
         glFlush
+//        egDiscardFrameBuffer(GL_FRAMEBUFFER, [GL_DEPTH_ATTACHMENT])
         context.restoreDefaultFramebuffer
         context.popViewport
+        egCheckError
     }
 
     private lazy val shader = ShadowSurfaceShader()

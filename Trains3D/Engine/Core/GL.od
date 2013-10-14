@@ -120,8 +120,8 @@ stub object gl {
     def egGenFrameBufferEXT : GLuint
     def egDeleteFrameBuffer(handle : GLuint)
     def egDeleteFrameBufferEXT(handle : GLuint)
-    def glBindFramebuffer( : uint4,handle : GLuint)
-    def glBindFramebufferEXT( : uint4,handle : GLuint)
+    def glBindFramebuffer( : uint4, handle : GLuint)
+    def glBindFramebufferEXT( : uint4, handle : GLuint)
     val GL_FRAMEBUFFER : uint4
     val GL_READ_FRAMEBUFFER : uint4
     val GL_DRAW_FRAMEBUFFER : uint4
@@ -138,6 +138,7 @@ stub object gl {
     val GL_NONE : uint4
     def egGenTexture : GLuint
     def egDeleteTexture(handle : GLuint)
+    def egDiscardFrameBuffer(target : GLuint, attachments : PArray<uint4>)
 
     def egGenRenderBuffer : GLuint
     def egDeleteRenderBuffer(handle : GLuint) : GLuint

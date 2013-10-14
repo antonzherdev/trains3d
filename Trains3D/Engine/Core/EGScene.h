@@ -9,11 +9,11 @@
 @class EGPlatform;
 @class EGEnvironment;
 @class EGLight;
-@class EGShadowRenderTarget;
+@class EGSceneRenderTarget;
 @class EGMatrixStack;
+@class EGShadowRenderTarget;
 @class EGShadowMap;
 @class GEMat4;
-@class EGSceneRenderTarget;
 @protocol EGInputProcessor;
 @class EGEventCamera;
 
@@ -92,6 +92,7 @@
 - (ODClassType*)type;
 + (EGLayer*)applyView:(id<EGLayerView>)view;
 - (void)drawWithViewport:(GERect)viewport;
+- (void)drawShadowForCamera:(id<EGCamera>)camera light:(EGLight*)light;
 - (BOOL)processEvent:(EGEvent*)event viewport:(GERect)viewport;
 - (void)updateWithDelta:(CGFloat)delta;
 - (GERect)viewportWithViewSize:(GEVec2)viewSize;
