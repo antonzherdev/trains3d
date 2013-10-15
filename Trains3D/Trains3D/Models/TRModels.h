@@ -20,7 +20,7 @@
 + (EGMesh*)switchTurn;
 + (ODType*)type;
 
-+ (EGMesh *)cityBodies;
++ (EGMesh *)city;
 + (EGMesh *)car;
 + (EGMesh *)carBlack;
 + (EGMesh *)engine;
@@ -31,10 +31,6 @@
 + (EGMesh *)light;
 + (EGMesh *)lightGreenGlow;
 + (EGMesh *)lightRedGlow;
-
-+ (EGMesh *)cityRoofs;
-
-+ (EGMesh *)cityWindows;
 @end
 
 

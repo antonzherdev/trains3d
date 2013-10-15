@@ -11,11 +11,8 @@ class CityView(level : Level) {
         0, 1, 0, 1, 0, -0.5, 0.001, 0.5
         ], [0, 1, 2,
         2, 3, 0]).vao(StandardMaterial(vec4(1, 1, 1, 1)), shadow = false)
-    val roofTexture = textureFor("Roof.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
-    val vaoBody = Models.cityBodies.vao(StandardMaterial(vec4(1, 1, 1, 1)), shadow = false)
-    val vaoRoof = Models.cityRoofs.vao(StandardMaterial(roofTexture), shadow = false)
-    val vaoWindows = Models.cityWindows.vao(StandardMaterial(textureFor("Window.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST),
-        vec4(1, 1, 1, 1), 1), shadow = false)
+    val cityTexture = textureFor("City.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
+    val vaoBody = Models.city.vao(StandardMaterial(cityTexture), shadow = true)
 
     def draw {
         egPushGroupMarker("Cities")
@@ -24,13 +21,8 @@ class CityView(level : Level) {
                 _.modify(w = w -> w.translate(city.tile.x, city.tile.y, 0))
                  .modify(m = m -> m.rotate(city.angle.angle, 0, -1, 0))
             ) {
-                vaoBody.draw(StandardMaterial(city.color.color))
+                vaoBody.draw(StandardMaterial(ColorSource(city.color.color, cityTexture)))
                 if(!context.renderTarget.is<ShadowRenderTarget>) {
-                    context.cullFace.disabled {
-                        val roofMaterial = StandardMaterial(ColorSource(city.color.color, roofTexture), vec4(0.5, 0.5, 0.5, 1), 1)
-                        vaoRoof.draw(roofMaterial)
-                    }
-                    vaoWindows.draw
                     city.expectedTrainCounter.for{time ->
                         val x = -time/2
                         expectedTrainModel.draw(StandardMaterial(vec4(1.0, 0.5 - x, 0.5 - x, 1)))

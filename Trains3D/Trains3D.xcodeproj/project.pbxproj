@@ -16,7 +16,6 @@
 		02C70A531802A3E500007F50 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C70A521802A3E500007F50 /* UIKit.framework */; };
 		02C70A551802A3E500007F50 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C70A541802A3E500007F50 /* GLKit.framework */; };
 		02C70A571802A3E500007F50 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C70A561802A3E500007F50 /* OpenGLES.framework */; };
-		6F3DF00239DEC95B9B099E02 /* Window.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF7A06EFC33D43D5EDF07 /* Window.png */; };
 		6F3DF008A7B14D12C7C9FBC1 /* ODType.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBD7D0D9B35B241BF676 /* ODType.m */; };
 		6F3DF00BEE276C3A31BFCB45 /* LevelPauseMenuView.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFC7754B42602CE8010CB /* LevelPauseMenuView.od */; };
 		6F3DF00C590705DCF4E3E183 /* EGStandardShaderSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF709252BA04F53353AC7 /* EGStandardShaderSystem.m */; };
@@ -58,7 +57,6 @@
 		6F3DF0A43D19793483AB3877 /* func_matrix.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFC4637A9A62409EAEF35 /* func_matrix.inl */; };
 		6F3DF0AA6E2838E93A20F759 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFBA18831A0CC868D0042 /* CMakeLists.txt */; };
 		6F3DF0AE8A6741509CC9CB43 /* CNPrependLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4C696CBA550F82C3489 /* CNPrependLink.m */; };
-		6F3DF0AFDB3412D19F5736E7 /* Roof.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF066CCFCEAD6E99954B5 /* Roof.png */; };
 		6F3DF0B4CEC1D3BF05DD6F6B /* btTriangleMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF79FE213C9FFE8FFC53F /* btTriangleMeshShape.cpp */; };
 		6F3DF0C20A875DEA9BBD7D1E /* btAxisSweep3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC2349E253F04434E70A /* btAxisSweep3.cpp */; };
 		6F3DF0C41B1AE0C692C22C09 /* DamageTest.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF1085CD447541E1E60C5 /* DamageTest.od */; };
@@ -470,6 +468,7 @@
 		6F3DF6E2C2372594102E95FD /* btContinuousConvexCollision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA5A6B0F27627DED08E8 /* btContinuousConvexCollision.cpp */; };
 		6F3DF6E9CB743C31B015961A /* btCollisionShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF93AC35433C6311DF5C6 /* btCollisionShape.cpp */; };
 		6F3DF6EA224A8FE0BCF67E9F /* TRNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8F6DB72597946D02C45 /* TRNotification.m */; };
+		6F3DF6EC10BBB2F6AC918D74 /* City.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF7D3C6CD185286ABD313 /* City.png */; };
 		6F3DF6EC3FB5AC1170EB375B /* gim_memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD7F3A078F018EA06949 /* gim_memory.cpp */; };
 		6F3DF6F2F07AC005EC8078C9 /* constants.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF3EEF742A17D1F85E53A /* constants.inl */; };
 		6F3DF6F74728BF21F2FF07C7 /* EGInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF294B5B3E02F5C105762 /* EGInput.m */; };
@@ -631,7 +630,6 @@
 		6F3DF96B3D1D921D9FBC7819 /* TRCity.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF28F5B178DD178B8F487 /* TRCity.m */; };
 		6F3DF96C656936557219F5A6 /* EGTexture.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDAA4AA0BEE1B1AF1D5B /* EGTexture.m */; };
 		6F3DF96DDA39FB2ED4968859 /* btGenericPoolAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDC92CF067CDBD0447BD /* btGenericPoolAllocator.cpp */; };
-		6F3DF9712D8E597AB0FD9304 /* Roof.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF066CCFCEAD6E99954B5 /* Roof.png */; };
 		6F3DF9721AF89321346B1510 /* CNAppendLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF79E56B52EA90418C91B /* CNAppendLink.m */; };
 		6F3DF9792E3CA2A2F8A30EE6 /* GEPerlin.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF78A2C2A5E472CC36676 /* GEPerlin.m */; };
 		6F3DF97BFC3155753F4F4F10 /* btDispatcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFACE0848D57807904F03 /* btDispatcher.cpp */; };
@@ -920,6 +918,7 @@
 		6F3DFD79DD3787018594C8A7 /* GEPerlin.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF78A2C2A5E472CC36676 /* GEPerlin.m */; };
 		6F3DFD7E8458523FE1981E3C /* btConvexHullComputer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF43B36254766B638682C /* btConvexHullComputer.cpp */; };
 		6F3DFD8505A1D98A08FB69BA /* btConvexPointCloudShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2C0E1DABF4C3773EBE3 /* btConvexPointCloudShape.cpp */; };
+		6F3DFD86FD539E1923EAE204 /* City.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF7D3C6CD185286ABD313 /* City.png */; };
 		6F3DFD890C204AE0C9FB5A1A /* btGImpactBvh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9D4EBC38BBF14EFBE61 /* btGImpactBvh.cpp */; };
 		6F3DFD8F48E5BD90DD7931AB /* Collision.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFB349E5354489BE0F203 /* Collision.od */; };
 		6F3DFD961AAF89CEAE856BBF /* perpendicular.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF2B9D55A882346D40C19 /* perpendicular.inl */; };
@@ -1036,7 +1035,6 @@
 		6F3DFF3DF6CFA4E261A445C9 /* btMinkowskiPenetrationDepthSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF23AF40817619C054E55 /* btMinkowskiPenetrationDepthSolver.cpp */; };
 		6F3DFF4591A8C7B6F48638AD /* intrinsic_trigonometric.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFD0D2D199FD8735FF2BD /* intrinsic_trigonometric.inl */; };
 		6F3DFF47C7F710DE8C001736 /* Figure.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF2AED1C37DFA92439486 /* Figure.od */; };
-		6F3DFF4DE4570FC79ED32779 /* Window.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF7A06EFC33D43D5EDF07 /* Window.png */; };
 		6F3DFF5122D0509B527DB6CF /* matrix_cross_product.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF5F8E7EB7DFEA34578FA /* matrix_cross_product.inl */; };
 		6F3DFF54B910BD78125FD486 /* CNRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF757E46369432794AF7D /* CNRange.m */; };
 		6F3DFF55114571D3AFF84669 /* btOverlappingPairCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2C501DEC5A0CE7C17EE /* btOverlappingPairCache.cpp */; };
@@ -1662,6 +1660,7 @@
 		6F3DF7CB665E3AE89BFF3B97 /* Kiwi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Kiwi.h; sourceTree = "<group>"; };
 		6F3DF7CC6710522AE66C313F /* color_space.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = color_space.inl; sourceTree = "<group>"; };
 		6F3DF7CFC9B3081A78412DFA /* TRViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRViewController.h; sourceTree = "<group>"; };
+		6F3DF7D3C6CD185286ABD313 /* City.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = City.png; sourceTree = "<group>"; };
 		6F3DF7D401FD26667ADFD958 /* vector_angle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = vector_angle.hpp; sourceTree = "<group>"; };
 		6F3DF7D51FA0E1B790DFAFEC /* vector_access.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = vector_access.hpp; sourceTree = "<group>"; };
 		6F3DF7DCA8B4B873B375FA76 /* btRaycastCallback.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btRaycastCallback.cpp; sourceTree = "<group>"; };
@@ -3461,6 +3460,7 @@
 				6F3DF395D42D5F70D0084342 /* Tree3.png */,
 				6F3DF8BAC3EAE789B65670CB /* YellowTree.png */,
 				6F3DFABCF7502FE5A61A37D2 /* Light.png */,
+				6F3DF7D3C6CD185286ABD313 /* City.png */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -4371,8 +4371,6 @@
 				6F3DF9DBFB8EA7C94C109645 /* eg.od in Resources */,
 				6F3DFC99321E27835B7D9875 /* LightGlow.png in Resources */,
 				6F3DF4EA34CB28669A5BC945 /* Line.od in Resources */,
-				6F3DF9712D8E597AB0FD9304 /* Roof.png in Resources */,
-				6F3DF00239DEC95B9B099E02 /* Window.png in Resources */,
 				6F3DFFFAB1D6AB69223AC883 /* Font.od in Resources */,
 				6F3DFDCC3E374A25D30430F9 /* XML.od in Resources */,
 				6F3DF40083EFC222E38A7C7A /* XMLTest.od in Resources */,
@@ -4425,6 +4423,7 @@
 				6F3DFFD4336A77359BCB1A6B /* Vertex.od in Resources */,
 				6F3DF34A576D0F90508C1D65 /* Buffer.od in Resources */,
 				6F3DF355AC6A3300D23A36A9 /* Index.od in Resources */,
+				6F3DF6EC10BBB2F6AC918D74 /* City.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4509,11 +4508,9 @@
 				6F3DFCA8943B2D84F18B746F /* Pine.png in Resources */,
 				6F3DF8BC36F94738BFC1A209 /* Smoke.png in Resources */,
 				6F3DF255FCEDAD7B7AF02ED7 /* Grass.png in Resources */,
-				6F3DF0AFDB3412D19F5736E7 /* Roof.png in Resources */,
 				6F3DF5935E77D73D927A9824 /* Gravel.png in Resources */,
 				6F3DF5DF991704CE96AEA20C /* Pause.png in Resources */,
 				6F3DF3E82DB856CBA68C7295 /* Tree1.png in Resources */,
-				6F3DFF4DE4570FC79ED32779 /* Window.png in Resources */,
 				6F3DFFD0390D1D2C94C0EF17 /* Pause_2x.png in Resources */,
 				6F3DFB2020EC50908B1B677C /* Crows.mp3 in Resources */,
 				6F3DFF8D7DFACA9333F1C558 /* Nightingale.mp3 in Resources */,
@@ -4531,6 +4528,7 @@
 				6F3DFC38419A6D62389C989F /* Vertex.od in Resources */,
 				6F3DFAD00457C9143BC939E6 /* Buffer.od in Resources */,
 				6F3DF840009B36EAA3D739D7 /* Index.od in Resources */,
+				6F3DFD86FD539E1923EAE204 /* City.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

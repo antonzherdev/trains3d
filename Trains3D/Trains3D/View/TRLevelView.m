@@ -74,7 +74,7 @@ static ODClassType* _TRLevelView_type;
 - (void)draw {
     BOOL shadows = [EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]];
     if(!(shadows)) [_railroadView drawBackground];
-    if(!(shadows)) [_cityView draw];
+    [_cityView draw];
     [_trainView draw];
     [_treeView draw];
     [_railroadView drawForeground];
