@@ -101,6 +101,7 @@ static ODClassType* _EGGlobal_type;
     EGEnablingState* _cullFace;
     EGEnablingState* _blend;
     EGEnablingState* _depthTest;
+    GEVec4 __lastClearColor;
 }
 static ODClassType* _EGContext_type;
 @synthesize defaultFramebuffer = _defaultFramebuffer;
@@ -141,6 +142,7 @@ static ODClassType* _EGContext_type;
         _cullFace = [EGEnablingState enablingStateWithTp:GL_CULL_FACE];
         _blend = [EGEnablingState enablingStateWithTp:GL_BLEND];
         _depthTest = [EGEnablingState enablingStateWithTp:GL_DEPTH_TEST];
+        __lastClearColor = GEVec4Make(0.0, 0.0, 0.0, 0.0);
     }
     
     return self;
@@ -287,6 +289,13 @@ static ODClassType* _EGContext_type;
     [_cullFace draw];
     [_blend draw];
     [_depthTest draw];
+}
+
+- (void)clearColorColor:(GEVec4)color {
+    if(!(GEVec4Eq(__lastClearColor, color))) {
+        __lastClearColor = color;
+        glClearColor(color.x, color.y, color.z, color.w);
+    }
 }
 
 - (ODClassType*)type {

@@ -14,6 +14,10 @@ trait Camera {
 
 
 class Scene(backgroundColor : vec4, controller : Controller, layers : Layers, soundPlayer : SoundPlayer?) {
+    def prepareWith(viewSize : vec2) {
+        layers.prepareWith(viewSize)
+    }
+
     def drawWith(viewSize : vec2) {
         layers.drawWith(viewSize)
     }
@@ -49,15 +53,16 @@ class Layers {
     def layers : [Layer]
 
     def viewportsWith(viewSize : vec2) : [(Layer, Rect)]
+    private val viewportsCache = Cache<vec2, [(Layer, Rect)]>(viewportsWith(_))
+    def prepareWith(viewSize : vec2) {
+        egPushGroupMarker("Prepare")
+        viewportsCache(viewSize).for{p -> p.a.prepareWith(viewport = p.b)}
+        egPopGroupMarker
 
+    }
     def drawWith(viewSize : vec2) {
-       val vps = viewportsWith(viewSize)
-       egPushGroupMarker("Prepare")
-       vps.for{p -> p.a.prepareWith(viewport = p.b)}
-       egPopGroupMarker
        egPushGroupMarker("Draw")
-       glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
-       vps.for{p -> p.a.drawWith(viewport = p.b)}
+       viewportsCache(viewSize).for{p -> p.a.drawWith(viewport = p.b)}
        egPopGroupMarker
     }
 

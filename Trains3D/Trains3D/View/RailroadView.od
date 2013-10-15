@@ -10,6 +10,7 @@ class RailroadView(railroad : Railroad) {
     private val damageView = DamageView()
     private val railroadSurface = ViewportSurface(depth = true, multisampling = true)
     private val backgroundView : BackgroundView
+    val shadowVao : VertexArray<_>?
 
     private var changed = true
     def init {
@@ -17,13 +18,21 @@ class RailroadView(railroad : Railroad) {
         context.considerShadows = false
         backgroundView = BackgroundView(railroad.map)
         railView = RailView()
+        val shadowParam = ShadowDrawParam([0.3])
+        shadowVao =
+            if(egPlatform.shadows)  backgroundView.mapView.plane.vao(ShadowDrawShaderSystem.instance, shadowParam, shadow = false)
+            else nil
         context.considerShadows = true
     }
 
     def drawBackground {
         egPushGroupMarker("Railroad background")
         railroadSurface.draw
-        backgroundView.drawShadow
+        if(egPlatform.shadows) {
+            BlendFunction.standard{ context.cullFace.disabled{ context.depthTest.disabled {
+                shadowVao.get.draw
+            }}}
+        }
         railroad.switches.for(switchView.draw(_))
         railroad.builder.rail.for(railView.draw(_))
         railroad.damagesPoints.for(damageView.draw(_))
@@ -39,7 +48,7 @@ class RailroadView(railroad : Railroad) {
 
     def prepare {
         railroadSurface.maybe(changed) {
-            glClearColor(0, 0, 0, 0)
+            context.clearColor(vec4(0, 0, 0, 0))
             glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
             context.considerShadows = false
             backgroundView.draw
@@ -184,18 +193,8 @@ class DamageView {
 
 class BackgroundView(map : MapSso) {
     val mapView = MapSsoView(map, StandardMaterial(textureFor("Grass.png")))
-    val shadowParam = ShadowDrawParam([0.3])
-    val shadowVao : VertexArray<_>? =  if(egPlatform.shadows) mapView.plane.vao(ShadowDrawShaderSystem.instance.shaderFor(shadowParam)) else nil
     def draw {
         mapView.draw
 //        mapView.drawLayout
-    }
-
-    def drawShadow {
-        if(egPlatform.shadows) {
-            BlendFunction.standard{ context.cullFace.disabled{ context.depthTest.disabled {
-                shadowVao.get.draw(shadowParam)
-            }}}
-        }
     }
 }

@@ -68,6 +68,7 @@
 - (void)bindDefaultVertexArray;
 - (void)checkBindDefaultVertexArray;
 - (void)draw;
+- (void)clearColorColor:(GEVec4)color;
 + (ODClassType*)type;
 @end
 

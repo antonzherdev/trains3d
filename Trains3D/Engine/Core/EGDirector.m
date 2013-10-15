@@ -2,8 +2,8 @@
 
 #import "EGTime.h"
 #import "EGScene.h"
-#import "GL.h"
 #import "EGContext.h"
+#import "GL.h"
 #import "EGStat.h"
 #import "EGInput.h"
 @implementation EGDirector{
@@ -47,8 +47,6 @@ static ODClassType* _EGDirector_type;
     if([__scene isDefined]) [((EGScene*)([__scene get])) stop];
     __scene = [CNOption applyValue:scene];
     [scene start];
-    GEVec4 color = ((EGScene*)([__scene get])).backgroundColor;
-    glClearColor(color.x, color.y, color.z, color.w);
     [self unlock];
 }
 
@@ -66,6 +64,9 @@ static ODClassType* _EGDirector_type;
     EGGlobal.context.director = self;
     [EGGlobal.context clear];
     [EGGlobal.context.depthTest enable];
+    [((EGScene*)([__scene get])) prepareWithViewSize:size];
+    [EGGlobal.context clearColorColor:((EGScene*)([__scene get])).backgroundColor];
+    glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
     [((EGScene*)([__scene get])) drawWithViewSize:size];
     [EGGlobal.context.depthTest disable];
     [EGGlobal.matrix clear];

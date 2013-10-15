@@ -46,6 +46,7 @@
 + (id)sceneWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id)soundPlayer;
 - (id)initWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id)soundPlayer;
 - (ODClassType*)type;
+- (void)prepareWithViewSize:(GEVec2)viewSize;
 - (void)drawWithViewSize:(GEVec2)viewSize;
 - (BOOL)processEvent:(EGEvent*)event;
 - (void)updateWithDelta:(CGFloat)delta;
@@ -64,6 +65,7 @@
 + (EGSingleLayer*)applyLayer:(EGLayer*)layer;
 - (id<CNSeq>)layers;
 - (id<CNSeq>)viewportsWithViewSize:(GEVec2)viewSize;
+- (void)prepareWithViewSize:(GEVec2)viewSize;
 - (void)drawWithViewSize:(GEVec2)viewSize;
 - (BOOL)processEvent:(EGEvent*)event;
 - (void)updateWithDelta:(CGFloat)delta;

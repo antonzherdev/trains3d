@@ -4,6 +4,14 @@
 @class EGViewportSurface;
 @class EGGlobal;
 @class EGContext;
+@class EGShadowDrawParam;
+@class EGPlatform;
+@class EGMapSsoView;
+@class EGShadowDrawShaderSystem;
+@class EGMesh;
+@class EGBlendFunction;
+@class EGVertexArray;
+@class EGEnablingState;
 @class TRRailroadBuilder;
 @class EGStandardMaterial;
 @class EGColorSource;
@@ -18,19 +26,11 @@
 @class EGMatrixStack;
 @class TRSwitch;
 @class TRRailConnector;
-@class EGVertexArray;
 @class EGTextureRegion;
-@class EGMesh;
 @class TRRailLight;
 @class EGRenderTarget;
-@class EGBlendFunction;
-@class EGEnablingState;
 @class TRRailPoint;
 @class EGMapSso;
-@class EGMapSsoView;
-@class EGShadowDrawParam;
-@class EGPlatform;
-@class EGShadowDrawShaderSystem;
 
 @class TRRailroadView;
 @class TRRailView;
@@ -41,6 +41,7 @@
 
 @interface TRRailroadView : NSObject
 @property (nonatomic, readonly) TRRailroad* railroad;
+@property (nonatomic, readonly) id shadowVao;
 
 + (id)railroadViewWithRailroad:(TRRailroad*)railroad;
 - (id)initWithRailroad:(TRRailroad*)railroad;
@@ -112,14 +113,11 @@
 @interface TRBackgroundView : NSObject
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) EGMapSsoView* mapView;
-@property (nonatomic, readonly) EGShadowDrawParam* shadowParam;
-@property (nonatomic, readonly) id shadowVao;
 
 + (id)backgroundViewWithMap:(EGMapSso*)map;
 - (id)initWithMap:(EGMapSso*)map;
 - (ODClassType*)type;
 - (void)draw;
-- (void)drawShadow;
 + (ODClassType*)type;
 @end
 

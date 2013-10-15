@@ -11,8 +11,6 @@ class Director {
         if(_scene.isDefined) _scene.get.stop
         _scene = scene
         scene.start
-        val color = _scene.get.backgroundColor
-        glClearColor(color.x, color.y, color.z, color.w)
         unlock
     }
 
@@ -22,11 +20,15 @@ class Director {
     def drawWith(size : vec2) {
         if(_scene.isEmpty) return nil
         if(size.x <= 0 || size.y <= 0) return nil
-
         context.director = self
         context.clear
         context.depthTest.enable
+
+        _scene.get.prepareWith(size)
+        context.clearColor(_scene.get.backgroundColor)
+        glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
         _scene.get.drawWith(size)
+
         context.depthTest.disable
         matrix.clear
         context.set(viewport = Rect(vec2(0, 0), size))

@@ -152,6 +152,14 @@ class Context {
         blend.draw
         depthTest.draw
     }
+
+    private var _lastClearColor = vec4(0, 0, 0, 0)
+    def clearColor(color : vec4) {
+        if(_lastClearColor != color) {
+            _lastClearColor = color
+            glClearColor(color.x, color.y, color.z, color.w)
+        }
+    }
 }
 
 class EnablingState(tp: uint4) {

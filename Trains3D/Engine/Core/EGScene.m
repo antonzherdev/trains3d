@@ -40,6 +40,10 @@ static ODClassType* _EGScene_type;
     _EGScene_type = [ODClassType classTypeWithCls:[EGScene class]];
 }
 
+- (void)prepareWithViewSize:(GEVec2)viewSize {
+    [_layers prepareWithViewSize:viewSize];
+}
+
 - (void)drawWithViewSize:(GEVec2)viewSize {
     [_layers drawWithViewSize:viewSize];
 }
@@ -121,7 +125,9 @@ static ODClassType* _EGScene_type;
 @end
 
 
-@implementation EGLayers
+@implementation EGLayers{
+    CNCache* _viewportsCache;
+}
 static ODClassType* _EGLayers_type;
 
 + (id)layers {
@@ -130,6 +136,10 @@ static ODClassType* _EGLayers_type;
 
 - (id)init {
     self = [super init];
+    __weak EGLayers* _weakSelf = self;
+    if(self) _viewportsCache = [CNCache cacheWithF:^id<CNSeq>(id _) {
+        return [_weakSelf viewportsWithViewSize:uwrap(GEVec2, _)];
+    }];
     
     return self;
 }
@@ -151,16 +161,17 @@ static ODClassType* _EGLayers_type;
     @throw @"Method viewportsWith is abstract";
 }
 
-- (void)drawWithViewSize:(GEVec2)viewSize {
-    id<CNSeq> vps = [self viewportsWithViewSize:viewSize];
+- (void)prepareWithViewSize:(GEVec2)viewSize {
     egPushGroupMarker(@"Prepare");
-    [vps forEach:^void(CNTuple* p) {
+    [((id<CNSeq>)([_viewportsCache applyX:wrap(GEVec2, viewSize)])) forEach:^void(CNTuple* p) {
         [((EGLayer*)(p.a)) prepareWithViewport:uwrap(GERect, p.b)];
     }];
     egPopGroupMarker();
+}
+
+- (void)drawWithViewSize:(GEVec2)viewSize {
     egPushGroupMarker(@"Draw");
-    glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
-    [vps forEach:^void(CNTuple* p) {
+    [((id<CNSeq>)([_viewportsCache applyX:wrap(GEVec2, viewSize)])) forEach:^void(CNTuple* p) {
         [((EGLayer*)(p.a)) drawWithViewport:uwrap(GERect, p.b)];
     }];
     egPopGroupMarker();
