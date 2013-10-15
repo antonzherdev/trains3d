@@ -28,13 +28,12 @@ class ShadowMap(size : vec2i) extends Surface(size) {
 
     def bind {
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
-        context.bindTexture(texture)
+//        context.bindTexture(texture)
         context.pushViewport
         context.set(viewport = RectI(0, 0, size.x, size.y))
     }
 
     def unbind {
-        glFlush
 //        egDiscardFrameBuffer(GL_FRAMEBUFFER, [GL_DEPTH_ATTACHMENT])
         context.restoreDefaultFramebuffer
         context.popViewport

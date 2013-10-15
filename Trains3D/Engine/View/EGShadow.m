@@ -73,13 +73,11 @@ static ODClassType* _EGShadowMap_type;
 
 - (void)bind {
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-    [EGGlobal.context bindTextureTexture:_texture];
     [EGGlobal.context pushViewport];
     [EGGlobal.context setViewport:geRectIApplyXYWidthHeight(0.0, 0.0, ((float)(self.size.x)), ((float)(self.size.y)))];
 }
 
 - (void)unbind {
-    glFlush();
     [EGGlobal.context restoreDefaultFramebuffer];
     [EGGlobal.context popViewport];
     egCheckError();

@@ -2,8 +2,8 @@
 
 #import "EGTime.h"
 #import "EGScene.h"
-#import "EGContext.h"
 #import "GL.h"
+#import "EGContext.h"
 #import "EGStat.h"
 #import "EGInput.h"
 @implementation EGDirector{
@@ -47,6 +47,8 @@ static ODClassType* _EGDirector_type;
     if([__scene isDefined]) [((EGScene*)([__scene get])) stop];
     __scene = [CNOption applyValue:scene];
     [scene start];
+    GEVec4 color = ((EGScene*)([__scene get])).backgroundColor;
+    glClearColor(color.x, color.y, color.z, color.w);
     [self unlock];
 }
 
@@ -63,11 +65,7 @@ static ODClassType* _EGDirector_type;
     if(size.x <= 0 || size.y <= 0) return ;
     EGGlobal.context.director = self;
     [EGGlobal.context clear];
-    GEVec4 color = ((EGScene*)([__scene get])).backgroundColor;
-    glClearColor(color.x, color.y, color.z, color.w);
-    glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
     [EGGlobal.context.depthTest enable];
-    [self beforeDraw];
     [((EGScene*)([__scene get])) drawWithViewSize:size];
     [EGGlobal.context.depthTest disable];
     [EGGlobal.matrix clear];
@@ -75,10 +73,6 @@ static ODClassType* _EGDirector_type;
     [__stat forEach:^void(EGStat* _) {
         [_ draw];
     }];
-}
-
-- (void)beforeDraw {
-    @throw @"Method beforeDraw is abstract";
 }
 
 - (void)processEvent:(EGEvent*)event {

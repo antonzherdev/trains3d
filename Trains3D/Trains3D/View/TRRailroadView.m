@@ -63,17 +63,6 @@ static ODClassType* _TRRailroadView_type;
 
 - (void)drawBackground {
     egPushGroupMarker(@"Railroad background");
-    [_railroadSurface maybeForce:_changed draw:^void() {
-        glClearColor(0.0, 0.0, 0.0, 0.0);
-        glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
-        EGGlobal.context.considerShadows = NO;
-        [_backgroundView draw];
-        [[_railroad rails] forEach:^void(TRRail* _) {
-            [_railView drawRail:_];
-        }];
-        EGGlobal.context.considerShadows = YES;
-        _changed = NO;
-    }];
     [_railroadSurface draw];
     [_backgroundView drawShadow];
     [[_railroad switches] forEach:^void(TRSwitch* _) {
@@ -96,6 +85,17 @@ static ODClassType* _TRRailroadView_type;
 }
 
 - (void)prepare {
+    [_railroadSurface maybeForce:_changed draw:^void() {
+        glClearColor(0.0, 0.0, 0.0, 0.0);
+        glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
+        EGGlobal.context.considerShadows = NO;
+        [_backgroundView draw];
+        [[_railroad rails] forEach:^void(TRRail* _) {
+            [_railView drawRail:_];
+        }];
+        EGGlobal.context.considerShadows = YES;
+        _changed = NO;
+    }];
 }
 
 - (ODClassType*)type {

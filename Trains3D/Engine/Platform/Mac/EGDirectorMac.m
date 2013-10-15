@@ -19,11 +19,6 @@
     return self;
 }
 
-- (void)beforeDraw {
-    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-    glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-}
-
 + (id)directorWithView:(__unsafe_unretained EGOpenGLViewMac *)view {
     return [[self alloc] initWithView:view];
 }

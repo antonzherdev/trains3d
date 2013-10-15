@@ -11,6 +11,8 @@ class Director {
         if(_scene.isDefined) _scene.get.stop
         _scene = scene
         scene.start
+        val color = _scene.get.backgroundColor
+        glClearColor(color.x, color.y, color.z, color.w)
         unlock
     }
 
@@ -23,11 +25,7 @@ class Director {
 
         context.director = self
         context.clear
-        val color = _scene.get.backgroundColor
-        glClearColor(color.x, color.y, color.z, color.w)
-        glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
         context.depthTest.enable
-        beforeDraw
         _scene.get.drawWith(size)
         context.depthTest.disable
         matrix.clear
@@ -35,7 +33,6 @@ class Director {
         _stat.for(_.draw)
     }
 
-    def beforeDraw
 
     def process(event : Event) {
         _scene.for(_.process(event))

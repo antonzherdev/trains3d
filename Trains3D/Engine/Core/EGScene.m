@@ -152,9 +152,18 @@ static ODClassType* _EGLayers_type;
 }
 
 - (void)drawWithViewSize:(GEVec2)viewSize {
-    [[self viewportsWithViewSize:viewSize] forEach:^void(CNTuple* p) {
+    id<CNSeq> vps = [self viewportsWithViewSize:viewSize];
+    egPushGroupMarker(@"Prepare");
+    [vps forEach:^void(CNTuple* p) {
+        [((EGLayer*)(p.a)) prepareWithViewport:uwrap(GERect, p.b)];
+    }];
+    egPopGroupMarker();
+    egPushGroupMarker(@"Draw");
+    glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
+    [vps forEach:^void(CNTuple* p) {
         [((EGLayer*)(p.a)) drawWithViewport:uwrap(GERect, p.b)];
     }];
+    egPopGroupMarker();
 }
 
 - (BOOL)processEvent:(EGEvent*)event {
@@ -299,14 +308,13 @@ static ODClassType* _EGLayer_type;
     return [EGLayer layerWithView:view inputProcessor:[ODObject asKindOfProtocol:@protocol(EGInputProcessor) object:view]];
 }
 
-- (void)drawWithViewport:(GERect)viewport {
+- (void)prepareWithViewport:(GERect)viewport {
     egPushGroupMarker([_view name]);
     EGEnvironment* env = [_view environment];
     EGGlobal.context.environment = env;
     id<EGCamera> camera = [_view cameraWithViewport:viewport];
     NSUInteger cullFace = [camera cullFace];
     if(cullFace != GL_NONE) [EGGlobal.context.cullFace enable];
-    [_view prepare];
     if(egPlatform().shadows) {
         id<CNSeq> shadowLights = [[[env.lights chain] filter:^BOOL(EGLight* _) {
             return _.hasShadows;
@@ -321,7 +329,25 @@ static ODClassType* _EGLayer_type;
     [EGGlobal.context setViewport:geRectIApplyRect(viewport)];
     EGGlobal.matrix.value = [camera matrixModel];
     if(cullFace != GL_NONE) glCullFace(cullFace);
+    [_view prepare];
+    if(cullFace != GL_NONE) [EGGlobal.context.cullFace disable];
+    egCheckError();
+    egPopGroupMarker();
+}
+
+- (void)drawWithViewport:(GERect)viewport {
+    egPushGroupMarker([_view name]);
+    EGEnvironment* env = [_view environment];
+    EGGlobal.context.environment = env;
+    id<EGCamera> camera = [_view cameraWithViewport:viewport];
+    NSUInteger cullFace = [camera cullFace];
+    if(cullFace != GL_NONE) [EGGlobal.context.cullFace enable];
+    EGGlobal.context.renderTarget = [EGSceneRenderTarget sceneRenderTarget];
+    [EGGlobal.context setViewport:geRectIApplyRect(viewport)];
+    EGGlobal.matrix.value = [camera matrixModel];
+    if(cullFace != GL_NONE) glCullFace(cullFace);
     [_view draw];
+    if(cullFace != GL_NONE) [EGGlobal.context.cullFace disable];
     egCheckError();
     egPopGroupMarker();
 }

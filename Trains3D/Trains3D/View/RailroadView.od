@@ -22,15 +22,6 @@ class RailroadView(railroad : Railroad) {
 
     def drawBackground {
         egPushGroupMarker("Railroad background")
-        railroadSurface.maybe(changed) {
-            glClearColor(0, 0, 0, 0)
-            glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
-            context.considerShadows = false
-            backgroundView.draw
-            railroad.rails.for(railView.draw(_))
-            context.considerShadows = true
-            changed = false
-        }
         railroadSurface.draw
         backgroundView.drawShadow
         railroad.switches.for(switchView.draw(_))
@@ -46,7 +37,17 @@ class RailroadView(railroad : Railroad) {
         egPopGroupMarker
     }
 
-    def prepare {}
+    def prepare {
+        railroadSurface.maybe(changed) {
+            glClearColor(0, 0, 0, 0)
+            glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
+            context.considerShadows = false
+            backgroundView.draw
+            railroad.rails.for(railView.draw(_))
+            context.considerShadows = true
+            changed = false
+        }
+    }
 }
 
 class RailView {

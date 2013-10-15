@@ -101,6 +101,9 @@
     glGenVertexArrays(1, &vertexArray);
     glBindVertexArray(vertexArray);
     [EGGlobal context].defaultVertexArray = vertexArray;
+
+    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+    glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 //	GLint order = -1;
 //	[[self openGLContext] setValues:&order forParameter:NSOpenGLCPSurfaceOrder];
 }

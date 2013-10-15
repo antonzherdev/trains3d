@@ -51,7 +51,14 @@ class Layers {
     def viewportsWith(viewSize : vec2) : [(Layer, Rect)]
 
     def drawWith(viewSize : vec2) {
-        viewportsWith(viewSize).for{p -> p.a.drawWith(viewport = p.b)}
+       val vps = viewportsWith(viewSize)
+       egPushGroupMarker("Prepare")
+       vps.for{p -> p.a.prepareWith(viewport = p.b)}
+       egPopGroupMarker
+       egPushGroupMarker("Draw")
+       glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
+       vps.for{p -> p.a.drawWith(viewport = p.b)}
+       egPopGroupMarker
     }
 
     def process(event : Event) : bool = {
@@ -72,15 +79,13 @@ class SingleLayer(layer : Layer) extends Layers {
 
 class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controller {
     static def apply(view : LayerView) : Layer = Layer(view, view.as<InputProcessor>)
-    def drawWith(viewport : Rect) {
+    def prepareWith(viewport : Rect) {
         egPushGroupMarker(view.name)
         val env = view.environment
         context.environment = env
         val camera = view.cameraWith(viewport)
         val cullFace = camera.cullFace
         if(cullFace != GL_NONE) context.cullFace.enable
-        view.prepare
-
         if(egPlatform.shadows) {
             val shadowLights = env.lights.chain.filter(_.hasShadows).toArray
             env.lights.chain.filter(_.hasShadows).for{light ->
@@ -91,8 +96,28 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
         context.set(viewport = viewport)
         matrix.value = camera.matrixModel
         if(cullFace != GL_NONE) glCullFace(cullFace)
+        view.prepare
+        if(cullFace != GL_NONE) context.cullFace.disable
 
+        egCheckError
+        egPopGroupMarker
+    }
+
+
+
+    def drawWith(viewport : Rect) {
+        egPushGroupMarker(view.name)
+        val env = view.environment
+        context.environment = env
+        val camera = view.cameraWith(viewport)
+        val cullFace = camera.cullFace
+        if(cullFace != GL_NONE) context.cullFace.enable
+        context.renderTarget = SceneRenderTarget()
+        context.set(viewport = viewport)
+        matrix.value = camera.matrixModel
+        if(cullFace != GL_NONE) glCullFace(cullFace)
         view.draw
+        if(cullFace != GL_NONE) context.cullFace.disable
         egCheckError
         egPopGroupMarker
     }
@@ -103,10 +128,10 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
         matrix.value = light.shadowMatrix(camera.matrixModel)
         light.shadowMap.biasDepthCp = ShadowMap.biasMatrix *matrix.value.cp
         light.shadowMap{
-        glClear(GL_DEPTH_BUFFER_BIT)
-        val cullFace = camera.cullFace
-        if(cullFace != GL_NONE) glCullFace(if(cullFace == GL_BACK) GL_FRONT else GL_BACK)
-        view.draw
+            glClear(GL_DEPTH_BUFFER_BIT)
+            val cullFace = camera.cullFace
+            if(cullFace != GL_NONE) glCullFace(if(cullFace == GL_BACK) GL_FRONT else GL_BACK)
+            view.draw
         }
         egCheckError
         egPopGroupMarker

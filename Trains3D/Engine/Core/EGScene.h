@@ -91,6 +91,7 @@
 - (id)initWithView:(id<EGLayerView>)view inputProcessor:(id)inputProcessor;
 - (ODClassType*)type;
 + (EGLayer*)applyView:(id<EGLayerView>)view;
+- (void)prepareWithViewport:(GERect)viewport;
 - (void)drawWithViewport:(GERect)viewport;
 - (void)drawShadowForCamera:(id<EGCamera>)camera light:(EGLight*)light;
 - (BOOL)processEvent:(EGEvent*)event viewport:(GERect)viewport;
