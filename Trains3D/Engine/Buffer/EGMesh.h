@@ -7,6 +7,7 @@
 @class EGIBO;
 @class EGVertexBufferDesc;
 @class EGShader;
+@class EGShadowShaderSystem;
 @class EGPlatform;
 @class EGShadowRenderTarget;
 @class EGShaderSystem;
@@ -63,6 +64,7 @@ ODPType* egMeshDataType();
 + (EGMesh*)applyVertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;
 + (EGMesh*)applyDesc:(EGVertexBufferDesc*)desc vertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;
 - (EGVertexArray*)vaoShader:(EGShader*)shader;
+- (EGVertexArray*)vaoShadowMaterial:(id)material;
 - (EGVertexArray*)vaoMaterial:(id)material shadow:(BOOL)shadow;
 - (EGVertexArray*)vaoShaderSystem:(EGShaderSystem*)shaderSystem material:(id)material shadow:(BOOL)shadow;
 - (void)drawMaterial:(EGMaterial*)material;

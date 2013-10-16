@@ -208,10 +208,13 @@ class EnablingState(tp: uint4) {
     }
 }
 
-class RenderTarget
+class RenderTarget {
+    def isShadow : bool = false
+}
 class SceneRenderTarget extends RenderTarget
 class ShadowRenderTarget(shadowLight : Light) extends RenderTarget {
     static val default = ShadowRenderTarget(Light.default)
+    def isShadow = true
 }
 
 class Environment(ambientColor : vec4, lights : [Light]) {

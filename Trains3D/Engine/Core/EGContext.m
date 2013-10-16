@@ -451,6 +451,10 @@ static ODClassType* _EGRenderTarget_type;
     _EGRenderTarget_type = [ODClassType classTypeWithCls:[EGRenderTarget class]];
 }
 
+- (BOOL)isShadow {
+    return NO;
+}
+
 - (ODClassType*)type {
     return [EGRenderTarget type];
 }
@@ -553,6 +557,10 @@ static ODClassType* _EGShadowRenderTarget_type;
     [super initialize];
     _EGShadowRenderTarget_type = [ODClassType classTypeWithCls:[EGShadowRenderTarget class]];
     _EGShadowRenderTarget_default = [EGShadowRenderTarget shadowRenderTargetWithShadowLight:EGLight.aDefault];
+}
+
+- (BOOL)isShadow {
+    return YES;
 }
 
 - (ODClassType*)type {

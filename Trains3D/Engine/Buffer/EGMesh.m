@@ -3,6 +3,7 @@
 #import "EGVertex.h"
 #import "EGIndex.h"
 #import "EGShader.h"
+#import "EGShadow.h"
 #import "EGPlatform.h"
 #import "EGContext.h"
 #import "EGMaterial.h"
@@ -100,6 +101,10 @@ static ODClassType* _EGMesh_type;
 
 - (EGVertexArray*)vaoShader:(EGShader*)shader {
     return [shader vaoVbo:_vertex ibo:_index];
+}
+
+- (EGVertexArray*)vaoShadowMaterial:(id)material {
+    return [self vaoShaderSystem:EGShadowShaderSystem.instance material:material shadow:NO];
 }
 
 - (EGVertexArray*)vaoMaterial:(id)material shadow:(BOOL)shadow {

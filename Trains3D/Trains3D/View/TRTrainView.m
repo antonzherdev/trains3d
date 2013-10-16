@@ -22,8 +22,10 @@
     EGStandardMaterial* _defMatTex;
     EGVertexArray* _vaoCar;
     EGVertexArray* _vaoCarBlack;
+    EGVertexArray* _vaoCarShadow;
     EGVertexArray* _vaoEngine;
     EGVertexArray* _vaoEngineBlack;
+    EGVertexArray* _vaoEngineShadow;
 }
 static ODClassType* _TRTrainView_type;
 @synthesize level = _level;
@@ -41,10 +43,12 @@ static ODClassType* _TRTrainView_type;
         _carTexture = [EGGlobal textureForFile:@"Car.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST];
         _defMat = [self trainMaterialForDiffuse:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)]];
         _defMatTex = [self trainMaterialForDiffuse:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_carTexture]];
-        _vaoCar = [TRModels.car vaoMaterial:_defMatTex shadow:YES];
-        _vaoCarBlack = [TRModels.carBlack vaoMaterial:_blackMaterial shadow:YES];
-        _vaoEngine = [TRModels.engine vaoMaterial:_defMat shadow:YES];
-        _vaoEngineBlack = [TRModels.engineBlack vaoMaterial:_blackMaterial shadow:YES];
+        _vaoCar = [TRModels.car vaoMaterial:_defMatTex shadow:NO];
+        _vaoCarBlack = [TRModels.carBlack vaoMaterial:_blackMaterial shadow:NO];
+        _vaoCarShadow = [TRModels.carShadow vaoShadowMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)]];
+        _vaoEngine = [TRModels.engine vaoMaterial:_defMat shadow:NO];
+        _vaoEngineBlack = [TRModels.engineBlack vaoMaterial:_blackMaterial shadow:NO];
+        _vaoEngineShadow = [TRModels.engineShadow vaoShadowMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)]];
     }
     
     return self;
@@ -112,14 +116,21 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (void)drawCarColor:(GEVec4)color {
-    [_vaoCar drawParam:[self trainMaterialForDiffuse:[EGColorSource applyColor:color texture:_carTexture]]];
-    [_vaoCarBlack draw];
+    if([EGGlobal.context.renderTarget isShadow]) {
+        [_vaoCarShadow draw];
+    } else {
+        [_vaoCar drawParam:[self trainMaterialForDiffuse:[EGColorSource applyColor:color texture:_carTexture]]];
+        [_vaoCarBlack draw];
+    }
 }
 
 - (void)drawEngineColor:(GEVec4)color {
-    EGStandardMaterial* material = [self trainMaterialForDiffuse:[EGColorSource applyColor:color]];
-    [_vaoEngine drawParam:material];
-    [_vaoEngineBlack draw];
+    if([EGGlobal.context.renderTarget isShadow]) {
+        [_vaoEngineShadow draw];
+    } else {
+        [_vaoEngine drawParam:[self trainMaterialForDiffuse:[EGColorSource applyColor:color]]];
+        [_vaoEngineBlack draw];
+    }
 }
 
 - (void)drawDyingTrains:(id<CNSeq>)dyingTrains {

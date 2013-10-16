@@ -93,6 +93,7 @@
 + (id)renderTarget;
 - (id)init;
 - (ODClassType*)type;
+- (BOOL)isShadow;
 + (ODClassType*)type;
 @end
 
@@ -111,6 +112,7 @@
 + (id)shadowRenderTargetWithShadowLight:(EGLight*)shadowLight;
 - (id)initWithShadowLight:(EGLight*)shadowLight;
 - (ODClassType*)type;
+- (BOOL)isShadow;
 + (EGShadowRenderTarget*)aDefault;
 + (ODClassType*)type;
 @end

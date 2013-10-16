@@ -20,6 +20,8 @@
 @class TRCityColor;
 @class EGMatrixStack;
 @class TRCarType;
+@class EGContext;
+@class EGRenderTarget;
 @class EGRigidBody;
 
 @class TRTrainView;

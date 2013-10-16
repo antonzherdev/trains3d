@@ -18,10 +18,12 @@ stub class Models {
 
     static val city : Mesh = nil
 
-    static val car : Mesh<MeshData> = nil
+    static val car : Mesh = nil
+    static val carShadow : Mesh = nil
     static val carBlack : Mesh = nil
 
     static val engine : Mesh = nil
+    static val engineShadow : Mesh = nil
     static val engineBlack : Mesh = nil
 
     static val damage : Mesh = nil

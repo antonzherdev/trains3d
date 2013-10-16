@@ -30,6 +30,9 @@
 + (EGMesh *)light;
 + (EGMesh *)lightGreenGlow;
 + (EGMesh *)lightRedGlow;
+
++ (EGMesh *)carShadow;
++ (EGMesh *)engineShadow;
 @end
 
 
