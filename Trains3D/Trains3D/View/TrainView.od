@@ -74,12 +74,10 @@ class TrainView(level : Level) {
     }
 
     private val vaoEngine = Models.engine.vao(defMat, shadow = true)
-    private val vaoEngineFloor = Models.engineFloor.vao(defMat, shadow = true)
     private val vaoEngineBlack = Models.engineBlack.vao(blackMaterial, shadow = true)
     private def drawEngine(color : vec4) {
         val material = trainMaterialFor(color)
         vaoEngine.draw(material)
-        vaoEngineFloor.draw(material)
         vaoEngineBlack.draw
     }
 

@@ -23,7 +23,6 @@ stub class Models {
 
     static val engine : Mesh = nil
     static val engineBlack : Mesh = nil
-    static val engineFloor : Mesh = nil
 
     static val damage : Mesh = nil
 }

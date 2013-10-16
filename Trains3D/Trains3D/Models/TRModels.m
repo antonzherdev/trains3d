@@ -22,7 +22,6 @@ static EGMesh *_switchStraight = nil;
 static EGMesh *_switchTurn = nil;
 static EGMesh *_light = nil;
 static EGMesh *_city = nil;
-static EGMesh *_engineFloor = nil;
 static EGMesh *_engineBlack = nil;
 static EGMesh *_engine = nil;
 static EGMesh *_carBlack = nil;
@@ -59,7 +58,6 @@ static ODClassType* _TR3D_type;
     _lightGreenGlow = egJasModel(LightGreenGlow);
     _lightRedGlow = egJasModel(LightRedGlow);
     _city = egJasModel(City);
-    _engineFloor = egJasModel(EngineFloor);
     _engineBlack = egJasModel(EngineBlack);
     _engine = egJasModel(Engine);
     _carBlack = egJasModel(CarBlack);
@@ -134,10 +132,6 @@ static ODClassType* _TR3D_type;
 
 + (EGMesh *)engineBlack {
     return _engineBlack;
-}
-
-+ (EGMesh *)engineFloor {
-    return _engineFloor;
 }
 
 + (EGMesh *)damage {

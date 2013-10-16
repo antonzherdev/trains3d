@@ -25,7 +25,6 @@
 + (EGMesh *)carBlack;
 + (EGMesh *)engine;
 + (EGMesh *)engineBlack;
-+ (EGMesh *)engineFloor;
 + (EGMesh *)damage;
 
 + (EGMesh *)light;

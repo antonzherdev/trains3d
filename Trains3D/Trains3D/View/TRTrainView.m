@@ -23,7 +23,6 @@
     EGVertexArray* _vaoCar;
     EGVertexArray* _vaoCarBlack;
     EGVertexArray* _vaoEngine;
-    EGVertexArray* _vaoEngineFloor;
     EGVertexArray* _vaoEngineBlack;
 }
 static ODClassType* _TRTrainView_type;
@@ -45,7 +44,6 @@ static ODClassType* _TRTrainView_type;
         _vaoCar = [TRModels.car vaoMaterial:_defMatTex shadow:YES];
         _vaoCarBlack = [TRModels.carBlack vaoMaterial:_blackMaterial shadow:YES];
         _vaoEngine = [TRModels.engine vaoMaterial:_defMat shadow:YES];
-        _vaoEngineFloor = [TRModels.engineFloor vaoMaterial:_defMat shadow:YES];
         _vaoEngineBlack = [TRModels.engineBlack vaoMaterial:_blackMaterial shadow:YES];
     }
     
@@ -121,7 +119,6 @@ static ODClassType* _TRTrainView_type;
 - (void)drawEngineColor:(GEVec4)color {
     EGStandardMaterial* material = [self trainMaterialForDiffuse:[EGColorSource applyColor:color]];
     [_vaoEngine drawParam:material];
-    [_vaoEngineFloor drawParam:material];
     [_vaoEngineBlack draw];
 }
 
