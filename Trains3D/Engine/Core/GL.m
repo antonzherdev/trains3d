@@ -75,6 +75,7 @@ GEVec2 egLoadTextureFromFile(GLuint target, NSString* file, GLenum magFilter, GL
     CFRelease(myImageRef);
     CFRelease(space);
     free(myData);
+    egCheckError();
     return GEVec2Make(width, height);
 
 }

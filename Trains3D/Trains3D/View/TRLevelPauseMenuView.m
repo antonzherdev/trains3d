@@ -6,8 +6,8 @@
 #import "EGMaterial.h"
 #import "EGContext.h"
 #import "EGDirector.h"
-#import "GL.h"
 #import "TRStrings.h"
+#import "GL.h"
 #import "TRSceneFactory.h"
 @implementation TRLevelPauseMenuView{
     TRLevel* _level;
@@ -69,7 +69,6 @@ static ODClassType* _TRLevelPauseMenuView_type;
     if(!([[EGGlobal director] isPaused])) return ;
     [EGBlendFunction.standard applyDraw:^void() {
         [EGGlobal.context.depthTest disabledF:^void() {
-            glLineWidth(2.0);
             [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 0.5)] at:GEVec3Make(0.0, 0.0, 0.0) rect:GERectMake(GEVec2Make(0.0, 0.0), geVec2ApplyVec2i([EGGlobal.context viewport].size))];
             GEVec2 p = geRectMoveToCenterForSize([_menuBackSprite rect], geVec2ApplyVec2i([EGGlobal.context viewport].size)).p0;
             _menuBackSprite.position = p;
