@@ -18,7 +18,12 @@ class ParticleSystem <P extends Particle> extends Controller {
         _particles = _particles.filter(_.isLive)
         generateParticlesWith(delta)
 
-        _particles.for(_.updateWith(delta))
+        var ps = List<P>()
+        _particles.for{p ->
+            p.updateWith(delta)
+            if(p.isLive) ps = List<P>(p, ps)
+        }
+        _particles = ps
     }
 
     def hasParticles = !_particles.isEmpty

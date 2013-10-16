@@ -710,6 +710,7 @@ static ODClassType* _TRRailroad_type;
 }
 
 - (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint*)from to:(CGFloat)to {
+    if([__damagesPoints isEmpty]) return [CNOption none];
     if(eqf(from.x, to)) return [CNOption none];
     id opt = [_damagesIndex optKey:tuple(wrap(GEVec2i, from.tile), from.form)];
     if([opt isEmpty]) return [CNOption none];

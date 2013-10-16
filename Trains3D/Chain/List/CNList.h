@@ -39,6 +39,7 @@
 - (BOOL)isEmpty;
 - (CNList*)filterF:(BOOL(^)(id))f;
 - (CNList*)reverse;
+- (void)forEach:(void(^)(id))each;
 + (ODClassType*)type;
 @end
 
@@ -54,6 +55,7 @@
 - (BOOL)isEmpty;
 - (CNList*)filterF:(BOOL(^)(id))f;
 - (CNList*)reverse;
+- (void)forEach:(void(^)(id))each;
 + (CNEmptyList*)instance;
 + (ODClassType*)type;
 @end

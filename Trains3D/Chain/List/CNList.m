@@ -263,6 +263,16 @@ static ODClassType* _CNFilledList_type;
     return ret;
 }
 
+- (void)forEach:(void(^)(id))each {
+    CNFilledList* list = self;
+    while(YES) {
+        each(list.head);
+        CNList* tail = list.tail;
+        if([tail isEmpty]) return ;
+        list = ((CNFilledList*)(tail));
+    }
+}
+
 - (ODClassType*)type {
     return [CNFilledList type];
 }
@@ -346,6 +356,9 @@ static ODClassType* _CNEmptyList_type;
 
 - (CNList*)reverse {
     return self;
+}
+
+- (void)forEach:(void(^)(id))each {
 }
 
 - (ODClassType*)type {

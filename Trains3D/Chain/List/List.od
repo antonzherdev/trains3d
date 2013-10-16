@@ -32,6 +32,16 @@ class FilledList<T>(head : T, tail : List<T>) extends List<T> {
         }
         ret
     }
+
+    def for(each : T -> void) {
+        val list : FilledList<T> = self
+        while(true) {
+            each(list.head)
+            val tail = list.tail
+            if(tail.isEmpty) return nil
+            list = tail.cast<FilledList<T>>
+        }
+    }
 }
 
 class EmptyList<T> extends List<T> {
@@ -44,6 +54,8 @@ class EmptyList<T> extends List<T> {
     static val instance = EmptyList<int>()
     def filter(f : T -> bool) : List<T> = self
     def reverse : List<T> = self
+    def for(each : T -> void) {
+    }
 }
 
 class ListIterator<T> extends Iterator<T> {

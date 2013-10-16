@@ -177,6 +177,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) {
     }
 
     def checkDamagesWith(obstacleProcessor : Obstacle -> bool, from : RailPoint, to : float) : float? = {
+        if(_damagesPoints.isEmpty) return nil
         if(from.x == to) return nil
         val opt = damagesIndex.opt((from.tile, from.form))
         if(opt.isEmpty) return nil

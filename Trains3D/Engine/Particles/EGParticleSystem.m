@@ -47,9 +47,12 @@ static ODClassType* _EGParticleSystem_type;
         return [_ isLive];
     }];
     [self generateParticlesWithDelta:delta];
-    [__particles forEach:^void(id _) {
-        [_ updateWithDelta:delta];
+    __block CNList* ps = [CNList apply];
+    [__particles forEach:^void(id p) {
+        [p updateWithDelta:delta];
+        if([p isLive]) ps = [CNList applyItem:p tail:ps];
     }];
+    __particles = ps;
 }
 
 - (BOOL)hasParticles {
