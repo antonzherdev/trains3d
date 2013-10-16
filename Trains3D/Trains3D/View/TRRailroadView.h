@@ -9,6 +9,7 @@
 @class EGMapSsoView;
 @class EGShadowDrawShaderSystem;
 @class EGMesh;
+@class EGRenderTarget;
 @class EGBlendFunction;
 @class EGVertexArray;
 @class EGEnablingState;
@@ -28,7 +29,6 @@
 @class TRRailConnector;
 @class EGTextureRegion;
 @class TRRailLight;
-@class EGRenderTarget;
 @class TRRailPoint;
 @class EGMapSso;
 
@@ -86,14 +86,16 @@
 @property (nonatomic, readonly) EGTexture* texture;
 @property (nonatomic, readonly) EGVertexArray* redBodyVao;
 @property (nonatomic, readonly) EGVertexArray* greenBodyVao;
+@property (nonatomic, readonly) EGVertexArray* shadowBodyVao;
 @property (nonatomic, readonly) EGVertexArray* greenGlowVao;
 @property (nonatomic, readonly) EGVertexArray* redGlowVao;
 
 + (id)lightViewWithRailroad:(TRRailroad*)railroad;
 - (id)initWithRailroad:(TRRailroad*)railroad;
 - (ODClassType*)type;
-- (void)prepare;
+- (void)_init;
 - (void)drawBodies;
+- (void)drawShadow;
 - (void)drawGlows;
 + (ODClassType*)type;
 @end

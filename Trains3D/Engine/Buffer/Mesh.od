@@ -16,7 +16,8 @@ class Mesh(vertex : VertexBuffer<_>, index : IndexSource) {
             index = IBO(indexData))
 
     def vao<N>(shader : Shader<N>) : VertexArray<N> = shader.vao(vertex, index)
-    def vaoShadow<N extends Material>(material : N) : VertexArray<N> = vao(ShadowShaderSystem.instance, material, false)
+    def vaoShadow : VertexArray<ColorSource> = vao(ShadowShaderSystem.instance, ColorSource(vec4(1, 1, 1, 1)), false)
+    def vaoShadow(material : ColorSource) : VertexArray<ColorSource> = vao(ShadowShaderSystem.instance, material, false)
     def vao<N extends Material>(material : N, shadow : bool) : VertexArray<N> = {
         val std = MaterialVertexArray(material.shader.vao(vertex, index), material)
         if(shadow && egPlatform.shadows) RouteVertexArray(std,

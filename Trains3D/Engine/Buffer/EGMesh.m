@@ -4,9 +4,9 @@
 #import "EGIndex.h"
 #import "EGShader.h"
 #import "EGShadow.h"
+#import "EGMaterial.h"
 #import "EGPlatform.h"
 #import "EGContext.h"
-#import "EGMaterial.h"
 NSString* EGMeshDataDescription(EGMeshData self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<EGMeshData: "];
     [description appendFormat:@"uv=%@", GEVec2Description(self.uv)];
@@ -103,7 +103,11 @@ static ODClassType* _EGMesh_type;
     return [shader vaoVbo:_vertex ibo:_index];
 }
 
-- (EGVertexArray*)vaoShadowMaterial:(id)material {
+- (EGVertexArray*)vaoShadow {
+    return [self vaoShaderSystem:EGShadowShaderSystem.instance material:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)] shadow:NO];
+}
+
+- (EGVertexArray*)vaoShadowMaterial:(EGColorSource*)material {
     return [self vaoShaderSystem:EGShadowShaderSystem.instance material:material shadow:NO];
 }
 

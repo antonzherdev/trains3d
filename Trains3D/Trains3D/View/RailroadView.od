@@ -27,16 +27,21 @@ class RailroadView(railroad : Railroad) {
 
     def drawBackground {
         egPushGroupMarker("Railroad background")
-        railroadSurface.draw
-        if(egPlatform.shadows) {
-            BlendFunction.standard{ context.cullFace.disabled{ context.depthTest.disabled {
+        if(context.renderTarget.isShadow) {
+            lightView.drawShadow
+        } else {
+            railroadSurface.draw
+            if(egPlatform.shadows) {
+                BlendFunction.standard{ context.cullFace.disabled{ context.depthTest.disabled {
                 shadowVao.get.draw
-            }}}
+                }}}
+            }
+            railroad.switches.for(switchView.draw(_))
+            railroad.builder.rail.for(railView.draw(_))
+            railroad.damagesPoints.for(damageView.draw(_))
+            lightView.drawBodies
         }
-        railroad.switches.for(switchView.draw(_))
-        railroad.builder.rail.for(railView.draw(_))
-        railroad.damagesPoints.for(damageView.draw(_))
-        lightView.drawBodies
+
         egPopGroupMarker
     }
 
@@ -57,6 +62,7 @@ class RailroadView(railroad : Railroad) {
             changed = false
         }
     }
+
 }
 
 class RailView {
@@ -142,25 +148,40 @@ class LightView(railroad : Railroad) {
     val texture = textureFor("Light.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
     val redBodyVao = Models.light.vao(StandardMaterial(TextureRegion(texture, Rect(0.5, 0, 1, 1))), false)
     val greenBodyVao = Models.light.vao(StandardMaterial(texture), false)
+    val shadowBodyVao = Models.light.vaoShadow
     val greenGlowVao = Models.lightGreenGlow.vao(StandardMaterial(ColorSource(vec4(0, 1, 0, 0.8), textureFor("LightGlow.png"))), false)
     val redGlowVao = Models.lightRedGlow.vao(StandardMaterial(ColorSource(vec4(1, 0, 0, 0.8), textureFor("LightGlow.png"))), false)
 
-    private var _matrixArr : [(MatrixModel, bool)] = []
-    def prepare {
-        _matrixArr = railroad.lights.chain.map{light ->
-            (matrix.value
-                .modify(w = w -> w.translate(light.tile.x, light.tile.y, 0))
-                .modify(m = m -> m.rotate(90 + light.connector.angle, 0, 1, 0).translate(0.2, 0, -0.45))
-        , light.isGreen)
-        }.toArray
+    private var changed = true
+    def init {
+        railroad.add(changeListener = changed = true)
     }
 
+    private var _matrixArr : [(MatrixModel, RailLight)] = []
+    private var _matrixArrShadow : [(MatrixModel, RailLight)] = []
+    private def calculateMatrixArr : [(MatrixModel, RailLight)] = railroad.lights.chain.map{light ->
+        (matrix.value
+            .modify(w = w -> w.translate(light.tile.x, light.tile.y, 0))
+            .modify(m = m -> m.rotate(90 + light.connector.angle, 0, 1, 0).translate(0.2, 0, -0.45))
+        , light)
+    }.toArray
+
     def drawBodies {
-        prepare
+        if(changed) _matrixArr = calculateMatrixArr
         matrix.push
         _matrixArr.for { p ->
             matrix.value = p.a
-            (if(p.b)greenBodyVao else redBodyVao).draw
+            (if(p.b.isGreen)greenBodyVao else redBodyVao).draw
+        }
+        matrix.pop
+    }
+
+    def drawShadow {
+        if(changed) _matrixArrShadow = calculateMatrixArr
+        matrix.push
+        _matrixArrShadow.for { p ->
+            matrix.value = p.a
+            shadowBodyVao.draw
         }
         matrix.pop
     }
@@ -171,7 +192,7 @@ class LightView(railroad : Railroad) {
             context.cullFace.disabled{ BlendFunction.standard{
                 _matrixArr.for { p ->
                     matrix.value = p.a
-                    if(p.b) greenGlowVao.draw
+                    if(p.b.isGreen) greenGlowVao.draw
                     else redGlowVao.draw
                 }
             }}

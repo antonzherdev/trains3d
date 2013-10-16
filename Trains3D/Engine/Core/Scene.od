@@ -91,17 +91,20 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
         val camera = view.cameraWith(viewport)
         val cullFace = camera.cullFace
         if(cullFace != GL_NONE) context.cullFace.enable
+
+
+        context.renderTarget = SceneRenderTarget()
+        context.set(viewport = viewport)
+        matrix.value = camera.matrixModel
+        if(cullFace != GL_NONE) glCullFace(cullFace)
+        view.prepare
+
         if(egPlatform.shadows) {
             val shadowLights = env.lights.chain.filter(_.hasShadows).toArray
             env.lights.chain.filter(_.hasShadows).for{light ->
                 drawShadowFor(camera, light)
             }
         }
-        context.renderTarget = SceneRenderTarget()
-        context.set(viewport = viewport)
-        matrix.value = camera.matrixModel
-        if(cullFace != GL_NONE) glCullFace(cullFace)
-        view.prepare
         if(cullFace != GL_NONE) context.cullFace.disable
 
         egCheckError

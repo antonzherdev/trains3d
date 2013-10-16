@@ -326,6 +326,11 @@ static ODClassType* _EGLayer_type;
     id<EGCamera> camera = [_view cameraWithViewport:viewport];
     NSUInteger cullFace = [camera cullFace];
     if(cullFace != GL_NONE) [EGGlobal.context.cullFace enable];
+    EGGlobal.context.renderTarget = [EGSceneRenderTarget sceneRenderTarget];
+    [EGGlobal.context setViewport:geRectIApplyRect(viewport)];
+    EGGlobal.matrix.value = [camera matrixModel];
+    if(cullFace != GL_NONE) glCullFace(cullFace);
+    [_view prepare];
     if(egPlatform().shadows) {
         id<CNSeq> shadowLights = [[[env.lights chain] filter:^BOOL(EGLight* _) {
             return _.hasShadows;
@@ -336,11 +341,6 @@ static ODClassType* _EGLayer_type;
             [self drawShadowForCamera:camera light:light];
         }];
     }
-    EGGlobal.context.renderTarget = [EGSceneRenderTarget sceneRenderTarget];
-    [EGGlobal.context setViewport:geRectIApplyRect(viewport)];
-    EGGlobal.matrix.value = [camera matrixModel];
-    if(cullFace != GL_NONE) glCullFace(cullFace);
-    [_view prepare];
     if(cullFace != GL_NONE) [EGGlobal.context.cullFace disable];
     egCheckError();
     egPopGroupMarker();
