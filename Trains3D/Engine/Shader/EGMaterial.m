@@ -198,7 +198,7 @@ static ODClassType* _EGStandardMaterial_type;
 }
 
 + (EGStandardMaterial*)applyDiffuse:(EGColorSource*)diffuse {
-    return [EGStandardMaterial standardMaterialWithDiffuse:diffuse specularColor:GEVec4Make(0.0, 0.0, 0.0, 1.0) specularSize:1.0];
+    return [EGStandardMaterial standardMaterialWithDiffuse:diffuse specularColor:GEVec4Make(0.0, 0.0, 0.0, 1.0) specularSize:0.0];
 }
 
 - (EGShaderSystem*)shaderSystem {

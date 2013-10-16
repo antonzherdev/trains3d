@@ -15,10 +15,11 @@ class StandardShaderSystem extends ShaderSystem<StandardMaterial> {
             val texture = param.diffuse.texture
             val t = texture.isDefined
             val region = t && texture.get.is<TextureRegion>
+            val spec = param.specularSize > 0
             val key =
                 if(egPlatform.shadows && context.considerShadows)
-                    StandardShaderKey(directLightsWithShadowsCount, directLightsWithoutShadowsCount, t, region)
-                else StandardShaderKey(0, directLightsWithShadowsCount + directLightsWithoutShadowsCount, t, region)
+                    StandardShaderKey(directLightsWithShadowsCount, directLightsWithoutShadowsCount, t, region, spec)
+                else StandardShaderKey(0, directLightsWithShadowsCount + directLightsWithoutShadowsCount, t, region, spec)
 
             shaders.objectFor(key, orUpdateWith = key.shader)
         }
@@ -38,7 +39,7 @@ class StandardShadowShader(shadowShader : ShadowShader) extends Shader<StandardM
     }
 }
 
-class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutShadowsCount : uint, texture : bool, region : bool) extends ShaderTextBuilder {
+class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutShadowsCount : uint, texture : bool, region : bool, specular : bool) extends ShaderTextBuilder {
     val directLightCount = directLightWithShadowsCount + directLightWithoutShadowsCount
     def shader : StandardShader = {
         val vertexShader =
@@ -80,8 +81,10 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
             $endif
              uniform lowp vec4 diffuseColor;
              uniform lowp vec4 ambientColor;
+            $if(specular)
              uniform lowp vec4 specularColor;
              uniform lowp float specularSize;
+            $endif
              $lightsIn
              $lightsFragmentUniform
 
@@ -107,21 +110,27 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
         "}.toStringWith("\n")
     def lightsIn : string = directLightCount.range.chain.map{i ->
         "$in mediump float dirLightDirectionCos$i;
+        $if(specular)
          $in mediump float dirLightDirectionCosA$i;
+        $endif
         $if(i < directLightWithShadowsCount)
          $in mediump vec3 dirLightShadowCoord$i;
         $endif
         "}.toStringWith("\n")
     def lightsOut : string = directLightCount.range.chain.map{i ->
         "$out mediump float dirLightDirectionCos$i;
+        $if(specular)
          $out mediump float dirLightDirectionCosA$i;
+        $endif
         $if(i < directLightWithShadowsCount)
          $out mediump vec3 dirLightShadowCoord$i;
         $endif
         "}.toStringWith("\n")
     def lightsCalculateVaryings : string = directLightCount.range.chain.map{i ->
         "dirLightDirectionCos$i = max(dot(normalMWC, -dirLightDirection$i), 0.0);
+        $if(specular)
          dirLightDirectionCosA$i = max(dot(eyeDirection, reflect(dirLightDirection$i, normalMWC)), 0.0);
+        $endif
         $if(i < directLightWithShadowsCount)
          dirLightShadowCoord$i = (dirLightDepthMwcp$i * vec4(position, 1)).xyz;
         $endif
@@ -139,10 +148,15 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
         $if(i < directLightWithShadowsCount)
          visibility = $shadow2D\(dirLightShadow$i, dirLightShadowCoord$i);
          color += visibility * dirLightDirectionCos$i * (materialColor * dirLightColor$i);
-         color += max(visibility * specularColor * dirLightColor$i * pow(dirLightDirectionCosA$i, 5.0/specularSize), vec4(0, 0, 0, 0));
         $else
          color += dirLightDirectionCos$i * (materialColor * dirLightColor$i);
+        $endif
+        $if(specular && i < directLightWithShadowsCount)
+         color += max(visibility * specularColor * dirLightColor$i * pow(dirLightDirectionCosA$i, 5.0/specularSize), vec4(0, 0, 0, 0));
+        $else
+        $if(specular)
          color += specularColor * dirLightColor$i * pow(dirLightDirectionCosA$i, 5.0/specularSize);
+        $endif
         $endif
         "
     }.toStringWith("\n")
@@ -158,8 +172,8 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
     val uvScale : ShaderUniformVec2? = if(key.region) uniformVec2("uvScale") else nil
     val uvShift : ShaderUniformVec2? = if(key.region) uniformVec2("uvShift") else nil
     val ambientColor = uniformVec4("ambientColor")
-    val specularColor : ShaderUniformVec4? = if(key.directLightCount > 0) uniformVec4("specularColor") else nil
-    val specularSize : ShaderUniformF4? = if(key.directLightCount > 0) uniformF4("specularSize") else nil
+    val specularColor : ShaderUniformVec4? = if(key.directLightCount > 0 && key.specular) uniformVec4("specularColor") else nil
+    val specularSize : ShaderUniformF4? = if(key.directLightCount > 0 && key.specular) uniformF4("specularSize") else nil
     val diffuseColorUniform = uniformVec4("diffuseColor")
     val mwcpUniform = uniformMat4("mwcp")
     val mwcUniform : ShaderUniformMat4? = if(key.directLightCount > 0) uniformMat4("mwc") else nil
@@ -196,8 +210,10 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
         val env = context.environment
         ambientColor(vec4 = env.ambientColor)
         if(key.directLightCount > 0) {
-            specularColor.get.apply(vec4 = param.specularColor)
-            specularSize.get.apply(f4 = param.specularSize)
+            if(key.specular) {
+                specularColor.get.apply(vec4 = param.specularColor)
+                specularSize.get.apply(f4 = param.specularSize)
+            }
             mwcUniform.get(matrix = context.matrixStack.value.mwc)
             var i : uint = 0
             if(key.directLightWithShadowsCount > 0) {

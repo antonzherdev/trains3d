@@ -16,7 +16,7 @@
 #import "EGDynamicWorld.h"
 @implementation TRTrainView{
     TRLevel* _level;
-    EGStandardMaterial* _blackMaterial;
+    EGMaterial* _blackMaterial;
     EGTexture* _carTexture;
     EGStandardMaterial* _defMat;
     EGStandardMaterial* _defMatTex;
@@ -38,7 +38,7 @@ static ODClassType* _TRTrainView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _blackMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 1.0)] specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:1.0];
+        _blackMaterial = [EGStandardMaterial applyColor:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
         _carTexture = [EGGlobal textureForFile:@"Car.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST];
         _defMat = [self trainMaterialForDiffuse:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)]];
         _defMatTex = [self trainMaterialForDiffuse:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_carTexture]];

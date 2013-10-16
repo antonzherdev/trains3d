@@ -1,10 +1,11 @@
 #import "objd.h"
 #import "GEVec.h"
 @class TRLevel;
+@class EGMaterial;
 @class EGStandardMaterial;
-@class EGColorSource;
 @class EGTexture;
 @class EGGlobal;
+@class EGColorSource;
 @class EGVertexArray;
 @class TRModels;
 @class EGMesh;
@@ -25,7 +26,7 @@
 
 @interface TRTrainView : NSObject
 @property (nonatomic, readonly) TRLevel* level;
-@property (nonatomic, readonly) EGStandardMaterial* blackMaterial;
+@property (nonatomic, readonly) EGMaterial* blackMaterial;
 
 + (id)trainViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;

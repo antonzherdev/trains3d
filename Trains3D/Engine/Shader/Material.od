@@ -24,7 +24,7 @@ class ColorSource(color : vec4, texture : Texture?, alphaTestLevel : float4) ext
 }
 
 class StandardMaterial(diffuse : ColorSource, specularColor : vec4, specularSize : float)  extends Material {
-    static def apply(diffuse : ColorSource) = StandardMaterial(diffuse, vec4(0, 0, 0, 1), 1)
+    static def apply(diffuse : ColorSource) = StandardMaterial(diffuse, vec4(0, 0, 0, 1), 0)
     def shaderSystem : ShaderSystem<self> = StandardShaderSystem.instance
 }
 
