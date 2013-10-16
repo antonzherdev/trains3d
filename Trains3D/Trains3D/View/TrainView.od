@@ -7,7 +7,7 @@ import com.antonzherdev.eg._
 class TrainView(level : Level) {
     val blackMaterial = StandardMaterial(vec4(0, 0, 0, 1), vec4(0.1, 0.1, 0.1, 1), 1)
 
-    def trainMaterialFor(color : vec4) = StandardMaterial(color, vec4(0.1, 0.1, 0.1, 1), 0.1)
+    def trainMaterialFor(diffuse : ColorSource) = StandardMaterial(diffuse, vec4(0.1, 0.1, 0.1, 1), 0.1)
 
     def draw {
         egPushGroupMarker("Trains")
@@ -41,7 +41,6 @@ class TrainView(level : Level) {
     }
 
     private def draw(train : Train) {
-        val material = trainMaterialFor(train.color.color)
         train.cars.for{ car ->
             matrix(
                 _.modify(w = w -> {
@@ -51,31 +50,34 @@ class TrainView(level : Level) {
                     m.rotate(car.position.line.degreeAngle + 90, 0, 1, 0)
                 })
             ){
-                doDraw(car, material)
+                doDraw(car, train.color.color)
             }
         }
     }
 
-    private def doDraw(car : Car, material : Material) {
+    private def doDraw(car : Car, color : vec4) {
         if(car.carType == CarType.car) {
-            drawCar(material)
+            drawCar(color)
         } else {
-            drawEngine(material)
+            drawEngine(color)
         }
     }
 
+    private val carTexture = textureFor("Car.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
     private val defMat = trainMaterialFor(vec4(1, 1, 1, 1))
-    private val vaoCar = Models.car.vao(defMat, shadow = true)
+    private val defMatTex = trainMaterialFor(ColorSource(vec4(1, 1, 1, 1), carTexture))
+    private val vaoCar = Models.car.vao(defMatTex, shadow = true)
     private val vaoCarBlack = Models.carBlack.vao(blackMaterial, shadow = true)
-    private def drawCar(material : Material) {
-        vaoCar.draw(material)
+    private def drawCar(color : vec4) {
+        vaoCar.draw(trainMaterialFor(ColorSource(color, carTexture)))
         vaoCarBlack.draw
     }
 
     private val vaoEngine = Models.engine.vao(defMat, shadow = true)
     private val vaoEngineFloor = Models.engineFloor.vao(defMat, shadow = true)
     private val vaoEngineBlack = Models.engineBlack.vao(blackMaterial, shadow = true)
-    private def drawEngine(material : Material) {
+    private def drawEngine(color : vec4) {
+        val material = trainMaterialFor(color)
         vaoEngine.draw(material)
         vaoEngineFloor.draw(material)
         vaoEngineBlack.draw
@@ -90,14 +92,13 @@ class TrainView(level : Level) {
     }
 
     private def draw(dyingTrain : Train) {
-        val material = trainMaterialFor(dyingTrain.color.color)
         dyingTrain.cars.for{ car ->
             matrix(
                 _.modify(m = m -> {
                     car.dynamicBody.matrix.translate(0, 0, -car.carType.height/2 + 0.04).mul(m.rotate(90, 0, 1, 0))
                 })
             ){
-                doDraw(car, material)
+                doDraw(car, dyingTrain.color.color)
             }
         }
     }

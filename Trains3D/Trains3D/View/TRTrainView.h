@@ -3,22 +3,22 @@
 @class TRLevel;
 @class EGStandardMaterial;
 @class EGColorSource;
+@class EGTexture;
+@class EGGlobal;
 @class EGVertexArray;
 @class TRModels;
 @class EGMesh;
 @class TRTrain;
 @class TRSmoke;
 @class TRSmokeView;
-@class TRCityColor;
-@class EGGlobal;
 @class TRCar;
 @class TRCarPosition;
 @class GELineSegment;
 @class GEMat4;
 @class EGMatrixModel;
+@class TRCityColor;
 @class EGMatrixStack;
 @class TRCarType;
-@class EGMaterial;
 @class EGRigidBody;
 
 @class TRTrainView;
@@ -30,7 +30,7 @@
 + (id)trainViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
-- (EGStandardMaterial*)trainMaterialForColor:(GEVec4)color;
+- (EGStandardMaterial*)trainMaterialForDiffuse:(EGColorSource*)diffuse;
 - (void)draw;
 - (void)drawSmoke;
 - (void)drawTrains:(id<CNSeq>)trains;

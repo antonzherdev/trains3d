@@ -2,21 +2,24 @@
 
 #import "TRLevel.h"
 #import "EGMaterial.h"
+#import "EGTexture.h"
+#import "GL.h"
+#import "EGContext.h"
 #import "EGMesh.h"
 #import "TRModels.h"
-#import "GL.h"
 #import "TRTrain.h"
 #import "TRSmoke.h"
-#import "TRCity.h"
-#import "EGContext.h"
 #import "TRCar.h"
 #import "GEFigure.h"
 #import "GEMat4.h"
+#import "TRCity.h"
 #import "EGDynamicWorld.h"
 @implementation TRTrainView{
     TRLevel* _level;
     EGStandardMaterial* _blackMaterial;
+    EGTexture* _carTexture;
     EGStandardMaterial* _defMat;
+    EGStandardMaterial* _defMatTex;
     EGVertexArray* _vaoCar;
     EGVertexArray* _vaoCarBlack;
     EGVertexArray* _vaoEngine;
@@ -36,8 +39,10 @@ static ODClassType* _TRTrainView_type;
     if(self) {
         _level = level;
         _blackMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 1.0)] specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:1.0];
-        _defMat = [self trainMaterialForColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
-        _vaoCar = [TRModels.car vaoMaterial:_defMat shadow:YES];
+        _carTexture = [EGGlobal textureForFile:@"Car.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST];
+        _defMat = [self trainMaterialForDiffuse:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)]];
+        _defMatTex = [self trainMaterialForDiffuse:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_carTexture]];
+        _vaoCar = [TRModels.car vaoMaterial:_defMatTex shadow:YES];
         _vaoCarBlack = [TRModels.carBlack vaoMaterial:_blackMaterial shadow:YES];
         _vaoEngine = [TRModels.engine vaoMaterial:_defMat shadow:YES];
         _vaoEngineFloor = [TRModels.engineFloor vaoMaterial:_defMat shadow:YES];
@@ -52,8 +57,8 @@ static ODClassType* _TRTrainView_type;
     _TRTrainView_type = [ODClassType classTypeWithCls:[TRTrainView class]];
 }
 
-- (EGStandardMaterial*)trainMaterialForColor:(GEVec4)color {
-    return [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:color] specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:0.1];
+- (EGStandardMaterial*)trainMaterialForDiffuse:(EGColorSource*)diffuse {
+    return [EGStandardMaterial standardMaterialWithDiffuse:diffuse specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:0.1];
 }
 
 - (void)draw {
@@ -89,7 +94,6 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (void)drawTrain:(TRTrain*)train {
-    EGStandardMaterial* material = [self trainMaterialForColor:train.color.color];
     [[train cars] forEach:^void(TRCar* car) {
         [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
             return [[_ modifyW:^GEMat4*(GEMat4* w) {
@@ -99,22 +103,23 @@ static ODClassType* _TRTrainView_type;
                 return [m rotateAngle:((float)([[car position].line degreeAngle] + 90)) x:0.0 y:1.0 z:0.0];
             }];
         } f:^void() {
-            [self doDrawCar:car material:material];
+            [self doDrawCar:car color:train.color.color];
         }];
     }];
 }
 
-- (void)doDrawCar:(TRCar*)car material:(EGMaterial*)material {
-    if(car.carType == TRCarType.car) [self drawCarMaterial:material];
-    else [self drawEngineMaterial:material];
+- (void)doDrawCar:(TRCar*)car color:(GEVec4)color {
+    if(car.carType == TRCarType.car) [self drawCarColor:color];
+    else [self drawEngineColor:color];
 }
 
-- (void)drawCarMaterial:(EGMaterial*)material {
-    [_vaoCar drawParam:material];
+- (void)drawCarColor:(GEVec4)color {
+    [_vaoCar drawParam:[self trainMaterialForDiffuse:[EGColorSource applyColor:color texture:_carTexture]]];
     [_vaoCarBlack draw];
 }
 
-- (void)drawEngineMaterial:(EGMaterial*)material {
+- (void)drawEngineColor:(GEVec4)color {
+    EGStandardMaterial* material = [self trainMaterialForDiffuse:[EGColorSource applyColor:color]];
     [_vaoEngine drawParam:material];
     [_vaoEngineFloor drawParam:material];
     [_vaoEngineBlack draw];
@@ -128,14 +133,13 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (void)drawDyingTrain:(TRTrain*)dyingTrain {
-    EGStandardMaterial* material = [self trainMaterialForColor:dyingTrain.color.color];
     [[dyingTrain cars] forEach:^void(TRCar* car) {
         [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
             return [_ modifyM:^GEMat4*(GEMat4* m) {
                 return [[[car dynamicBody].matrix translateX:0.0 y:0.0 z:((float)(-car.carType.height / 2 + 0.04))] mulMatrix:[m rotateAngle:90.0 x:0.0 y:1.0 z:0.0]];
             }];
         } f:^void() {
-            [self doDrawCar:car material:material];
+            [self doDrawCar:car color:dyingTrain.color.color];
         }];
     }];
 }

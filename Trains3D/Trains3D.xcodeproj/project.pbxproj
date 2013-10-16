@@ -67,6 +67,7 @@
 		6F3DF0DFBDFAF1D3471A23B0 /* btEmptyShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2997ADD58DA7B090DDC /* btEmptyShape.cpp */; };
 		6F3DF0F2215BD98D07A38009 /* Collection.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF272640E3F86B31E1626 /* Collection.od */; };
 		6F3DF0F380C8014CD326B708 /* btEmptyShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2997ADD58DA7B090DDC /* btEmptyShape.cpp */; };
+		6F3DF0F611F6D0D9676553CF /* Car.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF0229D6651F5977E1E7E /* Car.png */; };
 		6F3DF0FBACA1CB88517EB0C8 /* ODType.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBD7D0D9B35B241BF676 /* ODType.m */; };
 		6F3DF0FEBDBE361FCF1B2F80 /* btConvexShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF80F0ADA5509EFB81D68 /* btConvexShape.cpp */; };
 		6F3DF1022FCED6F43C044A45 /* compatibility.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF31DE3CB3DB50438682A /* compatibility.inl */; };
@@ -255,6 +256,7 @@
 		6F3DF3A10ABAF885D9084740 /* type_vec.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF0B949A81552EF19BE0A /* type_vec.inl */; };
 		6F3DF3A7BF73B2B658307C33 /* geometry.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF63252AB4FDB83A6F8A7 /* geometry.od */; };
 		6F3DF3A91FA62535CA949BA3 /* btTriangleMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF79FE213C9FFE8FFC53F /* btTriangleMeshShape.cpp */; };
+		6F3DF3ABAB30C4BFFC1C7D60 /* Car.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF0229D6651F5977E1E7E /* Car.png */; };
 		6F3DF3AF0F9267CCDB6B2E10 /* btCylinderShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFAAED030E8616AA27D3A /* btCylinderShape.cpp */; };
 		6F3DF3CA08C9AD91D14F0AC8 /* Light.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFABCF7502FE5A61A37D2 /* Light.png */; };
 		6F3DF3D00F3DBE1E36B461EF /* btScaledBvhTriangleMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0B5CDE0ED7F04E617FD /* btScaledBvhTriangleMeshShape.cpp */; };
@@ -1113,6 +1115,7 @@
 		6F3DF0080BD8176CF8E1C8BC /* Vertex.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Vertex.od; sourceTree = "<group>"; };
 		6F3DF0103DACAC74EFF729C5 /* func_geometric.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = func_geometric.inl; sourceTree = "<group>"; };
 		6F3DF01314FF9DD4CC6D8EBB /* btCollisionAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btCollisionAlgorithm.h; sourceTree = "<group>"; };
+		6F3DF0229D6651F5977E1E7E /* Car.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Car.png; sourceTree = "<group>"; };
 		6F3DF0237FBF34B409C18893 /* simd_vec4.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = simd_vec4.inl; sourceTree = "<group>"; };
 		6F3DF0255D0634FEBC03437A /* KWProbePoller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWProbePoller.m; sourceTree = "<group>"; };
 		6F3DF028BE493F6A2FCE2F52 /* raw_data.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = raw_data.inl; sourceTree = "<group>"; };
@@ -3461,6 +3464,7 @@
 				6F3DF8BAC3EAE789B65670CB /* YellowTree.png */,
 				6F3DFABCF7502FE5A61A37D2 /* Light.png */,
 				6F3DF7D3C6CD185286ABD313 /* City.png */,
+				6F3DF0229D6651F5977E1E7E /* Car.png */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -4424,6 +4428,7 @@
 				6F3DF34A576D0F90508C1D65 /* Buffer.od in Resources */,
 				6F3DF355AC6A3300D23A36A9 /* Index.od in Resources */,
 				6F3DF6EC10BBB2F6AC918D74 /* City.png in Resources */,
+				6F3DF3ABAB30C4BFFC1C7D60 /* Car.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4529,6 +4534,7 @@
 				6F3DFAD00457C9143BC939E6 /* Buffer.od in Resources */,
 				6F3DF840009B36EAA3D739D7 /* Index.od in Resources */,
 				6F3DFD86FD539E1923EAE204 /* City.png in Resources */,
+				6F3DF0F611F6D0D9676553CF /* Car.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
