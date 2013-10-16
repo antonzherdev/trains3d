@@ -149,28 +149,12 @@ static ODClassType* _TRSmokeParticle_type;
     if(self) {
         _weather = weather;
         _animation = ^id() {
-            id(^__l)(float) = ^id() {
-                id(^__l)(float) = ^id() {
-                    float(^__l)(float) = [EGProgress divOn:self.lifeLength];
-                    id(^__r)(float) = [EGProgress gapOptT1:0.75 t2:1.0];
-                    return ^id(float _) {
-                        return __r(__l(_));
-                    };
-                }();
-                float(^__r)(float) = [EGProgress progressF4:0.3 f42:0.0];
-                return ^id(float _) {
-                    return [__l(_) mapF:^id(id _) {
-                        return numf4(__r(unumf4(_)));
-                    }];
-                };
-            }();
+            float(^__l)(float) = [EGProgress progressF4:0.3 f42:0.0];
             void(^__r)(float) = ^void(float _) {
                 _weakSelf.color = GEVec4Make(_, _, _, _);
             };
             return ^void(float _) {
-                [__l(_) forEach:^void(id _) {
-                    __r(unumf4(_));
-                }];
+                __r(__l(_));
             };
         }();
     }
@@ -187,7 +171,7 @@ static ODClassType* _TRSmokeParticle_type;
     GEVec3 a = geVec3MulK(_speed, ((float)(-_TRSmokeParticle_dragCoefficient)));
     _speed = geVec3AddVec3(_speed, geVec3MulK(a, dt));
     self.position = geVec3AddVec3(self.position, geVec3MulK(geVec3AddVec3(_speed, geVec3ApplyVec2Z([_weather wind], 0.0)), dt));
-    _animation(t);
+    if(t > 1.5) _animation((t - 1.5) / 0.5);
 }
 
 - (ODClassType*)type {

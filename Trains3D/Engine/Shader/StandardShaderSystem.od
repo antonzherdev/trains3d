@@ -214,10 +214,10 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
                 specularColor.get.apply(vec4 = param.specularColor)
                 specularSize.get.apply(f4 = param.specularSize)
             }
-            mwcUniform.get(matrix = context.matrixStack.value.mwc)
+            mwcUniform.get.apply(matrix = context.matrixStack.value.mwc)
             var i : uint = 0
             if(key.directLightWithShadowsCount > 0) {
-                env.lights.chain.filter(_.is<DirectLight> && _.hasShadows).for { light ->
+                env.directLightsWithShadows.for { light ->
                     val dir = matrix.value.wc.mul(vec3 = light.cast<DirectLight>.direction, 0).xyz
                     directLightDirections[i].apply(vec3 = dir.normalize)
                     directLightColors[i].apply(vec4 = light.color)
@@ -228,7 +228,7 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
                 }
             }
             if(key.directLightWithoutShadowsCount > 0) {
-                env.lights.chain.filter(_.is<DirectLight> && (!_.hasShadows || !context.considerShadows)).for { light ->
+                (if(context.considerShadows) env.directLightsWithoutShadows else env.directLights).for { light ->
                     val dir = matrix.value.wc.mul(vec3 = light.cast<DirectLight>.direction, 0).xyz
                     directLightDirections[i].apply(vec3 = dir.normalize)
                     directLightColors[i].apply(vec4 = light.color)

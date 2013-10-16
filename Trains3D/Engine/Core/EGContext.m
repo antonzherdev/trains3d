@@ -597,11 +597,17 @@ static ODClassType* _EGShadowRenderTarget_type;
 @implementation EGEnvironment{
     GEVec4 _ambientColor;
     id<CNSeq> _lights;
+    id<CNSeq> _directLights;
+    id<CNSeq> _directLightsWithShadows;
+    id<CNSeq> _directLightsWithoutShadows;
 }
 static EGEnvironment* _EGEnvironment_default;
 static ODClassType* _EGEnvironment_type;
 @synthesize ambientColor = _ambientColor;
 @synthesize lights = _lights;
+@synthesize directLights = _directLights;
+@synthesize directLightsWithShadows = _directLightsWithShadows;
+@synthesize directLightsWithoutShadows = _directLightsWithoutShadows;
 
 + (id)environmentWithAmbientColor:(GEVec4)ambientColor lights:(id<CNSeq>)lights {
     return [[EGEnvironment alloc] initWithAmbientColor:ambientColor lights:lights];
@@ -612,6 +618,15 @@ static ODClassType* _EGEnvironment_type;
     if(self) {
         _ambientColor = ambientColor;
         _lights = lights;
+        _directLights = [[[_lights chain] filter:^BOOL(EGLight* _) {
+            return [_ isKindOfClass:[EGDirectLight class]];
+        }] toArray];
+        _directLightsWithShadows = [[[_lights chain] filter:^BOOL(EGLight* _) {
+            return [_ isKindOfClass:[EGDirectLight class]] && _.hasShadows;
+        }] toArray];
+        _directLightsWithoutShadows = [[[_lights chain] filter:^BOOL(EGLight* _) {
+            return [_ isKindOfClass:[EGDirectLight class]] && !(_.hasShadows);
+        }] toArray];
     }
     
     return self;

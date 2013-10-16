@@ -50,13 +50,13 @@ class SmokeParticle(weak weather : Weather) extends BillboardParticle(2) {
     var speed : vec3
     static val dragCoefficient = 0.5 // air resistance coefficient | a = -dragCoefficient * sqr(speed)
 
-    val animation = div(lifeLength) >> gapOpt(0.75, 1) >> progress(f4 = 0.3, 0) >> color = vec4(_, _, _, _)
+    val animation = progress(f4 = 0.3, 0) >> color = vec4(_, _, _, _)
 
     def update(t : float4, dt : float4) {
         val a = speed*(-dragCoefficient)
         speed = speed + a*dt
         position = position.add((speed + vec3(weather.wind, 0))*dt)
-        animation(t)
+        if(t > 1.5) animation((t - 1.5)/0.5)
     }
 }
 

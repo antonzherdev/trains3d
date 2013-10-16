@@ -215,6 +215,10 @@ class ShadowRenderTarget(shadowLight : Light) extends RenderTarget {
 }
 
 class Environment(ambientColor : vec4, lights : [Light]) {
+    val directLights : [DirectLight] = lights.chain.filter(_.is<DirectLight>).toArray
+    val directLightsWithShadows : [DirectLight] = lights.chain.filter(_.is<DirectLight> && _.hasShadows).toArray
+    val directLightsWithoutShadows : [DirectLight] = lights.chain.filter(_.is<DirectLight> && !_.hasShadows).toArray
+
     static val default = Environment(vec4(1, 1, 1, 1), [])
     static def apply(lights : [Light]) = Environment(vec4(1, 1, 1, 1), lights)
     static def apply(light : Light) = Environment(vec4(1, 1, 1, 1), [light])
