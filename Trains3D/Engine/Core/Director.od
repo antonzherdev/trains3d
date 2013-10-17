@@ -20,14 +20,17 @@ class Director {
     def drawWith(size : vec2) {
         if(_scene.isEmpty) return nil
         if(size.x <= 0 || size.y <= 0) return nil
+        val sc = _scene.get
+
         context.director = self
         context.clear
+        context.scale = sc.scaleWith(size)
         context.depthTest.enable
 
-        _scene.get.prepareWith(size)
+        sc.prepareWith(size)
         context.clearColor(_scene.get.backgroundColor)
         glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
-        _scene.get.drawWith(size)
+        sc.drawWith(size)
 
         context.depthTest.disable
         matrix.clear

@@ -39,6 +39,10 @@ static ODClassType* _EGGlobal_type;
     return [_EGGlobal_context fontWithName:name];
 }
 
++ (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size {
+    return [_EGGlobal_context fontWithName:name size:size];
+}
+
 - (ODClassType*)type {
     return [EGGlobal type];
 }
@@ -79,6 +83,7 @@ static ODClassType* _EGGlobal_type;
 
 
 @implementation EGContext{
+    CGFloat _scale;
     GLint _defaultFramebuffer;
     NSMutableDictionary* _textureCache;
     NSMutableDictionary* _fontCache;
@@ -105,6 +110,7 @@ static ODClassType* _EGGlobal_type;
     GEVec4 __lastClearColor;
 }
 static ODClassType* _EGContext_type;
+@synthesize scale = _scale;
 @synthesize defaultFramebuffer = _defaultFramebuffer;
 @synthesize director = _director;
 @synthesize environment = _environment;
@@ -123,6 +129,7 @@ static ODClassType* _EGContext_type;
 - (id)init {
     self = [super init];
     if(self) {
+        _scale = 1.0;
         _defaultFramebuffer = 0;
         _textureCache = [NSMutableDictionary mutableDictionary];
         _fontCache = [NSMutableDictionary mutableDictionary];
@@ -167,6 +174,10 @@ static ODClassType* _EGContext_type;
     }]));
 }
 
+- (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size {
+    return [self fontWithName:[NSString stringWithFormat:@"%@_%li", name, ((NSUInteger)(size * _scale))]];
+}
+
 - (void)clear {
     [_matrixStack clear];
     _considerShadows = YES;
@@ -176,6 +187,7 @@ static ODClassType* _EGContext_type;
     __lastIndexBuffer = 0;
     __lastVertexBufferId = 0;
     __lastVertexBufferCount = 0;
+    _scale = 1.0;
 }
 
 - (GERectI)viewport {

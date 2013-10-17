@@ -8,9 +8,11 @@ object Global {
     def nearestTextureFor(file : string) : Texture = context.textureFor(file, GL_NEAREST, GL_NEAREST)
     def textureFor(file : string, magFilter : uint4, minFilter : uint4) : Texture = context.textureFor(file, magFilter, minFilter)
     def fontWith(name : string) : Font = context.fontWith(name)
+    def fontWith(name : string, size : uint) : Font = context.fontWith(name, size)
 }
 
 class Context {
+    var scale : float = 1.0
     var defaultFramebuffer : GLint = 0
     private val textureCache = MutableHashMap<(string, uint4, uint4), FileTexture>()
     private val fontCache = MutableHashMap<string, Font>()
@@ -18,6 +20,7 @@ class Context {
     def textureFor(file : string, magFilter : uint4, minFilter : uint4) : Texture =
         textureCache.objectFor(key = (file, magFilter.cast<uint4>, minFilter.cast<uint4>), orUpdateWith = FileTexture(file, magFilter, minFilter))
     def fontWith(name : string) : Font = fontCache.objectFor(key = name, orUpdateWith = Font(name))
+    def fontWith(name : string, size : uint) : Font = fontWith("$name\_$((size*scale).cast<uint>)")
 
     var director : Director
     var environment = Environment.default
@@ -34,6 +37,7 @@ class Context {
         _lastIndexBuffer = 0
         _lastVertexBufferId = 0
         _lastVertexBufferCount = 0
+        scale = 1.0
     }
 
     private var _viewportStack = List<RectI>()

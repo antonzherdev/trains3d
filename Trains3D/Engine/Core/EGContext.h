@@ -29,6 +29,7 @@
 + (EGTexture*)nearestTextureForFile:(NSString*)file;
 + (EGTexture*)textureForFile:(NSString*)file magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
 + (EGFont*)fontWithName:(NSString*)name;
++ (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size;
 + (EGContext*)context;
 + (EGMatrixStack*)matrix;
 + (ODClassType*)type;
@@ -36,6 +37,7 @@
 
 
 @interface EGContext : NSObject
+@property (nonatomic) CGFloat scale;
 @property (nonatomic) GLint defaultFramebuffer;
 @property (nonatomic, retain) EGDirector* director;
 @property (nonatomic, retain) EGEnvironment* environment;
@@ -52,6 +54,7 @@
 - (ODClassType*)type;
 - (EGTexture*)textureForFile:(NSString*)file magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
 - (EGFont*)fontWithName:(NSString*)name;
+- (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size;
 - (void)clear;
 - (GERectI)viewport;
 - (void)setViewport:(GERectI)viewport;

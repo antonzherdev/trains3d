@@ -84,6 +84,10 @@ static ODClassType* _EGScene_type;
     }];
 }
 
+- (CGFloat)scaleWithViewSize:(GEVec2)viewSize {
+    return [_layers scaleWithViewSize:viewSize];
+}
+
 - (ODClassType*)type {
     return [EGScene type];
 }
@@ -189,6 +193,10 @@ static ODClassType* _EGLayers_type;
     [[self layers] forEach:^void(EGLayer* _) {
         [_ updateWithDelta:delta];
     }];
+}
+
+- (CGFloat)scaleWithViewSize:(GEVec2)viewSize {
+    return 1.0;
 }
 
 - (ODClassType*)type {

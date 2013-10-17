@@ -35,6 +35,7 @@
 - (ODClassType*)type;
 - (id<CNSeq>)layers;
 - (id<CNSeq>)viewportsWithViewSize:(GEVec2)viewSize;
+- (CGFloat)scaleWithViewSize:(GEVec2)viewSize;
 + (ODClassType*)type;
 @end
 

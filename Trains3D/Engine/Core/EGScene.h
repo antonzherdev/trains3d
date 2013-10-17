@@ -54,6 +54,7 @@
 - (void)stop;
 - (void)pause;
 - (void)resume;
+- (CGFloat)scaleWithViewSize:(GEVec2)viewSize;
 + (ODClassType*)type;
 @end
 
@@ -69,6 +70,7 @@
 - (void)drawWithViewSize:(GEVec2)viewSize;
 - (BOOL)processEvent:(EGEvent*)event;
 - (void)updateWithDelta:(CGFloat)delta;
+- (CGFloat)scaleWithViewSize:(GEVec2)viewSize;
 + (ODClassType*)type;
 @end
 

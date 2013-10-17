@@ -45,6 +45,8 @@ class Scene(backgroundColor : vec4, controller : Controller, layers : Layers, so
     def resume {
         soundPlayer.for(_.resume)
     }
+
+    def scaleWith(viewSize : vec2) : float = layers.scaleWith(viewSize)
 }
 
 class Layers {
@@ -75,6 +77,8 @@ class Layers {
     def updateWith(delta : float) {
         layers.for(_.updateWith(delta))
     }
+
+    def scaleWith(viewSize : vec2) : float = 1.0
 }
 
 class SingleLayer(layer : Layer) extends Layers {

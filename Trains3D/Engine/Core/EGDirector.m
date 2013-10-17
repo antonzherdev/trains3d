@@ -61,13 +61,15 @@ static ODClassType* _EGDirector_type;
 - (void)drawWithSize:(GEVec2)size {
     if([__scene isEmpty]) return ;
     if(size.x <= 0 || size.y <= 0) return ;
+    EGScene* sc = ((EGScene*)([__scene get]));
     EGGlobal.context.director = self;
     [EGGlobal.context clear];
+    EGGlobal.context.scale = [sc scaleWithViewSize:size];
     [EGGlobal.context.depthTest enable];
-    [((EGScene*)([__scene get])) prepareWithViewSize:size];
+    [sc prepareWithViewSize:size];
     [EGGlobal.context clearColorColor:((EGScene*)([__scene get])).backgroundColor];
     glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
-    [((EGScene*)([__scene get])) drawWithViewSize:size];
+    [sc drawWithViewSize:size];
     [EGGlobal.context.depthTest disable];
     [EGGlobal.matrix clear];
     [EGGlobal.context setViewport:geRectIApplyRect(GERectMake(GEVec2Make(0.0, 0.0), size))];
