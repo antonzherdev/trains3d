@@ -118,11 +118,13 @@ class Context {
     }
 
     private var _lastVertexArray : GLuint = 0
-    def bindVertexArray(handle : GLuint, vertexCount : uint4) {
-        if(handle != _lastVertexArray) {
+    private var _lastVertexMutable : GLuint = 0
+    def bindVertexArray(handle : GLuint, vertexCount : uint4, mutable : bool) {
+        if(handle != _lastVertexArray || mutable) {
             _lastVertexArray = handle
             _lastVertexBufferId = 0
             _lastIndexBuffer = 0
+            _lastVertexMutable = mutable
             egBindVertexArray(handle)
         }
         _needBindDefaultVertexArray = false

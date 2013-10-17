@@ -71,9 +71,10 @@ class RouteVertexArray<P>(standard : VertexArray<P>, shadow : VertexArray<P>) ex
 class SimpleVertexArray<P>(handle : GLuint, shader : Shader<P>, buffers : [VertexBuffer<_>], index : IndexSource) extends VertexArray<P> {
     static def apply<P>(shader : Shader<P>, buffers : [VertexBuffer<_>], index : IndexSource) : SimpleVertexArray<P> =
         SimpleVertexArray<P>(egGenVertexArray, shader, buffers, index)
+    val isMutable = index.isMutable || buffers.chain.find(_.isMutable).isDefined
 
     def bind {
-        context.bindVertexArray(handle, buffers.head.count)
+        context.bindVertexArray(handle, buffers.head.count, isMutable)
     }
 
     def unbind {

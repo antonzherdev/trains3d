@@ -376,12 +376,14 @@ static ODClassType* _EGRouteVertexArray_type;
     EGShader* _shader;
     id<CNSeq> _buffers;
     id<EGIndexSource> _index;
+    BOOL _isMutable;
 }
 static ODClassType* _EGSimpleVertexArray_type;
 @synthesize handle = _handle;
 @synthesize shader = _shader;
 @synthesize buffers = _buffers;
 @synthesize index = _index;
+@synthesize isMutable = _isMutable;
 
 + (id)simpleVertexArrayWithHandle:(GLuint)handle shader:(EGShader*)shader buffers:(id<CNSeq>)buffers index:(id<EGIndexSource>)index {
     return [[EGSimpleVertexArray alloc] initWithHandle:handle shader:shader buffers:buffers index:index];
@@ -394,6 +396,9 @@ static ODClassType* _EGSimpleVertexArray_type;
         _shader = shader;
         _buffers = buffers;
         _index = index;
+        _isMutable = [_index isMutable] || [[[_buffers chain] find:^BOOL(id<EGVertexBuffer> _) {
+    return [_ isMutable];
+}] isDefined];
     }
     
     return self;
@@ -409,7 +414,7 @@ static ODClassType* _EGSimpleVertexArray_type;
 }
 
 - (void)bind {
-    [EGGlobal.context bindVertexArrayHandle:_handle vertexCount:((unsigned int)([((id<EGVertexBuffer>)([_buffers head])) count]))];
+    [EGGlobal.context bindVertexArrayHandle:_handle vertexCount:((unsigned int)([((id<EGVertexBuffer>)([_buffers head])) count])) mutable:_isMutable];
 }
 
 - (void)unbind {

@@ -19,6 +19,7 @@
 - (void)bind;
 - (void)draw;
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
+- (BOOL)isMutable;
 @end
 
 
@@ -61,6 +62,7 @@
 + (id)mutableIndexBufferWithHandle:(GLuint)handle mode:(unsigned int)mode;
 - (id)initWithHandle:(GLuint)handle mode:(unsigned int)mode;
 - (ODClassType*)type;
+- (BOOL)isMutable;
 + (ODClassType*)type;
 @end
 

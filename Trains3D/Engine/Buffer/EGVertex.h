@@ -54,6 +54,7 @@
 - (void)bind;
 - (NSUInteger)count;
 - (GLuint)handle;
+- (BOOL)isMutable;
 @end
 
 
@@ -76,6 +77,7 @@
 + (id)mutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle;
 - (id)initWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle;
 - (ODClassType*)type;
+- (BOOL)isMutable;
 + (ODClassType*)type;
 @end
 

@@ -96,6 +96,7 @@ static ODClassType* _EGGlobal_type;
     unsigned int __lastVertexBufferCount;
     GLuint __lastIndexBuffer;
     GLuint __lastVertexArray;
+    GLuint __lastVertexMutable;
     GLuint _defaultVertexArray;
     BOOL __needBindDefaultVertexArray;
     EGEnablingState* _cullFace;
@@ -137,6 +138,7 @@ static ODClassType* _EGContext_type;
         __lastVertexBufferCount = 0;
         __lastIndexBuffer = 0;
         __lastVertexArray = 0;
+        __lastVertexMutable = 0;
         _defaultVertexArray = 0;
         __needBindDefaultVertexArray = NO;
         _cullFace = [EGEnablingState enablingStateWithTp:GL_CULL_FACE];
@@ -260,11 +262,12 @@ static ODClassType* _EGContext_type;
     }
 }
 
-- (void)bindVertexArrayHandle:(GLuint)handle vertexCount:(unsigned int)vertexCount {
-    if(!(GLuintEq(handle, __lastVertexArray))) {
+- (void)bindVertexArrayHandle:(GLuint)handle vertexCount:(unsigned int)vertexCount mutable:(BOOL)mutable {
+    if(!(GLuintEq(handle, __lastVertexArray)) || mutable) {
         __lastVertexArray = handle;
         __lastVertexBufferId = 0;
         __lastIndexBuffer = 0;
+        __lastVertexMutable = mutable;
         egBindVertexArray(handle);
     }
     __needBindDefaultVertexArray = NO;

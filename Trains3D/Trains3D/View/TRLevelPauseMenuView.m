@@ -7,7 +7,6 @@
 #import "EGContext.h"
 #import "EGDirector.h"
 #import "TRStrings.h"
-#import "GL.h"
 #import "TRSceneFactory.h"
 @implementation TRLevelPauseMenuView{
     TRLevel* _level;
@@ -85,7 +84,6 @@ static ODClassType* _TRLevelPauseMenuView_type;
             _mainMenuLine.p1 = GEVec2Make(p.x + _width, p.y);
             [_mainMenuLine draw];
             [_font drawText:[TRStr.Loc mainMenu] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec3Make(p.x + 35, p.y + 18, 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
-            glLineWidth(1.0);
         }];
     }];
 }

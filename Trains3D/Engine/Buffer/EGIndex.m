@@ -108,6 +108,10 @@ static ODClassType* _EGImmutableIndexBuffer_type;
     [EGGlobal.context bindIndexBufferHandle:[self handle]];
 }
 
+- (BOOL)isMutable {
+    return NO;
+}
+
 - (ODClassType*)type {
     return [EGImmutableIndexBuffer type];
 }
@@ -174,6 +178,10 @@ static ODClassType* _EGMutableIndexBuffer_type;
 + (void)initialize {
     [super initialize];
     _EGMutableIndexBuffer_type = [ODClassType classTypeWithCls:[EGMutableIndexBuffer class]];
+}
+
+- (BOOL)isMutable {
+    return YES;
 }
 
 - (void)draw {
@@ -272,6 +280,10 @@ static ODClassType* _EGEmptyIndexSource_type;
 - (void)bind {
 }
 
+- (BOOL)isMutable {
+    return NO;
+}
+
 - (ODClassType*)type {
     return [EGEmptyIndexSource type];
 }
@@ -361,6 +373,10 @@ static ODClassType* _EGArrayIndexSource_type;
 - (void)bind {
 }
 
+- (BOOL)isMutable {
+    return NO;
+}
+
 - (ODClassType*)type {
     return [EGArrayIndexSource type];
 }
@@ -438,6 +454,10 @@ static ODClassType* _EGVoidRefArrayIndexSource_type;
     [EGGlobal.context draw];
     glDrawElements(_mode, count, GL_UNSIGNED_INT, _array.bytes + 4 * start);
     egCheckError();
+}
+
+- (BOOL)isMutable {
+    return NO;
 }
 
 - (ODClassType*)type {
@@ -519,6 +539,10 @@ static ODClassType* _EGIndexSourceGap_type;
     [_source drawWithStart:((NSUInteger)(_start + start)) count:count];
 }
 
+- (BOOL)isMutable {
+    return NO;
+}
+
 - (ODClassType*)type {
     return [EGIndexSourceGap type];
 }
@@ -594,6 +618,10 @@ static ODClassType* _EGMutableIndexSourceGap_type;
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [_source drawWithStart:((NSUInteger)(_start + start)) count:count];
+}
+
+- (BOOL)isMutable {
+    return NO;
 }
 
 - (ODClassType*)type {

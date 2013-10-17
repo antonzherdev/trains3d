@@ -4,6 +4,7 @@ trait IndexSource {
     def bind {}
     def draw
     def drawWith(start : uint, count : uint)
+    def isMutable = false
 }
 
 object IBO {
@@ -55,6 +56,9 @@ class ImmutableIndexBuffer(handle : GLuint, mode : uint4, length : uint, count :
 class MutableIndexBuffer(handle : GLuint, mode : uint4)
     extends MutableBuffer<uint4>(UInt4.type, GL_ELEMENT_ARRAY_BUFFER, handle)
     with IndexBuffer
+{
+    def isMutable = true
+}
 
 class EmptyIndexSource(mode : uint4) extends IndexSource {
     static val triangleStrip = EmptyIndexSource(GL_TRIANGLE_STRIP)

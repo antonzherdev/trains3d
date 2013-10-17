@@ -64,7 +64,7 @@
 - (void)bindVertexBufferBuffer:(id<EGVertexBuffer>)buffer;
 - (unsigned int)vertexBufferCount;
 - (void)bindIndexBufferHandle:(GLuint)handle;
-- (void)bindVertexArrayHandle:(GLuint)handle vertexCount:(unsigned int)vertexCount;
+- (void)bindVertexArrayHandle:(GLuint)handle vertexCount:(unsigned int)vertexCount mutable:(BOOL)mutable;
 - (void)bindDefaultVertexArray;
 - (void)checkBindDefaultVertexArray;
 - (void)draw;

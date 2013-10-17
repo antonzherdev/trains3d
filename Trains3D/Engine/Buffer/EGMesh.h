@@ -116,6 +116,7 @@ ODPType* egMeshDataType();
 @property (nonatomic, readonly) EGShader* shader;
 @property (nonatomic, readonly) id<CNSeq> buffers;
 @property (nonatomic, readonly) id<EGIndexSource> index;
+@property (nonatomic, readonly) BOOL isMutable;
 
 + (id)simpleVertexArrayWithHandle:(GLuint)handle shader:(EGShader*)shader buffers:(id<CNSeq>)buffers index:(id<EGIndexSource>)index;
 - (id)initWithHandle:(GLuint)handle shader:(EGShader*)shader buffers:(id<CNSeq>)buffers index:(id<EGIndexSource>)index;

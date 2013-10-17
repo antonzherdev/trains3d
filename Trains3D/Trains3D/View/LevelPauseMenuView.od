@@ -41,7 +41,7 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor wi
             mainMenuLine.p1 = vec2(p.x + width, p.y)
             mainMenuLine.draw
             font.draw(text = Loc.mainMenu, color = vec4(0, 0, 0, 1), at = vec3(p.x + 35, p.y + 18, 0), TextAlignment.baseline(-1))
-            glLineWidth(1)
+//            glLineWidth(1)
         }}
 
     }
