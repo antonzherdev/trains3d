@@ -31,6 +31,10 @@
         [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     }
 
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+    tap.numberOfTapsRequired = 1;
+    [self.view addGestureRecognizer:tap];
+
     _director = [EGDirectorIOS directorWithView:self];
     // Create an OpenGL ES context and assign it to the view loaded from storyboard
     GLKView *view = (GLKView *)self.view;
@@ -99,6 +103,10 @@
 
 #define DISPATCH_EVENT(theEvent, tp) {\
 [_director processEvent:[EGEventIOS eventIOSWithEvent:theEvent type:tp view:self camera:[CNOption none]]];\
+}
+
+- (IBAction)tap:(UITapGestureRecognizer *)recognizer {
+    [_director processEvent:[EGEventIOS eventIOSWithRecognizer:recognizer type:EGEventTap view:self camera:[CNOption none]]];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {

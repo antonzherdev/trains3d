@@ -11,6 +11,7 @@
 @protocol EGInputProcessor;
 @protocol EGMouseProcessor;
 @protocol EGTouchProcessor;
+@protocol EGTapProcessor;
 
 @protocol EGInputProcessor<NSObject>
 - (BOOL)isProcessorActive;
@@ -30,6 +31,11 @@
 - (BOOL)touchMovedEvent:(EGEvent*)event;
 - (BOOL)touchEndedEvent:(EGEvent*)event;
 - (BOOL)touchCanceledEvent:(EGEvent*)event;
+@end
+
+
+@protocol EGTapProcessor<NSObject>
+- (BOOL)tapEvent:(EGEvent*)event;
 @end
 
 
@@ -67,6 +73,8 @@
 - (BOOL)isTouchEnded;
 - (BOOL)isTouchCanceled;
 - (BOOL)touchProcessor:(id<EGTouchProcessor>)processor;
+- (BOOL)isTap;
+- (BOOL)tapProcessor:(id<EGTapProcessor>)processor;
 + (ODClassType*)type;
 @end
 

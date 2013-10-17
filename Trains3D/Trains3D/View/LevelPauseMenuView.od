@@ -1,6 +1,6 @@
 package com.antonzherdev.trains
 
-class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor with MouseProcessor {
+class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor with TapProcessor {
     val name = "LevelPauseMenu"
 
     private var _lastViewportSize : vec2 = vec2(0, 0)
@@ -49,10 +49,10 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor wi
 
     def isProcessorActive : bool = director.isPaused
     def process(event : Event) : bool = {
-        event.leftMouse(self)
+        event.tap(self)
     }
 
-    def mouseUp(event : Event) : bool = {
+    def tap(event : Event) : bool = {
         val p = event.location
         if(menuBackSprite.contains(p)) {
             if(p.y > resumeLine.p0.y) director.resume

@@ -6,9 +6,10 @@
 #import "TRRailroad.h"
 #import "TRRailPoint.h"
 #import "EGCollision.h"
+#import "EGContext.h"
+#import "EGDirector.h"
 @implementation TRSwitchProcessor{
     TRLevel* _level;
-    id _downed;
     EGCollisionBox2d* _switchShape;
     EGCollisionBox2d* _lightShape;
     EGCollisionWorld* _world;
@@ -24,9 +25,8 @@ static ODClassType* _TRSwitchProcessor_type;
     self = [super init];
     if(self) {
         _level = level;
-        _downed = [CNOption none];
         _switchShape = [EGCollisionBox2d applyX:0.3 y:0.2];
-        _lightShape = [EGCollisionBox2d applyX:0.2 y:0.06];
+        _lightShape = [EGCollisionBox2d applyX:0.4 y:0.24];
         _world = [EGCollisionWorld collisionWorld];
         [self _init];
     }
@@ -40,7 +40,7 @@ static ODClassType* _TRSwitchProcessor_type;
 }
 
 - (BOOL)processEvent:(EGEvent*)event {
-    return [event leftMouseProcessor:self];
+    return [event tapProcessor:self];
 }
 
 - (void)_init {
@@ -64,29 +64,25 @@ static ODClassType* _TRSwitchProcessor_type;
     }];
 }
 
-- (BOOL)mouseDownEvent:(EGEvent*)event {
-    _downed = [[_world closestCrossPointWithSegment:[event segment]] mapF:^TRRailroadConnectorContent*(EGCrossPoint* _) {
+- (BOOL)tapEvent:(EGEvent*)event {
+    id downed = [[_world closestCrossPointWithSegment:[event segment]] mapF:^TRRailroadConnectorContent*(EGCrossPoint* _) {
         return ((TRRailroadConnectorContent*)(_.body.data));
     }];
-    return [_downed isDefined];
-}
-
-- (BOOL)mouseDragEvent:(EGEvent*)event {
-    return [_downed isDefined];
-}
-
-- (BOOL)mouseUpEvent:(EGEvent*)event {
-    if([_downed isDefined]) {
-        [[ODObject asKindOfClass:[TRSwitch class] object:((TRRailroadConnectorContent*)([_downed get]))] forEach:^void(TRSwitch* _) {
+    if([downed isDefined]) {
+        [[ODObject asKindOfClass:[TRSwitch class] object:((TRRailroadConnectorContent*)([downed get]))] forEach:^void(TRSwitch* _) {
             [_level tryTurnTheSwitch:_];
         }];
-        [[ODObject asKindOfClass:[TRRailLight class] object:((TRRailroadConnectorContent*)([_downed get]))] forEach:^void(TRRailLight* _) {
+        [[ODObject asKindOfClass:[TRRailLight class] object:((TRRailroadConnectorContent*)([downed get]))] forEach:^void(TRRailLight* _) {
             [_ turn];
         }];
         return YES;
     } else {
         return NO;
     }
+}
+
+- (BOOL)isProcessorActive {
+    return !([[EGGlobal director] isPaused]);
 }
 
 - (ODClassType*)type {

@@ -201,6 +201,19 @@ static ODClassType* _EGEvent_type;
     }
 }
 
+- (BOOL)isTap {
+    @throw @"Method isTap is abstract";
+}
+
+- (BOOL)tapProcessor:(id<EGTapProcessor>)processor {
+    if(!([self checkViewport])) {
+        return NO;
+    } else {
+        if([self isTap]) return [processor tapEvent:self];
+        else return NO;
+    }
+}
+
 - (ODClassType*)type {
     return [EGEvent type];
 }

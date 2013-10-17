@@ -8,6 +8,7 @@ enum EGEventMacType {
     EGEventTouchMoved = 0x101,
     EGEventTouchEnded = 0x102,
     EGEventTouchCanceled = 0x103,
+    EGEventTap = 0x104
 };
 
 @interface EGEventMac : EGEvent

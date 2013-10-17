@@ -63,5 +63,8 @@
     return [EGEventMac eventMacWithEvent:_event type:_type view:_view camera:camera];
 }
 
+- (BOOL)isTap {
+    return _type == EGEventTap;
+}
 
 @end

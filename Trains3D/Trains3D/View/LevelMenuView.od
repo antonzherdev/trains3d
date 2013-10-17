@@ -3,7 +3,7 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg.Text._
 import com.antonzherdev.eg.Progress._
 
-class LevelMenuView(level : Level) extends LayerView with InputProcessor with MouseProcessor {
+class LevelMenuView(level : Level) extends LayerView with InputProcessor with TapProcessor {
     val name = "LevelMenu"
 
     def cameraWith(viewport : Rect) : Camera = res(viewport.height).cameraWith(viewport)
@@ -57,10 +57,10 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor with Mo
     }
 
     def process(event : Event) : bool = {
-        event.leftMouse(self)
+        event.tap(self)
     }
 
-    def mouseUp(event : Event) : bool = {
+    def tap(event : Event) : bool = {
         val p = event.location
         if(res(event.camera.get.viewport.height).pauseSprite.contains(p)) {
             if(director.isPaused) director.resume else director.pause

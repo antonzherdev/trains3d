@@ -124,10 +124,10 @@ static ODClassType* _TRLevelMenuView_type;
 }
 
 - (BOOL)processEvent:(EGEvent*)event {
-    return [event leftMouseProcessor:self];
+    return [event tapProcessor:self];
 }
 
-- (BOOL)mouseUpEvent:(EGEvent*)event {
+- (BOOL)tapEvent:(EGEvent*)event {
     GEVec2 p = [event location];
     if([[[self resHeight:geRectHeight(((EGEventCamera*)([event.camera get])).viewport)] pauseSprite] containsVec2:p]) if([[EGGlobal director] isPaused]) [[EGGlobal director] resume];
     else [[EGGlobal director] pause];
@@ -147,14 +147,6 @@ static ODClassType* _TRLevelMenuView_type;
 
 - (BOOL)isProcessorActive {
     return !([[EGGlobal director] isPaused]);
-}
-
-- (BOOL)mouseDownEvent:(EGEvent*)event {
-    return NO;
-}
-
-- (BOOL)mouseDragEvent:(EGEvent*)event {
-    return NO;
 }
 
 - (ODClassType*)type {

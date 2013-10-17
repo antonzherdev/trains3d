@@ -2,12 +2,11 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class SwitchProcessor(level : Level) extends MouseProcessor {
-    def process(event : Event) : bool = event.leftMouse(self)
+class SwitchProcessor(level : Level) extends InputProcessor with TapProcessor {
+    def process(event : Event) : bool = event.tap(self)
 
-    private var downed : RailroadConnectorContent? = nil
     private val switchShape = CollisionBox2d(0.3, 0.2)
-    private val lightShape = CollisionBox2d(0.2, 0.06)
+    private val lightShape = CollisionBox2d(0.4, 0.24)
     private val world = CollisionWorld<RailroadConnectorContent>()
     def init {
         level.railroad.add(changeListener = {
@@ -30,18 +29,14 @@ class SwitchProcessor(level : Level) extends MouseProcessor {
         })
     }
 
-    def mouseDown(event : Event) = {
-        downed = world.closestCrossPointWith(event.segment).map(_.body.data)
-        downed.isDefined
-    }
 
-    def mouseDrag(event : Event) = downed.isDefined
-
-    def mouseUp(event : Event) =
+    def tap(event : Event) = {
+        val downed = world.closestCrossPointWith(event.segment).map(_.body.data)
         if(downed.isDefined) {
             downed.get.as<Switch>.for(level.tryTurn(theSwitch = _ ))
             downed.get.as<RailLight>.for(_.turn)
 
             true
         } else false
+    }
 }

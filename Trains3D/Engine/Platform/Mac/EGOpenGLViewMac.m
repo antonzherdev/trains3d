@@ -11,6 +11,7 @@
 @private
     EGDirector *_director;
     GEVec2 _viewSize;
+    BOOL _mouseDraged;
 }
 
 @synthesize director = _director;
@@ -141,6 +142,7 @@
 - (void)mouseDown:(NSEvent *)theEvent
 {
     DISPATCH_EVENT(theEvent, NSLeftMouseDown);
+    _mouseDraged = NO;
 }
 
 - (void)mouseMoved:(NSEvent *)theEvent
@@ -151,11 +153,15 @@
 - (void)mouseDragged:(NSEvent *)theEvent
 {
     DISPATCH_EVENT(theEvent, NSLeftMouseDragged);
+    _mouseDraged = YES;
 }
 
 - (void)mouseUp:(NSEvent *)theEvent
 {
     DISPATCH_EVENT(theEvent, NSLeftMouseUp);
+    if(!_mouseDraged) {
+        DISPATCH_EVENT(theEvent, EGEventTap);
+    }
 }
 
 - (void)rightMouseDown:(NSEvent *)theEvent {

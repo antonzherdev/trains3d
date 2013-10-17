@@ -19,6 +19,10 @@ trait TouchProcessor {
     def touchCanceled(event : Event) : bool = false
 }
 
+trait TapProcessor {
+    def tap(event : Event) : bool
+}
+
 class EventCamera(matrixModel : MatrixModel, viewport : Rect)
 
 class Event(viewSize : vec2, camera : EventCamera?) {
@@ -67,4 +71,11 @@ class Event(viewSize : vec2, camera : EventCamera?) {
         else if(isTouchEnded) processor.touchEnded(self)
         else if(isTouchCanceled) processor.touchCanceled(self)
         else false
+
+    def isTap : bool
+    def tap(processor : TapProcessor)  : bool = {
+        if(!checkViewport) false
+        else if(isTap) processor.tap(self)
+        else false
+    }
 }

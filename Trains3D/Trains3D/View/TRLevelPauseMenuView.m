@@ -95,10 +95,10 @@ static ODClassType* _TRLevelPauseMenuView_type;
 }
 
 - (BOOL)processEvent:(EGEvent*)event {
-    return [event leftMouseProcessor:self];
+    return [event tapProcessor:self];
 }
 
-- (BOOL)mouseUpEvent:(EGEvent*)event {
+- (BOOL)tapEvent:(EGEvent*)event {
     GEVec2 p = [event location];
     if([_menuBackSprite containsVec2:p]) {
         if(p.y > _resumeLine.p0.y) {
@@ -127,14 +127,6 @@ static ODClassType* _TRLevelPauseMenuView_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-}
-
-- (BOOL)mouseDownEvent:(EGEvent*)event {
-    return NO;
-}
-
-- (BOOL)mouseDragEvent:(EGEvent*)event {
-    return NO;
 }
 
 - (ODClassType*)type {

@@ -11,10 +11,12 @@
 @class TRRailLight;
 @class EGCrossPoint;
 @class TRRailroadConnectorContent;
+@class EGGlobal;
+@class EGDirector;
 
 @class TRSwitchProcessor;
 
-@interface TRSwitchProcessor : NSObject<EGMouseProcessor>
+@interface TRSwitchProcessor : NSObject<EGInputProcessor, EGTapProcessor>
 @property (nonatomic, readonly) TRLevel* level;
 
 + (id)switchProcessorWithLevel:(TRLevel*)level;
@@ -22,9 +24,7 @@
 - (ODClassType*)type;
 - (BOOL)processEvent:(EGEvent*)event;
 - (void)_init;
-- (BOOL)mouseDownEvent:(EGEvent*)event;
-- (BOOL)mouseDragEvent:(EGEvent*)event;
-- (BOOL)mouseUpEvent:(EGEvent*)event;
+- (BOOL)tapEvent:(EGEvent*)event;
 + (ODClassType*)type;
 @end
 
