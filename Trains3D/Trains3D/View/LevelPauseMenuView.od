@@ -9,43 +9,47 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor wi
     private val mainMenuLine = Line2d(vec4(211, 131, 235, 255)/255)
 
     var camera : Camera
+    private var width = 0
+    private var height = 0
+    private var delta = 0
+    private var font : Font
+    private var textRel : vec2
     def reshapeWith(viewport : Rect) {
         camera = Camera2D(vec2(viewport.width, viewport.height))
+        val s = context.scale
+        width = 350*s
+        height = 150*s
+        delta = 50*s
+        font = fontWith(name = "lucida_grande", size = 24)
+        menuBackSprite.size = vec2(width, height)
+        val p = menuBackSprite.rect.moveToCenterFor(viewport.size).p0
+        menuBackSprite.position = p
+        textRel = p + vec2(35, 18)*s
     }
 
     def draw {
         if(!director.isPaused) return nil
 
         BlendFunction.standard { context.depthTest.disabled {
-//            glLineWidth(2)
-            val s = context.scale
-            val width = 350*s
-            val height = 150*s
             D2D.drawSprite(material = vec4(0, 0, 0, 0.5), at = vec3(0, 0, 0), Rect(vec2(0, 0), context.viewport.size))
-            menuBackSprite.size = vec2(width, height)
-            val p = menuBackSprite.rect.moveToCenterFor(context.viewport.size).p0
-            menuBackSprite.position = p
+            val p = menuBackSprite.position
             menuBackSprite.draw
-            val d = 50*s
 
-            val font = fontWith(name = "lucida_grande", size = 24)
-            val textRel = p + vec2(35, 18)*s
-            resumeLine.p0 = vec2(p.x, p.y + 2*d)
-            resumeLine.p1 = vec2(p.x + width, p.y + 2*d)
+            resumeLine.p0 = vec2(p.x, p.y + 2*delta)
+            resumeLine.p1 = vec2(p.x + width, p.y + 2*delta)
             resumeLine.draw
-            font.draw(text = Loc.resumeGame, color = vec4(0, 0, 0, 1), at = vec3(textRel + vec2(0, 2*d), 0), TextAlignment.baseline(-1))
+            font.draw(text = Loc.resumeGame, color = vec4(0, 0, 0, 1), at = vec3(textRel + vec2(0, 2*delta), 0), TextAlignment.baseline(-1))
 
 
-            restartLine.p0 = vec2(p.x, p.y + d)
-            restartLine.p1 = vec2(p.x + width, p.y + d)
+            restartLine.p0 = vec2(p.x, p.y + delta)
+            restartLine.p1 = vec2(p.x + width, p.y + delta)
             restartLine.draw
-            font.draw(text = Loc.restartLevel, color = vec4(0, 0, 0, 1), at = vec3(textRel + vec2(0, d), 0), TextAlignment.baseline(-1))
+            font.draw(text = Loc.restartLevel, color = vec4(0, 0, 0, 1), at = vec3(textRel + vec2(0, delta), 0), TextAlignment.baseline(-1))
 
             mainMenuLine.p0 = vec2(p.x, p.y)
             mainMenuLine.p1 = vec2(p.x + width, p.y)
             mainMenuLine.draw
             font.draw(text = Loc.mainMenu, color = vec4(0, 0, 0, 1), at = vec3(textRel, 0), TextAlignment.baseline(-1))
-//            glLineWidth(1)
         }}
 
     }

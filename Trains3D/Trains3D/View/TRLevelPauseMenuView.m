@@ -16,6 +16,11 @@
     EGLine2d* _restartLine;
     EGLine2d* _mainMenuLine;
     id<EGCamera> _camera;
+    NSInteger _width;
+    NSInteger _height;
+    NSInteger _delta;
+    EGFont* _font;
+    GEVec2 _textRel;
 }
 static ODClassType* _TRLevelPauseMenuView_type;
 @synthesize level = _level;
@@ -35,6 +40,9 @@ static ODClassType* _TRLevelPauseMenuView_type;
         _resumeLine = [EGLine2d applyMaterial:[EGColorSource applyColor:geVec4DivI(GEVec4Make(49.0, 90.0, 3.0, 255.0), 255)]];
         _restartLine = [EGLine2d applyMaterial:[EGColorSource applyColor:geVec4DivI(GEVec4Make(248.0, 149.0, 21.0, 255.0), 255)]];
         _mainMenuLine = [EGLine2d applyMaterial:[EGColorSource applyColor:geVec4DivI(GEVec4Make(211.0, 131.0, 235.0, 255.0), 255)]];
+        _width = 0;
+        _height = 0;
+        _delta = 0;
     }
     
     return self;
@@ -47,35 +55,36 @@ static ODClassType* _TRLevelPauseMenuView_type;
 
 - (void)reshapeWithViewport:(GERect)viewport {
     _camera = [EGCamera2D camera2DWithSize:GEVec2Make(geRectWidth(viewport), geRectHeight(viewport))];
+    CGFloat s = EGGlobal.context.scale;
+    _width = ((NSInteger)(350 * s));
+    _height = ((NSInteger)(150 * s));
+    _delta = ((NSInteger)(50 * s));
+    _font = [EGGlobal fontWithName:@"lucida_grande" size:24];
+    _menuBackSprite.size = GEVec2Make(((float)(_width)), ((float)(_height)));
+    GEVec2 p = geRectMoveToCenterForSize([_menuBackSprite rect], viewport.size).p0;
+    _menuBackSprite.position = p;
+    _textRel = geVec2AddVec2(p, geVec2MulF(GEVec2Make(35.0, 18.0), s));
 }
 
 - (void)draw {
     if(!([[EGGlobal director] isPaused])) return ;
     [EGBlendFunction.standard applyDraw:^void() {
         [EGGlobal.context.depthTest disabledF:^void() {
-            CGFloat s = EGGlobal.context.scale;
-            CGFloat width = 350 * s;
-            CGFloat height = 150 * s;
             [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 0.5)] at:GEVec3Make(0.0, 0.0, 0.0) rect:GERectMake(GEVec2Make(0.0, 0.0), geVec2ApplyVec2i([EGGlobal.context viewport].size))];
-            _menuBackSprite.size = GEVec2Make(((float)(width)), ((float)(height)));
-            GEVec2 p = geRectMoveToCenterForSize([_menuBackSprite rect], geVec2ApplyVec2i([EGGlobal.context viewport].size)).p0;
-            _menuBackSprite.position = p;
+            GEVec2 p = _menuBackSprite.position;
             [_menuBackSprite draw];
-            CGFloat d = 50 * s;
-            EGFont* font = [EGGlobal fontWithName:@"lucida_grande" size:24];
-            GEVec2 textRel = geVec2AddVec2(p, geVec2MulF(GEVec2Make(35.0, 18.0), s));
-            _resumeLine.p0 = GEVec2Make(p.x, p.y + 2 * d);
-            _resumeLine.p1 = GEVec2Make(p.x + width, p.y + 2 * d);
+            _resumeLine.p0 = GEVec2Make(p.x, p.y + 2 * _delta);
+            _resumeLine.p1 = GEVec2Make(p.x + _width, p.y + 2 * _delta);
             [_resumeLine draw];
-            [font drawText:[TRStr.Loc resumeGame] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:geVec3ApplyVec2Z(geVec2AddVec2(textRel, GEVec2Make(0.0, ((float)(2 * d)))), 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
-            _restartLine.p0 = GEVec2Make(p.x, p.y + d);
-            _restartLine.p1 = GEVec2Make(p.x + width, p.y + d);
+            [_font drawText:[TRStr.Loc resumeGame] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:geVec3ApplyVec2Z(geVec2AddVec2(_textRel, GEVec2Make(0.0, ((float)(2 * _delta)))), 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
+            _restartLine.p0 = GEVec2Make(p.x, p.y + _delta);
+            _restartLine.p1 = GEVec2Make(p.x + _width, p.y + _delta);
             [_restartLine draw];
-            [font drawText:[TRStr.Loc restartLevel] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:geVec3ApplyVec2Z(geVec2AddVec2(textRel, GEVec2Make(0.0, ((float)(d)))), 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
+            [_font drawText:[TRStr.Loc restartLevel] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:geVec3ApplyVec2Z(geVec2AddVec2(_textRel, GEVec2Make(0.0, ((float)(_delta)))), 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
             _mainMenuLine.p0 = GEVec2Make(p.x, p.y);
-            _mainMenuLine.p1 = GEVec2Make(p.x + width, p.y);
+            _mainMenuLine.p1 = GEVec2Make(p.x + _width, p.y);
             [_mainMenuLine draw];
-            [font drawText:[TRStr.Loc mainMenu] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:geVec3ApplyVec2Z(textRel, 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
+            [_font drawText:[TRStr.Loc mainMenu] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:geVec3ApplyVec2Z(_textRel, 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
         }];
     }];
 }

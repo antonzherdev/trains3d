@@ -9,9 +9,9 @@
 @class EGLine2d;
 @class EGCamera2D;
 @class EGGlobal;
+@class EGContext;
 @class EGDirector;
 @class EGBlendFunction;
-@class EGContext;
 @class EGD2D;
 @class TRStr;
 @protocol TRStrings;
