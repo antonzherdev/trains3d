@@ -3,8 +3,14 @@ package com.antonzherdev.eg
 class Texture {
     def id : GLuint
     def size : vec2
+    def scale : float = 1.0
+    def scaledSize : vec2 = size/scale
 
     def dealloc {
+        deleteTexture
+    }
+
+    def deleteTexture {
         egDeleteTexture(id)
     }
 
@@ -12,19 +18,18 @@ class Texture {
         egSaveTextureToFile(id, file)
     }
 
+    def uv : Rect = Rect(0, 0, 1, 1)
     def uv(rect : Rect) : Rect = rect/size
-    def uv(x : float4, y : float4, width : float4, height : float4) : Rect = Rect(x, y, width, height)/size
+    def uv(x : float4, y : float4, width : float4, height : float4) : Rect = uv(Rect(x, y, width, height))
 }
 
 class EmptyTexture(size : vec2) extends Texture {
     val id : GLuint = egGenTexture
 }
 
-class FileTexture(file : string, magFilter : uint4, minFilter : uint4) extends Texture {
+class FileTexture(file : string, scale : float, magFilter : uint4, minFilter : uint4) extends Texture {
     val id : GLuint = egGenTexture
     private var _size : vec2
-
-    static def apply(file : string) = FileTexture(file, GL_LINEAR, GL_LINEAR)
 
     def init {
         _size = egLoadTextureFromFile(id, Bundle.fileNameFor(file), magFilter, minFilter)
@@ -33,8 +38,10 @@ class FileTexture(file : string, magFilter : uint4, minFilter : uint4) extends T
     def size : vec2 = _size
 }
 
-class TextureRegion(texture : Texture, rect : Rect) extends Texture {
+class TextureRegion(texture : Texture, uv : Rect) extends Texture {
     static def apply(texture : Texture) : TextureRegion = TextureRegion(texture, Rect(0, 0, 1, 1))
-    def id : GLuint = texture.id
-    def size : vec2 = texture.size
+    val id : GLuint = texture.id
+    val size : vec2 = texture.size * uv.size
+    def scale : float = texture.scale
+    def deleteTexture {}
 }

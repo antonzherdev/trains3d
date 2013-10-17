@@ -6,7 +6,15 @@ object D2D {
     private val vaoForColor = Mesh(vb, EmptyIndexSource.triangleStrip).vao(BillboardShader.instanceForColor)
     private val vaoForTexture = Mesh(vb, EmptyIndexSource.triangleStrip).vao(BillboardShader.instanceForTexture)
     def drawSprite(material : ColorSource, at : vec3, rect : Rect) {
-        drawSprite(material, at, rect.quad, Rect(1, 1, -1, -1).quad)
+        drawSprite(material, at, rect.quad)
+    }
+
+    def drawSprite(material : ColorSource, at : vec3, quad : Quad) {
+        if(material.texture.isDefined) {
+            drawSprite(material, at, quad, material.texture.get.uv.upsideDownQuad)
+        } else {
+            drawSprite(material, at, quad, Rect(0, 0, 1, 1).upsideDownQuad)
+        }
     }
 
     def drawSprite(material : ColorSource, at : vec3, quad : Quad, uv : Quad) {
@@ -53,10 +61,9 @@ object D2D {
 
 class Sprite {
     var material : ColorSource
-    var uv : Rect = Rect(0, 0, 1, 1)
 
     def draw {
-        D2D.drawSprite(material, at = vec3(position, 0), Rect(vec2(0, 0), size).quad, uv.quad)
+        D2D.drawSprite(material, at = vec3(position, 0), Rect(vec2(0, 0), size).quad)
     }
 
     var position : vec2 = vec2(0, 0)
@@ -70,12 +77,16 @@ class Sprite {
         s
     }
 
-    static def apply(material : ColorSource, uv : Rect, pixelsInPoint : float4) : Sprite = {
+    static def apply(texture : Texture) : Sprite = {
         val s = Sprite()
-        s.material = material
-        s.uv = material.texture.get.uv(uv)
-        s.size = uv.size/pixelsInPoint
+        s.material = ColorSource(texture)
         s
+    }
+
+    def adjustSize {
+        if(material.texture.isDefined) {
+            size = material.texture.get.scaledSize
+        }
     }
 
     def contains(vec2 : vec2) : bool = Rect(position, size).contains(vec2)

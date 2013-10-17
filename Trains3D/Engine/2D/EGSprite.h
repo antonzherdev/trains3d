@@ -7,10 +7,10 @@
 @class EGEmptyIndexSource;
 @class EGSimpleShaderSystem;
 @class EGColorSource;
+@class EGTexture;
 @class EGGlobal;
 @class EGContext;
 @class EGEnablingState;
-@class EGTexture;
 
 @class EGD2D;
 @class EGSprite;
@@ -19,6 +19,7 @@
 @interface EGD2D : NSObject
 - (ODClassType*)type;
 + (void)drawSpriteMaterial:(EGColorSource*)material at:(GEVec3)at rect:(GERect)rect;
++ (void)drawSpriteMaterial:(EGColorSource*)material at:(GEVec3)at quad:(GEQuad)quad;
 + (void)drawSpriteMaterial:(EGColorSource*)material at:(GEVec3)at quad:(GEQuad)quad uv:(GEQuad)uv;
 + (CNVoidRefArray)writeSpriteIn:(CNVoidRefArray)in material:(EGColorSource*)material at:(GEVec3)at quad:(GEQuad)quad uv:(GEQuad)uv;
 + (CNVoidRefArray)writeQuadIndexIn:(CNVoidRefArray)in i:(unsigned int)i;
@@ -29,7 +30,6 @@
 
 @interface EGSprite : NSObject
 @property (nonatomic, retain) EGColorSource* material;
-@property (nonatomic) GERect uv;
 @property (nonatomic) GEVec2 position;
 @property (nonatomic) GEVec2 size;
 
@@ -39,7 +39,8 @@
 - (void)draw;
 - (GERect)rect;
 + (EGSprite*)applyMaterial:(EGColorSource*)material size:(GEVec2)size;
-+ (EGSprite*)applyMaterial:(EGColorSource*)material uv:(GERect)uv pixelsInPoint:(float)pixelsInPoint;
++ (EGSprite*)applyTexture:(EGTexture*)texture;
+- (void)adjustSize;
 - (BOOL)containsVec2:(GEVec2)vec2;
 + (ODClassType*)type;
 @end

@@ -201,7 +201,7 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
             context.bindTexture(tex)
             diffuseTexture.get.apply(i4 = 0)
             if(key.region) {
-                val r = tex.cast<TextureRegion>.rect
+                val r = tex.cast<TextureRegion>.uv
                 uvShift.get.apply(vec2 = r.p0)
                 uvScale.get.apply(vec2 = r.size)
             }

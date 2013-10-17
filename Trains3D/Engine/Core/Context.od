@@ -4,9 +4,10 @@ object Global {
     def director : Director = context.director
     val context : Context = Context()
     val matrix : MatrixStack = context.matrixStack
-    def textureFor(file : string) : Texture = context.textureFor(file, GL_LINEAR, GL_LINEAR)
-    def nearestTextureFor(file : string) : Texture = context.textureFor(file, GL_NEAREST, GL_NEAREST)
-    def textureFor(file : string, magFilter : uint4, minFilter : uint4) : Texture = context.textureFor(file, magFilter, minFilter)
+    def textureFor(file : string) : Texture = context.textureFor(file, 1.0, GL_LINEAR, GL_LINEAR)
+    def textureFor(file : string, magFilter : uint4, minFilter : uint4) : Texture = context.textureFor(file, 1.0, magFilter, minFilter)
+    def scaledTextureFor(name : string, format : string, magFilter : uint4, minFilter : uint4) : Texture =
+        context.textureFor("$name\_$(context.scale.cast<uint4>)x.$format", context.scale, magFilter, minFilter)
     def fontWith(name : string) : Font = context.fontWith(name)
     def fontWith(name : string, size : uint) : Font = context.fontWith(name, size)
 }
@@ -17,8 +18,9 @@ class Context {
     private val textureCache = MutableHashMap<(string, uint4, uint4), FileTexture>()
     private val fontCache = MutableHashMap<string, Font>()
 
-    def textureFor(file : string, magFilter : uint4, minFilter : uint4) : Texture =
-        textureCache.objectFor(key = (file, magFilter.cast<uint4>, minFilter.cast<uint4>), orUpdateWith = FileTexture(file, magFilter, minFilter))
+    def textureFor(file : string, scale : float, magFilter : uint4, minFilter : uint4) : Texture =
+        textureCache.objectFor(key = (file, magFilter.cast<uint4>, minFilter.cast<uint4>), orUpdateWith = FileTexture(file, scale, magFilter, minFilter))
+
     def fontWith(name : string) : Font = fontCache.objectFor(key = name, orUpdateWith = Font(name))
     def fontWith(name : string, size : uint) : Font = fontWith("$name\_$((size*scale).cast<uint>)")
 
@@ -122,13 +124,11 @@ class Context {
     }
 
     private var _lastVertexArray : GLuint = 0
-    private var _lastVertexMutable : GLuint = 0
     def bindVertexArray(handle : GLuint, vertexCount : uint4, mutable : bool) {
         if(handle != _lastVertexArray || mutable) {
             _lastVertexArray = handle
             _lastVertexBufferId = 0
             _lastIndexBuffer = 0
-            _lastVertexMutable = mutable
             egBindVertexArray(handle)
         }
         _needBindDefaultVertexArray = false

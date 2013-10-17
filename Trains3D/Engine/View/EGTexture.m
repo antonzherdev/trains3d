@@ -26,7 +26,19 @@ static ODClassType* _EGTexture_type;
     @throw @"Method size is abstract";
 }
 
+- (CGFloat)scale {
+    return 1.0;
+}
+
+- (GEVec2)scaledSize {
+    return geVec2DivF([self size], [self scale]);
+}
+
 - (void)dealloc {
+    [self deleteTexture];
+}
+
+- (void)deleteTexture {
     egDeleteTexture([self id]);
 }
 
@@ -34,12 +46,16 @@ static ODClassType* _EGTexture_type;
     egSaveTextureToFile([self id], file);
 }
 
+- (GERect)uv {
+    return geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0);
+}
+
 - (GERect)uvRect:(GERect)rect {
     return geRectDivVec2(rect, [self size]);
 }
 
 - (GERect)uvX:(float)x y:(float)y width:(float)width height:(float)height {
-    return geRectDivVec2(geRectApplyXYWidthHeight(x, y, width, height), [self size]);
+    return [self uvRect:geRectApplyXYWidthHeight(x, y, width, height)];
 }
 
 - (ODClassType*)type {
@@ -137,6 +153,7 @@ static ODClassType* _EGEmptyTexture_type;
 
 @implementation EGFileTexture{
     NSString* _file;
+    CGFloat _scale;
     unsigned int _magFilter;
     unsigned int _minFilter;
     GLuint _id;
@@ -144,18 +161,20 @@ static ODClassType* _EGEmptyTexture_type;
 }
 static ODClassType* _EGFileTexture_type;
 @synthesize file = _file;
+@synthesize scale = _scale;
 @synthesize magFilter = _magFilter;
 @synthesize minFilter = _minFilter;
 @synthesize id = _id;
 
-+ (id)fileTextureWithFile:(NSString*)file magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
-    return [[EGFileTexture alloc] initWithFile:file magFilter:magFilter minFilter:minFilter];
++ (id)fileTextureWithFile:(NSString*)file scale:(CGFloat)scale magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
+    return [[EGFileTexture alloc] initWithFile:file scale:scale magFilter:magFilter minFilter:minFilter];
 }
 
-- (id)initWithFile:(NSString*)file magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
+- (id)initWithFile:(NSString*)file scale:(CGFloat)scale magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
     self = [super init];
     if(self) {
         _file = file;
+        _scale = scale;
         _magFilter = magFilter;
         _minFilter = minFilter;
         _id = egGenTexture();
@@ -168,10 +187,6 @@ static ODClassType* _EGFileTexture_type;
 + (void)initialize {
     [super initialize];
     _EGFileTexture_type = [ODClassType classTypeWithCls:[EGFileTexture class]];
-}
-
-+ (EGFileTexture*)applyFile:(NSString*)file {
-    return [EGFileTexture fileTextureWithFile:file magFilter:GL_LINEAR minFilter:GL_LINEAR];
 }
 
 - (void)_init {
@@ -198,12 +213,13 @@ static ODClassType* _EGFileTexture_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGFileTexture* o = ((EGFileTexture*)(other));
-    return [self.file isEqual:o.file] && self.magFilter == o.magFilter && self.minFilter == o.minFilter;
+    return [self.file isEqual:o.file] && eqf(self.scale, o.scale) && self.magFilter == o.magFilter && self.minFilter == o.minFilter;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.file hash];
+    hash = hash * 31 + floatHash(self.scale);
     hash = hash * 31 + self.magFilter;
     hash = hash * 31 + self.minFilter;
     return hash;
@@ -212,6 +228,7 @@ static ODClassType* _EGFileTexture_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"file=%@", self.file];
+    [description appendFormat:@", scale=%f", self.scale];
     [description appendFormat:@", magFilter=%d", self.magFilter];
     [description appendFormat:@", minFilter=%d", self.minFilter];
     [description appendString:@">"];
@@ -223,21 +240,27 @@ static ODClassType* _EGFileTexture_type;
 
 @implementation EGTextureRegion{
     EGTexture* _texture;
-    GERect _rect;
+    GERect _uv;
+    GLuint _id;
+    GEVec2 _size;
 }
 static ODClassType* _EGTextureRegion_type;
 @synthesize texture = _texture;
-@synthesize rect = _rect;
+@synthesize uv = _uv;
+@synthesize id = _id;
+@synthesize size = _size;
 
-+ (id)textureRegionWithTexture:(EGTexture*)texture rect:(GERect)rect {
-    return [[EGTextureRegion alloc] initWithTexture:texture rect:rect];
++ (id)textureRegionWithTexture:(EGTexture*)texture uv:(GERect)uv {
+    return [[EGTextureRegion alloc] initWithTexture:texture uv:uv];
 }
 
-- (id)initWithTexture:(EGTexture*)texture rect:(GERect)rect {
+- (id)initWithTexture:(EGTexture*)texture uv:(GERect)uv {
     self = [super init];
     if(self) {
         _texture = texture;
-        _rect = rect;
+        _uv = uv;
+        _id = [_texture id];
+        _size = geVec2MulVec2([_texture size], _uv.size);
     }
     
     return self;
@@ -249,15 +272,14 @@ static ODClassType* _EGTextureRegion_type;
 }
 
 + (EGTextureRegion*)applyTexture:(EGTexture*)texture {
-    return [EGTextureRegion textureRegionWithTexture:texture rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)];
+    return [EGTextureRegion textureRegionWithTexture:texture uv:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)];
 }
 
-- (GLuint)id {
-    return [_texture id];
+- (CGFloat)scale {
+    return [_texture scale];
 }
 
-- (GEVec2)size {
-    return [_texture size];
+- (void)deleteTexture {
 }
 
 - (ODClassType*)type {
@@ -276,20 +298,20 @@ static ODClassType* _EGTextureRegion_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGTextureRegion* o = ((EGTextureRegion*)(other));
-    return [self.texture isEqual:o.texture] && GERectEq(self.rect, o.rect);
+    return [self.texture isEqual:o.texture] && GERectEq(self.uv, o.uv);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.texture hash];
-    hash = hash * 31 + GERectHash(self.rect);
+    hash = hash * 31 + GERectHash(self.uv);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"texture=%@", self.texture];
-    [description appendFormat:@", rect=%@", GERectDescription(self.rect)];
+    [description appendFormat:@", uv=%@", GERectDescription(self.uv)];
     [description appendString:@">"];
     return description;
 }

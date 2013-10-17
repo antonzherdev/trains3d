@@ -24,15 +24,15 @@ static ODClassType* _EGGlobal_type;
 }
 
 + (EGTexture*)textureForFile:(NSString*)file {
-    return [_EGGlobal_context textureForFile:file magFilter:GL_LINEAR minFilter:GL_LINEAR];
-}
-
-+ (EGTexture*)nearestTextureForFile:(NSString*)file {
-    return [_EGGlobal_context textureForFile:file magFilter:GL_NEAREST minFilter:GL_NEAREST];
+    return [_EGGlobal_context textureForFile:file scale:1.0 magFilter:GL_LINEAR minFilter:GL_LINEAR];
 }
 
 + (EGTexture*)textureForFile:(NSString*)file magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
-    return [_EGGlobal_context textureForFile:file magFilter:magFilter minFilter:minFilter];
+    return [_EGGlobal_context textureForFile:file scale:1.0 magFilter:magFilter minFilter:minFilter];
+}
+
++ (EGTexture*)scaledTextureForName:(NSString*)name format:(NSString*)format magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
+    return [_EGGlobal_context textureForFile:[NSString stringWithFormat:@"%@_%dx.%@", name, ((unsigned int)(_EGGlobal_context.scale)), format] scale:_EGGlobal_context.scale magFilter:magFilter minFilter:minFilter];
 }
 
 + (EGFont*)fontWithName:(NSString*)name {
@@ -101,7 +101,6 @@ static ODClassType* _EGGlobal_type;
     unsigned int __lastVertexBufferCount;
     GLuint __lastIndexBuffer;
     GLuint __lastVertexArray;
-    GLuint __lastVertexMutable;
     GLuint _defaultVertexArray;
     BOOL __needBindDefaultVertexArray;
     EGEnablingState* _cullFace;
@@ -145,7 +144,6 @@ static ODClassType* _EGContext_type;
         __lastVertexBufferCount = 0;
         __lastIndexBuffer = 0;
         __lastVertexArray = 0;
-        __lastVertexMutable = 0;
         _defaultVertexArray = 0;
         __needBindDefaultVertexArray = NO;
         _cullFace = [EGEnablingState enablingStateWithTp:GL_CULL_FACE];
@@ -162,9 +160,9 @@ static ODClassType* _EGContext_type;
     _EGContext_type = [ODClassType classTypeWithCls:[EGContext class]];
 }
 
-- (EGTexture*)textureForFile:(NSString*)file magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
+- (EGTexture*)textureForFile:(NSString*)file scale:(CGFloat)scale magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
     return ((EGFileTexture*)([_textureCache objectForKey:tuple3(file, numui4(((unsigned int)(magFilter))), numui4(((unsigned int)(minFilter)))) orUpdateWith:^EGFileTexture*() {
-        return [EGFileTexture fileTextureWithFile:file magFilter:magFilter minFilter:minFilter];
+        return [EGFileTexture fileTextureWithFile:file scale:scale magFilter:magFilter minFilter:minFilter];
     }]));
 }
 
@@ -279,7 +277,6 @@ static ODClassType* _EGContext_type;
         __lastVertexArray = handle;
         __lastVertexBufferId = 0;
         __lastIndexBuffer = 0;
-        __lastVertexMutable = mutable;
         egBindVertexArray(handle);
     }
     __needBindDefaultVertexArray = NO;

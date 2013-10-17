@@ -395,7 +395,7 @@
 		6F3DF5D4447A04032481EDCA /* CNSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4C9C8F3F7223A3FC17F /* CNSet.m */; };
 		6F3DF5D466010E1843C1382E /* TRRailroad.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8F8C931223990326F81 /* TRRailroad.m */; };
 		6F3DF5D90987A4446D4A3B9F /* matrix_access.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFB000969082C9EEAC6B0 /* matrix_access.inl */; };
-		6F3DF5DF991704CE96AEA20C /* Pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF216A1B6A687560C0E50 /* Pause.png */; };
+		6F3DF5DF991704CE96AEA20C /* Pause_1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF216A1B6A687560C0E50 /* Pause_1x.png */; };
 		6F3DF5E2F54903C76B8464FA /* btConvexInternalShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA8F46E4742FCD80955E /* btConvexInternalShape.cpp */; };
 		6F3DF5E339F62A69A94FE894 /* TRRailroad.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8F8C931223990326F81 /* TRRailroad.m */; };
 		6F3DF5E3CC26D1279A77CEB9 /* btGeneric6DofSpringConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFAFE1B1B448B453E71AD /* btGeneric6DofSpringConstraint.cpp */; };
@@ -830,7 +830,7 @@
 		6F3DFC7067586699D3679403 /* TRSwitchProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF7BC684B734FD9A3AF81 /* TRSwitchProcessor.m */; };
 		6F3DFC71901A3148E3F80294 /* OSPlatform.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF5EA412E7CCF2623D2AF /* OSPlatform.m */; };
 		6F3DFC72E19B49E27076C1BB /* btCompoundShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1CB5FB7DC2851443043 /* btCompoundShape.cpp */; };
-		6F3DFC798E30B47BE1453B23 /* Pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF216A1B6A687560C0E50 /* Pause.png */; };
+		6F3DFC798E30B47BE1453B23 /* Pause_1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF216A1B6A687560C0E50 /* Pause_1x.png */; };
 		6F3DFC7A49187251DA19E8D5 /* btBroadphaseProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF895EE2C19AA0B036004 /* btBroadphaseProxy.cpp */; };
 		6F3DFC7C1AFFE4753B7C9376 /* btTriangleMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF79FE213C9FFE8FFC53F /* btTriangleMeshShape.cpp */; };
 		6F3DFC80906A26CB9018D2DC /* TRCollisionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF659A7A635DC0112288 /* TRCollisionsTest.m */; };
@@ -1267,7 +1267,7 @@
 		6F3DF208D47F9A3F62B0DD57 /* perpendicular.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = perpendicular.hpp; sourceTree = "<group>"; };
 		6F3DF210D3D13A9BC84A82EA /* Shadow.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Shadow.od; sourceTree = "<group>"; };
 		6F3DF212FCB3DEA0A5F72BDF /* CNGroupByLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNGroupByLink.m; sourceTree = "<group>"; };
-		6F3DF216A1B6A687560C0E50 /* Pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pause.png; sourceTree = "<group>"; };
+		6F3DF216A1B6A687560C0E50 /* Pause_1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pause_1x.png; sourceTree = "<group>"; };
 		6F3DF219474143ECAFBA6FBB /* KWIntercept.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWIntercept.h; sourceTree = "<group>"; };
 		6F3DF219B4562ABAD42059BB /* btCollisionWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btCollisionWorld.h; sourceTree = "<group>"; };
 		6F3DF22085E8073CEB5799E9 /* NSMutableArray+CNChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+CNChain.h"; sourceTree = "<group>"; };
@@ -3455,7 +3455,7 @@
 				6F3DFFAC2A07756845F41EED /* LightGlow.png */,
 				6F3DF066CCFCEAD6E99954B5 /* Roof.png */,
 				6F3DF7A06EFC33D43D5EDF07 /* Window.png */,
-				6F3DF216A1B6A687560C0E50 /* Pause.png */,
+				6F3DF216A1B6A687560C0E50 /* Pause_1x.png */,
 				6F3DF5F01E6C3ED6945F573B /* Pause_2x.png */,
 				6F3DF05456B15D3A2919FAA7 /* Pine.png */,
 				6F3DFD25AE165CAAB984D8E3 /* Tree1.png */,
@@ -4380,7 +4380,7 @@
 				6F3DF40083EFC222E38A7C7A /* XMLTest.od in Resources */,
 				6F3DF9368F46E4BB2BD9544B /* Notification.od in Resources */,
 				6F3DF1C9B980F7CD1C45DFB4 /* Queue.od in Resources */,
-				6F3DFC798E30B47BE1453B23 /* Pause.png in Resources */,
+				6F3DFC798E30B47BE1453B23 /* Pause_1x.png in Resources */,
 				6F3DF496AA13DBFF2CD2E204 /* Sprite.od in Resources */,
 				6F3DF00BEE276C3A31BFCB45 /* LevelPauseMenuView.od in Resources */,
 				6F3DF5413772109DB7930300 /* lucida_grande_18.fnt in Resources */,
@@ -4514,7 +4514,7 @@
 				6F3DF8BC36F94738BFC1A209 /* Smoke.png in Resources */,
 				6F3DF255FCEDAD7B7AF02ED7 /* Grass.png in Resources */,
 				6F3DF5935E77D73D927A9824 /* Gravel.png in Resources */,
-				6F3DF5DF991704CE96AEA20C /* Pause.png in Resources */,
+				6F3DF5DF991704CE96AEA20C /* Pause_1x.png in Resources */,
 				6F3DF3E82DB856CBA68C7295 /* Tree1.png in Resources */,
 				6F3DFFD0390D1D2C94C0EF17 /* Pause_2x.png in Resources */,
 				6F3DFB2020EC50908B1B677C /* Crows.mp3 in Resources */,

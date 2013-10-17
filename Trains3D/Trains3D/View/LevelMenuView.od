@@ -6,29 +6,28 @@ import com.antonzherdev.eg.Progress._
 class LevelMenuView(level : Level) extends LayerView with InputProcessor with TapProcessor {
     val name = "LevelMenu"
 
-    def cameraWith(viewport : Rect) : Camera = res(viewport.height).cameraWith(viewport)
-
-    lazy val res1x = LevelMenuViewRes1x()
-    lazy val res2x = LevelMenuViewRes2x()
-    def res : LevelMenuViewRes = if(context.viewport.size.y > 47) res2x else res1x
-    def res(height : float4) : LevelMenuViewRes = if(height > 47) res2x else res1x
-    def font : Font = res.font
+    val cameraCache = Cache<Rect, Camera>(viewport -> Camera2D(vec2(viewport.width/context.scale, 46)))
+    def cameraWith(viewport : Rect) : Camera = cameraCache(viewport)
+    val pauseSprite = Sprite()
 
     val notificationProgress = gap(0.7, 1) >> vec4(0, 0, 0, 1 - _)
+    val pauseReg =  Rect(0, 0, 46.0/64, 46.0/64)
     def draw {
         context.depthTest.disabled { BlendFunction.premultiplied {
-            val w = context.viewport.size.x/res.pixelsInPoint
-            res.font.draw(text = format(level.score.score), color = vec4(0, 0, 0, 1), at = vec3(10, 14, 0), TextAlignment.baseline(-1))
+            val w = context.viewport.size.x/context.scale
+            val font = fontWith(name = "lucida_grande", 24)
+            font.draw(text = format(level.score.score), color = vec4(0, 0, 0, 1), at = vec3(10, 14, 0), TextAlignment.baseline(-1))
     //        val seconds : int = level.schedule.time
     //        res.font.draw(text = seconds, color = vec4(0, 0, 0, 1), at = vec2(w - 56, 10), TextAlignment.baseline(1))
 
-            val pauseSprite = res.pauseSprite
             pauseSprite.position = vec2(w - 46, 0)
+            pauseSprite.material = ColorSource(TextureRegion(scaledTextureFor("Pause", "png", GL_NEAREST, GL_NEAREST), pauseReg))
+            pauseSprite.adjustSize
             pauseSprite.draw
 
-
             notificationAnimation.for{t ->
-                res.notificationFont.draw(text = notificationText, notificationProgress(t), at = vec3(w/2, 15, 0), TextAlignment.baseline(0))
+                val notificationFont = fontWith(name = "lucida_grande", 16)
+                notificationFont.draw(text = notificationText, notificationProgress(t), at = vec3(w/2, 15, 0), TextAlignment.baseline(0))
             }
         }}
     }
@@ -62,7 +61,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor with Ta
 
     def tap(event : Event) : bool = {
         val p = event.location
-        if(res(event.camera.get.viewport.height).pauseSprite.contains(p)) {
+        if(pauseSprite.contains(p)) {
             if(director.isPaused) director.resume else director.pause
         }
         false
@@ -77,18 +76,4 @@ class LevelMenuViewRes {
 
     val cameraCache = Cache<Rect, Camera>(viewport -> Camera2D(vec2(viewport.width/pixelsInPoint, 46)))
     def cameraWith(viewport : Rect) : Camera = cameraCache(viewport)
-}
-
-class LevelMenuViewRes1x extends LevelMenuViewRes {
-    val font = fontWith(name = "lucida_grande_24")
-    val notificationFont = fontWith(name = "lucida_grande_16")
-    val pixelsInPoint : float4 = 1
-    val pauseSprite : Sprite = Sprite(nearestTextureFor("Pause.png"), Rect(0, 0, 46, 46), 1)
-}
-
-class LevelMenuViewRes2x extends LevelMenuViewRes {
-    val font = fontWith(name = "lucida_grande_48")
-    val notificationFont = fontWith(name = "lucida_grande_32")
-    val pixelsInPoint : float4 = 2
-    val pauseSprite : Sprite = Sprite(nearestTextureFor("Pause_2x.png"), Rect(0, 0, 92, 92), 2)
 }

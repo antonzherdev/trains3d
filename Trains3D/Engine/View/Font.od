@@ -9,7 +9,7 @@ struct TextAlignment(x : float4, y : float4, baseline : bool, shift : vec3) {
 }
 
 class Font(name : string) {
-    private val texture = FileTexture("$(name).png", GL_NEAREST, GL_NEAREST)
+    private val texture = FileTexture("$(name).png", 1.0, GL_NEAREST, GL_NEAREST)
     private val symbols : [char : FontSymbolDesc]
     val height : uint
     val size : uint

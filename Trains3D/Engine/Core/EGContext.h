@@ -26,8 +26,8 @@
 - (ODClassType*)type;
 + (EGDirector*)director;
 + (EGTexture*)textureForFile:(NSString*)file;
-+ (EGTexture*)nearestTextureForFile:(NSString*)file;
 + (EGTexture*)textureForFile:(NSString*)file magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
++ (EGTexture*)scaledTextureForName:(NSString*)name format:(NSString*)format magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
 + (EGFont*)fontWithName:(NSString*)name;
 + (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size;
 + (EGContext*)context;
@@ -52,7 +52,7 @@
 + (id)context;
 - (id)init;
 - (ODClassType*)type;
-- (EGTexture*)textureForFile:(NSString*)file magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
+- (EGTexture*)textureForFile:(NSString*)file scale:(CGFloat)scale magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
 - (EGFont*)fontWithName:(NSString*)name;
 - (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size;
 - (void)clear;

@@ -4,8 +4,8 @@
 #import "EGIndex.h"
 #import "EGSimpleShaderSystem.h"
 #import "EGMaterial.h"
-#import "EGContext.h"
 #import "EGTexture.h"
+#import "EGContext.h"
 @implementation EGD2D
 static CNVoidRefArray _EGD2D_vertexes;
 static EGMutableVertexBuffer* _EGD2D_vb;
@@ -29,7 +29,12 @@ static ODClassType* _EGD2D_type;
 }
 
 + (void)drawSpriteMaterial:(EGColorSource*)material at:(GEVec3)at rect:(GERect)rect {
-    [EGD2D drawSpriteMaterial:material at:at quad:geRectQuad(rect) uv:geRectQuad(geRectApplyXYWidthHeight(1.0, 1.0, -1.0, -1.0))];
+    [EGD2D drawSpriteMaterial:material at:at quad:geRectQuad(rect)];
+}
+
++ (void)drawSpriteMaterial:(EGColorSource*)material at:(GEVec3)at quad:(GEQuad)quad {
+    if([material.texture isDefined]) [EGD2D drawSpriteMaterial:material at:at quad:quad uv:geRectUpsideDownQuad([((EGTexture*)([material.texture get])) uv])];
+    else [EGD2D drawSpriteMaterial:material at:at quad:quad uv:geRectUpsideDownQuad(geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0))];
 }
 
 + (void)drawSpriteMaterial:(EGColorSource*)material at:(GEVec3)at quad:(GEQuad)quad uv:(GEQuad)uv {
@@ -100,13 +105,11 @@ static ODClassType* _EGD2D_type;
 
 @implementation EGSprite{
     EGColorSource* _material;
-    GERect _uv;
     GEVec2 _position;
     GEVec2 _size;
 }
 static ODClassType* _EGSprite_type;
 @synthesize material = _material;
-@synthesize uv = _uv;
 @synthesize position = _position;
 @synthesize size = _size;
 
@@ -117,7 +120,6 @@ static ODClassType* _EGSprite_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _uv = geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0);
         _position = GEVec2Make(0.0, 0.0);
         _size = GEVec2Make(1.0, 1.0);
     }
@@ -131,7 +133,7 @@ static ODClassType* _EGSprite_type;
 }
 
 - (void)draw {
-    [EGD2D drawSpriteMaterial:_material at:geVec3ApplyVec2Z(_position, 0.0) quad:geRectQuad(GERectMake(GEVec2Make(0.0, 0.0), _size)) uv:geRectQuad(_uv)];
+    [EGD2D drawSpriteMaterial:_material at:geVec3ApplyVec2Z(_position, 0.0) quad:geRectQuad(GERectMake(GEVec2Make(0.0, 0.0), _size))];
 }
 
 - (GERect)rect {
@@ -145,12 +147,14 @@ static ODClassType* _EGSprite_type;
     return s;
 }
 
-+ (EGSprite*)applyMaterial:(EGColorSource*)material uv:(GERect)uv pixelsInPoint:(float)pixelsInPoint {
++ (EGSprite*)applyTexture:(EGTexture*)texture {
     EGSprite* s = [EGSprite sprite];
-    s.material = material;
-    s.uv = [((EGTexture*)([material.texture get])) uvRect:uv];
-    s.size = geVec2DivF4(uv.size, pixelsInPoint);
+    s.material = [EGColorSource applyTexture:texture];
     return s;
+}
+
+- (void)adjustSize {
+    if([_material.texture isDefined]) _size = [((EGTexture*)([_material.texture get])) scaledSize];
 }
 
 - (BOOL)containsVec2:(GEVec2)vec2 {
