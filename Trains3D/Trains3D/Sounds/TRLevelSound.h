@@ -2,6 +2,7 @@
 #import "EGSound.h"
 @class TRLevel;
 @class TRTreeSound;
+@class TRTrainSound;
 
 @class TRLevelSound;
 

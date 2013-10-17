@@ -82,7 +82,8 @@ static NSArray* _TRTrainType_values;
     id<CNSeq>(^__cars)(TRTrain*);
     NSUInteger _speed;
     id _viewData;
-    TRRailPoint* _head;
+    id _soundData;
+    TRRailPoint* __head;
     BOOL _back;
     CNLazy* __lazy_cars;
     CGFloat _length;
@@ -97,6 +98,7 @@ static ODClassType* _TRTrain_type;
 @synthesize _cars = __cars;
 @synthesize speed = _speed;
 @synthesize viewData = _viewData;
+@synthesize soundData = _soundData;
 @synthesize speedFloat = _speedFloat;
 @synthesize isDying = _isDying;
 
@@ -114,6 +116,7 @@ static ODClassType* _TRTrain_type;
         __cars = _cars;
         _speed = speed;
         _viewData = nil;
+        _soundData = nil;
         _back = NO;
         __lazy_cars = [CNLazy lazyWithF:^id<CNSeq>() {
             return _weakSelf._cars(self);
@@ -145,17 +148,21 @@ static ODClassType* _TRTrain_type;
 }
 
 - (void)startFromCity:(TRCity*)city {
-    _head = [city startPoint];
+    __head = [city startPoint];
     [self calculateCarPositions];
 }
 
+- (TRRailPoint*)head {
+    return __head;
+}
+
 - (void)setHead:(TRRailPoint*)head {
-    _head = head;
+    __head = head;
     [self calculateCarPositions];
 }
 
 - (void)calculateCarPositions {
-    ((TRRailPoint*)([[[self directedCars] chain] foldStart:[_head invert] by:^TRRailPoint*(TRRailPoint* frontConnector, TRCar* car) {
+    ((TRRailPoint*)([[[self directedCars] chain] foldStart:[__head invert] by:^TRRailPoint*(TRRailPoint* frontConnector, TRCar* car) {
         TRCarType* tp = car.carType;
         CGFloat fl = tp.startToWheel;
         CGFloat bl = tp.wheelToEnd;
@@ -174,7 +181,7 @@ static ODClassType* _TRTrain_type;
 - (void)updateWithDelta:(CGFloat)delta {
     [self correctCorrection:[_level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return _trainType.obstacleProcessor(_level, self, _);
-    } forLength:delta * _speedFloat point:_head]];
+    } forLength:delta * _speedFloat point:__head]];
 }
 
 - (id<CNSeq>)directedCars {
@@ -191,13 +198,13 @@ static ODClassType* _TRTrain_type;
             } else {
                 _back = !(_back);
                 TRCar* lastCar = ((TRCar*)([[self directedCars] head]));
-                _head = ((_back) ? [lastCar position].backConnector : [lastCar position].frontConnector);
+                __head = ((_back) ? [lastCar position].backConnector : [lastCar position].frontConnector);
             }
         } else {
-            _head = [correction addErrorToPoint];
+            __head = [correction addErrorToPoint];
         }
     } else {
-        _head = correction.point;
+        __head = correction.point;
     }
     [self calculateCarPositions];
 }

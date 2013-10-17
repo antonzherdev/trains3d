@@ -4,7 +4,7 @@ class TreeSound(forest : Forest) extends SoundPlayersCollection(
     [WindSound(forest)
     ,SporadicSoundPlayer(Sound("Nightingale.mp3", 0.1), 120)
     ,SporadicSoundPlayer(Sound("Crow.mp3", 0.1), 60)
-    ,SporadicSoundPlayer(Sound("Crows.mp3", 0.05), 120)
+    ,SporadicSoundPlayer(Sound("Crows.mp3", 0.03), 120)
     ,SporadicSoundPlayer(Sound("Woodpecker.mp3", 0.4), 120)
     ,SporadicSoundPlayer(Sound("Cuckoo.mp3", 0.4), 120)
     ,SporadicSoundPlayer(Sound("Grouse.mp3", 0.35), 120)

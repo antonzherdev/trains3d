@@ -25,7 +25,8 @@ enum TrainType(obstacleProcessor : (Level, Train, Obstacle) -> bool) {
 
 class Train(weak level : Level, trainType : TrainType, color : CityColor, _cars : (Train) ->[Car], speed : uint) extends Controller {
     var viewData : any = nil
-    private var head : RailPoint
+    var soundData : any = nil
+    private var _head : RailPoint
     private var back = false
     def isBack = back
     lazy val cars : [Car] = _cars(self)
@@ -34,19 +35,20 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, _cars 
     var isDying = false
 
     def startFrom(city : City) {
-        head = city.startPoint
+        _head = city.startPoint
         calculateCarPositions
     }
 
+    def head = _head
     def set(head : RailPoint) {
-        self.head = head
+        _head = head
         calculateCarPositions
     }
     private val carsObstacleProcessor : Obstacle -> bool = (o : Obstacle) ->
         o.obstacleType ==  ObstacleType.light
 
     private def calculateCarPositions {
-        directedCars.chain.fold(head.invert, (frontConnector, car) -> {
+        directedCars.chain.fold(_head.invert, (frontConnector, car) -> {
             val tp : CarType = car.carType
             val fl = tp.startToWheel
             val bl = tp.wheelToEnd
@@ -64,7 +66,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, _cars 
 
     def updateWith(delta : float) {
         correct(level.railroad.moveWith(obstacleProcessor = trainType.obstacleProcessor(level, self, _),
-            forLength = delta*speedFloat, point = head))
+            forLength = delta*speedFloat, point = _head))
     }
 
     private def directedCars : [Car] = if(back) cars.chain.reverse.toArray else cars
@@ -78,13 +80,13 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, _cars 
                 } else {
                     back = !back
                     val lastCar = directedCars.head
-                    head = if(back) lastCar.position.backConnector else lastCar.position.frontConnector
+                    _head = if(back) lastCar.position.backConnector else lastCar.position.frontConnector
                 }
             } else {
-                head = correction.addErrorToPoint
+                _head = correction.addErrorToPoint
             }
         } else {
-            head = correction.point
+            _head = correction.point
         }
         calculateCarPositions
     }

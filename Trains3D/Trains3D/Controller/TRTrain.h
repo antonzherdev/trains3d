@@ -38,6 +38,7 @@
 @property (nonatomic, readonly) id<CNSeq>(^_cars)(TRTrain*);
 @property (nonatomic, readonly) NSUInteger speed;
 @property (nonatomic) id viewData;
+@property (nonatomic) id soundData;
 @property (nonatomic, readonly) CGFloat speedFloat;
 @property (nonatomic) BOOL isDying;
 
@@ -47,6 +48,7 @@
 - (id<CNSeq>)cars;
 - (BOOL)isBack;
 - (void)startFromCity:(TRCity*)city;
+- (TRRailPoint*)head;
 - (void)setHead:(TRRailPoint*)head;
 - (void)updateWithDelta:(CGFloat)delta;
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch;

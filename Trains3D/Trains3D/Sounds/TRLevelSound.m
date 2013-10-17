@@ -2,6 +2,7 @@
 
 #import "TRLevel.h"
 #import "TRTreeSound.h"
+#import "TRTrainSound.h"
 @implementation TRLevelSound{
     TRLevel* _level;
 }
@@ -13,7 +14,7 @@ static ODClassType* _TRLevelSound_type;
 }
 
 - (id)initWithLevel:(TRLevel*)level {
-    self = [super initWithPlayers:(@[[TRTreeSound treeSoundWithForest:level.forest]])];
+    self = [super initWithPlayers:(@[[TRTreeSound treeSoundWithForest:level.forest], [TRTrainSound trainSoundWithLevel:level]])];
     if(self) _level = level;
     
     return self;

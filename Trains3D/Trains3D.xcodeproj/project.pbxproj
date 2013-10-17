@@ -54,6 +54,7 @@
 		6F3DF08E08891CE84C76BEA7 /* KWMatchers.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE539400E899D77BEF39 /* KWMatchers.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF091E44459BD3A8752E5 /* btCollisionShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF93AC35433C6311DF5C6 /* btCollisionShape.cpp */; };
 		6F3DF09D1C79158989D5937B /* btConvexConvexAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF96E18101CE6EAF1A722 /* btConvexConvexAlgorithm.cpp */; };
+		6F3DF0A2F2A9A03D61F51E6D /* TRTrainSound.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF204632298A298CD37A3 /* TRTrainSound.m */; };
 		6F3DF0A43D19793483AB3877 /* func_matrix.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFC4637A9A62409EAEF35 /* func_matrix.inl */; };
 		6F3DF0AA6E2838E93A20F759 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFBA18831A0CC868D0042 /* CMakeLists.txt */; };
 		6F3DF0AE8A6741509CC9CB43 /* CNPrependLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4C696CBA550F82C3489 /* CNPrependLink.m */; };
@@ -208,6 +209,7 @@
 		6F3DF308520EBA79432D3D82 /* TRCallRepairerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD162DBE89BC8E7B2F61 /* TRCallRepairerView.m */; };
 		6F3DF30D093046873A512232 /* Crows.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF09033D3726C9B3D7F00 /* Crows.mp3 */; };
 		6F3DF3119A7958A5841D0E1D /* btInternalEdgeUtility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF818C044E47538801BF0 /* btInternalEdgeUtility.cpp */; };
+		6F3DF3174A66FA247AA3E5BE /* TrainSound.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF2DF830C4C229670D594 /* TrainSound.od */; };
 		6F3DF317BB359E4BB10B4E6D /* KWMock.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9B58395D7F6CA5DE892 /* KWMock.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF31B82EE1A6A532B447F /* btGImpactShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA7D9A4FED64293C19BD /* btGImpactShape.cpp */; };
 		6F3DF31DB55BB70048328E53 /* btSequentialImpulseConstraintSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBDD7536EEDFC854FC17 /* btSequentialImpulseConstraintSolver.cpp */; };
@@ -428,6 +430,7 @@
 		6F3DF64A243F1F31EADB9726 /* type_precision.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFF30E32DBDA55B15DE4D /* type_precision.inl */; };
 		6F3DF64CBEEA5554B46EACA5 /* matrix_transform.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF695E56983B497F2BB47 /* matrix_transform.inl */; };
 		6F3DF64E5D1AAF6C260659A0 /* btSliderConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB88F755A8E8BEEA70AB /* btSliderConstraint.cpp */; };
+		6F3DF64F67CEB1D01F6CB912 /* Choo.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFF243FAA49A0E84008F9 /* Choo.wav */; };
 		6F3DF6531413AFA73A194D14 /* btGeneric6DofConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF5ED4BA24972D538AE5E /* btGeneric6DofConstraint.cpp */; };
 		6F3DF65364EF2AFE1945004A /* btBoxBoxCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBDEFBDBD5D27BA449BA /* btBoxBoxCollisionAlgorithm.cpp */; };
 		6F3DF656EBF282AE531AEE5F /* TRTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4476E10D45C11672E0D /* TRTree.m */; };
@@ -539,6 +542,7 @@
 		6F3DF808B708EB7E5CB5A2E5 /* CNPrependLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4C696CBA550F82C3489 /* CNPrependLink.m */; };
 		6F3DF809F7D3562C204E9AA3 /* KWNull.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF81BB6C3BC2858EF6253 /* KWNull.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF80A3B1822ED2F667E9E /* KWChangeMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFCEBA634AC4B5285ABFA /* KWChangeMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		6F3DF8108FC24BC7CDBB56C1 /* Choo.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFF243FAA49A0E84008F9 /* Choo.wav */; };
 		6F3DF813654C2CE7D86E3A20 /* CNZipLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF9A503B00E41C272272 /* CNZipLink.m */; };
 		6F3DF81AE50E6C3FF7F043E2 /* transform2.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFF5038E63FE65C7E4F9A /* transform2.inl */; };
 		6F3DF81E33776FFC651A6BAE /* CNFlatMapLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9B9CFB60AC2B50B34FE /* CNFlatMapLink.m */; };
@@ -660,6 +664,7 @@
 		6F3DF9CCEB49BD6A82499DA2 /* btQuantizedBvh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF5AFBEAA67FA3D76D1B4 /* btQuantizedBvh.cpp */; };
 		6F3DF9CD1A20B7ECAC6F18B2 /* vector_angle.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFEBC9B18EDD49B56EB30 /* vector_angle.inl */; };
 		6F3DF9CE0A1924ABC68440AE /* intrinsic_vector_relational.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF3ED77488DF6702FBFB1 /* intrinsic_vector_relational.inl */; };
+		6F3DF9CF3B7DE2A3121384F4 /* TrainSound.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF2DF830C4C229670D594 /* TrainSound.od */; };
 		6F3DF9D4A7F987AED827130A /* EGOpenGLViewMac.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA3414CC30A8B005B9C0 /* EGOpenGLViewMac.m */; };
 		6F3DF9D57FFA0C3CCC1D929A /* NSArray+CNChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFE56391C58FE97FAF35 /* NSArray+CNChain.m */; };
 		6F3DF9DBFB8EA7C94C109645 /* eg.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF6A31365E0C417389DF7 /* eg.od */; };
@@ -913,6 +918,7 @@
 		6F3DFD55291A99DFBB4BC96E /* KWMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF08167587560C849D6A1 /* KWMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DFD5D381ED5E4CC8EB786 /* CNFilterLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF19D193921A2623A28BF /* CNFilterLink.m */; };
 		6F3DFD63D706B282D983C4B8 /* Smoke.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF776EA78287C3A55E403 /* Smoke.png */; };
+		6F3DFD6449B9DA763310EE75 /* TRTrainSound.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF204632298A298CD37A3 /* TRTrainSound.m */; };
 		6F3DFD6C586DB73F46E2BEAA /* NSInvocation+KiwiAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF6BDCA09F45613AA98D6 /* NSInvocation+KiwiAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DFD6D424B3CF7D8E8FA6B /* NSMutableArray+CNChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF995908565F2E36557FA /* NSMutableArray+CNChain.m */; };
 		6F3DFD70E30331E38D1B1265 /* btHingeConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9B120E08D63E05F9A69 /* btHingeConstraint.cpp */; };
@@ -1171,6 +1177,7 @@
 		6F3DF0B5CDE0ED7F04E617FD /* btScaledBvhTriangleMeshShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btScaledBvhTriangleMeshShape.cpp; sourceTree = "<group>"; };
 		6F3DF0B758E9CDAFADEC6C0A /* CNSortLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSortLink.m; sourceTree = "<group>"; };
 		6F3DF0B949A81552EF19BE0A /* type_vec.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = type_vec.inl; sourceTree = "<group>"; };
+		6F3DF0BEF959C674059A7F87 /* TRTrainSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRTrainSound.h; sourceTree = "<group>"; };
 		6F3DF0BFC1AC2D31B49B3F8D /* TRLevelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRLevelView.h; sourceTree = "<group>"; };
 		6F3DF0C19B11DB521A56DEA1 /* ext.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ext.hpp; sourceTree = "<group>"; };
 		6F3DF0C41B6CEA9D3BADE23E /* type_mat4x3.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = type_mat4x3.inl; sourceTree = "<group>"; };
@@ -1263,6 +1270,7 @@
 		6F3DF203315A1455A9CD34DC /* btBox2dBox2dCollisionAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btBox2dBox2dCollisionAlgorithm.cpp; sourceTree = "<group>"; };
 		6F3DF2037717430F500EE4E1 /* glm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = glm.hpp; sourceTree = "<group>"; };
 		6F3DF2043672B015D90D21EA /* btSubSimplexConvexCast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btSubSimplexConvexCast.cpp; sourceTree = "<group>"; };
+		6F3DF204632298A298CD37A3 /* TRTrainSound.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRTrainSound.m; sourceTree = "<group>"; };
 		6F3DF208CA871BAF91CF2323 /* lucida_grande_24.fnt */ = {isa = PBXFileReference; lastKnownFileType = file.fnt; path = lucida_grande_24.fnt; sourceTree = "<group>"; };
 		6F3DF208D47F9A3F62B0DD57 /* perpendicular.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = perpendicular.hpp; sourceTree = "<group>"; };
 		6F3DF210D3D13A9BC84A82EA /* Shadow.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Shadow.od; sourceTree = "<group>"; };
@@ -1327,6 +1335,7 @@
 		6F3DF2CF7B5EC86C30890C20 /* CityView.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = CityView.od; sourceTree = "<group>"; };
 		6F3DF2D692BF664633297067 /* TRRailroadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRRailroadView.h; sourceTree = "<group>"; };
 		6F3DF2D9F9A43AB1D88DD58D /* btGImpactQuantizedBvh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btGImpactQuantizedBvh.cpp; sourceTree = "<group>"; };
+		6F3DF2DF830C4C229670D594 /* TrainSound.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TrainSound.od; sourceTree = "<group>"; };
 		6F3DF2E04DF68D352A206E1C /* CNNeighboursLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNNeighboursLink.m; sourceTree = "<group>"; };
 		6F3DF2E1B8872A1A48F21CB0 /* Platform.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Platform.od; sourceTree = "<group>"; };
 		6F3DF2E5174446BE10E6CACB /* btBulletDynamicsCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btBulletDynamicsCommon.h; sourceTree = "<group>"; };
@@ -2211,6 +2220,7 @@
 		6F3DFF1C8228A0C6F91DAF98 /* normalize_dot.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = normalize_dot.inl; sourceTree = "<group>"; };
 		6F3DFF1E464C00F46127B442 /* multiple.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = multiple.inl; sourceTree = "<group>"; };
 		6F3DFF22EC3CF3AAA6F80BA8 /* TreeMap.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TreeMap.od; sourceTree = "<group>"; };
+		6F3DFF243FAA49A0E84008F9 /* Choo.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Choo.wav; sourceTree = "<group>"; };
 		6F3DFF25BBF891F005434205 /* integer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = integer.hpp; sourceTree = "<group>"; };
 		6F3DFF279F07A229F40F5083 /* CNQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNQueue.m; sourceTree = "<group>"; };
 		6F3DFF28C729F025D705445D /* EGDirectorMac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGDirectorMac.h; sourceTree = "<group>"; };
@@ -3851,6 +3861,10 @@
 				6F3DF87C75021D4E71C51B9A /* Woodpecker.mp3 */,
 				6F3DF8153E6407A10CDE11FE /* Cuckoo.mp3 */,
 				6F3DF5975E2C0097829433D1 /* Grouse.mp3 */,
+				6F3DFF243FAA49A0E84008F9 /* Choo.wav */,
+				6F3DF2DF830C4C229670D594 /* TrainSound.od */,
+				6F3DF0BEF959C674059A7F87 /* TRTrainSound.h */,
+				6F3DF204632298A298CD37A3 /* TRTrainSound.m */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -4429,6 +4443,8 @@
 				6F3DF355AC6A3300D23A36A9 /* Index.od in Resources */,
 				6F3DF6EC10BBB2F6AC918D74 /* City.png in Resources */,
 				6F3DF3ABAB30C4BFFC1C7D60 /* Car.png in Resources */,
+				6F3DF8108FC24BC7CDBB56C1 /* Choo.wav in Resources */,
+				6F3DF3174A66FA247AA3E5BE /* TrainSound.od in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4535,6 +4551,8 @@
 				6F3DF840009B36EAA3D739D7 /* Index.od in Resources */,
 				6F3DFD86FD539E1923EAE204 /* City.png in Resources */,
 				6F3DF0F611F6D0D9676553CF /* Car.png in Resources */,
+				6F3DF64F67CEB1D01F6CB912 /* Choo.wav in Resources */,
+				6F3DF9CF3B7DE2A3121384F4 /* TrainSound.od in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4833,6 +4851,7 @@
 				6F3DF7F78B47883010B18D3E /* EGIndex.m in Sources */,
 				6F3DFD271059F5EDD1266633 /* EGVertex.m in Sources */,
 				6F3DF05111B23C498BBDCB5E /* EGMesh.m in Sources */,
+				6F3DF0A2F2A9A03D61F51E6D /* TRTrainSound.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5383,6 +5402,7 @@
 				6F3DFA0AD541DB9C9A09FAF7 /* EGIndex.m in Sources */,
 				6F3DF44AE2A12B3B9251020C /* EGVertex.m in Sources */,
 				6F3DFD0C259CF28075823C88 /* EGMesh.m in Sources */,
+				6F3DFD6449B9DA763310EE75 /* TRTrainSound.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
