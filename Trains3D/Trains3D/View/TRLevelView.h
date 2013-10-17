@@ -35,7 +35,6 @@
 - (void)_init;
 - (void)prepare;
 - (void)draw;
-- (id<EGCamera>)cameraWithViewport:(GERect)viewport;
 - (void)updateWithDelta:(CGFloat)delta;
 - (BOOL)processEvent:(EGEvent*)event;
 + (ODClassType*)type;

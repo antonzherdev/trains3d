@@ -3,16 +3,15 @@ package com.antonzherdev.trains
 class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor with TapProcessor {
     val name = "LevelPauseMenu"
 
-    private var _lastViewportSize : vec2 = vec2(0, 0)
-    private var _lastCamera : Camera
-
-    private val cameraCache = Cache<Rect, Camera>(viewport -> Camera2D(vec2(viewport.width, viewport.height)))
-    def cameraWith(viewport : Rect) : Camera = cameraCache(viewport)
-
     private val menuBackSprite = Sprite(ColorSource(vec4(220, 220, 220, 255)/255), vec2(350, 150))
     private val resumeLine = Line2d(vec4(49, 90, 3, 255)/255)
     private val restartLine = Line2d(vec4(248, 149, 21, 255)/255)
     private val mainMenuLine = Line2d(vec4(211, 131, 235, 255)/255)
+
+    var camera : Camera
+    def reshapeWith(viewport : Rect) {
+        camera = Camera2D(vec2(viewport.width, viewport.height))
+    }
 
     def draw {
         if(!director.isPaused) return nil

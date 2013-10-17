@@ -1,34 +1,37 @@
 #import "TRLevelMenuView.h"
 
 #import "TRLevel.h"
-#import "EGContext.h"
-#import "EGCamera2D.h"
 #import "EGSprite.h"
 #import "EGProgress.h"
 #import "EGSchedule.h"
-#import "EGMaterial.h"
-#import "TRScore.h"
+#import "EGContext.h"
+#import "EGCamera2D.h"
 #import "GL.h"
 #import "EGTexture.h"
+#import "EGMaterial.h"
+#import "TRScore.h"
 #import "TRNotification.h"
 #import "EGDirector.h"
 @implementation TRLevelMenuView{
     TRLevel* _level;
     NSString* _name;
-    CNCache* _cameraCache;
     EGSprite* _pauseSprite;
     GEVec4(^_notificationProgress)(float);
     GERect _pauseReg;
+    EGFont* _font;
+    EGFont* _notificationFont;
+    NSInteger _width;
+    id<EGCamera> _camera;
     NSString* _notificationText;
     EGCounter* _notificationAnimation;
 }
 static ODClassType* _TRLevelMenuView_type;
 @synthesize level = _level;
 @synthesize name = _name;
-@synthesize cameraCache = _cameraCache;
 @synthesize pauseSprite = _pauseSprite;
 @synthesize notificationProgress = _notificationProgress;
 @synthesize pauseReg = _pauseReg;
+@synthesize camera = _camera;
 
 + (id)levelMenuViewWithLevel:(TRLevel*)level {
     return [[TRLevelMenuView alloc] initWithLevel:level];
@@ -39,9 +42,6 @@ static ODClassType* _TRLevelMenuView_type;
     if(self) {
         _level = level;
         _name = @"LevelMenu";
-        _cameraCache = [CNCache cacheWithF:^EGCamera2D*(id viewport) {
-            return [EGCamera2D camera2DWithSize:GEVec2Make(geRectWidth(uwrap(GERect, viewport)) / EGGlobal.context.scale, 46.0)];
-        }];
         _pauseSprite = [EGSprite sprite];
         _notificationProgress = ^id() {
             float(^__l)(float) = [EGProgress gapT1:0.7 t2:1.0];
@@ -53,6 +53,7 @@ static ODClassType* _TRLevelMenuView_type;
             };
         }();
         _pauseReg = geRectApplyXYWidthHeight(0.0, 0.0, ((float)(46.0 / 64)), ((float)(46.0 / 64)));
+        _width = 0;
         _notificationText = @"";
         _notificationAnimation = [EGCounter apply];
     }
@@ -65,23 +66,23 @@ static ODClassType* _TRLevelMenuView_type;
     _TRLevelMenuView_type = [ODClassType classTypeWithCls:[TRLevelMenuView class]];
 }
 
-- (id<EGCamera>)cameraWithViewport:(GERect)viewport {
-    return ((id<EGCamera>)([_cameraCache applyX:wrap(GERect, viewport)]));
+- (void)reshapeWithViewport:(GERect)viewport {
+    _camera = [EGCamera2D camera2DWithSize:GEVec2Make(geRectWidth(viewport) / EGGlobal.context.scale, 46.0)];
+    _font = [EGGlobal fontWithName:@"lucida_grande" size:24];
+    _notificationFont = [EGGlobal fontWithName:@"lucida_grande" size:16];
+    _width = ((NSInteger)(viewport.size.x / EGGlobal.context.scale));
+    _pauseSprite.position = GEVec2Make(((float)(_width - 46)), 0.0);
+    _pauseSprite.material = [EGColorSource applyTexture:[EGTextureRegion textureRegionWithTexture:[EGGlobal scaledTextureForName:@"Pause" format:@"png" magFilter:GL_NEAREST minFilter:GL_NEAREST] uv:_pauseReg]];
+    [_pauseSprite adjustSize];
 }
 
 - (void)draw {
     [EGGlobal.context.depthTest disabledF:^void() {
         [EGBlendFunction.premultiplied applyDraw:^void() {
-            CGFloat w = [EGGlobal.context viewport].size.x / EGGlobal.context.scale;
-            EGFont* font = [EGGlobal fontWithName:@"lucida_grande" size:24];
-            [font drawText:[self formatScore:[_level.score score]] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec3Make(10.0, 14.0, 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
-            _pauseSprite.position = GEVec2Make(((float)(w - 46)), 0.0);
-            _pauseSprite.material = [EGColorSource applyTexture:[EGTextureRegion textureRegionWithTexture:[EGGlobal scaledTextureForName:@"Pause" format:@"png" magFilter:GL_NEAREST minFilter:GL_NEAREST] uv:_pauseReg]];
-            [_pauseSprite adjustSize];
+            [_font drawText:[self formatScore:[_level.score score]] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec3Make(10.0, 14.0, 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
             [_pauseSprite draw];
             [_notificationAnimation forF:^void(CGFloat t) {
-                EGFont* notificationFont = [EGGlobal fontWithName:@"lucida_grande" size:16];
-                [notificationFont drawText:_notificationText color:_notificationProgress(((float)(t))) at:GEVec3Make(((float)(w / 2)), 15.0, 0.0) alignment:egTextAlignmentBaselineX(0.0)];
+                [_notificationFont drawText:_notificationText color:_notificationProgress(((float)(t))) at:GEVec3Make(((float)(_width / 2)), 15.0, 0.0) alignment:egTextAlignmentBaselineX(0.0)];
             }];
         }];
     }];
@@ -118,10 +119,6 @@ static ODClassType* _TRLevelMenuView_type;
     if([_pauseSprite containsVec2:p]) if([[EGGlobal director] isPaused]) [[EGGlobal director] resume];
     else [[EGGlobal director] pause];
     return NO;
-}
-
-- (id<EGCamera>)camera {
-    return [self cameraWithViewport:geRectApplyXYWidthHeight(-1.0, -1.0, 2.0, 2.0)];
 }
 
 - (void)prepare {

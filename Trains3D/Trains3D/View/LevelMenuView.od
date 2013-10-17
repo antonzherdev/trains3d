@@ -6,28 +6,31 @@ import com.antonzherdev.eg.Progress._
 class LevelMenuView(level : Level) extends LayerView with InputProcessor with TapProcessor {
     val name = "LevelMenu"
 
-    val cameraCache = Cache<Rect, Camera>(viewport -> Camera2D(vec2(viewport.width/context.scale, 46)))
-    def cameraWith(viewport : Rect) : Camera = cameraCache(viewport)
     val pauseSprite = Sprite()
 
     val notificationProgress = gap(0.7, 1) >> vec4(0, 0, 0, 1 - _)
     val pauseReg =  Rect(0, 0, 46.0/64, 46.0/64)
+
+    private var font : Font
+    private var notificationFont : Font
+    private var width = 0
+    var camera : Camera
+    def reshapeWith(viewport : Rect) {
+        camera = Camera2D(vec2(viewport.width/context.scale, 46))
+        font = fontWith(name = "lucida_grande", 24)
+        notificationFont = fontWith(name = "lucida_grande", 16)
+        width = viewport.size.x/context.scale
+        pauseSprite.position = vec2(width - 46, 0)
+        pauseSprite.material = ColorSource(TextureRegion(scaledTextureFor("Pause", "png", GL_NEAREST, GL_NEAREST), pauseReg))
+        pauseSprite.adjustSize
+    }
+
     def draw {
         context.depthTest.disabled { BlendFunction.premultiplied {
-            val w = context.viewport.size.x/context.scale
-            val font = fontWith(name = "lucida_grande", 24)
             font.draw(text = format(level.score.score), color = vec4(0, 0, 0, 1), at = vec3(10, 14, 0), TextAlignment.baseline(-1))
-    //        val seconds : int = level.schedule.time
-    //        res.font.draw(text = seconds, color = vec4(0, 0, 0, 1), at = vec2(w - 56, 10), TextAlignment.baseline(1))
-
-            pauseSprite.position = vec2(w - 46, 0)
-            pauseSprite.material = ColorSource(TextureRegion(scaledTextureFor("Pause", "png", GL_NEAREST, GL_NEAREST), pauseReg))
-            pauseSprite.adjustSize
             pauseSprite.draw
-
             notificationAnimation.for{t ->
-                val notificationFont = fontWith(name = "lucida_grande", 16)
-                notificationFont.draw(text = notificationText, notificationProgress(t), at = vec3(w/2, 15, 0), TextAlignment.baseline(0))
+                notificationFont.draw(text = notificationText, notificationProgress(t), at = vec3(width/2, 15, 0), TextAlignment.baseline(0))
             }
         }}
     }

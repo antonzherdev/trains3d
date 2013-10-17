@@ -83,10 +83,6 @@ static ODClassType* _TRLevelView_type;
     }
 }
 
-- (id<EGCamera>)cameraWithViewport:(GERect)viewport {
-    return _camera;
-}
-
 - (void)updateWithDelta:(CGFloat)delta {
     [[_level trains] forEach:^void(TRTrain* _) {
         [_trainView updateWithDelta:delta train:_];
@@ -98,6 +94,9 @@ static ODClassType* _TRLevelView_type;
 
 - (BOOL)processEvent:(EGEvent*)event {
     return [_callRepairerView processEvent:event] || [_switchProcessor processEvent:event] || [_railroadBuilderProcessor processEvent:event];
+}
+
+- (void)reshapeWithViewport:(GERect)viewport {
 }
 
 - (BOOL)isProcessorActive {

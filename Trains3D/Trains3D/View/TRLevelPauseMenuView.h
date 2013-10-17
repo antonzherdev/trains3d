@@ -4,10 +4,10 @@
 #import "GEVec.h"
 #import "EGFont.h"
 @class TRLevel;
-@class EGCamera2D;
 @class EGSprite;
 @class EGColorSource;
 @class EGLine2d;
+@class EGCamera2D;
 @class EGGlobal;
 @class EGDirector;
 @class EGBlendFunction;
@@ -24,11 +24,12 @@
 @interface TRLevelPauseMenuView : NSObject<EGLayerView, EGInputProcessor, EGTapProcessor>
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) NSString* name;
+@property (nonatomic) id<EGCamera> camera;
 
 + (id)levelPauseMenuViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
-- (id<EGCamera>)cameraWithViewport:(GERect)viewport;
+- (void)reshapeWithViewport:(GERect)viewport;
 - (void)draw;
 - (BOOL)isProcessorActive;
 - (BOOL)processEvent:(EGEvent*)event;

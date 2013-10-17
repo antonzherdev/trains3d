@@ -12,6 +12,7 @@
     id<EGController> _controller;
     EGLayers* _layers;
     id _soundPlayer;
+    GEVec2 __lastViewSize;
 }
 static ODClassType* _EGScene_type;
 @synthesize backgroundColor = _backgroundColor;
@@ -30,6 +31,7 @@ static ODClassType* _EGScene_type;
         _controller = controller;
         _layers = layers;
         _soundPlayer = soundPlayer;
+        __lastViewSize = GEVec2Make(0.0, 0.0);
     }
     
     return self;
@@ -41,11 +43,15 @@ static ODClassType* _EGScene_type;
 }
 
 - (void)prepareWithViewSize:(GEVec2)viewSize {
-    [_layers prepareWithViewSize:viewSize];
+    if(!(GEVec2Eq(__lastViewSize, viewSize))) {
+        __lastViewSize = viewSize;
+        [_layers reshapeWithViewSize:viewSize];
+    }
+    [_layers prepare];
 }
 
 - (void)drawWithViewSize:(GEVec2)viewSize {
-    [_layers drawWithViewSize:viewSize];
+    [_layers draw];
 }
 
 - (BOOL)processEvent:(EGEvent*)event {
@@ -130,7 +136,7 @@ static ODClassType* _EGScene_type;
 
 
 @implementation EGLayers{
-    CNCache* _viewportsCache;
+    id<CNSeq> __viewports;
 }
 static ODClassType* _EGLayers_type;
 
@@ -140,10 +146,7 @@ static ODClassType* _EGLayers_type;
 
 - (id)init {
     self = [super init];
-    __weak EGLayers* _weakSelf = self;
-    if(self) _viewportsCache = [CNCache cacheWithF:^id<CNSeq>(id _) {
-        return [_weakSelf viewportsWithViewSize:uwrap(GEVec2, _)];
-    }];
+    if(self) __viewports = (@[]);
     
     return self;
 }
@@ -165,17 +168,17 @@ static ODClassType* _EGLayers_type;
     @throw @"Method viewportsWith is abstract";
 }
 
-- (void)prepareWithViewSize:(GEVec2)viewSize {
+- (void)prepare {
     egPushGroupMarker(@"Prepare");
-    [((id<CNSeq>)([_viewportsCache applyX:wrap(GEVec2, viewSize)])) forEach:^void(CNTuple* p) {
+    [__viewports forEach:^void(CNTuple* p) {
         [((EGLayer*)(p.a)) prepareWithViewport:uwrap(GERect, p.b)];
     }];
     egPopGroupMarker();
 }
 
-- (void)drawWithViewSize:(GEVec2)viewSize {
+- (void)draw {
     egPushGroupMarker(@"Draw");
-    [((id<CNSeq>)([_viewportsCache applyX:wrap(GEVec2, viewSize)])) forEach:^void(CNTuple* p) {
+    [__viewports forEach:^void(CNTuple* p) {
         [((EGLayer*)(p.a)) drawWithViewport:uwrap(GERect, p.b)];
     }];
     egPopGroupMarker();
@@ -192,6 +195,13 @@ static ODClassType* _EGLayers_type;
 - (void)updateWithDelta:(CGFloat)delta {
     [[self layers] forEach:^void(EGLayer* _) {
         [_ updateWithDelta:delta];
+    }];
+}
+
+- (void)reshapeWithViewSize:(GEVec2)viewSize {
+    __viewports = [self viewportsWithViewSize:viewSize];
+    [__viewports forEach:^void(CNTuple* p) {
+        [((EGLayer*)(p.a)) reshapeWithViewport:uwrap(GERect, p.b)];
     }];
 }
 
@@ -331,7 +341,7 @@ static ODClassType* _EGLayer_type;
     egPushGroupMarker([_view name]);
     EGEnvironment* env = [_view environment];
     EGGlobal.context.environment = env;
-    id<EGCamera> camera = [_view cameraWithViewport:viewport];
+    id<EGCamera> camera = [_view camera];
     NSUInteger cullFace = [camera cullFace];
     if(cullFace != GL_NONE) [EGGlobal.context.cullFace enable];
     EGGlobal.context.renderTarget = [EGSceneRenderTarget sceneRenderTarget];
@@ -354,11 +364,15 @@ static ODClassType* _EGLayer_type;
     egPopGroupMarker();
 }
 
+- (void)reshapeWithViewport:(GERect)viewport {
+    [_view reshapeWithViewport:viewport];
+}
+
 - (void)drawWithViewport:(GERect)viewport {
     egPushGroupMarker([_view name]);
     EGEnvironment* env = [_view environment];
     EGGlobal.context.environment = env;
-    id<EGCamera> camera = [_view cameraWithViewport:viewport];
+    id<EGCamera> camera = [_view camera];
     NSUInteger cullFace = [camera cullFace];
     if(cullFace != GL_NONE) [EGGlobal.context.cullFace enable];
     EGGlobal.context.renderTarget = [EGSceneRenderTarget sceneRenderTarget];
@@ -389,7 +403,7 @@ static ODClassType* _EGLayer_type;
 - (BOOL)processEvent:(EGEvent*)event viewport:(GERect)viewport {
     return unumb([[_inputProcessor mapF:^id(id<EGInputProcessor> p) {
         if([p isProcessorActive]) {
-            id<EGCamera> camera = [_view cameraWithViewport:viewport];
+            id<EGCamera> camera = [_view camera];
             EGGlobal.matrix.value = [camera matrixModel];
             EGEventCamera* cam = [EGEventCamera eventCameraWithMatrixModel:[camera matrixModel] viewport:viewport];
             EGEvent* e = [event setCamera:[CNOption applyValue:cam]];

@@ -4,16 +4,16 @@
 #import "GEVec.h"
 #import "EGFont.h"
 @class TRLevel;
-@class EGGlobal;
-@class EGContext;
-@class EGCamera2D;
 @class EGSprite;
 @class EGProgress;
 @class EGCounter;
-@class EGBlendFunction;
-@class TRScore;
+@class EGGlobal;
+@class EGContext;
+@class EGCamera2D;
 @class EGTextureRegion;
 @class EGColorSource;
+@class EGBlendFunction;
+@class TRScore;
 @class EGEnablingState;
 @class TRNotifications;
 @class EGDirector;
@@ -25,15 +25,15 @@
 @interface TRLevelMenuView : NSObject<EGLayerView, EGInputProcessor, EGTapProcessor>
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) NSString* name;
-@property (nonatomic, readonly) CNCache* cameraCache;
 @property (nonatomic, readonly) EGSprite* pauseSprite;
 @property (nonatomic, readonly) GEVec4(^notificationProgress)(float);
 @property (nonatomic, readonly) GERect pauseReg;
+@property (nonatomic) id<EGCamera> camera;
 
 + (id)levelMenuViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
-- (id<EGCamera>)cameraWithViewport:(GERect)viewport;
+- (void)reshapeWithViewport:(GERect)viewport;
 - (void)draw;
 - (NSString*)formatScore:(NSInteger)score;
 - (void)updateWithDelta:(CGFloat)delta;

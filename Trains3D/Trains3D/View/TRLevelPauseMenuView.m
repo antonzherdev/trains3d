@@ -1,9 +1,9 @@
 #import "TRLevelPauseMenuView.h"
 
 #import "TRLevel.h"
-#import "EGCamera2D.h"
 #import "EGSprite.h"
 #import "EGMaterial.h"
+#import "EGCamera2D.h"
 #import "EGContext.h"
 #import "EGDirector.h"
 #import "TRStrings.h"
@@ -11,17 +11,16 @@
 @implementation TRLevelPauseMenuView{
     TRLevel* _level;
     NSString* _name;
-    GEVec2 __lastViewportSize;
-    id<EGCamera> __lastCamera;
-    CNCache* _cameraCache;
     EGSprite* _menuBackSprite;
     EGLine2d* _resumeLine;
     EGLine2d* _restartLine;
     EGLine2d* _mainMenuLine;
+    id<EGCamera> _camera;
 }
 static ODClassType* _TRLevelPauseMenuView_type;
 @synthesize level = _level;
 @synthesize name = _name;
+@synthesize camera = _camera;
 
 + (id)levelPauseMenuViewWithLevel:(TRLevel*)level {
     return [[TRLevelPauseMenuView alloc] initWithLevel:level];
@@ -32,10 +31,6 @@ static ODClassType* _TRLevelPauseMenuView_type;
     if(self) {
         _level = level;
         _name = @"LevelPauseMenu";
-        __lastViewportSize = GEVec2Make(0.0, 0.0);
-        _cameraCache = [CNCache cacheWithF:^EGCamera2D*(id viewport) {
-            return [EGCamera2D camera2DWithSize:GEVec2Make(geRectWidth(uwrap(GERect, viewport)), geRectHeight(uwrap(GERect, viewport)))];
-        }];
         _menuBackSprite = [EGSprite applyMaterial:[EGColorSource applyColor:geVec4DivI(GEVec4Make(220.0, 220.0, 220.0, 255.0), 255)] size:GEVec2Make(350.0, 150.0)];
         _resumeLine = [EGLine2d applyMaterial:[EGColorSource applyColor:geVec4DivI(GEVec4Make(49.0, 90.0, 3.0, 255.0), 255)]];
         _restartLine = [EGLine2d applyMaterial:[EGColorSource applyColor:geVec4DivI(GEVec4Make(248.0, 149.0, 21.0, 255.0), 255)]];
@@ -50,8 +45,8 @@ static ODClassType* _TRLevelPauseMenuView_type;
     _TRLevelPauseMenuView_type = [ODClassType classTypeWithCls:[TRLevelPauseMenuView class]];
 }
 
-- (id<EGCamera>)cameraWithViewport:(GERect)viewport {
-    return ((id<EGCamera>)([_cameraCache applyX:wrap(GERect, viewport)]));
+- (void)reshapeWithViewport:(GERect)viewport {
+    _camera = [EGCamera2D camera2DWithSize:GEVec2Make(geRectWidth(viewport), geRectHeight(viewport))];
 }
 
 - (void)draw {
@@ -108,10 +103,6 @@ static ODClassType* _TRLevelPauseMenuView_type;
     } else {
         return NO;
     }
-}
-
-- (id<EGCamera>)camera {
-    return [self cameraWithViewport:geRectApplyXYWidthHeight(-1.0, -1.0, 2.0, 2.0)];
 }
 
 - (void)prepare {

@@ -14,12 +14,17 @@ trait Camera {
 
 
 class Scene(backgroundColor : vec4, controller : Controller, layers : Layers, soundPlayer : SoundPlayer?) {
+    private var _lastViewSize : vec2 = vec2(0, 0)
     def prepareWith(viewSize : vec2) {
-        layers.prepareWith(viewSize)
+        if(_lastViewSize != viewSize) {
+            _lastViewSize = viewSize
+            layers.reshapeWith(viewSize)
+        }
+        layers.prepare
     }
 
     def drawWith(viewSize : vec2) {
-        layers.drawWith(viewSize)
+        layers.draw
     }
 
     def process(event : Event) : bool = layers.process(event)
@@ -55,16 +60,16 @@ class Layers {
     def layers : [Layer]
 
     def viewportsWith(viewSize : vec2) : [(Layer, Rect)]
-    private val viewportsCache = Cache<vec2, [(Layer, Rect)]>(viewportsWith(_))
-    def prepareWith(viewSize : vec2) {
+    private val _viewports : [(Layer, Rect)] = []
+    def prepare {
         egPushGroupMarker("Prepare")
-        viewportsCache(viewSize).for{p -> p.a.prepareWith(viewport = p.b)}
+        _viewports.for{p -> p.a.prepareWith(viewport = p.b)}
         egPopGroupMarker
 
     }
-    def drawWith(viewSize : vec2) {
+    def draw {
        egPushGroupMarker("Draw")
-       viewportsCache(viewSize).for{p -> p.a.drawWith(viewport = p.b)}
+        _viewports.for{p -> p.a.drawWith(viewport = p.b)}
        egPopGroupMarker
     }
 
@@ -76,6 +81,11 @@ class Layers {
 
     def updateWith(delta : float) {
         layers.for(_.updateWith(delta))
+    }
+
+    def reshapeWith(viewSize : vec2) {
+        _viewports = viewportsWith(viewSize)
+        _viewports.for{p -> p.a.reshapeWith(viewport = p.b)}
     }
 
     def scaleWith(viewSize : vec2) : float = 1.0
@@ -92,7 +102,7 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
         egPushGroupMarker(view.name)
         val env = view.environment
         context.environment = env
-        val camera = view.cameraWith(viewport)
+        val camera = view.camera
         val cullFace = camera.cullFace
         if(cullFace != GL_NONE) context.cullFace.enable
 
@@ -115,13 +125,15 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
         egPopGroupMarker
     }
 
-
+    def reshapeWith(viewport : Rect) {
+        view.reshapeWith(viewport)
+    }
 
     def drawWith(viewport : Rect) {
         egPushGroupMarker(view.name)
         val env = view.environment
         context.environment = env
-        val camera = view.cameraWith(viewport)
+        val camera = view.camera
         val cullFace = camera.cullFace
         if(cullFace != GL_NONE) context.cullFace.enable
         context.renderTarget = SceneRenderTarget()
@@ -152,7 +164,7 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
     def process(event : Event, viewport : Rect) : bool = {
         inputProcessor.map{ p ->
             if(p.isProcessorActive) {
-                val camera = view.cameraWith(viewport)
+                val camera = view.camera
                 matrix.value = camera.matrixModel
                 val cam = EventCamera(camera.matrixModel, viewport)
                 val e = event.set(camera = cam)
@@ -185,9 +197,7 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
 trait LayerView extends Controller {
     def name : string
 
-    def camera : Camera = cameraWith(viewport = Rect(-1, -1, 2, 2))
-
-    def cameraWith(viewport : Rect) : Camera = camera
+    def camera : Camera
 
     def prepare {}
 
@@ -196,4 +206,6 @@ trait LayerView extends Controller {
     def environment = Environment.default
 
     def updateWith(delta : float) {}
+
+    def reshapeWith(viewport : Rect) {}
 }

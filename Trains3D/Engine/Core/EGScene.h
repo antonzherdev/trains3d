@@ -66,10 +66,11 @@
 + (EGSingleLayer*)applyLayer:(EGLayer*)layer;
 - (id<CNSeq>)layers;
 - (id<CNSeq>)viewportsWithViewSize:(GEVec2)viewSize;
-- (void)prepareWithViewSize:(GEVec2)viewSize;
-- (void)drawWithViewSize:(GEVec2)viewSize;
+- (void)prepare;
+- (void)draw;
 - (BOOL)processEvent:(EGEvent*)event;
 - (void)updateWithDelta:(CGFloat)delta;
+- (void)reshapeWithViewSize:(GEVec2)viewSize;
 - (CGFloat)scaleWithViewSize:(GEVec2)viewSize;
 + (ODClassType*)type;
 @end
@@ -96,6 +97,7 @@
 - (ODClassType*)type;
 + (EGLayer*)applyView:(id<EGLayerView>)view;
 - (void)prepareWithViewport:(GERect)viewport;
+- (void)reshapeWithViewport:(GERect)viewport;
 - (void)drawWithViewport:(GERect)viewport;
 - (void)drawShadowForCamera:(id<EGCamera>)camera light:(EGLight*)light;
 - (BOOL)processEvent:(EGEvent*)event viewport:(GERect)viewport;
@@ -109,11 +111,11 @@
 @protocol EGLayerView<EGController>
 - (NSString*)name;
 - (id<EGCamera>)camera;
-- (id<EGCamera>)cameraWithViewport:(GERect)viewport;
 - (void)prepare;
 - (void)draw;
 - (EGEnvironment*)environment;
 - (void)updateWithDelta:(CGFloat)delta;
+- (void)reshapeWithViewport:(GERect)viewport;
 @end
 
 
