@@ -55,6 +55,7 @@
 
     _view.paused = YES;
     [super pause];
+    [_view.view setNeedsDisplay];
 }
 
 - (void) resume {
