@@ -21,17 +21,17 @@
 
 @class TRCallRepairerView;
 
-@interface TRCallRepairerView : NSObject<EGInputProcessor, EGMouseProcessor>
+@interface TRCallRepairerView : NSObject<EGInputProcessor, EGTapProcessor>
 @property (nonatomic, readonly) TRLevel* level;
-@property (nonatomic, readonly) EGFont* font;
 
 + (id)callRepairerViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
+- (void)reshapeWithViewport:(GERect)viewport;
 - (void)draw;
 - (void)drawButtonForCity:(TRCity*)city;
 - (BOOL)processEvent:(EGEvent*)event;
-- (BOOL)mouseDownEvent:(EGEvent*)event;
+- (BOOL)tapEvent:(EGEvent*)event;
 + (ODClassType*)type;
 @end
 

@@ -365,6 +365,7 @@ static ODClassType* _EGLayer_type;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
+    [EGGlobal.context setViewport:geRectIApplyRect(viewport)];
     [_view reshapeWithViewport:viewport];
 }
 

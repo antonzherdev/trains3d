@@ -1,6 +1,15 @@
 package com.antonzherdev.trains
 
-class CallRepairerView(level : Level) extends InputProcessor with MouseProcessor {
+class CallRepairerView(level : Level) extends InputProcessor with TapProcessor {
+    private var font : Font
+    private var buttonSize : vec2
+    def reshapeWith(viewport : Rect) {
+        font = fontWith(name = "lucida_grande", 18)
+        val textSize = font.measure(Loc.callRepairer)
+        buttonSize = matrix.p.divBySelf(vec4(textSize * 1.2, 0, 0)).xy
+    }
+
+
     def draw {
         if(!level.railroad.damagesPoints.isEmpty && level.repairer.isEmpty) {
             egPushGroupMarker("Call repairer")
@@ -13,17 +22,12 @@ class CallRepairerView(level : Level) extends InputProcessor with MouseProcessor
         }
     }
 
-    val font = fontWith(name = "lucida_grande_18")
-    private val buttonSize = Cache<Rect, vec2>{vp ->
-        val textSize = font.measure(Loc.callRepairer)
-        matrix.p.divBySelf(vec4(textSize * 1.2, 0, 0)).xy
-    }
     private var buttons = MutableHashMap<City, Billboard>()
 
     def drawButtonFor(city : City) {
         val cut = level.map.cutStateFor(city.tile)
 
-        val bs = buttonSize(context.viewport)
+        val bs = buttonSize
         var p = vec2(0, 0)
         if(cut.x != 0) p += vec2(0.5, 0)
         if(cut.x2 != 0) p += vec2(-0.5 - bs.x, 0)
@@ -38,10 +42,10 @@ class CallRepairerView(level : Level) extends InputProcessor with MouseProcessor
     }
 
     def process(event : Event) : bool = {
-        event.leftMouse(self)
+        event.tap(self)
     }
 
-    def mouseDown(event : Event) : bool = {
+    def tap(event : Event) : bool = {
         val p = event.locationInViewport
         val b = buttons.chain.find(_.b.contains(p))
         b.for{kv -> level.runRepairerFrom(kv.a)}

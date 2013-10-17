@@ -126,6 +126,7 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
     }
 
     def reshapeWith(viewport : Rect) {
+        context.set(viewport = viewport)
         view.reshapeWith(viewport)
     }
 

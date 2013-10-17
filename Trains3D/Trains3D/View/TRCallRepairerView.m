@@ -13,12 +13,11 @@
 @implementation TRCallRepairerView{
     TRLevel* _level;
     EGFont* _font;
-    CNCache* _buttonSize;
+    GEVec2 _buttonSize;
     NSMutableDictionary* _buttons;
 }
 static ODClassType* _TRCallRepairerView_type;
 @synthesize level = _level;
-@synthesize font = _font;
 
 + (id)callRepairerViewWithLevel:(TRLevel*)level {
     return [[TRCallRepairerView alloc] initWithLevel:level];
@@ -26,14 +25,8 @@ static ODClassType* _TRCallRepairerView_type;
 
 - (id)initWithLevel:(TRLevel*)level {
     self = [super init];
-    __weak TRCallRepairerView* _weakSelf = self;
     if(self) {
         _level = level;
-        _font = [EGGlobal fontWithName:@"lucida_grande_18"];
-        _buttonSize = [CNCache cacheWithF:^id(id vp) {
-            GEVec2 textSize = [_weakSelf.font measureText:[TRStr.Loc callRepairer]];
-            return wrap(GEVec2, geVec4Xy([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW(geVec2MulF(textSize, 1.2), 0.0, 0.0)]));
-        }];
         _buttons = [NSMutableDictionary mutableDictionary];
     }
     
@@ -43,6 +36,12 @@ static ODClassType* _TRCallRepairerView_type;
 + (void)initialize {
     [super initialize];
     _TRCallRepairerView_type = [ODClassType classTypeWithCls:[TRCallRepairerView class]];
+}
+
+- (void)reshapeWithViewport:(GERect)viewport {
+    _font = [EGGlobal fontWithName:@"lucida_grande" size:18];
+    GEVec2 textSize = [_font measureText:[TRStr.Loc callRepairer]];
+    _buttonSize = geVec4Xy([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW(geVec2MulF(textSize, 1.2), 0.0, 0.0)]);
 }
 
 - (void)draw {
@@ -63,7 +62,7 @@ static ODClassType* _TRCallRepairerView_type;
 
 - (void)drawButtonForCity:(TRCity*)city {
     EGMapTileCutState cut = [_level.map cutStateForTile:city.tile];
-    GEVec2 bs = uwrap(GEVec2, [_buttonSize applyX:wrap(GERectI, [EGGlobal.context viewport])]);
+    GEVec2 bs = _buttonSize;
     GEVec2 p = GEVec2Make(0.0, 0.0);
     if(cut.x != 0) p = geVec2AddVec2(p, GEVec2Make(0.5, 0.0));
     if(cut.x2 != 0) p = geVec2AddVec2(p, GEVec2Make(((float)(-0.5 - bs.x)), 0.0));
@@ -79,10 +78,10 @@ static ODClassType* _TRCallRepairerView_type;
 }
 
 - (BOOL)processEvent:(EGEvent*)event {
-    return [event leftMouseProcessor:self];
+    return [event tapProcessor:self];
 }
 
-- (BOOL)mouseDownEvent:(EGEvent*)event {
+- (BOOL)tapEvent:(EGEvent*)event {
     GEVec2 p = [event locationInViewport];
     id b = [[_buttons chain] find:^BOOL(CNTuple* _) {
         return [((EGBillboard*)(_.b)) containsVec2:p];
@@ -95,14 +94,6 @@ static ODClassType* _TRCallRepairerView_type;
 
 - (BOOL)isProcessorActive {
     return !([[EGGlobal director] isPaused]);
-}
-
-- (BOOL)mouseDragEvent:(EGEvent*)event {
-    return NO;
-}
-
-- (BOOL)mouseUpEvent:(EGEvent*)event {
-    return NO;
 }
 
 - (ODClassType*)type {

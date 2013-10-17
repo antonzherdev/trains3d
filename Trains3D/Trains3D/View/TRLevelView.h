@@ -19,6 +19,7 @@
 @class EGGlobal;
 @class EGContext;
 @class EGRenderTarget;
+@class EGMatrixStack;
 @class EGDirector;
 
 @class TRLevelView;
@@ -37,6 +38,7 @@
 - (void)draw;
 - (void)updateWithDelta:(CGFloat)delta;
 - (BOOL)processEvent:(EGEvent*)event;
+- (void)reshapeWithViewport:(GERect)viewport;
 + (ODClassType*)type;
 @end
 

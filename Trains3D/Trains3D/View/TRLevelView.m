@@ -97,6 +97,8 @@ static ODClassType* _TRLevelView_type;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
+    EGGlobal.matrix.value = [_camera matrixModel];
+    [_callRepairerView reshapeWithViewport:viewport];
 }
 
 - (BOOL)isProcessorActive {
