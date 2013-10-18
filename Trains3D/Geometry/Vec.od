@@ -86,6 +86,7 @@ struct vec3(x : float4, y : float4, z : float4) {
 struct vec4(x : float4, y : float4, z : float4, w : float4) {
     static def apply(vec3 : vec3, w : float4) = vec4(vec3.x, vec3.y, vec3.z, w)
     static def apply(vec2 : vec2, z : float4, w : float4) = vec4(vec2.x, vec2.y, z, w)
+    def add(vec2 : vec2) : vec4 = vec4(x + vec2.x, y + vec2.y, z, w)
     def add(vec3 : vec3) : vec4 = vec4(x + vec3.x, y + vec3.y, z + vec3.z, w)
     def add(vec4 : vec4) : vec4 = vec4(x + vec4.x, y + vec4.y, z + vec4.z, w + vec4.w)
     def xyz = vec3(x, y, z)

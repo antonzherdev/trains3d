@@ -33,7 +33,7 @@
 + (CNVoidRefArray)writeSpriteIn:(CNVoidRefArray)in material:(EGColorSource*)material at:(GEVec3)at quad:(GEQuad)quad uv:(GEQuad)uv;
 + (CNVoidRefArray)writeQuadIndexIn:(CNVoidRefArray)in i:(unsigned int)i;
 + (void)drawLineMaterial:(EGColorSource*)material p0:(GEVec2)p0 p1:(GEVec2)p1;
-+ (void)drawCircleMaterial:(EGColorSource*)material at:(GEVec3)at radius:(float)radius segments:(unsigned int)segments start:(CGFloat)start end:(CGFloat)end;
++ (void)drawCircleMaterial:(EGColorSource*)material at:(GEVec3)at radius:(float)radius relative:(GEVec2)relative start:(CGFloat)start end:(CGFloat)end;
 + (ODClassType*)type;
 @end
 
@@ -53,11 +53,12 @@
 @property (nonatomic, readonly) GEVec4 color;
 @property (nonatomic, readonly) GEVec3 position;
 @property (nonatomic, readonly) float radius;
+@property (nonatomic, readonly) GEVec2 relative;
 @property (nonatomic, readonly) float start;
 @property (nonatomic, readonly) float end;
 
-+ (id)circleParamWithColor:(GEVec4)color position:(GEVec3)position radius:(float)radius start:(float)start end:(float)end;
-- (id)initWithColor:(GEVec4)color position:(GEVec3)position radius:(float)radius start:(float)start end:(float)end;
++ (id)circleParamWithColor:(GEVec4)color position:(GEVec3)position radius:(float)radius relative:(GEVec2)relative start:(float)start end:(float)end;
+- (id)initWithColor:(GEVec4)color position:(GEVec3)position radius:(float)radius relative:(GEVec2)relative start:(float)start end:(float)end;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

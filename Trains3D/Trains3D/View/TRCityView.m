@@ -65,8 +65,7 @@ static ODClassType* _TRCityView_type;
     [EGGlobal.context.depthTest disabledF:^void() {
         [[_level cities] forEach:^void(TRCity* city) {
             [city.expectedTrainCounter forF:^void(CGFloat time) {
-                EGMapTileCutState cut = [_level.map cutStateForTile:city.tile];
-                [EGD2D drawCircleMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)] at:geVec3ApplyVec2Z(geVec2AddVec2([TRCityView moveVecForLevel:_level city:city], geVec2ApplyVec2i(city.tile)), 0.0) radius:0.1 segments:12 start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
+                [EGD2D drawCircleMaterial:[EGColorSource applyColor:GEVec4Make(0.8, 0.8, 0.8, 0.9)] at:geVec3ApplyVec2Z(geVec2ApplyVec2i(city.tile), 0.0) radius:0.08 relative:geVec2MulF([TRCityView moveVecForLevel:_level city:city], 0.25) start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
             }];
         }];
     }];

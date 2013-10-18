@@ -82,10 +82,10 @@ static ODClassType* _EGD2D_type;
     }];
 }
 
-+ (void)drawCircleMaterial:(EGColorSource*)material at:(GEVec3)at radius:(float)radius segments:(unsigned int)segments start:(CGFloat)start end:(CGFloat)end {
++ (void)drawCircleMaterial:(EGColorSource*)material at:(GEVec3)at radius:(float)radius relative:(GEVec2)relative start:(CGFloat)start end:(CGFloat)end {
     [EGBlendFunction.standard applyDraw:^void() {
         [EGGlobal.context.cullFace disabledF:^void() {
-            [[EGD2D circleVaoForColor] drawParam:[EGCircleParam circleParamWithColor:material.color position:at radius:radius start:((float)(start)) end:((float)(end))]];
+            [[EGD2D circleVaoForColor] drawParam:[EGCircleParam circleParamWithColor:material.color position:at radius:radius relative:relative start:((float)(start)) end:((float)(end))]];
         }];
     }];
 }
@@ -282,6 +282,7 @@ static ODClassType* _EGCircleShaderBuilder_type;
     GEVec4 _color;
     GEVec3 _position;
     float _radius;
+    GEVec2 _relative;
     float _start;
     float _end;
 }
@@ -289,19 +290,21 @@ static ODClassType* _EGCircleParam_type;
 @synthesize color = _color;
 @synthesize position = _position;
 @synthesize radius = _radius;
+@synthesize relative = _relative;
 @synthesize start = _start;
 @synthesize end = _end;
 
-+ (id)circleParamWithColor:(GEVec4)color position:(GEVec3)position radius:(float)radius start:(float)start end:(float)end {
-    return [[EGCircleParam alloc] initWithColor:color position:position radius:radius start:start end:end];
++ (id)circleParamWithColor:(GEVec4)color position:(GEVec3)position radius:(float)radius relative:(GEVec2)relative start:(float)start end:(float)end {
+    return [[EGCircleParam alloc] initWithColor:color position:position radius:radius relative:relative start:start end:end];
 }
 
-- (id)initWithColor:(GEVec4)color position:(GEVec3)position radius:(float)radius start:(float)start end:(float)end {
+- (id)initWithColor:(GEVec4)color position:(GEVec3)position radius:(float)radius relative:(GEVec2)relative start:(float)start end:(float)end {
     self = [super init];
     if(self) {
         _color = color;
         _position = position;
         _radius = radius;
+        _relative = relative;
         _start = start;
         _end = end;
     }
@@ -330,7 +333,7 @@ static ODClassType* _EGCircleParam_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGCircleParam* o = ((EGCircleParam*)(other));
-    return GEVec4Eq(self.color, o.color) && GEVec3Eq(self.position, o.position) && eqf4(self.radius, o.radius) && eqf4(self.start, o.start) && eqf4(self.end, o.end);
+    return GEVec4Eq(self.color, o.color) && GEVec3Eq(self.position, o.position) && eqf4(self.radius, o.radius) && GEVec2Eq(self.relative, o.relative) && eqf4(self.start, o.start) && eqf4(self.end, o.end);
 }
 
 - (NSUInteger)hash {
@@ -338,6 +341,7 @@ static ODClassType* _EGCircleParam_type;
     hash = hash * 31 + GEVec4Hash(self.color);
     hash = hash * 31 + GEVec3Hash(self.position);
     hash = hash * 31 + float4Hash(self.radius);
+    hash = hash * 31 + GEVec2Hash(self.relative);
     hash = hash * 31 + float4Hash(self.start);
     hash = hash * 31 + float4Hash(self.end);
     return hash;
@@ -348,6 +352,7 @@ static ODClassType* _EGCircleParam_type;
     [description appendFormat:@"color=%@", GEVec4Description(self.color)];
     [description appendFormat:@", position=%@", GEVec3Description(self.position)];
     [description appendFormat:@", radius=%f", self.radius];
+    [description appendFormat:@", relative=%@", GEVec2Description(self.relative)];
     [description appendFormat:@", start=%f", self.start];
     [description appendFormat:@", end=%f", self.end];
     [description appendString:@">"];
@@ -406,7 +411,7 @@ static ODClassType* _EGCircleShader_type;
 }
 
 - (void)loadUniformsParam:(EGCircleParam*)param {
-    [_pos applyVec4:[[EGGlobal.matrix.value wc] mulVec4:geVec4ApplyVec3W(param.position, 1.0)]];
+    [_pos applyVec4:geVec4AddVec2([[EGGlobal.matrix.value wc] mulVec4:geVec4ApplyVec3W(param.position, 1.0)], param.relative)];
     [_p applyMatrix:EGGlobal.matrix.value.p];
     [_radius applyF4:param.radius];
     [_color applyVec4:param.color];
