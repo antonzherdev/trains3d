@@ -40,7 +40,6 @@ class RailroadView(railroad : Railroad) extends InputProcessor {
             railroad.switches.for(switchView.draw(_))
             railroad.builder.rail.for(railView.draw(_))
             railroad.builder.buildingRails.for(railView.draw(_))
-            railroad.damagesPoints.for(damageView.draw(_))
             lightView.drawBodies
         }
 
@@ -49,8 +48,11 @@ class RailroadView(railroad : Railroad) extends InputProcessor {
 
     def drawForeground {
         egPushGroupMarker("Railroad foreground")
-        undoView.draw
-        lightView.drawGlows
+        BlendFunction.standard{
+            undoView.draw
+            lightView.drawGlows
+            railroad.damagesPoints.for(damageView.draw(_))
+        }
         egPopGroupMarker
     }
 
@@ -135,11 +137,11 @@ class UndoView(builder : RailroadBuilder) extends InputProcessor with TapProcess
             empty = true
         } else {
             empty = false
-            context.depthTest.disabled { BlendFunction.standard {
+            context.depthTest.disabled {
                 button.position = vec3(rail.get.tile, 0)
                 button.draw
                 font.draw(Loc.undo, color = vec4(0.1, 0.1, 0.1, 1), button.position, TextAlignment(0, 0))
-            }}
+            }
         }
     }
 
@@ -240,20 +242,20 @@ class LightView(railroad : Railroad) {
     def drawGlows {
         if(!context.renderTarget.is<ShadowRenderTarget>) {
             matrix.push
-            context.cullFace.disabled{ BlendFunction.standard{
+            context.cullFace.disabled{
                 _matrixArr.for { p ->
                     matrix.value = p.a
                     if(p.b.isGreen) greenGlowVao.draw
                     else redGlowVao.draw
                 }
-            }}
+            }
             matrix.pop
         }
     }
 }
 
 class DamageView {
-    val model = MeshModel([(Models.damage, vec4(1, 0, 0, 1))])
+    val model = MeshModel([(Models.damage, ColorSource(vec4(1, 0, 0, 0.6)))])
     def draw(point : RailPoint) {
         matrix(
             _.modify(w = w -> w.translate(point.point.x, point.point.y, 0.0))

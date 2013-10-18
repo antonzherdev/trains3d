@@ -92,9 +92,6 @@ static ODClassType* _TRRailroadView_type;
         [[_railroad.builder buildingRails] forEach:^void(TRRailBuilding* _) {
             [_railView drawRailBuilding:_];
         }];
-        [[_railroad damagesPoints] forEach:^void(TRRailPoint* _) {
-            [_damageView drawPoint:_];
-        }];
         [_lightView drawBodies];
     }
     egPopGroupMarker();
@@ -102,8 +99,13 @@ static ODClassType* _TRRailroadView_type;
 
 - (void)drawForeground {
     egPushGroupMarker(@"Railroad foreground");
-    [_undoView draw];
-    [_lightView drawGlows];
+    [EGBlendFunction.standard applyDraw:^void() {
+        [_undoView draw];
+        [_lightView drawGlows];
+        [[_railroad damagesPoints] forEach:^void(TRRailPoint* _) {
+            [_damageView drawPoint:_];
+        }];
+    }];
     egPopGroupMarker();
 }
 
@@ -311,11 +313,9 @@ static ODClassType* _TRUndoView_type;
     } else {
         _empty = NO;
         [EGGlobal.context.depthTest disabledF:^void() {
-            [EGBlendFunction.standard applyDraw:^void() {
-                _button.position = geVec3ApplyVec2Z(geVec2ApplyVec2i(((TRRail*)([rail get])).tile), 0.0);
-                [_button draw];
-                [_font drawText:[TRStr.Loc undo] color:GEVec4Make(0.1, 0.1, 0.1, 1.0) at:_button.position alignment:egTextAlignmentApplyXY(0.0, 0.0)];
-            }];
+            _button.position = geVec3ApplyVec2Z(geVec2ApplyVec2i(((TRRail*)([rail get])).tile), 0.0);
+            [_button draw];
+            [_font drawText:[TRStr.Loc undo] color:GEVec4Make(0.1, 0.1, 0.1, 1.0) at:_button.position alignment:egTextAlignmentApplyXY(0.0, 0.0)];
         }];
     }
 }
@@ -557,12 +557,10 @@ static ODClassType* _TRLightView_type;
     if(!([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]])) {
         [EGGlobal.matrix push];
         [EGGlobal.context.cullFace disabledF:^void() {
-            [EGBlendFunction.standard applyDraw:^void() {
-                [__matrixArr forEach:^void(CNTuple* p) {
-                    EGGlobal.matrix.value = ((EGMatrixModel*)(p.a));
-                    if(((TRRailLight*)(p.b)).isGreen) [_greenGlowVao draw];
-                    else [_redGlowVao draw];
-                }];
+            [__matrixArr forEach:^void(CNTuple* p) {
+                EGGlobal.matrix.value = ((EGMatrixModel*)(p.a));
+                if(((TRRailLight*)(p.b)).isGreen) [_greenGlowVao draw];
+                else [_redGlowVao draw];
             }];
         }];
         [EGGlobal.matrix pop];
@@ -616,7 +614,7 @@ static ODClassType* _TRDamageView_type;
 
 - (id)init {
     self = [super init];
-    if(self) _model = [EGMeshModel applyMeshes:(@[tuple(TRModels.damage, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(1.0, 0.0, 0.0, 1.0)])))])];
+    if(self) _model = [EGMeshModel applyMeshes:(@[tuple(TRModels.damage, [EGColorSource applyColor:GEVec4Make(1.0, 0.0, 0.0, 0.6)])])];
     
     return self;
 }
