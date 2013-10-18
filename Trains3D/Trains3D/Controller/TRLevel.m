@@ -239,6 +239,7 @@ static ODClassType* _TRLevel_type;
         [_ updateWithDelta:delta];
     }];
     if(!([[self trains] isEmpty])) [self processCollisions];
+    [_railroad updateWithDelta:delta];
     [_dynamicWorld updateWithDelta:delta];
     [_schedule updateWithDelta:delta];
     [_weather updateWithDelta:delta];

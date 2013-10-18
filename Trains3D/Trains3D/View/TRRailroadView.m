@@ -84,6 +84,9 @@ static ODClassType* _TRRailroadView_type;
         [[_railroad.builder rail] forEach:^void(TRRail* _) {
             [_railView drawRail:_];
         }];
+        [[_railroad.builder buildingRails] forEach:^void(TRRailBuilding* _) {
+            [_railView drawRailBuilding:_];
+        }];
         [[_railroad damagesPoints] forEach:^void(TRRailPoint* _) {
             [_damageView drawPoint:_];
         }];
@@ -180,7 +183,16 @@ static ODClassType* _TRRailView_type;
     _TRRailView_type = [ODClassType classTypeWithCls:[TRRailView class]];
 }
 
+- (void)drawRailBuilding:(TRRailBuilding*)railBuilding {
+    CGFloat p = railBuilding.progress;
+    [self drawRail:railBuilding.rail count:((p < 0.5) ? 1 : 2)];
+}
+
 - (void)drawRail:(TRRail*)rail {
+    [self drawRail:rail count:3];
+}
+
+- (void)drawRail:(TRRail*)rail count:(unsigned int)count {
     [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
         return [[_ modifyW:^GEMat4*(GEMat4* w) {
             return [w translateX:((float)(rail.tile.x)) y:((float)(rail.tile.y)) z:0.001];
@@ -202,8 +214,8 @@ static ODClassType* _TRRailView_type;
             }
         }];
     } f:^void() {
-        if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) [_railModel draw];
-        else [_railTurnModel draw];
+        if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) [_railModel drawOnly:count];
+        else [_railTurnModel drawOnly:count];
     }];
 }
 

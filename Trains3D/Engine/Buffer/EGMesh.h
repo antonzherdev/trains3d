@@ -83,6 +83,7 @@ ODPType* egMeshDataType();
 + (EGMeshModel*)applyMeshes:(id<CNSeq>)meshes;
 + (EGMeshModel*)applyShadow:(BOOL)shadow meshes:(id<CNSeq>)meshes;
 - (void)draw;
+- (void)drawOnly:(unsigned int)only;
 + (ODClassType*)type;
 @end
 

@@ -38,6 +38,7 @@ class RailroadView(railroad : Railroad) {
             }
             railroad.switches.for(switchView.draw(_))
             railroad.builder.rail.for(railView.draw(_))
+            railroad.builder.buildingRails.for(railView.draw(_))
             railroad.damagesPoints.for(damageView.draw(_))
             lightView.drawBodies
         }
@@ -78,8 +79,16 @@ class RailView {
         (Models.railTurnTies, vec4(0.55, 0.45, 0.25, 1)),
         (Models.railsTurn, railMaterial)
     ])
+    def draw(railBuilding : RailBuilding) {
+        val p = railBuilding.progress
+        draw(railBuilding.rail, if(p < 0.5) 1 else 2)
+    }
 
     def draw(rail : Rail) {
+        draw(rail, 3)
+    }
+
+    private def draw(rail : Rail, count : uint4) {
         matrix(
             _.modify(w = w -> w.translate(rail.tile.x, rail.tile.y, 0.001))
              .modify(m = m ->
@@ -94,9 +103,9 @@ class RailView {
                 })
         ) {
             if(rail.form == RailForm.bottomTop || rail.form == RailForm.leftRight) {
-                railModel.draw
+                railModel.draw(count)
             } else {
-                railTurnModel.draw
+                railTurnModel.draw(count)
             }
         }
     }

@@ -90,6 +90,7 @@ class Level(rules : LevelRules) extends Controller {
         _cities.for(_.updateWith(delta))
         if(!trains.isEmpty) processCollisions
 //        if(!_dyingTrains.isEmpty) dynamicWorld.updateWith(delta)
+        railroad.updateWith(delta)
         dynamicWorld.updateWith(delta)
         schedule.updateWith(delta)
         weather.updateWith(delta)

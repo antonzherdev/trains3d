@@ -44,6 +44,16 @@ class MeshModel(arrays : [VertexArray<Material>]) {
     def draw {
         arrays.for(_.draw)
     }
+
+    def draw(only : uint4) {
+        if(only == 0) return nil
+        var o =  only
+        arrays.go {a ->
+            a.draw
+            o--
+            o > 0
+        }
+    }
 }
 
 

@@ -758,6 +758,10 @@ static ODClassType* _TRRailroad_type;
     }
 }
 
+- (void)updateWithDelta:(CGFloat)delta {
+    [_builder updateWithDelta:delta];
+}
+
 - (ODClassType*)type {
     return [TRRailroad type];
 }
@@ -797,9 +801,72 @@ static ODClassType* _TRRailroad_type;
 @end
 
 
+@implementation TRRailBuilding{
+    TRRail* _rail;
+    CGFloat _progress;
+}
+static ODClassType* _TRRailBuilding_type;
+@synthesize rail = _rail;
+@synthesize progress = _progress;
+
++ (id)railBuildingWithRail:(TRRail*)rail {
+    return [[TRRailBuilding alloc] initWithRail:rail];
+}
+
+- (id)initWithRail:(TRRail*)rail {
+    self = [super init];
+    if(self) {
+        _rail = rail;
+        _progress = 0.0;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRRailBuilding_type = [ODClassType classTypeWithCls:[TRRailBuilding class]];
+}
+
+- (ODClassType*)type {
+    return [TRRailBuilding type];
+}
+
++ (ODClassType*)type {
+    return _TRRailBuilding_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRailBuilding* o = ((TRRailBuilding*)(other));
+    return [self.rail isEqual:o.rail];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.rail hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"rail=%@", self.rail];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation TRRailroadBuilder{
     __weak TRRailroad* _railroad;
     id __rail;
+    CNList* __buildingRails;
 }
 static ODClassType* _TRRailroadBuilder_type;
 @synthesize railroad = _railroad;
@@ -813,6 +880,7 @@ static ODClassType* _TRRailroadBuilder_type;
     if(self) {
         _railroad = railroad;
         __rail = [CNOption none];
+        __buildingRails = [CNList apply];
     }
     
     return self;
@@ -825,6 +893,10 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (id)rail {
     return __rail;
+}
+
+- (id<CNSeq>)buildingRails {
+    return __buildingRails;
 }
 
 - (BOOL)tryBuildRail:(TRRail*)rail {
@@ -846,10 +918,27 @@ static ODClassType* _TRRailroadBuilder_type;
 }
 
 - (void)fix {
-    [__rail forEach:^void(TRRail* r) {
-        [_railroad tryAddRail:r];
+    if([__rail isDefined]) {
+        [_railroad.forest cutDownForRail:((TRRail*)([__rail get]))];
+        __buildingRails = [CNList applyItem:[TRRailBuilding railBuildingWithRail:((TRRail*)([__rail get]))] tail:__buildingRails];
+        __rail = [CNOption none];
+    }
+}
+
+- (void)updateWithDelta:(CGFloat)delta {
+    __block BOOL hasEnd = NO;
+    [__buildingRails forEach:^void(TRRailBuilding* b) {
+        b.progress += delta / 2;
+        hasEnd = hasEnd || b.progress >= 1.0;
     }];
-    __rail = [CNOption none];
+    if(hasEnd) __buildingRails = [__buildingRails filterF:^BOOL(TRRailBuilding* b) {
+        if(b.progress >= 1.0) {
+            [_railroad tryAddRail:b.rail];
+            return NO;
+        } else {
+            return YES;
+        }
+    }];
 }
 
 - (ODClassType*)type {

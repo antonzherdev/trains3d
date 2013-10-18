@@ -202,6 +202,16 @@ static ODClassType* _EGMeshModel_type;
     }];
 }
 
+- (void)drawOnly:(unsigned int)only {
+    if(only == 0) return ;
+    __block unsigned int o = only;
+    [_arrays goOn:^BOOL(EGVertexArray* a) {
+        [a draw];
+        o--;
+        return o > 0;
+    }];
+}
+
 - (ODClassType*)type {
     return [EGMeshModel type];
 }

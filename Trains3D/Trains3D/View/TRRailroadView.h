@@ -20,6 +20,7 @@
 @class EGMeshModel;
 @class TRModels;
 @class EGMaterial;
+@class TRRailBuilding;
 @class TRRail;
 @class GEMat4;
 @class EGMatrixModel;
@@ -63,6 +64,7 @@
 + (id)railView;
 - (id)init;
 - (ODClassType*)type;
+- (void)drawRailBuilding:(TRRailBuilding*)railBuilding;
 - (void)drawRail:(TRRail*)rail;
 + (ODClassType*)type;
 @end

@@ -1,5 +1,6 @@
 #import "objd.h"
 #import "GEVec.h"
+#import "EGScene.h"
 @class TRRailConnector;
 @class TRRailForm;
 @class TRRailPoint;
@@ -15,6 +16,7 @@
 @class TRRailLight;
 @class TRObstacle;
 @class TRRailroad;
+@class TRRailBuilding;
 @class TRRailroadBuilder;
 @class TRObstacleType;
 
@@ -118,7 +120,7 @@
 @end
 
 
-@interface TRRailroad : NSObject
+@interface TRRailroad : NSObject<EGController>
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRScore* score;
 @property (nonatomic, readonly) TRForest* forest;
@@ -140,21 +142,35 @@
 - (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint*)from to:(CGFloat)to;
 - (void)addDamageAtPoint:(TRRailPoint*)point;
 - (void)fixDamageAtPoint:(TRRailPoint*)point;
+- (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
 @end
 
 
-@interface TRRailroadBuilder : NSObject
+@interface TRRailBuilding : NSObject
+@property (nonatomic, readonly) TRRail* rail;
+@property (nonatomic) CGFloat progress;
+
++ (id)railBuildingWithRail:(TRRail*)rail;
+- (id)initWithRail:(TRRail*)rail;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface TRRailroadBuilder : NSObject<EGController>
 @property (nonatomic, readonly, weak) TRRailroad* railroad;
 
 + (id)railroadBuilderWithRailroad:(TRRailroad*)railroad;
 - (id)initWithRailroad:(TRRailroad*)railroad;
 - (ODClassType*)type;
 - (id)rail;
+- (id<CNSeq>)buildingRails;
 - (BOOL)tryBuildRail:(TRRail*)rail;
 - (BOOL)checkCityTile:(GEVec2i)tile connector:(TRRailConnector*)connector;
 - (void)clear;
 - (void)fix;
+- (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
 @end
 
