@@ -2,6 +2,7 @@
 #import "EGBillboard.h"
 #import "EGMesh.h"
 #import "GEVec.h"
+#import "EGShader.h"
 @class EGMutableVertexBuffer;
 @class EGVBO;
 @class EGEmptyIndexSource;
@@ -11,8 +12,16 @@
 @class EGGlobal;
 @class EGContext;
 @class EGEnablingState;
+@class EGBlendFunction;
+@class EGVertexBufferDesc;
+@class EGMatrixStack;
+@class EGMatrixModel;
+@class GEMat4;
 
 @class EGD2D;
+@class EGCircleShaderBuilder;
+@class EGCircleParam;
+@class EGCircleShader;
 @class EGSprite;
 @class EGLine2d;
 
@@ -25,6 +34,46 @@
 + (CNVoidRefArray)writeQuadIndexIn:(CNVoidRefArray)in i:(unsigned int)i;
 + (void)drawLineMaterial:(EGColorSource*)material p0:(GEVec2)p0 p1:(GEVec2)p1;
 + (void)drawCircleMaterial:(EGColorSource*)material at:(GEVec3)at radius:(float)radius segments:(unsigned int)segments start:(CGFloat)start end:(CGFloat)end;
++ (ODClassType*)type;
+@end
+
+
+@interface EGCircleShaderBuilder : NSObject<EGShaderTextBuilder>
++ (id)circleShaderBuilder;
+- (id)init;
+- (ODClassType*)type;
+- (NSString*)vertex;
+- (NSString*)fragment;
+- (EGShaderProgram*)program;
++ (ODClassType*)type;
+@end
+
+
+@interface EGCircleParam : NSObject
+@property (nonatomic, readonly) GEVec4 color;
+@property (nonatomic, readonly) GEVec3 position;
+@property (nonatomic, readonly) float radius;
+
++ (id)circleParamWithColor:(GEVec4)color position:(GEVec3)position radius:(float)radius;
+- (id)initWithColor:(GEVec4)color position:(GEVec3)position radius:(float)radius;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface EGCircleShader : EGShader
+@property (nonatomic, readonly) EGShaderAttribute* model;
+@property (nonatomic, readonly) EGShaderUniformVec4* pos;
+@property (nonatomic, readonly) EGShaderUniformMat4* p;
+@property (nonatomic, readonly) EGShaderUniformF4* radius;
+@property (nonatomic, readonly) EGShaderUniformVec4* color;
+
++ (id)circleShader;
+- (id)init;
+- (ODClassType*)type;
++ (EGCircleShader*)instance;
+- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
+- (void)loadUniformsParam:(EGCircleParam*)param;
 + (ODClassType*)type;
 @end
 
