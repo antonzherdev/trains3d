@@ -76,6 +76,7 @@
 - (void)draw;
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
 + (EGEmptyIndexSource*)triangleStrip;
++ (EGEmptyIndexSource*)triangleFan;
 + (EGEmptyIndexSource*)triangles;
 + (EGEmptyIndexSource*)lines;
 + (ODClassType*)type;

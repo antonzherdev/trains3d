@@ -14,6 +14,8 @@ static EGVertexArray* _EGD2D_vaoForTexture;
 static EGMutableVertexBuffer* _EGD2D_lineVb;
 static CNVoidRefArray _EGD2D_lineVertexes;
 static EGVertexArray* _EGD2D_lineVao;
+static CNLazy* _EGD2D__lazy_circleVb;
+static CNLazy* _EGD2D__lazy_circleVaoForColor;
 static ODClassType* _EGD2D_type;
 
 + (void)initialize {
@@ -26,6 +28,20 @@ static ODClassType* _EGD2D_type;
     _EGD2D_lineVb = [EGVBO mutMesh];
     _EGD2D_lineVertexes = cnVoidRefArrayApplyTpCount(egMeshDataType(), 2);
     _EGD2D_lineVao = [[EGMesh meshWithVertex:_EGD2D_lineVb index:EGEmptyIndexSource.lines] vaoShader:EGSimpleShaderSystem.colorShader];
+    _EGD2D__lazy_circleVb = [CNLazy lazyWithF:^EGMutableVertexBuffer*() {
+        return [EGVBO mutDesc:EGBillboard.vbDesc];
+    }];
+    _EGD2D__lazy_circleVaoForColor = [CNLazy lazyWithF:^EGVertexArray*() {
+        return [[EGMesh meshWithVertex:[EGD2D circleVb] index:EGEmptyIndexSource.triangleFan] vaoShader:[EGBillboardShader instanceForColor]];
+    }];
+}
+
++ (EGMutableVertexBuffer*)circleVb {
+    return ((EGMutableVertexBuffer*)([_EGD2D__lazy_circleVb get]));
+}
+
++ (EGVertexArray*)circleVaoForColor {
+    return ((EGVertexArray*)([_EGD2D__lazy_circleVaoForColor get]));
 }
 
 + (void)drawSpriteMaterial:(EGColorSource*)material at:(GEVec3)at rect:(GERect)rect {
@@ -69,6 +85,30 @@ static ODClassType* _EGD2D_type;
     [_EGD2D_lineVb setArray:_EGD2D_lineVertexes];
     [EGGlobal.context.cullFace disabledF:^void() {
         [_EGD2D_lineVao drawParam:material];
+    }];
+}
+
++ (void)drawCircleMaterial:(EGColorSource*)material at:(GEVec3)at radius:(float)radius segments:(unsigned int)segments start:(CGFloat)start end:(CGFloat)end {
+    CGFloat theta = (2 * M_PI) / segments;
+    CGFloat c = cos(theta);
+    CGFloat s = sin(theta);
+    CGFloat t = 0.0;
+    float x = radius;
+    CGFloat y = 0.0;
+    CNVoidRefArray vertexes = cnVoidRefArrayApplyTpCount(egBillboardBufferDataType(), ((NSUInteger)(segments + 2)));
+    CNVoidRefArray v = vertexes;
+    NSInteger ii = 0;
+    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, GEVec2Make(0.0, 0.0), material.color, GEVec2Make(0.0, 0.0)));
+    while(ii <= segments) {
+        v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, GEVec2Make(x, ((float)(y))), material.color, GEVec2Make(0.0, 0.0)));
+        t = ((CGFloat)(x));
+        x = ((float)(c * x - s * y));
+        y = s * t + c * y;
+        ii++;
+    }
+    [[EGD2D circleVb] setArray:vertexes];
+    [EGGlobal.context.cullFace disabledF:^void() {
+        [[EGD2D circleVaoForColor] drawParam:material];
     }];
 }
 

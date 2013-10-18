@@ -62,6 +62,7 @@ class MutableIndexBuffer(handle : GLuint, mode : uint4)
 
 class EmptyIndexSource(mode : uint4) extends IndexSource {
     static val triangleStrip = EmptyIndexSource(GL_TRIANGLE_STRIP)
+    static val triangleFan = EmptyIndexSource(GL_TRIANGLE_FAN)
     static val triangles = EmptyIndexSource(GL_TRIANGLES)
     static val lines = EmptyIndexSource(GL_LINES)
 

@@ -22,15 +22,74 @@ class CityView(level : Level) {
     }
 
     def drawExpected {
-        context.depthTest.disabled { BlendFunction.standard {
+        context.depthTest.disabled {
             level.cities.for{ city ->
-                if(!context.renderTarget.is<ShadowRenderTarget>) {
-                    city.expectedTrainCounter.for{time ->
-                        D2D.drawSprite(ColorSource(vec4(1.0, 1.0, 1.0, time)), vec3(city.tile, 0), Rect(0, 0, 0.3, 0.3))
-                    }
+                city.expectedTrainCounter.for{time ->
+                    val cut = level.map.cutStateFor(city.tile)
+                    D2D.drawCircle(ColorSource(vec4(1.0, 1.0, 1.0, 1.0)), vec3(moveVecFor(level, city) + city.tile, 0),
+                        radius = 0.3, segments = 12, start = 0.25, end = 0.25 - time)
                 }
             }
-        }}
+        }
+    }
 
+    static def moveVecFor(level : Level, city : City) : vec2 =  {
+        val cut = level.map.cutStateFor(city.tile)
+
+        var p = vec2(0, 0)
+        if(cut.x != 0) p += vec2(1, 0)
+        if(cut.x2 != 0) p += vec2(-1, 0)
+        if(cut.y != 0) p += vec2(0, -1)
+        if(cut.y2 != 0) p += vec2(0, 1)
+        p
+    }
+}
+
+class CallRepairerView(level : Level) extends InputProcessor with TapProcessor {
+    private var font : Font
+    private var buttonSize : vec2
+    def reshapeWith(viewport : Rect) {
+        font = fontWith(name = "lucida_grande", 18)
+        val textSize = font.measure(Loc.callRepairer)
+        buttonSize = matrix.p.divBySelf(vec4(textSize * 1.2, 0, 0)).xy
+    }
+
+
+    def draw {
+        if(!level.railroad.damagesPoints.isEmpty && level.repairer.isEmpty) {
+            egPushGroupMarker("Call repairer")
+            context.depthTest.disabled { BlendFunction.standard {
+            level.cities.for(drawButtonFor(_))
+            }}
+            egPopGroupMarker
+        } else if(!buttons.isEmpty) {
+            buttons.clear
+        }
+    }
+
+    private var buttons = MutableHashMap<City, Billboard>()
+
+    def drawButtonFor(city : City) {
+
+        val bs = buttonSize
+        var p = CityView.moveVecFor(level, city)
+
+        val billboard = buttons.objectFor(city, orUpdateWith = Billboard(material = vec4(city.color.color.xyz, 0.8)))
+        billboard.position = vec3(city.tile, 0)
+        val r = (p - 0.5) * bs
+        billboard.rect = Rect(r, bs)
+        billboard.draw
+        font.draw(Loc.callRepairer, color = vec4(0.1, 0.1, 0.1, 1), billboard.position, TextAlignment(0, 0, false, vec3(r + bs/2, 0)))
+    }
+
+    def process(event : Event) : bool = {
+        event.tap(self)
+    }
+
+    def tap(event : Event) : bool = {
+        val p = event.locationInViewport
+        val b = buttons.chain.find(_.b.contains(p))
+        b.for{kv -> level.runRepairerFrom(kv.a)}
+        b.isDefined
     }
 }

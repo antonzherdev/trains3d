@@ -241,6 +241,7 @@ static ODClassType* _EGMutableIndexBuffer_type;
     unsigned int _mode;
 }
 static EGEmptyIndexSource* _EGEmptyIndexSource_triangleStrip;
+static EGEmptyIndexSource* _EGEmptyIndexSource_triangleFan;
 static EGEmptyIndexSource* _EGEmptyIndexSource_triangles;
 static EGEmptyIndexSource* _EGEmptyIndexSource_lines;
 static ODClassType* _EGEmptyIndexSource_type;
@@ -261,6 +262,7 @@ static ODClassType* _EGEmptyIndexSource_type;
     [super initialize];
     _EGEmptyIndexSource_type = [ODClassType classTypeWithCls:[EGEmptyIndexSource class]];
     _EGEmptyIndexSource_triangleStrip = [EGEmptyIndexSource emptyIndexSourceWithMode:GL_TRIANGLE_STRIP];
+    _EGEmptyIndexSource_triangleFan = [EGEmptyIndexSource emptyIndexSourceWithMode:GL_TRIANGLE_FAN];
     _EGEmptyIndexSource_triangles = [EGEmptyIndexSource emptyIndexSourceWithMode:GL_TRIANGLES];
     _EGEmptyIndexSource_lines = [EGEmptyIndexSource emptyIndexSourceWithMode:((unsigned int)(GL_LINES))];
 }
@@ -290,6 +292,10 @@ static ODClassType* _EGEmptyIndexSource_type;
 
 + (EGEmptyIndexSource*)triangleStrip {
     return _EGEmptyIndexSource_triangleStrip;
+}
+
++ (EGEmptyIndexSource*)triangleFan {
+    return _EGEmptyIndexSource_triangleFan;
 }
 
 + (EGEmptyIndexSource*)triangles {

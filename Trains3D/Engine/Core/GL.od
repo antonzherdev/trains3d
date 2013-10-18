@@ -95,6 +95,7 @@ stub object gl {
     val GL_DYNAMIC_DRAW : uint4
     val GL_TRIANGLES : uint4
     val GL_TRIANGLE_STRIP : uint4
+    val GL_TRIANGLE_FAN : uint4
     val GL_LINES : uint
 
     val GL_FLOAT : uint4

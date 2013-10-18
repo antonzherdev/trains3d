@@ -194,7 +194,6 @@
 		6F3DF2D4AF12616DEADFB4BA /* btGImpactQuantizedBvh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2D9F9A43AB1D88DD58D /* btGImpactQuantizedBvh.cpp */; };
 		6F3DF2D4D3A3AA7FACD05C02 /* btMinkowskiSumShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFAE21F2E6B9C0681BBC2 /* btMinkowskiSumShape.cpp */; };
 		6F3DF2D575F5CC2FA20E999A /* btSubSimplexConvexCast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2043672B015D90D21EA /* btSubSimplexConvexCast.cpp */; };
-		6F3DF2D86B878E88404A014C /* TRCallRepairerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD162DBE89BC8E7B2F61 /* TRCallRepairerView.m */; };
 		6F3DF2DA20DFA76AE80EACF4 /* KWSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF6D8A39E76EEA5F3C9CC /* KWSpec.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF2DF59E5FEE868FFA88D /* TRSmoke.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1D0F040BB4977D9F1A0 /* TRSmoke.m */; };
 		6F3DF2E52943E97302649747 /* int_10_10_10_2.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF13F7A8F2D919AE09CA8 /* int_10_10_10_2.inl */; };
@@ -206,7 +205,6 @@
 		6F3DF3043473F2F359D00D1F /* CNQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF279F07A229F40F5083 /* CNQueue.m */; };
 		6F3DF3063FAA79E7442A293B /* type_vec4.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF4C0D3A506CF826D0684 /* type_vec4.inl */; };
 		6F3DF3064ADBD75F47C34007 /* btConvexHullShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF51196AAD4425CF79EC1 /* btConvexHullShape.cpp */; };
-		6F3DF308520EBA79432D3D82 /* TRCallRepairerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD162DBE89BC8E7B2F61 /* TRCallRepairerView.m */; };
 		6F3DF30D093046873A512232 /* Crows.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF09033D3726C9B3D7F00 /* Crows.mp3 */; };
 		6F3DF3119A7958A5841D0E1D /* btInternalEdgeUtility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF818C044E47538801BF0 /* btInternalEdgeUtility.cpp */; };
 		6F3DF3174A66FA247AA3E5BE /* TrainSound.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF2DF830C4C229670D594 /* TrainSound.od */; };
@@ -859,7 +857,6 @@
 		6F3DFCAD4B233E66004655D5 /* btStridingMeshInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFCBAF3638DD8E298B99F /* btStridingMeshInterface.cpp */; };
 		6F3DFCAD88AAF4D5EF163DD9 /* btSimpleDynamicsWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF97201C5052A12B89E98 /* btSimpleDynamicsWorld.cpp */; };
 		6F3DFCB3852F9360DE59B72A /* btHinge2Constraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF05F9808BAF022EF64D6 /* btHinge2Constraint.cpp */; };
-		6F3DFCB509FD55ACC1C50C38 /* CallRepairerView.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF6AADF3807670EFDA94F /* CallRepairerView.od */; };
 		6F3DFCB54F46C7B8177024A6 /* TRTreeSound.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF3BBCE3CFC0BD2F31CCF /* TRTreeSound.m */; };
 		6F3DFCB77271D0808D09B345 /* NSSet+CNChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0CF799BED6D9CCA4ACA /* NSSet+CNChain.m */; };
 		6F3DFCB871D74C4EC1EBB4AA /* btSphereSphereCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA29147A77CDE2344951 /* btSphereSphereCollisionAlgorithm.cpp */; };
@@ -1599,7 +1596,6 @@
 		6F3DF6A31365E0C417389DF7 /* eg.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = eg.od; sourceTree = "<group>"; };
 		6F3DF6A436CB4423AC136FA0 /* btGImpactCollisionAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btGImpactCollisionAlgorithm.cpp; sourceTree = "<group>"; };
 		6F3DF6A4B092E573CF2FC347 /* KWBlockRaiseMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBlockRaiseMatcher.h; sourceTree = "<group>"; };
-		6F3DF6AADF3807670EFDA94F /* CallRepairerView.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = CallRepairerView.od; sourceTree = "<group>"; };
 		6F3DF6B5E41194B88881593B /* Sound.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Sound.od; sourceTree = "<group>"; };
 		6F3DF6BDCA09F45613AA98D6 /* NSInvocation+KiwiAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSInvocation+KiwiAdditions.m"; sourceTree = "<group>"; };
 		6F3DF6C0458B399645B006C1 /* type_mat4x4.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = type_mat4x4.inl; sourceTree = "<group>"; };
@@ -1977,7 +1973,6 @@
 		6F3DFBA57EDF85421CF7B520 /* btDbvtBroadphase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btDbvtBroadphase.cpp; sourceTree = "<group>"; };
 		6F3DFBA6D6FF02C9645F0709 /* _swizzle_func.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = _swizzle_func.hpp; sourceTree = "<group>"; };
 		6F3DFBA7FB84688E7CB8353D /* func_packing.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = func_packing.inl; sourceTree = "<group>"; };
-		6F3DFBAEBFE3398483BE0754 /* TRCallRepairerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRCallRepairerView.h; sourceTree = "<group>"; };
 		6F3DFBB0CEBD7917BA7B3433 /* EGShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGShader.h; sourceTree = "<group>"; };
 		6F3DFBB2E106EAF0809269B2 /* EGEventMac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGEventMac.h; sourceTree = "<group>"; };
 		6F3DFBB6EB04DBA5CF087133 /* TRCollisionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRCollisionsTest.h; sourceTree = "<group>"; };
@@ -2079,7 +2074,6 @@
 		6F3DFD0EA8BB4AAF0B8773C2 /* btConvexConcaveCollisionAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btConvexConcaveCollisionAlgorithm.h; sourceTree = "<group>"; };
 		6F3DFD11D35819A9A170A4C9 /* xstream.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = xstream.hpp; sourceTree = "<group>"; };
 		6F3DFD153094A00EB8EF0EAB /* btTriangleMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btTriangleMesh.h; sourceTree = "<group>"; };
-		6F3DFD162DBE89BC8E7B2F61 /* TRCallRepairerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRCallRepairerView.m; sourceTree = "<group>"; };
 		6F3DFD25AE165CAAB984D8E3 /* Tree1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tree1.png; sourceTree = "<group>"; };
 		6F3DFD26092BC5F970E399C9 /* fast_square_root.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = fast_square_root.inl; sourceTree = "<group>"; };
 		6F3DFD260BC81FA6083B707E /* Shader.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Shader.od; sourceTree = "<group>"; };
@@ -4118,9 +4112,6 @@
 				6F3DF7076069B988C714A262 /* TreeView.od */,
 				6F3DF959D5D39D7AAE50D20E /* TRTreeView.h */,
 				6F3DF30A9CDF2DA6B3333EFD /* TRTreeView.m */,
-				6F3DF6AADF3807670EFDA94F /* CallRepairerView.od */,
-				6F3DFBAEBFE3398483BE0754 /* TRCallRepairerView.h */,
-				6F3DFD162DBE89BC8E7B2F61 /* TRCallRepairerView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -4420,7 +4411,6 @@
 				6F3DF86928A1DF32AA3B08FE /* Weather.od in Resources */,
 				6F3DF14661943AAC4D3BA008 /* Perlin.od in Resources */,
 				6F3DF688140B272246330874 /* PerlinTest.od in Resources */,
-				6F3DFCB509FD55ACC1C50C38 /* CallRepairerView.od in Resources */,
 				6F3DF1F70903E2E1FC2EADDF /* Shadow.od in Resources */,
 				6F3DF80642FF2867DE0ED79D /* TreeSound.od in Resources */,
 				6F3DF86E525DEFBFC1DF3500 /* LevelSound.od in Resources */,
@@ -4832,7 +4822,6 @@
 				6F3DF2C081206CA95F2FF0F9 /* TRTree.m in Sources */,
 				6F3DF9792E3CA2A2F8A30EE6 /* GEPerlin.m in Sources */,
 				6F3DF5B7323E98A46829B9CA /* TRWeather.m in Sources */,
-				6F3DF2D86B878E88404A014C /* TRCallRepairerView.m in Sources */,
 				6F3DF656FDA2566E11484CA2 /* EGShadow.m in Sources */,
 				6F3DFD0DC88BEBB387C6D9BF /* SDSound.m in Sources */,
 				6F3DF3557C6BC099ABE56F09 /* TRLevelSound.m in Sources */,
@@ -5377,7 +5366,6 @@
 				6F3DF17503FFF093347620C8 /* TRSwitchProcessor.m in Sources */,
 				6F3DFCB54F46C7B8177024A6 /* TRTreeSound.m in Sources */,
 				6F3DF8C589D98D5146BC0FCF /* TRLevelSound.m in Sources */,
-				6F3DF308520EBA79432D3D82 /* TRCallRepairerView.m in Sources */,
 				6F3DFCDB0E56A3891375AE04 /* TRCityView.m in Sources */,
 				6F3DF7D2DAF5436BEC789360 /* TRRailroadView.m in Sources */,
 				6F3DF50DCFB9055F4AD2A1C8 /* TRStrings.m in Sources */,

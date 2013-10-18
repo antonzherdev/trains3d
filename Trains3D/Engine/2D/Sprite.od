@@ -1,5 +1,7 @@
 package com.antonzherdev.eg
 
+import core.math._
+
 object D2D {
     private val vertexes = VoidRefArray(BillboardBufferData.type, 4)
     private val vb = VBO.mut(Billboard.vbDesc)
@@ -55,6 +57,33 @@ object D2D {
 
         context.cullFace.disabled {
             lineVao.draw(material)
+        }
+    }
+
+    private lazy val circleVb = VBO.mut(Billboard.vbDesc)
+    private lazy val circleVaoForColor = Mesh(circleVb, EmptyIndexSource.triangleFan).vao(BillboardShader.instanceForColor)
+    def drawCircle(material : ColorSource, at : vec3, radius : float4, segments : uint4, start : float, end : float) {
+        val theta = 2 * M_PI / segments
+        val c = cos(theta)
+        val s = sin(theta)
+        var t = 0.0
+        var x = radius //we start at angle = 0
+        var y = 0.0
+
+        val vertexes = VoidRefArray(BillboardBufferData.type, segments + 2)
+        var v = vertexes
+        var ii = 0
+        v = v.write(BillboardBufferData, BillboardBufferData(at, vec2(0, 0), material.color, vec2(0, 0)))
+        while(ii <= segments) {
+            v = v.write(BillboardBufferData, BillboardBufferData(at, vec2(x, y), material.color, vec2(0, 0)))
+            t = x
+            x = c * x - s * y
+            y = s * t + c * y
+            ii++
+        }
+        circleVb.set(vertexes)
+        context.cullFace.disabled {
+            circleVaoForColor.draw(material)
         }
     }
 }

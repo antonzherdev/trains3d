@@ -24,6 +24,7 @@
 + (CNVoidRefArray)writeSpriteIn:(CNVoidRefArray)in material:(EGColorSource*)material at:(GEVec3)at quad:(GEQuad)quad uv:(GEQuad)uv;
 + (CNVoidRefArray)writeQuadIndexIn:(CNVoidRefArray)in i:(unsigned int)i;
 + (void)drawLineMaterial:(EGColorSource*)material p0:(GEVec2)p0 p1:(GEVec2)p1;
++ (void)drawCircleMaterial:(EGColorSource*)material at:(GEVec3)at radius:(float)radius segments:(unsigned int)segments start:(CGFloat)start end:(CGFloat)end;
 + (ODClassType*)type;
 @end
 
