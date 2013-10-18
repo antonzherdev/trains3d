@@ -4,13 +4,6 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 
 class CityView(level : Level) {
-    val expectedTrainModel = Mesh([
-        0, 0, 0, 1, 0, -0.5, 0.001, -0.5,
-        1, 0, 0, 1, 0, 0.5, 0.001, -0.5,
-        1, 1, 0, 1, 0, 0.5, 0.001, 0.5,
-        0, 1, 0, 1, 0, -0.5, 0.001, 0.5
-        ], [0, 1, 2,
-        2, 3, 0]).vao(StandardMaterial(vec4(1, 1, 1, 1)), shadow = false)
     val cityTexture = textureFor("City.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
     val vaoBody = Models.city.vao(StandardMaterial(cityTexture), shadow = true)
 
@@ -22,14 +15,22 @@ class CityView(level : Level) {
                  .modify(m = m -> m.rotate(city.angle.angle, 0, -1, 0))
             ) {
                 vaoBody.draw(StandardMaterial(ColorSource(city.color.color, cityTexture)))
-                if(!context.renderTarget.is<ShadowRenderTarget>) {
-                    city.expectedTrainCounter.for{time ->
-                        val x = -time/2
-                        expectedTrainModel.draw(StandardMaterial(vec4(1.0, 0.5 - x, 0.5 - x, 1)))
-                    }
-                }
+
             }
         }
         egPopGroupMarker
+    }
+
+    def drawExpected {
+        context.depthTest.disabled { BlendFunction.standard {
+            level.cities.for{ city ->
+                if(!context.renderTarget.is<ShadowRenderTarget>) {
+                    city.expectedTrainCounter.for{time ->
+                        D2D.drawSprite(ColorSource(vec4(1.0, 1.0, 1.0, time)), vec3(city.tile, 0), Rect(0, 0, 0.3, 0.3))
+                    }
+                }
+            }
+        }}
+
     }
 }

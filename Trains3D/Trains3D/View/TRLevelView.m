@@ -79,6 +79,7 @@ static ODClassType* _TRLevelView_type;
     [_railroadView drawForeground];
     if(!([EGGlobal.context.renderTarget isShadow])) {
         [_trainView drawSmoke];
+        [_cityView drawExpected];
         [_callRepairerView draw];
     }
 }

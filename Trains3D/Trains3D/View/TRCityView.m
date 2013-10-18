@@ -1,24 +1,23 @@
 #import "TRCityView.h"
 
 #import "TRLevel.h"
-#import "EGMesh.h"
-#import "EGMaterial.h"
 #import "EGTexture.h"
 #import "GL.h"
 #import "EGContext.h"
+#import "EGMesh.h"
 #import "TRModels.h"
+#import "EGMaterial.h"
 #import "TRCity.h"
 #import "GEMat4.h"
+#import "EGSprite.h"
 #import "EGSchedule.h"
 @implementation TRCityView{
     TRLevel* _level;
-    EGVertexArray* _expectedTrainModel;
     EGTexture* _cityTexture;
     EGVertexArray* _vaoBody;
 }
 static ODClassType* _TRCityView_type;
 @synthesize level = _level;
-@synthesize expectedTrainModel = _expectedTrainModel;
 @synthesize cityTexture = _cityTexture;
 @synthesize vaoBody = _vaoBody;
 
@@ -30,7 +29,6 @@ static ODClassType* _TRCityView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _expectedTrainModel = [[EGMesh applyVertexData:[ arrs(EGMeshData, 32) {0, 0, 0, 1, 0, -0.5, 0.001, -0.5, 1, 0, 0, 1, 0, 0.5, 0.001, -0.5, 1, 1, 0, 1, 0, 0.5, 0.001, 0.5, 0, 1, 0, 1, 0, -0.5, 0.001, 0.5}] indexData:[ arrui4(6) {0, 1, 2, 2, 3, 0}]] vaoMaterial:[EGStandardMaterial applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)] shadow:NO];
         _cityTexture = [EGGlobal textureForFile:@"City.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST];
         _vaoBody = [TRModels.city vaoMaterial:[EGStandardMaterial applyTexture:_cityTexture] shadow:YES];
     }
@@ -54,13 +52,21 @@ static ODClassType* _TRCityView_type;
             }];
         } f:^void() {
             [_vaoBody drawParam:[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:city.color.color texture:_cityTexture]]];
-            if(!([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]])) [city.expectedTrainCounter forF:^void(CGFloat time) {
-                CGFloat x = -time / 2;
-                [_expectedTrainModel drawParam:[EGStandardMaterial applyColor:GEVec4Make(1.0, ((float)(0.5 - x)), ((float)(0.5 - x)), 1.0)]];
-            }];
         }];
     }];
     egPopGroupMarker();
+}
+
+- (void)drawExpected {
+    [EGGlobal.context.depthTest disabledF:^void() {
+        [EGBlendFunction.standard applyDraw:^void() {
+            [[_level cities] forEach:^void(TRCity* city) {
+                if(!([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]])) [city.expectedTrainCounter forF:^void(CGFloat time) {
+                    [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, ((float)(time)))] at:geVec3ApplyVec2Z(geVec2ApplyVec2i(city.tile), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 0.3, 0.3)];
+                }];
+            }];
+        }];
+    }];
 }
 
 - (ODClassType*)type {
