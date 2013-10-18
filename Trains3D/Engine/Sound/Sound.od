@@ -50,11 +50,14 @@ class SporadicSoundPlayer(sound : Sound, secondsBetween : float/*average seconds
     def stop {
         sound.stop
     }
+
+    private var wasPlaying = false
     def pause {
+        wasPlaying = sound.isPlaying
         sound.pause
     }
     def resume {
-        sound.play
+        if(wasPlaying) sound.play
     }
     def updateWith(delta : float) {
         if(!sound.isPlaying) {

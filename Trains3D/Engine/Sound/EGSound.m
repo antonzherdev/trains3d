@@ -168,6 +168,7 @@ static ODClassType* _EGSoundPlayersCollection_type;
     SDSound* _sound;
     CGFloat _secondsBetween;
     CGFloat __timeToNextPlaying;
+    BOOL _wasPlaying;
 }
 static ODClassType* _EGSporadicSoundPlayer_type;
 @synthesize sound = _sound;
@@ -183,6 +184,7 @@ static ODClassType* _EGSporadicSoundPlayer_type;
         _sound = sound;
         _secondsBetween = secondsBetween;
         __timeToNextPlaying = 0.0;
+        _wasPlaying = NO;
     }
     
     return self;
@@ -202,11 +204,12 @@ static ODClassType* _EGSporadicSoundPlayer_type;
 }
 
 - (void)pause {
+    _wasPlaying = [_sound isPlaying];
     [_sound pause];
 }
 
 - (void)resume {
-    [_sound play];
+    if(_wasPlaying) [_sound play];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

@@ -5,7 +5,7 @@ class SceneFactory {
 
     static def restartLevel = {
         director.scene.get.controller.as<Level>.for{level ->
-        director.set(scene = sceneFor(Level(level.rules)))
+            director.set(scene = sceneFor(Level(level.rules)))
         }
     }
 
