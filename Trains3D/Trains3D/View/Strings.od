@@ -10,6 +10,7 @@ trait  Strings {
     def restartLevel : string
     def mainMenu : string
     def callRepairer : string
+    def undo : string
 
     def format(cost : int) : string = "$cost"
 }
@@ -23,6 +24,7 @@ class EnStrings extends Strings {
     def restartLevel : string = "Restart the level"
     def mainMenu : string = "Main menu"
     def callRepairer : string = "Call\nrepairers"
+    def undo : string = "Undo"
 }
 
 class RuStrings extends Strings{
@@ -34,6 +36,7 @@ class RuStrings extends Strings{
     def restartLevel : string = "Начать уровень заново"
     def mainMenu : string = "Основное меню"
     def callRepairer : string = "Вызвать\nремонтников"
+    def undo : string = "Отменить"
 }
 
 object Str {

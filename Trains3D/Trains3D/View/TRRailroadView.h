@@ -1,5 +1,7 @@
 #import "objd.h"
+#import "EGInput.h"
 #import "GEVec.h"
+#import "EGFont.h"
 @class TRRailroad;
 @class EGViewportSurface;
 @class EGGlobal;
@@ -14,6 +16,7 @@
 @class EGVertexArray;
 @class EGEnablingState;
 @class TRRailroadBuilder;
+@class EGDirector;
 @class EGStandardMaterial;
 @class EGColorSource;
 @class EGTexture;
@@ -26,6 +29,9 @@
 @class EGMatrixModel;
 @class TRRailForm;
 @class EGMatrixStack;
+@class EGBillboard;
+@class TRStr;
+@protocol TRStrings;
 @class TRSwitch;
 @class TRRailConnector;
 @class EGTextureRegion;
@@ -35,12 +41,13 @@
 
 @class TRRailroadView;
 @class TRRailView;
+@class TRUndoView;
 @class TRSwitchView;
 @class TRLightView;
 @class TRDamageView;
 @class TRBackgroundView;
 
-@interface TRRailroadView : NSObject
+@interface TRRailroadView : NSObject<EGInputProcessor>
 @property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic, readonly) id shadowVao;
 
@@ -51,6 +58,8 @@
 - (void)drawBackground;
 - (void)drawForeground;
 - (void)prepare;
+- (void)reshape;
+- (BOOL)processEvent:(EGEvent*)event;
 + (ODClassType*)type;
 @end
 
@@ -66,6 +75,20 @@
 - (ODClassType*)type;
 - (void)drawRailBuilding:(TRRailBuilding*)railBuilding;
 - (void)drawRail:(TRRail*)rail;
++ (ODClassType*)type;
+@end
+
+
+@interface TRUndoView : NSObject<EGInputProcessor, EGTapProcessor>
+@property (nonatomic, readonly) TRRailroadBuilder* builder;
+
++ (id)undoViewWithBuilder:(TRRailroadBuilder*)builder;
+- (id)initWithBuilder:(TRRailroadBuilder*)builder;
+- (ODClassType*)type;
+- (void)reshape;
+- (void)draw;
+- (BOOL)processEvent:(EGEvent*)event;
+- (BOOL)tapEvent:(EGEvent*)event;
 + (ODClassType*)type;
 @end
 

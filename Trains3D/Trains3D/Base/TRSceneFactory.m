@@ -27,7 +27,7 @@ static ODClassType* _TRSceneFactory_type;
 }
 
 + (EGScene*)sceneForLevel:(TRLevel*)level {
-    return [EGScene sceneWithBackgroundColor:geVec4DivI(GEVec4Make(215.0, 230.0, 195.0, 255.0), 255) controller:level layers:[TRTrainLayers trainLayersWithLevel:level] soundPlayer:[CNOption applyValue:[TRLevelSound levelSoundWithLevel:level]]];
+    return [EGScene sceneWithBackgroundColor:GEVec4Make(0.85, 0.9, 0.75, 1.0) controller:level layers:[TRTrainLayers trainLayersWithLevel:level] soundPlayer:[CNOption applyValue:[TRLevelSound levelSoundWithLevel:level]]];
 }
 
 + (void)restartLevel {

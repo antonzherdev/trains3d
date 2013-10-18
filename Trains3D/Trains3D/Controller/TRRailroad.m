@@ -899,6 +899,12 @@ static ODClassType* _TRRailroadBuilder_type;
     return __buildingRails;
 }
 
+- (id)railForUndo {
+    return [[__buildingRails headOpt] mapF:^TRRail*(TRRailBuilding* _) {
+        return _.rail;
+    }];
+}
+
 - (BOOL)tryBuildRail:(TRRail*)rail {
     if([self canAddRail:rail]) {
         __rail = [CNOption applyValue:rail];
@@ -955,6 +961,10 @@ static ODClassType* _TRRailroadBuilder_type;
             return YES;
         }
     }];
+}
+
+- (void)undo {
+    __buildingRails = [__buildingRails tail];
 }
 
 - (ODClassType*)type {

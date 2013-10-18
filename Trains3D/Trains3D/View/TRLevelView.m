@@ -93,12 +93,13 @@ static ODClassType* _TRLevelView_type;
 }
 
 - (BOOL)processEvent:(EGEvent*)event {
-    return [_callRepairerView processEvent:event] || [_switchProcessor processEvent:event] || [_railroadBuilderProcessor processEvent:event];
+    return [_callRepairerView processEvent:event] || [_railroadView processEvent:event] || [_switchProcessor processEvent:event] || [_railroadBuilderProcessor processEvent:event];
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
     EGGlobal.matrix.value = [_camera matrixModel];
     [_callRepairerView reshapeWithViewport:viewport];
+    [_railroadView reshape];
 }
 
 - (BOOL)isProcessorActive {

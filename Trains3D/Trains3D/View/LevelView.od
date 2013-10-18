@@ -56,11 +56,13 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
 
     def process(event : Event) : bool =
         callRepairerView.process(event)
+        || railroadView.process(event)
         || switchProcessor.process(event)
         || railroadBuilderProcessor.process(event)
 
     def reshapeWith(viewport : Rect) {
         matrix.value = camera.matrixModel
         callRepairerView.reshapeWith(viewport)
+        railroadView.reshape
     }
 }

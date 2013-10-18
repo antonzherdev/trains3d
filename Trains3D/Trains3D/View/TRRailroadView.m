@@ -9,10 +9,13 @@
 #import "EGMapIsoView.h"
 #import "EGMesh.h"
 #import "EGMaterial.h"
+#import "EGDirector.h"
 #import "EGTexture.h"
 #import "TRModels.h"
 #import "GEMat4.h"
 #import "TRRailPoint.h"
+#import "EGBillboard.h"
+#import "TRStrings.h"
 #import "EGMapIso.h"
 @implementation TRRailroadView{
     TRRailroad* _railroad;
@@ -22,6 +25,7 @@
     TRDamageView* _damageView;
     EGViewportSurface* _railroadSurface;
     TRBackgroundView* _backgroundView;
+    TRUndoView* _undoView;
     id _shadowVao;
     BOOL _changed;
 }
@@ -41,6 +45,7 @@ static ODClassType* _TRRailroadView_type;
         _lightView = [TRLightView lightViewWithRailroad:_railroad];
         _damageView = [TRDamageView damageView];
         _railroadSurface = [EGViewportSurface viewportSurfaceWithDepth:YES multisampling:YES];
+        _undoView = [TRUndoView undoViewWithBuilder:_railroad.builder];
         _changed = YES;
         [self _init];
     }
@@ -97,6 +102,7 @@ static ODClassType* _TRRailroadView_type;
 
 - (void)drawForeground {
     egPushGroupMarker(@"Railroad foreground");
+    [_undoView draw];
     [_lightView drawGlows];
     egPopGroupMarker();
 }
@@ -113,6 +119,18 @@ static ODClassType* _TRRailroadView_type;
         EGGlobal.context.considerShadows = YES;
         _changed = NO;
     }];
+}
+
+- (void)reshape {
+    [_undoView reshape];
+}
+
+- (BOOL)processEvent:(EGEvent*)event {
+    return [_undoView processEvent:event];
+}
+
+- (BOOL)isProcessorActive {
+    return !([[EGGlobal director] isPaused]);
 }
 
 - (ODClassType*)type {
@@ -243,6 +261,111 @@ static ODClassType* _TRRailView_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRUndoView{
+    TRRailroadBuilder* _builder;
+    EGFont* _font;
+    BOOL _empty;
+    EGBillboard* _button;
+}
+static ODClassType* _TRUndoView_type;
+@synthesize builder = _builder;
+
++ (id)undoViewWithBuilder:(TRRailroadBuilder*)builder {
+    return [[TRUndoView alloc] initWithBuilder:builder];
+}
+
+- (id)initWithBuilder:(TRRailroadBuilder*)builder {
+    self = [super init];
+    if(self) {
+        _builder = builder;
+        _empty = YES;
+        _button = [EGBillboard applyMaterial:[EGColorSource applyColor:GEVec4Make(0.85, 0.9, 0.75, 0.8)]];
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRUndoView_type = [ODClassType classTypeWithCls:[TRUndoView class]];
+}
+
+- (void)reshape {
+    _font = [EGGlobal fontWithName:@"lucida_grande" size:18];
+    GEVec2 textSize = [_font measureText:[TRStr.Loc undo]];
+    GEVec2 buttonSize = geVec4Xy([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW(geVec2MulF(textSize, 1.5), 0.0, 0.0)]);
+    _button.rect = GERectMake(geVec2DivI(geVec2Negate(buttonSize), 2), buttonSize);
+}
+
+- (void)draw {
+    id rail = [_builder railForUndo];
+    if([rail isEmpty]) {
+        _empty = YES;
+    } else {
+        _empty = NO;
+        [EGGlobal.context.depthTest disabledF:^void() {
+            [EGBlendFunction.standard applyDraw:^void() {
+                _button.position = geVec3ApplyVec2Z(geVec2ApplyVec2i(((TRRail*)([rail get])).tile), 0.0);
+                [_button draw];
+                [_font drawText:[TRStr.Loc undo] color:GEVec4Make(0.1, 0.1, 0.1, 1.0) at:_button.position alignment:egTextAlignmentApplyXY(0.0, 0.0)];
+            }];
+        }];
+    }
+}
+
+- (BOOL)processEvent:(EGEvent*)event {
+    return !(_empty) && [event tapProcessor:self];
+}
+
+- (BOOL)tapEvent:(EGEvent*)event {
+    GEVec2 p = [event locationInViewport];
+    if([_button containsVec2:p]) {
+        [_builder undo];
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+- (BOOL)isProcessorActive {
+    return !([[EGGlobal director] isPaused]);
+}
+
+- (ODClassType*)type {
+    return [TRUndoView type];
+}
+
++ (ODClassType*)type {
+    return _TRUndoView_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRUndoView* o = ((TRUndoView*)(other));
+    return [self.builder isEqual:o.builder];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.builder hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"builder=%@", self.builder];
     [description appendString:@">"];
     return description;
 }

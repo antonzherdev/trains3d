@@ -14,6 +14,7 @@
 - (NSString*)restartLevel;
 - (NSString*)mainMenu;
 - (NSString*)callRepairer;
+- (NSString*)undo;
 - (NSString*)formatCost:(NSInteger)cost;
 @end
 
@@ -30,6 +31,7 @@
 - (NSString*)restartLevel;
 - (NSString*)mainMenu;
 - (NSString*)callRepairer;
+- (NSString*)undo;
 + (ODClassType*)type;
 @end
 
@@ -46,6 +48,7 @@
 - (NSString*)restartLevel;
 - (NSString*)mainMenu;
 - (NSString*)callRepairer;
+- (NSString*)undo;
 + (ODClassType*)type;
 @end
 

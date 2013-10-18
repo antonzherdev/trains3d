@@ -222,6 +222,7 @@ class RailroadBuilder(weak railroad : Railroad) extends Controller {
     def rail = _rail
     private var _buildingRails = List<RailBuilding>()
     def buildingRails : [RailBuilding] = _buildingRails
+    def railForUndo : Rail? = _buildingRails.headOpt.map(_.rail)
 
     def tryBuild(rail : Rail) : bool = {
         if(canAdd(rail)) {
@@ -278,6 +279,10 @@ class RailroadBuilder(weak railroad : Railroad) extends Controller {
                 } else true
             }
         }
+    }
+
+    def undo {
+        _buildingRails = _buildingRails.tail
     }
 }
 

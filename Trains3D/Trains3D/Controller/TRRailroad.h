@@ -166,12 +166,14 @@
 - (ODClassType*)type;
 - (id)rail;
 - (id<CNSeq>)buildingRails;
+- (id)railForUndo;
 - (BOOL)tryBuildRail:(TRRail*)rail;
 - (BOOL)checkCityTile:(GEVec2i)tile connector:(TRRailConnector*)connector;
 - (void)clear;
 - (void)fix;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (void)updateWithDelta:(CGFloat)delta;
+- (void)undo;
 + (ODClassType*)type;
 @end
 

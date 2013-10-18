@@ -51,6 +51,10 @@ static ODClassType* _TREnStrings_type;
         "repairers";
 }
 
+- (NSString*)undo {
+    return @"Undo";
+}
+
 - (NSString*)formatCost:(NSInteger)cost {
     return [NSString stringWithFormat:@"%li", cost];
 }
@@ -135,6 +139,10 @@ static ODClassType* _TRRuStrings_type;
 - (NSString*)callRepairer {
     return @"Вызвать\n"
         "ремонтников";
+}
+
+- (NSString*)undo {
+    return @"Отменить";
 }
 
 - (NSString*)formatCost:(NSInteger)cost {
