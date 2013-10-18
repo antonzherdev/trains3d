@@ -144,22 +144,35 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Controller 
             val x = damage.get
             return RailPointCorrection(p.set(x = x), correction.error + correction.point.x - x)
         }
-        if(correction.error == 0) return correction
+
+        if(correction.error == 0) {
+            val switchCheckCorrection = (correction.point + 0.5).correct
+            if(switchCheckCorrection.error == 0) return correction
+
+            val scActiveRailOpt = connectorIndex[(p.tile, p.endConnector)].rails.headOpt
+            if(scActiveRailOpt.isEmpty) return correction
+            if(scActiveRailOpt.get.form != p.form) {
+                if(!obstacleProcessor(Obstacle(ObstacleType.light, correction.point))) {
+                    return RailPointCorrection(switchCheckCorrection.point.add(-0.5), switchCheckCorrection.error)
+                }
+            }
+            return correction
+        }
 
         val connector = p.endConnector
         val connectorDesc = connectorIndex[(p.tile, connector)]
         val activeRailOpt = connectorDesc.rails.headOpt
         if(activeRailOpt.isEmpty) return correction
 
+        if(activeRailOpt.get.form != p.form) {
+            obstacleProcessor(Obstacle(ObstacleType.switch, correction.point))
+            return correction
+        }
+
         if(!connectorDesc.isGreen) {
             if(!obstacleProcessor(Obstacle(ObstacleType.light, correction.point))) {
                 return correction
             }
-        }
-
-        if(activeRailOpt.get.form != p.form) {
-            obstacleProcessor(Obstacle(ObstacleType.switch, correction.point))
-            return correction
         }
 
         val nextTile = connector.next(p.tile)

@@ -687,16 +687,23 @@ static ODClassType* _TRRailroad_type;
         CGFloat x = unumf([damage get]);
         return [TRRailPointCorrection railPointCorrectionWithPoint:[p setX:x] error:correction.error + correction.point.x - x];
     }
-    if(eqf(correction.error, 0)) return correction;
+    if(eqf(correction.error, 0)) {
+        TRRailPointCorrection* switchCheckCorrection = [[correction.point addX:0.5] correct];
+        if(eqf(switchCheckCorrection.error, 0)) return correction;
+        id scActiveRailOpt = [[((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(GEVec2i, p.tile), [p endConnector])])) rails] headOpt];
+        if([scActiveRailOpt isEmpty]) return correction;
+        if(((TRRail*)([scActiveRailOpt get])).form != p.form) if(!(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.light point:correction.point]))) return [TRRailPointCorrection railPointCorrectionWithPoint:[switchCheckCorrection.point addX:-0.5] error:switchCheckCorrection.error];
+        return correction;
+    }
     TRRailConnector* connector = [p endConnector];
     TRRailroadConnectorContent* connectorDesc = ((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(GEVec2i, p.tile), connector)]));
     id activeRailOpt = [[connectorDesc rails] headOpt];
     if([activeRailOpt isEmpty]) return correction;
-    if(!([connectorDesc isGreen])) if(!(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.light point:correction.point]))) return correction;
     if(((TRRail*)([activeRailOpt get])).form != p.form) {
         obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.aSwitch point:correction.point]);
         return correction;
     }
+    if(!([connectorDesc isGreen])) if(!(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.light point:correction.point]))) return correction;
     GEVec2i nextTile = [connector nextTile:p.tile];
     TRRailConnector* otherSideConnector = [connector otherSideConnector];
     id nextRail = [self activeRailForTile:nextTile connector:otherSideConnector];
