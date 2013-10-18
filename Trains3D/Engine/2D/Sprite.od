@@ -64,24 +64,42 @@ object D2D {
     private lazy val circleVaoForColor = Mesh(circleVb, EmptyIndexSource.triangleFan).vao(BillboardShader.instanceForColor)
     def drawCircle(material : ColorSource, at : vec3, radius : float4, segments : uint4, start : float, end : float) {
         val theta = 2 * M_PI / segments
+
         val c = cos(theta)
         val s = sin(theta)
         var t = 0.0
-        var x = radius //we start at angle = 0
-        var y = 0.0
+        var a = 0.0
+
+        val st : float
+        val ed : float
+        if(start < end) {
+            st = start
+            ed = end - start
+        } else {
+            st = end
+            ed = start - end
+        }
+        var x = radius * cos(st)
+        var y = radius * sin(st)
 
         val vertexes = VoidRefArray(BillboardBufferData.type, segments + 2)
         var v = vertexes
         var ii = 0
+        var n = 1
         v = v.write(BillboardBufferData, BillboardBufferData(at, vec2(0, 0), material.color, vec2(0, 0)))
+
         while(ii <= segments) {
-            v = v.write(BillboardBufferData, BillboardBufferData(at, vec2(x, y), material.color, vec2(0, 0)))
+            if(a <= ed) {
+                v = v.write(BillboardBufferData, BillboardBufferData(at, vec2(x, y), material.color, vec2(0, 0)))
+                n++
+            }
             t = x
             x = c * x - s * y
             y = s * t + c * y
             ii++
+            a += theta
         }
-        circleVb.set(vertexes)
+        circleVb.set(vertexes, n)
         context.cullFace.disabled {
             circleVaoForColor.draw(material)
         }

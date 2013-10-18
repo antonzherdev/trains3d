@@ -93,20 +93,35 @@ static ODClassType* _EGD2D_type;
     CGFloat c = cos(theta);
     CGFloat s = sin(theta);
     CGFloat t = 0.0;
-    float x = radius;
-    CGFloat y = 0.0;
+    CGFloat a = 0.0;
+    CGFloat st;
+    CGFloat ed;
+    if(start < end) {
+        st = start;
+        ed = end - start;
+    } else {
+        st = end;
+        ed = start - end;
+    }
+    float x = radius * cos(st);
+    float y = radius * sin(st);
     CNVoidRefArray vertexes = cnVoidRefArrayApplyTpCount(egBillboardBufferDataType(), ((NSUInteger)(segments + 2)));
     CNVoidRefArray v = vertexes;
     NSInteger ii = 0;
+    NSInteger n = 1;
     v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, GEVec2Make(0.0, 0.0), material.color, GEVec2Make(0.0, 0.0)));
     while(ii <= segments) {
-        v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, GEVec2Make(x, ((float)(y))), material.color, GEVec2Make(0.0, 0.0)));
+        if(a <= ed) {
+            v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, GEVec2Make(x, y), material.color, GEVec2Make(0.0, 0.0)));
+            n++;
+        }
         t = ((CGFloat)(x));
         x = ((float)(c * x - s * y));
-        y = s * t + c * y;
+        y = ((float)(s * t + c * y));
         ii++;
+        a += theta;
     }
-    [[EGD2D circleVb] setArray:vertexes];
+    [[EGD2D circleVb] setArray:vertexes count:((unsigned int)(n))];
     [EGGlobal.context.cullFace disabledF:^void() {
         [[EGD2D circleVaoForColor] drawParam:material];
     }];

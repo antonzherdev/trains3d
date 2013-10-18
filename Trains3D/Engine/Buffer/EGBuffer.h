@@ -30,6 +30,7 @@
 - (NSUInteger)count;
 - (id)setData:(CNPArray*)data;
 - (id)setArray:(CNVoidRefArray)array;
+- (id)setArray:(CNVoidRefArray)array count:(unsigned int)count;
 - (id)updateStart:(NSUInteger)start count:(NSUInteger)count array:(CNVoidRefArray)array;
 + (ODClassType*)type;
 @end
