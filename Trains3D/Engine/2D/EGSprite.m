@@ -30,7 +30,7 @@ static ODClassType* _EGD2D_type;
     _EGD2D_lineVertexes = cnVoidRefArrayApplyTpCount(egMeshDataType(), 2);
     _EGD2D_lineVao = [[EGMesh meshWithVertex:_EGD2D_lineVb index:EGEmptyIndexSource.lines] vaoShader:EGSimpleShaderSystem.colorShader];
     _EGD2D__lazy_circleVaoForColor = [CNLazy lazyWithF:^EGVertexArray*() {
-        return [[EGMesh meshWithVertex:[EGVBO vec2Data:[ arrs(GEVec2, 4) {GEVec2Make(-1.0, -1.0), GEVec2Make(-1.0, 1.0), GEVec2Make(1.0, -1.0), GEVec2Make(1.0, 1.0)}]] index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGCircleShader instance]];
+        return [[EGMesh meshWithVertex:[EGVBO vec2Data:[ arrs(GEVec2, 4) {GEVec2Make(-1.0, -1.0), GEVec2Make(-1.0, 1.0), GEVec2Make(1.0, -1.0), GEVec2Make(1.0, 1.0)}]] index:EGEmptyIndexSource.triangleStrip] vaoShader:EGCircleShader.instance];
     }];
 }
 
@@ -85,7 +85,7 @@ static ODClassType* _EGD2D_type;
 + (void)drawCircleMaterial:(EGColorSource*)material at:(GEVec3)at radius:(float)radius segments:(unsigned int)segments start:(CGFloat)start end:(CGFloat)end {
     [EGBlendFunction.standard applyDraw:^void() {
         [EGGlobal.context.cullFace disabledF:^void() {
-            [[EGD2D circleVaoForColor] drawParam:[EGCircleParam circleParamWithColor:material.color position:at radius:radius]];
+            [[EGD2D circleVaoForColor] drawParam:[EGCircleParam circleParamWithColor:material.color position:at radius:radius start:((float)(start)) end:((float)(end))]];
         }];
     }];
 }
@@ -162,10 +162,24 @@ static ODClassType* _EGCircleShaderBuilder_type;
         "\n"
         "%@ highp vec2 coord;\n"
         "uniform lowp vec4 color;\n"
+        "uniform lowp float startTg;\n"
+        "uniform lowp float endTg;\n"
         "\n"
         "void main(void) {\n"
-        "    %@ = vec4(color.xyz, color.w * (1.0 - smoothstep(0.95, 1.0, dot(coord, coord))));\n"
-        "}", [self fragmentHeader], [self in], [self fragColor]];
+        "    lowp float tg = atan(coord.y, coord.x);\n"
+        "    if(endTg < startTg) {\n"
+        "       %@ = vec4(color.xyz, color.w * (\n"
+        "                1.0 - smoothstep(0.95, 1.0, dot(coord, coord))\n"
+        "                - (clamp(smoothstep(endTg - 0.1, endTg, tg) + 1.0 - smoothstep(startTg, startTg + 0.1, tg), 1.0, 2.0) - 1.0)\n"
+        "       ));\n"
+        "    } else {\n"
+        "        %@ = vec4(color.xyz, color.w * (\n"
+        "                1.0 - smoothstep(0.95, 1.0, dot(coord, coord))\n"
+        "                - (1.0 - smoothstep(startTg, startTg + 0.1, tg))\n"
+        "                - (smoothstep(endTg - 0.1, endTg, tg))\n"
+        "        ));\n"
+        "    }\n"
+        "}", [self fragmentHeader], [self in], [self fragColor], [self fragColor]];
 }
 
 - (EGShaderProgram*)program {
@@ -268,22 +282,28 @@ static ODClassType* _EGCircleShaderBuilder_type;
     GEVec4 _color;
     GEVec3 _position;
     float _radius;
+    float _start;
+    float _end;
 }
 static ODClassType* _EGCircleParam_type;
 @synthesize color = _color;
 @synthesize position = _position;
 @synthesize radius = _radius;
+@synthesize start = _start;
+@synthesize end = _end;
 
-+ (id)circleParamWithColor:(GEVec4)color position:(GEVec3)position radius:(float)radius {
-    return [[EGCircleParam alloc] initWithColor:color position:position radius:radius];
++ (id)circleParamWithColor:(GEVec4)color position:(GEVec3)position radius:(float)radius start:(float)start end:(float)end {
+    return [[EGCircleParam alloc] initWithColor:color position:position radius:radius start:start end:end];
 }
 
-- (id)initWithColor:(GEVec4)color position:(GEVec3)position radius:(float)radius {
+- (id)initWithColor:(GEVec4)color position:(GEVec3)position radius:(float)radius start:(float)start end:(float)end {
     self = [super init];
     if(self) {
         _color = color;
         _position = position;
         _radius = radius;
+        _start = start;
+        _end = end;
     }
     
     return self;
@@ -310,7 +330,7 @@ static ODClassType* _EGCircleParam_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGCircleParam* o = ((EGCircleParam*)(other));
-    return GEVec4Eq(self.color, o.color) && GEVec3Eq(self.position, o.position) && eqf4(self.radius, o.radius);
+    return GEVec4Eq(self.color, o.color) && GEVec3Eq(self.position, o.position) && eqf4(self.radius, o.radius) && eqf4(self.start, o.start) && eqf4(self.end, o.end);
 }
 
 - (NSUInteger)hash {
@@ -318,6 +338,8 @@ static ODClassType* _EGCircleParam_type;
     hash = hash * 31 + GEVec4Hash(self.color);
     hash = hash * 31 + GEVec3Hash(self.position);
     hash = hash * 31 + float4Hash(self.radius);
+    hash = hash * 31 + float4Hash(self.start);
+    hash = hash * 31 + float4Hash(self.end);
     return hash;
 }
 
@@ -326,6 +348,8 @@ static ODClassType* _EGCircleParam_type;
     [description appendFormat:@"color=%@", GEVec4Description(self.color)];
     [description appendFormat:@", position=%@", GEVec3Description(self.position)];
     [description appendFormat:@", radius=%f", self.radius];
+    [description appendFormat:@", start=%f", self.start];
+    [description appendFormat:@", end=%f", self.end];
     [description appendString:@">"];
     return description;
 }
@@ -339,14 +363,18 @@ static ODClassType* _EGCircleParam_type;
     EGShaderUniformMat4* _p;
     EGShaderUniformF4* _radius;
     EGShaderUniformVec4* _color;
+    EGShaderUniformF4* _startTg;
+    EGShaderUniformF4* _endTg;
 }
-static CNLazy* _EGCircleShader__lazy_instance;
+static EGCircleShader* _EGCircleShader_instance;
 static ODClassType* _EGCircleShader_type;
 @synthesize model = _model;
 @synthesize pos = _pos;
 @synthesize p = _p;
 @synthesize radius = _radius;
 @synthesize color = _color;
+@synthesize startTg = _startTg;
+@synthesize endTg = _endTg;
 
 + (id)circleShader {
     return [[EGCircleShader alloc] init];
@@ -360,6 +388,8 @@ static ODClassType* _EGCircleShader_type;
         _p = [self uniformMat4Name:@"p"];
         _radius = [self uniformF4Name:@"radius"];
         _color = [self uniformVec4Name:@"color"];
+        _startTg = [self uniformF4Name:@"startTg"];
+        _endTg = [self uniformF4Name:@"endTg"];
     }
     
     return self;
@@ -368,13 +398,7 @@ static ODClassType* _EGCircleShader_type;
 + (void)initialize {
     [super initialize];
     _EGCircleShader_type = [ODClassType classTypeWithCls:[EGCircleShader class]];
-    _EGCircleShader__lazy_instance = [CNLazy lazyWithF:^EGCircleShader*() {
-        return [EGCircleShader circleShader];
-    }];
-}
-
-+ (EGCircleShader*)instance {
-    return ((EGCircleShader*)([_EGCircleShader__lazy_instance get]));
+    _EGCircleShader_instance = [EGCircleShader circleShader];
 }
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
@@ -386,10 +410,30 @@ static ODClassType* _EGCircleShader_type;
     [_p applyMatrix:EGGlobal.matrix.value.p];
     [_radius applyF4:param.radius];
     [_color applyVec4:param.color];
+    if(param.start < param.end) {
+        [_startTg applyF4:[self clampP:param.start]];
+        [_endTg applyF4:[self clampP:param.end]];
+    } else {
+        [_startTg applyF4:[self clampP:param.end]];
+        [_endTg applyF4:[self clampP:param.start]];
+    }
+}
+
+- (float)clampP:(float)p {
+    if(p < -M_PI) {
+        return ((float)(2 * M_PI + p));
+    } else {
+        if(p > M_PI) return ((float)(-2 * M_PI + p));
+        else return p;
+    }
 }
 
 - (ODClassType*)type {
     return [EGCircleShader type];
+}
+
++ (EGCircleShader*)instance {
+    return _EGCircleShader_instance;
 }
 
 + (ODClassType*)type {

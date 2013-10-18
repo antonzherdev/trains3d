@@ -65,7 +65,7 @@ object D2D {
         EmptyIndexSource.triangleStrip).vao(CircleShader.instance)
     def drawCircle(material : ColorSource, at : vec3, radius : float4, segments : uint4, start : float, end : float) {
         BlendFunction.standard { context.cullFace.disabled {
-            circleVaoForColor.draw(CircleParam(material.color, at, radius))
+            circleVaoForColor.draw(CircleParam(material.color, at, radius, start, end))
         }}
     }
 }
@@ -92,18 +92,32 @@ class CircleShaderBuilder extends ShaderTextBuilder {
 
         $in highp vec2 coord;
         uniform lowp vec4 color;
+        uniform lowp float startTg;
+        uniform lowp float endTg;
 
         void main(void) {
-            $fragColor = vec4(color.xyz, color.w * (1.0 - smoothstep(0.95, 1.0, dot(coord, coord))));
+            lowp float tg = atan(coord.y, coord.x);
+            if(endTg < startTg) {
+               $fragColor = vec4(color.xyz, color.w * (
+                        1.0 - smoothstep(0.95, 1.0, dot(coord, coord))
+                        - (clamp(smoothstep(endTg - 0.1, endTg, tg) + 1.0 - smoothstep(startTg, startTg + 0.1, tg), 1.0, 2.0) - 1.0)
+               ));
+            } else {
+                $fragColor = vec4(color.xyz, color.w * (
+                        1.0 - smoothstep(0.95, 1.0, dot(coord, coord))
+                        - (1.0 - smoothstep(startTg, startTg + 0.1, tg))
+                        - (smoothstep(endTg - 0.1, endTg, tg))
+                ));
+            }
         }"
 
     def program = ShaderProgram("Circle", vertex, fragment)
 }
 
-class CircleParam(color : vec4, position : vec3, radius : float4)
+class CircleParam(color : vec4, position : vec3, radius : float4, start : float4, end : float4)
 
 class CircleShader extends Shader<CircleParam>(CircleShaderBuilder().program) {
-    static lazy val instance = CircleShader()
+    static val instance = CircleShader()
 
     val model = attributeFor("model")
     def loadAttributes(vbDesc : VertexBufferDesc<_>) {
@@ -114,12 +128,25 @@ class CircleShader extends Shader<CircleParam>(CircleShaderBuilder().program) {
     val p = uniformMat4("p")
     val radius = uniformF4("radius")
     val color = uniformVec4("color")
+    val startTg = uniformF4("startTg")
+    val endTg = uniformF4("endTg")
     def loadUniforms(param : CircleParam) {
         pos(matrix.value.wc * vec4(param.position, 1))
         p(matrix.value.p)
         radius(param.radius)
         color(param.color)
+        if(param.start < param.end) {
+            startTg(clamp(param.start))
+            endTg(clamp(param.end))
+        } else {
+            startTg(clamp(param.end))
+            endTg(clamp(param.start))
+        }
     }
+    private def clamp(p : float4) : float4 =
+        if(p < -M_PI) 2*M_PI + p
+        else if(p > M_PI) -2*M_PI + p
+        else p
 }
 
 class Sprite {

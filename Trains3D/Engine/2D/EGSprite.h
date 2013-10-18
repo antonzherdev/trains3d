@@ -53,9 +53,11 @@
 @property (nonatomic, readonly) GEVec4 color;
 @property (nonatomic, readonly) GEVec3 position;
 @property (nonatomic, readonly) float radius;
+@property (nonatomic, readonly) float start;
+@property (nonatomic, readonly) float end;
 
-+ (id)circleParamWithColor:(GEVec4)color position:(GEVec3)position radius:(float)radius;
-- (id)initWithColor:(GEVec4)color position:(GEVec3)position radius:(float)radius;
++ (id)circleParamWithColor:(GEVec4)color position:(GEVec3)position radius:(float)radius start:(float)start end:(float)end;
+- (id)initWithColor:(GEVec4)color position:(GEVec3)position radius:(float)radius start:(float)start end:(float)end;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -67,13 +69,15 @@
 @property (nonatomic, readonly) EGShaderUniformMat4* p;
 @property (nonatomic, readonly) EGShaderUniformF4* radius;
 @property (nonatomic, readonly) EGShaderUniformVec4* color;
+@property (nonatomic, readonly) EGShaderUniformF4* startTg;
+@property (nonatomic, readonly) EGShaderUniformF4* endTg;
 
 + (id)circleShader;
 - (id)init;
 - (ODClassType*)type;
-+ (EGCircleShader*)instance;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGCircleParam*)param;
++ (EGCircleShader*)instance;
 + (ODClassType*)type;
 @end
 
