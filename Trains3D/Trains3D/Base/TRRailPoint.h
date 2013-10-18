@@ -31,6 +31,7 @@
 @property (nonatomic, readonly) GEVec2(^pointFun)(CGFloat);
 
 + (TRRailForm*)formForConnector1:(TRRailConnector*)connector1 connector2:(TRRailConnector*)connector2;
+- (BOOL)containsConnector:(TRRailConnector*)connector;
 + (TRRailForm*)leftBottom;
 + (TRRailForm*)leftRight;
 + (TRRailForm*)leftTop;

@@ -900,7 +900,7 @@ static ODClassType* _TRRailroadBuilder_type;
 }
 
 - (BOOL)tryBuildRail:(TRRail*)rail {
-    if([self checkCityTile:rail.tile connector:rail.form.start] && [self checkCityTile:rail.tile connector:rail.form.end] && [_railroad.map isFullTile:rail.tile] && [_railroad canAddRail:rail]) {
+    if([self canAddRail:rail]) {
         __rail = [CNOption applyValue:rail];
         return YES;
     } else {
@@ -923,6 +923,22 @@ static ODClassType* _TRRailroadBuilder_type;
         __buildingRails = [CNList applyItem:[TRRailBuilding railBuildingWithRail:((TRRail*)([__rail get]))] tail:__buildingRails];
         __rail = [CNOption none];
     }
+}
+
+- (BOOL)canAddRail:(TRRail*)rail {
+    return [self checkCityTile:rail.tile connector:rail.form.start] && [self checkCityTile:rail.tile connector:rail.form.end] && [_railroad.map isFullTile:rail.tile] && [self checkBuildingsRail:rail];
+}
+
+- (BOOL)checkBuildingsRail:(TRRail*)rail {
+    return !([[__buildingRails chain] exists:^BOOL(TRRailBuilding* _) {
+    return [_.rail isEqual:rail];
+}]) && [_railroad canAddRail:rail] && [self checkBuildingsConnectorTile:rail.tile connector:rail.form.start] && [self checkBuildingsConnectorTile:rail.tile connector:rail.form.end];
+}
+
+- (BOOL)checkBuildingsConnectorTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
+    return [[[_railroad contentInTile:tile connector:connector] rails] count] + [[[__buildingRails chain] filter:^BOOL(TRRailBuilding* _) {
+    return GEVec2iEq(_.rail.tile, tile) && [_.rail.form containsConnector:connector];
+}] count] < 2;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

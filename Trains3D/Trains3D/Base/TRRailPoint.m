@@ -188,6 +188,10 @@ static NSArray* _TRRailForm_values;
     }
 }
 
+- (BOOL)containsConnector:(TRRailConnector*)connector {
+    return _start == connector || _end == connector;
+}
+
 + (TRRailForm*)leftBottom {
     return _TRRailForm_leftBottom;
 }

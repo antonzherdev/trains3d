@@ -7,7 +7,6 @@
 #import "CNMulLink.h"
 #import "CNReverseLink.h"
 #import "CNOption.h"
-#import "CNTuple.h"
 #import "CNFlatMapLink.h"
 #import "CNDistinctLink.h"
 #import "CNTreeMap.h"
@@ -15,7 +14,6 @@
 #import "CNCombinationsLink.h"
 #import "CNUncombinationsLink.h"
 #import "CNGroupByLink.h"
-#import "CNList.h"
 #import "CNSortLink.h"
 #import "CNSortBuilder.h"
 #import "CNZipLink.h"
@@ -420,6 +418,20 @@
         [s appendFormat:@"%C", [x unsignedShortValue] ];
     }];
     return s;
+}
+
+- (BOOL)exists:(BOOL (^)(id))f {
+    __block BOOL ret = NO;
+    CNYield *yield = [CNYield alloc];
+    yield = [yield initWithBegin:nil yield:^CNYieldResult(id item) {
+        if(f(item)) {
+            ret = YES;
+            return cnYieldBreak;
+        }
+        return cnYieldContinue;
+    } end:nil all:nil];
+    [self apply:yield];
+    return ret;
 }
 @end
 

@@ -170,6 +170,7 @@
 - (BOOL)checkCityTile:(GEVec2i)tile connector:(TRRailConnector*)connector;
 - (void)clear;
 - (void)fix;
+- (BOOL)canAddRail:(TRRail*)rail;
 - (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
 @end

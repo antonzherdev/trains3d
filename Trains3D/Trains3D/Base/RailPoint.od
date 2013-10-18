@@ -45,6 +45,8 @@ enum RailForm(start : RailConnector, end : RailConnector, isTurn : bool, length 
         else if(connector1 == RailConnector.top && connector2 == RailConnector.right) topRight
         else throw "No form for connectors"
 
+    def contains(connector : RailConnector) : bool = start == connector || end == connector
+
 }
 
 class RailPoint(tile : vec2i, form : RailForm, x : float, back : bool) {

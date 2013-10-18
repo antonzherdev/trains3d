@@ -224,11 +224,7 @@ class RailroadBuilder(weak railroad : Railroad) extends Controller {
     def buildingRails : [RailBuilding] = _buildingRails
 
     def tryBuild(rail : Rail) : bool = {
-        if(checkCity(rail.tile, rail.form.start) &&
-           checkCity(rail.tile, rail.form.end) &&
-           railroad.map.isFull(rail.tile) &&
-           railroad.canAdd(rail)
-        ) {
+        if(canAdd(rail)) {
             _rail = rail
             true
         } else false
@@ -250,6 +246,23 @@ class RailroadBuilder(weak railroad : Railroad) extends Controller {
             _rail = nil
         }
     }
+
+    def canAdd(rail : Rail) : bool =
+        checkCity(rail.tile, rail.form.start) &&
+        checkCity(rail.tile, rail.form.end) &&
+        railroad.map.isFull(rail.tile) &&
+        checkBuildings(rail)
+
+    private def checkBuildings(rail : Rail) : bool =
+        !_buildingRails.chain.exists(_.rail == rail)
+        && railroad.canAdd(rail)
+        && checkBuildingsConnector(rail.tile, rail.form.start)
+        && checkBuildingsConnector(rail.tile, rail.form.end)
+
+    private def checkBuildingsConnector(tile : vec2i, connector : RailConnector) : bool =
+        (railroad.contentIn(tile, connector).rails.count
+        + _buildingRails.chain.filter(_.rail.tile == tile && _.rail.form.contains(connector)).count) < 2
+
 
     def updateWith(delta : float) {
         var hasEnd = false

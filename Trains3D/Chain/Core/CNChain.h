@@ -63,12 +63,14 @@
 
 - (id)foldStart:(id)start by:(cnF2)by;
 - (id)find:(cnPredicate)predicate;
+- (BOOL)exists:(BOOL (^)(id))f;
 - (id)min;
 - (id)max;
 - (NSDictionary *)toMap;
 - (NSMutableDictionary *)toMutableMap;
 - (CNYieldResult)apply:(CNYield *)yield;
 - (NSString *)toStringWithDelimiter:(NSString *)delimiter;
+
 - (NSString *)toStringWithStart:(NSString *)string delimiter:(NSString *)delimiter end:(NSString *)end;
 
 - (NSString *)charsToString;
