@@ -37,7 +37,7 @@
 + (id<EGVertexBuffer>)applyDesc:(EGVertexBufferDesc*)desc array:(CNVoidRefArray)array;
 + (id<EGVertexBuffer>)applyDesc:(EGVertexBufferDesc*)desc data:(CNPArray*)data;
 + (id<EGVertexBuffer>)vec4Data:(CNPArray*)data;
-+ (id<EGVertexBuffer>)vec4Data:(CNPArray*)data;
++ (id<EGVertexBuffer>)vec3Data:(CNPArray*)data;
 + (id<EGVertexBuffer>)vec2Data:(CNPArray*)data;
 + (id<EGVertexBuffer>)meshData:(CNPArray*)data;
 + (EGMutableVertexBuffer*)mutDesc:(EGVertexBufferDesc*)desc;

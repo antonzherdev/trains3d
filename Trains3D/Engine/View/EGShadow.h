@@ -18,7 +18,6 @@
 @class EGMatrixModel;
 @class EGEnvironment;
 @class EGLight;
-@class EGStandardShader;
 
 @class EGShadowMap;
 @class EGShadowSurfaceShaderBuilder;
@@ -125,7 +124,7 @@
 + (id)shadowDrawShaderSystem;
 - (id)init;
 - (ODClassType*)type;
-- (EGShader*)shaderForParam:(EGShadowDrawParam*)param renderTarget:(EGRenderTarget*)renderTarget;
+- (EGShadowDrawShader*)shaderForParam:(EGShadowDrawParam*)param renderTarget:(EGRenderTarget*)renderTarget;
 + (EGShadowDrawShaderSystem*)instance;
 + (ODClassType*)type;
 @end
@@ -137,7 +136,7 @@
 + (id)shadowDrawShaderKeyWithDirectLightCount:(NSUInteger)directLightCount;
 - (id)initWithDirectLightCount:(NSUInteger)directLightCount;
 - (ODClassType*)type;
-- (EGStandardShader*)shader;
+- (EGShadowDrawShader*)shader;
 - (NSString*)lightsVertexUniform;
 - (NSString*)lightsIn;
 - (NSString*)lightsOut;

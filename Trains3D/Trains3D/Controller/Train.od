@@ -48,7 +48,8 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, _cars 
         o.obstacleType ==  ObstacleType.light
 
     private def calculateCarPositions {
-        directedCars.chain.fold(_head.invert, (frontConnector, car) -> {
+        var frontConnector = _head.invert
+        directedCars.for{ car ->
             val tp : CarType = car.carType
             val fl = tp.startToWheel
             val bl = tp.wheelToEnd
@@ -58,8 +59,8 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, _cars 
             car.set(position =
                 if(back) CarPosition(backConnector, tail, head, frontConnector)
                 else CarPosition(frontConnector, head, tail, backConnector))
-            backConnector
-        })
+            frontConnector = backConnector
+        }
     }
 
     private def move(point : vec2, length : float) = vec2(point.x, point.y + length)

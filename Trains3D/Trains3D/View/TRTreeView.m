@@ -77,7 +77,6 @@ static ODClassType* _TRTreeView_type;
     GEQuad rustleUv = geQuadAddVec2(mainUv, GEVec2Make(((float)(uvw)), 0.0));
     GEPlaneCoord planeCoord = GEPlaneCoordMake(GEPlaneMake(GEVec3Make(0.0, 0.0, 0.0), GEVec3Make(0.0, 0.0, 1.0)), GEVec3Make(1.0, 0.0, 0.0), GEVec3Make(0.0, 1.0, 0.0));
     GEPlaneCoord mPlaneCoord = gePlaneCoordSetY(planeCoord, geVec3Normalize(geVec3AddVec3(planeCoord.y, GEVec3Make([tree incline].x, 0.0, [tree incline].y))));
-    NSUInteger tp = tree.treeType.ordinal;
     GEQuad quad = geRectQuad(geRectMulVec2(geRectCenterX(geRectApplyXYWidthHeight(0.0, 0.0, [_texture size].x / ([_texture size].y * 4), 0.5)), tree.size));
     GEQuad3 quad3 = GEQuad3Make(mPlaneCoord, quad);
     GEQuad mQuad = geQuadApplyP0P1P2P3(geVec3Xy(geQuad3P0(quad3)), geVec3Xy(geQuad3P1(quad3)), geVec3Xy(geQuad3P2(quad3)), geVec3Xy(geQuad3P3(quad3)));

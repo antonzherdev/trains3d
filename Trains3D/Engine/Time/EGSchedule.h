@@ -26,6 +26,7 @@
 - (CGFloat)time;
 - (BOOL)isStopped;
 - (void)forF:(void(^)(CGFloat))f;
+- (void)updateWithDelta:(CGFloat)delta;
 + (EGCounter*)applyLength:(CGFloat)length;
 + (EGCounter*)applyLength:(CGFloat)length finish:(void(^)())finish;
 + (EGCounter*)apply;

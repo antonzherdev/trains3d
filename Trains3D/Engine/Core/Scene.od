@@ -114,7 +114,6 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
         view.prepare
 
         if(egPlatform.shadows) {
-            val shadowLights = env.lights.chain.filter(_.hasShadows).toArray
             env.lights.chain.filter(_.hasShadows).for{light ->
                 drawShadowFor(camera, light)
             }
@@ -181,7 +180,6 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
     def viewportWith(viewSize : vec2) = viewportWith(viewSize, viewportLayout = Rect(0, 0, 1, 1))
 
     def viewportWith(viewSize : vec2, viewportLayout : Rect) : Rect = {
-        val layout = viewportLayout
         val vpr = view.camera.viewportRatio
 
         val size = viewSize*viewportLayout.size

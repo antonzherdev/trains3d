@@ -105,6 +105,10 @@ static ODClassType* _EGCounter_type;
     if([self isRun]) f([self time]);
 }
 
+- (void)updateWithDelta:(CGFloat)delta {
+    @throw @"Method updateWith is abstract";
+}
+
 + (EGCounter*)applyLength:(CGFloat)length {
     return [EGLengthCounter lengthCounterWithLength:length];
 }

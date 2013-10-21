@@ -349,16 +349,11 @@ static ODClassType* _EGLayer_type;
     EGGlobal.matrix.value = [camera matrixModel];
     if(cullFace != GL_NONE) glCullFace(cullFace);
     [_view prepare];
-    if(egPlatform().shadows) {
-        id<CNSeq> shadowLights = [[[env.lights chain] filter:^BOOL(EGLight* _) {
-            return _.hasShadows;
-        }] toArray];
-        [[[env.lights chain] filter:^BOOL(EGLight* _) {
-            return _.hasShadows;
-        }] forEach:^void(EGLight* light) {
-            [self drawShadowForCamera:camera light:light];
-        }];
-    }
+    if(egPlatform().shadows) [[[env.lights chain] filter:^BOOL(EGLight* _) {
+        return _.hasShadows;
+    }] forEach:^void(EGLight* light) {
+        [self drawShadowForCamera:camera light:light];
+    }];
     if(cullFace != GL_NONE) [EGGlobal.context.cullFace disable];
     egCheckError();
     egPopGroupMarker();
@@ -424,7 +419,6 @@ static ODClassType* _EGLayer_type;
 }
 
 - (GERect)viewportWithViewSize:(GEVec2)viewSize viewportLayout:(GERect)viewportLayout {
-    GERect layout = viewportLayout;
     CGFloat vpr = [[_view camera] viewportRatio];
     GEVec2 size = geVec2MulVec2(viewSize, viewportLayout.size);
     GEVec2 vpSize = ((eqf4(size.x, 0) && eqf4(size.y, 0)) ? GEVec2Make(viewSize.x, viewSize.y) : ((eqf4(size.x, 0)) ? GEVec2Make(viewSize.x, size.y) : ((eqf4(size.y, 0)) ? GEVec2Make(size.x, viewSize.y) : ((size.x / size.y < vpr) ? GEVec2Make(size.x, size.x / vpr) : GEVec2Make(size.y * vpr, size.y)))));

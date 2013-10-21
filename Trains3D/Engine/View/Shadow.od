@@ -149,7 +149,7 @@ class ShadowDrawParam(percents : Seq<float4>)
 
 class ShadowDrawShaderSystem extends ShaderSystem<ShadowDrawParam> {
     static val instance = ShadowDrawShaderSystem()
-    def shaderFor(param : ShadowDrawParam, renderTarget : RenderTarget) : Shader<ShadowDrawParam> = {
+    def shaderFor(param : ShadowDrawParam, renderTarget : RenderTarget) : ShadowDrawShader = {
         val lights = context.environment.lights
         val directLightsCount = lights.chain.filter(_.is<DirectLight> && _.hasShadows).count
         val key = ShadowDrawShaderKey(directLightsCount)
@@ -160,7 +160,7 @@ class ShadowDrawShaderSystem extends ShaderSystem<ShadowDrawParam> {
     private static val shaders = MutableHashMap<ShadowDrawShaderKey, ShadowDrawShader>()
 }
 class ShadowDrawShaderKey(directLightCount : uint) extends ShaderTextBuilder {
-    def shader : StandardShader = {
+    def shader : ShadowDrawShader = {
         val vertexShader =
             "$vertexHeader
              $ain highp vec3 position;

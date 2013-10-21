@@ -173,9 +173,9 @@ class ShaderSystem<P> {
         shader.draw(param, vertex, index)
     }
 
-    def draw(param : P, vao : VertexArray<P>) {
+    def draw(param : P, vao : SimpleVertexArray<P>) {
         val shader = shaderFor(param)
-        shader.draw(param, vao)
+        shader.draw(param, vao = vao)
     }
 
     def draw(param : P, mesh : Mesh) {

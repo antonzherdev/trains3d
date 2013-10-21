@@ -10,8 +10,8 @@
 @class EGVertexBufferDesc;
 @protocol EGIndexBuffer;
 @class GEMat4;
-@class EGVertexArray;
 @class EGRenderTarget;
+@class EGVertexArray;
 
 @class EGShaderProgram;
 @class EGShader;
@@ -149,7 +149,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)drawParam:(id)param vertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index;
-- (void)drawParam:(id)param vao:(EGVertexArray*)vao;
+- (void)drawParam:(id)param vao:(EGSimpleVertexArray*)vao;
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh;
 - (EGShader*)shaderForParam:(id)param;
 - (EGShader*)shaderForParam:(id)param renderTarget:(EGRenderTarget*)renderTarget;

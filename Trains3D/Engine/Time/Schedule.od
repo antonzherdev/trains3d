@@ -31,6 +31,7 @@ class Counter extends Controller {
     def for(f : float -> void) {
         if(isRun) f(time)
     }
+    def updateWith(delta : float)
 
     static def apply(length : float) : Counter = LengthCounter(length)
     static def apply(length : float, finish : void -> void) : Counter = Finisher(LengthCounter(length), finish)

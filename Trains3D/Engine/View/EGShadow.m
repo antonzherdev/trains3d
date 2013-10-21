@@ -6,7 +6,6 @@
 #import "EGMesh.h"
 #import "EGMaterial.h"
 #import "EGVertex.h"
-#import "EGStandardShaderSystem.h"
 @implementation EGShadowMap{
     GLuint _frameBuffer;
     GEMat4* _biasDepthCp;
@@ -648,7 +647,7 @@ static ODClassType* _EGShadowDrawShaderSystem_type;
     _EGShadowDrawShaderSystem_shaders = [NSMutableDictionary mutableDictionary];
 }
 
-- (EGShader*)shaderForParam:(EGShadowDrawParam*)param renderTarget:(EGRenderTarget*)renderTarget {
+- (EGShadowDrawShader*)shaderForParam:(EGShadowDrawParam*)param renderTarget:(EGRenderTarget*)renderTarget {
     id<CNSeq> lights = EGGlobal.context.environment.lights;
     NSUInteger directLightsCount = [[[lights chain] filter:^BOOL(EGLight* _) {
         return [_ isKindOfClass:[EGDirectLight class]] && _.hasShadows;
@@ -716,7 +715,7 @@ static ODClassType* _EGShadowDrawShaderKey_type;
     _EGShadowDrawShaderKey_type = [ODClassType classTypeWithCls:[EGShadowDrawShaderKey class]];
 }
 
-- (EGStandardShader*)shader {
+- (EGShadowDrawShader*)shader {
     NSString* vertexShader = [NSString stringWithFormat:@"%@\n"
         "%@ highp vec3 position;\n"
         "uniform mat4 mwcp;\n"

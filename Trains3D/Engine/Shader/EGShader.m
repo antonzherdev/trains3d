@@ -748,9 +748,9 @@ static ODClassType* _EGShaderSystem_type;
     [shader drawParam:param vertex:vertex index:index];
 }
 
-- (void)drawParam:(id)param vao:(EGVertexArray*)vao {
+- (void)drawParam:(id)param vao:(EGSimpleVertexArray*)vao {
     EGShader* shader = [self shaderForParam:param];
-    [shader drawParam:param mesh:vao];
+    [shader drawParam:param vao:vao];
 }
 
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh {

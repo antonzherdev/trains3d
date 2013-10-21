@@ -26,7 +26,7 @@ object VBO {
         vb
     }
     static def vec4(data : PArray<vec4>) = VBO<vec4>(VertexBufferDesc.Vec4, data)
-    static def vec4(data : PArray<vec3>) = VBO<vec3>(VertexBufferDesc.Vec3, data)
+    static def vec3(data : PArray<vec3>) = VBO<vec3>(VertexBufferDesc.Vec3, data)
     static def vec2(data : PArray<vec2>) = VBO<vec2>(VertexBufferDesc.Vec2, data)
     static def mesh(data : PArray<MeshData>) = VBO<MeshData>(VertexBufferDesc.mesh, data)
 

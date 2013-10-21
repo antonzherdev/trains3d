@@ -34,7 +34,7 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
 
         egCheckError();
         NSInteger status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-        if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer color attachment: %li", status];
+        if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer color attachment: %ld", (long)status];
         if(depth) {
             glGenRenderbuffers(1, &_depthRenderBuffer);
             glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
@@ -42,7 +42,7 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
             glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
             egCheckError();
             status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-            if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %li", status];
+            if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %ld", (long)status];
         }
         [EGGlobal.context restoreDefaultFramebuffer];
     }

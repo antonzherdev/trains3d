@@ -131,6 +131,10 @@ static ODClassType* _EGVBO_type;
     return [EGVBO applyDesc:[EGVertexBufferDesc Vec4] data:data];
 }
 
++ (id<EGVertexBuffer>)vec3Data:(CNPArray*)data {
+    return [EGVBO applyDesc:[EGVertexBufferDesc Vec3] data:data];
+}
+
 + (id<EGVertexBuffer>)vec2Data:(CNPArray*)data {
     return [EGVBO applyDesc:[EGVertexBufferDesc Vec2] data:data];
 }
