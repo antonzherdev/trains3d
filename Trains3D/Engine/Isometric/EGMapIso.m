@@ -110,10 +110,10 @@ static ODClassType* _EGMapSso_type;
 
 NSString* EGMapTileCutStateDescription(EGMapTileCutState self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<EGMapTileCutState: "];
-    [description appendFormat:@"x=%li", self.x];
-    [description appendFormat:@", y=%li", self.y];
-    [description appendFormat:@", x2=%li", self.x2];
-    [description appendFormat:@", y2=%li", self.y2];
+    [description appendFormat:@"x=%ld", (long)self.x];
+    [description appendFormat:@", y=%ld", (long)self.y];
+    [description appendFormat:@", x2=%ld", (long)self.x2];
+    [description appendFormat:@", y2=%ld", (long)self.y2];
     [description appendString:@">"];
     return description;
 }

@@ -84,7 +84,7 @@ static ODClassType* _EGBuffer_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"dataType=%@", self.dataType];
-    [description appendFormat:@", bufferType=%d", self.bufferType];
+    [description appendFormat:@", bufferType=%u", self.bufferType];
     [description appendFormat:@", handle=%@", GLuintDescription(self.handle)];
     [description appendString:@">"];
     return description;
@@ -171,7 +171,7 @@ static ODClassType* _EGMutableBuffer_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"dataType=%@", self.dataType];
-    [description appendFormat:@", bufferType=%d", self.bufferType];
+    [description appendFormat:@", bufferType=%u", self.bufferType];
     [description appendFormat:@", handle=%@", GLuintDescription(self.handle)];
     [description appendString:@">"];
     return description;

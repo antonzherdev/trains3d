@@ -322,8 +322,8 @@ static ODClassType* _EGBlendFunction_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"source=%d", self.source];
-    [description appendFormat:@", destination=%d", self.destination];
+    [description appendFormat:@"source=%u", self.source];
+    [description appendFormat:@", destination=%u", self.destination];
     [description appendString:@">"];
     return description;
 }

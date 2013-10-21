@@ -177,16 +177,16 @@ static ODClassType* _EGBillboardShaderBuilder_type;
 }
 
 - (NSString*)versionString {
-    return [NSString stringWithFormat:@"#version %li", [self version]];
+    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
 }
 
 - (NSString*)vertexHeader {
-    return [NSString stringWithFormat:@"#version %li", [self version]];
+    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
 }
 
 - (NSString*)fragmentHeader {
-    return [NSString stringWithFormat:@"#version %li\n"
-        "%@", [self version], [self fragColorDeclaration]];
+    return [NSString stringWithFormat:@"#version %ld\n"
+        "%@", (long)[self version], [self fragColorDeclaration]];
 }
 
 - (NSString*)fragColorDeclaration {
@@ -657,7 +657,7 @@ static ODClassType* _EGBillboardParticleSystemView_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"system=%@", self.system];
-    [description appendFormat:@", maxCount=%li", self.maxCount];
+    [description appendFormat:@", maxCount=%lu", (unsigned long)self.maxCount];
     [description appendFormat:@", material=%@", self.material];
     [description appendFormat:@", blendFunc=%@", self.blendFunc];
     [description appendString:@">"];

@@ -143,9 +143,9 @@ static ODClassType* _EGImmutableIndexBuffer_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"handle=%@", GLuintDescription(self.handle)];
-    [description appendFormat:@", mode=%d", self.mode];
-    [description appendFormat:@", length=%li", self.length];
-    [description appendFormat:@", count=%li", self.count];
+    [description appendFormat:@", mode=%u", self.mode];
+    [description appendFormat:@", length=%lu", (unsigned long)self.length];
+    [description appendFormat:@", count=%lu", (unsigned long)self.count];
     [description appendString:@">"];
     return description;
 }
@@ -229,7 +229,7 @@ static ODClassType* _EGMutableIndexBuffer_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"handle=%@", GLuintDescription(self.handle)];
-    [description appendFormat:@", mode=%d", self.mode];
+    [description appendFormat:@", mode=%u", self.mode];
     [description appendString:@">"];
     return description;
 }
@@ -329,7 +329,7 @@ static ODClassType* _EGEmptyIndexSource_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"mode=%d", self.mode];
+    [description appendFormat:@"mode=%u", self.mode];
     [description appendString:@">"];
     return description;
 }
@@ -412,7 +412,7 @@ static ODClassType* _EGArrayIndexSource_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"array=%@", self.array];
-    [description appendFormat:@", mode=%d", self.mode];
+    [description appendFormat:@", mode=%u", self.mode];
     [description appendString:@">"];
     return description;
 }
@@ -495,7 +495,7 @@ static ODClassType* _EGVoidRefArrayIndexSource_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"array=%@", CNVoidRefArrayDescription(self.array)];
-    [description appendFormat:@", mode=%d", self.mode];
+    [description appendFormat:@", mode=%u", self.mode];
     [description appendString:@">"];
     return description;
 }
@@ -579,8 +579,8 @@ static ODClassType* _EGIndexSourceGap_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"source=%@", self.source];
-    [description appendFormat:@", start=%d", self.start];
-    [description appendFormat:@", count=%d", self.count];
+    [description appendFormat:@", start=%u", self.start];
+    [description appendFormat:@", count=%u", self.count];
     [description appendString:@">"];
     return description;
 }

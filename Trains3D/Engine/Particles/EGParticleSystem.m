@@ -289,7 +289,7 @@ static ODClassType* _EGParticleSystemView_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"system=%@", self.system];
     [description appendFormat:@", vbDesc=%@", self.vbDesc];
-    [description appendFormat:@", maxCount=%li", self.maxCount];
+    [description appendFormat:@", maxCount=%lu", (unsigned long)self.maxCount];
     [description appendFormat:@", shader=%@", self.shader];
     [description appendFormat:@", material=%@", self.material];
     [description appendFormat:@", blendFunc=%@", self.blendFunc];

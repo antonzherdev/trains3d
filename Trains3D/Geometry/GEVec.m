@@ -157,8 +157,8 @@ ODPType* geVec2Type() {
 
 NSString* GEVec2iDescription(GEVec2i self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<GEVec2i: "];
-    [description appendFormat:@"x=%li", self.x];
-    [description appendFormat:@", y=%li", self.y];
+    [description appendFormat:@"x=%ld", (long)self.x];
+    [description appendFormat:@", y=%ld", (long)self.y];
     [description appendString:@">"];
     return description;
 }

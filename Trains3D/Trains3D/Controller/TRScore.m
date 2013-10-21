@@ -78,10 +78,10 @@ static ODClassType* _TRScoreRules_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"initialScore=%li", self.initialScore];
-    [description appendFormat:@", railCost=%li", self.railCost];
+    [description appendFormat:@"initialScore=%ld", (long)self.initialScore];
+    [description appendFormat:@", railCost=%ld", (long)self.railCost];
     [description appendFormat:@", delayPeriod=%f", self.delayPeriod];
-    [description appendFormat:@", repairCost=%li", self.repairCost];
+    [description appendFormat:@", repairCost=%ld", (long)self.repairCost];
     [description appendString:@">"];
     return description;
 }

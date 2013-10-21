@@ -397,16 +397,16 @@ static ODClassType* _EGFontShaderBuilder_type;
 }
 
 - (NSString*)versionString {
-    return [NSString stringWithFormat:@"#version %li", [self version]];
+    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
 }
 
 - (NSString*)vertexHeader {
-    return [NSString stringWithFormat:@"#version %li", [self version]];
+    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
 }
 
 - (NSString*)fragmentHeader {
-    return [NSString stringWithFormat:@"#version %li\n"
-        "%@", [self version], [self fragColorDeclaration]];
+    return [NSString stringWithFormat:@"#version %ld\n"
+        "%@", (long)[self version], [self fragColorDeclaration]];
 }
 
 - (NSString*)fragColorDeclaration {

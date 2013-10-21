@@ -257,7 +257,7 @@ static ODClassType* _TRTrain_type;
     [description appendFormat:@"level=%@", self.level];
     [description appendFormat:@", trainType=%@", self.trainType];
     [description appendFormat:@", color=%@", self.color];
-    [description appendFormat:@", speed=%li", self.speed];
+    [description appendFormat:@", speed=%lu", (unsigned long)self.speed];
     [description appendString:@">"];
     return description;
 }

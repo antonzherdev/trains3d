@@ -32,7 +32,7 @@ static ODClassType* _EGGlobal_type;
 }
 
 + (EGTexture*)scaledTextureForName:(NSString*)name format:(NSString*)format magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
-    return [_EGGlobal_context textureForFile:[NSString stringWithFormat:@"%@_%dx.%@", name, ((unsigned int)(_EGGlobal_context.scale)), format] scale:_EGGlobal_context.scale magFilter:magFilter minFilter:minFilter];
+    return [_EGGlobal_context textureForFile:[NSString stringWithFormat:@"%@_%ux.%@", name, ((unsigned int)(_EGGlobal_context.scale)), format] scale:_EGGlobal_context.scale magFilter:magFilter minFilter:minFilter];
 }
 
 + (EGFont*)fontWithName:(NSString*)name {
@@ -173,7 +173,7 @@ static ODClassType* _EGContext_type;
 }
 
 - (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size {
-    return [self fontWithName:[NSString stringWithFormat:@"%@_%li", name, ((NSUInteger)(size * _scale))]];
+    return [self fontWithName:[NSString stringWithFormat:@"%@_%lu", name, (unsigned long)((NSUInteger)(size * _scale))]];
 }
 
 - (void)clear {
@@ -437,7 +437,7 @@ static ODClassType* _EGEnablingState_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"tp=%d", self.tp];
+    [description appendFormat:@"tp=%u", self.tp];
     [description appendString:@">"];
     return description;
 }

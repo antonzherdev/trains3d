@@ -56,7 +56,7 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)formatCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"%li", cost];
+    return [NSString stringWithFormat:@"%ld", (long)cost];
 }
 
 - (ODClassType*)type {
@@ -146,7 +146,7 @@ static ODClassType* _TRRuStrings_type;
 }
 
 - (NSString*)formatCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"%li", cost];
+    return [NSString stringWithFormat:@"%ld", (long)cost];
 }
 
 - (ODClassType*)type {

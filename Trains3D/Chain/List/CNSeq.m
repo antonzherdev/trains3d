@@ -314,7 +314,7 @@ static ODClassType* _CNIndexFunSeqIterator_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"count=%li", self.count];
+    [description appendFormat:@"count=%lu", (unsigned long)self.count];
     [description appendString:@">"];
     return description;
 }

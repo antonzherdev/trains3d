@@ -406,7 +406,7 @@ static ODClassType* _EGIndexFunFilteredIterator_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"maxCount=%li", self.maxCount];
+    [description appendFormat:@"maxCount=%lu", (unsigned long)self.maxCount];
     [description appendString:@">"];
     return description;
 }

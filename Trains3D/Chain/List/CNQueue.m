@@ -56,7 +56,7 @@ static ODClassType* _CNQueue_type;
         return [_out applyIndex:index];
     } else {
         if(index < [_out count] + [_in count]) return [_in applyIndex:[_in count] - index + [_out count]];
-        else @throw [NSString stringWithFormat:@"Incorrect index=%li", index];
+        else @throw [NSString stringWithFormat:@"Incorrect index=%lu", (unsigned long)index];
     }
 }
 

@@ -37,7 +37,7 @@ static ODClassType* _EGShadowMap_type;
             egCheckError();
             egFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, t.id, 0);
             NSInteger status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-            if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in shadow map frame buffer: %li", status];
+            if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in shadow map frame buffer: %ld", (long)status];
             glBindTexture(GL_TEXTURE_2D, 0);
             [EGGlobal.context restoreDefaultFramebuffer];
             return t;
@@ -351,14 +351,14 @@ static ODClassType* _EGShadowShaderText_type;
 }
 
 - (NSString*)fragment {
-    return [NSString stringWithFormat:@"#version %li\n"
+    return [NSString stringWithFormat:@"#version %ld\n"
         "%@\n"
         "%@\n"
         "\n"
         "void main(void) {\n"
         "   %@\n"
         "   %@\n"
-        "}", [self version], ((_texture) ? [NSString stringWithFormat:@"\n"
+        "}", (long)[self version], ((_texture) ? [NSString stringWithFormat:@"\n"
         "%@ mediump vec2 UV;\n"
         "uniform lowp sampler2D texture;\n"
         "uniform lowp float alphaTestLevel;\n", [self in]] : @""), (([self version] > 100) ? @"\n"
@@ -376,16 +376,16 @@ static ODClassType* _EGShadowShaderText_type;
 }
 
 - (NSString*)versionString {
-    return [NSString stringWithFormat:@"#version %li", [self version]];
+    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
 }
 
 - (NSString*)vertexHeader {
-    return [NSString stringWithFormat:@"#version %li", [self version]];
+    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
 }
 
 - (NSString*)fragmentHeader {
-    return [NSString stringWithFormat:@"#version %li\n"
-        "%@", [self version], [self fragColorDeclaration]];
+    return [NSString stringWithFormat:@"#version %ld\n"
+        "%@", (long)[self version], [self fragColorDeclaration]];
 }
 
 - (NSString*)fragColorDeclaration {
@@ -781,16 +781,16 @@ static ODClassType* _EGShadowDrawShaderKey_type;
 }
 
 - (NSString*)versionString {
-    return [NSString stringWithFormat:@"#version %li", [self version]];
+    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
 }
 
 - (NSString*)vertexHeader {
-    return [NSString stringWithFormat:@"#version %li", [self version]];
+    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
 }
 
 - (NSString*)fragmentHeader {
-    return [NSString stringWithFormat:@"#version %li\n"
-        "%@", [self version], [self fragColorDeclaration]];
+    return [NSString stringWithFormat:@"#version %ld\n"
+        "%@", (long)[self version], [self fragColorDeclaration]];
 }
 
 - (NSString*)fragColorDeclaration {
@@ -868,7 +868,7 @@ static ODClassType* _EGShadowDrawShaderKey_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"directLightCount=%li", self.directLightCount];
+    [description appendFormat:@"directLightCount=%lu", (unsigned long)self.directLightCount];
     [description appendString:@">"];
     return description;
 }

@@ -86,7 +86,7 @@ static ODClassType* _TRLevelRules_type;
     [description appendFormat:@", scoreRules=%@", self.scoreRules];
     [description appendFormat:@", forestRules=%@", self.forestRules];
     [description appendFormat:@", weatherRules=%@", self.weatherRules];
-    [description appendFormat:@", repairerSpeed=%li", self.repairerSpeed];
+    [description appendFormat:@", repairerSpeed=%lu", (unsigned long)self.repairerSpeed];
     [description appendFormat:@", events=%@", self.events];
     [description appendString:@">"];
     return description;

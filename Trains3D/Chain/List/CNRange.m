@@ -263,9 +263,9 @@ static ODClassType* _CNRangeIterator_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"start=%li", self.start];
-    [description appendFormat:@", end=%li", self.end];
-    [description appendFormat:@", step=%li", self.step];
+    [description appendFormat:@"start=%ld", (long)self.start];
+    [description appendFormat:@", end=%ld", (long)self.end];
+    [description appendFormat:@", step=%ld", (long)self.step];
     [description appendString:@">"];
     return description;
 }

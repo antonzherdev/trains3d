@@ -229,8 +229,8 @@ static ODClassType* _EGFileTexture_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"file=%@", self.file];
     [description appendFormat:@", scale=%f", self.scale];
-    [description appendFormat:@", magFilter=%d", self.magFilter];
-    [description appendFormat:@", minFilter=%d", self.minFilter];
+    [description appendFormat:@", magFilter=%u", self.magFilter];
+    [description appendFormat:@", minFilter=%u", self.minFilter];
     [description appendString:@">"];
     return description;
 }

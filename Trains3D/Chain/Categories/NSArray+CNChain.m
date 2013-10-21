@@ -42,6 +42,11 @@
 }
 
 
+- (id)optIndex:(NSUInteger)index {
+    if(index >= self.count) return [CNOption none];
+    return [CNOption someValue:[self objectAtIndex:index]];
+}
+
 - (id)randomItem {
     if([self isEmpty]) return [CNOption none];
     else return [CNSome someWithValue:[self objectAtIndex:oduIntRndMax([self count] - 1)]];

@@ -260,8 +260,8 @@ static ODClassType* _EGImmutableVertexBuffer_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"desc=%@", self.desc];
     [description appendFormat:@", handle=%@", GLuintDescription(self.handle)];
-    [description appendFormat:@", length=%li", self.length];
-    [description appendFormat:@", count=%li", self.count];
+    [description appendFormat:@", length=%lu", (unsigned long)self.length];
+    [description appendFormat:@", count=%lu", (unsigned long)self.count];
     [description appendString:@">"];
     return description;
 }

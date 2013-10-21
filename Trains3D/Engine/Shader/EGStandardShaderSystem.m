@@ -318,16 +318,16 @@ static ODClassType* _EGStandardShaderKey_type;
 }
 
 - (NSString*)versionString {
-    return [NSString stringWithFormat:@"#version %li", [self version]];
+    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
 }
 
 - (NSString*)vertexHeader {
-    return [NSString stringWithFormat:@"#version %li", [self version]];
+    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
 }
 
 - (NSString*)fragmentHeader {
-    return [NSString stringWithFormat:@"#version %li\n"
-        "%@", [self version], [self fragColorDeclaration]];
+    return [NSString stringWithFormat:@"#version %ld\n"
+        "%@", (long)[self version], [self fragColorDeclaration]];
 }
 
 - (NSString*)fragColorDeclaration {
@@ -409,8 +409,8 @@ static ODClassType* _EGStandardShaderKey_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"directLightWithShadowsCount=%li", self.directLightWithShadowsCount];
-    [description appendFormat:@", directLightWithoutShadowsCount=%li", self.directLightWithoutShadowsCount];
+    [description appendFormat:@"directLightWithShadowsCount=%lu", (unsigned long)self.directLightWithShadowsCount];
+    [description appendFormat:@", directLightWithoutShadowsCount=%lu", (unsigned long)self.directLightWithoutShadowsCount];
     [description appendFormat:@", texture=%d", self.texture];
     [description appendFormat:@", region=%d", self.region];
     [description appendFormat:@", specular=%d", self.specular];

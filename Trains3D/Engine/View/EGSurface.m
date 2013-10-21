@@ -119,18 +119,18 @@ static ODClassType* _EGSimpleSurface_type;
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self.size.x, self.size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
             if(glGetError() != 0) {
-                NSString* e = [NSString stringWithFormat:@"Error in texture creation for surface with size %lix%li", self.size.x, self.size.y];
+                NSString* e = [NSString stringWithFormat:@"Error in texture creation for surface with size %ldx%ld", (long)self.size.x, (long)self.size.y];
                 @throw e;
             }
             egFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, t.id, 0);
             NSInteger status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-            if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer color attachment: %li", status];
+            if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer color attachment: %ld", (long)status];
             if(_depth) {
                 glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
                 glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, self.size.x, self.size.y);
                 glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
                 NSInteger status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-                if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %li", status];
+                if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %ld", (long)status];
             }
             glBindTexture(GL_TEXTURE_2D, 0);
             [EGGlobal.context restoreDefaultFramebuffer];
@@ -311,16 +311,16 @@ static ODClassType* _EGViewportShaderBuilder_type;
 }
 
 - (NSString*)versionString {
-    return [NSString stringWithFormat:@"#version %li", [self version]];
+    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
 }
 
 - (NSString*)vertexHeader {
-    return [NSString stringWithFormat:@"#version %li", [self version]];
+    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
 }
 
 - (NSString*)fragmentHeader {
-    return [NSString stringWithFormat:@"#version %li\n"
-        "%@", [self version], [self fragColorDeclaration]];
+    return [NSString stringWithFormat:@"#version %ld\n"
+        "%@", (long)[self version], [self fragColorDeclaration]];
 }
 
 - (NSString*)fragColorDeclaration {

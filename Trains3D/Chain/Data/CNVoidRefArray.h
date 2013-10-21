@@ -21,7 +21,7 @@ static inline NSUInteger CNVoidRefArrayHash(CNVoidRefArray self) {
 }
 static inline NSString* CNVoidRefArrayDescription(CNVoidRefArray self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<CNVoidRefArray: "];
-    [description appendFormat:@"length=%li", self.length];
+    [description appendFormat:@"length=%lu", (unsigned long)self.length];
     [description appendFormat:@", bytes=%p", self.bytes];
     [description appendString:@">"];
     return description;
