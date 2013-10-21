@@ -10,7 +10,6 @@
 		0214B1291773394400C03C71 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0214B1281773394400C03C71 /* Cocoa.framework */; };
 		0214B1471773394500C03C71 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0214B1461773394500C03C71 /* SenTestingKit.framework */; };
 		0214B1481773394500C03C71 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0214B1281773394400C03C71 /* Cocoa.framework */; };
-		024F434E1774A5C3005B6F82 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 024F434D1774A5C3005B6F82 /* CoreVideo.framework */; };
 		02C70A4F1802A3E500007F50 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C70A4E1802A3E500007F50 /* Foundation.framework */; };
 		02C70A511802A3E500007F50 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C70A501802A3E500007F50 /* CoreGraphics.framework */; };
 		02C70A531802A3E500007F50 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C70A521802A3E500007F50 /* UIKit.framework */; };
@@ -967,6 +966,7 @@
 		6F3DFE19BC9B7AABE5C8FCA2 /* EGBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF84AA90A6EE0300FE1E5 /* EGBuffer.m */; };
 		6F3DFE1FDA662649D0FD41AA /* Woodpecker.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF87C75021D4E71C51B9A /* Woodpecker.mp3 */; };
 		6F3DFE22A0D6260AECA72ED7 /* btSimpleBroadphase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9F2693719D1DA11805A /* btSimpleBroadphase.cpp */; };
+		6F3DFE24BEF0471BFAC2AF26 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F3DF0BAE9981FBF7E2E7895 /* CoreVideo.framework */; };
 		6F3DFE29448AA5BDBA6BA4D2 /* gim_tri_collision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF635597455B819909179 /* gim_tri_collision.cpp */; };
 		6F3DFE31FB41F78E0C62B14B /* btGjkEpaPenetrationDepthSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBBA5FB95C5800CEDD89 /* btGjkEpaPenetrationDepthSolver.cpp */; };
 		6F3DFE332FA7752A38E7150C /* lucida_grande_32.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF13D0E1AE8F3C0AD7B98 /* lucida_grande_32.fnt */; };
@@ -1106,7 +1106,6 @@
 		0214B12D1773394400C03C71 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0214B1451773394500C03C71 /* Trains3DTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Trains3DTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0214B1461773394500C03C71 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		024F434D1774A5C3005B6F82 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		02C70A4D1802A3E500007F50 /* Trains3Di.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Trains3Di.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02C70A4E1802A3E500007F50 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		02C70A501802A3E500007F50 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -1174,6 +1173,7 @@
 		6F3DF0B5CDE0ED7F04E617FD /* btScaledBvhTriangleMeshShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btScaledBvhTriangleMeshShape.cpp; sourceTree = "<group>"; };
 		6F3DF0B758E9CDAFADEC6C0A /* CNSortLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSortLink.m; sourceTree = "<group>"; };
 		6F3DF0B949A81552EF19BE0A /* type_vec.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = type_vec.inl; sourceTree = "<group>"; };
+		6F3DF0BAE9981FBF7E2E7895 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = ../../../../../Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/CoreVideo.framework; sourceTree = "<group>"; };
 		6F3DF0BEF959C674059A7F87 /* TRTrainSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRTrainSound.h; sourceTree = "<group>"; };
 		6F3DF0BFC1AC2D31B49B3F8D /* TRLevelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRLevelView.h; sourceTree = "<group>"; };
 		6F3DF0C19B11DB521A56DEA1 /* ext.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ext.hpp; sourceTree = "<group>"; };
@@ -2294,10 +2294,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				024F434E1774A5C3005B6F82 /* CoreVideo.framework in Frameworks */,
 				0214B1291773394400C03C71 /* Cocoa.framework in Frameworks */,
 				6F3DFB7610D3B97263DC6E0A /* OpenGL.framework in Frameworks */,
 				6F3DF3557A9133FEF8220A0D /* AVFoundation.framework in Frameworks */,
+				6F3DFE24BEF0471BFAC2AF26 /* CoreVideo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2328,7 +2328,6 @@
 		0214B11C1773394400C03C71 = {
 			isa = PBXGroup;
 			children = (
-				024F434D1774A5C3005B6F82 /* CoreVideo.framework */,
 				0214B12E1773394400C03C71 /* Trains3D */,
 				0214B1271773394400C03C71 /* Frameworks */,
 				0214B1261773394400C03C71 /* Products */,
@@ -2366,6 +2365,7 @@
 				0214B12A1773394400C03C71 /* Other Frameworks */,
 				6F3DF8BE3569365CA633DF43 /* OpenGL.framework */,
 				6F3DF29AC826080AE9E09EDF /* AVFoundation.framework */,
+				6F3DF0BAE9981FBF7E2E7895 /* CoreVideo.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
