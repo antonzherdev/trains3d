@@ -49,7 +49,7 @@
 
 
         srand(seed);
-        int i, j, k;
+        NSInteger i, j, k;
         for (i = 0 ; i < B ; i++) {
             p[i] = i;
             g1[i] = (float)((rand() % (B + B)) - B) / B;
@@ -130,7 +130,7 @@
 - (id)initWithOctaves:(NSUInteger)octaves frequency:(CGFloat)frequency amplitude:(CGFloat)amplitude seed:(unsigned int)seed {
     self = [super init];
     if (self) {
-        int i, j, k;
+        NSInteger i, j, k;
 
         for (i = 0 ; i < B ; i++) {
             p[i] = i;
@@ -251,7 +251,7 @@
 - (id)initWithOctaves:(NSUInteger)octaves frequency:(CGFloat)frequency amplitude:(CGFloat)amplitude seed:(unsigned int)seed {
     self = [super init];
     if (self) {
-        int i, j, k;
+        NSInteger i, j, k;
 
         for (i = 0 ; i < B ; i++)
         {

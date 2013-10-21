@@ -59,13 +59,13 @@ static ODClassType* _EGCollisionWorld_type;
 - (id<CNIterable>)detect {
     _world->performDiscreteCollisionDetection();
     return [EGIndexFunFilteredIterable indexFunFilteredIterableWithMaxCount:(NSUInteger) _dispatcher->getNumManifolds() f:^id(NSUInteger i) {
-        btPersistentManifold *pManifold = _dispatcher->getManifoldByIndexInternal(i);
+        btPersistentManifold *pManifold = _dispatcher->getManifoldByIndexInternal((int)i);
         if(pManifold->getNumContacts() == 0) return [CNOption none];
         EGCollisionBody *body0 = (__bridge EGCollisionBody *) pManifold->getBody0()->getUserPointer();
         EGCollisionBody *body1 = (__bridge EGCollisionBody *) pManifold->getBody1()->getUserPointer();
         return [CNSome someWithValue:[EGCollision collisionWithBodies:[CNPair newWithA:body0 b:body1]
                                 contacts:[CNIndexFunSeq indexFunSeqWithCount:(NSUInteger) pManifold->getNumContacts() f:^id(NSUInteger i) {
-                                    btManifoldPoint & p = pManifold->getContactPoint(i);
+                                    btManifoldPoint & p = pManifold->getContactPoint((int)i);
                                     btVector3 const & a = p.getPositionWorldOnA();
                                     btVector3 const & b = p.getPositionWorldOnB();
                                     return [EGContact contactWithA:GEVec3Make(a.x(), a.y(), a.z())
@@ -109,8 +109,8 @@ static ODClassType* _EGCollisionWorld_type;
     _world->rayTest(from, to, results);
     
     return [CNIndexFunSeq indexFunSeqWithCount:(NSUInteger) results.m_collisionObjects.size() f:^id(NSUInteger i) {
-        EGCollisionBody *body = (__bridge EGCollisionBody *) results.m_collisionObjects.at(i)->getUserPointer();
-        const btVector3 & p = results.m_hitPointWorld.at(i);
+        EGCollisionBody *body = (__bridge EGCollisionBody *) results.m_collisionObjects.at((int)i)->getUserPointer();
+        const btVector3 & p = results.m_hitPointWorld.at((int)i);
         return [EGCrossPoint crossPointWithBody:body point:(GEVec3){p.x(), p.y(), p.z()}];
     }];
 }

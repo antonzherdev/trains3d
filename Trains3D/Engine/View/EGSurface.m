@@ -44,7 +44,7 @@ static ODClassType* _EGSurface_type;
     @throw @"Method unbind is abstract";
 }
 
-- (GLint)frameBuffer {
+- (int)frameBuffer {
     @throw @"Method frameBuffer is abstract";
 }
 
@@ -113,24 +113,24 @@ static ODClassType* _EGSimpleSurface_type;
             glGetError();
             glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
             glBindTexture(GL_TEXTURE_2D, t.id);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self.size.x, self.size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, ((int)(GL_CLAMP_TO_EDGE)));
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, ((int)(GL_CLAMP_TO_EDGE)));
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, ((int)(GL_NEAREST)));
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, ((int)(GL_NEAREST)));
+            glTexImage2D(GL_TEXTURE_2D, 0, ((int)(GL_RGBA)), ((int)(self.size.x)), ((int)(self.size.y)), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
             if(glGetError() != 0) {
                 NSString* e = [NSString stringWithFormat:@"Error in texture creation for surface with size %ldx%ld", (long)self.size.x, (long)self.size.y];
                 @throw e;
             }
             egFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, t.id, 0);
-            NSInteger status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-            if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer color attachment: %ld", (long)status];
+            int status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+            if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer color attachment: %d", status];
             if(_depth) {
                 glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
-                glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, self.size.x, self.size.y);
+                glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, ((int)(self.size.x)), ((int)(self.size.y)));
                 glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
-                NSInteger status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-                if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %ld", (long)status];
+                int status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+                if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %d", status];
             }
             glBindTexture(GL_TEXTURE_2D, 0);
             [EGGlobal.context restoreDefaultFramebuffer];

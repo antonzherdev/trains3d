@@ -35,8 +35,8 @@ static ODClassType* _EGShadowMap_type;
             egInitShadowTexture(self.size);
             egCheckError();
             egFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, t.id, 0);
-            NSInteger status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-            if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in shadow map frame buffer: %ld", (long)status];
+            int status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+            if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in shadow map frame buffer: %d", status];
             glBindTexture(GL_TEXTURE_2D, 0);
             [EGGlobal.context restoreDefaultFramebuffer];
             return t;
@@ -928,11 +928,11 @@ static ODClassType* _EGShadowDrawShader_type;
 - (void)loadUniformsParam:(EGShadowDrawParam*)param {
     [_mwcpUniform applyMatrix:[EGGlobal.matrix.value mwcp]];
     EGEnvironment* env = EGGlobal.context.environment;
-    __block NSUInteger i = 0;
+    __block unsigned int i = 0;
     [[[env.lights chain] filter:^BOOL(EGLight* _) {
         return [((EGLight*)(_)) isKindOfClass:[EGDirectLight class]] && ((EGLight*)(_)).hasShadows;
     }] forEach:^void(EGLight* light) {
-        float p = unumf4([param.percents applyIndex:i]);
+        float p = unumf4([param.percents applyIndex:((NSUInteger)(i))]);
         [((EGShaderUniformF4*)([_directLightPercents applyIndex:i])) applyF4:p];
         [((EGShaderUniformMat4*)([_directLightDepthMwcp applyIndex:i])) applyMatrix:[[((EGLight*)(light)) shadowMap].biasDepthCp mulMatrix:[EGGlobal.matrix mw]]];
         [((EGShaderUniformI4*)([_directLightShadows applyIndex:i])) applyI4:((int)(i + 1))];

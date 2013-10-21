@@ -28,7 +28,7 @@
 - (void)applyDraw:(void(^)())draw;
 - (void)bind;
 - (void)unbind;
-- (GLint)frameBuffer;
+- (int)frameBuffer;
 - (void)_init;
 + (ODClassType*)type;
 @end

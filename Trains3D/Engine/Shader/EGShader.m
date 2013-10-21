@@ -78,7 +78,7 @@ static ODClassType* _EGShaderProgram_type;
 }
 
 - (EGShaderAttribute*)attributeForName:(NSString*)name {
-    GLint h = egGetAttribLocation(_handle, name);
+    int h = egGetAttribLocation(_handle, name);
     if(h < 0) @throw [@"Could not found attribute for name " stringByAppendingString:name];
     EGShaderAttribute* ret = [EGShaderAttribute shaderAttributeWithHandle:h];
     return ret;
@@ -176,8 +176,8 @@ static ODClassType* _EGShader_type;
     @throw @"Method loadUniforms is abstract";
 }
 
-- (GLint)uniformName:(NSString*)name {
-    GLint h = egGetUniformLocation(_program.handle, name);
+- (int)uniformName:(NSString*)name {
+    int h = egGetUniformLocation(_program.handle, name);
     if(h < 0) @throw [@"Could not found attribute for name " stringByAppendingString:name];
     return h;
 }
@@ -279,7 +279,7 @@ static ODClassType* _EGShaderAttribute_type;
 
 - (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(unsigned int)valuesType shift:(NSUInteger)shift {
     glEnableVertexAttribArray(_handle);
-    egVertexAttribPointer(_handle, valuesCount, valuesType, GL_FALSE, stride, shift);
+    egVertexAttribPointer(_handle, ((unsigned int)(valuesCount)), valuesType, GL_FALSE, ((unsigned int)(stride)), ((unsigned int)(shift)));
 }
 
 - (ODClassType*)type {

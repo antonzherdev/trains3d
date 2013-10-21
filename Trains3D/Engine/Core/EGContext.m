@@ -84,7 +84,7 @@ static ODClassType* _EGGlobal_type;
 
 @implementation EGContext{
     CGFloat _scale;
-    GLint _defaultFramebuffer;
+    int _defaultFramebuffer;
     NSMutableDictionary* _textureCache;
     NSMutableDictionary* _fontCache;
     EGDirector* _director;

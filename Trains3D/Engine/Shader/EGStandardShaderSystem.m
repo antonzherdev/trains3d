@@ -529,7 +529,7 @@ static ODClassType* _EGStandardShader_type;
             [((EGShaderUniformF4*)([_specularSize get])) applyF4:((float)(param.specularSize))];
         }
         [((EGShaderUniformMat4*)([_mwcUniform get])) applyMatrix:[EGGlobal.context.matrixStack.value mwc]];
-        __block NSUInteger i = 0;
+        __block unsigned int i = 0;
         if(_key.directLightWithShadowsCount > 0) [env.directLightsWithShadows forEach:^void(EGDirectLight* light) {
             GEVec3 dir = geVec4Xyz([[EGGlobal.matrix.value wc] mulVec3:((EGDirectLight*)(light)).direction w:0.0]);
             [((EGShaderUniformVec3*)([_directLightDirections applyIndex:i])) applyVec3:geVec3Normalize(dir)];

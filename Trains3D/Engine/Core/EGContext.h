@@ -1,6 +1,6 @@
 #import "objd.h"
-#import "GL.h"
 #import "GEVec.h"
+#import "GL.h"
 @class EGDirector;
 @class EGTexture;
 @class EGFont;
@@ -38,7 +38,7 @@
 
 @interface EGContext : NSObject
 @property (nonatomic) CGFloat scale;
-@property (nonatomic) GLint defaultFramebuffer;
+@property (nonatomic) int defaultFramebuffer;
 @property (nonatomic, retain) EGDirector* director;
 @property (nonatomic, retain) EGEnvironment* environment;
 @property (nonatomic, readonly) EGMatrixStack* matrixStack;

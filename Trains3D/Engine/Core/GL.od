@@ -3,11 +3,9 @@ package com.antonzherdev.gl
 import com.antonzherdev.geometry._
 import com.antonzherdev.eg._
 
-stub struct GLint
 stub struct GLintptr
 stub struct GLuint
 stub struct GLubyte
-stub struct GLsizei
 stub struct GLboolean
 stub struct GLsizeiptr
 stub struct GLbitfield
@@ -35,20 +33,20 @@ stub object gl {
     def glAlphaFunc(: uint4, : float4)
     val GL_GREATER : uint4
 
-    def glCullFace(: uint)
-    val GL_FRONT : uint
-    val GL_BACK : uint
-    val GL_FRONT_AND_BACK : uint
-    def glFrontFace(: uint)
-    val GL_CW : uint
-    val GL_CWW : uint
+    def glCullFace(: uint4)
+    val GL_FRONT : uint4
+    val GL_BACK : uint4
+    val GL_FRONT_AND_BACK : uint4
+    def glFrontFace(: uint4)
+    val GL_CW : uint4
+    val GL_CWW : uint4
 
     def glGetError : uint4
 
     def glLineWidth(width : float4)
     def egViewport(rect : RectI)
-    def glViewport (x : GLint, y : GLint, width : GLsizei, height : GLsizei)
-    def glUniformMatrix4fv(location : GLuint, count : GLsizei, transpose : GLboolean, value : [float4])
+    def glViewport (x : int4, y : int4, width : int4, height : int4)
+    def glUniformMatrix4fv(location : GLuint, count : int4, transpose : GLboolean, value : [float4])
     def glUniform1f(location : GLuint, f : float4)
     def glUniform1i(location : GLuint, f : int4)
     def egUniformVec4(location : GLuint, color : vec4)
@@ -61,8 +59,8 @@ stub object gl {
     def glLinkProgram(program : GLuint)
     def glDeleteProgram(program : GLuint)
     def glUseProgram(program : GLuint)
-    def egGetAttribLocation(program : GLuint, name : string) : GLint
-    def egGetUniformLocation(program : GLuint, name : string) : GLint
+    def egGetAttribLocation(program : GLuint, name : string) : int4
+    def egGetUniformLocation(program : GLuint, name : string) : int4
     def egGetProgramError(program : GLuint) : string?
 
     def glDeleteShader(shader : GLuint)
@@ -82,13 +80,13 @@ stub object gl {
     def glBindBuffer(target : uint4, handle : GLuint) : GLuint
     def glBufferData(target : uint4, size : GLsizeiptr, data : VoidRef, usage : uint4)
     def glBufferSubData(target : uint4, offset : GLintptr ,size : GLsizeiptr, data : VoidRef)
-    def egVertexAttribPointer(slot : GLuint, size : uint, tp : uint4, normalized : GLboolean, stride : uint, shift : uint)
-    def glDrawElements(mode : uint4, count : GLsizei, tp : uint4, indices : VoidRef)
-    def glDrawElementsEXT(mode : uint4, count : GLsizei, tp : uint4, indices : VoidRef)
-    def glDrawRangeElements(mode : uint4, start : GLuint, end : GLuint, count : GLsizei, tp : uint4, indices : VoidRef)
-    def glDrawArrays(mode : uint4, first : GLint, count : GLsizei)
-    def glEnableVertexAttribArray(handle : GLint)
-    def glDisableVertexAttribArray(handle : GLint)
+    def egVertexAttribPointer(slot : GLuint, size : uint4, tp : uint4, normalized : GLboolean, stride : uint4, shift : uint4)
+    def glDrawElements(mode : uint4, count : int4, tp : uint4, indices : VoidRef)
+    def glDrawElementsEXT(mode : uint4, count : int4, tp : uint4, indices : VoidRef)
+    def glDrawRangeElements(mode : uint4, start : GLuint, end : GLuint, count : int4, tp : uint4, indices : VoidRef)
+    def glDrawArrays(mode : uint4, first : int4, count : int4)
+    def glEnableVertexAttribArray(handle : int4)
+    def glDisableVertexAttribArray(handle : int4)
     val GL_ARRAY_BUFFER : uint4
     val GL_ELEMENT_ARRAY_BUFFER : uint4
     val GL_STATIC_DRAW : uint4
@@ -96,7 +94,7 @@ stub object gl {
     val GL_TRIANGLES : uint4
     val GL_TRIANGLE_STRIP : uint4
     val GL_TRIANGLE_FAN : uint4
-    val GL_LINES : uint
+    val GL_LINES : uint4
 
     val GL_FLOAT : uint4
     val GL_DOUBLE : uint4
@@ -111,10 +109,10 @@ stub object gl {
 
     def glBlendFunc(sfactor : uint4, dfactor : uint4)
     def glBlendFuncSeparate(srcRGB : uint4, dstRGB : uint4, stcAlpha : uint4, dstAlpha : uint4)
-    val GL_ZERO : uint
-    val GL_ONE : uint
-    val GL_SRC_ALPHA : uint
-    val GL_ONE_MINUS_SRC_ALPHA : uint
+    val GL_ZERO : uint4
+    val GL_ONE : uint4
+    val GL_SRC_ALPHA : uint4
+    val GL_ONE_MINUS_SRC_ALPHA : uint4
 
 
     def egGenFrameBuffer : GLuint
@@ -144,16 +142,16 @@ stub object gl {
     def egGenRenderBuffer : GLuint
     def egDeleteRenderBuffer(handle : GLuint) : GLuint
     def glBindRenderbuffer( : uint4,handle : GLuint)
-    def glRenderbufferStorage( : uint4, component : uint4, width : GLsizei, height : GLsizei)
+    def glRenderbufferStorage( : uint4, component : uint4, width : int4, height : int4)
     val GL_RENDERBUFFER : uint4
     val GL_DEPTH_COMPONENT : uint4
     val GL_DEPTH_COMPONENT24 : uint4
     def glFramebufferRenderbuffer(target : uint4, attachment : uint4, buftarget : uint4, buffer : GLuint)
     val GL_DEPTH_ATTACHMENT : uint4
 
-    def glTexImage2D(target : uint4, level : GLint, internalformat  : GLint, width : GLsizei, height : GLsizei, border : GLint, format : uint4, tp : uint4, pixels : VoidRef)
-    def glTexImage2DMultisample(target : uint4, samples : GLsizei, internalformat  : GLint, width : GLsizei, height : GLsizei, fixedsamplelocations : GLboolean)
-    def glTexParameteri(target : uint4, pname : uint4, param : GLint)
+    def glTexImage2D(target : uint4, level : int4, internalformat  : int4, width : int4, height : int4, border : int4, format : uint4, tp : uint4, pixels : VoidRef)
+    def glTexImage2DMultisample(target : uint4, samples : int4, internalformat  : int4, width : int4, height : int4, fixedsamplelocations : GLboolean)
+    def glTexParameteri(target : uint4, pname : uint4, param : int4)
     def egInitShadowTexture(size : vec2i)
     val GL_TEXTURE_WRAP_S : uint4
     val GL_TEXTURE_WRAP_T : uint4
@@ -170,9 +168,9 @@ stub object gl {
     val GL_NEAREST : uint4
     val GL_TEXTURE_MIN_FILTER : uint4
     val GL_TEXTURE_MAG_FILTER : uint4
-    def egFramebufferTexture(target : uint4, attachment : uint4, texture : GLuint, level : GLint)
+    def egFramebufferTexture(target : uint4, attachment : uint4, texture : GLuint, level : int4)
     def glDrawBuffer(:uint4)
-    def glCheckFramebufferStatus(target : uint4) : int
+    def glCheckFramebufferStatus(target : uint4) : int4
     val GL_COLOR_ATTACHMENT0 : uint4
     val GL_FRAMEBUFFER_COMPLETE : uint4
     def glGenerateMipmap(target : uint4)
@@ -186,7 +184,7 @@ stub object gl {
     def egLoadTextureFromFile(target : GLuint, file : string, magFilter : uint4, minFilter : uint4) : vec2
     def egSaveTextureToFile(source : GLuint, file : string)
     def egPlatform : Platform
-    def egGLSLVersion : uint
+    def egGLSLVersion : uint4
 
     def egLabelShaderProgram(handle : GLuint, name : string)
     def egPushGroupMarker(name : string)

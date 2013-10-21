@@ -11,7 +11,7 @@ class Surface(size : vec2i) {
 
     def unbind
 
-    def frameBuffer : GLint
+    def frameBuffer : int4
 
     def init {
         if(size.x <= 0 || size.y <= 0) throw "Invalid surface size"

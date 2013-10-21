@@ -14,7 +14,7 @@ object Global {
 
 class Context {
     var scale : float = 1.0
-    var defaultFramebuffer : GLint = 0
+    var defaultFramebuffer : int4 = 0
     private val textureCache = MutableHashMap<(string, uint4, uint4), FileTexture>()
     private val fontCache = MutableHashMap<string, Font>()
 

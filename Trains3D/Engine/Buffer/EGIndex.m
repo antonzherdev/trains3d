@@ -94,13 +94,13 @@ static ODClassType* _EGImmutableIndexBuffer_type;
 
 - (void)draw {
     [EGGlobal.context draw];
-    glDrawElements([self mode], [self count], GL_UNSIGNED_INT, 0);
+    glDrawElements([self mode], ((int)([self count])), GL_UNSIGNED_INT, 0);
     egCheckError();
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context draw];
-    glDrawElements([self mode], count, GL_UNSIGNED_INT, ((VoidRef)(4 * start)));
+    glDrawElements([self mode], ((int)(count)), GL_UNSIGNED_INT, ((VoidRef)(4 * start)));
     egCheckError();
 }
 
@@ -186,13 +186,13 @@ static ODClassType* _EGMutableIndexBuffer_type;
 
 - (void)draw {
     [EGGlobal.context draw];
-    glDrawElements([self mode], [self count], GL_UNSIGNED_INT, 0);
+    glDrawElements([self mode], ((int)([self count])), GL_UNSIGNED_INT, 0);
     egCheckError();
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context draw];
-    glDrawElements([self mode], count, GL_UNSIGNED_INT, ((VoidRef)(4 * start)));
+    glDrawElements([self mode], ((int)(count)), GL_UNSIGNED_INT, ((VoidRef)(4 * start)));
     egCheckError();
 }
 
@@ -264,18 +264,18 @@ static ODClassType* _EGEmptyIndexSource_type;
     _EGEmptyIndexSource_triangleStrip = [EGEmptyIndexSource emptyIndexSourceWithMode:GL_TRIANGLE_STRIP];
     _EGEmptyIndexSource_triangleFan = [EGEmptyIndexSource emptyIndexSourceWithMode:GL_TRIANGLE_FAN];
     _EGEmptyIndexSource_triangles = [EGEmptyIndexSource emptyIndexSourceWithMode:GL_TRIANGLES];
-    _EGEmptyIndexSource_lines = [EGEmptyIndexSource emptyIndexSourceWithMode:((unsigned int)(GL_LINES))];
+    _EGEmptyIndexSource_lines = [EGEmptyIndexSource emptyIndexSourceWithMode:GL_LINES];
 }
 
 - (void)draw {
     [EGGlobal.context draw];
-    glDrawArrays(_mode, 0, [EGGlobal.context vertexBufferCount]);
+    glDrawArrays(_mode, 0, ((int)([EGGlobal.context vertexBufferCount])));
     egCheckError();
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context draw];
-    glDrawArrays(_mode, start, count);
+    glDrawArrays(_mode, ((int)(start)), ((int)(count)));
     egCheckError();
 }
 
@@ -366,13 +366,13 @@ static ODClassType* _EGArrayIndexSource_type;
 
 - (void)draw {
     [EGGlobal.context bindIndexBufferHandle:0];
-    glDrawElements(_mode, _array.count, GL_UNSIGNED_INT, _array.bytes);
+    glDrawElements(_mode, ((int)(_array.count)), GL_UNSIGNED_INT, _array.bytes);
     egCheckError();
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context bindIndexBufferHandle:0];
-    glDrawElements(_mode, count, GL_UNSIGNED_INT, _array.bytes + 4 * start);
+    glDrawElements(_mode, ((int)(count)), GL_UNSIGNED_INT, _array.bytes + 4 * start);
     egCheckError();
 }
 
@@ -453,12 +453,12 @@ static ODClassType* _EGVoidRefArrayIndexSource_type;
 
 - (void)draw {
     [EGGlobal.context draw];
-    glDrawElements(_mode, _array.length / 4, GL_UNSIGNED_INT, _array.bytes);
+    glDrawElements(_mode, ((int)(_array.length / 4)), GL_UNSIGNED_INT, _array.bytes);
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context draw];
-    glDrawElements(_mode, count, GL_UNSIGNED_INT, _array.bytes + 4 * start);
+    glDrawElements(_mode, ((int)(count)), GL_UNSIGNED_INT, _array.bytes + 4 * start);
     egCheckError();
 }
 

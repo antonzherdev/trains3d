@@ -53,7 +53,7 @@ static ODClassType* _EGCameraIso_type;
 }
 
 - (NSUInteger)cullFace {
-    return GL_FRONT;
+    return ((NSUInteger)(GL_FRONT));
 }
 
 - (ODClassType*)type {

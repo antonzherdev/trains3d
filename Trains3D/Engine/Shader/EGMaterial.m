@@ -272,8 +272,8 @@ static ODClassType* _EGBlendFunction_type;
 + (void)initialize {
     [super initialize];
     _EGBlendFunction_type = [ODClassType classTypeWithCls:[EGBlendFunction class]];
-    _EGBlendFunction_standard = [EGBlendFunction blendFunctionWithSource:((unsigned int)(GL_SRC_ALPHA)) destination:((unsigned int)(GL_ONE_MINUS_SRC_ALPHA))];
-    _EGBlendFunction_premultiplied = [EGBlendFunction blendFunctionWithSource:((unsigned int)(GL_ONE)) destination:((unsigned int)(GL_ONE_MINUS_SRC_ALPHA))];
+    _EGBlendFunction_standard = [EGBlendFunction blendFunctionWithSource:GL_SRC_ALPHA destination:GL_ONE_MINUS_SRC_ALPHA];
+    _EGBlendFunction_premultiplied = [EGBlendFunction blendFunctionWithSource:GL_ONE destination:GL_ONE_MINUS_SRC_ALPHA];
 }
 
 - (void)applyDraw:(void(^)())draw {

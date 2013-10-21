@@ -29,7 +29,7 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
             glGetError();
             glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
             glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, t.id);
-            glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGBA, self.size.x, self.size.y, GL_FALSE);
+            glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGBA, (GLsizei)self.size.x, (GLsizei)self.size.y, GL_FALSE);
             if(glGetError() != 0) {
                 NSString* e = [NSString stringWithFormat:@"Error in texture creation for surface with size %lix%li", self.size.x, self.size.y];
                 @throw e;
@@ -39,7 +39,7 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
             if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer color attachment: %li", status];
             if(_depth) {
                 glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, ((EGTexture*)([_depthTexture get])).id);
-                glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_DEPTH_COMPONENT24, self.size.x, self.size.y, GL_FALSE);
+                glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_DEPTH_COMPONENT24, (GLsizei)self.size.x, (GLsizei)self.size.y, GL_FALSE);
                 glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, ((EGTexture*)([_depthTexture get])).id, 0);
                 NSInteger status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
                 if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %li", status];
@@ -147,7 +147,7 @@ static ODClassType* _EGMultisamplingSurface_type;
     glBindFramebuffer(GL_READ_FRAMEBUFFER, _multisampling.frameBuffer);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _simple.frameBuffer);
     GEVec2i s = self.size;
-    glBlitFramebuffer(0, 0, s.x, s.y, 0, 0, s.x, s.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    glBlitFramebuffer(0, 0, (GLsizei)s.x, (GLsizei)s.y, 0, 0, (GLsizei)s.x, (GLsizei)s.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
@@ -276,7 +276,7 @@ static ODClassType* _EGViewportSurface_type;
         glBindFramebuffer(GL_READ_FRAMEBUFFER, [((EGSurface*)([[self surface] get])) frameBuffer]);
         GEVec2i s = ((EGSurface*)([[self surface] get])).size;
         GERectI v = [EGGlobal.context viewport];
-        glBlitFramebuffer(0, 0, s.x, s.y, geRectIX(v), geRectIY(v), geRectIX2(v), geRectIY2(v), GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        glBlitFramebuffer(0, 0, (GLsizei)s.x, (GLsizei)s.y, (GLsizei)geRectIX(v), (GLsizei)geRectIY(v), (GLsizei)geRectIX2(v), (GLsizei)geRectIY2(v), GL_COLOR_BUFFER_BIT, GL_NEAREST);
         glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
     }
 }

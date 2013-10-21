@@ -5,7 +5,7 @@ stub class MultisamplingSurface(size : vec2i, depth : bool) extends  Surface(siz
 
     def unbind
 
-    def frameBuffer : GLint
+    def frameBuffer : int4
 
     def texture : Texture
 }

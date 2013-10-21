@@ -347,7 +347,7 @@ static ODClassType* _EGLayer_type;
     EGGlobal.context.renderTarget = [EGSceneRenderTarget sceneRenderTarget];
     [EGGlobal.context setViewport:geRectIApplyRect(viewport)];
     EGGlobal.matrix.value = [camera matrixModel];
-    if(cullFace != GL_NONE) glCullFace(cullFace);
+    if(cullFace != GL_NONE) glCullFace(((unsigned int)(cullFace)));
     [_view prepare];
     if(egPlatform().shadows) [[[env.lights chain] filter:^BOOL(EGLight* _) {
         return ((EGLight*)(_)).hasShadows;
@@ -374,7 +374,7 @@ static ODClassType* _EGLayer_type;
     EGGlobal.context.renderTarget = [EGSceneRenderTarget sceneRenderTarget];
     [EGGlobal.context setViewport:geRectIApplyRect(viewport)];
     EGGlobal.matrix.value = [camera matrixModel];
-    if(cullFace != GL_NONE) glCullFace(cullFace);
+    if(cullFace != GL_NONE) glCullFace(((unsigned int)(cullFace)));
     [_view draw];
     if(cullFace != GL_NONE) [EGGlobal.context.cullFace disable];
     egCheckError();
