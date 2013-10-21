@@ -64,6 +64,9 @@ static ODClassType* _TRRailroadView_type;
     [_railroad addChangeListener:^void() {
         weakSelf._changed = YES;
     }];
+    [_railroad.builder addChangeListener:^void() {
+        weakSelf._changed = YES;
+    }];
     EGGlobal.context.considerShadows = NO;
     _backgroundView = [TRBackgroundView backgroundViewWithMap:_railroad.map];
     _railView = [TRRailView railView];
@@ -87,12 +90,6 @@ static ODClassType* _TRRailroadView_type;
         }];
         [[_railroad switches] forEach:^void(TRSwitch* _) {
             [_switchView drawTheSwitch:_];
-        }];
-        [[_railroad.builder rail] forEach:^void(TRRail* _) {
-            [_railView drawRail:_];
-        }];
-        [[_railroad.builder buildingRails] forEach:^void(TRRailBuilding* _) {
-            [_railView drawRailBuilding:_];
         }];
         [_lightView drawBodies];
     }
@@ -119,6 +116,12 @@ static ODClassType* _TRRailroadView_type;
         [_backgroundView draw];
         [[_railroad rails] forEach:^void(TRRail* _) {
             [_railView drawRail:_];
+        }];
+        [[_railroad.builder rail] forEach:^void(TRRail* _) {
+            [_railView drawRail:_];
+        }];
+        [[_railroad.builder buildingRails] forEach:^void(TRRailBuilding* _) {
+            [_railView drawRailBuilding:_];
         }];
         EGGlobal.context.considerShadows = YES;
         __changed = NO;

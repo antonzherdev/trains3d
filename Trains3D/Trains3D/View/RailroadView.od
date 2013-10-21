@@ -17,6 +17,7 @@ class RailroadView(railroad : Railroad) extends InputProcessor {
     def init {
         weak val weakSelf = self
         railroad.add(changeListener = weakSelf._changed = true)
+        railroad.builder.add(changeListener = weakSelf._changed = true)
         context.considerShadows = false
         backgroundView = BackgroundView(railroad.map)
         railView = RailView()
@@ -39,8 +40,6 @@ class RailroadView(railroad : Railroad) extends InputProcessor {
                 }}}
             }
             railroad.switches.for(switchView.draw(_))
-            railroad.builder.rail.for(railView.draw(_))
-            railroad.builder.buildingRails.for(railView.draw(_))
             lightView.drawBodies
         }
 
@@ -64,6 +63,8 @@ class RailroadView(railroad : Railroad) extends InputProcessor {
             context.considerShadows = false
             backgroundView.draw
             railroad.rails.for(railView.draw(_))
+            railroad.builder.rail.for(railView.draw(_))
+            railroad.builder.buildingRails.for(railView.draw(_))
             context.considerShadows = true
             _changed = false
         }

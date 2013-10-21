@@ -237,11 +237,21 @@ class RailroadBuilder(weak railroad : Railroad) extends Controller {
     def buildingRails : [RailBuilding] = _buildingRails
     def railForUndo : Rail? = _buildingRails.headOpt.map(_.rail)
 
+    private var _changeListeners : [() -> void] = []
+    def add(changeListener : () -> void) {
+        _changeListeners += changeListener
+    }
+
     def tryBuild(rail : Rail) : bool = {
         if(canAdd(rail)) {
             _rail = rail
+            changed
             true
         } else false
+    }
+
+    private def changed {
+        _changeListeners.for(_())
     }
 
     def checkCity(tile : vec2i, connector : RailConnector) : bool = {
@@ -257,6 +267,7 @@ class RailroadBuilder(weak railroad : Railroad) extends Controller {
         if(_rail.isDefined) {
             railroad.forest.cutDownFor(_rail.get)
             _buildingRails = List(RailBuilding(_rail.get), _buildingRails)
+            changed
             _rail = nil
         }
     }
@@ -281,8 +292,12 @@ class RailroadBuilder(weak railroad : Railroad) extends Controller {
     def updateWith(delta : float) {
         var hasEnd = false
         _buildingRails.for{b ->
-            b.progress += delta/2
-            hasEnd = (hasEnd || b.progress >= 1.0)
+            val p = b.progress
+            val less = p < 0.5
+            p += delta/2
+            if(less && p > 0.5) changed
+            hasEnd = (hasEnd || p >= 1.0)
+            b.progress = p
         }
         if(hasEnd) {
             _buildingRails = _buildingRails.filter{b ->
@@ -291,11 +306,13 @@ class RailroadBuilder(weak railroad : Railroad) extends Controller {
                     false
                 } else true
             }
+            changed
         }
     }
 
     def undo {
         _buildingRails = _buildingRails.tail
+        changed
     }
 }
 

@@ -4,6 +4,7 @@
 #import "EGFont.h"
 @class TRRailroad;
 @class EGViewportSurface;
+@class TRRailroadBuilder;
 @class EGGlobal;
 @class EGContext;
 @class EGShadowDrawParam;
@@ -15,7 +16,6 @@
 @class EGBlendFunction;
 @class EGVertexArray;
 @class EGEnablingState;
-@class TRRailroadBuilder;
 @class EGDirector;
 @class EGStandardMaterial;
 @class EGColorSource;

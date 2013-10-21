@@ -167,6 +167,7 @@
 - (id)rail;
 - (id<CNSeq>)buildingRails;
 - (id)railForUndo;
+- (void)addChangeListener:(void(^)())changeListener;
 - (BOOL)tryBuildRail:(TRRail*)rail;
 - (BOOL)checkCityTile:(GEVec2i)tile connector:(TRRailConnector*)connector;
 - (void)clear;

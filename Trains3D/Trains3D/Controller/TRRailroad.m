@@ -878,6 +878,7 @@ static ODClassType* _TRRailBuilding_type;
     __weak TRRailroad* _railroad;
     id __rail;
     CNList* __buildingRails;
+    id<CNSeq> __changeListeners;
 }
 static ODClassType* _TRRailroadBuilder_type;
 @synthesize railroad = _railroad;
@@ -892,6 +893,7 @@ static ODClassType* _TRRailroadBuilder_type;
         _railroad = railroad;
         __rail = [CNOption none];
         __buildingRails = [CNList apply];
+        __changeListeners = (@[]);
     }
     
     return self;
@@ -916,13 +918,24 @@ static ODClassType* _TRRailroadBuilder_type;
     }];
 }
 
+- (void)addChangeListener:(void(^)())changeListener {
+    __changeListeners = [__changeListeners addItem:changeListener];
+}
+
 - (BOOL)tryBuildRail:(TRRail*)rail {
     if([self canAddRail:rail]) {
         __rail = [CNOption applyValue:rail];
+        [self changed];
         return YES;
     } else {
         return NO;
     }
+}
+
+- (void)changed {
+    [__changeListeners forEach:^void(void(^_)()) {
+        ((void(^)())(_))();
+    }];
 }
 
 - (BOOL)checkCityTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
@@ -938,6 +951,7 @@ static ODClassType* _TRRailroadBuilder_type;
     if([__rail isDefined]) {
         [_railroad.forest cutDownForRail:[__rail get]];
         __buildingRails = [CNList applyItem:[TRRailBuilding railBuildingWithRail:[__rail get]] tail:__buildingRails];
+        [self changed];
         __rail = [CNOption none];
     }
 }
@@ -961,21 +975,29 @@ static ODClassType* _TRRailroadBuilder_type;
 - (void)updateWithDelta:(CGFloat)delta {
     __block BOOL hasEnd = NO;
     [__buildingRails forEach:^void(TRRailBuilding* b) {
-        ((TRRailBuilding*)(b)).progress += delta / 2;
-        hasEnd = hasEnd || ((TRRailBuilding*)(b)).progress >= 1.0;
+        CGFloat p = ((TRRailBuilding*)(b)).progress;
+        BOOL less = p < 0.5;
+        p += delta / 2;
+        if(less && p > 0.5) [self changed];
+        hasEnd = hasEnd || p >= 1.0;
+        ((TRRailBuilding*)(b)).progress = p;
     }];
-    if(hasEnd) __buildingRails = [__buildingRails filterF:^BOOL(TRRailBuilding* b) {
-        if(((TRRailBuilding*)(b)).progress >= 1.0) {
-            [_railroad tryAddRail:((TRRailBuilding*)(b)).rail];
-            return NO;
-        } else {
-            return YES;
-        }
-    }];
+    if(hasEnd) {
+        __buildingRails = [__buildingRails filterF:^BOOL(TRRailBuilding* b) {
+            if(((TRRailBuilding*)(b)).progress >= 1.0) {
+                [_railroad tryAddRail:((TRRailBuilding*)(b)).rail];
+                return NO;
+            } else {
+                return YES;
+            }
+        }];
+        [self changed];
+    }
 }
 
 - (void)undo {
     __buildingRails = [__buildingRails tail];
+    [self changed];
 }
 
 - (ODClassType*)type {
