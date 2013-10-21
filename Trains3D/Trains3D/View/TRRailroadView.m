@@ -27,11 +27,12 @@
     TRBackgroundView* _backgroundView;
     TRUndoView* _undoView;
     id _shadowVao;
-    BOOL _changed;
+    BOOL __changed;
 }
 static ODClassType* _TRRailroadView_type;
 @synthesize railroad = _railroad;
 @synthesize shadowVao = _shadowVao;
+@synthesize _changed = __changed;
 
 + (id)railroadViewWithRailroad:(TRRailroad*)railroad {
     return [[TRRailroadView alloc] initWithRailroad:railroad];
@@ -46,7 +47,7 @@ static ODClassType* _TRRailroadView_type;
         _damageView = [TRDamageView damageView];
         _railroadSurface = [EGViewportSurface viewportSurfaceWithDepth:YES multisampling:YES];
         _undoView = [TRUndoView undoViewWithBuilder:_railroad.builder];
-        _changed = YES;
+        __changed = YES;
         [self _init];
     }
     
@@ -59,8 +60,9 @@ static ODClassType* _TRRailroadView_type;
 }
 
 - (void)_init {
+    __weak TRRailroadView* weakSelf = self;
     [_railroad addChangeListener:^void() {
-        _changed = YES;
+        weakSelf._changed = YES;
     }];
     EGGlobal.context.considerShadows = NO;
     _backgroundView = [TRBackgroundView backgroundViewWithMap:_railroad.map];
@@ -110,7 +112,7 @@ static ODClassType* _TRRailroadView_type;
 }
 
 - (void)prepare {
-    [_railroadSurface maybeForce:_changed draw:^void() {
+    [_railroadSurface maybeForce:__changed draw:^void() {
         [EGGlobal.context clearColorColor:GEVec4Make(0.0, 0.0, 0.0, 0.0)];
         glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
         EGGlobal.context.considerShadows = NO;
@@ -119,7 +121,7 @@ static ODClassType* _TRRailroadView_type;
             [_railView drawRail:_];
         }];
         EGGlobal.context.considerShadows = YES;
-        _changed = NO;
+        __changed = NO;
     }];
 }
 
@@ -476,7 +478,7 @@ static ODClassType* _TRSwitchView_type;
     EGVertexArray* _shadowBodyVao;
     EGVertexArray* _greenGlowVao;
     EGVertexArray* _redGlowVao;
-    BOOL _changed;
+    BOOL __changed;
     id<CNSeq> __matrixArr;
     id<CNSeq> __matrixArrShadow;
 }
@@ -488,6 +490,7 @@ static ODClassType* _TRLightView_type;
 @synthesize shadowBodyVao = _shadowBodyVao;
 @synthesize greenGlowVao = _greenGlowVao;
 @synthesize redGlowVao = _redGlowVao;
+@synthesize _changed = __changed;
 
 + (id)lightViewWithRailroad:(TRRailroad*)railroad {
     return [[TRLightView alloc] initWithRailroad:railroad];
@@ -503,7 +506,7 @@ static ODClassType* _TRLightView_type;
         _shadowBodyVao = [TRModels.light vaoShadow];
         _greenGlowVao = [TRModels.lightGreenGlow vaoMaterial:[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:GEVec4Make(0.0, 1.0, 0.0, 0.8) texture:[EGGlobal textureForFile:@"LightGlow.png"]]] shadow:NO];
         _redGlowVao = [TRModels.lightRedGlow vaoMaterial:[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:GEVec4Make(1.0, 0.0, 0.0, 0.8) texture:[EGGlobal textureForFile:@"LightGlow.png"]]] shadow:NO];
-        _changed = YES;
+        __changed = YES;
         __matrixArr = (@[]);
         __matrixArrShadow = (@[]);
         [self _init];
@@ -518,8 +521,9 @@ static ODClassType* _TRLightView_type;
 }
 
 - (void)_init {
+    __weak TRLightView* weakSelf = self;
     [_railroad addChangeListener:^void() {
-        _changed = YES;
+        weakSelf._changed = YES;
     }];
 }
 
@@ -534,7 +538,7 @@ static ODClassType* _TRLightView_type;
 }
 
 - (void)drawBodies {
-    if(_changed) __matrixArr = [self calculateMatrixArr];
+    if(__changed) __matrixArr = [self calculateMatrixArr];
     [EGGlobal.matrix push];
     [__matrixArr forEach:^void(CNTuple* p) {
         EGGlobal.matrix.value = ((EGMatrixModel*)(p.a));
@@ -544,7 +548,7 @@ static ODClassType* _TRLightView_type;
 }
 
 - (void)drawShadow {
-    if(_changed) __matrixArrShadow = [self calculateMatrixArr];
+    if(__changed) __matrixArrShadow = [self calculateMatrixArr];
     [EGGlobal.matrix push];
     [__matrixArrShadow forEach:^void(CNTuple* p) {
         EGGlobal.matrix.value = ((EGMatrixModel*)(p.a));

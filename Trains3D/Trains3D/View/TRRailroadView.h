@@ -50,6 +50,7 @@
 @interface TRRailroadView : NSObject<EGInputProcessor>
 @property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic, readonly) id shadowVao;
+@property (nonatomic) BOOL _changed;
 
 + (id)railroadViewWithRailroad:(TRRailroad*)railroad;
 - (id)initWithRailroad:(TRRailroad*)railroad;
@@ -114,6 +115,7 @@
 @property (nonatomic, readonly) EGVertexArray* shadowBodyVao;
 @property (nonatomic, readonly) EGVertexArray* greenGlowVao;
 @property (nonatomic, readonly) EGVertexArray* redGlowVao;
+@property (nonatomic) BOOL _changed;
 
 + (id)lightViewWithRailroad:(TRRailroad*)railroad;
 - (id)initWithRailroad:(TRRailroad*)railroad;

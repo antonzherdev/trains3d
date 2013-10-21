@@ -13,9 +13,10 @@ class RailroadView(railroad : Railroad) extends InputProcessor {
     private val undoView = UndoView(railroad.builder)
     val shadowVao : VertexArray<_>?
 
-    private var changed = true
+    var _changed = true
     def init {
-        railroad.add(changeListener = changed = true)
+        weak val weakSelf = self
+        railroad.add(changeListener = weakSelf._changed = true)
         context.considerShadows = false
         backgroundView = BackgroundView(railroad.map)
         railView = RailView()
@@ -57,14 +58,14 @@ class RailroadView(railroad : Railroad) extends InputProcessor {
     }
 
     def prepare {
-        railroadSurface.maybe(changed) {
+        railroadSurface.maybe(_changed) {
             context.clearColor(vec4(0, 0, 0, 0))
             glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
             context.considerShadows = false
             backgroundView.draw
             railroad.rails.for(railView.draw(_))
             context.considerShadows = true
-            changed = false
+            _changed = false
         }
     }
 
@@ -205,9 +206,10 @@ class LightView(railroad : Railroad) {
     val greenGlowVao = Models.lightGreenGlow.vao(StandardMaterial(ColorSource(vec4(0, 1, 0, 0.8), textureFor("LightGlow.png"))), false)
     val redGlowVao = Models.lightRedGlow.vao(StandardMaterial(ColorSource(vec4(1, 0, 0, 0.8), textureFor("LightGlow.png"))), false)
 
-    private var changed = true
+    var _changed = true
     def init {
-        railroad.add(changeListener = changed = true)
+        weak val weakSelf = self
+        railroad.add(changeListener = weakSelf._changed = true)
     }
 
     private var _matrixArr : [(MatrixModel, RailLight)] = []
@@ -220,7 +222,7 @@ class LightView(railroad : Railroad) {
     }.toArray
 
     def drawBodies {
-        if(changed) _matrixArr = calculateMatrixArr
+        if(_changed) _matrixArr = calculateMatrixArr
         matrix.push
         _matrixArr.for { p ->
             matrix.value = p.a
@@ -230,7 +232,7 @@ class LightView(railroad : Railroad) {
     }
 
     def drawShadow {
-        if(changed) _matrixArrShadow = calculateMatrixArr
+        if(_changed) _matrixArrShadow = calculateMatrixArr
         matrix.push
         _matrixArrShadow.for { p ->
             matrix.value = p.a

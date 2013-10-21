@@ -161,26 +161,31 @@ static ODClassType* _TRRailroadBuilderMouseProcessor_type;
 }
 
 - (BOOL)mouseDragEvent:(EGEvent*)event {
-    return unumb([[_startedPoint mapF:^id(id sp) {
-        GEVec2 deltaVector = geVec2SubVec2([event location], uwrap(GEVec2, sp));
+    if([_startedPoint isEmpty]) {
+        return NO;
+    } else {
+        GEVec2 sp = uwrap(GEVec2, [_startedPoint get]);
+        GEVec2 deltaVector = geVec2SubVec2([event location], sp);
         if(geVec2LengthSquare(deltaVector) > 0.25) {
-            GEVec2i spTile = geVec2iApplyVec2(uwrap(GEVec2, sp));
-            GEVec2i start = [self normPoint:geVec2SubVec2(uwrap(GEVec2, sp), geVec2ApplyVec2i(spTile))];
+            GEVec2i spTile = geVec2iApplyVec2(sp);
+            GEVec2i start = [self normPoint:geVec2SubVec2(sp, geVec2ApplyVec2i(spTile))];
             GEVec2i end = geVec2iAddVec2i(start, [self normPoint:geVec2SetLength(deltaVector, 0.7)]);
             [_builder tryBuildRail:[self convertRail:[self correctRail:TRRailCorrectionMake(spTile, start, end)]]];
         } else {
             [_builder clear];
         }
-        return @YES;
-    }] getOrValue:@NO]);
+        return YES;
+    }
 }
 
 - (BOOL)mouseUpEvent:(EGEvent*)event {
-    return unumb([[_startedPoint mapF:^id(id point) {
+    if([_startedPoint isEmpty]) {
+        return NO;
+    } else {
         [_builder fix];
         _startedPoint = [CNOption none];
-        return @YES;
-    }] getOrValue:@NO]);
+        return YES;
+    }
 }
 
 - (GEVec2i)normPoint:(GEVec2)point {

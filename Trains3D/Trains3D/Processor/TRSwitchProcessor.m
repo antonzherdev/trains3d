@@ -16,6 +16,7 @@
 }
 static ODClassType* _TRSwitchProcessor_type;
 @synthesize level = _level;
+@synthesize world = _world;
 
 + (id)switchProcessorWithLevel:(TRLevel*)level {
     return [[TRSwitchProcessor alloc] initWithLevel:level];
@@ -44,22 +45,23 @@ static ODClassType* _TRSwitchProcessor_type;
 }
 
 - (void)_init {
+    __weak TRSwitchProcessor* weakSelf = self;
     [_level.railroad addChangeListener:^void() {
-        [_world clear];
-        [[_level.railroad switches] forEach:^void(TRSwitch* aSwitch) {
+        [weakSelf.world clear];
+        [[weakSelf.level.railroad switches] forEach:^void(TRSwitch* aSwitch) {
             EGCollisionBody* body = [EGCollisionBody collisionBodyWithData:aSwitch shape:_switchShape isKinematic:NO];
             [body translateX:((float)(aSwitch.tile.x)) y:((float)(aSwitch.tile.y)) z:0.0];
             [body rotateAngle:((float)(aSwitch.connector.angle)) x:0.0 y:0.0 z:1.0];
             [body translateX:-0.35 y:0.0 z:0.0];
-            [_world addBody:body];
+            [weakSelf.world addBody:body];
         }];
-        [[_level.railroad lights] forEach:^void(TRRailLight* light) {
+        [[weakSelf.level.railroad lights] forEach:^void(TRRailLight* light) {
             EGCollisionBody* body = [EGCollisionBody collisionBodyWithData:light shape:_lightShape isKinematic:NO];
             [body translateX:((float)(light.tile.x)) y:((float)(light.tile.y)) z:0.0];
             [body rotateAngle:((float)(light.connector.angle)) x:0.0 y:0.0 z:1.0];
             [body translateX:-0.45 y:0.2 z:0.1];
             [body rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
-            [_world addBody:body];
+            [weakSelf.world addBody:body];
         }];
     }];
 }

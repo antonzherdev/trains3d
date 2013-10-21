@@ -34,13 +34,13 @@ class Score(rules : ScoreRules, notifications : Notifications) extends Controlle
         trains = trains.chain.filter(_.train != train).toArray
     }
     def updateWith(delta : float) {
-        trains.for(train -> {
+        trains.for{train ->
             train.updateWith(delta)
             if(train.needFineWith(rules.delayPeriod)) {
                 _score -= train.fineWith(rule = rules.delayFine)
                 notifications.notify(Loc.trainDelayedFine(rules.railCost))
             }
-        })
+        }
     }
 }
 

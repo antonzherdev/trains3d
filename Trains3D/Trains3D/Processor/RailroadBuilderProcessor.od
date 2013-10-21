@@ -20,24 +20,29 @@ class RailroadBuilderMouseProcessor(builder : RailroadBuilder) extends MouseProc
         true
     }
 
-    def mouseDrag(event : Event) = startedPoint.map(sp -> {
-        val deltaVector = event.location.sub(sp)
-        if(deltaVector.lengthSquare > 0.25) {
-            val spTile : vec2i = sp
-            val start = norm(sp.sub(spTile))
-            val end = start.add(norm(deltaVector.set(length = 0.7)))
-            builder.tryBuild(convert(correct(RailCorrection(spTile, start, end))))
-        } else {
-            builder.clear
+    def mouseDrag(event : Event) =
+        if(startedPoint.isEmpty) false
+        else {
+            val sp = startedPoint.get
+            val deltaVector = event.location.sub(sp)
+            if(deltaVector.lengthSquare > 0.25) {
+                val spTile : vec2i = sp
+                val start = norm(sp.sub(spTile))
+                val end = start.add(norm(deltaVector.set(length = 0.7)))
+                builder.tryBuild(convert(correct(RailCorrection(spTile, start, end))))
+            } else {
+                builder.clear
+            }
+            true
         }
-        true
-    }).getOr(false)
 
-    def mouseUp(event : Event) = startedPoint.map(point -> {
-        builder.fix
-        startedPoint = nil
-        true
-    }).getOr(false)
+    def mouseUp(event : Event) =
+        if(startedPoint.isEmpty) false
+        else {
+            builder.fix
+            startedPoint = nil
+            true
+        }
 
     private def norm(point : vec2) = vec2i(n(point.x), n(point.y))
     private def n(x : float) : int = (x*2).round

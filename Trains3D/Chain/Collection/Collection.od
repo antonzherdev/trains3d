@@ -72,7 +72,7 @@ trait MutableTraversable<T> extends Traversable<T> {
 }
 
 trait Iterable<T> extends Traversable<T> {
-    def count : uint = {
+    pure def count : uint = {
         val i = iterator
         var n : uint = 0
         while(i.hasNext) {
@@ -81,20 +81,20 @@ trait Iterable<T> extends Traversable<T> {
         }
         n
     }
-    def iterator : Iterator<T>
+    pure def iterator : Iterator<T>
 
-    def head : T = iterator.next
-    def headOpt : T? = if(isEmpty) nil else head
-    def isEmpty : bool = !iterator.hasNext
+    pure def head : T = iterator.next
+    pure def headOpt : T? = if(isEmpty) nil else head
+    pure def isEmpty : bool = !iterator.hasNext
 
-    def chain : Chain<T> = {
+    pure def chain : Chain<T> = {
         Chain.chainWith<T>(self)
     }
-    def for(each : T -> void) {
+    pure def for(each : T -> void) {
         val i = iterator
         while(i.hasNext) each(i.next)
     }
-    def go(on : T -> bool) : bool = {
+    pure def go(on : T -> bool) : bool = {
         val i = iterator
         while(i.hasNext) if(!on(i.next)) return false
         true

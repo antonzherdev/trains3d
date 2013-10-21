@@ -7,24 +7,25 @@ class SwitchProcessor(level : Level) extends InputProcessor with TapProcessor {
 
     private val switchShape = CollisionBox2d(0.3, 0.2)
     private val lightShape = CollisionBox2d(0.4, 0.24)
-    private val world = CollisionWorld<RailroadConnectorContent>()
+    val world = CollisionWorld<RailroadConnectorContent>()
     def init {
+        weak val weakSelf = self
         level.railroad.add(changeListener = {
-            world.clear
-            level.railroad.switches.for{switch ->
+            weakSelf.world.clear
+            weakSelf.level.railroad.switches.for{switch ->
                 val body = CollisionBody(switch, switchShape, isKinematic = false)
                 body.translate(switch.tile.x, switch.tile.y, 0)
                 body.rotate(switch.connector.angle, 0, 0, 1)
                 body.translate(-0.35, 0, 0)
-                world.add(body)
+                weakSelf.world.add(body)
             }
-            level.railroad.lights.for{light ->
+            weakSelf.level.railroad.lights.for{light ->
                 val body = CollisionBody(light, lightShape, isKinematic = false)
                 body.translate(light.tile.x, light.tile.y, 0)
                 body.rotate(light.connector.angle, 0, 0, 1)
                 body.translate(-0.45, 0.2, 0.1)
                 body.rotate(90, 0, 1, 0)
-                world.add(body)
+                weakSelf.world.add(body)
             }
         })
     }

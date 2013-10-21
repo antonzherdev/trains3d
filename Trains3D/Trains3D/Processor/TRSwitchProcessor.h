@@ -18,6 +18,7 @@
 
 @interface TRSwitchProcessor : NSObject<EGInputProcessor, EGTapProcessor>
 @property (nonatomic, readonly) TRLevel* level;
+@property (nonatomic, readonly) EGCollisionWorld* world;
 
 + (id)switchProcessorWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;

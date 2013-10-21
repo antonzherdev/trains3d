@@ -179,8 +179,9 @@ static ODClassType* _TRTrain_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
+    __weak TRTrain* _weakSelf = self;
     [self correctCorrection:[_level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
-        return _trainType.obstacleProcessor(_level, self, _);
+        return _weakSelf.trainType.obstacleProcessor(_weakSelf.level, self, _);
     } forLength:delta * _speedFloat point:__head]];
 }
 
