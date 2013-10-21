@@ -22,7 +22,7 @@
 + (id)counter;
 - (id)init;
 - (ODClassType*)type;
-- (BOOL)isRun;
+- (BOOL)isRunning;
 - (CGFloat)time;
 - (BOOL)isStopped;
 - (void)forF:(void(^)(CGFloat))f;
@@ -38,7 +38,7 @@
 + (id)emptyCounter;
 - (id)init;
 - (ODClassType*)type;
-- (BOOL)isRun;
+- (BOOL)isRunning;
 - (CGFloat)time;
 - (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
@@ -52,7 +52,7 @@
 - (id)initWithLength:(CGFloat)length;
 - (ODClassType*)type;
 - (CGFloat)time;
-- (BOOL)isRun;
+- (BOOL)isRunning;
 - (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
 @end
@@ -65,7 +65,7 @@
 + (id)finisherWithCounter:(EGCounter*)counter finish:(void(^)())finish;
 - (id)initWithCounter:(EGCounter*)counter finish:(void(^)())finish;
 - (ODClassType*)type;
-- (BOOL)isRun;
+- (BOOL)isRunning;
 - (CGFloat)time;
 - (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;

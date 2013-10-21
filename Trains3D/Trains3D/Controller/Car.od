@@ -74,5 +74,7 @@ class Car(weak train : Train, carType : CarType) {
 
 class CarPosition(frontConnector : RailPoint, head : RailPoint, tail : RailPoint, backConnector : RailPoint) {
     val line = LineSegment(tail.point, head.point)
+
+    def isIn(tile : vec2i) : bool = head.tile == tile || tail.tile == tile
 }
 

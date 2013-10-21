@@ -100,7 +100,7 @@ static ODClassType* _TRLevelMenuView_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    if([_notificationAnimation isRun]) {
+    if([_notificationAnimation isRunning]) {
         [_notificationAnimation updateWithDelta:delta];
     } else {
         if(!([_level.notifications isEmpty])) {

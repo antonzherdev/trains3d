@@ -30,6 +30,7 @@
 - (BOOL)goOn:(BOOL(^)(id))on;
 - (CNChain*)chain;
 - (id)findWhere:(BOOL(^)(id))where;
+- (BOOL)existsWhere:(BOOL(^)(id))where;
 - (id)head;
 - (id)headOpt;
 - (id)convertWithBuilder:(id<CNBuilder>)builder;

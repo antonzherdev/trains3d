@@ -51,7 +51,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor with Ta
     private var notificationAnimation = Counter()
 
     def updateWith(delta : float) {
-        if(notificationAnimation.isRun) notificationAnimation.updateWith(delta)
+        if(notificationAnimation.isRunning) notificationAnimation.updateWith(delta)
         else if(!level.notifications.isEmpty) {
             notificationText = level.notifications.take.get
             notificationAnimation = Counter(1)

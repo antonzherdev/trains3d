@@ -26,6 +26,17 @@
     return [CNChain chainWithCollection:self];
 }
 
+- (BOOL)existsWhere:(BOOL(^)(id))where {
+    BOOL ret = NO;
+    for(id item in self)  {
+        if(where(item)) {
+            ret = YES;
+            break;
+        }
+    }
+    return ret;
+}
+
 - (id)findWhere:(BOOL(^)(id))where {
     id ret = [CNOption none];
     for(id item in self)  {

@@ -51,6 +51,7 @@
 - (TRRailPoint*)head;
 - (void)setHead:(TRRailPoint*)head;
 - (void)updateWithDelta:(CGFloat)delta;
+- (BOOL)isInTile:(GEVec2i)tile;
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch;
 + (ODClassType*)type;
 @end

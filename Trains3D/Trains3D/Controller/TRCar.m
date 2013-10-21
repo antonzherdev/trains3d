@@ -298,6 +298,10 @@ static ODClassType* _TRCarPosition_type;
     _TRCarPosition_type = [ODClassType classTypeWithCls:[TRCarPosition class]];
 }
 
+- (BOOL)isInTile:(GEVec2i)tile {
+    return GEVec2iEq(_head.tile, tile) || GEVec2iEq(_tail.tile, tile);
+}
+
 - (ODClassType*)type {
     return [TRCarPosition type];
 }

@@ -74,6 +74,7 @@
 + (id)carPositionWithFrontConnector:(TRRailPoint*)frontConnector head:(TRRailPoint*)head tail:(TRRailPoint*)tail backConnector:(TRRailPoint*)backConnector;
 - (id)initWithFrontConnector:(TRRailPoint*)frontConnector head:(TRRailPoint*)head tail:(TRRailPoint*)tail backConnector:(TRRailPoint*)backConnector;
 - (ODClassType*)type;
+- (BOOL)isInTile:(GEVec2i)tile;
 + (ODClassType*)type;
 @end
 

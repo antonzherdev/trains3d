@@ -63,6 +63,17 @@
     return ret;
 }
 
+- (BOOL)existsWhere:(BOOL(^)(id))where {
+    BOOL ret = NO;
+    for(id item in self)  {
+        if(where(item)) {
+            ret = YES;
+            break;
+        }
+    }
+    return ret;
+}
+
 - (void)forEach:(cnP)p {
     for(id item in self)  {
         p(item);

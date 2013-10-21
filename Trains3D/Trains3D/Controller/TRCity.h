@@ -44,6 +44,10 @@
 - (ODClassType*)type;
 - (TRRailPoint*)startPoint;
 - (void)updateWithDelta:(CGFloat)delta;
+- (void)waitToRunTrain;
+- (BOOL)isWaitingToRunTrain;
+- (void)resumeTrainRunning;
+- (BOOL)canRunNewTrain;
 + (ODClassType*)type;
 @end
 

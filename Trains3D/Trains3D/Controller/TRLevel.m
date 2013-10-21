@@ -220,9 +220,13 @@ static ODClassType* _TRLevel_type;
     TRTrain* train = [TRTrain trainWithLevel:self trainType:generator.trainType color:city.color _cars:^id<CNSeq>(TRTrain* _) {
         return [generator generateCarsForTrain:_];
     } speed:[generator generateSpeed]];
-    [self runTrain:train fromCity:[[[[__cities chain] filter:^BOOL(TRCity* _) {
-        return !([_ isEqual:city]);
-    }] randomItem] get]];
+    id fromCity = [[[__cities chain] filter:^BOOL(TRCity* _) {
+        return !([_ isEqual:city]) && [((TRCity*)(_)) canRunNewTrain];
+    }] randomItem];
+    if([fromCity isEmpty]) [_schedule scheduleAfter:1.0 event:^void() {
+        [self runTrainWithGenerator:generator];
+    }];
+    else [self runTrain:train fromCity:[fromCity get]];
 }
 
 - (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint {
@@ -244,6 +248,19 @@ static ODClassType* _TRLevel_type;
     [_schedule updateWithDelta:delta];
     [_weather updateWithDelta:delta];
     [_forest updateWithDelta:delta];
+    [__cities forEach:^void(TRCity* city) {
+        if([((TRCity*)(city)).expectedTrainCounter isRunning]) {
+            if([__trains existsWhere:^BOOL(TRTrain* _) {
+    return [((TRTrain*)(_)) isInTile:((TRCity*)(city)).tile];
+}]) [((TRCity*)(city)) waitToRunTrain];
+        } else {
+            if([((TRCity*)(city)) isWaitingToRunTrain]) {
+                if(!([__trains existsWhere:^BOOL(TRTrain* _) {
+    return [((TRTrain*)(_)) isInTile:((TRCity*)(city)).tile];
+}])) [((TRCity*)(city)) resumeTrainRunning];
+            }
+        }
+    }];
 }
 
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch {

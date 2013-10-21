@@ -1,8 +1,6 @@
 #import "NSDictionary+CNChain.h"
 #import "NSArray+CNChain.h"
 #import "CNChain.h"
-#import "CNTuple.h"
-#import "CNEnumerator.h"
 #import "CNOption.h"
 
 
@@ -19,6 +17,19 @@
 - (id)applyKey:(id)key {
     id ret = self[key];
     if(ret == nil) @throw [NSString stringWithFormat:@"No value for key %@", key];
+    return ret;
+}
+
+- (BOOL)existsWhere:(BOOL(^)(id))where {
+    __block BOOL ret = NO;
+    [self goOn:^BOOL(id x) {
+        if(where(numb(ret))) {
+            ret = YES;
+            return NO;
+        } else {
+            return YES;
+        }
+    }];
     return ret;
 }
 

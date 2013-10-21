@@ -29,4 +29,19 @@ class City(color : CityColor, tile : vec2i, angle : CityAngle) extends Controlle
     def updateWith(delta : float) {
         expectedTrainCounter.updateWith(delta)
     }
+
+    private var waitingCounter = Counter()
+    def waitToRunTrain {
+        waitingCounter = expectedTrainCounter
+        expectedTrainCounter = Counter()
+    }
+
+    def isWaitingToRunTrain = waitingCounter.isRunning
+
+    def resumeTrainRunning {
+        expectedTrainCounter = waitingCounter
+        waitingCounter = Counter()
+    }
+
+    def canRunNewTrain = expectedTrainCounter.isStopped && waitingCounter.isStopped
 }

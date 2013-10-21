@@ -30,13 +30,23 @@ trait Traversable<T> {
 
     def find(where : T -> bool) : T? = {
         var ret : T? = nil
-        go(x -> {
+        go{x ->
             if(where(ret)) {
                 ret = x
                 false
-            }
-            true
-        })
+            } else true
+        }
+        ret
+    }
+
+    def exists(where : T -> bool) : bool = {
+        var ret = false
+        go{x ->
+            if(where(ret)) {
+                ret = true
+                false
+            } else true
+        }
         ret
     }
 

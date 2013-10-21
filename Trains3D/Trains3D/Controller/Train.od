@@ -92,6 +92,10 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, _cars 
         calculateCarPositions
     }
 
+    def isIn(tile : vec2i) : bool = {
+        cars.chain.exists{car -> car.position.isIn(tile)}
+    }
+
     private def isMoveToCityFor(point : RailPoint) : bool =
         !(level.map.isFull(point.tile)) && !(level.map.isFull(point.nextTile))
 

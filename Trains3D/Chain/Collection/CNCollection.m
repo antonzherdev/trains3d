@@ -97,9 +97,23 @@ static ODClassType* _CNIterableF_type;
     [self goOn:^BOOL(id x) {
         if(where(ret)) {
             ret = [CNOption applyValue:x];
-            NO;
+            return NO;
+        } else {
+            return YES;
         }
-        return YES;
+    }];
+    return ret;
+}
+
+- (BOOL)existsWhere:(BOOL(^)(id))where {
+    __block BOOL ret = NO;
+    [self goOn:^BOOL(id x) {
+        if(where(numb(ret))) {
+            ret = YES;
+            return NO;
+        } else {
+            return YES;
+        }
     }];
     return ret;
 }

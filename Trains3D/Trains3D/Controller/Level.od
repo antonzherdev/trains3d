@@ -76,7 +76,9 @@ class Level(rules : LevelRules) extends Controller {
     def runTrainWith(generator : TrainGenerator) {
         val city = _cities.randomItem.get
         val train = Train(self, generator.trainType, city.color, generator.generateCarsFor(_), generator.generateSpeed)
-        run(train, fromCity = _cities.chain.filter(_ != city).randomItem.get)
+        val fromCity = _cities.chain.filter(_ != city && _.canRunNewTrain).randomItem
+        if(fromCity.isEmpty) schedule.schedule(after = 1, runTrainWith(generator))
+        else run(train, fromCity.get)
     }
 
     def testRun(train : Train, fromPoint : RailPoint) {
@@ -95,6 +97,13 @@ class Level(rules : LevelRules) extends Controller {
         schedule.updateWith(delta)
         weather.updateWith(delta)
         forest.updateWith(delta)
+        _cities.for{city ->
+            if(city.expectedTrainCounter.isRunning) {
+                if(_trains.exists(_.isIn(city.tile))) city.waitToRunTrain
+            } else if(city.isWaitingToRunTrain) {
+                if(!_trains.exists(_.isIn(city.tile))) city.resumeTrainRunning
+            }
+        }
     }
 
     def tryTurn(theSwitch : Switch) {

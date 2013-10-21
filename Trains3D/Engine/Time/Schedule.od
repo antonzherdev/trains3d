@@ -24,12 +24,12 @@ class Schedule extends Controller {
 }
 
 class Counter extends Controller {
-    def isRun : bool
+    def isRunning : bool
     def time : float
-    def isStopped : bool = !isRun
+    def isStopped : bool = !isRunning
 
     def for(f : float -> void) {
-        if(isRun) f(time)
+        if(isRunning) f(time)
     }
     def updateWith(delta : float)
 
@@ -39,7 +39,7 @@ class Counter extends Controller {
 }
 
 class EmptyCounter extends Counter {
-    def isRun : bool = false
+    def isRunning : bool = false
     def time : float = 0
     def updateWith(delta : float) {
     }
@@ -49,7 +49,7 @@ class LengthCounter(length : float) extends Counter {
     private var _time : float = 0.0
     private var _run : bool = true
     def time : float = _time
-    def isRun : bool = _run
+    def isRunning : bool = _run
 
     def updateWith(delta : float) {
         if(_run) {
@@ -63,11 +63,11 @@ class LengthCounter(length : float) extends Counter {
 }
 
 class Finisher(counter : Counter, finish : void -> void) extends Counter {
-    def isRun : bool = counter.isRun
+    def isRunning : bool = counter.isRunning
     def time : float = counter.time
 
     def updateWith(delta : float) {
-        if(counter.isRun) {
+        if(counter.isRunning) {
             counter.updateWith(delta)
             if(counter.isStopped) {
                 finish()

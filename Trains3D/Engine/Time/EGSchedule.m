@@ -89,8 +89,8 @@ static ODClassType* _EGCounter_type;
     _EGCounter_type = [ODClassType classTypeWithCls:[EGCounter class]];
 }
 
-- (BOOL)isRun {
-    @throw @"Method isRun is abstract";
+- (BOOL)isRunning {
+    @throw @"Method isRunning is abstract";
 }
 
 - (CGFloat)time {
@@ -98,11 +98,11 @@ static ODClassType* _EGCounter_type;
 }
 
 - (BOOL)isStopped {
-    return !([self isRun]);
+    return !([self isRunning]);
 }
 
 - (void)forF:(void(^)(CGFloat))f {
-    if([self isRun]) f([self time]);
+    if([self isRunning]) f([self time]);
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -170,7 +170,7 @@ static ODClassType* _EGEmptyCounter_type;
     _EGEmptyCounter_type = [ODClassType classTypeWithCls:[EGEmptyCounter class]];
 }
 
-- (BOOL)isRun {
+- (BOOL)isRunning {
     return NO;
 }
 
@@ -244,7 +244,7 @@ static ODClassType* _EGLengthCounter_type;
     return __time;
 }
 
-- (BOOL)isRun {
+- (BOOL)isRunning {
     return __run;
 }
 
@@ -320,8 +320,8 @@ static ODClassType* _EGFinisher_type;
     _EGFinisher_type = [ODClassType classTypeWithCls:[EGFinisher class]];
 }
 
-- (BOOL)isRun {
-    return [_counter isRun];
+- (BOOL)isRunning {
+    return [_counter isRunning];
 }
 
 - (CGFloat)time {
@@ -329,7 +329,7 @@ static ODClassType* _EGFinisher_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    if([_counter isRun]) {
+    if([_counter isRunning]) {
         [_counter updateWithDelta:delta];
         if([_counter isStopped]) ((void(^)())(_finish))();
     }

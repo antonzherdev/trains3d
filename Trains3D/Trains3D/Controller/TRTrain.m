@@ -211,6 +211,12 @@ static ODClassType* _TRTrain_type;
     [self calculateCarPositions];
 }
 
+- (BOOL)isInTile:(GEVec2i)tile {
+    return [[[self cars] chain] exists:^BOOL(TRCar* car) {
+        return [[((TRCar*)(car)) position] isInTile:tile];
+    }];
+}
+
 - (BOOL)isMoveToCityForPoint:(TRRailPoint*)point {
     return !([_level.map isFullTile:point.tile]) && !([_level.map isFullTile:[point nextTile]]);
 }

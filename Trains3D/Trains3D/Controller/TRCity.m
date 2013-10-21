@@ -121,6 +121,7 @@ static NSArray* _TRCityAngle_values;
     GEVec2i _tile;
     TRCityAngle* _angle;
     EGCounter* _expectedTrainCounter;
+    EGCounter* _waitingCounter;
 }
 static ODClassType* _TRCity_type;
 @synthesize color = _color;
@@ -139,6 +140,7 @@ static ODClassType* _TRCity_type;
         _tile = tile;
         _angle = angle;
         _expectedTrainCounter = [EGCounter apply];
+        _waitingCounter = [EGCounter apply];
     }
     
     return self;
@@ -155,6 +157,24 @@ static ODClassType* _TRCity_type;
 
 - (void)updateWithDelta:(CGFloat)delta {
     [_expectedTrainCounter updateWithDelta:delta];
+}
+
+- (void)waitToRunTrain {
+    _waitingCounter = _expectedTrainCounter;
+    _expectedTrainCounter = [EGCounter apply];
+}
+
+- (BOOL)isWaitingToRunTrain {
+    return [_waitingCounter isRunning];
+}
+
+- (void)resumeTrainRunning {
+    _expectedTrainCounter = _waitingCounter;
+    _waitingCounter = [EGCounter apply];
+}
+
+- (BOOL)canRunNewTrain {
+    return [_expectedTrainCounter isStopped] && [_waitingCounter isStopped];
 }
 
 - (ODClassType*)type {
