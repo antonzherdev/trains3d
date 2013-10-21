@@ -519,7 +519,7 @@ static ODClassType* _GEPolygon_type;
     if(self) {
         _points = points;
         _segments = [[[[_points chain] neighborsRing] map:^GELineSegment*(CNTuple* ps) {
-            return [GELineSegment newWithP0:uwrap(GEVec2, ps.a) p1:uwrap(GEVec2, ps.b)];
+            return [GELineSegment newWithP0:uwrap(GEVec2, ((CNTuple*)(ps)).a) p1:uwrap(GEVec2, ((CNTuple*)(ps)).b)];
         }] toArray];
     }
     

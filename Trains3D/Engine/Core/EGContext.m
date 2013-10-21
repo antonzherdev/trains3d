@@ -161,15 +161,15 @@ static ODClassType* _EGContext_type;
 }
 
 - (EGTexture*)textureForFile:(NSString*)file scale:(CGFloat)scale magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
-    return ((EGFileTexture*)([_textureCache objectForKey:tuple3(file, numui4(((unsigned int)(magFilter))), numui4(((unsigned int)(minFilter)))) orUpdateWith:^EGFileTexture*() {
+    return [_textureCache objectForKey:tuple3(file, numui4(((unsigned int)(magFilter))), numui4(((unsigned int)(minFilter)))) orUpdateWith:^EGFileTexture*() {
         return [EGFileTexture fileTextureWithFile:file scale:scale magFilter:magFilter minFilter:minFilter];
-    }]));
+    }];
 }
 
 - (EGFont*)fontWithName:(NSString*)name {
-    return ((EGFont*)([_fontCache objectForKey:name orUpdateWith:^EGFont*() {
+    return [_fontCache objectForKey:name orUpdateWith:^EGFont*() {
         return [EGFont fontWithName:name];
-    }]));
+    }];
 }
 
 - (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size {
@@ -639,13 +639,13 @@ static ODClassType* _EGEnvironment_type;
         _ambientColor = ambientColor;
         _lights = lights;
         _directLights = [[[_lights chain] filter:^BOOL(EGLight* _) {
-            return [_ isKindOfClass:[EGDirectLight class]];
+            return [((EGLight*)(_)) isKindOfClass:[EGDirectLight class]];
         }] toArray];
         _directLightsWithShadows = [[[_lights chain] filter:^BOOL(EGLight* _) {
-            return [_ isKindOfClass:[EGDirectLight class]] && _.hasShadows;
+            return [((EGLight*)(_)) isKindOfClass:[EGDirectLight class]] && ((EGLight*)(_)).hasShadows;
         }] toArray];
         _directLightsWithoutShadows = [[[_lights chain] filter:^BOOL(EGLight* _) {
-            return [_ isKindOfClass:[EGDirectLight class]] && !(_.hasShadows);
+            return [((EGLight*)(_)) isKindOfClass:[EGDirectLight class]] && !(((EGLight*)(_)).hasShadows);
         }] toArray];
     }
     
@@ -741,7 +741,7 @@ static ODClassType* _EGLight_type;
 }
 
 - (EGShadowMap*)shadowMap {
-    return ((EGShadowMap*)([__lazy_shadowMap get]));
+    return [__lazy_shadowMap get];
 }
 
 - (EGMatrixModel*)shadowMatrixModel:(EGMatrixModel*)model {
@@ -909,7 +909,7 @@ static ODClassType* _EGMatrixStack_type;
 }
 
 - (void)pop {
-    _value = ((EGMatrixModel*)([_stack head]));
+    _value = [_stack head];
     _stack = [_stack tail];
 }
 
@@ -1039,45 +1039,45 @@ static ODClassType* _EGMatrixModel_type;
         return [w mulMatrix:m];
     }];
     CNLazy* _mwc = [CNLazy lazyWithF:^GEMat4*() {
-        return [c mulMatrix:((GEMat4*)([_mw get]))];
+        return [c mulMatrix:[_mw get]];
     }];
     CNLazy* _cp = [CNLazy lazyWithF:^GEMat4*() {
         return [p mulMatrix:c];
     }];
     CNLazy* _mwcp = [CNLazy lazyWithF:^GEMat4*() {
-        return [((GEMat4*)([_cp get])) mulMatrix:((GEMat4*)([_mw get]))];
+        return [((GEMat4*)([_cp get])) mulMatrix:[_mw get]];
     }];
     CNLazy* _wc = [CNLazy lazyWithF:^GEMat4*() {
         return [c mulMatrix:w];
     }];
     CNLazy* _wcp = [CNLazy lazyWithF:^GEMat4*() {
-        return [p mulMatrix:((GEMat4*)([_wc get]))];
+        return [p mulMatrix:[_wc get]];
     }];
     return [EGMatrixModel matrixModelWithM:m w:w c:c p:p _mw:_mw _mwc:_mwc _mwcp:_mwcp _cp:_cp _wcp:_wcp _wc:_wc];
 }
 
 - (GEMat4*)mw {
-    return ((GEMat4*)([__mw get]));
+    return [__mw get];
 }
 
 - (GEMat4*)mwc {
-    return ((GEMat4*)([__mwc get]));
+    return [__mwc get];
 }
 
 - (GEMat4*)mwcp {
-    return ((GEMat4*)([__mwcp get]));
+    return [__mwcp get];
 }
 
 - (GEMat4*)cp {
-    return ((GEMat4*)([__cp get]));
+    return [__cp get];
 }
 
 - (GEMat4*)wcp {
-    return ((GEMat4*)([__wcp get]));
+    return [__wcp get];
 }
 
 - (GEMat4*)wc {
-    return ((GEMat4*)([__wc get]));
+    return [__wc get];
 }
 
 - (EGMatrixModel*)modifyM:(GEMat4*(^)(GEMat4*))m {
@@ -1086,10 +1086,10 @@ static ODClassType* _EGMatrixModel_type;
         return [_w mulMatrix:mm];
     }];
     CNLazy* _mwc = [CNLazy lazyWithF:^GEMat4*() {
-        return [_c mulMatrix:((GEMat4*)([_mw get]))];
+        return [_c mulMatrix:[_mw get]];
     }];
     CNLazy* _mwcp = [CNLazy lazyWithF:^GEMat4*() {
-        return [((GEMat4*)([__cp get])) mulMatrix:((GEMat4*)([_mw get]))];
+        return [((GEMat4*)([__cp get])) mulMatrix:[_mw get]];
     }];
     return [EGMatrixModel matrixModelWithM:mm w:_w c:_c p:_p _mw:_mw _mwc:_mwc _mwcp:_mwcp _cp:__cp _wcp:__wcp _wc:__wc];
 }
@@ -1100,16 +1100,16 @@ static ODClassType* _EGMatrixModel_type;
         return [ww mulMatrix:_m];
     }];
     CNLazy* _mwc = [CNLazy lazyWithF:^GEMat4*() {
-        return [_c mulMatrix:((GEMat4*)([_mw get]))];
+        return [_c mulMatrix:[_mw get]];
     }];
     CNLazy* _mwcp = [CNLazy lazyWithF:^GEMat4*() {
-        return [((GEMat4*)([__cp get])) mulMatrix:((GEMat4*)([_mw get]))];
+        return [((GEMat4*)([__cp get])) mulMatrix:[_mw get]];
     }];
     CNLazy* _wc = [CNLazy lazyWithF:^GEMat4*() {
         return [_c mulMatrix:ww];
     }];
     CNLazy* _wcp = [CNLazy lazyWithF:^GEMat4*() {
-        return [_p mulMatrix:((GEMat4*)([_wc get]))];
+        return [_p mulMatrix:[_wc get]];
     }];
     return [EGMatrixModel matrixModelWithM:_m w:ww c:_c p:_p _mw:_mw _mwc:_mwc _mwcp:_mwcp _cp:__cp _wcp:_wcp _wc:_wc];
 }
@@ -1117,19 +1117,19 @@ static ODClassType* _EGMatrixModel_type;
 - (EGMatrixModel*)modifyC:(GEMat4*(^)(GEMat4*))c {
     GEMat4* cc = c(_c);
     CNLazy* _mwc = [CNLazy lazyWithF:^GEMat4*() {
-        return [cc mulMatrix:((GEMat4*)([__mw get]))];
+        return [cc mulMatrix:[__mw get]];
     }];
     CNLazy* _cp = [CNLazy lazyWithF:^GEMat4*() {
         return [_p mulMatrix:cc];
     }];
     CNLazy* _mwcp = [CNLazy lazyWithF:^GEMat4*() {
-        return [((GEMat4*)([_cp get])) mulMatrix:((GEMat4*)([__mw get]))];
+        return [((GEMat4*)([_cp get])) mulMatrix:[__mw get]];
     }];
     CNLazy* _wc = [CNLazy lazyWithF:^GEMat4*() {
         return [cc mulMatrix:_w];
     }];
     CNLazy* _wcp = [CNLazy lazyWithF:^GEMat4*() {
-        return [_p mulMatrix:((GEMat4*)([_wc get]))];
+        return [_p mulMatrix:[_wc get]];
     }];
     return [EGMatrixModel matrixModelWithM:_m w:_w c:cc p:_p _mw:__mw _mwc:_mwc _mwcp:_mwcp _cp:_cp _wcp:_wcp _wc:_wc];
 }
@@ -1140,10 +1140,10 @@ static ODClassType* _EGMatrixModel_type;
         return [pp mulMatrix:_c];
     }];
     CNLazy* _mwcp = [CNLazy lazyWithF:^GEMat4*() {
-        return [((GEMat4*)([_cp get])) mulMatrix:((GEMat4*)([__mw get]))];
+        return [((GEMat4*)([_cp get])) mulMatrix:[__mw get]];
     }];
     CNLazy* _wcp = [CNLazy lazyWithF:^GEMat4*() {
-        return [pp mulMatrix:((GEMat4*)([__wc get]))];
+        return [pp mulMatrix:[__wc get]];
     }];
     return [EGMatrixModel matrixModelWithM:_m w:_w c:_c p:pp _mw:__mw _mwc:__mwc _mwcp:_mwcp _cp:_cp _wcp:_wcp _wc:__wc];
 }

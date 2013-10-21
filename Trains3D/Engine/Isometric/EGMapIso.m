@@ -52,7 +52,7 @@ static ODClassType* _EGMapSso_type;
 
 - (CNChain*)allPosibleTiles {
     return [[[[CNRange rangeWithStart:geRectIX(_limits) end:geRectIX2(_limits) step:1] chain] mul:[CNRange rangeWithStart:geRectIY(_limits) end:geRectIY2(_limits) step:1]] map:^id(CNTuple* _) {
-        return wrap(GEVec2i, GEVec2iMake(unumi(_.a), unumi(_.b)));
+        return wrap(GEVec2i, GEVec2iMake(unumi(((CNTuple*)(_)).a), unumi(((CNTuple*)(_)).b)));
     }];
 }
 

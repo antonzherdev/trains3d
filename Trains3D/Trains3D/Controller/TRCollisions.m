@@ -30,28 +30,28 @@ static ODClassType* _TRTrainsCollisionWorld_type;
 
 - (void)addTrain:(TRTrain*)train {
     [[train cars] forEach:^void(TRCar* car) {
-        [_world addBody:car.collisionBody];
+        [_world addBody:((TRCar*)(car)).collisionBody];
     }];
 }
 
 - (void)removeTrain:(TRTrain*)train {
     [[train cars] forEach:^void(TRCar* car) {
-        [_world removeBody:car.collisionBody];
+        [_world removeBody:((TRCar*)(car)).collisionBody];
     }];
 }
 
 - (id<CNSeq>)detect {
     return [[[[_world detect] chain] map:^TRCarsCollision*(EGCollision* collision) {
-        TRCar* car1 = ((TRCar*)(((EGCollisionBody*)(collision.bodies.a)).data));
-        TRCar* car2 = ((TRCar*)(((EGCollisionBody*)(collision.bodies.b)).data));
-        TRRailPoint* point = ((TRRailPoint*)([[[[[[[(@[[car1 position].head, [car1 position].tail]) chain] mul:(@[[car2 position].head, [car2 position].tail])] sortBy] ascBy:^id(CNTuple* pair) {
-            TRRailPoint* x = ((TRRailPoint*)(pair.a));
-            TRRailPoint* y = ((TRRailPoint*)(pair.b));
+        TRCar* car1 = ((EGCollisionBody*)(((EGCollision*)(collision)).bodies.a)).data;
+        TRCar* car2 = ((EGCollisionBody*)(((EGCollision*)(collision)).bodies.b)).data;
+        TRRailPoint* point = [[[[[[[(@[[car1 position].head, [car1 position].tail]) chain] mul:(@[[car2 position].head, [car2 position].tail])] sortBy] ascBy:^id(CNTuple* pair) {
+            TRRailPoint* x = ((CNTuple*)(pair)).a;
+            TRRailPoint* y = ((CNTuple*)(pair)).b;
             if(x.form == y.form && GEVec2iEq(x.tile, y.tile)) return numf(fabs(x.x - y.x));
             else return @1000;
         }] endSort] map:^TRRailPoint*(CNTuple* _) {
-            return ((TRRailPoint*)(_.a));
-        }] head]));
+            return ((CNTuple*)(_)).a;
+        }] head];
         return [TRCarsCollision carsCollisionWithCars:[CNPair pairWithA:car1 b:car2] railPoint:point];
     }] toArray];
 }
@@ -183,13 +183,13 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 
 - (void)dieTrain:(TRTrain*)train {
     [[train cars] forEach:^void(TRCar* car) {
-        [_world addBody:[car dynamicBody]];
+        [_world addBody:[((TRCar*)(car)) dynamicBody]];
     }];
 }
 
 - (void)removeTrain:(TRTrain*)train {
     [[train cars] forEach:^void(TRCar* car) {
-        [_world removeBody:[car dynamicBody]];
+        [_world removeBody:[((TRCar*)(car)) dynamicBody]];
     }];
 }
 

@@ -50,15 +50,15 @@ static ODClassType* _TRSwitchProcessor_type;
         [weakSelf.world clear];
         [[weakSelf.level.railroad switches] forEach:^void(TRSwitch* aSwitch) {
             EGCollisionBody* body = [EGCollisionBody collisionBodyWithData:aSwitch shape:_switchShape isKinematic:NO];
-            [body translateX:((float)(aSwitch.tile.x)) y:((float)(aSwitch.tile.y)) z:0.0];
-            [body rotateAngle:((float)(aSwitch.connector.angle)) x:0.0 y:0.0 z:1.0];
+            [body translateX:((float)(((TRSwitch*)(aSwitch)).tile.x)) y:((float)(((TRSwitch*)(aSwitch)).tile.y)) z:0.0];
+            [body rotateAngle:((float)(((TRSwitch*)(aSwitch)).connector.angle)) x:0.0 y:0.0 z:1.0];
             [body translateX:-0.35 y:0.0 z:0.0];
             [weakSelf.world addBody:body];
         }];
         [[weakSelf.level.railroad lights] forEach:^void(TRRailLight* light) {
             EGCollisionBody* body = [EGCollisionBody collisionBodyWithData:light shape:_lightShape isKinematic:NO];
-            [body translateX:((float)(light.tile.x)) y:((float)(light.tile.y)) z:0.0];
-            [body rotateAngle:((float)(light.connector.angle)) x:0.0 y:0.0 z:1.0];
+            [body translateX:((float)(((TRRailLight*)(light)).tile.x)) y:((float)(((TRRailLight*)(light)).tile.y)) z:0.0];
+            [body rotateAngle:((float)(((TRRailLight*)(light)).connector.angle)) x:0.0 y:0.0 z:1.0];
             [body translateX:-0.45 y:0.2 z:0.1];
             [body rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
             [weakSelf.world addBody:body];
@@ -68,14 +68,14 @@ static ODClassType* _TRSwitchProcessor_type;
 
 - (BOOL)tapEvent:(EGEvent*)event {
     id downed = [[_world closestCrossPointWithSegment:[event segment]] mapF:^TRRailroadConnectorContent*(EGCrossPoint* _) {
-        return ((TRRailroadConnectorContent*)(_.body.data));
+        return ((EGCrossPoint*)(_)).body.data;
     }];
     if([downed isDefined]) {
         [[ODObject asKindOfClass:[TRSwitch class] object:((TRRailroadConnectorContent*)([downed get]))] forEach:^void(TRSwitch* _) {
             [_level tryTurnTheSwitch:_];
         }];
         [[ODObject asKindOfClass:[TRRailLight class] object:((TRRailroadConnectorContent*)([downed get]))] forEach:^void(TRRailLight* _) {
-            [_ turn];
+            [((TRRailLight*)(_)) turn];
         }];
         return YES;
     } else {

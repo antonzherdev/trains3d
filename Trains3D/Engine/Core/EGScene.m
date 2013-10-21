@@ -62,31 +62,31 @@ static ODClassType* _EGScene_type;
     [_controller updateWithDelta:delta];
     [_layers updateWithDelta:delta];
     [_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
-        [_ updateWithDelta:delta];
+        [((id<EGSoundPlayer>)(_)) updateWithDelta:delta];
     }];
 }
 
 - (void)start {
     [_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
-        [_ start];
+        [((id<EGSoundPlayer>)(_)) start];
     }];
 }
 
 - (void)stop {
     [_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
-        [_ stop];
+        [((id<EGSoundPlayer>)(_)) stop];
     }];
 }
 
 - (void)pause {
     [_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
-        [_ pause];
+        [((id<EGSoundPlayer>)(_)) pause];
     }];
 }
 
 - (void)resume {
     [_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
-        [_ resume];
+        [((id<EGSoundPlayer>)(_)) resume];
     }];
 }
 
@@ -171,7 +171,7 @@ static ODClassType* _EGLayers_type;
 - (void)prepare {
     egPushGroupMarker(@"Prepare");
     [__viewports forEach:^void(CNTuple* p) {
-        [((EGLayer*)(p.a)) prepareWithViewport:uwrap(GERect, p.b)];
+        [((EGLayer*)(((CNTuple*)(p)).a)) prepareWithViewport:uwrap(GERect, ((CNTuple*)(p)).b)];
     }];
     egPopGroupMarker();
 }
@@ -179,7 +179,7 @@ static ODClassType* _EGLayers_type;
 - (void)draw {
     egPushGroupMarker(@"Draw");
     [__viewports forEach:^void(CNTuple* p) {
-        [((EGLayer*)(p.a)) drawWithViewport:uwrap(GERect, p.b)];
+        [((EGLayer*)(((CNTuple*)(p)).a)) drawWithViewport:uwrap(GERect, ((CNTuple*)(p)).b)];
     }];
     egPopGroupMarker();
 }
@@ -187,21 +187,21 @@ static ODClassType* _EGLayers_type;
 - (BOOL)processEvent:(EGEvent*)event {
     __block BOOL r = NO;
     [[self viewportsWithViewSize:event.viewSize] forEach:^void(CNTuple* p) {
-        r = r || [((EGLayer*)(p.a)) processEvent:event viewport:uwrap(GERect, p.b)];
+        r = r || [((EGLayer*)(((CNTuple*)(p)).a)) processEvent:event viewport:uwrap(GERect, ((CNTuple*)(p)).b)];
     }];
     return r;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
     [[self layers] forEach:^void(EGLayer* _) {
-        [_ updateWithDelta:delta];
+        [((EGLayer*)(_)) updateWithDelta:delta];
     }];
 }
 
 - (void)reshapeWithViewSize:(GEVec2)viewSize {
     __viewports = [self viewportsWithViewSize:viewSize];
     [__viewports forEach:^void(CNTuple* p) {
-        [((EGLayer*)(p.a)) reshapeWithViewport:uwrap(GERect, p.b)];
+        [((EGLayer*)(((CNTuple*)(p)).a)) reshapeWithViewport:uwrap(GERect, ((CNTuple*)(p)).b)];
     }];
 }
 
@@ -350,7 +350,7 @@ static ODClassType* _EGLayer_type;
     if(cullFace != GL_NONE) glCullFace(cullFace);
     [_view prepare];
     if(egPlatform().shadows) [[[env.lights chain] filter:^BOOL(EGLight* _) {
-        return _.hasShadows;
+        return ((EGLight*)(_)).hasShadows;
     }] forEach:^void(EGLight* light) {
         [self drawShadowForCamera:camera light:light];
     }];
@@ -398,12 +398,12 @@ static ODClassType* _EGLayer_type;
 
 - (BOOL)processEvent:(EGEvent*)event viewport:(GERect)viewport {
     return unumb([[_inputProcessor mapF:^id(id<EGInputProcessor> p) {
-        if([p isProcessorActive]) {
+        if([((id<EGInputProcessor>)(p)) isProcessorActive]) {
             id<EGCamera> camera = [_view camera];
             EGGlobal.matrix.value = [camera matrixModel];
             EGEventCamera* cam = [EGEventCamera eventCameraWithMatrixModel:[camera matrixModel] viewport:viewport];
             EGEvent* e = [event setCamera:[CNOption applyValue:cam]];
-            return numb([p processEvent:e]);
+            return numb([((id<EGInputProcessor>)(p)) processEvent:e]);
         } else {
             return @NO;
         }

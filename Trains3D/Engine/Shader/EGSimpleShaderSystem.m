@@ -346,7 +346,7 @@ static ODClassType* _EGSimpleTextureShader_type;
 - (void)loadUniformsParam:(EGColorSource*)param {
     [_mvpUniform applyMatrix:[EGGlobal.matrix.value mwcp]];
     [_colorUniform applyVec4:param.color];
-    [EGGlobal.context bindTextureTexture:((EGTexture*)([param.texture get]))];
+    [EGGlobal.context bindTextureTexture:[param.texture get]];
 }
 
 - (ODClassType*)type {

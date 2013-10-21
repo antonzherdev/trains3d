@@ -125,7 +125,7 @@ static ODClassType* _EGFont_type;
     NSMutableDictionary* charMap = [NSMutableDictionary mutableDictionary];
     GEVec2 ts = [_texture size];
     [[[OSBundle readToStringResource:[NSString stringWithFormat:@"%@.fnt", _name]] splitBy:@"\n"] forEach:^void(NSString* line) {
-        CNTuple* t = ((CNTuple*)([[line tupleBy:@" "] get]));
+        CNTuple* t = [[line tupleBy:@" "] get];
         NSString* name = t.a;
         id<CNMap> map = [[[[t.b splitBy:@" "] chain] flatMap:^id(NSString* _) {
             return [_ tupleBy:@"="];
@@ -169,11 +169,11 @@ static ODClassType* _EGFont_type;
     __block NSInteger fullWidth = 0;
     __block NSInteger lineWidth = 0;
     [symbolsArr forEach:^void(EGFontSymbolDesc* s) {
-        if(s.isNewLine) {
+        if(((EGFontSymbolDesc*)(s)).isNewLine) {
             if(lineWidth > fullWidth) fullWidth = lineWidth;
             lineWidth = 0;
         } else {
-            lineWidth += ((NSInteger)(s.width));
+            lineWidth += ((NSInteger)(((EGFontSymbolDesc*)(s)).width));
         }
     }];
     if(lineWidth > fullWidth) fullWidth = lineWidth;
@@ -205,11 +205,11 @@ static ODClassType* _EGFont_type;
     if(!(eqf4(alignment.x, -1))) {
         __block NSInteger lineWidth = 0;
         [symbolsArr forEach:^void(EGFontSymbolDesc* s) {
-            if(s.isNewLine) {
+            if(((EGFontSymbolDesc*)(s)).isNewLine) {
                 [linesWidth appendItem:numi(lineWidth)];
                 lineWidth = 0;
             } else {
-                lineWidth += ((NSInteger)(s.width));
+                lineWidth += ((NSInteger)(((EGFontSymbolDesc*)(s)).width));
             }
         }];
         [linesWidth appendItem:numi(lineWidth)];
@@ -219,13 +219,13 @@ static ODClassType* _EGFont_type;
     float hh = ((float)(_height)) / vpSize.y;
     __block float y = ((alignment.baseline) ? pos.y + ((float)(_size)) / vpSize.y : pos.y - hh * (newLines + 1) * (alignment.y / 2 - 0.5));
     [symbolsArr forEach:^void(EGFontSymbolDesc* s) {
-        if(s.isNewLine) {
+        if(((EGFontSymbolDesc*)(s)).isNewLine) {
             x = ((eqf4(alignment.x, -1)) ? pos.x : pos.x - unumi([linesWidthIterator next]) / vpSize.x * (alignment.x / 2 + 0.5));
             y -= hh;
         } else {
-            GEVec2 size = geVec2DivVec2(s.size, vpSize);
-            GERect tr = s.textureRect;
-            GEVec2 v0 = GEVec2Make(x + s.offset.x / vpSize.x, y - s.offset.y / vpSize.y);
+            GEVec2 size = geVec2DivVec2(((EGFontSymbolDesc*)(s)).size, vpSize);
+            GERect tr = ((EGFontSymbolDesc*)(s)).textureRect;
+            GEVec2 v0 = GEVec2Make(x + ((EGFontSymbolDesc*)(s)).offset.x / vpSize.x, y - ((EGFontSymbolDesc*)(s)).offset.y / vpSize.y);
             vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, v0);
             vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, tr.p0);
             vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, GEVec2Make(v0.x, v0.y - size.y));
@@ -240,7 +240,7 @@ static ODClassType* _EGFont_type;
             ip = cnVoidRefArrayWriteUInt4(ip, ((unsigned int)(n + 2)));
             ip = cnVoidRefArrayWriteUInt4(ip, ((unsigned int)(n + 3)));
             ip = cnVoidRefArrayWriteUInt4(ip, ((unsigned int)(n)));
-            x += s.width / vpSize.x;
+            x += ((EGFontSymbolDesc*)(s)).width / vpSize.x;
             n += 4;
         }
     }];

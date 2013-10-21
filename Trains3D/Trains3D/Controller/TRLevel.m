@@ -175,8 +175,8 @@ static ODClassType* _TRLevel_type;
     [self createNewCity];
     [self createNewCity];
     [_rules.events forEach:^void(CNTuple* t) {
-        void(^f)(TRLevel*) = t.b;
-        [schedule scheduleAfter:unumf(t.a) event:^void() {
+        void(^f)(TRLevel*) = ((CNTuple*)(t)).b;
+        [schedule scheduleAfter:unumf(((CNTuple*)(t)).a) event:^void() {
             f(self);
         }];
     }];
@@ -185,7 +185,7 @@ static ODClassType* _TRLevel_type;
 
 - (void)createNewCity {
     GEVec2i tile = uwrap(GEVec2i, [[[[_map.partialTiles chain] exclude:[[[self cities] chain] map:^id(TRCity* _) {
-        return wrap(GEVec2i, _.tile);
+        return wrap(GEVec2i, ((TRCity*)(_)).tile);
     }]] randomItem] get]);
     TRCity* city = [TRCity cityWithColor:[TRCityColor values][[[self cities] count]] tile:tile angle:[self randomCityDirectionForTile:tile]];
     [_forest cutDownTile:tile];
@@ -195,10 +195,10 @@ static ODClassType* _TRLevel_type;
 
 - (TRCityAngle*)randomCityDirectionForTile:(GEVec2i)tile {
     EGMapTileCutState cut = [_map cutStateForTile:tile];
-    return ((TRCityAngle*)([[[[[TRCityAngle values] chain] filter:^BOOL(TRCityAngle* a) {
-        NSInteger angle = a.angle;
+    return [[[[[TRCityAngle values] chain] filter:^BOOL(TRCityAngle* a) {
+        NSInteger angle = ((TRCityAngle*)(a)).angle;
         return (angle == 0 && cut.x2 == 0 && cut.y2 == 0) || (angle == 90 && cut.x == 0 && cut.y2 == 0) || (angle == 180 && cut.x == 0 && cut.y == 0) || (angle == 270 && cut.x2 == 0 && cut.y == 0);
-    }] randomItem] get]));
+    }] randomItem] get];
 }
 
 - (void)runTrain:(TRTrain*)train fromCity:(TRCity*)fromCity {
@@ -216,13 +216,13 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator {
-    TRCity* city = ((TRCity*)([[__cities randomItem] get]));
+    TRCity* city = [[__cities randomItem] get];
     TRTrain* train = [TRTrain trainWithLevel:self trainType:generator.trainType color:city.color _cars:^id<CNSeq>(TRTrain* _) {
         return [generator generateCarsForTrain:_];
     } speed:[generator generateSpeed]];
-    [self runTrain:train fromCity:((TRCity*)([[[[__cities chain] filter:^BOOL(TRCity* _) {
+    [self runTrain:train fromCity:[[[[__cities chain] filter:^BOOL(TRCity* _) {
         return !([_ isEqual:city]);
-    }] randomItem] get]))];
+    }] randomItem] get]];
 }
 
 - (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint {
@@ -233,10 +233,10 @@ static ODClassType* _TRLevel_type;
 - (void)updateWithDelta:(CGFloat)delta {
     [_score updateWithDelta:delta];
     [__trains forEach:^void(TRTrain* _) {
-        [_ updateWithDelta:delta];
+        [((TRTrain*)(_)) updateWithDelta:delta];
     }];
     [__cities forEach:^void(TRCity* _) {
-        [_ updateWithDelta:delta];
+        [((TRCity*)(_)) updateWithDelta:delta];
     }];
     if(!([[self trains] isEmpty])) [self processCollisions];
     [_railroad updateWithDelta:delta];
@@ -252,13 +252,13 @@ static ODClassType* _TRLevel_type;
 
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch {
     return [[__trains findWhere:^BOOL(TRTrain* _) {
-        return [_ isLockedTheSwitch:theSwitch];
+        return [((TRTrain*)(_)) isLockedTheSwitch:theSwitch];
     }] isDefined];
 }
 
 - (id)cityForTile:(GEVec2i)tile {
     return [__cities findWhere:^BOOL(TRCity* _) {
-        return GEVec2iEq(_.tile, tile);
+        return GEVec2iEq(((TRCity*)(_)).tile, tile);
     }];
 }
 
@@ -269,10 +269,10 @@ static ODClassType* _TRLevel_type;
 
 - (void)processCollisions {
     [[self detectCollisions] forEach:^void(TRCarsCollision* collision) {
-        [collision.cars forEach:^void(TRCar* _) {
-            [self destroyTrain:_.train];
+        [((TRCarsCollision*)(collision)).cars forEach:^void(TRCar* _) {
+            [self destroyTrain:((TRCar*)(_)).train];
         }];
-        [_railroad addDamageAtPoint:collision.railPoint];
+        [_railroad addDamageAtPoint:((TRCarsCollision*)(collision)).railPoint];
     }];
 }
 

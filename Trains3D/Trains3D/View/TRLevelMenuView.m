@@ -211,7 +211,7 @@ static ODClassType* _TRLevelMenuViewRes_type;
 }
 
 - (id<EGCamera>)cameraWithViewport:(GERect)viewport {
-    return ((id<EGCamera>)([_cameraCache applyX:wrap(GERect, viewport)]));
+    return [_cameraCache applyX:wrap(GERect, viewport)];
 }
 
 - (ODClassType*)type {

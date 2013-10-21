@@ -96,14 +96,14 @@ static ODClassType* _CNQueue_type;
     CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
     [builder appendAllItems:self];
     [builder appendItem:item];
-    return ((NSArray*)([builder build]));
+    return [builder build];
 }
 
 - (id<CNSeq>)addSeq:(id<CNSeq>)seq {
     CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
     [builder appendAllItems:self];
     [builder appendAllItems:seq];
-    return ((NSArray*)([builder build]));
+    return [builder build];
 }
 
 - (id<CNSeq>)subItem:(id)item {

@@ -193,8 +193,8 @@ static ODClassType* _TRRailView_type;
     if(self) {
         _railMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.6, 1.0)] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:0.3];
         _gravel = [EGGlobal textureForFile:@"Gravel.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST];
-        _railModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railGravel, ((EGMaterial*)([EGMaterial applyTexture:_gravel]))), tuple(TRModels.railTies, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.rails, _railMaterial)])];
-        _railTurnModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railTurnGravel, ((EGMaterial*)([EGMaterial applyTexture:_gravel]))), tuple(TRModels.railTurnTies, ((EGMaterial*)([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]))), tuple(TRModels.railsTurn, _railMaterial)])];
+        _railModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railGravel, [EGMaterial applyTexture:_gravel]), tuple(TRModels.railTies, [EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]), tuple(TRModels.rails, _railMaterial)])];
+        _railTurnModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railTurnGravel, [EGMaterial applyTexture:_gravel]), tuple(TRModels.railTurnTies, [EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]), tuple(TRModels.railsTurn, _railMaterial)])];
     }
     
     return self;
@@ -530,9 +530,9 @@ static ODClassType* _TRLightView_type;
 - (id<CNSeq>)calculateMatrixArr {
     return [[[[_railroad lights] chain] map:^CNTuple*(TRRailLight* light) {
         return tuple([[EGGlobal.matrix.value modifyW:^GEMat4*(GEMat4* w) {
-            return [w translateX:((float)(light.tile.x)) y:((float)(light.tile.y)) z:0.0];
+            return [w translateX:((float)(((TRRailLight*)(light)).tile.x)) y:((float)(((TRRailLight*)(light)).tile.y)) z:0.0];
         }] modifyM:^GEMat4*(GEMat4* m) {
-            return [[m rotateAngle:((float)(90 + light.connector.angle)) x:0.0 y:1.0 z:0.0] translateX:0.2 y:0.0 z:-0.45];
+            return [[m rotateAngle:((float)(90 + ((TRRailLight*)(light)).connector.angle)) x:0.0 y:1.0 z:0.0] translateX:0.2 y:0.0 z:-0.45];
         }], light);
     }] toArray];
 }
@@ -541,8 +541,8 @@ static ODClassType* _TRLightView_type;
     if(__changed) __matrixArr = [self calculateMatrixArr];
     [EGGlobal.matrix push];
     [__matrixArr forEach:^void(CNTuple* p) {
-        EGGlobal.matrix.value = ((EGMatrixModel*)(p.a));
-        [((((TRRailLight*)(p.b)).isGreen) ? _greenBodyVao : _redBodyVao) draw];
+        EGGlobal.matrix.value = ((CNTuple*)(p)).a;
+        [((((TRRailLight*)(((CNTuple*)(p)).b)).isGreen) ? _greenBodyVao : _redBodyVao) draw];
     }];
     [EGGlobal.matrix pop];
 }
@@ -551,7 +551,7 @@ static ODClassType* _TRLightView_type;
     if(__changed) __matrixArrShadow = [self calculateMatrixArr];
     [EGGlobal.matrix push];
     [__matrixArrShadow forEach:^void(CNTuple* p) {
-        EGGlobal.matrix.value = ((EGMatrixModel*)(p.a));
+        EGGlobal.matrix.value = ((CNTuple*)(p)).a;
         [_shadowBodyVao draw];
     }];
     [EGGlobal.matrix pop];
@@ -562,8 +562,8 @@ static ODClassType* _TRLightView_type;
         [EGGlobal.matrix push];
         [EGGlobal.context.cullFace disabledF:^void() {
             [__matrixArr forEach:^void(CNTuple* p) {
-                EGGlobal.matrix.value = ((EGMatrixModel*)(p.a));
-                if(((TRRailLight*)(p.b)).isGreen) [_greenGlowVao draw];
+                EGGlobal.matrix.value = ((CNTuple*)(p)).a;
+                if(((TRRailLight*)(((CNTuple*)(p)).b)).isGreen) [_greenGlowVao draw];
                 else [_redGlowVao draw];
             }];
         }];

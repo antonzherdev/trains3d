@@ -34,7 +34,7 @@ static ODClassType* _TRSmoke_type;
     if(self) {
         _train = train;
         _weather = weather;
-        _engine = ((TRCar*)([[_train cars] head]));
+        _engine = [[_train cars] head];
         _tubePos = ((TREngineType*)([_engine.carType.engineType get])).tubePos;
         _emitTime = 0.0;
     }

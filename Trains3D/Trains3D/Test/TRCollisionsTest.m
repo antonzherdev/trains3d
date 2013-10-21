@@ -38,9 +38,9 @@ static ODClassType* _TRCollisionsTest_type;
 
 - (id<CNSet>)checkLevel:(TRLevel*)level {
     return [[[[[level detectCollisions] chain] flatMap:^CNPair*(TRCarsCollision* _) {
-        return _.cars;
+        return ((TRCarsCollision*)(_)).cars;
     }] map:^TRTrain*(TRCar* _) {
-        return _.train;
+        return ((TRCar*)(_)).train;
     }] toSet];
 }
 
@@ -83,7 +83,7 @@ static ODClassType* _TRCollisionsTest_type;
     [level processCollisions];
     [self assertEqualsA:numui([[level trains] count]) b:@0];
     [self assertEqualsA:numui([[level.railroad damagesPoints] count]) b:@1];
-    TRRailPoint* damage = ((TRRailPoint*)([[level.railroad damagesPoints] applyIndex:0]));
+    TRRailPoint* damage = [[level.railroad damagesPoints] applyIndex:0];
     CGFloat l = _TRCollisionsTest_carLen - TRCarType.car.startToWheel;
     [self assertTrueValue:floatBetween(damage.x, l - 0.15, l + 0.15)];
 }

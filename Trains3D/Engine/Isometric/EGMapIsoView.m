@@ -57,7 +57,7 @@ static ODClassType* _EGMapSsoView_type;
 }
 
 - (id<EGVertexBuffer>)axisVertexBuffer {
-    return ((id<EGVertexBuffer>)([__lazy_axisVertexBuffer get]));
+    return [__lazy_axisVertexBuffer get];
 }
 
 - (void)drawLayout {

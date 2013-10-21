@@ -147,15 +147,15 @@ static ODClassType* _TRScore_type;
 
 - (void)removeTrain:(TRTrain*)train {
     _trains = [[[_trains chain] filter:^BOOL(TRTrainScore* _) {
-        return !([_.train isEqual:train]);
+        return !([((TRTrainScore*)(_)).train isEqual:train]);
     }] toArray];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
     [_trains forEach:^void(TRTrainScore* train) {
-        [train updateWithDelta:delta];
-        if([train needFineWithDelayPeriod:_rules.delayPeriod]) {
-            __score -= [train fineWithRule:_rules.delayFine];
+        [((TRTrainScore*)(train)) updateWithDelta:delta];
+        if([((TRTrainScore*)(train)) needFineWithDelayPeriod:_rules.delayPeriod]) {
+            __score -= [((TRTrainScore*)(train)) fineWithRule:_rules.delayFine];
             [_notifications notifyNotification:[TRStr.Loc trainDelayedFineCost:_rules.railCost]];
         }
     }];

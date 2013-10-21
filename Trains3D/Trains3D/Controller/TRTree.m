@@ -93,7 +93,7 @@ static ODClassType* _TRForest_type;
         __trees = [[[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count]))) chain] map:^TRTree*(id _) {
             GEVec2i tile = uwrap(GEVec2i, [[_weakSelf.map.allTiles randomItem] get]);
             GEVec2 pos = GEVec2Make(((float)(odFloatRndMinMax(-0.5, 0.5))), ((float)(odFloatRndMinMax(-0.5, 0.5))));
-            return [TRTree treeWithTreeType:((TRTreeType*)([[_weakSelf.rules.types randomItem] get])) position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make(((float)(odFloatRndMinMax(0.8, 1.2))), ((float)(odFloatRndMinMax(0.8, 1.2))))];
+            return [TRTree treeWithTreeType:[[_weakSelf.rules.types randomItem] get] position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make(((float)(odFloatRndMinMax(0.8, 1.2))), ((float)(odFloatRndMinMax(0.8, 1.2))))];
         }] sort] toArray];
     }
     
@@ -123,13 +123,13 @@ static ODClassType* _TRForest_type;
 
 - (void)cutDownRect:(GERect)rect {
     __trees = [[[__trees chain] filter:^BOOL(TRTree* _) {
-        return !(geRectContainsVec2(rect, _.position));
+        return !(geRectContainsVec2(rect, ((TRTree*)(_)).position));
     }] toArray];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
     [__trees forEach:^void(TRTree* _) {
-        [_ updateWithWind:[_weather wind] delta:delta];
+        [((TRTree*)(_)) updateWithWind:[_weather wind] delta:delta];
     }];
 }
 

@@ -50,12 +50,12 @@ static ODClassType* _TRCityView_type;
     [[_level cities] forEach:^void(TRCity* city) {
         [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
             return [[_ modifyW:^GEMat4*(GEMat4* w) {
-                return [w translateX:((float)(city.tile.x)) y:((float)(city.tile.y)) z:0.0];
+                return [w translateX:((float)(((TRCity*)(city)).tile.x)) y:((float)(((TRCity*)(city)).tile.y)) z:0.0];
             }] modifyM:^GEMat4*(GEMat4* m) {
-                return [m rotateAngle:((float)(city.angle.angle)) x:0.0 y:-1.0 z:0.0];
+                return [m rotateAngle:((float)(((TRCity*)(city)).angle.angle)) x:0.0 y:-1.0 z:0.0];
             }];
         } f:^void() {
-            [_vaoBody drawParam:[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:city.color.color texture:_cityTexture]]];
+            [_vaoBody drawParam:[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:((TRCity*)(city)).color.color texture:_cityTexture]]];
         }];
     }];
     egPopGroupMarker();
@@ -64,8 +64,8 @@ static ODClassType* _TRCityView_type;
 - (void)drawExpected {
     [EGGlobal.context.depthTest disabledF:^void() {
         [[_level cities] forEach:^void(TRCity* city) {
-            [city.expectedTrainCounter forF:^void(CGFloat time) {
-                [EGD2D drawCircleMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.85)] at:geVec3ApplyVec2Z(geVec2ApplyVec2i(city.tile), 0.0) radius:0.08 relative:geVec2MulF([TRCityView moveVecForLevel:_level city:city], 0.25) start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
+            [((TRCity*)(city)).expectedTrainCounter forF:^void(CGFloat time) {
+                [EGD2D drawCircleMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.85)] at:geVec3ApplyVec2Z(geVec2ApplyVec2i(((TRCity*)(city)).tile), 0.0) radius:0.08 relative:geVec2MulF([TRCityView moveVecForLevel:_level city:city], 0.25) start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
             }];
         }];
     }];
@@ -169,9 +169,9 @@ static ODClassType* _TRCallRepairerView_type;
 - (void)drawButtonForCity:(TRCity*)city {
     GEVec2 bs = _buttonSize;
     GEVec2 p = [TRCityView moveVecForLevel:_level city:city];
-    EGBillboard* billboard = ((EGBillboard*)([_buttons objectForKey:city orUpdateWith:^EGBillboard*() {
+    EGBillboard* billboard = [_buttons objectForKey:city orUpdateWith:^EGBillboard*() {
         return [EGBillboard applyMaterial:[EGColorSource applyColor:geVec4ApplyVec3W(geVec4Xyz(city.color.color), 0.8)]];
-    }]));
+    }];
     billboard.position = geVec3ApplyVec2Z(geVec2ApplyVec2i(city.tile), 0.0);
     GEVec2 r = geVec2MulVec2(geVec2SubF(p, 0.5), bs);
     billboard.rect = GERectMake(r, bs);
@@ -186,10 +186,10 @@ static ODClassType* _TRCallRepairerView_type;
 - (BOOL)tapEvent:(EGEvent*)event {
     GEVec2 p = [event locationInViewport];
     id b = [[_buttons chain] find:^BOOL(CNTuple* _) {
-        return [((EGBillboard*)(_.b)) containsVec2:p];
+        return [((EGBillboard*)(((CNTuple*)(_)).b)) containsVec2:p];
     }];
     [b forEach:^void(CNTuple* kv) {
-        [_level runRepairerFromCity:((TRCity*)(kv.a))];
+        [_level runRepairerFromCity:((CNTuple*)(kv)).a];
     }];
     return [b isDefined];
 }

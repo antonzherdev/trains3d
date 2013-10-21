@@ -192,13 +192,13 @@ static ODClassType* _EGMeshModel_type;
 
 + (EGMeshModel*)applyShadow:(BOOL)shadow meshes:(id<CNSeq>)meshes {
     return [EGMeshModel meshModelWithArrays:[[[meshes chain] map:^EGVertexArray*(CNTuple* p) {
-        return [((EGMesh*)(p.a)) vaoMaterial:((EGMaterial*)(p.b)) shadow:shadow];
+        return [((EGMesh*)(((CNTuple*)(p)).a)) vaoMaterial:((CNTuple*)(p)).b shadow:shadow];
     }] toArray]];
 }
 
 - (void)draw {
     [_arrays forEach:^void(EGVertexArray* _) {
-        [_ draw];
+        [((EGVertexArray*)(_)) draw];
     }];
 }
 
@@ -206,7 +206,7 @@ static ODClassType* _EGMeshModel_type;
     if(only == 0) return ;
     __block unsigned int o = only;
     [_arrays goOn:^BOOL(EGVertexArray* a) {
-        [a draw];
+        [((EGVertexArray*)(a)) draw];
         o--;
         return o > 0;
     }];
@@ -407,7 +407,7 @@ static ODClassType* _EGSimpleVertexArray_type;
         _buffers = buffers;
         _index = index;
         _isMutable = [_index isMutable] || [[[_buffers chain] find:^BOOL(id<EGVertexBuffer> _) {
-    return [_ isMutable];
+    return [((id<EGVertexBuffer>)(_)) isMutable];
 }] isDefined];
     }
     

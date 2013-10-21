@@ -629,13 +629,13 @@ static ODClassType* _TRRailroad_type;
 }
 
 - (TRRailroadConnectorContent*)contentInTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
-    return ((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(GEVec2i, tile), connector)]));
+    return [_connectorIndex applyKey:tuple(wrap(GEVec2i, tile), connector)];
 }
 
 - (void)connectRail:(TRRail*)rail to:(TRRailConnector*)to {
-    ((TRRailroadConnectorContent*)([_connectorIndex modifyBy:^TRRailroadConnectorContent*(TRRailroadConnectorContent* _) {
-        return [_ connectRail:rail to:to];
-    } forKey:tuple(wrap(GEVec2i, rail.tile), to)]));
+    [_connectorIndex modifyBy:^TRRailroadConnectorContent*(TRRailroadConnectorContent* _) {
+        return [((TRRailroadConnectorContent*)(_)) connectRail:rail to:to];
+    } forKey:tuple(wrap(GEVec2i, rail.tile), to)];
 }
 
 - (void)buildLightsForTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
@@ -655,20 +655,20 @@ static ODClassType* _TRRailroad_type;
 }
 
 - (void)buildLightInTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
-    ((TRRailroadConnectorContent*)([_connectorIndex modifyBy:^TRRailroadConnectorContent*(TRRailroadConnectorContent* _) {
-        return [_ buildLightInConnector:connector];
-    } forKey:tuple(wrap(GEVec2i, tile), connector)]));
+    [_connectorIndex modifyBy:^TRRailroadConnectorContent*(TRRailroadConnectorContent* _) {
+        return [((TRRailroadConnectorContent*)(_)) buildLightInConnector:connector];
+    } forKey:tuple(wrap(GEVec2i, tile), connector)];
 }
 
 - (void)rebuildArrays {
     __rails = [[[[[_connectorIndex values] chain] flatMap:^id<CNSeq>(TRRailroadConnectorContent* _) {
-        return [_ rails];
+        return [((TRRailroadConnectorContent*)(_)) rails];
     }] distinct] toArray];
     __switches = [[[[_connectorIndex values] chain] filter:^BOOL(TRRailroadConnectorContent* _) {
-        return [_ isKindOfClass:[TRSwitch class]];
+        return [((TRRailroadConnectorContent*)(_)) isKindOfClass:[TRSwitch class]];
     }] toArray];
     __lights = [[[[_connectorIndex values] chain] filter:^BOOL(TRRailroadConnectorContent* _) {
-        return [_ isKindOfClass:[TRRailLight class]];
+        return [((TRRailroadConnectorContent*)(_)) isKindOfClass:[TRRailLight class]];
     }] toArray];
     [__changeListeners forEach:^void(void(^_)()) {
         ((void(^)())(_))();
@@ -698,7 +698,7 @@ static ODClassType* _TRRailroad_type;
         return correction;
     }
     TRRailConnector* connector = [p endConnector];
-    TRRailroadConnectorContent* connectorDesc = ((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(GEVec2i, p.tile), connector)]));
+    TRRailroadConnectorContent* connectorDesc = [_connectorIndex applyKey:tuple(wrap(GEVec2i, p.tile), connector)];
     id activeRailOpt = [[connectorDesc rails] headOpt];
     if([activeRailOpt isEmpty]) return correction;
     if(((TRRail*)([activeRailOpt get])).form != p.form) {
@@ -715,7 +715,7 @@ static ODClassType* _TRRailroad_type;
         obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.end point:correction.point]);
         return correction;
     }
-    TRRail* nextActiveRail = ((TRRail*)([nextRail get]));
+    TRRail* nextActiveRail = [nextRail get];
     TRRailForm* form = nextActiveRail.form;
     return [self moveWithObstacleProcessor:obstacleProcessor forLength:correction.error point:[TRRailPoint railPointWithTile:nextTile form:form x:0.0 back:form.end == otherSideConnector]];
 }
@@ -744,11 +744,11 @@ static ODClassType* _TRRailroad_type;
         [self addDamageAtPoint:[point invert]];
     } else {
         [_damagesIndex modifyBy:^id(id arr) {
-            return [CNOption applyValue:((id<CNSeq>)([[arr mapF:^id<CNSeq>(id<CNSeq> _) {
-                return [_ addItem:numf(point.x)];
+            return [CNOption applyValue:[[arr mapF:^id<CNSeq>(id<CNSeq> _) {
+                return [((id<CNSeq>)(_)) addItem:numf(point.x)];
             }] getOrElseF:^id<CNSeq>() {
                 return (@[numf(point.x)]);
-            }]))];
+            }]];
         } forKey:tuple(wrap(GEVec2i, point.tile), point.form)];
         [__damagesPoints appendItem:point];
     }
@@ -760,7 +760,7 @@ static ODClassType* _TRRailroad_type;
     } else {
         [_damagesIndex modifyBy:^id(id arrOpt) {
             return [arrOpt mapF:^id<CNSeq>(id<CNSeq> arr) {
-                return [[[arr chain] filter:^BOOL(id _) {
+                return [[[((id<CNSeq>)(arr)) chain] filter:^BOOL(id _) {
                     return !(eqf(unumf(_), point.x));
                 }] toArray];
             }];
@@ -912,7 +912,7 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (id)railForUndo {
     return [[__buildingRails headOpt] mapF:^TRRail*(TRRailBuilding* _) {
-        return _.rail;
+        return ((TRRailBuilding*)(_)).rail;
     }];
 }
 
@@ -936,8 +936,8 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (void)fix {
     if([__rail isDefined]) {
-        [_railroad.forest cutDownForRail:((TRRail*)([__rail get]))];
-        __buildingRails = [CNList applyItem:[TRRailBuilding railBuildingWithRail:((TRRail*)([__rail get]))] tail:__buildingRails];
+        [_railroad.forest cutDownForRail:[__rail get]];
+        __buildingRails = [CNList applyItem:[TRRailBuilding railBuildingWithRail:[__rail get]] tail:__buildingRails];
         __rail = [CNOption none];
     }
 }
@@ -948,25 +948,25 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (BOOL)checkBuildingsRail:(TRRail*)rail {
     return !([[__buildingRails chain] exists:^BOOL(TRRailBuilding* _) {
-    return [_.rail isEqual:rail];
+    return [((TRRailBuilding*)(_)).rail isEqual:rail];
 }]) && [_railroad canAddRail:rail] && [self checkBuildingsConnectorTile:rail.tile connector:rail.form.start] && [self checkBuildingsConnectorTile:rail.tile connector:rail.form.end];
 }
 
 - (BOOL)checkBuildingsConnectorTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
     return [[[_railroad contentInTile:tile connector:connector] rails] count] + [[[__buildingRails chain] filter:^BOOL(TRRailBuilding* _) {
-    return GEVec2iEq(_.rail.tile, tile) && [_.rail.form containsConnector:connector];
+    return GEVec2iEq(((TRRailBuilding*)(_)).rail.tile, tile) && [((TRRailBuilding*)(_)).rail.form containsConnector:connector];
 }] count] < 2;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
     __block BOOL hasEnd = NO;
     [__buildingRails forEach:^void(TRRailBuilding* b) {
-        b.progress += delta / 2;
-        hasEnd = hasEnd || b.progress >= 1.0;
+        ((TRRailBuilding*)(b)).progress += delta / 2;
+        hasEnd = hasEnd || ((TRRailBuilding*)(b)).progress >= 1.0;
     }];
     if(hasEnd) __buildingRails = [__buildingRails filterF:^BOOL(TRRailBuilding* b) {
-        if(b.progress >= 1.0) {
-            [_railroad tryAddRail:b.rail];
+        if(((TRRailBuilding*)(b)).progress >= 1.0) {
+            [_railroad tryAddRail:((TRRailBuilding*)(b)).rail];
             return NO;
         } else {
             return YES;

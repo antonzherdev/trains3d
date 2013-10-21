@@ -30,10 +30,10 @@ static ODClassType* _GEBentleyOttmann_type;
             [sweepLine handleEvents:events];
         }
         return [[[sweepLine.intersections chain] flatMap:^CNChain*(CNTuple* p) {
-            return [[[[((NSMutableSet*)(p.b)) chain] combinations] filter:^BOOL(CNTuple* comb) {
-                return !([((GEBentleyOttmannPointEvent*)(comb.a)) isVertical]) || !([((GEBentleyOttmannPointEvent*)(comb.b)) isVertical]);
+            return [[[[((NSMutableSet*)(((CNTuple*)(p)).b)) chain] combinations] filter:^BOOL(CNTuple* comb) {
+                return !([((GEBentleyOttmannPointEvent*)(((CNTuple*)(comb)).a)) isVertical]) || !([((GEBentleyOttmannPointEvent*)(((CNTuple*)(comb)).b)) isVertical]);
             }] map:^GEIntersection*(CNTuple* comb) {
-                return [GEIntersection intersectionWithItems:[CNPair newWithA:((GEBentleyOttmannPointEvent*)(((GEBentleyOttmannPointEvent*)(comb.a)).data)) b:((GEBentleyOttmannPointEvent*)(((GEBentleyOttmannPointEvent*)(comb.b)).data))] point:((GEPointClass*)(p.a)).point];
+                return [GEIntersection intersectionWithItems:[CNPair newWithA:((GEBentleyOttmannPointEvent*)(((CNTuple*)(comb)).a)).data b:((GEBentleyOttmannPointEvent*)(((CNTuple*)(comb)).b)).data] point:((GEPointClass*)(((CNTuple*)(p)).a)).point];
             }];
         }] toSet];
     }
@@ -387,9 +387,9 @@ static ODClassType* _GEBentleyOttmannEventQueue_type;
     GEBentleyOttmannEventQueue* ret = [GEBentleyOttmannEventQueue bentleyOttmannEventQueue];
     if(!([segments isEmpty])) {
         [segments forEach:^void(CNTuple* s) {
-            GELineSegment* segment = ((GELineSegment*)(s.b));
-            [ret offerPoint:segment.p0 event:[GEBentleyOttmannPointEvent bentleyOttmannPointEventWithIsStart:YES data:((CNTuple*)(s.a)) segment:segment point:segment.p0]];
-            [ret offerPoint:segment.p1 event:[GEBentleyOttmannPointEvent bentleyOttmannPointEventWithIsStart:NO data:((CNTuple*)(s.a)) segment:segment point:segment.p1]];
+            GELineSegment* segment = ((CNTuple*)(s)).b;
+            [ret offerPoint:segment.p0 event:[GEBentleyOttmannPointEvent bentleyOttmannPointEventWithIsStart:YES data:((CNTuple*)(s)).a segment:segment point:segment.p0]];
+            [ret offerPoint:segment.p1 event:[GEBentleyOttmannPointEvent bentleyOttmannPointEventWithIsStart:NO data:((CNTuple*)(s)).a segment:segment point:segment.p1]];
         }];
         sweepLine.queue = ret;
     }
@@ -547,7 +547,7 @@ static ODClassType* _GESweepLine_type;
             float maxY = pe.segment.p1.y;
             id<CNIterator> i = [_events iteratorHigherThanItem:event];
             while([i hasNext]) {
-                GEBentleyOttmannPointEvent* e = ((GEBentleyOttmannPointEvent*)([i next]));
+                GEBentleyOttmannPointEvent* e = [i next];
                 if(!([e isVertical])) {
                     CGFloat y = [e yForX:((CGFloat)(_currentEventPoint.x))];
                     if(y > maxY) break;
@@ -569,7 +569,7 @@ static ODClassType* _GESweepLine_type;
                 [self checkIntersectionA:a b:b];
             }
         } else {
-            NSMutableSet* set = ((NSMutableSet*)([_intersections applyKey:[GEPointClass pointClassWithPoint:[event point]]]));
+            NSMutableSet* set = [_intersections applyKey:[GEPointClass pointClassWithPoint:[event point]]];
             id<CNSeq> toInsert = [[[set chain] filter:^BOOL(GEBentleyOttmannPointEvent* _) {
                 return [_events removeItem:_];
             }] toArray];
@@ -593,8 +593,8 @@ static ODClassType* _GESweepLine_type;
 
 - (void)checkIntersectionA:(id)a b:(id)b {
     if([a isDefined] && [b isDefined] && [((GEBentleyOttmannEvent*)([a get])) isKindOfClass:[GEBentleyOttmannPointEvent class]] && [((GEBentleyOttmannEvent*)([b get])) isKindOfClass:[GEBentleyOttmannPointEvent class]]) {
-        GEBentleyOttmannPointEvent* aa = ((GEBentleyOttmannPointEvent*)(((GEBentleyOttmannEvent*)([a get]))));
-        GEBentleyOttmannPointEvent* bb = ((GEBentleyOttmannPointEvent*)(((GEBentleyOttmannEvent*)([b get]))));
+        GEBentleyOttmannPointEvent* aa = ((GEBentleyOttmannPointEvent*)([a get]));
+        GEBentleyOttmannPointEvent* bb = ((GEBentleyOttmannPointEvent*)([b get]));
         [[aa.segment intersectionWithSegment:bb.segment] forEach:^void(id _) {
             [self registerIntersectionA:aa b:bb point:uwrap(GEVec2, _)];
         }];
@@ -603,9 +603,9 @@ static ODClassType* _GESweepLine_type;
 
 - (void)registerIntersectionA:(GEBentleyOttmannPointEvent*)a b:(GEBentleyOttmannPointEvent*)b point:(GEVec2)point {
     if(!([a.segment endingsContainPoint:point]) || !([b.segment endingsContainPoint:point])) {
-        NSMutableSet* existing = ((NSMutableSet*)([_intersections objectForKey:[GEPointClass pointClassWithPoint:point] orUpdateWith:^NSMutableSet*() {
+        NSMutableSet* existing = [_intersections objectForKey:[GEPointClass pointClassWithPoint:point] orUpdateWith:^NSMutableSet*() {
             return [NSMutableSet mutableSet];
-        }]));
+        }];
         [existing appendItem:a];
         [existing appendItem:b];
         if(point.x > _currentEventPoint.x || (eqf4(point.x, _currentEventPoint.x) && point.y > _currentEventPoint.y)) {

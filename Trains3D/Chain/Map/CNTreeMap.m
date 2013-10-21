@@ -74,7 +74,7 @@ static ODClassType* _CNMutableTreeMap_type;
 }
 
 - (CNTreeMapIterator*)iteratorHigherThanKey:(id)key {
-    return [CNTreeMapIterator newMap:self entry:((CNTreeMapEntry*)([[self higherEntryThanKey:key] getOrValue:nil]))];
+    return [CNTreeMapIterator newMap:self entry:[[self higherEntryThanKey:key] getOrValue:nil]];
 }
 
 - (CNTreeMapEntry*)entryForKey:(id)key {
@@ -336,13 +336,13 @@ static ODClassType* _CNMutableTreeMap_type;
 
 - (id)lowerKeyThanKey:(id)key {
     return [[self lowerEntryThanKey:key] mapF:^id(CNTreeMapEntry* _) {
-        return _.key;
+        return ((CNTreeMapEntry*)(_)).key;
     }];
 }
 
 - (id)higherKeyThanKey:(id)key {
     return [[self higherEntryThanKey:key] mapF:^id(CNTreeMapEntry* _) {
-        return _.key;
+        return ((CNTreeMapEntry*)(_)).key;
     }];
 }
 
@@ -641,7 +641,7 @@ static ODClassType* _CNTreeMapKeySet_type;
 }
 
 - (id<CNIterator>)iteratorHigherThanKey:(id)key {
-    return [CNTreeMapKeyIterator newMap:_map entry:((CNTreeMapEntry*)([[_map higherEntryThanKey:key] getOrValue:nil]))];
+    return [CNTreeMapKeyIterator newMap:_map entry:[[_map higherEntryThanKey:key] getOrValue:nil]];
 }
 
 - (id)head {

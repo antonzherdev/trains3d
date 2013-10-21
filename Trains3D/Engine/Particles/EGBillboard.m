@@ -359,27 +359,27 @@ static ODClassType* _EGBillboardShader_type;
 }
 
 + (EGBillboardShader*)instanceForColor {
-    return ((EGBillboardShader*)([_EGBillboardShader__lazy_instanceForColor get]));
+    return [_EGBillboardShader__lazy_instanceForColor get];
 }
 
 + (EGBillboardShader*)instanceForTexture {
-    return ((EGBillboardShader*)([_EGBillboardShader__lazy_instanceForTexture get]));
+    return [_EGBillboardShader__lazy_instanceForTexture get];
 }
 
 + (EGBillboardShader*)instanceForAlpha {
-    return ((EGBillboardShader*)([_EGBillboardShader__lazy_instanceForAlpha get]));
+    return [_EGBillboardShader__lazy_instanceForAlpha get];
 }
 
 + (EGBillboardShader*)instanceForColorShadow {
-    return ((EGBillboardShader*)([_EGBillboardShader__lazy_instanceForColorShadow get]));
+    return [_EGBillboardShader__lazy_instanceForColorShadow get];
 }
 
 + (EGBillboardShader*)instanceForTextureShadow {
-    return ((EGBillboardShader*)([_EGBillboardShader__lazy_instanceForTextureShadow get]));
+    return [_EGBillboardShader__lazy_instanceForTextureShadow get];
 }
 
 + (EGBillboardShader*)instanceForAlphaShadow {
-    return ((EGBillboardShader*)([_EGBillboardShader__lazy_instanceForAlphaShadow get]));
+    return [_EGBillboardShader__lazy_instanceForAlphaShadow get];
 }
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
@@ -387,7 +387,7 @@ static ODClassType* _EGBillboardShader_type;
     [_modelSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.model))];
     [_colorSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:4 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.color))];
     if(_texture) [_uvSlot forEach:^void(EGShaderAttribute* _) {
-        [_ setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
+        [((EGShaderAttribute*)(_)) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
     }];
 }
 
@@ -395,7 +395,7 @@ static ODClassType* _EGBillboardShader_type;
     [_wcUniform applyMatrix:[EGGlobal.matrix.value wc]];
     [_pUniform applyMatrix:EGGlobal.matrix.value.p];
     if(_alpha) [((EGShaderUniformF4*)([_alphaTestLevelUniform get])) applyF4:param.alphaTestLevel];
-    if(_texture) [EGGlobal.context bindTextureTexture:((EGTexture*)([param.texture get]))];
+    if(_texture) [EGGlobal.context bindTextureTexture:[param.texture get]];
     [_colorUniform applyVec4:param.color];
 }
 

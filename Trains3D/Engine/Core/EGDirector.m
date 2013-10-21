@@ -61,7 +61,7 @@ static ODClassType* _EGDirector_type;
 - (void)drawWithSize:(GEVec2)size {
     if([__scene isEmpty]) return ;
     if(size.x <= 0 || size.y <= 0) return ;
-    EGScene* sc = ((EGScene*)([__scene get]));
+    EGScene* sc = [__scene get];
     EGGlobal.context.director = self;
     [EGGlobal.context clear];
     EGGlobal.context.scale = [sc scaleWithViewSize:size];
@@ -74,13 +74,13 @@ static ODClassType* _EGDirector_type;
     [EGGlobal.matrix clear];
     [EGGlobal.context setViewport:geRectIApplyRect(GERectMake(GEVec2Make(0.0, 0.0), size))];
     [__stat forEach:^void(EGStat* _) {
-        [_ draw];
+        [((EGStat*)(_)) draw];
     }];
 }
 
 - (void)processEvent:(EGEvent*)event {
     [__scene forEach:^void(EGScene* _) {
-        [_ processEvent:event];
+        [((EGScene*)(_)) processEvent:event];
     }];
 }
 
@@ -104,7 +104,7 @@ static ODClassType* _EGDirector_type;
 - (void)pause {
     __isPaused = YES;
     [__scene forEach:^void(EGScene* _) {
-        [_ pause];
+        [((EGScene*)(_)) pause];
     }];
 }
 
@@ -113,7 +113,7 @@ static ODClassType* _EGDirector_type;
         __isPaused = NO;
         [_time start];
         [__scene forEach:^void(EGScene* _) {
-            [_ resume];
+            [((EGScene*)(_)) resume];
         }];
     }
 }
@@ -121,10 +121,10 @@ static ODClassType* _EGDirector_type;
 - (void)tick {
     [_time tick];
     [__scene forEach:^void(EGScene* _) {
-        [_ updateWithDelta:_time.delta];
+        [((EGScene*)(_)) updateWithDelta:_time.delta];
     }];
     [__stat forEach:^void(EGStat* _) {
-        [_ tickWithDelta:_time.delta];
+        [((EGStat*)(_)) tickWithDelta:_time.delta];
     }];
 }
 

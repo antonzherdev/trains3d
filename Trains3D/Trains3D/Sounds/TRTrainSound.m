@@ -35,16 +35,16 @@ static ODClassType* _TRTrainSound_type;
 
 - (void)updateWithDelta:(CGFloat)delta {
     [[_level trains] forEach:^void(TRTrain* train) {
-        TRTrainSoundData* sd = ((TRTrainSoundData*)(train.soundData));
+        TRTrainSoundData* sd = ((TRTrainSoundData*)(((TRTrain*)(train)).soundData));
         if(sd == nil) {
             sd = [TRTrainSoundData trainSoundData];
-            train.soundData = sd;
+            ((TRTrain*)(train)).soundData = sd;
         }
         if(sd.chooCounter > 0 && sd.toNextChoo <= 0.0) {
             [self playChoo];
             [sd nextChoo];
         } else {
-            TRRailPoint* h = [train head];
+            TRRailPoint* h = [((TRTrain*)(train)) head];
             if(!(GEVec2iEq(h.tile, sd.lastTile))) {
                 [self playChoo];
                 sd.lastTile = h.tile;
@@ -59,10 +59,10 @@ static ODClassType* _TRTrainSound_type;
 
 - (void)playChoo {
     [_choos goOn:^BOOL(SDSound* p) {
-        if([p isPlaying]) {
+        if([((SDSound*)(p)) isPlaying]) {
             return YES;
         } else {
-            [p play];
+            [((SDSound*)(p)) play];
             return NO;
         }
     }];

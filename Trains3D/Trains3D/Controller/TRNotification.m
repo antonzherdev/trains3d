@@ -31,7 +31,7 @@ static ODClassType* _TRNotifications_type;
 
 - (id)take {
     CNTuple* p = [_queue dequeue];
-    _queue = ((CNQueue*)(p.b));
+    _queue = p.b;
     return p.a;
 }
 

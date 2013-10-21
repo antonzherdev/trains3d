@@ -122,7 +122,7 @@ static ODClassType* _TRTrain_type;
             return _weakSelf._cars(self);
         }];
         _length = unumf([[[self cars] chain] foldStart:@0.0 by:^id(id r, TRCar* car) {
-            return numf(car.carType.fullLength + unumf(r));
+            return numf(((TRCar*)(car)).carType.fullLength + unumf(r));
         }]);
         _speedFloat = 0.01 * _speed;
         _isDying = NO;
@@ -140,7 +140,7 @@ static ODClassType* _TRTrain_type;
 }
 
 - (id<CNSeq>)cars {
-    return ((id<CNSeq>)([__lazy_cars get]));
+    return [__lazy_cars get];
 }
 
 - (BOOL)isBack {
@@ -164,13 +164,13 @@ static ODClassType* _TRTrain_type;
 - (void)calculateCarPositions {
     __block TRRailPoint* frontConnector = [__head invert];
     [[self directedCars] forEach:^void(TRCar* car) {
-        TRCarType* tp = car.carType;
+        TRCarType* tp = ((TRCar*)(car)).carType;
         CGFloat fl = tp.startToWheel;
         CGFloat bl = tp.wheelToEnd;
         TRRailPoint* head = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((_back) ? bl : fl) point:frontConnector] addErrorToPoint];
         TRRailPoint* tail = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:tp.betweenWheels point:head] addErrorToPoint];
         TRRailPoint* backConnector = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((_back) ? fl : bl) point:tail] addErrorToPoint];
-        [car setPosition:((_back) ? [TRCarPosition carPositionWithFrontConnector:backConnector head:tail tail:head backConnector:frontConnector] : [TRCarPosition carPositionWithFrontConnector:frontConnector head:head tail:tail backConnector:backConnector])];
+        [((TRCar*)(car)) setPosition:((_back) ? [TRCarPosition carPositionWithFrontConnector:backConnector head:tail tail:head backConnector:frontConnector] : [TRCarPosition carPositionWithFrontConnector:frontConnector head:head tail:tail backConnector:backConnector])];
         frontConnector = backConnector;
     }];
 }
@@ -199,7 +199,7 @@ static ODClassType* _TRTrain_type;
                 [_level arrivedTrain:self];
             } else {
                 _back = !(_back);
-                TRCar* lastCar = ((TRCar*)([[self directedCars] head]));
+                TRCar* lastCar = [[self directedCars] head];
                 __head = ((_back) ? [lastCar position].backConnector : [lastCar position].frontConnector);
             }
         } else {
@@ -219,7 +219,7 @@ static ODClassType* _TRTrain_type;
     GEVec2i tile = theSwitch.tile;
     GEVec2i nextTile = [theSwitch.connector nextTile:tile];
     return [[[self cars] findWhere:^BOOL(TRCar* car) {
-        TRCarPosition* p = [car position];
+        TRCarPosition* p = [((TRCar*)(car)) position];
         return (GEVec2iEq(p.frontConnector.tile, tile) && GEVec2iEq(p.backConnector.tile, nextTile)) || (GEVec2iEq(p.frontConnector.tile, nextTile) && GEVec2iEq(p.backConnector.tile, tile));
     }] isDefined];
 }
@@ -301,14 +301,14 @@ static ODClassType* _TRTrainGenerator_type;
 
 - (id<CNSeq>)generateCarsForTrain:(TRTrain*)train {
     NSInteger count = unumi([[_carsCount randomItem] get]);
-    TRCar* engine = [TRCar carWithTrain:train carType:((TRCarType*)([[[[_carTypes chain] filter:^BOOL(TRCarType* _) {
-        return [_ isEngine];
-    }] randomItem] get]))];
+    TRCar* engine = [TRCar carWithTrain:train carType:[[[[_carTypes chain] filter:^BOOL(TRCarType* _) {
+        return [((TRCarType*)(_)) isEngine];
+    }] randomItem] get]];
     if(count <= 1) return (@[engine]);
     else return [[[[intRange(count) chain] map:^TRCar*(id i) {
-        return [TRCar carWithTrain:train carType:((TRCarType*)([[[[_carTypes chain] filter:^BOOL(TRCarType* _) {
-            return !([_ isEngine]);
-        }] randomItem] get]))];
+        return [TRCar carWithTrain:train carType:[[[[_carTypes chain] filter:^BOOL(TRCarType* _) {
+            return !([((TRCarType*)(_)) isEngine]);
+        }] randomItem] get]];
     }] prepend:(@[engine])] toArray];
 }
 

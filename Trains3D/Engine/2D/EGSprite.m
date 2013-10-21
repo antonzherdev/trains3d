@@ -35,7 +35,7 @@ static ODClassType* _EGD2D_type;
 }
 
 + (EGVertexArray*)circleVaoForColor {
-    return ((EGVertexArray*)([_EGD2D__lazy_circleVaoForColor get]));
+    return [_EGD2D__lazy_circleVaoForColor get];
 }
 
 + (void)drawSpriteMaterial:(EGColorSource*)material at:(GEVec3)at rect:(GERect)rect {

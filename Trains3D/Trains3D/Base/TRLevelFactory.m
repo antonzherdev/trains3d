@@ -54,7 +54,7 @@ static ODClassType* _TRLevelFactory_type;
 }
 
 + (TRLevel*)levelWithNumber:(NSUInteger)number {
-    return [TRLevel levelWithRules:((TRLevelRules*)([_TRLevelFactory_rules applyIndex:number - 1]))];
+    return [TRLevel levelWithRules:[_TRLevelFactory_rules applyIndex:number - 1]];
 }
 
 + (TRLevel*)levelWithMapSize:(GEVec2i)mapSize {

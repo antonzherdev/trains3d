@@ -63,7 +63,7 @@ static ODClassType* _EGCollisionsTest_type;
     [box2 translateX:2.0 y:2.0 z:-1.0];
     r = [world crossPointsWithSegment:segment];
     [self assertEqualsA:r b:(@[p1, [EGCrossPoint crossPointWithBody:box2 point:GEVec3Make(2.0, 2.0, -1.0)]])];
-    [self assertEqualsA:((EGCrossPoint*)([[world closestCrossPointWithSegment:segment] get])) b:p1];
+    [self assertEqualsA:[[world closestCrossPointWithSegment:segment] get] b:p1];
     [box2 translateX:0.0 y:0.0 z:-10.0];
     r = [world crossPointsWithSegment:segment];
     [self assertEqualsA:r b:(@[p1])];

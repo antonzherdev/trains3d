@@ -198,7 +198,7 @@ static ODClassType* _TRCar_type;
 }
 
 - (EGRigidBody*)dynamicBody {
-    return ((EGRigidBody*)([__lazy_dynamicBody get]));
+    return [__lazy_dynamicBody get];
 }
 
 - (TRCarPosition*)position {

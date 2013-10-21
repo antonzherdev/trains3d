@@ -509,11 +509,11 @@ static ODClassType* _EGBaseViewportSurface_type;
 }
 
 + (EGMesh*)fullScreenMesh {
-    return ((EGMesh*)([_EGBaseViewportSurface__lazy_fullScreenMesh get]));
+    return [_EGBaseViewportSurface__lazy_fullScreenMesh get];
 }
 
 + (EGVertexArray*)fullScreenVao {
-    return ((EGVertexArray*)([_EGBaseViewportSurface__lazy_fullScreenVao get]));
+    return [_EGBaseViewportSurface__lazy_fullScreenVao get];
 }
 
 - (id)surface {

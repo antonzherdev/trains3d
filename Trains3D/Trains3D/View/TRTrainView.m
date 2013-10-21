@@ -86,10 +86,10 @@ static ODClassType* _TRTrainView_type;
 
 - (void)drawSmokeTrains:(id<CNSeq>)trains {
     [trains forEach:^void(TRTrain* train) {
-        TRSmokeView* smoke = ((TRSmokeView*)(train.viewData));
-        if(train.viewData == nil) {
+        TRSmokeView* smoke = ((TRSmokeView*)(((TRTrain*)(train)).viewData));
+        if(((TRTrain*)(train)).viewData == nil) {
             smoke = [TRSmokeView smokeViewWithSystem:[TRSmoke smokeWithTrain:train weather:_level.weather]];
-            train.viewData = smoke;
+            ((TRTrain*)(train)).viewData = smoke;
         }
         [smoke draw];
     }];
@@ -99,10 +99,10 @@ static ODClassType* _TRTrainView_type;
     [[train cars] forEach:^void(TRCar* car) {
         [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
             return [[_ modifyW:^GEMat4*(GEMat4* w) {
-                GEVec2 mid = [[car position].line mid];
+                GEVec2 mid = [[((TRCar*)(car)) position].line mid];
                 return [w translateX:mid.x y:mid.y z:0.04];
             }] modifyM:^GEMat4*(GEMat4* m) {
-                return [m rotateAngle:((float)([[car position].line degreeAngle] + 90)) x:0.0 y:1.0 z:0.0];
+                return [m rotateAngle:((float)([[((TRCar*)(car)) position].line degreeAngle] + 90)) x:0.0 y:1.0 z:0.0];
             }];
         } f:^void() {
             [self doDrawCar:car color:train.color.color];
@@ -144,7 +144,7 @@ static ODClassType* _TRTrainView_type;
     [[dyingTrain cars] forEach:^void(TRCar* car) {
         [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
             return [_ modifyM:^GEMat4*(GEMat4* m) {
-                return [[[car dynamicBody].matrix translateX:0.0 y:0.0 z:((float)(-car.carType.height / 2 + 0.04))] mulMatrix:[m rotateAngle:90.0 x:0.0 y:1.0 z:0.0]];
+                return [[[((TRCar*)(car)) dynamicBody].matrix translateX:0.0 y:0.0 z:((float)(-((TRCar*)(car)).carType.height / 2 + 0.04))] mulMatrix:[m rotateAngle:90.0 x:0.0 y:1.0 z:0.0]];
             }];
         } f:^void() {
             [self doDrawCar:car color:dyingTrain.color.color];

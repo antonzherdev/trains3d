@@ -59,11 +59,11 @@ static ODClassType* _EGShadowMap_type;
 }
 
 - (EGShadowSurfaceShader*)shader {
-    return ((EGShadowSurfaceShader*)([__lazy_shader get]));
+    return [__lazy_shader get];
 }
 
 - (EGVertexArray*)vao {
-    return ((EGVertexArray*)([__lazy_vao get]));
+    return [__lazy_vao get];
 }
 
 - (void)dealloc {
@@ -215,7 +215,7 @@ static ODClassType* _EGShadowSurfaceShader_type;
 }
 
 - (void)loadUniformsParam:(EGColorSource*)param {
-    [EGGlobal.context bindTextureTexture:((EGTexture*)([param.texture get]))];
+    [EGGlobal.context bindTextureTexture:[param.texture get]];
 }
 
 - (ODClassType*)type {
@@ -519,7 +519,7 @@ static ODClassType* _EGShadowShader_type;
     [_mvpUniform applyMatrix:[EGGlobal.matrix.value mwcp]];
     if(_texture) {
         [((EGShaderUniformF4*)([_alphaTestLevelUniform get])) applyF4:param.alphaTestLevel];
-        [EGGlobal.context bindTextureTexture:((EGTexture*)([param.texture get]))];
+        [EGGlobal.context bindTextureTexture:[param.texture get]];
     }
 }
 
@@ -650,12 +650,12 @@ static ODClassType* _EGShadowDrawShaderSystem_type;
 - (EGShadowDrawShader*)shaderForParam:(EGShadowDrawParam*)param renderTarget:(EGRenderTarget*)renderTarget {
     id<CNSeq> lights = EGGlobal.context.environment.lights;
     NSUInteger directLightsCount = [[[lights chain] filter:^BOOL(EGLight* _) {
-        return [_ isKindOfClass:[EGDirectLight class]] && _.hasShadows;
+        return [((EGLight*)(_)) isKindOfClass:[EGDirectLight class]] && ((EGLight*)(_)).hasShadows;
     }] count];
     EGShadowDrawShaderKey* key = [EGShadowDrawShaderKey shadowDrawShaderKeyWithDirectLightCount:directLightsCount];
-    return ((EGShadowDrawShader*)([_EGShadowDrawShaderSystem_shaders objectForKey:key orUpdateWith:^EGShadowDrawShader*() {
+    return [_EGShadowDrawShaderSystem_shaders objectForKey:key orUpdateWith:^EGShadowDrawShader*() {
         return [key shader];
-    }]));
+    }];
 }
 
 - (ODClassType*)type {
@@ -930,13 +930,13 @@ static ODClassType* _EGShadowDrawShader_type;
     EGEnvironment* env = EGGlobal.context.environment;
     __block NSUInteger i = 0;
     [[[env.lights chain] filter:^BOOL(EGLight* _) {
-        return [_ isKindOfClass:[EGDirectLight class]] && _.hasShadows;
+        return [((EGLight*)(_)) isKindOfClass:[EGDirectLight class]] && ((EGLight*)(_)).hasShadows;
     }] forEach:^void(EGLight* light) {
         float p = unumf4([param.percents applyIndex:i]);
         [((EGShaderUniformF4*)([_directLightPercents applyIndex:i])) applyF4:p];
-        [((EGShaderUniformMat4*)([_directLightDepthMwcp applyIndex:i])) applyMatrix:[[light shadowMap].biasDepthCp mulMatrix:[EGGlobal.matrix mw]]];
+        [((EGShaderUniformMat4*)([_directLightDepthMwcp applyIndex:i])) applyMatrix:[[((EGLight*)(light)) shadowMap].biasDepthCp mulMatrix:[EGGlobal.matrix mw]]];
         [((EGShaderUniformI4*)([_directLightShadows applyIndex:i])) applyI4:((int)(i + 1))];
-        [EGGlobal.context bindTextureSlot:GL_TEXTURE0 + i + 1 target:GL_TEXTURE_2D texture:[light shadowMap].texture];
+        [EGGlobal.context bindTextureSlot:GL_TEXTURE0 + i + 1 target:GL_TEXTURE_2D texture:[((EGLight*)(light)) shadowMap].texture];
         i++;
     }];
 }
