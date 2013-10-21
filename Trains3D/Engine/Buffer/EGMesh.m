@@ -100,7 +100,7 @@ static ODClassType* _EGMesh_type;
 }
 
 - (EGVertexArray*)vaoShader:(EGShader*)shader {
-    return [shader vaoVbo:_vertex ibo:_index];
+    return [shader vaoVbo:_vertex ibo:((id<EGIndexBuffer>)(_index))];
 }
 
 - (EGVertexArray*)vaoShadow {
@@ -112,14 +112,14 @@ static ODClassType* _EGMesh_type;
 }
 
 - (EGVertexArray*)vaoMaterial:(id)material shadow:(BOOL)shadow {
-    EGMaterialVertexArray* std = [EGMaterialVertexArray materialVertexArrayWithVao:[[material shader] vaoVbo:_vertex ibo:_index] material:material];
-    if(shadow && egPlatform().shadows) return [EGRouteVertexArray routeVertexArrayWithStandard:std shadow:[EGMaterialVertexArray materialVertexArrayWithVao:[[[material shaderSystem] shaderForParam:material renderTarget:EGShadowRenderTarget.aDefault] vaoVbo:_vertex ibo:_index] material:material]];
+    EGMaterialVertexArray* std = [EGMaterialVertexArray materialVertexArrayWithVao:[[material shader] vaoVbo:_vertex ibo:((id<EGIndexBuffer>)(_index))] material:material];
+    if(shadow && egPlatform().shadows) return [EGRouteVertexArray routeVertexArrayWithStandard:std shadow:[EGMaterialVertexArray materialVertexArrayWithVao:[[[material shaderSystem] shaderForParam:material renderTarget:EGShadowRenderTarget.aDefault] vaoVbo:_vertex ibo:((id<EGIndexBuffer>)(_index))] material:material]];
     else return std;
 }
 
 - (EGVertexArray*)vaoShaderSystem:(EGShaderSystem*)shaderSystem material:(id)material shadow:(BOOL)shadow {
-    EGMaterialVertexArray* std = [EGMaterialVertexArray materialVertexArrayWithVao:[[shaderSystem shaderForParam:material] vaoVbo:_vertex ibo:_index] material:material];
-    if(shadow && egPlatform().shadows) return [EGRouteVertexArray routeVertexArrayWithStandard:std shadow:[EGMaterialVertexArray materialVertexArrayWithVao:[[shaderSystem shaderForParam:material renderTarget:EGShadowRenderTarget.aDefault] vaoVbo:_vertex ibo:_index] material:material]];
+    EGMaterialVertexArray* std = [EGMaterialVertexArray materialVertexArrayWithVao:[[shaderSystem shaderForParam:material] vaoVbo:_vertex ibo:((id<EGIndexBuffer>)(_index))] material:material];
+    if(shadow && egPlatform().shadows) return [EGRouteVertexArray routeVertexArrayWithStandard:std shadow:[EGMaterialVertexArray materialVertexArrayWithVao:[[shaderSystem shaderForParam:material renderTarget:EGShadowRenderTarget.aDefault] vaoVbo:_vertex ibo:((id<EGIndexBuffer>)(_index))] material:material]];
     else return std;
 }
 
