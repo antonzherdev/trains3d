@@ -64,7 +64,6 @@ class ArrayBuilder<T> extends Builder<T, Array<T>> {
 
     def append(item : T) {
         array.append(item)
-        self
     }
 
     def build : NSArray<T> = array

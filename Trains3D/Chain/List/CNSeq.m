@@ -29,7 +29,6 @@ static ODClassType* _CNArrayBuilder_type;
 
 - (void)appendItem:(id)item {
     [_array appendItem:item];
-    self;
 }
 
 - (NSArray*)build {

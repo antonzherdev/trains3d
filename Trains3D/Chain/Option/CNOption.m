@@ -74,6 +74,10 @@ static ODClassType* _CNOption_type;
     @throw @"Method for is abstract";
 }
 
+- (id<CNIterator>)iterator {
+    @throw @"Method iterator is abstract";
+}
+
 - (id)applyIndex:(NSUInteger)index {
     id<CNIterator> i = [self iterator];
     NSUInteger n = index;

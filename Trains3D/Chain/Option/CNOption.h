@@ -28,6 +28,7 @@
 - (BOOL)isEmpty;
 - (BOOL)isDefined;
 - (void)forEach:(void(^)(id))each;
+- (id<CNIterator>)iterator;
 + (ODClassType*)type;
 @end
 

@@ -9,7 +9,6 @@ class HashSetBuilder<T> extends Builder<T, HashSet<T>> {
 
     def append(item : T) {
         set.append(item)
-        self
     }
     def build : HashSet<T> = set
 }

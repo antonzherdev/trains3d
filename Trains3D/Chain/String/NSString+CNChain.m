@@ -90,6 +90,11 @@
     }];
 }
 
+- (id)optIndex:(NSUInteger)index1 {
+    if(index1 >= [self length]) return [CNOption none];
+    return [CNOption someValue:nums([self characterAtIndex:index1])];
+}
+
 - (id)randomItem {
     if([self isEmpty]) return [CNOption none];
     else return [CNSome someWithValue:[self applyIndex:oduIntRndMax([self count] - 1)]];

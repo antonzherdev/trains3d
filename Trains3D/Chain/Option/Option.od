@@ -15,6 +15,7 @@ class Option<V> extends Seq<V> {
     def isEmpty : bool
     def isDefined : bool
     def for(each : V -> void)
+    def iterator : Iterator<V>
 }
 
 class None<V> extends Option<V> {

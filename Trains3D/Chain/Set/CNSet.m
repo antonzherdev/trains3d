@@ -28,7 +28,6 @@ static ODClassType* _CNHashSetBuilder_type;
 
 - (void)appendItem:(id)item {
     [_set appendItem:item];
-    self;
 }
 
 - (NSSet*)build {
