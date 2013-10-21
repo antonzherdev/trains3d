@@ -116,8 +116,10 @@ static ODClassType* _TRLevelMenuView_type;
 
 - (BOOL)tapEvent:(EGEvent*)event {
     GEVec2 p = [event location];
-    if([_pauseSprite containsVec2:p]) if([[EGGlobal director] isPaused]) [[EGGlobal director] resume];
-    else [[EGGlobal director] pause];
+    if([_pauseSprite containsVec2:p]) {
+        if([[EGGlobal director] isPaused]) [[EGGlobal director] resume];
+        else [[EGGlobal director] pause];
+    }
     return NO;
 }
 

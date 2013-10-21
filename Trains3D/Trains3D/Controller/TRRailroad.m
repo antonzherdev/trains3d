@@ -692,7 +692,9 @@ static ODClassType* _TRRailroad_type;
         if(eqf(switchCheckCorrection.error, 0)) return correction;
         id scActiveRailOpt = [[((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(GEVec2i, p.tile), [p endConnector])])) rails] headOpt];
         if([scActiveRailOpt isEmpty]) return correction;
-        if(((TRRail*)([scActiveRailOpt get])).form != p.form) if(!(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.light point:correction.point]))) return [TRRailPointCorrection railPointCorrectionWithPoint:[switchCheckCorrection.point addX:-0.5] error:switchCheckCorrection.error];
+        if(((TRRail*)([scActiveRailOpt get])).form != p.form) {
+            if(!(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.light point:correction.point]))) return [TRRailPointCorrection railPointCorrectionWithPoint:[switchCheckCorrection.point addX:-0.5] error:switchCheckCorrection.error];
+        }
         return correction;
     }
     TRRailConnector* connector = [p endConnector];
@@ -703,7 +705,9 @@ static ODClassType* _TRRailroad_type;
         obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.aSwitch point:correction.point]);
         return correction;
     }
-    if(!([connectorDesc isGreen])) if(!(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.light point:correction.point]))) return correction;
+    if(!([connectorDesc isGreen])) {
+        if(!(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.light point:correction.point]))) return correction;
+    }
     GEVec2i nextTile = [connector nextTile:p.tile];
     TRRailConnector* otherSideConnector = [connector otherSideConnector];
     id nextRail = [self activeRailForTile:nextTile connector:otherSideConnector];

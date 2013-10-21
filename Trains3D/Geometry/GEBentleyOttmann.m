@@ -620,15 +620,17 @@ static ODClassType* _GESweepLine_type;
     CGFloat ay = [a yForX:((CGFloat)(_currentEventPoint.x))];
     CGFloat by = [b yForX:((CGFloat)(_currentEventPoint.x))];
     NSInteger c = floatCompareTo(ay, by);
-    if(c == 0) if([a isVertical]) {
-        c = -1;
-    } else {
-        if([b isVertical]) {
-            c = 1;
+    if(c == 0) {
+        if([a isVertical]) {
+            c = -1;
         } else {
-            c = floatCompareTo([a slope], [b slope]);
-            if(ay > _currentEventPoint.y) c = -c;
-            if(c == 0) c = float4CompareTo(a.point.x, b.point.x);
+            if([b isVertical]) {
+                c = 1;
+            } else {
+                c = floatCompareTo([a slope], [b slope]);
+                if(ay > _currentEventPoint.y) c = -c;
+                if(c == 0) c = float4CompareTo(a.point.x, b.point.x);
+            }
         }
     }
     return c;
