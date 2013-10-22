@@ -83,7 +83,7 @@ static ODClassType* _TR3D_type;
 
     _expressEngine = egJasModel(ExpressEngine);
     _expressEngineBlack = egJasModel(ExpressEngineBlack);
-    _expressEngineShadow = egJasModel(EngineShadow);
+    _expressEngineShadow = egJasModel(ExpressEngine);
 }
 
 - (ODType*)type {
