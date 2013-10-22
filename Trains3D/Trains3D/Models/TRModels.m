@@ -8,7 +8,9 @@
 #import "TR3DCity.h"
 #import "TR3DCar.h"
 #import "TR3DEngine.h"
+#import "TR3DExpressEngine.h"
 #import "TR3DDamage.h"
+
 
 
 @implementation TRModels
@@ -31,7 +33,12 @@ static EGMesh *_carShadow = nil;
 static EGMesh *_damage = nil;
 static EGMesh *_lightGreenGlow = nil;
 static EGMesh *_lightRedGlow = nil;
-
+static EGMesh *_expressCar = nil;
+static EGMesh *_expressCarBlack = nil;
+static EGMesh *_expressCarShadow = nil;
+static EGMesh *_expressEngine = nil;
+static EGMesh *_expressEngineBlack = nil;
+static EGMesh *_expressEngineShadow = nil;
 
 static ODClassType* _TR3D_type;
 
@@ -41,7 +48,7 @@ static ODClassType* _TR3D_type;
 
 - (id)init {
     self = [super init];
-    
+
     return self;
 }
 
@@ -60,13 +67,23 @@ static ODClassType* _TR3D_type;
     _lightGreenGlow = egJasModel(LightGreenGlow);
     _lightRedGlow = egJasModel(LightRedGlow);
     _city = egJasModel(City);
-    _engineBlack = egJasModel(EngineBlack);
+    _damage = egJasModel(Damage);
+
     _engine = egJasModel(Engine);
+    _engineBlack = egJasModel(EngineBlack);
     _engineShadow = egJasModel(EngineShadow);
+
+    _car = egJasModel(Car);
     _carBlack = egJasModel(CarBlack);
     _carShadow = egJasModel(CarShadow);
-    _car = egJasModel(Car);
-    _damage = egJasModel(Damage);
+
+    _expressCar = egJasModel(Car);
+    _expressCarBlack = egJasModel(CarBlack);
+    _expressCarShadow = egJasModel(CarShadow);
+
+    _expressEngine = egJasModel(ExpressEngine);
+    _expressEngineBlack = egJasModel(ExpressEngineBlack);
+    _expressEngineShadow = egJasModel(EngineShadow);
 }
 
 - (ODType*)type {
@@ -174,6 +191,31 @@ static ODClassType* _TR3D_type;
 + (EGMesh *)engineShadow {
     return _engineShadow;
 }
+
++ (EGMesh *)expressCar {
+    return _expressCar;
+}
+
++ (EGMesh *)expressCarBlack {
+    return _expressCarBlack;
+}
+
++ (EGMesh *)expressCarShadow {
+    return _expressCarShadow;
+}
+
++ (EGMesh *)expressEngine {
+    return _expressEngine;
+}
+
++ (EGMesh *)expressEngineBlack {
+    return _expressEngineBlack;
+}
+
++ (EGMesh *)expressEngineShadow {
+    return _expressEngineShadow;
+}
+
 @end
 
 

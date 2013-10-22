@@ -21,18 +21,26 @@
 + (ODType*)type;
 
 + (EGMesh *)city;
-+ (EGMesh *)car;
-+ (EGMesh *)carBlack;
-+ (EGMesh *)engine;
-+ (EGMesh *)engineBlack;
 + (EGMesh *)damage;
-
 + (EGMesh *)light;
 + (EGMesh *)lightGreenGlow;
 + (EGMesh *)lightRedGlow;
 
++ (EGMesh *)car;
++ (EGMesh *)carBlack;
 + (EGMesh *)carShadow;
+
++ (EGMesh *)engine;
++ (EGMesh *)engineBlack;
 + (EGMesh *)engineShadow;
+
++ (EGMesh *)expressCar;
++ (EGMesh *)expressCarBlack;
++ (EGMesh *)expressCarShadow;
+
++ (EGMesh *)expressEngine;
++ (EGMesh *)expressEngineBlack;
++ (EGMesh *)expressEngineShadow;
 @end
 
 

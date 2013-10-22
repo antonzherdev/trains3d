@@ -26,5 +26,13 @@ stub class Models {
     static val engineShadow : Mesh = nil
     static val engineBlack : Mesh = nil
 
+    static val expressEngine : Mesh = nil
+    static val expressEngineShadow : Mesh = nil
+    static val expressEngineBlack : Mesh = nil
+
+    static val expressCar : Mesh = nil
+    static val expressCarShadow : Mesh = nil
+    static val expressCarBlack : Mesh = nil
+
     static val damage : Mesh = nil
 }

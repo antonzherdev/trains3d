@@ -80,7 +80,9 @@ static ODClassType* _TREngineType_type;
     id<EGCollisionShape> _rigidShape;
 }
 static TRCarType* _TRCarType_car;
+static TRCarType* _TRCarType_expressCar;
 static TRCarType* _TRCarType_engine;
+static TRCarType* _TRCarType_expressEngine;
 static NSArray* _TRCarType_values;
 @synthesize width = _width;
 @synthesize height = _height;
@@ -126,8 +128,10 @@ static NSArray* _TRCarType_values;
 + (void)initialize {
     [super initialize];
     _TRCarType_car = [TRCarType carTypeWithOrdinal:0 name:@"car" width:0.18 height:0.3 weight:1.0 startToFront:0.05 frontToWheel:0.08 betweenWheels:0.44 wheelToBack:0.08 backToEnd:0.05 engineType:[CNOption none]];
-    _TRCarType_engine = [TRCarType carTypeWithOrdinal:1 name:@"engine" width:0.2 height:0.3 weight:2.0 startToFront:0.05 frontToWheel:0.14 betweenWheels:0.32 wheelToBack:0.22 backToEnd:0.05 engineType:[CNOption applyValue:[TREngineType engineTypeWithTubePos:GEVec3Make(-0.10, 0.0, 0.5)]]];
-    _TRCarType_values = (@[_TRCarType_car, _TRCarType_engine]);
+    _TRCarType_expressCar = [TRCarType carTypeWithOrdinal:1 name:@"expressCar" width:0.18 height:0.3 weight:1.0 startToFront:0.05 frontToWheel:0.08 betweenWheels:0.44 wheelToBack:0.08 backToEnd:0.05 engineType:[CNOption none]];
+    _TRCarType_engine = [TRCarType carTypeWithOrdinal:2 name:@"engine" width:0.2 height:0.3 weight:2.0 startToFront:0.05 frontToWheel:0.14 betweenWheels:0.32 wheelToBack:0.22 backToEnd:0.05 engineType:[CNOption applyValue:[TREngineType engineTypeWithTubePos:GEVec3Make(-0.10, 0.0, 0.5)]]];
+    _TRCarType_expressEngine = [TRCarType carTypeWithOrdinal:3 name:@"expressEngine" width:0.2 height:0.3 weight:2.0 startToFront:0.05 frontToWheel:0.14 betweenWheels:0.32 wheelToBack:0.22 backToEnd:0.05 engineType:[CNOption applyValue:[TREngineType engineTypeWithTubePos:GEVec3Make(-0.10, 0.0, 0.5)]]];
+    _TRCarType_values = (@[_TRCarType_car, _TRCarType_expressCar, _TRCarType_engine, _TRCarType_expressEngine]);
 }
 
 - (BOOL)isEngine {
@@ -138,8 +142,16 @@ static NSArray* _TRCarType_values;
     return _TRCarType_car;
 }
 
++ (TRCarType*)expressCar {
+    return _TRCarType_expressCar;
+}
+
 + (TRCarType*)engine {
     return _TRCarType_engine;
+}
+
++ (TRCarType*)expressEngine {
+    return _TRCarType_expressEngine;
 }
 
 + (NSArray*)values {

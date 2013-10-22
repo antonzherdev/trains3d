@@ -1,14 +1,9 @@
 package com.antonzherdev.trains
 
 
-import core.math._
-import com.antonzherdev.eg._
+import com.antonzherdev.trains.Models._
 
 class TrainView(level : Level) {
-    val blackMaterial = StandardMaterial(vec4(0, 0, 0, 1))
-
-    def trainMaterialFor(diffuse : ColorSource) = StandardMaterial(diffuse, vec4(0.1, 0.1, 0.1, 1), 0.1)
-
     def draw {
         egPushGroupMarker("Trains")
         draw(trains = level.trains)
@@ -56,39 +51,22 @@ class TrainView(level : Level) {
     }
 
     private def doDraw(car : Car, color : vec4) {
-        if(car.carType == CarType.car) {
-            drawCar(color)
-        } else {
-            drawEngine(color)
+        val tp = car.carType
+        if(tp == CarType.car) {
+            carModel.draw(color)
+        } else if(tp == CarType.engine){
+            engineModel.draw(color)
+        } else if(tp == CarType.expressEngine){
+            expressEngineModel.draw(color)
+        } else if(tp == CarType.expressCar){
+            expressCarModel.draw(color)
         }
     }
 
-    private val carTexture = textureFor("Car.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
-    private val defMat = trainMaterialFor(vec4(1, 1, 1, 1))
-    private val defMatTex = trainMaterialFor(ColorSource(vec4(1, 1, 1, 1), carTexture))
-    private val vaoCar = Models.car.vao(defMatTex, shadow = false)
-    private val vaoCarBlack = Models.carBlack.vao(blackMaterial, shadow = false)
-    private val vaoCarShadow = Models.carShadow.vaoShadow(ColorSource(vec4(1, 1, 1, 1)))
-    private def drawCar(color : vec4) {
-        if(context.renderTarget.isShadow) {
-            vaoCarShadow.draw
-        } else {
-            vaoCar.draw(trainMaterialFor(ColorSource(color, carTexture)))
-            vaoCarBlack.draw
-        }
-    }
-
-    private val vaoEngine = Models.engine.vao(defMat, shadow = false)
-    private val vaoEngineBlack = Models.engineBlack.vao(blackMaterial, shadow = false)
-    private val vaoEngineShadow = Models.engineShadow.vaoShadow(ColorSource(vec4(1, 1, 1, 1)))
-    private def drawEngine(color : vec4) {
-        if(context.renderTarget.isShadow) {
-            vaoEngineShadow.draw
-        } else {
-            vaoEngine.draw(trainMaterialFor(color))
-            vaoEngineBlack.draw
-        }
-    }
+    private val engineModel = CarModel(engine, engineBlack, engineShadow)
+    private val carModel = CarModel(car, carBlack, carShadow, textureFor("Car.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST))
+    private val expressEngineModel = CarModel(expressEngine, expressEngineBlack, expressEngineShadow)
+    private val expressCarModel = CarModel(expressCar, expressCarBlack, expressCarShadow, textureFor("Car.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST))
 
     def draw(dyingTrains : [Train]) {
         if(dyingTrains.isEmpty) return nil
@@ -113,5 +91,32 @@ class TrainView(level : Level) {
 
     def updateWith(delta : float, train : Train) {
         train.viewData.cast<SmokeView>.system.updateWith(delta)
+    }
+}
+
+class CarModel(colorVao : VertexArray<StandardMaterial>, blackVao : VertexArray<StandardMaterial>,
+    shadowVao : VertexArray<ColorSource>, texture : Texture?)
+{
+    static def trainMaterialFor(diffuse : ColorSource) = StandardMaterial(diffuse, vec4(0.1, 0.1, 0.1, 1), 0.1)
+
+    static val blackMaterial = StandardMaterial(vec4(0, 0, 0, 1))
+    static def apply(colorMesh : Mesh, blackMesh : Mesh, shadowMesh : Mesh) = CarModel(colorMesh, blackMesh, shadowMesh, nil)
+    static def apply(colorMesh : Mesh, blackMesh : Mesh, shadowMesh : Mesh, texture : Texture?) = {
+        val defMat = if(texture.isDefined) trainMaterialFor(texture.get) else trainMaterialFor(vec4(1, 1, 1, 1))
+        CarModel(
+            colorVao = colorMesh.vao(defMat, shadow = false),
+            blackVao = blackMesh.vao(blackMaterial, shadow = false),
+            shadowVao = shadowMesh.vaoShadow(ColorSource(vec4(1, 1, 1, 1))),
+            texture = texture
+            )
+    }
+
+    def draw(color : vec4) {
+        if(context.renderTarget.isShadow) {
+            shadowVao.draw
+        } else {
+            colorVao.draw(trainMaterialFor(ColorSource(color, texture, -1)))
+            blackVao.draw
+        }
     }
 }

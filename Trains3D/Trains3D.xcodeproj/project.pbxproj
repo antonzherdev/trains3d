@@ -1195,6 +1195,7 @@
 		6F3DF101BC1716FA186ECF1D /* btRigidBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btRigidBody.h; sourceTree = "<group>"; };
 		6F3DF1085CD447541E1E60C5 /* DamageTest.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = DamageTest.od; sourceTree = "<group>"; };
 		6F3DF10D827ADBFA6F19C305 /* GEFigureTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GEFigureTest.m; sourceTree = "<group>"; };
+		6F3DF10F1F50A5F93239771C /* TR3DExpressEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TR3DExpressEngine.h; sourceTree = "<group>"; };
 		6F3DF110A21484E46A71C23D /* optimum_pow.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = optimum_pow.inl; sourceTree = "<group>"; };
 		6F3DF1152F85EFC97E82B045 /* swizzle.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = swizzle.inl; sourceTree = "<group>"; };
 		6F3DF115C7C752A31A29E46A /* btSliderConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btSliderConstraint.h; sourceTree = "<group>"; };
@@ -1630,6 +1631,7 @@
 		6F3DF7197DB69706355A0E86 /* NSDictionary+CNChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+CNChain.h"; sourceTree = "<group>"; };
 		6F3DF71A717A6FD3CAA174BA /* CNSourceLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSourceLink.m; sourceTree = "<group>"; };
 		6F3DF721A18AFFB8E7A58EDA /* func_noise.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = func_noise.inl; sourceTree = "<group>"; };
+		6F3DF722E99721093AA438A1 /* TR3DExpressEngine.jas */ = {isa = PBXFileReference; lastKnownFileType = file.jas; path = TR3DExpressEngine.jas; sourceTree = "<group>"; };
 		6F3DF7240AFD538664F8CA65 /* type_int.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_int.hpp; sourceTree = "<group>"; };
 		6F3DF72F4479FF6518E7C2E7 /* btContactConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btContactConstraint.h; sourceTree = "<group>"; };
 		6F3DF7307148D307121BB8E3 /* btGjkPairDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btGjkPairDetector.cpp; sourceTree = "<group>"; };
@@ -3469,6 +3471,8 @@
 				6F3DFABCF7502FE5A61A37D2 /* Light.png */,
 				6F3DF7D3C6CD185286ABD313 /* City.png */,
 				6F3DF0229D6651F5977E1E7E /* Car.png */,
+				6F3DF10F1F50A5F93239771C /* TR3DExpressEngine.h */,
+				6F3DF722E99721093AA438A1 /* TR3DExpressEngine.jas */,
 			);
 			path = Models;
 			sourceTree = "<group>";
