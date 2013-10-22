@@ -313,6 +313,7 @@
 		6F3DF4B2BAAA46A9B29C956C /* euler_angles.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF7F851ED17F4778869CA /* euler_angles.inl */; };
 		6F3DF4B551C7C698FB1B59EB /* type_vec2.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF8AF3BD2C47C6BA0B07A /* type_vec2.inl */; };
 		6F3DF4BB2C71E7FDCAF818EA /* LightGlow.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFFAC2A07756845F41EED /* LightGlow.png */; };
+		6F3DF4BC9977BB11D17AA9C9 /* ExpressCar.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF3118A848E2296A0E2CC /* ExpressCar.png */; };
 		6F3DF4BD21EDDAE8157BE9EA /* CNCombinationsLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF829B182E3C723009787 /* CNCombinationsLink.m */; };
 		6F3DF4C0B41F1329D6044534 /* btAxisSweep3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC2349E253F04434E70A /* btAxisSweep3.cpp */; };
 		6F3DF4C273C9EE545C8B795D /* TRModels.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0684569A583737D2655 /* TRModels.m */; };
@@ -1053,6 +1054,7 @@
 		6F3DFF6D1F99511DC1448955 /* Light.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFABCF7502FE5A61A37D2 /* Light.png */; };
 		6F3DFF7D723ADE473F6914A8 /* CNLazy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBC4F2017FB62101E7DF /* CNLazy.m */; };
 		6F3DFF82E444549B58C5B7BE /* btStaticPlaneShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA0904ED6E27D4A1D647 /* btStaticPlaneShape.cpp */; };
+		6F3DFF83223B16A6A51BC061 /* ExpressCar.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF3118A848E2296A0E2CC /* ExpressCar.png */; };
 		6F3DFF861A5265A644C637ED /* EGParticleSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF5D4862C372F8FC524C6 /* EGParticleSystem.m */; };
 		6F3DFF87597D388D650A4C7F /* btTriangleMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF6406630E8B426885C7 /* btTriangleMesh.cpp */; };
 		6F3DFF87935052FA636BE7ED /* NSString+CNChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF982E7E46ACE02CB5845 /* NSString+CNChain.m */; };
@@ -1348,6 +1350,7 @@
 		6F3DF30A9CDF2DA6B3333EFD /* TRTreeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRTreeView.m; sourceTree = "<group>"; };
 		6F3DF30B21E47EA7EBD756D2 /* btConvexShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btConvexShape.h; sourceTree = "<group>"; };
 		6F3DF30FA7765A023554777E /* multiple.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = multiple.hpp; sourceTree = "<group>"; };
+		6F3DF3118A848E2296A0E2CC /* ExpressCar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ExpressCar.png; sourceTree = "<group>"; };
 		6F3DF3119E53C09ABD7F2044 /* btActivatingCollisionAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btActivatingCollisionAlgorithm.cpp; sourceTree = "<group>"; };
 		6F3DF311B4464E96DACF2021 /* KWCaptureSpy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWCaptureSpy.m; sourceTree = "<group>"; };
 		6F3DF316F0EF5CABB081661E /* btGhostObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btGhostObject.h; sourceTree = "<group>"; };
@@ -3477,6 +3480,7 @@
 				6F3DF722E99721093AA438A1 /* TR3DExpressEngine.jas */,
 				6F3DFBE8DBB249289ADB3346 /* TR3DExpressCar.h */,
 				6F3DF6EF8E3D2BE5B1C2CC69 /* TR3DExpressCar.jas */,
+				6F3DF3118A848E2296A0E2CC /* ExpressCar.png */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -4443,6 +4447,7 @@
 				6F3DF3ABAB30C4BFFC1C7D60 /* Car.png in Resources */,
 				6F3DF8108FC24BC7CDBB56C1 /* Choo.wav in Resources */,
 				6F3DF3174A66FA247AA3E5BE /* TrainSound.od in Resources */,
+				6F3DFF83223B16A6A51BC061 /* ExpressCar.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4551,6 +4556,7 @@
 				6F3DF0F611F6D0D9676553CF /* Car.png in Resources */,
 				6F3DF64F67CEB1D01F6CB912 /* Choo.wav in Resources */,
 				6F3DF9CF3B7DE2A3121384F4 /* TrainSound.od in Resources */,
+				6F3DF4BC9977BB11D17AA9C9 /* ExpressCar.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
