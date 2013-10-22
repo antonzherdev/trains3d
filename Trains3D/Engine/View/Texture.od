@@ -1,7 +1,7 @@
 package com.antonzherdev.eg
 
 class Texture {
-    def id : GLuint
+    def id : uint4
     def size : vec2
     def scale : float = 1.0
     def scaledSize : vec2 = size/scale
@@ -24,11 +24,11 @@ class Texture {
 }
 
 class EmptyTexture(size : vec2) extends Texture {
-    val id : GLuint = egGenTexture
+    val id : uint4 = egGenTexture
 }
 
 class FileTexture(file : string, scale : float, magFilter : uint4, minFilter : uint4) extends Texture {
-    val id : GLuint = egGenTexture
+    val id : uint4 = egGenTexture
     private var _size : vec2
 
     def init {
@@ -40,7 +40,7 @@ class FileTexture(file : string, scale : float, magFilter : uint4, minFilter : u
 
 class TextureRegion(texture : Texture, uv : Rect) extends Texture {
     static def apply(texture : Texture) : TextureRegion = TextureRegion(texture, Rect(0, 0, 1, 1))
-    val id : GLuint = texture.id
+    val id : uint4 = texture.id
     val size : vec2 = texture.size * uv.size
     def scale : float = texture.scale
     def deleteTexture {}

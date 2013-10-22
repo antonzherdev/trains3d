@@ -14,6 +14,7 @@
 @class GEMat4;
 @class EGEnablingState;
 @class EGTexture;
+@class EGBlendMode;
 
 @class EGFont;
 @class EGFontShaderParam;

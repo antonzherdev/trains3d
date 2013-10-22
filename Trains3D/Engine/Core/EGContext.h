@@ -1,6 +1,5 @@
 #import "objd.h"
 #import "GEVec.h"
-#import "GL.h"
 @class EGDirector;
 @class EGTexture;
 @class EGFont;
@@ -44,7 +43,7 @@
 @property (nonatomic, readonly) EGMatrixStack* matrixStack;
 @property (nonatomic, retain) EGRenderTarget* renderTarget;
 @property (nonatomic) BOOL considerShadows;
-@property (nonatomic) GLuint defaultVertexArray;
+@property (nonatomic) unsigned int defaultVertexArray;
 @property (nonatomic, readonly) EGEnablingState* cullFace;
 @property (nonatomic, readonly) EGEnablingState* blend;
 @property (nonatomic, readonly) EGEnablingState* depthTest;
@@ -66,8 +65,8 @@
 - (void)bindShaderProgramProgram:(EGShaderProgram*)program;
 - (void)bindVertexBufferBuffer:(id<EGVertexBuffer>)buffer;
 - (unsigned int)vertexBufferCount;
-- (void)bindIndexBufferHandle:(GLuint)handle;
-- (void)bindVertexArrayHandle:(GLuint)handle vertexCount:(unsigned int)vertexCount mutable:(BOOL)mutable;
+- (void)bindIndexBufferHandle:(unsigned int)handle;
+- (void)bindVertexArrayHandle:(unsigned int)handle vertexCount:(unsigned int)vertexCount mutable:(BOOL)mutable;
 - (void)bindDefaultVertexArray;
 - (void)checkBindDefaultVertexArray;
 - (void)draw;

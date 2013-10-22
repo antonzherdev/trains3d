@@ -1,5 +1,4 @@
 #import "objd.h"
-#import "GL.h"
 #import "GEVec.h"
 @class EGGlobal;
 @class EGContext;
@@ -12,6 +11,7 @@
 @class GEMat4;
 @class EGRenderTarget;
 @class EGVertexArray;
+@class EGBlendMode;
 
 @class EGShaderProgram;
 @class EGShader;
@@ -27,15 +27,15 @@
 
 @interface EGShaderProgram : NSObject
 @property (nonatomic, readonly) NSString* name;
-@property (nonatomic, readonly) GLuint handle;
+@property (nonatomic, readonly) unsigned int handle;
 
-+ (id)shaderProgramWithName:(NSString*)name handle:(GLuint)handle;
-- (id)initWithName:(NSString*)name handle:(GLuint)handle;
++ (id)shaderProgramWithName:(NSString*)name handle:(unsigned int)handle;
+- (id)initWithName:(NSString*)name handle:(unsigned int)handle;
 - (ODClassType*)type;
 + (EGShaderProgram*)loadFromFilesName:(NSString*)name vertex:(NSString*)vertex fragment:(NSString*)fragment;
 + (EGShaderProgram*)applyName:(NSString*)name vertex:(NSString*)vertex fragment:(NSString*)fragment;
-+ (EGShaderProgram*)linkFromShadersName:(NSString*)name vertex:(GLuint)vertex fragment:(GLuint)fragment;
-+ (GLuint)compileShaderForShaderType:(unsigned int)shaderType source:(NSString*)source;
++ (EGShaderProgram*)linkFromShadersName:(NSString*)name vertex:(unsigned int)vertex fragment:(unsigned int)fragment;
++ (unsigned int)compileShaderForShaderType:(unsigned int)shaderType source:(NSString*)source;
 - (void)_init;
 - (void)dealoc;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
@@ -61,6 +61,12 @@
 - (EGShaderUniformVec2*)uniformVec2Name:(NSString*)name;
 - (EGShaderUniformF4*)uniformF4Name:(NSString*)name;
 - (EGShaderUniformI4*)uniformI4Name:(NSString*)name;
+- (id)uniformMat4OptName:(NSString*)name;
+- (id)uniformVec4OptName:(NSString*)name;
+- (id)uniformVec3OptName:(NSString*)name;
+- (id)uniformVec2OptName:(NSString*)name;
+- (id)uniformF4OptName:(NSString*)name;
+- (id)uniformI4OptName:(NSString*)name;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
 - (EGSimpleVertexArray*)vaoVbo:(id<EGVertexBuffer>)vbo ibo:(id<EGIndexBuffer>)ibo;
 + (ODClassType*)type;
@@ -68,10 +74,10 @@
 
 
 @interface EGShaderAttribute : NSObject
-@property (nonatomic, readonly) GLuint handle;
+@property (nonatomic, readonly) unsigned int handle;
 
-+ (id)shaderAttributeWithHandle:(GLuint)handle;
-- (id)initWithHandle:(GLuint)handle;
++ (id)shaderAttributeWithHandle:(unsigned int)handle;
+- (id)initWithHandle:(unsigned int)handle;
 - (ODClassType*)type;
 - (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(unsigned int)valuesType shift:(NSUInteger)shift;
 + (ODClassType*)type;
@@ -79,10 +85,10 @@
 
 
 @interface EGShaderUniformMat4 : NSObject
-@property (nonatomic, readonly) GLuint handle;
+@property (nonatomic, readonly) unsigned int handle;
 
-+ (id)shaderUniformMat4WithHandle:(GLuint)handle;
-- (id)initWithHandle:(GLuint)handle;
++ (id)shaderUniformMat4WithHandle:(unsigned int)handle;
+- (id)initWithHandle:(unsigned int)handle;
 - (ODClassType*)type;
 - (void)applyMatrix:(GEMat4*)matrix;
 + (ODClassType*)type;
@@ -90,10 +96,10 @@
 
 
 @interface EGShaderUniformVec4 : NSObject
-@property (nonatomic, readonly) GLuint handle;
+@property (nonatomic, readonly) unsigned int handle;
 
-+ (id)shaderUniformVec4WithHandle:(GLuint)handle;
-- (id)initWithHandle:(GLuint)handle;
++ (id)shaderUniformVec4WithHandle:(unsigned int)handle;
+- (id)initWithHandle:(unsigned int)handle;
 - (ODClassType*)type;
 - (void)applyVec4:(GEVec4)vec4;
 + (ODClassType*)type;
@@ -101,10 +107,10 @@
 
 
 @interface EGShaderUniformVec3 : NSObject
-@property (nonatomic, readonly) GLuint handle;
+@property (nonatomic, readonly) unsigned int handle;
 
-+ (id)shaderUniformVec3WithHandle:(GLuint)handle;
-- (id)initWithHandle:(GLuint)handle;
++ (id)shaderUniformVec3WithHandle:(unsigned int)handle;
+- (id)initWithHandle:(unsigned int)handle;
 - (ODClassType*)type;
 - (void)applyVec3:(GEVec3)vec3;
 + (ODClassType*)type;
@@ -112,10 +118,10 @@
 
 
 @interface EGShaderUniformVec2 : NSObject
-@property (nonatomic, readonly) GLuint handle;
+@property (nonatomic, readonly) unsigned int handle;
 
-+ (id)shaderUniformVec2WithHandle:(GLuint)handle;
-- (id)initWithHandle:(GLuint)handle;
++ (id)shaderUniformVec2WithHandle:(unsigned int)handle;
+- (id)initWithHandle:(unsigned int)handle;
 - (ODClassType*)type;
 - (void)applyVec2:(GEVec2)vec2;
 + (ODClassType*)type;
@@ -123,10 +129,10 @@
 
 
 @interface EGShaderUniformF4 : NSObject
-@property (nonatomic, readonly) GLuint handle;
+@property (nonatomic, readonly) unsigned int handle;
 
-+ (id)shaderUniformF4WithHandle:(GLuint)handle;
-- (id)initWithHandle:(GLuint)handle;
++ (id)shaderUniformF4WithHandle:(unsigned int)handle;
+- (id)initWithHandle:(unsigned int)handle;
 - (ODClassType*)type;
 - (void)applyF4:(float)f4;
 + (ODClassType*)type;
@@ -134,10 +140,10 @@
 
 
 @interface EGShaderUniformI4 : NSObject
-@property (nonatomic, readonly) GLuint handle;
+@property (nonatomic, readonly) unsigned int handle;
 
-+ (id)shaderUniformI4WithHandle:(GLuint)handle;
-- (id)initWithHandle:(GLuint)handle;
++ (id)shaderUniformI4WithHandle:(unsigned int)handle;
+- (id)initWithHandle:(unsigned int)handle;
 - (ODClassType*)type;
 - (void)applyI4:(int)i4;
 + (ODClassType*)type;
@@ -172,6 +178,7 @@
 - (NSString*)texture2D;
 - (NSString*)shadowExt;
 - (NSString*)shadow2D;
+- (NSString*)blendMode:(EGBlendMode*)mode a:(NSString*)a b:(NSString*)b;
 @end
 
 

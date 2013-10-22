@@ -16,11 +16,24 @@ class Material {
     static def apply(texture : Texture) : Material = StandardMaterial(diffuse = texture)
 }
 
-class ColorSource(color : vec4, texture : Texture?, alphaTestLevel : float4) extends Material {
-    static def apply(color : vec4, texture : Texture) : ColorSource = ColorSource(color, texture, -1)
-    static def apply(color : vec4) : ColorSource = ColorSource(color, nil, -1)
-    static def apply(texture : Texture) : ColorSource = ColorSource(vec4(1, 1, 1, 1), texture, -1)
+class ColorSource(color : vec4, texture : Texture?, blendMode : BlendMode, alphaTestLevel : float4) extends Material {
+    static def apply(color : vec4, texture : Texture) : ColorSource = ColorSource(color, texture, BlendMode.multiply, -1)
+    static def apply(color : vec4, texture : Texture, alphaTestLevel : float4) : ColorSource =
+        ColorSource(color, texture, BlendMode.multiply, alphaTestLevel)
+    static def apply(color : vec4, texture : Texture, blendMode : BlendMode) : ColorSource =
+        ColorSource(color, texture, blendMode, -1)
+    static def apply(color : vec4) : ColorSource = ColorSource(color, nil, BlendMode.first, -1)
+    static def apply(texture : Texture) : ColorSource = ColorSource(vec4(1, 1, 1, 1), texture, BlendMode.second, -1)
     def shaderSystem : ShaderSystem<self> = SimpleShaderSystem.instance
+}
+
+enum BlendMode(blend : (string, string) -> string) {
+    first((a, b) -> a)
+    second((a, b) -> b)
+    multiply((a, b) -> "$a * $b")
+    darken((a, b) -> "min($a, $b)")
+
+
 }
 
 class StandardMaterial(diffuse : ColorSource, specularColor : vec4, specularSize : float)  extends Material {

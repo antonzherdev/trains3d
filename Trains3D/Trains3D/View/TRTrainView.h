@@ -20,6 +20,7 @@
 @class EGVertexArray;
 @class EGColorSource;
 @class EGMesh;
+@class EGBlendMode;
 @class EGContext;
 @class EGRenderTarget;
 

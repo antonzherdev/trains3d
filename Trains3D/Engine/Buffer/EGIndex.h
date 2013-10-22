@@ -1,5 +1,4 @@
 #import "objd.h"
-#import "GL.h"
 #import "EGBuffer.h"
 @class EGGlobal;
 @class EGContext;
@@ -34,7 +33,7 @@
 
 
 @protocol EGIndexBuffer<EGIndexSource>
-- (GLuint)handle;
+- (unsigned int)handle;
 - (unsigned int)mode;
 - (NSUInteger)count;
 - (void)draw;
@@ -48,19 +47,19 @@
 @property (nonatomic, readonly) NSUInteger length;
 @property (nonatomic, readonly) NSUInteger count;
 
-+ (id)immutableIndexBufferWithHandle:(GLuint)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count;
-- (id)initWithHandle:(GLuint)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count;
++ (id)immutableIndexBufferWithHandle:(unsigned int)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count;
+- (id)initWithHandle:(unsigned int)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
 
 
 @interface EGMutableIndexBuffer : EGMutableBuffer<EGIndexBuffer>
-@property (nonatomic, readonly) GLuint handle;
+@property (nonatomic, readonly) unsigned int handle;
 @property (nonatomic, readonly) unsigned int mode;
 
-+ (id)mutableIndexBufferWithHandle:(GLuint)handle mode:(unsigned int)mode;
-- (id)initWithHandle:(GLuint)handle mode:(unsigned int)mode;
++ (id)mutableIndexBufferWithHandle:(unsigned int)handle mode:(unsigned int)mode;
+- (id)initWithHandle:(unsigned int)handle mode:(unsigned int)mode;
 - (ODClassType*)type;
 - (BOOL)isMutable;
 + (ODClassType*)type;

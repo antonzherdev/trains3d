@@ -7,6 +7,7 @@
 #import "EGMesh.h"
 #import "EGContext.h"
 #import "GEMat4.h"
+#import "EGMaterial.h"
 NSString* EGTextAlignmentDescription(EGTextAlignment self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<EGTextAlignment: "];
     [description appendFormat:@"x=%f", self.x];
@@ -455,6 +456,10 @@ static ODClassType* _EGFontShaderBuilder_type;
 - (NSString*)shadow2D {
     if([self version] == 100) return @"shadow2DEXT";
     else return @"texture";
+}
+
+- (NSString*)blendMode:(EGBlendMode*)mode a:(NSString*)a b:(NSString*)b {
+    return mode.blend(a, b);
 }
 
 - (ODClassType*)type {

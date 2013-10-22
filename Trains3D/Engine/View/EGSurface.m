@@ -1,7 +1,9 @@
 #import "EGSurface.h"
 
+#import "GL.h"
 #import "EGTexture.h"
 #import "EGContext.h"
+#import "EGMaterial.h"
 #import "EGVertex.h"
 #import "EGMesh.h"
 #import "EGIndex.h"
@@ -89,8 +91,8 @@ static ODClassType* _EGSurface_type;
 
 @implementation EGSimpleSurface{
     BOOL _depth;
-    GLuint _frameBuffer;
-    GLuint _depthRenderBuffer;
+    unsigned int _frameBuffer;
+    unsigned int _depthRenderBuffer;
     EGEmptyTexture* _texture;
 }
 static ODClassType* _EGSimpleSurface_type;
@@ -369,6 +371,10 @@ static ODClassType* _EGViewportShaderBuilder_type;
 - (NSString*)shadow2D {
     if([self version] == 100) return @"shadow2DEXT";
     else return @"texture";
+}
+
+- (NSString*)blendMode:(EGBlendMode*)mode a:(NSString*)a b:(NSString*)b {
+    return mode.blend(a, b);
 }
 
 - (ODClassType*)type {

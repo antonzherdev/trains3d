@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-class ShaderProgram(name : string, handle : GLuint) {
+class ShaderProgram(name : string, handle : uint4) {
     static def loadFromFiles(name : string, vertex : string, fragment : string) : ShaderProgram =
         ShaderProgram(name, Bundle.readToString(vertex), Bundle.readToString(fragment))
 
@@ -14,7 +14,7 @@ class ShaderProgram(name : string, handle : GLuint) {
     }
 
 
-    static def linkFromShaders(name : string, vertex : GLuint, fragment : GLuint) : ShaderProgram = {
+    static def linkFromShaders(name : string, vertex : uint4, fragment : uint4) : ShaderProgram = {
         val handle = glCreateProgram
         glAttachShader(handle, vertex)
         glAttachShader(handle, fragment)
@@ -23,7 +23,7 @@ class ShaderProgram(name : string, handle : GLuint) {
         ShaderProgram(name, handle)
     }
 
-    static def compileShaderFor(shaderType : uint4, source : string) : GLuint = {
+    static def compileShaderFor(shaderType : uint4, source : string) : uint4 = {
         val shader = glCreateShader(shaderType)
         egShaderSource(shader, source)
         glCompileShader(shader)
@@ -79,6 +79,11 @@ class Shader<P>(program : ShaderProgram) {
         if(h < 0) throw "Could not found attribute for name " + name
         h
     }
+    private def uniformOpt(name : string) : uint4? = {
+        val h = egGetUniformLocation(program.handle, name)
+        if(h < 0) nil
+        h
+    }
 
     def uniformMat4(name : string ) = ShaderUniformMat4(uniform(name))
     def uniformVec4(name : string ) = ShaderUniformVec4(uniform(name))
@@ -86,6 +91,13 @@ class Shader<P>(program : ShaderProgram) {
     def uniformVec2(name : string ) = ShaderUniformVec2(uniform(name))
     def uniformF4(name : string ) = ShaderUniformF4(uniform(name))
     def uniformI4(name : string ) = ShaderUniformI4(uniform(name))
+    def uniformMat4Opt(name : string) = uniformOpt(name).map(ShaderUniformMat4(_))
+    def uniformVec4Opt(name : string) = uniformOpt(name).map(ShaderUniformVec4(_))
+    def uniformVec3Opt(name : string) = uniformOpt(name).map(ShaderUniformVec3(_))
+    def uniformVec2Opt(name : string) = uniformOpt(name).map(ShaderUniformVec2(_))
+    def uniformF4Opt(name : string ) = uniformOpt(name).map(ShaderUniformF4(_))
+    def uniformI4Opt(name : string ) = uniformOpt(name).map(ShaderUniformI4(_))
+
     def attributeFor(name : string ) = program.attributeFor(name)
 
     def vao(vbo : VertexBuffer<_>, ibo : IndexBuffer) : SimpleVertexArray<P> = {
@@ -99,14 +111,14 @@ class Shader<P>(program : ShaderProgram) {
     }
 }
 
-class ShaderAttribute(handle : GLuint) {
+class ShaderAttribute(handle : uint4) {
     def setFromBufferWith(stride : uint, valuesCount : uint, valuesType : uint4, shift : uint) {
         glEnableVertexAttribArray(handle)
         egVertexAttribPointer(handle, valuesCount, valuesType, GL_FALSE, stride, shift)
     }
 }
 
-class ShaderUniformMat4(handle : GLuint) {
+class ShaderUniformMat4(handle : uint4) {
     private var _last = mat4.null
 
     def apply(matrix : mat4) {
@@ -117,7 +129,7 @@ class ShaderUniformMat4(handle : GLuint) {
     }
 }
 
-class ShaderUniformVec4(handle : GLuint) {
+class ShaderUniformVec4(handle : uint4) {
     private var _last = vec4(0, 0, 0, 0)
     def apply(vec4 : vec4) {
         if(vec4 != _last) {
@@ -127,7 +139,7 @@ class ShaderUniformVec4(handle : GLuint) {
     }
 }
 
-class ShaderUniformVec3(handle : GLuint) {
+class ShaderUniformVec3(handle : uint4) {
     private var _last = vec3(0, 0, 0)
     def apply(vec3 : vec3) {
         if(vec3 != _last) {
@@ -137,7 +149,7 @@ class ShaderUniformVec3(handle : GLuint) {
     }
 }
 
-class ShaderUniformVec2(handle : GLuint) {
+class ShaderUniformVec2(handle : uint4) {
     private var _last = vec2(0, 0)
     def apply(vec2 : vec2) {
         if(vec2 != _last) {
@@ -147,7 +159,7 @@ class ShaderUniformVec2(handle : GLuint) {
     }
 }
 
-class ShaderUniformF4(handle : GLuint) {
+class ShaderUniformF4(handle : uint4) {
     private var _last : float4 = 0
     def apply(f4 : float4) {
         if(f4 != _last) {
@@ -157,7 +169,7 @@ class ShaderUniformF4(handle : GLuint) {
     }
 }
 
-class ShaderUniformI4(handle : GLuint) {
+class ShaderUniformI4(handle : uint4) {
     private var _last : int4 = 0
     def apply(i4 : int4) {
         if(i4 != _last) {
@@ -210,4 +222,5 @@ trait ShaderTextBuilder {
 
     def shadowExt = if(version == 100) "#extension GL_EXT_shadow_samplers : require" else ""
     def shadow2D = if(version == 100) "shadow2DEXT" else "texture"
+    def blend(mode : BlendMode, a : string, b : string) = mode.blend(a, b)
 }

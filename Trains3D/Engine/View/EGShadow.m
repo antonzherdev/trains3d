@@ -1,13 +1,14 @@
 #import "EGShadow.h"
 
 #import "GEMat4.h"
+#import "GL.h"
 #import "EGTexture.h"
 #import "EGContext.h"
 #import "EGMesh.h"
 #import "EGMaterial.h"
 #import "EGVertex.h"
 @implementation EGShadowMap{
-    GLuint _frameBuffer;
+    unsigned int _frameBuffer;
     GEMat4* _biasDepthCp;
     EGTexture* _texture;
     CNLazy* __lazy_shader;
@@ -435,6 +436,10 @@ static ODClassType* _EGShadowShaderText_type;
     else return @"texture";
 }
 
+- (NSString*)blendMode:(EGBlendMode*)mode a:(NSString*)a b:(NSString*)b {
+    return mode.blend(a, b);
+}
+
 - (ODClassType*)type {
     return [EGShadowShaderText type];
 }
@@ -838,6 +843,10 @@ static ODClassType* _EGShadowDrawShaderKey_type;
 - (NSString*)shadow2D {
     if([self version] == 100) return @"shadow2DEXT";
     else return @"texture";
+}
+
+- (NSString*)blendMode:(EGBlendMode*)mode a:(NSString*)a b:(NSString*)b {
+    return mode.blend(a, b);
 }
 
 - (ODClassType*)type {

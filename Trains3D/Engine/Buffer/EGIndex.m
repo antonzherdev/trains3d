@@ -1,5 +1,6 @@
 #import "EGIndex.h"
 
+#import "GL.h"
 #import "EGContext.h"
 @implementation EGIBO
 static ODClassType* _EGIBO_type;
@@ -72,11 +73,11 @@ static ODClassType* _EGImmutableIndexBuffer_type;
 @synthesize length = _length;
 @synthesize count = _count;
 
-+ (id)immutableIndexBufferWithHandle:(GLuint)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count {
++ (id)immutableIndexBufferWithHandle:(unsigned int)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count {
     return [[EGImmutableIndexBuffer alloc] initWithHandle:handle mode:mode length:length count:count];
 }
 
-- (id)initWithHandle:(GLuint)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count {
+- (id)initWithHandle:(unsigned int)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count {
     self = [super initWithDataType:oduInt4Type() bufferType:GL_ELEMENT_ARRAY_BUFFER handle:handle];
     if(self) {
         _mode = mode;
@@ -128,12 +129,12 @@ static ODClassType* _EGImmutableIndexBuffer_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGImmutableIndexBuffer* o = ((EGImmutableIndexBuffer*)(other));
-    return GLuintEq(self.handle, o.handle) && self.mode == o.mode && self.length == o.length && self.count == o.count;
+    return self.handle == o.handle && self.mode == o.mode && self.length == o.length && self.count == o.count;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + GLuintHash(self.handle);
+    hash = hash * 31 + self.handle;
     hash = hash * 31 + self.mode;
     hash = hash * 31 + self.length;
     hash = hash * 31 + self.count;
@@ -142,7 +143,7 @@ static ODClassType* _EGImmutableIndexBuffer_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"handle=%@", GLuintDescription(self.handle)];
+    [description appendFormat:@"handle=%u", self.handle];
     [description appendFormat:@", mode=%u", self.mode];
     [description appendFormat:@", length=%lu", (unsigned long)self.length];
     [description appendFormat:@", count=%lu", (unsigned long)self.count];
@@ -154,18 +155,18 @@ static ODClassType* _EGImmutableIndexBuffer_type;
 
 
 @implementation EGMutableIndexBuffer{
-    GLuint _handle;
+    unsigned int _handle;
     unsigned int _mode;
 }
 static ODClassType* _EGMutableIndexBuffer_type;
 @synthesize handle = _handle;
 @synthesize mode = _mode;
 
-+ (id)mutableIndexBufferWithHandle:(GLuint)handle mode:(unsigned int)mode {
++ (id)mutableIndexBufferWithHandle:(unsigned int)handle mode:(unsigned int)mode {
     return [[EGMutableIndexBuffer alloc] initWithHandle:handle mode:mode];
 }
 
-- (id)initWithHandle:(GLuint)handle mode:(unsigned int)mode {
+- (id)initWithHandle:(unsigned int)handle mode:(unsigned int)mode {
     self = [super initWithDataType:oduInt4Type() bufferType:GL_ELEMENT_ARRAY_BUFFER handle:handle];
     if(self) {
         _handle = handle;
@@ -216,19 +217,19 @@ static ODClassType* _EGMutableIndexBuffer_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGMutableIndexBuffer* o = ((EGMutableIndexBuffer*)(other));
-    return GLuintEq(self.handle, o.handle) && self.mode == o.mode;
+    return self.handle == o.handle && self.mode == o.mode;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + GLuintHash(self.handle);
+    hash = hash * 31 + self.handle;
     hash = hash * 31 + self.mode;
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"handle=%@", GLuintDescription(self.handle)];
+    [description appendFormat:@"handle=%u", self.handle];
     [description appendFormat:@", mode=%u", self.mode];
     [description appendString:@">"];
     return description;

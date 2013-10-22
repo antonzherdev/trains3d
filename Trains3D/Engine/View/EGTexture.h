@@ -1,5 +1,4 @@
 #import "objd.h"
-#import "GL.h"
 #import "GEVec.h"
 
 @class EGTexture;
@@ -11,7 +10,7 @@
 + (id)texture;
 - (id)init;
 - (ODClassType*)type;
-- (GLuint)id;
+- (unsigned int)id;
 - (GEVec2)size;
 - (CGFloat)scale;
 - (GEVec2)scaledSize;
@@ -27,7 +26,7 @@
 
 @interface EGEmptyTexture : EGTexture
 @property (nonatomic, readonly) GEVec2 size;
-@property (nonatomic, readonly) GLuint id;
+@property (nonatomic, readonly) unsigned int id;
 
 + (id)emptyTextureWithSize:(GEVec2)size;
 - (id)initWithSize:(GEVec2)size;
@@ -41,7 +40,7 @@
 @property (nonatomic, readonly) CGFloat scale;
 @property (nonatomic, readonly) unsigned int magFilter;
 @property (nonatomic, readonly) unsigned int minFilter;
-@property (nonatomic, readonly) GLuint id;
+@property (nonatomic, readonly) unsigned int id;
 
 + (id)fileTextureWithFile:(NSString*)file scale:(CGFloat)scale magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
 - (id)initWithFile:(NSString*)file scale:(CGFloat)scale magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
@@ -55,7 +54,7 @@
 @interface EGTextureRegion : EGTexture
 @property (nonatomic, readonly) EGTexture* texture;
 @property (nonatomic, readonly) GERect uv;
-@property (nonatomic, readonly) GLuint id;
+@property (nonatomic, readonly) unsigned int id;
 @property (nonatomic, readonly) GEVec2 size;
 
 + (id)textureRegionWithTexture:(EGTexture*)texture uv:(GERect)uv;

@@ -1,7 +1,6 @@
 #import "objd.h"
 #import "GEVec.h"
 #import "EGMesh.h"
-#import "GL.h"
 #import "EGBuffer.h"
 @class EGGlobal;
 @class EGContext;
@@ -53,7 +52,7 @@
 - (EGVertexBufferDesc*)desc;
 - (void)bind;
 - (NSUInteger)count;
-- (GLuint)handle;
+- (unsigned int)handle;
 - (BOOL)isMutable;
 @end
 
@@ -63,8 +62,8 @@
 @property (nonatomic, readonly) NSUInteger length;
 @property (nonatomic, readonly) NSUInteger count;
 
-+ (id)immutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle length:(NSUInteger)length count:(NSUInteger)count;
-- (id)initWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle length:(NSUInteger)length count:(NSUInteger)count;
++ (id)immutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle length:(NSUInteger)length count:(NSUInteger)count;
+- (id)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle length:(NSUInteger)length count:(NSUInteger)count;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -72,10 +71,10 @@
 
 @interface EGMutableVertexBuffer : EGMutableBuffer<EGVertexBuffer>
 @property (nonatomic, readonly) EGVertexBufferDesc* desc;
-@property (nonatomic, readonly) GLuint handle;
+@property (nonatomic, readonly) unsigned int handle;
 
-+ (id)mutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle;
-- (id)initWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle;
++ (id)mutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle;
+- (id)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle;
 - (ODClassType*)type;
 - (BOOL)isMutable;
 + (ODClassType*)type;

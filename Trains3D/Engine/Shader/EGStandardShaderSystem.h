@@ -13,6 +13,7 @@
 @class EGPlatform;
 @class EGShadowShader;
 @class EGVertexBufferDesc;
+@class EGBlendMode;
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class EGTextureRegion;
@@ -53,12 +54,13 @@
 @property (nonatomic, readonly) NSUInteger directLightWithShadowsCount;
 @property (nonatomic, readonly) NSUInteger directLightWithoutShadowsCount;
 @property (nonatomic, readonly) BOOL texture;
+@property (nonatomic, readonly) EGBlendMode* blendMode;
 @property (nonatomic, readonly) BOOL region;
 @property (nonatomic, readonly) BOOL specular;
 @property (nonatomic, readonly) NSUInteger directLightCount;
 
-+ (id)standardShaderKeyWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture region:(BOOL)region specular:(BOOL)specular;
-- (id)initWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture region:(BOOL)region specular:(BOOL)specular;
++ (id)standardShaderKeyWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture blendMode:(EGBlendMode*)blendMode region:(BOOL)region specular:(BOOL)specular;
+- (id)initWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture blendMode:(EGBlendMode*)blendMode region:(BOOL)region specular:(BOOL)specular;
 - (ODClassType*)type;
 - (EGStandardShader*)shader;
 - (NSString*)lightsVertexUniform;
@@ -82,7 +84,7 @@
 @property (nonatomic, readonly) EGShaderUniformVec4* ambientColor;
 @property (nonatomic, readonly) id specularColor;
 @property (nonatomic, readonly) id specularSize;
-@property (nonatomic, readonly) EGShaderUniformVec4* diffuseColorUniform;
+@property (nonatomic, readonly) id diffuseColorUniform;
 @property (nonatomic, readonly) EGShaderUniformMat4* mwcpUniform;
 @property (nonatomic, readonly) id mwcUniform;
 @property (nonatomic, readonly) id<CNSeq> directLightDirections;

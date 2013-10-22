@@ -44,16 +44,16 @@ trait VertexBuffer<T> {
         context.bindVertexBuffer(self)
     }
     def count : uint
-    def handle : GLuint
+    def handle : uint4
     def isMutable = false
 }
 
-class ImmutableVertexBuffer<T>(desc : VertexBufferDesc<T>, handle : GLuint, length : uint, count : uint)
+class ImmutableVertexBuffer<T>(desc : VertexBufferDesc<T>, handle : uint4, length : uint, count : uint)
     extends Buffer<T>(desc.dataType, GL_ARRAY_BUFFER, handle)
     with VertexBuffer<T>
 
 
-class MutableVertexBuffer<T>(desc : VertexBufferDesc<T>, handle : GLuint)
+class MutableVertexBuffer<T>(desc : VertexBufferDesc<T>, handle : uint4)
     extends MutableBuffer<T>(desc.dataType, GL_ARRAY_BUFFER, handle)
     with VertexBuffer<T>
 {

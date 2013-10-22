@@ -20,7 +20,7 @@ class Surface(size : vec2i) {
 
 class SimpleSurface(size : vec2i, depth : bool) extends Surface(size) {
     val frameBuffer = egGenFrameBuffer
-    private val depthRenderBuffer : GLuint = if(depth) egGenRenderBuffer else 0
+    private val depthRenderBuffer : uint4 = if(depth) egGenRenderBuffer else 0
     val texture = {
         val t = EmptyTexture(size)
         glGetError

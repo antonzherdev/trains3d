@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-class Buffer<T>(dataType : PType<T>, bufferType : uint4, handle : GLuint) {
+class Buffer<T>(dataType : PType<T>, bufferType : uint4, handle : uint4) {
     def length : uint
     def count : uint
     static def apply<T>(dataType : PType<T>, bufferType : uint4) : Buffer = Buffer<T>(dataType, bufferType, egGenBuffer)
@@ -17,7 +17,7 @@ class Buffer<T>(dataType : PType<T>, bufferType : uint4, handle : GLuint) {
 }
 
 
-class MutableBuffer<T>(dataType : PType<T>, bufferType : uint4, handle : GLuint) extends Buffer<T>(dataType, bufferType, handle) {
+class MutableBuffer<T>(dataType : PType<T>, bufferType : uint4, handle : uint4) extends Buffer<T>(dataType, bufferType, handle) {
     private var _length : uint = 0
     private var _count : uint = 0
     def length : uint = _length

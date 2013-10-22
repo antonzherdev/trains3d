@@ -2,6 +2,7 @@
 
 #import "EGDirector.h"
 #import "EGTexture.h"
+#import "GL.h"
 #import "EGFont.h"
 #import "EGShader.h"
 #import "EGVertex.h"
@@ -94,14 +95,14 @@ static ODClassType* _EGGlobal_type;
     BOOL _considerShadows;
     CNList* __viewportStack;
     GERectI __viewport;
-    GLuint __lastTexture2D;
+    unsigned int __lastTexture2D;
     NSMutableDictionary* __lastTextures;
-    GLuint __lastShaderProgram;
-    GLuint __lastVertexBufferId;
+    unsigned int __lastShaderProgram;
+    unsigned int __lastVertexBufferId;
     unsigned int __lastVertexBufferCount;
-    GLuint __lastIndexBuffer;
-    GLuint __lastVertexArray;
-    GLuint _defaultVertexArray;
+    unsigned int __lastIndexBuffer;
+    unsigned int __lastVertexArray;
+    unsigned int _defaultVertexArray;
     BOOL __needBindDefaultVertexArray;
     EGEnablingState* _cullFace;
     EGEnablingState* _blend;
@@ -209,12 +210,12 @@ static ODClassType* _EGContext_type;
 }
 
 - (void)restoreDefaultFramebuffer {
-    glBindFramebuffer(GL_FRAMEBUFFER, _defaultFramebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, ((unsigned int)(_defaultFramebuffer)));
 }
 
 - (void)bindTextureTexture:(EGTexture*)texture {
-    GLuint id = [texture id];
-    if(!(GLuintEq(__lastTexture2D, id))) {
+    unsigned int id = [texture id];
+    if(__lastTexture2D != id) {
         __lastTexture2D = id;
         glBindTexture(GL_TEXTURE_2D, id);
     }
@@ -223,7 +224,7 @@ static ODClassType* _EGContext_type;
 - (void)bindTextureSlot:(unsigned int)slot target:(unsigned int)target texture:(EGTexture*)texture {
     unsigned int id = [texture id];
     if(slot == GL_TEXTURE0 && target == GL_TEXTURE_2D) {
-        if(!(GLuintEq(__lastTexture2D, id))) {
+        if(__lastTexture2D != id) {
             __lastTexture2D = id;
             glBindTexture(target, id);
         }
@@ -243,16 +244,16 @@ static ODClassType* _EGContext_type;
 }
 
 - (void)bindShaderProgramProgram:(EGShaderProgram*)program {
-    GLuint id = program.handle;
-    if(!(GLuintEq(id, __lastShaderProgram))) {
+    unsigned int id = program.handle;
+    if(id != __lastShaderProgram) {
         __lastShaderProgram = id;
         glUseProgram(id);
     }
 }
 
 - (void)bindVertexBufferBuffer:(id<EGVertexBuffer>)buffer {
-    GLuint handle = [buffer handle];
-    if(!(GLuintEq(handle, __lastVertexBufferId))) {
+    unsigned int handle = [buffer handle];
+    if(handle != __lastVertexBufferId) {
         [self checkBindDefaultVertexArray];
         __lastVertexBufferId = handle;
         __lastVertexBufferCount = ((unsigned int)([buffer count]));
@@ -264,16 +265,16 @@ static ODClassType* _EGContext_type;
     return __lastVertexBufferCount;
 }
 
-- (void)bindIndexBufferHandle:(GLuint)handle {
-    if(!(GLuintEq(handle, __lastIndexBuffer))) {
+- (void)bindIndexBufferHandle:(unsigned int)handle {
+    if(handle != __lastIndexBuffer) {
         [self checkBindDefaultVertexArray];
         __lastIndexBuffer = handle;
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle);
     }
 }
 
-- (void)bindVertexArrayHandle:(GLuint)handle vertexCount:(unsigned int)vertexCount mutable:(BOOL)mutable {
-    if(!(GLuintEq(handle, __lastVertexArray)) || mutable) {
+- (void)bindVertexArrayHandle:(unsigned int)handle vertexCount:(unsigned int)vertexCount mutable:(BOOL)mutable {
+    if(handle != __lastVertexArray || mutable) {
         __lastVertexArray = handle;
         __lastVertexBufferId = 0;
         __lastIndexBuffer = 0;

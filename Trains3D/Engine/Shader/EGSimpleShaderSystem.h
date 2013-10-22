@@ -3,6 +3,7 @@
 @class EGRenderTarget;
 @class EGShadowShaderSystem;
 @class EGColorSource;
+@class EGBlendMode;
 @class EGVertexBufferDesc;
 @class EGGlobal;
 @class EGMatrixStack;

@@ -27,7 +27,7 @@ object IBO {
 }
 
 trait IndexBuffer extends IndexSource {
-    def handle : GLuint
+    def handle : uint4
     def mode : uint4
     def count : uint
 
@@ -48,12 +48,12 @@ trait IndexBuffer extends IndexSource {
     }
 }
 
-class ImmutableIndexBuffer(handle : GLuint, mode : uint4, length : uint, count : uint)
+class ImmutableIndexBuffer(handle : uint4, mode : uint4, length : uint, count : uint)
     extends Buffer<uint4>(UInt4.type, GL_ELEMENT_ARRAY_BUFFER, handle)
     with IndexBuffer
 
 
-class MutableIndexBuffer(handle : GLuint, mode : uint4)
+class MutableIndexBuffer(handle : uint4, mode : uint4)
     extends MutableBuffer<uint4>(UInt4.type, GL_ELEMENT_ARRAY_BUFFER, handle)
     with IndexBuffer
 {

@@ -104,7 +104,9 @@ class CarModel(colorVao : VertexArray<StandardMaterial>, blackVao : VertexArray<
     static val blackMaterial = StandardMaterial(vec4(0, 0, 0, 1))
     static def apply(colorMesh : Mesh, blackMesh : Mesh, shadowMesh : Mesh) = CarModel(colorMesh, blackMesh, shadowMesh, nil)
     static def apply(colorMesh : Mesh, blackMesh : Mesh, shadowMesh : Mesh, texture : Texture?) = {
-        val defMat = if(texture.isDefined) trainMaterialFor(texture.get) else trainMaterialFor(vec4(1, 1, 1, 1))
+        val defMat =
+            if(texture.isDefined) trainMaterialFor(ColorSource(vec4(1, 0, 0, 1), texture.get, BlendMode.darken, -1))
+            else trainMaterialFor(vec4(1, 1, 1, 1))
         CarModel(
             colorVao = colorMesh.vao(defMat, shadow = false),
             blackVao = blackMesh.vao(blackMaterial, shadow = false),
@@ -117,7 +119,7 @@ class CarModel(colorVao : VertexArray<StandardMaterial>, blackVao : VertexArray<
         if(context.renderTarget.isShadow) {
             shadowVao.draw
         } else {
-            colorVao.draw(trainMaterialFor(ColorSource(color, texture, -1)))
+            colorVao.draw(trainMaterialFor(ColorSource(color, texture, BlendMode.darken, -1)))
             blackVao.draw
         }
     }

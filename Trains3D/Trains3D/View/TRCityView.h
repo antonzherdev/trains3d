@@ -8,6 +8,8 @@
 @class EGGlobal;
 @class EGVertexArray;
 @class TRModels;
+@class EGBlendMode;
+@class EGColorSource;
 @class EGStandardMaterial;
 @class EGMesh;
 @class TRCity;
@@ -15,7 +17,6 @@
 @class EGMatrixModel;
 @class TRCityAngle;
 @class TRCityColor;
-@class EGColorSource;
 @class EGMatrixStack;
 @class EGContext;
 @class EGD2D;

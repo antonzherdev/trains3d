@@ -5,6 +5,7 @@
 #import "EGShader.h"
 #import "EGShadow.h"
 #import "EGMaterial.h"
+#import "GL.h"
 #import "EGPlatform.h"
 #import "EGContext.h"
 NSString* EGMeshDataDescription(EGMeshData self) {
@@ -382,7 +383,7 @@ static ODClassType* _EGRouteVertexArray_type;
 
 
 @implementation EGSimpleVertexArray{
-    GLuint _handle;
+    unsigned int _handle;
     EGShader* _shader;
     id<CNSeq> _buffers;
     id<EGIndexSource> _index;
@@ -395,11 +396,11 @@ static ODClassType* _EGSimpleVertexArray_type;
 @synthesize index = _index;
 @synthesize isMutable = _isMutable;
 
-+ (id)simpleVertexArrayWithHandle:(GLuint)handle shader:(EGShader*)shader buffers:(id<CNSeq>)buffers index:(id<EGIndexSource>)index {
++ (id)simpleVertexArrayWithHandle:(unsigned int)handle shader:(EGShader*)shader buffers:(id<CNSeq>)buffers index:(id<EGIndexSource>)index {
     return [[EGSimpleVertexArray alloc] initWithHandle:handle shader:shader buffers:buffers index:index];
 }
 
-- (id)initWithHandle:(GLuint)handle shader:(EGShader*)shader buffers:(id<CNSeq>)buffers index:(id<EGIndexSource>)index {
+- (id)initWithHandle:(unsigned int)handle shader:(EGShader*)shader buffers:(id<CNSeq>)buffers index:(id<EGIndexSource>)index {
     self = [super init];
     if(self) {
         _handle = handle;
@@ -463,12 +464,12 @@ static ODClassType* _EGSimpleVertexArray_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGSimpleVertexArray* o = ((EGSimpleVertexArray*)(other));
-    return GLuintEq(self.handle, o.handle) && [self.shader isEqual:o.shader] && [self.buffers isEqual:o.buffers] && [self.index isEqual:o.index];
+    return self.handle == o.handle && [self.shader isEqual:o.shader] && [self.buffers isEqual:o.buffers] && [self.index isEqual:o.index];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + GLuintHash(self.handle);
+    hash = hash * 31 + self.handle;
     hash = hash * 31 + [self.shader hash];
     hash = hash * 31 + [self.buffers hash];
     hash = hash * 31 + [self.index hash];
@@ -477,7 +478,7 @@ static ODClassType* _EGSimpleVertexArray_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"handle=%@", GLuintDescription(self.handle)];
+    [description appendFormat:@"handle=%u", self.handle];
     [description appendFormat:@", shader=%@", self.shader];
     [description appendFormat:@", buffers=%@", self.buffers];
     [description appendFormat:@", index=%@", self.index];

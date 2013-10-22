@@ -1,6 +1,5 @@
 #import "objd.h"
 #import "EGSurface.h"
-#import "GL.h"
 #import "GEVec.h"
 #import "EGShader.h"
 @class GEMat4;
@@ -14,6 +13,7 @@
 @class EGEnablingState;
 @class EGVertexBufferDesc;
 @class EGRenderTarget;
+@class EGBlendMode;
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class EGEnvironment;
@@ -31,7 +31,7 @@
 @class EGShadowDrawShader;
 
 @interface EGShadowMap : EGSurface
-@property (nonatomic, readonly) GLuint frameBuffer;
+@property (nonatomic, readonly) unsigned int frameBuffer;
 @property (nonatomic, retain) GEMat4* biasDepthCp;
 @property (nonatomic, readonly) EGTexture* texture;
 

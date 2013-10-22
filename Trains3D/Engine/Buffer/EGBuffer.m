@@ -1,20 +1,21 @@
 #import "EGBuffer.h"
 
+#import "GL.h"
 @implementation EGBuffer{
     ODPType* _dataType;
     unsigned int _bufferType;
-    GLuint _handle;
+    unsigned int _handle;
 }
 static ODClassType* _EGBuffer_type;
 @synthesize dataType = _dataType;
 @synthesize bufferType = _bufferType;
 @synthesize handle = _handle;
 
-+ (id)bufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(GLuint)handle {
++ (id)bufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle {
     return [[EGBuffer alloc] initWithDataType:dataType bufferType:bufferType handle:handle];
 }
 
-- (id)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(GLuint)handle {
+- (id)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle {
     self = [super init];
     if(self) {
         _dataType = dataType;
@@ -70,14 +71,14 @@ static ODClassType* _EGBuffer_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGBuffer* o = ((EGBuffer*)(other));
-    return [self.dataType isEqual:o.dataType] && self.bufferType == o.bufferType && GLuintEq(self.handle, o.handle);
+    return [self.dataType isEqual:o.dataType] && self.bufferType == o.bufferType && self.handle == o.handle;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.dataType hash];
     hash = hash * 31 + self.bufferType;
-    hash = hash * 31 + GLuintHash(self.handle);
+    hash = hash * 31 + self.handle;
     return hash;
 }
 
@@ -85,7 +86,7 @@ static ODClassType* _EGBuffer_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"dataType=%@", self.dataType];
     [description appendFormat:@", bufferType=%u", self.bufferType];
-    [description appendFormat:@", handle=%@", GLuintDescription(self.handle)];
+    [description appendFormat:@", handle=%u", self.handle];
     [description appendString:@">"];
     return description;
 }
@@ -99,11 +100,11 @@ static ODClassType* _EGBuffer_type;
 }
 static ODClassType* _EGMutableBuffer_type;
 
-+ (id)mutableBufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(GLuint)handle {
++ (id)mutableBufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle {
     return [[EGMutableBuffer alloc] initWithDataType:dataType bufferType:bufferType handle:handle];
 }
 
-- (id)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(GLuint)handle {
+- (id)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle {
     self = [super initWithDataType:dataType bufferType:bufferType handle:handle];
     if(self) {
         __length = 0;
@@ -172,7 +173,7 @@ static ODClassType* _EGMutableBuffer_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"dataType=%@", self.dataType];
     [description appendFormat:@", bufferType=%u", self.bufferType];
-    [description appendFormat:@", handle=%@", GLuintDescription(self.handle)];
+    [description appendFormat:@", handle=%u", self.handle];
     [description appendString:@">"];
     return description;
 }

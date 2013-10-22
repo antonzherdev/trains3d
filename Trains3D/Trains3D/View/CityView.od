@@ -5,7 +5,7 @@ import com.antonzherdev.eg._
 
 class CityView(level : Level) {
     val cityTexture = textureFor("City.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
-    val vaoBody = Models.city.vao(StandardMaterial(cityTexture), shadow = true)
+    val vaoBody = Models.city.vao(StandardMaterial(ColorSource(vec4(1, 0, 0, 1), cityTexture, BlendMode.darken, -1)), shadow = true)
 
     def draw {
         egPushGroupMarker("Cities")

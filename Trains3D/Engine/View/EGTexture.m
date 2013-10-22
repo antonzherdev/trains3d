@@ -1,5 +1,6 @@
 #import "EGTexture.h"
 
+#import "GL.h"
 @implementation EGTexture
 static ODClassType* _EGTexture_type;
 
@@ -18,7 +19,7 @@ static ODClassType* _EGTexture_type;
     _EGTexture_type = [ODClassType classTypeWithCls:[EGTexture class]];
 }
 
-- (GLuint)id {
+- (unsigned int)id {
     @throw @"Method id is abstract";
 }
 
@@ -91,7 +92,7 @@ static ODClassType* _EGTexture_type;
 
 @implementation EGEmptyTexture{
     GEVec2 _size;
-    GLuint _id;
+    unsigned int _id;
 }
 static ODClassType* _EGEmptyTexture_type;
 @synthesize size = _size;
@@ -156,7 +157,7 @@ static ODClassType* _EGEmptyTexture_type;
     CGFloat _scale;
     unsigned int _magFilter;
     unsigned int _minFilter;
-    GLuint _id;
+    unsigned int _id;
     GEVec2 __size;
 }
 static ODClassType* _EGFileTexture_type;
@@ -241,7 +242,7 @@ static ODClassType* _EGFileTexture_type;
 @implementation EGTextureRegion{
     EGTexture* _texture;
     GERect _uv;
-    GLuint _id;
+    unsigned int _id;
     GEVec2 _size;
 }
 static ODClassType* _EGTextureRegion_type;

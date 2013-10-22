@@ -13,6 +13,7 @@
 @class EGContext;
 @class EGEnablingState;
 @class EGBlendFunction;
+@class EGBlendMode;
 @class EGVertexBufferDesc;
 @class EGMatrixStack;
 @class EGMatrixModel;

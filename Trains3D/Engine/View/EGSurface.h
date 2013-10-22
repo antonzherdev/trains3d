@@ -1,11 +1,11 @@
 #import "objd.h"
 #import "GEVec.h"
-#import "GL.h"
 #import "EGShader.h"
 @class EGEmptyTexture;
 @class EGGlobal;
 @class EGContext;
 @class EGTexture;
+@class EGBlendMode;
 @class EGVertexBufferDesc;
 @class EGMesh;
 @class EGVBO;
@@ -36,7 +36,7 @@
 
 @interface EGSimpleSurface : EGSurface
 @property (nonatomic, readonly) BOOL depth;
-@property (nonatomic, readonly) GLuint frameBuffer;
+@property (nonatomic, readonly) unsigned int frameBuffer;
 @property (nonatomic, readonly) EGEmptyTexture* texture;
 
 + (id)simpleSurfaceWithSize:(GEVec2i)size depth:(BOOL)depth;

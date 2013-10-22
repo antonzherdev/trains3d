@@ -80,7 +80,7 @@ class RouteVertexArray<P>(standard : VertexArray<P>, shadow : VertexArray<P>) ex
 }
 
 
-class SimpleVertexArray<P>(handle : GLuint, shader : Shader<P>, buffers : [VertexBuffer<_>], index : IndexSource) extends VertexArray<P> {
+class SimpleVertexArray<P>(handle : uint4, shader : Shader<P>, buffers : [VertexBuffer<_>], index : IndexSource) extends VertexArray<P> {
     static def apply<P>(shader : Shader<P>, buffers : [VertexBuffer<_>], index : IndexSource) : SimpleVertexArray<P> =
         SimpleVertexArray<P>(egGenVertexArray, shader, buffers, index)
     val isMutable = index.isMutable || buffers.chain.find(_.isMutable).isDefined

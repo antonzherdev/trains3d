@@ -247,6 +247,10 @@ static ODClassType* _EGCircleShaderBuilder_type;
     else return @"texture";
 }
 
+- (NSString*)blendMode:(EGBlendMode*)mode a:(NSString*)a b:(NSString*)b {
+    return mode.blend(a, b);
+}
+
 - (ODClassType*)type {
     return [EGCircleShaderBuilder type];
 }

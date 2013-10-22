@@ -16,6 +16,7 @@
 @class EGColorSource;
 @class EGStandardMaterial;
 @class EGBlendFunction;
+@class EGBlendMode;
 
 @interface EGMaterial : NSObject
 + (id)material;
@@ -34,16 +35,30 @@
 @interface EGColorSource : EGMaterial
 @property (nonatomic, readonly) GEVec4 color;
 @property (nonatomic, readonly) id texture;
+@property (nonatomic, readonly) EGBlendMode* blendMode;
 @property (nonatomic, readonly) float alphaTestLevel;
 
-+ (id)colorSourceWithColor:(GEVec4)color texture:(id)texture alphaTestLevel:(float)alphaTestLevel;
-- (id)initWithColor:(GEVec4)color texture:(id)texture alphaTestLevel:(float)alphaTestLevel;
++ (id)colorSourceWithColor:(GEVec4)color texture:(id)texture blendMode:(EGBlendMode*)blendMode alphaTestLevel:(float)alphaTestLevel;
+- (id)initWithColor:(GEVec4)color texture:(id)texture blendMode:(EGBlendMode*)blendMode alphaTestLevel:(float)alphaTestLevel;
 - (ODClassType*)type;
 + (EGColorSource*)applyColor:(GEVec4)color texture:(EGTexture*)texture;
++ (EGColorSource*)applyColor:(GEVec4)color texture:(EGTexture*)texture alphaTestLevel:(float)alphaTestLevel;
++ (EGColorSource*)applyColor:(GEVec4)color texture:(EGTexture*)texture blendMode:(EGBlendMode*)blendMode;
 + (EGColorSource*)applyColor:(GEVec4)color;
 + (EGColorSource*)applyTexture:(EGTexture*)texture;
 - (EGShaderSystem*)shaderSystem;
 + (ODClassType*)type;
+@end
+
+
+@interface EGBlendMode : ODEnum
+@property (nonatomic, readonly) NSString*(^blend)(NSString*, NSString*);
+
++ (EGBlendMode*)first;
++ (EGBlendMode*)second;
++ (EGBlendMode*)multiply;
++ (EGBlendMode*)darken;
++ (NSArray*)values;
 @end
 
 

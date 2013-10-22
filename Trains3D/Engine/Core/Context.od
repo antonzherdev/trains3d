@@ -62,7 +62,7 @@ class Context {
         glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer)
     }
 
-    private var _lastTexture2D : GLuint = 0
+    private var _lastTexture2D : uint4 = 0
     def bindTexture(texture : Texture) {
         val id = texture.id
         if(_lastTexture2D != id) {
@@ -92,7 +92,7 @@ class Context {
         }
     }
 
-    private var _lastShaderProgram : GLuint = 0
+    private var _lastShaderProgram : uint4 = 0
     def bindShaderProgram(program : ShaderProgram) {
         val id = program.handle
         if(id != _lastShaderProgram) {
@@ -101,7 +101,7 @@ class Context {
         }
     }
 
-    private var _lastVertexBufferId : GLuint = 0
+    private var _lastVertexBufferId : uint4 = 0
     private var _lastVertexBufferCount : uint4 = 0
     def bindVertexBuffer(buffer : VertexBuffer<_>) {
         val handle = buffer.handle
@@ -114,8 +114,8 @@ class Context {
     }
     def vertexBufferCount : uint4 = _lastVertexBufferCount
 
-    private var _lastIndexBuffer : GLuint = 0
-    def bindIndexBuffer(handle : GLuint) {
+    private var _lastIndexBuffer : uint4 = 0
+    def bindIndexBuffer(handle : uint4) {
         if(handle != _lastIndexBuffer) {
             checkBindDefaultVertexArray
             _lastIndexBuffer = handle
@@ -123,8 +123,8 @@ class Context {
         }
     }
 
-    private var _lastVertexArray : GLuint = 0
-    def bindVertexArray(handle : GLuint, vertexCount : uint4, mutable : bool) {
+    private var _lastVertexArray : uint4 = 0
+    def bindVertexArray(handle : uint4, vertexCount : uint4, mutable : bool) {
         if(handle != _lastVertexArray || mutable) {
             _lastVertexArray = handle
             _lastVertexBufferId = 0
@@ -135,7 +135,7 @@ class Context {
         _lastVertexBufferCount = vertexCount
     }
 
-    var defaultVertexArray : GLuint = 0
+    var defaultVertexArray : uint4 = 0
     private var _needBindDefaultVertexArray = false
     def bindDefaultVertexArray {
         _needBindDefaultVertexArray = true

@@ -18,8 +18,8 @@ class StandardShaderSystem extends ShaderSystem<StandardMaterial> {
             val spec = param.specularSize > 0
             val key =
                 if(egPlatform.shadows && context.considerShadows)
-                    StandardShaderKey(directLightsWithShadowsCount, directLightsWithoutShadowsCount, t, region, spec)
-                else StandardShaderKey(0, directLightsWithShadowsCount + directLightsWithoutShadowsCount, t, region, spec)
+                    StandardShaderKey(directLightsWithShadowsCount, directLightsWithoutShadowsCount, t, param.diffuse.blendMode, region, spec)
+                else StandardShaderKey(0, directLightsWithShadowsCount + directLightsWithoutShadowsCount, t, param.diffuse.blendMode, region, spec)
 
             shaders.objectFor(key, orUpdateWith = key.shader)
         }
@@ -39,7 +39,9 @@ class StandardShadowShader(shadowShader : ShadowShader) extends Shader<StandardM
     }
 }
 
-class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutShadowsCount : uint, texture : bool, region : bool, specular : bool) extends ShaderTextBuilder {
+class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutShadowsCount : uint, texture : bool,
+    blendMode : BlendMode,  region : bool, specular : bool) extends ShaderTextBuilder
+{
     val directLightCount = directLightWithShadowsCount + directLightWithoutShadowsCount
     def shader : StandardShader = {
         val vertexShader =
@@ -90,11 +92,7 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
 
              void main(void) {
                 mediump float visibility;$when(directLightWithShadowsCount > 0)
-               $if(texture)
-                lowp vec4 materialColor = diffuseColor * $texture2D\(diffuseTexture, UV);
-               $else
-                lowp vec4 materialColor = diffuseColor;
-               $endif
+                lowp vec4 materialColor = $blend(blendMode, "diffuseColor", "$texture2D\(diffuseTexture, UV)");
                 lowp vec4 color = ambientColor * materialColor;
                 $lightsDiffuse
                 $fragColor = color;
@@ -174,7 +172,7 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
     val ambientColor = uniformVec4("ambientColor")
     val specularColor : ShaderUniformVec4? = if(key.directLightCount > 0 && key.specular) uniformVec4("specularColor") else nil
     val specularSize : ShaderUniformF4? = if(key.directLightCount > 0 && key.specular) uniformF4("specularSize") else nil
-    val diffuseColorUniform = uniformVec4("diffuseColor")
+    val diffuseColorUniform = uniformVec4Opt("diffuseColor")
     val mwcpUniform = uniformMat4("mwcp")
     val mwcUniform : ShaderUniformMat4? = if(key.directLightCount > 0) uniformMat4("mwc") else nil
 
@@ -206,7 +204,7 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
                 uvScale.get.apply(vec2 = r.size)
             }
         }
-        diffuseColorUniform(vec4 = param.diffuse.color)
+        if(diffuseColorUniform.isDefined) diffuseColorUniform.get.apply(vec4 = param.diffuse.color)
         val env = context.environment
         ambientColor(vec4 = env.ambientColor)
         if(key.directLightCount > 0) {

@@ -1,5 +1,4 @@
 #import "objd.h"
-#import "GL.h"
 
 @class EGBuffer;
 @class EGMutableBuffer;
@@ -7,10 +6,10 @@
 @interface EGBuffer : NSObject
 @property (nonatomic, readonly) ODPType* dataType;
 @property (nonatomic, readonly) unsigned int bufferType;
-@property (nonatomic, readonly) GLuint handle;
+@property (nonatomic, readonly) unsigned int handle;
 
-+ (id)bufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(GLuint)handle;
-- (id)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(GLuint)handle;
++ (id)bufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle;
+- (id)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle;
 - (ODClassType*)type;
 - (NSUInteger)length;
 - (NSUInteger)count;
@@ -23,8 +22,8 @@
 
 
 @interface EGMutableBuffer : EGBuffer
-+ (id)mutableBufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(GLuint)handle;
-- (id)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(GLuint)handle;
++ (id)mutableBufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle;
+- (id)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle;
 - (ODClassType*)type;
 - (NSUInteger)length;
 - (NSUInteger)count;

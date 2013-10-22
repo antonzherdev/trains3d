@@ -1,6 +1,5 @@
 #import "objd.h"
 #import "GEVec.h"
-#import "GL.h"
 @protocol EGVertexBuffer;
 @protocol EGIndexSource;
 @class EGVBO;
@@ -113,14 +112,14 @@ ODPType* egMeshDataType();
 
 
 @interface EGSimpleVertexArray : EGVertexArray
-@property (nonatomic, readonly) GLuint handle;
+@property (nonatomic, readonly) unsigned int handle;
 @property (nonatomic, readonly) EGShader* shader;
 @property (nonatomic, readonly) id<CNSeq> buffers;
 @property (nonatomic, readonly) id<EGIndexSource> index;
 @property (nonatomic, readonly) BOOL isMutable;
 
-+ (id)simpleVertexArrayWithHandle:(GLuint)handle shader:(EGShader*)shader buffers:(id<CNSeq>)buffers index:(id<EGIndexSource>)index;
-- (id)initWithHandle:(GLuint)handle shader:(EGShader*)shader buffers:(id<CNSeq>)buffers index:(id<EGIndexSource>)index;
++ (id)simpleVertexArrayWithHandle:(unsigned int)handle shader:(EGShader*)shader buffers:(id<CNSeq>)buffers index:(id<EGIndexSource>)index;
+- (id)initWithHandle:(unsigned int)handle shader:(EGShader*)shader buffers:(id<CNSeq>)buffers index:(id<EGIndexSource>)index;
 - (ODClassType*)type;
 + (EGSimpleVertexArray*)applyShader:(EGShader*)shader buffers:(id<CNSeq>)buffers index:(id<EGIndexSource>)index;
 - (void)bind;

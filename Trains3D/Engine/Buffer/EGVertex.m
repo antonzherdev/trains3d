@@ -1,5 +1,6 @@
 #import "EGVertex.h"
 
+#import "GL.h"
 #import "EGContext.h"
 @implementation EGVertexBufferDesc{
     ODPType* _dataType;
@@ -204,11 +205,11 @@ static ODClassType* _EGImmutableVertexBuffer_type;
 @synthesize length = _length;
 @synthesize count = _count;
 
-+ (id)immutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle length:(NSUInteger)length count:(NSUInteger)count {
++ (id)immutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle length:(NSUInteger)length count:(NSUInteger)count {
     return [[EGImmutableVertexBuffer alloc] initWithDesc:desc handle:handle length:length count:count];
 }
 
-- (id)initWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle length:(NSUInteger)length count:(NSUInteger)count {
+- (id)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle length:(NSUInteger)length count:(NSUInteger)count {
     self = [super initWithDataType:desc.dataType bufferType:GL_ARRAY_BUFFER handle:handle];
     if(self) {
         _desc = desc;
@@ -248,13 +249,13 @@ static ODClassType* _EGImmutableVertexBuffer_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGImmutableVertexBuffer* o = ((EGImmutableVertexBuffer*)(other));
-    return [self.desc isEqual:o.desc] && GLuintEq(self.handle, o.handle) && self.length == o.length && self.count == o.count;
+    return [self.desc isEqual:o.desc] && self.handle == o.handle && self.length == o.length && self.count == o.count;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.desc hash];
-    hash = hash * 31 + GLuintHash(self.handle);
+    hash = hash * 31 + self.handle;
     hash = hash * 31 + self.length;
     hash = hash * 31 + self.count;
     return hash;
@@ -263,7 +264,7 @@ static ODClassType* _EGImmutableVertexBuffer_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"desc=%@", self.desc];
-    [description appendFormat:@", handle=%@", GLuintDescription(self.handle)];
+    [description appendFormat:@", handle=%u", self.handle];
     [description appendFormat:@", length=%lu", (unsigned long)self.length];
     [description appendFormat:@", count=%lu", (unsigned long)self.count];
     [description appendString:@">"];
@@ -275,17 +276,17 @@ static ODClassType* _EGImmutableVertexBuffer_type;
 
 @implementation EGMutableVertexBuffer{
     EGVertexBufferDesc* _desc;
-    GLuint _handle;
+    unsigned int _handle;
 }
 static ODClassType* _EGMutableVertexBuffer_type;
 @synthesize desc = _desc;
 @synthesize handle = _handle;
 
-+ (id)mutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle {
++ (id)mutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle {
     return [[EGMutableVertexBuffer alloc] initWithDesc:desc handle:handle];
 }
 
-- (id)initWithDesc:(EGVertexBufferDesc*)desc handle:(GLuint)handle {
+- (id)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle {
     self = [super initWithDataType:desc.dataType bufferType:GL_ARRAY_BUFFER handle:handle];
     if(self) {
         _desc = desc;
@@ -324,20 +325,20 @@ static ODClassType* _EGMutableVertexBuffer_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGMutableVertexBuffer* o = ((EGMutableVertexBuffer*)(other));
-    return [self.desc isEqual:o.desc] && GLuintEq(self.handle, o.handle);
+    return [self.desc isEqual:o.desc] && self.handle == o.handle;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.desc hash];
-    hash = hash * 31 + GLuintHash(self.handle);
+    hash = hash * 31 + self.handle;
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"desc=%@", self.desc];
-    [description appendFormat:@", handle=%@", GLuintDescription(self.handle)];
+    [description appendFormat:@", handle=%u", self.handle];
     [description appendString:@">"];
     return description;
 }
