@@ -7,6 +7,7 @@
 #import "TR3DLight.h"
 #import "TR3DCity.h"
 #import "TR3DCar.h"
+#import "TR3DExpressCar.h"
 #import "TR3DEngine.h"
 #import "TR3DExpressEngine.h"
 #import "TR3DDamage.h"
@@ -77,9 +78,9 @@ static ODClassType* _TR3D_type;
     _carBlack = egJasModel(CarBlack);
     _carShadow = egJasModel(CarShadow);
 
-    _expressCar = egJasModel(Car);
-    _expressCarBlack = egJasModel(CarBlack);
-    _expressCarShadow = egJasModel(CarShadow);
+    _expressCar = egJasModel(ExpressCar);
+    _expressCarBlack = egJasModel(ExpressCarBlack);
+    _expressCarShadow = egJasModel(ExpressCarShadow);
 
     _expressEngine = egJasModel(ExpressEngine);
     _expressEngineBlack = egJasModel(ExpressEngineBlack);

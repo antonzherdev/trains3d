@@ -1615,6 +1615,7 @@
 		6F3DF6EB5F114E1E35A31DDB /* TreeMapTest.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TreeMapTest.od; sourceTree = "<group>"; };
 		6F3DF6ED4D3348D5169F9CCB /* ulp.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ulp.hpp; sourceTree = "<group>"; };
 		6F3DF6ED66A0864851C49DF8 /* gim_contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gim_contact.h; sourceTree = "<group>"; };
+		6F3DF6EF8E3D2BE5B1C2CC69 /* TR3DExpressCar.jas */ = {isa = PBXFileReference; lastKnownFileType = file.jas; path = TR3DExpressCar.jas; sourceTree = "<group>"; };
 		6F3DF6F1902F88BD3A29D2AB /* EGInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGInput.h; sourceTree = "<group>"; };
 		6F3DF6F2CE6B5E9A2151B7D5 /* TR3DEngine.jas */ = {isa = PBXFileReference; lastKnownFileType = file.jas; path = TR3DEngine.jas; sourceTree = "<group>"; };
 		6F3DF6FC3D2D1ECA0FD975DC /* intrinsic_geometric.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = intrinsic_geometric.hpp; sourceTree = "<group>"; };
@@ -1995,6 +1996,7 @@
 		6F3DFBDEFBDBD5D27BA449BA /* btBoxBoxCollisionAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btBoxBoxCollisionAlgorithm.cpp; sourceTree = "<group>"; };
 		6F3DFBE1118449E4AF0709E8 /* KWExampleGroupBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWExampleGroupBuilder.h; sourceTree = "<group>"; };
 		6F3DFBE5FE75FF3B1DF27393 /* ParticleSystem.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = ParticleSystem.od; sourceTree = "<group>"; };
+		6F3DFBE8DBB249289ADB3346 /* TR3DExpressCar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TR3DExpressCar.h; sourceTree = "<group>"; };
 		6F3DFBEE7B279CE4A05E3342 /* Option.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Option.od; sourceTree = "<group>"; };
 		6F3DFBF146CA2B2CC064615D /* btBulletCollisionCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btBulletCollisionCommon.h; sourceTree = "<group>"; };
 		6F3DFBF2E0A3B3B69DF76027 /* Billboard.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Billboard.od; sourceTree = "<group>"; };
@@ -3473,6 +3475,8 @@
 				6F3DF0229D6651F5977E1E7E /* Car.png */,
 				6F3DF10F1F50A5F93239771C /* TR3DExpressEngine.h */,
 				6F3DF722E99721093AA438A1 /* TR3DExpressEngine.jas */,
+				6F3DFBE8DBB249289ADB3346 /* TR3DExpressCar.h */,
+				6F3DF6EF8E3D2BE5B1C2CC69 /* TR3DExpressCar.jas */,
 			);
 			path = Models;
 			sourceTree = "<group>";

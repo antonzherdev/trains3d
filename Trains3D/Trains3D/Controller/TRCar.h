@@ -43,8 +43,8 @@
 
 - (BOOL)isEngine;
 + (TRCarType*)car;
-+ (TRCarType*)expressCar;
 + (TRCarType*)engine;
++ (TRCarType*)expressCar;
 + (TRCarType*)expressEngine;
 + (NSArray*)values;
 @end
