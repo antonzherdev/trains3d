@@ -212,7 +212,7 @@ static ODClassType* _TRTrain_type;
 }
 
 - (BOOL)isInTile:(GEVec2i)tile {
-    return [[[self cars] chain] exists:^BOOL(TRCar* car) {
+    return [[[self cars] chain] existsWhere:^BOOL(TRCar* car) {
         return [[((TRCar*)(car)) position] isInTile:tile];
     }];
 }

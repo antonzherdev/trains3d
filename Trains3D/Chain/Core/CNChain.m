@@ -99,7 +99,7 @@
     return ret;
 }
 
-- (id )find:(cnPredicate)predicate {
+- (id )findWhere:(cnPredicate)predicate {
     __block id ret = [CNOption none];
     CNYield *yield = [CNYield alloc];
     yield = [yield initWithBegin:nil yield:^CNYieldResult(id item) {
@@ -306,19 +306,6 @@
     return [builder build];
 }
 
-- (id)findWhere:(BOOL(^)(id))where {
-    __block id ret = [CNOption none];
-    [self goOn:^BOOL(id x) {
-        if(where(ret)) {
-            ret = [CNOption applyValue:x];
-            NO;
-        }
-        return YES;
-    }];
-    return ret;
-}
-
-
 - (id)randomItem {
     NSArray *array = [self toArray];
     if(array.count == 0) {
@@ -420,7 +407,7 @@
     return s;
 }
 
-- (BOOL)exists:(BOOL (^)(id))f {
+- (BOOL)existsWhere:(BOOL (^)(id))f {
     __block BOOL ret = NO;
     CNYield *yield = [CNYield alloc];
     yield = [yield initWithBegin:nil yield:^CNYieldResult(id item) {

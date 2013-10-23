@@ -185,7 +185,7 @@ static ODClassType* _TRCallRepairerView_type;
 
 - (BOOL)tapEvent:(EGEvent*)event {
     GEVec2 p = [event locationInViewport];
-    id b = [[_buttons chain] find:^BOOL(CNTuple* _) {
+    id b = [[_buttons chain] findWhere:^BOOL(CNTuple* _) {
         return [((EGBillboard*)(((CNTuple*)(_)).b)) containsVec2:p];
     }];
     [b forEach:^void(CNTuple* kv) {

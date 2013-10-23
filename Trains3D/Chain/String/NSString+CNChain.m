@@ -178,14 +178,29 @@
 - (id)findWhere:(BOOL(^)(id))where {
     __block id ret = [CNOption none];
     [self goOn:^BOOL(id x) {
-        if(where(ret)) {
+        if(where(x)) {
             ret = [CNOption applyValue:x];
-            NO;
+            return NO;
+        } else {
+            return YES;
         }
-        return YES;
     }];
     return ret;
 }
+
+- (BOOL)existsWhere:(BOOL(^)(id))where {
+    __block BOOL ret = NO;
+    [self goOn:^BOOL(id x) {
+        if(where(x)) {
+            ret = YES;
+            return NO;
+        } else {
+            return YES;
+        }
+    }];
+    return ret;
+}
+
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {
     [self forEach:^void(id x) {

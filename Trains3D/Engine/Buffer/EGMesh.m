@@ -407,7 +407,7 @@ static ODClassType* _EGSimpleVertexArray_type;
         _shader = shader;
         _buffers = buffers;
         _index = index;
-        _isMutable = [_index isMutable] || [[[_buffers chain] find:^BOOL(id<EGVertexBuffer> _) {
+        _isMutable = [_index isMutable] || [[[_buffers chain] findWhere:^BOOL(id<EGVertexBuffer> _) {
     return [((id<EGVertexBuffer>)(_)) isMutable];
 }] isDefined];
     }

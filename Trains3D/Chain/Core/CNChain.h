@@ -53,17 +53,12 @@
 - (CNSortBuilder *)sortBy;
 
 
-- (void)forEach:(cnP)p;
-- (id)head;
-- (id)headOpt;
 - (id)randomItem;
 - (NSUInteger)count;
 - (NSArray*)toArray;
 - (NSSet*)toSet;
 
 - (id)foldStart:(id)start by:(cnF2)by;
-- (id)find:(cnPredicate)predicate;
-- (BOOL)exists:(BOOL (^)(id))f;
 - (id)min;
 - (id)max;
 - (NSDictionary *)toMap;

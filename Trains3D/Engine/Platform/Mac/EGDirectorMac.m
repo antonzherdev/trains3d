@@ -40,8 +40,6 @@
             [self tick];
             [self drawWithSize:_view.viewSize];
             [self.view.openGLContext flushBuffer];
-            glFlush();
-
         } @finally {
             [self.view unlockOpenGLContext];
         }

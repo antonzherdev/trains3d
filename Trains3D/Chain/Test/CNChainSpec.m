@@ -124,8 +124,8 @@ SPEC_BEGIN(CNChainSpec)
           [[r should] equal:@6];
       });
       it(@".find should find first compatilable items or none", ^{
-          [[[[[s chain] find:LESS_THAN_3] get] should] equal:@1];
-          BOOL isNil = [[[s chain] find:^BOOL(id x) {
+          [[[[[s chain] findWhere:LESS_THAN_3] get] should] equal:@1];
+          BOOL isNil = [[[s chain] findWhere:^BOOL(id x) {
               return NO;
           }] isEmpty];
           [[theValue(isNil) should] beTrue];

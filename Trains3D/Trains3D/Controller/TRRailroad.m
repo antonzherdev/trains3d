@@ -733,10 +733,10 @@ static ODClassType* _TRRailroad_type;
         return floatBetween(unumf(_), len - to, len - from.x);
     }] sortDesc] map:^id(id _) {
         return numf(len - unumf(_));
-    }] find:on];
+    }] findWhere:on];
     else return [[[[((id<CNSeq>)([opt get])) chain] filter:^BOOL(id _) {
         return floatBetween(unumf(_), from.x, to);
-    }] sort] find:on];
+    }] sort] findWhere:on];
 }
 
 - (void)addDamageAtPoint:(TRRailPoint*)point {
@@ -961,7 +961,7 @@ static ODClassType* _TRRailroadBuilder_type;
 }
 
 - (BOOL)checkBuildingsRail:(TRRail*)rail {
-    return !([[__buildingRails chain] exists:^BOOL(TRRailBuilding* _) {
+    return !([[__buildingRails chain] existsWhere:^BOOL(TRRailBuilding* _) {
     return [((TRRailBuilding*)(_)).rail isEqual:rail];
 }]) && [_railroad canAddRail:rail] && [self checkBuildingsConnectorTile:rail.tile connector:rail.form.start] && [self checkBuildingsConnectorTile:rail.tile connector:rail.form.end];
 }
