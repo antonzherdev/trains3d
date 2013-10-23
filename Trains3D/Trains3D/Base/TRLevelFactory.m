@@ -4,6 +4,7 @@
 #import "TRTrain.h"
 #import "TRTree.h"
 #import "TRWeather.h"
+#import "TRStrings.h"
 #import "TRLevel.h"
 #import "TRCar.h"
 #import "TRNotification.h"
@@ -38,7 +39,7 @@ static ODClassType* _TRLevelFactory_type;
     } repairCost:2000];
     _TRLevelFactory_forestRules = [TRForestRules forestRulesWithTypes:[TRTreeType values] thickness:1.0];
     _TRLevelFactory_weatherRules = [TRWeatherRules weatherRulesWithWindStrength:1.0 blastness:0.1 blastMinLength:5.0 blastMaxLength:10.0 blastStrength:10.0];
-    _TRLevelFactory_rules = (@[[TRLevelRules levelRulesWithMapSize:GEVec2iMake(5, 3) scoreRules:_TRLevelFactory_scoreRules forestRules:[TRForestRules forestRulesWithTypes:(@[TRTreeType.pine]) thickness:2.0] weatherRules:[TRWeatherRules weatherRulesWithWindStrength:0.3 blastness:0.1 blastMinLength:1.0 blastMaxLength:3.0 blastStrength:0.3] repairerSpeed:30 events:(@[tuple(@1.0, [TRLevelFactory expressTrainCars:intTo(2, 4) speed:[intTo(50, 60) setStep:10]]), tuple(@10.0, [TRLevelFactory trainCars:intTo(2, 3) speed:[intTo(50, 60) setStep:10]]), tuple(@15.0, [TRLevelFactory createNewCity])])]]);
+    _TRLevelFactory_rules = (@[[TRLevelRules levelRulesWithMapSize:GEVec2iMake(3, 2) scoreRules:_TRLevelFactory_scoreRules forestRules:[TRForestRules forestRulesWithTypes:(@[TRTreeType.pine]) thickness:2.0] weatherRules:[TRWeatherRules weatherRulesWithWindStrength:0.3 blastness:0.1 blastMinLength:1.0 blastMaxLength:3.0 blastStrength:0.3] repairerSpeed:30 events:(@[tuple(@1.0, [TRLevelFactory showHelpText:[TRStr.Loc helpConnectTwoCities]]), tuple(@10.0, [TRLevelFactory trainCars:[CNRange applyI:2] speed:[CNRange applyI:30]]), tuple(@30.0, [TRLevelFactory createNewCity])])]]);
 }
 
 + (void(^)(TRLevel*))trainCars:(CNRange*)cars speed:(CNRange*)speed {
@@ -50,6 +51,12 @@ static ODClassType* _TRLevelFactory_type;
 + (void(^)(TRLevel*))expressTrainCars:(CNRange*)cars speed:(CNRange*)speed {
     return ^void(TRLevel* level) {
         [level runTrainWithGenerator:[TRTrainGenerator trainGeneratorWithTrainType:TRTrainType.simple carsCount:cars speed:speed carTypes:(@[TRCarType.expressCar, TRCarType.expressEngine])]];
+    };
+}
+
++ (void(^)(TRLevel*))showHelpText:(NSString*)text {
+    return ^void(TRLevel* level) {
+        [level showHelpText:text];
     };
 }
 

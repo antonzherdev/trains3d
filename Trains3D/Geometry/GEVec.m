@@ -248,6 +248,9 @@ NSString* GEVec3Description(GEVec3 self) {
     [description appendString:@">"];
     return description;
 }
+GEVec3 geVec3ApplyVec2(GEVec2 vec2) {
+    return GEVec3Make(vec2.x, vec2.y, 0.0);
+}
 GEVec3 geVec3ApplyVec2Z(GEVec2 vec2, float z) {
     return GEVec3Make(vec2.x, vec2.y, z);
 }
@@ -664,6 +667,9 @@ GERect geRectCenterX(GERect self) {
 }
 GERect geRectCenterY(GERect self) {
     return GERectMake(GEVec2Make(self.p0.x, self.p0.y - self.size.y / 2), self.size);
+}
+GEVec2 geRectCenter(GERect self) {
+    return geVec2AddVec2(self.p0, geVec2DivI(self.size, 2));
 }
 ODPType* geRectType() {
     static ODPType* _ret = nil;

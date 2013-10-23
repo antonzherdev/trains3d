@@ -15,6 +15,7 @@ class Range(start : int, end : int, step : int) extends Seq<int> {
         if(step > 0) start > end
         else if(step < 0) start < end
         else false
+    static def apply(i : int) : Range = Range(i, i, 1)
 }
 
 class RangeIterator(start : int, end : int, step : int) extends Iterator<int> {

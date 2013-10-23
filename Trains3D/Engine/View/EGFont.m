@@ -157,7 +157,7 @@ static ODClassType* _EGFont_type;
     return geRectApplyXYWidthHeight(((float)([[parts applyIndex:0] toFloat])), ((float)(y)), ((float)([[parts applyIndex:2] toFloat])), ((float)(h)));
 }
 
-- (GEVec2)measureText:(NSString*)text {
+- (GEVec2)measureInPixelsText:(NSString*)text {
     __block NSInteger newLines = 0;
     id<CNSeq> symbolsArr = [[[text chain] flatMap:^id(id s) {
         if(unumi(s) == 10) {
@@ -178,8 +178,15 @@ static ODClassType* _EGFont_type;
         }
     }];
     if(lineWidth > fullWidth) fullWidth = lineWidth;
-    GEVec2 vpSize = geVec2iDivF([EGGlobal.context viewport].size, 2.0);
-    return GEVec2Make(((float)(fullWidth)) / vpSize.x, ((float)(_height)) / vpSize.y * (newLines + 1));
+    return GEVec2Make(((float)(fullWidth)), ((float)(_height)) * (newLines + 1));
+}
+
+- (GEVec2)measurePText:(NSString*)text {
+    return geVec2DivVec2(geVec2MulF([self measureInPixelsText:text], 2.0), geVec2ApplyVec2i([EGGlobal.context viewport].size));
+}
+
+- (GEVec2)measureCText:(NSString*)text {
+    return geVec4Xy([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW([self measurePText:text], 0.0, 0.0)]);
 }
 
 - (void)drawText:(NSString*)text color:(GEVec4)color at:(GEVec3)at alignment:(EGTextAlignment)alignment {

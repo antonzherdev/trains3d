@@ -126,7 +126,7 @@ class UndoView(builder : RailroadBuilder) extends InputProcessor with TapProcess
     private var font : Font
     def reshape {
         font = fontWith(name = "lucida_grande", 18)
-        val textSize = font.measure(Loc.undo)
+        val textSize = font.measureP(Loc.undo)
         val buttonSize = matrix.p.divBySelf(vec4(textSize * 1.5, 0, 0)).xy
         button.rect = Rect(buttonSize.negate/2, buttonSize)
     }

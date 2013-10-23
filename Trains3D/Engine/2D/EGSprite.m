@@ -509,6 +509,11 @@ static ODClassType* _EGSprite_type;
     return GERectMake(_position, _size);
 }
 
+- (void)setRect:(GERect)rect {
+    _position = rect.p0;
+    _size = rect.size;
+}
+
 + (EGSprite*)applyMaterial:(EGColorSource*)material size:(GEVec2)size {
     EGSprite* s = [EGSprite sprite];
     s.material = material;

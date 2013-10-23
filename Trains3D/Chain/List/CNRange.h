@@ -23,6 +23,7 @@
 - (id<CNIterator>)iterator;
 - (CNRange*)setStep:(NSInteger)step;
 - (BOOL)isEmpty;
++ (CNRange*)applyI:(NSInteger)i;
 + (ODClassType*)type;
 @end
 

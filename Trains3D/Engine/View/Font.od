@@ -44,8 +44,8 @@ class Font(name : string) {
         Rect(parts[0].toFloat, y, parts[2].toFloat, h)
     }
 
-    //return size of text in projection space
-    def measure(text : string) : vec2 = {
+    //return size of text in pixels
+    def measureInPixels(text : string) : vec2 = {
         var newLines = 0
         val symbolsArr = text.chain.flatMap<FontSymbolDesc>{s ->
             if(s == 10) {
@@ -64,9 +64,12 @@ class Font(name : string) {
             }
         }
         if(lineWidth > fullWidth) fullWidth = lineWidth
-        val vpSize = context.viewport.size/2.0
-        vec2(fullWidth.cast<float4>/vpSize.x, height.cast<float4>/vpSize.y*(newLines + 1))
+        vec2(fullWidth, height.cast<float4>*(newLines + 1))
     }
+
+    //return size of text in projection space
+    def measureP(text : string) : vec2 = measureInPixels(text)*2.0/context.viewport.size
+    def measureC(text : string) : vec2 = matrix.p.divBySelf(vec4(measureP(text), 0, 0)).xy
 
     private static val vbDesc = VertexBufferDesc(FontPrintData.type, position = 0, uv = 2*4, normal = -1, color = -1, model = -1)
     private val vb = VBO.mut(vbDesc)

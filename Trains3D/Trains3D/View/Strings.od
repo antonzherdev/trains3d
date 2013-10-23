@@ -11,6 +11,7 @@ trait  Strings {
     def mainMenu : string
     def callRepairer : string
     def undo : string
+    def helpConnectTwoCities : string
 
     def format(cost : int) : string = "$cost"
 }
@@ -25,6 +26,13 @@ class EnStrings extends Strings {
     def mainMenu : string = "Main menu"
     def callRepairer : string = "Call\nrepairers"
     def undo : string = "Undo"
+    def helpConnectTwoCities : string =
+       "Connect two cities by rails.
+       $if(egPlatform.touch)
+        Simply paint rails by your finger.
+       $else
+        Use mouse or move two fingers on a touchpad.
+       $endif"
 }
 
 class RuStrings extends Strings{
@@ -37,6 +45,13 @@ class RuStrings extends Strings{
     def mainMenu : string = "Основное меню"
     def callRepairer : string = "Вызвать\nремонтников"
     def undo : string = "Отменить"
+    def helpConnectTwoCities : string =
+        "Соедините два города рельсами.
+        $if(egPlatform.touch)
+         Для этого просто проведите пальцем по экрану.
+        $else
+         Используйте мышку или проведите двумя пальцами по тачпаду.
+        $endif"
 }
 
 object Str {

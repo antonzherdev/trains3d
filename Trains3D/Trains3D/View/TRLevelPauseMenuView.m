@@ -21,6 +21,7 @@
     NSInteger _delta;
     EGFont* _font;
     GEVec2 _textRel;
+    EGSprite* _helpBackSprite;
 }
 static ODClassType* _TRLevelPauseMenuView_type;
 @synthesize level = _level;
@@ -43,6 +44,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
         _width = 0;
         _height = 0;
         _delta = 0;
+        _helpBackSprite = [EGSprite applyMaterial:[EGColorSource applyColor:geVec4DivI(GEVec4Make(220.0, 220.0, 220.0, 255.0), 255)] size:GEVec2Make(0.0, 0.0)];
     }
     
     return self;
@@ -71,22 +73,36 @@ static ODClassType* _TRLevelPauseMenuView_type;
     [EGBlendFunction.standard applyDraw:^void() {
         [EGGlobal.context.depthTest disabledF:^void() {
             [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 0.5)] at:GEVec3Make(0.0, 0.0, 0.0) rect:GERectMake(GEVec2Make(0.0, 0.0), geVec2ApplyVec2i([EGGlobal.context viewport].size))];
-            GEVec2 p = _menuBackSprite.position;
-            [_menuBackSprite draw];
-            _resumeLine.p0 = GEVec2Make(p.x, p.y + 2 * _delta);
-            _resumeLine.p1 = GEVec2Make(p.x + _width, p.y + 2 * _delta);
-            [_resumeLine draw];
-            [_font drawText:[TRStr.Loc resumeGame] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:geVec3ApplyVec2Z(geVec2AddVec2(_textRel, GEVec2Make(0.0, ((float)(2 * _delta)))), 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
-            _restartLine.p0 = GEVec2Make(p.x, p.y + _delta);
-            _restartLine.p1 = GEVec2Make(p.x + _width, p.y + _delta);
-            [_restartLine draw];
-            [_font drawText:[TRStr.Loc restartLevel] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:geVec3ApplyVec2Z(geVec2AddVec2(_textRel, GEVec2Make(0.0, ((float)(_delta)))), 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
-            _mainMenuLine.p0 = GEVec2Make(p.x, p.y);
-            _mainMenuLine.p1 = GEVec2Make(p.x + _width, p.y);
-            [_mainMenuLine draw];
-            [_font drawText:[TRStr.Loc mainMenu] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:geVec3ApplyVec2Z(_textRel, 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
+            if([[_level help] isEmpty]) [self drawMenu];
+            else [self drawHelp];
         }];
     }];
+}
+
+- (void)drawMenu {
+    GEVec2 p = _menuBackSprite.position;
+    [_menuBackSprite draw];
+    _resumeLine.p0 = GEVec2Make(p.x, p.y + 2 * _delta);
+    _resumeLine.p1 = GEVec2Make(p.x + _width, p.y + 2 * _delta);
+    [_resumeLine draw];
+    [_font drawText:[TRStr.Loc resumeGame] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:geVec3ApplyVec2Z(geVec2AddVec2(_textRel, GEVec2Make(0.0, ((float)(2 * _delta)))), 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
+    _restartLine.p0 = GEVec2Make(p.x, p.y + _delta);
+    _restartLine.p1 = GEVec2Make(p.x + _width, p.y + _delta);
+    [_restartLine draw];
+    [_font drawText:[TRStr.Loc restartLevel] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:geVec3ApplyVec2Z(geVec2AddVec2(_textRel, GEVec2Make(0.0, ((float)(_delta)))), 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
+    _mainMenuLine.p0 = GEVec2Make(p.x, p.y);
+    _mainMenuLine.p1 = GEVec2Make(p.x + _width, p.y);
+    [_mainMenuLine draw];
+    [_font drawText:[TRStr.Loc mainMenu] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:geVec3ApplyVec2Z(_textRel, 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
+}
+
+- (void)drawHelp {
+    TRHelp* help = [[_level help] get];
+    GEVec2 size = [_font measureCText:help.text];
+    GERect rect = geVec2RectInCenterWithSize(size, geVec2ApplyVec2i([EGGlobal.context viewport].size));
+    [_helpBackSprite setRect:rect];
+    [_helpBackSprite draw];
+    [_font drawText:help.text color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:geVec3ApplyVec2(geRectCenter(rect)) alignment:egTextAlignmentApplyXY(0.0, 0.0)];
 }
 
 - (BOOL)isProcessorActive {
@@ -98,19 +114,24 @@ static ODClassType* _TRLevelPauseMenuView_type;
 }
 
 - (BOOL)tapEvent:(EGEvent*)event {
-    GEVec2 p = [event location];
-    if([_menuBackSprite containsVec2:p]) {
-        if(p.y > _resumeLine.p0.y) {
-            [[EGGlobal director] resume];
-        } else {
-            if(p.y > _restartLine.p0.y) {
-                [TRSceneFactory restartLevel];
+    if([[_level help] isEmpty]) {
+        GEVec2 p = [event location];
+        if([_menuBackSprite containsVec2:p]) {
+            if(p.y > _resumeLine.p0.y) {
                 [[EGGlobal director] resume];
+            } else {
+                if(p.y > _restartLine.p0.y) {
+                    [TRSceneFactory restartLevel];
+                    [[EGGlobal director] resume];
+                }
             }
+            return YES;
+        } else {
+            return NO;
         }
-        return YES;
     } else {
-        return NO;
+        [_level clearHelp];
+        return YES;
     }
 }
 

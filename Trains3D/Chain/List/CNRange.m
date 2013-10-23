@@ -59,6 +59,10 @@ static ODClassType* _CNRange_type;
     }
 }
 
++ (CNRange*)applyI:(NSInteger)i {
+    return [CNRange rangeWithStart:i end:i step:1];
+}
+
 - (id)optIndex:(NSUInteger)index {
     if(index >= [self count]) return [CNOption none];
     else return [CNOption applyValue:[self applyIndex:index]];

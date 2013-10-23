@@ -306,7 +306,7 @@ static ODClassType* _TRUndoView_type;
 
 - (void)reshape {
     _font = [EGGlobal fontWithName:@"lucida_grande" size:18];
-    GEVec2 textSize = [_font measureText:[TRStr.Loc undo]];
+    GEVec2 textSize = [_font measurePText:[TRStr.Loc undo]];
     GEVec2 buttonSize = geVec4Xy([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW(geVec2MulF(textSize, 1.5), 0.0, 0.0)]);
     _button.rect = GERectMake(geVec2DivI(geVec2Negate(buttonSize), 2), buttonSize);
 }

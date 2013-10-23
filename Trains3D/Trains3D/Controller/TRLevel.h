@@ -26,9 +26,12 @@
 @class TRTrainType;
 @class TRCityColor;
 @class TRCarType;
+@class EGGlobal;
+@class EGDirector;
 
 @class TRLevelRules;
 @class TRLevel;
+@class TRHelp;
 
 @interface TRLevelRules : NSObject
 @property (nonatomic, readonly) GEVec2i mapSize;
@@ -76,6 +79,19 @@
 - (void)destroyTrain:(TRTrain*)train;
 - (void)removeTrain:(TRTrain*)train;
 - (void)runRepairerFromCity:(TRCity*)city;
+- (id)help;
+- (void)showHelpText:(NSString*)text;
+- (void)clearHelp;
++ (ODClassType*)type;
+@end
+
+
+@interface TRHelp : NSObject
+@property (nonatomic, readonly) NSString* text;
+
++ (id)helpWithText:(NSString*)text;
+- (id)initWithText:(NSString*)text;
+- (ODClassType*)type;
 + (ODClassType*)type;
 @end
 

@@ -12,7 +12,7 @@ class Schedule extends Controller {
 
     def updateWith(delta : float) {
         _current += delta
-        while(_next > 0 && _current > _next) {
+        while(_next >= 0 && _current > _next) {
             _map.pollFirst.get.b.for {event ->
                 event()
             }

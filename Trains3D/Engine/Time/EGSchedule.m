@@ -38,7 +38,7 @@ static ODClassType* _EGSchedule_type;
 
 - (void)updateWithDelta:(CGFloat)delta {
     __current += delta;
-    while(__next > 0 && __current > __next) {
+    while(__next >= 0 && __current > __next) {
         [((id<CNSeq>)(((CNTuple*)([[__map pollFirst] get])).b)) forEach:^void(void(^event)()) {
             ((void(^)())(event))();
         }];

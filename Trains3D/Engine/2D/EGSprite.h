@@ -94,6 +94,7 @@
 - (ODClassType*)type;
 - (void)draw;
 - (GERect)rect;
+- (void)setRect:(GERect)rect;
 + (EGSprite*)applyMaterial:(EGColorSource*)material size:(GEVec2)size;
 + (EGSprite*)applyTexture:(EGTexture*)texture;
 - (void)adjustSize;

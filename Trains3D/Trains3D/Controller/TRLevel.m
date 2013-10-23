@@ -11,6 +11,8 @@
 #import "TRTrain.h"
 #import "TRRailPoint.h"
 #import "TRCar.h"
+#import "EGContext.h"
+#import "EGDirector.h"
 @implementation TRLevelRules{
     GEVec2i _mapSize;
     TRScoreRules* _scoreRules;
@@ -110,6 +112,7 @@ static ODClassType* _TRLevelRules_type;
     TRTrainsCollisionWorld* _collisionWorld;
     TRTrainsDynamicWorld* _dynamicWorld;
     NSMutableArray* __dyingTrains;
+    id __help;
 }
 static ODClassType* _TRLevel_type;
 @synthesize rules = _rules;
@@ -144,6 +147,7 @@ static ODClassType* _TRLevel_type;
         _collisionWorld = [TRTrainsCollisionWorld trainsCollisionWorld];
         _dynamicWorld = [TRTrainsDynamicWorld trainsDynamicWorld];
         __dyingTrains = [NSMutableArray mutableArray];
+        __help = [CNOption none];
     }
     
     return self;
@@ -331,6 +335,20 @@ static ODClassType* _TRLevel_type;
     }
 }
 
+- (id)help {
+    return __help;
+}
+
+- (void)showHelpText:(NSString*)text {
+    __help = [CNOption applyValue:[TRHelp helpWithText:text]];
+    [[EGGlobal director] pause];
+}
+
+- (void)clearHelp {
+    __help = [CNOption none];
+    [[EGGlobal director] resume];
+}
+
 - (ODClassType*)type {
     return [TRLevel type];
 }
@@ -359,6 +377,63 @@ static ODClassType* _TRLevel_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"rules=%@", self.rules];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRHelp{
+    NSString* _text;
+}
+static ODClassType* _TRHelp_type;
+@synthesize text = _text;
+
++ (id)helpWithText:(NSString*)text {
+    return [[TRHelp alloc] initWithText:text];
+}
+
+- (id)initWithText:(NSString*)text {
+    self = [super init];
+    if(self) _text = text;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRHelp_type = [ODClassType classTypeWithCls:[TRHelp class]];
+}
+
+- (ODClassType*)type {
+    return [TRHelp type];
+}
+
++ (ODClassType*)type {
+    return _TRHelp_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRHelp* o = ((TRHelp*)(other));
+    return [self.text isEqual:o.text];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.text hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"text=%@", self.text];
     [description appendString:@">"];
     return description;
 }

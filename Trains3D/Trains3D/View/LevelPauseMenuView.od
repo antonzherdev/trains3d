@@ -32,26 +32,41 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor wi
 
         BlendFunction.standard { context.depthTest.disabled {
             D2D.drawSprite(material = vec4(0, 0, 0, 0.5), at = vec3(0, 0, 0), Rect(vec2(0, 0), context.viewport.size))
-            val p = menuBackSprite.position
-            menuBackSprite.draw
-
-            resumeLine.p0 = vec2(p.x, p.y + 2*delta)
-            resumeLine.p1 = vec2(p.x + width, p.y + 2*delta)
-            resumeLine.draw
-            font.draw(text = Loc.resumeGame, color = vec4(0, 0, 0, 1), at = vec3(textRel + vec2(0, 2*delta), 0), TextAlignment.baseline(-1))
-
-
-            restartLine.p0 = vec2(p.x, p.y + delta)
-            restartLine.p1 = vec2(p.x + width, p.y + delta)
-            restartLine.draw
-            font.draw(text = Loc.restartLevel, color = vec4(0, 0, 0, 1), at = vec3(textRel + vec2(0, delta), 0), TextAlignment.baseline(-1))
-
-            mainMenuLine.p0 = vec2(p.x, p.y)
-            mainMenuLine.p1 = vec2(p.x + width, p.y)
-            mainMenuLine.draw
-            font.draw(text = Loc.mainMenu, color = vec4(0, 0, 0, 1), at = vec3(textRel, 0), TextAlignment.baseline(-1))
+            if(level.help.isEmpty) drawMenu else drawHelp
         }}
 
+    }
+
+    def drawMenu {
+        val p = menuBackSprite.position
+        menuBackSprite.draw
+
+        resumeLine.p0 = vec2(p.x, p.y + 2*delta)
+        resumeLine.p1 = vec2(p.x + width, p.y + 2*delta)
+        resumeLine.draw
+        font.draw(text = Loc.resumeGame, color = vec4(0, 0, 0, 1), at = vec3(textRel + vec2(0, 2*delta), 0), TextAlignment.baseline(-1))
+
+
+        restartLine.p0 = vec2(p.x, p.y + delta)
+        restartLine.p1 = vec2(p.x + width, p.y + delta)
+        restartLine.draw
+        font.draw(text = Loc.restartLevel, color = vec4(0, 0, 0, 1), at = vec3(textRel + vec2(0, delta), 0), TextAlignment.baseline(-1))
+
+        mainMenuLine.p0 = vec2(p.x, p.y)
+        mainMenuLine.p1 = vec2(p.x + width, p.y)
+        mainMenuLine.draw
+        font.draw(text = Loc.mainMenu, color = vec4(0, 0, 0, 1), at = vec3(textRel, 0), TextAlignment.baseline(-1))
+    }
+
+    private val helpBackSprite = Sprite(ColorSource(vec4(220, 220, 220, 255)/255), vec2(0, 0))
+    def drawHelp {
+        val help = level.help.get
+        val size = font.measureC(help.text)
+        val rect = size.rectInCenterWith(context.viewport.size)
+
+        helpBackSprite.set(rect = rect)
+        helpBackSprite.draw
+        font.draw(help.text, color = vec4(0, 0, 0, 1), at = rect.center, TextAlignment(0, 0))
     }
 
 
@@ -61,14 +76,19 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor wi
     }
 
     def tap(event : Event) : bool = {
-        val p = event.location
-        if(menuBackSprite.contains(p)) {
-            if(p.y > resumeLine.p0.y) director.resume
-            else if(p.y > restartLine.p0.y) {
-                SceneFactory.restartLevel
-                director.resume
-            }
+        if(level.help.isEmpty) {
+            val p = event.location
+            if(menuBackSprite.contains(p)) {
+                if(p.y > resumeLine.p0.y) director.resume
+                else if(p.y > restartLine.p0.y) {
+                    SceneFactory.restartLevel
+                    director.resume
+                }
+                true
+            } else false
+        } else {
+            level.clearHelp
             true
-        } else false
+        }
     }
 }

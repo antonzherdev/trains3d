@@ -13,9 +13,10 @@
 @class EGDirector;
 @class EGBlendFunction;
 @class EGD2D;
+@class EGEnablingState;
 @class TRStr;
 @protocol TRStrings;
-@class EGEnablingState;
+@class TRHelp;
 @class TRSceneFactory;
 @class EGEnvironment;
 
@@ -31,6 +32,8 @@
 - (ODClassType*)type;
 - (void)reshapeWithViewport:(GERect)viewport;
 - (void)draw;
+- (void)drawMenu;
+- (void)drawHelp;
 - (BOOL)isProcessorActive;
 - (BOOL)processEvent:(EGEvent*)event;
 - (BOOL)tapEvent:(EGEvent*)event;

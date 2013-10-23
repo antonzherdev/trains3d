@@ -119,6 +119,7 @@ static ODClassType* _EGDirector_type;
 }
 
 - (void)tick {
+    EGGlobal.context.director = self;
     [_time tick];
     [__scene forEach:^void(EGScene* _) {
         [((EGScene*)(_)) updateWithDelta:_time.delta];

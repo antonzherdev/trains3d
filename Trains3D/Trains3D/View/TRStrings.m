@@ -1,5 +1,7 @@
 #import "TRStrings.h"
 
+#import "GL.h"
+#import "EGPlatform.h"
 @implementation TREnStrings
 static ODClassType* _TREnStrings_type;
 
@@ -53,6 +55,13 @@ static ODClassType* _TREnStrings_type;
 
 - (NSString*)undo {
     return @"Undo";
+}
+
+- (NSString*)helpConnectTwoCities {
+    return [NSString stringWithFormat:@"Connect two cities by rails.\n"
+        "%@", ((egPlatform().touch) ? @"\n"
+        "Simply paint rails by your finger.\n" : @"\n"
+        "Use mouse or move two fingers on a touchpad.\n")];
 }
 
 - (NSString*)formatCost:(NSInteger)cost {
@@ -143,6 +152,13 @@ static ODClassType* _TRRuStrings_type;
 
 - (NSString*)undo {
     return @"Отменить";
+}
+
+- (NSString*)helpConnectTwoCities {
+    return [NSString stringWithFormat:@"Соедините два города рельсами.\n"
+        "%@", ((egPlatform().touch) ? @"\n"
+        "Для этого просто проведите пальцем по экрану.\n" : @"\n"
+        "Используйте мышку или проведите двумя пальцами по тачпаду.\n")];
 }
 
 - (NSString*)formatCost:(NSInteger)cost {

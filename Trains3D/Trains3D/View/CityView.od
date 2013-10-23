@@ -49,8 +49,7 @@ class CallRepairerView(level : Level) extends InputProcessor with TapProcessor {
     private var buttonSize : vec2
     def reshapeWith(viewport : Rect) {
         font = fontWith(name = "lucida_grande", 18)
-        val textSize = font.measure(Loc.callRepairer)
-        buttonSize = matrix.p.divBySelf(vec4(textSize * 1.2, 0, 0)).xy
+        buttonSize = font.measureC(Loc.callRepairer)*1.2
     }
 
 

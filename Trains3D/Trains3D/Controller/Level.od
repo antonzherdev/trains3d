@@ -159,5 +159,17 @@ class Level(rules : LevelRules) extends Controller {
             _repairer = train
         }
     }
+
+    private var _help : Help? = nil
+    def help = _help
+    def showHelp(text : string) {
+        _help = Help(text)
+        director.pause
+    }
+    def clearHelp {
+        _help = nil
+        director.resume
+    }
 }
 
+class Help(text : string)

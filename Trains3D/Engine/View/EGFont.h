@@ -69,7 +69,9 @@ ODPType* egTextAlignmentType();
 - (id)initWithName:(NSString*)name;
 - (ODClassType*)type;
 - (void)_init;
-- (GEVec2)measureText:(NSString*)text;
+- (GEVec2)measureInPixelsText:(NSString*)text;
+- (GEVec2)measurePText:(NSString*)text;
+- (GEVec2)measureCText:(NSString*)text;
 - (void)drawText:(NSString*)text color:(GEVec4)color at:(GEVec3)at alignment:(EGTextAlignment)alignment;
 + (ODClassType*)type;
 @end

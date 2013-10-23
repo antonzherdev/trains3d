@@ -5,6 +5,8 @@
 @class TRForestRules;
 @class TRTreeType;
 @class TRWeatherRules;
+@class TRStr;
+@protocol TRStrings;
 @class TRLevelRules;
 @class TRTrainType;
 @class TRCarType;

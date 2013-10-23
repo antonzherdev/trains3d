@@ -124,6 +124,7 @@ static inline NSUInteger GEVec3Hash(GEVec3 self) {
     return hash;
 }
 NSString* GEVec3Description(GEVec3 self);
+GEVec3 geVec3ApplyVec2(GEVec2 vec2);
 GEVec3 geVec3ApplyVec2Z(GEVec2 vec2, float z);
 GEVec3 geVec3AddVec3(GEVec3 self, GEVec3 vec3);
 GEVec3 geVec3SubVec3(GEVec3 self, GEVec3 vec3);
@@ -296,6 +297,7 @@ GEQuad geRectQuad(GERect self);
 GEQuad geRectUpsideDownQuad(GERect self);
 GERect geRectCenterX(GERect self);
 GERect geRectCenterY(GERect self);
+GEVec2 geRectCenter(GERect self);
 ODPType* geRectType();
 @interface GERectWrap : NSObject
 @property (readonly, nonatomic) GERect value;

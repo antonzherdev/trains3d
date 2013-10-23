@@ -1,4 +1,5 @@
 #import "objd.h"
+@class EGPlatform;
 
 @class TREnStrings;
 @class TRRuStrings;
@@ -15,6 +16,7 @@
 - (NSString*)mainMenu;
 - (NSString*)callRepairer;
 - (NSString*)undo;
+- (NSString*)helpConnectTwoCities;
 - (NSString*)formatCost:(NSInteger)cost;
 @end
 
@@ -32,6 +34,7 @@
 - (NSString*)mainMenu;
 - (NSString*)callRepairer;
 - (NSString*)undo;
+- (NSString*)helpConnectTwoCities;
 + (ODClassType*)type;
 @end
 
@@ -49,6 +52,7 @@
 - (NSString*)mainMenu;
 - (NSString*)callRepairer;
 - (NSString*)undo;
+- (NSString*)helpConnectTwoCities;
 + (ODClassType*)type;
 @end
 
