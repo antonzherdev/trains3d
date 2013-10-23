@@ -5,6 +5,7 @@
 #import "EGFont.h"
 @class TRLevel;
 @class EGSprite;
+@class TRLevelMenuView;
 @class EGColorSource;
 @class EGLine2d;
 @class EGCamera2D;

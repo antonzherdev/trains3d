@@ -2,6 +2,7 @@
 
 #import "TRLevel.h"
 #import "EGSprite.h"
+#import "TRLevelMenuView.h"
 #import "EGMaterial.h"
 #import "EGCamera2D.h"
 #import "EGContext.h"
@@ -20,6 +21,7 @@
     NSInteger _height;
     NSInteger _delta;
     EGFont* _font;
+    EGFont* _helpFont;
     GEVec2 _textRel;
     EGSprite* _helpBackSprite;
 }
@@ -37,14 +39,14 @@ static ODClassType* _TRLevelPauseMenuView_type;
     if(self) {
         _level = level;
         _name = @"LevelPauseMenu";
-        _menuBackSprite = [EGSprite applyMaterial:[EGColorSource applyColor:geVec4DivI(GEVec4Make(220.0, 220.0, 220.0, 255.0), 255)] size:GEVec2Make(350.0, 150.0)];
+        _menuBackSprite = [EGSprite applyMaterial:[EGColorSource applyColor:TRLevelMenuView.backgroundColor] size:GEVec2Make(350.0, 150.0)];
         _resumeLine = [EGLine2d applyMaterial:[EGColorSource applyColor:geVec4DivI(GEVec4Make(49.0, 90.0, 3.0, 255.0), 255)]];
         _restartLine = [EGLine2d applyMaterial:[EGColorSource applyColor:geVec4DivI(GEVec4Make(248.0, 149.0, 21.0, 255.0), 255)]];
         _mainMenuLine = [EGLine2d applyMaterial:[EGColorSource applyColor:geVec4DivI(GEVec4Make(211.0, 131.0, 235.0, 255.0), 255)]];
         _width = 0;
         _height = 0;
         _delta = 0;
-        _helpBackSprite = [EGSprite applyMaterial:[EGColorSource applyColor:geVec4DivI(GEVec4Make(220.0, 220.0, 220.0, 255.0), 255)] size:GEVec2Make(0.0, 0.0)];
+        _helpBackSprite = [EGSprite applyMaterial:[EGColorSource applyColor:TRLevelMenuView.backgroundColor] size:GEVec2Make(0.0, 0.0)];
     }
     
     return self;
@@ -62,6 +64,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
     _height = ((NSInteger)(150 * s));
     _delta = ((NSInteger)(50 * s));
     _font = [EGGlobal fontWithName:@"lucida_grande" size:24];
+    _helpFont = [EGGlobal fontWithName:@"lucida_grande" size:16];
     _menuBackSprite.size = GEVec2Make(((float)(_width)), ((float)(_height)));
     GEVec2 p = geRectMoveToCenterForSize([_menuBackSprite rect], viewport.size).p0;
     _menuBackSprite.position = p;
@@ -98,11 +101,11 @@ static ODClassType* _TRLevelPauseMenuView_type;
 
 - (void)drawHelp {
     TRHelp* help = [[_level help] get];
-    GEVec2 size = [_font measureCText:help.text];
+    GEVec2 size = geVec2MulVec2([_helpFont measureCText:help.text], GEVec2Make(1.1, 1.4));
     GERect rect = geVec2RectInCenterWithSize(size, geVec2ApplyVec2i([EGGlobal.context viewport].size));
     [_helpBackSprite setRect:rect];
     [_helpBackSprite draw];
-    [_font drawText:help.text color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:geVec3ApplyVec2(geRectCenter(rect)) alignment:egTextAlignmentApplyXY(0.0, 0.0)];
+    [_helpFont drawText:help.text color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:geVec3ApplyVec2(geVec2SubVec2(geRectCenter(rect), GEVec2Make(rect.size.x * 0.45, 0.0))) alignment:egTextAlignmentApplyXY(-1.0, 0.0)];
 }
 
 - (BOOL)isProcessorActive {

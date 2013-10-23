@@ -1,7 +1,7 @@
 package com.antonzherdev.trains
 
 
-trait  Strings {
+trait Strings {
     def railBuilt(cost : int) : string
     def trainArrived(cost : int) : string
     def trainDestroyed(cost : int) : string
@@ -31,7 +31,8 @@ class EnStrings extends Strings {
        $if(egPlatform.touch)
         Simply paint rails by your finger.
        $else
-        Use mouse or move two fingers on a touchpad.
+        Use mouse or
+        move two fingers on a touchpad.
        $endif"
 }
 
@@ -50,7 +51,8 @@ class RuStrings extends Strings{
         $if(egPlatform.touch)
          Для этого просто проведите пальцем по экрану.
         $else
-         Используйте мышку или проведите двумя пальцами по тачпаду.
+         Используйте мышку или
+         проведите двумя пальцами по тачпаду.
         $endif"
 }
 

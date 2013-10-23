@@ -1,13 +1,13 @@
 #import "objd.h"
-#import "GEVec.h"
 #import "EGScene.h"
+#import "GEVec.h"
+@class TRLevelMenuView;
 @class TRLevelSound;
 @class TRLevel;
 @class EGGlobal;
 @class EGDirector;
 @class TRLevelFactory;
 @class TRLevelView;
-@class TRLevelMenuView;
 @class TRLevelPauseMenuView;
 
 @class TRSceneFactory;

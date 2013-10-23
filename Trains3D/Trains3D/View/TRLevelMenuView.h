@@ -39,6 +39,7 @@
 - (void)updateWithDelta:(CGFloat)delta;
 - (BOOL)processEvent:(EGEvent*)event;
 - (BOOL)tapEvent:(EGEvent*)event;
++ (GEVec4)backgroundColor;
 + (ODClassType*)type;
 @end
 

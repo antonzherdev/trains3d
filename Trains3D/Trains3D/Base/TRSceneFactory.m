@@ -1,12 +1,12 @@
 #import "TRSceneFactory.h"
 
+#import "TRLevelMenuView.h"
 #import "TRLevelSound.h"
 #import "TRLevel.h"
 #import "EGContext.h"
 #import "EGDirector.h"
 #import "TRLevelFactory.h"
 #import "TRLevelView.h"
-#import "TRLevelMenuView.h"
 #import "TRLevelPauseMenuView.h"
 @implementation TRSceneFactory
 static ODClassType* _TRSceneFactory_type;
@@ -27,7 +27,7 @@ static ODClassType* _TRSceneFactory_type;
 }
 
 + (EGScene*)sceneForLevel:(TRLevel*)level {
-    return [EGScene sceneWithBackgroundColor:GEVec4Make(0.85, 0.9, 0.75, 1.0) controller:level layers:[TRTrainLayers trainLayersWithLevel:level] soundPlayer:[CNOption applyValue:[TRLevelSound levelSoundWithLevel:level]]];
+    return [EGScene sceneWithBackgroundColor:TRLevelMenuView.backgroundColor controller:level layers:[TRTrainLayers trainLayersWithLevel:level] soundPlayer:[CNOption applyValue:[TRLevelSound levelSoundWithLevel:level]]];
 }
 
 + (void)restartLevel {
