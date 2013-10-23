@@ -103,12 +103,9 @@ static ODClassType* _EGSimpleShaderBuilder_type;
             "\n"
             "void main(void) {\n"
             "   %@\n"
-            "}", [self fragmentHeader], ((_texture) ? [NSString stringWithFormat:@"\n"
-            "%@ mediump vec2 UV;\n"
-            "uniform lowp sampler2D txt;\n", [self in]] : @""), ((_texture) ? [NSString stringWithFormat:@"\n"
-            "    %@ = color * %@(txt, UV);\n"
-            "   ", [self fragColor], [self texture2D]] : [NSString stringWithFormat:@"\n"
-            "    %@ = color;\n"
+            "}", [self fragmentHeader], ((_texture) ? [NSString stringWithFormat:@"%@ mediump vec2 UV;\n"
+            "uniform lowp sampler2D txt;", [self in]] : @""), ((_texture) ? [NSString stringWithFormat:@"    %@ = color * %@(txt, UV);\n"
+            "   ", [self fragColor], [self texture2D]] : [NSString stringWithFormat:@"    %@ = color;\n"
             "   ", [self fragColor]])];
     }
     
@@ -129,9 +126,8 @@ static ODClassType* _EGSimpleShaderBuilder_type;
         "\n"
         "void main(void) {\n"
         "    gl_Position = mvp * vec4(position, 1);%@\n"
-        "}", [self vertexHeader], [self ain], ((_texture) ? [NSString stringWithFormat:@"\n"
-        "%@ mediump vec2 vertexUV;\n"
-        "%@ mediump vec2 UV;\n", [self ain], [self out]] : @""), ((_texture) ? @"\n"
+        "}", [self vertexHeader], [self ain], ((_texture) ? [NSString stringWithFormat:@"%@ mediump vec2 vertexUV;\n"
+        "%@ mediump vec2 UV;", [self ain], [self out]] : @""), ((_texture) ? @"\n"
         "    UV = vertexUV; " : @"")];
 }
 

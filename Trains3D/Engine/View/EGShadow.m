@@ -344,9 +344,8 @@ static ODClassType* _EGShadowShaderText_type;
         "\n"
         "void main(void) {\n"
         "    gl_Position = mwcp * vec4(position, 1);%@\n"
-        "}", [self vertexHeader], ((_texture) ? [NSString stringWithFormat:@"\n"
-        "%@ mediump vec2 vertexUV;\n"
-        "%@ mediump vec2 UV;\n", [self ain], [self out]] : @""), [self ain], ((_texture) ? @"\n"
+        "}", [self vertexHeader], ((_texture) ? [NSString stringWithFormat:@"%@ mediump vec2 vertexUV;\n"
+        "%@ mediump vec2 UV;", [self ain], [self out]] : @""), [self ain], ((_texture) ? @"\n"
         "    UV = vertexUV;" : @"")];
 }
 
@@ -358,16 +357,12 @@ static ODClassType* _EGShadowShaderText_type;
         "void main(void) {\n"
         "   %@\n"
         "   %@\n"
-        "}", (long)[self version], ((_texture) ? [NSString stringWithFormat:@"\n"
-        "%@ mediump vec2 UV;\n"
+        "}", (long)[self version], ((_texture) ? [NSString stringWithFormat:@"%@ mediump vec2 UV;\n"
         "uniform lowp sampler2D txt;\n"
-        "uniform lowp float alphaTestLevel;\n", [self in]] : @""), (([self version] > 100) ? @"\n"
-        "out float depth;\n" : @""), ((_texture) ? [NSString stringWithFormat:@"\n"
-        "    if(%@(txt, UV).a < alphaTestLevel) {\n"
+        "uniform lowp float alphaTestLevel;", [self in]] : @""), (([self version] > 100) ? @"out float depth;" : @""), ((_texture) ? [NSString stringWithFormat:@"    if(%@(txt, UV).a < alphaTestLevel) {\n"
         "        discard;\n"
         "    }\n"
-        "   ", [self texture2D]] : @""), (([self version] > 100) ? @"\n"
-        "    depth = gl_FragCoord.z;\n"
+        "   ", [self texture2D]] : @""), (([self version] > 100) ? @"    depth = gl_FragCoord.z;\n"
         "   " : @"")];
 }
 

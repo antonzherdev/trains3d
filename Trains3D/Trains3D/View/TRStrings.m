@@ -59,9 +59,7 @@ static ODClassType* _TREnStrings_type;
 
 - (NSString*)helpConnectTwoCities {
     return [NSString stringWithFormat:@"Connect two cities by rails.\n"
-        "%@", ((egPlatform().touch) ? @"\n"
-        "Simply paint rails by your finger.\n" : @"\n"
-        "Use mouse or move two fingers on a touchpad.\n")];
+        "%@", ((egPlatform().touch) ? @"Simply paint rails by your finger." : @"Use mouse or move two fingers on a touchpad.")];
 }
 
 - (NSString*)formatCost:(NSInteger)cost {
@@ -156,9 +154,7 @@ static ODClassType* _TRRuStrings_type;
 
 - (NSString*)helpConnectTwoCities {
     return [NSString stringWithFormat:@"Соедините два города рельсами.\n"
-        "%@", ((egPlatform().touch) ? @"\n"
-        "Для этого просто проведите пальцем по экрану.\n" : @"\n"
-        "Используйте мышку или проведите двумя пальцами по тачпаду.\n")];
+        "%@", ((egPlatform().touch) ? @"Для этого просто проведите пальцем по экрану." : @"Используйте мышку или проведите двумя пальцами по тачпаду.")];
 }
 
 - (NSString*)formatCost:(NSInteger)cost {
