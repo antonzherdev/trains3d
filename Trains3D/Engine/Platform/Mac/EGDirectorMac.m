@@ -81,8 +81,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 
     if( _displayLink ) {
-        CVDisplayLinkStop(_displayLink);
-        CVDisplayLinkRelease(_displayLink);
+        [self performSelectorInBackground:@selector(doStopAndRelease) withObject:nil];
         _displayLink = nil;
     }
 
@@ -93,8 +92,17 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     if(!self.isStarted || self.isPaused) return;
 
     [super pause];
-    CVDisplayLinkStop(_displayLink);
+    [self performSelectorInBackground:@selector(doStop) withObject:nil];
     [_view reshape];
+}
+
+- (void)doStop {
+    CVDisplayLinkStop(_displayLink);
+}
+
+- (void)doStopAndRelease {
+    CVDisplayLinkStop(_displayLink);
+    CVDisplayLinkRelease(_displayLink);
 }
 
 - (void) resume {
