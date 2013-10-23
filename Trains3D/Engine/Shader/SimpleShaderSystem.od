@@ -30,13 +30,13 @@ class SimpleShaderBuilder(texture : bool) extends ShaderTextBuilder {
        "$fragmentHeader
        $if(texture)
         $in mediump vec2 UV;
-        uniform lowp sampler2D texture;
+        uniform lowp sampler2D txt;
        $endif
         uniform lowp vec4 color;
 
         void main(void) {
            $if(texture)
-            $fragColor = color * $texture2D\(texture, UV);
+            $fragColor = color * $texture2D\(txt, UV);
            $else
             $fragColor = color;
            $endif

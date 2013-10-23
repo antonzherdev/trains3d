@@ -2,7 +2,6 @@
 #import "EGOpenGLViewMac.h"
 #import "EGDirectorMac.h"
 #import "EGEventMac.h"
-#import "KWExample.h"
 #import "EGContext.h"
 
 

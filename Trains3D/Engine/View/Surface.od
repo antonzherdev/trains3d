@@ -88,10 +88,10 @@ class ViewportShaderBuilder extends ShaderTextBuilder {
        "$fragmentHeader
         $in mediump vec2 UV;
 
-        uniform lowp sampler2D texture;
+        uniform lowp sampler2D txt;
 
         void main(void) {
-            $fragColor = $texture2D\(texture, UV);
+            $fragColor = $texture2D\(txt, UV);
         }"
     def program = ShaderProgram("Viewport", vertex, fragment)
 }

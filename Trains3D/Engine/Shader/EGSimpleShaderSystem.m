@@ -105,8 +105,8 @@ static ODClassType* _EGSimpleShaderBuilder_type;
             "   %@\n"
             "}", [self fragmentHeader], ((_texture) ? [NSString stringWithFormat:@"\n"
             "%@ mediump vec2 UV;\n"
-            "uniform lowp sampler2D texture;\n", [self in]] : @""), ((_texture) ? [NSString stringWithFormat:@"\n"
-            "    %@ = color * %@(texture, UV);\n"
+            "uniform lowp sampler2D txt;\n", [self in]] : @""), ((_texture) ? [NSString stringWithFormat:@"\n"
+            "    %@ = color * %@(txt, UV);\n"
             "   ", [self fragColor], [self texture2D]] : [NSString stringWithFormat:@"\n"
             "    %@ = color;\n"
             "   ", [self fragColor]])];

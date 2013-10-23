@@ -54,10 +54,10 @@ class ShadowSurfaceShaderBuilder extends ViewportShaderBuilder {
        "$fragmentHeader
         $in vec2 UV;
 
-        uniform sampler2D texture;
+        uniform sampler2D txt;
 
         void main(void) {
-            vec4 col = $texture2D\(texture, UV);
+            vec4 col = $texture2D\(txt, UV);
             $fragColor = vec4(col.x, col.x, col.x, 1);
         }"
 }
@@ -100,7 +100,7 @@ class ShadowShaderText(texture : bool) extends ShaderTextBuilder {
        "#version $version
        $if(texture)
         $in mediump vec2 UV;
-        uniform lowp sampler2D texture;
+        uniform lowp sampler2D txt;
         uniform lowp float alphaTestLevel;
        $endif
        $if(version > 100)
@@ -109,7 +109,7 @@ class ShadowShaderText(texture : bool) extends ShaderTextBuilder {
 
         void main(void) {
            $if(texture)
-            if($texture2D\(texture, UV).a < alphaTestLevel) {
+            if($texture2D\(txt, UV).a < alphaTestLevel) {
                 discard;
             }
            $endif

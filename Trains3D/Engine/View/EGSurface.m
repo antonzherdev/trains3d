@@ -301,10 +301,10 @@ static ODClassType* _EGViewportShaderBuilder_type;
     return [NSString stringWithFormat:@"%@\n"
         "%@ mediump vec2 UV;\n"
         "\n"
-        "uniform lowp sampler2D texture;\n"
+        "uniform lowp sampler2D txt;\n"
         "\n"
         "void main(void) {\n"
-        "    %@ = %@(texture, UV);\n"
+        "    %@ = %@(txt, UV);\n"
         "}", [self fragmentHeader], [self in], [self fragColor], [self texture2D]];
 }
 

@@ -385,11 +385,11 @@ static ODClassType* _EGFontShaderBuilder_type;
 - (NSString*)fragment {
     return [NSString stringWithFormat:@"%@\n"
         "%@ mediump vec2 UV;\n"
-        "uniform lowp sampler2D texture;\n"
+        "uniform lowp sampler2D txt;\n"
         "uniform lowp vec4 color;\n"
         "\n"
         "void main(void) {\n"
-        "    %@ = color * %@(texture, UV);\n"
+        "    %@ = color * %@(txt, UV);\n"
         "}", [self fragmentHeader], [self in], [self fragColor], [self texture2D]];
 }
 

@@ -43,7 +43,7 @@ class BillboardShaderBuilder(texture : bool, alpha : bool, shadow : bool, parame
 
         $if(texture)
          $in mediump vec2 UV;
-         uniform lowp sampler2D texture;
+         uniform lowp sampler2D txt;
         $endif
          uniform lowp vec4 color;
          uniform lowp float alphaTestLevel;
@@ -58,7 +58,7 @@ class BillboardShaderBuilder(texture : bool, alpha : bool, shadow : bool, parame
          void main(void) {
              lowp vec4 fragColor;$when(shadow && !isFragColorDeclared)
             $if(texture)
-             $fragColor = fColor * color * $texture2D\(texture, UV);
+             $fragColor = fColor * color * $texture2D\(txt, UV);
             $else
              $fragColor = fColor * color;
             $endif
