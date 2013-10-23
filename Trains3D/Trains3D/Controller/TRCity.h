@@ -1,6 +1,8 @@
 #import "objd.h"
 #import "GEVec.h"
 #import "EGScene.h"
+@class TRStr;
+@protocol TRStrings;
 @class TRRailForm;
 @class EGCounter;
 @class TRRailPoint;
@@ -11,10 +13,11 @@
 
 @interface TRCityColor : ODEnum
 @property (nonatomic, readonly) GEVec4 color;
+@property (nonatomic, readonly) NSString* localName;
 
 + (TRCityColor*)orange;
 + (TRCityColor*)green;
-+ (TRCityColor*)purple;
++ (TRCityColor*)pink;
 + (TRCityColor*)grey;
 + (NSArray*)values;
 @end

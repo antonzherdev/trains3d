@@ -1,12 +1,13 @@
 package com.antonzherdev.trains
 
 class LevelFactory {
-    static val scoreRules = ScoreRules(
-        initialScore = 100000,
+    static val scoreRules = scoreRulesWith(100000)
+    static def scoreRulesWith(initialScore : int) = ScoreRules(
+        initialScore = initialScore,
         railCost = 1000,
         arrivedPrize = train -> train.cars.count * 2000,
         destructionFine = train -> train.cars.count * 3000,
-        delayPeriod = 10,
+        delayPeriod = 60,
         delayFine = (train, i) -> i*1000,
         repairCost = 2000
         )
@@ -22,13 +23,18 @@ class LevelFactory {
     private static def createNewCity : Level -> void = (level : Level)->
         level.createNewCity
     private static val rules = [
-        LevelRules(vec2i(3, 2), scoreRules,
+        LevelRules(vec2i(3, 2), scoreRulesWith(10000),
             ForestRules(types = [TreeType.pine], thickness = 2),
             WeatherRules(windStrength = 0.3, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3),
             repairerSpeed = 30, [
-            (1, showHelp(Loc.helpConnectTwoCities)),
-            (10, train(cars = 2, speed = 30)),
-            (30, createNewCity)//,
+                (1, showHelp(Loc.helpConnectTwoCities)),
+                (30, train(cars = 2, speed = 30)),
+                (8, showTrainHelp),
+                (30, createNewCity),
+                (1, showHelp(Loc.helpNewCity)),
+                (20, train(cars = 1, speed = 20)),
+                (8, showTrainHelpWithSwitches),
+                (30, train(cars = 3, speed = 30))
 //            (20, train(cars = 1.to(3), speed = 30.to(60).set(step = 10)))
         ])
     ]
@@ -39,4 +45,7 @@ class LevelFactory {
         val map = MapSso(mapSize)
         Railroad(map, score, Forest(map, forestRules, Weather(weatherRules)))
     }
+
+    static def showTrainHelp : Level -> void = (level : Level) -> level.showHelp(Loc.helpTrain(level.trains.head.color.localName))
+    static def showTrainHelpWithSwitches : Level -> void = (level : Level) -> level.showHelp(Loc.helpTrainWithSwitches(level.trains.head.color.localName))
 }

@@ -33,9 +33,11 @@ class Level(rules : LevelRules) extends Controller {
         val schedule = Schedule()
         createNewCity
         createNewCity
+        var time = 0.0
         rules.events.for(t -> {
             val f = t.b
-            schedule.schedule(after = t.a, event = f(self))
+            time += t.a
+            schedule.schedule(after = time, event = f(self))
         })
         schedule
     }
@@ -74,11 +76,17 @@ class Level(rules : LevelRules) extends Controller {
     }
 
     def runTrainWith(generator : TrainGenerator) {
-        val city = _cities.randomItem.get
+        val fromCityOpt = _cities.chain.filter{c ->
+            c.canRunNewTrain && !trains.exists(_.isIn(c.tile))
+        }.randomItem
+        if(fromCityOpt.isEmpty) {
+            schedule.schedule(after = 1, runTrainWith(generator))
+            return nil
+        }
+        val fromCity = fromCityOpt.get
+        val city = _cities.chain.filter(_ != fromCity).randomItem.get
         val train = Train(self, generator.trainType, city.color, generator.generateCarsFor(_), generator.generateSpeed)
-        val fromCity = _cities.chain.filter(_ != city && _.canRunNewTrain).randomItem
-        if(fromCity.isEmpty) schedule.schedule(after = 1, runTrainWith(generator))
-        else run(train, fromCity.get)
+        run(train, fromCity)
     }
 
     def testRun(train : Train, fromPoint : RailPoint) {

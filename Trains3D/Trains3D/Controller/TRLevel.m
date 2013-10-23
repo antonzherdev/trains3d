@@ -178,9 +178,11 @@ static ODClassType* _TRLevel_type;
     EGSchedule* schedule = [EGSchedule schedule];
     [self createNewCity];
     [self createNewCity];
+    __block CGFloat time = 0.0;
     [_rules.events forEach:^void(CNTuple* t) {
         void(^f)(TRLevel*) = ((CNTuple*)(t)).b;
-        [schedule scheduleAfter:unumf(((CNTuple*)(t)).a) event:^void() {
+        time += unumf(((CNTuple*)(t)).a);
+        [schedule scheduleAfter:time event:^void() {
             f(self);
         }];
     }];
@@ -220,17 +222,25 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator {
-    TRCity* city = [[__cities randomItem] get];
+    id fromCityOpt = [[[__cities chain] filter:^BOOL(TRCity* c) {
+        return [((TRCity*)(c)) canRunNewTrain] && !([[self trains] existsWhere:^BOOL(TRTrain* _) {
+    return [((TRTrain*)(_)) isInTile:((TRCity*)(c)).tile];
+}]);
+    }] randomItem];
+    if([fromCityOpt isEmpty]) {
+        [_schedule scheduleAfter:1.0 event:^void() {
+            [self runTrainWithGenerator:generator];
+        }];
+        return ;
+    }
+    TRCity* fromCity = [fromCityOpt get];
+    TRCity* city = [[[[__cities chain] filter:^BOOL(TRCity* _) {
+        return !([_ isEqual:fromCity]);
+    }] randomItem] get];
     TRTrain* train = [TRTrain trainWithLevel:self trainType:generator.trainType color:city.color _cars:^id<CNSeq>(TRTrain* _) {
         return [generator generateCarsForTrain:_];
     } speed:[generator generateSpeed]];
-    id fromCity = [[[__cities chain] filter:^BOOL(TRCity* _) {
-        return !([_ isEqual:city]) && [((TRCity*)(_)) canRunNewTrain];
-    }] randomItem];
-    if([fromCity isEmpty]) [_schedule scheduleAfter:1.0 event:^void() {
-        [self runTrainWithGenerator:generator];
-    }];
-    else [self runTrain:train fromCity:[fromCity get]];
+    [self runTrain:train fromCity:fromCity];
 }
 
 - (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint {

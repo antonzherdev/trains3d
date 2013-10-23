@@ -2,6 +2,8 @@ package com.antonzherdev.trains
 
 
 trait Strings {
+    def format(cost : int) : string = "$cost"
+
     def railBuilt(cost : int) : string
     def trainArrived(cost : int) : string
     def trainDestroyed(cost : int) : string
@@ -11,9 +13,16 @@ trait Strings {
     def mainMenu : string
     def callRepairer : string
     def undo : string
-    def helpConnectTwoCities : string
 
-    def format(cost : int) : string = "$cost"
+    def colorOrange : string
+    def colorGreen : string
+    def colorPink : string
+    def colorGrey : string
+
+    def helpConnectTwoCities : string
+    def helpNewCity : string
+    def helpTrain(to : string) : string
+    def helpTrainWithSwitches(to : string) : string
 }
 
 class EnStrings extends Strings {
@@ -26,6 +35,12 @@ class EnStrings extends Strings {
     def mainMenu : string = "Main menu"
     def callRepairer : string = "Call\nrepairers"
     def undo : string = "Undo"
+
+    def colorOrange : string = "orange"
+    def colorGreen : string = "green"
+    def colorPink : string = "pink"
+    def colorGrey : string = "grey"
+
     def helpConnectTwoCities : string =
        "Connect two cities by rails.
        $if(egPlatform.touch)
@@ -34,6 +49,15 @@ class EnStrings extends Strings {
         Use mouse or
         move two fingers on a touchpad.
        $endif"
+    def helpNewCity : string =
+        "New cities sometimes appear.
+         Connect theirs to your railroad."
+    def helpTrain(to : string) : string =
+        "This train is going to $to city.
+         You can understand it by train's color."
+    def helpTrainWithSwitches(to : string) : string =
+        "Turn railroad switches by$if(egPlatform.touch) tap$else click$endif,
+         so train arrive at $to city."
 }
 
 class RuStrings extends Strings{
@@ -46,6 +70,12 @@ class RuStrings extends Strings{
     def mainMenu : string = "Основное меню"
     def callRepairer : string = "Вызвать\nремонтников"
     def undo : string = "Отменить"
+
+    def colorOrange : string = "оранжевый"
+    def colorGreen : string = "зеленый"
+    def colorPink : string = "розовый"
+    def colorGrey : string = "серый"
+
     def helpConnectTwoCities : string =
         "Соедините два города рельсами.
         $if(egPlatform.touch)
@@ -54,6 +84,15 @@ class RuStrings extends Strings{
          Используйте мышку или
          проведите двумя пальцами по тачпаду.
         $endif"
+    def helpNewCity : string =
+        "Иногда появляются новые города.
+         Подсоединяйте их к своей железной дороге."
+    def helpTrain(to : string) : string =
+        "Этот поезд направляется в $to город.
+         Вы можете понять это по цвету поезда."
+    def helpTrainWithSwitches(to : string) : string =
+        "Переключите железнодорожные стрелки$if(egPlatform.touch) касанием$else кликом$endif,
+         чтобы этот поезд попал в $to город."
 }
 
 object Str {

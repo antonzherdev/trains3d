@@ -18,9 +18,12 @@ trait Seq<T> extends Iterable<T> {
         if(index >= count) nil
         else apply(index)
 
-    def randomItem : T? =
-        if(isEmpty) nil
+    def randomItem : T? = {
+        val c = count
+        if(c == 0) nil
+        else if(c == 1) head
         else apply(UInt.rnd(count - 1))
+    }
 
     def toSet : Set<T> = convertWith(HashSetBuilder<T>())
     def add(item : T) : Seq<T> = {

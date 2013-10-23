@@ -7,6 +7,7 @@
 @protocol TRStrings;
 
 @protocol TRStrings<NSObject>
+- (NSString*)formatCost:(NSInteger)cost;
 - (NSString*)railBuiltCost:(NSInteger)cost;
 - (NSString*)trainArrivedCost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
@@ -16,8 +17,14 @@
 - (NSString*)mainMenu;
 - (NSString*)callRepairer;
 - (NSString*)undo;
+- (NSString*)colorOrange;
+- (NSString*)colorGreen;
+- (NSString*)colorPink;
+- (NSString*)colorGrey;
 - (NSString*)helpConnectTwoCities;
-- (NSString*)formatCost:(NSInteger)cost;
+- (NSString*)helpNewCity;
+- (NSString*)helpTrainTo:(NSString*)to;
+- (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
 @end
 
 
@@ -34,7 +41,14 @@
 - (NSString*)mainMenu;
 - (NSString*)callRepairer;
 - (NSString*)undo;
+- (NSString*)colorOrange;
+- (NSString*)colorGreen;
+- (NSString*)colorPink;
+- (NSString*)colorGrey;
 - (NSString*)helpConnectTwoCities;
+- (NSString*)helpNewCity;
+- (NSString*)helpTrainTo:(NSString*)to;
+- (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
 + (ODClassType*)type;
 @end
 
@@ -52,7 +66,14 @@
 - (NSString*)mainMenu;
 - (NSString*)callRepairer;
 - (NSString*)undo;
+- (NSString*)colorOrange;
+- (NSString*)colorGreen;
+- (NSString*)colorPink;
+- (NSString*)colorGrey;
 - (NSString*)helpConnectTwoCities;
+- (NSString*)helpNewCity;
+- (NSString*)helpTrainTo:(NSString*)to;
+- (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
 + (ODClassType*)type;
 @end
 

@@ -57,10 +57,41 @@ static ODClassType* _TREnStrings_type;
     return @"Undo";
 }
 
+- (NSString*)colorOrange {
+    return @"orange";
+}
+
+- (NSString*)colorGreen {
+    return @"green";
+}
+
+- (NSString*)colorPink {
+    return @"pink";
+}
+
+- (NSString*)colorGrey {
+    return @"grey";
+}
+
 - (NSString*)helpConnectTwoCities {
     return [NSString stringWithFormat:@"Connect two cities by rails.\n"
         "%@", ((egPlatform().touch) ? @"Simply paint rails by your finger." : @"Use mouse or\n"
         "move two fingers on a touchpad.")];
+}
+
+- (NSString*)helpNewCity {
+    return @"New cities sometimes appear.\n"
+        "Connect theirs to your railroad.";
+}
+
+- (NSString*)helpTrainTo:(NSString*)to {
+    return [NSString stringWithFormat:@"This train is going to %@ city.\n"
+        "You can understand it by train's color.", to];
+}
+
+- (NSString*)helpTrainWithSwitchesTo:(NSString*)to {
+    return [NSString stringWithFormat:@"Turn railroad switches by%@,\n"
+        "so train arrive at %@ city.", ((egPlatform().touch) ? @" tap" : @" click"), to];
 }
 
 - (NSString*)formatCost:(NSInteger)cost {
@@ -153,10 +184,41 @@ static ODClassType* _TRRuStrings_type;
     return @"Отменить";
 }
 
+- (NSString*)colorOrange {
+    return @"оранжевый";
+}
+
+- (NSString*)colorGreen {
+    return @"зеленый";
+}
+
+- (NSString*)colorPink {
+    return @"розовый";
+}
+
+- (NSString*)colorGrey {
+    return @"серый";
+}
+
 - (NSString*)helpConnectTwoCities {
     return [NSString stringWithFormat:@"Соедините два города рельсами.\n"
         "%@", ((egPlatform().touch) ? @"Для этого просто проведите пальцем по экрану." : @"Используйте мышку или\n"
         "проведите двумя пальцами по тачпаду.")];
+}
+
+- (NSString*)helpNewCity {
+    return @"Иногда появляются новые города.\n"
+        "Подсоединяйте их к своей железной дороге.";
+}
+
+- (NSString*)helpTrainTo:(NSString*)to {
+    return [NSString stringWithFormat:@"Этот поезд направляется в %@ город.\n"
+        "Вы можете понять это по цвету поезда.", to];
+}
+
+- (NSString*)helpTrainWithSwitchesTo:(NSString*)to {
+    return [NSString stringWithFormat:@"Переключите железнодорожные стрелки%@,\n"
+        "чтобы этот поезд попал в %@ город.", ((egPlatform().touch) ? @" касанием" : @" кликом"), to];
 }
 
 - (NSString*)formatCost:(NSInteger)cost {

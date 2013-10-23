@@ -114,8 +114,13 @@ static ODClassType* _CNIndexFunSeq_type;
 }
 
 - (id)randomItem {
-    if([self isEmpty]) return [CNOption none];
-    else return [CNOption applyValue:[self applyIndex:oduIntRndMax([self count] - 1)]];
+    NSUInteger c = [self count];
+    if(c == 0) {
+        return [CNOption none];
+    } else {
+        if(c == 1) return [CNOption applyValue:[self head]];
+        else return [CNOption applyValue:[self applyIndex:oduIntRndMax([self count] - 1)]];
+    }
 }
 
 - (id<CNSet>)toSet {
