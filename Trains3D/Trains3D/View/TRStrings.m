@@ -98,6 +98,10 @@ static ODClassType* _TREnStrings_type;
     return @"purple";
 }
 
+- (NSString*)colorYellow {
+    return @"yellow";
+}
+
 - (NSString*)colorGrey {
     return @"grey";
 }
@@ -250,7 +254,11 @@ static ODClassType* _TRRuStrings_type;
 }
 
 - (NSString*)colorPurple {
-    return @"Сиреневый";
+    return @"cиреневый";
+}
+
+- (NSString*)colorYellow {
+    return @"желтый";
 }
 
 - (NSString*)colorGrey {

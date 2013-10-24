@@ -75,7 +75,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, _cars 
     private def correct(correction : RailPointCorrection) {
         if(correction.error != 0.0) {
             val isMoveToCity = isMoveToCityFor(correction.point)
-            if(!isMoveToCity || correction.error >= length) {
+            if(!isMoveToCity || correction.error >= length - 0.5) {
                 if(isMoveToCity && (color == CityColor.grey || level.cityFor(correction.point.tile).get.color == color)) {
                     level.arrived(self)
                 } else {

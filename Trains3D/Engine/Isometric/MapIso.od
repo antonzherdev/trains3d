@@ -32,6 +32,18 @@ class MapSso(size : vec2i) {
             || tile.y - tile.x == -size.x //bottom
         )
 
+    def isVisible(tile : vec2i) : bool =
+        tile.y + tile.x >= -1 //left
+        && tile.y - tile.x <= size.y //top
+        && tile.y + tile.x <= size.x + size.y - 1 //right
+        && tile.y - tile.x >= -size.x
+
+    def isVisible(vec2 : vec2) : bool =
+        vec2.y + vec2.x >= -1 //left
+        && vec2.y - vec2.x <= size.y //top
+        && vec2.y + vec2.x <= size.x + size.y - 1 //right
+        && vec2.y - vec2.x >= -size.x
+
     private def allPosibleTiles : Chain<vec2i> =
         Range(start = limits.x, end = limits.x2, step = 1).chain
             .mul<int>(Range(start = limits.y, end = limits.y2, step = 1))

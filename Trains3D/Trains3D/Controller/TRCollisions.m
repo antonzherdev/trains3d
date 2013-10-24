@@ -1,5 +1,6 @@
 #import "TRCollisions.h"
 
+#import "EGMapIso.h"
 #import "EGCollisionWorld.h"
 #import "TRTrain.h"
 #import "TRCar.h"
@@ -8,17 +9,22 @@
 #import "TRRailPoint.h"
 #import "EGDynamicWorld.h"
 @implementation TRTrainsCollisionWorld{
+    EGMapSso* _map;
     EGCollisionWorld* _world;
 }
 static ODClassType* _TRTrainsCollisionWorld_type;
+@synthesize map = _map;
 
-+ (id)trainsCollisionWorld {
-    return [[TRTrainsCollisionWorld alloc] init];
++ (id)trainsCollisionWorldWithMap:(EGMapSso*)map {
+    return [[TRTrainsCollisionWorld alloc] initWithMap:map];
 }
 
-- (id)init {
+- (id)initWithMap:(EGMapSso*)map {
     self = [super init];
-    if(self) _world = [EGCollisionWorld collisionWorld];
+    if(self) {
+        _map = map;
+        _world = [EGCollisionWorld collisionWorld];
+    }
     
     return self;
 }
@@ -41,19 +47,26 @@ static ODClassType* _TRTrainsCollisionWorld_type;
 }
 
 - (id<CNSeq>)detect {
-    return [[[[_world detect] chain] map:^TRCarsCollision*(EGCollision* collision) {
+    return [[[[_world detect] chain] flatMap:^id(EGCollision* collision) {
+        if([((EGCollision*)(collision)).contacts allConfirm:^BOOL(EGContact* _) {
+    return [self isOutOfMapContact:_];
+}]) return [CNOption none];
         TRCar* car1 = ((EGCollisionBody*)(((EGCollision*)(collision)).bodies.a)).data;
         TRCar* car2 = ((EGCollisionBody*)(((EGCollision*)(collision)).bodies.b)).data;
         TRRailPoint* point = [[[[[[[(@[[car1 position].head, [car1 position].tail]) chain] mul:(@[[car2 position].head, [car2 position].tail])] sortBy] ascBy:^id(CNTuple* pair) {
             TRRailPoint* x = ((CNTuple*)(pair)).a;
             TRRailPoint* y = ((CNTuple*)(pair)).b;
-            if(x.form == y.form && GEVec2iEq(x.tile, y.tile)) return numf(fabs(x.x - y.x));
+            if(x.form == y.form && GEVec2iEq(x.tile, y.tile)) return numf(floatAbs(x.x - y.x));
             else return @1000;
         }] endSort] map:^TRRailPoint*(CNTuple* _) {
             return ((CNTuple*)(_)).a;
         }] head];
-        return [TRCarsCollision carsCollisionWithCars:[CNPair pairWithA:car1 b:car2] railPoint:point];
+        return [CNOption someValue:[TRCarsCollision carsCollisionWithCars:[CNPair pairWithA:car1 b:car2] railPoint:point]];
     }] toArray];
+}
+
+- (BOOL)isOutOfMapContact:(EGContact*)contact {
+    return !([_map isVisibleVec2:geVec3Xy(contact.a)]) && !([_map isVisibleVec2:geVec3Xy(contact.b)]);
 }
 
 - (ODClassType*)type {
@@ -71,15 +84,19 @@ static ODClassType* _TRTrainsCollisionWorld_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
+    TRTrainsCollisionWorld* o = ((TRTrainsCollisionWorld*)(other));
+    return [self.map isEqual:o.map];
 }
 
 - (NSUInteger)hash {
-    return 0;
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.map hash];
+    return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"map=%@", self.map];
     [description appendString:@">"];
     return description;
 }

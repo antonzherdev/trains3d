@@ -194,7 +194,7 @@ static ODClassType* _TRTrain_type;
 - (void)correctCorrection:(TRRailPointCorrection*)correction {
     if(!(eqf(correction.error, 0.0))) {
         BOOL isMoveToCity = [self isMoveToCityForPoint:correction.point];
-        if(!(isMoveToCity) || correction.error >= _length) {
+        if(!(isMoveToCity) || correction.error >= _length - 0.5) {
             if(isMoveToCity && (_color == TRCityColor.grey || ((TRCity*)([[_level cityForTile:correction.point.tile] get])).color == _color)) {
                 [_level arrivedTrain:self];
             } else {

@@ -3,7 +3,7 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 import core.math._
 
-class TrainsCollisionWorld {
+class TrainsCollisionWorld(map : MapSso) {
     private val world = CollisionWorld<Car>()
 
     def add(train : Train) {
@@ -18,22 +18,28 @@ class TrainsCollisionWorld {
         }
     }
 
-    def detect : [CarsCollision] = world.detect.chain.map{collision ->
+    def detect : [CarsCollision] = world.detect.chain.flatMap<CarsCollision>{collision ->
+        if(collision.contacts.all(isOutOfMap(_))) return Option.none<CarsCollision>
+
         val car1 = collision.bodies.a.data
         val car2 = collision.bodies.b.data
+
         val point =
             [car1.position.head, car1.position.tail].chain
                 .mul([car2.position.head, car2.position.tail])
                 .sortBy.asc{pair ->
                     val x = pair.a
                     val y = pair.b
-                    if(x.form == y.form && x.tile == y.tile) fabs(x.x - y.x)
+                    if(x.form == y.form && x.tile == y.tile) (x.x - y.x).abs
                     else 1000
                 }.endSort
                 .map(_.a)
                 .head
-        CarsCollision(Pair(car1, car2), point)
+        Option.some(CarsCollision(Pair(car1, car2), point))
     }.toArray
+
+    private def isOutOfMap(contact : Contact) : bool =
+        !map.isVisible(contact.a.xy) && !map.isVisible(contact.b.xy)
 }
 
 class CarsCollision(cars : Pair<Car>, railPoint : RailPoint)

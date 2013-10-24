@@ -1,6 +1,7 @@
 #import "objd.h"
-#import "EGScene.h"
 #import "GEVec.h"
+#import "EGScene.h"
+@class EGMapSso;
 @class EGCollisionWorld;
 @class TRTrain;
 @class TRCar;
@@ -8,6 +9,7 @@
 @class EGCollisionBody;
 @class TRCarPosition;
 @class TRRailPoint;
+@class EGContact;
 @class EGDynamicWorld;
 @class EGCollisionPlane;
 @class EGRigidBody;
@@ -17,8 +19,10 @@
 @class TRTrainsDynamicWorld;
 
 @interface TRTrainsCollisionWorld : NSObject
-+ (id)trainsCollisionWorld;
-- (id)init;
+@property (nonatomic, readonly) EGMapSso* map;
+
++ (id)trainsCollisionWorldWithMap:(EGMapSso*)map;
+- (id)initWithMap:(EGMapSso*)map;
 - (ODClassType*)type;
 - (void)addTrain:(TRTrain*)train;
 - (void)removeTrain:(TRTrain*)train;

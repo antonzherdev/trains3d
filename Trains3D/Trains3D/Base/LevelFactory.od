@@ -20,14 +20,20 @@ class LevelFactory {
     private static def expressTrain(cars : Range, speed : Range) : Level -> void = (level : Level)->
         level.runTrainWith(TrainGenerator(TrainType.simple, cars, speed, [CarType.expressCar, CarType.expressEngine]))
     private static def showHelp(text : string) : Level -> void = (level : Level) -> level.showHelp(text)
-    private static def createNewCity : Level -> void = (level : Level)->
+    private static def createNewCity : Level -> void = (level : Level) -> level.createNewCity
+    private static def create2Cities : Level -> void = (level : Level) -> {
         level.createNewCity
+        level.createNewCity
+    }
+    private static def createCityWith(tile : vec2i, direction : CityAngle) : Level -> void = (level : Level) ->
+        level.createCityWith(tile, direction)
     private static val rules = [
         //1
         LevelRules(vec2i(5, 3), scoreRulesWith(20000),
             ForestRules(types = [TreeType.pine], thickness = 2),
             WeatherRules(windStrength = 0.3, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3),
             repairerSpeed = 20, [
+                (0, create2Cities),
                 (1, showHelp(Loc.helpConnectTwoCities)),
                 (30, train(cars = 2, speed = 30)),
                 (8, showTrainHelp),
@@ -43,6 +49,7 @@ class LevelFactory {
             ForestRules(types = [TreeType.pine], thickness = 2),
             WeatherRules(windStrength = 0.3, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3),
             repairerSpeed = 20, [
+                (0, create2Cities),
                 (20, slowTrain),
                 (30, createNewCity),
                 (20, slowTrain),
@@ -56,6 +63,7 @@ class LevelFactory {
             ForestRules(types = [TreeType.pine], thickness = 2),
             WeatherRules(windStrength = 0.3, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3),
             repairerSpeed = 20, [
+                (0, create2Cities),
                 (20, slowTrain),
                 (20, slowTrain),
                 (20, slowTrain),

@@ -204,7 +204,7 @@ static ODClassType* _CNQueue_type;
 - (BOOL)allConfirm:(BOOL(^)(id))confirm {
     __block BOOL ret = YES;
     [self goOn:^BOOL(id x) {
-        if(!(confirm(numb(ret)))) {
+        if(!(confirm(x))) {
             ret = NO;
             return NO;
         } else {

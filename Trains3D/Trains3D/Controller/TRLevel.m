@@ -149,7 +149,7 @@ static ODClassType* _TRLevel_type;
         _schedule = [self createSchedule];
         __trains = (@[]);
         __repairer = [CNOption none];
-        _collisionWorld = [TRTrainsCollisionWorld trainsCollisionWorld];
+        _collisionWorld = [TRTrainsCollisionWorld trainsCollisionWorldWithMap:_map];
         _dynamicWorld = [TRTrainsDynamicWorld trainsDynamicWorld];
         __dyingTrains = [NSMutableArray mutableArray];
         _looseCounter = 0.0;
@@ -183,8 +183,6 @@ static ODClassType* _TRLevel_type;
 
 - (EGSchedule*)createSchedule {
     EGSchedule* schedule = [EGSchedule schedule];
-    [self createNewCity];
-    [self createNewCity];
     __block CGFloat time = 0.0;
     [_rules.events forEach:^void(CNTuple* t) {
         void(^f)(TRLevel*) = ((CNTuple*)(t)).b;
@@ -200,7 +198,11 @@ static ODClassType* _TRLevel_type;
     GEVec2i tile = uwrap(GEVec2i, [[[[_map.partialTiles chain] exclude:[[[self cities] chain] map:^id(TRCity* _) {
         return wrap(GEVec2i, ((TRCity*)(_)).tile);
     }]] randomItem] get]);
-    TRCity* city = [TRCity cityWithColor:[TRCityColor values][[[self cities] count]] tile:tile angle:[self randomCityDirectionForTile:tile]];
+    [self createCityWithTile:tile direction:[self randomCityDirectionForTile:tile]];
+}
+
+- (void)createCityWithTile:(GEVec2i)tile direction:(TRCityAngle*)direction {
+    TRCity* city = [TRCity cityWithColor:[TRCityColor values][[[self cities] count]] tile:tile angle:direction];
     [_forest cutDownTile:tile];
     [_railroad addRail:[TRRail railWithTile:tile form:city.angle.form]];
     [__cities appendItem:city];
@@ -215,7 +217,7 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)runTrain:(TRTrain*)train fromCity:(TRCity*)fromCity {
-    fromCity.expectedTrainCounter = [EGCounter applyLength:3.0 finish:^void() {
+    fromCity.expectedTrainCounter = [EGCounter applyLength:5.0 finish:^void() {
         [train startFromCity:fromCity];
         [self addTrain:train];
     }];

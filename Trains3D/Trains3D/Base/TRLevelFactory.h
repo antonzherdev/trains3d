@@ -12,6 +12,7 @@
 @class TRCarType;
 @class TRTrainGenerator;
 @class TRLevel;
+@class TRCityAngle;
 @class TRScore;
 @class TRNotifications;
 @class TRRailroad;

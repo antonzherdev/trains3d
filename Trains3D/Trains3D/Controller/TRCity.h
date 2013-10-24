@@ -18,8 +18,8 @@
 + (TRCityColor*)orange;
 + (TRCityColor*)green;
 + (TRCityColor*)pink;
++ (TRCityColor*)yellow;
 + (TRCityColor*)purple;
-+ (TRCityColor*)xx;
 + (TRCityColor*)grey;
 + (NSArray*)values;
 @end

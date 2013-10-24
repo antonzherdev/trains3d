@@ -16,6 +16,8 @@ typedef struct EGMapTileCutState EGMapTileCutState;
 - (ODClassType*)type;
 - (BOOL)isFullTile:(GEVec2i)tile;
 - (BOOL)isPartialTile:(GEVec2i)tile;
+- (BOOL)isVisibleTile:(GEVec2i)tile;
+- (BOOL)isVisibleVec2:(GEVec2)vec2;
 - (EGMapTileCutState)cutStateForTile:(GEVec2i)tile;
 + (CGFloat)ISO;
 + (ODClassType*)type;

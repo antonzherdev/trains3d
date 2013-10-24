@@ -70,6 +70,7 @@
 - (id)repairer;
 - (id<CNSeq>)dyingTrains;
 - (void)createNewCity;
+- (void)createCityWithTile:(GEVec2i)tile direction:(TRCityAngle*)direction;
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator;
 - (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint;
 - (void)updateWithDelta:(CGFloat)delta;

@@ -24,6 +24,7 @@ trait Strings {
     def colorGreen : string
     def colorPink : string
     def colorPurple : string
+    def colorYellow : string
     def colorGrey : string
 
     def helpConnectTwoCities : string
@@ -53,6 +54,7 @@ class EnStrings extends Strings {
     def colorGreen : string = "green"
     def colorPink : string = "pink"
     def colorPurple : string = "purple"
+    def colorYellow : string = "yellow"
     def colorGrey : string = "grey"
 
     def helpConnectTwoCities : string =
@@ -94,7 +96,8 @@ class RuStrings extends Strings{
     def colorOrange : string = "оранжевый"
     def colorGreen : string = "зеленый"
     def colorPink : string = "розовый"
-    def colorPurple : string = "Сиреневый"
+    def colorPurple : string = "cиреневый"
+    def colorYellow : string = "желтый"
     def colorGrey : string = "серый"
 
     def helpConnectTwoCities : string =

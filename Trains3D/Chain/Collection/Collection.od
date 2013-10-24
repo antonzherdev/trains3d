@@ -53,7 +53,7 @@ trait Traversable<T> {
     def all(confirm : T -> bool) : bool = {
         var ret = true
         go{x ->
-            if(!confirm(ret)) {
+            if(!confirm(x)) {
                 ret = false
                 false
             } else true

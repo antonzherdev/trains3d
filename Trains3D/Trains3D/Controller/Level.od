@@ -22,7 +22,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
 
 
-    val collisionWorld = TrainsCollisionWorld()
+    val collisionWorld = TrainsCollisionWorld(map)
     val dynamicWorld = TrainsDynamicWorld()
 
     private var _dyingTrains = MutableArray<Train>()
@@ -31,8 +31,6 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
     private def createSchedule : Schedule = {
         val schedule = Schedule()
-        createNewCity
-        createNewCity
         var time = 0.0
         rules.events.for(t -> {
             val f = t.b
@@ -44,7 +42,12 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
     def createNewCity {
         val tile = map.partialTiles.chain.exclude(cities.chain.map(_.tile)).randomItem.get
-        val city = City(CityColor[cities.count], tile, randomCityDirectionFor(tile))
+        createCityWith(tile = tile,
+            direction = randomCityDirectionFor(tile))
+    }
+
+    def createCityWith(tile : vec2i, direction : CityAngle) {
+        val city = City(CityColor[cities.count], tile, direction)
         forest.cutDown(tile)
         railroad.add(Rail(tile, city.angle.form))
         _cities.append(city)
@@ -62,7 +65,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     }
 
     private def run(train : Train, fromCity : City) {
-        fromCity.expectedTrainCounter = Counter(3, finish = {
+        fromCity.expectedTrainCounter = Counter(5, finish = {
             train.startFrom(fromCity)
             add(train)
         })
