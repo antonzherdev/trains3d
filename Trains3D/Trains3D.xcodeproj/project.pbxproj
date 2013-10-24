@@ -1112,6 +1112,7 @@
 		0214B12D1773394400C03C71 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0214B1451773394500C03C71 /* Trains3DTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Trains3DTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0214B1461773394500C03C71 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		0291F31B181950600065E480 /* Trains3D.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Trains3D.entitlements; sourceTree = "<group>"; };
 		02C70A4D1802A3E500007F50 /* Trains3Di.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Trains3Di.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02C70A4E1802A3E500007F50 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		02C70A501802A3E500007F50 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -2396,6 +2397,7 @@
 		0214B12E1773394400C03C71 /* Trains3D */ = {
 			isa = PBXGroup;
 			children = (
+				0291F31B181950600065E480 /* Trains3D.entitlements */,
 				6F3DFE36FCF7A5D743EE00C9 /* Controller */,
 				6F3DFCBDBB6AEBC710C44B0F /* Test */,
 				6F3DF96A23DE11EF31BB04A6 /* Processor */,
@@ -4222,6 +4224,13 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Anton Zherdev";
 				TargetAttributes = {
+					0214B1241773394400C03C71 = {
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 1;
+							};
+						};
+					};
 					02C70A4C1802A3E500007F50 = {
 						DevelopmentTeam = 29S6DQ4WTL;
 					};
@@ -5541,6 +5550,8 @@
 		0214B1571773394500C03C71 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Trains3D/Trains3D.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Trains3D/Platform/Mac/Trains3D-Prefix.pch";
@@ -5560,6 +5571,8 @@
 		0214B1581773394500C03C71 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Trains3D/Trains3D.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Trains3D/Platform/Mac/Trains3D-Prefix.pch";
