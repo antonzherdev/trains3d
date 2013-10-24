@@ -58,22 +58,24 @@ class LevelFactory {
             repairerSpeed = 20, [
                 (20, slowTrain),
                 (20, slowTrain),
-                (10, slowTrain),
                 (20, slowTrain),
                 (10, createNewCity),
                 (20, slowTrain),
                 (20, slowTrain),
                 (10, slowTrain),
-                (10, slowTrain),
                 (10, createNewCity),
                 (20, slowTrain),
-                (10, slowTrain),
+                (20, slowTrain),
                 (10, slowTrain),
                 (10, createNewCity),
                 (10, slowTrain),
+                (20, slowTrain),
                 (10, slowTrain),
+                (20, slowTrain),
+                (20, slowTrain),
+                (15, slowTrain),
                 (10, slowTrain),
-                (10, slowTrain)
+                (20, slowTrain)
             ])
     ]
     static def slowTrain = train(cars = 1.to(4), speed = 20.to(40))
