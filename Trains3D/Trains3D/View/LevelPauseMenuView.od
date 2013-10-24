@@ -39,17 +39,45 @@ trait PauseView extends TapProcessor {
 }
 
 trait MenuView {
-    def font : Font
+    private var font : Font
     def button(text : string, onClick : () -> void) : Button =
         Button(drawLine *|* Button.drawText(font, vec4(0, 0, 0, 1), text), onClick)
 
     def drawLine : Rect -> void = (rect : Rect) ->
         D2D.drawLine(vec4(0.3, 0.3, 0.3, 1), rect.p1, rect.p3)
+
+    def buttons : [Button]
+
+    def tap(event : Event) : bool = buttons.exists(_.tap(event))
+
+    def draw {
+        menuBackSprite.draw
+        buttons.for(_.draw)
+    }
+
+    def menuBackSprite : Sprite
+
+    def reshapeWith(viewport : Rect) {
+        val s = context.scale
+        val width = 350*s
+        val delta = 50*s
+        val height = delta*buttons.count
+        font = fontWith(name = "lucida_grande", size = 24)
+
+        menuBackSprite.size = vec2(width, height)
+        menuBackSprite.position = menuBackSprite.rect.moveToCenterFor(viewport.size).p0
+        var p = menuBackSprite.position + vec2(0, height - delta)
+
+        buttons.chain.for{button ->
+            button.rect = Rect(p, vec2(width, delta))
+            p = p - vec2(0, delta)
+        }
+    }
+
 }
 
 class PauseMenuView(level : Level) extends PauseView with MenuView {
-    private val menuBackSprite = Sprite(vec4(0.9, 0.9, 0.9, 1), vec2(350, 150))
-    var font : Font
+    val menuBackSprite = Sprite(vec4(0.9, 0.9, 0.9, 1), vec2(350, 150))
 
     private val resumeButton = button(Loc.resumeGame, director.resume)
     private val chooseLevelButton = button(Loc.chooseLevel, director.resume)
@@ -57,38 +85,12 @@ class PauseMenuView(level : Level) extends PauseView with MenuView {
         SceneFactory.restartLevel
         director.resume
     }
-    private val chooseLevel = button(Loc.resumeGame, director.resume)
-
-    def reshapeWith(viewport : Rect) {
-        val s = context.scale
-        val width = 350*s
-        val height = 150*s
-        val delta = 50*s
-        font = fontWith(name = "lucida_grande", size = 24)
-
-        menuBackSprite.size = vec2(width, height)
-        val p = menuBackSprite.rect.moveToCenterFor(viewport.size).p0
-        menuBackSprite.position = p
-        chooseLevelButton.rect = Rect(p, vec2(width, delta))
-        restartButton.rect = Rect(p + vec2(0, delta), vec2(width, delta))
-        resumeButton.rect = Rect(p + vec2(0, 2*delta), vec2(width, delta))
-    }
-
-    def draw {
-        menuBackSprite.draw
-        resumeButton.draw
-        restartButton.draw
-        chooseLevelButton.draw
-    }
-
-    def tap(event : Event) : bool =
-        resumeButton.tap(event)
-        || restartButton.tap(event)
+    val buttons = [resumeButton, restartButton, chooseLevelButton]
 }
 
-class WinMenu(level : Level) extends PauseView {
-
-}
+//class WinMenu(level : Level) extends PauseView {
+//
+//}
 
 class HelpView(level : Level) extends PauseView {
     private var helpFont : Font
