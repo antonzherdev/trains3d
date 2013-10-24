@@ -112,6 +112,8 @@ class Level(rules : LevelRules) extends Controller {
                 if(!_trains.exists(_.isIn(city.tile))) city.resumeTrainRunning
             }
         }
+        if(score.score < 0) lose
+        if(schedule.isEmpty && _trains.isEmpty && _dyingTrains.isEmpty) win
     }
 
     def tryTurn(theSwitch : Switch) {
@@ -178,6 +180,18 @@ class Level(rules : LevelRules) extends Controller {
         _help = nil
         director.resume
     }
+
+    private var _result : LevelResult? = nil
+    def win {
+        _result = LevelResult(true)
+        director.pause
+    }
+
+    def lose {
+        _result = LevelResult(false)
+        director.pause
+    }
 }
 
 class Help(text : string)
+class LevelResult(win : bool)

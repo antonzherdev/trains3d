@@ -1,28 +1,60 @@
 package com.antonzherdev.trains
 
-class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor with TapProcessor {
+class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor {
     val name = "LevelPauseMenu"
 
-    private val menuBackSprite = Sprite(LevelMenuView.backgroundColor, vec2(350, 150))
+    private val menuView = PauseMenuView(level)
+    private val helpView = HelpView(level)
+
+    var camera : Camera
+
+    def reshapeWith(viewport : Rect) {
+        camera = Camera2D(vec2(viewport.width, viewport.height))
+        menuView.reshapeWith(viewport)
+        helpView.reshapeWith(viewport)
+    }
+
+    def view : PauseView =
+        if(level.help.isEmpty) menuView else helpView
+
+    def draw {
+        if(!director.isPaused) return nil
+
+        BlendFunction.standard { context.depthTest.disabled {
+            D2D.drawSprite(material = vec4(0, 0, 0, 0.5), at = vec3(0, 0, 0), Rect(vec2(0, 0), context.viewport.size))
+            view.draw
+        }}
+
+    }
+
+    def isProcessorActive : bool = director.isPaused
+    def process(event : Event) : bool = {
+        event.tap(view)
+    }
+}
+
+trait PauseView extends TapProcessor {
+    def reshapeWith(viewport : Rect)
+    def draw
+}
+
+class PauseMenuView(level : Level) extends PauseView {
+    private val menuBackSprite = Sprite(vec4(0.9, 0.9, 0.9, 1), vec2(350, 150))
     private val resumeLine = Line2d(vec4(49, 90, 3, 255)/255)
     private val restartLine = Line2d(vec4(248, 149, 21, 255)/255)
     private val mainMenuLine = Line2d(vec4(211, 131, 235, 255)/255)
-
-    var camera : Camera
     private var width = 0
     private var height = 0
     private var delta = 0
     private var font : Font
-    private var helpFont : Font
     private var textRel : vec2
+
     def reshapeWith(viewport : Rect) {
-        camera = Camera2D(vec2(viewport.width, viewport.height))
         val s = context.scale
         width = 350*s
         height = 150*s
         delta = 50*s
         font = fontWith(name = "lucida_grande", size = 24)
-        helpFont = fontWith(name = "lucida_grande", size = 16)
         menuBackSprite.size = vec2(width, height)
         val p = menuBackSprite.rect.moveToCenterFor(viewport.size).p0
         menuBackSprite.position = p
@@ -30,16 +62,6 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor wi
     }
 
     def draw {
-        if(!director.isPaused) return nil
-
-        BlendFunction.standard { context.depthTest.disabled {
-            D2D.drawSprite(material = vec4(0, 0, 0, 0.5), at = vec3(0, 0, 0), Rect(vec2(0, 0), context.viewport.size))
-            if(level.help.isEmpty) drawMenu else drawHelp
-        }}
-
-    }
-
-    def drawMenu {
         val p = menuBackSprite.position
         menuBackSprite.draw
 
@@ -60,8 +82,27 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor wi
         font.draw(text = Loc.mainMenu, color = vec4(0, 0, 0, 1), at = vec3(textRel, 0), TextAlignment.baseline(-1))
     }
 
+    def tap(event : Event) : bool = {
+        val p = event.location
+        if(menuBackSprite.contains(p)) {
+            if(p.y > resumeLine.p0.y) director.resume
+            else if(p.y > restartLine.p0.y) {
+                SceneFactory.restartLevel
+                director.resume
+            }
+            true
+        } else false
+    }
+}
+
+class HelpView(level : Level) extends PauseView {
+    private var helpFont : Font
+    def reshapeWith(viewport : Rect) {
+        helpFont = fontWith(name = "lucida_grande", size = 16)
+    }
+
     private val helpBackSprite = Sprite(LevelMenuView.backgroundColor, vec2(0, 0))
-    def drawHelp {
+    def draw {
         val help = level.help.get
         val size = helpFont.measureC(help.text)*vec2(1.1, 1.4)
         val rect = size.rectInCenterWith(context.viewport.size)
@@ -71,26 +112,8 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor wi
         helpFont.draw(help.text, color = vec4(0, 0, 0, 1), at = rect.center - vec2(rect.size.x*0.45, 0), TextAlignment(-1, 0))
     }
 
-
-    def isProcessorActive : bool = director.isPaused
-    def process(event : Event) : bool = {
-        event.tap(self)
-    }
-
     def tap(event : Event) : bool = {
-        if(level.help.isEmpty) {
-            val p = event.location
-            if(menuBackSprite.contains(p)) {
-                if(p.y > resumeLine.p0.y) director.resume
-                else if(p.y > restartLine.p0.y) {
-                    SceneFactory.restartLevel
-                    director.resume
-                }
-                true
-            } else false
-        } else {
-            level.clearHelp
-            true
-        }
+        level.clearHelp
+        true
     }
 }

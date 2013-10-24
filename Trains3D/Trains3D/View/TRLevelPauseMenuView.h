@@ -4,26 +4,29 @@
 #import "GEVec.h"
 #import "EGFont.h"
 @class TRLevel;
-@class EGSprite;
-@class TRLevelMenuView;
-@class EGColorSource;
-@class EGLine2d;
 @class EGCamera2D;
 @class EGGlobal;
-@class EGContext;
 @class EGDirector;
 @class EGBlendFunction;
+@class EGContext;
+@class EGColorSource;
 @class EGD2D;
 @class EGEnablingState;
+@class EGEnvironment;
+@class EGSprite;
+@class EGLine2d;
 @class TRStr;
 @protocol TRStrings;
-@class TRHelp;
 @class TRSceneFactory;
-@class EGEnvironment;
+@class TRLevelMenuView;
+@class TRHelp;
 
 @class TRLevelPauseMenuView;
+@class TRPauseMenuView;
+@class TRHelpView;
+@protocol TRPauseView;
 
-@interface TRLevelPauseMenuView : NSObject<EGLayerView, EGInputProcessor, EGTapProcessor>
+@interface TRLevelPauseMenuView : NSObject<EGLayerView, EGInputProcessor>
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic) id<EGCamera> camera;
@@ -32,11 +35,41 @@
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)reshapeWithViewport:(GERect)viewport;
+- (id<TRPauseView>)view;
 - (void)draw;
-- (void)drawMenu;
-- (void)drawHelp;
 - (BOOL)isProcessorActive;
 - (BOOL)processEvent:(EGEvent*)event;
++ (ODClassType*)type;
+@end
+
+
+@protocol TRPauseView<EGTapProcessor>
+- (void)reshapeWithViewport:(GERect)viewport;
+- (void)draw;
+@end
+
+
+@interface TRPauseMenuView : NSObject<TRPauseView>
+@property (nonatomic, readonly) TRLevel* level;
+
++ (id)pauseMenuViewWithLevel:(TRLevel*)level;
+- (id)initWithLevel:(TRLevel*)level;
+- (ODClassType*)type;
+- (void)reshapeWithViewport:(GERect)viewport;
+- (void)draw;
+- (BOOL)tapEvent:(EGEvent*)event;
++ (ODClassType*)type;
+@end
+
+
+@interface TRHelpView : NSObject<TRPauseView>
+@property (nonatomic, readonly) TRLevel* level;
+
++ (id)helpViewWithLevel:(TRLevel*)level;
+- (id)initWithLevel:(TRLevel*)level;
+- (ODClassType*)type;
+- (void)reshapeWithViewport:(GERect)viewport;
+- (void)draw;
 - (BOOL)tapEvent:(EGEvent*)event;
 + (ODClassType*)type;
 @end

@@ -32,6 +32,7 @@
 @class TRLevelRules;
 @class TRLevel;
 @class TRHelp;
+@class TRLevelResult;
 
 @interface TRLevelRules : NSObject
 @property (nonatomic, readonly) GEVec2i mapSize;
@@ -82,6 +83,8 @@
 - (id)help;
 - (void)showHelpText:(NSString*)text;
 - (void)clearHelp;
+- (void)win;
+- (void)lose;
 + (ODClassType*)type;
 @end
 
@@ -91,6 +94,16 @@
 
 + (id)helpWithText:(NSString*)text;
 - (id)initWithText:(NSString*)text;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface TRLevelResult : NSObject
+@property (nonatomic, readonly) BOOL win;
+
++ (id)levelResultWithWin:(BOOL)win;
+- (id)initWithWin:(BOOL)win;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

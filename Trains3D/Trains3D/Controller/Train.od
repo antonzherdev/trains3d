@@ -115,7 +115,7 @@ class TrainGenerator(trainType : TrainType, carsCount : [int], speed : [int], ca
         val count = carsCount.randomItem.get
         val engine = Car(train, carTypes.chain.filter(_.isEngine).randomItem.get)
         if(count <= 1) [engine]
-        else count.range.chain.map(i -> Car(train, carTypes.chain.filter(!_.isEngine).randomItem.get)).prepend([engine]).toArray
+        else (count - 1).range.chain.map(i -> Car(train, carTypes.chain.filter(!_.isEngine).randomItem.get)).prepend([engine]).toArray
     }
     def generateSpeed : uint = speed.randomItem.get
 }

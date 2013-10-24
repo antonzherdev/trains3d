@@ -14,6 +14,7 @@
 - (void)scheduleAfter:(CGFloat)after event:(void(^)())event;
 - (void)updateWithDelta:(CGFloat)delta;
 - (CGFloat)time;
+- (BOOL)isEmpty;
 + (ODClassType*)type;
 @end
 

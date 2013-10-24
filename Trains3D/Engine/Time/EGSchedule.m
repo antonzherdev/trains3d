@@ -50,6 +50,10 @@ static ODClassType* _EGSchedule_type;
     return __current;
 }
 
+- (BOOL)isEmpty {
+    return __next < 0.0;
+}
+
 - (ODClassType*)type {
     return [EGSchedule type];
 }

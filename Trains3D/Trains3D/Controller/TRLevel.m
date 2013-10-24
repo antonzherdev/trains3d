@@ -113,6 +113,7 @@ static ODClassType* _TRLevelRules_type;
     TRTrainsDynamicWorld* _dynamicWorld;
     NSMutableArray* __dyingTrains;
     id __help;
+    id __result;
 }
 static ODClassType* _TRLevel_type;
 @synthesize rules = _rules;
@@ -148,6 +149,7 @@ static ODClassType* _TRLevel_type;
         _dynamicWorld = [TRTrainsDynamicWorld trainsDynamicWorld];
         __dyingTrains = [NSMutableArray mutableArray];
         __help = [CNOption none];
+        __result = [CNOption none];
     }
     
     return self;
@@ -275,6 +277,8 @@ static ODClassType* _TRLevel_type;
             }
         }
     }];
+    if([_score score] < 0) [self lose];
+    if([_schedule isEmpty] && [__trains isEmpty] && [__dyingTrains isEmpty]) [self win];
 }
 
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch {
@@ -357,6 +361,16 @@ static ODClassType* _TRLevel_type;
 - (void)clearHelp {
     __help = [CNOption none];
     [[EGGlobal director] resume];
+}
+
+- (void)win {
+    __result = [CNOption applyValue:[TRLevelResult levelResultWithWin:YES]];
+    [[EGGlobal director] pause];
+}
+
+- (void)lose {
+    __result = [CNOption applyValue:[TRLevelResult levelResultWithWin:NO]];
+    [[EGGlobal director] pause];
 }
 
 - (ODClassType*)type {
@@ -444,6 +458,63 @@ static ODClassType* _TRHelp_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"text=%@", self.text];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRLevelResult{
+    BOOL _win;
+}
+static ODClassType* _TRLevelResult_type;
+@synthesize win = _win;
+
++ (id)levelResultWithWin:(BOOL)win {
+    return [[TRLevelResult alloc] initWithWin:win];
+}
+
+- (id)initWithWin:(BOOL)win {
+    self = [super init];
+    if(self) _win = win;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRLevelResult_type = [ODClassType classTypeWithCls:[TRLevelResult class]];
+}
+
+- (ODClassType*)type {
+    return [TRLevelResult type];
+}
+
++ (ODClassType*)type {
+    return _TRLevelResult_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRLevelResult* o = ((TRLevelResult*)(other));
+    return self.win == o.win;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.win;
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"win=%d", self.win];
     [description appendString:@">"];
     return description;
 }

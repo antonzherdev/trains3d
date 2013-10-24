@@ -311,7 +311,7 @@ static ODClassType* _TRTrainGenerator_type;
         return [((TRCarType*)(_)) isEngine];
     }] randomItem] get]];
     if(count <= 1) return (@[engine]);
-    else return [[[[intRange(count) chain] map:^TRCar*(id i) {
+    else return [[[[intRange(count - 1) chain] map:^TRCar*(id i) {
         return [TRCar carWithTrain:train carType:[[[[_carTypes chain] filter:^BOOL(TRCarType* _) {
             return !([((TRCarType*)(_)) isEngine]);
         }] randomItem] get]];

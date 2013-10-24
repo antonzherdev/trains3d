@@ -21,6 +21,8 @@ class Schedule extends Controller {
     }
 
     def time : float = _current
+
+    def isEmpty : bool = _next < 0.0
 }
 
 class Counter extends Controller {
