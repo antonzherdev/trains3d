@@ -616,3 +616,87 @@ static ODClassType* _EGLine2d_type;
 @end
 
 
+@implementation EGButton{
+    void(^_onDraw)(GERect);
+    void(^_onClick)();
+    GERect _rect;
+}
+static ODClassType* _EGButton_type;
+@synthesize onDraw = _onDraw;
+@synthesize onClick = _onClick;
+@synthesize rect = _rect;
+
++ (id)buttonWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick {
+    return [[EGButton alloc] initWithOnDraw:onDraw onClick:onClick];
+}
+
+- (id)initWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick {
+    self = [super init];
+    if(self) {
+        _onDraw = onDraw;
+        _onClick = onClick;
+        _rect = geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0);
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGButton_type = [ODClassType classTypeWithCls:[EGButton class]];
+}
+
+- (BOOL)tapEvent:(EGEvent*)event {
+    if(geRectContainsVec2(_rect, [event location])) {
+        ((void(^)())(_onClick))();
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+- (void)draw {
+    _onDraw(_rect);
+}
+
++ (void(^)(GERect))drawTextFont:(EGFont*(^)())font color:(GEVec4)color text:(NSString*)text {
+    return ^void(GERect rect) {
+        [((EGFont*(^)())(font))() drawText:text color:color at:geVec3ApplyVec2(geRectCenter(rect)) alignment:egTextAlignmentApplyXY(0.0, 0.0)];
+    };
+}
+
+- (ODClassType*)type {
+    return [EGButton type];
+}
+
++ (ODClassType*)type {
+    return _EGButton_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGButton* o = ((EGButton*)(other));
+    return [self.onDraw isEqual:o.onDraw] && [self.onClick isEqual:o.onClick];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.onDraw hash];
+    hash = hash * 31 + [self.onClick hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+

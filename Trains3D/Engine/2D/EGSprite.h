@@ -3,6 +3,8 @@
 #import "EGMesh.h"
 #import "GEVec.h"
 #import "EGShader.h"
+#import "EGInput.h"
+#import "EGFont.h"
 @class EGMutableVertexBuffer;
 @class EGVBO;
 @class EGEmptyIndexSource;
@@ -25,6 +27,7 @@
 @class EGCircleShader;
 @class EGSprite;
 @class EGLine2d;
+@class EGButton;
 
 @interface EGD2D : NSObject
 - (ODClassType*)type;
@@ -113,6 +116,21 @@
 - (ODClassType*)type;
 + (EGLine2d*)applyMaterial:(EGColorSource*)material;
 - (void)draw;
++ (ODClassType*)type;
+@end
+
+
+@interface EGButton : NSObject<EGTapProcessor>
+@property (nonatomic, readonly) void(^onDraw)(GERect);
+@property (nonatomic, readonly) void(^onClick)();
+@property (nonatomic) GERect rect;
+
++ (id)buttonWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick;
+- (id)initWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick;
+- (ODClassType*)type;
+- (BOOL)tapEvent:(EGEvent*)event;
+- (void)draw;
++ (void(^)(GERect))drawTextFont:(EGFont*(^)())font color:(GEVec4)color text:(NSString*)text;
 + (ODClassType*)type;
 @end
 

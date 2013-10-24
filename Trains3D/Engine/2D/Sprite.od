@@ -201,3 +201,20 @@ class Line2d {
         D2D.drawLine(material, p0, p1)
     }
 }
+
+class Button(onDraw : (Rect) -> void, onClick : () -> void) extends TapProcessor {
+    var rect : Rect = Rect(0, 0, 1, 1)
+    def tap(event : Event) : bool =
+        if(rect.contains(event.location)) {
+            onClick()
+            true
+        } else false
+
+    def draw {
+        onDraw(rect)
+    }
+
+
+    static def drawText(font : () -> Font, color : vec4, text : string) : Rect -> void = (rect : Rect) ->
+        font().draw(text = text, color = color, at = rect.center, TextAlignment(0, 0))
+}

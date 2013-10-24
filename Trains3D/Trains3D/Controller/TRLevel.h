@@ -50,6 +50,7 @@
 
 
 @interface TRLevel : NSObject<EGController>
+@property (nonatomic, readonly) NSUInteger number;
 @property (nonatomic, readonly) TRLevelRules* rules;
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRNotifications* notifications;
@@ -61,8 +62,8 @@
 @property (nonatomic, readonly) TRTrainsCollisionWorld* collisionWorld;
 @property (nonatomic, readonly) TRTrainsDynamicWorld* dynamicWorld;
 
-+ (id)levelWithRules:(TRLevelRules*)rules;
-- (id)initWithRules:(TRLevelRules*)rules;
++ (id)levelWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules;
+- (id)initWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules;
 - (ODClassType*)type;
 - (id<CNSeq>)cities;
 - (id<CNSeq>)trains;

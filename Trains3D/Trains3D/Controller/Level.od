@@ -5,7 +5,7 @@ import com.antonzherdev.eg._
 class LevelRules(mapSize : vec2i, scoreRules : ScoreRules, forestRules : ForestRules, weatherRules : WeatherRules,
     repairerSpeed : uint, events : [(float, (Level) -> void)])
 
-class Level(rules : LevelRules) extends Controller {
+class Level(number : uint, rules : LevelRules) extends Controller {
     val map : MapSso = MapSso(rules.mapSize)
     val notifications = Notifications()
     val score : Score = Score(rules.scoreRules, notifications)

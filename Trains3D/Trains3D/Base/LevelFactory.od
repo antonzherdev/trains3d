@@ -38,8 +38,8 @@ class LevelFactory {
 //            (20, train(cars = 1.to(3), speed = 30.to(60).set(step = 10)))
         ])
     ]
-    static def levelWith(number : uint) = Level(rules[number - 1])
-    static def levelWith(mapSize : vec2i) = Level(LevelRules(mapSize, scoreRules, forestRules, weatherRules, repairerSpeed = 30, []))
+    static def levelWith(number : uint) = Level(number, rules[number - 1])
+    static def levelWith(mapSize : vec2i) = Level(0, LevelRules(mapSize, scoreRules, forestRules, weatherRules, repairerSpeed = 30, []))
     static def score = Score(scoreRules, Notifications())
     static def railroadWith(mapSize : vec2i) = {
         val map = MapSso(mapSize)

@@ -1,5 +1,6 @@
 #import "TRStrings.h"
 
+#import "TRLevel.h"
 #import "GL.h"
 #import "EGPlatform.h"
 @implementation TREnStrings
@@ -40,12 +41,12 @@ static ODClassType* _TREnStrings_type;
     return @"Continue the game";
 }
 
-- (NSString*)restartLevel {
-    return @"Restart the level";
+- (NSString*)restartLevel:(TRLevel*)level {
+    return [NSString stringWithFormat:@"Restart the level %lu", (unsigned long)level.number];
 }
 
-- (NSString*)mainMenu {
-    return @"Main menu";
+- (NSString*)chooseLevel {
+    return @"Choose level";
 }
 
 - (NSString*)callRepairer {
@@ -167,12 +168,12 @@ static ODClassType* _TRRuStrings_type;
     return @"Продолжить игру";
 }
 
-- (NSString*)restartLevel {
-    return @"Начать уровень заново";
+- (NSString*)restartLevel:(TRLevel*)level {
+    return [NSString stringWithFormat:@"Начать заново уровень %lu", (unsigned long)level.number];
 }
 
-- (NSString*)mainMenu {
-    return @"Основное меню";
+- (NSString*)chooseLevel {
+    return @"Выбрать уровень";
 }
 
 - (NSString*)callRepairer {

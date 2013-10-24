@@ -1,4 +1,5 @@
 #import "objd.h"
+@class TRLevel;
 @class EGPlatform;
 
 @class TREnStrings;
@@ -13,8 +14,8 @@
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
 - (NSString*)trainDelayedFineCost:(NSInteger)cost;
 - (NSString*)resumeGame;
-- (NSString*)restartLevel;
-- (NSString*)mainMenu;
+- (NSString*)restartLevel:(TRLevel*)level;
+- (NSString*)chooseLevel;
 - (NSString*)callRepairer;
 - (NSString*)undo;
 - (NSString*)colorOrange;
@@ -37,8 +38,8 @@
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
 - (NSString*)trainDelayedFineCost:(NSInteger)cost;
 - (NSString*)resumeGame;
-- (NSString*)restartLevel;
-- (NSString*)mainMenu;
+- (NSString*)restartLevel:(TRLevel*)level;
+- (NSString*)chooseLevel;
 - (NSString*)callRepairer;
 - (NSString*)undo;
 - (NSString*)colorOrange;
@@ -62,8 +63,8 @@
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
 - (NSString*)trainDelayedFineCost:(NSInteger)cost;
 - (NSString*)resumeGame;
-- (NSString*)restartLevel;
-- (NSString*)mainMenu;
+- (NSString*)restartLevel:(TRLevel*)level;
+- (NSString*)chooseLevel;
 - (NSString*)callRepairer;
 - (NSString*)undo;
 - (NSString*)colorOrange;

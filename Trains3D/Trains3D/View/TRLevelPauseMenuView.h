@@ -13,8 +13,8 @@
 @class EGD2D;
 @class EGEnablingState;
 @class EGEnvironment;
+@class EGButton;
 @class EGSprite;
-@class EGLine2d;
 @class TRStr;
 @protocol TRStrings;
 @class TRSceneFactory;
@@ -23,8 +23,10 @@
 
 @class TRLevelPauseMenuView;
 @class TRPauseMenuView;
+@class TRWinMenu;
 @class TRHelpView;
 @protocol TRPauseView;
+@protocol TRMenuView;
 
 @interface TRLevelPauseMenuView : NSObject<EGLayerView, EGInputProcessor>
 @property (nonatomic, readonly) TRLevel* level;
@@ -49,8 +51,16 @@
 @end
 
 
-@interface TRPauseMenuView : NSObject<TRPauseView>
+@protocol TRMenuView<NSObject>
+- (EGFont*)font;
+- (EGButton*)buttonText:(NSString*)text onClick:(void(^)())onClick;
+- (void(^)(GERect))drawLine;
+@end
+
+
+@interface TRPauseMenuView : NSObject<TRPauseView, TRMenuView>
 @property (nonatomic, readonly) TRLevel* level;
+@property (nonatomic, retain) EGFont* font;
 
 + (id)pauseMenuViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
@@ -58,6 +68,16 @@
 - (void)reshapeWithViewport:(GERect)viewport;
 - (void)draw;
 - (BOOL)tapEvent:(EGEvent*)event;
++ (ODClassType*)type;
+@end
+
+
+@interface TRWinMenu : NSObject<TRPauseView>
+@property (nonatomic, readonly) TRLevel* level;
+
++ (id)winMenuWithLevel:(TRLevel*)level;
+- (id)initWithLevel:(TRLevel*)level;
+- (ODClassType*)type;
 + (ODClassType*)type;
 @end
 

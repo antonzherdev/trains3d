@@ -72,11 +72,11 @@ static ODClassType* _TRLevelFactory_type;
 }
 
 + (TRLevel*)levelWithNumber:(NSUInteger)number {
-    return [TRLevel levelWithRules:[_TRLevelFactory_rules applyIndex:number - 1]];
+    return [TRLevel levelWithNumber:number rules:[_TRLevelFactory_rules applyIndex:number - 1]];
 }
 
 + (TRLevel*)levelWithMapSize:(GEVec2i)mapSize {
-    return [TRLevel levelWithRules:[TRLevelRules levelRulesWithMapSize:mapSize scoreRules:_TRLevelFactory_scoreRules forestRules:_TRLevelFactory_forestRules weatherRules:_TRLevelFactory_weatherRules repairerSpeed:30 events:(@[])]];
+    return [TRLevel levelWithNumber:0 rules:[TRLevelRules levelRulesWithMapSize:mapSize scoreRules:_TRLevelFactory_scoreRules forestRules:_TRLevelFactory_forestRules weatherRules:_TRLevelFactory_weatherRules repairerSpeed:30 events:(@[])]];
 }
 
 + (TRScore*)score {

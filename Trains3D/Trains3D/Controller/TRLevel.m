@@ -98,6 +98,7 @@ static ODClassType* _TRLevelRules_type;
 
 
 @implementation TRLevel{
+    NSUInteger _number;
     TRLevelRules* _rules;
     EGMapSso* _map;
     TRNotifications* _notifications;
@@ -116,6 +117,7 @@ static ODClassType* _TRLevelRules_type;
     id __result;
 }
 static ODClassType* _TRLevel_type;
+@synthesize number = _number;
 @synthesize rules = _rules;
 @synthesize map = _map;
 @synthesize notifications = _notifications;
@@ -127,13 +129,14 @@ static ODClassType* _TRLevel_type;
 @synthesize collisionWorld = _collisionWorld;
 @synthesize dynamicWorld = _dynamicWorld;
 
-+ (id)levelWithRules:(TRLevelRules*)rules {
-    return [[TRLevel alloc] initWithRules:rules];
++ (id)levelWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules {
+    return [[TRLevel alloc] initWithNumber:number rules:rules];
 }
 
-- (id)initWithRules:(TRLevelRules*)rules {
+- (id)initWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules {
     self = [super init];
     if(self) {
+        _number = number;
         _rules = rules;
         _map = [EGMapSso mapSsoWithSize:_rules.mapSize];
         _notifications = [TRNotifications notifications];
@@ -389,18 +392,20 @@ static ODClassType* _TRLevel_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRLevel* o = ((TRLevel*)(other));
-    return [self.rules isEqual:o.rules];
+    return self.number == o.number && [self.rules isEqual:o.rules];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
+    hash = hash * 31 + self.number;
     hash = hash * 31 + [self.rules hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"rules=%@", self.rules];
+    [description appendFormat:@"number=%lu", (unsigned long)self.number];
+    [description appendFormat:@", rules=%@", self.rules];
     [description appendString:@">"];
     return description;
 }
