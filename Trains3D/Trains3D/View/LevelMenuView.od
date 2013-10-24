@@ -30,6 +30,9 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor with Ta
         context.depthTest.disabled { BlendFunction.premultiplied {
             font.draw(text = format(level.score.score), color = vec4(0, 0, 0, 1), at = vec3(10, 14, 0), TextAlignment.baseline(-1))
             pauseSprite.draw
+            levelAnimation.for { t ->
+                font.draw(text = Loc.startLevel(level.number), notificationProgress(t/3.0), at = vec3(width/2, 14, 0), TextAlignment.baseline(0))
+            }
             notificationAnimation.for{t ->
                 notificationFont.draw(text = notificationText, notificationProgress(t), at = vec3(width/2, 15, 0), TextAlignment.baseline(0))
             }
@@ -50,9 +53,11 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor with Ta
 
     private var notificationText = ""
     private var notificationAnimation = Counter()
+    private var levelAnimation = Counter(3)
 
     def updateWith(delta : float) {
-        if(notificationAnimation.isRunning) notificationAnimation.updateWith(delta)
+        if(levelAnimation.isRunning) levelAnimation.updateWith(delta)
+        else if(notificationAnimation.isRunning) notificationAnimation.updateWith(delta)
         else if(!level.notifications.isEmpty) {
             notificationText = level.notifications.take.get
             notificationAnimation = Counter(1)

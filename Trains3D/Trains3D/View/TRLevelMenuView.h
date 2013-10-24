@@ -14,6 +14,8 @@
 @class EGColorSource;
 @class EGBlendFunction;
 @class TRScore;
+@class TRStr;
+@protocol TRStrings;
 @class EGEnablingState;
 @class TRNotifications;
 @class EGDirector;

@@ -4,6 +4,7 @@ package com.antonzherdev.trains
 trait Strings {
     def format(cost : int) : string = "$cost"
 
+    def startLevel(number : uint) : string
     def railBuilt(cost : int) : string
     def trainArrived(cost : int) : string
     def trainDestroyed(cost : int) : string
@@ -31,6 +32,7 @@ trait Strings {
 }
 
 class EnStrings extends Strings {
+    def startLevel(number : uint) : string = "Level $number"
     def railBuilt(cost : int) : string = "-$(format(cost)): For the railroad building"
     def trainArrived(cost : int) : string = "+$(format(cost)): For the arrived train"
     def trainDestroyed(cost : int) : string = "-$(format(cost)): For the train destroying"
@@ -71,6 +73,7 @@ class EnStrings extends Strings {
 }
 
 class RuStrings extends Strings{
+    def startLevel(number : uint) : string = "Уровень $number"
     def railBuilt(cost : int) : string = "-$(format(cost)): За постройку железной дороги"
     def trainArrived(cost : int) : string = "+$(format(cost)): За прибывший поезд"
     def trainDestroyed(cost : int) : string = "-$(format(cost)): За уничтожение поезда"

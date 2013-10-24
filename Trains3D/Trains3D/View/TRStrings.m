@@ -21,6 +21,10 @@ static ODClassType* _TREnStrings_type;
     _TREnStrings_type = [ODClassType classTypeWithCls:[TREnStrings class]];
 }
 
+- (NSString*)startLevelNumber:(NSUInteger)number {
+    return [NSString stringWithFormat:@"Level %lu", (unsigned long)number];
+}
+
 - (NSString*)railBuiltCost:(NSInteger)cost {
     return [NSString stringWithFormat:@"-%@: For the railroad building", [self formatCost:cost]];
 }
@@ -166,6 +170,10 @@ static ODClassType* _TRRuStrings_type;
 + (void)initialize {
     [super initialize];
     _TRRuStrings_type = [ODClassType classTypeWithCls:[TRRuStrings class]];
+}
+
+- (NSString*)startLevelNumber:(NSUInteger)number {
+    return [NSString stringWithFormat:@"Уровень %lu", (unsigned long)number];
 }
 
 - (NSString*)railBuiltCost:(NSInteger)cost {

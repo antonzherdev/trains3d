@@ -10,6 +10,7 @@
 #import "EGTexture.h"
 #import "EGMaterial.h"
 #import "TRScore.h"
+#import "TRStrings.h"
 #import "TRNotification.h"
 #import "EGDirector.h"
 @implementation TRLevelMenuView{
@@ -24,6 +25,7 @@
     id<EGCamera> _camera;
     NSString* _notificationText;
     EGCounter* _notificationAnimation;
+    EGCounter* _levelAnimation;
 }
 static GEVec4 _TRLevelMenuView_backgroundColor = (GEVec4){0.85, 0.9, 0.75, 1.0};
 static ODClassType* _TRLevelMenuView_type;
@@ -57,6 +59,7 @@ static ODClassType* _TRLevelMenuView_type;
         _width = 0;
         _notificationText = @"";
         _notificationAnimation = [EGCounter apply];
+        _levelAnimation = [EGCounter applyLength:3.0];
     }
     
     return self;
@@ -82,6 +85,9 @@ static ODClassType* _TRLevelMenuView_type;
         [EGBlendFunction.premultiplied applyDraw:^void() {
             [_font drawText:[self formatScore:[_level.score score]] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec3Make(10.0, 14.0, 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
             [_pauseSprite draw];
+            [_levelAnimation forF:^void(CGFloat t) {
+                [_font drawText:[TRStr.Loc startLevelNumber:_level.number] color:_notificationProgress(((float)(t / 3.0))) at:GEVec3Make(((float)(_width / 2)), 14.0, 0.0) alignment:egTextAlignmentBaselineX(0.0)];
+            }];
             [_notificationAnimation forF:^void(CGFloat t) {
                 [_notificationFont drawText:_notificationText color:_notificationProgress(((float)(t))) at:GEVec3Make(((float)(_width / 2)), 15.0, 0.0) alignment:egTextAlignmentBaselineX(0.0)];
             }];
@@ -101,12 +107,16 @@ static ODClassType* _TRLevelMenuView_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    if([_notificationAnimation isRunning]) {
-        [_notificationAnimation updateWithDelta:delta];
+    if([_levelAnimation isRunning]) {
+        [_levelAnimation updateWithDelta:delta];
     } else {
-        if(!([_level.notifications isEmpty])) {
-            _notificationText = [[_level.notifications take] get];
-            _notificationAnimation = [EGCounter applyLength:1.0];
+        if([_notificationAnimation isRunning]) {
+            [_notificationAnimation updateWithDelta:delta];
+        } else {
+            if(!([_level.notifications isEmpty])) {
+                _notificationText = [[_level.notifications take] get];
+                _notificationAnimation = [EGCounter applyLength:1.0];
+            }
         }
     }
 }
