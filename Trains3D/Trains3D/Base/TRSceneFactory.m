@@ -40,6 +40,16 @@ static ODClassType* _TRSceneFactory_type;
     return [TRSceneFactory sceneForLevel:[TRLevelFactory levelWithNumber:number]];
 }
 
++ (void)chooseLevel {
+    [[EGGlobal director] resume];
+}
+
++ (void)nextLevel {
+    [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGGlobal director] scene] get])).controller] forEach:^void(TRLevel* level) {
+        [[EGGlobal director] setScene:[TRSceneFactory sceneForLevel:[TRLevelFactory levelWithNumber:((TRLevel*)(level)).number + 1]]];
+    }];
+}
+
 - (ODClassType*)type {
     return [TRSceneFactory type];
 }

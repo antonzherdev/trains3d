@@ -366,6 +366,10 @@ static ODClassType* _TRLevel_type;
     [[EGGlobal director] resume];
 }
 
+- (id)result {
+    return __result;
+}
+
 - (void)win {
     __result = [CNOption applyValue:[TRLevelResult levelResultWithWin:YES]];
     [[EGGlobal director] pause];

@@ -10,9 +10,14 @@ trait Strings {
     def trainDelayedFine(cost : int) : string
     def resumeGame : string
     def restart(level : Level) : string
+    def replay(level : Level) : string
+    def goToNext(level : Level) : string
     def chooseLevel : string
     def callRepairer : string
     def undo : string
+    def victory : string
+    def defeat : string
+    def moneyOver : string
 
     def colorOrange : string
     def colorGreen : string
@@ -32,9 +37,14 @@ class EnStrings extends Strings {
     def trainDelayedFine(cost : int) : string = "-$(format(cost)): Fine for the delayed train"
     def resumeGame : string = "Continue the game"
     def restart(level : Level) : string = "Restart the level $(level.number)"
+    def replay(level : Level) : string = "Play the level $(level.number) more one time"
+    def goToNext(level : Level) : string = "Play the next level $(level.number + 1)"
     def chooseLevel : string = "Choose level"
     def callRepairer : string = "Call\nrepairers"
     def undo : string = "Undo"
+    def victory : string = "Victory!"
+    def defeat : string = "Defeat!"
+    def moneyOver : string = "Money is over"
 
     def colorOrange : string = "orange"
     def colorGreen : string = "green"
@@ -67,9 +77,14 @@ class RuStrings extends Strings{
     def trainDelayedFine(cost : int) : string = "-$(format(cost)): Штраф за задерживающийся поезд"
     def resumeGame : string = "Продолжить игру"
     def restart(level : Level) : string = "Начать заново уровень $(level.number)"
+    def replay(level : Level) : string = "Переиграть уровень $(level.number)"
+    def goToNext(level : Level) : string = "Перейти к уровеню $(level.number + 1)"
     def chooseLevel : string = "Выбрать уровень"
     def callRepairer : string = "Вызвать\nремонтников"
     def undo : string = "Отменить"
+    def victory : string = "Победа!"
+    def defeat : string = "Вы проиграли!"
+    def moneyOver : string = "Закончились деньги"
 
     def colorOrange : string = "оранжевый"
     def colorGreen : string = "зеленый"

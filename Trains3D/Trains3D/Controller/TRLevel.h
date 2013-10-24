@@ -84,6 +84,7 @@
 - (id)help;
 - (void)showHelpText:(NSString*)text;
 - (void)clearHelp;
+- (id)result;
 - (void)win;
 - (void)lose;
 + (ODClassType*)type;

@@ -182,6 +182,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     }
 
     private var _result : LevelResult? = nil
+    def result = _result
     def win {
         _result = LevelResult(true)
         director.pause

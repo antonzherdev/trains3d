@@ -226,6 +226,7 @@
 		6F3DF345800FEC4838274769 /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF3C79C6A23AEA95EE0A9 /* TBXML.m */; };
 		6F3DF348AA1E9E2630F32BA0 /* EGMapIso.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8A4591A2AD641D4ABBC /* EGMapIso.m */; };
 		6F3DF34A576D0F90508C1D65 /* Buffer.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF2B24C6FAD00D99F75C3 /* Buffer.od */; };
+		6F3DF34DE1A49676B6EA77EA /* lucida_grande_72.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFA6834C80959C9E73458 /* lucida_grande_72.fnt */; };
 		6F3DF35041F9DAB02A96DBC9 /* KWMessagePattern.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8511B988BF5EF27411C /* KWMessagePattern.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF351D4FF46398E3A9003 /* Railroad.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF6D8438330ACB06D1F65 /* Railroad.od */; };
 		6F3DF354913EAB1C0A4D6043 /* EGCollisionWorld.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1E1D73228371582D516 /* EGCollisionWorld.mm */; };
@@ -312,6 +313,7 @@
 		6F3DF4AD6639B711F86D978D /* Queue.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFDC1D39E4A2AC83291A0 /* Queue.od */; };
 		6F3DF4B2BAAA46A9B29C956C /* euler_angles.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF7F851ED17F4778869CA /* euler_angles.inl */; };
 		6F3DF4B551C7C698FB1B59EB /* type_vec2.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF8AF3BD2C47C6BA0B07A /* type_vec2.inl */; };
+		6F3DF4B615BC5CCDECF9F007 /* lucida_grande_72.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF91510BF26B77726510E /* lucida_grande_72.png */; };
 		6F3DF4BB2C71E7FDCAF818EA /* LightGlow.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFFAC2A07756845F41EED /* LightGlow.png */; };
 		6F3DF4BC9977BB11D17AA9C9 /* ExpressCar.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF3118A848E2296A0E2CC /* ExpressCar.png */; };
 		6F3DF4BD21EDDAE8157BE9EA /* CNCombinationsLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF829B182E3C723009787 /* CNCombinationsLink.m */; };
@@ -894,6 +896,7 @@
 		6F3DFD121B462271E25843BA /* EGSchedule.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9EA2E28CC61810D9757 /* EGSchedule.m */; };
 		6F3DFD14C7441EAD431C2BE5 /* lucida_grande_18.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF54DC5799C2230D8C4DC /* lucida_grande_18.fnt */; };
 		6F3DFD1500FE10A11FFF7736 /* btGhostObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB5441E6F155F2A4CAF7 /* btGhostObject.cpp */; };
+		6F3DFD15679E6613C5B4F022 /* lucida_grande_72.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF91510BF26B77726510E /* lucida_grande_72.png */; };
 		6F3DFD1C48507ACE9B825789 /* btVoronoiSimplexSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4ED0B4AAE2368B4E857 /* btVoronoiSimplexSolver.cpp */; };
 		6F3DFD1CEBE145B1581C61EF /* EGBillboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFCD7B72734740F43AE3D /* EGBillboard.m */; };
 		6F3DFD22DA4D237BBA3C99A0 /* handed_coordinate_space.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF4A91E67CA1C196639BF /* handed_coordinate_space.inl */; };
@@ -983,6 +986,7 @@
 		6F3DFE538F3C5ED6B13A8534 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF85E4F4CEE17CDBD6EA7 /* Credits.rtf */; };
 		6F3DFE5FDF9264861B31C350 /* btVector3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFEF65DF8D8C1FD2036B /* btVector3.cpp */; };
 		6F3DFE603C4608416BE18791 /* Scene.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF4999E676ADD43976479 /* Scene.od */; };
+		6F3DFE671AFF957D2B54945B /* lucida_grande_72.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFA6834C80959C9E73458 /* lucida_grande_72.fnt */; };
 		6F3DFE6BA2F0256A3C927AEA /* EGMapIsoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB089F1369420BA0637B /* EGMapIsoView.m */; };
 		6F3DFE6FCD5AD3CBD34E6034 /* btSerializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA84ACB98D8E5D04200E /* btSerializer.cpp */; };
 		6F3DFE70F81B486E6B4A4F87 /* color_cast.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF97AF5E9136B3C149046 /* color_cast.inl */; };
@@ -1770,6 +1774,7 @@
 		6F3DF8FF7A0430E6026A4AE9 /* KWReporting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWReporting.h; sourceTree = "<group>"; };
 		6F3DF906737AA84029289ADC /* KWPendingNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWPendingNode.h; sourceTree = "<group>"; };
 		6F3DF90BA676F65547D965CE /* btBroadphaseInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btBroadphaseInterface.h; sourceTree = "<group>"; };
+		6F3DF91510BF26B77726510E /* lucida_grande_72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lucida_grande_72.png; sourceTree = "<group>"; };
 		6F3DF921C1D2CB03702AFF26 /* btJacobianEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btJacobianEntry.h; sourceTree = "<group>"; };
 		6F3DF9240291B64C04F995D6 /* PerlinTest.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = PerlinTest.od; sourceTree = "<group>"; };
 		6F3DF927802C5558365D56C7 /* CNGroupByLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNGroupByLink.h; sourceTree = "<group>"; };
@@ -1876,6 +1881,7 @@
 		6F3DFA5A6B0F27627DED08E8 /* btContinuousConvexCollision.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btContinuousConvexCollision.cpp; sourceTree = "<group>"; };
 		6F3DFA5F61C3E623C3026F49 /* TreeSet.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TreeSet.od; sourceTree = "<group>"; };
 		6F3DFA6815E349D06B7F3B0F /* KWVerifying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWVerifying.h; sourceTree = "<group>"; };
+		6F3DFA6834C80959C9E73458 /* lucida_grande_72.fnt */ = {isa = PBXFileReference; lastKnownFileType = file.fnt; path = lucida_grande_72.fnt; sourceTree = "<group>"; };
 		6F3DFA6942C0C9690B3E259F /* trains.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = trains.od; sourceTree = "<group>"; };
 		6F3DFA6BA2742BAF1B621214 /* associated_min_max.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = associated_min_max.inl; sourceTree = "<group>"; };
 		6F3DFA6F0B10CA9A6C1880BA /* btMinkowskiSumShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btMinkowskiSumShape.h; sourceTree = "<group>"; };
@@ -3434,6 +3440,8 @@
 				6F3DF4EE6798321A20414A22 /* lucida_grande_32.png */,
 				6F3DF980DF1413A5A4FE4187 /* lucida_grande_48.fnt */,
 				6F3DF577DEF2507D7614ACDA /* lucida_grande_48.png */,
+				6F3DFA6834C80959C9E73458 /* lucida_grande_72.fnt */,
+				6F3DF91510BF26B77726510E /* lucida_grande_72.png */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -4448,6 +4456,8 @@
 				6F3DF8108FC24BC7CDBB56C1 /* Choo.wav in Resources */,
 				6F3DF3174A66FA247AA3E5BE /* TrainSound.od in Resources */,
 				6F3DFF83223B16A6A51BC061 /* ExpressCar.png in Resources */,
+				6F3DF34DE1A49676B6EA77EA /* lucida_grande_72.fnt in Resources */,
+				6F3DF4B615BC5CCDECF9F007 /* lucida_grande_72.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4557,6 +4567,8 @@
 				6F3DF64F67CEB1D01F6CB912 /* Choo.wav in Resources */,
 				6F3DF9CF3B7DE2A3121384F4 /* TrainSound.od in Resources */,
 				6F3DF4BC9977BB11D17AA9C9 /* ExpressCar.png in Resources */,
+				6F3DFE671AFF957D2B54945B /* lucida_grande_72.fnt in Resources */,
+				6F3DFD15679E6613C5B4F022 /* lucida_grande_72.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

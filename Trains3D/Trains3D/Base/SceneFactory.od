@@ -10,6 +10,16 @@ class SceneFactory {
     }
 
     static def sceneForLevelWith(number : uint) = sceneFor(LevelFactory.levelWith(number))
+
+    static def chooseLevel {
+        director.resume
+    }
+
+    static def nextLevel {
+        director.scene.get.controller.as<Level>.for{level ->
+            director.set(scene = sceneFor(LevelFactory.levelWith(number = level.number + 1)))
+        }
+    }
 }
 
 

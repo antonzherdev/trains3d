@@ -20,6 +20,8 @@
 + (EGScene*)sceneForLevel:(TRLevel*)level;
 + (void)restartLevel;
 + (EGScene*)sceneForLevelWithNumber:(NSUInteger)number;
++ (void)chooseLevel;
++ (void)nextLevel;
 + (ODClassType*)type;
 @end
 

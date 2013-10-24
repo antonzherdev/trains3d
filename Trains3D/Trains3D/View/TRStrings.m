@@ -45,6 +45,14 @@ static ODClassType* _TREnStrings_type;
     return [NSString stringWithFormat:@"Restart the level %lu", (unsigned long)level.number];
 }
 
+- (NSString*)replayLevel:(TRLevel*)level {
+    return [NSString stringWithFormat:@"Play the level %lu more one time", (unsigned long)level.number];
+}
+
+- (NSString*)goToNextLevel:(TRLevel*)level {
+    return [NSString stringWithFormat:@"Play the next level %lu", (unsigned long)level.number + 1];
+}
+
 - (NSString*)chooseLevel {
     return @"Choose level";
 }
@@ -56,6 +64,18 @@ static ODClassType* _TREnStrings_type;
 
 - (NSString*)undo {
     return @"Undo";
+}
+
+- (NSString*)victory {
+    return @"Victory!";
+}
+
+- (NSString*)defeat {
+    return @"Defeat!";
+}
+
+- (NSString*)moneyOver {
+    return @"Money is over";
 }
 
 - (NSString*)colorOrange {
@@ -172,6 +192,14 @@ static ODClassType* _TRRuStrings_type;
     return [NSString stringWithFormat:@"Начать заново уровень %lu", (unsigned long)level.number];
 }
 
+- (NSString*)replayLevel:(TRLevel*)level {
+    return [NSString stringWithFormat:@"Переиграть уровень %lu", (unsigned long)level.number];
+}
+
+- (NSString*)goToNextLevel:(TRLevel*)level {
+    return [NSString stringWithFormat:@"Перейти к уровеню %lu", (unsigned long)level.number + 1];
+}
+
 - (NSString*)chooseLevel {
     return @"Выбрать уровень";
 }
@@ -183,6 +211,18 @@ static ODClassType* _TRRuStrings_type;
 
 - (NSString*)undo {
     return @"Отменить";
+}
+
+- (NSString*)victory {
+    return @"Победа!";
+}
+
+- (NSString*)defeat {
+    return @"Вы проиграли!";
+}
+
+- (NSString*)moneyOver {
+    return @"Закончились деньги";
 }
 
 - (NSString*)colorOrange {

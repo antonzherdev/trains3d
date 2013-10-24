@@ -14,6 +14,8 @@
     NSString* _name;
     TRPauseMenuView* _menuView;
     TRHelpView* _helpView;
+    TRWinMenu* _winView;
+    TRLooseMenu* _looseView;
     id<EGCamera> _camera;
 }
 static ODClassType* _TRLevelPauseMenuView_type;
@@ -32,6 +34,8 @@ static ODClassType* _TRLevelPauseMenuView_type;
         _name = @"LevelPauseMenu";
         _menuView = [TRPauseMenuView pauseMenuViewWithLevel:_level];
         _helpView = [TRHelpView helpViewWithLevel:_level];
+        _winView = [TRWinMenu winMenuWithLevel:_level];
+        _looseView = [TRLooseMenu looseMenuWithLevel:_level];
     }
     
     return self;
@@ -46,11 +50,21 @@ static ODClassType* _TRLevelPauseMenuView_type;
     _camera = [EGCamera2D camera2DWithSize:GEVec2Make(geRectWidth(viewport), geRectHeight(viewport))];
     [_menuView reshapeWithViewport:viewport];
     [_helpView reshapeWithViewport:viewport];
+    [_winView reshapeWithViewport:viewport];
+    [_looseView reshapeWithViewport:viewport];
 }
 
 - (id<TRPauseView>)view {
-    if([[_level help] isEmpty]) return _menuView;
-    else return _helpView;
+    if(!([[_level help] isEmpty])) {
+        return _helpView;
+    } else {
+        if([[_level result] isEmpty]) {
+            return _menuView;
+        } else {
+            if(((TRLevelResult*)([[_level result] get])).win) return _winView;
+            else return _looseView;
+        }
+    }
 }
 
 - (void)draw {
@@ -116,55 +130,37 @@ static ODClassType* _TRLevelPauseMenuView_type;
 @end
 
 
-@implementation TRPauseMenuView{
-    TRLevel* _level;
+@implementation TRMenuView{
+    EGFont* __font;
     EGSprite* _menuBackSprite;
-    EGButton* _resumeButton;
-    EGButton* _chooseLevelButton;
-    EGButton* _restartButton;
-    id<CNSeq> _buttons;
-    EGFont* _font;
 }
-static ODClassType* _TRPauseMenuView_type;
-@synthesize level = _level;
-@synthesize menuBackSprite = _menuBackSprite;
-@synthesize buttons = _buttons;
+static ODClassType* _TRMenuView_type;
 
-+ (id)pauseMenuViewWithLevel:(TRLevel*)level {
-    return [[TRPauseMenuView alloc] initWithLevel:level];
++ (id)menuView {
+    return [[TRMenuView alloc] init];
 }
 
-- (id)initWithLevel:(TRLevel*)level {
+- (id)init {
     self = [super init];
-    if(self) {
-        _level = level;
-        _menuBackSprite = [EGSprite applyMaterial:[EGColorSource applyColor:GEVec4Make(0.9, 0.9, 0.9, 1.0)] size:GEVec2Make(350.0, 150.0)];
-        _resumeButton = [self buttonText:[TRStr.Loc resumeGame] onClick:^void() {
-            [[EGGlobal director] resume];
-        }];
-        _chooseLevelButton = [self buttonText:[TRStr.Loc chooseLevel] onClick:^void() {
-            [[EGGlobal director] resume];
-        }];
-        _restartButton = [self buttonText:[TRStr.Loc restartLevel:_level] onClick:^void() {
-            [TRSceneFactory restartLevel];
-            [[EGGlobal director] resume];
-        }];
-        _buttons = (@[_resumeButton, _restartButton, _chooseLevelButton]);
-    }
+    if(self) _menuBackSprite = [EGSprite applyMaterial:[EGColorSource applyColor:GEVec4Make(0.9, 0.9, 0.9, 1.0)] size:GEVec2Make(350.0, 150.0)];
     
     return self;
 }
 
 + (void)initialize {
     [super initialize];
-    _TRPauseMenuView_type = [ODClassType classTypeWithCls:[TRPauseMenuView class]];
+    _TRMenuView_type = [ODClassType classTypeWithCls:[TRMenuView class]];
+}
+
+- (EGFont*)font {
+    return __font;
 }
 
 - (EGButton*)buttonText:(NSString*)text onClick:(void(^)())onClick {
     return [EGButton buttonWithOnDraw:^id() {
         void(^__l)(GERect) = [self drawLine];
         void(^__r)(GERect) = [EGButton drawTextFont:^EGFont*() {
-            return _font;
+            return __font;
         } color:GEVec4Make(0.0, 0.0, 0.0, 1.0) text:text];
         return ^void(GERect _) {
             __l(_);
@@ -179,6 +175,10 @@ static ODClassType* _TRPauseMenuView_type;
     };
 }
 
+- (id<CNSeq>)buttons {
+    @throw @"Method buttons is abstract";
+}
+
 - (BOOL)tapEvent:(EGEvent*)event {
     return [[self buttons] existsWhere:^BOOL(EGButton* _) {
         return [((EGButton*)(_)) tapEvent:event];
@@ -186,25 +186,109 @@ static ODClassType* _TRPauseMenuView_type;
 }
 
 - (void)draw {
-    [[self menuBackSprite] draw];
+    [_menuBackSprite draw];
     [[self buttons] forEach:^void(EGButton* _) {
         [((EGButton*)(_)) draw];
     }];
+    CGFloat hh = [self headerHeight] * EGGlobal.context.scale;
+    if(hh > 0) [self drawHeaderRect:GERectMake(geVec2AddVec2(_menuBackSprite.position, GEVec2Make(0.0, _menuBackSprite.size.y - hh)), GEVec2Make(_menuBackSprite.size.x, ((float)(hh))))];
+}
+
+- (CGFloat)headerHeight {
+    return 0.0;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
     CGFloat s = EGGlobal.context.scale;
-    CGFloat width = 350 * s;
+    CGFloat width = 400 * s;
     CGFloat delta = 50 * s;
     CGFloat height = delta * [[self buttons] count];
-    _font = [EGGlobal fontWithName:@"lucida_grande" size:24];
-    [self menuBackSprite].size = GEVec2Make(((float)(width)), ((float)(height)));
-    [self menuBackSprite].position = geRectMoveToCenterForSize([[self menuBackSprite] rect], viewport.size).p0;
-    __block GEVec2 p = geVec2AddVec2([self menuBackSprite].position, GEVec2Make(0.0, ((float)(height - delta))));
+    __font = [EGGlobal fontWithName:@"lucida_grande" size:24];
+    _menuBackSprite.size = GEVec2Make(((float)(width)), ((float)(height + [self headerHeight] * s)));
+    _menuBackSprite.position = geRectMoveToCenterForSize([_menuBackSprite rect], viewport.size).p0;
+    __block GEVec2 p = geVec2AddVec2(_menuBackSprite.position, GEVec2Make(0.0, ((float)(height - delta))));
     [[[self buttons] chain] forEach:^void(EGButton* button) {
         ((EGButton*)(button)).rect = GERectMake(p, GEVec2Make(((float)(width)), ((float)(delta))));
         p = geVec2SubVec2(p, GEVec2Make(0.0, ((float)(delta))));
     }];
+    [self reshape];
+}
+
+- (void)reshape {
+}
+
+- (void)drawHeaderRect:(GERect)rect {
+}
+
+- (ODClassType*)type {
+    return [TRMenuView type];
+}
+
++ (ODClassType*)type {
+    return _TRMenuView_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRPauseMenuView{
+    TRLevel* _level;
+    EGButton* _resumeButton;
+    EGButton* _restartButton;
+    EGButton* _chooseLevelButton;
+    id<CNSeq> _buttons;
+}
+static ODClassType* _TRPauseMenuView_type;
+@synthesize level = _level;
+@synthesize buttons = _buttons;
+
++ (id)pauseMenuViewWithLevel:(TRLevel*)level {
+    return [[TRPauseMenuView alloc] initWithLevel:level];
+}
+
+- (id)initWithLevel:(TRLevel*)level {
+    self = [super init];
+    if(self) {
+        _level = level;
+        _resumeButton = [self buttonText:[TRStr.Loc resumeGame] onClick:^void() {
+            [[EGGlobal director] resume];
+        }];
+        _restartButton = [self buttonText:[TRStr.Loc restartLevel:_level] onClick:^void() {
+            [TRSceneFactory restartLevel];
+            [[EGGlobal director] resume];
+        }];
+        _chooseLevelButton = [self buttonText:[TRStr.Loc chooseLevel] onClick:^void() {
+            [TRSceneFactory chooseLevel];
+        }];
+        _buttons = (@[_resumeButton, _restartButton, _chooseLevelButton]);
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRPauseMenuView_type = [ODClassType classTypeWithCls:[TRPauseMenuView class]];
 }
 
 - (ODClassType*)type {
@@ -223,6 +307,186 @@ static ODClassType* _TRPauseMenuView_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRPauseMenuView* o = ((TRPauseMenuView*)(other));
+    return [self.level isEqual:o.level];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.level hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"level=%@", self.level];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRWinMenu{
+    TRLevel* _level;
+    EGButton* _nextButton;
+    EGButton* _restartButton;
+    EGButton* _chooseLevelButton;
+    id<CNSeq> _buttons;
+    EGFont* _headerFont;
+}
+static ODClassType* _TRWinMenu_type;
+@synthesize level = _level;
+@synthesize buttons = _buttons;
+@synthesize headerFont = _headerFont;
+
++ (id)winMenuWithLevel:(TRLevel*)level {
+    return [[TRWinMenu alloc] initWithLevel:level];
+}
+
+- (id)initWithLevel:(TRLevel*)level {
+    self = [super init];
+    if(self) {
+        _level = level;
+        _nextButton = [self buttonText:[TRStr.Loc goToNextLevel:_level] onClick:^void() {
+            [TRSceneFactory nextLevel];
+        }];
+        _restartButton = [self buttonText:[TRStr.Loc replayLevel:_level] onClick:^void() {
+            [TRSceneFactory restartLevel];
+            [[EGGlobal director] resume];
+        }];
+        _chooseLevelButton = [self buttonText:[TRStr.Loc chooseLevel] onClick:^void() {
+            [TRSceneFactory chooseLevel];
+        }];
+        _buttons = (@[_nextButton, _restartButton, _chooseLevelButton]);
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRWinMenu_type = [ODClassType classTypeWithCls:[TRWinMenu class]];
+}
+
+- (CGFloat)headerHeight {
+    return 75.0;
+}
+
+- (void)drawHeaderRect:(GERect)rect {
+    [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.85, 0.9, 0.75, 1.0)] at:GEVec3Make(0.0, 0.0, 0.0) rect:rect];
+    [_headerFont drawText:[TRStr.Loc victory] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:geVec3ApplyVec2(geRectCenter(rect)) alignment:egTextAlignmentApplyXY(0.0, 0.0)];
+}
+
+- (void)reshape {
+    _headerFont = [EGGlobal fontWithName:@"lucida_grande" size:36];
+}
+
+- (ODClassType*)type {
+    return [TRWinMenu type];
+}
+
++ (ODClassType*)type {
+    return _TRWinMenu_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRWinMenu* o = ((TRWinMenu*)(other));
+    return [self.level isEqual:o.level];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.level hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"level=%@", self.level];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRLooseMenu{
+    TRLevel* _level;
+    EGButton* _restartButton;
+    EGButton* _chooseLevelButton;
+    id<CNSeq> _buttons;
+    EGFont* _headerFont;
+    EGFont* _detailsFont;
+}
+static ODClassType* _TRLooseMenu_type;
+@synthesize level = _level;
+@synthesize buttons = _buttons;
+@synthesize headerFont = _headerFont;
+@synthesize detailsFont = _detailsFont;
+
++ (id)looseMenuWithLevel:(TRLevel*)level {
+    return [[TRLooseMenu alloc] initWithLevel:level];
+}
+
+- (id)initWithLevel:(TRLevel*)level {
+    self = [super init];
+    if(self) {
+        _level = level;
+        _restartButton = [self buttonText:[TRStr.Loc replayLevel:_level] onClick:^void() {
+            [TRSceneFactory restartLevel];
+            [[EGGlobal director] resume];
+        }];
+        _chooseLevelButton = [self buttonText:[TRStr.Loc chooseLevel] onClick:^void() {
+            [TRSceneFactory chooseLevel];
+        }];
+        _buttons = (@[_restartButton, _chooseLevelButton]);
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRLooseMenu_type = [ODClassType classTypeWithCls:[TRLooseMenu class]];
+}
+
+- (CGFloat)headerHeight {
+    return 75.0;
+}
+
+- (void)drawHeaderRect:(GERect)rect {
+    [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 0.85, 0.75, 1.0)] at:GEVec3Make(0.0, 0.0, 0.0) rect:rect];
+    [_headerFont drawText:[TRStr.Loc defeat] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:geVec3ApplyVec2(geVec2AddVec2(rect.p0, geVec2MulVec2(rect.size, GEVec2Make(0.05, 0.7)))) alignment:egTextAlignmentApplyXY(-1.0, 0.0)];
+    [_detailsFont drawText:[TRStr.Loc moneyOver] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:geVec3ApplyVec2(geVec2AddVec2(rect.p0, geVec2MulVec2(rect.size, GEVec2Make(0.5, 0.35)))) alignment:egTextAlignmentApplyXY(0.0, 0.0)];
+}
+
+- (void)reshape {
+    _headerFont = [EGGlobal fontWithName:@"lucida_grande" size:36];
+    _detailsFont = [EGGlobal fontWithName:@"lucida_grande" size:16];
+}
+
+- (ODClassType*)type {
+    return [TRLooseMenu type];
+}
+
++ (ODClassType*)type {
+    return _TRLooseMenu_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRLooseMenu* o = ((TRLooseMenu*)(other));
     return [self.level isEqual:o.level];
 }
 

@@ -5,6 +5,7 @@
 #import "EGFont.h"
 @class TRLevel;
 @class EGCamera2D;
+@class TRLevelResult;
 @class EGGlobal;
 @class EGDirector;
 @class EGBlendFunction;
@@ -13,8 +14,8 @@
 @class EGD2D;
 @class EGEnablingState;
 @class EGEnvironment;
-@class EGButton;
 @class EGSprite;
+@class EGButton;
 @class TRStr;
 @protocol TRStrings;
 @class TRSceneFactory;
@@ -22,10 +23,12 @@
 @class TRHelp;
 
 @class TRLevelPauseMenuView;
+@class TRMenuView;
 @class TRPauseMenuView;
+@class TRWinMenu;
+@class TRLooseMenu;
 @class TRHelpView;
 @protocol TRPauseView;
-@protocol TRMenuView;
 
 @interface TRLevelPauseMenuView : NSObject<EGLayerView, EGInputProcessor>
 @property (nonatomic, readonly) TRLevel* level;
@@ -50,25 +53,62 @@
 @end
 
 
-@protocol TRMenuView<NSObject>
+@interface TRMenuView : NSObject
++ (id)menuView;
+- (id)init;
+- (ODClassType*)type;
+- (EGFont*)font;
 - (EGButton*)buttonText:(NSString*)text onClick:(void(^)())onClick;
 - (void(^)(GERect))drawLine;
 - (id<CNSeq>)buttons;
 - (BOOL)tapEvent:(EGEvent*)event;
 - (void)draw;
-- (EGSprite*)menuBackSprite;
+- (CGFloat)headerHeight;
 - (void)reshapeWithViewport:(GERect)viewport;
+- (void)reshape;
+- (void)drawHeaderRect:(GERect)rect;
++ (ODClassType*)type;
 @end
 
 
-@interface TRPauseMenuView : NSObject<TRPauseView, TRMenuView>
+@interface TRPauseMenuView : TRMenuView<TRPauseView>
 @property (nonatomic, readonly) TRLevel* level;
-@property (nonatomic, readonly) EGSprite* menuBackSprite;
 @property (nonatomic, readonly) id<CNSeq> buttons;
 
 + (id)pauseMenuViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface TRWinMenu : TRMenuView<TRPauseView>
+@property (nonatomic, readonly) TRLevel* level;
+@property (nonatomic, readonly) id<CNSeq> buttons;
+@property (nonatomic, retain) EGFont* headerFont;
+
++ (id)winMenuWithLevel:(TRLevel*)level;
+- (id)initWithLevel:(TRLevel*)level;
+- (ODClassType*)type;
+- (CGFloat)headerHeight;
+- (void)drawHeaderRect:(GERect)rect;
+- (void)reshape;
++ (ODClassType*)type;
+@end
+
+
+@interface TRLooseMenu : TRMenuView<TRPauseView>
+@property (nonatomic, readonly) TRLevel* level;
+@property (nonatomic, readonly) id<CNSeq> buttons;
+@property (nonatomic, retain) EGFont* headerFont;
+@property (nonatomic, retain) EGFont* detailsFont;
+
++ (id)looseMenuWithLevel:(TRLevel*)level;
+- (id)initWithLevel:(TRLevel*)level;
+- (ODClassType*)type;
+- (CGFloat)headerHeight;
+- (void)drawHeaderRect:(GERect)rect;
+- (void)reshape;
 + (ODClassType*)type;
 @end
 

@@ -5,6 +5,8 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor {
 
     private val menuView = PauseMenuView(level)
     private val helpView = HelpView(level)
+    private val winView = WinMenu(level)
+    private val looseView = LooseMenu(level)
 
     var camera : Camera
 
@@ -12,10 +14,15 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor {
         camera = Camera2D(vec2(viewport.width, viewport.height))
         menuView.reshapeWith(viewport)
         helpView.reshapeWith(viewport)
+        winView.reshapeWith(viewport)
+        looseView.reshapeWith(viewport)
     }
 
     def view : PauseView =
-        if(level.help.isEmpty) menuView else helpView
+        if(!level.help.isEmpty) helpView
+        else if(level.result.isEmpty) menuView
+        else if(level.result.get.win) winView
+        else looseView
 
     def draw {
         if(!director.isPaused) return nil
@@ -38,10 +45,11 @@ trait PauseView extends TapProcessor {
     def draw
 }
 
-trait MenuView {
-    private var font : Font
+class MenuView {
+    private var _font : Font
+    def font = _font
     def button(text : string, onClick : () -> void) : Button =
-        Button(drawLine *|* Button.drawText(font, vec4(0, 0, 0, 1), text), onClick)
+        Button(drawLine *|* Button.drawText(_font, vec4(0, 0, 0, 1), text), onClick)
 
     def drawLine : Rect -> void = (rect : Rect) ->
         D2D.drawLine(vec4(0.3, 0.3, 0.3, 1), rect.p1, rect.p3)
@@ -53,18 +61,25 @@ trait MenuView {
     def draw {
         menuBackSprite.draw
         buttons.for(_.draw)
+        val hh = headerHeight * context.scale
+        if(hh > 0) {
+            drawHeader(Rect(
+                menuBackSprite.position + vec2(0, menuBackSprite.size.y - hh),
+                vec2(menuBackSprite.size.x, hh)))
+        }
     }
 
-    def menuBackSprite : Sprite
+    private val menuBackSprite = Sprite(vec4(0.9, 0.9, 0.9, 1.0), vec2(350, 150))
+    def headerHeight : float = 0.0
 
     def reshapeWith(viewport : Rect) {
         val s = context.scale
-        val width = 350*s
+        val width = 400*s
         val delta = 50*s
         val height = delta*buttons.count
-        font = fontWith(name = "lucida_grande", size = 24)
+        _font = fontWith(name = "lucida_grande", size = 24)
 
-        menuBackSprite.size = vec2(width, height)
+        menuBackSprite.size = vec2(width, height + headerHeight*s)
         menuBackSprite.position = menuBackSprite.rect.moveToCenterFor(viewport.size).p0
         var p = menuBackSprite.position + vec2(0, height - delta)
 
@@ -72,25 +87,66 @@ trait MenuView {
             button.rect = Rect(p, vec2(width, delta))
             p = p - vec2(0, delta)
         }
+        reshape
     }
+    def reshape{}
 
+    def drawHeader(rect : Rect) {}
 }
 
-class PauseMenuView(level : Level) extends PauseView with MenuView {
-    val menuBackSprite = Sprite(vec4(0.9, 0.9, 0.9, 1), vec2(350, 150))
-
+class PauseMenuView(level : Level) extends MenuView with PauseView {
     private val resumeButton = button(Loc.resumeGame, director.resume)
-    private val chooseLevelButton = button(Loc.chooseLevel, director.resume)
     private val restartButton = button(Loc.restart(level)) {
         SceneFactory.restartLevel
         director.resume
     }
+    private val chooseLevelButton = button(Loc.chooseLevel, SceneFactory.chooseLevel)
     val buttons = [resumeButton, restartButton, chooseLevelButton]
 }
 
-//class WinMenu(level : Level) extends PauseView {
-//
-//}
+class WinMenu(level : Level) extends MenuView with PauseView{
+    private val nextButton = button(Loc.goToNext(level), SceneFactory.nextLevel)
+    private val restartButton = button(Loc.replay(level)) {
+        SceneFactory.restartLevel
+        director.resume
+    }
+    private val chooseLevelButton = button(Loc.chooseLevel, SceneFactory.chooseLevel)
+    val buttons = [nextButton, restartButton, chooseLevelButton]
+
+    def headerHeight = 75.0
+    def drawHeader(rect : Rect) {
+        D2D.drawSprite(vec4(0.85, 0.9, 0.75, 1.0), at = vec3(0, 0, 0), rect)
+        headerFont.draw(Loc.victory, vec4(0, 0, 0, 1), rect.center, TextAlignment(0, 0))
+    }
+
+    var headerFont : Font
+    def reshape {
+        headerFont = fontWith(name = "lucida_grande", size = 36)
+    }
+}
+
+class LooseMenu(level : Level) extends MenuView with PauseView{
+    private val restartButton = button(Loc.replay(level)) {
+        SceneFactory.restartLevel
+        director.resume
+    }
+    private val chooseLevelButton = button(Loc.chooseLevel, SceneFactory.chooseLevel)
+    val buttons = [restartButton, chooseLevelButton]
+    def headerHeight = 75.0
+    def drawHeader(rect : Rect) {
+        D2D.drawSprite(vec4(1.0, 0.85, 0.75, 1.0), at = vec3(0, 0, 0), rect)
+        headerFont.draw(Loc.defeat, vec4(0, 0, 0, 1), rect.p0 + rect.size*vec2(0.05, 0.7), TextAlignment(-1, 0))
+        detailsFont.draw(Loc.moneyOver, vec4(0, 0, 0, 1), rect.p0 + rect.size*vec2(0.5, 0.35), TextAlignment(0, 0))
+    }
+
+    var headerFont : Font
+    var detailsFont : Font
+    def reshape {
+        headerFont = fontWith(name = "lucida_grande", size = 36)
+        detailsFont = fontWith(name = "lucida_grande", size = 16)
+    }
+}
+
 
 class HelpView(level : Level) extends PauseView {
     private var helpFont : Font
