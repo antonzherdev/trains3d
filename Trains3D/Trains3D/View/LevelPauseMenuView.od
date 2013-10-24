@@ -96,20 +96,14 @@ class MenuView {
 
 class PauseMenuView(level : Level) extends MenuView with PauseView {
     private val resumeButton = button(Loc.resumeGame, director.resume)
-    private val restartButton = button(Loc.restart(level)) {
-        SceneFactory.restartLevel
-        director.resume
-    }
+    private val restartButton = button(Loc.restart(level), SceneFactory.restartLevel)
     private val chooseLevelButton = button(Loc.chooseLevel, SceneFactory.chooseLevel)
     val buttons = [resumeButton, restartButton, chooseLevelButton]
 }
 
 class WinMenu(level : Level) extends MenuView with PauseView{
     private val nextButton = button(Loc.goToNext(level), SceneFactory.nextLevel)
-    private val restartButton = button(Loc.replay(level)) {
-        SceneFactory.restartLevel
-        director.resume
-    }
+    private val restartButton = button(Loc.replay(level), SceneFactory.restartLevel)
     private val chooseLevelButton = button(Loc.chooseLevel, SceneFactory.chooseLevel)
     val buttons = [nextButton, restartButton, chooseLevelButton]
 

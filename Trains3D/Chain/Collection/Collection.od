@@ -31,7 +31,7 @@ trait Traversable<T> {
     def find(where : T -> bool) : T? = {
         var ret : T? = nil
         go{x ->
-            if(where(ret)) {
+            if(where(x)) {
                 ret = x
                 false
             } else true
@@ -42,8 +42,19 @@ trait Traversable<T> {
     def exists(where : T -> bool) : bool = {
         var ret = false
         go{x ->
-            if(where(ret)) {
+            if(where(x)) {
                 ret = true
+                false
+            } else true
+        }
+        ret
+    }
+
+    def all(confirm : T -> bool) : bool = {
+        var ret = true
+        go{x ->
+            if(!confirm(ret)) {
+                ret = false
                 false
             } else true
         }

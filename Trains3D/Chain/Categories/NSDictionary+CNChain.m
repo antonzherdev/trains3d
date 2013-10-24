@@ -33,6 +33,20 @@
     return ret;
 }
 
+- (BOOL)allConfirm:(BOOL(^)(id))confirm {
+    __block BOOL ret = YES;
+    [self goOn:^BOOL(id x) {
+        if(!confirm(numb(ret))) {
+            ret = NO;
+            return NO;
+        } else {
+            return YES;
+        }
+    }];
+    return ret;
+}
+
+
 - (id)optKey:(id)key {
     id ret = self[key];
     return ret == nil ? [CNOption none] : [CNSome someWithValue:ret];

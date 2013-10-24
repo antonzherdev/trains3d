@@ -1,8 +1,6 @@
 #import "NSString+CNChain.h"
 #import "NSArray+CNChain.h"
-#import "CNTuple.h"
 #import "CNOption.h"
-#import "CNCollection.h"
 #import "CNChain.h"
 #import "CNSet.h"
 
@@ -201,6 +199,18 @@
     return ret;
 }
 
+- (BOOL)allConfirm:(BOOL(^)(id))confirm {
+    __block BOOL ret = YES;
+    [self goOn:^BOOL(id x) {
+        if(!confirm(numb(ret))) {
+            ret = NO;
+            return NO;
+        } else {
+            return YES;
+        }
+    }];
+    return ret;
+}
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {
     [self forEach:^void(id x) {

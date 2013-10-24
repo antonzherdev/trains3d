@@ -34,14 +34,14 @@ static ODClassType* _TRLevelFactory_type;
     _TRLevelFactory_scoreRules = [TRLevelFactory scoreRulesWithInitialScore:100000];
     _TRLevelFactory_forestRules = [TRForestRules forestRulesWithTypes:[TRTreeType values] thickness:1.0];
     _TRLevelFactory_weatherRules = [TRWeatherRules weatherRulesWithWindStrength:1.0 blastness:0.1 blastMinLength:5.0 blastMaxLength:10.0 blastStrength:10.0];
-    _TRLevelFactory_rules = (@[[TRLevelRules levelRulesWithMapSize:GEVec2iMake(3, 2) scoreRules:[TRLevelFactory scoreRulesWithInitialScore:10000] forestRules:[TRForestRules forestRulesWithTypes:(@[TRTreeType.pine]) thickness:2.0] weatherRules:[TRWeatherRules weatherRulesWithWindStrength:0.3 blastness:0.1 blastMinLength:1.0 blastMaxLength:3.0 blastStrength:0.3] repairerSpeed:30 events:(@[tuple(@1.0, [TRLevelFactory showHelpText:[TRStr.Loc helpConnectTwoCities]]), tuple(@30.0, [TRLevelFactory trainCars:[CNRange applyI:2] speed:[CNRange applyI:30]]), tuple(@8.0, [TRLevelFactory showTrainHelp]), tuple(@30.0, [TRLevelFactory createNewCity]), tuple(@1.0, [TRLevelFactory showHelpText:[TRStr.Loc helpNewCity]]), tuple(@20.0, [TRLevelFactory trainCars:[CNRange applyI:1] speed:[CNRange applyI:20]]), tuple(@8.0, [TRLevelFactory showTrainHelpWithSwitches]), tuple(@30.0, [TRLevelFactory trainCars:[CNRange applyI:3] speed:[CNRange applyI:30]])])]]);
+    _TRLevelFactory_rules = (@[[TRLevelRules levelRulesWithMapSize:GEVec2iMake(5, 3) scoreRules:[TRLevelFactory scoreRulesWithInitialScore:20000] forestRules:[TRForestRules forestRulesWithTypes:(@[TRTreeType.pine]) thickness:2.0] weatherRules:[TRWeatherRules weatherRulesWithWindStrength:0.3 blastness:0.1 blastMinLength:1.0 blastMaxLength:3.0 blastStrength:0.3] repairerSpeed:20 events:(@[tuple(@1.0, [TRLevelFactory showHelpText:[TRStr.Loc helpConnectTwoCities]]), tuple(@30.0, [TRLevelFactory trainCars:[CNRange applyI:2] speed:[CNRange applyI:30]]), tuple(@8.0, [TRLevelFactory showTrainHelp]), tuple(@40.0, [TRLevelFactory createNewCity]), tuple(@1.0, [TRLevelFactory showHelpText:[TRStr.Loc helpNewCity]]), tuple(@20.0, [TRLevelFactory trainCars:[CNRange applyI:1] speed:[CNRange applyI:20]]), tuple(@8.0, [TRLevelFactory showTrainHelpWithSwitches]), tuple(@40.0, [TRLevelFactory trainCars:[CNRange applyI:3] speed:[CNRange applyI:30]])])], [TRLevelRules levelRulesWithMapSize:GEVec2iMake(5, 3) scoreRules:[TRLevelFactory scoreRulesWithInitialScore:20000] forestRules:[TRForestRules forestRulesWithTypes:(@[TRTreeType.pine]) thickness:2.0] weatherRules:[TRWeatherRules weatherRulesWithWindStrength:0.3 blastness:0.1 blastMinLength:1.0 blastMaxLength:3.0 blastStrength:0.3] repairerSpeed:20 events:(@[tuple(@20.0, [TRLevelFactory slowTrain]), tuple(@30.0, [TRLevelFactory createNewCity]), tuple(@20.0, [TRLevelFactory slowTrain]), tuple(@30.0, [TRLevelFactory slowTrain]), tuple(@30.0, [TRLevelFactory createNewCity]), tuple(@20.0, [TRLevelFactory slowTrain]), tuple(@10.0, [TRLevelFactory slowTrain])])]]);
 }
 
 + (TRScoreRules*)scoreRulesWithInitialScore:(NSInteger)initialScore {
     return [TRScoreRules scoreRulesWithInitialScore:initialScore railCost:1000 arrivedPrize:^NSInteger(TRTrain* train) {
         return ((NSInteger)([[train cars] count] * 2000));
     } destructionFine:^NSInteger(TRTrain* train) {
-        return ((NSInteger)([[train cars] count] * 3000));
+        return ((NSInteger)([[train cars] count] * 5000));
     } delayPeriod:60.0 delayFine:^NSInteger(TRTrain* train, NSInteger i) {
         return i * 1000;
     } repairCost:2000];
@@ -69,6 +69,10 @@ static ODClassType* _TRLevelFactory_type;
     return ^void(TRLevel* level) {
         [level createNewCity];
     };
+}
+
++ (void(^)(TRLevel*))slowTrain {
+    return [TRLevelFactory trainCars:intTo(1, 4) speed:intTo(20, 40)];
 }
 
 + (TRLevel*)levelWithNumber:(NSUInteger)number {

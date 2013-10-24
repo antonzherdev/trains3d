@@ -10,6 +10,7 @@
 static TRCityColor* _TRCityColor_orange;
 static TRCityColor* _TRCityColor_green;
 static TRCityColor* _TRCityColor_pink;
+static TRCityColor* _TRCityColor_gg;
 static TRCityColor* _TRCityColor_grey;
 static NSArray* _TRCityColor_values;
 @synthesize color = _color;
@@ -34,8 +35,9 @@ static NSArray* _TRCityColor_values;
     _TRCityColor_orange = [TRCityColor cityColorWithOrdinal:0 name:@"orange" color:GEVec4Make(1.0, 0.5, 0.0, 1.0) localName:[TRStr.Loc colorOrange]];
     _TRCityColor_green = [TRCityColor cityColorWithOrdinal:1 name:@"green" color:GEVec4Make(0.66, 0.9, 0.44, 1.0) localName:[TRStr.Loc colorGreen]];
     _TRCityColor_pink = [TRCityColor cityColorWithOrdinal:2 name:@"pink" color:GEVec4Make(0.9, 0.44, 0.66, 1.0) localName:[TRStr.Loc colorPink]];
-    _TRCityColor_grey = [TRCityColor cityColorWithOrdinal:3 name:@"grey" color:GEVec4Make(0.5, 0.5, 0.5, 1.0) localName:[TRStr.Loc colorGrey]];
-    _TRCityColor_values = (@[_TRCityColor_orange, _TRCityColor_green, _TRCityColor_pink, _TRCityColor_grey]);
+    _TRCityColor_gg = [TRCityColor cityColorWithOrdinal:3 name:@"gg" color:GEVec4Make(0.66, 0.44, 0.9, 1.0) localName:[TRStr.Loc colorPink]];
+    _TRCityColor_grey = [TRCityColor cityColorWithOrdinal:4 name:@"grey" color:GEVec4Make(0.5, 0.5, 0.5, 1.0) localName:[TRStr.Loc colorGrey]];
+    _TRCityColor_values = (@[_TRCityColor_orange, _TRCityColor_green, _TRCityColor_pink, _TRCityColor_gg, _TRCityColor_grey]);
 }
 
 + (TRCityColor*)orange {
@@ -48,6 +50,10 @@ static NSArray* _TRCityColor_values;
 
 + (TRCityColor*)pink {
     return _TRCityColor_pink;
+}
+
++ (TRCityColor*)gg {
+    return _TRCityColor_gg;
 }
 
 + (TRCityColor*)grey {

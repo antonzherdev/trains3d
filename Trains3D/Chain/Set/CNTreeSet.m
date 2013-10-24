@@ -141,7 +141,7 @@ static ODClassType* _CNMutableTreeSet_type;
 - (id)findWhere:(BOOL(^)(id))where {
     __block id ret = [CNOption none];
     [self goOn:^BOOL(id x) {
-        if(where(ret)) {
+        if(where(x)) {
             ret = [CNOption applyValue:x];
             return NO;
         } else {
@@ -154,8 +154,21 @@ static ODClassType* _CNMutableTreeSet_type;
 - (BOOL)existsWhere:(BOOL(^)(id))where {
     __block BOOL ret = NO;
     [self goOn:^BOOL(id x) {
-        if(where(numb(ret))) {
+        if(where(x)) {
             ret = YES;
+            return NO;
+        } else {
+            return YES;
+        }
+    }];
+    return ret;
+}
+
+- (BOOL)allConfirm:(BOOL(^)(id))confirm {
+    __block BOOL ret = YES;
+    [self goOn:^BOOL(id x) {
+        if(!(confirm(numb(ret)))) {
+            ret = NO;
             return NO;
         } else {
             return YES;

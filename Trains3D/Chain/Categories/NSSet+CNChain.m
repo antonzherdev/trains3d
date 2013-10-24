@@ -37,6 +37,17 @@
     return ret;
 }
 
+- (BOOL)allConfirm:(BOOL(^)(id))confirm {
+    BOOL ret = YES;
+    for(id item in self)  {
+        if(!confirm(item)) {
+            ret = NO;
+            break;
+        }
+    }
+    return ret;
+}
+
 - (id)findWhere:(BOOL(^)(id))where {
     id ret = [CNOption none];
     for(id item in self)  {

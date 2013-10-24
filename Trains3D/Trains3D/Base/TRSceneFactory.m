@@ -33,6 +33,7 @@ static ODClassType* _TRSceneFactory_type;
 + (void)restartLevel {
     [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGGlobal director] scene] get])).controller] forEach:^void(TRLevel* level) {
         [[EGGlobal director] setScene:[TRSceneFactory sceneForLevel:[TRLevel levelWithNumber:((TRLevel*)(level)).number rules:((TRLevel*)(level)).rules]]];
+        [[EGGlobal director] resume];
     }];
 }
 
@@ -47,6 +48,7 @@ static ODClassType* _TRSceneFactory_type;
 + (void)nextLevel {
     [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGGlobal director] scene] get])).controller] forEach:^void(TRLevel* level) {
         [[EGGlobal director] setScene:[TRSceneFactory sceneForLevel:[TRLevelFactory levelWithNumber:((TRLevel*)(level)).number + 1]]];
+        [[EGGlobal director] resume];
     }];
 }
 

@@ -113,6 +113,7 @@ static ODClassType* _TRLevelRules_type;
     TRTrainsCollisionWorld* _collisionWorld;
     TRTrainsDynamicWorld* _dynamicWorld;
     NSMutableArray* __dyingTrains;
+    CGFloat _looseCounter;
     id __help;
     id __result;
 }
@@ -151,6 +152,7 @@ static ODClassType* _TRLevel_type;
         _collisionWorld = [TRTrainsCollisionWorld trainsCollisionWorld];
         _dynamicWorld = [TRTrainsDynamicWorld trainsDynamicWorld];
         __dyingTrains = [NSMutableArray mutableArray];
+        _looseCounter = 0.0;
         __help = [CNOption none];
         __result = [CNOption none];
     }
@@ -280,8 +282,15 @@ static ODClassType* _TRLevel_type;
             }
         }
     }];
-    if([_score score] < 0) [self lose];
-    if([_schedule isEmpty] && [__trains isEmpty] && [__dyingTrains isEmpty]) [self win];
+    if([_score score] < 0) {
+        _looseCounter += delta;
+        if(_looseCounter > 5) [self lose];
+    } else {
+        _looseCounter = 0.0;
+        if([_schedule isEmpty] && [__trains isEmpty] && [__dyingTrains isEmpty] && [__cities allConfirm:^BOOL(TRCity* _) {
+    return [((TRCity*)(_)) canRunNewTrain];
+}]) [self win];
+    }
 }
 
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch {

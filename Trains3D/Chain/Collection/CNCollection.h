@@ -31,6 +31,7 @@
 - (CNChain*)chain;
 - (id)findWhere:(BOOL(^)(id))where;
 - (BOOL)existsWhere:(BOOL(^)(id))where;
+- (BOOL)allConfirm:(BOOL(^)(id))confirm;
 - (id)head;
 - (id)headOpt;
 - (id)convertWithBuilder:(id<CNBuilder>)builder;

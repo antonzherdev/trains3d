@@ -74,6 +74,18 @@
     return ret;
 }
 
+- (BOOL)allConfirm:(BOOL(^)(id))confirm {
+    BOOL ret = YES;
+    for(id item in self)  {
+        if(!confirm(item)) {
+            ret = NO;
+            break;
+        }
+    }
+    return ret;
+}
+
+
 - (void)forEach:(cnP)p {
     for(id item in self)  {
         p(item);

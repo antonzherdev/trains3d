@@ -420,6 +420,21 @@
     [self apply:yield];
     return ret;
 }
+
+- (BOOL)allConfirm:(BOOL (^)(id))f {
+    __block BOOL ret = YES;
+    CNYield *yield = [CNYield alloc];
+    yield = [yield initWithBegin:nil yield:^CNYieldResult(id item) {
+        if(!f(item)) {
+            ret = NO;
+            return cnYieldBreak;
+        }
+        return cnYieldContinue;
+    } end:nil all:nil];
+    [self apply:yield];
+    return ret;
+}
+
 @end
 
 id cnResolveCollection(id collection) {

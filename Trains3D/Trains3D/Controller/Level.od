@@ -94,6 +94,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         add(train)
     }
 
+    private var looseCounter = 0.0
     def updateWith(delta : float) {
         score.updateWith(delta)
         _trains.for(_.updateWith(delta))
@@ -112,8 +113,13 @@ class Level(number : uint, rules : LevelRules) extends Controller {
                 if(!_trains.exists(_.isIn(city.tile))) city.resumeTrainRunning
             }
         }
-        if(score.score < 0) lose
-        if(schedule.isEmpty && _trains.isEmpty && _dyingTrains.isEmpty) win
+        if(score.score < 0) {
+            looseCounter += delta
+            if(looseCounter > 5) lose
+        } else {
+            looseCounter = 0
+            if(schedule.isEmpty && _trains.isEmpty && _dyingTrains.isEmpty && _cities.all(_.canRunNewTrain)) win
+        }
     }
 
     def tryTurn(theSwitch : Switch) {

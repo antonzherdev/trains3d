@@ -275,7 +275,6 @@ static ODClassType* _TRPauseMenuView_type;
         }];
         _restartButton = [self buttonText:[TRStr.Loc restartLevel:_level] onClick:^void() {
             [TRSceneFactory restartLevel];
-            [[EGGlobal director] resume];
         }];
         _chooseLevelButton = [self buttonText:[TRStr.Loc chooseLevel] onClick:^void() {
             [TRSceneFactory chooseLevel];
@@ -352,7 +351,6 @@ static ODClassType* _TRWinMenu_type;
         }];
         _restartButton = [self buttonText:[TRStr.Loc replayLevel:_level] onClick:^void() {
             [TRSceneFactory restartLevel];
-            [[EGGlobal director] resume];
         }];
         _chooseLevelButton = [self buttonText:[TRStr.Loc chooseLevel] onClick:^void() {
             [TRSceneFactory chooseLevel];
