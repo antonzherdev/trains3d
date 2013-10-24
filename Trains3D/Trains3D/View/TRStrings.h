@@ -27,6 +27,7 @@
 - (NSString*)colorOrange;
 - (NSString*)colorGreen;
 - (NSString*)colorPink;
+- (NSString*)colorPurple;
 - (NSString*)colorGrey;
 - (NSString*)helpConnectTwoCities;
 - (NSString*)helpNewCity;
@@ -57,6 +58,7 @@
 - (NSString*)colorOrange;
 - (NSString*)colorGreen;
 - (NSString*)colorPink;
+- (NSString*)colorPurple;
 - (NSString*)colorGrey;
 - (NSString*)helpConnectTwoCities;
 - (NSString*)helpNewCity;
@@ -88,6 +90,7 @@
 - (NSString*)colorOrange;
 - (NSString*)colorGreen;
 - (NSString*)colorPink;
+- (NSString*)colorPurple;
 - (NSString*)colorGrey;
 - (NSString*)helpConnectTwoCities;
 - (NSString*)helpNewCity;

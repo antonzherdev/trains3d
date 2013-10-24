@@ -6,7 +6,8 @@ enum CityColor(color : vec4, localName : string) {
     orange(vec4(1.0, 0.5, 0.0, 1.0), Loc.colorOrange)
     green(vec4(0.66, 0.9, 0.44, 1.0), Loc.colorGreen)
     pink(vec4(0.9, 0.44, 0.66, 1.0), Loc.colorPink)
-    gg(vec4(0.66, 0.44, 0.9, 1.0), Loc.colorPink)
+    purple(vec4(0.66, 0.44, 0.9, 1.0), Loc.colorPurple)
+    xx(vec4(0.9, 0.9, 0.44, 1.0), Loc.colorPurple)
 
     grey(vec4(0.5, 0.5, 0.5 , 1.0), Loc.colorGrey)
 }

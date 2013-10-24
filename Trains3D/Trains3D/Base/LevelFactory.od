@@ -35,7 +35,7 @@ class LevelFactory {
                 (1, showHelp(Loc.helpNewCity)),
                 (20, train(cars = 1, speed = 20)),
                 (8, showTrainHelpWithSwitches),
-                (40, train(cars = 3, speed = 30))
+                (50, train(cars = 3, speed = 30))
         ]),
 
         //2
@@ -47,8 +47,32 @@ class LevelFactory {
                 (30, createNewCity),
                 (20, slowTrain),
                 (30, slowTrain),
-                (30, createNewCity),
+                (10, createNewCity),
                 (20, slowTrain),
+                (10, slowTrain)
+            ]),
+        //3
+        LevelRules(vec2i(5, 3), scoreRulesWith(20000),
+            ForestRules(types = [TreeType.pine], thickness = 2),
+            WeatherRules(windStrength = 0.3, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3),
+            repairerSpeed = 20, [
+                (20, slowTrain),
+                (20, slowTrain),
+                (10, slowTrain),
+                (20, slowTrain),
+                (10, createNewCity),
+                (20, slowTrain),
+                (20, slowTrain),
+                (10, slowTrain),
+                (10, slowTrain),
+                (10, createNewCity),
+                (20, slowTrain),
+                (10, slowTrain),
+                (10, slowTrain),
+                (10, createNewCity),
+                (10, slowTrain),
+                (10, slowTrain),
+                (10, slowTrain),
                 (10, slowTrain)
             ])
     ]
