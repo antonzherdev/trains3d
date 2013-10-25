@@ -131,6 +131,7 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
         $endif
         $if(i < directLightWithShadowsCount)
          dirLightShadowCoord$i = (dirLightDepthMwcp$i * vec4(position, 1)).xyz;
+         dirLightShadowCoord$i.z -= clamp(0.005*tan(acos(dirLightDirectionCos$i)), 0.0, 0.01);
         $endif
         "
     }.toStringWith("\n")

@@ -194,7 +194,8 @@ class ShadowDrawShaderKey(directLightCount : uint) extends ShaderTextBuilder {
     def lightsOut : string = directLightCount.range.chain.map{i ->
         "$out mediump vec3 dirLightShadowCoord$i;"}.toStringWith("\n")
     def lightsCalculateVaryings : string = directLightCount.range.chain.map{i ->
-        "dirLightShadowCoord$i = (dirLightDepthMwcp$i * vec4(position, 1)).xyz;"
+        "dirLightShadowCoord$i = (dirLightDepthMwcp$i * vec4(position, 1)).xyz;
+         dirLightShadowCoord$i.z -= 0.005;"
     }.toStringWith("\n")
 
 

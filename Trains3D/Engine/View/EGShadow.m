@@ -760,7 +760,8 @@ static ODClassType* _EGShadowDrawShaderKey_type;
 
 - (NSString*)lightsCalculateVaryings {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return [NSString stringWithFormat:@"dirLightShadowCoord%@ = (dirLightDepthMwcp%@ * vec4(position, 1)).xyz;", i, i];
+        return [NSString stringWithFormat:@"dirLightShadowCoord%@ = (dirLightDepthMwcp%@ * vec4(position, 1)).xyz;\n"
+            "dirLightShadowCoord%@.z -= 0.005;", i, i, i];
     }] toStringWithDelimiter:@"\n"];
 }
 
