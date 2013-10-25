@@ -49,8 +49,8 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
              $ain mediump vec3 normal;
 
              $ain highp vec3 position;
-             uniform mat4 mwcp;
-             uniform mat4 mwc;
+             uniform highp mat4 mwcp;
+             uniform highp mat4 mwc;
             $if(region)
              uniform mediump vec2 uvShift;
              uniform mediump vec2 uvScale;
@@ -91,7 +91,7 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
              $lightsFragmentUniform
 
              void main(void) {
-                mediump float visibility;$when(directLightWithShadowsCount > 0)
+                highp float visibility;$when(directLightWithShadowsCount > 0)
                 lowp vec4 materialColor = $blend(blendMode, "diffuseColor", "$texture2D\(diffuseTexture, UV)");
                 lowp vec4 color = ambientColor * materialColor;
                 $lightsDiffuse
@@ -103,7 +103,7 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
     def lightsVertexUniform : string = directLightCount.range.chain.map{i ->
         "uniform mediump vec3 dirLightDirection$i;
         $if(i < directLightWithShadowsCount)
-         uniform mat4 dirLightDepthMwcp$i;
+         uniform highp mat4 dirLightDepthMwcp$i;
         $endif
         "}.toStringWith("\n")
     def lightsIn : string = directLightCount.range.chain.map{i ->
@@ -112,7 +112,7 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
          $in mediump float dirLightDirectionCosA$i;
         $endif
         $if(i < directLightWithShadowsCount)
-         $in mediump vec3 dirLightShadowCoord$i;
+         $in highp vec3 dirLightShadowCoord$i;
         $endif
         "}.toStringWith("\n")
     def lightsOut : string = directLightCount.range.chain.map{i ->
@@ -121,7 +121,7 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
          $out mediump float dirLightDirectionCosA$i;
         $endif
         $if(i < directLightWithShadowsCount)
-         $out mediump vec3 dirLightShadowCoord$i;
+         $out highp vec3 dirLightShadowCoord$i;
         $endif
         "}.toStringWith("\n")
     def lightsCalculateVaryings : string = directLightCount.range.chain.map{i ->
@@ -140,7 +140,7 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
     def lightsFragmentUniform : string = directLightCount.range.chain.map{i ->
         "uniform lowp vec4 dirLightColor$i;
         $if(i < directLightWithShadowsCount)
-         uniform mediump sampler2DShadow dirLightShadow$i;
+         uniform highp sampler2DShadow dirLightShadow$i;
         $endif"}.toStringWith("\n")
     def lightsDiffuse : string =  directLightCount.range.chain.map{i ->
         "
