@@ -43,6 +43,7 @@
 @property (nonatomic, readonly) GEVec2i tile;
 @property (nonatomic, readonly) TRCityAngle* angle;
 @property (nonatomic, retain) EGCounter* expectedTrainCounter;
+@property (nonatomic, retain) TRCityColor* expectedTrainColor;
 
 + (id)cityWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
 - (id)initWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;

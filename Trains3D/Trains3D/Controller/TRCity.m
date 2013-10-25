@@ -139,6 +139,7 @@ static NSArray* _TRCityAngle_values;
     GEVec2i _tile;
     TRCityAngle* _angle;
     EGCounter* _expectedTrainCounter;
+    TRCityColor* _expectedTrainColor;
     EGCounter* _waitingCounter;
 }
 static ODClassType* _TRCity_type;
@@ -146,6 +147,7 @@ static ODClassType* _TRCity_type;
 @synthesize tile = _tile;
 @synthesize angle = _angle;
 @synthesize expectedTrainCounter = _expectedTrainCounter;
+@synthesize expectedTrainColor = _expectedTrainColor;
 
 + (id)cityWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle {
     return [[TRCity alloc] initWithColor:color tile:tile angle:angle];

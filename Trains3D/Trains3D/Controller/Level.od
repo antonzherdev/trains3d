@@ -65,6 +65,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     }
 
     private def run(train : Train, fromCity : City) {
+        fromCity.expectedTrainColor = train.color
         fromCity.expectedTrainCounter = Counter(5, finish = {
             train.startFrom(fromCity)
             add(train)

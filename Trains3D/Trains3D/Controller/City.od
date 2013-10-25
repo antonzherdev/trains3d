@@ -28,6 +28,7 @@ class City(color : CityColor, tile : vec2i, angle : CityAngle) extends Controlle
     def startPoint = RailPoint(tile, angle.form, 0, angle.back)
 
     var expectedTrainCounter = Counter()
+    var expectedTrainColor : CityColor
 
     def updateWith(delta : float) {
         expectedTrainCounter.updateWith(delta)
