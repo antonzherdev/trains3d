@@ -13,8 +13,8 @@
 @class EGMapSsoView;
 @class EGShadowDrawShaderSystem;
 @class EGRenderTarget;
-@class EGBlendFunction;
 @class EGEnablingState;
+@class EGBlendFunction;
 @class EGDirector;
 @class EGStandardMaterial;
 @class EGColorSource;

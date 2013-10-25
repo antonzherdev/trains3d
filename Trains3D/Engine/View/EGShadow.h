@@ -18,6 +18,7 @@
 @class EGMatrixModel;
 @class EGEnvironment;
 @class EGLight;
+@class EGViewportSurface;
 
 @class EGShadowMap;
 @class EGShadowSurfaceShaderBuilder;
@@ -112,9 +113,10 @@
 
 @interface EGShadowDrawParam : NSObject
 @property (nonatomic, readonly) id<CNSeq> percents;
+@property (nonatomic, readonly) id viewportSurface;
 
-+ (id)shadowDrawParamWithPercents:(id<CNSeq>)percents;
-- (id)initWithPercents:(id<CNSeq>)percents;
++ (id)shadowDrawParamWithPercents:(id<CNSeq>)percents viewportSurface:(id)viewportSurface;
+- (id)initWithPercents:(id<CNSeq>)percents viewportSurface:(id)viewportSurface;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -132,9 +134,10 @@
 
 @interface EGShadowDrawShaderKey : NSObject<EGShaderTextBuilder>
 @property (nonatomic, readonly) NSUInteger directLightCount;
+@property (nonatomic, readonly) BOOL viewportSurface;
 
-+ (id)shadowDrawShaderKeyWithDirectLightCount:(NSUInteger)directLightCount;
-- (id)initWithDirectLightCount:(NSUInteger)directLightCount;
++ (id)shadowDrawShaderKeyWithDirectLightCount:(NSUInteger)directLightCount viewportSurface:(BOOL)viewportSurface;
+- (id)initWithDirectLightCount:(NSUInteger)directLightCount viewportSurface:(BOOL)viewportSurface;
 - (ODClassType*)type;
 - (EGShadowDrawShader*)shader;
 - (NSString*)lightsVertexUniform;

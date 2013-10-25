@@ -7,6 +7,7 @@
 #import "EGMesh.h"
 #import "EGMaterial.h"
 #import "EGVertex.h"
+#import "EGMultisamplingSurface.h"
 @implementation EGShadowMap{
     unsigned int _frameBuffer;
     GEMat4* _biasDepthCp;
@@ -570,17 +571,22 @@ static ODClassType* _EGShadowShader_type;
 
 @implementation EGShadowDrawParam{
     id<CNSeq> _percents;
+    id _viewportSurface;
 }
 static ODClassType* _EGShadowDrawParam_type;
 @synthesize percents = _percents;
+@synthesize viewportSurface = _viewportSurface;
 
-+ (id)shadowDrawParamWithPercents:(id<CNSeq>)percents {
-    return [[EGShadowDrawParam alloc] initWithPercents:percents];
++ (id)shadowDrawParamWithPercents:(id<CNSeq>)percents viewportSurface:(id)viewportSurface {
+    return [[EGShadowDrawParam alloc] initWithPercents:percents viewportSurface:viewportSurface];
 }
 
-- (id)initWithPercents:(id<CNSeq>)percents {
+- (id)initWithPercents:(id<CNSeq>)percents viewportSurface:(id)viewportSurface {
     self = [super init];
-    if(self) _percents = percents;
+    if(self) {
+        _percents = percents;
+        _viewportSurface = viewportSurface;
+    }
     
     return self;
 }
@@ -606,18 +612,20 @@ static ODClassType* _EGShadowDrawParam_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGShadowDrawParam* o = ((EGShadowDrawParam*)(other));
-    return [self.percents isEqual:o.percents];
+    return [self.percents isEqual:o.percents] && [self.viewportSurface isEqual:o.viewportSurface];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.percents hash];
+    hash = hash * 31 + [self.viewportSurface hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"percents=%@", self.percents];
+    [description appendFormat:@", viewportSurface=%@", self.viewportSurface];
     [description appendString:@">"];
     return description;
 }
@@ -652,7 +660,7 @@ static ODClassType* _EGShadowDrawShaderSystem_type;
     NSUInteger directLightsCount = [[[lights chain] filter:^BOOL(EGLight* _) {
         return [((EGLight*)(_)) isKindOfClass:[EGDirectLight class]] && ((EGLight*)(_)).hasShadows;
     }] count];
-    EGShadowDrawShaderKey* key = [EGShadowDrawShaderKey shadowDrawShaderKeyWithDirectLightCount:directLightsCount];
+    EGShadowDrawShaderKey* key = [EGShadowDrawShaderKey shadowDrawShaderKeyWithDirectLightCount:directLightsCount viewportSurface:[param.viewportSurface isDefined]];
     return [_EGShadowDrawShaderSystem_shaders objectForKey:key orUpdateWith:^EGShadowDrawShader*() {
         return [key shader];
     }];
@@ -695,17 +703,22 @@ static ODClassType* _EGShadowDrawShaderSystem_type;
 
 @implementation EGShadowDrawShaderKey{
     NSUInteger _directLightCount;
+    BOOL _viewportSurface;
 }
 static ODClassType* _EGShadowDrawShaderKey_type;
 @synthesize directLightCount = _directLightCount;
+@synthesize viewportSurface = _viewportSurface;
 
-+ (id)shadowDrawShaderKeyWithDirectLightCount:(NSUInteger)directLightCount {
-    return [[EGShadowDrawShaderKey alloc] initWithDirectLightCount:directLightCount];
++ (id)shadowDrawShaderKeyWithDirectLightCount:(NSUInteger)directLightCount viewportSurface:(BOOL)viewportSurface {
+    return [[EGShadowDrawShaderKey alloc] initWithDirectLightCount:directLightCount viewportSurface:viewportSurface];
 }
 
-- (id)initWithDirectLightCount:(NSUInteger)directLightCount {
+- (id)initWithDirectLightCount:(NSUInteger)directLightCount viewportSurface:(BOOL)viewportSurface {
     self = [super init];
-    if(self) _directLightCount = directLightCount;
+    if(self) {
+        _directLightCount = directLightCount;
+        _viewportSurface = viewportSurface;
+    }
     
     return self;
 }
@@ -721,12 +734,16 @@ static ODClassType* _EGShadowDrawShaderKey_type;
         "uniform mat4 mwcp;\n"
         "%@\n"
         "%@\n"
+        "%@\n"
         "\n"
         "void main(void) {\n"
         "   gl_Position = mwcp * vec4(position, 1);\n"
+        "  %@\n"
         "   %@\n"
-        "}", [self vertexHeader], [self ain], [self lightsVertexUniform], [self lightsOut], [self lightsCalculateVaryings]];
+        "}", [self vertexHeader], [self ain], [self lightsVertexUniform], [self lightsOut], ((_viewportSurface) ? [NSString stringWithFormat:@"%@ mediump vec2 viewportUV;", [self out]] : @""), ((_viewportSurface) ? @"   viewportUV = gl_Position.xy*0.5 + vec2(0.5, 0.5);\n"
+        "  " : @""), [self lightsCalculateVaryings]];
     NSString* fragmentShader = [NSString stringWithFormat:@"%@\n"
+        "%@\n"
         "%@\n"
         "%@\n"
         "%@\n"
@@ -735,8 +752,9 @@ static ODClassType* _EGShadowDrawShaderKey_type;
         "   lowp float visibility;\n"
         "   lowp float a = 0.0;\n"
         "   %@\n"
-        "   %@ = vec4(0, 0, 0, a);\n"
-        "}", [self fragmentHeader], [self shadowExt], [self lightsIn], [self lightsFragmentUniform], [self lightsDiffuse], [self fragColor]];
+        "   %@ = vec4(0, 0, 0, a) + (1.0 - a)*%@(viewport, viewportUV);\n"
+        "}", [self fragmentHeader], [self shadowExt], ((_viewportSurface) ? [NSString stringWithFormat:@"uniform lowp sampler2D viewport;\n"
+        "%@ mediump vec2 viewportUV;", [self in]] : @""), [self lightsIn], [self lightsFragmentUniform], [self lightsDiffuse], [self fragColor], [self texture2D]];
     return [EGShadowDrawShader shadowDrawShaderWithKey:self program:[EGShaderProgram applyName:@"ShadowDraw" vertex:vertexShader fragment:fragmentShader]];
 }
 
@@ -861,18 +879,20 @@ static ODClassType* _EGShadowDrawShaderKey_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGShadowDrawShaderKey* o = ((EGShadowDrawShaderKey*)(other));
-    return self.directLightCount == o.directLightCount;
+    return self.directLightCount == o.directLightCount && self.viewportSurface == o.viewportSurface;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + self.directLightCount;
+    hash = hash * 31 + self.viewportSurface;
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"directLightCount=%lu", (unsigned long)self.directLightCount];
+    [description appendFormat:@", viewportSurface=%d", self.viewportSurface];
     [description appendString:@">"];
     return description;
 }
@@ -933,6 +953,9 @@ static ODClassType* _EGShadowDrawShader_type;
 - (void)loadUniformsParam:(EGShadowDrawParam*)param {
     [_mwcpUniform applyMatrix:[EGGlobal.matrix.value mwcp]];
     EGEnvironment* env = EGGlobal.context.environment;
+    [param.viewportSurface forEach:^void(EGViewportSurface* _) {
+        [EGGlobal.context bindTextureTexture:[((EGViewportSurface*)(_)) texture]];
+    }];
     __block unsigned int i = 0;
     [[[env.lights chain] filter:^BOOL(EGLight* _) {
         return [((EGLight*)(_)) isKindOfClass:[EGDirectLight class]] && ((EGLight*)(_)).hasShadows;

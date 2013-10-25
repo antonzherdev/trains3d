@@ -145,21 +145,21 @@ class ShadowShader(texture : bool, program : ShaderProgram) extends Shader<Color
     }
 }
 
-class ShadowDrawParam(percents : Seq<float4>)
+class ShadowDrawParam(percents : Seq<float4>, viewportSurface : ViewportSurface?)
 
 class ShadowDrawShaderSystem extends ShaderSystem<ShadowDrawParam> {
     static val instance = ShadowDrawShaderSystem()
     def shaderFor(param : ShadowDrawParam, renderTarget : RenderTarget) : ShadowDrawShader = {
         val lights = context.environment.lights
         val directLightsCount = lights.chain.filter(_.is<DirectLight> && _.hasShadows).count
-        val key = ShadowDrawShaderKey(directLightsCount)
+        val key = ShadowDrawShaderKey(directLightsCount, param.viewportSurface.isDefined)
 
         shaders.objectFor(key, orUpdateWith = key.shader)
     }
 
     private static val shaders = MutableHashMap<ShadowDrawShaderKey, ShadowDrawShader>()
 }
-class ShadowDrawShaderKey(directLightCount : uint) extends ShaderTextBuilder {
+class ShadowDrawShaderKey(directLightCount : uint, viewportSurface : bool) extends ShaderTextBuilder {
     def shader : ShadowDrawShader = {
         val vertexShader =
             "$vertexHeader
@@ -167,14 +167,24 @@ class ShadowDrawShaderKey(directLightCount : uint) extends ShaderTextBuilder {
              uniform mat4 mwcp;
              $lightsVertexUniform
              $lightsOut
+            $if(viewportSurface)
+             $out mediump vec2 viewportUV;
+            $endif
 
              void main(void) {
                 gl_Position = mwcp * vec4(position, 1);
+               $if(viewportSurface)
+                viewportUV = gl_Position.xy*0.5 + vec2(0.5, 0.5);
+               $endif
                 $lightsCalculateVaryings
              }"
         val fragmentShader =
             "$fragmentHeader
              $shadowExt
+            $if(viewportSurface)
+             uniform lowp sampler2D viewport;
+             $in mediump vec2 viewportUV;
+            $endif
              $lightsIn
              $lightsFragmentUniform
 
@@ -182,7 +192,7 @@ class ShadowDrawShaderKey(directLightCount : uint) extends ShaderTextBuilder {
                 lowp float visibility;
                 lowp float a = 0.0;
                 $lightsDiffuse
-                $fragColor = vec4(0, 0, 0, a);
+                $fragColor = vec4(0, 0, 0, a) + (1.0 - a)*$texture2D\(viewport, viewportUV);
             }"
         ShadowDrawShader(self, ShaderProgram("ShadowDraw", vertexShader, fragmentShader))
     }
@@ -227,6 +237,7 @@ class ShadowDrawShader(key : ShadowDrawShaderKey, program : ShaderProgram) exten
     def loadUniforms(param : ShadowDrawParam) {
         mwcpUniform(matrix = matrix.value.mwcp)
         val env = context.environment
+        param.viewportSurface.for(context.bindTexture(_.texture))
         var i : uint4 = 0
         env.lights.chain.filter(_.is<DirectLight> && _.hasShadows).for { light ->
             val p : float4  = param.percents(i)

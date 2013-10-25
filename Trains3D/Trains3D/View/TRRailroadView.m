@@ -71,7 +71,7 @@ static ODClassType* _TRRailroadView_type;
     EGGlobal.context.considerShadows = NO;
     _backgroundView = [TRBackgroundView backgroundViewWithMap:_railroad.map];
     _railView = [TRRailView railView];
-    EGShadowDrawParam* shadowParam = [EGShadowDrawParam shadowDrawParamWithPercents:(@[@0.3])];
+    EGShadowDrawParam* shadowParam = [EGShadowDrawParam shadowDrawParamWithPercents:(@[@0.3]) viewportSurface:[CNOption applyValue:_railroadSurface]];
     _shadowVao = ((egPlatform().shadows) ? [CNOption applyValue:[_backgroundView.mapView.plane vaoShaderSystem:EGShadowDrawShaderSystem.instance material:shadowParam shadow:NO]] : [CNOption none]);
     EGGlobal.context.considerShadows = YES;
 }
@@ -81,14 +81,12 @@ static ODClassType* _TRRailroadView_type;
     if([EGGlobal.context.renderTarget isShadow]) {
         [_lightView drawShadow];
     } else {
-        [_railroadSurface draw];
-        if(egPlatform().shadows) [EGBlendFunction.standard applyDraw:^void() {
-            [EGGlobal.context.cullFace disabledF:^void() {
-                [EGGlobal.context.depthTest disabledF:^void() {
-                    [((EGVertexArray*)([_shadowVao get])) draw];
-                }];
+        if(egPlatform().shadows) [EGGlobal.context.cullFace disabledF:^void() {
+            [EGGlobal.context.depthTest disabledF:^void() {
+                [((EGVertexArray*)([_shadowVao get])) draw];
             }];
         }];
+        else [_railroadSurface draw];
         [[_railroad switches] forEach:^void(TRSwitch* _) {
             [_switchView drawTheSwitch:_];
         }];

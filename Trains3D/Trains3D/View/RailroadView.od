@@ -21,9 +21,9 @@ class RailroadView(railroad : Railroad) extends InputProcessor {
         context.considerShadows = false
         backgroundView = BackgroundView(railroad.map)
         railView = RailView()
-        val shadowParam = ShadowDrawParam([0.3])
+        val shadowParam = ShadowDrawParam([0.3], railroadSurface)
         shadowVao =
-            if(egPlatform.shadows)  backgroundView.mapView.plane.vao(ShadowDrawShaderSystem.instance, shadowParam, shadow = false)
+            if(egPlatform.shadows) backgroundView.mapView.plane.vao(ShadowDrawShaderSystem.instance, shadowParam, shadow = false)
             else nil
         context.considerShadows = true
     }
@@ -33,11 +33,12 @@ class RailroadView(railroad : Railroad) extends InputProcessor {
         if(context.renderTarget.isShadow) {
             lightView.drawShadow
         } else {
-            railroadSurface.draw
             if(egPlatform.shadows) {
-                BlendFunction.standard{ context.cullFace.disabled{ context.depthTest.disabled {
-                shadowVao.get.draw
-                }}}
+                context.cullFace.disabled{ context.depthTest.disabled {
+                    shadowVao.get.draw
+                }}
+            } else {
+                railroadSurface.draw
             }
             railroad.switches.for(switchView.draw(_))
             lightView.drawBodies
