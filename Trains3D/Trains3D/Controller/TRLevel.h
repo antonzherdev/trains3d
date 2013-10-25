@@ -88,6 +88,7 @@
 - (id)result;
 - (void)win;
 - (void)lose;
++ (NSInteger)trainComingPeriod;
 + (ODClassType*)type;
 @end
 

@@ -117,6 +117,7 @@ static ODClassType* _TRLevelRules_type;
     id __help;
     id __result;
 }
+static NSInteger _TRLevel_trainComingPeriod = 10;
 static ODClassType* _TRLevel_type;
 @synthesize number = _number;
 @synthesize rules = _rules;
@@ -218,7 +219,7 @@ static ODClassType* _TRLevel_type;
 
 - (void)runTrain:(TRTrain*)train fromCity:(TRCity*)fromCity {
     fromCity.expectedTrainColor = train.color;
-    fromCity.expectedTrainCounter = [EGCounter applyLength:10.0 finish:^void() {
+    fromCity.expectedTrainCounter = [EGCounter applyLength:((CGFloat)(_TRLevel_trainComingPeriod)) finish:^void() {
         [train startFromCity:fromCity];
         [self addTrain:train];
     }];
@@ -394,6 +395,10 @@ static ODClassType* _TRLevel_type;
 
 - (ODClassType*)type {
     return [TRLevel type];
+}
+
++ (NSInteger)trainComingPeriod {
+    return _TRLevel_trainComingPeriod;
 }
 
 + (ODClassType*)type {

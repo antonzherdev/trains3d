@@ -101,7 +101,9 @@ extern id cnResolveCollection(id collection);
 #define arrs(p_type, p_count) CNPArray applyStride:sizeof(p_type) wrap:^id(void* arr, NSUInteger i) { \
     return wrap(p_type, ((p_type*)(arr))[i]);\
 } count:p_count copyBytes:(p_type[])
-
+#define arrsv(p_type, p_count) CNPArray applyStride:sizeof(p_type) wrap:^id(void* arr, NSUInteger i) { \
+    return wrap(p_type, ((p_type*)(arr))[i]);\
+} count:p_count copyBytes:(p_type*)
 
 static inline NSUInteger VoidRefHash(void * v) {
     return (NSUInteger) v;

@@ -59,7 +59,7 @@ static ODClassType* _TRLevelMenuView_type;
         _width = 0;
         _notificationText = @"";
         _notificationAnimation = [EGCounter apply];
-        _levelAnimation = [EGCounter applyLength:3.0];
+        _levelAnimation = [EGCounter applyLength:5.0];
     }
     
     return self;
@@ -115,7 +115,7 @@ static ODClassType* _TRLevelMenuView_type;
         } else {
             if(!([_level.notifications isEmpty])) {
                 _notificationText = [[_level.notifications take] get];
-                _notificationAnimation = [EGCounter applyLength:1.0];
+                _notificationAnimation = [EGCounter applyLength:2.0];
             }
         }
     }

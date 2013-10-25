@@ -147,12 +147,14 @@ static inline void egVertexAttribPointer (GLuint index, NSUInteger size, GLenum 
     glVertexAttribPointer(index, (GLint)size, type, normalized, (GLsizei)stride, (GLvoid const *) pointer);
 }
 
-#define egJasModel(NAME) [EGMesh \
-    applyVertexData:[arrp(float, numf4, NAME ## _vertexcount*8) NAME ## _vertex] \
-    indexData: [arrp(unsigned int, numui4, NAME ## _polygoncount*3) NAME ## _index]]
 
-#define egJasVertexArray(NAME) [arrs(EGMeshData, NAME ## _vertexcount) NAME ## _vertex]
+#define egJasVertexArray(NAME) [arrsv(EGMeshData, NAME ## _vertexcount) NAME ## _vertex]
 #define egJasIndexArray(NAME) [arrp(unsigned int, numui4, NAME ## _polygoncount*3) NAME ## _index]
+
+#define egJasModel(NAME) [EGMesh \
+    applyVertexData:egJasVertexArray(NAME) \
+    indexData: egJasIndexArray(NAME)]
+
 
 GEVec2 egLoadTextureFromFile(GLuint target, NSString* file, GLenum magFilter, GLenum minFilter);
 void egSaveTextureToFile(GLuint source, NSString* file);
