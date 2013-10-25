@@ -140,6 +140,7 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
         context.set(viewport = viewport)
         matrix.value = camera.matrixModel
         if(cullFace != GL_NONE) glCullFace(cullFace)
+//        if(!env.lights.isEmpty) env.lights.head.shadowMap.draw
         view.draw
         if(cullFace != GL_NONE) context.cullFace.disable
         egCheckError
