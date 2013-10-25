@@ -7,7 +7,6 @@
 #import "GL.h"
 #import "EGPlatform.h"
 #import "EGMapIsoView.h"
-#import "EGMesh.h"
 #import "EGMaterial.h"
 #import "EGDirector.h"
 #import "EGTexture.h"
@@ -16,6 +15,8 @@
 #import "TRRailPoint.h"
 #import "EGBillboard.h"
 #import "TRStrings.h"
+#import "EGVertex.h"
+#import "EGIndex.h"
 #import "EGMapIso.h"
 @implementation TRRailroadView{
     TRRailroad* _railroad;
@@ -479,11 +480,12 @@ static ODClassType* _TRSwitchView_type;
     EGVertexArray* _redBodyVao;
     EGVertexArray* _greenBodyVao;
     EGVertexArray* _shadowBodyVao;
-    EGVertexArray* _greenGlowVao;
-    EGVertexArray* _redGlowVao;
     BOOL __changed;
     id<CNSeq> __matrixArr;
     id<CNSeq> __matrixArrShadow;
+    EGMutableVertexBuffer* _glowVbo;
+    EGMutableIndexBuffer* _glowIbo;
+    EGVertexArray* _glowVao;
 }
 static ODClassType* _TRLightView_type;
 @synthesize railroad = _railroad;
@@ -491,8 +493,6 @@ static ODClassType* _TRLightView_type;
 @synthesize redBodyVao = _redBodyVao;
 @synthesize greenBodyVao = _greenBodyVao;
 @synthesize shadowBodyVao = _shadowBodyVao;
-@synthesize greenGlowVao = _greenGlowVao;
-@synthesize redGlowVao = _redGlowVao;
 @synthesize _changed = __changed;
 
 + (id)lightViewWithRailroad:(TRRailroad*)railroad {
@@ -507,11 +507,12 @@ static ODClassType* _TRLightView_type;
         _redBodyVao = [TRModels.light vaoMaterial:[EGStandardMaterial applyTexture:[EGTextureRegion textureRegionWithTexture:_texture uv:geRectApplyXYWidthHeight(0.5, 0.0, 1.0, 1.0)]] shadow:NO];
         _greenBodyVao = [TRModels.light vaoMaterial:[EGStandardMaterial applyTexture:_texture] shadow:NO];
         _shadowBodyVao = [TRModels.light vaoShadow];
-        _greenGlowVao = [TRModels.lightGreenGlow vaoMaterial:[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:GEVec4Make(0.0, 1.0, 0.0, 0.8) texture:[EGGlobal textureForFile:@"LightGlow.png"]]] shadow:NO];
-        _redGlowVao = [TRModels.lightRedGlow vaoMaterial:[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:GEVec4Make(1.0, 0.0, 0.0, 0.8) texture:[EGGlobal textureForFile:@"LightGlow.png"]]] shadow:NO];
         __changed = YES;
         __matrixArr = (@[]);
         __matrixArrShadow = (@[]);
+        _glowVbo = [EGVBO mutMesh];
+        _glowIbo = [EGIBO mut];
+        _glowVao = [[EGMesh meshWithVertex:_glowVbo index:_glowIbo] vaoMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"LightGlow.png"]] shadow:NO];
         [self _init];
     }
     
@@ -561,16 +562,31 @@ static ODClassType* _TRLightView_type;
 }
 
 - (void)drawGlows {
-    if(!([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]])) {
-        [EGGlobal.matrix push];
-        [EGGlobal.context.cullFace disabledF:^void() {
-            [__matrixArr forEach:^void(CNTuple* p) {
-                EGGlobal.matrix.value = ((CNTuple*)(p)).a;
-                if(((TRRailLight*)(((CNTuple*)(p)).b)).isGreen) [_greenGlowVao draw];
-                else [_redGlowVao draw];
+    if(!([__matrixArr isEmpty]) && !([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]])) {
+        NSUInteger vn = TRModels.lightGreenGlow.count;
+        CNVoidRefArray vertex = cnVoidRefArrayApplyTpCount(egMeshDataType(), vn * [__matrixArr count]);
+        CNVoidRefArray index = cnVoidRefArrayApplyTpCount(oduInt4Type(), TRModels.lightIndex.count * [__matrixArr count]);
+        __block CNVoidRefArray v = vertex;
+        __block CNVoidRefArray i = index;
+        __block unsigned int iShift = 0;
+        [__matrixArr forEach:^void(CNTuple* p) {
+            CNPArray* glow = ((((TRRailLight*)(((CNTuple*)(p)).b)).isGreen) ? TRModels.lightGreenGlow : TRModels.lightRedGlow);
+            GEMat4* m = [((EGMatrixModel*)(((CNTuple*)(p)).a)) mwcp];
+            [glow forRefEach:^void(VoidRef r) {
+                v = cnVoidRefArrayWriteTpItem(v, EGMeshData, egMeshDataMulMat4(*(((EGMeshData*)(r))), m));
+            }];
+            [TRModels.lightIndex forRefEach:^void(VoidRef r) {
+                i = cnVoidRefArrayWriteUInt4(i, *(((unsigned int*)(r))) + iShift);
+            }];
+            iShift += ((unsigned int)(vn));
+        }];
+        [_glowVbo setArray:vertex];
+        [_glowIbo setArray:index];
+        [EGGlobal.matrix identityF:^void() {
+            [EGGlobal.context.cullFace disabledF:^void() {
+                [_glowVao draw];
             }];
         }];
-        [EGGlobal.matrix pop];
     }
 }
 

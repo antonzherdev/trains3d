@@ -101,7 +101,7 @@ static ODClassType* _EGImmutableIndexBuffer_type;
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context draw];
-    glDrawElements([self mode], ((int)(count)), GL_UNSIGNED_INT, ((VoidRef)(4 * start)));
+    glDrawElements([self mode], ((int)(count)), GL_UNSIGNED_INT, cnVoidRefApplyI(4 * start));
     egCheckError();
 }
 
@@ -193,7 +193,7 @@ static ODClassType* _EGMutableIndexBuffer_type;
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context draw];
-    glDrawElements([self mode], ((int)(count)), GL_UNSIGNED_INT, ((VoidRef)(4 * start)));
+    glDrawElements([self mode], ((int)(count)), GL_UNSIGNED_INT, cnVoidRefApplyI(4 * start));
     egCheckError();
 }
 

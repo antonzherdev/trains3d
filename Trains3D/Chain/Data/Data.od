@@ -20,6 +20,16 @@ class PArray<T>(stride : uint, wrap : (VoidRef, uint) -> T, count : uint, length
     }
 
     def unsafeApply(index : uint) : T = wrap(bytes, index)
+
+    def forRef(each : VoidRef -> void) {
+        var b = bytes
+        var i = 0
+        while(i < count) {
+            each(b)
+            i++
+            b = b + stride
+        }
+    }
 }
 
 class PArrayIterator<T>(array : PArray<T>) extends Iterator<T> {

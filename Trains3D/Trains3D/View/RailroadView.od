@@ -204,8 +204,6 @@ class LightView(railroad : Railroad) {
     val redBodyVao = Models.light.vao(StandardMaterial(TextureRegion(texture, Rect(0.5, 0, 1, 1))), false)
     val greenBodyVao = Models.light.vao(StandardMaterial(texture), false)
     val shadowBodyVao = Models.light.vaoShadow
-    val greenGlowVao = Models.lightGreenGlow.vao(StandardMaterial(ColorSource(vec4(0, 1, 0, 0.8), textureFor("LightGlow.png"))), false)
-    val redGlowVao = Models.lightRedGlow.vao(StandardMaterial(ColorSource(vec4(1, 0, 0, 0.8), textureFor("LightGlow.png"))), false)
 
     var _changed = true
     def init {
@@ -242,17 +240,34 @@ class LightView(railroad : Railroad) {
         matrix.pop
     }
 
+    private val glowVbo = VBO.mutMesh
+    private val glowIbo = IBO.mut
+    private val glowVao = Mesh(glowVbo, glowIbo).vao(ColorSource(textureFor("LightGlow.png")), false)
     def drawGlows {
-        if(!context.renderTarget.is<ShadowRenderTarget>) {
-            matrix.push
-            context.cullFace.disabled{
-                _matrixArr.for { p ->
-                    matrix.value = p.a
-                    if(p.b.isGreen) greenGlowVao.draw
-                    else redGlowVao.draw
+        if(!_matrixArr.isEmpty && !context.renderTarget.is<ShadowRenderTarget>) {
+            val vn = Models.lightGreenGlow.count
+            val vertex = VoidRefArray(MeshData.type, vn * _matrixArr.count)
+            val index = VoidRefArray(UInt4.type, Models.lightIndex.count * _matrixArr.count)
+            var v = vertex
+            var i = index
+            var iShift : uint4 = 0
+            _matrixArr.for{ p ->
+                val glow = if(p.b.isGreen) Models.lightGreenGlow else Models.lightRedGlow
+                val m = p.a.mwcp
+                glow.forRef{ r ->
+                    v = v.write(MeshData, r.cast<MeshData> * m)
                 }
+                Models.lightIndex.forRef {r ->
+                    i = i.write(uInt4 = r.cast<uint4> + iShift)
+                }
+                iShift += vn
             }
-            matrix.pop
+
+            glowVbo.set(vertex)
+            glowIbo.set(index)
+            matrix.identity{ context.cullFace.disabled{
+                glowVao.draw
+            }}
         }
     }
 }

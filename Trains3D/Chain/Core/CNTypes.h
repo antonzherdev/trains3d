@@ -63,6 +63,8 @@ extern id cnResolveCollection(id collection);
             __typeof__(expr) chainReservedPrefix_lVar = expr; \
             [NSValue valueWithBytes:&chainReservedPrefix_lVar objCType:@encode(__typeof__(expr))]; \
         })
+#define cnVoidRefApplyI(expr) (VoidRef)(expr)
+
 #define voidRef(expr) \
         ({ \
             __typeof__(expr) chainReservedPrefix_lVar = expr; \

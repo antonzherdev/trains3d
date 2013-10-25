@@ -32,8 +32,9 @@ static EGMesh *_carBlack = nil;
 static EGMesh *_car = nil;
 static EGMesh *_carShadow = nil;
 static EGMesh *_damage = nil;
-static EGMesh *_lightGreenGlow = nil;
-static EGMesh *_lightRedGlow = nil;
+static CNPArray *_lightGreenGlow = nil;
+static CNPArray *_lightRedGlow = nil;
+static CNPArray *_lightIndex = nil;
 static EGMesh *_expressCar = nil;
 static EGMesh *_expressCarBlack = nil;
 static EGMesh *_expressCarShadow = nil;
@@ -65,8 +66,9 @@ static ODClassType* _TR3D_type;
     _switchStraight = egJasModel(SwitchStraight);
     _switchTurn = egJasModel(SwitchTurn);
     _light = egJasModel(Light);
-    _lightGreenGlow = egJasModel(LightGreenGlow);
-    _lightRedGlow = egJasModel(LightRedGlow);
+    _lightGreenGlow = egJasVbo(LightGreenGlow);
+    _lightRedGlow = egJasVbo(LightRedGlow);
+    _lightIndex = egJasIbo(LightGreenGlow);
     _city = egJasModel(City);
     _damage = egJasModel(Damage);
 
@@ -177,12 +179,16 @@ static ODClassType* _TR3D_type;
     return description;
 }
 
-+ (EGMesh *)lightGreenGlow {
++ (CNPArray *)lightGreenGlow {
     return _lightGreenGlow;
 }
 
-+ (EGMesh *)lightRedGlow {
++ (CNPArray *)lightRedGlow {
     return _lightRedGlow;
+}
+
++ (CNPArray *)lightIndex {
+    return _lightIndex;
 }
 
 + (EGMesh *)carShadow {

@@ -272,6 +272,13 @@ class MatrixStack {
         pop
     }
 
+    def identity(f : () -> void) {
+        push
+        value = MatrixModel.identity
+        f()
+        pop
+    }
+
     def m = value.m
     def w = value.w
     def c = value.c

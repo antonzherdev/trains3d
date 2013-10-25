@@ -1,5 +1,6 @@
 #import "EGMesh.h"
 
+#import "GEMat4.h"
 #import "EGVertex.h"
 #import "EGIndex.h"
 #import "EGShader.h"
@@ -15,6 +16,9 @@ NSString* EGMeshDataDescription(EGMeshData self) {
     [description appendFormat:@", position=%@", GEVec3Description(self.position)];
     [description appendString:@">"];
     return description;
+}
+EGMeshData egMeshDataMulMat4(EGMeshData self, GEMat4* mat4) {
+    return EGMeshDataMake(self.uv, geVec4Xyz([mat4 mulVec4:geVec4ApplyVec3W(self.normal, 0.0)]), geVec4Xyz([mat4 mulVec4:geVec4ApplyVec3W(self.position, 1.0)]));
 }
 ODPType* egMeshDataType() {
     static ODPType* _ret = nil;

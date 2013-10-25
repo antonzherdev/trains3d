@@ -175,6 +175,7 @@
 - (void)push;
 - (void)pop;
 - (void)applyModify:(EGMatrixModel*(^)(EGMatrixModel*))modify f:(void(^)())f;
+- (void)identityF:(void(^)())f;
 - (GEMat4*)m;
 - (GEMat4*)w;
 - (GEMat4*)c;

@@ -13,8 +13,9 @@ stub class Models {
     static val switchTurn : Mesh = nil
 
     static val light : Mesh = nil
-    static val lightGreenGlow : Mesh = nil
-    static val lightRedGlow : Mesh = nil
+    static val lightGreenGlow : PArray<MeshData> = nil
+    static val lightRedGlow : PArray<MeshData> = nil
+    static val lightIndex : PArray<uint4> = nil
 
     static val city : Mesh = nil
 

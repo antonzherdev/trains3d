@@ -2,6 +2,7 @@
 #import "EGInput.h"
 #import "GEVec.h"
 #import "EGFont.h"
+#import "EGMesh.h"
 @class TRRailroad;
 @class EGViewportSurface;
 @class TRRailroadBuilder;
@@ -11,16 +12,13 @@
 @class EGPlatform;
 @class EGMapSsoView;
 @class EGShadowDrawShaderSystem;
-@class EGMesh;
 @class EGRenderTarget;
 @class EGBlendFunction;
-@class EGVertexArray;
 @class EGEnablingState;
 @class EGDirector;
 @class EGStandardMaterial;
 @class EGColorSource;
 @class EGTexture;
-@class EGMeshModel;
 @class TRModels;
 @class EGMaterial;
 @class TRRailBuilding;
@@ -35,6 +33,10 @@
 @class TRSwitch;
 @class TRRailConnector;
 @class EGTextureRegion;
+@class EGMutableVertexBuffer;
+@class EGVBO;
+@class EGMutableIndexBuffer;
+@class EGIBO;
 @class TRRailLight;
 @class TRRailPoint;
 @class EGMapSso;
@@ -113,8 +115,6 @@
 @property (nonatomic, readonly) EGVertexArray* redBodyVao;
 @property (nonatomic, readonly) EGVertexArray* greenBodyVao;
 @property (nonatomic, readonly) EGVertexArray* shadowBodyVao;
-@property (nonatomic, readonly) EGVertexArray* greenGlowVao;
-@property (nonatomic, readonly) EGVertexArray* redGlowVao;
 @property (nonatomic) BOOL _changed;
 
 + (id)lightViewWithRailroad:(TRRailroad*)railroad;

@@ -57,9 +57,9 @@ static ODClassType* _EGProgress_type;
     float l = t2 - t1;
     return ^float(float t) {
         if(t <= t1) {
-            return ((float)(0.0));
+            return 0.0;
         } else {
-            if(t >= t2) return ((float)(1.0));
+            if(t >= t2) return 1.0;
             else return (t - t1) / l;
         }
     };

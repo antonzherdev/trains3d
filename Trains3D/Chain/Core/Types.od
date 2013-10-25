@@ -1,7 +1,8 @@
 package core.chain
 
 stub struct VoidRef {
-    def sss : int
+    static def apply(i : int) : VoidRef
+
     def add(shift : int) : VoidRef
 }
 

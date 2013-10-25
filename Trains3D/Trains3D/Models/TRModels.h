@@ -23,8 +23,9 @@
 + (EGMesh *)city;
 + (EGMesh *)damage;
 + (EGMesh *)light;
-+ (EGMesh *)lightGreenGlow;
-+ (EGMesh *)lightRedGlow;
++ (CNPArray *)lightGreenGlow;
++ (CNPArray *)lightRedGlow;
++ (CNPArray *)lightIndex;
 
 + (EGMesh *)car;
 + (EGMesh *)carBlack;

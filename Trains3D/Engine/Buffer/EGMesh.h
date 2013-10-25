@@ -1,5 +1,6 @@
 #import "objd.h"
 #import "GEVec.h"
+@class GEMat4;
 @protocol EGVertexBuffer;
 @protocol EGIndexSource;
 @class EGVBO;
@@ -43,6 +44,7 @@ static inline NSUInteger EGMeshDataHash(EGMeshData self) {
     return hash;
 }
 NSString* EGMeshDataDescription(EGMeshData self);
+EGMeshData egMeshDataMulMat4(EGMeshData self, GEMat4* mat4);
 ODPType* egMeshDataType();
 @interface EGMeshDataWrap : NSObject
 @property (readonly, nonatomic) EGMeshData value;

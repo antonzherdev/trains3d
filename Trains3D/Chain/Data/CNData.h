@@ -26,6 +26,7 @@
 - (id)applyIndex:(NSUInteger)index;
 - (void)dealloc;
 - (id)unsafeApplyIndex:(NSUInteger)index;
+- (void)forRefEach:(void(^)(VoidRef))each;
 + (ODClassType*)type;
 @end
 

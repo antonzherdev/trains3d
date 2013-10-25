@@ -66,6 +66,16 @@ static ODClassType* _CNPArray_type;
     return _wrap(_bytes, index);
 }
 
+- (void)forRefEach:(void(^)(VoidRef))each {
+    VoidRef b = _bytes;
+    NSInteger i = 0;
+    while(i < _count) {
+        each(b);
+        i++;
+        b = b + _stride;
+    }
+}
+
 - (id)optIndex:(NSUInteger)index {
     if(index >= [self count]) return [CNOption none];
     else return [CNOption applyValue:[self applyIndex:index]];

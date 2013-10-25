@@ -39,7 +39,7 @@ trait IndexBuffer extends IndexSource {
 
     def drawWith(start : uint, count : uint) {
         context.draw
-        glDrawElements(mode, count, GL_UNSIGNED_INT, (4*start).cast<VoidRef>)
+        glDrawElements(mode, count, GL_UNSIGNED_INT, VoidRef(4*start))
         egCheckError
     }
 

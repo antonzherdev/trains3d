@@ -921,6 +921,13 @@ static ODClassType* _EGMatrixStack_type;
     [self pop];
 }
 
+- (void)identityF:(void(^)())f {
+    [self push];
+    _value = EGMatrixModel.identity;
+    ((void(^)())(f))();
+    [self pop];
+}
+
 - (GEMat4*)m {
     return _value.m;
 }

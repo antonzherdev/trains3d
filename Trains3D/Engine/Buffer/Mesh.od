@@ -1,6 +1,9 @@
 package com.antonzherdev.eg
 
-struct MeshData(uv : vec2, normal : vec3, position : vec3)
+struct MeshData(uv : vec2, normal : vec3, position : vec3) {
+    def mul(mat4 : mat4) : MeshData =
+        MeshData(uv, (mat4 * vec4(normal, 0)).xyz, (mat4 * vec4(position, 1)).xyz)
+}
 
 class Mesh(vertex : VertexBuffer<_>, index : IndexSource) {
     static def vec2(vertexData : PArray<vec2>, indexData : PArray<uint4>) : Mesh = Mesh(
