@@ -202,8 +202,8 @@ class SwitchView {
 
 class LightView(railroad : Railroad) {
     val texture = textureFor("Light.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
-    val redBodyVao = Models.light.vao(StandardMaterial(TextureRegion(texture, Rect(0.5, 0, 1, 1))), false)
-    val greenBodyVao = Models.light.vao(StandardMaterial(texture), false)
+    val redBodyVao = Models.light.vao(ColorSource(TextureRegion(texture, Rect(0.5, 0, 1, 1))), false)
+    val greenBodyVao = Models.light.vao(ColorSource(texture), false)
     val shadowBodyVao = Models.light.vaoShadow
 
     var _changed = true

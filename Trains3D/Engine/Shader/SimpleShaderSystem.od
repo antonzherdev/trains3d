@@ -2,16 +2,21 @@ package com.antonzherdev.eg
 
 class SimpleShaderSystem extends ShaderSystem<ColorSource> {
     static val instance = SimpleShaderSystem()
-    static val colorShader = SimpleColorShader()
-    static val textureShader = SimpleTextureShader()
+    static def colorShader : Shader<ColorSource> = instance.shaderFor(ColorSource(vec4(0, 0, 0, 1)), context.renderTarget)
 
     def shaderFor(param : ColorSource, renderTarget : RenderTarget) : Shader<Material> =
         if(renderTarget.is<ShadowRenderTarget>) ShadowShaderSystem.instance.shaderFor(param)
-        else if(param.texture.isEmpty) colorShader else textureShader
+        else {
+            val t = param.texture.isDefined
+            val key = SimpleShaderKey(t, t && param.texture.get.is<TextureRegion>, param.blendMode)
+            shaders.objectFor(key, orUpdateWith = SimpleShader(key))
+        }
+
+    private static val shaders = MutableHashMap<SimpleShaderKey, SimpleShader>()
 }
 
 
-class SimpleShaderBuilder(texture : bool) extends ShaderTextBuilder {
+class SimpleShaderKey(texture : bool, region : bool, blendMode : BlendMode) extends ShaderTextBuilder {
     def vertex =
        "$vertexHeader
         $ain highp vec3 position;
@@ -21,10 +26,18 @@ class SimpleShaderBuilder(texture : bool) extends ShaderTextBuilder {
         $ain mediump vec2 vertexUV;
         $out mediump vec2 UV;
        $endif
+       $if(region)
+        uniform mediump vec2 uvShift;
+        uniform mediump vec2 uvScale;
+       $endif
 
         void main(void) {
             gl_Position = mvp * vec4(position, 1);
+       $if(texture && region)
+            UV = uvScale*vertexUV + uvShift;
+       $else
             UV = vertexUV; $when(texture)
+       $endif
         }"
     val fragment =
        "$fragmentHeader
@@ -35,44 +48,38 @@ class SimpleShaderBuilder(texture : bool) extends ShaderTextBuilder {
         uniform lowp vec4 color;
 
         void main(void) {
-           $if(texture)
-            $fragColor = color * $texture2D\(txt, UV);
-           $else
-            $fragColor = color;
-           $endif
+           $fragColor = $blend(blendMode, "color", "$texture2D\(txt, UV)");
         }"
 
     def program = ShaderProgram("Simple", vertex, fragment)
 }
 
 
-class SimpleColorShader extends Shader<ColorSource>(SimpleShaderBuilder(false).program) {
+class SimpleShader(key : SimpleShaderKey) extends Shader<ColorSource>(key.program) {
+    val uvSlot : ShaderAttribute? = if(key.texture) attributeFor("vertexUV") else nil
     val positionSlot : ShaderAttribute = attributeFor("position")
-    val colorUniform = uniformVec4("color")
     val mvpUniform = uniformMat4("mvp")
+    val colorUniform = uniformVec4Opt("color")
+    val uvScale : ShaderUniformVec2? = if(key.region) uniformVec2("uvScale") else nil
+    val uvShift : ShaderUniformVec2? = if(key.region) uniformVec2("uvShift") else nil
 
     def loadAttributes(vbDesc : VertexBufferDesc<_>) {
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.position)
+        if(key.texture) {
+            uvSlot.get.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.uv)
+        }
     }
     def loadUniforms(param : ColorSource) {
         mvpUniform(matrix.value.mwcp)
-        colorUniform(param.color)
-    }
-}
-
-class SimpleTextureShader extends Shader<ColorSource>(SimpleShaderBuilder(true).program) {
-    val uvSlot : ShaderAttribute = attributeFor("vertexUV")
-    val positionSlot : ShaderAttribute = attributeFor("position")
-    val mvpUniform = uniformMat4("mvp")
-    val colorUniform = uniformVec4("color")
-
-    def loadAttributes(vbDesc : VertexBufferDesc<_>) {
-        positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.position)
-        uvSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.uv)
-    }
-    def loadUniforms(param : ColorSource) {
-        mvpUniform(matrix.value.mwcp)
-        colorUniform(param.color)
-        context.bindTexture(param.texture.get)
+        if(colorUniform.isDefined) colorUniform.get.apply(param.color)
+        if(key.texture) {
+            val tex = param.texture.get
+            context.bindTexture(tex)
+            if(key.region) {
+                val r = tex.cast<TextureRegion>.uv
+                uvShift.get.apply(vec2 = r.p0)
+                uvScale.get.apply(vec2 = r.size)
+            }
+        }
     }
 }

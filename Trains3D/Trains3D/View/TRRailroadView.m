@@ -502,8 +502,8 @@ static ODClassType* _TRLightView_type;
     if(self) {
         _railroad = railroad;
         _texture = [EGGlobal textureForFile:@"Light.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST];
-        _redBodyVao = [TRModels.light vaoMaterial:[EGStandardMaterial applyTexture:[EGTextureRegion textureRegionWithTexture:_texture uv:geRectApplyXYWidthHeight(0.5, 0.0, 1.0, 1.0)]] shadow:NO];
-        _greenBodyVao = [TRModels.light vaoMaterial:[EGStandardMaterial applyTexture:_texture] shadow:NO];
+        _redBodyVao = [TRModels.light vaoMaterial:[EGColorSource applyTexture:[EGTextureRegion textureRegionWithTexture:_texture uv:geRectApplyXYWidthHeight(0.5, 0.0, 1.0, 1.0)]] shadow:NO];
+        _greenBodyVao = [TRModels.light vaoMaterial:[EGColorSource applyTexture:_texture] shadow:NO];
         _shadowBodyVao = [TRModels.light vaoShadow];
         __changed = YES;
         __matrixArr = (@[]);

@@ -1,38 +1,41 @@
 #import "objd.h"
 #import "EGShader.h"
+#import "GEVec.h"
+@class EGColorSource;
+@class EGGlobal;
+@class EGContext;
 @class EGRenderTarget;
 @class EGShadowShaderSystem;
-@class EGColorSource;
+@class EGTexture;
 @class EGBlendMode;
 @class EGVertexBufferDesc;
-@class EGGlobal;
 @class EGMatrixStack;
 @class EGMatrixModel;
-@class EGContext;
+@class EGTextureRegion;
 
 @class EGSimpleShaderSystem;
-@class EGSimpleShaderBuilder;
-@class EGSimpleColorShader;
-@class EGSimpleTextureShader;
+@class EGSimpleShaderKey;
+@class EGSimpleShader;
 
 @interface EGSimpleShaderSystem : EGShaderSystem
 + (id)simpleShaderSystem;
 - (id)init;
 - (ODClassType*)type;
++ (EGShader*)colorShader;
 - (EGShader*)shaderForParam:(EGColorSource*)param renderTarget:(EGRenderTarget*)renderTarget;
 + (EGSimpleShaderSystem*)instance;
-+ (EGSimpleColorShader*)colorShader;
-+ (EGSimpleTextureShader*)textureShader;
 + (ODClassType*)type;
 @end
 
 
-@interface EGSimpleShaderBuilder : NSObject<EGShaderTextBuilder>
+@interface EGSimpleShaderKey : NSObject<EGShaderTextBuilder>
 @property (nonatomic, readonly) BOOL texture;
+@property (nonatomic, readonly) BOOL region;
+@property (nonatomic, readonly) EGBlendMode* blendMode;
 @property (nonatomic, readonly) NSString* fragment;
 
-+ (id)simpleShaderBuilderWithTexture:(BOOL)texture;
-- (id)initWithTexture:(BOOL)texture;
++ (id)simpleShaderKeyWithTexture:(BOOL)texture region:(BOOL)region blendMode:(EGBlendMode*)blendMode;
+- (id)initWithTexture:(BOOL)texture region:(BOOL)region blendMode:(EGBlendMode*)blendMode;
 - (ODClassType*)type;
 - (NSString*)vertex;
 - (EGShaderProgram*)program;
@@ -40,28 +43,17 @@
 @end
 
 
-@interface EGSimpleColorShader : EGShader
-@property (nonatomic, readonly) EGShaderAttribute* positionSlot;
-@property (nonatomic, readonly) EGShaderUniformVec4* colorUniform;
-@property (nonatomic, readonly) EGShaderUniformMat4* mvpUniform;
-
-+ (id)simpleColorShader;
-- (id)init;
-- (ODClassType*)type;
-- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
-- (void)loadUniformsParam:(EGColorSource*)param;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGSimpleTextureShader : EGShader
-@property (nonatomic, readonly) EGShaderAttribute* uvSlot;
+@interface EGSimpleShader : EGShader
+@property (nonatomic, readonly) EGSimpleShaderKey* key;
+@property (nonatomic, readonly) id uvSlot;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderUniformMat4* mvpUniform;
-@property (nonatomic, readonly) EGShaderUniformVec4* colorUniform;
+@property (nonatomic, readonly) id colorUniform;
+@property (nonatomic, readonly) id uvScale;
+@property (nonatomic, readonly) id uvShift;
 
-+ (id)simpleTextureShader;
-- (id)init;
++ (id)simpleShaderWithKey:(EGSimpleShaderKey*)key;
+- (id)initWithKey:(EGSimpleShaderKey*)key;
 - (ODClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGColorSource*)param;
