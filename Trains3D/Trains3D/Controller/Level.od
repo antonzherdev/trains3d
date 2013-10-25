@@ -6,6 +6,8 @@ class LevelRules(mapSize : vec2i, scoreRules : ScoreRules, forestRules : ForestR
     repairerSpeed : uint, events : [(float, (Level) -> void)])
 
 class Level(number : uint, rules : LevelRules) extends Controller {
+    static val trainComingPeriod = 10
+
     val map : MapSso = MapSso(rules.mapSize)
     val notifications = Notifications()
     val score : Score = Score(rules.scoreRules, notifications)
@@ -66,7 +68,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
     private def run(train : Train, fromCity : City) {
         fromCity.expectedTrainColor = train.color
-        fromCity.expectedTrainCounter = Counter(5, finish = {
+        fromCity.expectedTrainCounter = Counter(trainComingPeriod, finish = {
             train.startFrom(fromCity)
             add(train)
         })

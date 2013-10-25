@@ -36,11 +36,11 @@ class LevelFactory {
                 (0, create2Cities),
                 (1, showHelp(Loc.helpConnectTwoCities)),
                 (30, train(cars = 2, speed = 30)),
-                (8, showTrainHelp),
+                (Level.trainComingPeriod + 3, showTrainHelp),
                 (40, createNewCity),
                 (1, showHelp(Loc.helpNewCity)),
                 (20, train(cars = 1, speed = 20)),
-                (8, showTrainHelpWithSwitches),
+                (Level.trainComingPeriod + 3, showTrainHelpWithSwitches),
                 (50, train(cars = 3, speed = 30))
         ]),
 
@@ -65,28 +65,28 @@ class LevelFactory {
             repairerSpeed = 20, [
                 (0, create2Cities),
                 (20, slowTrain),
-                (20, slowTrain),
-                (20, slowTrain),
+                (30, slowTrain),
+                (30, slowTrain),
                 (10, createNewCity),
                 (20, slowTrain),
-                (20, slowTrain),
-                (10, slowTrain),
+                (30, slowTrain),
+                (30, slowTrain),
                 (10, createNewCity),
                 (20, slowTrain),
-                (20, slowTrain),
-                (10, slowTrain),
+                (30, slowTrain),
+                (30, slowTrain),
                 (10, createNewCity),
                 (10, slowTrain),
-                (20, slowTrain),
+                (30, slowTrain),
                 (10, slowTrain),
-                (20, slowTrain),
-                (20, slowTrain),
-                (15, slowTrain),
-                (10, slowTrain),
+                (30, slowTrain),
+                (30, slowTrain),
+                (25, slowTrain),
+                (30, slowTrain),
                 (20, slowTrain)
             ])
     ]
-    static def slowTrain = train(cars = 1.to(4), speed = 20.to(40))
+    static def slowTrain = train(cars = 1.to(4), speed = 25.to(35))
     static def levelWith(number : uint) = Level(number, rules[number - 1])
     static def levelWith(mapSize : vec2i) = Level(0, LevelRules(mapSize, scoreRules, forestRules, weatherRules, repairerSpeed = 30, []))
     static def score = Score(scoreRules, Notifications())

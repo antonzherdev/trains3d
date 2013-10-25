@@ -218,7 +218,7 @@ static ODClassType* _TRLevel_type;
 
 - (void)runTrain:(TRTrain*)train fromCity:(TRCity*)fromCity {
     fromCity.expectedTrainColor = train.color;
-    fromCity.expectedTrainCounter = [EGCounter applyLength:5.0 finish:^void() {
+    fromCity.expectedTrainCounter = [EGCounter applyLength:10.0 finish:^void() {
         [train startFromCity:fromCity];
         [self addTrain:train];
     }];
