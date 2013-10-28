@@ -11,6 +11,7 @@
 		0214B1471773394500C03C71 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0214B1461773394500C03C71 /* SenTestingKit.framework */; };
 		0214B1481773394500C03C71 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0214B1281773394400C03C71 /* Cocoa.framework */; };
 		0292DC44181E534B00589F65 /* OsXImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0292DC43181E534B00589F65 /* OsXImages.xcassets */; };
+		0292DC46181E5B4A00589F65 /* iOsImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0292DC45181E5B4A00589F65 /* iOsImages.xcassets */; };
 		02C70A4F1802A3E500007F50 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C70A4E1802A3E500007F50 /* Foundation.framework */; };
 		02C70A511802A3E500007F50 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C70A501802A3E500007F50 /* CoreGraphics.framework */; };
 		02C70A531802A3E500007F50 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C70A521802A3E500007F50 /* UIKit.framework */; };
@@ -605,7 +606,6 @@
 		6F3DF8DC78BD5510A048B5E5 /* btUniversalConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF00312927A542D37D8A2 /* btUniversalConstraint.cpp */; };
 		6F3DF8E71E0A1A00FE19ADA4 /* func_geometric.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF0103DACAC74EFF729C5 /* func_geometric.inl */; };
 		6F3DF8E7877B4527AD5F3FC9 /* Billboard.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFBF2E0A3B3B69DF76027 /* Billboard.od */; };
-		6F3DF8EF3A1802ABCCDA8A05 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFC03EEFF49C2C9EEFEEE /* Images.xcassets */; };
 		6F3DF8F70415C1303909BE40 /* btSimpleDynamicsWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF97201C5052A12B89E98 /* btSimpleDynamicsWorld.cpp */; };
 		6F3DF8F7B74F8B2A84ED736B /* btHinge2Constraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF05F9808BAF022EF64D6 /* btHinge2Constraint.cpp */; };
 		6F3DF8FDA1502BB701FCD9B2 /* btConvexPlaneCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF61F3D1BD41D81C2483B /* btConvexPlaneCollisionAlgorithm.cpp */; };
@@ -1116,6 +1116,7 @@
 		0291F31B181950600065E480 /* Trains3D.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Trains3D.entitlements; path = ../../Trains3D.entitlements; sourceTree = "<group>"; };
 		0292DC40181E4CE800589F65 /* Trains3Di.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Trains3Di.entitlements; path = ../../../Trains3Di/Trains3Di.entitlements; sourceTree = "<group>"; };
 		0292DC43181E534B00589F65 /* OsXImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = OsXImages.xcassets; path = ../../OsXImages.xcassets; sourceTree = "<group>"; };
+		0292DC45181E5B4A00589F65 /* iOsImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = iOsImages.xcassets; path = ../../../Trains3Di/iOsImages.xcassets; sourceTree = "<group>"; };
 		02C70A4D1802A3E500007F50 /* Trains3Di.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Trains3Di.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02C70A4E1802A3E500007F50 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		02C70A501802A3E500007F50 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -2018,7 +2019,6 @@
 		6F3DFC0229D6D74D6F0B677F /* KWMock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWMock.h; sourceTree = "<group>"; };
 		6F3DFC02D9E03D0658162F27 /* matrix_operation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = matrix_operation.hpp; sourceTree = "<group>"; };
 		6F3DFC034EF43DAEC53C642E /* CollisionsTest.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = CollisionsTest.od; sourceTree = "<group>"; };
-		6F3DFC03EEFF49C2C9EEFEEE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Images.xcassets; sourceTree = "<group>"; };
 		6F3DFC08459F125194A91B39 /* Progress.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Progress.od; sourceTree = "<group>"; };
 		6F3DFC0B9EE13FE6B6861C21 /* btCollisionMargin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btCollisionMargin.h; sourceTree = "<group>"; };
 		6F3DFC0CA904EE3BFD1368E3 /* EGCamera2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGCamera2D.h; sourceTree = "<group>"; };
@@ -2921,6 +2921,7 @@
 		6F3DF5BDFC66F63C93BB376D /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				0292DC45181E5B4A00589F65 /* iOsImages.xcassets */,
 				0292DC40181E4CE800589F65 /* Trains3Di.entitlements */,
 				6F3DF26CC081BBFFC08D7AA8 /* InfoPlist.strings */,
 				6F3DF4D13D3F891E578C3343 /* Trains3Di-Prefix.pch */,
@@ -2930,7 +2931,6 @@
 				6F3DFF4119835AFD66956641 /* Main_iPad.storyboard */,
 				6F3DFDB0779CAE3E90C09CE4 /* TRAppDelegate.h */,
 				6F3DF7CFC9B3081A78412DFA /* TRViewController.h */,
-				6F3DFC03EEFF49C2C9EEFEEE /* Images.xcassets */,
 				6F3DFAD3ED4E373C26DAB3BE /* TRViewController.m */,
 				6F3DFA38DF54A9A8DF6124F7 /* TRAppDelegate.m */,
 			);
@@ -4548,6 +4548,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F3DF9BC101011750C3F3401 /* lucida_grande_48.fnt in Resources */,
+				0292DC46181E5B4A00589F65 /* iOsImages.xcassets in Resources */,
 				6F3DFE8E9FDF36AFC6A48F02 /* lucida_grande_18.png in Resources */,
 				6F3DF93199E5CD0A635341F3 /* lucida_grande_32.png in Resources */,
 				6F3DFAF9A7A3E59CCF369B34 /* lucida_grande_16.png in Resources */,
@@ -4580,7 +4581,6 @@
 				6F3DFDCF58E4C05A45346C70 /* InfoPlist.strings in Resources */,
 				6F3DFDA5D80ADD448C71DF76 /* Main_iPhone.storyboard in Resources */,
 				6F3DF16015B3AA6879EA9F4F /* Main_iPad.storyboard in Resources */,
-				6F3DF8EF3A1802ABCCDA8A05 /* Images.xcassets in Resources */,
 				6F3DF1B5B45B998F80774411 /* Collection.od in Resources */,
 				6F3DF3CA08C9AD91D14F0AC8 /* Light.png in Resources */,
 				6F3DFC38419A6D62389C989F /* Vertex.od in Resources */,
@@ -5565,7 +5565,7 @@
 		0214B1571773394500C03C71 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = OSXIcon;
 				CODE_SIGN_ENTITLEMENTS = Trains3D/Trains3D.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -5587,7 +5587,7 @@
 		0214B1581773394500C03C71 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = OSXIcon;
 				CODE_SIGN_ENTITLEMENTS = Trains3D/Trains3D.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -5639,7 +5639,7 @@
 		02C70A861802A3E600007F50 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = iOsIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -5674,7 +5674,7 @@
 		02C70A871802A3E600007F50 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = iOsIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
