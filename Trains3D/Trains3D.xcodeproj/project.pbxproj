@@ -1112,7 +1112,8 @@
 		0214B12D1773394400C03C71 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0214B1451773394500C03C71 /* Trains3DTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Trains3DTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0214B1461773394500C03C71 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		0291F31B181950600065E480 /* Trains3D.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Trains3D.entitlements; sourceTree = "<group>"; };
+		0291F31B181950600065E480 /* Trains3D.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Trains3D.entitlements; path = ../../Trains3D.entitlements; sourceTree = "<group>"; };
+		0292DC40181E4CE800589F65 /* Trains3Di.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Trains3Di.entitlements; path = ../../../Trains3Di/Trains3Di.entitlements; sourceTree = "<group>"; };
 		02C70A4D1802A3E500007F50 /* Trains3Di.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Trains3Di.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02C70A4E1802A3E500007F50 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		02C70A501802A3E500007F50 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -2397,7 +2398,6 @@
 		0214B12E1773394400C03C71 /* Trains3D */ = {
 			isa = PBXGroup;
 			children = (
-				0291F31B181950600065E480 /* Trains3D.entitlements */,
 				6F3DFE36FCF7A5D743EE00C9 /* Controller */,
 				6F3DFCBDBB6AEBC710C44B0F /* Test */,
 				6F3DF96A23DE11EF31BB04A6 /* Processor */,
@@ -2453,6 +2453,7 @@
 		6F3DF09E3C3B6143BE853706 /* Mac */ = {
 			isa = PBXGroup;
 			children = (
+				0291F31B181950600065E480 /* Trains3D.entitlements */,
 				6F3DF93F529165EF57B4F14B /* InfoPlist.strings */,
 				6F3DF00DB170E5F80CE1B4CD /* MainMenu.xib */,
 				6F3DF85E4F4CEE17CDBD6EA7 /* Credits.rtf */,
@@ -2917,6 +2918,7 @@
 		6F3DF5BDFC66F63C93BB376D /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				0292DC40181E4CE800589F65 /* Trains3Di.entitlements */,
 				6F3DF26CC081BBFFC08D7AA8 /* InfoPlist.strings */,
 				6F3DF4D13D3F891E578C3343 /* Trains3Di-Prefix.pch */,
 				6F3DFD54E45EC8695E2DAB0B /* main.m */,
@@ -4225,14 +4227,23 @@
 				ORGANIZATIONNAME = "Anton Zherdev";
 				TargetAttributes = {
 					0214B1241773394400C03C71 = {
+						DevelopmentTeam = 29S6DQ4WTL;
 						SystemCapabilities = {
 							com.apple.Sandbox = {
+								enabled = 1;
+							};
+							com.apple.iCloud = {
 								enabled = 1;
 							};
 						};
 					};
 					02C70A4C1802A3E500007F50 = {
 						DevelopmentTeam = 29S6DQ4WTL;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -5551,7 +5562,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Trains3D/Trains3D.entitlements;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Trains3D/Platform/Mac/Trains3D-Prefix.pch";
@@ -5572,7 +5583,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Trains3D/Trains3D.entitlements;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Trains3D/Platform/Mac/Trains3D-Prefix.pch";
@@ -5628,6 +5639,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_ENTITLEMENTS = Trains3Di/Trains3Di.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5662,6 +5674,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_ENTITLEMENTS = Trains3Di/Trains3Di.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_NS_ASSERTIONS = NO;
