@@ -16,7 +16,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    TRLevel *level = [TRLevelFactory levelWithNumber:1];
+    TRLevel *level = [TRLevelFactory levelWithNumber:3];
     EGScene *scene = [TRSceneFactory sceneForLevel:level];
     self.director.scene = scene;
     [self.director displayStats];
