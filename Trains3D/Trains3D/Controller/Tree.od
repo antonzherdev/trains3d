@@ -10,7 +10,7 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Contr
     private var _trees = (rules.thickness * map.allTiles.count).cast<int>.range.chain.map{ _ ->
         val tile = map.allTiles.randomItem.get
         val pos = vec2(Float.rnd(-0.5, 0.5), Float.rnd(-0.5, 0.5))
-        Tree(rules.types.randomItem.get, pos + tile, vec2(Float.rnd(0.8, 1.2), Float.rnd(0.8, 1.2)))
+        Tree(rules.types.randomItem.get, pos + tile, vec2(Float.rnd(0.9, 1.1), Float.rnd(0.9, 1.1)))
     }.sort.toArray
     def trees = _trees
 
@@ -73,7 +73,7 @@ class Tree(treeType : TreeType, position : vec2, size : vec2) extends Comparable
 }
 
 enum TreeType(width : float, height : float) {
-    pine(200.0/512, 1)
+    pine(184.0/512, 1)
     tree1(1, 1)
     tree2(1, 1)
     tree3(1, 1)

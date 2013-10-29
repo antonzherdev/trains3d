@@ -30,8 +30,8 @@ static ODClassType* _TRTreeView_type;
     self = [super init];
     if(self) {
         _forest = forest;
-        _texture = [EGGlobal textureForFile:@"Pine.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST];
-        _material = [EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_texture alphaTestLevel:0.3];
+        _texture = [EGGlobal textureForFile:@"Pine.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_LINEAR];
+        _material = [EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_texture alphaTestLevel:0.1];
         _vb = [EGVBO mutDesc:EGBillboard.vbDesc];
         _ib = [EGIBO mut];
         _mesh = [[EGMesh meshWithVertex:_vb index:_ib] vaoShaderSystem:EGBillboardShaderSystem.instance material:_material shadow:YES];
@@ -81,10 +81,10 @@ static ODClassType* _TRTreeView_type;
     GEQuad3 quad3 = GEQuad3Make(mPlaneCoord, quad);
     GEQuad mQuad = geQuadApplyP0P1P2P3(geVec3Xy(geQuad3P0(quad3)), geVec3Xy(geQuad3P1(quad3)), geVec3Xy(geQuad3P2(quad3)), geVec3Xy(geQuad3P3(quad3)));
     a = [EGD2D writeSpriteIn:a material:_material at:geVec3ApplyVec2Z(tree.position, 0.0) quad:mQuad uv:mainUv];
-    CGFloat r = tree.rustle * 0.04;
+    CGFloat r = tree.rustle * 0.1;
     GEPlaneCoord rPlaneCoord = gePlaneCoordSetX(mPlaneCoord, geVec3AddVec3(mPlaneCoord.x, GEVec3Make(0.0, ((float)(r)), 0.0)));
     GEQuad3 rQuad3 = GEQuad3Make(rPlaneCoord, quad);
-    a = [EGD2D writeSpriteIn:a material:_material at:geVec3ApplyVec2Z(tree.position, 0.0) quad:geQuadApplyP0P1P2P3(geVec3Xy(geQuad3P0(rQuad3)), geVec3Xy(geQuad3P1(rQuad3)), geVec3Xy(geQuad3P2(rQuad3)), geVec3Xy(geQuad3P3(rQuad3))) uv:rustleUv];
+    a = [EGD2D writeSpriteIn:a material:_material at:geVec3ApplyVec2Z(geVec2AddVec2(tree.position, GEVec2Make(0.001, -0.001)), 0.0) quad:geQuadApplyP0P1P2P3(geVec3Xy(geQuad3P0(rQuad3)), geVec3Xy(geQuad3P1(rQuad3)), geVec3Xy(geQuad3P2(rQuad3)), geVec3Xy(geQuad3P3(rQuad3))) uv:rustleUv];
     return a;
 }
 

@@ -93,7 +93,7 @@ static ODClassType* _TRForest_type;
         __trees = [[[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count]))) chain] map:^TRTree*(id _) {
             GEVec2i tile = uwrap(GEVec2i, [[_weakSelf.map.allTiles randomItem] get]);
             GEVec2 pos = GEVec2Make(((float)(odFloatRndMinMax(-0.5, 0.5))), ((float)(odFloatRndMinMax(-0.5, 0.5))));
-            return [TRTree treeWithTreeType:[[_weakSelf.rules.types randomItem] get] position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make(((float)(odFloatRndMinMax(0.8, 1.2))), ((float)(odFloatRndMinMax(0.8, 1.2))))];
+            return [TRTree treeWithTreeType:[[_weakSelf.rules.types randomItem] get] position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make(((float)(odFloatRndMinMax(0.9, 1.1))), ((float)(odFloatRndMinMax(0.9, 1.1))))];
         }] sort] toArray];
     }
     
@@ -309,7 +309,7 @@ static NSArray* _TRTreeType_values;
 
 + (void)initialize {
     [super initialize];
-    _TRTreeType_pine = [TRTreeType treeTypeWithOrdinal:0 name:@"pine" width:200.0 / 512 height:1.0];
+    _TRTreeType_pine = [TRTreeType treeTypeWithOrdinal:0 name:@"pine" width:184.0 / 512 height:1.0];
     _TRTreeType_tree1 = [TRTreeType treeTypeWithOrdinal:1 name:@"tree1" width:1.0 height:1.0];
     _TRTreeType_tree2 = [TRTreeType treeTypeWithOrdinal:2 name:@"tree2" width:1.0 height:1.0];
     _TRTreeType_tree3 = [TRTreeType treeTypeWithOrdinal:3 name:@"tree3" width:1.0 height:1.0];

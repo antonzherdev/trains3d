@@ -3,8 +3,8 @@ package com.antonzherdev.trains
 
 class TreeView(forest : Forest) {
 //    val textures = [textureFor("Pine.png"), textureFor("Tree1.png"), textureFor("Tree2.png"), textureFor("Tree3.png"), textureFor("YellowTree.png")]
-    val texture = textureFor("Pine.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
-    val material = ColorSource(vec4(1, 1, 1, 1), texture, 0.3)
+    val texture = textureFor("Pine.png", GL_LINEAR, GL_LINEAR_MIPMAP_LINEAR)
+    val material = ColorSource(vec4(1, 1, 1, 1), texture, 0.1)
 //    val materials = textures.chain.map(ColorSource(vec4(1, 1, 1, 1), _, 0.3)).toArray
 //    val rects = textures.chain.map(Rect(0, 0, _.size.x/(_.size.y*4), _.size.y/(_.size.y*2)).centerX).toArray
     private val vb = VBO.mut(Billboard.vbDesc)
@@ -18,10 +18,10 @@ class TreeView(forest : Forest) {
         var ia = iar
         var i : uint4 = 0
         forest.trees.for{tree ->
-        a = write(a, tree)
-        ia = D2D.writeQuadIndex(ia, i)
-        ia = D2D.writeQuadIndex(ia, i + 4)
-        i += 8
+            a = write(a, tree)
+            ia = D2D.writeQuadIndex(ia, i)
+            ia = D2D.writeQuadIndex(ia, i + 4)
+            i += 8
         }
         vb.set(ar)
         ib.set(iar)
@@ -49,10 +49,10 @@ class TreeView(forest : Forest) {
         val mQuad = Quad(quad3.p0.xy, quad3.p1.xy, quad3.p2.xy, quad3.p3.xy)
         a = D2D.writeSprite(a, material, at = vec3(tree.position, 0), mQuad, uv = mainUv)
 
-        val r = tree.rustle*0.04
+        val r = tree.rustle*0.1
         val rPlaneCoord = mPlaneCoord.set(x = mPlaneCoord.x + vec3(0, r, 0))
         val rQuad3 = Quad3(rPlaneCoord, quad)
-        a = D2D.writeSprite(a, material, at = vec3(tree.position, 0),
+        a = D2D.writeSprite(a, material, at = vec3(tree.position + vec2(0.001, -0.001), 0),
             Quad(rQuad3.p0.xy, rQuad3.p1.xy, rQuad3.p2.xy, rQuad3.p3.xy),
             uv = rustleUv)
         a
