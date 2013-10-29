@@ -285,7 +285,7 @@ class DamageView {
 }
 
 class BackgroundView(map : MapSso) {
-    val mapView = MapSsoView(map, StandardMaterial(textureFor("Grass.png")))
+    val mapView = MapSsoView(map, ColorSource(textureFor("Grass.png", GL_NEAREST, GL_NEAREST)))
     def draw {
         mapView.draw
 //        mapView.drawLayout

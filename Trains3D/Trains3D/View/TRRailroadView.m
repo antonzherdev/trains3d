@@ -702,7 +702,7 @@ static ODClassType* _TRBackgroundView_type;
     self = [super init];
     if(self) {
         _map = map;
-        _mapView = [EGMapSsoView mapSsoViewWithMap:_map material:[EGStandardMaterial applyTexture:[EGGlobal textureForFile:@"Grass.png"]]];
+        _mapView = [EGMapSsoView mapSsoViewWithMap:_map material:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Grass.png" magFilter:GL_NEAREST minFilter:GL_NEAREST]]];
     }
     
     return self;
