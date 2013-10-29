@@ -378,7 +378,7 @@ static ODClassType* _TRUndoView_type;
 
 
 @implementation TRSwitchView{
-    EGStandardMaterial* _material;
+    EGColorSource* _material;
     EGMeshModel* _switchStraightModel;
     EGMeshModel* _switchTurnModel;
 }
@@ -394,7 +394,7 @@ static ODClassType* _TRSwitchView_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _material = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.2, 0.5, 0.15, 1.0)] specularColor:GEVec4Make(0.5, 1.0, 0.5, 1.0) specularSize:1.0];
+        _material = [EGColorSource applyTexture:[EGGlobal textureForFile:@"Switches.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST]];
         _switchStraightModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.switchStraight, _material)])];
         _switchTurnModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.switchTurn, _material)])];
     }
@@ -434,10 +434,12 @@ static ODClassType* _TRSwitchView_type;
             }
         }];
     } f:^void() {
-        if(ref) glCullFace(GL_BACK);
-        if(form.start.x + form.end.x == 0) [_switchStraightModel draw];
-        else [_switchTurnModel draw];
-        if(ref) glCullFace(GL_FRONT);
+        [EGBlendFunction.standard applyDraw:^void() {
+            [EGGlobal.context.cullFace disabledF:^void() {
+                if(form.start.x + form.end.x == 0) [_switchStraightModel draw];
+                else [_switchTurnModel draw];
+            }];
+        }];
     }];
 }
 

@@ -159,7 +159,7 @@ class UndoView(builder : RailroadBuilder) extends InputProcessor with TapProcess
 }
 
 class SwitchView {
-    val material = StandardMaterial( vec4(0.2, 0.5, 0.15, 1), vec4(0.5, 1, 0.5, 1), 1)
+    val material = ColorSource(textureFor("Switches.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST))
     val switchStraightModel = MeshModel([
         (Models.switchStraight, material)
     ])
@@ -189,13 +189,13 @@ class SwitchView {
                 } else m2
              })
         ) {
-            if(ref) glCullFace(GL_BACK)
-            if(form.start.x + form.end.x == 0) {
-                switchStraightModel.draw
-            } else {
-                switchTurnModel.draw
-            }
-            if(ref) glCullFace(GL_FRONT)
+            BlendFunction.standard { context.cullFace.disabled {
+                if(form.start.x + form.end.x == 0) {
+                    switchStraightModel.draw
+                } else {
+                    switchTurnModel.draw
+                }
+            }}
         }
     }
 }

@@ -97,7 +97,7 @@
 
 
 @interface TRSwitchView : NSObject
-@property (nonatomic, readonly) EGStandardMaterial* material;
+@property (nonatomic, readonly) EGColorSource* material;
 @property (nonatomic, readonly) EGMeshModel* switchStraightModel;
 @property (nonatomic, readonly) EGMeshModel* switchTurnModel;
 
