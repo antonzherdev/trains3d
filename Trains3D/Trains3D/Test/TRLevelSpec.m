@@ -17,6 +17,8 @@ SPEC_BEGIN(TRLevelSpec)
             for(int i = 0; i < 500; i++) {
                 @autoreleasepool {
                     TRLevel* level = [TRLevelFactory levelWithMapSize:mapSize];
+                    [level createNewCity];
+                    [level createNewCity];
                     NSArray * c = (NSArray *) [level cities];
                     [[c should] haveCountOf:2];
 
