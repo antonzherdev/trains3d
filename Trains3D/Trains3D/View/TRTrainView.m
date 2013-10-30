@@ -31,7 +31,7 @@ static ODClassType* _TRTrainView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _engineModel = [TRCarModel applyColorMesh:TRModels.engine blackMesh:TRModels.engineBlack shadowMesh:TRModels.engineShadow];
+        _engineModel = [TRCarModel applyColorMesh:TRModels.engine blackMesh:TRModels.engineBlack shadowMesh:TRModels.engineShadow texture:[CNOption applyValue:[EGGlobal textureForFile:@"Engine.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST]]];
         _carModel = [TRCarModel applyColorMesh:TRModels.car blackMesh:TRModels.carBlack shadowMesh:TRModels.carShadow texture:[CNOption applyValue:[EGGlobal textureForFile:@"Car.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST]]];
         _expressEngineModel = [TRCarModel applyColorMesh:TRModels.expressEngine blackMesh:TRModels.expressEngineBlack shadowMesh:TRModels.expressEngineShadow];
         _expressCarModel = [TRCarModel applyColorMesh:TRModels.expressCar blackMesh:TRModels.expressCarBlack shadowMesh:TRModels.expressCarShadow texture:[CNOption applyValue:[EGGlobal textureForFile:@"ExpressCar.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST]]];
@@ -173,7 +173,7 @@ static ODClassType* _TRTrainView_type;
     EGVertexArray* _shadowVao;
     id _texture;
 }
-static EGMaterial* _TRCarModel_blackMaterial;
+static EGColorSource* _TRCarModel_blackMaterial;
 static ODClassType* _TRCarModel_type;
 @synthesize colorVao = _colorVao;
 @synthesize blackVao = _blackVao;
@@ -199,7 +199,7 @@ static ODClassType* _TRCarModel_type;
 + (void)initialize {
     [super initialize];
     _TRCarModel_type = [ODClassType classTypeWithCls:[TRCarModel class]];
-    _TRCarModel_blackMaterial = [EGStandardMaterial applyColor:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
+    _TRCarModel_blackMaterial = [EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
 }
 
 + (EGStandardMaterial*)trainMaterialForDiffuse:(EGColorSource*)diffuse {
@@ -211,7 +211,7 @@ static ODClassType* _TRCarModel_type;
 }
 
 + (TRCarModel*)applyColorMesh:(EGMesh*)colorMesh blackMesh:(EGMesh*)blackMesh shadowMesh:(EGMesh*)shadowMesh texture:(id)texture {
-    EGStandardMaterial* defMat = (([texture isDefined]) ? [TRCarModel trainMaterialForDiffuse:[EGColorSource colorSourceWithColor:GEVec4Make(1.0, 0.0, 0.0, 1.0) texture:[CNOption applyValue:[texture get]] blendMode:EGBlendMode.darken alphaTestLevel:-1.0]] : [TRCarModel trainMaterialForDiffuse:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)]]);
+    EGStandardMaterial* defMat = (([texture isDefined]) ? [TRCarModel trainMaterialForDiffuse:[EGColorSource colorSourceWithColor:GEVec4Make(1.0, 0.0, 0.0, 1.0) texture:[CNOption applyValue:[texture get]] blendMode:EGBlendMode.multiply alphaTestLevel:-1.0]] : [TRCarModel trainMaterialForDiffuse:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)]]);
     return [TRCarModel carModelWithColorVao:[colorMesh vaoMaterial:defMat shadow:NO] blackVao:[blackMesh vaoMaterial:_TRCarModel_blackMaterial shadow:NO] shadowVao:[shadowMesh vaoShadowMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)]] texture:texture];
 }
 
@@ -219,7 +219,7 @@ static ODClassType* _TRCarModel_type;
     if([EGGlobal.context.renderTarget isShadow]) {
         [_shadowVao draw];
     } else {
-        [_colorVao drawParam:[TRCarModel trainMaterialForDiffuse:[EGColorSource colorSourceWithColor:color texture:_texture blendMode:EGBlendMode.darken alphaTestLevel:-1.0]]];
+        [_colorVao drawParam:[TRCarModel trainMaterialForDiffuse:[EGColorSource colorSourceWithColor:color texture:_texture blendMode:EGBlendMode.multiply alphaTestLevel:-1.0]]];
         [_blackVao draw];
     }
 }
@@ -228,7 +228,7 @@ static ODClassType* _TRCarModel_type;
     return [TRCarModel type];
 }
 
-+ (EGMaterial*)blackMaterial {
++ (EGColorSource*)blackMaterial {
     return _TRCarModel_blackMaterial;
 }
 

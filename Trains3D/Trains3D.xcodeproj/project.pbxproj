@@ -423,6 +423,7 @@
 		6F3DF61E44E3767F14F657E3 /* CNNeighboursLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2E04DF68D352A206E1C /* CNNeighboursLink.m */; };
 		6F3DF622C822AFCC5E947522 /* ulp.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFB99B7E36081D62842D8 /* ulp.inl */; };
 		6F3DF6244616A93BB09A255C /* GEVec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF09B89B5EBBB20529EB7 /* GEVec.m */; };
+		6F3DF625C2C2DD4962674BE0 /* Engine.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF5F068FF2611CC1457E7 /* Engine.png */; };
 		6F3DF62FCE2AB9738765FD89 /* func_vector_relational.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF75CD850170EC75153BB /* func_vector_relational.inl */; };
 		6F3DF6307F3FEE715DF1BFF3 /* GELine.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8A8A187792223296827 /* GELine.m */; };
 		6F3DF63A7B2F0BB19E2CBD01 /* lucida_grande_36.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF5DBAEDD302C5B3F3D04 /* lucida_grande_36.fnt */; };
@@ -608,6 +609,7 @@
 		6F3DF8DC78BD5510A048B5E5 /* btUniversalConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF00312927A542D37D8A2 /* btUniversalConstraint.cpp */; };
 		6F3DF8E71E0A1A00FE19ADA4 /* func_geometric.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF0103DACAC74EFF729C5 /* func_geometric.inl */; };
 		6F3DF8E7877B4527AD5F3FC9 /* Billboard.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFBF2E0A3B3B69DF76027 /* Billboard.od */; };
+		6F3DF8E860D0FCEFF85F3F03 /* Engine.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF5F068FF2611CC1457E7 /* Engine.png */; };
 		6F3DF8F70415C1303909BE40 /* btSimpleDynamicsWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF97201C5052A12B89E98 /* btSimpleDynamicsWorld.cpp */; };
 		6F3DF8F7B74F8B2A84ED736B /* btHinge2Constraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF05F9808BAF022EF64D6 /* btHinge2Constraint.cpp */; };
 		6F3DF8FDA1502BB701FCD9B2 /* btConvexPlaneCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF61F3D1BD41D81C2483B /* btConvexPlaneCollisionAlgorithm.cpp */; };
@@ -1563,6 +1565,7 @@
 		6F3DF5EBA996D312588949F3 /* type_vec1.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_vec1.hpp; sourceTree = "<group>"; };
 		6F3DF5ED4BA24972D538AE5E /* btGeneric6DofConstraint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btGeneric6DofConstraint.cpp; sourceTree = "<group>"; };
 		6F3DF5F01E6C3ED6945F573B /* Pause_2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pause_2x.png; sourceTree = "<group>"; };
+		6F3DF5F068FF2611CC1457E7 /* Engine.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Engine.png; sourceTree = "<group>"; };
 		6F3DF5F571B2B940C1C176E2 /* KWStub.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWStub.m; sourceTree = "<group>"; };
 		6F3DF5F8E7EB7DFEA34578FA /* matrix_cross_product.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = matrix_cross_product.inl; sourceTree = "<group>"; };
 		6F3DF5FAC9B2E4F3B36621BC /* CNMulLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNMulLink.m; sourceTree = "<group>"; };
@@ -3500,6 +3503,7 @@
 				6F3DF6EF8E3D2BE5B1C2CC69 /* TR3DExpressCar.jas */,
 				6F3DF3118A848E2296A0E2CC /* ExpressCar.png */,
 				6F3DF902185D67D11257DD90 /* Switches.png */,
+				6F3DF5F068FF2611CC1457E7 /* Engine.png */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -4487,6 +4491,7 @@
 				6F3DF34DE1A49676B6EA77EA /* lucida_grande_72.fnt in Resources */,
 				6F3DF4B615BC5CCDECF9F007 /* lucida_grande_72.png in Resources */,
 				6F3DF6E1086D312972C2FF73 /* Switches.png in Resources */,
+				6F3DF625C2C2DD4962674BE0 /* Engine.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4599,6 +4604,7 @@
 				6F3DFE671AFF957D2B54945B /* lucida_grande_72.fnt in Resources */,
 				6F3DFD15679E6613C5B4F022 /* lucida_grande_72.png in Resources */,
 				6F3DF5B7EFD70D75F6B3BB2F /* Switches.png in Resources */,
+				6F3DF8E860D0FCEFF85F3F03 /* Engine.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

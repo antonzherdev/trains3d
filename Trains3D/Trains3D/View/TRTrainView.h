@@ -15,10 +15,9 @@
 @class EGMatrixStack;
 @class TRCarType;
 @class EGRigidBody;
-@class EGMaterial;
-@class EGStandardMaterial;
-@class EGVertexArray;
 @class EGColorSource;
+@class EGVertexArray;
+@class EGStandardMaterial;
 @class EGMesh;
 @class EGBlendMode;
 @class EGContext;
@@ -56,7 +55,7 @@
 + (TRCarModel*)applyColorMesh:(EGMesh*)colorMesh blackMesh:(EGMesh*)blackMesh shadowMesh:(EGMesh*)shadowMesh;
 + (TRCarModel*)applyColorMesh:(EGMesh*)colorMesh blackMesh:(EGMesh*)blackMesh shadowMesh:(EGMesh*)shadowMesh texture:(id)texture;
 - (void)drawColor:(GEVec4)color;
-+ (EGMaterial*)blackMaterial;
++ (EGColorSource*)blackMaterial;
 + (ODClassType*)type;
 @end
 
