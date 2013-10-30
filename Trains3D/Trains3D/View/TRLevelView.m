@@ -42,7 +42,7 @@ static ODClassType* _TRLevelView_type;
         _level = level;
         _name = @"Level";
         _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.7, 0.7, 0.7, 1.0) lights:(@[[EGDirectLight applyColor:GEVec4Make(0.6, 0.6, 0.6, 1.0) direction:geVec3Normalize(GEVec3Make(-0.15, 0.35, -0.3)) shadowsProjectionMatrix:[GEMat4 orthoLeft:-1.5 right:6.0 bottom:-3.0 top:3.0 zNear:-2.0 zFar:4.0]]])];
-        _camera = [EGCameraIso cameraIsoWithTilesOnScreen:_level.map.size zReserve:1.0 center:GEVec2Make(0.0, 0.0)];
+        _camera = [EGCameraIso cameraIsoWithTilesOnScreen:_level.map.size zReserve:0.5 center:GEVec2Make(0.0, 0.0)];
         _railroadBuilderProcessor = [TRRailroadBuilderProcessor railroadBuilderProcessorWithBuilder:_level.railroad.builder];
         _switchProcessor = [TRSwitchProcessor switchProcessorWithLevel:_level];
         [self _init];

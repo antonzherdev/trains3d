@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "EGInput.h"
 #import "GEVec.h"
+#import "EGMapIso.h"
 #import "EGFont.h"
 #import "EGMesh.h"
 @class TRRailroad;
@@ -26,12 +27,12 @@
 @class GEMat4;
 @class EGMatrixModel;
 @class TRRailForm;
+@class TRRailConnector;
 @class EGMatrixStack;
 @class EGBillboard;
 @class TRStr;
 @protocol TRStrings;
 @class TRSwitch;
-@class TRRailConnector;
 @class EGTextureRegion;
 @class EGMutableVertexBuffer;
 @class EGVBO;
@@ -39,7 +40,6 @@
 @class EGIBO;
 @class TRRailLight;
 @class TRRailPoint;
-@class EGMapSso;
 
 @class TRRailroadView;
 @class TRRailView;
@@ -68,13 +68,14 @@
 
 
 @interface TRRailView : NSObject
+@property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic, readonly) EGStandardMaterial* railMaterial;
 @property (nonatomic, readonly) EGTexture* gravel;
 @property (nonatomic, readonly) EGMeshModel* railModel;
 @property (nonatomic, readonly) EGMeshModel* railTurnModel;
 
-+ (id)railView;
-- (id)init;
++ (id)railViewWithRailroad:(TRRailroad*)railroad;
+- (id)initWithRailroad:(TRRailroad*)railroad;
 - (ODClassType*)type;
 - (void)drawRailBuilding:(TRRailBuilding*)railBuilding;
 - (void)drawRail:(TRRail*)rail;

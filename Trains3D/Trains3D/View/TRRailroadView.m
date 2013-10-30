@@ -17,7 +17,6 @@
 #import "TRStrings.h"
 #import "EGVertex.h"
 #import "EGIndex.h"
-#import "EGMapIso.h"
 @implementation TRRailroadView{
     TRRailroad* _railroad;
     TRRailView* _railView;
@@ -70,7 +69,7 @@ static ODClassType* _TRRailroadView_type;
     }];
     EGGlobal.context.considerShadows = NO;
     _backgroundView = [TRBackgroundView backgroundViewWithMap:_railroad.map];
-    _railView = [TRRailView railView];
+    _railView = [TRRailView railViewWithRailroad:_railroad];
     EGShadowDrawParam* shadowParam = [EGShadowDrawParam shadowDrawParamWithPercents:(@[@0.3]) viewportSurface:[CNOption applyValue:_railroadSurface]];
     _shadowVao = ((egPlatform().shadows) ? [CNOption applyValue:[_backgroundView.mapView.plane vaoShaderSystem:EGShadowDrawShaderSystem.instance material:shadowParam shadow:NO]] : [CNOption none]);
     EGGlobal.context.considerShadows = YES;
@@ -175,24 +174,27 @@ static ODClassType* _TRRailroadView_type;
 
 
 @implementation TRRailView{
+    TRRailroad* _railroad;
     EGStandardMaterial* _railMaterial;
     EGTexture* _gravel;
     EGMeshModel* _railModel;
     EGMeshModel* _railTurnModel;
 }
 static ODClassType* _TRRailView_type;
+@synthesize railroad = _railroad;
 @synthesize railMaterial = _railMaterial;
 @synthesize gravel = _gravel;
 @synthesize railModel = _railModel;
 @synthesize railTurnModel = _railTurnModel;
 
-+ (id)railView {
-    return [[TRRailView alloc] init];
++ (id)railViewWithRailroad:(TRRailroad*)railroad {
+    return [[TRRailView alloc] initWithRailroad:railroad];
 }
 
-- (id)init {
+- (id)initWithRailroad:(TRRailroad*)railroad {
     self = [super init];
     if(self) {
+        _railroad = railroad;
         _railMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.6, 1.0)] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:0.3];
         _gravel = [EGGlobal textureForFile:@"Gravel.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST];
         _railModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railGravel, [EGMaterial applyTexture:_gravel]), tuple(TRModels.railTies, [EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]), tuple(TRModels.rails, _railMaterial)])];
@@ -238,8 +240,21 @@ static ODClassType* _TRRailView_type;
             }
         }];
     } f:^void() {
-        if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) [_railModel drawOnly:count];
-        else [_railTurnModel drawOnly:count];
+        if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
+            [_railModel drawOnly:count];
+            GEVec2i t = rail.tile;
+            if([_railroad.map isPartialTile:t]) {
+                if([_railroad.map cutStateForTile:t].y != 0) {
+                    GEVec2i dt = geVec2iSubVec2i([((rail.form == TRRailForm.leftRight) ? rail.form.start : rail.form.end) nextTile:t], t);
+                    EGGlobal.matrix.value = [EGGlobal.matrix.value modifyW:^GEMat4*(GEMat4* w) {
+                        return [w translateX:((float)(dt.x)) y:((float)(dt.y)) z:0.001];
+                    }];
+                    [_railModel drawOnly:count];
+                }
+            }
+        } else {
+            [_railTurnModel drawOnly:count];
+        }
     }];
 }
 
@@ -258,15 +273,19 @@ static ODClassType* _TRRailView_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
+    TRRailView* o = ((TRRailView*)(other));
+    return [self.railroad isEqual:o.railroad];
 }
 
 - (NSUInteger)hash {
-    return 0;
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.railroad hash];
+    return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"railroad=%@", self.railroad];
     [description appendString:@">"];
     return description;
 }

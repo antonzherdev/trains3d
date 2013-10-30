@@ -20,7 +20,7 @@ class RailroadView(railroad : Railroad) extends InputProcessor {
         railroad.builder.add(changeListener = weakSelf._changed = true)
         context.considerShadows = false
         backgroundView = BackgroundView(railroad.map)
-        railView = RailView()
+        railView = RailView(railroad)
         val shadowParam = ShadowDrawParam([0.3], railroadSurface)
         shadowVao =
             if(egPlatform.shadows) backgroundView.mapView.plane.vao(ShadowDrawShaderSystem.instance, shadowParam, shadow = false)
@@ -78,7 +78,7 @@ class RailroadView(railroad : Railroad) extends InputProcessor {
     def process(event : Event) : bool = undoView.process(event)
 }
 
-class RailView {
+class RailView(railroad : Railroad) {
     val railMaterial = StandardMaterial(vec4(0.5, 0.5, 0.6, 1), vec4(0.5, 0.5, 0.5, 1), 0.3)
     val gravel = textureFor("Gravel.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
     val railModel = MeshModel([
@@ -116,6 +116,14 @@ class RailView {
         ) {
             if(rail.form == RailForm.bottomTop || rail.form == RailForm.leftRight) {
                 railModel.draw(count)
+                val t = rail.tile
+                if(railroad.map.isPartial(t)) {
+                    if(railroad.map.cutStateFor(t).y != 0) {
+                        val dt = (if(rail.form == RailForm.leftRight) rail.form.start else rail.form.end).next(t) - t
+                        matrix.value = matrix.value.modify(w = w -> w.translate(dt.x, dt.y, 0.001))
+                        railModel.draw(count)
+                    }
+                }
             } else {
                 railTurnModel.draw(count)
             }
