@@ -14,12 +14,16 @@
 @interface TRCityColor : ODEnum
 @property (nonatomic, readonly) GEVec4 color;
 @property (nonatomic, readonly) NSString* localName;
+@property (nonatomic, readonly) GEVec4 trainColor;
 
 + (TRCityColor*)orange;
 + (TRCityColor*)green;
 + (TRCityColor*)pink;
-+ (TRCityColor*)yellow;
 + (TRCityColor*)purple;
++ (TRCityColor*)beige;
++ (TRCityColor*)blue;
++ (TRCityColor*)red;
++ (TRCityColor*)mint;
 + (TRCityColor*)grey;
 + (NSArray*)values;
 @end

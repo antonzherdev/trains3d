@@ -45,7 +45,7 @@ class TrainView(level : Level) {
                     m.rotate(car.position.line.degreeAngle + 90, 0, 1, 0)
                 })
             ){
-                doDraw(car, train.color.color)
+                doDraw(car, train.color.trainColor)
             }
         }
     }

@@ -21,10 +21,13 @@ trait Strings {
     def moneyOver : string
 
     def colorOrange : string
+    def colorBlue : string
+    def colorMint : string
+    def colorRed : string
     def colorGreen : string
     def colorPink : string
+    def colorBeige : string
     def colorPurple : string
-    def colorYellow : string
     def colorGrey : string
 
     def helpConnectTwoCities : string
@@ -54,8 +57,11 @@ class EnStrings extends Strings {
     def colorGreen : string = "green"
     def colorPink : string = "pink"
     def colorPurple : string = "purple"
-    def colorYellow : string = "yellow"
     def colorGrey : string = "grey"
+    def colorBlue : string = "blue"
+    def colorMint : string = "mint"
+    def colorRed : string = "red"
+    def colorBeige : string = "beige"
 
     def helpConnectTwoCities : string =
        "Connect two cities by rails.
@@ -97,8 +103,11 @@ class RuStrings extends Strings{
     def colorGreen : string = "зеленый"
     def colorPink : string = "розовый"
     def colorPurple : string = "cиреневый"
-    def colorYellow : string = "желтый"
     def colorGrey : string = "серый"
+    def colorBlue : string = "синий"
+    def colorMint : string = "мятный"
+    def colorRed : string = "красный"
+    def colorBeige : string = "бежевый"
 
     def helpConnectTwoCities : string =
         "Соедините два города рельсами.

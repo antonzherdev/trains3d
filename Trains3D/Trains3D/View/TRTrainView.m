@@ -87,7 +87,7 @@ static ODClassType* _TRTrainView_type;
                 return [m rotateAngle:((float)([[((TRCar*)(car)) position].line degreeAngle] + 90)) x:0.0 y:1.0 z:0.0];
             }];
         } f:^void() {
-            [self doDrawCar:car color:train.color.color];
+            [self doDrawCar:car color:train.color.trainColor];
         }];
     }];
 }

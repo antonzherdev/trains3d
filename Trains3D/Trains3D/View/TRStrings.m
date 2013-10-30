@@ -98,12 +98,24 @@ static ODClassType* _TREnStrings_type;
     return @"purple";
 }
 
-- (NSString*)colorYellow {
-    return @"yellow";
-}
-
 - (NSString*)colorGrey {
     return @"grey";
+}
+
+- (NSString*)colorBlue {
+    return @"blue";
+}
+
+- (NSString*)colorMint {
+    return @"mint";
+}
+
+- (NSString*)colorRed {
+    return @"red";
+}
+
+- (NSString*)colorBeige {
+    return @"beige";
 }
 
 - (NSString*)helpConnectTwoCities {
@@ -257,12 +269,24 @@ static ODClassType* _TRRuStrings_type;
     return @"cиреневый";
 }
 
-- (NSString*)colorYellow {
-    return @"желтый";
-}
-
 - (NSString*)colorGrey {
     return @"серый";
+}
+
+- (NSString*)colorBlue {
+    return @"синий";
+}
+
+- (NSString*)colorMint {
+    return @"мятный";
+}
+
+- (NSString*)colorRed {
+    return @"красный";
+}
+
+- (NSString*)colorBeige {
+    return @"бежевый";
 }
 
 - (NSString*)helpConnectTwoCities {
