@@ -87,6 +87,7 @@ class LevelFactory {
             ])
     ]
     static def slowTrain = train(cars = 1.to(4), speed = 25.to(35))
+    static def expressTrain = expressTrain(cars = 1.to(4), speed = 75.to(100))
     static def levelWith(number : uint) = Level(number, rules[number - 1])
     static def levelWith(mapSize : vec2i) = Level(0, LevelRules(mapSize, scoreRules, forestRules, weatherRules, repairerSpeed = 30, []))
     static def score = Score(scoreRules, Notifications())

@@ -88,6 +88,10 @@ static ODClassType* _TRLevelFactory_type;
     return [TRLevelFactory trainCars:intTo(1, 4) speed:intTo(25, 35)];
 }
 
++ (void(^)(TRLevel*))expressTrain {
+    return [TRLevelFactory expressTrainCars:intTo(1, 4) speed:intTo(75, 100)];
+}
+
 + (TRLevel*)levelWithNumber:(NSUInteger)number {
     return [TRLevel levelWithNumber:number rules:[_TRLevelFactory_rules applyIndex:number - 1]];
 }
