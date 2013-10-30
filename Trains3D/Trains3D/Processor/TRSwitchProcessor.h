@@ -11,7 +11,6 @@
 @class TRRailLight;
 @class EGCrossPoint;
 @class TRRailroadConnectorContent;
-@class EGGlobal;
 @class EGDirector;
 
 @class TRSwitchProcessor;

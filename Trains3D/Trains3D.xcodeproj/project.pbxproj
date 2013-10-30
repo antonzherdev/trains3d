@@ -1044,6 +1044,7 @@
 		6F3DFF25D43DE44E1B3D1304 /* Car.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF12ABBBA22C0A2CCD945 /* Car.od */; };
 		6F3DFF2D05A3F38D27950565 /* CNSourceLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF71A717A6FD3CAA174BA /* CNSourceLink.m */; };
 		6F3DFF2D0B1D722884CB251E /* btTriangleBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1C80074C452E86C3818 /* btTriangleBuffer.cpp */; };
+		6F3DFF2F2A448474422705E5 /* EGPlatform.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDA3F98DA3A1E3E13E0B /* EGPlatform.m */; };
 		6F3DFF31134C8F186C03CB3E /* btConcaveShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDA9CBBD0DBF0524A566 /* btConcaveShape.cpp */; };
 		6F3DFF3C563478F280D7BE3B /* ObjC.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFF36F4D336EAACCAB31A /* ObjC.od */; };
 		6F3DFF3DA644565063716763 /* Stat.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF7E5BB71171CADC27363 /* Stat.od */; };
@@ -5200,6 +5201,7 @@
 				6F3DFFEF59B97D907943BE36 /* TRLevelFactory.m in Sources */,
 				6F3DF2879F778547C552820E /* TRStrings.m in Sources */,
 				6F3DFC71901A3148E3F80294 /* OSPlatform.m in Sources */,
+				6F3DFF2F2A448474422705E5 /* EGPlatform.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

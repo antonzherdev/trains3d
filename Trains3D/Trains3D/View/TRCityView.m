@@ -194,7 +194,7 @@ static ODClassType* _TRCallRepairerView_type;
 }
 
 - (BOOL)isProcessorActive {
-    return !([[EGGlobal director] isPaused]);
+    return !([[EGDirector current] isPaused]);
 }
 
 - (ODClassType*)type {

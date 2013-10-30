@@ -6,9 +6,9 @@
 @class TRLevel;
 @class EGCamera2D;
 @class TRLevelResult;
-@class EGGlobal;
 @class EGDirector;
 @class EGBlendFunction;
+@class EGGlobal;
 @class EGContext;
 @class EGColorSource;
 @class EGD2D;
@@ -41,6 +41,8 @@
 - (void)reshapeWithViewport:(GERect)viewport;
 - (id<TRPauseView>)view;
 - (void)draw;
+- (void)updateWithDelta:(CGFloat)delta;
+- (BOOL)isActive;
 - (BOOL)isProcessorActive;
 - (BOOL)processEvent:(EGEvent*)event;
 + (ODClassType*)type;

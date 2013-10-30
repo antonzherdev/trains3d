@@ -26,8 +26,6 @@
 @class TRTrainType;
 @class TRCityColor;
 @class TRCarType;
-@class EGGlobal;
-@class EGDirector;
 
 @class TRLevelRules;
 @class TRLevel;

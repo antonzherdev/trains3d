@@ -4,7 +4,6 @@
 @class TRLevelMenuView;
 @class TRLevelSound;
 @class TRLevel;
-@class EGGlobal;
 @class EGDirector;
 @class TRLevelFactory;
 @class TRLevelView;

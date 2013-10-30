@@ -6,7 +6,6 @@
 #import "TRRailroad.h"
 #import "TRRailPoint.h"
 #import "EGCollision.h"
-#import "EGContext.h"
 #import "EGDirector.h"
 @implementation TRSwitchProcessor{
     TRLevel* _level;
@@ -84,7 +83,7 @@ static ODClassType* _TRSwitchProcessor_type;
 }
 
 - (BOOL)isProcessorActive {
-    return !([[EGGlobal director] isPaused]);
+    return !([[EGDirector current] isPaused]);
 }
 
 - (ODClassType*)type {

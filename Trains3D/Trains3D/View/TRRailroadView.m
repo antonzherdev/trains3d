@@ -135,7 +135,7 @@ static ODClassType* _TRRailroadView_type;
 }
 
 - (BOOL)isProcessorActive {
-    return !([[EGGlobal director] isPaused]);
+    return !([[EGDirector current] isPaused]);
 }
 
 - (ODClassType*)type {
@@ -358,7 +358,7 @@ static ODClassType* _TRUndoView_type;
 }
 
 - (BOOL)isProcessorActive {
-    return !([[EGGlobal director] isPaused]);
+    return !([[EGDirector current] isPaused]);
 }
 
 - (ODClassType*)type {

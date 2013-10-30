@@ -186,23 +186,19 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     def help = _help
     def showHelp(text : string) {
         _help = Help(text)
-        director.pause
     }
     def clearHelp {
         _help = nil
-        director.resume
     }
 
     private var _result : LevelResult? = nil
     def result = _result
     def win {
         _result = LevelResult(true)
-        director.pause
     }
 
     def lose {
         _result = LevelResult(false)
-        director.pause
     }
 }
 

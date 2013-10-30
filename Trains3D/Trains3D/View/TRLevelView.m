@@ -103,7 +103,7 @@ static ODClassType* _TRLevelView_type;
 }
 
 - (BOOL)isProcessorActive {
-    return !([[EGGlobal director] isPaused]);
+    return !([[EGDirector current] isPaused]);
 }
 
 - (ODClassType*)type {

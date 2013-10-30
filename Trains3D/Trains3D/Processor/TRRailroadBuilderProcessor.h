@@ -3,7 +3,6 @@
 #import "GEVec.h"
 @class TRRailroadBuilder;
 @class EGTouchToMouse;
-@class EGGlobal;
 @class EGDirector;
 @class TRRail;
 @class TRRailConnector;

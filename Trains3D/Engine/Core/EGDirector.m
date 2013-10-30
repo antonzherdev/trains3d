@@ -13,6 +13,7 @@
     EGTime* _time;
     id __stat;
 }
+static EGDirector* _EGDirector__current;
 static ODClassType* _EGDirector_type;
 @synthesize time = _time;
 
@@ -36,6 +37,10 @@ static ODClassType* _EGDirector_type;
 + (void)initialize {
     [super initialize];
     _EGDirector_type = [ODClassType classTypeWithCls:[EGDirector class]];
+}
+
++ (EGDirector*)current {
+    return _EGDirector__current;
 }
 
 - (id)scene {
@@ -62,7 +67,7 @@ static ODClassType* _EGDirector_type;
     if([__scene isEmpty]) return ;
     if(size.x <= 0 || size.y <= 0) return ;
     EGScene* sc = [__scene get];
-    EGGlobal.context.director = self;
+    _EGDirector__current = self;
     [EGGlobal.context clear];
     EGGlobal.context.scale = [sc scaleWithViewSize:size];
     [EGGlobal.context.depthTest enable];
@@ -119,7 +124,7 @@ static ODClassType* _EGDirector_type;
 }
 
 - (void)tick {
-    EGGlobal.context.director = self;
+    _EGDirector__current = self;
     [_time tick];
     [__scene forEach:^void(EGScene* _) {
         [((EGScene*)(_)) updateWithDelta:_time.delta];

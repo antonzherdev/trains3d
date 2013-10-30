@@ -1,6 +1,5 @@
 #import "objd.h"
 #import "GEVec.h"
-@class EGDirector;
 @class EGTexture;
 @class EGFont;
 @class EGFileTexture;
@@ -23,7 +22,6 @@
 
 @interface EGGlobal : NSObject
 - (ODClassType*)type;
-+ (EGDirector*)director;
 + (EGTexture*)textureForFile:(NSString*)file;
 + (EGTexture*)textureForFile:(NSString*)file magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
 + (EGTexture*)scaledTextureForName:(NSString*)name format:(NSString*)format magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
@@ -38,7 +36,6 @@
 @interface EGContext : NSObject
 @property (nonatomic) CGFloat scale;
 @property (nonatomic) int defaultFramebuffer;
-@property (nonatomic, retain) EGDirector* director;
 @property (nonatomic, retain) EGEnvironment* environment;
 @property (nonatomic, readonly) EGMatrixStack* matrixStack;
 @property (nonatomic, retain) EGRenderTarget* renderTarget;

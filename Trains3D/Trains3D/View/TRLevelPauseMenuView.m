@@ -2,9 +2,9 @@
 
 #import "TRLevel.h"
 #import "EGCamera2D.h"
-#import "EGContext.h"
 #import "EGDirector.h"
 #import "EGMaterial.h"
+#import "EGContext.h"
 #import "EGSprite.h"
 #import "TRStrings.h"
 #import "TRSceneFactory.h"
@@ -68,7 +68,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
 }
 
 - (void)draw {
-    if(!([[EGGlobal director] isPaused])) return ;
+    if(!([[EGDirector current] isPaused])) return ;
     [EGBlendFunction.standard applyDraw:^void() {
         [EGGlobal.context.depthTest disabledF:^void() {
             [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 0.5)] at:GEVec3Make(0.0, 0.0, 0.0) rect:GERectMake(GEVec2Make(0.0, 0.0), geVec2ApplyVec2i([EGGlobal.context viewport].size))];
@@ -77,8 +77,16 @@ static ODClassType* _TRLevelPauseMenuView_type;
     }];
 }
 
+- (void)updateWithDelta:(CGFloat)delta {
+    if([self isActive]) [[EGDirector current] pause];
+}
+
+- (BOOL)isActive {
+    return [[EGDirector current] isPaused] || !([[_level help] isEmpty]) || !([[_level result] isEmpty]);
+}
+
 - (BOOL)isProcessorActive {
-    return [[EGGlobal director] isPaused];
+    return [[EGDirector current] isPaused];
 }
 
 - (BOOL)processEvent:(EGEvent*)event {
@@ -90,9 +98,6 @@ static ODClassType* _TRLevelPauseMenuView_type;
 
 - (EGEnvironment*)environment {
     return EGEnvironment.aDefault;
-}
-
-- (void)updateWithDelta:(CGFloat)delta {
 }
 
 - (ODClassType*)type {
@@ -271,7 +276,7 @@ static ODClassType* _TRPauseMenuView_type;
     if(self) {
         _level = level;
         _resumeButton = [self buttonText:[TRStr.Loc resumeGame] onClick:^void() {
-            [[EGGlobal director] resume];
+            [[EGDirector current] resume];
         }];
         _restartButton = [self buttonText:[TRStr.Loc restartLevel:_level] onClick:^void() {
             [TRSceneFactory restartLevel];
@@ -438,7 +443,7 @@ static ODClassType* _TRLooseMenu_type;
         _level = level;
         _restartButton = [self buttonText:[TRStr.Loc replayLevel:_level] onClick:^void() {
             [TRSceneFactory restartLevel];
-            [[EGGlobal director] resume];
+            [[EGDirector current] resume];
         }];
         _chooseLevelButton = [self buttonText:[TRStr.Loc chooseLevel] onClick:^void() {
             [TRSceneFactory chooseLevel];
@@ -546,6 +551,7 @@ static ODClassType* _TRHelpView_type;
 
 - (BOOL)tapEvent:(EGEvent*)event {
     [_level clearHelp];
+    [[EGDirector current] resume];
     return YES;
 }
 

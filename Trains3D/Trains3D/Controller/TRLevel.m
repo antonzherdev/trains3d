@@ -11,8 +11,6 @@
 #import "TRTrain.h"
 #import "TRRailPoint.h"
 #import "TRCar.h"
-#import "EGContext.h"
-#import "EGDirector.h"
 @implementation TRLevelRules{
     GEVec2i _mapSize;
     TRScoreRules* _scoreRules;
@@ -371,12 +369,10 @@ static ODClassType* _TRLevel_type;
 
 - (void)showHelpText:(NSString*)text {
     __help = [CNOption applyValue:[TRHelp helpWithText:text]];
-    [[EGGlobal director] pause];
 }
 
 - (void)clearHelp {
     __help = [CNOption none];
-    [[EGGlobal director] resume];
 }
 
 - (id)result {
@@ -385,12 +381,10 @@ static ODClassType* _TRLevel_type;
 
 - (void)win {
     __result = [CNOption applyValue:[TRLevelResult levelResultWithWin:YES]];
-    [[EGGlobal director] pause];
 }
 
 - (void)lose {
     __result = [CNOption applyValue:[TRLevelResult levelResultWithWin:NO]];
-    [[EGGlobal director] pause];
 }
 
 - (ODClassType*)type {

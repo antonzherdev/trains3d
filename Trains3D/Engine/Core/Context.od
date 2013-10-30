@@ -1,7 +1,6 @@
 package com.antonzherdev.eg
 
 object Global {
-    def director : Director = context.director
     val context : Context = Context()
     val matrix : MatrixStack = context.matrixStack
     def textureFor(file : string) : Texture = context.textureFor(file, 1.0, GL_LINEAR, GL_LINEAR)
@@ -24,7 +23,6 @@ class Context {
     def fontWith(name : string) : Font = fontCache.objectFor(key = name, orUpdateWith = Font(name))
     def fontWith(name : string, size : uint) : Font = fontWith("$name\_$((size*scale).cast<uint>)")
 
-    var director : Director
     var environment = Environment.default
     val matrixStack = MatrixStack()
     var renderTarget : RenderTarget = SceneRenderTarget()

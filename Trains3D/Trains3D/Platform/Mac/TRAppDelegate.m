@@ -12,7 +12,7 @@
     _window.contentView = self.view;
 
 
-    TRLevel *level = [TRLevelFactory levelWithNumber:3];
+    TRLevel *level = [TRLevelFactory levelWithNumber:1];
     EGScene *scene = [TRSceneFactory sceneForLevel:level];
     _view.director.scene = scene;
     [_view.director displayStats];

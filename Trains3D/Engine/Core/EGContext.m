@@ -1,6 +1,5 @@
 #import "EGContext.h"
 
-#import "EGDirector.h"
 #import "EGTexture.h"
 #import "GL.h"
 #import "EGFont.h"
@@ -18,10 +17,6 @@ static ODClassType* _EGGlobal_type;
     _EGGlobal_type = [ODClassType classTypeWithCls:[EGGlobal class]];
     _EGGlobal_context = [EGContext context];
     _EGGlobal_matrix = _EGGlobal_context.matrixStack;
-}
-
-+ (EGDirector*)director {
-    return _EGGlobal_context.director;
 }
 
 + (EGTexture*)textureForFile:(NSString*)file {
@@ -88,7 +83,6 @@ static ODClassType* _EGGlobal_type;
     int _defaultFramebuffer;
     NSMutableDictionary* _textureCache;
     NSMutableDictionary* _fontCache;
-    EGDirector* _director;
     EGEnvironment* _environment;
     EGMatrixStack* _matrixStack;
     EGRenderTarget* _renderTarget;
@@ -112,7 +106,6 @@ static ODClassType* _EGGlobal_type;
 static ODClassType* _EGContext_type;
 @synthesize scale = _scale;
 @synthesize defaultFramebuffer = _defaultFramebuffer;
-@synthesize director = _director;
 @synthesize environment = _environment;
 @synthesize matrixStack = _matrixStack;
 @synthesize renderTarget = _renderTarget;

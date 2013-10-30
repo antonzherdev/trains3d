@@ -1,7 +1,7 @@
 package com.antonzherdev.eg
 
 trait InputProcessor {
-    def isProcessorActive : bool = !director.isPaused
+    def isProcessorActive : bool = !Director.current.isPaused
 
     def process(event : Event) : bool
 }

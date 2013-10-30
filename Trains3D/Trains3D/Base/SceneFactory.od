@@ -4,22 +4,22 @@ class SceneFactory {
     static def sceneFor(level : Level) = Scene(LevelMenuView.backgroundColor, level, TrainLayers(level), LevelSound(level))
 
     static def restartLevel = {
-        director.scene.get.controller.as<Level>.for{level ->
-            director.set(scene = sceneFor(Level(level.number, level.rules)))
-            director.resume
+        Director.current.scene.get.controller.as<Level>.for{level ->
+            Director.current.set(scene = sceneFor(Level(level.number, level.rules)))
+            Director.current.resume
         }
     }
 
     static def sceneForLevelWith(number : uint) = sceneFor(LevelFactory.levelWith(number))
 
     static def chooseLevel {
-        director.resume
+        Director.current.resume
     }
 
     static def nextLevel {
-        director.scene.get.controller.as<Level>.for{level ->
-            director.set(scene = sceneFor(LevelFactory.levelWith(number = level.number + 1)))
-            director.resume
+        Director.current.scene.get.controller.as<Level>.for{level ->
+            Director.current.set(scene = sceneFor(LevelFactory.levelWith(number = level.number + 1)))
+            Director.current.resume
         }
     }
 }

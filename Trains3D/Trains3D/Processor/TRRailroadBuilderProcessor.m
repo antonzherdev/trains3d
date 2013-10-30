@@ -2,7 +2,6 @@
 
 #import "TRRailroad.h"
 #import "EGTouchToMouse.h"
-#import "EGContext.h"
 #import "EGDirector.h"
 #import "TRRailPoint.h"
 @implementation TRRailroadBuilderProcessor{
@@ -38,7 +37,7 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
 }
 
 - (BOOL)isProcessorActive {
-    return !([[EGGlobal director] isPaused]);
+    return !([[EGDirector current] isPaused]);
 }
 
 - (ODClassType*)type {

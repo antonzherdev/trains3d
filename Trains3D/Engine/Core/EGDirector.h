@@ -17,6 +17,7 @@
 + (id)director;
 - (id)init;
 - (ODClassType*)type;
++ (EGDirector*)current;
 - (id)scene;
 - (void)setScene:(EGScene*)scene;
 - (void)lock;

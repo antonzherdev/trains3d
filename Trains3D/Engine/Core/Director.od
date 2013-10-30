@@ -1,6 +1,9 @@
 package com.antonzherdev.eg
 
 class Director {
+    static private var _current : Director
+    static def current : Director = _current
+
     private var _scene : Scene? = nil
     private var _isStarted = false
     private var _isPaused = false
@@ -22,7 +25,7 @@ class Director {
         if(size.x <= 0 || size.y <= 0) return nil
         val sc = _scene.get
 
-        context.director = self
+        _current = self
         context.clear
         context.scale = sc.scaleWith(size)
         context.depthTest.enable
@@ -67,7 +70,7 @@ class Director {
     }
 
     def tick {
-        context.director = self
+        _current = self
         time.tick
         _scene.for(_.updateWith(time.delta))
         _stat.for(_.tickWith(time.delta))
@@ -76,6 +79,8 @@ class Director {
     private var _stat : Stat? = nil
     def stat = _stat
     def isDisplayingStats = _stat.isDefined
-    def displayStats {_stat = Stat()}
+    def displayStats {
+        _stat = Stat()
+    }
     def cancelDisplayingStats {_stat = nil}
 }
