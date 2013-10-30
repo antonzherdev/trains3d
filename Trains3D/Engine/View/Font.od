@@ -152,6 +152,8 @@ class Font(name : string) {
         }
         vb.set(vertexes)
         ib.set(indexes)
+        vertexes.free
+        indexes.free
 //        val mesh = Mesh(vertex = vb, ib)
         context.cullFace.disabled {
             mesh.draw(FontShaderParam(texture, color))

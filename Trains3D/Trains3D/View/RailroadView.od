@@ -274,6 +274,8 @@ class LightView(railroad : Railroad) {
 
             glowVbo.set(vertex)
             glowIbo.set(index)
+            vertex.free
+            index.free
             matrix.identity{ context.cullFace.disabled{
                 glowVao.draw
             }}

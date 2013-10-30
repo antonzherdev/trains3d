@@ -601,6 +601,8 @@ static ODClassType* _TRLightView_type;
         }];
         [_glowVbo setArray:vertex];
         [_glowIbo setArray:index];
+        cnVoidRefArrayFree(vertex);
+        cnVoidRefArrayFree(index);
         [EGGlobal.matrix identityF:^void() {
             [EGGlobal.context.cullFace disabledF:^void() {
                 [_glowVao draw];

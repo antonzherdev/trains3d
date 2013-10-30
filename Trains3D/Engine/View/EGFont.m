@@ -254,6 +254,8 @@ static ODClassType* _EGFont_type;
     }];
     [_vb setArray:vertexes];
     [_ib setArray:indexes];
+    cnVoidRefArrayFree(vertexes);
+    cnVoidRefArrayFree(indexes);
     [EGGlobal.context.cullFace disabledF:^void() {
         [_mesh drawParam:[EGFontShaderParam fontShaderParamWithTexture:_texture color:color]];
     }];
