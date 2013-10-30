@@ -19,8 +19,8 @@
 + (TRCityColor*)orange;
 + (TRCityColor*)green;
 + (TRCityColor*)pink;
-+ (TRCityColor*)purple;
 + (TRCityColor*)beige;
++ (TRCityColor*)purple;
 + (TRCityColor*)blue;
 + (TRCityColor*)red;
 + (TRCityColor*)mint;
