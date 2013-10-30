@@ -278,8 +278,7 @@ static ODClassType* _EGStandardShaderKey_type;
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
         return [NSString stringWithFormat:@"dirLightDirectionCos%@ = max(dot(normalMWC, -dirLightDirection%@), 0.0);\n"
             "%@\n"
-            "%@\n", i, i, ((_specular) ? [NSString stringWithFormat:@"dirLightDirectionCosA%@ = max(dot(eyeDirection, reflect(dirLightDirection%@, normalMWC)), 0.0);", i, i] : @""), ((unumi(i) < _directLightWithShadowsCount) ? [NSString stringWithFormat:@"dirLightShadowCoord%@ = (dirLightDepthMwcp%@ * vec4(position, 1)).xyz;\n"
-            "dirLightShadowCoord%@.z -= clamp(0.005*tan(acos(dirLightDirectionCos%@)), 0.0, 0.01);", i, i, i, i] : @"")];
+            "%@\n", i, i, ((_specular) ? [NSString stringWithFormat:@"dirLightDirectionCosA%@ = max(dot(eyeDirection, reflect(dirLightDirection%@, normalMWC)), 0.0);", i, i] : @""), ((unumi(i) < _directLightWithShadowsCount) ? [NSString stringWithFormat:@"dirLightShadowCoord%@ = (dirLightDepthMwcp%@ * vec4(position, 1)).xyz;", i, i] : @"")];
     }] toStringWithDelimiter:@"\n"];
 }
 
