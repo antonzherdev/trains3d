@@ -13,6 +13,7 @@
 @class EGTextureRegion;
 @class EGColorSource;
 @class EGBlendFunction;
+@class EGD2D;
 @class TRScore;
 @class TRStr;
 @protocol TRStrings;

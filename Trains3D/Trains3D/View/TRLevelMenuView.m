@@ -82,7 +82,8 @@ static ODClassType* _TRLevelMenuView_type;
 
 - (void)draw {
     [EGGlobal.context.depthTest disabledF:^void() {
-        [EGBlendFunction.premultiplied applyDraw:^void() {
+        [EGBlendFunction.standard applyDraw:^void() {
+            [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.7)] at:GEVec3Make(0.0, 0.0, 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(_width)), 46.0)];
             [_font drawText:[self formatScore:[_level.score score]] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec3Make(10.0, 14.0, 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
             [_pauseSprite draw];
             [_levelAnimation forF:^void(CGFloat t) {

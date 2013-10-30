@@ -27,7 +27,8 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor with Ta
     }
 
     def draw {
-        context.depthTest.disabled { BlendFunction.premultiplied {
+        context.depthTest.disabled { BlendFunction.standard {
+            D2D.drawSprite(material = vec4(1, 1, 1, 0.7), at = vec3(0, 0, 0), Rect(0, 0, width, 46))
             font.draw(text = format(level.score.score), color = vec4(0, 0, 0, 1), at = vec3(10, 14, 0), TextAlignment.baseline(-1))
             pauseSprite.draw
             levelAnimation.for { t ->
