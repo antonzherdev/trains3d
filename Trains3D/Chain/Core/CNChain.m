@@ -51,6 +51,7 @@
 - (NSArray *)toArray {
     __block id ret;
     CNYield *yield = [CNYield alloc];
+    __weak CNYield * wy = yield;
     yield = [yield initWithBegin:^CNYieldResult(NSUInteger size) {
         ret = [NSMutableArray arrayWithCapacity:size];
         return cnYieldContinue;
@@ -62,7 +63,7 @@
             ret = collection;
             return cnYieldContinue;
         }
-        return [CNYield yieldAll:collection byItemsTo:yield];
+        return [CNYield yieldAll:collection byItemsTo:wy];
     }];
     [self apply:yield];
     return ret;
@@ -71,6 +72,7 @@
 - (NSSet *)toSet {
     __block id ret;
     CNYield *yield = [CNYield alloc];
+    __weak CNYield * wy = yield;
     yield = [yield initWithBegin:^CNYieldResult(NSUInteger size) {
         ret = [NSMutableSet setWithCapacity:size];
         return cnYieldContinue;
@@ -82,7 +84,7 @@
             ret = collection;
             return cnYieldContinue;
         }
-        return [CNYield yieldAll:collection byItemsTo:yield];
+        return [CNYield yieldAll:collection byItemsTo:wy];
     }];
     [self apply:yield];
     return ret;

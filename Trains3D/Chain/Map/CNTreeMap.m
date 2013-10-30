@@ -638,7 +638,7 @@ static ODClassType* _CNTreeMapEntry_type;
 
 
 @implementation CNTreeMapKeySet{
-    CNMutableTreeMap* _map;
+    __weak CNMutableTreeMap* _map;
 }
 static ODClassType* _CNTreeMapKeySet_type;
 @synthesize map = _map;
@@ -868,7 +868,7 @@ static ODClassType* _CNTreeMapKeyIterator_type;
 
 
 @implementation CNTreeMapValues{
-    CNMutableTreeMap* _map;
+    __weak CNMutableTreeMap* _map;
 }
 static ODClassType* _CNTreeMapValues_type;
 @synthesize map = _map;

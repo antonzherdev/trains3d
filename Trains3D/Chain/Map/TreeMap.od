@@ -350,7 +350,7 @@ class TreeMapEntry<K, V> {
     }
 }
 
-class TreeMapKeySet<K>(map : MutableTreeMap<K, _>) extends Iterable<K> {
+class TreeMapKeySet<K>(weak map : MutableTreeMap<K, _>) extends Iterable<K> {
     def count : uint = map.count
 
     def iterator : Iterator<K> = TreeMapKeyIterator<K>.new(map, map.firstEntry)
@@ -372,7 +372,7 @@ class TreeMapKeyIterator<K>(map : MutableTreeMap<K, _>) extends Iterator<K> {
    }
 }
 
-class TreeMapValues<V>(map : MutableTreeMap<_, V>) extends Iterable<V> {
+class TreeMapValues<V>(weak map : MutableTreeMap<_, V>) extends Iterable<V> {
     def count : uint = map.count
 
     def iterator : Iterator<V> = TreeMapValuesIterator<V>.new(map, map.firstEntry)

@@ -1,7 +1,5 @@
 #import "chain.h"
 #import "Kiwi.h"
-#import "CNRange.h"
-#import "CNSortBuilder.h"
 
 static BOOL (^const LESS_THAN_3)(id) = ^BOOL(id x) {return [x intValue] < 3;};
 

@@ -61,7 +61,7 @@
 
 
 @interface CNTreeMapKeySet : NSObject<CNIterable>
-@property (nonatomic, readonly) CNMutableTreeMap* map;
+@property (nonatomic, readonly, weak) CNMutableTreeMap* map;
 
 + (id)treeMapKeySetWithMap:(CNMutableTreeMap*)map;
 - (id)initWithMap:(CNMutableTreeMap*)map;
@@ -88,7 +88,7 @@
 
 
 @interface CNTreeMapValues : NSObject<CNIterable>
-@property (nonatomic, readonly) CNMutableTreeMap* map;
+@property (nonatomic, readonly, weak) CNMutableTreeMap* map;
 
 + (id)treeMapValuesWithMap:(CNMutableTreeMap*)map;
 - (id)initWithMap:(CNMutableTreeMap*)map;
