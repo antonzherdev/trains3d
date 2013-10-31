@@ -4,23 +4,37 @@ import com.antonzherdev.data._
 
 class GameDirector {
     static val instance = GameDirector()
-    private val storage = KeyValueStorage([("maxLevel", 1), ("currentLevel", 1)])
+    val local = LocalKeyValueStorage([("currentLevel", 1)])
+    private val resolveMaxLevel : (any, any) -> any = (a : any, b : any) -> {
+        val v = Conflict.resolveMax(a, b)
+        log("Max level from cloud $v = max($a, $b)")
+        if(currentLevel == a.cast<int>) {
+            log("Update current level with $v from cloud")
+            local.set("currentLevel", value = v)
+        }
+        v
+    }
+
+    private val cloud = CloudKeyValueStorage([("maxLevel", 1)], [("maxLevel", resolveMaxLevel)])
 
     def init {
+//        cloud.set("maxLevel", i = 1)
+//        local.set("currentLevel", i = 1)
+//        cloud.synchronize
         NotificationCenter.default.addObserver<int>("level was passed", {
-            storage.keepMax("maxLevel", _ + 1)
-            storage.keepMax("currentLevel", _ + 1)
-            storage.synchronize
+            cloud.keepMax("maxLevel", _ + 1)
+            local.set("currentLevel", i = _ + 1)
         })
     }
 
-    def maxAvailableLevel = storage.intFor("maxLevel")
-    def restoreLastScene  = SceneFactory.sceneForLevelWith(number = storage.intFor("currentLevel"))
+    def currentLevel = local.intFor("currentLevel")
+    def maxAvailableLevel = cloud.intFor("maxLevel")
+    def restoreLastScene  = SceneFactory.sceneForLevelWith(number = currentLevel)
 
     def restartLevel {
         Director.current.scene.get.controller.as<Level>.for{level ->
             Director.current.set(scene = SceneFactory.sceneFor(Level(level.number, level.rules)))
-            storage.keepMax("currentLevel", i = level.number)
+            local.keepMax("currentLevel", i = level.number)
             Director.current.resume
         }
     }
@@ -31,9 +45,14 @@ class GameDirector {
 
     def nextLevel {
         Director.current.scene.get.controller.as<Level>.for{level ->
-            storage.keepMax("currentLevel", i = level.number + 1)
+            local.keepMax("currentLevel", i = level.number + 1)
             Director.current.set(scene = SceneFactory.sceneFor(LevelFactory.levelWith(number = level.number + 1)))
             Director.current.resume
         }
+    }
+
+    def synchronize {
+        local.synchronize
+        cloud.synchronize
     }
 }

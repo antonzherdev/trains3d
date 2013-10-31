@@ -583,6 +583,7 @@
 		6F3DF8873B2D852AF622AD4F /* Notification.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF88EE9523AC2D7BF7F10 /* Notification.od */; };
 		6F3DF88D2FFFAACA5D7F9181 /* btUniformScalingShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF65E2A2B0B13825D9D7F /* btUniformScalingShape.cpp */; };
 		6F3DF88D8C49BE36FA685A24 /* intrinsic_common.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFDC4525793E1A263E8CE /* intrinsic_common.inl */; };
+		6F3DF88E5D8EE0824AFEA9D7 /* DTConflictResolve.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF6447092E95BFE0A0641 /* DTConflictResolve.m */; };
 		6F3DF88ECC2AD74EEACD16F4 /* btBoxBoxCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBDEFBDBD5D27BA449BA /* btBoxBoxCollisionAlgorithm.cpp */; };
 		6F3DF8930804A84C2AC874F8 /* City.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFD410477E6DC3F8E31F6 /* City.od */; };
 		6F3DF89C8872876229AD774A /* CNMapLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBF9CB73172393811F54 /* CNMapLink.m */; };
@@ -781,6 +782,7 @@
 		6F3DFB7610D3B97263DC6E0A /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F3DF8BE3569365CA633DF43 /* OpenGL.framework */; };
 		6F3DFB78663C589D26673B8A /* TRWeather.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC75E0BF087BF501A48A /* TRWeather.m */; };
 		6F3DFB7B172B734DDB7FDA12 /* matrix_inverse.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFDB15FFDB94EE18D3D77 /* matrix_inverse.inl */; };
+		6F3DFB845E9A9C8850C7D6E3 /* DTConflictResolve.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF6447092E95BFE0A0641 /* DTConflictResolve.m */; };
 		6F3DFB865EE23B2DE074DF1E /* CNSeq.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2BA38A41753309D19A1 /* CNSeq.m */; };
 		6F3DFB893352810CE779F7FC /* btContactProcessing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA72FA20162EABD753EE /* btContactProcessing.cpp */; };
 		6F3DFB8FF56C518FB83C70C4 /* Grouse.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF5975E2C0097829433D1 /* Grouse.mp3 */; };
@@ -1465,6 +1467,7 @@
 		6F3DF45BBFED9CFEE86D4EAF /* btPolarDecomposition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btPolarDecomposition.h; sourceTree = "<group>"; };
 		6F3DF45F51BB58A94780D723 /* btOverlappingPairCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btOverlappingPairCache.h; sourceTree = "<group>"; };
 		6F3DF45FB9685A6094637BEC /* KWBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBlock.h; sourceTree = "<group>"; };
+		6F3DF4603D29A755B9606079 /* DTConflictResolve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTConflictResolve.h; sourceTree = "<group>"; };
 		6F3DF46F92130F54E5505192 /* RailroadBuilderProcessor.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = RailroadBuilderProcessor.od; sourceTree = "<group>"; };
 		6F3DF46FE434C72FD922A22B /* btGrahamScan2dConvexHull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btGrahamScan2dConvexHull.h; sourceTree = "<group>"; };
 		6F3DF4768A31C92249FF922F /* btBox2dShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btBox2dShape.h; sourceTree = "<group>"; };
@@ -1492,6 +1495,7 @@
 		6F3DF4C9C8F3F7223A3FC17F /* CNSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSet.m; sourceTree = "<group>"; };
 		6F3DF4CB3D788F74A150AEA6 /* TRStrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRStrings.h; sourceTree = "<group>"; };
 		6F3DF4CD415833BCBD7CE745 /* CNOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNOption.m; sourceTree = "<group>"; };
+		6F3DF4CE6607C37E91264792 /* ConflictResolve.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = ConflictResolve.od; sourceTree = "<group>"; };
 		6F3DF4D13635CE857958F907 /* EGSurface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGSurface.m; sourceTree = "<group>"; };
 		6F3DF4D13D3F891E578C3343 /* Trains3Di-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Trains3Di-Prefix.pch"; sourceTree = "<group>"; };
 		6F3DF4D6418A0696CFB12F89 /* btPoint2PointConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btPoint2PointConstraint.h; sourceTree = "<group>"; };
@@ -1599,6 +1603,7 @@
 		6F3DF634978B49A8B5BC2288 /* GL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GL.h; sourceTree = "<group>"; };
 		6F3DF635597455B819909179 /* gim_tri_collision.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gim_tri_collision.cpp; sourceTree = "<group>"; };
 		6F3DF6426F35CE15C4E8523C /* func_exponential.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = func_exponential.hpp; sourceTree = "<group>"; };
+		6F3DF6447092E95BFE0A0641 /* DTConflictResolve.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTConflictResolve.m; sourceTree = "<group>"; };
 		6F3DF647C0B30C93B30662C5 /* btGeneric6DofConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btGeneric6DofConstraint.h; sourceTree = "<group>"; };
 		6F3DF649C36881B731500D59 /* lucida_grande_16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lucida_grande_16.png; sourceTree = "<group>"; };
 		6F3DF65460A5DBAC04BC37F7 /* EGDirectorMac.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGDirectorMac.m; sourceTree = "<group>"; };
@@ -2927,6 +2932,9 @@
 				6F3DF609D3BA2DF0564EF3DF /* data.od */,
 				6F3DF3FAFEBEC574D4D1F0AC /* KeyValueStorage.od */,
 				6F3DF301B7D1BFD324A8A2E5 /* Platform */,
+				6F3DF4CE6607C37E91264792 /* ConflictResolve.od */,
+				6F3DF4603D29A755B9606079 /* DTConflictResolve.h */,
+				6F3DF6447092E95BFE0A0641 /* DTConflictResolve.m */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -4983,6 +4991,7 @@
 				6F3DF0ED37A247D015273C42 /* CNEnumerator.m in Sources */,
 				6F3DFA03B619007B93E30C91 /* CNNotification.m in Sources */,
 				6F3DF463EBFD16CE099CDF7F /* TRGameDirector.m in Sources */,
+				6F3DF88E5D8EE0824AFEA9D7 /* DTConflictResolve.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5537,6 +5546,7 @@
 				6F3DFA939A516F73852B1E23 /* CNEnumerator.m in Sources */,
 				6F3DF957FC7DA3C8BD55F78A /* CNNotification.m in Sources */,
 				6F3DF4FB055C86206BC6065A /* TRGameDirector.m in Sources */,
+				6F3DFB845E9A9C8850C7D6E3 /* DTConflictResolve.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -6,12 +6,12 @@
 @class TRWeatherRules;
 @class TRStr;
 @protocol TRStrings;
-@class TRLevel;
 @class TRLevelRules;
 @class TRTrain;
 @class TRTrainType;
 @class TRCarType;
 @class TRTrainGenerator;
+@class TRLevel;
 @class TRCityAngle;
 @class TRScore;
 @class TRNotifications;

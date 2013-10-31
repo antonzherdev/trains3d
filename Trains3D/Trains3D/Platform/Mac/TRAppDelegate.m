@@ -13,5 +13,9 @@
     [_view.director displayStats];
 }
 
+- (void)applicationWillTerminate:(NSNotification *)notification {
+    [[TRGameDirector instance] synchronize];
+}
+
 
 @end

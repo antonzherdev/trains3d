@@ -35,13 +35,14 @@ class LevelFactory {
             repairerSpeed = 20, [
                 (0, create2Cities),
                 (1, showHelp(Loc.helpConnectTwoCities)),
-                (30, train(cars = 2, speed = 30)),
-                (Level.trainComingPeriod + 3, showTrainHelp),
-                (40, createNewCity),
-                (1, showHelp(Loc.helpNewCity)),
-                (20, train(cars = 1, speed = 20)),
-                (Level.trainComingPeriod + 3, showTrainHelpWithSwitches),
-                (50, train(cars = 3, speed = 30))
+                (2, showHelp(Loc.helpConnectTwoCities))//,
+//                (30, train(cars = 2, speed = 30)),
+//                (Level.trainComingPeriod + 3, showTrainHelp),
+//                (40, createNewCity),
+//                (1, showHelp(Loc.helpNewCity)),
+//                (20, train(cars = 1, speed = 20)),
+//                (Level.trainComingPeriod + 3, showTrainHelpWithSwitches),
+//                (50, train(cars = 3, speed = 30))
         ]),
 
         //2
@@ -50,13 +51,13 @@ class LevelFactory {
             WeatherRules(windStrength = 0.3, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3),
             repairerSpeed = 20, [
                 (0, create2Cities),
-                (20, slowTrain),
-                (30, createNewCity),
-                (20, slowTrain),
-                (30, slowTrain),
-                (10, createNewCity),
-                (20, slowTrain),
-                (10, slowTrain)
+                (1, slowTrain)//,
+//                (30, createNewCity),
+//                (20, slowTrain),
+//                (30, slowTrain),
+//                (10, createNewCity),
+//                (20, slowTrain),
+//                (10, slowTrain)
             ]),
         //3
         LevelRules(vec2i(5, 3), scoreRulesWith(20000),

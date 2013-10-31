@@ -1,0 +1,6 @@
+package com.antonzherdev.data
+
+object Conflict {
+    val resolveMax = (a : any, b : any) -> if(a.cast<Comparable<_>>.compare(b.cast<Comparable<_>>) > 0) a else b
+    val resolveMin = (a : any, b : any) -> if(a.cast<Comparable<_>>.compare(b.cast<Comparable<_>>) < 0) a else b
+}

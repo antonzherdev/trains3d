@@ -2,7 +2,13 @@ package com.antonzherdev.data
 
 stub class KeyValueStorage(defaults : [string : any]) {
     def set(key : string, i : int)
+    def set(key : string, value : any)
     def keepMax(key : string, i : int)
     def intFor(key : string) : int
+    def valueFor<T>(key : string) : T
     def synchronize
 }
+
+stub class LocalKeyValueStorage(defaults : [string : any]) extends KeyValueStorage(defaults)
+
+stub class CloudKeyValueStorage(defaults : [string : any], resolveConflict : [string : (any, any) -> any]) extends KeyValueStorage(defaults)
