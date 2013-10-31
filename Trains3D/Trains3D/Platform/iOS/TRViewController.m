@@ -14,7 +14,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.director.scene = [[TRGameDirector instance] restoreLastScene];
+    [[TRGameDirector instance] restoreLastScene];
     [self.director displayStats];
 }
 

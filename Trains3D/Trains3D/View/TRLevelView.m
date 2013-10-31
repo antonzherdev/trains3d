@@ -57,6 +57,7 @@ static ODClassType* _TRLevelView_type;
 }
 
 - (void)_init {
+    [EGGlobal.context clear];
     EGGlobal.context.environment = _environment;
     _trainView = [TRTrainView trainViewWithLevel:_level];
     _treeView = [TRTreeView treeViewWithForest:_level.forest];

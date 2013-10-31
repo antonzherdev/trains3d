@@ -29,7 +29,9 @@ class GameDirector {
 
     def currentLevel = local.intFor("currentLevel")
     def maxAvailableLevel = cloud.intFor("maxLevel")
-    def restoreLastScene  = SceneFactory.sceneForLevelWith(number = currentLevel)
+    def restoreLastScene {
+        Director.current.set(scene = SceneFactory.sceneForLevelWith(number = currentLevel))
+    }
 
     def restartLevel {
         Director.current.scene.get.controller.as<Level>.for{level ->

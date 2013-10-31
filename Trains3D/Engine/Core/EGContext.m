@@ -175,6 +175,7 @@ static ODClassType* _EGContext_type;
     _considerShadows = YES;
     __viewport = geRectIApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0);
     __lastTexture2D = 0;
+    [__lastTextures clear];
     __lastShaderProgram = 0;
     __lastIndexBuffer = 0;
     __lastVertexBufferId = 0;

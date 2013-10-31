@@ -16,6 +16,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
         )])
 
     def init {
+        context.clear
         context.environment = environment
         trainView = TrainView(level)
         treeView = TreeView(level.forest)

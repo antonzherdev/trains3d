@@ -2,9 +2,9 @@
 
 #import "DTKeyValueStorage.h"
 #import "DTConflictResolve.h"
-#import "EGScene.h"
-#import "TRSceneFactory.h"
 #import "EGDirector.h"
+#import "TRSceneFactory.h"
+#import "EGScene.h"
 #import "TRLevel.h"
 #import "TRLevelFactory.h"
 @implementation TRGameDirector{
@@ -62,13 +62,17 @@ static ODClassType* _TRGameDirector_type;
     return [_cloud intForKey:@"maxLevel"];
 }
 
-- (EGScene*)restoreLastScene {
-    return [TRSceneFactory sceneForLevelWithNumber:((NSUInteger)([self currentLevel]))];
+- (void)restoreLastScene {
+    [[EGDirector current] setScene:^EGScene*() {
+        return [TRSceneFactory sceneForLevelWithNumber:((NSUInteger)([self currentLevel]))];
+    }];
 }
 
 - (void)restartLevel {
     [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
-        [[EGDirector current] setScene:[TRSceneFactory sceneForLevel:[TRLevel levelWithNumber:((TRLevel*)(level)).number rules:((TRLevel*)(level)).rules]]];
+        [[EGDirector current] setScene:^EGScene*() {
+            return [TRSceneFactory sceneForLevel:[TRLevel levelWithNumber:((TRLevel*)(level)).number rules:((TRLevel*)(level)).rules]];
+        }];
         [_local keepMaxKey:@"currentLevel" i:((NSInteger)(((TRLevel*)(level)).number))];
         [[EGDirector current] resume];
     }];
@@ -81,7 +85,9 @@ static ODClassType* _TRGameDirector_type;
 - (void)nextLevel {
     [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
         [_local keepMaxKey:@"currentLevel" i:((NSInteger)(((TRLevel*)(level)).number + 1))];
-        [[EGDirector current] setScene:[TRSceneFactory sceneForLevel:[TRLevelFactory levelWithNumber:((TRLevel*)(level)).number + 1]]];
+        [[EGDirector current] setScene:^EGScene*() {
+            return [TRSceneFactory sceneForLevel:[TRLevelFactory levelWithNumber:((TRLevel*)(level)).number + 1]];
+        }];
         [[EGDirector current] resume];
     }];
 }

@@ -19,9 +19,10 @@
 - (ODClassType*)type;
 + (EGDirector*)current;
 - (id)scene;
-- (void)setScene:(EGScene*)scene;
+- (void)setScene:(EGScene*(^)())scene;
 - (void)lock;
 - (void)unlock;
+- (void)_init;
 - (void)drawWithSize:(GEVec2)size;
 - (void)processEvent:(EGEvent*)event;
 - (BOOL)isStarted;

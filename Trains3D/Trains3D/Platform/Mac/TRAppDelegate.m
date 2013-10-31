@@ -9,7 +9,7 @@
     self.view = [[EGOpenGLViewMac alloc] initWithFrame:rect];
     _window.contentView = self.view;
 
-    _view.director.scene = [[TRGameDirector instance] restoreLastScene];
+    [[TRGameDirector instance] restoreLastScene];
     [_view.director displayStats];
 }
 

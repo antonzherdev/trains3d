@@ -2,9 +2,9 @@
 @class DTLocalKeyValueStorage;
 @class DTConflict;
 @class DTCloudKeyValueStorage;
-@class EGScene;
-@class TRSceneFactory;
 @class EGDirector;
+@class TRSceneFactory;
+@class EGScene;
 @protocol EGController;
 @class TRLevel;
 @class TRLevelFactory;
@@ -20,7 +20,7 @@
 - (void)_init;
 - (NSInteger)currentLevel;
 - (NSInteger)maxAvailableLevel;
-- (EGScene*)restoreLastScene;
+- (void)restoreLastScene;
 - (void)restartLevel;
 - (void)chooseLevel;
 - (void)nextLevel;

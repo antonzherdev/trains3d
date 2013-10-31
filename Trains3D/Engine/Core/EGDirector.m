@@ -29,6 +29,7 @@ static ODClassType* _EGDirector_type;
         __isPaused = NO;
         _time = [EGTime time];
         __stat = [CNOption none];
+        [self _init];
     }
     
     return self;
@@ -47,11 +48,11 @@ static ODClassType* _EGDirector_type;
     return __scene;
 }
 
-- (void)setScene:(EGScene*)scene {
+- (void)setScene:(EGScene*(^)())scene {
     [self lock];
     if([__scene isDefined]) [((EGScene*)([__scene get])) stop];
-    __scene = [CNOption applyValue:scene];
-    [scene start];
+    __scene = [CNOption applyValue:((EGScene*(^)())(scene))()];
+    [((EGScene*)([__scene get])) start];
     [self unlock];
 }
 
@@ -61,6 +62,10 @@ static ODClassType* _EGDirector_type;
 
 - (void)unlock {
     @throw @"Method unlock is abstract";
+}
+
+- (void)_init {
+    _EGDirector__current = self;
 }
 
 - (void)drawWithSize:(GEVec2)size {
