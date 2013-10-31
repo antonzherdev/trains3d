@@ -34,14 +34,14 @@ class LevelFactory {
             WeatherRules(windStrength = 0.3, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3),
             repairerSpeed = 20, [
                 (0, create2Cities),
-                (1, showHelp(Loc.helpConnectTwoCities)),
-                (30, train(cars = 2, speed = 30)),
-                (Level.trainComingPeriod + 3, showTrainHelp),
-                (40, createNewCity),
-                (1, showHelp(Loc.helpNewCity)),
-                (20, train(cars = 1, speed = 20)),
-                (Level.trainComingPeriod + 3, showTrainHelpWithSwitches),
-                (50, train(cars = 3, speed = 30))
+                (1, showHelp(Loc.helpConnectTwoCities))//,
+//                (30, train(cars = 2, speed = 30)),
+//                (Level.trainComingPeriod + 3, showTrainHelp),
+//                (40, createNewCity),
+//                (1, showHelp(Loc.helpNewCity)),
+//                (20, train(cars = 1, speed = 20)),
+//                (Level.trainComingPeriod + 3, showTrainHelpWithSwitches),
+//                (50, train(cars = 3, speed = 30))
         ]),
 
         //2
@@ -88,7 +88,9 @@ class LevelFactory {
     ]
     static def slowTrain = train(cars = 1.to(4), speed = 25.to(35))
     static def expressTrain = expressTrain(cars = 1.to(4), speed = 75.to(100))
-    static def levelWith(number : uint) = Level(number, rules[number - 1])
+    static def levelWith(number : uint) =
+        if(number > rules.count) Level(rules.count, rules[rules.count - 1])
+        else Level(number, rules[number - 1])
     static def levelWith(mapSize : vec2i) = Level(0, LevelRules(mapSize, scoreRules, forestRules, weatherRules, repairerSpeed = 30, []))
     static def score = Score(scoreRules, Notifications())
     static def railroadWith(mapSize : vec2i) = {

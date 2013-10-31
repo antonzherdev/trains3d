@@ -1,0 +1,8 @@
+package com.antonzherdev.data
+
+stub class KeyValueStorage(defaults : [string : any]) {
+    def set(key : string, i : int)
+    def keepMax(key : string, i : int)
+    def intFor(key : string) : int
+    def synchronize
+}

@@ -8,17 +8,13 @@
 
 #import "TRViewController.h"
 #import "EGDirector.h"
-#import "TRLevel.h"
-#import "TRLevelFactory.h"
-#import "TRSceneFactory.h"
+#import "TRGameDirector.h"
 
 @implementation TRViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    TRLevel *level = [TRLevelFactory levelWithNumber:3];
-    EGScene *scene = [TRSceneFactory sceneForLevel:level];
-    self.director.scene = scene;
+    self.director.scene = [[TRGameDirector instance] restoreLastScene];
     [self.director displayStats];
 }
 

@@ -4,6 +4,7 @@
 @class CNChain;
 
 @class CNMapDefault;
+@class CNHashMapBuilder;
 @protocol CNMap;
 @protocol CNMutableMap;
 
@@ -45,6 +46,18 @@
 - (void)appendItem:(CNTuple*)item;
 - (void)removeItem:(CNTuple*)item;
 - (void)clear;
++ (ODClassType*)type;
+@end
+
+
+@interface CNHashMapBuilder : NSObject<CNBuilder>
+@property (nonatomic, readonly) NSMutableDictionary* map;
+
++ (id)hashMapBuilder;
+- (id)init;
+- (ODClassType*)type;
+- (void)appendItem:(CNTuple*)item;
+- (NSDictionary*)build;
 + (ODClassType*)type;
 @end
 

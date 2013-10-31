@@ -1,7 +1,5 @@
 #import "TRAppDelegate.h"
-#import "TRLevel.h"
-#import "TRLevelFactory.h"
-#import "TRSceneFactory.h"
+#import "TRGameDirector.h"
 
 @implementation TRAppDelegate
 
@@ -11,10 +9,7 @@
     self.view = [[EGOpenGLViewMac alloc] initWithFrame:rect];
     _window.contentView = self.view;
 
-
-    TRLevel *level = [TRLevelFactory levelWithNumber:3];
-    EGScene *scene = [TRSceneFactory sceneForLevel:level];
-    _view.director.scene = scene;
+    _view.director.scene = [[TRGameDirector instance] restoreLastScene];
     [_view.director displayStats];
 }
 

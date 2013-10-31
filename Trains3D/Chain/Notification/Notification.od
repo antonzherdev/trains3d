@@ -1,0 +1,14 @@
+package core.chain
+
+stub class NotificationCenter {
+    static val default : NotificationCenter = NotificationCenter()
+
+    def addObserver<D>(name : string, block : D -> void) : NotificationObserver
+
+    def post<D>(name : string, data : D)
+}
+
+stub class NotificationObserver {
+    def detach
+}
+

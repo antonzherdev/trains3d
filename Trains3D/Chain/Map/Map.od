@@ -64,3 +64,12 @@ class MapDefault<K, V>(defaultFunc : K -> V, map : MutableMap<K, V>) extends Mut
         map.clear
     }
 }
+
+class HashMapBuilder<K, V> extends Builder<(K, V), HashMap<K, V>> {
+    val map = MutableHashMap<K, V>()
+
+    def append(item : (K, V)) {
+        map.set(item.a, item.b)
+    }
+    def build : HashMap<K, V> = map
+}

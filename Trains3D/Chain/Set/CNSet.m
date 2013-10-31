@@ -3,7 +3,6 @@
 
 #import "ODType.h"
 #import "CNChain.h"
-#import "ObjC.h"
 @implementation CNHashSetBuilder{
     NSMutableSet* _set;
 }

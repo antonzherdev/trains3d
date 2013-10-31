@@ -2,7 +2,6 @@
 #import "CNCollection.h"
 @class ODClassType;
 @class CNChain;
-@class NSMutableSet;
 
 @class CNHashSetBuilder;
 @protocol CNSet;

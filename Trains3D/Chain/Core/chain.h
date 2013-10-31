@@ -23,4 +23,5 @@
 #import "NSMutableArray+CNChain.h"
 #import "CNXML.h"
 #import "CNLog.h"
+#import "CNNotification.h"
 #import "NSString+CNChain.h"

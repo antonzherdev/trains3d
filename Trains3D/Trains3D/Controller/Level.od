@@ -195,6 +195,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     def result = _result
     def win {
         _result = LevelResult(true)
+        NotificationCenter.default.post<int>("level was passed", number)
     }
 
     def lose {

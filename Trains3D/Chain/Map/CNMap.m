@@ -199,3 +199,70 @@ static ODClassType* _CNMapDefault_type;
 @end
 
 
+@implementation CNHashMapBuilder{
+    NSMutableDictionary* _map;
+}
+static ODClassType* _CNHashMapBuilder_type;
+@synthesize map = _map;
+
++ (id)hashMapBuilder {
+    return [[CNHashMapBuilder alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    if(self) _map = [NSMutableDictionary mutableDictionary];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _CNHashMapBuilder_type = [ODClassType classTypeWithCls:[CNHashMapBuilder class]];
+}
+
+- (void)appendItem:(CNTuple*)item {
+    [_map setKey:item.a value:item.b];
+}
+
+- (NSDictionary*)build {
+    return _map;
+}
+
+- (void)appendAllItems:(id<CNTraversable>)items {
+    [items forEach:^void(id _) {
+        [self appendItem:_];
+    }];
+}
+
+- (ODClassType*)type {
+    return [CNHashMapBuilder type];
+}
+
++ (ODClassType*)type {
+    return _CNHashMapBuilder_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+

@@ -1,0 +1,19 @@
+package com.antonzherdev.trains
+
+import com.antonzherdev.data._
+
+class GameDirector {
+    static val instance = GameDirector()
+    private val storage = KeyValueStorage([("maxLevel", 1), ("currentLevel", 1)])
+
+    def init {
+        NotificationCenter.default.addObserver<int>("level was passed", {
+            storage.keepMax("maxLevel", _ + 1)
+            storage.keepMax("currentLevel", _ + 1)
+            storage.synchronize
+        })
+    }
+
+    def maxAvailableLevel = storage.intFor("maxLevel")
+    def restoreLastScene  = SceneFactory.sceneForLevelWith(number = storage.intFor("currentLevel"))
+}
