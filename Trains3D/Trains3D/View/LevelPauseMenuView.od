@@ -102,15 +102,15 @@ class MenuView {
 
 class PauseMenuView(level : Level) extends MenuView with PauseView {
     private val resumeButton = button(Loc.resumeGame, Director.current.resume)
-    private val restartButton = button(Loc.restart(level), SceneFactory.restartLevel)
-    private val chooseLevelButton = button(Loc.chooseLevel, SceneFactory.chooseLevel)
+    private val restartButton = button(Loc.restart(level), GameDirector.instance.restartLevel)
+    private val chooseLevelButton = button(Loc.chooseLevel, GameDirector.instance.chooseLevel)
     val buttons = [resumeButton, restartButton, chooseLevelButton]
 }
 
 class WinMenu(level : Level) extends MenuView with PauseView{
-    private val nextButton = button(Loc.goToNext(level), SceneFactory.nextLevel)
-    private val restartButton = button(Loc.replay(level), SceneFactory.restartLevel)
-    private val chooseLevelButton = button(Loc.chooseLevel, SceneFactory.chooseLevel)
+    private val nextButton = button(Loc.goToNext(level), GameDirector.instance.nextLevel)
+    private val restartButton = button(Loc.replay(level), GameDirector.instance.restartLevel)
+    private val chooseLevelButton = button(Loc.chooseLevel, GameDirector.instance.chooseLevel)
     val buttons = [nextButton, restartButton, chooseLevelButton]
 
     def headerHeight = 75.0
@@ -127,10 +127,10 @@ class WinMenu(level : Level) extends MenuView with PauseView{
 
 class LooseMenu(level : Level) extends MenuView with PauseView{
     private val restartButton = button(Loc.replay(level)) {
-        SceneFactory.restartLevel
+        GameDirector.instance.restartLevel
         Director.current.resume
     }
-    private val chooseLevelButton = button(Loc.chooseLevel, SceneFactory.chooseLevel)
+    private val chooseLevelButton = button(Loc.chooseLevel, GameDirector.instance.chooseLevel)
     val buttons = [restartButton, chooseLevelButton]
     def headerHeight = 75.0
     def drawHeader(rect : Rect) {

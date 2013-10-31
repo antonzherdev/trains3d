@@ -3,25 +3,7 @@ package com.antonzherdev.trains
 class SceneFactory {
     static def sceneFor(level : Level) = Scene(LevelMenuView.backgroundColor, level, TrainLayers(level), LevelSound(level))
 
-    static def restartLevel = {
-        Director.current.scene.get.controller.as<Level>.for{level ->
-            Director.current.set(scene = sceneFor(Level(level.number, level.rules)))
-            Director.current.resume
-        }
-    }
-
     static def sceneForLevelWith(number : uint) = sceneFor(LevelFactory.levelWith(number))
-
-    static def chooseLevel {
-        Director.current.resume
-    }
-
-    static def nextLevel {
-        Director.current.scene.get.controller.as<Level>.for{level ->
-            Director.current.set(scene = sceneFor(LevelFactory.levelWith(number = level.number + 1)))
-            Director.current.resume
-        }
-    }
 }
 
 

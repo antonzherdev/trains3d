@@ -3,6 +3,9 @@
 #import "DTKeyValueStorage.h"
 #import "EGScene.h"
 #import "TRSceneFactory.h"
+#import "EGDirector.h"
+#import "TRLevel.h"
+#import "TRLevelFactory.h"
 @implementation TRGameDirector{
     DTKeyValueStorage* _storage;
 }
@@ -43,6 +46,26 @@ static ODClassType* _TRGameDirector_type;
 
 - (EGScene*)restoreLastScene {
     return [TRSceneFactory sceneForLevelWithNumber:((NSUInteger)([_storage intForKey:@"currentLevel"]))];
+}
+
+- (void)restartLevel {
+    [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
+        [[EGDirector current] setScene:[TRSceneFactory sceneForLevel:[TRLevel levelWithNumber:((TRLevel*)(level)).number rules:((TRLevel*)(level)).rules]]];
+        [_storage keepMaxKey:@"currentLevel" i:((NSInteger)(((TRLevel*)(level)).number))];
+        [[EGDirector current] resume];
+    }];
+}
+
+- (void)chooseLevel {
+    [[EGDirector current] resume];
+}
+
+- (void)nextLevel {
+    [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
+        [_storage keepMaxKey:@"currentLevel" i:((NSInteger)(((TRLevel*)(level)).number + 1))];
+        [[EGDirector current] setScene:[TRSceneFactory sceneForLevel:[TRLevelFactory levelWithNumber:((TRLevel*)(level)).number + 1]]];
+        [[EGDirector current] resume];
+    }];
 }
 
 - (ODClassType*)type {

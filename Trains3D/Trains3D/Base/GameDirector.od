@@ -16,4 +16,24 @@ class GameDirector {
 
     def maxAvailableLevel = storage.intFor("maxLevel")
     def restoreLastScene  = SceneFactory.sceneForLevelWith(number = storage.intFor("currentLevel"))
+
+    def restartLevel {
+        Director.current.scene.get.controller.as<Level>.for{level ->
+            Director.current.set(scene = SceneFactory.sceneFor(Level(level.number, level.rules)))
+            storage.keepMax("currentLevel", i = level.number)
+            Director.current.resume
+        }
+    }
+
+    def chooseLevel {
+        Director.current.resume
+    }
+
+    def nextLevel {
+        Director.current.scene.get.controller.as<Level>.for{level ->
+            storage.keepMax("currentLevel", i = level.number + 1)
+            Director.current.set(scene = SceneFactory.sceneFor(LevelFactory.levelWith(number = level.number + 1)))
+            Director.current.resume
+        }
+    }
 }

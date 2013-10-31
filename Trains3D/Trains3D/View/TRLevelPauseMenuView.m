@@ -7,7 +7,7 @@
 #import "EGContext.h"
 #import "EGSprite.h"
 #import "TRStrings.h"
-#import "TRSceneFactory.h"
+#import "TRGameDirector.h"
 #import "TRLevelMenuView.h"
 @implementation TRLevelPauseMenuView{
     TRLevel* _level;
@@ -279,10 +279,10 @@ static ODClassType* _TRPauseMenuView_type;
             [[EGDirector current] resume];
         }];
         _restartButton = [self buttonText:[TRStr.Loc restartLevel:_level] onClick:^void() {
-            [TRSceneFactory restartLevel];
+            [TRGameDirector.instance restartLevel];
         }];
         _chooseLevelButton = [self buttonText:[TRStr.Loc chooseLevel] onClick:^void() {
-            [TRSceneFactory chooseLevel];
+            [TRGameDirector.instance chooseLevel];
         }];
         _buttons = (@[_resumeButton, _restartButton, _chooseLevelButton]);
     }
@@ -352,13 +352,13 @@ static ODClassType* _TRWinMenu_type;
     if(self) {
         _level = level;
         _nextButton = [self buttonText:[TRStr.Loc goToNextLevel:_level] onClick:^void() {
-            [TRSceneFactory nextLevel];
+            [TRGameDirector.instance nextLevel];
         }];
         _restartButton = [self buttonText:[TRStr.Loc replayLevel:_level] onClick:^void() {
-            [TRSceneFactory restartLevel];
+            [TRGameDirector.instance restartLevel];
         }];
         _chooseLevelButton = [self buttonText:[TRStr.Loc chooseLevel] onClick:^void() {
-            [TRSceneFactory chooseLevel];
+            [TRGameDirector.instance chooseLevel];
         }];
         _buttons = (@[_nextButton, _restartButton, _chooseLevelButton]);
     }
@@ -442,11 +442,11 @@ static ODClassType* _TRLooseMenu_type;
     if(self) {
         _level = level;
         _restartButton = [self buttonText:[TRStr.Loc replayLevel:_level] onClick:^void() {
-            [TRSceneFactory restartLevel];
+            [TRGameDirector.instance restartLevel];
             [[EGDirector current] resume];
         }];
         _chooseLevelButton = [self buttonText:[TRStr.Loc chooseLevel] onClick:^void() {
-            [TRSceneFactory chooseLevel];
+            [TRGameDirector.instance chooseLevel];
         }];
         _buttons = (@[_restartButton, _chooseLevelButton]);
     }

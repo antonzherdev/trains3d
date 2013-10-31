@@ -3,7 +3,6 @@
 #import "TRLevelMenuView.h"
 #import "TRLevelSound.h"
 #import "TRLevel.h"
-#import "EGDirector.h"
 #import "TRLevelFactory.h"
 #import "TRLevelView.h"
 #import "TRLevelPauseMenuView.h"
@@ -29,26 +28,8 @@ static ODClassType* _TRSceneFactory_type;
     return [EGScene sceneWithBackgroundColor:TRLevelMenuView.backgroundColor controller:level layers:[TRTrainLayers trainLayersWithLevel:level] soundPlayer:[CNOption applyValue:[TRLevelSound levelSoundWithLevel:level]]];
 }
 
-+ (void)restartLevel {
-    [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
-        [[EGDirector current] setScene:[TRSceneFactory sceneForLevel:[TRLevel levelWithNumber:((TRLevel*)(level)).number rules:((TRLevel*)(level)).rules]]];
-        [[EGDirector current] resume];
-    }];
-}
-
 + (EGScene*)sceneForLevelWithNumber:(NSUInteger)number {
     return [TRSceneFactory sceneForLevel:[TRLevelFactory levelWithNumber:number]];
-}
-
-+ (void)chooseLevel {
-    [[EGDirector current] resume];
-}
-
-+ (void)nextLevel {
-    [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
-        [[EGDirector current] setScene:[TRSceneFactory sceneForLevel:[TRLevelFactory levelWithNumber:((TRLevel*)(level)).number + 1]]];
-        [[EGDirector current] resume];
-    }];
 }
 
 - (ODClassType*)type {

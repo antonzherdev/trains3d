@@ -18,7 +18,7 @@
 @class EGButton;
 @class TRStr;
 @protocol TRStrings;
-@class TRSceneFactory;
+@class TRGameDirector;
 @class TRLevelMenuView;
 @class TRHelp;
 

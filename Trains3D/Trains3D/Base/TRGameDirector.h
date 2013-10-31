@@ -2,6 +2,10 @@
 @class DTKeyValueStorage;
 @class EGScene;
 @class TRSceneFactory;
+@class EGDirector;
+@protocol EGController;
+@class TRLevel;
+@class TRLevelFactory;
 
 @class TRGameDirector;
 
@@ -12,6 +16,9 @@
 - (void)_init;
 - (NSInteger)maxAvailableLevel;
 - (EGScene*)restoreLastScene;
+- (void)restartLevel;
+- (void)chooseLevel;
+- (void)nextLevel;
 + (TRGameDirector*)instance;
 + (ODClassType*)type;
 @end
