@@ -16,8 +16,8 @@ class RailroadView(railroad : Railroad) extends InputProcessor {
     var _changed = true
     def init {
         weak val weakSelf = self
-        railroad.add(changeListener = weakSelf._changed = true)
-        railroad.builder.add(changeListener = weakSelf._changed = true)
+        Railroad.changedNotification.observe(weakSelf._changed = true)
+        RailroadBuilder.changedNotification.observe(weakSelf._changed = true)
         context.considerShadows = false
         backgroundView = BackgroundView(railroad.map)
         railView = RailView(railroad)
@@ -217,7 +217,7 @@ class LightView(railroad : Railroad) {
     var _changed = true
     def init {
         weak val weakSelf = self
-        railroad.add(changeListener = weakSelf._changed = true)
+        Railroad.changedNotification.observe(weakSelf._changed = true)
     }
 
     private var _matrixArr : [(MatrixModel, RailLight)] = []

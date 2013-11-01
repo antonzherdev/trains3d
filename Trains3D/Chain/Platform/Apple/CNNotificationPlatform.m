@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "CNNotification.h"
+#import "CNNotificationPlatform.h"
 
 @implementation CNNotificationCenter {
     NSNotificationCenter * _nc;
@@ -32,7 +32,9 @@ static ODClassType* _CNNotificationCenter_type;
 }
 
 - (void)postName:(NSString*)name data:(id)data {
-    [_nc postNotificationName:name object:nil userInfo:[NSDictionary dictionaryWithObject:data forKey:@"data"]];
+    [_nc postNotificationName:name object:nil userInfo:
+            data == nil ? [NSDictionary dictionary]
+                    : [NSDictionary dictionaryWithObject:data forKey:@"data"]];
 }
 
 - (ODClassType*)type {

@@ -24,4 +24,5 @@
 #import "CNXML.h"
 #import "CNLog.h"
 #import "CNNotification.h"
+#import "CNNotificationPlatform.h"
 #import "NSString+CNChain.h"

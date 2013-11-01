@@ -61,10 +61,10 @@ static ODClassType* _TRRailroadView_type;
 
 - (void)_init {
     __weak TRRailroadView* weakSelf = self;
-    [_railroad addChangeListener:^void() {
+    [TRRailroad.changedNotification observeBy:^void(id _) {
         weakSelf._changed = YES;
     }];
-    [_railroad.builder addChangeListener:^void() {
+    [TRRailroadBuilder.changedNotification observeBy:^void(id _) {
         weakSelf._changed = YES;
     }];
     EGGlobal.context.considerShadows = NO;
@@ -543,7 +543,7 @@ static ODClassType* _TRLightView_type;
 
 - (void)_init {
     __weak TRLightView* weakSelf = self;
-    [_railroad addChangeListener:^void() {
+    [TRRailroad.changedNotification observeBy:^void(id _) {
         weakSelf._changed = YES;
     }];
 }

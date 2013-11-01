@@ -45,7 +45,7 @@ static ODClassType* _TRSwitchProcessor_type;
 
 - (void)_init {
     __weak TRSwitchProcessor* weakSelf = self;
-    [_level.railroad addChangeListener:^void() {
+    [TRRailroad.changedNotification observeBy:^void(id _) {
         [weakSelf.world clear];
         [[weakSelf.level.railroad switches] forEach:^void(TRSwitch* aSwitch) {
             EGCollisionBody* body = [EGCollisionBody collisionBodyWithData:aSwitch shape:_switchShape isKinematic:NO];

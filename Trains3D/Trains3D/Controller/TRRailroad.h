@@ -96,6 +96,7 @@
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (id<CNSeq>)rails;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
++ (CNNotificationHandle*)turnNotification;
 + (ODClassType*)type;
 @end
 
@@ -133,7 +134,6 @@
 - (id<CNSeq>)switches;
 - (id<CNSeq>)lights;
 - (id<CNSeq>)damagesPoints;
-- (void)addChangeListener:(void(^)())changeListener;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (BOOL)tryAddRail:(TRRail*)rail;
 - (void)addRail:(TRRail*)rail;
@@ -143,6 +143,7 @@
 - (void)addDamageAtPoint:(TRRailPoint*)point;
 - (void)fixDamageAtPoint:(TRRailPoint*)point;
 - (void)updateWithDelta:(CGFloat)delta;
++ (CNNotificationHandle*)changedNotification;
 + (ODClassType*)type;
 @end
 
@@ -167,7 +168,6 @@
 - (id)rail;
 - (id<CNSeq>)buildingRails;
 - (id)railForUndo;
-- (void)addChangeListener:(void(^)())changeListener;
 - (BOOL)tryBuildRail:(TRRail*)rail;
 - (BOOL)checkCityTile:(GEVec2i)tile connector:(TRRailConnector*)connector;
 - (void)clear;
@@ -175,6 +175,7 @@
 - (BOOL)canAddRail:(TRRail*)rail;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)undo;
++ (CNNotificationHandle*)changedNotification;
 + (ODClassType*)type;
 @end
 

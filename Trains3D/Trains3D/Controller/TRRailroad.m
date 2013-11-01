@@ -337,6 +337,7 @@ static ODClassType* _TRSwitch_type;
     TRRail* _rail;
     BOOL _isGreen;
 }
+static CNNotificationHandle* _TRRailLight_turnNotification;
 static ODClassType* _TRRailLight_type;
 @synthesize tile = _tile;
 @synthesize connector = _connector;
@@ -362,10 +363,12 @@ static ODClassType* _TRRailLight_type;
 + (void)initialize {
     [super initialize];
     _TRRailLight_type = [ODClassType classTypeWithCls:[TRRailLight class]];
+    _TRRailLight_turnNotification = [CNNotificationHandle notificationHandleWithName:@"Light turned"];
 }
 
 - (void)turn {
     _isGreen = !(_isGreen);
+    [_TRRailLight_turnNotification postData:self];
 }
 
 - (BOOL)canAddRail:(TRRail*)rail {
@@ -386,6 +389,10 @@ static ODClassType* _TRRailLight_type;
 
 - (ODClassType*)type {
     return [TRRailLight type];
+}
+
++ (CNNotificationHandle*)turnNotification {
+    return _TRRailLight_turnNotification;
 }
 
 + (ODClassType*)type {
@@ -547,8 +554,8 @@ static ODClassType* _TRObstacle_type;
     CNMapDefault* _connectorIndex;
     NSMutableDictionary* _damagesIndex;
     NSMutableArray* __damagesPoints;
-    id<CNSeq> __changeListeners;
 }
+static CNNotificationHandle* _TRRailroad_changedNotification;
 static ODClassType* _TRRailroad_type;
 @synthesize map = _map;
 @synthesize score = _score;
@@ -574,7 +581,6 @@ static ODClassType* _TRRailroad_type;
         } map:[NSMutableDictionary mutableDictionary]];
         _damagesIndex = [NSMutableDictionary mutableDictionary];
         __damagesPoints = [NSMutableArray mutableArray];
-        __changeListeners = (@[]);
     }
     
     return self;
@@ -583,6 +589,7 @@ static ODClassType* _TRRailroad_type;
 + (void)initialize {
     [super initialize];
     _TRRailroad_type = [ODClassType classTypeWithCls:[TRRailroad class]];
+    _TRRailroad_changedNotification = [CNNotificationHandle notificationHandleWithName:@"Railroad changed"];
 }
 
 - (id<CNSeq>)rails {
@@ -599,10 +606,6 @@ static ODClassType* _TRRailroad_type;
 
 - (id<CNSeq>)damagesPoints {
     return __damagesPoints;
-}
-
-- (void)addChangeListener:(void(^)())changeListener {
-    __changeListeners = [__changeListeners addItem:changeListener];
 }
 
 - (BOOL)canAddRail:(TRRail*)rail {
@@ -670,9 +673,7 @@ static ODClassType* _TRRailroad_type;
     __lights = [[[[_connectorIndex values] chain] filter:^BOOL(TRRailroadConnectorContent* _) {
         return [((TRRailroadConnectorContent*)(_)) isKindOfClass:[TRRailLight class]];
     }] toArray];
-    [__changeListeners forEach:^void(void(^_)()) {
-        ((void(^)())(_))();
-    }];
+    [_TRRailroad_changedNotification post];
 }
 
 - (id)activeRailForTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
@@ -777,6 +778,10 @@ static ODClassType* _TRRailroad_type;
     return [TRRailroad type];
 }
 
++ (CNNotificationHandle*)changedNotification {
+    return _TRRailroad_changedNotification;
+}
+
 + (ODClassType*)type {
     return _TRRailroad_type;
 }
@@ -878,8 +883,8 @@ static ODClassType* _TRRailBuilding_type;
     __weak TRRailroad* _railroad;
     id __rail;
     CNList* __buildingRails;
-    id<CNSeq> __changeListeners;
 }
+static CNNotificationHandle* _TRRailroadBuilder_changedNotification;
 static ODClassType* _TRRailroadBuilder_type;
 @synthesize railroad = _railroad;
 
@@ -893,7 +898,6 @@ static ODClassType* _TRRailroadBuilder_type;
         _railroad = railroad;
         __rail = [CNOption none];
         __buildingRails = [CNList apply];
-        __changeListeners = (@[]);
     }
     
     return self;
@@ -902,6 +906,7 @@ static ODClassType* _TRRailroadBuilder_type;
 + (void)initialize {
     [super initialize];
     _TRRailroadBuilder_type = [ODClassType classTypeWithCls:[TRRailroadBuilder class]];
+    _TRRailroadBuilder_changedNotification = [CNNotificationHandle notificationHandleWithName:@"Railroad builder changed"];
 }
 
 - (id)rail {
@@ -918,10 +923,6 @@ static ODClassType* _TRRailroadBuilder_type;
     }];
 }
 
-- (void)addChangeListener:(void(^)())changeListener {
-    __changeListeners = [__changeListeners addItem:changeListener];
-}
-
 - (BOOL)tryBuildRail:(TRRail*)rail {
     if([self canAddRail:rail]) {
         __rail = [CNOption applyValue:rail];
@@ -933,9 +934,7 @@ static ODClassType* _TRRailroadBuilder_type;
 }
 
 - (void)changed {
-    [__changeListeners forEach:^void(void(^_)()) {
-        ((void(^)())(_))();
-    }];
+    [_TRRailroadBuilder_changedNotification post];
 }
 
 - (BOOL)checkCityTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
@@ -1002,6 +1001,10 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (ODClassType*)type {
     return [TRRailroadBuilder type];
+}
+
++ (CNNotificationHandle*)changedNotification {
+    return _TRRailroadBuilder_changedNotification;
 }
 
 + (ODClassType*)type {

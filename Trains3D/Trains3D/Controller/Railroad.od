@@ -37,8 +37,12 @@ class Switch(tile : vec2i, connector : RailConnector, rail1 : Rail, rail2 : Rail
 }
 
 class RailLight(tile : vec2i, connector : RailConnector, rail : Rail) extends RailroadConnectorContent {
+    static val turnNotification = NotificationHandle<RailLight>("Light turned")
     var isGreen = true
-    def turn { isGreen = !isGreen }
+    def turn {
+        isGreen = !isGreen
+        turnNotification.post(self)
+    }
     def canAdd(rail : Rail) : bool = self.rail.canAdd(rail)
     def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = Switch(tile, to, self.rail, rail)
     def rails : [Rail] = [rail]
@@ -65,11 +69,6 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Controller 
     private val damagesIndex = MutableHashMap<(vec2i, RailForm), [float]>()
     private var _damagesPoints = MutableArray<RailPoint>()
     def damagesPoints : [RailPoint] = _damagesPoints
-
-    private var _changeListeners : [() -> void] = []
-    def add(changeListener : () -> void) {
-        _changeListeners += changeListener
-    }
 
     def canAdd(rail : Rail) : bool =
         connectorIndex[(rail.tile, rail.form.start)].canAdd(rail)
@@ -124,11 +123,12 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Controller 
     }
 
 
+    static val changedNotification = NotificationHandle<void>("Railroad changed")
     private def rebuildArrays {
         _rails = connectorIndex.values.chain.flatMap(_.rails).distinct.toArray
         _switches = connectorIndex.values.chain.filter(_.is<Switch>).toArray
         _lights = connectorIndex.values.chain.filter(_.is<RailLight>).toArray
-        _changeListeners.for(_())
+        changedNotification.post
     }
 
     private def activeRailFor(tile : vec2i, connector : RailConnector) : Rail? =
@@ -237,11 +237,6 @@ class RailroadBuilder(weak railroad : Railroad) extends Controller {
     def buildingRails : [RailBuilding] = _buildingRails
     def railForUndo : Rail? = _buildingRails.headOpt.map(_.rail)
 
-    private var _changeListeners : [() -> void] = []
-    def add(changeListener : () -> void) {
-        _changeListeners += changeListener
-    }
-
     def tryBuild(rail : Rail) : bool = {
         if(canAdd(rail)) {
             _rail = rail
@@ -250,8 +245,9 @@ class RailroadBuilder(weak railroad : Railroad) extends Controller {
         } else false
     }
 
+    static val changedNotification = NotificationHandle<void>("Railroad builder changed")
     private def changed {
-        _changeListeners.for(_())
+        changedNotification.post
     }
 
     def checkCity(tile : vec2i, connector : RailConnector) : bool = {
