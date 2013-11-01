@@ -134,13 +134,16 @@
 @interface TRMeshUnite : NSObject
 @property (nonatomic, readonly) CNPArray* vertexSample;
 @property (nonatomic, readonly) CNPArray* indexSample;
+@property (nonatomic, readonly) EGVertexArray*(^createVao)(EGMesh*);
 @property (nonatomic, readonly) EGMesh* mesh;
+@property (nonatomic, readonly) EGVertexArray* vao;
 
-+ (id)meshUniteWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample;
-- (id)initWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample;
++ (id)meshUniteWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample createVao:(EGVertexArray*(^)(EGMesh*))createVao;
+- (id)initWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample createVao:(EGVertexArray*(^)(EGMesh*))createVao;
 - (ODClassType*)type;
 - (void)writeCount:(unsigned int)count f:(void(^)(TRMeshWriter*))f;
 - (TRMeshWriter*)writerCount:(unsigned int)count;
+- (void)draw;
 + (ODClassType*)type;
 @end
 

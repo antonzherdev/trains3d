@@ -249,8 +249,9 @@ class LightView(railroad : Railroad) {
         matrix.pop
     }
 
-    private val glows = MeshUnite(Models.lightGreenGlow, Models.lightIndex)
-    private val glowVao = glows.mesh.vao(ColorSource(textureFor("LightGlow.png")), false)
+    private val glows = MeshUnite(Models.lightGreenGlow, Models.lightIndex,
+        _.vao(ColorSource(textureFor("LightGlow.png")), false))
+
     def drawGlows {
         if(!_matrixArr.isEmpty && !context.renderTarget.is<ShadowRenderTarget>) {
             glows.write(_matrixArr.count) {writer ->
@@ -258,17 +259,18 @@ class LightView(railroad : Railroad) {
                     writer.write(if(p.b.isGreen) Models.lightGreenGlow else Models.lightRedGlow, mat4 = p.a.mwcp)
                 }
             }
-            matrix.identity{ context.cullFace.disabled{
-                glowVao.draw
-            }}
+            context.cullFace.disabled{
+                glows.draw
+            }
         }
     }
 }
 
-class MeshUnite(vertexSample : PArray<MeshData>, indexSample : PArray<uint4>) {
+class MeshUnite(vertexSample : PArray<MeshData>, indexSample : PArray<uint4>, createVao : Mesh -> VertexArray<_>) {
     private val vbo = VBO.mutMesh
     private val ibo = IBO.mut
     val mesh = Mesh(vbo, ibo)
+    val vao = createVao(mesh)
 
     def write(count : uint4, f : MeshWriter -> void) {
         val w = writer(count)
@@ -277,6 +279,12 @@ class MeshUnite(vertexSample : PArray<MeshData>, indexSample : PArray<uint4>) {
     }
 
     def writer(count : uint4) = MeshWriter(vbo, ibo, count, vertexSample, indexSample)
+
+    def draw {
+        matrix.identity{
+            vao.draw
+        }
+    }
 }
 
 class MeshWriter(vbo : MutableVertexBuffer<MeshData>, ibo : MutableIndexBuffer,

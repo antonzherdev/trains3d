@@ -503,7 +503,6 @@ static ODClassType* _TRSwitchView_type;
     id<CNSeq> __matrixArr;
     id<CNSeq> __matrixArrShadow;
     TRMeshUnite* _glows;
-    EGVertexArray* _glowVao;
 }
 static ODClassType* _TRLightView_type;
 @synthesize railroad = _railroad;
@@ -528,8 +527,9 @@ static ODClassType* _TRLightView_type;
         __changed = YES;
         __matrixArr = (@[]);
         __matrixArrShadow = (@[]);
-        _glows = [TRMeshUnite meshUniteWithVertexSample:TRModels.lightGreenGlow indexSample:TRModels.lightIndex];
-        _glowVao = [_glows.mesh vaoMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"LightGlow.png"]] shadow:NO];
+        _glows = [TRMeshUnite meshUniteWithVertexSample:TRModels.lightGreenGlow indexSample:TRModels.lightIndex createVao:^EGVertexArray*(EGMesh* _) {
+            return [_ vaoMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"LightGlow.png"]] shadow:NO];
+        }];
         [self _init];
     }
     
@@ -585,10 +585,8 @@ static ODClassType* _TRLightView_type;
                 [writer writeVertex:((((TRRailLight*)(((CNTuple*)(p)).b)).isGreen) ? TRModels.lightGreenGlow : TRModels.lightRedGlow) mat4:[((EGMatrixModel*)(((CNTuple*)(p)).a)) mwcp]];
             }];
         }];
-        [EGGlobal.matrix identityF:^void() {
-            [EGGlobal.context.cullFace disabledF:^void() {
-                [_glowVao draw];
-            }];
+        [EGGlobal.context.cullFace disabledF:^void() {
+            [_glows draw];
         }];
     }
 }
@@ -631,27 +629,33 @@ static ODClassType* _TRLightView_type;
 @implementation TRMeshUnite{
     CNPArray* _vertexSample;
     CNPArray* _indexSample;
+    EGVertexArray*(^_createVao)(EGMesh*);
     EGMutableVertexBuffer* _vbo;
     EGMutableIndexBuffer* _ibo;
     EGMesh* _mesh;
+    EGVertexArray* _vao;
 }
 static ODClassType* _TRMeshUnite_type;
 @synthesize vertexSample = _vertexSample;
 @synthesize indexSample = _indexSample;
+@synthesize createVao = _createVao;
 @synthesize mesh = _mesh;
+@synthesize vao = _vao;
 
-+ (id)meshUniteWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample {
-    return [[TRMeshUnite alloc] initWithVertexSample:vertexSample indexSample:indexSample];
++ (id)meshUniteWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample createVao:(EGVertexArray*(^)(EGMesh*))createVao {
+    return [[TRMeshUnite alloc] initWithVertexSample:vertexSample indexSample:indexSample createVao:createVao];
 }
 
-- (id)initWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample {
+- (id)initWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample createVao:(EGVertexArray*(^)(EGMesh*))createVao {
     self = [super init];
     if(self) {
         _vertexSample = vertexSample;
         _indexSample = indexSample;
+        _createVao = createVao;
         _vbo = [EGVBO mutMesh];
         _ibo = [EGIBO mut];
         _mesh = [EGMesh meshWithVertex:_vbo index:_ibo];
+        _vao = _createVao(_mesh);
     }
     
     return self;
@@ -672,6 +676,12 @@ static ODClassType* _TRMeshUnite_type;
     return [TRMeshWriter meshWriterWithVbo:_vbo ibo:_ibo count:count vertexSample:_vertexSample indexSample:_indexSample];
 }
 
+- (void)draw {
+    [EGGlobal.matrix identityF:^void() {
+        [_vao draw];
+    }];
+}
+
 - (ODClassType*)type {
     return [TRMeshUnite type];
 }
@@ -688,13 +698,14 @@ static ODClassType* _TRMeshUnite_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRMeshUnite* o = ((TRMeshUnite*)(other));
-    return [self.vertexSample isEqual:o.vertexSample] && [self.indexSample isEqual:o.indexSample];
+    return [self.vertexSample isEqual:o.vertexSample] && [self.indexSample isEqual:o.indexSample] && [self.createVao isEqual:o.createVao];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.vertexSample hash];
     hash = hash * 31 + [self.indexSample hash];
+    hash = hash * 31 + [self.createVao hash];
     return hash;
 }
 
