@@ -216,11 +216,16 @@ class LightView(railroad : Railroad) {
 
     var _matrixChanged = true
     var _matrixShadowChanged = true
+    var _lightGlowChanged = true
     def init {
         weak val weakSelf = self
         Railroad.changedNotification.observe { _ ->
             weakSelf._matrixChanged = true
             weakSelf._matrixShadowChanged = true
+            weakSelf._lightGlowChanged = true
+        }
+        RailLight.turnNotification.observe { _ ->
+            weakSelf._lightGlowChanged = true
         }
     }
 
@@ -264,10 +269,13 @@ class LightView(railroad : Railroad) {
 
     def drawGlows {
         if(!_matrixArr.isEmpty && !context.renderTarget.is<ShadowRenderTarget>) {
-            glows.write(_matrixArr.count) {writer ->
-                _matrixArr.for{ p ->
-                    writer.write(if(p.b.isGreen) Models.lightGreenGlow else Models.lightRedGlow, mat4 = p.a.mwcp)
+            if(_lightGlowChanged) {
+                glows.write(_matrixArr.count) {writer ->
+                    _matrixArr.for{ p ->
+                        writer.write(if(p.b.isGreen) Models.lightGreenGlow else Models.lightRedGlow, mat4 = p.a.mwcp)
+                    }
                 }
+                _lightGlowChanged = false
             }
             context.cullFace.disabled{
                 glows.draw

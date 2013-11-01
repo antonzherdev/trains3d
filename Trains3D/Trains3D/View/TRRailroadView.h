@@ -120,6 +120,7 @@
 @property (nonatomic, readonly) EGVertexArray* shadowBodyVao;
 @property (nonatomic) BOOL _matrixChanged;
 @property (nonatomic) BOOL _matrixShadowChanged;
+@property (nonatomic) BOOL _lightGlowChanged;
 
 + (id)lightViewWithRailroad:(TRRailroad*)railroad;
 - (id)initWithRailroad:(TRRailroad*)railroad;

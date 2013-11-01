@@ -501,6 +501,7 @@ static ODClassType* _TRSwitchView_type;
     EGVertexArray* _shadowBodyVao;
     BOOL __matrixChanged;
     BOOL __matrixShadowChanged;
+    BOOL __lightGlowChanged;
     id<CNSeq> __matrixArr;
     id<CNSeq> __matrixArrShadow;
     TRMeshUnite* _glows;
@@ -513,6 +514,7 @@ static ODClassType* _TRLightView_type;
 @synthesize shadowBodyVao = _shadowBodyVao;
 @synthesize _matrixChanged = __matrixChanged;
 @synthesize _matrixShadowChanged = __matrixShadowChanged;
+@synthesize _lightGlowChanged = __lightGlowChanged;
 
 + (id)lightViewWithRailroad:(TRRailroad*)railroad {
     return [[TRLightView alloc] initWithRailroad:railroad];
@@ -528,6 +530,7 @@ static ODClassType* _TRLightView_type;
         _shadowBodyVao = [TRModels.light vaoShadow];
         __matrixChanged = YES;
         __matrixShadowChanged = YES;
+        __lightGlowChanged = YES;
         __matrixArr = (@[]);
         __matrixArrShadow = (@[]);
         _glows = [TRMeshUnite meshUniteWithVertexSample:TRModels.lightGreenGlow indexSample:TRModels.lightIndex createVao:^EGVertexArray*(EGMesh* _) {
@@ -549,6 +552,10 @@ static ODClassType* _TRLightView_type;
     [TRRailroad.changedNotification observeBy:^void(id _) {
         weakSelf._matrixChanged = YES;
         weakSelf._matrixShadowChanged = YES;
+        weakSelf._lightGlowChanged = YES;
+    }];
+    [TRRailLight.turnNotification observeBy:^void(TRRailLight* _) {
+        weakSelf._lightGlowChanged = YES;
     }];
 }
 
@@ -590,11 +597,14 @@ static ODClassType* _TRLightView_type;
 
 - (void)drawGlows {
     if(!([__matrixArr isEmpty]) && !([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]])) {
-        [_glows writeCount:((unsigned int)([__matrixArr count])) f:^void(TRMeshWriter* writer) {
-            [__matrixArr forEach:^void(CNTuple* p) {
-                [writer writeVertex:((((TRRailLight*)(((CNTuple*)(p)).b)).isGreen) ? TRModels.lightGreenGlow : TRModels.lightRedGlow) mat4:[((EGMatrixModel*)(((CNTuple*)(p)).a)) mwcp]];
+        if(__lightGlowChanged) {
+            [_glows writeCount:((unsigned int)([__matrixArr count])) f:^void(TRMeshWriter* writer) {
+                [__matrixArr forEach:^void(CNTuple* p) {
+                    [writer writeVertex:((((TRRailLight*)(((CNTuple*)(p)).b)).isGreen) ? TRModels.lightGreenGlow : TRModels.lightRedGlow) mat4:[((EGMatrixModel*)(((CNTuple*)(p)).a)) mwcp]];
+                }];
             }];
-        }];
+            __lightGlowChanged = NO;
+        }
         [EGGlobal.context.cullFace disabledF:^void() {
             [_glows draw];
         }];
