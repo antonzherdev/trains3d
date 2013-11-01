@@ -10,6 +10,8 @@
 		0214B1291773394400C03C71 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0214B1281773394400C03C71 /* Cocoa.framework */; };
 		0214B1471773394500C03C71 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0214B1461773394500C03C71 /* SenTestingKit.framework */; };
 		0214B1481773394500C03C71 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0214B1281773394400C03C71 /* Cocoa.framework */; };
+		0232DCE7182386F400139599 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0232DCE6182386F400139599 /* GameKit.framework */; };
+		027ABE5C182384D100A72CD0 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 027ABE5B182384D100A72CD0 /* GameKit.framework */; };
 		0292DC44181E534B00589F65 /* OsXImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0292DC43181E534B00589F65 /* OsXImages.xcassets */; };
 		0292DC46181E5B4A00589F65 /* iOsImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0292DC45181E5B4A00589F65 /* iOsImages.xcassets */; };
 		02C70A4F1802A3E500007F50 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C70A4E1802A3E500007F50 /* Foundation.framework */; };
@@ -1127,6 +1129,8 @@
 		0214B12D1773394400C03C71 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0214B1451773394500C03C71 /* Trains3DTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Trains3DTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0214B1461773394500C03C71 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		0232DCE6182386F400139599 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		027ABE5B182384D100A72CD0 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
 		0291F31B181950600065E480 /* Trains3D.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Trains3D.entitlements; path = ../../Trains3D.entitlements; sourceTree = "<group>"; };
 		0292DC40181E4CE800589F65 /* Trains3Di.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Trains3Di.entitlements; path = ../../../Trains3Di/Trains3Di.entitlements; sourceTree = "<group>"; };
 		0292DC43181E534B00589F65 /* OsXImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = OsXImages.xcassets; path = ../../OsXImages.xcassets; sourceTree = "<group>"; };
@@ -2344,6 +2348,7 @@
 				6F3DFB7610D3B97263DC6E0A /* OpenGL.framework in Frameworks */,
 				6F3DF3557A9133FEF8220A0D /* AVFoundation.framework in Frameworks */,
 				6F3DFE24BEF0471BFAC2AF26 /* CoreVideo.framework in Frameworks */,
+				0232DCE7182386F400139599 /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2363,6 +2368,7 @@
 				02C70A571802A3E500007F50 /* OpenGLES.framework in Frameworks */,
 				02C70A511802A3E500007F50 /* CoreGraphics.framework in Frameworks */,
 				02C70A531802A3E500007F50 /* UIKit.framework in Frameworks */,
+				027ABE5C182384D100A72CD0 /* GameKit.framework in Frameworks */,
 				02C70A551802A3E500007F50 /* GLKit.framework in Frameworks */,
 				02C70A4F1802A3E500007F50 /* Foundation.framework in Frameworks */,
 			);
@@ -2401,6 +2407,8 @@
 		0214B1271773394400C03C71 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0232DCE6182386F400139599 /* GameKit.framework */,
+				027ABE5B182384D100A72CD0 /* GameKit.framework */,
 				0214B1281773394400C03C71 /* Cocoa.framework */,
 				0214B1461773394500C03C71 /* SenTestingKit.framework */,
 				02C70A4E1802A3E500007F50 /* Foundation.framework */,
@@ -4324,6 +4332,9 @@
 					0214B1241773394400C03C71 = {
 						DevelopmentTeam = 29S6DQ4WTL;
 						SystemCapabilities = {
+							com.apple.GameCenter = {
+								enabled = 1;
+							};
 							com.apple.Sandbox = {
 								enabled = 1;
 							};
@@ -4335,6 +4346,9 @@
 					02C70A4C1802A3E500007F50 = {
 						DevelopmentTeam = 29S6DQ4WTL;
 						SystemCapabilities = {
+							com.apple.GameCenter = {
+								enabled = 1;
+							};
 							com.apple.iCloud = {
 								enabled = 1;
 							};
@@ -5674,6 +5688,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = OSXIcon;
 				CODE_SIGN_ENTITLEMENTS = Trains3D/Trains3D.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Trains3D/Platform/Mac/Trains3D-Prefix.pch";
@@ -5685,7 +5700,8 @@
 				);
 				INFOPLIST_FILE = "Trains3D/Platform/Mac/Trains3D-Info.plist";
 				LIBRARY_SEARCH_PATHS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Trains3D;
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -5696,6 +5712,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = OSXIcon;
 				CODE_SIGN_ENTITLEMENTS = Trains3D/Trains3D.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Trains3D/Platform/Mac/Trains3D-Prefix.pch";
@@ -5706,7 +5723,8 @@
 				);
 				INFOPLIST_FILE = "Trains3D/Platform/Mac/Trains3D-Info.plist";
 				LIBRARY_SEARCH_PATHS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Trains3D;
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -5769,7 +5787,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = "Trains3D/Platform/iOS/Trains3Di-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Trains3Di;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5806,7 +5824,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = "Trains3D/Platform/iOS/Trains3Di-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Trains3Di;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

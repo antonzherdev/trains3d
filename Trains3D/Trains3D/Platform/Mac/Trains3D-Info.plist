@@ -28,6 +28,8 @@
 	<string>Copyright © 2013 Anton Zherdev. All rights reserved.</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
+	<key>CFBundleDisplayName</key>
+	<string>${PRODUCT_NAME}</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>
