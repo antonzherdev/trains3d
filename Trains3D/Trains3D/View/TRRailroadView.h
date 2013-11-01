@@ -118,7 +118,8 @@
 @property (nonatomic, readonly) EGVertexArray* redBodyVao;
 @property (nonatomic, readonly) EGVertexArray* greenBodyVao;
 @property (nonatomic, readonly) EGVertexArray* shadowBodyVao;
-@property (nonatomic) BOOL _changed;
+@property (nonatomic) BOOL _matrixChanged;
+@property (nonatomic) BOOL _matrixShadowChanged;
 
 + (id)lightViewWithRailroad:(TRRailroad*)railroad;
 - (id)initWithRailroad:(TRRailroad*)railroad;

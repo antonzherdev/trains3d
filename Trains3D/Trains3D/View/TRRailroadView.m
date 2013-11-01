@@ -499,7 +499,8 @@ static ODClassType* _TRSwitchView_type;
     EGVertexArray* _redBodyVao;
     EGVertexArray* _greenBodyVao;
     EGVertexArray* _shadowBodyVao;
-    BOOL __changed;
+    BOOL __matrixChanged;
+    BOOL __matrixShadowChanged;
     id<CNSeq> __matrixArr;
     id<CNSeq> __matrixArrShadow;
     TRMeshUnite* _glows;
@@ -510,7 +511,8 @@ static ODClassType* _TRLightView_type;
 @synthesize redBodyVao = _redBodyVao;
 @synthesize greenBodyVao = _greenBodyVao;
 @synthesize shadowBodyVao = _shadowBodyVao;
-@synthesize _changed = __changed;
+@synthesize _matrixChanged = __matrixChanged;
+@synthesize _matrixShadowChanged = __matrixShadowChanged;
 
 + (id)lightViewWithRailroad:(TRRailroad*)railroad {
     return [[TRLightView alloc] initWithRailroad:railroad];
@@ -524,7 +526,8 @@ static ODClassType* _TRLightView_type;
         _redBodyVao = [TRModels.light vaoMaterial:[EGColorSource applyTexture:[EGTextureRegion textureRegionWithTexture:_texture uv:geRectApplyXYWidthHeight(0.5, 0.0, 1.0, 1.0)]] shadow:NO];
         _greenBodyVao = [TRModels.light vaoMaterial:[EGColorSource applyTexture:_texture] shadow:NO];
         _shadowBodyVao = [TRModels.light vaoShadow];
-        __changed = YES;
+        __matrixChanged = YES;
+        __matrixShadowChanged = YES;
         __matrixArr = (@[]);
         __matrixArrShadow = (@[]);
         _glows = [TRMeshUnite meshUniteWithVertexSample:TRModels.lightGreenGlow indexSample:TRModels.lightIndex createVao:^EGVertexArray*(EGMesh* _) {
@@ -544,7 +547,8 @@ static ODClassType* _TRLightView_type;
 - (void)_init {
     __weak TRLightView* weakSelf = self;
     [TRRailroad.changedNotification observeBy:^void(id _) {
-        weakSelf._changed = YES;
+        weakSelf._matrixChanged = YES;
+        weakSelf._matrixShadowChanged = YES;
     }];
 }
 
@@ -559,7 +563,10 @@ static ODClassType* _TRLightView_type;
 }
 
 - (void)drawBodies {
-    if(__changed) __matrixArr = [self calculateMatrixArr];
+    if(__matrixChanged) {
+        __matrixArr = [self calculateMatrixArr];
+        __matrixChanged = NO;
+    }
     [EGGlobal.matrix push];
     [__matrixArr forEach:^void(CNTuple* p) {
         EGGlobal.matrix.value = ((CNTuple*)(p)).a;
@@ -569,7 +576,10 @@ static ODClassType* _TRLightView_type;
 }
 
 - (void)drawShadow {
-    if(__changed) __matrixArrShadow = [self calculateMatrixArr];
+    if(__matrixShadowChanged) {
+        __matrixArrShadow = [self calculateMatrixArr];
+        __matrixShadowChanged = NO;
+    }
     [EGGlobal.matrix push];
     [__matrixArrShadow forEach:^void(CNTuple* p) {
         EGGlobal.matrix.value = ((CNTuple*)(p)).a;

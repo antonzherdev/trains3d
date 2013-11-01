@@ -214,10 +214,14 @@ class LightView(railroad : Railroad) {
     val greenBodyVao = Models.light.vao(ColorSource(texture), false)
     val shadowBodyVao = Models.light.vaoShadow
 
-    var _changed = true
+    var _matrixChanged = true
+    var _matrixShadowChanged = true
     def init {
         weak val weakSelf = self
-        Railroad.changedNotification.observe(weakSelf._changed = true)
+        Railroad.changedNotification.observe { _ ->
+            weakSelf._matrixChanged = true
+            weakSelf._matrixShadowChanged = true
+        }
     }
 
     private var _matrixArr : [(MatrixModel, RailLight)] = []
@@ -230,7 +234,10 @@ class LightView(railroad : Railroad) {
     }.toArray
 
     def drawBodies {
-        if(_changed) _matrixArr = calculateMatrixArr
+        if(_matrixChanged) {
+            _matrixArr = calculateMatrixArr
+            _matrixChanged = false
+        }
         matrix.push
         _matrixArr.for { p ->
             matrix.value = p.a
@@ -240,7 +247,10 @@ class LightView(railroad : Railroad) {
     }
 
     def drawShadow {
-        if(_changed) _matrixArrShadow = calculateMatrixArr
+        if(_matrixShadowChanged) {
+            _matrixArrShadow = calculateMatrixArr
+            _matrixShadowChanged = false
+        }
         matrix.push
         _matrixArrShadow.for { p ->
             matrix.value = p.a
