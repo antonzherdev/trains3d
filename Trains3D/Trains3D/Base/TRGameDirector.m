@@ -2,6 +2,7 @@
 
 #import "DTKeyValueStorage.h"
 #import "DTConflictResolve.h"
+#import "EGGameCenter.h"
 #import "EGDirector.h"
 #import "TRSceneFactory.h"
 #import "EGScene.h"
@@ -48,6 +49,7 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)_init {
+    [EGGameCenter.instance authenticate];
     [CNNotificationCenter.aDefault addObserverName:@"level was passed" block:^void(id _) {
         [_cloud keepMaxKey:@"maxLevel" i:unumi(_) + 1];
         [_local setKey:@"currentLevel" i:unumi(_) + 1];

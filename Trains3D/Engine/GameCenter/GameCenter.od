@@ -1,0 +1,17 @@
+package com.antonzherdev.eg
+
+stub class GameCenter {
+    static val instance : GameCenter = GameCenter()
+    def authenticate
+
+    def achievement(name : string) : Achievement?
+    def completeAchievement(name : string)
+}
+
+stub class Achievement(name : string) {
+    def progress : float
+    def set(progress : float)
+    def complete {
+        set(progress = 1.0)
+    }
+}

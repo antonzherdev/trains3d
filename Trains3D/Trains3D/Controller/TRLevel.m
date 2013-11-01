@@ -10,6 +10,7 @@
 #import "TRCity.h"
 #import "TRTrain.h"
 #import "TRRailPoint.h"
+#import "EGGameCenter.h"
 #import "TRCar.h"
 @implementation TRLevelRules{
     GEVec2i _mapSize;
@@ -318,6 +319,7 @@ static ODClassType* _TRLevel_type;
 
 - (void)processCollisions {
     [[self detectCollisions] forEach:^void(TRCarsCollision* collision) {
+        [EGGameCenter.instance completeAchievementName:@"grp.Crash"];
         [((TRCarsCollision*)(collision)).cars forEach:^void(TRCar* _) {
             [self destroyTrain:((TRCar*)(_)).train];
         }];

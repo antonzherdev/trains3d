@@ -2,6 +2,7 @@
 @class DTLocalKeyValueStorage;
 @class DTConflict;
 @class DTCloudKeyValueStorage;
+@class EGGameCenter;
 @class EGDirector;
 @class TRSceneFactory;
 @class EGScene;

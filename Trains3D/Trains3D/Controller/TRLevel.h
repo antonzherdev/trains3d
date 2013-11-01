@@ -21,6 +21,7 @@
 @class TRTrainGenerator;
 @class TRRailPoint;
 @class TRSwitch;
+@class EGGameCenter;
 @class TRCarsCollision;
 @class TRCar;
 @class TRTrainType;

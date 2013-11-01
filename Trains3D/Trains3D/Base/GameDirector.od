@@ -21,6 +21,7 @@ class GameDirector {
 //        cloud.set("maxLevel", i = 1)
 //        local.set("currentLevel", i = 1)
 //        cloud.synchronize
+        GameCenter.instance.authenticate
         NotificationCenter.default.addObserver<int>("level was passed", {
             cloud.keepMax("maxLevel", _ + 1)
             local.set("currentLevel", i = _ + 1)

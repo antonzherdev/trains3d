@@ -145,6 +145,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
     def processCollisions {
         detectCollisions.for(collision -> {
+            GameCenter.instance.completeAchievement("grp.Crash")
             collision.cars.for(destroy(_.train))
             railroad.addDamageAt(collision.railPoint)
         })
