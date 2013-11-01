@@ -46,11 +46,36 @@
 
 - (void)doInit {
     if(_director != nil) return;
+    [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillResignActiveNotification
+                                                      object:nil queue:nil usingBlock:^(NSNotification *note) {
+        [_director pause];
+    }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillTerminateNotification
+                                                      object:nil queue:nil usingBlock:^(NSNotification *note) {
+        [_director stop];
+    }];
 
+    [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowWillCloseNotification
+                                                      object:[self window] queue:nil usingBlock:^(NSNotification *note) {
+        [_director stop];
+    }];
     _director = [[EGDirectorMac alloc] initWithView:self];
     [_director start];
     [self setAcceptsTouchEvents:YES];
 }
+
+- (void)viewWillMoveToWindow:(NSWindow *)newWindow {
+    [super viewWillMoveToWindow:newWindow];
+    if(newWindow == nil) {
+        [_director stop];
+    }
+}
+
+- (void)clearGLContext {
+    [super clearGLContext];
+    [_director stop];
+}
+
 
 - (id)init {
     self = [super init];

@@ -81,7 +81,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 
     if( _displayLink ) {
-        [self performSelectorInBackground:@selector(doStopAndRelease) withObject:nil];
+        [self doStopAndRelease];
         _displayLink = nil;
     }
 

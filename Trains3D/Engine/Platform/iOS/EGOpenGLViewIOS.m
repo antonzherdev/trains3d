@@ -31,6 +31,13 @@
         [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     }
 
+    self.pauseOnWillResignActive = NO;
+    self.resumeOnDidBecomeActive = NO;
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification
+                                                      object:nil queue:nil usingBlock:^(NSNotification *note) {
+        [_director pause];
+    }];
+
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
     tap.numberOfTapsRequired = 1;
     [self.view addGestureRecognizer:tap];

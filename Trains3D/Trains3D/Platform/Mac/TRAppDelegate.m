@@ -17,5 +17,7 @@
     [[TRGameDirector instance] synchronize];
 }
 
-
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
+    return YES;
+}
 @end
