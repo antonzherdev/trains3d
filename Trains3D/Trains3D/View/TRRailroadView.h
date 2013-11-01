@@ -34,11 +34,11 @@
 @protocol TRStrings;
 @class TRSwitch;
 @class EGTextureRegion;
+@class TRRailLight;
 @class EGMutableVertexBuffer;
 @class EGVBO;
 @class EGMutableIndexBuffer;
 @class EGIBO;
-@class TRRailLight;
 @class TRRailPoint;
 
 @class TRRailroadView;
@@ -46,6 +46,7 @@
 @class TRUndoView;
 @class TRSwitchView;
 @class TRLightView;
+@class TRMeshUnite;
 @class TRMeshWriter;
 @class TRDamageView;
 @class TRBackgroundView;
@@ -126,6 +127,20 @@
 - (void)drawBodies;
 - (void)drawShadow;
 - (void)drawGlows;
++ (ODClassType*)type;
+@end
+
+
+@interface TRMeshUnite : NSObject
+@property (nonatomic, readonly) CNPArray* vertexSample;
+@property (nonatomic, readonly) CNPArray* indexSample;
+@property (nonatomic, readonly) EGMesh* mesh;
+
++ (id)meshUniteWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample;
+- (id)initWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample;
+- (ODClassType*)type;
+- (void)writeCount:(unsigned int)count f:(void(^)(TRMeshWriter*))f;
+- (TRMeshWriter*)writerCount:(unsigned int)count;
 + (ODClassType*)type;
 @end
 
