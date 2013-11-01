@@ -254,32 +254,53 @@ class LightView(railroad : Railroad) {
     private val glowVao = Mesh(glowVbo, glowIbo).vao(ColorSource(textureFor("LightGlow.png")), false)
     def drawGlows {
         if(!_matrixArr.isEmpty && !context.renderTarget.is<ShadowRenderTarget>) {
-            val vn = Models.lightGreenGlow.count
-            val vertex = VoidRefArray(MeshData.type, vn * _matrixArr.count)
-            val index = VoidRefArray(UInt4.type, Models.lightIndex.count * _matrixArr.count)
-            var v = vertex
-            var i = index
-            var iShift : uint4 = 0
+            val writer = MeshWriter(glowVbo, glowIbo, _matrixArr.count, Models.lightGreenGlow, Models.lightIndex)
             _matrixArr.for{ p ->
-                val glow = if(p.b.isGreen) Models.lightGreenGlow else Models.lightRedGlow
-                val m = p.a.mwcp
-                glow.forRef{ r ->
-                    v = v.write(MeshData, r.cast<MeshData> * m)
-                }
-                Models.lightIndex.forRef {r ->
-                    i = i.write(uInt4 = r.cast<uint4> + iShift)
-                }
-                iShift += vn
+                writer.write(if(p.b.isGreen) Models.lightGreenGlow else Models.lightRedGlow, mat4 = p.a.mwcp)
             }
+            writer.flush
 
-            glowVbo.set(vertex)
-            glowIbo.set(index)
-            vertex.free
-            index.free
             matrix.identity{ context.cullFace.disabled{
                 glowVao.draw
             }}
         }
+    }
+}
+
+class MeshWriter(vbo : MutableVertexBuffer<MeshData>, ibo : MutableIndexBuffer,
+    count : uint4, vertexSample : PArray<MeshData>, indexSample : PArray<uint4>)
+{
+    private val vertex = VoidRefArray(MeshData.type, vertexSample.count * count)
+    private val index = VoidRefArray(UInt4.type, indexSample.count * count)
+    private var _vp = vertex
+    private var _ip = index
+    private var _indexShift : uint4 = 0
+    def write(mat4 : mat4) {
+        write(vertexSample, indexSample, mat4)
+    }
+
+    def write(vertex : PArray<MeshData>, mat4 : mat4) {
+        write(vertex, indexSample, mat4)
+    }
+
+    def write(vertex : PArray<MeshData>, index : PArray<uint4>, mat4 : mat4) {
+        vertex.forRef{ r ->
+            _vp = _vp.write(MeshData, r.cast<MeshData> * mat4)
+        }
+        index.forRef {r ->
+            _ip = _ip.write(uInt4 = r.cast<uint4> + _indexShift)
+        }
+        _indexShift += vertex.count
+    }
+
+    def flush {
+        vbo.set(vertex)
+        ibo.set(index)
+    }
+
+    def dealloc {
+        vertex.free
+        index.free
     }
 }
 

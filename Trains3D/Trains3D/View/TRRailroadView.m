@@ -582,27 +582,11 @@ static ODClassType* _TRLightView_type;
 
 - (void)drawGlows {
     if(!([__matrixArr isEmpty]) && !([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]])) {
-        NSUInteger vn = TRModels.lightGreenGlow.count;
-        CNVoidRefArray vertex = cnVoidRefArrayApplyTpCount(egMeshDataType(), vn * [__matrixArr count]);
-        CNVoidRefArray index = cnVoidRefArrayApplyTpCount(oduInt4Type(), TRModels.lightIndex.count * [__matrixArr count]);
-        __block CNVoidRefArray v = vertex;
-        __block CNVoidRefArray i = index;
-        __block unsigned int iShift = 0;
+        TRMeshWriter* writer = [TRMeshWriter meshWriterWithVbo:_glowVbo ibo:_glowIbo count:((unsigned int)([__matrixArr count])) vertexSample:TRModels.lightGreenGlow indexSample:TRModels.lightIndex];
         [__matrixArr forEach:^void(CNTuple* p) {
-            CNPArray* glow = ((((TRRailLight*)(((CNTuple*)(p)).b)).isGreen) ? TRModels.lightGreenGlow : TRModels.lightRedGlow);
-            GEMat4* m = [((EGMatrixModel*)(((CNTuple*)(p)).a)) mwcp];
-            [glow forRefEach:^void(VoidRef r) {
-                v = cnVoidRefArrayWriteTpItem(v, EGMeshData, egMeshDataMulMat4(*(((EGMeshData*)(r))), m));
-            }];
-            [TRModels.lightIndex forRefEach:^void(VoidRef r) {
-                i = cnVoidRefArrayWriteUInt4(i, *(((unsigned int*)(r))) + iShift);
-            }];
-            iShift += ((unsigned int)(vn));
+            [writer writeVertex:((((TRRailLight*)(((CNTuple*)(p)).b)).isGreen) ? TRModels.lightGreenGlow : TRModels.lightRedGlow) mat4:[((EGMatrixModel*)(((CNTuple*)(p)).a)) mwcp]];
         }];
-        [_glowVbo setArray:vertex];
-        [_glowIbo setArray:index];
-        cnVoidRefArrayFree(vertex);
-        cnVoidRefArrayFree(index);
+        [writer flush];
         [EGGlobal.matrix identityF:^void() {
             [EGGlobal.context.cullFace disabledF:^void() {
                 [_glowVao draw];
@@ -639,6 +623,123 @@ static ODClassType* _TRLightView_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"railroad=%@", self.railroad];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRMeshWriter{
+    EGMutableVertexBuffer* _vbo;
+    EGMutableIndexBuffer* _ibo;
+    unsigned int _count;
+    CNPArray* _vertexSample;
+    CNPArray* _indexSample;
+    CNVoidRefArray _vertex;
+    CNVoidRefArray _index;
+    CNVoidRefArray __vp;
+    CNVoidRefArray __ip;
+    unsigned int __indexShift;
+}
+static ODClassType* _TRMeshWriter_type;
+@synthesize vbo = _vbo;
+@synthesize ibo = _ibo;
+@synthesize count = _count;
+@synthesize vertexSample = _vertexSample;
+@synthesize indexSample = _indexSample;
+
++ (id)meshWriterWithVbo:(EGMutableVertexBuffer*)vbo ibo:(EGMutableIndexBuffer*)ibo count:(unsigned int)count vertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample {
+    return [[TRMeshWriter alloc] initWithVbo:vbo ibo:ibo count:count vertexSample:vertexSample indexSample:indexSample];
+}
+
+- (id)initWithVbo:(EGMutableVertexBuffer*)vbo ibo:(EGMutableIndexBuffer*)ibo count:(unsigned int)count vertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample {
+    self = [super init];
+    if(self) {
+        _vbo = vbo;
+        _ibo = ibo;
+        _count = count;
+        _vertexSample = vertexSample;
+        _indexSample = indexSample;
+        _vertex = cnVoidRefArrayApplyTpCount(egMeshDataType(), _vertexSample.count * _count);
+        _index = cnVoidRefArrayApplyTpCount(oduInt4Type(), _indexSample.count * _count);
+        __vp = _vertex;
+        __ip = _index;
+        __indexShift = 0;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRMeshWriter_type = [ODClassType classTypeWithCls:[TRMeshWriter class]];
+}
+
+- (void)writeMat4:(GEMat4*)mat4 {
+    [self writeVertex:_vertexSample index:_indexSample mat4:mat4];
+}
+
+- (void)writeVertex:(CNPArray*)vertex mat4:(GEMat4*)mat4 {
+    [self writeVertex:vertex index:_indexSample mat4:mat4];
+}
+
+- (void)writeVertex:(CNPArray*)vertex index:(CNPArray*)index mat4:(GEMat4*)mat4 {
+    [vertex forRefEach:^void(VoidRef r) {
+        __vp = cnVoidRefArrayWriteTpItem(__vp, EGMeshData, egMeshDataMulMat4(*(((EGMeshData*)(r))), mat4));
+    }];
+    [index forRefEach:^void(VoidRef r) {
+        __ip = cnVoidRefArrayWriteUInt4(__ip, *(((unsigned int*)(r))) + __indexShift);
+    }];
+    __indexShift += ((unsigned int)(vertex.count));
+}
+
+- (void)flush {
+    [_vbo setArray:_vertex];
+    [_ibo setArray:_index];
+}
+
+- (void)dealloc {
+    cnVoidRefArrayFree(_vertex);
+    cnVoidRefArrayFree(_index);
+}
+
+- (ODClassType*)type {
+    return [TRMeshWriter type];
+}
+
++ (ODClassType*)type {
+    return _TRMeshWriter_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRMeshWriter* o = ((TRMeshWriter*)(other));
+    return [self.vbo isEqual:o.vbo] && [self.ibo isEqual:o.ibo] && self.count == o.count && [self.vertexSample isEqual:o.vertexSample] && [self.indexSample isEqual:o.indexSample];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.vbo hash];
+    hash = hash * 31 + [self.ibo hash];
+    hash = hash * 31 + self.count;
+    hash = hash * 31 + [self.vertexSample hash];
+    hash = hash * 31 + [self.indexSample hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"vbo=%@", self.vbo];
+    [description appendFormat:@", ibo=%@", self.ibo];
+    [description appendFormat:@", count=%u", self.count];
+    [description appendFormat:@", vertexSample=%@", self.vertexSample];
+    [description appendFormat:@", indexSample=%@", self.indexSample];
     [description appendString:@">"];
     return description;
 }

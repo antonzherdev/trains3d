@@ -46,6 +46,7 @@
 @class TRUndoView;
 @class TRSwitchView;
 @class TRLightView;
+@class TRMeshWriter;
 @class TRDamageView;
 @class TRBackgroundView;
 
@@ -125,6 +126,25 @@
 - (void)drawBodies;
 - (void)drawShadow;
 - (void)drawGlows;
++ (ODClassType*)type;
+@end
+
+
+@interface TRMeshWriter : NSObject
+@property (nonatomic, readonly) EGMutableVertexBuffer* vbo;
+@property (nonatomic, readonly) EGMutableIndexBuffer* ibo;
+@property (nonatomic, readonly) unsigned int count;
+@property (nonatomic, readonly) CNPArray* vertexSample;
+@property (nonatomic, readonly) CNPArray* indexSample;
+
++ (id)meshWriterWithVbo:(EGMutableVertexBuffer*)vbo ibo:(EGMutableIndexBuffer*)ibo count:(unsigned int)count vertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample;
+- (id)initWithVbo:(EGMutableVertexBuffer*)vbo ibo:(EGMutableIndexBuffer*)ibo count:(unsigned int)count vertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample;
+- (ODClassType*)type;
+- (void)writeMat4:(GEMat4*)mat4;
+- (void)writeVertex:(CNPArray*)vertex mat4:(GEMat4*)mat4;
+- (void)writeVertex:(CNPArray*)vertex index:(CNPArray*)index mat4:(GEMat4*)mat4;
+- (void)flush;
+- (void)dealloc;
 + (ODClassType*)type;
 @end
 
