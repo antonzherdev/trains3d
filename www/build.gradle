@@ -1,0 +1,80 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'de.obqo.gradle:gradle-lesscss-plugin:1.0-1.3.3'
+        classpath 'com.eriwen:gradle-js-plugin:1.8.0'
+    }
+}
+
+defaultTasks 'clean', 'build'
+
+task build(dependsOn:['img', 'favIcon', 'html', 'js', 'lesscss'])
+
+task clean(type: Delete) {
+  delete 'target'
+}
+
+task favIcon(type:Copy) {
+    from('src/favicon')
+    into 'target'
+}
+
+task img(type:Copy) {
+    from('src/img')
+    into 'target/img'
+}
+
+task html(type:Copy) {
+    from('src/html')
+    into 'target'
+}
+
+apply plugin: 'js'
+
+// Declare your sources
+javascript.source {
+    dev {
+        js {
+            srcDir "src/js"
+            include "*.js"
+            exclude "*.min.js"
+        }
+    }
+}
+
+combineJs {
+    source = javascript.source.dev.js.files
+    dest = file("target/js/all.js")
+}
+
+minifyJs {
+    source = combineJs
+    dest = file("target/js/all.min.js")
+    closure {
+        warningLevel = 'QUIET'
+    }
+}
+
+task vendorJs(type:Copy) {
+    from('lib')
+    into 'target/js/vendor'
+}
+
+task js (dependsOn: ['vendorJs', 'combineJs', 'minifyJs'])
+
+task root(type:Copy) {
+    from('src/root')
+    into 'target'
+}
+
+apply plugin: 'lesscss'
+
+lesscss {
+    source = fileTree('src/less') {
+        include 'main.less'
+    }
+    dest = 'target/css'
+    compress = false
+}

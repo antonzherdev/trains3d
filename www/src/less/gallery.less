@@ -1,0 +1,54 @@
+@import "vars";
+
+.b-gallery {
+  display: inline-block;
+  .content {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+  }
+  .item {
+    position: absolute;
+  }
+
+  .left-arrow, .right-arrow {
+    width: 20px;
+    height: 40px;
+    background-color: @leadColor;
+    cursor: pointer;
+  }
+
+  .points {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0;
+  }
+
+  .point .inner {
+    width: 10px;
+    height: 10px;
+    background-color: @leadColor;
+    cursor: pointer;
+    position: relative;
+    top: 2px;
+    left: 4px;
+  }
+
+  .point {
+    width: 18px;
+    height: 16px;
+    position: relative;
+    margin-right: 7px;
+    display: inline-block;
+  }
+
+  .point.current {
+    border: 2px solid @leadColor;
+    width: 14px;
+    height: 14px;
+  }
+
+  .point.current .inner {
+    left: 2px;
+  }
+}
