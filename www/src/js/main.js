@@ -2,7 +2,7 @@
     "use strict";
 
     $(document).ready(function(){
-        $('#social').portamento({gap: 0});
+//        $('#social').portamento({gap: 0});
     });
 
 
