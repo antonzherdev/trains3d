@@ -1,6 +1,12 @@
+@import "elements.less";
+
 .b-social {
-  border-top: 1px solid #BDBDBD;
+//  .gradient(#FFFFF3, #339C00, #34B300);
   background-color: #EBE6EB;
+  border-bottom: 1px solid #BDBDBD;
+  height: 71px;
+  max-height: 71px;
+  min-height: 71px;
 
   td {
     vertical-align: top;
@@ -16,6 +22,7 @@
   }
 
   .pr {
+//    color: #fff;
     padding-right: 10px;
     text-align: right;
   }
@@ -62,3 +69,16 @@
   }
 }
 
+#portamento_container {
+//  float:right;
+  position:relative;
+}
+
+#portamento_container #social {
+  float:none;
+  position:absolute;
+}
+
+#portamento_container #social.fixed {
+  position:fixed;
+}
