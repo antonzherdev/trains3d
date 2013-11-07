@@ -1,4 +1,6 @@
 @import "elements.less";
+@import "vars.less";
+
 
 @logoWidth : 256px;
 @logoHeight : 204px;
@@ -10,7 +12,7 @@
 
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a2d372', endColorstr='#87dd5f',GradientType=0 ); /* IE6-9 */
   padding-top: 5px;
-  border-bottom: 1px solid #888888;
+  border-bottom: 1px solid @lineColor;
 
   .logo {
     width : @logoWidth;
@@ -35,7 +37,8 @@
     position: relative;
   }
   .pr {
-    font-size: 18px;
+    color : @textColor;
+    font-size: 14px;
     line-height: 20px;
 //    color: #fff;
 

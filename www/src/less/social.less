@@ -1,10 +1,11 @@
+@import "vars.less";
 @import "elements.less";
 
 .b-social {
 //  .gradient(#FFFFF3, #9DED4F, #5A9700);
 //  position: fixed;
   background-color: rgba(255, 255, 255, 0.8);
-  border-bottom: 1px solid #888888;
+  border-bottom: 1px solid @lineColor;
   height: 71px;
   max-height: 71px;
   min-height: 71px;
@@ -26,7 +27,8 @@
   }
 
   .pr {
-//    color: #fff;
+    color: @textColor;
+    font-size: 14px;
     padding-right: 10px;
     text-align: right;
   }
