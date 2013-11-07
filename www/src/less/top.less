@@ -9,14 +9,17 @@
 //  .gradient(#FFFFC8, #FFF, #FFFFC8);
 //  .gradient(#FFFFF3, #003206, #000);
   background-color: #fff;
-
+  height: 108px;
+  margin-top: 10px;
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a2d372', endColorstr='#87dd5f',GradientType=0 ); /* IE6-9 */
-  padding-top: 5px;
   border-bottom: 1px solid @lineColor;
-
+  .cont {
+    font-size: 0;
+    margin: 0 20px;
+  }
   #logo {
-    margin-top: 10px;
-    text-align: center;
+    text-align: left;
+    float: left;
   }
   #icon {
     display: inline-block;
@@ -26,18 +29,19 @@
   }
 
   #logo-text {
-//    color: #fff;
+    padding-top: 30px;
   }
 
   #raildale {
-//    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
-    font-size: 45px;
+    font-size: 35px;
+    left: 10px;
+    position: relative;
+    top: -10px;
   }
   .pr {
     color : @textColor;
     font-size: 14px;
     line-height: 20px;
-//    color: #fff;
 
     a {
       text-decoration: none;
@@ -47,8 +51,6 @@
   }
 
   #logo-text {
-    margin-bottom: 40px;
-    margin-top: 10px;
-    text-align: center;
+    text-align: right;
   }
 }

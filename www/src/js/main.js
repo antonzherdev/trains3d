@@ -4,10 +4,11 @@
     $(document).ready(function(){
 //        $('#social').portamento({gap: 0});
         $("#gallery").gallery({
-            width : "765px",
-            height : "574px",
+            width : "860px",
+            height : "645px",
             timeout : 10000,
             arrows : 0,
+            animation : 2,
             items: [
                 '<div class="txt">Build your railway between cities</div><img src="/img/scr0.jpg"/>',
                 '<div class="txt">Sent trains to corresponding cities using lightnings and switches</div><img src="/img/scr1.jpg"/>',

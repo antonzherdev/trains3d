@@ -66,7 +66,8 @@
             timerRunning : true,
             width : options.width,
             animate : false,
-            timeout: options.timeout === undefined ? 10000 : options.timeout
+            timeout: options.timeout === undefined ? 10000 : options.timeout,
+            animation: options.animation === undefined ? 1 : options.animation
         };
         $(div).data("gallery", d);
         points.children().first().addClass("current");
@@ -82,6 +83,10 @@
         div.hammer().on("swiperight", function(event) {
 //            alert("swiperight");
             setCurrentItem(d, d.currentItem - 1);
+        });
+        div.bind('click', function () {
+            d.timerRunning = false;
+            setCurrentItem(d, d.currentItem + 1);
         });
     }
 
@@ -106,13 +111,22 @@
         var n = d.content.children().get(d.currentItem);
         var nPoint = $(d.points.children().get(d.currentItem));
 
-        $(o).css("left", "0px");
-        $(n).css("left", d.width).show();
         oPoint.removeClass("current");
         nPoint.addClass("current");
-        $(o).add(n).animate({"left" : "-=" + d.width}, function() {
-            $(o).hide();
-            d.animate = false;
-        });
+        if(d.animation === 1) {
+            $(o).css("left", "0px");
+            $(n).css("left", d.width).show();
+            $(o).add(n).animate({"left" : "-=" + d.width}, function() {
+                $(o).hide();
+                d.animate = false;
+            });
+        } else {
+            $(o).css("z-index", 0).show();
+            $(n).css("opacity", 0).css("z-index", 1).show();
+            $(n).animate({"opacity" : 1.0}, 600, function() {
+                $(o).hide();
+                d.animate = false;
+            });
+        }
     }
 })();
