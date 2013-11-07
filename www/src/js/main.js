@@ -4,8 +4,8 @@
     $(document).ready(function(){
 //        $('#social').portamento({gap: 0});
         $("#gallery").gallery({
-            width : "1024px",
-            height : "768px",
+            width : "765px",
+            height : "574px",
             timeout : 10000,
             arrows : 0,
             items: [
