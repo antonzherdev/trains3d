@@ -9,20 +9,34 @@
     };
 
     function createGallery(elem, options) {
-        var div = $('<table class="b-gallery"></table>');
+        var arrows = options.arrows === undefined ? 1 : 0;
+        var div = arrows === 1 ? $('<table class="b-gallery"></table>') : $('<div class="b-gallery"></div>');
         $(elem).append(div);
 
-        var top = $('<tr></tr>');
-        div.append(top);
-        var points = $('<td colspan="3" class="points"></td>');
-        div.append($('<tr></tr>').append(points));
-
-        var left = $('<div class="left-arrow"></div>');
-        top.append($('<td></td>').append(left));
         var content = $('<div class="content"></div>');
-        top.append($('<td></td>').append(content));
-        var right = $('<div class="right-arrow"></div>');
-        top.append($('<td></td>').append(right));
+        var points =  arrows === 1 ? $('<td colspan="3" class="points"></td>') : $('<div class="points"></div>');
+        if(arrows === 1) {
+            var top = $('<tr></tr>');
+            div.append(top);
+            div.append($('<tr></tr>').append(points));
+
+            var left = $('<div class="left-arrow"></div>');
+            top.append($('<td></td>').append(left));
+            top.append($('<td></td>').append(content));
+            var right = $('<div class="right-arrow"></div>');
+            top.append($('<td></td>').append(right));
+            left.bind('click', function () {
+                d.timerRunning = false;
+                setCurrentItem(d, d.currentItem - 1);
+            });
+            right.bind('click', function () {
+                d.timerRunning = false;
+                setCurrentItem(d, d.currentItem + 1);
+            });
+        } else {
+            div.append(content);
+            div.append(points);
+        }
 
         content.css("width", options.width);
         content.css("height", options.height);
@@ -59,13 +73,15 @@
 
         setTimeout(function() {galleryTimer(d);}, d.timeout);
 
-        left.bind('click', function () {
-            d.timerRunning = false;
-            setCurrentItem(d, d.currentItem - 1);
-        });
-        right.bind('click', function () {
-            d.timerRunning = false;
+
+        div.hammer().on("swipeleft", function(event) {
+//            alert("left");
             setCurrentItem(d, d.currentItem + 1);
+        });
+
+        div.hammer().on("swiperight", function(event) {
+//            alert("swiperight");
+            setCurrentItem(d, d.currentItem - 1);
         });
     }
 

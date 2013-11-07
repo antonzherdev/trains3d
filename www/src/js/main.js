@@ -6,7 +6,8 @@
         $("#gallery").gallery({
             width : "1024px",
             height : "768px",
-            timeout : 5000,
+            timeout : 10000,
+            arrows : 0,
             items: [
                 '<div class="txt">Build your railway between cities</div><img src="/img/scr0.jpg"/>',
                 '<div class="txt">Sent trains to corresponding cities using lightnings and switches</div><img src="/img/scr1.jpg"/>',
