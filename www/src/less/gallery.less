@@ -21,36 +21,27 @@
 
   .points {
     text-align: center;
-    margin-top: 5px;
     font-size: 0;
   }
 
   .point .inner {
     width: 8px;
     height: 8px;
-    background-color: @leadColor;
+    background-image: url("/img/gallery.png");
     cursor: pointer;
+    left: 6px;
     position: relative;
-    top: 3px;
-    left: 4px;
+    top: 6px;
   }
 
   .point {
-    width: 16px;
-    height: 15px;
-    position: relative;
-    margin-right: 7px;
+    width: 20px;
+    height: 20px;
     display: inline-block;
   }
 
-  .point.current {
-    border: 1px solid @leadColor;
-    width: 14px;
-    height: 14px;
-  }
-
   .point.current .inner {
-    left: 3px;
+    background-position: -8px 0;
   }
 
   .txt {
@@ -67,6 +58,6 @@
 }
 
 .b-gal {
-  padding-top: 20px;
+  padding-top: 15px;
   text-align : center;
 }
