@@ -2,8 +2,8 @@
 @import "vars.less";
 
 
-@logoWidth : 256px;
-@logoHeight : 204px;
+@logoWidth : 109px;
+@logoHeight : 88px;
 
 .b-top {
 //  .gradient(#FFFFC8, #FFF, #FFFFC8);
@@ -14,27 +14,24 @@
   padding-top: 5px;
   border-bottom: 1px solid @lineColor;
 
-  .logo {
+  #logo {
+    margin-top: 10px;
+    text-align: center;
+  }
+  #icon {
+    display: inline-block;
     width : @logoWidth;
     height : @logoHeight;
-    float: left;
-    background: url("/img/icon.png");
-    margin-right: 20px;
-    margin-left: 20px;
+    background: url("/img/icon.png") no-repeat;
   }
 
   #logo-text {
 //    color: #fff;
-    height : @logoHeight;
   }
 
   #raildale {
 //    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
-    font-size: 70px;
-    left: -5px;
-    line-height: 70px;
-    padding-top: 45px;
-    position: relative;
+    font-size: 45px;
   }
   .pr {
     color : @textColor;
@@ -45,6 +42,13 @@
     a {
       text-decoration: none;
       color: #53952f;
+      font-size : 14px;
     }
+  }
+
+  #logo-text {
+    margin-bottom: 40px;
+    margin-top: 10px;
+    text-align: center;
   }
 }

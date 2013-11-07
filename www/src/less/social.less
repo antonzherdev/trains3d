@@ -1,29 +1,29 @@
 @import "vars.less";
 @import "elements.less";
 
+@socHeight : 55px;
+
 .b-social {
 //  .gradient(#FFFFF3, #9DED4F, #5A9700);
 //  position: fixed;
   background-color: rgba(255, 255, 255, 0.8);
   border-bottom: 1px solid @lineColor;
-  height: 71px;
-  max-height: 71px;
-  min-height: 71px;
-  z-index: 10;
-  padding-bottom: 10px;
-  padding-top: 4px;
+  height: @socHeight;
+  max-height: @socHeight;
+  min-height: @socHeight;
+  padding-top: 3px;
+
 
   td {
     vertical-align: top;
   }
 
-  .last-btn {
-    height: 20px;
+  .btn {
+    height: 25px;
   }
 
   .blk {
     margin-left: 20px;
-    margin-top: 10px;
   }
 
   .pr {
@@ -35,8 +35,8 @@
 
   .lim-width {
     overflow: hidden;
-    max-height: 71px;
-    min-height: 71px;
+    max-height: @socHeight;
+    min-height: @socHeight;
   }
 }
 
@@ -59,7 +59,7 @@
   }
 
   .pr {
-    padding-top: 1px;
+    padding-top: 3px;
   }
 }
 
@@ -81,6 +81,10 @@
 
   #share-google {
     width: 90px;
+  }
+
+  .pr {
+    padding-top: 2px;
   }
 }
 

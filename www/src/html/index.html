@@ -43,9 +43,11 @@
 <div class="b-top fs">
     <div class="lim-width">
         <div class="cont">
-            <div class="logo"></div>
+            <div id="logo">
+                <span id="icon"></span>
+                <span id="raildale">Raildale</span>
+            </div>
             <div id="logo-text">
-                <div id="raildale">Raildale</div>
                 <div class="pr">Build and manage your railway</div>
                 <div class="pr">The game developed by <a href="http://www.antonzherdev.com" target="_blank">Anton Zherdev</a></div>
                 <div class="pr">Will be available soon on the App Store for iPhone, iPad and Mac</div>
@@ -60,54 +62,75 @@
         <table class="blk">
             <tr class="b-follow">
                 <td><div class="pr">In first days the price will be reduced. Not miss, follow:</div></td>
-                <td id = "follow-twitter" class="btn">
-                    <a href="https://twitter.com/raildale" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @raildale</a>
-                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                <td id = "follow-twitter">
+                    <div class="btn">
+                        <a href="https://twitter.com/raildale" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @raildale</a>
+                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                    </div>
                 </td>
-                <td id = "follow-facebook" class="btn">
-                    <div class="fb-follow" data-href="http://www.facebook.com/raildale" data-colorscheme="light" data-layout="button" data-show-faces="true"></div>
+                <td id = "follow-facebook">
+                    <div class="btn">
+                        <div class="fb-follow" data-href="http://www.facebook.com/raildale" data-colorscheme="light" data-layout="button" data-show-faces="true"></div>
+                    </div>
                 </td>
-                <td id = "follow-tumbrl" class="btn">
-                    <iframe class="btn" frameborder="0" border="0" scrolling="no" allowtransparency="true" height="25" width="120" src="http://platform.tumblr.com/v1/follow_button.html?button_type=2&tumblelog=raildale&color_scheme=light"></iframe>
+                <td id = "follow-tumbrl">
+                    <div class="btn">
+                        <iframe class="btn" frameborder="0" border="0" scrolling="no" allowtransparency="true" height="25" width="120" src="http://platform.tumblr.com/v1/follow_button.html?button_type=2&tumblelog=raildale&color_scheme=light"></iframe>
+                    </div>
                 </td>
-                <td id = "follow-google" class="btn">
-                    <a href="//plus.google.com/103785811973638747654?prsrc=3" rel="publisher" target="_top" style="text-decoration:none;">
-                        <img src="//ssl.gstatic.com/images/icons/gplus-16.png" alt="Google+" style="border:0;width:16px;height:16px;"/>
-                    </a>
+                <td id = "follow-google">
+                    <div class="btn">
+                        <a href="//plus.google.com/103785811973638747654?prsrc=3" rel="publisher" target="_top" style="text-decoration:none;">
+                            <img src="//ssl.gstatic.com/images/icons/gplus-16.png" alt="Google+" style="border:0;width:16px;height:16px;"/>
+                        </a>
+                    </div>
                 </td>
+
                 <td id = "follow-vk" class="last-btn">
-                    <a href="//vk.com/raildale" target="_top" style="text-decoration:none;">
-                        <img src="/img/vk.png" alt="ВКонтакте" style="border:0;width:16px;height:16px;"/>
-                    </a>
+                    <div class="btn">
+                        <a href="//vk.com/raildale" target="_top" style="text-decoration:none;">
+                            <img src="/img/vk.png" alt="ВКонтакте" style="border:0;width:16px;height:16px;"/>
+                        </a>
+                    </div>
                 </td>
             </tr>
             <tr class="b-share">
                 <td><div class="pr">Tell your friends:</div></td>
-                <td id = "share-twitter" class="btn">
-                    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.raildale.com" data-text="Great game about railways" data-via="raildale">Tweet</a>
-                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                <td id = "share-twitter">
+                    <div class="btn">
+                        <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.raildale.com" data-text="Great game about railways" data-via="raildale">Tweet</a>
+                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                    </div>
                 </td>
-                <td id = "share-facebook" class="btn">
-                    <div class="fb-like" data-href="http://www.facebook.com/raildale" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="false"></div>
+                <td id = "share-facebook">
+                    <div class="btn">
+                        <div class="fb-like" data-href="http://www.facebook.com/raildale" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="false"></div>
+                    </div>
                 </td>
-                <td id = "share-tumbrl" class="btn">
-                    <span id="tumblr_button_abc123"></span>
+                <td id = "share-tumbrl">
+                    <div class="btn">
+                        <span id="tumblr_button_abc123"></span>
+                    </div>
                 </td>
-                <td id = "share-google" class="btn">
-                    <div class="g-plusone" data-size="medium"></div>
-                    <script type="text/javascript">
-                        (function() {
-                            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-                            po.src = 'https://apis.google.com/js/plusone.js';
-                            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-                        })();
-                    </script>
+                <td id = "share-google">
+                    <div class="btn">
+                        <div class="g-plusone" data-size="medium"></div>
+                        <script type="text/javascript">
+                            (function() {
+                                var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                                po.src = 'https://apis.google.com/js/plusone.js';
+                                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+                            })();
+                        </script>
+                    </div>
                 </td>
-                <td id = "share-vk" class="btn">
-                    <div id="vk_like"></div>
-                    <script type="text/javascript">
-                        VK.Widgets.Like("vk_like", {type: "mini"});
-                    </script>
+                <td id = "share-vk">
+                    <div class="btn">
+                        <div id="vk_like"></div>
+                        <script type="text/javascript">
+                            VK.Widgets.Like("vk_like", {type: "mini"});
+                        </script>
+                    </div>
                 </td>
             </tr>
         </table>
