@@ -9,7 +9,7 @@
 //  .gradient(#FFFFC8, #FFF, #FFFFC8);
 //  .gradient(#FFFFF3, #003206, #000);
   background-color: #fff;
-  height: 108px;
+  height: 115px;
   margin-top: 10px;
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a2d372', endColorstr='#87dd5f',GradientType=0 ); /* IE6-9 */
   border-bottom: 1px solid @lineColor;
@@ -28,15 +28,12 @@
     background: url("/img/icon.png") no-repeat;
   }
 
-  #logo-text {
-    padding-top: 30px;
-  }
-
   #raildale {
-    font-size: 35px;
+    font-size: 40px;
     left: 10px;
+    line-height: 40px;
     position: relative;
-    top: -10px;
+    top: -4px;
   }
   .pr {
     color : @textColor;
@@ -50,7 +47,18 @@
     }
   }
 
-  #logo-text {
+  #desc-text {
     text-align: right;
+    padding-top: 10px;
+  }
+
+  #logo-text {
+    display: inline-block;
+  }
+
+  #logo-desc {
+    left: 12px;
+    position: relative;
+    top: -10px;
   }
 }

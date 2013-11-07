@@ -18,124 +18,41 @@
     <link rel="icon" href="/16.png" sizes="16x16" type="image/png">
     <link rel="icon" href="/32.png" sizes="32x32" type="image/png">
     <link rel="stylesheet" href="css/main.css">
-    <link href="https://plus.google.com/103785811973638747654" rel="publisher" />
+    <link rel="alternate" type="application/rss+xml" href="http://blog.raildale.com/rss"/>
     <!--<script src="js/vendor/modernizr-2.6.2.min.js"></script>-->
-
-    <script type="text/javascript" src="//vk.com/js/api/openapi.js?101"></script>
-    <script type="text/javascript">
-        VK.init({apiId: 3979015, onlyWidgets: true});
-    </script>
 </head>
 <body>
 <!--[if lt IE 7]>
 <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
 <![endif]-->
 
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/ru_RU/all.js#xfbml=1";
-    fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
 <div class="b-top fs">
     <div class="lim-width">
         <div class="cont">
             <div id="logo">
                 <span id="icon"></span>
-                <span id="raildale">Raildale</span>
+                <span id="logo-text">
+                    <div id="raildale">Raildale</div>
+                    <div id="logo-desc" class="pr">Build and manage your railway</div>
+                </span>
             </div>
-            <div id="logo-text">
-                <div class="pr">Build and manage your railway</div>
+            <div id="desc-text">
                 <div class="pr">The game developed by <a href="http://www.antonzherdev.com" target="_blank">Anton Zherdev</a></div>
                 <div class="pr">Will be available soon on the App Store for iPhone, iPad and Mac</div>
+                <div class="pr">In first days the price will be reduced. Not miss, follow:</div>
+                <div class="b-social" id = "social">
+                    <a href="https://twitter.com/raildale" class = "sbtn twitter" title="Twitter" target="_blank"></a>
+                    <a href="http://facebook.com/raildale" class = "sbtn facebook" title="Facebook" target="_blank"></a>
+                    <a href="http://blog.raildale.com/" class = "sbtn tumblr" title="Tumblr" target="_blank"></a>
+                    <a href="http://blog.raildale.com/rss" class = "sbtn rss" title="Blog RSS" target="_blank"></a>
+                    <a href="//plus.google.com/103785811973638747654" class = "sbtn google" title="Google plus" target="_blank"></a>
+                    <a href="http://vk.com/raildale" class = "sbtn last vk" title="ВКонтакте" target="_blank"></a>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-
-<div class="b-social fs" id = "social">
-    <div class="lim-width">
-        <table class="blk">
-            <tr class="b-follow">
-                <td><div class="pr">In first days the price will be reduced. Not miss, follow:</div></td>
-                <td id = "follow-twitter">
-                    <div class="btn">
-                        <a href="https://twitter.com/raildale" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @raildale</a>
-                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                    </div>
-                </td>
-                <td id = "follow-facebook">
-                    <div class="btn">
-                        <div class="fb-follow" data-href="http://www.facebook.com/raildale" data-colorscheme="light" data-layout="button" data-show-faces="true"></div>
-                    </div>
-                </td>
-                <td id = "follow-tumbrl">
-                    <div class="btn">
-                        <iframe class="btn" frameborder="0" border="0" scrolling="no" allowtransparency="true" height="25" width="120" src="http://platform.tumblr.com/v1/follow_button.html?button_type=2&tumblelog=raildale&color_scheme=light"></iframe>
-                    </div>
-                </td>
-                <td id = "follow-google">
-                    <div class="btn">
-                        <a href="//plus.google.com/103785811973638747654?prsrc=3" rel="publisher" target="_top" style="text-decoration:none;">
-                            <img src="//ssl.gstatic.com/images/icons/gplus-16.png" alt="Google+" style="border:0;width:16px;height:16px;"/>
-                        </a>
-                    </div>
-                </td>
-
-                <td id = "follow-vk" class="last-btn">
-                    <div class="btn">
-                        <a href="//vk.com/raildale" target="_top" style="text-decoration:none;">
-                            <img src="/img/vk.png" alt="ВКонтакте" style="border:0;width:16px;height:16px;"/>
-                        </a>
-                    </div>
-                </td>
-            </tr>
-            <tr class="b-share">
-                <td><div class="pr">Tell your friends:</div></td>
-                <td id = "share-twitter">
-                    <div class="btn">
-                        <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.raildale.com" data-text="Great game about railways" data-via="raildale">Tweet</a>
-                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                    </div>
-                </td>
-                <td id = "share-facebook">
-                    <div class="btn">
-                        <div class="fb-like" data-href="http://www.facebook.com/raildale" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="false"></div>
-                    </div>
-                </td>
-                <td id = "share-tumbrl">
-                    <div class="btn">
-                        <span id="tumblr_button_abc123"></span>
-                    </div>
-                </td>
-                <td id = "share-google">
-                    <div class="btn">
-                        <div class="g-plusone" data-size="medium"></div>
-                        <script type="text/javascript">
-                            (function() {
-                                var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-                                po.src = 'https://apis.google.com/js/plusone.js';
-                                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-                            })();
-                        </script>
-                    </div>
-                </td>
-                <td id = "share-vk">
-                    <div class="btn">
-                        <div id="vk_like"></div>
-                        <script type="text/javascript">
-                            VK.Widgets.Like("vk_like", {type: "mini"});
-                        </script>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
-</div>
 
 <div class="b-gal">
     <div class="lim-width">
@@ -147,24 +64,6 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
 <script src="js/all.min.js"></script>
-
-
-<script type="text/javascript">
-    var tumblr_link_url = "http://www.raildale.com/";
-    var tumblr_link_name = "Great game about railways";
-    var tumblr_link_description = "Build and manage your railway";
-</script>
-
-<!-- Put this code at the bottom of your page -->
-<script type="text/javascript">
-    var tumblr_button = document.createElement("a");
-    tumblr_button.setAttribute("href", "http://www.tumblr.com/share/link?url=" + encodeURIComponent(tumblr_link_url) + "&name=" + encodeURIComponent(tumblr_link_name) + "&description=" + encodeURIComponent(tumblr_link_description));
-    tumblr_button.setAttribute("title", "Share on Tumblr");
-    tumblr_button.setAttribute("style", "display:inline-block; text-indent:-9999px; overflow:hidden; width:129px; height:20px; background:url('http://platform.tumblr.com/v1/share_3T.png') top left no-repeat transparent;");
-    tumblr_button.innerHTML = "Share on Tumblr";
-    document.getElementById("tumblr_button_abc123").appendChild(tumblr_button);
-</script>
-<script src="http://platform.tumblr.com/v1/share.js"></script>
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

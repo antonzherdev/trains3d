@@ -1,103 +1,62 @@
 @import "vars.less";
 @import "elements.less";
 
-@socHeight : 55px;
-
 .b-social {
-//  .gradient(#FFFFF3, #9DED4F, #5A9700);
-//  position: fixed;
-  background-color: rgba(255, 255, 255, 0.8);
-  border-bottom: 1px solid @lineColor;
-  height: @socHeight;
-  max-height: @socHeight;
-  min-height: @socHeight;
-  padding-top: 3px;
-
-
   td {
     vertical-align: top;
   }
 
-  .btn {
-    height: 25px;
-  }
+  font-size : 0;
 
-  .blk {
-    margin-left: 20px;
-  }
-
-  .pr {
-    color: @textColor;
-    font-size: 14px;
-    padding-right: 10px;
-    text-align: right;
-  }
-
-  .lim-width {
-    overflow: hidden;
-    max-height: @socHeight;
-    min-height: @socHeight;
-  }
 }
 
-.b-follow{
-  #follow-facebook {
-    width: 121px;
-  }
-
-  #follow-twitter {
-    padding-top: 2px;
-  }
-  #follow-tumbrl {
-    padding-top: 0px;
-  }
-  #follow-google {
-    padding-top: 1px;
-  }
-  #follow-vk {
-    padding-top: 1px;
-  }
-
-  .pr {
-    padding-top: 3px;
-  }
+.sbtn {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+  background-image: url("/img/social.png");
+  background-repeat: no-repeat;
 }
 
-.b-share {
-  #share-twitter {
-    padding-top: 1px;
-    max-width: 90px;
-  }
-
-  #share-facebook {
-    padding-top: 1px;
-    padding-right: 20px;
-  }
-
-  #share-tumbrl {
-    padding-top: 1px;
-    padding-right: 20px;
-  }
-
-  #share-google {
-    width: 90px;
-  }
-
-  .pr {
-    padding-top: 2px;
-  }
+.sbtn.last {
+  margin-right: 0px;
+}
+.sbtn.twitter:hover {
+  background-position : 0 -32px;
 }
 
-#portamento_container {
-//  float:right;
-  position:relative;
+.sbtn.facebook {
+  background-position : -32px 0;
+}
+.sbtn.facebook:hover {
+  background-position : -32px -32px;
 }
 
-#portamento_container #social {
-  float:none;
-  position:absolute;
+.sbtn.tumblr {
+  background-position : -64px 0;
+}
+.sbtn.tumblr:hover {
+  background-position : -64px -32px;
 }
 
-#portamento_container #social.fixed {
-  position:fixed;
+.sbtn.google {
+  background-position : -96px 0;
+}
+.sbtn.google:hover {
+  background-position : -96px -32px;
+}
+
+.sbtn.vk {
+  background-position : -128px 0;
+}
+.sbtn.vk:hover {
+  background-position : -128px -32px;
+}
+
+.sbtn.rss {
+  background-position : -160px 0;
+}
+.sbtn.rss:hover {
+  background-position : -160px -32px;
 }
