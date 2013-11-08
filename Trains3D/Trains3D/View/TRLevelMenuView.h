@@ -11,10 +11,9 @@
 @class EGGlobal;
 @class EGContext;
 @class EGCamera2D;
-@class EGTextureRegion;
 @class EGColorSource;
+@class EGTextureRegion;
 @class EGBlendFunction;
-@class EGD2D;
 @class TRScore;
 @class TRStr;
 @protocol TRStrings;
@@ -29,6 +28,7 @@
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) EGSprite* pauseSprite;
+@property (nonatomic, readonly) EGSprite* backSprite;
 @property (nonatomic, readonly) GEVec4(^notificationProgress)(float);
 @property (nonatomic, readonly) GERect pauseReg;
 @property (nonatomic) id<EGCamera> camera;

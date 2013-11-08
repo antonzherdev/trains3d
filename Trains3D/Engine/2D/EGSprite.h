@@ -95,10 +95,10 @@
 + (id)sprite;
 - (id)init;
 - (ODClassType*)type;
++ (EGSprite*)applyMaterial:(EGColorSource*)material rect:(GERect)rect;
 - (void)draw;
 - (GERect)rect;
 - (void)setRect:(GERect)rect;
-+ (EGSprite*)applyMaterial:(EGColorSource*)material size:(GEVec2)size;
 + (EGSprite*)applyTexture:(EGTexture*)texture;
 - (void)adjustSize;
 - (BOOL)containsVec2:(GEVec2)vec2;

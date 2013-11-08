@@ -147,7 +147,7 @@ static ODClassType* _TRMenuView_type;
 
 - (id)init {
     self = [super init];
-    if(self) _menuBackSprite = [EGSprite applyMaterial:[EGColorSource applyColor:GEVec4Make(0.9, 0.9, 0.9, 1.0)] size:GEVec2Make(350.0, 150.0)];
+    if(self) _menuBackSprite = [EGSprite applyMaterial:[EGColorSource applyColor:GEVec4Make(0.9, 0.9, 0.9, 1.0)] rect:geRectApplyXYWidthHeight(0.0, 0.0, 350.0, 150.0)];
     
     return self;
 }
@@ -529,7 +529,7 @@ static ODClassType* _TRHelpView_type;
     if(self) {
         _level = level;
         _helpText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
-        _helpBackSprite = [EGSprite applyMaterial:[EGColorSource applyColor:TRLevelMenuView.backgroundColor] size:GEVec2Make(0.0, 0.0)];
+        _helpBackSprite = [EGSprite applyMaterial:[EGColorSource applyColor:TRLevelMenuView.backgroundColor] rect:geRectApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0)];
     }
     
     return self;

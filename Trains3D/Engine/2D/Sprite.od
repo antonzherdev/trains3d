@@ -151,6 +151,13 @@ class CircleShader extends Shader<CircleParam>(CircleShaderBuilder().program) {
 }
 
 class Sprite {
+    static def apply(material : ColorSource, rect : Rect) : Sprite = {
+        val s = Sprite()
+        s.material = material
+        s.rect = rect
+        s
+    }
+
     var material : ColorSource
 
     def draw {
@@ -163,13 +170,6 @@ class Sprite {
     def set(rect : Rect) {
         position = rect.p0
         size = rect.size
-    }
-
-    static def apply(material : ColorSource, size : vec2) : Sprite = {
-        val s = Sprite()
-        s.material = material
-        s.size = size
-        s
     }
 
     static def apply(texture : Texture) : Sprite = {

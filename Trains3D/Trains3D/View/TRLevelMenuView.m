@@ -6,9 +6,9 @@
 #import "EGSchedule.h"
 #import "EGContext.h"
 #import "EGCamera2D.h"
+#import "EGMaterial.h"
 #import "GL.h"
 #import "EGTexture.h"
-#import "EGMaterial.h"
 #import "TRScore.h"
 #import "TRStrings.h"
 #import "TRNotification.h"
@@ -17,6 +17,7 @@
     TRLevel* _level;
     NSString* _name;
     EGSprite* _pauseSprite;
+    EGSprite* _backSprite;
     GEVec4(^_notificationProgress)(float);
     GERect _pauseReg;
     NSInteger _width;
@@ -32,6 +33,7 @@ static ODClassType* _TRLevelMenuView_type;
 @synthesize level = _level;
 @synthesize name = _name;
 @synthesize pauseSprite = _pauseSprite;
+@synthesize backSprite = _backSprite;
 @synthesize notificationProgress = _notificationProgress;
 @synthesize pauseReg = _pauseReg;
 @synthesize camera = _camera;
@@ -48,6 +50,7 @@ static ODClassType* _TRLevelMenuView_type;
         _level = level;
         _name = @"LevelMenu";
         _pauseSprite = [EGSprite sprite];
+        _backSprite = [EGSprite sprite];
         _notificationProgress = ^id() {
             float(^__l)(float) = [EGProgress gapT1:0.7 t2:1.0];
             GEVec4(^__r)(float) = ^GEVec4(float _) {
@@ -89,6 +92,8 @@ static ODClassType* _TRLevelMenuView_type;
         [((EGText*)(_)) setFont:font];
         [((EGText*)(_)) setPosition:GEVec3Make(((float)(_width / 2)), 14.0, 0.0)];
     }];
+    _backSprite.material = [EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.7)];
+    [_backSprite setRect:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(_width)), 46.0)];
     _pauseSprite.position = GEVec2Make(((float)(_width - 46)), 0.0);
     _pauseSprite.material = [EGColorSource applyTexture:[EGTextureRegion textureRegionWithTexture:[EGGlobal scaledTextureForName:@"Pause" format:@"png" magFilter:GL_NEAREST minFilter:GL_NEAREST] uv:_pauseReg]];
     [_pauseSprite adjustSize];
@@ -97,7 +102,7 @@ static ODClassType* _TRLevelMenuView_type;
 - (void)draw {
     [EGGlobal.context.depthTest disabledF:^void() {
         [EGBlendFunction.standard applyDraw:^void() {
-            [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.7)] at:GEVec3Make(0.0, 0.0, 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(_width)), 46.0)];
+            [_backSprite draw];
             [_scoreText setText:[self formatScore:[_level.score score]]];
             [_scoreText draw];
             [_pauseSprite draw];

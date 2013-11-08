@@ -501,6 +501,13 @@ static ODClassType* _EGSprite_type;
     _EGSprite_type = [ODClassType classTypeWithCls:[EGSprite class]];
 }
 
++ (EGSprite*)applyMaterial:(EGColorSource*)material rect:(GERect)rect {
+    EGSprite* s = [EGSprite sprite];
+    s.material = material;
+    [s setRect:rect];
+    return s;
+}
+
 - (void)draw {
     [EGD2D drawSpriteMaterial:_material at:geVec3ApplyVec2Z(_position, 0.0) quad:geRectQuad(GERectMake(GEVec2Make(0.0, 0.0), _size))];
 }
@@ -512,13 +519,6 @@ static ODClassType* _EGSprite_type;
 - (void)setRect:(GERect)rect {
     _position = rect.p0;
     _size = rect.size;
-}
-
-+ (EGSprite*)applyMaterial:(EGColorSource*)material size:(GEVec2)size {
-    EGSprite* s = [EGSprite sprite];
-    s.material = material;
-    s.size = size;
-    return s;
 }
 
 + (EGSprite*)applyTexture:(EGTexture*)texture {

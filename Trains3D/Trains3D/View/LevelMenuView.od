@@ -8,6 +8,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor with Ta
     val name = "LevelMenu"
 
     val pauseSprite = Sprite()
+    val backSprite = Sprite()
 
     val notificationProgress = gap(0.7, 1) >> vec4(0, 0, 0, 1 - _)
     val pauseReg =  Rect(0, 0, 46.0/64, 46.0/64)
@@ -29,6 +30,9 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor with Ta
             _.position = vec3(width/2, 14, 0)
         }
 
+        backSprite.material = vec4(1, 1, 1, 0.7)
+        backSprite.rect = Rect(0, 0, width, 46)
+
         pauseSprite.position = vec2(width - 46, 0)
         pauseSprite.material = ColorSource(TextureRegion(scaledTextureFor("Pause", "png", GL_NEAREST, GL_NEAREST), pauseReg))
         pauseSprite.adjustSize
@@ -39,7 +43,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor with Ta
 
     def draw {
         context.depthTest.disabled { BlendFunction.standard {
-            D2D.drawSprite(material = vec4(1, 1, 1, 0.7), at = vec3(0, 0, 0), Rect(0, 0, width, 46))
+            backSprite.draw
 
             scoreText.text = format(level.score.score)
             scoreText.draw

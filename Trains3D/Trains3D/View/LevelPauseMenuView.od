@@ -75,7 +75,7 @@ class MenuView {
         }
     }
 
-    private val menuBackSprite = Sprite(vec4(0.9, 0.9, 0.9, 1.0), vec2(350, 150))
+    private val menuBackSprite = Sprite(vec4(0.9, 0.9, 0.9, 1.0), Rect(0, 0, 350, 150))
     def headerHeight : float = 0.0
 
     def reshapeWith(viewport : Rect) {
@@ -157,7 +157,7 @@ class HelpView(level : Level) extends PauseView {
         helpText.font = fontWith(name = "lucida_grande", size = 16)
     }
 
-    private val helpBackSprite = Sprite(LevelMenuView.backgroundColor, vec2(0, 0))
+    private val helpBackSprite = Sprite(LevelMenuView.backgroundColor, Rect(0, 0, 0, 0))
     def draw {
         val help = level.help.get
         helpText.text = help.text
