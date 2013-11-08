@@ -88,15 +88,18 @@
 
 
 @interface EGSprite : NSObject
-@property (nonatomic, retain) EGColorSource* material;
-@property (nonatomic) GEVec2 position;
-@property (nonatomic) GEVec2 size;
-
 + (id)sprite;
 - (id)init;
 - (ODClassType*)type;
++ (EGSprite*)applyMaterial:(EGColorSource*)material;
 + (EGSprite*)applyMaterial:(EGColorSource*)material rect:(GERect)rect;
+- (EGColorSource*)material;
+- (void)setMaterial:(EGColorSource*)material;
 - (void)draw;
+- (GEVec2)position;
+- (void)setPosition:(GEVec2)position;
+- (GEVec2)size;
+- (void)setSize:(GEVec2)size;
 - (GERect)rect;
 - (void)setRect:(GERect)rect;
 + (EGSprite*)applyTexture:(EGTexture*)texture;

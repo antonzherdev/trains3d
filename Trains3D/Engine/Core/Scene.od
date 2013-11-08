@@ -19,6 +19,7 @@ class Scene(backgroundColor : vec4, controller : Controller, layers : Layers, so
         if(_lastViewSize != viewSize) {
             _lastViewSize = viewSize
             layers.reshapeWith(viewSize)
+            Director.reshapeNotification.post(viewSize)
         }
         layers.prepare
     }

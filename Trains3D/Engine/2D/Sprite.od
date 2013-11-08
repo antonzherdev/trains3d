@@ -151,6 +151,12 @@ class CircleShader extends Shader<CircleParam>(CircleShaderBuilder().program) {
 }
 
 class Sprite {
+    static def apply(material : ColorSource) : Sprite = {
+        val s = Sprite()
+        s.material = material
+        s
+    }
+
     static def apply(material : ColorSource, rect : Rect) : Sprite = {
         val s = Sprite()
         s.material = material
@@ -158,15 +164,51 @@ class Sprite {
         s
     }
 
-    var material : ColorSource
+    private val vb = VBO.mut(Billboard.vbDesc)
+    private var vao : VertexArray<ColorSource>
 
-    def draw {
-        D2D.drawSprite(material, at = vec3(position, 0), Rect(vec2(0, 0), size).quad)
+    private var _changed = true
+    private var _material : ColorSource
+    def material = _material
+    def set(material : ColorSource) {
+        if(_material != material) {
+            _material = material
+            _changed = true
+            vao = Mesh(vb, EmptyIndexSource.triangleStrip).vao(BillboardShaderSystem.instance, material, false)
+        }
     }
 
-    var position : vec2 = vec2(0, 0)
-    var size : vec2 = vec2(1, 1)
-    def rect : Rect = Rect(position, size)
+    def draw {
+        if(_changed) {
+            val vertexes = VoidRefArray(BillboardBufferData.type, 4)
+            D2D.writeSprite(vertexes, _material, vec3(_position, 0), Rect(vec2(0, 0), _size).quad,
+                if(_material.texture.isDefined) material.texture.get.uv.upsideDownQuad
+                else Rect(0, 0, 1, 1).upsideDownQuad)
+            vb.set(vertexes)
+            _changed = false
+        }
+        context.cullFace.disabled {
+            vao.draw
+        }
+    }
+
+    private var _position : vec2 = vec2(0, 0)
+    def position = _position
+    def set(position : vec2) {
+        if(_position != position) {
+            _position = position
+            _changed = true
+        }
+    }
+    private var _size : vec2 = vec2(1, 1)
+    def size = _size
+    def set(size : vec2) {
+        if(_size != size) {
+            _size = size
+            _changed = true
+        }
+    }
+    def rect : Rect = Rect(_position, _size)
     def set(rect : Rect) {
         position = rect.p0
         size = rect.size
@@ -179,12 +221,12 @@ class Sprite {
     }
 
     def adjustSize {
-        if(material.texture.isDefined) {
-            size = material.texture.get.scaledSize
+        if(_material.texture.isDefined) {
+            size = _material.texture.get.scaledSize
         }
     }
 
-    def contains(vec2 : vec2) : bool = Rect(position, size).contains(vec2)
+    def contains(vec2 : vec2) : bool = Rect(_position, _size).contains(vec2)
 }
 
 class Line2d {

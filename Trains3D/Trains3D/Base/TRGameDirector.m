@@ -50,7 +50,7 @@ static ODClassType* _TRGameDirector_type;
 
 - (void)_init {
     [EGGameCenter.instance authenticate];
-    [CNNotificationCenter.aDefault addObserverName:@"level was passed" block:^void(id _) {
+    [CNNotificationCenter.instance addObserverName:@"level was passed" block:^void(id _) {
         [_cloud keepMaxKey:@"maxLevel" i:unumi(_) + 1];
         [_local setKey:@"currentLevel" i:unumi(_) + 1];
     }];

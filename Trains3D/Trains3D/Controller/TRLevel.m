@@ -383,7 +383,7 @@ static ODClassType* _TRLevel_type;
 
 - (void)win {
     __result = [CNOption applyValue:[TRLevelResult levelResultWithWin:YES]];
-    [CNNotificationCenter.aDefault postName:@"level was passed" data:numi(((NSInteger)(_number)))];
+    [CNNotificationCenter.instance postName:@"level was passed" data:numi(((NSInteger)(_number)))];
 }
 
 - (void)lose {

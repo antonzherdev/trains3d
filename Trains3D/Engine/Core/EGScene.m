@@ -2,6 +2,7 @@
 
 #import "GL.h"
 #import "EGContext.h"
+#import "EGDirector.h"
 #import "EGInput.h"
 #import "EGSound.h"
 #import "EGPlatform.h"
@@ -46,6 +47,7 @@ static ODClassType* _EGScene_type;
     if(!(GEVec2Eq(__lastViewSize, viewSize))) {
         __lastViewSize = viewSize;
         [_layers reshapeWithViewSize:viewSize];
+        [EGDirector.reshapeNotification postData:wrap(GEVec2, viewSize)];
     }
     [_layers prepare];
 }

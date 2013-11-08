@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "GEVec.h"
 @class EGMatrixModel;
+@class EGDirector;
 @class EGEvent;
 @protocol EGSoundPlayer;
 @class EGGlobal;

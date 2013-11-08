@@ -26,15 +26,15 @@ static ODClassType* _CNNotificationHandle_type;
 }
 
 - (void)postData:(id)data {
-    [CNNotificationCenter.aDefault postName:_name data:data];
+    [CNNotificationCenter.instance postName:_name data:data];
 }
 
 - (void)post {
-    [CNNotificationCenter.aDefault postName:_name data:nil];
+    [CNNotificationCenter.instance postName:_name data:nil];
 }
 
 - (void)observeBy:(void(^)(id))by {
-    [CNNotificationCenter.aDefault addObserverName:_name block:by];
+    [CNNotificationCenter.instance addObserverName:_name block:by];
 }
 
 - (ODClassType*)type {

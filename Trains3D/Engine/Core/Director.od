@@ -24,6 +24,8 @@ class Director {
         _current = self
     }
 
+    static val reshapeNotification = NotificationHandle<vec2>("Reshape")
+
     def drawWith(size : vec2) {
         if(_scene.isEmpty) return nil
         if(size.x <= 0 || size.y <= 0) return nil

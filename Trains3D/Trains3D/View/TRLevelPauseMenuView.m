@@ -196,7 +196,7 @@ static ODClassType* _TRMenuView_type;
         [((EGButton*)(_)) draw];
     }];
     CGFloat hh = [self headerHeight] * EGGlobal.context.scale;
-    if(hh > 0) [self drawHeaderRect:GERectMake(geVec2AddVec2(_menuBackSprite.position, GEVec2Make(0.0, _menuBackSprite.size.y - hh)), GEVec2Make(_menuBackSprite.size.x, ((float)(hh))))];
+    if(hh > 0) [self drawHeaderRect:GERectMake(geVec2AddVec2([_menuBackSprite position], GEVec2Make(0.0, [_menuBackSprite size].y - hh)), GEVec2Make([_menuBackSprite size].x, ((float)(hh))))];
 }
 
 - (CGFloat)headerHeight {
@@ -209,9 +209,9 @@ static ODClassType* _TRMenuView_type;
     CGFloat delta = 50 * s;
     CGFloat height = delta * [[self buttons] count];
     __font = [EGGlobal fontWithName:@"lucida_grande" size:24];
-    _menuBackSprite.size = GEVec2Make(((float)(width)), ((float)(height + [self headerHeight] * s)));
-    _menuBackSprite.position = geRectMoveToCenterForSize([_menuBackSprite rect], viewport.size).p0;
-    __block GEVec2 p = geVec2AddVec2(_menuBackSprite.position, GEVec2Make(0.0, ((float)(height - delta))));
+    [_menuBackSprite setSize:GEVec2Make(((float)(width)), ((float)(height + [self headerHeight] * s)))];
+    [_menuBackSprite setPosition:geRectMoveToCenterForSize([_menuBackSprite rect], viewport.size).p0];
+    __block GEVec2 p = geVec2AddVec2([_menuBackSprite position], GEVec2Make(0.0, ((float)(height - delta))));
     [[[self buttons] chain] forEach:^void(EGButton* button) {
         ((EGButton*)(button)).rect = GERectMake(p, GEVec2Make(((float)(width)), ((float)(delta))));
         p = geVec2SubVec2(p, GEVec2Make(0.0, ((float)(delta))));

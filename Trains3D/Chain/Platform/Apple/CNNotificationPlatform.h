@@ -11,7 +11,7 @@
 - (ODClassType*)type;
 - (CNNotificationObserver*)addObserverName:(NSString*)name block:(void(^)(id))block;
 - (void)postName:(NSString*)name data:(id)data;
-+ (CNNotificationCenter*)aDefault;
++ (CNNotificationCenter*)instance;
 + (ODClassType*)type;
 @end
 

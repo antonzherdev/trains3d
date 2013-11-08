@@ -473,14 +473,14 @@ static ODClassType* _EGCircleShader_type;
 
 
 @implementation EGSprite{
-    EGColorSource* _material;
-    GEVec2 _position;
-    GEVec2 _size;
+    EGMutableVertexBuffer* _vb;
+    EGVertexArray* _vao;
+    BOOL __changed;
+    EGColorSource* __material;
+    GEVec2 __position;
+    GEVec2 __size;
 }
 static ODClassType* _EGSprite_type;
-@synthesize material = _material;
-@synthesize position = _position;
-@synthesize size = _size;
 
 + (id)sprite {
     return [[EGSprite alloc] init];
@@ -489,8 +489,10 @@ static ODClassType* _EGSprite_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _position = GEVec2Make(0.0, 0.0);
-        _size = GEVec2Make(1.0, 1.0);
+        _vb = [EGVBO mutDesc:EGBillboard.vbDesc];
+        __changed = YES;
+        __position = GEVec2Make(0.0, 0.0);
+        __size = GEVec2Make(1.0, 1.0);
     }
     
     return self;
@@ -501,38 +503,86 @@ static ODClassType* _EGSprite_type;
     _EGSprite_type = [ODClassType classTypeWithCls:[EGSprite class]];
 }
 
++ (EGSprite*)applyMaterial:(EGColorSource*)material {
+    EGSprite* s = [EGSprite sprite];
+    [s setMaterial:material];
+    return s;
+}
+
 + (EGSprite*)applyMaterial:(EGColorSource*)material rect:(GERect)rect {
     EGSprite* s = [EGSprite sprite];
-    s.material = material;
+    [s setMaterial:material];
     [s setRect:rect];
     return s;
 }
 
+- (EGColorSource*)material {
+    return __material;
+}
+
+- (void)setMaterial:(EGColorSource*)material {
+    if(!([__material isEqual:material])) {
+        __material = material;
+        __changed = YES;
+        _vao = [[EGMesh meshWithVertex:_vb index:EGEmptyIndexSource.triangleStrip] vaoShaderSystem:EGBillboardShaderSystem.instance material:material shadow:NO];
+    }
+}
+
 - (void)draw {
-    [EGD2D drawSpriteMaterial:_material at:geVec3ApplyVec2Z(_position, 0.0) quad:geRectQuad(GERectMake(GEVec2Make(0.0, 0.0), _size))];
+    if(__changed) {
+        CNVoidRefArray vertexes = cnVoidRefArrayApplyTpCount(egBillboardBufferDataType(), 4);
+        [EGD2D writeSpriteIn:vertexes material:__material at:geVec3ApplyVec2Z(__position, 0.0) quad:geRectQuad(GERectMake(GEVec2Make(0.0, 0.0), __size)) uv:(([__material.texture isDefined]) ? geRectUpsideDownQuad([((EGTexture*)([[self material].texture get])) uv]) : geRectUpsideDownQuad(geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)))];
+        [_vb setArray:vertexes];
+        __changed = NO;
+    }
+    [EGGlobal.context.cullFace disabledF:^void() {
+        [_vao draw];
+    }];
+}
+
+- (GEVec2)position {
+    return __position;
+}
+
+- (void)setPosition:(GEVec2)position {
+    if(!(GEVec2Eq(__position, position))) {
+        __position = position;
+        __changed = YES;
+    }
+}
+
+- (GEVec2)size {
+    return __size;
+}
+
+- (void)setSize:(GEVec2)size {
+    if(!(GEVec2Eq(__size, size))) {
+        __size = size;
+        __changed = YES;
+    }
 }
 
 - (GERect)rect {
-    return GERectMake(_position, _size);
+    return GERectMake(__position, __size);
 }
 
 - (void)setRect:(GERect)rect {
-    _position = rect.p0;
-    _size = rect.size;
+    [self setPosition:rect.p0];
+    [self setSize:rect.size];
 }
 
 + (EGSprite*)applyTexture:(EGTexture*)texture {
     EGSprite* s = [EGSprite sprite];
-    s.material = [EGColorSource applyTexture:texture];
+    [s setMaterial:[EGColorSource applyTexture:texture]];
     return s;
 }
 
 - (void)adjustSize {
-    if([_material.texture isDefined]) _size = [((EGTexture*)([_material.texture get])) scaledSize];
+    if([__material.texture isDefined]) [self setSize:[((EGTexture*)([__material.texture get])) scaledSize]];
 }
 
 - (BOOL)containsVec2:(GEVec2)vec2 {
-    return geRectContainsVec2(GERectMake(_position, _size), vec2);
+    return geRectContainsVec2(GERectMake(__position, __size), vec2);
 }
 
 - (ODClassType*)type {
@@ -545,6 +595,16 @@ static ODClassType* _EGSprite_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
 }
 
 - (NSString*)description {

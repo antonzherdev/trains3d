@@ -2,11 +2,11 @@
 
 #import "TRLevel.h"
 #import "EGSprite.h"
+#import "EGMaterial.h"
 #import "EGProgress.h"
 #import "EGSchedule.h"
 #import "EGContext.h"
 #import "EGCamera2D.h"
-#import "EGMaterial.h"
 #import "GL.h"
 #import "EGTexture.h"
 #import "TRScore.h"
@@ -32,8 +32,6 @@ static GEVec4 _TRLevelMenuView_backgroundColor = (GEVec4){0.85, 0.9, 0.75, 1.0};
 static ODClassType* _TRLevelMenuView_type;
 @synthesize level = _level;
 @synthesize name = _name;
-@synthesize pauseSprite = _pauseSprite;
-@synthesize backSprite = _backSprite;
 @synthesize notificationProgress = _notificationProgress;
 @synthesize pauseReg = _pauseReg;
 @synthesize camera = _camera;
@@ -50,7 +48,7 @@ static ODClassType* _TRLevelMenuView_type;
         _level = level;
         _name = @"LevelMenu";
         _pauseSprite = [EGSprite sprite];
-        _backSprite = [EGSprite sprite];
+        _backSprite = [EGSprite applyMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.7)]];
         _notificationProgress = ^id() {
             float(^__l)(float) = [EGProgress gapT1:0.7 t2:1.0];
             GEVec4(^__r)(float) = ^GEVec4(float _) {
@@ -92,10 +90,9 @@ static ODClassType* _TRLevelMenuView_type;
         [((EGText*)(_)) setFont:font];
         [((EGText*)(_)) setPosition:GEVec3Make(((float)(_width / 2)), 14.0, 0.0)];
     }];
-    _backSprite.material = [EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.7)];
     [_backSprite setRect:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(_width)), 46.0)];
-    _pauseSprite.position = GEVec2Make(((float)(_width - 46)), 0.0);
-    _pauseSprite.material = [EGColorSource applyTexture:[EGTextureRegion textureRegionWithTexture:[EGGlobal scaledTextureForName:@"Pause" format:@"png" magFilter:GL_NEAREST minFilter:GL_NEAREST] uv:_pauseReg]];
+    [_pauseSprite setPosition:GEVec2Make(((float)(_width - 46)), 0.0)];
+    [_pauseSprite setMaterial:[EGColorSource applyTexture:[EGTextureRegion textureRegionWithTexture:[EGGlobal scaledTextureForName:@"Pause" format:@"png" magFilter:GL_NEAREST minFilter:GL_NEAREST] uv:_pauseReg]]];
     [_pauseSprite adjustSize];
 }
 

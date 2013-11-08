@@ -2,14 +2,14 @@ package core.chain
 
 class NotificationHandle<D>(name : string) {
     def post(data : D) {
-        NotificationCenter.default.post(name, data)
+        NotificationCenter.instance.post(name, data)
     }
 
     def post(self : NotificationHandle<void>) {
-        NotificationCenter.default.post(name, nil)
+        NotificationCenter.instance.post(name, nil)
     }
 
     def observe(by : D -> void) {
-        NotificationCenter.default.addObserver(name, by)
+        NotificationCenter.instance.addObserver(name, by)
     }
 }

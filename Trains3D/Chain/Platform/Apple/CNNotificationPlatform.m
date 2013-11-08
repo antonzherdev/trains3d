@@ -41,7 +41,7 @@ static ODClassType* _CNNotificationCenter_type;
     return [CNNotificationCenter type];
 }
 
-+ (CNNotificationCenter*)aDefault {
++ (CNNotificationCenter*)instance {
     return _CNNotificationCenter_default;
 }
 

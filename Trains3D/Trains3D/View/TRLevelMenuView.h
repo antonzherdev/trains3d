@@ -5,13 +5,13 @@
 #import "EGFont.h"
 @class TRLevel;
 @class EGSprite;
+@class EGColorSource;
 @class EGProgress;
 @class EGCounter;
 @class EGFinisher;
 @class EGGlobal;
 @class EGContext;
 @class EGCamera2D;
-@class EGColorSource;
 @class EGTextureRegion;
 @class EGBlendFunction;
 @class TRScore;
@@ -27,8 +27,6 @@
 @interface TRLevelMenuView : NSObject<EGLayerView, EGInputProcessor, EGTapProcessor>
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) NSString* name;
-@property (nonatomic, readonly) EGSprite* pauseSprite;
-@property (nonatomic, readonly) EGSprite* backSprite;
 @property (nonatomic, readonly) GEVec4(^notificationProgress)(float);
 @property (nonatomic, readonly) GERect pauseReg;
 @property (nonatomic) id<EGCamera> camera;

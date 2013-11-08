@@ -166,6 +166,10 @@ class Text {
         t
     }
 
+    def init {
+        Director.reshapeNotification.observe{_ -> _changed = true}
+    }
+
     private var _changed = true
 
     private var _font : Font

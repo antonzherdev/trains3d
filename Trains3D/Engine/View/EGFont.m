@@ -7,6 +7,7 @@
 #import "GEMat4.h"
 #import "EGMesh.h"
 #import "EGIndex.h"
+#import "EGDirector.h"
 #import "EGMaterial.h"
 NSString* EGTextAlignmentDescription(EGTextAlignment self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<EGTextAlignment: "];
@@ -311,7 +312,10 @@ static ODClassType* _EGText_type;
 
 - (id)init {
     self = [super init];
-    if(self) __changed = YES;
+    if(self) {
+        __changed = YES;
+        [self _init];
+    }
     
     return self;
 }
@@ -329,6 +333,12 @@ static ODClassType* _EGText_type;
     [t setAlignment:alignment];
     t.color = color;
     return t;
+}
+
+- (void)_init {
+    [EGDirector.reshapeNotification observeBy:^void(id _) {
+        __changed = YES;
+    }];
 }
 
 - (EGFont*)font {

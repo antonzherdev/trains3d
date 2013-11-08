@@ -36,6 +36,7 @@
 - (BOOL)isDisplayingStats;
 - (void)displayStats;
 - (void)cancelDisplayingStats;
++ (CNNotificationHandle*)reshapeNotification;
 + (ODClassType*)type;
 @end
 

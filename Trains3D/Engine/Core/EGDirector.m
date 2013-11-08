@@ -14,6 +14,7 @@
     id __stat;
 }
 static EGDirector* _EGDirector__current;
+static CNNotificationHandle* _EGDirector_reshapeNotification;
 static ODClassType* _EGDirector_type;
 @synthesize time = _time;
 
@@ -38,6 +39,7 @@ static ODClassType* _EGDirector_type;
 + (void)initialize {
     [super initialize];
     _EGDirector_type = [ODClassType classTypeWithCls:[EGDirector class]];
+    _EGDirector_reshapeNotification = [CNNotificationHandle notificationHandleWithName:@"Reshape"];
 }
 
 + (EGDirector*)current {
@@ -157,6 +159,10 @@ static ODClassType* _EGDirector_type;
 
 - (ODClassType*)type {
     return [EGDirector type];
+}
+
++ (CNNotificationHandle*)reshapeNotification {
+    return _EGDirector_reshapeNotification;
 }
 
 + (ODClassType*)type {
