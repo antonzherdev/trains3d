@@ -4,12 +4,14 @@ package com.antonzherdev.trains
 class TreeView(forest : Forest) {
 //    val textures = [textureFor("Pine.png"), textureFor("Tree1.png"), textureFor("Tree2.png"), textureFor("Tree3.png"), textureFor("YellowTree.png")]
     val texture = textureFor("Pine.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
-    val material = ColorSource(vec4(1, 1, 1, 1), texture, 0.1)
+    val material = ColorSource(vec4(1, 1, 1, 1), texture)
 //    val materials = textures.chain.map(ColorSource(vec4(1, 1, 1, 1), _, 0.3)).toArray
 //    val rects = textures.chain.map(Rect(0, 0, _.size.x/(_.size.y*4), _.size.y/(_.size.y*2)).centerX).toArray
     private val vb = VBO.mut(Billboard.vbDesc)
     private val ib = IBO.mut
-    private val mesh = Mesh(vertex = vb, ib).vao(BillboardShaderSystem.instance, material, shadow = true)
+    private val vao = Mesh(vertex = vb, ib).vao(BillboardShaderSystem.instance, ColorSource(vec4(1, 1, 1, 1), texture), shadow = false)
+    private val shadowMaterial = ColorSource(vec4(1, 1, 1, 1), texture, 0.1)
+    private val shadowVao = Mesh(vertex = vb, ib).vao(BillboardShaderSystem.instance.shaderFor(shadowMaterial, ShadowRenderTarget.default))
 
     def prepare {
         val ar = VoidRefArray(BillboardBufferData.type, 8 * forest.trees.count)
@@ -32,7 +34,8 @@ class TreeView(forest : Forest) {
     def draw {
         BlendFunction.standard {
             context.cullFace.disabled {
-                mesh.draw
+                if(context.renderTarget.isShadow) shadowVao.draw(shadowMaterial)
+                else vao.draw
             }
         }
     }

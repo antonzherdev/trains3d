@@ -15,7 +15,9 @@
     EGColorSource* _material;
     EGMutableVertexBuffer* _vb;
     EGMutableIndexBuffer* _ib;
-    EGVertexArray* _mesh;
+    EGVertexArray* _vao;
+    EGColorSource* _shadowMaterial;
+    EGVertexArray* _shadowVao;
 }
 static ODClassType* _TRTreeView_type;
 @synthesize forest = _forest;
@@ -31,10 +33,12 @@ static ODClassType* _TRTreeView_type;
     if(self) {
         _forest = forest;
         _texture = [EGGlobal textureForFile:@"Pine.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST];
-        _material = [EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_texture alphaTestLevel:0.1];
+        _material = [EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_texture];
         _vb = [EGVBO mutDesc:EGBillboard.vbDesc];
         _ib = [EGIBO mut];
-        _mesh = [[EGMesh meshWithVertex:_vb index:_ib] vaoShaderSystem:EGBillboardShaderSystem.instance material:_material shadow:YES];
+        _vao = [[EGMesh meshWithVertex:_vb index:_ib] vaoShaderSystem:EGBillboardShaderSystem.instance material:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_texture] shadow:NO];
+        _shadowMaterial = [EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_texture alphaTestLevel:0.1];
+        _shadowVao = [[EGMesh meshWithVertex:_vb index:_ib] vaoShader:[EGBillboardShaderSystem.instance shaderForParam:_shadowMaterial renderTarget:EGShadowRenderTarget.aDefault]];
     }
     
     return self;
@@ -66,7 +70,8 @@ static ODClassType* _TRTreeView_type;
 - (void)draw {
     [EGBlendFunction.standard applyDraw:^void() {
         [EGGlobal.context.cullFace disabledF:^void() {
-            [_mesh draw];
+            if([EGGlobal.context.renderTarget isShadow]) [_shadowVao drawParam:_shadowMaterial];
+            else [_vao draw];
         }];
     }];
 }

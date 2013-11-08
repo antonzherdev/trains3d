@@ -12,9 +12,11 @@
 @class EGIBO;
 @class EGVertexArray;
 @class EGMesh;
+@class EGShadowRenderTarget;
 @class EGD2D;
 @class EGBlendFunction;
 @class EGContext;
+@class EGRenderTarget;
 @class EGEnablingState;
 @class TRTree;
 @class TRTreeType;
