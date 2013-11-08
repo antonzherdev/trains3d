@@ -23,7 +23,7 @@ static EGMesh*_railTurnGravel = nil;
 static EGMesh*_railsTurn = nil;
 static EGMesh *_switchStraight = nil;
 static EGMesh *_switchTurn = nil;
-static EGMesh *_light = nil;
+static EGMeshDataModel *_light = nil;
 static EGMesh *_city = nil;
 static EGMesh *_engineBlack = nil;
 static EGMesh *_engine = nil;
@@ -65,7 +65,7 @@ static ODClassType* _TR3D_type;
     _railsTurn = egJasModel(RailsTurn);
     _switchStraight = egJasModel(SwitchStraight);
     _switchTurn = egJasModel(SwitchTurn);
-    _light = egJasModel(Light);
+    _light = egMeshDataModel(Light);
     _lightGreenGlow = egJasVbo(LightGreenGlow);
     _lightRedGlow = egJasVbo(LightRedGlow);
     _lightIndex = egJasIbo(LightGreenGlow);
@@ -125,7 +125,7 @@ static ODClassType* _TR3D_type;
     return _switchTurn;
 }
 
-+ (EGMesh *)light {
++ (EGMeshDataModel *)light {
     return _light;
 }
 
@@ -187,7 +187,7 @@ static ODClassType* _TR3D_type;
     return _lightRedGlow;
 }
 
-+ (CNPArray *)lightIndex {
++ (CNPArray *)lightGlowIndex {
     return _lightIndex;
 }
 

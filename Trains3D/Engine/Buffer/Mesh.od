@@ -3,7 +3,11 @@ package com.antonzherdev.eg
 struct MeshData(uv : vec2, normal : vec3, position : vec3) {
     def mul(mat4 : mat4) : MeshData =
         MeshData(uv, (mat4 * vec4(normal, 0)).xyz, (mat4 * vec4(position, 1)).xyz)
+
+    def uvAdd(vec2 : vec2) = MeshData(uv + vec2, normal, position)
 }
+
+class MeshDataModel(vertex : PArray<MeshData>, index : PArray<uint4>)
 
 class Mesh(vertex : VertexBuffer<_>, index : IndexSource) {
     static def vec2(vertexData : PArray<vec2>, indexData : PArray<uint4>) : Mesh = Mesh(
@@ -121,3 +125,89 @@ class MaterialVertexArray<P>(vao : VertexArray<P>, material : P) extends VertexA
         vao.draw(param)
     }
 }
+
+class MeshUnite(vertexSample : PArray<MeshData>, indexSample : PArray<uint4>, createVao : Mesh -> VertexArray<_>) {
+    static def apply(meshModel : MeshDataModel, createVao : Mesh -> VertexArray<_>) : MeshUnite =
+        MeshUnite(meshModel.vertex, meshModel.index, createVao)
+
+    private val vbo = VBO.mutMesh
+    private val ibo = IBO.mut
+    val mesh = Mesh(vbo, ibo)
+    val vao = createVao(mesh)
+
+    def write(count : uint4, f : MeshWriter -> void) {
+        val w = writer(count)
+        f(w)
+        w.flush
+    }
+
+    def write(mat4Array : Iterable<mat4>) {
+        val w = writer(mat4Array.count)
+        mat4Array.for(w.write(_))
+        w.flush
+    }
+
+    def writer(count : uint4) = MeshWriter(vbo, ibo, count, vertexSample, indexSample)
+
+    def draw {
+        matrix.identity{
+        vao.draw
+        }
+    }
+}
+
+class MeshWriter(vbo : MutableVertexBuffer<MeshData>, ibo : MutableIndexBuffer,
+    count : uint4, vertexSample : PArray<MeshData>, indexSample : PArray<uint4>)
+{
+    private val vertex = VoidRefArray(MeshData.type, vertexSample.count * count)
+    private val index = VoidRefArray(UInt4.type, indexSample.count * count)
+    private var _vp = vertex
+    private var _ip = index
+    private var _indexShift : uint4 = 0
+    def write(mat4 : mat4) {
+        write(vertexSample, indexSample, mat4)
+    }
+
+    def write(vertex : PArray<MeshData>, mat4 : mat4) {
+        write(vertex, indexSample, mat4)
+    }
+
+    def write(vertex : PArray<MeshData>, index : PArray<uint4>, mat4 : mat4) {
+        vertex.forRef{ r ->
+            _vp = _vp.write(MeshData, r.cast<MeshData> * mat4)
+        }
+        index.forRef {r ->
+        _ip = _ip.write(uInt4 = r.cast<uint4> + _indexShift)
+        }
+        _indexShift += vertex.count
+    }
+
+    def write(map : MeshData -> MeshData) {
+        write(vertexSample, indexSample, map)
+    }
+
+    def write(vertex : PArray<MeshData>, map : MeshData -> MeshData) {
+        write(vertex, indexSample, map)
+    }
+
+    def write(vertex : PArray<MeshData>, index : PArray<uint4>, map : MeshData -> MeshData) {
+        vertex.forRef{ r ->
+        _vp = _vp.write(MeshData, map(r.cast<MeshData>))
+        }
+        index.forRef {r ->
+        _ip = _ip.write(uInt4 = r.cast<uint4> + _indexShift)
+        }
+        _indexShift += vertex.count
+    }
+
+    def flush {
+        vbo.set(vertex)
+        ibo.set(index)
+    }
+
+    def dealloc {
+        vertex.free
+        index.free
+    }
+}
+

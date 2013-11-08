@@ -5,6 +5,7 @@
 @class EGMeshModel;
 
 @class TRModels;
+@class EGMeshDataModel;
 
 @interface TRModels : NSObject
 + (id)r3D;
@@ -22,10 +23,10 @@
 
 + (EGMesh *)city;
 + (EGMesh *)damage;
-+ (EGMesh *)light;
++ (EGMeshDataModel *)light;
 + (CNPArray *)lightGreenGlow;
 + (CNPArray *)lightRedGlow;
-+ (CNPArray *)lightIndex;
++ (CNPArray *)lightGlowIndex;
 
 + (EGMesh *)car;
 + (EGMesh *)carBlack;

@@ -33,12 +33,7 @@
 @class TRStr;
 @protocol TRStrings;
 @class TRSwitch;
-@class EGTextureRegion;
 @class TRRailLight;
-@class EGMutableVertexBuffer;
-@class EGVBO;
-@class EGMutableIndexBuffer;
-@class EGIBO;
 @class TRRailPoint;
 
 @class TRRailroadView;
@@ -46,8 +41,6 @@
 @class TRUndoView;
 @class TRSwitchView;
 @class TRLightView;
-@class TRMeshUnite;
-@class TRMeshWriter;
 @class TRDamageView;
 @class TRBackgroundView;
 
@@ -114,11 +107,8 @@
 
 @interface TRLightView : NSObject
 @property (nonatomic, readonly) TRRailroad* railroad;
-@property (nonatomic, readonly) EGTexture* texture;
-@property (nonatomic, readonly) EGVertexArray* redBodyVao;
-@property (nonatomic, readonly) EGVertexArray* greenBodyVao;
-@property (nonatomic, readonly) EGVertexArray* shadowBodyVao;
 @property (nonatomic) BOOL _matrixChanged;
+@property (nonatomic) BOOL _bodyChanged;
 @property (nonatomic) BOOL _matrixShadowChanged;
 @property (nonatomic) BOOL _lightGlowChanged;
 
@@ -129,42 +119,6 @@
 - (void)drawBodies;
 - (void)drawShadow;
 - (void)drawGlows;
-+ (ODClassType*)type;
-@end
-
-
-@interface TRMeshUnite : NSObject
-@property (nonatomic, readonly) CNPArray* vertexSample;
-@property (nonatomic, readonly) CNPArray* indexSample;
-@property (nonatomic, readonly) EGVertexArray*(^createVao)(EGMesh*);
-@property (nonatomic, readonly) EGMesh* mesh;
-@property (nonatomic, readonly) EGVertexArray* vao;
-
-+ (id)meshUniteWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample createVao:(EGVertexArray*(^)(EGMesh*))createVao;
-- (id)initWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample createVao:(EGVertexArray*(^)(EGMesh*))createVao;
-- (ODClassType*)type;
-- (void)writeCount:(unsigned int)count f:(void(^)(TRMeshWriter*))f;
-- (TRMeshWriter*)writerCount:(unsigned int)count;
-- (void)draw;
-+ (ODClassType*)type;
-@end
-
-
-@interface TRMeshWriter : NSObject
-@property (nonatomic, readonly) EGMutableVertexBuffer* vbo;
-@property (nonatomic, readonly) EGMutableIndexBuffer* ibo;
-@property (nonatomic, readonly) unsigned int count;
-@property (nonatomic, readonly) CNPArray* vertexSample;
-@property (nonatomic, readonly) CNPArray* indexSample;
-
-+ (id)meshWriterWithVbo:(EGMutableVertexBuffer*)vbo ibo:(EGMutableIndexBuffer*)ibo count:(unsigned int)count vertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample;
-- (id)initWithVbo:(EGMutableVertexBuffer*)vbo ibo:(EGMutableIndexBuffer*)ibo count:(unsigned int)count vertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample;
-- (ODClassType*)type;
-- (void)writeMat4:(GEMat4*)mat4;
-- (void)writeVertex:(CNPArray*)vertex mat4:(GEMat4*)mat4;
-- (void)writeVertex:(CNPArray*)vertex index:(CNPArray*)index mat4:(GEMat4*)mat4;
-- (void)flush;
-- (void)dealloc;
 + (ODClassType*)type;
 @end
 

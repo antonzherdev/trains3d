@@ -20,6 +20,9 @@ NSString* EGMeshDataDescription(EGMeshData self) {
 EGMeshData egMeshDataMulMat4(EGMeshData self, GEMat4* mat4) {
     return EGMeshDataMake(self.uv, geVec4Xyz([mat4 mulVec4:geVec4ApplyVec3W(self.normal, 0.0)]), geVec4Xyz([mat4 mulVec4:geVec4ApplyVec3W(self.position, 1.0)]));
 }
+EGMeshData egMeshDataUvAddVec2(EGMeshData self, GEVec2 vec2) {
+    return EGMeshDataMake(geVec2AddVec2(self.uv, vec2), self.normal, self.position);
+}
 ODPType* egMeshDataType() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[EGMeshDataWrap class] name:@"EGMeshData" size:sizeof(EGMeshData) wrap:^id(void* data, NSUInteger i) {
@@ -63,6 +66,70 @@ ODPType* egMeshDataType() {
 
 @end
 
+
+
+@implementation EGMeshDataModel{
+    CNPArray* _vertex;
+    CNPArray* _index;
+}
+static ODClassType* _EGMeshDataModel_type;
+@synthesize vertex = _vertex;
+@synthesize index = _index;
+
++ (id)meshDataModelWithVertex:(CNPArray*)vertex index:(CNPArray*)index {
+    return [[EGMeshDataModel alloc] initWithVertex:vertex index:index];
+}
+
+- (id)initWithVertex:(CNPArray*)vertex index:(CNPArray*)index {
+    self = [super init];
+    if(self) {
+        _vertex = vertex;
+        _index = index;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGMeshDataModel_type = [ODClassType classTypeWithCls:[EGMeshDataModel class]];
+}
+
+- (ODClassType*)type {
+    return [EGMeshDataModel type];
+}
+
++ (ODClassType*)type {
+    return _EGMeshDataModel_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGMeshDataModel* o = ((EGMeshDataModel*)(other));
+    return [self.vertex isEqual:o.vertex] && [self.index isEqual:o.index];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.vertex hash];
+    hash = hash * 31 + [self.index hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"vertex=%@", self.vertex];
+    [description appendFormat:@", index=%@", self.index];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
 
 
 @implementation EGMesh{
@@ -558,6 +625,247 @@ static ODClassType* _EGMaterialVertexArray_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"vao=%@", self.vao];
     [description appendFormat:@", material=%@", self.material];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGMeshUnite{
+    CNPArray* _vertexSample;
+    CNPArray* _indexSample;
+    EGVertexArray*(^_createVao)(EGMesh*);
+    EGMutableVertexBuffer* _vbo;
+    EGMutableIndexBuffer* _ibo;
+    EGMesh* _mesh;
+    EGVertexArray* _vao;
+}
+static ODClassType* _EGMeshUnite_type;
+@synthesize vertexSample = _vertexSample;
+@synthesize indexSample = _indexSample;
+@synthesize createVao = _createVao;
+@synthesize mesh = _mesh;
+@synthesize vao = _vao;
+
++ (id)meshUniteWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample createVao:(EGVertexArray*(^)(EGMesh*))createVao {
+    return [[EGMeshUnite alloc] initWithVertexSample:vertexSample indexSample:indexSample createVao:createVao];
+}
+
+- (id)initWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample createVao:(EGVertexArray*(^)(EGMesh*))createVao {
+    self = [super init];
+    if(self) {
+        _vertexSample = vertexSample;
+        _indexSample = indexSample;
+        _createVao = createVao;
+        _vbo = [EGVBO mutMesh];
+        _ibo = [EGIBO mut];
+        _mesh = [EGMesh meshWithVertex:_vbo index:_ibo];
+        _vao = _createVao(_mesh);
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGMeshUnite_type = [ODClassType classTypeWithCls:[EGMeshUnite class]];
+}
+
++ (EGMeshUnite*)applyMeshModel:(EGMeshDataModel*)meshModel createVao:(EGVertexArray*(^)(EGMesh*))createVao {
+    return [EGMeshUnite meshUniteWithVertexSample:meshModel.vertex indexSample:meshModel.index createVao:createVao];
+}
+
+- (void)writeCount:(unsigned int)count f:(void(^)(EGMeshWriter*))f {
+    EGMeshWriter* w = [self writerCount:count];
+    f(w);
+    [w flush];
+}
+
+- (void)writeMat4Array:(id<CNIterable>)mat4Array {
+    EGMeshWriter* w = [self writerCount:((unsigned int)([mat4Array count]))];
+    [mat4Array forEach:^void(GEMat4* _) {
+        [w writeMat4:_];
+    }];
+    [w flush];
+}
+
+- (EGMeshWriter*)writerCount:(unsigned int)count {
+    return [EGMeshWriter meshWriterWithVbo:_vbo ibo:_ibo count:count vertexSample:_vertexSample indexSample:_indexSample];
+}
+
+- (void)draw {
+    [EGGlobal.matrix identityF:^void() {
+        [_vao draw];
+    }];
+}
+
+- (ODClassType*)type {
+    return [EGMeshUnite type];
+}
+
++ (ODClassType*)type {
+    return _EGMeshUnite_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGMeshUnite* o = ((EGMeshUnite*)(other));
+    return [self.vertexSample isEqual:o.vertexSample] && [self.indexSample isEqual:o.indexSample] && [self.createVao isEqual:o.createVao];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.vertexSample hash];
+    hash = hash * 31 + [self.indexSample hash];
+    hash = hash * 31 + [self.createVao hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"vertexSample=%@", self.vertexSample];
+    [description appendFormat:@", indexSample=%@", self.indexSample];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGMeshWriter{
+    EGMutableVertexBuffer* _vbo;
+    EGMutableIndexBuffer* _ibo;
+    unsigned int _count;
+    CNPArray* _vertexSample;
+    CNPArray* _indexSample;
+    CNVoidRefArray _vertex;
+    CNVoidRefArray _index;
+    CNVoidRefArray __vp;
+    CNVoidRefArray __ip;
+    unsigned int __indexShift;
+}
+static ODClassType* _EGMeshWriter_type;
+@synthesize vbo = _vbo;
+@synthesize ibo = _ibo;
+@synthesize count = _count;
+@synthesize vertexSample = _vertexSample;
+@synthesize indexSample = _indexSample;
+
++ (id)meshWriterWithVbo:(EGMutableVertexBuffer*)vbo ibo:(EGMutableIndexBuffer*)ibo count:(unsigned int)count vertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample {
+    return [[EGMeshWriter alloc] initWithVbo:vbo ibo:ibo count:count vertexSample:vertexSample indexSample:indexSample];
+}
+
+- (id)initWithVbo:(EGMutableVertexBuffer*)vbo ibo:(EGMutableIndexBuffer*)ibo count:(unsigned int)count vertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample {
+    self = [super init];
+    if(self) {
+        _vbo = vbo;
+        _ibo = ibo;
+        _count = count;
+        _vertexSample = vertexSample;
+        _indexSample = indexSample;
+        _vertex = cnVoidRefArrayApplyTpCount(egMeshDataType(), _vertexSample.count * _count);
+        _index = cnVoidRefArrayApplyTpCount(oduInt4Type(), _indexSample.count * _count);
+        __vp = _vertex;
+        __ip = _index;
+        __indexShift = 0;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGMeshWriter_type = [ODClassType classTypeWithCls:[EGMeshWriter class]];
+}
+
+- (void)writeMat4:(GEMat4*)mat4 {
+    [self writeVertex:_vertexSample index:_indexSample mat4:mat4];
+}
+
+- (void)writeVertex:(CNPArray*)vertex mat4:(GEMat4*)mat4 {
+    [self writeVertex:vertex index:_indexSample mat4:mat4];
+}
+
+- (void)writeVertex:(CNPArray*)vertex index:(CNPArray*)index mat4:(GEMat4*)mat4 {
+    [vertex forRefEach:^void(VoidRef r) {
+        __vp = cnVoidRefArrayWriteTpItem(__vp, EGMeshData, egMeshDataMulMat4(*(((EGMeshData*)(r))), mat4));
+    }];
+    [index forRefEach:^void(VoidRef r) {
+        __ip = cnVoidRefArrayWriteUInt4(__ip, *(((unsigned int*)(r))) + __indexShift);
+    }];
+    __indexShift += ((unsigned int)(vertex.count));
+}
+
+- (void)writeMap:(EGMeshData(^)(EGMeshData))map {
+    [self writeVertex:_vertexSample index:_indexSample map:map];
+}
+
+- (void)writeVertex:(CNPArray*)vertex map:(EGMeshData(^)(EGMeshData))map {
+    [self writeVertex:vertex index:_indexSample map:map];
+}
+
+- (void)writeVertex:(CNPArray*)vertex index:(CNPArray*)index map:(EGMeshData(^)(EGMeshData))map {
+    [vertex forRefEach:^void(VoidRef r) {
+        __vp = cnVoidRefArrayWriteTpItem(__vp, EGMeshData, map(*(((EGMeshData*)(r)))));
+    }];
+    [index forRefEach:^void(VoidRef r) {
+        __ip = cnVoidRefArrayWriteUInt4(__ip, *(((unsigned int*)(r))) + __indexShift);
+    }];
+    __indexShift += ((unsigned int)(vertex.count));
+}
+
+- (void)flush {
+    [_vbo setArray:_vertex];
+    [_ibo setArray:_index];
+}
+
+- (void)dealloc {
+    cnVoidRefArrayFree(_vertex);
+    cnVoidRefArrayFree(_index);
+}
+
+- (ODClassType*)type {
+    return [EGMeshWriter type];
+}
+
++ (ODClassType*)type {
+    return _EGMeshWriter_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGMeshWriter* o = ((EGMeshWriter*)(other));
+    return [self.vbo isEqual:o.vbo] && [self.ibo isEqual:o.ibo] && self.count == o.count && [self.vertexSample isEqual:o.vertexSample] && [self.indexSample isEqual:o.indexSample];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.vbo hash];
+    hash = hash * 31 + [self.ibo hash];
+    hash = hash * 31 + self.count;
+    hash = hash * 31 + [self.vertexSample hash];
+    hash = hash * 31 + [self.indexSample hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"vbo=%@", self.vbo];
+    [description appendFormat:@", ibo=%@", self.ibo];
+    [description appendFormat:@", count=%u", self.count];
+    [description appendFormat:@", vertexSample=%@", self.vertexSample];
+    [description appendFormat:@", indexSample=%@", self.indexSample];
     [description appendString:@">"];
     return description;
 }

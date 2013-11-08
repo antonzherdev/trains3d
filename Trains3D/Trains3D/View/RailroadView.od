@@ -209,62 +209,61 @@ class SwitchView {
 }
 
 class LightView(railroad : Railroad) {
-    val texture = textureFor("Light.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
-    val redBodyVao = Models.light.vao(ColorSource(TextureRegion(texture, Rect(0.5, 0, 1, 1))), false)
-    val greenBodyVao = Models.light.vao(ColorSource(texture), false)
-    val shadowBodyVao = Models.light.vaoShadow
-
     var _matrixChanged = true
+    var _bodyChanged = true
     var _matrixShadowChanged = true
     var _lightGlowChanged = true
     def init {
         weak val weakSelf = self
         Railroad.changedNotification.observe { _ ->
             weakSelf._matrixChanged = true
+            weakSelf._bodyChanged = true
             weakSelf._matrixShadowChanged = true
             weakSelf._lightGlowChanged = true
         }
         RailLight.turnNotification.observe { _ ->
             weakSelf._lightGlowChanged = true
+            weakSelf._bodyChanged = true
         }
     }
 
     private var _matrixArr : [(MatrixModel, RailLight)] = []
-    private var _matrixArrShadow : [(MatrixModel, RailLight)] = []
-    private def calculateMatrixArr : [(MatrixModel, RailLight)] = railroad.lights.chain.map{light ->
+    private def calculateMatrixArr : Chain<(MatrixModel, RailLight)> = railroad.lights.chain.map{light ->
         (matrix.value
             .modify(w = w -> w.translate(light.tile.x, light.tile.y, 0))
             .modify(m = m -> m.rotate(90 + light.connector.angle, 0, 1, 0).translate(0.2, 0, -0.45))
         , light)
-    }.toArray
+    }
 
+    private val bodies = MeshUnite(Models.light, _.vao(ColorSource(textureFor("Light.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)), false))
     def drawBodies {
         if(_matrixChanged) {
-            _matrixArr = calculateMatrixArr
+            _matrixArr = calculateMatrixArr.toArray
             _matrixChanged = false
         }
-        matrix.push
-        _matrixArr.for { p ->
-            matrix.value = p.a
-            (if(p.b.isGreen)greenBodyVao else redBodyVao).draw
+        if(_bodyChanged) {
+            bodies.write(_matrixArr.count) {writer ->
+                _matrixArr.for{ p ->
+                    val g = p.b.isGreen
+                    writer.write(map = (if(g) _ else _.uvAdd(vec2(0.5, 0))) * p.a.mwcp)
+                }
+            }
+            _bodyChanged = false
         }
-        matrix.pop
+
+        bodies.draw
     }
 
+    private val shadows = MeshUnite(Models.light, _.vaoShadow)
     def drawShadow {
         if(_matrixShadowChanged) {
-            _matrixArrShadow = calculateMatrixArr
+            shadows.write(calculateMatrixArr.map(_.a.mwcp).toArray)
             _matrixShadowChanged = false
         }
-        matrix.push
-        _matrixArrShadow.for { p ->
-            matrix.value = p.a
-            shadowBodyVao.draw
-        }
-        matrix.pop
+        shadows.draw
     }
 
-    private val glows = MeshUnite(Models.lightGreenGlow, Models.lightIndex,
+    private val glows = MeshUnite(Models.lightGreenGlow, Models.lightGlowIndex,
         _.vao(ColorSource(textureFor("LightGlow.png")), false))
 
     def drawGlows {
@@ -281,64 +280,6 @@ class LightView(railroad : Railroad) {
                 glows.draw
             }
         }
-    }
-}
-
-class MeshUnite(vertexSample : PArray<MeshData>, indexSample : PArray<uint4>, createVao : Mesh -> VertexArray<_>) {
-    private val vbo = VBO.mutMesh
-    private val ibo = IBO.mut
-    val mesh = Mesh(vbo, ibo)
-    val vao = createVao(mesh)
-
-    def write(count : uint4, f : MeshWriter -> void) {
-        val w = writer(count)
-        f(w)
-        w.flush
-    }
-
-    def writer(count : uint4) = MeshWriter(vbo, ibo, count, vertexSample, indexSample)
-
-    def draw {
-        matrix.identity{
-            vao.draw
-        }
-    }
-}
-
-class MeshWriter(vbo : MutableVertexBuffer<MeshData>, ibo : MutableIndexBuffer,
-    count : uint4, vertexSample : PArray<MeshData>, indexSample : PArray<uint4>)
-{
-    private val vertex = VoidRefArray(MeshData.type, vertexSample.count * count)
-    private val index = VoidRefArray(UInt4.type, indexSample.count * count)
-    private var _vp = vertex
-    private var _ip = index
-    private var _indexShift : uint4 = 0
-    def write(mat4 : mat4) {
-        write(vertexSample, indexSample, mat4)
-    }
-
-    def write(vertex : PArray<MeshData>, mat4 : mat4) {
-        write(vertex, indexSample, mat4)
-    }
-
-    def write(vertex : PArray<MeshData>, index : PArray<uint4>, mat4 : mat4) {
-        vertex.forRef{ r ->
-            _vp = _vp.write(MeshData, r.cast<MeshData> * mat4)
-        }
-        index.forRef {r ->
-            _ip = _ip.write(uInt4 = r.cast<uint4> + _indexShift)
-        }
-        _indexShift += vertex.count
-    }
-
-    def flush {
-        vbo.set(vertex)
-        ibo.set(index)
-    }
-
-    def dealloc {
-        vertex.free
-        index.free
     }
 }
 
