@@ -127,6 +127,10 @@ static ODClassType* _EGMutableBuffer_type;
     return __count;
 }
 
+- (BOOL)isEmpty {
+    return __count > 0;
+}
+
 - (id)setData:(CNPArray*)data {
     [self bind];
     glBufferData(self.bufferType, data.length, data.bytes, GL_DYNAMIC_DRAW);

@@ -19,6 +19,7 @@
 - (void)draw;
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
 - (BOOL)isMutable;
+- (BOOL)isEmpty;
 @end
 
 

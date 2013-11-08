@@ -5,6 +5,7 @@ trait IndexSource {
     def draw
     def drawWith(start : uint, count : uint)
     def isMutable = false
+    def isEmpty = false
 }
 
 object IBO {

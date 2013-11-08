@@ -30,7 +30,7 @@ static ODClassType* _TRTreeView_type;
     self = [super init];
     if(self) {
         _forest = forest;
-        _texture = [EGGlobal textureForFile:@"Pine.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_LINEAR];
+        _texture = [EGGlobal textureForFile:@"Pine.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST];
         _material = [EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_texture alphaTestLevel:0.1];
         _vb = [EGVBO mutDesc:EGBillboard.vbDesc];
         _ib = [EGIBO mut];

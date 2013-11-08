@@ -113,6 +113,10 @@ static ODClassType* _EGImmutableIndexBuffer_type;
     return NO;
 }
 
+- (BOOL)isEmpty {
+    return NO;
+}
+
 - (ODClassType*)type {
     return [EGImmutableIndexBuffer type];
 }
@@ -201,6 +205,10 @@ static ODClassType* _EGMutableIndexBuffer_type;
     [EGGlobal.context bindIndexBufferHandle:[self handle]];
 }
 
+- (BOOL)isEmpty {
+    return NO;
+}
+
 - (ODClassType*)type {
     return [EGMutableIndexBuffer type];
 }
@@ -284,6 +292,10 @@ static ODClassType* _EGEmptyIndexSource_type;
 }
 
 - (BOOL)isMutable {
+    return NO;
+}
+
+- (BOOL)isEmpty {
     return NO;
 }
 
@@ -384,6 +396,10 @@ static ODClassType* _EGArrayIndexSource_type;
     return NO;
 }
 
+- (BOOL)isEmpty {
+    return NO;
+}
+
 - (ODClassType*)type {
     return [EGArrayIndexSource type];
 }
@@ -464,6 +480,10 @@ static ODClassType* _EGVoidRefArrayIndexSource_type;
 }
 
 - (BOOL)isMutable {
+    return NO;
+}
+
+- (BOOL)isEmpty {
     return NO;
 }
 
@@ -550,6 +570,10 @@ static ODClassType* _EGIndexSourceGap_type;
     return NO;
 }
 
+- (BOOL)isEmpty {
+    return NO;
+}
+
 - (ODClassType*)type {
     return [EGIndexSourceGap type];
 }
@@ -628,6 +652,10 @@ static ODClassType* _EGMutableIndexSourceGap_type;
 }
 
 - (BOOL)isMutable {
+    return NO;
+}
+
+- (BOOL)isEmpty {
     return NO;
 }
 

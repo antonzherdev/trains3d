@@ -512,7 +512,7 @@ static ODClassType* _EGSimpleVertexArray_type;
 }
 
 - (void)drawParam:(id)param {
-    [_shader drawParam:param vao:self];
+    if(!([_index isEmpty])) [_shader drawParam:param vao:self];
 }
 
 - (void)draw {
@@ -640,6 +640,7 @@ static ODClassType* _EGMaterialVertexArray_type;
     EGMutableIndexBuffer* _ibo;
     EGMesh* _mesh;
     EGVertexArray* _vao;
+    unsigned int __count;
 }
 static ODClassType* _EGMeshUnite_type;
 @synthesize vertexSample = _vertexSample;
@@ -662,6 +663,7 @@ static ODClassType* _EGMeshUnite_type;
         _ibo = [EGIBO mut];
         _mesh = [EGMesh meshWithVertex:_vbo index:_ibo];
         _vao = _createVao(_mesh);
+        __count = 0;
     }
     
     return self;
@@ -691,11 +693,12 @@ static ODClassType* _EGMeshUnite_type;
 }
 
 - (EGMeshWriter*)writerCount:(unsigned int)count {
+    __count = count;
     return [EGMeshWriter meshWriterWithVbo:_vbo ibo:_ibo count:count vertexSample:_vertexSample indexSample:_indexSample];
 }
 
 - (void)draw {
-    [EGGlobal.matrix identityF:^void() {
+    if(__count > 0) [EGGlobal.matrix identityF:^void() {
         [_vao draw];
     }];
 }

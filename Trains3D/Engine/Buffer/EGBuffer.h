@@ -27,6 +27,7 @@
 - (ODClassType*)type;
 - (NSUInteger)length;
 - (NSUInteger)count;
+- (BOOL)isEmpty;
 - (id)setData:(CNPArray*)data;
 - (id)setArray:(CNVoidRefArray)array;
 - (id)setArray:(CNVoidRefArray)array count:(unsigned int)count;
