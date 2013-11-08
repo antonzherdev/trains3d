@@ -20,6 +20,7 @@ object D2D {
     }
 
     def drawSprite(material : ColorSource, at : vec3, quad : Quad, uv : Quad) {
+//        if(true) return nil
         var v = vertexes
         v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[0], material.color, uv.p[0]))
         v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[1], material.color, uv.p[1]))
@@ -215,6 +216,12 @@ class Button(onDraw : (Rect) -> void, onClick : () -> void) extends TapProcessor
     }
 
 
-    static def drawText(font : () -> Font, color : vec4, text : string) : Rect -> void = (rect : Rect) ->
-        font().draw(text = text, color = color, at = rect.center, TextAlignment(0, 0))
+    static def drawText(font : () -> Font, color : vec4, text : string) : Rect -> void = {
+        val tc = Text(nil, text, vec3(0, 0, 0), TextAlignment(0, 0), color)
+        (rect : Rect) -> {
+            tc.font = font()
+            tc.position = rect.center
+            tc.draw
+        }
+    }
 }

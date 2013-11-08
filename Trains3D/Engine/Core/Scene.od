@@ -60,7 +60,7 @@ class Layers {
     def layers : [Layer]
 
     def viewportsWith(viewSize : vec2) : [(Layer, Rect)]
-    private val _viewports : [(Layer, Rect)] = []
+    private var _viewports : [(Layer, Rect)] = []
     def prepare {
         egPushGroupMarker("Prepare")
         _viewports.for{p -> p.a.prepareWith(viewport = p.b)}

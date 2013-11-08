@@ -13,8 +13,8 @@
 #import "TRModels.h"
 #import "GEMat4.h"
 #import "TRRailPoint.h"
-#import "EGBillboard.h"
 #import "TRStrings.h"
+#import "EGBillboard.h"
 @implementation TRRailroadView{
     TRRailroad* _railroad;
     TRRailView* _railView;
@@ -293,7 +293,7 @@ static ODClassType* _TRRailView_type;
 
 @implementation TRUndoView{
     TRRailroadBuilder* _builder;
-    EGFont* _font;
+    EGText* _text;
     BOOL _empty;
     EGBillboard* _button;
 }
@@ -308,6 +308,7 @@ static ODClassType* _TRUndoView_type;
     self = [super init];
     if(self) {
         _builder = builder;
+        _text = [EGText applyFont:nil text:[TRStr.Loc undo] position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:GEVec4Make(0.1, 0.1, 0.1, 1.0)];
         _empty = YES;
         _button = [EGBillboard applyMaterial:[EGColorSource applyColor:GEVec4Make(0.85, 0.9, 0.75, 0.8)]];
     }
@@ -321,8 +322,9 @@ static ODClassType* _TRUndoView_type;
 }
 
 - (void)reshape {
-    _font = [EGGlobal fontWithName:@"lucida_grande" size:18];
-    GEVec2 textSize = [_font measurePText:[TRStr.Loc undo]];
+    EGFont* font = [EGGlobal fontWithName:@"lucida_grande" size:18];
+    [_text setFont:font];
+    GEVec2 textSize = [font measurePText:[TRStr.Loc undo]];
     GEVec2 buttonSize = geVec4Xy([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW(geVec2MulF(textSize, 1.5), 0.0, 0.0)]);
     _button.rect = GERectMake(geVec2DivI(geVec2Negate(buttonSize), 2), buttonSize);
 }
@@ -336,7 +338,8 @@ static ODClassType* _TRUndoView_type;
         [EGGlobal.context.depthTest disabledF:^void() {
             _button.position = geVec3ApplyVec2Z(geVec2ApplyVec2i(((TRRail*)([rail get])).tile), 0.0);
             [_button draw];
-            [_font drawText:[TRStr.Loc undo] color:GEVec4Make(0.1, 0.1, 0.1, 1.0) at:_button.position alignment:egTextAlignmentApplyXY(0.0, 0.0)];
+            [_text setPosition:_button.position];
+            [_text draw];
         }];
     }
 }

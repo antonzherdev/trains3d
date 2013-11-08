@@ -87,7 +87,6 @@
 @interface TRWinMenu : TRMenuView<TRPauseView>
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) id<CNSeq> buttons;
-@property (nonatomic, retain) EGFont* headerFont;
 
 + (id)winMenuWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
@@ -102,8 +101,6 @@
 @interface TRLooseMenu : TRMenuView<TRPauseView>
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) id<CNSeq> buttons;
-@property (nonatomic, retain) EGFont* headerFont;
-@property (nonatomic, retain) EGFont* detailsFont;
 
 + (id)looseMenuWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;

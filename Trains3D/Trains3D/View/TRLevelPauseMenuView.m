@@ -336,12 +336,11 @@ static ODClassType* _TRPauseMenuView_type;
     EGButton* _restartButton;
     EGButton* _chooseLevelButton;
     id<CNSeq> _buttons;
-    EGFont* _headerFont;
+    EGText* _headerText;
 }
 static ODClassType* _TRWinMenu_type;
 @synthesize level = _level;
 @synthesize buttons = _buttons;
-@synthesize headerFont = _headerFont;
 
 + (id)winMenuWithLevel:(TRLevel*)level {
     return [[TRWinMenu alloc] initWithLevel:level];
@@ -361,6 +360,7 @@ static ODClassType* _TRWinMenu_type;
             [TRGameDirector.instance chooseLevel];
         }];
         _buttons = (@[_nextButton, _restartButton, _chooseLevelButton]);
+        _headerText = [EGText applyFont:nil text:[TRStr.Loc victory] position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
     }
     
     return self;
@@ -377,11 +377,12 @@ static ODClassType* _TRWinMenu_type;
 
 - (void)drawHeaderRect:(GERect)rect {
     [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.85, 0.9, 0.75, 1.0)] at:GEVec3Make(0.0, 0.0, 0.0) rect:rect];
-    [_headerFont drawText:[TRStr.Loc victory] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:geVec3ApplyVec2(geRectCenter(rect)) alignment:egTextAlignmentApplyXY(0.0, 0.0)];
+    [_headerText setPosition:geVec3ApplyVec2(geRectCenter(rect))];
+    [_headerText draw];
 }
 
 - (void)reshape {
-    _headerFont = [EGGlobal fontWithName:@"lucida_grande" size:36];
+    [_headerText setFont:[EGGlobal fontWithName:@"lucida_grande" size:36]];
 }
 
 - (ODClassType*)type {
@@ -424,14 +425,12 @@ static ODClassType* _TRWinMenu_type;
     EGButton* _restartButton;
     EGButton* _chooseLevelButton;
     id<CNSeq> _buttons;
-    EGFont* _headerFont;
-    EGFont* _detailsFont;
+    EGText* _headerText;
+    EGText* _detailsText;
 }
 static ODClassType* _TRLooseMenu_type;
 @synthesize level = _level;
 @synthesize buttons = _buttons;
-@synthesize headerFont = _headerFont;
-@synthesize detailsFont = _detailsFont;
 
 + (id)looseMenuWithLevel:(TRLevel*)level {
     return [[TRLooseMenu alloc] initWithLevel:level];
@@ -449,6 +448,8 @@ static ODClassType* _TRLooseMenu_type;
             [TRGameDirector.instance chooseLevel];
         }];
         _buttons = (@[_restartButton, _chooseLevelButton]);
+        _headerText = [EGText applyFont:nil text:[TRStr.Loc defeat] position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
+        _detailsText = [EGText applyFont:nil text:[TRStr.Loc moneyOver] position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
     }
     
     return self;
@@ -465,13 +466,15 @@ static ODClassType* _TRLooseMenu_type;
 
 - (void)drawHeaderRect:(GERect)rect {
     [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 0.85, 0.75, 1.0)] at:GEVec3Make(0.0, 0.0, 0.0) rect:rect];
-    [_headerFont drawText:[TRStr.Loc defeat] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:geVec3ApplyVec2(geVec2AddVec2(rect.p0, geVec2MulVec2(rect.size, GEVec2Make(0.05, 0.7)))) alignment:egTextAlignmentApplyXY(-1.0, 0.0)];
-    [_detailsFont drawText:[TRStr.Loc moneyOver] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:geVec3ApplyVec2(geVec2AddVec2(rect.p0, geVec2MulVec2(rect.size, GEVec2Make(0.5, 0.35)))) alignment:egTextAlignmentApplyXY(0.0, 0.0)];
+    [_headerText setPosition:geVec3ApplyVec2(geVec2AddVec2(rect.p0, geVec2MulVec2(rect.size, GEVec2Make(0.05, 0.7))))];
+    [_headerText draw];
+    [_detailsText setPosition:geVec3ApplyVec2(geVec2AddVec2(rect.p0, geVec2MulVec2(rect.size, GEVec2Make(0.5, 0.35))))];
+    [_detailsText draw];
 }
 
 - (void)reshape {
-    _headerFont = [EGGlobal fontWithName:@"lucida_grande" size:36];
-    _detailsFont = [EGGlobal fontWithName:@"lucida_grande" size:16];
+    [_headerText setFont:[EGGlobal fontWithName:@"lucida_grande" size:36]];
+    [_detailsText setFont:[EGGlobal fontWithName:@"lucida_grande" size:16]];
 }
 
 - (ODClassType*)type {
@@ -511,7 +514,7 @@ static ODClassType* _TRLooseMenu_type;
 
 @implementation TRHelpView{
     TRLevel* _level;
-    EGFont* _helpFont;
+    EGText* _helpText;
     EGSprite* _helpBackSprite;
 }
 static ODClassType* _TRHelpView_type;
@@ -525,6 +528,7 @@ static ODClassType* _TRHelpView_type;
     self = [super init];
     if(self) {
         _level = level;
+        _helpText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
         _helpBackSprite = [EGSprite applyMaterial:[EGColorSource applyColor:TRLevelMenuView.backgroundColor] size:GEVec2Make(0.0, 0.0)];
     }
     
@@ -537,16 +541,18 @@ static ODClassType* _TRHelpView_type;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
-    _helpFont = [EGGlobal fontWithName:@"lucida_grande" size:16];
+    [_helpText setFont:[EGGlobal fontWithName:@"lucida_grande" size:16]];
 }
 
 - (void)draw {
     TRHelp* help = [[_level help] get];
-    GEVec2 size = geVec2MulVec2([_helpFont measureCText:help.text], GEVec2Make(1.1, 1.4));
+    [_helpText setText:help.text];
+    GEVec2 size = geVec2MulVec2([_helpText measureC], GEVec2Make(1.1, 1.4));
     GERect rect = geVec2RectInCenterWithSize(size, geVec2ApplyVec2i([EGGlobal.context viewport].size));
     [_helpBackSprite setRect:rect];
     [_helpBackSprite draw];
-    [_helpFont drawText:help.text color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:geVec3ApplyVec2(geVec2SubVec2(geRectCenter(rect), GEVec2Make(rect.size.x * 0.45, 0.0))) alignment:egTextAlignmentApplyXY(-1.0, 0.0)];
+    [_helpText setPosition:geVec3ApplyVec2(geVec2SubVec2(geRectCenter(rect), GEVec2Make(rect.size.x * 0.45, 0.0)))];
+    [_helpText draw];
 }
 
 - (BOOL)tapEvent:(EGEvent*)event {

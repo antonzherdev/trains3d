@@ -132,9 +132,10 @@ class RailView(railroad : Railroad) {
 }
 
 class UndoView(builder : RailroadBuilder) extends InputProcessor with TapProcessor {
-    private var font : Font
+    private val text = Text(nil, Loc.undo, vec3(0, 0, 0), TextAlignment(0, 0), vec4(0.1, 0.1, 0.1, 1))
     def reshape {
-        font = fontWith(name = "lucida_grande", 18)
+        val font = fontWith(name = "lucida_grande", 18)
+        text.font = font
         val textSize = font.measureP(Loc.undo)
         val buttonSize = matrix.p.divBySelf(vec4(textSize * 1.5, 0, 0)).xy
         button.rect = Rect(buttonSize.negate/2, buttonSize)
@@ -151,7 +152,9 @@ class UndoView(builder : RailroadBuilder) extends InputProcessor with TapProcess
             context.depthTest.disabled {
                 button.position = vec3(rail.get.tile, 0)
                 button.draw
-                font.draw(Loc.undo, color = vec4(0.1, 0.1, 0.1, 1), button.position, TextAlignment(0, 0))
+
+                text.position = button.position
+                text.draw
             }
         }
     }

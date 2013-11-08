@@ -47,14 +47,15 @@ class TreeView(forest : Forest) {
         val quad = (Rect(0, 0, texture.size.x/(texture.size.y*4), 0.5).centerX*tree.size).quad
         val quad3 = Quad3(mPlaneCoord, quad)
         val mQuad = Quad(quad3.p0.xy, quad3.p1.xy, quad3.p2.xy, quad3.p3.xy)
-        a = D2D.writeSprite(a, material, at = vec3(tree.position, 0), mQuad, uv = mainUv)
+        var aa = a
+        aa = D2D.writeSprite(aa, material, at = vec3(tree.position, 0), mQuad, uv = mainUv)
 
         val r = tree.rustle*0.1
         val rPlaneCoord = mPlaneCoord.set(x = mPlaneCoord.x + vec3(0, r, 0))
         val rQuad3 = Quad3(rPlaneCoord, quad)
-        a = D2D.writeSprite(a, material, at = vec3(tree.position + vec2(0.001, -0.001), 0),
+        aa = D2D.writeSprite(aa, material, at = vec3(tree.position + vec2(0.001, -0.001), 0),
             Quad(rQuad3.p0.xy, rQuad3.p1.xy, rQuad3.p2.xy, rQuad3.p3.xy),
             uv = rustleUv)
-        a
+        aa
     }
 }

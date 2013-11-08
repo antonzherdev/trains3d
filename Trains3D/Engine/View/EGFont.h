@@ -3,20 +3,19 @@
 #import "EGShader.h"
 @class EGVertexBufferDesc;
 @class EGFileTexture;
-@class EGMutableVertexBuffer;
-@class EGVBO;
-@class EGMutableIndexBuffer;
-@class EGIBO;
-@class EGSimpleVertexArray;
 @class EGGlobal;
 @class EGContext;
 @class EGMatrixStack;
 @class GEMat4;
+@class EGSimpleVertexArray;
+@class EGVBO;
+@class EGIBO;
 @class EGEnablingState;
 @class EGTexture;
 @class EGBlendMode;
 
 @class EGFont;
+@class EGText;
 @class EGFontShaderParam;
 @class EGFontShaderBuilder;
 @class EGFontShader;
@@ -62,6 +61,7 @@ ODPType* egTextAlignmentType();
 
 @interface EGFont : NSObject
 @property (nonatomic, readonly) NSString* name;
+@property (nonatomic, readonly) EGFileTexture* texture;
 @property (nonatomic, readonly) NSUInteger height;
 @property (nonatomic, readonly) NSUInteger size;
 
@@ -72,7 +72,31 @@ ODPType* egTextAlignmentType();
 - (GEVec2)measureInPixelsText:(NSString*)text;
 - (GEVec2)measurePText:(NSString*)text;
 - (GEVec2)measureCText:(NSString*)text;
-- (void)drawText:(NSString*)text color:(GEVec4)color at:(GEVec3)at alignment:(EGTextAlignment)alignment;
+- (EGSimpleVertexArray*)vaoText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment;
++ (EGVertexBufferDesc*)vbDesc;
++ (ODClassType*)type;
+@end
+
+
+@interface EGText : NSObject
+@property (nonatomic) GEVec4 color;
+
++ (id)text;
+- (id)init;
+- (ODClassType*)type;
++ (EGText*)applyFont:(EGFont*)font text:(NSString*)text position:(GEVec3)position alignment:(EGTextAlignment)alignment color:(GEVec4)color;
+- (EGFont*)font;
+- (void)setFont:(EGFont*)font;
+- (NSString*)text;
+- (void)setText:(NSString*)text;
+- (GEVec3)position;
+- (void)setPosition:(GEVec3)position;
+- (EGTextAlignment)alignment;
+- (void)setAlignment:(EGTextAlignment)alignment;
+- (void)draw;
+- (GEVec2)measureInPixels;
+- (GEVec2)measureP;
+- (GEVec2)measureC;
 + (ODClassType*)type;
 @end
 

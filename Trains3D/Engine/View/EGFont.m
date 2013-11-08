@@ -3,10 +3,10 @@
 #import "EGVertex.h"
 #import "EGTexture.h"
 #import "GL.h"
-#import "EGIndex.h"
-#import "EGMesh.h"
 #import "EGContext.h"
 #import "GEMat4.h"
+#import "EGMesh.h"
+#import "EGIndex.h"
 #import "EGMaterial.h"
 NSString* EGTextAlignmentDescription(EGTextAlignment self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<EGTextAlignment: "];
@@ -86,14 +86,12 @@ ODPType* egTextAlignmentType() {
     id<CNMap> _symbols;
     NSUInteger _height;
     NSUInteger _size;
-    EGMutableVertexBuffer* _vb;
-    EGMutableIndexBuffer* _ib;
-    EGSimpleVertexArray* _mesh;
 }
 static EGFontSymbolDesc* _EGFont_newLineDesc;
 static EGVertexBufferDesc* _EGFont_vbDesc;
 static ODClassType* _EGFont_type;
 @synthesize name = _name;
+@synthesize texture = _texture;
 @synthesize height = _height;
 @synthesize size = _size;
 
@@ -106,9 +104,6 @@ static ODClassType* _EGFont_type;
     if(self) {
         _name = name;
         _texture = [EGFileTexture fileTextureWithFile:[NSString stringWithFormat:@"%@.png", _name] scale:1.0 magFilter:GL_NEAREST minFilter:GL_NEAREST];
-        _vb = [EGVBO mutDesc:_EGFont_vbDesc];
-        _ib = [EGIBO mut];
-        _mesh = [EGFontShader.instance vaoVbo:_vb ibo:_ib];
         [self _init];
     }
     
@@ -189,7 +184,7 @@ static ODClassType* _EGFont_type;
     return geVec4Xy([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW([self measurePText:text], 0.0, 0.0)]);
 }
 
-- (void)drawText:(NSString*)text color:(GEVec4)color at:(GEVec3)at alignment:(EGTextAlignment)alignment {
+- (EGSimpleVertexArray*)vaoText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment {
     GEVec2 pos = ((geVec3IsEmpty(alignment.shift)) ? geVec4Xy([[EGGlobal.matrix wcp] mulVec4:geVec4ApplyVec3W(at, 1.0)]) : geVec4Xy([[EGGlobal.matrix p] mulVec4:geVec4AddVec3([[EGGlobal.matrix wc] mulVec4:geVec4ApplyVec3W(at, 1.0)], alignment.shift)]));
     __block NSInteger newLines = 0;
     id<CNSeq> symbolsArr = [[[text chain] flatMap:^id(id s) {
@@ -252,17 +247,19 @@ static ODClassType* _EGFont_type;
             n += 4;
         }
     }];
-    [_vb setArray:vertexes];
-    [_ib setArray:indexes];
+    id<EGVertexBuffer> vb = [EGVBO applyDesc:_EGFont_vbDesc array:vertexes];
+    EGImmutableIndexBuffer* ib = [EGIBO applyArray:indexes];
     cnVoidRefArrayFree(vertexes);
     cnVoidRefArrayFree(indexes);
-    [EGGlobal.context.cullFace disabledF:^void() {
-        [_mesh drawParam:[EGFontShaderParam fontShaderParamWithTexture:_texture color:color]];
-    }];
+    return [EGFontShader.instance vaoVbo:vb ibo:ib];
 }
 
 - (ODClassType*)type {
     return [EGFont type];
+}
+
++ (EGVertexBufferDesc*)vbDesc {
+    return _EGFont_vbDesc;
 }
 
 + (ODClassType*)type {
@@ -289,6 +286,131 @@ static ODClassType* _EGFont_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"name=%@", self.name];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGText{
+    BOOL __changed;
+    EGFont* __font;
+    NSString* __text;
+    GEVec3 __position;
+    EGTextAlignment __alignment;
+    EGSimpleVertexArray* __vao;
+    GEVec4 _color;
+}
+static ODClassType* _EGText_type;
+@synthesize color = _color;
+
++ (id)text {
+    return [[EGText alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    if(self) __changed = YES;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGText_type = [ODClassType classTypeWithCls:[EGText class]];
+}
+
++ (EGText*)applyFont:(EGFont*)font text:(NSString*)text position:(GEVec3)position alignment:(EGTextAlignment)alignment color:(GEVec4)color {
+    EGText* t = [EGText text];
+    [t setFont:font];
+    [t setText:text];
+    [t setPosition:position];
+    [t setAlignment:alignment];
+    t.color = color;
+    return t;
+}
+
+- (EGFont*)font {
+    return __font;
+}
+
+- (void)setFont:(EGFont*)font {
+    if(!([font isEqual:__font])) {
+        __changed = YES;
+        __font = font;
+    }
+}
+
+- (NSString*)text {
+    return __text;
+}
+
+- (void)setText:(NSString*)text {
+    if(!([text isEqual:__text])) {
+        __changed = YES;
+        __text = text;
+    }
+}
+
+- (GEVec3)position {
+    return __position;
+}
+
+- (void)setPosition:(GEVec3)position {
+    if(!(GEVec3Eq(position, __position))) {
+        __changed = YES;
+        __position = position;
+    }
+}
+
+- (EGTextAlignment)alignment {
+    return __alignment;
+}
+
+- (void)setAlignment:(EGTextAlignment)alignment {
+    if(!(EGTextAlignmentEq(alignment, __alignment))) {
+        __changed = YES;
+        __alignment = alignment;
+    }
+}
+
+- (void)draw {
+    if(__changed) {
+        __vao = [__font vaoText:__text at:__position alignment:__alignment];
+        __changed = NO;
+    }
+    [EGGlobal.context.cullFace disabledF:^void() {
+        [__vao drawParam:[EGFontShaderParam fontShaderParamWithTexture:__font.texture color:_color]];
+    }];
+}
+
+- (GEVec2)measureInPixels {
+    return [__font measureInPixelsText:__text];
+}
+
+- (GEVec2)measureP {
+    return [__font measurePText:__text];
+}
+
+- (GEVec2)measureC {
+    return [__font measureCText:__text];
+}
+
+- (ODClassType*)type {
+    return [EGText type];
+}
+
++ (ODClassType*)type {
+    return _EGText_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
     return description;
 }

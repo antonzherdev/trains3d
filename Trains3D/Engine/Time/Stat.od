@@ -4,12 +4,13 @@ class Stat {
     private var accumDelta : float
     private var framesCount : uint
     private var _frameRate : float
-    val font = fontWith(name = "lucida_grande_18")
+    private val text = Text(fontWith(name = "lucida_grande_18"), "", vec3(-0.98, -0.99, 0), TextAlignment.left, vec4(1, 1, 1, 1))
     def frameRate = _frameRate
 
     def draw {
         BlendFunction.standard {
-            font.draw(text = _frameRate.round, color = vec4(1, 1, 1, 1), at = vec3(-0.98, -0.99, 0), TextAlignment.left)
+            text.text = _frameRate.round
+            text.draw
         }
     }
     def tickWith(delta : float) {

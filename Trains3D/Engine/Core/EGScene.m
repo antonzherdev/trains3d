@@ -110,7 +110,7 @@ static ODClassType* _EGScene_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGScene* o = ((EGScene*)(other));
-    return GEVec4Eq(self.backgroundColor, o.backgroundColor) && [self.controller isEqual:o.controller] && [self.layers isEqual:o.layers] && [self.soundPlayer isEqual:o.soundPlayer];
+    return GEVec4Eq(self.backgroundColor, o.backgroundColor) && [self.controller isEqual:o.controller] && self.layers == o.layers && [self.soundPlayer isEqual:o.soundPlayer];
 }
 
 - (NSUInteger)hash {
@@ -219,16 +219,6 @@ static ODClassType* _EGLayers_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {

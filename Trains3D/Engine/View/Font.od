@@ -9,7 +9,7 @@ struct TextAlignment(x : float4, y : float4, baseline : bool, shift : vec3) {
 }
 
 class Font(name : string) {
-    private val texture = FileTexture("$(name).png", 1.0, GL_NEAREST, GL_NEAREST)
+    val texture = FileTexture("$(name).png", 1.0, GL_NEAREST, GL_NEAREST)
     private val symbols : [char : FontSymbolDesc]
     val height : uint
     val size : uint
@@ -71,11 +71,8 @@ class Font(name : string) {
     def measureP(text : string) : vec2 = measureInPixels(text)*2.0/context.viewport.size
     def measureC(text : string) : vec2 = matrix.p.divBySelf(vec4(measureP(text), 0, 0)).xy
 
-    private static val vbDesc = VertexBufferDesc(FontPrintData.type, position = 0, uv = 2*4, normal = -1, color = -1, model = -1)
-    private val vb = VBO.mut(vbDesc)
-    private val ib = IBO.mut
-    private val mesh = FontShader.instance.vao(vb, ib)
-    def draw(text : string, color : vec4, at : vec3, alignment : TextAlignment) {
+    static val vbDesc = VertexBufferDesc(FontPrintData.type, position = 0, uv = 2*4, normal = -1, color = -1, model = -1)
+    def vao(text : string, at : vec3, alignment : TextAlignment) : SimpleVertexArray<FontShaderParam> = {
         val pos =
             if(alignment.shift.isEmpty) matrix.wcp.mul(vec4(at, 1)).xy
             else matrix.p.mul(matrix.wc.mul(vec4(at, 1)) + alignment.shift).xy
@@ -96,7 +93,7 @@ class Font(name : string) {
         var n = 0
 
         var linesWidth = MutableArray<int>()
-        val linesWidthIterator : Iterator<int>
+        var linesWidthIterator : Iterator<int>
         var x =  pos.x
         if(alignment.x != -1) {
             var lineWidth = 0
@@ -150,15 +147,79 @@ class Font(name : string) {
                 n += 4
             }
         }
-        vb.set(vertexes)
-        ib.set(indexes)
+        val vb = VBO(vbDesc, vertexes)
+        val ib = IBO(indexes)
         vertexes.free
         indexes.free
-//        val mesh = Mesh(vertex = vb, ib)
-        context.cullFace.disabled {
-            mesh.draw(FontShaderParam(texture, color))
+        FontShader.instance.vao(vb, ib)
+    }
+}
+
+class Text {
+    static def apply(font : Font, text : string, position : vec3, alignment : TextAlignment, color : vec4) : Text = {
+        val t = Text()
+        t.font = font
+        t.text = text
+        t.position = position
+        t.alignment = alignment
+        t.color = color
+        t
+    }
+
+    private var _changed = true
+
+    private var _font : Font
+    def font = _font
+    def set(font : Font) {
+       if(font != _font) {
+           _changed = true
+           _font = font
+       }
+    }
+
+    private var _text : string
+    def text = _text
+    def set(text : string) {
+        if(text != _text) {
+            _changed = true
+            _text = text
         }
     }
+
+    private var _position : vec3
+    def position = _position
+    def set(position : vec3) {
+        if(position != _position) {
+            _changed = true
+            _position = position
+        }
+    }
+
+    private var _alignment : TextAlignment
+    def alignment = _alignment
+    def set(alignment : TextAlignment) {
+        if(alignment != _alignment) {
+            _changed = true
+            _alignment = alignment
+        }
+    }
+
+    private var _vao : SimpleVertexArray<FontShaderParam>
+    var color : vec4
+
+    def draw {
+        if(_changed) {
+            _vao = _font.vao(_text, _position, _alignment)
+            _changed = false
+        }
+        context.cullFace.disabled {
+            _vao.draw(FontShaderParam(_font.texture, color))
+        }
+    }
+
+    def measureInPixels = _font.measureInPixels(_text)
+    def measureP = _font.measureP(_text)
+    def measureC = _font.measureC(_text)
 }
 
 class FontShaderParam(texture : Texture, color : vec4)

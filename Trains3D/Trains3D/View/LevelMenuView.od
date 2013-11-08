@@ -12,30 +12,49 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor with Ta
     val notificationProgress = gap(0.7, 1) >> vec4(0, 0, 0, 1 - _)
     val pauseReg =  Rect(0, 0, 46.0/64, 46.0/64)
 
-    private var font : Font
-    private var notificationFont : Font
     private var width = 0
     var camera : Camera
     def reshapeWith(viewport : Rect) {
         camera = Camera2D(vec2(viewport.width/context.scale, 46))
-        font = fontWith(name = "lucida_grande", 24)
-        notificationFont = fontWith(name = "lucida_grande", 16)
+        val font = fontWith(name = "lucida_grande", 24)
+        val notificationFont = fontWith(name = "lucida_grande", 16)
+        notificationText.font = font
         width = viewport.size.x/context.scale
+
+        scoreText.font = font
+        notificationText.font = notificationFont
+        notificationText.position = vec3(width/2, 15, 0)
+        levelText.for{ _ ->
+            _.font = font
+            _.position = vec3(width/2, 14, 0)
+        }
+
         pauseSprite.position = vec2(width - 46, 0)
         pauseSprite.material = ColorSource(TextureRegion(scaledTextureFor("Pause", "png", GL_NEAREST, GL_NEAREST), pauseReg))
         pauseSprite.adjustSize
     }
+    private val scoreText = Text(nil, "", vec3(10, 14, 0), TextAlignment.baseline(-1), vec4(0, 0, 0, 1))
+    private val notificationText = Text(nil, "", vec3(0, 0, 0), TextAlignment.baseline(0), vec4(0, 0, 0, 1))
+    var levelText : Text? = Text(nil, "", vec3(0, 0, 0), TextAlignment.baseline(0), vec4(0, 0, 0, 1))
 
     def draw {
         context.depthTest.disabled { BlendFunction.standard {
             D2D.drawSprite(material = vec4(1, 1, 1, 0.7), at = vec3(0, 0, 0), Rect(0, 0, width, 46))
-            font.draw(text = format(level.score.score), color = vec4(0, 0, 0, 1), at = vec3(10, 14, 0), TextAlignment.baseline(-1))
+
+            scoreText.text = format(level.score.score)
+            scoreText.draw
+
             pauseSprite.draw
             levelAnimation.for { t ->
-                font.draw(text = Loc.startLevel(level.number), notificationProgress(t/3.0), at = vec3(width/2, 14, 0), TextAlignment.baseline(0))
+                levelText.for { _ ->
+                    _.text = Loc.startLevel(level.number)
+                    _.color = notificationProgress(t/3.0)
+                    _.draw
+                }
             }
             notificationAnimation.for{t ->
-                notificationFont.draw(text = notificationText, notificationProgress(t), at = vec3(width/2, 15, 0), TextAlignment.baseline(0))
+                notificationText.color = notificationProgress(t)
+                notificationText.draw
             }
         }}
     }
@@ -52,15 +71,14 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor with Ta
         "\$$str"
     }
 
-    private var notificationText = ""
     private var notificationAnimation = Counter()
-    private var levelAnimation = Counter(5)
+    private var levelAnimation = Finisher(Counter(5), (levelText = nil))
 
     def updateWith(delta : float) {
         if(levelAnimation.isRunning) levelAnimation.updateWith(delta)
         else if(notificationAnimation.isRunning) notificationAnimation.updateWith(delta)
         else if(!level.notifications.isEmpty) {
-            notificationText = level.notifications.take.get
+            notificationText.text = level.notifications.take.get
             notificationAnimation = Counter(2)
         }
     }
@@ -78,12 +96,3 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor with Ta
     }
 }
 
-class LevelMenuViewRes {
-    def font : Font
-    def notificationFont : Font
-    def pauseSprite : Sprite
-    def pixelsInPoint : float4
-
-    val cameraCache = Cache<Rect, Camera>(viewport -> Camera2D(vec2(viewport.width/pixelsInPoint, 46)))
-    def cameraWith(viewport : Rect) : Camera = cameraCache(viewport)
-}

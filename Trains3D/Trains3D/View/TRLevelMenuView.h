@@ -7,6 +7,7 @@
 @class EGSprite;
 @class EGProgress;
 @class EGCounter;
+@class EGFinisher;
 @class EGGlobal;
 @class EGContext;
 @class EGCamera2D;
@@ -23,7 +24,6 @@
 @class EGEnvironment;
 
 @class TRLevelMenuView;
-@class TRLevelMenuViewRes;
 
 @interface TRLevelMenuView : NSObject<EGLayerView, EGInputProcessor, EGTapProcessor>
 @property (nonatomic, readonly) TRLevel* level;
@@ -32,6 +32,7 @@
 @property (nonatomic, readonly) GEVec4(^notificationProgress)(float);
 @property (nonatomic, readonly) GERect pauseReg;
 @property (nonatomic) id<EGCamera> camera;
+@property (nonatomic) id levelText;
 
 + (id)levelMenuViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
@@ -43,21 +44,6 @@
 - (BOOL)processEvent:(EGEvent*)event;
 - (BOOL)tapEvent:(EGEvent*)event;
 + (GEVec4)backgroundColor;
-+ (ODClassType*)type;
-@end
-
-
-@interface TRLevelMenuViewRes : NSObject
-@property (nonatomic, readonly) CNCache* cameraCache;
-
-+ (id)levelMenuViewRes;
-- (id)init;
-- (ODClassType*)type;
-- (EGFont*)font;
-- (EGFont*)notificationFont;
-- (EGSprite*)pauseSprite;
-- (float)pixelsInPoint;
-- (id<EGCamera>)cameraWithViewport:(GERect)viewport;
 + (ODClassType*)type;
 @end
 

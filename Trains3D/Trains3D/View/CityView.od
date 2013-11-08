@@ -45,10 +45,11 @@ class CityView(level : Level) {
 }
 
 class CallRepairerView(level : Level) extends InputProcessor with TapProcessor {
-    private var font : Font
     private var buttonSize : vec2
+    private val text = Text(nil, Loc.callRepairer, vec3(0, 0, 0), TextAlignment(0, 0), vec4(0.1, 0.1, 0.1, 1))
     def reshapeWith(viewport : Rect) {
-        font = fontWith(name = "lucida_grande", 18)
+        val font = fontWith(name = "lucida_grande", 18)
+        text.font = font
         buttonSize = font.measureC(Loc.callRepairer)*1.2
     }
 
@@ -68,7 +69,6 @@ class CallRepairerView(level : Level) extends InputProcessor with TapProcessor {
     private var buttons = MutableHashMap<City, Billboard>()
 
     def drawButtonFor(city : City) {
-
         val bs = buttonSize
         var p = CityView.moveVecFor(level, city)
 
@@ -77,7 +77,10 @@ class CallRepairerView(level : Level) extends InputProcessor with TapProcessor {
         val r = (p - 0.5) * bs
         billboard.rect = Rect(r, bs)
         billboard.draw
-        font.draw(Loc.callRepairer, color = vec4(0.1, 0.1, 0.1, 1), billboard.position, TextAlignment(0, 0, false, vec3(r + bs/2, 0)))
+
+        text.position = billboard.position
+        text.alignment = TextAlignment(0, 0, false, vec3(r + bs/2, 0))
+        text.draw
     }
 
     def process(event : Event) : bool = {

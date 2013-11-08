@@ -5,7 +5,7 @@ class TrainSound(level : Level) extends SoundPlayer {
 
     def updateWith(delta : float) {
         level.trains.for { train ->
-            val sd = train.soundData.cast<TrainSoundData>
+            var sd = train.soundData.cast<TrainSoundData>
             if(sd == nil) {
                 sd = TrainSoundData()
                 train.soundData = sd

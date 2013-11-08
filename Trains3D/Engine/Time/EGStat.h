@@ -7,8 +7,6 @@
 @class EGStat;
 
 @interface EGStat : NSObject
-@property (nonatomic, readonly) EGFont* font;
-
 + (id)stat;
 - (id)init;
 - (ODClassType*)type;

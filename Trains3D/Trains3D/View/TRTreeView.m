@@ -80,12 +80,13 @@ static ODClassType* _TRTreeView_type;
     GEQuad quad = geRectQuad(geRectMulVec2(geRectCenterX(geRectApplyXYWidthHeight(0.0, 0.0, [_texture size].x / ([_texture size].y * 4), 0.5)), tree.size));
     GEQuad3 quad3 = GEQuad3Make(mPlaneCoord, quad);
     GEQuad mQuad = geQuadApplyP0P1P2P3(geVec3Xy(geQuad3P0(quad3)), geVec3Xy(geQuad3P1(quad3)), geVec3Xy(geQuad3P2(quad3)), geVec3Xy(geQuad3P3(quad3)));
-    a = [EGD2D writeSpriteIn:a material:_material at:geVec3ApplyVec2Z(tree.position, 0.0) quad:mQuad uv:mainUv];
+    CNVoidRefArray aa = a;
+    aa = [EGD2D writeSpriteIn:aa material:_material at:geVec3ApplyVec2Z(tree.position, 0.0) quad:mQuad uv:mainUv];
     CGFloat r = tree.rustle * 0.1;
     GEPlaneCoord rPlaneCoord = gePlaneCoordSetX(mPlaneCoord, geVec3AddVec3(mPlaneCoord.x, GEVec3Make(0.0, ((float)(r)), 0.0)));
     GEQuad3 rQuad3 = GEQuad3Make(rPlaneCoord, quad);
-    a = [EGD2D writeSpriteIn:a material:_material at:geVec3ApplyVec2Z(geVec2AddVec2(tree.position, GEVec2Make(0.001, -0.001)), 0.0) quad:geQuadApplyP0P1P2P3(geVec3Xy(geQuad3P0(rQuad3)), geVec3Xy(geQuad3P1(rQuad3)), geVec3Xy(geQuad3P2(rQuad3)), geVec3Xy(geQuad3P3(rQuad3))) uv:rustleUv];
-    return a;
+    aa = [EGD2D writeSpriteIn:aa material:_material at:geVec3ApplyVec2Z(geVec2AddVec2(tree.position, GEVec2Make(0.001, -0.001)), 0.0) quad:geQuadApplyP0P1P2P3(geVec3Xy(geQuad3P0(rQuad3)), geVec3Xy(geQuad3P1(rQuad3)), geVec3Xy(geQuad3P2(rQuad3)), geVec3Xy(geQuad3P3(rQuad3))) uv:rustleUv];
+    return aa;
 }
 
 - (ODClassType*)type {

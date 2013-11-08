@@ -24,7 +24,7 @@ class MutableTreeMap<K, V>(comparator : (K, K) -> int) extends MutableMap<K, V> 
     def iteratorHigherThan(key : K) = TreeMapIterator<K, V>.new(self, higherEntryThan(key).getOr(nil))
 
     private def entryFor(key : K) : TreeMapEntry<K, V> = {
-        val p = root
+        var p = root
         while (p != nil) {
             val cmp = comparator(key, p.key)
             if (cmp < 0) p = p.left
@@ -38,13 +38,13 @@ class MutableTreeMap<K, V>(comparator : (K, K) -> int) extends MutableMap<K, V> 
     static val RED = 1
 
     def set(key : K, value : V)  {
-        val t = root
+        var t = root
         if (t == nil) {
             root = TreeMapEntry.newWith<K,V>(key, value, parent = nil)
             _size = 1
         } else {
-            val cmp : int = 0
-            val parent : TreeMapEntry<K, V> = nil
+            var cmp : int = 0
+            var parent : TreeMapEntry<K, V> = nil
 
             do {
                 parent = t
@@ -72,7 +72,7 @@ class MutableTreeMap<K, V>(comparator : (K, K) -> int) extends MutableMap<K, V> 
     }
 
     private def delete(entry : TreeMapEntry<K, V>) : V = {
-        val p = entry
+        var p = entry
         _size--
 
         // If strictly internal, copy successor's element to p and then make p
@@ -158,7 +158,7 @@ class MutableTreeMap<K, V>(comparator : (K, K) -> int) extends MutableMap<K, V> 
         var x = entry
         while (x != root && x.color == BLACK) {
             if (x == x.parent.left) {
-                val sib = x.parent.right
+                var sib = x.parent.right
                 if (sib.color == RED) {
                     sib.color = BLACK
                     x.parent.color = RED
@@ -242,13 +242,13 @@ class MutableTreeMap<K, V>(comparator : (K, K) -> int) extends MutableMap<K, V> 
     }
 
     private def firstEntry : TreeMapEntry<K, V> = {
-        val p = root
+        var p = root
         if (p != nil) while (p.left != nil) p = p.left
         p
     }
 
     private def lastEntry : TreeMapEntry<K, V> = {
-        val p = root
+        var p = root
         if (p != nil) while (p.right != nil) p = p.right
         p
     }
@@ -269,7 +269,7 @@ class MutableTreeMap<K, V>(comparator : (K, K) -> int) extends MutableMap<K, V> 
     def higherKeyThan(key : K) : K? = higherEntryThan(key).map(_.key)
 
     private def lowerEntryThan(key : K) : TreeMapEntry<K, V>? = {
-        val p = root
+        var p = root
         while (p != nil) {
             val cmp = comparator(key, p.key)
             if (cmp > 0) {
@@ -279,8 +279,8 @@ class MutableTreeMap<K, V>(comparator : (K, K) -> int) extends MutableMap<K, V> 
                 if (p.left != nil) {
                     p = p.left
                 } else {
-                    val parent = p.parent
-                    val ch = p
+                    var parent = p.parent
+                    var ch = p
                     while (parent != nil && ch == parent.left) {
                         ch = parent
                         parent = parent.parent
@@ -293,7 +293,7 @@ class MutableTreeMap<K, V>(comparator : (K, K) -> int) extends MutableMap<K, V> 
     }
 
     private def higherEntryThan(key : K) : TreeMapEntry<K, V>? = {
-        val p = root
+        var p = root
         while (p != nil) {
             val cmp = comparator(key, p.key)
             if (cmp < 0) {
@@ -303,8 +303,8 @@ class MutableTreeMap<K, V>(comparator : (K, K) -> int) extends MutableMap<K, V> 
                 if (p.right != nil) {
                     p = p.right
                 } else {
-                    val parent = p.parent
-                    val ch = p
+                    var parent = p.parent
+                    var ch = p
                     while (parent != nil && ch == parent.right) {
                         ch = parent
                         parent = parent.parent

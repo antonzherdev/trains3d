@@ -34,7 +34,7 @@ class FilledList<T>(head : T, tail : List<T>) extends List<T> {
     }
 
     def for(each : T -> void) {
-        val list : FilledList<T> = self
+        var list : FilledList<T> = self
         while(true) {
             each(list.head)
             val tail = list.tail

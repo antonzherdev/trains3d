@@ -6,10 +6,9 @@
     CGFloat _accumDelta;
     NSUInteger _framesCount;
     CGFloat __frameRate;
-    EGFont* _font;
+    EGText* _text;
 }
 static ODClassType* _EGStat_type;
-@synthesize font = _font;
 
 + (id)stat {
     return [[EGStat alloc] init];
@@ -17,7 +16,7 @@ static ODClassType* _EGStat_type;
 
 - (id)init {
     self = [super init];
-    if(self) _font = [EGGlobal fontWithName:@"lucida_grande_18"];
+    if(self) _text = [EGText applyFont:[EGGlobal fontWithName:@"lucida_grande_18"] text:@"" position:GEVec3Make(-0.98, -0.99, 0.0) alignment:egTextAlignmentLeft() color:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
     
     return self;
 }
@@ -33,7 +32,8 @@ static ODClassType* _EGStat_type;
 
 - (void)draw {
     [EGBlendFunction.standard applyDraw:^void() {
-        [_font drawText:[NSString stringWithFormat:@"%ld", (long)floatRound(__frameRate)] color:GEVec4Make(1.0, 1.0, 1.0, 1.0) at:GEVec3Make(-0.98, -0.99, 0.0) alignment:egTextAlignmentLeft()];
+        [_text setText:[NSString stringWithFormat:@"%ld", (long)floatRound(__frameRate)]];
+        [_text draw];
     }];
 }
 

@@ -19,13 +19,13 @@
     EGSprite* _pauseSprite;
     GEVec4(^_notificationProgress)(float);
     GERect _pauseReg;
-    EGFont* _font;
-    EGFont* _notificationFont;
     NSInteger _width;
     id<EGCamera> _camera;
-    NSString* _notificationText;
+    EGText* _scoreText;
+    EGText* _notificationText;
+    id _levelText;
     EGCounter* _notificationAnimation;
-    EGCounter* _levelAnimation;
+    EGFinisher* _levelAnimation;
 }
 static GEVec4 _TRLevelMenuView_backgroundColor = (GEVec4){0.85, 0.9, 0.75, 1.0};
 static ODClassType* _TRLevelMenuView_type;
@@ -35,6 +35,7 @@ static ODClassType* _TRLevelMenuView_type;
 @synthesize notificationProgress = _notificationProgress;
 @synthesize pauseReg = _pauseReg;
 @synthesize camera = _camera;
+@synthesize levelText = _levelText;
 
 + (id)levelMenuViewWithLevel:(TRLevel*)level {
     return [[TRLevelMenuView alloc] initWithLevel:level];
@@ -42,6 +43,7 @@ static ODClassType* _TRLevelMenuView_type;
 
 - (id)initWithLevel:(TRLevel*)level {
     self = [super init];
+    __weak TRLevelMenuView* _weakSelf = self;
     if(self) {
         _level = level;
         _name = @"LevelMenu";
@@ -57,9 +59,13 @@ static ODClassType* _TRLevelMenuView_type;
         }();
         _pauseReg = geRectApplyXYWidthHeight(0.0, 0.0, ((float)(46.0 / 64)), ((float)(46.0 / 64)));
         _width = 0;
-        _notificationText = @"";
+        _scoreText = [EGText applyFont:nil text:@"" position:GEVec3Make(10.0, 14.0, 0.0) alignment:egTextAlignmentBaselineX(-1.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
+        _notificationText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentBaselineX(0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
+        _levelText = [CNOption applyValue:[EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentBaselineX(0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)]];
         _notificationAnimation = [EGCounter apply];
-        _levelAnimation = [EGCounter applyLength:5.0];
+        _levelAnimation = [EGFinisher finisherWithCounter:[EGCounter applyLength:5.0] finish:^void() {
+            _weakSelf.levelText = [CNOption none];
+        }];
     }
     
     return self;
@@ -72,9 +78,17 @@ static ODClassType* _TRLevelMenuView_type;
 
 - (void)reshapeWithViewport:(GERect)viewport {
     _camera = [EGCamera2D camera2DWithSize:GEVec2Make(geRectWidth(viewport) / EGGlobal.context.scale, 46.0)];
-    _font = [EGGlobal fontWithName:@"lucida_grande" size:24];
-    _notificationFont = [EGGlobal fontWithName:@"lucida_grande" size:16];
+    EGFont* font = [EGGlobal fontWithName:@"lucida_grande" size:24];
+    EGFont* notificationFont = [EGGlobal fontWithName:@"lucida_grande" size:16];
+    [_notificationText setFont:font];
     _width = ((NSInteger)(viewport.size.x / EGGlobal.context.scale));
+    [_scoreText setFont:font];
+    [_notificationText setFont:notificationFont];
+    [_notificationText setPosition:GEVec3Make(((float)(_width / 2)), 15.0, 0.0)];
+    [_levelText forEach:^void(EGText* _) {
+        [((EGText*)(_)) setFont:font];
+        [((EGText*)(_)) setPosition:GEVec3Make(((float)(_width / 2)), 14.0, 0.0)];
+    }];
     _pauseSprite.position = GEVec2Make(((float)(_width - 46)), 0.0);
     _pauseSprite.material = [EGColorSource applyTexture:[EGTextureRegion textureRegionWithTexture:[EGGlobal scaledTextureForName:@"Pause" format:@"png" magFilter:GL_NEAREST minFilter:GL_NEAREST] uv:_pauseReg]];
     [_pauseSprite adjustSize];
@@ -84,13 +98,19 @@ static ODClassType* _TRLevelMenuView_type;
     [EGGlobal.context.depthTest disabledF:^void() {
         [EGBlendFunction.standard applyDraw:^void() {
             [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.7)] at:GEVec3Make(0.0, 0.0, 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(_width)), 46.0)];
-            [_font drawText:[self formatScore:[_level.score score]] color:GEVec4Make(0.0, 0.0, 0.0, 1.0) at:GEVec3Make(10.0, 14.0, 0.0) alignment:egTextAlignmentBaselineX(-1.0)];
+            [_scoreText setText:[self formatScore:[_level.score score]]];
+            [_scoreText draw];
             [_pauseSprite draw];
             [_levelAnimation forF:^void(CGFloat t) {
-                [_font drawText:[TRStr.Loc startLevelNumber:_level.number] color:_notificationProgress(((float)(t / 3.0))) at:GEVec3Make(((float)(_width / 2)), 14.0, 0.0) alignment:egTextAlignmentBaselineX(0.0)];
+                [_levelText forEach:^void(EGText* _) {
+                    [((EGText*)(_)) setText:[TRStr.Loc startLevelNumber:_level.number]];
+                    ((EGText*)(_)).color = _notificationProgress(((float)(t / 3.0)));
+                    [((EGText*)(_)) draw];
+                }];
             }];
             [_notificationAnimation forF:^void(CGFloat t) {
-                [_notificationFont drawText:_notificationText color:_notificationProgress(((float)(t))) at:GEVec3Make(((float)(_width / 2)), 15.0, 0.0) alignment:egTextAlignmentBaselineX(0.0)];
+                _notificationText.color = _notificationProgress(((float)(t)));
+                [_notificationText draw];
             }];
         }];
     }];
@@ -115,7 +135,7 @@ static ODClassType* _TRLevelMenuView_type;
             [_notificationAnimation updateWithDelta:delta];
         } else {
             if(!([_level.notifications isEmpty])) {
-                _notificationText = [[_level.notifications take] get];
+                [_notificationText setText:[[_level.notifications take] get]];
                 _notificationAnimation = [EGCounter applyLength:2.0];
             }
         }
@@ -178,82 +198,6 @@ static ODClassType* _TRLevelMenuView_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"level=%@", self.level];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
-@implementation TRLevelMenuViewRes{
-    CNCache* _cameraCache;
-}
-static ODClassType* _TRLevelMenuViewRes_type;
-@synthesize cameraCache = _cameraCache;
-
-+ (id)levelMenuViewRes {
-    return [[TRLevelMenuViewRes alloc] init];
-}
-
-- (id)init {
-    self = [super init];
-    __weak TRLevelMenuViewRes* _weakSelf = self;
-    if(self) _cameraCache = [CNCache cacheWithF:^EGCamera2D*(id viewport) {
-        return [EGCamera2D camera2DWithSize:GEVec2Make(geRectWidth(uwrap(GERect, viewport)) / [_weakSelf pixelsInPoint], 46.0)];
-    }];
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _TRLevelMenuViewRes_type = [ODClassType classTypeWithCls:[TRLevelMenuViewRes class]];
-}
-
-- (EGFont*)font {
-    @throw @"Method font is abstract";
-}
-
-- (EGFont*)notificationFont {
-    @throw @"Method notificationFont is abstract";
-}
-
-- (EGSprite*)pauseSprite {
-    @throw @"Method pauseSprite is abstract";
-}
-
-- (float)pixelsInPoint {
-    @throw @"Method pixelsInPoint is abstract";
-}
-
-- (id<EGCamera>)cameraWithViewport:(GERect)viewport {
-    return [_cameraCache applyX:wrap(GERect, viewport)];
-}
-
-- (ODClassType*)type {
-    return [TRLevelMenuViewRes type];
-}
-
-+ (ODClassType*)type {
-    return _TRLevelMenuViewRes_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
     return description;
 }

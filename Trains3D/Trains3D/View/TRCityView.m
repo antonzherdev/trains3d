@@ -118,8 +118,8 @@ static ODClassType* _TRCityView_type;
 
 @implementation TRCallRepairerView{
     TRLevel* _level;
-    EGFont* _font;
     GEVec2 _buttonSize;
+    EGText* _text;
     NSMutableDictionary* _buttons;
 }
 static ODClassType* _TRCallRepairerView_type;
@@ -133,6 +133,7 @@ static ODClassType* _TRCallRepairerView_type;
     self = [super init];
     if(self) {
         _level = level;
+        _text = [EGText applyFont:nil text:[TRStr.Loc callRepairer] position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:GEVec4Make(0.1, 0.1, 0.1, 1.0)];
         _buttons = [NSMutableDictionary mutableDictionary];
     }
     
@@ -145,8 +146,9 @@ static ODClassType* _TRCallRepairerView_type;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
-    _font = [EGGlobal fontWithName:@"lucida_grande" size:18];
-    _buttonSize = geVec2MulF([_font measureCText:[TRStr.Loc callRepairer]], 1.2);
+    EGFont* font = [EGGlobal fontWithName:@"lucida_grande" size:18];
+    [_text setFont:font];
+    _buttonSize = geVec2MulF([font measureCText:[TRStr.Loc callRepairer]], 1.2);
 }
 
 - (void)draw {
@@ -175,7 +177,9 @@ static ODClassType* _TRCallRepairerView_type;
     GEVec2 r = geVec2MulVec2(geVec2SubF(p, 0.5), bs);
     billboard.rect = GERectMake(r, bs);
     [billboard draw];
-    [_font drawText:[TRStr.Loc callRepairer] color:GEVec4Make(0.1, 0.1, 0.1, 1.0) at:billboard.position alignment:EGTextAlignmentMake(0.0, 0.0, NO, geVec3ApplyVec2Z(geVec2AddVec2(r, geVec2DivI(bs, 2)), 0.0))];
+    [_text setPosition:billboard.position];
+    [_text setAlignment:EGTextAlignmentMake(0.0, 0.0, NO, geVec3ApplyVec2Z(geVec2AddVec2(r, geVec2DivI(bs, 2)), 0.0))];
+    [_text draw];
 }
 
 - (BOOL)processEvent:(EGEvent*)event {

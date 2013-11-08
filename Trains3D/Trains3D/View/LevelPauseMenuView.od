@@ -116,12 +116,13 @@ class WinMenu(level : Level) extends MenuView with PauseView{
     def headerHeight = 75.0
     def drawHeader(rect : Rect) {
         D2D.drawSprite(vec4(0.85, 0.9, 0.75, 1.0), at = vec3(0, 0, 0), rect)
-        headerFont.draw(Loc.victory, vec4(0, 0, 0, 1), rect.center, TextAlignment(0, 0))
+        headerText.position = rect.center
+        headerText.draw
     }
 
-    var headerFont : Font
+    private val headerText = Text(nil, Loc.victory, vec3(0, 0, 0), TextAlignment(0, 0), vec4(0, 0, 0, 1))
     def reshape {
-        headerFont = fontWith(name = "lucida_grande", size = 36)
+        headerText.font = fontWith(name = "lucida_grande", size = 36)
     }
 }
 
@@ -135,34 +136,38 @@ class LooseMenu(level : Level) extends MenuView with PauseView{
     def headerHeight = 75.0
     def drawHeader(rect : Rect) {
         D2D.drawSprite(vec4(1.0, 0.85, 0.75, 1.0), at = vec3(0, 0, 0), rect)
-        headerFont.draw(Loc.defeat, vec4(0, 0, 0, 1), rect.p0 + rect.size*vec2(0.05, 0.7), TextAlignment(-1, 0))
-        detailsFont.draw(Loc.moneyOver, vec4(0, 0, 0, 1), rect.p0 + rect.size*vec2(0.5, 0.35), TextAlignment(0, 0))
+        headerText.position = rect.p0 + rect.size*vec2(0.05, 0.7)
+        headerText.draw
+        detailsText.position = rect.p0 + rect.size*vec2(0.5, 0.35)
+        detailsText.draw
     }
 
-    var headerFont : Font
-    var detailsFont : Font
+    private val headerText : Text = Text(nil, Loc.defeat, vec3(0, 0, 0), TextAlignment(-1, 0), vec4(0, 0, 0, 1))
+    private val detailsText : Text = Text(nil, Loc.moneyOver, vec3(0, 0, 0), TextAlignment(0, 0), vec4(0, 0, 0, 1))
     def reshape {
-        headerFont = fontWith(name = "lucida_grande", size = 36)
-        detailsFont = fontWith(name = "lucida_grande", size = 16)
+        headerText.font = fontWith(name = "lucida_grande", size = 36)
+        detailsText.font = fontWith(name = "lucida_grande", size = 16)
     }
 }
 
 
 class HelpView(level : Level) extends PauseView {
-    private var helpFont : Font
+    private val helpText : Text = Text(nil, "", vec3(0, 0, 0), TextAlignment(-1, 0), vec4(0, 0, 0, 1))
     def reshapeWith(viewport : Rect) {
-        helpFont = fontWith(name = "lucida_grande", size = 16)
+        helpText.font = fontWith(name = "lucida_grande", size = 16)
     }
 
     private val helpBackSprite = Sprite(LevelMenuView.backgroundColor, vec2(0, 0))
     def draw {
         val help = level.help.get
-        val size = helpFont.measureC(help.text)*vec2(1.1, 1.4)
+        helpText.text = help.text
+        val size = helpText.measureC*vec2(1.1, 1.4)
         val rect = size.rectInCenterWith(context.viewport.size)
 
         helpBackSprite.set(rect = rect)
         helpBackSprite.draw
-        helpFont.draw(help.text, color = vec4(0, 0, 0, 1), at = rect.center - vec2(rect.size.x*0.45, 0), TextAlignment(-1, 0))
+        helpText.position = rect.center - vec2(rect.size.x*0.45, 0)
+        helpText.draw
     }
 
     def tap(event : Event) : bool = {

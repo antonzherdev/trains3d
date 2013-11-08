@@ -168,8 +168,8 @@ class ThickLineSegment(segment : LineSegment, thickness : float) extends Figure 
 
     def segments : [LineSegment] = {
         if(_segments == nil) {
-            val dx : float = 0
-            val dy : float = 0
+            var dx : float = 0
+            var dy : float = 0
             if(segment.isVertical) {
                 dx = thickness_2
                 dy = 0

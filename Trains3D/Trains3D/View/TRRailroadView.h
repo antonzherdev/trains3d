@@ -29,9 +29,9 @@
 @class TRRailForm;
 @class TRRailConnector;
 @class EGMatrixStack;
-@class EGBillboard;
 @class TRStr;
 @protocol TRStrings;
+@class EGBillboard;
 @class TRSwitch;
 @class TRRailLight;
 @class TRRailPoint;

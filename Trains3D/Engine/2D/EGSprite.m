@@ -660,8 +660,11 @@ static ODClassType* _EGButton_type;
 }
 
 + (void(^)(GERect))drawTextFont:(EGFont*(^)())font color:(GEVec4)color text:(NSString*)text {
+    EGText* tc = [EGText applyFont:nil text:text position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:color];
     return ^void(GERect rect) {
-        [((EGFont*(^)())(font))() drawText:text color:color at:geVec3ApplyVec2(geRectCenter(rect)) alignment:egTextAlignmentApplyXY(0.0, 0.0)];
+        [tc setFont:((EGFont*(^)())(font))()];
+        [tc setPosition:geVec3ApplyVec2(geRectCenter(rect))];
+        [tc draw];
     };
 }
 

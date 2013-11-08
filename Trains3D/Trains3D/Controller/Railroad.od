@@ -288,7 +288,7 @@ class RailroadBuilder(weak railroad : Railroad) extends Controller {
     def updateWith(delta : float) {
         var hasEnd = false
         _buildingRails.for{b ->
-            val p = b.progress
+            var p = b.progress
             val less = p < 0.5
             p += delta/2
             if(less && p > 0.5) changed
