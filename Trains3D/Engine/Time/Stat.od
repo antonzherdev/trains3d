@@ -9,15 +9,15 @@ class Stat {
 
     def draw {
         BlendFunction.standard {
-            text.text = _frameRate.round
             text.draw
         }
     }
     def tickWith(delta : float) {
         accumDelta += delta
         framesCount++
-        if(accumDelta > 0.1) {
+        if(accumDelta > 1.0) {
             _frameRate = framesCount / accumDelta
+            text.text = _frameRate.round
             accumDelta = 0
             framesCount = 0
         }

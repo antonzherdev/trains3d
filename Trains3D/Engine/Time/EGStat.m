@@ -32,7 +32,6 @@ static ODClassType* _EGStat_type;
 
 - (void)draw {
     [EGBlendFunction.standard applyDraw:^void() {
-        [_text setText:[NSString stringWithFormat:@"%ld", (long)floatRound(__frameRate)]];
         [_text draw];
     }];
 }
@@ -40,8 +39,9 @@ static ODClassType* _EGStat_type;
 - (void)tickWithDelta:(CGFloat)delta {
     _accumDelta += delta;
     _framesCount++;
-    if(_accumDelta > 0.1) {
+    if(_accumDelta > 1.0) {
         __frameRate = _framesCount / _accumDelta;
+        [_text setText:[NSString stringWithFormat:@"%ld", (long)floatRound(__frameRate)]];
         _accumDelta = 0.0;
         _framesCount = 0;
     }
