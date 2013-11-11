@@ -117,6 +117,7 @@ static ODClassType* _TRLevelRules_type;
     id __result;
 }
 static NSInteger _TRLevel_trainComingPeriod = 10;
+static CNNotificationHandle* _TRLevel_winNotification;
 static ODClassType* _TRLevel_type;
 @synthesize number = _number;
 @synthesize rules = _rules;
@@ -163,6 +164,7 @@ static ODClassType* _TRLevel_type;
 + (void)initialize {
     [super initialize];
     _TRLevel_type = [ODClassType classTypeWithCls:[TRLevel class]];
+    _TRLevel_winNotification = [CNNotificationHandle notificationHandleWithName:@"Level was passed"];
 }
 
 - (id<CNSeq>)cities {
@@ -383,7 +385,7 @@ static ODClassType* _TRLevel_type;
 
 - (void)win {
     __result = [CNOption applyValue:[TRLevelResult levelResultWithWin:YES]];
-    [CNNotificationCenter.instance postName:@"level was passed" data:numi(((NSInteger)(_number)))];
+    [_TRLevel_winNotification postData:numi(((NSInteger)(_number)))];
 }
 
 - (void)lose {
@@ -396,6 +398,10 @@ static ODClassType* _TRLevel_type;
 
 + (NSInteger)trainComingPeriod {
     return _TRLevel_trainComingPeriod;
+}
+
++ (CNNotificationHandle*)winNotification {
+    return _TRLevel_winNotification;
 }
 
 + (ODClassType*)type {

@@ -84,6 +84,48 @@ class LevelFactory {
                 (25, slowTrain),
                 (30, slowTrain),
                 (20, slowTrain)
+            ]),
+            //4
+            LevelRules(vec2i(5, 3), scoreRulesWith(20000),
+                ForestRules(types = [TreeType.pine], thickness = 2),
+                WeatherRules(windStrength = 0.3, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3),
+                repairerSpeed = 20, [
+                    (0, create2Cities),
+                    (15, slowTrain),
+                    (25, slowTrain),
+                    (25, slowTrain),
+                    (10, createNewCity),
+                    (15, slowTrain),
+                    (20, slowTrain),
+                    (25, slowTrain),
+                    (10, createNewCity),
+                    (10, slowTrain),
+                    (20, slowTrain),
+                    (20, slowTrain),
+                    (10, createNewCity),
+                    (10, slowTrain),
+                    (25, slowTrain),
+                    (10, slowTrain),
+
+                    (30, slowTrain),
+                    (0, slowTrain),
+
+                    (30, slowTrain),
+                    (5, slowTrain),
+                    (15, slowTrain),
+
+                    (30, slowTrain),
+                    (5, slowTrain),
+
+                    (20, slowTrain),
+                    (15, slowTrain),
+                    (10, slowTrain),
+
+                    (30, slowTrain),
+                    (10, slowTrain),
+                    (15, slowTrain),
+                    (5, slowTrain),
+                    (15, slowTrain)
             ])
     ]
     static def slowTrain = train(cars = 1.to(4), speed = 25.to(35))

@@ -15,14 +15,15 @@ class GameDirector {
         v
     }
 
-    private val cloud = CloudKeyValueStorage([("maxLevel", 1)], [("maxLevel", resolveMaxLevel)])
+    val cloud = CloudKeyValueStorage([("maxLevel", 1)], [("maxLevel", resolveMaxLevel)])
+
+    private val obs = Level.winNotification.observe{ level ->
+        cloud.keepMax("maxLevel", level + 1)
+        local.set("currentLevel", i = level + 1)
+    }
 
     def init {
         GameCenter.instance.authenticate
-        NotificationCenter.instance.addObserver<int>("level was passed", {
-            cloud.keepMax("maxLevel", _ + 1)
-            local.set("currentLevel", i = _ + 1)
-        })
     }
 
     def currentLevel = local.intFor("currentLevel")

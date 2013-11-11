@@ -2,12 +2,12 @@
 @class DTLocalKeyValueStorage;
 @class DTConflict;
 @class DTCloudKeyValueStorage;
+@class TRLevel;
 @class EGGameCenter;
 @class EGDirector;
 @class TRSceneFactory;
 @class EGScene;
 @protocol EGController;
-@class TRLevel;
 @class TRLevelChooseMenu;
 @class TRLevelFactory;
 
@@ -15,6 +15,7 @@
 
 @interface TRGameDirector : NSObject
 @property (nonatomic, readonly) DTLocalKeyValueStorage* local;
+@property (nonatomic, readonly) DTCloudKeyValueStorage* cloud;
 
 + (id)gameDirector;
 - (id)init;

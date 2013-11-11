@@ -194,9 +194,10 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
     private var _result : LevelResult? = nil
     def result = _result
+    static val winNotification = NotificationHandle<int>("Level was passed")
     def win {
         _result = LevelResult(true)
-        NotificationCenter.instance.post<int>("level was passed", number)
+        winNotification.post(number)
     }
 
     def lose {

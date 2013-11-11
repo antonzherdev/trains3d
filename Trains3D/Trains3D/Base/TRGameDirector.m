@@ -2,21 +2,23 @@
 
 #import "DTKeyValueStorage.h"
 #import "DTConflictResolve.h"
+#import "TRLevel.h"
 #import "EGGameCenter.h"
 #import "EGDirector.h"
 #import "TRSceneFactory.h"
 #import "EGScene.h"
-#import "TRLevel.h"
 #import "TRLevelChooseMenu.h"
 #import "TRLevelFactory.h"
 @implementation TRGameDirector{
     DTLocalKeyValueStorage* _local;
     id(^_resolveMaxLevel)(id, id);
     DTCloudKeyValueStorage* _cloud;
+    CNNotificationObserver* _obs;
 }
 static TRGameDirector* _TRGameDirector_instance;
 static ODClassType* _TRGameDirector_type;
 @synthesize local = _local;
+@synthesize cloud = _cloud;
 
 + (id)gameDirector {
     return [[TRGameDirector alloc] init];
@@ -37,6 +39,10 @@ static ODClassType* _TRGameDirector_type;
             return v;
         };
         _cloud = [DTCloudKeyValueStorage cloudKeyValueStorageWithDefaults:(@{@"maxLevel" : @1}) resolveConflict:(@{@"maxLevel" : _resolveMaxLevel})];
+        _obs = [TRLevel.winNotification observeBy:^void(id level) {
+            [_weakSelf.cloud keepMaxKey:@"maxLevel" i:unumi(level) + 1];
+            [_weakSelf.local setKey:@"currentLevel" i:unumi(level) + 1];
+        }];
         [self _init];
     }
     
@@ -51,10 +57,6 @@ static ODClassType* _TRGameDirector_type;
 
 - (void)_init {
     [EGGameCenter.instance authenticate];
-    [CNNotificationCenter.instance addObserverName:@"level was passed" block:^void(id _) {
-        [_cloud keepMaxKey:@"maxLevel" i:unumi(_) + 1];
-        [_local setKey:@"currentLevel" i:unumi(_) + 1];
-    }];
 }
 
 - (NSInteger)currentLevel {
