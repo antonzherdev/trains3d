@@ -139,7 +139,9 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     def cityFor(tile : vec2i) : City? = _cities.find(_.tile == tile)
 
     def arrived(train : Train) {
-        if(!repairer.contains(train)) {
+        if(repairer.contains(train)) {
+            score.remove(train)
+        } else {
             score.arrived(train)
         }
         remove(train)
