@@ -77,7 +77,11 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, _cars 
             val isMoveToCity = isMoveToCityFor(correction.point)
             if(!isMoveToCity || correction.error >= length - 0.5) {
                 if(isMoveToCity && (color == CityColor.grey || level.cityFor(correction.point.tile).get.color == color)) {
-                    level.arrived(self)
+                    if(correction.error >= length + 0.1) {
+                        level.arrived(self)
+                    } else {
+                        _head = correction.addErrorToPoint
+                    }
                 } else {
                     back = !back
                     val lastCar = directedCars.head
