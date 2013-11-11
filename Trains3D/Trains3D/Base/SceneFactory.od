@@ -1,7 +1,7 @@
 package com.antonzherdev.trains
 
 class SceneFactory {
-    static def sceneFor(level : Level) = Scene(LevelMenuView.backgroundColor, level, TrainLayers(level), LevelSound(level))
+    static def sceneFor(level : Level) = Scene(vec4(1.0, 1.0, 1.0, 1.0), level, TrainLayers(level), LevelSound(level))
 
     static def sceneForLevelWith(number : uint) = sceneFor(LevelFactory.levelWith(number))
 }
