@@ -96,6 +96,7 @@
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (id<CNSeq>)rails;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
+- (GEVec3)shift;
 + (CNNotificationHandle*)turnNotification;
 + (ODClassType*)type;
 @end

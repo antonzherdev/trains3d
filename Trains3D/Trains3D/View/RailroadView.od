@@ -232,7 +232,10 @@ class LightView(railroad : Railroad) {
     private def calculateMatrixArr : Chain<(MatrixModel, RailLight)> = railroad.lights.chain.map{light ->
         (matrix.value
             .modify(w = w -> w.translate(light.tile.x, light.tile.y, 0))
-            .modify(m = m -> m.rotate(90 + light.connector.angle, 0, 1, 0).translate(0.2, 0, -0.45))
+            .modify(m = m -> m
+                .rotate(90 + light.connector.angle, 0, 1, 0)
+                .translate(light.shift)
+            )
         , light)
     }
 

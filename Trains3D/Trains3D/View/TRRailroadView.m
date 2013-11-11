@@ -564,7 +564,7 @@ static ODClassType* _TRLightView_type;
         return tuple([[EGGlobal.matrix.value modifyW:^GEMat4*(GEMat4* w) {
             return [w translateX:((float)(((TRRailLight*)(light)).tile.x)) y:((float)(((TRRailLight*)(light)).tile.y)) z:0.0];
         }] modifyM:^GEMat4*(GEMat4* m) {
-            return [[m rotateAngle:((float)(90 + ((TRRailLight*)(light)).connector.angle)) x:0.0 y:1.0 z:0.0] translateX:0.2 y:0.0 z:-0.45];
+            return [[m rotateAngle:((float)(90 + ((TRRailLight*)(light)).connector.angle)) x:0.0 y:1.0 z:0.0] translateVec3:[((TRRailLight*)(light)) shift]];
         }], light);
     }];
 }

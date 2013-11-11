@@ -32,6 +32,7 @@ typedef struct GEMat4Impl GEMat4Impl;
 + (GEMat4 *)null;
 
 - (GEMat4 *)translateX:(float)x y:(float)y z:(float)z;
+- (GEMat4 *)translateVec3:(GEVec3)vec3;
 
 - (GEVec4)divBySelfVec4:(GEVec4)vec4;
 

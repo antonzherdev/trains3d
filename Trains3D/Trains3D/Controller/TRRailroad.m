@@ -387,6 +387,10 @@ static ODClassType* _TRRailLight_type;
     return self;
 }
 
+- (GEVec3)shift {
+    return GEVec3Make(((_connector == TRRailConnector.top) ? -0.2 : 0.2), 0.0, -0.45);
+}
+
 - (ODClassType*)type {
     return [TRRailLight type];
 }

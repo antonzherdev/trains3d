@@ -21,7 +21,8 @@ class SwitchProcessor(level : Level) extends InputProcessor with TapProcessor {
             val body = CollisionBody(light, lightShape, isKinematic = false)
             body.translate(light.tile.x, light.tile.y, 0)
             body.rotate(light.connector.angle, 0, 0, 1)
-            body.translate(-0.45, 0.2, 0.1)
+            val shift = light.shift
+            body.translate(shift.z, shift.x, 0.1)
             body.rotate(90, 0, 1, 0)
             self.world.add(body)
         }

@@ -47,6 +47,7 @@ class RailLight(tile : vec2i, connector : RailConnector, rail : Rail) extends Ra
     def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = Switch(tile, to, self.rail, rail)
     def rails : [Rail] = [rail]
     def buildLightIn(connector : RailConnector) : RailroadConnectorContent = self
+    def shift = vec3(if(connector == RailConnector.top) -0.2 else 0.2, 0, -0.45)
 }
 
 enum ObstacleType {

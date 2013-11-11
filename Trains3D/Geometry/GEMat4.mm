@@ -132,6 +132,14 @@ static GEMat4 * _null;
     return [GEMat4 matrixWithImpl:impl];
 }
 
+- (GEMat4 *)translateVec3:(GEVec3)vec3 {
+    GEMat4Impl * impl = new GEMat4Impl;
+    impl->m = glm::translate(_impl->m, glm::vec3(vec3.x, vec3.y, vec3.z));
+    return [GEMat4 matrixWithImpl:impl];
+}
+
+
+
 - (NSString*)description {
     float const *m = [self array];
     return [NSString stringWithFormat:
