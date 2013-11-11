@@ -165,12 +165,9 @@ class Text {
         t.color = color
         t
     }
+    private val obs = Director.reshapeNotification.observe{_ -> _changed = true}
 
-    def init {
-        Director.reshapeNotification.observe{_ -> _changed = true}
-    }
-
-    private var _changed = true
+    var _changed = true
 
     private var _font : Font
     def font = _font

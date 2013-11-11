@@ -25,6 +25,8 @@
     TRBackgroundView* _backgroundView;
     TRUndoView* _undoView;
     id _shadowVao;
+    CNNotificationObserver* _obs1;
+    CNNotificationObserver* _obs2;
     BOOL __changed;
 }
 static ODClassType* _TRRailroadView_type;
@@ -38,6 +40,7 @@ static ODClassType* _TRRailroadView_type;
 
 - (id)initWithRailroad:(TRRailroad*)railroad {
     self = [super init];
+    __weak TRRailroadView* _weakSelf = self;
     if(self) {
         _railroad = railroad;
         _switchView = [TRSwitchView switchView];
@@ -45,6 +48,12 @@ static ODClassType* _TRRailroadView_type;
         _damageView = [TRDamageView damageView];
         _railroadSurface = [EGViewportSurface viewportSurfaceWithDepth:YES multisampling:YES];
         _undoView = [TRUndoView undoViewWithBuilder:_railroad.builder];
+        _obs1 = [TRRailroad.changedNotification observeBy:^void(id _) {
+            _weakSelf._changed = YES;
+        }];
+        _obs2 = [TRRailroadBuilder.changedNotification observeBy:^void(id _) {
+            _weakSelf._changed = YES;
+        }];
         __changed = YES;
         [self _init];
     }
@@ -58,13 +67,6 @@ static ODClassType* _TRRailroadView_type;
 }
 
 - (void)_init {
-    __weak TRRailroadView* weakSelf = self;
-    [TRRailroad.changedNotification observeBy:^void(id _) {
-        weakSelf._changed = YES;
-    }];
-    [TRRailroadBuilder.changedNotification observeBy:^void(id _) {
-        weakSelf._changed = YES;
-    }];
     EGGlobal.context.considerShadows = NO;
     _backgroundView = [TRBackgroundView backgroundViewWithMap:_railroad.map];
     _railView = [TRRailView railViewWithRailroad:_railroad];
@@ -500,6 +502,8 @@ static ODClassType* _TRSwitchView_type;
     BOOL __bodyChanged;
     BOOL __matrixShadowChanged;
     BOOL __lightGlowChanged;
+    CNNotificationObserver* _obs1;
+    CNNotificationObserver* _obs2;
     id<CNSeq> __matrixArr;
     EGMeshUnite* _bodies;
     EGMeshUnite* _shadows;
@@ -518,12 +522,23 @@ static ODClassType* _TRLightView_type;
 
 - (id)initWithRailroad:(TRRailroad*)railroad {
     self = [super init];
+    __weak TRLightView* _weakSelf = self;
     if(self) {
         _railroad = railroad;
         __matrixChanged = YES;
         __bodyChanged = YES;
         __matrixShadowChanged = YES;
         __lightGlowChanged = YES;
+        _obs1 = [TRRailroad.changedNotification observeBy:^void(id _) {
+            _weakSelf._matrixChanged = YES;
+            _weakSelf._bodyChanged = YES;
+            _weakSelf._matrixShadowChanged = YES;
+            _weakSelf._lightGlowChanged = YES;
+        }];
+        _obs2 = [TRRailLight.turnNotification observeBy:^void(TRRailLight* _) {
+            _weakSelf._lightGlowChanged = YES;
+            _weakSelf._bodyChanged = YES;
+        }];
         __matrixArr = (@[]);
         _bodies = [EGMeshUnite applyMeshModel:TRModels.light createVao:^EGVertexArray*(EGMesh* _) {
             return [_ vaoMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Light.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST]] shadow:NO];
@@ -534,7 +549,6 @@ static ODClassType* _TRLightView_type;
         _glows = [EGMeshUnite meshUniteWithVertexSample:TRModels.lightGreenGlow indexSample:TRModels.lightGlowIndex createVao:^EGVertexArray*(EGMesh* _) {
             return [_ vaoMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"LightGlow.png"]] shadow:NO];
         }];
-        [self _init];
     }
     
     return self;
@@ -543,20 +557,6 @@ static ODClassType* _TRLightView_type;
 + (void)initialize {
     [super initialize];
     _TRLightView_type = [ODClassType classTypeWithCls:[TRLightView class]];
-}
-
-- (void)_init {
-    __weak TRLightView* weakSelf = self;
-    [TRRailroad.changedNotification observeBy:^void(id _) {
-        weakSelf._matrixChanged = YES;
-        weakSelf._bodyChanged = YES;
-        weakSelf._matrixShadowChanged = YES;
-        weakSelf._lightGlowChanged = YES;
-    }];
-    [TRRailLight.turnNotification observeBy:^void(TRRailLight* _) {
-        weakSelf._lightGlowChanged = YES;
-        weakSelf._bodyChanged = YES;
-    }];
 }
 
 - (CNChain*)calculateMatrixArr {

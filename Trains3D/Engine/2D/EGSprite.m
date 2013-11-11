@@ -706,6 +706,12 @@ static ODClassType* _EGButton_type;
     _EGButton_type = [ODClassType classTypeWithCls:[EGButton class]];
 }
 
++ (EGButton*)applyRect:(GERect)rect onDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick {
+    EGButton* b = [EGButton buttonWithOnDraw:onDraw onClick:onClick];
+    b.rect = rect;
+    return b;
+}
+
 - (BOOL)tapEvent:(EGEvent*)event {
     if(geRectContainsVec2(_rect, [event location])) {
         ((void(^)())(_onClick))();

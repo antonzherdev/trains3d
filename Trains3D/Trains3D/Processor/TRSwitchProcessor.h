@@ -17,13 +17,14 @@
 
 @interface TRSwitchProcessor : NSObject<EGInputProcessor, EGTapProcessor>
 @property (nonatomic, readonly) TRLevel* level;
+@property (nonatomic, readonly) EGCollisionBox2d* switchShape;
+@property (nonatomic, readonly) EGCollisionBox2d* lightShape;
 @property (nonatomic, readonly) EGCollisionWorld* world;
 
 + (id)switchProcessorWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (BOOL)processEvent:(EGEvent*)event;
-- (void)_init;
 - (BOOL)tapEvent:(EGEvent*)event;
 + (ODClassType*)type;
 @end

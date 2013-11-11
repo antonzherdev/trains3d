@@ -115,7 +115,6 @@
 + (id)lightViewWithRailroad:(TRRailroad*)railroad;
 - (id)initWithRailroad:(TRRailroad*)railroad;
 - (ODClassType*)type;
-- (void)_init;
 - (void)drawBodies;
 - (void)drawShadow;
 - (void)drawGlows;

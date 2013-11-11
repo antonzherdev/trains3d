@@ -25,6 +25,4 @@ class TrainLayers(level : Level) extends Layers {
             (pauseMenuLayer, Rect(vec2(0, 0), viewSize))]
         }
     }
-
-    def scaleWith(viewSize : vec2) : float = if(viewSize.y > 1279) 2.0 else 1.0
 }

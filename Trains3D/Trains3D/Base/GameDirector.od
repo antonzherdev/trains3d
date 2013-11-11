@@ -18,9 +18,6 @@ class GameDirector {
     private val cloud = CloudKeyValueStorage([("maxLevel", 1)], [("maxLevel", resolveMaxLevel)])
 
     def init {
-//        cloud.set("maxLevel", i = 1)
-//        local.set("currentLevel", i = 1)
-//        cloud.synchronize
         GameCenter.instance.authenticate
         NotificationCenter.instance.addObserver<int>("level was passed", {
             cloud.keepMax("maxLevel", _ + 1)
@@ -36,20 +33,25 @@ class GameDirector {
 
     def restartLevel {
         Director.current.scene.get.controller.as<Level>.for{level ->
-            Director.current.set(scene = SceneFactory.sceneFor(Level(level.number, level.rules)))
-            local.keepMax("currentLevel", i = level.number)
-            Director.current.resume
+            set(level = level.number)
         }
     }
 
     def chooseLevel {
-        Director.current.resume
+        Director.current.scene = LevelChooseMenu.scene
+        Director.current.pause
     }
 
     def nextLevel {
         Director.current.scene.get.controller.as<Level>.for{level ->
-            local.keepMax("currentLevel", i = level.number + 1)
-            Director.current.set(scene = SceneFactory.sceneFor(LevelFactory.levelWith(number = level.number + 1)))
+            set(level = level.number + 1)
+        }
+    }
+
+    def set(level : int) {
+        if(level <= maxAvailableLevel) {
+            local.set("currentLevel", i = level)
+            Director.current.scene = SceneFactory.sceneFor(LevelFactory.levelWith(number = level))
             Director.current.resume
         }
     }

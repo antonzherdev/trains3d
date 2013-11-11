@@ -33,8 +33,8 @@ static ODClassType* _CNNotificationHandle_type;
     [CNNotificationCenter.instance postName:_name data:nil];
 }
 
-- (void)observeBy:(void(^)(id))by {
-    [CNNotificationCenter.instance addObserverName:_name block:by];
+- (CNNotificationObserver*)observeBy:(void(^)(id))by {
+    return [CNNotificationCenter.instance addObserverName:_name block:by];
 }
 
 - (ODClassType*)type {

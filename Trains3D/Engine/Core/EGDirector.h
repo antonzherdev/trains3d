@@ -20,8 +20,10 @@
 + (EGDirector*)current;
 - (id)scene;
 - (void)setScene:(EGScene*(^)())scene;
+- (CGFloat)scale;
 - (void)lock;
 - (void)unlock;
+- (void)redraw;
 - (void)_init;
 - (void)drawWithSize:(GEVec2)size;
 - (void)processEvent:(EGEvent*)event;

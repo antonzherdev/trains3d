@@ -38,7 +38,6 @@ class Context {
         _lastIndexBuffer = 0
         _lastVertexBufferId = 0
         _lastVertexBufferCount = 0
-        scale = 1.0
     }
 
     private var _viewportStack = List<RectI>()

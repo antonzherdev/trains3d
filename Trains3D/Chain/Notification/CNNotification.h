@@ -1,6 +1,7 @@
 #import "objdcore.h"
 #import "ODObject.h"
 @class CNNotificationCenter;
+@class CNNotificationObserver;
 @class ODClassType;
 
 @class CNNotificationHandle;
@@ -13,7 +14,7 @@
 - (ODClassType*)type;
 - (void)postData:(id)data;
 - (void)post;
-- (void)observeBy:(void(^)(id))by;
+- (CNNotificationObserver*)observeBy:(void(^)(id))by;
 + (ODClassType*)type;
 @end
 

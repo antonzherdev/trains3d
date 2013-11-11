@@ -9,6 +9,7 @@
 
 @protocol TRStrings<NSObject>
 - (NSString*)formatCost:(NSInteger)cost;
+- (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)startLevelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
 - (NSString*)trainArrivedCost:(NSInteger)cost;
@@ -44,7 +45,7 @@
 + (id)enStrings;
 - (id)init;
 - (ODClassType*)type;
-- (NSString*)startLevelNumber:(NSUInteger)number;
+- (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
 - (NSString*)trainArrivedCost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
@@ -80,7 +81,7 @@
 + (id)ruStrings;
 - (id)init;
 - (ODClassType*)type;
-- (NSString*)startLevelNumber:(NSUInteger)number;
+- (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
 - (NSString*)trainArrivedCost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;

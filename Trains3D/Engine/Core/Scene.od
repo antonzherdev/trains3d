@@ -14,14 +14,14 @@ trait Camera {
 
 
 class Scene(backgroundColor : vec4, controller : Controller, layers : Layers, soundPlayer : SoundPlayer?) {
-    private var _lastViewSize : vec2 = vec2(0, 0)
+    static def apply(sceneView : SceneView) = Scene(vec4(1, 1, 1, 1), sceneView, Layers(Layer(sceneView, sceneView)), nil)
+
     def prepareWith(viewSize : vec2) {
-        if(_lastViewSize != viewSize) {
-            _lastViewSize = viewSize
-            layers.reshapeWith(viewSize)
-            Director.reshapeNotification.post(viewSize)
-        }
         layers.prepare
+    }
+
+    def reshapeWith(viewSize : vec2) {
+        layers.reshapeWith(viewSize)
     }
 
     def drawWith(viewSize : vec2) {
@@ -51,8 +51,6 @@ class Scene(backgroundColor : vec4, controller : Controller, layers : Layers, so
     def resume {
         soundPlayer.for(_.resume)
     }
-
-    def scaleWith(viewSize : vec2) : float = layers.scaleWith(viewSize)
 }
 
 class Layers {
@@ -88,8 +86,6 @@ class Layers {
         _viewports = viewportsWith(viewSize)
         _viewports.for{p -> p.a.reshapeWith(viewport = p.b)}
     }
-
-    def scaleWith(viewSize : vec2) : float = 1.0
 }
 
 class SingleLayer(layer : Layer) extends Layers {
@@ -210,3 +206,5 @@ trait LayerView extends Controller {
 
     def reshapeWith(viewport : Rect) {}
 }
+
+trait SceneView extends LayerView with Controller with InputProcessor

@@ -131,6 +131,7 @@
 + (id)buttonWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick;
 - (id)initWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick;
 - (ODClassType*)type;
++ (EGButton*)applyRect:(GERect)rect onDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick;
 - (BOOL)tapEvent:(EGEvent*)event;
 - (void)draw;
 + (void(^)(GERect))drawTextFont:(EGFont*(^)())font color:(GEVec4)color text:(NSString*)text;

@@ -105,11 +105,6 @@ static ODClassType* _TRTrainLayers_type;
     else return (@[tuple(_levelLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, 0.0, viewSize.x, viewSize.y))), tuple(_menuLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, viewSize.y - 46, viewSize.x, 46.0))), tuple(_pauseMenuLayer, wrap(GERect, GERectMake(GEVec2Make(0.0, 0.0), viewSize)))]);
 }
 
-- (CGFloat)scaleWithViewSize:(GEVec2)viewSize {
-    if(viewSize.y > 1279) return 2.0;
-    else return 1.0;
-}
-
 - (ODClassType*)type {
     return [TRTrainLayers type];
 }

@@ -96,6 +96,11 @@ static ODClassType* _CNNotificationObserver_type;
     _CNNotificationObserver_type = [ODClassType classTypeWithCls:[CNNotificationObserver class]];
 }
 
+- (void)dealloc {
+    [self detach];
+}
+
+
 - (void)detach {
     [[NSNotificationCenter defaultCenter] removeObserver:_observerHandle];
 }

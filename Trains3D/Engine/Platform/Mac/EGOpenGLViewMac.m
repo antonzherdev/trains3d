@@ -92,6 +92,17 @@
 }
 
 
+- (void)redraw {
+    [self lockOpenGLContext];
+    @try {
+        [_director drawWithSize:_viewSize];
+        [self.openGLContext flushBuffer];
+    } @finally {
+        [self unlockOpenGLContext];
+    }
+}
+
+
 - (void)reshape {
     // We draw on a secondary thread through the display link
     // When resizing the view, -reshape is called automatically on the main thread
@@ -276,6 +287,4 @@
 {
     DISPATCH_EVENT(theEvent, EGEventTouchCanceled);
 }
-
-
 @end

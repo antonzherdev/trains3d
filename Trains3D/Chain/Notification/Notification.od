@@ -9,7 +9,7 @@ class NotificationHandle<D>(name : string) {
         NotificationCenter.instance.post(name, nil)
     }
 
-    def observe(by : D -> void) {
+    def observe(by : D -> void) : NotificationObserver = {
         NotificationCenter.instance.addObserver(name, by)
     }
 }

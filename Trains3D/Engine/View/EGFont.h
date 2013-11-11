@@ -80,13 +80,13 @@ ODPType* egTextAlignmentType();
 
 
 @interface EGText : NSObject
+@property (nonatomic) BOOL _changed;
 @property (nonatomic) GEVec4 color;
 
 + (id)text;
 - (id)init;
 - (ODClassType*)type;
 + (EGText*)applyFont:(EGFont*)font text:(NSString*)text position:(GEVec3)position alignment:(EGTextAlignment)alignment color:(GEVec4)color;
-- (void)_init;
 - (EGFont*)font;
 - (void)setFont:(EGFont*)font;
 - (NSString*)text;

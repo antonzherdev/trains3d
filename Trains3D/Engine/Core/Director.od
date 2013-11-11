@@ -12,13 +12,18 @@ class Director {
     def set(scene : () -> Scene) {
         lock
         if(_scene.isDefined) _scene.get.stop
-        _scene = scene()
-        _scene.get.start
+        val sc = scene()
+        _scene = sc
+        sc.reshapeWith(_lastViewSize)
+        sc.start
+        if(_isPaused) redraw
         unlock
     }
 
+    def scale : float
     def lock
     def unlock
+    def redraw
 
     def init {
         _current = self
@@ -26,14 +31,21 @@ class Director {
 
     static val reshapeNotification = NotificationHandle<vec2>("Reshape")
 
+    private var _lastViewSize : vec2 = vec2(0, 0)
     def drawWith(size : vec2) {
+        if(_lastViewSize != size) {
+            context.scale = scale
+            _lastViewSize = size
+            _scene.for(_.reshapeWith(size))
+            Director.reshapeNotification.post(size)
+        }
+
         if(_scene.isEmpty) return nil
         if(size.x <= 0 || size.y <= 0) return nil
         val sc = _scene.get
 
         _current = self
         context.clear
-        context.scale = sc.scaleWith(size)
         context.depthTest.enable
 
         sc.prepareWith(size)
@@ -65,6 +77,7 @@ class Director {
     def pause {
         _isPaused = true
         _scene.for(_.pause)
+        redraw
     }
 
     def resume {

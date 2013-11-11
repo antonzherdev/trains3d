@@ -21,7 +21,7 @@ static ODClassType* _TREnStrings_type;
     _TREnStrings_type = [ODClassType classTypeWithCls:[TREnStrings class]];
 }
 
-- (NSString*)startLevelNumber:(NSUInteger)number {
+- (NSString*)levelNumber:(NSUInteger)number {
     return [NSString stringWithFormat:@"Level %lu", (unsigned long)number];
 }
 
@@ -143,6 +143,10 @@ static ODClassType* _TREnStrings_type;
     return [NSString stringWithFormat:@"%ld", (long)cost];
 }
 
+- (NSString*)startLevelNumber:(NSUInteger)number {
+    return [self levelNumber:number];
+}
+
 - (ODClassType*)type {
     return [TREnStrings type];
 }
@@ -192,7 +196,7 @@ static ODClassType* _TRRuStrings_type;
     _TRRuStrings_type = [ODClassType classTypeWithCls:[TRRuStrings class]];
 }
 
-- (NSString*)startLevelNumber:(NSUInteger)number {
+- (NSString*)levelNumber:(NSUInteger)number {
     return [NSString stringWithFormat:@"Уровень %lu", (unsigned long)number];
 }
 
@@ -312,6 +316,10 @@ static ODClassType* _TRRuStrings_type;
 
 - (NSString*)formatCost:(NSInteger)cost {
     return [NSString stringWithFormat:@"%ld", (long)cost];
+}
+
+- (NSString*)startLevelNumber:(NSUInteger)number {
+    return [self levelNumber:number];
 }
 
 - (ODClassType*)type {

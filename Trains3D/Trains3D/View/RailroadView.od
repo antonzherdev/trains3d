@@ -13,11 +13,11 @@ class RailroadView(railroad : Railroad) extends InputProcessor {
     private val undoView = UndoView(railroad.builder)
     val shadowVao : VertexArray<_>?
 
+    private val obs1 = Railroad.changedNotification.observe((_changed = true))
+    private val obs2 = RailroadBuilder.changedNotification.observe((_changed = true))
+
     var _changed = true
     def init {
-        weak val weakSelf = self
-        Railroad.changedNotification.observe(weakSelf._changed = true)
-        RailroadBuilder.changedNotification.observe(weakSelf._changed = true)
         context.considerShadows = false
         backgroundView = BackgroundView(railroad.map)
         railView = RailView(railroad)
@@ -216,19 +216,17 @@ class LightView(railroad : Railroad) {
     var _bodyChanged = true
     var _matrixShadowChanged = true
     var _lightGlowChanged = true
-    def init {
-        weak val weakSelf = self
-        Railroad.changedNotification.observe { _ ->
-            weakSelf._matrixChanged = true
-            weakSelf._bodyChanged = true
-            weakSelf._matrixShadowChanged = true
-            weakSelf._lightGlowChanged = true
-        }
-        RailLight.turnNotification.observe { _ ->
-            weakSelf._lightGlowChanged = true
-            weakSelf._bodyChanged = true
-        }
+    private val obs1 = Railroad.changedNotification.observe { _ ->
+        _matrixChanged = true
+        _bodyChanged = true
+        _matrixShadowChanged = true
+        _lightGlowChanged = true
     }
+    private val obs2 = RailLight.turnNotification.observe { _ ->
+        _lightGlowChanged = true
+        _bodyChanged = true
+    }
+
 
     private var _matrixArr : [(MatrixModel, RailLight)] = []
     private def calculateMatrixArr : Chain<(MatrixModel, RailLight)> = railroad.lights.chain.map{light ->

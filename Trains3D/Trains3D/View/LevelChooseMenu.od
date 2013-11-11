@@ -1,0 +1,38 @@
+package com.antonzherdev.trains
+
+
+class LevelChooseMenu extends SceneView {
+    static def scene = Scene(LevelChooseMenu())
+    val name = "Level Choose manu"
+    val maxLevel = GameDirector.instance.maxAvailableLevel
+    def camera = Camera2D(vec2(4, 4))
+    private val buttons : [Button] = 0.to(3).chain.flatMap{ y ->
+        0.to(3).chain.map{ x ->
+            val level = (3 - y)*4 + x + 1
+            Button(Rect(x, y, 1, 1), drawButton(x, y, level), GameDirector.instance.set(level = level))}
+    }.toArray
+
+    private var font : Font
+    def reshapeWith(viewport : Rect) {
+        font = fontWith(name = "lucida_grande", size = 24)
+    }
+
+    private def drawButton(x : int, y : int, level : int) = {
+        val text = Text(nil, Loc.level(level), vec3(x + 0.5, y + 0.5, 0), TextAlignment(0, 0),
+            if(level > maxLevel) vec4(0.7, 0.7, 0.7, 1)
+            else vec4(0, 0, 0, 1))
+        rect : Rect -> {
+            text.font = font
+            text.draw
+        }
+    }
+
+    def draw {
+        BlendFunction.standard {
+            buttons.for(_.draw)
+        }
+    }
+
+    def isProcessorActive : bool = true
+    def process(event : Event) : bool = buttons.exists(event.tap(_))
+}

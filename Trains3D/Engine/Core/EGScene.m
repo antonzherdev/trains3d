@@ -2,18 +2,16 @@
 
 #import "GL.h"
 #import "EGContext.h"
-#import "EGDirector.h"
-#import "EGInput.h"
 #import "EGSound.h"
 #import "EGPlatform.h"
 #import "EGShadow.h"
 #import "GEMat4.h"
+#import "EGDirector.h"
 @implementation EGScene{
     GEVec4 _backgroundColor;
     id<EGController> _controller;
     EGLayers* _layers;
     id _soundPlayer;
-    GEVec2 __lastViewSize;
 }
 static ODClassType* _EGScene_type;
 @synthesize backgroundColor = _backgroundColor;
@@ -32,7 +30,6 @@ static ODClassType* _EGScene_type;
         _controller = controller;
         _layers = layers;
         _soundPlayer = soundPlayer;
-        __lastViewSize = GEVec2Make(0.0, 0.0);
     }
     
     return self;
@@ -43,13 +40,16 @@ static ODClassType* _EGScene_type;
     _EGScene_type = [ODClassType classTypeWithCls:[EGScene class]];
 }
 
++ (EGScene*)applySceneView:(id<EGSceneView>)sceneView {
+    return [EGScene sceneWithBackgroundColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) controller:sceneView layers:[EGLayers applyLayer:[EGLayer layerWithView:sceneView inputProcessor:[CNOption applyValue:sceneView]]] soundPlayer:[CNOption none]];
+}
+
 - (void)prepareWithViewSize:(GEVec2)viewSize {
-    if(!(GEVec2Eq(__lastViewSize, viewSize))) {
-        __lastViewSize = viewSize;
-        [_layers reshapeWithViewSize:viewSize];
-        [EGDirector.reshapeNotification postData:wrap(GEVec2, viewSize)];
-    }
     [_layers prepare];
+}
+
+- (void)reshapeWithViewSize:(GEVec2)viewSize {
+    [_layers reshapeWithViewSize:viewSize];
 }
 
 - (void)drawWithViewSize:(GEVec2)viewSize {
@@ -90,10 +90,6 @@ static ODClassType* _EGScene_type;
     [_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
         [((id<EGSoundPlayer>)(_)) resume];
     }];
-}
-
-- (CGFloat)scaleWithViewSize:(GEVec2)viewSize {
-    return [_layers scaleWithViewSize:viewSize];
 }
 
 - (ODClassType*)type {
@@ -205,10 +201,6 @@ static ODClassType* _EGLayers_type;
     [__viewports forEach:^void(CNTuple* p) {
         [((EGLayer*)(((CNTuple*)(p)).a)) reshapeWithViewport:uwrap(GERect, ((CNTuple*)(p)).b)];
     }];
-}
-
-- (CGFloat)scaleWithViewSize:(GEVec2)viewSize {
-    return 1.0;
 }
 
 - (ODClassType*)type {

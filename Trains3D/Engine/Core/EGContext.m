@@ -180,7 +180,6 @@ static ODClassType* _EGContext_type;
     __lastIndexBuffer = 0;
     __lastVertexBufferId = 0;
     __lastVertexBufferCount = 0;
-    _scale = 1.0;
 }
 
 - (GERectI)viewport {

@@ -8,6 +8,7 @@
 @class EGScene;
 @protocol EGController;
 @class TRLevel;
+@class TRLevelChooseMenu;
 @class TRLevelFactory;
 
 @class TRGameDirector;
@@ -25,6 +26,7 @@
 - (void)restartLevel;
 - (void)chooseLevel;
 - (void)nextLevel;
+- (void)setLevel:(NSInteger)level;
 - (void)synchronize;
 + (TRGameDirector*)instance;
 + (ODClassType*)type;

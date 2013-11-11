@@ -7,6 +7,7 @@
 #import "TRSceneFactory.h"
 #import "EGScene.h"
 #import "TRLevel.h"
+#import "TRLevelChooseMenu.h"
 #import "TRLevelFactory.h"
 @implementation TRGameDirector{
     DTLocalKeyValueStorage* _local;
@@ -72,26 +73,31 @@ static ODClassType* _TRGameDirector_type;
 
 - (void)restartLevel {
     [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
-        [[EGDirector current] setScene:^EGScene*() {
-            return [TRSceneFactory sceneForLevel:[TRLevel levelWithNumber:((TRLevel*)(level)).number rules:((TRLevel*)(level)).rules]];
-        }];
-        [_local keepMaxKey:@"currentLevel" i:((NSInteger)(((TRLevel*)(level)).number))];
-        [[EGDirector current] resume];
+        [self setLevel:((NSInteger)(((TRLevel*)(level)).number))];
     }];
 }
 
 - (void)chooseLevel {
-    [[EGDirector current] resume];
+    [[EGDirector current] setScene:^EGScene*() {
+        return [TRLevelChooseMenu scene];
+    }];
+    [[EGDirector current] pause];
 }
 
 - (void)nextLevel {
     [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
-        [_local keepMaxKey:@"currentLevel" i:((NSInteger)(((TRLevel*)(level)).number + 1))];
+        [self setLevel:((NSInteger)(((TRLevel*)(level)).number + 1))];
+    }];
+}
+
+- (void)setLevel:(NSInteger)level {
+    if(level <= [self maxAvailableLevel]) {
+        [_local setKey:@"currentLevel" i:level];
         [[EGDirector current] setScene:^EGScene*() {
-            return [TRSceneFactory sceneForLevel:[TRLevelFactory levelWithNumber:((TRLevel*)(level)).number + 1]];
+            return [TRSceneFactory sceneForLevel:[TRLevelFactory levelWithNumber:((NSUInteger)(level))]];
         }];
         [[EGDirector current] resume];
-    }];
+    }
 }
 
 - (void)synchronize {

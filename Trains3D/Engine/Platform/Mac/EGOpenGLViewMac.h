@@ -9,4 +9,6 @@
 - (void)lockOpenGLContext;
 
 - (void)unlockOpenGLContext;
+
+- (void)redraw;
 @end

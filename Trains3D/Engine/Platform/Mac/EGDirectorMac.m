@@ -93,7 +93,6 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
     [super pause];
     [self performSelectorInBackground:@selector(doStop) withObject:nil];
-    [_view reshape];
 }
 
 - (void)doStop {
@@ -110,6 +109,14 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     CVDisplayLinkStart(_displayLink);
 
     [super resume];
+}
+
+- (void)redraw {
+    [_view redraw];
+}
+
+- (CGFloat)scale {
+    return [[NSScreen mainScreen] backingScaleFactor];
 }
 
 

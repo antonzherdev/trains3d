@@ -295,6 +295,7 @@ static ODClassType* _EGFont_type;
 
 
 @implementation EGText{
+    CNNotificationObserver* _obs;
     BOOL __changed;
     EGFont* __font;
     NSString* __text;
@@ -304,6 +305,7 @@ static ODClassType* _EGFont_type;
     GEVec4 _color;
 }
 static ODClassType* _EGText_type;
+@synthesize _changed = __changed;
 @synthesize color = _color;
 
 + (id)text {
@@ -312,9 +314,12 @@ static ODClassType* _EGText_type;
 
 - (id)init {
     self = [super init];
+    __weak EGText* _weakSelf = self;
     if(self) {
+        _obs = [EGDirector.reshapeNotification observeBy:^void(id _) {
+            _weakSelf._changed = YES;
+        }];
         __changed = YES;
-        [self _init];
     }
     
     return self;
@@ -333,12 +338,6 @@ static ODClassType* _EGText_type;
     [t setAlignment:alignment];
     t.color = color;
     return t;
-}
-
-- (void)_init {
-    [EGDirector.reshapeNotification observeBy:^void(id _) {
-        __changed = YES;
-    }];
 }
 
 - (EGFont*)font {
@@ -417,6 +416,16 @@ static ODClassType* _EGText_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
 }
 
 - (NSString*)description {

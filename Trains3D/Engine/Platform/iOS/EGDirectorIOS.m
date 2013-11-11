@@ -55,7 +55,6 @@
 
     _view.paused = YES;
     [super pause];
-    [_view.view setNeedsDisplay];
 }
 
 - (void) resume {
@@ -63,6 +62,14 @@
 
     _view.paused = NO;
     [super resume];
+}
+
+- (void)redraw {
+    [_view.view setNeedsDisplay];
+}
+
+- (CGFloat)scale {
+    return [UIScreen mainScreen].scale;
 }
 
 @end

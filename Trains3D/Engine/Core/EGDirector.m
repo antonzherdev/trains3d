@@ -11,6 +11,7 @@
     BOOL __isStarted;
     BOOL __isPaused;
     EGTime* _time;
+    GEVec2 __lastViewSize;
     id __stat;
 }
 static EGDirector* _EGDirector__current;
@@ -29,6 +30,7 @@ static ODClassType* _EGDirector_type;
         __isStarted = NO;
         __isPaused = NO;
         _time = [EGTime time];
+        __lastViewSize = GEVec2Make(0.0, 0.0);
         __stat = [CNOption none];
         [self _init];
     }
@@ -53,9 +55,16 @@ static ODClassType* _EGDirector_type;
 - (void)setScene:(EGScene*(^)())scene {
     [self lock];
     if([__scene isDefined]) [((EGScene*)([__scene get])) stop];
-    __scene = [CNOption applyValue:((EGScene*(^)())(scene))()];
-    [((EGScene*)([__scene get])) start];
+    EGScene* sc = ((EGScene*(^)())(scene))();
+    __scene = [CNOption applyValue:sc];
+    [sc reshapeWithViewSize:__lastViewSize];
+    [sc start];
+    if(__isPaused) [self redraw];
     [self unlock];
+}
+
+- (CGFloat)scale {
+    @throw @"Method scale is abstract";
 }
 
 - (void)lock {
@@ -66,17 +75,28 @@ static ODClassType* _EGDirector_type;
     @throw @"Method unlock is abstract";
 }
 
+- (void)redraw {
+    @throw @"Method redraw is abstract";
+}
+
 - (void)_init {
     _EGDirector__current = self;
 }
 
 - (void)drawWithSize:(GEVec2)size {
+    if(!(GEVec2Eq(__lastViewSize, size))) {
+        EGGlobal.context.scale = [self scale];
+        __lastViewSize = size;
+        [__scene forEach:^void(EGScene* _) {
+            [((EGScene*)(_)) reshapeWithViewSize:size];
+        }];
+        [EGDirector.reshapeNotification postData:wrap(GEVec2, size)];
+    }
     if([__scene isEmpty]) return ;
     if(size.x <= 0 || size.y <= 0) return ;
     EGScene* sc = [__scene get];
     _EGDirector__current = self;
     [EGGlobal.context clear];
-    EGGlobal.context.scale = [sc scaleWithViewSize:size];
     [EGGlobal.context.depthTest enable];
     [sc prepareWithViewSize:size];
     [EGGlobal.context clearColorColor:((EGScene*)([__scene get])).backgroundColor];
@@ -118,6 +138,7 @@ static ODClassType* _EGDirector_type;
     [__scene forEach:^void(EGScene* _) {
         [((EGScene*)(_)) pause];
     }];
+    [self redraw];
 }
 
 - (void)resume {

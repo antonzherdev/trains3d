@@ -246,6 +246,12 @@ class Line2d {
 }
 
 class Button(onDraw : (Rect) -> void, onClick : () -> void) extends TapProcessor {
+    static def apply(rect : Rect, onDraw : (Rect) -> void, onClick : () -> void) = {
+        val b = Button(onDraw, onClick)
+        b.rect = rect
+        b
+    }
+
     var rect : Rect = Rect(0, 0, 1, 1)
     def tap(event : Event) : bool =
         if(rect.contains(event.location)) {

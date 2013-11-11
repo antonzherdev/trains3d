@@ -1,8 +1,7 @@
 #import "objd.h"
 #import "GEVec.h"
+#import "EGInput.h"
 @class EGMatrixModel;
-@class EGDirector;
-@class EGEvent;
 @protocol EGSoundPlayer;
 @class EGGlobal;
 @class EGContext;
@@ -15,8 +14,7 @@
 @class EGShadowRenderTarget;
 @class EGShadowMap;
 @class GEMat4;
-@protocol EGInputProcessor;
-@class EGEventCamera;
+@class EGDirector;
 
 @class EGScene;
 @class EGLayers;
@@ -25,6 +23,7 @@
 @protocol EGController;
 @protocol EGCamera;
 @protocol EGLayerView;
+@protocol EGSceneView;
 
 @protocol EGController<NSObject>
 - (void)updateWithDelta:(CGFloat)delta;
@@ -47,7 +46,9 @@
 + (id)sceneWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id)soundPlayer;
 - (id)initWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id)soundPlayer;
 - (ODClassType*)type;
++ (EGScene*)applySceneView:(id<EGSceneView>)sceneView;
 - (void)prepareWithViewSize:(GEVec2)viewSize;
+- (void)reshapeWithViewSize:(GEVec2)viewSize;
 - (void)drawWithViewSize:(GEVec2)viewSize;
 - (BOOL)processEvent:(EGEvent*)event;
 - (void)updateWithDelta:(CGFloat)delta;
@@ -55,7 +56,6 @@
 - (void)stop;
 - (void)pause;
 - (void)resume;
-- (CGFloat)scaleWithViewSize:(GEVec2)viewSize;
 + (ODClassType*)type;
 @end
 
@@ -72,7 +72,6 @@
 - (BOOL)processEvent:(EGEvent*)event;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)reshapeWithViewSize:(GEVec2)viewSize;
-- (CGFloat)scaleWithViewSize:(GEVec2)viewSize;
 + (ODClassType*)type;
 @end
 
@@ -117,6 +116,10 @@
 - (EGEnvironment*)environment;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)reshapeWithViewport:(GERect)viewport;
+@end
+
+
+@protocol EGSceneView<EGLayerView, EGController , EGInputProcessor>
 @end
 
 
