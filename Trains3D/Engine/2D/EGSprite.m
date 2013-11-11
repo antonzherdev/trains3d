@@ -533,6 +533,7 @@ static ODClassType* _EGSprite_type;
         CNVoidRefArray vertexes = cnVoidRefArrayApplyTpCount(egBillboardBufferDataType(), 4);
         [EGD2D writeSpriteIn:vertexes material:__material at:geVec3ApplyVec2Z(__position, 0.0) quad:geRectQuad(GERectMake(GEVec2Make(0.0, 0.0), __size)) uv:(([__material.texture isDefined]) ? geRectUpsideDownQuad([((EGTexture*)([[self material].texture get])) uv]) : geRectUpsideDownQuad(geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)))];
         [_vb setArray:vertexes];
+        cnVoidRefArrayFree(vertexes);
         __changed = NO;
     }
     [EGGlobal.context.cullFace disabledF:^void() {

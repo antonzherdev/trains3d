@@ -185,6 +185,7 @@ class Sprite {
                 if(_material.texture.isDefined) material.texture.get.uv.upsideDownQuad
                 else Rect(0, 0, 1, 1).upsideDownQuad)
             vb.set(vertexes)
+            vertexes.free
             _changed = false
         }
         context.cullFace.disabled {

@@ -162,10 +162,11 @@ static ODClassType* _TRMenuView_type;
 }
 
 - (EGButton*)buttonText:(NSString*)text onClick:(void(^)())onClick {
+    __weak TRMenuView* weakSelf = self;
     return [EGButton buttonWithOnDraw:^id() {
         void(^__l)(GERect) = [self drawLine];
         void(^__r)(GERect) = [EGButton drawTextFont:^EGFont*() {
-            return __font;
+            return [weakSelf font];
         } color:GEVec4Make(0.0, 0.0, 0.0, 1.0) text:text];
         return ^void(GERect _) {
             __l(_);
