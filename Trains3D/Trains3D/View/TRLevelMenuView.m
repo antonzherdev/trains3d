@@ -134,7 +134,7 @@ static ODClassType* _TRLevelMenuView_type;
         [_levelAnimation updateWithDelta:delta];
     } else {
         if([_notificationAnimation isRunning]) {
-            [_notificationAnimation updateWithDelta:delta];
+            [_notificationAnimation updateWithDelta:(([_level.notifications isEmpty]) ? delta : 5 * delta)];
         } else {
             if(!([_level.notifications isEmpty])) {
                 [_notificationText setText:[[_level.notifications take] get]];
