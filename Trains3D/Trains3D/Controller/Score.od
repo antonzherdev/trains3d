@@ -21,13 +21,15 @@ class Score(rules : ScoreRules, notifications : Notifications) extends Controlle
         trains += TrainScore(train)
     }
     def arrived(train : Train) {
-        _score += rules.arrivedPrize(train)
-        notifications.notify(Loc.trainArrived(rules.railCost))
+        val prize = rules.arrivedPrize(train)
+        _score += prize
+        notifications.notify(Loc.trainArrived(prize))
         remove(train)
     }
     def destroyed(train : Train) {
-        _score -= rules.destructionFine(train)
-        notifications.notify(Loc.trainDestroyed(rules.railCost))
+        val fine = rules.destructionFine(train)
+        _score -= fine
+        notifications.notify(Loc.trainDestroyed(fine))
         remove(train)
     }
     def remove(train : Train) {
@@ -37,8 +39,9 @@ class Score(rules : ScoreRules, notifications : Notifications) extends Controlle
         trains.for{train ->
             train.updateWith(delta)
             if(train.needFineWith(rules.delayPeriod)) {
-                _score -= train.fineWith(rule = rules.delayFine)
-                notifications.notify(Loc.trainDelayedFine(rules.railCost))
+                val fine = train.fineWith(rule = rules.delayFine)
+                _score -= fine
+                notifications.notify(Loc.trainDelayedFine(fine))
             }
         }
     }
