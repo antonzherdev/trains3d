@@ -4,6 +4,7 @@
 
 @class CNSortBuilder;
 @protocol CNTraversable;
+@class CNTreeSet;
 
 @interface CNChain : NSObject <CNTraversable>
 - (id)initWithLink:(id <CNChainLink>)link previous:(CNChain *)previous;
@@ -69,4 +70,6 @@
 - (NSString *)toStringWithStart:(NSString *)string delimiter:(NSString *)delimiter end:(NSString *)end;
 
 - (NSString *)charsToString;
+
+- (CNTreeSet *)toTreeSet;
 @end

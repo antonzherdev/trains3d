@@ -7,11 +7,11 @@ class ForestRules(
 )
 
 class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Controller {
-    private var _trees = (rules.thickness * map.allTiles.count * 1.1).cast<int>.range.chain.map{ _ ->
+    private var _trees : Iterable<Tree> = (rules.thickness * map.allTiles.count * 1.1).cast<int>.range.chain.map{ _ ->
         val tile = map.allTiles.randomItem.get
         val pos = vec2(Float.rnd(-0.5, 0.5), Float.rnd(-0.5, 0.5))
         Tree(rules.types.randomItem.get, pos + tile, vec2(Float.rnd(0.9, 1.1), Float.rnd(0.9, 1.1)))
-    }.sort.toArray
+    }.toTreeSet
     def trees = _trees
 
     def cutDown(tile : vec2i) {
@@ -37,7 +37,8 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Contr
 
 
 class Tree(treeType : TreeType, position : vec2, size : vec2) extends Comparable<Tree> {
-    def compare(to : Tree) : int = -(position.y - position.x).compare(to.position.y - to.position.x)
+    val z : int = ((position.y - position.x)*1000).round
+    def compare(to : Tree) : int = -(z).compare(to.z)
 
     val rigidity = Float.rnd(0.5, 1.5)
     private var _rustleUp : bool = true

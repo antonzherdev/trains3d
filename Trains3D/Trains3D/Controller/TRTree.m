@@ -72,7 +72,7 @@ static ODClassType* _TRForestRules_type;
     EGMapSso* _map;
     TRForestRules* _rules;
     TRWeather* _weather;
-    id<CNSeq> __trees;
+    id<CNIterable> __trees;
 }
 static ODClassType* _TRForest_type;
 @synthesize map = _map;
@@ -90,11 +90,11 @@ static ODClassType* _TRForest_type;
         _map = map;
         _rules = rules;
         _weather = weather;
-        __trees = [[[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count] * 1.1))) chain] map:^TRTree*(id _) {
+        __trees = [[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count] * 1.1))) chain] map:^TRTree*(id _) {
             GEVec2i tile = uwrap(GEVec2i, [[_weakSelf.map.allTiles randomItem] get]);
             GEVec2 pos = GEVec2Make(((float)(odFloatRndMinMax(-0.5, 0.5))), ((float)(odFloatRndMinMax(-0.5, 0.5))));
             return [TRTree treeWithTreeType:[[_weakSelf.rules.types randomItem] get] position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make(((float)(odFloatRndMinMax(0.9, 1.1))), ((float)(odFloatRndMinMax(0.9, 1.1))))];
-        }] sort] toArray];
+        }] toTreeSet];
     }
     
     return self;
@@ -105,7 +105,7 @@ static ODClassType* _TRForest_type;
     _TRForest_type = [ODClassType classTypeWithCls:[TRForest class]];
 }
 
-- (id<CNSeq>)trees {
+- (id<CNIterable>)trees {
     return __trees;
 }
 
@@ -176,6 +176,7 @@ static ODClassType* _TRForest_type;
     TRTreeType* _treeType;
     GEVec2 _position;
     GEVec2 _size;
+    NSInteger _z;
     CGFloat _rigidity;
     BOOL __rustleUp;
     CGFloat _rustle;
@@ -186,6 +187,7 @@ static ODClassType* _TRTree_type;
 @synthesize treeType = _treeType;
 @synthesize position = _position;
 @synthesize size = _size;
+@synthesize z = _z;
 @synthesize rigidity = _rigidity;
 @synthesize rustle = _rustle;
 
@@ -199,6 +201,7 @@ static ODClassType* _TRTree_type;
         _treeType = treeType;
         _position = position;
         _size = size;
+        _z = float4Round((_position.y - _position.x) * 1000);
         _rigidity = odFloatRndMinMax(0.5, 1.5);
         __rustleUp = YES;
         _rustle = 0.0;
@@ -215,7 +218,7 @@ static ODClassType* _TRTree_type;
 }
 
 - (NSInteger)compareTo:(TRTree*)to {
-    return -float4CompareTo(_position.y - _position.x, to.position.y - to.position.x);
+    return -intCompareTo(_z, to.z);
 }
 
 - (GEVec2)incline {

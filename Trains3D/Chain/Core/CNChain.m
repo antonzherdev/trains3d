@@ -17,6 +17,7 @@
 #import "CNSortLink.h"
 #import "CNSortBuilder.h"
 #import "CNZipLink.h"
+#import "CNTreeSet.h"
 
 
 @implementation CNChain {
@@ -437,6 +438,9 @@
     return ret;
 }
 
+- (CNTreeSet *)toTreeSet {
+    return [self convertWithBuilder:[CNTreeSetBuilder apply]];
+}
 @end
 
 id cnResolveCollection(id collection) {

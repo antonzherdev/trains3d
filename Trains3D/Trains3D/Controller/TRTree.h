@@ -31,7 +31,7 @@
 + (id)forestWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
 - (id)initWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
 - (ODClassType*)type;
-- (id<CNSeq>)trees;
+- (id<CNIterable>)trees;
 - (void)cutDownTile:(GEVec2i)tile;
 - (void)cutDownForRail:(TRRail*)rail;
 - (void)cutDownRect:(GERect)rect;
@@ -44,6 +44,7 @@
 @property (nonatomic, readonly) TRTreeType* treeType;
 @property (nonatomic, readonly) GEVec2 position;
 @property (nonatomic, readonly) GEVec2 size;
+@property (nonatomic, readonly) NSInteger z;
 @property (nonatomic, readonly) CGFloat rigidity;
 @property (nonatomic) CGFloat rustle;
 
