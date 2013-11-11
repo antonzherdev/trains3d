@@ -111,6 +111,7 @@
 		6F3DF192A13CBB48E7A7ED77 /* btTriangleCallback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1C842FC3A9CEFEA96CE /* btTriangleCallback.cpp */; };
 		6F3DF194ADB16E5C7F1D84D7 /* gim_box_set.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF575E96E1CFD10AAD026 /* gim_box_set.cpp */; };
 		6F3DF194C56638A08F95D03C /* EGStat.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF418927B90E9B8FD285D /* EGStat.m */; };
+		6F3DF19BB0F3D430C6A22D64 /* CNNotificationPlatform.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF712C0A359F5788BCCE /* CNNotificationPlatform.m */; };
 		6F3DF1A321BE608B5A62FE0B /* btInternalEdgeUtility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF818C044E47538801BF0 /* btInternalEdgeUtility.cpp */; };
 		6F3DF1A5A90A5DF73DEAE1CF /* TRNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8F6DB72597946D02C45 /* TRNotification.m */; };
 		6F3DF1A707B85511AE06EB5E /* TRTrainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF89D6B449939B5F76CD5 /* TRTrainView.m */; };
@@ -473,6 +474,7 @@
 		6F3DF6AD5125053D15E51DAE /* CNZipLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF9A503B00E41C272272 /* CNZipLink.m */; };
 		6F3DF6AF7530519629A78DE5 /* btDbvt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF48A569A1F7747885285 /* btDbvt.cpp */; };
 		6F3DF6B0922FD43065500A26 /* btConeTwistConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF11CB277C948FCF1E426 /* btConeTwistConstraint.cpp */; };
+		6F3DF6B70EB722CA88D474E2 /* CNNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF18FA5CB8501C25AD352 /* CNNotification.m */; };
 		6F3DF6D2624166B630D4B521 /* Train.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFEF62D691FF6C2A194BD /* Train.od */; };
 		6F3DF6D50B456EF95DB5A3FA /* btConeTwistConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF11CB277C948FCF1E426 /* btConeTwistConstraint.cpp */; };
 		6F3DF6D5C140BA8E03A9DE00 /* btConvexTriangleMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2C5FE1F27000317F456 /* btConvexTriangleMeshShape.cpp */; };
@@ -5339,6 +5341,8 @@
 				6F3DFBED281E8A3535E30B37 /* NSMutableSet+CNChain.m in Sources */,
 				6F3DFDCC8B2CA45D38268B30 /* NSMutableArray+CNChain.m in Sources */,
 				6F3DFE9344E5EF23081FF9ED /* CNEnumerator.m in Sources */,
+				6F3DF6B70EB722CA88D474E2 /* CNNotification.m in Sources */,
+				6F3DF19BB0F3D430C6A22D64 /* CNNotificationPlatform.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,7 +10,6 @@
 #import "TRCity.h"
 #import "TRTrain.h"
 #import "TRRailPoint.h"
-#import "EGGameCenter.h"
 #import "TRCar.h"
 @implementation TRLevelRules{
     GEVec2i _mapSize;
@@ -117,6 +116,7 @@ static ODClassType* _TRLevelRules_type;
     id __result;
 }
 static NSInteger _TRLevel_trainComingPeriod = 10;
+static CNNotificationHandle* _TRLevel_crashNotification;
 static CNNotificationHandle* _TRLevel_winNotification;
 static ODClassType* _TRLevel_type;
 @synthesize number = _number;
@@ -164,6 +164,7 @@ static ODClassType* _TRLevel_type;
 + (void)initialize {
     [super initialize];
     _TRLevel_type = [ODClassType classTypeWithCls:[TRLevel class]];
+    _TRLevel_crashNotification = [CNNotificationHandle notificationHandleWithName:@"Trains crashed"];
     _TRLevel_winNotification = [CNNotificationHandle notificationHandleWithName:@"Level was passed"];
 }
 
@@ -321,7 +322,7 @@ static ODClassType* _TRLevel_type;
 
 - (void)processCollisions {
     [[self detectCollisions] forEach:^void(TRCarsCollision* collision) {
-        [EGGameCenter.instance completeAchievementName:@"grp.Crash"];
+        [_TRLevel_crashNotification post];
         [((TRCarsCollision*)(collision)).cars forEach:^void(TRCar* _) {
             [self destroyTrain:((TRCar*)(_)).train];
         }];
@@ -404,6 +405,10 @@ static ODClassType* _TRLevel_type;
 
 + (NSInteger)trainComingPeriod {
     return _TRLevel_trainComingPeriod;
+}
+
++ (CNNotificationHandle*)crashNotification {
+    return _TRLevel_crashNotification;
 }
 
 + (CNNotificationHandle*)winNotification {

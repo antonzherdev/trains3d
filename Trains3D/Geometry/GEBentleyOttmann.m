@@ -356,7 +356,7 @@ static ODClassType* _GEBentleyOttmannIntersectionEvent_type;
 
 
 @implementation GEBentleyOttmannEventQueue{
-    CNMutableTreeMap* _events;
+    CNMTreeMap* _events;
 }
 static ODClassType* _GEBentleyOttmannEventQueue_type;
 @synthesize events = _events;
@@ -367,7 +367,7 @@ static ODClassType* _GEBentleyOttmannEventQueue_type;
 
 - (id)init {
     self = [super init];
-    if(self) _events = [CNMutableTreeMap mutableTreeMapWithComparator:^NSInteger(id a, id b) {
+    if(self) _events = [CNMTreeMap treeMapWithComparator:^NSInteger(id a, id b) {
         return geVec2CompareTo(uwrap(GEVec2, a), uwrap(GEVec2, b));
     }];
     
@@ -495,7 +495,7 @@ static ODClassType* _GEPointClass_type;
 
 
 @implementation GESweepLine{
-    CNMutableTreeSet* _events;
+    CNMTreeSet* _events;
     NSMutableDictionary* _intersections;
     GEVec2 _currentEventPoint;
     GEBentleyOttmannEventQueue* _queue;
@@ -513,7 +513,7 @@ static ODClassType* _GESweepLine_type;
     self = [super init];
     __weak GESweepLine* _weakSelf = self;
     if(self) {
-        _events = [CNMutableTreeSet newWithComparator:^NSInteger(GEBentleyOttmannPointEvent* a, GEBentleyOttmannPointEvent* b) {
+        _events = [CNMTreeSet applyComparator:^NSInteger(GEBentleyOttmannPointEvent* a, GEBentleyOttmannPointEvent* b) {
             return [_weakSelf compareEventsA:a b:b];
         }];
         _intersections = [NSMutableDictionary mutableDictionary];

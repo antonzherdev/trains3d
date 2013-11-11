@@ -74,7 +74,7 @@
 
 
 @interface GEBentleyOttmannEventQueue : NSObject
-@property (nonatomic, readonly) CNMutableTreeMap* events;
+@property (nonatomic, readonly) CNMTreeMap* events;
 
 + (id)bentleyOttmannEventQueue;
 - (id)init;
@@ -98,7 +98,7 @@
 
 
 @interface GESweepLine : NSObject
-@property (nonatomic, retain) CNMutableTreeSet* events;
+@property (nonatomic, retain) CNMTreeSet* events;
 @property (nonatomic, readonly) NSMutableDictionary* intersections;
 @property (nonatomic, retain) GEBentleyOttmannEventQueue* queue;
 

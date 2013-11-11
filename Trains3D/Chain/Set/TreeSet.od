@@ -1,22 +1,6 @@
 package core.chain
 
-class MutableTreeSet<T>(map : MutableTreeMap<T, Object>) extends MutableSet<T> {
-    static def newWith<T>(comparator : (T, T) -> int) : MutableTreeSet<T> = {
-        MutableTreeSet<T>(MutableTreeMap<T, Object>(comparator))
-    }
-
-    static def apply<T> = MutableTreeSet<T>(MutableTreeMap<T, Object>())
-    private static val obj = NSObject()
-
-    def between(a : T, b : T) : [T]
-
-    def append(item : T) {
-        map.set(item, obj)
-    }
-
-    def remove(item : T) : bool = map.removeFor(key = item).isDefined
-
-
+class TreeSet<T>(map : TreeMap<T, Object>) extends Set<T> {
     def higherThan(item : T) : T? = map.higherKeyThan(item)
     def lowerThan(item : T) : T? = map.lowerKeyThan(item)
 
@@ -28,17 +12,47 @@ class MutableTreeSet<T>(map : MutableTreeMap<T, Object>) extends MutableSet<T> {
     def headOpt : T? = map.firstKey
     def last : T? = map.lastKey
     def contains(item : T) : bool = map.contains(key = item)
+}
+
+class ImTreeSet<T>(map : TreeMap<T, Object>) extends TreeSet<T>(map)
+
+class TreeSetBuilder<T>(comparator : (T, T) -> int) extends Builder<T, TreeSet<T>> {
+    static def apply<T extends Comparable<T>> = TreeSetBuilder<T>((a : T, b : T) -> a.compare(b))
+    private val set = MTreeSet<T>(comparator)
+    def append(item : T) {
+        set.append(item)
+    }
+    def build : TreeSet<T> = set
+}
+
+
+class MTreeSet<T>(mmap : MTreeMap<T, Object>) extends TreeSet<T>(mmap) with MutableSet<T> {
+    static def apply<T>(comparator : (T, T) -> int) : MTreeSet<T> = {
+        MTreeSet<T>(MTreeMap<T, Object>(comparator))
+    }
+
+    static def apply<T> = MTreeSet<T>(MTreeMap<T, Object>())
+    private static val obj = NSObject()
+
+//    def between(a : T, b : T) : [T]
+
+    def append(item : T) {
+        mmap.set(item, obj)
+    }
+
+    def remove(item : T) : bool = mmap.removeFor(key = item).isDefined
+
 
     def clear {
-        map.clear
+        mmap.clear
     }
 
     def addAll(objects : Traversable<T>) {
         objects.for(append(item = _))
     }
 
-    def reorder : MutableTreeSet<T> = {
-        val ret = MutableTreeSet<T>(MutableTreeMap<T, Object>(map.comparator))
+    def reorder : MTreeSet<T> = {
+        val ret = MTreeSet<T>(MTreeMap<T, Object>(mmap.comparator))
         ret.addAll(self)
         ret
     }

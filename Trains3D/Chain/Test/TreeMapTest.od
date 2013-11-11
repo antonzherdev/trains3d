@@ -4,7 +4,7 @@ import com.antonzherdev.test._
 
 class TreeMapTest extends TestCase {
     def testMain {
-        val map = MutableTreeMap<int, string>()
+        val map = MTreeMap<int, string>()
         assertEquals(0, map.count)
         assertTrue(map.opt(0).isEmpty)
 

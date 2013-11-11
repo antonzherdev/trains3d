@@ -1,29 +1,17 @@
 package core.chain
 
-class MutableTreeMap<K, V>(comparator : (K, K) -> int) extends MutableMap<K, V> {
-    static def apply<K extends Comparable<K>, V> = MutableTreeMap<K, V>((a : K, b : K) -> a.compare(b))
-
-    private var root : TreeMapEntry<K, V> = nil
-    private var _size : uint = 0
-
-    def count = _size
-    def isEmpty : bool = root == nil
+class TreeMap<K, V>(comparator : (K, K) -> int) extends Map<K, V> {
     def apply(key : K) : V = entryFor(key).value
     def opt(key : K) : V? = {
         val e = entryFor(key)
         if(e == nil) nil else e.value
     }
-    def clear {
-        _size = 0
-        root = nil
-    }
 
-    val keys : TreeMapKeySet<K> = TreeMapKeySet<K>(self)
-    val values : TreeMapValues<V> = TreeMapValues<V>(self)
-    def iterator : Iterator<(K, V)> = TreeMapIterator<K, V>.new(self, firstEntry)
-    def iteratorHigherThan(key : K) = TreeMapIterator<K, V>.new(self, higherEntryThan(key).getOr(nil))
+    def root : TreeMapEntry<K, V>
+    def isEmpty : bool = root == nil
 
-    private def entryFor(key : K) : TreeMapEntry<K, V> = {
+
+    def entryFor(key : K) : TreeMapEntry<K, V> = {
         var p = root
         while (p != nil) {
             val cmp = comparator(key, p.key)
@@ -34,232 +22,19 @@ class MutableTreeMap<K, V>(comparator : (K, K) -> int) extends MutableMap<K, V> 
         p
     }
 
+    val keys : TreeMapKeySet<K> = TreeMapKeySet<K>(self)
+    val values : TreeMapValues<V> = TreeMapValues<V>(self)
+
+    def iterator : Iterator<(K, V)> = TreeMapIterator<K, V>(self, firstEntry)
+    def iteratorHigherThan(key : K) = TreeMapIterator<K, V>(self, higherEntryThan(key).getOr(nil))
+
     static val BLACK = 0
     static val RED = 1
 
-    def set(key : K, value : V)  {
-        var t = root
-        if (t == nil) {
-            root = TreeMapEntry.newWith<K,V>(key, value, parent = nil)
-            _size = 1
-        } else {
-            var cmp : int = 0
-            var parent : TreeMapEntry<K, V> = nil
-
-            do {
-                parent = t
-                cmp = comparator(key, t.key)
-                if (cmp < 0) t = t.left
-                else if (cmp > 0) t = t.right
-                else {
-                    t.value = value
-                    return nil
-                }
-            } while (t != nil)
-
-            val e =  TreeMapEntry.newWith<K,V>(key, value, parent)
-            if (cmp < 0) parent.left = e
-            else parent.right = e
-            fixAfterInsertion(e)
-            _size++
-        }
-    }
-
-    def removeFor(key : K) : V? = {
-        val entry = entryFor(key)
-        if(entry != nil) delete(entry)
-        else nil
-    }
-
-    private def delete(entry : TreeMapEntry<K, V>) : V = {
-        var p = entry
-        _size--
-
-        // If strictly internal, copy successor's element to p and then make p
-        // point to successor.
-        if (p.left != nil && p.right != nil) {
-            val s = p.next
-            p.key = s.key
-            p.value = s.value
-            p = s
-        } // p has 2 children
-
-        // Start fixup at replacement node, if it exists.
-        val replacement = if(p.left != nil) p.left else p.right
-        if (replacement != nil) {
-            // Link replacement to parent
-            replacement.parent = p.parent
-            if (p.parent == nil) root = replacement
-            else if (p == p.parent.left) p.parent.left  = replacement
-            else p.parent.right = replacement
-
-            // Null out links so they are OK to use by fixAfterDeletion.
-            p.left = nil
-            p.right = nil
-            p.parent = nil
-
-            // Fix replacement
-            if (p.color == BLACK) fixAfterDeletion(replacement)
-        } else if (p.parent == nil) { // return if we are the only node.
-            root = nil
-        } else { //  No children. Use self as phantom replacement and unlink.
-            if (p.color == BLACK) fixAfterDeletion(p)
-            if (p.parent != nil) {
-                if (p == p.parent.left) p.parent.left = nil
-                else if (p == p.parent.right) p.parent.right = nil
-                p.parent = nil
-            }
-        }
-        entry.value
-    }
-
-    private def fixAfterInsertion(entry : TreeMapEntry<K, V>) {
-        var x = entry
-        x.color = RED
-        while (x != nil && x != root && x.parent.color == RED) {
-            if (x.parent == x.parent.parent.left) {
-                val y = x.parent.parent.right
-                if (y.color == RED) {
-                    x.parent.color = BLACK
-                    y.color = BLACK
-                    x.parent.parent.color = RED
-                    x = x.parent.parent
-                } else {
-                    if (x == x.parent.right) {
-                        x = x.parent
-                        rotateLeft(x)
-                    }
-                    x.parent.color = BLACK
-                    x.parent.parent.color = RED
-                    rotateRight(x.parent.parent)
-                }
-            } else {
-                val y = x.parent.parent.left
-                if (y.color == RED) {
-                    x.parent.color = BLACK
-                    y.color = BLACK
-                    x.parent.parent.color = RED
-                    x = x.parent.parent
-                } else {
-                    if (x == x.parent.left) {
-                        x = x.parent
-                        rotateRight(x)
-                    }
-                    x.parent.color = BLACK
-                    x.parent.parent.color = RED
-                    rotateLeft(x.parent.parent)
-                }
-            }
-        }
-        root.color = BLACK
-    }
-
-    private def fixAfterDeletion(entry : TreeMapEntry<K, V>) {
-        var x = entry
-        while (x != root && x.color == BLACK) {
-            if (x == x.parent.left) {
-                var sib = x.parent.right
-                if (sib.color == RED) {
-                    sib.color = BLACK
-                    x.parent.color = RED
-                    rotateLeft(x.parent)
-                    sib = x.parent.right
-                }
-                if (sib.left.color == BLACK && sib.right.color == BLACK) {
-                    sib.color = RED
-                    x = x.parent
-                } else {
-                    if (sib.right.color == BLACK) {
-                        sib.left.color = BLACK
-                        sib.color = RED
-                        rotateRight(sib)
-                        sib = x.parent.right
-                    }
-                    sib.color = x.parent.color
-                    x.parent.color = BLACK
-                    sib.right.color = BLACK
-                    rotateLeft(x.parent)
-                    x = root
-                }
-            } else { // symmetric
-                var sib = x.parent.left
-
-                if (sib.color == RED) {
-                    sib.color = BLACK
-                    x.parent.color = RED
-                    rotateRight(x.parent)
-                    sib = x.parent.left
-                }
-
-                if (sib.right.color == BLACK && sib.left.color == BLACK) {
-                    sib.color = RED
-                    x = x.parent
-                } else {
-                    if (sib.left.color == BLACK) {
-                        sib.right.color = BLACK
-                        sib.color = RED
-                        rotateLeft(sib)
-                        sib = x.parent.left
-                    }
-                    sib.color = x.parent.color
-                    x.parent.color = BLACK
-                    sib.left.color = BLACK
-                    rotateRight(x.parent)
-                    x = root
-                }
-            }
-        }
-        x.color = BLACK
-    }
-
-
-    private def rotateLeft(p : TreeMapEntry<K, V>) {
-        if (p != nil) {
-            val r = p.right
-            p.right = r.left
-            if (r.left != nil) r.left.parent = p
-            r.parent = p.parent
-            if (p.parent == nil) root = r
-            else if (p.parent.left == p) p.parent.left = r
-            else p.parent.right = r
-            r.left = p
-            p.parent = r
-        }
-    }
-
-    private def rotateRight(p : TreeMapEntry<K, V>) {
-        if (p != nil) {
-            val l = p.left
-            p.left = l.right
-            if (l.right != nil) l.right.parent = p
-            l.parent = p.parent
-            if (p.parent == nil) root = l
-            else if (p.parent.right == p) p.parent.right = l
-            else p.parent.left = l
-            l.right = p
-            p.parent = l
-        }
-    }
-
-    private def firstEntry : TreeMapEntry<K, V> = {
+    def firstEntry : TreeMapEntry<K, V> = {
         var p = root
         if (p != nil) while (p.left != nil) p = p.left
         p
-    }
-
-    private def lastEntry : TreeMapEntry<K, V> = {
-        var p = root
-        if (p != nil) while (p.right != nil) p = p.right
-        p
-    }
-
-    def pollFirst : (K, V)? = {
-        val entry = firstEntry
-        if(entry == nil) nil
-        else {
-            delete(entry)
-            (entry.key, entry.value)
-        }
     }
 
     def firstKey : K? = if(root == nil) nil else firstEntry.key
@@ -315,6 +90,254 @@ class MutableTreeMap<K, V>(comparator : (K, K) -> int) extends MutableMap<K, V> 
         }
         nil
     }
+
+    private def lastEntry : TreeMapEntry<K, V> = {
+        var p = root
+        if (p != nil) while (p.right != nil) p = p.right
+        p
+    }
+
+}
+
+class ImTreeMap<K, V>(comparator : (K, K) -> int, root : TreeMapEntry<K, V>, count : uint) extends TreeMap<K, V>(comparator)  {
+    def isEmpty : bool = root == nil
+}
+
+class TreeMapBuilder<K, V>(comparator : (K, K) -> int) extends Builder<(K, V), TreeMap<K, V>> {
+    static def apply<K extends Comparable<K>, V> = TreeMapBuilder<K, V>((a : K, b : K) -> a.compare(b))
+    private val map = MTreeMap<K, V>(comparator)
+    def append(item : (K, V)) {
+        map.append(item)
+    }
+    def build : TreeMap<K, V> = map
+}
+
+
+class MTreeMap<K, V>(comparator : (K, K) -> int) extends TreeMap<K, V>(comparator) with MutableMap<K, V> {
+    static def apply<K extends Comparable<K>, V> = MTreeMap<K, V>((a : K, b : K) -> a.compare(b))
+    private var _root : TreeMapEntry<K, V> = nil
+    def root : TreeMapEntry<K, V> = _root
+    private var _size : uint = 0
+    def count = _size
+    def clear {
+        _size = 0
+        _root = nil
+    }
+
+
+    def set(key : K, value : V)  {
+        val _comparator = comparator
+        var t = _root
+        if (t == nil) {
+            _root = TreeMapEntry.newWith<K,V>(key, value, parent = nil)
+            _size = 1
+        } else {
+            var cmp : int = 0
+            var parent : TreeMapEntry<K, V> = nil
+
+            do {
+                parent = t
+                cmp = _comparator(key, t.key)
+                if (cmp < 0) t = t.left
+                else if (cmp > 0) t = t.right
+                else {
+                    t.value = value
+                    return nil
+                }
+            } while (t != nil)
+
+            val e =  TreeMapEntry.newWith<K,V>(key, value, parent)
+            if (cmp < 0) parent.left = e
+            else parent.right = e
+            fixAfterInsertion(e)
+            _size++
+        }
+    }
+
+    def removeFor(key : K) : V? = {
+        val entry = entryFor(key)
+        if(entry != nil) delete(entry)
+        else nil
+    }
+
+    private def delete(entry : TreeMapEntry<K, V>) : V = {
+        var p = entry
+        _size--
+
+        // If strictly internal, copy successor's element to p and then make p
+        // point to successor.
+        if (p.left != nil && p.right != nil) {
+            val s = p.next
+            p.key = s.key
+            p.value = s.value
+            p = s
+        } // p has 2 children
+
+        // Start fixup at replacement node, if it exists.
+        val replacement = if(p.left != nil) p.left else p.right
+        if (replacement != nil) {
+            // Link replacement to parent
+            replacement.parent = p.parent
+            if (p.parent == nil) _root = replacement
+            else if (p == p.parent.left) p.parent.left  = replacement
+            else p.parent.right = replacement
+
+            // Null out links so they are OK to use by fixAfterDeletion.
+            p.left = nil
+            p.right = nil
+            p.parent = nil
+
+            // Fix replacement
+            if (p.color == BLACK) fixAfterDeletion(replacement)
+        } else if (p.parent == nil) { // return if we are the only node.
+            _root = nil
+        } else { //  No children. Use self as phantom replacement and unlink.
+            if (p.color == BLACK) fixAfterDeletion(p)
+            if (p.parent != nil) {
+                if (p == p.parent.left) p.parent.left = nil
+                else if (p == p.parent.right) p.parent.right = nil
+                p.parent = nil
+            }
+        }
+        entry.value
+    }
+
+    private def fixAfterInsertion(entry : TreeMapEntry<K, V>) {
+        var x = entry
+        x.color = RED
+        while (x != nil && x != _root && x.parent.color == RED) {
+            if (x.parent == x.parent.parent.left) {
+                val y = x.parent.parent.right
+                if (y.color == RED) {
+                    x.parent.color = BLACK
+                    y.color = BLACK
+                    x.parent.parent.color = RED
+                    x = x.parent.parent
+                } else {
+                    if (x == x.parent.right) {
+                        x = x.parent
+                        rotateLeft(x)
+                    }
+                    x.parent.color = BLACK
+                    x.parent.parent.color = RED
+                    rotateRight(x.parent.parent)
+                }
+            } else {
+                val y = x.parent.parent.left
+                if (y.color == RED) {
+                    x.parent.color = BLACK
+                    y.color = BLACK
+                    x.parent.parent.color = RED
+                    x = x.parent.parent
+                } else {
+                    if (x == x.parent.left) {
+                        x = x.parent
+                        rotateRight(x)
+                    }
+                    x.parent.color = BLACK
+                    x.parent.parent.color = RED
+                    rotateLeft(x.parent.parent)
+                }
+            }
+        }
+        _root.color = BLACK
+    }
+
+    private def fixAfterDeletion(entry : TreeMapEntry<K, V>) {
+        var x = entry
+        while (x != _root && x.color == BLACK) {
+            if (x == x.parent.left) {
+                var sib = x.parent.right
+                if (sib.color == RED) {
+                    sib.color = BLACK
+                    x.parent.color = RED
+                    rotateLeft(x.parent)
+                    sib = x.parent.right
+                }
+                if (sib.left.color == BLACK && sib.right.color == BLACK) {
+                    sib.color = RED
+                    x = x.parent
+                } else {
+                    if (sib.right.color == BLACK) {
+                        sib.left.color = BLACK
+                        sib.color = RED
+                        rotateRight(sib)
+                        sib = x.parent.right
+                    }
+                    sib.color = x.parent.color
+                    x.parent.color = BLACK
+                    sib.right.color = BLACK
+                    rotateLeft(x.parent)
+                    x = _root
+                }
+            } else { // symmetric
+                var sib = x.parent.left
+
+                if (sib.color == RED) {
+                    sib.color = BLACK
+                    x.parent.color = RED
+                    rotateRight(x.parent)
+                    sib = x.parent.left
+                }
+
+                if (sib.right.color == BLACK && sib.left.color == BLACK) {
+                    sib.color = RED
+                    x = x.parent
+                } else {
+                    if (sib.left.color == BLACK) {
+                        sib.right.color = BLACK
+                        sib.color = RED
+                        rotateLeft(sib)
+                        sib = x.parent.left
+                    }
+                    sib.color = x.parent.color
+                    x.parent.color = BLACK
+                    sib.left.color = BLACK
+                    rotateRight(x.parent)
+                    x = _root
+                }
+            }
+        }
+        x.color = BLACK
+    }
+
+
+    private def rotateLeft(p : TreeMapEntry<K, V>) {
+        if (p != nil) {
+            val r = p.right
+            p.right = r.left
+            if (r.left != nil) r.left.parent = p
+            r.parent = p.parent
+            if (p.parent == nil) _root = r
+            else if (p.parent.left == p) p.parent.left = r
+            else p.parent.right = r
+            r.left = p
+            p.parent = r
+        }
+    }
+
+    private def rotateRight(p : TreeMapEntry<K, V>) {
+        if (p != nil) {
+            val l = p.left
+            p.left = l.right
+            if (l.right != nil) l.right.parent = p
+            l.parent = p.parent
+            if (p.parent == nil) _root = l
+            else if (p.parent.right == p) p.parent.right = l
+            else p.parent.left = l
+            l.right = p
+            p.parent = l
+        }
+    }
+
+    def pollFirst : (K, V)? = {
+        val entry = firstEntry
+        if(entry == nil) nil
+        else {
+            delete(entry)
+            (entry.key, entry.value)
+        }
+    }
 }
 
 class TreeMapEntry<K, V> {
@@ -350,15 +373,15 @@ class TreeMapEntry<K, V> {
     }
 }
 
-class TreeMapKeySet<K>(weak map : MutableTreeMap<K, _>) extends Iterable<K> {
+class TreeMapKeySet<K>(weak map : TreeMap<K, _>) extends Iterable<K> {
     def count : uint = map.count
 
-    def iterator : Iterator<K> = TreeMapKeyIterator<K>.new(map, map.firstEntry)
-    def iteratorHigherThan(key : K) : Iterator<K> = TreeMapKeyIterator<K>.new(map, map.higherEntryThan(key).getOr(nil))
+    def iterator : Iterator<K> = TreeMapKeyIterator<K>(map, map.firstEntry)
+    def iteratorHigherThan(key : K) : Iterator<K> = TreeMapKeyIterator<K>(map, map.higherEntryThan(key).getOr(nil))
 }
 
-class TreeMapKeyIterator<K>(map : MutableTreeMap<K, _>) extends Iterator<K> {
-   static def new<K>(map : MutableTreeMap<K, _>, entry : TreeMapEntry<K, _>) : TreeMapKeyIterator<K> = {
+class TreeMapKeyIterator<K>(map : TreeMap<K, _>) extends Iterator<K> {
+   static def apply<K>(map : TreeMap<K, _>, entry : TreeMapEntry<K, _>) : TreeMapKeyIterator<K> = {
        val ret = TreeMapKeyIterator<K>(map)
        ret.entry = entry
        ret
@@ -372,14 +395,14 @@ class TreeMapKeyIterator<K>(map : MutableTreeMap<K, _>) extends Iterator<K> {
    }
 }
 
-class TreeMapValues<V>(weak map : MutableTreeMap<_, V>) extends Iterable<V> {
+class TreeMapValues<V>(weak map : TreeMap<_, V>) extends Iterable<V> {
     def count : uint = map.count
 
-    def iterator : Iterator<V> = TreeMapValuesIterator<V>.new(map, map.firstEntry)
+    def iterator : Iterator<V> = TreeMapValuesIterator<V>(map, map.firstEntry)
 }
 
-class TreeMapValuesIterator<V>(map : MutableTreeMap<_, V>) extends Iterator<V> {
-    static def new<V>(map : MutableTreeMap<_, V>, entry : TreeMapEntry<_, V>) : TreeMapValuesIterator<V> = {
+class TreeMapValuesIterator<V>(map : TreeMap<_, V>) extends Iterator<V> {
+    static def apply<V>(map : TreeMap<_, V>, entry : TreeMapEntry<_, V>) : TreeMapValuesIterator<V> = {
         val ret = TreeMapValuesIterator<V>(map)
         ret.entry = entry
         ret
@@ -393,8 +416,8 @@ class TreeMapValuesIterator<V>(map : MutableTreeMap<_, V>) extends Iterator<V> {
     }
 }
 
-class TreeMapIterator<K, V>(map : MutableTreeMap<K, V>) extends Iterator<(K, V)> {
-    static def new<K, V>(map : MutableTreeMap<K, V>, entry : TreeMapEntry<K, V>) : TreeMapIterator<K, V> = {
+class TreeMapIterator<K, V>(map : TreeMap<K, V>) extends Iterator<(K, V)> {
+    static def apply<K, V>(map : TreeMap<K, V>, entry : TreeMapEntry<K, V>) : TreeMapIterator<K, V> = {
         val ret = TreeMapIterator<K, V>(map)
         ret.entry = entry
         ret

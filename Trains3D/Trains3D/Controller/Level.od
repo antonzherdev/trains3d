@@ -145,9 +145,10 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         remove(train)
     }
 
+    static val crashNotification = NotificationHandle<void>("Trains crashed")
     def processCollisions {
         detectCollisions.for(collision -> {
-            GameCenter.instance.completeAchievement("grp.Crash")
+            crashNotification.post
             collision.cars.for(destroy(_.train))
             railroad.addDamageAt(collision.railPoint)
         })

@@ -21,7 +21,6 @@
 @class TRTrainGenerator;
 @class TRRailPoint;
 @class TRSwitch;
-@class EGGameCenter;
 @class TRCarsCollision;
 @class TRCar;
 @class TRTrainType;
@@ -89,6 +88,7 @@
 - (void)win;
 - (void)lose;
 + (NSInteger)trainComingPeriod;
++ (CNNotificationHandle*)crashNotification;
 + (CNNotificationHandle*)winNotification;
 + (ODClassType*)type;
 @end

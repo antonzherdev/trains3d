@@ -1,7 +1,7 @@
 package com.antonzherdev.eg
 
 class Schedule extends Controller {
-    private var _map = MutableTreeMap<float, [() -> void]>()
+    private var _map = MTreeMap<float, [() -> void]>()
     private var _current = 0.0
     private var _next = -1.0
 

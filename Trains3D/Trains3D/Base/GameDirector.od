@@ -21,6 +21,9 @@ class GameDirector {
         cloud.keepMax("maxLevel", level + 1)
         local.set("currentLevel", i = level + 1)
     }
+    private val crashObs = Level.crashNotification.observe { _ ->
+        GameCenter.instance.completeAchievement("grp.Crash")
+    }
 
     def init {
         GameCenter.instance.authenticate

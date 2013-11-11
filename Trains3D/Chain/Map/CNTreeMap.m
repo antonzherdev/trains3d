@@ -4,30 +4,26 @@
 #import "CNOption.h"
 #import "ODType.h"
 #import "CNChain.h"
-@implementation CNMutableTreeMap{
+@implementation CNTreeMap{
     NSInteger(^_comparator)(id, id);
-    CNTreeMapEntry* _root;
-    NSUInteger __size;
     CNTreeMapKeySet* _keys;
     CNTreeMapValues* _values;
 }
-static NSInteger _CNMutableTreeMap_BLACK = 0;
-static NSInteger _CNMutableTreeMap_RED = 1;
-static ODClassType* _CNMutableTreeMap_type;
+static NSInteger _CNTreeMap_BLACK = 0;
+static NSInteger _CNTreeMap_RED = 1;
+static ODClassType* _CNTreeMap_type;
 @synthesize comparator = _comparator;
 @synthesize keys = _keys;
 @synthesize values = _values;
 
-+ (id)mutableTreeMapWithComparator:(NSInteger(^)(id, id))comparator {
-    return [[CNMutableTreeMap alloc] initWithComparator:comparator];
++ (id)treeMapWithComparator:(NSInteger(^)(id, id))comparator {
+    return [[CNTreeMap alloc] initWithComparator:comparator];
 }
 
 - (id)initWithComparator:(NSInteger(^)(id, id))comparator {
     self = [super init];
     if(self) {
         _comparator = comparator;
-        _root = nil;
-        __size = 0;
         _keys = [CNTreeMapKeySet treeMapKeySetWithMap:self];
         _values = [CNTreeMapValues treeMapValuesWithMap:self];
     }
@@ -37,21 +33,7 @@ static ODClassType* _CNMutableTreeMap_type;
 
 + (void)initialize {
     [super initialize];
-    _CNMutableTreeMap_type = [ODClassType classTypeWithCls:[CNMutableTreeMap class]];
-}
-
-+ (CNMutableTreeMap*)apply {
-    return [CNMutableTreeMap mutableTreeMapWithComparator:^NSInteger(id a, id b) {
-        return [a compareTo:b];
-    }];
-}
-
-- (NSUInteger)count {
-    return __size;
-}
-
-- (BOOL)isEmpty {
-    return _root == nil;
+    _CNTreeMap_type = [ODClassType classTypeWithCls:[CNTreeMap class]];
 }
 
 - (id)applyKey:(id)key {
@@ -64,21 +46,16 @@ static ODClassType* _CNMutableTreeMap_type;
     else return [CNOption applyValue:e.value];
 }
 
-- (void)clear {
-    __size = 0;
-    _root = nil;
+- (CNTreeMapEntry*)root {
+    @throw @"Method root is abstract";
 }
 
-- (id<CNIterator>)iterator {
-    return [CNTreeMapIterator newMap:self entry:[self firstEntry]];
-}
-
-- (CNTreeMapIterator*)iteratorHigherThanKey:(id)key {
-    return [CNTreeMapIterator newMap:self entry:[[self higherEntryThanKey:key] getOrValue:nil]];
+- (BOOL)isEmpty {
+    return [self root] == nil;
 }
 
 - (CNTreeMapEntry*)entryForKey:(id)key {
-    CNTreeMapEntry* p = _root;
+    CNTreeMapEntry* p = [self root];
     while(p != nil) {
         NSInteger cmp = _comparator(key, p.key);
         if(cmp < 0) {
@@ -91,246 +68,29 @@ static ODClassType* _CNMutableTreeMap_type;
     return p;
 }
 
-- (void)setKey:(id)key value:(id)value {
-    CNTreeMapEntry* t = _root;
-    if(t == nil) {
-        _root = [CNTreeMapEntry newWithKey:key value:value parent:nil];
-        __size = 1;
-    } else {
-        NSInteger cmp = 0;
-        CNTreeMapEntry* parent = nil;
-        do {
-            parent = t;
-            cmp = _comparator(key, t.key);
-            if(cmp < 0) {
-                t = t.left;
-            } else {
-                if(cmp > 0) {
-                    t = t.right;
-                } else {
-                    t.value = value;
-                    return ;
-                }
-            }
-        } while(t != nil);
-        CNTreeMapEntry* e = [CNTreeMapEntry newWithKey:key value:value parent:parent];
-        if(cmp < 0) parent.left = e;
-        else parent.right = e;
-        [self fixAfterInsertionEntry:e];
-        __size++;
-    }
+- (id<CNIterator>)iterator {
+    return [CNTreeMapIterator applyMap:self entry:[self firstEntry]];
 }
 
-- (id)removeForKey:(id)key {
-    CNTreeMapEntry* entry = [self entryForKey:key];
-    if(entry != nil) return [CNOption applyValue:[self deleteEntry:entry]];
-    else return [CNOption none];
-}
-
-- (id)deleteEntry:(CNTreeMapEntry*)entry {
-    CNTreeMapEntry* p = entry;
-    __size--;
-    if(p.left != nil && p.right != nil) {
-        CNTreeMapEntry* s = [p next];
-        p.key = s.key;
-        p.value = s.value;
-        p = s;
-    }
-    CNTreeMapEntry* replacement = ((p.left != nil) ? p.left : p.right);
-    if(replacement != nil) {
-        replacement.parent = p.parent;
-        if(p.parent == nil) {
-            _root = replacement;
-        } else {
-            if(p == p.parent.left) p.parent.left = replacement;
-            else p.parent.right = replacement;
-        }
-        p.left = nil;
-        p.right = nil;
-        p.parent = nil;
-        if(p.color == _CNMutableTreeMap_BLACK) [self fixAfterDeletionEntry:replacement];
-    } else {
-        if(p.parent == nil) {
-            _root = nil;
-        } else {
-            if(p.color == _CNMutableTreeMap_BLACK) [self fixAfterDeletionEntry:p];
-            if(p.parent != nil) {
-                if(p == p.parent.left) {
-                    p.parent.left = nil;
-                } else {
-                    if(p == p.parent.right) p.parent.right = nil;
-                }
-                p.parent = nil;
-            }
-        }
-    }
-    return entry.value;
-}
-
-- (void)fixAfterInsertionEntry:(CNTreeMapEntry*)entry {
-    CNTreeMapEntry* x = entry;
-    x.color = _CNMutableTreeMap_RED;
-    while(x != nil && x != _root && x.parent.color == _CNMutableTreeMap_RED) {
-        if(x.parent == x.parent.parent.left) {
-            CNTreeMapEntry* y = x.parent.parent.right;
-            if(y.color == _CNMutableTreeMap_RED) {
-                x.parent.color = _CNMutableTreeMap_BLACK;
-                y.color = _CNMutableTreeMap_BLACK;
-                x.parent.parent.color = _CNMutableTreeMap_RED;
-                x = x.parent.parent;
-            } else {
-                if(x == x.parent.right) {
-                    x = x.parent;
-                    [self rotateLeftP:x];
-                }
-                x.parent.color = _CNMutableTreeMap_BLACK;
-                x.parent.parent.color = _CNMutableTreeMap_RED;
-                [self rotateRightP:x.parent.parent];
-            }
-        } else {
-            CNTreeMapEntry* y = x.parent.parent.left;
-            if(y.color == _CNMutableTreeMap_RED) {
-                x.parent.color = _CNMutableTreeMap_BLACK;
-                y.color = _CNMutableTreeMap_BLACK;
-                x.parent.parent.color = _CNMutableTreeMap_RED;
-                x = x.parent.parent;
-            } else {
-                if(x == x.parent.left) {
-                    x = x.parent;
-                    [self rotateRightP:x];
-                }
-                x.parent.color = _CNMutableTreeMap_BLACK;
-                x.parent.parent.color = _CNMutableTreeMap_RED;
-                [self rotateLeftP:x.parent.parent];
-            }
-        }
-    }
-    _root.color = _CNMutableTreeMap_BLACK;
-}
-
-- (void)fixAfterDeletionEntry:(CNTreeMapEntry*)entry {
-    CNTreeMapEntry* x = entry;
-    while(x != _root && x.color == _CNMutableTreeMap_BLACK) {
-        if(x == x.parent.left) {
-            CNTreeMapEntry* sib = x.parent.right;
-            if(sib.color == _CNMutableTreeMap_RED) {
-                sib.color = _CNMutableTreeMap_BLACK;
-                x.parent.color = _CNMutableTreeMap_RED;
-                [self rotateLeftP:x.parent];
-                sib = x.parent.right;
-            }
-            if(sib.left.color == _CNMutableTreeMap_BLACK && sib.right.color == _CNMutableTreeMap_BLACK) {
-                sib.color = _CNMutableTreeMap_RED;
-                x = x.parent;
-            } else {
-                if(sib.right.color == _CNMutableTreeMap_BLACK) {
-                    sib.left.color = _CNMutableTreeMap_BLACK;
-                    sib.color = _CNMutableTreeMap_RED;
-                    [self rotateRightP:sib];
-                    sib = x.parent.right;
-                }
-                sib.color = x.parent.color;
-                x.parent.color = _CNMutableTreeMap_BLACK;
-                sib.right.color = _CNMutableTreeMap_BLACK;
-                [self rotateLeftP:x.parent];
-                x = _root;
-            }
-        } else {
-            CNTreeMapEntry* sib = x.parent.left;
-            if(sib.color == _CNMutableTreeMap_RED) {
-                sib.color = _CNMutableTreeMap_BLACK;
-                x.parent.color = _CNMutableTreeMap_RED;
-                [self rotateRightP:x.parent];
-                sib = x.parent.left;
-            }
-            if(sib.right.color == _CNMutableTreeMap_BLACK && sib.left.color == _CNMutableTreeMap_BLACK) {
-                sib.color = _CNMutableTreeMap_RED;
-                x = x.parent;
-            } else {
-                if(sib.left.color == _CNMutableTreeMap_BLACK) {
-                    sib.right.color = _CNMutableTreeMap_BLACK;
-                    sib.color = _CNMutableTreeMap_RED;
-                    [self rotateLeftP:sib];
-                    sib = x.parent.left;
-                }
-                sib.color = x.parent.color;
-                x.parent.color = _CNMutableTreeMap_BLACK;
-                sib.left.color = _CNMutableTreeMap_BLACK;
-                [self rotateRightP:x.parent];
-                x = _root;
-            }
-        }
-    }
-    x.color = _CNMutableTreeMap_BLACK;
-}
-
-- (void)rotateLeftP:(CNTreeMapEntry*)p {
-    if(p != nil) {
-        CNTreeMapEntry* r = p.right;
-        p.right = r.left;
-        if(r.left != nil) r.left.parent = p;
-        r.parent = p.parent;
-        if(p.parent == nil) {
-            _root = r;
-        } else {
-            if(p.parent.left == p) p.parent.left = r;
-            else p.parent.right = r;
-        }
-        r.left = p;
-        p.parent = r;
-    }
-}
-
-- (void)rotateRightP:(CNTreeMapEntry*)p {
-    if(p != nil) {
-        CNTreeMapEntry* l = p.left;
-        p.left = l.right;
-        if(l.right != nil) l.right.parent = p;
-        l.parent = p.parent;
-        if(p.parent == nil) {
-            _root = l;
-        } else {
-            if(p.parent.right == p) p.parent.right = l;
-            else p.parent.left = l;
-        }
-        l.right = p;
-        p.parent = l;
-    }
+- (CNTreeMapIterator*)iteratorHigherThanKey:(id)key {
+    return [CNTreeMapIterator applyMap:self entry:[[self higherEntryThanKey:key] getOrValue:nil]];
 }
 
 - (CNTreeMapEntry*)firstEntry {
-    CNTreeMapEntry* p = _root;
+    CNTreeMapEntry* p = [self root];
     if(p != nil) while(p.left != nil) {
         p = p.left;
     }
     return p;
 }
 
-- (CNTreeMapEntry*)lastEntry {
-    CNTreeMapEntry* p = _root;
-    if(p != nil) while(p.right != nil) {
-        p = p.right;
-    }
-    return p;
-}
-
-- (id)pollFirst {
-    CNTreeMapEntry* entry = [self firstEntry];
-    if(entry == nil) {
-        return [CNOption none];
-    } else {
-        [self deleteEntry:entry];
-        return [CNOption applyValue:tuple(entry.key, entry.value)];
-    }
-}
-
 - (id)firstKey {
-    if(_root == nil) return [CNOption none];
+    if([self root] == nil) return [CNOption none];
     else return [CNOption applyValue:[self firstEntry].key];
 }
 
 - (id)lastKey {
-    if(_root == nil) return [CNOption none];
+    if([self root] == nil) return [CNOption none];
     else return [CNOption applyValue:[self lastEntry].key];
 }
 
@@ -347,7 +107,7 @@ static ODClassType* _CNMutableTreeMap_type;
 }
 
 - (id)lowerEntryThanKey:(id)key {
-    CNTreeMapEntry* p = _root;
+    CNTreeMapEntry* p = [self root];
     while(p != nil) {
         NSInteger cmp = _comparator(key, p.key);
         if(cmp > 0) {
@@ -371,7 +131,7 @@ static ODClassType* _CNMutableTreeMap_type;
 }
 
 - (id)higherEntryThanKey:(id)key {
-    CNTreeMapEntry* p = _root;
+    CNTreeMapEntry* p = [self root];
     while(p != nil) {
         NSInteger cmp = _comparator(key, p.key);
         if(cmp < 0) {
@@ -394,30 +154,12 @@ static ODClassType* _CNMutableTreeMap_type;
     return [CNOption none];
 }
 
-- (id)objectForKey:(id)key orUpdateWith:(id(^)())orUpdateWith {
-    id o = [self optKey:key];
-    if([o isDefined]) {
-        return [o get];
-    } else {
-        id init = orUpdateWith();
-        [self setKey:key value:init];
-        return init;
+- (CNTreeMapEntry*)lastEntry {
+    CNTreeMapEntry* p = [self root];
+    if(p != nil) while(p.right != nil) {
+        p = p.right;
     }
-}
-
-- (id)modifyBy:(id(^)(id))by forKey:(id)forKey {
-    id newObject = by([CNOption applyValue:[self applyKey:forKey]]);
-    if([newObject isEmpty]) [self removeForKey:forKey];
-    else [self setKey:forKey value:[newObject get]];
-    return newObject;
-}
-
-- (void)appendItem:(CNTuple*)item {
-    [self setKey:item.b value:item.a];
-}
-
-- (void)removeItem:(CNTuple*)item {
-    [self removeForKey:item.a];
+    return p;
 }
 
 - (BOOL)containsKey:(id)key {
@@ -428,6 +170,16 @@ static ODClassType* _CNMutableTreeMap_type;
     id v = [self optKey:key];
     if([v isEmpty]) return NO;
     else return [value isEqual:[v get]];
+}
+
+- (NSUInteger)count {
+    id<CNIterator> i = [self iterator];
+    NSUInteger n = 0;
+    while([i hasNext]) {
+        [i next];
+        n++;
+    }
+    return n;
 }
 
 - (id)head {
@@ -526,19 +278,19 @@ static ODClassType* _CNMutableTreeMap_type;
 }
 
 - (ODClassType*)type {
-    return [CNMutableTreeMap type];
+    return [CNTreeMap type];
 }
 
 + (NSInteger)BLACK {
-    return _CNMutableTreeMap_BLACK;
+    return _CNTreeMap_BLACK;
 }
 
 + (NSInteger)RED {
-    return _CNMutableTreeMap_RED;
+    return _CNTreeMap_RED;
 }
 
 + (ODClassType*)type {
-    return _CNMutableTreeMap_type;
+    return _CNTreeMap_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -548,8 +300,569 @@ static ODClassType* _CNMutableTreeMap_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNMutableTreeMap* o = ((CNMutableTreeMap*)(other));
+    CNTreeMap* o = ((CNTreeMap*)(other));
     return [self.comparator isEqual:o.comparator];
+}
+
+@end
+
+
+@implementation CNImTreeMap{
+    CNTreeMapEntry* _root;
+    NSUInteger _count;
+}
+static ODClassType* _CNImTreeMap_type;
+@synthesize root = _root;
+@synthesize count = _count;
+
++ (id)imTreeMapWithComparator:(NSInteger(^)(id, id))comparator root:(CNTreeMapEntry*)root count:(NSUInteger)count {
+    return [[CNImTreeMap alloc] initWithComparator:comparator root:root count:count];
+}
+
+- (id)initWithComparator:(NSInteger(^)(id, id))comparator root:(CNTreeMapEntry*)root count:(NSUInteger)count {
+    self = [super initWithComparator:comparator];
+    if(self) {
+        _root = root;
+        _count = count;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _CNImTreeMap_type = [ODClassType classTypeWithCls:[CNImTreeMap class]];
+}
+
+- (BOOL)isEmpty {
+    return _root == nil;
+}
+
+- (ODClassType*)type {
+    return [CNImTreeMap type];
+}
+
++ (ODClassType*)type {
+    return _CNImTreeMap_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    CNImTreeMap* o = ((CNImTreeMap*)(other));
+    return [self.comparator isEqual:o.comparator] && self.root == o.root && self.count == o.count;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.comparator hash];
+    hash = hash * 31 + [self.root hash];
+    hash = hash * 31 + self.count;
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"root=%@", self.root];
+    [description appendFormat:@", count=%lu", (unsigned long)self.count];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation CNTreeMapBuilder{
+    NSInteger(^_comparator)(id, id);
+    CNMTreeMap* _map;
+}
+static ODClassType* _CNTreeMapBuilder_type;
+@synthesize comparator = _comparator;
+
++ (id)treeMapBuilderWithComparator:(NSInteger(^)(id, id))comparator {
+    return [[CNTreeMapBuilder alloc] initWithComparator:comparator];
+}
+
+- (id)initWithComparator:(NSInteger(^)(id, id))comparator {
+    self = [super init];
+    if(self) {
+        _comparator = comparator;
+        _map = [CNMTreeMap treeMapWithComparator:_comparator];
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _CNTreeMapBuilder_type = [ODClassType classTypeWithCls:[CNTreeMapBuilder class]];
+}
+
++ (CNTreeMapBuilder*)apply {
+    return [CNTreeMapBuilder treeMapBuilderWithComparator:^NSInteger(id a, id b) {
+        return [a compareTo:b];
+    }];
+}
+
+- (void)appendItem:(CNTuple*)item {
+    [_map appendItem:item];
+}
+
+- (CNTreeMap*)build {
+    return _map;
+}
+
+- (void)appendAllItems:(id<CNTraversable>)items {
+    [items forEach:^void(id _) {
+        [self appendItem:_];
+    }];
+}
+
+- (ODClassType*)type {
+    return [CNTreeMapBuilder type];
+}
+
++ (ODClassType*)type {
+    return _CNTreeMapBuilder_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    CNTreeMapBuilder* o = ((CNTreeMapBuilder*)(other));
+    return [self.comparator isEqual:o.comparator];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.comparator hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation CNMTreeMap{
+    CNTreeMapEntry* __root;
+    NSUInteger __size;
+}
+static ODClassType* _CNMTreeMap_type;
+
++ (id)treeMapWithComparator:(NSInteger(^)(id, id))comparator {
+    return [[CNMTreeMap alloc] initWithComparator:comparator];
+}
+
+- (id)initWithComparator:(NSInteger(^)(id, id))comparator {
+    self = [super initWithComparator:comparator];
+    if(self) {
+        __root = nil;
+        __size = 0;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _CNMTreeMap_type = [ODClassType classTypeWithCls:[CNMTreeMap class]];
+}
+
++ (CNMTreeMap*)apply {
+    return [CNMTreeMap treeMapWithComparator:^NSInteger(id a, id b) {
+        return [a compareTo:b];
+    }];
+}
+
+- (CNTreeMapEntry*)root {
+    return __root;
+}
+
+- (NSUInteger)count {
+    return __size;
+}
+
+- (void)clear {
+    __size = 0;
+    __root = nil;
+}
+
+- (void)setKey:(id)key value:(id)value {
+    NSInteger(^_comparator)(id, id) = self.comparator;
+    CNTreeMapEntry* t = __root;
+    if(t == nil) {
+        __root = [CNTreeMapEntry newWithKey:key value:value parent:nil];
+        __size = 1;
+    } else {
+        NSInteger cmp = 0;
+        CNTreeMapEntry* parent = nil;
+        do {
+            parent = t;
+            cmp = _comparator(key, t.key);
+            if(cmp < 0) {
+                t = t.left;
+            } else {
+                if(cmp > 0) {
+                    t = t.right;
+                } else {
+                    t.value = value;
+                    return ;
+                }
+            }
+        } while(t != nil);
+        CNTreeMapEntry* e = [CNTreeMapEntry newWithKey:key value:value parent:parent];
+        if(cmp < 0) parent.left = e;
+        else parent.right = e;
+        [self fixAfterInsertionEntry:e];
+        __size++;
+    }
+}
+
+- (id)removeForKey:(id)key {
+    CNTreeMapEntry* entry = [self entryForKey:key];
+    if(entry != nil) return [CNOption applyValue:[self deleteEntry:entry]];
+    else return [CNOption none];
+}
+
+- (id)deleteEntry:(CNTreeMapEntry*)entry {
+    CNTreeMapEntry* p = entry;
+    __size--;
+    if(p.left != nil && p.right != nil) {
+        CNTreeMapEntry* s = [p next];
+        p.key = s.key;
+        p.value = s.value;
+        p = s;
+    }
+    CNTreeMapEntry* replacement = ((p.left != nil) ? p.left : p.right);
+    if(replacement != nil) {
+        replacement.parent = p.parent;
+        if(p.parent == nil) {
+            __root = replacement;
+        } else {
+            if(p == p.parent.left) p.parent.left = replacement;
+            else p.parent.right = replacement;
+        }
+        p.left = nil;
+        p.right = nil;
+        p.parent = nil;
+        if(p.color == [CNMTreeMap BLACK]) [self fixAfterDeletionEntry:replacement];
+    } else {
+        if(p.parent == nil) {
+            __root = nil;
+        } else {
+            if(p.color == [CNMTreeMap BLACK]) [self fixAfterDeletionEntry:p];
+            if(p.parent != nil) {
+                if(p == p.parent.left) {
+                    p.parent.left = nil;
+                } else {
+                    if(p == p.parent.right) p.parent.right = nil;
+                }
+                p.parent = nil;
+            }
+        }
+    }
+    return entry.value;
+}
+
+- (void)fixAfterInsertionEntry:(CNTreeMapEntry*)entry {
+    CNTreeMapEntry* x = entry;
+    x.color = [CNMTreeMap RED];
+    while(x != nil && x != __root && x.parent.color == [CNMTreeMap RED]) {
+        if(x.parent == x.parent.parent.left) {
+            CNTreeMapEntry* y = x.parent.parent.right;
+            if(y.color == [CNMTreeMap RED]) {
+                x.parent.color = [CNMTreeMap BLACK];
+                y.color = [CNMTreeMap BLACK];
+                x.parent.parent.color = [CNMTreeMap RED];
+                x = x.parent.parent;
+            } else {
+                if(x == x.parent.right) {
+                    x = x.parent;
+                    [self rotateLeftP:x];
+                }
+                x.parent.color = [CNMTreeMap BLACK];
+                x.parent.parent.color = [CNMTreeMap RED];
+                [self rotateRightP:x.parent.parent];
+            }
+        } else {
+            CNTreeMapEntry* y = x.parent.parent.left;
+            if(y.color == [CNMTreeMap RED]) {
+                x.parent.color = [CNMTreeMap BLACK];
+                y.color = [CNMTreeMap BLACK];
+                x.parent.parent.color = [CNMTreeMap RED];
+                x = x.parent.parent;
+            } else {
+                if(x == x.parent.left) {
+                    x = x.parent;
+                    [self rotateRightP:x];
+                }
+                x.parent.color = [CNMTreeMap BLACK];
+                x.parent.parent.color = [CNMTreeMap RED];
+                [self rotateLeftP:x.parent.parent];
+            }
+        }
+    }
+    __root.color = [CNMTreeMap BLACK];
+}
+
+- (void)fixAfterDeletionEntry:(CNTreeMapEntry*)entry {
+    CNTreeMapEntry* x = entry;
+    while(x != __root && x.color == [CNMTreeMap BLACK]) {
+        if(x == x.parent.left) {
+            CNTreeMapEntry* sib = x.parent.right;
+            if(sib.color == [CNMTreeMap RED]) {
+                sib.color = [CNMTreeMap BLACK];
+                x.parent.color = [CNMTreeMap RED];
+                [self rotateLeftP:x.parent];
+                sib = x.parent.right;
+            }
+            if(sib.left.color == [CNMTreeMap BLACK] && sib.right.color == [CNMTreeMap BLACK]) {
+                sib.color = [CNMTreeMap RED];
+                x = x.parent;
+            } else {
+                if(sib.right.color == [CNMTreeMap BLACK]) {
+                    sib.left.color = [CNMTreeMap BLACK];
+                    sib.color = [CNMTreeMap RED];
+                    [self rotateRightP:sib];
+                    sib = x.parent.right;
+                }
+                sib.color = x.parent.color;
+                x.parent.color = [CNMTreeMap BLACK];
+                sib.right.color = [CNMTreeMap BLACK];
+                [self rotateLeftP:x.parent];
+                x = __root;
+            }
+        } else {
+            CNTreeMapEntry* sib = x.parent.left;
+            if(sib.color == [CNMTreeMap RED]) {
+                sib.color = [CNMTreeMap BLACK];
+                x.parent.color = [CNMTreeMap RED];
+                [self rotateRightP:x.parent];
+                sib = x.parent.left;
+            }
+            if(sib.right.color == [CNMTreeMap BLACK] && sib.left.color == [CNMTreeMap BLACK]) {
+                sib.color = [CNMTreeMap RED];
+                x = x.parent;
+            } else {
+                if(sib.left.color == [CNMTreeMap BLACK]) {
+                    sib.right.color = [CNMTreeMap BLACK];
+                    sib.color = [CNMTreeMap RED];
+                    [self rotateLeftP:sib];
+                    sib = x.parent.left;
+                }
+                sib.color = x.parent.color;
+                x.parent.color = [CNMTreeMap BLACK];
+                sib.left.color = [CNMTreeMap BLACK];
+                [self rotateRightP:x.parent];
+                x = __root;
+            }
+        }
+    }
+    x.color = [CNMTreeMap BLACK];
+}
+
+- (void)rotateLeftP:(CNTreeMapEntry*)p {
+    if(p != nil) {
+        CNTreeMapEntry* r = p.right;
+        p.right = r.left;
+        if(r.left != nil) r.left.parent = p;
+        r.parent = p.parent;
+        if(p.parent == nil) {
+            __root = r;
+        } else {
+            if(p.parent.left == p) p.parent.left = r;
+            else p.parent.right = r;
+        }
+        r.left = p;
+        p.parent = r;
+    }
+}
+
+- (void)rotateRightP:(CNTreeMapEntry*)p {
+    if(p != nil) {
+        CNTreeMapEntry* l = p.left;
+        p.left = l.right;
+        if(l.right != nil) l.right.parent = p;
+        l.parent = p.parent;
+        if(p.parent == nil) {
+            __root = l;
+        } else {
+            if(p.parent.right == p) p.parent.right = l;
+            else p.parent.left = l;
+        }
+        l.right = p;
+        p.parent = l;
+    }
+}
+
+- (id)pollFirst {
+    CNTreeMapEntry* entry = [self firstEntry];
+    if(entry == nil) {
+        return [CNOption none];
+    } else {
+        [self deleteEntry:entry];
+        return [CNOption applyValue:tuple(entry.key, entry.value)];
+    }
+}
+
+- (id)objectForKey:(id)key orUpdateWith:(id(^)())orUpdateWith {
+    id o = [self optKey:key];
+    if([o isDefined]) {
+        return [o get];
+    } else {
+        id init = orUpdateWith();
+        [self setKey:key value:init];
+        return init;
+    }
+}
+
+- (id)modifyBy:(id(^)(id))by forKey:(id)forKey {
+    id newObject = by([CNOption applyValue:[self applyKey:forKey]]);
+    if([newObject isEmpty]) [self removeForKey:forKey];
+    else [self setKey:forKey value:[newObject get]];
+    return newObject;
+}
+
+- (void)appendItem:(CNTuple*)item {
+    [self setKey:item.b value:item.a];
+}
+
+- (void)removeItem:(CNTuple*)item {
+    [self removeForKey:item.a];
+}
+
+- (BOOL)containsKey:(id)key {
+    return [[self optKey:key] isDefined];
+}
+
+- (BOOL)isValueEqualKey:(id)key value:(id)value {
+    id v = [self optKey:key];
+    if([v isEmpty]) return NO;
+    else return [value isEqual:[v get]];
+}
+
+- (id)head {
+    return [[self iterator] next];
+}
+
+- (id)headOpt {
+    if([self isEmpty]) return [CNOption none];
+    else return [CNOption applyValue:[self head]];
+}
+
+- (BOOL)isEmpty {
+    return !([[self iterator] hasNext]);
+}
+
+- (CNChain*)chain {
+    return [CNChain chainWithCollection:self];
+}
+
+- (void)forEach:(void(^)(id))each {
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        each([i next]);
+    }
+}
+
+- (BOOL)goOn:(BOOL(^)(id))on {
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        if(!(on([i next]))) return NO;
+    }
+    return YES;
+}
+
+- (BOOL)containsItem:(id)item {
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        if([[i next] isEqual:i]) return YES;
+    }
+    return NO;
+}
+
+- (NSString*)description {
+    return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
+}
+
+- (NSUInteger)hash {
+    NSUInteger ret = 13;
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        ret = ret * 31 + [[i next] hash];
+    }
+    return ret;
+}
+
+- (id)findWhere:(BOOL(^)(id))where {
+    __block id ret = [CNOption none];
+    [self goOn:^BOOL(id x) {
+        if(where(x)) {
+            ret = [CNOption applyValue:x];
+            return NO;
+        } else {
+            return YES;
+        }
+    }];
+    return ret;
+}
+
+- (BOOL)existsWhere:(BOOL(^)(id))where {
+    __block BOOL ret = NO;
+    [self goOn:^BOOL(id x) {
+        if(where(x)) {
+            ret = YES;
+            return NO;
+        } else {
+            return YES;
+        }
+    }];
+    return ret;
+}
+
+- (BOOL)allConfirm:(BOOL(^)(id))confirm {
+    __block BOOL ret = YES;
+    [self goOn:^BOOL(id x) {
+        if(!(confirm(x))) {
+            ret = NO;
+            return NO;
+        } else {
+            return YES;
+        }
+    }];
+    return ret;
+}
+
+- (id)convertWithBuilder:(id<CNBuilder>)builder {
+    [self forEach:^void(id x) {
+        [builder appendItem:x];
+    }];
+    return [builder build];
+}
+
+- (ODClassType*)type {
+    return [CNMTreeMap type];
+}
+
++ (ODClassType*)type {
+    return _CNMTreeMap_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end
@@ -638,16 +951,16 @@ static ODClassType* _CNTreeMapEntry_type;
 
 
 @implementation CNTreeMapKeySet{
-    __weak CNMutableTreeMap* _map;
+    __weak CNTreeMap* _map;
 }
 static ODClassType* _CNTreeMapKeySet_type;
 @synthesize map = _map;
 
-+ (id)treeMapKeySetWithMap:(CNMutableTreeMap*)map {
++ (id)treeMapKeySetWithMap:(CNTreeMap*)map {
     return [[CNTreeMapKeySet alloc] initWithMap:map];
 }
 
-- (id)initWithMap:(CNMutableTreeMap*)map {
+- (id)initWithMap:(CNTreeMap*)map {
     self = [super init];
     if(self) _map = map;
     
@@ -664,11 +977,11 @@ static ODClassType* _CNTreeMapKeySet_type;
 }
 
 - (id<CNIterator>)iterator {
-    return [CNTreeMapKeyIterator newMap:_map entry:[_map firstEntry]];
+    return [CNTreeMapKeyIterator applyMap:_map entry:[_map firstEntry]];
 }
 
 - (id<CNIterator>)iteratorHigherThanKey:(id)key {
-    return [CNTreeMapKeyIterator newMap:_map entry:[[_map higherEntryThanKey:key] getOrValue:nil]];
+    return [CNTreeMapKeyIterator applyMap:_map entry:[[_map higherEntryThanKey:key] getOrValue:nil]];
 }
 
 - (id)head {
@@ -793,18 +1106,18 @@ static ODClassType* _CNTreeMapKeySet_type;
 
 
 @implementation CNTreeMapKeyIterator{
-    CNMutableTreeMap* _map;
+    CNTreeMap* _map;
     CNTreeMapEntry* _entry;
 }
 static ODClassType* _CNTreeMapKeyIterator_type;
 @synthesize map = _map;
 @synthesize entry = _entry;
 
-+ (id)treeMapKeyIteratorWithMap:(CNMutableTreeMap*)map {
++ (id)treeMapKeyIteratorWithMap:(CNTreeMap*)map {
     return [[CNTreeMapKeyIterator alloc] initWithMap:map];
 }
 
-- (id)initWithMap:(CNMutableTreeMap*)map {
+- (id)initWithMap:(CNTreeMap*)map {
     self = [super init];
     if(self) _map = map;
     
@@ -816,7 +1129,7 @@ static ODClassType* _CNTreeMapKeyIterator_type;
     _CNTreeMapKeyIterator_type = [ODClassType classTypeWithCls:[CNTreeMapKeyIterator class]];
 }
 
-+ (CNTreeMapKeyIterator*)newMap:(CNMutableTreeMap*)map entry:(CNTreeMapEntry*)entry {
++ (CNTreeMapKeyIterator*)applyMap:(CNTreeMap*)map entry:(CNTreeMapEntry*)entry {
     CNTreeMapKeyIterator* ret = [CNTreeMapKeyIterator treeMapKeyIteratorWithMap:map];
     ret.entry = entry;
     return ret;
@@ -868,16 +1181,16 @@ static ODClassType* _CNTreeMapKeyIterator_type;
 
 
 @implementation CNTreeMapValues{
-    __weak CNMutableTreeMap* _map;
+    __weak CNTreeMap* _map;
 }
 static ODClassType* _CNTreeMapValues_type;
 @synthesize map = _map;
 
-+ (id)treeMapValuesWithMap:(CNMutableTreeMap*)map {
++ (id)treeMapValuesWithMap:(CNTreeMap*)map {
     return [[CNTreeMapValues alloc] initWithMap:map];
 }
 
-- (id)initWithMap:(CNMutableTreeMap*)map {
+- (id)initWithMap:(CNTreeMap*)map {
     self = [super init];
     if(self) _map = map;
     
@@ -894,7 +1207,7 @@ static ODClassType* _CNTreeMapValues_type;
 }
 
 - (id<CNIterator>)iterator {
-    return [CNTreeMapValuesIterator newMap:_map entry:[_map firstEntry]];
+    return [CNTreeMapValuesIterator applyMap:_map entry:[_map firstEntry]];
 }
 
 - (id)head {
@@ -1019,18 +1332,18 @@ static ODClassType* _CNTreeMapValues_type;
 
 
 @implementation CNTreeMapValuesIterator{
-    CNMutableTreeMap* _map;
+    CNTreeMap* _map;
     CNTreeMapEntry* _entry;
 }
 static ODClassType* _CNTreeMapValuesIterator_type;
 @synthesize map = _map;
 @synthesize entry = _entry;
 
-+ (id)treeMapValuesIteratorWithMap:(CNMutableTreeMap*)map {
++ (id)treeMapValuesIteratorWithMap:(CNTreeMap*)map {
     return [[CNTreeMapValuesIterator alloc] initWithMap:map];
 }
 
-- (id)initWithMap:(CNMutableTreeMap*)map {
+- (id)initWithMap:(CNTreeMap*)map {
     self = [super init];
     if(self) _map = map;
     
@@ -1042,7 +1355,7 @@ static ODClassType* _CNTreeMapValuesIterator_type;
     _CNTreeMapValuesIterator_type = [ODClassType classTypeWithCls:[CNTreeMapValuesIterator class]];
 }
 
-+ (CNTreeMapValuesIterator*)newMap:(CNMutableTreeMap*)map entry:(CNTreeMapEntry*)entry {
++ (CNTreeMapValuesIterator*)applyMap:(CNTreeMap*)map entry:(CNTreeMapEntry*)entry {
     CNTreeMapValuesIterator* ret = [CNTreeMapValuesIterator treeMapValuesIteratorWithMap:map];
     ret.entry = entry;
     return ret;
@@ -1094,18 +1407,18 @@ static ODClassType* _CNTreeMapValuesIterator_type;
 
 
 @implementation CNTreeMapIterator{
-    CNMutableTreeMap* _map;
+    CNTreeMap* _map;
     CNTreeMapEntry* _entry;
 }
 static ODClassType* _CNTreeMapIterator_type;
 @synthesize map = _map;
 @synthesize entry = _entry;
 
-+ (id)treeMapIteratorWithMap:(CNMutableTreeMap*)map {
++ (id)treeMapIteratorWithMap:(CNTreeMap*)map {
     return [[CNTreeMapIterator alloc] initWithMap:map];
 }
 
-- (id)initWithMap:(CNMutableTreeMap*)map {
+- (id)initWithMap:(CNTreeMap*)map {
     self = [super init];
     if(self) _map = map;
     
@@ -1117,7 +1430,7 @@ static ODClassType* _CNTreeMapIterator_type;
     _CNTreeMapIterator_type = [ODClassType classTypeWithCls:[CNTreeMapIterator class]];
 }
 
-+ (CNTreeMapIterator*)newMap:(CNMutableTreeMap*)map entry:(CNTreeMapEntry*)entry {
++ (CNTreeMapIterator*)applyMap:(CNTreeMap*)map entry:(CNTreeMapEntry*)entry {
     CNTreeMapIterator* ret = [CNTreeMapIterator treeMapIteratorWithMap:map];
     ret.entry = entry;
     return ret;

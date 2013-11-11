@@ -42,7 +42,7 @@ class BentleyOttmannIntersectionEvent<T>(point : vec2) extends BentleyOttmannEve
 
 
 class BentleyOttmannEventQueue<T> {
-    val events = MutableTreeMap<vec2, MutableArray<BentleyOttmannEvent<T>>>((a, b) -> a.compare(b))
+    val events = MTreeMap<vec2, MutableArray<BentleyOttmannEvent<T>>>((a, b) -> a.compare(b))
 
     def isEmpty : bool = events.isEmpty
 
@@ -78,7 +78,7 @@ class SweepLine<T>
     */
 //    ignoreSegmentEndings : bool
 {
-    var events = MutableTreeSet.newWith<BentleyOttmannPointEvent<T>>((a, b) -> compareEvents(a, b))
+    var events = MTreeSet<BentleyOttmannPointEvent<T>>((a, b) -> compareEvents(a, b))
 
     /**
     * A map holding all intersection points mapped to the Events

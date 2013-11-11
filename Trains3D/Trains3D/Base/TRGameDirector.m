@@ -14,6 +14,7 @@
     id(^_resolveMaxLevel)(id, id);
     DTCloudKeyValueStorage* _cloud;
     CNNotificationObserver* _obs;
+    CNNotificationObserver* _crashObs;
 }
 static TRGameDirector* _TRGameDirector_instance;
 static ODClassType* _TRGameDirector_type;
@@ -42,6 +43,9 @@ static ODClassType* _TRGameDirector_type;
         _obs = [TRLevel.winNotification observeBy:^void(id level) {
             [_weakSelf.cloud keepMaxKey:@"maxLevel" i:unumi(level) + 1];
             [_weakSelf.local setKey:@"currentLevel" i:unumi(level) + 1];
+        }];
+        _crashObs = [TRLevel.crashNotification observeBy:^void(id _) {
+            [EGGameCenter.instance completeAchievementName:@"grp.Crash"];
         }];
         [self _init];
     }

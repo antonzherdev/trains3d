@@ -1,28 +1,24 @@
 #import "objdcore.h"
 #import "CNSet.h"
-@class NSObject;
-@class CNMutableTreeMap;
-@protocol CNIterator;
+#import "CNCollection.h"
+@class CNTreeMap;
 @class CNTreeMapKeySet;
-@protocol CNTraversable;
 @class ODClassType;
-@protocol CNIterable;
 @class CNChain;
-@protocol CNBuilder;
+@class NSObject;
+@class CNMTreeMap;
 
-@class CNMutableTreeSet;
+@class CNTreeSet;
+@class CNImTreeSet;
+@class CNTreeSetBuilder;
+@class CNMTreeSet;
 
-@interface CNMutableTreeSet : NSObject<CNMutableSet>
-@property (nonatomic, readonly) CNMutableTreeMap* map;
+@interface CNTreeSet : NSObject<CNSet>
+@property (nonatomic, readonly) CNTreeMap* map;
 
-+ (id)mutableTreeSetWithMap:(CNMutableTreeMap*)map;
-- (id)initWithMap:(CNMutableTreeMap*)map;
++ (id)treeSetWithMap:(CNTreeMap*)map;
+- (id)initWithMap:(CNTreeMap*)map;
 - (ODClassType*)type;
-+ (CNMutableTreeSet*)newWithComparator:(NSInteger(^)(id, id))comparator;
-+ (CNMutableTreeSet*)apply;
-- (id<CNSeq>)betweenA:(id)a b:(id)b;
-- (void)appendItem:(id)item;
-- (BOOL)removeItem:(id)item;
 - (id)higherThanItem:(id)item;
 - (id)lowerThanItem:(id)item;
 - (NSUInteger)count;
@@ -32,9 +28,44 @@
 - (id)headOpt;
 - (id)last;
 - (BOOL)containsItem:(id)item;
++ (ODClassType*)type;
+@end
+
+
+@interface CNImTreeSet : CNTreeSet
++ (id)imTreeSetWithMap:(CNTreeMap*)map;
+- (id)initWithMap:(CNTreeMap*)map;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface CNTreeSetBuilder : NSObject<CNBuilder>
+@property (nonatomic, readonly) NSInteger(^comparator)(id, id);
+
++ (id)treeSetBuilderWithComparator:(NSInteger(^)(id, id))comparator;
+- (id)initWithComparator:(NSInteger(^)(id, id))comparator;
+- (ODClassType*)type;
++ (CNTreeSetBuilder*)apply;
+- (void)appendItem:(id)item;
+- (CNTreeSet*)build;
++ (ODClassType*)type;
+@end
+
+
+@interface CNMTreeSet : CNTreeSet<CNMutableSet>
+@property (nonatomic, readonly) CNMTreeMap* mmap;
+
++ (id)treeSetWithMmap:(CNMTreeMap*)mmap;
+- (id)initWithMmap:(CNMTreeMap*)mmap;
+- (ODClassType*)type;
++ (CNMTreeSet*)applyComparator:(NSInteger(^)(id, id))comparator;
++ (CNMTreeSet*)apply;
+- (void)appendItem:(id)item;
+- (BOOL)removeItem:(id)item;
 - (void)clear;
 - (void)addAllObjects:(id<CNTraversable>)objects;
-- (CNMutableTreeSet*)reorder;
+- (CNMTreeSet*)reorder;
 + (ODClassType*)type;
 @end
 
