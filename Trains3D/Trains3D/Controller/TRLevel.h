@@ -81,6 +81,7 @@
 - (void)destroyTrain:(TRTrain*)train;
 - (void)removeTrain:(TRTrain*)train;
 - (void)runRepairerFromCity:(TRCity*)city;
+- (void)fixDamageAtPoint:(TRRailPoint*)point;
 - (id)help;
 - (void)showHelpText:(NSString*)text;
 - (void)clearHelp;

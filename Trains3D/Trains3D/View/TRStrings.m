@@ -41,6 +41,10 @@ static ODClassType* _TREnStrings_type;
     return [NSString stringWithFormat:@"-%@: Fine for the delayed train", [self formatCost:cost]];
 }
 
+- (NSString*)damageFixedPaymentCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: Payment for the railroad repairing", [self formatCost:cost]];
+}
+
 - (NSString*)resumeGame {
     return @"Continue the game";
 }
@@ -214,6 +218,10 @@ static ODClassType* _TRRuStrings_type;
 
 - (NSString*)trainDelayedFineCost:(NSInteger)cost {
     return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся поезд", [self formatCost:cost]];
+}
+
+- (NSString*)damageFixedPaymentCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: Плата за починку железной дороги", [self formatCost:cost]];
 }
 
 - (NSString*)resumeGame {

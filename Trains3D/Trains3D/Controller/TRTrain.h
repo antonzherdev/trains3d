@@ -4,12 +4,12 @@
 @class TRObstacle;
 @class TRObstacleType;
 @class TRLevel;
-@class TRRailroad;
 @class TRCityColor;
 @class TRRailPoint;
 @class TRCar;
 @class TRCarType;
 @class TRCity;
+@class TRRailroad;
 @class TRRailPointCorrection;
 @class TRCarPosition;
 @class EGMapSso;

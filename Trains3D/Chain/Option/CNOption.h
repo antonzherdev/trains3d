@@ -49,6 +49,7 @@
 - (BOOL)isDefined;
 - (id<CNIterator>)iterator;
 - (BOOL)goOn:(BOOL(^)(id))on;
+- (BOOL)containsItem:(id)item;
 + (ODClassType*)type;
 @end
 
@@ -71,6 +72,7 @@
 - (id<CNIterator>)iterator;
 - (void)forEach:(void(^)(id))each;
 - (BOOL)goOn:(BOOL(^)(id))on;
+- (BOOL)containsItem:(id)item;
 + (ODClassType*)type;
 @end
 

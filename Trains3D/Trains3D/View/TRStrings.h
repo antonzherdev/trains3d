@@ -15,6 +15,7 @@
 - (NSString*)trainArrivedCost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
 - (NSString*)trainDelayedFineCost:(NSInteger)cost;
+- (NSString*)damageFixedPaymentCost:(NSInteger)cost;
 - (NSString*)resumeGame;
 - (NSString*)restartLevel:(TRLevel*)level;
 - (NSString*)replayLevel:(TRLevel*)level;
@@ -50,6 +51,7 @@
 - (NSString*)trainArrivedCost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
 - (NSString*)trainDelayedFineCost:(NSInteger)cost;
+- (NSString*)damageFixedPaymentCost:(NSInteger)cost;
 - (NSString*)resumeGame;
 - (NSString*)restartLevel:(TRLevel*)level;
 - (NSString*)replayLevel:(TRLevel*)level;
@@ -86,6 +88,7 @@
 - (NSString*)trainArrivedCost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
 - (NSString*)trainDelayedFineCost:(NSInteger)cost;
+- (NSString*)damageFixedPaymentCost:(NSInteger)cost;
 - (NSString*)resumeGame;
 - (NSString*)restartLevel:(TRLevel*)level;
 - (NSString*)replayLevel:(TRLevel*)level;

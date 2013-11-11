@@ -315,8 +315,8 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)arrivedTrain:(TRTrain*)train {
+    if(!([[self repairer] containsItem:train])) [_score arrivedTrain:train];
     [self removeTrain:train];
-    [_score arrivedTrain:train];
 }
 
 - (void)processCollisions {
@@ -359,12 +359,18 @@ static ODClassType* _TRLevel_type;
 
 - (void)runRepairerFromCity:(TRCity*)city {
     if([__repairer isEmpty]) {
+        [_score repairerCalled];
         TRTrain* train = [TRTrain trainWithLevel:self trainType:TRTrainType.repairer color:TRCityColor.grey _cars:^id<CNSeq>(TRTrain* _) {
             return (@[[TRCar carWithTrain:_ carType:TRCarType.engine]]);
         } speed:_rules.repairerSpeed];
         [self runTrain:train fromCity:city];
         __repairer = [CNOption applyValue:train];
     }
+}
+
+- (void)fixDamageAtPoint:(TRRailPoint*)point {
+    [_railroad fixDamageAtPoint:point];
+    [_score damageFixed];
 }
 
 - (id)help {

@@ -45,6 +45,16 @@ class Score(rules : ScoreRules, notifications : Notifications) extends Controlle
             }
         }
     }
+    def repairerCalled {
+
+    }
+
+    def damageFixed {
+        if(rules.repairCost > 0) {
+            _score -= rules.repairCost
+            notifications.notify(Loc.damageFixedPayment(rules.repairCost))
+        }
+    }
 }
 
 class TrainScore(train : Train) extends Controller {

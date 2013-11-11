@@ -5,11 +5,11 @@ class LevelFactory {
     static def scoreRulesWith(initialScore : int) = ScoreRules(
         initialScore = initialScore,
         railCost = 1000,
-        arrivedPrize = train -> train.cars.count * 2000,
-        destructionFine = train -> train.cars.count * 5000,
-        delayPeriod = 60,
+        arrivedPrize = train -> train.cars.count * 1000,
+        destructionFine = train -> train.cars.count * 4000,
+        delayPeriod = 45,
         delayFine = (train, i) -> i*1000,
-        repairCost = 2000
+        repairCost = 1000
         )
 
     static val forestRules = ForestRules(types = TreeType.values, thickness = 1)
@@ -92,7 +92,7 @@ class LevelFactory {
                 repairerSpeed = 20, [
                     (0, create2Cities),
                     (15, slowTrain),
-                    (25, slowTrain),
+                    (20, slowTrain),
                     (25, slowTrain),
                     (10, createNewCity),
                     (15, slowTrain),

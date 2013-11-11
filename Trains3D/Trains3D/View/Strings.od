@@ -10,6 +10,7 @@ trait Strings {
     def trainArrived(cost : int) : string
     def trainDestroyed(cost : int) : string
     def trainDelayedFine(cost : int) : string
+    def damageFixedPayment(cost : int) : string
     def resumeGame : string
     def restart(level : Level) : string
     def replay(level : Level) : string
@@ -43,6 +44,7 @@ class EnStrings extends Strings {
     def trainArrived(cost : int) : string = "+$(format(cost)): For the arrived train"
     def trainDestroyed(cost : int) : string = "-$(format(cost)): For the train destroying"
     def trainDelayedFine(cost : int) : string = "-$(format(cost)): Fine for the delayed train"
+    def damageFixedPayment(cost : int) : string = "-$(format(cost)): Payment for the railroad repairing"
     def resumeGame : string = "Continue the game"
     def restart(level : Level) : string = "Restart the level $(level.number)"
     def replay(level : Level) : string = "Play the level $(level.number) more one time"
@@ -89,6 +91,7 @@ class RuStrings extends Strings{
     def trainArrived(cost : int) : string = "+$(format(cost)): За прибывший поезд"
     def trainDestroyed(cost : int) : string = "-$(format(cost)): За уничтожение поезда"
     def trainDelayedFine(cost : int) : string = "-$(format(cost)): Штраф за задерживающийся поезд"
+    def damageFixedPayment(cost : int) : string = "-$(format(cost)): Плата за починку железной дороги"
     def resumeGame : string = "Продолжить игру"
     def restart(level : Level) : string = "Начать заново уровень $(level.number)"
     def replay(level : Level) : string = "Переиграть уровень $(level.number)"

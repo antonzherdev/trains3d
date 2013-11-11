@@ -39,6 +39,8 @@
 - (void)destroyedTrain:(TRTrain*)train;
 - (void)removeTrain:(TRTrain*)train;
 - (void)updateWithDelta:(CGFloat)delta;
+- (void)repairerCalled;
+- (void)damageFixed;
 + (ODClassType*)type;
 @end
 

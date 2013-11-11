@@ -17,7 +17,7 @@ enum TrainType(obstacleProcessor : (Level, Train, Obstacle) -> bool) {
     })
     repairer((level : Level, train : Train, o : Obstacle) -> {
         if(o.obstacleType ==  ObstacleType.damage) {
-            level.railroad.fixDamageAt(o.point)
+            level.fixDamageAt(o.point)
             true
         } else false
     })

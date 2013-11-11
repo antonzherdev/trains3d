@@ -139,8 +139,10 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     def cityFor(tile : vec2i) : City? = _cities.find(_.tile == tile)
 
     def arrived(train : Train) {
+        if(!repairer.contains(train)) {
+            score.arrived(train)
+        }
         remove(train)
-        score.arrived(train)
     }
 
     def processCollisions {
@@ -177,10 +179,16 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
     def runRepairerFrom(city : City) {
         if(_repairer.isEmpty) {
+            score.repairerCalled
             val train = Train(self, TrainType.repairer, CityColor.grey, [Car(_, CarType.engine)], rules.repairerSpeed)
             run(train, city)
             _repairer = train
         }
+    }
+
+    def fixDamageAt(point : RailPoint) {
+        railroad.fixDamageAt(point)
+        score.damageFixed
     }
 
     private var _help : Help? = nil

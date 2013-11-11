@@ -322,6 +322,10 @@ static ODClassType* _CNNone_type;
     return YES;
 }
 
+- (BOOL)containsItem:(id)item {
+    return NO;
+}
+
 - (ODClassType*)type {
     return [CNNone type];
 }
@@ -422,6 +426,10 @@ static ODClassType* _CNSome_type;
 
 - (BOOL)goOn:(BOOL(^)(id))on {
     return on(_value);
+}
+
+- (BOOL)containsItem:(id)item {
+    return [_value isEqual:item];
 }
 
 - (ODClassType*)type {

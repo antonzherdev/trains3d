@@ -164,6 +164,16 @@ static ODClassType* _TRScore_type;
     }];
 }
 
+- (void)repairerCalled {
+}
+
+- (void)damageFixed {
+    if(_rules.repairCost > 0) {
+        __score -= _rules.repairCost;
+        [_notifications notifyNotification:[TRStr.Loc damageFixedPaymentCost:_rules.repairCost]];
+    }
+}
+
 - (ODClassType*)type {
     return [TRScore type];
 }

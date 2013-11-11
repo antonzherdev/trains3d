@@ -31,6 +31,7 @@ class None<V> extends Option<V> {
     def isDefined : bool = false
     def iterator : Iterator<V> = EmptyIterator.instance
     def go(on : V -> bool) : bool = true
+    def contains(item : V) : bool = false
 }
 
 
@@ -49,6 +50,7 @@ class Some<V> (value : V) extends Option<V> {
         each(value)
     }
     def go(on : V -> bool) : bool = on(value)
+    def contains(item : V) : bool = value == item
 }
 
 class SomeIterator<V>(value : V) extends Iterator<V> {

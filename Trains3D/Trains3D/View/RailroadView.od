@@ -288,7 +288,7 @@ class LightView(railroad : Railroad) {
 }
 
 class DamageView {
-    val model = MeshModel([(Models.damage, ColorSource(vec4(1, 0, 0, 0.6)))])
+    val model = MeshModel([(Models.damage, ColorSource(vec4(1, 0, 0, 0.3)))])
     def draw(point : RailPoint) {
         matrix(
             _.modify(w = w -> w.translate(point.point.x, point.point.y, 0.0))

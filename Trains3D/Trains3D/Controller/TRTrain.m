@@ -43,7 +43,7 @@ static NSArray* _TRTrainType_values;
     }];
     _TRTrainType_repairer = [TRTrainType trainTypeWithOrdinal:3 name:@"repairer" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) {
-            [level.railroad fixDamageAtPoint:o.point];
+            [level fixDamageAtPoint:o.point];
             return YES;
         } else {
             return NO;
