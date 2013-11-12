@@ -193,7 +193,7 @@ static ODClassType* _TRCity_type;
 }
 
 - (TRRailPoint*)startPoint {
-    return [TRRailPoint railPointWithTile:_tile form:_angle.form x:0.0 back:_angle.back];
+    return [TRRailPoint railPointWithTile:_tile form:_angle.form x:-0.5 back:_angle.back];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
