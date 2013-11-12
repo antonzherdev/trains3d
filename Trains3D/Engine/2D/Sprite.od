@@ -66,7 +66,10 @@ object D2D {
         EmptyIndexSource.triangleStrip).vao(CircleShader.instance)
     def drawCircle(material : ColorSource, at : vec3, radius : float4, relative : vec2, start : float, end : float) {
         BlendFunction.standard { context.cullFace.disabled {
-            circleVaoForColor.draw(CircleParam(material.color, at, radius, relative, start, end))
+            val vps = context.viewport.size
+            val rad = if(vps.y <= vps.x) vec2(radius * vps.y/vps.x, radius)
+                else vec2(radius, radius * vps.x/vps.y)
+            circleVaoForColor.draw(CircleParam(material.color, at, rad, relative, start, end))
         }}
     }
 }
@@ -78,14 +81,13 @@ class CircleShaderBuilder extends ShaderTextBuilder {
 
         uniform highp vec4 position;
         uniform mat4 p;
-        uniform lowp float radius;
+        uniform lowp vec2 radius;
         $out highp vec2 coord;
 
         void main(void) {
-            highp vec4 pos = position;
-            pos.x += model.x*radius;
-            pos.y += model.y*radius;
-            gl_Position = p*pos;
+            highp vec4 pos = p*position;
+            pos.xy += model*radius;
+            gl_Position = pos;
             coord = model;
         }"
     def fragment =
@@ -115,7 +117,7 @@ class CircleShaderBuilder extends ShaderTextBuilder {
     def program = ShaderProgram("Circle", vertex, fragment)
 }
 
-class CircleParam(color : vec4, position : vec3, radius : float4, relative : vec2, start : float4, end : float4)
+class CircleParam(color : vec4, position : vec3, radius : vec2, relative : vec2, start : float4, end : float4)
 
 class CircleShader extends Shader<CircleParam>(CircleShaderBuilder().program) {
     static val instance = CircleShader()
@@ -127,7 +129,7 @@ class CircleShader extends Shader<CircleParam>(CircleShaderBuilder().program) {
 
     val pos = uniformVec4("position")
     val p = uniformMat4("p")
-    val radius = uniformF4("radius")
+    val radius = uniformVec2("radius")
     val color = uniformVec4("color")
     val startTg = uniformF4("startTg")
     val endTg = uniformF4("endTg")

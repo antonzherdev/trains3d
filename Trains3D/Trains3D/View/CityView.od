@@ -26,7 +26,7 @@ class CityView(level : Level) {
             level.cities.for{ city ->
                 city.expectedTrainCounter.for{time ->
                     D2D.drawCircle(ColorSource(vec4(city.expectedTrainColor.color.xyz, 0.85)), vec3(city.tile, 0),
-                        radius = 0.08, relative = moveVecFor(level, city)*0.25, start = math.M_PI_2, end = math.M_PI_2 - 2*time*math.M_PI)
+                        radius = 0.04, relative = moveVecFor(level, city)*0.25, start = math.M_PI_2, end = math.M_PI_2 - 2*time*math.M_PI)
                 }
             }
         }

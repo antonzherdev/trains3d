@@ -56,13 +56,13 @@
 @interface EGCircleParam : NSObject
 @property (nonatomic, readonly) GEVec4 color;
 @property (nonatomic, readonly) GEVec3 position;
-@property (nonatomic, readonly) float radius;
+@property (nonatomic, readonly) GEVec2 radius;
 @property (nonatomic, readonly) GEVec2 relative;
 @property (nonatomic, readonly) float start;
 @property (nonatomic, readonly) float end;
 
-+ (id)circleParamWithColor:(GEVec4)color position:(GEVec3)position radius:(float)radius relative:(GEVec2)relative start:(float)start end:(float)end;
-- (id)initWithColor:(GEVec4)color position:(GEVec3)position radius:(float)radius relative:(GEVec2)relative start:(float)start end:(float)end;
++ (id)circleParamWithColor:(GEVec4)color position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative start:(float)start end:(float)end;
+- (id)initWithColor:(GEVec4)color position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative start:(float)start end:(float)end;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -72,7 +72,7 @@
 @property (nonatomic, readonly) EGShaderAttribute* model;
 @property (nonatomic, readonly) EGShaderUniformVec4* pos;
 @property (nonatomic, readonly) EGShaderUniformMat4* p;
-@property (nonatomic, readonly) EGShaderUniformF4* radius;
+@property (nonatomic, readonly) EGShaderUniformVec2* radius;
 @property (nonatomic, readonly) EGShaderUniformVec4* color;
 @property (nonatomic, readonly) EGShaderUniformF4* startTg;
 @property (nonatomic, readonly) EGShaderUniformF4* endTg;
