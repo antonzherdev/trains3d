@@ -4,6 +4,7 @@
 @class TRForestRules;
 @class TRTreeType;
 @class TRWeatherRules;
+@class TRLevelTheme;
 @class TRStr;
 @protocol TRStrings;
 @class TRLevel;

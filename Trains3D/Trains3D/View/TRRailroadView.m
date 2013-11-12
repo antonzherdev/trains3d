@@ -1,5 +1,6 @@
 #import "TRRailroadView.h"
 
+#import "TRLevel.h"
 #import "TRRailroad.h"
 #import "EGMultisamplingSurface.h"
 #import "EGContext.h"
@@ -16,6 +17,7 @@
 #import "TRStrings.h"
 #import "EGBillboard.h"
 @implementation TRRailroadView{
+    TRLevel* _level;
     TRRailroad* _railroad;
     TRRailView* _railView;
     TRSwitchView* _switchView;
@@ -30,24 +32,26 @@
     BOOL __changed;
 }
 static ODClassType* _TRRailroadView_type;
+@synthesize level = _level;
 @synthesize railroad = _railroad;
 @synthesize shadowVao = _shadowVao;
 @synthesize _changed = __changed;
 
-+ (id)railroadViewWithRailroad:(TRRailroad*)railroad {
-    return [[TRRailroadView alloc] initWithRailroad:railroad];
++ (id)railroadViewWithLevel:(TRLevel*)level {
+    return [[TRRailroadView alloc] initWithLevel:level];
 }
 
-- (id)initWithRailroad:(TRRailroad*)railroad {
+- (id)initWithLevel:(TRLevel*)level {
     self = [super init];
     __weak TRRailroadView* _weakSelf = self;
     if(self) {
-        _railroad = railroad;
+        _level = level;
+        _railroad = _level.railroad;
         _switchView = [TRSwitchView switchView];
-        _lightView = [TRLightView lightViewWithRailroad:_railroad];
+        _lightView = [TRLightView lightViewWithRailroad:_level.railroad];
         _damageView = [TRDamageView damageView];
         _railroadSurface = [EGViewportSurface viewportSurfaceWithDepth:YES multisampling:YES];
-        _undoView = [TRUndoView undoViewWithBuilder:_railroad.builder];
+        _undoView = [TRUndoView undoViewWithBuilder:_level.railroad.builder];
         _obs1 = [TRRailroad.changedNotification observeBy:^void(id _) {
             _weakSelf._changed = YES;
         }];
@@ -68,7 +72,7 @@ static ODClassType* _TRRailroadView_type;
 
 - (void)_init {
     EGGlobal.context.considerShadows = NO;
-    _backgroundView = [TRBackgroundView backgroundViewWithMap:_railroad.map];
+    _backgroundView = [TRBackgroundView backgroundViewWithLevel:_level];
     _railView = [TRRailView railViewWithRailroad:_railroad];
     EGShadowDrawParam* shadowParam = [EGShadowDrawParam shadowDrawParamWithPercents:(@[@0.3]) viewportSurface:[CNOption applyValue:_railroadSurface]];
     _shadowVao = ((egPlatform().shadows) ? [CNOption applyValue:[_backgroundView.mapView.plane vaoShaderSystem:EGShadowDrawShaderSystem.instance material:shadowParam shadow:NO]] : [CNOption none]);
@@ -154,18 +158,18 @@ static ODClassType* _TRRailroadView_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRRailroadView* o = ((TRRailroadView*)(other));
-    return [self.railroad isEqual:o.railroad];
+    return [self.level isEqual:o.level];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [self.railroad hash];
+    hash = hash * 31 + [self.level hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"railroad=%@", self.railroad];
+    [description appendFormat:@"level=%@", self.level];
     [description appendString:@">"];
     return description;
 }
@@ -713,22 +717,22 @@ static ODClassType* _TRDamageView_type;
 
 
 @implementation TRBackgroundView{
-    EGMapSso* _map;
+    TRLevel* _level;
     EGMapSsoView* _mapView;
 }
 static ODClassType* _TRBackgroundView_type;
-@synthesize map = _map;
+@synthesize level = _level;
 @synthesize mapView = _mapView;
 
-+ (id)backgroundViewWithMap:(EGMapSso*)map {
-    return [[TRBackgroundView alloc] initWithMap:map];
++ (id)backgroundViewWithLevel:(TRLevel*)level {
+    return [[TRBackgroundView alloc] initWithLevel:level];
 }
 
-- (id)initWithMap:(EGMapSso*)map {
+- (id)initWithLevel:(TRLevel*)level {
     self = [super init];
     if(self) {
-        _map = map;
-        _mapView = [EGMapSsoView mapSsoViewWithMap:_map material:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Grass.png" magFilter:GL_NEAREST minFilter:GL_NEAREST]]];
+        _level = level;
+        _mapView = [EGMapSsoView mapSsoViewWithMap:_level.map material:[EGColorSource applyTexture:[EGGlobal textureForFile:_level.rules.theme.background magFilter:GL_NEAREST minFilter:GL_NEAREST]]];
     }
     
     return self;
@@ -759,18 +763,18 @@ static ODClassType* _TRBackgroundView_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRBackgroundView* o = ((TRBackgroundView*)(other));
-    return [self.map isEqual:o.map];
+    return [self.level isEqual:o.level];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [self.map hash];
+    hash = hash * 31 + [self.level hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"map=%@", self.map];
+    [description appendFormat:@"level=%@", self.level];
     [description appendString:@">"];
     return description;
 }

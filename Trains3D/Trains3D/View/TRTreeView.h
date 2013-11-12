@@ -4,6 +4,8 @@
 #import "GELine.h"
 @class TRForest;
 @class EGTexture;
+@class TRForestRules;
+@class TRTreeType;
 @class EGGlobal;
 @class EGColorSource;
 @class EGMutableVertexBuffer;
@@ -19,7 +21,6 @@
 @class EGRenderTarget;
 @class EGEnablingState;
 @class TRTree;
-@class TRTreeType;
 
 @class TRTreeView;
 

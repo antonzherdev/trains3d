@@ -2,7 +2,7 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class LevelRules(mapSize : vec2i, scoreRules : ScoreRules, forestRules : ForestRules, weatherRules : WeatherRules,
+class LevelRules(mapSize : vec2i, theme : LevelTheme, scoreRules : ScoreRules, weatherRules : WeatherRules,
     repairerSpeed : uint, events : [(float, (Level) -> void)])
 
 class Level(number : uint, rules : LevelRules) extends Controller {
@@ -12,7 +12,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     val notifications = Notifications()
     val score : Score = Score(rules.scoreRules, notifications)
     val weather = Weather(rules.weatherRules)
-    val forest = Forest(map, rules.forestRules, weather)
+    val forest = Forest(map, rules.theme.forestRules, weather)
     val railroad : Railroad = Railroad(map, score, forest)
     private var _cities = MutableArray<City>()
     val schedule : Schedule = createSchedule
@@ -224,3 +224,8 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
 class Help(text : string)
 class LevelResult(win : bool)
+
+enum LevelTheme(background : string, forestRules : ForestRules) {
+    forest("Grass.png", ForestRules(TreeType.Pine, thickness = 2))
+    winter("Snow.png", ForestRules(TreeType.SnowPine, thickness = 2))
+}

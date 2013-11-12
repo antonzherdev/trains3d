@@ -18,6 +18,7 @@
     EGVertexArray* _vao;
     EGColorSource* _shadowMaterial;
     EGVertexArray* _shadowVao;
+    CGFloat _uvw;
 }
 static ODClassType* _TRTreeView_type;
 @synthesize forest = _forest;
@@ -32,13 +33,14 @@ static ODClassType* _TRTreeView_type;
     self = [super init];
     if(self) {
         _forest = forest;
-        _texture = [EGGlobal textureForFile:@"Pine.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST];
+        _texture = [EGGlobal textureForFile:[NSString stringWithFormat:@"%@.png", _forest.rules.treeType.name] magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST];
         _material = [EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_texture];
         _vb = [EGVBO mutDesc:EGBillboard.vbDesc];
         _ib = [EGIBO mut];
         _vao = [[EGMesh meshWithVertex:_vb index:_ib] vaoShaderSystem:EGBillboardShaderSystem.instance material:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_texture] shadow:NO];
         _shadowMaterial = [EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_texture alphaTestLevel:0.1];
         _shadowVao = [[EGMesh meshWithVertex:_vb index:_ib] vaoShader:[EGBillboardShaderSystem.instance shaderForParam:_shadowMaterial renderTarget:EGShadowRenderTarget.aDefault]];
+        _uvw = _forest.rules.treeType.width;
     }
     
     return self;
@@ -77,9 +79,8 @@ static ODClassType* _TRTreeView_type;
 }
 
 - (CNVoidRefArray)writeA:(CNVoidRefArray)a tree:(TRTree*)tree {
-    CGFloat uvw = tree.treeType.width;
-    GEQuad mainUv = geRectUpsideDownQuad(geRectApplyXYWidthHeight(0.0, 0.0, ((float)(uvw)), 1.0));
-    GEQuad rustleUv = geQuadAddVec2(mainUv, GEVec2Make(((float)(uvw)), 0.0));
+    GEQuad mainUv = geRectUpsideDownQuad(geRectApplyXYWidthHeight(0.0, 0.0, ((float)(_uvw)), 1.0));
+    GEQuad rustleUv = geQuadAddVec2(mainUv, GEVec2Make(((float)(_uvw)), 0.0));
     GEPlaneCoord planeCoord = GEPlaneCoordMake(GEPlaneMake(GEVec3Make(0.0, 0.0, 0.0), GEVec3Make(0.0, 0.0, 1.0)), GEVec3Make(1.0, 0.0, 0.0), GEVec3Make(0.0, 1.0, 0.0));
     GEPlaneCoord mPlaneCoord = gePlaneCoordSetY(planeCoord, geVec3Normalize(geVec3AddVec3(planeCoord.y, GEVec3Make([tree incline].x, 0.0, [tree incline].y))));
     GEQuad quad = geRectQuad(geRectMulVec2(geRectCenterX(geRectApplyXYWidthHeight(0.0, 0.0, [_texture size].x / ([_texture size].y * 4), 0.5)), tree.size));

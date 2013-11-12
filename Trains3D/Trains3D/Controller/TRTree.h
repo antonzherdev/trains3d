@@ -14,11 +14,11 @@
 @class TRTreeType;
 
 @interface TRForestRules : NSObject
-@property (nonatomic, readonly) id<CNSeq> types;
+@property (nonatomic, readonly) TRTreeType* treeType;
 @property (nonatomic, readonly) CGFloat thickness;
 
-+ (id)forestRulesWithTypes:(id<CNSeq>)types thickness:(CGFloat)thickness;
-- (id)initWithTypes:(id<CNSeq>)types thickness:(CGFloat)thickness;
++ (id)forestRulesWithTreeType:(TRTreeType*)treeType thickness:(CGFloat)thickness;
+- (id)initWithTreeType:(TRTreeType*)treeType thickness:(CGFloat)thickness;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -43,15 +43,14 @@
 
 
 @interface TRTree : NSObject<ODComparable>
-@property (nonatomic, readonly) TRTreeType* treeType;
 @property (nonatomic, readonly) GEVec2 position;
 @property (nonatomic, readonly) GEVec2 size;
 @property (nonatomic, readonly) NSInteger z;
 @property (nonatomic, readonly) CGFloat rigidity;
 @property (nonatomic) CGFloat rustle;
 
-+ (id)treeWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size;
-- (id)initWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size;
++ (id)treeWithPosition:(GEVec2)position size:(GEVec2)size;
+- (id)initWithPosition:(GEVec2)position size:(GEVec2)size;
 - (ODClassType*)type;
 - (NSInteger)compareTo:(TRTree*)to;
 - (GEVec2)incline;
@@ -64,11 +63,8 @@
 @property (nonatomic, readonly) CGFloat width;
 @property (nonatomic, readonly) CGFloat height;
 
-+ (TRTreeType*)pine;
-+ (TRTreeType*)tree1;
-+ (TRTreeType*)tree2;
-+ (TRTreeType*)tree3;
-+ (TRTreeType*)yellow;
++ (TRTreeType*)Pine;
++ (TRTreeType*)SnowPine;
 + (NSArray*)values;
 @end
 

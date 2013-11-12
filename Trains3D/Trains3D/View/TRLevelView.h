@@ -9,9 +9,9 @@
 @class TRTreeView;
 @class TRCallRepairerView;
 @class EGEnvironment;
+@class EGMapSso;
 @class GEMat4;
 @class EGDirectLight;
-@class EGMapSso;
 @class EGCameraIso;
 @class TRRailroadBuilderProcessor;
 @class TRRailroad;

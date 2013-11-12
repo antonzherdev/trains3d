@@ -3,14 +3,15 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class RailroadView(railroad : Railroad) extends InputProcessor {
+class RailroadView(level : Level) extends InputProcessor {
+    val railroad = level.railroad
     private val railView : RailView
     private val switchView = SwitchView()
-    private val lightView = LightView(railroad)
+    private val lightView = LightView(level.railroad)
     private val damageView = DamageView()
     private val railroadSurface = ViewportSurface(depth = true, multisampling = true)
     private val backgroundView : BackgroundView
-    private val undoView = UndoView(railroad.builder)
+    private val undoView = UndoView(level.railroad.builder)
     val shadowVao : VertexArray<_>?
 
     private val obs1 = Railroad.changedNotification.observe((_changed = true))
@@ -19,7 +20,7 @@ class RailroadView(railroad : Railroad) extends InputProcessor {
     var _changed = true
     def init {
         context.considerShadows = false
-        backgroundView = BackgroundView(railroad.map)
+        backgroundView = BackgroundView(level)
         railView = RailView(railroad)
         val shadowParam = ShadowDrawParam([0.3], railroadSurface)
         shadowVao =
@@ -298,8 +299,8 @@ class DamageView {
     }
 }
 
-class BackgroundView(map : MapSso) {
-    val mapView = MapSsoView(map, ColorSource(textureFor("Grass.png", GL_NEAREST, GL_NEAREST)))
+class BackgroundView(level : Level) {
+    val mapView = MapSsoView(level.map, ColorSource(textureFor(level.rules.theme.background, GL_NEAREST, GL_NEAREST)))
     def draw {
         mapView.draw
 //        mapView.drawLayout

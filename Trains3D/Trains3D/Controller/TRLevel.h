@@ -3,7 +3,6 @@
 #import "EGScene.h"
 #import "EGMapIso.h"
 @class TRScoreRules;
-@class TRForestRules;
 @class TRWeatherRules;
 @class TRNotifications;
 @class TRScore;
@@ -26,22 +25,25 @@
 @class TRTrainType;
 @class TRCityColor;
 @class TRCarType;
+@class TRForestRules;
+@class TRTreeType;
 
 @class TRLevelRules;
 @class TRLevel;
 @class TRHelp;
 @class TRLevelResult;
+@class TRLevelTheme;
 
 @interface TRLevelRules : NSObject
 @property (nonatomic, readonly) GEVec2i mapSize;
+@property (nonatomic, readonly) TRLevelTheme* theme;
 @property (nonatomic, readonly) TRScoreRules* scoreRules;
-@property (nonatomic, readonly) TRForestRules* forestRules;
 @property (nonatomic, readonly) TRWeatherRules* weatherRules;
 @property (nonatomic, readonly) NSUInteger repairerSpeed;
 @property (nonatomic, readonly) id<CNSeq> events;
 
-+ (id)levelRulesWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules forestRules:(TRForestRules*)forestRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
-- (id)initWithMapSize:(GEVec2i)mapSize scoreRules:(TRScoreRules*)scoreRules forestRules:(TRForestRules*)forestRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
++ (id)levelRulesWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
+- (id)initWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -114,6 +116,16 @@
 - (id)initWithWin:(BOOL)win;
 - (ODClassType*)type;
 + (ODClassType*)type;
+@end
+
+
+@interface TRLevelTheme : ODEnum
+@property (nonatomic, readonly) NSString* background;
+@property (nonatomic, readonly) TRForestRules* forestRules;
+
++ (TRLevelTheme*)forest;
++ (TRLevelTheme*)winter;
++ (NSArray*)values;
 @end
 
 

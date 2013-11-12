@@ -4,6 +4,7 @@
 #import "EGMapIso.h"
 #import "EGFont.h"
 #import "EGMesh.h"
+@class TRLevel;
 @class TRRailroad;
 @class EGViewportSurface;
 @class TRRailroadBuilder;
@@ -35,6 +36,8 @@
 @class TRSwitch;
 @class TRRailLight;
 @class TRRailPoint;
+@class TRLevelRules;
+@class TRLevelTheme;
 
 @class TRRailroadView;
 @class TRRailView;
@@ -45,12 +48,13 @@
 @class TRBackgroundView;
 
 @interface TRRailroadView : NSObject<EGInputProcessor>
+@property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic, readonly) id shadowVao;
 @property (nonatomic) BOOL _changed;
 
-+ (id)railroadViewWithRailroad:(TRRailroad*)railroad;
-- (id)initWithRailroad:(TRRailroad*)railroad;
++ (id)railroadViewWithLevel:(TRLevel*)level;
+- (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)_init;
 - (void)drawBackground;
@@ -134,11 +138,11 @@
 
 
 @interface TRBackgroundView : NSObject
-@property (nonatomic, readonly) EGMapSso* map;
+@property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) EGMapSsoView* mapView;
 
-+ (id)backgroundViewWithMap:(EGMapSso*)map;
-- (id)initWithMap:(EGMapSso*)map;
++ (id)backgroundViewWithLevel:(TRLevel*)level;
+- (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)draw;
 + (ODClassType*)type;
