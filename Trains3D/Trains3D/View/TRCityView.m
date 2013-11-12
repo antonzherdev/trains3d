@@ -156,8 +156,8 @@ static ODClassType* _TRCallRepairerView_type;
         egPushGroupMarker(@"Call repairer");
         [EGGlobal.context.depthTest disabledF:^void() {
             [EGBlendFunction.standard applyDraw:^void() {
-                [[_level cities] forEach:^void(TRCity* _) {
-                    [self drawButtonForCity:_];
+                [[_level cities] forEach:^void(TRCity* city) {
+                    if([((TRCity*)(city)) canRunNewTrain]) [self drawButtonForCity:city];
                 }];
             }];
         }];
@@ -192,7 +192,7 @@ static ODClassType* _TRCallRepairerView_type;
         return [((EGBillboard*)(((CNTuple*)(_)).b)) containsVec2:p];
     }];
     [b forEach:^void(CNTuple* kv) {
-        [_level runRepairerFromCity:((CNTuple*)(kv)).a];
+        if([((TRCity*)(((CNTuple*)(kv)).a)) canRunNewTrain]) [_level runRepairerFromCity:((CNTuple*)(kv)).a];
     }];
     return [b isDefined];
 }

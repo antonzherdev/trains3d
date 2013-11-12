@@ -58,7 +58,9 @@ class CallRepairerView(level : Level) extends InputProcessor with TapProcessor {
         if(!level.railroad.damagesPoints.isEmpty && level.repairer.isEmpty) {
             egPushGroupMarker("Call repairer")
             context.depthTest.disabled { BlendFunction.standard {
-            level.cities.for(drawButtonFor(_))
+                level.cities.for{city ->
+                    if(city.canRunNewTrain) drawButtonFor(city)
+                }
             }}
             egPopGroupMarker
         } else if(!buttons.isEmpty) {
@@ -90,7 +92,9 @@ class CallRepairerView(level : Level) extends InputProcessor with TapProcessor {
     def tap(event : Event) : bool = {
         val p = event.locationInViewport
         val b = buttons.chain.find(_.b.contains(p))
-        b.for{kv -> level.runRepairerFrom(kv.a)}
+        b.for{kv ->
+            if(kv.a.canRunNewTrain) level.runRepairerFrom(kv.a)
+        }
         b.isDefined
     }
 }
