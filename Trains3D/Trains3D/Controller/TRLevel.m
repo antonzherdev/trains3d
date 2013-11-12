@@ -316,7 +316,8 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)arrivedTrain:(TRTrain*)train {
-    if(!([[self repairer] containsItem:train])) [_score arrivedTrain:train];
+    if([[self repairer] containsItem:train]) [_score removeTrain:train];
+    else [_score arrivedTrain:train];
     [self removeTrain:train];
 }
 
