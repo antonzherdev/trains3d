@@ -217,7 +217,7 @@ static ODClassType* _TRTree_type;
         _treeType = treeType;
         _position = position;
         _size = size;
-        _z = float4Round((_position.y - _position.x) * 1000);
+        _z = float4Round((_position.y - _position.x) * 500);
         _rigidity = odFloatRndMinMax(0.5, 1.5);
         __rustleUp = YES;
         _rustle = 0.0;

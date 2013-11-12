@@ -50,7 +50,7 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Contr
 
 
 class Tree(treeType : TreeType, position : vec2, size : vec2) extends Comparable<Tree> {
-    val z : int = ((position.y - position.x)*1000).round
+    val z : int = ((position.y - position.x)*500).round
     def compare(to : Tree) : int = -(z).compare(to.z)
 
     val rigidity = Float.rnd(0.5, 1.5)
