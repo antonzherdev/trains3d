@@ -65,10 +65,12 @@
 @interface EGNotificationSoundPlayer : NSObject<EGSoundPlayer>
 @property (nonatomic, readonly) SDSound* sound;
 @property (nonatomic, readonly) CNNotificationHandle* notificationHandle;
+@property (nonatomic, readonly) BOOL(^condition)(id);
 
-+ (id)notificationSoundPlayerWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle;
-- (id)initWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle;
++ (id)notificationSoundPlayerWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle condition:(BOOL(^)(id))condition;
+- (id)initWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle condition:(BOOL(^)(id))condition;
 - (ODClassType*)type;
++ (EGNotificationSoundPlayer*)applySound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle;
 - (void)start;
 - (void)stop;
 - (void)pause;

@@ -262,22 +262,25 @@ static ODClassType* _EGSporadicSoundPlayer_type;
 @implementation EGNotificationSoundPlayer{
     SDSound* _sound;
     CNNotificationHandle* _notificationHandle;
+    BOOL(^_condition)(id);
     id _obs;
     BOOL _wasPlaying;
 }
 static ODClassType* _EGNotificationSoundPlayer_type;
 @synthesize sound = _sound;
 @synthesize notificationHandle = _notificationHandle;
+@synthesize condition = _condition;
 
-+ (id)notificationSoundPlayerWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle {
-    return [[EGNotificationSoundPlayer alloc] initWithSound:sound notificationHandle:notificationHandle];
++ (id)notificationSoundPlayerWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle condition:(BOOL(^)(id))condition {
+    return [[EGNotificationSoundPlayer alloc] initWithSound:sound notificationHandle:notificationHandle condition:condition];
 }
 
-- (id)initWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle {
+- (id)initWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle condition:(BOOL(^)(id))condition {
     self = [super init];
     if(self) {
         _sound = sound;
         _notificationHandle = notificationHandle;
+        _condition = condition;
         _wasPlaying = NO;
     }
     
@@ -289,9 +292,15 @@ static ODClassType* _EGNotificationSoundPlayer_type;
     _EGNotificationSoundPlayer_type = [ODClassType classTypeWithCls:[EGNotificationSoundPlayer class]];
 }
 
++ (EGNotificationSoundPlayer*)applySound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle {
+    return [EGNotificationSoundPlayer notificationSoundPlayerWithSound:sound notificationHandle:notificationHandle condition:^BOOL(id _) {
+        return YES;
+    }];
+}
+
 - (void)start {
-    _obs = [CNOption applyValue:[_notificationHandle observeBy:^void(id _) {
-        [_sound play];
+    _obs = [CNOption applyValue:[_notificationHandle observeBy:^void(id value) {
+        if(_condition(value)) [_sound play];
     }]];
 }
 
@@ -331,13 +340,14 @@ static ODClassType* _EGNotificationSoundPlayer_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGNotificationSoundPlayer* o = ((EGNotificationSoundPlayer*)(other));
-    return self.sound == o.sound && [self.notificationHandle isEqual:o.notificationHandle];
+    return self.sound == o.sound && [self.notificationHandle isEqual:o.notificationHandle] && [self.condition isEqual:o.condition];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.sound hash];
     hash = hash * 31 + [self.notificationHandle hash];
+    hash = hash * 31 + [self.condition hash];
     return hash;
 }
 

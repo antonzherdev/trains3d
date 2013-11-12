@@ -286,6 +286,7 @@
 		6F3DF41D2FFC4CFBD4269C4D /* TRRailPointSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD2B4DE89BFC30B63617 /* TRRailPointSpec.m */; };
 		6F3DF41EBCC1AC73FC02A22E /* NSMutableDictionary+CNChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD1979A158F7FC2C5F21 /* NSMutableDictionary+CNChain.m */; };
 		6F3DF4275721F9BA824D1A29 /* btConvexInternalShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA8F46E4742FCD80955E /* btConvexInternalShape.cpp */; };
+		6F3DF4336D0D9EF3451A9725 /* CityBuild.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF402E3D8FC100E8273C7 /* CityBuild.wav */; };
 		6F3DF43ABAB9FEF4D21E3433 /* CNXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFAFE515052FAF1425911 /* CNXML.m */; };
 		6F3DF43CAAB339F6B2E62F11 /* TRLevelSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF06063B5F1A002BF4352 /* TRLevelSpec.m */; };
 		6F3DF43EC1DA0CD181A4CDBB /* btUniformScalingShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF65E2A2B0B13825D9D7F /* btUniformScalingShape.cpp */; };
@@ -454,6 +455,7 @@
 		6F3DF66E947D2ACE1817DE47 /* btTetrahedronShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF40E9E74BEE97D6F5C1A /* btTetrahedronShape.cpp */; };
 		6F3DF66F5F64444902117EA4 /* btGImpactCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF6A436CB4423AC136FA0 /* btGImpactCollisionAlgorithm.cpp */; };
 		6F3DF6738F923B239E7C4A7B /* btRaycastCallback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF7DCA8B4B873B375FA76 /* btRaycastCallback.cpp */; };
+		6F3DF674EA2CBD03633BE43C /* CityBuild.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF402E3D8FC100E8273C7 /* CityBuild.wav */; };
 		6F3DF675B1663D2738344895 /* NSObject+KiwiMockAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8B0B304346D910A7B2B /* NSObject+KiwiMockAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF67D9671A7B5645480B8 /* Tree2.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFA9DA40E26F1341C204B /* Tree2.png */; };
 		6F3DF683E2D40DADE59C995E /* CNVoidRefArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBDC82D0132DDEC35C11 /* CNVoidRefArray.m */; };
@@ -1456,6 +1458,7 @@
 		6F3DF3FD6B1F57E08B886C4A /* EGCollision.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGCollision.h; sourceTree = "<group>"; };
 		6F3DF3FE5635D1899802AECF /* Log.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Log.od; sourceTree = "<group>"; };
 		6F3DF3FF6A3103165340889E /* EGOpenGLViewIOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOpenGLViewIOS.h; sourceTree = "<group>"; };
+		6F3DF402E3D8FC100E8273C7 /* CityBuild.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = CityBuild.wav; sourceTree = "<group>"; };
 		6F3DF4033789188B3F2B40FB /* EGSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGSprite.h; sourceTree = "<group>"; };
 		6F3DF40930DD94642361179D /* TreeSound.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TreeSound.od; sourceTree = "<group>"; };
 		6F3DF40B7EA21CBF17B28F8C /* EGTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGTime.m; sourceTree = "<group>"; };
@@ -4025,6 +4028,7 @@
 				6F3DF204632298A298CD37A3 /* TRTrainSound.m */,
 				6F3DFEFAB362A0BA60A22067 /* TrainPreparing.wav */,
 				6F3DF70A7B18F0C1FA83AFE2 /* TrainRun.wav */,
+				6F3DF402E3D8FC100E8273C7 /* CityBuild.wav */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -4635,6 +4639,7 @@
 				6F3DF5C92BBBBD850F090AFA /* ObjC.od in Resources */,
 				6F3DF87742E2E9511EB22AF9 /* TrainPreparing.wav in Resources */,
 				6F3DFC72BC5C497F66268451 /* TrainRun.wav in Resources */,
+				6F3DF4336D0D9EF3451A9725 /* CityBuild.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4750,6 +4755,7 @@
 				6F3DF8E860D0FCEFF85F3F03 /* Engine.png in Resources */,
 				6F3DF8E169E026F27C29FB84 /* TrainPreparing.wav in Resources */,
 				6F3DFE4DC7E47AE6F9752FC9 /* TrainRun.wav in Resources */,
+				6F3DF674EA2CBD03633BE43C /* CityBuild.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

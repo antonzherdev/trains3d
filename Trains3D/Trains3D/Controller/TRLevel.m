@@ -116,6 +116,7 @@ static ODClassType* _TRLevelRules_type;
     id __result;
 }
 static NSInteger _TRLevel_trainComingPeriod = 10;
+static CNNotificationHandle* _TRLevel_buildCityNotification;
 static CNNotificationHandle* _TRLevel_expectedTrainNotification;
 static CNNotificationHandle* _TRLevel_runTrainNotification;
 static CNNotificationHandle* _TRLevel_crashNotification;
@@ -166,6 +167,7 @@ static ODClassType* _TRLevel_type;
 + (void)initialize {
     [super initialize];
     _TRLevel_type = [ODClassType classTypeWithCls:[TRLevel class]];
+    _TRLevel_buildCityNotification = [CNNotificationHandle notificationHandleWithName:@"buildCityNotification"];
     _TRLevel_expectedTrainNotification = [CNNotificationHandle notificationHandleWithName:@"expectedTrainNotification"];
     _TRLevel_runTrainNotification = [CNNotificationHandle notificationHandleWithName:@"runTrainNotification"];
     _TRLevel_crashNotification = [CNNotificationHandle notificationHandleWithName:@"Trains crashed"];
@@ -213,6 +215,7 @@ static ODClassType* _TRLevel_type;
     [_forest cutDownTile:tile];
     [_railroad addRail:[TRRail railWithTile:tile form:city.angle.form]];
     [__cities appendItem:city];
+    [_TRLevel_buildCityNotification postData:city];
 }
 
 - (TRCityAngle*)randomCityDirectionForTile:(GEVec2i)tile {
@@ -412,6 +415,10 @@ static ODClassType* _TRLevel_type;
 
 + (NSInteger)trainComingPeriod {
     return _TRLevel_trainComingPeriod;
+}
+
++ (CNNotificationHandle*)buildCityNotification {
+    return _TRLevel_buildCityNotification;
 }
 
 + (CNNotificationHandle*)expectedTrainNotification {

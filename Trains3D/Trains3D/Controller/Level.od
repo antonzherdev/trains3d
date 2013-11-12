@@ -48,11 +48,13 @@ class Level(number : uint, rules : LevelRules) extends Controller {
             direction = randomCityDirectionFor(tile))
     }
 
+    static val buildCityNotification = NotificationHandle<(City)>("buildCityNotification")
     def createCityWith(tile : vec2i, direction : CityAngle) {
         val city = City(CityColor[cities.count], tile, direction)
         forest.cutDown(tile)
         railroad.add(Rail(tile, city.angle.form))
         _cities.append(city)
+        buildCityNotification.post(city)
     }
 
     private def randomCityDirectionFor(tile : vec2i) = {

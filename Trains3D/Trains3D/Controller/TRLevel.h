@@ -88,6 +88,7 @@
 - (void)win;
 - (void)lose;
 + (NSInteger)trainComingPeriod;
++ (CNNotificationHandle*)buildCityNotification;
 + (CNNotificationHandle*)expectedTrainNotification;
 + (CNNotificationHandle*)runTrainNotification;
 + (CNNotificationHandle*)crashNotification;
