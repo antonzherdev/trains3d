@@ -69,3 +69,24 @@ class SporadicSoundPlayer(sound : Sound, secondsBetween : float/*average seconds
         }
     }
 }
+
+class NotificationSoundPlayer(sound : Sound, notificationHandle : NotificationHandle<_>) extends  SoundPlayer {
+    private var obs : NotificationObserver?
+    def start {
+        obs = notificationHandle.observe((_ : any) -> sound.play)
+    }
+    def stop {
+        obs.for(_.detach)
+        obs = nil
+        sound.stop
+    }
+
+    private var wasPlaying = false
+    def pause {
+        wasPlaying = sound.isPlaying
+        sound.pause
+    }
+    def resume {
+        if(wasPlaying) sound.play
+    }
+}

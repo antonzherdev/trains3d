@@ -259,3 +259,96 @@ static ODClassType* _EGSporadicSoundPlayer_type;
 @end
 
 
+@implementation EGNotificationSoundPlayer{
+    SDSound* _sound;
+    CNNotificationHandle* _notificationHandle;
+    id _obs;
+    BOOL _wasPlaying;
+}
+static ODClassType* _EGNotificationSoundPlayer_type;
+@synthesize sound = _sound;
+@synthesize notificationHandle = _notificationHandle;
+
++ (id)notificationSoundPlayerWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle {
+    return [[EGNotificationSoundPlayer alloc] initWithSound:sound notificationHandle:notificationHandle];
+}
+
+- (id)initWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle {
+    self = [super init];
+    if(self) {
+        _sound = sound;
+        _notificationHandle = notificationHandle;
+        _wasPlaying = NO;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGNotificationSoundPlayer_type = [ODClassType classTypeWithCls:[EGNotificationSoundPlayer class]];
+}
+
+- (void)start {
+    _obs = [CNOption applyValue:[_notificationHandle observeBy:^void(id _) {
+        [_sound play];
+    }]];
+}
+
+- (void)stop {
+    [_obs forEach:^void(CNNotificationObserver* _) {
+        [((CNNotificationObserver*)(_)) detach];
+    }];
+    _obs = [CNOption none];
+    [_sound stop];
+}
+
+- (void)pause {
+    _wasPlaying = [_sound isPlaying];
+    [_sound pause];
+}
+
+- (void)resume {
+    if(_wasPlaying) [_sound play];
+}
+
+- (void)updateWithDelta:(CGFloat)delta {
+}
+
+- (ODClassType*)type {
+    return [EGNotificationSoundPlayer type];
+}
+
++ (ODClassType*)type {
+    return _EGNotificationSoundPlayer_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGNotificationSoundPlayer* o = ((EGNotificationSoundPlayer*)(other));
+    return self.sound == o.sound && [self.notificationHandle isEqual:o.notificationHandle];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.sound hash];
+    hash = hash * 31 + [self.notificationHandle hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"sound=%@", self.sound];
+    [description appendFormat:@", notificationHandle=%@", self.notificationHandle];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+

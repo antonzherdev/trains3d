@@ -3,6 +3,7 @@
 #import "TRLevel.h"
 #import "TRTreeSound.h"
 #import "TRTrainSound.h"
+#import "SDSound.h"
 @implementation TRLevelSound{
     TRLevel* _level;
 }
@@ -14,7 +15,7 @@ static ODClassType* _TRLevelSound_type;
 }
 
 - (id)initWithLevel:(TRLevel*)level {
-    self = [super initWithPlayers:(@[[TRTreeSound treeSoundWithForest:level.forest], [TRTrainSound trainSoundWithLevel:level]])];
+    self = [super initWithPlayers:(@[[TRTreeSound treeSoundWithForest:level.forest], [TRTrainSound trainSoundWithLevel:level], [EGNotificationSoundPlayer notificationSoundPlayerWithSound:[SDSound applyFile:@"TrainPreparing.wav" volume:0.02] notificationHandle:TRLevel.expectedTrainNotification], [EGNotificationSoundPlayer notificationSoundPlayerWithSound:[SDSound applyFile:@"TrainRun.wav" volume:0.05] notificationHandle:TRLevel.runTrainNotification]])];
     if(self) _level = level;
     
     return self;

@@ -5,6 +5,7 @@
 @class EGBackgroundSoundPlayer;
 @class EGSoundPlayersCollection;
 @class EGSporadicSoundPlayer;
+@class EGNotificationSoundPlayer;
 @protocol EGSoundPlayer;
 
 @protocol EGSoundPlayer<EGController>
@@ -57,6 +58,21 @@
 - (void)pause;
 - (void)resume;
 - (void)updateWithDelta:(CGFloat)delta;
++ (ODClassType*)type;
+@end
+
+
+@interface EGNotificationSoundPlayer : NSObject<EGSoundPlayer>
+@property (nonatomic, readonly) SDSound* sound;
+@property (nonatomic, readonly) CNNotificationHandle* notificationHandle;
+
++ (id)notificationSoundPlayerWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle;
+- (id)initWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle;
+- (ODClassType*)type;
+- (void)start;
+- (void)stop;
+- (void)pause;
+- (void)resume;
 + (ODClassType*)type;
 @end
 

@@ -66,19 +66,23 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         }.randomItem.get
     }
 
+    static val expectedTrainNotification = NotificationHandle<(Train, City)>("expectedTrainNotification")
     private def run(train : Train, fromCity : City) {
         fromCity.expectedTrainColor = train.color
         fromCity.expectedTrainCounter = Counter(trainComingPeriod, finish = {
             train.startFrom(fromCity)
             add(train)
         })
+        expectedTrainNotification.post((train, fromCity))
     }
 
+    static val runTrainNotification = NotificationHandle<Train>("runTrainNotification")
     private def add(train : Train) {
         _trains += train
         score.run(train)
         collisionWorld.add(train)
         dynamicWorld.add(train)
+        runTrainNotification.post(train)
     }
 
     def runTrainWith(generator : TrainGenerator) {

@@ -116,6 +116,8 @@ static ODClassType* _TRLevelRules_type;
     id __result;
 }
 static NSInteger _TRLevel_trainComingPeriod = 10;
+static CNNotificationHandle* _TRLevel_expectedTrainNotification;
+static CNNotificationHandle* _TRLevel_runTrainNotification;
 static CNNotificationHandle* _TRLevel_crashNotification;
 static CNNotificationHandle* _TRLevel_winNotification;
 static ODClassType* _TRLevel_type;
@@ -164,6 +166,8 @@ static ODClassType* _TRLevel_type;
 + (void)initialize {
     [super initialize];
     _TRLevel_type = [ODClassType classTypeWithCls:[TRLevel class]];
+    _TRLevel_expectedTrainNotification = [CNNotificationHandle notificationHandleWithName:@"expectedTrainNotification"];
+    _TRLevel_runTrainNotification = [CNNotificationHandle notificationHandleWithName:@"runTrainNotification"];
     _TRLevel_crashNotification = [CNNotificationHandle notificationHandleWithName:@"Trains crashed"];
     _TRLevel_winNotification = [CNNotificationHandle notificationHandleWithName:@"Level was passed"];
 }
@@ -225,6 +229,7 @@ static ODClassType* _TRLevel_type;
         [train startFromCity:fromCity];
         [self addTrain:train];
     }];
+    [_TRLevel_expectedTrainNotification postData:tuple(train, fromCity)];
 }
 
 - (void)addTrain:(TRTrain*)train {
@@ -232,6 +237,7 @@ static ODClassType* _TRLevel_type;
     [_score runTrain:train];
     [_collisionWorld addTrain:train];
     [_dynamicWorld addTrain:train];
+    [_TRLevel_runTrainNotification postData:train];
 }
 
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator {
@@ -406,6 +412,14 @@ static ODClassType* _TRLevel_type;
 
 + (NSInteger)trainComingPeriod {
     return _TRLevel_trainComingPeriod;
+}
+
++ (CNNotificationHandle*)expectedTrainNotification {
+    return _TRLevel_expectedTrainNotification;
+}
+
++ (CNNotificationHandle*)runTrainNotification {
+    return _TRLevel_runTrainNotification;
 }
 
 + (CNNotificationHandle*)crashNotification {

@@ -1,4 +1,9 @@
 package com.antonzherdev.trains
 
 
-class LevelSound(level : Level) extends SoundPlayersCollection([TreeSound(level.forest), TrainSound(level)])
+class LevelSound(level : Level) extends SoundPlayersCollection([
+    TreeSound(level.forest),
+    TrainSound(level),
+    NotificationSoundPlayer(Sound("TrainPreparing.wav", 0.02), Level.expectedTrainNotification),
+    NotificationSoundPlayer(Sound("TrainRun.wav", 0.05), Level.runTrainNotification)
+])

@@ -88,6 +88,8 @@
 - (void)win;
 - (void)lose;
 + (NSInteger)trainComingPeriod;
++ (CNNotificationHandle*)expectedTrainNotification;
++ (CNNotificationHandle*)runTrainNotification;
 + (CNNotificationHandle*)crashNotification;
 + (CNNotificationHandle*)winNotification;
 + (ODClassType*)type;

@@ -3,6 +3,7 @@
 @class TRLevel;
 @class TRTreeSound;
 @class TRTrainSound;
+@class SDSound;
 
 @class TRLevelSound;
 
