@@ -121,6 +121,22 @@ static ODClassType* _TRForest_type;
     [self cutDownRect:geRectAddVec2(geQuadBoundingRect(geQuadApplyP0P1P2P3(geVec2SubVec2(s, ds), geVec2AddVec2(s, ds), geVec2SubVec2(e, de), geVec2AddVec2(e, de))), geVec2ApplyVec2i(rail.tile))];
 }
 
+- (void)cutDownForASwitch:(TRSwitch*)aSwitch {
+    GEVec2 pos = geVec2AddVec2(geVec2iMulF([aSwitch.connector vec], 0.4), geVec2ApplyVec2i(aSwitch.tile));
+    float xx = pos.x + pos.y;
+    float yy = pos.y - pos.x;
+    __trees = [[[__trees chain] filter:^BOOL(TRTree* tree) {
+        float ty = ((TRTree*)(tree)).position.y - ((TRTree*)(tree)).position.x;
+        if(yy - 1.2 <= ty && ty <= yy) {
+            float tx = ((TRTree*)(tree)).position.x + ((TRTree*)(tree)).position.y;
+            if(xx - 0.3 < tx && tx < xx + 0.3) return NO;
+            else return YES;
+        } else {
+            return YES;
+        }
+    }] toArray];
+}
+
 - (void)cutDownRect:(GERect)rect {
     __trees = [[[__trees chain] filter:^BOOL(TRTree* _) {
         return !(geRectContainsVec2(rect, ((TRTree*)(_)).position));

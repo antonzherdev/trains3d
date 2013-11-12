@@ -9,6 +9,7 @@ class RailroadConnectorContent {
     def rails : [Rail]
     def isGreen : bool = true
     def isEmpty = false
+    def cutDownTreesIn(forest : Forest) {}
 }
 
 class EmptyConnector extends RailroadConnectorContent {
@@ -34,6 +35,9 @@ class Switch(tile : vec2i, connector : RailConnector, rail1 : Rail, rail2 : Rail
     def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = throw "Couldn't add rail to switch"
     def rails : [Rail] = if(firstActive) [rail1, rail2] else [rail2, rail1]
     def buildLightIn(connector : RailConnector) : RailroadConnectorContent = self
+    def cutDownTreesIn(forest : Forest) {
+        forest.cutDownFor(switch = self)
+    }
 }
 
 class RailLight(tile : vec2i, connector : RailConnector, rail : Rail) extends RailroadConnectorContent {
@@ -84,8 +88,8 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Controller 
     }
 
     def add(rail : Rail) {
-        connect(rail, rail.form.start)
-        connect(rail, rail.form.end)
+        connect(rail, rail.form.start).cutDownTreesIn(forest)
+        connect(rail, rail.form.end).cutDownTreesIn(forest)
         buildLightsFor(rail.tile, rail.form.start)
         buildLightsFor(rail.tile, rail.form.end)
         forest.cutDownFor(rail)
@@ -95,9 +99,9 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Controller 
     def contentIn(tile : vec2i, connector : RailConnector) : RailroadConnectorContent =
         connectorIndex[(tile, connector)]
 
-    private def connect(rail : Rail, to : RailConnector) {
+    private def connect(rail : Rail, to : RailConnector) =
         connectorIndex.modify(by = _.connect(rail, to), forKey = (rail.tile, to))
-    }
+
 
     private def buildLightsFor(tile : vec2i, connector : RailConnector) {
         val nextTile = connector.next(tile)

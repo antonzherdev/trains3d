@@ -1,9 +1,9 @@
 #import "TRRailroad.h"
 
 #import "TRRailPoint.h"
+#import "TRTree.h"
 #import "EGMapIso.h"
 #import "TRScore.h"
-#import "TRTree.h"
 @implementation TRRailroadConnectorContent
 static ODClassType* _TRRailroadConnectorContent_type;
 
@@ -44,6 +44,9 @@ static ODClassType* _TRRailroadConnectorContent_type;
 
 - (BOOL)isEmpty {
     return NO;
+}
+
+- (void)cutDownTreesInForest:(TRForest*)forest {
 }
 
 - (ODClassType*)type {
@@ -288,6 +291,10 @@ static ODClassType* _TRSwitch_type;
 
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector {
     return self;
+}
+
+- (void)cutDownTreesInForest:(TRForest*)forest {
+    [forest cutDownForASwitch:self];
 }
 
 - (ODClassType*)type {
@@ -627,8 +634,8 @@ static ODClassType* _TRRailroad_type;
 }
 
 - (void)addRail:(TRRail*)rail {
-    [self connectRail:rail to:rail.form.start];
-    [self connectRail:rail to:rail.form.end];
+    [[self connectRail:rail to:rail.form.start] cutDownTreesInForest:_forest];
+    [[self connectRail:rail to:rail.form.end] cutDownTreesInForest:_forest];
     [self buildLightsForTile:rail.tile connector:rail.form.start];
     [self buildLightsForTile:rail.tile connector:rail.form.end];
     [_forest cutDownForRail:rail];
@@ -639,8 +646,8 @@ static ODClassType* _TRRailroad_type;
     return [_connectorIndex applyKey:tuple(wrap(GEVec2i, tile), connector)];
 }
 
-- (void)connectRail:(TRRail*)rail to:(TRRailConnector*)to {
-    [_connectorIndex modifyBy:^TRRailroadConnectorContent*(TRRailroadConnectorContent* _) {
+- (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to {
+    return [_connectorIndex modifyBy:^TRRailroadConnectorContent*(TRRailroadConnectorContent* _) {
         return [((TRRailroadConnectorContent*)(_)) connectRail:rail to:to];
     } forKey:tuple(wrap(GEVec2i, rail.tile), to)];
 }

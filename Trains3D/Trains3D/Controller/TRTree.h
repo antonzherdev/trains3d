@@ -6,6 +6,7 @@
 @class TRRail;
 @class TRRailForm;
 @class TRRailConnector;
+@class TRSwitch;
 
 @class TRForestRules;
 @class TRForest;
@@ -34,6 +35,7 @@
 - (id<CNIterable>)trees;
 - (void)cutDownTile:(GEVec2i)tile;
 - (void)cutDownForRail:(TRRail*)rail;
+- (void)cutDownForASwitch:(TRSwitch*)aSwitch;
 - (void)cutDownRect:(GERect)rect;
 - (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;

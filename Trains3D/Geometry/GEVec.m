@@ -171,6 +171,15 @@ GEVec2i geVec2iAddVec2i(GEVec2i self, GEVec2i vec2i) {
 GEVec2i geVec2iSubVec2i(GEVec2i self, GEVec2i vec2i) {
     return GEVec2iMake(self.x - vec2i.x, self.y - vec2i.y);
 }
+GEVec2i geVec2iMulI(GEVec2i self, NSInteger i) {
+    return GEVec2iMake(self.x * i, self.y * i);
+}
+GEVec2 geVec2iMulF(GEVec2i self, CGFloat f) {
+    return GEVec2Make(((float)(self.x)) * f, ((float)(self.y)) * f);
+}
+GEVec2 geVec2iMulF4(GEVec2i self, float f4) {
+    return GEVec2Make(((float)(self.x)) * f4, ((float)(self.y)) * f4);
+}
 GEVec2 geVec2iDivF4(GEVec2i self, float f4) {
     return GEVec2Make(((float)(self.x)) / f4, ((float)(self.y)) / f4);
 }

@@ -53,6 +53,9 @@ struct vec2i(x : int, y : int) extends Comparable<vec2i> {
 
     def add(vec2i : vec2i) = vec2i(x + vec2i.x, y + vec2i.y)
     def sub(vec2i : vec2i) = vec2i(x - vec2i.x, y - vec2i.y)
+    def mul(i : int) = vec2i(x*i, y*i)
+    def mul(f : float) = vec2(x.cast<float4>*f, y.cast<float4>*f)
+    def mul(f4 : float4) = vec2(x.cast<float4>*f4, y.cast<float4>*f4)
     def div(f4 : float4) = vec2(x.cast<float4>/f4, y.cast<float4>/f4)
     def div(f : float) = vec2(x.cast<float4>/f, y.cast<float4>/f)
     def div(i : int) = vec2i(x/i, y/i)

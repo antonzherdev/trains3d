@@ -2,11 +2,11 @@
 #import "GEVec.h"
 #import "EGScene.h"
 @class TRRailConnector;
+@class TRForest;
 @class TRRailForm;
 @class TRRailPoint;
 @class EGMapSso;
 @class TRScore;
-@class TRForest;
 @class TRRailPointCorrection;
 
 @class TRRailroadConnectorContent;
@@ -30,6 +30,7 @@
 - (id<CNSeq>)rails;
 - (BOOL)isGreen;
 - (BOOL)isEmpty;
+- (void)cutDownTreesInForest:(TRForest*)forest;
 + (ODClassType*)type;
 @end
 
@@ -78,6 +79,7 @@
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (id<CNSeq>)rails;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
+- (void)cutDownTreesInForest:(TRForest*)forest;
 + (ODClassType*)type;
 @end
 
