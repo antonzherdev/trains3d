@@ -176,6 +176,7 @@
 - (BOOL)canAddRail:(TRRail*)rail;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)undo;
++ (CNNotificationHandle*)refuseBuildNotification;
 + (CNNotificationHandle*)changedNotification;
 + (ODClassType*)type;
 @end

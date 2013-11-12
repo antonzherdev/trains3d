@@ -719,6 +719,7 @@
 		6F3DFA597919BD2DCDAF2425 /* mixed_product.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFB5D05F1FD9DE026B457 /* mixed_product.inl */; };
 		6F3DFA5A92ACF4DED21461D3 /* btContinuousConvexCollision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA5A6B0F27627DED08E8 /* btContinuousConvexCollision.cpp */; };
 		6F3DFA5C1871BB43A168E94B /* CNChainSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC0D21FEC5A694BED172 /* CNChainSpec.m */; };
+		6F3DFA62C0A3966CE6119D7D /* RefuseBuild.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF4672630E009640A2C61 /* RefuseBuild.wav */; };
 		6F3DFA64192C792F123AD0FD /* btUnionFind.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA938562BA3845FDDCE3 /* btUnionFind.cpp */; };
 		6F3DFA6B4607387168E06EBC /* orthonormalize.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF555417A6C054D259F93 /* orthonormalize.inl */; };
 		6F3DFA6EDDE1B89F5E8B528F /* btShapeHull.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF7FECFAC6C0037776D2D /* btShapeHull.cpp */; };
@@ -1100,6 +1101,7 @@
 		6F3DFF9C6F06CBA75D487035 /* btSliderConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB88F755A8E8BEEA70AB /* btSliderConstraint.cpp */; };
 		6F3DFF9D6A8367A56056E2B3 /* TRTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4476E10D45C11672E0D /* TRTree.m */; };
 		6F3DFF9E559D4F68B93B93D0 /* KWDeviceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF53978B4FC6B4618A49D /* KWDeviceInfo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		6F3DFFA3DC2062279A7E9455 /* RefuseBuild.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF4672630E009640A2C61 /* RefuseBuild.wav */; };
 		6F3DFFA3E5F0EAEE9B95CC45 /* btDbvt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF48A569A1F7747885285 /* btDbvt.cpp */; };
 		6F3DFFA555178326440D9492 /* CNList.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0B05A9FBEF000F0623F /* CNList.m */; };
 		6F3DFFA5AE377882684AB133 /* TRRailPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC10AAF2EA07B7086A8D /* TRRailPoint.m */; };
@@ -1493,6 +1495,7 @@
 		6F3DF45F51BB58A94780D723 /* btOverlappingPairCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btOverlappingPairCache.h; sourceTree = "<group>"; };
 		6F3DF45FB9685A6094637BEC /* KWBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBlock.h; sourceTree = "<group>"; };
 		6F3DF4603D29A755B9606079 /* DTConflictResolve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTConflictResolve.h; sourceTree = "<group>"; };
+		6F3DF4672630E009640A2C61 /* RefuseBuild.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = RefuseBuild.wav; sourceTree = "<group>"; };
 		6F3DF46F92130F54E5505192 /* RailroadBuilderProcessor.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = RailroadBuilderProcessor.od; sourceTree = "<group>"; };
 		6F3DF46FE434C72FD922A22B /* btGrahamScan2dConvexHull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btGrahamScan2dConvexHull.h; sourceTree = "<group>"; };
 		6F3DF4768A31C92249FF922F /* btBox2dShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btBox2dShape.h; sourceTree = "<group>"; };
@@ -4029,6 +4032,7 @@
 				6F3DFEFAB362A0BA60A22067 /* TrainPreparing.wav */,
 				6F3DF70A7B18F0C1FA83AFE2 /* TrainRun.wav */,
 				6F3DF402E3D8FC100E8273C7 /* CityBuild.wav */,
+				6F3DF4672630E009640A2C61 /* RefuseBuild.wav */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -4640,6 +4644,7 @@
 				6F3DF87742E2E9511EB22AF9 /* TrainPreparing.wav in Resources */,
 				6F3DFC72BC5C497F66268451 /* TrainRun.wav in Resources */,
 				6F3DF4336D0D9EF3451A9725 /* CityBuild.wav in Resources */,
+				6F3DFFA3DC2062279A7E9455 /* RefuseBuild.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4756,6 +4761,7 @@
 				6F3DF8E169E026F27C29FB84 /* TrainPreparing.wav in Resources */,
 				6F3DFE4DC7E47AE6F9752FC9 /* TrainRun.wav in Resources */,
 				6F3DF674EA2CBD03633BE43C /* CityBuild.wav in Resources */,
+				6F3DFA62C0A3966CE6119D7D /* RefuseBuild.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -238,12 +238,25 @@ class RailroadBuilder(weak railroad : Railroad) extends Controller {
     def buildingRails : [RailBuilding] = _buildingRails
     def railForUndo : Rail? = _buildingRails.headOpt.map(_.rail)
 
+    static val refuseBuildNotification = NotificationHandle<Rail>("refuseBuildNotification")
+    private var firstTry : bool = true
     def tryBuild(rail : Rail) : bool = {
         if(canAdd(rail)) {
             _rail = rail
+            firstTry = true
             changed
             true
-        } else false
+        } else {
+            if(firstTry) {
+                firstTry = false
+                refuseBuildNotification.post(rail)
+            }
+            if(_rail.isDefined) {
+                _rail = nil
+                changed
+            }
+            false
+        }
     }
 
     static val changedNotification = NotificationHandle<void>("Railroad builder changed")
@@ -257,15 +270,20 @@ class RailroadBuilder(weak railroad : Railroad) extends Controller {
     }
 
     def clear {
-        _rail = nil
+        firstTry = true
+        if(_rail.isDefined) {
+            _rail = nil
+            changed
+        }
     }
 
     def fix {
+        firstTry = true
         if(_rail.isDefined) {
             railroad.forest.cutDownFor(_rail.get)
             _buildingRails = List(RailBuilding(_rail.get), _buildingRails)
-            changed
             _rail = nil
+            changed
         }
     }
 

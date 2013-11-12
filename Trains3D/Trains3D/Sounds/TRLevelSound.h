@@ -4,6 +4,7 @@
 @class TRTreeSound;
 @class TRTrainSound;
 @class SDSound;
+@class TRRailroadBuilder;
 
 @class TRLevelSound;
 
