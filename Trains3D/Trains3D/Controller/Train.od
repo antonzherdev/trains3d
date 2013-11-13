@@ -107,9 +107,9 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, _cars 
         val tile = theSwitch.tile
         val nextTile = theSwitch.connector.next(tile)
         val rp11 = theSwitch.railPoint1
-        val rp12 = rp11.add(0.5)
+        val rp12 = rp11.add(0.45)
         val rp21 = theSwitch.railPoint2
-        val rp22 = rp21.add(0.5)
+        val rp22 = rp21.add(0.45)
         cars.find{car ->
             val p = car.position
             p.frontConnector.tile == tile && p.backConnector.tile == nextTile

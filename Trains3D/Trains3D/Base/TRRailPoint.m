@@ -312,7 +312,7 @@ static ODClassType* _TRRailPoint_type;
 }
 
 - (BOOL)betweenA:(TRRailPoint*)a b:(TRRailPoint*)b {
-    if(GEVec2iEq(a.tile, _tile) && GEVec2iEq(b.tile, _tile)) {
+    if(GEVec2iEq(a.tile, _tile) && GEVec2iEq(b.tile, _tile) && a.form == _form && b.form == _form) {
         CGFloat ax = [a straight].x;
         CGFloat bx = [b straight].x;
         if(ax > bx) return floatBetween([self straight].x, bx, ax);
