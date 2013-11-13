@@ -20,14 +20,14 @@ enum CarType(
 
     engineType : EngineType?)
 {
-    car(0.18, 0.3, 1,
+    car(0.16, 0.3, 1,
         0.05, 0.06, 0.44, 0.06, 0.05, nil)
-    engine(0.2, 0.3, 2,
+    engine(0.18, 0.3, 2,
         0.05, 0.14, 0.32, 0.22, 0.05,
         EngineType(tubePos = vec3(-0.10, 0, 0.5)))
-    expressCar(0.18, 0.25, 1,
+    expressCar(0.16, 0.25, 1,
         0.05, 0.06, 0.44, 0.06, 0.05, nil)
-    expressEngine(0.2, 0.3, 3,
+    expressEngine(0.18, 0.3, 3,
         0.05, 0.14, 0.32, 0.19, 0.05,
         EngineType(tubePos = vec3(-0.05, 0, 0.35)))
 
