@@ -1,6 +1,9 @@
 #import "objd.h"
 #import "EGSound.h"
 #import "GEVec.h"
+@class TRLevel;
+@class TRLevelRules;
+@class TRLevelTheme;
 @class SDSound;
 @class TRForest;
 @class TRWeather;
@@ -9,10 +12,10 @@
 @class TRWindSound;
 
 @interface TRTreeSound : EGSoundPlayersCollection
-@property (nonatomic, readonly) TRForest* forest;
+@property (nonatomic, readonly) TRLevel* level;
 
-+ (id)treeSoundWithForest:(TRForest*)forest;
-- (id)initWithForest:(TRForest*)forest;
++ (id)treeSoundWithLevel:(TRLevel*)level;
+- (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

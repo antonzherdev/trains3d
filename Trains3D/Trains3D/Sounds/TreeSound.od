@@ -1,14 +1,21 @@
 package com.antonzherdev.trains
 
-class TreeSound(forest : Forest) extends SoundPlayersCollection(
-    [WindSound(forest)
-    ,SporadicSoundPlayer(Sound("Nightingale.mp3", 0.1), 120)
-    ,SporadicSoundPlayer(Sound("Crow.mp3", 0.1), 60)
-    ,SporadicSoundPlayer(Sound("Crows.mp3", 0.03), 120)
-    ,SporadicSoundPlayer(Sound("Woodpecker.mp3", 0.4), 120)
-    ,SporadicSoundPlayer(Sound("Cuckoo.mp3", 0.4), 120)
-    ,SporadicSoundPlayer(Sound("Grouse.mp3", 0.35), 120)
-    ])
+class TreeSound(level : Level) extends SoundPlayersCollection(
+    if(level.rules.theme == LevelTheme.forest)
+        [WindSound(level.forest)
+        ,SporadicSoundPlayer(Sound("Nightingale.mp3", 0.1), 120)
+        ,SporadicSoundPlayer(Sound("Crow.mp3", 0.1), 240)
+        ,SporadicSoundPlayer(Sound("Crows.mp3", 0.03), 240)
+        ,SporadicSoundPlayer(Sound("Woodpecker.mp3", 0.4), 120)
+        ,SporadicSoundPlayer(Sound("Cuckoo.mp3", 0.4), 120)
+        ,SporadicSoundPlayer(Sound("Grouse.mp3", 0.35), 120)
+        ]
+    else
+        [WindSound(level.forest)
+        ,SporadicSoundPlayer(Sound("Crow.mp3", 0.1), 60)
+        ,SporadicSoundPlayer(Sound("Crows.mp3", 0.03), 120)
+        ]
+)
 
 class WindSound(forest : Forest) extends BackgroundSoundPlayer(Sound("Rustle.mp3", 0)) {
 

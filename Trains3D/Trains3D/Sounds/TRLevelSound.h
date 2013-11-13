@@ -1,9 +1,9 @@
 #import "objd.h"
 #import "EGSound.h"
-@class TRLevel;
 @class TRTreeSound;
 @class TRTrainSound;
 @class SDSound;
+@class TRLevel;
 @class TRRailroadBuilder;
 
 @class TRLevelSound;

@@ -483,6 +483,7 @@
 		6F3DF6DABCF4BAA03AFFA443 /* NSObject+KiwiStubAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1F8CF0334439242AFDD /* NSObject+KiwiStubAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF6E1086D312972C2FF73 /* Switches.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF902185D67D11257DD90 /* Switches.png */; };
 		6F3DF6E2C2372594102E95FD /* btContinuousConvexCollision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA5A6B0F27627DED08E8 /* btContinuousConvexCollision.cpp */; };
+		6F3DF6E48752694C70A66943 /* Click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFA85490A034AEE88B3D1 /* Click.wav */; };
 		6F3DF6E9CB743C31B015961A /* btCollisionShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF93AC35433C6311DF5C6 /* btCollisionShape.cpp */; };
 		6F3DF6EA224A8FE0BCF67E9F /* TRNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8F6DB72597946D02C45 /* TRNotification.m */; };
 		6F3DF6EC10BBB2F6AC918D74 /* City.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF7D3C6CD185286ABD313 /* City.png */; };
@@ -635,6 +636,7 @@
 		6F3DF910C87C07F82797E755 /* TRLevelChooseMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC47E3D538358117D21C /* TRLevelChooseMenu.m */; };
 		6F3DF91120EFE3537DAA7F04 /* TRLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF86CCB044E060A70A002 /* TRLevel.m */; };
 		6F3DF91387740AC640952DE9 /* color_space_YCoCg.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF834266145B7F6EDDB7B /* color_space_YCoCg.inl */; };
+		6F3DF9151FD4FD4CF5442A50 /* Click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFA85490A034AEE88B3D1 /* Click.wav */; };
 		6F3DF925CB0930C10F92F501 /* NSDictionary+CNChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDBB75EB14F29802BCE3 /* NSDictionary+CNChain.m */; };
 		6F3DF92DE3719B90CA5FA318 /* CNPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF773230713415C3BB893 /* CNPair.m */; };
 		6F3DF93040C4F23C67E35E1E /* func_exponential.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF77D36D7D624D210359C /* func_exponential.inl */; };
@@ -1954,6 +1956,7 @@
 		6F3DFA8019BF5F56429BC134 /* transform2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = transform2.hpp; sourceTree = "<group>"; };
 		6F3DFA802CD9A7E225BCFDA2 /* btOverlappingPairCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btOverlappingPairCallback.h; sourceTree = "<group>"; };
 		6F3DFA84ACB98D8E5D04200E /* btSerializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btSerializer.cpp; sourceTree = "<group>"; };
+		6F3DFA85490A034AEE88B3D1 /* Click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Click.wav; sourceTree = "<group>"; };
 		6F3DFA8F46E4742FCD80955E /* btConvexInternalShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btConvexInternalShape.cpp; sourceTree = "<group>"; };
 		6F3DFA9074AB674E4E72CA19 /* CNData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNData.m; sourceTree = "<group>"; };
 		6F3DFA919DDC836CFC68709A /* TSTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSTestCase.h; sourceTree = "<group>"; };
@@ -4041,6 +4044,7 @@
 				6F3DF70A7B18F0C1FA83AFE2 /* TrainPreparing.wav */,
 				6F3DF402E3D8FC100E8273C7 /* CityBuild.wav */,
 				6F3DF4672630E009640A2C61 /* RefuseBuild.wav */,
+				6F3DFA85490A034AEE88B3D1 /* Click.wav */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -4655,6 +4659,7 @@
 				6F3DFFA3DC2062279A7E9455 /* RefuseBuild.wav in Resources */,
 				6F3DFB1A03FCC79EB9223DD8 /* Snow.png in Resources */,
 				6F3DF9509399BCCA3295B835 /* SnowPine.png in Resources */,
+				6F3DF9151FD4FD4CF5442A50 /* Click.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4774,6 +4779,7 @@
 				6F3DFA62C0A3966CE6119D7D /* RefuseBuild.wav in Resources */,
 				6F3DFCACCE3C44F281373C7A /* Snow.png in Resources */,
 				6F3DF9AEA1B104FB437A85ED /* SnowPine.png in Resources */,
+				6F3DF6E48752694C70A66943 /* Click.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

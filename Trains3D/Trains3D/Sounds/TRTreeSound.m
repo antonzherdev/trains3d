@@ -1,21 +1,22 @@
 #import "TRTreeSound.h"
 
+#import "TRLevel.h"
 #import "SDSound.h"
 #import "TRTree.h"
 #import "TRWeather.h"
 @implementation TRTreeSound{
-    TRForest* _forest;
+    TRLevel* _level;
 }
 static ODClassType* _TRTreeSound_type;
-@synthesize forest = _forest;
+@synthesize level = _level;
 
-+ (id)treeSoundWithForest:(TRForest*)forest {
-    return [[TRTreeSound alloc] initWithForest:forest];
++ (id)treeSoundWithLevel:(TRLevel*)level {
+    return [[TRTreeSound alloc] initWithLevel:level];
 }
 
-- (id)initWithForest:(TRForest*)forest {
-    self = [super initWithPlayers:(@[[TRWindSound windSoundWithForest:forest], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Nightingale.mp3" volume:0.1] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crow.mp3" volume:0.1] secondsBetween:60.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crows.mp3" volume:0.03] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Woodpecker.mp3" volume:0.4] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Cuckoo.mp3" volume:0.4] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Grouse.mp3" volume:0.35] secondsBetween:120.0]])];
-    if(self) _forest = forest;
+- (id)initWithLevel:(TRLevel*)level {
+    self = [super initWithPlayers:((level.rules.theme == TRLevelTheme.forest) ? (@[[TRWindSound windSoundWithForest:level.forest], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Nightingale.mp3" volume:0.1] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crow.mp3" volume:0.1] secondsBetween:240.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crows.mp3" volume:0.03] secondsBetween:240.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Woodpecker.mp3" volume:0.4] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Cuckoo.mp3" volume:0.4] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Grouse.mp3" volume:0.35] secondsBetween:120.0]]) : (@[[TRWindSound windSoundWithForest:level.forest], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crow.mp3" volume:0.1] secondsBetween:60.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crows.mp3" volume:0.03] secondsBetween:120.0]]))];
+    if(self) _level = level;
     
     return self;
 }
@@ -41,18 +42,18 @@ static ODClassType* _TRTreeSound_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRTreeSound* o = ((TRTreeSound*)(other));
-    return [self.forest isEqual:o.forest];
+    return [self.level isEqual:o.level];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [self.forest hash];
+    hash = hash * 31 + [self.level hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"forest=%@", self.forest];
+    [description appendFormat:@"level=%@", self.level];
     [description appendString:@">"];
     return description;
 }
