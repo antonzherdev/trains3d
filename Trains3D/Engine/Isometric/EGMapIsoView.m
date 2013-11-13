@@ -37,12 +37,12 @@ static ODClassType* _EGMapSsoView_type;
         }];
         _plane = ^EGMesh*() {
             GERectI limits = _map.limits;
-            CGFloat l = geRectIX(limits) - 3.5;
+            CGFloat l = geRectIX(limits) - _map.size.x + 0.5;
             CGFloat r = geRectIX2(limits) + 0.5;
-            CGFloat t = geRectIY(limits) - 3.5;
+            CGFloat t = geRectIY(limits) - _map.size.y + 0.5;
             CGFloat b = geRectIY2(limits) + 0.5;
-            NSInteger w = geRectIWidth(limits) + 4;
-            NSInteger h = geRectIHeight(limits) + 4;
+            NSInteger w = geRectIWidth(limits) + 5;
+            NSInteger h = geRectIHeight(limits) + 5;
             return [EGMesh meshWithVertex:[EGVBO meshData:[ arrs(EGMeshData, 4) {EGMeshDataMake(GEVec2Make(0.0, 0.0), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(l)), 0.0, ((float)(b)))), EGMeshDataMake(GEVec2Make(((float)(w)), 0.0), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(r)), 0.0, ((float)(b)))), EGMeshDataMake(GEVec2Make(0.0, ((float)(h))), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(l)), 0.0, ((float)(t)))), EGMeshDataMake(GEVec2Make(((float)(w)), ((float)(h))), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(r)), 0.0, ((float)(t))))}]] index:EGEmptyIndexSource.triangleStrip];
         }();
         _planeVao = [_plane vaoMaterial:_material shadow:NO];

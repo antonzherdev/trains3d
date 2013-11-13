@@ -83,7 +83,7 @@ class LevelFactory {
                     (40, slowTrain), (10, slowTrain), (25, slowTrain), (10, slowTrain), (20, slowTrain)
             ])    ,
             //5
-            LevelRules(vec2i(6, 4), LevelTheme.winter, scoreRulesWith(40000),
+            LevelRules(vec2i(5, 5), LevelTheme.winter, scoreRulesWith(40000),
                 WeatherRules(windStrength = 0.3, blastness = 0.05, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.1),
                 repairerSpeed = 20, [
                 (0, create2Cities), (10, slowTrain), (17, slowTrain), (30, slowTrain), (15, slowTrain),
