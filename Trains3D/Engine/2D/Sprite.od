@@ -64,12 +64,14 @@ object D2D {
     private lazy val circleVaoForColor = Mesh(
         VBO.vec2([vec2(-1, -1), vec2(-1, 1), vec2(1, -1), vec2(1, 1)]),
         EmptyIndexSource.triangleStrip).vao(CircleShader.instance)
-    def drawCircle(material : ColorSource, at : vec3, radius : float4, relative : vec2, start : float, end : float) {
+    def drawCircle(backColor : vec4, strokeColor : vec4, at : vec3, radius : float4, relative : vec2, segmentColor : vec4,
+        start : float, end : float)
+    {
         BlendFunction.standard { context.cullFace.disabled {
             val vps = context.viewport.size
             val rad = if(vps.y <= vps.x) vec2(radius * vps.y/vps.x, radius)
                 else vec2(radius, radius * vps.x/vps.y)
-            circleVaoForColor.draw(CircleParam(material.color, at, rad, relative, start, end))
+            circleVaoForColor.draw(CircleParam(backColor, strokeColor, at, rad, relative, CircleSegment(segmentColor, start, end)))
         }}
     }
 }
@@ -95,32 +97,39 @@ class CircleShaderBuilder extends ShaderTextBuilder {
 
         $in highp vec2 coord;
         uniform lowp vec4 color;
+        uniform lowp vec4 strokeColor;
+        uniform lowp vec4 sectorColor;
         uniform lowp float startTg;
         uniform lowp float endTg;
 
         void main(void) {
             lowp float tg = atan(coord.y, coord.x);
             highp float dt = dot(coord, coord);
+            lowp float alpha = 0.0;
             if(endTg < startTg) {
-               $fragColor = vec4(color.xyz, color.w * clamp(
-                        1.0 - smoothstep(0.95, 1.0, dt)
-                        - (clamp(smoothstep(endTg - 0.1, endTg, tg) + 1.0 - smoothstep(startTg, startTg + 0.1, tg), 1.0, 2.0) - 1.0)
-                        + smoothstep(0.75, 0.8, dt) - smoothstep(0.95, 1.0, dt)
-               , 0.0, 1.0));
+                alpha = sectorColor.w * clamp(
+                    1.0 - smoothstep(0.95, 1.0, dt)
+                    - (clamp(smoothstep(endTg - 0.1, endTg, tg) + 1.0 - smoothstep(startTg, startTg + 0.1, tg), 1.0, 2.0) - 1.0)
+                , 0.0, 1.0);
             } else {
-                $fragColor = vec4(color.xyz, color.w * clamp(
+                alpha = sectorColor.w * clamp(
                         1.0 - smoothstep(0.95, 1.0, dt)
                         - (1.0 - smoothstep(startTg, startTg + 0.1, tg))
                         - (smoothstep(endTg - 0.1, endTg, tg))
-                        + smoothstep(0.75, 0.8, dt) - smoothstep(0.95, 1.0, dt)
-                , 0.0, 1.0));
+                , 0.0, 1.0);
             }
+            $fragColor = vec4(mix(
+                    mix(color.xyz, sectorColor.xyz, alpha),
+                    strokeColor.xyz, strokeColor.w*(smoothstep(0.75, 0.8, dt) - smoothstep(0.95, 1.0, dt))),
+                color.w * (1.0 - smoothstep(0.95, 1.0, dt)));
+
         }"
 
     def program = ShaderProgram("Circle", vertex, fragment)
 }
 
-class CircleParam(color : vec4, position : vec3, radius : vec2, relative : vec2, start : float4, end : float4)
+class CircleParam(color : vec4, strokeColor : vec4, position : vec3, radius : vec2, relative : vec2, segment : CircleSegment)
+class CircleSegment(color : vec4, start : float4, end : float4)
 
 class CircleShader extends Shader<CircleParam>(CircleShaderBuilder().program) {
     static val instance = CircleShader()
@@ -134,6 +143,8 @@ class CircleShader extends Shader<CircleParam>(CircleShaderBuilder().program) {
     val p = uniformMat4("p")
     val radius = uniformVec2("radius")
     val color = uniformVec4("color")
+    val strokeColor = uniformVec4("strokeColor")
+    val sectorColor = uniformVec4("sectorColor")
     val startTg = uniformF4("startTg")
     val endTg = uniformF4("endTg")
     def loadUniforms(param : CircleParam) {
@@ -141,12 +152,15 @@ class CircleShader extends Shader<CircleParam>(CircleShaderBuilder().program) {
         p(matrix.value.p)
         radius(param.radius)
         color(param.color)
-        if(param.start < param.end) {
-            startTg(clamp(param.start))
-            endTg(clamp(param.end))
+        strokeColor(param.strokeColor)
+        val sec = param.segment
+        sectorColor(sec.color)
+        if(sec.start < sec.end) {
+            startTg(clamp(sec.start))
+            endTg(clamp(sec.end))
         } else {
-            startTg(clamp(param.end))
-            endTg(clamp(param.start))
+            startTg(clamp(sec.end))
+            endTg(clamp(sec.start))
         }
     }
     private def clamp(p : float4) : float4 =

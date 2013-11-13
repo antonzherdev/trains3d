@@ -82,12 +82,12 @@ static ODClassType* _EGD2D_type;
     }];
 }
 
-+ (void)drawCircleMaterial:(EGColorSource*)material at:(GEVec3)at radius:(float)radius relative:(GEVec2)relative start:(CGFloat)start end:(CGFloat)end {
++ (void)drawCircleBackColor:(GEVec4)backColor strokeColor:(GEVec4)strokeColor at:(GEVec3)at radius:(float)radius relative:(GEVec2)relative segmentColor:(GEVec4)segmentColor start:(CGFloat)start end:(CGFloat)end {
     [EGBlendFunction.standard applyDraw:^void() {
         [EGGlobal.context.cullFace disabledF:^void() {
             GEVec2i vps = [EGGlobal.context viewport].size;
             GEVec2 rad = ((vps.y <= vps.x) ? GEVec2Make((radius * vps.y) / vps.x, radius) : GEVec2Make(radius, (radius * vps.x) / vps.y));
-            [[EGD2D circleVaoForColor] drawParam:[EGCircleParam circleParamWithColor:material.color position:at radius:rad relative:relative start:((float)(start)) end:((float)(end))]];
+            [[EGD2D circleVaoForColor] drawParam:[EGCircleParam circleParamWithColor:backColor strokeColor:strokeColor position:at radius:rad relative:relative segment:[EGCircleSegment circleSegmentWithColor:segmentColor start:((float)(start)) end:((float)(end))]]];
         }];
     }];
 }
@@ -163,27 +163,33 @@ static ODClassType* _EGCircleShaderBuilder_type;
         "\n"
         "%@ highp vec2 coord;\n"
         "uniform lowp vec4 color;\n"
+        "uniform lowp vec4 strokeColor;\n"
+        "uniform lowp vec4 sectorColor;\n"
         "uniform lowp float startTg;\n"
         "uniform lowp float endTg;\n"
         "\n"
         "void main(void) {\n"
         "    lowp float tg = atan(coord.y, coord.x);\n"
         "    highp float dt = dot(coord, coord);\n"
+        "    lowp float alpha = 0.0;\n"
         "    if(endTg < startTg) {\n"
-        "       %@ = vec4(color.xyz, color.w * clamp(\n"
-        "                1.0 - smoothstep(0.95, 1.0, dt)\n"
-        "                - (clamp(smoothstep(endTg - 0.1, endTg, tg) + 1.0 - smoothstep(startTg, startTg + 0.1, tg), 1.0, 2.0) - 1.0)\n"
-        "                + smoothstep(0.75, 0.8, dt) - smoothstep(0.95, 1.0, dt)\n"
-        "       , 0.0, 1.0));\n"
+        "        alpha = sectorColor.w * clamp(\n"
+        "            1.0 - smoothstep(0.95, 1.0, dt)\n"
+        "            - (clamp(smoothstep(endTg - 0.1, endTg, tg) + 1.0 - smoothstep(startTg, startTg + 0.1, tg), 1.0, 2.0) - 1.0)\n"
+        "        , 0.0, 1.0);\n"
         "    } else {\n"
-        "        %@ = vec4(color.xyz, color.w * clamp(\n"
+        "        alpha = sectorColor.w * clamp(\n"
         "                1.0 - smoothstep(0.95, 1.0, dt)\n"
         "                - (1.0 - smoothstep(startTg, startTg + 0.1, tg))\n"
         "                - (smoothstep(endTg - 0.1, endTg, tg))\n"
-        "                + smoothstep(0.75, 0.8, dt) - smoothstep(0.95, 1.0, dt)\n"
-        "        , 0.0, 1.0));\n"
+        "        , 0.0, 1.0);\n"
         "    }\n"
-        "}", [self fragmentHeader], [self in], [self fragColor], [self fragColor]];
+        "    %@ = vec4(mix(\n"
+        "            mix(color.xyz, sectorColor.xyz, alpha),\n"
+        "            strokeColor.xyz, strokeColor.w*(smoothstep(0.75, 0.8, dt) - smoothstep(0.95, 1.0, dt))),\n"
+        "        color.w * (1.0 - smoothstep(0.95, 1.0, dt)));\n"
+        "\n"
+        "}", [self fragmentHeader], [self in], [self fragColor]];
 }
 
 - (EGShaderProgram*)program {
@@ -288,33 +294,33 @@ static ODClassType* _EGCircleShaderBuilder_type;
 
 @implementation EGCircleParam{
     GEVec4 _color;
+    GEVec4 _strokeColor;
     GEVec3 _position;
     GEVec2 _radius;
     GEVec2 _relative;
-    float _start;
-    float _end;
+    EGCircleSegment* _segment;
 }
 static ODClassType* _EGCircleParam_type;
 @synthesize color = _color;
+@synthesize strokeColor = _strokeColor;
 @synthesize position = _position;
 @synthesize radius = _radius;
 @synthesize relative = _relative;
-@synthesize start = _start;
-@synthesize end = _end;
+@synthesize segment = _segment;
 
-+ (id)circleParamWithColor:(GEVec4)color position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative start:(float)start end:(float)end {
-    return [[EGCircleParam alloc] initWithColor:color position:position radius:radius relative:relative start:start end:end];
++ (id)circleParamWithColor:(GEVec4)color strokeColor:(GEVec4)strokeColor position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative segment:(EGCircleSegment*)segment {
+    return [[EGCircleParam alloc] initWithColor:color strokeColor:strokeColor position:position radius:radius relative:relative segment:segment];
 }
 
-- (id)initWithColor:(GEVec4)color position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative start:(float)start end:(float)end {
+- (id)initWithColor:(GEVec4)color strokeColor:(GEVec4)strokeColor position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative segment:(EGCircleSegment*)segment {
     self = [super init];
     if(self) {
         _color = color;
+        _strokeColor = strokeColor;
         _position = position;
         _radius = radius;
         _relative = relative;
-        _start = start;
-        _end = end;
+        _segment = segment;
     }
     
     return self;
@@ -341,15 +347,87 @@ static ODClassType* _EGCircleParam_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGCircleParam* o = ((EGCircleParam*)(other));
-    return GEVec4Eq(self.color, o.color) && GEVec3Eq(self.position, o.position) && GEVec2Eq(self.radius, o.radius) && GEVec2Eq(self.relative, o.relative) && eqf4(self.start, o.start) && eqf4(self.end, o.end);
+    return GEVec4Eq(self.color, o.color) && GEVec4Eq(self.strokeColor, o.strokeColor) && GEVec3Eq(self.position, o.position) && GEVec2Eq(self.radius, o.radius) && GEVec2Eq(self.relative, o.relative) && [self.segment isEqual:o.segment];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + GEVec4Hash(self.color);
+    hash = hash * 31 + GEVec4Hash(self.strokeColor);
     hash = hash * 31 + GEVec3Hash(self.position);
     hash = hash * 31 + GEVec2Hash(self.radius);
     hash = hash * 31 + GEVec2Hash(self.relative);
+    hash = hash * 31 + [self.segment hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"color=%@", GEVec4Description(self.color)];
+    [description appendFormat:@", strokeColor=%@", GEVec4Description(self.strokeColor)];
+    [description appendFormat:@", position=%@", GEVec3Description(self.position)];
+    [description appendFormat:@", radius=%@", GEVec2Description(self.radius)];
+    [description appendFormat:@", relative=%@", GEVec2Description(self.relative)];
+    [description appendFormat:@", segment=%@", self.segment];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGCircleSegment{
+    GEVec4 _color;
+    float _start;
+    float _end;
+}
+static ODClassType* _EGCircleSegment_type;
+@synthesize color = _color;
+@synthesize start = _start;
+@synthesize end = _end;
+
++ (id)circleSegmentWithColor:(GEVec4)color start:(float)start end:(float)end {
+    return [[EGCircleSegment alloc] initWithColor:color start:start end:end];
+}
+
+- (id)initWithColor:(GEVec4)color start:(float)start end:(float)end {
+    self = [super init];
+    if(self) {
+        _color = color;
+        _start = start;
+        _end = end;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGCircleSegment_type = [ODClassType classTypeWithCls:[EGCircleSegment class]];
+}
+
+- (ODClassType*)type {
+    return [EGCircleSegment type];
+}
+
++ (ODClassType*)type {
+    return _EGCircleSegment_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGCircleSegment* o = ((EGCircleSegment*)(other));
+    return GEVec4Eq(self.color, o.color) && eqf4(self.start, o.start) && eqf4(self.end, o.end);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + GEVec4Hash(self.color);
     hash = hash * 31 + float4Hash(self.start);
     hash = hash * 31 + float4Hash(self.end);
     return hash;
@@ -358,9 +436,6 @@ static ODClassType* _EGCircleParam_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"color=%@", GEVec4Description(self.color)];
-    [description appendFormat:@", position=%@", GEVec3Description(self.position)];
-    [description appendFormat:@", radius=%@", GEVec2Description(self.radius)];
-    [description appendFormat:@", relative=%@", GEVec2Description(self.relative)];
     [description appendFormat:@", start=%f", self.start];
     [description appendFormat:@", end=%f", self.end];
     [description appendString:@">"];
@@ -376,6 +451,8 @@ static ODClassType* _EGCircleParam_type;
     EGShaderUniformMat4* _p;
     EGShaderUniformVec2* _radius;
     EGShaderUniformVec4* _color;
+    EGShaderUniformVec4* _strokeColor;
+    EGShaderUniformVec4* _sectorColor;
     EGShaderUniformF4* _startTg;
     EGShaderUniformF4* _endTg;
 }
@@ -386,6 +463,8 @@ static ODClassType* _EGCircleShader_type;
 @synthesize p = _p;
 @synthesize radius = _radius;
 @synthesize color = _color;
+@synthesize strokeColor = _strokeColor;
+@synthesize sectorColor = _sectorColor;
 @synthesize startTg = _startTg;
 @synthesize endTg = _endTg;
 
@@ -401,6 +480,8 @@ static ODClassType* _EGCircleShader_type;
         _p = [self uniformMat4Name:@"p"];
         _radius = [self uniformVec2Name:@"radius"];
         _color = [self uniformVec4Name:@"color"];
+        _strokeColor = [self uniformVec4Name:@"strokeColor"];
+        _sectorColor = [self uniformVec4Name:@"sectorColor"];
         _startTg = [self uniformF4Name:@"startTg"];
         _endTg = [self uniformF4Name:@"endTg"];
     }
@@ -423,12 +504,15 @@ static ODClassType* _EGCircleShader_type;
     [_p applyMatrix:EGGlobal.matrix.value.p];
     [_radius applyVec2:param.radius];
     [_color applyVec4:param.color];
-    if(param.start < param.end) {
-        [_startTg applyF4:[self clampP:param.start]];
-        [_endTg applyF4:[self clampP:param.end]];
+    [_strokeColor applyVec4:param.strokeColor];
+    EGCircleSegment* sec = param.segment;
+    [_sectorColor applyVec4:sec.color];
+    if(sec.start < sec.end) {
+        [_startTg applyF4:[self clampP:sec.start]];
+        [_endTg applyF4:[self clampP:sec.end]];
     } else {
-        [_startTg applyF4:[self clampP:param.end]];
-        [_endTg applyF4:[self clampP:param.start]];
+        [_startTg applyF4:[self clampP:sec.end]];
+        [_endTg applyF4:[self clampP:sec.start]];
     }
 }
 

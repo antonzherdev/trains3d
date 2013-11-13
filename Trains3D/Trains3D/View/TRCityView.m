@@ -65,7 +65,7 @@ static ODClassType* _TRCityView_type;
     [EGGlobal.context.depthTest disabledF:^void() {
         [[_level cities] forEach:^void(TRCity* city) {
             [((TRCity*)(city)).expectedTrainCounter forF:^void(CGFloat time) {
-                [EGD2D drawCircleMaterial:[EGColorSource applyColor:geVec4ApplyVec3W(geVec4Xyz(((TRCity*)(city)).expectedTrainColor.color), 0.85)] at:geVec3ApplyVec2Z(geVec2ApplyVec2i(((TRCity*)(city)).tile), 0.0) radius:0.04 relative:geVec2MulF([TRCityView moveVecForLevel:_level city:city], 0.25) start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
+                [EGD2D drawCircleBackColor:geVec4ApplyVec3W(geVec3MulK(geVec4Xyz(((TRCity*)(city)).expectedTrainColor.color), 0.5), 0.85) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.2) at:geVec3ApplyVec2Z(geVec2ApplyVec2i(((TRCity*)(city)).tile), 0.0) radius:0.04 relative:geVec2MulF([TRCityView moveVecForLevel:_level city:city], 0.25) segmentColor:geVec4ApplyVec3W(geVec4Xyz(((TRCity*)(city)).expectedTrainColor.color), 1.0) start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
             }];
         }];
     }];

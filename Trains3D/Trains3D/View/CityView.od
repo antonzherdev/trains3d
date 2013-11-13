@@ -25,8 +25,11 @@ class CityView(level : Level) {
         context.depthTest.disabled {
             level.cities.for{ city ->
                 city.expectedTrainCounter.for{time ->
-                    D2D.drawCircle(ColorSource(vec4(city.expectedTrainColor.color.xyz, 0.85)), vec3(city.tile, 0),
-                        radius = 0.04, relative = moveVecFor(level, city)*0.25, start = math.M_PI_2, end = math.M_PI_2 - 2*time*math.M_PI)
+                    D2D.drawCircle(backColor = vec4(city.expectedTrainColor.color.xyz*0.5, 0.85), strokeColor = vec4(0, 0, 0, 0.2),
+                        at = vec3(city.tile, 0), radius = 0.04, relative = moveVecFor(level, city)*0.25,
+                        segmentColor = vec4(city.expectedTrainColor.color.xyz, 1.0),
+                        start = math.M_PI_2, end = math.M_PI_2 - 2*time*math.M_PI
+                        )
                 }
             }
         }

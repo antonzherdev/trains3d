@@ -24,6 +24,7 @@
 @class EGD2D;
 @class EGCircleShaderBuilder;
 @class EGCircleParam;
+@class EGCircleSegment;
 @class EGCircleShader;
 @class EGSprite;
 @class EGLine2d;
@@ -37,7 +38,7 @@
 + (CNVoidRefArray)writeSpriteIn:(CNVoidRefArray)in material:(EGColorSource*)material at:(GEVec3)at quad:(GEQuad)quad uv:(GEQuad)uv;
 + (CNVoidRefArray)writeQuadIndexIn:(CNVoidRefArray)in i:(unsigned int)i;
 + (void)drawLineMaterial:(EGColorSource*)material p0:(GEVec2)p0 p1:(GEVec2)p1;
-+ (void)drawCircleMaterial:(EGColorSource*)material at:(GEVec3)at radius:(float)radius relative:(GEVec2)relative start:(CGFloat)start end:(CGFloat)end;
++ (void)drawCircleBackColor:(GEVec4)backColor strokeColor:(GEVec4)strokeColor at:(GEVec3)at radius:(float)radius relative:(GEVec2)relative segmentColor:(GEVec4)segmentColor start:(CGFloat)start end:(CGFloat)end;
 + (ODClassType*)type;
 @end
 
@@ -55,14 +56,26 @@
 
 @interface EGCircleParam : NSObject
 @property (nonatomic, readonly) GEVec4 color;
+@property (nonatomic, readonly) GEVec4 strokeColor;
 @property (nonatomic, readonly) GEVec3 position;
 @property (nonatomic, readonly) GEVec2 radius;
 @property (nonatomic, readonly) GEVec2 relative;
+@property (nonatomic, readonly) EGCircleSegment* segment;
+
++ (id)circleParamWithColor:(GEVec4)color strokeColor:(GEVec4)strokeColor position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative segment:(EGCircleSegment*)segment;
+- (id)initWithColor:(GEVec4)color strokeColor:(GEVec4)strokeColor position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative segment:(EGCircleSegment*)segment;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface EGCircleSegment : NSObject
+@property (nonatomic, readonly) GEVec4 color;
 @property (nonatomic, readonly) float start;
 @property (nonatomic, readonly) float end;
 
-+ (id)circleParamWithColor:(GEVec4)color position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative start:(float)start end:(float)end;
-- (id)initWithColor:(GEVec4)color position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative start:(float)start end:(float)end;
++ (id)circleSegmentWithColor:(GEVec4)color start:(float)start end:(float)end;
+- (id)initWithColor:(GEVec4)color start:(float)start end:(float)end;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -74,6 +87,8 @@
 @property (nonatomic, readonly) EGShaderUniformMat4* p;
 @property (nonatomic, readonly) EGShaderUniformVec2* radius;
 @property (nonatomic, readonly) EGShaderUniformVec4* color;
+@property (nonatomic, readonly) EGShaderUniformVec4* strokeColor;
+@property (nonatomic, readonly) EGShaderUniformVec4* sectorColor;
 @property (nonatomic, readonly) EGShaderUniformF4* startTg;
 @property (nonatomic, readonly) EGShaderUniformF4* endTg;
 
