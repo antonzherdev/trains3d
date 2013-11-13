@@ -5,6 +5,8 @@
 @class SDSound;
 @class TRLevel;
 @class TRRailroadBuilder;
+@class TRSwitch;
+@class TRRailLight;
 
 @class TRLevelSound;
 

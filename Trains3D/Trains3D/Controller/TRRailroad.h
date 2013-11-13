@@ -80,6 +80,7 @@
 - (id<CNSeq>)rails;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
 - (void)cutDownTreesInForest:(TRForest*)forest;
++ (CNNotificationHandle*)turnNotification;
 + (ODClassType*)type;
 @end
 

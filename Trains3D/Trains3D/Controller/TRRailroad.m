@@ -238,6 +238,7 @@ static ODClassType* _TRRail_type;
     TRRail* _rail2;
     BOOL _firstActive;
 }
+static CNNotificationHandle* _TRSwitch_turnNotification;
 static ODClassType* _TRSwitch_type;
 @synthesize tile = _tile;
 @synthesize connector = _connector;
@@ -265,6 +266,7 @@ static ODClassType* _TRSwitch_type;
 + (void)initialize {
     [super initialize];
     _TRSwitch_type = [ODClassType classTypeWithCls:[TRSwitch class]];
+    _TRSwitch_turnNotification = [CNNotificationHandle notificationHandleWithName:@"switchTurnNotification"];
 }
 
 - (TRRail*)activeRail {
@@ -274,6 +276,7 @@ static ODClassType* _TRSwitch_type;
 
 - (void)turn {
     _firstActive = !(_firstActive);
+    [_TRSwitch_turnNotification postData:self];
 }
 
 - (BOOL)canAddRail:(TRRail*)rail {
@@ -299,6 +302,10 @@ static ODClassType* _TRSwitch_type;
 
 - (ODClassType*)type {
     return [TRSwitch type];
+}
+
++ (CNNotificationHandle*)turnNotification {
+    return _TRSwitch_turnNotification;
 }
 
 + (ODClassType*)type {

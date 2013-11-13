@@ -28,9 +28,13 @@ class Rail(tile : vec2i, form : RailForm) extends RailroadConnectorContent {
 }
 
 class Switch(tile : vec2i, connector : RailConnector, rail1 : Rail, rail2 : Rail) extends RailroadConnectorContent {
+    static val turnNotification = NotificationHandle<Switch>("switchTurnNotification")
     var firstActive = true
     def activeRail : Rail = if(firstActive) rail1 else rail2
-    def turn { firstActive = !firstActive }
+    def turn {
+        firstActive = !firstActive
+        turnNotification.post(self)
+    }
     def canAdd(rail : Rail) = false
     def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = throw "Couldn't add rail to switch"
     def rails : [Rail] = if(firstActive) [rail1, rail2] else [rail2, rail1]

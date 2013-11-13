@@ -746,6 +746,7 @@
 		6F3DFAA28A043F06BC66F3ED /* wrap.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFE167498FC1E69F466CA /* wrap.inl */; };
 		6F3DFAA5FB0594A16735CB39 /* btCompoundShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1CB5FB7DC2851443043 /* btCompoundShape.cpp */; };
 		6F3DFAA6177F9949F056EF6F /* CNSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4C9C8F3F7223A3FC17F /* CNSet.m */; };
+		6F3DFAA7050260D7FE5F885F /* Beep.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFEB3BAE0DC6CEEFED6A3 /* Beep.wav */; };
 		6F3DFAA754DDECC75CC8095D /* GEVec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF09B89B5EBBB20529EB7 /* GEVec.m */; };
 		6F3DFAA887C1F7209B194D17 /* btSphereBoxCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8771F57DA38E87A915E /* btSphereBoxCollisionAlgorithm.cpp */; };
 		6F3DFAAAAEC793B68843DD14 /* projection.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF3DFB2CC48B0CF6210F4 /* projection.inl */; };
@@ -925,6 +926,7 @@
 		6F3DFD0DB0F307EEF433FB26 /* NSArray+CNChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF577034D32EE48B6D60E /* NSArray+CNChain.m */; };
 		6F3DFD0DC88BEBB387C6D9BF /* SDSound.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1D73132A86A5C9E3DEF /* SDSound.m */; };
 		6F3DFD0ED0180BEF6F941DCA /* CNFilterLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF19D193921A2623A28BF /* CNFilterLink.m */; };
+		6F3DFD0F57A894CB2FEB2EE4 /* Beep.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFEB3BAE0DC6CEEFED6A3 /* Beep.wav */; };
 		6F3DFD1158CE6BB68A7F1282 /* btDefaultCollisionConfiguration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB83A23FDD26AC96EE90 /* btDefaultCollisionConfiguration.cpp */; };
 		6F3DFD121B462271E25843BA /* EGSchedule.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9EA2E28CC61810D9757 /* EGSchedule.m */; };
 		6F3DFD14C7441EAD431C2BE5 /* lucida_grande_18.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF54DC5799C2230D8C4DC /* lucida_grande_18.fnt */; };
@@ -2269,6 +2271,7 @@
 		6F3DFEAC738568E52F76F5AF /* TBXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBXML.h; sourceTree = "<group>"; };
 		6F3DFEAEBDA77BBFC5F7BFBC /* Line.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Line.od; sourceTree = "<group>"; };
 		6F3DFEAEF336912A5D856EAD /* KWPendingNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWPendingNode.m; sourceTree = "<group>"; };
+		6F3DFEB3BAE0DC6CEEFED6A3 /* Beep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Beep.wav; sourceTree = "<group>"; };
 		6F3DFEB5D2B44AFAB7532FBB /* NSMutableSet+CNChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableSet+CNChain.h"; sourceTree = "<group>"; };
 		6F3DFEB7AFB15FDAC5EF0E59 /* NSSet+CNChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSSet+CNChain.m"; sourceTree = "<group>"; };
 		6F3DFEBAAA2D36A9D7E417B7 /* EGEventIOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGEventIOS.m; sourceTree = "<group>"; };
@@ -4045,6 +4048,7 @@
 				6F3DF402E3D8FC100E8273C7 /* CityBuild.wav */,
 				6F3DF4672630E009640A2C61 /* RefuseBuild.wav */,
 				6F3DFA85490A034AEE88B3D1 /* Click.wav */,
+				6F3DFEB3BAE0DC6CEEFED6A3 /* Beep.wav */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -4660,6 +4664,7 @@
 				6F3DFB1A03FCC79EB9223DD8 /* Snow.png in Resources */,
 				6F3DF9509399BCCA3295B835 /* SnowPine.png in Resources */,
 				6F3DF9151FD4FD4CF5442A50 /* Click.wav in Resources */,
+				6F3DFAA7050260D7FE5F885F /* Beep.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4780,6 +4785,7 @@
 				6F3DFCACCE3C44F281373C7A /* Snow.png in Resources */,
 				6F3DF9AEA1B104FB437A85ED /* SnowPine.png in Resources */,
 				6F3DF6E48752694C70A66943 /* Click.wav in Resources */,
+				6F3DFD0F57A894CB2FEB2EE4 /* Beep.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
