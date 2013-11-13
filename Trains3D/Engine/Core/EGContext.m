@@ -721,7 +721,7 @@ static ODClassType* _EGLight_type;
         _color = color;
         _hasShadows = hasShadows;
         __lazy_shadowMap = [CNLazy lazyWithF:^EGShadowMap*() {
-            return [EGShadowMap shadowMapWithSize:geVec2iApplyVec2(GEVec2Make(1536.0, 1536.0))];
+            return [EGShadowMap shadowMapWithSize:geVec2iApplyVec2(GEVec2Make(2048.0, 2048.0))];
         }];
     }
     

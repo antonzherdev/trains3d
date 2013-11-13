@@ -151,8 +151,8 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
         light.shadowMap.biasDepthCp = ShadowMap.biasMatrix *matrix.value.cp
         light.shadowMap{
             glClear(GL_DEPTH_BUFFER_BIT)
-            val cullFace = camera.cullFace
-            if(cullFace != GL_NONE) glCullFace(if(cullFace == GL_BACK) GL_FRONT else GL_BACK)
+//            val cullFace = camera.cullFace
+//            if(cullFace != GL_NONE) glCullFace(if(cullFace == GL_BACK) GL_FRONT else GL_BACK)
             view.draw
         }
         egCheckError

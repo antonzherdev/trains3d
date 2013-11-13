@@ -232,7 +232,7 @@ class Environment(ambientColor : vec4, lights : [Light]) {
 }
 
 class Light(color : vec4, hasShadows : bool) {
-    lazy val shadowMap : ShadowMap = ShadowMap(vec2(1536, 1536))
+    lazy val shadowMap : ShadowMap = ShadowMap(vec2(2048, 2048))
     static val default = Light(vec4(1, 1, 1, 1), true)
 
     def shadowMatrix(model : MatrixModel) : MatrixModel = throw "Shadows are not supported for $(self.type)"

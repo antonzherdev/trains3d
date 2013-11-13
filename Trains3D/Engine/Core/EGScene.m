@@ -372,8 +372,6 @@ static ODClassType* _EGLayer_type;
     [light shadowMap].biasDepthCp = [EGShadowMap.biasMatrix mulMatrix:[EGGlobal.matrix.value cp]];
     [[light shadowMap] applyDraw:^void() {
         glClear(GL_DEPTH_BUFFER_BIT);
-        NSUInteger cullFace = [camera cullFace];
-        if(cullFace != GL_NONE) glCullFace(((cullFace == GL_BACK) ? GL_FRONT : GL_BACK));
         [_view draw];
     }];
     egCheckError();
