@@ -226,9 +226,9 @@ static ODClassType* _TRTrain_type;
     GEVec2i tile = theSwitch.tile;
     GEVec2i nextTile = [theSwitch.connector nextTile:tile];
     TRRailPoint* rp11 = [theSwitch railPoint1];
-    TRRailPoint* rp12 = [rp11 addX:0.45];
+    TRRailPoint* rp12 = [rp11 addX:0.3];
     TRRailPoint* rp21 = [theSwitch railPoint2];
-    TRRailPoint* rp22 = [rp21 addX:0.45];
+    TRRailPoint* rp22 = [rp21 addX:0.3];
     return [[[self cars] findWhere:^BOOL(TRCar* car) {
         TRCarPosition* p = [((TRCar*)(car)) position];
         return (GEVec2iEq(p.frontConnector.tile, tile) && GEVec2iEq(p.backConnector.tile, nextTile)) || (GEVec2iEq(p.frontConnector.tile, nextTile) && GEVec2iEq(p.backConnector.tile, tile)) || [p.frontConnector betweenA:rp11 b:rp12] || [p.backConnector betweenA:rp21 b:rp22];

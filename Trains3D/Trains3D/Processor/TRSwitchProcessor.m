@@ -29,7 +29,7 @@ static ODClassType* _TRSwitchProcessor_type;
     __weak TRSwitchProcessor* _weakSelf = self;
     if(self) {
         _level = level;
-        _switchShape = [EGCollisionBox2d applyX:0.3 y:0.2];
+        _switchShape = [EGCollisionBox2d applyX:0.4 y:0.4];
         _lightShape = [EGCollisionBox2d applyX:0.4 y:0.24];
         _world = [EGCollisionWorld collisionWorld];
         _obs = [TRRailroad.changedNotification observeBy:^void(id _) {

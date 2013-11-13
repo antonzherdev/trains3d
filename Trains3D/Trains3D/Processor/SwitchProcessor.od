@@ -5,7 +5,7 @@ import com.antonzherdev.eg._
 class SwitchProcessor(level : Level) extends InputProcessor with TapProcessor {
     def process(event : Event) : bool = event.tap(self)
 
-    val switchShape = CollisionBox2d(0.3, 0.2)
+    val switchShape = CollisionBox2d(0.4, 0.4)
     val lightShape = CollisionBox2d(0.4, 0.24)
     val world = CollisionWorld<RailroadConnectorContent>()
     private val obs = Railroad.changedNotification.observe { _ ->
