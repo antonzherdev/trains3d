@@ -41,7 +41,16 @@ static ODClassType* _TRLevelView_type;
     if(self) {
         _level = level;
         _name = @"Level";
-        _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.7, 0.7, 0.7, 1.0) lights:(@[[EGDirectLight applyColor:GEVec4Make(0.6, 0.6, 0.6, 1.0) direction:geVec3Normalize(GEVec3Make(-0.15, 0.35, -0.3)) shadowsProjectionMatrix:[GEMat4 orthoLeft:-1.5 right:((float)(_level.map.size.x + 2)) bottom:-3.5 top:((float)(_level.map.size.y + 1)) zNear:-2.0 zFar:4.0]]])];
+        _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.7, 0.7, 0.7, 1.0) lights:(@[[EGDirectLight applyColor:GEVec4Make(0.6, 0.6, 0.6, 1.0) direction:geVec3Normalize(GEVec3Make(-0.15, 0.35, -0.3)) shadowsProjectionMatrix:^GEMat4*() {
+    GEMat4* m;
+    if(GEVec2iEq(_level.map.size, GEVec2iMake(5, 5))) {
+        m = [GEMat4 orthoLeft:-2.4 right:7.3 bottom:-2.2 top:3.9 zNear:-2.0 zFar:5.5];
+    } else {
+        if(GEVec2iEq(_level.map.size, GEVec2iMake(5, 3))) m = [GEMat4 orthoLeft:-2.0 right:5.7 bottom:-2.0 top:2.7 zNear:-2.0 zFar:4.0];
+        else @throw @"Define shadow matrix for this map size";
+    }
+    return m;
+}()]])];
         _camera = [EGCameraIso cameraIsoWithTilesOnScreen:_level.map.size zReserve:0.5 center:GEVec2Make(0.0, 0.0)];
         _railroadBuilderProcessor = [TRRailroadBuilderProcessor railroadBuilderProcessorWithBuilder:_level.railroad.builder];
         _switchProcessor = [TRSwitchProcessor switchProcessorWithLevel:_level];
