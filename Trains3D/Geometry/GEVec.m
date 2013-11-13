@@ -106,6 +106,9 @@ GEVec2 geVec2Rnd() {
 BOOL geVec2IsEmpty(GEVec2 self) {
     return eqf4(self.x, 0) && eqf4(self.y, 0);
 }
+GEVec2i geVec2Round(GEVec2 self) {
+    return GEVec2iMake(float4Round(self.x), float4Round(self.y));
+}
 ODPType* geVec2Type() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[GEVec2Wrap class] name:@"GEVec2" size:sizeof(GEVec2) wrap:^id(void* data, NSUInteger i) {

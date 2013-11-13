@@ -7,6 +7,14 @@ struct Line2(r0 : vec2, u : vec2) {
     def r(plane : Plane) = r0 + u*( plane.n.dot(plane.p0 - r0)/plane.n.dot(u) )
     def angle = u.angle
     def degreeAngle = u.degreeAngle
+
+    def set(length : float4) : Line2 = Line2(r0, u = u.set(length = length))
+    def normalize : Line2 = Line2(r0, u = u.normalize)
+    def mid : vec2  = r0 + u/2
+    def r1 : vec2 = r0 + u
+
+    def add(vec2 : vec2) = Line2(r0 + vec2, u)
+    def sub(vec2 : vec2) = Line2(r0 - vec2, u)
 }
 
 

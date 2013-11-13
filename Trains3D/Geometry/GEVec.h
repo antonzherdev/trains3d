@@ -59,6 +59,7 @@ GERect geVec2RectToVec2(GEVec2 self, GEVec2 vec2);
 GERect geVec2RectInCenterWithSize(GEVec2 self, GEVec2 size);
 GEVec2 geVec2Rnd();
 BOOL geVec2IsEmpty(GEVec2 self);
+GEVec2i geVec2Round(GEVec2 self);
 ODPType* geVec2Type();
 @interface GEVec2Wrap : NSObject
 @property (readonly, nonatomic) GEVec2 value;

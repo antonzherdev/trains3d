@@ -10,8 +10,6 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
     def process(event : Event) : bool = event.leftMouse(mouseProcessor) || event.touch(touchProcessor)
 }
 
-struct RailCorrection (tile : vec2i, start : vec2i, end : vec2i)
-
 class RailroadBuilderMouseProcessor(builder : RailroadBuilder) extends MouseProcessor {
     private var startedPoint : vec2? = nil
 
@@ -23,13 +21,30 @@ class RailroadBuilderMouseProcessor(builder : RailroadBuilder) extends MouseProc
     def mouseDrag(event : Event) =
         if(startedPoint.isEmpty) false
         else {
-            val sp = startedPoint.get
-            val deltaVector = event.location.sub(sp)
-            if(deltaVector.lengthSquare > 0.25) {
-                val spTile : vec2i = sp
-                val start = norm(sp.sub(spTile))
-                val end = start.add(norm(deltaVector.set(length = 0.7)))
-                builder.tryBuild(convert(correct(RailCorrection(spTile, start, end))))
+            val line = Line2(p0 = startedPoint.get, p1 = event.location)
+
+            if(line.u.lengthSquare > 0.25) {
+                val nl = line.normalize
+                val mid = nl.mid
+                val tile = mid.round
+
+                val a = nl.degreeAngle
+                var f : RailForm
+                if(a < -157.5) f = RailForm.leftRight
+                else if(a < -112.5) f = RailForm.leftTop
+                else if(a < -67.5) f = RailForm.bottomTop
+                else if(a < -22.5) f = RailForm.leftBottom
+                else if(a < 22.5) f = RailForm.leftRight
+                else if(a < 67.5) f = RailForm.leftTop
+                else if(a < 112.5) f = RailForm.bottomTop
+                else if(a < 157.5) f = RailForm.leftBottom
+                else f = RailForm.leftRight
+
+                val md = mid - tile
+                if(f == RailForm.leftTop && md.y < md.x) f = RailForm.bottomRight
+                else if(f == RailForm.leftBottom && md.y > -md.x) f = RailForm.topRight
+
+                builder.tryBuild(Rail(tile, f))
             } else {
                 builder.clear
             }
@@ -43,31 +58,4 @@ class RailroadBuilderMouseProcessor(builder : RailroadBuilder) extends MouseProc
             startedPoint = nil
             true
         }
-
-    private def norm(point : vec2) = vec2i(n(point.x), n(point.y))
-    private def n(x : float) : int = (x*2).round
-
-    private def correct(rail : RailCorrection) : RailCorrection =
-        if(rail.end.x > 1) move(rail, 1, 0)
-        else if(rail.end.x < -1) move(rail,-1, 0)
-        else if(rail.end.y > 1) move(rail, 0, 1)
-        else if(rail.end.y < -1) move(rail, 0, -1)
-        else if(rail.start.x == 0 && rail.start.y == 0) correct(RailCorrection(rail.tile, rail.end.negate, rail.end))
-        else if(rail.end.x == 0 && rail.end.y == 0) correct(RailCorrection(rail.tile, rail.start, rail.start.negate))
-        else if(rail.start.x > rail.end.x) correct(RailCorrection(rail.tile, rail.end, rail.start))
-        else if(rail.start.x == rail.end.x && rail.start.y > rail.end.y) correct(RailCorrection(rail.tile, rail.end, rail.start))
-        else if(fabs(rail.start.x) == 1 && fabs(rail.start.y) == 1 && rail.start.x != rail.end.x) correct(RailCorrection(rail.tile, vec2i(rail.start.x, 0), rail.end))
-        else if(fabs(rail.start.x) == 1 && fabs(rail.start.y) == 1) correct(RailCorrection(rail.tile, vec2i(0, rail.start.y), rail.end))
-        else if(fabs(rail.end.x) == 1 && fabs(rail.end.y) == 1 && rail.start.x != rail.end.x) correct(RailCorrection(rail.tile, rail.start, vec2i(rail.end.x, 0)))
-        else if(fabs(rail.end.x) == 1 && fabs(rail.end.y) == 1) correct(RailCorrection(rail.tile, rail.start, vec2i(0, rail.end.y)))
-        else rail
-
-    private def move(rail : RailCorrection, x : int, y : int) = correct(RailCorrection(
-        vec2i(rail.tile.x + x, rail.tile.y + y),
-        vec2i(rail.start.x - 2*x, rail.start.y - 2*y),
-        vec2i(rail.end.x - 2*x, rail.end.y - 2*y)))
-
-    private def convert(rail : RailCorrection) = Rail(rail.tile, RailForm.formFor(
-        RailConnector.connectorFor(rail.start.x, rail.start.y),
-        RailConnector.connectorFor(rail.end.x, rail.end.y)) )
 }

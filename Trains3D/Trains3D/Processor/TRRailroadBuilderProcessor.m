@@ -75,59 +75,6 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
 @end
 
 
-NSString* TRRailCorrectionDescription(TRRailCorrection self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<TRRailCorrection: "];
-    [description appendFormat:@"tile=%@", GEVec2iDescription(self.tile)];
-    [description appendFormat:@", start=%@", GEVec2iDescription(self.start)];
-    [description appendFormat:@", end=%@", GEVec2iDescription(self.end)];
-    [description appendString:@">"];
-    return description;
-}
-ODPType* trRailCorrectionType() {
-    static ODPType* _ret = nil;
-    if(_ret == nil) _ret = [ODPType typeWithCls:[TRRailCorrectionWrap class] name:@"TRRailCorrection" size:sizeof(TRRailCorrection) wrap:^id(void* data, NSUInteger i) {
-        return wrap(TRRailCorrection, ((TRRailCorrection*)(data))[i]);
-    }];
-    return _ret;
-}
-@implementation TRRailCorrectionWrap{
-    TRRailCorrection _value;
-}
-@synthesize value = _value;
-
-+ (id)wrapWithValue:(TRRailCorrection)value {
-    return [[TRRailCorrectionWrap alloc] initWithValue:value];
-}
-
-- (id)initWithValue:(TRRailCorrection)value {
-    self = [super init];
-    if(self) _value = value;
-    return self;
-}
-
-- (NSString*)description {
-    return TRRailCorrectionDescription(_value);
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRailCorrectionWrap* o = ((TRRailCorrectionWrap*)(other));
-    return TRRailCorrectionEq(_value, o.value);
-}
-
-- (NSUInteger)hash {
-    return TRRailCorrectionHash(_value);
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-@end
-
-
-
 @implementation TRRailroadBuilderMouseProcessor{
     TRRailroadBuilder* _builder;
     id _startedPoint;
@@ -163,13 +110,50 @@ static ODClassType* _TRRailroadBuilderMouseProcessor_type;
     if([_startedPoint isEmpty]) {
         return NO;
     } else {
-        GEVec2 sp = uwrap(GEVec2, [_startedPoint get]);
-        GEVec2 deltaVector = geVec2SubVec2([event location], sp);
-        if(geVec2LengthSquare(deltaVector) > 0.25) {
-            GEVec2i spTile = geVec2iApplyVec2(sp);
-            GEVec2i start = [self normPoint:geVec2SubVec2(sp, geVec2ApplyVec2i(spTile))];
-            GEVec2i end = geVec2iAddVec2i(start, [self normPoint:geVec2SetLength(deltaVector, 0.7)]);
-            [_builder tryBuildRail:[self convertRail:[self correctRail:TRRailCorrectionMake(spTile, start, end)]]];
+        GELine2 line = geLine2ApplyP0P1(uwrap(GEVec2, [_startedPoint get]), [event location]);
+        if(geVec2LengthSquare(line.u) > 0.25) {
+            GELine2 nl = geLine2Normalize(line);
+            GEVec2 mid = geLine2Mid(nl);
+            GEVec2i tile = geVec2Round(mid);
+            float a = geLine2DegreeAngle(nl);
+            TRRailForm* f;
+            if(a < -157.5) {
+                f = TRRailForm.leftRight;
+            } else {
+                if(a < -112.5) {
+                    f = TRRailForm.leftTop;
+                } else {
+                    if(a < -67.5) {
+                        f = TRRailForm.bottomTop;
+                    } else {
+                        if(a < -22.5) {
+                            f = TRRailForm.leftBottom;
+                        } else {
+                            if(a < 22.5) {
+                                f = TRRailForm.leftRight;
+                            } else {
+                                if(a < 67.5) {
+                                    f = TRRailForm.leftTop;
+                                } else {
+                                    if(a < 112.5) {
+                                        f = TRRailForm.bottomTop;
+                                    } else {
+                                        if(a < 157.5) f = TRRailForm.leftBottom;
+                                        else f = TRRailForm.leftRight;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            GEVec2 md = geVec2SubVec2(mid, geVec2ApplyVec2i(tile));
+            if(f == TRRailForm.leftTop && md.y < md.x) {
+                f = TRRailForm.bottomRight;
+            } else {
+                if(f == TRRailForm.leftBottom && md.y > -md.x) f = TRRailForm.topRight;
+            }
+            [_builder tryBuildRail:[TRRail railWithTile:tile form:f]];
         } else {
             [_builder clear];
         }
@@ -185,71 +169,6 @@ static ODClassType* _TRRailroadBuilderMouseProcessor_type;
         _startedPoint = [CNOption none];
         return YES;
     }
-}
-
-- (GEVec2i)normPoint:(GEVec2)point {
-    return GEVec2iMake([self nX:((CGFloat)(point.x))], [self nX:((CGFloat)(point.y))]);
-}
-
-- (NSInteger)nX:(CGFloat)x {
-    return floatRound(x * 2);
-}
-
-- (TRRailCorrection)correctRail:(TRRailCorrection)rail {
-    if(rail.end.x > 1) {
-        return [self moveRail:rail x:1 y:0];
-    } else {
-        if(rail.end.x < -1) {
-            return [self moveRail:rail x:-1 y:0];
-        } else {
-            if(rail.end.y > 1) {
-                return [self moveRail:rail x:0 y:1];
-            } else {
-                if(rail.end.y < -1) {
-                    return [self moveRail:rail x:0 y:-1];
-                } else {
-                    if(rail.start.x == 0 && rail.start.y == 0) {
-                        return [self correctRail:TRRailCorrectionMake(rail.tile, geVec2iNegate(rail.end), rail.end)];
-                    } else {
-                        if(rail.end.x == 0 && rail.end.y == 0) {
-                            return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, geVec2iNegate(rail.start))];
-                        } else {
-                            if(rail.start.x > rail.end.x) {
-                                return [self correctRail:TRRailCorrectionMake(rail.tile, rail.end, rail.start)];
-                            } else {
-                                if(rail.start.x == rail.end.x && rail.start.y > rail.end.y) {
-                                    return [self correctRail:TRRailCorrectionMake(rail.tile, rail.end, rail.start)];
-                                } else {
-                                    if(eqf(fabs(((CGFloat)(rail.start.x))), 1) && eqf(fabs(((CGFloat)(rail.start.y))), 1) && rail.start.x != rail.end.x) {
-                                        return [self correctRail:TRRailCorrectionMake(rail.tile, GEVec2iMake(rail.start.x, 0), rail.end)];
-                                    } else {
-                                        if(eqf(fabs(((CGFloat)(rail.start.x))), 1) && eqf(fabs(((CGFloat)(rail.start.y))), 1)) {
-                                            return [self correctRail:TRRailCorrectionMake(rail.tile, GEVec2iMake(0, rail.start.y), rail.end)];
-                                        } else {
-                                            if(eqf(fabs(((CGFloat)(rail.end.x))), 1) && eqf(fabs(((CGFloat)(rail.end.y))), 1) && rail.start.x != rail.end.x) {
-                                                return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, GEVec2iMake(rail.end.x, 0))];
-                                            } else {
-                                                if(eqf(fabs(((CGFloat)(rail.end.x))), 1) && eqf(fabs(((CGFloat)(rail.end.y))), 1)) return [self correctRail:TRRailCorrectionMake(rail.tile, rail.start, GEVec2iMake(0, rail.end.y))];
-                                                else return rail;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-- (TRRailCorrection)moveRail:(TRRailCorrection)rail x:(NSInteger)x y:(NSInteger)y {
-    return [self correctRail:TRRailCorrectionMake(GEVec2iMake(rail.tile.x + x, rail.tile.y + y), GEVec2iMake(rail.start.x - 2 * x, rail.start.y - 2 * y), GEVec2iMake(rail.end.x - 2 * x, rail.end.y - 2 * y))];
-}
-
-- (TRRail*)convertRail:(TRRailCorrection)rail {
-    return [TRRail railWithTile:rail.tile form:[TRRailForm formForConnector1:[TRRailConnector connectorForX:rail.start.x y:rail.start.y] connector2:[TRRailConnector connectorForX:rail.end.x y:rail.end.y]]];
 }
 
 - (ODClassType*)type {

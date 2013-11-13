@@ -22,6 +22,24 @@ float geLine2Angle(GELine2 self) {
 float geLine2DegreeAngle(GELine2 self) {
     return geVec2DegreeAngle(self.u);
 }
+GELine2 geLine2SetLength(GELine2 self, float length) {
+    return GELine2Make(self.r0, geVec2SetLength(self.u, length));
+}
+GELine2 geLine2Normalize(GELine2 self) {
+    return GELine2Make(self.r0, geVec2Normalize(self.u));
+}
+GEVec2 geLine2Mid(GELine2 self) {
+    return geVec2AddVec2(self.r0, geVec2DivI(self.u, 2));
+}
+GEVec2 geLine2R1(GELine2 self) {
+    return geVec2AddVec2(self.r0, self.u);
+}
+GELine2 geLine2AddVec2(GELine2 self, GEVec2 vec2) {
+    return geLine2ApplyP0P1(geVec2AddVec2(self.r0, vec2), self.u);
+}
+GELine2 geLine2SubVec2(GELine2 self, GEVec2 vec2) {
+    return geLine2ApplyP0P1(geVec2SubVec2(self.r0, vec2), self.u);
+}
 ODPType* geLine2Type() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[GELine2Wrap class] name:@"GELine2" size:sizeof(GELine2) wrap:^id(void* data, NSUInteger i) {

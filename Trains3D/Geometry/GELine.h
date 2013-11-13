@@ -29,6 +29,12 @@ GEVec2 geLine2RT(GELine2 self, float t);
 GEVec2 geLine2RPlane(GELine2 self, GEPlane plane);
 float geLine2Angle(GELine2 self);
 float geLine2DegreeAngle(GELine2 self);
+GELine2 geLine2SetLength(GELine2 self, float length);
+GELine2 geLine2Normalize(GELine2 self);
+GEVec2 geLine2Mid(GELine2 self);
+GEVec2 geLine2R1(GELine2 self);
+GELine2 geLine2AddVec2(GELine2 self, GEVec2 vec2);
+GELine2 geLine2SubVec2(GELine2 self, GEVec2 vec2);
 ODPType* geLine2Type();
 @interface GELine2Wrap : NSObject
 @property (readonly, nonatomic) GELine2 value;
