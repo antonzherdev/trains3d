@@ -100,17 +100,20 @@ class CircleShaderBuilder extends ShaderTextBuilder {
 
         void main(void) {
             lowp float tg = atan(coord.y, coord.x);
+            highp float dt = dot(coord, coord);
             if(endTg < startTg) {
-               $fragColor = vec4(color.xyz, color.w * (
-                        1.0 - smoothstep(0.95, 1.0, dot(coord, coord))
+               $fragColor = vec4(color.xyz, color.w * clamp(
+                        1.0 - smoothstep(0.95, 1.0, dt)
                         - (clamp(smoothstep(endTg - 0.1, endTg, tg) + 1.0 - smoothstep(startTg, startTg + 0.1, tg), 1.0, 2.0) - 1.0)
-               ));
+                        + smoothstep(0.75, 0.8, dt) - smoothstep(0.95, 1.0, dt)
+               , 0.0, 1.0));
             } else {
-                $fragColor = vec4(color.xyz, color.w * (
-                        1.0 - smoothstep(0.95, 1.0, dot(coord, coord))
+                $fragColor = vec4(color.xyz, color.w * clamp(
+                        1.0 - smoothstep(0.95, 1.0, dt)
                         - (1.0 - smoothstep(startTg, startTg + 0.1, tg))
                         - (smoothstep(endTg - 0.1, endTg, tg))
-                ));
+                        + smoothstep(0.75, 0.8, dt) - smoothstep(0.95, 1.0, dt)
+                , 0.0, 1.0));
             }
         }"
 
