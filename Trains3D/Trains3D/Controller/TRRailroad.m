@@ -771,33 +771,33 @@ static ODClassType* _TRRailroad_type;
 }
 
 - (void)addDamageAtPoint:(TRRailPoint*)point {
-    if(point.back) {
-        [self addDamageAtPoint:[point invert]];
-    } else {
-        [_damagesIndex modifyBy:^id(id arr) {
-            return [CNOption applyValue:[[arr mapF:^id<CNSeq>(id<CNSeq> _) {
-                return [((id<CNSeq>)(_)) addItem:numf(point.x)];
-            }] getOrElseF:^id<CNSeq>() {
-                return (@[numf(point.x)]);
-            }]];
-        } forKey:tuple(wrap(GEVec2i, point.tile), point.form)];
-        [__damagesPoints appendItem:point];
+    TRRailPoint* p = point;
+    if(p.back) p = [p invert];
+    if(!([_map isVisibleVec2:p.point])) {
+        p = [p setX:0.0];
+        if(!([_map isVisibleVec2:p.point])) p = [p setX:p.form.length];
     }
+    [_damagesIndex modifyBy:^id(id arr) {
+        return [CNOption applyValue:[[arr mapF:^id<CNSeq>(id<CNSeq> _) {
+            return [((id<CNSeq>)(_)) addItem:numf(p.x)];
+        }] getOrElseF:^id<CNSeq>() {
+            return (@[numf(p.x)]);
+        }]];
+    } forKey:tuple(wrap(GEVec2i, p.tile), p.form)];
+    [__damagesPoints appendItem:p];
 }
 
 - (void)fixDamageAtPoint:(TRRailPoint*)point {
-    if(point.back) {
-        [self fixDamageAtPoint:[point invert]];
-    } else {
-        [_damagesIndex modifyBy:^id(id arrOpt) {
-            return [arrOpt mapF:^id<CNSeq>(id<CNSeq> arr) {
-                return [[[((id<CNSeq>)(arr)) chain] filter:^BOOL(id _) {
-                    return !(eqf(unumf(_), point.x));
-                }] toArray];
-            }];
-        } forKey:tuple(wrap(GEVec2i, point.tile), point.form)];
-        [__damagesPoints removeItem:point];
-    }
+    TRRailPoint* p = point;
+    if(p.back) p = [point invert];
+    [_damagesIndex modifyBy:^id(id arrOpt) {
+        return [arrOpt mapF:^id<CNSeq>(id<CNSeq> arr) {
+            return [[[((id<CNSeq>)(arr)) chain] filter:^BOOL(id _) {
+                return !(eqf(unumf(_), p.x));
+            }] toArray];
+        }];
+    } forKey:tuple(wrap(GEVec2i, p.tile), p.form)];
+    [__damagesPoints removeItem:p];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

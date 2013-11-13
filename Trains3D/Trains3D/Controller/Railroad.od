@@ -217,19 +217,24 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Controller 
     }
 
     def addDamageAt(point : RailPoint) {
-        if(point.back) addDamageAt(point.invert)
-        else {
-            damagesIndex.modify(by = arr -> arr.map(_ + point.x).getOrElse([point.x]), forKey = (point.tile, point.form))
-            _damagesPoints.append(point)
+        var p = point
+        if(p.back) p = p.invert
+        if(!map.isVisible(p.point)) {
+           p = p.set(x = 0)
+           if(!map.isVisible(p.point)) {
+               p = p.set(x = p.form.length)
+           }
         }
+        damagesIndex.modify(by = arr -> arr.map(_ + p.x).getOrElse([p.x]), forKey = (p.tile, p.form))
+        _damagesPoints.append(p)
     }
 
     def fixDamageAt(point : RailPoint) {
-        if(point.back) fixDamageAt(point.invert)
-        else {
-            damagesIndex.modify(by = arrOpt -> arrOpt.map(arr -> arr.chain.filter(_ != point.x).toArray), forKey = (point.tile, point.form))
-            _damagesPoints.remove(point)
-        }
+        var p = point
+        if(p.back) p = point.invert
+
+        damagesIndex.modify(by = arrOpt -> arrOpt.map(arr -> arr.chain.filter(_ != p.x).toArray), forKey = (p.tile, p.form))
+        _damagesPoints.remove(p)
     }
 
     def updateWith(delta : float) {
