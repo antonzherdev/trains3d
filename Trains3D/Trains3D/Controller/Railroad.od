@@ -219,12 +219,19 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Controller 
     def addDamageAt(point : RailPoint) {
         var p = point
         if(p.back) p = p.invert
+
+        val fl = p.form.length
+        if(p.form.isStraight && p.x.between(0.35, 0.65)) p = p.set(x = 0.35)
+        else if(p.x.between(0, 0.3)) p = p.set(x = 0.3)
+        else if(p.x.between(fl - 0.3, fl)) p = p.set(x = fl - 0.3)
+
         if(!map.isVisible(p.point)) {
            p = p.set(x = 0)
            if(!map.isVisible(p.point)) {
-               p = p.set(x = p.form.length)
+               p = p.set(x = fl)
            }
         }
+
         damagesIndex.modify(by = arr -> arr.map(_ + p.x).getOrElse([p.x]), forKey = (p.tile, p.form))
         _damagesPoints.append(p)
     }

@@ -192,6 +192,10 @@ static NSArray* _TRRailForm_values;
     return _start == connector || _end == connector;
 }
 
+- (BOOL)isStraight {
+    return !(_isTurn);
+}
+
 + (TRRailForm*)leftBottom {
     return _TRRailForm_leftBottom;
 }

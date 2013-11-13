@@ -32,6 +32,7 @@
 
 + (TRRailForm*)formForConnector1:(TRRailConnector*)connector1 connector2:(TRRailConnector*)connector2;
 - (BOOL)containsConnector:(TRRailConnector*)connector;
+- (BOOL)isStraight;
 + (TRRailForm*)leftBottom;
 + (TRRailForm*)leftRight;
 + (TRRailForm*)leftTop;

@@ -773,9 +773,19 @@ static ODClassType* _TRRailroad_type;
 - (void)addDamageAtPoint:(TRRailPoint*)point {
     TRRailPoint* p = point;
     if(p.back) p = [p invert];
+    CGFloat fl = p.form.length;
+    if([p.form isStraight] && floatBetween(p.x, 0.35, 0.65)) {
+        p = [p setX:0.35];
+    } else {
+        if(floatBetween(p.x, 0.0, 0.3)) {
+            p = [p setX:0.3];
+        } else {
+            if(floatBetween(p.x, fl - 0.3, fl)) p = [p setX:fl - 0.3];
+        }
+    }
     if(!([_map isVisibleVec2:p.point])) {
         p = [p setX:0.0];
-        if(!([_map isVisibleVec2:p.point])) p = [p setX:p.form.length];
+        if(!([_map isVisibleVec2:p.point])) p = [p setX:fl];
     }
     [_damagesIndex modifyBy:^id(id arr) {
         return [CNOption applyValue:[[arr mapF:^id<CNSeq>(id<CNSeq> _) {
