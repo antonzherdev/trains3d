@@ -76,6 +76,13 @@ class RailPoint(tile : vec2i, form : RailForm, x : float, back : bool) {
     def set(x : float) = RailPoint(tile, form, x, back)
 
     def nextTile : vec2i = endConnector.next(tile)
+    def straight : RailPoint = if(back) invert else self
+    def between(a : RailPoint, b : RailPoint) : bool =
+        if(a.tile == tile && b.tile == tile) {
+            val ax = a.straight.x
+            val bx = b.straight.x
+            if(ax > bx) straight.x.between(bx, ax) else straight.x.between(ax, bx)
+        } else false
 }
 
 class RailPointCorrection(point : RailPoint, error : float) {

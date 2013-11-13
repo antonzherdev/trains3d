@@ -42,6 +42,10 @@ class Switch(tile : vec2i, connector : RailConnector, rail1 : Rail, rail2 : Rail
     def cutDownTreesIn(forest : Forest) {
         forest.cutDownFor(switch = self)
     }
+    def railPoint1 = railPoint(rail1)
+    def railPoint2 = railPoint(rail2)
+
+    private def railPoint(rail : Rail) =  RailPoint(tile, rail.form, 0, rail.form.end == connector)
 }
 
 class RailLight(tile : vec2i, connector : RailConnector, rail : Rail) extends RailroadConnectorContent {

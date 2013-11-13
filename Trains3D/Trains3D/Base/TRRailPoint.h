@@ -60,6 +60,8 @@
 - (TRRailPoint*)invert;
 - (TRRailPoint*)setX:(CGFloat)x;
 - (GEVec2i)nextTile;
+- (TRRailPoint*)straight;
+- (BOOL)betweenA:(TRRailPoint*)a b:(TRRailPoint*)b;
 + (ODClassType*)type;
 @end
 

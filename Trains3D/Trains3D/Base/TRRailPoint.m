@@ -302,6 +302,22 @@ static ODClassType* _TRRailPoint_type;
     return [[self endConnector] nextTile:_tile];
 }
 
+- (TRRailPoint*)straight {
+    if(_back) return [self invert];
+    else return self;
+}
+
+- (BOOL)betweenA:(TRRailPoint*)a b:(TRRailPoint*)b {
+    if(GEVec2iEq(a.tile, _tile) && GEVec2iEq(b.tile, _tile)) {
+        CGFloat ax = [a straight].x;
+        CGFloat bx = [b straight].x;
+        if(ax > bx) return floatBetween([self straight].x, bx, ax);
+        else return floatBetween([self straight].x, ax, bx);
+    } else {
+        return NO;
+    }
+}
+
 - (ODClassType*)type {
     return [TRRailPoint type];
 }

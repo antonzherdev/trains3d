@@ -300,6 +300,18 @@ static ODClassType* _TRSwitch_type;
     [forest cutDownForASwitch:self];
 }
 
+- (TRRailPoint*)railPoint1 {
+    return [self railPointRail:_rail1];
+}
+
+- (TRRailPoint*)railPoint2 {
+    return [self railPointRail:_rail2];
+}
+
+- (TRRailPoint*)railPointRail:(TRRail*)rail {
+    return [TRRailPoint railPointWithTile:_tile form:rail.form x:0.0 back:rail.form.end == _connector];
+}
+
 - (ODClassType*)type {
     return [TRSwitch type];
 }
