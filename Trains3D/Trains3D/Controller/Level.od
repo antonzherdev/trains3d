@@ -68,13 +68,14 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         }.randomItem.get
     }
 
+    static val prepareToRunTrainNotification = NotificationHandle<(Train, City)>("prepateToRunTrainNotification")
     static val expectedTrainNotification = NotificationHandle<(Train, City)>("expectedTrainNotification")
     private def run(train : Train, fromCity : City) {
         fromCity.expectedTrainColor = train.color
         fromCity.expectedTrainCounter = Counter(trainComingPeriod, finish = {
             train.startFrom(fromCity)
             add(train)
-        })
+        }).on(0.9, prepareToRunTrainNotification.post((train, fromCity)))
         expectedTrainNotification.post((train, fromCity))
     }
 

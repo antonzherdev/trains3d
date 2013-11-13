@@ -38,6 +38,8 @@ class Counter extends Controller {
     static def apply(length : float) : Counter = LengthCounter(length)
     static def apply(length : float, finish : void -> void) : Counter = Finisher(LengthCounter(length), finish)
     static def apply : Counter = EmptyCounter()
+
+    def on(time : float, event : void -> void) : Counter = EventCounter(self, time, event)
 }
 
 class EmptyCounter extends Counter {
@@ -73,6 +75,22 @@ class Finisher(counter : Counter, finish : void -> void) extends Counter {
             counter.updateWith(delta)
             if(counter.isStopped) {
                 finish()
+            }
+        }
+    }
+}
+
+class EventCounter(counter : Counter, eventTime : float, event : void -> void) extends Counter {
+    def isRunning : bool = counter.isRunning
+    def time : float = counter.time
+
+    private var executed = false
+    def updateWith(delta : float) {
+        if(counter.isRunning) {
+            counter.updateWith(delta)
+            if(!executed && counter.time > eventTime) {
+                event()
+                executed = true
             }
         }
     }

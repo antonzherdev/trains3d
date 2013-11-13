@@ -125,6 +125,10 @@ static ODClassType* _EGCounter_type;
     return [EGEmptyCounter emptyCounter];
 }
 
+- (EGCounter*)onTime:(CGFloat)time event:(void(^)())event {
+    return [EGEventCounter eventCounterWithCounter:self eventTime:time event:event];
+}
+
 - (ODClassType*)type {
     return [EGCounter type];
 }
@@ -368,6 +372,94 @@ static ODClassType* _EGFinisher_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"counter=%@", self.counter];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGEventCounter{
+    EGCounter* _counter;
+    CGFloat _eventTime;
+    void(^_event)();
+    BOOL _executed;
+}
+static ODClassType* _EGEventCounter_type;
+@synthesize counter = _counter;
+@synthesize eventTime = _eventTime;
+@synthesize event = _event;
+
++ (id)eventCounterWithCounter:(EGCounter*)counter eventTime:(CGFloat)eventTime event:(void(^)())event {
+    return [[EGEventCounter alloc] initWithCounter:counter eventTime:eventTime event:event];
+}
+
+- (id)initWithCounter:(EGCounter*)counter eventTime:(CGFloat)eventTime event:(void(^)())event {
+    self = [super init];
+    if(self) {
+        _counter = counter;
+        _eventTime = eventTime;
+        _event = event;
+        _executed = NO;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGEventCounter_type = [ODClassType classTypeWithCls:[EGEventCounter class]];
+}
+
+- (BOOL)isRunning {
+    return [_counter isRunning];
+}
+
+- (CGFloat)time {
+    return [_counter time];
+}
+
+- (void)updateWithDelta:(CGFloat)delta {
+    if([_counter isRunning]) {
+        [_counter updateWithDelta:delta];
+        if(!(_executed) && [_counter time] > _eventTime) {
+            ((void(^)())(_event))();
+            _executed = YES;
+        }
+    }
+}
+
+- (ODClassType*)type {
+    return [EGEventCounter type];
+}
+
++ (ODClassType*)type {
+    return _EGEventCounter_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGEventCounter* o = ((EGEventCounter*)(other));
+    return [self.counter isEqual:o.counter] && eqf(self.eventTime, o.eventTime) && [self.event isEqual:o.event];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.counter hash];
+    hash = hash * 31 + floatHash(self.eventTime);
+    hash = hash * 31 + [self.event hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"counter=%@", self.counter];
+    [description appendFormat:@", eventTime=%f", self.eventTime];
     [description appendString:@">"];
     return description;
 }

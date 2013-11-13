@@ -117,6 +117,7 @@ static ODClassType* _TRLevelRules_type;
 }
 static NSInteger _TRLevel_trainComingPeriod = 10;
 static CNNotificationHandle* _TRLevel_buildCityNotification;
+static CNNotificationHandle* _TRLevel_prepareToRunTrainNotification;
 static CNNotificationHandle* _TRLevel_expectedTrainNotification;
 static CNNotificationHandle* _TRLevel_runTrainNotification;
 static CNNotificationHandle* _TRLevel_crashNotification;
@@ -168,6 +169,7 @@ static ODClassType* _TRLevel_type;
     [super initialize];
     _TRLevel_type = [ODClassType classTypeWithCls:[TRLevel class]];
     _TRLevel_buildCityNotification = [CNNotificationHandle notificationHandleWithName:@"buildCityNotification"];
+    _TRLevel_prepareToRunTrainNotification = [CNNotificationHandle notificationHandleWithName:@"prepateToRunTrainNotification"];
     _TRLevel_expectedTrainNotification = [CNNotificationHandle notificationHandleWithName:@"expectedTrainNotification"];
     _TRLevel_runTrainNotification = [CNNotificationHandle notificationHandleWithName:@"runTrainNotification"];
     _TRLevel_crashNotification = [CNNotificationHandle notificationHandleWithName:@"Trains crashed"];
@@ -228,9 +230,11 @@ static ODClassType* _TRLevel_type;
 
 - (void)runTrain:(TRTrain*)train fromCity:(TRCity*)fromCity {
     fromCity.expectedTrainColor = train.color;
-    fromCity.expectedTrainCounter = [EGCounter applyLength:((CGFloat)(_TRLevel_trainComingPeriod)) finish:^void() {
+    fromCity.expectedTrainCounter = [[EGCounter applyLength:((CGFloat)(_TRLevel_trainComingPeriod)) finish:^void() {
         [train startFromCity:fromCity];
         [self addTrain:train];
+    }] onTime:0.9 event:^void() {
+        [_TRLevel_prepareToRunTrainNotification postData:tuple(train, fromCity)];
     }];
     [_TRLevel_expectedTrainNotification postData:tuple(train, fromCity)];
 }
@@ -419,6 +423,10 @@ static ODClassType* _TRLevel_type;
 
 + (CNNotificationHandle*)buildCityNotification {
     return _TRLevel_buildCityNotification;
+}
+
++ (CNNotificationHandle*)prepareToRunTrainNotification {
+    return _TRLevel_prepareToRunTrainNotification;
 }
 
 + (CNNotificationHandle*)expectedTrainNotification {

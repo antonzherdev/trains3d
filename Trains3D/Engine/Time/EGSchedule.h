@@ -6,6 +6,7 @@
 @class EGEmptyCounter;
 @class EGLengthCounter;
 @class EGFinisher;
+@class EGEventCounter;
 
 @interface EGSchedule : NSObject<EGController>
 + (id)schedule;
@@ -31,6 +32,7 @@
 + (EGCounter*)applyLength:(CGFloat)length;
 + (EGCounter*)applyLength:(CGFloat)length finish:(void(^)())finish;
 + (EGCounter*)apply;
+- (EGCounter*)onTime:(CGFloat)time event:(void(^)())event;
 + (ODClassType*)type;
 @end
 
@@ -65,6 +67,21 @@
 
 + (id)finisherWithCounter:(EGCounter*)counter finish:(void(^)())finish;
 - (id)initWithCounter:(EGCounter*)counter finish:(void(^)())finish;
+- (ODClassType*)type;
+- (BOOL)isRunning;
+- (CGFloat)time;
+- (void)updateWithDelta:(CGFloat)delta;
++ (ODClassType*)type;
+@end
+
+
+@interface EGEventCounter : EGCounter
+@property (nonatomic, readonly) EGCounter* counter;
+@property (nonatomic, readonly) CGFloat eventTime;
+@property (nonatomic, readonly) void(^event)();
+
++ (id)eventCounterWithCounter:(EGCounter*)counter eventTime:(CGFloat)eventTime event:(void(^)())event;
+- (id)initWithCounter:(EGCounter*)counter eventTime:(CGFloat)eventTime event:(void(^)())event;
 - (ODClassType*)type;
 - (BOOL)isRunning;
 - (CGFloat)time;
