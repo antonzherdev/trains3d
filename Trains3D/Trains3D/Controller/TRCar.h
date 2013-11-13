@@ -1,12 +1,12 @@
 #import "objd.h"
 #import "GEVec.h"
+#import "GELine.h"
 @protocol EGCollisionShape;
 @class EGCollisionBox2d;
 @class EGCollisionBox;
 @class TRTrain;
 @class EGCollisionBody;
 @class EGRigidBody;
-@class GELineSegment;
 @class GEMat4;
 @class TRRailPoint;
 
@@ -71,7 +71,7 @@
 @property (nonatomic, readonly) TRRailPoint* head;
 @property (nonatomic, readonly) TRRailPoint* tail;
 @property (nonatomic, readonly) TRRailPoint* backConnector;
-@property (nonatomic, readonly) GELineSegment* line;
+@property (nonatomic, readonly) GELine2 line;
 
 + (id)carPositionWithFrontConnector:(TRRailPoint*)frontConnector head:(TRRailPoint*)head tail:(TRRailPoint*)tail backConnector:(TRRailPoint*)backConnector;
 - (id)initWithFrontConnector:(TRRailPoint*)frontConnector head:(TRRailPoint*)head tail:(TRRailPoint*)tail backConnector:(TRRailPoint*)backConnector;

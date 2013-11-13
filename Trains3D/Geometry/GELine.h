@@ -1,10 +1,43 @@
 #import "objd.h"
 #import "GEVec.h"
 
+typedef struct GELine2 GELine2;
 typedef struct GELine3 GELine3;
 typedef struct GEPlane GEPlane;
 typedef struct GEPlaneCoord GEPlaneCoord;
 typedef struct GEQuad3 GEQuad3;
+
+struct GELine2 {
+    GEVec2 r0;
+    GEVec2 u;
+};
+static inline GELine2 GELine2Make(GEVec2 r0, GEVec2 u) {
+    return (GELine2){r0, u};
+}
+static inline BOOL GELine2Eq(GELine2 s1, GELine2 s2) {
+    return GEVec2Eq(s1.r0, s2.r0) && GEVec2Eq(s1.u, s2.u);
+}
+static inline NSUInteger GELine2Hash(GELine2 self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + GEVec2Hash(self.r0);
+    hash = hash * 31 + GEVec2Hash(self.u);
+    return hash;
+}
+NSString* GELine2Description(GELine2 self);
+GELine2 geLine2ApplyP0P1(GEVec2 p0, GEVec2 p1);
+GEVec2 geLine2RT(GELine2 self, float t);
+GEVec2 geLine2RPlane(GELine2 self, GEPlane plane);
+float geLine2Angle(GELine2 self);
+float geLine2DegreeAngle(GELine2 self);
+ODPType* geLine2Type();
+@interface GELine2Wrap : NSObject
+@property (readonly, nonatomic) GELine2 value;
+
++ (id)wrapWithValue:(GELine2)value;
+- (id)initWithValue:(GELine2)value;
+@end
+
+
 
 struct GELine3 {
     GEVec3 r0;

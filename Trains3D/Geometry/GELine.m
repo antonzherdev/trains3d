@@ -1,5 +1,72 @@
 #import "GELine.h"
 
+NSString* GELine2Description(GELine2 self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<GELine2: "];
+    [description appendFormat:@"r0=%@", GEVec2Description(self.r0)];
+    [description appendFormat:@", u=%@", GEVec2Description(self.u)];
+    [description appendString:@">"];
+    return description;
+}
+GELine2 geLine2ApplyP0P1(GEVec2 p0, GEVec2 p1) {
+    return GELine2Make(p0, geVec2SubVec2(p1, p0));
+}
+GEVec2 geLine2RT(GELine2 self, float t) {
+    return geVec2AddVec2(self.r0, geVec2MulF4(self.u, t));
+}
+GEVec2 geLine2RPlane(GELine2 self, GEPlane plane) {
+    return geVec2AddVec2(self.r0, geVec2MulF4(self.u, geVec3DotVec3(plane.n, geVec3SubVec3(plane.p0, geVec3ApplyVec2(self.r0))) / geVec3DotVec3(plane.n, geVec3ApplyVec2(self.u))));
+}
+float geLine2Angle(GELine2 self) {
+    return geVec2Angle(self.u);
+}
+float geLine2DegreeAngle(GELine2 self) {
+    return geVec2DegreeAngle(self.u);
+}
+ODPType* geLine2Type() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[GELine2Wrap class] name:@"GELine2" size:sizeof(GELine2) wrap:^id(void* data, NSUInteger i) {
+        return wrap(GELine2, ((GELine2*)(data))[i]);
+    }];
+    return _ret;
+}
+@implementation GELine2Wrap{
+    GELine2 _value;
+}
+@synthesize value = _value;
+
++ (id)wrapWithValue:(GELine2)value {
+    return [[GELine2Wrap alloc] initWithValue:value];
+}
+
+- (id)initWithValue:(GELine2)value {
+    self = [super init];
+    if(self) _value = value;
+    return self;
+}
+
+- (NSString*)description {
+    return GELine2Description(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    GELine2Wrap* o = ((GELine2Wrap*)(other));
+    return GELine2Eq(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return GELine2Hash(_value);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
+
+
 NSString* GELine3Description(GELine3 self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<GELine3: "];
     [description appendFormat:@"r0=%@", GEVec3Description(self.r0)];

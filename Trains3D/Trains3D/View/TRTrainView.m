@@ -7,7 +7,6 @@
 #import "TRTrain.h"
 #import "TRSmoke.h"
 #import "TRCar.h"
-#import "GEFigure.h"
 #import "GEMat4.h"
 #import "TRCity.h"
 #import "EGDynamicWorld.h"
@@ -81,10 +80,10 @@ static ODClassType* _TRTrainView_type;
     [[train cars] forEach:^void(TRCar* car) {
         [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
             return [[_ modifyW:^GEMat4*(GEMat4* w) {
-                GEVec2 mid = [[((TRCar*)(car)) position].line mid];
+                GEVec2 mid = [((TRCar*)(car)) midPoint];
                 return [w translateX:mid.x y:mid.y z:0.04];
             }] modifyM:^GEMat4*(GEMat4* m) {
-                return [m rotateAngle:((float)([[((TRCar*)(car)) position].line degreeAngle] + 90)) x:0.0 y:1.0 z:0.0];
+                return [m rotateAngle:geLine2DegreeAngle([((TRCar*)(car)) position].line) + 90 x:0.0 y:1.0 z:0.0];
             }];
         } f:^void() {
             [self doDrawCar:car color:train.color.trainColor];

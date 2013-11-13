@@ -110,7 +110,7 @@ static ODClassType* _TRCollisionsTest_type;
     TRRailPoint* p = [TRRailPoint railPointWithTile:GEVec2iMake(1, 1) form:TRRailForm.bottomTop x:0.0 back:NO];
     TRRailPoint* p1 = [level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
-    } forLength:0.5 - _TRCollisionsTest_carWidth - 0.001 point:p].point;
+    } forLength:(0.5 - _TRCollisionsTest_carWidth) - 0.001 point:p].point;
     [level testRunTrain:t1 fromPoint:p1];
     TRTrain* t2 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRCityColor.orange _cars:^id<CNSeq>(TRTrain* _) {
         return (@[[TRCar carWithTrain:_ carType:TRCarType.car], [TRCar carWithTrain:_ carType:TRCarType.car]]);

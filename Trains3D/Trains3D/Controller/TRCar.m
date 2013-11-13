@@ -3,7 +3,6 @@
 #import "EGCollisionBody.h"
 #import "TRTrain.h"
 #import "EGDynamicWorld.h"
-#import "GEFigure.h"
 #import "GEMat4.h"
 #import "TRRailPoint.h"
 @implementation TREngineType{
@@ -128,7 +127,7 @@ static NSArray* _TRCarType_values;
 + (void)initialize {
     [super initialize];
     _TRCarType_car = [TRCarType carTypeWithOrdinal:0 name:@"car" width:0.16 height:0.3 weight:1.0 startToFront:0.05 frontToWheel:0.06 betweenWheels:0.44 wheelToBack:0.06 backToEnd:0.05 engineType:[CNOption none]];
-    _TRCarType_engine = [TRCarType carTypeWithOrdinal:1 name:@"engine" width:0.18 height:0.3 weight:2.0 startToFront:0.05 frontToWheel:0.14 betweenWheels:0.32 wheelToBack:0.22 backToEnd:0.05 engineType:[CNOption applyValue:[TREngineType engineTypeWithTubePos:GEVec3Make(-0.10, 0.0, 0.5)]]];
+    _TRCarType_engine = [TRCarType carTypeWithOrdinal:1 name:@"engine" width:0.18 height:0.3 weight:2.0 startToFront:0.05 frontToWheel:0.14 betweenWheels:0.32 wheelToBack:0.22 backToEnd:0.05 engineType:[CNOption applyValue:[TREngineType engineTypeWithTubePos:GEVec3Make(-0.07, 0.0, 0.5)]]];
     _TRCarType_expressCar = [TRCarType carTypeWithOrdinal:2 name:@"expressCar" width:0.16 height:0.25 weight:1.0 startToFront:0.05 frontToWheel:0.06 betweenWheels:0.44 wheelToBack:0.06 backToEnd:0.05 engineType:[CNOption none]];
     _TRCarType_expressEngine = [TRCarType carTypeWithOrdinal:3 name:@"expressEngine" width:0.18 height:0.3 weight:3.0 startToFront:0.05 frontToWheel:0.14 betweenWheels:0.32 wheelToBack:0.19 backToEnd:0.05 engineType:[CNOption applyValue:[TREngineType engineTypeWithTubePos:GEVec3Make(-0.05, 0.0, 0.35)]]];
     _TRCarType_values = (@[_TRCarType_car, _TRCarType_engine, _TRCarType_expressCar, _TRCarType_expressEngine]);
@@ -186,12 +185,12 @@ static ODClassType* _TRCar_type;
         _collisionBody = [EGCollisionBody collisionBodyWithData:self shape:_carType.collision2dShape isKinematic:YES];
         __lazy_dynamicBody = [CNLazy lazyWithF:^EGRigidBody*() {
             return ^EGRigidBody*() {
-                GELineSegment* line = [_weakSelf position].line;
-                CGFloat len = [line length];
-                GEVec2 vec = [line vec];
+                GELine2 line = [_weakSelf position].line;
+                CGFloat len = geVec2Length(line.u);
+                GEVec2 vec = line.u;
                 GEVec2 mid = [_weakSelf midPoint];
                 EGRigidBody* b = [EGRigidBody dynamicData:self shape:_weakSelf.carType.rigidShape mass:((float)(_weakSelf.carType.weight))];
-                b.matrix = [[[GEMat4 identity] translateX:mid.x y:mid.y z:((float)(_weakSelf.carType.height / 2))] rotateAngle:((float)([line degreeAngle])) x:0.0 y:0.0 z:1.0];
+                b.matrix = [[[GEMat4 identity] translateX:mid.x y:mid.y z:((float)(_weakSelf.carType.height / 2))] rotateAngle:geLine2DegreeAngle(line) x:0.0 y:0.0 z:1.0];
                 GEVec3 rnd = GEVec3Make(((float)(odFloatRndMinMax(-0.1, 0.1))), ((float)(odFloatRndMinMax(-0.1, 0.1))), ((float)(odFloatRndMinMax(0.0, 5.0))));
                 GEVec3 vel = geVec3AddVec3(geVec3ApplyVec2Z(geVec2MulF(vec, _weakSelf.train.speedFloat / len * 2), 0.0), rnd);
                 b.velocity = (([_weakSelf.train isBack]) ? geVec3Negate(vel) : vel);
@@ -219,21 +218,18 @@ static ODClassType* _TRCar_type;
 
 - (void)setPosition:(TRCarPosition*)position {
     __position = position;
-    GELineSegment* line = position.line;
+    GELine2 line = position.line;
     GEVec2 mid = [self midPoint];
-    [_collisionBody setMatrix:[[[GEMat4 identity] translateX:mid.x y:mid.y z:0.0] rotateAngle:((float)([line degreeAngle])) x:0.0 y:0.0 z:1.0]];
+    [_collisionBody setMatrix:[[[GEMat4 identity] translateX:mid.x y:mid.y z:0.0] rotateAngle:geLine2DegreeAngle(line) x:0.0 y:0.0 z:1.0]];
 }
 
 - (GEVec2)midPoint {
+    GELine2 line = [self position].line;
     if(eqf(_carType.wheelToBack, _carType.frontToWheel)) {
-        return [[self position].line mid];
+        return geVec2AddVec2(line.r0, geVec2DivI(line.u, 2));
     } else {
-        GELineSegment* line = [self position].line;
-        CGFloat len = [line length];
-        GEVec2 vec = [line vec];
-        GEVec2 dh = geVec2MulF(vec, _carType.frontToWheel / len);
-        GEVec2 dt = geVec2MulF(vec, _carType.wheelToBack / len);
-        return [[line moveWithPoint:geVec2MulF(geVec2SubVec2(dh, dt), 0.5)] mid];
+        GEVec2 u = geVec2SetLength(line.u, ((float)(geVec2Length(line.u) - (_carType.wheelToBack - _carType.frontToWheel))));
+        return geVec2AddVec2(line.r0, geVec2DivI(u, 2));
     }
 }
 
@@ -279,7 +275,7 @@ static ODClassType* _TRCar_type;
     TRRailPoint* _head;
     TRRailPoint* _tail;
     TRRailPoint* _backConnector;
-    GELineSegment* _line;
+    GELine2 _line;
 }
 static ODClassType* _TRCarPosition_type;
 @synthesize frontConnector = _frontConnector;
@@ -299,7 +295,7 @@ static ODClassType* _TRCarPosition_type;
         _head = head;
         _tail = tail;
         _backConnector = backConnector;
-        _line = [GELineSegment lineSegmentWithP0:_tail.point p1:_head.point];
+        _line = geLine2ApplyP0P1(_tail.point, _head.point);
     }
     
     return self;

@@ -1,5 +1,6 @@
 #import "objd.h"
 #import "GEVec.h"
+#import "GELine.h"
 @class TRLevel;
 @class TRModels;
 @class EGGlobal;
@@ -7,10 +8,9 @@
 @class TRSmoke;
 @class TRSmokeView;
 @class TRCar;
-@class TRCarPosition;
-@class GELineSegment;
 @class GEMat4;
 @class EGMatrixModel;
+@class TRCarPosition;
 @class TRCityColor;
 @class EGMatrixStack;
 @class TRCarType;
