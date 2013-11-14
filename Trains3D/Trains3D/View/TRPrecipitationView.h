@@ -68,16 +68,18 @@ typedef struct TRRainData TRRainData;
 
 struct TRRainData {
     GEVec2 position;
+    float alpha;
 };
-static inline TRRainData TRRainDataMake(GEVec2 position) {
-    return (TRRainData){position};
+static inline TRRainData TRRainDataMake(GEVec2 position, float alpha) {
+    return (TRRainData){position, alpha};
 }
 static inline BOOL TRRainDataEq(TRRainData s1, TRRainData s2) {
-    return GEVec2Eq(s1.position, s2.position);
+    return GEVec2Eq(s1.position, s2.position) && eqf4(s1.alpha, s2.alpha);
 }
 static inline NSUInteger TRRainDataHash(TRRainData self) {
     NSUInteger hash = 0;
     hash = hash * 31 + GEVec2Hash(self.position);
+    hash = hash * 31 + float4Hash(self.alpha);
     return hash;
 }
 NSString* TRRainDataDescription(TRRainData self);
@@ -117,6 +119,7 @@ ODPType* trRainDataType();
 
 @interface TRRainShader : EGShader
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
+@property (nonatomic, readonly) EGShaderAttribute* alphaSlot;
 
 + (id)rainShader;
 - (id)init;

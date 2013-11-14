@@ -212,6 +212,7 @@ static ODClassType* _TRRainParticleSystem_type;
 
 @implementation TRRainParticle{
     GEVec2 _position;
+    CGFloat _alpha;
 }
 static ODClassType* _TRRainParticle_type;
 
@@ -221,7 +222,10 @@ static ODClassType* _TRRainParticle_type;
 
 - (id)init {
     self = [super init];
-    if(self) _position = geVec2MulI(geVec2Rnd(), 2);
+    if(self) {
+        _position = geVec2MulI(geVec2Rnd(), 2);
+        _alpha = odFloatRndMinMax(0.2, 0.5);
+    }
     
     return self;
 }
@@ -232,7 +236,7 @@ static ODClassType* _TRRainParticle_type;
 }
 
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array {
-    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, TRRainData, TRRainDataMake(_position)), TRRainData, TRRainDataMake(geVec2AddVec2(_position, GEVec2Make(0.0, 0.1))));
+    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, TRRainData, TRRainDataMake(_position, ((float)(_alpha)))), TRRainData, TRRainDataMake(geVec2AddVec2(_position, GEVec2Make(0.0, 0.1)), ((float)(_alpha))));
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -252,6 +256,16 @@ static ODClassType* _TRRainParticle_type;
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -264,6 +278,7 @@ static ODClassType* _TRRainParticle_type;
 NSString* TRRainDataDescription(TRRainData self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<TRRainData: "];
     [description appendFormat:@"position=%@", GEVec2Description(self.position)];
+    [description appendFormat:@", alpha=%f", self.alpha];
     [description appendString:@">"];
     return description;
 }
@@ -329,7 +344,7 @@ static ODClassType* _TRRainSystemView_type;
 + (void)initialize {
     [super initialize];
     _TRRainSystemView_type = [ODClassType classTypeWithCls:[TRRainSystemView class]];
-    _TRRainSystemView_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:trRainDataType() position:0 uv:-1 normal:-1 color:-1 model:-1];
+    _TRRainSystemView_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:trRainDataType() position:0 uv:-1 normal:-1 color:((int)(2 * 4)) model:-1];
 }
 
 - (NSUInteger)vertexCount {
@@ -396,10 +411,11 @@ static ODClassType* _TRRainShaderText_type;
 - (id)init {
     self = [super init];
     if(self) _fragment = [NSString stringWithFormat:@"%@\n"
+        "%@ lowp float fAlpha;\n"
         "\n"
         "void main(void) {\n"
-        "   %@ = vec4(1, 1, 1, 0.5);\n"
-        "}", [self fragmentHeader], [self fragColor]];
+        "   %@ = vec4(0.7, 0.7, 0.7, fAlpha);\n"
+        "}", [self fragmentHeader], [self in], [self fragColor]];
     
     return self;
 }
@@ -412,10 +428,13 @@ static ODClassType* _TRRainShaderText_type;
 - (NSString*)vertex {
     return [NSString stringWithFormat:@"%@\n"
         "%@ highp vec2 position;\n"
+        "%@ lowp float alpha;\n"
+        "%@ lowp float fAlpha;\n"
         "\n"
         "void main(void) {\n"
         "   gl_Position = vec4(position.x, position.y, 0, 1);\n"
-        "}", [self vertexHeader], [self ain]];
+        "   fAlpha = alpha;\n"
+        "}", [self vertexHeader], [self ain], [self ain], [self out]];
 }
 
 - (EGShaderProgram*)program {
@@ -520,10 +539,12 @@ static ODClassType* _TRRainShaderText_type;
 
 @implementation TRRainShader{
     EGShaderAttribute* _positionSlot;
+    EGShaderAttribute* _alphaSlot;
 }
 static TRRainShader* _TRRainShader_instance;
 static ODClassType* _TRRainShader_type;
 @synthesize positionSlot = _positionSlot;
+@synthesize alphaSlot = _alphaSlot;
 
 + (id)rainShader {
     return [[TRRainShader alloc] init];
@@ -531,7 +552,10 @@ static ODClassType* _TRRainShader_type;
 
 - (id)init {
     self = [super initWithProgram:[[TRRainShaderText rainShaderText] program]];
-    if(self) _positionSlot = [self attributeForName:@"position"];
+    if(self) {
+        _positionSlot = [self attributeForName:@"position"];
+        _alphaSlot = [self attributeForName:@"alpha"];
+    }
     
     return self;
 }
@@ -544,6 +568,7 @@ static ODClassType* _TRRainShader_type;
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
+    [_alphaSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:1 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.color))];
 }
 
 - (void)loadUniformsParam:(NSObject*)param {
