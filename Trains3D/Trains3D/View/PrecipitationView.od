@@ -1,0 +1,16 @@
+package com.antonzherdev.trains
+
+class PrecipitationView {
+    static def apply(precipitation : Precipitation) : PrecipitationView = {
+        if(precipitation.tp == PrecipitationType.rain) RainView(precipitation.strength)
+        else throw "Unknown precipitation type"
+    }
+
+    def draw
+}
+
+class RainView(strength : float) extends PrecipitationView {
+    def draw {
+
+    }
+}

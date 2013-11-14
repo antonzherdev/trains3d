@@ -18,6 +18,9 @@
 @class TRSwitchProcessor;
 @class EGGlobal;
 @class EGContext;
+@class TRLevelRules;
+@class TRWeatherRules;
+@class TRPrecipitationView;
 @class EGRenderTarget;
 @class EGMatrixStack;
 @class EGDirector;

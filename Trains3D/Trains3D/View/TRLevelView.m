@@ -12,6 +12,8 @@
 #import "TRRailroadBuilderProcessor.h"
 #import "TRRailroad.h"
 #import "TRSwitchProcessor.h"
+#import "TRWeather.h"
+#import "TRPrecipitationView.h"
 #import "EGDirector.h"
 @implementation TRLevelView{
     TRLevel* _level;
@@ -21,6 +23,7 @@
     TRTrainView* _trainView;
     TRTreeView* _treeView;
     TRCallRepairerView* _callRepairerView;
+    id _precipitationView;
     EGEnvironment* _environment;
     id<EGCamera> _camera;
     TRRailroadBuilderProcessor* _railroadBuilderProcessor;
@@ -73,6 +76,9 @@ static ODClassType* _TRLevelView_type;
     _railroadView = [TRRailroadView railroadViewWithLevel:_level];
     _cityView = [TRCityView cityViewWithLevel:_level];
     _callRepairerView = [TRCallRepairerView callRepairerViewWithLevel:_level];
+    _precipitationView = [_level.rules.weatherRules.precipitation mapF:^TRPrecipitationView*(TRPrecipitation* _) {
+        return [TRPrecipitationView applyPrecipitation:_];
+    }];
 }
 
 - (void)prepare {
@@ -88,6 +94,9 @@ static ODClassType* _TRLevelView_type;
     [_treeView draw];
     if(!([EGGlobal.context.renderTarget isShadow])) {
         [_trainView drawSmoke];
+        [_precipitationView forEach:^void(TRPrecipitationView* _) {
+            [((TRPrecipitationView*)(_)) draw];
+        }];
         [_cityView drawExpected];
         [_callRepairerView draw];
     }

@@ -1,7 +1,5 @@
 package com.antonzherdev.trains
 
-import com.antonzherdev.eg._
-
 class LevelView(level : Level) extends LayerView with InputProcessor {
     val name = "Level"
     private val cityView : CityView
@@ -9,6 +7,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     private val trainView : TrainView
     private val treeView : TreeView
     private val callRepairerView : CallRepairerView
+    private val precipitationView : PrecipitationView?
 
     val environment = Environment(ambientColor = vec4(0.7, 0.7, 0.7, 1), lights = [
         DirectLight(color = vec4(0.6, 0.6, 0.6, 1), direction = vec3(-0.15, 0.35, -0.3).normalize
@@ -29,6 +28,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
         railroadView = RailroadView(level)
         cityView = CityView(level)
         callRepairerView = CallRepairerView(level)
+        precipitationView = level.rules.weatherRules.precipitation.map(PrecipitationView(_))
     }
 
     def prepare {
@@ -45,6 +45,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
 
         if(!context.renderTarget.isShadow) {
             trainView.drawSmoke
+            precipitationView.for(_.draw)
             cityView.drawExpected
             callRepairerView.draw
         }
