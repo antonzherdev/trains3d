@@ -28,28 +28,22 @@ class RailroadBuilderMouseProcessor(builder : RailroadBuilder) extends MouseProc
                 val mid = nl.mid
                 val tile = mid.round
 
-                val a = nl.degreeAngle
-                var f : RailForm
-                if(a < -157.5) f = RailForm.leftRight
-                else if(a < -112.5) f = RailForm.leftTop
-                else if(a < -67.5) f = RailForm.bottomTop
-                else if(a < -22.5) f = RailForm.leftBottom
-                else if(a < 22.5) f = RailForm.leftRight
-                else if(a < 67.5) f = RailForm.leftTop
-                else if(a < 112.5) f = RailForm.bottomTop
-                else if(a < 157.5) f = RailForm.leftBottom
-                else f = RailForm.leftRight
+                val start = connectorsByDistanceFrom(line.r0 - tile).head
+                val ends = connectorsByDistanceFrom(line.r1 - tile)
+                var end = ends.head
+                if(end == start) end = ends[1]
 
-                val md = mid - tile
-                if(f == RailForm.leftTop && md.y < md.x) f = RailForm.bottomRight
-                else if(f == RailForm.leftBottom && md.y > -md.x) f = RailForm.topRight
-
-                builder.tryBuild(Rail(tile, f))
+                builder.tryBuild(Rail(tile, RailForm.formFor(start, end)))
             } else {
                 builder.clear
             }
             true
         }
+
+    private def connectorsByDistanceFrom(point : vec2) : [RailConnector] =
+        RailConnector.values.chain.sortBy.asc{connector ->
+            (connector.vec*0.5 - point).lengthSquare
+        }.endSort.toArray
 
     def mouseUp(event : Event) =
         if(startedPoint.isEmpty) false

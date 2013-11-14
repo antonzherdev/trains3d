@@ -7,6 +7,7 @@
 @class EGDirector;
 @class TRRailForm;
 @class TRRail;
+@class TRRailConnector;
 
 @class TRRailroadBuilderProcessor;
 @class TRRailroadBuilderMouseProcessor;

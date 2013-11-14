@@ -115,50 +115,22 @@ static ODClassType* _TRRailroadBuilderMouseProcessor_type;
             GELine2 nl = geLine2Normalize(line);
             GEVec2 mid = geLine2Mid(nl);
             GEVec2i tile = geVec2Round(mid);
-            float a = geLine2DegreeAngle(nl);
-            TRRailForm* f;
-            if(a < -157.5) {
-                f = TRRailForm.leftRight;
-            } else {
-                if(a < -112.5) {
-                    f = TRRailForm.leftTop;
-                } else {
-                    if(a < -67.5) {
-                        f = TRRailForm.bottomTop;
-                    } else {
-                        if(a < -22.5) {
-                            f = TRRailForm.leftBottom;
-                        } else {
-                            if(a < 22.5) {
-                                f = TRRailForm.leftRight;
-                            } else {
-                                if(a < 67.5) {
-                                    f = TRRailForm.leftTop;
-                                } else {
-                                    if(a < 112.5) {
-                                        f = TRRailForm.bottomTop;
-                                    } else {
-                                        if(a < 157.5) f = TRRailForm.leftBottom;
-                                        else f = TRRailForm.leftRight;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            GEVec2 md = geVec2SubVec2(mid, geVec2ApplyVec2i(tile));
-            if(f == TRRailForm.leftTop && md.y < md.x) {
-                f = TRRailForm.bottomRight;
-            } else {
-                if(f == TRRailForm.leftBottom && md.y > -md.x) f = TRRailForm.topRight;
-            }
-            [_builder tryBuildRail:[TRRail railWithTile:tile form:f]];
+            TRRailConnector* start = [[self connectorsByDistanceFromPoint:geVec2SubVec2(line.r0, geVec2ApplyVec2i(tile))] head];
+            id<CNSeq> ends = [self connectorsByDistanceFromPoint:geVec2SubVec2(geLine2R1(line), geVec2ApplyVec2i(tile))];
+            TRRailConnector* end = [ends head];
+            if(end == start) end = [ends applyIndex:1];
+            [_builder tryBuildRail:[TRRail railWithTile:tile form:[TRRailForm formForConnector1:start connector2:end]]];
         } else {
             [_builder clear];
         }
         return YES;
     }
+}
+
+- (id<CNSeq>)connectorsByDistanceFromPoint:(GEVec2)point {
+    return [[[[[[TRRailConnector values] chain] sortBy] ascBy:^id(TRRailConnector* connector) {
+        return numf4(geVec2LengthSquare(geVec2SubVec2(geVec2iMulF([((TRRailConnector*)(connector)) vec], 0.5), point)));
+    }] endSort] toArray];
 }
 
 - (BOOL)mouseUpEvent:(EGEvent*)event {
