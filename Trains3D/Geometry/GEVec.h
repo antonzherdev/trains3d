@@ -88,7 +88,9 @@ static inline NSUInteger GEVec2iHash(GEVec2i self) {
 }
 NSString* GEVec2iDescription(GEVec2i self);
 GEVec2i geVec2iApplyVec2(GEVec2 vec2);
+GEVec2 geVec2iAddVec2(GEVec2i self, GEVec2 vec2);
 GEVec2i geVec2iAddVec2i(GEVec2i self, GEVec2i vec2i);
+GEVec2 geVec2iSubVec2(GEVec2i self, GEVec2 vec2);
 GEVec2i geVec2iSubVec2i(GEVec2i self, GEVec2i vec2i);
 GEVec2i geVec2iMulI(GEVec2i self, NSInteger i);
 GEVec2 geVec2iMulF(GEVec2i self, CGFloat f);

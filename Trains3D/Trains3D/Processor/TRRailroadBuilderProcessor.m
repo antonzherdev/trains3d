@@ -119,7 +119,12 @@ static ODClassType* _TRRailroadBuilderMouseProcessor_type;
             id<CNSeq> ends = [self connectorsByDistanceFromPoint:geVec2SubVec2(geLine2R1(line), geVec2ApplyVec2i(tile))];
             TRRailConnector* end = [ends head];
             if(end == start) end = [ends applyIndex:1];
-            [_builder tryBuildRail:[TRRail railWithTile:tile form:[TRRailForm formForConnector1:start connector2:end]]];
+            if([_builder tryBuildRail:[TRRail railWithTile:tile form:[TRRailForm formForConnector1:start connector2:end]]]) {
+                if(geVec2Length(line.u) > 1.0) {
+                    [_builder fix];
+                    _startedPoint = [CNOption applyValue:wrap(GEVec2, geVec2iAddVec2(tile, geVec2iMulF([end vec], 0.5)))];
+                }
+            }
         } else {
             [_builder clear];
         }
