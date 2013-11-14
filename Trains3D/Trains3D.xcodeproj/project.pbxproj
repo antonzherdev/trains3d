@@ -195,6 +195,7 @@
 		6F3DF2D2328F1230421AEB36 /* EGProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF54466337FFA2B6FB465 /* EGProgress.m */; };
 		6F3DF2D25FE0FB304A64A987 /* TRTrain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB08F20E2FD32E0CA79A /* TRTrain.m */; };
 		6F3DF2D3F5C540C800CD0AC9 /* btAlignedAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2BFF8A305F53D6234FE /* btAlignedAllocator.cpp */; };
+		6F3DF2D3FAFD854A3509EBC7 /* Rain.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFBF3A04F849928969536 /* Rain.mp3 */; };
 		6F3DF2D4AF12616DEADFB4BA /* btGImpactQuantizedBvh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2D9F9A43AB1D88DD58D /* btGImpactQuantizedBvh.cpp */; };
 		6F3DF2D4D3A3AA7FACD05C02 /* btMinkowskiSumShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFAE21F2E6B9C0681BBC2 /* btMinkowskiSumShape.cpp */; };
 		6F3DF2D575F5CC2FA20E999A /* btSubSimplexConvexCast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2043672B015D90D21EA /* btSubSimplexConvexCast.cpp */; };
@@ -1041,6 +1042,7 @@
 		6F3DFE9A6573CCC2121C4399 /* Lazy.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF835F81FFE0C7D97DC7A /* Lazy.od */; };
 		6F3DFE9AF1BD70C8AB6F498A /* Nightingale.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF23F3060C73098441B6D /* Nightingale.mp3 */; };
 		6F3DFE9DE9C43756500826C3 /* CNSortBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF59F9DE9E545715CEE2F /* CNSortBuilder.m */; };
+		6F3DFEAD1CD17B1ADED8FD38 /* Rain.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFBF3A04F849928969536 /* Rain.mp3 */; };
 		6F3DFEADAE3F5922EBA107E7 /* Woodpecker.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF87C75021D4E71C51B9A /* Woodpecker.mp3 */; };
 		6F3DFEB009F6DD590345E2CB /* gim_contact.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4930B18032DBD17F203 /* gim_contact.cpp */; };
 		6F3DFEB44CE6629797F216AD /* CNChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA93D8D19D1214BDEC32 /* CNChain.m */; };
@@ -2080,6 +2082,7 @@
 		6F3DFBEE7B279CE4A05E3342 /* Option.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Option.od; sourceTree = "<group>"; };
 		6F3DFBF146CA2B2CC064615D /* btBulletCollisionCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btBulletCollisionCommon.h; sourceTree = "<group>"; };
 		6F3DFBF2E0A3B3B69DF76027 /* Billboard.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Billboard.od; sourceTree = "<group>"; };
+		6F3DFBF3A04F849928969536 /* Rain.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Rain.mp3; sourceTree = "<group>"; };
 		6F3DFBF9AEACFE736505CB8E /* btGjkEpa2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btGjkEpa2.cpp; sourceTree = "<group>"; };
 		6F3DFBF9CB73172393811F54 /* CNMapLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNMapLink.m; sourceTree = "<group>"; };
 		6F3DFC0229D6D74D6F0B677F /* KWMock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWMock.h; sourceTree = "<group>"; };
@@ -4054,6 +4057,7 @@
 				6F3DF4672630E009640A2C61 /* RefuseBuild.wav */,
 				6F3DFA85490A034AEE88B3D1 /* Click.wav */,
 				6F3DFEB3BAE0DC6CEEFED6A3 /* Beep.wav */,
+				6F3DFBF3A04F849928969536 /* Rain.mp3 */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -4673,6 +4677,7 @@
 				6F3DF9509399BCCA3295B835 /* SnowPine.png in Resources */,
 				6F3DF9151FD4FD4CF5442A50 /* Click.wav in Resources */,
 				6F3DFAA7050260D7FE5F885F /* Beep.wav in Resources */,
+				6F3DFEAD1CD17B1ADED8FD38 /* Rain.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4794,6 +4799,7 @@
 				6F3DF9AEA1B104FB437A85ED /* SnowPine.png in Resources */,
 				6F3DF6E48752694C70A66943 /* Click.wav in Resources */,
 				6F3DFD0F57A894CB2FEB2EE4 /* Beep.wav in Resources */,
+				6F3DF2D3FAFD854A3509EBC7 /* Rain.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -43,6 +43,10 @@ static ODClassType* _TRWeatherRules_type;
     _TRWeatherRules_type = [ODClassType classTypeWithCls:[TRWeatherRules class]];
 }
 
+- (BOOL)isRain {
+    return [_precipitation isDefined] && ((TRPrecipitation*)([_precipitation get])).tp == TRPrecipitationType.rain;
+}
+
 - (ODClassType*)type {
     return [TRWeatherRules type];
 }

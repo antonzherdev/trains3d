@@ -24,12 +24,12 @@ class RainView(weather : Weather, strength : float) extends PrecipitationView {
 }
 
 class RainParticleSystem(weather : Weather, strength : float) extends ParticleSystem<RainParticle> {
-    val particles = 0.to(1000*strength).chain.map(RainParticle(weather)).toArray
+    val particles = 0.to(2000*strength).chain.map(RainParticle(weather)).toArray
 }
 
 class RainParticle(weather : Weather) extends Particle {
     private var position : vec2 = vec2.rnd*2
-    private val alpha = Float.rnd(0.1, 0.4)
+    private val alpha = Float.rnd(0.1, 0.4)*context.scale
 
     def writeTo(array : VoidRefArray) : VoidRefArray = {
         array.write(RainData, RainData(position, alpha))

@@ -9,7 +9,9 @@ class WeatherRules(
     blastMinLength : float, blastMaxLength : float,//blast length gap in seconds
     blastStrength : float, //maximum wind strength in cell/second
     precipitation : Precipitation?
-)
+) {
+    def isRain : bool = precipitation.isDefined && precipitation.get.tp == PrecipitationType.rain
+}
 
 class Precipitation(tp : PrecipitationType, strength : float)
 

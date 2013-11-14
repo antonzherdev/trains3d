@@ -6,6 +6,8 @@
 @class TRPrecipitation;
 @class TRPrecipitationType;
 @class TRWeather;
+@class EGGlobal;
+@class EGContext;
 @class EGBlendFunction;
 @class EGVertexBufferDesc;
 @protocol EGIndexSource;

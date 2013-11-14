@@ -3,6 +3,7 @@
 #import "GEVec.h"
 @class TRLevel;
 @class TRLevelRules;
+@class TRWeatherRules;
 @class TRLevelTheme;
 @class SDSound;
 @class TRForest;
@@ -10,6 +11,7 @@
 
 @class TRTreeSound;
 @class TRWindSound;
+@class TRRainSound;
 
 @interface TRTreeSound : EGSoundPlayersCollection
 @property (nonatomic, readonly) TRLevel* level;
@@ -26,6 +28,17 @@
 
 + (id)windSoundWithForest:(TRForest*)forest;
 - (id)initWithForest:(TRForest*)forest;
+- (ODClassType*)type;
+- (void)updateWithDelta:(CGFloat)delta;
++ (ODClassType*)type;
+@end
+
+
+@interface TRRainSound : EGBackgroundSoundPlayer
+@property (nonatomic, readonly) TRWeather* weather;
+
++ (id)rainSoundWithWeather:(TRWeather*)weather;
+- (id)initWithWeather:(TRWeather*)weather;
 - (ODClassType*)type;
 - (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;

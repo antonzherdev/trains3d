@@ -1,9 +1,9 @@
 #import "TRTreeSound.h"
 
 #import "TRLevel.h"
+#import "TRWeather.h"
 #import "SDSound.h"
 #import "TRTree.h"
-#import "TRWeather.h"
 @implementation TRTreeSound{
     TRLevel* _level;
 }
@@ -15,7 +15,7 @@ static ODClassType* _TRTreeSound_type;
 }
 
 - (id)initWithLevel:(TRLevel*)level {
-    self = [super initWithPlayers:((level.rules.theme == TRLevelTheme.forest) ? (@[[TRWindSound windSoundWithForest:level.forest], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Nightingale.mp3" volume:0.1] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crow.mp3" volume:0.1] secondsBetween:240.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crows.mp3" volume:0.03] secondsBetween:240.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Woodpecker.mp3" volume:0.4] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Cuckoo.mp3" volume:0.4] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Grouse.mp3" volume:0.35] secondsBetween:120.0]]) : (@[[TRWindSound windSoundWithForest:level.forest], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crow.mp3" volume:0.1] secondsBetween:60.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crows.mp3" volume:0.03] secondsBetween:120.0]]))];
+    self = [super initWithPlayers:(([level.rules.weatherRules isRain]) ? (@[[TRWindSound windSoundWithForest:level.forest], [TRRainSound rainSoundWithWeather:level.weather]]) : ((level.rules.theme == TRLevelTheme.forest) ? (@[[TRWindSound windSoundWithForest:level.forest], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Nightingale.mp3" volume:0.1] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crow.mp3" volume:0.1] secondsBetween:240.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crows.mp3" volume:0.03] secondsBetween:240.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Woodpecker.mp3" volume:0.4] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Cuckoo.mp3" volume:0.4] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Grouse.mp3" volume:0.35] secondsBetween:120.0]]) : (@[[TRWindSound windSoundWithForest:level.forest], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crow.mp3" volume:0.1] secondsBetween:60.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crows.mp3" volume:0.03] secondsBetween:120.0]])))];
     if(self) _level = level;
     
     return self;
@@ -116,6 +116,68 @@ static ODClassType* _TRWindSound_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"forest=%@", self.forest];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRRainSound{
+    TRWeather* _weather;
+}
+static ODClassType* _TRRainSound_type;
+@synthesize weather = _weather;
+
++ (id)rainSoundWithWeather:(TRWeather*)weather {
+    return [[TRRainSound alloc] initWithWeather:weather];
+}
+
+- (id)initWithWeather:(TRWeather*)weather {
+    self = [super initWithSound:[SDSound applyFile:@"Rain.mp3" volume:0.0]];
+    if(self) _weather = weather;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRRainSound_type = [ODClassType classTypeWithCls:[TRRainSound class]];
+}
+
+- (void)updateWithDelta:(CGFloat)delta {
+    GEVec2 w = [_weather wind];
+    self.sound.volume = ((float)(0.15 + geVec2LengthSquare(w) * 8));
+}
+
+- (ODClassType*)type {
+    return [TRRainSound type];
+}
+
++ (ODClassType*)type {
+    return _TRRainSound_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRainSound* o = ((TRRainSound*)(other));
+    return [self.weather isEqual:o.weather];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.weather hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"weather=%@", self.weather];
     [description appendString:@">"];
     return description;
 }

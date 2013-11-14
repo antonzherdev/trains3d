@@ -1,7 +1,11 @@
 package com.antonzherdev.trains
 
 class TreeSound(level : Level) extends SoundPlayersCollection(
-    if(level.rules.theme == LevelTheme.forest)
+    if(level.rules.weatherRules.isRain)
+        [WindSound(level.forest)
+        , RainSound(level.weather)
+        ]
+    else if(level.rules.theme == LevelTheme.forest)
         [WindSound(level.forest)
         ,SporadicSoundPlayer(Sound("Nightingale.mp3", 0.1), 120)
         ,SporadicSoundPlayer(Sound("Crow.mp3", 0.1), 240)
@@ -18,12 +22,16 @@ class TreeSound(level : Level) extends SoundPlayersCollection(
 )
 
 class WindSound(forest : Forest) extends BackgroundSoundPlayer(Sound("Rustle.mp3", 0)) {
-
     def updateWith(delta : float) {
         val w = forest.weather.wind
         sound.volume = w.lengthSquare*2
-//        log("$(sound.volume)")
     }
 }
 
+class RainSound(weather : Weather) extends BackgroundSoundPlayer(Sound("Rain.mp3", 0)) {
+    def updateWith(delta : float) {
+        val w = weather.wind
+        sound.volume = 0.15 + w.lengthSquare*8
+    }
+}
 

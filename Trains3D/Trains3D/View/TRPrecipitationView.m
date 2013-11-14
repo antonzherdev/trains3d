@@ -1,6 +1,7 @@
 #import "TRPrecipitationView.h"
 
 #import "TRWeather.h"
+#import "EGContext.h"
 #import "EGMaterial.h"
 #import "EGVertex.h"
 #import "EGIndex.h"
@@ -165,7 +166,7 @@ static ODClassType* _TRRainParticleSystem_type;
     if(self) {
         _weather = weather;
         _strength = strength;
-        _particles = [[[intTo(0, ((NSInteger)(1000 * _strength))) chain] map:^TRRainParticle*(id _) {
+        _particles = [[[intTo(0, ((NSInteger)(2000 * _strength))) chain] map:^TRRainParticle*(id _) {
             return [TRRainParticle rainParticleWithWeather:_weakSelf.weather];
         }] toArray];
     }
@@ -238,7 +239,7 @@ static ODClassType* _TRRainParticle_type;
     if(self) {
         _weather = weather;
         _position = geVec2MulI(geVec2Rnd(), 2);
-        _alpha = odFloatRndMinMax(0.1, 0.4);
+        _alpha = odFloatRndMinMax(0.1, 0.4) * EGGlobal.context.scale;
     }
     
     return self;
