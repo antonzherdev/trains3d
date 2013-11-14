@@ -116,11 +116,10 @@ class BillboardShader(program : ShaderProgram, texture : bool, alpha : bool, sha
 
 struct BillboardBufferData(position : vec3, model : vec2, color : vec4, uv : vec2)
 
+trait BillboardParticleSystem extends ParticleSystem<BillboardParticle>
+class EmissiveBillboardParticleSystem extends EmissiveParticleSystem<BillboardParticle>
 
-class BillboardParticleSystem extends ParticleSystem<BillboardParticle>
-
-
-class BillboardParticle(lifeLength : float4) extends Particle(lifeLength) {
+trait BillboardParticle extends Particle {
     var position : vec3
     var uv : Quad
     var model : Quad
@@ -135,7 +134,7 @@ class BillboardParticle(lifeLength : float4) extends Particle(lifeLength) {
     }
 }
 
-class BillboardParticleSystemView(system : BillboardParticleSystem,
+class BillboardParticleSystemView(system : ParticleSystem<BillboardParticle>,
     maxCount : uint, material : ColorSource, blendFunc : BlendFunction
     ) extends ParticleSystemView<BillboardParticle, BillboardBufferData>(
         system, Billboard.vbDesc, maxCount,
@@ -144,7 +143,7 @@ class BillboardParticleSystemView(system : BillboardParticleSystem,
     )
 {
 
-    static def apply(system : BillboardParticleSystem, maxCount : uint, material : ColorSource) =
+    static def apply(system : ParticleSystem, maxCount : uint, material : ColorSource) =
         BillboardParticleSystemView(system, maxCount, material, BlendFunction.standard)
     def vertexCount : uint = 4
 

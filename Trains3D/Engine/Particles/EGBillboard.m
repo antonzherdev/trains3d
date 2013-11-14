@@ -491,11 +491,11 @@ ODPType* egBillboardBufferDataType() {
 
 
 
-@implementation EGBillboardParticleSystem
-static ODClassType* _EGBillboardParticleSystem_type;
+@implementation EGEmissiveBillboardParticleSystem
+static ODClassType* _EGEmissiveBillboardParticleSystem_type;
 
-+ (id)billboardParticleSystem {
-    return [[EGBillboardParticleSystem alloc] init];
++ (id)emissiveBillboardParticleSystem {
+    return [[EGEmissiveBillboardParticleSystem alloc] init];
 }
 
 - (id)init {
@@ -506,15 +506,15 @@ static ODClassType* _EGBillboardParticleSystem_type;
 
 + (void)initialize {
     [super initialize];
-    _EGBillboardParticleSystem_type = [ODClassType classTypeWithCls:[EGBillboardParticleSystem class]];
+    _EGEmissiveBillboardParticleSystem_type = [ODClassType classTypeWithCls:[EGEmissiveBillboardParticleSystem class]];
 }
 
 - (ODClassType*)type {
-    return [EGBillboardParticleSystem type];
+    return [EGEmissiveBillboardParticleSystem type];
 }
 
 + (ODClassType*)type {
-    return _EGBillboardParticleSystem_type;
+    return _EGEmissiveBillboardParticleSystem_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -540,67 +540,14 @@ static ODClassType* _EGBillboardParticleSystem_type;
 @end
 
 
-@implementation EGBillboardParticle{
-    GEVec3 _position;
-    GEQuad _uv;
-    GEQuad _model;
-    GEVec4 _color;
-}
-static ODClassType* _EGBillboardParticle_type;
-@synthesize position = _position;
-@synthesize uv = _uv;
-@synthesize model = _model;
-@synthesize color = _color;
-
-+ (id)billboardParticleWithLifeLength:(float)lifeLength {
-    return [[EGBillboardParticle alloc] initWithLifeLength:lifeLength];
-}
-
-- (id)initWithLifeLength:(float)lifeLength {
-    self = [super initWithLifeLength:lifeLength];
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _EGBillboardParticle_type = [ODClassType classTypeWithCls:[EGBillboardParticle class]];
-}
-
-- (CNVoidRefArray)writeToArray:(CNVoidRefArray)array {
-    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p[0], _color, _uv.p[0])), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p[1], _color, _uv.p[1])), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p[2], _color, _uv.p[2])), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p[3], _color, _uv.p[3]));
-}
-
-- (ODClassType*)type {
-    return [EGBillboardParticle type];
-}
-
-+ (ODClassType*)type {
-    return _EGBillboardParticle_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"lifeLength=%f", self.lifeLength];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
 @implementation EGBillboardParticleSystemView
 static ODClassType* _EGBillboardParticleSystemView_type;
 
-+ (id)billboardParticleSystemViewWithSystem:(EGBillboardParticleSystem*)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
++ (id)billboardParticleSystemViewWithSystem:(id<EGParticleSystem>)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
     return [[EGBillboardParticleSystemView alloc] initWithSystem:system maxCount:maxCount material:material blendFunc:blendFunc];
 }
 
-- (id)initWithSystem:(EGBillboardParticleSystem*)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
+- (id)initWithSystem:(id<EGParticleSystem>)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
     self = [super initWithSystem:system vbDesc:EGBillboard.vbDesc maxCount:maxCount shader:[EGBillboardShaderSystem.instance shaderForParam:material] material:material blendFunc:blendFunc];
     
     return self;
@@ -611,7 +558,7 @@ static ODClassType* _EGBillboardParticleSystemView_type;
     _EGBillboardParticleSystemView_type = [ODClassType classTypeWithCls:[EGBillboardParticleSystemView class]];
 }
 
-+ (EGBillboardParticleSystemView*)applySystem:(EGBillboardParticleSystem*)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material {
++ (EGBillboardParticleSystemView*)applySystem:(id<EGParticleSystem>)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material {
     return [EGBillboardParticleSystemView billboardParticleSystemViewWithSystem:system maxCount:maxCount material:material blendFunc:EGBlendFunction.standard];
 }
 

@@ -6,161 +6,8 @@
 #import "EGIndex.h"
 #import "EGMesh.h"
 #import "EGContext.h"
-@implementation EGParticleSystem{
-    CNList* __particles;
-}
-static ODClassType* _EGParticleSystem_type;
-
-+ (id)particleSystem {
-    return [[EGParticleSystem alloc] init];
-}
-
-- (id)init {
-    self = [super init];
-    if(self) __particles = [CNList apply];
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _EGParticleSystem_type = [ODClassType classTypeWithCls:[EGParticleSystem class]];
-}
-
-- (id<CNSeq>)particles {
-    return __particles;
-}
-
-- (id)generateParticle {
-    @throw @"Method generateParticle is abstract";
-}
-
-- (void)generateParticlesWithDelta:(CGFloat)delta {
-}
-
-- (void)emitParticle {
-    __particles = [CNList applyItem:[self generateParticle] tail:__particles];
-}
-
-- (void)updateWithDelta:(CGFloat)delta {
-    __particles = [__particles filterF:^BOOL(id _) {
-        return [_ isLive];
-    }];
-    [self generateParticlesWithDelta:delta];
-    __block CNList* ps = [CNList apply];
-    [__particles forEach:^void(id p) {
-        [p updateWithDelta:delta];
-        if([p isLive]) ps = [CNList applyItem:p tail:ps];
-    }];
-    __particles = ps;
-}
-
-- (BOOL)hasParticles {
-    return !([__particles isEmpty]);
-}
-
-- (ODClassType*)type {
-    return [EGParticleSystem type];
-}
-
-+ (ODClassType*)type {
-    return _EGParticleSystem_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
-@implementation EGParticle{
-    float _lifeLength;
-    float __lifeTime;
-}
-static ODClassType* _EGParticle_type;
-@synthesize lifeLength = _lifeLength;
-
-+ (id)particleWithLifeLength:(float)lifeLength {
-    return [[EGParticle alloc] initWithLifeLength:lifeLength];
-}
-
-- (id)initWithLifeLength:(float)lifeLength {
-    self = [super init];
-    if(self) _lifeLength = lifeLength;
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _EGParticle_type = [ODClassType classTypeWithCls:[EGParticle class]];
-}
-
-- (float)lifeTime {
-    return __lifeTime;
-}
-
-- (CNVoidRefArray)writeToArray:(CNVoidRefArray)array {
-    @throw @"Method writeTo is abstract";
-}
-
-- (BOOL)isLive {
-    return __lifeTime <= _lifeLength;
-}
-
-- (void)updateWithDelta:(CGFloat)delta {
-    __lifeTime += ((float)(delta));
-    [self updateT:__lifeTime dt:((float)(delta))];
-}
-
-- (void)updateT:(float)t dt:(float)dt {
-    @throw @"Method update is abstract";
-}
-
-- (ODClassType*)type {
-    return [EGParticle type];
-}
-
-+ (ODClassType*)type {
-    return _EGParticle_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGParticle* o = ((EGParticle*)(other));
-    return eqf4(self.lifeLength, o.lifeLength);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + float4Hash(self.lifeLength);
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"lifeLength=%f", self.lifeLength];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
 @implementation EGParticleSystemView{
-    EGParticleSystem* _system;
+    id<EGParticleSystem> _system;
     EGVertexBufferDesc* _vbDesc;
     NSUInteger _maxCount;
     EGShader* _shader;
@@ -183,11 +30,11 @@ static ODClassType* _EGParticleSystemView_type;
 @synthesize index = _index;
 @synthesize vao = _vao;
 
-+ (id)particleSystemViewWithSystem:(EGParticleSystem*)system vbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount shader:(EGShader*)shader material:(EGMaterial*)material blendFunc:(EGBlendFunction*)blendFunc {
++ (id)particleSystemViewWithSystem:(id<EGParticleSystem>)system vbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount shader:(EGShader*)shader material:(EGMaterial*)material blendFunc:(EGBlendFunction*)blendFunc {
     return [[EGParticleSystemView alloc] initWithSystem:system vbDesc:vbDesc maxCount:maxCount shader:shader material:material blendFunc:blendFunc];
 }
 
-- (id)initWithSystem:(EGParticleSystem*)system vbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount shader:(EGShader*)shader material:(EGMaterial*)material blendFunc:(EGBlendFunction*)blendFunc {
+- (id)initWithSystem:(id<EGParticleSystem>)system vbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount shader:(EGShader*)shader material:(EGMaterial*)material blendFunc:(EGBlendFunction*)blendFunc {
     self = [super init];
     __weak EGParticleSystemView* _weakSelf = self;
     if(self) {
@@ -271,7 +118,7 @@ static ODClassType* _EGParticleSystemView_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGParticleSystemView* o = ((EGParticleSystemView*)(other));
-    return self.system == o.system && [self.vbDesc isEqual:o.vbDesc] && self.maxCount == o.maxCount && [self.shader isEqual:o.shader] && [self.material isEqual:o.material] && [self.blendFunc isEqual:o.blendFunc];
+    return [self.system isEqual:o.system] && [self.vbDesc isEqual:o.vbDesc] && self.maxCount == o.maxCount && [self.shader isEqual:o.shader] && [self.material isEqual:o.material] && [self.blendFunc isEqual:o.blendFunc];
 }
 
 - (NSUInteger)hash {
@@ -293,6 +140,155 @@ static ODClassType* _EGParticleSystemView_type;
     [description appendFormat:@", shader=%@", self.shader];
     [description appendFormat:@", material=%@", self.material];
     [description appendFormat:@", blendFunc=%@", self.blendFunc];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGEmissiveParticleSystem{
+    CNList* __particles;
+}
+static ODClassType* _EGEmissiveParticleSystem_type;
+
++ (id)emissiveParticleSystem {
+    return [[EGEmissiveParticleSystem alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    if(self) __particles = [CNList apply];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGEmissiveParticleSystem_type = [ODClassType classTypeWithCls:[EGEmissiveParticleSystem class]];
+}
+
+- (id<CNSeq>)particles {
+    return __particles;
+}
+
+- (id)generateParticle {
+    @throw @"Method generateParticle is abstract";
+}
+
+- (void)generateParticlesWithDelta:(CGFloat)delta {
+}
+
+- (void)emitParticle {
+    __particles = [CNList applyItem:[self generateParticle] tail:__particles];
+}
+
+- (void)updateWithDelta:(CGFloat)delta {
+    __particles = [__particles filterF:^BOOL(id _) {
+        return [_ isLive];
+    }];
+    [self generateParticlesWithDelta:delta];
+    __block CNList* ps = [CNList apply];
+    [__particles forEach:^void(id p) {
+        [p updateWithDelta:delta];
+        if([p isLive]) ps = [CNList applyItem:p tail:ps];
+    }];
+    __particles = ps;
+}
+
+- (BOOL)hasParticles {
+    return !([__particles isEmpty]);
+}
+
+- (ODClassType*)type {
+    return [EGEmissiveParticleSystem type];
+}
+
++ (ODClassType*)type {
+    return _EGEmissiveParticleSystem_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGEmittedParticle{
+    float _lifeLength;
+    float __lifeTime;
+}
+static ODClassType* _EGEmittedParticle_type;
+@synthesize lifeLength = _lifeLength;
+
++ (id)emittedParticleWithLifeLength:(float)lifeLength {
+    return [[EGEmittedParticle alloc] initWithLifeLength:lifeLength];
+}
+
+- (id)initWithLifeLength:(float)lifeLength {
+    self = [super init];
+    if(self) _lifeLength = lifeLength;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGEmittedParticle_type = [ODClassType classTypeWithCls:[EGEmittedParticle class]];
+}
+
+- (float)lifeTime {
+    return __lifeTime;
+}
+
+- (BOOL)isLive {
+    return __lifeTime <= _lifeLength;
+}
+
+- (void)updateWithDelta:(CGFloat)delta {
+    __lifeTime += ((float)(delta));
+    [self updateT:__lifeTime dt:((float)(delta))];
+}
+
+- (void)updateT:(float)t dt:(float)dt {
+    @throw @"Method update is abstract";
+}
+
+- (ODClassType*)type {
+    return [EGEmittedParticle type];
+}
+
++ (ODClassType*)type {
+    return _EGEmittedParticle_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGEmittedParticle* o = ((EGEmittedParticle*)(other));
+    return eqf4(self.lifeLength, o.lifeLength);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + float4Hash(self.lifeLength);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"lifeLength=%f", self.lifeLength];
     [description appendString:@">"];
     return description;
 }

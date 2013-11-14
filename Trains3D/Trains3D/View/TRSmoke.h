@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "EGBillboard.h"
 #import "GEVec.h"
+#import "EGParticleSystem.h"
 @class TRTrain;
 @class TRWeather;
 @class TRCar;
@@ -17,7 +18,7 @@
 @class TRSmokeParticle;
 @class TRSmokeView;
 
-@interface TRSmoke : EGBillboardParticleSystem
+@interface TRSmoke : EGEmissiveBillboardParticleSystem
 @property (nonatomic, readonly, weak) TRTrain* train;
 @property (nonatomic, readonly, weak) TRWeather* weather;
 
@@ -34,7 +35,7 @@
 @end
 
 
-@interface TRSmokeParticle : EGBillboardParticle
+@interface TRSmokeParticle : EGEmittedParticle<EGBillboardParticle>
 @property (nonatomic, readonly, weak) TRWeather* weather;
 @property (nonatomic) GEVec3 speed;
 @property (nonatomic, readonly) void(^animation)(float);

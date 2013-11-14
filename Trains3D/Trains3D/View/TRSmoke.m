@@ -132,12 +132,20 @@ static ODClassType* _TRSmoke_type;
     __weak TRWeather* _weather;
     GEVec3 _speed;
     void(^_animation)(float);
+    GEVec3 _position;
+    GEQuad _uv;
+    GEQuad _model;
+    GEVec4 _color;
 }
 static CGFloat _TRSmokeParticle_dragCoefficient = 0.5;
 static ODClassType* _TRSmokeParticle_type;
 @synthesize weather = _weather;
 @synthesize speed = _speed;
 @synthesize animation = _animation;
+@synthesize position = _position;
+@synthesize uv = _uv;
+@synthesize model = _model;
+@synthesize color = _color;
 
 + (id)smokeParticleWithWeather:(TRWeather*)weather {
     return [[TRSmokeParticle alloc] initWithWeather:weather];
@@ -172,6 +180,10 @@ static ODClassType* _TRSmokeParticle_type;
     _speed = geVec3AddVec3(_speed, geVec3MulK(a, dt));
     self.position = geVec3AddVec3(self.position, geVec3MulK(geVec3AddVec3(_speed, geVec3ApplyVec2Z([_weather wind], 0.0)), dt));
     if(t > 1.5) _animation((t - 1.5) / 0.5);
+}
+
+- (CNVoidRefArray)writeToArray:(CNVoidRefArray)array {
+    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p[0], _color, _uv.p[0])), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p[1], _color, _uv.p[1])), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p[2], _color, _uv.p[2])), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p[3], _color, _uv.p[3]));
 }
 
 - (ODClassType*)type {
