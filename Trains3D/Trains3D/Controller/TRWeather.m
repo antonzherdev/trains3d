@@ -7,6 +7,7 @@
     CGFloat _blastMinLength;
     CGFloat _blastMaxLength;
     CGFloat _blastStrength;
+    id _precipitation;
 }
 static ODClassType* _TRWeatherRules_type;
 @synthesize windStrength = _windStrength;
@@ -14,12 +15,13 @@ static ODClassType* _TRWeatherRules_type;
 @synthesize blastMinLength = _blastMinLength;
 @synthesize blastMaxLength = _blastMaxLength;
 @synthesize blastStrength = _blastStrength;
+@synthesize precipitation = _precipitation;
 
-+ (id)weatherRulesWithWindStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength {
-    return [[TRWeatherRules alloc] initWithWindStrength:windStrength blastness:blastness blastMinLength:blastMinLength blastMaxLength:blastMaxLength blastStrength:blastStrength];
++ (id)weatherRulesWithWindStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(id)precipitation {
+    return [[TRWeatherRules alloc] initWithWindStrength:windStrength blastness:blastness blastMinLength:blastMinLength blastMaxLength:blastMaxLength blastStrength:blastStrength precipitation:precipitation];
 }
 
-- (id)initWithWindStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength {
+- (id)initWithWindStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(id)precipitation {
     self = [super init];
     if(self) {
         _windStrength = windStrength;
@@ -27,6 +29,7 @@ static ODClassType* _TRWeatherRules_type;
         _blastMinLength = blastMinLength;
         _blastMaxLength = blastMaxLength;
         _blastStrength = blastStrength;
+        _precipitation = precipitation;
     }
     
     return self;
@@ -53,7 +56,7 @@ static ODClassType* _TRWeatherRules_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRWeatherRules* o = ((TRWeatherRules*)(other));
-    return eqf(self.windStrength, o.windStrength) && eqf(self.blastness, o.blastness) && eqf(self.blastMinLength, o.blastMinLength) && eqf(self.blastMaxLength, o.blastMaxLength) && eqf(self.blastStrength, o.blastStrength);
+    return eqf(self.windStrength, o.windStrength) && eqf(self.blastness, o.blastness) && eqf(self.blastMinLength, o.blastMinLength) && eqf(self.blastMaxLength, o.blastMaxLength) && eqf(self.blastStrength, o.blastStrength) && [self.precipitation isEqual:o.precipitation];
 }
 
 - (NSUInteger)hash {
@@ -63,6 +66,7 @@ static ODClassType* _TRWeatherRules_type;
     hash = hash * 31 + floatHash(self.blastMinLength);
     hash = hash * 31 + floatHash(self.blastMaxLength);
     hash = hash * 31 + floatHash(self.blastStrength);
+    hash = hash * 31 + [self.precipitation hash];
     return hash;
 }
 
@@ -73,8 +77,110 @@ static ODClassType* _TRWeatherRules_type;
     [description appendFormat:@", blastMinLength=%f", self.blastMinLength];
     [description appendFormat:@", blastMaxLength=%f", self.blastMaxLength];
     [description appendFormat:@", blastStrength=%f", self.blastStrength];
+    [description appendFormat:@", precipitation=%@", self.precipitation];
     [description appendString:@">"];
     return description;
+}
+
+@end
+
+
+@implementation TRPrecipitation{
+    TRPrecipitationType* _tp;
+    CGFloat _strength;
+}
+static ODClassType* _TRPrecipitation_type;
+@synthesize tp = _tp;
+@synthesize strength = _strength;
+
++ (id)precipitationWithTp:(TRPrecipitationType*)tp strength:(CGFloat)strength {
+    return [[TRPrecipitation alloc] initWithTp:tp strength:strength];
+}
+
+- (id)initWithTp:(TRPrecipitationType*)tp strength:(CGFloat)strength {
+    self = [super init];
+    if(self) {
+        _tp = tp;
+        _strength = strength;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRPrecipitation_type = [ODClassType classTypeWithCls:[TRPrecipitation class]];
+}
+
+- (ODClassType*)type {
+    return [TRPrecipitation type];
+}
+
++ (ODClassType*)type {
+    return _TRPrecipitation_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRPrecipitation* o = ((TRPrecipitation*)(other));
+    return self.tp == o.tp && eqf(self.strength, o.strength);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.tp ordinal];
+    hash = hash * 31 + floatHash(self.strength);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"tp=%@", self.tp];
+    [description appendFormat:@", strength=%f", self.strength];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRPrecipitationType
+static TRPrecipitationType* _TRPrecipitationType_rain;
+static TRPrecipitationType* _TRPrecipitationType_snow;
+static NSArray* _TRPrecipitationType_values;
+
++ (id)precipitationTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
+    return [[TRPrecipitationType alloc] initWithOrdinal:ordinal name:name];
+}
+
+- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
+    self = [super initWithOrdinal:ordinal name:name];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRPrecipitationType_rain = [TRPrecipitationType precipitationTypeWithOrdinal:0 name:@"rain"];
+    _TRPrecipitationType_snow = [TRPrecipitationType precipitationTypeWithOrdinal:1 name:@"snow"];
+    _TRPrecipitationType_values = (@[_TRPrecipitationType_rain, _TRPrecipitationType_snow]);
+}
+
++ (TRPrecipitationType*)rain {
+    return _TRPrecipitationType_rain;
+}
+
++ (TRPrecipitationType*)snow {
+    return _TRPrecipitationType_snow;
+}
+
++ (NSArray*)values {
+    return _TRPrecipitationType_values;
 }
 
 @end

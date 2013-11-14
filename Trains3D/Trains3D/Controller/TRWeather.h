@@ -4,7 +4,9 @@
 @class EGProgress;
 
 @class TRWeatherRules;
+@class TRPrecipitation;
 @class TRWeather;
+@class TRPrecipitationType;
 typedef struct TRBlast TRBlast;
 
 @interface TRWeatherRules : NSObject
@@ -13,11 +15,30 @@ typedef struct TRBlast TRBlast;
 @property (nonatomic, readonly) CGFloat blastMinLength;
 @property (nonatomic, readonly) CGFloat blastMaxLength;
 @property (nonatomic, readonly) CGFloat blastStrength;
+@property (nonatomic, readonly) id precipitation;
 
-+ (id)weatherRulesWithWindStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength;
-- (id)initWithWindStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength;
++ (id)weatherRulesWithWindStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(id)precipitation;
+- (id)initWithWindStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(id)precipitation;
 - (ODClassType*)type;
 + (ODClassType*)type;
+@end
+
+
+@interface TRPrecipitation : NSObject
+@property (nonatomic, readonly) TRPrecipitationType* tp;
+@property (nonatomic, readonly) CGFloat strength;
+
++ (id)precipitationWithTp:(TRPrecipitationType*)tp strength:(CGFloat)strength;
+- (id)initWithTp:(TRPrecipitationType*)tp strength:(CGFloat)strength;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface TRPrecipitationType : ODEnum
++ (TRPrecipitationType*)rain;
++ (TRPrecipitationType*)snow;
++ (NSArray*)values;
 @end
 
 

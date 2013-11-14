@@ -6,8 +6,16 @@ class WeatherRules(
     windStrength : float, //maximum wind strength in cell/second
     blastness : float, //count of blasts in second
     blastMinLength : float, blastMaxLength : float,//blast length gap in seconds
-    blastStrength : float //maximum wind strength in cell/second
+    blastStrength : float, //maximum wind strength in cell/second
+    precipitation : Precipitation?
 )
+
+class Precipitation(tp : PrecipitationType, strength : float)
+
+enum PrecipitationType {
+    rain()
+    snow()
+}
 
 class Weather(rules : WeatherRules) extends Controller {
     private var _constantWind : vec2 = vec2.rnd*rules.windStrength
