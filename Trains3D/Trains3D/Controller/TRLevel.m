@@ -8,6 +8,7 @@
 #import "EGSchedule.h"
 #import "TRCollisions.h"
 #import "TRCity.h"
+#import "TRStrings.h"
 #import "TRTrain.h"
 #import "TRRailPoint.h"
 #import "TRCar.h"
@@ -218,6 +219,7 @@ static ODClassType* _TRLevel_type;
     [_railroad addRail:[TRRail railWithTile:tile form:city.angle.form]];
     [__cities appendItem:city];
     [_TRLevel_buildCityNotification postData:city];
+    if([__cities count] > 2) [_notifications notifyNotification:[TRStr.Loc cityBuilt]];
 }
 
 - (TRCityAngle*)randomCityDirectionForTile:(GEVec2i)tile {

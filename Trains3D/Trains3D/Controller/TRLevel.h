@@ -15,6 +15,8 @@
 @class TRCity;
 @class TRCityAngle;
 @class TRRail;
+@class TRStr;
+@protocol TRStrings;
 @class TRTrain;
 @class EGCounter;
 @class TRTrainGenerator;

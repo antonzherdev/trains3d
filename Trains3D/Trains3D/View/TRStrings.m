@@ -86,6 +86,10 @@ static ODClassType* _TREnStrings_type;
     return @"Money is over";
 }
 
+- (NSString*)cityBuilt {
+    return @"New city has been built";
+}
+
 - (NSString*)colorOrange {
     return @"orange";
 }
@@ -263,6 +267,10 @@ static ODClassType* _TRRuStrings_type;
 
 - (NSString*)moneyOver {
     return @"Закончились деньги";
+}
+
+- (NSString*)cityBuilt {
+    return @"Построен новый город";
 }
 
 - (NSString*)colorOrange {

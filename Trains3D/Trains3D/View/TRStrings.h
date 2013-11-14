@@ -16,6 +16,7 @@
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
 - (NSString*)trainDelayedFineCost:(NSInteger)cost;
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost;
+- (NSString*)cityBuilt;
 - (NSString*)resumeGame;
 - (NSString*)restartLevel:(TRLevel*)level;
 - (NSString*)replayLevel:(TRLevel*)level;
@@ -62,6 +63,7 @@
 - (NSString*)victory;
 - (NSString*)defeat;
 - (NSString*)moneyOver;
+- (NSString*)cityBuilt;
 - (NSString*)colorOrange;
 - (NSString*)colorGreen;
 - (NSString*)colorPink;
@@ -99,6 +101,7 @@
 - (NSString*)victory;
 - (NSString*)defeat;
 - (NSString*)moneyOver;
+- (NSString*)cityBuilt;
 - (NSString*)colorOrange;
 - (NSString*)colorGreen;
 - (NSString*)colorPink;

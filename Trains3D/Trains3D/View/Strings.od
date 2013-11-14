@@ -11,6 +11,7 @@ trait Strings {
     def trainDestroyed(cost : int) : string
     def trainDelayedFine(cost : int) : string
     def damageFixedPayment(cost : int) : string
+    def cityBuilt : string
     def resumeGame : string
     def restart(level : Level) : string
     def replay(level : Level) : string
@@ -55,6 +56,7 @@ class EnStrings extends Strings {
     def victory : string = "Victory!"
     def defeat : string = "Defeat!"
     def moneyOver : string = "Money is over"
+    def cityBuilt : string = "New city has been built"
 
     def colorOrange : string = "orange"
     def colorGreen : string = "green"
@@ -102,6 +104,7 @@ class RuStrings extends Strings{
     def victory : string = "Победа!"
     def defeat : string = "Вы проиграли!"
     def moneyOver : string = "Закончились деньги"
+    def cityBuilt : string = "Построен новый город"
 
     def colorOrange : string = "оранжевый"
     def colorGreen : string = "зеленый"

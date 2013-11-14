@@ -55,6 +55,9 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         railroad.add(Rail(tile, city.angle.form))
         _cities.append(city)
         buildCityNotification.post(city)
+        if(_cities.count > 2) {
+            notifications.notify(Loc.cityBuilt)
+        }
     }
 
     private def randomCityDirectionFor(tile : vec2i) = {
