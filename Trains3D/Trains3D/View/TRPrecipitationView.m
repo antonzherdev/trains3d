@@ -156,7 +156,7 @@ static ODClassType* _TRRainParticleSystem_type;
     self = [super init];
     if(self) {
         _strength = strength;
-        _particles = [[[intTo(0, ((NSInteger)(100 * _strength))) chain] map:^TRRainParticle*(id _) {
+        _particles = [[[intTo(0, ((NSInteger)(200 * _strength))) chain] map:^TRRainParticle*(id _) {
             return [TRRainParticle rainParticle];
         }] toArray];
     }
@@ -236,6 +236,8 @@ static ODClassType* _TRRainParticle_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
+    _position = geVec2SubVec2(_position, GEVec2Make(0.0, ((float)(delta))));
+    if(_position.y < -1.0) _position = GEVec2Make(((float)(odFloatRnd() * 2 - 1)), 1.0);
 }
 
 - (ODClassType*)type {

@@ -10,8 +10,11 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     private val precipitationView : PrecipitationView?
 
     val environment = Environment(ambientColor = vec4(0.7, 0.7, 0.7, 1), lights = [
-        DirectLight(color = vec4(0.6, 0.6, 0.6, 1), direction = vec3(-0.15, 0.35, -0.3).normalize
-            ,shadowsProjectionMatrix = {
+        DirectLight(
+            color = vec4(vec3(0.2, 0.2, 0.2) + vec3(0.4, 0.4, 0.4)*level.rules.weatherRules.sunny, 1.0),
+            direction = vec3(-0.15, 0.35, -0.3).normalize,
+            hasShadows = level.rules.weatherRules.sunny > 0.0,
+            shadowsProjectionMatrix = {
                 var m : mat4
                 if(level.map.size == vec2i(5, 5))      m = mat4.ortho(-2.4, 7.3, -2.2, 3.9, -2, 5.5)
                 else if(level.map.size == vec2i(5, 3)) m = mat4.ortho(-2, 5.7, -2, 2.7, -2, 4.0)
@@ -45,9 +48,9 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
 
         if(!context.renderTarget.isShadow) {
             trainView.drawSmoke
-            precipitationView.for(_.draw)
             cityView.drawExpected
             callRepairerView.draw
+            precipitationView.for(_.draw)
         }
     }
 

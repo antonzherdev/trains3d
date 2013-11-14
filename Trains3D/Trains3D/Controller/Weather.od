@@ -3,6 +3,7 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg.Progress._
 
 class WeatherRules(
+    sunny : float,
     windStrength : float, //maximum wind strength in cell/second
     blastness : float, //count of blasts in second
     blastMinLength : float, blastMaxLength : float,//blast length gap in seconds

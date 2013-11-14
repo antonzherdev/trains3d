@@ -9,6 +9,8 @@
 @class TRTreeView;
 @class TRCallRepairerView;
 @class EGEnvironment;
+@class TRLevelRules;
+@class TRWeatherRules;
 @class EGMapSso;
 @class GEMat4;
 @class EGDirectLight;
@@ -18,8 +20,6 @@
 @class TRSwitchProcessor;
 @class EGGlobal;
 @class EGContext;
-@class TRLevelRules;
-@class TRWeatherRules;
 @class TRPrecipitationView;
 @class EGRenderTarget;
 @class EGMatrixStack;

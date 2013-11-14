@@ -2,6 +2,7 @@
 
 #import "EGProgress.h"
 @implementation TRWeatherRules{
+    CGFloat _sunny;
     CGFloat _windStrength;
     CGFloat _blastness;
     CGFloat _blastMinLength;
@@ -10,6 +11,7 @@
     id _precipitation;
 }
 static ODClassType* _TRWeatherRules_type;
+@synthesize sunny = _sunny;
 @synthesize windStrength = _windStrength;
 @synthesize blastness = _blastness;
 @synthesize blastMinLength = _blastMinLength;
@@ -17,13 +19,14 @@ static ODClassType* _TRWeatherRules_type;
 @synthesize blastStrength = _blastStrength;
 @synthesize precipitation = _precipitation;
 
-+ (id)weatherRulesWithWindStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(id)precipitation {
-    return [[TRWeatherRules alloc] initWithWindStrength:windStrength blastness:blastness blastMinLength:blastMinLength blastMaxLength:blastMaxLength blastStrength:blastStrength precipitation:precipitation];
++ (id)weatherRulesWithSunny:(CGFloat)sunny windStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(id)precipitation {
+    return [[TRWeatherRules alloc] initWithSunny:sunny windStrength:windStrength blastness:blastness blastMinLength:blastMinLength blastMaxLength:blastMaxLength blastStrength:blastStrength precipitation:precipitation];
 }
 
-- (id)initWithWindStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(id)precipitation {
+- (id)initWithSunny:(CGFloat)sunny windStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(id)precipitation {
     self = [super init];
     if(self) {
+        _sunny = sunny;
         _windStrength = windStrength;
         _blastness = blastness;
         _blastMinLength = blastMinLength;
@@ -56,11 +59,12 @@ static ODClassType* _TRWeatherRules_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRWeatherRules* o = ((TRWeatherRules*)(other));
-    return eqf(self.windStrength, o.windStrength) && eqf(self.blastness, o.blastness) && eqf(self.blastMinLength, o.blastMinLength) && eqf(self.blastMaxLength, o.blastMaxLength) && eqf(self.blastStrength, o.blastStrength) && [self.precipitation isEqual:o.precipitation];
+    return eqf(self.sunny, o.sunny) && eqf(self.windStrength, o.windStrength) && eqf(self.blastness, o.blastness) && eqf(self.blastMinLength, o.blastMinLength) && eqf(self.blastMaxLength, o.blastMaxLength) && eqf(self.blastStrength, o.blastStrength) && [self.precipitation isEqual:o.precipitation];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
+    hash = hash * 31 + floatHash(self.sunny);
     hash = hash * 31 + floatHash(self.windStrength);
     hash = hash * 31 + floatHash(self.blastness);
     hash = hash * 31 + floatHash(self.blastMinLength);
@@ -72,7 +76,8 @@ static ODClassType* _TRWeatherRules_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"windStrength=%f", self.windStrength];
+    [description appendFormat:@"sunny=%f", self.sunny];
+    [description appendFormat:@", windStrength=%f", self.windStrength];
     [description appendFormat:@", blastness=%f", self.blastness];
     [description appendFormat:@", blastMinLength=%f", self.blastMinLength];
     [description appendFormat:@", blastMaxLength=%f", self.blastMaxLength];

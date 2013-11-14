@@ -24,7 +24,7 @@ class RainView(strength : float) extends PrecipitationView {
 }
 
 class RainParticleSystem(strength : float) extends ParticleSystem<RainParticle> {
-    val particles = 0.to(100*strength).chain.map(RainParticle()).toArray
+    val particles = 0.to(200*strength).chain.map(RainParticle()).toArray
 }
 
 class RainParticle extends Particle {
@@ -35,6 +35,11 @@ class RainParticle extends Particle {
             .write(RainData, RainData(position + vec2(0, 0.1)))
 
     def updateWith(delta : float) {
+        position -= vec2(0, delta)
+        if(position.y < -1.0) {
+            position = vec2(Float.rnd*2 - 1, 1)
+//            log("$position")
+        }
     }
 }
 
