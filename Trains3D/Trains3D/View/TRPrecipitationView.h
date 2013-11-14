@@ -9,12 +9,14 @@
 @class EGVertexBufferDesc;
 @protocol EGIndexSource;
 @class EGEmptyIndexSource;
+@class EGBlendMode;
 
 @class TRPrecipitationView;
 @class TRRainView;
 @class TRRainParticleSystem;
 @class TRRainParticle;
 @class TRRainSystemView;
+@class TRRainShaderText;
 @class TRRainShader;
 typedef struct TRRainData TRRainData;
 
@@ -94,13 +96,28 @@ ODPType* trRainDataType();
 - (id)initWithSystem:(TRRainParticleSystem*)system;
 - (ODClassType*)type;
 - (NSUInteger)vertexCount;
+- (NSUInteger)indexCount;
 - (id<EGIndexSource>)indexVertexCount:(NSUInteger)vertexCount maxCount:(NSUInteger)maxCount;
 + (EGVertexBufferDesc*)vbDesc;
 + (ODClassType*)type;
 @end
 
 
+@interface TRRainShaderText : NSObject<EGShaderTextBuilder>
+@property (nonatomic, readonly) NSString* fragment;
+
++ (id)rainShaderText;
+- (id)init;
+- (ODClassType*)type;
+- (NSString*)vertex;
+- (EGShaderProgram*)program;
++ (ODClassType*)type;
+@end
+
+
 @interface TRRainShader : EGShader
+@property (nonatomic, readonly) EGShaderAttribute* positionSlot;
+
 + (id)rainShader;
 - (id)init;
 - (ODClassType*)type;

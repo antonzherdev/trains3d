@@ -19,7 +19,7 @@ class RainView(strength : float) extends PrecipitationView {
     }
 
     def draw {
-//        view.draw
+        view.draw
     }
 }
 
@@ -28,12 +28,11 @@ class RainParticleSystem(strength : float) extends ParticleSystem<RainParticle> 
 }
 
 class RainParticle extends Particle {
-    private var position : vec2 = vec2.rnd
+    private var position : vec2 = vec2.rnd*2
 
-    def writeTo(array : VoidRefArray) : VoidRefArray = {
+    def writeTo(array : VoidRefArray) : VoidRefArray =
         array.write(RainData, RainData(position))
-        array.write(RainData, RainData(position + vec2(0, 0.1)))
-    }
+            .write(RainData, RainData(position + vec2(0, 0.1)))
 
     def updateWith(delta : float) {
     }
@@ -46,20 +45,38 @@ class RainSystemView(system : RainParticleSystem) extends ParticleSystemView<Rai
     system, RainSystemView.vbDesc, system.particles.count,
     RainShader.instance, nil, BlendFunction.standard)
 {
-    static val vbDesc = VertexBufferDesc<RainData>(RainData.type, -1, -1, -1, -1, -1)
+    static val vbDesc = VertexBufferDesc<RainData>(RainData.type, 0, -1, -1, -1, -1)
 
     def vertexCount : uint = 2
+    def indexCount : uint = 2
     def index(vertexCount : uint, maxCount : uint) : IndexSource = EmptyIndexSource.lines
-
 }
 
-class RainShader extends Shader<Object> {
+class RainShaderText extends ShaderTextBuilder {
+    def vertex =
+        "$vertexHeader
+         $ain highp vec2 position;
+
+         void main(void) {
+            gl_Position = vec4(position.x, position.y, 0, 1);
+         }"
+    val fragment =
+        "$fragmentHeader
+
+         void main(void) {
+            $fragColor = vec4(1, 1, 1, 0.5);
+         }"
+
+    def program = ShaderProgram("Rain", vertex, fragment)
+}
+
+class RainShader extends Shader<Object>(RainShaderText().program) {
     static val instance = RainShader()
+    val positionSlot = attributeFor("position")
 
     def loadAttributes(vbDesc : VertexBufferDesc<_>) {
-
+        positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.position)
     }
     def loadUniforms(param : Object) {
-
     }
 }

@@ -65,6 +65,10 @@ static ODClassType* _EGParticleSystemView_type;
     @throw @"Method index is abstract";
 }
 
+- (NSUInteger)indexCount {
+    @throw @"Method indexCount is abstract";
+}
+
 - (void)draw {
     id<CNSeq> particles = [_system particles];
     if([particles isEmpty]) return ;
@@ -77,10 +81,8 @@ static ODClassType* _EGParticleSystemView_type;
                     if(i < _maxCount) vertexPointer = [particle writeToArray:vertexPointer];
                     i++;
                 }];
-                NSUInteger n = uintMinB([particles count], _maxCount);
-                NSUInteger vc = [self vertexCount];
-                [_vertexBuffer setArray:_vertexArr count:((unsigned int)(vc * i))];
-                [_vao drawParam:_material start:0 end:n * 3 * (vc - 2)];
+                [_vertexBuffer setArray:_vertexArr count:((unsigned int)([self vertexCount] * i))];
+                [_vao drawParam:_material start:0 end:[self indexCount] * i];
             }];
         }];
     }];

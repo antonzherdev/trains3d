@@ -49,6 +49,7 @@
 - (ODClassType*)type;
 - (NSUInteger)vertexCount;
 - (id<EGIndexSource>)indexVertexCount:(NSUInteger)vertexCount maxCount:(NSUInteger)maxCount;
+- (NSUInteger)indexCount;
 - (void)draw;
 - (void)dealloc;
 + (ODClassType*)type;
@@ -57,6 +58,8 @@
 
 @protocol EGIBOParticleSystem<NSObject>
 - (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i;
+- (NSUInteger)vertexCount;
+- (NSUInteger)indexCount;
 - (EGMutableIndexSourceGap*)indexVertexCount:(NSUInteger)vertexCount maxCount:(NSUInteger)maxCount;
 @end
 

@@ -146,6 +146,7 @@ class BillboardParticleSystemView(system : ParticleSystem<BillboardParticle>,
     static def apply(system : ParticleSystem, maxCount : uint, material : ColorSource) =
         BillboardParticleSystemView(system, maxCount, material, BlendFunction.standard)
     def vertexCount : uint = 4
+    def indexCount : uint = 6
 
     def writeIndexesTo(indexPointer : VoidRefArray, i : uint4) : VoidRefArray = {
         indexPointer

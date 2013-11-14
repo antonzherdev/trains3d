@@ -141,6 +141,7 @@ ODPType* egBillboardBufferDataType();
 - (ODClassType*)type;
 + (EGBillboardParticleSystemView*)applySystem:(id<EGParticleSystem>)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material;
 - (NSUInteger)vertexCount;
+- (NSUInteger)indexCount;
 - (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i;
 + (ODClassType*)type;
 @end

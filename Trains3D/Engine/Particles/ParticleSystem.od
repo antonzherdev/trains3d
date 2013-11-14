@@ -21,6 +21,7 @@ class ParticleSystemView<P extends Particle, D, M>(
 {
     def vertexCount : uint
     def index(vertexCount : uint, maxCount : uint) : IndexSource
+    def indexCount : uint
 
 
     val vertexArr = VoidRefArray(vbDesc.dataType, maxCount*vertexCount)
@@ -39,10 +40,8 @@ class ParticleSystemView<P extends Particle, D, M>(
                 if(i < maxCount) vertexPointer = particle.writeTo(vertexPointer)
                 i++
             }
-            val n = particles.count.min(maxCount)
-            val vc = vertexCount
-            vertexBuffer.set(array = vertexArr, vc * i)
-            vao.draw(material, 0, n*3*(vc - 2))
+            vertexBuffer.set(array = vertexArr, vertexCount * i)
+            vao.draw(material, 0, indexCount * i)
         }}}
     }
 
@@ -53,10 +52,12 @@ class ParticleSystemView<P extends Particle, D, M>(
 
 trait IBOParticleSystem {
     def writeIndexesTo(indexPointer : VoidRefArray, i : uint4) : VoidRefArray
+    def vertexCount : uint
+    def indexCount : uint = 3*(vertexCount - 2)
 
     def index(vertexCount : uint, maxCount : uint) : MutableIndexSourceGap = {
         val vc = vertexCount
-        val ia = VoidRefArray(UInt4.type, maxCount*3*(vc - 2))
+        val ia = VoidRefArray(UInt4.type, indexCount*maxCount)
         var indexPointer = ia
         maxCount.range.for{i ->
             indexPointer = writeIndexesTo(indexPointer, i*vc)

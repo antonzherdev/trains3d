@@ -4,6 +4,7 @@
 #import "EGMaterial.h"
 #import "EGVertex.h"
 #import "EGIndex.h"
+#import "GL.h"
 @implementation TRPrecipitationView
 static ODClassType* _TRPrecipitationView_type;
 
@@ -101,6 +102,7 @@ static ODClassType* _TRRainView_type;
 }
 
 - (void)draw {
+    [_view draw];
 }
 
 - (ODClassType*)type {
@@ -219,7 +221,7 @@ static ODClassType* _TRRainParticle_type;
 
 - (id)init {
     self = [super init];
-    if(self) _position = geVec2Rnd();
+    if(self) _position = geVec2MulI(geVec2Rnd(), 2);
     
     return self;
 }
@@ -230,8 +232,7 @@ static ODClassType* _TRRainParticle_type;
 }
 
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array {
-    cnVoidRefArrayWriteTpItem(array, TRRainData, TRRainDataMake(_position));
-    return cnVoidRefArrayWriteTpItem(array, TRRainData, TRRainDataMake(geVec2AddVec2(_position, GEVec2Make(0.0, 0.1))));
+    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, TRRainData, TRRainDataMake(_position)), TRRainData, TRRainDataMake(geVec2AddVec2(_position, GEVec2Make(0.0, 0.1))));
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -326,10 +327,14 @@ static ODClassType* _TRRainSystemView_type;
 + (void)initialize {
     [super initialize];
     _TRRainSystemView_type = [ODClassType classTypeWithCls:[TRRainSystemView class]];
-    _TRRainSystemView_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:trRainDataType() position:-1 uv:-1 normal:-1 color:-1 model:-1];
+    _TRRainSystemView_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:trRainDataType() position:0 uv:-1 normal:-1 color:-1 model:-1];
 }
 
 - (NSUInteger)vertexCount {
+    return 2;
+}
+
+- (NSUInteger)indexCount {
     return 2;
 }
 
@@ -376,16 +381,155 @@ static ODClassType* _TRRainSystemView_type;
 @end
 
 
-@implementation TRRainShader
+@implementation TRRainShaderText{
+    NSString* _fragment;
+}
+static ODClassType* _TRRainShaderText_type;
+@synthesize fragment = _fragment;
+
++ (id)rainShaderText {
+    return [[TRRainShaderText alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    if(self) _fragment = [NSString stringWithFormat:@"%@\n"
+        "\n"
+        "void main(void) {\n"
+        "   %@ = vec4(1, 1, 1, 0.5);\n"
+        "}", [self fragmentHeader], [self fragColor]];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRRainShaderText_type = [ODClassType classTypeWithCls:[TRRainShaderText class]];
+}
+
+- (NSString*)vertex {
+    return [NSString stringWithFormat:@"%@\n"
+        "%@ highp vec2 position;\n"
+        "\n"
+        "void main(void) {\n"
+        "   gl_Position = vec4(position.x, position.y, 0, 1);\n"
+        "}", [self vertexHeader], [self ain]];
+}
+
+- (EGShaderProgram*)program {
+    return [EGShaderProgram applyName:@"Rain" vertex:[self vertex] fragment:_fragment];
+}
+
+- (NSString*)versionString {
+    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
+}
+
+- (NSString*)vertexHeader {
+    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
+}
+
+- (NSString*)fragmentHeader {
+    return [NSString stringWithFormat:@"#version %ld\n"
+        "%@", (long)[self version], [self fragColorDeclaration]];
+}
+
+- (NSString*)fragColorDeclaration {
+    if([self isFragColorDeclared]) return @"";
+    else return @"out lowp vec4 fragColor;";
+}
+
+- (BOOL)isFragColorDeclared {
+    return EGShaderProgram.version < 110;
+}
+
+- (NSInteger)version {
+    return EGShaderProgram.version;
+}
+
+- (NSString*)ain {
+    if([self version] < 150) return @"attribute";
+    else return @"in";
+}
+
+- (NSString*)in {
+    if([self version] < 150) return @"varying";
+    else return @"in";
+}
+
+- (NSString*)out {
+    if([self version] < 150) return @"varying";
+    else return @"out";
+}
+
+- (NSString*)fragColor {
+    if([self version] > 100) return @"fragColor";
+    else return @"gl_FragColor";
+}
+
+- (NSString*)texture2D {
+    if([self version] > 100) return @"texture";
+    else return @"texture2D";
+}
+
+- (NSString*)shadowExt {
+    if([self version] == 100) return @"#extension GL_EXT_shadow_samplers : require";
+    else return @"";
+}
+
+- (NSString*)shadow2D {
+    if([self version] == 100) return @"shadow2DEXT";
+    else return @"texture";
+}
+
+- (NSString*)blendMode:(EGBlendMode*)mode a:(NSString*)a b:(NSString*)b {
+    return mode.blend(a, b);
+}
+
+- (ODClassType*)type {
+    return [TRRainShaderText type];
+}
+
++ (ODClassType*)type {
+    return _TRRainShaderText_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRRainShader{
+    EGShaderAttribute* _positionSlot;
+}
 static TRRainShader* _TRRainShader_instance;
 static ODClassType* _TRRainShader_type;
+@synthesize positionSlot = _positionSlot;
 
 + (id)rainShader {
     return [[TRRainShader alloc] init];
 }
 
 - (id)init {
-    self = [super init];
+    self = [super initWithProgram:[[TRRainShaderText rainShaderText] program]];
+    if(self) _positionSlot = [self attributeForName:@"position"];
     
     return self;
 }
@@ -397,6 +541,7 @@ static ODClassType* _TRRainShader_type;
 }
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
+    [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
 }
 
 - (void)loadUniformsParam:(NSObject*)param {
