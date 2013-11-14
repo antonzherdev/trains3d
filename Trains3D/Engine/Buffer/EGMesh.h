@@ -111,6 +111,7 @@ ODPType* egMeshDataType();
 + (id)vertexArray;
 - (id)init;
 - (ODClassType*)type;
+- (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end;
 - (void)drawParam:(id)param;
 - (void)draw;
 + (ODClassType*)type;
@@ -126,6 +127,7 @@ ODPType* egMeshDataType();
 - (ODClassType*)type;
 - (EGVertexArray*)mesh;
 - (void)drawParam:(id)param;
+- (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end;
 - (void)draw;
 + (ODClassType*)type;
 @end
@@ -147,6 +149,7 @@ ODPType* egMeshDataType();
 - (void)dealloc;
 - (NSUInteger)count;
 - (void)drawParam:(id)param;
+- (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end;
 - (void)draw;
 + (ODClassType*)type;
 @end
@@ -161,6 +164,7 @@ ODPType* egMeshDataType();
 - (ODClassType*)type;
 - (void)draw;
 - (void)drawParam:(id)param;
+- (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end;
 + (ODClassType*)type;
 @end
 

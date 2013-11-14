@@ -109,6 +109,9 @@ static ODClassType* _TRLevelView_type;
     [[_level dyingTrains] forEach:^void(TRTrain* _) {
         [_trainView updateWithDelta:delta train:_];
     }];
+    [_precipitationView forEach:^void(TRPrecipitationView* _) {
+        [((TRPrecipitationView*)(_)) updateWithDelta:delta];
+    }];
 }
 
 - (BOOL)processEvent:(EGEvent*)event {

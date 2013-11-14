@@ -56,6 +56,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     def updateWith(delta : float) {
         level.trains.for(trainView.updateWith(delta, _))
         level.dyingTrains.for(trainView.updateWith(delta, _))
+        precipitationView.for(_.updateWith(delta))
     }
 
     private val railroadBuilderProcessor = RailroadBuilderProcessor(level.railroad.builder)

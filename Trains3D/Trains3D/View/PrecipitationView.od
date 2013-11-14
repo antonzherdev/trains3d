@@ -1,16 +1,65 @@
 package com.antonzherdev.trains
 
-class PrecipitationView {
+class PrecipitationView extends Controller {
     static def apply(precipitation : Precipitation) : PrecipitationView = {
         if(precipitation.tp == PrecipitationType.rain) RainView(precipitation.strength)
         else throw "Unknown precipitation type"
     }
 
     def draw
+    def updateWith(delta : float)
 }
 
 class RainView(strength : float) extends PrecipitationView {
+    val system = RainParticleSystem(strength)
+    val view = RainSystemView(system)
+
+    def updateWith(delta : float) {
+        system.updateWith(delta)
+    }
+
     def draw {
+//        view.draw
+    }
+}
+
+class RainParticleSystem(strength : float) extends ParticleSystem<RainParticle> {
+    val particles = 0.to(100*strength).chain.map(RainParticle()).toArray
+}
+
+class RainParticle extends Particle {
+    private var position : vec2 = vec2.rnd
+
+    def writeTo(array : VoidRefArray) : VoidRefArray = {
+        array.write(RainData, RainData(position))
+        array.write(RainData, RainData(position + vec2(0, 0.1)))
+    }
+
+    def updateWith(delta : float) {
+    }
+}
+
+struct RainData(position : vec2)
+
+
+class RainSystemView(system : RainParticleSystem) extends ParticleSystemView<RainParticle, RainData>(
+    system, RainSystemView.vbDesc, system.particles.count,
+    RainShader.instance, nil, BlendFunction.standard)
+{
+    static val vbDesc = VertexBufferDesc<RainData>(RainData.type, -1, -1, -1, -1, -1)
+
+    def vertexCount : uint = 2
+    def index(vertexCount : uint, maxCount : uint) : IndexSource = EmptyIndexSource.lines
+
+}
+
+class RainShader extends Shader<Object> {
+    static val instance = RainShader()
+
+    def loadAttributes(vbDesc : VertexBufferDesc<_>) {
+
+    }
+    def loadUniforms(param : Object) {
 
     }
 }

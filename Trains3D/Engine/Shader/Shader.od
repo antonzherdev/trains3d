@@ -71,6 +71,14 @@ class Shader<P>(program : ShaderProgram) {
         vao.unbind
     }
 
+    def draw(param : P, vao : SimpleVertexArray<P>, start : uint, end : uint) {
+        vao.bind
+        context.bindShaderProgram(program)
+        loadUniforms(param)
+        vao.index.drawWith(start, end)
+        vao.unbind
+    }
+
     def loadAttributes(vbDesc : VertexBufferDesc<_>)
     def loadUniforms(param : P)
 

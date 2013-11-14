@@ -5,33 +5,28 @@ import core.math._
 
 trait ParticleSystem <P extends Particle> extends Controller {
     def particles : [P]
+
+    def updateWith(delta : float) {
+        particles.for(_.updateWith(delta))
+    }
 }
 
 trait Particle extends Controller  {
     def writeTo(array : VoidRefArray) : VoidRefArray
 }
 
-class ParticleSystemView<P extends Particle, D>(
+class ParticleSystemView<P extends Particle, D, M>(
     system : ParticleSystem<P>, vbDesc : VertexBufferDesc<D>, maxCount : uint,
-    shader : Shader<_>, material : Material, blendFunc : BlendFunction)
+    shader : Shader<M>, material : M, blendFunc : BlendFunction)
 {
+    def vertexCount : uint
+    def index(vertexCount : uint, maxCount : uint) : IndexSource
+
+
     val vertexArr = VoidRefArray(vbDesc.dataType, maxCount*vertexCount)
     val vertexBuffer = VBO.mut<D>(vbDesc)
-    val index : MutableIndexSourceGap = {
-        val vc = vertexCount
-        val ia = VoidRefArray(UInt4.type, maxCount*3*(vc - 2))
-        var indexPointer = ia
-        maxCount.range.for{i ->
-            indexPointer = writeIndexesTo(indexPointer, i*vc)
-        }
-        val ib = IBO(ia)
-        ia.free
-        MutableIndexSourceGap(ib)
-    }
+    val index : IndexSource = index(vertexCount, maxCount)
     val vao = Mesh<D>(vertex = vertexBuffer, index).vao(shader)
-
-    def vertexCount : uint
-    def writeIndexesTo(indexPointer : VoidRefArray, i : uint4) : VoidRefArray
 
     def draw {
         val particles = system.particles
@@ -46,14 +41,29 @@ class ParticleSystemView<P extends Particle, D>(
             }
             val n = particles.count.min(maxCount)
             val vc = vertexCount
-            vertexBuffer.set(array = vertexArr)
-            index.count = n*3*(vc - 2)
-            vao.draw(material)
+            vertexBuffer.set(array = vertexArr, vc * i)
+            vao.draw(material, 0, n*3*(vc - 2))
         }}}
     }
 
     def dealloc {
         vertexArr.free
+    }
+}
+
+trait IBOParticleSystem {
+    def writeIndexesTo(indexPointer : VoidRefArray, i : uint4) : VoidRefArray
+
+    def index(vertexCount : uint, maxCount : uint) : MutableIndexSourceGap = {
+        val vc = vertexCount
+        val ia = VoidRefArray(UInt4.type, maxCount*3*(vc - 2))
+        var indexPointer = ia
+        maxCount.range.for{i ->
+            indexPointer = writeIndexesTo(indexPointer, i*vc)
+        }
+        val ib = IBO(ia)
+        ia.free
+        ib
     }
 }
 
@@ -74,8 +84,8 @@ class EmissiveParticleSystem <P extends EmittedParticle> extends ParticleSystem<
 
         var ps = List<P>()
         _particles.for{p ->
-        p.updateWith(delta)
-        if(p.isLive) ps = List<P>(p, ps)
+            p.updateWith(delta)
+            if(p.isLive) ps = List<P>(p, ps)
         }
         _particles = ps
     }
@@ -95,4 +105,5 @@ class EmittedParticle(lifeLength : float4) extends Particle {
     }
 
     def update(t : float4, dt : float4)
+    def writeTo(array : VoidRefArray) : VoidRefArray
 }

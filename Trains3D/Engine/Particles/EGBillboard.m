@@ -5,6 +5,7 @@
 #import "EGMaterial.h"
 #import "EGVertex.h"
 #import "GL.h"
+#import "EGIndex.h"
 #import "EGSprite.h"
 #import "GEMat4.h"
 @implementation EGBillboardShaderSystem
@@ -568,6 +569,18 @@ static ODClassType* _EGBillboardParticleSystemView_type;
 
 - (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i {
     return cnVoidRefArrayWriteUInt4(cnVoidRefArrayWriteUInt4(cnVoidRefArrayWriteUInt4(cnVoidRefArrayWriteUInt4(cnVoidRefArrayWriteUInt4(cnVoidRefArrayWriteUInt4(indexPointer, i), i + 1), i + 2), i + 2), i), i + 3);
+}
+
+- (EGMutableIndexSourceGap*)indexVertexCount:(NSUInteger)vertexCount maxCount:(NSUInteger)maxCount {
+    NSUInteger vc = vertexCount;
+    CNVoidRefArray ia = cnVoidRefArrayApplyTpCount(oduInt4Type(), maxCount * 3 * (vc - 2));
+    __block CNVoidRefArray indexPointer = ia;
+    [uintRange(maxCount) forEach:^void(id i) {
+        indexPointer = [self writeIndexesToIndexPointer:indexPointer i:((unsigned int)(unumi(i) * vc))];
+    }];
+    EGImmutableIndexBuffer* ib = [EGIBO applyArray:ia];
+    cnVoidRefArrayFree(ia);
+    return [EGMutableIndexSourceGap mutableIndexSourceGapWithSource:ib];
 }
 
 - (ODClassType*)type {

@@ -136,11 +136,11 @@ trait BillboardParticle extends Particle {
 
 class BillboardParticleSystemView(system : ParticleSystem<BillboardParticle>,
     maxCount : uint, material : ColorSource, blendFunc : BlendFunction
-    ) extends ParticleSystemView<BillboardParticle, BillboardBufferData>(
+    ) extends ParticleSystemView<BillboardParticle, BillboardBufferData, ColorSource>(
         system, Billboard.vbDesc, maxCount,
         BillboardShaderSystem.instance.shaderFor(material), material,
         blendFunc
-    )
+    ) with IBOParticleSystem
 {
 
     static def apply(system : ParticleSystem, maxCount : uint, material : ColorSource) =

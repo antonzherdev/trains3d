@@ -12,6 +12,8 @@
 @class EGMatrixModel;
 @class EGContext;
 @class EGBlendFunction;
+@class EGMutableIndexSourceGap;
+@class EGIBO;
 @class EGD2D;
 @class GEMat4;
 
@@ -133,7 +135,7 @@ ODPType* egBillboardBufferDataType();
 @end
 
 
-@interface EGBillboardParticleSystemView : EGParticleSystemView
+@interface EGBillboardParticleSystemView : EGParticleSystemView<EGIBOParticleSystem>
 + (id)billboardParticleSystemViewWithSystem:(id<EGParticleSystem>)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
 - (id)initWithSystem:(id<EGParticleSystem>)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
 - (ODClassType*)type;

@@ -170,6 +170,14 @@ static ODClassType* _EGShader_type;
     [vao unbind];
 }
 
+- (void)drawParam:(id)param vao:(EGSimpleVertexArray*)vao start:(NSUInteger)start end:(NSUInteger)end {
+    [vao bind];
+    [EGGlobal.context bindShaderProgramProgram:_program];
+    [self loadUniformsParam:param];
+    [vao.index drawWithStart:start count:end];
+    [vao unbind];
+}
+
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
     @throw @"Method loadAttributes is abstract";
 }

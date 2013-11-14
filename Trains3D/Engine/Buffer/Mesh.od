@@ -67,6 +67,7 @@ class MeshModel(arrays : [VertexArray<Material>]) {
 
 
 class VertexArray<P> {
+    def draw(param : P, start : uint, end : uint)
     def draw(param : P)
 
     def draw
@@ -79,6 +80,10 @@ class RouteVertexArray<P>(standard : VertexArray<P>, shadow : VertexArray<P>) ex
 
     def draw(param : P) {
         mesh.draw(param)
+    }
+
+    def draw(param : P, start : uint, end : uint) {
+        mesh.draw(param, start, end)
     }
 
     def draw {
@@ -110,6 +115,10 @@ class SimpleVertexArray<P>(handle : uint4, shader : Shader<P>, buffers : [Vertex
         if(!index.isEmpty) shader.draw(param, self)
     }
 
+    def draw(param : P, start : uint, end : uint) {
+        if(!index.isEmpty) shader.draw(param, self, start, end)
+    }
+
     def draw {
         throw "No default material"
     }
@@ -123,6 +132,10 @@ class MaterialVertexArray<P>(vao : VertexArray<P>, material : P) extends VertexA
 
     def draw(param : P) {
         vao.draw(param)
+    }
+
+    def draw(param : P, start : uint, end : uint) {
+        vao.draw(param, start, end)
     }
 }
 

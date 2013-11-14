@@ -337,6 +337,10 @@ static ODClassType* _EGVertexArray_type;
     _EGVertexArray_type = [ODClassType classTypeWithCls:[EGVertexArray class]];
 }
 
+- (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end {
+    @throw @"Method draw is abstract";
+}
+
 - (void)drawParam:(id)param {
     @throw @"Method draw is abstract";
 }
@@ -410,6 +414,10 @@ static ODClassType* _EGRouteVertexArray_type;
 
 - (void)drawParam:(id)param {
     [[self mesh] drawParam:param];
+}
+
+- (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end {
+    [[self mesh] drawParam:param start:start end:end];
 }
 
 - (void)draw {
@@ -515,6 +523,10 @@ static ODClassType* _EGSimpleVertexArray_type;
     if(!([_index isEmpty])) [_shader drawParam:param vao:self];
 }
 
+- (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end {
+    if(!([_index isEmpty])) [_shader drawParam:param vao:self start:start end:end];
+}
+
 - (void)draw {
     @throw @"No default material";
 }
@@ -593,6 +605,10 @@ static ODClassType* _EGMaterialVertexArray_type;
 
 - (void)drawParam:(id)param {
     [_vao drawParam:param];
+}
+
+- (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end {
+    [_vao drawParam:param start:start end:end];
 }
 
 - (ODClassType*)type {
