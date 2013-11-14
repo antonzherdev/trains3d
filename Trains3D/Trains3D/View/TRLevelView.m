@@ -77,7 +77,7 @@ static ODClassType* _TRLevelView_type;
     _cityView = [TRCityView cityViewWithLevel:_level];
     _callRepairerView = [TRCallRepairerView callRepairerViewWithLevel:_level];
     _precipitationView = [_level.rules.weatherRules.precipitation mapF:^TRPrecipitationView*(TRPrecipitation* _) {
-        return [TRPrecipitationView applyPrecipitation:_];
+        return [TRPrecipitationView applyWeather:_level.weather precipitation:_];
     }];
 }
 

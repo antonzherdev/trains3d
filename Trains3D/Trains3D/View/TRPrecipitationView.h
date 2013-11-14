@@ -5,6 +5,7 @@
 #import "EGShader.h"
 @class TRPrecipitation;
 @class TRPrecipitationType;
+@class TRWeather;
 @class EGBlendFunction;
 @class EGVertexBufferDesc;
 @protocol EGIndexSource;
@@ -24,7 +25,7 @@ typedef struct TRRainData TRRainData;
 + (id)precipitationView;
 - (id)init;
 - (ODClassType*)type;
-+ (TRPrecipitationView*)applyPrecipitation:(TRPrecipitation*)precipitation;
++ (TRPrecipitationView*)applyWeather:(TRWeather*)weather precipitation:(TRPrecipitation*)precipitation;
 - (void)draw;
 - (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
@@ -32,12 +33,13 @@ typedef struct TRRainData TRRainData;
 
 
 @interface TRRainView : TRPrecipitationView
+@property (nonatomic, readonly) TRWeather* weather;
 @property (nonatomic, readonly) CGFloat strength;
 @property (nonatomic, readonly) TRRainParticleSystem* system;
 @property (nonatomic, readonly) TRRainSystemView* view;
 
-+ (id)rainViewWithStrength:(CGFloat)strength;
-- (id)initWithStrength:(CGFloat)strength;
++ (id)rainViewWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
+- (id)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
 - (ODClassType*)type;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)draw;
@@ -46,21 +48,25 @@ typedef struct TRRainData TRRainData;
 
 
 @interface TRRainParticleSystem : NSObject<EGParticleSystem>
+@property (nonatomic, readonly) TRWeather* weather;
 @property (nonatomic, readonly) CGFloat strength;
 @property (nonatomic, readonly) id<CNSeq> particles;
 
-+ (id)rainParticleSystemWithStrength:(CGFloat)strength;
-- (id)initWithStrength:(CGFloat)strength;
++ (id)rainParticleSystemWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
+- (id)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
 
 
 @interface TRRainParticle : NSObject<EGParticle>
-+ (id)rainParticle;
-- (id)init;
+@property (nonatomic, readonly) TRWeather* weather;
+
++ (id)rainParticleWithWeather:(TRWeather*)weather;
+- (id)initWithWeather:(TRWeather*)weather;
 - (ODClassType*)type;
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array;
+- (GEVec2)vec;
 - (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
 @end

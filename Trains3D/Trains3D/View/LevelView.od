@@ -31,7 +31,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
         railroadView = RailroadView(level)
         cityView = CityView(level)
         callRepairerView = CallRepairerView(level)
-        precipitationView = level.rules.weatherRules.precipitation.map(PrecipitationView(_))
+        precipitationView = level.rules.weatherRules.precipitation.map(PrecipitationView(level.weather, _))
     }
 
     def prepare {

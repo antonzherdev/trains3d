@@ -23,8 +23,8 @@ static ODClassType* _TRPrecipitationView_type;
     _TRPrecipitationView_type = [ODClassType classTypeWithCls:[TRPrecipitationView class]];
 }
 
-+ (TRPrecipitationView*)applyPrecipitation:(TRPrecipitation*)precipitation {
-    if(precipitation.tp == TRPrecipitationType.rain) return [TRRainView rainViewWithStrength:precipitation.strength];
++ (TRPrecipitationView*)applyWeather:(TRWeather*)weather precipitation:(TRPrecipitation*)precipitation {
+    if(precipitation.tp == TRPrecipitationType.rain) return [TRRainView rainViewWithWeather:weather strength:precipitation.strength];
     else @throw @"Unknown precipitation type";
 }
 
@@ -68,24 +68,27 @@ static ODClassType* _TRPrecipitationView_type;
 
 
 @implementation TRRainView{
+    TRWeather* _weather;
     CGFloat _strength;
     TRRainParticleSystem* _system;
     TRRainSystemView* _view;
 }
 static ODClassType* _TRRainView_type;
+@synthesize weather = _weather;
 @synthesize strength = _strength;
 @synthesize system = _system;
 @synthesize view = _view;
 
-+ (id)rainViewWithStrength:(CGFloat)strength {
-    return [[TRRainView alloc] initWithStrength:strength];
++ (id)rainViewWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
+    return [[TRRainView alloc] initWithWeather:weather strength:strength];
 }
 
-- (id)initWithStrength:(CGFloat)strength {
+- (id)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
     self = [super init];
     if(self) {
+        _weather = weather;
         _strength = strength;
-        _system = [TRRainParticleSystem rainParticleSystemWithStrength:_strength];
+        _system = [TRRainParticleSystem rainParticleSystemWithWeather:_weather strength:_strength];
         _view = [TRRainSystemView rainSystemViewWithSystem:_system];
     }
     
@@ -121,18 +124,20 @@ static ODClassType* _TRRainView_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRRainView* o = ((TRRainView*)(other));
-    return eqf(self.strength, o.strength);
+    return [self.weather isEqual:o.weather] && eqf(self.strength, o.strength);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
+    hash = hash * 31 + [self.weather hash];
     hash = hash * 31 + floatHash(self.strength);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"strength=%f", self.strength];
+    [description appendFormat:@"weather=%@", self.weather];
+    [description appendFormat:@", strength=%f", self.strength];
     [description appendString:@">"];
     return description;
 }
@@ -141,23 +146,27 @@ static ODClassType* _TRRainView_type;
 
 
 @implementation TRRainParticleSystem{
+    TRWeather* _weather;
     CGFloat _strength;
     id<CNSeq> _particles;
 }
 static ODClassType* _TRRainParticleSystem_type;
+@synthesize weather = _weather;
 @synthesize strength = _strength;
 @synthesize particles = _particles;
 
-+ (id)rainParticleSystemWithStrength:(CGFloat)strength {
-    return [[TRRainParticleSystem alloc] initWithStrength:strength];
++ (id)rainParticleSystemWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
+    return [[TRRainParticleSystem alloc] initWithWeather:weather strength:strength];
 }
 
-- (id)initWithStrength:(CGFloat)strength {
+- (id)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
     self = [super init];
+    __weak TRRainParticleSystem* _weakSelf = self;
     if(self) {
+        _weather = weather;
         _strength = strength;
-        _particles = [[[intTo(0, ((NSInteger)(200 * _strength))) chain] map:^TRRainParticle*(id _) {
-            return [TRRainParticle rainParticle];
+        _particles = [[[intTo(0, ((NSInteger)(1000 * _strength))) chain] map:^TRRainParticle*(id _) {
+            return [TRRainParticle rainParticleWithWeather:_weakSelf.weather];
         }] toArray];
     }
     
@@ -191,18 +200,20 @@ static ODClassType* _TRRainParticleSystem_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRRainParticleSystem* o = ((TRRainParticleSystem*)(other));
-    return eqf(self.strength, o.strength);
+    return [self.weather isEqual:o.weather] && eqf(self.strength, o.strength);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
+    hash = hash * 31 + [self.weather hash];
     hash = hash * 31 + floatHash(self.strength);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"strength=%f", self.strength];
+    [description appendFormat:@"weather=%@", self.weather];
+    [description appendFormat:@", strength=%f", self.strength];
     [description appendString:@">"];
     return description;
 }
@@ -211,20 +222,23 @@ static ODClassType* _TRRainParticleSystem_type;
 
 
 @implementation TRRainParticle{
+    TRWeather* _weather;
     GEVec2 _position;
     CGFloat _alpha;
 }
 static ODClassType* _TRRainParticle_type;
+@synthesize weather = _weather;
 
-+ (id)rainParticle {
-    return [[TRRainParticle alloc] init];
++ (id)rainParticleWithWeather:(TRWeather*)weather {
+    return [[TRRainParticle alloc] initWithWeather:weather];
 }
 
-- (id)init {
+- (id)initWithWeather:(TRWeather*)weather {
     self = [super init];
     if(self) {
+        _weather = weather;
         _position = geVec2MulI(geVec2Rnd(), 2);
-        _alpha = odFloatRndMinMax(0.2, 0.5);
+        _alpha = odFloatRndMinMax(0.1, 0.4);
     }
     
     return self;
@@ -236,12 +250,17 @@ static ODClassType* _TRRainParticle_type;
 }
 
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array {
-    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, TRRainData, TRRainDataMake(_position, ((float)(_alpha)))), TRRainData, TRRainDataMake(geVec2AddVec2(_position, GEVec2Make(0.0, 0.1)), ((float)(_alpha))));
+    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, TRRainData, TRRainDataMake(_position, ((float)(_alpha)))), TRRainData, TRRainDataMake(geVec2AddVec2(_position, [self vec]), ((float)(_alpha))));
+}
+
+- (GEVec2)vec {
+    GEVec2 w = [_weather wind];
+    return GEVec2Make((w.x + w.y) * 0.1, -float4Abs(w.y - w.x) * 0.3 - 0.05);
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    _position = geVec2SubVec2(_position, GEVec2Make(0.0, ((float)(delta))));
-    if(_position.y < -1.0) _position = GEVec2Make(((float)(odFloatRnd() * 2 - 1)), 1.0);
+    _position = geVec2AddVec2(_position, geVec2MulI(geVec2MulF([self vec], delta), 10));
+    if(_position.y < -1.0) _position = GEVec2Make(((float)(odFloatRnd() * 2 - 1)), ((float)(odFloatRndMinMax(1.5, 1.1))));
 }
 
 - (ODClassType*)type {
@@ -259,15 +278,19 @@ static ODClassType* _TRRainParticle_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
+    TRRainParticle* o = ((TRRainParticle*)(other));
+    return [self.weather isEqual:o.weather];
 }
 
 - (NSUInteger)hash {
-    return 0;
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.weather hash];
+    return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"weather=%@", self.weather];
     [description appendString:@">"];
     return description;
 }
