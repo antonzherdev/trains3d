@@ -137,7 +137,7 @@ static ODClassType* _EGDynamicWorld_type;
         NSArray *array = [builder build];
         if([array isEmpty]) return [CNOption none];
 
-        return [CNSome someWithValue:[EGCollision collisionWithBodies:[CNPair newWithA:body0 b:body1] contacts:array]];
+        return [CNSome someWithValue:[EGDynamicCollision dynamicCollisionWithBodies:[CNPair newWithA:body0 b:body1] contacts:array]];
     }];
 }
 

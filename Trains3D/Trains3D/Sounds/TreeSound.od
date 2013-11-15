@@ -7,7 +7,7 @@ class TreeSound(level : Level) extends SoundPlayersCollection(
         ]
     else if(level.rules.weatherRules.isSnow)
         [WindSound(level.forest)]
-    else if(level.rules.theme == LevelTheme.forest)
+    else if(level.rules.theme == LevelTheme.forest || level.rules.theme == LevelTheme.leafForest)
         [WindSound(level.forest)
         ,SporadicSoundPlayer(Sound("Nightingale.mp3", 0.1), 120)
         ,SporadicSoundPlayer(Sound("Crow.mp3", 0.1), 240)

@@ -71,12 +71,19 @@ class TrainsDynamicWorld extends Controller {
         }
     }
 
+    static val carsCollisionNotification = NotificationHandle<float4>("carsCollisionNotification")
+    static val carAndGroundCollisionNotification = NotificationHandle<float4>("carAndGroundCollisionNotification")
     def updateWith(delta : float) {
         world.updateWith(delta)
         if(workCounter > 0) {
-            log("-----")
             world.newCollisions.for {collision ->
-                log("Collistion = $(collision.bodies.a.data) and $(collision.bodies.b.data) with impulse $(collision.contacts.head.impulse)"  )
+                if(collision.impulse > 0) {
+                    if(collision.bodies.a.data == nil || collision.bodies.b.data == nil) {
+                        carAndGroundCollisionNotification.post(collision.impulse)
+                    } else {
+                        carsCollisionNotification.post(collision.impulse)
+                    }
+                }
             }
         }
     }

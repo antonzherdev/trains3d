@@ -51,6 +51,8 @@
 - (void)dieTrain:(TRTrain*)train;
 - (void)removeTrain:(TRTrain*)train;
 - (void)updateWithDelta:(CGFloat)delta;
++ (CNNotificationHandle*)carsCollisionNotification;
++ (CNNotificationHandle*)carAndGroundCollisionNotification;
 + (ODClassType*)type;
 @end
 

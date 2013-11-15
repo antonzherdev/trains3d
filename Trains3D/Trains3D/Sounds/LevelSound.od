@@ -4,6 +4,7 @@ package com.antonzherdev.trains
 class LevelSound(level : Level) extends SoundPlayersCollection([
     TreeSound(level),
     TrainSound(level),
+    CollisionSound("Crash1", TrainsDynamicWorld.carsCollisionNotification),
     NotificationSoundPlayer(Sound("TrainPreparing.wav", 0.2), Level.expectedTrainNotification),
     NotificationSoundPlayer(Sound("TrainRun.wav", 0.1), Level.prepareToRunTrainNotification),
     NotificationSoundPlayer(Sound("CityBuild.wav", 0.15), Level.buildCityNotification, _ -> level.cities.count > 2),
@@ -11,3 +12,18 @@ class LevelSound(level : Level) extends SoundPlayersCollection([
     NotificationSoundPlayer(Sound("Click.wav", 0.3), Switch.turnNotification),
     NotificationSoundPlayer(Sound("Beep.wav", 0.3), RailLight.turnNotification)
 ])
+
+class CollisionSound(name : string, notificationHandle : NotificationHandle<float4>) extends SoundPlayer {
+    val sound = Sound("$name.wav")
+    private var obs : NotificationObserver?
+    def start{
+        obs = notificationHandle.observe { impulse ->
+            sound.volume = impulse.abs
+            sound.play
+        }
+    }
+    def stop{
+        obs.for(_.detach)
+        obs = nil
+    }
+}

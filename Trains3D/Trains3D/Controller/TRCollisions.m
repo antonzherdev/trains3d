@@ -172,6 +172,8 @@ static ODClassType* _TRCarsCollision_type;
     EGDynamicWorld* _world;
     NSInteger _workCounter;
 }
+static CNNotificationHandle* _TRTrainsDynamicWorld_carsCollisionNotification;
+static CNNotificationHandle* _TRTrainsDynamicWorld_carAndGroundCollisionNotification;
 static ODClassType* _TRTrainsDynamicWorld_type;
 
 + (id)trainsDynamicWorld {
@@ -197,6 +199,8 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 + (void)initialize {
     [super initialize];
     _TRTrainsDynamicWorld_type = [ODClassType classTypeWithCls:[TRTrainsDynamicWorld class]];
+    _TRTrainsDynamicWorld_carsCollisionNotification = [CNNotificationHandle notificationHandleWithName:@"carsCollisionNotification"];
+    _TRTrainsDynamicWorld_carAndGroundCollisionNotification = [CNNotificationHandle notificationHandleWithName:@"carAndGroundCollisionNotification"];
 }
 
 - (void)addTrain:(TRTrain*)train {
@@ -218,16 +222,24 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 
 - (void)updateWithDelta:(CGFloat)delta {
     [_world updateWithDelta:delta];
-    if(_workCounter > 0) {
-        [CNLog applyText:@"-----"];
-        [[_world newCollisions] forEach:^void(EGDynamicCollision* collision) {
-            [CNLog applyText:[NSString stringWithFormat:@"Collistion = %@ and %@ with impulse %f", ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).data, ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).data, ((EGContact*)([((EGDynamicCollision*)(collision)).contacts head])).impulse]];
-        }];
-    }
+    if(_workCounter > 0) [[_world newCollisions] forEach:^void(EGDynamicCollision* collision) {
+        if([((EGDynamicCollision*)(collision)) impulse] > 0) {
+            if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).data == nil || ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).data == nil) [_TRTrainsDynamicWorld_carAndGroundCollisionNotification postData:numf4([((EGDynamicCollision*)(collision)) impulse])];
+            else [_TRTrainsDynamicWorld_carsCollisionNotification postData:numf4([((EGDynamicCollision*)(collision)) impulse])];
+        }
+    }];
 }
 
 - (ODClassType*)type {
     return [TRTrainsDynamicWorld type];
+}
+
++ (CNNotificationHandle*)carsCollisionNotification {
+    return _TRTrainsDynamicWorld_carsCollisionNotification;
+}
+
++ (CNNotificationHandle*)carAndGroundCollisionNotification {
+    return _TRTrainsDynamicWorld_carAndGroundCollisionNotification;
 }
 
 + (ODClassType*)type {
