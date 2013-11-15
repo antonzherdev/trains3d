@@ -1,11 +1,12 @@
 #import "TRSnowView.h"
 
 #import "TRWeather.h"
+#import "GL.h"
 #import "EGContext.h"
 #import "EGMaterial.h"
 #import "EGVertex.h"
 #import "EGIndex.h"
-#import "GL.h"
+#import "EGTexture.h"
 @implementation TRSnowView{
     TRWeather* _weather;
     CGFloat _strength;
@@ -163,8 +164,10 @@ static ODClassType* _TRSnowParticleSystem_type;
 @implementation TRSnowParticle{
     TRWeather* _weather;
     GEVec2 _position;
-    CGFloat _alpha;
+    CGFloat _size;
+    GEQuad _uv;
 }
+static GEQuadrant _TRSnowParticle_textureQuadrant;
 static ODClassType* _TRSnowParticle_type;
 @synthesize weather = _weather;
 
@@ -177,7 +180,8 @@ static ODClassType* _TRSnowParticle_type;
     if(self) {
         _weather = weather;
         _position = geVec2MulI(geVec2Rnd(), 2);
-        _alpha = odFloatRndMinMax(0.1, 0.4) * EGGlobal.context.scale;
+        _size = odFloatRndMinMax(0.002, 0.01);
+        _uv = geQuadrantRndQuad(_TRSnowParticle_textureQuadrant);
     }
     
     return self;
@@ -186,10 +190,11 @@ static ODClassType* _TRSnowParticle_type;
 + (void)initialize {
     [super initialize];
     _TRSnowParticle_type = [ODClassType classTypeWithCls:[TRSnowParticle class]];
+    _TRSnowParticle_textureQuadrant = geQuadQuadrant(geQuadIdentity());
 }
 
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array {
-    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, TRSnowData, TRSnowDataMake(_position, ((float)(_alpha)))), TRSnowData, TRSnowDataMake(geVec2AddVec2(_position, [self vec]), ((float)(_alpha))));
+    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, TRSnowData, TRSnowDataMake(_position, _uv.p[0])), TRSnowData, TRSnowDataMake(GEVec2Make(_position.x + _size, _position.y), _uv.p[1])), TRSnowData, TRSnowDataMake(GEVec2Make(_position.x + _size, _position.y + _size), _uv.p[2])), TRSnowData, TRSnowDataMake(GEVec2Make(_position.x, _position.y + _size), _uv.p[3]));
 }
 
 - (GEVec2)vec {
@@ -198,12 +203,16 @@ static ODClassType* _TRSnowParticle_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    _position = geVec2AddVec2(_position, geVec2MulI(geVec2MulF([self vec], delta), 10));
+    _position = geVec2AddVec2(_position, geVec2MulF([self vec], delta));
     if(_position.y < -1.0) _position = GEVec2Make(((float)(odFloatRnd() * 2 - 1)), ((float)(odFloatRndMinMax(1.5, 1.1))));
 }
 
 - (ODClassType*)type {
     return [TRSnowParticle type];
+}
+
++ (GEQuadrant)textureQuadrant {
+    return _TRSnowParticle_textureQuadrant;
 }
 
 + (ODClassType*)type {
@@ -240,7 +249,7 @@ static ODClassType* _TRSnowParticle_type;
 NSString* TRSnowDataDescription(TRSnowData self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<TRSnowData: "];
     [description appendFormat:@"position=%@", GEVec2Description(self.position)];
-    [description appendFormat:@", alpha=%f", self.alpha];
+    [description appendFormat:@", uv=%@", GEVec2Description(self.uv)];
     [description appendString:@">"];
     return description;
 }
@@ -298,7 +307,7 @@ static ODClassType* _TRSnowSystemView_type;
 }
 
 - (id)initWithSystem:(TRSnowParticleSystem*)system {
-    self = [super initWithSystem:system vbDesc:TRSnowSystemView.vbDesc maxCount:[system.particles count] shader:TRSnowShader.instance material:nil blendFunc:EGBlendFunction.standard];
+    self = [super initWithSystem:system vbDesc:TRSnowSystemView.vbDesc maxCount:[system.particles count] shader:TRSnowShader.instance material:[EGGlobal textureForFile:@"Snowflake.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST] blendFunc:EGBlendFunction.premultiplied];
     
     return self;
 }
@@ -306,19 +315,31 @@ static ODClassType* _TRSnowSystemView_type;
 + (void)initialize {
     [super initialize];
     _TRSnowSystemView_type = [ODClassType classTypeWithCls:[TRSnowSystemView class]];
-    _TRSnowSystemView_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:trSnowDataType() position:0 uv:-1 normal:-1 color:((int)(2 * 4)) model:-1];
+    _TRSnowSystemView_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:trSnowDataType() position:0 uv:((int)(2 * 4)) normal:-1 color:-1 model:-1];
 }
 
 - (NSUInteger)vertexCount {
-    return 2;
+    return 4;
 }
 
 - (NSUInteger)indexCount {
-    return 2;
+    return 6;
 }
 
-- (id<EGIndexSource>)indexVertexCount:(NSUInteger)vertexCount maxCount:(NSUInteger)maxCount {
-    return EGEmptyIndexSource.lines;
+- (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i {
+    return cnVoidRefArrayWriteUInt4(cnVoidRefArrayWriteUInt4(cnVoidRefArrayWriteUInt4(cnVoidRefArrayWriteUInt4(cnVoidRefArrayWriteUInt4(cnVoidRefArrayWriteUInt4(indexPointer, i), i + 1), i + 2), i + 2), i), i + 3);
+}
+
+- (EGMutableIndexSourceGap*)indexVertexCount:(NSUInteger)vertexCount maxCount:(NSUInteger)maxCount {
+    NSUInteger vc = vertexCount;
+    CNVoidRefArray ia = cnVoidRefArrayApplyTpCount(oduInt4Type(), [self indexCount] * maxCount);
+    __block CNVoidRefArray indexPointer = ia;
+    [uintRange(maxCount) forEach:^void(id i) {
+        indexPointer = [self writeIndexesToIndexPointer:indexPointer i:((unsigned int)(unumi(i) * vc))];
+    }];
+    EGImmutableIndexBuffer* ib = [EGIBO applyArray:ia];
+    cnVoidRefArrayFree(ia);
+    return [EGMutableIndexSourceGap mutableIndexSourceGapWithSource:ib];
 }
 
 - (ODClassType*)type {
@@ -373,11 +394,12 @@ static ODClassType* _TRSnowShaderText_type;
 - (id)init {
     self = [super init];
     if(self) _fragment = [NSString stringWithFormat:@"%@\n"
-        "%@ lowp float fAlpha;\n"
+        "%@ mediump vec2 fuv;\n"
+        "uniform lowp sampler2D txt;\n"
         "\n"
         "void main(void) {\n"
-        "   %@ = vec4(0.7, 0.7, 0.7, fAlpha);\n"
-        "}", [self fragmentHeader], [self in], [self fragColor]];
+        "   %@ = %@(txt, fuv);\n"
+        "}", [self fragmentHeader], [self in], [self fragColor], [self texture2D]];
     
     return self;
 }
@@ -390,12 +412,12 @@ static ODClassType* _TRSnowShaderText_type;
 - (NSString*)vertex {
     return [NSString stringWithFormat:@"%@\n"
         "%@ highp vec2 position;\n"
-        "%@ lowp float alpha;\n"
-        "%@ lowp float fAlpha;\n"
+        "%@ mediump vec2 uv;\n"
+        "%@ mediump vec2 fuv;\n"
         "\n"
         "void main(void) {\n"
         "   gl_Position = vec4(position.x, position.y, 0, 1);\n"
-        "   fAlpha = alpha;\n"
+        "   fuv = uv;\n"
         "}", [self vertexHeader], [self ain], [self ain], [self out]];
 }
 
@@ -501,12 +523,12 @@ static ODClassType* _TRSnowShaderText_type;
 
 @implementation TRSnowShader{
     EGShaderAttribute* _positionSlot;
-    EGShaderAttribute* _alphaSlot;
+    EGShaderAttribute* _uvSlot;
 }
 static TRSnowShader* _TRSnowShader_instance;
 static ODClassType* _TRSnowShader_type;
 @synthesize positionSlot = _positionSlot;
-@synthesize alphaSlot = _alphaSlot;
+@synthesize uvSlot = _uvSlot;
 
 + (id)snowShader {
     return [[TRSnowShader alloc] init];
@@ -516,7 +538,7 @@ static ODClassType* _TRSnowShader_type;
     self = [super initWithProgram:[[TRSnowShaderText snowShaderText] program]];
     if(self) {
         _positionSlot = [self attributeForName:@"position"];
-        _alphaSlot = [self attributeForName:@"alpha"];
+        _uvSlot = [self attributeForName:@"uv"];
     }
     
     return self;
@@ -530,10 +552,11 @@ static ODClassType* _TRSnowShader_type;
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
-    [_alphaSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:1 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.color))];
+    [_uvSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
 }
 
-- (void)loadUniformsParam:(NSObject*)param {
+- (void)loadUniformsParam:(EGTexture*)param {
+    [EGGlobal.context bindTextureTexture:param];
 }
 
 - (ODClassType*)type {

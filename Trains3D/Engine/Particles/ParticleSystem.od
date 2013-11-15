@@ -50,7 +50,7 @@ class ParticleSystemView<P extends Particle, D, M>(
     }
 }
 
-trait IBOParticleSystem {
+trait IBOParticleSystemView {
     def writeIndexesTo(indexPointer : VoidRefArray, i : uint4) : VoidRefArray
     def vertexCount : uint
     def indexCount : uint = 3*(vertexCount - 2)
@@ -65,6 +65,17 @@ trait IBOParticleSystem {
         val ib = IBO(ia)
         ia.free
         ib
+    }
+}
+
+trait IBOParticleSystemViewQuad extends IBOParticleSystemView {
+    def vertexCount : uint = 4
+    def indexCount : uint = 6
+
+    def writeIndexesTo(indexPointer : VoidRefArray, i : uint4) : VoidRefArray = {
+        indexPointer
+        .write(uInt4 = i).write(uInt4 = i + 1).write(uInt4 = i + 2)
+        .write(uInt4 = i + 2).write(uInt4 = i).write(uInt4 = i + 3)
     }
 }
 

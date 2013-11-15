@@ -5,12 +5,13 @@
 #import "EGShader.h"
 @class TRWeather;
 @class EGGlobal;
-@class EGContext;
 @class EGBlendFunction;
 @class EGVertexBufferDesc;
-@protocol EGIndexSource;
-@class EGEmptyIndexSource;
+@class EGMutableIndexSourceGap;
+@class EGIBO;
 @class EGBlendMode;
+@class EGContext;
+@class EGTexture;
 
 @class TRSnowView;
 @class TRSnowParticleSystem;
@@ -56,24 +57,25 @@ typedef struct TRSnowData TRSnowData;
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array;
 - (GEVec2)vec;
 - (void)updateWithDelta:(CGFloat)delta;
++ (GEQuadrant)textureQuadrant;
 + (ODClassType*)type;
 @end
 
 
 struct TRSnowData {
     GEVec2 position;
-    float alpha;
+    GEVec2 uv;
 };
-static inline TRSnowData TRSnowDataMake(GEVec2 position, float alpha) {
-    return (TRSnowData){position, alpha};
+static inline TRSnowData TRSnowDataMake(GEVec2 position, GEVec2 uv) {
+    return (TRSnowData){position, uv};
 }
 static inline BOOL TRSnowDataEq(TRSnowData s1, TRSnowData s2) {
-    return GEVec2Eq(s1.position, s2.position) && eqf4(s1.alpha, s2.alpha);
+    return GEVec2Eq(s1.position, s2.position) && GEVec2Eq(s1.uv, s2.uv);
 }
 static inline NSUInteger TRSnowDataHash(TRSnowData self) {
     NSUInteger hash = 0;
     hash = hash * 31 + GEVec2Hash(self.position);
-    hash = hash * 31 + float4Hash(self.alpha);
+    hash = hash * 31 + GEVec2Hash(self.uv);
     return hash;
 }
 NSString* TRSnowDataDescription(TRSnowData self);
@@ -87,13 +89,10 @@ ODPType* trSnowDataType();
 
 
 
-@interface TRSnowSystemView : EGParticleSystemView
+@interface TRSnowSystemView : EGParticleSystemView<EGIBOParticleSystemViewQuad>
 + (id)snowSystemViewWithSystem:(TRSnowParticleSystem*)system;
 - (id)initWithSystem:(TRSnowParticleSystem*)system;
 - (ODClassType*)type;
-- (NSUInteger)vertexCount;
-- (NSUInteger)indexCount;
-- (id<EGIndexSource>)indexVertexCount:(NSUInteger)vertexCount maxCount:(NSUInteger)maxCount;
 + (EGVertexBufferDesc*)vbDesc;
 + (ODClassType*)type;
 @end
@@ -113,13 +112,13 @@ ODPType* trSnowDataType();
 
 @interface TRSnowShader : EGShader
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
-@property (nonatomic, readonly) EGShaderAttribute* alphaSlot;
+@property (nonatomic, readonly) EGShaderAttribute* uvSlot;
 
 + (id)snowShader;
 - (id)init;
 - (ODClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
-- (void)loadUniformsParam:(NSObject*)param;
+- (void)loadUniformsParam:(EGTexture*)param;
 + (TRSnowShader*)instance;
 + (ODClassType*)type;
 @end

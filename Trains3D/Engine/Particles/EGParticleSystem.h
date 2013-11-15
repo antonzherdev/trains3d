@@ -19,7 +19,8 @@
 @class EGEmittedParticle;
 @protocol EGParticleSystem;
 @protocol EGParticle;
-@protocol EGIBOParticleSystem;
+@protocol EGIBOParticleSystemView;
+@protocol EGIBOParticleSystemViewQuad;
 
 @protocol EGParticleSystem<EGController>
 - (id<CNSeq>)particles;
@@ -56,11 +57,18 @@
 @end
 
 
-@protocol EGIBOParticleSystem<NSObject>
+@protocol EGIBOParticleSystemView<NSObject>
 - (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i;
 - (NSUInteger)vertexCount;
 - (NSUInteger)indexCount;
 - (EGMutableIndexSourceGap*)indexVertexCount:(NSUInteger)vertexCount maxCount:(NSUInteger)maxCount;
+@end
+
+
+@protocol EGIBOParticleSystemViewQuad<EGIBOParticleSystemView>
+- (NSUInteger)vertexCount;
+- (NSUInteger)indexCount;
+- (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i;
 @end
 
 

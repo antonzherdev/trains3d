@@ -19,11 +19,15 @@ class SnowParticleSystem(weather : Weather, strength : float) extends ParticleSy
 
 class SnowParticle(weather : Weather) extends Particle {
     private var position : vec2 = vec2.rnd*2
-    private val alpha = Float.rnd(0.1, 0.4)*context.scale
+    private val size = Float.rnd(0.002, 0.01)
+    static val textureQuadrant : Quadrant = Quad.identity.quadrant
+    private val uv = textureQuadrant.rndQuad
 
     def writeTo(array : VoidRefArray) : VoidRefArray = {
-        array.write(SnowData, SnowData(position, alpha))
-            .write(SnowData, SnowData(position + vec, alpha))
+        array.write(SnowData, SnowData(position, uv.p[0]))
+             .write(SnowData, SnowData(vec2(position.x + size, position.y), uv.p[1]))
+             .write(SnowData, SnowData(vec2(position.x + size, position.y + size), uv.p[2]))
+             .write(SnowData, SnowData(vec2(position.x, position.y + size), uv.p[3]))
     }
 
     def vec : vec2 = {
@@ -32,7 +36,7 @@ class SnowParticle(weather : Weather) extends Particle {
     }
 
     def updateWith(delta : float) {
-        position += vec*delta*10
+        position += vec*delta
         if(position.y < -1.0) {
             position = vec2(Float.rnd*2 - 1, Float.rnd(1.5, 1.1))
 //            log("$position")
@@ -40,51 +44,50 @@ class SnowParticle(weather : Weather) extends Particle {
     }
 }
 
-struct SnowData(position : vec2, alpha : float4)
+struct SnowData(position : vec2, uv : vec2)
 
 
 class SnowSystemView(system : SnowParticleSystem) extends ParticleSystemView<SnowParticle, SnowData>(
     system, SnowSystemView.vbDesc, system.particles.count,
-    SnowShader.instance, nil, BlendFunction.standard)
+    SnowShader.instance, textureFor("Snowflake.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST), BlendFunction.premultiplied)
+    with IBOParticleSystemViewQuad
 {
-    static val vbDesc = VertexBufferDesc<SnowData>(SnowData.type, 0, -1, -1, 2*4, -1)
-
-    def vertexCount : uint = 2
-    def indexCount : uint = 2
-    def index(vertexCount : uint, maxCount : uint) : IndexSource = EmptyIndexSource.lines
+    static val vbDesc = VertexBufferDesc<SnowData>(SnowData.type, 0, 2*4, -1, -1, -1)
 }
 
 class SnowShaderText extends ShaderTextBuilder {
     def vertex =
         "$vertexHeader
          $ain highp vec2 position;
-         $ain lowp float alpha;
-         $out lowp float fAlpha;
+         $ain mediump vec2 uv;
+         $out mediump vec2 fuv;
 
          void main(void) {
             gl_Position = vec4(position.x, position.y, 0, 1);
-            fAlpha = alpha;
+            fuv = uv;
          }"
     val fragment =
         "$fragmentHeader
-         $in lowp float fAlpha;
+         $in mediump vec2 fuv;
+         uniform lowp sampler2D txt;
 
          void main(void) {
-            $fragColor = vec4(0.7, 0.7, 0.7, fAlpha);
+            $fragColor = $texture2D\(txt, fuv);
          }"
 
     def program = ShaderProgram("Snow", vertex, fragment)
 }
 
-class SnowShader extends Shader<Object>(SnowShaderText().program) {
+class SnowShader extends Shader<Texture>(SnowShaderText().program) {
     static val instance = SnowShader()
     val positionSlot = attributeFor("position")
-    val alphaSlot = attributeFor("alpha")
+    val uvSlot = attributeFor("uv")
 
     def loadAttributes(vbDesc : VertexBufferDesc<_>) {
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.position)
-        alphaSlot.setFromBufferWith(vbDesc.stride, valuesCount = 1, GL_FLOAT, shift = vbDesc.color)
+        uvSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.uv)
     }
-    def loadUniforms(param : Object) {
+    def loadUniforms(param : Texture) {
+        context.bindTexture(param)
     }
 }
