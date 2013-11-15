@@ -27,15 +27,22 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Contr
     }
 
     def cutDownFor(switch : Switch) {
-        val pos = switch.connector.vec*0.4 + switch.tile
+        cutDown(switch.connector.vec*0.4 + switch.tile, 0.4, 2)
+    }
+
+    def cutDownFor(light : RailLight) {
+        cutDown(light.connector.vec*0.45 + light.tile, 0.3, 2)
+    }
+
+    private def cutDown(pos : vec2, xLength : float, yLength : float) {
         val xx = pos.x + pos.y
         val yy = pos.y - pos.x
         _trees = _trees.chain.filter{tree ->
-            val ty = tree.position.y - tree.position.x
-            if(yy - 1.2 <= ty && ty <= yy) {
-                val tx = tree.position.x + tree.position.y
-                if(xx - 0.3 < tx && tx < xx + 0.3) false else true
-            } else true
+        val ty = tree.position.y - tree.position.x
+        if(yy - yLength <= ty && ty <= yy) {
+            val tx = tree.position.x + tree.position.y
+            if(xx - xLength < tx && tx < xx + xLength) false else true
+        } else true
         }.toArray
     }
 

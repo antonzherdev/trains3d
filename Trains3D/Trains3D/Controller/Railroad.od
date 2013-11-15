@@ -55,6 +55,9 @@ class RailLight(tile : vec2i, connector : RailConnector, rail : Rail) extends Ra
         isGreen = !isGreen
         turnNotification.post(self)
     }
+    def cutDownTreesIn(forest : Forest) {
+        forest.cutDownFor(light = self)
+    }
     def canAdd(rail : Rail) : bool = self.rail.canAdd(rail)
     def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = Switch(tile, to, self.rail, rail)
     def rails : [Rail] = [rail]

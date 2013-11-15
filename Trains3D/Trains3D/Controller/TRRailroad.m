@@ -397,6 +397,10 @@ static ODClassType* _TRRailLight_type;
     [_TRRailLight_turnNotification postData:self];
 }
 
+- (void)cutDownTreesInForest:(TRForest*)forest {
+    [forest cutDownForLight:self];
+}
+
 - (BOOL)canAddRail:(TRRail*)rail {
     return [_rail canAddRail:rail];
 }

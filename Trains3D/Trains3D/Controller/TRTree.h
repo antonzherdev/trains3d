@@ -7,6 +7,7 @@
 @class TRRailForm;
 @class TRRailConnector;
 @class TRSwitch;
+@class TRRailLight;
 
 @class TRForestRules;
 @class TRForest;
@@ -37,6 +38,7 @@
 - (void)cutDownTile:(GEVec2i)tile;
 - (void)cutDownForRail:(TRRail*)rail;
 - (void)cutDownForASwitch:(TRSwitch*)aSwitch;
+- (void)cutDownForLight:(TRRailLight*)light;
 - (void)cutDownRect:(GERect)rect;
 - (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;

@@ -122,14 +122,21 @@ static ODClassType* _TRForest_type;
 }
 
 - (void)cutDownForASwitch:(TRSwitch*)aSwitch {
-    GEVec2 pos = geVec2AddVec2(geVec2iMulF([aSwitch.connector vec], 0.4), geVec2ApplyVec2i(aSwitch.tile));
+    [self cutDownPos:geVec2AddVec2(geVec2iMulF([aSwitch.connector vec], 0.4), geVec2ApplyVec2i(aSwitch.tile)) xLength:0.4 yLength:2.0];
+}
+
+- (void)cutDownForLight:(TRRailLight*)light {
+    [self cutDownPos:geVec2AddVec2(geVec2iMulF([light.connector vec], 0.45), geVec2ApplyVec2i(light.tile)) xLength:0.3 yLength:2.0];
+}
+
+- (void)cutDownPos:(GEVec2)pos xLength:(CGFloat)xLength yLength:(CGFloat)yLength {
     float xx = pos.x + pos.y;
     float yy = pos.y - pos.x;
     __trees = [[[__trees chain] filter:^BOOL(TRTree* tree) {
         float ty = ((TRTree*)(tree)).position.y - ((TRTree*)(tree)).position.x;
-        if(yy - 1.2 <= ty && ty <= yy) {
+        if(yy - yLength <= ty && ty <= yy) {
             float tx = ((TRTree*)(tree)).position.x + ((TRTree*)(tree)).position.y;
-            if(xx - 0.3 < tx && tx < xx + 0.3) return NO;
+            if(xx - xLength < tx && tx < xx + xLength) return NO;
             else return YES;
         } else {
             return YES;
