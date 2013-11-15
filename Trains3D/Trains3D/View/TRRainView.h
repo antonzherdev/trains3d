@@ -1,10 +1,8 @@
 #import "objd.h"
-#import "EGScene.h"
+#import "TRLevelView.h"
 #import "EGParticleSystem.h"
 #import "GEVec.h"
 #import "EGShader.h"
-@class TRPrecipitation;
-@class TRPrecipitationType;
 @class TRWeather;
 @class EGGlobal;
 @class EGContext;
@@ -14,7 +12,6 @@
 @class EGEmptyIndexSource;
 @class EGBlendMode;
 
-@class TRPrecipitationView;
 @class TRRainView;
 @class TRRainParticleSystem;
 @class TRRainParticle;
@@ -22,17 +19,6 @@
 @class TRRainShaderText;
 @class TRRainShader;
 typedef struct TRRainData TRRainData;
-
-@interface TRPrecipitationView : NSObject<EGController>
-+ (id)precipitationView;
-- (id)init;
-- (ODClassType*)type;
-+ (TRPrecipitationView*)applyWeather:(TRWeather*)weather precipitation:(TRPrecipitation*)precipitation;
-- (void)draw;
-- (void)updateWithDelta:(CGFloat)delta;
-+ (ODClassType*)type;
-@end
-
 
 @interface TRRainView : TRPrecipitationView
 @property (nonatomic, readonly) TRWeather* weather;

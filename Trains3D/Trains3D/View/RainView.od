@@ -1,0 +1,90 @@
+package com.antonzherdev.trains
+
+class RainView(weather : Weather, strength : float) extends PrecipitationView {
+    val system = RainParticleSystem(weather, strength)
+    val view = RainSystemView(system)
+
+    def updateWith(delta : float) {
+        system.updateWith(delta)
+    }
+
+    def draw {
+        view.draw
+    }
+}
+
+class RainParticleSystem(weather : Weather, strength : float) extends ParticleSystem<RainParticle> {
+    val particles = 0.to(2000*strength).chain.map(RainParticle(weather)).toArray
+}
+
+class RainParticle(weather : Weather) extends Particle {
+    private var position : vec2 = vec2.rnd*2
+    private val alpha = Float.rnd(0.1, 0.4)*context.scale
+
+    def writeTo(array : VoidRefArray) : VoidRefArray = {
+        array.write(RainData, RainData(position, alpha))
+            .write(RainData, RainData(position + vec, alpha))
+    }
+
+    def vec : vec2 = {
+        val w = weather.wind
+        vec2((w.x + w.y)*0.1, -(w.y - w.x).abs*0.3 - 0.05)
+    }
+
+    def updateWith(delta : float) {
+        position += vec*delta*10
+        if(position.y < -1.0) {
+            position = vec2(Float.rnd*2 - 1, Float.rnd(1.5, 1.1))
+//            log("$position")
+        }
+    }
+}
+
+struct RainData(position : vec2, alpha : float4)
+
+
+class RainSystemView(system : RainParticleSystem) extends ParticleSystemView<RainParticle, RainData>(
+    system, RainSystemView.vbDesc, system.particles.count,
+    RainShader.instance, nil, BlendFunction.standard)
+{
+    static val vbDesc = VertexBufferDesc<RainData>(RainData.type, 0, -1, -1, 2*4, -1)
+
+    def vertexCount : uint = 2
+    def indexCount : uint = 2
+    def index(vertexCount : uint, maxCount : uint) : IndexSource = EmptyIndexSource.lines
+}
+
+class RainShaderText extends ShaderTextBuilder {
+    def vertex =
+        "$vertexHeader
+         $ain highp vec2 position;
+         $ain lowp float alpha;
+         $out lowp float fAlpha;
+
+         void main(void) {
+            gl_Position = vec4(position.x, position.y, 0, 1);
+            fAlpha = alpha;
+         }"
+    val fragment =
+        "$fragmentHeader
+         $in lowp float fAlpha;
+
+         void main(void) {
+            $fragColor = vec4(0.7, 0.7, 0.7, fAlpha);
+         }"
+
+    def program = ShaderProgram("Rain", vertex, fragment)
+}
+
+class RainShader extends Shader<Object>(RainShaderText().program) {
+    static val instance = RainShader()
+    val positionSlot = attributeFor("position")
+    val alphaSlot = attributeFor("alpha")
+
+    def loadAttributes(vbDesc : VertexBufferDesc<_>) {
+        positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.position)
+        alphaSlot.setFromBufferWith(vbDesc.stride, valuesCount = 1, GL_FLOAT, shift = vbDesc.color)
+    }
+    def loadUniforms(param : Object) {
+    }
+}

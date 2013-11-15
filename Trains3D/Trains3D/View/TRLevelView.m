@@ -13,8 +13,9 @@
 #import "TRRailroadBuilderProcessor.h"
 #import "TRRailroad.h"
 #import "TRSwitchProcessor.h"
-#import "TRPrecipitationView.h"
 #import "EGDirector.h"
+#import "TRRainView.h"
+#import "TRSnowView.h"
 @implementation TRLevelView{
     TRLevel* _level;
     NSString* _name;
@@ -156,6 +157,72 @@ static ODClassType* _TRLevelView_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"level=%@", self.level];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRPrecipitationView
+static ODClassType* _TRPrecipitationView_type;
+
++ (id)precipitationView {
+    return [[TRPrecipitationView alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRPrecipitationView_type = [ODClassType classTypeWithCls:[TRPrecipitationView class]];
+}
+
++ (TRPrecipitationView*)applyWeather:(TRWeather*)weather precipitation:(TRPrecipitation*)precipitation {
+    if(precipitation.tp == TRPrecipitationType.rain) {
+        return [TRRainView rainViewWithWeather:weather strength:precipitation.strength];
+    } else {
+        if(precipitation.tp == TRPrecipitationType.snow) return [TRSnowView snowViewWithWeather:weather strength:precipitation.strength];
+        else @throw @"Unknown precipitation type";
+    }
+}
+
+- (void)draw {
+    @throw @"Method draw is abstract";
+}
+
+- (void)updateWithDelta:(CGFloat)delta {
+    @throw @"Method updateWith is abstract";
+}
+
+- (ODClassType*)type {
+    return [TRPrecipitationView type];
+}
+
++ (ODClassType*)type {
+    return _TRPrecipitationView_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
     return description;
 }

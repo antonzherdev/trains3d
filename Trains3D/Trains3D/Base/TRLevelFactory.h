@@ -32,6 +32,7 @@
 - (ODClassType*)type;
 + (TRScoreRules*)scoreRulesWithInitialScore:(NSInteger)initialScore;
 + (void(^)(TRLevel*))slowTrain;
++ (void(^)(TRLevel*))train;
 + (void(^)(TRLevel*))expressTrain;
 + (TRLevel*)levelWithNumber:(NSUInteger)number;
 + (TRLevel*)levelWithMapSize:(GEVec2i)mapSize;

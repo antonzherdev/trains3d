@@ -77,3 +77,14 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
         railroadView.reshape
     }
 }
+
+class PrecipitationView extends Controller {
+    static def apply(weather : Weather, precipitation : Precipitation) : PrecipitationView = {
+        if(precipitation.tp == PrecipitationType.rain) RainView(weather, precipitation.strength)
+        else if(precipitation.tp == PrecipitationType.snow) SnowView(weather, precipitation.strength)
+        else throw "Unknown precipitation type"
+    }
+
+    def draw
+    def updateWith(delta : float)
+}

@@ -20,12 +20,17 @@
 @class TRSwitchProcessor;
 @class EGGlobal;
 @class EGContext;
-@class TRPrecipitationView;
 @class EGRenderTarget;
 @class EGMatrixStack;
 @class EGDirector;
+@class TRPrecipitation;
+@class TRPrecipitationType;
+@class TRRainView;
+@class TRSnowView;
+@class TRWeather;
 
 @class TRLevelView;
+@class TRPrecipitationView;
 
 @interface TRLevelView : NSObject<EGLayerView, EGInputProcessor>
 @property (nonatomic, readonly) TRLevel* level;
@@ -42,6 +47,17 @@
 - (void)updateWithDelta:(CGFloat)delta;
 - (BOOL)processEvent:(EGEvent*)event;
 - (void)reshapeWithViewport:(GERect)viewport;
++ (ODClassType*)type;
+@end
+
+
+@interface TRPrecipitationView : NSObject<EGController>
++ (id)precipitationView;
+- (id)init;
+- (ODClassType*)type;
++ (TRPrecipitationView*)applyWeather:(TRWeather*)weather precipitation:(TRPrecipitation*)precipitation;
+- (void)draw;
+- (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
 @end
 
