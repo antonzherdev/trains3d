@@ -4,8 +4,8 @@ package com.antonzherdev.trains
 class LevelSound(level : Level) extends SoundPlayersCollection([
     TreeSound(level),
     TrainSound(level),
-    CollisionSound("Crash1", TrainsDynamicWorld.carsCollisionNotification, 0.5),
-    CollisionSound("GroundCrash1", TrainsDynamicWorld.carAndGroundCollisionNotification, 0.5),
+    CollisionSound("Crash1", TrainsDynamicWorld.carsCollisionNotification, 0.5, 0.7),
+    CollisionSound("GroundCrash1", TrainsDynamicWorld.carAndGroundCollisionNotification, 0.2, 0.5),
     NotificationSoundPlayer(Sound("TrainPreparing.wav", 0.2), Level.expectedTrainNotification),
     NotificationSoundPlayer(Sound("TrainRun.wav", 0.1), Level.prepareToRunTrainNotification),
     NotificationSoundPlayer(Sound("CityBuild.wav", 0.15), Level.buildCityNotification, _ -> level.cities.count > 2),
@@ -14,16 +14,14 @@ class LevelSound(level : Level) extends SoundPlayersCollection([
     NotificationSoundPlayer(Sound("Beep.wav", 0.3), RailLight.turnNotification)
 ])
 
-class CollisionSound(name : string, notificationHandle : NotificationHandle<float4>, volume : float4) extends SoundPlayer {
-    val sound = SoundParallel(10, Sound("$name.wav"))
+class CollisionSound(name : string, notificationHandle : NotificationHandle<float4>, impulseK : float4, volume : float4) extends SoundPlayer {
+    val sound = SoundParallel(5, Sound("$name.wav"))
     private var obs : NotificationObserver?
     def start{
         obs = notificationHandle.observe { impulse ->
-            var imp = impulse.abs
-            if(imp > 0.3) {
-                imp = imp * 0.5
+            var imp = impulseK * impulse.abs
+            if(imp > 0.1) {
                 if(imp > 1.0) imp = 1.0
-                log("$name - $imp")
                 sound.playWith(volume = imp*volume)
             }
         }

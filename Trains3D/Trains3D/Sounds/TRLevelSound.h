@@ -25,11 +25,12 @@
 @interface TRCollisionSound : NSObject<EGSoundPlayer>
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) CNNotificationHandle* notificationHandle;
+@property (nonatomic, readonly) float impulseK;
 @property (nonatomic, readonly) float volume;
 @property (nonatomic, readonly) EGSoundParallel* sound;
 
-+ (id)collisionSoundWithName:(NSString*)name notificationHandle:(CNNotificationHandle*)notificationHandle volume:(float)volume;
-- (id)initWithName:(NSString*)name notificationHandle:(CNNotificationHandle*)notificationHandle volume:(float)volume;
++ (id)collisionSoundWithName:(NSString*)name notificationHandle:(CNNotificationHandle*)notificationHandle impulseK:(float)impulseK volume:(float)volume;
+- (id)initWithName:(NSString*)name notificationHandle:(CNNotificationHandle*)notificationHandle impulseK:(float)impulseK volume:(float)volume;
 - (ODClassType*)type;
 - (void)start;
 - (void)stop;
