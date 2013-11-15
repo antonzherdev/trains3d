@@ -3,6 +3,7 @@
 @class EGCollisionBody;
 
 @class EGCollision;
+@class EGDynamicCollision;
 @class EGCrossPoint;
 @class EGContact;
 @class EGIndexFunFilteredIterable;
@@ -13,6 +14,17 @@
 @property (nonatomic, readonly) id<CNSeq> contacts;
 
 + (id)collisionWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
+- (id)initWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface EGDynamicCollision : NSObject
+@property (nonatomic, readonly) CNPair* bodies;
+@property (nonatomic, readonly) id<CNSeq> contacts;
+
++ (id)dynamicCollisionWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
 - (id)initWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
 - (ODClassType*)type;
 + (ODClassType*)type;

@@ -65,6 +65,70 @@ static ODClassType* _EGCollision_type;
 @end
 
 
+@implementation EGDynamicCollision{
+    CNPair* _bodies;
+    id<CNSeq> _contacts;
+}
+static ODClassType* _EGDynamicCollision_type;
+@synthesize bodies = _bodies;
+@synthesize contacts = _contacts;
+
++ (id)dynamicCollisionWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts {
+    return [[EGDynamicCollision alloc] initWithBodies:bodies contacts:contacts];
+}
+
+- (id)initWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts {
+    self = [super init];
+    if(self) {
+        _bodies = bodies;
+        _contacts = contacts;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGDynamicCollision_type = [ODClassType classTypeWithCls:[EGDynamicCollision class]];
+}
+
+- (ODClassType*)type {
+    return [EGDynamicCollision type];
+}
+
++ (ODClassType*)type {
+    return _EGDynamicCollision_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGDynamicCollision* o = ((EGDynamicCollision*)(other));
+    return [self.bodies isEqual:o.bodies] && [self.contacts isEqual:o.contacts];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.bodies hash];
+    hash = hash * 31 + [self.contacts hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"bodies=%@", self.bodies];
+    [description appendFormat:@", contacts=%@", self.contacts];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation EGCrossPoint{
     EGCollisionBody* _body;
     GEVec3 _point;

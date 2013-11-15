@@ -3,6 +3,8 @@
 #import "EGCollisionBody.h"
 #import "GEMat4.h"
 #include "btBulletDynamicsCommon.h"
+#import "EGCollision.h"
+
 @implementation EGDynamicWorld{
     GEVec3 _gravity;
     NSMutableArray* __bodies;
@@ -107,6 +109,22 @@ static ODClassType* _EGDynamicWorld_type;
     return description;
 }
 
+- (id <CNIterable>)collisions {
+    return [EGIndexFunFilteredIterable indexFunFilteredIterableWithMaxCount:(NSUInteger) _dispatcher->getNumManifolds() f:^id(NSUInteger i) {
+        btPersistentManifold *pManifold = _dispatcher->getManifoldByIndexInternal((int)i);
+        if(pManifold->getNumContacts() == 0) return [CNOption none];
+        EGRigidBody *body0 = (__bridge EGRigidBody *) pManifold->getBody0()->getUserPointer();
+        EGRigidBody *body1 = (__bridge EGRigidBody *) pManifold->getBody1()->getUserPointer();
+        return [CNSome someWithValue:[EGCollision collisionWithBodies:[CNPair newWithA:body0 b:body1]
+                                                             contacts:[CNIndexFunSeq indexFunSeqWithCount:(NSUInteger) pManifold->getNumContacts() f:^id(NSUInteger i) {
+                                                                 btManifoldPoint & p = pManifold->getContactPoint((int)i);
+                                                                 btVector3 const & a = p.getPositionWorldOnA();
+                                                                 btVector3 const & b = p.getPositionWorldOnB();
+                                                                 return [EGContact contactWithA:GEVec3Make(a.x(), a.y(), a.z())
+                                                                                              b:GEVec3Make(b.x(), b.y(), b.z())];
+                                                             }]]];
+    }];
+}
 @end
 
 
@@ -154,6 +172,7 @@ static ODClassType* _EGDynamicBody_type;
         _motionState = new btDefaultMotionState(transform);
         btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, _motionState, sh, localInertia);
         _body = new btRigidBody(rbInfo);
+        _body->setUserPointer((__bridge void *)self);
         if(isKinematic) {
             _body->setCollisionFlags(_body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
             _body->setActivationState(DISABLE_DEACTIVATION);

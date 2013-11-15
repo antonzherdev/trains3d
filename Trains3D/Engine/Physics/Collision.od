@@ -1,6 +1,7 @@
 package com.antonzherdev.eg
 
 class Collision<T>(bodies : Pair<CollisionBody<T>>, contacts : [Contact])
+class DynamicCollision<T>(bodies : Pair<RigidBody<T>>, contacts : [Contact])
 class CrossPoint<T>(body : CollisionBody<T>, point : vec3)
 class Contact(a : vec3, b : vec3)
 

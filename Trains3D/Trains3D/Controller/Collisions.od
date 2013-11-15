@@ -70,5 +70,9 @@ class TrainsDynamicWorld extends Controller {
 
     def updateWith(delta : float) {
         world.updateWith(delta)
+//        log("-----")
+//        world.collisions.for {collision ->
+//            log("Collistion = $(collision.bodies.a.data) and $(collision.bodies.b.data)"  )
+//        }
     }
 }

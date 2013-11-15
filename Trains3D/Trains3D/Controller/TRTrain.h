@@ -48,6 +48,7 @@
 - (id<CNSeq>)cars;
 - (BOOL)isBack;
 - (void)startFromCity:(TRCity*)city;
+- (NSString*)description;
 - (TRRailPoint*)head;
 - (void)setHead:(TRRailPoint*)head;
 - (void)updateWithDelta:(CGFloat)delta;

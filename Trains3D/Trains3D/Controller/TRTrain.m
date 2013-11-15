@@ -157,6 +157,10 @@ static ODClassType* _TRTrain_type;
     [self calculateCarPositions];
 }
 
+- (NSString*)description {
+    return [NSString stringWithFormat:@"<Train: %@, %@>", _trainType, _color];
+}
+
 - (TRRailPoint*)head {
     return __head;
 }
@@ -267,16 +271,6 @@ static ODClassType* _TRTrain_type;
     hash = hash * 31 + [self._cars hash];
     hash = hash * 31 + self.speed;
     return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"level=%@", self.level];
-    [description appendFormat:@", trainType=%@", self.trainType];
-    [description appendFormat:@", color=%@", self.color];
-    [description appendFormat:@", speed=%lu", (unsigned long)self.speed];
-    [description appendString:@">"];
-    return description;
 }
 
 @end

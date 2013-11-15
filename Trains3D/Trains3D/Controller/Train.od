@@ -42,6 +42,8 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, _cars 
         calculateCarPositions
     }
 
+    def description = "<Train: $trainType, $color>"
+
     def head = _head
     def set(head : RailPoint) {
         _head = head
