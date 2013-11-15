@@ -724,7 +724,7 @@ static ODClassType* _TRRailroad_type;
         id scActiveRailOpt = [[((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(GEVec2i, p.tile), [p endConnector])])) rails] headOpt];
         if([scActiveRailOpt isEmpty]) return correction;
         if(((TRRail*)([scActiveRailOpt get])).form != p.form) {
-            if(!(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.light point:correction.point]))) return [TRRailPointCorrection railPointCorrectionWithPoint:[switchCheckCorrection.point addX:-0.5] error:switchCheckCorrection.error];
+            if(!(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.aSwitch point:correction.point]))) return [TRRailPointCorrection railPointCorrectionWithPoint:[switchCheckCorrection.point addX:-0.5] error:switchCheckCorrection.error];
         }
         return correction;
     }

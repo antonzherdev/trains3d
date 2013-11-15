@@ -165,7 +165,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Controller 
             val scActiveRailOpt = connectorIndex[(p.tile, p.endConnector)].rails.headOpt
             if(scActiveRailOpt.isEmpty) return correction
             if(scActiveRailOpt.get.form != p.form) {
-                if(!obstacleProcessor(Obstacle(ObstacleType.light, correction.point))) {
+                if(!obstacleProcessor(Obstacle(ObstacleType.switch, correction.point))) {
                     return RailPointCorrection(switchCheckCorrection.point.add(-0.5), switchCheckCorrection.error)
                 }
             }

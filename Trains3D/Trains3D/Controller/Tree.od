@@ -86,17 +86,17 @@ class Tree(treeType : TreeType, position : vec2, size : vec2) extends Comparable
     }
 }
 
-enum ForestType(treeTypes : [TreeType], rustleStrength : float) {
-    Pine([TreeType.Pine], 1)
-    Leaf([TreeType.Leaf, TreeType.WeakLeaf], 1.5)
-    SnowPine([TreeType.SnowPine], 1)
+enum ForestType(treeTypes : [TreeType]) {
+    Pine([TreeType.Pine])
+    Leaf([TreeType.Leaf, TreeType.WeakLeaf])
+    SnowPine([TreeType.SnowPine])
 }
 
-enum TreeType(uv : Rect, scale : float) {
-    Pine(Rect(0, 0, 184.0/512, 1), 1)
-    SnowPine(Rect(0, 0, 184.0/512, 1), 1)
-    Leaf(Rect(0, 0, 197.0/512, 0.5), 1.8)
-    WeakLeaf(Rect(0, 0.5, 115.0/512, 0.5), 0.6)
+enum TreeType(uv : Rect, scale : float, rustleStrength : float) {
+    Pine(Rect(0, 0, 184.0/512, 1), 1, 1)
+    SnowPine(Rect(0, 0, 184.0/512, 1), 1, 1)
+    Leaf(Rect(0, 0, 197.0/512, 0.5), 1.6, 1)
+    WeakLeaf(Rect(0, 0.5, 115.0/512, 0.5), 0.6, 2)
 
     val uvQuad : Quad = uv.upsideDownQuad
     val size : vec2 = vec2(uv.width, 0.5) * scale

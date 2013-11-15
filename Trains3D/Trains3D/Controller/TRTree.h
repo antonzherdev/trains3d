@@ -63,7 +63,6 @@
 
 @interface TRForestType : ODEnum
 @property (nonatomic, readonly) id<CNSeq> treeTypes;
-@property (nonatomic, readonly) CGFloat rustleStrength;
 
 + (TRForestType*)Pine;
 + (TRForestType*)Leaf;
@@ -75,6 +74,7 @@
 @interface TRTreeType : ODEnum
 @property (nonatomic, readonly) GERect uv;
 @property (nonatomic, readonly) CGFloat scale;
+@property (nonatomic, readonly) CGFloat rustleStrength;
 @property (nonatomic, readonly) GEQuad uvQuad;
 @property (nonatomic, readonly) GEVec2 size;
 

@@ -38,7 +38,10 @@ static NSArray* _TRTrainType_values;
         return o.obstacleType == TRObstacleType.light;
     }];
     _TRTrainType_fast = [TRTrainType trainTypeWithOrdinal:2 name:@"fast" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
-        if(o.obstacleType == TRObstacleType.damage || o.obstacleType == TRObstacleType.aSwitch) [level destroyTrain:train];
+        if(o.obstacleType != TRObstacleType.light) {
+            [level.railroad addDamageAtPoint:o.point];
+            [level destroyTrain:train];
+        }
         return NO;
     }];
     _TRTrainType_repairer = [TRTrainType trainTypeWithOrdinal:3 name:@"repairer" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
