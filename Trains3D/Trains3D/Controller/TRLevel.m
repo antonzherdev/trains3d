@@ -623,7 +623,7 @@ static NSArray* _TRLevelTheme_values;
     [super initialize];
     _TRLevelTheme_forest = [TRLevelTheme levelThemeWithOrdinal:0 name:@"forest" background:@"Grass.png" forestRules:[TRForestRules forestRulesWithForestType:TRForestType.Pine thickness:2.0]];
     _TRLevelTheme_winter = [TRLevelTheme levelThemeWithOrdinal:1 name:@"winter" background:@"Snow.png" forestRules:[TRForestRules forestRulesWithForestType:TRForestType.SnowPine thickness:2.0]];
-    _TRLevelTheme_leafForest = [TRLevelTheme levelThemeWithOrdinal:2 name:@"leafForest" background:@"Grass.png" forestRules:[TRForestRules forestRulesWithForestType:TRForestType.Leaf thickness:2.0]];
+    _TRLevelTheme_leafForest = [TRLevelTheme levelThemeWithOrdinal:2 name:@"leafForest" background:@"Grass2.png" forestRules:[TRForestRules forestRulesWithForestType:TRForestType.Leaf thickness:2.0]];
     _TRLevelTheme_values = (@[_TRLevelTheme_forest, _TRLevelTheme_winter, _TRLevelTheme_leafForest]);
 }
 
