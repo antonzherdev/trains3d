@@ -12,10 +12,10 @@ enum TrainType(obstacleProcessor : (Level, Train, Obstacle) -> bool) {
         o.obstacleType ==  ObstacleType.light
     })
     fast((level : Level, train : Train, o : Obstacle) -> {
-        if(o.obstacleType !=  ObstacleType.light) {
+        if(o.obstacleType ==  ObstacleType.switch) {
             level.railroad.addDamageAt(o.point)
             level.destroy(train)
-        }
+        } else if(o.obstacleType ==  ObstacleType.damage) level.destroy(train)
         false
     })
     repairer((level : Level, train : Train, o : Obstacle) -> {
