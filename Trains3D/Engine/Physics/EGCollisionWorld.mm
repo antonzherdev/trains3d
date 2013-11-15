@@ -63,14 +63,18 @@ static ODClassType* _EGCollisionWorld_type;
         if(pManifold->getNumContacts() == 0) return [CNOption none];
         EGCollisionBody *body0 = (__bridge EGCollisionBody *) pManifold->getBody0()->getUserPointer();
         EGCollisionBody *body1 = (__bridge EGCollisionBody *) pManifold->getBody1()->getUserPointer();
-        return [CNSome someWithValue:[EGCollision collisionWithBodies:[CNPair newWithA:body0 b:body1]
-                                contacts:[CNIndexFunSeq indexFunSeqWithCount:(NSUInteger) pManifold->getNumContacts() f:^id(NSUInteger i) {
-                                    btManifoldPoint & p = pManifold->getContactPoint((int)i);
-                                    btVector3 const & a = p.getPositionWorldOnA();
-                                    btVector3 const & b = p.getPositionWorldOnB();
-                                    return [EGContact contactWithA:GEVec3Make(a.x(), a.y(), a.z())
-                                                                 b:GEVec3Make(b.x(), b.y(), b.z())];
-                                }]]];
+        return [CNSome someWithValue:[EGCollision
+                collisionWithBodies:[CNPair newWithA:body0 b:body1]
+                           contacts:[CNIndexFunSeq indexFunSeqWithCount:(NSUInteger) pManifold->getNumContacts() f:^id(NSUInteger i) {
+                               btManifoldPoint & p = pManifold->getContactPoint((int)i);
+                               btVector3 const & a = p.getPositionWorldOnA();
+                               btVector3 const & b = p.getPositionWorldOnB();
+                               return [EGContact contactWithA:GEVec3Make(a.x(), a.y(), a.z())
+                                                            b:GEVec3Make(b.x(), b.y(), b.z())
+                                                     distance:p.getDistance()
+                                                      impulse:p.getAppliedImpulse()
+                                                     lifeTime:(unsigned int) p.getLifeTime()];
+                           }]]];
     }];
 }
 

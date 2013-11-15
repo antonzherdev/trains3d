@@ -13,6 +13,7 @@
 @class EGDynamicWorld;
 @class EGCollisionPlane;
 @class EGRigidBody;
+@class EGDynamicCollision;
 
 @class TRTrainsCollisionWorld;
 @class TRCarsCollision;

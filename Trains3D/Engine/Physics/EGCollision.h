@@ -27,6 +27,7 @@
 + (id)dynamicCollisionWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
 - (id)initWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
 - (ODClassType*)type;
+- (float)impulse;
 + (ODClassType*)type;
 @end
 
@@ -45,9 +46,12 @@
 @interface EGContact : NSObject
 @property (nonatomic, readonly) GEVec3 a;
 @property (nonatomic, readonly) GEVec3 b;
+@property (nonatomic, readonly) float distance;
+@property (nonatomic, readonly) float impulse;
+@property (nonatomic, readonly) unsigned int lifeTime;
 
-+ (id)contactWithA:(GEVec3)a b:(GEVec3)b;
-- (id)initWithA:(GEVec3)a b:(GEVec3)b;
++ (id)contactWithA:(GEVec3)a b:(GEVec3)b distance:(float)distance impulse:(float)impulse lifeTime:(unsigned int)lifeTime;
+- (id)initWithA:(GEVec3)a b:(GEVec3)b distance:(float)distance impulse:(float)impulse lifeTime:(unsigned int)lifeTime;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

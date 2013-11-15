@@ -1,9 +1,11 @@
 package com.antonzherdev.eg
 
 class Collision<T>(bodies : Pair<CollisionBody<T>>, contacts : [Contact])
-class DynamicCollision<T>(bodies : Pair<RigidBody<T>>, contacts : [Contact])
+class DynamicCollision<T>(bodies : Pair<RigidBody<T>>, contacts : [Contact]) {
+    def impulse : float4 = contacts.chain.map(_.impulse).max.get
+}
 class CrossPoint<T>(body : CollisionBody<T>, point : vec3)
-class Contact(a : vec3, b : vec3)
+class Contact(a : vec3, b : vec3, distance : float4, impulse : float4, lifeTime : uint4)
 
 class IndexFunFilteredIterable<T>(maxCount : uint, f : uint -> T?) extends Iterable<T> {
     def iterator : Iterator<T> = IndexFunFilteredIterator<T>(maxCount, f)

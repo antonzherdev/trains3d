@@ -56,13 +56,16 @@ class TrainsDynamicWorld extends Controller {
     def add(train : Train) {
     }
 
+    private var workCounter = 0
     def die(train : Train) {
+        workCounter++
         train.cars.for{car ->
             world.add(car.dynamicBody)
         }
     }
 
     def remove(train : Train) {
+        workCounter--
         train.cars.for{car ->
             world.remove(car.dynamicBody)
         }
@@ -70,9 +73,11 @@ class TrainsDynamicWorld extends Controller {
 
     def updateWith(delta : float) {
         world.updateWith(delta)
-//        log("-----")
-//        world.collisions.for {collision ->
-//            log("Collistion = $(collision.bodies.a.data) and $(collision.bodies.b.data)"  )
-//        }
+        if(workCounter > 0) {
+            log("-----")
+            world.newCollisions.for {collision ->
+                log("Collistion = $(collision.bodies.a.data) and $(collision.bodies.b.data) with impulse $(collision.contacts.head.impulse)"  )
+            }
+        }
     }
 }

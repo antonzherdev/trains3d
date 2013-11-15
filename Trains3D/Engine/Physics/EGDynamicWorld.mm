@@ -110,20 +110,39 @@ static ODClassType* _EGDynamicWorld_type;
 }
 
 - (id <CNIterable>)collisions {
+    return [self collisionsOnlyNew:NO];
+}
+
+- (id <CNIterable>)collisionsOnlyNew:(BOOL)onlyNew {
     return [EGIndexFunFilteredIterable indexFunFilteredIterableWithMaxCount:(NSUInteger) _dispatcher->getNumManifolds() f:^id(NSUInteger i) {
         btPersistentManifold *pManifold = _dispatcher->getManifoldByIndexInternal((int)i);
         if(pManifold->getNumContacts() == 0) return [CNOption none];
         EGRigidBody *body0 = (__bridge EGRigidBody *) pManifold->getBody0()->getUserPointer();
         EGRigidBody *body1 = (__bridge EGRigidBody *) pManifold->getBody1()->getUserPointer();
-        return [CNSome someWithValue:[EGCollision collisionWithBodies:[CNPair newWithA:body0 b:body1]
-                                                             contacts:[CNIndexFunSeq indexFunSeqWithCount:(NSUInteger) pManifold->getNumContacts() f:^id(NSUInteger i) {
-                                                                 btManifoldPoint & p = pManifold->getContactPoint((int)i);
-                                                                 btVector3 const & a = p.getPositionWorldOnA();
-                                                                 btVector3 const & b = p.getPositionWorldOnB();
-                                                                 return [EGContact contactWithA:GEVec3Make(a.x(), a.y(), a.z())
-                                                                                              b:GEVec3Make(b.x(), b.y(), b.z())];
-                                                             }]]];
+        CNArrayBuilder *builder = [CNArrayBuilder arrayBuilder];
+        for(int j = 0; j <  pManifold->getNumContacts(); j ++) {
+            btManifoldPoint & p = pManifold->getContactPoint(j);
+            if(p.getDistance() < 0.f) {
+                if(p.getLifeTime() != 1 && onlyNew) return [CNOption none];
+                btVector3 const & a = p.getPositionWorldOnA();
+                btVector3 const & b = p.getPositionWorldOnB();
+                [builder appendItem: [EGContact
+                        contactWithA:GEVec3Make(a.x(), a.y(), a.z())
+                                   b:GEVec3Make(b.x(), b.y(), b.z())
+                            distance:p.getDistance()
+                             impulse:p.getAppliedImpulse()
+                            lifeTime:(unsigned int) p.getLifeTime()]];
+            }
+        }
+        NSArray *array = [builder build];
+        if([array isEmpty]) return [CNOption none];
+
+        return [CNSome someWithValue:[EGCollision collisionWithBodies:[CNPair newWithA:body0 b:body1] contacts:array]];
     }];
+}
+
+- (id <CNIterable>)newCollisions {
+    return [self collisionsOnlyNew:YES];
 }
 @end
 

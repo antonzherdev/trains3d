@@ -17,8 +17,8 @@
 - (void)addBody:(EGRigidBody*)body;
 - (void)removeBody:(EGRigidBody*)body;
 + (ODClassType*)type;
-
 - (id <CNIterable>)collisions;
+- (id <CNIterable>)newCollisions;
 @end
 
 

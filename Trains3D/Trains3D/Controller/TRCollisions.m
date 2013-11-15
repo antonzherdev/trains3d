@@ -170,6 +170,7 @@ static ODClassType* _TRCarsCollision_type;
 
 @implementation TRTrainsDynamicWorld{
     EGDynamicWorld* _world;
+    NSInteger _workCounter;
 }
 static ODClassType* _TRTrainsDynamicWorld_type;
 
@@ -179,13 +180,16 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 
 - (id)init {
     self = [super init];
-    if(self) _world = ^EGDynamicWorld*() {
-        EGDynamicWorld* w = [EGDynamicWorld dynamicWorldWithGravity:GEVec3Make(0.0, 0.0, -10.0)];
-        EGRigidBody* plane = [EGRigidBody rigidBodyWithData:nil shape:[EGCollisionPlane collisionPlaneWithNormal:GEVec3Make(0.0, 0.0, 1.0) distance:0.0] isKinematic:NO mass:0.0];
-        plane.friction = 0.4;
-        [w addBody:plane];
-        return w;
-    }();
+    if(self) {
+        _world = ^EGDynamicWorld*() {
+            EGDynamicWorld* w = [EGDynamicWorld dynamicWorldWithGravity:GEVec3Make(0.0, 0.0, -10.0)];
+            EGRigidBody* plane = [EGRigidBody rigidBodyWithData:nil shape:[EGCollisionPlane collisionPlaneWithNormal:GEVec3Make(0.0, 0.0, 1.0) distance:0.0] isKinematic:NO mass:0.0];
+            plane.friction = 0.4;
+            [w addBody:plane];
+            return w;
+        }();
+        _workCounter = 0;
+    }
     
     return self;
 }
@@ -199,12 +203,14 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 }
 
 - (void)dieTrain:(TRTrain*)train {
+    _workCounter++;
     [[train cars] forEach:^void(TRCar* car) {
         [_world addBody:[((TRCar*)(car)) dynamicBody]];
     }];
 }
 
 - (void)removeTrain:(TRTrain*)train {
+    _workCounter--;
     [[train cars] forEach:^void(TRCar* car) {
         [_world removeBody:[((TRCar*)(car)) dynamicBody]];
     }];
@@ -212,6 +218,12 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 
 - (void)updateWithDelta:(CGFloat)delta {
     [_world updateWithDelta:delta];
+    if(_workCounter > 0) {
+        [CNLog applyText:@"-----"];
+        [[_world newCollisions] forEach:^void(EGDynamicCollision* collision) {
+            [CNLog applyText:[NSString stringWithFormat:@"Collistion = %@ and %@ with impulse %f", ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).data, ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).data, ((EGContact*)([((EGDynamicCollision*)(collision)).contacts head])).impulse]];
+        }];
+    }
 }
 
 - (ODClassType*)type {

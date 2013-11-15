@@ -135,7 +135,11 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Controller 
     }
 
     private def buildLightIn(tile : vec2i, connector : RailConnector) {
-        connectorIndex.modify(by = _.buildLightIn(connector), forKey = (tile, connector))
+        connectorIndex.modify(by = _ -> {
+            val r = _.buildLightIn(connector)
+            r.cutDownTreesIn(forest)
+            r
+        }, forKey = (tile, connector))
     }
 
 

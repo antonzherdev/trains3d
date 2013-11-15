@@ -27,11 +27,11 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Contr
     }
 
     def cutDownFor(switch : Switch) {
-        cutDown(switch.connector.vec*0.4 + switch.tile, 0.5, 2.5)
+        cutDown(switch.connector.vec*0.4 + switch.tile, 0.5, 2)
     }
 
     def cutDownFor(light : RailLight) {
-        cutDown(light.connector.vec*0.45 + light.tile, 0.5, 2.5)
+        cutDown(light.connector.vec*0.45 + light.tile, 0.3, 2)
     }
 
     private def cutDown(pos : vec2, xLength : float, yLength : float) {

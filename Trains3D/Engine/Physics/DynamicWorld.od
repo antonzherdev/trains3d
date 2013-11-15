@@ -10,6 +10,7 @@ stub class DynamicWorld<T>(gravity : vec3) extends Controller {
         _bodies.remove(body)
     }
     def collisions : Iterable<DynamicCollision<T>>
+    def newCollisions : Iterable<DynamicCollision<T>>
 }
 
 stub class RigidBody<T>(data : T, shape : CollisionShape, isKinematic : bool, mass : float4) {

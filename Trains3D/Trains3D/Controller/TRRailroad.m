@@ -693,7 +693,9 @@ static ODClassType* _TRRailroad_type;
 
 - (void)buildLightInTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
     [_connectorIndex modifyBy:^TRRailroadConnectorContent*(TRRailroadConnectorContent* _) {
-        return [((TRRailroadConnectorContent*)(_)) buildLightInConnector:connector];
+        TRRailroadConnectorContent* r = [((TRRailroadConnectorContent*)(_)) buildLightInConnector:connector];
+        [r cutDownTreesInForest:_forest];
+        return r;
     } forKey:tuple(wrap(GEVec2i, tile), connector)];
 }
 

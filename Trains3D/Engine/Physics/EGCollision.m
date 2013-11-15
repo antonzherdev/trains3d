@@ -92,6 +92,12 @@ static ODClassType* _EGDynamicCollision_type;
     _EGDynamicCollision_type = [ODClassType classTypeWithCls:[EGDynamicCollision class]];
 }
 
+- (float)impulse {
+    return unumf4([[[[_contacts chain] map:^id(EGContact* _) {
+        return numf4(((EGContact*)(_)).impulse);
+    }] max] get]);
+}
+
 - (ODClassType*)type {
     return [EGDynamicCollision type];
 }
@@ -196,20 +202,29 @@ static ODClassType* _EGCrossPoint_type;
 @implementation EGContact{
     GEVec3 _a;
     GEVec3 _b;
+    float _distance;
+    float _impulse;
+    unsigned int _lifeTime;
 }
 static ODClassType* _EGContact_type;
 @synthesize a = _a;
 @synthesize b = _b;
+@synthesize distance = _distance;
+@synthesize impulse = _impulse;
+@synthesize lifeTime = _lifeTime;
 
-+ (id)contactWithA:(GEVec3)a b:(GEVec3)b {
-    return [[EGContact alloc] initWithA:a b:b];
++ (id)contactWithA:(GEVec3)a b:(GEVec3)b distance:(float)distance impulse:(float)impulse lifeTime:(unsigned int)lifeTime {
+    return [[EGContact alloc] initWithA:a b:b distance:distance impulse:impulse lifeTime:lifeTime];
 }
 
-- (id)initWithA:(GEVec3)a b:(GEVec3)b {
+- (id)initWithA:(GEVec3)a b:(GEVec3)b distance:(float)distance impulse:(float)impulse lifeTime:(unsigned int)lifeTime {
     self = [super init];
     if(self) {
         _a = a;
         _b = b;
+        _distance = distance;
+        _impulse = impulse;
+        _lifeTime = lifeTime;
     }
     
     return self;
@@ -236,13 +251,16 @@ static ODClassType* _EGContact_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGContact* o = ((EGContact*)(other));
-    return GEVec3Eq(self.a, o.a) && GEVec3Eq(self.b, o.b);
+    return GEVec3Eq(self.a, o.a) && GEVec3Eq(self.b, o.b) && eqf4(self.distance, o.distance) && eqf4(self.impulse, o.impulse) && self.lifeTime == o.lifeTime;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + GEVec3Hash(self.a);
     hash = hash * 31 + GEVec3Hash(self.b);
+    hash = hash * 31 + float4Hash(self.distance);
+    hash = hash * 31 + float4Hash(self.impulse);
+    hash = hash * 31 + self.lifeTime;
     return hash;
 }
 
@@ -250,6 +268,9 @@ static ODClassType* _EGContact_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"a=%@", GEVec3Description(self.a)];
     [description appendFormat:@", b=%@", GEVec3Description(self.b)];
+    [description appendFormat:@", distance=%f", self.distance];
+    [description appendFormat:@", impulse=%f", self.impulse];
+    [description appendFormat:@", lifeTime=%u", self.lifeTime];
     [description appendString:@">"];
     return description;
 }
