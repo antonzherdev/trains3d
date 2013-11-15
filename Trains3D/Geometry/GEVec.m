@@ -620,6 +620,9 @@ NSString* GERectDescription(GERect self) {
 GERect geRectApplyXYWidthHeight(float x, float y, float width, float height) {
     return GERectMake(GEVec2Make(x, y), GEVec2Make(width, height));
 }
+GERect geRectApplyXYSize(float x, float y, GEVec2 size) {
+    return GERectMake(GEVec2Make(x, y), size);
+}
 float geRectX(GERect self) {
     return self.p0.x;
 }

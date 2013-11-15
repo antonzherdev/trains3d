@@ -281,6 +281,7 @@ static inline NSUInteger GERectHash(GERect self) {
 }
 NSString* GERectDescription(GERect self);
 GERect geRectApplyXYWidthHeight(float x, float y, float width, float height);
+GERect geRectApplyXYSize(float x, float y, GEVec2 size);
 float geRectX(GERect self);
 float geRectY(GERect self);
 float geRectX2(GERect self);

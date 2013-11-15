@@ -149,6 +149,7 @@ struct Quadrant(quads : Quad[4]) {
 
 struct Rect(p0 : vec2, size : vec2) {
     static def apply(x : float4, y : float4, width : float4, height : float4) = Rect(vec2(x, y), vec2(width, height))
+    static def apply(x : float4, y : float4, size : vec2) = Rect(vec2(x, y), size)
 
     def x = p0.x
     def y = p0.y

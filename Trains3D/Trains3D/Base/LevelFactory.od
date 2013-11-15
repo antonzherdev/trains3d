@@ -12,7 +12,7 @@ class LevelFactory {
         repairCost = 1000
         )
 
-    static val forestRules = ForestRules(TreeType.Pine, thickness = 1)
+    static val forestRules = ForestRules(ForestType.Pine, thickness = 1)
     static val weatherRules : WeatherRules = WeatherRules(sunny = 1.0, windStrength = 1,
         blastness = 0.1, blastMinLength = 5, blastMaxLength = 10, blastStrength = 10, nil)
     private static def train(cars : Range, speed : Range) : Level -> void = (level : Level)->
@@ -117,12 +117,28 @@ class LevelFactory {
             (40, train), (5, train), (25, train), (10, train),
             (50, train), (20, train), (10, train), (5, train),
             (60, train), (20, train), (25, train), (20, train), (15, expressTrain),
-            (Level.trainComingPeriod + 3, Loc.helpExpressTrain)
+            (Level.trainComingPeriod + 3, showHelp(Loc.helpExpressTrain))
+        ]),
+        //7
+        LevelRules(vec2i(5, 5), LevelTheme.leafForest, scoreRulesWith(60000),
+        WeatherRules(sunny = 1.0, windStrength = 0.3, blastness = 0.05, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.1, nil),
+        repairerSpeed = 20, [
+            (0, create2Cities), (10, train), (17, expressTrain), (30, train), (15, train),
+            (10, createNewCity), (15, train), (25, train), (25, train),
+            (10, createNewCity), (20, train), (25, train), (25, expressTrain), (20, train), (25, train),
+            (10, createNewCity), (15, train), (22, train), (20, train),
+            (40, expressTrain), (10, train), (15, train),
+            (40, train), (10, train), (15, train), (25, expressTrain),
+            (10, createNewCity), (20, train), (10, train), (25, train),
+            (40, train), (5, train), (15, train), (25, train),
+            (40, train), (5, train), (25, expressTrain), (10, train),
+            (50, train), (20, train), (10, train), (5, train),
+            (60, train), (20, expressTrain), (25, train), (20, expressTrain), (15, train)
         ])
     ]
     static def slowTrain = train(cars = 1.to(4), speed = 25.to(35))
-    static def train = train(cars = 1.to(5), speed = 25.to(50))
-    static def expressTrain = expressTrain(cars = 1.to(4), speed = 75.to(100))
+    static def train = train(cars = 1.to(6), speed = 20.to(50))
+    static def expressTrain = expressTrain(cars = 3.to(6), speed = 75.to(100))
     static def levelWith(number : uint) =
         if(number > rules.count) Level(rules.count, rules[rules.count - 1])
         else Level(number, rules[number - 1])

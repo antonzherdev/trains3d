@@ -230,6 +230,7 @@ class Help(text : string)
 class LevelResult(win : bool)
 
 enum LevelTheme(background : string, forestRules : ForestRules) {
-    forest("Grass.png", ForestRules(TreeType.Pine, thickness = 2))
-    winter("Snow.png", ForestRules(TreeType.SnowPine, thickness = 2))
+    forest("Grass.png", ForestRules(ForestType.Pine, thickness = 2))
+    winter("Snow.png", ForestRules(ForestType.SnowPine, thickness = 2))
+    leafForest("Grass.png", ForestRules(ForestType.Leaf, thickness = 2))
 }

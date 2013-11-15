@@ -5,21 +5,21 @@
 #import "TRRailroad.h"
 #import "TRRailPoint.h"
 @implementation TRForestRules{
-    TRTreeType* _treeType;
+    TRForestType* _forestType;
     CGFloat _thickness;
 }
 static ODClassType* _TRForestRules_type;
-@synthesize treeType = _treeType;
+@synthesize forestType = _forestType;
 @synthesize thickness = _thickness;
 
-+ (id)forestRulesWithTreeType:(TRTreeType*)treeType thickness:(CGFloat)thickness {
-    return [[TRForestRules alloc] initWithTreeType:treeType thickness:thickness];
++ (id)forestRulesWithForestType:(TRForestType*)forestType thickness:(CGFloat)thickness {
+    return [[TRForestRules alloc] initWithForestType:forestType thickness:thickness];
 }
 
-- (id)initWithTreeType:(TRTreeType*)treeType thickness:(CGFloat)thickness {
+- (id)initWithForestType:(TRForestType*)forestType thickness:(CGFloat)thickness {
     self = [super init];
     if(self) {
-        _treeType = treeType;
+        _forestType = forestType;
         _thickness = thickness;
     }
     
@@ -47,19 +47,19 @@ static ODClassType* _TRForestRules_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRForestRules* o = ((TRForestRules*)(other));
-    return self.treeType == o.treeType && eqf(self.thickness, o.thickness);
+    return self.forestType == o.forestType && eqf(self.thickness, o.thickness);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [self.treeType ordinal];
+    hash = hash * 31 + [self.forestType ordinal];
     hash = hash * 31 + floatHash(self.thickness);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"treeType=%@", self.treeType];
+    [description appendFormat:@"forestType=%@", self.forestType];
     [description appendFormat:@", thickness=%f", self.thickness];
     [description appendString:@">"];
     return description;
@@ -93,7 +93,7 @@ static ODClassType* _TRForest_type;
         __trees = [[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count] * 1.1))) chain] map:^TRTree*(id _) {
             GEVec2i tile = uwrap(GEVec2i, [[_weakSelf.map.allTiles randomItem] get]);
             GEVec2 pos = GEVec2Make(((float)(odFloatRndMinMax(-0.5, 0.5))), ((float)(odFloatRndMinMax(-0.5, 0.5))));
-            return [TRTree treeWithPosition:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make(((float)(odFloatRndMinMax(0.9, 1.1))), ((float)(odFloatRndMinMax(0.9, 1.1))))];
+            return [TRTree treeWithTreeType:[[_weakSelf.rules.forestType.treeTypes randomItem] get] position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make(((float)(odFloatRndMinMax(0.9, 1.1))), ((float)(odFloatRndMinMax(0.9, 1.1))))];
         }] toTreeSet];
     }
     
@@ -189,6 +189,7 @@ static ODClassType* _TRForest_type;
 
 
 @implementation TRTree{
+    TRTreeType* _treeType;
     GEVec2 _position;
     GEVec2 _size;
     NSInteger _z;
@@ -199,22 +200,24 @@ static ODClassType* _TRForest_type;
     BOOL __inclineUp;
 }
 static ODClassType* _TRTree_type;
+@synthesize treeType = _treeType;
 @synthesize position = _position;
 @synthesize size = _size;
 @synthesize z = _z;
 @synthesize rigidity = _rigidity;
 @synthesize rustle = _rustle;
 
-+ (id)treeWithPosition:(GEVec2)position size:(GEVec2)size {
-    return [[TRTree alloc] initWithPosition:position size:size];
++ (id)treeWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size {
+    return [[TRTree alloc] initWithTreeType:treeType position:position size:size];
 }
 
-- (id)initWithPosition:(GEVec2)position size:(GEVec2)size {
+- (id)initWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size {
     self = [super init];
     if(self) {
+        _treeType = treeType;
         _position = position;
         _size = size;
-        _z = float4Round((_position.y - _position.x) * 500);
+        _z = float4Round((_position.y - _position.x) * 400);
         _rigidity = odFloatRndMinMax(0.5, 1.5);
         __rustleUp = YES;
         _rustle = 0.0;
@@ -273,11 +276,12 @@ static ODClassType* _TRTree_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRTree* o = ((TRTree*)(other));
-    return GEVec2Eq(self.position, o.position) && GEVec2Eq(self.size, o.size);
+    return self.treeType == o.treeType && GEVec2Eq(self.position, o.position) && GEVec2Eq(self.size, o.size);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
+    hash = hash * 31 + [self.treeType ordinal];
     hash = hash * 31 + GEVec2Hash(self.position);
     hash = hash * 31 + GEVec2Hash(self.size);
     return hash;
@@ -285,7 +289,8 @@ static ODClassType* _TRTree_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"position=%@", GEVec2Description(self.position)];
+    [description appendFormat:@"treeType=%@", self.treeType];
+    [description appendFormat:@", position=%@", GEVec2Description(self.position)];
     [description appendFormat:@", size=%@", GEVec2Description(self.size)];
     [description appendString:@">"];
     return description;
@@ -294,25 +299,26 @@ static ODClassType* _TRTree_type;
 @end
 
 
-@implementation TRTreeType{
-    CGFloat _width;
-    CGFloat _height;
+@implementation TRForestType{
+    id<CNSeq> _treeTypes;
+    CGFloat _rustleStrength;
 }
-static TRTreeType* _TRTreeType_Pine;
-static TRTreeType* _TRTreeType_SnowPine;
-static NSArray* _TRTreeType_values;
-@synthesize width = _width;
-@synthesize height = _height;
+static TRForestType* _TRForestType_Pine;
+static TRForestType* _TRForestType_Leaf;
+static TRForestType* _TRForestType_SnowPine;
+static NSArray* _TRForestType_values;
+@synthesize treeTypes = _treeTypes;
+@synthesize rustleStrength = _rustleStrength;
 
-+ (id)treeTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name width:(CGFloat)width height:(CGFloat)height {
-    return [[TRTreeType alloc] initWithOrdinal:ordinal name:name width:width height:height];
++ (id)forestTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name treeTypes:(id<CNSeq>)treeTypes rustleStrength:(CGFloat)rustleStrength {
+    return [[TRForestType alloc] initWithOrdinal:ordinal name:name treeTypes:treeTypes rustleStrength:rustleStrength];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name width:(CGFloat)width height:(CGFloat)height {
+- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name treeTypes:(id<CNSeq>)treeTypes rustleStrength:(CGFloat)rustleStrength {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
-        _width = width;
-        _height = height;
+        _treeTypes = treeTypes;
+        _rustleStrength = rustleStrength;
     }
     
     return self;
@@ -320,9 +326,70 @@ static NSArray* _TRTreeType_values;
 
 + (void)initialize {
     [super initialize];
-    _TRTreeType_Pine = [TRTreeType treeTypeWithOrdinal:0 name:@"Pine" width:184.0 / 512 height:1.0];
-    _TRTreeType_SnowPine = [TRTreeType treeTypeWithOrdinal:1 name:@"SnowPine" width:184.0 / 512 height:1.0];
-    _TRTreeType_values = (@[_TRTreeType_Pine, _TRTreeType_SnowPine]);
+    _TRForestType_Pine = [TRForestType forestTypeWithOrdinal:0 name:@"Pine" treeTypes:(@[TRTreeType.Pine]) rustleStrength:1.0];
+    _TRForestType_Leaf = [TRForestType forestTypeWithOrdinal:1 name:@"Leaf" treeTypes:(@[TRTreeType.Leaf, TRTreeType.WeakLeaf]) rustleStrength:1.5];
+    _TRForestType_SnowPine = [TRForestType forestTypeWithOrdinal:2 name:@"SnowPine" treeTypes:(@[TRTreeType.SnowPine]) rustleStrength:1.0];
+    _TRForestType_values = (@[_TRForestType_Pine, _TRForestType_Leaf, _TRForestType_SnowPine]);
+}
+
++ (TRForestType*)Pine {
+    return _TRForestType_Pine;
+}
+
++ (TRForestType*)Leaf {
+    return _TRForestType_Leaf;
+}
+
++ (TRForestType*)SnowPine {
+    return _TRForestType_SnowPine;
+}
+
++ (NSArray*)values {
+    return _TRForestType_values;
+}
+
+@end
+
+
+@implementation TRTreeType{
+    GERect _uv;
+    CGFloat _scale;
+    GEQuad _uvQuad;
+    GEVec2 _size;
+}
+static TRTreeType* _TRTreeType_Pine;
+static TRTreeType* _TRTreeType_SnowPine;
+static TRTreeType* _TRTreeType_Leaf;
+static TRTreeType* _TRTreeType_WeakLeaf;
+static NSArray* _TRTreeType_values;
+@synthesize uv = _uv;
+@synthesize scale = _scale;
+@synthesize uvQuad = _uvQuad;
+@synthesize size = _size;
+
++ (id)treeTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name uv:(GERect)uv scale:(CGFloat)scale {
+    return [[TRTreeType alloc] initWithOrdinal:ordinal name:name uv:uv scale:scale];
+}
+
+- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name uv:(GERect)uv scale:(CGFloat)scale {
+    self = [super initWithOrdinal:ordinal name:name];
+    if(self) {
+        _uv = uv;
+        _scale = scale;
+        _uvQuad = geRectUpsideDownQuad(_uv);
+        _size = geVec2MulF(GEVec2Make(geRectWidth(_uv), 0.5), _scale);
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRTreeType_Pine = [TRTreeType treeTypeWithOrdinal:0 name:@"Pine" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(184.0 / 512)), 1.0) scale:1.0];
+    _TRTreeType_SnowPine = [TRTreeType treeTypeWithOrdinal:1 name:@"SnowPine" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(184.0 / 512)), 1.0) scale:1.0];
+    _TRTreeType_Leaf = [TRTreeType treeTypeWithOrdinal:2 name:@"Leaf" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(197.0 / 512)), 0.5) scale:1.8];
+    _TRTreeType_WeakLeaf = [TRTreeType treeTypeWithOrdinal:3 name:@"WeakLeaf" uv:geRectApplyXYWidthHeight(0.0, 0.5, ((float)(115.0 / 512)), 0.5) scale:0.6];
+    _TRTreeType_values = (@[_TRTreeType_Pine, _TRTreeType_SnowPine, _TRTreeType_Leaf, _TRTreeType_WeakLeaf]);
 }
 
 + (TRTreeType*)Pine {
@@ -331,6 +398,14 @@ static NSArray* _TRTreeType_values;
 
 + (TRTreeType*)SnowPine {
     return _TRTreeType_SnowPine;
+}
+
++ (TRTreeType*)Leaf {
+    return _TRTreeType_Leaf;
+}
+
++ (TRTreeType*)WeakLeaf {
+    return _TRTreeType_WeakLeaf;
 }
 
 + (NSArray*)values {

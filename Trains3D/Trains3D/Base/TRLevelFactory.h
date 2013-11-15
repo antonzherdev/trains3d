@@ -2,7 +2,7 @@
 #import "GEVec.h"
 @class TRScoreRules;
 @class TRForestRules;
-@class TRTreeType;
+@class TRForestType;
 @class TRWeatherRules;
 @class TRLevelTheme;
 @class TRStr;

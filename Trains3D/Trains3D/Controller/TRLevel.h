@@ -28,7 +28,7 @@
 @class TRCityColor;
 @class TRCarType;
 @class TRForestRules;
-@class TRTreeType;
+@class TRForestType;
 
 @class TRLevelRules;
 @class TRLevel;
@@ -128,6 +128,7 @@
 
 + (TRLevelTheme*)forest;
 + (TRLevelTheme*)winter;
++ (TRLevelTheme*)leafForest;
 + (NSArray*)values;
 @end
 

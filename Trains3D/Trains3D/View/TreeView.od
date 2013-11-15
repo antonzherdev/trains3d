@@ -3,7 +3,7 @@ package com.antonzherdev.trains
 
 class TreeView(forest : Forest) {
 //    val textures = [textureFor("Pine.png"), textureFor("Tree1.png"), textureFor("Tree2.png"), textureFor("Tree3.png"), textureFor("YellowTree.png")]
-    val texture = textureFor("$(forest.rules.treeType.name).png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
+    val texture = textureFor("$(forest.rules.forestType.name).png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
     val material = ColorSource(vec4(1, 1, 1, 1), texture)
 //    val materials = textures.chain.map(ColorSource(vec4(1, 1, 1, 1), _, 0.3)).toArray
 //    val rects = textures.chain.map(Rect(0, 0, _.size.x/(_.size.y*4), _.size.y/(_.size.y*2)).centerX).toArray
@@ -40,20 +40,21 @@ class TreeView(forest : Forest) {
         }
     }
 
-    private val uvw = forest.rules.treeType.width
+    private val rustleK = 0.1 * forest.rules.forestType.rustleStrength
     private def write(a :VoidRefArray, tree : Tree) : VoidRefArray = {
-        val mainUv = Rect(0, 0, uvw, 1).upsideDownQuad
-        val rustleUv = mainUv + vec2(uvw, 0)
+        val tp = tree.treeType
+        val mainUv = tp.uvQuad
+        val rustleUv = mainUv + vec2(tp.uv.width, 0)
 
         val planeCoord = PlaneCoord(Plane(vec3(0, 0, 0), vec3(0, 0, 1)), vec3(1, 0, 0), vec3(0, 1, 0))
         val mPlaneCoord = planeCoord.set(y = (planeCoord.y + vec3(tree.incline.x, 0, tree.incline.y)).normalize)
-        val quad = (Rect(0, 0, texture.size.x/(texture.size.y*4), 0.5).centerX*tree.size).quad
+        val quad = (Rect(0, 0, tp.size).centerX*tree.size).quad
         val quad3 = Quad3(mPlaneCoord, quad)
         val mQuad = Quad(quad3.p0.xy, quad3.p1.xy, quad3.p2.xy, quad3.p3.xy)
         var aa = a
         aa = D2D.writeSprite(aa, material, at = vec3(tree.position, 0), mQuad, uv = mainUv)
 
-        val r = tree.rustle*0.1
+        val r = tree.rustle*rustleK
         val rPlaneCoord = mPlaneCoord.set(x = mPlaneCoord.x + vec3(0, r, 0))
         val rQuad3 = Quad3(rPlaneCoord, quad)
         aa = D2D.writeSprite(aa, material, at = vec3(tree.position + vec2(0.001, -0.001), 0),

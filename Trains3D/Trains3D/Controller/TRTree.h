@@ -11,14 +11,15 @@
 @class TRForestRules;
 @class TRForest;
 @class TRTree;
+@class TRForestType;
 @class TRTreeType;
 
 @interface TRForestRules : NSObject
-@property (nonatomic, readonly) TRTreeType* treeType;
+@property (nonatomic, readonly) TRForestType* forestType;
 @property (nonatomic, readonly) CGFloat thickness;
 
-+ (id)forestRulesWithTreeType:(TRTreeType*)treeType thickness:(CGFloat)thickness;
-- (id)initWithTreeType:(TRTreeType*)treeType thickness:(CGFloat)thickness;
++ (id)forestRulesWithForestType:(TRForestType*)forestType thickness:(CGFloat)thickness;
+- (id)initWithForestType:(TRForestType*)forestType thickness:(CGFloat)thickness;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -43,14 +44,15 @@
 
 
 @interface TRTree : NSObject<ODComparable>
+@property (nonatomic, readonly) TRTreeType* treeType;
 @property (nonatomic, readonly) GEVec2 position;
 @property (nonatomic, readonly) GEVec2 size;
 @property (nonatomic, readonly) NSInteger z;
 @property (nonatomic, readonly) CGFloat rigidity;
 @property (nonatomic) CGFloat rustle;
 
-+ (id)treeWithPosition:(GEVec2)position size:(GEVec2)size;
-- (id)initWithPosition:(GEVec2)position size:(GEVec2)size;
++ (id)treeWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size;
+- (id)initWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size;
 - (ODClassType*)type;
 - (NSInteger)compareTo:(TRTree*)to;
 - (GEVec2)incline;
@@ -59,12 +61,27 @@
 @end
 
 
+@interface TRForestType : ODEnum
+@property (nonatomic, readonly) id<CNSeq> treeTypes;
+@property (nonatomic, readonly) CGFloat rustleStrength;
+
++ (TRForestType*)Pine;
++ (TRForestType*)Leaf;
++ (TRForestType*)SnowPine;
++ (NSArray*)values;
+@end
+
+
 @interface TRTreeType : ODEnum
-@property (nonatomic, readonly) CGFloat width;
-@property (nonatomic, readonly) CGFloat height;
+@property (nonatomic, readonly) GERect uv;
+@property (nonatomic, readonly) CGFloat scale;
+@property (nonatomic, readonly) GEQuad uvQuad;
+@property (nonatomic, readonly) GEVec2 size;
 
 + (TRTreeType*)Pine;
 + (TRTreeType*)SnowPine;
++ (TRTreeType*)Leaf;
++ (TRTreeType*)WeakLeaf;
 + (NSArray*)values;
 @end
 
