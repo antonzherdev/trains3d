@@ -122,11 +122,11 @@ static ODClassType* _TRForest_type;
 }
 
 - (void)cutDownForASwitch:(TRSwitch*)aSwitch {
-    [self cutDownPos:geVec2AddVec2(geVec2iMulF([aSwitch.connector vec], 0.4), geVec2ApplyVec2i(aSwitch.tile)) xLength:0.5 yLength:2.0];
+    [self cutDownPos:geVec2AddVec2(geVec2iMulF([aSwitch.connector vec], 0.4), geVec2ApplyVec2i(aSwitch.tile)) xLength:0.5 yLength:2.5];
 }
 
 - (void)cutDownForLight:(TRRailLight*)light {
-    [self cutDownPos:geVec2AddVec2(geVec2iMulF([light.connector vec], 0.45), geVec2ApplyVec2i(light.tile)) xLength:0.3 yLength:2.0];
+    [self cutDownPos:geVec2AddVec2(geVec2iMulF([light.connector vec], 0.45), geVec2ApplyVec2i(light.tile)) xLength:0.3 yLength:2.5];
 }
 
 - (void)cutDownPos:(GEVec2)pos xLength:(CGFloat)xLength yLength:(CGFloat)yLength {

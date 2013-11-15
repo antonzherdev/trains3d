@@ -94,3 +94,29 @@ class NotificationSoundPlayer<T>(sound : Sound, notificationHandle : Notificatio
         if(wasPlaying) sound.play
     }
 }
+
+class SoundParallel(limit : int, create : void -> Sound) {
+    private val sounds  = MutableArray<Sound>()
+
+    def play {
+        sound.for(_.play)
+    }
+
+    def playWith(volume : float4) {
+        sound.for{s ->
+            s.volume = volume
+            s.play
+        }
+    }
+
+    def sound : Sound? = {
+        val s = sounds.find(!_.isPlaying)
+        if(s.isDefined) s
+        else if(sounds.count >= limit) nil
+        else {
+            val newSound = create()
+            sounds.append(newSound)
+            newSound
+        }
+    }
+}

@@ -362,3 +362,98 @@ static ODClassType* _EGNotificationSoundPlayer_type;
 @end
 
 
+@implementation EGSoundParallel{
+    NSInteger _limit;
+    SDSound*(^_create)();
+    NSMutableArray* _sounds;
+}
+static ODClassType* _EGSoundParallel_type;
+@synthesize limit = _limit;
+@synthesize create = _create;
+
++ (id)soundParallelWithLimit:(NSInteger)limit create:(SDSound*(^)())create {
+    return [[EGSoundParallel alloc] initWithLimit:limit create:create];
+}
+
+- (id)initWithLimit:(NSInteger)limit create:(SDSound*(^)())create {
+    self = [super init];
+    if(self) {
+        _limit = limit;
+        _create = create;
+        _sounds = [NSMutableArray mutableArray];
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGSoundParallel_type = [ODClassType classTypeWithCls:[EGSoundParallel class]];
+}
+
+- (void)play {
+    [[self sound] forEach:^void(SDSound* _) {
+        [((SDSound*)(_)) play];
+    }];
+}
+
+- (void)playWithVolume:(float)volume {
+    [[self sound] forEach:^void(SDSound* s) {
+        ((SDSound*)(s)).volume = volume;
+        [((SDSound*)(s)) play];
+    }];
+}
+
+- (id)sound {
+    id s = [_sounds findWhere:^BOOL(SDSound* _) {
+        return !([((SDSound*)(_)) isPlaying]);
+    }];
+    if([s isDefined]) {
+        return s;
+    } else {
+        if([_sounds count] >= _limit) {
+            return [CNOption none];
+        } else {
+            SDSound* newSound = ((SDSound*(^)())(_create))();
+            [_sounds appendItem:newSound];
+            return [CNOption applyValue:newSound];
+        }
+    }
+}
+
+- (ODClassType*)type {
+    return [EGSoundParallel type];
+}
+
++ (ODClassType*)type {
+    return _EGSoundParallel_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGSoundParallel* o = ((EGSoundParallel*)(other));
+    return self.limit == o.limit && [self.create isEqual:o.create];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.limit;
+    hash = hash * 31 + [self.create hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"limit=%ld", (long)self.limit];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+

@@ -6,6 +6,7 @@
 @class EGSoundPlayersCollection;
 @class EGSporadicSoundPlayer;
 @class EGNotificationSoundPlayer;
+@class EGSoundParallel;
 @protocol EGSoundPlayer;
 
 @protocol EGSoundPlayer<EGController>
@@ -75,6 +76,20 @@
 - (void)stop;
 - (void)pause;
 - (void)resume;
++ (ODClassType*)type;
+@end
+
+
+@interface EGSoundParallel : NSObject
+@property (nonatomic, readonly) NSInteger limit;
+@property (nonatomic, readonly) SDSound*(^create)();
+
++ (id)soundParallelWithLimit:(NSInteger)limit create:(SDSound*(^)())create;
+- (id)initWithLimit:(NSInteger)limit create:(SDSound*(^)())create;
+- (ODClassType*)type;
+- (void)play;
+- (void)playWithVolume:(float)volume;
+- (id)sound;
 + (ODClassType*)type;
 @end
 
