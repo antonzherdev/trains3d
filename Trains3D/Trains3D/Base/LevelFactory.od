@@ -18,7 +18,7 @@ class LevelFactory {
     private static def train(cars : Range, speed : Range) : Level -> void = (level : Level)->
         level.runTrainWith(TrainGenerator(TrainType.simple, cars, speed, [CarType.car, CarType.engine]))
     private static def expressTrain(cars : Range, speed : Range) : Level -> void = (level : Level)->
-        level.runTrainWith(TrainGenerator(TrainType.simple, cars, speed, [CarType.expressCar, CarType.expressEngine]))
+        level.runTrainWith(TrainGenerator(TrainType.fast, cars, speed, [CarType.expressCar, CarType.expressEngine]))
     private static def showHelp(text : string) : Level -> void = (level : Level) -> level.showHelp(text)
     private static def createNewCity : Level -> void = (level : Level) -> level.createNewCity
     private static def create2Cities : Level -> void = (level : Level) -> {
@@ -116,7 +116,8 @@ class LevelFactory {
             (40, train), (5, train), (15, train), (25, train),
             (40, train), (5, train), (25, train), (10, train),
             (50, train), (20, train), (10, train), (5, train),
-            (60, train), (20, train), (25, train), (20, train), (15, expressTrain)
+            (60, train), (20, train), (25, train), (20, train), (15, expressTrain),
+            (Level.trainComingPeriod + 3, Loc.helpExpressTrain)
         ])
     ]
     static def slowTrain = train(cars = 1.to(4), speed = 25.to(35))

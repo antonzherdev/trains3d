@@ -147,6 +147,13 @@ static ODClassType* _TREnStrings_type;
         "so train arrive at %@ city.", ((egPlatform().touch) ? @" tap" : @" click"), to];
 }
 
+- (NSString*)helpExpressTrain {
+    return @"It's very fast express train.\n"
+        "It doesn't have time to stop in front of a switch.\n"
+        "In this case the train will be destroyed.\n"
+        "But you can use lights to conduct the train.";
+}
+
 - (NSString*)formatCost:(NSInteger)cost {
     return [NSString stringWithFormat:@"%ld", (long)cost];
 }
@@ -328,6 +335,13 @@ static ODClassType* _TRRuStrings_type;
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to {
     return [NSString stringWithFormat:@"Переключите железнодорожные стрелки%@,\n"
         "чтобы этот поезд попал в %@ город.", ((egPlatform().touch) ? @" касанием" : @" кликом"), to];
+}
+
+- (NSString*)helpExpressTrain {
+    return @"Это очень быстрый экспресс.\n"
+        "Он не успеет остановиться перед стрелкой.\n"
+        "Если заблокировать его стрелкой, то он уничтожится.\n"
+        "Но можно использовать светофоры.";
 }
 
 - (NSString*)formatCost:(NSInteger)cost {

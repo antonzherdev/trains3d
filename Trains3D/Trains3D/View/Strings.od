@@ -35,6 +35,7 @@ trait Strings {
 
     def helpConnectTwoCities : string
     def helpNewCity : string
+    def helpExpressTrain : string
     def helpTrain(to : string) : string
     def helpTrainWithSwitches(to : string) : string
 }
@@ -85,6 +86,11 @@ class EnStrings extends Strings {
     def helpTrainWithSwitches(to : string) : string =
         "Turn railroad switches by$if(egPlatform.touch) tap$else click$endif,
          so train arrive at $to city."
+    def helpExpressTrain : string =
+        "It's very fast express train.
+         It doesn't have time to stop in front of a switch.
+         In this case the train will be destroyed.
+         But you can use lights to conduct the train."
 }
 
 class RuStrings extends Strings{
@@ -133,6 +139,11 @@ class RuStrings extends Strings{
     def helpTrainWithSwitches(to : string) : string =
         "Переключите железнодорожные стрелки$if(egPlatform.touch) касанием$else кликом$endif,
          чтобы этот поезд попал в $to город."
+    def helpExpressTrain : string =
+        "Это очень быстрый экспресс.
+         Он не успеет остановиться перед стрелкой.
+         Если заблокировать его стрелкой, то он уничтожится.
+         Но можно использовать светофоры."
 }
 
 object Str {

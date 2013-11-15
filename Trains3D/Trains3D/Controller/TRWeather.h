@@ -22,6 +22,7 @@ typedef struct TRBlast TRBlast;
 - (id)initWithSunny:(CGFloat)sunny windStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(id)precipitation;
 - (ODClassType*)type;
 - (BOOL)isRain;
+- (BOOL)isSnow;
 + (ODClassType*)type;
 @end
 

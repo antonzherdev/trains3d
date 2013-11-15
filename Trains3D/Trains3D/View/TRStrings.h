@@ -38,6 +38,7 @@
 - (NSString*)colorGrey;
 - (NSString*)helpConnectTwoCities;
 - (NSString*)helpNewCity;
+- (NSString*)helpExpressTrain;
 - (NSString*)helpTrainTo:(NSString*)to;
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
 @end
@@ -77,6 +78,7 @@
 - (NSString*)helpNewCity;
 - (NSString*)helpTrainTo:(NSString*)to;
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
+- (NSString*)helpExpressTrain;
 + (ODClassType*)type;
 @end
 
@@ -115,6 +117,7 @@
 - (NSString*)helpNewCity;
 - (NSString*)helpTrainTo:(NSString*)to;
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
+- (NSString*)helpExpressTrain;
 + (ODClassType*)type;
 @end
 

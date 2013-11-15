@@ -11,6 +11,7 @@ class WeatherRules(
     precipitation : Precipitation?
 ) {
     def isRain : bool = precipitation.isDefined && precipitation.get.tp == PrecipitationType.rain
+    def isSnow : bool = precipitation.isDefined && precipitation.get.tp == PrecipitationType.snow
 }
 
 class Precipitation(tp : PrecipitationType, strength : float)
