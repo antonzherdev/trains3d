@@ -165,6 +165,8 @@ static ODClassType* _TRSnowParticleSystem_type;
     TRWeather* _weather;
     GEVec2 _position;
     CGFloat _size;
+    GEVec2 _windVar;
+    GEVec2 _urge;
     GEQuad _uv;
 }
 static GEQuadrant _TRSnowParticle_textureQuadrant;
@@ -180,7 +182,9 @@ static ODClassType* _TRSnowParticle_type;
     if(self) {
         _weather = weather;
         _position = geVec2MulI(geVec2Rnd(), 2);
-        _size = odFloatRndMinMax(0.002, 0.01);
+        _size = odFloatRndMinMax(0.004, 0.01);
+        _windVar = GEVec2Make(((float)(odFloatRndMinMax(0.8, 1.2))), ((float)(odFloatRndMinMax(0.8, 1.2))));
+        _urge = GEVec2Make(((float)(odFloatRndMinMax(-0.03, 0.03))), ((float)(odFloatRndMinMax(-0.02, 0.02))));
         _uv = geQuadrantRndQuad(_TRSnowParticle_textureQuadrant);
     }
     
@@ -199,12 +203,14 @@ static ODClassType* _TRSnowParticle_type;
 
 - (GEVec2)vec {
     GEVec2 w = [_weather wind];
-    return GEVec2Make((w.x + w.y) * 0.1, -float4Abs(w.y - w.x) * 0.3 - 0.05);
+    return geVec2AddVec2(geVec2MulVec2(GEVec2Make((w.x + w.y) * 0.3, -float4Abs(w.y - w.x) * 0.3 - 0.05), _windVar), _urge);
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
     _position = geVec2AddVec2(_position, geVec2MulF([self vec], delta));
     if(_position.y < -1.0) _position = GEVec2Make(((float)(odFloatRnd() * 2 - 1)), ((float)(odFloatRndMinMax(1.5, 1.1))));
+    if(_position.x > 1.0) _position = GEVec2Make(-1.0, _position.y);
+    if(_position.x < -1.0) _position = GEVec2Make(1.0, _position.y);
 }
 
 - (ODClassType*)type {

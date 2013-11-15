@@ -200,6 +200,8 @@ static ODClassType* _TRRainParticle_type;
 - (void)updateWithDelta:(CGFloat)delta {
     _position = geVec2AddVec2(_position, geVec2MulI(geVec2MulF([self vec], delta), 10));
     if(_position.y < -1.0) _position = GEVec2Make(((float)(odFloatRnd() * 2 - 1)), ((float)(odFloatRndMinMax(1.5, 1.1))));
+    if(_position.x > 1.0) _position = GEVec2Make(-1.0, _position.y);
+    if(_position.x < -1.0) _position = GEVec2Make(1.0, _position.y);
 }
 
 - (ODClassType*)type {

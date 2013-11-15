@@ -37,6 +37,8 @@ class RainParticle(weather : Weather) extends Particle {
             position = vec2(Float.rnd*2 - 1, Float.rnd(1.5, 1.1))
 //            log("$position")
         }
+        if(position.x > 1.0) position = vec2(-1.0, position.y)
+        if(position.x < -1.0) position = vec2(1.0, position.y)
     }
 }
 
