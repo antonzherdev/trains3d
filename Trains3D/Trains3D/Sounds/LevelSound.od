@@ -4,6 +4,7 @@ package com.antonzherdev.trains
 class LevelSound(level : Level) extends SoundPlayersCollection([
     TreeSound(level),
     TrainSound(level),
+    NotificationSoundPlayer(Sound("CrashBack.wav", 0.7), Level.crashNotification),
     CollisionSound("Crash1", TrainsDynamicWorld.carsCollisionNotification, 0.5, 1.0),
     CollisionSound("GroundCrash1", TrainsDynamicWorld.carAndGroundCollisionNotification, 0.2, 0.5),
     NotificationSoundPlayer(Sound("TrainPreparing.wav", 0.2), Level.expectedTrainNotification),

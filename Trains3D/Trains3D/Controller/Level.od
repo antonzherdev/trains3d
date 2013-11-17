@@ -161,7 +161,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     def processCollisions {
         detectCollisions.for(collision -> {
             crashNotification.post
-            collision.cars.for(destroy(_.train))
+            collision.cars.for(doDestroy(_.train))
             railroad.addDamageAt(collision.railPoint)
         })
     }
@@ -169,6 +169,13 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     def detectCollisions = collisionWorld.detect
 
     def destroy(train : Train) {
+        if(_trains.contains(train)) {
+            crashNotification.post
+            doDestroy(train)
+        }
+    }
+
+    private def doDestroy(train : Train) {
         if(_trains.contains(train)) {
             score.destroyed(train)
             train.isDying = true

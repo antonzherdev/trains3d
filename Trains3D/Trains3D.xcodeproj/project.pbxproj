@@ -60,6 +60,7 @@
 		6F3DF0A2F2A9A03D61F51E6D /* TRTrainSound.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF204632298A298CD37A3 /* TRTrainSound.m */; };
 		6F3DF0A43D19793483AB3877 /* func_matrix.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFC4637A9A62409EAEF35 /* func_matrix.inl */; };
 		6F3DF0AA6E2838E93A20F759 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFBA18831A0CC868D0042 /* CMakeLists.txt */; };
+		6F3DF0AC115E7D036EFD313A /* CrashBack.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF051957CCF356028DFA7 /* CrashBack.wav */; };
 		6F3DF0AE8A6741509CC9CB43 /* CNPrependLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4C696CBA550F82C3489 /* CNPrependLink.m */; };
 		6F3DF0B4CEC1D3BF05DD6F6B /* btTriangleMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF79FE213C9FFE8FFC53F /* btTriangleMeshShape.cpp */; };
 		6F3DF0C20A875DEA9BBD7D1E /* btAxisSweep3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC2349E253F04434E70A /* btAxisSweep3.cpp */; };
@@ -618,6 +619,7 @@
 		6F3DF8B667CAF32427A98B10 /* CNSourceLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF71A717A6FD3CAA174BA /* CNSourceLink.m */; };
 		6F3DF8BC36F94738BFC1A209 /* Smoke.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF776EA78287C3A55E403 /* Smoke.png */; };
 		6F3DF8BCFC3F6053F643250B /* btConvexPointCloudShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2C0E1DABF4C3773EBE3 /* btConvexPointCloudShape.cpp */; };
+		6F3DF8BD09234F126EE922A4 /* CrashBack.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF051957CCF356028DFA7 /* CrashBack.wav */; };
 		6F3DF8C1DADD5AF81B504C0C /* type_mat2x2.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFED12F6B44D3D971ABF7 /* type_mat2x2.inl */; };
 		6F3DF8C589D98D5146BC0FCF /* TRLevelSound.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9B90D4ED6C36397AD8F /* TRLevelSound.m */; };
 		6F3DF8C6C4F49A65458D4A9F /* TRRainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF5E1F6D89FF59909CC3E /* TRRainView.m */; };
@@ -1205,6 +1207,7 @@
 		6F3DF047B74731D2FF64D9B8 /* TR3DRailTurn.jas */ = {isa = PBXFileReference; lastKnownFileType = file.jas; path = TR3DRailTurn.jas; sourceTree = "<group>"; };
 		6F3DF047BA6008E8473EAD30 /* ODObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ODObject.m; sourceTree = "<group>"; };
 		6F3DF050FAF0DAC7AE7C7141 /* KWGenericMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWGenericMatcher.h; sourceTree = "<group>"; };
+		6F3DF051957CCF356028DFA7 /* CrashBack.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = CrashBack.wav; sourceTree = "<group>"; };
 		6F3DF05456B15D3A2919FAA7 /* Pine.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pine.png; sourceTree = "<group>"; };
 		6F3DF05612621A3BF235D2F1 /* KWExampleSuite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWExampleSuite.m; sourceTree = "<group>"; };
 		6F3DF05F17501F02334554FF /* btOptimizedBvh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btOptimizedBvh.cpp; sourceTree = "<group>"; };
@@ -4084,6 +4087,7 @@
 				6F3DFBF3A04F849928969536 /* Rain.mp3 */,
 				6F3DFAD56817A97870213C60 /* Crash1.wav */,
 				6F3DFBAD91659209AE0E0D4E /* GroundCrash1.wav */,
+				6F3DF051957CCF356028DFA7 /* CrashBack.wav */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -4713,6 +4717,7 @@
 				6F3DFF974F7EC685D31F6FF9 /* Grass2.png in Resources */,
 				6F3DF66723E18BECC9ABFC97 /* Crash1.wav in Resources */,
 				6F3DF20AEA3EB17F182ABE2D /* GroundCrash1.wav in Resources */,
+				6F3DF8BD09234F126EE922A4 /* CrashBack.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4840,6 +4845,7 @@
 				6F3DFBEF93233E6F280A5853 /* Grass2.png in Resources */,
 				6F3DF9F2E48BCB08A081FA3E /* Crash1.wav in Resources */,
 				6F3DFC6C43C65C667B78927B /* GroundCrash1.wav in Resources */,
+				6F3DF0AC115E7D036EFD313A /* CrashBack.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

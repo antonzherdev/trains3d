@@ -340,7 +340,7 @@ static ODClassType* _TRLevel_type;
     [[self detectCollisions] forEach:^void(TRCarsCollision* collision) {
         [_TRLevel_crashNotification post];
         [((TRCarsCollision*)(collision)).cars forEach:^void(TRCar* _) {
-            [self destroyTrain:((TRCar*)(_)).train];
+            [self doDestroyTrain:((TRCar*)(_)).train];
         }];
         [_railroad addDamageAtPoint:((TRCarsCollision*)(collision)).railPoint];
     }];
@@ -351,6 +351,13 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)destroyTrain:(TRTrain*)train {
+    if([__trains containsItem:train]) {
+        [_TRLevel_crashNotification post];
+        [self doDestroyTrain:train];
+    }
+}
+
+- (void)doDestroyTrain:(TRTrain*)train {
     if([__trains containsItem:train]) {
         [_score destroyedTrain:train];
         train.isDying = YES;

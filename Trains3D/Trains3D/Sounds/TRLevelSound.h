@@ -2,9 +2,9 @@
 #import "EGSound.h"
 @class TRTreeSound;
 @class TRTrainSound;
-@class TRTrainsDynamicWorld;
 @class SDSound;
 @class TRLevel;
+@class TRTrainsDynamicWorld;
 @class TRRailroadBuilder;
 @class TRSwitch;
 @class TRRailLight;
