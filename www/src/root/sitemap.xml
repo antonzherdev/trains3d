@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+    <url>
+        <loc>http://www.raildale.com/</loc>
+        <lastmod>2013-11-17</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>1.0</priority>
+
+        <image:image>
+            <image:loc>http://raildale.com/img/scr0.jpg</image:loc>
+            <image:title>Raildale game screenshot. Build your railway between cities</image:title>
+        </image:image>
+
+        <image:image>
+            <image:loc>http://raildale.com/img/scr1.jpg</image:loc>
+            <image:title>Raildale game screenshot. Send trains to corresponding cities using lightnings and switches</image:title>
+        </image:image>
+
+        <image:image>
+            <image:loc>http://raildale.com/img/scr2.jpg</image:loc>
+            <image:title>Raildale game screenshot. Prevent train crashes and fix railway damages</image:title>
+        </image:image>
+    </url>
+</urlset>

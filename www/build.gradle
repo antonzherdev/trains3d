@@ -10,7 +10,7 @@ buildscript {
 
 defaultTasks 'clean', 'build'
 
-task build(dependsOn:['img', 'favIcon', 'html', 'js', 'lesscss'])
+task build(dependsOn:['img', 'favIcon', 'html', 'js', 'lesscss', 'root'])
 
 task clean(type: Delete) {
   delete 'target'
