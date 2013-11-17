@@ -22,5 +22,10 @@
             <image:loc>http://raildale.com/img/scr2.jpg</image:loc>
             <image:title>Raildale game screenshot. Prevent train crashes and fix railway damages</image:title>
         </image:image>
+
+        <image:image>
+            <image:loc>http://raildale.com/img/scr3.jpg</image:loc>
+            <image:title>Raildale game screenshot. Different locations and weather</image:title>
+        </image:image>
     </url>
 </urlset>
