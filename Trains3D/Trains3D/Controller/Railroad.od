@@ -340,7 +340,7 @@ class RailroadBuilder(weak railroad : Railroad) extends Controller {
         _buildingRails.for{b ->
             var p = b.progress
             val less = p < 0.5
-            p += delta/2
+            p += delta/4
             if(less && p > 0.5) changed
             hasEnd = (hasEnd || p >= 1.0)
             b.progress = p

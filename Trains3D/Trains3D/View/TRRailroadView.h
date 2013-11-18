@@ -58,6 +58,7 @@
 - (ODClassType*)type;
 - (void)_init;
 - (void)drawBackground;
+- (void)drawLightGlows;
 - (void)drawForeground;
 - (void)prepare;
 - (void)reshape;

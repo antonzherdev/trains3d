@@ -98,14 +98,19 @@ static ODClassType* _TRRailroadView_type;
     egPopGroupMarker();
 }
 
+- (void)drawLightGlows {
+    [EGBlendFunction.standard applyDraw:^void() {
+        [[_railroad damagesPoints] forEach:^void(TRRailPoint* _) {
+            [_damageView drawPoint:_];
+        }];
+        [_lightView drawGlows];
+    }];
+}
+
 - (void)drawForeground {
     egPushGroupMarker(@"Railroad foreground");
     [EGBlendFunction.standard applyDraw:^void() {
         [_undoView draw];
-        [_lightView drawGlows];
-        [[_railroad damagesPoints] forEach:^void(TRRailPoint* _) {
-            [_damageView drawPoint:_];
-        }];
     }];
     egPopGroupMarker();
 }

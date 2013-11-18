@@ -43,12 +43,13 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
         railroadView.drawBackground
         cityView.draw
         trainView.draw
-        if(!context.renderTarget.isShadow) railroadView.drawForeground
+        if(!context.renderTarget.isShadow) railroadView.drawLightGlows
         treeView.draw
 
         if(!context.renderTarget.isShadow) {
             trainView.drawSmoke
             cityView.drawExpected
+            railroadView.drawForeground
             callRepairerView.draw
             precipitationView.for(_.draw)
         }

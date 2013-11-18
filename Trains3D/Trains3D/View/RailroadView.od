@@ -48,12 +48,17 @@ class RailroadView(level : Level) extends InputProcessor {
         egPopGroupMarker
     }
 
+    def drawLightGlows {
+        BlendFunction.standard{
+            railroad.damagesPoints.for(damageView.draw(_))
+            lightView.drawGlows
+        }
+    }
+
     def drawForeground {
         egPushGroupMarker("Railroad foreground")
         BlendFunction.standard{
             undoView.draw
-            lightView.drawGlows
-            railroad.damagesPoints.for(damageView.draw(_))
         }
         egPopGroupMarker
     }

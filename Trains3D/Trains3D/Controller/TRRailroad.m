@@ -1040,7 +1040,7 @@ static ODClassType* _TRRailroadBuilder_type;
     [__buildingRails forEach:^void(TRRailBuilding* b) {
         CGFloat p = ((TRRailBuilding*)(b)).progress;
         BOOL less = p < 0.5;
-        p += delta / 2;
+        p += delta / 4;
         if(less && p > 0.5) [self changed];
         hasEnd = hasEnd || p >= 1.0;
         ((TRRailBuilding*)(b)).progress = p;
