@@ -1,7 +1,7 @@
 package com.antonzherdev.trains
 
 class TrainSound(level : Level) extends SoundPlayer {
-    val choos = Range(0, 8, 1).chain.map(Sound("Choo.wav", 0.05)).toArray
+    val choo = SoundParallel(8, Sound("Choo.wav", 0.05))
 
     def updateWith(delta : float) {
         level.trains.for { train ->
@@ -11,28 +11,18 @@ class TrainSound(level : Level) extends SoundPlayer {
                 train.soundData = sd
             }
             if(sd.chooCounter > 0 && sd.toNextChoo <= 0.0) {
-                playChoo
+                choo.play
                 sd.nextChoo
             } else {
                 val h = train.head
                 if(h.tile != sd.lastTile) {
-                    playChoo
+                    choo.play
                     sd.lastTile = h.tile
                     sd.lastX = h.x
                     sd.nextChoo
                 } else if(sd.chooCounter > 0) {
                     sd.next(h)
                 }
-            }
-        }
-    }
-
-    def playChoo {
-        choos.go {p ->
-            if(p.isPlaying) true
-            else {
-                p.play
-                false
             }
         }
     }

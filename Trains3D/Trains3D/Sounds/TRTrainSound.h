@@ -11,13 +11,12 @@
 
 @interface TRTrainSound : NSObject<EGSoundPlayer>
 @property (nonatomic, readonly) TRLevel* level;
-@property (nonatomic, readonly) id<CNSeq> choos;
+@property (nonatomic, readonly) EGSoundParallel* choo;
 
 + (id)trainSoundWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)updateWithDelta:(CGFloat)delta;
-- (void)playChoo;
 + (ODClassType*)type;
 @end
 

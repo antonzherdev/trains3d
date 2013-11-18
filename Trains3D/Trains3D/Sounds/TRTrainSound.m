@@ -6,11 +6,11 @@
 #import "TRRailPoint.h"
 @implementation TRTrainSound{
     TRLevel* _level;
-    id<CNSeq> _choos;
+    EGSoundParallel* _choo;
 }
 static ODClassType* _TRTrainSound_type;
 @synthesize level = _level;
-@synthesize choos = _choos;
+@synthesize choo = _choo;
 
 + (id)trainSoundWithLevel:(TRLevel*)level {
     return [[TRTrainSound alloc] initWithLevel:level];
@@ -20,9 +20,9 @@ static ODClassType* _TRTrainSound_type;
     self = [super init];
     if(self) {
         _level = level;
-        _choos = [[[[CNRange rangeWithStart:0 end:8 step:1] chain] map:^SDSound*(id _) {
+        _choo = [EGSoundParallel soundParallelWithLimit:8 create:^SDSound*() {
             return [SDSound applyFile:@"Choo.wav" volume:0.05];
-        }] toArray];
+        }];
     }
     
     return self;
@@ -41,29 +41,18 @@ static ODClassType* _TRTrainSound_type;
             ((TRTrain*)(train)).soundData = sd;
         }
         if(sd.chooCounter > 0 && sd.toNextChoo <= 0.0) {
-            [self playChoo];
+            [_choo play];
             [sd nextChoo];
         } else {
             TRRailPoint* h = [((TRTrain*)(train)) head];
             if(!(GEVec2iEq(h.tile, sd.lastTile))) {
-                [self playChoo];
+                [_choo play];
                 sd.lastTile = h.tile;
                 sd.lastX = h.x;
                 [sd nextChoo];
             } else {
                 if(sd.chooCounter > 0) [sd nextHead:h];
             }
-        }
-    }];
-}
-
-- (void)playChoo {
-    [_choos goOn:^BOOL(SDSound* p) {
-        if([((SDSound*)(p)) isPlaying]) {
-            return YES;
-        } else {
-            [((SDSound*)(p)) play];
-            return NO;
         }
     }];
 }
