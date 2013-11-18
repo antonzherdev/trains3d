@@ -61,5 +61,7 @@ class SmokeParticle(weak weather : Weather) extends EmittedParticle(2) with Bill
 }
 
 
-class SmokeView(system : Smoke) extends BillboardParticleSystemView(system, 200, textureFor("Smoke.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST),
+class SmokeView(system : Smoke) extends BillboardParticleSystemView(system,
+    if(system.train.trainType == TrainType.fast) 400 else 200,
+    textureFor("Smoke.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST),
     BlendFunction.premultiplied)

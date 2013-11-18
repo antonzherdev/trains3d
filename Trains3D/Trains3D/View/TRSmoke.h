@@ -10,6 +10,7 @@
 @class TRCarPosition;
 @class TRRailPoint;
 @class EGProgress;
+@class TRTrainType;
 @class EGGlobal;
 @class EGColorSource;
 @class EGBlendFunction;

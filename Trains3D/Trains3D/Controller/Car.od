@@ -29,7 +29,7 @@ enum CarType(
         0.05, 0.06, 0.44, 0.06, 0.05, nil)
     expressEngine(0.18, 0.3, 3,
         0.05, 0.14, 0.32, 0.19, 0.05,
-        EngineType(tubePos = vec3(-0.05, 0, 0.35)))
+        EngineType(tubePos = vec3(-0.03, 0, 0.35)))
 
     val startToWheel = startToFront + frontToWheel
     val wheelToEnd = wheelToBack + backToEnd
