@@ -120,7 +120,7 @@ static ODClassType* _TRRailroadBuilderMouseProcessor_type;
             TRRailConnector* end = [ends head];
             if(end == start) end = [ends applyIndex:1];
             if([_builder tryBuildRail:[TRRail railWithTile:tile form:[TRRailForm formForConnector1:start connector2:end]]]) {
-                if(geVec2Length(line.u) > 1.0) {
+                if(geVec2Length(line.u) > 1.5) {
                     [_builder fix];
                     _startedPoint = [CNOption applyValue:wrap(GEVec2, geVec2iAddVec2(tile, geVec2iMulF([end vec], 0.5)))];
                 }

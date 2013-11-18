@@ -34,7 +34,7 @@ class RailroadBuilderMouseProcessor(builder : RailroadBuilder) extends MouseProc
                 if(end == start) end = ends[1]
 
                 if(builder.tryBuild(Rail(tile, RailForm.formFor(start, end)))) {
-                    if(line.u.length > 1.0) {
+                    if(line.u.length > 1.5) {
                         builder.fix
                         startedPoint = tile + end.vec*0.5
                     }
