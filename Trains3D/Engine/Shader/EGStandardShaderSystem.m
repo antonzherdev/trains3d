@@ -295,7 +295,7 @@ static ODClassType* _EGStandardShaderKey_type;
         return [NSString stringWithFormat:@"\n"
             "%@\n"
             "%@\n", ((unumi(i) < _directLightWithShadowsCount) ? [NSString stringWithFormat:@"visibility = %@(dirLightShadow%@, dirLightShadowCoord%@);\n"
-            "color += visibility * dirLightDirectionCos%@ * (materialColor * dirLightColor%@);", [self shadow2D], i, i, i, i] : [NSString stringWithFormat:@"color += dirLightDirectionCos%@ * (materialColor * dirLightColor%@);", i, i]), ((_specular && unumi(i) < _directLightWithShadowsCount) ? [NSString stringWithFormat:@"color += max(visibility * specularColor * dirLightColor%@ * pow(dirLightDirectionCosA%@, 5.0/specularSize), vec4(0, 0, 0, 0));", i, i] : [NSString stringWithFormat:@"%@", ((_specular) ? [NSString stringWithFormat:@"color += specularColor * dirLightColor%@ * pow(dirLightDirectionCosA%@, 5.0/specularSize);", i, i] : @"")])];
+            "color += visibility * dirLightDirectionCos%@ * (materialColor * dirLightColor%@);", [self shadow2D], i, i, i, i] : [NSString stringWithFormat:@"color += dirLightDirectionCos%@ * (materialColor * dirLightColor%@);", i, i]), ((_specular && unumi(i) < _directLightWithShadowsCount) ? [NSString stringWithFormat:@"color += max(visibility * specularColor * dirLightColor%@ * pow(dirLightDirectionCosA%@, 5.0/specularSize), vec4(0, 0, 0, 0));", i, i] : [NSString stringWithFormat:@"%@", ((_specular) ? [NSString stringWithFormat:@"color += max(specularColor * dirLightColor%@ * pow(dirLightDirectionCosA%@, 5.0/specularSize), vec4(0, 0, 0, 0));", i, i] : @"")])];
     }] toStringWithDelimiter:@"\n"];
 }
 

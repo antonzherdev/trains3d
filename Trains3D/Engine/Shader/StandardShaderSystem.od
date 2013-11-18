@@ -154,7 +154,7 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
          color += max(visibility * specularColor * dirLightColor$i * pow(dirLightDirectionCosA$i, 5.0/specularSize), vec4(0, 0, 0, 0));
         $else
         $if(specular)
-         color += specularColor * dirLightColor$i * pow(dirLightDirectionCosA$i, 5.0/specularSize);
+         color += max(specularColor * dirLightColor$i * pow(dirLightDirectionCosA$i, 5.0/specularSize), vec4(0, 0, 0, 0));
         $endif
         $endif
         "
