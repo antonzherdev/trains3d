@@ -390,6 +390,7 @@
 		6F3DF574E3DD67FD9A298CF6 /* btConvexShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF80F0ADA5509EFB81D68 /* btConvexShape.cpp */; };
 		6F3DF575FEDEAF3D0E4677EC /* func_integer.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFC49C114D0F76FDB8ADB /* func_integer.inl */; };
 		6F3DF57ADC40E5824B319BAB /* DynamicWorld.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFFD3595049F76EB44967 /* DynamicWorld.od */; };
+		6F3DF5865DFDB6AD2E133260 /* ExpressEngine.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF72ED3C26D4DBE0F4446 /* ExpressEngine.png */; };
 		6F3DF589586AE8E4B7EF40EB /* TRCollisions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFCEE75688F74AE37F431 /* TRCollisions.m */; };
 		6F3DF5928B9B4445494A9BDF /* KWValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFACC20BF8698A6F56017 /* KWValue.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF5935E77D73D927A9824 /* Gravel.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFE13534F0E3322DA3E4D /* Gravel.png */; };
@@ -1013,6 +1014,7 @@
 		6F3DFE01EE99493870619D65 /* btPersistentManifold.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFC87DD4F9A005E94449 /* btPersistentManifold.cpp */; };
 		6F3DFE040D670AB912A0E1D4 /* integer.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF0E479E39C912FDB8CCC /* integer.inl */; };
 		6F3DFE0910E1A8B3352EB349 /* OSPlatform.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD5F996646DFE101BF14 /* OSPlatform.m */; };
+		6F3DFE0CF8222DB32A25250F /* ExpressEngine.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF72ED3C26D4DBE0F4446 /* ExpressEngine.png */; };
 		6F3DFE0DA87554D5652013A4 /* btDbvtBroadphase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBA57EDF85421CF7B520 /* btDbvtBroadphase.cpp */; };
 		6F3DFE0DC01A40C64E65B664 /* btWheelInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF6DD991279189C0A1F9 /* btWheelInfo.cpp */; };
 		6F3DFE0F5C8D71EDD8A586F4 /* fast_square_root.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFD26092BC5F970E399C9 /* fast_square_root.inl */; };
@@ -1728,6 +1730,7 @@
 		6F3DF721A18AFFB8E7A58EDA /* func_noise.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = func_noise.inl; sourceTree = "<group>"; };
 		6F3DF722E99721093AA438A1 /* TR3DExpressEngine.jas */ = {isa = PBXFileReference; lastKnownFileType = file.jas; path = TR3DExpressEngine.jas; sourceTree = "<group>"; };
 		6F3DF7240AFD538664F8CA65 /* type_int.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_int.hpp; sourceTree = "<group>"; };
+		6F3DF72ED3C26D4DBE0F4446 /* ExpressEngine.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ExpressEngine.png; sourceTree = "<group>"; };
 		6F3DF72F4479FF6518E7C2E7 /* btContactConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btContactConstraint.h; sourceTree = "<group>"; };
 		6F3DF7307148D307121BB8E3 /* btGjkPairDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btGjkPairDetector.cpp; sourceTree = "<group>"; };
 		6F3DF735DBB41588914476E3 /* btQuickprof.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btQuickprof.h; sourceTree = "<group>"; };
@@ -3677,6 +3680,7 @@
 				6F3DFC522163F417BDCBAC8E /* Snowflake.png */,
 				6F3DF86CDBEEAED082D9D1A7 /* Leaf.png */,
 				6F3DF9D13CC54215811CB843 /* Grass2.png */,
+				6F3DF72ED3C26D4DBE0F4446 /* ExpressEngine.png */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -4718,6 +4722,7 @@
 				6F3DF66723E18BECC9ABFC97 /* Crash1.wav in Resources */,
 				6F3DF20AEA3EB17F182ABE2D /* GroundCrash1.wav in Resources */,
 				6F3DF8BD09234F126EE922A4 /* CrashBack.wav in Resources */,
+				6F3DFE0CF8222DB32A25250F /* ExpressEngine.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4846,6 +4851,7 @@
 				6F3DF9F2E48BCB08A081FA3E /* Crash1.wav in Resources */,
 				6F3DFC6C43C65C667B78927B /* GroundCrash1.wav in Resources */,
 				6F3DF0AC115E7D036EFD313A /* CrashBack.wav in Resources */,
+				6F3DF5865DFDB6AD2E133260 /* ExpressEngine.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
