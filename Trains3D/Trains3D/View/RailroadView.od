@@ -298,9 +298,19 @@ class DamageView {
     def draw(point : RailPoint) {
         matrix(
             _.modify(w = w -> w.translate(point.point.x, point.point.y, 0.0))
+             .modify(m = m -> m.rotate(angleFor(point), 0, 1, 0))
         ) {
             model.draw
         }
+    }
+
+    private def angleFor(point : RailPoint) : float4 = {
+        val p = point.straight
+        val a = p.add(-0.1)
+        val b = p.add(0.1)
+        val line = Line2(p0 = a.point, p1 = b.point)
+        val angle = line.degreeAngle
+        angle + 90
     }
 }
 

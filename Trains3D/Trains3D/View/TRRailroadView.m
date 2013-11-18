@@ -682,12 +682,23 @@ static ODClassType* _TRDamageView_type;
 
 - (void)drawPoint:(TRRailPoint*)point {
     [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
-        return [_ modifyW:^GEMat4*(GEMat4* w) {
+        return [[_ modifyW:^GEMat4*(GEMat4* w) {
             return [w translateX:point.point.x y:point.point.y z:0.0];
+        }] modifyM:^GEMat4*(GEMat4* m) {
+            return [m rotateAngle:[self angleForPoint:point] x:0.0 y:1.0 z:0.0];
         }];
     } f:^void() {
         [_model draw];
     }];
+}
+
+- (float)angleForPoint:(TRRailPoint*)point {
+    TRRailPoint* p = [point straight];
+    TRRailPoint* a = [p addX:-0.1];
+    TRRailPoint* b = [p addX:0.1];
+    GELine2 line = geLine2ApplyP0P1(a.point, b.point);
+    float angle = geLine2DegreeAngle(line);
+    return angle + 90;
 }
 
 - (ODClassType*)type {
