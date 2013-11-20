@@ -139,8 +139,8 @@ static ODClassType* _TRRailroadView_type;
     [_undoView reshape];
 }
 
-- (BOOL)processEvent:(EGEvent*)event {
-    return [_undoView processEvent:event];
+- (EGRecognizers*)recognizers {
+    return [_undoView recognizers];
 }
 
 - (BOOL)isProcessorActive {
@@ -355,18 +355,17 @@ static ODClassType* _TRUndoView_type;
     }
 }
 
-- (BOOL)processEvent:(EGEvent*)event {
-    return !(_empty) && [event tapProcessor:self];
-}
-
-- (BOOL)tapEvent:(EGEvent*)event {
-    GEVec2 p = [event locationInViewport];
-    if([_button containsVec2:p]) {
-        [_builder undo];
-        return YES;
-    } else {
-        return NO;
-    }
+- (EGRecognizers*)recognizers {
+    return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(EGEvent* event) {
+        if(_empty) return NO;
+        GEVec2 p = [event locationInViewport];
+        if([_button containsVec2:p]) {
+            [_builder undo];
+            return YES;
+        } else {
+            return NO;
+        }
+    }]];
 }
 
 - (BOOL)isProcessorActive {

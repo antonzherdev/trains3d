@@ -9,7 +9,9 @@
 @class TRStr;
 @protocol TRStrings;
 @class EGBlendFunction;
-@class EGEvent;
+@class EGRecognizers;
+@class EGTap;
+@class EGRecognizer;
 @class EGEnvironment;
 
 @class TRLevelChooseMenu;
@@ -26,7 +28,7 @@
 - (void)reshapeWithViewport:(GERect)viewport;
 - (void)draw;
 - (BOOL)isProcessorActive;
-- (BOOL)processEvent:(EGEvent*)event;
+- (EGRecognizers*)recognizers;
 + (ODClassType*)type;
 @end
 

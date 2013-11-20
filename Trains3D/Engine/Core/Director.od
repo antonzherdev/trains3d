@@ -11,14 +11,23 @@ class Director {
     def scene = _scene
     def set(scene : () -> Scene) {
         lock
-        if(_scene.isDefined) _scene.get.stop
+        if(_scene.isDefined) {
+            _scene.get.stop
+            clearRecognizers
+        }
+
         val sc = scene()
         _scene = sc
         sc.reshapeWith(_lastViewSize)
+        sc.recognizersTypes.for(register(_))
         sc.start
+
         if(_isPaused) redraw
         unlock
     }
+
+    def clearRecognizers
+    def register(recognizerType : RecognizerType<_>)
 
     def scale : float
     def lock

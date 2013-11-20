@@ -6,61 +6,61 @@
     NSEvent* _event;
     NSEventType _type;
     __weak EGOpenGLViewMac * _view;
+    EGRecognizerType* _tp;
+    EGEventPhase* _phase;
+    GEVec2 _location;
 }
 
 @synthesize event = _event;
 @synthesize view = _view;
 
-- (id)initWithEvent:(NSEvent *)event type:(NSUInteger)type view:(EGOpenGLViewMac *)view camera:(id)camera {
+- (id)initWithEvent:(NSEvent *)event location:(GEVec2)location type:(NSUInteger)type view:(EGOpenGLViewMac *)view camera:(id)camera {
     self = [super initWithViewSize:[view viewSize] camera: camera];
     if (self) {
         _event = event;
-        _type=type;
+        _type = type;
         _view = view;
+        if(type == NSLeftMouseDown) {
+            _tp = [EGPan leftMouse];
+            _phase = [EGEventPhase began];
+        } else if(type == NSLeftMouseDragged) {
+            _tp = [EGPan leftMouse];
+            _phase = [EGEventPhase changed];
+        } else if(type == NSLeftMouseUp) {
+            _tp = [EGPan leftMouse];
+            _phase = [EGEventPhase ended];
+        } else if(type == EGLeftMouseCanceled) {
+            _tp = [EGPan leftMouse];
+            _phase = [EGEventPhase canceled];
+        } else if(type == EGEventTap) {
+            _tp = [EGTap tapWithFingers:1 taps:(NSUInteger) event.clickCount];
+            _phase = [EGEventPhase on];
+        }
+        _location=location;
     }
 
     return self;
 }
 
-+ (id)eventMacWithEvent:(NSEvent *)event type:(NSUInteger)type view:(EGOpenGLViewMac *)view camera:(id)camera {
-    return [[self alloc] initWithEvent:event type:type view:view camera:camera];
++ (id)eventMacWithEvent:(NSEvent *)event location:(GEVec2)location type:(NSUInteger)type view:(EGOpenGLViewMac *)view camera:(id)camera {
+    return [[self alloc] initWithEvent:event location:location type:type view:view camera:camera];
 }
 
-- (BOOL)isLeftMouseDown {
-    return _type == NSLeftMouseDown;
+- (EGRecognizerType *)recognizerType {
+    return _tp;
 }
 
-- (BOOL)isLeftMouseDrag {
-    return _type == NSLeftMouseDragged;
+- (EGEventPhase *)phase {
+    return _phase;
 }
 
-- (BOOL)isLeftMouseUp {
-    return _type == NSLeftMouseUp;
-}
-
-- (BOOL)isTouchBegan {
-    return _type == EGEventTouchBegan;
-}
-
-- (BOOL)isTouchMoved {
-    return _type == EGEventTouchMoved;
-}
-
-- (BOOL)isTouchEnded {
-    return _type == EGEventTouchEnded;
-}
-
-- (BOOL)isTouchCanceled {
-    return _type == EGEventTouchCanceled;
-}
 
 - (GEVec2)locationInView {
-    NSPoint point = [_view convertPoint:[_event locationInWindow] fromView:nil];
-    return GEVec2Make((float) point.x, (float) point.y);
+    return _location;
 }
 
 - (EGEvent *)setCamera:(id)camera {
-    return [EGEventMac eventMacWithEvent:_event type:_type view:_view camera:camera];
+    return [EGEventMac eventMacWithEvent:_event location:_location type:_type view:_view camera:camera];
 }
 
 - (BOOL)isTap {

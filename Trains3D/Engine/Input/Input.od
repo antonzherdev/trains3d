@@ -1,31 +1,110 @@
 package com.antonzherdev.eg
 
+class Recognizer(tp : RecognizerType) {
+    static def apply(tp : RecognizerType<LongRecognizer>,
+        began : Event -> bool, changed : Event -> void, ended : Event -> void)
+        = LongRecognizer(tp, began, changed, ended, {})
+    static def apply(tp : RecognizerType<LongRecognizer>,
+        began : Event -> bool, changed : Event -> void, ended : Event -> void, canceled : Event -> void)
+        = LongRecognizer(tp, began, changed, ended, canceled)
+
+    static def apply(tp : RecognizerType<ShortRecognizer>, on : Event -> bool)
+        = ShortRecognizer(tp, on)
+
+    def is(tp : RecognizerType) : bool = tp == self.tp
+
+    def add(recognizer : Recognizer) = Recognizers([self, recognizer])
+}
+class LongRecognizer(tp : RecognizerType, began : Event -> bool,
+    changed : Event -> void, ended : Event -> void, canceled : Event -> void) extends Recognizer(tp)
+class ShortRecognizer(tp : RecognizerType, on : Event -> bool) extends Recognizer(tp)
+
+
 trait InputProcessor {
     def isProcessorActive : bool = !Director.current.isPaused
-
-    def process(event : Event) : bool
+    def recognizers : Recognizers
 }
 
-trait MouseProcessor {
-    def mouseDown(event : Event) : bool = false
-    def mouseDrag(event : Event)  : bool = false
-    def mouseUp(event : Event) : bool = false
+
+class Recognizers(items : [Recognizer]) {
+    static def apply(recognizer : Recognizer) = Recognizers([recognizer])
+
+    def on(event : Event) : ShortRecognizer? = {
+        items.find{item -> item.is(event.recognizerType) && item.cast<ShortRecognizer>.on(event)}
+    }
+
+    def began(event : Event) : LongRecognizer? = {
+        items.find{item -> item.is(event.recognizerType) && item.cast<LongRecognizer>.began(event)}
+    }
+
+    def add(recognizer : Recognizer) = Recognizers(items + recognizer)
+    def add(recognizers : Recognizers) = Recognizers(items + recognizers.items)
+    def types : Set<RecognizerType<_>> = items.chain.map(_.tp).toSet
 }
 
-trait TouchProcessor {
-    def touchBegan(event : Event) : bool = false
-    def touchMoved(event : Event) : bool = false
-    def touchEnded(event : Event) : bool = false
-    def touchCanceled(event : Event) : bool = false
+class RecognizersState(recognizers : Recognizers) {
+    def process(event : Event) : bool =
+        if(event.phase == EventPhase.on) on(event)
+        else if(event.phase == EventPhase.began) began(event)
+        else if(event.phase == EventPhase.ended) ended(event)
+        else if(event.phase == EventPhase.changed) changed(event)
+        else canceled(event)
+
+    def on(event : Event) : bool = recognizers.on(event).isDefined
+
+    private val longMap = MutableHashMap<RecognizerType<LongRecognizer>, LongRecognizer>()
+
+    def began(event : Event) : bool = {
+        val tp = event.recognizerType
+        longMap.modify(recognizers.began(event), forKey = tp).isDefined
+    }
+
+    def changed(event : Event) : bool = longMap.opt(event.recognizerType).try(_.changed(event))
+
+
+    def ended(event : Event) : bool = {
+        val tp = event.recognizerType
+        longMap.opt(tp).for(_.ended(event))
+        longMap.removeFor(tp).isDefined
+    }
+
+    def canceled(event : Event) : bool = {
+        val tp = event.recognizerType
+        longMap.opt(tp).for(_.canceled(event))
+        longMap.removeFor(tp).isDefined
+    }
 }
 
-trait TapProcessor {
-    def tap(event : Event) : bool
+
+class RecognizerType<T extends Recognizer>
+
+// For a computer it's mouse events. fingers 1 - left button, 2 - right
+// For a touchpad "fingers + 1" is count of fingers
+class Pan(fingers : uint) extends RecognizerType<ShortRecognizer> {
+    static def apply : Pan = leftMouse
+    static val leftMouse = Pan(1)
+    static val rightMouse = Pan(2)
+}
+
+// For a computer it's click event. fingers 1 - left button, 2 - right
+class Tap(fingers : uint, taps : uint)  extends RecognizerType<LongRecognizer> {
+    static def apply() = Tap(1, 1)
+}
+
+
+enum EventPhase {
+    began()
+    changed()
+    ended()
+    canceled()
+    on()
 }
 
 class EventCamera(matrixModel : MatrixModel, viewport : Rect)
 
 class Event(viewSize : vec2, camera : EventCamera?) {
+    def recognizerType : RecognizerType<_>
+    def phase : EventPhase
     def set(camera : EventCamera?) : Event
 
     def locationInView : vec2
@@ -48,34 +127,4 @@ class Event(viewSize : vec2, camera : EventCamera?) {
             Line3(p0.xyz, p1.xyz - p0.xyz)
         }
     def checkViewport : bool = camera.isEmpty || camera.get.viewport.contains(locationInView)
-
-    def isLeftMouseDown : bool
-    def isLeftMouseDrag : bool
-    def isLeftMouseUp : bool
-    def leftMouse(processor : MouseProcessor) : bool =
-        if(!checkViewport) false
-        else if(isLeftMouseDown) processor.mouseDown(self)
-        else if(isLeftMouseDrag) processor.mouseDrag(self)
-        else if(isLeftMouseUp) processor.mouseUp(self)
-        else false
-
-
-    def isTouchBegan : bool
-    def isTouchMoved : bool
-    def isTouchEnded : bool
-    def isTouchCanceled : bool
-    def touch(processor : TouchProcessor) : bool =
-        if(!checkViewport) false
-        else if(isTouchBegan) processor.touchBegan(self)
-        else if(isTouchMoved) processor.touchMoved(self)
-        else if(isTouchEnded) processor.touchEnded(self)
-        else if(isTouchCanceled) processor.touchCanceled(self)
-        else false
-
-    def isTap : bool
-    def tap(processor : TapProcessor)  : bool = {
-        if(!checkViewport) false
-        else if(isTap) processor.tap(self)
-        else false
-    }
 }

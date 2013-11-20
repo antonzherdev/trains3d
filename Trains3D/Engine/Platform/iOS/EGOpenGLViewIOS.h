@@ -11,6 +11,7 @@
 #import "GEVec.h"
 
 @class EGDirector;
+@class EGRecognizerType;
 
 
 @interface EGOpenGLViewIOS : GLKViewController
@@ -20,4 +21,8 @@
 - (void)lockOpenGLContext;
 
 - (void)unlockOpenGLContext;
+
+- (void)registerRecognizerType:(EGRecognizerType *)type;
+
+- (void)clearRecognizers;
 @end

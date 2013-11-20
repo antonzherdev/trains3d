@@ -116,8 +116,8 @@ static ODClassType* _TRLevelView_type;
     }];
 }
 
-- (BOOL)processEvent:(EGEvent*)event {
-    return [_callRepairerView processEvent:event] || [_railroadView processEvent:event] || [_switchProcessor processEvent:event] || [_railroadBuilderProcessor processEvent:event];
+- (EGRecognizers*)recognizers {
+    return [[[[_callRepairerView recognizers] addRecognizers:[_railroadView recognizers]] addRecognizers:[_switchProcessor recognizers]] addRecognizers:[_railroadBuilderProcessor recognizers]];
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {

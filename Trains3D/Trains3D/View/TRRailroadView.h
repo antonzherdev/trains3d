@@ -63,7 +63,7 @@
 - (void)drawForeground;
 - (void)prepare;
 - (void)reshape;
-- (BOOL)processEvent:(EGEvent*)event;
+- (EGRecognizers*)recognizers;
 + (ODClassType*)type;
 @end
 
@@ -84,7 +84,7 @@
 @end
 
 
-@interface TRUndoView : NSObject<EGInputProcessor, EGTapProcessor>
+@interface TRUndoView : NSObject<EGInputProcessor>
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
 
 + (id)undoViewWithBuilder:(TRRailroadBuilder*)builder;
@@ -92,8 +92,7 @@
 - (ODClassType*)type;
 - (void)reshape;
 - (void)draw;
-- (BOOL)processEvent:(EGEvent*)event;
-- (BOOL)tapEvent:(EGEvent*)event;
+- (EGRecognizers*)recognizers;
 + (ODClassType*)type;
 @end
 

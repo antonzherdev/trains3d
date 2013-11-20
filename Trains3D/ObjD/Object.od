@@ -3,6 +3,8 @@ package core.lang
 stub class Object {
     def is<T> : bool
     def as<T> : T?
+    def is<T>(type : Type<T>) : bool
+    def as<T>(type : Type<T>) : T?
     def cast<T> : T
     def description : string
     def hash : uint

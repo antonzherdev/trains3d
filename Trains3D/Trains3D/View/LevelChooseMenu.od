@@ -34,5 +34,5 @@ class LevelChooseMenu extends SceneView {
     }
 
     def isProcessorActive : bool = true
-    def process(event : Event) : bool = buttons.exists(event.tap(_))
+    def recognizers : Recognizers = Recognizer(Tap()){event -> buttons.exists(_.tap(event))}
 }

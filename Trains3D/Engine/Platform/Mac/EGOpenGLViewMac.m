@@ -3,14 +3,16 @@
 #import "EGDirectorMac.h"
 #import "EGEventMac.h"
 #import "EGContext.h"
+#import "EGTouchToMouse.h"
 
 
 @implementation EGOpenGLViewMac {
 
 @private
-    EGDirector *_director;
+    EGDirectorMac *_director;
     GEVec2 _viewSize;
     BOOL _mouseDraged;
+    EGTouchToMouse* _ttm;
 }
 
 @synthesize director = _director;
@@ -168,11 +170,16 @@
 
 #define DISPATCH_EVENT(theEvent, tp) {\
 [self lockOpenGLContext];\
-[_director processEvent:[EGEventMac eventMacWithEvent:theEvent type:tp view:self camera:[CNOption none]]];\
+[_director processEvent:[EGEventMac eventMacWithEvent:theEvent location:[self locationForEvent:theEvent] type:tp view:self camera:[CNOption none]]];\
 [self unlockOpenGLContext];\
 }
 
 #pragma mark CCGLView - Mouse events
+
+- (GEVec2) locationForEvent:(NSEvent*)event{
+    NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
+    return GEVec2Make((float) point.x, (float) point.y);
+}
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
@@ -270,21 +277,35 @@
 #pragma mark CCGLView - Touch events
 - (void)touchesBeganWithEvent:(NSEvent *)theEvent
 {
-    DISPATCH_EVENT(theEvent, EGEventTouchBegan);
+    [_ttm touchBeganEvent:theEvent];
+//    DISPATCH_EVENT(theEvent, EGEventTouchBegan);
 }
 
 - (void)touchesMovedWithEvent:(NSEvent *)theEvent
 {
-    DISPATCH_EVENT(theEvent, EGEventTouchMoved);
+    [_ttm touchMovedEvent:theEvent];
+//    DISPATCH_EVENT(theEvent, EGEventTouchMoved);
 }
 
 - (void)touchesEndedWithEvent:(NSEvent *)theEvent
 {
-    DISPATCH_EVENT(theEvent, EGEventTouchEnded);
+    [_ttm touchEndedEvent:theEvent];
+//    DISPATCH_EVENT(theEvent, EGEventTouchEnded);
 }
 
 - (void)touchesCancelledWithEvent:(NSEvent *)theEvent
 {
-    DISPATCH_EVENT(theEvent, EGEventTouchCanceled);
+    [_ttm touchCanceledEvent:theEvent];
+//    DISPATCH_EVENT(theEvent, EGEventTouchCanceled);
+}
+
+- (void)clearRecognizers {
+    _ttm = nil;
+}
+
+- (void)registerRecognizerType:(EGRecognizerType *)type {
+    if([type isKindOfClass:[EGPan class]]) {
+        if(((EGPan*)type).fingers == 1) _ttm = [EGTouchToMouse touchToMouseWithDirector:_director];
+    }
 }
 @end

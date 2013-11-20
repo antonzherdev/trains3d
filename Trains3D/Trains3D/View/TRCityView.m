@@ -182,19 +182,17 @@ static ODClassType* _TRCallRepairerView_type;
     [_text draw];
 }
 
-- (BOOL)processEvent:(EGEvent*)event {
-    return [event tapProcessor:self];
-}
-
-- (BOOL)tapEvent:(EGEvent*)event {
-    GEVec2 p = [event locationInViewport];
-    id b = [[_buttons chain] findWhere:^BOOL(CNTuple* _) {
-        return [((EGBillboard*)(((CNTuple*)(_)).b)) containsVec2:p];
-    }];
-    [b forEach:^void(CNTuple* kv) {
-        if([((TRCity*)(((CNTuple*)(kv)).a)) canRunNewTrain]) [_level runRepairerFromCity:((CNTuple*)(kv)).a];
-    }];
-    return [b isDefined];
+- (EGRecognizers*)recognizers {
+    return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(EGEvent* event) {
+        GEVec2 p = [event locationInViewport];
+        id b = [[_buttons chain] findWhere:^BOOL(CNTuple* _) {
+            return [((EGBillboard*)(((CNTuple*)(_)).b)) containsVec2:p];
+        }];
+        [b forEach:^void(CNTuple* kv) {
+            if([((TRCity*)(((CNTuple*)(kv)).a)) canRunNewTrain]) [_level runRepairerFromCity:((CNTuple*)(kv)).a];
+        }];
+        return [b isDefined];
+    }]];
 }
 
 - (BOOL)isProcessorActive {

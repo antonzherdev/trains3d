@@ -40,18 +40,17 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor {
 
     def isActive : bool = Director.current.isPaused || !level.help.isEmpty || !level.result.isEmpty
 
-    def isProcessorActive : bool = Director.current.isPaused
-    def process(event : Event) : bool = {
-        event.tap(view)
-    }
+    def isProcessorActive = Director.current.isPaused
+    def recognizers : Recognizers = Recognizer(Tap(), view.tap(_))
 }
 
-trait PauseView extends TapProcessor {
+class PauseView {
     def reshapeWith(viewport : Rect)
     def draw
+    def tap(event : Event) : bool
 }
 
-class MenuView {
+class MenuView extends PauseView {
     private var _font : Font
     def font = _font
     def button(text : string, onClick : () -> void) : Button = {
@@ -102,14 +101,14 @@ class MenuView {
     def drawHeader(rect : Rect) {}
 }
 
-class PauseMenuView(level : Level) extends MenuView with PauseView {
+class PauseMenuView(level : Level) extends MenuView  {
     private val resumeButton = button(Loc.resumeGame, Director.current.resume)
     private val restartButton = button(Loc.restart(level), GameDirector.instance.restartLevel)
     private val chooseLevelButton = button(Loc.chooseLevel, GameDirector.instance.chooseLevel)
     val buttons = [resumeButton, restartButton, chooseLevelButton]
 }
 
-class WinMenu(level : Level) extends MenuView with PauseView{
+class WinMenu(level : Level) extends MenuView {
     private val nextButton = button(Loc.goToNext(level), GameDirector.instance.nextLevel)
     private val restartButton = button(Loc.replay(level), GameDirector.instance.restartLevel)
     private val chooseLevelButton = button(Loc.chooseLevel, GameDirector.instance.chooseLevel)
@@ -128,7 +127,7 @@ class WinMenu(level : Level) extends MenuView with PauseView{
     }
 }
 
-class LooseMenu(level : Level) extends MenuView with PauseView{
+class LooseMenu(level : Level) extends MenuView {
     private val restartButton = button(Loc.replay(level)) {
         GameDirector.instance.restartLevel
         Director.current.resume

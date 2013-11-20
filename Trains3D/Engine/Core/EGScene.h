@@ -50,6 +50,7 @@
 - (void)prepareWithViewSize:(GEVec2)viewSize;
 - (void)reshapeWithViewSize:(GEVec2)viewSize;
 - (void)drawWithViewSize:(GEVec2)viewSize;
+- (id<CNSet>)recognizersTypes;
 - (BOOL)processEvent:(EGEvent*)event;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)start;
@@ -69,6 +70,7 @@
 - (id<CNSeq>)viewportsWithViewSize:(GEVec2)viewSize;
 - (void)prepare;
 - (void)draw;
+- (id<CNSet>)recognizersTypes;
 - (BOOL)processEvent:(EGEvent*)event;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)reshapeWithViewSize:(GEVec2)viewSize;

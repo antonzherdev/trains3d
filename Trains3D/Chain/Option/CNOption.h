@@ -28,6 +28,7 @@
 - (BOOL)isEmpty;
 - (BOOL)isDefined;
 - (void)forEach:(void(^)(id))each;
+- (BOOL)tryEach:(void(^)(id))each;
 - (id<CNIterator>)iterator;
 + (ODClassType*)type;
 @end
@@ -49,6 +50,7 @@
 - (BOOL)isDefined;
 - (id<CNIterator>)iterator;
 - (BOOL)goOn:(BOOL(^)(id))on;
+- (BOOL)tryEach:(void(^)(id))each;
 - (BOOL)containsItem:(id)item;
 + (ODClassType*)type;
 @end
@@ -71,6 +73,7 @@
 - (BOOL)isDefined;
 - (id<CNIterator>)iterator;
 - (void)forEach:(void(^)(id))each;
+- (BOOL)tryEach:(void(^)(id))each;
 - (BOOL)goOn:(BOOL(^)(id))on;
 - (BOOL)containsItem:(id)item;
 + (ODClassType*)type;

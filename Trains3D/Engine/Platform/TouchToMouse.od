@@ -1,8 +1,0 @@
-package com.antonzherdev.eg
-
-stub class TouchToMouse(processor : MouseProcessor) extends TouchProcessor {
-    def touchBegan(event : Event) : bool = false
-    def touchMoved(event : Event) : bool = false
-    def touchEnded(event : Event) : bool = false
-    def touchCanceled(event : Event) : bool = false
-}

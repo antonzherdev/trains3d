@@ -265,7 +265,7 @@ class Line2d {
     }
 }
 
-class Button(onDraw : (Rect) -> void, onClick : () -> void) extends TapProcessor {
+class Button(onDraw : (Rect) -> void, onClick : () -> void) {
     static def apply(rect : Rect, onDraw : (Rect) -> void, onClick : () -> void) = {
         val b = Button(onDraw, onClick)
         b.rect = rect

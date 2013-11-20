@@ -11,6 +11,7 @@
 #import "EGDirectorIOS.h"
 #import "EGEventIOS.h"
 #import "EGContext.h"
+#import "EGInput.h"
 
 
 @implementation EGOpenGLViewIOS {
@@ -38,9 +39,6 @@
         [_director pause];
     }];
 
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
-    tap.numberOfTapsRequired = 1;
-    [self.view addGestureRecognizer:tap];
 
     _director = [EGDirectorIOS directorWithView:self];
     // Create an OpenGL ES context and assign it to the view loaded from storyboard
@@ -113,23 +111,55 @@
 }
 
 - (IBAction)tap:(UITapGestureRecognizer *)recognizer {
-    [_director processEvent:[EGEventIOS eventIOSWithRecognizer:recognizer type:EGEventTap view:self camera:[CNOption none]]];
+    [self processRecognizer:recognizer
+                         tp:[EGTap tapWithFingers:recognizer.numberOfTouchesRequired taps:recognizer.numberOfTapsRequired]
+                      phase:[EGEventPhase on]];
 }
 
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    DISPATCH_EVENT(event, EGEventTouchCanceled)
+- (IBAction)pan:(UIPanGestureRecognizer *)recognizer {
+    [self processRecognizer:recognizer
+                         tp:[EGPan panWithFingers:recognizer.minimumNumberOfTouches]
+                      phase:[self phase:recognizer]];
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    DISPATCH_EVENT(event, EGEventTouchBegan)
+- (EGEventPhase *)phase:(UIGestureRecognizer *)recognizer {
+    if(recognizer.state == UIGestureRecognizerStateBegan) return [EGEventPhase began];
+    if(recognizer.state == UIGestureRecognizerStateEnded) return [EGEventPhase ended];
+    if(recognizer.state == UIGestureRecognizerStateChanged) return [EGEventPhase changed];
+    return [EGEventPhase canceled];
 }
 
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    DISPATCH_EVENT(event, EGEventTouchMoved)
+- (void)processRecognizer:(UIGestureRecognizer *)recognizer tp:(EGRecognizerType *)tp phase:(EGEventPhase *)phase {
+    [_director processEvent:[EGEventIOS eventIOsWithTp:tp
+                                                 phase:phase location:[self locationForRecognizer:recognizer]
+                                                  view:self camera:[CNOption none]]];
 }
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    DISPATCH_EVENT(event, EGEventTouchEnded)
+
+- (GEVec2)locationForRecognizer:(UIGestureRecognizer *)recognizer {
+    CGPoint point = [recognizer locationInView:self.view];
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    return GEVec2Make(scale* (float) point.x, _viewSize.y - scale*(float) point.y);
 }
 
+
+- (void)registerRecognizerType:(EGRecognizerType *)type {
+    if([type isKindOfClass:[EGTap class]]) {
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+        tap.numberOfTapsRequired = ((EGTap*)type).fingers;
+        [self.view addGestureRecognizer:tap];
+    } else if([type isKindOfClass:[EGPan class]]) {
+        UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
+        pan.minimumNumberOfTouches = ((EGPan*)type).fingers;
+        pan.maximumNumberOfTouches = ((EGPan*)type).fingers;
+        [self.view addGestureRecognizer:pan];
+    }
+}
+
+- (void)clearRecognizers {
+    UIView *view = self.view;
+    for(UIGestureRecognizer * recognizer in view.gestureRecognizers) {
+        [view removeGestureRecognizer:recognizer];
+    }
+}
 @end

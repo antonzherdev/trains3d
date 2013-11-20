@@ -24,7 +24,7 @@
 
 @class TRLevelMenuView;
 
-@interface TRLevelMenuView : NSObject<EGLayerView, EGInputProcessor, EGTapProcessor>
+@interface TRLevelMenuView : NSObject<EGLayerView, EGInputProcessor>
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) GEVec4(^notificationProgress)(float);
@@ -39,8 +39,7 @@
 - (void)draw;
 - (NSString*)formatScore:(NSInteger)score;
 - (void)updateWithDelta:(CGFloat)delta;
-- (BOOL)processEvent:(EGEvent*)event;
-- (BOOL)tapEvent:(EGEvent*)event;
+- (EGRecognizers*)recognizers;
 + (GEVec4)backgroundColor;
 + (ODClassType*)type;
 @end

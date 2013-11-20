@@ -11,4 +11,8 @@
 - (void)unlockOpenGLContext;
 
 - (void)redraw;
+
+- (void)clearRecognizers;
+
+- (void)registerRecognizerType:(EGRecognizerType *)type;
 @end

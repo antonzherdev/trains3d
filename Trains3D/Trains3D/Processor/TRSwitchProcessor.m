@@ -61,25 +61,23 @@ static ODClassType* _TRSwitchProcessor_type;
     _TRSwitchProcessor_type = [ODClassType classTypeWithCls:[TRSwitchProcessor class]];
 }
 
-- (BOOL)processEvent:(EGEvent*)event {
-    return [event tapProcessor:self];
-}
-
-- (BOOL)tapEvent:(EGEvent*)event {
-    id downed = [[_world closestCrossPointWithSegment:[event segment]] mapF:^TRRailroadConnectorContent*(EGCrossPoint* _) {
-        return ((EGCrossPoint*)(_)).body.data;
-    }];
-    if([downed isDefined]) {
-        [[ODObject asKindOfClass:[TRSwitch class] object:((TRRailroadConnectorContent*)([downed get]))] forEach:^void(TRSwitch* _) {
-            [_level tryTurnTheSwitch:_];
+- (EGRecognizers*)recognizers {
+    return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(EGEvent* event) {
+        id downed = [[_world closestCrossPointWithSegment:[event segment]] mapF:^TRRailroadConnectorContent*(EGCrossPoint* _) {
+            return ((EGCrossPoint*)(_)).body.data;
         }];
-        [[ODObject asKindOfClass:[TRRailLight class] object:((TRRailroadConnectorContent*)([downed get]))] forEach:^void(TRRailLight* _) {
-            [((TRRailLight*)(_)) turn];
-        }];
-        return YES;
-    } else {
-        return NO;
-    }
+        if([downed isDefined]) {
+            [[ODObject asKindOfClass:[TRSwitch class] object:((TRRailroadConnectorContent*)([downed get]))] forEach:^void(TRSwitch* _) {
+                [_level tryTurnTheSwitch:_];
+            }];
+            [[ODObject asKindOfClass:[TRRailLight class] object:((TRRailroadConnectorContent*)([downed get]))] forEach:^void(TRRailLight* _) {
+                [((TRRailLight*)(_)) turn];
+            }];
+            return YES;
+        } else {
+            return NO;
+        }
+    }]];
 }
 
 - (BOOL)isProcessorActive {

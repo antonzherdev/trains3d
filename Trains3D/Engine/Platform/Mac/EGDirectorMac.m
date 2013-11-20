@@ -1,5 +1,6 @@
 #import "EGDirectorMac.h"
 #import "EGOpenGLViewMac.h"
+#import "EGInput.h"
 
 
 @implementation EGDirectorMac {
@@ -117,6 +118,15 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 - (CGFloat)scale {
     return [[NSScreen mainScreen] backingScaleFactor];
+}
+
+- (void)registerRecognizerType:(EGRecognizerType *)recognizerType {
+    [_view registerRecognizerType:recognizerType];
+
+}
+
+- (void)clearRecognizers {
+    [_view clearRecognizers];
 }
 
 

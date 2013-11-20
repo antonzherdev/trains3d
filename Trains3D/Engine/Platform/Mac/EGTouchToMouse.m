@@ -1,60 +1,56 @@
 #import "EGTouchToMouse.h"
 #import "EGEventMac.h"
 #import "EGOpenGLViewMac.h"
+#import "EGDirectorMac.h"
 
 @implementation EGTouchToMouse {
-    id _processor;
+    EGDirectorMac* _director;
     BOOL _touching;
     NSTouch* _startTouches[2];
     GEVec2 _touchStartPoint;
     GEVec2 _touchStartScreenPoint;
     GEVec2 _touchLastPoint;
 }
-@synthesize processor = _processor;
 
-+ (id)touchToMouseWithProcessor:(id)processor {
-    return [[EGTouchToMouse alloc] initWithProcessor:processor];
++ (id)touchToMouseWithDirector:(EGDirectorMac*)director {
+    return [[EGTouchToMouse alloc] initWithDirector:director];
 }
 
-- (id)initWithProcessor:(id)processor {
+- (id)initWithDirector:(EGDirectorMac*)director {
     self = [super init];
     if(self) {
-        _processor = processor;
+        _director = director;
         _touching = NO;
     }
     
     return self;
 }
 
-- (BOOL)touchBeganEvent:(EGEvent*)event {
-    NSEvent * e= [(EGEventMac*)event event];
-    __weak NSView *view = [(EGEventMac*)event view];
-    NSSet* touches = [e touchesMatchingPhase:NSTouchPhaseTouching inView:view];
+- (void)touchBeganEvent:(NSEvent *)event {
+    NSSet* touches = [event touchesMatchingPhase:NSTouchPhaseTouching inView:_director.view];
     if(touches.count == 2) {
         _touching = YES;
         NSArray *array = [touches allObjects];
         _startTouches[0] = [array objectAtIndex:0];
         _startTouches[1] = [array objectAtIndex:1];
-        CGPoint eventLocation = CGEventGetLocation([e CGEvent]);
-        _touchStartScreenPoint.x = eventLocation.x;
-        _touchStartScreenPoint.y = eventLocation.y;
-        _touchStartPoint = [event locationInView];
-        return [_processor mouseDownEvent:[EGEventEmulateMouseMove
-                eventWithType:NSLeftMouseDown locationInView:_touchStartPoint viewSize:[event viewSize] camera:[event camera]]];
+        CGPoint eventLocation = CGEventGetLocation([event CGEvent]);
+        _touchStartScreenPoint.x = (float) eventLocation.x;
+        _touchStartScreenPoint.y = (float) eventLocation.y;
+        NSPoint sp = [event locationInWindow];
+        _touchStartPoint.x = (float) sp.x;
+        _touchStartPoint.y = (float) sp.y;
+        [_director processEvent:[EGEventMac eventMacWithEvent:event location:_touchStartPoint type:NSLeftMouseDown view:_director.view camera:nil]];
     }
-    return NO;
 }
 
-- (BOOL)touchMovedEvent:(EGEvent*)event {
-    if(!_touching) return NO;
+- (void)touchMovedEvent:(NSEvent*)event {
+    if(!_touching) return;
 
-    NSEvent * e= [(EGEventMac*)event event];
-    __weak NSView *view = [(EGEventMac*)event view];
-    NSSet* touches = [e touchesMatchingPhase:NSTouchPhaseTouching inView:view];
+    NSSet* touches = [event touchesMatchingPhase:NSTouchPhaseTouching inView:_director.view];
     NSTouch *touch0 = [self findTouch:_startTouches[0] inTouches:touches];
-    if(touch0 == nil) return NO;
+    if(touch0 == nil) return ;
     NSTouch *touch1 = [self findTouch:_startTouches[1] inTouches:touches];
-    if(touch1 == nil) return NO;
+    if(touch1 == nil) return ;
 
     NSPoint np1 = _startTouches[0].normalizedPosition;
     NSPoint np2 = _startTouches[1].normalizedPosition;
@@ -63,16 +59,14 @@
     CGFloat w = touch0.deviceSize.width;
     CGFloat h = touch0.deviceSize.height;
     GEVec2 delta = GEVec2Make(
-            3*((MIN(p1.x, p2.x) * w) - (MIN(np1.x, np2.x)* w)),
-            3*((MIN(p1.y, p2.y) * h) - (MIN(np1.y, np2.y)* h))
+            (float) (3*((MIN(p1.x, p2.x) * w) - (MIN(np1.x, np2.x)* w))),
+            (float) (3*((MIN(p1.y, p2.y) * h) - (MIN(np1.y, np2.y)* h)))
     );
-
 
     _touchLastPoint = geVec2AddVec2(_touchStartPoint, delta);
     CGPoint cursor = CGPointMake(_touchStartScreenPoint.x + delta.x, _touchStartScreenPoint.y - delta.y);
     CGWarpMouseCursorPosition(cursor);
-    return [_processor mouseDragEvent:[EGEventEmulateMouseMove
-                 eventWithType:NSLeftMouseDragged locationInView:_touchLastPoint viewSize:[event viewSize] camera:[event camera]]];
+    [_director processEvent:[EGEventMac eventMacWithEvent:event location:_touchLastPoint type:NSLeftMouseDragged view:_director.view camera:nil]];
 }
 
 - (NSTouch *)findTouch:(NSTouch *)touch inTouches:(NSSet *)touches {
@@ -85,18 +79,22 @@
 }
 
 
-- (BOOL)touchEndedEvent:(EGEvent*)event {
-    if(!_touching) return NO;
+- (void)touchEndedEvent:(NSEvent*)event {
+    if(!_touching) return;
 
     _touching = NO;
     _startTouches[0] = nil;
     _startTouches[1] = nil;
-    return [_processor mouseUpEvent:[EGEventEmulateMouseMove
-            eventWithType:NSLeftMouseDragged locationInView:_touchLastPoint viewSize:[event viewSize] camera:[event camera]]];
+    [_director processEvent:[EGEventMac eventMacWithEvent:event location:_touchLastPoint type:NSLeftMouseUp view:_director.view camera:nil]];
 }
 
-- (BOOL)touchCanceledEvent:(EGEvent*)event {
-    return YES;
+- (void)touchCanceledEvent:(NSEvent*)event {
+    if(!_touching) return;
+
+    _touching = NO;
+    _startTouches[0] = nil;
+    _startTouches[1] = nil;
+    [_director processEvent:[EGEventMac eventMacWithEvent:event location:_touchLastPoint type:EGLeftMouseCanceled view:_director.view camera:nil]];
 }
 @end
 

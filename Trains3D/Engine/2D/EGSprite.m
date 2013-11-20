@@ -8,6 +8,7 @@
 #import "EGContext.h"
 #import "GL.h"
 #import "GEMat4.h"
+#import "EGInput.h"
 @implementation EGD2D
 static CNVoidRefArray _EGD2D_vertexes;
 static EGMutableVertexBuffer* _EGD2D_vb;

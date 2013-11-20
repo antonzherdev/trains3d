@@ -8,6 +8,7 @@
 
 #import "EGDirectorIOS.h"
 #import "EGOpenGLViewIOS.h"
+#import "EGInput.h"
 
 
 @implementation EGDirectorIOS {
@@ -70,6 +71,14 @@
 
 - (CGFloat)scale {
     return [UIScreen mainScreen].scale;
+}
+
+- (void)registerRecognizerType:(EGRecognizerType *)recognizerType {
+    [_view registerRecognizerType:recognizerType];
+}
+
+- (void)clearRecognizers {
+    [_view clearRecognizers];
 }
 
 @end

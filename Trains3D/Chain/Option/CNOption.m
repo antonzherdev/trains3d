@@ -74,6 +74,10 @@ static ODClassType* _CNOption_type;
     @throw @"Method for is abstract";
 }
 
+- (BOOL)tryEach:(void(^)(id))each {
+    @throw @"Method try is abstract";
+}
+
 - (id<CNIterator>)iterator {
     @throw @"Method iterator is abstract";
 }
@@ -322,6 +326,10 @@ static ODClassType* _CNNone_type;
     return YES;
 }
 
+- (BOOL)tryEach:(void(^)(id))each {
+    return NO;
+}
+
 - (BOOL)containsItem:(id)item {
     return NO;
 }
@@ -422,6 +430,11 @@ static ODClassType* _CNSome_type;
 
 - (void)forEach:(void(^)(id))each {
     each(_value);
+}
+
+- (BOOL)tryEach:(void(^)(id))each {
+    each(_value);
+    return YES;
 }
 
 - (BOOL)goOn:(BOOL(^)(id))on {

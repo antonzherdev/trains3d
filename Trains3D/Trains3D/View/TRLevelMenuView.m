@@ -144,17 +144,15 @@ static ODClassType* _TRLevelMenuView_type;
     }
 }
 
-- (BOOL)processEvent:(EGEvent*)event {
-    return [event tapProcessor:self];
-}
-
-- (BOOL)tapEvent:(EGEvent*)event {
-    GEVec2 p = [event location];
-    if([_pauseSprite containsVec2:p]) {
-        if([[EGDirector current] isPaused]) [[EGDirector current] resume];
-        else [[EGDirector current] pause];
-    }
-    return NO;
+- (EGRecognizers*)recognizers {
+    return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(EGEvent* event) {
+        GEVec2 p = [event location];
+        if([_pauseSprite containsVec2:p]) {
+            if([[EGDirector current] isPaused]) [[EGDirector current] resume];
+            else [[EGDirector current] pause];
+        }
+        return NO;
+    }]];
 }
 
 - (void)prepare {

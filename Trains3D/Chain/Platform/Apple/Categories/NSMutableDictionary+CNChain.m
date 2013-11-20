@@ -8,7 +8,7 @@
 
 - (id)removeForKey:(id)key {
     id ret = [self optKey:key];
-    [self removeObjectForKey:key];
+    if([ret isDefined]) [self removeObjectForKey:key];
     return ret;
 }
 

@@ -3,6 +3,657 @@
 #import "EGDirector.h"
 #import "EGContext.h"
 #import "GEMat4.h"
+@implementation EGRecognizer{
+    EGRecognizerType* _tp;
+}
+static ODClassType* _EGRecognizer_type;
+@synthesize tp = _tp;
+
++ (id)recognizerWithTp:(EGRecognizerType*)tp {
+    return [[EGRecognizer alloc] initWithTp:tp];
+}
+
+- (id)initWithTp:(EGRecognizerType*)tp {
+    self = [super init];
+    if(self) _tp = tp;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGRecognizer_type = [ODClassType classTypeWithCls:[EGRecognizer class]];
+}
+
++ (EGLongRecognizer*)applyTp:(EGRecognizerType*)tp began:(BOOL(^)(EGEvent*))began changed:(void(^)(EGEvent*))changed ended:(void(^)(EGEvent*))ended {
+    return [EGLongRecognizer longRecognizerWithTp:tp began:began changed:changed ended:ended canceled:^void(EGEvent* _) {
+    }];
+}
+
++ (EGLongRecognizer*)applyTp:(EGRecognizerType*)tp began:(BOOL(^)(EGEvent*))began changed:(void(^)(EGEvent*))changed ended:(void(^)(EGEvent*))ended canceled:(void(^)(EGEvent*))canceled {
+    return [EGLongRecognizer longRecognizerWithTp:tp began:began changed:changed ended:ended canceled:canceled];
+}
+
++ (EGShortRecognizer*)applyTp:(EGRecognizerType*)tp on:(BOOL(^)(EGEvent*))on {
+    return [EGShortRecognizer shortRecognizerWithTp:tp on:on];
+}
+
+- (BOOL)isTp:(EGRecognizerType*)tp {
+    return [tp isEqual:_tp];
+}
+
+- (EGRecognizers*)addRecognizer:(EGRecognizer*)recognizer {
+    return [EGRecognizers recognizersWithItems:(@[self, recognizer])];
+}
+
+- (ODClassType*)type {
+    return [EGRecognizer type];
+}
+
++ (ODClassType*)type {
+    return _EGRecognizer_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGRecognizer* o = ((EGRecognizer*)(other));
+    return [self.tp isEqual:o.tp];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.tp hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"tp=%@", self.tp];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGLongRecognizer{
+    BOOL(^_began)(EGEvent*);
+    void(^_changed)(EGEvent*);
+    void(^_ended)(EGEvent*);
+    void(^_canceled)(EGEvent*);
+}
+static ODClassType* _EGLongRecognizer_type;
+@synthesize began = _began;
+@synthesize changed = _changed;
+@synthesize ended = _ended;
+@synthesize canceled = _canceled;
+
++ (id)longRecognizerWithTp:(EGRecognizerType*)tp began:(BOOL(^)(EGEvent*))began changed:(void(^)(EGEvent*))changed ended:(void(^)(EGEvent*))ended canceled:(void(^)(EGEvent*))canceled {
+    return [[EGLongRecognizer alloc] initWithTp:tp began:began changed:changed ended:ended canceled:canceled];
+}
+
+- (id)initWithTp:(EGRecognizerType*)tp began:(BOOL(^)(EGEvent*))began changed:(void(^)(EGEvent*))changed ended:(void(^)(EGEvent*))ended canceled:(void(^)(EGEvent*))canceled {
+    self = [super initWithTp:tp];
+    if(self) {
+        _began = began;
+        _changed = changed;
+        _ended = ended;
+        _canceled = canceled;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGLongRecognizer_type = [ODClassType classTypeWithCls:[EGLongRecognizer class]];
+}
+
+- (ODClassType*)type {
+    return [EGLongRecognizer type];
+}
+
++ (ODClassType*)type {
+    return _EGLongRecognizer_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGLongRecognizer* o = ((EGLongRecognizer*)(other));
+    return [self.tp isEqual:o.tp] && [self.began isEqual:o.began] && [self.changed isEqual:o.changed] && [self.ended isEqual:o.ended] && [self.canceled isEqual:o.canceled];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.tp hash];
+    hash = hash * 31 + [self.began hash];
+    hash = hash * 31 + [self.changed hash];
+    hash = hash * 31 + [self.ended hash];
+    hash = hash * 31 + [self.canceled hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"tp=%@", self.tp];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGShortRecognizer{
+    BOOL(^_on)(EGEvent*);
+}
+static ODClassType* _EGShortRecognizer_type;
+@synthesize on = _on;
+
++ (id)shortRecognizerWithTp:(EGRecognizerType*)tp on:(BOOL(^)(EGEvent*))on {
+    return [[EGShortRecognizer alloc] initWithTp:tp on:on];
+}
+
+- (id)initWithTp:(EGRecognizerType*)tp on:(BOOL(^)(EGEvent*))on {
+    self = [super initWithTp:tp];
+    if(self) _on = on;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGShortRecognizer_type = [ODClassType classTypeWithCls:[EGShortRecognizer class]];
+}
+
+- (ODClassType*)type {
+    return [EGShortRecognizer type];
+}
+
++ (ODClassType*)type {
+    return _EGShortRecognizer_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGShortRecognizer* o = ((EGShortRecognizer*)(other));
+    return [self.tp isEqual:o.tp] && [self.on isEqual:o.on];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.tp hash];
+    hash = hash * 31 + [self.on hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"tp=%@", self.tp];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGRecognizers{
+    id<CNSeq> _items;
+}
+static ODClassType* _EGRecognizers_type;
+@synthesize items = _items;
+
++ (id)recognizersWithItems:(id<CNSeq>)items {
+    return [[EGRecognizers alloc] initWithItems:items];
+}
+
+- (id)initWithItems:(id<CNSeq>)items {
+    self = [super init];
+    if(self) _items = items;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGRecognizers_type = [ODClassType classTypeWithCls:[EGRecognizers class]];
+}
+
++ (EGRecognizers*)applyRecognizer:(EGRecognizer*)recognizer {
+    return [EGRecognizers recognizersWithItems:(@[recognizer])];
+}
+
+- (id)onEvent:(EGEvent*)event {
+    return [_items findWhere:^BOOL(EGRecognizer* item) {
+        return [((EGRecognizer*)(item)) isTp:[event recognizerType]] && ((EGShortRecognizer*)(item)).on(event);
+    }];
+}
+
+- (id)beganEvent:(EGEvent*)event {
+    return [_items findWhere:^BOOL(EGRecognizer* item) {
+        return [((EGRecognizer*)(item)) isTp:[event recognizerType]] && ((EGLongRecognizer*)(item)).began(event);
+    }];
+}
+
+- (EGRecognizers*)addRecognizer:(EGRecognizer*)recognizer {
+    return [EGRecognizers recognizersWithItems:[_items addItem:recognizer]];
+}
+
+- (EGRecognizers*)addRecognizers:(EGRecognizers*)recognizers {
+    return [EGRecognizers recognizersWithItems:[_items addSeq:recognizers.items]];
+}
+
+- (id<CNSet>)types {
+    return [[[_items chain] map:^EGRecognizerType*(EGRecognizer* _) {
+        return ((EGRecognizer*)(_)).tp;
+    }] toSet];
+}
+
+- (ODClassType*)type {
+    return [EGRecognizers type];
+}
+
++ (ODClassType*)type {
+    return _EGRecognizers_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGRecognizers* o = ((EGRecognizers*)(other));
+    return [self.items isEqual:o.items];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.items hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"items=%@", self.items];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGRecognizersState{
+    EGRecognizers* _recognizers;
+    NSMutableDictionary* _longMap;
+}
+static ODClassType* _EGRecognizersState_type;
+@synthesize recognizers = _recognizers;
+
++ (id)recognizersStateWithRecognizers:(EGRecognizers*)recognizers {
+    return [[EGRecognizersState alloc] initWithRecognizers:recognizers];
+}
+
+- (id)initWithRecognizers:(EGRecognizers*)recognizers {
+    self = [super init];
+    if(self) {
+        _recognizers = recognizers;
+        _longMap = [NSMutableDictionary mutableDictionary];
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGRecognizersState_type = [ODClassType classTypeWithCls:[EGRecognizersState class]];
+}
+
+- (BOOL)processEvent:(EGEvent*)event {
+    if([event phase] == EGEventPhase.on) {
+        return [self onEvent:event];
+    } else {
+        if([event phase] == EGEventPhase.began) {
+            return [self beganEvent:event];
+        } else {
+            if([event phase] == EGEventPhase.ended) {
+                return [self endedEvent:event];
+            } else {
+                if([event phase] == EGEventPhase.changed) return [self changedEvent:event];
+                else return [self canceledEvent:event];
+            }
+        }
+    }
+}
+
+- (BOOL)onEvent:(EGEvent*)event {
+    return [[_recognizers onEvent:event] isDefined];
+}
+
+- (BOOL)beganEvent:(EGEvent*)event {
+    EGRecognizerType* tp = [event recognizerType];
+    return [[_longMap modifyBy:^id(id _) {
+        return [_recognizers beganEvent:event];
+    } forKey:tp] isDefined];
+}
+
+- (BOOL)changedEvent:(EGEvent*)event {
+    return [[_longMap optKey:[event recognizerType]] tryEach:^void(EGLongRecognizer* _) {
+        ((EGLongRecognizer*)(_)).changed(event);
+    }];
+}
+
+- (BOOL)endedEvent:(EGEvent*)event {
+    EGRecognizerType* tp = [event recognizerType];
+    [[_longMap optKey:tp] forEach:^void(EGLongRecognizer* _) {
+        ((EGLongRecognizer*)(_)).ended(event);
+    }];
+    return [[_longMap removeForKey:tp] isDefined];
+}
+
+- (BOOL)canceledEvent:(EGEvent*)event {
+    EGRecognizerType* tp = [event recognizerType];
+    [[_longMap optKey:tp] forEach:^void(EGLongRecognizer* _) {
+        ((EGLongRecognizer*)(_)).canceled(event);
+    }];
+    return [[_longMap removeForKey:tp] isDefined];
+}
+
+- (ODClassType*)type {
+    return [EGRecognizersState type];
+}
+
++ (ODClassType*)type {
+    return _EGRecognizersState_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGRecognizersState* o = ((EGRecognizersState*)(other));
+    return [self.recognizers isEqual:o.recognizers];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.recognizers hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"recognizers=%@", self.recognizers];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGRecognizerType
+static ODClassType* _EGRecognizerType_type;
+
++ (id)recognizerType {
+    return [[EGRecognizerType alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGRecognizerType_type = [ODClassType classTypeWithCls:[EGRecognizerType class]];
+}
+
+- (ODClassType*)type {
+    return [EGRecognizerType type];
+}
+
++ (ODClassType*)type {
+    return _EGRecognizerType_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGPan{
+    NSUInteger _fingers;
+}
+static EGPan* _EGPan_leftMouse;
+static EGPan* _EGPan_rightMouse;
+static ODClassType* _EGPan_type;
+@synthesize fingers = _fingers;
+
++ (id)panWithFingers:(NSUInteger)fingers {
+    return [[EGPan alloc] initWithFingers:fingers];
+}
+
+- (id)initWithFingers:(NSUInteger)fingers {
+    self = [super init];
+    if(self) _fingers = fingers;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGPan_type = [ODClassType classTypeWithCls:[EGPan class]];
+    _EGPan_leftMouse = [EGPan panWithFingers:1];
+    _EGPan_rightMouse = [EGPan panWithFingers:2];
+}
+
++ (EGPan*)apply {
+    return _EGPan_leftMouse;
+}
+
+- (ODClassType*)type {
+    return [EGPan type];
+}
+
++ (EGPan*)leftMouse {
+    return _EGPan_leftMouse;
+}
+
++ (EGPan*)rightMouse {
+    return _EGPan_rightMouse;
+}
+
++ (ODClassType*)type {
+    return _EGPan_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGPan* o = ((EGPan*)(other));
+    return self.fingers == o.fingers;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.fingers;
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"fingers=%lu", (unsigned long)self.fingers];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGTap{
+    NSUInteger _fingers;
+    NSUInteger _taps;
+}
+static ODClassType* _EGTap_type;
+@synthesize fingers = _fingers;
+@synthesize taps = _taps;
+
++ (id)tapWithFingers:(NSUInteger)fingers taps:(NSUInteger)taps {
+    return [[EGTap alloc] initWithFingers:fingers taps:taps];
+}
+
+- (id)initWithFingers:(NSUInteger)fingers taps:(NSUInteger)taps {
+    self = [super init];
+    if(self) {
+        _fingers = fingers;
+        _taps = taps;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGTap_type = [ODClassType classTypeWithCls:[EGTap class]];
+}
+
++ (EGTap*)apply {
+    return [EGTap tapWithFingers:1 taps:1];
+}
+
+- (ODClassType*)type {
+    return [EGTap type];
+}
+
++ (ODClassType*)type {
+    return _EGTap_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGTap* o = ((EGTap*)(other));
+    return self.fingers == o.fingers && self.taps == o.taps;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.fingers;
+    hash = hash * 31 + self.taps;
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"fingers=%lu", (unsigned long)self.fingers];
+    [description appendFormat:@", taps=%lu", (unsigned long)self.taps];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGEventPhase
+static EGEventPhase* _EGEventPhase_began;
+static EGEventPhase* _EGEventPhase_changed;
+static EGEventPhase* _EGEventPhase_ended;
+static EGEventPhase* _EGEventPhase_canceled;
+static EGEventPhase* _EGEventPhase_on;
+static NSArray* _EGEventPhase_values;
+
++ (id)eventPhaseWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
+    return [[EGEventPhase alloc] initWithOrdinal:ordinal name:name];
+}
+
+- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
+    self = [super initWithOrdinal:ordinal name:name];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGEventPhase_began = [EGEventPhase eventPhaseWithOrdinal:0 name:@"began"];
+    _EGEventPhase_changed = [EGEventPhase eventPhaseWithOrdinal:1 name:@"changed"];
+    _EGEventPhase_ended = [EGEventPhase eventPhaseWithOrdinal:2 name:@"ended"];
+    _EGEventPhase_canceled = [EGEventPhase eventPhaseWithOrdinal:3 name:@"canceled"];
+    _EGEventPhase_on = [EGEventPhase eventPhaseWithOrdinal:4 name:@"on"];
+    _EGEventPhase_values = (@[_EGEventPhase_began, _EGEventPhase_changed, _EGEventPhase_ended, _EGEventPhase_canceled, _EGEventPhase_on]);
+}
+
++ (EGEventPhase*)began {
+    return _EGEventPhase_began;
+}
+
++ (EGEventPhase*)changed {
+    return _EGEventPhase_changed;
+}
+
++ (EGEventPhase*)ended {
+    return _EGEventPhase_ended;
+}
+
++ (EGEventPhase*)canceled {
+    return _EGEventPhase_canceled;
+}
+
++ (EGEventPhase*)on {
+    return _EGEventPhase_on;
+}
+
++ (NSArray*)values {
+    return _EGEventPhase_values;
+}
+
+@end
+
+
 @implementation EGEventCamera{
     EGMatrixModel* _matrixModel;
     GERect _viewport;
@@ -109,6 +760,14 @@ static ODClassType* _EGEvent_type;
     return uwrap(GELine3, [__lazy_segment get]);
 }
 
+- (EGRecognizerType*)recognizerType {
+    @throw @"Method recognizerType is abstract";
+}
+
+- (EGEventPhase*)phase {
+    @throw @"Method phase is abstract";
+}
+
 - (EGEvent*)setCamera:(id)camera {
     @throw @"Method set is abstract";
 }
@@ -133,85 +792,6 @@ static ODClassType* _EGEvent_type;
 
 - (BOOL)checkViewport {
     return [_camera isEmpty] || geRectContainsVec2(((EGEventCamera*)([_camera get])).viewport, [self locationInView]);
-}
-
-- (BOOL)isLeftMouseDown {
-    @throw @"Method isLeftMouseDown is abstract";
-}
-
-- (BOOL)isLeftMouseDrag {
-    @throw @"Method isLeftMouseDrag is abstract";
-}
-
-- (BOOL)isLeftMouseUp {
-    @throw @"Method isLeftMouseUp is abstract";
-}
-
-- (BOOL)leftMouseProcessor:(id<EGMouseProcessor>)processor {
-    if(!([self checkViewport])) {
-        return NO;
-    } else {
-        if([self isLeftMouseDown]) {
-            return [processor mouseDownEvent:self];
-        } else {
-            if([self isLeftMouseDrag]) {
-                return [processor mouseDragEvent:self];
-            } else {
-                if([self isLeftMouseUp]) return [processor mouseUpEvent:self];
-                else return NO;
-            }
-        }
-    }
-}
-
-- (BOOL)isTouchBegan {
-    @throw @"Method isTouchBegan is abstract";
-}
-
-- (BOOL)isTouchMoved {
-    @throw @"Method isTouchMoved is abstract";
-}
-
-- (BOOL)isTouchEnded {
-    @throw @"Method isTouchEnded is abstract";
-}
-
-- (BOOL)isTouchCanceled {
-    @throw @"Method isTouchCanceled is abstract";
-}
-
-- (BOOL)touchProcessor:(id<EGTouchProcessor>)processor {
-    if(!([self checkViewport])) {
-        return NO;
-    } else {
-        if([self isTouchBegan]) {
-            return [processor touchBeganEvent:self];
-        } else {
-            if([self isTouchMoved]) {
-                return [processor touchMovedEvent:self];
-            } else {
-                if([self isTouchEnded]) {
-                    return [processor touchEndedEvent:self];
-                } else {
-                    if([self isTouchCanceled]) return [processor touchCanceledEvent:self];
-                    else return NO;
-                }
-            }
-        }
-    }
-}
-
-- (BOOL)isTap {
-    @throw @"Method isTap is abstract";
-}
-
-- (BOOL)tapProcessor:(id<EGTapProcessor>)processor {
-    if(!([self checkViewport])) {
-        return NO;
-    } else {
-        if([self isTap]) return [processor tapEvent:self];
-        else return NO;
-    }
 }
 
 - (ODClassType*)type {

@@ -2,16 +2,18 @@
 #import "EGInput.h"
 
 @class EGTouchToMouse;
+@class EGDirectorMac;
+@class EGOpenGLViewMac;
 
-@interface EGTouchToMouse : NSObject<EGTouchProcessor>
-@property (nonatomic, readonly) id processor;
+@interface EGTouchToMouse : NSObject
 
-+ (id)touchToMouseWithProcessor:(id)processor;
-- (id)initWithProcessor:(id)processor;
-- (BOOL)touchBeganEvent:(EGEvent*)event;
-- (BOOL)touchMovedEvent:(EGEvent*)event;
-- (BOOL)touchEndedEvent:(EGEvent*)event;
-- (BOOL)touchCanceledEvent:(EGEvent*)event;
++ (id)touchToMouseWithDirector:(EGDirectorMac*)director;
+- (id)initWithDirector:(EGDirectorMac*)director;
+
+- (void)touchBeganEvent:(NSEvent *)event;
+- (void)touchMovedEvent:(NSEvent*)event;
+- (void)touchEndedEvent:(NSEvent*)event;
+- (void)touchCanceledEvent:(NSEvent*)event;
 @end
 
 

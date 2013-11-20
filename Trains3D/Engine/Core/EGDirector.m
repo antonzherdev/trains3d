@@ -2,10 +2,10 @@
 
 #import "EGTime.h"
 #import "EGScene.h"
+#import "EGInput.h"
 #import "EGContext.h"
 #import "GL.h"
 #import "EGStat.h"
-#import "EGInput.h"
 @implementation EGDirector{
     id __scene;
     BOOL __isStarted;
@@ -54,13 +54,27 @@ static ODClassType* _EGDirector_type;
 
 - (void)setScene:(EGScene*(^)())scene {
     [self lock];
-    if([__scene isDefined]) [((EGScene*)([__scene get])) stop];
+    if([__scene isDefined]) {
+        [((EGScene*)([__scene get])) stop];
+        [self clearRecognizers];
+    }
     EGScene* sc = ((EGScene*(^)())(scene))();
     __scene = [CNOption applyValue:sc];
     [sc reshapeWithViewSize:__lastViewSize];
+    [[sc recognizersTypes] forEach:^void(EGRecognizerType* _) {
+        [self registerRecognizerType:_];
+    }];
     [sc start];
     if(__isPaused) [self redraw];
     [self unlock];
+}
+
+- (void)clearRecognizers {
+    @throw @"Method clearRecognizers is abstract";
+}
+
+- (void)registerRecognizerType:(EGRecognizerType*)recognizerType {
+    @throw @"Method register is abstract";
 }
 
 - (CGFloat)scale {

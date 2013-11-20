@@ -47,7 +47,7 @@
 @end
 
 
-@interface TRCallRepairerView : NSObject<EGInputProcessor, EGTapProcessor>
+@interface TRCallRepairerView : NSObject<EGInputProcessor>
 @property (nonatomic, readonly) TRLevel* level;
 
 + (id)callRepairerViewWithLevel:(TRLevel*)level;
@@ -56,8 +56,7 @@
 - (void)reshapeWithViewport:(GERect)viewport;
 - (void)draw;
 - (void)drawButtonForCity:(TRCity*)city;
-- (BOOL)processEvent:(EGEvent*)event;
-- (BOOL)tapEvent:(EGEvent*)event;
+- (EGRecognizers*)recognizers;
 + (ODClassType*)type;
 @end
 

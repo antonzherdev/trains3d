@@ -47,7 +47,7 @@ class CityView(level : Level) {
     }
 }
 
-class CallRepairerView(level : Level) extends InputProcessor with TapProcessor {
+class CallRepairerView(level : Level) extends InputProcessor {
     private var buttonSize : vec2
     private val text = Text(nil, Loc.callRepairer, vec3(0, 0, 0), TextAlignment(0, 0), vec4(0.1, 0.1, 0.1, 1))
     def reshapeWith(viewport : Rect) {
@@ -88,16 +88,10 @@ class CallRepairerView(level : Level) extends InputProcessor with TapProcessor {
         text.draw
     }
 
-    def process(event : Event) : bool = {
-        event.tap(self)
-    }
-
-    def tap(event : Event) : bool = {
+    def recognizers : Recognizers = Recognizer(Tap()) { event : Event ->
         val p = event.locationInViewport
         val b = buttons.chain.find(_.b.contains(p))
-        b.for{kv ->
-            if(kv.a.canRunNewTrain) level.runRepairerFrom(kv.a)
-        }
+        b.for{kv -> if(kv.a.canRunNewTrain) level.runRepairerFrom(kv.a)}
         b.isDefined
     }
 }

@@ -4,23 +4,15 @@ import com.antonzherdev.eg._
 import core.math._
 
 class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor {
-    private val mouseProcessor = RailroadBuilderMouseProcessor(builder)
-    private val touchProcessor = TouchToMouse(mouseProcessor)
 
-    def process(event : Event) : bool = event.leftMouse(mouseProcessor) || event.touch(touchProcessor)
-}
-
-class RailroadBuilderMouseProcessor(builder : RailroadBuilder) extends MouseProcessor {
     private var startedPoint : vec2? = nil
 
-    def mouseDown(event : Event) = {
-        startedPoint = event.location
-        true
-    }
-
-    def mouseDrag(event : Event) =
-        if(startedPoint.isEmpty) false
-        else {
+    def recognizers : Recognizers = Recognizer(Pan(),
+        began = event -> {
+            startedPoint = event.location
+            true
+        },
+        changed = event -> {
             val line = Line2(p0 = startedPoint.get, p1 = event.location)
 
             if(line.u.lengthSquare > 0.25) {
@@ -42,19 +34,15 @@ class RailroadBuilderMouseProcessor(builder : RailroadBuilder) extends MouseProc
             } else {
                 builder.clear
             }
-            true
-        }
+       },
+       ended = event -> {
+           builder.fix
+           startedPoint = nil
+       }
+    )
 
     private def connectorsByDistanceFrom(point : vec2) : [RailConnector] =
         RailConnector.values.chain.sortBy.asc{connector ->
             (connector.vec*0.5 - point).lengthSquare
         }.endSort.toArray
-
-    def mouseUp(event : Event) =
-        if(startedPoint.isEmpty) false
-        else {
-            builder.fix
-            startedPoint = nil
-            true
-        }
 }

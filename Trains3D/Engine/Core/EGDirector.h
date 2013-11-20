@@ -2,6 +2,7 @@
 #import "GEVec.h"
 @class EGTime;
 @class EGScene;
+@class EGRecognizerType;
 @class EGGlobal;
 @class EGContext;
 @class EGEnablingState;
@@ -20,6 +21,8 @@
 + (EGDirector*)current;
 - (id)scene;
 - (void)setScene:(EGScene*(^)())scene;
+- (void)clearRecognizers;
+- (void)registerRecognizerType:(EGRecognizerType*)recognizerType;
 - (CGFloat)scale;
 - (void)lock;
 - (void)unlock;

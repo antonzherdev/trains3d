@@ -3,7 +3,6 @@
 #import "EGMesh.h"
 #import "GEVec.h"
 #import "EGShader.h"
-#import "EGInput.h"
 #import "EGFont.h"
 @class EGMutableVertexBuffer;
 @class EGVBO;
@@ -20,6 +19,7 @@
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class GEMat4;
+@class EGEvent;
 
 @class EGD2D;
 @class EGCircleShaderBuilder;
@@ -138,7 +138,7 @@
 @end
 
 
-@interface EGButton : NSObject<EGTapProcessor>
+@interface EGButton : NSObject
 @property (nonatomic, readonly) void(^onDraw)(GERect);
 @property (nonatomic, readonly) void(^onClick)();
 @property (nonatomic) GERect rect;

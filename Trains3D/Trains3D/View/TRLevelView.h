@@ -45,7 +45,7 @@
 - (void)prepare;
 - (void)draw;
 - (void)updateWithDelta:(CGFloat)delta;
-- (BOOL)processEvent:(EGEvent*)event;
+- (EGRecognizers*)recognizers;
 - (void)reshapeWithViewport:(GERect)viewport;
 + (ODClassType*)type;
 @end

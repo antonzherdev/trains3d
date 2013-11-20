@@ -23,12 +23,12 @@
 @class TRHelp;
 
 @class TRLevelPauseMenuView;
+@class TRPauseView;
 @class TRMenuView;
 @class TRPauseMenuView;
 @class TRWinMenu;
 @class TRLooseMenu;
 @class TRHelpView;
-@protocol TRPauseView;
 
 @interface TRLevelPauseMenuView : NSObject<EGLayerView, EGInputProcessor>
 @property (nonatomic, readonly) TRLevel* level;
@@ -39,23 +39,28 @@
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)reshapeWithViewport:(GERect)viewport;
-- (id<TRPauseView>)view;
+- (TRPauseView*)view;
 - (void)draw;
 - (void)updateWithDelta:(CGFloat)delta;
 - (BOOL)isActive;
 - (BOOL)isProcessorActive;
-- (BOOL)processEvent:(EGEvent*)event;
+- (EGRecognizers*)recognizers;
 + (ODClassType*)type;
 @end
 
 
-@protocol TRPauseView<EGTapProcessor>
+@interface TRPauseView : NSObject
++ (id)pauseView;
+- (id)init;
+- (ODClassType*)type;
 - (void)reshapeWithViewport:(GERect)viewport;
 - (void)draw;
+- (BOOL)tapEvent:(EGEvent*)event;
++ (ODClassType*)type;
 @end
 
 
-@interface TRMenuView : NSObject
+@interface TRMenuView : TRPauseView
 + (id)menuView;
 - (id)init;
 - (ODClassType*)type;
@@ -73,7 +78,7 @@
 @end
 
 
-@interface TRPauseMenuView : TRMenuView<TRPauseView>
+@interface TRPauseMenuView : TRMenuView
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) id<CNSeq> buttons;
 
@@ -84,7 +89,7 @@
 @end
 
 
-@interface TRWinMenu : TRMenuView<TRPauseView>
+@interface TRWinMenu : TRMenuView
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) id<CNSeq> buttons;
 
@@ -98,7 +103,7 @@
 @end
 
 
-@interface TRLooseMenu : TRMenuView<TRPauseView>
+@interface TRLooseMenu : TRMenuView
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) id<CNSeq> buttons;
 
@@ -112,7 +117,7 @@
 @end
 
 
-@interface TRHelpView : NSObject<TRPauseView>
+@interface TRHelpView : TRPauseView
 @property (nonatomic, readonly) TRLevel* level;
 
 + (id)helpViewWithLevel:(TRLevel*)level;

@@ -66,11 +66,11 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     private val railroadBuilderProcessor = RailroadBuilderProcessor(level.railroad.builder)
     private val switchProcessor = SwitchProcessor(level)
 
-    def process(event : Event) : bool =
-        callRepairerView.process(event)
-        || railroadView.process(event)
-        || switchProcessor.process(event)
-        || railroadBuilderProcessor.process(event)
+    def recognizers : Recognizers =
+        callRepairerView.recognizers +
+        railroadView.recognizers +
+        switchProcessor.recognizers +
+        railroadBuilderProcessor.recognizers
 
     def reshapeWith(viewport : Rect) {
         matrix.value = camera.matrixModel

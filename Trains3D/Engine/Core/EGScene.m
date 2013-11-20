@@ -56,6 +56,10 @@ static ODClassType* _EGScene_type;
     [_layers draw];
 }
 
+- (id<CNSet>)recognizersTypes {
+    return [_layers recognizersTypes];
+}
+
 - (BOOL)processEvent:(EGEvent*)event {
     return [_layers processEvent:event];
 }
@@ -182,6 +186,16 @@ static ODClassType* _EGLayers_type;
     egPopGroupMarker();
 }
 
+- (id<CNSet>)recognizersTypes {
+    return [[[[[[self layers] chain] flatMap:^id(EGLayer* _) {
+        return ((EGLayer*)(_)).inputProcessor;
+    }] flatMap:^id<CNSeq>(id<EGInputProcessor> _) {
+        return [((id<EGInputProcessor>)(_)) recognizers].items;
+    }] map:^EGRecognizerType*(EGRecognizer* _) {
+        return ((EGRecognizer*)(_)).tp;
+    }] toSet];
+}
+
 - (BOOL)processEvent:(EGEvent*)event {
     __block BOOL r = NO;
     [[self viewportsWithViewSize:event.viewSize] forEach:^void(CNTuple* p) {
@@ -293,6 +307,7 @@ static ODClassType* _EGSingleLayer_type;
 @implementation EGLayer{
     id<EGLayerView> _view;
     id _inputProcessor;
+    EGRecognizersState* _recognizerState;
 }
 static ODClassType* _EGLayer_type;
 @synthesize view = _view;
@@ -307,6 +322,11 @@ static ODClassType* _EGLayer_type;
     if(self) {
         _view = view;
         _inputProcessor = inputProcessor;
+        _recognizerState = [EGRecognizersState recognizersStateWithRecognizers:[[_inputProcessor mapF:^EGRecognizers*(id<EGInputProcessor> _) {
+            return [((id<EGInputProcessor>)(_)) recognizers];
+        }] getOrElseF:^EGRecognizers*() {
+            return [ODObject object];
+        }]];
     }
     
     return self;
@@ -379,17 +399,15 @@ static ODClassType* _EGLayer_type;
 }
 
 - (BOOL)processEvent:(EGEvent*)event viewport:(GERect)viewport {
-    return unumb([[_inputProcessor mapF:^id(id<EGInputProcessor> p) {
-        if([((id<EGInputProcessor>)(p)) isProcessorActive]) {
-            id<EGCamera> camera = [_view camera];
-            EGGlobal.matrix.value = [camera matrixModel];
-            EGEventCamera* cam = [EGEventCamera eventCameraWithMatrixModel:[camera matrixModel] viewport:viewport];
-            EGEvent* e = [event setCamera:[CNOption applyValue:cam]];
-            return numb([((id<EGInputProcessor>)(p)) processEvent:e]);
-        } else {
-            return @NO;
-        }
-    }] getOrValue:@NO]);
+    if([_inputProcessor isDefined] && [((id<EGInputProcessor>)([_inputProcessor get])) isProcessorActive]) {
+        id<EGCamera> camera = [_view camera];
+        EGGlobal.matrix.value = [camera matrixModel];
+        EGEventCamera* cam = [EGEventCamera eventCameraWithMatrixModel:[camera matrixModel] viewport:viewport];
+        EGEvent* e = [event setCamera:[CNOption applyValue:cam]];
+        return [_recognizerState processEvent:e];
+    } else {
+        return NO;
+    }
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

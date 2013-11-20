@@ -81,7 +81,7 @@ class RailroadView(level : Level) extends InputProcessor {
         undoView.reshape
     }
 
-    def process(event : Event) : bool = undoView.process(event)
+    def recognizers = undoView.recognizers
 }
 
 class RailView(railroad : Railroad) {
@@ -137,7 +137,7 @@ class RailView(railroad : Railroad) {
     }
 }
 
-class UndoView(builder : RailroadBuilder) extends InputProcessor with TapProcessor {
+class UndoView(builder : RailroadBuilder) extends InputProcessor {
     private val text = Text(nil, Loc.undo, vec3(0, 0, 0), TextAlignment(0, 0), vec4(0.1, 0.1, 0.1, 1))
     def reshape {
         val font = fontWith(name = "lucida_grande", 18)
@@ -165,8 +165,8 @@ class UndoView(builder : RailroadBuilder) extends InputProcessor with TapProcess
         }
     }
 
-    def process(event : Event) : bool = !empty && event.tap(self)
-    def tap(event : Event) : bool = {
+    def recognizers : Recognizers = Recognizer(Tap()) {event ->
+        if(empty) return false
         val p = event.locationInViewport
         if(button.contains(p)) {
             builder.undo

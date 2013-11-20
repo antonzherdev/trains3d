@@ -54,7 +54,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
     [_looseView reshapeWithViewport:viewport];
 }
 
-- (id<TRPauseView>)view {
+- (TRPauseView*)view {
     if(!([[_level help] isEmpty])) {
         return _helpView;
     } else {
@@ -89,8 +89,10 @@ static ODClassType* _TRLevelPauseMenuView_type;
     return [[EGDirector current] isPaused];
 }
 
-- (BOOL)processEvent:(EGEvent*)event {
-    return [event tapProcessor:[self view]];
+- (EGRecognizers*)recognizers {
+    return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(EGEvent* _) {
+        return [[self view] tapEvent:_];
+    }]];
 }
 
 - (void)prepare {
@@ -128,6 +130,67 @@ static ODClassType* _TRLevelPauseMenuView_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"level=%@", self.level];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRPauseView
+static ODClassType* _TRPauseView_type;
+
++ (id)pauseView {
+    return [[TRPauseView alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRPauseView_type = [ODClassType classTypeWithCls:[TRPauseView class]];
+}
+
+- (void)reshapeWithViewport:(GERect)viewport {
+    @throw @"Method reshapeWith is abstract";
+}
+
+- (void)draw {
+    @throw @"Method draw is abstract";
+}
+
+- (BOOL)tapEvent:(EGEvent*)event {
+    @throw @"Method tap is abstract";
+}
+
+- (ODClassType*)type {
+    return [TRPauseView type];
+}
+
++ (ODClassType*)type {
+    return _TRPauseView_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
     return description;
 }

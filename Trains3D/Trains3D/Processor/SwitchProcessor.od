@@ -2,8 +2,7 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class SwitchProcessor(level : Level) extends InputProcessor with TapProcessor {
-    def process(event : Event) : bool = event.tap(self)
+class SwitchProcessor(level : Level) extends InputProcessor {
 
     val switchShape = CollisionBox2d(0.4, 0.4)
     val lightShape = CollisionBox2d(0.4, 0.24)
@@ -29,7 +28,7 @@ class SwitchProcessor(level : Level) extends InputProcessor with TapProcessor {
     }
 
 
-    def tap(event : Event) = {
+    def recognizers: Recognizers = Recognizer(Tap()) {event : Event ->
         val downed = world.closestCrossPointWith(event.segment).map(_.body.data)
         if(downed.isDefined) {
             downed.get.as<Switch>.for(level.tryTurn(theSwitch = _ ))
