@@ -9,7 +9,6 @@
 #import "EGOpenGLViewIOS.h"
 #import "EGDirector.h"
 #import "EGDirectorIOS.h"
-#import "EGEventIOS.h"
 #import "EGContext.h"
 #import "EGInput.h"
 
@@ -130,9 +129,9 @@
 }
 
 - (void)processRecognizer:(UIGestureRecognizer *)recognizer tp:(EGRecognizerType *)tp phase:(EGEventPhase *)phase {
-    [_director processEvent:[EGEventIOS eventIOsWithTp:tp
-                                                 phase:phase location:[self locationForRecognizer:recognizer]
-                                                  view:self camera:[CNOption none]]];
+    [_director processEvent:[EGEvent applyRecognizerType:tp
+                                                 phase:phase locationInView:[self locationForRecognizer:recognizer]
+                                                  viewSize:self.viewSize]];
 }
 
 

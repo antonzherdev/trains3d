@@ -91,6 +91,7 @@ class Tap(fingers : uint, taps : uint)  extends RecognizerType<LongRecognizer> {
     static def apply() = Tap(1, 1)
 }
 
+class Pinch extends RecognizerType<LongRecognizer>
 
 enum EventPhase {
     began()
@@ -102,12 +103,12 @@ enum EventPhase {
 
 class EventCamera(matrixModel : MatrixModel, viewport : Rect)
 
-class Event(viewSize : vec2, camera : EventCamera?) {
-    def recognizerType : RecognizerType<_>
-    def phase : EventPhase
-    def set(camera : EventCamera?) : Event
+class Event(recognizerType : RecognizerType<_>, phase : EventPhase, locationInView : vec2, viewSize : vec2, camera : EventCamera?) {
+    static def apply(recognizerType : RecognizerType<_>, phase : EventPhase, locationInView : vec2, viewSize : vec2) : Event =
+        Event(recognizerType, phase, locationInView, viewSize, nil)
 
-    def locationInView : vec2
+    def set(camera : EventCamera?) : Event = Event(recognizerType, phase, locationInView, viewSize, camera)
+
     def location = locationFor(0)
     def locationInViewport : vec2 = {
         val viewport = camera.get.viewport

@@ -239,13 +239,13 @@ static ODClassType* _EGRecognizers_type;
 
 - (id)onEvent:(EGEvent*)event {
     return [_items findWhere:^BOOL(EGRecognizer* item) {
-        return [((EGRecognizer*)(item)) isTp:[event recognizerType]] && ((EGShortRecognizer*)(item)).on(event);
+        return [((EGRecognizer*)(item)) isTp:event.recognizerType] && ((EGShortRecognizer*)(item)).on(event);
     }];
 }
 
 - (id)beganEvent:(EGEvent*)event {
     return [_items findWhere:^BOOL(EGRecognizer* item) {
-        return [((EGRecognizer*)(item)) isTp:[event recognizerType]] && ((EGLongRecognizer*)(item)).began(event);
+        return [((EGRecognizer*)(item)) isTp:event.recognizerType] && ((EGLongRecognizer*)(item)).began(event);
     }];
 }
 
@@ -325,16 +325,16 @@ static ODClassType* _EGRecognizersState_type;
 }
 
 - (BOOL)processEvent:(EGEvent*)event {
-    if([event phase] == EGEventPhase.on) {
+    if(event.phase == EGEventPhase.on) {
         return [self onEvent:event];
     } else {
-        if([event phase] == EGEventPhase.began) {
+        if(event.phase == EGEventPhase.began) {
             return [self beganEvent:event];
         } else {
-            if([event phase] == EGEventPhase.ended) {
+            if(event.phase == EGEventPhase.ended) {
                 return [self endedEvent:event];
             } else {
-                if([event phase] == EGEventPhase.changed) return [self changedEvent:event];
+                if(event.phase == EGEventPhase.changed) return [self changedEvent:event];
                 else return [self canceledEvent:event];
             }
         }
@@ -346,20 +346,20 @@ static ODClassType* _EGRecognizersState_type;
 }
 
 - (BOOL)beganEvent:(EGEvent*)event {
-    EGRecognizerType* tp = [event recognizerType];
+    EGRecognizerType* tp = event.recognizerType;
     return [[_longMap modifyBy:^id(id _) {
         return [_recognizers beganEvent:event];
     } forKey:tp] isDefined];
 }
 
 - (BOOL)changedEvent:(EGEvent*)event {
-    return [[_longMap optKey:[event recognizerType]] tryEach:^void(EGLongRecognizer* _) {
+    return [[_longMap optKey:event.recognizerType] tryEach:^void(EGLongRecognizer* _) {
         ((EGLongRecognizer*)(_)).changed(event);
     }];
 }
 
 - (BOOL)endedEvent:(EGEvent*)event {
-    EGRecognizerType* tp = [event recognizerType];
+    EGRecognizerType* tp = event.recognizerType;
     [[_longMap optKey:tp] forEach:^void(EGLongRecognizer* _) {
         ((EGLongRecognizer*)(_)).ended(event);
     }];
@@ -367,7 +367,7 @@ static ODClassType* _EGRecognizersState_type;
 }
 
 - (BOOL)canceledEvent:(EGEvent*)event {
-    EGRecognizerType* tp = [event recognizerType];
+    EGRecognizerType* tp = event.recognizerType;
     [[_longMap optKey:tp] forEach:^void(EGLongRecognizer* _) {
         ((EGLongRecognizer*)(_)).canceled(event);
     }];
@@ -599,6 +599,55 @@ static ODClassType* _EGTap_type;
 @end
 
 
+@implementation EGPinch
+static ODClassType* _EGPinch_type;
+
++ (id)pinch {
+    return [[EGPinch alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGPinch_type = [ODClassType classTypeWithCls:[EGPinch class]];
+}
+
+- (ODClassType*)type {
+    return [EGPinch type];
+}
+
++ (ODClassType*)type {
+    return _EGPinch_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation EGEventPhase
 static EGEventPhase* _EGEventPhase_began;
 static EGEventPhase* _EGEventPhase_changed;
@@ -719,26 +768,35 @@ static ODClassType* _EGEventCamera_type;
 
 
 @implementation EGEvent{
+    EGRecognizerType* _recognizerType;
+    EGEventPhase* _phase;
+    GEVec2 _locationInView;
     GEVec2 _viewSize;
     id _camera;
     CNLazy* __lazy_segment;
 }
 static ODClassType* _EGEvent_type;
+@synthesize recognizerType = _recognizerType;
+@synthesize phase = _phase;
+@synthesize locationInView = _locationInView;
 @synthesize viewSize = _viewSize;
 @synthesize camera = _camera;
 
-+ (id)eventWithViewSize:(GEVec2)viewSize camera:(id)camera {
-    return [[EGEvent alloc] initWithViewSize:viewSize camera:camera];
++ (id)eventWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize camera:(id)camera {
+    return [[EGEvent alloc] initWithRecognizerType:recognizerType phase:phase locationInView:locationInView viewSize:viewSize camera:camera];
 }
 
-- (id)initWithViewSize:(GEVec2)viewSize camera:(id)camera {
+- (id)initWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize camera:(id)camera {
     self = [super init];
     __weak EGEvent* _weakSelf = self;
     if(self) {
+        _recognizerType = recognizerType;
+        _phase = phase;
+        _locationInView = locationInView;
         _viewSize = viewSize;
         _camera = camera;
         __lazy_segment = [CNLazy lazyWithF:^id() {
-            return wrap(GELine3, (([_weakSelf.camera isEmpty]) ? GELine3Make(geVec3ApplyVec2Z([_weakSelf locationInView], 0.0), GEVec3Make(0.0, 0.0, 1000.0)) : ^GELine3() {
+            return wrap(GELine3, (([_weakSelf.camera isEmpty]) ? GELine3Make(geVec3ApplyVec2Z(_weakSelf.locationInView, 0.0), GEVec3Make(0.0, 0.0, 1000.0)) : ^GELine3() {
                 GEVec2 loc = [_weakSelf locationInViewport];
                 GEMat4* mat4 = [[((EGEventCamera*)([_weakSelf.camera get])).matrixModel wcp] inverse];
                 GEVec4 p0 = [mat4 mulVec4:GEVec4Make(loc.x, loc.y, -1.0, 1.0)];
@@ -760,20 +818,12 @@ static ODClassType* _EGEvent_type;
     return uwrap(GELine3, [__lazy_segment get]);
 }
 
-- (EGRecognizerType*)recognizerType {
-    @throw @"Method recognizerType is abstract";
-}
-
-- (EGEventPhase*)phase {
-    @throw @"Method phase is abstract";
++ (EGEvent*)applyRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize {
+    return [EGEvent eventWithRecognizerType:recognizerType phase:phase locationInView:locationInView viewSize:viewSize camera:[CNOption none]];
 }
 
 - (EGEvent*)setCamera:(id)camera {
-    @throw @"Method set is abstract";
-}
-
-- (GEVec2)locationInView {
-    @throw @"Method locationInView is abstract";
+    return [EGEvent eventWithRecognizerType:_recognizerType phase:_phase locationInView:_locationInView viewSize:_viewSize camera:camera];
 }
 
 - (GEVec2)location {
@@ -782,16 +832,16 @@ static ODClassType* _EGEvent_type;
 
 - (GEVec2)locationInViewport {
     GERect viewport = ((EGEventCamera*)([_camera get])).viewport;
-    return geVec2SubVec2(geVec2MulI(geVec2DivVec2(geVec2SubVec2([self locationInView], viewport.p0), viewport.size), 2), GEVec2Make(1.0, 1.0));
+    return geVec2SubVec2(geVec2MulI(geVec2DivVec2(geVec2SubVec2(_locationInView, viewport.p0), viewport.size), 2), GEVec2Make(1.0, 1.0));
 }
 
 - (GEVec2)locationForDepth:(CGFloat)depth {
-    if([_camera isEmpty]) return [self locationInView];
+    if([_camera isEmpty]) return _locationInView;
     else return geVec3Xy(geLine3RPlane([self segment], GEPlaneMake(GEVec3Make(0.0, 0.0, ((float)(depth))), GEVec3Make(0.0, 0.0, 1.0))));
 }
 
 - (BOOL)checkViewport {
-    return [_camera isEmpty] || geRectContainsVec2(((EGEventCamera*)([_camera get])).viewport, [self locationInView]);
+    return [_camera isEmpty] || geRectContainsVec2(((EGEventCamera*)([_camera get])).viewport, _locationInView);
 }
 
 - (ODClassType*)type {
@@ -810,11 +860,14 @@ static ODClassType* _EGEvent_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGEvent* o = ((EGEvent*)(other));
-    return GEVec2Eq(self.viewSize, o.viewSize) && [self.camera isEqual:o.camera];
+    return [self.recognizerType isEqual:o.recognizerType] && self.phase == o.phase && GEVec2Eq(self.locationInView, o.locationInView) && GEVec2Eq(self.viewSize, o.viewSize) && [self.camera isEqual:o.camera];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
+    hash = hash * 31 + [self.recognizerType hash];
+    hash = hash * 31 + [self.phase ordinal];
+    hash = hash * 31 + GEVec2Hash(self.locationInView);
     hash = hash * 31 + GEVec2Hash(self.viewSize);
     hash = hash * 31 + [self.camera hash];
     return hash;
@@ -822,7 +875,10 @@ static ODClassType* _EGEvent_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"viewSize=%@", GEVec2Description(self.viewSize)];
+    [description appendFormat:@"recognizerType=%@", self.recognizerType];
+    [description appendFormat:@", phase=%@", self.phase];
+    [description appendFormat:@", locationInView=%@", GEVec2Description(self.locationInView)];
+    [description appendFormat:@", viewSize=%@", GEVec2Description(self.viewSize)];
     [description appendFormat:@", camera=%@", self.camera];
     [description appendString:@">"];
     return description;

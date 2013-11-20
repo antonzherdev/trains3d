@@ -1,5 +1,4 @@
 #import "EGTouchToMouse.h"
-#import "EGEventMac.h"
 #import "EGOpenGLViewMac.h"
 #import "EGDirectorMac.h"
 
@@ -26,6 +25,12 @@
     return self;
 }
 
+#define DISPATCH_EVENT(theEvent, __tp__, __phase__, __location__) {\
+[_director.view lockOpenGLContext];\
+[_director processEvent:[EGEvent applyRecognizerType:__tp__ phase:__phase__ locationInView:__location__ viewSize:_director.view.viewSize]];\
+[_director.view unlockOpenGLContext];\
+}
+
 - (void)touchBeganEvent:(NSEvent *)event {
     NSSet* touches = [event touchesMatchingPhase:NSTouchPhaseTouching inView:_director.view];
     if(touches.count == 2) {
@@ -39,7 +44,7 @@
         NSPoint sp = [event locationInWindow];
         _touchStartPoint.x = (float) sp.x;
         _touchStartPoint.y = (float) sp.y;
-        [_director processEvent:[EGEventMac eventMacWithEvent:event location:_touchStartPoint type:NSLeftMouseDown view:_director.view camera:nil]];
+        DISPATCH_EVENT(theEvent, [EGPan leftMouse], [EGEventPhase began], _touchStartPoint);
     }
 }
 
@@ -66,7 +71,7 @@
     _touchLastPoint = geVec2AddVec2(_touchStartPoint, delta);
     CGPoint cursor = CGPointMake(_touchStartScreenPoint.x + delta.x, _touchStartScreenPoint.y - delta.y);
     CGWarpMouseCursorPosition(cursor);
-    [_director processEvent:[EGEventMac eventMacWithEvent:event location:_touchLastPoint type:NSLeftMouseDragged view:_director.view camera:nil]];
+    DISPATCH_EVENT(theEvent, [EGPan leftMouse], [EGEventPhase changed], _touchLastPoint);
 }
 
 - (NSTouch *)findTouch:(NSTouch *)touch inTouches:(NSSet *)touches {
@@ -85,7 +90,7 @@
     _touching = NO;
     _startTouches[0] = nil;
     _startTouches[1] = nil;
-    [_director processEvent:[EGEventMac eventMacWithEvent:event location:_touchLastPoint type:NSLeftMouseUp view:_director.view camera:nil]];
+    DISPATCH_EVENT(theEvent, [EGPan leftMouse], [EGEventPhase ended], _touchLastPoint);
 }
 
 - (void)touchCanceledEvent:(NSEvent*)event {
@@ -94,44 +99,7 @@
     _touching = NO;
     _startTouches[0] = nil;
     _startTouches[1] = nil;
-    [_director processEvent:[EGEventMac eventMacWithEvent:event location:_touchLastPoint type:EGLeftMouseCanceled view:_director.view camera:nil]];
+    DISPATCH_EVENT(theEvent, [EGPan leftMouse], [EGEventPhase canceled], _touchStartPoint);
 }
 @end
 
-
-@implementation EGEventEmulateMouseMove {
-    NSUInteger _type;
-    GEVec2 _locationInView;
-}
-- (id)initWithType:(NSUInteger)type locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize camera:(id)camera{
-    self = [super initWithViewSize:viewSize camera:camera];
-    if (self) {
-        _locationInView = locationInView;
-        _type=type;
-    }
-
-    return self;
-}
-
-+ (id)eventWithType:(NSUInteger)type locationInView:(GEVec2)locationInView  viewSize:(GEVec2)viewSize camera:(id)camera {
-    return [[self alloc] initWithType:type locationInView:locationInView viewSize:viewSize camera:camera];
-}
-
-- (BOOL)isLeftMouseDown {
-    return _type == NSLeftMouseDown;
-}
-
-- (BOOL)isLeftMouseDrag {
-    return _type == NSLeftMouseDragged;
-}
-
-- (BOOL)isLeftMouseUp {
-    return _type == NSLeftMouseUp;
-}
-
-- (GEVec2)locationInView {
-    return _locationInView;
-}
-
-
-@end

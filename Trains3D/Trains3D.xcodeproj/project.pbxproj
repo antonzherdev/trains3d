@@ -66,7 +66,6 @@
 		6F3DF0C20A875DEA9BBD7D1E /* btAxisSweep3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC2349E253F04434E70A /* btAxisSweep3.cpp */; };
 		6F3DF0C41B1AE0C692C22C09 /* DamageTest.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF1085CD447541E1E60C5 /* DamageTest.od */; };
 		6F3DF0CCBB3A100E2183DD0A /* btStaticPlaneShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA0904ED6E27D4A1D647 /* btStaticPlaneShape.cpp */; };
-		6F3DF0CF7BB4DBB37599EE30 /* EGEventIOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFEBAAA2D36A9D7E417B7 /* EGEventIOS.m */; };
 		6F3DF0D3AB2B3F1BF120266B /* btScaledBvhTriangleMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0B5CDE0ED7F04E617FD /* btScaledBvhTriangleMeshShape.cpp */; };
 		6F3DF0DDE67D2725F2D57107 /* NSSet+CNChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFEB7AFB15FDAC5EF0E59 /* NSSet+CNChain.m */; };
 		6F3DF0DE27775A9CA682AB17 /* CNTreeMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF61F6AC6163A38816654 /* CNTreeMap.m */; };
@@ -257,7 +256,6 @@
 		6F3DF389C5EE2CB0C8F3B932 /* CNUncombinationsLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFB34A5F66AA174ECC65 /* CNUncombinationsLink.m */; };
 		6F3DF389DDBBEF49A3690B8E /* btActivatingCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF3119E53C09ABD7F2044 /* btActivatingCollisionAlgorithm.cpp */; };
 		6F3DF38B278F2E5147139DE2 /* YellowTree.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF8BAC3EAE789B65670CB /* YellowTree.png */; };
-		6F3DF38B6359289D123A28F9 /* EGEventMac.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB4834E2D90F91985566 /* EGEventMac.m */; };
 		6F3DF38B6E19482CA3AC7B48 /* GEFigure.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF6637298356C79DC41A4 /* GEFigure.m */; };
 		6F3DF38F19DFA812EC50BDA2 /* TRRailroadBuilderProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF37F737A3145F69F8298 /* TRRailroadBuilderProcessor.m */; };
 		6F3DF390637CDAEBFF1126C4 /* TRLevelMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF539C1DCB1A0FA0BA2D6 /* TRLevelMenuView.m */; };
@@ -1254,7 +1252,6 @@
 		6F3DF0BFC1AC2D31B49B3F8D /* TRLevelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRLevelView.h; sourceTree = "<group>"; };
 		6F3DF0C19B11DB521A56DEA1 /* ext.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ext.hpp; sourceTree = "<group>"; };
 		6F3DF0C41B6CEA9D3BADE23E /* type_mat4x3.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = type_mat4x3.inl; sourceTree = "<group>"; };
-		6F3DF0C5392DD007E79F7356 /* EGEventIOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGEventIOS.h; sourceTree = "<group>"; };
 		6F3DF0C686B576496A1C863F /* KWAny.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWAny.m; sourceTree = "<group>"; };
 		6F3DF0CC00FD6CE31C2CE2D0 /* NSObject+KiwiVerifierAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+KiwiVerifierAdditions.m"; sourceTree = "<group>"; };
 		6F3DF0D92D88777FC126FCB0 /* btCollisionShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btCollisionShape.h; sourceTree = "<group>"; };
@@ -2051,7 +2048,6 @@
 		6F3DFB349E5354489BE0F203 /* Collision.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Collision.od; sourceTree = "<group>"; };
 		6F3DFB3E03359788BD097773 /* KWStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWStub.h; sourceTree = "<group>"; };
 		6F3DFB3F0414470F73B2A552 /* Range.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Range.od; sourceTree = "<group>"; };
-		6F3DFB4834E2D90F91985566 /* EGEventMac.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGEventMac.m; sourceTree = "<group>"; };
 		6F3DFB4DA62F45967EDC4D00 /* verbose_operator.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = verbose_operator.inl; sourceTree = "<group>"; };
 		6F3DFB520B61FBD2C964BDAA /* swizzle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = swizzle.hpp; sourceTree = "<group>"; };
 		6F3DFB5441E6F155F2A4CAF7 /* btGhostObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btGhostObject.cpp; sourceTree = "<group>"; };
@@ -2084,7 +2080,6 @@
 		6F3DFBA7FB84688E7CB8353D /* func_packing.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = func_packing.inl; sourceTree = "<group>"; };
 		6F3DFBAD91659209AE0E0D4E /* GroundCrash1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = GroundCrash1.wav; sourceTree = "<group>"; };
 		6F3DFBB0CEBD7917BA7B3433 /* EGShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGShader.h; sourceTree = "<group>"; };
-		6F3DFBB2E106EAF0809269B2 /* EGEventMac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGEventMac.h; sourceTree = "<group>"; };
 		6F3DFBB6EB04DBA5CF087133 /* TRCollisionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRCollisionsTest.h; sourceTree = "<group>"; };
 		6F3DFBB71DF0CE30CF2BBAA4 /* btQuantization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btQuantization.h; sourceTree = "<group>"; };
 		6F3DFBBA133FEB0F2F558E2A /* btHashMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btHashMap.h; sourceTree = "<group>"; };
@@ -2306,7 +2301,6 @@
 		6F3DFEB3BAE0DC6CEEFED6A3 /* Beep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Beep.wav; sourceTree = "<group>"; };
 		6F3DFEB5D2B44AFAB7532FBB /* NSMutableSet+CNChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableSet+CNChain.h"; sourceTree = "<group>"; };
 		6F3DFEB7AFB15FDAC5EF0E59 /* NSSet+CNChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSSet+CNChain.m"; sourceTree = "<group>"; };
-		6F3DFEBAAA2D36A9D7E417B7 /* EGEventIOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGEventIOS.m; sourceTree = "<group>"; };
 		6F3DFEBC9B18EDD49B56EB30 /* vector_angle.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = vector_angle.inl; sourceTree = "<group>"; };
 		6F3DFEC18617F545F2EF268A /* CNMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNMap.h; sourceTree = "<group>"; };
 		6F3DFEC45454CDB86BE7788B /* TRCityView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRCityView.m; sourceTree = "<group>"; };
@@ -2610,8 +2604,6 @@
 				6F3DF3E279A6BB92EAA800FC /* EGOpenGLViewMac.h */,
 				6F3DF65460A5DBAC04BC37F7 /* EGDirectorMac.m */,
 				6F3DFF28C729F025D705445D /* EGDirectorMac.h */,
-				6F3DFB4834E2D90F91985566 /* EGEventMac.m */,
-				6F3DFBB2E106EAF0809269B2 /* EGEventMac.h */,
 				6F3DFF1467E5998508E538EE /* EGTouchToMouse.m */,
 				6F3DF36ED0CD1DB20CE24A6A /* GLPlatform.m */,
 				6F3DFADA2C3CC961C4886045 /* EGMultisamplingSurface.m */,
@@ -3463,8 +3455,6 @@
 				6F3DF3FF6A3103165340889E /* EGOpenGLViewIOS.h */,
 				6F3DFB88A07C355504C6E137 /* EGDirectorIOS.h */,
 				6F3DFA70C4F3D88F2A08978C /* EGDirectorIOS.m */,
-				6F3DFEBAAA2D36A9D7E417B7 /* EGEventIOS.m */,
-				6F3DF0C5392DD007E79F7356 /* EGEventIOS.h */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -4920,7 +4910,6 @@
 				6F3DF5E41526169A9A167F40 /* CNMulLink.m in Sources */,
 				6F3DF19066F1E5F2E8D964F5 /* CNTuple.m in Sources */,
 				6F3DF5E339F62A69A94FE894 /* TRRailroad.m in Sources */,
-				6F3DF38B6359289D123A28F9 /* EGEventMac.m in Sources */,
 				6F3DF5B8922AE637B43642E1 /* TRRailroadBuilderProcessor.m in Sources */,
 				6F3DF8784CC3ABA3DEE7980C /* CNReverseLink.m in Sources */,
 				6F3DF12D3EB77F0319FCBBAD /* EGMapIso.m in Sources */,
@@ -5690,7 +5679,6 @@
 				6F3DF03AA3CDEEE06023DB60 /* main.m in Sources */,
 				6F3DF9E97A77927F7D7B1D13 /* TRViewController.m in Sources */,
 				6F3DFB0AFED88014C79CEAA9 /* TRAppDelegate.m in Sources */,
-				6F3DF0CF7BB4DBB37599EE30 /* EGEventIOS.m in Sources */,
 				6F3DF8A483A87B4D7D35C087 /* CNLog.m in Sources */,
 				6F3DFE6BA2F0256A3C927AEA /* EGMapIsoView.m in Sources */,
 				6F3DF1F2BEBA6B69CA19218C /* TRSceneFactory.m in Sources */,
