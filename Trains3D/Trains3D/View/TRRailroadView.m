@@ -356,7 +356,7 @@ static ODClassType* _TRUndoView_type;
 }
 
 - (EGRecognizers*)recognizers {
-    return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(EGEvent* event) {
+    return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(id<EGEvent> event) {
         if(_empty) return NO;
         GEVec2 p = [event locationInViewport];
         if([_button containsVec2:p]) {

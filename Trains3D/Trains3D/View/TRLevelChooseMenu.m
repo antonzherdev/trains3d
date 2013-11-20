@@ -78,7 +78,7 @@ static ODClassType* _TRLevelChooseMenu_type;
 }
 
 - (EGRecognizers*)recognizers {
-    return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(EGEvent* event) {
+    return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(id<EGEvent> event) {
         return [_buttons existsWhere:^BOOL(EGButton* _) {
             return [((EGButton*)(_)) tapEvent:event];
         }];

@@ -169,7 +169,7 @@
 
 #define DISPATCH_EVENT(theEvent, __tp__, __phase__) {\
 [self lockOpenGLContext];\
-[_director processEvent:[EGEvent applyRecognizerType:__tp__ phase:__phase__ locationInView:[self locationForEvent:theEvent] viewSize:_viewSize]];\
+[_director processEvent:[EGViewEvent viewEventWithRecognizerType:__tp__ phase:__phase__ locationInView:[self locationForEvent:theEvent] viewSize:_viewSize]];\
 [self unlockOpenGLContext];\
 }
 

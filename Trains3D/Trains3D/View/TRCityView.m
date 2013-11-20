@@ -183,7 +183,7 @@ static ODClassType* _TRCallRepairerView_type;
 }
 
 - (EGRecognizers*)recognizers {
-    return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(EGEvent* event) {
+    return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(id<EGEvent> event) {
         GEVec2 p = [event locationInViewport];
         id b = [[_buttons chain] findWhere:^BOOL(CNTuple* _) {
             return [((EGBillboard*)(((CNTuple*)(_)).b)) containsVec2:p];

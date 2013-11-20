@@ -129,7 +129,7 @@
 }
 
 - (void)processRecognizer:(UIGestureRecognizer *)recognizer tp:(EGRecognizerType *)tp phase:(EGEventPhase *)phase {
-    [_director processEvent:[EGEvent applyRecognizerType:tp
+    [_director processEvent:[EGViewEvent viewEventWithRecognizerType:tp
                                                  phase:phase locationInView:[self locationForRecognizer:recognizer]
                                                   viewSize:self.viewSize]];
 }

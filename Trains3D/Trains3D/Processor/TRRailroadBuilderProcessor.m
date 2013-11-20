@@ -30,10 +30,10 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
 }
 
 - (EGRecognizers*)recognizers {
-    return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGPan apply] began:^BOOL(EGEvent* event) {
+    return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGPan apply] began:^BOOL(id<EGEvent> event) {
         _startedPoint = [CNOption applyValue:wrap(GEVec2, [event location])];
         return YES;
-    } changed:^void(EGEvent* event) {
+    } changed:^void(id<EGEvent> event) {
         GELine2 line = geLine2ApplyP0P1(uwrap(GEVec2, [_startedPoint get]), [event location]);
         if(geVec2LengthSquare(line.u) > 0.25) {
             GELine2 nl = geLine2Normalize(line);
@@ -52,7 +52,7 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
         } else {
             [_builder clear];
         }
-    } ended:^void(EGEvent* event) {
+    } ended:^void(id<EGEvent> event) {
         [_builder fix];
         _startedPoint = [CNOption none];
     }]];

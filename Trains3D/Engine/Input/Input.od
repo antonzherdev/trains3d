@@ -101,31 +101,42 @@ enum EventPhase {
     on()
 }
 
-class EventCamera(matrixModel : MatrixModel, viewport : Rect)
+trait Event {
+    def recognizerType : RecognizerType<_>
+    def phase : EventPhase
+    def locationInView : vec2
+    def viewSize : vec2
 
-class Event(recognizerType : RecognizerType<_>, phase : EventPhase, locationInView : vec2, viewSize : vec2, camera : EventCamera?) {
-    static def apply(recognizerType : RecognizerType<_>, phase : EventPhase, locationInView : vec2, viewSize : vec2) : Event =
-        Event(recognizerType, phase, locationInView, viewSize, nil)
+    def locationInViewport : vec2 = locationInView
+    def location : vec2 = locationInView
+    def locationFor(depth : float) : vec2 = locationInView
+    def segment : Line3 = Line3(vec3(locationInView, 0), vec3(0, 0, 1000))
+    def checkViewport : bool = true
+}
 
-    def set(camera : EventCamera?) : Event = Event(recognizerType, phase, locationInView, viewSize, camera)
+class ViewEvent(recognizerType : RecognizerType<_>, phase : EventPhase, locationInView : vec2, viewSize : vec2) extends Event
+
+class CameraEvent(event : Event, matrixModel : MatrixModel, viewport : Rect) extends Event {
+    val recognizerType : RecognizerType<_> = event.recognizerType
+    def phase : EventPhase = event.phase
+    val locationInView = event.locationInView
+    def viewSize : vec2 = event.viewSize
 
     def location = locationFor(0)
     def locationInViewport : vec2 = {
-        val viewport = camera.get.viewport
+        val viewport = viewport
         (locationInView - viewport.p0)/viewport.size*2 - vec2(1, 1)
     }
-    def locationFor(depth : float) : vec2 =
-        if(camera.isEmpty) locationInView
-        else segment.r(plane = Plane(vec3(0, 0, depth), vec3(0, 0, 1))).xy
+    def locationFor(depth : float) : vec2 = segment.r(plane = Plane(vec3(0, 0, depth), vec3(0, 0, 1))).xy
 
-    lazy val segment : Line3 =
-        if(camera.isEmpty) Line3(vec3(locationInView, 0), vec3(0, 0, 1000))
-        else {
-            val loc = locationInViewport
-            val mat4 = camera.get.matrixModel.wcp.inverse
-            val p0 = mat4.mul(vec4 = vec4(loc.x, loc.y, -1, 1))
-            val p1 = mat4.mul(vec4 = vec4(loc.x, loc.y, 1, 1))
-            Line3(p0.xyz, p1.xyz - p0.xyz)
-        }
-    def checkViewport : bool = camera.isEmpty || camera.get.viewport.contains(locationInView)
+    lazy val segment : Line3 = {
+        val loc = locationInViewport
+        val mat4 = matrixModel.wcp.inverse
+        val p0 = mat4.mul(vec4 = vec4(loc.x, loc.y, -1, 1))
+        val p1 = mat4.mul(vec4 = vec4(loc.x, loc.y, 1, 1))
+        Line3(p0.xyz, p1.xyz - p0.xyz)
+    }
+    def checkViewport : bool = viewport.contains(locationInView)
 }
+
+

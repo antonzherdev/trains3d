@@ -27,7 +27,7 @@
 
 #define DISPATCH_EVENT(theEvent, __tp__, __phase__, __location__) {\
 [_director.view lockOpenGLContext];\
-[_director processEvent:[EGEvent applyRecognizerType:__tp__ phase:__phase__ locationInView:__location__ viewSize:_director.view.viewSize]];\
+[_director processEvent:[EGViewEvent viewEventWithRecognizerType:__tp__ phase:__phase__ locationInView:__location__ viewSize:_director.view.viewSize]];\
 [_director.view unlockOpenGLContext];\
 }
 

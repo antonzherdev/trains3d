@@ -8,7 +8,7 @@
 @class EGEnablingState;
 @class EGMatrixStack;
 @class EGStat;
-@class EGEvent;
+@protocol EGEvent;
 
 @class EGDirector;
 
@@ -29,7 +29,7 @@
 - (void)redraw;
 - (void)_init;
 - (void)drawWithSize:(GEVec2)size;
-- (void)processEvent:(EGEvent*)event;
+- (void)processEvent:(id<EGEvent>)event;
 - (BOOL)isStarted;
 - (void)start;
 - (void)stop;

@@ -19,7 +19,7 @@
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class GEMat4;
-@class EGEvent;
+@protocol EGEvent;
 
 @class EGD2D;
 @class EGCircleShaderBuilder;
@@ -147,7 +147,7 @@
 - (id)initWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick;
 - (ODClassType*)type;
 + (EGButton*)applyRect:(GERect)rect onDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick;
-- (BOOL)tapEvent:(EGEvent*)event;
+- (BOOL)tapEvent:(id<EGEvent>)event;
 - (void)draw;
 + (void(^)(GERect))drawTextFont:(EGFont*(^)())font color:(GEVec4)color text:(NSString*)text;
 + (ODClassType*)type;

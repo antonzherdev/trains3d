@@ -171,9 +171,7 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
         if(inputProcessor.isDefined && inputProcessor.get.isProcessorActive) {
             val camera = view.camera
             matrix.value = camera.matrixModel
-            val cam = EventCamera(camera.matrixModel, viewport)
-            val e = event.set(camera = cam)
-            recognizerState.process(e)
+            recognizerState.process(CameraEvent(event, camera.matrixModel, viewport))
         } else false
     }
 

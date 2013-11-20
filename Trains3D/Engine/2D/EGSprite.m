@@ -802,7 +802,7 @@ static ODClassType* _EGButton_type;
     return b;
 }
 
-- (BOOL)tapEvent:(EGEvent*)event {
+- (BOOL)tapEvent:(id<EGEvent>)event {
     if(geRectContainsVec2(_rect, [event location])) {
         ((void(^)())(_onClick))();
         return YES;

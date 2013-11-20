@@ -51,7 +51,7 @@
 - (void)reshapeWithViewSize:(GEVec2)viewSize;
 - (void)drawWithViewSize:(GEVec2)viewSize;
 - (id<CNSet>)recognizersTypes;
-- (BOOL)processEvent:(EGEvent*)event;
+- (BOOL)processEvent:(id<EGEvent>)event;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)start;
 - (void)stop;
@@ -71,7 +71,7 @@
 - (void)prepare;
 - (void)draw;
 - (id<CNSet>)recognizersTypes;
-- (BOOL)processEvent:(EGEvent*)event;
+- (BOOL)processEvent:(id<EGEvent>)event;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)reshapeWithViewSize:(GEVec2)viewSize;
 + (ODClassType*)type;
@@ -102,7 +102,7 @@
 - (void)reshapeWithViewport:(GERect)viewport;
 - (void)drawWithViewport:(GERect)viewport;
 - (void)drawShadowForCamera:(id<EGCamera>)camera light:(EGLight*)light;
-- (BOOL)processEvent:(EGEvent*)event viewport:(GERect)viewport;
+- (BOOL)processEvent:(id<EGEvent>)event viewport:(GERect)viewport;
 - (void)updateWithDelta:(CGFloat)delta;
 - (GERect)viewportWithViewSize:(GEVec2)viewSize;
 - (GERect)viewportWithViewSize:(GEVec2)viewSize viewportLayout:(GERect)viewportLayout;

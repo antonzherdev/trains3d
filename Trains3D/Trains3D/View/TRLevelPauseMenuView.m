@@ -90,7 +90,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
 }
 
 - (EGRecognizers*)recognizers {
-    return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(EGEvent* _) {
+    return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(id<EGEvent> _) {
         return [[self view] tapEvent:_];
     }]];
 }
@@ -163,7 +163,7 @@ static ODClassType* _TRPauseView_type;
     @throw @"Method draw is abstract";
 }
 
-- (BOOL)tapEvent:(EGEvent*)event {
+- (BOOL)tapEvent:(id<EGEvent>)event {
     @throw @"Method tap is abstract";
 }
 
@@ -248,7 +248,7 @@ static ODClassType* _TRMenuView_type;
     @throw @"Method buttons is abstract";
 }
 
-- (BOOL)tapEvent:(EGEvent*)event {
+- (BOOL)tapEvent:(id<EGEvent>)event {
     return [[self buttons] existsWhere:^BOOL(EGButton* _) {
         return [((EGButton*)(_)) tapEvent:event];
     }];
@@ -619,7 +619,7 @@ static ODClassType* _TRHelpView_type;
     [_helpText draw];
 }
 
-- (BOOL)tapEvent:(EGEvent*)event {
+- (BOOL)tapEvent:(id<EGEvent>)event {
     [_level clearHelp];
     [[EGDirector current] resume];
     return YES;

@@ -55,7 +55,7 @@
 - (ODClassType*)type;
 - (void)reshapeWithViewport:(GERect)viewport;
 - (void)draw;
-- (BOOL)tapEvent:(EGEvent*)event;
+- (BOOL)tapEvent:(id<EGEvent>)event;
 + (ODClassType*)type;
 @end
 
@@ -68,7 +68,7 @@
 - (EGButton*)buttonText:(NSString*)text onClick:(void(^)())onClick;
 - (void(^)(GERect))drawLine;
 - (id<CNSeq>)buttons;
-- (BOOL)tapEvent:(EGEvent*)event;
+- (BOOL)tapEvent:(id<EGEvent>)event;
 - (void)draw;
 - (CGFloat)headerHeight;
 - (void)reshapeWithViewport:(GERect)viewport;
@@ -125,7 +125,7 @@
 - (ODClassType*)type;
 - (void)reshapeWithViewport:(GERect)viewport;
 - (void)draw;
-- (BOOL)tapEvent:(EGEvent*)event;
+- (BOOL)tapEvent:(id<EGEvent>)event;
 + (ODClassType*)type;
 @end
 

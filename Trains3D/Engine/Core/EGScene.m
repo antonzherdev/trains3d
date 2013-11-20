@@ -60,7 +60,7 @@ static ODClassType* _EGScene_type;
     return [_layers recognizersTypes];
 }
 
-- (BOOL)processEvent:(EGEvent*)event {
+- (BOOL)processEvent:(id<EGEvent>)event {
     return [_layers processEvent:event];
 }
 
@@ -196,9 +196,9 @@ static ODClassType* _EGLayers_type;
     }] toSet];
 }
 
-- (BOOL)processEvent:(EGEvent*)event {
+- (BOOL)processEvent:(id<EGEvent>)event {
     __block BOOL r = NO;
-    [[self viewportsWithViewSize:event.viewSize] forEach:^void(CNTuple* p) {
+    [[self viewportsWithViewSize:[event viewSize]] forEach:^void(CNTuple* p) {
         r = r || [((EGLayer*)(((CNTuple*)(p)).a)) processEvent:event viewport:uwrap(GERect, ((CNTuple*)(p)).b)];
     }];
     return r;
@@ -398,13 +398,11 @@ static ODClassType* _EGLayer_type;
     egPopGroupMarker();
 }
 
-- (BOOL)processEvent:(EGEvent*)event viewport:(GERect)viewport {
+- (BOOL)processEvent:(id<EGEvent>)event viewport:(GERect)viewport {
     if([_inputProcessor isDefined] && [((id<EGInputProcessor>)([_inputProcessor get])) isProcessorActive]) {
         id<EGCamera> camera = [_view camera];
         EGGlobal.matrix.value = [camera matrixModel];
-        EGEventCamera* cam = [EGEventCamera eventCameraWithMatrixModel:[camera matrixModel] viewport:viewport];
-        EGEvent* e = [event setCamera:[CNOption applyValue:cam]];
-        return [_recognizerState processEvent:e];
+        return [_recognizerState processEvent:[EGCameraEvent cameraEventWithEvent:event matrixModel:[camera matrixModel] viewport:viewport]];
     } else {
         return NO;
     }

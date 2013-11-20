@@ -124,7 +124,7 @@ static ODClassType* _EGDirector_type;
     }];
 }
 
-- (void)processEvent:(EGEvent*)event {
+- (void)processEvent:(id<EGEvent>)event {
     [__scene forEach:^void(EGScene* _) {
         [((EGScene*)(_)) processEvent:event];
     }];
