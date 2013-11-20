@@ -55,7 +55,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
         }
     }
 
-    val move = CameraIsoMove(CameraIso(level.map.size, zReserve = 0.5, vec2(0, 0)))
+    val move = CameraIsoMove(CameraIso(level.map.size, zReserve = 0.5, vec2(0, 0)), 1.0, 2.0)
     def camera : Camera = move.camera
 
     def updateWith(delta : float) {

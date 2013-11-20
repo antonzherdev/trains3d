@@ -55,7 +55,7 @@ static ODClassType* _TRLevelView_type;
     }
     return m;
 }()]])];
-        _move = [EGCameraIsoMove cameraIsoMoveWithBase:[EGCameraIso cameraIsoWithTilesOnScreen:_level.map.size zReserve:0.5 center:GEVec2Make(0.0, 0.0)]];
+        _move = [EGCameraIsoMove cameraIsoMoveWithBase:[EGCameraIso cameraIsoWithTilesOnScreen:geVec2ApplyVec2i(_level.map.size) zReserve:0.5 center:GEVec2Make(0.0, 0.0)] misScale:1.0 maxScale:2.0];
         _railroadBuilderProcessor = [TRRailroadBuilderProcessor railroadBuilderProcessorWithBuilder:_level.railroad.builder];
         _switchProcessor = [TRSwitchProcessor switchProcessorWithLevel:_level];
         [self _init];
