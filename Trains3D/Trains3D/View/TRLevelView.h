@@ -14,6 +14,7 @@
 @class EGMapSso;
 @class GEMat4;
 @class EGDirectLight;
+@class EGCameraIsoMove;
 @class EGCameraIso;
 @class TRRailroadBuilderProcessor;
 @class TRRailroad;
@@ -36,7 +37,7 @@
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) EGEnvironment* environment;
-@property (nonatomic, readonly) id<EGCamera> camera;
+@property (nonatomic, readonly) EGCameraIsoMove* move;
 
 + (id)levelViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
@@ -44,6 +45,7 @@
 - (void)_init;
 - (void)prepare;
 - (void)draw;
+- (id<EGCamera>)camera;
 - (void)updateWithDelta:(CGFloat)delta;
 - (EGRecognizers*)recognizers;
 - (void)reshapeWithViewport:(GERect)viewport;

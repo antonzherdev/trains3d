@@ -4,6 +4,7 @@
 #import "GEMat4.h"
 #import "EGContext.h"
 #import "GL.h"
+#import "EGDirector.h"
 @implementation EGCameraIso{
     GEVec2i _tilesOnScreen;
     float _zReserve;
@@ -96,6 +97,82 @@ static ODClassType* _EGCameraIso_type;
     [description appendFormat:@"tilesOnScreen=%@", GEVec2iDescription(self.tilesOnScreen)];
     [description appendFormat:@", zReserve=%f", self.zReserve];
     [description appendFormat:@", center=%@", GEVec2Description(self.center)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGCameraIsoMove{
+    EGCameraIso* _base;
+}
+static ODClassType* _EGCameraIsoMove_type;
+@synthesize base = _base;
+
++ (id)cameraIsoMoveWithBase:(EGCameraIso*)base {
+    return [[EGCameraIsoMove alloc] initWithBase:base];
+}
+
+- (id)initWithBase:(EGCameraIso*)base {
+    self = [super init];
+    if(self) _base = base;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGCameraIsoMove_type = [ODClassType classTypeWithCls:[EGCameraIsoMove class]];
+}
+
+- (EGCameraIso*)camera {
+    return _base;
+}
+
+- (EGRecognizers*)recognizers {
+    return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGPinch pinch] began:^BOOL(id<EGEvent> event) {
+        [CNLog applyText:@"-- begin"];
+        return YES;
+    } changed:^void(id<EGEvent> event) {
+        [CNLog applyText:[NSString stringWithFormat:@"scale = %f", ((EGPinchParameter*)([event param])).scale]];
+    } ended:^void(id<EGEvent> event) {
+        [CNLog applyText:@"!! end"];
+    }]];
+}
+
+- (BOOL)isProcessorActive {
+    return !([[EGDirector current] isPaused]);
+}
+
+- (ODClassType*)type {
+    return [EGCameraIsoMove type];
+}
+
++ (ODClassType*)type {
+    return _EGCameraIsoMove_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGCameraIsoMove* o = ((EGCameraIsoMove*)(other));
+    return [self.base isEqual:o.base];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.base hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"base=%@", self.base];
     [description appendString:@">"];
     return description;
 }

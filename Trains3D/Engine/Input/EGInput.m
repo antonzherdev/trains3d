@@ -648,6 +648,70 @@ static ODClassType* _EGPinch_type;
 @end
 
 
+@implementation EGPinchParameter{
+    CGFloat _scale;
+    CGFloat _velocity;
+}
+static ODClassType* _EGPinchParameter_type;
+@synthesize scale = _scale;
+@synthesize velocity = _velocity;
+
++ (id)pinchParameterWithScale:(CGFloat)scale velocity:(CGFloat)velocity {
+    return [[EGPinchParameter alloc] initWithScale:scale velocity:velocity];
+}
+
+- (id)initWithScale:(CGFloat)scale velocity:(CGFloat)velocity {
+    self = [super init];
+    if(self) {
+        _scale = scale;
+        _velocity = velocity;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGPinchParameter_type = [ODClassType classTypeWithCls:[EGPinchParameter class]];
+}
+
+- (ODClassType*)type {
+    return [EGPinchParameter type];
+}
+
++ (ODClassType*)type {
+    return _EGPinchParameter_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGPinchParameter* o = ((EGPinchParameter*)(other));
+    return eqf(self.scale, o.scale) && eqf(self.velocity, o.velocity);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + floatHash(self.scale);
+    hash = hash * 31 + floatHash(self.velocity);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"scale=%f", self.scale];
+    [description appendFormat:@", velocity=%f", self.velocity];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation EGEventPhase
 static EGEventPhase* _EGEventPhase_began;
 static EGEventPhase* _EGEventPhase_changed;
@@ -708,24 +772,27 @@ static NSArray* _EGEventPhase_values;
     EGEventPhase* _phase;
     GEVec2 _locationInView;
     GEVec2 _viewSize;
+    id _param;
 }
 static ODClassType* _EGViewEvent_type;
 @synthesize recognizerType = _recognizerType;
 @synthesize phase = _phase;
 @synthesize locationInView = _locationInView;
 @synthesize viewSize = _viewSize;
+@synthesize param = _param;
 
-+ (id)viewEventWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize {
-    return [[EGViewEvent alloc] initWithRecognizerType:recognizerType phase:phase locationInView:locationInView viewSize:viewSize];
++ (id)viewEventWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize param:(id)param {
+    return [[EGViewEvent alloc] initWithRecognizerType:recognizerType phase:phase locationInView:locationInView viewSize:viewSize param:param];
 }
 
-- (id)initWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize {
+- (id)initWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize param:(id)param {
     self = [super init];
     if(self) {
         _recognizerType = recognizerType;
         _phase = phase;
         _locationInView = locationInView;
         _viewSize = viewSize;
+        _param = param;
     }
     
     return self;
@@ -772,7 +839,7 @@ static ODClassType* _EGViewEvent_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGViewEvent* o = ((EGViewEvent*)(other));
-    return [self.recognizerType isEqual:o.recognizerType] && self.phase == o.phase && GEVec2Eq(self.locationInView, o.locationInView) && GEVec2Eq(self.viewSize, o.viewSize);
+    return [self.recognizerType isEqual:o.recognizerType] && self.phase == o.phase && GEVec2Eq(self.locationInView, o.locationInView) && GEVec2Eq(self.viewSize, o.viewSize) && [self.param isEqual:o.param];
 }
 
 - (NSUInteger)hash {
@@ -781,6 +848,7 @@ static ODClassType* _EGViewEvent_type;
     hash = hash * 31 + [self.phase ordinal];
     hash = hash * 31 + GEVec2Hash(self.locationInView);
     hash = hash * 31 + GEVec2Hash(self.viewSize);
+    hash = hash * 31 + [self.param hash];
     return hash;
 }
 
@@ -790,6 +858,7 @@ static ODClassType* _EGViewEvent_type;
     [description appendFormat:@", phase=%@", self.phase];
     [description appendFormat:@", locationInView=%@", GEVec2Description(self.locationInView)];
     [description appendFormat:@", viewSize=%@", GEVec2Description(self.viewSize)];
+    [description appendFormat:@", param=%@", self.param];
     [description appendString:@">"];
     return description;
 }
@@ -854,6 +923,10 @@ static ODClassType* _EGCameraEvent_type;
 
 - (GEVec2)viewSize {
     return [_event viewSize];
+}
+
+- (id)param {
+    return [_event param];
 }
 
 - (GEVec2)location {

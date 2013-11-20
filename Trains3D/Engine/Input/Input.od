@@ -1,23 +1,23 @@
 package com.antonzherdev.eg
 
-class Recognizer(tp : RecognizerType) {
-    static def apply(tp : RecognizerType<LongRecognizer>,
-        began : Event -> bool, changed : Event -> void, ended : Event -> void)
-        = LongRecognizer(tp, began, changed, ended, {})
-    static def apply(tp : RecognizerType<LongRecognizer>,
-        began : Event -> bool, changed : Event -> void, ended : Event -> void, canceled : Event -> void)
-        = LongRecognizer(tp, began, changed, ended, canceled)
+class Recognizer<P>(tp : RecognizerType<_, P>) {
+    static def apply<P>(tp : RecognizerType<LongRecognizer, P>,
+        began : Event<P> -> bool, changed : Event<P> -> void, ended : Event<P> -> void)
+        = LongRecognizer<P>(tp, began, changed, ended, {})
+    static def apply<P>(tp : RecognizerType<LongRecognizer, P>,
+        began : Event<P> -> bool, changed : Event<P> -> void, ended : Event<P> -> void, canceled : Event<P> -> void)
+        = LongRecognizer<P>(tp, began, changed, ended, canceled)
 
-    static def apply(tp : RecognizerType<ShortRecognizer>, on : Event -> bool)
-        = ShortRecognizer(tp, on)
+    static def apply<P>(tp : RecognizerType<ShortRecognizer, P>, on : Event<P> -> bool)
+        = ShortRecognizer<P>(tp, on)
 
-    def is(tp : RecognizerType) : bool = tp == self.tp
+    def is(tp : RecognizerType<_, _>) : bool = tp == self.tp
 
-    def add(recognizer : Recognizer) = Recognizers([self, recognizer])
+    def add(recognizer : Recognizer<_>) = Recognizers([self, recognizer])
 }
-class LongRecognizer(tp : RecognizerType, began : Event -> bool,
-    changed : Event -> void, ended : Event -> void, canceled : Event -> void) extends Recognizer(tp)
-class ShortRecognizer(tp : RecognizerType, on : Event -> bool) extends Recognizer(tp)
+class LongRecognizer<P>(tp : RecognizerType<LongRecognizer, P>, began : Event<P> -> bool,
+    changed : Event<P> -> void, ended : Event<P> -> void, canceled : Event<P> -> void) extends Recognizer<P>(tp)
+class ShortRecognizer<P>(tp : RecognizerType<ShortRecognizer, P>, on : Event<P> -> bool) extends Recognizer<P>(tp)
 
 
 trait InputProcessor {
@@ -26,49 +26,49 @@ trait InputProcessor {
 }
 
 
-class Recognizers(items : [Recognizer]) {
-    static def apply(recognizer : Recognizer) = Recognizers([recognizer])
+class Recognizers(items : [Recognizer<_>]) {
+    static def apply(recognizer : Recognizer<_>) = Recognizers([recognizer])
 
-    def on(event : Event) : ShortRecognizer? = {
-        items.find{item -> item.is(event.recognizerType) && item.cast<ShortRecognizer>.on(event)}
+    def on<P>(event : Event<P>) : ShortRecognizer<P>? = {
+        items.find{item -> item.is(event.recognizerType) && item.cast<ShortRecognizer<P>>.on(event)}
     }
 
-    def began(event : Event) : LongRecognizer? = {
-        items.find{item -> item.is(event.recognizerType) && item.cast<LongRecognizer>.began(event)}
+    def began<P>(event : Event<P>) : LongRecognizer? = {
+        items.find{item -> item.is(event.recognizerType) && item.cast<LongRecognizer<P>>.began(event)}
     }
 
-    def add(recognizer : Recognizer) = Recognizers(items + recognizer)
+    def add(recognizer : Recognizer<_>) = Recognizers(items + recognizer)
     def add(recognizers : Recognizers) = Recognizers(items + recognizers.items)
-    def types : Set<RecognizerType<_>> = items.chain.map(_.tp).toSet
+    def types : Set<RecognizerType<_, _>> = items.chain.map(_.tp).toSet
 }
 
 class RecognizersState(recognizers : Recognizers) {
-    def process(event : Event) : bool =
+    def process<P>(event : Event<P>) : bool =
         if(event.phase == EventPhase.on) on(event)
         else if(event.phase == EventPhase.began) began(event)
         else if(event.phase == EventPhase.ended) ended(event)
         else if(event.phase == EventPhase.changed) changed(event)
         else canceled(event)
 
-    def on(event : Event) : bool = recognizers.on(event).isDefined
+    def on<P>(event : Event<P>) : bool = recognizers.on(event).isDefined
 
-    private val longMap = MutableHashMap<RecognizerType<LongRecognizer>, LongRecognizer>()
+    private val longMap = MutableHashMap<RecognizerType<LongRecognizer>, LongRecognizer<_>>()
 
-    def began(event : Event) : bool = {
+    def began<P>(event : Event<P>) : bool = {
         val tp = event.recognizerType
         longMap.modify(recognizers.began(event), forKey = tp).isDefined
     }
 
-    def changed(event : Event) : bool = longMap.opt(event.recognizerType).try(_.changed(event))
+    def changed<P>(event : Event<P>) : bool = longMap.opt(event.recognizerType).try(_.changed(event))
 
 
-    def ended(event : Event) : bool = {
+    def ended<P>(event : Event<P>) : bool = {
         val tp = event.recognizerType
         longMap.opt(tp).for(_.ended(event))
         longMap.removeFor(tp).isDefined
     }
 
-    def canceled(event : Event) : bool = {
+    def canceled<P>(event : Event<P>) : bool = {
         val tp = event.recognizerType
         longMap.opt(tp).for(_.canceled(event))
         longMap.removeFor(tp).isDefined
@@ -76,22 +76,23 @@ class RecognizersState(recognizers : Recognizers) {
 }
 
 
-class RecognizerType<T extends Recognizer>
+class RecognizerType<T extends Recognizer, P>
 
 // For a computer it's mouse events. fingers 1 - left button, 2 - right
 // For a touchpad "fingers + 1" is count of fingers
-class Pan(fingers : uint) extends RecognizerType<ShortRecognizer> {
+class Pan(fingers : uint) extends RecognizerType<ShortRecognizer, Void> {
     static def apply : Pan = leftMouse
     static val leftMouse = Pan(1)
     static val rightMouse = Pan(2)
 }
 
 // For a computer it's click event. fingers 1 - left button, 2 - right
-class Tap(fingers : uint, taps : uint)  extends RecognizerType<LongRecognizer> {
+class Tap(fingers : uint, taps : uint)  extends RecognizerType<LongRecognizer, Void> {
     static def apply() = Tap(1, 1)
 }
 
-class Pinch extends RecognizerType<LongRecognizer>
+class Pinch extends RecognizerType<LongRecognizer, PinchParameter>
+class PinchParameter(scale : float, velocity : float)
 
 enum EventPhase {
     began()
@@ -101,11 +102,12 @@ enum EventPhase {
     on()
 }
 
-trait Event {
-    def recognizerType : RecognizerType<_>
+trait Event<P> {
+    def recognizerType : RecognizerType<_, P>
     def phase : EventPhase
     def locationInView : vec2
     def viewSize : vec2
+    def param : P
 
     def locationInViewport : vec2 = locationInView
     def location : vec2 = locationInView
@@ -114,13 +116,14 @@ trait Event {
     def checkViewport : bool = true
 }
 
-class ViewEvent(recognizerType : RecognizerType<_>, phase : EventPhase, locationInView : vec2, viewSize : vec2) extends Event
+class ViewEvent<P>(recognizerType : RecognizerType<_, P>, phase : EventPhase, locationInView : vec2, viewSize : vec2, param : P) extends Event<P>
 
-class CameraEvent(event : Event, matrixModel : MatrixModel, viewport : Rect) extends Event {
-    val recognizerType : RecognizerType<_> = event.recognizerType
+class CameraEvent<P>(event : Event<P>, matrixModel : MatrixModel, viewport : Rect) extends Event<P> {
+    val recognizerType : RecognizerType<_, P> = event.recognizerType
     def phase : EventPhase = event.phase
     val locationInView = event.locationInView
     def viewSize : vec2 = event.viewSize
+    def param : P = event.param
 
     def location = locationFor(0)
     def locationInViewport : vec2 = {

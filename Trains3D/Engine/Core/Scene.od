@@ -29,7 +29,7 @@ class Scene(backgroundColor : vec4, controller : Controller, layers : Layers, so
     }
 
     def recognizersTypes : Set<RecognizerType> = layers.recognizersTypes
-    def process(event : Event) : bool = layers.process(event)
+    def process<P>(event : Event<P>) : bool = layers.process(event)
 
     def updateWith(delta : float) {
         controller.updateWith(delta)
@@ -73,13 +73,13 @@ class Layers {
        egPopGroupMarker
     }
 
-    def recognizersTypes : Set<RecognizerType>
+    def recognizersTypes : Set<RecognizerType<_, _>>
         = layers.chain
             .flatMap<InputProcessor>(_.inputProcessor)
-            .flatMap<Recognizer>(_.recognizers.items)
+            .flatMap<Recognizer<_>>(_.recognizers.items)
             .map(_.tp).toSet
 
-    def process(event : Event) : bool = {
+    def process<P>(event : Event<P>) : bool = {
         var r = false
         viewportsWith(event.viewSize).for{p -> r = (r || p.a.process(event, viewport = p.b))}
         r
@@ -167,7 +167,7 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
     }
 
     private val recognizerState = RecognizersState(inputProcessor.map(_.recognizers).getOrElse(Recognizers()))
-    def process(event : Event, viewport : Rect) : bool = {
+    def process<P>(event : Event<P>, viewport : Rect) : bool = {
         if(inputProcessor.isDefined && inputProcessor.get.isProcessorActive) {
             val camera = view.camera
             matrix.value = camera.matrixModel

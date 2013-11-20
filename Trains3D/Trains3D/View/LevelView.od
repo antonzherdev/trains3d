@@ -55,7 +55,8 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
         }
     }
 
-    val camera : Camera = CameraIso(level.map.size, zReserve = 0.5, vec2(0, 0))
+    val move = CameraIsoMove(CameraIso(level.map.size, zReserve = 0.5, vec2(0, 0)))
+    def camera : Camera = move.camera
 
     def updateWith(delta : float) {
         level.trains.for(trainView.updateWith(delta, _))
@@ -67,6 +68,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     private val switchProcessor = SwitchProcessor(level)
 
     def recognizers : Recognizers =
+        move.recognizers +
         callRepairerView.recognizers +
         railroadView.recognizers +
         switchProcessor.recognizers +

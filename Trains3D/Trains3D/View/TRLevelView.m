@@ -26,7 +26,7 @@
     TRCallRepairerView* _callRepairerView;
     id _precipitationView;
     EGEnvironment* _environment;
-    id<EGCamera> _camera;
+    EGCameraIsoMove* _move;
     TRRailroadBuilderProcessor* _railroadBuilderProcessor;
     TRSwitchProcessor* _switchProcessor;
 }
@@ -34,7 +34,7 @@ static ODClassType* _TRLevelView_type;
 @synthesize level = _level;
 @synthesize name = _name;
 @synthesize environment = _environment;
-@synthesize camera = _camera;
+@synthesize move = _move;
 
 + (id)levelViewWithLevel:(TRLevel*)level {
     return [[TRLevelView alloc] initWithLevel:level];
@@ -55,7 +55,7 @@ static ODClassType* _TRLevelView_type;
     }
     return m;
 }()]])];
-        _camera = [EGCameraIso cameraIsoWithTilesOnScreen:_level.map.size zReserve:0.5 center:GEVec2Make(0.0, 0.0)];
+        _move = [EGCameraIsoMove cameraIsoMoveWithBase:[EGCameraIso cameraIsoWithTilesOnScreen:_level.map.size zReserve:0.5 center:GEVec2Make(0.0, 0.0)]];
         _railroadBuilderProcessor = [TRRailroadBuilderProcessor railroadBuilderProcessorWithBuilder:_level.railroad.builder];
         _switchProcessor = [TRSwitchProcessor switchProcessorWithLevel:_level];
         [self _init];
@@ -104,6 +104,10 @@ static ODClassType* _TRLevelView_type;
     }
 }
 
+- (id<EGCamera>)camera {
+    return [_move camera];
+}
+
 - (void)updateWithDelta:(CGFloat)delta {
     [[_level trains] forEach:^void(TRTrain* _) {
         [_trainView updateWithDelta:delta train:_];
@@ -117,11 +121,11 @@ static ODClassType* _TRLevelView_type;
 }
 
 - (EGRecognizers*)recognizers {
-    return [[[[_callRepairerView recognizers] addRecognizers:[_railroadView recognizers]] addRecognizers:[_switchProcessor recognizers]] addRecognizers:[_railroadBuilderProcessor recognizers]];
+    return [[[[[_move recognizers] addRecognizers:[_callRepairerView recognizers]] addRecognizers:[_railroadView recognizers]] addRecognizers:[_switchProcessor recognizers]] addRecognizers:[_railroadBuilderProcessor recognizers]];
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
-    EGGlobal.matrix.value = [_camera matrixModel];
+    EGGlobal.matrix.value = [[self camera] matrixModel];
     [_callRepairerView reshapeWithViewport:viewport];
     [_railroadView reshape];
 }

@@ -14,6 +14,7 @@
 @class EGPan;
 @class EGTap;
 @class EGPinch;
+@class EGPinchParameter;
 @class EGViewEvent;
 @class EGCameraEvent;
 @class EGEventPhase;
@@ -137,6 +138,17 @@
 @end
 
 
+@interface EGPinchParameter : NSObject
+@property (nonatomic, readonly) CGFloat scale;
+@property (nonatomic, readonly) CGFloat velocity;
+
++ (id)pinchParameterWithScale:(CGFloat)scale velocity:(CGFloat)velocity;
+- (id)initWithScale:(CGFloat)scale velocity:(CGFloat)velocity;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
 @interface EGEventPhase : ODEnum
 + (EGEventPhase*)began;
 + (EGEventPhase*)changed;
@@ -152,6 +164,7 @@
 - (EGEventPhase*)phase;
 - (GEVec2)locationInView;
 - (GEVec2)viewSize;
+- (id)param;
 - (GEVec2)locationInViewport;
 - (GEVec2)location;
 - (GEVec2)locationForDepth:(CGFloat)depth;
@@ -165,9 +178,10 @@
 @property (nonatomic, readonly) EGEventPhase* phase;
 @property (nonatomic, readonly) GEVec2 locationInView;
 @property (nonatomic, readonly) GEVec2 viewSize;
+@property (nonatomic, readonly) id param;
 
-+ (id)viewEventWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize;
-- (id)initWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize;
++ (id)viewEventWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize param:(id)param;
+- (id)initWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize param:(id)param;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -186,6 +200,7 @@
 - (GELine3)segment;
 - (EGEventPhase*)phase;
 - (GEVec2)viewSize;
+- (id)param;
 - (GEVec2)location;
 - (GEVec2)locationInViewport;
 - (GEVec2)locationForDepth:(CGFloat)depth;

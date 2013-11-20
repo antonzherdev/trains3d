@@ -27,3 +27,20 @@ class CameraIso(tilesOnScreen : vec2i, zReserve : float4, center : vec2) extends
     def cullFace : uint = GL_FRONT
 }
 
+
+class CameraIsoMove(base : CameraIso) extends InputProcessor {
+    def camera : CameraIso = base
+
+    def recognizers : Recognizers = Recognizer<PinchParameter>(Pinch(),
+        began = event -> {
+            log("-- begin")
+            true
+        },
+        changed = event -> {
+            log("scale = $(event.param.scale)")
+        },
+        ended = event -> {
+            log("!! end")
+        }
+    )
+}

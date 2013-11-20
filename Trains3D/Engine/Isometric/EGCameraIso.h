@@ -1,11 +1,14 @@
 #import "objd.h"
 #import "EGScene.h"
 #import "GEVec.h"
+#import "EGInput.h"
 @class EGMapSso;
 @class GEMat4;
 @class EGMatrixModel;
+@class EGDirector;
 
 @class EGCameraIso;
+@class EGCameraIsoMove;
 
 @interface EGCameraIso : NSObject<EGCamera>
 @property (nonatomic, readonly) GEVec2i tilesOnScreen;
@@ -20,6 +23,18 @@
 - (NSUInteger)cullFace;
 + (GEMat4*)m;
 + (GEMat4*)w;
++ (ODClassType*)type;
+@end
+
+
+@interface EGCameraIsoMove : NSObject<EGInputProcessor>
+@property (nonatomic, readonly) EGCameraIso* base;
+
++ (id)cameraIsoMoveWithBase:(EGCameraIso*)base;
+- (id)initWithBase:(EGCameraIso*)base;
+- (ODClassType*)type;
+- (EGCameraIso*)camera;
+- (EGRecognizers*)recognizers;
 + (ODClassType*)type;
 @end
 

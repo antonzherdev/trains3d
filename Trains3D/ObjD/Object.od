@@ -17,6 +17,8 @@ stub trait Comparable<T> {
     def compare(to : T) : int
 }
 
+stub struct Void
+
 stub struct Byte extends Comparable<byte> {
     def compare(to : byte) : byte
     def range : Range

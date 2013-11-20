@@ -110,15 +110,16 @@
 }
 
 - (IBAction)tap:(UITapGestureRecognizer *)recognizer {
-    [self processRecognizer:recognizer
-                         tp:[EGTap tapWithFingers:recognizer.numberOfTouchesRequired taps:recognizer.numberOfTapsRequired]
-                      phase:[EGEventPhase on]];
+    [self processRecognizer:recognizer tp:[EGTap tapWithFingers:recognizer.numberOfTouchesRequired taps:recognizer.numberOfTapsRequired] phase:[EGEventPhase on] param:nil ];
 }
 
 - (IBAction)pan:(UIPanGestureRecognizer *)recognizer {
-    [self processRecognizer:recognizer
-                         tp:[EGPan panWithFingers:recognizer.minimumNumberOfTouches]
-                      phase:[self phase:recognizer]];
+    [self processRecognizer:recognizer tp:[EGPan panWithFingers:recognizer.minimumNumberOfTouches] phase:[self phase:recognizer] param:nil ];
+}
+
+- (IBAction)pinch:(UIPinchGestureRecognizer *)recognizer {
+    [self processRecognizer:recognizer tp:[EGPinch pinch] phase:[self phase:recognizer]
+                      param:[EGPinchParameter pinchParameterWithScale:recognizer.scale velocity:recognizer.velocity] ];
 }
 
 - (EGEventPhase *)phase:(UIGestureRecognizer *)recognizer {
@@ -128,10 +129,12 @@
     return [EGEventPhase canceled];
 }
 
-- (void)processRecognizer:(UIGestureRecognizer *)recognizer tp:(EGRecognizerType *)tp phase:(EGEventPhase *)phase {
+- (void)processRecognizer:(UIGestureRecognizer *)recognizer tp:(EGRecognizerType *)tp phase:(EGEventPhase *)phase param:(id)param {
     [_director processEvent:[EGViewEvent viewEventWithRecognizerType:tp
-                                                 phase:phase locationInView:[self locationForRecognizer:recognizer]
-                                                  viewSize:self.viewSize]];
+                                                               phase:phase locationInView:[self locationForRecognizer:recognizer]
+                                                            viewSize:self.viewSize
+                                                               param:param
+    ]];
 }
 
 
@@ -152,6 +155,9 @@
         pan.minimumNumberOfTouches = ((EGPan*)type).fingers;
         pan.maximumNumberOfTouches = ((EGPan*)type).fingers;
         [self.view addGestureRecognizer:pan];
+    } else if([type isKindOfClass:[EGPinch class]]) {
+        UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinch:)];
+        [self.view addGestureRecognizer:pinch];
     }
 }
 
