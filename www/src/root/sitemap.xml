@@ -4,7 +4,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     <url>
         <loc>http://www.raildale.com/</loc>
-        <lastmod>2013-11-18</lastmod>
+        <lastmod>2013-11-22</lastmod>
         <changefreq>monthly</changefreq>
         <priority>1.0</priority>
 
@@ -31,6 +31,23 @@
         <image:image>
             <image:loc>http://www.raildale.com/img/scr4.jpg</image:loc>
             <image:title>Raildale game screenshot. Express trains are extremely fast</image:title>
+        </image:image>
+
+        <image:image>
+            <image:loc>http://www.raildale.com/img/iPhone0.jpg</image:loc>
+            <image:title>Raildale game screenshot for iPhone. Use the special interface for the limited iPhone screen. Zoom using pinch gesture.</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>http://www.raildale.com/img/iPhone1.jpg</image:loc>
+            <image:title>Raildale game screenshot for iPhone. Use the special interface for the limited iPhone screen. Build rails using one finger.</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>http://www.raildale.com/img/iPhone2.jpg</image:loc>
+            <image:title>Raildale game screenshot for iPhone. Use the special interface for the limited iPhone screen.</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>http://www.raildale.com/img/iPhone3.jpg</image:loc>
+            <image:title>Raildale game screenshot for iPhone. Scroll using two fingers.</image:title>
         </image:image>
     </url>
 </urlset>
