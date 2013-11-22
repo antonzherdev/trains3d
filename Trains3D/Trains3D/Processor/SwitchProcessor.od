@@ -4,8 +4,9 @@ import com.antonzherdev.eg._
 
 class SwitchProcessor(level : Level) extends InputProcessor {
 
-    val switchShape = CollisionBox2d(0.4, 0.4)
-    val lightShape = CollisionBox2d(0.4, 0.24)
+    val switchShape = CollisionBox2d(0.6, 0.6)
+    val lightShape = CollisionBox2d(0.5, 0.6)
+    val narrowLightShape = CollisionBox2d(0.5, 0.5)
     val world = CollisionWorld<RailroadConnectorContent>()
     private val obs = Railroad.changedNotification.observe { _ ->
             self.world.clear
@@ -13,22 +14,40 @@ class SwitchProcessor(level : Level) extends InputProcessor {
             val body = CollisionBody(switch, switchShape, isKinematic = false)
             body.translate(switch.tile.x, switch.tile.y, 0)
             body.rotate(switch.connector.angle, 0, 0, 1)
-            body.translate(-0.35, 0, 0)
+            body.translate(-0.2, 0, 0)
             self.world.add(body)
         }
         self.level.railroad.lights.for{light ->
-            val body = CollisionBody(light, lightShape, isKinematic = false)
+            val dy = dyFor(light)
+            val body = CollisionBody(light, dy.a, isKinematic = false)
             body.translate(light.tile.x, light.tile.y, 0)
             body.rotate(light.connector.angle, 0, 0, 1)
             val shift = light.shift
-            val dx : float4 =
-                if(light.connector == RailConnector.top || light.connector == RailConnector.bottom)
-                    lightShape.size.y/2
-                else 0
-            body.translate(shift.z + dx, shift.x, lightShape.size.x/2)
+            body.translate(shift.z, shift.x + dy.b, 0.1 + dzFor(light))
             body.rotate(90, 0, 1, 0)
             self.world.add(body)
         }
+    }
+
+    private def dyFor(light : RailLight) : (CollisionBox2d, float4) = {
+        if(light.connector == RailConnector.top || light.connector == RailConnector.bottom) {
+            if(nextConnect(light).is<RailLight>) (narrowLightShape, -0.15)
+            else (lightShape, 0)
+        } else if(light.connector == RailConnector.left && nextConnect(light).is<Switch>) (narrowLightShape, 0.15)
+        else (lightShape, 0)
+    }
+
+    private def dzFor(light : RailLight) : float4 = {
+        if(light.connector == RailConnector.bottom
+            && level.railroad.contentIn(light.tile + vec2i(-1, 0), RailConnector.right).is<RailLight>) -0.15
+        else if(light.connector == RailConnector.top
+            && level.railroad.contentIn(light.tile + vec2i(-1, 1), RailConnector.right).is<RailLight>) -0.15
+        else 0
+    }
+
+    private def nextConnect(light : RailLight) : RailroadConnectorContent = {
+        val c = light.connector
+        level.railroad.contentIn(c.next(light.tile), c.otherSideConnector)
     }
 
 

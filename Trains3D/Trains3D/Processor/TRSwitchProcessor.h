@@ -9,8 +9,8 @@
 @class TRSwitch;
 @class TRRailConnector;
 @class TRRailLight;
-@class EGCrossPoint;
 @class TRRailroadConnectorContent;
+@class EGCrossPoint;
 @class EGDirector;
 
 @class TRSwitchProcessor;
@@ -19,6 +19,7 @@
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) EGCollisionBox2d* switchShape;
 @property (nonatomic, readonly) EGCollisionBox2d* lightShape;
+@property (nonatomic, readonly) EGCollisionBox2d* narrowLightShape;
 @property (nonatomic, readonly) EGCollisionWorld* world;
 
 + (id)switchProcessorWithLevel:(TRLevel*)level;
