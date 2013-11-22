@@ -126,6 +126,8 @@ static ODClassType* _EGCameraIso_type;
     EGCameraIso* __camera;
     GEVec2 __startPan;
     CGFloat __startScale;
+    GEVec2 __pinchLocation;
+    GEVec2 __startCenter;
 }
 static CNNotificationHandle* _EGCameraIsoMove_cameraChangedNotification;
 static ODClassType* _EGCameraIsoMove_type;
@@ -191,10 +193,13 @@ static ODClassType* _EGCameraIsoMove_type;
 - (EGRecognizers*)recognizers {
     return [EGRecognizers recognizersWithItems:(@[[EGRecognizer applyTp:[EGPinch pinch] began:^BOOL(id<EGEvent> event) {
     __startScale = __scale;
+    __pinchLocation = [event location];
+    __startCenter = __camera.center;
     return YES;
 } changed:^void(id<EGEvent> event) {
-    [self setScale:__startScale * ((EGPinchParameter*)([event param])).scale];
-    [self setCenter:[event location]];
+    CGFloat s = ((EGPinchParameter*)([event param])).scale;
+    [self setScale:__startScale * s];
+    [self setCenter:((s <= 1.0) ? __startCenter : ((s < 2.0) ? geVec2AddVec2(__startCenter, geVec2MulF(geVec2SubVec2(__pinchLocation, __startCenter), s - 1.0)) : __pinchLocation))];
 } ended:^void(id<EGEvent> event) {
 }], [EGRecognizer applyTp:[EGPan panWithFingers:((NSUInteger)(_panFingers))] began:^BOOL(id<EGEvent> event) {
     __startPan = [event location];

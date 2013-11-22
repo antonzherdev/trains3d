@@ -63,14 +63,24 @@ class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFin
 
     private var _startPan : vec2
     private var _startScale : float = 1.0
+    private var _pinchLocation : vec2
+    private var _startCenter : vec2
+
     def recognizers : Recognizers = [Recognizer<PinchParameter>(Pinch(),
         began = event -> {
             _startScale = _scale
+            _pinchLocation = event.location
+            _startCenter = _camera.center
             true
         },
         changed = event -> {
-            set(scale = _startScale * event.param.scale)
-            set(center = event.location)
+            val s = event.param.scale
+            set(scale = _startScale * s)
+            set(center =
+                if(s <= 1.0) _startCenter
+                else if(s < 2.0) _startCenter + (_pinchLocation - _startCenter)*(s - 1.0)
+                else _pinchLocation
+            )
         },
         ended = event -> {
         }
