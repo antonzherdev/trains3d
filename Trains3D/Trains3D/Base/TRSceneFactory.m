@@ -6,6 +6,7 @@
 #import "TRLevelView.h"
 #import "TRLevelMenuView.h"
 #import "TRLevelPauseMenuView.h"
+#import "EGContext.h"
 @implementation TRSceneFactory
 static ODClassType* _TRSceneFactory_type;
 
@@ -101,8 +102,7 @@ static ODClassType* _TRTrainLayers_type;
 }
 
 - (id<CNSeq>)viewportsWithViewSize:(GEVec2)viewSize {
-    if(viewSize.y > 1279) return (@[tuple(_levelLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, 0.0, viewSize.x, viewSize.y))), tuple(_menuLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, viewSize.y - 92, viewSize.x, 92.0))), tuple(_pauseMenuLayer, wrap(GERect, GERectMake(GEVec2Make(0.0, 0.0), viewSize)))]);
-    else return (@[tuple(_levelLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, 0.0, viewSize.x, viewSize.y))), tuple(_menuLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, viewSize.y - 46, viewSize.x, 46.0))), tuple(_pauseMenuLayer, wrap(GERect, GERectMake(GEVec2Make(0.0, 0.0), viewSize)))]);
+    return (@[tuple(_levelLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, 0.0, viewSize.x, viewSize.y))), tuple(_menuLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, viewSize.y - 46 * EGGlobal.context.scale, viewSize.x, ((float)(46 * EGGlobal.context.scale))))), tuple(_pauseMenuLayer, wrap(GERect, GERectMake(GEVec2Make(0.0, 0.0), viewSize)))]);
 }
 
 - (ODClassType*)type {
