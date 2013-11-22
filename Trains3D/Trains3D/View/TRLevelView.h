@@ -8,13 +8,14 @@
 @class TRTrainView;
 @class TRTreeView;
 @class TRCallRepairerView;
+@class EGCameraIsoMove;
+@class EGDirector;
 @class EGEnvironment;
 @class TRLevelRules;
 @class TRWeatherRules;
 @class EGMapSso;
 @class GEMat4;
 @class EGDirectLight;
-@class EGCameraIsoMove;
 @class EGCameraIso;
 @class TRRailroadBuilderProcessor;
 @class TRRailroad;
@@ -23,7 +24,6 @@
 @class EGContext;
 @class EGRenderTarget;
 @class EGMatrixStack;
-@class EGDirector;
 @class TRPrecipitation;
 @class TRPrecipitationType;
 @class TRRainView;

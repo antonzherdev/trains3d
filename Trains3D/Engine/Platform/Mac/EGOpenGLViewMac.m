@@ -214,10 +214,12 @@
 }
 
 - (void)scrollWheel:(NSEvent *)theEvent {
-    DISPATCH_EVENT(theEvent, [EGPinch pinch], [EGEventPhase began], [EGPinchParameter pinchParameterWithScale:1.0 velocity:1.0]);
-    CGFloat scale = theEvent.deltaY < 0 ? -0.1* theEvent.deltaY + 1.0 : -0.05*theEvent.deltaY + 1.0;
-    DISPATCH_EVENT(theEvent, [EGPinch pinch], [EGEventPhase changed], [EGPinchParameter pinchParameterWithScale:scale velocity:1.0]);
-    DISPATCH_EVENT(theEvent, [EGPinch pinch], [EGEventPhase ended], [EGPinchParameter pinchParameterWithScale:scale velocity:1.0]);
+    if(!theEvent.hasPreciseScrollingDeltas) {
+        DISPATCH_EVENT(theEvent, [EGPinch pinch], [EGEventPhase began], [EGPinchParameter pinchParameterWithScale:1.0 velocity:1.0]);
+        CGFloat scale = theEvent.scrollingDeltaY < 0 ? -0.1* theEvent.scrollingDeltaY + 1.0 : -0.05*theEvent.scrollingDeltaY + 1.0;
+        DISPATCH_EVENT(theEvent, [EGPinch pinch], [EGEventPhase changed], [EGPinchParameter pinchParameterWithScale:scale velocity:1.0]);
+        DISPATCH_EVENT(theEvent, [EGPinch pinch], [EGEventPhase ended], [EGPinchParameter pinchParameterWithScale:scale velocity:1.0]);
+    }
 }
 
 

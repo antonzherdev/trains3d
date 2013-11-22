@@ -16,6 +16,7 @@ class RailroadView(level : Level) extends InputProcessor {
 
     private val obs1 = Railroad.changedNotification.observe((_changed = true))
     private val obs2 = RailroadBuilder.changedNotification.observe((_changed = true))
+    private val obs3 = CameraIsoMove.cameraChangedNotification.observe((_changed = true))
 
     var _changed = true
     def init {
@@ -231,6 +232,12 @@ class LightView(railroad : Railroad) {
     private val obs2 = RailLight.turnNotification.observe { _ ->
         _lightGlowChanged = true
         _bodyChanged = true
+    }
+    private val obs3 = CameraIsoMove.cameraChangedNotification.observe{_ ->
+        _matrixChanged = true
+        _bodyChanged = true
+        _matrixShadowChanged = true
+        _lightGlowChanged = true
     }
 
 

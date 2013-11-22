@@ -97,6 +97,10 @@ static ODClassType* _EGDirector_type;
     _EGDirector__current = self;
 }
 
+- (GEVec2)viewSize {
+    return __lastViewSize;
+}
+
 - (void)drawWithSize:(GEVec2)size {
     if(!(GEVec2Eq(__lastViewSize, size))) {
         EGGlobal.context.scale = [self scale];

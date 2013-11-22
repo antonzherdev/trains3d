@@ -45,6 +45,7 @@
 - (void)setCenter:(GEVec2)center;
 - (EGRecognizers*)recognizers;
 - (GEQuad)centerBounds;
++ (CNNotificationHandle*)cameraChangedNotification;
 + (ODClassType*)type;
 @end
 

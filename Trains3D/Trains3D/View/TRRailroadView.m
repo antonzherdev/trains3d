@@ -3,6 +3,7 @@
 #import "TRLevel.h"
 #import "TRRailroad.h"
 #import "EGMultisamplingSurface.h"
+#import "EGCameraIso.h"
 #import "EGContext.h"
 #import "EGShadow.h"
 #import "GL.h"
@@ -29,6 +30,7 @@
     id _shadowVao;
     CNNotificationObserver* _obs1;
     CNNotificationObserver* _obs2;
+    CNNotificationObserver* _obs3;
     BOOL __changed;
 }
 static ODClassType* _TRRailroadView_type;
@@ -56,6 +58,9 @@ static ODClassType* _TRRailroadView_type;
             _weakSelf._changed = YES;
         }];
         _obs2 = [TRRailroadBuilder.changedNotification observeBy:^void(id _) {
+            _weakSelf._changed = YES;
+        }];
+        _obs3 = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* _) {
             _weakSelf._changed = YES;
         }];
         __changed = YES;
@@ -512,6 +517,7 @@ static ODClassType* _TRSwitchView_type;
     BOOL __lightGlowChanged;
     CNNotificationObserver* _obs1;
     CNNotificationObserver* _obs2;
+    CNNotificationObserver* _obs3;
     id<CNSeq> __matrixArr;
     EGMeshUnite* _bodies;
     EGMeshUnite* _shadows;
@@ -546,6 +552,12 @@ static ODClassType* _TRLightView_type;
         _obs2 = [TRRailLight.turnNotification observeBy:^void(TRRailLight* _) {
             _weakSelf._lightGlowChanged = YES;
             _weakSelf._bodyChanged = YES;
+        }];
+        _obs3 = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* _) {
+            _weakSelf._matrixChanged = YES;
+            _weakSelf._bodyChanged = YES;
+            _weakSelf._matrixShadowChanged = YES;
+            _weakSelf._lightGlowChanged = YES;
         }];
         __matrixArr = (@[]);
         _bodies = [EGMeshUnite applyMeshModel:TRModels.light createVao:^EGVertexArray*(EGMesh* _) {

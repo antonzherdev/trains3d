@@ -38,9 +38,7 @@ static ODClassType* _EGCameraIso_type;
         _yReserve = _zReserve * 0.612372;
         _viewportRatio = (2 * _ww) / (_yReserve * 2 + _ww);
         _matrixModel = ^EGMatrixModel*() {
-            CGFloat cww = ((CGFloat)(_center.x + _center.y));
             CGFloat isoWW2 = (_ww * _EGCameraIso_ISO) / 2;
-            CGFloat isoCWW2 = cww * _EGCameraIso_ISO;
             return [EGMatrixModel applyM:_EGCameraIso_m w:_EGCameraIso_w c:^GEMat4*() {
                 GEMat4* t = [[GEMat4 identity] translateX:-_center.x y:0.0 z:_center.y];
                 GEMat4* r = [[[GEMat4 identity] rotateAngle:30.0 x:1.0 y:0.0 z:0.0] rotateAngle:-45.0 x:0.0 y:1.0 z:0.0];
@@ -129,6 +127,7 @@ static ODClassType* _EGCameraIso_type;
     GEVec2 __startPan;
     CGFloat __startScale;
 }
+static CNNotificationHandle* _EGCameraIsoMove_cameraChangedNotification;
 static ODClassType* _EGCameraIsoMove_type;
 @synthesize base = _base;
 @synthesize misScale = _misScale;
@@ -157,6 +156,7 @@ static ODClassType* _EGCameraIsoMove_type;
 + (void)initialize {
     [super initialize];
     _EGCameraIsoMove_type = [ODClassType classTypeWithCls:[EGCameraIsoMove class]];
+    _EGCameraIsoMove_cameraChangedNotification = [CNNotificationHandle notificationHandleWithName:@"cameraChangedNotification"];
 }
 
 - (EGCameraIso*)camera {
@@ -172,6 +172,7 @@ static ODClassType* _EGCameraIsoMove_type;
     if(!(eqf(s, __scale))) {
         __scale = s;
         __camera = [EGCameraIso cameraIsoWithTilesOnScreen:geVec2DivF(_base.tilesOnScreen, s) zReserve:_base.zReserve / s center:__camera.center];
+        [_EGCameraIsoMove_cameraChangedNotification postData:self];
     }
 }
 
@@ -181,7 +182,10 @@ static ODClassType* _EGCameraIsoMove_type;
 
 - (void)setCenter:(GEVec2)center {
     GEVec2 c = ((__scale <= 1) ? [_base naturalCenter] : geQuadClosestPointForVec2([self centerBounds], center));
-    if(!(GEVec2Eq(c, __camera.center))) __camera = [EGCameraIso cameraIsoWithTilesOnScreen:[self camera].tilesOnScreen zReserve:[self camera].zReserve center:c];
+    if(!(GEVec2Eq(c, __camera.center))) {
+        __camera = [EGCameraIso cameraIsoWithTilesOnScreen:[self camera].tilesOnScreen zReserve:[self camera].zReserve center:c];
+        [_EGCameraIsoMove_cameraChangedNotification postData:self];
+    }
 }
 
 - (EGRecognizers*)recognizers {
@@ -219,6 +223,10 @@ static ODClassType* _EGCameraIsoMove_type;
 
 - (ODClassType*)type {
     return [EGCameraIsoMove type];
+}
+
++ (CNNotificationHandle*)cameraChangedNotification {
+    return _EGCameraIsoMove_cameraChangedNotification;
 }
 
 + (ODClassType*)type {

@@ -41,6 +41,7 @@ class Director {
     static val reshapeNotification = NotificationHandle<vec2>("Reshape")
 
     private var _lastViewSize : vec2 = vec2(0, 0)
+    def viewSize : vec2 = _lastViewSize
     def drawWith(size : vec2) {
         if(_lastViewSize != size) {
             context.scale = scale

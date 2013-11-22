@@ -5,15 +5,15 @@
 #import "TRRailroadView.h"
 #import "TRTrainView.h"
 #import "TRTreeView.h"
+#import "EGCameraIso.h"
+#import "EGDirector.h"
 #import "EGContext.h"
 #import "TRWeather.h"
 #import "EGMapIso.h"
 #import "GEMat4.h"
-#import "EGCameraIso.h"
 #import "TRRailroadBuilderProcessor.h"
 #import "TRRailroad.h"
 #import "TRSwitchProcessor.h"
-#import "EGDirector.h"
 #import "TRRainView.h"
 #import "TRSnowView.h"
 @implementation TRLevelView{
@@ -25,6 +25,7 @@
     TRTreeView* _treeView;
     TRCallRepairerView* _callRepairerView;
     id _precipitationView;
+    CNNotificationObserver* _obs1;
     EGEnvironment* _environment;
     EGCameraIsoMove* _move;
     TRRailroadBuilderProcessor* _railroadBuilderProcessor;
@@ -45,6 +46,9 @@ static ODClassType* _TRLevelView_type;
     if(self) {
         _level = level;
         _name = @"Level";
+        _obs1 = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* _) {
+            [EGDirector.reshapeNotification postData:wrap(GEVec2, [[EGDirector current] viewSize])];
+        }];
         _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.7, 0.7, 0.7, 1.0) lights:(@[[EGDirectLight directLightWithColor:geVec4ApplyVec3W(geVec3AddVec3(GEVec3Make(0.2, 0.2, 0.2), geVec3MulK(GEVec3Make(0.4, 0.4, 0.4), ((float)(_level.rules.weatherRules.sunny)))), 1.0) direction:geVec3Normalize(GEVec3Make(-0.15, 0.35, -0.3)) hasShadows:_level.rules.weatherRules.sunny > 0.0 shadowsProjectionMatrix:^GEMat4*() {
     GEMat4* m;
     if(GEVec2iEq(_level.map.size, GEVec2iMake(5, 5))) {

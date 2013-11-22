@@ -28,6 +28,7 @@
 - (void)unlock;
 - (void)redraw;
 - (void)_init;
+- (GEVec2)viewSize;
 - (void)drawWithSize:(GEVec2)size;
 - (void)processEvent:(id<EGEvent>)event;
 - (BOOL)isStarted;

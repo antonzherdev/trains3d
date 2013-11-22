@@ -9,6 +9,8 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     private val callRepairerView : CallRepairerView
     private val precipitationView : PrecipitationView?
 
+    private val obs1 = CameraIsoMove.cameraChangedNotification.observe(Director.reshapeNotification.post(Director.current.viewSize))
+
     val environment = Environment(ambientColor = vec4(0.7, 0.7, 0.7, 1), lights = [
         DirectLight(
             color = vec4(vec3(0.2, 0.2, 0.2) + vec3(0.4, 0.4, 0.4)*level.rules.weatherRules.sunny, 1.0),

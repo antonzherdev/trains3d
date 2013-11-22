@@ -8,6 +8,7 @@
 @class TRRailroad;
 @class EGViewportSurface;
 @class TRRailroadBuilder;
+@class EGCameraIsoMove;
 @class EGGlobal;
 @class EGContext;
 @class EGShadowDrawParam;

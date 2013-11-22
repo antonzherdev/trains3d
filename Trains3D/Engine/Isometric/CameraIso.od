@@ -16,9 +16,7 @@ class CameraIso(tilesOnScreen : vec2, zReserve : float4, center : vec2) extends 
     static val w = mat4.identity.rotate(-90, 1, 0, 0)
 
     val matrixModel : MatrixModel = {
-        val cww : float = center.x + center.y
         val isoWW2 = ww*ISO/2
-        val isoCWW2 = cww*ISO
         MatrixModel(
             m = m,
             w = w,
@@ -43,12 +41,14 @@ class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFin
     private var _camera : CameraIso = base
     def camera : CameraIso = _camera
 
+    static val cameraChangedNotification = NotificationHandle<CameraIsoMove>("cameraChangedNotification")
     def scale : float = _scale
     def set(scale : float) {
         var s = scale.max(misScale).min(maxScale)
         if(s != _scale) {
             _scale = s
             _camera = CameraIso(base.tilesOnScreen/s, base.zReserve/s, _camera.center)
+            cameraChangedNotification.post(self)
         }
     }
 
@@ -57,6 +57,7 @@ class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFin
         var c = if(_scale <= 1) base.naturalCenter else centerBounds.closestPointFor(vec2 = center)
         if(c != _camera.center) {
             _camera = CameraIso(camera.tilesOnScreen, camera.zReserve, c)
+            cameraChangedNotification.post(self)
         }
     }
 
