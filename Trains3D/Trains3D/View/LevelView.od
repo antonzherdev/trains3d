@@ -9,7 +9,10 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     private val callRepairerView : CallRepairerView
     private val precipitationView : PrecipitationView?
 
-    private val obs1 = CameraIsoMove.cameraChangedNotification.observe(Director.reshapeNotification.post(Director.current.viewSize))
+    private val obs1 = CameraIsoMove.cameraChangedNotification.observe{_ ->
+        reshapeWith(context.viewport)
+        Director.reshapeNotification.post(Director.current.viewSize)
+    }
 
     val environment = Environment(ambientColor = vec4(0.7, 0.7, 0.7, 1), lights = [
         DirectLight(
@@ -78,7 +81,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
 
     def reshapeWith(viewport : Rect) {
         matrix.value = camera.matrixModel
-        callRepairerView.reshapeWith(viewport)
+        callRepairerView.reshape
         railroadView.reshape
     }
 }

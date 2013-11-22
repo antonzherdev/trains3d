@@ -145,7 +145,7 @@ static ODClassType* _TRCallRepairerView_type;
     _TRCallRepairerView_type = [ODClassType classTypeWithCls:[TRCallRepairerView class]];
 }
 
-- (void)reshapeWithViewport:(GERect)viewport {
+- (void)reshape {
     EGFont* font = [EGGlobal fontWithName:@"lucida_grande" size:18];
     [_text setFont:font];
     _buttonSize = geVec2MulF([font measureCText:[TRStr.Loc callRepairer]], 1.2);

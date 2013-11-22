@@ -6,8 +6,8 @@
 #import "TRTrainView.h"
 #import "TRTreeView.h"
 #import "EGCameraIso.h"
-#import "EGDirector.h"
 #import "EGContext.h"
+#import "EGDirector.h"
 #import "TRWeather.h"
 #import "EGMapIso.h"
 #import "GEMat4.h"
@@ -43,10 +43,12 @@ static ODClassType* _TRLevelView_type;
 
 - (id)initWithLevel:(TRLevel*)level {
     self = [super init];
+    __weak TRLevelView* _weakSelf = self;
     if(self) {
         _level = level;
         _name = @"Level";
         _obs1 = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* _) {
+            [_weakSelf reshapeWithViewport:geRectApplyRectI([EGGlobal.context viewport])];
             [EGDirector.reshapeNotification postData:wrap(GEVec2, [[EGDirector current] viewSize])];
         }];
         _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.7, 0.7, 0.7, 1.0) lights:(@[[EGDirectLight directLightWithColor:geVec4ApplyVec3W(geVec3AddVec3(GEVec3Make(0.2, 0.2, 0.2), geVec3MulK(GEVec3Make(0.4, 0.4, 0.4), ((float)(_level.rules.weatherRules.sunny)))), 1.0) direction:geVec3Normalize(GEVec3Make(-0.15, 0.35, -0.3)) hasShadows:_level.rules.weatherRules.sunny > 0.0 shadowsProjectionMatrix:^GEMat4*() {
@@ -130,7 +132,7 @@ static ODClassType* _TRLevelView_type;
 
 - (void)reshapeWithViewport:(GERect)viewport {
     EGGlobal.matrix.value = [[self camera] matrixModel];
-    [_callRepairerView reshapeWithViewport:viewport];
+    [_callRepairerView reshape];
     [_railroadView reshape];
 }
 

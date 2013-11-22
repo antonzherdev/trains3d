@@ -178,6 +178,7 @@ struct Quadrant(quads : Quad[4]) {
 struct Rect(p : vec2, size : vec2) {
     static def apply(x : float4, y : float4, width : float4, height : float4) = Rect(vec2(x, y), vec2(width, height))
     static def apply(x : float4, y : float4, size : vec2) = Rect(vec2(x, y), size)
+    static def apply(rectI : RectI) = Rect(rectI.p, rectI.size)
 
     def x = p.x
     def y = p.y
@@ -215,13 +216,13 @@ struct Rect(p : vec2, size : vec2) {
     def center = p + size/2
     def closestPointFor(vec2 : vec2) = vec2.min(phw).max(p)
 }
-struct RectI(origin : vec2i, size : vec2i) {
+struct RectI(p : vec2i, size : vec2i) {
     static def apply(x : float4, y : float4, width : float4, height : float4) = RectI(vec2(x, y), vec2(width, height))
     static def apply(rect : Rect) = RectI(rect.p, rect.size)
-    def x = origin.x
-    def y = origin.y
-    def x2 : int = origin.x + size.x
-    def y2 : int = origin.y + size.y
+    def x = p.x
+    def y = p.y
+    def x2 : int = p.x + size.x
+    def y2 : int = p.y + size.y
     def width : int = size.x
     def height : int = size.y
     def moveToCenterFor(size : vec2) = RectI(size.sub(self.size).mul(0.5), self.size)

@@ -9,6 +9,8 @@
 @class TRTreeView;
 @class TRCallRepairerView;
 @class EGCameraIsoMove;
+@class EGGlobal;
+@class EGContext;
 @class EGDirector;
 @class EGEnvironment;
 @class TRLevelRules;
@@ -20,8 +22,6 @@
 @class TRRailroadBuilderProcessor;
 @class TRRailroad;
 @class TRSwitchProcessor;
-@class EGGlobal;
-@class EGContext;
 @class EGRenderTarget;
 @class EGMatrixStack;
 @class TRPrecipitation;

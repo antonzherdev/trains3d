@@ -53,7 +53,7 @@
 + (id)callRepairerViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
-- (void)reshapeWithViewport:(GERect)viewport;
+- (void)reshape;
 - (void)draw;
 - (void)drawButtonForCity:(TRCity*)city;
 - (EGRecognizers*)recognizers;

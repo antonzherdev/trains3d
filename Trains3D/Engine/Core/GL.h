@@ -10,7 +10,7 @@
 
 
 static inline void egViewport(GERectI rect) {
-    glViewport((GLint)rect.origin.x, (GLint)rect.origin.y, (GLsizei)rect.size.x, (GLsizei)rect.size.y);
+    glViewport((GLint)rect.p.x, (GLint)rect.p.y, (GLsizei)rect.size.x, (GLsizei)rect.size.y);
 }
 
 

@@ -668,6 +668,9 @@ GERect geRectApplyXYWidthHeight(float x, float y, float width, float height) {
 GERect geRectApplyXYSize(float x, float y, GEVec2 size) {
     return GERectMake(GEVec2Make(x, y), size);
 }
+GERect geRectApplyRectI(GERectI rectI) {
+    return GERectMake(geVec2ApplyVec2i(rectI.p), geVec2ApplyVec2i(rectI.size));
+}
 float geRectX(GERect self) {
     return self.p.x;
 }
@@ -790,7 +793,7 @@ ODPType* geRectType() {
 
 NSString* GERectIDescription(GERectI self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<GERectI: "];
-    [description appendFormat:@"origin=%@", GEVec2iDescription(self.origin)];
+    [description appendFormat:@"p=%@", GEVec2iDescription(self.p)];
     [description appendFormat:@", size=%@", GEVec2iDescription(self.size)];
     [description appendString:@">"];
     return description;
@@ -802,16 +805,16 @@ GERectI geRectIApplyRect(GERect rect) {
     return GERectIMake(geVec2iApplyVec2(rect.p), geVec2iApplyVec2(rect.size));
 }
 NSInteger geRectIX(GERectI self) {
-    return self.origin.x;
+    return self.p.x;
 }
 NSInteger geRectIY(GERectI self) {
-    return self.origin.y;
+    return self.p.y;
 }
 NSInteger geRectIX2(GERectI self) {
-    return self.origin.x + self.size.x;
+    return self.p.x + self.size.x;
 }
 NSInteger geRectIY2(GERectI self) {
-    return self.origin.y + self.size.y;
+    return self.p.y + self.size.y;
 }
 NSInteger geRectIWidth(GERectI self) {
     return self.size.x;

@@ -300,6 +300,7 @@ static inline NSUInteger GERectHash(GERect self) {
 NSString* GERectDescription(GERect self);
 GERect geRectApplyXYWidthHeight(float x, float y, float width, float height);
 GERect geRectApplyXYSize(float x, float y, GEVec2 size);
+GERect geRectApplyRectI(GERectI rectI);
 float geRectX(GERect self);
 float geRectY(GERect self);
 float geRectX2(GERect self);
@@ -336,18 +337,18 @@ ODPType* geRectType();
 
 
 struct GERectI {
-    GEVec2i origin;
+    GEVec2i p;
     GEVec2i size;
 };
-static inline GERectI GERectIMake(GEVec2i origin, GEVec2i size) {
-    return (GERectI){origin, size};
+static inline GERectI GERectIMake(GEVec2i p, GEVec2i size) {
+    return (GERectI){p, size};
 }
 static inline BOOL GERectIEq(GERectI s1, GERectI s2) {
-    return GEVec2iEq(s1.origin, s2.origin) && GEVec2iEq(s1.size, s2.size);
+    return GEVec2iEq(s1.p, s2.p) && GEVec2iEq(s1.size, s2.size);
 }
 static inline NSUInteger GERectIHash(GERectI self) {
     NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2iHash(self.origin);
+    hash = hash * 31 + GEVec2iHash(self.p);
     hash = hash * 31 + GEVec2iHash(self.size);
     return hash;
 }

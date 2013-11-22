@@ -50,7 +50,7 @@ class CityView(level : Level) {
 class CallRepairerView(level : Level) extends InputProcessor {
     private var buttonSize : vec2
     private val text = Text(nil, Loc.callRepairer, vec3(0, 0, 0), TextAlignment(0, 0), vec4(0.1, 0.1, 0.1, 1))
-    def reshapeWith(viewport : Rect) {
+    def reshape {
         val font = fontWith(name = "lucida_grande", 18)
         text.font = font
         buttonSize = font.measureC(Loc.callRepairer)*1.2
