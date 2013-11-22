@@ -37,6 +37,7 @@ class LevelFactory {
             repairerSpeed = 20, [
                 (0, create2Cities),
                 (1, showHelp(Loc.helpConnectTwoCities)),
+                (1, if(egInterfaceIdiom == InterfaceIdiom.phone) showHelp(Loc.helpToMakeZoom) else nil),
                 (30, train(cars = 2, speed = 30)),
                 (Level.trainComingPeriod + 3, showTrainHelp),
                 (40, createNewCity),

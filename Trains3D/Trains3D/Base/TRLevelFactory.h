@@ -7,6 +7,7 @@
 @class TRLevelTheme;
 @class TRStr;
 @protocol TRStrings;
+@class EGInterfaceIdiom;
 @class TRLevel;
 @class TRLevelRules;
 @class TRTrain;

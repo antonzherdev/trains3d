@@ -183,6 +183,7 @@ stub object gl {
     def egLoadTextureFromFile(target : uint4, file : string, magFilter : uint4, minFilter : uint4) : vec2
     def egSaveTextureToFile(source : uint4, file : string)
     def egPlatform : Platform
+    def egInterfaceIdiom : InterfaceIdiom
     def egGLSLVersion : uint4
 
     def egLabelShaderProgram(handle : uint4, name : string)

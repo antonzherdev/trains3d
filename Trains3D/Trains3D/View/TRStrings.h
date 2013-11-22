@@ -41,6 +41,7 @@
 - (NSString*)helpExpressTrain;
 - (NSString*)helpTrainTo:(NSString*)to;
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
+- (NSString*)helpToMakeZoom;
 @end
 
 
@@ -79,6 +80,7 @@
 - (NSString*)helpTrainTo:(NSString*)to;
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
 - (NSString*)helpExpressTrain;
+- (NSString*)helpToMakeZoom;
 + (ODClassType*)type;
 @end
 
@@ -118,6 +120,7 @@
 - (NSString*)helpTrainTo:(NSString*)to;
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
 - (NSString*)helpExpressTrain;
+- (NSString*)helpToMakeZoom;
 + (ODClassType*)type;
 @end
 

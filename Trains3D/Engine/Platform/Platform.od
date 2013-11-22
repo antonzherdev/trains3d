@@ -4,3 +4,9 @@ enum Platform(shadows : bool, touch : bool) {
     MacOS(true, false)
     iOS(true, true)
 }
+
+enum InterfaceIdiom {
+    phone()
+    pad()
+    computer()
+}

@@ -38,6 +38,7 @@ trait Strings {
     def helpExpressTrain : string
     def helpTrain(to : string) : string
     def helpTrainWithSwitches(to : string) : string
+    def helpToMakeZoom : string
 }
 
 class EnStrings extends Strings {
@@ -91,6 +92,10 @@ class EnStrings extends Strings {
          It doesn't have time to stop in front of a switch.
          In this case the train will be destroyed.
          But you can use lights to conduct the train."
+    def helpToMakeZoom : string =
+        "You can change scale using pinch gesture.
+         Use two fingers for scrolling.
+         And one finger for railway building."
 }
 
 class RuStrings extends Strings{
@@ -144,6 +149,11 @@ class RuStrings extends Strings{
          Он не успеет остановиться перед стрелкой.
          Если заблокировать его стрелкой, то он уничтожится.
          Но можно использовать светофоры."
+
+    def helpToMakeZoom : string =
+        "Вы можете изменять масштаб с помощью жеста.
+         Для прокрутки используйте два пальца.
+         Для строительства рельсов один."
 }
 
 object Str {

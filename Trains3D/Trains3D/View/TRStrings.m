@@ -154,6 +154,12 @@ static ODClassType* _TREnStrings_type;
         "But you can use lights to conduct the train.";
 }
 
+- (NSString*)helpToMakeZoom {
+    return @"You can change scale using pinch gesture.\n"
+        "Use two fingers for scrolling.\n"
+        "And one finger for railway building.";
+}
+
 - (NSString*)formatCost:(NSInteger)cost {
     return [NSString stringWithFormat:@"%ld", (long)cost];
 }
@@ -342,6 +348,12 @@ static ODClassType* _TRRuStrings_type;
         "Он не успеет остановиться перед стрелкой.\n"
         "Если заблокировать его стрелкой, то он уничтожится.\n"
         "Но можно использовать светофоры.";
+}
+
+- (NSString*)helpToMakeZoom {
+    return @"Вы можете изменять масштаб с помощью жеста.\n"
+        "Для прокрутки используйте два пальца.\n"
+        "Для строительства рельсов один.";
 }
 
 - (NSString*)formatCost:(NSInteger)cost {
