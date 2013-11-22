@@ -504,7 +504,7 @@ static ODClassType* _EGStandardShader_type;
         [((EGShaderUniformI4*)([_diffuseTexture get])) applyI4:0];
         if(_key.region) {
             GERect r = ((EGTextureRegion*)(tex)).uv;
-            [((EGShaderUniformVec2*)([_uvShift get])) applyVec2:r.p0];
+            [((EGShaderUniformVec2*)([_uvShift get])) applyVec2:r.p];
             [((EGShaderUniformVec2*)([_uvScale get])) applyVec2:r.size];
         }
     }

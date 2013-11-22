@@ -398,7 +398,7 @@ static ODClassType* _EGShaderUniformMat4_type;
 - (void)applyMatrix:(GEMat4*)matrix {
     if(!([matrix isEqual:__last])) {
         __last = matrix;
-        glUniformMatrix4fv(_handle, 1, GL_FALSE, [matrix array]);
+        glUniformMatrix4fv(_handle, 1, GL_FALSE, matrix.array);
     }
 }
 

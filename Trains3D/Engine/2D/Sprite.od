@@ -8,24 +8,24 @@ object D2D {
     private val vaoForColor = Mesh(vb, EmptyIndexSource.triangleStrip).vao(BillboardShader.instanceForColor)
     private val vaoForTexture = Mesh(vb, EmptyIndexSource.triangleStrip).vao(BillboardShader.instanceForTexture)
     def drawSprite(material : ColorSource, at : vec3, rect : Rect) {
-        drawSprite(material, at, rect.quad)
+        drawSprite(material, at, rect.stripQuad)
     }
 
     def drawSprite(material : ColorSource, at : vec3, quad : Quad) {
         if(material.texture.isDefined) {
-            drawSprite(material, at, quad, material.texture.get.uv.upsideDownQuad)
+            drawSprite(material, at, quad, material.texture.get.uv.upsideDownStripQuad)
         } else {
-            drawSprite(material, at, quad, Rect(0, 0, 1, 1).upsideDownQuad)
+            drawSprite(material, at, quad, Rect(0, 0, 1, 1).upsideDownStripQuad)
         }
     }
 
     def drawSprite(material : ColorSource, at : vec3, quad : Quad, uv : Quad) {
 //        if(true) return nil
         var v = vertexes
-        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[0], material.color, uv.p[0]))
-        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[1], material.color, uv.p[1]))
-        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[2], material.color, uv.p[2]))
-        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[3], material.color, uv.p[3]))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p0, material.color, uv.p0))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p1, material.color, uv.p1))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p2, material.color, uv.p2))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p3, material.color, uv.p3))
         vb.set(vertexes)
         context.cullFace.disabled {
             if(material.texture.isEmpty) vaoForColor.draw(material)
@@ -34,10 +34,10 @@ object D2D {
     }
 
     def writeSprite(in : VoidRefArray, material : ColorSource, at : vec3, quad : Quad, uv : Quad) : VoidRefArray = {
-        var v = in.write(BillboardBufferData, BillboardBufferData(at, quad.p[0], material.color, uv.p[0]))
-        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[1], material.color, uv.p[1]))
-        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[2], material.color, uv.p[2]))
-        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p[3], material.color, uv.p[3]))
+        var v = in.write(BillboardBufferData, BillboardBufferData(at, quad.p0, material.color, uv.p0))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p1, material.color, uv.p1))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p2, material.color, uv.p2))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p3, material.color, uv.p3))
         v
     }
 
@@ -200,9 +200,9 @@ class Sprite {
     def draw {
         if(_changed) {
             val vertexes = VoidRefArray(BillboardBufferData.type, 4)
-            D2D.writeSprite(vertexes, _material, vec3(_position, 0), Rect(vec2(0, 0), _size).quad,
-                if(_material.texture.isDefined) material.texture.get.uv.upsideDownQuad
-                else Rect(0, 0, 1, 1).upsideDownQuad)
+            D2D.writeSprite(vertexes, _material, vec3(_position, 0), Rect(vec2(0, 0), _size).stripQuad,
+                if(_material.texture.isDefined) material.texture.get.uv.upsideDownStripQuad
+                else Rect(0, 0, 1, 1).upsideDownStripQuad)
             vb.set(vertexes)
             vertexes.free
             _changed = false
@@ -230,7 +230,7 @@ class Sprite {
     }
     def rect : Rect = Rect(_position, _size)
     def set(rect : Rect) {
-        position = rect.p0
+        position = rect.p
         size = rect.size
     }
 

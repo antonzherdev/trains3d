@@ -4,53 +4,99 @@ package com.antonzherdev.eg
 import core.math._
 
 class CameraIso(tilesOnScreen : vec2, zReserve : float4, center : vec2) extends Camera {
+    static def apply(tilesOnScreen : vec2, zReserve : float4) =
+        CameraIso(tilesOnScreen, zReserve, (tilesOnScreen - vec2(1, 1))/2.0)
     private static val ISO = MapSso.ISO
 
     private val ww : float = tilesOnScreen.x + tilesOnScreen.y
-    private val isoWW2 = ww*ISO/2
     private val yReserve = zReserve * 0.612372
     val viewportRatio : float = 2*ww/(yReserve*2 + ww)
 
     static val m = mat4.identity.rotate(90, 1, 0, 0)
     static val w = mat4.identity.rotate(-90, 1, 0, 0)
 
-    val matrixModel : MatrixModel = MatrixModel(
-        m = m,
-        w = w,
-        c = mat4.identity
-            .translate(-isoWW2 + ISO, -ISO*(tilesOnScreen.y - tilesOnScreen.x)/4 + isoWW2/2, -1000)
-            .rotate(30, 1, 0, 0)
-            .rotate(-45.0, 0, 1, 0),
-        p = mat4.ortho(-isoWW2, isoWW2, 0, (ww + 2*yReserve)*ISO/2, 0.0, 2000.0)
-    )
+    val matrixModel : MatrixModel = {
+        val cww : float = center.x + center.y
+        val isoWW2 = ww*ISO/2
+        val isoCWW2 = cww*ISO
+        MatrixModel(
+            m = m,
+            w = w,
+            c = {
+                val t = mat4.identity.translate(-center.x, 0, center.y)
+                val r = mat4.identity
+                    .rotate(30, 1, 0, 0)
+                    .rotate(-45.0, 0, 1, 0)
+                r * t
+            },
+            p = mat4.ortho(-isoWW2, isoWW2, -ww*ISO/4, (ww + 4*yReserve)*ISO/4, -1000.0, 1000.0)
+        )
+    }
 
     def cullFace : uint = GL_FRONT
+    def naturalCenter : vec2 = (tilesOnScreen - vec2(1, 1))/2.0
 }
 
 
-class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float) extends InputProcessor {
+class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFingers : float) extends InputProcessor {
     private var _scale : float = 1.0
     private var _camera : CameraIso = base
     def camera : CameraIso = _camera
 
+    def scale : float = _scale
     def set(scale : float) {
         var s = scale.max(misScale).min(maxScale)
         if(s != _scale) {
             _scale = s
-            _camera = CameraIso(base.tilesOnScreen/s, base.zReserve, _camera.center)
+            _camera = CameraIso(base.tilesOnScreen/s, base.zReserve/s, _camera.center)
         }
     }
 
+    def center : vec2 = _camera.center
+    def set(center : vec2) {
+        var c = if(_scale <= 1) base.naturalCenter else centerBounds.closestPointFor(vec2 = center)
+        if(c != _camera.center) {
+            _camera = CameraIso(camera.tilesOnScreen, camera.zReserve, c)
+        }
+    }
+
+    private var _startPan : vec2
     private var _startScale : float = 1.0
-    def recognizers : Recognizers = Recognizer<PinchParameter>(Pinch(),
+    def recognizers : Recognizers = [Recognizer<PinchParameter>(Pinch(),
         began = event -> {
             _startScale = _scale
             true
         },
         changed = event -> {
             set(scale = _startScale * event.param.scale)
+            set(center = event.location)
+        },
+        ended = event -> {
+        }
+    ),
+    Recognizer<PinchParameter>(Pan(panFingers),
+        began = event -> {
+            _startPan = event.location
+            true
+        },
+        changed = event -> {
+            set(center = _camera.center + _startPan - event.location)
         },
         ended = event -> {
         }
     )
+    ]
+
+    def centerBounds : Quad = {
+        val o = base.naturalCenter
+        if(_scale < 1) Rect(o, vec2(0, 0)).stripQuad
+        else {
+            val size = base.tilesOnScreen - base.tilesOnScreen/_scale
+            val s2 = size/2
+            val rect = Rect(o - size/2, size)
+            Quad(rect.p + vec2(-s2.x, s2.y), rect.ph + vec2(s2.x, s2.y),
+                rect.phw + vec2(s2.x, -s2.y),
+                rect.pw + vec2(-s2.x, -s2.y))
+        }
+    }
 }

@@ -1,6 +1,5 @@
 #import "objd.h"
 #import "GEVec.h"
-#import "GELine.h"
 @class EGDirector;
 @class EGMatrixModel;
 @class GEMat4;

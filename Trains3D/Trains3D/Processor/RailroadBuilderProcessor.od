@@ -20,8 +20,8 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
                 val mid = nl.mid
                 val tile = mid.round
 
-                val start = connectorsByDistanceFrom(line.r0 - tile).head
-                val ends = connectorsByDistanceFrom(line.r1 - tile)
+                val start = connectorsByDistanceFrom(line.p0 - tile).head
+                val ends = connectorsByDistanceFrom(line.p1 - tile)
                 var end = ends.head
                 if(end == start) end = ends[1]
 

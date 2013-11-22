@@ -67,10 +67,10 @@ class Car(weak train : Train, carType : CarType) {
 
     def midPoint : vec2 = {
         val line = position.line
-        if(carType.wheelToBack == carType.frontToWheel) line.r0 + line.u/2
+        if(carType.wheelToBack == carType.frontToWheel) line.p0 + line.u/2
         else {
             val u = line.u.set(length = line.u.length - (carType.wheelToBack - carType.frontToWheel))
-            line.r0 + u/2
+            line.p0 + u/2
         }
     }
 }

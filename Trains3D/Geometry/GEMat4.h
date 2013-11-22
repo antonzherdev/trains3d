@@ -1,7 +1,6 @@
 #import "objd.h"
 #import "GEVec.h"
 
-@class GEMat4;
 
 struct GEMat4Impl;
 typedef struct GEMat4Impl GEMat4Impl;
@@ -10,8 +9,8 @@ typedef struct GEMat4Impl GEMat4Impl;
 
 - (id)initWithImpl:(GEMat4Impl *)m;
 
-+ (id)matrixWithImpl:(GEMat4Impl *)m;
-+ (id)matrixWithArray:(float[16])m;
++ (id)mat4WithImpl:(GEMat4Impl *)m;
++ (id)mat4WithArray:(float[16])m;
 
 - (GEMat4 *)mulMatrix:(GEMat4 *)matrix;
 - (GEVec4)mulVec4:(GEVec4)vec4;
@@ -43,4 +42,22 @@ typedef struct GEMat4Impl GEMat4Impl;
 - (GERect)mulRect:(GERect)rect z:(float)z;
 @end
 
+struct GEMat3Impl;
+typedef struct GEMat3Impl GEMat3Impl;
+@interface GEMat3 : NSObject
+- (GEMat3Impl *)impl;
+
+- (id)initWithImplMat3:(GEMat3Impl *)m;
+
++ (id)mat3WithImpl:(GEMat3Impl *)m;
++ (id)mat3WithArray:(float[9])m;
+
+- (GEVec3)mulVec3:(GEVec3)vec3;
+
++ (GEMat3 *)identity;
++ (GEMat3 *)null;
+- (float const *)array;
+
+- (GEVec2)mulVec2:(GEVec2)vec2;
+@end
 

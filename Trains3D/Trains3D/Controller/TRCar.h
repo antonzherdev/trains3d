@@ -1,6 +1,5 @@
 #import "objd.h"
 #import "GEVec.h"
-#import "GELine.h"
 @protocol EGCollisionShape;
 @class EGCollisionBox2d;
 @class EGCollisionBox;

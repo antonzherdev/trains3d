@@ -127,10 +127,10 @@ trait BillboardParticle extends Particle {
 
     def writeTo(array : VoidRefArray) : VoidRefArray = {
         array
-            .write(BillboardBufferData, BillboardBufferData(position, model.p[0], color, uv.p[0]))
-            .write(BillboardBufferData, BillboardBufferData(position, model.p[1], color, uv.p[1]))
-            .write(BillboardBufferData, BillboardBufferData(position, model.p[2], color, uv.p[2]))
-            .write(BillboardBufferData, BillboardBufferData(position, model.p[3], color, uv.p[3]))
+            .write(BillboardBufferData, BillboardBufferData(position, model.p0, color, uv.p0))
+            .write(BillboardBufferData, BillboardBufferData(position, model.p1, color, uv.p1))
+            .write(BillboardBufferData, BillboardBufferData(position, model.p2, color, uv.p2))
+            .write(BillboardBufferData, BillboardBufferData(position, model.p3, color, uv.p3))
     }
 }
 
@@ -154,7 +154,7 @@ class Billboard {
     var uv : Rect = Rect(0, 0, 1, 1)
 
     def draw {
-        D2D.drawSprite(material, at = position, rect.quad, uv.quad)
+        D2D.drawSprite(material, at = position, rect.stripQuad, uv.stripQuad)
     }
 
     var position : vec3 = vec3(0, 0, 0)

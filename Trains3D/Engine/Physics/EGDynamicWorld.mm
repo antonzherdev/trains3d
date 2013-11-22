@@ -233,7 +233,7 @@ static ODClassType* _EGDynamicBody_type;
     }
     float matrix[16];
     trans.getOpenGLMatrix(matrix);
-    return [GEMat4 matrixWithArray:matrix];
+    return [GEMat4 mat4WithArray:matrix];
 }
 
 - (float)friction {

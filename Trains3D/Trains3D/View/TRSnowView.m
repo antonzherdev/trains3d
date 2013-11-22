@@ -198,7 +198,7 @@ static ODClassType* _TRSnowParticle_type;
 }
 
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array {
-    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, TRSnowData, TRSnowDataMake(_position, _uv.p[0])), TRSnowData, TRSnowDataMake(GEVec2Make(_position.x + _size, _position.y), _uv.p[1])), TRSnowData, TRSnowDataMake(GEVec2Make(_position.x + _size, _position.y + _size), _uv.p[2])), TRSnowData, TRSnowDataMake(GEVec2Make(_position.x, _position.y + _size), _uv.p[3]));
+    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, TRSnowData, TRSnowDataMake(_position, _uv.p0)), TRSnowData, TRSnowDataMake(GEVec2Make(_position.x + _size, _position.y), _uv.p1)), TRSnowData, TRSnowDataMake(GEVec2Make(_position.x + _size, _position.y + _size), _uv.p2)), TRSnowData, TRSnowDataMake(GEVec2Make(_position.x, _position.y + _size), _uv.p3));
 }
 
 - (GEVec2)vec {

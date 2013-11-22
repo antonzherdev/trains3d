@@ -26,10 +26,10 @@ class SnowParticle(weather : Weather) extends Particle {
     private val uv = textureQuadrant.rndQuad
 
     def writeTo(array : VoidRefArray) : VoidRefArray = {
-        array.write(SnowData, SnowData(position, uv.p[0]))
-             .write(SnowData, SnowData(vec2(position.x + size, position.y), uv.p[1]))
-             .write(SnowData, SnowData(vec2(position.x + size, position.y + size), uv.p[2]))
-             .write(SnowData, SnowData(vec2(position.x, position.y + size), uv.p[3]))
+        array.write(SnowData, SnowData(position, uv.p0))
+             .write(SnowData, SnowData(vec2(position.x + size, position.y), uv.p1))
+             .write(SnowData, SnowData(vec2(position.x + size, position.y + size), uv.p2))
+             .write(SnowData, SnowData(vec2(position.x, position.y + size), uv.p3))
     }
 
     def vec : vec2 = {

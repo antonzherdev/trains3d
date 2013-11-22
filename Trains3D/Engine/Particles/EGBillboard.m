@@ -663,7 +663,7 @@ static ODClassType* _EGBillboard_type;
 }
 
 - (void)draw {
-    [EGD2D drawSpriteMaterial:_material at:_position quad:geRectQuad(_rect) uv:geRectQuad(_uv)];
+    [EGD2D drawSpriteMaterial:_material at:_position quad:geRectStripQuad(_rect) uv:geRectStripQuad(_uv)];
 }
 
 + (EGBillboard*)applyMaterial:(EGColorSource*)material {

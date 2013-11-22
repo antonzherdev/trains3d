@@ -167,9 +167,9 @@
     CGLUnlockContext([glContext CGLContextObj]);
 }
 
-#define DISPATCH_EVENT(theEvent, __tp__, __phase__) {\
+#define DISPATCH_EVENT(theEvent, __tp__, __phase__, __param__) {\
 [self lockOpenGLContext];\
-[_director processEvent:[EGViewEvent viewEventWithRecognizerType:__tp__ phase:__phase__ locationInView:[self locationForEvent:theEvent] viewSize:_viewSize param : nil]];\
+[_director processEvent:[EGViewEvent viewEventWithRecognizerType:__tp__ phase:__phase__ locationInView:[self locationForEvent:theEvent] viewSize:_viewSize param : __param__]];\
 [self unlockOpenGLContext];\
 }
 
@@ -182,36 +182,44 @@
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
-    DISPATCH_EVENT(theEvent, [EGPan leftMouse], [EGEventPhase began]);
+    DISPATCH_EVENT(theEvent, [EGPan leftMouse], [EGEventPhase began], nil);
     _mouseDraged = NO;
 }
 
 
 - (void)mouseDragged:(NSEvent *)theEvent
 {
-    DISPATCH_EVENT(theEvent, [EGPan leftMouse], [EGEventPhase changed]);
+    DISPATCH_EVENT(theEvent, [EGPan leftMouse], [EGEventPhase changed], nil);
     _mouseDraged = YES;
 }
 
 - (void)mouseUp:(NSEvent *)theEvent
 {
-    DISPATCH_EVENT(theEvent, [EGPan leftMouse], [EGEventPhase ended]);
+    DISPATCH_EVENT(theEvent, [EGPan leftMouse], [EGEventPhase ended], nil);
     if(!_mouseDraged) {
-        DISPATCH_EVENT(theEvent, [EGTap tapWithFingers:1 taps:(NSUInteger)theEvent.clickCount], [EGEventPhase on]);
+        DISPATCH_EVENT(theEvent, [EGTap tapWithFingers:1 taps:(NSUInteger)theEvent.clickCount], [EGEventPhase on], nil);
     }
 }
 
 - (void)rightMouseDown:(NSEvent *)theEvent {
-    DISPATCH_EVENT(theEvent, [EGPan rightMouse], [EGEventPhase began]);
+    DISPATCH_EVENT(theEvent, [EGPan rightMouse], [EGEventPhase began], nil);
 }
 
 - (void)rightMouseDragged:(NSEvent *)theEvent {
-    DISPATCH_EVENT(theEvent, [EGPan rightMouse], [EGEventPhase changed]);
+    DISPATCH_EVENT(theEvent, [EGPan rightMouse], [EGEventPhase changed], nil);
 }
 
 - (void)rightMouseUp:(NSEvent *)theEvent {
-    DISPATCH_EVENT(theEvent, [EGPan rightMouse], [EGEventPhase ended]);
+    DISPATCH_EVENT(theEvent, [EGPan rightMouse], [EGEventPhase ended], nil);
 }
+
+- (void)scrollWheel:(NSEvent *)theEvent {
+    DISPATCH_EVENT(theEvent, [EGPinch pinch], [EGEventPhase began], [EGPinchParameter pinchParameterWithScale:1.0 velocity:1.0]);
+    CGFloat scale = theEvent.deltaY < 0 ? -0.1* theEvent.deltaY + 1.0 : -0.05*theEvent.deltaY + 1.0;
+    DISPATCH_EVENT(theEvent, [EGPinch pinch], [EGEventPhase changed], [EGPinchParameter pinchParameterWithScale:scale velocity:1.0]);
+    DISPATCH_EVENT(theEvent, [EGPinch pinch], [EGEventPhase ended], [EGPinchParameter pinchParameterWithScale:scale velocity:1.0]);
+}
+
 
 #pragma mark CCGLView - Key events
 

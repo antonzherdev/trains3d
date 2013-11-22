@@ -1,6 +1,5 @@
 #import "objd.h"
 #import "EGInput.h"
-#import "GELine.h"
 #import "GEVec.h"
 @class TRRailroadBuilder;
 @class TRRailForm;

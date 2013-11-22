@@ -20,7 +20,9 @@
 + (id)cameraIsoWithTilesOnScreen:(GEVec2)tilesOnScreen zReserve:(float)zReserve center:(GEVec2)center;
 - (id)initWithTilesOnScreen:(GEVec2)tilesOnScreen zReserve:(float)zReserve center:(GEVec2)center;
 - (ODClassType*)type;
++ (EGCameraIso*)applyTilesOnScreen:(GEVec2)tilesOnScreen zReserve:(float)zReserve;
 - (NSUInteger)cullFace;
+- (GEVec2)naturalCenter;
 + (GEMat4*)m;
 + (GEMat4*)w;
 + (ODClassType*)type;
@@ -31,13 +33,18 @@
 @property (nonatomic, readonly) EGCameraIso* base;
 @property (nonatomic, readonly) CGFloat misScale;
 @property (nonatomic, readonly) CGFloat maxScale;
+@property (nonatomic, readonly) CGFloat panFingers;
 
-+ (id)cameraIsoMoveWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale;
-- (id)initWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale;
++ (id)cameraIsoMoveWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale panFingers:(CGFloat)panFingers;
+- (id)initWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale panFingers:(CGFloat)panFingers;
 - (ODClassType*)type;
 - (EGCameraIso*)camera;
+- (CGFloat)scale;
 - (void)setScale:(CGFloat)scale;
+- (GEVec2)center;
+- (void)setCenter:(GEVec2)center;
 - (EGRecognizers*)recognizers;
+- (GEQuad)centerBounds;
 + (ODClassType*)type;
 @end
 

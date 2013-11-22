@@ -77,7 +77,7 @@ class SimpleShader(key : SimpleShaderKey) extends Shader<ColorSource>(key.progra
             context.bindTexture(tex)
             if(key.region) {
                 val r = tex.cast<TextureRegion>.uv
-                uvShift.get.apply(vec2 = r.p0)
+                uvShift.get.apply(vec2 = r.p)
                 uvScale.get.apply(vec2 = r.size)
             }
         }

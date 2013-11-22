@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "GELine.h"
+#import "GEVec.h"
 
 @class EGCollisionBody;
 

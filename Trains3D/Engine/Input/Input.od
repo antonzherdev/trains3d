@@ -128,7 +128,7 @@ class CameraEvent<P>(event : Event<P>, matrixModel : MatrixModel, viewport : Rec
     def location = locationFor(0)
     def locationInViewport : vec2 = {
         val viewport = viewport
-        (locationInView - viewport.p0)/viewport.size*2 - vec2(1, 1)
+        (locationInView - viewport.p)/viewport.size*2 - vec2(1, 1)
     }
     def locationFor(depth : float) : vec2 = segment.r(plane = Plane(vec3(0, 0, depth), vec3(0, 0, 1))).xy
 

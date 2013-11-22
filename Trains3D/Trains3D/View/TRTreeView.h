@@ -1,7 +1,6 @@
 #import "objd.h"
 #import "GEVec.h"
 #import "EGBillboard.h"
-#import "GELine.h"
 @class TRForest;
 @class EGTexture;
 @class TRForestRules;

@@ -183,7 +183,7 @@ static ODClassType* _TRSmokeParticle_type;
 }
 
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array {
-    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p[0], _color, _uv.p[0])), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p[1], _color, _uv.p[1])), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p[2], _color, _uv.p[2])), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p[3], _color, _uv.p[3]));
+    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p0, _color, _uv.p0)), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p1, _color, _uv.p1)), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p2, _color, _uv.p2)), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p3, _color, _uv.p3));
 }
 
 - (ODClassType*)type {

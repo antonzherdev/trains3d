@@ -125,16 +125,16 @@ class Font(name : string) {
                 val v0 = vec2(x + s.offset.x/vpSize.x, y - s.offset.y/vpSize.y)
 
                 vp = vp.write(vec2, v0)
-                vp = vp.write(vec2, tr.p0)
+                vp = vp.write(vec2, tr.p)
 
                 vp = vp.write(vec2, vec2(v0.x, v0.y - size.y))
-                vp = vp.write(vec2, tr.p1)
+                vp = vp.write(vec2, tr.ph)
 
                 vp = vp.write(vec2, vec2(v0.x + size.x, v0.y - size.y))
-                vp = vp.write(vec2, tr.p3)
+                vp = vp.write(vec2, tr.phw)
 
                 vp = vp.write(vec2, vec2(v0.x + size.x, v0.y))
-                vp = vp.write(vec2, tr.p2)
+                vp = vp.write(vec2, tr.pw)
 
                 ip = ip.write(uInt4 = n)
                 ip = ip.write(uInt4 = n + 1)

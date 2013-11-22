@@ -4,7 +4,6 @@
 
 #include "btBulletCollisionCommon.h"
 #import "EGCollision.h"
-#import "GELine.h"
 
 @implementation EGCollisionWorld {
     btCollisionWorld * _world;

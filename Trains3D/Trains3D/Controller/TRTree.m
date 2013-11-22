@@ -118,7 +118,7 @@ static ODClassType* _TRForest_type;
     GEVec2 e = geVec2iDivF([rail.form.end vec], 2.0);
     GEVec2 ds = ((eqf4(s.x, 0)) ? GEVec2Make(0.3, 0.0) : GEVec2Make(0.0, 0.3));
     GEVec2 de = ((eqf4(e.x, 0)) ? GEVec2Make(0.3, 0.0) : GEVec2Make(0.0, 0.3));
-    [self cutDownRect:geRectAddVec2(geQuadBoundingRect(geQuadApplyP0P1P2P3(geVec2SubVec2(s, ds), geVec2AddVec2(s, ds), geVec2SubVec2(e, de), geVec2AddVec2(e, de))), geVec2ApplyVec2i(rail.tile))];
+    [self cutDownRect:geRectAddVec2(geQuadBoundingRect(GEQuadMake(geVec2SubVec2(s, ds), geVec2AddVec2(s, ds), geVec2SubVec2(e, de), geVec2AddVec2(e, de))), geVec2ApplyVec2i(rail.tile))];
 }
 
 - (void)cutDownForASwitch:(TRSwitch*)aSwitch {
@@ -381,7 +381,7 @@ static NSArray* _TRTreeType_values;
         _uv = uv;
         _scale = scale;
         _rustleStrength = rustleStrength;
-        _uvQuad = geRectUpsideDownQuad(_uv);
+        _uvQuad = geRectUpsideDownStripQuad(_uv);
         _size = geVec2MulF(GEVec2Make(geRectWidth(_uv), 0.5), _scale);
     }
     

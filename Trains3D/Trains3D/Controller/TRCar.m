@@ -226,10 +226,10 @@ static ODClassType* _TRCar_type;
 - (GEVec2)midPoint {
     GELine2 line = [self position].line;
     if(eqf(_carType.wheelToBack, _carType.frontToWheel)) {
-        return geVec2AddVec2(line.r0, geVec2DivI(line.u, 2));
+        return geVec2AddVec2(line.p0, geVec2DivI(line.u, 2));
     } else {
         GEVec2 u = geVec2SetLength(line.u, ((float)(geVec2Length(line.u) - (_carType.wheelToBack - _carType.frontToWheel))));
-        return geVec2AddVec2(line.r0, geVec2DivI(u, 2));
+        return geVec2AddVec2(line.p0, geVec2DivI(u, 2));
     }
 }
 

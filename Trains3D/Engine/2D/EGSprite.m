@@ -40,20 +40,20 @@ static ODClassType* _EGD2D_type;
 }
 
 + (void)drawSpriteMaterial:(EGColorSource*)material at:(GEVec3)at rect:(GERect)rect {
-    [EGD2D drawSpriteMaterial:material at:at quad:geRectQuad(rect)];
+    [EGD2D drawSpriteMaterial:material at:at quad:geRectStripQuad(rect)];
 }
 
 + (void)drawSpriteMaterial:(EGColorSource*)material at:(GEVec3)at quad:(GEQuad)quad {
-    if([material.texture isDefined]) [EGD2D drawSpriteMaterial:material at:at quad:quad uv:geRectUpsideDownQuad([((EGTexture*)([material.texture get])) uv])];
-    else [EGD2D drawSpriteMaterial:material at:at quad:quad uv:geRectUpsideDownQuad(geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0))];
+    if([material.texture isDefined]) [EGD2D drawSpriteMaterial:material at:at quad:quad uv:geRectUpsideDownStripQuad([((EGTexture*)([material.texture get])) uv])];
+    else [EGD2D drawSpriteMaterial:material at:at quad:quad uv:geRectUpsideDownStripQuad(geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0))];
 }
 
 + (void)drawSpriteMaterial:(EGColorSource*)material at:(GEVec3)at quad:(GEQuad)quad uv:(GEQuad)uv {
     CNVoidRefArray v = _EGD2D_vertexes;
-    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[0], material.color, uv.p[0]));
-    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[1], material.color, uv.p[1]));
-    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[2], material.color, uv.p[2]));
-    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[3], material.color, uv.p[3]));
+    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p0, material.color, uv.p0));
+    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p1, material.color, uv.p1));
+    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p2, material.color, uv.p2));
+    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p3, material.color, uv.p3));
     [_EGD2D_vb setArray:_EGD2D_vertexes];
     [EGGlobal.context.cullFace disabledF:^void() {
         if([material.texture isEmpty]) [_EGD2D_vaoForColor drawParam:material];
@@ -62,10 +62,10 @@ static ODClassType* _EGD2D_type;
 }
 
 + (CNVoidRefArray)writeSpriteIn:(CNVoidRefArray)in material:(EGColorSource*)material at:(GEVec3)at quad:(GEQuad)quad uv:(GEQuad)uv {
-    CNVoidRefArray v = cnVoidRefArrayWriteTpItem(in, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[0], material.color, uv.p[0]));
-    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[1], material.color, uv.p[1]));
-    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[2], material.color, uv.p[2]));
-    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p[3], material.color, uv.p[3]));
+    CNVoidRefArray v = cnVoidRefArrayWriteTpItem(in, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p0, material.color, uv.p0));
+    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p1, material.color, uv.p1));
+    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p2, material.color, uv.p2));
+    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, EGBillboardBufferDataMake(at, quad.p3, material.color, uv.p3));
     return v;
 }
 
@@ -620,7 +620,7 @@ static ODClassType* _EGSprite_type;
 - (void)draw {
     if(__changed) {
         CNVoidRefArray vertexes = cnVoidRefArrayApplyTpCount(egBillboardBufferDataType(), 4);
-        [EGD2D writeSpriteIn:vertexes material:__material at:geVec3ApplyVec2Z(__position, 0.0) quad:geRectQuad(GERectMake(GEVec2Make(0.0, 0.0), __size)) uv:(([__material.texture isDefined]) ? geRectUpsideDownQuad([((EGTexture*)([[self material].texture get])) uv]) : geRectUpsideDownQuad(geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)))];
+        [EGD2D writeSpriteIn:vertexes material:__material at:geVec3ApplyVec2Z(__position, 0.0) quad:geRectStripQuad(GERectMake(GEVec2Make(0.0, 0.0), __size)) uv:(([__material.texture isDefined]) ? geRectUpsideDownStripQuad([((EGTexture*)([[self material].texture get])) uv]) : geRectUpsideDownStripQuad(geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)))];
         [_vb setArray:vertexes];
         cnVoidRefArrayFree(vertexes);
         __changed = NO;
@@ -657,7 +657,7 @@ static ODClassType* _EGSprite_type;
 }
 
 - (void)setRect:(GERect)rect {
-    [self setPosition:rect.p0];
+    [self setPosition:rect.p];
     [self setSize:rect.size];
 }
 

@@ -4,7 +4,6 @@
 #import "EGMapIso.h"
 #import "EGFont.h"
 #import "EGMesh.h"
-#import "GELine.h"
 @class TRLevel;
 @class TRRailroad;
 @class EGViewportSurface;

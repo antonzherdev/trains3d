@@ -39,8 +39,8 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
             GELine2 nl = geLine2Normalize(line);
             GEVec2 mid = geLine2Mid(nl);
             GEVec2i tile = geVec2Round(mid);
-            TRRailConnector* start = [[self connectorsByDistanceFromPoint:geVec2SubVec2(line.r0, geVec2ApplyVec2i(tile))] head];
-            id<CNSeq> ends = [self connectorsByDistanceFromPoint:geVec2SubVec2(geLine2R1(line), geVec2ApplyVec2i(tile))];
+            TRRailConnector* start = [[self connectorsByDistanceFromPoint:geVec2SubVec2(line.p0, geVec2ApplyVec2i(tile))] head];
+            id<CNSeq> ends = [self connectorsByDistanceFromPoint:geVec2SubVec2(geLine2P1(line), geVec2ApplyVec2i(tile))];
             TRRailConnector* end = [ends head];
             if(end == start) end = [ends applyIndex:1];
             if([_builder tryBuildRail:[TRRail railWithTile:tile form:[TRRailForm formForConnector1:start connector2:end]]]) {

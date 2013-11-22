@@ -240,7 +240,7 @@ static ODClassType* _TRMenuView_type;
 
 - (void(^)(GERect))drawLine {
     return ^void(GERect rect) {
-        [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.3, 0.3, 0.3, 1.0)] p0:geRectP1(rect) p1:geRectP3(rect)];
+        [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.3, 0.3, 0.3, 1.0)] p0:geRectPh(rect) p1:geRectPhw(rect)];
     };
 }
 
@@ -274,7 +274,7 @@ static ODClassType* _TRMenuView_type;
     CGFloat height = delta * [[self buttons] count];
     __font = [EGGlobal fontWithName:@"lucida_grande" size:24];
     [_menuBackSprite setSize:GEVec2Make(((float)(width)), ((float)(height + [self headerHeight] * s)))];
-    [_menuBackSprite setPosition:geRectMoveToCenterForSize([_menuBackSprite rect], viewport.size).p0];
+    [_menuBackSprite setPosition:geRectMoveToCenterForSize([_menuBackSprite rect], viewport.size).p];
     __block GEVec2 p = geVec2AddVec2([_menuBackSprite position], GEVec2Make(0.0, ((float)(height - delta))));
     [[[self buttons] chain] forEach:^void(EGButton* button) {
         ((EGButton*)(button)).rect = GERectMake(p, GEVec2Make(((float)(width)), ((float)(delta))));
@@ -530,9 +530,9 @@ static ODClassType* _TRLooseMenu_type;
 
 - (void)drawHeaderRect:(GERect)rect {
     [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 0.85, 0.75, 1.0)] at:GEVec3Make(0.0, 0.0, 0.0) rect:rect];
-    [_headerText setPosition:geVec3ApplyVec2(geVec2AddVec2(rect.p0, geVec2MulVec2(rect.size, GEVec2Make(0.05, 0.7))))];
+    [_headerText setPosition:geVec3ApplyVec2(geVec2AddVec2(rect.p, geVec2MulVec2(rect.size, GEVec2Make(0.05, 0.7))))];
     [_headerText draw];
-    [_detailsText setPosition:geVec3ApplyVec2(geVec2AddVec2(rect.p0, geVec2MulVec2(rect.size, GEVec2Make(0.5, 0.35))))];
+    [_detailsText setPosition:geVec3ApplyVec2(geVec2AddVec2(rect.p, geVec2MulVec2(rect.size, GEVec2Make(0.5, 0.35))))];
     [_detailsText draw];
 }
 

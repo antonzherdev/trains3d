@@ -1,6 +1,5 @@
 #import "objd.h"
 #import "GEVec.h"
-#import "GELine.h"
 @class TRLevel;
 @class TRModels;
 @class EGGlobal;

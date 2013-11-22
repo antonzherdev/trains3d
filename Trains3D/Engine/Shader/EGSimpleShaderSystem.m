@@ -299,7 +299,7 @@ static ODClassType* _EGSimpleShader_type;
         [EGGlobal.context bindTextureTexture:tex];
         if(_key.region) {
             GERect r = ((EGTextureRegion*)(tex)).uv;
-            [((EGShaderUniformVec2*)([_uvShift get])) applyVec2:r.p0];
+            [((EGShaderUniformVec2*)([_uvShift get])) applyVec2:r.p];
             [((EGShaderUniformVec2*)([_uvScale get])) applyVec2:r.size];
         }
     }

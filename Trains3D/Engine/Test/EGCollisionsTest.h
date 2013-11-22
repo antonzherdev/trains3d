@@ -1,7 +1,6 @@
 #import "objd.h"
 #import "TSTestCase.h"
 #import "GEVec.h"
-#import "GELine.h"
 @class EGCollisionWorld;
 @class EGCollisionBox;
 @class EGCollisionBody;

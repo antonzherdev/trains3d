@@ -935,7 +935,7 @@ static ODClassType* _EGCameraEvent_type;
 
 - (GEVec2)locationInViewport {
     GERect viewport = _viewport;
-    return geVec2SubVec2(geVec2MulI(geVec2DivVec2(geVec2SubVec2(_locationInView, viewport.p0), viewport.size), 2), GEVec2Make(1.0, 1.0));
+    return geVec2SubVec2(geVec2MulI(geVec2DivVec2(geVec2SubVec2(_locationInView, viewport.p), viewport.size), 2), GEVec2Make(1.0, 1.0));
 }
 
 - (GEVec2)locationForDepth:(CGFloat)depth {
