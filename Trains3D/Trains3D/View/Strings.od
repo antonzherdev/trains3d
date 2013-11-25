@@ -2,7 +2,17 @@ package com.antonzherdev.trains
 
 
 trait Strings {
-    def format(cost : int) : string = "$cost"
+    def format(cost : int) : string = {
+        var i = 0
+        val a = "'".head
+        val str = "$cost".chain.reverse.flatMap{s ->
+            i++
+            if(i == 3) List(s, List(a))
+            else Option(s)
+        }.reverse.charsToString
+
+        "\$$str"
+    }
 
     def level(number : uint) : string
     def startLevel(number : uint) : string = level(number)
@@ -22,6 +32,7 @@ trait Strings {
     def victory : string
     def defeat : string
     def moneyOver : string
+    def winScore(score : uint) : string
 
     def colorOrange : string
     def colorBlue : string
@@ -96,6 +107,8 @@ class EnStrings extends Strings {
         "You can change scale using pinch gesture.
          Use two fingers for scrolling.
          And one finger for railway building."
+
+    def winScore(score : uint) : string = "Score: $(format(score))"
 }
 
 class RuStrings extends Strings{
@@ -154,6 +167,8 @@ class RuStrings extends Strings{
         "Вы можете изменять масштаб с помощью жеста.
          Для прокрутки используйте два пальца.
          Для строительства рельсов один."
+
+    def winScore(score : uint) : string = "Cчет: $(format(score))"
 }
 
 object Str {

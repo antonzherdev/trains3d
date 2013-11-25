@@ -27,6 +27,7 @@
 - (NSString*)victory;
 - (NSString*)defeat;
 - (NSString*)moneyOver;
+- (NSString*)winScoreScore:(NSUInteger)score;
 - (NSString*)colorOrange;
 - (NSString*)colorBlue;
 - (NSString*)colorMint;
@@ -81,6 +82,7 @@
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
 - (NSString*)helpExpressTrain;
 - (NSString*)helpToMakeZoom;
+- (NSString*)winScoreScore:(NSUInteger)score;
 + (ODClassType*)type;
 @end
 
@@ -121,6 +123,7 @@
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
 - (NSString*)helpExpressTrain;
 - (NSString*)helpToMakeZoom;
+- (NSString*)winScoreScore:(NSUInteger)score;
 + (ODClassType*)type;
 @end
 

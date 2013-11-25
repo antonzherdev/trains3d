@@ -117,13 +117,18 @@ class WinMenu(level : Level) extends MenuView {
     def headerHeight = 75.0
     def drawHeader(rect : Rect) {
         D2D.drawSprite(vec4(0.85, 0.9, 0.75, 1.0), at = vec3(0, 0, 0), rect)
-        headerText.position = rect.center
+        headerText.position = rect.p(0.5, 0.7)
         headerText.draw
+        scoreText.position = rect.p(0.05, 0.23)
+        scoreText.text = Loc.winScore(level.score.score)
+        scoreText.draw
     }
 
     private val headerText = Text(nil, Loc.victory, vec3(0, 0, 0), TextAlignment(0, 0), vec4(0, 0, 0, 1))
+    private val scoreText = Text(nil, "", vec3(0, 0, 0), TextAlignment(-1, 0), vec4(0, 0, 0, 1))
     def reshape {
         headerText.font = fontWith(name = "lucida_grande", size = 36)
+        scoreText.font = fontWith(name = "lucida_grande", size = 24)
     }
 }
 

@@ -119,14 +119,7 @@ static ODClassType* _TRLevelMenuView_type;
 }
 
 - (NSString*)formatScore:(NSInteger)score {
-    __block NSInteger i = 0;
-    unichar a = unums([@"'" head]);
-    NSString* str = [[[[[[NSString stringWithFormat:@"%ld", (long)score] chain] reverse] flatMap:^CNList*(id s) {
-        i++;
-        if(i == 3) return [CNList applyItem:s tail:[CNList applyItem:nums(a)]];
-        else return [CNOption applyValue:s];
-    }] reverse] charsToString];
-    return [NSString stringWithFormat:@"$%@", str];
+    return [TRStr.Loc formatCost:score];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

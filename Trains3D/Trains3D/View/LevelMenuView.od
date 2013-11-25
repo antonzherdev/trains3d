@@ -63,15 +63,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
     }
 
     def format(score : int) : string = {
-        var i = 0
-        val a = "'".head
-        val str = "$score".chain.reverse.flatMap{s ->
-            i++
-            if(i == 3) List(s, List(a))
-            else Option(s)
-        }.reverse.charsToString
-
-        "\$$str"
+        Loc.format(score)
     }
 
     private var notificationAnimation = Counter()

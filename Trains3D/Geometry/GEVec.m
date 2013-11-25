@@ -746,6 +746,9 @@ GEVec2 geRectCenter(GERect self) {
 GEVec2 geRectClosestPointForVec2(GERect self, GEVec2 vec2) {
     return geVec2MaxVec2(geVec2MinVec2(vec2, geRectPhw(self)), self.p);
 }
+GEVec2 geRectPXY(GERect self, float x, float y) {
+    return GEVec2Make(self.p.x + self.size.x * x, self.p.y + self.size.y * y);
+}
 ODPType* geRectType() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[GERectWrap class] name:@"GERect" size:sizeof(GERect) wrap:^id(void* data, NSUInteger i) {

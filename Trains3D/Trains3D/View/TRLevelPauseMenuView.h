@@ -19,6 +19,7 @@
 @class TRStr;
 @protocol TRStrings;
 @class TRGameDirector;
+@class TRScore;
 @class TRLevelMenuView;
 @class TRHelp;
 

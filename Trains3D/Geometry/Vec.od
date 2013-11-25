@@ -215,6 +215,7 @@ struct Rect(p : vec2, size : vec2) {
     def centerY = Rect(vec2(p.x, p.y - size.y/2), size)
     def center = p + size/2
     def closestPointFor(vec2 : vec2) = vec2.min(phw).max(p)
+    def p(x : float4, y : float4) : vec2 = vec2(p.x + size.x*x, p.y  + size.y*y)
 }
 struct RectI(p : vec2i, size : vec2i) {
     static def apply(x : float4, y : float4, width : float4, height : float4) = RectI(vec2(x, y), vec2(width, height))

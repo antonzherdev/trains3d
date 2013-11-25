@@ -160,8 +160,19 @@ static ODClassType* _TREnStrings_type;
         "And one finger for railway building.";
 }
 
+- (NSString*)winScoreScore:(NSUInteger)score {
+    return [NSString stringWithFormat:@"Score: %@", [self formatCost:((NSInteger)(score))]];
+}
+
 - (NSString*)formatCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"%ld", (long)cost];
+    __block NSInteger i = 0;
+    unichar a = unums([@"'" head]);
+    NSString* str = [[[[[[NSString stringWithFormat:@"%ld", (long)cost] chain] reverse] flatMap:^CNList*(id s) {
+        i++;
+        if(i == 3) return [CNList applyItem:s tail:[CNList applyItem:nums(a)]];
+        else return [CNOption applyValue:s];
+    }] reverse] charsToString];
+    return [NSString stringWithFormat:@"$%@", str];
 }
 
 - (NSString*)startLevelNumber:(NSUInteger)number {
@@ -356,8 +367,19 @@ static ODClassType* _TRRuStrings_type;
         "Для строительства рельсов один.";
 }
 
+- (NSString*)winScoreScore:(NSUInteger)score {
+    return [NSString stringWithFormat:@"Cчет: %@", [self formatCost:((NSInteger)(score))]];
+}
+
 - (NSString*)formatCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"%ld", (long)cost];
+    __block NSInteger i = 0;
+    unichar a = unums([@"'" head]);
+    NSString* str = [[[[[[NSString stringWithFormat:@"%ld", (long)cost] chain] reverse] flatMap:^CNList*(id s) {
+        i++;
+        if(i == 3) return [CNList applyItem:s tail:[CNList applyItem:nums(a)]];
+        else return [CNOption applyValue:s];
+    }] reverse] charsToString];
+    return [NSString stringWithFormat:@"$%@", str];
 }
 
 - (NSString*)startLevelNumber:(NSUInteger)number {

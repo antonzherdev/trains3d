@@ -326,6 +326,7 @@ GERect geRectCenterX(GERect self);
 GERect geRectCenterY(GERect self);
 GEVec2 geRectCenter(GERect self);
 GEVec2 geRectClosestPointForVec2(GERect self, GEVec2 vec2);
+GEVec2 geRectPXY(GERect self, float x, float y);
 ODPType* geRectType();
 @interface GERectWrap : NSObject
 @property (readonly, nonatomic) GERect value;
