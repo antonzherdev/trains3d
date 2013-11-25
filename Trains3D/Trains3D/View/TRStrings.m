@@ -203,6 +203,10 @@ static ODClassType* _TREnStrings_type;
     }
 }
 
+- (NSString*)leaderboard {
+    return @"Best results";
+}
+
 - (NSString*)formatCost:(NSInteger)cost {
     __block NSInteger i = 0;
     unichar a = unums([@"'" head]);
@@ -446,6 +450,10 @@ static ODClassType* _TRRuStrings_type;
             }
         }
     }
+}
+
+- (NSString*)leaderboard {
+    return @"Лучшие результаты";
 }
 
 - (NSString*)formatCost:(NSInteger)cost {

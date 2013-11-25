@@ -110,9 +110,10 @@ class PauseMenuView(level : Level) extends MenuView  {
 
 class WinMenu(level : Level) extends MenuView {
     private val nextButton = button(Loc.goToNext(level), GameDirector.instance.nextLevel)
+    private val leaderboardButton = button(Loc.leaderboard, GameDirector.instance.showLeaderboard(level))
     private val restartButton = button(Loc.replay(level), GameDirector.instance.restartLevel)
     private val chooseLevelButton = button(Loc.chooseLevel, GameDirector.instance.chooseLevel)
-    val buttons = [nextButton, restartButton, chooseLevelButton]
+    val buttons = [nextButton, leaderboardButton, restartButton, chooseLevelButton]
 
     def headerHeight = 75.0
     def drawHeader(rect : Rect) {

@@ -10,6 +10,7 @@ stub class GameCenter {
     def reportScore(leaderboard : string, value : int8, completed : () -> void)
 
     def localPlayerScore(leaderboard : string, callback : LocalPlayerScore -> void)
+    def showLeaderboard(name : string)
 }
 
 stub class Achievement(name : string) {

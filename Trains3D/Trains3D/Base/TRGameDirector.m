@@ -121,6 +121,10 @@ static ODClassType* _TRGameDirector_type;
     }
 }
 
+- (void)showLeaderboardLevel:(TRLevel*)level {
+    [EGGameCenter.instance showLeaderboardName:[NSString stringWithFormat:@"grp.com.antonzherdev.Trains3D.Level%lu", (unsigned long)level.number]];
+}
+
 - (void)synchronize {
     [_local synchronize];
     [_cloud synchronize];

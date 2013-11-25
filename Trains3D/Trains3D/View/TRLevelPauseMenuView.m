@@ -398,6 +398,7 @@ static ODClassType* _TRPauseMenuView_type;
 @implementation TRWinMenu{
     TRLevel* _level;
     EGButton* _nextButton;
+    EGButton* _leaderboardButton;
     EGButton* _restartButton;
     EGButton* _chooseLevelButton;
     id<CNSeq> _buttons;
@@ -425,13 +426,16 @@ static ODClassType* _TRWinMenu_type;
         _nextButton = [self buttonText:[TRStr.Loc goToNextLevel:_level] onClick:^void() {
             [TRGameDirector.instance nextLevel];
         }];
+        _leaderboardButton = [self buttonText:[TRStr.Loc leaderboard] onClick:^void() {
+            [TRGameDirector.instance showLeaderboardLevel:_weakSelf.level];
+        }];
         _restartButton = [self buttonText:[TRStr.Loc replayLevel:_level] onClick:^void() {
             [TRGameDirector.instance restartLevel];
         }];
         _chooseLevelButton = [self buttonText:[TRStr.Loc chooseLevel] onClick:^void() {
             [TRGameDirector.instance chooseLevel];
         }];
-        _buttons = (@[_nextButton, _restartButton, _chooseLevelButton]);
+        _buttons = (@[_nextButton, _leaderboardButton, _restartButton, _chooseLevelButton]);
         __score = [CNOption none];
         _obs = [TRGameDirector.playerScoreRetrieveNotification observeBy:^void(EGLocalPlayerScore* score) {
             _weakSelf._score = [CNOption applyValue:score];

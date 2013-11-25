@@ -30,6 +30,7 @@
 - (void)chooseLevel;
 - (void)nextLevel;
 - (void)setLevel:(NSInteger)level;
+- (void)showLeaderboardLevel:(TRLevel*)level;
 - (void)synchronize;
 + (TRGameDirector*)instance;
 + (CNNotificationHandle*)playerScoreRetrieveNotification;

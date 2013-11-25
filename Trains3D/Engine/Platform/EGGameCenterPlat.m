@@ -167,6 +167,34 @@ static ODClassType* _EGGameCenter_type;
         callback(lps);
     }];
 }
+
+- (void)showLeaderboardName:(NSString *)name {
+    GKGameCenterViewController *gameCenterController = [[GKGameCenterViewController alloc] init];
+    if (gameCenterController != nil)
+    {
+        gameCenterController.gameCenterDelegate = self;
+        gameCenterController.viewState = GKGameCenterViewControllerStateLeaderboards;
+        gameCenterController.leaderboardTimeScope = GKLeaderboardTimeScopeToday;
+        gameCenterController.leaderboardCategory = name;
+#if TARGET_OS_IPHONE
+        [[[[[UIApplication sharedApplication] delegate] window] rootViewController]
+            presentViewController:gameCenterController animated:YES completion:nil];
+#else
+        [[GKDialogController sharedDialogController] presentViewController:gameCenterController];
+#endif
+
+    }
+
+}
+
+- (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController {
+#if TARGET_OS_IPHONE
+    [[[[[UIApplication sharedApplication] delegate] window] rootViewController] dismissViewControllerAnimated:YES completion:nil];
+#else
+    [[GKDialogController sharedDialogController] dismiss:self];
+#endif
+}
+
 @end
 
 

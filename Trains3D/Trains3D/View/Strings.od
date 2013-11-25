@@ -35,6 +35,7 @@ trait Strings {
     def winScore(score : uint) : string
     def bestScore(score : LocalPlayerScore) : string
     def top(score : LocalPlayerScore) : string
+    def leaderboard : string
 
     def colorOrange : string
     def colorBlue : string
@@ -125,7 +126,7 @@ class EnStrings extends Strings {
             else if(p <= 50) "Better than average"
             else "Worse than average"
         }
-
+    def leaderboard : string = "Best results"
 }
 
 class RuStrings extends Strings{
@@ -200,6 +201,7 @@ class RuStrings extends Strings{
             else if(p <= 50) "Выше среднего"
             else "Хуже среднего"
         }
+    def leaderboard : string = "Лучшие результаты"
 }
 
 object Str {

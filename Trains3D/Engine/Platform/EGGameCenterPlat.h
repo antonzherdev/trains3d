@@ -1,3 +1,4 @@
+#import <GameKit/GameKit.h>
 #import "objd.h"
 
 @class EGGameCenter;
@@ -5,7 +6,7 @@
 @class GKAchievement;
 @class EGLocalPlayerScore;
 
-@interface EGGameCenter : NSObject
+@interface EGGameCenter : NSObject <GKGameCenterControllerDelegate>
 + (id)gameCenter;
 - (id)init;
 - (ODClassType*)type;
@@ -21,6 +22,8 @@
 - (void)reportScoreLeaderboard:(NSString *)leaderboard value:(long)value completed :(void (^)(void))completed;
 
 - (void)localPlayerScoreLeaderboard:(NSString *)leaderboard callback:(void (^)(EGLocalPlayerScore*))callback;
+
+- (void)showLeaderboardName:(NSString *)name;
 @end
 
 

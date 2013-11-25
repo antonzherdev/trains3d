@@ -69,6 +69,10 @@ class GameDirector {
         }
     }
 
+    def showLeaderboard(level : Level) {
+        GameCenter.instance.showLeaderboard("grp.com.antonzherdev.Trains3D.Level$(level.number)")
+    }
+
     def synchronize {
         local.synchronize
         cloud.synchronize

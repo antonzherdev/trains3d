@@ -31,6 +31,7 @@
 - (NSString*)winScoreScore:(NSUInteger)score;
 - (NSString*)bestScoreScore:(EGLocalPlayerScore*)score;
 - (NSString*)topScore:(EGLocalPlayerScore*)score;
+- (NSString*)leaderboard;
 - (NSString*)colorOrange;
 - (NSString*)colorBlue;
 - (NSString*)colorMint;
@@ -88,6 +89,7 @@
 - (NSString*)winScoreScore:(NSUInteger)score;
 - (NSString*)bestScoreScore:(EGLocalPlayerScore*)score;
 - (NSString*)topScore:(EGLocalPlayerScore*)score;
+- (NSString*)leaderboard;
 + (ODClassType*)type;
 @end
 
@@ -131,6 +133,7 @@
 - (NSString*)winScoreScore:(NSUInteger)score;
 - (NSString*)bestScoreScore:(EGLocalPlayerScore*)score;
 - (NSString*)topScore:(EGLocalPlayerScore*)score;
+- (NSString*)leaderboard;
 + (ODClassType*)type;
 @end
 
