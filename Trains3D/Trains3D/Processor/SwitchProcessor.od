@@ -4,7 +4,7 @@ import com.antonzherdev.eg._
 
 class SwitchProcessor(level : Level) extends InputProcessor {
 
-    val switchShape = CollisionBox2d(0.6, 0.6)
+    val switchShape = CollisionBox2d(0.4, 0.4)
     val lightShape = CollisionBox2d(0.5, 0.6)
     val narrowLightShape = CollisionBox2d(0.5, 0.5)
     val world = CollisionWorld<RailroadConnectorContent>()

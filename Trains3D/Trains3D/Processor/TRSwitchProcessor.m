@@ -31,7 +31,7 @@ static ODClassType* _TRSwitchProcessor_type;
     __weak TRSwitchProcessor* _weakSelf = self;
     if(self) {
         _level = level;
-        _switchShape = [EGCollisionBox2d applyX:0.6 y:0.6];
+        _switchShape = [EGCollisionBox2d applyX:0.4 y:0.4];
         _lightShape = [EGCollisionBox2d applyX:0.5 y:0.6];
         _narrowLightShape = [EGCollisionBox2d applyX:0.5 y:0.5];
         _world = [EGCollisionWorld collisionWorld];
