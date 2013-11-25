@@ -140,7 +140,18 @@ static ODClassType* _EGGameCenter_type;
 
 - (void)reportScoreLeaderboard:(NSString *)leaderboard value:(long)value completed :(void (^)(void))completed {
     if(!_active) return;
+#if TARGET_OS_IPHONE
+    GKScore *scoreReporter = [[GKScore alloc] initWithLeaderboardIdentifier:leaderboard];
+    scoreReporter.value = value;
+    scoreReporter.context = 0;
+    NSArray *scores = @[scoreReporter];
+    [GKScore reportScores:scores withCompletionHandler:^(NSError *error) {
+        if(error != nil) NSLog(@"Error while writing leaderboard %@", error);
+        if(completed != nil) completed();
+    }];
+#else
     GKScore *scoreReporter = [[GKScore alloc] initWithCategory:leaderboard];
+
     scoreReporter.value = value;
     scoreReporter.context = 0;
 
@@ -148,12 +159,17 @@ static ODClassType* _EGGameCenter_type;
         if(error != nil) NSLog(@"Error while writing leaderboard %@", error);
         if(completed != nil) completed();
     }];
+#endif
 }
 - (void)localPlayerScoreLeaderboard:(NSString *)leaderboard callback:(void (^)(EGLocalPlayerScore*))callback {
     GKLeaderboard *leaderboardRequest = [[GKLeaderboard alloc] init];
     leaderboardRequest.timeScope = GKLeaderboardTimeScopeAllTime;
     leaderboardRequest.playerScope = GKLeaderboardPlayerScopeGlobal;
+#if TARGET_OS_IPHONE
+    leaderboardRequest.identifier = leaderboard;
+#else
     leaderboardRequest.category = leaderboard;
+#endif
     leaderboardRequest.range = NSMakeRange(1, 1);
     [leaderboardRequest loadScoresWithCompletionHandler:^(NSArray *scores, NSError *error) {
         if(error != nil) {
@@ -174,12 +190,12 @@ static ODClassType* _EGGameCenter_type;
     {
         gameCenterController.gameCenterDelegate = self;
         gameCenterController.viewState = GKGameCenterViewControllerStateLeaderboards;
-        gameCenterController.leaderboardTimeScope = GKLeaderboardTimeScopeToday;
-        gameCenterController.leaderboardCategory = name;
 #if TARGET_OS_IPHONE
+        gameCenterController.leaderboardIdentifier = name;
         [[[[[UIApplication sharedApplication] delegate] window] rootViewController]
             presentViewController:gameCenterController animated:YES completion:nil];
 #else
+        gameCenterController.leaderboardCategory = name;
         [[GKDialogController sharedDialogController] presentViewController:gameCenterController];
 #endif
 
