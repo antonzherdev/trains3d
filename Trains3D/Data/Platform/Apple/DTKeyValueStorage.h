@@ -27,12 +27,11 @@
 
 @end
 
-
 @interface DTCloudKeyValueStorage : DTKeyValueStorage
-@property (nonatomic, readonly) id<CNMap> resolveConflict;
+@property (nonatomic, readonly) id (^resolveConflict)(NSString*);
 
-+ (id)cloudKeyValueStorageWithDefaults:(id<CNMap>)defaults resolveConflict:(id<CNMap>)resolveConflict;
-- (id)initWithDefaults:(id<CNMap>)defaults resolveConflict:(id<CNMap>)resolveConflict;
++ (id)cloudKeyValueStorageWithDefaults:(id<CNMap>)defaults resolveConflict:(id (^)(NSString*))resolveConflict;
+- (id)initWithDefaults:(id<CNMap>)defaults resolveConflict:(id (^)(NSString*))resolveConflict;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

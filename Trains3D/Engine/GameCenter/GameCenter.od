@@ -6,6 +6,7 @@ stub class GameCenter {
 
     def achievement(name : string) : Achievement?
     def completeAchievement(name : string)
+    def reportScore(leaderboard : string, value : int8)
 }
 
 stub class Achievement(name : string) {
@@ -15,3 +16,4 @@ stub class Achievement(name : string) {
         set(progress = 1.0)
     }
 }
+

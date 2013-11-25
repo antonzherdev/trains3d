@@ -5,7 +5,7 @@ import com.antonzherdev.data._
 class GameDirector {
     static val instance = GameDirector()
     val local = LocalKeyValueStorage([("currentLevel", 1)])
-    private val resolveMaxLevel : (any, any) -> any = (a : any, b : any) -> {
+    val resolveMaxLevel : (any, any) -> any = (a : any, b : any) -> {
         val v = Conflict.resolveMax(a, b)
         log("Max level from cloud $v = max($a, $b)")
         if(currentLevel == a.cast<int>) {
@@ -15,11 +15,16 @@ class GameDirector {
         v
     }
 
-    val cloud = CloudKeyValueStorage([("maxLevel", 1)], [("maxLevel", resolveMaxLevel)])
+    val cloud = CloudKeyValueStorage([("maxLevel", 1)], name ->
+        if(name == "maxLevel") resolveMaxLevel
+        else Conflict.resolveMax)
 
     private val obs = Level.winNotification.observe{ level ->
-        cloud.keepMax("maxLevel", level + 1)
-        local.set("currentLevel", i = level + 1)
+        val n = level.number + 1
+        cloud.keepMax("maxLevel", n)
+        local.set("currentLevel", i = n)
+        GameCenter.instance.reportScore("grp.com.antonzherdev.Trains3D.Level$n", level.score.score)
+        cloud.keepMax("level$n.score", level.score.score)
     }
     private val crashObs = Level.crashNotification.observe { _ ->
         GameCenter.instance.completeAchievement("grp.Crash")

@@ -132,6 +132,18 @@ static ODClassType* _EGGameCenter_type;
         [a complete];
     }];
 }
+
+- (void)reportScoreLeaderboard:(NSString *)leaderboard value:(long)value {
+    if(!_active) return;
+    GKScore *scoreReporter = [[GKScore alloc] initWithCategory:leaderboard];
+    scoreReporter.value = value;
+    scoreReporter.context = 0;
+
+    [scoreReporter reportScoreWithCompletionHandler:^(NSError *error) {
+        if(error != nil) NSLog(@"Error while writing leaderboard %@", error);
+    }];
+}
+
 @end
 
 

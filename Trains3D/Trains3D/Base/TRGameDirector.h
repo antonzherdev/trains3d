@@ -4,6 +4,7 @@
 @class DTCloudKeyValueStorage;
 @class TRLevel;
 @class EGGameCenter;
+@class TRScore;
 @class EGDirector;
 @class TRSceneFactory;
 @class EGScene;
@@ -15,6 +16,7 @@
 
 @interface TRGameDirector : NSObject
 @property (nonatomic, readonly) DTLocalKeyValueStorage* local;
+@property (nonatomic, readonly) id(^resolveMaxLevel)(id, id);
 @property (nonatomic, readonly) DTCloudKeyValueStorage* cloud;
 
 + (id)gameDirector;

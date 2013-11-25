@@ -11,4 +11,4 @@ stub class KeyValueStorage(defaults : [string : any]) {
 
 stub class LocalKeyValueStorage(defaults : [string : any]) extends KeyValueStorage(defaults)
 
-stub class CloudKeyValueStorage(defaults : [string : any], resolveConflict : [string : (any, any) -> any]) extends KeyValueStorage(defaults)
+stub class CloudKeyValueStorage(defaults : [string : any], resolveConflict : string -> ((any, any) -> any)) extends KeyValueStorage(defaults)

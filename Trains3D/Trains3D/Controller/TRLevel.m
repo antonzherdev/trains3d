@@ -113,6 +113,7 @@ static ODClassType* _TRLevelRules_type;
     TRTrainsDynamicWorld* _dynamicWorld;
     NSMutableArray* __dyingTrains;
     CGFloat _looseCounter;
+    BOOL __resultSent;
     id __help;
     id __result;
 }
@@ -159,6 +160,7 @@ static ODClassType* _TRLevel_type;
         _dynamicWorld = [TRTrainsDynamicWorld trainsDynamicWorld];
         __dyingTrains = [NSMutableArray mutableArray];
         _looseCounter = 0.0;
+        __resultSent = NO;
         __help = [CNOption none];
         __result = [CNOption none];
     }
@@ -305,12 +307,18 @@ static ODClassType* _TRLevel_type;
     }];
     if([_score score] < 0) {
         _looseCounter += delta;
-        if(_looseCounter > 5) [self lose];
+        if(_looseCounter > 5 && !(__resultSent)) {
+            __resultSent = YES;
+            [self lose];
+        }
     } else {
         _looseCounter = 0.0;
         if([_schedule isEmpty] && [__trains isEmpty] && [__dyingTrains isEmpty] && [__cities allConfirm:^BOOL(TRCity* _) {
     return [((TRCity*)(_)) canRunNewTrain];
-}]) [self win];
+}] && !(__resultSent)) {
+            __resultSent = YES;
+            [self win];
+        }
     }
 }
 
@@ -415,7 +423,7 @@ static ODClassType* _TRLevel_type;
 
 - (void)win {
     __result = [CNOption applyValue:[TRLevelResult levelResultWithWin:YES]];
-    [_TRLevel_winNotification postData:numi(((NSInteger)(_number)))];
+    [_TRLevel_winNotification postData:self];
 }
 
 - (void)lose {

@@ -4,6 +4,7 @@
 #import "DTConflictResolve.h"
 #import "TRLevel.h"
 #import "EGGameCenter.h"
+#import "TRScore.h"
 #import "EGDirector.h"
 #import "TRSceneFactory.h"
 #import "EGScene.h"
@@ -19,6 +20,7 @@
 static TRGameDirector* _TRGameDirector_instance;
 static ODClassType* _TRGameDirector_type;
 @synthesize local = _local;
+@synthesize resolveMaxLevel = _resolveMaxLevel;
 @synthesize cloud = _cloud;
 
 + (id)gameDirector {
@@ -39,10 +41,16 @@ static ODClassType* _TRGameDirector_type;
             }
             return v;
         };
-        _cloud = [DTCloudKeyValueStorage cloudKeyValueStorageWithDefaults:(@{@"maxLevel" : @1}) resolveConflict:(@{@"maxLevel" : _resolveMaxLevel})];
-        _obs = [TRLevel.winNotification observeBy:^void(id level) {
-            [_weakSelf.cloud keepMaxKey:@"maxLevel" i:unumi(level) + 1];
-            [_weakSelf.local setKey:@"currentLevel" i:unumi(level) + 1];
+        _cloud = [DTCloudKeyValueStorage cloudKeyValueStorageWithDefaults:(@{@"maxLevel" : @1}) resolveConflict:^id(NSString* name) {
+            if([name isEqual:@"maxLevel"]) return _weakSelf.resolveMaxLevel;
+            else return DTConflict.resolveMax;
+        }];
+        _obs = [TRLevel.winNotification observeBy:^void(TRLevel* level) {
+            NSUInteger n = ((TRLevel*)(level)).number + 1;
+            [_weakSelf.cloud keepMaxKey:@"maxLevel" i:((NSInteger)(n))];
+            [_weakSelf.local setKey:@"currentLevel" i:((NSInteger)(n))];
+            [EGGameCenter.instance reportScoreLeaderboard:[NSString stringWithFormat:@"grp.com.antonzherdev.Trains3D.Level%lu", (unsigned long)n] value:((long)([((TRLevel*)(level)).score score]))];
+            [_weakSelf.cloud keepMaxKey:[NSString stringWithFormat:@"level%lu.score", (unsigned long)n] i:[((TRLevel*)(level)).score score]];
         }];
         _crashObs = [TRLevel.crashNotification observeBy:^void(id _) {
             [EGGameCenter.instance completeAchievementName:@"grp.Crash"];

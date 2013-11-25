@@ -171,17 +171,17 @@ static ODClassType* _DTKeyValueStorage_type;
 
 
 @implementation DTCloudKeyValueStorage{
-    id<CNMap> _resolveConflict;
+    id (^_resolveConflict)(NSString*);
     NSUserDefaults* _d;
 }
 static ODClassType* _DTCloudKeyValueStorage_type;
 @synthesize resolveConflict = _resolveConflict;
 
-+ (id)cloudKeyValueStorageWithDefaults:(id<CNMap>)defaults resolveConflict:(id<CNMap>)resolveConflict {
++ (id)cloudKeyValueStorageWithDefaults:(id<CNMap>)defaults resolveConflict:(id (^)(NSString*))resolveConflict {
     return [[DTCloudKeyValueStorage alloc] initWithDefaults:defaults resolveConflict:resolveConflict];
 }
 
-- (id)initWithDefaults:(id<CNMap>)defaults resolveConflict:(id<CNMap>)resolveConflict {
+- (id)initWithDefaults:(id<CNMap>)defaults resolveConflict:(id (^)(NSString*))resolveConflict {
     self = [super initWithDefaults:defaults];
     if(self) {
         _d = [NSUserDefaults standardUserDefaults];
@@ -222,18 +222,13 @@ static ODClassType* _DTCloudKeyValueStorage_type;
             id oldValue = [_d objectForKey:key];
             if(oldValue == nil) [_d setObject:value forKey:key];
             else if(![oldValue isEqual:value]) {
-                id resolverOpt = [_resolveConflict optKey:key];
-                if([resolverOpt isDefined]) {
-                    id (^resolver)(id, id)  = [resolverOpt get];
-                    id newValue = resolver(oldValue, value);
-                    if(![oldValue isEqual:newValue]) {
-                        [_d setObject:value forKey:key];
-                    }
-                    if(![value isEqual:newValue]) {
-                        [[NSUbiquitousKeyValueStore defaultStore] setObject:newValue forKey:key];
-                    }
-                } else {
+                id (^resolver)(id, id) = _resolveConflict(key);
+                id newValue = resolver(oldValue, value);
+                if(![oldValue isEqual:newValue]) {
                     [_d setObject:value forKey:key];
+                }
+                if(![value isEqual:newValue]) {
+                    [[NSUbiquitousKeyValueStore defaultStore] setObject:newValue forKey:key];
                 }
             }
         }

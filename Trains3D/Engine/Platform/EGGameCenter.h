@@ -15,6 +15,8 @@
 - (void)completeAchievementName:(NSString *)name;
 
 + (ODClassType*)type;
+
+- (void)reportScoreLeaderboard:(NSString *)leaderboard value:(long)value;
 @end
 
 
