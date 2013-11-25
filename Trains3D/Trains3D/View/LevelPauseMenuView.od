@@ -119,16 +119,40 @@ class WinMenu(level : Level) extends MenuView {
         D2D.drawSprite(vec4(0.85, 0.9, 0.75, 1.0), at = vec3(0, 0, 0), rect)
         headerText.position = rect.p(0.5, 0.7)
         headerText.draw
+
+        val ls = level.score.score
+        scoreText.text = Loc.winScore(ls)
         scoreText.position = rect.p(0.05, 0.23)
-        scoreText.text = Loc.winScore(level.score.score)
-        scoreText.draw
+        if(_score.isDefined) {
+            val s = _score.get
+            bestText.text = Loc.bestScore(s)
+            topText.text = Loc.top(s)
+            bestText.position = rect.p(0.05, 0.23)
+            topText.position = rect.p(0.95, 0.23)
+            bestText.draw
+            topText.draw
+        } else {
+            scoreText.draw
+        }
+
+    }
+
+    var _score : LocalPlayerScore? = nil
+    private val obs = GameDirector.playerScoreRetrieveNotification.observe{ score ->
+        _score = score
+        Director.current.redraw
     }
 
     private val headerText = Text(nil, Loc.victory, vec3(0, 0, 0), TextAlignment(0, 0), vec4(0, 0, 0, 1))
     private val scoreText = Text(nil, "", vec3(0, 0, 0), TextAlignment(-1, 0), vec4(0, 0, 0, 1))
+    private val bestText = Text(nil, "", vec3(0, 0, 0), TextAlignment(-1, 0), vec4(0, 0, 0, 1))
+    private val topText = Text(nil, "", vec3(0, 0, 0), TextAlignment(1, 0), vec4(0, 0, 0, 1))
     def reshape {
         headerText.font = fontWith(name = "lucida_grande", size = 36)
-        scoreText.font = fontWith(name = "lucida_grande", size = 24)
+        val f = fontWith(name = "lucida_grande", size = 18)
+        scoreText.font = f
+        bestText.font = f
+        topText.font = f
     }
 }
 

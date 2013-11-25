@@ -1,6 +1,7 @@
 #import "TRStrings.h"
 
 #import "TRLevel.h"
+#import "EGGameCenter.h"
 #import "GL.h"
 #import "EGPlatform.h"
 @implementation TREnStrings
@@ -162,6 +163,44 @@ static ODClassType* _TREnStrings_type;
 
 - (NSString*)winScoreScore:(NSUInteger)score {
     return [NSString stringWithFormat:@"Score: %@", [self formatCost:((NSInteger)(score))]];
+}
+
+- (NSString*)bestScoreScore:(EGLocalPlayerScore*)score {
+    return [NSString stringWithFormat:@"Your best score: %@", [self formatCost:((NSInteger)(score.value))]];
+}
+
+- (NSString*)topScore:(EGLocalPlayerScore*)score {
+    if(score.rank == 1) {
+        return @"The best result ever!";
+    } else {
+        if(score.rank == 2) {
+            return @"The second result ever!";
+        } else {
+            if(score.rank == 3) {
+                return @"The third result ever!";
+            } else {
+                CGFloat p = ((CGFloat)(score.rank)) / score.maxRank;
+                if(p <= 5) {
+                    return @"Top 5%";
+                } else {
+                    if(p <= 10) {
+                        return @"Top 10%";
+                    } else {
+                        if(p <= 20) {
+                            return @"Top 20%";
+                        } else {
+                            if(p <= 30) {
+                                return @"Top 30%";
+                            } else {
+                                if(p <= 50) return @"Better than average";
+                                else return @"Worse than average";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 - (NSString*)formatCost:(NSInteger)cost {
@@ -369,6 +408,44 @@ static ODClassType* _TRRuStrings_type;
 
 - (NSString*)winScoreScore:(NSUInteger)score {
     return [NSString stringWithFormat:@"Cчет: %@", [self formatCost:((NSInteger)(score))]];
+}
+
+- (NSString*)bestScoreScore:(EGLocalPlayerScore*)score {
+    return [NSString stringWithFormat:@"Ваш лучший результат: %@", [self formatCost:((NSInteger)(score.value))]];
+}
+
+- (NSString*)topScore:(EGLocalPlayerScore*)score {
+    if(score.rank == 1) {
+        return @"Лучший результат!";
+    } else {
+        if(score.rank == 2) {
+            return @"2-й результат!";
+        } else {
+            if(score.rank == 3) {
+                return @"3-й результат!";
+            } else {
+                CGFloat p = ((CGFloat)(score.rank)) / score.maxRank;
+                if(p <= 5) {
+                    return @"Лучшие 5%";
+                } else {
+                    if(p <= 10) {
+                        return @"Лучшие 10%";
+                    } else {
+                        if(p <= 20) {
+                            return @"Лучшие 20%";
+                        } else {
+                            if(p <= 30) {
+                                return @"Лучшие 30%";
+                            } else {
+                                if(p <= 50) return @"Выше среднего";
+                                else return @"Хуже среднего";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 - (NSString*)formatCost:(NSInteger)cost {

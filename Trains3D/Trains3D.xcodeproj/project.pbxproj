@@ -371,7 +371,7 @@
 		6F3DF532E3E3C3B36E3390A0 /* KWEqualMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF16B343577D6355460C0 /* KWEqualMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF5344C0F17A9E43ABF66 /* btGImpactQuantizedBvh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2D9F9A43AB1D88DD58D /* btGImpactQuantizedBvh.cpp */; };
 		6F3DF53686E80A3D8E079F51 /* btBoxShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9F92E4F73C1C456688B /* btBoxShape.cpp */; };
-		6F3DF53D155EE9FC74A5C017 /* EGGameCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF08ED5E5657FABF69059 /* EGGameCenter.m */; };
+		6F3DF53D155EE9FC74A5C017 /* EGGameCenterPlat.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF08ED5E5657FABF69059 /* EGGameCenterPlat.m */; };
 		6F3DF53D2650264E469BE1C5 /* Tree.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFE9EA336EF79C80518F9 /* Tree.od */; };
 		6F3DF5413772109DB7930300 /* lucida_grande_18.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF54DC5799C2230D8C4DC /* lucida_grande_18.fnt */; };
 		6F3DF54C70F33A11A30E7AE4 /* gim_contact.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4930B18032DBD17F203 /* gim_contact.cpp */; };
@@ -448,6 +448,7 @@
 		6F3DF656EBF282AE531AEE5F /* TRTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4476E10D45C11672E0D /* TRTree.m */; };
 		6F3DF656FDA2566E11484CA2 /* EGShadow.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC4B4C5CB925B3B6F0D2 /* EGShadow.m */; };
 		6F3DF658E173D2B79F6CB0E7 /* btDiscreteDynamicsWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD5D9998BAB8454EE8B0 /* btDiscreteDynamicsWorld.cpp */; };
+		6F3DF65C5DCB17A45A1CF5A3 /* EGGameCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDBE69352ED81A2B0970 /* EGGameCenter.m */; };
 		6F3DF65D24D22A853BDA447B /* btAlignedAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2BFF8A305F53D6234FE /* btAlignedAllocator.cpp */; };
 		6F3DF65FFAF4C2040C8F302E /* Bullet-C-API.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF3B25D1AF1CF03BBD333 /* Bullet-C-API.cpp */; };
 		6F3DF666760E356C7196FD48 /* matrix_operation.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFCECE045CC91ED7F7827 /* matrix_operation.inl */; };
@@ -578,6 +579,7 @@
 		6F3DF853FA57B8BEE900DA27 /* KWMatcherFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFFB07075D0B621DA115 /* KWMatcherFactory.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF85836E86C0F777A4400 /* btSolve2LinearConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF13E661D7F13887072FF /* btSolve2LinearConstraint.cpp */; };
 		6F3DF8597FD9D420FCE55D93 /* btDispatcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFACE0848D57807904F03 /* btDispatcher.cpp */; };
+		6F3DF85AC40DCE0071D9D074 /* EGGameCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDBE69352ED81A2B0970 /* EGGameCenter.m */; };
 		6F3DF85C9B44831A893CD33A /* KWCallSite.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF09F4DC5C8503452E941 /* KWCallSite.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF85DF7958BF013E5B1C2 /* KWGenericMatchEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC506DF7AFF339438CBF /* KWGenericMatchEvaluator.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF85EAC8132B1E417689E /* btCollisionDispatcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDCAAB32380DDB351847 /* btCollisionDispatcher.cpp */; };
@@ -589,7 +591,7 @@
 		6F3DF86F4994CBBF13DA081C /* ODEnum.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2B5F56E42A6B83F3EBD /* ODEnum.m */; };
 		6F3DF870888D2E2203B91F43 /* EGShadow.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC4B4C5CB925B3B6F0D2 /* EGShadow.m */; };
 		6F3DF8717AC9CBB96E76EDE3 /* DTKeyValueStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8EE35D95E2210854AF3 /* DTKeyValueStorage.m */; };
-		6F3DF873276EA7C381F7A3F9 /* EGGameCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF08ED5E5657FABF69059 /* EGGameCenter.m */; };
+		6F3DF873276EA7C381F7A3F9 /* EGGameCenterPlat.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF08ED5E5657FABF69059 /* EGGameCenterPlat.m */; };
 		6F3DF8735E29864F38A6AD83 /* CameraIso.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF3C7B0EE49FD496C5709 /* CameraIso.od */; };
 		6F3DF874677F8AAEA00CE28E /* btCollisionWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF339D32D4BF07D109BED /* btCollisionWorld.cpp */; };
 		6F3DF8767DD1FCEE7506426D /* btGjkPairDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF7307148D307121BB8E3 /* btGjkPairDetector.cpp */; };
@@ -1223,7 +1225,7 @@
 		6F3DF0836D534FCFE5B04C87 /* btPoolAllocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btPoolAllocator.h; sourceTree = "<group>"; };
 		6F3DF089806F3022FDD85299 /* KWProbe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWProbe.h; sourceTree = "<group>"; };
 		6F3DF08B0BB8EA58CEE41686 /* btEmptyCollisionAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btEmptyCollisionAlgorithm.h; sourceTree = "<group>"; };
-		6F3DF08ED5E5657FABF69059 /* EGGameCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGGameCenter.m; sourceTree = "<group>"; };
+		6F3DF08ED5E5657FABF69059 /* EGGameCenterPlat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGGameCenterPlat.m; sourceTree = "<group>"; };
 		6F3DF09033D3726C9B3D7F00 /* Crows.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Crows.mp3; sourceTree = "<group>"; };
 		6F3DF0914D9D3CAEF4031CB5 /* btStaticPlaneShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btStaticPlaneShape.h; sourceTree = "<group>"; };
 		6F3DF09734043367E34BE6B6 /* EGDynamicWorld.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EGDynamicWorld.mm; sourceTree = "<group>"; };
@@ -1654,6 +1656,7 @@
 		6F3DF6344817B9FDAA83EF43 /* CNXMLTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNXMLTest.h; sourceTree = "<group>"; };
 		6F3DF634978B49A8B5BC2288 /* GL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GL.h; sourceTree = "<group>"; };
 		6F3DF635597455B819909179 /* gim_tri_collision.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gim_tri_collision.cpp; sourceTree = "<group>"; };
+		6F3DF63C0FFE535683E7730B /* GameCenter.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = GameCenter.od; sourceTree = "<group>"; };
 		6F3DF6426F35CE15C4E8523C /* func_exponential.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = func_exponential.hpp; sourceTree = "<group>"; };
 		6F3DF6447092E95BFE0A0641 /* DTConflictResolve.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTConflictResolve.m; sourceTree = "<group>"; };
 		6F3DF647C0B30C93B30662C5 /* btGeneric6DofConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btGeneric6DofConstraint.h; sourceTree = "<group>"; };
@@ -1980,7 +1983,7 @@
 		6F3DFA8F46E4742FCD80955E /* btConvexInternalShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btConvexInternalShape.cpp; sourceTree = "<group>"; };
 		6F3DFA9074AB674E4E72CA19 /* CNData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNData.m; sourceTree = "<group>"; };
 		6F3DFA919DDC836CFC68709A /* TSTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSTestCase.h; sourceTree = "<group>"; };
-		6F3DFA931C65B3B33BDDF173 /* EGGameCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGGameCenter.h; sourceTree = "<group>"; };
+		6F3DFA931C65B3B33BDDF173 /* EGGameCenterPlat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGGameCenterPlat.h; sourceTree = "<group>"; };
 		6F3DFA938562BA3845FDDCE3 /* btUnionFind.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btUnionFind.cpp; sourceTree = "<group>"; };
 		6F3DFA93D8D19D1214BDEC32 /* CNChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNChain.m; sourceTree = "<group>"; };
 		6F3DFA93F699909D14924233 /* RailroadView.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = RailroadView.od; sourceTree = "<group>"; };
@@ -2225,12 +2228,13 @@
 		6F3DFDBB75EB14F29802BCE3 /* NSDictionary+CNChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+CNChain.m"; sourceTree = "<group>"; };
 		6F3DFDBC9E80303F3C3F1889 /* btContactConstraint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btContactConstraint.cpp; sourceTree = "<group>"; };
 		6F3DFDBE5969B379EA570E21 /* EGSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGSound.h; sourceTree = "<group>"; };
+		6F3DFDBE69352ED81A2B0970 /* EGGameCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGGameCenter.m; sourceTree = "<group>"; };
 		6F3DFDBFA5446B65998112B1 /* Material.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Material.od; sourceTree = "<group>"; };
 		6F3DFDC12AC9704F0483A4CE /* compatibility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = compatibility.hpp; sourceTree = "<group>"; };
 		6F3DFDC1D39E4A2AC83291A0 /* Queue.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Queue.od; sourceTree = "<group>"; };
 		6F3DFDC2BA898F749E5C2E9A /* KiwiBlockMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KiwiBlockMacros.h; sourceTree = "<group>"; };
 		6F3DFDC338E423A7A5AAB4FE /* NSObject+KiwiMockAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+KiwiMockAdditions.h"; sourceTree = "<group>"; };
-		6F3DFDC44B8A19C081718008 /* GameCenter.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = GameCenter.od; sourceTree = "<group>"; };
+		6F3DFDC44B8A19C081718008 /* GameCenterPlat.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = GameCenterPlat.od; sourceTree = "<group>"; };
 		6F3DFDC4525793E1A263E8CE /* intrinsic_common.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = intrinsic_common.inl; sourceTree = "<group>"; };
 		6F3DFDC92CF067CDBD0447BD /* btGenericPoolAllocator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btGenericPoolAllocator.cpp; sourceTree = "<group>"; };
 		6F3DFDC9D08945B86C1E9F69 /* Input.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Input.od; sourceTree = "<group>"; };
@@ -2376,6 +2380,7 @@
 		6F3DFFC7D19F2438102CA788 /* noise.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = noise.hpp; sourceTree = "<group>"; };
 		6F3DFFC87DD4F9A005E94449 /* btPersistentManifold.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btPersistentManifold.cpp; sourceTree = "<group>"; };
 		6F3DFFCA22D9324408AFA0DA /* KWMatchVerifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWMatchVerifier.h; sourceTree = "<group>"; };
+		6F3DFFCD13C70F42AAA3A0F9 /* EGGameCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGGameCenter.h; sourceTree = "<group>"; };
 		6F3DFFCEC6E50594590CA2A8 /* EGVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGVertex.h; sourceTree = "<group>"; };
 		6F3DFFCF082FA9814878ABC9 /* KWBeBetweenMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWBeBetweenMatcher.m; sourceTree = "<group>"; };
 		6F3DFFD15391C87A17E57A02 /* TRWeather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRWeather.h; sourceTree = "<group>"; };
@@ -2513,7 +2518,10 @@
 		6F3DF00FD3BB3EBCAB42A383 /* GameCenter */ = {
 			isa = PBXGroup;
 			children = (
-				6F3DFDC44B8A19C081718008 /* GameCenter.od */,
+				6F3DFDC44B8A19C081718008 /* GameCenterPlat.od */,
+				6F3DF63C0FFE535683E7730B /* GameCenter.od */,
+				6F3DFFCD13C70F42AAA3A0F9 /* EGGameCenter.h */,
+				6F3DFDBE69352ED81A2B0970 /* EGGameCenter.m */,
 			);
 			path = GameCenter;
 			sourceTree = "<group>";
@@ -4283,8 +4291,8 @@
 				6F3DF2E1B8872A1A48F21CB0 /* Platform.od */,
 				6F3DFC77EAAFD168A73BBAB1 /* EGPlatform.h */,
 				6F3DFDA3F98DA3A1E3E13E0B /* EGPlatform.m */,
-				6F3DFA931C65B3B33BDDF173 /* EGGameCenter.h */,
-				6F3DF08ED5E5657FABF69059 /* EGGameCenter.m */,
+				6F3DFA931C65B3B33BDDF173 /* EGGameCenterPlat.h */,
+				6F3DF08ED5E5657FABF69059 /* EGGameCenterPlat.m */,
 			);
 			path = Platform;
 			sourceTree = "<group>";
@@ -5123,12 +5131,13 @@
 				6F3DFA03B619007B93E30C91 /* CNNotificationPlatform.m in Sources */,
 				6F3DF463EBFD16CE099CDF7F /* TRGameDirector.m in Sources */,
 				6F3DF88E5D8EE0824AFEA9D7 /* DTConflictResolve.m in Sources */,
-				6F3DF53D155EE9FC74A5C017 /* EGGameCenter.m in Sources */,
+				6F3DF53D155EE9FC74A5C017 /* EGGameCenterPlat.m in Sources */,
 				6F3DF17EDF195BF11D8CFACC /* CNNotification.m in Sources */,
 				6F3DF3EF7C0B604C9E8F7DF9 /* TRLevelChooseMenu.m in Sources */,
 				6F3DFD46071584FA560A70C0 /* TRRainView.m in Sources */,
 				6F3DF7CAE7093F74F567C426 /* TRSnowView.m in Sources */,
 				6F3DF0E1A7E2CCDA529C5ABB /* EGTouchToMouse.m in Sources */,
+				6F3DF65C5DCB17A45A1CF5A3 /* EGGameCenter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5682,11 +5691,12 @@
 				6F3DF957FC7DA3C8BD55F78A /* CNNotificationPlatform.m in Sources */,
 				6F3DF4FB055C86206BC6065A /* TRGameDirector.m in Sources */,
 				6F3DFB845E9A9C8850C7D6E3 /* DTConflictResolve.m in Sources */,
-				6F3DF873276EA7C381F7A3F9 /* EGGameCenter.m in Sources */,
+				6F3DF873276EA7C381F7A3F9 /* EGGameCenterPlat.m in Sources */,
 				6F3DFE86EA79AFAB57D05659 /* CNNotification.m in Sources */,
 				6F3DF910C87C07F82797E755 /* TRLevelChooseMenu.m in Sources */,
 				6F3DF8C6C4F49A65458D4A9F /* TRRainView.m in Sources */,
 				6F3DFB81FBF054BF344F5C44 /* TRSnowView.m in Sources */,
+				6F3DF85AC40DCE0071D9D074 /* EGGameCenter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

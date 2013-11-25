@@ -3,7 +3,7 @@
 #import "DTKeyValueStorage.h"
 #import "DTConflictResolve.h"
 #import "TRLevel.h"
-#import "EGGameCenter.h"
+#import "EGGameCenterPlat.h"
 #import "TRScore.h"
 #import "EGDirector.h"
 #import "TRSceneFactory.h"
@@ -18,6 +18,7 @@
     CNNotificationObserver* _crashObs;
 }
 static TRGameDirector* _TRGameDirector_instance;
+static CNNotificationHandle* _TRGameDirector_playerScoreRetrieveNotification;
 static ODClassType* _TRGameDirector_type;
 @synthesize local = _local;
 @synthesize resolveMaxLevel = _resolveMaxLevel;
@@ -46,10 +47,15 @@ static ODClassType* _TRGameDirector_type;
             else return DTConflict.resolveMax;
         }];
         _obs = [TRLevel.winNotification observeBy:^void(TRLevel* level) {
-            NSUInteger n = ((TRLevel*)(level)).number + 1;
-            [_weakSelf.cloud keepMaxKey:@"maxLevel" i:((NSInteger)(n))];
-            [_weakSelf.local setKey:@"currentLevel" i:((NSInteger)(n))];
-            [EGGameCenter.instance reportScoreLeaderboard:[NSString stringWithFormat:@"grp.com.antonzherdev.Trains3D.Level%lu", (unsigned long)n] value:((long)([((TRLevel*)(level)).score score]))];
+            NSUInteger n = ((TRLevel*)(level)).number;
+            [_weakSelf.cloud keepMaxKey:@"maxLevel" i:((NSInteger)(n + 1))];
+            [_weakSelf.local setKey:@"currentLevel" i:((NSInteger)(n + 1))];
+            NSString* leaderboard = [NSString stringWithFormat:@"grp.com.antonzherdev.Trains3D.Level%lu", (unsigned long)n];
+            [EGGameCenter.instance reportScoreLeaderboard:leaderboard value:((long)([((TRLevel*)(level)).score score])) completed:^void() {
+                [EGGameCenter.instance localPlayerScoreLeaderboard:leaderboard callback:^void(EGLocalPlayerScore* _) {
+                    [[TRGameDirector playerScoreRetrieveNotification] postData:_];
+                }];
+            }];
             [_weakSelf.cloud keepMaxKey:[NSString stringWithFormat:@"level%lu.score", (unsigned long)n] i:[((TRLevel*)(level)).score score]];
         }];
         _crashObs = [TRLevel.crashNotification observeBy:^void(id _) {
@@ -65,6 +71,7 @@ static ODClassType* _TRGameDirector_type;
     [super initialize];
     _TRGameDirector_type = [ODClassType classTypeWithCls:[TRGameDirector class]];
     _TRGameDirector_instance = [TRGameDirector gameDirector];
+    _TRGameDirector_playerScoreRetrieveNotification = [CNNotificationHandle notificationHandleWithName:@"playerScoreRetrieveNotification"];
 }
 
 - (void)_init {
@@ -125,6 +132,10 @@ static ODClassType* _TRGameDirector_type;
 
 + (TRGameDirector*)instance {
     return _TRGameDirector_instance;
+}
+
++ (CNNotificationHandle*)playerScoreRetrieveNotification {
+    return _TRGameDirector_playerScoreRetrieveNotification;
 }
 
 + (ODClassType*)type {

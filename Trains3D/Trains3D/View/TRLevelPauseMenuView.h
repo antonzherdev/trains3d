@@ -93,6 +93,7 @@
 @interface TRWinMenu : TRMenuView
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) id<CNSeq> buttons;
+@property (nonatomic) id _score;
 
 + (id)winMenuWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;

@@ -401,12 +401,17 @@ static ODClassType* _TRPauseMenuView_type;
     EGButton* _restartButton;
     EGButton* _chooseLevelButton;
     id<CNSeq> _buttons;
+    id __score;
+    CNNotificationObserver* _obs;
     EGText* _headerText;
     EGText* _scoreText;
+    EGText* _bestText;
+    EGText* _topText;
 }
 static ODClassType* _TRWinMenu_type;
 @synthesize level = _level;
 @synthesize buttons = _buttons;
+@synthesize _score = __score;
 
 + (id)winMenuWithLevel:(TRLevel*)level {
     return [[TRWinMenu alloc] initWithLevel:level];
@@ -414,6 +419,7 @@ static ODClassType* _TRWinMenu_type;
 
 - (id)initWithLevel:(TRLevel*)level {
     self = [super init];
+    __weak TRWinMenu* _weakSelf = self;
     if(self) {
         _level = level;
         _nextButton = [self buttonText:[TRStr.Loc goToNextLevel:_level] onClick:^void() {
@@ -426,8 +432,15 @@ static ODClassType* _TRWinMenu_type;
             [TRGameDirector.instance chooseLevel];
         }];
         _buttons = (@[_nextButton, _restartButton, _chooseLevelButton]);
+        __score = [CNOption none];
+        _obs = [TRGameDirector.playerScoreRetrieveNotification observeBy:^void(EGLocalPlayerScore* score) {
+            _weakSelf._score = [CNOption applyValue:score];
+            [[EGDirector current] redraw];
+        }];
         _headerText = [EGText applyFont:nil text:[TRStr.Loc victory] position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
         _scoreText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
+        _bestText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
+        _topText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
     }
     
     return self;
@@ -446,14 +459,28 @@ static ODClassType* _TRWinMenu_type;
     [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.85, 0.9, 0.75, 1.0)] at:GEVec3Make(0.0, 0.0, 0.0) rect:rect];
     [_headerText setPosition:geVec3ApplyVec2(geRectPXY(rect, 0.5, 0.7))];
     [_headerText draw];
+    NSInteger ls = [_level.score score];
+    [_scoreText setText:[TRStr.Loc winScoreScore:((NSUInteger)(ls))]];
     [_scoreText setPosition:geVec3ApplyVec2(geRectPXY(rect, 0.05, 0.23))];
-    [_scoreText setText:[TRStr.Loc winScoreScore:((NSUInteger)([_level.score score]))]];
-    [_scoreText draw];
+    if([__score isDefined]) {
+        EGLocalPlayerScore* s = [__score get];
+        [_bestText setText:[TRStr.Loc bestScoreScore:s]];
+        [_topText setText:[TRStr.Loc topScore:s]];
+        [_bestText setPosition:geVec3ApplyVec2(geRectPXY(rect, 0.05, 0.23))];
+        [_topText setPosition:geVec3ApplyVec2(geRectPXY(rect, 0.95, 0.23))];
+        [_bestText draw];
+        [_topText draw];
+    } else {
+        [_scoreText draw];
+    }
 }
 
 - (void)reshape {
     [_headerText setFont:[EGGlobal fontWithName:@"lucida_grande" size:36]];
-    [_scoreText setFont:[EGGlobal fontWithName:@"lucida_grande" size:24]];
+    EGFont* f = [EGGlobal fontWithName:@"lucida_grande" size:18];
+    [_scoreText setFont:f];
+    [_bestText setFont:f];
+    [_topText setFont:f];
 }
 
 - (ODClassType*)type {

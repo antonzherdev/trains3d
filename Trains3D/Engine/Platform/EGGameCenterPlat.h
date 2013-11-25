@@ -3,6 +3,7 @@
 @class EGGameCenter;
 @class EGAchievement;
 @class GKAchievement;
+@class EGLocalPlayerScore;
 
 @interface EGGameCenter : NSObject
 + (id)gameCenter;
@@ -10,13 +11,16 @@
 - (ODClassType*)type;
 - (void)authenticate;
 - (id)achievementName:(NSString*)name;
-+ (EGGameCenter*)instance;
++ (EGGameCenter *)instance;
 
 - (void)completeAchievementName:(NSString *)name;
 
 + (ODClassType*)type;
 
 - (void)reportScoreLeaderboard:(NSString *)leaderboard value:(long)value;
+- (void)reportScoreLeaderboard:(NSString *)leaderboard value:(long)value completed :(void (^)(void))completed;
+
+- (void)localPlayerScoreLeaderboard:(NSString *)leaderboard callback:(void (^)(EGLocalPlayerScore*))callback;
 @end
 
 

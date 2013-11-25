@@ -33,6 +33,8 @@ trait Strings {
     def defeat : string
     def moneyOver : string
     def winScore(score : uint) : string
+    def bestScore(score : LocalPlayerScore) : string
+    def top(score : LocalPlayerScore) : string
 
     def colorOrange : string
     def colorBlue : string
@@ -109,6 +111,21 @@ class EnStrings extends Strings {
          And one finger for railway building."
 
     def winScore(score : uint) : string = "Score: $(format(score))"
+    def bestScore(score : LocalPlayerScore) : string = "Your best score: $(format(score.value))"
+    def top(score : LocalPlayerScore) : string =
+        if(score.rank == 1) "The best result ever!"
+        else if(score.rank == 2) "The second result ever!"
+        else if(score.rank == 3) "The third result ever!"
+        else {
+            val p = score.rank.cast<float> / score.maxRank
+            if(p <= 5) "Top 5%"
+            else if(p <= 10) "Top 10%"
+            else if(p <= 20) "Top 20%"
+            else if(p <= 30) "Top 30%"
+            else if(p <= 50) "Better than average"
+            else "Worse than average"
+        }
+
 }
 
 class RuStrings extends Strings{
@@ -169,6 +186,20 @@ class RuStrings extends Strings{
          Для строительства рельсов один."
 
     def winScore(score : uint) : string = "Cчет: $(format(score))"
+    def bestScore(score : LocalPlayerScore) : string = "Ваш лучший результат: $(format(score.value))"
+    def top(score : LocalPlayerScore) : string =
+        if(score.rank == 1) "Лучший результат!"
+        else if(score.rank == 2) "2-й результат!"
+        else if(score.rank == 3) "3-й результат!"
+        else {
+            val p = score.rank.cast<float> / score.maxRank
+            if(p <= 5) "Лучшие 5%"
+            else if(p <= 10) "Лучшие 10%"
+            else if(p <= 20) "Лучшие 20%"
+            else if(p <= 30) "Лучшие 30%"
+            else if(p <= 50) "Выше среднего"
+            else "Хуже среднего"
+        }
 }
 
 object Str {

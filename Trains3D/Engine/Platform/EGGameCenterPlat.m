@@ -1,12 +1,13 @@
 #import <GameKit/GameKit.h>
-#import "EGGameCenter.h"
+#import "EGGameCenterPlat.h"
 #import "EGDirector.h"
+#import "EGGameCenter.h"
 
 @implementation EGGameCenter {
     BOOL _paused;
     BOOL _active;
 }
-static EGGameCenter* _EGGameCenter_instance;
+static EGGameCenter * _EGGameCenter_instance;
 static ODClassType* _EGGameCenter_type;
 
 + (id)gameCenter {
@@ -99,7 +100,7 @@ static ODClassType* _EGGameCenter_type;
     return [EGGameCenter type];
 }
 
-+ (EGGameCenter*)instance {
++ (EGGameCenter *)instance {
     return _EGGameCenter_instance;
 }
 
@@ -134,6 +135,10 @@ static ODClassType* _EGGameCenter_type;
 }
 
 - (void)reportScoreLeaderboard:(NSString *)leaderboard value:(long)value {
+    [self reportScoreLeaderboard:leaderboard value:value completed:nil];
+}
+
+- (void)reportScoreLeaderboard:(NSString *)leaderboard value:(long)value completed :(void (^)(void))completed {
     if(!_active) return;
     GKScore *scoreReporter = [[GKScore alloc] initWithCategory:leaderboard];
     scoreReporter.value = value;
@@ -141,9 +146,27 @@ static ODClassType* _EGGameCenter_type;
 
     [scoreReporter reportScoreWithCompletionHandler:^(NSError *error) {
         if(error != nil) NSLog(@"Error while writing leaderboard %@", error);
+        if(completed != nil) completed();
     }];
 }
-
+- (void)localPlayerScoreLeaderboard:(NSString *)leaderboard callback:(void (^)(EGLocalPlayerScore*))callback {
+    GKLeaderboard *leaderboardRequest = [[GKLeaderboard alloc] init];
+    leaderboardRequest.timeScope = GKLeaderboardTimeScopeAllTime;
+    leaderboardRequest.playerScope = GKLeaderboardPlayerScopeGlobal;
+    leaderboardRequest.category = leaderboard;
+    leaderboardRequest.range = NSMakeRange(1, 1);
+    [leaderboardRequest loadScoresWithCompletionHandler:^(NSArray *scores, NSError *error) {
+        if(error != nil) {
+            NSLog(@"Error while loading scores %@", error);
+            return;
+        }
+        GKScore *s = leaderboardRequest.localPlayerScore;
+        EGLocalPlayerScore *lps = [EGLocalPlayerScore localPlayerScoreWithValue:(long) s.value
+                                                                           rank:(NSUInteger) s.rank
+                                                                        maxRank:leaderboardRequest.maxRange];
+        callback(lps);
+    }];
+}
 @end
 
 

@@ -1,5 +1,6 @@
 #import "objd.h"
 @class TRLevel;
+@class EGLocalPlayerScore;
 @class EGPlatform;
 
 @class TREnStrings;
@@ -28,6 +29,8 @@
 - (NSString*)defeat;
 - (NSString*)moneyOver;
 - (NSString*)winScoreScore:(NSUInteger)score;
+- (NSString*)bestScoreScore:(EGLocalPlayerScore*)score;
+- (NSString*)topScore:(EGLocalPlayerScore*)score;
 - (NSString*)colorOrange;
 - (NSString*)colorBlue;
 - (NSString*)colorMint;
@@ -83,6 +86,8 @@
 - (NSString*)helpExpressTrain;
 - (NSString*)helpToMakeZoom;
 - (NSString*)winScoreScore:(NSUInteger)score;
+- (NSString*)bestScoreScore:(EGLocalPlayerScore*)score;
+- (NSString*)topScore:(EGLocalPlayerScore*)score;
 + (ODClassType*)type;
 @end
 
@@ -124,6 +129,8 @@
 - (NSString*)helpExpressTrain;
 - (NSString*)helpToMakeZoom;
 - (NSString*)winScoreScore:(NSUInteger)score;
+- (NSString*)bestScoreScore:(EGLocalPlayerScore*)score;
+- (NSString*)topScore:(EGLocalPlayerScore*)score;
 + (ODClassType*)type;
 @end
 

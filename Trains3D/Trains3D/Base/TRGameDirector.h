@@ -32,6 +32,7 @@
 - (void)setLevel:(NSInteger)level;
 - (void)synchronize;
 + (TRGameDirector*)instance;
++ (CNNotificationHandle*)playerScoreRetrieveNotification;
 + (ODClassType*)type;
 @end
 
