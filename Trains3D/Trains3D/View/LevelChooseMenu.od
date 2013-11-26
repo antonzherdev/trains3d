@@ -30,7 +30,7 @@ class LevelChooseMenu extends SceneView {
     }
 
 
-    private static val rankProgress = Progress.progress(vec4(211, 255, 191, 255)/255, vec4(255, 202, 191, 255)/255)
+    private static val rankProgress = Progress.progress(vec4(229, 255, 217, 255)/255, vec4(255, 223, 217, 255)/255)
     static def rankColor(score : LocalPlayerScore) : vec4 = rankProgress(score.percent)
 
 

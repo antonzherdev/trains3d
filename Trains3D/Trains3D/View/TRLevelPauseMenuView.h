@@ -19,6 +19,7 @@
 @class TRStr;
 @protocol TRStrings;
 @class TRGameDirector;
+@class TRLevelChooseMenu;
 @class TRScore;
 @class EGLocalPlayerScore;
 @class TRLevelMenuView;

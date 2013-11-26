@@ -8,6 +8,7 @@
 #import "EGSprite.h"
 #import "TRStrings.h"
 #import "TRGameDirector.h"
+#import "TRLevelChooseMenu.h"
 #import "TRScore.h"
 #import "EGGameCenter.h"
 #import "TRLevelMenuView.h"
@@ -469,7 +470,7 @@ static ODClassType* _TRWinMenu_type;
 }
 
 - (void)drawHeaderRect:(GERect)rect {
-    [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.85, 0.9, 0.75, 1.0)] at:GEVec3Make(0.0, 0.0, 0.0) rect:rect];
+    [EGD2D drawSpriteMaterial:(([__score isDefined]) ? [EGColorSource applyColor:[TRLevelChooseMenu rankColorScore:[__score get]]] : [EGColorSource applyColor:GEVec4Make(0.85, 0.9, 0.75, 1.0)]) at:GEVec3Make(0.0, 0.0, 0.0) rect:rect];
     [_headerText setPosition:geVec3ApplyVec2(geRectPXY(rect, 0.5, 0.75))];
     [_headerText draw];
     [_resultText setPosition:geVec3ApplyVec2(geRectPXY(rect, 0.15, 0.4))];
