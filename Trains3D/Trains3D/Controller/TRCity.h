@@ -42,7 +42,7 @@
 @end
 
 
-@interface TRCity : NSObject<EGController>
+@interface TRCity : NSObject<EGUpdatable>
 @property (nonatomic, readonly) TRCityColor* color;
 @property (nonatomic, readonly) GEVec2i tile;
 @property (nonatomic, readonly) TRCityAngle* angle;

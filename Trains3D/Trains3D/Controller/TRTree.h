@@ -26,7 +26,7 @@
 @end
 
 
-@interface TRForest : NSObject<EGController>
+@interface TRForest : NSObject<EGUpdatable>
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRForestRules* rules;
 @property (nonatomic, readonly) TRWeather* weather;

@@ -430,6 +430,12 @@ static ODClassType* _TRLevel_type;
     __result = [CNOption applyValue:[TRLevelResult levelResultWithWin:NO]];
 }
 
+- (void)start {
+}
+
+- (void)stop {
+}
+
 - (ODClassType*)type {
     return [TRLevel type];
 }

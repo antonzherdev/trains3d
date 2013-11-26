@@ -7,7 +7,7 @@
 @class EGDynamicWorld;
 @class EGRigidBody;
 
-@interface EGDynamicWorld : NSObject<EGController>
+@interface EGDynamicWorld : NSObject<EGUpdatable>
 @property (nonatomic, readonly) GEVec3 gravity;
 
 + (id)dynamicWorldWithGravity:(GEVec3)gravity;

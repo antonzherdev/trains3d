@@ -43,7 +43,7 @@
 @end
 
 
-@interface TRTrainsDynamicWorld : NSObject<EGController>
+@interface TRTrainsDynamicWorld : NSObject<EGUpdatable>
 + (id)trainsDynamicWorld;
 - (id)init;
 - (ODClassType*)type;

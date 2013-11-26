@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-trait SoundPlayer extends Controller {
+trait SoundPlayer extends Updatable {
     def start{}
     def stop{}
     def pause{}

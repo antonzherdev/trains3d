@@ -128,7 +128,7 @@
 @end
 
 
-@interface TRRailroad : NSObject<EGController>
+@interface TRRailroad : NSObject<EGUpdatable>
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRScore* score;
 @property (nonatomic, readonly) TRForest* forest;
@@ -166,7 +166,7 @@
 @end
 
 
-@interface TRRailroadBuilder : NSObject<EGController>
+@interface TRRailroadBuilder : NSObject<EGUpdatable>
 @property (nonatomic, readonly, weak) TRRailroad* railroad;
 
 + (id)railroadBuilderWithRailroad:(TRRailroad*)railroad;

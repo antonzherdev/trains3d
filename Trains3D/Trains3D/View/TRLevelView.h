@@ -53,7 +53,7 @@
 @end
 
 
-@interface TRPrecipitationView : NSObject<EGController>
+@interface TRPrecipitationView : NSObject<EGUpdatable>
 + (id)precipitationView;
 - (id)init;
 - (ODClassType*)type;

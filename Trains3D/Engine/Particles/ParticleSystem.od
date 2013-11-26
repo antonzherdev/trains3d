@@ -3,7 +3,7 @@ package com.antonzherdev.eg
 import core.math._
 
 
-trait ParticleSystem <P extends Particle> extends Controller {
+trait ParticleSystem <P extends Particle> extends Updatable {
     def particles : [P]
 
     def updateWith(delta : float) {
@@ -11,7 +11,7 @@ trait ParticleSystem <P extends Particle> extends Controller {
     }
 }
 
-trait Particle extends Controller  {
+trait Particle extends Updatable  {
     def writeTo(array : VoidRefArray) : VoidRefArray
 }
 

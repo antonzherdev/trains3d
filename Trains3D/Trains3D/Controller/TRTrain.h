@@ -31,7 +31,7 @@
 @end
 
 
-@interface TRTrain : NSObject<EGController>
+@interface TRTrain : NSObject<EGUpdatable>
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) TRTrainType* trainType;
 @property (nonatomic, readonly) TRCityColor* color;

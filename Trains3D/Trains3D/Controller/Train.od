@@ -26,7 +26,7 @@ enum TrainType(obstacleProcessor : (Level, Train, Obstacle) -> bool) {
     })
 }
 
-class Train(weak level : Level, trainType : TrainType, color : CityColor, _cars : (Train) ->[Car], speed : uint) extends Controller {
+class Train(weak level : Level, trainType : TrainType, color : CityColor, _cars : (Train) ->[Car], speed : uint) extends Updatable {
     var viewData : any = nil
     var soundData : any = nil
     private var _head : RailPoint

@@ -22,13 +22,13 @@
 @protocol EGIBOParticleSystemView;
 @protocol EGIBOParticleSystemViewQuad;
 
-@protocol EGParticleSystem<EGController>
+@protocol EGParticleSystem<EGUpdatable>
 - (id<CNSeq>)particles;
 - (void)updateWithDelta:(CGFloat)delta;
 @end
 
 
-@protocol EGParticle<EGController>
+@protocol EGParticle<EGUpdatable>
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array;
 @end
 

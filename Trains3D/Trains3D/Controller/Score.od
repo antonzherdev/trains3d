@@ -7,7 +7,7 @@ class ScoreRules(initialScore : int, railCost : int,
     delayPeriod : float, delayFine : (Train, int) -> int,
     repairCost : int)
 
-class Score(rules : ScoreRules, notifications : Notifications) extends Controller {
+class Score(rules : ScoreRules, notifications : Notifications) extends Updatable {
     private var _score : int = rules.initialScore
     def score : int = _score
 
@@ -57,7 +57,7 @@ class Score(rules : ScoreRules, notifications : Notifications) extends Controlle
     }
 }
 
-class TrainScore(train : Train) extends Controller {
+class TrainScore(train : Train) extends Updatable {
     private var delayTime = 0.0
     private var fineCount = 0
 

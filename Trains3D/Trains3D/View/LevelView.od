@@ -86,7 +86,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     }
 }
 
-class PrecipitationView extends Controller {
+class PrecipitationView extends Updatable {
     static def apply(weather : Weather, precipitation : Precipitation) : PrecipitationView = {
         if(precipitation.tp == PrecipitationType.rain) RainView(weather, precipitation.strength)
         else if(precipitation.tp == PrecipitationType.snow) SnowView(weather, precipitation.strength)

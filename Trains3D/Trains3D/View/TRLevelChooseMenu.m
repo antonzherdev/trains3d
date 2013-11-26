@@ -113,6 +113,12 @@ static ODClassType* _TRLevelChooseMenu_type;
 - (void)updateWithDelta:(CGFloat)delta {
 }
 
+- (void)start {
+}
+
+- (void)stop {
+}
+
 - (ODClassType*)type {
     return [TRLevelChooseMenu type];
 }

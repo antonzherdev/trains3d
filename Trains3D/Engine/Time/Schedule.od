@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-class Schedule extends Controller {
+class Schedule extends Updatable {
     private var _map = MTreeMap<float, [() -> void]>()
     private var _current = 0.0
     private var _next = -1.0
@@ -25,7 +25,7 @@ class Schedule extends Controller {
     def isEmpty : bool = _next < 0.0
 }
 
-class Counter extends Controller {
+class Counter extends Updatable {
     def isRunning : bool
     def time : float
     def isStopped : bool = !isRunning

@@ -45,7 +45,7 @@ typedef struct TRBlast TRBlast;
 @end
 
 
-@interface TRWeather : NSObject<EGController>
+@interface TRWeather : NSObject<EGUpdatable>
 @property (nonatomic, readonly) TRWeatherRules* rules;
 
 + (id)weatherWithRules:(TRWeatherRules*)rules;

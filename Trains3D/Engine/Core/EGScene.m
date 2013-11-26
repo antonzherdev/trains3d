@@ -76,12 +76,14 @@ static ODClassType* _EGScene_type;
     [_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
         [((id<EGSoundPlayer>)(_)) start];
     }];
+    [_controller start];
 }
 
 - (void)stop {
     [_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
         [((id<EGSoundPlayer>)(_)) stop];
     }];
+    [_controller stop];
 }
 
 - (void)pause {

@@ -20,13 +20,21 @@
 @class EGLayers;
 @class EGSingleLayer;
 @class EGLayer;
+@protocol EGUpdatable;
 @protocol EGController;
 @protocol EGCamera;
 @protocol EGLayerView;
 @protocol EGSceneView;
 
-@protocol EGController<NSObject>
+@protocol EGUpdatable<NSObject>
 - (void)updateWithDelta:(CGFloat)delta;
+@end
+
+
+@protocol EGController<EGUpdatable>
+- (void)updateWithDelta:(CGFloat)delta;
+- (void)start;
+- (void)stop;
 @end
 
 
@@ -90,7 +98,7 @@
 @end
 
 
-@interface EGLayer : NSObject<EGController>
+@interface EGLayer : NSObject<EGUpdatable>
 @property (nonatomic, readonly) id<EGLayerView> view;
 @property (nonatomic, readonly) id inputProcessor;
 
@@ -109,7 +117,7 @@
 @end
 
 
-@protocol EGLayerView<EGController>
+@protocol EGLayerView<EGUpdatable>
 - (NSString*)name;
 - (id<EGCamera>)camera;
 - (void)prepare;

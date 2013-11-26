@@ -25,7 +25,7 @@
 @end
 
 
-@interface TRScore : NSObject<EGController>
+@interface TRScore : NSObject<EGUpdatable>
 @property (nonatomic, readonly) TRScoreRules* rules;
 @property (nonatomic, readonly) TRNotifications* notifications;
 
@@ -45,7 +45,7 @@
 @end
 
 
-@interface TRTrainScore : NSObject<EGController>
+@interface TRTrainScore : NSObject<EGUpdatable>
 @property (nonatomic, readonly) TRTrain* train;
 
 + (id)trainScoreWithTrain:(TRTrain*)train;

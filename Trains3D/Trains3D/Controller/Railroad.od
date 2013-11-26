@@ -73,7 +73,7 @@ enum ObstacleType {
 }
 class Obstacle(obstacleType : ObstacleType, point : RailPoint) {}
 
-class Railroad(map : MapSso, score : Score, forest : Forest) extends Controller {
+class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
     private var _rails : [Rail] = []
     def rails = _rails
     private var _switches : [Switch] = []
@@ -262,7 +262,7 @@ class RailBuilding(rail : Rail) {
 }
 
 
-class RailroadBuilder(weak railroad : Railroad) extends Controller {
+class RailroadBuilder(weak railroad : Railroad) extends Updatable {
     private var _rail : Rail? = nil
     def rail = _rail
     private var _buildingRails = List<RailBuilding>()

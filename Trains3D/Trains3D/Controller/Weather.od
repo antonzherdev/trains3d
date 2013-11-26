@@ -21,7 +21,7 @@ enum PrecipitationType {
     snow()
 }
 
-class Weather(rules : WeatherRules) extends Controller {
+class Weather(rules : WeatherRules) extends Updatable {
     private var _constantWind : vec2 = vec2.rnd*rules.windStrength
     private var _blast : vec2 = vec2(0, 0)
     def wind : vec2 = _constantWind + _blast

@@ -9,7 +9,7 @@
 @class EGSoundParallel;
 @protocol EGSoundPlayer;
 
-@protocol EGSoundPlayer<EGController>
+@protocol EGSoundPlayer<EGUpdatable>
 - (void)start;
 - (void)stop;
 - (void)pause;

@@ -8,7 +8,7 @@
 @class EGFinisher;
 @class EGEventCounter;
 
-@interface EGSchedule : NSObject<EGController>
+@interface EGSchedule : NSObject<EGUpdatable>
 + (id)schedule;
 - (id)init;
 - (ODClassType*)type;
@@ -20,7 +20,7 @@
 @end
 
 
-@interface EGCounter : NSObject<EGController>
+@interface EGCounter : NSObject<EGUpdatable>
 + (id)counter;
 - (id)init;
 - (ODClassType*)type;

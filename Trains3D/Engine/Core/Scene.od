@@ -1,7 +1,13 @@
 package com.antonzherdev.eg
 
-trait Controller {
+trait Updatable {
     def updateWith(delta : float)
+}
+
+trait Controller extends Updatable {
+    def updateWith(delta : float)
+    def start {}
+    def stop {}
 }
 
 trait Camera {
@@ -39,10 +45,12 @@ class Scene(backgroundColor : vec4, controller : Controller, layers : Layers, so
 
     def start {
         soundPlayer.for(_.start)
+        controller.start
     }
 
     def stop {
         soundPlayer.for(_.stop)
+        controller.stop
     }
 
     def pause {
@@ -100,7 +108,7 @@ class SingleLayer(layer : Layer) extends Layers {
     def viewportsWith(viewSize : vec2) = [(layer, layer.view.viewportWith(viewSize))]
 }
 
-class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controller {
+class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Updatable {
     static def apply(view : LayerView) : Layer = Layer(view, view.as<InputProcessor>)
     def prepareWith(viewport : Rect) {
         egPushGroupMarker(view.name)
@@ -192,7 +200,7 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
     }
 }
 
-trait LayerView extends Controller {
+trait LayerView extends Updatable {
     def name : string
 
     def camera : Camera
