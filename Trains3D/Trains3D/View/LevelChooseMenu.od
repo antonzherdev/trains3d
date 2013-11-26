@@ -18,12 +18,10 @@ class LevelChooseMenu extends SceneView {
     }
 
     private def drawButton(x : int, y : int, level : int) = {
-        val text = Text(nil, Loc.level(level), vec3(x + 0.5, y + 0.5, 0), TextAlignment(0, 0),
-            if(level > maxLevel) vec4(0.7, 0.7, 0.7, 1)
-            else vec4(0, 0, 0, 1))
         rect : Rect -> {
-            text.font = font
-            text.draw
+            font.draw(Loc.level(level), vec3(x + 0.5, y + 0.95, 0), TextAlignment(0, 1), color =
+                if(level > maxLevel) vec4(0.7, 0.7, 0.7, 1)
+                else vec4(0, 0, 0, 1))
         }
     }
 
@@ -31,8 +29,15 @@ class LevelChooseMenu extends SceneView {
         BlendFunction.standard {
             buttons.for(_.draw)
         }
+
+        1.to(3).for{ c ->
+            D2D.drawLine(vec4(0.7, 0.7, 0.7, 1), vec2(c, 0), vec2(c, 5))
+            D2D.drawLine(vec4(0.7, 0.7, 0.7, 1), vec2(0, c), vec2(5, c))
+        }
     }
 
     def isProcessorActive : bool = true
     def recognizers : Recognizers = Recognizer(Tap()){event -> buttons.exists(_.tap(event))}
+
+    def viewportWith(viewSize : vec2) : Rect = Rect(0, 0, viewSize)
 }

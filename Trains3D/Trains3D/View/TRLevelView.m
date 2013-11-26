@@ -136,6 +136,10 @@ static ODClassType* _TRLevelView_type;
     [_railroadView reshape];
 }
 
+- (GERect)viewportWithViewSize:(GEVec2)viewSize {
+    return [EGLayer viewportWithViewSize:viewSize viewportLayout:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0) viewportRatio:((float)([[self camera] viewportRatio]))];
+}
+
 - (BOOL)isProcessorActive {
     return !([[EGDirector current] isPaused]);
 }

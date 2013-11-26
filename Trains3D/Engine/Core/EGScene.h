@@ -104,8 +104,7 @@
 - (void)drawShadowForCamera:(id<EGCamera>)camera light:(EGLight*)light;
 - (BOOL)processEvent:(id<EGEvent>)event viewport:(GERect)viewport;
 - (void)updateWithDelta:(CGFloat)delta;
-- (GERect)viewportWithViewSize:(GEVec2)viewSize;
-- (GERect)viewportWithViewSize:(GEVec2)viewSize viewportLayout:(GERect)viewportLayout;
++ (GERect)viewportWithViewSize:(GEVec2)viewSize viewportLayout:(GERect)viewportLayout viewportRatio:(float)viewportRatio;
 + (ODClassType*)type;
 @end
 
@@ -118,6 +117,7 @@
 - (EGEnvironment*)environment;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)reshapeWithViewport:(GERect)viewport;
+- (GERect)viewportWithViewSize:(GEVec2)viewSize;
 @end
 
 

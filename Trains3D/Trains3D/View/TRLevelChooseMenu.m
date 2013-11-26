@@ -58,10 +58,8 @@ static ODClassType* _TRLevelChooseMenu_type;
 }
 
 - (void(^)(GERect))drawButtonX:(NSInteger)x y:(NSInteger)y level:(NSInteger)level {
-    EGText* text = [EGText applyFont:nil text:[TRStr.Loc levelNumber:((NSUInteger)(level))] position:GEVec3Make(((float)(x + 0.5)), ((float)(y + 0.5)), 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:((level > _maxLevel) ? GEVec4Make(0.7, 0.7, 0.7, 1.0) : GEVec4Make(0.0, 0.0, 0.0, 1.0))];
     return ^void(GERect rect) {
-        [text setFont:_font];
-        [text draw];
+        [_font drawText:[TRStr.Loc levelNumber:((NSUInteger)(level))] at:GEVec3Make(((float)(x + 0.5)), ((float)(y + 0.95)), 0.0) alignment:egTextAlignmentApplyXY(0.0, 1.0) color:((level > _maxLevel) ? GEVec4Make(0.7, 0.7, 0.7, 1.0) : GEVec4Make(0.0, 0.0, 0.0, 1.0))];
     };
 }
 
@@ -70,6 +68,10 @@ static ODClassType* _TRLevelChooseMenu_type;
         [_buttons forEach:^void(EGButton* _) {
             [((EGButton*)(_)) draw];
         }];
+    }];
+    [intTo(1, 3) forEach:^void(id c) {
+        [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.7, 0.7, 0.7, 1.0)] p0:GEVec2Make(((float)(unumi(c))), 0.0) p1:GEVec2Make(((float)(unumi(c))), 5.0)];
+        [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.7, 0.7, 0.7, 1.0)] p0:GEVec2Make(0.0, ((float)(unumi(c)))) p1:GEVec2Make(5.0, ((float)(unumi(c))))];
     }];
 }
 
@@ -83,6 +85,10 @@ static ODClassType* _TRLevelChooseMenu_type;
             return [((EGButton*)(_)) tapEvent:event];
         }];
     }]];
+}
+
+- (GERect)viewportWithViewSize:(GEVec2)viewSize {
+    return geRectApplyXYSize(0.0, 0.0, viewSize);
 }
 
 - (void)prepare {

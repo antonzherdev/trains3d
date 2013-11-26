@@ -153,6 +153,13 @@ class Font(name : string) {
         indexes.free
         FontShader.instance.vao(vb, ib)
     }
+
+    def draw(text : string, at : vec3, alignment : TextAlignment, color : vec4) {
+        val vao = vao(text, at, alignment)
+        context.cullFace.disabled {
+            vao.draw(FontShaderParam(texture, color))
+        }
+    }
 }
 
 class Text {

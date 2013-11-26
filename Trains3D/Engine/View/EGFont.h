@@ -10,8 +10,8 @@
 @class EGSimpleVertexArray;
 @class EGVBO;
 @class EGIBO;
-@class EGDirector;
 @class EGEnablingState;
+@class EGDirector;
 @class EGTexture;
 @class EGBlendMode;
 
@@ -74,6 +74,7 @@ ODPType* egTextAlignmentType();
 - (GEVec2)measurePText:(NSString*)text;
 - (GEVec2)measureCText:(NSString*)text;
 - (EGSimpleVertexArray*)vaoText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment;
+- (void)drawText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment color:(GEVec4)color;
 + (EGVertexBufferDesc*)vbDesc;
 + (ODClassType*)type;
 @end

@@ -255,6 +255,13 @@ static ODClassType* _EGFont_type;
     return [EGFontShader.instance vaoVbo:vb ibo:ib];
 }
 
+- (void)drawText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment color:(GEVec4)color {
+    EGSimpleVertexArray* vao = [self vaoText:text at:at alignment:alignment];
+    [EGGlobal.context.cullFace disabledF:^void() {
+        [vao drawParam:[EGFontShaderParam fontShaderParamWithTexture:_texture color:color]];
+    }];
+}
+
 - (ODClassType*)type {
     return [EGFont type];
 }

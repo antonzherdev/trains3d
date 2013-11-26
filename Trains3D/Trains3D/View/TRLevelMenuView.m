@@ -155,6 +155,10 @@ static ODClassType* _TRLevelMenuView_type;
     return EGEnvironment.aDefault;
 }
 
+- (GERect)viewportWithViewSize:(GEVec2)viewSize {
+    return [EGLayer viewportWithViewSize:viewSize viewportLayout:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0) viewportRatio:((float)([[self camera] viewportRatio]))];
+}
+
 - (BOOL)isProcessorActive {
     return !([[EGDirector current] isPaused]);
 }

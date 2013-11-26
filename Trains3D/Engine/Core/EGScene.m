@@ -266,7 +266,7 @@ static ODClassType* _EGSingleLayer_type;
 }
 
 - (id<CNSeq>)viewportsWithViewSize:(GEVec2)viewSize {
-    return (@[tuple(_layer, wrap(GERect, [_layer viewportWithViewSize:viewSize]))]);
+    return (@[tuple(_layer, wrap(GERect, [_layer.view viewportWithViewSize:viewSize]))]);
 }
 
 - (ODClassType*)type {
@@ -412,14 +412,9 @@ static ODClassType* _EGLayer_type;
     [_view updateWithDelta:delta];
 }
 
-- (GERect)viewportWithViewSize:(GEVec2)viewSize {
-    return [self viewportWithViewSize:viewSize viewportLayout:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)];
-}
-
-- (GERect)viewportWithViewSize:(GEVec2)viewSize viewportLayout:(GERect)viewportLayout {
-    CGFloat vpr = [[_view camera] viewportRatio];
++ (GERect)viewportWithViewSize:(GEVec2)viewSize viewportLayout:(GERect)viewportLayout viewportRatio:(float)viewportRatio {
     GEVec2 size = geVec2MulVec2(viewSize, viewportLayout.size);
-    GEVec2 vpSize = ((eqf4(size.x, 0) && eqf4(size.y, 0)) ? GEVec2Make(viewSize.x, viewSize.y) : ((eqf4(size.x, 0)) ? GEVec2Make(viewSize.x, size.y) : ((eqf4(size.y, 0)) ? GEVec2Make(size.x, viewSize.y) : ((size.x / size.y < vpr) ? GEVec2Make(size.x, size.x / vpr) : GEVec2Make(size.y * vpr, size.y)))));
+    GEVec2 vpSize = ((eqf4(size.x, 0) && eqf4(size.y, 0)) ? GEVec2Make(viewSize.x, viewSize.y) : ((eqf4(size.x, 0)) ? GEVec2Make(viewSize.x, size.y) : ((eqf4(size.y, 0)) ? GEVec2Make(size.x, viewSize.y) : ((size.x / size.y < viewportRatio) ? GEVec2Make(size.x, size.x / viewportRatio) : GEVec2Make(size.y * viewportRatio, size.y)))));
     GEVec2 po = geVec2AddF(geVec2DivI(viewportLayout.p, 2), 0.5);
     return GERectMake(geVec2MulVec2(geVec2SubVec2(viewSize, vpSize), po), vpSize);
 }

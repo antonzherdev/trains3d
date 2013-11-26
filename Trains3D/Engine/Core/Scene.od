@@ -97,7 +97,7 @@ class Layers {
 
 class SingleLayer(layer : Layer) extends Layers {
     val layers = [layer]
-    def viewportsWith(viewSize : vec2) = [(layer, layer.viewportWith(viewSize))]
+    def viewportsWith(viewSize : vec2) = [(layer, layer.view.viewportWith(viewSize))]
 }
 
 class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controller {
@@ -179,17 +179,14 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Controll
         view.updateWith(delta)
     }
 
-    def viewportWith(viewSize : vec2) = viewportWith(viewSize, viewportLayout = Rect(0, 0, 1, 1))
-
-    def viewportWith(viewSize : vec2, viewportLayout : Rect) : Rect = {
-        val vpr = view.camera.viewportRatio
-
+    static def viewportWith(viewSize : vec2, viewportLayout : Rect, viewportRatio : float4) : Rect = {
         val size = viewSize*viewportLayout.size
         val vpSize =
-        if(size.x == 0 && size.y == 0) vec2(viewSize.x, viewSize.y)
-        else if(size.x == 0) vec2(viewSize.x, size.y)
-        else if(size.y == 0) vec2(size.x, viewSize.y)
-        else if(size.x/size.y < vpr) vec2(size.x, size.x/vpr) else vec2(size.y*vpr, size.y)
+            if(size.x == 0 && size.y == 0) vec2(viewSize.x, viewSize.y)
+            else if(size.x == 0) vec2(viewSize.x, size.y)
+            else if(size.y == 0) vec2(size.x, viewSize.y)
+            else if(size.x/size.y < viewportRatio) vec2(size.x, size.x/viewportRatio)
+            else vec2(size.y*viewportRatio, size.y)
         val po = viewportLayout.p/2 + 0.5
         Rect((viewSize - vpSize) * po, vpSize)
     }
@@ -209,6 +206,8 @@ trait LayerView extends Controller {
     def updateWith(delta : float) {}
 
     def reshapeWith(viewport : Rect) {}
+
+    def viewportWith(viewSize : vec2) : Rect = Layer.viewportWith(viewSize, viewportLayout = Rect(0, 0, 1, 1), camera.viewportRatio)
 }
 
 trait SceneView extends LayerView with Controller with InputProcessor

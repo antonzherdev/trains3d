@@ -9,6 +9,8 @@
 @class TRStr;
 @protocol TRStrings;
 @class EGBlendFunction;
+@class EGColorSource;
+@class EGD2D;
 @class EGRecognizers;
 @class EGTap;
 @class EGRecognizer;
@@ -29,6 +31,7 @@
 - (void)draw;
 - (BOOL)isProcessorActive;
 - (EGRecognizers*)recognizers;
+- (GERect)viewportWithViewSize:(GEVec2)viewSize;
 + (ODClassType*)type;
 @end
 
