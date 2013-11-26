@@ -12,6 +12,7 @@
     NSInteger _maxLevel;
     id<CNSeq> _buttons;
     EGFont* _font;
+    EGFont* _fontRes;
 }
 static ODClassType* _TRLevelChooseMenu_type;
 @synthesize name = _name;
@@ -55,15 +56,18 @@ static ODClassType* _TRLevelChooseMenu_type;
 
 - (void)reshapeWithViewport:(GERect)viewport {
     _font = [EGGlobal fontWithName:@"lucida_grande" size:24];
+    _fontRes = [EGGlobal fontWithName:@"lucida_grande" size:18];
 }
 
 - (void(^)(GERect))drawButtonX:(NSInteger)x y:(NSInteger)y level:(NSInteger)level {
     return ^void(GERect rect) {
         BOOL dis = level > _maxLevel;
         [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.95, 0.95, 0.95, 1.0)] at:GEVec3Make(((float)(x)), ((float)(y + 0.8)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.2)];
+        if(!(dis)) [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.95, 0.95, 0.95, 1.0)] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.2)];
         [EGBlendFunction.standard applyDraw:^void() {
             [_font drawText:[TRStr.Loc levelNumber:((NSUInteger)(level))] at:GEVec3Make(((float)(x + 0.5)), ((float)(y + 0.92)), 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
-            if(dis) [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.7)] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)];
+            if(dis) [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)];
+            else [_fontRes drawText:[TRStr.Loc formatCost:[TRGameDirector.instance bestScoreLevelNumber:((NSUInteger)(level))]] at:GEVec3Make(((float)(x + 0.02)), ((float)(y + 0.1)), 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
         }];
     };
 }
@@ -78,6 +82,7 @@ static ODClassType* _TRLevelChooseMenu_type;
         }];
         [intTo(1, 3) forEach:^void(id c) {
             [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.5, 1.0)] p0:GEVec2Make(((float)(unumi(c))), 0.0) p1:GEVec2Make(((float)(unumi(c))), 5.0)];
+            [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.5, 1.0)] p0:GEVec2Make(0.0, ((float)(unumi(c)))) p1:GEVec2Make(5.0, ((float)(unumi(c))))];
         }];
     }];
 }

@@ -24,6 +24,7 @@
 - (ODClassType*)type;
 - (NSInteger)bestScoreLevelNumber:(NSUInteger)levelNumber;
 - (void)_init;
+- (void)levelScoresCallback:(void(^)(id<CNMap>))callback;
 - (NSInteger)currentLevel;
 - (NSInteger)maxAvailableLevel;
 - (void)restoreLastScene;

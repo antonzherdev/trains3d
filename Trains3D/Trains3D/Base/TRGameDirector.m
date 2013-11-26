@@ -82,6 +82,16 @@ static ODClassType* _TRGameDirector_type;
     [EGGameCenter.instance authenticate];
 }
 
+- (void)levelScoresCallback:(void(^)(id<CNMap>))callback {
+    NSMutableDictionary* scoresMap = [NSMutableDictionary mutableDictionary];
+    [intTo(1, 16) forEach:^void(id level) {
+        [EGGameCenter.instance localPlayerScoreLeaderboard:[NSString stringWithFormat:@"grp.com.antonzherdev.Trains3D.Level%@", level] callback:^void(EGLocalPlayerScore* score) {
+            [scoresMap setKey:numui(((NSUInteger)(unumi(level)))) value:score];
+            if([scoresMap count] == 16) callback(scoresMap);
+        }];
+    }];
+}
+
 - (NSInteger)currentLevel {
     return [_local intForKey:@"currentLevel"];
 }

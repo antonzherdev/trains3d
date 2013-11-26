@@ -40,6 +40,18 @@ class GameDirector {
         GameCenter.instance.authenticate
     }
 
+    def levelScores(callback : ([uint : LocalPlayerScore]) -> void) {
+        val scoresMap = MutableHashMap<uint, LocalPlayerScore>()
+        1.to(16).for { level ->
+           GameCenter.instance.localPlayerScore("grp.com.antonzherdev.Trains3D.Level$level", { score ->
+               scoresMap.set(level, score)
+               if(scoresMap.count == 16) {
+                   callback(scoresMap)
+               }
+           })
+        }
+    }
+
     def currentLevel = local.intFor("currentLevel")
     def maxAvailableLevel = cloud.intFor("maxLevel")
     def restoreLastScene {
