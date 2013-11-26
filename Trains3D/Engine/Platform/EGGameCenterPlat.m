@@ -177,10 +177,14 @@ static ODClassType* _EGGameCenter_type;
             return;
         }
         GKScore *s = leaderboardRequest.localPlayerScore;
-        EGLocalPlayerScore *lps = [EGLocalPlayerScore localPlayerScoreWithValue:(long) s.value
-                                                                           rank:(NSUInteger) s.rank
-                                                                        maxRank:leaderboardRequest.maxRange];
-        callback(lps);
+        if(s.rank == 0) {
+            callback([CNOption none]);
+        } else {
+            EGLocalPlayerScore *lps = [EGLocalPlayerScore localPlayerScoreWithValue:(long) s.value
+                                                                               rank:(NSUInteger) s.rank
+                                                                            maxRank:leaderboardRequest.maxRange];
+            callback([CNOption someValue:lps]);
+        }
     }];
 }
 

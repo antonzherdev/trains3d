@@ -30,6 +30,10 @@ static ODClassType* _EGLocalPlayerScore_type;
     _EGLocalPlayerScore_type = [ODClassType classTypeWithCls:[EGLocalPlayerScore class]];
 }
 
+- (CGFloat)percent {
+    return (((CGFloat)(_rank)) - 1) / _maxRank;
+}
+
 - (ODClassType*)type {
     return [EGLocalPlayerScore type];
 }

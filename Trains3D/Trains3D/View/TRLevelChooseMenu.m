@@ -1,9 +1,13 @@
 #import "TRLevelChooseMenu.h"
 
+#import "EGProgress.h"
 #import "TRGameDirector.h"
 #import "EGSprite.h"
 #import "EGCamera2D.h"
 #import "EGContext.h"
+#import "EGGameCenterPlat.h"
+#import "EGDirector.h"
+#import "EGGameCenter.h"
 #import "EGMaterial.h"
 #import "TRStrings.h"
 #import "EGInput.h"
@@ -11,9 +15,10 @@
     NSString* _name;
     NSInteger _maxLevel;
     id<CNSeq> _buttons;
-    EGFont* _font;
     EGFont* _fontRes;
+    NSMutableDictionary* __scores;
 }
+static GEVec4(^_TRLevelChooseMenu_rankProgress)(float);
 static ODClassType* _TRLevelChooseMenu_type;
 @synthesize name = _name;
 @synthesize maxLevel = _maxLevel;
@@ -36,6 +41,7 @@ static ODClassType* _TRLevelChooseMenu_type;
                 }];
             }];
         }] toArray];
+        __scores = [NSMutableDictionary mutableDictionary];
     }
     
     return self;
@@ -44,6 +50,7 @@ static ODClassType* _TRLevelChooseMenu_type;
 + (void)initialize {
     [super initialize];
     _TRLevelChooseMenu_type = [ODClassType classTypeWithCls:[TRLevelChooseMenu class]];
+    _TRLevelChooseMenu_rankProgress = [EGProgress progressVec4:geVec4DivI(GEVec4Make(211.0, 255.0, 191.0, 255.0), 255) vec42:geVec4DivI(GEVec4Make(255.0, 202.0, 191.0, 255.0), 255)];
 }
 
 + (EGScene*)scene {
@@ -55,19 +62,39 @@ static ODClassType* _TRLevelChooseMenu_type;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
-    _font = [EGGlobal fontWithName:@"lucida_grande" size:24];
     _fontRes = [EGGlobal fontWithName:@"lucida_grande" size:18];
+}
+
+- (void)start {
+    [intTo(1, 16) forEach:^void(id level) {
+        [EGGameCenter.instance localPlayerScoreLeaderboard:[NSString stringWithFormat:@"grp.com.antonzherdev.Trains3D.Level%@", level] callback:^void(id score) {
+            if([score isDefined]) {
+                [__scores setKey:numui(((NSUInteger)(unumi(level)))) value:[score get]];
+                [[EGDirector current] redraw];
+            }
+        }];
+    }];
+}
+
++ (GEVec4)rankColorScore:(EGLocalPlayerScore*)score {
+    return _TRLevelChooseMenu_rankProgress(((float)([score percent])));
 }
 
 - (void(^)(GERect))drawButtonX:(NSInteger)x y:(NSInteger)y level:(NSInteger)level {
     return ^void(GERect rect) {
         BOOL dis = level > _maxLevel;
-        [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.95, 0.95, 0.95, 1.0)] at:GEVec3Make(((float)(x)), ((float)(y + 0.8)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.2)];
-        if(!(dis)) [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.95, 0.95, 0.95, 1.0)] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.2)];
+        id score = [__scores optKey:numui(((NSUInteger)(level)))];
+        GEVec4 color = (([score isDefined]) ? [TRLevelChooseMenu rankColorScore:[score get]] : GEVec4Make(0.95, 0.95, 0.95, 1.0));
+        [EGD2D drawSpriteMaterial:[EGColorSource applyColor:color] at:GEVec3Make(((float)(x)), ((float)(y + 0.8)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.2)];
+        if(!(dis)) [EGD2D drawSpriteMaterial:[EGColorSource applyColor:color] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.2)];
         [EGBlendFunction.standard applyDraw:^void() {
-            [_font drawText:[TRStr.Loc levelNumber:((NSUInteger)(level))] at:GEVec3Make(((float)(x + 0.5)), ((float)(y + 0.92)), 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
-            if(dis) [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)];
-            else [_fontRes drawText:[TRStr.Loc formatCost:[TRGameDirector.instance bestScoreLevelNumber:((NSUInteger)(level))]] at:GEVec3Make(((float)(x + 0.02)), ((float)(y + 0.1)), 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
+            [_fontRes drawText:[TRStr.Loc levelNumber:((NSUInteger)(level))] at:GEVec3Make(((float)(x + 0.5)), ((float)(y + 0.92)), 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
+            if(dis) {
+                [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)];
+            } else {
+                [_fontRes drawText:[TRStr.Loc formatCost:(([score isDefined]) ? ((NSInteger)(((EGLocalPlayerScore*)([score get])).value)) : [TRGameDirector.instance bestScoreLevelNumber:((NSUInteger)(level))])] at:GEVec3Make(((float)(x + 0.02)), ((float)(y + 0.1)), 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
+                if([score isDefined]) [_fontRes drawText:[TRStr.Loc topScore:[score get]] at:GEVec3Make(((float)(x + 0.98)), ((float)(y + 0.1)), 0.0) alignment:egTextAlignmentApplyXY(1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
+            }
         }];
     };
 }
@@ -111,9 +138,6 @@ static ODClassType* _TRLevelChooseMenu_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-}
-
-- (void)start {
 }
 
 - (void)stop {

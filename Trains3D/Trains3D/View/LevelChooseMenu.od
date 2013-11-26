@@ -12,27 +12,49 @@ class LevelChooseMenu extends SceneView {
             Button(Rect(x, y, 1, 1), drawButton(x, y, level), GameDirector.instance.set(level = level))}
     }.toArray
 
-    private var font : Font
     private var fontRes : Font
     def reshapeWith(viewport : Rect) {
-        font = fontWith(name = "lucida_grande", size = 24)
         fontRes = fontWith(name = "lucida_grande", size = 18)
     }
+
+    private var _scores = MutableHashMap<uint, LocalPlayerScore>()
+    def start {
+        1.to(16).for { level ->
+            GameCenter.instance.localPlayerScore("grp.com.antonzherdev.Trains3D.Level$level", { score ->
+                if(score.isDefined) {
+                    _scores.set(level, score.get)
+                    Director.current.redraw
+                }
+            })
+        }
+    }
+
+
+    private static val rankProgress = Progress.progress(vec4(211, 255, 191, 255)/255, vec4(255, 202, 191, 255)/255)
+    static def rankColor(score : LocalPlayerScore) : vec4 = rankProgress(score.percent)
+
 
     private def drawButton(x : int, y : int, level : int) = {
         rect : Rect -> {
             val dis = level > maxLevel
-            D2D.drawSprite(vec4(0.95, 0.95, 0.95, 1.0), vec3(x, y + 0.8, 0), Rect(0, 0, 1, 0.2))
+            val score : LocalPlayerScore? = _scores.opt(level)
+
+            val color = if(score.isDefined) rankColor(score.get) else vec4(0.95, 0.95, 0.95, 1.0)
+            D2D.drawSprite(color, vec3(x, y + 0.8, 0), Rect(0, 0, 1, 0.2))
             if(!dis) {
-                D2D.drawSprite(vec4(0.95, 0.95, 0.95, 1.0), vec3(x, y, 0), Rect(0, 0, 1, 0.2))
+                D2D.drawSprite(color, vec3(x, y, 0), Rect(0, 0, 1, 0.2))
             }
             BlendFunction.standard {
-                font.draw(Loc.level(level), vec3(x + 0.5, y + 0.92, 0), TextAlignment(0, 0), color = vec4(0, 0, 0, 1))
+                fontRes.draw(Loc.level(level), vec3(x + 0.5, y + 0.92, 0), TextAlignment(0, 0), color = vec4(0, 0, 0, 1))
                 if(dis) {
                     D2D.drawSprite(vec4(1, 1, 1, 0.9), vec3(x, y, 0), Rect(0, 0, 1, 1))
                 } else {
-                    fontRes.draw(Loc.format(GameDirector.instance.bestScore(level)),
+                    fontRes.draw(Loc.format(if(score.isDefined) score.get.value else GameDirector.instance.bestScore(level)),
                         vec3(x + 0.02, y + 0.1, 0), TextAlignment(-1, 0), color = vec4(0, 0, 0, 1))
+                    if(score.isDefined) {
+                        fontRes.draw(Loc.top(score.get), vec3(x + 0.98, y + 0.1, 0), TextAlignment(1, 0),
+                            color = vec4(0, 0, 0, 1))
+                    }
                 }
             }
         }

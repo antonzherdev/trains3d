@@ -52,8 +52,8 @@ static ODClassType* _TRGameDirector_type;
             [_weakSelf.local setKey:@"currentLevel" i:((NSInteger)(n + 1))];
             NSString* leaderboard = [NSString stringWithFormat:@"grp.com.antonzherdev.Trains3D.Level%lu", (unsigned long)n];
             [EGGameCenter.instance reportScoreLeaderboard:leaderboard value:((long)([((TRLevel*)(level)).score score])) completed:^void() {
-                [EGGameCenter.instance localPlayerScoreLeaderboard:leaderboard callback:^void(EGLocalPlayerScore* _) {
-                    [[TRGameDirector playerScoreRetrieveNotification] postData:_];
+                [EGGameCenter.instance localPlayerScoreLeaderboard:leaderboard callback:^void(id score) {
+                    if([score isDefined]) [[TRGameDirector playerScoreRetrieveNotification] postData:[score get]];
                 }];
             }];
             [_weakSelf.cloud keepMaxKey:[NSString stringWithFormat:@"level%lu.score", (unsigned long)n] i:[((TRLevel*)(level)).score score]];
@@ -82,14 +82,8 @@ static ODClassType* _TRGameDirector_type;
     [EGGameCenter.instance authenticate];
 }
 
-- (void)levelScoresCallback:(void(^)(id<CNMap>))callback {
-    NSMutableDictionary* scoresMap = [NSMutableDictionary mutableDictionary];
-    [intTo(1, 16) forEach:^void(id level) {
-        [EGGameCenter.instance localPlayerScoreLeaderboard:[NSString stringWithFormat:@"grp.com.antonzherdev.Trains3D.Level%@", level] callback:^void(EGLocalPlayerScore* score) {
-            [scoresMap setKey:numui(((NSUInteger)(unumi(level)))) value:score];
-            if([scoresMap count] == 16) callback(scoresMap);
-        }];
-    }];
+- (void)localPlayerScoreLevel:(NSUInteger)level callback:(void(^)(id))callback {
+    [EGGameCenter.instance localPlayerScoreLeaderboard:[NSString stringWithFormat:@"grp.com.antonzherdev.Trains3D.Level%lu", (unsigned long)level] callback:callback];
 }
 
 - (NSInteger)currentLevel {

@@ -2,10 +2,14 @@
 #import "EGScene.h"
 #import "GEVec.h"
 #import "EGFont.h"
+@class EGProgress;
 @class TRGameDirector;
 @class EGButton;
 @class EGCamera2D;
 @class EGGlobal;
+@class EGGameCenter;
+@class EGDirector;
+@class EGLocalPlayerScore;
 @class EGColorSource;
 @class EGD2D;
 @class EGBlendFunction;
@@ -30,6 +34,8 @@
 + (EGScene*)scene;
 - (EGCamera2D*)camera;
 - (void)reshapeWithViewport:(GERect)viewport;
+- (void)start;
++ (GEVec4)rankColorScore:(EGLocalPlayerScore*)score;
 - (void)draw;
 - (BOOL)isProcessorActive;
 - (EGRecognizers*)recognizers;

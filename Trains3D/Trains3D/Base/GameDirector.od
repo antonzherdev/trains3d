@@ -26,7 +26,9 @@ class GameDirector {
         local.set("currentLevel", i = n + 1)
         val leaderboard = "grp.com.antonzherdev.Trains3D.Level$n"
         GameCenter.instance.reportScore(leaderboard, level.score.score,
-            GameCenter.instance.localPlayerScore(leaderboard, playerScoreRetrieveNotification.post(_))
+            GameCenter.instance.localPlayerScore(leaderboard, { score ->
+                if(score.isDefined) playerScoreRetrieveNotification.post(score.get)
+            })
         )
         cloud.keepMax("level$n.score", level.score.score)
     }
@@ -40,16 +42,9 @@ class GameDirector {
         GameCenter.instance.authenticate
     }
 
-    def levelScores(callback : ([uint : LocalPlayerScore]) -> void) {
-        val scoresMap = MutableHashMap<uint, LocalPlayerScore>()
-        1.to(16).for { level ->
-           GameCenter.instance.localPlayerScore("grp.com.antonzherdev.Trains3D.Level$level", { score ->
-               scoresMap.set(level, score)
-               if(scoresMap.count == 16) {
-                   callback(scoresMap)
-               }
-           })
-        }
+
+    def localPlayerScore(level : uint, callback : LocalPlayerScore? -> void) {
+        GameCenter.instance.localPlayerScore("grp.com.antonzherdev.Trains3D.Level$level", callback)
     }
 
     def currentLevel = local.intFor("currentLevel")

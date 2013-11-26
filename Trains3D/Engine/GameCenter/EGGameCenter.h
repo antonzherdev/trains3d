@@ -10,6 +10,7 @@
 + (id)localPlayerScoreWithValue:(long)value rank:(NSUInteger)rank maxRank:(NSUInteger)maxRank;
 - (id)initWithValue:(long)value rank:(NSUInteger)rank maxRank:(NSUInteger)maxRank;
 - (ODClassType*)type;
+- (CGFloat)percent;
 + (ODClassType*)type;
 @end
 
