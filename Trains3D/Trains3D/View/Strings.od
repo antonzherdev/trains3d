@@ -32,8 +32,8 @@ trait Strings {
     def victory : string
     def defeat : string
     def moneyOver : string
-    def winScore(score : uint) : string
-    def bestScore(score : LocalPlayerScore) : string
+    def result : string
+    def best : string
     def top(score : LocalPlayerScore) : string
     def leaderboard : string
 
@@ -111,12 +111,12 @@ class EnStrings extends Strings {
          Use two fingers for scrolling.
          And one finger for railway building."
 
-    def winScore(score : uint) : string = "Score: $(format(score))"
-    def bestScore(score : LocalPlayerScore) : string = "Your best score: $(format(score.value))"
+    def result : string = "Score:"
+    def best : string = "Your best:"
     def top(score : LocalPlayerScore) : string =
-        if(score.rank == 1) "The best result ever!"
-        else if(score.rank == 2) "The second result ever!"
-        else if(score.rank == 3) "The third result ever!"
+        if(score.rank == 1) "The best ever!"
+        else if(score.rank == 2) "The 2-nd ever!"
+        else if(score.rank == 3) "The 3-rd ever!"
         else {
             val p = score.rank.cast<float> / score.maxRank
             if(p <= 5) "Top 5%"
@@ -186,12 +186,12 @@ class RuStrings extends Strings{
          Для прокрутки используйте два пальца.
          Для строительства рельсов один."
 
-    def winScore(score : uint) : string = "Cчет: $(format(score))"
-    def bestScore(score : LocalPlayerScore) : string = "Ваш лучший результат: $(format(score.value))"
+    def result : string = "Счет:"
+    def best : string = "Ваш лучший:"
     def top(score : LocalPlayerScore) : string =
-        if(score.rank == 1) "Лучший результат!"
-        else if(score.rank == 2) "2-й результат!"
-        else if(score.rank == 3) "3-й результат!"
+        if(score.rank == 1) "1-й!"
+        else if(score.rank == 2) "2-й!"
+        else if(score.rank == 3) "3-й!"
         else {
             val p = score.rank.cast<float> / score.maxRank
             if(p <= 5) "Лучшие 5%"
@@ -199,7 +199,7 @@ class RuStrings extends Strings{
             else if(p <= 20) "Лучшие 20%"
             else if(p <= 30) "Лучшие 30%"
             else if(p <= 50) "Выше среднего"
-            else "Хуже среднего"
+            else "Ниже среднего"
         }
     def leaderboard : string = "Лучшие результаты"
 }

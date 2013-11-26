@@ -161,23 +161,23 @@ static ODClassType* _TREnStrings_type;
         "And one finger for railway building.";
 }
 
-- (NSString*)winScoreScore:(NSUInteger)score {
-    return [NSString stringWithFormat:@"Score: %@", [self formatCost:((NSInteger)(score))]];
+- (NSString*)result {
+    return @"Score:";
 }
 
-- (NSString*)bestScoreScore:(EGLocalPlayerScore*)score {
-    return [NSString stringWithFormat:@"Your best score: %@", [self formatCost:((NSInteger)(score.value))]];
+- (NSString*)best {
+    return @"Your best:";
 }
 
 - (NSString*)topScore:(EGLocalPlayerScore*)score {
     if(score.rank == 1) {
-        return @"The best result ever!";
+        return @"The best ever!";
     } else {
         if(score.rank == 2) {
-            return @"The second result ever!";
+            return @"The 2-nd ever!";
         } else {
             if(score.rank == 3) {
-                return @"The third result ever!";
+                return @"The 3-rd ever!";
             } else {
                 CGFloat p = ((CGFloat)(score.rank)) / score.maxRank;
                 if(p <= 5) {
@@ -410,23 +410,23 @@ static ODClassType* _TRRuStrings_type;
         "Для строительства рельсов один.";
 }
 
-- (NSString*)winScoreScore:(NSUInteger)score {
-    return [NSString stringWithFormat:@"Cчет: %@", [self formatCost:((NSInteger)(score))]];
+- (NSString*)result {
+    return @"Счет:";
 }
 
-- (NSString*)bestScoreScore:(EGLocalPlayerScore*)score {
-    return [NSString stringWithFormat:@"Ваш лучший результат: %@", [self formatCost:((NSInteger)(score.value))]];
+- (NSString*)best {
+    return @"Ваш лучший:";
 }
 
 - (NSString*)topScore:(EGLocalPlayerScore*)score {
     if(score.rank == 1) {
-        return @"Лучший результат!";
+        return @"1-й!";
     } else {
         if(score.rank == 2) {
-            return @"2-й результат!";
+            return @"2-й!";
         } else {
             if(score.rank == 3) {
-                return @"3-й результат!";
+                return @"3-й!";
             } else {
                 CGFloat p = ((CGFloat)(score.rank)) / score.maxRank;
                 if(p <= 5) {
@@ -442,7 +442,7 @@ static ODClassType* _TRRuStrings_type;
                                 return @"Лучшие 30%";
                             } else {
                                 if(p <= 50) return @"Выше среднего";
-                                else return @"Хуже среднего";
+                                else return @"Ниже среднего";
                             }
                         }
                     }

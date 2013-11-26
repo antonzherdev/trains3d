@@ -22,6 +22,7 @@
 + (id)gameDirector;
 - (id)init;
 - (ODClassType*)type;
+- (NSInteger)bestScoreLevelNumber:(NSUInteger)levelNumber;
 - (void)_init;
 - (NSInteger)currentLevel;
 - (NSInteger)maxAvailableLevel;

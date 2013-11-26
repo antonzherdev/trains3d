@@ -20,6 +20,7 @@
 @protocol TRStrings;
 @class TRGameDirector;
 @class TRScore;
+@class EGLocalPlayerScore;
 @class TRLevelMenuView;
 @class TRHelp;
 

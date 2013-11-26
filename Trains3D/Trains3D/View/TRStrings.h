@@ -28,8 +28,8 @@
 - (NSString*)victory;
 - (NSString*)defeat;
 - (NSString*)moneyOver;
-- (NSString*)winScoreScore:(NSUInteger)score;
-- (NSString*)bestScoreScore:(EGLocalPlayerScore*)score;
+- (NSString*)result;
+- (NSString*)best;
 - (NSString*)topScore:(EGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
 - (NSString*)colorOrange;
@@ -86,8 +86,8 @@
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
 - (NSString*)helpExpressTrain;
 - (NSString*)helpToMakeZoom;
-- (NSString*)winScoreScore:(NSUInteger)score;
-- (NSString*)bestScoreScore:(EGLocalPlayerScore*)score;
+- (NSString*)result;
+- (NSString*)best;
 - (NSString*)topScore:(EGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
 + (ODClassType*)type;
@@ -130,8 +130,8 @@
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
 - (NSString*)helpExpressTrain;
 - (NSString*)helpToMakeZoom;
-- (NSString*)winScoreScore:(NSUInteger)score;
-- (NSString*)bestScoreScore:(EGLocalPlayerScore*)score;
+- (NSString*)result;
+- (NSString*)best;
 - (NSString*)topScore:(EGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
 + (ODClassType*)type;

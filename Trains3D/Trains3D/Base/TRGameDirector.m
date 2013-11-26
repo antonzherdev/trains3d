@@ -74,6 +74,10 @@ static ODClassType* _TRGameDirector_type;
     _TRGameDirector_playerScoreRetrieveNotification = [CNNotificationHandle notificationHandleWithName:@"playerScoreRetrieveNotification"];
 }
 
+- (NSInteger)bestScoreLevelNumber:(NSUInteger)levelNumber {
+    return [_cloud intForKey:[NSString stringWithFormat:@"level%lu.score", (unsigned long)levelNumber]];
+}
+
 - (void)_init {
     [EGGameCenter.instance authenticate];
 }

@@ -30,6 +30,8 @@ class GameDirector {
         )
         cloud.keepMax("level$n.score", level.score.score)
     }
+    def bestScore(levelNumber : uint) : int = cloud.intFor("level$levelNumber.score")
+
     private val crashObs = Level.crashNotification.observe { _ ->
         GameCenter.instance.completeAchievement("grp.Crash")
     }

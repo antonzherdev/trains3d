@@ -115,26 +115,38 @@ class WinMenu(level : Level) extends MenuView {
     private val chooseLevelButton = button(Loc.chooseLevel, GameDirector.instance.chooseLevel)
     val buttons = [nextButton, leaderboardButton, restartButton, chooseLevelButton]
 
-    def headerHeight = 75.0
+    def headerHeight = 100.0
     def drawHeader(rect : Rect) {
         D2D.drawSprite(vec4(0.85, 0.9, 0.75, 1.0), at = vec3(0, 0, 0), rect)
-        headerText.position = rect.p(0.5, 0.7)
+        headerText.position = rect.p(0.5, 0.75)
         headerText.draw
 
+        resultText.position = rect.p(0.15, 0.4)
+        resultText.draw
         val ls = level.score.score
-        scoreText.text = Loc.winScore(ls)
-        scoreText.position = rect.p(0.05, 0.23)
+        scoreText.text = Loc.format(ls)
+        scoreText.position = rect.p(0.16, 0.4)
+        scoreText.draw
+
+        var bs : int = 0
         if(_score.isDefined) {
             val s = _score.get
-            bestText.text = Loc.bestScore(s)
+            bs = s.value
+
+            topText.position = rect.p(0.95, 0.2)
             topText.text = Loc.top(s)
-            bestText.position = rect.p(0.05, 0.23)
-            topText.position = rect.p(0.95, 0.23)
-            bestText.draw
             topText.draw
         } else {
-            scoreText.draw
+            bs = GameDirector.instance.bestScore(level.number)
         }
+
+        bestScoreText.position = rect.p(0.95, 0.4)
+        bestScoreText.text = Loc.format(bs)
+        bestScoreText.draw
+        val x = scoreText.measureC.x
+
+        bestText.position = bestScoreText.position - vec2(x + 0.01*rect.size.x, 0)
+        bestText.draw
 
     }
 
@@ -145,14 +157,19 @@ class WinMenu(level : Level) extends MenuView {
     }
 
     private val headerText = Text(nil, Loc.victory, vec3(0, 0, 0), TextAlignment(0, 0), vec4(0, 0, 0, 1))
+
+    private val resultText = Text(nil, Loc.result, vec3(0, 0, 0), TextAlignment(1, 0), vec4(0, 0, 0, 1))
+    private val bestText = Text(nil,  Loc.best, vec3(0, 0, 0), TextAlignment(1, 0), vec4(0, 0, 0, 1))
     private val scoreText = Text(nil, "", vec3(0, 0, 0), TextAlignment(-1, 0), vec4(0, 0, 0, 1))
-    private val bestText = Text(nil, "", vec3(0, 0, 0), TextAlignment(-1, 0), vec4(0, 0, 0, 1))
+    private val bestScoreText = Text(nil, "", vec3(0, 0, 0), TextAlignment(1, 0), vec4(0, 0, 0, 1))
     private val topText = Text(nil, "", vec3(0, 0, 0), TextAlignment(1, 0), vec4(0, 0, 0, 1))
     def reshape {
         headerText.font = fontWith(name = "lucida_grande", size = 36)
         val f = fontWith(name = "lucida_grande", size = 18)
-        scoreText.font = f
+        resultText.font = f
         bestText.font = f
+        scoreText.font = f
+        bestScoreText.font = f
         topText.font = f
     }
 }
