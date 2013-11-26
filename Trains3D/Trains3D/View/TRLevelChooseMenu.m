@@ -4,8 +4,8 @@
 #import "EGSprite.h"
 #import "EGCamera2D.h"
 #import "EGContext.h"
-#import "TRStrings.h"
 #import "EGMaterial.h"
+#import "TRStrings.h"
 #import "EGInput.h"
 @implementation TRLevelChooseMenu{
     NSString* _name;
@@ -59,19 +59,26 @@ static ODClassType* _TRLevelChooseMenu_type;
 
 - (void(^)(GERect))drawButtonX:(NSInteger)x y:(NSInteger)y level:(NSInteger)level {
     return ^void(GERect rect) {
-        [_font drawText:[TRStr.Loc levelNumber:((NSUInteger)(level))] at:GEVec3Make(((float)(x + 0.5)), ((float)(y + 0.95)), 0.0) alignment:egTextAlignmentApplyXY(0.0, 1.0) color:((level > _maxLevel) ? GEVec4Make(0.7, 0.7, 0.7, 1.0) : GEVec4Make(0.0, 0.0, 0.0, 1.0))];
+        BOOL dis = level > _maxLevel;
+        [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.95, 0.95, 0.95, 1.0)] at:GEVec3Make(((float)(x)), ((float)(y + 0.8)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.2)];
+        [EGBlendFunction.standard applyDraw:^void() {
+            [_font drawText:[TRStr.Loc levelNumber:((NSUInteger)(level))] at:GEVec3Make(((float)(x + 0.5)), ((float)(y + 0.92)), 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
+            if(dis) [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.7)] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)];
+        }];
     };
 }
 
 - (void)draw {
-    [EGBlendFunction.standard applyDraw:^void() {
-        [_buttons forEach:^void(EGButton* _) {
-            [((EGButton*)(_)) draw];
+    [EGGlobal.context.depthTest disabledF:^void() {
+        [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Levels.jpg"]] at:GEVec3Make(0.0, 0.0, 0.0) quad:geRectStripQuad(geRectApplyXYWidthHeight(0.0, 0.0, 4.0, 4.0)) uv:geRectUpsideDownStripQuad(geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.75))];
+        [EGBlendFunction.standard applyDraw:^void() {
+            [_buttons forEach:^void(EGButton* _) {
+                [((EGButton*)(_)) draw];
+            }];
         }];
-    }];
-    [intTo(1, 3) forEach:^void(id c) {
-        [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.7, 0.7, 0.7, 1.0)] p0:GEVec2Make(((float)(unumi(c))), 0.0) p1:GEVec2Make(((float)(unumi(c))), 5.0)];
-        [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.7, 0.7, 0.7, 1.0)] p0:GEVec2Make(0.0, ((float)(unumi(c)))) p1:GEVec2Make(5.0, ((float)(unumi(c))))];
+        [intTo(1, 3) forEach:^void(id c) {
+            [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.5, 1.0)] p0:GEVec2Make(((float)(unumi(c))), 0.0) p1:GEVec2Make(((float)(unumi(c))), 5.0)];
+        }];
     }];
 }
 

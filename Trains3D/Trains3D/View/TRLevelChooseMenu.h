@@ -6,11 +6,13 @@
 @class EGButton;
 @class EGCamera2D;
 @class EGGlobal;
-@class TRStr;
-@protocol TRStrings;
-@class EGBlendFunction;
 @class EGColorSource;
 @class EGD2D;
+@class EGBlendFunction;
+@class TRStr;
+@protocol TRStrings;
+@class EGContext;
+@class EGEnablingState;
 @class EGRecognizers;
 @class EGTap;
 @class EGRecognizer;

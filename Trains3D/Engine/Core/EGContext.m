@@ -182,6 +182,11 @@ static ODClassType* _EGContext_type;
     __lastVertexBufferCount = 0;
 }
 
+- (void)clearCache {
+    [_textureCache clear];
+    [_fontCache clear];
+}
+
 - (GERectI)viewport {
     return __viewport;
 }

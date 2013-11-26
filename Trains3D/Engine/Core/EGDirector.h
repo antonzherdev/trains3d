@@ -2,9 +2,9 @@
 #import "GEVec.h"
 @class EGTime;
 @class EGScene;
-@class EGRecognizerType;
 @class EGGlobal;
 @class EGContext;
+@class EGRecognizerType;
 @class EGEnablingState;
 @class EGMatrixStack;
 @class EGStat;

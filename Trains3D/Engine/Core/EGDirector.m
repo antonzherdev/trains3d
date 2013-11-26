@@ -2,8 +2,8 @@
 
 #import "EGTime.h"
 #import "EGScene.h"
-#import "EGInput.h"
 #import "EGContext.h"
+#import "EGInput.h"
 #import "GL.h"
 #import "EGStat.h"
 @implementation EGDirector{
@@ -60,6 +60,7 @@ static ODClassType* _EGDirector_type;
     }
     EGScene* sc = ((EGScene*(^)())(scene))();
     __scene = [CNOption applyValue:sc];
+    [EGGlobal.context clearCache];
     [sc reshapeWithViewSize:__lastViewSize];
     [[sc recognizersTypes] forEach:^void(EGRecognizerType* _) {
         [self registerRecognizerType:_];

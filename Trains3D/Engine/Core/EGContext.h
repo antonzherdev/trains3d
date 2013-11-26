@@ -52,6 +52,7 @@
 - (EGFont*)fontWithName:(NSString*)name;
 - (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size;
 - (void)clear;
+- (void)clearCache;
 - (GERectI)viewport;
 - (void)setViewport:(GERectI)viewport;
 - (void)pushViewport;

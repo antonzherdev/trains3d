@@ -40,6 +40,11 @@ class Context {
         _lastVertexBufferCount = 0
     }
 
+    def clearCache {
+        textureCache.clear
+        fontCache.clear
+    }
+
     private var _viewportStack = List<RectI>()
     private var _viewport : RectI
     def viewport = _viewport
