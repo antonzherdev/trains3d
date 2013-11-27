@@ -1,0 +1,5 @@
+package core.lang
+
+stub object Action {
+    def delay(seconds : uint, action : () -> void)
+}

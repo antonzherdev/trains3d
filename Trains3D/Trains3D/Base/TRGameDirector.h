@@ -3,8 +3,9 @@
 @class DTConflict;
 @class DTCloudKeyValueStorage;
 @class TRLevel;
-@class EGGameCenter;
 @class TRScore;
+@class EGGameCenter;
+@class EGLocalPlayerScore;
 @class EGDirector;
 @class TRSceneFactory;
 @class EGScene;

@@ -3,8 +3,9 @@
 #import "DTKeyValueStorage.h"
 #import "DTConflictResolve.h"
 #import "TRLevel.h"
-#import "EGGameCenterPlat.h"
 #import "TRScore.h"
+#import "EGGameCenterPlat.h"
+#import "EGGameCenter.h"
 #import "EGDirector.h"
 #import "TRSceneFactory.h"
 #import "EGScene.h"
@@ -51,12 +52,14 @@ static ODClassType* _TRGameDirector_type;
             [_weakSelf.cloud keepMaxKey:@"maxLevel" i:((NSInteger)(n + 1))];
             [_weakSelf.local setKey:@"currentLevel" i:((NSInteger)(n + 1))];
             NSString* leaderboard = [NSString stringWithFormat:@"grp.com.antonzherdev.Trains3D.Level%lu", (unsigned long)n];
-            [EGGameCenter.instance reportScoreLeaderboard:leaderboard value:((long)([((TRLevel*)(level)).score score])) completed:^void() {
-                [EGGameCenter.instance localPlayerScoreLeaderboard:leaderboard callback:^void(id score) {
-                    if([score isDefined]) [[TRGameDirector playerScoreRetrieveNotification] postData:[score get]];
-                }];
-            }];
+            NSInteger s = [((TRLevel*)(level)).score score];
             [_weakSelf.cloud keepMaxKey:[NSString stringWithFormat:@"level%lu.score", (unsigned long)n] i:[((TRLevel*)(level)).score score]];
+            [EGGameCenter.instance reportScoreLeaderboard:leaderboard value:((long)(s)) completed:^void() {
+                BOOL isBest = s == [_weakSelf bestScoreLevelNumber:n];
+                delay(((isBest) ? ((NSUInteger)(0.5)) : ((NSUInteger)(0.0))), ^void() {
+                    [_weakSelf retrieveGameCenterLeaderboard:leaderboard isBest:isBest s:((NSUInteger)(s))];
+                });
+            }];
         }];
         _crashObs = [TRLevel.crashNotification observeBy:^void(id _) {
             [EGGameCenter.instance completeAchievementName:@"grp.Crash"];
@@ -72,6 +75,19 @@ static ODClassType* _TRGameDirector_type;
     _TRGameDirector_type = [ODClassType classTypeWithCls:[TRGameDirector class]];
     _TRGameDirector_instance = [TRGameDirector gameDirector];
     _TRGameDirector_playerScoreRetrieveNotification = [CNNotificationHandle notificationHandleWithName:@"playerScoreRetrieveNotification"];
+}
+
+- (void)retrieveGameCenterLeaderboard:(NSString*)leaderboard isBest:(BOOL)isBest s:(NSUInteger)s {
+    [EGGameCenter.instance localPlayerScoreLeaderboard:leaderboard callback:^void(id score) {
+        if(isBest) {
+            if([score isEmpty] || ((EGLocalPlayerScore*)([score get])).value < s) delay(((NSUInteger)(0.5)), ^void() {
+                [self retrieveGameCenterLeaderboard:leaderboard isBest:YES s:s];
+            });
+            else [_TRGameDirector_playerScoreRetrieveNotification postData:[score get]];
+        } else {
+            if([score isDefined]) [_TRGameDirector_playerScoreRetrieveNotification postData:[score get]];
+        }
+    }];
 }
 
 - (NSInteger)bestScoreLevelNumber:(NSUInteger)levelNumber {

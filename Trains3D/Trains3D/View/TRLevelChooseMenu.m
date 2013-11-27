@@ -4,6 +4,8 @@
 #import "TRGameDirector.h"
 #import "EGSprite.h"
 #import "EGCamera2D.h"
+#import "GL.h"
+#import "EGPlatform.h"
 #import "EGContext.h"
 #import "EGGameCenterPlat.h"
 #import "EGDirector.h"
@@ -62,7 +64,7 @@ static ODClassType* _TRLevelChooseMenu_type;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
-    _fontRes = [EGGlobal fontWithName:@"lucida_grande" size:18];
+    _fontRes = [EGGlobal fontWithName:@"lucida_grande" size:((egInterfaceIdiom() == EGInterfaceIdiom.phone) ? 16 : 18)];
 }
 
 - (void)start {

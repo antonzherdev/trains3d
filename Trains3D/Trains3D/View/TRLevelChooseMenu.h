@@ -6,6 +6,7 @@
 @class TRGameDirector;
 @class EGButton;
 @class EGCamera2D;
+@class EGInterfaceIdiom;
 @class EGGlobal;
 @class EGGameCenter;
 @class EGDirector;

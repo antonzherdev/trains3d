@@ -14,7 +14,7 @@ class LevelChooseMenu extends SceneView {
 
     private var fontRes : Font
     def reshapeWith(viewport : Rect) {
-        fontRes = fontWith(name = "lucida_grande", size = 18)
+        fontRes = fontWith(name = "lucida_grande", size = if(egInterfaceIdiom == InterfaceIdiom.phone) 16 else 18)
     }
 
     private var _scores = MutableHashMap<uint, LocalPlayerScore>()
