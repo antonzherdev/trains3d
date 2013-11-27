@@ -10,16 +10,12 @@
 @implementation TRSwitchProcessor{
     TRLevel* _level;
     EGCollisionBox2d* _switchShape;
-    EGCollisionBox2d* _lightShape;
-    EGCollisionBox2d* _narrowLightShape;
     EGCollisionWorld* _world;
     CNNotificationObserver* _obs;
 }
 static ODClassType* _TRSwitchProcessor_type;
 @synthesize level = _level;
 @synthesize switchShape = _switchShape;
-@synthesize lightShape = _lightShape;
-@synthesize narrowLightShape = _narrowLightShape;
 @synthesize world = _world;
 
 + (id)switchProcessorWithLevel:(TRLevel*)level {
@@ -32,8 +28,6 @@ static ODClassType* _TRSwitchProcessor_type;
     if(self) {
         _level = level;
         _switchShape = [EGCollisionBox2d applyX:0.4 y:0.4];
-        _lightShape = [EGCollisionBox2d applyX:0.5 y:0.6];
-        _narrowLightShape = [EGCollisionBox2d applyX:0.5 y:0.5];
         _world = [EGCollisionWorld collisionWorld];
         _obs = [TRRailroad.changedNotification observeBy:^void(id _) {
             [_weakSelf.world clear];
@@ -45,12 +39,45 @@ static ODClassType* _TRSwitchProcessor_type;
                 [_weakSelf.world addBody:body];
             }];
             [[_weakSelf.level.railroad lights] forEach:^void(TRRailLight* light) {
-                CNTuple* dy = [_weakSelf dyForLight:light];
-                EGCollisionBody* body = [EGCollisionBody collisionBodyWithData:light shape:dy.a isKinematic:NO];
+                CGFloat sz = 0.5;
+                CGFloat sy = 0.6;
+                GEVec3 sh = [((TRRailLight*)(light)) shift];
+                float x = sh.z;
+                float y = sh.x;
+                float z = sh.y + 0.1;
+                if(((TRRailLight*)(light)).connector == TRRailConnector.top) {
+                    if([[_weakSelf nextConnectLight:light] isKindOfClass:[TRRailLight class]]) {
+                        sy -= 0.1;
+                        y -= 0.15;
+                    }
+                    if([[_weakSelf.level.railroad contentInTile:geVec2iAddVec2i(((TRRailLight*)(light)).tile, GEVec2iMake(-1, 1)) connector:TRRailConnector.right] isKindOfClass:[TRRailLight class]]) z -= 0.15;
+                }
+                if(((TRRailLight*)(light)).connector == TRRailConnector.bottom) {
+                    if([[_weakSelf nextConnectLight:light] isKindOfClass:[TRRailLight class]]) {
+                        sy -= 0.1;
+                        y -= 0.15;
+                    }
+                    if([[_weakSelf.level.railroad contentInTile:geVec2iAddVec2i(((TRRailLight*)(light)).tile, GEVec2iMake(-1, 0)) connector:TRRailConnector.right] isKindOfClass:[TRRailLight class]]) {
+                        z -= 0.15;
+                        sz -= 0.1;
+                    }
+                }
+                if(((TRRailLight*)(light)).connector == TRRailConnector.left) {
+                    if([[_weakSelf nextConnectLight:light] isKindOfClass:[TRSwitch class]]) {
+                        sy += 0.1;
+                        y += 0.15;
+                    }
+                }
+                if(((TRRailLight*)(light)).connector == TRRailConnector.right) {
+                    if([[_weakSelf.level.railroad contentInTile:((TRRailLight*)(light)).tile connector:TRRailConnector.top] isKindOfClass:[TRSwitch class]]) {
+                        z -= 0.15;
+                        sz -= 0.1;
+                    }
+                }
+                EGCollisionBody* body = [EGCollisionBody collisionBodyWithData:light shape:[EGCollisionBox2d applyX:((float)(sz)) y:((float)(sy))] isKinematic:NO];
                 [body translateX:((float)(((TRRailLight*)(light)).tile.x)) y:((float)(((TRRailLight*)(light)).tile.y)) z:0.0];
                 [body rotateAngle:((float)(((TRRailLight*)(light)).connector.angle)) x:0.0 y:0.0 z:1.0];
-                GEVec3 shift = [((TRRailLight*)(light)) shift];
-                [body translateX:shift.z y:shift.x + unumf4(dy.b) z:((float)(0.1 + [_weakSelf dzForLight:light]))];
+                [body translateX:x y:y z:z];
                 [body rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
                 [_weakSelf.world addBody:body];
             }];
@@ -63,16 +90,6 @@ static ODClassType* _TRSwitchProcessor_type;
 + (void)initialize {
     [super initialize];
     _TRSwitchProcessor_type = [ODClassType classTypeWithCls:[TRSwitchProcessor class]];
-}
-
-- (CNTuple*)dyForLight:(TRRailLight*)light {
-    if(light.connector == TRRailConnector.top || light.connector == TRRailConnector.bottom) {
-        if([[self nextConnectLight:light] isKindOfClass:[TRRailLight class]]) return tuple(_narrowLightShape, @-0.15);
-        else return tuple(_lightShape, @0.0);
-    } else {
-        if(light.connector == TRRailConnector.left && [[self nextConnectLight:light] isKindOfClass:[TRSwitch class]]) return tuple(_narrowLightShape, @0.15);
-        else return tuple(_lightShape, @0.0);
-    }
 }
 
 - (float)dzForLight:(TRRailLight*)light {

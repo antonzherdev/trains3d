@@ -18,8 +18,6 @@
 @interface TRSwitchProcessor : NSObject<EGInputProcessor>
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) EGCollisionBox2d* switchShape;
-@property (nonatomic, readonly) EGCollisionBox2d* lightShape;
-@property (nonatomic, readonly) EGCollisionBox2d* narrowLightShape;
 @property (nonatomic, readonly) EGCollisionWorld* world;
 
 + (id)switchProcessorWithLevel:(TRLevel*)level;
