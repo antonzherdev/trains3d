@@ -4,7 +4,8 @@ import com.antonzherdev.eg._
 
 class ScoreRules(initialScore : int, railCost : int,
     arrivedPrize : Train -> int, destructionFine : Train -> int,
-    delayPeriod : float, delayFine : (Train, int) -> int,
+    delayPeriod : float, // seconds for speed 30.
+    delayFine : (Train, int) -> int,
     repairCost : int)
 
 class Score(rules : ScoreRules, notifications : Notifications) extends Updatable {
@@ -60,9 +61,10 @@ class Score(rules : ScoreRules, notifications : Notifications) extends Updatable
 class TrainScore(train : Train) extends Updatable {
     private var delayTime = 0.0
     private var fineCount = 0
+    private val delayK = train.speed / 30.0
 
     def updateWith(delta : float) {
-        delayTime += delta
+        delayTime += delta * delayK
     }
 
     def needFineWith(delayPeriod : float) : bool = delayTime >= delayPeriod

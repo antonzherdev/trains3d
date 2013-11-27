@@ -215,6 +215,7 @@ static ODClassType* _TRScore_type;
     TRTrain* _train;
     CGFloat _delayTime;
     NSInteger _fineCount;
+    CGFloat _delayK;
 }
 static ODClassType* _TRTrainScore_type;
 @synthesize train = _train;
@@ -229,6 +230,7 @@ static ODClassType* _TRTrainScore_type;
         _train = train;
         _delayTime = 0.0;
         _fineCount = 0;
+        _delayK = _train.speed / 30.0;
     }
     
     return self;
@@ -240,7 +242,7 @@ static ODClassType* _TRTrainScore_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    _delayTime += delta;
+    _delayTime += delta * _delayK;
 }
 
 - (BOOL)needFineWithDelayPeriod:(CGFloat)delayPeriod {

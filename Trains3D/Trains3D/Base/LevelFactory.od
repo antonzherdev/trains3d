@@ -7,7 +7,7 @@ class LevelFactory {
         railCost = 1000,
         arrivedPrize = train -> 1000 + train.cars.count * 500,
         destructionFine = train -> 5000 + train.cars.count * 2500,
-        delayPeriod = 45,
+        delayPeriod = 60,
         delayFine = (train, i) -> i*2000,
         repairCost = 1000
         )
