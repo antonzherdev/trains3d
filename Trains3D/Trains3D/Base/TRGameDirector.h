@@ -12,6 +12,7 @@
 @protocol EGController;
 @class TRLevelChooseMenu;
 @class TRLevelFactory;
+@class EGEMail;
 
 @class TRGameDirector;
 
@@ -35,6 +36,7 @@
 - (void)setLevel:(NSInteger)level;
 - (void)showLeaderboardLevel:(TRLevel*)level;
 - (void)synchronize;
+- (void)showSupport;
 + (TRGameDirector*)instance;
 + (CNNotificationHandle*)playerScoreRetrieveNotification;
 + (ODClassType*)type;

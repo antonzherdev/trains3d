@@ -36,6 +36,7 @@ trait Strings {
     def best : string
     def top(score : LocalPlayerScore) : string
     def leaderboard : string
+    def supportButton : string
 
     def colorOrange : string
     def colorBlue : string
@@ -131,6 +132,7 @@ class EnStrings extends Strings {
             else "Worse than average"
         }
     def leaderboard : string = "Best results"
+    def supportButton : string = "Question or support"
 }
 
 class RuStrings extends Strings{
@@ -210,6 +212,7 @@ class RuStrings extends Strings{
             else "Ниже среднего"
         }
     def leaderboard : string = "Лучшие результаты"
+    def supportButton : string = "Вопрос или поддержка"
 }
 
 object Str {

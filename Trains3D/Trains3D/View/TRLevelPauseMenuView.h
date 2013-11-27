@@ -77,6 +77,7 @@
 - (void)reshapeWithViewport:(GERect)viewport;
 - (void)reshape;
 - (void)drawHeaderRect:(GERect)rect;
+- (NSInteger)columnWidth;
 + (ODClassType*)type;
 @end
 

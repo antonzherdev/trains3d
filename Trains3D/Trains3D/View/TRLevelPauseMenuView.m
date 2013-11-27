@@ -276,7 +276,7 @@ static ODClassType* _TRMenuView_type;
 
 - (void)reshapeWithViewport:(GERect)viewport {
     CGFloat s = EGGlobal.context.scale;
-    CGFloat width = 400 * s;
+    CGFloat width = [self columnWidth] * s;
     CGFloat delta = 50 * s;
     CGFloat height = delta * [[self buttons] count];
     __font = [EGGlobal fontWithName:@"lucida_grande" size:24];
@@ -294,6 +294,10 @@ static ODClassType* _TRMenuView_type;
 }
 
 - (void)drawHeaderRect:(GERect)rect {
+}
+
+- (NSInteger)columnWidth {
+    return 400;
 }
 
 - (ODClassType*)type {
@@ -332,6 +336,8 @@ static ODClassType* _TRMenuView_type;
     EGButton* _resumeButton;
     EGButton* _restartButton;
     EGButton* _chooseLevelButton;
+    EGButton* _leaderboardButton;
+    EGButton* _supportButton;
     id<CNSeq> _buttons;
 }
 static ODClassType* _TRPauseMenuView_type;
@@ -344,6 +350,7 @@ static ODClassType* _TRPauseMenuView_type;
 
 - (id)initWithLevel:(TRLevel*)level {
     self = [super init];
+    __weak TRPauseMenuView* _weakSelf = self;
     if(self) {
         _level = level;
         _resumeButton = [self buttonText:[TRStr.Loc resumeGame] onClick:^void() {
@@ -355,7 +362,13 @@ static ODClassType* _TRPauseMenuView_type;
         _chooseLevelButton = [self buttonText:[TRStr.Loc chooseLevel] onClick:^void() {
             [TRGameDirector.instance chooseLevel];
         }];
-        _buttons = (@[_resumeButton, _restartButton, _chooseLevelButton]);
+        _leaderboardButton = [self buttonText:[TRStr.Loc leaderboard] onClick:^void() {
+            [TRGameDirector.instance showLeaderboardLevel:_weakSelf.level];
+        }];
+        _supportButton = [self buttonText:[TRStr.Loc supportButton] onClick:^void() {
+            [TRGameDirector.instance showSupport];
+        }];
+        _buttons = (@[_resumeButton, _restartButton, _chooseLevelButton, _leaderboardButton, _supportButton]);
     }
     
     return self;

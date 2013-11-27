@@ -212,6 +212,10 @@ static ODClassType* _TREnStrings_type;
     return @"Best results";
 }
 
+- (NSString*)supportButton {
+    return @"Question or support";
+}
+
 - (NSString*)formatCost:(NSInteger)cost {
     __block NSInteger i = 0;
     unichar a = unums([@"'" head]);
@@ -465,6 +469,10 @@ static ODClassType* _TRRuStrings_type;
 
 - (NSString*)leaderboard {
     return @"Лучшие результаты";
+}
+
+- (NSString*)supportButton {
+    return @"Вопрос или поддержка";
 }
 
 - (NSString*)formatCost:(NSInteger)cost {

@@ -81,7 +81,7 @@ class MenuView extends PauseView {
 
     def reshapeWith(viewport : Rect) {
         val s = context.scale
-        val width = 400*s
+        val width = columnWidth*s
         val delta = 50*s
         val height = delta*buttons.count
         _font = fontWith(name = "lucida_grande", size = 24)
@@ -99,13 +99,16 @@ class MenuView extends PauseView {
     def reshape{}
 
     def drawHeader(rect : Rect) {}
+    def columnWidth : int = 400
 }
 
 class PauseMenuView(level : Level) extends MenuView  {
     private val resumeButton = button(Loc.resumeGame, Director.current.resume)
     private val restartButton = button(Loc.restart(level), GameDirector.instance.restartLevel)
     private val chooseLevelButton = button(Loc.chooseLevel, GameDirector.instance.chooseLevel)
-    val buttons = [resumeButton, restartButton, chooseLevelButton]
+    private val leaderboardButton = button(Loc.leaderboard, GameDirector.instance.showLeaderboard(level))
+    private val supportButton = button(Loc.supportButton, GameDirector.instance.showSupport)
+    val buttons = [resumeButton, restartButton, chooseLevelButton, leaderboardButton, supportButton]
 }
 
 class WinMenu(level : Level) extends MenuView {

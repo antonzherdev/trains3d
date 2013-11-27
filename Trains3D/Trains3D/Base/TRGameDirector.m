@@ -11,6 +11,7 @@
 #import "EGScene.h"
 #import "TRLevelChooseMenu.h"
 #import "TRLevelFactory.h"
+#import "EGEMail.h"
 @implementation TRGameDirector{
     DTLocalKeyValueStorage* _local;
     id(^_resolveMaxLevel)(id, id);
@@ -152,6 +153,10 @@ static ODClassType* _TRGameDirector_type;
 - (void)synchronize {
     [_local synchronize];
     [_cloud synchronize];
+}
+
+- (void)showSupport {
+    [EGEMail.instance showInterfaceTo:@"support@raildale.com"];
 }
 
 - (ODClassType*)type {

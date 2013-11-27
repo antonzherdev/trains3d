@@ -32,6 +32,7 @@
 - (NSString*)best;
 - (NSString*)topScore:(EGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
+- (NSString*)supportButton;
 - (NSString*)colorOrange;
 - (NSString*)colorBlue;
 - (NSString*)colorMint;
@@ -92,6 +93,7 @@
 - (NSString*)best;
 - (NSString*)topScore:(EGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
+- (NSString*)supportButton;
 + (ODClassType*)type;
 @end
 
@@ -137,6 +139,7 @@
 - (NSString*)best;
 - (NSString*)topScore:(EGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
+- (NSString*)supportButton;
 + (ODClassType*)type;
 @end
 
