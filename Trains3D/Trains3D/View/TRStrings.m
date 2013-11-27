@@ -133,6 +133,11 @@ static ODClassType* _TREnStrings_type;
         "move two fingers on a touchpad.")];
 }
 
+- (NSString*)helpRules {
+    return @"Don't allow falling of account balance lower than zero.\n"
+        "Stand assigned time with a positive balance and win a level.";
+}
+
 - (NSString*)helpNewCity {
     return @"New cities sometimes appear.\n"
         "Connect theirs to your railroad.";
@@ -408,6 +413,12 @@ static ODClassType* _TRRuStrings_type;
     return @"Вы можете изменять масштаб с помощью жеста.\n"
         "Для прокрутки используйте два пальца.\n"
         "Для строительства рельсов один.";
+}
+
+- (NSString*)helpRules {
+    return @"Не позволяйте балансу опускаться ниже нуля.\n"
+        "Продержитесь с положительным балансов отведенное время\n"
+        "и выграйте уровень.";
 }
 
 - (NSString*)result {

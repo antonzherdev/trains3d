@@ -42,6 +42,7 @@
 - (NSString*)colorPurple;
 - (NSString*)colorGrey;
 - (NSString*)helpConnectTwoCities;
+- (NSString*)helpRules;
 - (NSString*)helpNewCity;
 - (NSString*)helpExpressTrain;
 - (NSString*)helpTrainTo:(NSString*)to;
@@ -81,6 +82,7 @@
 - (NSString*)colorRed;
 - (NSString*)colorBeige;
 - (NSString*)helpConnectTwoCities;
+- (NSString*)helpRules;
 - (NSString*)helpNewCity;
 - (NSString*)helpTrainTo:(NSString*)to;
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
@@ -130,6 +132,7 @@
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
 - (NSString*)helpExpressTrain;
 - (NSString*)helpToMakeZoom;
+- (NSString*)helpRules;
 - (NSString*)result;
 - (NSString*)best;
 - (NSString*)topScore:(EGLocalPlayerScore*)score;

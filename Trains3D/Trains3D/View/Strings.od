@@ -48,6 +48,7 @@ trait Strings {
     def colorGrey : string
 
     def helpConnectTwoCities : string
+    def helpRules : string
     def helpNewCity : string
     def helpExpressTrain : string
     def helpTrain(to : string) : string
@@ -92,6 +93,9 @@ class EnStrings extends Strings {
         Use mouse or
         move two fingers on a touchpad.
        $endif"
+    def helpRules : string =
+        "Don't allow falling of account balance lower than zero.
+         Stand assigned time with a positive balance and win a level."
     def helpNewCity : string =
         "New cities sometimes appear.
          Connect theirs to your railroad."
@@ -185,6 +189,10 @@ class RuStrings extends Strings{
         "Вы можете изменять масштаб с помощью жеста.
          Для прокрутки используйте два пальца.
          Для строительства рельсов один."
+    def helpRules : string =
+        "Не позволяйте балансу опускаться ниже нуля.
+         Продержитесь с положительным балансов отведенное время
+         и выграйте уровень."
 
     def result : string = "Счет:"
     def best : string = "Ваш лучший:"

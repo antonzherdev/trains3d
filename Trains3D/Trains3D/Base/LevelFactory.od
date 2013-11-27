@@ -33,18 +33,19 @@ class LevelFactory {
     private static val rules = [
         //1
         LevelRules(vec2i(5, 3), LevelTheme.forest, scoreRulesWith(20000),
-            WeatherRules(sunny = 1.0, windStrength = 0.3, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3, nil),
+            WeatherRules(sunny = 1.0, windStrength = 0.2, blastness = 0.05, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3, nil),
             repairerSpeed = 20, [
                 (0, create2Cities),
                 (1, showHelp(Loc.helpConnectTwoCities)),
                 (1, if(egInterfaceIdiom == InterfaceIdiom.phone) showHelp(Loc.helpToMakeZoom) else nil),
                 (30, train(cars = 2, speed = 30)),
-                (Level.trainComingPeriod + 3, showTrainHelp),
-                (40, createNewCity),
+                (Level.trainComingPeriod + 7, showTrainHelp),
+                (36, createNewCity),
                 (1, showHelp(Loc.helpNewCity)),
                 (20, train(cars = 1, speed = 20)),
                 (Level.trainComingPeriod + 3, showTrainHelpWithSwitches),
-                (50, train(cars = 3, speed = 30))
+                (50, train(cars = 3, speed = 30)),
+                (1, showHelp(Loc.helpRules))
         ]),
 
         //2
