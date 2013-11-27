@@ -12,6 +12,7 @@
 #import "TRLevelChooseMenu.h"
 #import "TRLevelFactory.h"
 #import "EGEMail.h"
+#import "EGRate.h"
 @implementation TRGameDirector{
     DTLocalKeyValueStorage* _local;
     id(^_resolveMaxLevel)(id, id);
@@ -157,6 +158,15 @@ static ODClassType* _TRGameDirector_type;
 
 - (void)showSupport {
     [EGEMail.instance showInterfaceTo:@"support@raildale.com"];
+}
+
+- (BOOL)isNeedRate {
+    return [self maxAvailableLevel] > 4 && !([EGRate.instance isRatedThisVersion]);
+}
+
+- (void)showRate {
+    [EGRate.instance showRate];
+    [[EGDirector current] redraw];
 }
 
 - (ODClassType*)type {

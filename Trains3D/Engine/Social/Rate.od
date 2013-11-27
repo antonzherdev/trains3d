@@ -1,0 +1,9 @@
+package com.antonzherdev.eg
+
+stub class Rate {
+    static val instance = Rate()
+
+    def isRated : bool
+    def isRatedThisVersion : bool
+    def showRate
+}

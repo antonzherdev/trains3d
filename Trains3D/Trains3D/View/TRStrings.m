@@ -127,6 +127,10 @@ static ODClassType* _TREnStrings_type;
     return @"beige";
 }
 
+- (NSString*)rate {
+    return @"Rate it";
+}
+
 - (NSString*)helpConnectTwoCities {
     return [NSString stringWithFormat:@"Connect two cities by rails.\n"
         "%@", ((egPlatform().touch) ? @"Simply paint rails by your finger." : @"Use mouse or\n"
@@ -423,6 +427,10 @@ static ODClassType* _TRRuStrings_type;
     return @"Не позволяйте балансу опускаться ниже нуля.\n"
         "Продержитесь с положительным балансов отведенное время\n"
         "и выграйте уровень.";
+}
+
+- (NSString*)rate {
+    return @"Оценить игру";
 }
 
 - (NSString*)result {

@@ -262,6 +262,17 @@ static ODClassType* _TRMenuView_type;
 }
 
 - (void)draw {
+    CGFloat s = EGGlobal.context.scale;
+    CGFloat width = [self columnWidth] * s;
+    CGFloat delta = 50 * s;
+    CGFloat height = delta * [[self buttons] count];
+    _size = GEVec2Make(((float)(width)), ((float)(height + [self headerHeight] * s)));
+    _position = geRectMoveToCenterForSize(geRectApplyXYSize(0.0, 0.0, _size), geVec2ApplyVec2i([EGGlobal.context viewport].size)).p;
+    __block GEVec2 p = geVec2AddVec2(_position, GEVec2Make(0.0, ((float)(height - delta))));
+    [[[self buttons] chain] forEach:^void(EGButton* button) {
+        ((EGButton*)(button)).rect = GERectMake(p, GEVec2Make(((float)(width)), ((float)(delta - 0.2))));
+        p = geVec2SubVec2(p, GEVec2Make(0.0, ((float)(delta))));
+    }];
     [[self buttons] forEach:^void(EGButton* _) {
         [((EGButton*)(_)) draw];
     }];
@@ -274,18 +285,7 @@ static ODClassType* _TRMenuView_type;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
-    CGFloat s = EGGlobal.context.scale;
-    CGFloat width = [self columnWidth] * s;
-    CGFloat delta = 50 * s;
-    CGFloat height = delta * [[self buttons] count];
     __font = [EGGlobal fontWithName:@"lucida_grande" size:24];
-    _size = GEVec2Make(((float)(width)), ((float)(height + [self headerHeight] * s)));
-    _position = geRectMoveToCenterForSize(geRectApplyXYSize(0.0, 0.0, _size), viewport.size).p;
-    __block GEVec2 p = geVec2AddVec2(_position, GEVec2Make(0.0, ((float)(height - delta))));
-    [[[self buttons] chain] forEach:^void(EGButton* button) {
-        ((EGButton*)(button)).rect = GERectMake(p, GEVec2Make(((float)(width)), ((float)(delta - 0.2))));
-        p = geVec2SubVec2(p, GEVec2Make(0.0, ((float)(delta))));
-    }];
     [self reshape];
 }
 
@@ -405,11 +405,11 @@ static ODClassType* _TRPauseMenuView_type;
 
 @implementation TRWinMenu{
     TRLevel* _level;
+    EGButton* _rateButton;
     EGButton* _nextButton;
     EGButton* _leaderboardButton;
     EGButton* _restartButton;
     EGButton* _chooseLevelButton;
-    id<CNSeq> _buttons;
     id __score;
     CNNotificationObserver* _obs;
     EGText* _headerText;
@@ -421,7 +421,6 @@ static ODClassType* _TRPauseMenuView_type;
 }
 static ODClassType* _TRWinMenu_type;
 @synthesize level = _level;
-@synthesize buttons = _buttons;
 @synthesize _score = __score;
 
 + (id)winMenuWithLevel:(TRLevel*)level {
@@ -433,6 +432,9 @@ static ODClassType* _TRWinMenu_type;
     __weak TRWinMenu* _weakSelf = self;
     if(self) {
         _level = level;
+        _rateButton = [self buttonText:[TRStr.Loc rate] onClick:^void() {
+            [TRGameDirector.instance showRate];
+        }];
         _nextButton = [self buttonText:[TRStr.Loc goToNextLevel:_level] onClick:^void() {
             [TRGameDirector.instance nextLevel];
         }];
@@ -445,7 +447,6 @@ static ODClassType* _TRWinMenu_type;
         _chooseLevelButton = [self buttonText:[TRStr.Loc chooseLevel] onClick:^void() {
             [TRGameDirector.instance chooseLevel];
         }];
-        _buttons = (@[_nextButton, _leaderboardButton, _restartButton, _chooseLevelButton]);
         __score = [CNOption none];
         _obs = [TRGameDirector.playerScoreRetrieveNotification observeBy:^void(EGLocalPlayerScore* score) {
             _weakSelf._score = [CNOption applyValue:score];
@@ -465,6 +466,11 @@ static ODClassType* _TRWinMenu_type;
 + (void)initialize {
     [super initialize];
     _TRWinMenu_type = [ODClassType classTypeWithCls:[TRWinMenu class]];
+}
+
+- (id<CNSeq>)buttons {
+    if([TRGameDirector.instance isNeedRate]) return (@[_rateButton, _nextButton, _leaderboardButton, _restartButton, _chooseLevelButton]);
+    else return (@[_nextButton, _leaderboardButton, _restartButton, _chooseLevelButton]);
 }
 
 - (CGFloat)headerHeight {

@@ -13,6 +13,7 @@
 @class TRLevelChooseMenu;
 @class TRLevelFactory;
 @class EGEMail;
+@class EGRate;
 
 @class TRGameDirector;
 
@@ -37,6 +38,8 @@
 - (void)showLeaderboardLevel:(TRLevel*)level;
 - (void)synchronize;
 - (void)showSupport;
+- (BOOL)isNeedRate;
+- (void)showRate;
 + (TRGameDirector*)instance;
 + (CNNotificationHandle*)playerScoreRetrieveNotification;
 + (ODClassType*)type;

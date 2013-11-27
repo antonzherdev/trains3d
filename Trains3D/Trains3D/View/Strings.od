@@ -34,6 +34,7 @@ trait Strings {
     def moneyOver : string
     def result : string
     def best : string
+    def rate : string
     def top(score : LocalPlayerScore) : string
     def leaderboard : string
     def supportButton : string
@@ -85,6 +86,7 @@ class EnStrings extends Strings {
     def colorMint : string = "mint"
     def colorRed : string = "red"
     def colorBeige : string = "beige"
+    def rate : string = "Rate it"
 
     def helpConnectTwoCities : string =
        "Connect two cities by rails.
@@ -196,6 +198,7 @@ class RuStrings extends Strings{
          Продержитесь с положительным балансов отведенное время
          и выграйте уровень."
 
+    def rate : string = "Оценить игру"
     def result : string = "Счет:"
     def best : string = "Ваш лучший:"
     def top(score : LocalPlayerScore) : string =

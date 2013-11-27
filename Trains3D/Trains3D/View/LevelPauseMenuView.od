@@ -66,6 +66,20 @@ class MenuView extends PauseView {
     def tap(event : Event) : bool = buttons.exists(_.tap(event))
 
     def draw {
+        val s = context.scale
+        val width = columnWidth*s
+        val delta = 50*s
+        val height = delta*buttons.count
+
+        size = vec2(width, height + headerHeight*s)
+        position = Rect(0, 0, size).moveToCenterFor(context.viewport.size).p
+        var p = position + vec2(0, height - delta)
+
+        buttons.chain.for{button ->
+            button.rect = Rect(p, vec2(width, delta - 0.2))
+            p = p - vec2(0, delta)
+        }
+
         buttons.for(_.draw)
         val hh = headerHeight * context.scale
         if(hh > 0) {
@@ -80,20 +94,8 @@ class MenuView extends PauseView {
     private var position : vec2
     private var size : vec2
     def reshapeWith(viewport : Rect) {
-        val s = context.scale
-        val width = columnWidth*s
-        val delta = 50*s
-        val height = delta*buttons.count
         _font = fontWith(name = "lucida_grande", size = 24)
 
-        size = vec2(width, height + headerHeight*s)
-        position = Rect(0, 0, size).moveToCenterFor(viewport.size).p
-        var p = position + vec2(0, height - delta)
-
-        buttons.chain.for{button ->
-            button.rect = Rect(p, vec2(width, delta - 0.2))
-            p = p - vec2(0, delta)
-        }
         reshape
     }
     def reshape{}
@@ -112,11 +114,14 @@ class PauseMenuView(level : Level) extends MenuView  {
 }
 
 class WinMenu(level : Level) extends MenuView {
+    private val rateButton = button(Loc.rate, GameDirector.instance.showRate)
     private val nextButton = button(Loc.goToNext(level), GameDirector.instance.nextLevel)
     private val leaderboardButton = button(Loc.leaderboard, GameDirector.instance.showLeaderboard(level))
     private val restartButton = button(Loc.replay(level), GameDirector.instance.restartLevel)
     private val chooseLevelButton = button(Loc.chooseLevel, GameDirector.instance.chooseLevel)
-    val buttons = [nextButton, leaderboardButton, restartButton, chooseLevelButton]
+    def buttons =
+        if(GameDirector.instance.isNeedRate) [rateButton, nextButton, leaderboardButton, restartButton, chooseLevelButton]
+        else [nextButton, leaderboardButton, restartButton, chooseLevelButton]
 
     def headerHeight = 100.0
     def drawHeader(rect : Rect) {

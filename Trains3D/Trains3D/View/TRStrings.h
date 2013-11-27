@@ -30,6 +30,7 @@
 - (NSString*)moneyOver;
 - (NSString*)result;
 - (NSString*)best;
+- (NSString*)rate;
 - (NSString*)topScore:(EGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
 - (NSString*)supportButton;
@@ -82,6 +83,7 @@
 - (NSString*)colorMint;
 - (NSString*)colorRed;
 - (NSString*)colorBeige;
+- (NSString*)rate;
 - (NSString*)helpConnectTwoCities;
 - (NSString*)helpRules;
 - (NSString*)helpNewCity;
@@ -135,6 +137,7 @@
 - (NSString*)helpExpressTrain;
 - (NSString*)helpToMakeZoom;
 - (NSString*)helpRules;
+- (NSString*)rate;
 - (NSString*)result;
 - (NSString*)best;
 - (NSString*)topScore:(EGLocalPlayerScore*)score;

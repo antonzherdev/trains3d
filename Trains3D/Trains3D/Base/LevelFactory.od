@@ -52,9 +52,9 @@ class LevelFactory {
         LevelRules(vec2i(5, 3), LevelTheme.forest, scoreRulesWith(20000),
             WeatherRules(sunny = 1.0, windStrength = 0.3, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3, nil),
             repairerSpeed = 20, [
-                (0, create2Cities), (20, slowTrain),
-                (30, createNewCity), (20, slowTrain), (30, slowTrain),
-                (10, createNewCity), (20, slowTrain), (10, slowTrain)
+                (0, create2Cities)//, (20, slowTrain),
+//                (30, createNewCity), (20, slowTrain), (30, slowTrain),
+//                (10, createNewCity), (20, slowTrain), (10, slowTrain)
             ]),
         //3
         LevelRules(vec2i(5, 3), LevelTheme.forest, scoreRulesWith(30000),

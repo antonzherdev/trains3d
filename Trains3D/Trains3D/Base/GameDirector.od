@@ -105,4 +105,10 @@ class GameDirector {
     def showSupport {
         EMail.instance.showInterface(to = "support@raildale.com")
     }
+
+    def isNeedRate : bool = maxAvailableLevel > 4 && !Rate.instance.isRatedThisVersion
+    def showRate {
+        Rate.instance.showRate
+        Director.current.redraw
+    }
 }
