@@ -207,7 +207,8 @@ static ODClassType* _TRPauseView_type;
 
 @implementation TRMenuView{
     EGFont* __font;
-    EGSprite* _menuBackSprite;
+    GEVec2 _position;
+    GEVec2 _size;
 }
 static ODClassType* _TRMenuView_type;
 
@@ -217,7 +218,6 @@ static ODClassType* _TRMenuView_type;
 
 - (id)init {
     self = [super init];
-    if(self) _menuBackSprite = [EGSprite applyMaterial:[EGColorSource applyColor:GEVec4Make(0.9, 0.9, 0.9, 1.0)] rect:geRectApplyXYWidthHeight(0.0, 0.0, 350.0, 150.0)];
     
     return self;
 }
@@ -234,7 +234,7 @@ static ODClassType* _TRMenuView_type;
 - (EGButton*)buttonText:(NSString*)text onClick:(void(^)())onClick {
     __weak TRMenuView* weakSelf = self;
     return [EGButton buttonWithOnDraw:^id() {
-        void(^__l)(GERect) = [self drawLine];
+        void(^__l)(GERect) = [self drawBack];
         void(^__r)(GERect) = [EGButton drawTextFont:^EGFont*() {
             return [weakSelf font];
         } color:GEVec4Make(0.0, 0.0, 0.0, 1.0) text:text];
@@ -245,9 +245,9 @@ static ODClassType* _TRMenuView_type;
     }() onClick:onClick];
 }
 
-- (void(^)(GERect))drawLine {
+- (void(^)(GERect))drawBack {
     return ^void(GERect rect) {
-        [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.3, 0.3, 0.3, 1.0)] p0:geRectPh(rect) p1:geRectPhw(rect)];
+        [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)] at:GEVec3Make(0.0, 0.0, 0.0) rect:rect];
     };
 }
 
@@ -262,12 +262,11 @@ static ODClassType* _TRMenuView_type;
 }
 
 - (void)draw {
-    [_menuBackSprite draw];
     [[self buttons] forEach:^void(EGButton* _) {
         [((EGButton*)(_)) draw];
     }];
     CGFloat hh = [self headerHeight] * EGGlobal.context.scale;
-    if(hh > 0) [self drawHeaderRect:GERectMake(geVec2AddVec2([_menuBackSprite position], GEVec2Make(0.0, [_menuBackSprite size].y - hh)), GEVec2Make([_menuBackSprite size].x, ((float)(hh))))];
+    if(hh > 0) [self drawHeaderRect:GERectMake(geVec2AddVec2(_position, GEVec2Make(0.0, _size.y - hh)), GEVec2Make(_size.x, ((float)(hh))))];
 }
 
 - (CGFloat)headerHeight {
@@ -280,11 +279,11 @@ static ODClassType* _TRMenuView_type;
     CGFloat delta = 50 * s;
     CGFloat height = delta * [[self buttons] count];
     __font = [EGGlobal fontWithName:@"lucida_grande" size:24];
-    [_menuBackSprite setSize:GEVec2Make(((float)(width)), ((float)(height + [self headerHeight] * s)))];
-    [_menuBackSprite setPosition:geRectMoveToCenterForSize([_menuBackSprite rect], viewport.size).p];
-    __block GEVec2 p = geVec2AddVec2([_menuBackSprite position], GEVec2Make(0.0, ((float)(height - delta))));
+    _size = GEVec2Make(((float)(width)), ((float)(height + [self headerHeight] * s)));
+    _position = geRectMoveToCenterForSize(geRectApplyXYSize(0.0, 0.0, _size), viewport.size).p;
+    __block GEVec2 p = geVec2AddVec2(_position, GEVec2Make(0.0, ((float)(height - delta))));
     [[[self buttons] chain] forEach:^void(EGButton* button) {
-        ((EGButton*)(button)).rect = GERectMake(p, GEVec2Make(((float)(width)), ((float)(delta))));
+        ((EGButton*)(button)).rect = GERectMake(p, GEVec2Make(((float)(width)), ((float)(delta - 0.2))));
         p = geVec2SubVec2(p, GEVec2Make(0.0, ((float)(delta))));
     }];
     [self reshape];
@@ -310,16 +309,6 @@ static ODClassType* _TRMenuView_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {

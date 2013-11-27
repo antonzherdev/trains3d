@@ -55,30 +55,30 @@ class MenuView extends PauseView {
     def font = _font
     def button(text : string, onClick : () -> void) : Button = {
         weak val weakSelf = self
-        Button(drawLine *|* Button.drawText(weakSelf.font, vec4(0, 0, 0, 1), text), onClick)
+        Button(drawBack *|* Button.drawText(weakSelf.font, vec4(0, 0, 0, 1), text), onClick)
     }
 
-    def drawLine : Rect -> void = (rect : Rect) ->
-        D2D.drawLine(vec4(0.3, 0.3, 0.3, 1), rect.ph, rect.phw)
+    def drawBack : Rect -> void = (rect : Rect) ->
+        D2D.drawSprite(vec4(1, 1, 1, 0.9), vec3(0, 0, 0), rect)
 
     def buttons : [Button]
 
     def tap(event : Event) : bool = buttons.exists(_.tap(event))
 
     def draw {
-        menuBackSprite.draw
         buttons.for(_.draw)
         val hh = headerHeight * context.scale
         if(hh > 0) {
             drawHeader(Rect(
-                menuBackSprite.position + vec2(0, menuBackSprite.size.y - hh),
-                vec2(menuBackSprite.size.x, hh)))
+                position + vec2(0, size.y - hh),
+                vec2(size.x, hh)))
         }
     }
 
-    private val menuBackSprite = Sprite(vec4(0.9, 0.9, 0.9, 1.0), Rect(0, 0, 350, 150))
     def headerHeight : float = 0.0
 
+    private var position : vec2
+    private var size : vec2
     def reshapeWith(viewport : Rect) {
         val s = context.scale
         val width = columnWidth*s
@@ -86,12 +86,12 @@ class MenuView extends PauseView {
         val height = delta*buttons.count
         _font = fontWith(name = "lucida_grande", size = 24)
 
-        menuBackSprite.size = vec2(width, height + headerHeight*s)
-        menuBackSprite.position = menuBackSprite.rect.moveToCenterFor(viewport.size).p
-        var p = menuBackSprite.position + vec2(0, height - delta)
+        size = vec2(width, height + headerHeight*s)
+        position = Rect(0, 0, size).moveToCenterFor(viewport.size).p
+        var p = position + vec2(0, height - delta)
 
         buttons.chain.for{button ->
-            button.rect = Rect(p, vec2(width, delta))
+            button.rect = Rect(p, vec2(width, delta - 0.2))
             p = p - vec2(0, delta)
         }
         reshape

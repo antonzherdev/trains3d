@@ -14,7 +14,6 @@
 @class EGD2D;
 @class EGEnablingState;
 @class EGEnvironment;
-@class EGSprite;
 @class EGButton;
 @class TRStr;
 @protocol TRStrings;
@@ -22,6 +21,7 @@
 @class TRLevelChooseMenu;
 @class TRScore;
 @class EGLocalPlayerScore;
+@class EGSprite;
 @class TRLevelMenuView;
 @class TRHelp;
 
@@ -69,7 +69,7 @@
 - (ODClassType*)type;
 - (EGFont*)font;
 - (EGButton*)buttonText:(NSString*)text onClick:(void(^)())onClick;
-- (void(^)(GERect))drawLine;
+- (void(^)(GERect))drawBack;
 - (id<CNSeq>)buttons;
 - (BOOL)tapEvent:(id<EGEvent>)event;
 - (void)draw;
