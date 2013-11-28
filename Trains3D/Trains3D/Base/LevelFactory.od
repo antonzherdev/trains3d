@@ -27,6 +27,7 @@ class LevelFactory {
     }
     private static def createCityWith(tile : vec2i, direction : CityAngle) : Level -> void = (level : Level) ->
         level.createCityWith(tile, direction)
+    private static def lightRain = Precipitation(PrecipitationType.rain, 0.5)
     private static def rain = Precipitation(PrecipitationType.rain, 1)
     private static def snow = Precipitation(PrecipitationType.snow, 1)
 
@@ -50,15 +51,15 @@ class LevelFactory {
 
         //2
         LevelRules(vec2i(5, 3), LevelTheme.forest, scoreRulesWith(20000),
-            WeatherRules(sunny = 1.0, windStrength = 0.3, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3, nil),
+            WeatherRules(sunny = 1.0, windStrength = 0.2, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3, nil),
             repairerSpeed = 20, [
-                (0, create2Cities)//, (20, slowTrain),
-//                (30, createNewCity), (20, slowTrain), (30, slowTrain),
-//                (10, createNewCity), (20, slowTrain), (10, slowTrain)
+                (0, create2Cities), (20, slowTrain),
+                (30, createNewCity), (20, slowTrain), (30, slowTrain),
+                (10, createNewCity), (20, slowTrain), (10, slowTrain)
             ]),
         //3
         LevelRules(vec2i(5, 3), LevelTheme.forest, scoreRulesWith(30000),
-            WeatherRules(sunny = 0.0, windStrength = 0.3, blastness = 0.3, blastMinLength = 1, blastMaxLength = 5, blastStrength = 0.6, rain),
+            WeatherRules(sunny = 0.0, windStrength = 0.3, blastness = 0.3, blastMinLength = 1, blastMaxLength = 5, blastStrength = 0.6, lightRain),
             repairerSpeed = 20, [
                 (0, create2Cities), (20, slowTrain), (30, slowTrain), (30, slowTrain),
                 (10, createNewCity), (20, slowTrain), (30, slowTrain), (30, slowTrain),
@@ -88,7 +89,7 @@ class LevelFactory {
                 (40, slowTrain), (10, slowTrain), (25, slowTrain), (10, slowTrain), (20, slowTrain)
         ])    ,
         //5
-        LevelRules(vec2i(5, 5), LevelTheme.winter, scoreRulesWith(60000),
+        LevelRules(vec2i(5, 5), LevelTheme.forest, scoreRulesWith(60000),
             WeatherRules(sunny = 1.0, windStrength = 0.3, blastness = 0.05, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.1, nil),
             repairerSpeed = 20, [
             (0, create2Cities), (10, slowTrain), (17, slowTrain), (30, slowTrain), (15, slowTrain),
@@ -106,7 +107,7 @@ class LevelFactory {
 
         //6
         LevelRules(vec2i(5, 5), LevelTheme.winter, scoreRulesWith(60000),
-        WeatherRules(sunny = 0.0, windStrength = 0.3, blastness = 0.3, blastMinLength = 1, blastMaxLength = 5, blastStrength = 0.6, snow),
+            WeatherRules(sunny = 1.0, windStrength = 0.3, blastness = 0.05, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.1, nil),
             repairerSpeed = 20, [
             (0, create2Cities), (10, train), (17, train), (30, train), (15, train),
             (10, createNewCity), (15, train), (25, train), (25, train),
@@ -118,29 +119,64 @@ class LevelFactory {
             (40, train), (5, train), (15, train), (25, train),
             (40, train), (5, train), (25, train), (10, train),
             (50, train), (20, train), (10, train), (5, train),
-            (60, train), (20, train), (25, train), (20, train), (15, expressTrain),
-            (Level.trainComingPeriod + 3, showHelp(Loc.helpExpressTrain))
+            (60, train), (20, train), (25, train), (20, train)
         ]),
         //7
-        LevelRules(vec2i(5, 5), LevelTheme.leafForest, scoreRulesWith(60000),
-        WeatherRules(sunny = 1.0, windStrength = 0.3, blastness = 0.05, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.1, nil),
-        repairerSpeed = 20, [
-            (0, create2Cities), (10, train), (17, expressTrain), (30, train), (15, train),
-            (10, createNewCity), (15, train), (25, train), (25, train),
-            (10, createNewCity), (20, train), (25, train), (25, expressTrain), (20, train), (25, train),
-            (10, createNewCity), (15, train), (22, train), (20, train),
-            (40, expressTrain), (10, train), (15, train),
-            (40, train), (10, train), (15, train), (25, expressTrain),
-            (10, createNewCity), (20, train), (10, train), (25, train),
-            (40, train), (5, train), (15, train), (25, train),
-            (40, train), (5, train), (25, expressTrain), (10, train),
-            (50, train), (20, train), (10, train), (5, train),
-            (60, train), (20, expressTrain), (25, train), (20, expressTrain), (15, train)
+        LevelRules(vec2i(5, 5), LevelTheme.winter, scoreRulesWith(60000),
+            WeatherRules(sunny = 1.0, windStrength = 0.3, blastness = 0.05, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.1, nil),
+            repairerSpeed = 20, [
+            (0, create2Cities), (10, train), (15, train),
+            (10, createNewCity), (13, train), (23, train), (23, train),
+            (10, createNewCity), (15, train), (15, verySlowTrain), (10, train), (30, train), (10, train),
+            (10, createNewCity), (13, train), (15, train), (10, train),
+            (40, verySlowTrain), (10, train), (15, train),
+            (40, train), (5, train), (15, train), (25, verySlowTrain),
+            (10, createNewCity), (20, train), (10, train), (15, train),
+            (40, train), (5, train), (12, train), (20, train),
+            (40, train), (5, train), (22, verySlowTrain), (10, train),
+            (50, verySlowTrain), (18, train), (10, train), (5, train),
+            (60, train), (15, train), (15, train), (20, train), (15, expressTrain),
+            (Level.trainComingPeriod + 3, showHelp(Loc.helpExpressTrain))
         ]),
         //8
-        LevelRules(vec2i(5, 5), LevelTheme.leafForest, scoreRulesWith(60000),
-            WeatherRules(sunny = 0.0, windStrength = 0.4, blastness = 0.5, blastMinLength = 1, blastMaxLength = 5, blastStrength = 0.9, rain),
+        LevelRules(vec2i(5, 5), LevelTheme.winter, scoreRulesWith(60000),
+            WeatherRules(sunny = 0.0, windStrength = 0.3, blastness = 0.3, blastMinLength = 1, blastMaxLength = 5, blastStrength = 0.6, snow),
             repairerSpeed = 20, [
+                (0, create2Cities), (10, train), (17, train), (20, train),
+                (10, createNewCity), (10, train), (15, train), (20, train),
+                (10, createNewCity), (20, train), (25, train), (25, expressTrain), (20, train), (25, train),
+                (10, createNewCity), (15, train), (22, train), (20, train),
+                (40, expressTrain), (10, train), (15, train),
+                (40, train), (10, train), (15, train), (22, expressTrain),
+                (10, createNewCity), (20, verySlowTrain), (10, train), (20, train),
+                (40, train), (5, train), (12, train), (22, train),
+                (40, verySlowTrain), (5, train), (25, expressTrain), (10, train),
+                (50, train), (0, verySlowTrain), (10, train), (5, train),
+                (50, train), (0, expressTrain), (10, train), (10, train), (10, train),
+                (60, train), (20, expressTrain), (25, train), (20, expressTrain), (15, train)
+            ]),
+        //9
+        LevelRules(vec2i(5, 5), LevelTheme.leafForest, scoreRulesWith(60000),
+            WeatherRules(sunny = 1.0, windStrength = 0.1, blastness = 0.05, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.05, nil),
+            repairerSpeed = 20, [
+                (0, create2Cities), (10, expressTrain), (10, train), (20, train),
+                (10, createNewCity), (15, train), (20, expressTrain), (20, train), (20, train),
+                (10, createNewCity), (10, expressTrain), (20, train), (22, train), (20, train), (20, train),
+                (10, createNewCity), (15, train), (15, train), (15, train),
+                (40, expressTrain), (10, verySlowTrain), (15, train), (10, train),
+                (40, train), (12, expressTrain), (15, train), (25, train),
+                (10, createNewCity), (20, train), (15, expressTrain), (20, train),
+                (40, train), (15, train), (25, expressTrain), (15, train),
+                (40, train), (15, train), (20, expressTrain), (10, verySlowTrain),
+                (40, expressTrain), (20, train), (10, verySlowTrain), (7, train),
+                (10, createNewCity), (10, verySlowTrain), (10, expressTrain), (10, train),
+                (40, train), (20, expressTrain), (20, train), (10, verySlowTrain), (15, train),
+                (40, train), (10, expressTrain), (20, verySlowTrain), (10, expressTrain), (10, train), (15, train)
+        ]),
+        //10
+        LevelRules(vec2i(5, 5), LevelTheme.leafForest, scoreRulesWith(60000),
+        WeatherRules(sunny = 0.0, windStrength = 0.4, blastness = 0.5, blastMinLength = 1, blastMaxLength = 5, blastStrength = 0.9, rain),
+        repairerSpeed = 20, [
             (0, create2Cities), (10, train), (17, train), (30, train), (15, expressTrain), (10, train),
             (10, createNewCity), (15, train), (20, expressTrain), (20, train), (20, train),
             (10, createNewCity), (10, train), (20, train), (20, expressTrain), (20, train), (20, train),
