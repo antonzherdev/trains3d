@@ -31,6 +31,14 @@ class GameDirector {
             playerScoreRetrieveNotification.post(score)
         }
     }
+    private val sporadicDamageHelpObs = Level.sporadicDamageNotification.observe{ level ->
+        if(cloud.intFor("help.sporadicDamage1") == 0) {
+            level.schedule.schedule(1) {
+                level.showHelp(Loc.helpSporadicDamage)
+                cloud.set("help.sporadicDamage1", 1)
+            }
+        }
+    }
 
     def bestScore(levelNumber : uint) : int = cloud.intFor("level$levelNumber.score")
 

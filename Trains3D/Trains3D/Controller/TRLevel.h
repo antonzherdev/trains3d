@@ -24,6 +24,7 @@
 @class TRSwitch;
 @class TRCarsCollision;
 @class TRCar;
+@class TRRailForm;
 @class TRTrainType;
 @class TRCityColor;
 @class TRCarType;
@@ -42,10 +43,11 @@
 @property (nonatomic, readonly) TRScoreRules* scoreRules;
 @property (nonatomic, readonly) TRWeatherRules* weatherRules;
 @property (nonatomic, readonly) NSUInteger repairerSpeed;
+@property (nonatomic, readonly) NSUInteger sporadicDamagePeriod;
 @property (nonatomic, readonly) id<CNSeq> events;
 
-+ (id)levelRulesWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
-- (id)initWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events;
++ (id)levelRulesWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNSeq>)events;
+- (id)initWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNSeq>)events;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -80,6 +82,7 @@
 - (id)cityForTile:(GEVec2i)tile;
 - (void)arrivedTrain:(TRTrain*)train;
 - (void)processCollisions;
+- (void)addSporadicDamage;
 - (id<CNSeq>)detectCollisions;
 - (void)destroyTrain:(TRTrain*)train;
 - (void)removeTrain:(TRTrain*)train;
@@ -97,6 +100,7 @@
 + (CNNotificationHandle*)expectedTrainNotification;
 + (CNNotificationHandle*)runTrainNotification;
 + (CNNotificationHandle*)crashNotification;
++ (CNNotificationHandle*)sporadicDamageNotification;
 + (CNNotificationHandle*)winNotification;
 + (ODClassType*)type;
 @end

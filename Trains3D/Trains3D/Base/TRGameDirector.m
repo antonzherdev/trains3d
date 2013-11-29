@@ -5,6 +5,8 @@
 #import "TRLevel.h"
 #import "TRScore.h"
 #import "EGGameCenterPlat.h"
+#import "TRStrings.h"
+#import "EGSchedule.h"
 #import "EGGameCenter.h"
 #import "EGDirector.h"
 #import "TRSceneFactory.h"
@@ -18,6 +20,7 @@
     id(^_resolveMaxLevel)(id, id);
     DTCloudKeyValueStorage* _cloud;
     CNNotificationObserver* _obs;
+    CNNotificationObserver* _sporadicDamageHelpObs;
     CNNotificationObserver* _crashObs;
 }
 static TRGameDirector* _TRGameDirector_instance;
@@ -58,6 +61,12 @@ static ODClassType* _TRGameDirector_type;
             [_weakSelf.cloud keepMaxKey:[NSString stringWithFormat:@"level%lu.score", (unsigned long)n] i:[((TRLevel*)(level)).score score]];
             [EGGameCenter.instance reportScoreLeaderboard:leaderboard value:((long)(s)) completed:^void(EGLocalPlayerScore* score) {
                 [[TRGameDirector playerScoreRetrieveNotification] postData:score];
+            }];
+        }];
+        _sporadicDamageHelpObs = [TRLevel.sporadicDamageNotification observeBy:^void(TRLevel* level) {
+            if([_weakSelf.cloud intForKey:@"help.sporadicDamage1"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:1.0 event:^void() {
+                [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpSporadicDamage]];
+                [_weakSelf.cloud setKey:@"help.sporadicDamage1" i:1];
             }];
         }];
         _crashObs = [TRLevel.crashNotification observeBy:^void(id _) {

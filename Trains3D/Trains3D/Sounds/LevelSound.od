@@ -7,6 +7,7 @@ class LevelSound(level : Level) extends SoundPlayersCollection([
     NotificationSoundPlayer(Sound("CrashBack.wav", 0.7), Level.crashNotification),
     CollisionSound("Crash1", TrainsDynamicWorld.carsCollisionNotification, 0.5, 1.0),
     CollisionSound("GroundCrash1", TrainsDynamicWorld.carAndGroundCollisionNotification, 0.3, 0.7),
+    NotificationSoundPlayer(Sound("SporadicDamage.wav", 0.15), Level.sporadicDamageNotification),
     NotificationSoundPlayer(Sound("TrainPreparing.wav", 0.2), Level.expectedTrainNotification),
     NotificationSoundPlayer(Sound("TrainRun.wav", 0.1), Level.prepareToRunTrainNotification),
     NotificationSoundPlayer(Sound("CityBuild.wav", 0.15), Level.buildCityNotification, _ -> level.cities.count > 2),

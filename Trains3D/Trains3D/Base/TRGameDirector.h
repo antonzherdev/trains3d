@@ -5,6 +5,9 @@
 @class TRLevel;
 @class TRScore;
 @class EGGameCenter;
+@class TRStr;
+@protocol TRStrings;
+@class EGSchedule;
 @class EGLocalPlayerScore;
 @class EGDirector;
 @class TRSceneFactory;

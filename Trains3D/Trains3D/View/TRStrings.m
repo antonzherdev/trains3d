@@ -170,6 +170,10 @@ static ODClassType* _TREnStrings_type;
         "And one finger for railway building.";
 }
 
+- (NSString*)helpSporadicDamage {
+    return @"Sometimes rails could be broken in itself.";
+}
+
 - (NSString*)result {
     return @"Score:";
 }
@@ -427,6 +431,10 @@ static ODClassType* _TRRuStrings_type;
     return @"Не позволяйте балансу опускаться ниже нуля.\n"
         "Продержитесь с положительным балансов отведенное время\n"
         "и выграйте уровень.";
+}
+
+- (NSString*)helpSporadicDamage {
+    return @"Иногда рельсы могут ломаться сами по себе.";
 }
 
 - (NSString*)rate {

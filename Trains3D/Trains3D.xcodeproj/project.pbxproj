@@ -135,6 +135,7 @@
 		6F3DF1AE6BF294FD79AFD3CC /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFCFF331A1B21BBD63CB2 /* Localizable.strings */; };
 		6F3DF1B5B45B998F80774411 /* Collection.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF272640E3F86B31E1626 /* Collection.od */; };
 		6F3DF1B78403036405259233 /* KWExampleSuite.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF05612621A3BF235D2F1 /* KWExampleSuite.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		6F3DF1C5C5C1028A13790F4B /* SporadicDamage.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF326832A25F371D5807A /* SporadicDamage.wav */; };
 		6F3DF1C6B0FCABE8793611D8 /* lang.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFDF510F6753ECD1CAE5C /* lang.od */; };
 		6F3DF1C6CA909167F79E8646 /* btScaledBvhTriangleMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0B5CDE0ED7F04E617FD /* btScaledBvhTriangleMeshShape.cpp */; };
 		6F3DF1C84599D63739A3E41F /* btConvex2dConvex2dAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0B1447586509089CC78 /* btConvex2dConvex2dAlgorithm.cpp */; };
@@ -575,6 +576,7 @@
 		6F3DF7BF8F59CE5B4D9A02E6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF197D63F1E8E0BE4A603 /* Localizable.strings */; };
 		6F3DF7C904B941FC873BEAB1 /* String.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFB096294C0FB834CFB34 /* String.od */; };
 		6F3DF7CAE7093F74F567C426 /* TRSnowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF6DBC752802082A65B74 /* TRSnowView.m */; };
+		6F3DF7CD9F97EF22CEBE4933 /* SporadicDamage.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF326832A25F371D5807A /* SporadicDamage.wav */; };
 		6F3DF7CDCA405A16821E85F7 /* Lazy.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF835F81FFE0C7D97DC7A /* Lazy.od */; };
 		6F3DF7D1205DA6DBE29863DB /* List.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFCE384E5B53BDB8B17A9 /* List.od */; };
 		6F3DF7D2DAF5436BEC789360 /* TRRailroadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8C0B11253A7DE39B3B7 /* TRRailroadView.m */; };
@@ -1499,6 +1501,7 @@
 		6F3DF316F0EF5CABB081661E /* btGhostObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btGhostObject.h; sourceTree = "<group>"; };
 		6F3DF31DE3CB3DB50438682A /* compatibility.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = compatibility.inl; sourceTree = "<group>"; };
 		6F3DF325F3ACABFBC1A00042 /* matrix_transform.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = matrix_transform.hpp; sourceTree = "<group>"; };
+		6F3DF326832A25F371D5807A /* SporadicDamage.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = SporadicDamage.wav; sourceTree = "<group>"; };
 		6F3DF32D92F8F4C5C0FFDD4D /* CNYield.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNYield.h; sourceTree = "<group>"; };
 		6F3DF33077040522DF03AB06 /* KWUserDefinedMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWUserDefinedMatcher.m; sourceTree = "<group>"; };
 		6F3DF337E5B98301621C522F /* symbols.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = symbols.txt; sourceTree = "<group>"; };
@@ -4405,6 +4408,7 @@
 				6F3DFAD56817A97870213C60 /* Crash1.wav */,
 				6F3DFBAD91659209AE0E0D4E /* GroundCrash1.wav */,
 				6F3DF051957CCF356028DFA7 /* CrashBack.wav */,
+				6F3DF326832A25F371D5807A /* SporadicDamage.wav */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -5107,6 +5111,7 @@
 				6F3DFA935F4523ABA9495F8B /* Localizable.strings in Resources */,
 				6F3DF5E6EA4F50CA1C245FE6 /* Localizable.strings in Resources */,
 				6F3DFE23141737FC5C676A4B /* Localizable.strings in Resources */,
+				6F3DF7CD9F97EF22CEBE4933 /* SporadicDamage.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5264,6 +5269,7 @@
 				6F3DF0B664FD7713575F585D /* Localizable.strings in Resources */,
 				6F3DF423A4B67127E30EDA41 /* Localizable.strings in Resources */,
 				6F3DF603BF995E2ED4F65C9B /* Localizable.strings in Resources */,
+				6F3DF1C5C5C1028A13790F4B /* SporadicDamage.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

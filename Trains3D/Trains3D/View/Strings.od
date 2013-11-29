@@ -52,6 +52,7 @@ trait Strings {
     def helpConnectTwoCities : string
     def helpRules : string
     def helpNewCity : string
+    def helpSporadicDamage : string
     def helpExpressTrain : string
     def helpTrain(to : string) : string
     def helpTrainWithSwitches(to : string) : string
@@ -117,6 +118,8 @@ class EnStrings extends Strings {
         "You can change scale using pinch gesture.
          Use two fingers for scrolling.
          And one finger for railway building."
+    def helpSporadicDamage : string =
+        "Sometimes rails could be broken in itself."
 
     def result : string = "Score:"
     def best : string = "Your best:"
@@ -197,6 +200,8 @@ class RuStrings extends Strings{
         "Не позволяйте балансу опускаться ниже нуля.
          Продержитесь с положительным балансов отведенное время
          и выграйте уровень."
+    def helpSporadicDamage : string =
+        "Иногда рельсы могут ломаться сами по себе."
 
     def rate : string = "Оценить игру"
     def result : string = "Счет:"

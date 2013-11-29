@@ -3,7 +3,7 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 
 class LevelRules(mapSize : vec2i, theme : LevelTheme, scoreRules : ScoreRules, weatherRules : WeatherRules,
-    repairerSpeed : uint, events : [(float, (Level) -> void)])
+    repairerSpeed : uint, sporadicDamagePeriod : uint, events : [(float, (Level) -> void)])
 
 class Level(number : uint, rules : LevelRules) extends Controller {
     static val trainComingPeriod = 10
@@ -30,7 +30,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     private var _dyingTrains = MutableArray<Train>()
     def dyingTrains : [Train] = _dyingTrains
 
-
+    private var _timeToNextDamage : float = Float.rnd(rules.sporadicDamagePeriod*0.75, rules.sporadicDamagePeriod*1.25)
     private def createSchedule : Schedule = {
         val schedule = Schedule()
         var time = 0.0
@@ -39,6 +39,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
             time += t.a
             schedule.schedule(after = time, event = f(self))
         })
+        log("Schedule for level $number is $time seconds")
         schedule
     }
 
@@ -130,6 +131,13 @@ class Level(number : uint, rules : LevelRules) extends Controller {
                 if(!_trains.exists(_.isIn(city.tile))) city.resumeTrainRunning
             }
         }
+        if(rules.sporadicDamagePeriod > 0) {
+            _timeToNextDamage -= delta
+            if(_timeToNextDamage <= 0) {
+                addSporadicDamage
+                _timeToNextDamage = Float.rnd(rules.sporadicDamagePeriod * 0.75, rules.sporadicDamagePeriod*1.25)
+            }
+        }
         if(score.score < 0) {
             looseCounter += delta
             if(looseCounter > 5 && !_resultSent) {
@@ -171,6 +179,14 @@ class Level(number : uint, rules : LevelRules) extends Controller {
             collision.cars.for(doDestroy(_.train))
             railroad.addDamageAt(collision.railPoint)
         })
+    }
+
+    static val sporadicDamageNotification = NotificationHandle<Level>("sporadicDamageNotification")
+    def addSporadicDamage {
+        railroad.rails.randomItem.for {rail ->
+            railroad.addDamageAt(RailPoint(rail.tile, rail.form, Float.rnd(0, rail.form.length), false))
+            sporadicDamageNotification.post(self)
+        }
     }
 
     def detectCollisions = collisionWorld.detect

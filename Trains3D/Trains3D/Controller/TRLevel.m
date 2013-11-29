@@ -18,6 +18,7 @@
     TRScoreRules* _scoreRules;
     TRWeatherRules* _weatherRules;
     NSUInteger _repairerSpeed;
+    NSUInteger _sporadicDamagePeriod;
     id<CNSeq> _events;
 }
 static ODClassType* _TRLevelRules_type;
@@ -26,13 +27,14 @@ static ODClassType* _TRLevelRules_type;
 @synthesize scoreRules = _scoreRules;
 @synthesize weatherRules = _weatherRules;
 @synthesize repairerSpeed = _repairerSpeed;
+@synthesize sporadicDamagePeriod = _sporadicDamagePeriod;
 @synthesize events = _events;
 
-+ (id)levelRulesWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
-    return [[TRLevelRules alloc] initWithMapSize:mapSize theme:theme scoreRules:scoreRules weatherRules:weatherRules repairerSpeed:repairerSpeed events:events];
++ (id)levelRulesWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNSeq>)events {
+    return [[TRLevelRules alloc] initWithMapSize:mapSize theme:theme scoreRules:scoreRules weatherRules:weatherRules repairerSpeed:repairerSpeed sporadicDamagePeriod:sporadicDamagePeriod events:events];
 }
 
-- (id)initWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed events:(id<CNSeq>)events {
+- (id)initWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNSeq>)events {
     self = [super init];
     if(self) {
         _mapSize = mapSize;
@@ -40,6 +42,7 @@ static ODClassType* _TRLevelRules_type;
         _scoreRules = scoreRules;
         _weatherRules = weatherRules;
         _repairerSpeed = repairerSpeed;
+        _sporadicDamagePeriod = sporadicDamagePeriod;
         _events = events;
     }
     
@@ -67,7 +70,7 @@ static ODClassType* _TRLevelRules_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRLevelRules* o = ((TRLevelRules*)(other));
-    return GEVec2iEq(self.mapSize, o.mapSize) && self.theme == o.theme && [self.scoreRules isEqual:o.scoreRules] && [self.weatherRules isEqual:o.weatherRules] && self.repairerSpeed == o.repairerSpeed && [self.events isEqual:o.events];
+    return GEVec2iEq(self.mapSize, o.mapSize) && self.theme == o.theme && [self.scoreRules isEqual:o.scoreRules] && [self.weatherRules isEqual:o.weatherRules] && self.repairerSpeed == o.repairerSpeed && self.sporadicDamagePeriod == o.sporadicDamagePeriod && [self.events isEqual:o.events];
 }
 
 - (NSUInteger)hash {
@@ -77,6 +80,7 @@ static ODClassType* _TRLevelRules_type;
     hash = hash * 31 + [self.scoreRules hash];
     hash = hash * 31 + [self.weatherRules hash];
     hash = hash * 31 + self.repairerSpeed;
+    hash = hash * 31 + self.sporadicDamagePeriod;
     hash = hash * 31 + [self.events hash];
     return hash;
 }
@@ -88,6 +92,7 @@ static ODClassType* _TRLevelRules_type;
     [description appendFormat:@", scoreRules=%@", self.scoreRules];
     [description appendFormat:@", weatherRules=%@", self.weatherRules];
     [description appendFormat:@", repairerSpeed=%lu", (unsigned long)self.repairerSpeed];
+    [description appendFormat:@", sporadicDamagePeriod=%lu", (unsigned long)self.sporadicDamagePeriod];
     [description appendFormat:@", events=%@", self.events];
     [description appendString:@">"];
     return description;
@@ -112,6 +117,7 @@ static ODClassType* _TRLevelRules_type;
     TRTrainsCollisionWorld* _collisionWorld;
     TRTrainsDynamicWorld* _dynamicWorld;
     NSMutableArray* __dyingTrains;
+    CGFloat __timeToNextDamage;
     CGFloat _looseCounter;
     BOOL __resultSent;
     id __help;
@@ -123,6 +129,7 @@ static CNNotificationHandle* _TRLevel_prepareToRunTrainNotification;
 static CNNotificationHandle* _TRLevel_expectedTrainNotification;
 static CNNotificationHandle* _TRLevel_runTrainNotification;
 static CNNotificationHandle* _TRLevel_crashNotification;
+static CNNotificationHandle* _TRLevel_sporadicDamageNotification;
 static CNNotificationHandle* _TRLevel_winNotification;
 static ODClassType* _TRLevel_type;
 @synthesize number = _number;
@@ -159,6 +166,7 @@ static ODClassType* _TRLevel_type;
         _collisionWorld = [TRTrainsCollisionWorld trainsCollisionWorldWithMap:_map];
         _dynamicWorld = [TRTrainsDynamicWorld trainsDynamicWorld];
         __dyingTrains = [NSMutableArray mutableArray];
+        __timeToNextDamage = odFloatRndMinMax(_rules.sporadicDamagePeriod * 0.75, _rules.sporadicDamagePeriod * 1.25);
         _looseCounter = 0.0;
         __resultSent = NO;
         __help = [CNOption none];
@@ -176,6 +184,7 @@ static ODClassType* _TRLevel_type;
     _TRLevel_expectedTrainNotification = [CNNotificationHandle notificationHandleWithName:@"expectedTrainNotification"];
     _TRLevel_runTrainNotification = [CNNotificationHandle notificationHandleWithName:@"runTrainNotification"];
     _TRLevel_crashNotification = [CNNotificationHandle notificationHandleWithName:@"Trains crashed"];
+    _TRLevel_sporadicDamageNotification = [CNNotificationHandle notificationHandleWithName:@"sporadicDamageNotification"];
     _TRLevel_winNotification = [CNNotificationHandle notificationHandleWithName:@"Level was passed"];
 }
 
@@ -205,6 +214,7 @@ static ODClassType* _TRLevel_type;
             f(self);
         }];
     }];
+    [CNLog applyText:[NSString stringWithFormat:@"Schedule for level %lu is %f seconds", (unsigned long)_number, time]];
     return schedule;
 }
 
@@ -305,6 +315,13 @@ static ODClassType* _TRLevel_type;
             }
         }
     }];
+    if(_rules.sporadicDamagePeriod > 0) {
+        __timeToNextDamage -= delta;
+        if(__timeToNextDamage <= 0) {
+            [self addSporadicDamage];
+            __timeToNextDamage = odFloatRndMinMax(_rules.sporadicDamagePeriod * 0.75, _rules.sporadicDamagePeriod * 1.25);
+        }
+    }
     if([_score score] < 0) {
         _looseCounter += delta;
         if(_looseCounter > 5 && !(__resultSent)) {
@@ -351,6 +368,13 @@ static ODClassType* _TRLevel_type;
             [self doDestroyTrain:((TRCar*)(_)).train];
         }];
         [_railroad addDamageAtPoint:((TRCarsCollision*)(collision)).railPoint];
+    }];
+}
+
+- (void)addSporadicDamage {
+    [[[_railroad rails] randomItem] forEach:^void(TRRail* rail) {
+        [_railroad addDamageAtPoint:[TRRailPoint railPointWithTile:((TRRail*)(rail)).tile form:((TRRail*)(rail)).form x:odFloatRndMinMax(0.0, ((TRRail*)(rail)).form.length) back:NO]];
+        [_TRLevel_sporadicDamageNotification postData:self];
     }];
 }
 
@@ -462,6 +486,10 @@ static ODClassType* _TRLevel_type;
 
 + (CNNotificationHandle*)crashNotification {
     return _TRLevel_crashNotification;
+}
+
++ (CNNotificationHandle*)sporadicDamageNotification {
+    return _TRLevel_sporadicDamageNotification;
 }
 
 + (CNNotificationHandle*)winNotification {
