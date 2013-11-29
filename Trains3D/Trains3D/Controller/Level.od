@@ -177,7 +177,9 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         detectCollisions.for(collision -> {
             crashNotification.post
             collision.cars.for(doDestroy(_.train))
-            railroad.addDamageAt(collision.railPoint)
+            schedule.schedule(5) {
+                railroad.addDamageAt(collision.railPoint)
+            }
         })
     }
 

@@ -367,7 +367,9 @@ static ODClassType* _TRLevel_type;
         [((TRCarsCollision*)(collision)).cars forEach:^void(TRCar* _) {
             [self doDestroyTrain:((TRCar*)(_)).train];
         }];
-        [_railroad addDamageAtPoint:((TRCarsCollision*)(collision)).railPoint];
+        [_schedule scheduleAfter:5.0 event:^void() {
+            [_railroad addDamageAtPoint:((TRCarsCollision*)(collision)).railPoint];
+        }];
     }];
 }
 
