@@ -52,7 +52,7 @@ static ODClassType* _TRLevelChooseMenu_type;
 + (void)initialize {
     [super initialize];
     _TRLevelChooseMenu_type = [ODClassType classTypeWithCls:[TRLevelChooseMenu class]];
-    _TRLevelChooseMenu_rankProgress = [EGProgress progressVec4:geVec4DivI(GEVec4Make(229.0, 255.0, 217.0, 255.0), 255) vec42:geVec4DivI(GEVec4Make(255.0, 223.0, 217.0, 255.0), 255)];
+    _TRLevelChooseMenu_rankProgress = [EGProgress progressVec4:geVec4DivI(GEVec4Make(232.0, 255.0, 208.0, 255.0), 255) vec42:geVec4DivI(GEVec4Make(255.0, 223.0, 217.0, 255.0), 255)];
 }
 
 + (EGScene*)scene {
@@ -92,7 +92,7 @@ static ODClassType* _TRLevelChooseMenu_type;
         [EGBlendFunction.standard applyDraw:^void() {
             [_fontRes drawText:[TRStr.Loc levelNumber:((NSUInteger)(level))] at:GEVec3Make(((float)(x + 0.5)), ((float)(y + 0.92)), 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
             if(dis) {
-                [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)];
+                [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.8)] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)];
             } else {
                 [_fontRes drawText:[TRStr.Loc formatCost:(([score isDefined]) ? ((NSInteger)(((EGLocalPlayerScore*)([score get])).value)) : [TRGameDirector.instance bestScoreLevelNumber:((NSUInteger)(level))])] at:GEVec3Make(((float)(x + 0.02)), ((float)(y + 0.1)), 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
                 if([score isDefined]) [_fontRes drawText:[TRStr.Loc topScore:[score get]] at:GEVec3Make(((float)(x + 0.98)), ((float)(y + 0.1)), 0.0) alignment:egTextAlignmentApplyXY(1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
