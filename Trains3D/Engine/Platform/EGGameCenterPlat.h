@@ -19,7 +19,7 @@
 + (ODClassType*)type;
 
 - (void)reportScoreLeaderboard:(NSString *)leaderboard value:(long)value;
-- (void)reportScoreLeaderboard:(NSString *)leaderboard value:(long)value completed :(void (^)(void))completed;
+- (void)reportScoreLeaderboard:(NSString *)leaderboard value:(long)value completed :(void (^)(EGLocalPlayerScore*))completed;
 
 - (void)localPlayerScoreLeaderboard:(NSString *)leaderboard callback:(void (^)(EGLocalPlayerScore*))callback;
 

@@ -27,23 +27,8 @@ class GameDirector {
         val leaderboard = "grp.com.antonzherdev.Trains3D.Level$n"
         val s = level.score.score
         cloud.keepMax("level$n.score", level.score.score)
-        GameCenter.instance.reportScore(leaderboard, s) {
-            val isBest = s == bestScore(n)
-            Action.delay(if(isBest) 0.5 else 0.0) {
-                retrieveGameCenter(leaderboard, isBest, s)
-            }
-        }
-    }
-
-    private def retrieveGameCenter(leaderboard : string, isBest : bool, s : uint) {
-        GameCenter.instance.localPlayerScore(leaderboard) { score ->
-            if(isBest) {
-                if(score.isEmpty || score.get.value < s) Action.delay(0.5) {
-                    retrieveGameCenter(leaderboard, true, s)
-                } else {
-                    playerScoreRetrieveNotification.post(score.get)
-                }
-            } else if(score.isDefined) playerScoreRetrieveNotification.post(score.get)
+        GameCenter.instance.reportScore(leaderboard, s) { score ->
+            playerScoreRetrieveNotification.post(score)
         }
     }
 
@@ -59,7 +44,18 @@ class GameDirector {
 
 
     def localPlayerScore(level : uint, callback : LocalPlayerScore? -> void) {
-        GameCenter.instance.localPlayerScore("grp.com.antonzherdev.Trains3D.Level$level", callback)
+        val leaderboard = "grp.com.antonzherdev.Trains3D.Level$level"
+        GameCenter.instance.localPlayerScore(leaderboard) { score ->
+            val bs = bestScore(level)
+            if( (score.isDefined && score.get.value <  bs) || (bs > 0 && score.isEmpty) ) {
+                log("No result in game center for level $level. We are trying to report.")
+                GameCenter.instance.reportScore(leaderboard, bs) { ls ->
+                    callback(ls)
+                }
+            } else {
+                callback(score)
+            }
+        }
     }
 
     def currentLevel = local.intFor("currentLevel")

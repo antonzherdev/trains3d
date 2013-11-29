@@ -56,6 +56,7 @@ static ODClassType* _EGGameCenter_type;
             }
             else {
                 [weakSelf disableGameCenter];
+                _active = NO;
             }
             if(_paused) {
                 _paused = NO;
@@ -138,7 +139,7 @@ static ODClassType* _EGGameCenter_type;
     [self reportScoreLeaderboard:leaderboard value:value completed:nil];
 }
 
-- (void)reportScoreLeaderboard:(NSString *)leaderboard value:(long)value completed :(void (^)(void))completed {
+- (void)reportScoreLeaderboard:(NSString *)leaderboard value:(long)value completed :(void (^)(EGLocalPlayerScore*))completed {
     if(!_active) return;
 #if TARGET_OS_IPHONE
     GKScore *scoreReporter = [[GKScore alloc] initWithLeaderboardIdentifier:leaderboard];
@@ -157,11 +158,12 @@ static ODClassType* _EGGameCenter_type;
 
     [scoreReporter reportScoreWithCompletionHandler:^(NSError *error) {
         if(error != nil) NSLog(@"Error while writing leaderboard %@", error);
-        if(completed != nil) completed();
+        if(completed != nil) [self retrieveLocalPlayerScoreLeaderboard: leaderboard minValue : [NSNumber numberWithLong:value] callback:completed attems:0];
     }];
 #endif
 }
-- (void)localPlayerScoreLeaderboard:(NSString *)leaderboard callback:(void (^)(EGLocalPlayerScore*))callback {
+
+- (void)retrieveLocalPlayerScoreLeaderboard:(NSString *)leaderboard minValue:(NSNumber *)value callback:(void (^)(EGLocalPlayerScore *))callback attems:(int)attems {
     GKLeaderboard *leaderboardRequest = [[GKLeaderboard alloc] init];
     leaderboardRequest.timeScope = GKLeaderboardTimeScopeAllTime;
     leaderboardRequest.playerScope = GKLeaderboardPlayerScopeGlobal;
@@ -177,15 +179,28 @@ static ODClassType* _EGGameCenter_type;
             return;
         }
         GKScore *s = leaderboardRequest.localPlayerScore;
-        if(s.rank == 0) {
+        if(s.rank == 0 && value == nil) {
             callback([CNOption none]);
-        } else {
+
+        } else if(s.rank != 0 && (value == nil || s.value >= value.longValue)) {
             EGLocalPlayerScore *lps = [EGLocalPlayerScore localPlayerScoreWithValue:(long) s.value
                                                                                rank:(NSUInteger) s.rank
                                                                             maxRank:leaderboardRequest.maxRange];
             callback([CNOption someValue:lps]);
+        } else {
+            if(attems > 10) {
+                NSLog(@"Could not write retrieve new information from Game Center during a timeout.");
+            } else {
+                delay(0.5, ^{
+                    [self retrieveLocalPlayerScoreLeaderboard:leaderboard minValue:value callback:callback attems:attems + 1];
+                });
+            }
         }
     }];
+}
+
+- (void)localPlayerScoreLeaderboard:(NSString *)leaderboard callback:(void (^)(EGLocalPlayerScore*))callback {
+    [self retrieveLocalPlayerScoreLeaderboard:leaderboard minValue:nil callback:callback attems:0];
 }
 
 - (void)showLeaderboardName:(NSString *)name {

@@ -8,7 +8,6 @@
 @class EGCamera2D;
 @class EGInterfaceIdiom;
 @class EGGlobal;
-@class EGGameCenter;
 @class EGDirector;
 @class EGLocalPlayerScore;
 @class EGColorSource;

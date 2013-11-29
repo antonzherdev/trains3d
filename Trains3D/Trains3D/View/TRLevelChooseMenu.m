@@ -7,7 +7,6 @@
 #import "GL.h"
 #import "EGPlatform.h"
 #import "EGContext.h"
-#import "EGGameCenterPlat.h"
 #import "EGDirector.h"
 #import "EGGameCenter.h"
 #import "EGMaterial.h"
@@ -69,7 +68,7 @@ static ODClassType* _TRLevelChooseMenu_type;
 
 - (void)start {
     [intTo(1, 16) forEach:^void(id level) {
-        [EGGameCenter.instance localPlayerScoreLeaderboard:[NSString stringWithFormat:@"grp.com.antonzherdev.Trains3D.Level%@", level] callback:^void(id score) {
+        [TRGameDirector.instance localPlayerScoreLevel:((NSUInteger)(unumi(level))) callback:^void(id score) {
             if([score isDefined]) {
                 [__scores setKey:numui(((NSUInteger)(unumi(level)))) value:[score get]];
                 [[EGDirector current] redraw];

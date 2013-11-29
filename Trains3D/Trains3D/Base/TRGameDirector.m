@@ -56,11 +56,8 @@ static ODClassType* _TRGameDirector_type;
             NSString* leaderboard = [NSString stringWithFormat:@"grp.com.antonzherdev.Trains3D.Level%lu", (unsigned long)n];
             NSInteger s = [((TRLevel*)(level)).score score];
             [_weakSelf.cloud keepMaxKey:[NSString stringWithFormat:@"level%lu.score", (unsigned long)n] i:[((TRLevel*)(level)).score score]];
-            [EGGameCenter.instance reportScoreLeaderboard:leaderboard value:((long)(s)) completed:^void() {
-                BOOL isBest = s == [_weakSelf bestScoreLevelNumber:n];
-                delay(((isBest) ? ((NSUInteger)(0.5)) : ((NSUInteger)(0.0))), ^void() {
-                    [_weakSelf retrieveGameCenterLeaderboard:leaderboard isBest:isBest s:((NSUInteger)(s))];
-                });
+            [EGGameCenter.instance reportScoreLeaderboard:leaderboard value:((long)(s)) completed:^void(EGLocalPlayerScore* score) {
+                [[TRGameDirector playerScoreRetrieveNotification] postData:score];
             }];
         }];
         _crashObs = [TRLevel.crashNotification observeBy:^void(id _) {
@@ -79,19 +76,6 @@ static ODClassType* _TRGameDirector_type;
     _TRGameDirector_playerScoreRetrieveNotification = [CNNotificationHandle notificationHandleWithName:@"playerScoreRetrieveNotification"];
 }
 
-- (void)retrieveGameCenterLeaderboard:(NSString*)leaderboard isBest:(BOOL)isBest s:(NSUInteger)s {
-    [EGGameCenter.instance localPlayerScoreLeaderboard:leaderboard callback:^void(id score) {
-        if(isBest) {
-            if([score isEmpty] || ((EGLocalPlayerScore*)([score get])).value < s) delay(((NSUInteger)(0.5)), ^void() {
-                [self retrieveGameCenterLeaderboard:leaderboard isBest:YES s:s];
-            });
-            else [_TRGameDirector_playerScoreRetrieveNotification postData:[score get]];
-        } else {
-            if([score isDefined]) [_TRGameDirector_playerScoreRetrieveNotification postData:[score get]];
-        }
-    }];
-}
-
 - (NSInteger)bestScoreLevelNumber:(NSUInteger)levelNumber {
     return [_cloud intForKey:[NSString stringWithFormat:@"level%lu.score", (unsigned long)levelNumber]];
 }
@@ -101,7 +85,18 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)localPlayerScoreLevel:(NSUInteger)level callback:(void(^)(id))callback {
-    [EGGameCenter.instance localPlayerScoreLeaderboard:[NSString stringWithFormat:@"grp.com.antonzherdev.Trains3D.Level%lu", (unsigned long)level] callback:callback];
+    NSString* leaderboard = [NSString stringWithFormat:@"grp.com.antonzherdev.Trains3D.Level%lu", (unsigned long)level];
+    [EGGameCenter.instance localPlayerScoreLeaderboard:leaderboard callback:^void(id score) {
+        NSInteger bs = [self bestScoreLevelNumber:level];
+        if(([score isDefined] && ((EGLocalPlayerScore*)([score get])).value < bs) || (bs > 0 && [score isEmpty])) {
+            [CNLog applyText:[NSString stringWithFormat:@"No result in game center for level %lu. We are trying to report.", (unsigned long)level]];
+            [EGGameCenter.instance reportScoreLeaderboard:leaderboard value:((long)(bs)) completed:^void(EGLocalPlayerScore* ls) {
+                callback([CNOption applyValue:ls]);
+            }];
+        } else {
+            callback(score);
+        }
+    }];
 }
 
 - (NSInteger)currentLevel {

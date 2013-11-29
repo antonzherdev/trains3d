@@ -20,12 +20,12 @@ class LevelChooseMenu extends SceneView {
     private var _scores = MutableHashMap<uint, LocalPlayerScore>()
     def start {
         1.to(16).for { level ->
-            GameCenter.instance.localPlayerScore("grp.com.antonzherdev.Trains3D.Level$level", { score ->
+            GameDirector.instance.localPlayerScore(level) { score ->
                 if(score.isDefined) {
                     _scores.set(level, score.get)
                     Director.current.redraw
                 }
-            })
+            }
         }
     }
 
