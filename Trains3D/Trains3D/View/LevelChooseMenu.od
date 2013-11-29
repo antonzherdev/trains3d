@@ -49,8 +49,10 @@ class LevelChooseMenu extends SceneView {
                 if(dis) {
                     D2D.drawSprite(vec4(1, 1, 1, 0.8), vec3(x, y, 0), Rect(0, 0, 1, 1))
                 } else {
-                    fontRes.draw(Loc.format(if(score.isDefined) score.get.value else GameDirector.instance.bestScore(level)),
-                        vec3(x + 0.02, y + 0.1, 0), TextAlignment(-1, 0), color = vec4(0, 0, 0, 1))
+                    val ss = if(score.isDefined) score.get.value else GameDirector.instance.bestScore(level)
+                    if(ss > 0 || score.isDefined) {
+                        fontRes.draw(Loc.format(ss), vec3(x + 0.02, y + 0.1, 0), TextAlignment(-1, 0), color = vec4(0, 0, 0, 1))
+                    }
                     if(score.isDefined) {
                         fontRes.draw(Loc.top(score.get), vec3(x + 0.98, y + 0.1, 0), TextAlignment(1, 0),
                             color = vec4(0, 0, 0, 1))

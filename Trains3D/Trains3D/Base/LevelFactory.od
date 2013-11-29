@@ -185,14 +185,14 @@ class LevelFactory {
                     (40, expressTrain), (10, verySlowTrain), (15, train), (10, train),
                     (40, train), (12, expressTrain), (15, train), (25, train),
                 (10, createNewCity),
-                    (20, train), (15, expressTrain), (20, train),
-                    (40, train), (15, train), (25, expressTrain), (15, train),
-                    (40, train), (15, train), (20, expressTrain), (10, verySlowTrain),
-                    (40, expressTrain), (20, train), (10, verySlowTrain), (7, train),
+                    (40, train), (15, expressTrain), (20, train),
+                    (50, train), (20, train), (25, expressTrain), (20, train),
+                    (60, train), (20, train), (20, expressTrain), (15, verySlowTrain),
+                    (50, expressTrain), (20, train), (15, verySlowTrain), (15, train),
                 (10, createNewCity),
-                    (30, verySlowTrain), (10, expressTrain), (10, train),
-                    (40, train), (20, expressTrain), (20, train), (10, verySlowTrain), (15, train),
-                    (40, train), (10, expressTrain), (20, verySlowTrain), (10, expressTrain), (10, train), (15, train)
+                    (40, verySlowTrain), (10, expressTrain), (10, train),
+                    (60, train), (20, expressTrain), (20, train), (10, verySlowTrain), (15, train),
+                    (50, train), (10, expressTrain), (20, verySlowTrain), (10, expressTrain), (10, train), (15, train)
         ]),
         //10
         LevelRules(vec2i(5, 5), LevelTheme.leafForest, scoreRulesWith(60000),

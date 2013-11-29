@@ -93,7 +93,8 @@ static ODClassType* _TRLevelChooseMenu_type;
             if(dis) {
                 [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.8)] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)];
             } else {
-                [_fontRes drawText:[TRStr.Loc formatCost:(([score isDefined]) ? ((NSInteger)(((EGLocalPlayerScore*)([score get])).value)) : [TRGameDirector.instance bestScoreLevelNumber:((NSUInteger)(level))])] at:GEVec3Make(((float)(x + 0.02)), ((float)(y + 0.1)), 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
+                long ss = (([score isDefined]) ? ((EGLocalPlayerScore*)([score get])).value : ((long)([TRGameDirector.instance bestScoreLevelNumber:((NSUInteger)(level))])));
+                if(ss > 0 || [score isDefined]) [_fontRes drawText:[TRStr.Loc formatCost:((NSInteger)(ss))] at:GEVec3Make(((float)(x + 0.02)), ((float)(y + 0.1)), 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
                 if([score isDefined]) [_fontRes drawText:[TRStr.Loc topScore:[score get]] at:GEVec3Make(((float)(x + 0.98)), ((float)(y + 0.1)), 0.0) alignment:egTextAlignmentApplyXY(1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
             }
         }];

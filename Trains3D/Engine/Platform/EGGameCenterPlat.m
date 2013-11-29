@@ -148,7 +148,7 @@ static ODClassType* _EGGameCenter_type;
     NSArray *scores = @[scoreReporter];
     [GKScore reportScores:scores withCompletionHandler:^(NSError *error) {
         if(error != nil) NSLog(@"Error while writing leaderboard %@", error);
-        if(completed != nil) completed();
+        if(completed != nil) [self retrieveLocalPlayerScoreLeaderboard: leaderboard minValue : [NSNumber numberWithLong:value] callback:completed attems:0];
     }];
 #else
     GKScore *scoreReporter = [[GKScore alloc] initWithCategory:leaderboard];
