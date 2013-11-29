@@ -4,7 +4,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     <url>
         <loc>http://www.raildale.com/</loc>
-        <lastmod>2013-11-25</lastmod>
+        <lastmod>2013-11-29</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
 
@@ -48,6 +48,11 @@
         <image:image>
             <image:loc>http://www.raildale.com/img/iPhone3.jpg</image:loc>
             <image:title>Raildale game screenshot for iPhone. Scroll using two fingers.</image:title>
+        </image:image>
+
+        <image:image>
+            <image:loc>http://www.raildale.com/img/crash1.gif</image:loc>
+            <image:title>Funny train crashes in Raildale</image:title>
         </image:image>
     </url>
 </urlset>
