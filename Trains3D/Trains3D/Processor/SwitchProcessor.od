@@ -25,7 +25,7 @@ class SwitchProcessor(level : Level) extends InputProcessor {
             if(light.connector == RailConnector.top ) {
                 val next = nextConnect(light)
                 if(next.is<RailLight>) {
-                    sy -= 0.1
+                    sy -= 0.15
                     y -= 0.2
                 }
                 if(next.is<Switch>) {
@@ -39,12 +39,17 @@ class SwitchProcessor(level : Level) extends InputProcessor {
             }
             if(light.connector == RailConnector.bottom ) {
                 if(nextConnect(light).is<RailLight>) {
-                    sy -= 0.2
-                    y -= 0.18
+                    y -= 0.2
+                    sy -= 0.15
                 }
-                if(level.railroad.contentIn(light.tile + vec2i(-1, 0), RailConnector.right).is<RailLight>) {
+                val cont = level.railroad.contentIn(light.tile + vec2i(-1, 0), RailConnector.right)
+                if(cont.is<RailLight> || cont.is<Switch>) {
                     z -= 0.1
                     sz -= 0.1
+                }
+                if(level.railroad.contentIn(light.tile, RailConnector.left).is<Switch>) {
+                    y += 0.1
+                    sy -= 0.1
                 }
             }
             if(light.connector == RailConnector.left) {
