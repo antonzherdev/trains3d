@@ -32,10 +32,10 @@ class GameDirector {
         }
     }
     private val sporadicDamageHelpObs = Level.sporadicDamageNotification.observe{ level ->
-        if(cloud.intFor("help.sporadicDamage1") == 0) {
+        if(cloud.intFor("help.sporadicDamage2") == 0) {
             level.schedule.schedule(1) {
                 level.showHelp(Loc.helpSporadicDamage)
-                cloud.set("help.sporadicDamage1", 1)
+                cloud.set("help.sporadicDamage2", 1)
             }
         }
     }

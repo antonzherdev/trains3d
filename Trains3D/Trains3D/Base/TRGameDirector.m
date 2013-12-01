@@ -64,9 +64,9 @@ static ODClassType* _TRGameDirector_type;
             }];
         }];
         _sporadicDamageHelpObs = [TRLevel.sporadicDamageNotification observeBy:^void(TRLevel* level) {
-            if([_weakSelf.cloud intForKey:@"help.sporadicDamage1"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:1.0 event:^void() {
+            if([_weakSelf.cloud intForKey:@"help.sporadicDamage2"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:1.0 event:^void() {
                 [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpSporadicDamage]];
-                [_weakSelf.cloud setKey:@"help.sporadicDamage1" i:1];
+                [_weakSelf.cloud setKey:@"help.sporadicDamage2" i:1];
             }];
         }];
         _crashObs = [TRLevel.crashNotification observeBy:^void(id _) {
