@@ -10,7 +10,7 @@ buildscript {
 
 defaultTasks 'clean', 'build'
 
-task build(dependsOn:['img', 'favIcon', 'html', 'js', 'lesscss', 'root'])
+task build(dependsOn:['img', 'favIcon', 'html', 'js', 'lesscss', 'root', 'pressZip'])
 
 task clean(type: Delete) {
   delete 'target'
@@ -30,6 +30,13 @@ task html(type:Copy) {
     from('src/html')
     into 'target'
 }
+
+task pressZip(type: Zip) {
+    from 'src/press/'
+    baseName 'presskit'
+    destinationDir file('target/download')
+}
+
 
 apply plugin: 'js'
 
