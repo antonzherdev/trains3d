@@ -97,6 +97,7 @@ enum ForestType(treeTypes : [TreeType]) {
     Pine([TreeType.Pine])
     Leaf([TreeType.Leaf, TreeType.WeakLeaf])
     SnowPine([TreeType.SnowPine])
+    Palm([TreeType.Palm])
 }
 
 enum TreeType(uv : Rect, scale : float, rustleStrength : float) {
@@ -104,6 +105,7 @@ enum TreeType(uv : Rect, scale : float, rustleStrength : float) {
     SnowPine(Rect(0, 0, 184.0/512, 1), 1, 1)
     Leaf(Rect(0, 0, 197.0/512, 0.5), 1.6, 1)
     WeakLeaf(Rect(0, 0.5, 115.0/512, 0.5), 0.6, 2)
+    Palm(Rect(0, 0, 2115.0/5500, 1), 1.5, 1)
 
     val uvQuad : Quad = uv.upsideDownStripQuad
     val size : vec2 = vec2(uv.width, 0.5) * scale

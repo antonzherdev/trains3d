@@ -133,6 +133,7 @@
 + (TRLevelTheme*)forest;
 + (TRLevelTheme*)winter;
 + (TRLevelTheme*)leafForest;
++ (TRLevelTheme*)palm;
 + (NSArray*)values;
 @end
 

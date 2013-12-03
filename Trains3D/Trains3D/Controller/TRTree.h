@@ -69,6 +69,7 @@
 + (TRForestType*)Pine;
 + (TRForestType*)Leaf;
 + (TRForestType*)SnowPine;
++ (TRForestType*)Palm;
 + (NSArray*)values;
 @end
 
@@ -84,6 +85,7 @@
 + (TRTreeType*)SnowPine;
 + (TRTreeType*)Leaf;
 + (TRTreeType*)WeakLeaf;
++ (TRTreeType*)Palm;
 + (NSArray*)values;
 @end
 

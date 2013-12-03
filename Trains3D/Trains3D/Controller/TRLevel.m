@@ -652,6 +652,7 @@ static ODClassType* _TRLevelResult_type;
 static TRLevelTheme* _TRLevelTheme_forest;
 static TRLevelTheme* _TRLevelTheme_winter;
 static TRLevelTheme* _TRLevelTheme_leafForest;
+static TRLevelTheme* _TRLevelTheme_palm;
 static NSArray* _TRLevelTheme_values;
 @synthesize background = _background;
 @synthesize forestRules = _forestRules;
@@ -675,7 +676,8 @@ static NSArray* _TRLevelTheme_values;
     _TRLevelTheme_forest = [TRLevelTheme levelThemeWithOrdinal:0 name:@"forest" background:@"Grass.png" forestRules:[TRForestRules forestRulesWithForestType:TRForestType.Pine thickness:2.0]];
     _TRLevelTheme_winter = [TRLevelTheme levelThemeWithOrdinal:1 name:@"winter" background:@"Snow.png" forestRules:[TRForestRules forestRulesWithForestType:TRForestType.SnowPine thickness:2.0]];
     _TRLevelTheme_leafForest = [TRLevelTheme levelThemeWithOrdinal:2 name:@"leafForest" background:@"Grass2.png" forestRules:[TRForestRules forestRulesWithForestType:TRForestType.Leaf thickness:2.0]];
-    _TRLevelTheme_values = (@[_TRLevelTheme_forest, _TRLevelTheme_winter, _TRLevelTheme_leafForest]);
+    _TRLevelTheme_palm = [TRLevelTheme levelThemeWithOrdinal:3 name:@"palm" background:@"PalmGrass.png" forestRules:[TRForestRules forestRulesWithForestType:TRForestType.Palm thickness:2.0]];
+    _TRLevelTheme_values = (@[_TRLevelTheme_forest, _TRLevelTheme_winter, _TRLevelTheme_leafForest, _TRLevelTheme_palm]);
 }
 
 + (TRLevelTheme*)forest {
@@ -688,6 +690,10 @@ static NSArray* _TRLevelTheme_values;
 
 + (TRLevelTheme*)leafForest {
     return _TRLevelTheme_leafForest;
+}
+
++ (TRLevelTheme*)palm {
+    return _TRLevelTheme_palm;
 }
 
 + (NSArray*)values {

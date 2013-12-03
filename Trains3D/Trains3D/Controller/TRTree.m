@@ -312,6 +312,7 @@ static ODClassType* _TRTree_type;
 static TRForestType* _TRForestType_Pine;
 static TRForestType* _TRForestType_Leaf;
 static TRForestType* _TRForestType_SnowPine;
+static TRForestType* _TRForestType_Palm;
 static NSArray* _TRForestType_values;
 @synthesize treeTypes = _treeTypes;
 
@@ -331,7 +332,8 @@ static NSArray* _TRForestType_values;
     _TRForestType_Pine = [TRForestType forestTypeWithOrdinal:0 name:@"Pine" treeTypes:(@[TRTreeType.Pine])];
     _TRForestType_Leaf = [TRForestType forestTypeWithOrdinal:1 name:@"Leaf" treeTypes:(@[TRTreeType.Leaf, TRTreeType.WeakLeaf])];
     _TRForestType_SnowPine = [TRForestType forestTypeWithOrdinal:2 name:@"SnowPine" treeTypes:(@[TRTreeType.SnowPine])];
-    _TRForestType_values = (@[_TRForestType_Pine, _TRForestType_Leaf, _TRForestType_SnowPine]);
+    _TRForestType_Palm = [TRForestType forestTypeWithOrdinal:3 name:@"Palm" treeTypes:(@[TRTreeType.Palm])];
+    _TRForestType_values = (@[_TRForestType_Pine, _TRForestType_Leaf, _TRForestType_SnowPine, _TRForestType_Palm]);
 }
 
 + (TRForestType*)Pine {
@@ -344,6 +346,10 @@ static NSArray* _TRForestType_values;
 
 + (TRForestType*)SnowPine {
     return _TRForestType_SnowPine;
+}
+
++ (TRForestType*)Palm {
+    return _TRForestType_Palm;
 }
 
 + (NSArray*)values {
@@ -364,6 +370,7 @@ static TRTreeType* _TRTreeType_Pine;
 static TRTreeType* _TRTreeType_SnowPine;
 static TRTreeType* _TRTreeType_Leaf;
 static TRTreeType* _TRTreeType_WeakLeaf;
+static TRTreeType* _TRTreeType_Palm;
 static NSArray* _TRTreeType_values;
 @synthesize uv = _uv;
 @synthesize scale = _scale;
@@ -394,7 +401,8 @@ static NSArray* _TRTreeType_values;
     _TRTreeType_SnowPine = [TRTreeType treeTypeWithOrdinal:1 name:@"SnowPine" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(184.0 / 512)), 1.0) scale:1.0 rustleStrength:1.0];
     _TRTreeType_Leaf = [TRTreeType treeTypeWithOrdinal:2 name:@"Leaf" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(197.0 / 512)), 0.5) scale:1.6 rustleStrength:1.0];
     _TRTreeType_WeakLeaf = [TRTreeType treeTypeWithOrdinal:3 name:@"WeakLeaf" uv:geRectApplyXYWidthHeight(0.0, 0.5, ((float)(115.0 / 512)), 0.5) scale:0.6 rustleStrength:2.0];
-    _TRTreeType_values = (@[_TRTreeType_Pine, _TRTreeType_SnowPine, _TRTreeType_Leaf, _TRTreeType_WeakLeaf]);
+    _TRTreeType_Palm = [TRTreeType treeTypeWithOrdinal:4 name:@"Palm" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(2115.0 / 5500)), 1.0) scale:1.5 rustleStrength:1.0];
+    _TRTreeType_values = (@[_TRTreeType_Pine, _TRTreeType_SnowPine, _TRTreeType_Leaf, _TRTreeType_WeakLeaf, _TRTreeType_Palm]);
 }
 
 + (TRTreeType*)Pine {
@@ -411,6 +419,10 @@ static NSArray* _TRTreeType_values;
 
 + (TRTreeType*)WeakLeaf {
     return _TRTreeType_WeakLeaf;
+}
+
++ (TRTreeType*)Palm {
+    return _TRTreeType_Palm;
 }
 
 + (NSArray*)values {
