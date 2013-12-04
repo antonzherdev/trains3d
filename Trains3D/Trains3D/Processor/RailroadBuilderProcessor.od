@@ -16,7 +16,7 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
             val line = Line2(p0 = startedPoint.get, p1 = event.location)
 
             if(line.u.lengthSquare > 0.25) {
-                val nl = line.normalize
+                val nl = line.set(length = 0.5)
                 val mid = nl.mid
                 val tile = mid.round
 

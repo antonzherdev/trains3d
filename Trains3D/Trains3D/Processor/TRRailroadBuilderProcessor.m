@@ -36,7 +36,7 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
     } changed:^void(id<EGEvent> event) {
         GELine2 line = geLine2ApplyP0P1(uwrap(GEVec2, [_startedPoint get]), [event location]);
         if(geVec2LengthSquare(line.u) > 0.25) {
-            GELine2 nl = geLine2Normalize(line);
+            GELine2 nl = geLine2SetLength(line, 0.5);
             GEVec2 mid = geLine2Mid(nl);
             GEVec2i tile = geVec2Round(mid);
             TRRailConnector* start = [[self connectorsByDistanceFromPoint:geVec2SubVec2(line.p0, geVec2ApplyVec2i(tile))] head];
