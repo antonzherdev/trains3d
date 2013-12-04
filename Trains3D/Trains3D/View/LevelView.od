@@ -21,7 +21,8 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
             hasShadows = level.rules.weatherRules.sunny > 0.0,
             shadowsProjectionMatrix = {
                 var m : mat4
-                if(level.map.size == vec2i(5, 5))      m = mat4.ortho(-2.4, 7.3, -2.2, 3.9, -2, 5.5)
+                if(level.map.size == vec2i(7, 5)) m = mat4.ortho(-2.4, 8.6, -2.2, 3.9, -2, 5.5)
+                else if(level.map.size == vec2i(5, 5)) m = mat4.ortho(-2.4, 7.3, -2.2, 3.9, -2, 5.5)
                 else if(level.map.size == vec2i(5, 3)) m = mat4.ortho(-2, 5.7, -2, 2.7, -2, 4.0)
                 else throw "Define shadow matrix for this map size"
                 m
