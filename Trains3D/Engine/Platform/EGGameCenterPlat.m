@@ -6,6 +6,7 @@
 @implementation EGGameCenter {
     BOOL _paused;
     BOOL _active;
+    NSDictionary* _achievements;
 }
 static EGGameCenter * _EGGameCenter_instance;
 static ODClassType* _EGGameCenter_type;
@@ -79,6 +80,20 @@ static ODClassType* _EGGameCenter_type;
 #endif
 
 -(void)authenticatedPlayer:(GKLocalPlayer *)player{
+    [GKAchievement loadAchievementsWithCompletionHandler:^(NSArray *achievements, NSError *error) {
+        if (error != nil) {
+            NSLog(@"Error while loading achievements: %@", error);
+            return;
+        }
+        if (achievements != nil) {
+            NSMutableDictionary * dic = [NSMutableDictionary dictionary];
+            for(GKAchievement* a in achievements) {
+                a.showsCompletionBanner = YES;
+                [dic setObject:[EGAchievement achievementWithAchievement:a] forKey:a.identifier];
+            }
+            _achievements = dic;
+        }
+    }];
 }
 
 -(void)disableGameCenter {
@@ -87,13 +102,8 @@ static ODClassType* _EGGameCenter_type;
 
 - (id)achievementName:(NSString*)name {
     if(!_active) return [CNOption none];
-    GKAchievement *ach = [[GKAchievement alloc] initWithIdentifier:name];
-    if(ach == nil) {
-        NSLog(@"Could not find achievement with name %@", name);
-        return [CNOption none];
-    }
-    ach.showsCompletionBanner = YES;
-    return [CNOption someValue:[EGAchievement achievementWithAchievement:ach]];
+
+    return [_achievements optKey:name];
 }
 
 
@@ -266,12 +276,15 @@ static ODClassType* _EGAchievement_type;
 }
 
 - (void)setProgress:(CGFloat)progress {
-    _achievement.percentComplete = progress*100.0;
-    [GKAchievement reportAchievements:@[_achievement] withCompletionHandler:^(NSError *error) {
-        if(error != nil) {
-            NSLog(@"Error in achievenment reporting: %@", error);
-        }
-    }];
+    CGFloat d = progress*100.0;
+    if(!eqf(_achievement.percentComplete, d)) {
+        _achievement.percentComplete = d;
+        [GKAchievement reportAchievements:@[_achievement] withCompletionHandler:^(NSError *error) {
+            if(error != nil) {
+                NSLog(@"Error in achievenment reporting: %@", error);
+            }
+        }];
+    }
 }
 
 - (void)complete {
