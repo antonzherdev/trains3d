@@ -5,6 +5,7 @@
 #import "EGCollisionWorld.h"
 #import "TRRailroad.h"
 #import "TRRailPoint.h"
+#import "GEMat4.h"
 #import "EGCollision.h"
 #import "EGDirector.h"
 @implementation TRSwitchProcessor{
@@ -56,13 +57,13 @@ static ODClassType* _TRSwitchProcessor_type;
                         y -= 0.1;
                     }
                     if([[_weakSelf.level.railroad contentInTile:geVec2iAddVec2i(((TRRailLight*)(light)).tile, GEVec2iMake(-1, 1)) connector:TRRailConnector.right] isKindOfClass:[TRRailLight class]]) {
-                        z -= 0.1;
-                        sz -= 0.1;
+                        z -= 0.15;
+                        sz -= 0.2;
                     }
                 }
                 if(((TRRailLight*)(light)).connector == TRRailConnector.bottom) {
                     if([[_weakSelf nextConnectLight:light] isKindOfClass:[TRRailLight class]]) {
-                        y -= 0.2;
+                        y -= 0.23;
                         sy -= 0.15;
                     }
                     TRRailroadConnectorContent* cont = [_weakSelf.level.railroad contentInTile:geVec2iAddVec2i(((TRRailLight*)(light)).tile, GEVec2iMake(-1, 0)) connector:TRRailConnector.right];
@@ -70,7 +71,8 @@ static ODClassType* _TRSwitchProcessor_type;
                         z -= 0.1;
                         sz -= 0.1;
                     }
-                    if([[_weakSelf.level.railroad contentInTile:((TRRailLight*)(light)).tile connector:TRRailConnector.left] isKindOfClass:[TRSwitch class]]) {
+                    TRRailroadConnectorContent* cont2 = [_weakSelf.level.railroad contentInTile:((TRRailLight*)(light)).tile connector:TRRailConnector.left];
+                    if([cont2 isKindOfClass:[TRSwitch class]]) {
                         y += 0.1;
                         sy -= 0.1;
                     }
@@ -92,11 +94,11 @@ static ODClassType* _TRSwitchProcessor_type;
                     }
                 }
                 EGCollisionBody* body = [EGCollisionBody collisionBodyWithData:light shape:[EGCollisionBox2d applyX:((float)(sz)) y:((float)(sy))] isKinematic:NO];
-                [body translateX:((float)(((TRRailLight*)(light)).tile.x)) y:((float)(((TRRailLight*)(light)).tile.y)) z:0.0];
-                [body rotateAngle:((float)(((TRRailLight*)(light)).connector.angle)) x:0.0 y:0.0 z:1.0];
-                [body translateX:x y:y z:z];
-                if(((TRRailLight*)(light)).connector == TRRailConnector.top || ((TRRailLight*)(light)).connector == TRRailConnector.bottom) [body rotateAngle:90.0 x:0.0 y:0.0 z:1.0];
-                [body rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
+                GEMat4* stand = ((((TRRailLight*)(light)).connector == TRRailConnector.top || ((TRRailLight*)(light)).connector == TRRailConnector.bottom) ? [[GEMat4 identity] rotateAngle:90.0 x:1.0 y:0.0 z:0.0] : [[GEMat4 identity] rotateAngle:90.0 x:0.0 y:1.0 z:0.0]);
+                GEMat4* moveToPlace = [[GEMat4 identity] translateX:x y:y z:z];
+                GEMat4* rotateToConnector = [[GEMat4 identity] rotateAngle:((float)(((TRRailLight*)(light)).connector.angle)) x:0.0 y:0.0 z:1.0];
+                GEMat4* moveToTile = [[GEMat4 identity] translateX:((float)(((TRRailLight*)(light)).tile.x)) y:((float)(((TRRailLight*)(light)).tile.y)) z:0.0];
+                [body setMatrix:[[[moveToTile mulMatrix:rotateToConnector] mulMatrix:moveToPlace] mulMatrix:stand]];
                 [_weakSelf.world addBody:body];
             }];
         }];

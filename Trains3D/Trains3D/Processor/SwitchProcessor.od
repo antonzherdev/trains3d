@@ -33,13 +33,13 @@ class SwitchProcessor(level : Level) extends InputProcessor {
                     y -= 0.1
                 }
                 if(level.railroad.contentIn(light.tile + vec2i(-1, 1), RailConnector.right).is<RailLight>) {
-                    z -= 0.1
-                    sz -= 0.1
+                    z -= 0.15
+                    sz -= 0.2
                 }
             }
             if(light.connector == RailConnector.bottom ) {
                 if(nextConnect(light).is<RailLight>) {
-                    y -= 0.2
+                    y -= 0.23
                     sy -= 0.15
                 }
                 val cont = level.railroad.contentIn(light.tile + vec2i(-1, 0), RailConnector.right)
@@ -47,7 +47,8 @@ class SwitchProcessor(level : Level) extends InputProcessor {
                     z -= 0.1
                     sz -= 0.1
                 }
-                if(level.railroad.contentIn(light.tile, RailConnector.left).is<Switch>) {
+                val cont2 = level.railroad.contentIn(light.tile, RailConnector.left)
+                if(cont2.is<Switch>) {
                     y += 0.1
                     sy -= 0.1
                 }
@@ -70,12 +71,16 @@ class SwitchProcessor(level : Level) extends InputProcessor {
             }
 
             val body = CollisionBody(light, CollisionBox2d(sz, sy), isKinematic = false)
-            body.translate(light.tile.x, light.tile.y, 0)
-            body.rotate(light.connector.angle, 0, 0, 1)
 
-            body.translate(x, y, z)
-            if(light.connector == RailConnector.top || light.connector == RailConnector.bottom) body.rotate(90, 0, 0, 1)
-            body.rotate(90, 0, 1, 0)
+            val stand =
+                if(light.connector == RailConnector.top || light.connector == RailConnector.bottom)
+                    mat4.identity.rotate(90, 1, 0, 0)
+                else mat4.identity.rotate(90, 0, 1, 0)
+            val moveToPlace = mat4.identity.translate(x, y, z)
+            val rotateToConnector = mat4.identity.rotate(light.connector.angle, 0, 0, 1)
+            val moveToTile = mat4.identity.translate(light.tile.x, light.tile.y, 0)
+
+            body.matrix = moveToTile * rotateToConnector * moveToPlace * stand
             self.world.add(body)
         }
     }

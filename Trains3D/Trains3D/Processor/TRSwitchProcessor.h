@@ -10,6 +10,7 @@
 @class TRRailConnector;
 @class TRRailLight;
 @class TRRailroadConnectorContent;
+@class GEMat4;
 @class EGCrossPoint;
 @class EGDirector;
 
