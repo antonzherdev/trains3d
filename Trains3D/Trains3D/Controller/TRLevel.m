@@ -365,10 +365,12 @@ static ODClassType* _TRLevel_type;
 
 - (void)processCollisions {
     [[self detectCollisions] forEach:^void(TRCarsCollision* collision) {
-        [_TRLevel_crashNotification post];
         [((TRCarsCollision*)(collision)).cars forEach:^void(TRCar* _) {
             [self doDestroyTrain:((TRCar*)(_)).train];
         }];
+        [_TRLevel_crashNotification postData:[[[((TRCarsCollision*)(collision)).cars chain] map:^TRTrain*(TRCar* _) {
+            return ((TRCar*)(_)).train;
+        }] toArray]];
         [_schedule scheduleAfter:5.0 event:^void() {
             [_railroad addDamageAtPoint:((TRCarsCollision*)(collision)).railPoint];
         }];

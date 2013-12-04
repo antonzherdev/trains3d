@@ -7,6 +7,7 @@
 #import "EGGameCenterPlat.h"
 #import "TRStrings.h"
 #import "EGSchedule.h"
+#import "TRTrain.h"
 #import "EGGameCenter.h"
 #import "EGDirector.h"
 #import "TRSceneFactory.h"
@@ -69,8 +70,17 @@ static ODClassType* _TRGameDirector_type;
                 [_weakSelf.cloud setKey:@"help.sporadicDamage2" i:1];
             }];
         }];
-        _crashObs = [TRLevel.crashNotification observeBy:^void(id _) {
+        _crashObs = [TRLevel.crashNotification observeBy:^void(id<CNSeq> trains) {
             [EGGameCenter.instance completeAchievementName:@"grp.Crash"];
+            if([((id<CNSeq>)(trains)) existsWhere:^BOOL(TRTrain* _) {
+    return ((TRTrain*)(_)).trainType == TRTrainType.fast;
+}]) [EGGameCenter.instance completeAchievementName:@"grp.ExpressCrash"];
+            if([((id<CNSeq>)(trains)) existsWhere:^BOOL(TRTrain* _) {
+    return ((TRTrain*)(_)).trainType == TRTrainType.repairer;
+}]) [EGGameCenter.instance completeAchievementName:@"grp.RepairCrash"];
+            if([((id<CNSeq>)(trains)) existsWhere:^BOOL(TRTrain* _) {
+    return ((TRTrain*)(_)).trainType == TRTrainType.crazy;
+}]) [EGGameCenter.instance completeAchievementName:@"grp.CrazyCrash"];
         }];
         [self _init];
     }

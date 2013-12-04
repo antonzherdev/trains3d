@@ -172,11 +172,11 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         remove(train)
     }
 
-    static val crashNotification = NotificationHandle<void>("Trains crashed")
+    static val crashNotification = NotificationHandle<[Train]>("Trains crashed")
     def processCollisions {
         detectCollisions.for(collision -> {
-            crashNotification.post
             collision.cars.for(doDestroy(_.train))
+            crashNotification.post(collision.cars.chain.map(_.train).toArray)
             schedule.schedule(5) {
                 railroad.addDamageAt(collision.railPoint)
             }

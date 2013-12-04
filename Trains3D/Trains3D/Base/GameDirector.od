@@ -42,8 +42,17 @@ class GameDirector {
 
     def bestScore(levelNumber : uint) : int = cloud.intFor("level$levelNumber.score")
 
-    private val crashObs = Level.crashNotification.observe { _ ->
+    private val crashObs = Level.crashNotification.observe { trains ->
         GameCenter.instance.completeAchievement("grp.Crash")
+        if(trains.exists(_.trainType == TrainType.fast)) {
+            GameCenter.instance.completeAchievement("grp.ExpressCrash")
+        }
+        if(trains.exists(_.trainType == TrainType.repairer)) {
+            GameCenter.instance.completeAchievement("grp.RepairCrash")
+        }
+        if(trains.exists(_.trainType == TrainType.crazy)) {
+            GameCenter.instance.completeAchievement("grp.CrazyCrash")
+        }
     }
 
     def init {

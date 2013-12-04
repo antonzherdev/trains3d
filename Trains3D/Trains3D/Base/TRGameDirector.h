@@ -8,6 +8,8 @@
 @class TRStr;
 @protocol TRStrings;
 @class EGSchedule;
+@class TRTrain;
+@class TRTrainType;
 @class EGLocalPlayerScore;
 @class EGDirector;
 @class TRSceneFactory;
