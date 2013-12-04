@@ -8,6 +8,9 @@
 @class TRRailConnector;
 @class TRSwitch;
 @class TRRailLight;
+@class EGCollisionBox;
+@class EGRigidBody;
+@class GEMat4;
 
 @class TRForestRules;
 @class TRForest;
@@ -52,6 +55,7 @@
 @property (nonatomic, readonly) NSInteger z;
 @property (nonatomic, readonly) CGFloat rigidity;
 @property (nonatomic) CGFloat rustle;
+@property (nonatomic, readonly) id body;
 
 + (id)treeWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size;
 - (id)initWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size;
@@ -59,6 +63,8 @@
 - (NSInteger)compareTo:(TRTree*)to;
 - (GEVec2)incline;
 - (void)updateWithWind:(GEVec2)wind delta:(CGFloat)delta;
+- (void)cutDown;
++ (CNNotificationHandle*)cutDownNotification;
 + (ODClassType*)type;
 @end
 
@@ -78,6 +84,7 @@
 @property (nonatomic, readonly) GERect uv;
 @property (nonatomic, readonly) CGFloat scale;
 @property (nonatomic, readonly) CGFloat rustleStrength;
+@property (nonatomic, readonly) BOOL collisions;
 @property (nonatomic, readonly) GEQuad uvQuad;
 @property (nonatomic, readonly) GEVec2 size;
 

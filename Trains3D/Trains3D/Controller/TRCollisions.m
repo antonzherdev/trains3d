@@ -9,6 +9,7 @@
 #import "TRRailPoint.h"
 #import "TRLevel.h"
 #import "EGDynamicWorld.h"
+#import "TRTree.h"
 @implementation TRTrainsCollisionWorld{
     EGMapSso* _map;
     EGCollisionWorld* _world;
@@ -172,12 +173,15 @@ static ODClassType* _TRCarsCollision_type;
 @implementation TRTrainsDynamicWorld{
     __weak TRLevel* _level;
     EGDynamicWorld* _world;
+    CNNotificationObserver* _cutDownObs;
     NSInteger _workCounter;
 }
 static CNNotificationHandle* _TRTrainsDynamicWorld_carsCollisionNotification;
 static CNNotificationHandle* _TRTrainsDynamicWorld_carAndGroundCollisionNotification;
 static ODClassType* _TRTrainsDynamicWorld_type;
 @synthesize level = _level;
+@synthesize world = _world;
+@synthesize cutDownObs = _cutDownObs;
 
 + (id)trainsDynamicWorldWithLevel:(TRLevel*)level {
     return [[TRTrainsDynamicWorld alloc] initWithLevel:level];
@@ -185,6 +189,7 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 
 - (id)initWithLevel:(TRLevel*)level {
     self = [super init];
+    __weak TRTrainsDynamicWorld* _weakSelf = self;
     if(self) {
         _level = level;
         _world = ^EGDynamicWorld*() {
@@ -192,8 +197,18 @@ static ODClassType* _TRTrainsDynamicWorld_type;
             EGRigidBody* plane = [EGRigidBody rigidBodyWithData:nil shape:[EGCollisionPlane collisionPlaneWithNormal:GEVec3Make(0.0, 0.0, 1.0) distance:0.0] isKinematic:NO mass:0.0];
             plane.friction = 0.4;
             [w addBody:plane];
+            [[_level.forest trees] forEach:^void(TRTree* tree) {
+                [((TRTree*)(tree)).body forEach:^void(EGRigidBody* _) {
+                    [w addBody:_];
+                }];
+            }];
             return w;
         }();
+        _cutDownObs = [TRTree.cutDownNotification observeBy:^void(TRTree* tree) {
+            [((TRTree*)(tree)).body forEach:^void(EGRigidBody* _) {
+                [_weakSelf.world removeBody:_];
+            }];
+        }];
         _workCounter = 0;
     }
     

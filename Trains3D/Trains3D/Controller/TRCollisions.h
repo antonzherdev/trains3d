@@ -14,6 +14,8 @@
 @class EGDynamicWorld;
 @class EGCollisionPlane;
 @class EGRigidBody;
+@class TRForest;
+@class TRTree;
 @class EGDynamicCollision;
 
 @class TRTrainsCollisionWorld;
@@ -46,6 +48,8 @@
 
 @interface TRTrainsDynamicWorld : NSObject<EGUpdatable>
 @property (nonatomic, readonly, weak) TRLevel* level;
+@property (nonatomic, readonly) EGDynamicWorld* world;
+@property (nonatomic, readonly) CNNotificationObserver* cutDownObs;
 
 + (id)trainsDynamicWorldWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;

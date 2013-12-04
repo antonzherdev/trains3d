@@ -45,12 +45,19 @@ class TrainsCollisionWorld(map : MapSso) {
 class CarsCollision(cars : Pair<Car>, railPoint : RailPoint)
 
 class TrainsDynamicWorld(weak level : Level) extends Updatable {
-    private val world = {
+    val world = {
         val w = DynamicWorld<Car>(gravity = vec3(0, 0, -10))
         val plane = RigidBody<Car>(nil, CollisionPlane(vec3(0, 0, 1), 0), false, 0)
         plane.friction = 0.4
         w.add(plane)
+        level.forest.trees.for{ tree ->
+            tree.body.for(w.add(_))
+        }
         w
+    }
+
+    val cutDownObs = Tree.cutDownNotification.observe { tree ->
+        tree.body.for(world.remove(_))
     }
 
     def add(train : Train) {

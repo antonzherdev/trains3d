@@ -4,6 +4,9 @@
 #import "TRWeather.h"
 #import "TRRailroad.h"
 #import "TRRailPoint.h"
+#import "EGCollisionBody.h"
+#import "EGDynamicWorld.h"
+#import "GEMat4.h"
 @implementation TRForestRules{
     TRForestType* _forestType;
     CGFloat _thickness;
@@ -136,8 +139,12 @@ static ODClassType* _TRForest_type;
         float ty = ((TRTree*)(tree)).position.y - ((TRTree*)(tree)).position.x;
         if(yy - yLength <= ty && ty <= yy) {
             float tx = ((TRTree*)(tree)).position.x + ((TRTree*)(tree)).position.y;
-            if(xx - xLength < tx && tx < xx + xLength) return NO;
-            else return YES;
+            if(xx - xLength < tx && tx < xx + xLength) {
+                [((TRTree*)(tree)) cutDown];
+                return NO;
+            } else {
+                return YES;
+            }
         } else {
             return YES;
         }
@@ -205,7 +212,9 @@ static ODClassType* _TRForest_type;
     CGFloat _rustle;
     GEVec2 __incline;
     BOOL __inclineUp;
+    id _body;
 }
+static CNNotificationHandle* _TRTree_cutDownNotification;
 static ODClassType* _TRTree_type;
 @synthesize treeType = _treeType;
 @synthesize position = _position;
@@ -213,6 +222,7 @@ static ODClassType* _TRTree_type;
 @synthesize z = _z;
 @synthesize rigidity = _rigidity;
 @synthesize rustle = _rustle;
+@synthesize body = _body;
 
 + (id)treeWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size {
     return [[TRTree alloc] initWithTreeType:treeType position:position size:size];
@@ -230,6 +240,11 @@ static ODClassType* _TRTree_type;
         _rustle = 0.0;
         __incline = GEVec2Make(0.0, 0.0);
         __inclineUp = NO;
+        _body = ((_treeType.collisions) ? ^id() {
+            EGRigidBody* b = [EGRigidBody staticalData:nil shape:[EGCollisionBox applyX:0.01 y:0.01 z:_size.y]];
+            b.matrix = [[GEMat4 identity] translateX:_position.x y:_position.y z:0.0];
+            return [CNOption applyValue:b];
+        }() : [CNOption none]);
     }
     
     return self;
@@ -238,6 +253,7 @@ static ODClassType* _TRTree_type;
 + (void)initialize {
     [super initialize];
     _TRTree_type = [ODClassType classTypeWithCls:[TRTree class]];
+    _TRTree_cutDownNotification = [CNNotificationHandle notificationHandleWithName:@"cutDownNotification"];
 }
 
 - (NSInteger)compareTo:(TRTree*)to {
@@ -267,8 +283,16 @@ static ODClassType* _TRTree_type;
     }
 }
 
+- (void)cutDown {
+    [_TRTree_cutDownNotification postData:self];
+}
+
 - (ODClassType*)type {
     return [TRTree type];
+}
+
++ (CNNotificationHandle*)cutDownNotification {
+    return _TRTree_cutDownNotification;
 }
 
 + (ODClassType*)type {
@@ -363,6 +387,7 @@ static NSArray* _TRForestType_values;
     GERect _uv;
     CGFloat _scale;
     CGFloat _rustleStrength;
+    BOOL _collisions;
     GEQuad _uvQuad;
     GEVec2 _size;
 }
@@ -375,19 +400,21 @@ static NSArray* _TRTreeType_values;
 @synthesize uv = _uv;
 @synthesize scale = _scale;
 @synthesize rustleStrength = _rustleStrength;
+@synthesize collisions = _collisions;
 @synthesize uvQuad = _uvQuad;
 @synthesize size = _size;
 
-+ (id)treeTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name uv:(GERect)uv scale:(CGFloat)scale rustleStrength:(CGFloat)rustleStrength {
-    return [[TRTreeType alloc] initWithOrdinal:ordinal name:name uv:uv scale:scale rustleStrength:rustleStrength];
++ (id)treeTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name uv:(GERect)uv scale:(CGFloat)scale rustleStrength:(CGFloat)rustleStrength collisions:(BOOL)collisions {
+    return [[TRTreeType alloc] initWithOrdinal:ordinal name:name uv:uv scale:scale rustleStrength:rustleStrength collisions:collisions];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name uv:(GERect)uv scale:(CGFloat)scale rustleStrength:(CGFloat)rustleStrength {
+- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name uv:(GERect)uv scale:(CGFloat)scale rustleStrength:(CGFloat)rustleStrength collisions:(BOOL)collisions {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
         _uv = uv;
         _scale = scale;
         _rustleStrength = rustleStrength;
+        _collisions = collisions;
         _uvQuad = geRectUpsideDownStripQuad(_uv);
         _size = geVec2MulF(GEVec2Make(geRectWidth(_uv), 0.5), _scale);
     }
@@ -397,11 +424,11 @@ static NSArray* _TRTreeType_values;
 
 + (void)initialize {
     [super initialize];
-    _TRTreeType_Pine = [TRTreeType treeTypeWithOrdinal:0 name:@"Pine" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(184.0 / 512)), 1.0) scale:1.0 rustleStrength:1.0];
-    _TRTreeType_SnowPine = [TRTreeType treeTypeWithOrdinal:1 name:@"SnowPine" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(184.0 / 512)), 1.0) scale:1.0 rustleStrength:1.0];
-    _TRTreeType_Leaf = [TRTreeType treeTypeWithOrdinal:2 name:@"Leaf" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(197.0 / 512)), 0.5) scale:1.6 rustleStrength:1.0];
-    _TRTreeType_WeakLeaf = [TRTreeType treeTypeWithOrdinal:3 name:@"WeakLeaf" uv:geRectApplyXYWidthHeight(0.0, 0.5, ((float)(115.0 / 512)), 0.5) scale:0.6 rustleStrength:2.0];
-    _TRTreeType_Palm = [TRTreeType treeTypeWithOrdinal:4 name:@"Palm" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(2115.0 / 5500)), 1.0) scale:1.5 rustleStrength:1.0];
+    _TRTreeType_Pine = [TRTreeType treeTypeWithOrdinal:0 name:@"Pine" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(184.0 / 512)), 1.0) scale:1.0 rustleStrength:1.0 collisions:YES];
+    _TRTreeType_SnowPine = [TRTreeType treeTypeWithOrdinal:1 name:@"SnowPine" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(184.0 / 512)), 1.0) scale:1.0 rustleStrength:1.0 collisions:YES];
+    _TRTreeType_Leaf = [TRTreeType treeTypeWithOrdinal:2 name:@"Leaf" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(197.0 / 512)), 0.5) scale:1.6 rustleStrength:1.0 collisions:YES];
+    _TRTreeType_WeakLeaf = [TRTreeType treeTypeWithOrdinal:3 name:@"WeakLeaf" uv:geRectApplyXYWidthHeight(0.0, 0.5, ((float)(115.0 / 512)), 0.5) scale:0.6 rustleStrength:2.0 collisions:NO];
+    _TRTreeType_Palm = [TRTreeType treeTypeWithOrdinal:4 name:@"Palm" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(2115.0 / 5500)), 1.0) scale:1.5 rustleStrength:1.0 collisions:YES];
     _TRTreeType_values = (@[_TRTreeType_Pine, _TRTreeType_SnowPine, _TRTreeType_Leaf, _TRTreeType_WeakLeaf, _TRTreeType_Palm]);
 }
 

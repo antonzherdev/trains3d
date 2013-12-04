@@ -38,11 +38,15 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Updat
         val xx = pos.x + pos.y
         val yy = pos.y - pos.x
         _trees = _trees.chain.filter{tree ->
-        val ty = tree.position.y - tree.position.x
-        if(yy - yLength <= ty && ty <= yy) {
-            val tx = tree.position.x + tree.position.y
-            if(xx - xLength < tx && tx < xx + xLength) false else true
-        } else true
+            val ty = tree.position.y - tree.position.x
+            if(yy - yLength <= ty && ty <= yy) {
+                val tx = tree.position.x + tree.position.y
+                if(xx - xLength < tx && tx < xx + xLength) {
+                    tree.cutDown
+                    false
+                }
+                else true
+            } else true
         }.toArray
     }
 
@@ -91,6 +95,18 @@ class Tree(treeType : TreeType, position : vec2, size : vec2) extends Comparable
             }
         }
     }
+
+    val body : RigidBody<Car>? =
+        if(treeType.collisions) {
+            val b = RigidBody.statical<Car>(nil, CollisionBox(0.01, 0.01, size.y))
+            b.matrix = mat4.identity.translate(position.x, position.y, 0)
+            b
+        } else nil
+
+    static val cutDownNotification = NotificationHandle<Tree>("cutDownNotification")
+    def cutDown {
+        cutDownNotification.post(self)
+    }
 }
 
 enum ForestType(treeTypes : [TreeType]) {
@@ -100,12 +116,12 @@ enum ForestType(treeTypes : [TreeType]) {
     Palm([TreeType.Palm])
 }
 
-enum TreeType(uv : Rect, scale : float, rustleStrength : float) {
-    Pine(Rect(0, 0, 184.0/512, 1), 1, 1)
-    SnowPine(Rect(0, 0, 184.0/512, 1), 1, 1)
-    Leaf(Rect(0, 0, 197.0/512, 0.5), 1.6, 1)
-    WeakLeaf(Rect(0, 0.5, 115.0/512, 0.5), 0.6, 2)
-    Palm(Rect(0, 0, 2115.0/5500, 1), 1.5, 1)
+enum TreeType(uv : Rect, scale : float, rustleStrength : float, collisions : bool) {
+    Pine(Rect(0, 0, 184.0/512, 1), 1, 1, true)
+    SnowPine(Rect(0, 0, 184.0/512, 1), 1, 1, true)
+    Leaf(Rect(0, 0, 197.0/512, 0.5), 1.6, 1, true)
+    WeakLeaf(Rect(0, 0.5, 115.0/512, 0.5), 0.6, 2, false)
+    Palm(Rect(0, 0, 2115.0/5500, 1), 1.5, 1, true)
 
     val uvQuad : Quad = uv.upsideDownStripQuad
     val size : vec2 = vec2(uv.width, 0.5) * scale
