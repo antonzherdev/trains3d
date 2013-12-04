@@ -173,9 +173,11 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     }
 
     static val crashNotification = NotificationHandle<[Train]>("Trains crashed")
+    private var _crashCounter : uint = 0
     def processCollisions {
         detectCollisions.for(collision -> {
             collision.cars.for(doDestroy(_.train))
+            _crashCounter = 2
             crashNotification.post(collision.cars.chain.map(_.train).toArray)
             schedule.schedule(5) {
                 railroad.addDamageAt(collision.railPoint)
@@ -183,11 +185,12 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         })
     }
 
-    static val knockDownNotification = NotificationHandle<void>("Knock down crashed")
+    static val knockDownNotification = NotificationHandle<(Train, uint)>("Knock down crashed")
     def knockDown(train : Train) {
         if(_trains.contains(train)) {
             doDestroy(train)
-            knockDownNotification.post
+            _crashCounter += 1
+            knockDownNotification.post((train, _crashCounter))
         }
     }
 
@@ -203,7 +206,8 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
     def destroy(train : Train) {
         if(_trains.contains(train)) {
-            crashNotification.post
+            _crashCounter = 1
+            crashNotification.post([train])
             doDestroy(train)
         }
     }

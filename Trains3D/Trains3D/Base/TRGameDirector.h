@@ -31,6 +31,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (NSInteger)bestScoreLevelNumber:(NSUInteger)levelNumber;
+- (void)destroyTrainsTrains:(id<CNSeq>)trains;
 - (void)_init;
 - (void)localPlayerScoreLevel:(NSUInteger)level callback:(void(^)(id))callback;
 - (NSInteger)currentLevel;

@@ -120,6 +120,7 @@ static ODClassType* _TRLevelRules_type;
     CGFloat __timeToNextDamage;
     CGFloat _looseCounter;
     BOOL __resultSent;
+    NSUInteger __crashCounter;
     id __help;
     id __result;
 }
@@ -170,6 +171,7 @@ static ODClassType* _TRLevel_type;
         __timeToNextDamage = odFloatRndMinMax(_rules.sporadicDamagePeriod * 0.75, _rules.sporadicDamagePeriod * 1.25);
         _looseCounter = 0.0;
         __resultSent = NO;
+        __crashCounter = 0;
         __help = [CNOption none];
         __result = [CNOption none];
     }
@@ -368,6 +370,7 @@ static ODClassType* _TRLevel_type;
         [((TRCarsCollision*)(collision)).cars forEach:^void(TRCar* _) {
             [self doDestroyTrain:((TRCar*)(_)).train];
         }];
+        __crashCounter = 2;
         [_TRLevel_crashNotification postData:[[[((TRCarsCollision*)(collision)).cars chain] map:^TRTrain*(TRCar* _) {
             return ((TRCar*)(_)).train;
         }] toArray]];
@@ -380,7 +383,8 @@ static ODClassType* _TRLevel_type;
 - (void)knockDownTrain:(TRTrain*)train {
     if([__trains containsItem:train]) {
         [self doDestroyTrain:train];
-        [_TRLevel_knockDownNotification post];
+        __crashCounter += 1;
+        [_TRLevel_knockDownNotification postData:tuple(train, numui(__crashCounter))];
     }
 }
 
@@ -397,7 +401,8 @@ static ODClassType* _TRLevel_type;
 
 - (void)destroyTrain:(TRTrain*)train {
     if([__trains containsItem:train]) {
-        [_TRLevel_crashNotification post];
+        __crashCounter = 1;
+        [_TRLevel_crashNotification postData:(@[train])];
         [self doDestroyTrain:train];
     }
 }

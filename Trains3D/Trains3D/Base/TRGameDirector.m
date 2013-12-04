@@ -23,6 +23,7 @@
     CNNotificationObserver* _obs;
     CNNotificationObserver* _sporadicDamageHelpObs;
     CNNotificationObserver* _crashObs;
+    CNNotificationObserver* _knockDownObs;
 }
 static TRGameDirector* _TRGameDirector_instance;
 static CNNotificationHandle* _TRGameDirector_playerScoreRetrieveNotification;
@@ -70,17 +71,28 @@ static ODClassType* _TRGameDirector_type;
                 [_weakSelf.cloud setKey:@"help.sporadicDamage2" i:1];
             }];
         }];
-        _crashObs = [TRLevel.crashNotification observeBy:^void(id<CNSeq> trains) {
-            [EGGameCenter.instance completeAchievementName:@"grp.Crash"];
-            if([((id<CNSeq>)(trains)) existsWhere:^BOOL(TRTrain* _) {
-    return ((TRTrain*)(_)).trainType == TRTrainType.fast;
-}]) [EGGameCenter.instance completeAchievementName:@"grp.ExpressCrash"];
-            if([((id<CNSeq>)(trains)) existsWhere:^BOOL(TRTrain* _) {
-    return ((TRTrain*)(_)).trainType == TRTrainType.repairer;
-}]) [EGGameCenter.instance completeAchievementName:@"grp.RepairCrash"];
-            if([((id<CNSeq>)(trains)) existsWhere:^BOOL(TRTrain* _) {
-    return ((TRTrain*)(_)).trainType == TRTrainType.crazy;
-}]) [EGGameCenter.instance completeAchievementName:@"grp.CrazyCrash"];
+        _crashObs = [TRLevel.crashNotification observeBy:^void(id<CNSeq> _) {
+            [TRGameDirector.instance destroyTrainsTrains:_];
+        }];
+        _knockDownObs = [TRLevel.knockDownNotification observeBy:^void(CNTuple* p) {
+            [TRGameDirector.instance destroyTrainsTrains:(@[((CNTuple*)(p)).a])];
+            if(unumi(((CNTuple*)(p)).b) == 2) {
+                [EGGameCenter.instance completeAchievementName:@"grp.KnockDown"];
+            } else {
+                if(unumi(((CNTuple*)(p)).b) == 3) {
+                    [EGGameCenter.instance completeAchievementName:@"grp.TripleCrash"];
+                } else {
+                    if(unumi(((CNTuple*)(p)).b) == 4) {
+                        [EGGameCenter.instance completeAchievementName:@"grp.QuadrupleCrash"];
+                    } else {
+                        if(unumi(((CNTuple*)(p)).b) == 5) {
+                            [EGGameCenter.instance completeAchievementName:@"grp.QuinaryCrash"];
+                        } else {
+                            if(unumi(((CNTuple*)(p)).b) == 6) [EGGameCenter.instance completeAchievementName:@"grp.SenaryCrash"];
+                        }
+                    }
+                }
+            }
         }];
         [self _init];
     }
@@ -97,6 +109,19 @@ static ODClassType* _TRGameDirector_type;
 
 - (NSInteger)bestScoreLevelNumber:(NSUInteger)levelNumber {
     return [_cloud intForKey:[NSString stringWithFormat:@"level%lu.score", (unsigned long)levelNumber]];
+}
+
+- (void)destroyTrainsTrains:(id<CNSeq>)trains {
+    [EGGameCenter.instance completeAchievementName:@"grp.Crash"];
+    if([trains existsWhere:^BOOL(TRTrain* _) {
+    return ((TRTrain*)(_)).trainType == TRTrainType.fast;
+}]) [EGGameCenter.instance completeAchievementName:@"grp.ExpressCrash"];
+    if([trains existsWhere:^BOOL(TRTrain* _) {
+    return ((TRTrain*)(_)).trainType == TRTrainType.repairer;
+}]) [EGGameCenter.instance completeAchievementName:@"grp.RepairCrash"];
+    if([trains existsWhere:^BOOL(TRTrain* _) {
+    return ((TRTrain*)(_)).trainType == TRTrainType.crazy;
+}]) [EGGameCenter.instance completeAchievementName:@"grp.CrazyCrash"];
 }
 
 - (void)_init {
