@@ -44,7 +44,7 @@ class TrainsCollisionWorld(map : MapSso) {
 
 class CarsCollision(cars : Pair<Car>, railPoint : RailPoint)
 
-class TrainsDynamicWorld extends Updatable {
+class TrainsDynamicWorld(weak level : Level) extends Updatable {
     private val world = {
         val w = DynamicWorld<Car>(gravity = vec3(0, 0, -10))
         val plane = RigidBody<Car>(nil, CollisionPlane(vec3(0, 0, 1), 0), false, 0)
@@ -54,12 +54,16 @@ class TrainsDynamicWorld extends Updatable {
     }
 
     def add(train : Train) {
+        train.cars.for{car ->
+            world.add(car.kinematicBody)
+        }
     }
 
     private var workCounter = 0
     def die(train : Train) {
         workCounter++
         train.cars.for{car ->
+            world.remove(car.kinematicBody)
             world.add(car.dynamicBody)
         }
     }
@@ -77,6 +81,12 @@ class TrainsDynamicWorld extends Updatable {
         world.updateWith(delta)
         if(workCounter > 0) {
             world.newCollisions.for {collision ->
+                if(collision.bodies.a.isKinematic && collision.bodies.b.isKinematic) return nil
+                if(collision.bodies.a.isKinematic) {
+                    level.knockDown(collision.bodies.a.data.train)
+                } else if(collision.bodies.b.isKinematic) {
+                    level.knockDown(collision.bodies.b.data.train)
+                }
                 if(collision.impulse > 0) {
                     if(collision.bodies.a.data == nil || collision.bodies.b.data == nil) {
                         carAndGroundCollisionNotification.post(collision.impulse)

@@ -129,6 +129,7 @@ static CNNotificationHandle* _TRLevel_prepareToRunTrainNotification;
 static CNNotificationHandle* _TRLevel_expectedTrainNotification;
 static CNNotificationHandle* _TRLevel_runTrainNotification;
 static CNNotificationHandle* _TRLevel_crashNotification;
+static CNNotificationHandle* _TRLevel_knockDownNotification;
 static CNNotificationHandle* _TRLevel_sporadicDamageNotification;
 static CNNotificationHandle* _TRLevel_winNotification;
 static ODClassType* _TRLevel_type;
@@ -164,7 +165,7 @@ static ODClassType* _TRLevel_type;
         __trains = (@[]);
         __repairer = [CNOption none];
         _collisionWorld = [TRTrainsCollisionWorld trainsCollisionWorldWithMap:_map];
-        _dynamicWorld = [TRTrainsDynamicWorld trainsDynamicWorld];
+        _dynamicWorld = [TRTrainsDynamicWorld trainsDynamicWorldWithLevel:self];
         __dyingTrains = [NSMutableArray mutableArray];
         __timeToNextDamage = odFloatRndMinMax(_rules.sporadicDamagePeriod * 0.75, _rules.sporadicDamagePeriod * 1.25);
         _looseCounter = 0.0;
@@ -184,6 +185,7 @@ static ODClassType* _TRLevel_type;
     _TRLevel_expectedTrainNotification = [CNNotificationHandle notificationHandleWithName:@"expectedTrainNotification"];
     _TRLevel_runTrainNotification = [CNNotificationHandle notificationHandleWithName:@"runTrainNotification"];
     _TRLevel_crashNotification = [CNNotificationHandle notificationHandleWithName:@"Trains crashed"];
+    _TRLevel_knockDownNotification = [CNNotificationHandle notificationHandleWithName:@"Knock down crashed"];
     _TRLevel_sporadicDamageNotification = [CNNotificationHandle notificationHandleWithName:@"sporadicDamageNotification"];
     _TRLevel_winNotification = [CNNotificationHandle notificationHandleWithName:@"Level was passed"];
 }
@@ -373,6 +375,13 @@ static ODClassType* _TRLevel_type;
     }];
 }
 
+- (void)knockDownTrain:(TRTrain*)train {
+    if([__trains containsItem:train]) {
+        [self doDestroyTrain:train];
+        [_TRLevel_knockDownNotification post];
+    }
+}
+
 - (void)addSporadicDamage {
     [[[_railroad rails] randomItem] forEach:^void(TRRail* rail) {
         [_railroad addDamageAtPoint:[TRRailPoint railPointWithTile:((TRRail*)(rail)).tile form:((TRRail*)(rail)).form x:odFloatRndMinMax(0.0, ((TRRail*)(rail)).form.length) back:NO]];
@@ -488,6 +497,10 @@ static ODClassType* _TRLevel_type;
 
 + (CNNotificationHandle*)crashNotification {
     return _TRLevel_crashNotification;
+}
+
++ (CNNotificationHandle*)knockDownNotification {
+    return _TRLevel_knockDownNotification;
 }
 
 + (CNNotificationHandle*)sporadicDamageNotification {

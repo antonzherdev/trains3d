@@ -164,6 +164,7 @@ static NSArray* _TRCarType_values;
     __weak TRTrain* _train;
     TRCarType* _carType;
     EGCollisionBody* _collisionBody;
+    EGRigidBody* _kinematicBody;
     CNLazy* __lazy_dynamicBody;
     TRCarPosition* __position;
 }
@@ -171,6 +172,7 @@ static ODClassType* _TRCar_type;
 @synthesize train = _train;
 @synthesize carType = _carType;
 @synthesize collisionBody = _collisionBody;
+@synthesize kinematicBody = _kinematicBody;
 
 + (id)carWithTrain:(TRTrain*)train carType:(TRCarType*)carType {
     return [[TRCar alloc] initWithTrain:train carType:carType];
@@ -183,6 +185,7 @@ static ODClassType* _TRCar_type;
         _train = train;
         _carType = carType;
         _collisionBody = [EGCollisionBody collisionBodyWithData:self shape:_carType.collision2dShape isKinematic:YES];
+        _kinematicBody = [EGRigidBody kinematicData:self shape:_carType.collision2dShape];
         __lazy_dynamicBody = [CNLazy lazyWithF:^EGRigidBody*() {
             return ^EGRigidBody*() {
                 GELine2 line = [_weakSelf position].line;
@@ -220,7 +223,9 @@ static ODClassType* _TRCar_type;
     __position = position;
     GELine2 line = position.line;
     GEVec2 mid = [self midPoint];
-    [_collisionBody setMatrix:[[[GEMat4 identity] translateX:mid.x y:mid.y z:0.0] rotateAngle:geLine2DegreeAngle(line) x:0.0 y:0.0 z:1.0]];
+    GEMat4* m = [[[GEMat4 identity] translateX:mid.x y:mid.y z:0.0] rotateAngle:geLine2DegreeAngle(line) x:0.0 y:0.0 z:1.0];
+    [_collisionBody setMatrix:m];
+    _kinematicBody.matrix = m;
 }
 
 - (GEVec2)midPoint {

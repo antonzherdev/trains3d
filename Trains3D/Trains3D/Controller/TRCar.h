@@ -53,6 +53,7 @@
 @property (nonatomic, readonly, weak) TRTrain* train;
 @property (nonatomic, readonly) TRCarType* carType;
 @property (nonatomic, readonly) EGCollisionBody* collisionBody;
+@property (nonatomic, readonly) EGRigidBody* kinematicBody;
 
 + (id)carWithTrain:(TRTrain*)train carType:(TRCarType*)carType;
 - (id)initWithTrain:(TRTrain*)train carType:(TRCarType*)carType;

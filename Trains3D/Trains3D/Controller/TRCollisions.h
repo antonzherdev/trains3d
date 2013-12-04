@@ -10,6 +10,7 @@
 @class TRCarPosition;
 @class TRRailPoint;
 @class EGContact;
+@class TRLevel;
 @class EGDynamicWorld;
 @class EGCollisionPlane;
 @class EGRigidBody;
@@ -44,8 +45,10 @@
 
 
 @interface TRTrainsDynamicWorld : NSObject<EGUpdatable>
-+ (id)trainsDynamicWorld;
-- (id)init;
+@property (nonatomic, readonly, weak) TRLevel* level;
+
++ (id)trainsDynamicWorldWithLevel:(TRLevel*)level;
+- (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)addTrain:(TRTrain*)train;
 - (void)dieTrain:(TRTrain*)train;

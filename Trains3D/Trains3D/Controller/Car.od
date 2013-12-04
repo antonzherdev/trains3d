@@ -41,6 +41,7 @@ enum CarType(
 
 class Car(weak train : Train, carType : CarType) {
     val collisionBody = CollisionBody(self, carType.collision2dShape, isKinematic = true)
+    val kinematicBody = RigidBody.kinematic(self, carType.collision2dShape)
     lazy val dynamicBody : RigidBody<Car> = {
         val line = position.line
         val len = line.u.length
@@ -62,7 +63,9 @@ class Car(weak train : Train, carType : CarType) {
         _position = position
         val line = position.line
         val mid = midPoint
-        collisionBody.set(matrix = mat4.identity.translate(mid.x, mid.y, 0).rotate(line.degreeAngle, 0, 0, 1))
+        val m = mat4.identity.translate(mid.x, mid.y, 0).rotate(line.degreeAngle, 0, 0, 1)
+        collisionBody.matrix = m
+        kinematicBody.matrix = m
     }
 
     def midPoint : vec2 = {

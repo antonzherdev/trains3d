@@ -7,6 +7,7 @@
 #import "EGCollision.h"
 #import "EGCollisionBody.h"
 #import "TRRailPoint.h"
+#import "TRLevel.h"
 #import "EGDynamicWorld.h"
 @implementation TRTrainsCollisionWorld{
     EGMapSso* _map;
@@ -169,20 +170,23 @@ static ODClassType* _TRCarsCollision_type;
 
 
 @implementation TRTrainsDynamicWorld{
+    __weak TRLevel* _level;
     EGDynamicWorld* _world;
     NSInteger _workCounter;
 }
 static CNNotificationHandle* _TRTrainsDynamicWorld_carsCollisionNotification;
 static CNNotificationHandle* _TRTrainsDynamicWorld_carAndGroundCollisionNotification;
 static ODClassType* _TRTrainsDynamicWorld_type;
+@synthesize level = _level;
 
-+ (id)trainsDynamicWorld {
-    return [[TRTrainsDynamicWorld alloc] init];
++ (id)trainsDynamicWorldWithLevel:(TRLevel*)level {
+    return [[TRTrainsDynamicWorld alloc] initWithLevel:level];
 }
 
-- (id)init {
+- (id)initWithLevel:(TRLevel*)level {
     self = [super init];
     if(self) {
+        _level = level;
         _world = ^EGDynamicWorld*() {
             EGDynamicWorld* w = [EGDynamicWorld dynamicWorldWithGravity:GEVec3Make(0.0, 0.0, -10.0)];
             EGRigidBody* plane = [EGRigidBody rigidBodyWithData:nil shape:[EGCollisionPlane collisionPlaneWithNormal:GEVec3Make(0.0, 0.0, 1.0) distance:0.0] isKinematic:NO mass:0.0];
@@ -204,11 +208,15 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 }
 
 - (void)addTrain:(TRTrain*)train {
+    [[train cars] forEach:^void(TRCar* car) {
+        [_world addBody:((TRCar*)(car)).kinematicBody];
+    }];
 }
 
 - (void)dieTrain:(TRTrain*)train {
     _workCounter++;
     [[train cars] forEach:^void(TRCar* car) {
+        [_world removeBody:((TRCar*)(car)).kinematicBody];
         [_world addBody:[((TRCar*)(car)) dynamicBody]];
     }];
 }
@@ -223,6 +231,12 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 - (void)updateWithDelta:(CGFloat)delta {
     [_world updateWithDelta:delta];
     if(_workCounter > 0) [[_world newCollisions] forEach:^void(EGDynamicCollision* collision) {
+        if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).isKinematic && ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).isKinematic) return ;
+        if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).isKinematic) {
+            [_level knockDownTrain:((TRCar*)(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).data)).train];
+        } else {
+            if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).isKinematic) [_level knockDownTrain:((TRCar*)(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).data)).train];
+        }
         if([((EGDynamicCollision*)(collision)) impulse] > 0) {
             if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).data == nil || ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).data == nil) [_TRTrainsDynamicWorld_carAndGroundCollisionNotification postData:numf4([((EGDynamicCollision*)(collision)) impulse])];
             else [_TRTrainsDynamicWorld_carsCollisionNotification postData:numf4([((EGDynamicCollision*)(collision)) impulse])];
@@ -253,15 +267,19 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
+    TRTrainsDynamicWorld* o = ((TRTrainsDynamicWorld*)(other));
+    return [self.level isEqual:o.level];
 }
 
 - (NSUInteger)hash {
-    return 0;
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.level hash];
+    return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"level=%@", self.level];
     [description appendString:@">"];
     return description;
 }

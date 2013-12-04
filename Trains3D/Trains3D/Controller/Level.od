@@ -25,7 +25,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
 
     val collisionWorld = TrainsCollisionWorld(map)
-    val dynamicWorld = TrainsDynamicWorld()
+    val dynamicWorld = TrainsDynamicWorld(self)
 
     private var _dyingTrains = MutableArray<Train>()
     def dyingTrains : [Train] = _dyingTrains
@@ -181,6 +181,14 @@ class Level(number : uint, rules : LevelRules) extends Controller {
                 railroad.addDamageAt(collision.railPoint)
             }
         })
+    }
+
+    static val knockDownNotification = NotificationHandle<void>("Knock down crashed")
+    def knockDown(train : Train) {
+        if(_trains.contains(train)) {
+            doDestroy(train)
+            knockDownNotification.post
+        }
     }
 
     static val sporadicDamageNotification = NotificationHandle<Level>("sporadicDamageNotification")

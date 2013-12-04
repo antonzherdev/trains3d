@@ -82,6 +82,7 @@
 - (id)cityForTile:(GEVec2i)tile;
 - (void)arrivedTrain:(TRTrain*)train;
 - (void)processCollisions;
+- (void)knockDownTrain:(TRTrain*)train;
 - (void)addSporadicDamage;
 - (id<CNSeq>)detectCollisions;
 - (void)destroyTrain:(TRTrain*)train;
@@ -100,6 +101,7 @@
 + (CNNotificationHandle*)expectedTrainNotification;
 + (CNNotificationHandle*)runTrainNotification;
 + (CNNotificationHandle*)crashNotification;
++ (CNNotificationHandle*)knockDownNotification;
 + (CNNotificationHandle*)sporadicDamageNotification;
 + (CNNotificationHandle*)winNotification;
 + (ODClassType*)type;
