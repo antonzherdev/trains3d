@@ -52,4 +52,17 @@ class City(color : CityColor, tile : vec2i, angle : CityAngle) extends Updatable
     }
 
     def canRunNewTrain = expectedTrainCounter.isStopped && waitingCounter.isStopped
+
+    static val box = CollisionBox(0.9, 0.2, 0.15)
+    val bodies : [RigidBody<Car>] = {
+        val a = RigidBody.statical(nil, box)
+        val b = RigidBody.statical(nil, box)
+        val moveYa = mat4.identity.translate(0, 0.3, 0)
+        val moveYb = mat4.identity.translate(0, -0.3, 0)
+        val rotate = mat4.identity.rotate(angle.angle , 0, 0, -1)
+        val moveTile = mat4.identity.translate(tile.x, tile.y, 0)
+        a.matrix = moveTile * rotate * moveYa
+        b.matrix = moveTile * rotate * moveYb
+        [a, b]
+    }
 }

@@ -56,8 +56,11 @@ class TrainsDynamicWorld(weak level : Level) extends Updatable {
         w
     }
 
-    val cutDownObs = Tree.cutDownNotification.observe { tree ->
+    val cutDownObs = Tree.cutDownNotification.observe{ tree ->
         tree.body.for(world.remove(_))
+    }
+    val cityBuildObs = Level.buildCityNotification.observe{ city ->
+        city.bodies.for(world.add(_))
     }
 
     def add(train : Train) {

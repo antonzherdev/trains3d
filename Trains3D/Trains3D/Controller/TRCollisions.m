@@ -10,6 +10,7 @@
 #import "TRLevel.h"
 #import "EGDynamicWorld.h"
 #import "TRTree.h"
+#import "TRCity.h"
 @implementation TRTrainsCollisionWorld{
     EGMapSso* _map;
     EGCollisionWorld* _world;
@@ -174,6 +175,7 @@ static ODClassType* _TRCarsCollision_type;
     __weak TRLevel* _level;
     EGDynamicWorld* _world;
     CNNotificationObserver* _cutDownObs;
+    CNNotificationObserver* _cityBuildObs;
     NSInteger _workCounter;
 }
 static CNNotificationHandle* _TRTrainsDynamicWorld_carsCollisionNotification;
@@ -182,6 +184,7 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 @synthesize level = _level;
 @synthesize world = _world;
 @synthesize cutDownObs = _cutDownObs;
+@synthesize cityBuildObs = _cityBuildObs;
 
 + (id)trainsDynamicWorldWithLevel:(TRLevel*)level {
     return [[TRTrainsDynamicWorld alloc] initWithLevel:level];
@@ -207,6 +210,11 @@ static ODClassType* _TRTrainsDynamicWorld_type;
         _cutDownObs = [TRTree.cutDownNotification observeBy:^void(TRTree* tree) {
             [((TRTree*)(tree)).body forEach:^void(EGRigidBody* _) {
                 [_weakSelf.world removeBody:_];
+            }];
+        }];
+        _cityBuildObs = [TRLevel.buildCityNotification observeBy:^void(TRCity* city) {
+            [((TRCity*)(city)).bodies forEach:^void(EGRigidBody* _) {
+                [_weakSelf.world addBody:_];
             }];
         }];
         _workCounter = 0;

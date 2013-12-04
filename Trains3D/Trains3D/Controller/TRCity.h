@@ -4,7 +4,10 @@
 @class TRStr;
 @protocol TRStrings;
 @class TRRailForm;
+@class EGCollisionBox;
 @class EGCounter;
+@class EGRigidBody;
+@class GEMat4;
 @class TRRailPoint;
 
 @class TRCity;
@@ -48,6 +51,7 @@
 @property (nonatomic, readonly) TRCityAngle* angle;
 @property (nonatomic, retain) EGCounter* expectedTrainCounter;
 @property (nonatomic, retain) TRCityColor* expectedTrainColor;
+@property (nonatomic, readonly) id<CNSeq> bodies;
 
 + (id)cityWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
 - (id)initWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
@@ -58,6 +62,7 @@
 - (BOOL)isWaitingToRunTrain;
 - (void)resumeTrainRunning;
 - (BOOL)canRunNewTrain;
++ (EGCollisionBox*)box;
 + (ODClassType*)type;
 @end
 

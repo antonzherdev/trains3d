@@ -2,7 +2,10 @@
 
 #import "TRStrings.h"
 #import "TRRailPoint.h"
+#import "EGCollisionBody.h"
 #import "EGSchedule.h"
+#import "EGDynamicWorld.h"
+#import "GEMat4.h"
 @implementation TRCityColor{
     GEVec4 _color;
     NSString* _localName;
@@ -162,13 +165,16 @@ static NSArray* _TRCityAngle_values;
     EGCounter* _expectedTrainCounter;
     TRCityColor* _expectedTrainColor;
     EGCounter* _waitingCounter;
+    id<CNSeq> _bodies;
 }
+static EGCollisionBox* _TRCity_box;
 static ODClassType* _TRCity_type;
 @synthesize color = _color;
 @synthesize tile = _tile;
 @synthesize angle = _angle;
 @synthesize expectedTrainCounter = _expectedTrainCounter;
 @synthesize expectedTrainColor = _expectedTrainColor;
+@synthesize bodies = _bodies;
 
 + (id)cityWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle {
     return [[TRCity alloc] initWithColor:color tile:tile angle:angle];
@@ -182,6 +188,17 @@ static ODClassType* _TRCity_type;
         _angle = angle;
         _expectedTrainCounter = [EGCounter apply];
         _waitingCounter = [EGCounter apply];
+        _bodies = ^id<CNSeq>() {
+            EGRigidBody* a = [EGRigidBody staticalData:nil shape:_TRCity_box];
+            EGRigidBody* b = [EGRigidBody staticalData:nil shape:_TRCity_box];
+            GEMat4* moveYa = [[GEMat4 identity] translateX:0.0 y:0.3 z:0.0];
+            GEMat4* moveYb = [[GEMat4 identity] translateX:0.0 y:-0.3 z:0.0];
+            GEMat4* rotate = [[GEMat4 identity] rotateAngle:((float)(_angle.angle)) x:0.0 y:0.0 z:-1.0];
+            GEMat4* moveTile = [[GEMat4 identity] translateX:((float)(_tile.x)) y:((float)(_tile.y)) z:0.0];
+            a.matrix = [[moveTile mulMatrix:rotate] mulMatrix:moveYa];
+            b.matrix = [[moveTile mulMatrix:rotate] mulMatrix:moveYb];
+            return (@[a, b]);
+        }();
     }
     
     return self;
@@ -190,6 +207,7 @@ static ODClassType* _TRCity_type;
 + (void)initialize {
     [super initialize];
     _TRCity_type = [ODClassType classTypeWithCls:[TRCity class]];
+    _TRCity_box = [EGCollisionBox applyX:0.9 y:0.2 z:0.15];
 }
 
 - (TRRailPoint*)startPoint {
@@ -220,6 +238,10 @@ static ODClassType* _TRCity_type;
 
 - (ODClassType*)type {
     return [TRCity type];
+}
+
++ (EGCollisionBox*)box {
+    return _TRCity_box;
 }
 
 + (ODClassType*)type {

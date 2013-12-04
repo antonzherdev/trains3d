@@ -16,6 +16,7 @@
 @class EGRigidBody;
 @class TRForest;
 @class TRTree;
+@class TRCity;
 @class EGDynamicCollision;
 
 @class TRTrainsCollisionWorld;
@@ -50,6 +51,7 @@
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) EGDynamicWorld* world;
 @property (nonatomic, readonly) CNNotificationObserver* cutDownObs;
+@property (nonatomic, readonly) CNNotificationObserver* cityBuildObs;
 
 + (id)trainsDynamicWorldWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
