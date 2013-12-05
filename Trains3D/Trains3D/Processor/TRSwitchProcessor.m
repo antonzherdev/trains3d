@@ -45,7 +45,7 @@ static ODClassType* _TRSwitchProcessor_type;
                 GEVec3 sh = [((TRRailLight*)(light)) shift];
                 float x = sh.z;
                 float y = sh.x;
-                float z = sh.y + 0.1;
+                float z = sh.y + sz / 4;
                 if(((TRRailLight*)(light)).connector == TRRailConnector.top) {
                     TRRailroadConnectorContent* next = [_weakSelf nextConnectLight:light];
                     if([next isKindOfClass:[TRRailLight class]]) {

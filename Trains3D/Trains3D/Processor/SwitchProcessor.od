@@ -21,7 +21,7 @@ class SwitchProcessor(level : Level) extends InputProcessor {
             val sh = light.shift
             var x = sh.z
             var y = sh.x
-            var z = sh.y + 0.1
+            var z = sh.y + sz/4
             if(light.connector == RailConnector.top ) {
                 val next = nextConnect(light)
                 if(next.is<RailLight>) {
