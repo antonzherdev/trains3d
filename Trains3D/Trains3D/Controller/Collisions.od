@@ -81,15 +81,16 @@ class TrainsDynamicWorld(weak level : Level) extends Updatable {
     def remove(train : Train) {
         workCounter--
         train.cars.for{car ->
-            world.remove(car.dynamicBody)
+            if(train.isDying) world.remove(car.dynamicBody)
+            else world.remove(car.kinematicBody)
         }
     }
 
     static val carsCollisionNotification = NotificationHandle<float4>("carsCollisionNotification")
     static val carAndGroundCollisionNotification = NotificationHandle<float4>("carAndGroundCollisionNotification")
     def updateWith(delta : float) {
-        world.updateWith(delta)
         if(workCounter > 0) {
+            world.updateWith(delta)
             world.newCollisions.for {collision ->
                 if(collision.bodies.a.isKinematic && collision.bodies.b.isKinematic) return nil
                 if(collision.bodies.a.isKinematic) {

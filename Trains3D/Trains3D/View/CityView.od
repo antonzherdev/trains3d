@@ -49,10 +49,9 @@ class CityView(level : Level) {
 
 class CallRepairerView(level : Level) extends InputProcessor {
     private var buttonSize : vec2
-    private val text = Text(nil, Loc.callRepairer, vec3(0, 0, 0), TextAlignment(0, 0), vec4(0.1, 0.1, 0.1, 1))
+    private var font : Font
     def reshape {
-        val font = fontWith(name = "lucida_grande", 18)
-        text.font = font
+        font = fontWith(name = "lucida_grande", 18)
         buttonSize = font.measureC(Loc.callRepairer)*1.2
     }
 
@@ -68,10 +67,12 @@ class CallRepairerView(level : Level) extends InputProcessor {
             egPopGroupMarker
         } else if(!buttons.isEmpty) {
             buttons.clear
+            texts.clear
         }
     }
 
     private var buttons = MutableHashMap<City, Billboard>()
+    private var texts = MutableHashMap<City, Text>()
 
     def drawButtonFor(city : City) {
         val bs = buttonSize
@@ -83,6 +84,7 @@ class CallRepairerView(level : Level) extends InputProcessor {
         billboard.rect = Rect(r, bs)
         billboard.draw
 
+        val text = texts.objectFor(city, orUpdateWith =  Text(font, Loc.callRepairer, vec3(0, 0, 0), TextAlignment(0, 0), vec4(0.1, 0.1, 0.1, 1)))
         text.position = billboard.position
         text.alignment = TextAlignment(0, 0, false, vec3(r + bs/2, 0))
         text.draw

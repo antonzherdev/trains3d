@@ -247,24 +247,27 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 - (void)removeTrain:(TRTrain*)train {
     _workCounter--;
     [[train cars] forEach:^void(TRCar* car) {
-        [_world removeBody:[((TRCar*)(car)) dynamicBody]];
+        if(train.isDying) [_world removeBody:[((TRCar*)(car)) dynamicBody]];
+        else [_world removeBody:((TRCar*)(car)).kinematicBody];
     }];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    [_world updateWithDelta:delta];
-    if(_workCounter > 0) [[_world newCollisions] forEach:^void(EGDynamicCollision* collision) {
-        if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).isKinematic && ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).isKinematic) return ;
-        if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).isKinematic) {
-            [_level knockDownTrain:((TRCar*)(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).data)).train];
-        } else {
-            if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).isKinematic) [_level knockDownTrain:((TRCar*)(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).data)).train];
-        }
-        if([((EGDynamicCollision*)(collision)) impulse] > 0) {
-            if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).data == nil || ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).data == nil) [_TRTrainsDynamicWorld_carAndGroundCollisionNotification postData:numf4([((EGDynamicCollision*)(collision)) impulse])];
-            else [_TRTrainsDynamicWorld_carsCollisionNotification postData:numf4([((EGDynamicCollision*)(collision)) impulse])];
-        }
-    }];
+    if(_workCounter > 0) {
+        [_world updateWithDelta:delta];
+        [[_world newCollisions] forEach:^void(EGDynamicCollision* collision) {
+            if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).isKinematic && ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).isKinematic) return ;
+            if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).isKinematic) {
+                [_level knockDownTrain:((TRCar*)(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).data)).train];
+            } else {
+                if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).isKinematic) [_level knockDownTrain:((TRCar*)(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).data)).train];
+            }
+            if([((EGDynamicCollision*)(collision)) impulse] > 0) {
+                if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).data == nil || ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).data == nil) [_TRTrainsDynamicWorld_carAndGroundCollisionNotification postData:numf4([((EGDynamicCollision*)(collision)) impulse])];
+                else [_TRTrainsDynamicWorld_carsCollisionNotification postData:numf4([((EGDynamicCollision*)(collision)) impulse])];
+            }
+        }];
+    }
 }
 
 - (ODClassType*)type {

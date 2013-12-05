@@ -119,8 +119,9 @@ static ODClassType* _TRCityView_type;
 @implementation TRCallRepairerView{
     TRLevel* _level;
     GEVec2 _buttonSize;
-    EGText* _text;
+    EGFont* _font;
     NSMutableDictionary* _buttons;
+    NSMutableDictionary* _texts;
 }
 static ODClassType* _TRCallRepairerView_type;
 @synthesize level = _level;
@@ -133,8 +134,8 @@ static ODClassType* _TRCallRepairerView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _text = [EGText applyFont:nil text:[TRStr.Loc callRepairer] position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:GEVec4Make(0.1, 0.1, 0.1, 1.0)];
         _buttons = [NSMutableDictionary mutableDictionary];
+        _texts = [NSMutableDictionary mutableDictionary];
     }
     
     return self;
@@ -146,9 +147,8 @@ static ODClassType* _TRCallRepairerView_type;
 }
 
 - (void)reshape {
-    EGFont* font = [EGGlobal fontWithName:@"lucida_grande" size:18];
-    [_text setFont:font];
-    _buttonSize = geVec2MulF([font measureCText:[TRStr.Loc callRepairer]], 1.2);
+    _font = [EGGlobal fontWithName:@"lucida_grande" size:18];
+    _buttonSize = geVec2MulF([_font measureCText:[TRStr.Loc callRepairer]], 1.2);
 }
 
 - (void)draw {
@@ -163,7 +163,10 @@ static ODClassType* _TRCallRepairerView_type;
         }];
         egPopGroupMarker();
     } else {
-        if(!([_buttons isEmpty])) [_buttons clear];
+        if(!([_buttons isEmpty])) {
+            [_buttons clear];
+            [_texts clear];
+        }
     }
 }
 
@@ -177,9 +180,12 @@ static ODClassType* _TRCallRepairerView_type;
     GEVec2 r = geVec2MulVec2(geVec2SubF(p, 0.5), bs);
     billboard.rect = GERectMake(r, bs);
     [billboard draw];
-    [_text setPosition:billboard.position];
-    [_text setAlignment:EGTextAlignmentMake(0.0, 0.0, NO, geVec3ApplyVec2Z(geVec2AddVec2(r, geVec2DivI(bs, 2)), 0.0))];
-    [_text draw];
+    EGText* text = [_texts objectForKey:city orUpdateWith:^EGText*() {
+        return [EGText applyFont:_font text:[TRStr.Loc callRepairer] position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:GEVec4Make(0.1, 0.1, 0.1, 1.0)];
+    }];
+    [text setPosition:billboard.position];
+    [text setAlignment:EGTextAlignmentMake(0.0, 0.0, NO, geVec3ApplyVec2Z(geVec2AddVec2(r, geVec2DivI(bs, 2)), 0.0))];
+    [text draw];
 }
 
 - (EGRecognizers*)recognizers {
