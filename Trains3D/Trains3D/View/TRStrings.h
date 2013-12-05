@@ -47,6 +47,8 @@
 - (NSString*)helpRules;
 - (NSString*)helpNewCity;
 - (NSString*)helpSporadicDamage;
+- (NSString*)helpDamage;
+- (NSString*)helpRepairer;
 - (NSString*)helpExpressTrain;
 - (NSString*)helpTrainTo:(NSString*)to;
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
@@ -93,6 +95,8 @@
 - (NSString*)helpExpressTrain;
 - (NSString*)helpToMakeZoom;
 - (NSString*)helpSporadicDamage;
+- (NSString*)helpDamage;
+- (NSString*)helpRepairer;
 - (NSString*)result;
 - (NSString*)best;
 - (NSString*)topScore:(EGLocalPlayerScore*)score;
@@ -140,6 +144,8 @@
 - (NSString*)helpToMakeZoom;
 - (NSString*)helpRules;
 - (NSString*)helpSporadicDamage;
+- (NSString*)helpDamage;
+- (NSString*)helpRepairer;
 - (NSString*)rate;
 - (NSString*)result;
 - (NSString*)best;

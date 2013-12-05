@@ -174,6 +174,16 @@ static ODClassType* _TREnStrings_type;
     return @"Sometimes rails could be broken in itself.";
 }
 
+- (NSString*)helpDamage {
+    return @"Call the special train using a button to fix the damage.\n"
+        "It's better to call train from the closest city to the damage.";
+}
+
+- (NSString*)helpRepairer {
+    return @"Move the repairer train throught the damage\n"
+        "and send it to any city.";
+}
+
 - (NSString*)result {
     return @"Score:";
 }
@@ -435,6 +445,16 @@ static ODClassType* _TRRuStrings_type;
 
 - (NSString*)helpSporadicDamage {
     return @"Иногда рельсы могут ломаться сами по себе.";
+}
+
+- (NSString*)helpDamage {
+    return @"Вызовите специальный поезд с помощью кнопки, чтобы починить рельсы.\n"
+        "Лучше вызвать из города, который находиться ближе к повреждению.";
+}
+
+- (NSString*)helpRepairer {
+    return @"Проведите ремонтный поезд через повреждение\n"
+        "и отправьте его в любой город.";
 }
 
 - (NSString*)rate {

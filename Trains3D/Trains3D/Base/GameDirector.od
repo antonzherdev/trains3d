@@ -32,12 +32,36 @@ class GameDirector {
         }
     }
     private val sporadicDamageHelpObs = Level.sporadicDamageNotification.observe{ level ->
-        if(cloud.intFor("help.sporadicDamage2") == 0) {
+        if(cloud.intFor("help.sporadicDamage") == 0) {
             level.schedule.schedule(1) {
                 level.showHelp(Loc.helpSporadicDamage)
-                cloud.set("help.sporadicDamage2", 1)
+                cloud.set("help.sporadicDamage", 1)
             }
         }
+    }
+
+    private val damageHelpObs = Level.damageNotification.observe{ level ->
+        if(cloud.intFor("help.damage") == 0) {
+            level.schedule.schedule(1) {
+                level.showHelp(Loc.helpDamage)
+                cloud.set("help.damage", 1)
+            }
+        }
+    }
+
+    private val repairerHelpObs = Level.damageNotification.observe{ level ->
+        if(cloud.intFor("help.repairer") == 0) {
+            level.schedule.schedule(Level.trainComingPeriod + 7) {
+                level.showHelp(Loc.helpRepairer)
+                cloud.set("help.repairer", 1)
+            }
+        }
+    }
+
+    def clearTutorial {
+        cloud.set("help.sporadicDamage", 0)
+        cloud.set("help.damage", 0)
+        cloud.set("help.repairer", 0)
     }
 
     def bestScore(levelNumber : uint) : int = cloud.intFor("level$levelNumber.score")
@@ -73,6 +97,7 @@ class GameDirector {
 
     def init {
         GameCenter.instance.authenticate
+//        clearTutorial
     }
 
 

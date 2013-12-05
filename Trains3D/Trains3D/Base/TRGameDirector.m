@@ -22,6 +22,8 @@
     DTCloudKeyValueStorage* _cloud;
     CNNotificationObserver* _obs;
     CNNotificationObserver* _sporadicDamageHelpObs;
+    CNNotificationObserver* _damageHelpObs;
+    CNNotificationObserver* _repairerHelpObs;
     CNNotificationObserver* _crashObs;
     CNNotificationObserver* _knockDownObs;
 }
@@ -66,9 +68,21 @@ static ODClassType* _TRGameDirector_type;
             }];
         }];
         _sporadicDamageHelpObs = [TRLevel.sporadicDamageNotification observeBy:^void(TRLevel* level) {
-            if([_weakSelf.cloud intForKey:@"help.sporadicDamage2"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:1.0 event:^void() {
+            if([_weakSelf.cloud intForKey:@"help.sporadicDamage"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:1.0 event:^void() {
                 [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpSporadicDamage]];
-                [_weakSelf.cloud setKey:@"help.sporadicDamage2" i:1];
+                [_weakSelf.cloud setKey:@"help.sporadicDamage" i:1];
+            }];
+        }];
+        _damageHelpObs = [TRLevel.damageNotification observeBy:^void(TRLevel* level) {
+            if([_weakSelf.cloud intForKey:@"help.damage"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:1.0 event:^void() {
+                [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpDamage]];
+                [_weakSelf.cloud setKey:@"help.damage" i:1];
+            }];
+        }];
+        _repairerHelpObs = [TRLevel.damageNotification observeBy:^void(TRLevel* level) {
+            if([_weakSelf.cloud intForKey:@"help.repairer"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:((CGFloat)(TRLevel.trainComingPeriod + 7)) event:^void() {
+                [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpRepairer]];
+                [_weakSelf.cloud setKey:@"help.repairer" i:1];
             }];
         }];
         _crashObs = [TRLevel.crashNotification observeBy:^void(id<CNSeq> _) {
@@ -105,6 +119,12 @@ static ODClassType* _TRGameDirector_type;
     _TRGameDirector_type = [ODClassType classTypeWithCls:[TRGameDirector class]];
     _TRGameDirector_instance = [TRGameDirector gameDirector];
     _TRGameDirector_playerScoreRetrieveNotification = [CNNotificationHandle notificationHandleWithName:@"playerScoreRetrieveNotification"];
+}
+
+- (void)clearTutorial {
+    [_cloud setKey:@"help.sporadicDamage" i:0];
+    [_cloud setKey:@"help.damage" i:0];
+    [_cloud setKey:@"help.repairer" i:0];
 }
 
 - (NSInteger)bestScoreLevelNumber:(NSUInteger)levelNumber {

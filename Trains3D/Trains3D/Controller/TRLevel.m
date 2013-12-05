@@ -131,7 +131,9 @@ static CNNotificationHandle* _TRLevel_expectedTrainNotification;
 static CNNotificationHandle* _TRLevel_runTrainNotification;
 static CNNotificationHandle* _TRLevel_crashNotification;
 static CNNotificationHandle* _TRLevel_knockDownNotification;
+static CNNotificationHandle* _TRLevel_damageNotification;
 static CNNotificationHandle* _TRLevel_sporadicDamageNotification;
+static CNNotificationHandle* _TRLevel_runRepairerNotification;
 static CNNotificationHandle* _TRLevel_winNotification;
 static ODClassType* _TRLevel_type;
 @synthesize number = _number;
@@ -188,7 +190,9 @@ static ODClassType* _TRLevel_type;
     _TRLevel_runTrainNotification = [CNNotificationHandle notificationHandleWithName:@"runTrainNotification"];
     _TRLevel_crashNotification = [CNNotificationHandle notificationHandleWithName:@"Trains crashed"];
     _TRLevel_knockDownNotification = [CNNotificationHandle notificationHandleWithName:@"Knock down crashed"];
+    _TRLevel_damageNotification = [CNNotificationHandle notificationHandleWithName:@"damageNotification"];
     _TRLevel_sporadicDamageNotification = [CNNotificationHandle notificationHandleWithName:@"sporadicDamageNotification"];
+    _TRLevel_runRepairerNotification = [CNNotificationHandle notificationHandleWithName:@"runRepairerNotification"];
     _TRLevel_winNotification = [CNNotificationHandle notificationHandleWithName:@"Level was passed"];
 }
 
@@ -376,6 +380,7 @@ static ODClassType* _TRLevel_type;
         }] toArray]];
         [_schedule scheduleAfter:5.0 event:^void() {
             [_railroad addDamageAtPoint:((TRCarsCollision*)(collision)).railPoint];
+            [_TRLevel_damageNotification postData:self];
         }];
     }];
 }
@@ -392,6 +397,7 @@ static ODClassType* _TRLevel_type;
     [[[_railroad rails] randomItem] forEach:^void(TRRail* rail) {
         [_railroad addDamageAtPoint:[TRRailPoint railPointWithTile:((TRRail*)(rail)).tile form:((TRRail*)(rail)).form x:odFloatRndMinMax(0.0, ((TRRail*)(rail)).form.length) back:NO]];
         [_TRLevel_sporadicDamageNotification postData:self];
+        [_TRLevel_damageNotification postData:self];
     }];
 }
 
@@ -439,6 +445,7 @@ static ODClassType* _TRLevel_type;
         } speed:_rules.repairerSpeed];
         [self runTrain:train fromCity:city];
         __repairer = [CNOption applyValue:train];
+        [_TRLevel_runRepairerNotification postData:self];
     }
 }
 
@@ -510,8 +517,16 @@ static ODClassType* _TRLevel_type;
     return _TRLevel_knockDownNotification;
 }
 
++ (CNNotificationHandle*)damageNotification {
+    return _TRLevel_damageNotification;
+}
+
 + (CNNotificationHandle*)sporadicDamageNotification {
     return _TRLevel_sporadicDamageNotification;
+}
+
++ (CNNotificationHandle*)runRepairerNotification {
+    return _TRLevel_runRepairerNotification;
 }
 
 + (CNNotificationHandle*)winNotification {

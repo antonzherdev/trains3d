@@ -102,7 +102,9 @@
 + (CNNotificationHandle*)runTrainNotification;
 + (CNNotificationHandle*)crashNotification;
 + (CNNotificationHandle*)knockDownNotification;
++ (CNNotificationHandle*)damageNotification;
 + (CNNotificationHandle*)sporadicDamageNotification;
++ (CNNotificationHandle*)runRepairerNotification;
 + (CNNotificationHandle*)winNotification;
 + (ODClassType*)type;
 @end

@@ -181,6 +181,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
             crashNotification.post(collision.cars.chain.map(_.train).toArray)
             schedule.schedule(5) {
                 railroad.addDamageAt(collision.railPoint)
+                damageNotification.post(self)
             }
         })
     }
@@ -194,11 +195,14 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         }
     }
 
+    static val damageNotification = NotificationHandle<Level>("damageNotification")
+
     static val sporadicDamageNotification = NotificationHandle<Level>("sporadicDamageNotification")
     def addSporadicDamage {
         railroad.rails.randomItem.for {rail ->
             railroad.addDamageAt(RailPoint(rail.tile, rail.form, Float.rnd(0, rail.form.length), false))
             sporadicDamageNotification.post(self)
+            damageNotification.post(self)
         }
     }
 
@@ -234,12 +238,15 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         _repairer = _repairer.filter(_ != train)
     }
 
+
+    static val runRepairerNotification = NotificationHandle<Level>("runRepairerNotification")
     def runRepairerFrom(city : City) {
         if(_repairer.isEmpty) {
             score.repairerCalled
             val train = Train(self, TrainType.repairer, CityColor.grey, [Car(_, CarType.engine)], rules.repairerSpeed)
             run(train, city)
             _repairer = train
+            runRepairerNotification.post(self)
         }
     }
 

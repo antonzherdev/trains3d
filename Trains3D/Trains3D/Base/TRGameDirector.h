@@ -30,6 +30,7 @@
 + (id)gameDirector;
 - (id)init;
 - (ODClassType*)type;
+- (void)clearTutorial;
 - (NSInteger)bestScoreLevelNumber:(NSUInteger)levelNumber;
 - (void)destroyTrainsTrains:(id<CNSeq>)trains;
 - (void)_init;

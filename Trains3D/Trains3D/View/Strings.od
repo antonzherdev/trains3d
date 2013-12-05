@@ -53,6 +53,8 @@ trait Strings {
     def helpRules : string
     def helpNewCity : string
     def helpSporadicDamage : string
+    def helpDamage : string
+    def helpRepairer : string
     def helpExpressTrain : string
     def helpTrain(to : string) : string
     def helpTrainWithSwitches(to : string) : string
@@ -120,6 +122,13 @@ class EnStrings extends Strings {
          And one finger for railway building."
     def helpSporadicDamage : string =
         "Sometimes rails could be broken in itself."
+    def helpDamage : string =
+        "Call the special train using a button to fix the damage.
+         It's better to call train from the closest city to the damage."
+
+    def helpRepairer : string =
+        "Move the repairer train throught the damage
+         and send it to any city."
 
     def result : string = "Score:"
     def best : string = "Your best:"
@@ -202,6 +211,12 @@ class RuStrings extends Strings{
          и выграйте уровень."
     def helpSporadicDamage : string =
         "Иногда рельсы могут ломаться сами по себе."
+    def helpDamage : string =
+        "Вызовите специальный поезд с помощью кнопки, чтобы починить рельсы.
+         Лучше вызвать из города, который находиться ближе к повреждению."
+    def helpRepairer : string =
+        "Проведите ремонтный поезд через повреждение
+         и отправьте его в любой город."
 
     def rate : string = "Оценить игру"
     def result : string = "Счет:"
