@@ -38,7 +38,8 @@ static ODClassType* _EGCameraIso_type;
         _matrixModel = ^EGMatrixModel*() {
             CGFloat isoWW = _ww * _EGCameraIso_ISO;
             CGFloat isoWW2 = isoWW / 2;
-            CGFloat angleSin = (isoWW - _viewportRatio * _yReserve) / (isoWW * _viewportRatio);
+            CGFloat as = (isoWW - _viewportRatio * _yReserve) / (isoWW * _viewportRatio);
+            CGFloat angleSin = ((as > 1.0) ? 1.0 : as);
             return [EGMatrixModel applyM:_EGCameraIso_m w:_EGCameraIso_w c:^GEMat4*() {
                 CGFloat ang = (asin(angleSin) * 180) / M_PI;
                 GEMat4* t = [[GEMat4 identity] translateX:-_center.x y:0.0 z:_center.y];

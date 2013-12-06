@@ -17,7 +17,8 @@ class CameraIso(tilesOnScreen : vec2, yReserve : float4, viewportRatio : float, 
     val matrixModel : MatrixModel = {
         val isoWW = ww*ISO
         val isoWW2 = isoWW/2
-        val angleSin = (isoWW - viewportRatio*yReserve)/(isoWW*viewportRatio)
+        val as = (isoWW - viewportRatio*yReserve)/(isoWW*viewportRatio)
+        val angleSin = if(as > 1.0) 1.0 else as
         MatrixModel(
             m = m,
             w = w,
