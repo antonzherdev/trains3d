@@ -35,7 +35,6 @@ static ODClassType* _TRLevelView_type;
 @synthesize level = _level;
 @synthesize name = _name;
 @synthesize environment = _environment;
-@synthesize move = _move;
 
 + (id)levelViewWithLevel:(TRLevel*)level {
     return [[TRLevelView alloc] initWithLevel:level];
@@ -65,7 +64,7 @@ static ODClassType* _TRLevelView_type;
     }
     return m;
 }()]])];
-        _move = [EGCameraIsoMove cameraIsoMoveWithBase:[EGCameraIso applyTilesOnScreen:geVec2ApplyVec2i(_level.map.size) zReserve:0.5] misScale:1.0 maxScale:2.0 panFingers:2.0];
+        _move = [EGCameraIsoMove cameraIsoMoveWithBase:[EGCameraIso applyTilesOnScreen:geVec2ApplyVec2i(_level.map.size) yReserve:0.1 viewportRatio:2.0] misScale:1.0 maxScale:2.0 panFingers:2.0];
         _railroadBuilderProcessor = [TRRailroadBuilderProcessor railroadBuilderProcessorWithBuilder:_level.railroad.builder];
         _switchProcessor = [TRSwitchProcessor switchProcessorWithLevel:_level];
         [self _init];
@@ -135,6 +134,7 @@ static ODClassType* _TRLevelView_type;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
+    [_move setViewportRatio:((CGFloat)(viewport.size.x / viewport.size.y))];
     EGGlobal.matrix.value = [[self camera] matrixModel];
     [_callRepairerView reshape];
     [_railroadView reshape];

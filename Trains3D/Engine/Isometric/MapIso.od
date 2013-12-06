@@ -3,7 +3,7 @@ package com.antonzherdev.eg
 
 
 class MapSso(size : vec2i) {
-    static val ISO = 0.70710676908493
+    static val ISO = 0.70710678118655 //sqrt(2)/2 = tg 45
 
     val limits = vec2i(
         (1 - size.y)/2 - 1,

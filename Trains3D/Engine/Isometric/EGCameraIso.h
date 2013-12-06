@@ -12,15 +12,15 @@
 
 @interface EGCameraIso : NSObject<EGCamera>
 @property (nonatomic, readonly) GEVec2 tilesOnScreen;
-@property (nonatomic, readonly) float zReserve;
-@property (nonatomic, readonly) GEVec2 center;
+@property (nonatomic, readonly) float yReserve;
 @property (nonatomic, readonly) CGFloat viewportRatio;
+@property (nonatomic, readonly) GEVec2 center;
 @property (nonatomic, readonly) EGMatrixModel* matrixModel;
 
-+ (id)cameraIsoWithTilesOnScreen:(GEVec2)tilesOnScreen zReserve:(float)zReserve center:(GEVec2)center;
-- (id)initWithTilesOnScreen:(GEVec2)tilesOnScreen zReserve:(float)zReserve center:(GEVec2)center;
++ (id)cameraIsoWithTilesOnScreen:(GEVec2)tilesOnScreen yReserve:(float)yReserve viewportRatio:(CGFloat)viewportRatio center:(GEVec2)center;
+- (id)initWithTilesOnScreen:(GEVec2)tilesOnScreen yReserve:(float)yReserve viewportRatio:(CGFloat)viewportRatio center:(GEVec2)center;
 - (ODClassType*)type;
-+ (EGCameraIso*)applyTilesOnScreen:(GEVec2)tilesOnScreen zReserve:(float)zReserve;
++ (EGCameraIso*)applyTilesOnScreen:(GEVec2)tilesOnScreen yReserve:(float)yReserve viewportRatio:(CGFloat)viewportRatio;
 - (NSUInteger)cullFace;
 - (GEVec2)naturalCenter;
 + (GEMat4*)m;
@@ -43,6 +43,8 @@
 - (void)setScale:(CGFloat)scale;
 - (GEVec2)center;
 - (void)setCenter:(GEVec2)center;
+- (CGFloat)viewportRatio;
+- (void)setViewportRatio:(CGFloat)viewportRatio;
 - (EGRecognizers*)recognizers;
 - (GEQuad)centerBounds;
 + (CNNotificationHandle*)cameraChangedNotification;

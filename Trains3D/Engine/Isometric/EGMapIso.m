@@ -7,7 +7,7 @@
     id<CNSeq> _partialTiles;
     id<CNSeq> _allTiles;
 }
-static CGFloat _EGMapSso_ISO = 0.70710676908493;
+static CGFloat _EGMapSso_ISO = 0.70710678118655;
 static ODClassType* _EGMapSso_type;
 @synthesize size = _size;
 @synthesize limits = _limits;

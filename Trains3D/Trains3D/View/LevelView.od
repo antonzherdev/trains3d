@@ -61,7 +61,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
         }
     }
 
-    val move = CameraIsoMove(CameraIso(level.map.size, zReserve = 0.5), 1.0, 2.0, 2)
+    private var move = CameraIsoMove(CameraIso(level.map.size, yReserve = 0.1, viewportRatio = 2), 1.0, 2.0, 2)
     def camera : Camera = move.camera
 
     def updateWith(delta : float) {
@@ -81,6 +81,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
         railroadBuilderProcessor.recognizers
 
     def reshapeWith(viewport : Rect) {
+        move.viewportRatio = viewport.size.x/viewport.size.y
         matrix.value = camera.matrixModel
         callRepairerView.reshape
         railroadView.reshape

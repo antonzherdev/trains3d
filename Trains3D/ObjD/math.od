@@ -5,6 +5,7 @@ stub object math {
     val M_PI_2 : float
     val M_PI_4 : float
     def sin(:float) : float
+    def asin(:float) : float
     def cos(:float) : float
     def tan(:float) : float
     def fabs(:float) : float

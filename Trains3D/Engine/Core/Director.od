@@ -19,7 +19,7 @@ class Director {
         val sc = scene()
         _scene = sc
         context.clearCache
-        sc.reshapeWith(_lastViewSize)
+        if(_lastViewSize != vec2(0, 0)) sc.reshapeWith(_lastViewSize)
         sc.recognizersTypes.for(register(_))
         sc.start
 

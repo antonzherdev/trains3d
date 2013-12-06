@@ -61,7 +61,7 @@ static ODClassType* _EGDirector_type;
     EGScene* sc = ((EGScene*(^)())(scene))();
     __scene = [CNOption applyValue:sc];
     [EGGlobal.context clearCache];
-    [sc reshapeWithViewSize:__lastViewSize];
+    if(!(GEVec2Eq(__lastViewSize, GEVec2Make(0.0, 0.0)))) [sc reshapeWithViewSize:__lastViewSize];
     [[sc recognizersTypes] forEach:^void(EGRecognizerType* _) {
         [self registerRecognizerType:_];
     }];
