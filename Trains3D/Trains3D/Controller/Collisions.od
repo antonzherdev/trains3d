@@ -79,7 +79,7 @@ class TrainsDynamicWorld(weak level : Level) extends Updatable {
     }
 
     def remove(train : Train) {
-        workCounter--
+        if(train.isDying) workCounter--
         train.cars.for{car ->
             if(train.isDying) world.remove(car.dynamicBody)
             else world.remove(car.kinematicBody)

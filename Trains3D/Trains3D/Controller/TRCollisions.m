@@ -245,7 +245,7 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 }
 
 - (void)removeTrain:(TRTrain*)train {
-    _workCounter--;
+    if(train.isDying) _workCounter--;
     [[train cars] forEach:^void(TRCar* car) {
         if(train.isDying) [_world removeBody:[((TRCar*)(car)) dynamicBody]];
         else [_world removeBody:((TRCar*)(car)).kinematicBody];
