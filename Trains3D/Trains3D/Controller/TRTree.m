@@ -152,8 +152,13 @@ static ODClassType* _TRForest_type;
 }
 
 - (void)cutDownRect:(GERect)rect {
-    __trees = [[[__trees chain] filter:^BOOL(TRTree* _) {
-        return !(geRectContainsVec2(rect, ((TRTree*)(_)).position));
+    __trees = [[[__trees chain] filter:^BOOL(TRTree* tree) {
+        if(geRectContainsVec2(rect, ((TRTree*)(tree)).position)) {
+            [((TRTree*)(tree)) cutDown];
+            return NO;
+        } else {
+            return YES;
+        }
     }] toArray];
 }
 

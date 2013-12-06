@@ -51,7 +51,12 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Updat
     }
 
     def cutDown(rect : Rect) {
-        _trees = _trees.chain.filter(!rect.contains(_.position)).toArray
+        _trees = _trees.chain.filter{tree ->
+            if(rect.contains(tree.position)) {
+                tree.cutDown
+                false
+            } else true
+        }.toArray
     }
 
     def updateWith(delta : float) {
