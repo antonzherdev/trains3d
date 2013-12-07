@@ -14,6 +14,8 @@
 #import "TRRailroadBuilderProcessor.h"
 #import "TRRailroad.h"
 #import "TRSwitchProcessor.h"
+#import "GL.h"
+#import "EGPlatform.h"
 #import "TRRainView.h"
 #import "TRSnowView.h"
 @implementation TRLevelView{
@@ -134,7 +136,13 @@ static ODClassType* _TRLevelView_type;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
-    [_move setViewportRatio:((CGFloat)(viewport.size.x / viewport.size.y))];
+    float r = viewport.size.x / viewport.size.y;
+    [_move setViewportRatio:((CGFloat)(r))];
+    if(egInterfaceIdiom() == EGInterfaceIdiom.pad) {
+        if(r < 4.0 / 3 + 0.01) [_move setYReserve:0.6];
+    } else {
+        if(egInterfaceIdiom() == EGInterfaceIdiom.phone) [_move setYReserve:0.2];
+    }
     EGGlobal.matrix.value = [[self camera] matrixModel];
     [_callRepairerView reshape];
     [_railroadView reshape];

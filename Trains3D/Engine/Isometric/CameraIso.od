@@ -75,6 +75,11 @@ class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFin
         _currentBase = CameraIso(_currentBase.tilesOnScreen, _currentBase.yReserve, viewportRatio, _currentBase.center)
         _camera = CameraIso(_camera.tilesOnScreen, _camera.yReserve, viewportRatio, _camera.center)
     }
+    def yReserve : float = _currentBase.yReserve
+    def set(yReserve : float) {
+        _currentBase = CameraIso(_currentBase.tilesOnScreen, yReserve, _currentBase.viewportRatio, _currentBase.center)
+        _camera = CameraIso(_camera.tilesOnScreen, yReserve, _camera.viewportRatio, _camera.center)
+    }
 
     def recognizers : Recognizers = [Recognizer<PinchParameter>(Pinch(),
         began = event -> {

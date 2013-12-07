@@ -45,6 +45,8 @@
 - (void)setCenter:(GEVec2)center;
 - (CGFloat)viewportRatio;
 - (void)setViewportRatio:(CGFloat)viewportRatio;
+- (CGFloat)yReserve;
+- (void)setYReserve:(CGFloat)yReserve;
 - (EGRecognizers*)recognizers;
 - (GEQuad)centerBounds;
 + (CNNotificationHandle*)cameraChangedNotification;

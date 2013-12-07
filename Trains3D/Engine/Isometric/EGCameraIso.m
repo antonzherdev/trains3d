@@ -205,6 +205,15 @@ static ODClassType* _EGCameraIsoMove_type;
     __camera = [EGCameraIso cameraIsoWithTilesOnScreen:__camera.tilesOnScreen yReserve:__camera.yReserve viewportRatio:viewportRatio center:__camera.center];
 }
 
+- (CGFloat)yReserve {
+    return ((CGFloat)(__currentBase.yReserve));
+}
+
+- (void)setYReserve:(CGFloat)yReserve {
+    __currentBase = [EGCameraIso cameraIsoWithTilesOnScreen:__currentBase.tilesOnScreen yReserve:((float)(yReserve)) viewportRatio:__currentBase.viewportRatio center:__currentBase.center];
+    __camera = [EGCameraIso cameraIsoWithTilesOnScreen:__camera.tilesOnScreen yReserve:((float)(yReserve)) viewportRatio:__camera.viewportRatio center:__camera.center];
+}
+
 - (EGRecognizers*)recognizers {
     return [EGRecognizers recognizersWithItems:(@[[EGRecognizer applyTp:[EGPinch pinch] began:^BOOL(id<EGEvent> event) {
     __startScale = __scale;
