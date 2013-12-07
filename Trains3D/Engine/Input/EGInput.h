@@ -164,6 +164,8 @@
 - (GEVec2)locationInView;
 - (GEVec2)viewSize;
 - (id)param;
+- (EGMatrixModel*)matrixModel;
+- (GERect)viewport;
 - (GEVec2)locationInViewport;
 - (GEVec2)location;
 - (GEVec2)locationForDepth:(CGFloat)depth;

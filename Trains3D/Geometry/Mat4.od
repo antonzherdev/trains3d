@@ -6,6 +6,7 @@ stub class mat4(array : float4[16]) {
     def inverse : mat4
     def mul(matrix : mat4) : mat4
     def mul(vec4 : vec4) : vec4
+    def mul(vec3 : vec3) : vec3
     def mul(vec3 : vec3, w : float4) : vec4
     def mul(rect : Rect) : Rect
     def mul(rect : Rect, z : float4) : Rect

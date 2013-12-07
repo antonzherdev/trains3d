@@ -803,6 +803,14 @@ static ODClassType* _EGViewEvent_type;
     _EGViewEvent_type = [ODClassType classTypeWithCls:[EGViewEvent class]];
 }
 
+- (EGMatrixModel*)matrixModel {
+    return EGMatrixModel.identity;
+}
+
+- (GERect)viewport {
+    return geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0);
+}
+
 - (GEVec2)locationInViewport {
     return [self locationInView];
 }
@@ -934,8 +942,7 @@ static ODClassType* _EGCameraEvent_type;
 }
 
 - (GEVec2)locationInViewport {
-    GERect viewport = _viewport;
-    return geVec2SubVec2(geVec2MulI(geVec2DivVec2(geVec2SubVec2(_locationInView, viewport.p), viewport.size), 2), GEVec2Make(1.0, 1.0));
+    return geVec2SubVec2(geVec2MulI(geVec2DivVec2(geVec2SubVec2(_locationInView, _viewport.p), _viewport.size), 2), GEVec2Make(1.0, 1.0));
 }
 
 - (GEVec2)locationForDepth:(CGFloat)depth {

@@ -40,6 +40,8 @@ typedef struct GEMat4Impl GEMat4Impl;
 - (GERect)mulRect:(GERect)rect;
 
 - (GERect)mulRect:(GERect)rect z:(float)z;
+
+- (GEVec3)mulVec3:(GEVec3)vec3;
 @end
 
 struct GEMat3Impl;

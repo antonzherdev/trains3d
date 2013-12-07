@@ -11,6 +11,12 @@ NSString* GEVec2Description(GEVec2 self) {
 GEVec2 geVec2ApplyVec2i(GEVec2i vec2i) {
     return GEVec2Make(((float)(vec2i.x)), ((float)(vec2i.y)));
 }
+GEVec2 geVec2Min() {
+    return GEVec2Make(((float)(odFloat4Min())), ((float)(odFloat4Min())));
+}
+GEVec2 geVec2Max() {
+    return GEVec2Make(((float)(odFloat4Max())), ((float)(odFloat4Max())));
+}
 GEVec2 geVec2AddVec2(GEVec2 self, GEVec2 vec2) {
     return GEVec2Make(self.x + vec2.x, self.y + vec2.y);
 }
@@ -1043,6 +1049,9 @@ BOOL gePlaneContainsVec3(GEPlane self, GEVec3 vec3) {
 GEPlane gePlaneAddVec3(GEPlane self, GEVec3 vec3) {
     return GEPlaneMake(geVec3AddVec3(self.p0, vec3), self.n);
 }
+GEPlane gePlaneMulMat4(GEPlane self, GEMat4* mat4) {
+    return GEPlaneMake([mat4 mulVec3:self.p0], geVec4Xyz([mat4 mulVec3:self.n w:0.0]));
+}
 ODPType* gePlaneType() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[GEPlaneWrap class] name:@"GEPlane" size:sizeof(GEPlane) wrap:^id(void* data, NSUInteger i) {
@@ -1111,6 +1120,9 @@ GEPlaneCoord gePlaneCoordSetX(GEPlaneCoord self, GEVec3 x) {
 GEPlaneCoord gePlaneCoordSetY(GEPlaneCoord self, GEVec3 y) {
     return GEPlaneCoordMake(self.plane, self.x, y);
 }
+GEPlaneCoord gePlaneCoordMulMat4(GEPlaneCoord self, GEMat4* mat4) {
+    return GEPlaneCoordMake(gePlaneMulMat4(self.plane, mat4), [mat4 mulVec3:self.x], [mat4 mulVec3:self.y]);
+}
 ODPType* gePlaneCoordType() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[GEPlaneCoordWrap class] name:@"GEPlaneCoord" size:sizeof(GEPlaneCoord) wrap:^id(void* data, NSUInteger i) {
@@ -1177,6 +1189,9 @@ GEVec3 geQuad3P3(GEQuad3 self) {
 }
 id<CNSeq> geQuad3Ps(GEQuad3 self) {
     return (@[wrap(GEVec3, geQuad3P0(self)), wrap(GEVec3, geQuad3P1(self)), wrap(GEVec3, geQuad3P2(self)), wrap(GEVec3, geQuad3P3(self))]);
+}
+GEQuad3 geQuad3MulMat4(GEQuad3 self, GEMat4* mat4) {
+    return GEQuad3Make(gePlaneCoordMulMat4(self.planeCoord, mat4), self.quad);
 }
 ODPType* geQuad3Type() {
     static ODPType* _ret = nil;

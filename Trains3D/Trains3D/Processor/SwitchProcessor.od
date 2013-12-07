@@ -3,110 +3,78 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 
 class SwitchProcessor(level : Level) extends InputProcessor {
-
-    val switchShape = CollisionBox2d(0.45, 0.45)
-    val world = CollisionWorld<RailroadConnectorContent>()
-    private val obs = Railroad.changedNotification.observe { _ ->
-        self.world.clear
-        self.level.railroad.switches.for{switch ->
-            val body = CollisionBody(switch, switchShape, isKinematic = false)
-            body.translate(switch.tile.x, switch.tile.y, 0)
-            body.rotate(switch.connector.angle, 0, 0, 1)
-            body.translate(-switchShape.size.x/2, 0, 0)
-            self.world.add(body)
-        }
-        self.level.railroad.lights.for{light ->
-            var sz = 0.5
-            var sy = 0.6
-            val sh = light.shift
-            var x = sh.z
-            var y = sh.x
-            var z = sh.y + sz/4
-            if(light.connector == RailConnector.top ) {
-                val next = nextConnect(light)
-                if(next.is<RailLight>) {
-                    sy -= 0.15
-                    y -= 0.2
-                }
-                if(next.is<Switch>) {
-                    sy -= 0.1
-                    y -= 0.1
-                }
-                if(level.railroad.contentIn(light.tile + vec2i(-1, 1), RailConnector.right).is<RailLight>) {
-                    z -= 0.15
-                    sz -= 0.2
-                }
-            }
-            if(light.connector == RailConnector.bottom ) {
-                if(nextConnect(light).is<RailLight>) {
-                    y -= 0.23
-                    sy -= 0.15
-                }
-                val cont = level.railroad.contentIn(light.tile + vec2i(-1, 0), RailConnector.right)
-                if(cont.is<RailLight> || cont.is<Switch>) {
-                    z -= 0.1
-                    sz -= 0.1
-                }
-                val cont2 = level.railroad.contentIn(light.tile, RailConnector.left)
-                if(cont2.is<Switch>) {
-                    y += 0.1
-                    sy -= 0.1
-                }
-            }
-            if(light.connector == RailConnector.left) {
-                if(nextConnect(light).is<Switch>) {
-                    sy -= 0.1
-                    y += 0.15
-                }
-                if(level.railroad.contentIn(light.tile + vec2i(-1, 1), RailConnector.bottom).is<Switch>) {
-                    z -= 0.1
-                    sz -= 0.1
-                }
-            }
-            if(light.connector == RailConnector.right) {
-                if(level.railroad.contentIn(light.tile, RailConnector.top).is<Switch>) {
-                    z -= 0.1
-                    sz -= 0.1
-                }
-            }
-
-            val body = CollisionBody(light, CollisionBox2d(sz, sy), isKinematic = false)
-
-            val stand =
-                if(light.connector == RailConnector.top || light.connector == RailConnector.bottom)
-                    mat4.identity.rotate(90, 1, 0, 0)
-                else mat4.identity.rotate(90, 0, 1, 0)
-            val moveToPlace = mat4.identity.translate(x, y, z)
-            val rotateToConnector = mat4.identity.rotate(light.connector.angle, 0, 0, 1)
-            val moveToTile = mat4.identity.translate(light.tile.x, light.tile.y, 0)
-
-            body.matrix = moveToTile * rotateToConnector * moveToPlace * stand
-            self.world.add(body)
-        }
-    }
+//    private val obs = Railroad.changedNotification.observe { _ ->
+//    }
 
 
-    private def dzFor(light : RailLight) : float4 = {
-        if(light.connector == RailConnector.bottom
-            && level.railroad.contentIn(light.tile + vec2i(-1, 0), RailConnector.right).is<RailLight>) -0.15
-        else if(light.connector == RailConnector.top
-            && level.railroad.contentIn(light.tile + vec2i(-1, 1), RailConnector.right).is<RailLight>) -0.15
-        else 0
-    }
+    def process(event : Event) : bool = {
+        val vps = vec2(80, 80)/event.viewport.size*context.scale
+        val loc = event.locationInViewport
+        val downed =
+            self.level.railroad.switches.chain.map{switch ->
+                val rotate = mat4.identity.rotate(switch.connector.angle, 0, 0, 1)
+                val moveToTile = mat4.identity.translate(switch.tile.x, switch.tile.y, 0)
+                val m = moveToTile * rotate
+                SwitchProcessorItem(switch, Rect(-0.5, -0.2, 0.4, 0.4)) * m
+            }.append(self.level.railroad.lights.chain.map{light ->
+                    var sz = 0.2
+                    var sy = 0.1
 
-    private def nextConnect(light : RailLight) : RailroadConnectorContent = {
-        val c = light.connector
-        level.railroad.contentIn(c.next(light.tile), c.otherSideConnector)
-    }
+                    val stand = mat4.identity.rotate(90, 0, 1, 0)
+                    val sh = light.shift
+                    val moveToPlace = mat4.identity.translate(sh.z, sh.x, sh.y + sz/4)
+                    val rotateToConnector = mat4.identity.rotate(light.connector.angle, 0, 0, 1)
+                    val moveToTile = mat4.identity.translate(light.tile.x, light.tile.y, 0)
 
+                    val m = moveToTile * rotateToConnector * moveToPlace * stand
+                    SwitchProcessorItem(light, Rect(-sz/2, -sy/2, sz, sy)) * m
+            })
+            .map{item -> item * event.matrixModel.wcp}
+            .map{item -> item.expand(vps) }
+            .filter{item -> item.contains(loc)}
+            .sortBy.asc{item -> item.distance(loc)}.endSort
+            .headOpt
 
-    def recognizers: Recognizers = Recognizer(Tap()) {event : Event ->
-        val downed = world.closestCrossPointWith(event.segment).map(_.body.data)
         if(downed.isDefined) {
-            downed.get.as<Switch>.for(level.tryTurn(theSwitch = _ ))
-            downed.get.as<RailLight>.for(_.turn)
+            downed.get.content.as<Switch>.for(level.tryTurn(theSwitch = _ ))
+            downed.get.content.as<RailLight>.for(_.turn)
 
             true
         } else false
     }
+
+    def recognizers: Recognizers = Recognizer(Tap(), process(_))
+
+}
+
+class SwitchProcessorItem(content : RailroadConnectorContent, p0 : vec3, p1 : vec3, p2 : vec3, p3 : vec3) {
+    static def apply(content : RailroadConnectorContent, rect : Rect) : SwitchProcessorItem =
+        SwitchProcessorItem(content, rect.p, rect.pw, rect.phw, rect.ph)
+
+    def ps : [vec2] = [p0, p1, p2, p3]
+    def mul(mat4 : mat4) : SwitchProcessorItem = SwitchProcessorItem(content, mat4*p0, mat4*p1, mat4*p2, mat4*p3)
+    def boundingRect : Rect = {
+        var min = vec2.max
+        var max = vec2.min
+        ps.for {p ->
+            min = min.min(p)
+            max = max.max(p)
+        }
+        Rect(min, max - min)
+    }
+
+    def expand(vec2 : vec2) : SwitchProcessorItem = {
+        val r = boundingRect
+        val len = r.size
+        val mid = r.center
+        SwitchProcessorItem(content,
+            vec3(p0.xy + (p0.xy - mid)/len*vec2, p0.z),
+            vec3(p1.xy + (p1.xy - mid)/len*vec2, p1.z),
+            vec3(p2.xy + (p2.xy - mid)/len*vec2, p2.z),
+            vec3(p3.xy + (p3.xy - mid)/len*vec2, p3.z)
+        )
+    }
+
+    def contains(vec2 : vec2) : bool = boundingRect.contains(vec2)
+    def distance(vec2 : vec2) : float4 = (boundingRect.center - vec2).length
 }

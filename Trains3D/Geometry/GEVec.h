@@ -34,6 +34,8 @@ static inline NSUInteger GEVec2Hash(GEVec2 self) {
 }
 NSString* GEVec2Description(GEVec2 self);
 GEVec2 geVec2ApplyVec2i(GEVec2i vec2i);
+GEVec2 geVec2Min();
+GEVec2 geVec2Max();
 GEVec2 geVec2AddVec2(GEVec2 self, GEVec2 vec2);
 GEVec2 geVec2AddF4(GEVec2 self, float f4);
 GEVec2 geVec2AddF(GEVec2 self, CGFloat f);
@@ -463,6 +465,7 @@ static inline NSUInteger GEPlaneHash(GEPlane self) {
 NSString* GEPlaneDescription(GEPlane self);
 BOOL gePlaneContainsVec3(GEPlane self, GEVec3 vec3);
 GEPlane gePlaneAddVec3(GEPlane self, GEVec3 vec3);
+GEPlane gePlaneMulMat4(GEPlane self, GEMat4* mat4);
 ODPType* gePlaneType();
 @interface GEPlaneWrap : NSObject
 @property (readonly, nonatomic) GEPlane value;
@@ -497,6 +500,7 @@ GEVec3 gePlaneCoordPVec2(GEPlaneCoord self, GEVec2 vec2);
 GEPlaneCoord gePlaneCoordAddVec3(GEPlaneCoord self, GEVec3 vec3);
 GEPlaneCoord gePlaneCoordSetX(GEPlaneCoord self, GEVec3 x);
 GEPlaneCoord gePlaneCoordSetY(GEPlaneCoord self, GEVec3 y);
+GEPlaneCoord gePlaneCoordMulMat4(GEPlaneCoord self, GEMat4* mat4);
 ODPType* gePlaneCoordType();
 @interface GEPlaneCoordWrap : NSObject
 @property (readonly, nonatomic) GEPlaneCoord value;
@@ -529,6 +533,7 @@ GEVec3 geQuad3P1(GEQuad3 self);
 GEVec3 geQuad3P2(GEQuad3 self);
 GEVec3 geQuad3P3(GEQuad3 self);
 id<CNSeq> geQuad3Ps(GEQuad3 self);
+GEQuad3 geQuad3MulMat4(GEQuad3 self, GEMat4* mat4);
 ODPType* geQuad3Type();
 @interface GEQuad3Wrap : NSObject
 @property (readonly, nonatomic) GEQuad3 value;

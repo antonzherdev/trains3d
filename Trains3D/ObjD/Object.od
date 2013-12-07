@@ -85,6 +85,9 @@ stub struct Float extends Comparable<float> with Number {
 }
 
 stub struct Float4 extends Comparable<float4> with Number {
+    static val max : float
+    static val min : float
+
     def compare(to : float4) : int
     def between( : float4, : float4) : bool
     def abs : float4

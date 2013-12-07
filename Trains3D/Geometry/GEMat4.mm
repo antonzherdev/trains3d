@@ -177,6 +177,11 @@ static GEMat4 * _null;
     glm::vec4 v3 = _impl->m* glm::vec4(p3.x, p3.y, z, 1);
     return {v0.x, v0.y, v3.x - v0.x, v3.y - v0.y};
 }
+
+- (GEVec3)mulVec3:(GEVec3)vec3 {
+    glm::vec4 v4 = _impl->m* glm::vec4(vec3.x, vec3.y, vec3.z, 1);
+    return {v4.x, v4.y, v4.z};
+}
 @end
 
 
