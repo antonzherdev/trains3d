@@ -21,12 +21,12 @@ class TrainsCollisionWorld(map : MapSso) {
     def detect : [CarsCollision] = world.detect.chain.flatMap<CarsCollision>{collision ->
         if(collision.contacts.all(isOutOfMap(_))) return Option.none<CarsCollision>
 
-        val car1 = collision.bodies.a.data
-        val car2 = collision.bodies.b.data
+        val car1 = collision.bodies.a.data.get
+        val car2 = collision.bodies.b.data.get
 
         val point =
-            [car1.get.position.head, car1.get.position.tail].chain
-                .mul([car2.get.position.head, car2.get.position.tail])
+            [car1.position.head, car1.position.tail].chain
+                .mul([car2.position.head, car2.position.tail])
                 .sortBy.asc{pair ->
                     val x = pair.a
                     val y = pair.b

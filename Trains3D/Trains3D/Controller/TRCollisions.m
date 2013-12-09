@@ -54,9 +54,9 @@ static ODClassType* _TRTrainsCollisionWorld_type;
         if([((EGCollision*)(collision)).contacts allConfirm:^BOOL(EGContact* _) {
     return [self isOutOfMapContact:_];
 }]) return [CNOption none];
-        CNWeak* car1 = ((EGCollisionBody*)(((EGCollision*)(collision)).bodies.a)).data;
-        CNWeak* car2 = ((EGCollisionBody*)(((EGCollision*)(collision)).bodies.b)).data;
-        TRRailPoint* point = [[[[[[[(@[[((TRCar*)(car1.get)) position].head, [((TRCar*)(car1.get)) position].tail]) chain] mul:(@[[((TRCar*)(car2.get)) position].head, [((TRCar*)(car2.get)) position].tail])] sortBy] ascBy:^id(CNTuple* pair) {
+        TRCar* car1 = ((CNWeak*)(((EGCollisionBody*)(((EGCollision*)(collision)).bodies.a)).data)).get;
+        TRCar* car2 = ((CNWeak*)(((EGCollisionBody*)(((EGCollision*)(collision)).bodies.b)).data)).get;
+        TRRailPoint* point = [[[[[[[(@[[car1 position].head, [car1 position].tail]) chain] mul:(@[[car2 position].head, [car2 position].tail])] sortBy] ascBy:^id(CNTuple* pair) {
             TRRailPoint* x = ((CNTuple*)(pair)).a;
             TRRailPoint* y = ((CNTuple*)(pair)).b;
             if(x.form == y.form && GEVec2iEq(x.tile, y.tile)) return numf(floatAbs(x.x - y.x));
