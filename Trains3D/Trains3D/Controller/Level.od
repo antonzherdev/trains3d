@@ -76,10 +76,12 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     static val expectedTrainNotification = NotificationHandle<(Train, City)>("expectedTrainNotification")
     private def run(train : Train, fromCity : City) {
         fromCity.expectedTrainColor = train.color
+        weak val ws = self
+        weak val fs = fromCity
         fromCity.expectedTrainCounter = Counter(trainComingPeriod, finish = {
-            train.startFrom(fromCity)
-            add(train)
-        }).on(0.9, prepareToRunTrainNotification.post((train, fromCity)))
+            train.startFrom(fs)
+            ws.add(train)
+        }).on(0.9, prepareToRunTrainNotification.post((train, fs)))
         expectedTrainNotification.post((train, fromCity))
     }
 
