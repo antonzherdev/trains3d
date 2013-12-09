@@ -16,6 +16,7 @@
 @class TRCityAngle;
 @class TRRailConnector;
 @class TRRailroadConnectorContent;
+@class TRRailForm;
 @class TRRail;
 @class TRStr;
 @protocol TRStrings;
@@ -26,7 +27,6 @@
 @class TRSwitch;
 @class TRCarsCollision;
 @class TRCar;
-@class TRRailForm;
 @class TRTrainType;
 @class TRCityColor;
 @class TRCarType;

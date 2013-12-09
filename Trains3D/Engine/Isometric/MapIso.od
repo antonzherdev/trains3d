@@ -31,6 +31,10 @@ class MapSso(size : vec2i) {
             || tile.y + tile.x == size.x + size.y - 1 //right
             || tile.y - tile.x == -size.x //bottom
         )
+    def isLeft(tile : vec2i) : bool = tile.y + tile.x == -1
+    def isTop(tile : vec2i) : bool = tile.y - tile.x == size.y
+    def isRight(tile : vec2i) : bool = tile.y + tile.x == size.x + size.y - 1
+    def isBottom(tile : vec2i) : bool = tile.y - tile.x == -size.x
 
     def isVisible(tile : vec2i) : bool =
         tile.y + tile.x >= -1 //left

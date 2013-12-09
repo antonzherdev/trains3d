@@ -48,14 +48,21 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         createCityWith(tile = c.a, direction = c.b)
     }
 
+    private def hasCityIn(tile : vec2i) : bool = cities.exists(_.tile == tile)
+
     private def rndCityTime(att : int) : (vec2i, CityAngle) = {
         val tile = map.partialTiles.chain.exclude(cities.chain.map(_.tile)).randomItem.get
         val dir = randomCityDirectionFor(tile)
         val nextTile = dir.out.next(tile)
         if(att > 30) (tile, dir)
+        else if(map.isRight(tile)) rndCityTime(att + 1)
         else if(RailConnector.values.chain.filter(_ != dir.out.otherSideConnector).all{connector ->
             railroad.contentIn(nextTile, connector).is<Switch>
         }) rndCityTime(att + 1)
+        else if(map.isTop(tile) && hasCityIn(tile +
+            if(dir.form == RailForm.leftRight) vec2(-1, -1)
+            else vec2(1, 1)
+        )) rndCityTime(att + 1)
         else (tile, dir)
     }
 

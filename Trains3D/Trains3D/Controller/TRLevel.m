@@ -236,6 +236,12 @@ static ODClassType* _TRLevel_type;
     [self createCityWithTile:uwrap(GEVec2i, c.a) direction:c.b];
 }
 
+- (BOOL)hasCityInTile:(GEVec2i)tile {
+    return [[self cities] existsWhere:^BOOL(TRCity* _) {
+        return GEVec2iEq(((TRCity*)(_)).tile, tile);
+    }];
+}
+
 - (CNTuple*)rndCityTimeAtt:(NSInteger)att {
     GEVec2i tile = uwrap(GEVec2i, [[[[_map.partialTiles chain] exclude:[[[self cities] chain] map:^id(TRCity* _) {
         return wrap(GEVec2i, ((TRCity*)(_)).tile);
@@ -245,12 +251,20 @@ static ODClassType* _TRLevel_type;
     if(att > 30) {
         return tuple(wrap(GEVec2i, tile), dir);
     } else {
-        if([[[[TRRailConnector values] chain] filter:^BOOL(TRRailConnector* _) {
+        if([_map isRightTile:tile]) {
+            return [self rndCityTimeAtt:att + 1];
+        } else {
+            if([[[[TRRailConnector values] chain] filter:^BOOL(TRRailConnector* _) {
     return !(_ == [[dir out] otherSideConnector]);
 }] allConfirm:^BOOL(TRRailConnector* connector) {
     return [[_railroad contentInTile:nextTile connector:connector] isKindOfClass:[TRSwitch class]];
-}]) return [self rndCityTimeAtt:att + 1];
-        else return tuple(wrap(GEVec2i, tile), dir);
+}]) {
+                return [self rndCityTimeAtt:att + 1];
+            } else {
+                if([_map isTopTile:tile] && [self hasCityInTile:geVec2iApplyVec2(geVec2iAddVec2(tile, ((dir.form == TRRailForm.leftRight) ? GEVec2Make(-1.0, -1.0) : GEVec2Make(1.0, 1.0))))]) return [self rndCityTimeAtt:att + 1];
+                else return tuple(wrap(GEVec2i, tile), dir);
+            }
+        }
     }
 }
 

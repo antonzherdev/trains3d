@@ -50,6 +50,22 @@ static ODClassType* _EGMapSso_type;
     return tile.y + tile.x >= -1 && tile.y - tile.x <= _size.y && tile.y + tile.x <= _size.x + _size.y - 1 && tile.y - tile.x >= -_size.x && (tile.y + tile.x == -1 || tile.y - tile.x == _size.y || tile.y + tile.x == _size.x + _size.y - 1 || tile.y - tile.x == -_size.x);
 }
 
+- (BOOL)isLeftTile:(GEVec2i)tile {
+    return tile.y + tile.x == -1;
+}
+
+- (BOOL)isTopTile:(GEVec2i)tile {
+    return tile.y - tile.x == _size.y;
+}
+
+- (BOOL)isRightTile:(GEVec2i)tile {
+    return tile.y + tile.x == _size.x + _size.y - 1;
+}
+
+- (BOOL)isBottomTile:(GEVec2i)tile {
+    return tile.y - tile.x == -_size.x;
+}
+
 - (BOOL)isVisibleTile:(GEVec2i)tile {
     return tile.y + tile.x >= -1 && tile.y - tile.x <= _size.y && tile.y + tile.x <= _size.x + _size.y - 1 && tile.y - tile.x >= -_size.x;
 }
