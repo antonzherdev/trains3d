@@ -15,7 +15,18 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     val forest = Forest(map, rules.theme.forestRules, weather)
     val railroad : Railroad = Railroad(map, score, forest)
     private var _cities = MutableArray<City>()
-    val schedule : Schedule = createSchedule
+    val schedule : Schedule = {
+        val schedule = Schedule()
+        var time = 0.0
+        weak val ws = self
+        rules.events.for{t ->
+            val f = t.b
+            time += t.a
+            schedule.schedule(after = time, event = f(ws))
+        }
+        log("Schedule for level $number is $time seconds")
+        schedule
+    }
     def cities : [City] = _cities
     private var _trains : [Train] = []
     def trains = _trains
@@ -31,17 +42,6 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     def dyingTrains : [Train] = _dyingTrains
 
     private var _timeToNextDamage : float = Float.rnd(rules.sporadicDamagePeriod*0.75, rules.sporadicDamagePeriod*1.25)
-    private def createSchedule : Schedule = {
-        val schedule = Schedule()
-        var time = 0.0
-        rules.events.for(t -> {
-            val f = t.b
-            time += t.a
-            schedule.schedule(after = time, event = f(self))
-        })
-        log("Schedule for level $number is $time seconds")
-        schedule
-    }
 
     def createNewCity {
         val tile = map.partialTiles.chain.exclude(cities.chain.map(_.tile)).randomItem.get
@@ -274,6 +274,10 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
     def lose {
         _result = LevelResult(false)
+    }
+
+    def dealloc {
+        log("Dealloc level $number")
     }
 }
 

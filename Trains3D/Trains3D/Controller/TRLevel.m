@@ -164,7 +164,20 @@ static ODClassType* _TRLevel_type;
         _forest = [TRForest forestWithMap:_map rules:_rules.theme.forestRules weather:_weather];
         _railroad = [TRRailroad railroadWithMap:_map score:_score forest:_forest];
         __cities = [NSMutableArray mutableArray];
-        _schedule = [self createSchedule];
+        _schedule = ^EGSchedule*() {
+            EGSchedule* schedule = [EGSchedule schedule];
+            __block CGFloat time = 0.0;
+            __weak TRLevel* ws = self;
+            [_rules.events forEach:^void(CNTuple* t) {
+                void(^f)(TRLevel*) = ((CNTuple*)(t)).b;
+                time += unumf(((CNTuple*)(t)).a);
+                [schedule scheduleAfter:time event:^void() {
+                    f(ws);
+                }];
+            }];
+            [CNLog applyText:[NSString stringWithFormat:@"Schedule for level %lu is %f seconds", (unsigned long)_number, time]];
+            return schedule;
+        }();
         __trains = (@[]);
         __repairer = [CNOption none];
         _collisionWorld = [TRTrainsCollisionWorld trainsCollisionWorldWithMap:_map];
@@ -210,20 +223,6 @@ static ODClassType* _TRLevel_type;
 
 - (id<CNSeq>)dyingTrains {
     return __dyingTrains;
-}
-
-- (EGSchedule*)createSchedule {
-    EGSchedule* schedule = [EGSchedule schedule];
-    __block CGFloat time = 0.0;
-    [_rules.events forEach:^void(CNTuple* t) {
-        void(^f)(TRLevel*) = ((CNTuple*)(t)).b;
-        time += unumf(((CNTuple*)(t)).a);
-        [schedule scheduleAfter:time event:^void() {
-            f(self);
-        }];
-    }];
-    [CNLog applyText:[NSString stringWithFormat:@"Schedule for level %lu is %f seconds", (unsigned long)_number, time]];
-    return schedule;
 }
 
 - (void)createNewCity {
@@ -477,6 +476,10 @@ static ODClassType* _TRLevel_type;
 
 - (void)lose {
     __result = [CNOption applyValue:[TRLevelResult levelResultWithWin:NO]];
+}
+
+- (void)dealloc {
+    [CNLog applyText:[NSString stringWithFormat:@"Dealloc level %lu", (unsigned long)_number]];
 }
 
 - (void)start {
