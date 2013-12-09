@@ -38,13 +38,13 @@ static ODClassType* _TRTrainsCollisionWorld_type;
 }
 
 - (void)addTrain:(TRTrain*)train {
-    [[train cars] forEach:^void(TRCar* car) {
+    [train.cars forEach:^void(TRCar* car) {
         [_world addBody:((TRCar*)(car)).collisionBody];
     }];
 }
 
 - (void)removeTrain:(TRTrain*)train {
-    [[train cars] forEach:^void(TRCar* car) {
+    [train.cars forEach:^void(TRCar* car) {
         [_world removeBody:((TRCar*)(car)).collisionBody];
     }];
 }
@@ -54,9 +54,9 @@ static ODClassType* _TRTrainsCollisionWorld_type;
         if([((EGCollision*)(collision)).contacts allConfirm:^BOOL(EGContact* _) {
     return [self isOutOfMapContact:_];
 }]) return [CNOption none];
-        TRCar* car1 = ((EGCollisionBody*)(((EGCollision*)(collision)).bodies.a)).data;
-        TRCar* car2 = ((EGCollisionBody*)(((EGCollision*)(collision)).bodies.b)).data;
-        TRRailPoint* point = [[[[[[[(@[[car1 position].head, [car1 position].tail]) chain] mul:(@[[car2 position].head, [car2 position].tail])] sortBy] ascBy:^id(CNTuple* pair) {
+        CNWeak* car1 = ((EGCollisionBody*)(((EGCollision*)(collision)).bodies.a)).data;
+        CNWeak* car2 = ((EGCollisionBody*)(((EGCollision*)(collision)).bodies.b)).data;
+        TRRailPoint* point = [[[[[[[(@[[((TRCar*)(car1.get)) position].head, [((TRCar*)(car1.get)) position].tail]) chain] mul:(@[[((TRCar*)(car2.get)) position].head, [((TRCar*)(car2.get)) position].tail])] sortBy] ascBy:^id(CNTuple* pair) {
             TRRailPoint* x = ((CNTuple*)(pair)).a;
             TRRailPoint* y = ((CNTuple*)(pair)).b;
             if(x.form == y.form && GEVec2iEq(x.tile, y.tile)) return numf(floatAbs(x.x - y.x));
@@ -231,14 +231,14 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 }
 
 - (void)addTrain:(TRTrain*)train {
-    [[train cars] forEach:^void(TRCar* car) {
+    [train.cars forEach:^void(TRCar* car) {
         [_world addBody:((TRCar*)(car)).kinematicBody];
     }];
 }
 
 - (void)dieTrain:(TRTrain*)train {
     _workCounter++;
-    [[train cars] forEach:^void(TRCar* car) {
+    [train.cars forEach:^void(TRCar* car) {
         [_world removeBody:((TRCar*)(car)).kinematicBody];
         [_world addBody:[((TRCar*)(car)) dynamicBody]];
     }];
@@ -246,7 +246,7 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 
 - (void)removeTrain:(TRTrain*)train {
     if(train.isDying) _workCounter--;
-    [[train cars] forEach:^void(TRCar* car) {
+    [train.cars forEach:^void(TRCar* car) {
         if(train.isDying) [_world removeBody:[((TRCar*)(car)) dynamicBody]];
         else [_world removeBody:((TRCar*)(car)).kinematicBody];
     }];
@@ -258,9 +258,9 @@ static ODClassType* _TRTrainsDynamicWorld_type;
         [[_world newCollisions] forEach:^void(EGDynamicCollision* collision) {
             if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).isKinematic && ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).isKinematic) return ;
             if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).isKinematic) {
-                [_level knockDownTrain:((TRCar*)(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).data)).train];
+                [_level knockDownTrain:((TRCar*)(((CNWeak*)(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).data)).get)).train];
             } else {
-                if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).isKinematic) [_level knockDownTrain:((TRCar*)(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).data)).train];
+                if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).isKinematic) [_level knockDownTrain:((TRCar*)(((CNWeak*)(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).data)).get)).train];
             }
             if([((EGDynamicCollision*)(collision)) impulse] > 0) {
                 if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).data == nil || ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).data == nil) [_TRTrainsDynamicWorld_carAndGroundCollisionNotification postData:numf4([((EGDynamicCollision*)(collision)) impulse])];

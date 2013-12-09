@@ -26,13 +26,13 @@ enum TrainType(obstacleProcessor : (Level, Train, Obstacle) -> bool) {
     })
 }
 
-class Train(weak level : Level, trainType : TrainType, color : CityColor, _cars : (Train) ->[Car], speed : uint) extends Updatable {
+class Train(weak level : Level, trainType : TrainType, color : CityColor, __cars : (Train) ->[Car], speed : uint) extends Updatable {
     var viewData : any = nil
     var soundData : any = nil
     private var _head : RailPoint
     private var back = false
     def isBack = back
-    lazy val cars : [Car] = _cars(self)
+    val cars : [Car] = __cars(self)
     private val length : float = cars.chain.fold(0.0, (r, car) -> car.carType.fullLength + r)
     val speedFloat : float = 0.01 * speed
     var isDying = false
@@ -122,6 +122,10 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, _cars 
             || p.frontConnector.between(rp11, rp12)
             || p.backConnector.between(rp21, rp22)
         }.isDefined
+    }
+
+    def dealloc {
+        log("Dealloc train")
     }
 }
 

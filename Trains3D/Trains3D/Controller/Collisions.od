@@ -4,7 +4,7 @@ import com.antonzherdev.eg._
 import core.math._
 
 class TrainsCollisionWorld(map : MapSso) {
-    private val world = CollisionWorld<Car>()
+    private val world = CollisionWorld<Weak<Car>>()
 
     def add(train : Train) {
         train.cars.for{car ->
@@ -25,8 +25,8 @@ class TrainsCollisionWorld(map : MapSso) {
         val car2 = collision.bodies.b.data
 
         val point =
-            [car1.position.head, car1.position.tail].chain
-                .mul([car2.position.head, car2.position.tail])
+            [car1.get.position.head, car1.get.position.tail].chain
+                .mul([car2.get.position.head, car2.get.position.tail])
                 .sortBy.asc{pair ->
                     val x = pair.a
                     val y = pair.b
@@ -46,8 +46,8 @@ class CarsCollision(cars : Pair<Car>, railPoint : RailPoint)
 
 class TrainsDynamicWorld(weak level : Level) extends Updatable {
     val world = {
-        val w = DynamicWorld<Car>(gravity = vec3(0, 0, -10))
-        val plane = RigidBody<Car>(nil, CollisionPlane(vec3(0, 0, 1), 0), false, 0)
+        val w = DynamicWorld<Weak<Car>>(gravity = vec3(0, 0, -10))
+        val plane = RigidBody<Weak<Car>>(nil, CollisionPlane(vec3(0, 0, 1), 0), false, 0)
         plane.friction = 0.4
         w.add(plane)
         level.forest.trees.for{ tree ->
@@ -94,9 +94,9 @@ class TrainsDynamicWorld(weak level : Level) extends Updatable {
             world.newCollisions.for {collision ->
                 if(collision.bodies.a.isKinematic && collision.bodies.b.isKinematic) return nil
                 if(collision.bodies.a.isKinematic) {
-                    level.knockDown(collision.bodies.a.data.train)
+                    level.knockDown(collision.bodies.a.data.get.train)
                 } else if(collision.bodies.b.isKinematic) {
-                    level.knockDown(collision.bodies.b.data.train)
+                    level.knockDown(collision.bodies.b.data.get.train)
                 }
                 if(collision.impulse > 0) {
                     if(collision.bodies.a.data == nil || collision.bodies.b.data == nil) {

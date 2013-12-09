@@ -277,8 +277,9 @@ static ODClassType* _TRLevel_type;
 }]);
     }] randomItem];
     if([fromCityOpt isEmpty]) {
+        __weak TRLevel* ws = self;
         [_schedule scheduleAfter:1.0 event:^void() {
-            [self runTrainWithGenerator:generator];
+            [ws runTrainWithGenerator:generator];
         }];
         return ;
     }
@@ -286,7 +287,7 @@ static ODClassType* _TRLevel_type;
     TRCity* city = [[[[__cities chain] filter:^BOOL(TRCity* _) {
         return !([_ isEqual:fromCity]);
     }] randomItem] get];
-    TRTrain* train = [TRTrain trainWithLevel:self trainType:generator.trainType color:city.color _cars:^id<CNSeq>(TRTrain* _) {
+    TRTrain* train = [TRTrain trainWithLevel:self trainType:generator.trainType color:city.color __cars:^id<CNSeq>(TRTrain* _) {
         return [generator generateCarsForTrain:_];
     } speed:[generator generateSpeed]];
     [self runTrain:train fromCity:fromCity];
@@ -379,9 +380,10 @@ static ODClassType* _TRLevel_type;
         [_TRLevel_crashNotification postData:[[[((TRCarsCollision*)(collision)).cars chain] map:^TRTrain*(TRCar* _) {
             return ((TRCar*)(_)).train;
         }] toArray]];
+        __weak TRLevel* ws = self;
         [_schedule scheduleAfter:5.0 event:^void() {
-            [_railroad addDamageAtPoint:((TRCarsCollision*)(collision)).railPoint];
-            [_TRLevel_damageNotification postData:self];
+            [ws.railroad addDamageAtPoint:((TRCarsCollision*)(collision)).railPoint];
+            [_TRLevel_damageNotification postData:ws];
         }];
     }];
 }
@@ -422,8 +424,9 @@ static ODClassType* _TRLevel_type;
         [_collisionWorld removeTrain:train];
         [__dyingTrains appendItem:train];
         [_dynamicWorld dieTrain:train];
+        __weak TRLevel* ws = self;
         [_schedule scheduleAfter:5.0 event:^void() {
-            [self removeTrain:train];
+            [ws removeTrain:train];
         }];
     }
 }
@@ -441,7 +444,7 @@ static ODClassType* _TRLevel_type;
 - (void)runRepairerFromCity:(TRCity*)city {
     if([__repairer isEmpty]) {
         [_score repairerCalled];
-        TRTrain* train = [TRTrain trainWithLevel:self trainType:TRTrainType.repairer color:TRCityColor.grey _cars:^id<CNSeq>(TRTrain* _) {
+        TRTrain* train = [TRTrain trainWithLevel:self trainType:TRTrainType.repairer color:TRCityColor.grey __cars:^id<CNSeq>(TRTrain* _) {
             return (@[[TRCar carWithTrain:_ carType:TRCarType.engine]]);
         } speed:_rules.repairerSpeed];
         [self runTrain:train fromCity:city];

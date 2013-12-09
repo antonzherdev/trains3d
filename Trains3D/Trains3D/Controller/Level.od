@@ -99,7 +99,8 @@ class Level(number : uint, rules : LevelRules) extends Controller {
             c.canRunNewTrain && !trains.exists(_.isIn(c.tile))
         }.randomItem
         if(fromCityOpt.isEmpty) {
-            schedule.schedule(after = 1, runTrainWith(generator))
+            weak val ws = self
+            schedule.schedule(after = 1, ws.runTrainWith(generator))
             return nil
         }
         val fromCity = fromCityOpt.get
@@ -177,15 +178,16 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     static val crashNotification = NotificationHandle<[Train]>("Trains crashed")
     private var _crashCounter : uint = 0
     def processCollisions {
-        detectCollisions.for(collision -> {
+        detectCollisions.for{collision ->
             collision.cars.for(doDestroy(_.train))
             _crashCounter = 2
             crashNotification.post(collision.cars.chain.map(_.train).toArray)
+            weak val ws = self
             schedule.schedule(5) {
-                railroad.addDamageAt(collision.railPoint)
-                damageNotification.post(self)
+                ws.railroad.addDamageAt(collision.railPoint)
+                damageNotification.post(ws)
             }
-        })
+        }
     }
 
     static val knockDownNotification = NotificationHandle<(Train, uint)>("Knock down crashed")
@@ -226,8 +228,9 @@ class Level(number : uint, rules : LevelRules) extends Controller {
             collisionWorld.remove(train)
             _dyingTrains.append(train)
             dynamicWorld.die(train)
+            weak val ws = self
             schedule.schedule(after = 5) {
-                remove(train)
+                ws.remove(train)
             }
         }
     }

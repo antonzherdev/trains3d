@@ -84,13 +84,13 @@ static NSArray* _TRTrainType_values;
     __weak TRLevel* _level;
     TRTrainType* _trainType;
     TRCityColor* _color;
-    id<CNSeq>(^__cars)(TRTrain*);
+    id<CNSeq>(^___cars)(TRTrain*);
     NSUInteger _speed;
     id _viewData;
     id _soundData;
     TRRailPoint* __head;
     BOOL _back;
-    CNLazy* __lazy_cars;
+    id<CNSeq> _cars;
     CGFloat _length;
     CGFloat _speedFloat;
     BOOL _isDying;
@@ -100,33 +100,31 @@ static ODClassType* _TRTrain_type;
 @synthesize level = _level;
 @synthesize trainType = _trainType;
 @synthesize color = _color;
-@synthesize _cars = __cars;
+@synthesize __cars = ___cars;
 @synthesize speed = _speed;
 @synthesize viewData = _viewData;
 @synthesize soundData = _soundData;
+@synthesize cars = _cars;
 @synthesize speedFloat = _speedFloat;
 @synthesize isDying = _isDying;
 
-+ (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color _cars:(id<CNSeq>(^)(TRTrain*))_cars speed:(NSUInteger)speed {
-    return [[TRTrain alloc] initWithLevel:level trainType:trainType color:color _cars:_cars speed:speed];
++ (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color __cars:(id<CNSeq>(^)(TRTrain*))__cars speed:(NSUInteger)speed {
+    return [[TRTrain alloc] initWithLevel:level trainType:trainType color:color __cars:__cars speed:speed];
 }
 
-- (id)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color _cars:(id<CNSeq>(^)(TRTrain*))_cars speed:(NSUInteger)speed {
+- (id)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color __cars:(id<CNSeq>(^)(TRTrain*))__cars speed:(NSUInteger)speed {
     self = [super init];
-    __weak TRTrain* _weakSelf = self;
     if(self) {
         _level = level;
         _trainType = trainType;
         _color = color;
-        __cars = _cars;
+        ___cars = __cars;
         _speed = speed;
         _viewData = nil;
         _soundData = nil;
         _back = NO;
-        __lazy_cars = [CNLazy lazyWithF:^id<CNSeq>() {
-            return _weakSelf._cars(self);
-        }];
-        _length = unumf([[[self cars] chain] foldStart:@0.0 by:^id(id r, TRCar* car) {
+        _cars = ___cars(self);
+        _length = unumf([[_cars chain] foldStart:@0.0 by:^id(id r, TRCar* car) {
             return numf(((TRCar*)(car)).carType.fullLength + unumf(r));
         }]);
         _speedFloat = 0.01 * _speed;
@@ -142,10 +140,6 @@ static ODClassType* _TRTrain_type;
 + (void)initialize {
     [super initialize];
     _TRTrain_type = [ODClassType classTypeWithCls:[TRTrain class]];
-}
-
-- (id<CNSeq>)cars {
-    return [__lazy_cars get];
 }
 
 - (BOOL)isBack {
@@ -191,13 +185,13 @@ static ODClassType* _TRTrain_type;
 - (void)updateWithDelta:(CGFloat)delta {
     __weak TRTrain* _weakSelf = self;
     [self correctCorrection:[_level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
-        return _weakSelf.trainType.obstacleProcessor(_weakSelf.level, self, _);
+        return _weakSelf.trainType.obstacleProcessor(_weakSelf.level, _weakSelf, _);
     } forLength:delta * _speedFloat point:__head]];
 }
 
 - (id<CNSeq>)directedCars {
-    if(_back) return [[[[self cars] chain] reverse] toArray];
-    else return [self cars];
+    if(_back) return [[[_cars chain] reverse] toArray];
+    else return _cars;
 }
 
 - (void)correctCorrection:(TRRailPointCorrection*)correction {
@@ -222,7 +216,7 @@ static ODClassType* _TRTrain_type;
 }
 
 - (BOOL)isInTile:(GEVec2i)tile {
-    return [[[self cars] chain] existsWhere:^BOOL(TRCar* car) {
+    return [[_cars chain] existsWhere:^BOOL(TRCar* car) {
         return [[((TRCar*)(car)) position] isInTile:tile];
     }];
 }
@@ -238,10 +232,14 @@ static ODClassType* _TRTrain_type;
     TRRailPoint* rp12 = [rp11 addX:0.3];
     TRRailPoint* rp21 = [theSwitch railPoint2];
     TRRailPoint* rp22 = [rp21 addX:0.3];
-    return [[[self cars] findWhere:^BOOL(TRCar* car) {
+    return [[_cars findWhere:^BOOL(TRCar* car) {
         TRCarPosition* p = [((TRCar*)(car)) position];
         return (GEVec2iEq(p.frontConnector.tile, tile) && GEVec2iEq(p.backConnector.tile, nextTile)) || (GEVec2iEq(p.frontConnector.tile, nextTile) && GEVec2iEq(p.backConnector.tile, tile)) || [p.frontConnector betweenA:rp11 b:rp12] || [p.backConnector betweenA:rp21 b:rp22];
     }] isDefined];
+}
+
+- (void)dealloc {
+    [CNLog applyText:@"Dealloc train"];
 }
 
 - (ODClassType*)type {
@@ -260,7 +258,7 @@ static ODClassType* _TRTrain_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRTrain* o = ((TRTrain*)(other));
-    return [self.level isEqual:o.level] && self.trainType == o.trainType && self.color == o.color && [self._cars isEqual:o._cars] && self.speed == o.speed;
+    return [self.level isEqual:o.level] && self.trainType == o.trainType && self.color == o.color && [self.__cars isEqual:o.__cars] && self.speed == o.speed;
 }
 
 - (NSUInteger)hash {
@@ -268,7 +266,7 @@ static ODClassType* _TRTrain_type;
     hash = hash * 31 + [self.level hash];
     hash = hash * 31 + [self.trainType ordinal];
     hash = hash * 31 + [self.color ordinal];
-    hash = hash * 31 + [self._cars hash];
+    hash = hash * 31 + [self.__cars hash];
     hash = hash * 31 + self.speed;
     return hash;
 }

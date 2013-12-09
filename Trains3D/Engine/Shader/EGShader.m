@@ -75,7 +75,7 @@ static ODClassType* _EGShaderProgram_type;
     egLabelShaderProgram(_handle, _name);
 }
 
-- (void)dealoc {
+- (void)dealloc {
     glDeleteProgram(_handle);
 }
 

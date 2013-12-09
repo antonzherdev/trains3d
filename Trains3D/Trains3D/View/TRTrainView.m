@@ -77,7 +77,7 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (void)drawTrain:(TRTrain*)train {
-    [[train cars] forEach:^void(TRCar* car) {
+    [train.cars forEach:^void(TRCar* car) {
         [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
             return [[_ modifyW:^GEMat4*(GEMat4* w) {
                 GEVec2 mid = [((TRCar*)(car)) midPoint];
@@ -116,7 +116,7 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (void)drawDyingTrain:(TRTrain*)dyingTrain {
-    [[dyingTrain cars] forEach:^void(TRCar* car) {
+    [dyingTrain.cars forEach:^void(TRCar* car) {
         [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
             return [_ modifyM:^GEMat4*(GEMat4* m) {
                 return [[[((TRCar*)(car)) dynamicBody].matrix translateX:0.0 y:0.0 z:((float)(-((TRCar*)(car)).carType.height / 2 + 0.04))] mulMatrix:[m rotateAngle:90.0 x:0.0 y:1.0 z:0.0]];

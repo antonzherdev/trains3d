@@ -37,7 +37,7 @@
 + (EGShaderProgram*)linkFromShadersName:(NSString*)name vertex:(unsigned int)vertex fragment:(unsigned int)fragment;
 + (unsigned int)compileShaderForShaderType:(unsigned int)shaderType source:(NSString*)source;
 - (void)_init;
-- (void)dealoc;
+- (void)dealloc;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
 + (NSInteger)version;
 + (ODClassType*)type;

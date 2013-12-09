@@ -14,7 +14,7 @@
 - (NSUInteger)length;
 - (NSUInteger)count;
 + (EGBuffer*)applyDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType;
-- (void)dealoc;
+- (void)dealloc;
 - (void)bind;
 - (unsigned int)stride;
 + (ODClassType*)type;

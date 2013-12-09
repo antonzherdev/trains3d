@@ -168,12 +168,18 @@ static ODClassType* _EGGameCenter_type;
 
     [scoreReporter reportScoreWithCompletionHandler:^(NSError *error) {
         if(error != nil) NSLog(@"Error while writing leaderboard %@", error);
-        if(completed != nil) [self retrieveLocalPlayerScoreLeaderboard: leaderboard minValue : [NSNumber numberWithLong:value] callback:completed attems:0];
+        if(completed != nil) [self retrieveLocalPlayerScoreLeaderboard: leaderboard minValue : [NSNumber numberWithLong:value] callback:^(id o) {
+                if([o isEmpty]) {
+                    NSLog(@"Error while retrurning written value to leaderboard");
+                    return;
+                }
+                completed([o get]);
+            } attems:0];
     }];
 #endif
 }
 
-- (void)retrieveLocalPlayerScoreLeaderboard:(NSString *)leaderboard minValue:(NSNumber *)value callback:(void (^)(EGLocalPlayerScore *))callback attems:(int)attems {
+- (void)retrieveLocalPlayerScoreLeaderboard:(NSString *)leaderboard minValue:(NSNumber *)value callback:(void (^)(id))callback attems:(int)attems {
     GKLeaderboard *leaderboardRequest = [[GKLeaderboard alloc] init];
     leaderboardRequest.timeScope = GKLeaderboardTimeScopeAllTime;
     leaderboardRequest.playerScope = GKLeaderboardPlayerScopeGlobal;
@@ -209,7 +215,7 @@ static ODClassType* _EGGameCenter_type;
     }];
 }
 
-- (void)localPlayerScoreLeaderboard:(NSString *)leaderboard callback:(void (^)(EGLocalPlayerScore*))callback {
+- (void)localPlayerScoreLeaderboard:(NSString *)leaderboard callback:(void (^)(id))callback {
     [self retrieveLocalPlayerScoreLeaderboard:leaderboard minValue:nil callback:callback attems:0];
 }
 

@@ -184,15 +184,15 @@ static ODClassType* _TRCar_type;
     if(self) {
         _train = train;
         _carType = carType;
-        _collisionBody = [EGCollisionBody collisionBodyWithData:self shape:_carType.collision2dShape isKinematic:YES];
-        _kinematicBody = [EGRigidBody kinematicData:self shape:_carType.collision2dShape];
+        _collisionBody = [EGCollisionBody collisionBodyWithData:[CNWeak weakWithGet:self] shape:_carType.collision2dShape isKinematic:YES];
+        _kinematicBody = [EGRigidBody kinematicData:[CNWeak weakWithGet:self] shape:_carType.collision2dShape];
         __lazy_dynamicBody = [CNLazy lazyWithF:^EGRigidBody*() {
             return ^EGRigidBody*() {
                 GELine2 line = [_weakSelf position].line;
                 CGFloat len = geVec2Length(line.u);
                 GEVec2 vec = line.u;
                 GEVec2 mid = [_weakSelf midPoint];
-                EGRigidBody* b = [EGRigidBody dynamicData:self shape:_weakSelf.carType.rigidShape mass:((float)(_weakSelf.carType.weight))];
+                EGRigidBody* b = [EGRigidBody dynamicData:_weakSelf shape:_weakSelf.carType.rigidShape mass:((float)(_weakSelf.carType.weight))];
                 b.matrix = [[[GEMat4 identity] translateX:mid.x y:mid.y z:((float)(_weakSelf.carType.height / 2))] rotateAngle:geLine2DegreeAngle(line) x:0.0 y:0.0 z:1.0];
                 GEVec3 rnd = GEVec3Make(((float)(odFloatRndMinMax(-0.1, 0.1))), ((float)(odFloatRndMinMax(-0.1, 0.1))), ((float)(odFloatRndMinMax(0.0, 5.0))));
                 GEVec3 vel = geVec3AddVec3(geVec3ApplyVec2Z(geVec2MulF(vec, _weakSelf.train.speedFloat / len * 2), 0.0), rnd);
@@ -236,6 +236,10 @@ static ODClassType* _TRCar_type;
         GEVec2 u = geVec2SetLength(line.u, ((float)(geVec2Length(line.u) - (_carType.wheelToBack - _carType.frontToWheel))));
         return geVec2AddVec2(line.p0, geVec2DivI(u, 2));
     }
+}
+
+- (void)dealloc {
+    [CNLog applyText:@"Dealloc car"];
 }
 
 - (ODClassType*)type {

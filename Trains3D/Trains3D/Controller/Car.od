@@ -40,8 +40,8 @@ enum CarType(
 }
 
 class Car(weak train : Train, carType : CarType) {
-    val collisionBody = CollisionBody(self, carType.collision2dShape, isKinematic = true)
-    val kinematicBody = RigidBody.kinematic(self, carType.collision2dShape)
+    val collisionBody = CollisionBody(Weak(self), carType.collision2dShape, isKinematic = true)
+    val kinematicBody = RigidBody.kinematic(Weak(self), carType.collision2dShape)
     lazy val dynamicBody : RigidBody<Car> = {
         val line = position.line
         val len = line.u.length
@@ -75,6 +75,10 @@ class Car(weak train : Train, carType : CarType) {
             val u = line.u.set(length = line.u.length - (carType.wheelToBack - carType.frontToWheel))
             line.p0 + u/2
         }
+    }
+
+    def dealloc {
+        log("Dealloc car")
     }
 }
 

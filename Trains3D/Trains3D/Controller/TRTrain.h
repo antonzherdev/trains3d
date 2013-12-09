@@ -35,17 +35,17 @@
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) TRTrainType* trainType;
 @property (nonatomic, readonly) TRCityColor* color;
-@property (nonatomic, readonly) id<CNSeq>(^_cars)(TRTrain*);
+@property (nonatomic, readonly) id<CNSeq>(^__cars)(TRTrain*);
 @property (nonatomic, readonly) NSUInteger speed;
 @property (nonatomic) id viewData;
 @property (nonatomic) id soundData;
+@property (nonatomic, readonly) id<CNSeq> cars;
 @property (nonatomic, readonly) CGFloat speedFloat;
 @property (nonatomic) BOOL isDying;
 
-+ (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color _cars:(id<CNSeq>(^)(TRTrain*))_cars speed:(NSUInteger)speed;
-- (id)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color _cars:(id<CNSeq>(^)(TRTrain*))_cars speed:(NSUInteger)speed;
++ (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color __cars:(id<CNSeq>(^)(TRTrain*))__cars speed:(NSUInteger)speed;
+- (id)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color __cars:(id<CNSeq>(^)(TRTrain*))__cars speed:(NSUInteger)speed;
 - (ODClassType*)type;
-- (id<CNSeq>)cars;
 - (BOOL)isBack;
 - (void)startFromCity:(TRCity*)city;
 - (NSString*)description;
@@ -54,6 +54,7 @@
 - (void)updateWithDelta:(CGFloat)delta;
 - (BOOL)isInTile:(GEVec2i)tile;
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch;
+- (void)dealloc;
 + (ODClassType*)type;
 @end
 

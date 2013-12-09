@@ -26,3 +26,8 @@ class Cache<X, F>(f : X -> F) {
             _lastF
         }
 }
+
+
+class Weak<T>(weak get : T) {
+
+}

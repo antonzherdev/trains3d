@@ -43,7 +43,7 @@ static ODClassType* _EGBuffer_type;
     return [EGBuffer bufferWithDataType:dataType bufferType:bufferType handle:egGenBuffer()];
 }
 
-- (void)dealoc {
+- (void)dealloc {
     egDeleteBuffer(_handle);
 }
 

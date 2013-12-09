@@ -21,7 +21,7 @@
 - (void)reportScoreLeaderboard:(NSString *)leaderboard value:(long)value;
 - (void)reportScoreLeaderboard:(NSString *)leaderboard value:(long)value completed :(void (^)(EGLocalPlayerScore*))completed;
 
-- (void)localPlayerScoreLeaderboard:(NSString *)leaderboard callback:(void (^)(EGLocalPlayerScore*))callback;
+- (void)localPlayerScoreLeaderboard:(NSString *)leaderboard callback:(void (^)(id))callback;
 
 - (void)showLeaderboardName:(NSString *)name;
 @end
