@@ -51,11 +51,11 @@
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) EGDynamicWorld* world;
 @property (nonatomic, readonly) CNNotificationObserver* cutDownObs;
-@property (nonatomic, readonly) CNNotificationObserver* cityBuildObs;
 
 + (id)trainsDynamicWorldWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
+- (void)addCity:(TRCity*)city;
 - (void)addTrain:(TRTrain*)train;
 - (void)dieTrain:(TRTrain*)train;
 - (void)removeTrain:(TRTrain*)train;

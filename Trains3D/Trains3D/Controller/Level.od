@@ -36,7 +36,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
 
     val collisionWorld = TrainsCollisionWorld(map)
-    val dynamicWorld = TrainsDynamicWorld(self)
+    lazy val dynamicWorld = TrainsDynamicWorld(self)
 
     private var _dyingTrains = MutableArray<Train>()
     def dyingTrains : [Train] = _dyingTrains
@@ -55,6 +55,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         forest.cutDown(tile)
         railroad.add(Rail(tile, city.angle.form))
         _cities.append(city)
+        dynamicWorld.add(city)
         buildCityNotification.post(city)
         if(_cities.count > 2) {
             notifications.notify(Loc.cityBuilt)

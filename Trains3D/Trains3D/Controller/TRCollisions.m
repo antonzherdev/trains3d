@@ -175,7 +175,6 @@ static ODClassType* _TRCarsCollision_type;
     __weak TRLevel* _level;
     EGDynamicWorld* _world;
     CNNotificationObserver* _cutDownObs;
-    CNNotificationObserver* _cityBuildObs;
     NSInteger _workCounter;
 }
 static CNNotificationHandle* _TRTrainsDynamicWorld_carsCollisionNotification;
@@ -184,7 +183,6 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 @synthesize level = _level;
 @synthesize world = _world;
 @synthesize cutDownObs = _cutDownObs;
-@synthesize cityBuildObs = _cityBuildObs;
 
 + (id)trainsDynamicWorldWithLevel:(TRLevel*)level {
     return [[TRTrainsDynamicWorld alloc] initWithLevel:level];
@@ -212,11 +210,6 @@ static ODClassType* _TRTrainsDynamicWorld_type;
                 [_weakSelf.world removeBody:_];
             }];
         }];
-        _cityBuildObs = [TRLevel.buildCityNotification observeBy:^void(TRCity* city) {
-            [((TRCity*)(city)).bodies forEach:^void(EGRigidBody* _) {
-                [_weakSelf.world addBody:_];
-            }];
-        }];
         _workCounter = 0;
     }
     
@@ -228,6 +221,12 @@ static ODClassType* _TRTrainsDynamicWorld_type;
     _TRTrainsDynamicWorld_type = [ODClassType classTypeWithCls:[TRTrainsDynamicWorld class]];
     _TRTrainsDynamicWorld_carsCollisionNotification = [CNNotificationHandle notificationHandleWithName:@"carsCollisionNotification"];
     _TRTrainsDynamicWorld_carAndGroundCollisionNotification = [CNNotificationHandle notificationHandleWithName:@"carAndGroundCollisionNotification"];
+}
+
+- (void)addCity:(TRCity*)city {
+    [city.bodies forEach:^void(EGRigidBody* _) {
+        [_world addBody:_];
+    }];
 }
 
 - (void)addTrain:(TRTrain*)train {

@@ -115,7 +115,7 @@ static ODClassType* _TRLevelRules_type;
     id<CNSeq> __trains;
     id __repairer;
     TRTrainsCollisionWorld* _collisionWorld;
-    TRTrainsDynamicWorld* _dynamicWorld;
+    CNLazy* __lazy_dynamicWorld;
     NSMutableArray* __dyingTrains;
     CGFloat __timeToNextDamage;
     CGFloat _looseCounter;
@@ -146,7 +146,6 @@ static ODClassType* _TRLevel_type;
 @synthesize railroad = _railroad;
 @synthesize schedule = _schedule;
 @synthesize collisionWorld = _collisionWorld;
-@synthesize dynamicWorld = _dynamicWorld;
 
 + (id)levelWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules {
     return [[TRLevel alloc] initWithNumber:number rules:rules];
@@ -154,6 +153,7 @@ static ODClassType* _TRLevel_type;
 
 - (id)initWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules {
     self = [super init];
+    __weak TRLevel* _weakSelf = self;
     if(self) {
         _number = number;
         _rules = rules;
@@ -181,7 +181,9 @@ static ODClassType* _TRLevel_type;
         __trains = (@[]);
         __repairer = [CNOption none];
         _collisionWorld = [TRTrainsCollisionWorld trainsCollisionWorldWithMap:_map];
-        _dynamicWorld = [TRTrainsDynamicWorld trainsDynamicWorldWithLevel:self];
+        __lazy_dynamicWorld = [CNLazy lazyWithF:^TRTrainsDynamicWorld*() {
+            return [TRTrainsDynamicWorld trainsDynamicWorldWithLevel:_weakSelf];
+        }];
         __dyingTrains = [NSMutableArray mutableArray];
         __timeToNextDamage = odFloatRndMinMax(_rules.sporadicDamagePeriod * 0.75, _rules.sporadicDamagePeriod * 1.25);
         _looseCounter = 0.0;
@@ -207,6 +209,10 @@ static ODClassType* _TRLevel_type;
     _TRLevel_sporadicDamageNotification = [CNNotificationHandle notificationHandleWithName:@"sporadicDamageNotification"];
     _TRLevel_runRepairerNotification = [CNNotificationHandle notificationHandleWithName:@"runRepairerNotification"];
     _TRLevel_winNotification = [CNNotificationHandle notificationHandleWithName:@"Level was passed"];
+}
+
+- (TRTrainsDynamicWorld*)dynamicWorld {
+    return [__lazy_dynamicWorld get];
 }
 
 - (id<CNSeq>)cities {
@@ -237,6 +243,7 @@ static ODClassType* _TRLevel_type;
     [_forest cutDownTile:tile];
     [_railroad addRail:[TRRail railWithTile:tile form:city.angle.form]];
     [__cities appendItem:city];
+    [[self dynamicWorld] addCity:city];
     [_TRLevel_buildCityNotification postData:city];
     if([__cities count] > 2) [_notifications notifyNotification:[TRStr.Loc cityBuilt]];
 }
@@ -266,7 +273,7 @@ static ODClassType* _TRLevel_type;
     __trains = [__trains addItem:train];
     [_score runTrain:train];
     [_collisionWorld addTrain:train];
-    [_dynamicWorld addTrain:train];
+    [[self dynamicWorld] addTrain:train];
     [_TRLevel_runTrainNotification postData:train];
 }
 
@@ -308,7 +315,7 @@ static ODClassType* _TRLevel_type;
     }];
     if(!([[self trains] isEmpty])) [self processCollisions];
     [_railroad updateWithDelta:delta];
-    [_dynamicWorld updateWithDelta:delta];
+    [[self dynamicWorld] updateWithDelta:delta];
     [_schedule updateWithDelta:delta];
     [_weather updateWithDelta:delta];
     [_forest updateWithDelta:delta];
@@ -423,7 +430,7 @@ static ODClassType* _TRLevel_type;
         __trains = [__trains subItem:train];
         [_collisionWorld removeTrain:train];
         [__dyingTrains appendItem:train];
-        [_dynamicWorld dieTrain:train];
+        [[self dynamicWorld] dieTrain:train];
         __weak TRLevel* ws = self;
         [_schedule scheduleAfter:5.0 event:^void() {
             [ws removeTrain:train];
@@ -434,7 +441,7 @@ static ODClassType* _TRLevel_type;
 - (void)removeTrain:(TRTrain*)train {
     __trains = [__trains subItem:train];
     [_collisionWorld removeTrain:train];
-    [_dynamicWorld removeTrain:train];
+    [[self dynamicWorld] removeTrain:train];
     [__dyingTrains removeItem:train];
     __repairer = [__repairer filterF:^BOOL(TRTrain* _) {
         return !([_ isEqual:train]);
