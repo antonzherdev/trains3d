@@ -4,6 +4,7 @@
 @class TRStr;
 @protocol TRStrings;
 @class TRRailForm;
+@class TRRailConnector;
 @class EGCollisionBox;
 @class EGCounter;
 @class EGRigidBody;
@@ -37,6 +38,7 @@
 @property (nonatomic, readonly) TRRailForm* form;
 @property (nonatomic, readonly) BOOL back;
 
+- (TRRailConnector*)out;
 + (TRCityAngle*)angle0;
 + (TRCityAngle*)angle90;
 + (TRCityAngle*)angle180;

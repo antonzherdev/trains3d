@@ -135,6 +135,11 @@ static NSArray* _TRCityAngle_values;
     _TRCityAngle_values = (@[_TRCityAngle_angle0, _TRCityAngle_angle90, _TRCityAngle_angle180, _TRCityAngle_angle270]);
 }
 
+- (TRRailConnector*)out {
+    if(_back) return _form.start;
+    else return _form.end;
+}
+
 + (TRCityAngle*)angle0 {
     return _TRCityAngle_angle0;
 }

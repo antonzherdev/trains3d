@@ -14,6 +14,8 @@
 @class TRTrainsDynamicWorld;
 @class TRCity;
 @class TRCityAngle;
+@class TRRailConnector;
+@class TRRailroadConnectorContent;
 @class TRRail;
 @class TRStr;
 @protocol TRStrings;

@@ -47,7 +47,7 @@ stub class Chain<A> extends Iterable<A> {
     pure def randomItem : A?
     pure def find(where: A -> bool) : A?
     pure def exists(where: A -> bool) : bool
-    pure def all(where: A -> bool) : bool
+    pure def all(confirm: A -> bool) : bool
     pure def isEmpty : bool
     pure def gap<B extends Comparable<B>> (self : Chain<B>) : (A, A)?
     pure def min<B extends Comparable<B>> (self : Chain<B>) : A?

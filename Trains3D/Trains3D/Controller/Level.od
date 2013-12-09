@@ -44,9 +44,19 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     private var _timeToNextDamage : float = Float.rnd(rules.sporadicDamagePeriod*0.75, rules.sporadicDamagePeriod*1.25)
 
     def createNewCity {
+        val c = rndCityTime(0)
+        createCityWith(tile = c.a, direction = c.b)
+    }
+
+    private def rndCityTime(att : int) : (vec2i, CityAngle) = {
         val tile = map.partialTiles.chain.exclude(cities.chain.map(_.tile)).randomItem.get
-        createCityWith(tile = tile,
-            direction = randomCityDirectionFor(tile))
+        val dir = randomCityDirectionFor(tile)
+        val nextTile = dir.out.next(tile)
+        if(att > 30) (tile, dir)
+        else if(RailConnector.values.chain.filter(_ != dir.out.otherSideConnector).all{connector ->
+            railroad.contentIn(nextTile, connector).is<Switch>
+        }) rndCityTime(att + 1)
+        else (tile, dir)
     }
 
     static val buildCityNotification = NotificationHandle<(City)>("buildCityNotification")
@@ -62,7 +72,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         }
     }
 
-    private def randomCityDirectionFor(tile : vec2i) = {
+    private def randomCityDirectionFor(tile : vec2i) : CityAngle = {
         val cut = map.cutStateFor(tile)
         CityAngle.values.chain.filter{a ->
             val angle = a.angle

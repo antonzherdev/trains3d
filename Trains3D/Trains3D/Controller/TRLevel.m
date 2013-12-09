@@ -8,9 +8,9 @@
 #import "EGSchedule.h"
 #import "TRCollisions.h"
 #import "TRCity.h"
+#import "TRRailPoint.h"
 #import "TRStrings.h"
 #import "TRTrain.h"
-#import "TRRailPoint.h"
 #import "TRCar.h"
 @implementation TRLevelRules{
     GEVec2i _mapSize;
@@ -232,10 +232,26 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)createNewCity {
+    CNTuple* c = [self rndCityTimeAtt:0];
+    [self createCityWithTile:uwrap(GEVec2i, c.a) direction:c.b];
+}
+
+- (CNTuple*)rndCityTimeAtt:(NSInteger)att {
     GEVec2i tile = uwrap(GEVec2i, [[[[_map.partialTiles chain] exclude:[[[self cities] chain] map:^id(TRCity* _) {
         return wrap(GEVec2i, ((TRCity*)(_)).tile);
     }]] randomItem] get]);
-    [self createCityWithTile:tile direction:[self randomCityDirectionForTile:tile]];
+    TRCityAngle* dir = [self randomCityDirectionForTile:tile];
+    GEVec2i nextTile = [[dir out] nextTile:tile];
+    if(att > 30) {
+        return tuple(wrap(GEVec2i, tile), dir);
+    } else {
+        if([[[[TRRailConnector values] chain] filter:^BOOL(TRRailConnector* _) {
+    return !(_ == [[dir out] otherSideConnector]);
+}] allConfirm:^BOOL(TRRailConnector* connector) {
+    return [[_railroad contentInTile:nextTile connector:connector] isKindOfClass:[TRSwitch class]];
+}]) return [self rndCityTimeAtt:att + 1];
+        else return tuple(wrap(GEVec2i, tile), dir);
+    }
 }
 
 - (void)createCityWithTile:(GEVec2i)tile direction:(TRCityAngle*)direction {
