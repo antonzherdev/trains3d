@@ -22,7 +22,7 @@ class CityView(level : Level) {
     }
 
     def drawExpected {
-        context.depthTest.disabled {
+        BlendFunction.standard{ context.depthTest.disabled {
             level.cities.for{ city ->
                 city.expectedTrainCounter.for{time ->
                     D2D.drawCircle(backColor = vec4(city.expectedTrainColor.color.xyz*0.5, 0.85), strokeColor = vec4(0, 0, 0, 0.2),
@@ -32,7 +32,7 @@ class CityView(level : Level) {
                         )
                 }
             }
-        }
+        }}
     }
 
     static def moveVecFor(level : Level, city : City) : vec2 =  {

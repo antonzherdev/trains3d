@@ -36,7 +36,11 @@
 @class EGBillboard;
 @class TRSwitch;
 @class TRRailLight;
+@class EGMutableCounterArray;
+@class EGLengthCounter;
 @class TRRailPoint;
+@class EGCounterData;
+@class EGD2D;
 @class TRLevelRules;
 @class TRLevelTheme;
 
@@ -64,6 +68,7 @@
 - (void)prepare;
 - (void)reshape;
 - (EGRecognizers*)recognizers;
+- (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
 @end
 
@@ -128,12 +133,18 @@
 
 
 @interface TRDamageView : NSObject
+@property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic, readonly) EGMeshModel* model;
+@property (nonatomic, readonly) EGMutableCounterArray* sporadicAnimations;
+@property (nonatomic, readonly) CNNotificationObserver* spObs;
 
-+ (id)damageView;
-- (id)init;
++ (id)damageViewWithRailroad:(TRRailroad*)railroad;
+- (id)initWithRailroad:(TRRailroad*)railroad;
 - (ODClassType*)type;
 - (void)drawPoint:(TRRailPoint*)point;
+- (void)draw;
+- (void)drawForeground;
+- (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
 @end
 

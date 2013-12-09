@@ -13,7 +13,6 @@
 @class EGGlobal;
 @class EGContext;
 @class EGEnablingState;
-@class EGBlendFunction;
 @class EGBlendMode;
 @class EGVertexBufferDesc;
 @class EGMatrixStack;
@@ -39,13 +38,16 @@
 + (CNVoidRefArray)writeQuadIndexIn:(CNVoidRefArray)in i:(unsigned int)i;
 + (void)drawLineMaterial:(EGColorSource*)material p0:(GEVec2)p0 p1:(GEVec2)p1;
 + (void)drawCircleBackColor:(GEVec4)backColor strokeColor:(GEVec4)strokeColor at:(GEVec3)at radius:(float)radius relative:(GEVec2)relative segmentColor:(GEVec4)segmentColor start:(CGFloat)start end:(CGFloat)end;
++ (void)drawCircleBackColor:(GEVec4)backColor strokeColor:(GEVec4)strokeColor at:(GEVec3)at radius:(float)radius relative:(GEVec2)relative;
 + (ODClassType*)type;
 @end
 
 
 @interface EGCircleShaderBuilder : NSObject<EGShaderTextBuilder>
-+ (id)circleShaderBuilder;
-- (id)init;
+@property (nonatomic, readonly) BOOL segment;
+
++ (id)circleShaderBuilderWithSegment:(BOOL)segment;
+- (id)initWithSegment:(BOOL)segment;
 - (ODClassType*)type;
 - (NSString*)vertex;
 - (NSString*)fragment;
@@ -60,10 +62,10 @@
 @property (nonatomic, readonly) GEVec3 position;
 @property (nonatomic, readonly) GEVec2 radius;
 @property (nonatomic, readonly) GEVec2 relative;
-@property (nonatomic, readonly) EGCircleSegment* segment;
+@property (nonatomic, readonly) id segment;
 
-+ (id)circleParamWithColor:(GEVec4)color strokeColor:(GEVec4)strokeColor position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative segment:(EGCircleSegment*)segment;
-- (id)initWithColor:(GEVec4)color strokeColor:(GEVec4)strokeColor position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative segment:(EGCircleSegment*)segment;
++ (id)circleParamWithColor:(GEVec4)color strokeColor:(GEVec4)strokeColor position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative segment:(id)segment;
+- (id)initWithColor:(GEVec4)color strokeColor:(GEVec4)strokeColor position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative segment:(id)segment;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -82,22 +84,24 @@
 
 
 @interface EGCircleShader : EGShader
+@property (nonatomic, readonly) BOOL segment;
 @property (nonatomic, readonly) EGShaderAttribute* model;
 @property (nonatomic, readonly) EGShaderUniformVec4* pos;
 @property (nonatomic, readonly) EGShaderUniformMat4* p;
 @property (nonatomic, readonly) EGShaderUniformVec2* radius;
 @property (nonatomic, readonly) EGShaderUniformVec4* color;
 @property (nonatomic, readonly) EGShaderUniformVec4* strokeColor;
-@property (nonatomic, readonly) EGShaderUniformVec4* sectorColor;
-@property (nonatomic, readonly) EGShaderUniformF4* startTg;
-@property (nonatomic, readonly) EGShaderUniformF4* endTg;
+@property (nonatomic, readonly) id sectorColor;
+@property (nonatomic, readonly) id startTg;
+@property (nonatomic, readonly) id endTg;
 
-+ (id)circleShader;
-- (id)init;
++ (id)circleShaderWithSegment:(BOOL)segment;
+- (id)initWithSegment:(BOOL)segment;
 - (ODClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGCircleParam*)param;
-+ (EGCircleShader*)instance;
++ (EGCircleShader*)withSegment;
++ (EGCircleShader*)withoutSegment;
 + (ODClassType*)type;
 @end
 

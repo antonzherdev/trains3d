@@ -18,6 +18,7 @@
 @class TRCityAngle;
 @class TRCityColor;
 @class EGMatrixStack;
+@class EGBlendFunction;
 @class EGContext;
 @class EGD2D;
 @class EGCounter;
@@ -25,7 +26,6 @@
 @class TRStr;
 @protocol TRStrings;
 @class TRRailroad;
-@class EGBlendFunction;
 @class EGBillboard;
 @class EGDirector;
 

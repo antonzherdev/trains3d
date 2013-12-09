@@ -67,19 +67,19 @@ static ODClassType* _TRGameDirector_type;
                 [[TRGameDirector playerScoreRetrieveNotification] postData:score];
             }];
         }];
-        _sporadicDamageHelpObs = [TRLevel.sporadicDamageNotification observeBy:^void(TRLevel* level) {
-            if([_weakSelf.cloud intForKey:@"help.sporadicDamage"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:1.0 event:^void() {
-                [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpSporadicDamage]];
+        _sporadicDamageHelpObs = [TRLevel.sporadicDamageNotification observeBy:^void(CNTuple* p) {
+            if([_weakSelf.cloud intForKey:@"help.sporadicDamage"] == 0) [((TRLevel*)(((CNTuple*)(p)).a)).schedule scheduleAfter:1.0 event:^void() {
+                [((TRLevel*)(((CNTuple*)(p)).a)) showHelpText:[TRStr.Loc helpSporadicDamage]];
                 [_weakSelf.cloud setKey:@"help.sporadicDamage" i:1];
             }];
         }];
-        _damageHelpObs = [TRLevel.damageNotification observeBy:^void(TRLevel* level) {
-            if([_weakSelf.cloud intForKey:@"help.damage"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:1.0 event:^void() {
-                [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpDamage]];
+        _damageHelpObs = [TRLevel.damageNotification observeBy:^void(CNTuple* p) {
+            if([_weakSelf.cloud intForKey:@"help.damage"] == 0) [((TRLevel*)(((CNTuple*)(p)).a)).schedule scheduleAfter:1.0 event:^void() {
+                [((TRLevel*)(((CNTuple*)(p)).a)) showHelpText:[TRStr.Loc helpDamage]];
                 [_weakSelf.cloud setKey:@"help.damage" i:1];
             }];
         }];
-        _repairerHelpObs = [TRLevel.damageNotification observeBy:^void(TRLevel* level) {
+        _repairerHelpObs = [TRLevel.runRepairerNotification observeBy:^void(TRLevel* level) {
             if([_weakSelf.cloud intForKey:@"help.repairer"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:((CGFloat)(TRLevel.trainComingPeriod + 7)) event:^void() {
                 [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpRepairer]];
                 [_weakSelf.cloud setKey:@"help.repairer" i:1];

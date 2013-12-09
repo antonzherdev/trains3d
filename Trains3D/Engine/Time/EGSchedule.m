@@ -101,6 +101,10 @@ static ODClassType* _EGCounter_type;
     @throw @"Method time is abstract";
 }
 
+- (CGFloat)invTime {
+    return 1.0 - [self time];
+}
+
 - (BOOL)isStopped {
     return !([self isRunning]);
 }
@@ -186,6 +190,10 @@ static ODClassType* _EGEmptyCounter_type;
     return 0.0;
 }
 
+- (CGFloat)invTime {
+    return 1.0;
+}
+
 - (void)updateWithDelta:(CGFloat)delta {
 }
 
@@ -250,6 +258,10 @@ static ODClassType* _EGLengthCounter_type;
 
 - (CGFloat)time {
     return __time;
+}
+
+- (CGFloat)invTime {
+    return 1.0 - __time;
 }
 
 - (BOOL)isRunning {
@@ -460,6 +472,151 @@ static ODClassType* _EGEventCounter_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"counter=%@", self.counter];
     [description appendFormat:@", eventTime=%f", self.eventTime];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGCounterData{
+    EGCounter* _counter;
+    id _data;
+}
+static ODClassType* _EGCounterData_type;
+@synthesize counter = _counter;
+@synthesize data = _data;
+
++ (id)counterDataWithCounter:(EGCounter*)counter data:(id)data {
+    return [[EGCounterData alloc] initWithCounter:counter data:data];
+}
+
+- (id)initWithCounter:(EGCounter*)counter data:(id)data {
+    self = [super init];
+    if(self) {
+        _counter = counter;
+        _data = data;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGCounterData_type = [ODClassType classTypeWithCls:[EGCounterData class]];
+}
+
+- (BOOL)isRunning {
+    return [_counter isRunning];
+}
+
+- (CGFloat)time {
+    return [_counter time];
+}
+
+- (void)updateWithDelta:(CGFloat)delta {
+    [_counter updateWithDelta:delta];
+}
+
+- (ODClassType*)type {
+    return [EGCounterData type];
+}
+
++ (ODClassType*)type {
+    return _EGCounterData_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGCounterData* o = ((EGCounterData*)(other));
+    return [self.counter isEqual:o.counter] && [self.data isEqual:o.data];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.counter hash];
+    hash = hash * 31 + [self.data hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"counter=%@", self.counter];
+    [description appendFormat:@", data=%@", self.data];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGMutableCounterArray{
+    id<CNSeq> __counters;
+}
+static ODClassType* _EGMutableCounterArray_type;
+
++ (id)mutableCounterArray {
+    return [[EGMutableCounterArray alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    if(self) __counters = (@[]);
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGMutableCounterArray_type = [ODClassType classTypeWithCls:[EGMutableCounterArray class]];
+}
+
+- (id<CNSeq>)counters {
+    return __counters;
+}
+
+- (void)appendCounter:(EGCounterData*)counter {
+    __counters = [__counters addItem:counter];
+}
+
+- (void)appendCounter:(EGCounter*)counter data:(id)data {
+    __counters = [__counters addItem:[EGCounterData counterDataWithCounter:counter data:data]];
+}
+
+- (void)updateWithDelta:(CGFloat)delta {
+    __block BOOL hasDied = NO;
+    [__counters forEach:^void(EGCounterData* counter) {
+        [((EGCounterData*)(counter)) updateWithDelta:delta];
+        if([((EGCounterData*)(counter)) isStopped]) hasDied = YES;
+    }];
+    if(hasDied) __counters = [[[__counters chain] filter:^BOOL(EGCounterData* _) {
+        return [((EGCounterData*)(_)) isRunning];
+    }] toArray];
+}
+
+- (void)forEach:(void(^)(EGCounterData*))each {
+    [__counters forEach:each];
+}
+
+- (ODClassType*)type {
+    return [EGMutableCounterArray type];
+}
+
++ (ODClassType*)type {
+    return _EGMutableCounterArray_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
     return description;
 }

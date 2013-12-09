@@ -28,6 +28,7 @@ class Schedule extends Updatable {
 class Counter extends Updatable {
     def isRunning : bool
     def time : float
+    def invTime : float = 1.0 - time
     def isStopped : bool = !isRunning
 
     def for(f : float -> void) {
@@ -45,6 +46,7 @@ class Counter extends Updatable {
 class EmptyCounter extends Counter {
     def isRunning : bool = false
     def time : float = 0
+    def invTime : float = 1.0
     def updateWith(delta : float) {
     }
 }
@@ -53,6 +55,7 @@ class LengthCounter(length : float) extends Counter {
     private var _time : float = 0.0
     private var _run : bool = true
     def time : float = _time
+    def invTime : float = 1.0 - _time
     def isRunning : bool = _run
 
     def updateWith(delta : float) {
@@ -93,5 +96,40 @@ class EventCounter(counter : Counter, eventTime : float, event : void -> void) e
                 executed = true
             }
         }
+    }
+}
+
+class CounterData<T>(counter : Counter, data : T) extends Counter {
+    def isRunning : bool = counter.isRunning
+    def time : float = counter.time
+
+    def updateWith(delta : float) {
+        counter.updateWith(delta)
+    }
+}
+
+class MutableCounterArray<T> extends Updatable {
+    private var _counters : [CounterData<T>] = []
+
+    def counters : [CounterData<T>] = _counters
+    def append(counter : CounterData<T>) {
+        _counters += counter
+    }
+
+    def append(counter : Counter, data : T) {
+        _counters += CounterData<T>(counter, data)
+    }
+
+    def updateWith(delta : float) {
+        var hasDied = false
+        _counters.for{counter ->
+            counter.updateWith(delta)
+            if(counter.isStopped) hasDied = true
+        }
+        if(hasDied) _counters = _counters.chain.filter(_.isRunning).toArray
+    }
+
+    def for(each : (CounterData<T>) -> void) {
+        _counters.for(each)
     }
 }

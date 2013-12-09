@@ -31,25 +31,25 @@ class GameDirector {
             playerScoreRetrieveNotification.post(score)
         }
     }
-    private val sporadicDamageHelpObs = Level.sporadicDamageNotification.observe{ level ->
+    private val sporadicDamageHelpObs = Level.sporadicDamageNotification.observe{ p ->
         if(cloud.intFor("help.sporadicDamage") == 0) {
-            level.schedule.schedule(1) {
-                level.showHelp(Loc.helpSporadicDamage)
+            p.a.schedule.schedule(1) {
+            p.a.showHelp(Loc.helpSporadicDamage)
                 cloud.set("help.sporadicDamage", 1)
             }
         }
     }
 
-    private val damageHelpObs = Level.damageNotification.observe{ level ->
+    private val damageHelpObs = Level.damageNotification.observe{ p ->
         if(cloud.intFor("help.damage") == 0) {
-            level.schedule.schedule(1) {
-                level.showHelp(Loc.helpDamage)
+            p.a.schedule.schedule(1) {
+            p.a.showHelp(Loc.helpDamage)
                 cloud.set("help.damage", 1)
             }
         }
     }
 
-    private val repairerHelpObs = Level.damageNotification.observe{ level ->
+    private val repairerHelpObs = Level.runRepairerNotification.observe{ level ->
         if(cloud.intFor("help.repairer") == 0) {
             level.schedule.schedule(Level.trainComingPeriod + 7) {
                 level.showHelp(Loc.helpRepairer)

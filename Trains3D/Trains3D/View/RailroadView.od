@@ -8,7 +8,7 @@ class RailroadView(level : Level) extends InputProcessor {
     private val railView : RailView
     private val switchView = SwitchView()
     private val lightView = LightView(level.railroad)
-    private val damageView = DamageView()
+    private val damageView = DamageView(level.railroad)
     private val railroadSurface = ViewportSurface(depth = true, multisampling = true)
     private val backgroundView : BackgroundView
     private val undoView = UndoView(level.railroad.builder)
@@ -51,7 +51,7 @@ class RailroadView(level : Level) extends InputProcessor {
 
     def drawLightGlows {
         BlendFunction.standard{
-            railroad.damagesPoints.for(damageView.draw(_))
+            damageView.draw
             lightView.drawGlows
         }
     }
@@ -60,6 +60,7 @@ class RailroadView(level : Level) extends InputProcessor {
         egPushGroupMarker("Railroad foreground")
         BlendFunction.standard{
             undoView.draw
+            damageView.drawForeground
         }
         egPopGroupMarker
     }
@@ -83,6 +84,10 @@ class RailroadView(level : Level) extends InputProcessor {
     }
 
     def recognizers = undoView.recognizers
+
+    def updateWith(delta : float) {
+        damageView.updateWith(delta)
+    }
 }
 
 class RailView(railroad : Railroad) {
@@ -300,7 +305,7 @@ class LightView(railroad : Railroad) {
     }
 }
 
-class DamageView {
+class DamageView(railroad : Railroad) {
     val model = MeshModel([(Models.damage, ColorSource(vec4(1, 0, 0, 0.3)))])
     def draw(point : RailPoint) {
         matrix(
@@ -311,6 +316,25 @@ class DamageView {
         }
     }
 
+    def draw {
+        railroad.damagesPoints.for(draw(_))
+    }
+
+    val sporadicAnimations = MutableCounterArray<RailPoint>()
+
+    val spObs = Level.sporadicDamageNotification.observe{p ->
+        sporadicAnimations.append(LengthCounter(2), p.b)
+    }
+
+    def drawForeground {
+        context.depthTest.disabled {
+            sporadicAnimations.for{counter ->
+                D2D.drawCircle(backColor = vec4(1, 0, 0, 0.5), strokeColor = vec4(1, 0, 0, 0.5),
+                    at = vec3(counter.data.point, 0), radius = 0.1 * counter.invTime, relative = vec2(0, 0))
+            }
+        }
+    }
+
     private def angleFor(point : RailPoint) : float4 = {
         val p = point.straight
         val a = p.add(-0.1)
@@ -318,6 +342,10 @@ class DamageView {
         val line = Line2(p0 = a.point, p1 = b.point)
         val angle = line.degreeAngle
         angle + 90
+    }
+
+    def updateWith(delta : float) {
+        sporadicAnimations.updateWith(delta)
     }
 }
 

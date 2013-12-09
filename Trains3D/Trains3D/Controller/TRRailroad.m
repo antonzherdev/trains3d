@@ -776,7 +776,7 @@ static ODClassType* _TRRailroad_type;
     }] sort] findWhere:on];
 }
 
-- (void)addDamageAtPoint:(TRRailPoint*)point {
+- (TRRailPoint*)addDamageAtPoint:(TRRailPoint*)point {
     TRRailPoint* p = point;
     if(p.back) p = [p invert];
     CGFloat fl = p.form.length;
@@ -801,6 +801,7 @@ static ODClassType* _TRRailroad_type;
         }]];
     } forKey:tuple(wrap(GEVec2i, p.tile), p.form)];
     [__damagesPoints appendItem:p];
+    return p;
 }
 
 - (void)fixDamageAtPoint:(TRRailPoint*)point {

@@ -186,7 +186,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
             weak val ws = self
             schedule.schedule(5) {
                 ws.railroad.addDamageAt(collision.railPoint)
-                damageNotification.post(ws)
+                damageNotification.post((ws, collision.railPoint))
             }
         }
     }
@@ -200,14 +200,15 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         }
     }
 
-    static val damageNotification = NotificationHandle<Level>("damageNotification")
+    static val damageNotification = NotificationHandle<(Level, RailPoint)>("damageNotification")
 
-    static val sporadicDamageNotification = NotificationHandle<Level>("sporadicDamageNotification")
+    static val sporadicDamageNotification = NotificationHandle<(Level, RailPoint)>("sporadicDamageNotification")
     def addSporadicDamage {
         railroad.rails.randomItem.for {rail ->
-            railroad.addDamageAt(RailPoint(rail.tile, rail.form, Float.rnd(0, rail.form.length), false))
-            sporadicDamageNotification.post(self)
-            damageNotification.post(self)
+            val p = RailPoint(rail.tile, rail.form, Float.rnd(0, rail.form.length), false)
+            val pp = railroad.addDamageAt(p)
+            sporadicDamageNotification.post((self, pp))
+            damageNotification.post((self, pp))
         }
     }
 

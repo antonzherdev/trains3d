@@ -390,7 +390,7 @@ static ODClassType* _TRLevel_type;
         __weak TRLevel* ws = self;
         [_schedule scheduleAfter:5.0 event:^void() {
             [ws.railroad addDamageAtPoint:((TRCarsCollision*)(collision)).railPoint];
-            [_TRLevel_damageNotification postData:ws];
+            [_TRLevel_damageNotification postData:tuple(ws, ((TRCarsCollision*)(collision)).railPoint)];
         }];
     }];
 }
@@ -405,9 +405,10 @@ static ODClassType* _TRLevel_type;
 
 - (void)addSporadicDamage {
     [[[_railroad rails] randomItem] forEach:^void(TRRail* rail) {
-        [_railroad addDamageAtPoint:[TRRailPoint railPointWithTile:((TRRail*)(rail)).tile form:((TRRail*)(rail)).form x:odFloatRndMinMax(0.0, ((TRRail*)(rail)).form.length) back:NO]];
-        [_TRLevel_sporadicDamageNotification postData:self];
-        [_TRLevel_damageNotification postData:self];
+        TRRailPoint* p = [TRRailPoint railPointWithTile:((TRRail*)(rail)).tile form:((TRRail*)(rail)).form x:odFloatRndMinMax(0.0, ((TRRail*)(rail)).form.length) back:NO];
+        TRRailPoint* pp = [_railroad addDamageAtPoint:p];
+        [_TRLevel_sporadicDamageNotification postData:tuple(self, pp)];
+        [_TRLevel_damageNotification postData:tuple(self, pp)];
     }];
 }
 
