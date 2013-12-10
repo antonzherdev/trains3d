@@ -82,16 +82,17 @@ stub struct Float extends Comparable<float> with Number {
     def max(b : float) : float
     def min(b : float) : float
     def round : int
+    def fraction : float
 }
 
 stub struct Float4 extends Comparable<float4> with Number {
-    static val max : float
-    static val min : float
+    static val max : float4
+    static val min : float4
 
     def compare(to : float4) : int
     def between( : float4, : float4) : bool
     def abs : float4
-    def noise(percents : float) : float
+    def noise(percents : float4) : float4
 
     def max(b : float4) : float4
     def min(b : float4) : float4
@@ -99,8 +100,26 @@ stub struct Float4 extends Comparable<float4> with Number {
 
     static def rnd : float4
     static def rnd(min : float4, max : float4) : float4
+    def fraction : float4
 }
 
+stub struct Float8 extends Comparable<float8> with Number {
+    static val max : float8
+    static val min : float8
+
+    def compare(to : float8) : int
+    def between( : float8, : float8) : bool
+    def abs : float8
+    def noise(percents : float8) : float8
+
+    def max(b : float8) : float8
+    def min(b : float8) : float8
+    def round : int
+
+    static def rnd : float8
+    static def rnd(min : float8, max : float8) : float8
+    def fraction : float8
+}
 
 
 

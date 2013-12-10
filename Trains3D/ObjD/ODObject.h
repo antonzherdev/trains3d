@@ -164,6 +164,18 @@ static inline float odFloat4Min() {
     return -OD_FLT_MAX;
 }
 
+static inline CGFloat floatFraction(CGFloat s) {
+    return s - (NSUInteger)s;
+}
+
+static inline float float4Fraction(float s) {
+    return s - (unsigned int)s;
+}
+
+static inline double float8Fraction(double s) {
+    return s - (unsigned long)s;
+}
+
 
 static inline char byteAbs(char f) {
     return f < 0 ? -f : f;

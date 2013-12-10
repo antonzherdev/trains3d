@@ -23,12 +23,12 @@
 @class TRTrain;
 @class EGCounter;
 @class TRTrainGenerator;
+@class TRTrainType;
+@class TRCityColor;
 @class TRRailPoint;
 @class TRSwitch;
 @class TRCarsCollision;
 @class TRCar;
-@class TRTrainType;
-@class TRCityColor;
 @class TRCarType;
 @class TRForestRules;
 @class TRForestType;

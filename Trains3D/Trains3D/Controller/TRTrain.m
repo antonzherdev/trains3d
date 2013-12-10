@@ -2,10 +2,10 @@
 
 #import "TRRailroad.h"
 #import "TRLevel.h"
-#import "TRCity.h"
 #import "TRRailPoint.h"
-#import "TRCar.h"
 #import "EGMapIso.h"
+#import "TRCity.h"
+#import "TRCar.h"
 @implementation TRTrainType{
     BOOL(^_obstacleProcessor)(TRLevel*, TRTrain*, TRObstacle*);
 }
@@ -34,8 +34,22 @@ static NSArray* _TRTrainType_values;
         return NO;
     }];
     _TRTrainType_crazy = [TRTrainType trainTypeWithOrdinal:1 name:@"crazy" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
-        if(o.obstacleType == TRObstacleType.damage) [level destroyTrain:train];
-        return o.obstacleType == TRObstacleType.light;
+        if(o.obstacleType != TRObstacleType.light) {
+            if(o.obstacleType == TRObstacleType.end) {
+                TRRailPoint* point = [train head];
+                if(!([level.map isFullTile:point.tile]) && !([level.map isFullTile:[point nextTile]])) {
+                    return NO;
+                } else {
+                    [level destroyTrain:train];
+                    return NO;
+                }
+            } else {
+                [level destroyTrain:train];
+                return NO;
+            }
+        } else {
+            return YES;
+        }
     }];
     _TRTrainType_fast = [TRTrainType trainTypeWithOrdinal:2 name:@"fast" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.aSwitch) {
@@ -95,6 +109,7 @@ static NSArray* _TRTrainType_values;
     CGFloat _speedFloat;
     BOOL _isDying;
     BOOL(^_carsObstacleProcessor)(TRObstacle*);
+    CGFloat __time;
 }
 static ODClassType* _TRTrain_type;
 @synthesize level = _level;
@@ -132,6 +147,7 @@ static ODClassType* _TRTrain_type;
         _carsObstacleProcessor = ^BOOL(TRObstacle* o) {
             return o.obstacleType == TRObstacleType.light;
         };
+        __time = 0.0;
     }
     
     return self;
@@ -182,11 +198,16 @@ static ODClassType* _TRTrain_type;
     return GEVec2Make(point.x, point.y + length);
 }
 
+- (CGFloat)time {
+    return __time;
+}
+
 - (void)updateWithDelta:(CGFloat)delta {
     __weak TRTrain* _weakSelf = self;
     [self correctCorrection:[_level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return _weakSelf.trainType.obstacleProcessor(_weakSelf.level, _weakSelf, _);
     } forLength:delta * _speedFloat point:__head]];
+    __time += delta;
 }
 
 - (id<CNSeq>)directedCars {

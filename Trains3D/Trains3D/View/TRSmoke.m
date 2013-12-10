@@ -71,7 +71,7 @@ static ODClassType* _TRSmoke_type;
     p.model = _TRSmoke_modelQuad;
     p.uv = geQuadrantRndQuad(_TRSmoke_textureQuadrant);
     GEVec3 s = geVec3ApplyVec2Z(geVec2SetLength((([_train isBack]) ? geVec2SubVec2(fPos, bPos) : delta), ((float)(_train.speedFloat))), ((float)(_TRSmoke_zSpeed)));
-    p.speed = GEVec3Make(((float)(-float4NoisePercents(s.x, 0.3))), ((float)(-float4NoisePercents(s.y, 0.3))), ((float)(float4NoisePercents(s.z, 0.3))));
+    p.speed = GEVec3Make(-float4NoisePercents(s.x, 0.3), -float4NoisePercents(s.y, 0.3), float4NoisePercents(s.z, 0.3));
     return p;
 }
 

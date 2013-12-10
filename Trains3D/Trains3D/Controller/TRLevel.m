@@ -321,10 +321,10 @@ static ODClassType* _TRLevel_type;
         return ;
     }
     TRCity* fromCity = [fromCityOpt get];
-    TRCity* city = [[[[__cities chain] filter:^BOOL(TRCity* _) {
+    TRCityColor* color = ((generator.trainType == TRTrainType.crazy) ? TRCityColor.grey : ((TRCity*)([[[[__cities chain] filter:^BOOL(TRCity* _) {
         return !([_ isEqual:fromCity]);
-    }] randomItem] get];
-    TRTrain* train = [TRTrain trainWithLevel:self trainType:generator.trainType color:city.color __cars:^id<CNSeq>(TRTrain* _) {
+    }] randomItem] get])).color);
+    TRTrain* train = [TRTrain trainWithLevel:self trainType:generator.trainType color:color __cars:^id<CNSeq>(TRTrain* _) {
         return [generator generateCarsForTrain:_];
     } speed:[generator generateSpeed]];
     [self runTrain:train fromCity:fromCity];

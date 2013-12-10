@@ -10,8 +10,9 @@
 @class GEMat4;
 @class EGMatrixModel;
 @class TRCarPosition;
-@class TRCityColor;
 @class EGMatrixStack;
+@class TRTrainType;
+@class TRCityColor;
 @class TRCarType;
 @class EGRigidBody;
 @class EGColorSource;

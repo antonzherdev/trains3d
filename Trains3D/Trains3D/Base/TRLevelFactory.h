@@ -36,6 +36,7 @@
 + (void(^)(TRLevel*))train;
 + (void(^)(TRLevel*))verySlowTrain;
 + (void(^)(TRLevel*))expressTrain;
++ (void(^)(TRLevel*))crazyTrain;
 + (TRLevel*)levelWithNumber:(NSUInteger)number;
 + (TRLevel*)levelWithMapSize:(GEVec2i)mapSize;
 + (TRScore*)score;

@@ -8,8 +8,20 @@ enum TrainType(obstacleProcessor : (Level, Train, Obstacle) -> bool) {
         false
     })
     crazy((level : Level, train : Train, o : Obstacle) -> {
-        if(o.obstacleType ==  ObstacleType.damage) level.destroy(train)
-        o.obstacleType ==  ObstacleType.light
+        if(o.obstacleType !=  ObstacleType.light) {
+            if(o.obstacleType == ObstacleType.end) {
+                val point = train.head
+                if(!(level.map.isFull(point.tile)) && !(level.map.isFull(point.nextTile))) {
+                    false
+                } else {
+                    level.destroy(train)
+                    false
+                }
+            } else {
+                level.destroy(train)
+                false
+            }
+        } else true
     })
     fast((level : Level, train : Train, o : Obstacle) -> {
         if(o.obstacleType ==  ObstacleType.switch) {
@@ -70,9 +82,12 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, __cars
 
     private def move(point : vec2, length : float) = vec2(point.x, point.y + length)
 
+    private var _time : float = 0
+    def time = _time
     def updateWith(delta : float) {
         correct(level.railroad.moveWith(obstacleProcessor = trainType.obstacleProcessor(level, self, _),
             forLength = delta*speedFloat, point = _head))
+        _time += delta
     }
 
     private def directedCars : [Car] = if(back) cars.chain.reverse.toArray else cars

@@ -12,10 +12,10 @@ GEVec2 geVec2ApplyVec2i(GEVec2i vec2i) {
     return GEVec2Make(((float)(vec2i.x)), ((float)(vec2i.y)));
 }
 GEVec2 geVec2Min() {
-    return GEVec2Make(((float)(odFloat4Min())), ((float)(odFloat4Min())));
+    return GEVec2Make(odFloat4Min(), odFloat4Min());
 }
 GEVec2 geVec2Max() {
-    return GEVec2Make(((float)(odFloat4Max())), ((float)(odFloat4Max())));
+    return GEVec2Make(odFloat4Max(), odFloat4Max());
 }
 GEVec2 geVec2AddVec2(GEVec2 self, GEVec2 vec2) {
     return GEVec2Make(self.x + vec2.x, self.y + vec2.y);
@@ -286,6 +286,12 @@ GEVec3 geVec3ApplyVec2(GEVec2 vec2) {
 }
 GEVec3 geVec3ApplyVec2Z(GEVec2 vec2, float z) {
     return GEVec3Make(vec2.x, vec2.y, z);
+}
+GEVec3 geVec3ApplyF4(float f4) {
+    return GEVec3Make(f4, f4, f4);
+}
+GEVec3 geVec3ApplyF(CGFloat f) {
+    return GEVec3Make(((float)(f)), ((float)(f)), ((float)(f)));
 }
 GEVec3 geVec3AddVec3(GEVec3 self, GEVec3 vec3) {
     return GEVec3Make(self.x + vec3.x, self.y + vec3.y, self.z + vec3.z);

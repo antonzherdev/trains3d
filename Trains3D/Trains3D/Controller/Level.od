@@ -122,8 +122,10 @@ class Level(number : uint, rules : LevelRules) extends Controller {
             return nil
         }
         val fromCity = fromCityOpt.get
-        val city = _cities.chain.filter(_ != fromCity).randomItem.get
-        val train = Train(self, generator.trainType, city.color, generator.generateCarsFor(_), generator.generateSpeed)
+        val color =
+            if(generator.trainType == TrainType.crazy) CityColor.grey
+            else _cities.chain.filter(_ != fromCity).randomItem.get.color
+        val train = Train(self, generator.trainType, color, generator.generateCarsFor(_), generator.generateSpeed)
         run(train, fromCity)
     }
 

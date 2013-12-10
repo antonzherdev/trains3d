@@ -4,15 +4,15 @@
 @class TRObstacle;
 @class TRObstacleType;
 @class TRLevel;
+@class TRRailPoint;
+@class EGMapSso;
 @class TRRailroad;
 @class TRCityColor;
-@class TRRailPoint;
 @class TRCar;
 @class TRCarType;
 @class TRCity;
 @class TRRailPointCorrection;
 @class TRCarPosition;
-@class EGMapSso;
 @class TRSwitch;
 @class TRRailConnector;
 
@@ -51,6 +51,7 @@
 - (NSString*)description;
 - (TRRailPoint*)head;
 - (void)setHead:(TRRailPoint*)head;
+- (CGFloat)time;
 - (void)updateWithDelta:(CGFloat)delta;
 - (BOOL)isInTile:(GEVec2i)tile;
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch;

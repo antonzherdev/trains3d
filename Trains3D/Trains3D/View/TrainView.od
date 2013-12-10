@@ -45,13 +45,19 @@ class TrainView(level : Level) {
                     m.rotate(car.position.line.degreeAngle + 90, 0, 1, 0)
                 })
             ){
-                doDraw(car, train.color.trainColor)
+                doDraw(car)
             }
         }
     }
 
-    private def doDraw(car : Car, color : vec4) {
+    private def doDraw(car : Car) {
+        val train = car.train
         val tp = car.carType
+        val color : vec4 =
+            if(train.trainType == TrainType.crazy) {
+                val f = train.time.fraction
+                vec4(vec3(0.5 + 0.5 * ((if(f < 0.5) f else 1.0 - f) - 0.5)), 1)
+            } else train.color.trainColor
         if(tp == CarType.car) {
             carModel.draw(color)
         } else if(tp == CarType.engine){
@@ -87,7 +93,7 @@ class TrainView(level : Level) {
                     car.dynamicBody.matrix.translate(0, 0, -car.carType.height/2 + 0.04).mul(m.rotate(90, 0, 1, 0))
                 })
             ){
-                doDraw(car, dyingTrain.color.color)
+                doDraw(car)
             }
         }
     }

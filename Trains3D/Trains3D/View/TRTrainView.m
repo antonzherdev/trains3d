@@ -86,13 +86,18 @@ static ODClassType* _TRTrainView_type;
                 return [m rotateAngle:geLine2DegreeAngle([((TRCar*)(car)) position].line) + 90 x:0.0 y:1.0 z:0.0];
             }];
         } f:^void() {
-            [self doDrawCar:car color:train.color.trainColor];
+            [self doDrawCar:car];
         }];
     }];
 }
 
-- (void)doDrawCar:(TRCar*)car color:(GEVec4)color {
+- (void)doDrawCar:(TRCar*)car {
+    TRTrain* train = car.train;
     TRCarType* tp = car.carType;
+    GEVec4 color = ((train.trainType == TRTrainType.crazy) ? ^GEVec4() {
+        CGFloat f = floatFraction([train time]);
+        return geVec4ApplyVec3W(geVec3ApplyF(0.5 + 0.5 * (((f < 0.5) ? f : 1.0 - f) - 0.5)), 1.0);
+    }() : train.color.trainColor);
     if(tp == TRCarType.car) {
         [_carModel drawColor:color];
     } else {
@@ -122,7 +127,7 @@ static ODClassType* _TRTrainView_type;
                 return [[[((TRCar*)(car)) dynamicBody].matrix translateX:0.0 y:0.0 z:((float)(-((TRCar*)(car)).carType.height / 2 + 0.04))] mulMatrix:[m rotateAngle:90.0 x:0.0 y:1.0 z:0.0]];
             }];
         } f:^void() {
-            [self doDrawCar:car color:dyingTrain.color.color];
+            [self doDrawCar:car];
         }];
     }];
 }
