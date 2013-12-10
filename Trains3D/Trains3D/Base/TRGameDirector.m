@@ -24,6 +24,7 @@
     CNNotificationObserver* _sporadicDamageHelpObs;
     CNNotificationObserver* _damageHelpObs;
     CNNotificationObserver* _repairerHelpObs;
+    CNNotificationObserver* _crazyHelpObs;
     CNNotificationObserver* _crashObs;
     CNNotificationObserver* _knockDownObs;
 }
@@ -85,6 +86,12 @@ static ODClassType* _TRGameDirector_type;
                 [_weakSelf.cloud setKey:@"help.repairer" i:1];
             }];
         }];
+        _crazyHelpObs = [TRLevel.runTrainNotification observeBy:^void(CNTuple* p) {
+            if(((TRTrain*)(((CNTuple*)(p)).b)).trainType == TRTrainType.crazy && [_weakSelf.cloud intForKey:@"help.crazy"] == 0) [((TRLevel*)(((CNTuple*)(p)).a)).schedule scheduleAfter:2.0 event:^void() {
+                [((TRLevel*)(((CNTuple*)(p)).a)) showHelpText:[TRStr.Loc helpCrazy]];
+                [_weakSelf.cloud setKey:@"help.crazy" i:1];
+            }];
+        }];
         _crashObs = [TRLevel.crashNotification observeBy:^void(id<CNSeq> _) {
             [TRGameDirector.instance destroyTrainsTrains:_];
         }];
@@ -125,6 +132,7 @@ static ODClassType* _TRGameDirector_type;
     [_cloud setKey:@"help.sporadicDamage" i:0];
     [_cloud setKey:@"help.damage" i:0];
     [_cloud setKey:@"help.repairer" i:0];
+    [_cloud setKey:@"help.crazy" i:0];
 }
 
 - (NSInteger)bestScoreLevelNumber:(NSUInteger)levelNumber {

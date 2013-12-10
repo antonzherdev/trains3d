@@ -58,10 +58,20 @@ class GameDirector {
         }
     }
 
+    private val crazyHelpObs = Level.runTrainNotification.observe{ p ->
+        if(p.b.trainType == TrainType.crazy && cloud.intFor("help.crazy") == 0) {
+            p.a.schedule.schedule(2) {
+                p.a.showHelp(Loc.helpCrazy)
+                cloud.set("help.crazy", 1)
+            }
+        }
+    }
+
     def clearTutorial {
         cloud.set("help.sporadicDamage", 0)
         cloud.set("help.damage", 0)
         cloud.set("help.repairer", 0)
+        cloud.set("help.crazy", 0)
     }
 
     def bestScore(levelNumber : uint) : int = cloud.intFor("level$levelNumber.score")

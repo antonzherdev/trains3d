@@ -304,7 +304,7 @@ static ODClassType* _TRLevel_type;
     [_score runTrain:train];
     [_collisionWorld addTrain:train];
     [[self dynamicWorld] addTrain:train];
-    [_TRLevel_runTrainNotification postData:train];
+    [_TRLevel_runTrainNotification postData:tuple(self, train)];
 }
 
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator {

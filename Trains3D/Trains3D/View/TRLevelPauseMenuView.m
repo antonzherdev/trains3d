@@ -646,6 +646,7 @@ static ODClassType* _TRLooseMenu_type;
     TRLevel* _level;
     EGText* _helpText;
     EGSprite* _helpBackSprite;
+    BOOL __allowClose;
 }
 static ODClassType* _TRHelpView_type;
 @synthesize level = _level;
@@ -660,6 +661,7 @@ static ODClassType* _TRHelpView_type;
         _level = level;
         _helpText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
         _helpBackSprite = [EGSprite applyMaterial:[EGColorSource applyColor:TRLevelMenuView.backgroundColor] rect:geRectApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0)];
+        __allowClose = NO;
     }
     
     return self;
@@ -683,11 +685,16 @@ static ODClassType* _TRHelpView_type;
     [_helpBackSprite draw];
     [_helpText setPosition:geVec3ApplyVec2(geVec2SubVec2(geRectCenter(rect), GEVec2Make(rect.size.x * 0.45, 0.0)))];
     [_helpText draw];
+    delay(1, ^void() {
+        __allowClose = YES;
+    });
 }
 
 - (BOOL)tapEvent:(id<EGEvent>)event {
-    [_level clearHelp];
-    [[EGDirector current] resume];
+    if(__allowClose) {
+        [_level clearHelp];
+        [[EGDirector current] resume];
+    }
     return YES;
 }
 

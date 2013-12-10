@@ -14,10 +14,12 @@ enum TrainType(obstacleProcessor : (Level, Train, Obstacle) -> bool) {
                 if(!(level.map.isFull(point.tile)) && !(level.map.isFull(point.nextTile))) {
                     false
                 } else {
+                    level.railroad.addDamageAt(point)
                     level.destroy(train)
                     false
                 }
             } else {
+                level.railroad.addDamageAt(train.head)
                 level.destroy(train)
                 false
             }

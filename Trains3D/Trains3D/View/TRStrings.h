@@ -49,6 +49,7 @@
 - (NSString*)helpSporadicDamage;
 - (NSString*)helpDamage;
 - (NSString*)helpRepairer;
+- (NSString*)helpCrazy;
 - (NSString*)helpExpressTrain;
 - (NSString*)helpTrainTo:(NSString*)to;
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
@@ -96,6 +97,7 @@
 - (NSString*)helpToMakeZoom;
 - (NSString*)helpSporadicDamage;
 - (NSString*)helpDamage;
+- (NSString*)helpCrazy;
 - (NSString*)helpRepairer;
 - (NSString*)result;
 - (NSString*)best;
@@ -146,6 +148,7 @@
 - (NSString*)helpSporadicDamage;
 - (NSString*)helpDamage;
 - (NSString*)helpRepairer;
+- (NSString*)helpCrazy;
 - (NSString*)rate;
 - (NSString*)result;
 - (NSString*)best;

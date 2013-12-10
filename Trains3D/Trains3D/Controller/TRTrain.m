@@ -40,10 +40,12 @@ static NSArray* _TRTrainType_values;
                 if(!([level.map isFullTile:point.tile]) && !([level.map isFullTile:[point nextTile]])) {
                     return NO;
                 } else {
+                    [level.railroad addDamageAtPoint:point];
                     [level destroyTrain:train];
                     return NO;
                 }
             } else {
+                [level.railroad addDamageAtPoint:[train head]];
                 [level destroyTrain:train];
                 return NO;
             }

@@ -294,9 +294,9 @@ class LevelFactory {
     LevelRules(vec2i(7, 5), LevelTheme.palm, scoreRulesWith(60000),
     WeatherRules(sunny = 1.0, windStrength = 0.1, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.1, nil),
     repairerSpeed = 20, sporadicDamagePeriod = 400, [
-        (0, create2Cities), (10, crazyTrain), (170, train), (10, train), (10, train),
+        (0, create2Cities), (10, train), (15, train), (10, expressTrain),
         (10, createNewCity),
-        (20, train), (20, train), (15, train),
+        (20, train), (20, expressTrain), (15, train), (30, crazyTrain),
         (20, createNewCity),
         (20, train), (10, verySlowTrain), (15, train), (15, expressTrain), (20, train),
         (10, createNewCity),

@@ -214,6 +214,7 @@ class HelpView(level : Level) extends PauseView {
     }
 
     private val helpBackSprite = Sprite(LevelMenuView.backgroundColor, Rect(0, 0, 0, 0))
+    private var _allowClose = false
     def draw {
         val help = level.help.get
         helpText.text = help.text
@@ -224,11 +225,16 @@ class HelpView(level : Level) extends PauseView {
         helpBackSprite.draw
         helpText.position = rect.center - vec2(rect.size.x*0.45, 0)
         helpText.draw
+        Action.delay(1) {
+            _allowClose = true
+        }
     }
 
     def tap(event : Event) : bool = {
-        level.clearHelp
-        Director.current.resume
+        if(_allowClose) {
+            level.clearHelp
+            Director.current.resume
+        }
         true
     }
 }

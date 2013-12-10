@@ -55,6 +55,7 @@ trait Strings {
     def helpSporadicDamage : string
     def helpDamage : string
     def helpRepairer : string
+    def helpCrazy : string
     def helpExpressTrain : string
     def helpTrain(to : string) : string
     def helpTrainWithSwitches(to : string) : string
@@ -125,6 +126,10 @@ class EnStrings extends Strings {
     def helpDamage : string =
         "Call the special train using a button to fix the damage.
          It's better to call train from the closest city to the damage."
+    def helpCrazy : string =
+        "The machinist of the train is crazy.
+         He doesn't pay attention to lights or closed switches.
+         Send this train to any city."
 
     def helpRepairer : string =
         "Move the repairer train throught the damage
@@ -217,6 +222,10 @@ class RuStrings extends Strings{
     def helpRepairer : string =
         "Проведите ремонтный поезд через повреждение
          и отправьте его в любой город."
+    def helpCrazy : string =
+        "Машинист этого поезда сошел с ума.
+         Он не обращает внимания на светофоры или закрытые стрелки.
+         Отправьте этот поезд в любой город."
 
     def rate : string = "Оценить игру"
     def result : string = "Счет:"

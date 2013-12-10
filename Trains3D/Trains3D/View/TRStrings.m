@@ -179,6 +179,12 @@ static ODClassType* _TREnStrings_type;
         "It's better to call train from the closest city to the damage.";
 }
 
+- (NSString*)helpCrazy {
+    return @"The machinist of the train is crazy.\n"
+        "He doesn't pay attention to lights or closed switches.\n"
+        "Send this train to any city.";
+}
+
 - (NSString*)helpRepairer {
     return @"Move the repairer train throught the damage\n"
         "and send it to any city.";
@@ -455,6 +461,12 @@ static ODClassType* _TRRuStrings_type;
 - (NSString*)helpRepairer {
     return @"Проведите ремонтный поезд через повреждение\n"
         "и отправьте его в любой город.";
+}
+
+- (NSString*)helpCrazy {
+    return @"Машинист этого поезда сошел с ума.\n"
+        "Он не обращает внимания на светофоры или закрытые стрелки.\n"
+        "Отправьте этот поезд в любой город.";
 }
 
 - (NSString*)rate {

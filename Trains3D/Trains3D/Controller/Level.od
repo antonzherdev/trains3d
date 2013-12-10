@@ -103,13 +103,13 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         expectedTrainNotification.post((train, fromCity))
     }
 
-    static val runTrainNotification = NotificationHandle<Train>("runTrainNotification")
+    static val runTrainNotification = NotificationHandle<(Level, Train)>("runTrainNotification")
     private def add(train : Train) {
         _trains += train
         score.run(train)
         collisionWorld.add(train)
         dynamicWorld.add(train)
-        runTrainNotification.post(train)
+        runTrainNotification.post((self, train))
     }
 
     def runTrainWith(generator : TrainGenerator) {
