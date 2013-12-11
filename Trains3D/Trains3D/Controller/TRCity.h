@@ -28,6 +28,7 @@
 + (TRCityColor*)blue;
 + (TRCityColor*)red;
 + (TRCityColor*)mint;
++ (TRCityColor*)yellow;
 + (TRCityColor*)grey;
 + (NSArray*)values;
 @end

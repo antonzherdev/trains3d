@@ -127,6 +127,10 @@ static ODClassType* _TREnStrings_type;
     return @"beige";
 }
 
+- (NSString*)colorYellow {
+    return @"yellow";
+}
+
 - (NSString*)rate {
     return @"Rate it";
 }
@@ -407,6 +411,10 @@ static ODClassType* _TRRuStrings_type;
 
 - (NSString*)colorBeige {
     return @"бежевый";
+}
+
+- (NSString*)colorYellow {
+    return @"желтый";
 }
 
 - (NSString*)helpConnectTwoCities {

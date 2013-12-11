@@ -37,6 +37,7 @@
 - (NSString*)colorOrange;
 - (NSString*)colorBlue;
 - (NSString*)colorMint;
+- (NSString*)colorYellow;
 - (NSString*)colorRed;
 - (NSString*)colorGreen;
 - (NSString*)colorPink;
@@ -87,6 +88,7 @@
 - (NSString*)colorMint;
 - (NSString*)colorRed;
 - (NSString*)colorBeige;
+- (NSString*)colorYellow;
 - (NSString*)rate;
 - (NSString*)helpConnectTwoCities;
 - (NSString*)helpRules;
@@ -138,6 +140,7 @@
 - (NSString*)colorMint;
 - (NSString*)colorRed;
 - (NSString*)colorBeige;
+- (NSString*)colorYellow;
 - (NSString*)helpConnectTwoCities;
 - (NSString*)helpNewCity;
 - (NSString*)helpTrainTo:(NSString*)to;
