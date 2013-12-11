@@ -43,7 +43,7 @@ class GameDirector {
     private val damageHelpObs = Level.damageNotification.observe{ p ->
         if(cloud.intFor("help.damage") == 0) {
             p.a.schedule.schedule(1) {
-            p.a.showHelp(Loc.helpDamage)
+                p.a.showHelp(Loc.helpDamage)
                 cloud.set("help.damage", 1)
             }
         }
