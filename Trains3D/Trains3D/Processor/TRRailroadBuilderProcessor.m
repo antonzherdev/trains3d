@@ -38,6 +38,7 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
 - (EGRecognizers*)recognizers {
     return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGPan apply] began:^BOOL(id<EGEvent> event) {
         _startedPoint = [CNOption applyValue:wrap(GEVec2, [event location])];
+        _firstTry = YES;
         return YES;
     } changed:^void(id<EGEvent> event) {
         GELine2 line = geLine2ApplyP0P1(uwrap(GEVec2, [_startedPoint get]), [event location]);
@@ -46,7 +47,7 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
             GEVec2 mid = geLine2Mid(nl);
             GEVec2i tile = geVec2Round(mid);
             id railOpt = [[[[[[[[[[self possibleRailsAroundTile:tile] map:^CNTuple*(TRRail* rail) {
-                return tuple(rail, numf([self distanceBetweenA:[((TRRail*)(rail)) line] b:nl]));
+                return tuple(rail, numf([self distanceBetweenRailLine:[((TRRail*)(rail)) line] paintLine:nl]));
             }] filter:^BOOL(CNTuple* _) {
                 return unumf(((CNTuple*)(_)).b) < 3;
             }] sortBy] ascBy:^id(CNTuple* _) {
@@ -87,11 +88,15 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
     }]];
 }
 
-- (CGFloat)distanceBetweenA:(GELine2)a b:(GELine2)b {
-    GELine2 pa = geLine2Positive(a);
-    GELine2 pb = geLine2Positive(b);
-    float d = float4Abs(geVec2DotVec2(pa.u, geLine2N(pb))) + geVec2Length(geVec2SubVec2(pa.p0, pb.p0)) + geVec2Length(geVec2SubVec2(geLine2P1(pa), geLine2P1(pb)));
-    return ((CGFloat)(d));
+- (CGFloat)distanceBetweenRailLine:(GELine2)railLine paintLine:(GELine2)paintLine {
+    if([_fixedStart isDefined]) {
+        return ((CGFloat)(geVec2LengthSquare(geVec2SubVec2(((GEVec2Eq(paintLine.p0, railLine.p0)) ? geLine2P1(railLine) : railLine.p0), geLine2P1(paintLine)))));
+    } else {
+        GELine2 pa = geLine2Positive(railLine);
+        GELine2 pb = geLine2Positive(paintLine);
+        float d = float4Abs(geVec2DotVec2(pa.u, geLine2N(pb))) + geVec2Length(geVec2SubVec2(pa.p0, pb.p0)) + geVec2Length(geVec2SubVec2(geLine2P1(pa), geLine2P1(pb)));
+        return ((CGFloat)(d));
+    }
 }
 
 - (CNChain*)possibleRailsAroundTile:(GEVec2i)tile {

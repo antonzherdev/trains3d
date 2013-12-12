@@ -13,7 +13,7 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
     def recognizers : Recognizers = Recognizer(Pan(),
         began = event -> {
             startedPoint = event.location
-//            firstTry = true
+            firstTry = true
             true
         },
         changed = event -> {
@@ -66,11 +66,15 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
        }
     )
 
-    private def distanceBetween(a : Line2, b : Line2) : float = {
-        val pa = a.positive
-        val pb = b.positive
-        val d = pa.u.dot(pb.n).abs + ((pa.p0 - pb.p0).length + (pa.p1 - pb.p1).length)
-        d
+    private def distanceBetween(railLine : Line2, paintLine : Line2) : float = {
+        if(fixedStart.isDefined) {
+            ((if(paintLine.p0 == railLine.p0) railLine.p1 else railLine.p0) - paintLine.p1).lengthSquare
+        } else {
+            val pa = railLine.positive
+            val pb = paintLine.positive
+            val d = pa.u.dot(pb.n).abs + ((pa.p0 - pb.p0).length + (pa.p1 - pb.p1).length)
+            d
+        }
     }
 
 
