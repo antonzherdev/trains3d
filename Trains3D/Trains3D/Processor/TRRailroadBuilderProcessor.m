@@ -99,7 +99,7 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
         NSUInteger c = [[[[rail.form connectors] chain] filter:^BOOL(TRRailConnector* connector) {
             return !([[_builder.railroad contentInTile:[((TRRailConnector*)(connector)) nextTile:rail.tile] connector:[((TRRailConnector*)(connector)) otherSideConnector]] isEmpty]);
         }] count];
-        CGFloat k = ((c == 1) ? 0.3 : ((c == 2) ? 0.1 : 1.0));
+        CGFloat k = ((c == 1) ? 0.3 : ((c == 2) ? 0.2 : 1.0));
         return k * d;
     }
 }
