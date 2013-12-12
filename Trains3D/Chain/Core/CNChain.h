@@ -72,4 +72,6 @@
 - (NSString *)charsToString;
 
 - (CNTreeSet *)toTreeSet;
+
+- (CNChain *)topNumbers:(NSUInteger)numbers;
 @end

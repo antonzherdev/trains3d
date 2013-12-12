@@ -194,6 +194,10 @@ static ODClassType* _TRRail_type;
     return rail.form != _form;
 }
 
+- (GELine2)line {
+    return geLine2AddVec2([_form line], geVec2ApplyVec2i(_tile));
+}
+
 - (ODClassType*)type {
     return [TRRail type];
 }
@@ -930,9 +934,7 @@ static ODClassType* _TRRailBuilding_type;
     __weak TRRailroad* _railroad;
     id __rail;
     CNList* __buildingRails;
-    BOOL _firstTry;
 }
-static CNNotificationHandle* _TRRailroadBuilder_refuseBuildNotification;
 static CNNotificationHandle* _TRRailroadBuilder_changedNotification;
 static ODClassType* _TRRailroadBuilder_type;
 @synthesize railroad = _railroad;
@@ -947,7 +949,6 @@ static ODClassType* _TRRailroadBuilder_type;
         _railroad = railroad;
         __rail = [CNOption none];
         __buildingRails = [CNList apply];
-        _firstTry = YES;
     }
     
     return self;
@@ -956,7 +957,6 @@ static ODClassType* _TRRailroadBuilder_type;
 + (void)initialize {
     [super initialize];
     _TRRailroadBuilder_type = [ODClassType classTypeWithCls:[TRRailroadBuilder class]];
-    _TRRailroadBuilder_refuseBuildNotification = [CNNotificationHandle notificationHandleWithName:@"refuseBuildNotification"];
     _TRRailroadBuilder_changedNotification = [CNNotificationHandle notificationHandleWithName:@"Railroad builder changed"];
 }
 
@@ -977,14 +977,9 @@ static ODClassType* _TRRailroadBuilder_type;
 - (BOOL)tryBuildRail:(TRRail*)rail {
     if([self canAddRail:rail]) {
         __rail = [CNOption applyValue:rail];
-        _firstTry = YES;
         [self changed];
         return YES;
     } else {
-        if(_firstTry) {
-            _firstTry = NO;
-            [_TRRailroadBuilder_refuseBuildNotification postData:rail];
-        }
         if([__rail isDefined]) {
             __rail = [CNOption none];
             [self changed];
@@ -1003,7 +998,6 @@ static ODClassType* _TRRailroadBuilder_type;
 }
 
 - (void)clear {
-    _firstTry = YES;
     if([__rail isDefined]) {
         __rail = [CNOption none];
         [self changed];
@@ -1011,7 +1005,6 @@ static ODClassType* _TRRailroadBuilder_type;
 }
 
 - (void)fix {
-    _firstTry = YES;
     if([__rail isDefined]) {
         [_railroad.forest cutDownForRail:[__rail get]];
         __buildingRails = [CNList applyItem:[TRRailBuilding railBuildingWithRail:[__rail get]] tail:__buildingRails];
@@ -1066,10 +1059,6 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (ODClassType*)type {
     return [TRRailroadBuilder type];
-}
-
-+ (CNNotificationHandle*)refuseBuildNotification {
-    return _TRRailroadBuilder_refuseBuildNotification;
 }
 
 + (CNNotificationHandle*)changedNotification {

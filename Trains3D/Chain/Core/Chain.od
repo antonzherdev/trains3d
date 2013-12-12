@@ -44,6 +44,7 @@ stub class Chain<A> extends Iterable<A> {
     pure def for(each: A -> void)
     pure def head : A
     pure def headOpt : A?
+    pure def top(numbers: int) : Chain<A>
     pure def randomItem : A?
     pure def find(where: A -> bool) : A?
     pure def exists(where: A -> bool) : bool

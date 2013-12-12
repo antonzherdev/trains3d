@@ -59,6 +59,7 @@
 - (id<CNSeq>)rails;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
 - (BOOL)canAddRail:(TRRail*)rail;
+- (GELine2)line;
 + (ODClassType*)type;
 @end
 
@@ -182,7 +183,6 @@
 - (BOOL)canAddRail:(TRRail*)rail;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)undo;
-+ (CNNotificationHandle*)refuseBuildNotification;
 + (CNNotificationHandle*)changedNotification;
 + (ODClassType*)type;
 @end

@@ -246,16 +246,17 @@ struct Line2(p0 : vec2, u : vec2) {
     def mid : vec2  = p0 + u/2
     def p1 : vec2 = p0 + u
 
-    def add(vec2 : vec2) = Line2(p0 + vec2, u)
-    def sub(vec2 : vec2) = Line2(p0 - vec2, u)
+    def add(vec2 : vec2) = Line2(p0 + vec2, u = u)
+    def sub(vec2 : vec2) = Line2(p0 - vec2, u = u)
 
     def n : vec2 = vec2(-u.y, u.x).normalize
-    def projection(vec2 : vec2) : vec2 = r(Line2(vec2, n))
+    def projection(vec2 : vec2) : vec2 = r(Line2(p0 = vec2, u = n))
     def projectionOnSegment(vec2 : vec2) : vec2? = {
         val p = r(Line2(p0 = vec2, u = n))
         if(boundingRect.contains(p)) p else nil
     }
     def boundingRect : Rect = Rect(if(u.x > 0) p0.x else p0.x + u.x, if(u.y > 0) p0.y else p0.y + u.y, u.abs)
+    def positive : Line2 = if(u.x < 0 || u.x == 0 && u.y < 0) Line2(p0 = p1, u = u.negate) else self
 }
 
 

@@ -2,8 +2,8 @@
 #import "EGInput.h"
 #import "GEVec.h"
 @class TRRailroadBuilder;
-@class TRRailForm;
 @class TRRail;
+@class TRRailForm;
 @class TRRailConnector;
 @class EGDirector;
 
@@ -16,6 +16,7 @@
 - (id)initWithBuilder:(TRRailroadBuilder*)builder;
 - (ODClassType*)type;
 - (EGRecognizers*)recognizers;
++ (CNNotificationHandle*)refuseBuildNotification;
 + (ODClassType*)type;
 @end
 

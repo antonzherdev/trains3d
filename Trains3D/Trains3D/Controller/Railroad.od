@@ -25,6 +25,7 @@ class Rail(tile : vec2i, form : RailForm) extends RailroadConnectorContent {
     def rails : [Rail] = [self]
     def buildLightIn(connector : RailConnector) : RailroadConnectorContent = RailLight(tile, connector, self)
     def canAdd(rail : Rail) : bool = rail.form != form
+    def line : Line2 = form.line + tile
 }
 
 class Switch(tile : vec2i, connector : RailConnector, rail1 : Rail, rail2 : Rail) extends RailroadConnectorContent {
@@ -270,19 +271,13 @@ class RailroadBuilder(weak railroad : Railroad) extends Updatable {
     def buildingRails : [RailBuilding] = _buildingRails
     def railForUndo : Rail? = _buildingRails.headOpt.map(_.rail)
 
-    static val refuseBuildNotification = NotificationHandle<Rail>("refuseBuildNotification")
-    private var firstTry : bool = true
+
     def tryBuild(rail : Rail) : bool = {
         if(canAdd(rail)) {
             _rail = rail
-            firstTry = true
             changed
             true
         } else {
-            if(firstTry) {
-                firstTry = false
-                refuseBuildNotification.post(rail)
-            }
             if(_rail.isDefined) {
                 _rail = nil
                 changed
@@ -302,7 +297,6 @@ class RailroadBuilder(weak railroad : Railroad) extends Updatable {
     }
 
     def clear {
-        firstTry = true
         if(_rail.isDefined) {
             _rail = nil
             changed
@@ -310,7 +304,6 @@ class RailroadBuilder(weak railroad : Railroad) extends Updatable {
     }
 
     def fix {
-        firstTry = true
         if(_rail.isDefined) {
             railroad.forest.cutDownFor(_rail.get)
             _buildingRails = List(RailBuilding(_rail.get), _buildingRails)

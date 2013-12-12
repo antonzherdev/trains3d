@@ -409,6 +409,7 @@ GEVec2 geLine2N(GELine2 self);
 GEVec2 geLine2ProjectionVec2(GELine2 self, GEVec2 vec2);
 id geLine2ProjectionOnSegmentVec2(GELine2 self, GEVec2 vec2);
 GERect geLine2BoundingRect(GELine2 self);
+GELine2 geLine2Positive(GELine2 self);
 ODPType* geLine2Type();
 @interface GELine2Wrap : NSObject
 @property (readonly, nonatomic) GELine2 value;

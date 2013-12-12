@@ -18,6 +18,7 @@
 #import "CNSortBuilder.h"
 #import "CNZipLink.h"
 #import "CNTreeSet.h"
+#import "CNTopLink.h"
 
 
 @implementation CNChain {
@@ -440,6 +441,10 @@
 
 - (CNTreeSet *)toTreeSet {
     return [self convertWithBuilder:[CNTreeSetBuilder apply]];
+}
+
+- (CNChain *)topNumbers:(NSUInteger)numbers {
+    return [self link:[CNTopLink linkWithNumbers:numbers]];
 }
 @end
 

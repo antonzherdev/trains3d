@@ -920,16 +920,16 @@ GEVec2 geLine2P1(GELine2 self) {
     return geVec2AddVec2(self.p0, self.u);
 }
 GELine2 geLine2AddVec2(GELine2 self, GEVec2 vec2) {
-    return geLine2ApplyP0P1(geVec2AddVec2(self.p0, vec2), self.u);
+    return GELine2Make(geVec2AddVec2(self.p0, vec2), self.u);
 }
 GELine2 geLine2SubVec2(GELine2 self, GEVec2 vec2) {
-    return geLine2ApplyP0P1(geVec2SubVec2(self.p0, vec2), self.u);
+    return GELine2Make(geVec2SubVec2(self.p0, vec2), self.u);
 }
 GEVec2 geLine2N(GELine2 self) {
     return geVec2Normalize(GEVec2Make(-self.u.y, self.u.x));
 }
 GEVec2 geLine2ProjectionVec2(GELine2 self, GEVec2 vec2) {
-    return geLine2RLine2(self, geLine2ApplyP0P1(vec2, geLine2N(self)));
+    return geLine2RLine2(self, GELine2Make(vec2, geLine2N(self)));
 }
 id geLine2ProjectionOnSegmentVec2(GELine2 self, GEVec2 vec2) {
     GEVec2 p = geLine2RLine2(self, GELine2Make(vec2, geLine2N(self)));
@@ -938,6 +938,10 @@ id geLine2ProjectionOnSegmentVec2(GELine2 self, GEVec2 vec2) {
 }
 GERect geLine2BoundingRect(GELine2 self) {
     return geRectApplyXYSize(((self.u.x > 0) ? self.p0.x : self.p0.x + self.u.x), ((self.u.y > 0) ? self.p0.y : self.p0.y + self.u.y), geVec2Abs(self.u));
+}
+GELine2 geLine2Positive(GELine2 self) {
+    if(self.u.x < 0 || (eqf4(self.u.x, 0) && self.u.y < 0)) return GELine2Make(geLine2P1(self), geVec2Negate(self.u));
+    else return self;
 }
 ODPType* geLine2Type() {
     static ODPType* _ret = nil;

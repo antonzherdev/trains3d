@@ -7,39 +7,84 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
 
     private var startedPoint : vec2? = nil
 
+    static val refuseBuildNotification = NotificationHandle<void>("refuseBuildNotification")
+    private var firstTry : bool = true
+    private var fixedStart : (vec2i, RailConnector)? = nil
     def recognizers : Recognizers = Recognizer(Pan(),
         began = event -> {
             startedPoint = event.location
+//            firstTry = true
             true
         },
         changed = event -> {
             val line = Line2(p0 = startedPoint.get, p1 = event.location)
 
             if(line.u.lengthSquare > 0.25) {
-                val nl = line.set(length = 0.5)
+                val nl = line.set(length = 0.8)
                 val mid = nl.mid
                 val tile = mid.round
+                val railOpt =
+                    possibleRailsAround(tile)
+                    .map{rail -> (rail, distanceBetween(rail.line, nl))}
+                    .filter(_.b < 3)
+                    .sortBy.asc(_.b).endSort
+                    .top(4)
+                    .map{p -> p.a}
+                    .filter(builder.canAdd(_))
+                    .headOpt
 
-                val start = connectorsByDistanceFrom(line.p0 - tile).head
-                val ends = connectorsByDistanceFrom(line.p1 - tile)
-                var end = ends.head
-                if(end == start) end = ends[1]
+                if(railOpt.isDefined) {
+                    firstTry = true
+                    val rail = railOpt.get
+                    if(builder.tryBuild(rail)) {
+                        if(line.u.length > 1.2) {
+                            builder.fix
+                            val rl = rail.line
 
-                if(builder.tryBuild(Rail(tile, RailForm.formFor(start, end)))) {
-                    if(line.u.length > 1.5) {
-                        builder.fix
-                        startedPoint = tile + end.vec*0.5
+                            val end = rl.p0.sub(line.p0).lengthSquare < rl.p1.sub(line.p0).lengthSquare
+                            startedPoint = if(end) rl.p1 else rl.p0
+                            val con = if(end) rail.form.end else rail.form.start
+                            fixedStart = (con.next(rail.tile), con.otherSideConnector)
+                        }
+                    }
+                } else {
+                    if(firstTry) {
+                        firstTry = false
+                        refuseBuildNotification.post
                     }
                 }
             } else {
+                firstTry = true
                 builder.clear
             }
        },
        ended = event -> {
            builder.fix
+           firstTry = true
            startedPoint = nil
+           fixedStart = nil
        }
     )
+
+    private def distanceBetween(a : Line2, b : Line2) : float = {
+        val pa = a.positive
+        val pb = b.positive
+        val d = pa.u.dot(pb.n).abs + ((pa.p0 - pb.p0).length + (pa.p1 - pb.p1).length)
+        d
+    }
+
+
+    private def possibleRailsAround(tile : vec2i) : Chain<Rail> =
+        if(fixedStart.isDefined)
+            RailForm.values.chain.filter(_.contains(fixedStart.get.b)).map(Rail(fixedStart.get.a, _))
+        else
+            tilesAround(tile).chain.mul(RailForm.values).map{p ->Rail(p.a, p.b)}
+
+    private def tilesAround(tile : vec2i) : [vec2i] =
+        [tile
+        , tile + vec2i(1, 0),  tile + vec2i(-1, 0),  tile + vec2i(0, 1),  tile + vec2i(0, -1)
+        , tile + vec2i(1, 1),  tile + vec2i(-1, 1),  tile + vec2i(1, -1),  tile + vec2i(-1, -1)
+        ]
 
     private def connectorsByDistanceFrom(point : vec2) : [RailConnector] =
         RailConnector.values.chain.sortBy.asc{connector ->
