@@ -47,7 +47,7 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
             GEVec2 mid = geLine2Mid(nl);
             GEVec2i tile = geVec2Round(mid);
             id railOpt = [[[[[[[[[[self possibleRailsAroundTile:tile] map:^CNTuple*(TRRail* rail) {
-                return tuple(rail, numf([self distanceBetweenRailLine:[((TRRail*)(rail)) line] paintLine:nl]));
+                return tuple(rail, numf([self distanceBetweenRail:rail paintLine:nl]));
             }] filter:^BOOL(CNTuple* _) {
                 return unumf(((CNTuple*)(_)).b) < 3;
             }] sortBy] ascBy:^id(CNTuple* _) {
@@ -88,14 +88,19 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
     }]];
 }
 
-- (CGFloat)distanceBetweenRailLine:(GELine2)railLine paintLine:(GELine2)paintLine {
+- (CGFloat)distanceBetweenRail:(TRRail*)rail paintLine:(GELine2)paintLine {
+    GELine2 railLine = [rail line];
     if([_fixedStart isDefined]) {
         return ((CGFloat)(geVec2LengthSquare(geVec2SubVec2(((GEVec2Eq(paintLine.p0, railLine.p0)) ? geLine2P1(railLine) : railLine.p0), geLine2P1(paintLine)))));
     } else {
         GELine2 pa = geLine2Positive(railLine);
         GELine2 pb = geLine2Positive(paintLine);
         float d = float4Abs(geVec2DotVec2(pa.u, geLine2N(pb))) + geVec2Length(geVec2SubVec2(pa.p0, pb.p0)) + geVec2Length(geVec2SubVec2(geLine2P1(pa), geLine2P1(pb)));
-        return ((CGFloat)(d));
+        NSUInteger c = [[[[rail.form connectors] chain] filter:^BOOL(TRRailConnector* connector) {
+            return !([[_builder.railroad contentInTile:[((TRRailConnector*)(connector)) nextTile:rail.tile] connector:[((TRRailConnector*)(connector)) otherSideConnector]] isEmpty]);
+        }] count];
+        CGFloat k = ((c == 1) ? 0.3 : ((c == 2) ? 0.1 : 1.0));
+        return k * d;
     }
 }
 

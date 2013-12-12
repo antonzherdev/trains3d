@@ -25,7 +25,7 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
                 val tile = mid.round
                 val railOpt =
                     possibleRailsAround(tile)
-                    .map{rail -> (rail, distanceBetween(rail.line, nl))}
+                    .map{rail -> (rail, distanceBetween(rail, nl))}
                     .filter(_.b < 3)
                     .sortBy.asc(_.b).endSort
                     .top(4)
@@ -66,14 +66,19 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
        }
     )
 
-    private def distanceBetween(railLine : Line2, paintLine : Line2) : float = {
+    private def distanceBetween(rail : Rail, paintLine : Line2) : float = {
+        val railLine = rail.line
         if(fixedStart.isDefined) {
             ((if(paintLine.p0 == railLine.p0) railLine.p1 else railLine.p0) - paintLine.p1).lengthSquare
         } else {
             val pa = railLine.positive
             val pb = paintLine.positive
             val d = pa.u.dot(pb.n).abs + ((pa.p0 - pb.p0).length + (pa.p1 - pb.p1).length)
-            d
+            val c = rail.form.connectors.chain.filter{connector ->
+                !builder.railroad.contentIn(connector.next(rail.tile), connector.otherSideConnector).isEmpty
+            }.count
+            val k = if(c == 1) 0.3 else if(c == 2) 0.1 else 1.0
+            k*d
         }
     }
 

@@ -183,7 +183,7 @@ static ODClassType* _TRSwitchProcessorItem_type;
 }
 
 - (float)distanceVec2:(GEVec2)vec2 {
-    return ((float)(geVec2Length(geVec2SubVec2(geRectCenter([self boundingRect]), vec2))));
+    return geVec2Length(geVec2SubVec2(geRectCenter([self boundingRect]), vec2));
 }
 
 - (ODClassType*)type {

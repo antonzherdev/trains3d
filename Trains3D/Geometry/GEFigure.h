@@ -102,7 +102,7 @@
 - (GEVec2)mid;
 - (CGFloat)angle;
 - (CGFloat)degreeAngle;
-- (CGFloat)length;
+- (float)length;
 - (GEVec2)vec;
 - (GEVec2)vec1;
 + (ODClassType*)type;

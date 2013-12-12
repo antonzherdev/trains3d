@@ -453,7 +453,7 @@ static ODClassType* _GELineSegment_type;
     else return 180 + [[self line] degreeAngle];
 }
 
-- (CGFloat)length {
+- (float)length {
     return geVec2Length(geVec2SubVec2(_p1, _p0));
 }
 

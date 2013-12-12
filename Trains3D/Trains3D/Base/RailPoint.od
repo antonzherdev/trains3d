@@ -48,6 +48,7 @@ enum RailForm(start : RailConnector, end : RailConnector, isTurn : bool, length 
     def contains(connector : RailConnector) : bool = start == connector || end == connector
     def isStraight : bool = !isTurn
     def line : Line2 = Line2(p0 = start.vec/2.0, p1 = end.vec/2.0)
+    def connectors : [RailConnector] = [start, end]
 }
 
 class RailPoint(tile : vec2i, form : RailForm, x : float, back : bool) {

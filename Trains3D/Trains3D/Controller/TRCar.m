@@ -189,7 +189,7 @@ static ODClassType* _TRCar_type;
         __lazy_dynamicBody = [CNLazy lazyWithF:^EGRigidBody*() {
             return ^EGRigidBody*() {
                 GELine2 line = [_weakSelf position].line;
-                CGFloat len = geVec2Length(line.u);
+                float len = geVec2Length(line.u);
                 GEVec2 vec = line.u;
                 GEVec2 mid = [_weakSelf midPoint];
                 EGRigidBody* b = [EGRigidBody dynamicData:_weakSelf shape:_weakSelf.carType.rigidShape mass:((float)(_weakSelf.carType.weight))];
@@ -233,7 +233,7 @@ static ODClassType* _TRCar_type;
     if(eqf(_carType.wheelToBack, _carType.frontToWheel)) {
         return geVec2AddVec2(line.p0, geVec2DivI(line.u, 2));
     } else {
-        GEVec2 u = geVec2SetLength(line.u, ((float)(geVec2Length(line.u) - (_carType.wheelToBack - _carType.frontToWheel))));
+        GEVec2 u = geVec2SetLength(line.u, geVec2Length(line.u) - (_carType.wheelToBack - _carType.frontToWheel));
         return geVec2AddVec2(line.p0, geVec2DivI(u, 2));
     }
 }

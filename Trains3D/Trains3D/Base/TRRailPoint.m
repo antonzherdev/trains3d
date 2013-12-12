@@ -200,6 +200,10 @@ static NSArray* _TRRailForm_values;
     return geLine2ApplyP0P1(geVec2iDivF([_start vec], 2.0), geVec2iDivF([_end vec], 2.0));
 }
 
+- (id<CNSeq>)connectors {
+    return (@[_start, _end]);
+}
+
 + (TRRailForm*)leftBottom {
     return _TRRailForm_leftBottom;
 }

@@ -34,6 +34,7 @@
 - (BOOL)containsConnector:(TRRailConnector*)connector;
 - (BOOL)isStraight;
 - (GELine2)line;
+- (id<CNSeq>)connectors;
 + (TRRailForm*)leftBottom;
 + (TRRailForm*)leftRight;
 + (TRRailForm*)leftTop;

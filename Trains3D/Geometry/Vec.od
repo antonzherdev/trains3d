@@ -32,7 +32,7 @@ struct vec2(x : float4, y : float4) extends Comparable<vec2> {
     def angle : float4 = atan2(y, x)
     def dot(vec2 : vec2) : float4 = x*vec2.x + y*vec2.y
     def lengthSquare : float4 = dot(self)
-    def length = sqrt(lengthSquare)
+    def length : float4 = sqrt(lengthSquare)
 
     def mid(vec2 : vec2) = add(vec2).mul(0.5)
     def distanceTo(vec2 : vec2) = sub(vec2).length

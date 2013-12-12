@@ -80,13 +80,13 @@ float geVec2DotVec2(GEVec2 self, GEVec2 vec2) {
 float geVec2LengthSquare(GEVec2 self) {
     return geVec2DotVec2(self, self);
 }
-CGFloat geVec2Length(GEVec2 self) {
-    return sqrt(((CGFloat)(geVec2LengthSquare(self))));
+float geVec2Length(GEVec2 self) {
+    return ((float)(sqrt(((CGFloat)(geVec2LengthSquare(self))))));
 }
 GEVec2 geVec2MidVec2(GEVec2 self, GEVec2 vec2) {
     return geVec2MulF(geVec2AddVec2(self, vec2), 0.5);
 }
-CGFloat geVec2DistanceToVec2(GEVec2 self, GEVec2 vec2) {
+float geVec2DistanceToVec2(GEVec2 self, GEVec2 vec2) {
     return geVec2Length(geVec2SubVec2(self, vec2));
 }
 GEVec2 geVec2SetLength(GEVec2 self, float length) {
