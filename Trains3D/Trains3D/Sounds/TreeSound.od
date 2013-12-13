@@ -14,7 +14,15 @@ class TreeSound(level : Level) extends SoundPlayersCollection(
         ,SporadicSoundPlayer(Sound("Crows.mp3", 0.03), 240)
         ,SporadicSoundPlayer(Sound("Woodpecker.mp3", 0.4), 120)
         ,SporadicSoundPlayer(Sound("Cuckoo.mp3", 0.4), 120)
-        ,SporadicSoundPlayer(Sound("Grouse.mp3", 0.35), 120)
+        ,SporadicSoundPlayer(Sound("Grouse.mp3", 0.35), 240)
+        ]
+    else if(level.rules.theme == LevelTheme.palm)
+        [WindSound(level.forest)
+        ,BackgroundSoundPlayer(Sound("Tropical.mp3", 0.07))
+        ,SporadicSoundPlayer(Sound("Parrot.mp3", 0.1), 240)
+        ,SporadicSoundPlayer(Sound("Parrots.mp3", 0.07), 240)
+        ,SporadicSoundPlayer(Sound("Parrots2.mp3", 0.1), 240)
+        ,SporadicSoundPlayer(Sound("Kaka.mp3", 0.1), 240)
         ]
     else
         [WindSound(level.forest)
