@@ -319,7 +319,7 @@ class LevelFactory {
     //15
     LevelRules(vec2i(7, 5), LevelTheme.palm, scoreRulesWith(70000),
     WeatherRules(sunny = 0.0, windStrength = 0.3, blastness = 0.3, blastMinLength = 1, blastMaxLength = 5, blastStrength = 0.7, rain),
-    repairerSpeed = 20, sporadicDamagePeriod = 400, [
+        repairerSpeed = 20, sporadicDamagePeriod = 400, [
         (0, create2Cities), (10, expressTrain), (15, verySlowTrain), (10, train),
         (10, createNewCity),
             (18, verySlowTrain), (20, expressTrain), (15, expressTrain), (20, train),
@@ -341,6 +341,34 @@ class LevelFactory {
             (50, verySlowTrain), (10, crazyTrain), (10, verySlowTrain), (10, expressTrain), (20, train),
             (40, verySlowTrain), (10, verySlowTrain), (10, crazyTrain), (10, train), (10, expressTrain), (10, expressTrain),
             (40, verySlowTrain), (10, crazyTrain), (10, crazyTrain), (10, expressTrain), (0, expressTrain)
+    ]),
+    //16
+    LevelRules(vec2i(7, 5), LevelTheme.palm, scoreRulesWith(70000),
+        WeatherRules(sunny = 1.0, windStrength = 0.1, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.1, nil),
+        repairerSpeed = 20, sporadicDamagePeriod = 380, [
+        (0, create2Cities),
+            (10, verySlowTrain), (15, expressTrain), (10, train), (10, crazyTrain),
+        (10, createNewCity),
+            (15, train), (15, verySlowTrain), (15, crazyTrain), (15, train),
+        (15, createNewCity),
+            (15, expressTrain), (10, expressTrain), (15, train), (0, train),
+        (15, createNewCity),
+            (10, train), (5, expressTrain), (10, expressTrain), (10, expressTrain), (15, crazyTrain),
+            (40, crazyTrain), (10, verySlowTrain), (15, verySlowTrain), (10, expressTrain),
+        (10, createNewCity),
+            (40, crazyTrain), (10, crazyTrain), (10, verySlowTrain), (10, expressTrain), (10, expressTrain),
+            (40, verySlowTrain), (10, train), (15, expressTrain), (15, expressTrain), (10, train),
+        (10, createNewCity),
+            (40, train), (10, verySlowTrain), (10, expressTrain), (10, expressTrain), (20, train),
+            (50, expressTrain), (10, expressTrain), (5, train), (4, expressTrain), (3, crazyTrain),
+        (10, createNewCity),
+            (60, train), (0, expressTrain), (20, train), (0, expressTrain), (20, train), (0, expressTrain),
+            (60, train), (0, crazyTrain), (20, train), (0, crazyTrain), (20, train), (0, crazyTrain),
+        (10, createNewCity),
+            (50, verySlowTrain), (0, verySlowTrain), (0, verySlowTrain), (0, verySlowTrain),
+            (60, train), (0, train), (0, train), (0, train),
+            (60, expressTrain), (0, expressTrain), (0, expressTrain), (0, expressTrain),
+            (60, crazyTrain), (0, crazyTrain), (0, crazyTrain), (0, crazyTrain)
     ])
     ]
     static def slowTrain = train(cars = 1.to(4), speed = 25.to(35))
