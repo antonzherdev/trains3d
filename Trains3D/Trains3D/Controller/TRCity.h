@@ -7,6 +7,7 @@
 @class TRRailConnector;
 @class EGCollisionBox;
 @class EGCounter;
+@class TRTrain;
 @class EGRigidBody;
 @class GEMat4;
 @class TRRailPoint;
@@ -53,7 +54,7 @@
 @property (nonatomic, readonly) GEVec2i tile;
 @property (nonatomic, readonly) TRCityAngle* angle;
 @property (nonatomic, retain) EGCounter* expectedTrainCounter;
-@property (nonatomic, retain) TRCityColor* expectedTrainColor;
+@property (nonatomic, retain) TRTrain* expectedTrain;
 @property (nonatomic, readonly) id<CNSeq> bodies;
 
 + (id)cityWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;

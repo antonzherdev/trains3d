@@ -723,7 +723,7 @@ static ODClassType* _CNMTreeMap_type;
     if([o isDefined]) {
         return [o get];
     } else {
-        id init = orUpdateWith();
+        id init = ((id(^)())(orUpdateWith))();
         [self setKey:key value:init];
         return init;
     }

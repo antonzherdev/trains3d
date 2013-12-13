@@ -1,5 +1,7 @@
 #import "objd.h"
 #import "GEVec.h"
+@class TRCityColor;
+@class EGProgress;
 @class TRLevel;
 @class TRModels;
 @class EGGlobal;
@@ -12,7 +14,6 @@
 @class TRCarPosition;
 @class EGMatrixStack;
 @class TRTrainType;
-@class TRCityColor;
 @class TRCarType;
 @class EGRigidBody;
 @class EGColorSource;
@@ -36,6 +37,7 @@
 - (void)drawSmoke;
 - (void)drawTrains:(id<CNSeq>)trains;
 - (void)drawSmokeTrains:(id<CNSeq>)trains;
++ (GEVec4)crazyColorTime:(CGFloat)time;
 - (void)drawDyingTrains:(id<CNSeq>)dyingTrains;
 - (void)updateWithDelta:(CGFloat)delta train:(TRTrain*)train;
 + (ODClassType*)type;

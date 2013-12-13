@@ -287,7 +287,7 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)runTrain:(TRTrain*)train fromCity:(TRCity*)fromCity {
-    fromCity.expectedTrainColor = train.color;
+    fromCity.expectedTrain = train;
     __weak TRLevel* ws = self;
     __weak TRCity* fs = fromCity;
     fromCity.expectedTrainCounter = [[EGCounter applyLength:((CGFloat)(_TRLevel_trainComingPeriod)) finish:^void() {

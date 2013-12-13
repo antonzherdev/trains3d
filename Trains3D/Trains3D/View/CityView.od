@@ -25,9 +25,13 @@ class CityView(level : Level) {
         BlendFunction.standard{ context.depthTest.disabled {
             level.cities.for{ city ->
                 city.expectedTrainCounter.for{time ->
-                    D2D.drawCircle(backColor = vec4(city.expectedTrainColor.color.xyz*0.5, 0.85), strokeColor = vec4(0, 0, 0, 0.2),
+                    val train = city.expectedTrain
+                    val color =
+                        if(train.trainType == TrainType.crazy) TrainView.crazyColor(time * Level.trainComingPeriod)
+                        else train.color.trainColor
+                    D2D.drawCircle(backColor = vec4(color.xyz*0.5, 0.85), strokeColor = vec4(0, 0, 0, 0.2),
                         at = vec3(city.tile, 0), radius = 0.04, relative = moveVecFor(level, city)*0.25,
-                        segmentColor = vec4(city.expectedTrainColor.color.xyz, 1.0),
+                        segmentColor = color,
                         start = math.M_PI_2, end = math.M_PI_2 - 2*time*math.M_PI
                         )
                 }

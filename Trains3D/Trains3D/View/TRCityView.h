@@ -20,6 +20,9 @@
 @class EGMatrixStack;
 @class EGBlendFunction;
 @class EGContext;
+@class TRTrain;
+@class TRTrainType;
+@class TRTrainView;
 @class EGD2D;
 @class EGCounter;
 @class EGEnablingState;

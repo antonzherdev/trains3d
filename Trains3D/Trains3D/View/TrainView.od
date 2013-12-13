@@ -50,14 +50,28 @@ class TrainView(level : Level) {
         }
     }
 
+    private static val crazyColors : [float4 -> vec4] =
+        CityColor.values.chain
+        .exclude([CityColor.grey])
+        .map{cityColor ->
+            cityColor.color
+        }.neighborsRing
+        .map{colors ->
+            Progress.progress(colors.a, colors.b)
+        }.toArray
+
+    static def crazyColor(time : float) : vec4 = {
+        val f = (time / 2).fraction * crazyColors.count - 0.0001
+        val cc = crazyColors[f.cast<int>]
+        cc(f.fraction)
+    }
+
     private def doDraw(car : Car) {
         val train = car.train
         val tp = car.carType
         val color : vec4 =
-            if(train.trainType == TrainType.crazy) {
-                val f = train.time.fraction
-                vec4(vec3(0.5 + 0.5 * ((if(f < 0.5) f else 1.0 - f) - 0.5)), 1)
-            } else train.color.trainColor
+            if(train.trainType == TrainType.crazy) crazyColor(train.time)
+            else train.color.trainColor
         if(tp == CarType.car) {
             carModel.draw(color)
         } else if(tp == CarType.engine){

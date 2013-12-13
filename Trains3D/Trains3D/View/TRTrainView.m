@@ -1,5 +1,7 @@
 #import "TRTrainView.h"
 
+#import "TRCity.h"
+#import "EGProgress.h"
 #import "TRLevel.h"
 #import "TRModels.h"
 #import "GL.h"
@@ -8,7 +10,6 @@
 #import "TRSmoke.h"
 #import "TRCar.h"
 #import "GEMat4.h"
-#import "TRCity.h"
 #import "EGDynamicWorld.h"
 #import "EGMaterial.h"
 #import "EGMesh.h"
@@ -19,6 +20,7 @@
     TRCarModel* _expressEngineModel;
     TRCarModel* _expressCarModel;
 }
+static id<CNSeq> _TRTrainView_crazyColors;
 static ODClassType* _TRTrainView_type;
 @synthesize level = _level;
 
@@ -42,6 +44,11 @@ static ODClassType* _TRTrainView_type;
 + (void)initialize {
     [super initialize];
     _TRTrainView_type = [ODClassType classTypeWithCls:[TRTrainView class]];
+    _TRTrainView_crazyColors = [[[[[[[TRCityColor values] chain] exclude:(@[TRCityColor.grey])] map:^id(TRCityColor* cityColor) {
+        return wrap(GEVec4, ((TRCityColor*)(cityColor)).color);
+    }] neighborsRing] map:^id(CNTuple* colors) {
+        return [EGProgress progressVec4:uwrap(GEVec4, ((CNTuple*)(colors)).a) vec42:uwrap(GEVec4, ((CNTuple*)(colors)).b)];
+    }] toArray];
 }
 
 - (void)draw {
@@ -91,13 +98,16 @@ static ODClassType* _TRTrainView_type;
     }];
 }
 
++ (GEVec4)crazyColorTime:(CGFloat)time {
+    CGFloat f = floatFraction(time / 2) * [_TRTrainView_crazyColors count] - 0.0001;
+    GEVec4(^cc)(float) = [_TRTrainView_crazyColors applyIndex:((NSInteger)(f))];
+    return cc(((float)(floatFraction(f))));
+}
+
 - (void)doDrawCar:(TRCar*)car {
     TRTrain* train = car.train;
     TRCarType* tp = car.carType;
-    GEVec4 color = ((train.trainType == TRTrainType.crazy) ? ^GEVec4() {
-        CGFloat f = floatFraction([train time]);
-        return geVec4ApplyVec3W(geVec3ApplyF(0.5 + 0.5 * (((f < 0.5) ? f : 1.0 - f) - 0.5)), 1.0);
-    }() : train.color.trainColor);
+    GEVec4 color = ((train.trainType == TRTrainType.crazy) ? [TRTrainView crazyColorTime:[train time]] : train.color.trainColor);
     if(tp == TRCarType.car) {
         [_carModel drawColor:color];
     } else {

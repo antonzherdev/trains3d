@@ -4,6 +4,7 @@
 #import "TRRailPoint.h"
 #import "EGCollisionBody.h"
 #import "EGSchedule.h"
+#import "TRTrain.h"
 #import "EGDynamicWorld.h"
 #import "GEMat4.h"
 @implementation TRCityColor{
@@ -174,7 +175,7 @@ static NSArray* _TRCityAngle_values;
     GEVec2i _tile;
     TRCityAngle* _angle;
     EGCounter* _expectedTrainCounter;
-    TRCityColor* _expectedTrainColor;
+    TRTrain* _expectedTrain;
     EGCounter* _waitingCounter;
     id<CNSeq> _bodies;
 }
@@ -184,7 +185,7 @@ static ODClassType* _TRCity_type;
 @synthesize tile = _tile;
 @synthesize angle = _angle;
 @synthesize expectedTrainCounter = _expectedTrainCounter;
-@synthesize expectedTrainColor = _expectedTrainColor;
+@synthesize expectedTrain = _expectedTrain;
 @synthesize bodies = _bodies;
 
 + (id)cityWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle {
