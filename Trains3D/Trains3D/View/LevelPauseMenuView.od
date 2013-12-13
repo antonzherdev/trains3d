@@ -120,8 +120,10 @@ class WinMenu(level : Level) extends MenuView {
     private val restartButton = button(Loc.replay(level), GameDirector.instance.restartLevel)
     private val chooseLevelButton = button(Loc.chooseLevel, GameDirector.instance.chooseLevel)
     def buttons =
-        if(GameDirector.instance.isNeedRate) [rateButton, nextButton, leaderboardButton, restartButton, chooseLevelButton]
-        else [nextButton, leaderboardButton, restartButton, chooseLevelButton]
+        (if(GameDirector.instance.isNeedRate) [rateButton] else []) +
+        (if(level.number < 16) [nextButton] else []) +
+        [leaderboardButton, restartButton, chooseLevelButton]
+
 
     def headerHeight = 100.0
     def drawHeader(rect : Rect) {

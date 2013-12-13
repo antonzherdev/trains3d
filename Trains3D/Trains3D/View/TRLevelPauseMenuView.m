@@ -469,8 +469,7 @@ static ODClassType* _TRWinMenu_type;
 }
 
 - (id<CNSeq>)buttons {
-    if([TRGameDirector.instance isNeedRate]) return (@[_rateButton, _nextButton, _leaderboardButton, _restartButton, _chooseLevelButton]);
-    else return (@[_nextButton, _leaderboardButton, _restartButton, _chooseLevelButton]);
+    return [[(([TRGameDirector.instance isNeedRate]) ? (@[_rateButton]) : (@[])) addSeq:((_level.number < 16) ? (@[_nextButton]) : (@[]))] addSeq:(@[_leaderboardButton, _restartButton, _chooseLevelButton])];
 }
 
 - (CGFloat)headerHeight {
