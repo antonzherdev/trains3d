@@ -48,22 +48,21 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
             GELine2 nl = (([_fixedStart isDefined]) ? GELine2Make(line.p0, nu) : GELine2Make(geVec2SubVec2(line.p0, geVec2MulF(nu, 0.25)), nu));
             GEVec2 mid = geLine2Mid(nl);
             GEVec2i tile = geVec2Round(mid);
-            id railOpt = [[[[[[[[[[self possibleRailsAroundTile:tile] map:^CNTuple*(TRRail* rail) {
+            id railOpt = [[[[[[[[[self possibleRailsAroundTile:tile] map:^CNTuple*(TRRail* rail) {
                 return tuple(rail, numf([self distanceBetweenRail:rail paintLine:nl]));
             }] filter:^BOOL(CNTuple* _) {
-                return unumf(((CNTuple*)(_)).b) < 3;
+                return unumf(((CNTuple*)(_)).b) < (([_fixedStart isDefined]) ? 0.5 : 0.6);
             }] sortBy] ascBy:^id(CNTuple* _) {
                 return ((CNTuple*)(_)).b;
-            }] endSort] topNumbers:4] map:^TRRail*(CNTuple* p) {
-                return ((CNTuple*)(p)).a;
-            }] filter:^BOOL(TRRail* _) {
-                return [_builder canAddRail:_];
+            }] endSort] topNumbers:4] filter:^BOOL(CNTuple* _) {
+                return [_builder canAddRail:((CNTuple*)(_)).a];
             }] headOpt];
             if([railOpt isDefined]) {
+                [CNLog applyText:[NSString stringWithFormat:@"Distance %d %@", [_fixedStart isDefined], ((CNTuple*)([railOpt get])).b]];
                 _firstTry = YES;
-                TRRail* rail = [railOpt get];
+                TRRail* rail = ((CNTuple*)([railOpt get])).a;
                 if([_builder tryBuildRail:rail]) {
-                    if(len > (([_fixedStart isDefined]) ? 1.4 : 1.2)) {
+                    if(len > (([_fixedStart isDefined]) ? 1.6 : 1)) {
                         [_builder fix];
                         GELine2 rl = [rail line];
                         BOOL end = geVec2LengthSquare(geVec2SubVec2(rl.p0, line.p0)) < geVec2LengthSquare(geVec2SubVec2(geLine2P1(rl), line.p0));
@@ -101,7 +100,7 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
         NSUInteger c = [[[[rail.form connectors] chain] filter:^BOOL(TRRailConnector* connector) {
             return !([[_builder.railroad contentInTile:[((TRRailConnector*)(connector)) nextTile:rail.tile] connector:[((TRRailConnector*)(connector)) otherSideConnector]] isEmpty]);
         }] count];
-        CGFloat k = ((c == 1) ? 0.3 : ((c == 2) ? 0.25 : 1.0));
+        CGFloat k = ((c == 1) ? 0.5 : ((c == 2) ? 0.4 : 1.0));
         return k * d;
     }
 }
