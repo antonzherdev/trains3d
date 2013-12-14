@@ -328,7 +328,7 @@ class LevelFactory {
             (15, verySlowTrain), (10, train), (15, expressTrain), (0, crazyTrain),
         (10, createNewCity),
             (25, train), (5, train), (10, expressTrain), (10, expressTrain), (15, verySlowTrain),
-            (40, verySlowTrain), (10, train), (15, expressTrain), (0, crazyTrain),
+            (40, train), (10, train), (15, expressTrain), (10, crazyTrain),
         (10, createNewCity),
             (40, expressTrain), (1, expressTrain), (5, expressTrain), (15, train), (12, train),
             (35, verySlowTrain), (10, train), (15, crazyTrain), (15, train), (10, train), (10, crazyTrain),

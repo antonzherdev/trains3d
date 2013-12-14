@@ -19,8 +19,12 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
         changed = event -> {
             val line = Line2(p0 = startedPoint.get, p1 = event.location)
 
-            if(line.u.lengthSquare > 0.25) {
-                val nl = line.set(length = 0.8)
+            val len = line.u.length
+            if(len > 0.5) {
+                val nu = line.u.set(length = 1.0)
+                val nl =
+                    if(fixedStart.isDefined) Line2(p0 = line.p0, u = nu)
+                    else Line2(p0 = line.p0 - nu*0.25, u = nu)
                 val mid = nl.mid
                 val tile = mid.round
                 val railOpt =
@@ -37,7 +41,7 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
                     firstTry = true
                     val rail = railOpt.get
                     if(builder.tryBuild(rail)) {
-                        if(line.u.length > 1.2) {
+                        if(len > if(fixedStart.isDefined) 1.4 else 1.2) {
                             builder.fix
                             val rl = rail.line
 
@@ -71,13 +75,13 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
         if(fixedStart.isDefined) {
             ((if(paintLine.p0 == railLine.p0) railLine.p1 else railLine.p0) - paintLine.p1).lengthSquare
         } else {
-            val pa = railLine.positive
-            val pb = paintLine.positive
-            val d = pa.u.dot(pb.n).abs + ((pa.p0 - pb.p0).length + (pa.p1 - pb.p1).length)
+            val p0d = (railLine.p0 - paintLine.p0).length.min((railLine.p0 - paintLine.p1).length)
+            val p1d = (railLine.p1 - paintLine.p0).length.min((railLine.p1 - paintLine.p1).length)
+            val d = railLine.u.dot(paintLine.n).abs*0.5 + p0d + p1d
             val c = rail.form.connectors.chain.filter{connector ->
                 !builder.railroad.contentIn(connector.next(rail.tile), connector.otherSideConnector).isEmpty
             }.count
-            val k = if(c == 1) 0.3 else if(c == 2) 0.2 else 1.0
+            val k = if(c == 1) 0.3 else if(c == 2) 0.25 else 1.0
             k*d
         }
     }

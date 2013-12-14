@@ -42,8 +42,10 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
         return YES;
     } changed:^void(id<EGEvent> event) {
         GELine2 line = geLine2ApplyP0P1(uwrap(GEVec2, [_startedPoint get]), [event location]);
-        if(geVec2LengthSquare(line.u) > 0.25) {
-            GELine2 nl = geLine2SetLength(line, 0.8);
+        float len = geVec2Length(line.u);
+        if(len > 0.5) {
+            GEVec2 nu = geVec2SetLength(line.u, 1.0);
+            GELine2 nl = (([_fixedStart isDefined]) ? GELine2Make(line.p0, nu) : GELine2Make(geVec2SubVec2(line.p0, geVec2MulF(nu, 0.25)), nu));
             GEVec2 mid = geLine2Mid(nl);
             GEVec2i tile = geVec2Round(mid);
             id railOpt = [[[[[[[[[[self possibleRailsAroundTile:tile] map:^CNTuple*(TRRail* rail) {
@@ -61,7 +63,7 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
                 _firstTry = YES;
                 TRRail* rail = [railOpt get];
                 if([_builder tryBuildRail:rail]) {
-                    if(geVec2Length(line.u) > 1.2) {
+                    if(len > (([_fixedStart isDefined]) ? 1.4 : 1.2)) {
                         [_builder fix];
                         GELine2 rl = [rail line];
                         BOOL end = geVec2LengthSquare(geVec2SubVec2(rl.p0, line.p0)) < geVec2LengthSquare(geVec2SubVec2(geLine2P1(rl), line.p0));
@@ -93,13 +95,13 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
     if([_fixedStart isDefined]) {
         return ((CGFloat)(geVec2LengthSquare(geVec2SubVec2(((GEVec2Eq(paintLine.p0, railLine.p0)) ? geLine2P1(railLine) : railLine.p0), geLine2P1(paintLine)))));
     } else {
-        GELine2 pa = geLine2Positive(railLine);
-        GELine2 pb = geLine2Positive(paintLine);
-        float d = float4Abs(geVec2DotVec2(pa.u, geLine2N(pb))) + geVec2Length(geVec2SubVec2(pa.p0, pb.p0)) + geVec2Length(geVec2SubVec2(geLine2P1(pa), geLine2P1(pb)));
+        float p0d = float4MinB(geVec2Length(geVec2SubVec2(railLine.p0, paintLine.p0)), geVec2Length(geVec2SubVec2(railLine.p0, geLine2P1(paintLine))));
+        float p1d = float4MinB(geVec2Length(geVec2SubVec2(geLine2P1(railLine), paintLine.p0)), geVec2Length(geVec2SubVec2(geLine2P1(railLine), geLine2P1(paintLine))));
+        float d = float4Abs(geVec2DotVec2(railLine.u, geLine2N(paintLine))) * 0.5 + p0d + p1d;
         NSUInteger c = [[[[rail.form connectors] chain] filter:^BOOL(TRRailConnector* connector) {
             return !([[_builder.railroad contentInTile:[((TRRailConnector*)(connector)) nextTile:rail.tile] connector:[((TRRailConnector*)(connector)) otherSideConnector]] isEmpty]);
         }] count];
-        CGFloat k = ((c == 1) ? 0.3 : ((c == 2) ? 0.2 : 1.0));
+        CGFloat k = ((c == 1) ? 0.3 : ((c == 2) ? 0.25 : 1.0));
         return k * d;
     }
 }
