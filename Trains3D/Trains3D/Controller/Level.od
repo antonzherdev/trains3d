@@ -139,6 +139,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     def updateWith(delta : float) {
         score.updateWith(delta)
         _trains.for(_.updateWith(delta))
+        _dyingTrains.for(_.updateWith(delta))
         _cities.for(_.updateWith(delta))
         if(!trains.isEmpty) processCollisions
 //        if(!_dyingTrains.isEmpty) dynamicWorld.updateWith(delta)

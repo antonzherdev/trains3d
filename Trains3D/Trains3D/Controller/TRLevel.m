@@ -340,6 +340,9 @@ static ODClassType* _TRLevel_type;
     [__trains forEach:^void(TRTrain* _) {
         [((TRTrain*)(_)) updateWithDelta:delta];
     }];
+    [__dyingTrains forEach:^void(TRTrain* _) {
+        [((TRTrain*)(_)) updateWithDelta:delta];
+    }];
     [__cities forEach:^void(TRCity* _) {
         [((TRCity*)(_)) updateWithDelta:delta];
     }];

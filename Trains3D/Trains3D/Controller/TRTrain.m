@@ -206,7 +206,7 @@ static ODClassType* _TRTrain_type;
 
 - (void)updateWithDelta:(CGFloat)delta {
     __weak TRTrain* _weakSelf = self;
-    [self correctCorrection:[_level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
+    if(!(_isDying)) [self correctCorrection:[_level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return _weakSelf.trainType.obstacleProcessor(_weakSelf.level, _weakSelf, _);
     } forLength:delta * _speedFloat point:__head]];
     __time += delta;
