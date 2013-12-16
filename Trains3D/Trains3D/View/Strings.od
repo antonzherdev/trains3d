@@ -169,7 +169,7 @@ class RuStrings extends Strings{
     def trainArrived(cost : int) : string = "+$(format(cost)): За прибывший поезд"
     def trainDestroyed(cost : int) : string = "-$(format(cost)): За уничтожение поезда"
     def trainDelayedFine(cost : int) : string = "-$(format(cost)): Штраф за задерживающийся поезд"
-    def damageFixedPayment(cost : int) : string = "-$(format(cost)): Плата за починку железной дороги"
+    def damageFixedPayment(cost : int) : string = "-$(format(cost)): Плата за ремонт железной дороги"
     def resumeGame : string = "Продолжить игру"
     def restart(level : Level) : string = "Начать заново уровень $(level.number)"
     def replay(level : Level) : string = "Переиграть уровень $(level.number)"
@@ -223,8 +223,8 @@ class RuStrings extends Strings{
          Для строительства рельсов один."
     def helpRules : string =
         "Не позволяйте балансу опускаться ниже нуля.
-         Продержитесь с положительным балансов отведенное время
-         и выграйте уровень."
+         Продержитесь с положительным балансом отведенное время
+         и выйграйте уровень."
     def helpSporadicDamage : string =
         "Иногда рельсы могут ломаться сами по себе."
     def helpDamage : string =

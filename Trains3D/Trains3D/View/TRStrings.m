@@ -340,7 +340,7 @@ static ODClassType* _TRRuStrings_type;
 }
 
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"-%@: Плата за починку железной дороги", [self formatCost:cost]];
+    return [NSString stringWithFormat:@"-%@: Плата за ремонт железной дороги", [self formatCost:cost]];
 }
 
 - (NSString*)resumeGame {
@@ -469,8 +469,8 @@ static ODClassType* _TRRuStrings_type;
 
 - (NSString*)helpRules {
     return @"Не позволяйте балансу опускаться ниже нуля.\n"
-        "Продержитесь с положительным балансов отведенное время\n"
-        "и выграйте уровень.";
+        "Продержитесь с положительным балансом отведенное время\n"
+        "и выйграйте уровень.";
 }
 
 - (NSString*)helpSporadicDamage {
