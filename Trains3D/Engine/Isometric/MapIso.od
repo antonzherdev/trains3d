@@ -46,7 +46,17 @@ class MapSso(size : vec2i) {
         vec2.y + vec2.x >= -1 //left
         && vec2.y - vec2.x <= size.y //top
         && vec2.y + vec2.x <= size.x + size.y - 1 //right
-        && vec2.y - vec2.x >= -size.x
+        && vec2.y - vec2.x >= -size.x //bottom
+
+    def distanceToMap(vec2 : vec2) : vec2 =
+        vec2(
+            if(vec2.y + vec2.x < -1) vec2.y + vec2.x + 1 //left
+            else if(vec2.y + vec2.x > size.x + size.y - 1) vec2.y + vec2.x - size.x - size.y + 1 //right
+            else 0,
+            if(vec2.y - vec2.x > size.y) vec2.y - vec2.x - size.y //top
+            else if(vec2.y - vec2.x < -size.x ) vec2.y - vec2.x + size.x //bottom
+            else 0
+        )
 
     private def allPosibleTiles : Chain<vec2i> =
         Range(start = limits.x, end = limits.x2, step = 1).chain

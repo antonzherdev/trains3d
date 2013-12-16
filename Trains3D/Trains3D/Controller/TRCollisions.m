@@ -69,7 +69,7 @@ static ODClassType* _TRTrainsCollisionWorld_type;
 }
 
 - (BOOL)isOutOfMapContact:(EGContact*)contact {
-    return !([_map isVisibleVec2:geVec3Xy(contact.a)]) && !([_map isVisibleVec2:geVec3Xy(contact.b)]);
+    return geVec2Length([_map distanceToMapVec2:geVec3Xy(contact.a)]) > 0.5 && geVec2Length([_map distanceToMapVec2:geVec3Xy(contact.b)]) > 0.5;
 }
 
 - (ODClassType*)type {

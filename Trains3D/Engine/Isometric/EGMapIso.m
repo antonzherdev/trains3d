@@ -74,6 +74,10 @@ static ODClassType* _EGMapSso_type;
     return vec2.y + vec2.x >= -1 && vec2.y - vec2.x <= _size.y && vec2.y + vec2.x <= _size.x + _size.y - 1 && vec2.y - vec2.x >= -_size.x;
 }
 
+- (GEVec2)distanceToMapVec2:(GEVec2)vec2 {
+    return GEVec2Make(((vec2.y + vec2.x < -1) ? vec2.y + vec2.x + 1 : ((vec2.y + vec2.x > _size.x + _size.y - 1) ? (vec2.y + vec2.x - _size.x) - _size.y + 1 : 0.0)), ((vec2.y - vec2.x > _size.y) ? (vec2.y - vec2.x) - _size.y : ((vec2.y - vec2.x < -_size.x) ? vec2.y - vec2.x + _size.x : 0.0)));
+}
+
 - (CNChain*)allPosibleTiles {
     return [[[[CNRange rangeWithStart:geRectIX(_limits) end:geRectIX2(_limits) step:1] chain] mul:[CNRange rangeWithStart:geRectIY(_limits) end:geRectIY2(_limits) step:1]] map:^id(CNTuple* _) {
         return wrap(GEVec2i, GEVec2iMake(unumi(((CNTuple*)(_)).a), unumi(((CNTuple*)(_)).b)));

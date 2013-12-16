@@ -22,6 +22,7 @@ typedef struct EGMapTileCutState EGMapTileCutState;
 - (BOOL)isBottomTile:(GEVec2i)tile;
 - (BOOL)isVisibleTile:(GEVec2i)tile;
 - (BOOL)isVisibleVec2:(GEVec2)vec2;
+- (GEVec2)distanceToMapVec2:(GEVec2)vec2;
 - (EGMapTileCutState)cutStateForTile:(GEVec2i)tile;
 + (CGFloat)ISO;
 + (ODClassType*)type;
