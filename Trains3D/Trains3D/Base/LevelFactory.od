@@ -63,7 +63,9 @@ class LevelFactory {
         LevelRules(vec2i(5, 3), LevelTheme.forest, scoreRulesWith(30000),
             WeatherRules(sunny = 0.0, windStrength = 0.3, blastness = 0.3, blastMinLength = 1, blastMaxLength = 5, blastStrength = 0.6, lightRain),
             repairerSpeed = 20, sporadicDamagePeriod = 0, [
-                (0, create2Cities), (20, slowTrain), (30, slowTrain), (30, slowTrain),
+                (0, create2Cities),
+                (1, (level : Level) -> GameDirector.instance.showLinesAdvice(level)),
+                (20, slowTrain), (30, slowTrain), (30, slowTrain),
                 (10, createNewCity), (20, slowTrain), (30, slowTrain), (30, slowTrain),
                 (10, createNewCity), (20, slowTrain), (30, slowTrain), (30, slowTrain),
                 (10, createNewCity), (10, slowTrain),

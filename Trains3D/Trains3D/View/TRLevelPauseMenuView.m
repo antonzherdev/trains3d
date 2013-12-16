@@ -661,7 +661,7 @@ static ODClassType* _TRHelpView_type;
         _level = level;
         _helpText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(-1.0, 1.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
         _tapText = [EGText applyFont:nil text:[NSString stringWithFormat:@"(%@)", [TRStr.Loc tapToContinue]] position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(0.0, -1.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
-        _helpBackSprite = [EGSprite applyMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)] rect:geRectApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0)];
+        _helpBackSprite = [EGSprite applyMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.8)] rect:geRectApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0)];
         __allowClose = NO;
     }
     

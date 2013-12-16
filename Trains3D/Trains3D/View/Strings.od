@@ -62,6 +62,7 @@ trait Strings {
     def helpTrain(to : string) : string
     def helpTrainWithSwitches(to : string) : string
     def helpToMakeZoom : string
+    def linesAdvice : string
 }
 
 class EnStrings extends Strings {
@@ -156,6 +157,10 @@ class EnStrings extends Strings {
         }
     def leaderboard : string = "Best results"
     def supportButton : string = "Question or support"
+    def linesAdvice : string =
+        "You can connect cities with more than one line.
+         Then two train coming from the opposite direction
+         will be able to arrive in the corresponding city."
 }
 
 class RuStrings extends Strings{
@@ -232,6 +237,9 @@ class RuStrings extends Strings{
         "Машинист этого поезда сошел с ума.
          Он не обращает внимания на светофоры или закрытые стрелки.
          Отправьте этот поезд в любой город."
+    def linesAdvice : string =
+        "Вы можете соединять города несколькими линиями.
+         В таком случае встречные поезда смогут разъехаться."
 
     def rate : string = "Оценить игру"
     def result : string = "Счет:"

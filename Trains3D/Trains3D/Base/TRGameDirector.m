@@ -128,11 +128,19 @@ static ODClassType* _TRGameDirector_type;
     _TRGameDirector_playerScoreRetrieveNotification = [CNNotificationHandle notificationHandleWithName:@"playerScoreRetrieveNotification"];
 }
 
+- (void)showLinesAdviceLevel:(TRLevel*)level {
+    if([_cloud intForKey:@"help.linesAdvice"] == 0) {
+        [level showHelpText:[TRStr.Loc linesAdvice]];
+        [_cloud setKey:@"help.linesAdvice" i:1];
+    }
+}
+
 - (void)clearTutorial {
     [_cloud setKey:@"help.sporadicDamage" i:0];
     [_cloud setKey:@"help.damage" i:0];
     [_cloud setKey:@"help.repairer" i:0];
     [_cloud setKey:@"help.crazy" i:0];
+    [_cloud setKey:@"help.linesAdvice" i:0];
 }
 
 - (NSInteger)bestScoreLevelNumber:(NSUInteger)levelNumber {

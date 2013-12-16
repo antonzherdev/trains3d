@@ -249,6 +249,12 @@ static ODClassType* _TREnStrings_type;
     return @"Question or support";
 }
 
+- (NSString*)linesAdvice {
+    return @"You can connect cities with more than one line.\n"
+        "Then two train coming from the opposite direction\n"
+        "will be able to arrive in the corresponding city.";
+}
+
 - (NSString*)formatCost:(NSInteger)cost {
     __block NSInteger i = 0;
     unichar a = unums([@"'" head]);
@@ -485,6 +491,11 @@ static ODClassType* _TRRuStrings_type;
     return @"Машинист этого поезда сошел с ума.\n"
         "Он не обращает внимания на светофоры или закрытые стрелки.\n"
         "Отправьте этот поезд в любой город.";
+}
+
+- (NSString*)linesAdvice {
+    return @"Вы можете соединять города несколькими линиями.\n"
+        "В таком случае встречные поезда смогут разъехаться.";
 }
 
 - (NSString*)rate {

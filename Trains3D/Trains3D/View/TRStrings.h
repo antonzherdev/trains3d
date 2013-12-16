@@ -57,6 +57,7 @@
 - (NSString*)helpTrainTo:(NSString*)to;
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
 - (NSString*)helpToMakeZoom;
+- (NSString*)linesAdvice;
 @end
 
 
@@ -109,6 +110,7 @@
 - (NSString*)topScore:(EGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
 - (NSString*)supportButton;
+- (NSString*)linesAdvice;
 + (ODClassType*)type;
 @end
 
@@ -156,6 +158,7 @@
 - (NSString*)helpDamage;
 - (NSString*)helpRepairer;
 - (NSString*)helpCrazy;
+- (NSString*)linesAdvice;
 - (NSString*)rate;
 - (NSString*)result;
 - (NSString*)best;

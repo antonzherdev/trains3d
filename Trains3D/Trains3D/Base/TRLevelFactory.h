@@ -10,6 +10,7 @@
 @class EGInterfaceIdiom;
 @class TRLevel;
 @class TRLevelRules;
+@class TRGameDirector;
 @class TRTrain;
 @class TRTrainType;
 @class TRCarType;
