@@ -11,7 +11,6 @@
 #import "TRLevelChooseMenu.h"
 #import "TRScore.h"
 #import "EGGameCenter.h"
-#import "TRLevelMenuView.h"
 @implementation TRLevelPauseMenuView{
     TRLevel* _level;
     NSString* _name;
@@ -644,11 +643,13 @@ static ODClassType* _TRLooseMenu_type;
 @implementation TRHelpView{
     TRLevel* _level;
     EGText* _helpText;
+    EGText* _tapText;
     EGSprite* _helpBackSprite;
     BOOL __allowClose;
 }
 static ODClassType* _TRHelpView_type;
 @synthesize level = _level;
+@synthesize _allowClose = __allowClose;
 
 + (id)helpViewWithLevel:(TRLevel*)level {
     return [[TRHelpView alloc] initWithLevel:level];
@@ -658,8 +659,9 @@ static ODClassType* _TRHelpView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _helpText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
-        _helpBackSprite = [EGSprite applyMaterial:[EGColorSource applyColor:TRLevelMenuView.backgroundColor] rect:geRectApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0)];
+        _helpText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(-1.0, 1.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
+        _tapText = [EGText applyFont:nil text:[NSString stringWithFormat:@"(%@)", [TRStr.Loc tapToContinue]] position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(0.0, -1.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
+        _helpBackSprite = [EGSprite applyMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)] rect:geRectApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0)];
         __allowClose = NO;
     }
     
@@ -673,19 +675,23 @@ static ODClassType* _TRHelpView_type;
 
 - (void)reshapeWithViewport:(GERect)viewport {
     [_helpText setFont:[EGGlobal fontWithName:@"lucida_grande" size:16]];
+    [_tapText setFont:[EGGlobal fontWithName:@"lucida_grande" size:12]];
 }
 
 - (void)draw {
     TRHelp* help = [[_level help] get];
     [_helpText setText:help.text];
-    GEVec2 size = geVec2MulVec2([_helpText measureC], GEVec2Make(1.1, 1.4));
+    GEVec2 size = geVec2AddVec2(geVec2MulVec2([_helpText measureC], GEVec2Make(1.1, 1.4)), GEVec2Make(0.0, [_tapText measureC].y));
     GERect rect = geVec2RectInCenterWithSize(size, geVec2ApplyVec2i([EGGlobal.context viewport].size));
     [_helpBackSprite setRect:rect];
     [_helpBackSprite draw];
-    [_helpText setPosition:geVec3ApplyVec2(geVec2SubVec2(geRectCenter(rect), GEVec2Make(rect.size.x * 0.45, 0.0)))];
+    [_helpText setPosition:geVec3ApplyVec2(geVec2AddVec2(geRectCenter(rect), geVec2MulVec2(rect.size, GEVec2Make(-0.45, 0.45))))];
+    [_tapText setPosition:geVec3ApplyVec2(geVec2AddVec2(geRectCenter(rect), geVec2MulVec2(rect.size, GEVec2Make(0.0, -0.4))))];
     [_helpText draw];
+    [_tapText draw];
+    __weak TRHelpView* ws = self;
     delay(1, ^void() {
-        __allowClose = YES;
+        ws._allowClose = YES;
     });
 }
 

@@ -1,6 +1,7 @@
 #import "objd.h"
 @class TRLevel;
 @class EGLocalPlayerScore;
+@class EGInterfaceIdiom;
 @class EGPlatform;
 
 @class TREnStrings;
@@ -34,6 +35,7 @@
 - (NSString*)topScore:(EGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
 - (NSString*)supportButton;
+- (NSString*)tapToContinue;
 - (NSString*)colorOrange;
 - (NSString*)colorBlue;
 - (NSString*)colorMint;
@@ -79,6 +81,7 @@
 - (NSString*)defeat;
 - (NSString*)moneyOver;
 - (NSString*)cityBuilt;
+- (NSString*)tapToContinue;
 - (NSString*)colorOrange;
 - (NSString*)colorGreen;
 - (NSString*)colorPink;
@@ -131,6 +134,7 @@
 - (NSString*)defeat;
 - (NSString*)moneyOver;
 - (NSString*)cityBuilt;
+- (NSString*)tapToContinue;
 - (NSString*)colorOrange;
 - (NSString*)colorGreen;
 - (NSString*)colorPink;

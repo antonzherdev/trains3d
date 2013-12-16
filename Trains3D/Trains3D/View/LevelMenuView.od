@@ -4,7 +4,6 @@ import com.antonzherdev.eg.Text._
 import com.antonzherdev.eg.Progress._
 
 class LevelMenuView(level : Level) extends LayerView with InputProcessor {
-    static val backgroundColor = vec4(0.85, 0.9, 0.75, 1.0)
     val name = "LevelMenu"
 
     private var pauseSprite = Sprite()

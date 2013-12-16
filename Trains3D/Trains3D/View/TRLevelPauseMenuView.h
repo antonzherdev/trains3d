@@ -22,7 +22,6 @@
 @class TRScore;
 @class EGLocalPlayerScore;
 @class EGSprite;
-@class TRLevelMenuView;
 @class TRHelp;
 
 @class TRLevelPauseMenuView;
@@ -124,6 +123,7 @@
 
 @interface TRHelpView : TRPauseView
 @property (nonatomic, readonly) TRLevel* level;
+@property (nonatomic) BOOL _allowClose;
 
 + (id)helpViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;

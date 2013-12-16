@@ -210,25 +210,31 @@ class LooseMenu(level : Level) extends MenuView {
 
 
 class HelpView(level : Level) extends PauseView {
-    private val helpText : Text = Text(nil, "", vec3(0, 0, 0), TextAlignment(-1, 0), vec4(0, 0, 0, 1))
+    private val helpText : Text = Text(nil, "", vec3(0, 0, 0), TextAlignment(-1, 1), vec4(0, 0, 0, 1))
+    private val tapText : Text = Text(nil, "($(Loc.tapToContinue))", vec3(0, 0, 0), TextAlignment(0, -1), vec4(0, 0, 0, 1))
     def reshapeWith(viewport : Rect) {
         helpText.font = fontWith(name = "lucida_grande", size = 16)
+        tapText.font = fontWith(name = "lucida_grande", size = 12)
     }
 
-    private val helpBackSprite = Sprite(LevelMenuView.backgroundColor, Rect(0, 0, 0, 0))
-    private var _allowClose = false
+    private val helpBackSprite = Sprite(vec4(1, 1, 1, 0.8), Rect(0, 0, 0, 0))
+    var _allowClose = false
     def draw {
         val help = level.help.get
         helpText.text = help.text
-        val size = helpText.measureC*vec2(1.1, 1.4)
+        val size = helpText.measureC*vec2(1.1, 1.4) + vec2(0, tapText.measureC.y)
         val rect = size.rectInCenterWith(context.viewport.size)
 
         helpBackSprite.set(rect = rect)
         helpBackSprite.draw
-        helpText.position = rect.center - vec2(rect.size.x*0.45, 0)
+        helpText.position = rect.center + rect.size * vec2(-0.45, 0.45)
+        tapText.position = rect.center + rect.size * vec2(0, -0.4)
         helpText.draw
+        tapText.draw
+
+        weak val ws = self
         Action.delay(1) {
-            _allowClose = true
+            ws._allowClose = true
         }
     }
 

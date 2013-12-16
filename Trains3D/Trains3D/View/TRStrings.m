@@ -91,6 +91,11 @@ static ODClassType* _TREnStrings_type;
     return @"New city has been built";
 }
 
+- (NSString*)tapToContinue {
+    if(egInterfaceIdiom() == EGInterfaceIdiom.computer) return @"Click to contiunue";
+    else return @"Tap to continue";
+}
+
 - (NSString*)colorOrange {
     return @"orange";
 }
@@ -375,6 +380,11 @@ static ODClassType* _TRRuStrings_type;
 
 - (NSString*)cityBuilt {
     return @"Построен новый город";
+}
+
+- (NSString*)tapToContinue {
+    if(egInterfaceIdiom() == EGInterfaceIdiom.computer) return @"Кликните для продолжения";
+    else return @"Нажмите для продолжения";
 }
 
 - (NSString*)colorOrange {

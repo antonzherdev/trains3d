@@ -62,6 +62,7 @@
 		6F3DF08E08891CE84C76BEA7 /* KWMatchers.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE539400E899D77BEF39 /* KWMatchers.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF091E44459BD3A8752E5 /* btCollisionShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF93AC35433C6311DF5C6 /* btCollisionShape.cpp */; };
 		6F3DF09D1C79158989D5937B /* btConvexConvexAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF96E18101CE6EAF1A722 /* btConvexConvexAlgorithm.cpp */; };
+		6F3DF09F8D55D3A6A463F1E0 /* lucida_grande_12.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF79F7384A2798C1A5954 /* lucida_grande_12.fnt */; };
 		6F3DF0A2F2A9A03D61F51E6D /* TRTrainSound.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF204632298A298CD37A3 /* TRTrainSound.m */; };
 		6F3DF0A43D19793483AB3877 /* func_matrix.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFC4637A9A62409EAEF35 /* func_matrix.inl */; };
 		6F3DF0AA6E2838E93A20F759 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFBA18831A0CC868D0042 /* CMakeLists.txt */; };
@@ -399,6 +400,7 @@
 		6F3DF528E22DA244C19AE434 /* btWheelInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF6DD991279189C0A1F9 /* btWheelInfo.cpp */; };
 		6F3DF532E3E3C3B36E3390A0 /* KWEqualMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF16B343577D6355460C0 /* KWEqualMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF5344C0F17A9E43ABF66 /* btGImpactQuantizedBvh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2D9F9A43AB1D88DD58D /* btGImpactQuantizedBvh.cpp */; };
+		6F3DF5344F12498DDE6732D3 /* lucida_grande_12.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF1EEF89BA70F44A87964 /* lucida_grande_12.png */; };
 		6F3DF53686E80A3D8E079F51 /* btBoxShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9F92E4F73C1C456688B /* btBoxShape.cpp */; };
 		6F3DF53D155EE9FC74A5C017 /* EGGameCenterPlat.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF08ED5E5657FABF69059 /* EGGameCenterPlat.m */; };
 		6F3DF53D2650264E469BE1C5 /* Tree.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFE9EA336EF79C80518F9 /* Tree.od */; };
@@ -892,6 +894,7 @@
 		6F3DFBAE85D0FA2DD230BC91 /* KWMatchVerifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF3B28EDF7690F0C5A980 /* KWMatchVerifier.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DFBAF546A84E32559C7FA /* EGSimpleShaderSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE0D6FB797629C54739A /* EGSimpleShaderSystem.m */; };
 		6F3DFBB305AFCEAEA8F0A61B /* btConvexCast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9ED7DADA50670E5CFB6 /* btConvexCast.cpp */; };
+		6F3DFBB34202902AE9D7EFD9 /* lucida_grande_12.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF1EEF89BA70F44A87964 /* lucida_grande_12.png */; };
 		6F3DFBB620FAF0C0CEB016C3 /* btMultimaterialTriangleMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF198E13319C933E1E384 /* btMultimaterialTriangleMeshShape.cpp */; };
 		6F3DFBBFAA8B4882A211CDA6 /* btTetrahedronShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF40E9E74BEE97D6F5C1A /* btTetrahedronShape.cpp */; };
 		6F3DFBC0F70601B16E5E6E41 /* btMultiSphereShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE3C727E06A5B62B0383 /* btMultiSphereShape.cpp */; };
@@ -1157,6 +1160,7 @@
 		6F3DFEF544FE2C371CA81EE3 /* CNSortBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF59F9DE9E545715CEE2F /* CNSortBuilder.m */; };
 		6F3DFEF5A372B40587382FDA /* norm.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF8B27E44D09CDED7E949 /* norm.inl */; };
 		6F3DFEF8C52E25950A6DB452 /* vector_query.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF1B42349419870E8CDCE /* vector_query.inl */; };
+		6F3DFEFBD583D4D0F43059F5 /* lucida_grande_12.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF79F7384A2798C1A5954 /* lucida_grande_12.fnt */; };
 		6F3DFEFD960AD625A8F60FF9 /* btGeometryUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1261B9F474CD7B32A91 /* btGeometryUtil.cpp */; };
 		6F3DFF0195D82CCC99782FCC /* btRigidBody.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF61DE27FAAD6930E8F61 /* btRigidBody.cpp */; };
 		6F3DFF0300690C4A49063271 /* TRLevelFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9AF54A0CAE5E3EB6282 /* TRLevelFactory.m */; };
@@ -1422,6 +1426,7 @@
 		6F3DF1E1D73228371582D516 /* EGCollisionWorld.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EGCollisionWorld.mm; sourceTree = "<group>"; };
 		6F3DF1E33966B8D9FE4E3B36 /* KWGenericMatchingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWGenericMatchingAdditions.h; sourceTree = "<group>"; };
 		6F3DF1E4642B3C6D244DCD91 /* verbose_operator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = verbose_operator.hpp; sourceTree = "<group>"; };
+		6F3DF1EEF89BA70F44A87964 /* lucida_grande_12.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lucida_grande_12.png; sourceTree = "<group>"; };
 		6F3DF1F1A325A4520151366D /* lucida_grande_24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lucida_grande_24.png; sourceTree = "<group>"; };
 		6F3DF1F88E1579823A385F0B /* btDispatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btDispatcher.h; sourceTree = "<group>"; };
 		6F3DF1F8CF0334439242AFDD /* NSObject+KiwiStubAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+KiwiStubAdditions.m"; sourceTree = "<group>"; };
@@ -1858,6 +1863,7 @@
 		6F3DF78B4312FF39C8C15954 /* EGMultisamplingSurface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGMultisamplingSurface.m; sourceTree = "<group>"; };
 		6F3DF799B0C9171B9F92B7F3 /* TRAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRAppDelegate.h; sourceTree = "<group>"; };
 		6F3DF79E56B52EA90418C91B /* CNAppendLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNAppendLink.m; sourceTree = "<group>"; };
+		6F3DF79F7384A2798C1A5954 /* lucida_grande_12.fnt */ = {isa = PBXFileReference; lastKnownFileType = file.fnt; path = lucida_grande_12.fnt; sourceTree = "<group>"; };
 		6F3DF79FE213C9FFE8FFC53F /* btTriangleMeshShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btTriangleMeshShape.cpp; sourceTree = "<group>"; };
 		6F3DF7A06EFC33D43D5EDF07 /* Window.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Window.png; sourceTree = "<group>"; };
 		6F3DF7A662AE8EAD03F94024 /* hint.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = hint.hpp; sourceTree = "<group>"; };
@@ -3951,6 +3957,8 @@
 				6F3DF577DEF2507D7614ACDA /* lucida_grande_48.png */,
 				6F3DFA6834C80959C9E73458 /* lucida_grande_72.fnt */,
 				6F3DF91510BF26B77726510E /* lucida_grande_72.png */,
+				6F3DF79F7384A2798C1A5954 /* lucida_grande_12.fnt */,
+				6F3DF1EEF89BA70F44A87964 /* lucida_grande_12.png */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -5153,6 +5161,8 @@
 				6F3DF0864F9E431A6F42B84C /* Parrot.mp3 in Resources */,
 				6F3DF8F6E26FA16C8CD9890B /* Parrots2.mp3 in Resources */,
 				6F3DFAAFE34CB4CC528175E5 /* Tropical.mp3 in Resources */,
+				6F3DF09F8D55D3A6A463F1E0 /* lucida_grande_12.fnt in Resources */,
+				6F3DF5344F12498DDE6732D3 /* lucida_grande_12.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5318,6 +5328,8 @@
 				6F3DFBDDDDEA0B4ED5E0CA5D /* Parrot.mp3 in Resources */,
 				6F3DF5F7D171389E034BB500 /* Parrots2.mp3 in Resources */,
 				6F3DF01B3B8BA6D959B7728D /* Tropical.mp3 in Resources */,
+				6F3DFEFBD583D4D0F43059F5 /* lucida_grande_12.fnt in Resources */,
+				6F3DFBB34202902AE9D7EFD9 /* lucida_grande_12.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

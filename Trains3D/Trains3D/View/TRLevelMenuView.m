@@ -28,7 +28,6 @@
     EGCounter* _notificationAnimation;
     EGFinisher* _levelAnimation;
 }
-static GEVec4 _TRLevelMenuView_backgroundColor = (GEVec4){0.85, 0.9, 0.75, 1.0};
 static ODClassType* _TRLevelMenuView_type;
 @synthesize level = _level;
 @synthesize name = _name;
@@ -165,10 +164,6 @@ static ODClassType* _TRLevelMenuView_type;
 
 - (ODClassType*)type {
     return [TRLevelMenuView type];
-}
-
-+ (GEVec4)backgroundColor {
-    return _TRLevelMenuView_backgroundColor;
 }
 
 + (ODClassType*)type {

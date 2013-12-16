@@ -38,6 +38,7 @@ trait Strings {
     def top(score : LocalPlayerScore) : string
     def leaderboard : string
     def supportButton : string
+    def tapToContinue : string
 
     def colorOrange : string
     def colorBlue : string
@@ -81,6 +82,7 @@ class EnStrings extends Strings {
     def defeat : string = "Defeat!"
     def moneyOver : string = "Money is over"
     def cityBuilt : string = "New city has been built"
+    def tapToContinue : string = if(egInterfaceIdiom == InterfaceIdiom.computer) "Click to contiunue" else "Tap to continue"
 
     def colorOrange : string = "orange"
     def colorGreen : string = "green"
@@ -174,6 +176,7 @@ class RuStrings extends Strings{
     def defeat : string = "Вы проиграли!"
     def moneyOver : string = "Закончились деньги"
     def cityBuilt : string = "Построен новый город"
+    def tapToContinue : string = if(egInterfaceIdiom == InterfaceIdiom.computer) "Кликните для продолжения" else "Нажмите для продолжения"
 
     def colorOrange : string = "оранжевый"
     def colorGreen : string = "зеленый"

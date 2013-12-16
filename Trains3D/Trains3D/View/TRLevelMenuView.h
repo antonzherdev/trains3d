@@ -40,7 +40,6 @@
 - (NSString*)formatScore:(NSInteger)score;
 - (void)updateWithDelta:(CGFloat)delta;
 - (EGRecognizers*)recognizers;
-+ (GEVec4)backgroundColor;
 + (ODClassType*)type;
 @end
 
