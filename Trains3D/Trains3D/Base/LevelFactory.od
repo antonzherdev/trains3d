@@ -348,7 +348,7 @@ class LevelFactory {
         WeatherRules(sunny = 1.0, windStrength = 0.1, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.1, nil),
         repairerSpeed = 20, sporadicDamagePeriod = 380, [
         (0, create2Cities),
-            (10, verySlowTrain), (15, expressTrain), (10, train), (10, crazyTrain),
+            (10, train), (15, expressTrain), (10, train), (10, crazyTrain),
         (10, createNewCity),
             (15, train), (15, verySlowTrain), (15, crazyTrain), (15, train),
         (15, createNewCity),
