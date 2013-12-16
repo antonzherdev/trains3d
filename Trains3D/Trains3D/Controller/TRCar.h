@@ -62,7 +62,6 @@
 - (TRCarPosition*)position;
 - (void)setPosition:(TRCarPosition*)position;
 - (GEVec2)midPoint;
-- (void)dealloc;
 + (ODClassType*)type;
 @end
 

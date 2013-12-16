@@ -36,7 +36,7 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
                     .filter(builder.canAdd(_.a))
                     .headOpt
                 if(railOpt.isDefined) {
-                    log("Distance $(fixedStart.isDefined) $(railOpt.get.b)")
+//                    log("Distance $(fixedStart.isDefined) $(railOpt.get.b)")
                     firstTry = true
                     val rail = railOpt.get.a
                     if(builder.tryBuild(rail)) {

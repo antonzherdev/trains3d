@@ -55,7 +55,6 @@
 - (void)updateWithDelta:(CGFloat)delta;
 - (BOOL)isInTile:(GEVec2i)tile;
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch;
-- (void)dealloc;
 + (ODClassType*)type;
 @end
 

@@ -115,6 +115,7 @@ static ODClassType* _EGDynamicWorld_type;
 
 - (id <CNIterable>)collisionsOnlyNew:(BOOL)onlyNew {
     return [EGIndexFunFilteredIterable indexFunFilteredIterableWithMaxCount:(NSUInteger) _dispatcher->getNumManifolds() f:^id(NSUInteger i) {
+        if(_dispatcher->getNumManifolds() <= i) return [CNOption none];
         btPersistentManifold *pManifold = _dispatcher->getManifoldByIndexInternal((int)i);
         if(pManifold->getNumContacts() == 0) return [CNOption none];
         EGRigidBody *body0 = (__bridge EGRigidBody *) pManifold->getBody0()->getUserPointer();

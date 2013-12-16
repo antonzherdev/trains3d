@@ -58,7 +58,6 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
                 return [_builder canAddRail:((CNTuple*)(_)).a];
             }] headOpt];
             if([railOpt isDefined]) {
-                [CNLog applyText:[NSString stringWithFormat:@"Distance %d %@", [_fixedStart isDefined], ((CNTuple*)([railOpt get])).b]];
                 _firstTry = YES;
                 TRRail* rail = ((CNTuple*)([railOpt get])).a;
                 if([_builder tryBuildRail:rail]) {

@@ -141,9 +141,9 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, __cars
         }.isDefined
     }
 
-    def dealloc {
-        log("Dealloc train")
-    }
+//    def dealloc {
+//        log("Dealloc train")
+//    }
 }
 
 class TrainGenerator(trainType : TrainType, carsCount : [int], speed : [int], carTypes : [CarType]) {

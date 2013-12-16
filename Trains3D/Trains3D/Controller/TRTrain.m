@@ -261,10 +261,6 @@ static ODClassType* _TRTrain_type;
     }] isDefined];
 }
 
-- (void)dealloc {
-    [CNLog applyText:@"Dealloc train"];
-}
-
 - (ODClassType*)type {
     return [TRTrain type];
 }
