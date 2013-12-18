@@ -16,14 +16,21 @@ static ODClassType* _EGRate_type;
     return self;
 }
 
-+ (void)initialize {
-    [super initialize];
++ (void)load {
+    [super load];
     _EGRate_type = [ODClassType classTypeWithCls:[EGRate class]];
     _EGRate_instance = [EGRate rate];
 
-//    [iRate sharedInstance].previewMode = YES;
     [iRate sharedInstance].promptAtLaunch = NO;
     [iRate sharedInstance].delegate = _EGRate_instance;
+    [iRate sharedInstance].usesUntilPrompt = 0;
+    [iRate sharedInstance].eventsUntilPrompt = 0;
+    [iRate sharedInstance].daysUntilPrompt = 0;
+    [iRate sharedInstance].usesPerWeekForPrompt = 0;
+
+//    [iRate sharedInstance].previewMode = YES;
+//    [iRate sharedInstance].declinedThisVersion = NO;
+//    [iRate sharedInstance].lastReminded = nil;
 //    [[iRate sharedInstance] setRatedThisVersion:NO];
 }
 
@@ -100,6 +107,26 @@ static ODClassType* _EGRate_type;
     return description;
 }
 
+- (void)later {
+    [iRate sharedInstance].lastReminded = [NSDate date];
+}
+
+- (void)never {
+    [iRate sharedInstance].declinedThisVersion = YES;
+}
+
+- (BOOL)shouldShowEveryVersion:(BOOL)everyVersion {
+    [iRate sharedInstance].promptAgainForEachNewVersion = everyVersion;
+    return [[iRate sharedInstance] shouldPromptForRating];
+}
+
+- (void)setIdsIos:(NSUInteger)ios osx:(NSUInteger)osx {
+    #if TARGET_OS_IPHONE
+        [iRate sharedInstance].appStoreID = ios;
+    #else
+        [iRate sharedInstance].appStoreID = osx;
+    #endif
+}
 @end
 
 

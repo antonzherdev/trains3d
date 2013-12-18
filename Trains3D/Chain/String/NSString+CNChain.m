@@ -219,5 +219,28 @@
     return [builder build];
 }
 
+- (NSString *)encodeForURL {
+    NSMutableString * output = [NSMutableString string];
+    const char * source = [self UTF8String];
+    int sourceLen = strlen(source);
+    for (int i = 0; i < sourceLen; ++i) {
+        const unsigned char thisChar = (const unsigned char)source[i];
+        /*if (false && thisChar == ' '){
+            [output appendString:@"+"];
+        } else*/ if (thisChar == '.' || thisChar == '-' || thisChar == '_' || thisChar == '~' ||
+                (thisChar >= 'a' && thisChar <= 'z') ||
+                (thisChar >= 'A' && thisChar <= 'Z') ||
+                (thisChar >= '0' && thisChar <= '9')) {
+            [output appendFormat:@"%c", thisChar];
+        } else {
+            [output appendFormat:@"%%%02X", thisChar];
+        }
+    }
+    return output;
+}
+
+- (NSString *)replaceOccurrences:(NSString *)from withString:(NSString *)to {
+    return [self stringByReplacingOccurrencesOfString:from withString:to];
+}
 @end
 

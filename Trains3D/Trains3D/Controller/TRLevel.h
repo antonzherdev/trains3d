@@ -66,6 +66,7 @@
 @property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic, readonly) EGSchedule* schedule;
 @property (nonatomic, readonly) TRTrainsCollisionWorld* collisionWorld;
+@property (nonatomic) BOOL rate;
 
 + (id)levelWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules;
 - (id)initWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules;

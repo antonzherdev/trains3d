@@ -2,5 +2,5 @@ package com.antonzherdev.eg
 
 stub class EMail {
     static val instance = EMail()
-    def showInterface(to : string)
+    def showInterface(to : string, subject : string, text : string, htmlText : string)
 }

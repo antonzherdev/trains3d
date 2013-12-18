@@ -114,6 +114,8 @@ class GameDirector {
     }
 
     def init {
+//        Rate.instance.setIds(ios = 736579117, osx = 736545415)
+        Rate.instance.setIds(ios = 343200656, osx = 403961173)
         GameCenter.instance.authenticate
 //        clearTutorial
     }
@@ -142,7 +144,13 @@ class GameDirector {
 
     def restartLevel {
         Director.current.scene.get.controller.as<Level>.for{level ->
-            set(level = level.number)
+            if(level.number == 16 && isNeedRate) {
+                level.rate = true
+                Director.current.redraw
+            } else {
+                set(level = level.number)
+                Director.current.resume
+            }
         }
     }
 
@@ -153,17 +161,33 @@ class GameDirector {
 
     def nextLevel {
         Director.current.scene.get.controller.as<Level>.for{level ->
-            set(level = level.number + 1)
+            if(isNeedRate) {
+                level.rate = true
+                Director.current.redraw
+            } else {
+                set(level = level.number + 1)
+                Director.current.resume
+            }
         }
+    }
+
+    def rateLater {
+        Rate.instance.later
+        nextLevel
+    }
+
+    def rateClose {
+        Rate.instance.never
+        nextLevel
     }
 
     def set(level : int) {
         if(level <= maxAvailableLevel) {
             local.set("currentLevel", i = level)
             Director.current.scene = SceneFactory.sceneFor(LevelFactory.levelWith(number = level))
-            Director.current.resume
         }
     }
+
 
     def showLeaderboard(level : Level) {
         GameCenter.instance.showLeaderboard("grp.com.antonzherdev.Trains3D.Level$(level.number)")
@@ -174,13 +198,24 @@ class GameDirector {
         cloud.synchronize
     }
 
-    def showSupport {
-        EMail.instance.showInterface(to = "support@raildale.com")
+    def showSupport(changeLevel : bool) {
+        val text = "\n\n> " + Loc.supportEmailText.replace("\n", "\n> ")
+        val htmlText = text.replace(">", "&gt;").replace("\n", "<br/>\n")
+        Director.current.scene.get.controller.as<Level>.for{level ->
+            EMail.instance.showInterface(to = "support@raildale.com",
+                subject = "Raildale - $(UInt.rnd)",
+                text = text,
+                htmlText = "<small><i>$(htmlText)</i></small>")
+            if(changeLevel) set(level = level.number + 1)
+        }
+
     }
 
-    def isNeedRate : bool = maxAvailableLevel > 4 && !Rate.instance.isRatedThisVersion
+    def isNeedRate : bool = maxAvailableLevel > 6 && Rate.instance.shouldShow(everyVersion = true)
     def showRate {
-        Rate.instance.showRate
-        Director.current.redraw
+        Director.current.scene.get.controller.as<Level>.for{level ->
+            Rate.instance.showRate
+            set(level = level.number + 1)
+        }
     }
 }

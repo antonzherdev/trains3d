@@ -123,6 +123,7 @@ static ODClassType* _TRLevelRules_type;
     NSUInteger __crashCounter;
     id __help;
     id __result;
+    BOOL _rate;
 }
 static NSInteger _TRLevel_trainComingPeriod = 10;
 static CNNotificationHandle* _TRLevel_buildCityNotification;
@@ -146,6 +147,7 @@ static ODClassType* _TRLevel_type;
 @synthesize railroad = _railroad;
 @synthesize schedule = _schedule;
 @synthesize collisionWorld = _collisionWorld;
+@synthesize rate = _rate;
 
 + (id)levelWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules {
     return [[TRLevel alloc] initWithNumber:number rules:rules];
@@ -191,6 +193,7 @@ static ODClassType* _TRLevel_type;
         __crashCounter = 0;
         __help = [CNOption none];
         __result = [CNOption none];
+        _rate = NO;
     }
     
     return self;

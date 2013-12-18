@@ -31,10 +31,15 @@
 - (NSString*)moneyOver;
 - (NSString*)result;
 - (NSString*)best;
-- (NSString*)rate;
+- (NSString*)supportButton;
+- (NSString*)supportEmailText;
+- (NSString*)rateText;
+- (NSString*)rateNow;
+- (NSString*)rateProblem;
+- (NSString*)rateLater;
+- (NSString*)rateClose;
 - (NSString*)topScore:(EGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
-- (NSString*)supportButton;
 - (NSString*)tapToContinue;
 - (NSString*)colorOrange;
 - (NSString*)colorBlue;
@@ -93,7 +98,14 @@
 - (NSString*)colorRed;
 - (NSString*)colorBeige;
 - (NSString*)colorYellow;
-- (NSString*)rate;
+- (NSString*)supportButton;
+- (NSString*)supportEmailText;
+- (NSString*)rateText;
+- (NSString*)rateSignature;
+- (NSString*)rateNow;
+- (NSString*)rateProblem;
+- (NSString*)rateLater;
+- (NSString*)rateClose;
 - (NSString*)helpConnectTwoCities;
 - (NSString*)helpRules;
 - (NSString*)helpNewCity;
@@ -109,7 +121,6 @@
 - (NSString*)best;
 - (NSString*)topScore:(EGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
-- (NSString*)supportButton;
 - (NSString*)linesAdvice;
 + (ODClassType*)type;
 @end
@@ -159,12 +170,17 @@
 - (NSString*)helpRepairer;
 - (NSString*)helpCrazy;
 - (NSString*)linesAdvice;
-- (NSString*)rate;
+- (NSString*)supportButton;
+- (NSString*)supportEmailText;
+- (NSString*)rateText;
+- (NSString*)rateNow;
+- (NSString*)rateProblem;
+- (NSString*)rateLater;
+- (NSString*)rateClose;
 - (NSString*)result;
 - (NSString*)best;
 - (NSString*)topScore:(EGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
-- (NSString*)supportButton;
 + (ODClassType*)type;
 @end
 

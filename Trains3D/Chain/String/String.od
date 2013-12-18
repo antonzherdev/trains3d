@@ -10,4 +10,6 @@ stub class String extends Seq<char> {
 
     def has(prefix : string) : bool
     def has(suffix : string) : bool
+    def encodeForURL : string
+    def replace(occurrences : string, withString : string) : string
 }

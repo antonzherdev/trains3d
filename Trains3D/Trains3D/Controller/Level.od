@@ -306,6 +306,8 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     def dealloc {
         log("Dealloc level $number")
     }
+
+    var rate = false
 }
 
 class Help(text : string)

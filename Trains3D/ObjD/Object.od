@@ -54,6 +54,7 @@ stub struct UInt extends Comparable<uint>  with Number {
     def range : Range
     def to(: uint) : Range
     def between( : uint, : uint) : bool
+    static def rnd : uint
     static def rnd(max : uint) : uint
 
     def max(b : uint) : uint

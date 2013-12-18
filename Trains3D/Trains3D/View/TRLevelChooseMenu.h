@@ -4,11 +4,11 @@
 #import "EGFont.h"
 @class EGProgress;
 @class TRGameDirector;
+@class EGDirector;
 @class EGButton;
 @class EGCamera2D;
 @class EGInterfaceIdiom;
 @class EGGlobal;
-@class EGDirector;
 @class EGLocalPlayerScore;
 @class EGColorSource;
 @class EGD2D;

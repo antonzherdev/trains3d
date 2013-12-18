@@ -8,6 +8,7 @@
 #import "TRStrings.h"
 #import "EGSchedule.h"
 #import "TRTrain.h"
+#import "EGRate.h"
 #import "EGGameCenter.h"
 #import "EGDirector.h"
 #import "TRSceneFactory.h"
@@ -15,7 +16,6 @@
 #import "TRLevelChooseMenu.h"
 #import "TRLevelFactory.h"
 #import "EGEMail.h"
-#import "EGRate.h"
 @implementation TRGameDirector{
     DTLocalKeyValueStorage* _local;
     id(^_resolveMaxLevel)(id, id);
@@ -161,6 +161,7 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)_init {
+    [EGRate.instance setIdsIos:343200656 osx:403961173];
     [EGGameCenter.instance authenticate];
 }
 
@@ -195,7 +196,13 @@ static ODClassType* _TRGameDirector_type;
 
 - (void)restartLevel {
     [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
-        [self setLevel:((NSInteger)(((TRLevel*)(level)).number))];
+        if(((TRLevel*)(level)).number == 16 && [self isNeedRate]) {
+            ((TRLevel*)(level)).rate = YES;
+            [[EGDirector current] redraw];
+        } else {
+            [self setLevel:((NSInteger)(((TRLevel*)(level)).number))];
+            [[EGDirector current] resume];
+        }
     }];
 }
 
@@ -208,8 +215,24 @@ static ODClassType* _TRGameDirector_type;
 
 - (void)nextLevel {
     [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
-        [self setLevel:((NSInteger)(((TRLevel*)(level)).number + 1))];
+        if([self isNeedRate]) {
+            ((TRLevel*)(level)).rate = YES;
+            [[EGDirector current] redraw];
+        } else {
+            [self setLevel:((NSInteger)(((TRLevel*)(level)).number + 1))];
+            [[EGDirector current] resume];
+        }
     }];
+}
+
+- (void)rateLater {
+    [EGRate.instance later];
+    [self nextLevel];
+}
+
+- (void)rateClose {
+    [EGRate.instance never];
+    [self nextLevel];
 }
 
 - (void)setLevel:(NSInteger)level {
@@ -218,7 +241,6 @@ static ODClassType* _TRGameDirector_type;
         [[EGDirector current] setScene:^EGScene*() {
             return [TRSceneFactory sceneForLevel:[TRLevelFactory levelWithNumber:((NSUInteger)(level))]];
         }];
-        [[EGDirector current] resume];
     }
 }
 
@@ -231,17 +253,27 @@ static ODClassType* _TRGameDirector_type;
     [_cloud synchronize];
 }
 
-- (void)showSupport {
-    [EGEMail.instance showInterfaceTo:@"support@raildale.com"];
+- (void)showSupportChangeLevel:(BOOL)changeLevel {
+    NSString* text = [@"\n"
+        "\n"
+        "> " stringByAppendingString:[[TRStr.Loc supportEmailText] replaceOccurrences:@"\n" withString:@"\n"
+        "> "]];
+    NSString* htmlText = [[text replaceOccurrences:@">" withString:@"&gt;"] replaceOccurrences:@"\n" withString:@"<br/>\n"];
+    [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
+        [EGEMail.instance showInterfaceTo:@"support@raildale.com" subject:[NSString stringWithFormat:@"Raildale - %lu", (unsigned long)oduIntRnd()] text:text htmlText:[NSString stringWithFormat:@"<small><i>%@</i></small>", htmlText]];
+        if(changeLevel) [self setLevel:((NSInteger)(((TRLevel*)(level)).number + 1))];
+    }];
 }
 
 - (BOOL)isNeedRate {
-    return [self maxAvailableLevel] > 4 && !([EGRate.instance isRatedThisVersion]);
+    return [self maxAvailableLevel] > 6 && [EGRate.instance shouldShowEveryVersion:YES];
 }
 
 - (void)showRate {
-    [EGRate.instance showRate];
-    [[EGDirector current] redraw];
+    [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
+        [EGRate.instance showRate];
+        [self setLevel:((NSInteger)(((TRLevel*)(level)).number + 1))];
+    }];
 }
 
 - (ODClassType*)type {

@@ -677,7 +677,7 @@ static NSString *const iRateMacAppStoreURLFormat = @"macappstore://itunes.apple.
                 NSString *bundleID = [self valueForKey:@"bundleId" inJSON:json];
                 if (bundleID)
                 {
-                    if ([bundleID isEqualToString:self.applicationBundleID])
+                    if ([bundleID isEqualToString:self.applicationBundleID] || (_appStoreID && _previewMode))
                     {
                         //get genre
                         if (self.appStoreGenreID == 0)

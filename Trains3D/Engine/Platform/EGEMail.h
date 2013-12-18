@@ -12,7 +12,8 @@
 + (id)mail;
 - (id)init;
 - (ODClassType*)type;
-- (void)showInterfaceTo:(NSString*)to;
+
+- (void)showInterfaceTo:(NSString *)to subject:(NSString *)subject text:(NSString *)text htmlText:(NSString *)text1;
 + (EGEMail*)instance;
 + (ODClassType*)type;
 @end

@@ -20,10 +20,16 @@ static ODClassType* _EGEMail_type;
     _EGEMail_instance = [EGEMail mail];
 }
 
-- (void)showInterfaceTo:(NSString*)to {
+- (void)showInterfaceTo:(NSString *)to subject:(NSString *)subject text:(NSString *)text htmlText:(NSString *)htmlText {
     MFMailComposeViewController* controller = [[MFMailComposeViewController alloc] init];
     controller.mailComposeDelegate = self;
     [controller setToRecipients:@[to]];
+    [controller setSubject:subject];
+    if(htmlText == nil || [htmlText isEmpty]) {
+        [controller setMessageBody:text isHTML:NO];
+    } else {
+        [controller setMessageBody:htmlText isHTML:YES];
+    }
     if (controller) {
         [[[[[UIApplication sharedApplication] delegate] window] rootViewController] presentViewController:controller animated:YES completion:nil];
     }

@@ -29,6 +29,7 @@
 @class TRMenuView;
 @class TRPauseMenuView;
 @class TRWinMenu;
+@class TRRateMenu;
 @class TRLooseMenu;
 @class TRHelpView;
 
@@ -73,6 +74,7 @@
 - (BOOL)tapEvent:(id<EGEvent>)event;
 - (void)draw;
 - (CGFloat)headerHeight;
+- (NSInteger)buttonHeight;
 - (void)reshapeWithViewport:(GERect)viewport;
 - (void)reshape;
 - (void)drawHeaderRect:(GERect)rect;
@@ -101,6 +103,20 @@
 - (ODClassType*)type;
 - (id<CNSeq>)buttons;
 - (CGFloat)headerHeight;
+- (void)drawHeaderRect:(GERect)rect;
+- (void)reshape;
++ (ODClassType*)type;
+@end
+
+
+@interface TRRateMenu : TRMenuView
++ (id)rateMenu;
+- (id)init;
+- (ODClassType*)type;
+- (id<CNSeq>)buttons;
+- (CGFloat)headerHeight;
+- (NSInteger)columnWidth;
+- (NSInteger)buttonHeight;
 - (void)drawHeaderRect:(GERect)rect;
 - (void)reshape;
 + (ODClassType*)type;

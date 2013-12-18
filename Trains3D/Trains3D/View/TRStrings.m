@@ -136,8 +136,45 @@ static ODClassType* _TREnStrings_type;
     return @"yellow";
 }
 
-- (NSString*)rate {
-    return @"Rate it";
+- (NSString*)supportButton {
+    return @"Email to the developer";
+}
+
+- (NSString*)supportEmailText {
+    return @"Report a problem or tell me about your ideas.\n"
+        "I will definetely reply to you and I will try to fix problems as soon as posible.\n"
+        "Thank you very much, Anton Zhedev, Developer";
+}
+
+- (NSString*)rateText {
+    return @"If you enjoy playing Raildale, would you mind taking\n"
+        "a moment to rate it? It won’t take more than a minute.\n"
+        "\n"
+        "If you faced with a problem, please, report me. I will\n"
+        "try to fix it as soon as possible.\n"
+        "\n"
+        "Thanks for your support!\n"
+        "Best Regards, Anton Zherdev, Developer";
+}
+
+- (NSString*)rateSignature {
+    return @"Anton Zherdev, Developer";
+}
+
+- (NSString*)rateNow {
+    return @"Rate it now";
+}
+
+- (NSString*)rateProblem {
+    return @"Report a problem";
+}
+
+- (NSString*)rateLater {
+    return @"Remind me later";
+}
+
+- (NSString*)rateClose {
+    return @"No, thanks";
 }
 
 - (NSString*)helpConnectTwoCities {
@@ -243,10 +280,6 @@ static ODClassType* _TREnStrings_type;
 
 - (NSString*)leaderboard {
     return @"Best results";
-}
-
-- (NSString*)supportButton {
-    return @"Question or support";
 }
 
 - (NSString*)linesAdvice {
@@ -498,8 +531,41 @@ static ODClassType* _TRRuStrings_type;
         "В таком случае встречные поезда смогут разъехаться.";
 }
 
-- (NSString*)rate {
-    return @"Оценить игру";
+- (NSString*)supportButton {
+    return @"Написать разработчику";
+}
+
+- (NSString*)supportEmailText {
+    return @"Сообщите о проблеме или напишите ваши идеи.\n"
+        "Я обязательно вам отвечу и постараюсь исправить возникшие проблемы как можно скорее.\n"
+        "Спасибо большое, Антон Жердев, Разработчик";
+}
+
+- (NSString*)rateText {
+    return @"Если вам понравилась игра Raildale, не будете ли вы возражать\n"
+        "против того, чтобы уделить время и оценить ее?\n"
+        "\n"
+        "Если вы столкнулись с проблемой, сообщите мне об этом.\n"
+        "Я постараюсь исправить ее как можно скорее.\n"
+        "\n"
+        "Спасибо вам за поддержку!\n"
+        "С наилучшими пожеланиями, Антон Жердев, Разработчик";
+}
+
+- (NSString*)rateNow {
+    return @"Оценить сейчас";
+}
+
+- (NSString*)rateProblem {
+    return @"Сообщить о проблеме";
+}
+
+- (NSString*)rateLater {
+    return @"Напомнить позже";
+}
+
+- (NSString*)rateClose {
+    return @"Нет, спасибо";
 }
 
 - (NSString*)result {
@@ -546,10 +612,6 @@ static ODClassType* _TRRuStrings_type;
 
 - (NSString*)leaderboard {
     return @"Лучшие результаты";
-}
-
-- (NSString*)supportButton {
-    return @"Вопрос или поддержка";
 }
 
 - (NSString*)formatCost:(NSInteger)cost {

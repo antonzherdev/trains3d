@@ -10,4 +10,7 @@
 - (NSUInteger) toUInt;
 - (NSInteger) toInt;
 - (CGFloat) toFloat;
+- (NSString *)encodeForURL;
+
+- (NSString *)replaceOccurrences:(NSString *)from withString:(NSString *)to;
 @end

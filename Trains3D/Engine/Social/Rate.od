@@ -3,7 +3,11 @@ package com.antonzherdev.eg
 stub class Rate {
     static val instance = Rate()
 
+    def setIds(ios : uint, osx : uint)
     def isRated : bool
     def isRatedThisVersion : bool
     def showRate
+    def shouldShow(everyVersion : bool) : bool
+    def later
+    def never
 }

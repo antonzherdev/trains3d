@@ -20,8 +20,8 @@ static ODClassType* _EGEMail_type;
     _EGEMail_instance = [EGEMail mail];
 }
 
-- (void)showInterfaceTo:(NSString*)to {
-    NSString* mailtoAddress = [NSString stringWithFormat:@"mailto:%@", to];
+- (void)showInterfaceTo:(NSString *)to subject:(NSString *)subject text:(NSString *)text htmlText:(NSString *)text1 {
+    NSString* mailtoAddress = [NSString stringWithFormat:@"mailto:%@?subject=%@&body=%@", to, [subject encodeForURL], [text encodeForURL]];
     [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:mailtoAddress]];
 }
 

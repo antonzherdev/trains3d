@@ -2,12 +2,12 @@
 
 #import "EGProgress.h"
 #import "TRGameDirector.h"
+#import "EGDirector.h"
 #import "EGSprite.h"
 #import "EGCamera2D.h"
 #import "GL.h"
 #import "EGPlatform.h"
 #import "EGContext.h"
-#import "EGDirector.h"
 #import "EGGameCenter.h"
 #import "EGMaterial.h"
 #import "TRStrings.h"
@@ -39,6 +39,7 @@ static ODClassType* _TRLevelChooseMenu_type;
                 NSInteger level = (3 - unumi(y)) * 4 + unumi(x) + 1;
                 return [EGButton applyRect:geRectApplyXYWidthHeight(((float)(unumi(x))), ((float)(unumi(y))), 1.0, 1.0) onDraw:[_weakSelf drawButtonX:unumi(x) y:unumi(y) level:level] onClick:^void() {
                     [TRGameDirector.instance setLevel:level];
+                    [[EGDirector current] resume];
                 }];
             }];
         }] toArray];

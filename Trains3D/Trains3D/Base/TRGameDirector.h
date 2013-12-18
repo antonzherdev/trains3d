@@ -10,6 +10,7 @@
 @class EGSchedule;
 @class TRTrain;
 @class TRTrainType;
+@class EGRate;
 @class EGLocalPlayerScore;
 @class EGDirector;
 @class TRSceneFactory;
@@ -18,7 +19,6 @@
 @class TRLevelChooseMenu;
 @class TRLevelFactory;
 @class EGEMail;
-@class EGRate;
 
 @class TRGameDirector;
 
@@ -42,10 +42,12 @@
 - (void)restartLevel;
 - (void)chooseLevel;
 - (void)nextLevel;
+- (void)rateLater;
+- (void)rateClose;
 - (void)setLevel:(NSInteger)level;
 - (void)showLeaderboardLevel:(TRLevel*)level;
 - (void)synchronize;
-- (void)showSupport;
+- (void)showSupportChangeLevel:(BOOL)changeLevel;
 - (BOOL)isNeedRate;
 - (void)showRate;
 + (TRGameDirector*)instance;

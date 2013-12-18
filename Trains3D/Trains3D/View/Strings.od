@@ -34,10 +34,17 @@ trait Strings {
     def moneyOver : string
     def result : string
     def best : string
-    def rate : string
+
+    def supportButton : string
+    def supportEmailText : string
+    def rateText : string
+    def rateNow : string
+    def rateProblem : string
+    def rateLater : string
+    def rateClose : string
+
     def top(score : LocalPlayerScore) : string
     def leaderboard : string
-    def supportButton : string
     def tapToContinue : string
 
     def colorOrange : string
@@ -95,7 +102,26 @@ class EnStrings extends Strings {
     def colorRed : string = "red"
     def colorBeige : string = "beige"
     def colorYellow : string = "yellow"
-    def rate : string = "Rate it"
+
+    def supportButton : string = "Email to the developer"
+    def supportEmailText : string =
+        "Report a problem or tell me about your ideas.
+         I will definetely reply to you and I will try to fix problems as soon as posible.
+         Thank you very much, Anton Zhedev, Developer"
+    def rateText : string =
+        "If you enjoy playing Raildale, would you mind taking
+         a moment to rate it? It won’t take more than a minute.
+
+         If you faced with a problem, please, report me. I will
+         try to fix it as soon as possible.
+
+         Thanks for your support!
+         Best Regards, Anton Zherdev, Developer"
+    def rateSignature : string = "Anton Zherdev, Developer"
+    def rateNow : string = "Rate it now"
+    def rateProblem : string = "Report a problem"
+    def rateLater : string = "Remind me later"
+    def rateClose : string = "No, thanks"
 
     def helpConnectTwoCities : string =
        "Connect two cities by rails.
@@ -156,7 +182,6 @@ class EnStrings extends Strings {
             else "Worse than average"
         }
     def leaderboard : string = "Best results"
-    def supportButton : string = "Question or support"
     def linesAdvice : string =
         "You can connect cities with more than one line.
          Then two train coming from the opposite direction
@@ -241,7 +266,25 @@ class RuStrings extends Strings{
         "Вы можете соединять города несколькими линиями.
          В таком случае встречные поезда смогут разъехаться."
 
-    def rate : string = "Оценить игру"
+    def supportButton : string = "Написать разработчику"
+    def supportEmailText : string =
+        "Сообщите о проблеме или напишите ваши идеи.
+         Я обязательно вам отвечу и постараюсь исправить возникшие проблемы как можно скорее.
+         Спасибо большое, Антон Жердев, Разработчик"
+    def rateText : string =
+        "Если вам понравилась игра Raildale, не будете ли вы возражать
+         против того, чтобы уделить время и оценить ее?
+
+         Если вы столкнулись с проблемой, сообщите мне об этом.
+         Я постараюсь исправить ее как можно скорее.
+
+         Спасибо вам за поддержку!
+         С наилучшими пожеланиями, Антон Жердев, Разработчик"
+    def rateNow : string = "Оценить сейчас"
+    def rateProblem : string = "Сообщить о проблеме"
+    def rateLater : string = "Напомнить позже"
+    def rateClose : string = "Нет, спасибо"
+
     def result : string = "Счет:"
     def best : string = "Ваш лучший:"
     def top(score : LocalPlayerScore) : string =
@@ -258,7 +301,7 @@ class RuStrings extends Strings{
             else "Ниже среднего"
         }
     def leaderboard : string = "Лучшие результаты"
-    def supportButton : string = "Вопрос или поддержка"
+
 }
 
 object Str {

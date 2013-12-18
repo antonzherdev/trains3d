@@ -144,6 +144,11 @@ static inline NSUInteger oduIntRndMax(NSUInteger max) {
     return arc4random_uniform((u_int32_t)(max + 1));
 }
 
+
+static inline NSUInteger oduIntRnd() {
+    return arc4random();
+}
+
 #define OD_DBL_MAX 1.7976931348623157E+308
 //#define OD_DBL_MIN 2.2250738585072014E-308
 #define OD_FLT_MAX 3.40282347E+38F
