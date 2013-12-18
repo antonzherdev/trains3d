@@ -161,7 +161,7 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)_init {
-    [EGRate.instance setIdsIos:343200656 osx:403961173];
+    [EGRate.instance setIdsIos:736579117 osx:736545415];
     [EGGameCenter.instance authenticate];
 }
 
