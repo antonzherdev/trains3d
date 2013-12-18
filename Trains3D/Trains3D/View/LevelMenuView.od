@@ -10,32 +10,31 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
     private val backSprite = Sprite(vec4(1, 1, 1, 0.7))
 
     val notificationProgress = gap(0.7, 1) >> vec4(0, 0, 0, 1 - _)
-    val pauseReg =  Rect(0, 0, 46.0/64, 46.0/64)
 
     private var width = 0
     var camera : Camera
     def reshapeWith(viewport : Rect) {
-        camera = Camera2D(vec2(viewport.width/context.scale, 46))
+        camera = Camera2D(vec2(viewport.width/context.scale, 32))
         val font = fontWith(name = "lucida_grande", 24)
-        val notificationFont = fontWith(name = "lucida_grande", 16)
+        val notificationFont = fontWith(name = "lucida_grande", if(egInterfaceIdiom == InterfaceIdiom.phone) 14 else 16)
         notificationText.font = font
         width = viewport.size.x/context.scale
 
         scoreText.font = font
         notificationText.font = notificationFont
-        notificationText.position = vec3(width/2, 15, 0)
+        notificationText.position = vec3(width/2, 10, 0)
         levelText.for{ _ ->
             _.font = font
-            _.position = vec3(width/2, 14, 0)
+            _.position = vec3(width/2, 10, 0)
         }
 
-        backSprite.rect = Rect(0, 0, width, 46)
+        backSprite.rect = Rect(0, 0, width, 32)
 
-        pauseSprite.position = vec2(width - 46, 0)
-        pauseSprite.material = ColorSource(TextureRegion(scaledTextureFor("Pause", "png", GL_NEAREST, GL_NEAREST), pauseReg))
+        pauseSprite.position = vec2(width - 32, 0)
+        pauseSprite.material = ColorSource(scaledTextureFor("Pause", "png", GL_NEAREST, GL_NEAREST))
         pauseSprite.adjustSize
     }
-    private val scoreText = Text(nil, "", vec3(10, 14, 0), TextAlignment.baseline(-1), vec4(0, 0, 0, 1))
+    private val scoreText = Text(nil, "", vec3(10, 8, 0), TextAlignment.baseline(-1), vec4(0, 0, 0, 1))
     private val notificationText = Text(nil, "", vec3(0, 0, 0), TextAlignment.baseline(0), vec4(0, 0, 0, 1))
     var levelText : Text? = Text(nil, "", vec3(0, 0, 0), TextAlignment.baseline(0), vec4(0, 0, 0, 1))
 

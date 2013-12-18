@@ -16,7 +16,7 @@ class TrainLayers(level : Level) extends Layers {
     def layers : [Layer] = [levelLayer, menuLayer, pauseMenuLayer]
     def viewportsWith(viewSize : vec2) = {
         [(levelLayer, Rect(0, 0, viewSize.x, viewSize.y)),
-            (menuLayer, Rect(0, viewSize.y - 46*context.scale, viewSize.x, 46*context.scale)),
+            (menuLayer, Rect(0, viewSize.y - 32*context.scale, viewSize.x, 32*context.scale)),
             (pauseMenuLayer, Rect(vec2(0, 0), viewSize))
         ]
     }

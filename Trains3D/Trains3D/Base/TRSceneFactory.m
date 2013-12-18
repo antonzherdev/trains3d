@@ -102,7 +102,7 @@ static ODClassType* _TRTrainLayers_type;
 }
 
 - (id<CNSeq>)viewportsWithViewSize:(GEVec2)viewSize {
-    return (@[tuple(_levelLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, 0.0, viewSize.x, viewSize.y))), tuple(_menuLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, viewSize.y - 46 * EGGlobal.context.scale, viewSize.x, ((float)(46 * EGGlobal.context.scale))))), tuple(_pauseMenuLayer, wrap(GERect, GERectMake(GEVec2Make(0.0, 0.0), viewSize)))]);
+    return (@[tuple(_levelLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, 0.0, viewSize.x, viewSize.y))), tuple(_menuLayer, wrap(GERect, geRectApplyXYWidthHeight(0.0, viewSize.y - 32 * EGGlobal.context.scale, viewSize.x, ((float)(32 * EGGlobal.context.scale))))), tuple(_pauseMenuLayer, wrap(GERect, GERectMake(GEVec2Make(0.0, 0.0), viewSize)))]);
 }
 
 - (ODClassType*)type {

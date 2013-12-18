@@ -8,7 +8,7 @@
 #import "EGContext.h"
 #import "EGCamera2D.h"
 #import "GL.h"
-#import "EGTexture.h"
+#import "EGPlatform.h"
 #import "TRScore.h"
 #import "TRStrings.h"
 #import "TRNotification.h"
@@ -19,7 +19,6 @@
     EGSprite* _pauseSprite;
     EGSprite* _backSprite;
     GEVec4(^_notificationProgress)(float);
-    GERect _pauseReg;
     NSInteger _width;
     id<EGCamera> _camera;
     EGText* _scoreText;
@@ -32,7 +31,6 @@ static ODClassType* _TRLevelMenuView_type;
 @synthesize level = _level;
 @synthesize name = _name;
 @synthesize notificationProgress = _notificationProgress;
-@synthesize pauseReg = _pauseReg;
 @synthesize camera = _camera;
 @synthesize levelText = _levelText;
 
@@ -57,9 +55,8 @@ static ODClassType* _TRLevelMenuView_type;
                 return __r(__l(_));
             };
         }();
-        _pauseReg = geRectApplyXYWidthHeight(0.0, 0.0, ((float)(46.0 / 64)), ((float)(46.0 / 64)));
         _width = 0;
-        _scoreText = [EGText applyFont:nil text:@"" position:GEVec3Make(10.0, 14.0, 0.0) alignment:egTextAlignmentBaselineX(-1.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
+        _scoreText = [EGText applyFont:nil text:@"" position:GEVec3Make(10.0, 8.0, 0.0) alignment:egTextAlignmentBaselineX(-1.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
         _notificationText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentBaselineX(0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
         _levelText = [CNOption applyValue:[EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentBaselineX(0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)]];
         _notificationAnimation = [EGCounter apply];
@@ -77,21 +74,21 @@ static ODClassType* _TRLevelMenuView_type;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
-    _camera = [EGCamera2D camera2DWithSize:GEVec2Make(geRectWidth(viewport) / EGGlobal.context.scale, 46.0)];
+    _camera = [EGCamera2D camera2DWithSize:GEVec2Make(geRectWidth(viewport) / EGGlobal.context.scale, 32.0)];
     EGFont* font = [EGGlobal fontWithName:@"lucida_grande" size:24];
-    EGFont* notificationFont = [EGGlobal fontWithName:@"lucida_grande" size:16];
+    EGFont* notificationFont = [EGGlobal fontWithName:@"lucida_grande" size:((egInterfaceIdiom() == EGInterfaceIdiom.phone) ? 14 : 16)];
     [_notificationText setFont:font];
     _width = ((NSInteger)(viewport.size.x / EGGlobal.context.scale));
     [_scoreText setFont:font];
     [_notificationText setFont:notificationFont];
-    [_notificationText setPosition:GEVec3Make(((float)(_width / 2)), 15.0, 0.0)];
+    [_notificationText setPosition:GEVec3Make(((float)(_width / 2)), 10.0, 0.0)];
     [_levelText forEach:^void(EGText* _) {
         [((EGText*)(_)) setFont:font];
-        [((EGText*)(_)) setPosition:GEVec3Make(((float)(_width / 2)), 14.0, 0.0)];
+        [((EGText*)(_)) setPosition:GEVec3Make(((float)(_width / 2)), 10.0, 0.0)];
     }];
-    [_backSprite setRect:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(_width)), 46.0)];
-    [_pauseSprite setPosition:GEVec2Make(((float)(_width - 46)), 0.0)];
-    [_pauseSprite setMaterial:[EGColorSource applyTexture:[EGTextureRegion textureRegionWithTexture:[EGGlobal scaledTextureForName:@"Pause" format:@"png" magFilter:GL_NEAREST minFilter:GL_NEAREST] uv:_pauseReg]]];
+    [_backSprite setRect:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(_width)), 32.0)];
+    [_pauseSprite setPosition:GEVec2Make(((float)(_width - 32)), 0.0)];
+    [_pauseSprite setMaterial:[EGColorSource applyTexture:[EGGlobal scaledTextureForName:@"Pause" format:@"png" magFilter:GL_NEAREST minFilter:GL_NEAREST]]];
     [_pauseSprite adjustSize];
 }
 
