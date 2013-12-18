@@ -11,6 +11,7 @@
 #import "GEMat4.h"
 #import "TRTrain.h"
 #import "TRTrainView.h"
+#import "EGPlatform.h"
 #import "EGSprite.h"
 #import "EGSchedule.h"
 #import "TRStrings.h"
@@ -70,7 +71,7 @@ static ODClassType* _TRCityView_type;
                 [((TRCity*)(city)).expectedTrainCounter forF:^void(CGFloat time) {
                     TRTrain* train = ((TRCity*)(city)).expectedTrain;
                     GEVec4 color = ((train.trainType == TRTrainType.crazy) ? [TRTrainView crazyColorTime:time * TRLevel.trainComingPeriod] : train.color.trainColor);
-                    [EGD2D drawCircleBackColor:geVec4ApplyVec3W(geVec3MulK(geVec4Xyz(color), 0.5), 0.85) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.2) at:geVec3ApplyVec2Z(geVec2ApplyVec2i(((TRCity*)(city)).tile), 0.0) radius:0.04 relative:geVec2MulF([TRCityView moveVecForLevel:_level city:city], 0.25) segmentColor:color start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
+                    [EGD2D drawCircleBackColor:geVec4ApplyVec3W(geVec3MulK(geVec4Xyz(color), 0.5), 0.85) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.2) at:geVec3ApplyVec2Z(geVec2ApplyVec2i(((TRCity*)(city)).tile), 0.0) radius:((egInterfaceIdiom().isPhone) ? 0.08 : 0.04) relative:geVec2MulF([TRCityView moveVecForLevel:_level city:city], 0.25) segmentColor:color start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
                 }];
             }];
         }];
@@ -153,7 +154,7 @@ static ODClassType* _TRCallRepairerView_type;
 }
 
 - (void)reshape {
-    _font = [EGGlobal fontWithName:@"lucida_grande" size:18];
+    _font = [EGGlobal fontWithName:@"lucida_grande" size:((egInterfaceIdiom().isPhone) ? 12 : 18)];
     _buttonSize = geVec2MulF([_font measureCText:[TRStr.Loc callRepairer]], 1.2);
 }
 

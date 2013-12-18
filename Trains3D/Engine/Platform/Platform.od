@@ -5,8 +5,8 @@ enum Platform(shadows : bool, touch : bool) {
     iOS(true, true)
 }
 
-enum InterfaceIdiom {
-    phone()
-    pad()
-    computer()
+enum InterfaceIdiom(isPhone : bool, isPad : bool, isComputer : bool) {
+    phone(true, false, false)
+    pad(false, true, false)
+    computer(false, false, true)
 }

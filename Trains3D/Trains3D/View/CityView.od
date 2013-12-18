@@ -30,7 +30,7 @@ class CityView(level : Level) {
                         if(train.trainType == TrainType.crazy) TrainView.crazyColor(time * Level.trainComingPeriod)
                         else train.color.trainColor
                     D2D.drawCircle(backColor = vec4(color.xyz*0.5, 0.85), strokeColor = vec4(0, 0, 0, 0.2),
-                        at = vec3(city.tile, 0), radius = 0.04, relative = moveVecFor(level, city)*0.25,
+                        at = vec3(city.tile, 0), radius = if(egInterfaceIdiom.isPhone) 0.08 else 0.04 , relative = moveVecFor(level, city)*0.25,
                         segmentColor = color,
                         start = math.M_PI_2, end = math.M_PI_2 - 2*time*math.M_PI
                         )
@@ -55,7 +55,7 @@ class CallRepairerView(level : Level) extends InputProcessor {
     private var buttonSize : vec2
     private var font : Font
     def reshape {
-        font = fontWith(name = "lucida_grande", 18)
+        font = fontWith(name = "lucida_grande", if(egInterfaceIdiom.isPhone) 12 else 18)
         buttonSize = font.measureC(Loc.callRepairer)*1.2
     }
 

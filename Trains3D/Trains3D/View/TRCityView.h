@@ -23,6 +23,7 @@
 @class TRTrain;
 @class TRTrainType;
 @class TRTrainView;
+@class EGInterfaceIdiom;
 @class EGD2D;
 @class EGCounter;
 @class EGEnablingState;

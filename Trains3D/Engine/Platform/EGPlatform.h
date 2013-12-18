@@ -14,6 +14,10 @@
 
 
 @interface EGInterfaceIdiom : ODEnum
+@property (nonatomic, readonly) BOOL isPhone;
+@property (nonatomic, readonly) BOOL isPad;
+@property (nonatomic, readonly) BOOL isComputer;
+
 + (EGInterfaceIdiom*)phone;
 + (EGInterfaceIdiom*)pad;
 + (EGInterfaceIdiom*)computer;

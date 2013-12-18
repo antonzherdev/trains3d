@@ -52,7 +52,7 @@ static ODClassType* _TRLevelChooseMenu_type;
 + (void)initialize {
     [super initialize];
     _TRLevelChooseMenu_type = [ODClassType classTypeWithCls:[TRLevelChooseMenu class]];
-    _TRLevelChooseMenu_rankProgress = [EGProgress progressVec4:geVec4DivI(GEVec4Make(232.0, 255.0, 208.0, 255.0), 255) vec42:geVec4DivI(GEVec4Make(255.0, 223.0, 217.0, 255.0), 255)];
+    _TRLevelChooseMenu_rankProgress = [EGProgress progressVec4:geVec4DivI(GEVec4Make(232.0, 255.0, 208.0, 255.0), 255) vec42:geVec4DivI(GEVec4Make(255.0, 249.0, 217.0, 255.0), 255)];
 }
 
 + (EGScene*)scene {
