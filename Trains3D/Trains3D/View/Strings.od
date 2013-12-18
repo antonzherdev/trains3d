@@ -74,16 +74,16 @@ trait Strings {
 
 class EnStrings extends Strings {
     def level(number : uint) : string = "Level $number"
-    def railBuilt(cost : int) : string = "-$(format(cost)): For the railroad building"
-    def trainArrived(cost : int) : string = "+$(format(cost)): For the arrived train"
-    def trainDestroyed(cost : int) : string = "-$(format(cost)): For the train destroying"
+    def railBuilt(cost : int) : string = "-$(format(cost)): Payment for the railroad building"
+    def trainArrived(cost : int) : string = "+$(format(cost)): Reward for the arrived train"
+    def trainDestroyed(cost : int) : string = "-$(format(cost)): Fine for the destroyed train"
     def trainDelayedFine(cost : int) : string = "-$(format(cost)): Fine for the delayed train"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): Payment for the railroad repairing"
     def resumeGame : string = "Continue the game"
     def restart(level : Level) : string = "Restart the level $(level.number)"
     def replay(level : Level) : string = "Play the level $(level.number) more one time"
     def goToNext(level : Level) : string = "Play the next level $(level.number + 1)"
-    def chooseLevel : string = "Choose level"
+    def chooseLevel : string = "Choose the level"
     def callRepairer : string = "Call\nrepairers"
     def undo : string = "Undo"
     def victory : string = "Victory!"
@@ -106,7 +106,7 @@ class EnStrings extends Strings {
     def supportButton : string = "Email to the developer"
     def supportEmailText : string =
         "Report a problem or tell me about your ideas.
-         I will definetely reply to you and I will try to fix problems as soon as posible.
+         I will definetely reply to you and try to fix problems as soon as posible.
          Thank you very much, Anton Zhedev, Developer"
     def rateText : string =
         "If you enjoy playing Raildale, would you mind taking
@@ -128,30 +128,30 @@ class EnStrings extends Strings {
        $if(egPlatform.touch)
         Simply paint rails by your finger.
        $else
-        Use mouse or
+        Use a mouse or
         move two fingers on a touchpad.
        $endif"
     def helpRules : string =
         "Don't allow falling of account balance lower than zero.
          Stand assigned time with a positive balance and win a level."
     def helpNewCity : string =
-        "New cities sometimes appear.
-         Connect theirs to your railroad."
+        "Sometimes new cities appear.
+         Connect them to your railway."
     def helpTrain(to : string) : string =
-        "This train is going to $to city.
-         You can understand it by train's color."
+        "This train is going to the $to city.
+         You can recognize it by the color of the train."
     def helpTrainWithSwitches(to : string) : string =
-        "Turn railroad switches by$if(egPlatform.touch) tap$else click$endif,
-         so train arrive at $to city."
+        "Turn railroad switches using a $if(egPlatform.touch) tap$else click$endif,
+         so the train will arrive at the $to city."
     def helpExpressTrain : string =
-        "It's very fast express train.
+        "This is a very fast express train.
          It doesn't have time to stop in front of a switch.
          In this case the train will be destroyed.
          But you can use lights to conduct the train."
     def helpToMakeZoom : string =
-        "You can change scale using pinch gesture.
-         Use two fingers for scrolling.
-         And one finger for railway building."
+        "You can change the scale using a pinch gesture.
+         Use two fingers to scroll.
+         And one finger to build rails."
     def helpSporadicDamage : string =
         "Sometimes rails could be broken in itself."
     def helpDamage : string =
@@ -190,9 +190,9 @@ class EnStrings extends Strings {
 
 class RuStrings extends Strings{
     def level(number : uint) : string = "Уровень $number"
-    def railBuilt(cost : int) : string = "-$(format(cost)): За постройку железной дороги"
-    def trainArrived(cost : int) : string = "+$(format(cost)): За прибывший поезд"
-    def trainDestroyed(cost : int) : string = "-$(format(cost)): За уничтожение поезда"
+    def railBuilt(cost : int) : string = "-$(format(cost)): Плата за постройку железной дороги"
+    def trainArrived(cost : int) : string = "+$(format(cost)): Награда за прибывший поезд"
+    def trainDestroyed(cost : int) : string = "-$(format(cost)): Штраф за уничтожение поезда"
     def trainDelayedFine(cost : int) : string = "-$(format(cost)): Штраф за задерживающийся поезд"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): Плата за ремонт железной дороги"
     def resumeGame : string = "Продолжить игру"

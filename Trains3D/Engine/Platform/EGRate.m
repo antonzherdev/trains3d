@@ -31,7 +31,7 @@ static ODClassType* _EGRate_type;
 //    [iRate sharedInstance].previewMode = YES;
 //    [iRate sharedInstance].declinedThisVersion = NO;
 //    [iRate sharedInstance].lastReminded = nil;
-//    [[iRate sharedInstance] setRatedThisVersion:NO];
+//    [iRate sharedInstance].ratedThisVersion = NO;
 }
 
 - (BOOL)iRateShouldPromptForRating

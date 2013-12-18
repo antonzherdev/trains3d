@@ -27,15 +27,15 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)railBuiltCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"-%@: For the railroad building", [self formatCost:cost]];
+    return [NSString stringWithFormat:@"-%@: Payment for the railroad building", [self formatCost:cost]];
 }
 
 - (NSString*)trainArrivedCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"+%@: For the arrived train", [self formatCost:cost]];
+    return [NSString stringWithFormat:@"+%@: Reward for the arrived train", [self formatCost:cost]];
 }
 
 - (NSString*)trainDestroyedCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"-%@: For the train destroying", [self formatCost:cost]];
+    return [NSString stringWithFormat:@"-%@: Fine for the destroyed train", [self formatCost:cost]];
 }
 
 - (NSString*)trainDelayedFineCost:(NSInteger)cost {
@@ -63,7 +63,7 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)chooseLevel {
-    return @"Choose level";
+    return @"Choose the level";
 }
 
 - (NSString*)callRepairer {
@@ -142,7 +142,7 @@ static ODClassType* _TREnStrings_type;
 
 - (NSString*)supportEmailText {
     return @"Report a problem or tell me about your ideas.\n"
-        "I will definetely reply to you and I will try to fix problems as soon as posible.\n"
+        "I will definetely reply to you and try to fix problems as soon as posible.\n"
         "Thank you very much, Anton Zhedev, Developer";
 }
 
@@ -179,7 +179,7 @@ static ODClassType* _TREnStrings_type;
 
 - (NSString*)helpConnectTwoCities {
     return [NSString stringWithFormat:@"Connect two cities by rails.\n"
-        "%@", ((egPlatform().touch) ? @"Simply paint rails by your finger." : @"Use mouse or\n"
+        "%@", ((egPlatform().touch) ? @"Simply paint rails by your finger." : @"Use a mouse or\n"
         "move two fingers on a touchpad.")];
 }
 
@@ -189,31 +189,31 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)helpNewCity {
-    return @"New cities sometimes appear.\n"
-        "Connect theirs to your railroad.";
+    return @"Sometimes new cities appear.\n"
+        "Connect them to your railway.";
 }
 
 - (NSString*)helpTrainTo:(NSString*)to {
-    return [NSString stringWithFormat:@"This train is going to %@ city.\n"
-        "You can understand it by train's color.", to];
+    return [NSString stringWithFormat:@"This train is going to the %@ city.\n"
+        "You can recognize it by the color of the train.", to];
 }
 
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to {
-    return [NSString stringWithFormat:@"Turn railroad switches by%@,\n"
-        "so train arrive at %@ city.", ((egPlatform().touch) ? @" tap" : @" click"), to];
+    return [NSString stringWithFormat:@"Turn railroad switches using a %@,\n"
+        "so the train will arrive at the %@ city.", ((egPlatform().touch) ? @" tap" : @" click"), to];
 }
 
 - (NSString*)helpExpressTrain {
-    return @"It's very fast express train.\n"
+    return @"This is a very fast express train.\n"
         "It doesn't have time to stop in front of a switch.\n"
         "In this case the train will be destroyed.\n"
         "But you can use lights to conduct the train.";
 }
 
 - (NSString*)helpToMakeZoom {
-    return @"You can change scale using pinch gesture.\n"
-        "Use two fingers for scrolling.\n"
-        "And one finger for railway building.";
+    return @"You can change the scale using a pinch gesture.\n"
+        "Use two fingers to scroll.\n"
+        "And one finger to build rails.";
 }
 
 - (NSString*)helpSporadicDamage {
@@ -357,15 +357,15 @@ static ODClassType* _TRRuStrings_type;
 }
 
 - (NSString*)railBuiltCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"-%@: За постройку железной дороги", [self formatCost:cost]];
+    return [NSString stringWithFormat:@"-%@: Плата за постройку железной дороги", [self formatCost:cost]];
 }
 
 - (NSString*)trainArrivedCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"+%@: За прибывший поезд", [self formatCost:cost]];
+    return [NSString stringWithFormat:@"+%@: Награда за прибывший поезд", [self formatCost:cost]];
 }
 
 - (NSString*)trainDestroyedCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"-%@: За уничтожение поезда", [self formatCost:cost]];
+    return [NSString stringWithFormat:@"-%@: Штраф за уничтожение поезда", [self formatCost:cost]];
 }
 
 - (NSString*)trainDelayedFineCost:(NSInteger)cost {
