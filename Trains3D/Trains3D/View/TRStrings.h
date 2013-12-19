@@ -58,6 +58,7 @@
 - (NSString*)helpDamage;
 - (NSString*)helpRepairer;
 - (NSString*)helpCrazy;
+- (NSString*)helpInZoom;
 - (NSString*)helpExpressTrain;
 - (NSString*)helpTrainTo:(NSString*)to;
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
@@ -113,6 +114,7 @@
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
 - (NSString*)helpExpressTrain;
 - (NSString*)helpToMakeZoom;
+- (NSString*)helpInZoom;
 - (NSString*)helpSporadicDamage;
 - (NSString*)helpDamage;
 - (NSString*)helpCrazy;
@@ -164,6 +166,7 @@
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
 - (NSString*)helpExpressTrain;
 - (NSString*)helpToMakeZoom;
+- (NSString*)helpInZoom;
 - (NSString*)helpRules;
 - (NSString*)helpSporadicDamage;
 - (NSString*)helpDamage;

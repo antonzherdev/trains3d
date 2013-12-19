@@ -68,7 +68,7 @@ static ODClassType* _TREnStrings_type;
 
 - (NSString*)callRepairer {
     return @"Call\n"
-        "repairers";
+        "service train";
 }
 
 - (NSString*)undo {
@@ -211,9 +211,13 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)helpToMakeZoom {
-    return @"You can change the scale using a pinch gesture.\n"
-        "Use two fingers to scroll.\n"
-        "And one finger to build rails.";
+    return @"You can change the scale using a pinch gesture.";
+}
+
+- (NSString*)helpInZoom {
+    return @"Use a finger to scroll.\n"
+        "Press the button of hammer at the top to build rails.\n"
+        "Press one more time to come back to the scroll mode.";
 }
 
 - (NSString*)helpSporadicDamage {
@@ -221,8 +225,8 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)helpDamage {
-    return @"Call the special train using a button to fix the damage.\n"
-        "It's better to call train from the closest city to the damage.";
+    return @"Call the special train using one of the buttons to fix the damage.\n"
+        "It is better to call the train from the closest city to the damage.";
 }
 
 - (NSString*)helpCrazy {
@@ -232,7 +236,7 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)helpRepairer {
-    return @"Move the repairer train throught the damage\n"
+    return @"Conduct the service train through the damage\n"
         "and send it to any city.";
 }
 
@@ -500,6 +504,12 @@ static ODClassType* _TRRuStrings_type;
         "Для строительства рельсов один.";
 }
 
+- (NSString*)helpInZoom {
+    return @"Прокручивайте одним пальцем.\n"
+        "Чтобы построить рельсы нажмите кнопку с молотком вверху.\n"
+        "Нажмите ее еще раз чтобы вернуться в режим прокрутки.";
+}
+
 - (NSString*)helpRules {
     return @"Не позволяйте балансу опускаться ниже нуля.\n"
         "Продержитесь с положительным балансом отведенное время\n"
@@ -669,9 +679,7 @@ static ODClassType* _TRStr_type;
     [super initialize];
     _TRStr_type = [ODClassType classTypeWithCls:[TRStr class]];
     _TRStr_locales = [[(@[tuple(@"en", [TREnStrings enStrings]), tuple(@"ru", [TRRuStrings ruStrings])]) chain] toMap];
-    _TRStr_Loc = [[_TRStr_locales optKey:[OSLocale currentLanguageId]] getOrElseF:^id<TRStrings>() {
-        return [TREnStrings enStrings];
-    }];
+    _TRStr_Loc = [TREnStrings enStrings];
 }
 
 - (ODClassType*)type {

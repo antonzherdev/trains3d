@@ -65,6 +65,7 @@ trait Strings {
     def helpDamage : string
     def helpRepairer : string
     def helpCrazy : string
+    def helpInZoom : string
     def helpExpressTrain : string
     def helpTrain(to : string) : string
     def helpTrainWithSwitches(to : string) : string
@@ -84,7 +85,7 @@ class EnStrings extends Strings {
     def replay(level : Level) : string = "Play the level $(level.number) more one time"
     def goToNext(level : Level) : string = "Play the next level $(level.number + 1)"
     def chooseLevel : string = "Choose the level"
-    def callRepairer : string = "Call\nrepairers"
+    def callRepairer : string = "Call the\nservice train"
     def undo : string = "Undo"
     def victory : string = "Victory!"
     def defeat : string = "Defeat!"
@@ -149,27 +150,29 @@ class EnStrings extends Strings {
          In this case the train will be destroyed.
          But you can use lights to conduct the train."
     def helpToMakeZoom : string =
-        "You can change the scale using a pinch gesture.
-         Use two fingers to scroll.
-         And one finger to build rails."
+        "You can change the scale using a pinch gesture."
+    def helpInZoom : string =
+        "Use a finger to scroll.
+         Press the button of hammer at the top to build rails.
+         Press one more time to come back to the scroll mode."
     def helpSporadicDamage : string =
         "Sometimes rails could be broken in itself."
     def helpDamage : string =
-        "Call the special train using a button to fix the damage.
-         It's better to call train from the closest city to the damage."
+        "Call the service train using one of the buttons to fix the damage.
+         It is better to call the train from the closest city to the damage."
     def helpCrazy : string =
         "The machinist of the train is crazy.
          He doesn't pay attention to lights or closed switches.
          Send this train to any city."
 
     def helpRepairer : string =
-        "Move the repairer train throught the damage
+        "Conduct the service train through the damage
          and send it to any city."
 
     def result : string = "Score:"
     def best : string = "Your best:"
     def top(score : LocalPlayerScore) : string =
-        if(score.rank == 1) "The best ever!"
+        if(score.rank == 1) "The 1-st ever!"
         else if(score.rank == 2) "The 2-nd ever!"
         else if(score.rank == 3) "The 3-rd ever!"
         else {
@@ -183,9 +186,9 @@ class EnStrings extends Strings {
         }
     def leaderboard : string = "Best results"
     def linesAdvice : string =
-        "You can connect cities with more than one line.
-         Then two train coming from the opposite direction
-         will be able to arrive in the corresponding city."
+        "You can connect cities using more than one line.
+         Thus two trains coming from the opposite direction
+         would not collide with each other."
 }
 
 class RuStrings extends Strings{
@@ -246,6 +249,10 @@ class RuStrings extends Strings{
         "Вы можете изменять масштаб с помощью жеста.
          Для прокрутки используйте два пальца.
          Для строительства рельсов один."
+    def helpInZoom : string =
+        "Прокручивайте одним пальцем.
+         Чтобы построить рельсы нажмите кнопку с молотком вверху.
+         Нажмите ее еще раз чтобы вернуться в режим прокрутки."
     def helpRules : string =
         "Не позволяйте балансу опускаться ниже нуля.
          Продержитесь с положительным балансом отведенное время
