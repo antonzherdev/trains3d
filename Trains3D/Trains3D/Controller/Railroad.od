@@ -354,5 +354,13 @@ class RailroadBuilder(weak railroad : Railroad) extends Updatable {
         _buildingRails = _buildingRails.tail
         changed
     }
+
+    static val buildModeNotification = NotificationHandle<void>("buildModeNotification")
+    private var _buildMode : bool = false
+    def buildMode = _buildMode
+    def set(buildMode : bool) {
+        _buildMode = buildMode
+        buildModeNotification.post
+    }
 }
 

@@ -139,6 +139,10 @@ static ODClassType* _EGColorSource_type;
     return EGSimpleShaderSystem.instance;
 }
 
+- (EGColorSource*)setColor:(GEVec4)color {
+    return [EGColorSource colorSourceWithColor:color texture:_texture blendMode:_blendMode alphaTestLevel:_alphaTestLevel];
+}
+
 - (ODClassType*)type {
     return [EGColorSource type];
 }

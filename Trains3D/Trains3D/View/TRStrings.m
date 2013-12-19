@@ -67,7 +67,7 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)callRepairer {
-    return @"Call\n"
+    return @"Call the\n"
         "service train";
 }
 
@@ -225,7 +225,7 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)helpDamage {
-    return @"Call the special train using one of the buttons to fix the damage.\n"
+    return @"Call the service train using one of the buttons to fix the damage.\n"
         "It is better to call the train from the closest city to the damage.";
 }
 
@@ -250,7 +250,7 @@ static ODClassType* _TREnStrings_type;
 
 - (NSString*)topScore:(EGLocalPlayerScore*)score {
     if(score.rank == 1) {
-        return @"The best ever!";
+        return @"The 1-st ever!";
     } else {
         if(score.rank == 2) {
             return @"The 2-nd ever!";
@@ -287,9 +287,9 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)linesAdvice {
-    return @"You can connect cities with more than one line.\n"
-        "Then two train coming from the opposite direction\n"
-        "will be able to arrive in the corresponding city.";
+    return @"You can connect cities using more than one line.\n"
+        "Thus two trains coming from the opposite direction\n"
+        "would not collide with each other.";
 }
 
 - (NSString*)formatCost:(NSInteger)cost {
@@ -679,7 +679,9 @@ static ODClassType* _TRStr_type;
     [super initialize];
     _TRStr_type = [ODClassType classTypeWithCls:[TRStr class]];
     _TRStr_locales = [[(@[tuple(@"en", [TREnStrings enStrings]), tuple(@"ru", [TRRuStrings ruStrings])]) chain] toMap];
-    _TRStr_Loc = [TREnStrings enStrings];
+    _TRStr_Loc = [[_TRStr_locales optKey:[OSLocale currentLanguageId]] getOrElseF:^id<TRStrings>() {
+        return [TREnStrings enStrings];
+    }];
 }
 
 - (ODClassType*)type {

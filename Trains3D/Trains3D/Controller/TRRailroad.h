@@ -183,7 +183,10 @@
 - (BOOL)canAddRail:(TRRail*)rail;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)undo;
+- (BOOL)buildMode;
+- (void)setBuildMode:(BOOL)buildMode;
 + (CNNotificationHandle*)changedNotification;
++ (CNNotificationHandle*)buildModeNotification;
 + (ODClassType*)type;
 @end
 

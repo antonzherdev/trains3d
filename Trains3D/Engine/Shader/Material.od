@@ -25,6 +25,8 @@ class ColorSource(color : vec4, texture : Texture?, blendMode : BlendMode, alpha
     static def apply(color : vec4) : ColorSource = ColorSource(color, nil, BlendMode.first, -1)
     static def apply(texture : Texture) : ColorSource = ColorSource(vec4(1, 1, 1, 1), texture, BlendMode.second, -1)
     def shaderSystem : ShaderSystem<self> = SimpleShaderSystem.instance
+
+    def set(color : vec4) = ColorSource(color, texture, blendMode, alphaTestLevel)
 }
 
 enum BlendMode(blend : (string, string) -> string) {

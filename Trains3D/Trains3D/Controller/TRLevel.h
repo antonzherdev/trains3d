@@ -58,6 +58,7 @@
 @interface TRLevel : NSObject<EGController>
 @property (nonatomic, readonly) NSUInteger number;
 @property (nonatomic, readonly) TRLevelRules* rules;
+@property (nonatomic) CGFloat scale;
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRNotifications* notifications;
 @property (nonatomic, readonly) TRScore* score;

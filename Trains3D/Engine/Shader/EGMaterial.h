@@ -47,6 +47,7 @@
 + (EGColorSource*)applyColor:(GEVec4)color;
 + (EGColorSource*)applyTexture:(EGTexture*)texture;
 - (EGShaderSystem*)shaderSystem;
+- (EGColorSource*)setColor:(GEVec4)color;
 + (ODClassType*)type;
 @end
 

@@ -47,6 +47,7 @@
 		6F3DF0589A40375A8DFB265A /* TestCase.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF9689EE4E4062446F71A /* TestCase.od */; };
 		6F3DF05C592837EB7B32BC8A /* btRaycastVehicle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF69DA67D9AC048076B83 /* btRaycastVehicle.cpp */; };
 		6F3DF05C65CB69A495DF74B0 /* btBoxShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9F92E4F73C1C456688B /* btBoxShape.cpp */; };
+		6F3DF05EEB024BA65A2604B4 /* BuildMode.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF22AF6F60D387DE6D492 /* BuildMode.wav */; };
 		6F3DF05FF28FB02EA6EE2B6A /* btWheelInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF6DD991279189C0A1F9 /* btWheelInfo.cpp */; };
 		6F3DF06416B67EFEF2666202 /* SortBuilder.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFEDD74BA65C8006A3268 /* SortBuilder.od */; };
 		6F3DF067A23BBCC41D4A68CF /* TreeSet.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFA5F61C3E623C3026F49 /* TreeSet.od */; };
@@ -198,6 +199,7 @@
 		6F3DF2977A38FE7940E5CE35 /* Level.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF124FA3EDCF67ED63F3B /* Level.od */; };
 		6F3DF29F332C2D2D1F3D0884 /* btContactProcessing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA72FA20162EABD753EE /* btContactProcessing.cpp */; };
 		6F3DF2A3126CA88F5A2F4D49 /* btDefaultCollisionConfiguration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB83A23FDD26AC96EE90 /* btDefaultCollisionConfiguration.cpp */; };
+		6F3DF2A36D8161B00E87442D /* BuildMode.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF22AF6F60D387DE6D492 /* BuildMode.wav */; };
 		6F3DF2A409115C42355E8143 /* Director.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFACF90AEDEC71A116F83 /* Director.od */; };
 		6F3DF2A63C083839576D6827 /* EGSurface.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4D13635CE857958F907 /* EGSurface.m */; };
 		6F3DF2A9C1229782DDD17CC6 /* btHingeConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9B120E08D63E05F9A69 /* btHingeConstraint.cpp */; };
@@ -1458,6 +1460,7 @@
 		6F3DF224D7CEE332AD4861C9 /* CNMulLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNMulLink.h; sourceTree = "<group>"; };
 		6F3DF2284BE07CDEC7D16786 /* btManifoldResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btManifoldResult.h; sourceTree = "<group>"; };
 		6F3DF2284D15E25DD88DF99F /* btMaterial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btMaterial.h; sourceTree = "<group>"; };
+		6F3DF22AF6F60D387DE6D492 /* BuildMode.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = BuildMode.wav; sourceTree = "<group>"; };
 		6F3DF230674EDAD926358B6E /* chain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = chain.h; sourceTree = "<group>"; };
 		6F3DF2346C0079EBFA7BF96F /* uk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = uk; path = Localizable.strings; sourceTree = "<group>"; };
 		6F3DF2355B368C373F5F7381 /* cs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = cs; path = Localizable.strings; sourceTree = "<group>"; };
@@ -4469,6 +4472,7 @@
 				6F3DF99E045D8FD627DA2D5B /* Parrot.mp3 */,
 				6F3DF6B7BAAAE9E9372A65FC /* Parrots2.mp3 */,
 				6F3DF9D9350FC24C87E20EFF /* Tropical.mp3 */,
+				6F3DF22AF6F60D387DE6D492 /* BuildMode.wav */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -5183,6 +5187,7 @@
 				6F3DF7CCE171B6A9FCB76422 /* lucida_grande_14.png in Resources */,
 				6F3DF926B21DD020D944916A /* lucida_grande_28.fnt in Resources */,
 				6F3DF591E7E8D7D34C3FE29E /* lucida_grande_28.png in Resources */,
+				6F3DF2A36D8161B00E87442D /* BuildMode.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5354,6 +5359,7 @@
 				6F3DFFC84831CCA1EFDBD304 /* lucida_grande_14.png in Resources */,
 				6F3DF4574087DA262ED47CBC /* lucida_grande_28.fnt in Resources */,
 				6F3DFBA10ECA7E4B85FF2FEC /* lucida_grande_28.png in Resources */,
+				6F3DF05EEB024BA65A2604B4 /* BuildMode.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

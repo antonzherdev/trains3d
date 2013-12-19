@@ -59,6 +59,10 @@ static ODClassType* _EGTexture_type;
     return [self uvRect:geRectApplyXYWidthHeight(x, y, width, height)];
 }
 
+- (EGTextureRegion*)regionX:(float)x y:(float)y width:(CGFloat)width height:(float)height {
+    return [EGTextureRegion textureRegionWithTexture:self uv:geRectApplyXYWidthHeight(x, y, ((float)(width)), height)];
+}
+
 - (ODClassType*)type {
     return [EGTexture type];
 }

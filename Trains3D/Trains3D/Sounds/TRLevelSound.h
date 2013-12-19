@@ -8,6 +8,7 @@
 @class TRRailroadBuilderProcessor;
 @class TRSwitch;
 @class TRRailLight;
+@class TRRailroadBuilder;
 
 @class TRLevelSound;
 @class TRCollisionSound;

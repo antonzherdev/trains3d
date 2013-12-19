@@ -35,6 +35,9 @@
 @property (nonatomic, readonly) CGFloat maxScale;
 @property (nonatomic, readonly) NSUInteger panFingers;
 @property (nonatomic, readonly) NSUInteger tapFingers;
+@property (nonatomic) BOOL panEnabled;
+@property (nonatomic) BOOL tapEnabled;
+@property (nonatomic) BOOL pinchEnabled;
 
 + (id)cameraIsoMoveWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale panFingers:(NSUInteger)panFingers tapFingers:(NSUInteger)tapFingers;
 - (id)initWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale panFingers:(NSUInteger)panFingers tapFingers:(NSUInteger)tapFingers;

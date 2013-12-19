@@ -13,7 +13,10 @@
 @class EGContext;
 @class EGCamera2D;
 @class EGInterfaceIdiom;
+@class EGTexture;
 @class EGBlendFunction;
+@class TRRailroad;
+@class TRRailroadBuilder;
 @class TRScore;
 @class TRStr;
 @protocol TRStrings;

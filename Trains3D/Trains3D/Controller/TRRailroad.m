@@ -934,8 +934,10 @@ static ODClassType* _TRRailBuilding_type;
     __weak TRRailroad* _railroad;
     id __rail;
     CNList* __buildingRails;
+    BOOL __buildMode;
 }
 static CNNotificationHandle* _TRRailroadBuilder_changedNotification;
+static CNNotificationHandle* _TRRailroadBuilder_buildModeNotification;
 static ODClassType* _TRRailroadBuilder_type;
 @synthesize railroad = _railroad;
 
@@ -949,6 +951,7 @@ static ODClassType* _TRRailroadBuilder_type;
         _railroad = railroad;
         __rail = [CNOption none];
         __buildingRails = [CNList apply];
+        __buildMode = NO;
     }
     
     return self;
@@ -958,6 +961,7 @@ static ODClassType* _TRRailroadBuilder_type;
     [super initialize];
     _TRRailroadBuilder_type = [ODClassType classTypeWithCls:[TRRailroadBuilder class]];
     _TRRailroadBuilder_changedNotification = [CNNotificationHandle notificationHandleWithName:@"Railroad builder changed"];
+    _TRRailroadBuilder_buildModeNotification = [CNNotificationHandle notificationHandleWithName:@"buildModeNotification"];
 }
 
 - (id)rail {
@@ -1057,12 +1061,25 @@ static ODClassType* _TRRailroadBuilder_type;
     [self changed];
 }
 
+- (BOOL)buildMode {
+    return __buildMode;
+}
+
+- (void)setBuildMode:(BOOL)buildMode {
+    __buildMode = buildMode;
+    [_TRRailroadBuilder_buildModeNotification post];
+}
+
 - (ODClassType*)type {
     return [TRRailroadBuilder type];
 }
 
 + (CNNotificationHandle*)changedNotification {
     return _TRRailroadBuilder_changedNotification;
+}
+
++ (CNNotificationHandle*)buildModeNotification {
+    return _TRRailroadBuilder_buildModeNotification;
 }
 
 + (ODClassType*)type {

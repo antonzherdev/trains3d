@@ -9,6 +9,8 @@
 #import "EGCamera2D.h"
 #import "GL.h"
 #import "EGPlatform.h"
+#import "EGTexture.h"
+#import "TRRailroad.h"
 #import "TRScore.h"
 #import "TRStrings.h"
 #import "TRNotification.h"
@@ -17,10 +19,12 @@
     TRLevel* _level;
     NSString* _name;
     EGSprite* _pauseSprite;
+    EGSprite* _hammerSprite;
     EGSprite* _backSprite;
     GEVec4(^_notificationProgress)(float);
     NSInteger _width;
     id<EGCamera> _camera;
+    GEVec3 _notificationTextPos;
     EGText* _scoreText;
     EGText* _notificationText;
     id _levelText;
@@ -45,6 +49,7 @@ static ODClassType* _TRLevelMenuView_type;
         _level = level;
         _name = @"LevelMenu";
         _pauseSprite = [EGSprite sprite];
+        _hammerSprite = [EGSprite sprite];
         _backSprite = [EGSprite applyMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.7)]];
         _notificationProgress = ^id() {
             float(^__l)(float) = [EGProgress gapT1:0.7 t2:1.0];
@@ -56,6 +61,7 @@ static ODClassType* _TRLevelMenuView_type;
             };
         }();
         _width = 0;
+        _notificationTextPos = GEVec3Make(0.0, 0.0, 0.0);
         _scoreText = [EGText applyFont:nil text:@"" position:GEVec3Make(10.0, 8.0, 0.0) alignment:egTextAlignmentBaselineX(-1.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
         _notificationText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentBaselineX(0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
         _levelText = [CNOption applyValue:[EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentBaselineX(0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)]];
@@ -81,21 +87,34 @@ static ODClassType* _TRLevelMenuView_type;
     _width = ((NSInteger)(viewport.size.x / EGGlobal.context.scale));
     [_scoreText setFont:font];
     [_notificationText setFont:notificationFont];
-    [_notificationText setPosition:GEVec3Make(((float)(_width / 2)), 10.0, 0.0)];
+    _notificationTextPos = GEVec3Make(((float)(_width / 2)), 10.0, 0.0);
     [_levelText forEach:^void(EGText* _) {
         [((EGText*)(_)) setFont:font];
         [((EGText*)(_)) setPosition:GEVec3Make(((float)(_width / 2)), 10.0, 0.0)];
     }];
     [_backSprite setRect:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(_width)), 32.0)];
     [_pauseSprite setPosition:GEVec2Make(((float)(_width - 32)), 0.0)];
-    [_pauseSprite setMaterial:[EGColorSource applyTexture:[EGGlobal scaledTextureForName:@"Pause" format:@"png" magFilter:GL_NEAREST minFilter:GL_NEAREST]]];
+    EGTexture* t = [EGGlobal scaledTextureForName:@"Pause" format:@"png" magFilter:GL_NEAREST minFilter:GL_NEAREST];
+    [_pauseSprite setMaterial:[EGColorSource applyTexture:[t regionX:0.0 y:0.0 width:0.5 height:0.5]]];
     [_pauseSprite adjustSize];
+    [_hammerSprite setPosition:GEVec2Make(0.0, 0.0)];
+    [_hammerSprite setMaterial:[EGColorSource applyColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) texture:[t regionX:0.5 y:0.0 width:0.5 height:0.5]]];
+    [_hammerSprite adjustSize];
 }
 
 - (void)draw {
     [EGGlobal.context.depthTest disabledF:^void() {
         [EGBlendFunction.standard applyDraw:^void() {
             [_backSprite draw];
+            if(_level.scale > 1.0) {
+                [_hammerSprite setMaterial:[[_hammerSprite material] setColor:(([_level.railroad.builder buildMode]) ? GEVec4Make(0.45, 0.9, 0.6, 1.0) : GEVec4Make(0.223, 0.223, 0.223, 1.0))]];
+                [_hammerSprite draw];
+                [_scoreText setPosition:GEVec3Make(32.0, 8.0, 0.0)];
+                [_notificationText setPosition:geVec3AddVec3(_notificationTextPos, GEVec3Make(32.0, 0.0, 0.0))];
+            } else {
+                [_scoreText setPosition:GEVec3Make(10.0, 8.0, 0.0)];
+                [_notificationText setPosition:_notificationTextPos];
+            }
             [_scoreText setText:[self formatScore:[_level.score score]]];
             [_scoreText draw];
             [_pauseSprite draw];
@@ -139,6 +158,8 @@ static ODClassType* _TRLevelMenuView_type;
         if([_pauseSprite containsVec2:p]) {
             if([[EGDirector current] isPaused]) [[EGDirector current] resume];
             else [[EGDirector current] pause];
+        } else {
+            if(_level.scale > 1.0 && [_hammerSprite containsVec2:p]) [_level.railroad.builder setBuildMode:!([_level.railroad.builder buildMode])];
         }
         return NO;
     }]];

@@ -104,6 +104,7 @@ static ODClassType* _TRLevelRules_type;
 @implementation TRLevel{
     NSUInteger _number;
     TRLevelRules* _rules;
+    CGFloat _scale;
     EGMapSso* _map;
     TRNotifications* _notifications;
     TRScore* _score;
@@ -139,6 +140,7 @@ static CNNotificationHandle* _TRLevel_winNotification;
 static ODClassType* _TRLevel_type;
 @synthesize number = _number;
 @synthesize rules = _rules;
+@synthesize scale = _scale;
 @synthesize map = _map;
 @synthesize notifications = _notifications;
 @synthesize score = _score;
@@ -159,6 +161,7 @@ static ODClassType* _TRLevel_type;
     if(self) {
         _number = number;
         _rules = rules;
+        _scale = 1.0;
         _map = [EGMapSso mapSsoWithSize:_rules.mapSize];
         _notifications = [TRNotifications notifications];
         _score = [TRScore scoreWithRules:_rules.scoreRules notifications:_notifications];

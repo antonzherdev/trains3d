@@ -92,12 +92,17 @@ class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFin
         _camera = CameraIso(_camera.tilesOnScreen, yReserve, _camera.viewportRatio, _camera.center)
     }
 
+    var panEnabled = true
+    var tapEnabled = true
+    var pinchEnabled = true
     def recognizers : Recognizers = [Recognizer<PinchParameter>(Pinch(),
         began = event -> {
-            _startScale = _scale
-            _pinchLocation = event.location
-            _startCenter = _camera.center
-            true
+            if(pinchEnabled) {
+                _startScale = _scale
+                _pinchLocation = event.location
+                _startCenter = _camera.center
+                true
+            } else false
         },
         changed = event -> {
             val s = event.param.scale
@@ -114,7 +119,7 @@ class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFin
     Recognizer<Void>(Pan(panFingers),
         began = event -> {
             _startPan = event.location
-            _scale > 1.0
+            panEnabled && _scale > 1.0
         },
         changed = event -> {
             set(center = _camera.center + _startPan - event.location)
@@ -124,15 +129,17 @@ class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFin
     ),
     Recognizer<Void>(Tap(tapFingers, 2),
         on = event -> {
-            if(_scale != maxScale) {
-                val loc = event.location
-                set(scale = maxScale)
-                set(center = loc)
-            } else {
-                set(scale = 1.0)
-                set(center = _currentBase.naturalCenter)
-            }
-            true
+            if(tapEnabled) {
+                if(_scale != maxScale) {
+                    val loc = event.location
+                    set(scale = maxScale)
+                    set(center = loc)
+                } else {
+                    set(scale = 1.0)
+                    set(center = _currentBase.naturalCenter)
+                }
+                true
+            } else false
         })
     ]
 

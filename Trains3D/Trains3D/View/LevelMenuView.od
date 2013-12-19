@@ -7,6 +7,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
     val name = "LevelMenu"
 
     private var pauseSprite = Sprite()
+    private var hammerSprite = Sprite()
     private val backSprite = Sprite(vec4(1, 1, 1, 0.7))
 
     val notificationProgress = gap(0.7, 1) >> vec4(0, 0, 0, 1 - _)
@@ -22,7 +23,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
 
         scoreText.font = font
         notificationText.font = notificationFont
-        notificationText.position = vec3(width/2, 10, 0)
+        notificationTextPos = vec3(width/2, 10, 0)
         levelText.for{ _ ->
             _.font = font
             _.position = vec3(width/2, 10, 0)
@@ -31,9 +32,15 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         backSprite.rect = Rect(0, 0, width, 32)
 
         pauseSprite.position = vec2(width - 32, 0)
-        pauseSprite.material = ColorSource(scaledTextureFor("Pause", "png", GL_NEAREST, GL_NEAREST))
+        val t = scaledTextureFor("Pause", "png", GL_NEAREST, GL_NEAREST)
+        pauseSprite.material = ColorSource(t.region(0, 0, 0.5, 0.5))
         pauseSprite.adjustSize
+
+        hammerSprite.position = vec2(0, 0)
+        hammerSprite.material = ColorSource(vec4(0.1, 0.1, 0.1, 1), t.region(0.5, 0, 0.5, 0.5))
+        hammerSprite.adjustSize
     }
+    private var notificationTextPos = vec3(0, 0, 0)
     private val scoreText = Text(nil, "", vec3(10, 8, 0), TextAlignment.baseline(-1), vec4(0, 0, 0, 1))
     private val notificationText = Text(nil, "", vec3(0, 0, 0), TextAlignment.baseline(0), vec4(0, 0, 0, 1))
     var levelText : Text? = Text(nil, "", vec3(0, 0, 0), TextAlignment.baseline(0), vec4(0, 0, 0, 1))
@@ -42,6 +49,18 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         context.depthTest.disabled { BlendFunction.standard {
             backSprite.draw
 
+            if(level.scale > 1.0) {
+                hammerSprite.material = hammerSprite.material.set(color =
+                    if(level.railroad.builder.buildMode) vec4(0.45, 0.9, 0.6, 1)
+                    else vec4(0.223,  0.223, 0.223, 1)
+                )
+                hammerSprite.draw
+                scoreText.position = vec3(32, 8, 0)
+                notificationText.position = notificationTextPos + vec3(32, 0, 0)
+            } else {
+                scoreText.position = vec3(10, 8, 0)
+                notificationText.position = notificationTextPos
+            }
             scoreText.text = format(level.score.score)
             scoreText.draw
 
@@ -82,6 +101,8 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         val p = event.location
         if(pauseSprite.contains(p)) {
             if(Director.current.isPaused) Director.current.resume else Director.current.pause
+        } else if(level.scale > 1.0 && hammerSprite.contains(p)) {
+            level.railroad.builder.buildMode = !level.railroad.builder.buildMode
         }
         false
     }

@@ -9,8 +9,9 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     private val callRepairerView : CallRepairerView
     private val precipitationView : PrecipitationView?
 
-    private val obs1 = CameraIsoMove.cameraChangedNotification.observe{_ ->
+    private val obs1 = CameraIsoMove.cameraChangedNotification.observe{move ->
         reshapeWith(context.viewport)
+        level.scale = move.scale
         Director.reshapeNotification.post(Director.current.viewSize)
     }
 
@@ -66,6 +67,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     def camera : Camera = move.camera
 
     def updateWith(delta : float) {
+        move.panEnabled = !level.railroad.builder.buildMode
         railroadView.updateWith(delta)
         level.trains.for(trainView.updateWith(delta, _))
         level.dyingTrains.for(trainView.updateWith(delta, _))

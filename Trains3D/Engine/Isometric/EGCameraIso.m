@@ -134,6 +134,9 @@ static ODClassType* _EGCameraIso_type;
     CGFloat __startScale;
     GEVec2 __pinchLocation;
     GEVec2 __startCenter;
+    BOOL _panEnabled;
+    BOOL _tapEnabled;
+    BOOL _pinchEnabled;
 }
 static CNNotificationHandle* _EGCameraIsoMove_cameraChangedNotification;
 static ODClassType* _EGCameraIsoMove_type;
@@ -142,6 +145,9 @@ static ODClassType* _EGCameraIsoMove_type;
 @synthesize maxScale = _maxScale;
 @synthesize panFingers = _panFingers;
 @synthesize tapFingers = _tapFingers;
+@synthesize panEnabled = _panEnabled;
+@synthesize tapEnabled = _tapEnabled;
+@synthesize pinchEnabled = _pinchEnabled;
 
 + (id)cameraIsoMoveWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale panFingers:(NSUInteger)panFingers tapFingers:(NSUInteger)tapFingers {
     return [[EGCameraIsoMove alloc] initWithBase:base misScale:misScale maxScale:maxScale panFingers:panFingers tapFingers:tapFingers];
@@ -159,6 +165,9 @@ static ODClassType* _EGCameraIsoMove_type;
         __currentBase = _base;
         __camera = _base;
         __startScale = 1.0;
+        _panEnabled = YES;
+        _tapEnabled = YES;
+        _pinchEnabled = YES;
     }
     
     return self;
@@ -231,10 +240,14 @@ static ODClassType* _EGCameraIsoMove_type;
 
 - (EGRecognizers*)recognizers {
     return [EGRecognizers recognizersWithItems:(@[[EGRecognizer applyTp:[EGPinch pinch] began:^BOOL(id<EGEvent> event) {
-    __startScale = __scale;
-    __pinchLocation = [event location];
-    __startCenter = __camera.center;
-    return YES;
+    if(_pinchEnabled) {
+        __startScale = __scale;
+        __pinchLocation = [event location];
+        __startCenter = __camera.center;
+        return YES;
+    } else {
+        return NO;
+    }
 } changed:^void(id<EGEvent> event) {
     CGFloat s = ((EGPinchParameter*)([event param])).scale;
     [self setScale:__startScale * s];
@@ -242,20 +255,24 @@ static ODClassType* _EGCameraIsoMove_type;
 } ended:^void(id<EGEvent> event) {
 }], [EGRecognizer applyTp:[EGPan panWithFingers:_panFingers] began:^BOOL(id<EGEvent> event) {
     __startPan = [event location];
-    return __scale > 1.0;
+    return _panEnabled && __scale > 1.0;
 } changed:^void(id<EGEvent> event) {
     [self setCenter:geVec2SubVec2(geVec2AddVec2(__camera.center, __startPan), [event location])];
 } ended:^void(id<EGEvent> event) {
 }], [EGRecognizer applyTp:[EGTap tapWithFingers:_tapFingers taps:2] on:^BOOL(id<EGEvent> event) {
-    if(!(eqf(__scale, _maxScale))) {
-        GEVec2 loc = [event location];
-        [self setScale:_maxScale];
-        [self setCenter:loc];
+    if(_tapEnabled) {
+        if(!(eqf(__scale, _maxScale))) {
+            GEVec2 loc = [event location];
+            [self setScale:_maxScale];
+            [self setCenter:loc];
+        } else {
+            [self setScale:1.0];
+            [self setCenter:[__currentBase naturalCenter]];
+        }
+        return YES;
     } else {
-        [self setScale:1.0];
-        [self setCenter:[__currentBase naturalCenter]];
+        return NO;
     }
-    return YES;
 }]])];
 }
 

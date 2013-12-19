@@ -20,6 +20,7 @@
 - (GERect)uv;
 - (GERect)uvRect:(GERect)rect;
 - (GERect)uvX:(float)x y:(float)y width:(float)width height:(float)height;
+- (EGTextureRegion*)regionX:(float)x y:(float)y width:(CGFloat)width height:(float)height;
 + (ODClassType*)type;
 @end
 
