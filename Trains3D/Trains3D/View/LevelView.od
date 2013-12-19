@@ -62,7 +62,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     }
 
     private var move = CameraIsoMove(CameraIso(level.map.size, yReserve = 0.1,
-        viewportRatio = 2), 1.0, 2.0, 2, 2)
+        viewportRatio = 2), 1.0, 2.0, 1, 2)
     def camera : Camera = move.camera
 
     def updateWith(delta : float) {

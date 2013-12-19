@@ -242,7 +242,7 @@ static ODClassType* _EGCameraIsoMove_type;
 } ended:^void(id<EGEvent> event) {
 }], [EGRecognizer applyTp:[EGPan panWithFingers:_panFingers] began:^BOOL(id<EGEvent> event) {
     __startPan = [event location];
-    return YES;
+    return __scale > 1.0;
 } changed:^void(id<EGEvent> event) {
     [self setCenter:geVec2SubVec2(geVec2AddVec2(__camera.center, __startPan), [event location])];
 } ended:^void(id<EGEvent> event) {

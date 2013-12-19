@@ -114,7 +114,7 @@ class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFin
     Recognizer<Void>(Pan(panFingers),
         began = event -> {
             _startPan = event.location
-            true
+            _scale > 1.0
         },
         changed = event -> {
             set(center = _camera.center + _startPan - event.location)
