@@ -51,7 +51,7 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
             id railOpt = [[[[[[[[[self possibleRailsAroundTile:tile] map:^CNTuple*(TRRail* rail) {
                 return tuple(rail, numf([self distanceBetweenRail:rail paintLine:nl]));
             }] filter:^BOOL(CNTuple* _) {
-                return unumf(((CNTuple*)(_)).b) < (([_fixedStart isDefined]) ? 0.5 : 0.6);
+                return unumf(((CNTuple*)(_)).b) < (([_fixedStart isDefined]) ? 0.8 : 0.6);
             }] sortBy] ascBy:^id(CNTuple* _) {
                 return ((CNTuple*)(_)).b;
             }] endSort] topNumbers:4] filter:^BOOL(CNTuple* _) {

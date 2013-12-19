@@ -39,7 +39,7 @@ class CameraIso(tilesOnScreen : vec2, yReserve : float4, viewportRatio : float, 
 }
 
 
-class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFingers : float) extends InputProcessor {
+class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFingers : uint, tapFingers : uint) extends InputProcessor {
     private var _scale : float = 1.0
     private var _currentBase : CameraIso = base
     private var _camera : CameraIso = base
@@ -58,7 +58,18 @@ class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFin
 
     def center : vec2 = _camera.center
     def set(center : vec2) {
-        var c = if(_scale <= 1) _currentBase.naturalCenter else centerBounds.closestPointFor(vec2 = center)
+        var c = if(_scale <= 1) _currentBase.naturalCenter else {
+            val centerP = _currentBase.matrixModel.wcp.mul(vec4(center, 0, 1)).xy
+            val cp = centerBounds.closestPointFor(vec2 = centerP)
+            if(cp == centerP) center
+            else {
+                val mat4 = _currentBase.matrixModel.wcp.inverse
+                val p0 = mat4.mul(vec4 = vec4(cp.x, cp.y, -1, 1))
+                val p1 = mat4.mul(vec4 = vec4(cp.x, cp.y, 1, 1))
+                val line = Line3(p0.xyz, p1.xyz - p0.xyz)
+                line.r(plane = Plane(vec3(0, 0, 0), vec3(0, 0, 1))).xy
+            }
+        }
         if(c != _camera.center) {
             _camera = CameraIso(camera.tilesOnScreen, camera.yReserve, camera.viewportRatio, c)
             cameraChangedNotification.post(self)
@@ -100,7 +111,7 @@ class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFin
         ended = event -> {
         }
     ),
-    Recognizer<PinchParameter>(Pan(panFingers),
+    Recognizer<Void>(Pan(panFingers),
         began = event -> {
             _startPan = event.location
             true
@@ -110,19 +121,23 @@ class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFin
         },
         ended = event -> {
         }
-    )
+    ),
+    Recognizer<Void>(Tap(tapFingers, 2),
+        on = event -> {
+            if(_scale != maxScale) {
+                val loc = event.location
+                set(scale = maxScale)
+                set(center = loc)
+            } else {
+                set(scale = 1.0)
+                set(center = _currentBase.naturalCenter)
+            }
+            true
+        })
     ]
 
-    def centerBounds : Quad = {
-        val o = base.naturalCenter
-        if(_scale < 1) Rect(o, vec2(0, 0)).stripQuad
-        else {
-            val size = base.tilesOnScreen - base.tilesOnScreen/_scale
-            val s2 = size/2
-            val rect = Rect(o - size/2, size)
-            Quad(rect.p + vec2(-s2.x, s2.y), rect.ph + vec2(s2.x, s2.y),
-                rect.phw + vec2(s2.x, -s2.y),
-                rect.pw + vec2(-s2.x, -s2.y))
-        }
+    private def centerBounds : Rect = {
+        val sizeP = vec2(2 - 2/_scale, (2 - 2/_scale)*_currentBase.viewportRatio)
+        Rect(sizeP/-2, sizeP)
     }
 }

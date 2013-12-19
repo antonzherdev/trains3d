@@ -34,6 +34,8 @@ static inline NSUInteger GEVec2Hash(GEVec2 self) {
 }
 NSString* GEVec2Description(GEVec2 self);
 GEVec2 geVec2ApplyVec2i(GEVec2i vec2i);
+GEVec2 geVec2ApplyF(CGFloat f);
+GEVec2 geVec2ApplyF4(float f4);
 GEVec2 geVec2Min();
 GEVec2 geVec2Max();
 GEVec2 geVec2AddVec2(GEVec2 self, GEVec2 vec2);
@@ -248,6 +250,7 @@ GERect geQuadBoundingRect(GEQuad self);
 id<CNSeq> geQuadLines(GEQuad self);
 id<CNSeq> geQuadPs(GEQuad self);
 GEVec2 geQuadClosestPointForVec2(GEQuad self, GEVec2 vec2);
+GEQuad geQuadMapF(GEQuad self, GEVec2(^f)(GEVec2));
 GEQuad geQuadIdentity();
 ODPType* geQuadType();
 @interface GEQuadWrap : NSObject

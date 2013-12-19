@@ -80,14 +80,14 @@ class RecognizerType<T extends Recognizer, P>
 
 // For a computer it's mouse events. fingers 1 - left button, 2 - right
 // For a touchpad "fingers + 1" is count of fingers
-class Pan(fingers : uint) extends RecognizerType<ShortRecognizer, Void> {
+class Pan(fingers : uint) extends RecognizerType<LongRecognizer, Void> {
     static def apply : Pan = leftMouse
     static val leftMouse = Pan(1)
     static val rightMouse = Pan(2)
 }
 
 // For a computer it's click event. fingers 1 - left button, 2 - right
-class Tap(fingers : uint, taps : uint)  extends RecognizerType<LongRecognizer, Void> {
+class Tap(fingers : uint, taps : uint)  extends RecognizerType<ShortRecognizer, Void> {
     static def apply() = Tap(1, 1)
 }
 

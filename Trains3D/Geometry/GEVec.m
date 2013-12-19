@@ -11,6 +11,12 @@ NSString* GEVec2Description(GEVec2 self) {
 GEVec2 geVec2ApplyVec2i(GEVec2i vec2i) {
     return GEVec2Make(((float)(vec2i.x)), ((float)(vec2i.y)));
 }
+GEVec2 geVec2ApplyF(CGFloat f) {
+    return GEVec2Make(((float)(f)), ((float)(f)));
+}
+GEVec2 geVec2ApplyF4(float f4) {
+    return GEVec2Make(f4, f4);
+}
 GEVec2 geVec2Min() {
     return GEVec2Make(odFloat4Min(), odFloat4Min());
 }
@@ -563,6 +569,9 @@ GEVec2 geQuadClosestPointForVec2(GEQuad self, GEVec2 vec2) {
         }] endSort] head]);
         return p;
     }
+}
+GEQuad geQuadMapF(GEQuad self, GEVec2(^f)(GEVec2)) {
+    return GEQuadMake(f(self.p0), f(self.p1), f(self.p2), f(self.p3));
 }
 GEQuad geQuadIdentity() {
     static GEQuad _ret = (GEQuad){{0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}, {0.0, 1.0}};

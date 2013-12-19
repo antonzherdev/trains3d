@@ -30,7 +30,7 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
                 val railOpt =
                     possibleRailsAround(tile)
                     .map{rail -> (rail, distanceBetween(rail, nl))}
-                    .filter(_.b < if(fixedStart.isDefined) 0.5 else 0.6)
+                    .filter(_.b < if(fixedStart.isDefined) 0.8 else 0.6)
                     .sortBy.asc(_.b).endSort
                     .top(4)
                     .filter(builder.canAdd(_.a))

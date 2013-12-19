@@ -125,7 +125,8 @@ static ODClassType* _EGCameraIso_type;
     EGCameraIso* _base;
     CGFloat _misScale;
     CGFloat _maxScale;
-    CGFloat _panFingers;
+    NSUInteger _panFingers;
+    NSUInteger _tapFingers;
     CGFloat __scale;
     EGCameraIso* __currentBase;
     EGCameraIso* __camera;
@@ -140,18 +141,20 @@ static ODClassType* _EGCameraIsoMove_type;
 @synthesize misScale = _misScale;
 @synthesize maxScale = _maxScale;
 @synthesize panFingers = _panFingers;
+@synthesize tapFingers = _tapFingers;
 
-+ (id)cameraIsoMoveWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale panFingers:(CGFloat)panFingers {
-    return [[EGCameraIsoMove alloc] initWithBase:base misScale:misScale maxScale:maxScale panFingers:panFingers];
++ (id)cameraIsoMoveWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale panFingers:(NSUInteger)panFingers tapFingers:(NSUInteger)tapFingers {
+    return [[EGCameraIsoMove alloc] initWithBase:base misScale:misScale maxScale:maxScale panFingers:panFingers tapFingers:tapFingers];
 }
 
-- (id)initWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale panFingers:(CGFloat)panFingers {
+- (id)initWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale panFingers:(NSUInteger)panFingers tapFingers:(NSUInteger)tapFingers {
     self = [super init];
     if(self) {
         _base = base;
         _misScale = misScale;
         _maxScale = maxScale;
         _panFingers = panFingers;
+        _tapFingers = tapFingers;
         __scale = 1.0;
         __currentBase = _base;
         __camera = _base;
@@ -189,7 +192,19 @@ static ODClassType* _EGCameraIsoMove_type;
 }
 
 - (void)setCenter:(GEVec2)center {
-    GEVec2 c = ((__scale <= 1) ? [__currentBase naturalCenter] : geQuadClosestPointForVec2([self centerBounds], center));
+    GEVec2 c = ((__scale <= 1) ? [__currentBase naturalCenter] : ^GEVec2() {
+        GEVec2 centerP = geVec4Xy([[__currentBase.matrixModel wcp] mulVec4:geVec4ApplyVec2ZW(center, 0.0, 1.0)]);
+        GEVec2 cp = geRectClosestPointForVec2([self centerBounds], centerP);
+        if(GEVec2Eq(cp, centerP)) {
+            return center;
+        } else {
+            GEMat4* mat4 = [[__currentBase.matrixModel wcp] inverse];
+            GEVec4 p0 = [mat4 mulVec4:GEVec4Make(cp.x, cp.y, -1.0, 1.0)];
+            GEVec4 p1 = [mat4 mulVec4:GEVec4Make(cp.x, cp.y, 1.0, 1.0)];
+            GELine3 line = GELine3Make(geVec4Xyz(p0), geVec3SubVec3(geVec4Xyz(p1), geVec4Xyz(p0)));
+            return geVec3Xy(geLine3RPlane(line, GEPlaneMake(GEVec3Make(0.0, 0.0, 0.0), GEVec3Make(0.0, 0.0, 1.0))));
+        }
+    }());
     if(!(GEVec2Eq(c, __camera.center))) {
         __camera = [EGCameraIso cameraIsoWithTilesOnScreen:[self camera].tilesOnScreen yReserve:[self camera].yReserve viewportRatio:[self camera].viewportRatio center:c];
         [_EGCameraIsoMove_cameraChangedNotification postData:self];
@@ -225,25 +240,28 @@ static ODClassType* _EGCameraIsoMove_type;
     [self setScale:__startScale * s];
     [self setCenter:((s <= 1.0) ? __startCenter : ((s < 2.0) ? geVec2AddVec2(__startCenter, geVec2MulF(geVec2SubVec2(__pinchLocation, __startCenter), s - 1.0)) : __pinchLocation))];
 } ended:^void(id<EGEvent> event) {
-}], [EGRecognizer applyTp:[EGPan panWithFingers:((NSUInteger)(_panFingers))] began:^BOOL(id<EGEvent> event) {
+}], [EGRecognizer applyTp:[EGPan panWithFingers:_panFingers] began:^BOOL(id<EGEvent> event) {
     __startPan = [event location];
     return YES;
 } changed:^void(id<EGEvent> event) {
     [self setCenter:geVec2SubVec2(geVec2AddVec2(__camera.center, __startPan), [event location])];
 } ended:^void(id<EGEvent> event) {
+}], [EGRecognizer applyTp:[EGTap tapWithFingers:_tapFingers taps:2] on:^BOOL(id<EGEvent> event) {
+    if(!(eqf(__scale, _maxScale))) {
+        GEVec2 loc = [event location];
+        [self setScale:_maxScale];
+        [self setCenter:loc];
+    } else {
+        [self setScale:1.0];
+        [self setCenter:[__currentBase naturalCenter]];
+    }
+    return YES;
 }]])];
 }
 
-- (GEQuad)centerBounds {
-    GEVec2 o = [_base naturalCenter];
-    if(__scale < 1) {
-        return geRectStripQuad(GERectMake(o, GEVec2Make(0.0, 0.0)));
-    } else {
-        GEVec2 size = geVec2SubVec2(_base.tilesOnScreen, geVec2DivF(_base.tilesOnScreen, __scale));
-        GEVec2 s2 = geVec2DivI(size, 2);
-        GERect rect = GERectMake(geVec2SubVec2(o, geVec2DivI(size, 2)), size);
-        return GEQuadMake(geVec2AddVec2(rect.p, GEVec2Make(-s2.x, s2.y)), geVec2AddVec2(geRectPh(rect), GEVec2Make(s2.x, s2.y)), geVec2AddVec2(geRectPhw(rect), GEVec2Make(s2.x, -s2.y)), geVec2AddVec2(geRectPw(rect), GEVec2Make(-s2.x, -s2.y)));
-    }
+- (GERect)centerBounds {
+    GEVec2 sizeP = GEVec2Make(((float)(2 - 2 / __scale)), ((float)((2 - 2 / __scale) * __currentBase.viewportRatio)));
+    return GERectMake(geVec2DivI(sizeP, -2), sizeP);
 }
 
 - (BOOL)isProcessorActive {
@@ -270,7 +288,7 @@ static ODClassType* _EGCameraIsoMove_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGCameraIsoMove* o = ((EGCameraIsoMove*)(other));
-    return [self.base isEqual:o.base] && eqf(self.misScale, o.misScale) && eqf(self.maxScale, o.maxScale) && eqf(self.panFingers, o.panFingers);
+    return [self.base isEqual:o.base] && eqf(self.misScale, o.misScale) && eqf(self.maxScale, o.maxScale) && self.panFingers == o.panFingers && self.tapFingers == o.tapFingers;
 }
 
 - (NSUInteger)hash {
@@ -278,7 +296,8 @@ static ODClassType* _EGCameraIsoMove_type;
     hash = hash * 31 + [self.base hash];
     hash = hash * 31 + floatHash(self.misScale);
     hash = hash * 31 + floatHash(self.maxScale);
-    hash = hash * 31 + floatHash(self.panFingers);
+    hash = hash * 31 + self.panFingers;
+    hash = hash * 31 + self.tapFingers;
     return hash;
 }
 
@@ -287,7 +306,8 @@ static ODClassType* _EGCameraIsoMove_type;
     [description appendFormat:@"base=%@", self.base];
     [description appendFormat:@", misScale=%f", self.misScale];
     [description appendFormat:@", maxScale=%f", self.maxScale];
-    [description appendFormat:@", panFingers=%f", self.panFingers];
+    [description appendFormat:@", panFingers=%lu", (unsigned long)self.panFingers];
+    [description appendFormat:@", tapFingers=%lu", (unsigned long)self.tapFingers];
     [description appendString:@">"];
     return description;
 }

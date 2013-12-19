@@ -33,10 +33,11 @@
 @property (nonatomic, readonly) EGCameraIso* base;
 @property (nonatomic, readonly) CGFloat misScale;
 @property (nonatomic, readonly) CGFloat maxScale;
-@property (nonatomic, readonly) CGFloat panFingers;
+@property (nonatomic, readonly) NSUInteger panFingers;
+@property (nonatomic, readonly) NSUInteger tapFingers;
 
-+ (id)cameraIsoMoveWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale panFingers:(CGFloat)panFingers;
-- (id)initWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale panFingers:(CGFloat)panFingers;
++ (id)cameraIsoMoveWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale panFingers:(NSUInteger)panFingers tapFingers:(NSUInteger)tapFingers;
+- (id)initWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale panFingers:(NSUInteger)panFingers tapFingers:(NSUInteger)tapFingers;
 - (ODClassType*)type;
 - (EGCameraIso*)camera;
 - (CGFloat)scale;
@@ -48,7 +49,6 @@
 - (CGFloat)yReserve;
 - (void)setYReserve:(CGFloat)yReserve;
 - (EGRecognizers*)recognizers;
-- (GEQuad)centerBounds;
 + (CNNotificationHandle*)cameraChangedNotification;
 + (ODClassType*)type;
 @end
