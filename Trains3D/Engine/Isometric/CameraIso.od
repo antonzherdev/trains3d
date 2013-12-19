@@ -137,7 +137,7 @@ class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFin
     ]
 
     private def centerBounds : Rect = {
-        val sizeP = vec2(2 - 2/_scale, (2 - 2/_scale)*_currentBase.viewportRatio)
+        val sizeP = vec2(2 - 2/_scale)
         Rect(sizeP/-2, sizeP)
     }
 }

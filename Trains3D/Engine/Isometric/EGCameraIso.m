@@ -260,7 +260,7 @@ static ODClassType* _EGCameraIsoMove_type;
 }
 
 - (GERect)centerBounds {
-    GEVec2 sizeP = GEVec2Make(((float)(2 - 2 / __scale)), ((float)((2 - 2 / __scale) * __currentBase.viewportRatio)));
+    GEVec2 sizeP = geVec2ApplyF(2 - 2 / __scale);
     return GERectMake(geVec2DivI(sizeP, -2), sizeP);
 }
 
