@@ -22,6 +22,12 @@ enum RailConnector(x : int, y : int, angle : int) {
         else if(self == top) bottom
         else top
 
+    def neighbours : Pair<RailConnector> =
+        if(self == left) Pair(top, bottom)
+        else if(self == right) Pair(top, bottom)
+        else if(self == top) Pair(left, right)
+        else Pair(left, right)
+
     def next(tile : vec2i) = vec2i(tile.x + x, tile.y + y)
 
     def vec : vec2i = vec2i(x, y)

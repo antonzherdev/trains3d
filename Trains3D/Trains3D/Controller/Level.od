@@ -55,14 +55,16 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         val dir = randomCityDirectionFor(tile)
         val nextTile = dir.out.next(tile)
         if(att > 30) (tile, dir)
-        else if(map.isRight(tile)) rndCityTime(att + 1)
         else if(RailConnector.values.chain.filter(_ != dir.out.otherSideConnector).all{connector ->
             railroad.contentIn(nextTile, connector).is<Switch>
-        }) rndCityTime(att + 1)
-        else if(map.isTop(tile) && hasCityIn(tile +
-            if(dir.form == RailForm.leftRight) vec2(-1, -1)
-            else vec2(1, 1)
-        )) rndCityTime(att + 1)
+        }) {
+            rndCityTime(att + 1)
+        }
+        else if(dir.in.otherSideConnector.neighbours.exists{ n ->
+            hasCityIn(n.next(dir.in.next(tile)))
+        }) {
+            rndCityTime(att + 1)
+        }
         else (tile, dir)
     }
 

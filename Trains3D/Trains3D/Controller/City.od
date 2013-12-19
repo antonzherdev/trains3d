@@ -26,6 +26,7 @@ enum CityAngle(angle : int, form : RailForm, back : bool) {
     angle180(180, RailForm.leftRight, true)
     angle270(270, RailForm.bottomTop, false)
 
+    def in : RailConnector = if(back) form.end else form.start
     def out : RailConnector = if(back) form.start else form.end
 }
 

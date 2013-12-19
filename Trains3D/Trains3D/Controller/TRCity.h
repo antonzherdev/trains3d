@@ -40,6 +40,7 @@
 @property (nonatomic, readonly) TRRailForm* form;
 @property (nonatomic, readonly) BOOL back;
 
+- (TRRailConnector*)in;
 - (TRRailConnector*)out;
 + (TRCityAngle*)angle0;
 + (TRCityAngle*)angle90;

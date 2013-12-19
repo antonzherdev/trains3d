@@ -254,19 +254,17 @@ static ODClassType* _TRLevel_type;
     if(att > 30) {
         return tuple(wrap(GEVec2i, tile), dir);
     } else {
-        if([_map isRightTile:tile]) {
-            return [self rndCityTimeAtt:att + 1];
-        } else {
-            if([[[[TRRailConnector values] chain] filter:^BOOL(TRRailConnector* _) {
+        if([[[[TRRailConnector values] chain] filter:^BOOL(TRRailConnector* _) {
     return !(_ == [[dir out] otherSideConnector]);
 }] allConfirm:^BOOL(TRRailConnector* connector) {
     return [[_railroad contentInTile:nextTile connector:connector] isKindOfClass:[TRSwitch class]];
 }]) {
-                return [self rndCityTimeAtt:att + 1];
-            } else {
-                if([_map isTopTile:tile] && [self hasCityInTile:geVec2iApplyVec2(geVec2iAddVec2(tile, ((dir.form == TRRailForm.leftRight) ? GEVec2Make(-1.0, -1.0) : GEVec2Make(1.0, 1.0))))]) return [self rndCityTimeAtt:att + 1];
-                else return tuple(wrap(GEVec2i, tile), dir);
-            }
+            return [self rndCityTimeAtt:att + 1];
+        } else {
+            if([[[[dir in] otherSideConnector] neighbours] existsWhere:^BOOL(TRRailConnector* n) {
+    return [self hasCityInTile:[((TRRailConnector*)(n)) nextTile:[[dir in] nextTile:tile]]];
+}]) return [self rndCityTimeAtt:att + 1];
+            else return tuple(wrap(GEVec2i, tile), dir);
         }
     }
 }

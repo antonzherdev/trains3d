@@ -68,6 +68,19 @@ static NSArray* _TRRailConnector_values;
     }
 }
 
+- (CNPair*)neighbours {
+    if(self == _TRRailConnector_left) {
+        return [CNPair pairWithA:_TRRailConnector_top b:_TRRailConnector_bottom];
+    } else {
+        if(self == _TRRailConnector_right) {
+            return [CNPair pairWithA:_TRRailConnector_top b:_TRRailConnector_bottom];
+        } else {
+            if(self == _TRRailConnector_top) return [CNPair pairWithA:_TRRailConnector_left b:_TRRailConnector_right];
+            else return [CNPair pairWithA:_TRRailConnector_left b:_TRRailConnector_right];
+        }
+    }
+}
+
 - (GEVec2i)nextTile:(GEVec2i)tile {
     return GEVec2iMake(tile.x + _x, tile.y + _y);
 }

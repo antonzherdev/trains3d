@@ -39,7 +39,7 @@ class TrainsCollisionWorld(map : MapSso) {
     }.toArray
 
     private def isOutOfMap(contact : Contact) : bool =
-        map.distanceToMap(contact.a.xy).length > 0.1 && map.distanceToMap(contact.b.xy).length > 0.1
+        map.distanceToMap(contact.a.xy).length > 0.5 && map.distanceToMap(contact.b.xy).length > 0.5
 }
 
 class CarsCollision(cars : Pair<Car>, railPoint : RailPoint)

@@ -13,6 +13,7 @@
 
 + (TRRailConnector*)connectorForX:(NSInteger)x y:(NSInteger)y;
 - (TRRailConnector*)otherSideConnector;
+- (CNPair*)neighbours;
 - (GEVec2i)nextTile:(GEVec2i)tile;
 - (GEVec2i)vec;
 + (TRRailConnector*)left;
