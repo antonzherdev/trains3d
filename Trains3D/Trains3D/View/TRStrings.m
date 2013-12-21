@@ -43,7 +43,7 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"-%@: Payment for the railroad repairing", [self formatCost:cost]];
+    return [NSString stringWithFormat:@"-%@: Payment for the railroad repairs", [self formatCost:cost]];
 }
 
 - (NSString*)resumeGame {
@@ -55,11 +55,11 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)replayLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"Play the level %lu more one time", (unsigned long)level.number];
+    return [NSString stringWithFormat:@"Play level %lu again", (unsigned long)level.number];
 }
 
 - (NSString*)goToNextLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"Play the next level %lu", (unsigned long)level.number + 1];
+    return @"Play the next level";
 }
 
 - (NSString*)chooseLevel {
@@ -88,7 +88,7 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)cityBuilt {
-    return @"New city has been built";
+    return @"The new city has been built";
 }
 
 - (NSString*)tapToContinue {
@@ -137,7 +137,7 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)supportButton {
-    return @"Email to the developer";
+    return @"Email the developer";
 }
 
 - (NSString*)supportEmailText {
@@ -150,8 +150,8 @@ static ODClassType* _TREnStrings_type;
     return @"If you enjoy playing Raildale, would you mind taking\n"
         "a moment to rate it? It won’t take more than a minute.\n"
         "\n"
-        "If you faced with a problem, please, report me. I will\n"
-        "try to fix it as soon as possible.\n"
+        "If you are faced with a problem, please, report it to me.\n"
+        "I will try to fix it as soon as possible.\n"
         "\n"
         "Thanks for your support!\n"
         "Best Regards, Anton Zherdev, Developer";
@@ -178,14 +178,14 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)helpConnectTwoCities {
-    return [NSString stringWithFormat:@"Connect two cities by rails.\n"
-        "%@", ((egPlatform().touch) ? @"Simply paint rails by your finger." : @"Use a mouse or\n"
+    return [NSString stringWithFormat:@"Connect two cities by rail.\n"
+        "%@", ((egPlatform().touch) ? @"Simply paint the rails using your finger." : @"Use a mouse or\n"
         "move two fingers on a touchpad.")];
 }
 
 - (NSString*)helpRules {
-    return @"Don't allow falling of account balance lower than zero.\n"
-        "Stand assigned time with a positive balance and win a level.";
+    return @"Don't allow account balance to fall lower than zero.\n"
+        "Hang in the allotted time with a positive balance and win a level.";
 }
 
 - (NSString*)helpNewCity {
@@ -216,12 +216,12 @@ static ODClassType* _TREnStrings_type;
 
 - (NSString*)helpInZoom {
     return @"Use a finger to scroll.\n"
-        "Press the button of hammer at the top to build rails.\n"
-        "Press one more time to come back to the scroll mode.";
+        "Press the hammer button at the top to build rails.\n"
+        "Press again to come back to the scroll mode.";
 }
 
 - (NSString*)helpSporadicDamage {
-    return @"Sometimes rails could be broken in itself.";
+    return @"Sometimes rails can be broken.";
 }
 
 - (NSString*)helpDamage {
@@ -230,7 +230,7 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)helpCrazy {
-    return @"The machinist of the train is crazy.\n"
+    return @"The engineer of the train is crazy.\n"
         "He doesn't pay attention to lights or closed switches.\n"
         "Send this train to any city.";
 }
@@ -365,7 +365,7 @@ static ODClassType* _TRRuStrings_type;
 }
 
 - (NSString*)trainArrivedCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"+%@: Награда за прибывший поезд", [self formatCost:cost]];
+    return [NSString stringWithFormat:@"+%@: Доход от прибытия поезда", [self formatCost:cost]];
 }
 
 - (NSString*)trainDestroyedCost:(NSInteger)cost {

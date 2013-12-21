@@ -79,18 +79,18 @@ class EnStrings extends Strings {
     def trainArrived(cost : int) : string = "+$(format(cost)): Reward for the arrived train"
     def trainDestroyed(cost : int) : string = "-$(format(cost)): Fine for the destroyed train"
     def trainDelayedFine(cost : int) : string = "-$(format(cost)): Fine for the delayed train"
-    def damageFixedPayment(cost : int) : string = "-$(format(cost)): Payment for the railroad repairing"
+    def damageFixedPayment(cost : int) : string = "-$(format(cost)): Payment for the railroad repairs"
     def resumeGame : string = "Continue the game"
     def restart(level : Level) : string = "Restart the level $(level.number)"
-    def replay(level : Level) : string = "Play the level $(level.number) more one time"
-    def goToNext(level : Level) : string = "Play the next level $(level.number + 1)"
+    def replay(level : Level) : string = "Play level $(level.number) again"
+    def goToNext(level : Level) : string = "Play the next level"
     def chooseLevel : string = "Choose the level"
     def callRepairer : string = "Call the\nservice train"
     def undo : string = "Undo"
     def victory : string = "Victory!"
     def defeat : string = "Defeat!"
     def moneyOver : string = "Money is over"
-    def cityBuilt : string = "New city has been built"
+    def cityBuilt : string = "The new city has been built"
     def tapToContinue : string = if(egInterfaceIdiom == InterfaceIdiom.computer) "Click to contiunue" else "Tap to continue"
 
     def colorOrange : string = "orange"
@@ -104,7 +104,7 @@ class EnStrings extends Strings {
     def colorBeige : string = "beige"
     def colorYellow : string = "yellow"
 
-    def supportButton : string = "Email to the developer"
+    def supportButton : string = "Email the developer"
     def supportEmailText : string =
         "Report a problem or tell me about your ideas.
          I will definetely reply to you and try to fix problems as soon as posible.
@@ -113,8 +113,8 @@ class EnStrings extends Strings {
         "If you enjoy playing Raildale, would you mind taking
          a moment to rate it? It won’t take more than a minute.
 
-         If you faced with a problem, please, report me. I will
-         try to fix it as soon as possible.
+         If you are faced with a problem, please, report it to me.
+         I will try to fix it as soon as possible.
 
          Thanks for your support!
          Best Regards, Anton Zherdev, Developer"
@@ -125,16 +125,16 @@ class EnStrings extends Strings {
     def rateClose : string = "No, thanks"
 
     def helpConnectTwoCities : string =
-       "Connect two cities by rails.
+       "Connect two cities by rail.
        $if(egPlatform.touch)
-        Simply paint rails by your finger.
+        Simply paint the rails using your finger.
        $else
         Use a mouse or
         move two fingers on a touchpad.
        $endif"
     def helpRules : string =
-        "Don't allow falling of account balance lower than zero.
-         Stand assigned time with a positive balance and win a level."
+        "Don't allow account balance to fall lower than zero.
+         Hang in the allotted time with a positive balance and win a level."
     def helpNewCity : string =
         "Sometimes new cities appear.
          Connect them to your railway."
@@ -153,15 +153,15 @@ class EnStrings extends Strings {
         "You can change the scale using a pinch gesture."
     def helpInZoom : string =
         "Use a finger to scroll.
-         Press the button of hammer at the top to build rails.
-         Press one more time to come back to the scroll mode."
+         Press the hammer button at the top to build rails.
+         Press again to come back to the scroll mode."
     def helpSporadicDamage : string =
-        "Sometimes rails could be broken in itself."
+        "Sometimes rails can be broken."
     def helpDamage : string =
         "Call the service train using one of the buttons to fix the damage.
          It is better to call the train from the closest city to the damage."
     def helpCrazy : string =
-        "The machinist of the train is crazy.
+        "The engineer of the train is crazy.
          He doesn't pay attention to lights or closed switches.
          Send this train to any city."
 
@@ -194,7 +194,7 @@ class EnStrings extends Strings {
 class RuStrings extends Strings{
     def level(number : uint) : string = "Уровень $number"
     def railBuilt(cost : int) : string = "-$(format(cost)): Плата за постройку железной дороги"
-    def trainArrived(cost : int) : string = "+$(format(cost)): Награда за прибывший поезд"
+    def trainArrived(cost : int) : string = "+$(format(cost)): Доход от прибытия поезда"
     def trainDestroyed(cost : int) : string = "-$(format(cost)): Штраф за уничтожение поезда"
     def trainDelayedFine(cost : int) : string = "-$(format(cost)): Штраф за задерживающийся поезд"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): Плата за ремонт железной дороги"
