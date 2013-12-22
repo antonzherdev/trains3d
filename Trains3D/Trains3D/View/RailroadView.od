@@ -286,7 +286,7 @@ class LightView(railroad : Railroad) {
     }
 
     private val glows = MeshUnite(Models.lightGreenGlow, Models.lightGlowIndex,
-        _.vao(ColorSource(textureFor("LightGlow.png")), false))
+        _.vao(ColorSource(textureFor(if(egInterfaceIdiom.isPhone) "LightGlowPhone.png" else "LightGlow.png")), false))
 
     def drawGlows {
         if(!_matrixArr.isEmpty && !context.renderTarget.is<ShadowRenderTarget>) {

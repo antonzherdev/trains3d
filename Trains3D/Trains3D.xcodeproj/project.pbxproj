@@ -66,6 +66,7 @@
 		6F3DF09F8D55D3A6A463F1E0 /* lucida_grande_12.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF79F7384A2798C1A5954 /* lucida_grande_12.fnt */; };
 		6F3DF0A2F2A9A03D61F51E6D /* TRTrainSound.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF204632298A298CD37A3 /* TRTrainSound.m */; };
 		6F3DF0A43D19793483AB3877 /* func_matrix.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFC4637A9A62409EAEF35 /* func_matrix.inl */; };
+		6F3DF0A6984B655B268BE68D /* LightGlowPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF8C7BDABC097F65B99CF /* LightGlowPhone.png */; };
 		6F3DF0AA6E2838E93A20F759 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFBA18831A0CC868D0042 /* CMakeLists.txt */; };
 		6F3DF0AC115E7D036EFD313A /* CrashBack.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF051957CCF356028DFA7 /* CrashBack.wav */; };
 		6F3DF0AE8A6741509CC9CB43 /* CNPrependLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4C696CBA550F82C3489 /* CNPrependLink.m */; };
@@ -521,6 +522,7 @@
 		6F3DF6A340158BA5AD556DDF /* btGenericPoolAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDC92CF067CDBD0447BD /* btGenericPoolAllocator.cpp */; };
 		6F3DF6A92F1748C2DB7FE664 /* Car.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF12ABBBA22C0A2CCD945 /* Car.od */; };
 		6F3DF6A9E3989DD22E17B15D /* CNXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFAFE515052FAF1425911 /* CNXML.m */; };
+		6F3DF6ACC859068E6392D2AA /* LightGlowPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF8C7BDABC097F65B99CF /* LightGlowPhone.png */; };
 		6F3DF6AD5125053D15E51DAE /* CNZipLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF9A503B00E41C272272 /* CNZipLink.m */; };
 		6F3DF6AF7530519629A78DE5 /* btDbvt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF48A569A1F7747885285 /* btDbvt.cpp */; };
 		6F3DF6B0922FD43065500A26 /* btConeTwistConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF11CB277C948FCF1E426 /* btConeTwistConstraint.cpp */; };
@@ -1967,6 +1969,7 @@
 		6F3DF8C0B11253A7DE39B3B7 /* TRRailroadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRRailroadView.m; sourceTree = "<group>"; };
 		6F3DF8C1105FDF3EFEFAA522 /* LevelFactory.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = LevelFactory.od; sourceTree = "<group>"; };
 		6F3DF8C181529DD4AD60C15F /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
+		6F3DF8C7BDABC097F65B99CF /* LightGlowPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LightGlowPhone.png; sourceTree = "<group>"; };
 		6F3DF8C84130E5F56AE7050C /* TRSwitchProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRSwitchProcessor.h; sourceTree = "<group>"; };
 		6F3DF8CA39A714276227B97D /* reciprocal.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = reciprocal.hpp; sourceTree = "<group>"; };
 		6F3DF8CACF49E39946225A89 /* type_mat.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_mat.hpp; sourceTree = "<group>"; };
@@ -4037,6 +4040,7 @@
 				6F3DFBB7BCB1C3CF80057E4A /* Levels.jpg */,
 				6F3DF81DF7AE936C719685D0 /* Palm.png */,
 				6F3DFA78E97EC67C5C5CEC51 /* PalmGrass.png */,
+				6F3DF8C7BDABC097F65B99CF /* LightGlowPhone.png */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -5188,6 +5192,7 @@
 				6F3DF926B21DD020D944916A /* lucida_grande_28.fnt in Resources */,
 				6F3DF591E7E8D7D34C3FE29E /* lucida_grande_28.png in Resources */,
 				6F3DF2A36D8161B00E87442D /* BuildMode.wav in Resources */,
+				6F3DF6ACC859068E6392D2AA /* LightGlowPhone.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5360,6 +5365,7 @@
 				6F3DF4574087DA262ED47CBC /* lucida_grande_28.fnt in Resources */,
 				6F3DFBA10ECA7E4B85FF2FEC /* lucida_grande_28.png in Resources */,
 				6F3DF05EEB024BA65A2604B4 /* BuildMode.wav in Resources */,
+				6F3DF0A6984B655B268BE68D /* LightGlowPhone.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
