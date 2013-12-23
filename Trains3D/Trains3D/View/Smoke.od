@@ -10,7 +10,6 @@ class Smoke(weak train : Train, weak weather : Weather) extends EmissiveBillboar
     private val engine : Car = train.cars.head
     private val tubePos = engine.carType.engineType.get.tubePos
     private static val zSpeed = 0.1
-//    private val emitEvery = (0.005/train.speedFloat).min(0.01)
     private val emitEvery = if(train.trainType == TrainType.fast) 0.005 else 0.01
     private val lifeLength = if(train.trainType == TrainType.fast) 1 else 2
     private var emitTime = 0.0
@@ -54,7 +53,6 @@ class Smoke(weak train : Train, weak weather : Weather) extends EmissiveBillboar
     }
 }
 
-//class SmokeParticle(trainSpeed : float, weak weather : Weather) extends EmittedParticle((1.0/trainSpeed).min(2)) with BillboardParticle {
 class SmokeParticle(lifeLength : float4, weak weather : Weather) extends EmittedParticle(lifeLength) with BillboardParticle {
     var speed : vec3
     static val dragCoefficient = 0.5 // air resistance coefficient | a = -dragCoefficient * sqr(speed)
