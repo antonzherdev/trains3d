@@ -101,6 +101,8 @@ struct vec3(x : float4, y : float4, z : float4) {
 }
 
 struct vec4(x : float4, y : float4, z : float4, w : float4) {
+    static def apply(f : float) = vec4(f, f, f, f)
+    static def apply(f4 : float4) = vec4(f4, f4, f4, f4)
     static def apply(vec3 : vec3, w : float4) = vec4(vec3.x, vec3.y, vec3.z, w)
     static def apply(vec2 : vec2, z : float4, w : float4) = vec4(vec2.x, vec2.y, z, w)
     def add(vec2 : vec2) : vec4 = vec4(x + vec2.x, y + vec2.y, z, w)

@@ -17,6 +17,7 @@
 
 @class EGFont;
 @class EGText;
+@class EGTextShadow;
 @class EGFontShaderParam;
 @class EGFontShaderBuilder;
 @class EGFontShader;
@@ -83,6 +84,7 @@ ODPType* egTextAlignmentType();
 @interface EGText : NSObject
 @property (nonatomic) BOOL _changed;
 @property (nonatomic) GEVec4 color;
+@property (nonatomic) id shadow;
 
 + (id)text;
 - (id)init;
@@ -104,12 +106,24 @@ ODPType* egTextAlignmentType();
 @end
 
 
+@interface EGTextShadow : NSObject
+@property (nonatomic, readonly) GEVec4 color;
+@property (nonatomic, readonly) GEVec2 shift;
+
++ (id)textShadowWithColor:(GEVec4)color shift:(GEVec2)shift;
+- (id)initWithColor:(GEVec4)color shift:(GEVec2)shift;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
 @interface EGFontShaderParam : NSObject
 @property (nonatomic, readonly) EGTexture* texture;
 @property (nonatomic, readonly) GEVec4 color;
+@property (nonatomic, readonly) GEVec2 shift;
 
-+ (id)fontShaderParamWithTexture:(EGTexture*)texture color:(GEVec4)color;
-- (id)initWithTexture:(EGTexture*)texture color:(GEVec4)color;
++ (id)fontShaderParamWithTexture:(EGTexture*)texture color:(GEVec4)color shift:(GEVec2)shift;
+- (id)initWithTexture:(EGTexture*)texture color:(GEVec4)color shift:(GEVec2)shift;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -130,6 +144,7 @@ ODPType* egTextAlignmentType();
 @property (nonatomic, readonly) EGShaderAttribute* uvSlot;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderUniformVec4* colorUniform;
+@property (nonatomic, readonly) EGShaderUniformVec2* shiftSlot;
 
 + (id)fontShader;
 - (id)init;

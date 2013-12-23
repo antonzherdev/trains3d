@@ -2,7 +2,6 @@
 
 #import "TRLevel.h"
 #import "EGSprite.h"
-#import "EGMaterial.h"
 #import "EGProgress.h"
 #import "EGSchedule.h"
 #import "EGContext.h"
@@ -10,6 +9,7 @@
 #import "GL.h"
 #import "EGPlatform.h"
 #import "EGTexture.h"
+#import "EGMaterial.h"
 #import "TRRailroad.h"
 #import "TRScore.h"
 #import "TRStrings.h"
@@ -20,7 +20,6 @@
     NSString* _name;
     EGSprite* _pauseSprite;
     EGSprite* _hammerSprite;
-    EGSprite* _backSprite;
     GEVec4(^_notificationProgress)(float);
     NSInteger _width;
     id<EGCamera> _camera;
@@ -50,11 +49,10 @@ static ODClassType* _TRLevelMenuView_type;
         _name = @"LevelMenu";
         _pauseSprite = [EGSprite sprite];
         _hammerSprite = [EGSprite sprite];
-        _backSprite = [EGSprite applyMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.7)]];
         _notificationProgress = ^id() {
             float(^__l)(float) = [EGProgress gapT1:0.7 t2:1.0];
             GEVec4(^__r)(float) = ^GEVec4(float _) {
-                return GEVec4Make(0.0, 0.0, 0.0, 1 - _);
+                return geVec4ApplyF(0.95 - _);
             };
             return ^GEVec4(float _) {
                 return __r(__l(_));
@@ -62,9 +60,9 @@ static ODClassType* _TRLevelMenuView_type;
         }();
         _width = 0;
         _notificationTextPos = GEVec3Make(0.0, 0.0, 0.0);
-        _scoreText = [EGText applyFont:nil text:@"" position:GEVec3Make(10.0, 8.0, 0.0) alignment:egTextAlignmentBaselineX(-1.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
-        _notificationText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentBaselineX(0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
-        _levelText = [CNOption applyValue:[EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentBaselineX(0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)]];
+        _scoreText = [EGText applyFont:nil text:@"" position:GEVec3Make(10.0, 8.0, 0.0) alignment:egTextAlignmentBaselineX(-1.0) color:[self color]];
+        _notificationText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentBaselineX(0.0) color:[self color]];
+        _levelText = [CNOption applyValue:[EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentBaselineX(0.0) color:[self color]]];
         _notificationAnimation = [EGCounter apply];
         _levelAnimation = [EGFinisher finisherWithCounter:[EGCounter applyLength:5.0] finish:^void() {
             _weakSelf.levelText = [CNOption none];
@@ -85,14 +83,18 @@ static ODClassType* _TRLevelMenuView_type;
     EGFont* notificationFont = [EGGlobal fontWithName:@"lucida_grande" size:((egInterfaceIdiom() == EGInterfaceIdiom.phone) ? 14 : 16)];
     [_notificationText setFont:font];
     _width = ((NSInteger)(viewport.size.x / EGGlobal.context.scale));
+    EGTextShadow* sh = [EGTextShadow textShadowWithColor:GEVec4Make(0.05, 0.05, 0.05, 0.5) shift:GEVec2Make(1.0, -1.0)];
     [_scoreText setFont:font];
+    _scoreText.shadow = [CNOption applyValue:sh];
     [_notificationText setFont:notificationFont];
+    _notificationText.shadow = [CNOption applyValue:sh];
     _notificationTextPos = GEVec3Make(((float)(_width / 2)), 10.0, 0.0);
+    _scoreText.shadow = [CNOption applyValue:sh];
     [_levelText forEach:^void(EGText* _) {
         [((EGText*)(_)) setFont:font];
+        ((EGText*)(_)).shadow = [CNOption applyValue:sh];
         [((EGText*)(_)) setPosition:GEVec3Make(((float)(_width / 2)), 10.0, 0.0)];
     }];
-    [_backSprite setRect:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(_width)), 32.0)];
     [_pauseSprite setPosition:GEVec2Make(((float)(_width - 32)), 0.0)];
     EGTexture* t = [EGGlobal scaledTextureForName:@"Pause" format:@"png" magFilter:GL_NEAREST minFilter:GL_NEAREST];
     [_pauseSprite setMaterial:[EGColorSource applyTexture:[t regionX:0.0 y:0.0 width:0.5 height:0.5]]];
@@ -102,12 +104,15 @@ static ODClassType* _TRLevelMenuView_type;
     [_hammerSprite adjustSize];
 }
 
+- (GEVec4)color {
+    return geVec4ApplyF(0.95);
+}
+
 - (void)draw {
     [EGGlobal.context.depthTest disabledF:^void() {
-        [EGBlendFunction.standard applyDraw:^void() {
-            [_backSprite draw];
+        [EGBlendFunction.premultiplied applyDraw:^void() {
             if(_level.scale > 1.0) {
-                [_hammerSprite setMaterial:[[_hammerSprite material] setColor:(([_level.railroad.builder buildMode]) ? GEVec4Make(0.45, 0.9, 0.6, 1.0) : GEVec4Make(0.223, 0.223, 0.223, 1.0))]];
+                [_hammerSprite setMaterial:[[_hammerSprite material] setColor:(([_level.railroad.builder buildMode]) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : [self color])]];
                 [_hammerSprite draw];
                 [_scoreText setPosition:GEVec3Make(32.0, 8.0, 0.0)];
                 [_notificationText setPosition:geVec3AddVec3(_notificationTextPos, GEVec3Make(32.0, 0.0, 0.0))];

@@ -143,8 +143,6 @@ static ODClassType* _TRLevelView_type;
     [_move setViewportRatio:((CGFloat)(r))];
     if(egInterfaceIdiom() == EGInterfaceIdiom.pad) {
         if(r < 4.0 / 3 + 0.01) [_move setYReserve:0.6];
-    } else {
-        if(egInterfaceIdiom() == EGInterfaceIdiom.phone) [_move setYReserve:0.4];
     }
     EGGlobal.matrix.value = [[self camera] matrixModel];
     [_callRepairerView reshape];

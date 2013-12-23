@@ -8,9 +8,8 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
 
     private var pauseSprite = Sprite()
     private var hammerSprite = Sprite()
-    private val backSprite = Sprite(vec4(1, 1, 1, 0.7))
 
-    val notificationProgress = gap(0.7, 1) >> vec4(0, 0, 0, 1 - _)
+    val notificationProgress = gap(0.7, 1) >> vec4(0.95 - _)
 
     private var width = 0
     var camera : Camera
@@ -21,15 +20,18 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         notificationText.font = font
         width = viewport.size.x/context.scale
 
+        val sh = TextShadow(color = vec4(0.05, 0.05, 0.05, 0.5), shift = vec2(1, -1))
         scoreText.font = font
+        scoreText.shadow = sh
         notificationText.font = notificationFont
+        notificationText.shadow = sh
         notificationTextPos = vec3(width/2, 10, 0)
+        scoreText.shadow = sh
         levelText.for{ _ ->
             _.font = font
+            _.shadow = sh
             _.position = vec3(width/2, 10, 0)
         }
-
-        backSprite.rect = Rect(0, 0, width, 32)
 
         pauseSprite.position = vec2(width - 32, 0)
         val t = scaledTextureFor("Pause", "png", GL_NEAREST, GL_NEAREST)
@@ -40,19 +42,18 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         hammerSprite.material = ColorSource(vec4(0.1, 0.1, 0.1, 1), t.region(0.5, 0, 0.5, 0.5))
         hammerSprite.adjustSize
     }
+    def color : vec4 = vec4(0.95)
     private var notificationTextPos = vec3(0, 0, 0)
-    private val scoreText = Text(nil, "", vec3(10, 8, 0), TextAlignment.baseline(-1), vec4(0, 0, 0, 1))
-    private val notificationText = Text(nil, "", vec3(0, 0, 0), TextAlignment.baseline(0), vec4(0, 0, 0, 1))
-    var levelText : Text? = Text(nil, "", vec3(0, 0, 0), TextAlignment.baseline(0), vec4(0, 0, 0, 1))
+    private val scoreText = Text(nil, "", vec3(10, 8, 0), TextAlignment.baseline(-1), color)
+    private val notificationText = Text(nil, "", vec3(0, 0, 0), TextAlignment.baseline(0), color)
+    var levelText : Text? = Text(nil, "", vec3(0, 0, 0), TextAlignment.baseline(0), color)
 
     def draw {
-        context.depthTest.disabled { BlendFunction.standard {
-            backSprite.draw
-
+        context.depthTest.disabled { BlendFunction.premultiplied {
             if(level.scale > 1.0) {
                 hammerSprite.material = hammerSprite.material.set(color =
-                    if(level.railroad.builder.buildMode) vec4(0.45, 0.9, 0.6, 1)
-                    else vec4(0.223,  0.223, 0.223, 1)
+                    if(level.railroad.builder.buildMode) vec4(0.45, 0.9, 0.6, 0.95)
+                    else color
                 )
                 hammerSprite.draw
                 scoreText.position = vec3(32, 8, 0)

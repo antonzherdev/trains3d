@@ -5,7 +5,6 @@
 #import "EGFont.h"
 @class TRLevel;
 @class EGSprite;
-@class EGColorSource;
 @class EGProgress;
 @class EGCounter;
 @class EGFinisher;
@@ -14,6 +13,7 @@
 @class EGCamera2D;
 @class EGInterfaceIdiom;
 @class EGTexture;
+@class EGColorSource;
 @class EGBlendFunction;
 @class TRRailroad;
 @class TRRailroadBuilder;
@@ -38,6 +38,7 @@
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)reshapeWithViewport:(GERect)viewport;
+- (GEVec4)color;
 - (void)draw;
 - (NSString*)formatScore:(NSInteger)score;
 - (void)updateWithDelta:(CGFloat)delta;

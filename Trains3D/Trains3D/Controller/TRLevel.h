@@ -138,6 +138,7 @@
 @interface TRLevelTheme : ODEnum
 @property (nonatomic, readonly) NSString* background;
 @property (nonatomic, readonly) TRForestRules* forestRules;
+@property (nonatomic, readonly) BOOL dark;
 
 + (TRLevelTheme*)forest;
 + (TRLevelTheme*)winter;

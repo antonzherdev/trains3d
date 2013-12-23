@@ -395,6 +395,12 @@ NSString* GEVec4Description(GEVec4 self) {
     [description appendString:@">"];
     return description;
 }
+GEVec4 geVec4ApplyF(CGFloat f) {
+    return GEVec4Make(((float)(f)), ((float)(f)), ((float)(f)), ((float)(f)));
+}
+GEVec4 geVec4ApplyF4(float f4) {
+    return GEVec4Make(f4, f4, f4, f4);
+}
 GEVec4 geVec4ApplyVec3W(GEVec3 vec3, float w) {
     return GEVec4Make(vec3.x, vec3.y, vec3.z, w);
 }

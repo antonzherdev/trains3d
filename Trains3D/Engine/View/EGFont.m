@@ -258,7 +258,7 @@ static ODClassType* _EGFont_type;
 - (void)drawText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment color:(GEVec4)color {
     EGSimpleVertexArray* vao = [self vaoText:text at:at alignment:alignment];
     [EGGlobal.context.cullFace disabledF:^void() {
-        [vao drawParam:[EGFontShaderParam fontShaderParamWithTexture:_texture color:color]];
+        [vao drawParam:[EGFontShaderParam fontShaderParamWithTexture:_texture color:color shift:GEVec2Make(0.0, 0.0)]];
     }];
 }
 
@@ -310,10 +310,12 @@ static ODClassType* _EGFont_type;
     EGTextAlignment __alignment;
     EGSimpleVertexArray* __vao;
     GEVec4 _color;
+    id _shadow;
 }
 static ODClassType* _EGText_type;
 @synthesize _changed = __changed;
 @synthesize color = _color;
+@synthesize shadow = _shadow;
 
 + (id)text {
     return [[EGText alloc] init];
@@ -397,7 +399,10 @@ static ODClassType* _EGText_type;
         __changed = NO;
     }
     [EGGlobal.context.cullFace disabledF:^void() {
-        [__vao drawParam:[EGFontShaderParam fontShaderParamWithTexture:__font.texture color:_color]];
+        [_shadow forEach:^void(EGTextShadow* sh) {
+            [__vao drawParam:[EGFontShaderParam fontShaderParamWithTexture:__font.texture color:geVec4MulK(((EGTextShadow*)(sh)).color, _color.w) shift:((EGTextShadow*)(sh)).shift]];
+        }];
+        [__vao drawParam:[EGFontShaderParam fontShaderParamWithTexture:__font.texture color:_color shift:GEVec2Make(0.0, 0.0)]];
     }];
 }
 
@@ -444,23 +449,90 @@ static ODClassType* _EGText_type;
 @end
 
 
+@implementation EGTextShadow{
+    GEVec4 _color;
+    GEVec2 _shift;
+}
+static ODClassType* _EGTextShadow_type;
+@synthesize color = _color;
+@synthesize shift = _shift;
+
++ (id)textShadowWithColor:(GEVec4)color shift:(GEVec2)shift {
+    return [[EGTextShadow alloc] initWithColor:color shift:shift];
+}
+
+- (id)initWithColor:(GEVec4)color shift:(GEVec2)shift {
+    self = [super init];
+    if(self) {
+        _color = color;
+        _shift = shift;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGTextShadow_type = [ODClassType classTypeWithCls:[EGTextShadow class]];
+}
+
+- (ODClassType*)type {
+    return [EGTextShadow type];
+}
+
++ (ODClassType*)type {
+    return _EGTextShadow_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGTextShadow* o = ((EGTextShadow*)(other));
+    return GEVec4Eq(self.color, o.color) && GEVec2Eq(self.shift, o.shift);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + GEVec4Hash(self.color);
+    hash = hash * 31 + GEVec2Hash(self.shift);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"color=%@", GEVec4Description(self.color)];
+    [description appendFormat:@", shift=%@", GEVec2Description(self.shift)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation EGFontShaderParam{
     EGTexture* _texture;
     GEVec4 _color;
+    GEVec2 _shift;
 }
 static ODClassType* _EGFontShaderParam_type;
 @synthesize texture = _texture;
 @synthesize color = _color;
+@synthesize shift = _shift;
 
-+ (id)fontShaderParamWithTexture:(EGTexture*)texture color:(GEVec4)color {
-    return [[EGFontShaderParam alloc] initWithTexture:texture color:color];
++ (id)fontShaderParamWithTexture:(EGTexture*)texture color:(GEVec4)color shift:(GEVec2)shift {
+    return [[EGFontShaderParam alloc] initWithTexture:texture color:color shift:shift];
 }
 
-- (id)initWithTexture:(EGTexture*)texture color:(GEVec4)color {
+- (id)initWithTexture:(EGTexture*)texture color:(GEVec4)color shift:(GEVec2)shift {
     self = [super init];
     if(self) {
         _texture = texture;
         _color = color;
+        _shift = shift;
     }
     
     return self;
@@ -487,13 +559,14 @@ static ODClassType* _EGFontShaderParam_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGFontShaderParam* o = ((EGFontShaderParam*)(other));
-    return [self.texture isEqual:o.texture] && GEVec4Eq(self.color, o.color);
+    return [self.texture isEqual:o.texture] && GEVec4Eq(self.color, o.color) && GEVec2Eq(self.shift, o.shift);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.texture hash];
     hash = hash * 31 + GEVec4Hash(self.color);
+    hash = hash * 31 + GEVec2Hash(self.shift);
     return hash;
 }
 
@@ -501,6 +574,7 @@ static ODClassType* _EGFontShaderParam_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"texture=%@", self.texture];
     [description appendFormat:@", color=%@", GEVec4Description(self.color)];
+    [description appendFormat:@", shift=%@", GEVec2Description(self.shift)];
     [description appendString:@">"];
     return description;
 }
@@ -528,13 +602,14 @@ static ODClassType* _EGFontShaderBuilder_type;
 
 - (NSString*)vertex {
     return [NSString stringWithFormat:@"%@\n"
+        "uniform highp vec2 shift;\n"
         "%@ highp vec2 position;\n"
         "%@ mediump vec2 vertexUV;\n"
         "\n"
         "%@ mediump vec2 UV;\n"
         "\n"
         "void main(void) {\n"
-        "    gl_Position = vec4(position.x, position.y, 0, 1);\n"
+        "    gl_Position = vec4(position.x + shift.x, position.y + shift.y, 0, 1);\n"
         "    UV = vertexUV;\n"
         "}", [self vertexHeader], [self ain], [self ain], [self out]];
 }
@@ -654,12 +729,14 @@ static ODClassType* _EGFontShaderBuilder_type;
     EGShaderAttribute* _uvSlot;
     EGShaderAttribute* _positionSlot;
     EGShaderUniformVec4* _colorUniform;
+    EGShaderUniformVec2* _shiftSlot;
 }
 static EGFontShader* _EGFontShader_instance;
 static ODClassType* _EGFontShader_type;
 @synthesize uvSlot = _uvSlot;
 @synthesize positionSlot = _positionSlot;
 @synthesize colorUniform = _colorUniform;
+@synthesize shiftSlot = _shiftSlot;
 
 + (id)fontShader {
     return [[EGFontShader alloc] init];
@@ -671,6 +748,7 @@ static ODClassType* _EGFontShader_type;
         _uvSlot = [self attributeForName:@"vertexUV"];
         _positionSlot = [self attributeForName:@"position"];
         _colorUniform = [self uniformVec4Name:@"color"];
+        _shiftSlot = [self uniformVec2Name:@"shift"];
     }
     
     return self;
@@ -690,6 +768,7 @@ static ODClassType* _EGFontShader_type;
 - (void)loadUniformsParam:(EGFontShaderParam*)param {
     [EGGlobal.context bindTextureTexture:param.texture];
     [_colorUniform applyVec4:param.color];
+    [_shiftSlot applyVec2:geVec4Xy([[EGGlobal.matrix p] mulVec4:geVec4ApplyVec2ZW(param.shift, 0.0, 0.0)])];
 }
 
 - (ODClassType*)type {
