@@ -7,10 +7,11 @@ class SwitchProcessor(level : Level) extends InputProcessor {
 //    }
 
 
+    static val strangeClickNotification = NotificationHandle<Event>("strangeClickNotification")
     def process(event : Event) : bool = {
         val vps = vec2(80, 80)/event.viewport.size*context.scale
         val loc = event.locationInViewport
-        val downed =
+        val closest =
             self.level.railroad.switches.chain.map{switch ->
                 val rotate = mat4.identity.rotate(switch.connector.angle, 0, 0, 1)
                 val moveToTile = mat4.identity.translate(switch.tile.x, switch.tile.y, 0)
@@ -18,11 +19,11 @@ class SwitchProcessor(level : Level) extends InputProcessor {
                 SwitchProcessorItem(switch, Rect(-0.5, -0.2, 0.4, 0.4)) * m
             }.append(self.level.railroad.lights.chain.map{light ->
                     var sz = 0.2
-                    var sy = 0.1
+                    var sy = 0.2
 
                     val stand = mat4.identity.rotate(90, 0, 1, 0)
                     val sh = light.shift
-                    val moveToPlace = mat4.identity.translate(sh.z, sh.x, sh.y + sz/4)
+                    val moveToPlace = mat4.identity.translate(sh.z, sh.x, sh.y + sz/2)
                     val rotateToConnector = mat4.identity.rotate(light.connector.angle, 0, 0, 1)
                     val moveToTile = mat4.identity.translate(light.tile.x, light.tile.y, 0)
 
@@ -33,9 +34,25 @@ class SwitchProcessor(level : Level) extends InputProcessor {
             .map{item -> item.expand(vps) }
             .filter{item -> item.contains(loc)}
             .sortBy.asc{item -> item.distance(loc)}.endSort
-            .headOpt
+            .top(2)
+            .toArray
 
+        val downed : SwitchProcessorItem? =
+            if(closest.count == 2) {
+                val a = closest(0)
+                val b = closest(1)
+                val delta = (a.distance(loc) - b.distance(loc)).abs
+                if(delta < 0.01) {
+                    log("!! Click: $delta = $(a.distance(loc)) - $(b.distance(loc))")
+                    strangeClickNotification.post(event)
+                    Option.none<SwitchProcessorItem>
+                } else {
+                    log("Click: $delta = $(a.distance(loc)) - $(b.distance(loc))")
+                    Option.some(a)
+                }
+            } else closest.headOpt
         if(downed.isDefined) {
+            log("downed: $(downed.get.boundingRect.center - loc)")
             downed.get.content.as<Switch>.for(level.tryTurn(theSwitch = _ ))
             downed.get.content.as<RailLight>.for(_.turn)
 

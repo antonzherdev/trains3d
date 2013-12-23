@@ -24,6 +24,7 @@
 - (ODClassType*)type;
 - (BOOL)processEvent:(id<EGEvent>)event;
 - (EGRecognizers*)recognizers;
++ (CNNotificationHandle*)strangeClickNotification;
 + (ODClassType*)type;
 @end
 

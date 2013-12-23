@@ -6,6 +6,7 @@
 @class TRLevel;
 @class TRTrainsDynamicWorld;
 @class TRRailroadBuilderProcessor;
+@class TRSwitchProcessor;
 @class TRSwitch;
 @class TRRailLight;
 @class TRRailroadBuilder;

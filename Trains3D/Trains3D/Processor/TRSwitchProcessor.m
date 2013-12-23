@@ -9,6 +9,7 @@
 @implementation TRSwitchProcessor{
     TRLevel* _level;
 }
+static CNNotificationHandle* _TRSwitchProcessor_strangeClickNotification;
 static ODClassType* _TRSwitchProcessor_type;
 @synthesize level = _level;
 
@@ -26,22 +27,23 @@ static ODClassType* _TRSwitchProcessor_type;
 + (void)initialize {
     [super initialize];
     _TRSwitchProcessor_type = [ODClassType classTypeWithCls:[TRSwitchProcessor class]];
+    _TRSwitchProcessor_strangeClickNotification = [CNNotificationHandle notificationHandleWithName:@"strangeClickNotification"];
 }
 
 - (BOOL)processEvent:(id<EGEvent>)event {
     GEVec2 vps = geVec2MulF(geVec2DivVec2(GEVec2Make(80.0, 80.0), [event viewport].size), EGGlobal.context.scale);
     GEVec2 loc = [event locationInViewport];
-    id downed = [[[[[[[[[[[_level.railroad switches] chain] map:^TRSwitchProcessorItem*(TRSwitch* aSwitch) {
+    id<CNSeq> closest = [[[[[[[[[[[[_level.railroad switches] chain] map:^TRSwitchProcessorItem*(TRSwitch* aSwitch) {
         GEMat4* rotate = [[GEMat4 identity] rotateAngle:((float)(((TRSwitch*)(aSwitch)).connector.angle)) x:0.0 y:0.0 z:1.0];
         GEMat4* moveToTile = [[GEMat4 identity] translateX:((float)(((TRSwitch*)(aSwitch)).tile.x)) y:((float)(((TRSwitch*)(aSwitch)).tile.y)) z:0.0];
         GEMat4* m = [moveToTile mulMatrix:rotate];
         return [[TRSwitchProcessorItem applyContent:aSwitch rect:geRectApplyXYWidthHeight(-0.5, -0.2, 0.4, 0.4)] mulMat4:m];
     }] append:[[[_level.railroad lights] chain] map:^TRSwitchProcessorItem*(TRRailLight* light) {
         CGFloat sz = 0.2;
-        CGFloat sy = 0.1;
+        CGFloat sy = 0.2;
         GEMat4* stand = [[GEMat4 identity] rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
         GEVec3 sh = [((TRRailLight*)(light)) shift];
-        GEMat4* moveToPlace = [[GEMat4 identity] translateX:sh.z y:sh.x z:sh.y + sz / 4];
+        GEMat4* moveToPlace = [[GEMat4 identity] translateX:sh.z y:sh.x z:sh.y + sz / 2];
         GEMat4* rotateToConnector = [[GEMat4 identity] rotateAngle:((float)(((TRRailLight*)(light)).connector.angle)) x:0.0 y:0.0 z:1.0];
         GEMat4* moveToTile = [[GEMat4 identity] translateX:((float)(((TRRailLight*)(light)).tile.x)) y:((float)(((TRRailLight*)(light)).tile.y)) z:0.0];
         GEMat4* m = [[[moveToTile mulMatrix:rotateToConnector] mulMatrix:moveToPlace] mulMatrix:stand];
@@ -54,8 +56,22 @@ static ODClassType* _TRSwitchProcessor_type;
         return [((TRSwitchProcessorItem*)(item)) containsVec2:loc];
     }] sortBy] ascBy:^id(TRSwitchProcessorItem* item) {
         return numf4([((TRSwitchProcessorItem*)(item)) distanceVec2:loc]);
-    }] endSort] headOpt];
+    }] endSort] topNumbers:2] toArray];
+    id downed = (([closest count] == 2) ? ^id() {
+        TRSwitchProcessorItem* a = [closest applyIndex:0];
+        TRSwitchProcessorItem* b = [closest applyIndex:1];
+        float delta = float4Abs([a distanceVec2:loc] - [b distanceVec2:loc]);
+        if(delta < 0.01) {
+            [CNLog applyText:[NSString stringWithFormat:@"!! Click: %f = %f - %f", delta, [a distanceVec2:loc], [b distanceVec2:loc]]];
+            [_TRSwitchProcessor_strangeClickNotification postData:event];
+            return [CNOption none];
+        } else {
+            [CNLog applyText:[NSString stringWithFormat:@"Click: %f = %f - %f", delta, [a distanceVec2:loc], [b distanceVec2:loc]]];
+            return [CNOption someValue:a];
+        }
+    }() : [closest headOpt]);
     if([downed isDefined]) {
+        [CNLog applyText:[NSString stringWithFormat:@"downed: %@", GEVec2Description(geVec2SubVec2(geRectCenter([((TRSwitchProcessorItem*)([downed get])) boundingRect]), loc))]];
         [[ODObject asKindOfClass:[TRSwitch class] object:((TRSwitchProcessorItem*)([downed get])).content] forEach:^void(TRSwitch* _) {
             [_level tryTurnTheSwitch:_];
         }];
@@ -80,6 +96,10 @@ static ODClassType* _TRSwitchProcessor_type;
 
 - (ODClassType*)type {
     return [TRSwitchProcessor type];
+}
+
++ (CNNotificationHandle*)strangeClickNotification {
+    return _TRSwitchProcessor_strangeClickNotification;
 }
 
 + (ODClassType*)type {
