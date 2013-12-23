@@ -9,6 +9,8 @@
 #import "TRCollisions.h"
 #import "TRCity.h"
 #import "TRRailPoint.h"
+#import "GL.h"
+#import "EGPlatform.h"
 #import "TRStrings.h"
 #import "TRTrain.h"
 #import "TRCar.h"
@@ -266,8 +268,12 @@ static ODClassType* _TRLevel_type;
         } else {
             if([[[[dir in] otherSideConnector] neighbours] existsWhere:^BOOL(TRRailConnector* n) {
     return [self hasCityInTile:[((TRRailConnector*)(n)) nextTile:[[dir in] nextTile:tile]]];
-}]) return [self rndCityTimeAtt:att + 1];
-            else return tuple(wrap(GEVec2i, tile), dir);
+}]) {
+                return [self rndCityTimeAtt:att + 1];
+            } else {
+                if(egInterfaceIdiom().isPhone && [_map isRightTile:tile] && [_map isTopTile:tile]) return [self rndCityTimeAtt:att + 1];
+                else return tuple(wrap(GEVec2i, tile), dir);
+            }
         }
     }
 }

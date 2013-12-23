@@ -65,6 +65,8 @@ class Level(number : uint, rules : LevelRules) extends Controller {
             hasCityIn(n.next(dir.in.next(tile)))
         }) {
             rndCityTime(att + 1)
+        } else if(egInterfaceIdiom.isPhone && map.isRight(tile) && map.isTop(tile)) {
+            rndCityTime(att + 1)
         }
         else (tile, dir)
     }
