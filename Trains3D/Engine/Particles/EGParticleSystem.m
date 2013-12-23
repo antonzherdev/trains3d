@@ -77,9 +77,14 @@ static ODClassType* _EGParticleSystemView_type;
             [_blendFunc applyDraw:^void() {
                 __block NSInteger i = 0;
                 __block CNVoidRefArray vertexPointer = _vertexArr;
-                [particles forEach:^void(id particle) {
-                    if(i < _maxCount) vertexPointer = [particle writeToArray:vertexPointer];
-                    i++;
+                [particles goOn:^BOOL(id particle) {
+                    if(i < _maxCount) {
+                        vertexPointer = [particle writeToArray:vertexPointer];
+                        i++;
+                        return YES;
+                    } else {
+                        return NO;
+                    }
                 }];
                 [_vertexBuffer setArray:_vertexArr count:((unsigned int)([self vertexCount] * i))];
                 [_vao drawParam:_material start:0 end:[self indexCount] * i];

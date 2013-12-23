@@ -7,10 +7,10 @@
 @class TRCar;
 @class TRCarType;
 @class TREngineType;
+@class TRTrainType;
 @class TRCarPosition;
 @class TRRailPoint;
 @class EGProgress;
-@class TRTrainType;
 @class EGGlobal;
 @class EGColorSource;
 @class EGBlendFunction;
@@ -41,8 +41,8 @@
 @property (nonatomic) GEVec3 speed;
 @property (nonatomic, readonly) void(^animation)(float);
 
-+ (id)smokeParticleWithWeather:(TRWeather*)weather;
-- (id)initWithWeather:(TRWeather*)weather;
++ (id)smokeParticleWithLifeLength:(float)lifeLength weather:(TRWeather*)weather;
+- (id)initWithLifeLength:(float)lifeLength weather:(TRWeather*)weather;
 - (ODClassType*)type;
 - (void)updateT:(float)t dt:(float)dt;
 + (CGFloat)dragCoefficient;

@@ -10,7 +10,9 @@ class Smoke(weak train : Train, weak weather : Weather) extends EmissiveBillboar
     private val engine : Car = train.cars.head
     private val tubePos = engine.carType.engineType.get.tubePos
     private static val zSpeed = 0.1
-    private static val emitEvery = 0.01
+//    private val emitEvery = (0.005/train.speedFloat).min(0.01)
+    private val emitEvery = if(train.trainType == TrainType.fast) 0.005 else 0.01
+    private val lifeLength = if(train.trainType == TrainType.fast) 1 else 2
     private var emitTime = 0.0
 
     def generateParticlesWith(delta : float) {
@@ -31,22 +33,29 @@ class Smoke(weak train : Train, weak weather : Weather) extends EmissiveBillboar
         val pos = engine.position
         val fPos = pos.head.point
         val bPos = pos.tail.point
-        val delta = bPos.sub(fPos)
+        val delta = bPos - fPos
         val tubeXY = fPos.add(delta.set(length = tubePos.x))
         val emitterPos = vec3(tubeXY, tubePos.z)
 
-        val p = SmokeParticle(weather)
+        val p = SmokeParticle(lifeLength, weather)
         p.color = defColor
         p.position = vec3(emitterPos.x + Float.rnd(-0.01, 0.01), emitterPos.y + Float.rnd(-0.01, 0.01), emitterPos.z)
         p.model = modelQuad
         p.uv = textureQuadrant.rndQuad
-        val s = vec3((if(train.isBack) fPos.sub(bPos) else delta).set(length = train.speedFloat), zSpeed)
-        p.speed = vec3(-s.x.noise(0.3), -s.y.noise(0.3), s.z.noise(0.3))
+
+        if(train.trainType == TrainType.fast) {
+            val v = (if(train.isBack) fPos - bPos else delta).set(length = (train.speedFloat + Float4.rnd(-0.5, 0.05)).max(0)).mul(-1)
+            p.speed = vec3(v + vec2(-v.y, v.x).set(length = Float4.rnd(-0.02, 0.02)), zSpeed.noise(0.1))
+        } else {
+            val s = vec3((if(train.isBack) fPos.sub(bPos) else delta).set(length = train.speedFloat), zSpeed)
+            p.speed = vec3(-s.x.noise(0.3), -s.y.noise(0.3), s.z.noise(0.3))
+        }
         p
     }
 }
 
-class SmokeParticle(weak weather : Weather) extends EmittedParticle(2) with BillboardParticle {
+//class SmokeParticle(trainSpeed : float, weak weather : Weather) extends EmittedParticle((1.0/trainSpeed).min(2)) with BillboardParticle {
+class SmokeParticle(lifeLength : float4, weak weather : Weather) extends EmittedParticle(lifeLength) with BillboardParticle {
     var speed : vec3
     static val dragCoefficient = 0.5 // air resistance coefficient | a = -dragCoefficient * sqr(speed)
 
@@ -56,12 +65,13 @@ class SmokeParticle(weak weather : Weather) extends EmittedParticle(2) with Bill
         val a = speed*(-dragCoefficient)
         speed = speed + a*dt
         position = position.add((speed + vec3(weather.wind, 0))*dt)
-        if(t > 1.5) animation((t - 1.5)/0.5)
+        val pt = t/lifeLength
+        if(pt > 0.75) animation((pt - 0.75)/0.25)
     }
 }
 
 
 class SmokeView(system : Smoke) extends BillboardParticleSystemView(system,
-    if(system.train.trainType == TrainType.fast) 400 else 200,
+    202,
     textureFor("Smoke.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST),
     BlendFunction.premultiplied)

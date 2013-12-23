@@ -36,9 +36,12 @@ class ParticleSystemView<P extends Particle, D, M>(
         context.depthTest.disabled{ context.cullFace.disabled{ blendFunc {
             var i = 0
             var vertexPointer = vertexArr
-            particles.for{particle ->
-                if(i < maxCount) vertexPointer = particle.writeTo(vertexPointer)
-                i++
+            particles.go{particle ->
+                if(i < maxCount) {
+                    vertexPointer = particle.writeTo(vertexPointer)
+                    i++
+                    true
+                } else false
             }
             vertexBuffer.set(array = vertexArr, vertexCount * i)
             vao.draw(material, 0, indexCount * i)

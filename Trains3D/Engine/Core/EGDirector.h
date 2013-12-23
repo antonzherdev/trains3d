@@ -14,6 +14,7 @@
 
 @interface EGDirector : NSObject
 @property (nonatomic, readonly) EGTime* time;
+@property (nonatomic) CGFloat timeSpeed;
 
 + (id)director;
 - (id)init;

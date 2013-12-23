@@ -99,10 +99,11 @@ class Director {
         }
     }
 
+    var timeSpeed = 1.0
     def tick {
         _current = self
         time.tick
-        _scene.for(_.updateWith(time.delta))
+        _scene.for(_.updateWith(time.delta*timeSpeed))
         _stat.for(_.tickWith(time.delta))
     }
 
