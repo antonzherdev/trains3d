@@ -16,7 +16,7 @@ class SwitchProcessor(level : Level) extends InputProcessor {
                 val rotate = mat4.identity.rotate(switch.connector.angle, 0, 0, 1)
                 val moveToTile = mat4.identity.translate(switch.tile.x, switch.tile.y, 0)
                 val m = moveToTile * rotate
-                SwitchProcessorItem(switch, Rect(-0.5, -0.2, 0.4, 0.4)) * m
+                SwitchProcessorItem(switch, Rect(-0.6, -0.2, 0.4, 0.4)) * m
             }.append(self.level.railroad.lights.chain.map{light ->
                     var sz = 0.2
                     var sy = 0.2
@@ -43,16 +43,16 @@ class SwitchProcessor(level : Level) extends InputProcessor {
                 val b = closest(1)
                 val delta = (a.distance(loc) - b.distance(loc)).abs
                 if(delta < 0.01) {
-                    log("!! Click: $delta = $(a.distance(loc)) - $(b.distance(loc))")
+//                    log("!! Click: $delta = $(a.distance(loc)) - $(b.distance(loc))")
                     strangeClickNotification.post(event)
                     Option.none<SwitchProcessorItem>
                 } else {
-                    log("Click: $delta = $(a.distance(loc)) - $(b.distance(loc))")
+//                    log("Click: $delta = $(a.distance(loc)) - $(b.distance(loc))")
                     Option.some(a)
                 }
             } else closest.headOpt
         if(downed.isDefined) {
-            log("downed: $(downed.get.boundingRect.center - loc)")
+//            log("downed: $(downed.get.boundingRect.center - loc)")
             downed.get.content.as<Switch>.for(level.tryTurn(theSwitch = _ ))
             downed.get.content.as<RailLight>.for(_.turn)
 

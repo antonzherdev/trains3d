@@ -37,7 +37,7 @@ static ODClassType* _TRSwitchProcessor_type;
         GEMat4* rotate = [[GEMat4 identity] rotateAngle:((float)(((TRSwitch*)(aSwitch)).connector.angle)) x:0.0 y:0.0 z:1.0];
         GEMat4* moveToTile = [[GEMat4 identity] translateX:((float)(((TRSwitch*)(aSwitch)).tile.x)) y:((float)(((TRSwitch*)(aSwitch)).tile.y)) z:0.0];
         GEMat4* m = [moveToTile mulMatrix:rotate];
-        return [[TRSwitchProcessorItem applyContent:aSwitch rect:geRectApplyXYWidthHeight(-0.5, -0.2, 0.4, 0.4)] mulMat4:m];
+        return [[TRSwitchProcessorItem applyContent:aSwitch rect:geRectApplyXYWidthHeight(-0.6, -0.2, 0.4, 0.4)] mulMat4:m];
     }] append:[[[_level.railroad lights] chain] map:^TRSwitchProcessorItem*(TRRailLight* light) {
         CGFloat sz = 0.2;
         CGFloat sy = 0.2;
@@ -62,16 +62,13 @@ static ODClassType* _TRSwitchProcessor_type;
         TRSwitchProcessorItem* b = [closest applyIndex:1];
         float delta = float4Abs([a distanceVec2:loc] - [b distanceVec2:loc]);
         if(delta < 0.01) {
-            [CNLog applyText:[NSString stringWithFormat:@"!! Click: %f = %f - %f", delta, [a distanceVec2:loc], [b distanceVec2:loc]]];
             [_TRSwitchProcessor_strangeClickNotification postData:event];
             return [CNOption none];
         } else {
-            [CNLog applyText:[NSString stringWithFormat:@"Click: %f = %f - %f", delta, [a distanceVec2:loc], [b distanceVec2:loc]]];
             return [CNOption someValue:a];
         }
     }() : [closest headOpt]);
     if([downed isDefined]) {
-        [CNLog applyText:[NSString stringWithFormat:@"downed: %@", GEVec2Description(geVec2SubVec2(geRectCenter([((TRSwitchProcessorItem*)([downed get])) boundingRect]), loc))]];
         [[ODObject asKindOfClass:[TRSwitch class] object:((TRSwitchProcessorItem*)([downed get])).content] forEach:^void(TRSwitch* _) {
             [_level tryTurnTheSwitch:_];
         }];
