@@ -4,7 +4,6 @@
 #import "TRLevel.h"
 #import "TRLevelFactory.h"
 #import "TRCollisions.h"
-#import "TRRailPoint.h"
 #import "TRRailroad.h"
 #import "TRTrain.h"
 #import "TRCity.h"
@@ -56,8 +55,8 @@ static ODClassType* _TRCollisionsTest_type;
     TRTrain* t1 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRCityColor.green __cars:^id<CNSeq>(TRTrain* _) {
         return (@[[TRCar carWithTrain:_ carType:TRCarType.car]]);
     } speed:0];
-    TRRailPoint* p = [TRRailPoint railPointWithTile:GEVec2iMake(0, 0) form:form x:0.0 back:NO];
-    TRRailPoint* p2 = [level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
+    TRRailPoint p = trRailPointApplyTileFormXBack(GEVec2iMake(0, 0), form, 0.0, NO);
+    TRRailPoint p2 = [level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
     } forLength:_TRCollisionsTest_carLen point:p].point;
     [level testRunTrain:t1 fromPoint:p2];
@@ -70,11 +69,11 @@ static ODClassType* _TRCollisionsTest_type;
     [level testRunTrain:t2 fromPoint:p2];
     id<CNSet> cols = [self checkLevel:level];
     [self assertTrueValue:[cols isEmpty]];
-    p2 = [p2 addX:-2 * _TRCollisionsTest_carConLen + 0.1];
+    p2 = trRailPointAddX(p2, -2 * _TRCollisionsTest_carConLen + 0.1);
     [t2 setHead:p2];
     cols = [self checkLevel:level];
     [self assertTrueValue:[cols isEmpty]];
-    p2 = [p2 addX:-0.2];
+    p2 = trRailPointAddX(p2, -0.2);
     [t2 setHead:p2];
     cols = [self checkLevel:level];
     [self assertEqualsA:cols b:[(@[t1, t2]) toSet]];
@@ -105,22 +104,22 @@ static ODClassType* _TRCollisionsTest_type;
     TRTrain* t1 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRCityColor.green __cars:^id<CNSeq>(TRTrain* _) {
         return (@[[TRCar carWithTrain:_ carType:TRCarType.car]]);
     } speed:0];
-    TRRailPoint* p = [TRRailPoint railPointWithTile:GEVec2iMake(1, 1) form:TRRailForm.bottomTop x:0.0 back:NO];
-    TRRailPoint* p1 = [level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
+    TRRailPoint p = trRailPointApplyTileFormXBack(GEVec2iMake(1, 1), TRRailForm.bottomTop, 0.0, NO);
+    TRRailPoint p1 = [level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
     } forLength:(0.5 - _TRCollisionsTest_carWidth) - 0.001 point:p].point;
     [level testRunTrain:t1 fromPoint:p1];
     TRTrain* t2 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRCityColor.orange __cars:^id<CNSeq>(TRTrain* _) {
         return (@[[TRCar carWithTrain:_ carType:TRCarType.car], [TRCar carWithTrain:_ carType:TRCarType.car]]);
     } speed:0];
-    p = [TRRailPoint railPointWithTile:GEVec2iMake(1, 1) form:TRRailForm.leftRight x:0.0 back:NO];
-    TRRailPoint* p2 = [level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
+    p = trRailPointApplyTileFormXBack(GEVec2iMake(1, 1), TRRailForm.leftRight, 0.0, NO);
+    TRRailPoint p2 = [level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
     } forLength:_TRCollisionsTest_carLen * 2 point:p].point;
     [level testRunTrain:t2 fromPoint:p2];
     id<CNSet> cols = [self checkLevel:level];
     [self assertTrueValue:[cols isEmpty]];
-    [t1 setHead:[p2 addX:-0.002]];
+    [t1 setHead:trRailPointAddX(p2, -0.002)];
     cols = [self checkLevel:level];
     [self assertEqualsA:cols b:[(@[t1, t2]) toSet]];
 }

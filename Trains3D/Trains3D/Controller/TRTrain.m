@@ -2,10 +2,8 @@
 
 #import "TRRailroad.h"
 #import "TRLevel.h"
-#import "TRRailPoint.h"
 #import "EGMapIso.h"
 #import "TRCity.h"
-#import "TRCar.h"
 @implementation TRTrainType{
     BOOL(^_obstacleProcessor)(TRLevel*, TRTrain*, TRObstacle*);
 }
@@ -36,8 +34,8 @@ static NSArray* _TRTrainType_values;
     _TRTrainType_crazy = [TRTrainType trainTypeWithOrdinal:1 name:@"crazy" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
         if(o.obstacleType != TRObstacleType.light) {
             if(o.obstacleType == TRObstacleType.end) {
-                TRRailPoint* point = [train head];
-                if(!([level.map isFullTile:point.tile]) && !([level.map isFullTile:[point nextTile]])) {
+                TRRailPoint point = [train head];
+                if(!([level.map isFullTile:point.tile]) && !([level.map isFullTile:trRailPointNextTile(point)])) {
                     return NO;
                 } else {
                     [level.railroad addDamageAtPoint:point];
@@ -104,7 +102,7 @@ static NSArray* _TRTrainType_values;
     NSUInteger _speed;
     id _viewData;
     id _soundData;
-    TRRailPoint* __head;
+    TRRailPoint __head;
     BOOL _back;
     id<CNSeq> _cars;
     CGFloat _length;
@@ -173,25 +171,25 @@ static ODClassType* _TRTrain_type;
     return [NSString stringWithFormat:@"<Train: %@, %@>", _trainType, _color];
 }
 
-- (TRRailPoint*)head {
+- (TRRailPoint)head {
     return __head;
 }
 
-- (void)setHead:(TRRailPoint*)head {
+- (void)setHead:(TRRailPoint)head {
     __head = head;
     [self calculateCarPositions];
 }
 
 - (void)calculateCarPositions {
-    __block TRRailPoint* frontConnector = [__head invert];
+    __block TRRailPoint frontConnector = trRailPointInvert(__head);
     [[self directedCars] forEach:^void(TRCar* car) {
         TRCarType* tp = ((TRCar*)(car)).carType;
         CGFloat fl = tp.startToWheel;
         CGFloat bl = tp.wheelToEnd;
-        TRRailPoint* head = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((_back) ? bl : fl) point:frontConnector] addErrorToPoint];
-        TRRailPoint* tail = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:tp.betweenWheels point:head] addErrorToPoint];
-        TRRailPoint* backConnector = [[_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((_back) ? fl : bl) point:tail] addErrorToPoint];
-        [((TRCar*)(car)) setPosition:((_back) ? [TRCarPosition carPositionWithFrontConnector:backConnector head:tail tail:head backConnector:frontConnector] : [TRCarPosition carPositionWithFrontConnector:frontConnector head:head tail:tail backConnector:backConnector])];
+        TRRailPoint head = trRailPointCorrectionAddErrorToPoint([_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((_back) ? bl : fl) point:frontConnector]);
+        TRRailPoint tail = trRailPointCorrectionAddErrorToPoint([_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:tp.betweenWheels point:head]);
+        TRRailPoint backConnector = trRailPointCorrectionAddErrorToPoint([_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((_back) ? fl : bl) point:tail]);
+        [((TRCar*)(car)) setPosition:((_back) ? trCarPositionApplyFrontConnectorHeadTailBackConnector(backConnector, tail, head, frontConnector) : trCarPositionApplyFrontConnectorHeadTailBackConnector(frontConnector, head, tail, backConnector))];
         frontConnector = backConnector;
     }];
 }
@@ -217,20 +215,20 @@ static ODClassType* _TRTrain_type;
     else return _cars;
 }
 
-- (void)correctCorrection:(TRRailPointCorrection*)correction {
+- (void)correctCorrection:(TRRailPointCorrection)correction {
     if(!(eqf(correction.error, 0.0))) {
         BOOL isMoveToCity = [self isMoveToCityForPoint:correction.point];
         if(!(isMoveToCity) || correction.error >= _length - 0.5) {
             if(isMoveToCity && (_color == TRCityColor.grey || ((TRCity*)([[_level cityForTile:correction.point.tile] get])).color == _color)) {
                 if(correction.error >= _length + 0.7) [_level arrivedTrain:self];
-                else __head = [correction addErrorToPoint];
+                else __head = trRailPointCorrectionAddErrorToPoint(correction);
             } else {
                 _back = !(_back);
                 TRCar* lastCar = [[self directedCars] head];
                 __head = ((_back) ? [lastCar position].backConnector : [lastCar position].frontConnector);
             }
         } else {
-            __head = [correction addErrorToPoint];
+            __head = trRailPointCorrectionAddErrorToPoint(correction);
         }
     } else {
         __head = correction.point;
@@ -240,24 +238,24 @@ static ODClassType* _TRTrain_type;
 
 - (BOOL)isInTile:(GEVec2i)tile {
     return [[_cars chain] existsWhere:^BOOL(TRCar* car) {
-        return [[((TRCar*)(car)) position] isInTile:tile];
+        return trCarPositionIsInTile([((TRCar*)(car)) position], tile);
     }];
 }
 
-- (BOOL)isMoveToCityForPoint:(TRRailPoint*)point {
-    return !([_level.map isFullTile:point.tile]) && !([_level.map isFullTile:[point nextTile]]);
+- (BOOL)isMoveToCityForPoint:(TRRailPoint)point {
+    return !([_level.map isFullTile:point.tile]) && !([_level.map isFullTile:trRailPointNextTile(point)]);
 }
 
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch {
     GEVec2i tile = theSwitch.tile;
     GEVec2i nextTile = [theSwitch.connector nextTile:tile];
-    TRRailPoint* rp11 = [theSwitch railPoint1];
-    TRRailPoint* rp12 = [rp11 addX:0.3];
-    TRRailPoint* rp21 = [theSwitch railPoint2];
-    TRRailPoint* rp22 = [rp21 addX:0.3];
+    TRRailPoint rp11 = [theSwitch railPoint1];
+    TRRailPoint rp12 = trRailPointAddX(rp11, 0.3);
+    TRRailPoint rp21 = [theSwitch railPoint2];
+    TRRailPoint rp22 = trRailPointAddX(rp21, 0.3);
     return [[_cars findWhere:^BOOL(TRCar* car) {
-        TRCarPosition* p = [((TRCar*)(car)) position];
-        return (GEVec2iEq(p.frontConnector.tile, tile) && GEVec2iEq(p.backConnector.tile, nextTile)) || (GEVec2iEq(p.frontConnector.tile, nextTile) && GEVec2iEq(p.backConnector.tile, tile)) || [p.frontConnector betweenA:rp11 b:rp12] || [p.backConnector betweenA:rp21 b:rp22];
+        TRCarPosition p = [((TRCar*)(car)) position];
+        return (GEVec2iEq(p.frontConnector.tile, tile) && GEVec2iEq(p.backConnector.tile, nextTile)) || (GEVec2iEq(p.frontConnector.tile, nextTile) && GEVec2iEq(p.backConnector.tile, tile)) || trRailPointBetweenAB(p.frontConnector, rp11, rp12) || trRailPointBetweenAB(p.backConnector, rp21, rp22);
     }] isDefined];
 }
 

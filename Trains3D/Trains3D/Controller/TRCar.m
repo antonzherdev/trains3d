@@ -4,7 +4,6 @@
 #import "TRTrain.h"
 #import "EGDynamicWorld.h"
 #import "GEMat4.h"
-#import "TRRailPoint.h"
 @implementation TREngineType{
     GEVec3 _tubePos;
 }
@@ -166,7 +165,7 @@ static NSArray* _TRCarType_values;
     EGCollisionBody* _collisionBody;
     EGRigidBody* _kinematicBody;
     CNLazy* __lazy_dynamicBody;
-    TRCarPosition* __position;
+    TRCarPosition __position;
 }
 static ODClassType* _TRCar_type;
 @synthesize train = _train;
@@ -215,11 +214,11 @@ static ODClassType* _TRCar_type;
     return [__lazy_dynamicBody get];
 }
 
-- (TRCarPosition*)position {
+- (TRCarPosition)position {
     return __position;
 }
 
-- (void)setPosition:(TRCarPosition*)position {
+- (void)setPosition:(TRCarPosition)position {
     __position = position;
     GELine2 line = position.line;
     GEVec2 mid = [self midPoint];
@@ -275,84 +274,64 @@ static ODClassType* _TRCar_type;
 @end
 
 
-@implementation TRCarPosition{
-    TRRailPoint* _frontConnector;
-    TRRailPoint* _head;
-    TRRailPoint* _tail;
-    TRRailPoint* _backConnector;
-    GELine2 _line;
+NSString* TRCarPositionDescription(TRCarPosition self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<TRCarPosition: "];
+    [description appendFormat:@"frontConnector=%@", TRRailPointDescription(self.frontConnector)];
+    [description appendFormat:@", head=%@", TRRailPointDescription(self.head)];
+    [description appendFormat:@", tail=%@", TRRailPointDescription(self.tail)];
+    [description appendFormat:@", backConnector=%@", TRRailPointDescription(self.backConnector)];
+    [description appendFormat:@", line=%@", GELine2Description(self.line)];
+    [description appendString:@">"];
+    return description;
 }
-static ODClassType* _TRCarPosition_type;
-@synthesize frontConnector = _frontConnector;
-@synthesize head = _head;
-@synthesize tail = _tail;
-@synthesize backConnector = _backConnector;
-@synthesize line = _line;
+TRCarPosition trCarPositionApplyFrontConnectorHeadTailBackConnector(TRRailPoint frontConnector, TRRailPoint head, TRRailPoint tail, TRRailPoint backConnector) {
+    return TRCarPositionMake(frontConnector, head, tail, backConnector, geLine2ApplyP0P1(tail.point, head.point));
+}
+BOOL trCarPositionIsInTile(TRCarPosition self, GEVec2i tile) {
+    return GEVec2iEq(self.head.tile, tile) || GEVec2iEq(self.tail.tile, tile);
+}
+ODPType* trCarPositionType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[TRCarPositionWrap class] name:@"TRCarPosition" size:sizeof(TRCarPosition) wrap:^id(void* data, NSUInteger i) {
+        return wrap(TRCarPosition, ((TRCarPosition*)(data))[i]);
+    }];
+    return _ret;
+}
+@implementation TRCarPositionWrap{
+    TRCarPosition _value;
+}
+@synthesize value = _value;
 
-+ (id)carPositionWithFrontConnector:(TRRailPoint*)frontConnector head:(TRRailPoint*)head tail:(TRRailPoint*)tail backConnector:(TRRailPoint*)backConnector {
-    return [[TRCarPosition alloc] initWithFrontConnector:frontConnector head:head tail:tail backConnector:backConnector];
++ (id)wrapWithValue:(TRCarPosition)value {
+    return [[TRCarPositionWrap alloc] initWithValue:value];
 }
 
-- (id)initWithFrontConnector:(TRRailPoint*)frontConnector head:(TRRailPoint*)head tail:(TRRailPoint*)tail backConnector:(TRRailPoint*)backConnector {
+- (id)initWithValue:(TRCarPosition)value {
     self = [super init];
-    if(self) {
-        _frontConnector = frontConnector;
-        _head = head;
-        _tail = tail;
-        _backConnector = backConnector;
-        _line = geLine2ApplyP0P1(_tail.point, _head.point);
-    }
-    
+    if(self) _value = value;
     return self;
 }
 
-+ (void)initialize {
-    [super initialize];
-    _TRCarPosition_type = [ODClassType classTypeWithCls:[TRCarPosition class]];
+- (NSString*)description {
+    return TRCarPositionDescription(_value);
 }
 
-- (BOOL)isInTile:(GEVec2i)tile {
-    return GEVec2iEq(_head.tile, tile) || GEVec2iEq(_tail.tile, tile);
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRCarPositionWrap* o = ((TRCarPositionWrap*)(other));
+    return TRCarPositionEq(_value, o.value);
 }
 
-- (ODClassType*)type {
-    return [TRCarPosition type];
-}
-
-+ (ODClassType*)type {
-    return _TRCarPosition_type;
+- (NSUInteger)hash {
+    return TRCarPositionHash(_value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRCarPosition* o = ((TRCarPosition*)(other));
-    return [self.frontConnector isEqual:o.frontConnector] && [self.head isEqual:o.head] && [self.tail isEqual:o.tail] && [self.backConnector isEqual:o.backConnector];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.frontConnector hash];
-    hash = hash * 31 + [self.head hash];
-    hash = hash * 31 + [self.tail hash];
-    hash = hash * 31 + [self.backConnector hash];
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"frontConnector=%@", self.frontConnector];
-    [description appendFormat:@", head=%@", self.head];
-    [description appendFormat:@", tail=%@", self.tail];
-    [description appendFormat:@", backConnector=%@", self.backConnector];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
+
 
 

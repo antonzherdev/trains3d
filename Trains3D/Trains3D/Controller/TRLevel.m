@@ -8,7 +8,6 @@
 #import "EGSchedule.h"
 #import "TRCollisions.h"
 #import "TRCity.h"
-#import "TRRailPoint.h"
 #import "GL.h"
 #import "EGPlatform.h"
 #import "TRStrings.h"
@@ -340,7 +339,7 @@ static ODClassType* _TRLevel_type;
     [self runTrain:train fromCity:fromCity];
 }
 
-- (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint {
+- (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint)fromPoint {
     [train setHead:fromPoint];
     [self addTrain:train];
 }
@@ -433,7 +432,7 @@ static ODClassType* _TRLevel_type;
         __weak TRLevel* ws = self;
         [_schedule scheduleAfter:5.0 event:^void() {
             [ws.railroad addDamageAtPoint:((TRCarsCollision*)(collision)).railPoint];
-            [_TRLevel_damageNotification postData:tuple(ws, ((TRCarsCollision*)(collision)).railPoint)];
+            [_TRLevel_damageNotification postData:tuple(ws, wrap(TRRailPoint, ((TRCarsCollision*)(collision)).railPoint))];
         }];
     }];
 }
@@ -448,10 +447,10 @@ static ODClassType* _TRLevel_type;
 
 - (void)addSporadicDamage {
     [[[_railroad rails] randomItem] forEach:^void(TRRail* rail) {
-        TRRailPoint* p = [TRRailPoint railPointWithTile:((TRRail*)(rail)).tile form:((TRRail*)(rail)).form x:odFloatRndMinMax(0.0, ((TRRail*)(rail)).form.length) back:NO];
-        TRRailPoint* pp = [_railroad addDamageAtPoint:p];
-        [_TRLevel_sporadicDamageNotification postData:tuple(self, pp)];
-        [_TRLevel_damageNotification postData:tuple(self, pp)];
+        TRRailPoint p = trRailPointApplyTileFormXBack(((TRRail*)(rail)).tile, ((TRRail*)(rail)).form, odFloatRndMinMax(0.0, ((TRRail*)(rail)).form.length), NO);
+        TRRailPoint pp = [_railroad addDamageAtPoint:p];
+        [_TRLevel_sporadicDamageNotification postData:tuple(self, wrap(TRRailPoint, pp))];
+        [_TRLevel_damageNotification postData:tuple(self, wrap(TRRailPoint, pp))];
     }];
 }
 
@@ -504,7 +503,7 @@ static ODClassType* _TRLevel_type;
     }
 }
 
-- (void)fixDamageAtPoint:(TRRailPoint*)point {
+- (void)fixDamageAtPoint:(TRRailPoint)point {
     [_railroad fixDamageAtPoint:point];
     [_score damageFixed];
 }

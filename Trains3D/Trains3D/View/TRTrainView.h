@@ -1,5 +1,6 @@
 #import "objd.h"
 #import "GEVec.h"
+#import "TRCar.h"
 @class TRCityColor;
 @class EGProgress;
 @class TRLevel;
@@ -8,13 +9,10 @@
 @class TRTrain;
 @class TRSmoke;
 @class TRSmokeView;
-@class TRCar;
 @class GEMat4;
 @class EGMatrixModel;
-@class TRCarPosition;
 @class EGMatrixStack;
 @class TRTrainType;
-@class TRCarType;
 @class EGRigidBody;
 @class EGColorSource;
 @class EGVertexArray;

@@ -248,208 +248,162 @@ static NSArray* _TRRailForm_values;
 @end
 
 
-@implementation TRRailPoint{
-    GEVec2i _tile;
-    TRRailForm* _form;
-    CGFloat _x;
-    BOOL _back;
-    GEVec2 _point;
-}
-static ODClassType* _TRRailPoint_type;
-@synthesize tile = _tile;
-@synthesize form = _form;
-@synthesize x = _x;
-@synthesize back = _back;
-@synthesize point = _point;
-
-+ (id)railPointWithTile:(GEVec2i)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back {
-    return [[TRRailPoint alloc] initWithTile:tile form:form x:x back:back];
-}
-
-- (id)initWithTile:(GEVec2i)tile form:(TRRailForm*)form x:(CGFloat)x back:(BOOL)back {
-    self = [super init];
-    if(self) {
-        _tile = tile;
-        _form = form;
-        _x = x;
-        _back = back;
-        _point = [self calculatePoint];
-    }
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _TRRailPoint_type = [ODClassType classTypeWithCls:[TRRailPoint class]];
-}
-
-- (TRRailPoint*)addX:(CGFloat)x {
-    return [TRRailPoint railPointWithTile:_tile form:_form x:_x + x back:_back];
-}
-
-- (TRRailConnector*)startConnector {
-    if(_back) return _form.end;
-    else return _form.start;
-}
-
-- (TRRailConnector*)endConnector {
-    if(_back) return _form.start;
-    else return _form.end;
-}
-
-- (BOOL)isValid {
-    return _x >= 0 && _x <= _form.length;
-}
-
-- (TRRailPointCorrection*)correct {
-    CGFloat length = _form.length;
-    if(_x > length) return [TRRailPointCorrection railPointCorrectionWithPoint:[TRRailPoint railPointWithTile:_tile form:_form x:length back:_back] error:_x - length];
-    else return [TRRailPointCorrection railPointCorrectionWithPoint:self error:0.0];
-}
-
-- (GEVec2)calculatePoint {
-    CGFloat x = ((_back) ? _form.length - _x : _x);
-    GEVec2(^f)(CGFloat) = _form.pointFun;
-    GEVec2 p = f(x);
-    return GEVec2Make(p.x + _tile.x, p.y + _tile.y);
-}
-
-- (TRRailPoint*)invert {
-    return [TRRailPoint railPointWithTile:_tile form:_form x:_form.length - _x back:!(_back)];
-}
-
-- (TRRailPoint*)setX:(CGFloat)x {
-    return [TRRailPoint railPointWithTile:_tile form:_form x:x back:_back];
-}
-
-- (GEVec2i)nextTile {
-    return [[self endConnector] nextTile:_tile];
-}
-
-- (TRRailPoint*)straight {
-    if(_back) return [self invert];
-    else return self;
-}
-
-- (BOOL)betweenA:(TRRailPoint*)a b:(TRRailPoint*)b {
-    if(GEVec2iEq(a.tile, _tile) && GEVec2iEq(b.tile, _tile) && a.form == _form && b.form == _form) {
-        CGFloat ax = [a straight].x;
-        CGFloat bx = [b straight].x;
-        if(ax > bx) return floatBetween([self straight].x, bx, ax);
-        else return floatBetween([self straight].x, ax, bx);
-    } else {
-        return NO;
-    }
-}
-
-- (ODClassType*)type {
-    return [TRRailPoint type];
-}
-
-+ (ODClassType*)type {
-    return _TRRailPoint_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRailPoint* o = ((TRRailPoint*)(other));
-    return GEVec2iEq(self.tile, o.tile) && self.form == o.form && eqf(self.x, o.x) && self.back == o.back;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2iHash(self.tile);
-    hash = hash * 31 + [self.form ordinal];
-    hash = hash * 31 + floatHash(self.x);
-    hash = hash * 31 + self.back;
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+NSString* TRRailPointDescription(TRRailPoint self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<TRRailPoint: "];
     [description appendFormat:@"tile=%@", GEVec2iDescription(self.tile)];
     [description appendFormat:@", form=%@", self.form];
     [description appendFormat:@", x=%f", self.x];
     [description appendFormat:@", back=%d", self.back];
+    [description appendFormat:@", point=%@", GEVec2Description(self.point)];
     [description appendString:@">"];
     return description;
 }
-
-@end
-
-
-@implementation TRRailPointCorrection{
-    TRRailPoint* _point;
-    CGFloat _error;
+TRRailPoint trRailPointApplyTileFormXBack(GEVec2i tile, TRRailForm* form, CGFloat x, BOOL back) {
+    CGFloat xx = ((back) ? form.length - x : x);
+    GEVec2(^f)(CGFloat) = form.pointFun;
+    GEVec2 p = f(xx);
+    return TRRailPointMake(tile, form, x, back, GEVec2Make(p.x + tile.x, p.y + tile.y));
 }
-static ODClassType* _TRRailPointCorrection_type;
-@synthesize point = _point;
-@synthesize error = _error;
-
-+ (id)railPointCorrectionWithPoint:(TRRailPoint*)point error:(CGFloat)error {
-    return [[TRRailPointCorrection alloc] initWithPoint:point error:error];
+TRRailPoint trRailPointAddX(TRRailPoint self, CGFloat x) {
+    return trRailPointApplyTileFormXBack(self.tile, self.form, self.x + x, self.back);
 }
-
-- (id)initWithPoint:(TRRailPoint*)point error:(CGFloat)error {
-    self = [super init];
-    if(self) {
-        _point = point;
-        _error = error;
+TRRailConnector* trRailPointStartConnector(TRRailPoint self) {
+    if(self.back) return self.form.end;
+    else return self.form.start;
+}
+TRRailConnector* trRailPointEndConnector(TRRailPoint self) {
+    if(self.back) return self.form.start;
+    else return self.form.end;
+}
+BOOL trRailPointIsValid(TRRailPoint self) {
+    return self.x >= 0 && self.x <= self.form.length;
+}
+TRRailPointCorrection trRailPointCorrect(TRRailPoint self) {
+    CGFloat length = self.form.length;
+    if(self.x > length) return TRRailPointCorrectionMake(trRailPointApplyTileFormXBack(self.tile, self.form, length, self.back), self.x - length);
+    else return TRRailPointCorrectionMake(self, 0.0);
+}
+TRRailPoint trRailPointInvert(TRRailPoint self) {
+    return trRailPointApplyTileFormXBack(self.tile, self.form, self.form.length - self.x, !(self.back));
+}
+TRRailPoint trRailPointSetX(TRRailPoint self, CGFloat x) {
+    return trRailPointApplyTileFormXBack(self.tile, self.form, x, self.back);
+}
+GEVec2i trRailPointNextTile(TRRailPoint self) {
+    return [trRailPointEndConnector(self) nextTile:self.tile];
+}
+TRRailPoint trRailPointStraight(TRRailPoint self) {
+    if(self.back) return trRailPointInvert(self);
+    else return self;
+}
+BOOL trRailPointBetweenAB(TRRailPoint self, TRRailPoint a, TRRailPoint b) {
+    if(GEVec2iEq(a.tile, self.tile) && GEVec2iEq(b.tile, self.tile) && a.form == self.form && b.form == self.form) {
+        CGFloat ax = trRailPointStraight(a).x;
+        CGFloat bx = trRailPointStraight(b).x;
+        if(ax > bx) return floatBetween(trRailPointStraight(self).x, bx, ax);
+        else return floatBetween(trRailPointStraight(self).x, ax, bx);
+    } else {
+        return NO;
     }
-    
+}
+ODPType* trRailPointType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[TRRailPointWrap class] name:@"TRRailPoint" size:sizeof(TRRailPoint) wrap:^id(void* data, NSUInteger i) {
+        return wrap(TRRailPoint, ((TRRailPoint*)(data))[i]);
+    }];
+    return _ret;
+}
+@implementation TRRailPointWrap{
+    TRRailPoint _value;
+}
+@synthesize value = _value;
+
++ (id)wrapWithValue:(TRRailPoint)value {
+    return [[TRRailPointWrap alloc] initWithValue:value];
+}
+
+- (id)initWithValue:(TRRailPoint)value {
+    self = [super init];
+    if(self) _value = value;
     return self;
 }
 
-+ (void)initialize {
-    [super initialize];
-    _TRRailPointCorrection_type = [ODClassType classTypeWithCls:[TRRailPointCorrection class]];
+- (NSString*)description {
+    return TRRailPointDescription(_value);
 }
 
-- (TRRailPoint*)addErrorToPoint {
-    if(eqf(_error, 0)) return _point;
-    else return [_point addX:_error];
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRailPointWrap* o = ((TRRailPointWrap*)(other));
+    return TRRailPointEq(_value, o.value);
 }
 
-- (ODClassType*)type {
-    return [TRRailPointCorrection type];
-}
-
-+ (ODClassType*)type {
-    return _TRRailPointCorrection_type;
+- (NSUInteger)hash {
+    return TRRailPointHash(_value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRailPointCorrection* o = ((TRRailPointCorrection*)(other));
-    return [self.point isEqual:o.point] && eqf(self.error, o.error);
-}
+@end
 
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.point hash];
-    hash = hash * 31 + floatHash(self.error);
-    return hash;
-}
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"point=%@", self.point];
+
+NSString* TRRailPointCorrectionDescription(TRRailPointCorrection self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<TRRailPointCorrection: "];
+    [description appendFormat:@"point=%@", TRRailPointDescription(self.point)];
     [description appendFormat:@", error=%f", self.error];
     [description appendString:@">"];
     return description;
 }
+TRRailPoint trRailPointCorrectionAddErrorToPoint(TRRailPointCorrection self) {
+    if(eqf(self.error, 0)) return self.point;
+    else return trRailPointAddX(self.point, self.error);
+}
+ODPType* trRailPointCorrectionType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[TRRailPointCorrectionWrap class] name:@"TRRailPointCorrection" size:sizeof(TRRailPointCorrection) wrap:^id(void* data, NSUInteger i) {
+        return wrap(TRRailPointCorrection, ((TRRailPointCorrection*)(data))[i]);
+    }];
+    return _ret;
+}
+@implementation TRRailPointCorrectionWrap{
+    TRRailPointCorrection _value;
+}
+@synthesize value = _value;
+
++ (id)wrapWithValue:(TRRailPointCorrection)value {
+    return [[TRRailPointCorrectionWrap alloc] initWithValue:value];
+}
+
+- (id)initWithValue:(TRRailPointCorrection)value {
+    self = [super init];
+    if(self) _value = value;
+    return self;
+}
+
+- (NSString*)description {
+    return TRRailPointCorrectionDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRailPointCorrectionWrap* o = ((TRRailPointCorrectionWrap*)(other));
+    return TRRailPointCorrectionEq(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return TRRailPointCorrectionHash(_value);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
 
 @end
+
 
 

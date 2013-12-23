@@ -1,13 +1,10 @@
 #import "objd.h"
 #import "GEVec.h"
+#import "TRRailPoint.h"
 #import "EGScene.h"
-@class TRRailConnector;
 @class TRForest;
-@class TRRailForm;
-@class TRRailPoint;
 @class EGMapSso;
 @class TRScore;
-@class TRRailPointCorrection;
 
 @class TRRailroadConnectorContent;
 @class TREmptyConnector;
@@ -81,8 +78,8 @@
 - (id<CNSeq>)rails;
 - (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
 - (void)cutDownTreesInForest:(TRForest*)forest;
-- (TRRailPoint*)railPoint1;
-- (TRRailPoint*)railPoint2;
+- (TRRailPoint)railPoint1;
+- (TRRailPoint)railPoint2;
 + (CNNotificationHandle*)turnNotification;
 + (ODClassType*)type;
 @end
@@ -120,10 +117,10 @@
 
 @interface TRObstacle : NSObject
 @property (nonatomic, readonly) TRObstacleType* obstacleType;
-@property (nonatomic, readonly) TRRailPoint* point;
+@property (nonatomic, readonly) TRRailPoint point;
 
-+ (id)obstacleWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint*)point;
-- (id)initWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint*)point;
++ (id)obstacleWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint)point;
+- (id)initWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint)point;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -146,10 +143,10 @@
 - (BOOL)tryAddRail:(TRRail*)rail;
 - (void)addRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)contentInTile:(GEVec2i)tile connector:(TRRailConnector*)connector;
-- (TRRailPointCorrection*)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(CGFloat)forLength point:(TRRailPoint*)point;
-- (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint*)from to:(CGFloat)to;
-- (TRRailPoint*)addDamageAtPoint:(TRRailPoint*)point;
-- (void)fixDamageAtPoint:(TRRailPoint*)point;
+- (TRRailPointCorrection)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(CGFloat)forLength point:(TRRailPoint)point;
+- (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint)from to:(CGFloat)to;
+- (TRRailPoint)addDamageAtPoint:(TRRailPoint)point;
+- (void)fixDamageAtPoint:(TRRailPoint)point;
 - (void)updateWithDelta:(CGFloat)delta;
 + (CNNotificationHandle*)changedNotification;
 + (ODClassType*)type;

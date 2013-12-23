@@ -1,14 +1,12 @@
 #import "objd.h"
 #import "TSTestCase.h"
 #import "GEVec.h"
+#import "TRRailPoint.h"
 @class TRLevelFactory;
-@class TRRailForm;
 @class TRRail;
 @class TRRailroad;
-@class TRRailPoint;
 @class TRObstacle;
 @class TRObstacleType;
-@class TRRailPointCorrection;
 
 @class TRDamageTest;
 

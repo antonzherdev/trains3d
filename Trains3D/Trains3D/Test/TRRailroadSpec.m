@@ -5,11 +5,11 @@
 #import "TRLevelFactory.h"
 #import "TRRailPoint.h"
 
-#define checkCorrection [[r should] equal:e]
-#define rpm(tx, ty, fform, xx, bback) [[TRRailPoint alloc] initWithTile:GEVec2iMake(tx, ty) form:[TRRailForm fform] x:xx back:bback]
-#define cor(p, e) [TRRailPointCorrection railPointCorrectionWithPoint:p error:e]
-#define zcor(p) [TRRailPointCorrection railPointCorrectionWithPoint:p error:0]
-#define zrpm(tx, ty, fform, xx, bback) zcor([[TRRailPoint alloc] initWithTile:GEVec2iMake(tx, ty) form:[TRRailForm fform] x:xx back:bback])
+#define checkCorrection [[theValue(TRRailPointCorrectionEq(r, e)) should] beTrue]
+#define rpm(tx, ty, fform, xx, bback) trRailPointApplyTileFormXBack(GEVec2iMake(tx, ty), [TRRailForm fform], xx, bback)
+#define cor(p, e) TRRailPointCorrectionMake(p, e)
+#define zcor(p) TRRailPointCorrectionMake(p, 0)
+#define zrpm(tx, ty, fform, xx, bback) zcor(trRailPointApplyTileFormXBack(GEVec2iMake(tx, ty), [TRRailForm fform], xx, bback))
 #define move(p, len) [railroad moveWithObstacleProcessor:^BOOL(TRObstacle* o) {return NO;} forLength:len point:p]
 SPEC_BEGIN(TRRailroadSpec)
     describe(@"TRRailroad", ^{
@@ -26,9 +26,9 @@ SPEC_BEGIN(TRRailroadSpec)
             [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(3, 2) form:[TRRailForm leftBottom]]];
             [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(2, 2) form:[TRRailForm leftRight]]];
 
-            TRRailPoint* p0 = rpm(0, 0, leftRight, 0, NO);
-            TRRailPointCorrection* r = move(p0, 0.5);
-            TRRailPointCorrection* e = zcor([p0 addX:0.5]);
+            TRRailPoint p0 = rpm(0, 0, leftRight, 0, NO);
+            TRRailPointCorrection r = move(p0, 0.5);
+            TRRailPointCorrection e = zcor(trRailPointAddX(p0, 0.5));
             checkCorrection;
 
             r = move(p0, 1.2);
@@ -83,9 +83,9 @@ SPEC_BEGIN(TRRailroadSpec)
             [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(3, 0) form:[TRRailForm leftTop]]];
             [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(3, 0) form:[TRRailForm leftRight]]];
 
-            TRRailPoint* p0 = rpm(2, 0, leftRight, 0, NO);
-            TRRailPointCorrection* r = move(p0, 1.2);
-            TRRailPointCorrection* e = zrpm(3, 0, leftTop, 0.2, NO);
+            TRRailPoint p0 = rpm(2, 0, leftRight, 0, NO);
+            TRRailPointCorrection r = move(p0, 1.2);
+            TRRailPointCorrection e = zrpm(3, 0, leftTop, 0.2, NO);
             checkCorrection;
 
             TRSwitch * theSwitch = railroad.switches[0];

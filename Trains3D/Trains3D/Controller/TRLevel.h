@@ -2,6 +2,7 @@
 #import "GEVec.h"
 #import "EGScene.h"
 #import "EGMapIso.h"
+#import "TRRailPoint.h"
 @class TRScoreRules;
 @class TRWeatherRules;
 @class TRNotifications;
@@ -14,7 +15,6 @@
 @class TRTrainsDynamicWorld;
 @class TRCity;
 @class TRCityAngle;
-@class TRRailConnector;
 @class TRRailroadConnectorContent;
 @class EGInterfaceIdiom;
 @class TRRail;
@@ -25,11 +25,9 @@
 @class TRTrainGenerator;
 @class TRTrainType;
 @class TRCityColor;
-@class TRRailPoint;
 @class TRSwitch;
 @class TRCarsCollision;
 @class TRCar;
-@class TRRailForm;
 @class TRCarType;
 @class TRForestRules;
 @class TRForestType;
@@ -81,7 +79,7 @@
 - (void)createNewCity;
 - (void)createCityWithTile:(GEVec2i)tile direction:(TRCityAngle*)direction;
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator;
-- (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint*)fromPoint;
+- (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint)fromPoint;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch;
 - (id)cityForTile:(GEVec2i)tile;
@@ -93,7 +91,7 @@
 - (void)destroyTrain:(TRTrain*)train;
 - (void)removeTrain:(TRTrain*)train;
 - (void)runRepairerFromCity:(TRCity*)city;
-- (void)fixDamageAtPoint:(TRRailPoint*)point;
+- (void)fixDamageAtPoint:(TRRailPoint)point;
 - (id)help;
 - (void)showHelpText:(NSString*)text;
 - (void)clearHelp;

@@ -8,7 +8,6 @@
 #import "EGContext.h"
 #import "TRTrain.h"
 #import "TRSmoke.h"
-#import "TRCar.h"
 #import "GEMat4.h"
 #import "EGDynamicWorld.h"
 #import "EGMaterial.h"

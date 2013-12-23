@@ -14,7 +14,6 @@
 #import "EGTexture.h"
 #import "TRModels.h"
 #import "GEMat4.h"
-#import "TRRailPoint.h"
 #import "TRStrings.h"
 #import "EGBillboard.h"
 #import "EGSchedule.h"
@@ -710,7 +709,7 @@ static ODClassType* _TRDamageView_type;
     _TRDamageView_type = [ODClassType classTypeWithCls:[TRDamageView class]];
 }
 
-- (void)drawPoint:(TRRailPoint*)point {
+- (void)drawPoint:(TRRailPoint)point {
     [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
         return [[_ modifyW:^GEMat4*(GEMat4* w) {
             return [w translateX:point.point.x y:point.point.y z:0.0];
@@ -723,23 +722,23 @@ static ODClassType* _TRDamageView_type;
 }
 
 - (void)draw {
-    [[_railroad damagesPoints] forEach:^void(TRRailPoint* _) {
-        [self drawPoint:_];
+    [[_railroad damagesPoints] forEach:^void(id _) {
+        [self drawPoint:uwrap(TRRailPoint, _)];
     }];
 }
 
 - (void)drawForeground {
     [EGGlobal.context.depthTest disabledF:^void() {
         [_sporadicAnimations forEach:^void(EGCounterData* counter) {
-            [EGD2D drawCircleBackColor:GEVec4Make(1.0, 0.0, 0.0, 0.5) strokeColor:GEVec4Make(1.0, 0.0, 0.0, 0.5) at:geVec3ApplyVec2Z(((TRRailPoint*)(counter.data)).point, 0.0) radius:((float)(0.1 * [counter invTime])) relative:GEVec2Make(0.0, 0.0)];
+            [EGD2D drawCircleBackColor:GEVec4Make(1.0, 0.0, 0.0, 0.5) strokeColor:GEVec4Make(1.0, 0.0, 0.0, 0.5) at:geVec3ApplyVec2Z(uwrap(TRRailPoint, counter.data).point, 0.0) radius:((float)(0.1 * [counter invTime])) relative:GEVec2Make(0.0, 0.0)];
         }];
     }];
 }
 
-- (float)angleForPoint:(TRRailPoint*)point {
-    TRRailPoint* p = [point straight];
-    TRRailPoint* a = [p addX:-0.1];
-    TRRailPoint* b = [p addX:0.1];
+- (float)angleForPoint:(TRRailPoint)point {
+    TRRailPoint p = trRailPointStraight(point);
+    TRRailPoint a = trRailPointAddX(p, -0.1);
+    TRRailPoint b = trRailPointAddX(p, 0.1);
     GELine2 line = geLine2ApplyP0P1(a.point, b.point);
     float angle = geLine2DegreeAngle(line);
     return angle + 90;

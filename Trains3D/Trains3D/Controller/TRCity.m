@@ -1,7 +1,6 @@
 #import "TRCity.h"
 
 #import "TRStrings.h"
-#import "TRRailPoint.h"
 #import "EGCollisionBody.h"
 #import "EGSchedule.h"
 #import "TRTrain.h"
@@ -227,8 +226,8 @@ static ODClassType* _TRCity_type;
     _TRCity_box = [EGCollisionBox applyX:0.9 y:0.2 z:0.15];
 }
 
-- (TRRailPoint*)startPoint {
-    return [TRRailPoint railPointWithTile:_tile form:_angle.form x:-0.5 back:_angle.back];
+- (TRRailPoint)startPoint {
+    return trRailPointApplyTileFormXBack(_tile, _angle.form, -0.5, _angle.back);
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

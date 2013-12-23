@@ -1,16 +1,14 @@
 #import "objd.h"
 #import "GEVec.h"
 #import "EGScene.h"
+#import "TRRailPoint.h"
 @class TRStr;
 @protocol TRStrings;
-@class TRRailForm;
-@class TRRailConnector;
 @class EGCollisionBox;
 @class EGCounter;
 @class TRTrain;
 @class EGRigidBody;
 @class GEMat4;
-@class TRRailPoint;
 
 @class TRCity;
 @class TRCityColor;
@@ -61,7 +59,7 @@
 + (id)cityWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
 - (id)initWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
 - (ODClassType*)type;
-- (TRRailPoint*)startPoint;
+- (TRRailPoint)startPoint;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)waitToRunTrain;
 - (BOOL)isWaitingToRunTrain;

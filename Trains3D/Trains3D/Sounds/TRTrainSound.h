@@ -1,10 +1,10 @@
 #import "objd.h"
 #import "EGSound.h"
+#import "TRRailPoint.h"
 #import "GEVec.h"
 @class TRLevel;
 @class SDSound;
 @class TRTrain;
-@class TRRailPoint;
 
 @class TRTrainSound;
 @class TRTrainSoundData;
@@ -31,7 +31,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)nextChoo;
-- (void)nextHead:(TRRailPoint*)head;
+- (void)nextHead:(TRRailPoint)head;
 + (ODClassType*)type;
 @end
 

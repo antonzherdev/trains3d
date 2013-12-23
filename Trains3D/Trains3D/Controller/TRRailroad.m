@@ -1,6 +1,5 @@
 #import "TRRailroad.h"
 
-#import "TRRailPoint.h"
 #import "TRTree.h"
 #import "EGMapIso.h"
 #import "TRScore.h"
@@ -304,16 +303,16 @@ static ODClassType* _TRSwitch_type;
     [forest cutDownForASwitch:self];
 }
 
-- (TRRailPoint*)railPoint1 {
+- (TRRailPoint)railPoint1 {
     return [self railPointRail:_rail1];
 }
 
-- (TRRailPoint*)railPoint2 {
+- (TRRailPoint)railPoint2 {
     return [self railPointRail:_rail2];
 }
 
-- (TRRailPoint*)railPointRail:(TRRail*)rail {
-    return [TRRailPoint railPointWithTile:_tile form:rail.form x:0.0 back:rail.form.end == _connector];
+- (TRRailPoint)railPointRail:(TRRail*)rail {
+    return trRailPointApplyTileFormXBack(_tile, rail.form, 0.0, rail.form.end == _connector);
 }
 
 - (ODClassType*)type {
@@ -519,17 +518,17 @@ static NSArray* _TRObstacleType_values;
 
 @implementation TRObstacle{
     TRObstacleType* _obstacleType;
-    TRRailPoint* _point;
+    TRRailPoint _point;
 }
 static ODClassType* _TRObstacle_type;
 @synthesize obstacleType = _obstacleType;
 @synthesize point = _point;
 
-+ (id)obstacleWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint*)point {
++ (id)obstacleWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint)point {
     return [[TRObstacle alloc] initWithObstacleType:obstacleType point:point];
 }
 
-- (id)initWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint*)point {
+- (id)initWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint)point {
     self = [super init];
     if(self) {
         _obstacleType = obstacleType;
@@ -560,20 +559,20 @@ static ODClassType* _TRObstacle_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRObstacle* o = ((TRObstacle*)(other));
-    return self.obstacleType == o.obstacleType && [self.point isEqual:o.point];
+    return self.obstacleType == o.obstacleType && TRRailPointEq(self.point, o.point);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.obstacleType ordinal];
-    hash = hash * 31 + [self.point hash];
+    hash = hash * 31 + TRRailPointHash(self.point);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"obstacleType=%@", self.obstacleType];
-    [description appendFormat:@", point=%@", self.point];
+    [description appendFormat:@", point=%@", TRRailPointDescription(self.point)];
     [description appendString:@">"];
     return description;
 }
@@ -720,25 +719,25 @@ static ODClassType* _TRRailroad_type;
     return [[((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(GEVec2i, tile), connector)])) rails] headOpt];
 }
 
-- (TRRailPointCorrection*)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(CGFloat)forLength point:(TRRailPoint*)point {
-    TRRailPoint* p = [point addX:forLength];
-    TRRailPointCorrection* correction = [p correct];
+- (TRRailPointCorrection)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(CGFloat)forLength point:(TRRailPoint)point {
+    TRRailPoint p = trRailPointAddX(point, forLength);
+    TRRailPointCorrection correction = trRailPointCorrect(p);
     id damage = [self checkDamagesWithObstacleProcessor:obstacleProcessor from:point to:correction.point.x];
     if([damage isDefined]) {
         CGFloat x = unumf([damage get]);
-        return [TRRailPointCorrection railPointCorrectionWithPoint:[p setX:x] error:correction.error + correction.point.x - x];
+        return TRRailPointCorrectionMake(trRailPointSetX(p, x), correction.error + correction.point.x - x);
     }
     if(eqf(correction.error, 0)) {
-        TRRailPointCorrection* switchCheckCorrection = [[correction.point addX:0.5] correct];
+        TRRailPointCorrection switchCheckCorrection = trRailPointCorrect(trRailPointAddX(correction.point, 0.5));
         if(eqf(switchCheckCorrection.error, 0)) return correction;
-        id scActiveRailOpt = [[((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(GEVec2i, p.tile), [p endConnector])])) rails] headOpt];
+        id scActiveRailOpt = [[((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(GEVec2i, p.tile), trRailPointEndConnector(p))])) rails] headOpt];
         if([scActiveRailOpt isEmpty]) return correction;
         if(((TRRail*)([scActiveRailOpt get])).form != p.form) {
-            if(!(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.aSwitch point:correction.point]))) return [TRRailPointCorrection railPointCorrectionWithPoint:[switchCheckCorrection.point addX:-0.5] error:switchCheckCorrection.error];
+            if(!(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.aSwitch point:correction.point]))) return TRRailPointCorrectionMake(trRailPointAddX(switchCheckCorrection.point, -0.5), switchCheckCorrection.error);
         }
         return correction;
     }
-    TRRailConnector* connector = [p endConnector];
+    TRRailConnector* connector = trRailPointEndConnector(p);
     TRRailroadConnectorContent* connectorDesc = [_connectorIndex applyKey:tuple(wrap(GEVec2i, p.tile), connector)];
     id activeRailOpt = [[connectorDesc rails] headOpt];
     if([activeRailOpt isEmpty]) return correction;
@@ -758,16 +757,16 @@ static ODClassType* _TRRailroad_type;
     }
     TRRail* nextActiveRail = [nextRail get];
     TRRailForm* form = nextActiveRail.form;
-    return [self moveWithObstacleProcessor:obstacleProcessor forLength:correction.error point:[TRRailPoint railPointWithTile:nextTile form:form x:0.0 back:form.end == otherSideConnector]];
+    return [self moveWithObstacleProcessor:obstacleProcessor forLength:correction.error point:trRailPointApplyTileFormXBack(nextTile, form, 0.0, form.end == otherSideConnector)];
 }
 
-- (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint*)from to:(CGFloat)to {
+- (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint)from to:(CGFloat)to {
     if([__damagesPoints isEmpty]) return [CNOption none];
     if(eqf(from.x, to)) return [CNOption none];
     id opt = [_damagesIndex optKey:tuple(wrap(GEVec2i, from.tile), from.form)];
     if([opt isEmpty]) return [CNOption none];
     BOOL(^on)(id) = ^BOOL(id x) {
-        return !(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.damage point:[from setX:unumf(x)]]));
+        return !(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.damage point:trRailPointSetX(from, unumf(x))]));
     };
     CGFloat len = from.form.length;
     if(from.back) return [[[[[((id<CNSeq>)([opt get])) chain] filter:^BOOL(id _) {
@@ -780,22 +779,22 @@ static ODClassType* _TRRailroad_type;
     }] sort] findWhere:on];
 }
 
-- (TRRailPoint*)addDamageAtPoint:(TRRailPoint*)point {
-    TRRailPoint* p = point;
-    if(p.back) p = [p invert];
+- (TRRailPoint)addDamageAtPoint:(TRRailPoint)point {
+    TRRailPoint p = point;
+    if(p.back) p = trRailPointInvert(p);
     CGFloat fl = p.form.length;
     if([p.form isStraight] && floatBetween(p.x, 0.35, 0.65)) {
-        p = [p setX:0.35];
+        p = trRailPointSetX(p, 0.35);
     } else {
         if(floatBetween(p.x, 0.0, 0.3)) {
-            p = [p setX:0.3];
+            p = trRailPointSetX(p, 0.3);
         } else {
-            if(floatBetween(p.x, fl - 0.3, fl)) p = [p setX:fl - 0.3];
+            if(floatBetween(p.x, fl - 0.3, fl)) p = trRailPointSetX(p, fl - 0.3);
         }
     }
     if(!([_map isVisibleVec2:p.point])) {
-        p = [p setX:0.0];
-        if(!([_map isVisibleVec2:p.point])) p = [p setX:fl];
+        p = trRailPointSetX(p, 0.0);
+        if(!([_map isVisibleVec2:p.point])) p = trRailPointSetX(p, fl);
     }
     [_damagesIndex modifyBy:^id(id arr) {
         return [CNOption applyValue:[[arr mapF:^id<CNSeq>(id<CNSeq> _) {
@@ -804,13 +803,13 @@ static ODClassType* _TRRailroad_type;
             return (@[numf(p.x)]);
         }]];
     } forKey:tuple(wrap(GEVec2i, p.tile), p.form)];
-    [__damagesPoints appendItem:p];
+    [__damagesPoints appendItem:wrap(TRRailPoint, p)];
     return p;
 }
 
-- (void)fixDamageAtPoint:(TRRailPoint*)point {
-    TRRailPoint* p = point;
-    if(p.back) p = [point invert];
+- (void)fixDamageAtPoint:(TRRailPoint)point {
+    TRRailPoint p = point;
+    if(p.back) p = trRailPointInvert(point);
     [_damagesIndex modifyBy:^id(id arrOpt) {
         return [arrOpt mapF:^id<CNSeq>(id<CNSeq> arr) {
             return [[[((id<CNSeq>)(arr)) chain] filter:^BOOL(id _) {
@@ -818,7 +817,7 @@ static ODClassType* _TRRailroad_type;
             }] toArray];
         }];
     } forKey:tuple(wrap(GEVec2i, p.tile), p.form)];
-    [__damagesPoints removeItem:p];
+    [__damagesPoints removeItem:wrap(TRRailPoint, p)];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

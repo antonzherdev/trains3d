@@ -3,7 +3,6 @@
 #import "TRLevel.h"
 #import "SDSound.h"
 #import "TRTrain.h"
-#import "TRRailPoint.h"
 @implementation TRTrainSound{
     TRLevel* _level;
     EGSoundParallel* _choo;
@@ -44,7 +43,7 @@ static ODClassType* _TRTrainSound_type;
             [_choo play];
             [sd nextChoo];
         } else {
-            TRRailPoint* h = [((TRTrain*)(train)) head];
+            TRRailPoint h = [((TRTrain*)(train)) head];
             if(!(GEVec2iEq(h.tile, sd.lastTile))) {
                 [_choo play];
                 sd.lastTile = h.tile;
@@ -156,7 +155,7 @@ static ODClassType* _TRTrainSoundData_type;
     }
 }
 
-- (void)nextHead:(TRRailPoint*)head {
+- (void)nextHead:(TRRailPoint)head {
     _toNextChoo -= floatAbs(_lastX - head.x);
     _lastX = head.x;
 }

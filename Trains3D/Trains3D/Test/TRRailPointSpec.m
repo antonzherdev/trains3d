@@ -2,8 +2,8 @@
 #import "TRLevel.h"
 #import "TRRailPoint.h"
 
-#define p(fform, xx) [((TRRailPoint*)[TRRailPoint railPointWithTile:t0 form:[TRRailForm fform] x:xx back:NO]) point]
-#define pb(fform, xx) [((TRRailPoint*)[TRRailPoint railPointWithTile:t0 form:[TRRailForm fform] x:xx back:YES]) point]
+#define p(fform, xx) trRailPointApplyTileFormXBack(t0, [TRRailForm fform], xx, NO).point
+#define pb(fform, xx) trRailPointApplyTileFormXBack(t0, [TRRailForm fform], xx, YES).point
 #define chechPoints(p1, p2) [[theValue(GEVec2Eq(p1, p2)) should] beTrue]
 #define egp(x, y) GEVec2Make(x, y)
 

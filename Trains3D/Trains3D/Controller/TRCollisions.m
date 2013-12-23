@@ -3,10 +3,8 @@
 #import "EGMapIso.h"
 #import "EGCollisionWorld.h"
 #import "TRTrain.h"
-#import "TRCar.h"
 #import "EGCollision.h"
 #import "EGCollisionBody.h"
-#import "TRRailPoint.h"
 #import "TRLevel.h"
 #import "EGDynamicWorld.h"
 #import "TRTree.h"
@@ -56,14 +54,14 @@ static ODClassType* _TRTrainsCollisionWorld_type;
 }]) return [CNOption none];
         TRCar* car1 = ((CNWeak*)(((EGCollisionBody*)(((EGCollision*)(collision)).bodies.a)).data)).get;
         TRCar* car2 = ((CNWeak*)(((EGCollisionBody*)(((EGCollision*)(collision)).bodies.b)).data)).get;
-        TRRailPoint* point = [[[[[[[(@[[car1 position].head, [car1 position].tail]) chain] mul:(@[[car2 position].head, [car2 position].tail])] sortBy] ascBy:^id(CNTuple* pair) {
-            TRRailPoint* x = ((CNTuple*)(pair)).a;
-            TRRailPoint* y = ((CNTuple*)(pair)).b;
+        TRRailPoint point = uwrap(TRRailPoint, [[[[[[[(@[wrap(TRRailPoint, [car1 position].head), wrap(TRRailPoint, [car1 position].tail)]) chain] mul:(@[wrap(TRRailPoint, [car2 position].head), wrap(TRRailPoint, [car2 position].tail)])] sortBy] ascBy:^id(CNTuple* pair) {
+            TRRailPoint x = uwrap(TRRailPoint, ((CNTuple*)(pair)).a);
+            TRRailPoint y = uwrap(TRRailPoint, ((CNTuple*)(pair)).b);
             if(x.form == y.form && GEVec2iEq(x.tile, y.tile)) return numf(floatAbs(x.x - y.x));
             else return @1000;
-        }] endSort] map:^TRRailPoint*(CNTuple* _) {
+        }] endSort] map:^id(CNTuple* _) {
             return ((CNTuple*)(_)).a;
-        }] head];
+        }] head]);
         return [CNOption someValue:[TRCarsCollision carsCollisionWithCars:[CNPair pairWithA:car1 b:car2] railPoint:point]];
     }] toArray];
 }
@@ -109,17 +107,17 @@ static ODClassType* _TRTrainsCollisionWorld_type;
 
 @implementation TRCarsCollision{
     CNPair* _cars;
-    TRRailPoint* _railPoint;
+    TRRailPoint _railPoint;
 }
 static ODClassType* _TRCarsCollision_type;
 @synthesize cars = _cars;
 @synthesize railPoint = _railPoint;
 
-+ (id)carsCollisionWithCars:(CNPair*)cars railPoint:(TRRailPoint*)railPoint {
++ (id)carsCollisionWithCars:(CNPair*)cars railPoint:(TRRailPoint)railPoint {
     return [[TRCarsCollision alloc] initWithCars:cars railPoint:railPoint];
 }
 
-- (id)initWithCars:(CNPair*)cars railPoint:(TRRailPoint*)railPoint {
+- (id)initWithCars:(CNPair*)cars railPoint:(TRRailPoint)railPoint {
     self = [super init];
     if(self) {
         _cars = cars;
@@ -150,20 +148,20 @@ static ODClassType* _TRCarsCollision_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRCarsCollision* o = ((TRCarsCollision*)(other));
-    return [self.cars isEqual:o.cars] && [self.railPoint isEqual:o.railPoint];
+    return [self.cars isEqual:o.cars] && TRRailPointEq(self.railPoint, o.railPoint);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.cars hash];
-    hash = hash * 31 + [self.railPoint hash];
+    hash = hash * 31 + TRRailPointHash(self.railPoint);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"cars=%@", self.cars];
-    [description appendFormat:@", railPoint=%@", self.railPoint];
+    [description appendFormat:@", railPoint=%@", TRRailPointDescription(self.railPoint)];
     [description appendString:@">"];
     return description;
 }

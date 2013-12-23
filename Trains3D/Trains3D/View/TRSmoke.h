@@ -1,15 +1,12 @@
 #import "objd.h"
 #import "EGBillboard.h"
 #import "GEVec.h"
+#import "TRCar.h"
+#import "TRRailPoint.h"
 #import "EGParticleSystem.h"
 @class TRTrain;
 @class TRWeather;
-@class TRCar;
-@class TRCarType;
-@class TREngineType;
 @class TRTrainType;
-@class TRCarPosition;
-@class TRRailPoint;
 @class EGProgress;
 @class EGGlobal;
 @class EGColorSource;

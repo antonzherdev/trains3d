@@ -1,14 +1,13 @@
 #import "objd.h"
+#import "TRCar.h"
+#import "TRRailPoint.h"
 #import "GEVec.h"
 #import "EGScene.h"
 @class EGMapSso;
 @class EGCollisionWorld;
 @class TRTrain;
-@class TRCar;
 @class EGCollision;
 @class EGCollisionBody;
-@class TRCarPosition;
-@class TRRailPoint;
 @class EGContact;
 @class TRLevel;
 @class EGDynamicWorld;
@@ -38,10 +37,10 @@
 
 @interface TRCarsCollision : NSObject
 @property (nonatomic, readonly) CNPair* cars;
-@property (nonatomic, readonly) TRRailPoint* railPoint;
+@property (nonatomic, readonly) TRRailPoint railPoint;
 
-+ (id)carsCollisionWithCars:(CNPair*)cars railPoint:(TRRailPoint*)railPoint;
-- (id)initWithCars:(CNPair*)cars railPoint:(TRRailPoint*)railPoint;
++ (id)carsCollisionWithCars:(CNPair*)cars railPoint:(TRRailPoint)railPoint;
+- (id)initWithCars:(CNPair*)cars railPoint:(TRRailPoint)railPoint;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

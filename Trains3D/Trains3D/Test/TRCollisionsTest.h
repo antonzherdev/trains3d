@@ -1,19 +1,17 @@
 #import "objd.h"
 #import "TSTestCase.h"
 #import "GEVec.h"
+#import "TRRailPoint.h"
 @class TRCarType;
 @class TRLevel;
 @class TRLevelFactory;
 @class TRCarsCollision;
 @class TRCar;
-@class TRRailForm;
 @class TRRail;
 @class TRRailroad;
 @class TRTrainType;
 @class TRCityColor;
 @class TRTrain;
-@class TRRailPoint;
-@class TRRailPointCorrection;
 
 @class TRCollisionsTest;
 

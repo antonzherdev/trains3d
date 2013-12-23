@@ -82,8 +82,9 @@ class Car(weak train : Train, carType : CarType) {
 //    }
 }
 
-class CarPosition(frontConnector : RailPoint, head : RailPoint, tail : RailPoint, backConnector : RailPoint) {
-    val line = Line2(p0 = tail.point, p1 = head.point)
+struct CarPosition(frontConnector : RailPoint, head : RailPoint, tail : RailPoint, backConnector : RailPoint, line : Line2) {
+    static def apply(frontConnector : RailPoint, head : RailPoint, tail : RailPoint, backConnector : RailPoint) : CarPosition =
+        CarPosition(frontConnector, head, tail, backConnector, Line2(p0 = tail.point, p1 = head.point))
 
     def isIn(tile : vec2i) : bool = head.tile == tile || tail.tile == tile
 }

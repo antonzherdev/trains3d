@@ -57,7 +57,13 @@ enum RailForm(start : RailConnector, end : RailConnector, isTurn : bool, length 
     def connectors : [RailConnector] = [start, end]
 }
 
-class RailPoint(tile : vec2i, form : RailForm, x : float, back : bool) {
+struct RailPoint(tile : vec2i, form : RailForm, x : float, back : bool, point : vec2) {
+    static def apply(tile : vec2i, form : RailForm, x : float, back : bool) : RailPoint = {
+        val xx = if(back) form.length - x else x
+        val f = form.pointFun
+        val p : vec2 = f(xx)
+        RailPoint(tile, form, x, back, vec2(p.x + tile.x, p.y + tile.y))
+    }
     def add(x : float) = RailPoint(tile, form, self.x + x, back)
 
     def startConnector = if(back) form.end else form.start
@@ -70,14 +76,6 @@ class RailPoint(tile : vec2i, form : RailForm, x : float, back : bool) {
         val length = self.form.length
         if(self.x > length) RailPointCorrection(RailPoint(self.tile, self.form, length, self.back), self.x - length)
         else RailPointCorrection(self, 0)
-    }
-
-    val point : vec2 = calculatePoint
-    private def calculatePoint : vec2 = {
-        val x = if(back) form.length - self.x else self.x
-        val f = form.pointFun
-        val p : vec2 = f(x)
-        vec2(p.x + tile.x, p.y + tile.y)
     }
 
     def invert = RailPoint(tile, form, form.length - x, !back)
@@ -93,6 +91,6 @@ class RailPoint(tile : vec2i, form : RailForm, x : float, back : bool) {
         } else false
 }
 
-class RailPointCorrection(point : RailPoint, error : float) {
+struct RailPointCorrection(point : RailPoint, error : float) {
     def addErrorToPoint : RailPoint = if(error == 0) point else point + error
 }

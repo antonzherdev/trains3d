@@ -2,8 +2,6 @@
 
 #import "TRTrain.h"
 #import "TRWeather.h"
-#import "TRCar.h"
-#import "TRRailPoint.h"
 #import "EGProgress.h"
 #import "GL.h"
 #import "EGContext.h"
@@ -62,7 +60,7 @@ static ODClassType* _TRSmoke_type;
 }
 
 - (TRSmokeParticle*)generateParticle {
-    TRCarPosition* pos = [_engine position];
+    TRCarPosition pos = [_engine position];
     GEVec2 fPos = pos.head.point;
     GEVec2 bPos = pos.tail.point;
     GEVec2 delta = geVec2SubVec2(bPos, fPos);

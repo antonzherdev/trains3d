@@ -1,20 +1,16 @@
 #import "objd.h"
+#import "TRRailPoint.h"
 #import "EGScene.h"
+#import "TRCar.h"
 #import "GEVec.h"
 @class TRObstacle;
 @class TRObstacleType;
 @class TRLevel;
-@class TRRailPoint;
 @class EGMapSso;
 @class TRRailroad;
 @class TRCityColor;
-@class TRCar;
-@class TRCarType;
 @class TRCity;
-@class TRRailPointCorrection;
-@class TRCarPosition;
 @class TRSwitch;
-@class TRRailConnector;
 
 @class TRTrain;
 @class TRTrainGenerator;
@@ -49,8 +45,8 @@
 - (BOOL)isBack;
 - (void)startFromCity:(TRCity*)city;
 - (NSString*)description;
-- (TRRailPoint*)head;
-- (void)setHead:(TRRailPoint*)head;
+- (TRRailPoint)head;
+- (void)setHead:(TRRailPoint)head;
 - (CGFloat)time;
 - (void)updateWithDelta:(CGFloat)delta;
 - (BOOL)isInTile:(GEVec2i)tile;

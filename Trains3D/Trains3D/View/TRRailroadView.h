@@ -4,6 +4,7 @@
 #import "EGMapIso.h"
 #import "EGFont.h"
 #import "EGMesh.h"
+#import "TRRailPoint.h"
 @class TRLevel;
 @class TRRailroad;
 @class EGViewportSurface;
@@ -28,8 +29,6 @@
 @class TRRail;
 @class GEMat4;
 @class EGMatrixModel;
-@class TRRailForm;
-@class TRRailConnector;
 @class EGMatrixStack;
 @class TRStr;
 @protocol TRStrings;
@@ -39,7 +38,6 @@
 @class EGInterfaceIdiom;
 @class EGMutableCounterArray;
 @class EGLengthCounter;
-@class TRRailPoint;
 @class EGCounterData;
 @class EGD2D;
 @class TRLevelRules;
@@ -142,7 +140,7 @@
 + (id)damageViewWithRailroad:(TRRailroad*)railroad;
 - (id)initWithRailroad:(TRRailroad*)railroad;
 - (ODClassType*)type;
-- (void)drawPoint:(TRRailPoint*)point;
+- (void)drawPoint:(TRRailPoint)point;
 - (void)draw;
 - (void)drawForeground;
 - (void)updateWithDelta:(CGFloat)delta;

@@ -1,5 +1,6 @@
 #import "objd.h"
 #import "GEVec.h"
+#import "TRRailPoint.h"
 @protocol EGCollisionShape;
 @class EGCollisionBox2d;
 @class EGCollisionBox;
@@ -7,12 +8,11 @@
 @class EGCollisionBody;
 @class EGRigidBody;
 @class GEMat4;
-@class TRRailPoint;
 
 @class TREngineType;
 @class TRCar;
-@class TRCarPosition;
 @class TRCarType;
+typedef struct TRCarPosition TRCarPosition;
 
 @interface TREngineType : NSObject
 @property (nonatomic, readonly) GEVec3 tubePos;
@@ -59,25 +59,45 @@
 - (id)initWithTrain:(TRTrain*)train carType:(TRCarType*)carType;
 - (ODClassType*)type;
 - (EGRigidBody*)dynamicBody;
-- (TRCarPosition*)position;
-- (void)setPosition:(TRCarPosition*)position;
+- (TRCarPosition)position;
+- (void)setPosition:(TRCarPosition)position;
 - (GEVec2)midPoint;
 + (ODClassType*)type;
 @end
 
 
-@interface TRCarPosition : NSObject
-@property (nonatomic, readonly) TRRailPoint* frontConnector;
-@property (nonatomic, readonly) TRRailPoint* head;
-@property (nonatomic, readonly) TRRailPoint* tail;
-@property (nonatomic, readonly) TRRailPoint* backConnector;
-@property (nonatomic, readonly) GELine2 line;
+struct TRCarPosition {
+    TRRailPoint frontConnector;
+    TRRailPoint head;
+    TRRailPoint tail;
+    TRRailPoint backConnector;
+    GELine2 line;
+};
+static inline TRCarPosition TRCarPositionMake(TRRailPoint frontConnector, TRRailPoint head, TRRailPoint tail, TRRailPoint backConnector, GELine2 line) {
+    return (TRCarPosition){frontConnector, head, tail, backConnector, line};
+}
+static inline BOOL TRCarPositionEq(TRCarPosition s1, TRCarPosition s2) {
+    return TRRailPointEq(s1.frontConnector, s2.frontConnector) && TRRailPointEq(s1.head, s2.head) && TRRailPointEq(s1.tail, s2.tail) && TRRailPointEq(s1.backConnector, s2.backConnector) && GELine2Eq(s1.line, s2.line);
+}
+static inline NSUInteger TRCarPositionHash(TRCarPosition self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + TRRailPointHash(self.frontConnector);
+    hash = hash * 31 + TRRailPointHash(self.head);
+    hash = hash * 31 + TRRailPointHash(self.tail);
+    hash = hash * 31 + TRRailPointHash(self.backConnector);
+    hash = hash * 31 + GELine2Hash(self.line);
+    return hash;
+}
+NSString* TRCarPositionDescription(TRCarPosition self);
+TRCarPosition trCarPositionApplyFrontConnectorHeadTailBackConnector(TRRailPoint frontConnector, TRRailPoint head, TRRailPoint tail, TRRailPoint backConnector);
+BOOL trCarPositionIsInTile(TRCarPosition self, GEVec2i tile);
+ODPType* trCarPositionType();
+@interface TRCarPositionWrap : NSObject
+@property (readonly, nonatomic) TRCarPosition value;
 
-+ (id)carPositionWithFrontConnector:(TRRailPoint*)frontConnector head:(TRRailPoint*)head tail:(TRRailPoint*)tail backConnector:(TRRailPoint*)backConnector;
-- (id)initWithFrontConnector:(TRRailPoint*)frontConnector head:(TRRailPoint*)head tail:(TRRailPoint*)tail backConnector:(TRRailPoint*)backConnector;
-- (ODClassType*)type;
-- (BOOL)isInTile:(GEVec2i)tile;
-+ (ODClassType*)type;
++ (id)wrapWithValue:(TRCarPosition)value;
+- (id)initWithValue:(TRCarPosition)value;
 @end
+
 
 
