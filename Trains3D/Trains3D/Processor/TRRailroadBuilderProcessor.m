@@ -64,7 +64,13 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
                     if(len > (([_fixedStart isDefined]) ? 1.6 : 1)) {
                         [_builder fix];
                         GELine2 rl = [rail line];
-                        BOOL end = geVec2LengthSquare(geVec2SubVec2(rl.p0, line.p0)) < geVec2LengthSquare(geVec2SubVec2(geLine2P1(rl), line.p0));
+                        float la0 = geVec2LengthSquare(geVec2SubVec2(rl.p0, line.p0));
+                        float la1 = geVec2LengthSquare(geVec2SubVec2(rl.p0, geLine2P1(line)));
+                        float lb0 = geVec2LengthSquare(geVec2SubVec2(geLine2P1(rl), line.p0));
+                        float lb1 = geVec2LengthSquare(geVec2SubVec2(geLine2P1(rl), geLine2P1(line)));
+                        BOOL end0 = la0 < lb0;
+                        BOOL end1 = la1 > lb1;
+                        BOOL end = ((end0 == end1) ? end0 : la1 > la0);
                         _startedPoint = ((end) ? [CNOption applyValue:wrap(GEVec2, geLine2P1(rl))] : [CNOption applyValue:wrap(GEVec2, rl.p0)]);
                         TRRailConnector* con = ((end) ? rail.form.end : rail.form.start);
                         _fixedStart = [CNOption applyValue:tuple(wrap(GEVec2i, [con nextTile:rail.tile]), [con otherSideConnector])];
