@@ -1,7 +1,9 @@
 #import "TRStrings.h"
 
+#import "TRTrain.h"
 #import "TRLevel.h"
 #import "EGGameCenter.h"
+#import "TRCity.h"
 #import "GL.h"
 #import "EGPlatform.h"
 @implementation TREnStrings
@@ -30,16 +32,16 @@ static ODClassType* _TREnStrings_type;
     return [NSString stringWithFormat:@"-%@: Payment for the railroad building", [self formatCost:cost]];
 }
 
-- (NSString*)trainArrivedCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"+%@: Reward for the arrived train", [self formatCost:cost]];
+- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"+%@: Reward for the arrived %@ train", [self formatCost:cost], train.color.localName];
 }
 
 - (NSString*)trainDestroyedCost:(NSInteger)cost {
     return [NSString stringWithFormat:@"-%@: Fine for the destroyed train", [self formatCost:cost]];
 }
 
-- (NSString*)trainDelayedFineCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"-%@: Fine for the delayed train", [self formatCost:cost]];
+- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: Fine for the delayed %@ train", [self formatCost:cost], train.color.localName];
 }
 
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost {
@@ -364,16 +366,16 @@ static ODClassType* _TRRuStrings_type;
     return [NSString stringWithFormat:@"-%@: Плата за постройку железной дороги", [self formatCost:cost]];
 }
 
-- (NSString*)trainArrivedCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"+%@: Доход от прибытия поезда", [self formatCost:cost]];
+- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"+%@: Доход от прибытия поезда в %@ город", [self formatCost:cost], train.color.localName];
 }
 
 - (NSString*)trainDestroyedCost:(NSInteger)cost {
     return [NSString stringWithFormat:@"-%@: Штраф за уничтожение поезда", [self formatCost:cost]];
 }
 
-- (NSString*)trainDelayedFineCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся поезд", [self formatCost:cost]];
+- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся %@ поезд", [self formatCost:cost], train.color.localName];
 }
 
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost {

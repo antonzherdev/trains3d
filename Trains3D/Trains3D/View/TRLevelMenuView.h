@@ -6,12 +6,12 @@
 @class TRLevel;
 @class EGSprite;
 @class EGProgress;
+@class EGInterfaceIdiom;
 @class EGCounter;
 @class EGFinisher;
 @class EGGlobal;
 @class EGContext;
 @class EGCamera2D;
-@class EGInterfaceIdiom;
 @class EGTexture;
 @class EGColorSource;
 @class EGBlendFunction;
@@ -32,6 +32,7 @@
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) GEVec4(^notificationProgress)(float);
 @property (nonatomic) id<EGCamera> camera;
+@property (nonatomic, readonly) EGText* scoreText;
 @property (nonatomic) id levelText;
 
 + (id)levelMenuViewWithLevel:(TRLevel*)level;

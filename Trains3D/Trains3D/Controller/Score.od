@@ -24,7 +24,7 @@ class Score(rules : ScoreRules, notifications : Notifications) extends Updatable
     def arrived(train : Train) {
         val prize = rules.arrivedPrize(train)
         _score += prize
-        notifications.notify(Loc.trainArrived(prize))
+        notifications.notify(Loc.trainArrived(train, prize))
         remove(train)
     }
     def destroyed(train : Train) {
@@ -37,12 +37,12 @@ class Score(rules : ScoreRules, notifications : Notifications) extends Updatable
         trains = trains.chain.filter(_.train != train).toArray
     }
     def updateWith(delta : float) {
-        trains.for{train ->
-            train.updateWith(delta)
-            if(train.needFineWith(rules.delayPeriod)) {
-                val fine = train.fineWith(rule = rules.delayFine)
+        trains.for{ts ->
+            ts.updateWith(delta)
+            if(ts.needFineWith(rules.delayPeriod)) {
+                val fine = ts.fineWith(rule = rules.delayFine)
                 _score -= fine
-                notifications.notify(Loc.trainDelayedFine(fine))
+                notifications.notify(Loc.trainDelayedFine(ts.train, fine))
             }
         }
     }

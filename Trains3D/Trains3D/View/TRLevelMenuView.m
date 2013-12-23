@@ -3,11 +3,11 @@
 #import "TRLevel.h"
 #import "EGSprite.h"
 #import "EGProgress.h"
+#import "GL.h"
+#import "EGPlatform.h"
 #import "EGSchedule.h"
 #import "EGContext.h"
 #import "EGCamera2D.h"
-#import "GL.h"
-#import "EGPlatform.h"
 #import "EGTexture.h"
 #import "EGMaterial.h"
 #import "TRRailroad.h"
@@ -23,10 +23,10 @@
     GEVec4(^_notificationProgress)(float);
     NSInteger _width;
     id<EGCamera> _camera;
-    GEVec3 _notificationTextPos;
     EGText* _scoreText;
     EGText* _notificationText;
     id _levelText;
+    CNCache* _scoreX;
     EGCounter* _notificationAnimation;
     EGFinisher* _levelAnimation;
 }
@@ -35,6 +35,7 @@ static ODClassType* _TRLevelMenuView_type;
 @synthesize name = _name;
 @synthesize notificationProgress = _notificationProgress;
 @synthesize camera = _camera;
+@synthesize scoreText = _scoreText;
 @synthesize levelText = _levelText;
 
 + (id)levelMenuViewWithLevel:(TRLevel*)level {
@@ -59,10 +60,12 @@ static ODClassType* _TRLevelMenuView_type;
             };
         }();
         _width = 0;
-        _notificationTextPos = GEVec3Make(0.0, 0.0, 0.0);
         _scoreText = [EGText applyFont:nil text:@"" position:GEVec3Make(10.0, 8.0, 0.0) alignment:egTextAlignmentBaselineX(-1.0) color:[self color]];
-        _notificationText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentBaselineX(0.0) color:[self color]];
+        _notificationText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentBaselineX(((egInterfaceIdiom().isPhone) ? -1.0 : 0.0)) color:[self color]];
         _levelText = [CNOption applyValue:[EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentBaselineX(0.0) color:[self color]]];
+        _scoreX = [CNCache cacheWithF:^id(NSString* _) {
+            return numf4([_weakSelf.scoreText measureC].x);
+        }];
         _notificationAnimation = [EGCounter apply];
         _levelAnimation = [EGFinisher finisherWithCounter:[EGCounter applyLength:5.0] finish:^void() {
             _weakSelf.levelText = [CNOption none];
@@ -80,7 +83,7 @@ static ODClassType* _TRLevelMenuView_type;
 - (void)reshapeWithViewport:(GERect)viewport {
     _camera = [EGCamera2D camera2DWithSize:GEVec2Make(geRectWidth(viewport) / EGGlobal.context.scale, 32.0)];
     EGFont* font = [EGGlobal fontWithName:@"lucida_grande" size:24];
-    EGFont* notificationFont = [EGGlobal fontWithName:@"lucida_grande" size:((egInterfaceIdiom() == EGInterfaceIdiom.phone) ? 14 : 16)];
+    EGFont* notificationFont = [EGGlobal fontWithName:@"lucida_grande" size:((egInterfaceIdiom().isPhone) ? 14 : 16)];
     [_notificationText setFont:font];
     _width = ((NSInteger)(viewport.size.x / EGGlobal.context.scale));
     EGTextShadow* sh = [EGTextShadow textShadowWithColor:GEVec4Make(0.05, 0.05, 0.05, 0.5) shift:GEVec2Make(1.0, -1.0)];
@@ -88,7 +91,7 @@ static ODClassType* _TRLevelMenuView_type;
     _scoreText.shadow = [CNOption applyValue:sh];
     [_notificationText setFont:notificationFont];
     _notificationText.shadow = [CNOption applyValue:sh];
-    _notificationTextPos = GEVec3Make(((float)(_width / 2)), 10.0, 0.0);
+    [_notificationText setPosition:GEVec3Make(((float)(_width / 2)), 10.0, 0.0)];
     _scoreText.shadow = [CNOption applyValue:sh];
     [_levelText forEach:^void(EGText* _) {
         [((EGText*)(_)) setFont:font];
@@ -115,10 +118,8 @@ static ODClassType* _TRLevelMenuView_type;
                 [_hammerSprite setMaterial:[[_hammerSprite material] setColor:(([_level.railroad.builder buildMode]) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : [self color])]];
                 [_hammerSprite draw];
                 [_scoreText setPosition:GEVec3Make(32.0, 8.0, 0.0)];
-                [_notificationText setPosition:geVec3AddVec3(_notificationTextPos, GEVec3Make(32.0, 0.0, 0.0))];
             } else {
                 [_scoreText setPosition:GEVec3Make(10.0, 8.0, 0.0)];
-                [_notificationText setPosition:_notificationTextPos];
             }
             [_scoreText setText:[self formatScore:[_level.score score]]];
             [_scoreText draw];
@@ -131,6 +132,7 @@ static ODClassType* _TRLevelMenuView_type;
                 }];
             }];
             [_notificationAnimation forF:^void(CGFloat t) {
+                if(egInterfaceIdiom().isPhone) [_notificationText setPosition:GEVec3Make(unumf4([_scoreX applyX:[_scoreText text]]) + [_scoreText position].x + 5, 10.0, 0.0)];
                 _notificationText.color = _notificationProgress(((float)(t)));
                 [_notificationText draw];
             }];

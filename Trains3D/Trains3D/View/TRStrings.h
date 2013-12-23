@@ -1,6 +1,8 @@
 #import "objd.h"
+@class TRTrain;
 @class TRLevel;
 @class EGLocalPlayerScore;
+@class TRCityColor;
 @class EGInterfaceIdiom;
 @class EGPlatform;
 
@@ -14,9 +16,9 @@
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)startLevelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
-- (NSString*)trainArrivedCost:(NSInteger)cost;
+- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
-- (NSString*)trainDelayedFineCost:(NSInteger)cost;
+- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost;
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost;
 - (NSString*)cityBuilt;
 - (NSString*)resumeGame;
@@ -73,9 +75,9 @@
 - (ODClassType*)type;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
-- (NSString*)trainArrivedCost:(NSInteger)cost;
+- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
-- (NSString*)trainDelayedFineCost:(NSInteger)cost;
+- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost;
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost;
 - (NSString*)resumeGame;
 - (NSString*)restartLevel:(TRLevel*)level;
@@ -134,9 +136,9 @@
 - (ODClassType*)type;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
-- (NSString*)trainArrivedCost:(NSInteger)cost;
+- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
-- (NSString*)trainDelayedFineCost:(NSInteger)cost;
+- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost;
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost;
 - (NSString*)resumeGame;
 - (NSString*)restartLevel:(TRLevel*)level;

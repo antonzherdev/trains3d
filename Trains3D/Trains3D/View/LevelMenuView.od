@@ -16,7 +16,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
     def reshapeWith(viewport : Rect) {
         camera = Camera2D(vec2(viewport.width/context.scale, 32))
         val font = fontWith(name = "lucida_grande", 24)
-        val notificationFont = fontWith(name = "lucida_grande", if(egInterfaceIdiom == InterfaceIdiom.phone) 14 else 16)
+        val notificationFont = fontWith(name = "lucida_grande", if(egInterfaceIdiom.isPhone) 14 else 16)
         notificationText.font = font
         width = viewport.size.x/context.scale
 
@@ -25,7 +25,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         scoreText.shadow = sh
         notificationText.font = notificationFont
         notificationText.shadow = sh
-        notificationTextPos = vec3(width/2, 10, 0)
+        notificationText.position = vec3(width/2, 10, 0)
         scoreText.shadow = sh
         levelText.for{ _ ->
             _.font = font
@@ -43,9 +43,8 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         hammerSprite.adjustSize
     }
     def color : vec4 = vec4(0.95)
-    private var notificationTextPos = vec3(0, 0, 0)
-    private val scoreText = Text(nil, "", vec3(10, 8, 0), TextAlignment.baseline(-1), color)
-    private val notificationText = Text(nil, "", vec3(0, 0, 0), TextAlignment.baseline(0), color)
+    val scoreText = Text(nil, "", vec3(10, 8, 0), TextAlignment.baseline(-1), color)
+    private val notificationText = Text(nil, "", vec3(0, 0, 0), TextAlignment.baseline(if(egInterfaceIdiom.isPhone) -1 else 0), color)
     var levelText : Text? = Text(nil, "", vec3(0, 0, 0), TextAlignment.baseline(0), color)
 
     def draw {
@@ -57,10 +56,8 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
                 )
                 hammerSprite.draw
                 scoreText.position = vec3(32, 8, 0)
-                notificationText.position = notificationTextPos + vec3(32, 0, 0)
             } else {
                 scoreText.position = vec3(10, 8, 0)
-                notificationText.position = notificationTextPos
             }
             scoreText.text = format(level.score.score)
             scoreText.draw
@@ -74,11 +71,16 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
                 }
             }
             notificationAnimation.for{t ->
+                if(egInterfaceIdiom.isPhone) {
+                    notificationText.position = vec3(scoreX(scoreText.text) + scoreText.position.x + 5, 10, 0)
+                }
                 notificationText.color = notificationProgress(t)
                 notificationText.draw
             }
         }}
     }
+
+    private val scoreX = Cache<string, float4>(scoreText.measureC.x)
 
     def format(score : int) : string = {
         Loc.format(score)

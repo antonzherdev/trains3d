@@ -136,7 +136,7 @@ static ODClassType* _TRScore_type;
 - (void)arrivedTrain:(TRTrain*)train {
     NSInteger prize = _rules.arrivedPrize(train);
     __score += prize;
-    [_notifications notifyNotification:[TRStr.Loc trainArrivedCost:prize]];
+    [_notifications notifyNotification:[TRStr.Loc trainArrivedTrain:train cost:prize]];
     [self removeTrain:train];
 }
 
@@ -154,12 +154,12 @@ static ODClassType* _TRScore_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    [_trains forEach:^void(TRTrainScore* train) {
-        [((TRTrainScore*)(train)) updateWithDelta:delta];
-        if([((TRTrainScore*)(train)) needFineWithDelayPeriod:_rules.delayPeriod]) {
-            NSInteger fine = [((TRTrainScore*)(train)) fineWithRule:_rules.delayFine];
+    [_trains forEach:^void(TRTrainScore* ts) {
+        [((TRTrainScore*)(ts)) updateWithDelta:delta];
+        if([((TRTrainScore*)(ts)) needFineWithDelayPeriod:_rules.delayPeriod]) {
+            NSInteger fine = [((TRTrainScore*)(ts)) fineWithRule:_rules.delayFine];
             __score -= fine;
-            [_notifications notifyNotification:[TRStr.Loc trainDelayedFineCost:fine]];
+            [_notifications notifyNotification:[TRStr.Loc trainDelayedFineTrain:((TRTrainScore*)(ts)).train cost:fine]];
         }
     }];
 }
