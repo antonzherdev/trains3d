@@ -3,9 +3,17 @@ package com.antonzherdev.eg
 
 import core.math._
 
-class CameraIso(tilesOnScreen : vec2, yReserve : float4, viewportRatio : float, center : vec2) extends Camera {
-    static def apply(tilesOnScreen : vec2, yReserve : float4, viewportRatio : float) =
-        CameraIso(tilesOnScreen, yReserve, viewportRatio, (tilesOnScreen - vec2(1, 1))/2.0)
+struct CameraReserve(left : float4, right : float4, top : float4, bottom : float4) {
+    def width = left + right
+    def height = top + bottom
+
+    def mul(f4 : float4) : CameraReserve = CameraReserve(left * f4, right * f4, top * f4, bottom * f4)
+    def div(f4 : float4) : CameraReserve = CameraReserve(left / f4, right / f4, top / f4, bottom / f4)
+}
+
+class CameraIso(tilesOnScreen : vec2, reserve : CameraReserve, viewportRatio : float, center : vec2) extends Camera {
+    static def apply(tilesOnScreen : vec2, reserve : CameraReserve, viewportRatio : float) =
+        CameraIso(tilesOnScreen, reserve, viewportRatio, (tilesOnScreen - vec2(1, 1))/2.0)
     private static val ISO = MapSso.ISO
 
     private val ww : float = tilesOnScreen.x + tilesOnScreen.y
@@ -17,7 +25,7 @@ class CameraIso(tilesOnScreen : vec2, yReserve : float4, viewportRatio : float, 
     val matrixModel : MatrixModel = {
         val isoWW = ww*ISO
         val isoWW2 = isoWW/2
-        val as = (isoWW - viewportRatio*yReserve)/(isoWW*viewportRatio)
+        val as = (isoWW - viewportRatio*reserve.height + reserve.width)/(isoWW*viewportRatio)
         val angleSin = if(as > 1.0) 1.0 else as
         MatrixModel(
             m = m,
@@ -30,7 +38,10 @@ class CameraIso(tilesOnScreen : vec2, yReserve : float4, viewportRatio : float, 
                     .rotate(-45.0, 0, 1, 0)
                 r * t
             },
-            p = mat4.ortho(-isoWW2, isoWW2, -isoWW2*angleSin, isoWW2*angleSin + yReserve, -1000.0, 1000.0)
+            p = mat4.ortho(
+                -isoWW2 - reserve.left, isoWW2 + reserve.right,
+                -isoWW2*angleSin - reserve.bottom, isoWW2*angleSin + reserve.top,
+                -1000.0, 1000.0)
         )
     }
 
@@ -51,7 +62,7 @@ class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFin
         var s = scale.max(misScale).min(maxScale)
         if(s != _scale) {
             _scale = s
-            _camera = CameraIso(_currentBase.tilesOnScreen/s, _currentBase.yReserve/s, _currentBase.viewportRatio, _camera.center)
+            _camera = CameraIso(_currentBase.tilesOnScreen/s, _currentBase.reserve/s, _currentBase.viewportRatio, _camera.center)
             cameraChangedNotification.post(self)
         }
     }
@@ -71,7 +82,7 @@ class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFin
             }
         }
         if(c != _camera.center) {
-            _camera = CameraIso(camera.tilesOnScreen, camera.yReserve, camera.viewportRatio, c)
+            _camera = CameraIso(camera.tilesOnScreen, camera.reserve, camera.viewportRatio, c)
             cameraChangedNotification.post(self)
         }
     }
@@ -83,13 +94,13 @@ class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFin
 
     def viewportRatio : float = _currentBase.viewportRatio
     def set(viewportRatio : float) {
-        _currentBase = CameraIso(_currentBase.tilesOnScreen, _currentBase.yReserve, viewportRatio, _currentBase.center)
-        _camera = CameraIso(_camera.tilesOnScreen, _camera.yReserve, viewportRatio, _camera.center)
+        _currentBase = CameraIso(_currentBase.tilesOnScreen, _currentBase.reserve, viewportRatio, _currentBase.center)
+        _camera = CameraIso(_camera.tilesOnScreen, _camera.reserve, viewportRatio, _camera.center)
     }
-    def yReserve : float = _currentBase.yReserve
-    def set(yReserve : float) {
-        _currentBase = CameraIso(_currentBase.tilesOnScreen, yReserve, _currentBase.viewportRatio, _currentBase.center)
-        _camera = CameraIso(_camera.tilesOnScreen, yReserve, _camera.viewportRatio, _camera.center)
+    def reserve : CameraReserve = _currentBase.reserve
+    def set(reserve : CameraReserve) {
+        _currentBase = CameraIso(_currentBase.tilesOnScreen, reserve, _currentBase.viewportRatio, _currentBase.center)
+        _camera = CameraIso(_camera.tilesOnScreen, reserve, _camera.viewportRatio, _camera.center)
     }
 
     var panEnabled = true

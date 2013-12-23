@@ -5,7 +5,6 @@
 #import "TRRailroadView.h"
 #import "TRTrainView.h"
 #import "TRTreeView.h"
-#import "EGCameraIso.h"
 #import "EGContext.h"
 #import "EGDirector.h"
 #import "TRWeather.h"
@@ -67,7 +66,7 @@ static ODClassType* _TRLevelView_type;
     }
     return m;
 }()]])];
-        _move = [EGCameraIsoMove cameraIsoMoveWithBase:[EGCameraIso applyTilesOnScreen:geVec2ApplyVec2i(_level.map.size) yReserve:0.1 viewportRatio:2.0] misScale:1.0 maxScale:2.0 panFingers:1 tapFingers:2];
+        _move = [EGCameraIsoMove cameraIsoMoveWithBase:[EGCameraIso applyTilesOnScreen:geVec2ApplyVec2i(_level.map.size) reserve:EGCameraReserveMake(0.0, 0.0, 0.1, 0.0) viewportRatio:2.0] misScale:1.0 maxScale:2.0 panFingers:1 tapFingers:2];
         _railroadBuilderProcessor = [TRRailroadBuilderProcessor railroadBuilderProcessorWithBuilder:_level.railroad.builder];
         _switchProcessor = [TRSwitchProcessor switchProcessorWithLevel:_level];
         [self _init];
@@ -141,8 +140,11 @@ static ODClassType* _TRLevelView_type;
 - (void)reshapeWithViewport:(GERect)viewport {
     float r = viewport.size.x / viewport.size.y;
     [_move setViewportRatio:((CGFloat)(r))];
-    if(egInterfaceIdiom() == EGInterfaceIdiom.pad) {
-        if(r < 4.0 / 3 + 0.01) [_move setYReserve:0.6];
+    if(egInterfaceIdiom().isPad) {
+        if(r < 4.0 / 3 + 0.01) [_move setReserve:EGCameraReserveMake(0.0, 0.0, 0.5, 0.1)];
+        else [_move setReserve:EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)];
+    } else {
+        if(egInterfaceIdiom().isPhone) [_move setReserve:EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)];
     }
     EGGlobal.matrix.value = [[self camera] matrixModel];
     [_callRepairerView reshape];

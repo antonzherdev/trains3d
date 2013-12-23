@@ -2,13 +2,13 @@
 #import "EGScene.h"
 #import "EGInput.h"
 #import "GEVec.h"
+#import "EGCameraIso.h"
 @class TRLevel;
 @class TRCityView;
 @class TRRailroadView;
 @class TRTrainView;
 @class TRTreeView;
 @class TRCallRepairerView;
-@class EGCameraIsoMove;
 @class EGGlobal;
 @class EGContext;
 @class EGDirector;
@@ -18,7 +18,6 @@
 @class EGMapSso;
 @class GEMat4;
 @class EGDirectLight;
-@class EGCameraIso;
 @class TRRailroadBuilderProcessor;
 @class TRRailroad;
 @class TRSwitchProcessor;

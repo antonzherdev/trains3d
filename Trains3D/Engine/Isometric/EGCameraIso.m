@@ -5,9 +5,75 @@
 #import "EGContext.h"
 #import "GL.h"
 #import "EGDirector.h"
+NSString* EGCameraReserveDescription(EGCameraReserve self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<EGCameraReserve: "];
+    [description appendFormat:@"left=%f", self.left];
+    [description appendFormat:@", right=%f", self.right];
+    [description appendFormat:@", top=%f", self.top];
+    [description appendFormat:@", bottom=%f", self.bottom];
+    [description appendString:@">"];
+    return description;
+}
+float egCameraReserveWidth(EGCameraReserve self) {
+    return self.left + self.right;
+}
+float egCameraReserveHeight(EGCameraReserve self) {
+    return self.top + self.bottom;
+}
+EGCameraReserve egCameraReserveMulF4(EGCameraReserve self, float f4) {
+    return EGCameraReserveMake(self.left * f4, self.right * f4, self.top * f4, self.bottom * f4);
+}
+EGCameraReserve egCameraReserveDivF4(EGCameraReserve self, float f4) {
+    return EGCameraReserveMake(self.left / f4, self.right / f4, self.top / f4, self.bottom / f4);
+}
+ODPType* egCameraReserveType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGCameraReserveWrap class] name:@"EGCameraReserve" size:sizeof(EGCameraReserve) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGCameraReserve, ((EGCameraReserve*)(data))[i]);
+    }];
+    return _ret;
+}
+@implementation EGCameraReserveWrap{
+    EGCameraReserve _value;
+}
+@synthesize value = _value;
+
++ (id)wrapWithValue:(EGCameraReserve)value {
+    return [[EGCameraReserveWrap alloc] initWithValue:value];
+}
+
+- (id)initWithValue:(EGCameraReserve)value {
+    self = [super init];
+    if(self) _value = value;
+    return self;
+}
+
+- (NSString*)description {
+    return EGCameraReserveDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGCameraReserveWrap* o = ((EGCameraReserveWrap*)(other));
+    return EGCameraReserveEq(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return EGCameraReserveHash(_value);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
+
+
 @implementation EGCameraIso{
     GEVec2 _tilesOnScreen;
-    float _yReserve;
+    EGCameraReserve _reserve;
     CGFloat _viewportRatio;
     GEVec2 _center;
     CGFloat _ww;
@@ -18,34 +84,34 @@ static GEMat4* _EGCameraIso_m;
 static GEMat4* _EGCameraIso_w;
 static ODClassType* _EGCameraIso_type;
 @synthesize tilesOnScreen = _tilesOnScreen;
-@synthesize yReserve = _yReserve;
+@synthesize reserve = _reserve;
 @synthesize viewportRatio = _viewportRatio;
 @synthesize center = _center;
 @synthesize matrixModel = _matrixModel;
 
-+ (id)cameraIsoWithTilesOnScreen:(GEVec2)tilesOnScreen yReserve:(float)yReserve viewportRatio:(CGFloat)viewportRatio center:(GEVec2)center {
-    return [[EGCameraIso alloc] initWithTilesOnScreen:tilesOnScreen yReserve:yReserve viewportRatio:viewportRatio center:center];
++ (id)cameraIsoWithTilesOnScreen:(GEVec2)tilesOnScreen reserve:(EGCameraReserve)reserve viewportRatio:(CGFloat)viewportRatio center:(GEVec2)center {
+    return [[EGCameraIso alloc] initWithTilesOnScreen:tilesOnScreen reserve:reserve viewportRatio:viewportRatio center:center];
 }
 
-- (id)initWithTilesOnScreen:(GEVec2)tilesOnScreen yReserve:(float)yReserve viewportRatio:(CGFloat)viewportRatio center:(GEVec2)center {
+- (id)initWithTilesOnScreen:(GEVec2)tilesOnScreen reserve:(EGCameraReserve)reserve viewportRatio:(CGFloat)viewportRatio center:(GEVec2)center {
     self = [super init];
     if(self) {
         _tilesOnScreen = tilesOnScreen;
-        _yReserve = yReserve;
+        _reserve = reserve;
         _viewportRatio = viewportRatio;
         _center = center;
         _ww = ((CGFloat)(_tilesOnScreen.x + _tilesOnScreen.y));
         _matrixModel = ^EGMatrixModel*() {
             CGFloat isoWW = _ww * _EGCameraIso_ISO;
             CGFloat isoWW2 = isoWW / 2;
-            CGFloat as = (isoWW - _viewportRatio * _yReserve) / (isoWW * _viewportRatio);
+            CGFloat as = (isoWW - _viewportRatio * egCameraReserveHeight(_reserve) + egCameraReserveWidth(_reserve)) / (isoWW * _viewportRatio);
             CGFloat angleSin = ((as > 1.0) ? 1.0 : as);
             return [EGMatrixModel applyM:_EGCameraIso_m w:_EGCameraIso_w c:^GEMat4*() {
                 CGFloat ang = (asin(angleSin) * 180) / M_PI;
                 GEMat4* t = [[GEMat4 identity] translateX:-_center.x y:0.0 z:_center.y];
                 GEMat4* r = [[[GEMat4 identity] rotateAngle:((float)(ang)) x:1.0 y:0.0 z:0.0] rotateAngle:-45.0 x:0.0 y:1.0 z:0.0];
                 return [r mulMatrix:t];
-            }() p:[GEMat4 orthoLeft:((float)(-isoWW2)) right:((float)(isoWW2)) bottom:((float)(-isoWW2 * angleSin)) top:((float)(isoWW2 * angleSin + _yReserve)) zNear:-1000.0 zFar:1000.0]];
+            }() p:[GEMat4 orthoLeft:((float)(-isoWW2 - _reserve.left)) right:((float)(isoWW2 + _reserve.right)) bottom:((float)(-isoWW2 * angleSin - _reserve.bottom)) top:((float)(isoWW2 * angleSin + _reserve.top)) zNear:-1000.0 zFar:1000.0]];
         }();
     }
     
@@ -60,8 +126,8 @@ static ODClassType* _EGCameraIso_type;
     _EGCameraIso_w = [[GEMat4 identity] rotateAngle:-90.0 x:1.0 y:0.0 z:0.0];
 }
 
-+ (EGCameraIso*)applyTilesOnScreen:(GEVec2)tilesOnScreen yReserve:(float)yReserve viewportRatio:(CGFloat)viewportRatio {
-    return [EGCameraIso cameraIsoWithTilesOnScreen:tilesOnScreen yReserve:yReserve viewportRatio:viewportRatio center:geVec2DivF(geVec2SubVec2(tilesOnScreen, GEVec2Make(1.0, 1.0)), 2.0)];
++ (EGCameraIso*)applyTilesOnScreen:(GEVec2)tilesOnScreen reserve:(EGCameraReserve)reserve viewportRatio:(CGFloat)viewportRatio {
+    return [EGCameraIso cameraIsoWithTilesOnScreen:tilesOnScreen reserve:reserve viewportRatio:viewportRatio center:geVec2DivF(geVec2SubVec2(tilesOnScreen, GEVec2Make(1.0, 1.0)), 2.0)];
 }
 
 - (NSUInteger)cullFace {
@@ -96,13 +162,13 @@ static ODClassType* _EGCameraIso_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGCameraIso* o = ((EGCameraIso*)(other));
-    return GEVec2Eq(self.tilesOnScreen, o.tilesOnScreen) && eqf4(self.yReserve, o.yReserve) && eqf(self.viewportRatio, o.viewportRatio) && GEVec2Eq(self.center, o.center);
+    return GEVec2Eq(self.tilesOnScreen, o.tilesOnScreen) && EGCameraReserveEq(self.reserve, o.reserve) && eqf(self.viewportRatio, o.viewportRatio) && GEVec2Eq(self.center, o.center);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + GEVec2Hash(self.tilesOnScreen);
-    hash = hash * 31 + float4Hash(self.yReserve);
+    hash = hash * 31 + EGCameraReserveHash(self.reserve);
     hash = hash * 31 + floatHash(self.viewportRatio);
     hash = hash * 31 + GEVec2Hash(self.center);
     return hash;
@@ -111,7 +177,7 @@ static ODClassType* _EGCameraIso_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"tilesOnScreen=%@", GEVec2Description(self.tilesOnScreen)];
-    [description appendFormat:@", yReserve=%f", self.yReserve];
+    [description appendFormat:@", reserve=%@", EGCameraReserveDescription(self.reserve)];
     [description appendFormat:@", viewportRatio=%f", self.viewportRatio];
     [description appendFormat:@", center=%@", GEVec2Description(self.center)];
     [description appendString:@">"];
@@ -191,7 +257,7 @@ static ODClassType* _EGCameraIsoMove_type;
     CGFloat s = floatMinB(floatMaxB(scale, _misScale), _maxScale);
     if(!(eqf(s, __scale))) {
         __scale = s;
-        __camera = [EGCameraIso cameraIsoWithTilesOnScreen:geVec2DivF(__currentBase.tilesOnScreen, s) yReserve:__currentBase.yReserve / s viewportRatio:__currentBase.viewportRatio center:__camera.center];
+        __camera = [EGCameraIso cameraIsoWithTilesOnScreen:geVec2DivF(__currentBase.tilesOnScreen, s) reserve:egCameraReserveDivF4(__currentBase.reserve, ((float)(s))) viewportRatio:__currentBase.viewportRatio center:__camera.center];
         [_EGCameraIsoMove_cameraChangedNotification postData:self];
     }
 }
@@ -215,7 +281,7 @@ static ODClassType* _EGCameraIsoMove_type;
         }
     }());
     if(!(GEVec2Eq(c, __camera.center))) {
-        __camera = [EGCameraIso cameraIsoWithTilesOnScreen:[self camera].tilesOnScreen yReserve:[self camera].yReserve viewportRatio:[self camera].viewportRatio center:c];
+        __camera = [EGCameraIso cameraIsoWithTilesOnScreen:[self camera].tilesOnScreen reserve:[self camera].reserve viewportRatio:[self camera].viewportRatio center:c];
         [_EGCameraIsoMove_cameraChangedNotification postData:self];
     }
 }
@@ -225,17 +291,17 @@ static ODClassType* _EGCameraIsoMove_type;
 }
 
 - (void)setViewportRatio:(CGFloat)viewportRatio {
-    __currentBase = [EGCameraIso cameraIsoWithTilesOnScreen:__currentBase.tilesOnScreen yReserve:__currentBase.yReserve viewportRatio:viewportRatio center:__currentBase.center];
-    __camera = [EGCameraIso cameraIsoWithTilesOnScreen:__camera.tilesOnScreen yReserve:__camera.yReserve viewportRatio:viewportRatio center:__camera.center];
+    __currentBase = [EGCameraIso cameraIsoWithTilesOnScreen:__currentBase.tilesOnScreen reserve:__currentBase.reserve viewportRatio:viewportRatio center:__currentBase.center];
+    __camera = [EGCameraIso cameraIsoWithTilesOnScreen:__camera.tilesOnScreen reserve:__camera.reserve viewportRatio:viewportRatio center:__camera.center];
 }
 
-- (CGFloat)yReserve {
-    return ((CGFloat)(__currentBase.yReserve));
+- (EGCameraReserve)reserve {
+    return __currentBase.reserve;
 }
 
-- (void)setYReserve:(CGFloat)yReserve {
-    __currentBase = [EGCameraIso cameraIsoWithTilesOnScreen:__currentBase.tilesOnScreen yReserve:((float)(yReserve)) viewportRatio:__currentBase.viewportRatio center:__currentBase.center];
-    __camera = [EGCameraIso cameraIsoWithTilesOnScreen:__camera.tilesOnScreen yReserve:((float)(yReserve)) viewportRatio:__camera.viewportRatio center:__camera.center];
+- (void)setReserve:(EGCameraReserve)reserve {
+    __currentBase = [EGCameraIso cameraIsoWithTilesOnScreen:__currentBase.tilesOnScreen reserve:reserve viewportRatio:__currentBase.viewportRatio center:__currentBase.center];
+    __camera = [EGCameraIso cameraIsoWithTilesOnScreen:__camera.tilesOnScreen reserve:reserve viewportRatio:__camera.viewportRatio center:__camera.center];
 }
 
 - (EGRecognizers*)recognizers {
