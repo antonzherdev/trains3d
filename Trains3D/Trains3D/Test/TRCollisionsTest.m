@@ -82,10 +82,8 @@ static ODClassType* _TRCollisionsTest_type;
     [self assertEqualsA:numui([[level.railroad damagesPoints] count]) b:@0];
     [level processCollisions];
     [self assertEqualsA:numui([[level trains] count]) b:@0];
+    [level updateWithDelta:5.1];
     [self assertEqualsA:numui([[level.railroad damagesPoints] count]) b:@1];
-    TRRailPoint* damage = [[level.railroad damagesPoints] applyIndex:0];
-    CGFloat l = _TRCollisionsTest_carLen - TRCarType.car.startToWheel;
-    [self assertTrueValue:floatBetween(damage.x, l - 0.15, l + 0.15)];
 }
 
 - (void)testTurn {

@@ -92,6 +92,12 @@ static ODClassType* _TRGameDirector_type;
                 [_weakSelf.cloud setKey:@"help.crazy" i:1];
             }];
         }];
+        _crazyHelpObs = [TRLevelFactory.lineAdviceTimeNotification observeBy:^void(TRLevel* level) {
+            if([_weakSelf.cloud intForKey:@"help.linesAdvice"] == 0) {
+                [((TRLevel*)(level)) showHelpText:[TRStr.Loc linesAdvice]];
+                [_weakSelf.cloud setKey:@"help.linesAdvice" i:1];
+            }
+        }];
         _crashObs = [TRLevel.crashNotification observeBy:^void(id<CNSeq> _) {
             [TRGameDirector.instance destroyTrainsTrains:_];
         }];
@@ -126,13 +132,6 @@ static ODClassType* _TRGameDirector_type;
     _TRGameDirector_type = [ODClassType classTypeWithCls:[TRGameDirector class]];
     _TRGameDirector_instance = [TRGameDirector gameDirector];
     _TRGameDirector_playerScoreRetrieveNotification = [CNNotificationHandle notificationHandleWithName:@"playerScoreRetrieveNotification"];
-}
-
-- (void)showLinesAdviceLevel:(TRLevel*)level {
-    if([_cloud intForKey:@"help.linesAdvice"] == 0) {
-        [level showHelpText:[TRStr.Loc linesAdvice]];
-        [_cloud setKey:@"help.linesAdvice" i:1];
-    }
 }
 
 - (void)clearTutorial {

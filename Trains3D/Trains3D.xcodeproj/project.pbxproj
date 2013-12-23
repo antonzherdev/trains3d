@@ -1232,6 +1232,7 @@
 		6F3DFFC84831CCA1EFDBD304 /* lucida_grande_14.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF92A6033E0AB9721846B /* lucida_grande_14.png */; };
 		6F3DFFCF7E5B64A5F873B65D /* CNCombinationsLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF829B182E3C723009787 /* CNCombinationsLink.m */; };
 		6F3DFFD0390D1D2C94C0EF17 /* Pause_2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF5F01E6C3ED6945F573B /* Pause_2x.png */; };
+		6F3DFFD3AFE9225815BC2F8E /* CNTopLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF871039F45A2F614287F /* CNTopLink.m */; };
 		6F3DFFD3EAF2B05433B5D836 /* btTetrahedronShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF40E9E74BEE97D6F5C1A /* btTetrahedronShape.cpp */; };
 		6F3DFFD425E09EBFC7CC2BBD /* TRModels.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0684569A583737D2655 /* TRModels.m */; };
 		6F3DFFD4336A77359BCB1A6B /* Vertex.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF0080BD8176CF8E1C8BC /* Vertex.od */; };
@@ -5975,6 +5976,7 @@
 				6F3DF6B70EB722CA88D474E2 /* CNNotification.m in Sources */,
 				6F3DF19BB0F3D430C6A22D64 /* CNNotificationPlatform.m in Sources */,
 				6F3DF5C7ED8A872AFB821C07 /* TRTrain.m in Sources */,
+				6F3DFFD3AFE9225815BC2F8E /* CNTopLink.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

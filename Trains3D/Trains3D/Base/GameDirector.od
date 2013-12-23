@@ -67,7 +67,7 @@ class GameDirector {
         }
     }
 
-    def showLinesAdvice(level : Level) {
+    private val crazyHelpObs = LevelFactory.lineAdviceTimeNotification.observe{ level ->
         if(cloud.intFor("help.linesAdvice") == 0) {
             level.showHelp(Loc.linesAdvice)
             cloud.set("help.linesAdvice", 1)

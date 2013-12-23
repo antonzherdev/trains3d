@@ -10,7 +10,6 @@
 @class EGInterfaceIdiom;
 @class TRLevel;
 @class TRLevelRules;
-@class TRGameDirector;
 @class TRTrain;
 @class TRTrainType;
 @class TRCarType;
@@ -47,6 +46,7 @@
 + (TRScoreRules*)scoreRules;
 + (TRForestRules*)forestRules;
 + (TRWeatherRules*)weatherRules;
++ (CNNotificationHandle*)lineAdviceTimeNotification;
 + (ODClassType*)type;
 @end
 

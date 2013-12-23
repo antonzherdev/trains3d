@@ -24,7 +24,7 @@ static ODClassType* _TRDamageTest_type;
 - (void)testMain {
     TRRailroad* railroad = [TRLevelFactory railroadWithMapSize:GEVec2iMake(4, 3)];
     [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 1) form:TRRailForm.leftRight]];
-    [railroad addDamageAtPoint:[TRRailPoint railPointWithTile:GEVec2iMake(1, 1) form:TRRailForm.leftRight x:0.2 back:NO]];
+    [railroad addDamageAtPoint:[TRRailPoint railPointWithTile:GEVec2iMake(1, 1) form:TRRailForm.leftRight x:0.3 back:NO]];
     [railroad addDamageAtPoint:[TRRailPoint railPointWithTile:GEVec2iMake(1, 1) form:TRRailForm.leftRight x:0.6 back:YES]];
     __block id<CNSeq> damagesCount = [ arrf(0) {}];
     TRRailPoint* p0 = [TRRailPoint railPointWithTile:GEVec2iMake(1, 1) form:TRRailForm.leftRight x:0.0 back:NO];
@@ -32,7 +32,7 @@ static ODClassType* _TRDamageTest_type;
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount addItem:numf(o.point.x)];
         return YES;
     } forLength:1.0 point:p0];
-    [self assertEqualsA:damagesCount b:[ arrf(2) {0.2, 0.4}]];
+    [self assertEqualsA:damagesCount b:[ arrf(2) {0.3, 0.35}]];
     [self assertEqualsA:numf(p1.error) b:@0.0];
     [self assertEqualsA:numf(p1.point.x) b:@1.0];
     damagesCount = [ arrf(0) {}];
@@ -40,7 +40,7 @@ static ODClassType* _TRDamageTest_type;
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount addItem:numf(o.point.x)];
         return YES;
     } forLength:1.0 point:[p1.point invert]];
-    [self assertEqualsA:damagesCount b:[ arrf(2) {0.6, 0.8}]];
+    [self assertEqualsA:damagesCount b:[ arrf(2) {0.65, 0.7}]];
     [self assertEqualsA:numf(p00.error) b:@0.0];
     [self assertEqualsA:numf(p00.point.x) b:@1.0];
     damagesCount = [ arrf(0) {}];
@@ -48,9 +48,9 @@ static ODClassType* _TRDamageTest_type;
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount addItem:numf(o.point.x)];
         return NO;
     } forLength:1.0 point:[p1.point invert]];
-    [self assertEqualsA:damagesCount b:[ arrf(1) {0.6}]];
-    [self assertEqualsA:numf(p01.error) b:@0.4];
-    [self assertEqualsA:numf(p01.point.x) b:@0.6];
+    [self assertEqualsA:damagesCount b:[ arrf(1) {0.65}]];
+    [self assertEqualsA:numf(p01.error) b:@0.35];
+    [self assertEqualsA:numf(p01.point.x) b:@0.65];
 }
 
 - (ODClassType*)type {

@@ -45,10 +45,8 @@ class CollisionsTest extends TestCase {
         assertEquals(level.railroad.damagesPoints.count, 0)
         level.processCollisions
         assertEquals(level.trains.count, 0)
+        level.updateWith(delta = 5.1)
         assertEquals(level.railroad.damagesPoints.count, 1)
-        val damage = level.railroad.damagesPoints[0]
-        val l = carLen - CarType.car.startToWheel
-        assertTrue(damage.x.between(l - 0.15, l + 0.15))
     }
 
     def testTurn {
