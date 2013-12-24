@@ -49,7 +49,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         createCityWith(tile = c.a, direction = c.b)
     }
 
-    private def hasCityIn(tile : vec2i) : bool = cities.exists(_.tile == tile)
+    def hasCityIn(tile : vec2i) : bool = cities.exists(_.tile == tile)
 
     private def rndCityTime(att : int) : (vec2i, CityAngle) = {
         val tile = map.partialTiles.chain.exclude(cities.chain.map(_.tile)).randomItem.get

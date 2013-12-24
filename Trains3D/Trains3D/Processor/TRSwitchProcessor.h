@@ -8,9 +8,13 @@
 @class GEMat4;
 @class TRSwitch;
 @class TRRailConnector;
+@class EGMapSso;
+@class TRCity;
+@class TRCityAngle;
+@class TRRailForm;
+@class TRRailroadConnectorContent;
 @class TRRailLight;
 @class EGMatrixModel;
-@class TRRailroadConnectorContent;
 @class EGDirector;
 
 @class TRSwitchProcessor;
