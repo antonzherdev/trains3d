@@ -16,8 +16,10 @@ class LevelChooseMenu extends SceneView {
     }.toArray
 
     private var fontRes : Font
+    private var fontBottom : Font
     def reshapeWith(viewport : Rect) {
-        fontRes = fontWith(name = "lucida_grande", size = if(egInterfaceIdiom == InterfaceIdiom.phone) 16 else 18)
+        fontRes = fontWith(name = "lucida_grande", size = if(egInterfaceIdiom == InterfaceIdiom.phone) 14 else 16)
+        fontBottom = fontWith(name = "lucida_grande", size = if(egInterfaceIdiom == InterfaceIdiom.phone) 12 else 14)
     }
 
     private var _scores = MutableHashMap<uint, LocalPlayerScore>()
@@ -36,7 +38,7 @@ class LevelChooseMenu extends SceneView {
     private static val rankProgress = Progress.progress(vec4(232, 255, 208, 255)/255, vec4(255, 249, 217, 255)/255)
     static def rankColor(score : LocalPlayerScore) : vec4 = rankProgress(score.percent)
 
-
+    private val textColor = vec4(0.1, 0.1, 0.1, 1)
     private def drawButton(x : int, y : int, level : int) = {
         rect : Rect -> {
             val dis = level > maxLevel
@@ -45,20 +47,19 @@ class LevelChooseMenu extends SceneView {
             val color = if(score.isDefined) rankColor(score.get) else vec4(0.95, 0.95, 0.95, 1.0)
             D2D.drawSprite(color, vec3(x, y + 0.8, 0), Rect(0, 0, 1, 0.2))
             if(!dis) {
-                D2D.drawSprite(color, vec3(x, y, 0), Rect(0, 0, 1, 0.2))
+                D2D.drawSprite(color, vec3(x, y, 0), Rect(0, 0, 1, 0.14))
             }
             BlendFunction.standard {
-                fontRes.draw(Loc.level(level), vec3(x + 0.5, y + 0.92, 0), TextAlignment(0, 0), color = vec4(0, 0, 0, 1))
+                fontRes.draw(Loc.level(level), vec3(x + 0.5, y + 0.91, 0), TextAlignment(0, 0), color = textColor)
                 if(dis) {
                     D2D.drawSprite(vec4(1, 1, 1, 0.8), vec3(x, y, 0), Rect(0, 0, 1, 1))
                 } else {
                     val ss = if(score.isDefined) score.get.value else GameDirector.instance.bestScore(level)
                     if(ss > 0 || score.isDefined) {
-                        fontRes.draw(Loc.format(ss), vec3(x + 0.02, y + 0.1, 0), TextAlignment(-1, 0), color = vec4(0, 0, 0, 1))
+                        fontBottom.draw(Loc.format(ss), vec3(x + 0.02, y + 0.07, 0), TextAlignment(-1, 0), color = textColor)
                     }
                     if(score.isDefined) {
-                        fontRes.draw(Loc.top(score.get), vec3(x + 0.98, y + 0.1, 0), TextAlignment(1, 0),
-                            color = vec4(0, 0, 0, 1))
+                        fontBottom.draw(Loc.top(score.get), vec3(x + 0.98, y + 0.07, 0), TextAlignment(1, 0), color = textColor)
                     }
                 }
             }
