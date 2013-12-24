@@ -2,7 +2,6 @@
 #import "GEVec.h"
 #import "EGMapIso.h"
 #import "EGInput.h"
-#import "EGFont.h"
 @class TRLevel;
 @class EGTexture;
 @class EGGlobal;
@@ -27,8 +26,6 @@
 @class EGD2D;
 @class EGCounter;
 @class EGEnablingState;
-@class TRStr;
-@protocol TRStrings;
 @class TRRailroad;
 @class EGBillboard;
 @class EGDirector;

@@ -143,6 +143,11 @@ static ODClassType* _EGColorSource_type;
     return [EGColorSource colorSourceWithColor:color texture:_texture blendMode:_blendMode alphaTestLevel:_alphaTestLevel];
 }
 
+- (GERect)uv {
+    if([_texture isDefined]) return [((EGTexture*)([_texture get])) uv];
+    else return geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0);
+}
+
 - (ODClassType*)type {
     return [EGColorSource type];
 }

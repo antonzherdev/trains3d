@@ -14,7 +14,6 @@
 #import "EGPlatform.h"
 #import "EGSprite.h"
 #import "EGSchedule.h"
-#import "TRStrings.h"
 #import "TRRailroad.h"
 #import "EGBillboard.h"
 #import "EGDirector.h"
@@ -126,9 +125,8 @@ static ODClassType* _TRCityView_type;
 @implementation TRCallRepairerView{
     TRLevel* _level;
     GEVec2 _buttonSize;
-    EGFont* _font;
     NSMutableDictionary* _buttons;
-    NSMutableDictionary* _texts;
+    NSMutableDictionary* _stammers;
 }
 static ODClassType* _TRCallRepairerView_type;
 @synthesize level = _level;
@@ -142,7 +140,7 @@ static ODClassType* _TRCallRepairerView_type;
     if(self) {
         _level = level;
         _buttons = [NSMutableDictionary mutableDictionary];
-        _texts = [NSMutableDictionary mutableDictionary];
+        _stammers = [NSMutableDictionary mutableDictionary];
     }
     
     return self;
@@ -154,8 +152,7 @@ static ODClassType* _TRCallRepairerView_type;
 }
 
 - (void)reshape {
-    _font = [EGGlobal fontWithName:@"lucida_grande" size:((egInterfaceIdiom().isPhone) ? 12 : 18)];
-    _buttonSize = geVec2MulF([_font measureCText:[TRStr.Loc callRepairer]], 1.2);
+    _buttonSize = geVec4Xy([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW(geVec2DivVec2(geVec2ApplyF(64 * EGGlobal.context.scale), geVec2ApplyVec2i([EGGlobal.context viewport].size)), 0.0, 0.0)]);
 }
 
 - (void)draw {
@@ -172,27 +169,26 @@ static ODClassType* _TRCallRepairerView_type;
     } else {
         if(!([_buttons isEmpty])) {
             [_buttons clear];
-            [_texts clear];
+            [_stammers clear];
         }
     }
 }
 
 - (void)drawButtonForCity:(TRCity*)city {
-    GEVec2 bs = _buttonSize;
     GEVec2 p = [TRCityView moveVecForLevel:_level city:city];
     EGBillboard* billboard = [_buttons objectForKey:city orUpdateWith:^EGBillboard*() {
         return [EGBillboard applyMaterial:[EGColorSource applyColor:geVec4ApplyVec3W(geVec4Xyz(city.color.color), 0.8)]];
     }];
     billboard.position = geVec3ApplyVec2Z(geVec2ApplyVec2i(city.tile), 0.0);
-    GEVec2 r = geVec2MulVec2(geVec2SubF(p, 0.5), bs);
-    billboard.rect = GERectMake(r, bs);
+    GEVec2 r = geVec2MulVec2(geVec2SubF(p, 0.5), _buttonSize);
+    billboard.rect = GERectMake(r, _buttonSize);
     [billboard draw];
-    EGText* text = [_texts objectForKey:city orUpdateWith:^EGText*() {
-        return [EGText applyFont:_font text:[TRStr.Loc callRepairer] position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:GEVec4Make(0.1, 0.1, 0.1, 1.0)];
+    EGBillboard* stammer = [_stammers objectForKey:city orUpdateWith:^EGBillboard*() {
+        return [EGBillboard applyMaterial:[EGColorSource applyTexture:[[EGGlobal scaledTextureForName:@"Pause" format:@"png" magFilter:GL_NEAREST minFilter:GL_NEAREST] regionX:0.0 y:0.5 width:0.5 height:0.5]]];
     }];
-    [text setPosition:billboard.position];
-    [text setAlignment:EGTextAlignmentMake(0.0, 0.0, NO, geVec3ApplyVec2Z(geVec2AddVec2(r, geVec2DivI(bs, 2)), 0.0))];
-    [text draw];
+    stammer.position = geVec3ApplyVec2Z(geVec2ApplyVec2i(city.tile), 0.0);
+    stammer.rect = GERectMake(r, _buttonSize);
+    [stammer draw];
 }
 
 - (EGRecognizers*)recognizers {

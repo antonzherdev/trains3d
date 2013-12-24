@@ -630,14 +630,12 @@ static ODClassType* _EGBillboardParticleSystemView_type;
 
 @implementation EGBillboard{
     EGColorSource* _material;
-    GERect _uv;
     GEVec3 _position;
     GERect _rect;
 }
 static EGVertexBufferDesc* _EGBillboard_vbDesc;
 static ODClassType* _EGBillboard_type;
 @synthesize material = _material;
-@synthesize uv = _uv;
 @synthesize position = _position;
 @synthesize rect = _rect;
 
@@ -648,7 +646,6 @@ static ODClassType* _EGBillboard_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _uv = geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0);
         _position = GEVec3Make(0.0, 0.0, 0.0);
         _rect = geRectApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0);
     }
@@ -663,7 +660,7 @@ static ODClassType* _EGBillboard_type;
 }
 
 - (void)draw {
-    [EGD2D drawSpriteMaterial:_material at:_position quad:geRectStripQuad(_rect) uv:geRectStripQuad(_uv)];
+    [EGD2D drawSpriteMaterial:_material at:_position quad:geRectStripQuad(_rect) uv:geRectUpsideDownStripQuad([_material uv])];
 }
 
 + (EGBillboard*)applyMaterial:(EGColorSource*)material {

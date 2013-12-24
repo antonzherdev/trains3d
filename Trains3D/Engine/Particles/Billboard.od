@@ -151,10 +151,9 @@ class Billboard {
     static val vbDesc = VertexBufferDesc<BillboardBufferData>(BillboardBufferData.type,
         position = 0, uv = 9*4, normal = -1, color = 5*4, model = 3*4)
     var material : ColorSource
-    var uv : Rect = Rect(0, 0, 1, 1)
 
     def draw {
-        D2D.drawSprite(material, at = position, rect.stripQuad, uv.stripQuad)
+        D2D.drawSprite(material, at = position, rect.stripQuad, material.uv.upsideDownStripQuad)
     }
 
     var position : vec3 = vec3(0, 0, 0)

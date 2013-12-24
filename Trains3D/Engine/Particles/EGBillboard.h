@@ -146,7 +146,6 @@ ODPType* egBillboardBufferDataType();
 
 @interface EGBillboard : NSObject
 @property (nonatomic, retain) EGColorSource* material;
-@property (nonatomic) GERect uv;
 @property (nonatomic) GEVec3 position;
 @property (nonatomic) GERect rect;
 

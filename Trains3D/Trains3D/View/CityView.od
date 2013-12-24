@@ -53,10 +53,8 @@ class CityView(level : Level) {
 
 class CallRepairerView(level : Level) extends InputProcessor {
     private var buttonSize : vec2
-    private var font : Font
     def reshape {
-        font = fontWith(name = "lucida_grande", if(egInterfaceIdiom.isPhone) 12 else 18)
-        buttonSize = font.measureC(Loc.callRepairer)*1.2
+        buttonSize = matrix.p.divBySelf(vec4(vec2(64 * context.scale)/context.viewport.size, 0, 0)).xy
     }
 
 
@@ -71,27 +69,28 @@ class CallRepairerView(level : Level) extends InputProcessor {
             egPopGroupMarker
         } else if(!buttons.isEmpty) {
             buttons.clear
-            texts.clear
+            stammers.clear
         }
     }
 
     private var buttons = MutableHashMap<City, Billboard>()
-    private var texts = MutableHashMap<City, Text>()
+    private var stammers = MutableHashMap<City, Billboard>()
 
     def drawButtonFor(city : City) {
-        val bs = buttonSize
         var p = CityView.moveVecFor(level, city)
 
         val billboard = buttons.objectFor(city, orUpdateWith = Billboard(material = vec4(city.color.color.xyz, 0.8)))
         billboard.position = vec3(city.tile, 0)
-        val r = (p - 0.5) * bs
-        billboard.rect = Rect(r, bs)
+        val r = (p - 0.5) * buttonSize
+        billboard.rect = Rect(r, buttonSize)
         billboard.draw
 
-        val text = texts.objectFor(city, orUpdateWith =  Text(font, Loc.callRepairer, vec3(0, 0, 0), TextAlignment(0, 0), vec4(0.1, 0.1, 0.1, 1)))
-        text.position = billboard.position
-        text.alignment = TextAlignment(0, 0, false, vec3(r + bs/2, 0))
-        text.draw
+        val stammer = stammers.objectFor(city, orUpdateWith = Billboard(
+            scaledTextureFor("Pause", "png", GL_NEAREST, GL_NEAREST).region(0, 0.5, 0.5, 0.5)))
+        stammer.position = vec3(city.tile, 0)
+        stammer.rect = Rect(r, buttonSize)
+        stammer.draw
+
     }
 
     def recognizers : Recognizers = Recognizer(Tap()) { event : Event ->
