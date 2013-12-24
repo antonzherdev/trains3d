@@ -74,16 +74,13 @@ static ODClassType* _TRSwitchProcessor_type;
         TRSwitchProcessorItem* b = [closest applyIndex:1];
         float delta = float4Abs([a distanceVec2:loc] - [b distanceVec2:loc]);
         if(delta < 0.01) {
-            [CNLog applyText:[NSString stringWithFormat:@"!! Click: %f = %f - %f", delta, [a distanceVec2:loc], [b distanceVec2:loc]]];
             [_TRSwitchProcessor_strangeClickNotification postData:event];
             return [CNOption none];
         } else {
-            [CNLog applyText:[NSString stringWithFormat:@"Click: %f = %f - %f", delta, [a distanceVec2:loc], [b distanceVec2:loc]]];
             return [CNOption someValue:a];
         }
     }() : [closest headOpt]);
     if([downed isDefined]) {
-        [CNLog applyText:[NSString stringWithFormat:@"downed: %@", GEVec2Description(geVec2SubVec2(geRectCenter([((TRSwitchProcessorItem*)([downed get])) boundingRect]), loc))]];
         [[ODObject asKindOfClass:[TRSwitch class] object:((TRSwitchProcessorItem*)([downed get])).content] forEach:^void(TRSwitch* _) {
             [_level tryTurnTheSwitch:_];
         }];
