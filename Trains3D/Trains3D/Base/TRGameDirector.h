@@ -10,12 +10,13 @@
 @class EGSchedule;
 @class TRTrain;
 @class TRTrainType;
-@class EGRate;
-@class EGLocalPlayerScore;
+@class EGCameraIsoMove;
 @class EGDirector;
-@class TRSceneFactory;
 @class EGScene;
 @protocol EGController;
+@class EGRate;
+@class EGLocalPlayerScore;
+@class TRSceneFactory;
 @class TRLevelChooseMenu;
 @class TRLevelFactory;
 @class EGEMail;

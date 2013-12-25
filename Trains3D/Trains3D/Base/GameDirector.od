@@ -74,6 +74,13 @@ class GameDirector {
         }
     }
 
+    private val zoomHelpObs = CameraIsoMove.cameraChangedNotification.observe{ move ->
+        if(cloud.intFor("help.zoom") == 0 && move.scale > 1) {
+            Director.current.scene.get.controller.cast<Level>.showHelp(Loc.helpInZoom)
+            cloud.set("help.zoom", 1)
+        }
+    }
+
     def clearTutorial {
         cloud.set("help.sporadicDamage", 0)
         cloud.set("help.damage", 0)

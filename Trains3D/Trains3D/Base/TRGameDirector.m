@@ -8,11 +8,12 @@
 #import "TRStrings.h"
 #import "EGSchedule.h"
 #import "TRTrain.h"
+#import "EGCameraIso.h"
+#import "EGDirector.h"
+#import "EGScene.h"
 #import "EGRate.h"
 #import "EGGameCenter.h"
-#import "EGDirector.h"
 #import "TRSceneFactory.h"
-#import "EGScene.h"
 #import "TRLevelChooseMenu.h"
 #import "TRLevelFactory.h"
 #import "EGEMail.h"
@@ -25,6 +26,7 @@
     CNNotificationObserver* _damageHelpObs;
     CNNotificationObserver* _repairerHelpObs;
     CNNotificationObserver* _crazyHelpObs;
+    CNNotificationObserver* _zoomHelpObs;
     CNNotificationObserver* _crashObs;
     CNNotificationObserver* _knockDownObs;
 }
@@ -96,6 +98,12 @@ static ODClassType* _TRGameDirector_type;
             if([_weakSelf.cloud intForKey:@"help.linesAdvice"] == 0) {
                 [((TRLevel*)(level)) showHelpText:[TRStr.Loc linesAdvice]];
                 [_weakSelf.cloud setKey:@"help.linesAdvice" i:1];
+            }
+        }];
+        _zoomHelpObs = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* move) {
+            if([_weakSelf.cloud intForKey:@"help.zoom"] == 0 && [((EGCameraIsoMove*)(move)) scale] > 1) {
+                [((TRLevel*)(((EGScene*)([[[EGDirector current] scene] get])).controller)) showHelpText:[TRStr.Loc helpInZoom]];
+                [_weakSelf.cloud setKey:@"help.zoom" i:1];
             }
         }];
         _crashObs = [TRLevel.crashNotification observeBy:^void(id<CNSeq> _) {
