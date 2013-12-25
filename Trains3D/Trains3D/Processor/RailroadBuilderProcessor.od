@@ -14,6 +14,7 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
         began = event -> {
             startedPoint = event.location
             firstTry = true
+            builder.building = true
             true
         },
         changed = event -> {
@@ -71,6 +72,7 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
            firstTry = true
            startedPoint = nil
            fixedStart = nil
+           builder.building = false
        }
     )
 

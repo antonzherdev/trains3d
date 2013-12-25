@@ -166,6 +166,7 @@
 
 @interface TRRailroadBuilder : NSObject<EGUpdatable>
 @property (nonatomic, readonly, weak) TRRailroad* railroad;
+@property (nonatomic) BOOL building;
 
 + (id)railroadBuilderWithRailroad:(TRRailroad*)railroad;
 - (id)initWithRailroad:(TRRailroad*)railroad;

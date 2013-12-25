@@ -39,6 +39,7 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
     return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGPan apply] began:^BOOL(id<EGEvent> event) {
         _startedPoint = [CNOption applyValue:wrap(GEVec2, [event location])];
         _firstTry = YES;
+        _builder.building = YES;
         return YES;
     } changed:^void(id<EGEvent> event) {
         GELine2 line = geLine2ApplyP0P1(uwrap(GEVec2, [_startedPoint get]), [event location]);
@@ -91,6 +92,7 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
         _firstTry = YES;
         _startedPoint = [CNOption none];
         _fixedStart = [CNOption none];
+        _builder.building = NO;
     }]];
 }
 

@@ -265,6 +265,7 @@ class RailBuilding(rail : Rail) {
 
 
 class RailroadBuilder(weak railroad : Railroad) extends Updatable {
+    var building = false
     private var _rail : Rail? = nil
     def rail = _rail
     private var _buildingRails = List<RailBuilding>()

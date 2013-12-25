@@ -931,6 +931,7 @@ static ODClassType* _TRRailBuilding_type;
 
 @implementation TRRailroadBuilder{
     __weak TRRailroad* _railroad;
+    BOOL _building;
     id __rail;
     CNList* __buildingRails;
     BOOL __buildMode;
@@ -939,6 +940,7 @@ static CNNotificationHandle* _TRRailroadBuilder_changedNotification;
 static CNNotificationHandle* _TRRailroadBuilder_buildModeNotification;
 static ODClassType* _TRRailroadBuilder_type;
 @synthesize railroad = _railroad;
+@synthesize building = _building;
 
 + (id)railroadBuilderWithRailroad:(TRRailroad*)railroad {
     return [[TRRailroadBuilder alloc] initWithRailroad:railroad];
@@ -948,6 +950,7 @@ static ODClassType* _TRRailroadBuilder_type;
     self = [super init];
     if(self) {
         _railroad = railroad;
+        _building = NO;
         __rail = [CNOption none];
         __buildingRails = [CNList apply];
         __buildMode = NO;

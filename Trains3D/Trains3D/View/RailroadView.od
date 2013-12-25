@@ -155,7 +155,7 @@ class UndoView(builder : RailroadBuilder) extends InputProcessor {
     private val button = Billboard(material = vec4(0.85, 0.9, 0.75, 0.8))
     def draw {
         val rail = builder.railForUndo
-        if(rail.isEmpty) {
+        if(rail.isEmpty || builder.building) {
             empty = true
         } else {
             empty = false

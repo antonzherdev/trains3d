@@ -349,7 +349,7 @@ static ODClassType* _TRUndoView_type;
 
 - (void)draw {
     id rail = [_builder railForUndo];
-    if([rail isEmpty]) {
+    if([rail isEmpty] || _builder.building) {
         _empty = YES;
     } else {
         _empty = NO;
