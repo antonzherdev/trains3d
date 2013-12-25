@@ -83,6 +83,9 @@ float geVec2Angle(GEVec2 self) {
 float geVec2DotVec2(GEVec2 self, GEVec2 vec2) {
     return self.x * vec2.x + self.y * vec2.y;
 }
+float geVec2CrossVec2(GEVec2 self, GEVec2 vec2) {
+    return self.x * vec2.y - vec2.x * self.y;
+}
 float geVec2LengthSquare(GEVec2 self) {
     return geVec2DotVec2(self, self);
 }
@@ -494,6 +497,68 @@ ODPType* geVec4Type() {
 
 
 
+NSString* GETriangleDescription(GETriangle self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<GETriangle: "];
+    [description appendFormat:@"p0=%@", GEVec2Description(self.p0)];
+    [description appendFormat:@", p1=%@", GEVec2Description(self.p1)];
+    [description appendFormat:@", p2=%@", GEVec2Description(self.p2)];
+    [description appendString:@">"];
+    return description;
+}
+BOOL geTriangleContainsVec2(GETriangle self, GEVec2 vec2) {
+    GEVec2 r0 = geVec2SubVec2(self.p0, vec2);
+    GEVec2 r1 = geVec2SubVec2(self.p1, vec2);
+    GEVec2 r2 = geVec2SubVec2(self.p2, vec2);
+    float c0 = geVec2CrossVec2(r0, r1);
+    float c1 = geVec2CrossVec2(r1, r2);
+    float c2 = geVec2CrossVec2(r2, r0);
+    return (c0 > 0 && c1 > 0 && c2 > 0) || (c0 < 0 && c1 < 0 && c2 < 0);
+}
+ODPType* geTriangleType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[GETriangleWrap class] name:@"GETriangle" size:sizeof(GETriangle) wrap:^id(void* data, NSUInteger i) {
+        return wrap(GETriangle, ((GETriangle*)(data))[i]);
+    }];
+    return _ret;
+}
+@implementation GETriangleWrap{
+    GETriangle _value;
+}
+@synthesize value = _value;
+
++ (id)wrapWithValue:(GETriangle)value {
+    return [[GETriangleWrap alloc] initWithValue:value];
+}
+
+- (id)initWithValue:(GETriangle)value {
+    self = [super init];
+    if(self) _value = value;
+    return self;
+}
+
+- (NSString*)description {
+    return GETriangleDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    GETriangleWrap* o = ((GETriangleWrap*)(other));
+    return GETriangleEq(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return GETriangleHash(_value);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
+
+
 NSString* GEQuadDescription(GEQuad self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<GEQuad: "];
     [description appendFormat:@"p0=%@", GEVec2Description(self.p0)];
@@ -563,12 +628,12 @@ id<CNSeq> geQuadPs(GEQuad self) {
     return (@[wrap(GEVec2, self.p0), wrap(GEVec2, self.p1), wrap(GEVec2, self.p2), wrap(GEVec2, self.p3)]);
 }
 GEVec2 geQuadClosestPointForVec2(GEQuad self, GEVec2 vec2) {
-    id<CNSeq> projs = [[[geQuadLines(self) chain] flatMap:^id(id _) {
-        return geLine2ProjectionOnSegmentVec2(uwrap(GELine2, _), vec2);
-    }] toArray];
-    if([projs count] == 4) {
+    if(geQuadContainsVec2(self, vec2)) {
         return vec2;
     } else {
+        id<CNSeq> projs = [[[geQuadLines(self) chain] flatMap:^id(id _) {
+            return geLine2ProjectionOnSegmentVec2(uwrap(GELine2, _), vec2);
+        }] toArray];
         if([projs isEmpty]) projs = geQuadPs(self);
         GEVec2 p = uwrap(GEVec2, [[[[[projs chain] sortBy] ascBy:^id(id _) {
             return numf4(geVec2LengthSquare(geVec2SubVec2(uwrap(GEVec2, _), vec2)));
@@ -576,8 +641,16 @@ GEVec2 geQuadClosestPointForVec2(GEQuad self, GEVec2 vec2) {
         return p;
     }
 }
+BOOL geQuadContainsVec2(GEQuad self, GEVec2 vec2) {
+    return geRectContainsVec2(geQuadBoundingRect(self), vec2) && (geTriangleContainsVec2(GETriangleMake(self.p0, self.p1, self.p2), vec2) || geTriangleContainsVec2(GETriangleMake(self.p2, self.p3, self.p0), vec2));
+}
 GEQuad geQuadMapF(GEQuad self, GEVec2(^f)(GEVec2)) {
     return GEQuadMake(f(self.p0), f(self.p1), f(self.p2), f(self.p3));
+}
+GEVec2 geQuadCenter(GEQuad self) {
+    return uwrap(GEVec2, [geLine2CrossPointLine2(geLine2ApplyP0P1(self.p0, self.p2), geLine2ApplyP0P1(self.p1, self.p3)) getOrElseF:^id() {
+        return [geLine2CrossPointLine2(geLine2ApplyP0P1(self.p0, self.p1), geLine2ApplyP0P1(self.p2, self.p3)) get];
+    }]);
 }
 GEQuad geQuadIdentity() {
     static GEQuad _ret = (GEQuad){{0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}, {0.0, 1.0}};
@@ -913,8 +986,10 @@ GELine2 geLine2ApplyP0P1(GEVec2 p0, GEVec2 p1) {
 GEVec2 geLine2RT(GELine2 self, float t) {
     return geVec2AddVec2(self.p0, geVec2MulF4(self.u, t));
 }
-GEVec2 geLine2RLine2(GELine2 self, GELine2 line2) {
-    return geVec2AddVec2(self.p0, geVec2MulF4(self.u, geVec2DotVec2(geLine2N(line2), geVec2SubVec2(line2.p0, self.p0)) / geVec2DotVec2(geLine2N(line2), self.u)));
+id geLine2CrossPointLine2(GELine2 self, GELine2 line2) {
+    float dot = geVec2DotVec2(geLine2N(line2), self.u);
+    if(eqf4(dot, 0)) return [CNOption none];
+    else return [CNOption applyValue:wrap(GEVec2, geVec2AddVec2(self.p0, geVec2MulF4(self.u, geVec2DotVec2(geLine2N(line2), geVec2SubVec2(line2.p0, self.p0)) / dot)))];
 }
 float geLine2Angle(GELine2 self) {
     return geVec2Angle(self.u);
@@ -944,10 +1019,10 @@ GEVec2 geLine2N(GELine2 self) {
     return geVec2Normalize(GEVec2Make(-self.u.y, self.u.x));
 }
 GEVec2 geLine2ProjectionVec2(GELine2 self, GEVec2 vec2) {
-    return geLine2RLine2(self, GELine2Make(vec2, geLine2N(self)));
+    return uwrap(GEVec2, [geLine2CrossPointLine2(self, GELine2Make(vec2, geLine2N(self))) get]);
 }
 id geLine2ProjectionOnSegmentVec2(GELine2 self, GEVec2 vec2) {
-    GEVec2 p = geLine2RLine2(self, GELine2Make(vec2, geLine2N(self)));
+    GEVec2 p = uwrap(GEVec2, [geLine2CrossPointLine2(self, GELine2Make(vec2, geLine2N(self))) get]);
     if(geRectContainsVec2(geLine2BoundingRect(self), p)) return [CNOption applyValue:wrap(GEVec2, p)];
     else return [CNOption none];
 }

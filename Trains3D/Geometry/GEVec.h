@@ -6,6 +6,7 @@ typedef struct GEVec2 GEVec2;
 typedef struct GEVec2i GEVec2i;
 typedef struct GEVec3 GEVec3;
 typedef struct GEVec4 GEVec4;
+typedef struct GETriangle GETriangle;
 typedef struct GEQuad GEQuad;
 typedef struct GEQuadrant GEQuadrant;
 typedef struct GERect GERect;
@@ -58,6 +59,7 @@ GEVec2 geVec2Negate(GEVec2 self);
 float geVec2DegreeAngle(GEVec2 self);
 float geVec2Angle(GEVec2 self);
 float geVec2DotVec2(GEVec2 self, GEVec2 vec2);
+float geVec2CrossVec2(GEVec2 self, GEVec2 vec2);
 float geVec2LengthSquare(GEVec2 self);
 float geVec2Length(GEVec2 self);
 GEVec2 geVec2MidVec2(GEVec2 self, GEVec2 vec2);
@@ -220,6 +222,36 @@ ODPType* geVec4Type();
 
 
 
+struct GETriangle {
+    GEVec2 p0;
+    GEVec2 p1;
+    GEVec2 p2;
+};
+static inline GETriangle GETriangleMake(GEVec2 p0, GEVec2 p1, GEVec2 p2) {
+    return (GETriangle){p0, p1, p2};
+}
+static inline BOOL GETriangleEq(GETriangle s1, GETriangle s2) {
+    return GEVec2Eq(s1.p0, s2.p0) && GEVec2Eq(s1.p1, s2.p1) && GEVec2Eq(s1.p2, s2.p2);
+}
+static inline NSUInteger GETriangleHash(GETriangle self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + GEVec2Hash(self.p0);
+    hash = hash * 31 + GEVec2Hash(self.p1);
+    hash = hash * 31 + GEVec2Hash(self.p2);
+    return hash;
+}
+NSString* GETriangleDescription(GETriangle self);
+BOOL geTriangleContainsVec2(GETriangle self, GEVec2 vec2);
+ODPType* geTriangleType();
+@interface GETriangleWrap : NSObject
+@property (readonly, nonatomic) GETriangle value;
+
++ (id)wrapWithValue:(GETriangle)value;
+- (id)initWithValue:(GETriangle)value;
+@end
+
+
+
 struct GEQuad {
     GEVec2 p0;
     GEVec2 p1;
@@ -252,7 +284,9 @@ GERect geQuadBoundingRect(GEQuad self);
 id<CNSeq> geQuadLines(GEQuad self);
 id<CNSeq> geQuadPs(GEQuad self);
 GEVec2 geQuadClosestPointForVec2(GEQuad self, GEVec2 vec2);
+BOOL geQuadContainsVec2(GEQuad self, GEVec2 vec2);
 GEQuad geQuadMapF(GEQuad self, GEVec2(^f)(GEVec2));
+GEVec2 geQuadCenter(GEQuad self);
 GEQuad geQuadIdentity();
 ODPType* geQuadType();
 @interface GEQuadWrap : NSObject
@@ -401,7 +435,7 @@ static inline NSUInteger GELine2Hash(GELine2 self) {
 NSString* GELine2Description(GELine2 self);
 GELine2 geLine2ApplyP0P1(GEVec2 p0, GEVec2 p1);
 GEVec2 geLine2RT(GELine2 self, float t);
-GEVec2 geLine2RLine2(GELine2 self, GELine2 line2);
+id geLine2CrossPointLine2(GELine2 self, GELine2 line2);
 float geLine2Angle(GELine2 self);
 float geLine2DegreeAngle(GELine2 self);
 GELine2 geLine2SetLength(GELine2 self, float length);

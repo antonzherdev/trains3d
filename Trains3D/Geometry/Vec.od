@@ -33,6 +33,7 @@ struct vec2(x : float4, y : float4) extends Comparable<vec2> {
     def degreeAngle : float4 = 180.0 / M_PI * atan2(y, x)
     def angle : float4 = atan2(y, x)
     def dot(vec2 : vec2) : float4 = x*vec2.x + y*vec2.y
+    def cross(vec2 : vec2) : float4 = x*vec2.y - vec2.x*y
     def lengthSquare : float4 = dot(self)
     def length : float4 = sqrt(lengthSquare)
 
@@ -122,6 +123,21 @@ struct vec4(x : float4, y : float4, z : float4, w : float4) {
     def normalize = set(length = 1.0)
 }
 
+struct Triangle(p0 : vec2, p1 : vec2, p2 : vec2) {
+    def contains(vec2 : vec2) : bool = {
+        val r0 = p0 - vec2
+        val r1 = p1 - vec2
+        val r2 = p2 - vec2
+
+        val c0 = r0.cross(r1)
+        val c1 = r1.cross(r2)
+        val c2 = r2.cross(r0)
+
+        (c0 > 0 && c1 > 0 && c2 > 0)
+        || (c0 < 0 && c1 < 0 && c2 < 0)
+    }
+}
+
 struct Quad(p0 : vec2, p1 : vec2, p2 : vec2, p3 : vec2) {
     static val identity : Quad = Quad(vec2(0, 0), vec2(1, 0), vec2(1, 1), vec2(0, 1))
     static def apply(size : float4) : Quad = Quad(vec2(-size, -size), vec2(size, -size), vec2(size, size), vec2(-size, size))
@@ -168,9 +184,9 @@ struct Quad(p0 : vec2, p1 : vec2, p2 : vec2, p3 : vec2) {
     // It works valid only for quads without a inner point.
     // For quads with a inner point it needs to make up the case with 3 projection points
     def closestPointFor(vec2 : vec2) : vec2 = {
-        var projs : [vec2] = lines.chain.flatMap<vec2>(_.projectionOnSegment(vec2)).toArray
-        if(projs.count == 4) vec2
+        if(contains(vec2)) vec2
         else {
+            var projs : [vec2] = lines.chain.flatMap<vec2>(_.projectionOnSegment(vec2)).toArray
             if(projs.isEmpty) projs = ps
             val p = projs.chain.sortBy.asc((_ - vec2).lengthSquare).endSort.head
 //            log("Correct $vec2 -> $p")
@@ -178,7 +194,15 @@ struct Quad(p0 : vec2, p1 : vec2, p2 : vec2, p3 : vec2) {
         }
     }
 
+    def contains(vec2 : vec2) : bool = boundingRect.contains(vec2) &&
+        ( Triangle(p0, p1, p2).contains(vec2)
+        || Triangle(p2, p3, p0).contains(vec2))
+
     def map(f : vec2 -> vec2) : Quad = Quad(f(p0), f(p1), f(p2), f(p3))
+    def center : vec2 =
+        Line2(p0 = p0, p1 = p2).crossPoint(Line2(p0 = p1, p1 = p3)).getOrElse{
+        Line2(p0 = p0, p1 = p1).crossPoint(Line2(p0 = p2, p1 = p3)).get
+        }
 }
 
 struct Quadrant(quads : Quad[4]) {
@@ -241,8 +265,13 @@ struct RectI(p : vec2i, size : vec2i) {
 
 struct Line2(p0 : vec2, u : vec2) {
     static def apply(p0 : vec2, p1 : vec2) : Line2 = Line2(p0 = p0, u = p1 - p0)
-    def r(t : float4) = p0 + u*t
-    def r(line2 : Line2) = p0 + u*( line2.n.dot(line2.p0 - p0)/line2.n.dot(u) )
+    def r(t : float4) : vec2 = p0 + u*t
+    def crossPoint(line2 : Line2) : vec2? = {
+        val dot = line2.n.dot(u)
+        if(dot == 0) Option.none<vec2>
+        else p0 + u*( line2.n.dot(line2.p0 - p0)/dot)
+    }
+
 
     def angle = u.angle
     def degreeAngle = u.degreeAngle
@@ -256,9 +285,9 @@ struct Line2(p0 : vec2, u : vec2) {
     def sub(vec2 : vec2) = Line2(p0 - vec2, u = u)
 
     def n : vec2 = vec2(-u.y, u.x).normalize
-    def projection(vec2 : vec2) : vec2 = r(Line2(p0 = vec2, u = n))
+    def projection(vec2 : vec2) : vec2 = crossPoint(Line2(p0 = vec2, u = n)).get
     def projectionOnSegment(vec2 : vec2) : vec2? = {
-        val p = r(Line2(p0 = vec2, u = n))
+        val p = crossPoint(Line2(p0 = vec2, u = n)).get
         if(boundingRect.contains(p)) p else nil
     }
     def boundingRect : Rect = Rect(if(u.x > 0) p0.x else p0.x + u.x, if(u.y > 0) p0.y else p0.y + u.y, u.abs)

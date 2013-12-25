@@ -8,13 +8,9 @@
 @class GEMat4;
 @class TRSwitch;
 @class TRRailConnector;
-@class EGMapSso;
-@class TRCity;
-@class TRCityAngle;
-@class TRRailForm;
-@class TRRailroadConnectorContent;
 @class TRRailLight;
 @class EGMatrixModel;
+@class TRRailroadConnectorContent;
 @class EGDirector;
 
 @class TRSwitchProcessor;
@@ -44,7 +40,7 @@
 - (id)initWithContent:(TRRailroadConnectorContent*)content p0:(GEVec3)p0 p1:(GEVec3)p1 p2:(GEVec3)p2 p3:(GEVec3)p3;
 - (ODClassType*)type;
 + (TRSwitchProcessorItem*)applyContent:(TRRailroadConnectorContent*)content rect:(GERect)rect;
-- (id<CNSeq>)ps;
+- (GEQuad)quad;
 - (TRSwitchProcessorItem*)mulMat4:(GEMat4*)mat4;
 - (GERect)boundingRect;
 - (TRSwitchProcessorItem*)expandVec2:(GEVec2)vec2;
