@@ -14,7 +14,6 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
         began = event -> {
             startedPoint = event.location
             firstTry = true
-            builder.building = true
             true
         },
         changed = event -> {
@@ -22,6 +21,7 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
 
             val len = line.u.length
             if(len > 0.5) {
+                builder.building = true
                 val nu = line.u.set(length = 1.0)
                 val nl =
                     if(fixedStart.isDefined) Line2(p0 = line.p0, u = nu)
