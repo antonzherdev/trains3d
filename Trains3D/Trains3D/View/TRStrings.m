@@ -243,11 +243,11 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)result {
-    return @"Score:";
+    return @"Score";
 }
 
 - (NSString*)best {
-    return @"Your best:";
+    return @"Your best";
 }
 
 - (NSString*)topScore:(EGLocalPlayerScore*)score {
@@ -581,11 +581,11 @@ static ODClassType* _TRRuStrings_type;
 }
 
 - (NSString*)result {
-    return @"Счет:";
+    return @"Счет";
 }
 
 - (NSString*)best {
-    return @"Ваш лучший:";
+    return @"Ваш лучший";
 }
 
 - (NSString*)topScore:(EGLocalPlayerScore*)score {

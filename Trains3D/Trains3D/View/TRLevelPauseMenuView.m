@@ -423,8 +423,6 @@ static ODClassType* _TRPauseMenuView_type;
     CNNotificationObserver* _obs;
     EGText* _headerText;
     EGText* _resultText;
-    EGText* _bestText;
-    EGText* _scoreText;
     EGText* _bestScoreText;
     EGText* _topText;
 }
@@ -459,9 +457,7 @@ static ODClassType* _TRWinMenu_type;
             [[EGDirector current] redraw];
         }];
         _headerText = [EGText applyFont:nil text:[TRStr.Loc victory] position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
-        _resultText = [EGText applyFont:nil text:[TRStr.Loc result] position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
-        _bestText = [EGText applyFont:nil text:[TRStr.Loc best] position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
-        _scoreText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
+        _resultText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
         _bestScoreText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
         _topText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(1.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
     }
@@ -486,36 +482,28 @@ static ODClassType* _TRWinMenu_type;
     [EGD2D drawSpriteMaterial:(([__score isDefined]) ? [EGColorSource applyColor:[TRLevelChooseMenu rankColorScore:[__score get]]] : [EGColorSource applyColor:GEVec4Make(0.85, 0.9, 0.75, 1.0)]) at:GEVec3Make(0.0, 0.0, 0.0) rect:rect];
     [_headerText setPosition:geVec3ApplyVec2(geRectPXY(rect, 0.5, 0.75))];
     [_headerText draw];
-    [_resultText setPosition:geVec3ApplyVec2(geRectPXY(rect, 0.15, 0.4))];
+    [_resultText setText:[NSString stringWithFormat:@"%@: %@", [TRStr.Loc result], [TRStr.Loc formatCost:[_level.score score]]]];
+    [_resultText setPosition:geVec3ApplyVec2(geRectPXY(rect, 0.03, 0.4))];
     [_resultText draw];
-    NSInteger ls = [_level.score score];
-    [_scoreText setText:[TRStr.Loc formatCost:ls]];
-    [_scoreText setPosition:geVec3ApplyVec2(geRectPXY(rect, 0.16, 0.4))];
-    [_scoreText draw];
     NSInteger bs = 0;
     if([__score isDefined]) {
         EGLocalPlayerScore* s = [__score get];
         bs = ((NSInteger)(s.value));
-        [_topText setPosition:geVec3ApplyVec2(geRectPXY(rect, 0.95, 0.2))];
+        [_topText setPosition:geVec3ApplyVec2(geRectPXY(rect, 0.97, 0.2))];
         [_topText setText:[TRStr.Loc topScore:s]];
         [_topText draw];
     } else {
         bs = [TRGameDirector.instance bestScoreLevelNumber:_level.number];
     }
-    [_bestScoreText setPosition:geVec3ApplyVec2(geRectPXY(rect, 0.95, 0.4))];
-    [_bestScoreText setText:[TRStr.Loc formatCost:bs]];
+    [_bestScoreText setPosition:geVec3ApplyVec2(geRectPXY(rect, 0.97, 0.4))];
+    [_bestScoreText setText:[NSString stringWithFormat:@"%@: %@", [TRStr.Loc best], [TRStr.Loc formatCost:bs]]];
     [_bestScoreText draw];
-    float x = [_scoreText measureC].x;
-    [_bestText setPosition:geVec3SubVec3([_bestScoreText position], geVec3ApplyVec2(GEVec2Make(x + 0.01 * rect.size.x, 0.0)))];
-    [_bestText draw];
 }
 
 - (void)reshape {
     [_headerText setFont:[EGGlobal fontWithName:@"lucida_grande" size:36]];
     EGFont* f = [EGGlobal fontWithName:@"lucida_grande" size:18];
     [_resultText setFont:f];
-    [_bestText setFont:f];
-    [_scoreText setFont:f];
     [_bestScoreText setFont:f];
     [_topText setFont:f];
 }

@@ -169,8 +169,8 @@ class EnStrings extends Strings {
         "Conduct the service train through the damage
          and send it to any city."
 
-    def result : string = "Score:"
-    def best : string = "Your best:"
+    def result : string = "Score"
+    def best : string = "Your best"
     def top(score : LocalPlayerScore) : string =
         if(score.rank == 1) "The 1-st ever!"
         else if(score.rank == 2) "The 2-nd ever!"
@@ -292,8 +292,8 @@ class RuStrings extends Strings{
     def rateLater : string = "Напомнить позже"
     def rateClose : string = "Нет, спасибо"
 
-    def result : string = "Счет:"
-    def best : string = "Ваш лучший:"
+    def result : string = "Счет"
+    def best : string = "Ваш лучший"
     def top(score : LocalPlayerScore) : string =
         if(score.rank == 1) "1-й!"
         else if(score.rank == 2) "2-й!"
