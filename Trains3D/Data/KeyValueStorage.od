@@ -12,6 +12,10 @@ stub class KeyValueStorage(defaults : [string : any]) {
 stub class LocalKeyValueStorage(defaults : [string : any]) extends KeyValueStorage(defaults)
 
 stub class CloudKeyValueStorage(defaults : [string : any],
-    resolveConflict : string -> ((any, any) -> any)) extends KeyValueStorage(defaults) {
+    resolveConflict : string -> ((any, any) -> any)) extends KeyValueStorage(defaults)
+{
+    static val valueChangedNotification = NotificationHandle<CloudKeyValueStorage, (string, any)>("CloudKeyValueStorage.changeNotification")
 
+    def observeValueChange(by : (string, any) -> void)
+    def observeValueChange(key : string, by : any -> void)
 }

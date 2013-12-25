@@ -175,6 +175,7 @@ static ODClassType* _DTKeyValueStorage_type;
     NSUserDefaults* _d;
 }
 static ODClassType* _DTCloudKeyValueStorage_type;
+static CNNotificationHandle* _DTCloudKeyValueStorage_valueChangedNotification;
 @synthesize resolveConflict = _resolveConflict;
 
 + (id)cloudKeyValueStorageWithDefaults:(id<CNMap>)defaults resolveConflict:(id (^)(NSString*))resolveConflict {
@@ -220,12 +221,15 @@ static ODClassType* _DTCloudKeyValueStorage_type;
         for (NSString* key in changedKeys) {
             id value = [store objectForKey:key];
             id oldValue = [_d objectForKey:key];
-            if(oldValue == nil) [_d setObject:value forKey:key];
-            else if(![oldValue isEqual:value]) {
+            if(oldValue == nil) {
+                [_d setObject:value forKey:key];
+                [_DTCloudKeyValueStorage_valueChangedNotification postSender:self data:tuple(key, value)];
+            } else if(![oldValue isEqual:value]) {
                 id (^resolver)(id, id) = _resolveConflict(key);
                 id newValue = resolver(oldValue, value);
                 if(![oldValue isEqual:newValue]) {
                     [_d setObject:value forKey:key];
+                    [_DTCloudKeyValueStorage_valueChangedNotification postSender:self data:tuple(key, value)];
                 }
                 if(![value isEqual:newValue]) {
                     [[NSUbiquitousKeyValueStore defaultStore] setObject:newValue forKey:key];
@@ -265,11 +269,14 @@ static ODClassType* _DTCloudKeyValueStorage_type;
     return [_d objectForKey:key];
 }
 
-
++ (CNNotificationHandle*)valueChangedNotification {
+    return _DTCloudKeyValueStorage_valueChangedNotification;
+}
 
 + (void)initialize {
     [super initialize];
     _DTCloudKeyValueStorage_type = [ODClassType classTypeWithCls:[DTCloudKeyValueStorage class]];
+    _DTCloudKeyValueStorage_valueChangedNotification = [CNNotificationHandle notificationHandleWithName:@"CloudKeyValueStorage.changeNotification"];
 }
 
 - (ODClassType*)type {
