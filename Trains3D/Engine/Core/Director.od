@@ -39,7 +39,7 @@ class Director {
         _current = self
     }
 
-    static val reshapeNotification = NotificationHandle<vec2>("Reshape")
+    static val reshapeNotification = NotificationHandle<Director, vec2>("Reshape")
 
     private var _lastViewSize : vec2 = vec2(0, 0)
     def viewSize : vec2 = _lastViewSize
@@ -48,7 +48,7 @@ class Director {
             context.scale = scale
             _lastViewSize = size
             _scene.for(_.reshapeWith(size))
-            Director.reshapeNotification.post(size)
+            reshapeNotification.post(sender = self, data = size)
         }
 
         if(_scene.isEmpty) return nil

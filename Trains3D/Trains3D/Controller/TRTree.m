@@ -289,7 +289,7 @@ static ODClassType* _TRTree_type;
 }
 
 - (void)cutDown {
-    [_TRTree_cutDownNotification postData:self];
+    [_TRTree_cutDownNotification postSender:self];
 }
 
 - (ODClassType*)type {

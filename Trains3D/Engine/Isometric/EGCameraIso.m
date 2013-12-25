@@ -258,7 +258,7 @@ static ODClassType* _EGCameraIsoMove_type;
     if(!(eqf(s, __scale))) {
         __scale = s;
         __camera = [EGCameraIso cameraIsoWithTilesOnScreen:geVec2DivF(__currentBase.tilesOnScreen, s) reserve:egCameraReserveDivF4(__currentBase.reserve, ((float)(s))) viewportRatio:__currentBase.viewportRatio center:__camera.center];
-        [_EGCameraIsoMove_cameraChangedNotification postData:self];
+        [_EGCameraIsoMove_cameraChangedNotification postSender:self];
     }
 }
 
@@ -282,7 +282,7 @@ static ODClassType* _EGCameraIsoMove_type;
     }());
     if(!(GEVec2Eq(c, __camera.center))) {
         __camera = [EGCameraIso cameraIsoWithTilesOnScreen:[self camera].tilesOnScreen reserve:[self camera].reserve viewportRatio:[self camera].viewportRatio center:c];
-        [_EGCameraIsoMove_cameraChangedNotification postData:self];
+        [_EGCameraIsoMove_cameraChangedNotification postSender:self];
     }
 }
 

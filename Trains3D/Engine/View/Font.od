@@ -172,7 +172,7 @@ class Text {
         t.color = color
         t
     }
-    private val obs = Director.reshapeNotification.observe{_ -> _changed = true}
+    private val obs = Director.reshapeNotification.observe{_, __ -> _changed = true}
 
     var _changed = true
 

@@ -11,7 +11,7 @@ class LevelSound(level : Level) extends SoundPlayersCollection([
     NotificationSoundPlayer(Sound("SporadicDamage.wav", 0.15), Level.sporadicDamageNotification),
     NotificationSoundPlayer(Sound("TrainPreparing.wav", 0.2), Level.expectedTrainNotification),
     NotificationSoundPlayer(Sound("TrainRun.wav", 0.1), Level.prepareToRunTrainNotification),
-    NotificationSoundPlayer(Sound("CityBuild.wav", 0.15), Level.buildCityNotification, _ -> level.cities.count > 2),
+    NotificationSoundPlayer(Sound("CityBuild.wav", 0.15), Level.buildCityNotification, level.cities.count > 2),
     NotificationSoundPlayer(Sound("RefuseBuild.wav", 0.2), RailroadBuilderProcessor.refuseBuildNotification),
     NotificationSoundPlayer(Sound("RefuseBuild.wav", 0.2), SwitchProcessor.strangeClickNotification),
     NotificationSoundPlayer(Sound("Click.wav", 0.3), Switch.turnNotification),
@@ -19,11 +19,11 @@ class LevelSound(level : Level) extends SoundPlayersCollection([
     NotificationSoundPlayer(Sound("BuildMode.wav", 0.3), RailroadBuilder.buildModeNotification)
 ])
 
-class CollisionSound(name : string, notificationHandle : NotificationHandle<float4>, impulseK : float4, volume : float4) extends SoundPlayer {
+class CollisionSound(name : string, notificationHandle : NotificationHandle<Level, float4>, impulseK : float4, volume : float4) extends SoundPlayer {
     val sound = SoundParallel(5, Sound("$name.wav"))
     private var obs : NotificationObserver?
     def start{
-        obs = notificationHandle.observe { impulse ->
+        obs = notificationHandle.observe { _, impulse ->
             var imp = impulseK * impulse.abs
             if(imp > 0.1) {
                 if(imp > 1.0) imp = 1.0

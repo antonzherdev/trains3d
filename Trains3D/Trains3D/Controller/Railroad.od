@@ -29,7 +29,7 @@ class Rail(tile : vec2i, form : RailForm) extends RailroadConnectorContent {
 }
 
 class Switch(tile : vec2i, connector : RailConnector, rail1 : Rail, rail2 : Rail) extends RailroadConnectorContent {
-    static val turnNotification = NotificationHandle<Switch>("switchTurnNotification")
+    static val turnNotification = NotificationHandle<Switch, void>("switchTurnNotification")
     var firstActive = true
     def activeRail : Rail = if(firstActive) rail1 else rail2
     def turn {
@@ -50,7 +50,7 @@ class Switch(tile : vec2i, connector : RailConnector, rail1 : Rail, rail2 : Rail
 }
 
 class RailLight(tile : vec2i, connector : RailConnector, rail : Rail) extends RailroadConnectorContent {
-    static val turnNotification = NotificationHandle<RailLight>("Light turned")
+    static val turnNotification = NotificationHandle<RailLight, void>("Light turned")
     var isGreen = true
     def turn {
         isGreen = !isGreen
@@ -144,12 +144,12 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
     }
 
 
-    static val changedNotification = NotificationHandle<void>("Railroad changed")
+    static val changedNotification = NotificationHandle<Railroad, void>("Railroad changed")
     private def rebuildArrays {
         _rails = connectorIndex.values.chain.flatMap(_.rails).distinct.toArray
         _switches = connectorIndex.values.chain.filter(_.is<Switch>).toArray
         _lights = connectorIndex.values.chain.filter(_.is<RailLight>).toArray
-        changedNotification.post
+        changedNotification.post(self)
     }
 
     private def activeRailFor(tile : vec2i, connector : RailConnector) : Rail? =
@@ -287,9 +287,9 @@ class RailroadBuilder(weak railroad : Railroad) extends Updatable {
         }
     }
 
-    static val changedNotification = NotificationHandle<void>("Railroad builder changed")
+    static val changedNotification = NotificationHandle<RailroadBuilder, void>("Railroad builder changed")
     private def changed {
-        changedNotification.post
+        changedNotification.post(self)
     }
 
     def checkCity(tile : vec2i, connector : RailConnector) : bool = {
@@ -356,12 +356,12 @@ class RailroadBuilder(weak railroad : Railroad) extends Updatable {
         changed
     }
 
-    static val buildModeNotification = NotificationHandle<void>("buildModeNotification")
+    static val buildModeNotification = NotificationHandle<RailroadBuilder, void>("buildModeNotification")
     private var _buildMode : bool = false
     def buildMode = _buildMode
     def set(buildMode : bool) {
         _buildMode = buildMode
-        buildModeNotification.post
+        buildModeNotification.post(self)
     }
 }
 

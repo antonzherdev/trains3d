@@ -9,7 +9,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     private val callRepairerView : CallRepairerView
     private val precipitationView : PrecipitationView?
 
-    private val obs1 = CameraIsoMove.cameraChangedNotification.observe{move ->
+    private val obs1 = CameraIsoMove.cameraChangedNotification.observe{move, _ ->
         reshapeWith(context.viewport)
         level.scale = move.scale
         Director.reshapeNotification.post(Director.current.viewSize)

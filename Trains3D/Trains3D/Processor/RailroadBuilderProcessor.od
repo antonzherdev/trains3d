@@ -7,7 +7,7 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
 
     private var startedPoint : vec2? = nil
 
-    static val refuseBuildNotification = NotificationHandle<void>("refuseBuildNotification")
+    static val refuseBuildNotification = NotificationHandle<RailroadBuilderProcessor, void>("refuseBuildNotification")
     private var firstTry : bool = true
     private var fixedStart : (vec2i, RailConnector)? = nil
     def recognizers : Recognizers = Recognizer(Pan(),
@@ -59,7 +59,7 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
                 } else {
                     if(firstTry) {
                         firstTry = false
-                        refuseBuildNotification.post
+                        refuseBuildNotification.post(self)
                     }
                 }
             } else {

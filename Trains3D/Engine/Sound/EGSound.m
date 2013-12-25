@@ -262,7 +262,7 @@ static ODClassType* _EGSporadicSoundPlayer_type;
 @implementation EGNotificationSoundPlayer{
     SDSound* _sound;
     CNNotificationHandle* _notificationHandle;
-    BOOL(^_condition)(id);
+    BOOL(^_condition)(id, id);
     id _obs;
     BOOL _wasPlaying;
 }
@@ -271,11 +271,11 @@ static ODClassType* _EGNotificationSoundPlayer_type;
 @synthesize notificationHandle = _notificationHandle;
 @synthesize condition = _condition;
 
-+ (id)notificationSoundPlayerWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle condition:(BOOL(^)(id))condition {
++ (id)notificationSoundPlayerWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle condition:(BOOL(^)(id, id))condition {
     return [[EGNotificationSoundPlayer alloc] initWithSound:sound notificationHandle:notificationHandle condition:condition];
 }
 
-- (id)initWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle condition:(BOOL(^)(id))condition {
+- (id)initWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle condition:(BOOL(^)(id, id))condition {
     self = [super init];
     if(self) {
         _sound = sound;
@@ -293,14 +293,14 @@ static ODClassType* _EGNotificationSoundPlayer_type;
 }
 
 + (EGNotificationSoundPlayer*)applySound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle {
-    return [EGNotificationSoundPlayer notificationSoundPlayerWithSound:sound notificationHandle:notificationHandle condition:^BOOL(id _) {
+    return [EGNotificationSoundPlayer notificationSoundPlayerWithSound:sound notificationHandle:notificationHandle condition:^BOOL(id _0, id _1) {
         return YES;
     }];
 }
 
 - (void)start {
-    _obs = [CNOption applyValue:[_notificationHandle observeBy:^void(id value) {
-        if(_condition(value)) [_sound play];
+    _obs = [CNOption applyValue:[_notificationHandle observeBy:^void(id sender, id data) {
+        if(_condition(sender, data)) [_sound play];
     }]];
 }
 

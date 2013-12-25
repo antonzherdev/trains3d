@@ -203,9 +203,9 @@ static ODClassType* _TRTrainsDynamicWorld_type;
             }];
             return w;
         }();
-        _cutDownObs = [TRTree.cutDownNotification observeBy:^void(TRTree* tree) {
-            [((TRTree*)(tree)).body forEach:^void(EGRigidBody* _) {
-                [_weakSelf.world removeBody:_];
+        _cutDownObs = [TRTree.cutDownNotification observeBy:^void(TRTree* tree, id _) {
+            [((TRTree*)(tree)).body forEach:^void(EGRigidBody* b) {
+                [_weakSelf.world removeBody:b];
             }];
         }];
         _workCounter = 0;
@@ -260,8 +260,8 @@ static ODClassType* _TRTrainsDynamicWorld_type;
                 if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).isKinematic) [_level knockDownTrain:((TRCar*)(((CNWeak*)(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).data)).get)).train];
             }
             if([((EGDynamicCollision*)(collision)) impulse] > 0) {
-                if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).data == nil || ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).data == nil) [_TRTrainsDynamicWorld_carAndGroundCollisionNotification postData:numf4([((EGDynamicCollision*)(collision)) impulse])];
-                else [_TRTrainsDynamicWorld_carsCollisionNotification postData:numf4([((EGDynamicCollision*)(collision)) impulse])];
+                if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).data == nil || ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).data == nil) [_TRTrainsDynamicWorld_carAndGroundCollisionNotification postSender:_level data:numf4([((EGDynamicCollision*)(collision)) impulse])];
+                else [_TRTrainsDynamicWorld_carsCollisionNotification postSender:_level data:numf4([((EGDynamicCollision*)(collision)) impulse])];
             }
         }];
     }

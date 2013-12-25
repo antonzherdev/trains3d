@@ -279,7 +279,7 @@ static ODClassType* _TRSwitch_type;
 
 - (void)turn {
     _firstActive = !(_firstActive);
-    [_TRSwitch_turnNotification postData:self];
+    [_TRSwitch_turnNotification postSender:self];
 }
 
 - (BOOL)canAddRail:(TRRail*)rail {
@@ -397,7 +397,7 @@ static ODClassType* _TRRailLight_type;
 
 - (void)turn {
     _isGreen = !(_isGreen);
-    [_TRRailLight_turnNotification postData:self];
+    [_TRRailLight_turnNotification postSender:self];
 }
 
 - (void)cutDownTreesInForest:(TRForest*)forest {
@@ -712,7 +712,7 @@ static ODClassType* _TRRailroad_type;
     __lights = [[[[_connectorIndex values] chain] filter:^BOOL(TRRailroadConnectorContent* _) {
         return [((TRRailroadConnectorContent*)(_)) isKindOfClass:[TRRailLight class]];
     }] toArray];
-    [_TRRailroad_changedNotification post];
+    [_TRRailroad_changedNotification postSender:self];
 }
 
 - (id)activeRailForTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
@@ -995,7 +995,7 @@ static ODClassType* _TRRailroadBuilder_type;
 }
 
 - (void)changed {
-    [_TRRailroadBuilder_changedNotification post];
+    [_TRRailroadBuilder_changedNotification postSender:self];
 }
 
 - (BOOL)checkCityTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
@@ -1069,7 +1069,7 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (void)setBuildMode:(BOOL)buildMode {
     __buildMode = buildMode;
-    [_TRRailroadBuilder_buildModeNotification post];
+    [_TRRailroadBuilder_buildModeNotification postSender:self];
 }
 
 - (ODClassType*)type {

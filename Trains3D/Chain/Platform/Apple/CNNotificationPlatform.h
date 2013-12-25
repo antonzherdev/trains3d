@@ -9,8 +9,8 @@
 + (id)notificationCenter;
 - (id)init;
 - (ODClassType*)type;
-- (CNNotificationObserver*)addObserverName:(NSString*)name block:(void(^)(id))block;
-- (void)postName:(NSString*)name data:(id)data;
+- (CNNotificationObserver*)addObserverName:(NSString*)name sender:(id)sender block:(void(^)(id, id))block;
+- (void)postName:(NSString*)name sender:(id)sender data:(id)data;
 + (CNNotificationCenter*)instance;
 + (ODClassType*)type;
 @end

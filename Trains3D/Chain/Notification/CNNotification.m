@@ -25,16 +25,24 @@ static ODClassType* _CNNotificationHandle_type;
     _CNNotificationHandle_type = [ODClassType classTypeWithCls:[CNNotificationHandle class]];
 }
 
-- (void)postData:(id)data {
-    [CNNotificationCenter.instance postName:_name data:data];
+- (void)postSender:(id)sender {
+    [CNNotificationCenter.instance postName:_name sender:sender data:nil];
 }
 
-- (void)post {
-    [CNNotificationCenter.instance postName:_name data:nil];
+- (void)postSender:(id)sender data:(id)data {
+    [CNNotificationCenter.instance postName:_name sender:sender data:data];
 }
 
-- (CNNotificationObserver*)observeBy:(void(^)(id))by {
-    return [CNNotificationCenter.instance addObserverName:_name block:by];
+- (CNNotificationObserver*)observeBy:(void(^)(id, id))by {
+    return [CNNotificationCenter.instance addObserverName:_name sender:nil block:^void(id sender, id data) {
+        by(sender, data);
+    }];
+}
+
+- (CNNotificationObserver*)observeSender:(id)sender by:(void(^)(id))by {
+    return [CNNotificationCenter.instance addObserverName:_name sender:sender block:^void(id _, id data) {
+        by(data);
+    }];
 }
 
 - (ODClassType*)type {

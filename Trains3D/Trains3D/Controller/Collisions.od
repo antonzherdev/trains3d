@@ -56,8 +56,8 @@ class TrainsDynamicWorld(weak level : Level) extends Updatable {
         w
     }
 
-    val cutDownObs = Tree.cutDownNotification.observe{ tree ->
-        tree.body.for(world.remove(_))
+    val cutDownObs = Tree.cutDownNotification.observe{ tree, _ ->
+        tree.body.for{b -> world.remove(b)}
     }
 
     def add(city : City) {
@@ -87,8 +87,8 @@ class TrainsDynamicWorld(weak level : Level) extends Updatable {
         }
     }
 
-    static val carsCollisionNotification = NotificationHandle<float4>("carsCollisionNotification")
-    static val carAndGroundCollisionNotification = NotificationHandle<float4>("carAndGroundCollisionNotification")
+    static val carsCollisionNotification = NotificationHandle<Level, float4>("carsCollisionNotification")
+    static val carAndGroundCollisionNotification = NotificationHandle<Level, float4>("carAndGroundCollisionNotification")
     def updateWith(delta : float) {
         if(workCounter > 0) {
             world.updateWith(delta)
@@ -101,9 +101,9 @@ class TrainsDynamicWorld(weak level : Level) extends Updatable {
                 }
                 if(collision.impulse > 0) {
                     if(collision.bodies.a.data == nil || collision.bodies.b.data == nil) {
-                        carAndGroundCollisionNotification.post(collision.impulse)
+                        carAndGroundCollisionNotification.post(level, collision.impulse)
                     } else {
-                        carsCollisionNotification.post(collision.impulse)
+                        carsCollisionNotification.post(level, collision.impulse)
                     }
                 }
             }

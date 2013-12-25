@@ -12,9 +12,10 @@
 + (id)notificationHandleWithName:(NSString*)name;
 - (id)initWithName:(NSString*)name;
 - (ODClassType*)type;
-- (void)postData:(id)data;
-- (void)post;
-- (CNNotificationObserver*)observeBy:(void(^)(id))by;
+- (void)postSender:(id)sender;
+- (void)postSender:(id)sender data:(id)data;
+- (CNNotificationObserver*)observeBy:(void(^)(id, id))by;
+- (CNNotificationObserver*)observeSender:(id)sender by:(void(^)(id))by;
 + (ODClassType*)type;
 @end
 

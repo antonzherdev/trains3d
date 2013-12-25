@@ -3,11 +3,7 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 
 class SwitchProcessor(level : Level) extends InputProcessor {
-//    private val obs = Railroad.changedNotification.observe { _ ->
-//    }
-
-
-    static val strangeClickNotification = NotificationHandle<Event>("strangeClickNotification")
+    static val strangeClickNotification = NotificationHandle<SwitchProcessor, Event>("strangeClickNotification")
     def process(event : Event) : bool = {
         val vps = vec2(80, 80)/event.viewport.size*context.scale
         val loc = event.locationInViewport
@@ -55,7 +51,7 @@ class SwitchProcessor(level : Level) extends InputProcessor {
                 val delta = (a.distance(loc) - b.distance(loc)).abs
                 if(delta < 0.01) {
 //                    log("!! Click: $delta = $(a.distance(loc)) - $(b.distance(loc))")
-                    strangeClickNotification.post(event)
+                    strangeClickNotification.post(self, event)
                     Option.none<SwitchProcessorItem>
                 } else {
 //                    log("Click: $delta = $(a.distance(loc)) - $(b.distance(loc))")

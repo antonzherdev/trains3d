@@ -112,7 +112,7 @@ static ODClassType* _EGDirector_type;
         [__scene forEach:^void(EGScene* _) {
             [((EGScene*)(_)) reshapeWithViewSize:size];
         }];
-        [EGDirector.reshapeNotification postData:wrap(GEVec2, size)];
+        [_EGDirector_reshapeNotification postSender:self data:wrap(GEVec2, size)];
     }
     if([__scene isEmpty]) return ;
     if(size.x <= 0 || size.y <= 0) return ;

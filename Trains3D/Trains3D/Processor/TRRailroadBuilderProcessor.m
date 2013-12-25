@@ -80,7 +80,7 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
             } else {
                 if(_firstTry) {
                     _firstTry = NO;
-                    [_TRRailroadBuilderProcessor_refuseBuildNotification post];
+                    [_TRRailroadBuilderProcessor_refuseBuildNotification postSender:self];
                 }
             }
         } else {

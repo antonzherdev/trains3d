@@ -452,7 +452,7 @@ static ODClassType* _TRWinMenu_type;
             [TRGameDirector.instance chooseLevel];
         }];
         __score = [CNOption none];
-        _obs = [TRGameDirector.playerScoreRetrieveNotification observeBy:^void(EGLocalPlayerScore* score) {
+        _obs = [TRGameDirector.playerScoreRetrieveNotification observeBy:^void(TRGameDirector* _, EGLocalPlayerScore* score) {
             _weakSelf._score = [CNOption applyValue:score];
             [[EGDirector current] redraw];
         }];

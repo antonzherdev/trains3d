@@ -55,13 +55,13 @@ static ODClassType* _TRRailroadView_type;
         _damageView = [TRDamageView damageViewWithRailroad:_level.railroad];
         _railroadSurface = [EGViewportSurface viewportSurfaceWithDepth:YES multisampling:YES];
         _undoView = [TRUndoView undoViewWithBuilder:_level.railroad.builder];
-        _obs1 = [TRRailroad.changedNotification observeBy:^void(id _) {
+        _obs1 = [TRRailroad.changedNotification observeBy:^void(TRRailroad* _0, id _1) {
             _weakSelf._changed = YES;
         }];
-        _obs2 = [TRRailroadBuilder.changedNotification observeBy:^void(id _) {
+        _obs2 = [TRRailroadBuilder.changedNotification observeBy:^void(TRRailroadBuilder* _0, id _1) {
             _weakSelf._changed = YES;
         }];
-        _obs3 = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* _) {
+        _obs3 = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* _0, id _1) {
             _weakSelf._changed = YES;
         }];
         __changed = YES;
@@ -545,17 +545,17 @@ static ODClassType* _TRLightView_type;
         __bodyChanged = YES;
         __matrixShadowChanged = YES;
         __lightGlowChanged = YES;
-        _obs1 = [TRRailroad.changedNotification observeBy:^void(id _) {
+        _obs1 = [TRRailroad.changedNotification observeBy:^void(TRRailroad* _, id __) {
             _weakSelf._matrixChanged = YES;
             _weakSelf._bodyChanged = YES;
             _weakSelf._matrixShadowChanged = YES;
             _weakSelf._lightGlowChanged = YES;
         }];
-        _obs2 = [TRRailLight.turnNotification observeBy:^void(TRRailLight* _) {
+        _obs2 = [TRRailLight.turnNotification observeBy:^void(TRRailLight* _, id __) {
             _weakSelf._lightGlowChanged = YES;
             _weakSelf._bodyChanged = YES;
         }];
-        _obs3 = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* _) {
+        _obs3 = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* _, id __) {
             _weakSelf._matrixChanged = YES;
             _weakSelf._bodyChanged = YES;
             _weakSelf._matrixShadowChanged = YES;
@@ -694,8 +694,8 @@ static ODClassType* _TRDamageView_type;
         _railroad = railroad;
         _model = [EGMeshModel applyMeshes:(@[tuple(TRModels.damage, [EGColorSource applyColor:GEVec4Make(1.0, 0.0, 0.0, 0.3)])])];
         _sporadicAnimations = [EGMutableCounterArray mutableCounterArray];
-        _spObs = [TRLevel.sporadicDamageNotification observeBy:^void(CNTuple* p) {
-            [_weakSelf.sporadicAnimations appendCounter:[EGLengthCounter lengthCounterWithLength:2.0] data:((CNTuple*)(p)).b];
+        _spObs = [TRLevel.sporadicDamageNotification observeBy:^void(TRLevel* level, id point) {
+            [_weakSelf.sporadicAnimations appendCounter:[EGLengthCounter lengthCounterWithLength:2.0] data:point];
         }];
     }
     

@@ -325,7 +325,7 @@ static ODClassType* _EGText_type;
     self = [super init];
     __weak EGText* _weakSelf = self;
     if(self) {
-        _obs = [EGDirector.reshapeNotification observeBy:^void(id _) {
+        _obs = [EGDirector.reshapeNotification observeBy:^void(EGDirector* _, id __) {
             _weakSelf._changed = YES;
         }];
         __changed = YES;

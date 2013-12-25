@@ -226,17 +226,17 @@ class LightView(railroad : Railroad) {
     var _bodyChanged = true
     var _matrixShadowChanged = true
     var _lightGlowChanged = true
-    private val obs1 = Railroad.changedNotification.observe { _ ->
+    private val obs1 = Railroad.changedNotification.observe { _, __ ->
         _matrixChanged = true
         _bodyChanged = true
         _matrixShadowChanged = true
         _lightGlowChanged = true
     }
-    private val obs2 = RailLight.turnNotification.observe { _ ->
+    private val obs2 = RailLight.turnNotification.observe { _, __ ->
         _lightGlowChanged = true
         _bodyChanged = true
     }
-    private val obs3 = CameraIsoMove.cameraChangedNotification.observe{_ ->
+    private val obs3 = CameraIsoMove.cameraChangedNotification.observe{_, __ ->
         _matrixChanged = true
         _bodyChanged = true
         _matrixShadowChanged = true
@@ -320,8 +320,8 @@ class DamageView(railroad : Railroad) {
 
     val sporadicAnimations = MutableCounterArray<RailPoint>()
 
-    val spObs = Level.sporadicDamageNotification.observe{p ->
-        sporadicAnimations.append(LengthCounter(2), p.b)
+    val spObs = Level.sporadicDamageNotification.observe{level, point ->
+        sporadicAnimations.append(LengthCounter(2), point)
     }
 
     def drawForeground {

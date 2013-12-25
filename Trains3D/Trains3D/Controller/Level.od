@@ -71,14 +71,14 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         else (tile, dir)
     }
 
-    static val buildCityNotification = NotificationHandle<(City)>("buildCityNotification")
+    static val buildCityNotification = NotificationHandle<Level, City>("buildCityNotification")
     def createCityWith(tile : vec2i, direction : CityAngle) {
         val city = City(CityColor[cities.count], tile, direction)
         forest.cutDown(tile)
         railroad.add(Rail(tile, city.angle.form))
         _cities.append(city)
         dynamicWorld.add(city)
-        buildCityNotification.post(city)
+        buildCityNotification.post(self, city)
         if(_cities.count > 2) {
             notifications.notify(Loc.cityBuilt)
         }
@@ -95,8 +95,8 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         }.randomItem.get
     }
 
-    static val prepareToRunTrainNotification = NotificationHandle<(Train, City)>("prepateToRunTrainNotification")
-    static val expectedTrainNotification = NotificationHandle<(Train, City)>("expectedTrainNotification")
+    static val prepareToRunTrainNotification = NotificationHandle<Level, (Train, City)>("prepateToRunTrainNotification")
+    static val expectedTrainNotification = NotificationHandle<Level, (Train, City)>("expectedTrainNotification")
     private def run(train : Train, fromCity : City) {
         fromCity.expectedTrain = train
         weak val ws = self
@@ -104,17 +104,17 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         fromCity.expectedTrainCounter = Counter(trainComingPeriod, finish = {
             train.startFrom(fs)
             ws.add(train)
-        }).on(0.9, prepareToRunTrainNotification.post((train, fs)))
-        expectedTrainNotification.post((train, fromCity))
+        }).on(0.9, prepareToRunTrainNotification.post(self, (train, fs)))
+        expectedTrainNotification.post(self, (train, fromCity))
     }
 
-    static val runTrainNotification = NotificationHandle<(Level, Train)>("runTrainNotification")
+    static val runTrainNotification = NotificationHandle<Level, Train>("runTrainNotification")
     private def add(train : Train) {
         _trains += train
         score.run(train)
         collisionWorld.add(train)
         dynamicWorld.add(train)
-        runTrainNotification.post((self, train))
+        runTrainNotification.post(self, train)
     }
 
     def runTrainWith(generator : TrainGenerator) {
@@ -201,13 +201,13 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         remove(train)
     }
 
-    static val crashNotification = NotificationHandle<[Train]>("Trains crashed")
+    static val crashNotification = NotificationHandle<Level, [Train]>("Trains crashed")
     private var _crashCounter : uint = 0
     def processCollisions {
         detectCollisions.for{collision ->
             collision.cars.for(doDestroy(_.train))
             _crashCounter = 2
-            crashNotification.post(collision.cars.chain.map(_.train).toArray)
+            crashNotification.post(self, collision.cars.chain.map(_.train).toArray)
             weak val ws = self
             schedule.schedule(5) {
                 ws.railroad.addDamageAt(collision.railPoint)
@@ -216,24 +216,24 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         }
     }
 
-    static val knockDownNotification = NotificationHandle<(Train, uint)>("Knock down crashed")
+    static val knockDownNotification = NotificationHandle<Level, (Train, uint)>("Knock down crashed")
     def knockDown(train : Train) {
         if(_trains.contains(train)) {
             doDestroy(train)
             _crashCounter += 1
-            knockDownNotification.post((train, _crashCounter))
+            knockDownNotification.post(self, (train, _crashCounter))
         }
     }
 
-    static val damageNotification = NotificationHandle<(Level, RailPoint)>("damageNotification")
+    static val damageNotification = NotificationHandle<Level, RailPoint>("damageNotification")
 
-    static val sporadicDamageNotification = NotificationHandle<(Level, RailPoint)>("sporadicDamageNotification")
+    static val sporadicDamageNotification = NotificationHandle<Level, RailPoint>("sporadicDamageNotification")
     def addSporadicDamage {
         railroad.rails.randomItem.for {rail ->
             val p = RailPoint(rail.tile, rail.form, Float.rnd(0, rail.form.length), false)
             val pp = railroad.addDamageAt(p)
-            sporadicDamageNotification.post((self, pp))
-            damageNotification.post((self, pp))
+            sporadicDamageNotification.post(self, pp)
+            damageNotification.post(self, pp)
         }
     }
 
@@ -271,7 +271,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     }
 
 
-    static val runRepairerNotification = NotificationHandle<Level>("runRepairerNotification")
+    static val runRepairerNotification = NotificationHandle<Level, void>("runRepairerNotification")
     def runRepairerFrom(city : City) {
         if(_repairer.isEmpty) {
             score.repairerCalled
@@ -298,7 +298,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
     private var _result : LevelResult? = nil
     def result = _result
-    static val winNotification = NotificationHandle<Level>("Level was passed")
+    static val winNotification = NotificationHandle<Level, void>("Level was passed")
     def win {
         _result = LevelResult(true)
         winNotification.post(self)

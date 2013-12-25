@@ -1,15 +1,23 @@
 package core.chain
 
-class NotificationHandle<D>(name : string) {
-    def post(data : D) {
-        NotificationCenter.instance.post(name, data)
+class NotificationHandle<S, D>(name : string) {
+    def post(self : NotificationHandle<_, void>, sender : S) {
+        NotificationCenter.instance.post(name, sender, nil)
     }
 
-    def post(self : NotificationHandle<void>) {
-        NotificationCenter.instance.post(name, nil)
+    def post(sender : S, data : D) {
+        NotificationCenter.instance.post(name, sender, data)
     }
 
-    def observe(by : D -> void) : NotificationObserver = {
-        NotificationCenter.instance.addObserver(name, by)
+    def observe(by : (S, D) -> void) : NotificationObserver = {
+        NotificationCenter.instance.addObserver<S, D>(name, sender = nil) { sender, data ->
+            by(sender, data)
+        }
+    }
+
+    def observe(sender : S, by : D -> void) : NotificationObserver = {
+        NotificationCenter.instance.addObserver<S, D>(name, sender) { _, data ->
+            by(data)
+        }
     }
 }

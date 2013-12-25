@@ -156,7 +156,7 @@ class WinMenu(level : Level) extends MenuView {
     }
 
     var _score : LocalPlayerScore? = nil
-    private val obs = GameDirector.playerScoreRetrieveNotification.observe{ score ->
+    private val obs = GameDirector.playerScoreRetrieveNotification.observe{ _, score ->
         _score = score
         Director.current.redraw
     }

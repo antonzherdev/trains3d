@@ -19,8 +19,8 @@ class GameDirector {
         if(name == "maxLevel") resolveMaxLevel
         else Conflict.resolveMax)
 
-    static val playerScoreRetrieveNotification = NotificationHandle<LocalPlayerScore>("playerScoreRetrieveNotification")
-    private val obs = Level.winNotification.observe{ level ->
+    static val playerScoreRetrieveNotification = NotificationHandle<GameDirector, LocalPlayerScore>("playerScoreRetrieveNotification")
+    private val obs = Level.winNotification.observe{ level, _ ->
         val n = level.number
         cloud.keepMax("maxLevel", n + 1)
         local.set("currentLevel", i = n + 1)
@@ -28,28 +28,28 @@ class GameDirector {
         val s = level.score.score
         cloud.keepMax("level$n.score", level.score.score)
         GameCenter.instance.reportScore(leaderboard, s) { score ->
-            playerScoreRetrieveNotification.post(score)
+            playerScoreRetrieveNotification.post(self, score)
         }
     }
-    private val sporadicDamageHelpObs = Level.sporadicDamageNotification.observe{ p ->
+    private val sporadicDamageHelpObs = Level.sporadicDamageNotification.observe{ level, _ ->
         if(cloud.intFor("help.sporadicDamage") == 0) {
-            p.a.schedule.schedule(1) {
-            p.a.showHelp(Loc.helpSporadicDamage)
+            level.schedule.schedule(1) {
+                level.showHelp(Loc.helpSporadicDamage)
                 cloud.set("help.sporadicDamage", 1)
             }
         }
     }
 
-    private val damageHelpObs = Level.damageNotification.observe{ p ->
+    private val damageHelpObs = Level.damageNotification.observe{ level, _ ->
         if(cloud.intFor("help.damage") == 0) {
-            p.a.schedule.schedule(1) {
-                p.a.showHelp(Loc.helpDamage)
+            level.schedule.schedule(1) {
+                level.showHelp(Loc.helpDamage)
                 cloud.set("help.damage", 1)
             }
         }
     }
 
-    private val repairerHelpObs = Level.runRepairerNotification.observe{ level ->
+    private val repairerHelpObs = Level.runRepairerNotification.observe{ level, _ ->
         if(cloud.intFor("help.repairer") == 0) {
             level.schedule.schedule(Level.trainComingPeriod + 7) {
                 level.showHelp(Loc.helpRepairer)
@@ -58,23 +58,23 @@ class GameDirector {
         }
     }
 
-    private val crazyHelpObs = Level.runTrainNotification.observe{ p ->
-        if(p.b.trainType == TrainType.crazy && cloud.intFor("help.crazy") == 0) {
-            p.a.schedule.schedule(2) {
-                p.a.showHelp(Loc.helpCrazy)
+    private val crazyHelpObs = Level.runTrainNotification.observe{ level, train ->
+        if(train.trainType == TrainType.crazy && cloud.intFor("help.crazy") == 0) {
+            level.schedule.schedule(2) {
+                level.showHelp(Loc.helpCrazy)
                 cloud.set("help.crazy", 1)
             }
         }
     }
 
-    private val crazyHelpObs = LevelFactory.lineAdviceTimeNotification.observe{ level ->
+    private val crazyHelpObs = LevelFactory.lineAdviceTimeNotification.observe{ _, level ->
         if(cloud.intFor("help.linesAdvice") == 0) {
             level.showHelp(Loc.linesAdvice)
             cloud.set("help.linesAdvice", 1)
         }
     }
 
-    private val zoomHelpObs = CameraIsoMove.cameraChangedNotification.observe{ move ->
+    private val zoomHelpObs = CameraIsoMove.cameraChangedNotification.observe{ move, _ ->
         if(cloud.intFor("help.zoom") == 0 && move.scale > 1) {
             Director.current.scene.get.controller.cast<Level>.showHelp(Loc.helpInZoom)
             cloud.set("help.zoom", 1)
@@ -91,8 +91,10 @@ class GameDirector {
 
     def bestScore(levelNumber : uint) : int = cloud.intFor("level$levelNumber.score")
 
-    private val crashObs = Level.crashNotification.observe(GameDirector.instance.destroyTrains(_))
-    private val knockDownObs = Level.knockDownNotification.observe{p ->
+    private val crashObs = Level.crashNotification.observe{level, trains ->
+        GameDirector.instance.destroyTrains(trains)
+    }
+    private val knockDownObs = Level.knockDownNotification.observe{level, p ->
         GameDirector.instance.destroyTrains([p.a])
         if(p.b == 2) {
             GameCenter.instance.completeAchievement("grp.KnockDown")

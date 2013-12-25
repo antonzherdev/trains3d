@@ -108,7 +108,7 @@ class Tree(treeType : TreeType, position : vec2, size : vec2) extends Comparable
             b
         } else nil
 
-    static val cutDownNotification = NotificationHandle<Tree>("cutDownNotification")
+    static val cutDownNotification = NotificationHandle<Tree, void>("cutDownNotification")
     def cutDown {
         cutDownNotification.post(self)
     }

@@ -283,7 +283,7 @@ static ODClassType* _TRLevel_type;
     [_railroad addRail:[TRRail railWithTile:tile form:city.angle.form]];
     [__cities appendItem:city];
     [[self dynamicWorld] addCity:city];
-    [_TRLevel_buildCityNotification postData:city];
+    [_TRLevel_buildCityNotification postSender:self data:city];
     if([__cities count] > 2) [_notifications notifyNotification:[TRStr.Loc cityBuilt]];
 }
 
@@ -303,9 +303,9 @@ static ODClassType* _TRLevel_type;
         [train startFromCity:fs];
         [ws addTrain:train];
     }] onTime:0.9 event:^void() {
-        [_TRLevel_prepareToRunTrainNotification postData:tuple(train, fs)];
+        [_TRLevel_prepareToRunTrainNotification postSender:self data:tuple(train, fs)];
     }];
-    [_TRLevel_expectedTrainNotification postData:tuple(train, fromCity)];
+    [_TRLevel_expectedTrainNotification postSender:self data:tuple(train, fromCity)];
 }
 
 - (void)addTrain:(TRTrain*)train {
@@ -313,7 +313,7 @@ static ODClassType* _TRLevel_type;
     [_score runTrain:train];
     [_collisionWorld addTrain:train];
     [[self dynamicWorld] addTrain:train];
-    [_TRLevel_runTrainNotification postData:tuple(self, train)];
+    [_TRLevel_runTrainNotification postSender:self data:train];
 }
 
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator {
@@ -426,13 +426,13 @@ static ODClassType* _TRLevel_type;
             [self doDestroyTrain:((TRCar*)(_)).train];
         }];
         __crashCounter = 2;
-        [_TRLevel_crashNotification postData:[[[((TRCarsCollision*)(collision)).cars chain] map:^TRTrain*(TRCar* _) {
+        [_TRLevel_crashNotification postSender:self data:[[[((TRCarsCollision*)(collision)).cars chain] map:^TRTrain*(TRCar* _) {
             return ((TRCar*)(_)).train;
         }] toArray]];
         __weak TRLevel* ws = self;
         [_schedule scheduleAfter:5.0 event:^void() {
             [ws.railroad addDamageAtPoint:((TRCarsCollision*)(collision)).railPoint];
-            [_TRLevel_damageNotification postData:tuple(ws, wrap(TRRailPoint, ((TRCarsCollision*)(collision)).railPoint))];
+            [_TRLevel_damageNotification postSender:tuple(ws, wrap(TRRailPoint, ((TRCarsCollision*)(collision)).railPoint))];
         }];
     }];
 }
@@ -441,7 +441,7 @@ static ODClassType* _TRLevel_type;
     if([__trains containsItem:train]) {
         [self doDestroyTrain:train];
         __crashCounter += 1;
-        [_TRLevel_knockDownNotification postData:tuple(train, numui(__crashCounter))];
+        [_TRLevel_knockDownNotification postSender:self data:tuple(train, numui(__crashCounter))];
     }
 }
 
@@ -449,8 +449,8 @@ static ODClassType* _TRLevel_type;
     [[[_railroad rails] randomItem] forEach:^void(TRRail* rail) {
         TRRailPoint p = trRailPointApplyTileFormXBack(((TRRail*)(rail)).tile, ((TRRail*)(rail)).form, odFloatRndMinMax(0.0, ((TRRail*)(rail)).form.length), NO);
         TRRailPoint pp = [_railroad addDamageAtPoint:p];
-        [_TRLevel_sporadicDamageNotification postData:tuple(self, wrap(TRRailPoint, pp))];
-        [_TRLevel_damageNotification postData:tuple(self, wrap(TRRailPoint, pp))];
+        [_TRLevel_sporadicDamageNotification postSender:self data:wrap(TRRailPoint, pp)];
+        [_TRLevel_damageNotification postSender:self data:wrap(TRRailPoint, pp)];
     }];
 }
 
@@ -461,7 +461,7 @@ static ODClassType* _TRLevel_type;
 - (void)destroyTrain:(TRTrain*)train {
     if([__trains containsItem:train]) {
         __crashCounter = 1;
-        [_TRLevel_crashNotification postData:(@[train])];
+        [_TRLevel_crashNotification postSender:(@[train])];
         [self doDestroyTrain:train];
     }
 }
@@ -499,7 +499,7 @@ static ODClassType* _TRLevel_type;
         } speed:_rules.repairerSpeed];
         [self runTrain:train fromCity:city];
         __repairer = [CNOption applyValue:train];
-        [_TRLevel_runRepairerNotification postData:self];
+        [_TRLevel_runRepairerNotification postSender:self];
     }
 }
 
@@ -526,7 +526,7 @@ static ODClassType* _TRLevel_type;
 
 - (void)win {
     __result = [CNOption applyValue:[TRLevelResult levelResultWithWin:YES]];
-    [_TRLevel_winNotification postData:self];
+    [_TRLevel_winNotification postSender:self];
 }
 
 - (void)lose {

@@ -59,7 +59,7 @@ static ODClassType* _TRGameDirector_type;
             if([name isEqual:@"maxLevel"]) return _weakSelf.resolveMaxLevel;
             else return DTConflict.resolveMax;
         }];
-        _obs = [TRLevel.winNotification observeBy:^void(TRLevel* level) {
+        _obs = [TRLevel.winNotification observeBy:^void(TRLevel* level, id _) {
             NSUInteger n = ((TRLevel*)(level)).number;
             [_weakSelf.cloud keepMaxKey:@"maxLevel" i:((NSInteger)(n + 1))];
             [_weakSelf.local setKey:@"currentLevel" i:((NSInteger)(n + 1))];
@@ -67,49 +67,49 @@ static ODClassType* _TRGameDirector_type;
             NSInteger s = [((TRLevel*)(level)).score score];
             [_weakSelf.cloud keepMaxKey:[NSString stringWithFormat:@"level%lu.score", (unsigned long)n] i:[((TRLevel*)(level)).score score]];
             [EGGameCenter.instance reportScoreLeaderboard:leaderboard value:((long)(s)) completed:^void(EGLocalPlayerScore* score) {
-                [[TRGameDirector playerScoreRetrieveNotification] postData:score];
+                [[TRGameDirector playerScoreRetrieveNotification] postSender:_weakSelf data:score];
             }];
         }];
-        _sporadicDamageHelpObs = [TRLevel.sporadicDamageNotification observeBy:^void(CNTuple* p) {
-            if([_weakSelf.cloud intForKey:@"help.sporadicDamage"] == 0) [((TRLevel*)(((CNTuple*)(p)).a)).schedule scheduleAfter:1.0 event:^void() {
-                [((TRLevel*)(((CNTuple*)(p)).a)) showHelpText:[TRStr.Loc helpSporadicDamage]];
+        _sporadicDamageHelpObs = [TRLevel.sporadicDamageNotification observeBy:^void(TRLevel* level, id _) {
+            if([_weakSelf.cloud intForKey:@"help.sporadicDamage"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:1.0 event:^void() {
+                [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpSporadicDamage]];
                 [_weakSelf.cloud setKey:@"help.sporadicDamage" i:1];
             }];
         }];
-        _damageHelpObs = [TRLevel.damageNotification observeBy:^void(CNTuple* p) {
-            if([_weakSelf.cloud intForKey:@"help.damage"] == 0) [((TRLevel*)(((CNTuple*)(p)).a)).schedule scheduleAfter:1.0 event:^void() {
-                [((TRLevel*)(((CNTuple*)(p)).a)) showHelpText:[TRStr.Loc helpDamage]];
+        _damageHelpObs = [TRLevel.damageNotification observeBy:^void(TRLevel* level, id _) {
+            if([_weakSelf.cloud intForKey:@"help.damage"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:1.0 event:^void() {
+                [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpDamage]];
                 [_weakSelf.cloud setKey:@"help.damage" i:1];
             }];
         }];
-        _repairerHelpObs = [TRLevel.runRepairerNotification observeBy:^void(TRLevel* level) {
+        _repairerHelpObs = [TRLevel.runRepairerNotification observeBy:^void(TRLevel* level, id _) {
             if([_weakSelf.cloud intForKey:@"help.repairer"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:((CGFloat)(TRLevel.trainComingPeriod + 7)) event:^void() {
                 [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpRepairer]];
                 [_weakSelf.cloud setKey:@"help.repairer" i:1];
             }];
         }];
-        _crazyHelpObs = [TRLevel.runTrainNotification observeBy:^void(CNTuple* p) {
-            if(((TRTrain*)(((CNTuple*)(p)).b)).trainType == TRTrainType.crazy && [_weakSelf.cloud intForKey:@"help.crazy"] == 0) [((TRLevel*)(((CNTuple*)(p)).a)).schedule scheduleAfter:2.0 event:^void() {
-                [((TRLevel*)(((CNTuple*)(p)).a)) showHelpText:[TRStr.Loc helpCrazy]];
+        _crazyHelpObs = [TRLevel.runTrainNotification observeBy:^void(TRLevel* level, TRTrain* train) {
+            if(((TRTrain*)(train)).trainType == TRTrainType.crazy && [_weakSelf.cloud intForKey:@"help.crazy"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:2.0 event:^void() {
+                [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpCrazy]];
                 [_weakSelf.cloud setKey:@"help.crazy" i:1];
             }];
         }];
-        _crazyHelpObs = [TRLevelFactory.lineAdviceTimeNotification observeBy:^void(TRLevel* level) {
+        _crazyHelpObs = [TRLevelFactory.lineAdviceTimeNotification observeBy:^void(id _, TRLevel* level) {
             if([_weakSelf.cloud intForKey:@"help.linesAdvice"] == 0) {
                 [((TRLevel*)(level)) showHelpText:[TRStr.Loc linesAdvice]];
                 [_weakSelf.cloud setKey:@"help.linesAdvice" i:1];
             }
         }];
-        _zoomHelpObs = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* move) {
+        _zoomHelpObs = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* move, id _) {
             if([_weakSelf.cloud intForKey:@"help.zoom"] == 0 && [((EGCameraIsoMove*)(move)) scale] > 1) {
                 [((TRLevel*)(((EGScene*)([[[EGDirector current] scene] get])).controller)) showHelpText:[TRStr.Loc helpInZoom]];
                 [_weakSelf.cloud setKey:@"help.zoom" i:1];
             }
         }];
-        _crashObs = [TRLevel.crashNotification observeBy:^void(id<CNSeq> _) {
-            [TRGameDirector.instance destroyTrainsTrains:_];
+        _crashObs = [TRLevel.crashNotification observeBy:^void(TRLevel* level, id<CNSeq> trains) {
+            [TRGameDirector.instance destroyTrainsTrains:trains];
         }];
-        _knockDownObs = [TRLevel.knockDownNotification observeBy:^void(CNTuple* p) {
+        _knockDownObs = [TRLevel.knockDownNotification observeBy:^void(TRLevel* level, CNTuple* p) {
             [TRGameDirector.instance destroyTrainsTrains:(@[((CNTuple*)(p)).a])];
             if(unumi(((CNTuple*)(p)).b) == 2) {
                 [EGGameCenter.instance completeAchievementName:@"grp.KnockDown"];

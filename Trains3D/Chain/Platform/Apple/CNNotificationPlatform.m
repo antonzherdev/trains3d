@@ -25,14 +25,14 @@ static ODClassType* _CNNotificationCenter_type;
     _CNNotificationCenter_default = [CNNotificationCenter notificationCenter];
 }
 
-- (CNNotificationObserver*)addObserverName:(NSString*)name block:(void(^)(id))block {
-    return [CNNotificationObserver observerWithObserverHandle:[_nc addObserverForName:name object:nil queue:nil usingBlock:^(NSNotification *note) {
-        block([note.userInfo valueForKey:@"data"]);
+- (CNNotificationObserver*)addObserverName:(NSString*)name sender:(id)sender block:(void(^)(id, id))block {
+    return [CNNotificationObserver observerWithObserverHandle:[_nc addObserverForName:name object:sender queue:nil usingBlock:^(NSNotification *note) {
+        block(note.object, [note.userInfo valueForKey:@"data"]);
     }]];
 }
 
-- (void)postName:(NSString*)name data:(id)data {
-    [_nc postNotificationName:name object:nil userInfo:
+- (void)postName:(NSString*)name sender:(id)sender data:(id)data {
+    [_nc postNotificationName:name object:sender userInfo:
             data == nil ? [NSDictionary dictionary]
                     : [NSDictionary dictionaryWithObject:data forKey:@"data"]];
 }

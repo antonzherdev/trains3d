@@ -56,7 +56,7 @@ class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFin
     private var _camera : CameraIso = base
     def camera : CameraIso = _camera
 
-    static val cameraChangedNotification = NotificationHandle<CameraIsoMove>("cameraChangedNotification")
+    static val cameraChangedNotification = NotificationHandle<CameraIsoMove, void>("cameraChangedNotification")
     def scale : float = _scale
     def set(scale : float) {
         var s = scale.max(misScale).min(maxScale)
