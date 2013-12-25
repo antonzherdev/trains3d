@@ -73,6 +73,19 @@ static ODClassType* _CNMutableList_type;
     _lastItem = nil;
 }
 
+- (void)removeIndex:(NSUInteger)index {
+    id<CNMutableIterator> i = [self iterator];
+    NSUInteger j = index;
+    while([i hasNext]) {
+        [i next];
+        if(j == 0) {
+            [i remove];
+            break;
+        }
+        j--;
+    }
+}
+
 - (id)applyIndex:(NSUInteger)index {
     id<CNIterator> i = [self iterator];
     NSUInteger n = index;
@@ -229,19 +242,6 @@ static ODClassType* _CNMutableList_type;
         [builder appendItem:x];
     }];
     return [builder build];
-}
-
-- (void)removeIndex:(NSUInteger)index {
-    id<CNMutableIterator> i = [self iterator];
-    NSUInteger j = index;
-    while([i hasNext]) {
-        [i next];
-        if(j == 0) {
-            [i remove];
-            break;
-        }
-        j--;
-    }
 }
 
 - (void)removeItem:(id)item {

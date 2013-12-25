@@ -52,7 +52,7 @@ static ODClassType* _CNSortBuilder_type;
 - (CNChain*)endSort {
     return [_chain sort:^NSInteger(id x, id y) {
         NSInteger ret = 0;
-        id<CNIterator> i = [_functions iterator];
+        id<CNMutableIterator> i = [_functions iterator];
         while(ret == 0 && [i hasNext]) {
             NSInteger(^f)(id, id) = [i next];
             ret = f(x, y);

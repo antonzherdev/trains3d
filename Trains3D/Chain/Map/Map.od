@@ -13,6 +13,7 @@ trait Map<K, V> extends Iterable<(K, V)> {
 }
 
 trait MutableMap<K, V> extends Map<K, V> with MutableIterable<(K, V)> {
+    def iterator : MutableIterator<(K, V)>
     def set(key : K, value : V)
     def removeFor(key : K) : V?
     def objectFor(key: K, orUpdateWith: () -> V) : V = {

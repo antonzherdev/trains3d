@@ -78,19 +78,6 @@ static ODClassType* _CNMapDefault_type;
     [_map clear];
 }
 
-- (void)removeIndex:(NSUInteger)index {
-    id<CNMutableIterator> i = [self iterator];
-    NSUInteger j = index;
-    while([i hasNext]) {
-        [i next];
-        if(j == 0) {
-            [i remove];
-            break;
-        }
-        j--;
-    }
-}
-
 - (id)head {
     return [[self iterator] next];
 }

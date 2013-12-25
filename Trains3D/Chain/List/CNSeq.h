@@ -29,6 +29,8 @@
 
 
 @protocol CNMutableSeq<CNSeq, CNMutableIterable>
+- (id<CNMutableIterator>)iterator;
+- (void)removeIndex:(NSUInteger)index;
 @end
 
 

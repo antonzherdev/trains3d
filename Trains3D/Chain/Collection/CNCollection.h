@@ -68,7 +68,6 @@
 
 @protocol CNMutableIterable<CNIterable, CNMutableTraversable>
 - (id<CNMutableIterator>)iterator;
-- (void)removeIndex:(NSUInteger)index;
 - (void)removeItem:(id)item;
 @end
 

@@ -222,7 +222,7 @@
 - (NSString *)encodeForURL {
     NSMutableString * output = [NSMutableString string];
     const char * source = [self UTF8String];
-    int sourceLen = strlen(source);
+    int sourceLen = (int)strlen(source);
     for (int i = 0; i < sourceLen; ++i) {
         const unsigned char thisChar = (const unsigned char)source[i];
         /*if (false && thisChar == ' '){

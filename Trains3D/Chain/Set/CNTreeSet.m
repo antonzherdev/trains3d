@@ -469,19 +469,6 @@ static ODClassType* _CNMTreeSet_type;
     return [builder build];
 }
 
-- (void)removeIndex:(NSUInteger)index {
-    id<CNMutableIterator> i = [self iterator];
-    NSUInteger j = index;
-    while([i hasNext]) {
-        [i next];
-        if(j == 0) {
-            [i remove];
-            break;
-        }
-        j--;
-    }
-}
-
 - (ODClassType*)type {
     return [CNMTreeSet type];
 }

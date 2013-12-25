@@ -60,7 +60,21 @@ trait Seq<T> extends Iterable<T> {
     def headOpt : T? = opt(0)
 }
 
-trait MutableSeq<T> extends Seq<T> with MutableIterable<T>
+trait MutableSeq<T> extends Seq<T> with MutableIterable<T> {
+    def iterator : MutableIterator<T>
+    def remove(index : uint) {
+        val i = iterator
+        var j = index
+        while(i.hasNext) {
+            i.next
+            if(j == 0) {
+                i.remove
+                break
+            }
+            j--
+        }
+    }
+}
 
 class ArrayBuilder<T> extends Builder<T, Array<T>> {
     val array = MutableArray<T>()
