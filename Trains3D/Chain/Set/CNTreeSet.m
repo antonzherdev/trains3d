@@ -40,11 +40,11 @@ static ODClassType* _CNTreeSet_type;
 }
 
 - (id<CNIterator>)iterator {
-    return [_map.keys iterator];
+    return [[_map keys] iterator];
 }
 
 - (id<CNIterator>)iteratorHigherThanItem:(id)item {
-    return [_map.keys iteratorHigherThanKey:item];
+    return [[_map keys] iteratorHigherThanKey:item];
 }
 
 - (id)head {
@@ -332,6 +332,10 @@ static ODClassType* _CNMTreeSet_type;
     return [CNMTreeSet treeSetWithMmap:[CNMTreeMap apply]];
 }
 
+- (id<CNMutableIterator>)iterator {
+    return [_mmap.keys iterator];
+}
+
 - (void)appendItem:(id)item {
     [_mmap setKey:item value:_CNMTreeSet_obj];
 }
@@ -465,6 +469,19 @@ static ODClassType* _CNMTreeSet_type;
     return [builder build];
 }
 
+- (void)removeIndex:(NSUInteger)index {
+    id<CNMutableIterator> i = [self iterator];
+    NSUInteger j = index;
+    while([i hasNext]) {
+        [i next];
+        if(j == 0) {
+            [i remove];
+            break;
+        }
+        j--;
+    }
+}
+
 - (ODClassType*)type {
     return [CNMTreeSet type];
 }
@@ -481,7 +498,7 @@ static ODClassType* _CNMTreeSet_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     CNMTreeSet* o = ((CNMTreeSet*)(other));
-    return self.mmap == o.mmap;
+    return [self.mmap isEqual:o.mmap];
 }
 
 @end

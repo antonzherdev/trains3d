@@ -41,7 +41,7 @@ trait MutableMap<K, V> extends Map<K, V> with MutableIterable<(K, V)> {
 
 class MapDefault<K, V>(defaultFunc : K -> V, map : MutableMap<K, V>) extends MutableIterable<(K, V)> {
     def count : uint = map.count
-    def iterator : Iterator<(K, V)> = map.iterator
+    def iterator : MutableIterator<(K, V)> = map.iterator
     def apply(key : K) : V = map.objectFor(key, orUpdateWith = defaultFunc(key))
     def keys : Iterable<K> = map.keys
     def values : Iterable<V> = map.values

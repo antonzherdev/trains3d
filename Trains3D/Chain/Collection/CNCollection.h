@@ -6,6 +6,7 @@
 @class CNIterableF;
 @class CNEmptyIterator;
 @protocol CNIterator;
+@protocol CNMutableIterator;
 @protocol CNBuilder;
 @protocol CNTraversable;
 @protocol CNMutableTraversable;
@@ -15,6 +16,11 @@
 @protocol CNIterator<NSObject>
 - (BOOL)hasNext;
 - (id)next;
+@end
+
+
+@protocol CNMutableIterator<CNIterator>
+- (void)remove;
 @end
 
 
@@ -61,6 +67,9 @@
 
 
 @protocol CNMutableIterable<CNIterable, CNMutableTraversable>
+- (id<CNMutableIterator>)iterator;
+- (void)removeIndex:(NSUInteger)index;
+- (void)removeItem:(id)item;
 @end
 
 

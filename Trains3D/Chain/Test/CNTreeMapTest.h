@@ -2,7 +2,7 @@
 #import "TSTestCase.h"
 @class CNMTreeMap;
 @class CNChain;
-@class CNTreeMapKeySet;
+@class CNMTreeMapKeySet;
 @class ODClassType;
 
 @class CNTreeMapTest;

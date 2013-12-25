@@ -11,15 +11,18 @@
 @class CNTreeMapBuilder;
 @class CNMTreeMap;
 @class CNTreeMapEntry;
-@class CNTreeMapKeySet;
+@class CNImTreeMapKeySet;
 @class CNTreeMapKeyIterator;
+@class CNMTreeMapKeySet;
+@class CNMTreeMapKeyIterator;
 @class CNTreeMapValues;
 @class CNTreeMapValuesIterator;
 @class CNTreeMapIterator;
+@class CNMTreeMapIterator;
+@protocol CNTreeMapKeySet;
 
 @interface CNTreeMap : NSObject<CNMap>
 @property (nonatomic, readonly) NSInteger(^comparator)(id, id);
-@property (nonatomic, readonly) CNTreeMapKeySet* keys;
 @property (nonatomic, readonly) CNTreeMapValues* values;
 
 + (id)treeMapWithComparator:(NSInteger(^)(id, id))comparator;
@@ -30,6 +33,7 @@
 - (CNTreeMapEntry*)root;
 - (BOOL)isEmpty;
 - (CNTreeMapEntry*)entryForKey:(id)key;
+- (id<CNTreeMapKeySet>)keys;
 - (id<CNIterator>)iterator;
 - (CNTreeMapIterator*)iteratorHigherThanKey:(id)key;
 - (CNTreeMapEntry*)firstEntry;
@@ -46,6 +50,7 @@
 @interface CNImTreeMap : CNTreeMap
 @property (nonatomic, readonly) CNTreeMapEntry* root;
 @property (nonatomic, readonly) NSUInteger count;
+@property (nonatomic, readonly) id<CNTreeMapKeySet> keys;
 
 + (id)imTreeMapWithComparator:(NSInteger(^)(id, id))comparator root:(CNTreeMapEntry*)root count:(NSUInteger)count;
 - (id)initWithComparator:(NSInteger(^)(id, id))comparator root:(CNTreeMapEntry*)root count:(NSUInteger)count;
@@ -69,6 +74,8 @@
 
 
 @interface CNMTreeMap : CNTreeMap<CNMutableMap>
+@property (nonatomic, readonly) CNMTreeMapKeySet* keys;
+
 + (id)treeMapWithComparator:(NSInteger(^)(id, id))comparator;
 - (id)initWithComparator:(NSInteger(^)(id, id))comparator;
 - (ODClassType*)type;
@@ -76,6 +83,7 @@
 - (CNTreeMapEntry*)root;
 - (NSUInteger)count;
 - (void)clear;
+- (id<CNMutableIterator>)iterator;
 - (void)setKey:(id)key value:(id)value;
 - (id)removeForKey:(id)key;
 - (id)pollFirst;
@@ -100,10 +108,15 @@
 @end
 
 
-@interface CNTreeMapKeySet : NSObject<CNIterable>
+@protocol CNTreeMapKeySet<CNIterable>
+- (id<CNIterator>)iteratorHigherThanKey:(id)key;
+@end
+
+
+@interface CNImTreeMapKeySet : NSObject<CNTreeMapKeySet>
 @property (nonatomic, readonly, weak) CNTreeMap* map;
 
-+ (id)treeMapKeySetWithMap:(CNTreeMap*)map;
++ (id)imTreeMapKeySetWithMap:(CNTreeMap*)map;
 - (id)initWithMap:(CNTreeMap*)map;
 - (ODClassType*)type;
 - (NSUInteger)count;
@@ -123,6 +136,34 @@
 + (CNTreeMapKeyIterator*)applyMap:(CNTreeMap*)map entry:(CNTreeMapEntry*)entry;
 - (BOOL)hasNext;
 - (id)next;
++ (ODClassType*)type;
+@end
+
+
+@interface CNMTreeMapKeySet : NSObject<CNTreeMapKeySet>
+@property (nonatomic, readonly, weak) CNMTreeMap* map;
+
++ (id)treeMapKeySetWithMap:(CNMTreeMap*)map;
+- (id)initWithMap:(CNMTreeMap*)map;
+- (ODClassType*)type;
+- (NSUInteger)count;
+- (id<CNMutableIterator>)iterator;
+- (id<CNIterator>)iteratorHigherThanKey:(id)key;
++ (ODClassType*)type;
+@end
+
+
+@interface CNMTreeMapKeyIterator : NSObject<CNMutableIterator>
+@property (nonatomic, readonly) CNMTreeMap* map;
+@property (nonatomic, retain) CNTreeMapEntry* entry;
+
++ (id)treeMapKeyIteratorWithMap:(CNMTreeMap*)map;
+- (id)initWithMap:(CNMTreeMap*)map;
+- (ODClassType*)type;
++ (CNMTreeMapKeyIterator*)applyMap:(CNMTreeMap*)map entry:(CNTreeMapEntry*)entry;
+- (BOOL)hasNext;
+- (id)next;
+- (void)remove;
 + (ODClassType*)type;
 @end
 
@@ -163,6 +204,21 @@
 + (CNTreeMapIterator*)applyMap:(CNTreeMap*)map entry:(CNTreeMapEntry*)entry;
 - (BOOL)hasNext;
 - (id)next;
++ (ODClassType*)type;
+@end
+
+
+@interface CNMTreeMapIterator : NSObject<CNMutableIterator>
+@property (nonatomic, readonly) CNMTreeMap* map;
+@property (nonatomic, retain) CNTreeMapEntry* entry;
+
++ (id)treeMapIteratorWithMap:(CNMTreeMap*)map;
+- (id)initWithMap:(CNMTreeMap*)map;
+- (ODClassType*)type;
++ (CNMTreeMapIterator*)applyMap:(CNMTreeMap*)map entry:(CNTreeMapEntry*)entry;
+- (BOOL)hasNext;
+- (id)next;
+- (void)remove;
 + (ODClassType*)type;
 @end
 

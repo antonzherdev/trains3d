@@ -1,0 +1,52 @@
+#import "objdcore.h"
+#import "CNSeq.h"
+#import "ODObject.h"
+#import "CNCollection.h"
+@class ODClassType;
+@protocol CNSet;
+@class CNHashSetBuilder;
+@class CNChain;
+
+@class CNMutableList;
+@class CNMutableListItem;
+@class CNMutableListIterator;
+
+@interface CNMutableList : NSObject<CNMutableSeq>
++ (id)mutableList;
+- (id)init;
+- (ODClassType*)type;
+- (NSUInteger)count;
+- (id<CNMutableIterator>)iterator;
+- (void)appendItem:(id)item;
+- (void)removeListItem:(CNMutableListItem*)listItem;
+- (void)clear;
++ (ODClassType*)type;
+@end
+
+
+@interface CNMutableListItem : NSObject
+@property (nonatomic) id data;
+@property (nonatomic, retain) CNMutableListItem* next;
+@property (nonatomic, weak) CNMutableListItem* prev;
+
++ (id)mutableListItem;
+- (id)init;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface CNMutableListIterator : NSObject<CNMutableIterator>
+@property (nonatomic, readonly) CNMutableList* list;
+@property (nonatomic, retain) CNMutableListItem* item;
+
++ (id)mutableListIteratorWithList:(CNMutableList*)list;
+- (id)initWithList:(CNMutableList*)list;
+- (ODClassType*)type;
+- (BOOL)hasNext;
+- (id)next;
+- (void)remove;
++ (ODClassType*)type;
+@end
+
+

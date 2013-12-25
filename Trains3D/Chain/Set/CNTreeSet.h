@@ -2,11 +2,12 @@
 #import "CNSet.h"
 #import "CNCollection.h"
 @class CNTreeMap;
-@class CNTreeMapKeySet;
+@protocol CNTreeMapKeySet;
 @class ODClassType;
 @class CNChain;
 @class NSObject;
 @class CNMTreeMap;
+@class CNMTreeMapKeySet;
 
 @class CNTreeSet;
 @class CNImTreeSet;
@@ -61,6 +62,7 @@
 - (ODClassType*)type;
 + (CNMTreeSet*)applyComparator:(NSInteger(^)(id, id))comparator;
 + (CNMTreeSet*)apply;
+- (id<CNMutableIterator>)iterator;
 - (void)appendItem:(id)item;
 - (BOOL)removeItem:(id)item;
 - (void)clear;

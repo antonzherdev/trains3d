@@ -14,9 +14,9 @@ class SwitchProcessor(level : Level) extends InputProcessor {
                 val m = moveToTile * rotate
                 var p = vec2(-0.6, -0.2)
 
-                val nextTile = switch.connector.next(switch.tile)
-                val osc = switch.connector.otherSideConnector
-                val city = level.cityFor(nextTile)
+//                val nextTile = switch.connector.next(switch.tile)
+//                val osc = switch.connector.otherSideConnector
+//                val city = level.cityFor(nextTile)
 //                if(city.isDefined && level.map.isBottom(nextTile)) {
 //                    if(city.get.angle.form == RailForm.bottomTop) p += vec2(0.1, -0.1)
 //                    else p += vec2(0.1, 0.1)

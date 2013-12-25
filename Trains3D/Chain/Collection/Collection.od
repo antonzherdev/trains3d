@@ -5,6 +5,10 @@ trait Iterator<T> {
    def next : T
 }
 
+trait MutableIterator<T> extends Iterator<T> {
+    def remove
+}
+
 trait Builder<T, C extends Traversable<T>> {
     def append(item : T)
     def build : C
@@ -141,7 +145,29 @@ trait Iterable<T> extends Traversable<T> {
     }
 }
 
-trait MutableIterable<T> extends Iterable<T> with MutableTraversable<T> {}
+trait MutableIterable<T> extends Iterable<T> with MutableTraversable<T> {
+    def iterator : MutableIterator<T>
+
+    def remove(index : uint) {
+        val i = iterator
+        var j = index
+        while(i.hasNext) {
+            i.next
+            if(j == 0) {
+                i.remove
+                break
+            }
+            j--
+        }
+    }
+
+    def remove(item : T) {
+        val i = iterator
+        while(i.hasNext) {
+            if(i.next == item) i.remove
+        }
+    }
+}
 
 class IterableF<T>(iteratorF : () -> Iterator<T>) extends Iterable<T> {
     def iterator = iteratorF()

@@ -38,9 +38,6 @@ static ODClassType* _TRSwitchProcessor_type;
         GEMat4* moveToTile = [[GEMat4 identity] translateX:((float)(((TRSwitch*)(aSwitch)).tile.x)) y:((float)(((TRSwitch*)(aSwitch)).tile.y)) z:0.0];
         GEMat4* m = [moveToTile mulMatrix:rotate];
         GEVec2 p = GEVec2Make(-0.6, -0.2);
-        GEVec2i nextTile = [((TRSwitch*)(aSwitch)).connector nextTile:((TRSwitch*)(aSwitch)).tile];
-        TRRailConnector* osc = [((TRSwitch*)(aSwitch)).connector otherSideConnector];
-        id city = [_level cityForTile:nextTile];
         return [[TRSwitchProcessorItem applyContent:aSwitch rect:GERectMake(p, GEVec2Make(0.4, 0.4))] mulMat4:m];
     }] append:[[[_level.railroad lights] chain] map:^TRSwitchProcessorItem*(TRRailLight* light) {
         CGFloat sz = 0.2;

@@ -83,26 +83,25 @@ trait IBOParticleSystemViewQuad extends IBOParticleSystemView {
 }
 
 class EmissiveParticleSystem <P extends EmittedParticle> extends ParticleSystem<P> {
-    private var _particles = List<P>()
+    private val _particles = MutableList<P>()
     def particles : [P] = _particles
 
     def generateParticle : P
     def generateParticlesWith(delta : float) {}
 
     def emitParticle {
-        _particles = List(generateParticle, _particles)
+        _particles.append(generateParticle)
     }
 
     def updateWith(delta : float) {
-        _particles = _particles.filter(_.isLive)
         generateParticlesWith(delta)
 
-        var ps = List<P>()
-        _particles.for{p ->
+        val i = _particles.iterator
+        while(i.hasNext) {
+            val p = i.next
             p.updateWith(delta)
-            if(p.isLive) ps = List<P>(p, ps)
+            if(!p.isLive) i.remove
         }
-        _particles = ps
     }
 
     def hasParticles = !_particles.isEmpty

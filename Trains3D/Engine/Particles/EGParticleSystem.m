@@ -143,7 +143,7 @@ static ODClassType* _EGParticleSystemView_type;
 
 
 @implementation EGEmissiveParticleSystem{
-    CNList* __particles;
+    CNMutableList* __particles;
 }
 static ODClassType* _EGEmissiveParticleSystem_type;
 
@@ -153,7 +153,7 @@ static ODClassType* _EGEmissiveParticleSystem_type;
 
 - (id)init {
     self = [super init];
-    if(self) __particles = [CNList apply];
+    if(self) __particles = [CNMutableList mutableList];
     
     return self;
 }
@@ -175,20 +175,17 @@ static ODClassType* _EGEmissiveParticleSystem_type;
 }
 
 - (void)emitParticle {
-    __particles = [CNList applyItem:[self generateParticle] tail:__particles];
+    [__particles appendItem:[self generateParticle]];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    __particles = [__particles filterF:^BOOL(id _) {
-        return [_ isLive];
-    }];
     [self generateParticlesWithDelta:delta];
-    __block CNList* ps = [CNList apply];
-    [__particles forEach:^void(id p) {
+    id<CNMutableIterator> i = [__particles iterator];
+    while([i hasNext]) {
+        id p = [i next];
         [p updateWithDelta:delta];
-        if([p isLive]) ps = [CNList applyItem:p tail:ps];
-    }];
-    __particles = ps;
+        if(!([p isLive])) [i remove];
+    }
 }
 
 - (BOOL)hasParticles {
@@ -205,6 +202,16 @@ static ODClassType* _EGEmissiveParticleSystem_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
 }
 
 - (NSString*)description {

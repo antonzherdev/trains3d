@@ -36,7 +36,7 @@
 - (id)initWithDefaultFunc:(id(^)(id))defaultFunc map:(id<CNMutableMap>)map;
 - (ODClassType*)type;
 - (NSUInteger)count;
-- (id<CNIterator>)iterator;
+- (id<CNMutableIterator>)iterator;
 - (id)applyKey:(id)key;
 - (id<CNIterable>)keys;
 - (id<CNIterable>)values;
