@@ -57,8 +57,8 @@ class MutableListItem<T> {
 }
 
 class MutableListIterator<T>(list : MutableList<T>) extends MutableIterator<T> {
-    private var prev : MutableListItem<T>
-    var item : MutableListItem<T>
+    private weak var prev : MutableListItem<T>
+    weak var item : MutableListItem<T>
 
     def hasNext : bool = item != nil
     def next : T = {

@@ -19,6 +19,7 @@
 
 
 @protocol CNMutableMap<CNMap, CNMutableIterable>
+- (id<CNMutableIterator>)iterator;
 - (void)setKey:(id)key value:(id)value;
 - (id)removeForKey:(id)key;
 - (id)objectForKey:(id)key orUpdateWith:(id(^)())orUpdateWith;
