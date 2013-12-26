@@ -70,4 +70,8 @@ class City(color : CityColor, tile : vec2i, angle : CityAngle) extends Updatable
         b.matrix = moveTile * rotate * moveYb
         [a, b]
     }
+
+//    def dealloc {
+//        log("Dealloc city")
+//    }
 }
