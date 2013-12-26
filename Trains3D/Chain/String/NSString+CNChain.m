@@ -14,11 +14,16 @@
 @implementation CNSplitByIterator {
     NSString* _string;
     NSString* _by;
+    NSRange _range;
+    NSUInteger _length;
 }
 - (id)initWithString:(NSString *)string by:(NSString *)by {
     self = [super init];
     if (self) {
         _string = string;
+        _length = _string.length;
+        _range.length = _length;
+        _range.location = 0;
         _by = by;
     }
 
@@ -26,18 +31,20 @@
 }
 
 - (BOOL)hasNext {
-    return _string != nil && ![_string length] == 0;
+    return _string != nil && _range.length != 0;
 }
 
 - (id)next {
-    NSRange range = [_string rangeOfString:_by];
-    if(range.length <= 0) {
-        NSString *r = _string;
+    NSRange foundedRange = [_string rangeOfString:_by options:0 range:_range];
+    if(foundedRange.length <= 0) {
+        NSString *r = [_string substringWithRange:_range];
         _string = nil;
         return r;
     } else {
-        NSString *r = [_string substringToIndex:range.location];
-        _string = [_string substringFromIndex:range.location + range.length];
+        NSRange rng = {_range.location, foundedRange.location - _range.location};
+        NSString *r = [_string substringWithRange:rng];
+        _range.location = foundedRange.location + foundedRange.length;
+        _range.length = _length - _range.location;
         return r;
     }
 }
