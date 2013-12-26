@@ -8,3 +8,11 @@
 + (id)enumeratorWithEnumerator:(NSEnumerator *)enumerator;
 
 @end
+
+
+@interface CNMutableEnumerator : NSObject<CNMutableIterator>
+- (id)initWithEnumerator:(NSEnumerator *)enumerator;
+
++ (id)enumeratorWithEnumerator:(NSEnumerator *)enumerator;
+
+@end

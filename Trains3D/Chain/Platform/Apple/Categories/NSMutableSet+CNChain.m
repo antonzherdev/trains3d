@@ -1,5 +1,6 @@
 #import "NSMutableSet+CNChain.h"
 #import "NSSet+CNChain.h"
+#import "CNEnumerator.h"
 
 
 @implementation NSMutableSet (CNChain)
@@ -19,4 +20,7 @@
     [self removeAllObjects];
 }
 
+- (id <CNMutableIterator>)mutableIterator {
+    return [CNMutableEnumerator enumeratorWithEnumerator:[self objectEnumerator]];
+}
 @end

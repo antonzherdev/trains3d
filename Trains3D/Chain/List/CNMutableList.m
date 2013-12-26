@@ -30,7 +30,13 @@ static ODClassType* _CNMutableList_type;
     return __count;
 }
 
-- (id<CNMutableIterator>)iterator {
+- (id<CNIterator>)iterator {
+    CNMutableListImmutableIterator* i = [CNMutableListImmutableIterator mutableListImmutableIterator];
+    i.item = _headItem;
+    return i;
+}
+
+- (id<CNMutableIterator>)mutableIterator {
     CNMutableListIterator* i = [CNMutableListIterator mutableListIteratorWithList:self];
     i.item = _headItem;
     return i;
@@ -73,8 +79,33 @@ static ODClassType* _CNMutableList_type;
     _lastItem = nil;
 }
 
+- (void)forEach:(void(^)(id))each {
+    CNMutableListItem* i = _headItem;
+    while(i != nil) {
+        each(i.data);
+        i = i.next;
+    }
+}
+
+- (BOOL)goOn:(BOOL(^)(id))on {
+    CNMutableListItem* i = _headItem;
+    while(i != nil) {
+        if(!(on(i.data))) return NO;
+        i = i.next;
+    }
+    return YES;
+}
+
+- (void)mutableFilterBy:(BOOL(^)(id))by {
+    CNMutableListItem* i = _headItem;
+    while(i != nil) {
+        if(!(by(i.data))) [self removeListItem:i];
+        i = i.next;
+    }
+}
+
 - (void)removeIndex:(NSUInteger)index {
-    id<CNMutableIterator> i = [self iterator];
+    id<CNMutableIterator> i = [self mutableIterator];
     NSUInteger j = index;
     while([i hasNext]) {
         [i next];
@@ -162,21 +193,6 @@ static ODClassType* _CNMutableList_type;
     return [CNChain chainWithCollection:self];
 }
 
-- (void)forEach:(void(^)(id))each {
-    id<CNIterator> i = [self iterator];
-    while([i hasNext]) {
-        each([i next]);
-    }
-}
-
-- (BOOL)goOn:(BOOL(^)(id))on {
-    id<CNIterator> i = [self iterator];
-    while([i hasNext]) {
-        if(!(on([i next]))) return NO;
-    }
-    return YES;
-}
-
 - (BOOL)containsItem:(id)item {
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
@@ -245,7 +261,7 @@ static ODClassType* _CNMutableList_type;
 }
 
 - (void)removeItem:(id)item {
-    id<CNMutableIterator> i = [self iterator];
+    id<CNMutableIterator> i = [self mutableIterator];
     while([i hasNext]) {
         if([[i next] isEqual:item]) [i remove];
     }
@@ -379,6 +395,58 @@ static ODClassType* _CNMutableListIterator_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"list=%@", self.list];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation CNMutableListImmutableIterator{
+    __weak CNMutableListItem* _item;
+}
+static ODClassType* _CNMutableListImmutableIterator_type;
+@synthesize item = _item;
+
++ (id)mutableListImmutableIterator {
+    return [[CNMutableListImmutableIterator alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _CNMutableListImmutableIterator_type = [ODClassType classTypeWithCls:[CNMutableListImmutableIterator class]];
+}
+
+- (BOOL)hasNext {
+    return _item != nil;
+}
+
+- (id)next {
+    CNMutableListItem* r = _item;
+    _item = _item.next;
+    return r;
+}
+
+- (ODClassType*)type {
+    return [CNMutableListImmutableIterator type];
+}
+
++ (ODClassType*)type {
+    return _CNMutableListImmutableIterator_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
     return description;
 }

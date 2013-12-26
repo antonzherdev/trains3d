@@ -125,7 +125,7 @@ class MTreeMap<K, V>(comparator : (K, K) -> int) extends TreeMap<K, V>(comparato
         _size = 0
         _root = nil
     }
-    def iterator : MutableIterator<(K, V)> = MTreeMapIterator<K, V>(self, firstEntry)
+    def mutableIterator : MutableIterator<(K, V)> = MTreeMapIterator<K, V>(self, firstEntry)
     val keys : MTreeMapKeySet<K> = MTreeMapKeySet<K>(self)
 
     def set(key : K, value : V)  {
@@ -405,7 +405,8 @@ class TreeMapKeyIterator<K>(map : TreeMap<K, _>) extends Iterator<K> {
 class MTreeMapKeySet<K>(weak map : MTreeMap<K, _>) extends TreeMapKeySet<K> {
     def count : uint = map.count
 
-    def iterator : MutableIterator<K> = MTreeMapKeyIterator<K>(map, map.firstEntry)
+    def iterator : Iterator<K> = TreeMapKeyIterator<K>(map, map.firstEntry)
+    def mutableIterator : MutableIterator<K> = MTreeMapKeyIterator<K>(map, map.firstEntry)
     def iteratorHigherThan(key : K) : Iterator<K> = MTreeMapKeyIterator<K>(map, map.higherEntryThan(key).getOr(nil))
 }
 

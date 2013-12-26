@@ -19,7 +19,6 @@
 
 
 @protocol CNMutableMap<CNMap, CNMutableIterable>
-- (id<CNMutableIterator>)iterator;
 - (void)setKey:(id)key value:(id)value;
 - (id)removeForKey:(id)key;
 - (id)objectForKey:(id)key orUpdateWith:(id(^)())orUpdateWith;
@@ -37,7 +36,8 @@
 - (id)initWithDefaultFunc:(id(^)(id))defaultFunc map:(id<CNMutableMap>)map;
 - (ODClassType*)type;
 - (NSUInteger)count;
-- (id<CNMutableIterator>)iterator;
+- (id<CNIterator>)iterator;
+- (id<CNMutableIterator>)mutableIterator;
 - (id)applyKey:(id)key;
 - (id<CNIterable>)keys;
 - (id<CNIterable>)values;

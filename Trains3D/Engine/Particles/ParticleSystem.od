@@ -96,11 +96,9 @@ class EmissiveParticleSystem <P extends EmittedParticle> extends ParticleSystem<
     def updateWith(delta : float) {
         generateParticlesWith(delta)
 
-        val i = _particles.iterator
-        while(i.hasNext) {
-            val p = i.next
+        _particles.mutableFilter { p ->
             p.updateWith(delta)
-            if(!p.isLive) i.remove
+            p.isLive
         }
     }
 

@@ -79,7 +79,7 @@
 
 
 - (id <CNIterator>)iterator {
-    return nil;
+    @throw @"Hasn't implemented yet";
 }
 
 - (BOOL)containsKey:(id)key {

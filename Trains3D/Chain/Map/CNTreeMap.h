@@ -83,7 +83,7 @@
 - (CNTreeMapEntry*)root;
 - (NSUInteger)count;
 - (void)clear;
-- (id<CNMutableIterator>)iterator;
+- (id<CNMutableIterator>)mutableIterator;
 - (void)setKey:(id)key value:(id)value;
 - (id)removeForKey:(id)key;
 - (id)pollFirst;
@@ -147,7 +147,8 @@
 - (id)initWithMap:(CNMTreeMap*)map;
 - (ODClassType*)type;
 - (NSUInteger)count;
-- (id<CNMutableIterator>)iterator;
+- (id<CNIterator>)iterator;
+- (id<CNMutableIterator>)mutableIterator;
 - (id<CNIterator>)iteratorHigherThanKey:(id)key;
 + (ODClassType*)type;
 @end

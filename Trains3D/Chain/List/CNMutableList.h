@@ -10,16 +10,21 @@
 @class CNMutableList;
 @class CNMutableListItem;
 @class CNMutableListIterator;
+@class CNMutableListImmutableIterator;
 
 @interface CNMutableList : NSObject<CNMutableSeq>
 + (id)mutableList;
 - (id)init;
 - (ODClassType*)type;
 - (NSUInteger)count;
-- (id<CNMutableIterator>)iterator;
+- (id<CNIterator>)iterator;
+- (id<CNMutableIterator>)mutableIterator;
 - (void)appendItem:(id)item;
 - (void)removeListItem:(CNMutableListItem*)listItem;
 - (void)clear;
+- (void)forEach:(void(^)(id))each;
+- (BOOL)goOn:(BOOL(^)(id))on;
+- (void)mutableFilterBy:(BOOL(^)(id))by;
 + (ODClassType*)type;
 @end
 
@@ -46,6 +51,18 @@
 - (BOOL)hasNext;
 - (id)next;
 - (void)remove;
++ (ODClassType*)type;
+@end
+
+
+@interface CNMutableListImmutableIterator : NSObject<CNIterator>
+@property (nonatomic, weak) CNMutableListItem* item;
+
++ (id)mutableListImmutableIterator;
+- (id)init;
+- (ODClassType*)type;
+- (BOOL)hasNext;
+- (id)next;
 + (ODClassType*)type;
 @end
 

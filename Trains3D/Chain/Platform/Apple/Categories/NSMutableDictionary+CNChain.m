@@ -46,5 +46,9 @@
     [self removeAllObjects];
 }
 
+- (id <CNMutableIterator>)mutableIterator {
+    @throw @"Hasn't implemented yet";
+}
+
 
 @end

@@ -180,12 +180,10 @@ static ODClassType* _EGEmissiveParticleSystem_type;
 
 - (void)updateWithDelta:(CGFloat)delta {
     [self generateParticlesWithDelta:delta];
-    id<CNMutableIterator> i = [__particles iterator];
-    while([i hasNext]) {
-        id p = [i next];
+    [__particles mutableFilterBy:^BOOL(id p) {
         [p updateWithDelta:delta];
-        if(!([p isLive])) [i remove];
-    }
+        return [p isLive];
+    }];
 }
 
 - (BOOL)hasParticles {

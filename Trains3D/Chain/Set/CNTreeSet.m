@@ -332,8 +332,8 @@ static ODClassType* _CNMTreeSet_type;
     return [CNMTreeSet treeSetWithMmap:[CNMTreeMap apply]];
 }
 
-- (id<CNMutableIterator>)iterator {
-    return [_mmap.keys iterator];
+- (id<CNMutableIterator>)mutableIterator {
+    return [_mmap.keys mutableIterator];
 }
 
 - (void)appendItem:(id)item {

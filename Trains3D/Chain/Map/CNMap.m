@@ -34,8 +34,12 @@ static ODClassType* _CNMapDefault_type;
     return [_map count];
 }
 
-- (id<CNMutableIterator>)iterator {
+- (id<CNIterator>)iterator {
     return [_map iterator];
+}
+
+- (id<CNMutableIterator>)mutableIterator {
+    return [_map mutableIterator];
 }
 
 - (id)applyKey:(id)key {

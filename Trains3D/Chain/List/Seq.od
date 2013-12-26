@@ -61,9 +61,8 @@ trait Seq<T> extends Iterable<T> {
 }
 
 trait MutableSeq<T> extends Seq<T> with MutableIterable<T> {
-    def iterator : MutableIterator<T>
     def remove(index : uint) {
-        val i = iterator
+        val i = mutableIterator
         var j = index
         while(i.hasNext) {
             i.next

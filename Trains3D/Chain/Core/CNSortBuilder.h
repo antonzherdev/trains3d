@@ -1,7 +1,7 @@
 #import "objdcore.h"
 #import "ODObject.h"
 @class CNChain;
-@protocol CNMutableIterator;
+@protocol CNIterator;
 @class ODClassType;
 
 @class CNSortBuilder;

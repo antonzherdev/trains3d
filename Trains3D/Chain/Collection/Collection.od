@@ -146,10 +146,10 @@ trait Iterable<T> extends Traversable<T> {
 }
 
 trait MutableIterable<T> extends Iterable<T> with MutableTraversable<T> {
-    def iterator : MutableIterator<T>
+    def mutableIterator : MutableIterator<T>
 
     def remove(item : T) {
-        val i = iterator
+        val i = mutableIterator
         while(i.hasNext) {
             if(i.next == item) i.remove
         }

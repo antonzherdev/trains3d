@@ -67,7 +67,7 @@
 
 
 @protocol CNMutableIterable<CNIterable, CNMutableTraversable>
-- (id<CNMutableIterator>)iterator;
+- (id<CNMutableIterator>)mutableIterator;
 - (void)removeItem:(id)item;
 @end
 

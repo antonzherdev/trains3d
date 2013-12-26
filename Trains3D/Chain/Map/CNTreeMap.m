@@ -507,7 +507,7 @@ static ODClassType* _CNMTreeMap_type;
     __root = nil;
 }
 
-- (id<CNMutableIterator>)iterator {
+- (id<CNMutableIterator>)mutableIterator {
     return [CNMTreeMapIterator applyMap:self entry:[self firstEntry]];
 }
 
@@ -1224,7 +1224,11 @@ static ODClassType* _CNMTreeMapKeySet_type;
     return [_map count];
 }
 
-- (id<CNMutableIterator>)iterator {
+- (id<CNIterator>)iterator {
+    return [CNTreeMapKeyIterator applyMap:_map entry:[_map firstEntry]];
+}
+
+- (id<CNMutableIterator>)mutableIterator {
     return [CNMTreeMapKeyIterator applyMap:_map entry:[_map firstEntry]];
 }
 

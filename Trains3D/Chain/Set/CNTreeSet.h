@@ -62,7 +62,7 @@
 - (ODClassType*)type;
 + (CNMTreeSet*)applyComparator:(NSInteger(^)(id, id))comparator;
 + (CNMTreeSet*)apply;
-- (id<CNMutableIterator>)iterator;
+- (id<CNMutableIterator>)mutableIterator;
 - (void)appendItem:(id)item;
 - (BOOL)removeItem:(id)item;
 - (void)clear;
