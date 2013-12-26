@@ -88,7 +88,7 @@ static inline GLuint egGenVertexArray() {
 
 static inline void egDeleteVertexArray(GLuint handle) {
 #if TARGET_OS_IPHONE
-    glGenVertexArraysOES(1, &handle);
+    glDeleteVertexArraysOES(1, &handle);
 #else
     glDeleteVertexArrays(1, &handle);
 #endif
