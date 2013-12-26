@@ -14,6 +14,7 @@
 @class EGDirector;
 @class EGScene;
 @protocol EGController;
+@class SDSoundDirector;
 @class EGRate;
 @class EGLocalPlayerScore;
 @class TRSceneFactory;
@@ -50,6 +51,8 @@
 - (void)showSupportChangeLevel:(BOOL)changeLevel;
 - (BOOL)isNeedRate;
 - (void)showRate;
+- (BOOL)soundEnabled;
+- (void)setSoundEnabled:(BOOL)soundEnabled;
 + (TRGameDirector*)instance;
 + (CNNotificationHandle*)playerScoreRetrieveNotification;
 + (ODClassType*)type;

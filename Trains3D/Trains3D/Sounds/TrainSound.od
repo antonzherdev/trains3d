@@ -26,6 +26,12 @@ class TrainSound(level : Level) extends SoundPlayer {
             }
         }
     }
+    def pause{
+        choo.pause
+    }
+    def resume{
+        choo.resume
+    }
 }
 
 class TrainSoundData {

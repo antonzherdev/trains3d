@@ -86,7 +86,7 @@ class CallRepairerView(level : Level) extends InputProcessor {
         billboard.draw
 
         val stammer = stammers.objectFor(city, orUpdateWith = Billboard(
-            scaledTextureFor("Pause", "png", GL_NEAREST, GL_NEAREST).region(0, 0.5, 0.5, 0.5)))
+            scaledTextureFor("Pause", "png").region(0, 32, 32, 32)))
         stammer.position = vec3(city.tile, 0)
         stammer.rect = Rect(r, buttonSize)
         stammer.draw

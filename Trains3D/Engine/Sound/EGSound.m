@@ -366,6 +366,7 @@ static ODClassType* _EGNotificationSoundPlayer_type;
     NSInteger _limit;
     SDSound*(^_create)();
     NSMutableArray* _sounds;
+    id<CNSeq> _paused;
 }
 static ODClassType* _EGSoundParallel_type;
 @synthesize limit = _limit;
@@ -381,6 +382,7 @@ static ODClassType* _EGSoundParallel_type;
         _limit = limit;
         _create = create;
         _sounds = [NSMutableArray mutableArray];
+        _paused = (@[]);
     }
     
     return self;
@@ -395,6 +397,24 @@ static ODClassType* _EGSoundParallel_type;
     [[self sound] forEach:^void(SDSound* _) {
         [((SDSound*)(_)) play];
     }];
+}
+
+- (void)pause {
+    _paused = [_paused addSeq:[[[_sounds chain] filter:^BOOL(SDSound* sound) {
+        if([((SDSound*)(sound)) isPlaying]) {
+            [((SDSound*)(sound)) pause];
+            return YES;
+        } else {
+            return NO;
+        }
+    }] toArray]];
+}
+
+- (void)resume {
+    [_paused forEach:^void(SDSound* _) {
+        [((SDSound*)(_)) play];
+    }];
+    _paused = (@[]);
 }
 
 - (void)playWithVolume:(float)volume {

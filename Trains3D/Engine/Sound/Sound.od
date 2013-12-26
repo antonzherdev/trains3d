@@ -104,6 +104,20 @@ class SoundParallel(limit : int, create : void -> Sound) {
         sound.for(_.play)
     }
 
+    private var paused : [Sound] = []
+    def pause{
+        paused += sounds.chain.filter { sound ->
+            if(sound.isPlaying) {
+                sound.pause
+                true
+            } else false
+        }.toArray
+    }
+    def resume {
+        paused.for(_.play)
+        paused = []
+    }
+
     def playWith(volume : float4) {
         sound.for{s ->
             s.volume = volume

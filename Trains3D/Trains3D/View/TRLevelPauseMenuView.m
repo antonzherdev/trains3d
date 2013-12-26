@@ -8,6 +8,7 @@
 #import "EGSprite.h"
 #import "TRStrings.h"
 #import "TRGameDirector.h"
+#import "EGTexture.h"
 #import "TRLevelChooseMenu.h"
 #import "TRScore.h"
 #import "EGGameCenter.h"
@@ -338,10 +339,12 @@ static ODClassType* _TRMenuView_type;
     EGButton* _leaderboardButton;
     EGButton* _supportButton;
     id<CNSeq> _buttons;
+    EGSprite* _soundSprite;
 }
 static ODClassType* _TRPauseMenuView_type;
 @synthesize level = _level;
 @synthesize buttons = _buttons;
+@synthesize soundSprite = _soundSprite;
 
 + (id)pauseMenuViewWithLevel:(TRLevel*)level {
     return [[TRPauseMenuView alloc] initWithLevel:level];
@@ -368,6 +371,7 @@ static ODClassType* _TRPauseMenuView_type;
             [TRGameDirector.instance showSupportChangeLevel:NO];
         }];
         _buttons = (@[_resumeButton, _restartButton, _chooseLevelButton, _leaderboardButton, _supportButton]);
+        _soundSprite = [EGSprite sprite];
     }
     
     return self;
@@ -376,6 +380,28 @@ static ODClassType* _TRPauseMenuView_type;
 + (void)initialize {
     [super initialize];
     _TRPauseMenuView_type = [ODClassType classTypeWithCls:[TRPauseMenuView class]];
+}
+
+- (void)draw {
+    [super draw];
+    [_soundSprite setMaterial:[EGColorSource applyTexture:[[EGGlobal scaledTextureForName:@"Pause" format:@"png"] regionX:(([TRGameDirector.instance soundEnabled]) ? 64.0 : 96.0) y:0.0 width:32.0 height:32.0]]];
+    [_soundSprite setPosition:GEVec2Make(((float)([EGGlobal.context viewport].size.x - 48)), 16.0)];
+    [_soundSprite adjustSize];
+    [EGBlendFunction.premultiplied applyDraw:^void() {
+        [_soundSprite draw];
+    }];
+}
+
+- (BOOL)tapEvent:(id<EGEvent>)event {
+    BOOL r = [super tapEvent:event];
+    if(r) return YES;
+    if([_soundSprite containsVec2:[event location]]) {
+        [TRGameDirector.instance setSoundEnabled:!([TRGameDirector.instance soundEnabled])];
+        [[EGDirector current] redraw];
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 - (ODClassType*)type {

@@ -34,12 +34,12 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         }
 
         pauseSprite.position = vec2(width - 32, 0)
-        val t = scaledTextureFor("Pause", "png", GL_NEAREST, GL_NEAREST)
-        pauseSprite.material = ColorSource(t.region(0, 0, 0.5, 0.5))
+        val t = scaledTextureFor("Pause", "png")
+        pauseSprite.material = ColorSource(t.region(0, 0, 32, 32))
         pauseSprite.adjustSize
 
         hammerSprite.position = vec2(0, 0)
-        hammerSprite.material = ColorSource(vec4(0.1, 0.1, 0.1, 1), t.region(0.5, 0, 0.5, 0.5))
+        hammerSprite.material = ColorSource(vec4(0.1, 0.1, 0.1, 1), t.region(32, 0, 32, 32))
         hammerSprite.adjustSize
     }
     def color : vec4 = vec4(0.95)

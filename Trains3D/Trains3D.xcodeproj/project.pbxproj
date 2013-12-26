@@ -539,6 +539,7 @@
 		6F3DF6EA224A8FE0BCF67E9F /* TRNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8F6DB72597946D02C45 /* TRNotification.m */; };
 		6F3DF6EC10BBB2F6AC918D74 /* City.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF7D3C6CD185286ABD313 /* City.png */; };
 		6F3DF6EC3FB5AC1170EB375B /* gim_memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD7F3A078F018EA06949 /* gim_memory.cpp */; };
+		6F3DF6ED2350C8CC29AE248F /* SDSoundDirector.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA65E415ACD1FBEAAD89 /* SDSoundDirector.m */; };
 		6F3DF6F2F07AC005EC8078C9 /* constants.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF3EEF742A17D1F85E53A /* constants.inl */; };
 		6F3DF6F74728BF21F2FF07C7 /* EGInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF294B5B3E02F5C105762 /* EGInput.m */; };
 		6F3DF6FB9D955AFA8E51520C /* type_mat2x3.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFC9849C492EE307686D6 /* type_mat2x3.inl */; };
@@ -565,6 +566,7 @@
 		6F3DF73E89F244089D4EB498 /* lucida_grande_36.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF5DBAEDD302C5B3F3D04 /* lucida_grande_36.fnt */; };
 		6F3DF74059CBB98B61303E3F /* lucida_grande_48.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF577DEF2507D7614ACDA /* lucida_grande_48.png */; };
 		6F3DF743953DC660FC89D19A /* CNCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0666099530AA68BB6F1 /* CNCollection.m */; };
+		6F3DF7445813EBFE9E09A2EB /* SoundDirector.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF132DFED048FA1D13474 /* SoundDirector.od */; };
 		6F3DF74B216F97957505EA5B /* CNOptionSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFBE0D8CB2B59FCEB8C9 /* CNOptionSpec.m */; };
 		6F3DF74EAAB6EC8287F6EB5F /* LevelMenuView.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFF9FCEF06BB9D540032F /* LevelMenuView.od */; };
 		6F3DF75DE996CBFCE1C14858 /* TRScore.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF26E551E0914BC2C9F69 /* TRScore.m */; };
@@ -645,6 +647,7 @@
 		6F3DF869C3C6E2DE9EE9E4C7 /* intersect.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF307504747634D59E3B1 /* intersect.inl */; };
 		6F3DF86E525DEFBFC1DF3500 /* LevelSound.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF2A4726C64265847C296 /* LevelSound.od */; };
 		6F3DF86F4994CBBF13DA081C /* ODEnum.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2B5F56E42A6B83F3EBD /* ODEnum.m */; };
+		6F3DF8701BE1EF033CF2042D /* SDSoundDirector.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA65E415ACD1FBEAAD89 /* SDSoundDirector.m */; };
 		6F3DF870888D2E2203B91F43 /* EGShadow.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC4B4C5CB925B3B6F0D2 /* EGShadow.m */; };
 		6F3DF8717AC9CBB96E76EDE3 /* DTKeyValueStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8EE35D95E2210854AF3 /* DTKeyValueStorage.m */; };
 		6F3DF873276EA7C381F7A3F9 /* EGGameCenterPlat.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF08ED5E5657FABF69059 /* EGGameCenterPlat.m */; };
@@ -674,6 +677,7 @@
 		6F3DF8B667CAF32427A98B10 /* CNSourceLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF71A717A6FD3CAA174BA /* CNSourceLink.m */; };
 		6F3DF8BC36F94738BFC1A209 /* Smoke.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF776EA78287C3A55E403 /* Smoke.png */; };
 		6F3DF8BC9B414E64A2AD218F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF197D63F1E8E0BE4A603 /* Localizable.strings */; };
+		6F3DF8BCB576EAE22AC5019D /* SoundDirector.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF132DFED048FA1D13474 /* SoundDirector.od */; };
 		6F3DF8BCFC3F6053F643250B /* btConvexPointCloudShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2C0E1DABF4C3773EBE3 /* btConvexPointCloudShape.cpp */; };
 		6F3DF8BD09234F126EE922A4 /* CrashBack.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF051957CCF356028DFA7 /* CrashBack.wav */; };
 		6F3DF8C1DADD5AF81B504C0C /* type_mat2x2.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFED12F6B44D3D971ABF7 /* type_mat2x2.inl */; };
@@ -1389,6 +1393,7 @@
 		6F3DF12D06AD7BE4ECD1DF02 /* EGCollisionBody.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EGCollisionBody.mm; sourceTree = "<group>"; };
 		6F3DF12FE88829FBF592AB67 /* TRRainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRRainView.h; sourceTree = "<group>"; };
 		6F3DF1324BE87DB49A184D85 /* TR3DDamage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TR3DDamage.h; sourceTree = "<group>"; };
+		6F3DF132DFED048FA1D13474 /* SoundDirector.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = SoundDirector.od; sourceTree = "<group>"; };
 		6F3DF13A0F942D1FB32C0111 /* TRDamageTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRDamageTest.m; sourceTree = "<group>"; };
 		6F3DF13D0E1AE8F3C0AD7B98 /* lucida_grande_32.fnt */ = {isa = PBXFileReference; lastKnownFileType = file.fnt; path = lucida_grande_32.fnt; sourceTree = "<group>"; };
 		6F3DF13E661D7F13887072FF /* btSolve2LinearConstraint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btSolve2LinearConstraint.cpp; sourceTree = "<group>"; };
@@ -1487,6 +1492,7 @@
 		6F3DF273F66B99DC0E265FC1 /* type_size.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_size.hpp; sourceTree = "<group>"; };
 		6F3DF28F5B178DD178B8F487 /* TRCity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRCity.m; sourceTree = "<group>"; };
 		6F3DF290CD634B4975ECD177 /* extend.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = extend.inl; sourceTree = "<group>"; };
+		6F3DF29173A87A5972F786A4 /* SDSoundDirector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDSoundDirector.h; sourceTree = "<group>"; };
 		6F3DF2918792631CFF952D7C /* btSubSimplexConvexCast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btSubSimplexConvexCast.h; sourceTree = "<group>"; };
 		6F3DF294B5B3E02F5C105762 /* EGInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGInput.m; sourceTree = "<group>"; };
 		6F3DF2997ADD58DA7B090DDC /* btEmptyShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btEmptyShape.cpp; sourceTree = "<group>"; };
@@ -2112,6 +2118,7 @@
 		6F3DFA5A6B0F27627DED08E8 /* btContinuousConvexCollision.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btContinuousConvexCollision.cpp; sourceTree = "<group>"; };
 		6F3DFA5F61C3E623C3026F49 /* TreeSet.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TreeSet.od; sourceTree = "<group>"; };
 		6F3DFA631D48AB7E24D8E64A /* ObjC.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = ObjC.od; sourceTree = "<group>"; };
+		6F3DFA65E415ACD1FBEAAD89 /* SDSoundDirector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDSoundDirector.m; sourceTree = "<group>"; };
 		6F3DFA6815E349D06B7F3B0F /* KWVerifying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWVerifying.h; sourceTree = "<group>"; };
 		6F3DFA6834C80959C9E73458 /* lucida_grande_72.fnt */ = {isa = PBXFileReference; lastKnownFileType = file.fnt; path = lucida_grande_72.fnt; sourceTree = "<group>"; };
 		6F3DFA6942C0C9690B3E259F /* trains.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = trains.od; sourceTree = "<group>"; };
@@ -2753,6 +2760,9 @@
 				6F3DF6B5E41194B88881593B /* Sound.od */,
 				6F3DFC131DD17E1C2C6EFFB5 /* pack.od */,
 				6F3DF06FA120BC206D39C8F0 /* Platform */,
+				6F3DF132DFED048FA1D13474 /* SoundDirector.od */,
+				6F3DF29173A87A5972F786A4 /* SDSoundDirector.h */,
+				6F3DFA65E415ACD1FBEAAD89 /* SDSoundDirector.m */,
 			);
 			path = Sound;
 			sourceTree = "<group>";
@@ -5202,6 +5212,7 @@
 				6F3DF591E7E8D7D34C3FE29E /* lucida_grande_28.png in Resources */,
 				6F3DF2A36D8161B00E87442D /* BuildMode.wav in Resources */,
 				6F3DF6ACC859068E6392D2AA /* LightGlowPhone.png in Resources */,
+				6F3DF7445813EBFE9E09A2EB /* SoundDirector.od in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5375,6 +5386,7 @@
 				6F3DFBA10ECA7E4B85FF2FEC /* lucida_grande_28.png in Resources */,
 				6F3DF05EEB024BA65A2604B4 /* BuildMode.wav in Resources */,
 				6F3DF0A6984B655B268BE68D /* LightGlowPhone.png in Resources */,
+				6F3DF8BCB576EAE22AC5019D /* SoundDirector.od in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5686,6 +5698,7 @@
 				6F3DFCF42CC3D676E064DDB3 /* TRTrain.m in Sources */,
 				6F3DF19F54AA6DF72611F4B8 /* CNTopLink.m in Sources */,
 				6F3DFBA4768DB3450FA2CC07 /* CNMutableList.m in Sources */,
+				6F3DF6ED2350C8CC29AE248F /* SDSoundDirector.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6251,6 +6264,7 @@
 				6F3DFA4E2CB9ED692F4130D6 /* TRTrain.m in Sources */,
 				6F3DFFB90F53DE390055D061 /* CNTopLink.m in Sources */,
 				6F3DF43C68661D54557BB44E /* CNMutableList.m in Sources */,
+				6F3DF8701BE1EF033CF2042D /* SDSoundDirector.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

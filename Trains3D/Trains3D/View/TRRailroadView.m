@@ -343,7 +343,7 @@ static ODClassType* _TRUndoView_type;
 
 - (void)reshape {
     GEVec2 buttonSize = geVec4Xy([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW(geVec2DivVec2(geVec2ApplyF(64 * EGGlobal.context.scale), geVec2ApplyVec2i([EGGlobal.context viewport].size)), 0.0, 0.0)]);
-    _button.material = [EGColorSource applyTexture:[[EGGlobal scaledTextureForName:@"Pause" format:@"png" magFilter:GL_NEAREST minFilter:GL_NEAREST] regionX:0.5 y:0.5 width:0.5 height:0.5]];
+    _button.material = [EGColorSource applyTexture:[[EGGlobal scaledTextureForName:@"Pause" format:@"png"] regionX:32.0 y:32.0 width:32.0 height:32.0]];
     _button.rect = GERectMake(geVec2DivI(geVec2Negate(buttonSize), 2), buttonSize);
 }
 

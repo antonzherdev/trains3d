@@ -4,7 +4,7 @@ import com.antonzherdev.data._
 
 class GameDirector {
     static val instance : GameDirector = GameDirector()
-    val local = LocalKeyValueStorage([("currentLevel", 1)])
+    val local = LocalKeyValueStorage([("currentLevel", 1), ("soundEnabled", 1)])
     val resolveMaxLevel : (any, any) -> any = (a : any, b : any) -> {
         val v = Conflict.resolveMax(a, b)
         log("Max level from cloud $v = max($a, $b)")
@@ -123,6 +123,7 @@ class GameDirector {
     }
 
     def init {
+        SoundDirector.instance.enabled = (local.intFor("soundEnabled") == 1)
         Rate.instance.setIds(ios = 736579117, osx = 736545415)
 //        Rate.instance.setIds(ios = 343200656, osx = 403961173)
         GameCenter.instance.authenticate
@@ -225,6 +226,14 @@ class GameDirector {
         Director.current.scene.get.controller.as<Level>.for{level ->
             Rate.instance.showRate
             set(level = level.number + 1)
+        }
+    }
+
+    def soundEnabled = SoundDirector.instance.enabled
+    def set(soundEnabled : bool) {
+        if( SoundDirector.instance.enabled != soundEnabled) {
+            local.set("soundEnabled", i = if(soundEnabled) 1 else 0)
+            SoundDirector.instance.enabled = soundEnabled
         }
     }
 }

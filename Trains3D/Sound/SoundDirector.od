@@ -1,0 +1,14 @@
+package com.antonzherdev.sound
+
+class SoundDirector {
+    static val instance : SoundDirector = SoundDirector()
+    private var _enabled = true
+    def enabled = _enabled
+    val enabledChangedNotification = NotificationHandle<SoundDirector, bool>("soundEnabledChangedNotification")
+    def set(enabled : bool) {
+        if(_enabled != enabled) {
+            _enabled = enabled
+            enabledChangedNotification.post(self, enabled)
+        }
+    }
+}

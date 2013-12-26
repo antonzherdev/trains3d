@@ -184,7 +184,7 @@ static ODClassType* _TRCallRepairerView_type;
     billboard.rect = GERectMake(r, _buttonSize);
     [billboard draw];
     EGBillboard* stammer = [_stammers objectForKey:city orUpdateWith:^EGBillboard*() {
-        return [EGBillboard applyMaterial:[EGColorSource applyTexture:[[EGGlobal scaledTextureForName:@"Pause" format:@"png" magFilter:GL_NEAREST minFilter:GL_NEAREST] regionX:0.0 y:0.5 width:0.5 height:0.5]]];
+        return [EGBillboard applyMaterial:[EGColorSource applyTexture:[[EGGlobal scaledTextureForName:@"Pause" format:@"png"] regionX:0.0 y:32.0 width:32.0 height:32.0]]];
     }];
     stammer.position = geVec3ApplyVec2Z(geVec2ApplyVec2i(city.tile), 0.0);
     stammer.rect = GERectMake(r, _buttonSize);

@@ -11,6 +11,7 @@
 #import "EGCameraIso.h"
 #import "EGDirector.h"
 #import "EGScene.h"
+#import "SDSoundDirector.h"
 #import "EGRate.h"
 #import "EGGameCenter.h"
 #import "TRSceneFactory.h"
@@ -45,7 +46,7 @@ static ODClassType* _TRGameDirector_type;
     self = [super init];
     __weak TRGameDirector* _weakSelf = self;
     if(self) {
-        _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1})];
+        _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1})];
         _resolveMaxLevel = ^id(id a, id b) {
             id v = DTConflict.resolveMax(a, b);
             [CNLog applyText:[NSString stringWithFormat:@"Max level from cloud %@ = max(%@, %@)", v, a, b]];
@@ -168,6 +169,7 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)_init {
+    [SDSoundDirector.instance setEnabled:[_local intForKey:@"soundEnabled"] == 1];
     [EGRate.instance setIdsIos:736579117 osx:736545415];
     [EGGameCenter.instance authenticate];
 }
@@ -281,6 +283,17 @@ static ODClassType* _TRGameDirector_type;
         [EGRate.instance showRate];
         [self setLevel:((NSInteger)(((TRLevel*)(level)).number + 1))];
     }];
+}
+
+- (BOOL)soundEnabled {
+    return [SDSoundDirector.instance enabled];
+}
+
+- (void)setSoundEnabled:(BOOL)soundEnabled {
+    if([SDSoundDirector.instance enabled] != soundEnabled) {
+        [_local setKey:@"soundEnabled" i:((soundEnabled) ? 1 : 0)];
+        [SDSoundDirector.instance setEnabled:soundEnabled];
+    }
 }
 
 - (ODClassType*)type {

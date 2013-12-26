@@ -17,6 +17,8 @@
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)updateWithDelta:(CGFloat)delta;
+- (void)pause;
+- (void)resume;
 + (ODClassType*)type;
 @end
 

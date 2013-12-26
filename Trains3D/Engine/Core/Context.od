@@ -5,6 +5,7 @@ object Global {
     val matrix : MatrixStack = context.matrixStack
     def textureFor(file : string) : Texture = context.textureFor(file, 1.0, GL_LINEAR, GL_LINEAR)
     def textureFor(file : string, magFilter : uint4, minFilter : uint4) : Texture = context.textureFor(file, 1.0, magFilter, minFilter)
+    def scaledTextureFor(name : string, format : string) : Texture = scaledTextureFor(name, format, GL_NEAREST, GL_NEAREST)
     def scaledTextureFor(name : string, format : string, magFilter : uint4, minFilter : uint4) : Texture =
         context.textureFor("$name\_$(context.scale.cast<uint4>)x.$format", context.scale, magFilter, minFilter)
     def fontWith(name : string) : Font = context.fontWith(name)

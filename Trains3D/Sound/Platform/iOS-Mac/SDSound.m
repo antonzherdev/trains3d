@@ -1,7 +1,13 @@
 #import "SDSound.h"
+#import "SDSoundDirector.h"
 
 @implementation SDSound{
     AVAudioPlayer* _player;
+    BOOL _enabled;
+    double _startedAt;
+    BOOL _wasPaused;
+    BOOL _played;
+    CNNotificationObserver *_observer;
 }
 static ODClassType* _SDSound_type;
 
@@ -22,11 +28,36 @@ static ODClassType* _SDSound_type;
     self = [super init];
     if (self) {
         _player = player;
+        _wasPaused = YES;
+        _enabled = SDSoundDirector.instance.enabled;
+        __weak SDSound *ws = self;
+        _observer = [SDSoundDirector.instance.enabledChangedNotification observeBy:^(id sender, id en) {
+            ws.enabled = unumb(en);
+        }];
         [player prepareToPlay];
         [player pause];
     }
 
     return self;
+}
+
+- (void)setEnabled:(BOOL)enabled {
+    if(_enabled != enabled) {
+        _enabled = enabled;
+        if(!_enabled) {
+            _played = NO;
+            if(_player.isPlaying) {
+                _wasPaused = NO;
+                [_player pause];
+                [self fixStart];
+            } else {
+                _wasPaused = YES;
+            }
+        } else {
+            [self updateCurrentTime];
+            if(!_wasPaused && !_played) [self play];
+        }
+    }
 }
 
 + (id)soundWithPlayer:(AVAudioPlayer *)player {
@@ -56,26 +87,62 @@ static ODClassType* _SDSound_type;
 }
 
 - (void)play {
-    [_player play];
+    if(_enabled) [_player play];
+    else {
+        [self fixStart];
+        _wasPaused = NO;
+    }
+}
+
+- (void)fixStart {
+    _startedAt = clock() / CLOCKS_PER_SEC;
 }
 
 - (void)playLoops:(NSUInteger)loops {
     _player.numberOfLoops = loops - 1;
-    [_player play];
+    [self play];
 }
 
 - (void)playAlways {
     _player.numberOfLoops = -1;
-    [_player play];
+    [self play];
 }
 
 - (void)pause {
-    [_player pause];
+    if(_enabled) [_player pause];
+    else {
+        [self updateCurrentTime];
+        _wasPaused = YES;
+    }
+}
+
+- (void)updateCurrentTime {
+    if(_wasPaused || _played) return;
+
+    NSTimeInterval time = _player.currentTime + (clock() / CLOCKS_PER_SEC) - _startedAt;
+    if(time > _player.duration) {
+        long cycles = (long)(time/_player.duration);
+        if(_player.numberOfLoops == -1) {
+            _player.currentTime = time - (_player.duration * cycles);
+        } else if(_player.numberOfLoops >= cycles) {
+            _player.numberOfLoops -= cycles;
+            _player.currentTime = time - (_player.duration * cycles);
+        } else {
+            _player.numberOfLoops = 0;
+            _player.currentTime = 0;
+            _played = YES;
+        }
+    }
 }
 
 - (void)stop {
-    [_player pause];
-    _player.currentTime = 0;
+    if(_enabled) {
+        [_player pause];
+        _player.currentTime = 0;
+    } else {
+        _player.currentTime = 0;
+        _wasPaused = YES;
+    }
 }
 
 - (float)pan {

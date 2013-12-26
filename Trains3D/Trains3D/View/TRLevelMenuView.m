@@ -99,11 +99,11 @@ static ODClassType* _TRLevelMenuView_type;
         [((EGText*)(_)) setPosition:GEVec3Make(((float)(_width / 2)), 10.0, 0.0)];
     }];
     [_pauseSprite setPosition:GEVec2Make(((float)(_width - 32)), 0.0)];
-    EGTexture* t = [EGGlobal scaledTextureForName:@"Pause" format:@"png" magFilter:GL_NEAREST minFilter:GL_NEAREST];
-    [_pauseSprite setMaterial:[EGColorSource applyTexture:[t regionX:0.0 y:0.0 width:0.5 height:0.5]]];
+    EGTexture* t = [EGGlobal scaledTextureForName:@"Pause" format:@"png"];
+    [_pauseSprite setMaterial:[EGColorSource applyTexture:[t regionX:0.0 y:0.0 width:32.0 height:32.0]]];
     [_pauseSprite adjustSize];
     [_hammerSprite setPosition:GEVec2Make(0.0, 0.0)];
-    [_hammerSprite setMaterial:[EGColorSource applyColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) texture:[t regionX:0.5 y:0.0 width:0.5 height:0.5]]];
+    [_hammerSprite setMaterial:[EGColorSource applyColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) texture:[t regionX:32.0 y:0.0 width:32.0 height:32.0]]];
     [_hammerSprite adjustSize];
 }
 

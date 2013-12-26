@@ -24,6 +24,7 @@
 - (ODClassType*)type;
 + (EGTexture*)textureForFile:(NSString*)file;
 + (EGTexture*)textureForFile:(NSString*)file magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
++ (EGTexture*)scaledTextureForName:(NSString*)name format:(NSString*)format;
 + (EGTexture*)scaledTextureForName:(NSString*)name format:(NSString*)format magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
 + (EGFont*)fontWithName:(NSString*)name;
 + (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size;

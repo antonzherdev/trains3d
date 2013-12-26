@@ -27,6 +27,10 @@ static ODClassType* _EGGlobal_type;
     return [_EGGlobal_context textureForFile:file scale:1.0 magFilter:magFilter minFilter:minFilter];
 }
 
++ (EGTexture*)scaledTextureForName:(NSString*)name format:(NSString*)format {
+    return [EGGlobal scaledTextureForName:name format:format magFilter:GL_NEAREST minFilter:GL_NEAREST];
+}
+
 + (EGTexture*)scaledTextureForName:(NSString*)name format:(NSString*)format magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
     return [_EGGlobal_context textureForFile:[NSString stringWithFormat:@"%@_%ux.%@", name, ((unsigned int)(_EGGlobal_context.scale)), format] scale:_EGGlobal_context.scale magFilter:magFilter minFilter:minFilter];
 }

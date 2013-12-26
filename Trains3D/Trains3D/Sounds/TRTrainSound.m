@@ -56,16 +56,18 @@ static ODClassType* _TRTrainSound_type;
     }];
 }
 
+- (void)pause {
+    [_choo pause];
+}
+
+- (void)resume {
+    [_choo resume];
+}
+
 - (void)start {
 }
 
 - (void)stop {
-}
-
-- (void)pause {
-}
-
-- (void)resume {
 }
 
 - (ODClassType*)type {

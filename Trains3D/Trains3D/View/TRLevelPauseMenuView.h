@@ -18,10 +18,11 @@
 @class TRStr;
 @protocol TRStrings;
 @class TRGameDirector;
+@class EGSprite;
+@class EGTexture;
 @class TRLevelChooseMenu;
 @class TRScore;
 @class EGLocalPlayerScore;
-@class EGSprite;
 @class TRHelp;
 
 @class TRLevelPauseMenuView;
@@ -86,10 +87,13 @@
 @interface TRPauseMenuView : TRMenuView
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) id<CNSeq> buttons;
+@property (nonatomic, readonly) EGSprite* soundSprite;
 
 + (id)pauseMenuViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
+- (void)draw;
+- (BOOL)tapEvent:(id<EGEvent>)event;
 + (ODClassType*)type;
 @end
 

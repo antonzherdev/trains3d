@@ -88,6 +88,8 @@
 - (id)initWithLimit:(NSInteger)limit create:(SDSound*(^)())create;
 - (ODClassType*)type;
 - (void)play;
+- (void)pause;
+- (void)resume;
 - (void)playWithVolume:(float)volume;
 - (id)sound;
 + (ODClassType*)type;

@@ -115,6 +115,28 @@ class PauseMenuView(level : Level) extends MenuView  {
     private val leaderboardButton = button(Loc.leaderboard, GameDirector.instance.showLeaderboard(level))
     private val supportButton = button(Loc.supportButton, GameDirector.instance.showSupport(changeLevel = false))
     val buttons = [resumeButton, restartButton, chooseLevelButton, leaderboardButton, supportButton]
+
+    val soundSprite = Sprite()
+    def draw {
+        super.draw
+        soundSprite.material = scaledTextureFor("Pause", "png").region(if(GameDirector.instance.soundEnabled) 64 else 96, 0, 32, 32)
+        soundSprite.position = vec2(context.viewport.size.x - 48, 16)
+        soundSprite.adjustSize
+        BlendFunction.premultiplied {
+            soundSprite.draw
+        }
+    }
+
+    def tap(event : Event) : bool = {
+        val r = super.tap(event)
+        if(r) return true
+
+        if(soundSprite.contains(event.location)) {
+            GameDirector.instance.soundEnabled = !GameDirector.instance.soundEnabled
+            Director.current.redraw
+            true
+        } else false
+    }
 }
 
 class WinMenu(level : Level) extends MenuView {
