@@ -153,6 +153,11 @@
     return [CNOption someValue:nums([self characterAtIndex:0])];
 }
 
+- (id <CNSeq>)tail {
+    return [self substringFromIndex:1];
+}
+
+
 - (CNChain*)chain {
     return [CNChain chainWithCollection:self];
 }
