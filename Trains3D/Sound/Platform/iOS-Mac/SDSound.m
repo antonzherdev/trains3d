@@ -38,7 +38,7 @@ static ODClassType* _SDSound_type;
             ws.enabled = unumb(en);
         }];
         _observer2 = [SDSoundDirector.instance.timeSpeedChangeNotification observeBy:^(id sender, id sp) {
-            _player.rate = (float) unumf(sp);
+            ws.rate = (float) unumf(sp);
         }];
 
         [player prepareToPlay];
@@ -46,6 +46,10 @@ static ODClassType* _SDSound_type;
     }
 
     return self;
+}
+
+- (void)setRate:(float)rate {
+    _player.rate = rate;
 }
 
 - (void)setEnabled:(BOOL)enabled {

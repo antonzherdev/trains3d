@@ -26,6 +26,8 @@
 - (void)stop;
 + (ODClassType*)type;
 
+- (void)setRate:(float)rate;
+
 + (SDSound *)applyFile:(NSString *)string volume:(float)volume;
 @end
 
