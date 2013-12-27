@@ -49,7 +49,7 @@ class SwitchProcessor(level : Level) extends InputProcessor {
                 val a = closest(0)
                 val b = closest(1)
                 val delta = (a.distance(loc) - b.distance(loc)).abs
-                if(delta < 0.01) {
+                if(delta < 0.008) {
 //                    log("!! Click: $delta = $(a.distance(loc)) - $(b.distance(loc))")
                     strangeClickNotification.post(self, event)
                     Option.none<SwitchProcessorItem>

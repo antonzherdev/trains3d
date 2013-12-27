@@ -55,7 +55,7 @@ static ODClassType* _TRLevelView_type;
         _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.7, 0.7, 0.7, 1.0) lights:(@[[EGDirectLight directLightWithColor:geVec4ApplyVec3W(geVec3AddVec3(GEVec3Make(0.2, 0.2, 0.2), geVec3MulK(GEVec3Make(0.4, 0.4, 0.4), ((float)(_level.rules.weatherRules.sunny)))), 1.0) direction:geVec3Normalize(GEVec3Make(-0.15, 0.35, -0.3)) hasShadows:_level.rules.weatherRules.sunny > 0.0 shadowsProjectionMatrix:^GEMat4*() {
     GEMat4* m;
     if(GEVec2iEq(_level.map.size, GEVec2iMake(7, 5))) {
-        m = [GEMat4 orthoLeft:-2.4 right:8.6 bottom:-2.9 top:4.9 zNear:-2.9 zFar:5.5];
+        m = [GEMat4 orthoLeft:-2.4 right:8.6 bottom:-2.9 top:5.2 zNear:-2.9 zFar:5.5];
     } else {
         if(GEVec2iEq(_level.map.size, GEVec2iMake(5, 5))) {
             m = [GEMat4 orthoLeft:-2.4 right:7.3 bottom:-2.4 top:3.9 zNear:-2.0 zFar:5.5];
