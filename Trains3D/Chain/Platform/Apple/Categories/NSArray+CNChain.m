@@ -166,4 +166,16 @@
     return [self objectAtIndex:index];
 }
 
+- (id<CNSeq>)tail {
+    CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
+    id<CNIterator> i = [self iterator];
+    if([i hasNext]) {
+        [i next];
+        while([i hasNext]) {
+            [builder appendItem:[i next]];
+        }
+    }
+    return [builder build];
+}
+
 @end

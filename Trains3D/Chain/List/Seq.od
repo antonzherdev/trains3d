@@ -58,6 +58,17 @@ trait Seq<T> extends Iterable<T> {
 
     def head : T = apply(0)
     def headOpt : T? = opt(0)
+    def tail : Seq<T> = {
+        val builder = ArrayBuilder<T>()
+        val i = iterator
+        if(i.hasNext) {
+            i.next
+            while(i.hasNext) {
+                builder.append(i.next)
+            }
+        }
+        builder.build
+    }
 }
 
 trait MutableSeq<T> extends Seq<T> with MutableIterable<T> {

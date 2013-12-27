@@ -4,7 +4,12 @@ import com.antonzherdev.data._
 
 class GameDirector {
     static val instance : GameDirector = GameDirector()
-    val local = LocalKeyValueStorage([("currentLevel", 1), ("soundEnabled", 1)])
+    static val maxDaySlowMotions = 5
+    static val slowMotionRestorePeriod = 120
+    val local = LocalKeyValueStorage([("currentLevel", 1), ("soundEnabled", 1),
+        ("lastSlowMotions", []),
+        ("daySlowMotions", maxDaySlowMotions),
+        ("boughtSlowMotions", 0)])
     val resolveMaxLevel : (any, any) -> any = (a : any, b : any) -> {
         val v = Conflict.resolveMax(a, b)
         log("Max level from cloud $v = max($a, $b)")
@@ -137,6 +142,17 @@ class GameDirector {
 //        Rate.instance.setIds(ios = 343200656, osx = 403961173)
         GameCenter.instance.authenticate
 //        clearTutorial
+
+        if(daySlowMotions > maxDaySlowMotions) local.set("daySlowMotions", i = maxDaySlowMotions)
+        val fullDayCount = lastSlowMotions.count + daySlowMotions
+        if(fullDayCount > maxDaySlowMotions) {
+            local.set("lastSlowMotions", array = lastSlowMotions.chain.top(maxDaySlowMotions - daySlowMotions).toArray)
+        } else if(fullDayCount < maxDaySlowMotions) {
+            local.set("daySlowMotions", i = maxDaySlowMotions - lastSlowMotions.count)
+        }
+        checkLastSlowMotions
+
+        _slowMotionsCount = daySlowMotions + boughtSlowMotions
     }
 
 
@@ -246,7 +262,48 @@ class GameDirector {
         }
     }
 
+
+    def lastSlowMotions = local.arrayFor<DateTime>("lastSlowMotions")
+    def daySlowMotions = local.intFor("daySlowMotions")
+    def boughtSlowMotions = local.intFor("boughtSlowMotions")
+    private var _slowMotionsCount = 0
+    def slowMotionsCount = _slowMotionsCount
+
     def runSlowMotion(level : Level) {
+        val dsm = daySlowMotions
+        if(dsm > 0) {
+            local.decrement("daySlowMotions")
+            if(local.appendToArray("lastSlowMotions", value = DateTime()).count == 1) {
+                checkLastSlowMotions
+            }
+            _slowMotionsCount--
+        } else {
+            val bsm = boughtSlowMotions
+            if(bsm > 0) {
+                local.decrement("boughtSlowMotions")
+                _slowMotionsCount--
+            } else {
+                return nil
+            }
+        }
         level.runSlowMotion
+    }
+
+    def checkLastSlowMotions {
+        val lsm = lastSlowMotions
+        if(!lsm.isEmpty) {
+            val first = lsm.head
+            if(first.beforeNow > slowMotionRestorePeriod) {
+                local.set("lastSlowMotions", array = lastSlowMotions.tail)
+                local.increment("daySlowMotions")
+                _slowMotionsCount++
+                checkLastSlowMotions
+            } else {
+                weak val ws = self
+                Action.delay(first.beforeNow + 1) {
+                    ws.checkLastSlowMotions
+                }
+            }
+        }
     }
 }

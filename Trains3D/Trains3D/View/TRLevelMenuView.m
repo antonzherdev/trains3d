@@ -13,15 +13,16 @@
 #import "TRRailroad.h"
 #import "TRScore.h"
 #import "TRStrings.h"
+#import "TRGameDirector.h"
 #import "TRNotification.h"
 #import "EGDirector.h"
-#import "TRGameDirector.h"
 @implementation TRLevelMenuView{
     TRLevel* _level;
     NSString* _name;
     EGSprite* _pauseSprite;
     EGSprite* _slowSprite;
     EGSprite* _hammerSprite;
+    EGText* _slowMotionCountText;
     GEVec4(^_notificationProgress)(float);
     id<EGCamera> _camera;
     EGText* _scoreText;
@@ -52,6 +53,7 @@ static ODClassType* _TRLevelMenuView_type;
         _pauseSprite = [EGSprite sprite];
         _slowSprite = [EGSprite sprite];
         _hammerSprite = [EGSprite sprite];
+        _slowMotionCountText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(1.0, 0.0) color:[self color]];
         _notificationProgress = ^id() {
             float(^__l)(float) = [EGProgress gapT1:0.7 t2:1.0];
             GEVec4(^__r)(float) = ^GEVec4(float _) {
@@ -106,6 +108,9 @@ static ODClassType* _TRLevelMenuView_type;
     [_slowSprite setPosition:GEVec2Make(s.x - 32, 0.0)];
     [_slowSprite setMaterial:[EGColorSource applyTexture:[t regionX:64.0 y:32.0 width:32.0 height:32.0]]];
     [_slowSprite adjustSize];
+    [_slowMotionCountText setFont:[EGGlobal fontWithName:@"lucida_grande" size:18]];
+    [_slowMotionCountText setPosition:geVec3ApplyVec2(geVec2AddVec2([_slowSprite position], GEVec2Make(1.0, 18.0)))];
+    _slowMotionCountText.shadow = [CNOption applyValue:sh];
     [_hammerSprite setPosition:GEVec2Make(0.0, s.y - 32)];
     [_hammerSprite setMaterial:[EGColorSource applyColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) texture:[t regionX:32.0 y:0.0 width:32.0 height:32.0]]];
     [_hammerSprite adjustSize];
@@ -141,10 +146,15 @@ static ODClassType* _TRLevelMenuView_type;
                 _notificationText.color = _notificationProgress(((float)(t)));
                 [_notificationText draw];
             }];
-            if([[_level slowMotionCounter] isRunning]) [EGBlendFunction.standard applyDraw:^void() {
-                [EGD2D drawCircleBackColor:GEVec4Make(0.6, 0.6, 0.6, 0.95) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.5) at:geVec3ApplyVec2(geVec2AddVec2([_slowSprite position], geVec2DivI([_slowSprite size], 2))) radius:22.0 relative:GEVec2Make(0.0, 0.0) segmentColor:geVec4ApplyF(0.95) start:M_PI_2 end:M_PI_2 - 2 * [[_level slowMotionCounter] time] * M_PI];
-            }];
-            else [_slowSprite draw];
+            if([[_level slowMotionCounter] isRunning]) {
+                [EGBlendFunction.standard applyDraw:^void() {
+                    [EGD2D drawCircleBackColor:GEVec4Make(0.6, 0.6, 0.6, 0.95) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.5) at:geVec3ApplyVec2(geVec2AddVec2([_slowSprite position], geVec2DivI([_slowSprite size], 2))) radius:22.0 relative:GEVec2Make(0.0, 0.0) segmentColor:geVec4ApplyF(0.95) start:M_PI_2 end:M_PI_2 - 2 * [[_level slowMotionCounter] time] * M_PI];
+                }];
+            } else {
+                [_slowMotionCountText setText:[NSString stringWithFormat:@"%ld", (long)[TRGameDirector.instance slowMotionsCount]]];
+                [_slowMotionCountText draw];
+                [_slowSprite draw];
+            }
         }];
     }];
 }

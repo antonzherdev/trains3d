@@ -53,8 +53,15 @@
 - (void)showRate;
 - (BOOL)soundEnabled;
 - (void)setSoundEnabled:(BOOL)soundEnabled;
+- (id<CNSeq>)lastSlowMotions;
+- (NSInteger)daySlowMotions;
+- (NSInteger)boughtSlowMotions;
+- (NSInteger)slowMotionsCount;
 - (void)runSlowMotionLevel:(TRLevel*)level;
+- (void)checkLastSlowMotions;
 + (TRGameDirector*)instance;
++ (NSInteger)maxDaySlowMotions;
++ (NSInteger)slowMotionRestorePeriod;
 + (CNNotificationHandle*)playerScoreRetrieveNotification;
 + (ODClassType*)type;
 @end

@@ -10,6 +10,7 @@
 #import "KWGenericMatchingAdditions.h"
 #import "KWGenericMatcher.h"
 #import "KWFormatter.h"
+#import "DTKeyValueStorage.h"
 
 @interface KWHaveValueMatcher()
 

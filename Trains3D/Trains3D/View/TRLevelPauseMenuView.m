@@ -811,7 +811,7 @@ static ODClassType* _TRHelpView_type;
     [_helpText draw];
     [_tapText draw];
     __weak TRHelpView* ws = self;
-    delay(1, ^void() {
+    delay(1.0, ^void() {
         ws._allowClose = YES;
     });
 }

@@ -32,8 +32,11 @@
     CNNotificationObserver* _zoomHelpObs;
     CNNotificationObserver* _crashObs;
     CNNotificationObserver* _knockDownObs;
+    NSInteger __slowMotionsCount;
 }
 static TRGameDirector* _TRGameDirector_instance;
+static NSInteger _TRGameDirector_maxDaySlowMotions = 5;
+static NSInteger _TRGameDirector_slowMotionRestorePeriod = 120;
 static CNNotificationHandle* _TRGameDirector_playerScoreRetrieveNotification;
 static ODClassType* _TRGameDirector_type;
 @synthesize local = _local;
@@ -48,7 +51,7 @@ static ODClassType* _TRGameDirector_type;
     self = [super init];
     __weak TRGameDirector* _weakSelf = self;
     if(self) {
-        _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1})];
+        _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1, @"lastSlowMotions" : (@[]), @"daySlowMotions" : numi(_TRGameDirector_maxDaySlowMotions), @"boughtSlowMotions" : @0})];
         _resolveMaxLevel = ^id(id a, id b) {
             id v = DTConflict.resolveMax(a, b);
             [CNLog applyText:[NSString stringWithFormat:@"Max level from cloud %@ = max(%@, %@)", v, a, b]];
@@ -138,6 +141,7 @@ static ODClassType* _TRGameDirector_type;
                 }
             }
         }];
+        __slowMotionsCount = 0;
         [self _init];
     }
     
@@ -182,6 +186,15 @@ static ODClassType* _TRGameDirector_type;
     [SDSoundDirector.instance setEnabled:[_local intForKey:@"soundEnabled"] == 1];
     [EGRate.instance setIdsIos:736579117 osx:736545415];
     [EGGameCenter.instance authenticate];
+    if([self daySlowMotions] > _TRGameDirector_maxDaySlowMotions) [_local setKey:@"daySlowMotions" i:_TRGameDirector_maxDaySlowMotions];
+    NSUInteger fullDayCount = [[self lastSlowMotions] count] + [self daySlowMotions];
+    if(fullDayCount > _TRGameDirector_maxDaySlowMotions) {
+        [_local setKey:@"lastSlowMotions" array:[[[[self lastSlowMotions] chain] topNumbers:_TRGameDirector_maxDaySlowMotions - [self daySlowMotions]] toArray]];
+    } else {
+        if(fullDayCount < _TRGameDirector_maxDaySlowMotions) [_local setKey:@"daySlowMotions" i:_TRGameDirector_maxDaySlowMotions - [[self lastSlowMotions] count]];
+    }
+    [self checkLastSlowMotions];
+    __slowMotionsCount = [self daySlowMotions] + [self boughtSlowMotions];
 }
 
 - (void)localPlayerScoreLevel:(NSUInteger)level callback:(void(^)(id))callback {
@@ -306,8 +319,56 @@ static ODClassType* _TRGameDirector_type;
     }
 }
 
+- (id<CNSeq>)lastSlowMotions {
+    return [_local arrayForKey:@"lastSlowMotions"];
+}
+
+- (NSInteger)daySlowMotions {
+    return [_local intForKey:@"daySlowMotions"];
+}
+
+- (NSInteger)boughtSlowMotions {
+    return [_local intForKey:@"boughtSlowMotions"];
+}
+
+- (NSInteger)slowMotionsCount {
+    return __slowMotionsCount;
+}
+
 - (void)runSlowMotionLevel:(TRLevel*)level {
+    NSInteger dsm = [self daySlowMotions];
+    if(dsm > 0) {
+        [_local decrementKey:@"daySlowMotions"];
+        if([[_local appendToArrayKey:@"lastSlowMotions" value:[NSDate date]] count] == 1) [self checkLastSlowMotions];
+        __slowMotionsCount--;
+    } else {
+        NSInteger bsm = [self boughtSlowMotions];
+        if(bsm > 0) {
+            [_local decrementKey:@"boughtSlowMotions"];
+            __slowMotionsCount--;
+        } else {
+            return ;
+        }
+    }
     [level runSlowMotion];
+}
+
+- (void)checkLastSlowMotions {
+    id<CNSeq> lsm = [self lastSlowMotions];
+    if(!([lsm isEmpty])) {
+        NSDate* first = [lsm head];
+        if([first beforeNow] > _TRGameDirector_slowMotionRestorePeriod) {
+            [_local setKey:@"lastSlowMotions" array:[[self lastSlowMotions] tail]];
+            [_local incrementKey:@"daySlowMotions"];
+            __slowMotionsCount++;
+            [self checkLastSlowMotions];
+        } else {
+            __weak TRGameDirector* ws = self;
+            delay([first beforeNow] + 1, ^void() {
+                [ws checkLastSlowMotions];
+            });
+        }
+    }
 }
 
 - (ODClassType*)type {
@@ -316,6 +377,14 @@ static ODClassType* _TRGameDirector_type;
 
 + (TRGameDirector*)instance {
     return _TRGameDirector_instance;
+}
+
++ (NSInteger)maxDaySlowMotions {
+    return _TRGameDirector_maxDaySlowMotions;
+}
+
++ (NSInteger)slowMotionRestorePeriod {
+    return _TRGameDirector_slowMotionRestorePeriod;
 }
 
 + (CNNotificationHandle*)playerScoreRetrieveNotification {

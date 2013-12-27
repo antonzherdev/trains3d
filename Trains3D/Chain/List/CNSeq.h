@@ -25,6 +25,7 @@
 - (BOOL)isEmpty;
 - (id)head;
 - (id)headOpt;
+- (id<CNSeq>)tail;
 @end
 
 

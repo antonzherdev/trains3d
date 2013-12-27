@@ -2,10 +2,19 @@ package com.antonzherdev.data
 
 stub class KeyValueStorage(defaults : [string : any]) {
     def set(key : string, i : int)
-    def set(key : string, value : any)
     def keepMax(key : string, i : int)
+    def increment(key : string)
+    def decrement(key : string)
+
+    def set(key : string, value : any)
+
+    def set<T>(key : string, array : [T])
+    def appendToArray<T>(key : string, value : T) : [T]
+
     def intFor(key : string) : int
+    def arrayFor<T>(key : string) : [T]
     def valueFor<T>(key : string) : T
+
     def synchronize
 }
 

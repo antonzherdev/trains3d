@@ -5,8 +5,9 @@
 @interface DTKeyValueStorage : NSObject
 @property (nonatomic, readonly) id<CNMap> defaults;
 
-+ (id)keyValueStorageWithDefaults:(id<CNMap>)defaults;
-- (id)initWithDefaults:(id<CNMap>)defaults;
++ (id)keyValueStorageWithDefaults:(id <CNMap>)defaults userDefaults:(NSUserDefaults *)userDefaults;
+
+- (id)initWithDefaults:(id <CNMap>)defaults userDefaults:(NSUserDefaults *)d;
 - (ODClassType*)type;
 - (void)setKey:(NSString*)key i:(NSInteger)i;
 - (void)setKey:(NSString *)key value:(id)value;
@@ -16,14 +17,23 @@
 - (void)synchronize;
 + (ODClassType*)type;
 - (void)keepMaxKey:(NSString *)key i:(NSInteger)i;
+
+- (void)setKey:(NSString *)string array:(id <CNSeq>)array;
+
+- (id <CNSeq>)arrayForKey:(NSString *)string;
+
+- (id <CNSeq>)appendToArrayKey:(NSString *)key value:(id)value;
+
+- (NSInteger)decrementKey:(NSString *)string;
+- (NSInteger)incrementKey:(NSString *)string;
 @end
 
 
 @interface DTLocalKeyValueStorage : DTKeyValueStorage
 + (id)localKeyValueStorageWithDefaults:(id<CNMap>)defaults;
-- (id)initWithDefaults:(id<CNMap>)defaults;
+
+- (id)initWithDefaults:(id <CNMap>)defaults userDefaults:(NSUserDefaults *)d;
 - (ODClassType*)type;
-+ (ODClassType*)type;
 
 @end
 
@@ -33,5 +43,4 @@
 + (id)cloudKeyValueStorageWithDefaults:(id<CNMap>)defaults resolveConflict:(id (^)(NSString*))resolveConflict;
 - (id)initWithDefaults:(id<CNMap>)defaults resolveConflict:(id (^)(NSString*))resolveConflict;
 - (ODClassType*)type;
-+ (ODClassType*)type;
 @end

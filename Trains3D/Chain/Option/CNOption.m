@@ -150,6 +150,18 @@ static ODClassType* _CNOption_type;
     return [self optIndex:0];
 }
 
+- (id<CNSeq>)tail {
+    CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
+    id<CNIterator> i = [self iterator];
+    if([i hasNext]) {
+        [i next];
+        while([i hasNext]) {
+            [builder appendItem:[i next]];
+        }
+    }
+    return [builder build];
+}
+
 - (NSUInteger)count {
     id<CNIterator> i = [self iterator];
     NSUInteger n = 0;

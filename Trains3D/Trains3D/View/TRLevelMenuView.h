@@ -21,10 +21,10 @@
 @class TRStr;
 @protocol TRStrings;
 @class EGD2D;
+@class TRGameDirector;
 @class EGEnablingState;
 @class TRNotifications;
 @class EGDirector;
-@class TRGameDirector;
 @class EGEnvironment;
 
 @class TRLevelMenuView;
