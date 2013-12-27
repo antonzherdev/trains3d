@@ -5,6 +5,8 @@
 #import "TRRailroad.h"
 #import "GEMat4.h"
 #import "TRRailPoint.h"
+#import "EGMapIso.h"
+#import "TRCity.h"
 #import "EGDirector.h"
 @implementation TRSwitchProcessor{
     TRLevel* _level;
@@ -38,6 +40,15 @@ static ODClassType* _TRSwitchProcessor_type;
         GEMat4* moveToTile = [[GEMat4 identity] translateX:((float)(((TRSwitch*)(aSwitch)).tile.x)) y:((float)(((TRSwitch*)(aSwitch)).tile.y)) z:0.0];
         GEMat4* m = [moveToTile mulMatrix:rotate];
         GEVec2 p = GEVec2Make(-0.6, -0.2);
+        GEVec2i nextTile = [((TRSwitch*)(aSwitch)).connector nextTile:((TRSwitch*)(aSwitch)).tile];
+        TRRailConnector* osc = [((TRSwitch*)(aSwitch)).connector otherSideConnector];
+        id city = [_level cityForTile:nextTile];
+        if([city isDefined] && [_level.map isBottomTile:nextTile]) {
+            if(((TRCity*)([city get])).angle.form == TRRailForm.bottomTop) p = geVec2AddVec2(p, GEVec2Make(0.1, -0.1));
+            else p = geVec2AddVec2(p, GEVec2Make(0.1, 0.1));
+        } else {
+            if([[_level.railroad contentInTile:nextTile connector:osc] isKindOfClass:[TRSwitch class]]) p = geVec2AddVec2(p, GEVec2Make(0.2, 0.0));
+        }
         return [[TRSwitchProcessorItem applyContent:aSwitch rect:GERectMake(p, GEVec2Make(0.4, 0.4))] mulMat4:m];
     }] append:[[[_level.railroad lights] chain] map:^TRSwitchProcessorItem*(TRRailLight* light) {
         CGFloat sz = 0.2;
