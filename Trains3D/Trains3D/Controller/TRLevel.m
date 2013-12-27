@@ -139,6 +139,7 @@ static CNNotificationHandle* _TRLevel_knockDownNotification;
 static CNNotificationHandle* _TRLevel_damageNotification;
 static CNNotificationHandle* _TRLevel_sporadicDamageNotification;
 static CNNotificationHandle* _TRLevel_runRepairerNotification;
+static CNNotificationHandle* _TRLevel_fixDamageNotification;
 static CNNotificationHandle* _TRLevel_winNotification;
 static ODClassType* _TRLevel_type;
 @synthesize number = _number;
@@ -218,6 +219,7 @@ static ODClassType* _TRLevel_type;
     _TRLevel_damageNotification = [CNNotificationHandle notificationHandleWithName:@"damageNotification"];
     _TRLevel_sporadicDamageNotification = [CNNotificationHandle notificationHandleWithName:@"sporadicDamageNotification"];
     _TRLevel_runRepairerNotification = [CNNotificationHandle notificationHandleWithName:@"runRepairerNotification"];
+    _TRLevel_fixDamageNotification = [CNNotificationHandle notificationHandleWithName:@"fixDamageNotification"];
     _TRLevel_winNotification = [CNNotificationHandle notificationHandleWithName:@"Level was passed"];
 }
 
@@ -512,6 +514,7 @@ static ODClassType* _TRLevel_type;
 - (void)fixDamageAtPoint:(TRRailPoint)point {
     [_railroad fixDamageAtPoint:point];
     [_score damageFixed];
+    [_TRLevel_fixDamageNotification postSender:self data:wrap(TRRailPoint, point)];
 }
 
 - (id)help {
@@ -604,6 +607,10 @@ static ODClassType* _TRLevel_type;
 
 + (CNNotificationHandle*)runRepairerNotification {
     return _TRLevel_runRepairerNotification;
+}
+
++ (CNNotificationHandle*)fixDamageNotification {
+    return _TRLevel_fixDamageNotification;
 }
 
 + (CNNotificationHandle*)winNotification {

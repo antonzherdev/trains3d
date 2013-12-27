@@ -16,7 +16,8 @@ class LevelSound(level : Level) extends SoundPlayersCollection([
     NotificationSoundPlayer(Sound("RefuseBuild.wav", 0.2), SwitchProcessor.strangeClickNotification),
     NotificationSoundPlayer(Sound("Click.wav", 0.3), Switch.turnNotification),
     NotificationSoundPlayer(Sound("Beep.wav", 0.3), RailLight.turnNotification),
-    NotificationSoundPlayer(Sound("BuildMode.wav", 0.3), RailroadBuilder.buildModeNotification)
+    NotificationSoundPlayer(Sound("BuildMode.wav", 0.3), RailroadBuilder.buildModeNotification),
+    NotificationSoundPlayer(Sound("Fix.wav", 0.3), Level.fixDamageNotification)
 ])
 
 class CollisionSound(name : string, notificationHandle : NotificationHandle<Level, float4>, impulseK : float4, volume : float4) extends SoundPlayer {

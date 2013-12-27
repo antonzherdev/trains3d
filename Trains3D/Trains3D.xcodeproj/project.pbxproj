@@ -596,6 +596,7 @@
 		6F3DF7CCE171B6A9FCB76422 /* lucida_grande_14.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF92A6033E0AB9721846B /* lucida_grande_14.png */; };
 		6F3DF7CD9F97EF22CEBE4933 /* SporadicDamage.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF326832A25F371D5807A /* SporadicDamage.wav */; };
 		6F3DF7CDCA405A16821E85F7 /* Lazy.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF835F81FFE0C7D97DC7A /* Lazy.od */; };
+		6F3DF7CDF9DD4BC1517003EB /* Fix.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF332DA191D7E25541892 /* Fix.wav */; };
 		6F3DF7D1205DA6DBE29863DB /* List.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFCE384E5B53BDB8B17A9 /* List.od */; };
 		6F3DF7D2DAF5436BEC789360 /* TRRailroadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8C0B11253A7DE39B3B7 /* TRRailroadView.m */; };
 		6F3DF7D72242B4C1B926DD8E /* EGBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF84AA90A6EE0300FE1E5 /* EGBuffer.m */; };
@@ -672,6 +673,7 @@
 		6F3DF8A75B812090738E89F1 /* Figure.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF2AED1C37DFA92439486 /* Figure.od */; };
 		6F3DF8A7C3E45347B4194840 /* TRLevelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF19940EBD57ECE70B0FB /* TRLevelView.m */; };
 		6F3DF8AAEABD8F890D133988 /* color_space.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF7CC6710522AE66C313F /* color_space.inl */; };
+		6F3DF8AEEE0667E20C45D694 /* Fix.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF332DA191D7E25541892 /* Fix.wav */; };
 		6F3DF8AF9BB229B7635F54A0 /* unsigned_int.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF9CC8725187552B6E63B /* unsigned_int.inl */; };
 		6F3DF8B4C769EB6C4F0A3BA9 /* TrainView.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFD46EA054E41A43C6F17 /* TrainView.od */; };
 		6F3DF8B667CAF32427A98B10 /* CNSourceLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF71A717A6FD3CAA174BA /* CNSourceLink.m */; };
@@ -1548,6 +1550,7 @@
 		6F3DF326832A25F371D5807A /* SporadicDamage.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = SporadicDamage.wav; sourceTree = "<group>"; };
 		6F3DF32D92F8F4C5C0FFDD4D /* CNYield.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNYield.h; sourceTree = "<group>"; };
 		6F3DF33077040522DF03AB06 /* KWUserDefinedMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWUserDefinedMatcher.m; sourceTree = "<group>"; };
+		6F3DF332DA191D7E25541892 /* Fix.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Fix.wav; sourceTree = "<group>"; };
 		6F3DF337E5B98301621C522F /* symbols.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = symbols.txt; sourceTree = "<group>"; };
 		6F3DF338FD9D40540026D12D /* vector_access.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = vector_access.inl; sourceTree = "<group>"; };
 		6F3DF339D32D4BF07D109BED /* btCollisionWorld.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btCollisionWorld.cpp; sourceTree = "<group>"; };
@@ -4493,6 +4496,7 @@
 				6F3DF6B7BAAAE9E9372A65FC /* Parrots2.mp3 */,
 				6F3DF9D9350FC24C87E20EFF /* Tropical.mp3 */,
 				6F3DF22AF6F60D387DE6D492 /* BuildMode.wav */,
+				6F3DF332DA191D7E25541892 /* Fix.wav */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -5213,6 +5217,7 @@
 				6F3DF2A36D8161B00E87442D /* BuildMode.wav in Resources */,
 				6F3DF6ACC859068E6392D2AA /* LightGlowPhone.png in Resources */,
 				6F3DF7445813EBFE9E09A2EB /* SoundDirector.od in Resources */,
+				6F3DF7CDF9DD4BC1517003EB /* Fix.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5387,6 +5392,7 @@
 				6F3DF05EEB024BA65A2604B4 /* BuildMode.wav in Resources */,
 				6F3DF0A6984B655B268BE68D /* LightGlowPhone.png in Resources */,
 				6F3DF8BCB576EAE22AC5019D /* SoundDirector.od in Resources */,
+				6F3DF8AEEE0667E20C45D694 /* Fix.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

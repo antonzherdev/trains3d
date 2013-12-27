@@ -115,6 +115,7 @@
 + (CNNotificationHandle*)damageNotification;
 + (CNNotificationHandle*)sporadicDamageNotification;
 + (CNNotificationHandle*)runRepairerNotification;
++ (CNNotificationHandle*)fixDamageNotification;
 + (CNNotificationHandle*)winNotification;
 + (ODClassType*)type;
 @end

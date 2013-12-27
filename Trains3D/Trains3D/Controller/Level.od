@@ -285,9 +285,11 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         }
     }
 
+    static val fixDamageNotification = NotificationHandle<Level, RailPoint>("fixDamageNotification")
     def fixDamageAt(point : RailPoint) {
         railroad.fixDamageAt(point)
         score.damageFixed
+        fixDamageNotification.post(self, point)
     }
 
     private var _help : Help? = nil
