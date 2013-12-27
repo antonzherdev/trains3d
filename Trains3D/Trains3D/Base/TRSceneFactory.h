@@ -7,8 +7,6 @@
 @class TRLevelView;
 @class TRLevelMenuView;
 @class TRLevelPauseMenuView;
-@class EGGlobal;
-@class EGContext;
 
 @class TRSceneFactory;
 @class TRTrainLayers;

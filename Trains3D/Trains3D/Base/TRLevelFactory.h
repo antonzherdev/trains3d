@@ -47,6 +47,7 @@
 + (TRForestRules*)forestRules;
 + (TRWeatherRules*)weatherRules;
 + (CNNotificationHandle*)lineAdviceTimeNotification;
++ (CNNotificationHandle*)slowMotionHelpNotification;
 + (ODClassType*)type;
 @end
 

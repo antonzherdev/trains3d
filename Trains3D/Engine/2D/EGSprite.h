@@ -13,11 +13,11 @@
 @class EGGlobal;
 @class EGContext;
 @class EGEnablingState;
-@class EGBlendMode;
-@class EGVertexBufferDesc;
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class GEMat4;
+@class EGBlendMode;
+@class EGVertexBufferDesc;
 @protocol EGEvent;
 
 @class EGD2D;

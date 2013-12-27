@@ -41,6 +41,7 @@ class Counter extends Updatable {
     static def apply : Counter = EmptyCounter()
 
     def on(time : float, event : void -> void) : Counter = EventCounter(self, time, event)
+    def onEnd(event : void -> void) : Counter = Finisher(self, event)
 }
 
 class EmptyCounter extends Counter {

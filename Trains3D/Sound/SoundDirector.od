@@ -11,4 +11,15 @@ class SoundDirector {
             enabledChangedNotification.post(self, enabled)
         }
     }
+
+
+    private var _timeSpeed = 1.0
+    def timeSpeed = _timeSpeed
+    val timeSpeedChangeNotification = NotificationHandle<SoundDirector, float>("soundTimeSpeedChangeNotification")
+    def set(timeSpeed : float) {
+        if(_timeSpeed != timeSpeed) {
+            _timeSpeed = timeSpeed
+            timeSpeedChangeNotification.post(self, timeSpeed)
+        }
+    }
 }

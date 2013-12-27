@@ -36,6 +36,7 @@
 + (EGCounter*)applyLength:(CGFloat)length finish:(void(^)())finish;
 + (EGCounter*)apply;
 - (EGCounter*)onTime:(CGFloat)time event:(void(^)())event;
+- (EGCounter*)onEndEvent:(void(^)())event;
 + (ODClassType*)type;
 @end
 

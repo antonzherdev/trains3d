@@ -3,10 +3,13 @@
 @implementation SDSoundDirector{
     BOOL __enabled;
     CNNotificationHandle* _enabledChangedNotification;
+    CGFloat __timeSpeed;
+    CNNotificationHandle* _timeSpeedChangeNotification;
 }
 static SDSoundDirector* _SDSoundDirector_instance;
 static ODClassType* _SDSoundDirector_type;
 @synthesize enabledChangedNotification = _enabledChangedNotification;
+@synthesize timeSpeedChangeNotification = _timeSpeedChangeNotification;
 
 + (id)soundDirector {
     return [[SDSoundDirector alloc] init];
@@ -17,6 +20,8 @@ static ODClassType* _SDSoundDirector_type;
     if(self) {
         __enabled = YES;
         _enabledChangedNotification = [CNNotificationHandle notificationHandleWithName:@"soundEnabledChangedNotification"];
+        __timeSpeed = 1.0;
+        _timeSpeedChangeNotification = [CNNotificationHandle notificationHandleWithName:@"soundTimeSpeedChangeNotification"];
     }
     
     return self;
@@ -36,6 +41,17 @@ static ODClassType* _SDSoundDirector_type;
     if(__enabled != enabled) {
         __enabled = enabled;
         [_enabledChangedNotification postSender:self data:numb(enabled)];
+    }
+}
+
+- (CGFloat)timeSpeed {
+    return __timeSpeed;
+}
+
+- (void)setTimeSpeed:(CGFloat)timeSpeed {
+    if(!(eqf(__timeSpeed, timeSpeed))) {
+        __timeSpeed = timeSpeed;
+        [_timeSpeedChangeNotification postSender:self data:numf(timeSpeed)];
     }
 }
 

@@ -67,10 +67,17 @@ class GameDirector {
         }
     }
 
-    private val crazyHelpObs = LevelFactory.lineAdviceTimeNotification.observe{ _, level ->
+    private val lineAdviceObs = LevelFactory.lineAdviceTimeNotification.observe{ _, level ->
         if(cloud.intFor("help.linesAdvice") == 0) {
             level.showHelp(Loc.linesAdvice)
             cloud.set("help.linesAdvice", 1)
+        }
+    }
+
+    private val slowMotionHelpObs = LevelFactory.slowMotionHelpNotification.observe{ _, level ->
+        if(cloud.intFor("help.slowMotion") == 0) {
+            level.showHelp(Loc.helpSlowMotion)
+            cloud.set("help.slowMotion", 1)
         }
     }
 
@@ -87,6 +94,8 @@ class GameDirector {
         cloud.set("help.repairer", 0)
         cloud.set("help.crazy", 0)
         cloud.set("help.linesAdvice", 0)
+        cloud.set("help.slowMotion", 0)
+        cloud.set("help.zoom", 0)
     }
 
     def bestScore(levelNumber : uint) : int = cloud.intFor("level$levelNumber.score")
@@ -235,5 +244,9 @@ class GameDirector {
             local.set("soundEnabled", i = if(soundEnabled) 1 else 0)
             SoundDirector.instance.enabled = soundEnabled
         }
+    }
+
+    def runSlowMotion(level : Level) {
+        level.runSlowMotion
     }
 }

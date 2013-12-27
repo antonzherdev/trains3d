@@ -695,7 +695,7 @@ static ODClassType* _TRDamageView_type;
         _model = [EGMeshModel applyMeshes:(@[tuple(TRModels.damage, [EGColorSource applyColor:GEVec4Make(1.0, 0.0, 0.0, 0.3)])])];
         _sporadicAnimations = [EGMutableCounterArray mutableCounterArray];
         _spObs = [TRLevel.sporadicDamageNotification observeBy:^void(TRLevel* level, id point) {
-            [_weakSelf.sporadicAnimations appendCounter:[EGLengthCounter lengthCounterWithLength:2.0] data:point];
+            [_weakSelf.sporadicAnimations appendCounter:[EGLengthCounter lengthCounterWithLength:3.0] data:point];
         }];
     }
     
@@ -728,7 +728,7 @@ static ODClassType* _TRDamageView_type;
 - (void)drawForeground {
     [EGGlobal.context.depthTest disabledF:^void() {
         [_sporadicAnimations forEach:^void(EGCounterData* counter) {
-            [EGD2D drawCircleBackColor:GEVec4Make(1.0, 0.0, 0.0, 0.5) strokeColor:GEVec4Make(1.0, 0.0, 0.0, 0.5) at:geVec3ApplyVec2Z(uwrap(TRRailPoint, counter.data).point, 0.0) radius:((float)(0.1 * [counter invTime])) relative:GEVec2Make(0.0, 0.0)];
+            [EGD2D drawCircleBackColor:GEVec4Make(1.0, 0.0, 0.0, 0.5) strokeColor:GEVec4Make(1.0, 0.0, 0.0, 0.5) at:geVec3ApplyVec2Z(uwrap(TRRailPoint, counter.data).point, 0.0) radius:((float)(0.5 * [counter invTime])) relative:GEVec2Make(0.0, 0.0)];
         }];
     }];
 }

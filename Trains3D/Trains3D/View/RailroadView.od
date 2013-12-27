@@ -321,14 +321,14 @@ class DamageView(railroad : Railroad) {
     val sporadicAnimations = MutableCounterArray<RailPoint>()
 
     val spObs = Level.sporadicDamageNotification.observe{level, point ->
-        sporadicAnimations.append(LengthCounter(2), point)
+        sporadicAnimations.append(LengthCounter(3), point)
     }
 
     def drawForeground {
         context.depthTest.disabled {
             sporadicAnimations.for{counter ->
                 D2D.drawCircle(backColor = vec4(1, 0, 0, 0.5), strokeColor = vec4(1, 0, 0, 0.5),
-                    at = vec3(counter.data.point, 0), radius = 0.1 * counter.invTime, relative = vec2(0, 0))
+                    at = vec3(counter.data.point, 0), radius = 0.5 * counter.invTime, relative = vec2(0, 0))
             }
         }
     }

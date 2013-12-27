@@ -385,7 +385,7 @@ static ODClassType* _TRPauseMenuView_type;
 - (void)draw {
     [super draw];
     [_soundSprite setMaterial:[EGColorSource applyTexture:[[EGGlobal scaledTextureForName:@"Pause" format:@"png"] regionX:(([TRGameDirector.instance soundEnabled]) ? 64.0 : 96.0) y:0.0 width:32.0 height:32.0]]];
-    [_soundSprite setPosition:GEVec2Make(((float)([EGGlobal.context viewport].size.x - 48)), 16.0)];
+    [_soundSprite setPosition:GEVec2Make(8.0, 8.0)];
     [_soundSprite adjustSize];
     [EGBlendFunction.premultiplied applyDraw:^void() {
         [_soundSprite draw];

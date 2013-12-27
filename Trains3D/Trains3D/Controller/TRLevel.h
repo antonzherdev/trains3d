@@ -13,6 +13,8 @@
 @class EGSchedule;
 @class TRTrainsCollisionWorld;
 @class TRTrainsDynamicWorld;
+@class EGCounter;
+@class EGEmptyCounter;
 @class TRCity;
 @class TRCityAngle;
 @class TRRailroadConnectorContent;
@@ -21,7 +23,6 @@
 @class TRStr;
 @protocol TRStrings;
 @class TRTrain;
-@class EGCounter;
 @class TRTrainGenerator;
 @class TRTrainType;
 @class TRCityColor;
@@ -29,6 +30,8 @@
 @class TRCarsCollision;
 @class TRCar;
 @class TRCarType;
+@class EGDirector;
+@class EGLengthCounter;
 @class TRForestRules;
 @class TRForestType;
 
@@ -100,6 +103,8 @@
 - (void)win;
 - (void)lose;
 - (void)dealloc;
+- (EGCounter*)slowMotionCounter;
+- (void)runSlowMotion;
 + (NSInteger)trainComingPeriod;
 + (CNNotificationHandle*)buildCityNotification;
 + (CNNotificationHandle*)prepareToRunTrainNotification;

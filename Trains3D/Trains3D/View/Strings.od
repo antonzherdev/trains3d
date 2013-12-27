@@ -71,6 +71,7 @@ trait Strings {
     def helpTrainWithSwitches(to : string) : string
     def helpToMakeZoom : string
     def linesAdvice : string
+    def helpSlowMotion : string
 }
 
 class EnStrings extends Strings {
@@ -168,6 +169,11 @@ class EnStrings extends Strings {
     def helpRepairer : string =
         "Conduct the service train through the damage
          and send it to any city."
+
+    def helpSlowMotion : string =
+        "Use the slow motion to help yourself in difficult moments.
+         Press the snail button at the right bottom corner of the screen.
+         The number of uses is restored every day."
 
     def result : string = "Score"
     def best : string = "Your best"
@@ -272,6 +278,10 @@ class RuStrings extends Strings{
     def linesAdvice : string =
         "Вы можете соединять города несколькими линиями.
          В таком случае встречные поезда смогут разъехаться."
+    def helpSlowMotion : string =
+        "Используйте замедленное время, чтобы помочь себе в трудных ситуациях.
+         Нажмите кнопку с изображением улитки в правом нижнем углу экрана.
+         Количество использование восстанавливается каждый день."
 
     def supportButton : string = "Написать разработчику"
     def supportEmailText : string =

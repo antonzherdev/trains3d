@@ -10,6 +10,7 @@
 @class EGSchedule;
 @class TRTrain;
 @class TRTrainType;
+@class TRLevelFactory;
 @class EGCameraIsoMove;
 @class EGDirector;
 @class EGScene;
@@ -19,7 +20,6 @@
 @class EGLocalPlayerScore;
 @class TRSceneFactory;
 @class TRLevelChooseMenu;
-@class TRLevelFactory;
 @class EGEMail;
 
 @class TRGameDirector;
@@ -53,6 +53,7 @@
 - (void)showRate;
 - (BOOL)soundEnabled;
 - (void)setSoundEnabled:(BOOL)soundEnabled;
+- (void)runSlowMotionLevel:(TRLevel*)level;
 + (TRGameDirector*)instance;
 + (CNNotificationHandle*)playerScoreRetrieveNotification;
 + (ODClassType*)type;

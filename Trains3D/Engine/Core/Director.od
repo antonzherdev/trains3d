@@ -99,11 +99,19 @@ class Director {
         }
     }
 
-    var timeSpeed = 1.0
+    private var _timeSpeed = 1.0
+    def timeSpeed = _timeSpeed
+    def set(timeSpeed : float) {
+        if(_timeSpeed != timeSpeed) {
+            _timeSpeed = timeSpeed
+            SoundDirector.instance.timeSpeed = _timeSpeed
+        }
+    }
+
     def tick {
         _current = self
         time.tick
-        _scene.for(_.updateWith(time.delta*timeSpeed))
+        _scene.for(_.updateWith(time.delta*_timeSpeed))
         _stat.for(_.tickWith(time.delta))
     }
 

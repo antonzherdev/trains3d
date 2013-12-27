@@ -34,6 +34,7 @@ class LevelFactory {
     private static def snow = Precipitation(PrecipitationType.snow, 1)
 
     static val lineAdviceTimeNotification = NotificationHandle<void, Level>("lineAdviceTimeNotification")
+    static val slowMotionHelpNotification = NotificationHandle<void, Level>("slowMotionHelpNotification")
     private static val rules = [
         //1
         LevelRules(vec2i(5, 3), LevelTheme.forest, scoreRulesWith(20000),
@@ -80,7 +81,9 @@ class LevelFactory {
         LevelRules(vec2i(5, 3), LevelTheme.forest, scoreRulesWith(40000),
             WeatherRules(sunny = 1.0, windStrength = 0.3, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3, nil),
             repairerSpeed = 20, sporadicDamagePeriod = 0, [
-                (0, create2Cities), (15, slowTrain), (20, slowTrain), (35, slowTrain),
+                (0, create2Cities),
+                (1, (level : Level) -> slowMotionHelpNotification.post(nil, level)),
+                (15, slowTrain), (20, slowTrain), (35, slowTrain),
                 (10, createNewCity), (15, slowTrain), (25, slowTrain), (30, slowTrain),
                 (15, createNewCity), (20, slowTrain), (25, slowTrain), (25, slowTrain),
                 (10, createNewCity), (15, slowTrain), (25, slowTrain), (20, slowTrain),

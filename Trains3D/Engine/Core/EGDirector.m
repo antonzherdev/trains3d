@@ -6,20 +6,20 @@
 #import "EGInput.h"
 #import "GL.h"
 #import "EGStat.h"
+#import "SDSoundDirector.h"
 @implementation EGDirector{
     id __scene;
     BOOL __isStarted;
     BOOL __isPaused;
     EGTime* _time;
     GEVec2 __lastViewSize;
-    CGFloat _timeSpeed;
+    CGFloat __timeSpeed;
     id __stat;
 }
 static EGDirector* _EGDirector__current;
 static CNNotificationHandle* _EGDirector_reshapeNotification;
 static ODClassType* _EGDirector_type;
 @synthesize time = _time;
-@synthesize timeSpeed = _timeSpeed;
 
 + (id)director {
     return [[EGDirector alloc] init];
@@ -33,7 +33,7 @@ static ODClassType* _EGDirector_type;
         __isPaused = NO;
         _time = [EGTime time];
         __lastViewSize = GEVec2Make(0.0, 0.0);
-        _timeSpeed = 1.0;
+        __timeSpeed = 1.0;
         __stat = [CNOption none];
         [self _init];
     }
@@ -173,11 +173,22 @@ static ODClassType* _EGDirector_type;
     }
 }
 
+- (CGFloat)timeSpeed {
+    return __timeSpeed;
+}
+
+- (void)setTimeSpeed:(CGFloat)timeSpeed {
+    if(!(eqf(__timeSpeed, timeSpeed))) {
+        __timeSpeed = timeSpeed;
+        [SDSoundDirector.instance setTimeSpeed:__timeSpeed];
+    }
+}
+
 - (void)tick {
     _EGDirector__current = self;
     [_time tick];
     [__scene forEach:^void(EGScene* _) {
-        [((EGScene*)(_)) updateWithDelta:_time.delta * _timeSpeed];
+        [((EGScene*)(_)) updateWithDelta:_time.delta * __timeSpeed];
     }];
     [__stat forEach:^void(EGStat* _) {
         [((EGStat*)(_)) tickWithDelta:_time.delta];

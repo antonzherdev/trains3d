@@ -9,12 +9,12 @@
 @class EGMatrixStack;
 @class EGStat;
 @protocol EGEvent;
+@class SDSoundDirector;
 
 @class EGDirector;
 
 @interface EGDirector : NSObject
 @property (nonatomic, readonly) EGTime* time;
-@property (nonatomic) CGFloat timeSpeed;
 
 + (id)director;
 - (id)init;
@@ -38,6 +38,8 @@
 - (BOOL)isPaused;
 - (void)pause;
 - (void)resume;
+- (CGFloat)timeSpeed;
+- (void)setTimeSpeed:(CGFloat)timeSpeed;
 - (void)tick;
 - (id)stat;
 - (BOOL)isDisplayingStats;

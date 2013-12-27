@@ -120,7 +120,7 @@ class PauseMenuView(level : Level) extends MenuView  {
     def draw {
         super.draw
         soundSprite.material = scaledTextureFor("Pause", "png").region(if(GameDirector.instance.soundEnabled) 64 else 96, 0, 32, 32)
-        soundSprite.position = vec2(context.viewport.size.x - 48, 16)
+        soundSprite.position = vec2(8, 8)
         soundSprite.adjustSize
         BlendFunction.premultiplied {
             soundSprite.draw

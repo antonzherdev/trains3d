@@ -66,6 +66,7 @@
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
 - (NSString*)helpToMakeZoom;
 - (NSString*)linesAdvice;
+- (NSString*)helpSlowMotion;
 @end
 
 
@@ -121,6 +122,7 @@
 - (NSString*)helpDamage;
 - (NSString*)helpCrazy;
 - (NSString*)helpRepairer;
+- (NSString*)helpSlowMotion;
 - (NSString*)result;
 - (NSString*)best;
 - (NSString*)topScore:(EGLocalPlayerScore*)score;
@@ -175,6 +177,7 @@
 - (NSString*)helpRepairer;
 - (NSString*)helpCrazy;
 - (NSString*)linesAdvice;
+- (NSString*)helpSlowMotion;
 - (NSString*)supportButton;
 - (NSString*)supportEmailText;
 - (NSString*)rateText;

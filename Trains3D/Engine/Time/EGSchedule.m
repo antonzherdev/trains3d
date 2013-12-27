@@ -133,6 +133,10 @@ static ODClassType* _EGCounter_type;
     return [EGEventCounter eventCounterWithCounter:self eventTime:time event:event];
 }
 
+- (EGCounter*)onEndEvent:(void(^)())event {
+    return [EGFinisher finisherWithCounter:self finish:event];
+}
+
 - (ODClassType*)type {
     return [EGCounter type];
 }

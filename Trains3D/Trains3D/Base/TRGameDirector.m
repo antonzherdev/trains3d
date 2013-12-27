@@ -8,6 +8,7 @@
 #import "TRStrings.h"
 #import "EGSchedule.h"
 #import "TRTrain.h"
+#import "TRLevelFactory.h"
 #import "EGCameraIso.h"
 #import "EGDirector.h"
 #import "EGScene.h"
@@ -16,7 +17,6 @@
 #import "EGGameCenter.h"
 #import "TRSceneFactory.h"
 #import "TRLevelChooseMenu.h"
-#import "TRLevelFactory.h"
 #import "EGEMail.h"
 @implementation TRGameDirector{
     DTLocalKeyValueStorage* _local;
@@ -27,6 +27,8 @@
     CNNotificationObserver* _damageHelpObs;
     CNNotificationObserver* _repairerHelpObs;
     CNNotificationObserver* _crazyHelpObs;
+    CNNotificationObserver* _lineAdviceObs;
+    CNNotificationObserver* _slowMotionHelpObs;
     CNNotificationObserver* _zoomHelpObs;
     CNNotificationObserver* _crashObs;
     CNNotificationObserver* _knockDownObs;
@@ -95,10 +97,16 @@ static ODClassType* _TRGameDirector_type;
                 [_weakSelf.cloud setKey:@"help.crazy" i:1];
             }];
         }];
-        _crazyHelpObs = [TRLevelFactory.lineAdviceTimeNotification observeBy:^void(id _, TRLevel* level) {
+        _lineAdviceObs = [TRLevelFactory.lineAdviceTimeNotification observeBy:^void(id _, TRLevel* level) {
             if([_weakSelf.cloud intForKey:@"help.linesAdvice"] == 0) {
                 [((TRLevel*)(level)) showHelpText:[TRStr.Loc linesAdvice]];
                 [_weakSelf.cloud setKey:@"help.linesAdvice" i:1];
+            }
+        }];
+        _slowMotionHelpObs = [TRLevelFactory.slowMotionHelpNotification observeBy:^void(id _, TRLevel* level) {
+            if([_weakSelf.cloud intForKey:@"help.slowMotion"] == 0) {
+                [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpSlowMotion]];
+                [_weakSelf.cloud setKey:@"help.slowMotion" i:1];
             }
         }];
         _zoomHelpObs = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* move, id _) {
@@ -149,6 +157,8 @@ static ODClassType* _TRGameDirector_type;
     [_cloud setKey:@"help.repairer" i:0];
     [_cloud setKey:@"help.crazy" i:0];
     [_cloud setKey:@"help.linesAdvice" i:0];
+    [_cloud setKey:@"help.slowMotion" i:0];
+    [_cloud setKey:@"help.zoom" i:0];
 }
 
 - (NSInteger)bestScoreLevelNumber:(NSUInteger)levelNumber {
@@ -294,6 +304,10 @@ static ODClassType* _TRGameDirector_type;
         [_local setKey:@"soundEnabled" i:((soundEnabled) ? 1 : 0)];
         [SDSoundDirector.instance setEnabled:soundEnabled];
     }
+}
+
+- (void)runSlowMotionLevel:(TRLevel*)level {
+    [level runSlowMotion];
 }
 
 - (ODClassType*)type {

@@ -6,8 +6,8 @@
 #import "EGMaterial.h"
 #import "EGTexture.h"
 #import "EGContext.h"
-#import "GL.h"
 #import "GEMat4.h"
+#import "GL.h"
 #import "EGInput.h"
 @implementation EGD2D
 static CNVoidRefArray _EGD2D_vertexes;
@@ -93,18 +93,21 @@ static ODClassType* _EGD2D_type;
 
 + (void)drawCircleBackColor:(GEVec4)backColor strokeColor:(GEVec4)strokeColor at:(GEVec3)at radius:(float)radius relative:(GEVec2)relative segmentColor:(GEVec4)segmentColor start:(CGFloat)start end:(CGFloat)end {
     [EGGlobal.context.cullFace disabledF:^void() {
-        GEVec2i vps = [EGGlobal.context viewport].size;
-        GEVec2 rad = ((vps.y <= vps.x) ? GEVec2Make((radius * vps.y) / vps.x, radius) : GEVec2Make(radius, (radius * vps.x) / vps.y));
-        [[EGD2D circleVaoWithSegment] drawParam:[EGCircleParam circleParamWithColor:backColor strokeColor:strokeColor position:at radius:rad relative:relative segment:[CNOption applyValue:[EGCircleSegment circleSegmentWithColor:segmentColor start:((float)(start)) end:((float)(end))]]]];
+        [[EGD2D circleVaoWithSegment] drawParam:[EGCircleParam circleParamWithColor:backColor strokeColor:strokeColor position:at radius:[EGD2D radiusPR:radius] relative:relative segment:[CNOption applyValue:[EGCircleSegment circleSegmentWithColor:segmentColor start:((float)(start)) end:((float)(end))]]]];
     }];
 }
 
 + (void)drawCircleBackColor:(GEVec4)backColor strokeColor:(GEVec4)strokeColor at:(GEVec3)at radius:(float)radius relative:(GEVec2)relative {
     [EGGlobal.context.cullFace disabledF:^void() {
-        GEVec2i vps = [EGGlobal.context viewport].size;
-        GEVec2 rad = ((vps.y <= vps.x) ? GEVec2Make((radius * vps.y) / vps.x, radius) : GEVec2Make(radius, (radius * vps.x) / vps.y));
-        [[EGD2D circleVaoWithoutSegment] drawParam:[EGCircleParam circleParamWithColor:backColor strokeColor:strokeColor position:at radius:rad relative:relative segment:[CNOption none]]];
+        [[EGD2D circleVaoWithoutSegment] drawParam:[EGCircleParam circleParamWithColor:backColor strokeColor:strokeColor position:at radius:[EGD2D radiusPR:radius] relative:relative segment:[CNOption none]]];
     }];
+}
+
++ (GEVec2)radiusPR:(float)r {
+    float l = geVec2Length(geVec4Xy([[EGGlobal.matrix.value wcp] mulVec4:GEVec4Make(r, 0.0, 0.0, 0.0)]));
+    GEVec2i vps = [EGGlobal.context viewport].size;
+    if(vps.y <= vps.x) return GEVec2Make((l * vps.y) / vps.x, l);
+    else return GEVec2Make(l, (l * vps.x) / vps.y);
 }
 
 - (ODClassType*)type {

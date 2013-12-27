@@ -8,6 +8,7 @@
     BOOL _wasPaused;
     BOOL _played;
     CNNotificationObserver *_observer;
+    CNNotificationObserver *_observer2;
 }
 static ODClassType* _SDSound_type;
 
@@ -29,11 +30,17 @@ static ODClassType* _SDSound_type;
     if (self) {
         _player = player;
         _wasPaused = YES;
+        _player.enableRate = YES;
         _enabled = SDSoundDirector.instance.enabled;
+        _player.rate = (float) SDSoundDirector.instance.timeSpeed;
         __weak SDSound *ws = self;
         _observer = [SDSoundDirector.instance.enabledChangedNotification observeBy:^(id sender, id en) {
             ws.enabled = unumb(en);
         }];
+        _observer2 = [SDSoundDirector.instance.timeSpeedChangeNotification observeBy:^(id sender, id sp) {
+            _player.rate = (float) unumf(sp);
+        }];
+
         [player prepareToPlay];
         [player pause];
     }

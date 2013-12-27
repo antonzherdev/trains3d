@@ -7,57 +7,62 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
     val name = "LevelMenu"
 
     private var pauseSprite = Sprite()
+    private var slowSprite = Sprite()
     private var hammerSprite = Sprite()
 
     val notificationProgress = gap(0.7, 1) >> vec4(0.95 - _)
 
-    private var width = 0
     var camera : Camera
     def reshapeWith(viewport : Rect) {
-        camera = Camera2D(vec2(viewport.width/context.scale, 32))
+        val s = viewport.size/context.scale
+        camera = Camera2D(s)
         val font = fontWith(name = "lucida_grande", 24)
         val notificationFont = fontWith(name = "lucida_grande", if(egInterfaceIdiom.isPhone) 14 else 16)
         notificationText.font = font
-        width = viewport.size.x/context.scale
 
         val sh = TextShadow(color = vec4(0.05, 0.05, 0.05, 0.5), shift = vec2(1, -1))
         scoreText.font = font
         scoreText.shadow = sh
         notificationText.font = notificationFont
         notificationText.shadow = sh
-        notificationText.position = vec3(width/2, 10, 0)
+        notificationText.position = vec3(s.x/2, s.y - 22, 0)
         scoreText.shadow = sh
         levelText.for{ _ ->
             _.font = font
             _.shadow = sh
-            _.position = vec3(width/2, 10, 0)
+            _.position = vec3(s.x/2, s.y - 22, 0)
         }
 
-        pauseSprite.position = vec2(width - 32, 0)
+        pauseSprite.position = vec2(s.x - 32, s.y - 32)
         val t = scaledTextureFor("Pause", "png")
         pauseSprite.material = ColorSource(t.region(0, 0, 32, 32))
         pauseSprite.adjustSize
 
-        hammerSprite.position = vec2(0, 0)
+        slowSprite.position = vec2(s.x - 32, 0)
+        slowSprite.material = ColorSource(t.region(64, 32, 32, 32))
+        slowSprite.adjustSize
+
+        hammerSprite.position = vec2(0, s.y - 32)
         hammerSprite.material = ColorSource(vec4(0.1, 0.1, 0.1, 1), t.region(32, 0, 32, 32))
         hammerSprite.adjustSize
     }
     def color : vec4 = vec4(0.95)
-    val scoreText = Text(nil, "", vec3(10, 8, 0), TextAlignment.baseline(-1), color)
+    val scoreText = Text(nil, "", vec3(10, 40, 0), TextAlignment.baseline(-1), color)
     private val notificationText = Text(nil, "", vec3(0, 0, 0), TextAlignment.baseline(if(egInterfaceIdiom.isPhone) -1 else 0), color)
     var levelText : Text? = Text(nil, "", vec3(0, 0, 0), TextAlignment.baseline(0), color)
 
     def draw {
         context.depthTest.disabled { BlendFunction.premultiplied {
+            val s = context.viewport.size/context.scale
             if(level.scale > 1.0) {
                 hammerSprite.material = hammerSprite.material.set(color =
                     if(level.railroad.builder.buildMode) vec4(0.45, 0.9, 0.6, 0.95)
                     else color
                 )
                 hammerSprite.draw
-                scoreText.position = vec3(32, 8, 0)
+                scoreText.position = vec3(32, s.y - 24, 0)
             } else {
-                scoreText.position = vec3(10, 8, 0)
+                scoreText.position = vec3(10, s.y - 24, 0)
             }
             scoreText.text = format(level.score.score)
             scoreText.draw
@@ -72,10 +77,22 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
             }
             notificationAnimation.for{t ->
                 if(egInterfaceIdiom.isPhone) {
-                    notificationText.position = vec3(scoreX(scoreText.text) + scoreText.position.x + 5, 10, 0)
+                    notificationText.position = vec3(scoreX(scoreText.text) + scoreText.position.x + 5, s.y - 22, 0)
                 }
                 notificationText.color = notificationProgress(t)
                 notificationText.draw
+            }
+
+            if(level.slowMotionCounter.isRunning) {
+                BlendFunction.standard {
+                    D2D.drawCircle(backColor = vec4(0.6, 0.6, 0.6, 0.95), strokeColor = vec4(0, 0, 0, 0.5),
+                        at = slowSprite.position + slowSprite.size/2, radius = 22, relative = vec2(0, 0),
+                        segmentColor = vec4(0.95),
+                        start = math.M_PI_2, end = math.M_PI_2 - 2*level.slowMotionCounter.time*math.M_PI
+                )
+                }
+            } else {
+                slowSprite.draw
             }
         }}
     }
@@ -104,7 +121,9 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         val p = event.location
         if(pauseSprite.contains(p)) {
             if(Director.current.isPaused) Director.current.resume else Director.current.pause
-        } else if(level.scale > 1.0 && hammerSprite.contains(p)) {
+        } else if(slowSprite.contains(p) && level.slowMotionCounter.isStopped) {
+            GameDirector.instance.runSlowMotion(level)
+        }else if(level.scale > 1.0 && hammerSprite.contains(p)) {
             level.railroad.builder.buildMode = !level.railroad.builder.buildMode
         }
         false

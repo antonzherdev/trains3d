@@ -68,10 +68,7 @@ object D2D {
         start : float, end : float)
     {
         context.cullFace.disabled {
-            val vps = context.viewport.size
-            val rad = if(vps.y <= vps.x) vec2(radius * vps.y/vps.x, radius)
-                else vec2(radius, radius * vps.x/vps.y)
-            circleVaoWithSegment.draw(CircleParam(backColor, strokeColor, at, rad, relative, CircleSegment(segmentColor, start, end)))
+            circleVaoWithSegment.draw(CircleParam(backColor, strokeColor, at, radiusP(radius), relative, CircleSegment(segmentColor, start, end)))
         }
     }
     private lazy val circleVaoWithoutSegment = Mesh(
@@ -80,11 +77,16 @@ object D2D {
 
     def drawCircle(backColor : vec4, strokeColor : vec4, at : vec3, radius : float4, relative : vec2) {
         context.cullFace.disabled {
-            val vps = context.viewport.size
-            val rad = if(vps.y <= vps.x) vec2(radius * vps.y/vps.x, radius)
-            else vec2(radius, radius * vps.x/vps.y)
-            circleVaoWithoutSegment.draw(CircleParam(backColor, strokeColor, at, rad, relative, nil))
+            circleVaoWithoutSegment.draw(CircleParam(backColor, strokeColor, at, radiusP(radius), relative, nil))
         }
+    }
+
+    private def radiusP(r : float4) : vec2 = {
+        val l = (matrix.value.wcp * vec4(r, 0, 0, 0)).xy.length
+        val vps = context.viewport.size
+
+        if(vps.y <= vps.x) vec2(l * vps.y/vps.x, l)
+        else vec2(l, l * vps.x/vps.y)
     }
 }
 

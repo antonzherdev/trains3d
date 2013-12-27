@@ -242,6 +242,12 @@ static ODClassType* _TREnStrings_type;
         "and send it to any city.";
 }
 
+- (NSString*)helpSlowMotion {
+    return @"Use the slow motion to help yourself in difficult moments.\n"
+        "Press the snail button at the right bottom corner of the screen.\n"
+        "The number of uses is restored every day.";
+}
+
 - (NSString*)result {
     return @"Score";
 }
@@ -541,6 +547,12 @@ static ODClassType* _TRRuStrings_type;
 - (NSString*)linesAdvice {
     return @"Вы можете соединять города несколькими линиями.\n"
         "В таком случае встречные поезда смогут разъехаться.";
+}
+
+- (NSString*)helpSlowMotion {
+    return @"Используйте замедленное время, чтобы помочь себе в трудных ситуациях.\n"
+        "Нажмите кнопку с изображением улитки в правом нижнем углу экрана.\n"
+        "Количество использование восстанавливается каждый день.";
 }
 
 - (NSString*)supportButton {

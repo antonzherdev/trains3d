@@ -13,6 +13,7 @@
 #import "TRStrings.h"
 #import "TRTrain.h"
 #import "TRCar.h"
+#import "EGDirector.h"
 @implementation TRLevelRules{
     GEVec2i _mapSize;
     TRLevelTheme* _theme;
@@ -126,6 +127,7 @@ static ODClassType* _TRLevelRules_type;
     id __help;
     id __result;
     BOOL _rate;
+    EGCounter* __slowMotion;
 }
 static NSInteger _TRLevel_trainComingPeriod = 10;
 static CNNotificationHandle* _TRLevel_buildCityNotification;
@@ -198,6 +200,7 @@ static ODClassType* _TRLevel_type;
         __help = [CNOption none];
         __result = [CNOption none];
         _rate = NO;
+        __slowMotion = [EGEmptyCounter emptyCounter];
     }
     
     return self;
@@ -270,7 +273,7 @@ static ODClassType* _TRLevel_type;
 }]) {
                 return [self rndCityTimeAtt:att + 1];
             } else {
-                if(egInterfaceIdiom().isPhone && [_map isRightTile:tile] && [_map isTopTile:tile]) return [self rndCityTimeAtt:att + 1];
+                if(egInterfaceIdiom().isPhone && [_map isRightTile:tile] && ([_map isTopTile:tile] || [_map isBottomTile:tile])) return [self rndCityTimeAtt:att + 1];
                 else return tuple(wrap(GEVec2i, tile), dir);
             }
         }
@@ -363,6 +366,7 @@ static ODClassType* _TRLevel_type;
     [_schedule updateWithDelta:delta];
     [_weather updateWithDelta:delta];
     [_forest updateWithDelta:delta];
+    [__slowMotion updateWithDelta:delta];
     [__cities forEach:^void(TRCity* city) {
         if([((TRCity*)(city)).expectedTrainCounter isRunning]) {
             if([__trains existsWhere:^BOOL(TRTrain* _) {
@@ -537,6 +541,19 @@ static ODClassType* _TRLevel_type;
 
 - (void)dealloc {
     [CNLog applyText:[NSString stringWithFormat:@"Dealloc level %lu", (unsigned long)_number]];
+}
+
+- (EGCounter*)slowMotionCounter {
+    return __slowMotion;
+}
+
+- (void)runSlowMotion {
+    if([__slowMotion isStopped]) {
+        [[EGDirector current] setTimeSpeed:0.1];
+        __slowMotion = [[EGLengthCounter lengthCounterWithLength:1.0] onEndEvent:^void() {
+            [[EGDirector current] setTimeSpeed:1.0];
+        }];
+    }
 }
 
 - (void)start {
