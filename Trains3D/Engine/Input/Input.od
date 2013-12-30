@@ -3,9 +3,11 @@ package com.antonzherdev.eg
 class Recognizer<P>(tp : RecognizerType<_, P>) {
     static def apply<P>(tp : RecognizerType<LongRecognizer, P>,
         began : Event<P> -> bool, changed : Event<P> -> void, ended : Event<P> -> void)
+        : Recognizer<P>
         = LongRecognizer<P>(tp, began, changed, ended, {})
     static def apply<P>(tp : RecognizerType<LongRecognizer, P>,
         began : Event<P> -> bool, changed : Event<P> -> void, ended : Event<P> -> void, canceled : Event<P> -> void)
+        : Recognizer<P>
         = LongRecognizer<P>(tp, began, changed, ended, canceled)
 
     static def apply<P>(tp : RecognizerType<ShortRecognizer, P>, on : Event<P> -> bool)
@@ -13,7 +15,7 @@ class Recognizer<P>(tp : RecognizerType<_, P>) {
 
     def is(tp : RecognizerType<_, _>) : bool = tp == self.tp
 
-    def add(recognizer : Recognizer<_>) = Recognizers([self, recognizer])
+    def add(recognizer : Recognizer<_>) : Recognizers = Recognizers([self, recognizer])
 }
 class LongRecognizer<P>(tp : RecognizerType<LongRecognizer, P>, began : Event<P> -> bool,
     changed : Event<P> -> void, ended : Event<P> -> void, canceled : Event<P> -> void) extends Recognizer<P>(tp)
@@ -27,7 +29,7 @@ trait InputProcessor {
 
 
 class Recognizers(items : [Recognizer<_>]) {
-    static def apply(recognizer : Recognizer<_>) = Recognizers([recognizer])
+    static def apply(recognizer : Recognizer<_>) : Recognizers = Recognizers([recognizer])
 
     def on<P>(event : Event<P>) : ShortRecognizer<P>? = {
         items.find{item -> item.is(event.recognizerType) && item.cast<ShortRecognizer<P>>.on(event)}
@@ -127,7 +129,7 @@ class CameraEvent<P>(event : Event<P>, matrixModel : MatrixModel, viewport : Rec
     def viewSize : vec2 = event.viewSize
     def param : P = event.param
 
-    def location = locationFor(0)
+    def location : vec2 = locationFor(0)
     def locationInViewport : vec2 = {
         (locationInView - viewport.p)/viewport.size*2 - vec2(1, 1)
     }

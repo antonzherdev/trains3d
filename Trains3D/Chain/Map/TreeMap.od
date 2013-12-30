@@ -106,7 +106,7 @@ class ImTreeMap<K, V>(comparator : (K, K) -> int, root : TreeMapEntry<K, V>, cou
 }
 
 class TreeMapBuilder<K, V>(comparator : (K, K) -> int) extends Builder<(K, V), TreeMap<K, V>> {
-    static def apply<K extends Comparable<K>, V> = TreeMapBuilder<K, V>((a : K, b : K) -> a.compare(b))
+    static def apply<K extends Comparable<K>, V> : TreeMapBuilder<K, V> = TreeMapBuilder<K, V>((a : K, b : K) -> a.compare(b))
     private val map = MTreeMap<K, V>(comparator)
     def append(item : (K, V)) {
         map.append(item)
