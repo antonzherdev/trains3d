@@ -77,9 +77,13 @@ trait Strings {
 class EnStrings extends Strings {
     def level(number : uint) : string = "Level $number"
     def railBuilt(cost : int) : string = "-$(format(cost)): Payment for the railroad building"
-    def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Reward for the arrived $(train.color.localName) train"
+    def trainArrived(train : Train, cost : int) : string =
+        if(train.trainType == TrainType.crazy) "+$(format(cost)): Reward for the arrived crazy train"
+        else "+$(format(cost)): Reward for the arrived $(train.color.localName) train"
     def trainDestroyed(cost : int) : string = "-$(format(cost)): Fine for the destroyed train"
-    def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Fine for the delayed $(train.color.localName) train"
+    def trainDelayedFine(train : Train, cost : int) : string =
+        if(train.trainType == TrainType.crazy) "-$(format(cost)): Fine for the delayed crazy train"
+        else "-$(format(cost)): Fine for the delayed $(train.color.localName) train"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): Payment for the railroad repairs"
     def resumeGame : string = "Continue the game"
     def restart(level : Level) : string = "Restart the level $(level.number)"
@@ -200,9 +204,13 @@ class EnStrings extends Strings {
 class RuStrings extends Strings{
     def level(number : uint) : string = "Уровень $number"
     def railBuilt(cost : int) : string = "-$(format(cost)): Плата за постройку железной дороги"
-    def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Доход от прибытия поезда в $(train.color.localName) город"
+    def trainArrived(train : Train, cost : int) : string =
+        if(train.trainType == TrainType.crazy) "+$(format(cost)): Доход от прибытия сумасшедшего поезда"
+        else "+$(format(cost)): Доход от прибытия поезда в $(train.color.localName) город"
     def trainDestroyed(cost : int) : string = "-$(format(cost)): Штраф за уничтожение поезда"
-    def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Штраф за задерживающийся $(train.color.localName) поезд"
+    def trainDelayedFine(train : Train, cost : int) : string =
+        if(train.trainType == TrainType.crazy) "-$(format(cost)): Штраф за задерживающийся сумасшедший поезд"
+        else "-$(format(cost)): Штраф за задерживающийся $(train.color.localName) поезд"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): Плата за ремонт железной дороги"
     def resumeGame : string = "Продолжить игру"
     def restart(level : Level) : string = "Начать заново уровень $(level.number)"

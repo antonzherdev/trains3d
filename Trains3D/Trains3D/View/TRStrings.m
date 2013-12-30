@@ -33,7 +33,8 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"+%@: Reward for the arrived %@ train", [self formatCost:cost], train.color.localName];
+    if(train.trainType == TRTrainType.crazy) return [NSString stringWithFormat:@"+%@: Reward for the arrived crazy train", [self formatCost:cost]];
+    else return [NSString stringWithFormat:@"+%@: Reward for the arrived %@ train", [self formatCost:cost], train.color.localName];
 }
 
 - (NSString*)trainDestroyedCost:(NSInteger)cost {
@@ -41,7 +42,8 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"-%@: Fine for the delayed %@ train", [self formatCost:cost], train.color.localName];
+    if(train.trainType == TRTrainType.crazy) return [NSString stringWithFormat:@"-%@: Fine for the delayed crazy train", [self formatCost:cost]];
+    else return [NSString stringWithFormat:@"-%@: Fine for the delayed %@ train", [self formatCost:cost], train.color.localName];
 }
 
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost {
@@ -373,7 +375,8 @@ static ODClassType* _TRRuStrings_type;
 }
 
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"+%@: Доход от прибытия поезда в %@ город", [self formatCost:cost], train.color.localName];
+    if(train.trainType == TRTrainType.crazy) return [NSString stringWithFormat:@"+%@: Доход от прибытия сумасшедшего поезда", [self formatCost:cost]];
+    else return [NSString stringWithFormat:@"+%@: Доход от прибытия поезда в %@ город", [self formatCost:cost], train.color.localName];
 }
 
 - (NSString*)trainDestroyedCost:(NSInteger)cost {
@@ -381,7 +384,8 @@ static ODClassType* _TRRuStrings_type;
 }
 
 - (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся %@ поезд", [self formatCost:cost], train.color.localName];
+    if(train.trainType == TRTrainType.crazy) return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся сумасшедший поезд", [self formatCost:cost]];
+    else return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся %@ поезд", [self formatCost:cost], train.color.localName];
 }
 
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost {

@@ -2,6 +2,7 @@
 @class TRTrain;
 @class TRLevel;
 @class EGLocalPlayerScore;
+@class TRTrainType;
 @class TRCityColor;
 @class EGInterfaceIdiom;
 @class EGPlatform;
