@@ -1,5 +1,7 @@
 #import "TRGameDirector.h"
 
+#import "GL.h"
+#import "EGPlatform.h"
 #import "DTKeyValueStorage.h"
 #import "DTConflictResolve.h"
 #import "TRLevel.h"
@@ -12,8 +14,6 @@
 #import "EGCameraIso.h"
 #import "EGDirector.h"
 #import "EGScene.h"
-#import "GL.h"
-#import "EGPlatform.h"
 #import "SDSoundDirector.h"
 #import "EGRate.h"
 #import "EGGameCenter.h"
@@ -21,6 +21,8 @@
 #import "TRLevelChooseMenu.h"
 #import "EGEMail.h"
 @implementation TRGameDirector{
+    NSString* _gameCenterPrefix;
+    NSString* _cloudPrefix;
     DTLocalKeyValueStorage* _local;
     id(^_resolveMaxLevel)(id, id);
     DTCloudKeyValueStorage* _cloud;
@@ -34,7 +36,6 @@
     CNNotificationObserver* _zoomHelpObs;
     CNNotificationObserver* _crashObs;
     CNNotificationObserver* _knockDownObs;
-    NSString* _gameCenterPrefix;
     NSInteger __slowMotionsCount;
 }
 static TRGameDirector* _TRGameDirector_instance;
@@ -42,10 +43,11 @@ static NSInteger _TRGameDirector_maxDaySlowMotions = 5;
 static NSInteger _TRGameDirector_slowMotionRestorePeriod = 120;
 static CNNotificationHandle* _TRGameDirector_playerScoreRetrieveNotification;
 static ODClassType* _TRGameDirector_type;
+@synthesize gameCenterPrefix = _gameCenterPrefix;
+@synthesize cloudPrefix = _cloudPrefix;
 @synthesize local = _local;
 @synthesize resolveMaxLevel = _resolveMaxLevel;
 @synthesize cloud = _cloud;
-@synthesize gameCenterPrefix = _gameCenterPrefix;
 
 + (id)gameDirector {
     return [[TRGameDirector alloc] init];
@@ -55,6 +57,8 @@ static ODClassType* _TRGameDirector_type;
     self = [super init];
     __weak TRGameDirector* _weakSelf = self;
     if(self) {
+        _gameCenterPrefix = ((egInterfaceIdiom().isPhone) ? @"grp.com.antonzherdev.Trains3DPocket" : @"grp.com.antonzherdev.Trains3D");
+        _cloudPrefix = ((egInterfaceIdiom().isPhone) ? @"pocket." : @"");
         _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1, @"lastSlowMotions" : (@[]), @"daySlowMotions" : numi(_TRGameDirector_maxDaySlowMotions), @"boughtSlowMotions" : @0})];
         _resolveMaxLevel = ^id(id a, id b) {
             id v = DTConflict.resolveMax(a, b);
@@ -65,17 +69,17 @@ static ODClassType* _TRGameDirector_type;
             }
             return v;
         };
-        _cloud = [DTCloudKeyValueStorage cloudKeyValueStorageWithDefaults:(@{@"maxLevel" : @1}) resolveConflict:^id(NSString* name) {
-            if([name isEqual:@"maxLevel"]) return _weakSelf.resolveMaxLevel;
+        _cloud = [DTCloudKeyValueStorage cloudKeyValueStorageWithDefaults:(@{@"maxLevel" : @1, @"pocket.maxLevel" : @1}) resolveConflict:^id(NSString* name) {
+            if([name isEqual:[NSString stringWithFormat:@"%@maxLevel", _weakSelf.cloudPrefix]]) return _weakSelf.resolveMaxLevel;
             else return DTConflict.resolveMax;
         }];
         _obs = [TRLevel.winNotification observeBy:^void(TRLevel* level, id _) {
             NSUInteger n = ((TRLevel*)(level)).number;
-            [_weakSelf.cloud keepMaxKey:@"maxLevel" i:((NSInteger)(n + 1))];
+            [_weakSelf.cloud keepMaxKey:[NSString stringWithFormat:@"%@maxLevel", _weakSelf.cloudPrefix] i:((NSInteger)(n + 1))];
             [_weakSelf.local setKey:@"currentLevel" i:((NSInteger)(n + 1))];
             NSString* leaderboard = [NSString stringWithFormat:@"%@.Level%lu", _weakSelf.gameCenterPrefix, (unsigned long)n];
             NSInteger s = [((TRLevel*)(level)).score score];
-            [_weakSelf.cloud keepMaxKey:[NSString stringWithFormat:@"level%lu.score", (unsigned long)n] i:[((TRLevel*)(level)).score score]];
+            [_weakSelf.cloud keepMaxKey:[NSString stringWithFormat:@"%@level%lu.score", _weakSelf.cloudPrefix, (unsigned long)n] i:[((TRLevel*)(level)).score score]];
             [EGGameCenter.instance reportScoreLeaderboard:leaderboard value:((long)(s)) completed:^void(EGLocalPlayerScore* score) {
                 [[TRGameDirector playerScoreRetrieveNotification] postSender:_weakSelf data:score];
             }];
@@ -133,7 +137,6 @@ static ODClassType* _TRGameDirector_type;
                 if(unumui(((CNTuple*)(p)).b) > 2) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.Crash%@", _weakSelf.gameCenterPrefix, ((CNTuple*)(p)).b]];
             }
         }];
-        _gameCenterPrefix = ((egInterfaceIdiom().isPhone) ? @"grp.com.antonzherdev.Trains3DPocket" : @"grp.com.antonzherdev.Trains3D");
         __slowMotionsCount = 0;
         [self _init];
     }
@@ -159,7 +162,7 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (NSInteger)bestScoreLevelNumber:(NSUInteger)levelNumber {
-    return [_cloud intForKey:[NSString stringWithFormat:@"level%lu.score", (unsigned long)levelNumber]];
+    return [_cloud intForKey:[NSString stringWithFormat:@"%@level%lu.score", _cloudPrefix, (unsigned long)levelNumber]];
 }
 
 - (void)destroyTrainsTrains:(id<CNSeq>)trains {
@@ -210,7 +213,7 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (NSInteger)maxAvailableLevel {
-    return [_cloud intForKey:@"maxLevel"];
+    return [_cloud intForKey:[NSString stringWithFormat:@"%@maxLevel", _cloudPrefix]];
 }
 
 - (void)restoreLastScene {

@@ -3,6 +3,9 @@ package com.antonzherdev.trains
 import com.antonzherdev.data._
 
 class GameDirector {
+    val gameCenterPrefix = if(egInterfaceIdiom.isPhone) "grp.com.antonzherdev.Trains3DPocket" else "grp.com.antonzherdev.Trains3D"
+    val cloudPrefix = if(egInterfaceIdiom.isPhone) "pocket." else ""
+
     static val instance : GameDirector = GameDirector()
     static val maxDaySlowMotions = 5
     static val slowMotionRestorePeriod = 120
@@ -20,18 +23,18 @@ class GameDirector {
         v
     }
 
-    val cloud = CloudKeyValueStorage([("maxLevel", 1)], name ->
-        if(name == "maxLevel") resolveMaxLevel
+    val cloud = CloudKeyValueStorage([("maxLevel", 1), ("pocket.maxLevel", 1)], name ->
+        if(name == "$(cloudPrefix)maxLevel") resolveMaxLevel
         else Conflict.resolveMax)
 
     static val playerScoreRetrieveNotification = NotificationHandle<GameDirector, LocalPlayerScore>("playerScoreRetrieveNotification")
     private val obs = Level.winNotification.observe{ level, _ ->
         val n = level.number
-        cloud.keepMax("maxLevel", n + 1)
+        cloud.keepMax("$(cloudPrefix)maxLevel", n + 1)
         local.set("currentLevel", i = n + 1)
         val leaderboard = "$gameCenterPrefix.Level$n"
         val s = level.score.score
-        cloud.keepMax("level$n.score", level.score.score)
+        cloud.keepMax("$(cloudPrefix)level$n.score", level.score.score)
         GameCenter.instance.reportScore(leaderboard, s) { score ->
             playerScoreRetrieveNotification.post(self, score)
         }
@@ -103,7 +106,7 @@ class GameDirector {
         cloud.set("help.zoom", 0)
     }
 
-    def bestScore(levelNumber : uint) : int = cloud.intFor("level$levelNumber.score")
+    def bestScore(levelNumber : uint) : int = cloud.intFor("$(cloudPrefix)level$levelNumber.score")
 
     private val crashObs = Level.crashNotification.observe{level, trains ->
         GameDirector.instance.destroyTrains(trains)
@@ -116,7 +119,6 @@ class GameDirector {
             GameCenter.instance.completeAchievement("$gameCenterPrefix.Crash$(p.b)")
         }
     }
-    val gameCenterPrefix = if(egInterfaceIdiom.isPhone) "grp.com.antonzherdev.Trains3DPocket" else "grp.com.antonzherdev.Trains3D"
 
     def destroyTrains(trains : [Train]) {
         GameCenter.instance.completeAchievement("$gameCenterPrefix.Crash")
@@ -167,7 +169,7 @@ class GameDirector {
     }
 
     def currentLevel = local.intFor("currentLevel")
-    def maxAvailableLevel = cloud.intFor("maxLevel")
+    def maxAvailableLevel = cloud.intFor("$(cloudPrefix)maxLevel")
     def restoreLastScene {
         Director.current.set(scene = SceneFactory.sceneForLevelWith(number = currentLevel))
     }

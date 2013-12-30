@@ -1,4 +1,5 @@
 #import "objd.h"
+@class EGInterfaceIdiom;
 @class DTLocalKeyValueStorage;
 @class DTConflict;
 @class DTCloudKeyValueStorage;
@@ -15,7 +16,6 @@
 @class EGDirector;
 @class EGScene;
 @protocol EGController;
-@class EGInterfaceIdiom;
 @class SDSoundDirector;
 @class EGRate;
 @class EGLocalPlayerScore;
@@ -26,10 +26,11 @@
 @class TRGameDirector;
 
 @interface TRGameDirector : NSObject
+@property (nonatomic, readonly) NSString* gameCenterPrefix;
+@property (nonatomic, readonly) NSString* cloudPrefix;
 @property (nonatomic, readonly) DTLocalKeyValueStorage* local;
 @property (nonatomic, readonly) id(^resolveMaxLevel)(id, id);
 @property (nonatomic, readonly) DTCloudKeyValueStorage* cloud;
-@property (nonatomic, readonly) NSString* gameCenterPrefix;
 
 + (id)gameDirector;
 - (id)init;
