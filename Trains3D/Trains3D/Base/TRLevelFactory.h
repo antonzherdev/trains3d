@@ -4,12 +4,12 @@
 @class TRForestRules;
 @class TRForestType;
 @class TRWeatherRules;
+@class TRLevelRules;
 @class TRLevelTheme;
 @class TRStr;
 @protocol TRStrings;
 @class EGInterfaceIdiom;
 @class TRLevel;
-@class TRLevelRules;
 @class TRTrain;
 @class TRTrainType;
 @class TRCarType;
