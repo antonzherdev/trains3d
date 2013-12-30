@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0214B1241773394400C03C71"
-               BuildableName = "Raildale.app"
-               BlueprintName = "Trains3D"
+               BlueprintIdentifier = "0297EDF3187163CB004427A8"
+               BuildableName = "RaildalePocket.app"
+               BlueprintName = "Trains3DPocket"
                ReferencedContainer = "container:Trains3D.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,23 +28,13 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       buildConfiguration = "Debug">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "02C70A761802A3E600007F50"
-               BuildableName = "Trains3DiTests.xctest"
-               BlueprintName = "Trains3DiTests"
-               ReferencedContainer = "container:Trains3D.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0214B1241773394400C03C71"
-            BuildableName = "Raildale.app"
-            BlueprintName = "Trains3D"
+            BlueprintIdentifier = "0297EDF3187163CB004427A8"
+            BuildableName = "RaildalePocket.app"
+            BlueprintName = "Trains3DPocket"
             ReferencedContainer = "container:Trains3D.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -61,9 +51,9 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0214B1241773394400C03C71"
-            BuildableName = "Raildale.app"
-            BlueprintName = "Trains3D"
+            BlueprintIdentifier = "0297EDF3187163CB004427A8"
+            BuildableName = "RaildalePocket.app"
+            BlueprintName = "Trains3DPocket"
             ReferencedContainer = "container:Trains3D.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -79,9 +69,9 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0214B1241773394400C03C71"
-            BuildableName = "Raildale.app"
-            BlueprintName = "Trains3D"
+            BlueprintIdentifier = "0297EDF3187163CB004427A8"
+            BuildableName = "RaildalePocket.app"
+            BlueprintName = "Trains3DPocket"
             ReferencedContainer = "container:Trains3D.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

@@ -29,7 +29,7 @@ class GameDirector {
         val n = level.number
         cloud.keepMax("maxLevel", n + 1)
         local.set("currentLevel", i = n + 1)
-        val leaderboard = "grp.com.antonzherdev.Trains3D.Level$n"
+        val leaderboard = "$gameCenterPrefix.Level$n"
         val s = level.score.score
         cloud.keepMax("level$n.score", level.score.score)
         GameCenter.instance.reportScore(leaderboard, s) { score ->
@@ -111,28 +111,23 @@ class GameDirector {
     private val knockDownObs = Level.knockDownNotification.observe{level, p ->
         GameDirector.instance.destroyTrains([p.a])
         if(p.b == 2) {
-            GameCenter.instance.completeAchievement("grp.KnockDown")
-        } else if(p.b == 3) {
-            GameCenter.instance.completeAchievement("grp.TripleCrash")
-        } else if(p.b == 4) {
-            GameCenter.instance.completeAchievement("grp.QuadrupleCrash")
-        } else if(p.b == 5) {
-            GameCenter.instance.completeAchievement("grp.QuinaryCrash")
-        } else if(p.b == 6) {
-            GameCenter.instance.completeAchievement("grp.SenaryCrash")
+            GameCenter.instance.completeAchievement("$gameCenterPrefix.KnockDown")
+        } else if(p.b > 2) {
+            GameCenter.instance.completeAchievement("$gameCenterPrefix.Crash$(p.b)")
         }
     }
+    val gameCenterPrefix = if(egInterfaceIdiom.isPhone) "grp.com.antonzherdev.Trains3DPocket" else "grp.com.antonzherdev.Trains3D"
 
     def destroyTrains(trains : [Train]) {
-        GameCenter.instance.completeAchievement("grp.Crash")
+        GameCenter.instance.completeAchievement("$gameCenterPrefix.Crash")
         if(trains.exists(_.trainType == TrainType.fast)) {
-            GameCenter.instance.completeAchievement("grp.ExpressCrash")
+            GameCenter.instance.completeAchievement("$gameCenterPrefix.ExpressCrash")
         }
         if(trains.exists(_.trainType == TrainType.repairer)) {
-            GameCenter.instance.completeAchievement("grp.RepairCrash")
+            GameCenter.instance.completeAchievement("$gameCenterPrefix.RepairCrash")
         }
         if(trains.exists(_.trainType == TrainType.crazy)) {
-            GameCenter.instance.completeAchievement("grp.CrazyCrash")
+            GameCenter.instance.completeAchievement("$gameCenterPrefix.CrazyCrash")
         }
     }
 
@@ -157,7 +152,7 @@ class GameDirector {
 
 
     def localPlayerScore(level : uint, callback : LocalPlayerScore? -> void) {
-        val leaderboard = "grp.com.antonzherdev.Trains3D.Level$level"
+        val leaderboard = "$gameCenterPrefix.Level$level"
         GameCenter.instance.localPlayerScore(leaderboard) { score ->
             val bs = bestScore(level)
             if( (score.isDefined && score.get.value <  bs) || (bs > 0 && score.isEmpty) ) {
@@ -225,7 +220,7 @@ class GameDirector {
 
 
     def showLeaderboard(level : Level) {
-        GameCenter.instance.showLeaderboard("grp.com.antonzherdev.Trains3D.Level$(level.number)")
+        GameCenter.instance.showLeaderboard("$gameCenterPrefix.Level$(level.number)")
     }
 
     def synchronize {

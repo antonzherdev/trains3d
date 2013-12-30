@@ -6,7 +6,7 @@
 @implementation EGGameCenter {
     BOOL _paused;
     BOOL _active;
-    NSDictionary* _achievements;
+    NSMutableDictionary* _achievements;
 }
 static EGGameCenter * _EGGameCenter_instance;
 static ODClassType* _EGGameCenter_type;
@@ -103,7 +103,11 @@ static ODClassType* _EGGameCenter_type;
 - (id)achievementName:(NSString*)name {
     if(!_active) return [CNOption none];
 
-    return [_achievements optKey:name];
+    return [CNOption someValue:[_achievements objectForKey:name orUpdateWith:^id {
+        GKAchievement *a = [[GKAchievement alloc] initWithIdentifier:name];
+        a.showsCompletionBanner = YES;
+        return [EGAchievement achievementWithAchievement:a];
+    }]];
 }
 
 
@@ -289,11 +293,13 @@ static ODClassType* _EGAchievement_type;
 
 - (void)setProgress:(CGFloat)progress {
     CGFloat d = progress*100.0;
-    if(!eqf(_achievement.percentComplete, d)) {
+    if(!eqf((CGFloat) _achievement.percentComplete, d)) {
         _achievement.percentComplete = d;
         [GKAchievement reportAchievements:@[_achievement] withCompletionHandler:^(NSError *error) {
             if(error != nil) {
-                NSLog(@"Error in achievenment reporting: %@", error);
+                NSLog(@"Error in achievenment %@ reporting: %@", _achievement.identifier, error);
+            } else {
+                NSLog(@"The achievenment %@ has been reported", _achievement.identifier);
             }
         }];
     }

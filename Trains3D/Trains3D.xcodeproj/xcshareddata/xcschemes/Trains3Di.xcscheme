@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "02C70A4C1802A3E500007F50"
-               BuildableName = "Trains3Di.app"
+               BuildableName = "Raildale.app"
                BlueprintName = "Trains3Di"
                ReferencedContainer = "container:Trains3D.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "02C70A4C1802A3E500007F50"
-            BuildableName = "Trains3Di.app"
+            BuildableName = "Raildale.app"
             BlueprintName = "Trains3Di"
             ReferencedContainer = "container:Trains3D.xcodeproj">
          </BuildableReference>
@@ -52,7 +52,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "02C70A4C1802A3E500007F50"
-            BuildableName = "Trains3Di.app"
+            BuildableName = "Raildale.app"
             BlueprintName = "Trains3Di"
             ReferencedContainer = "container:Trains3D.xcodeproj">
          </BuildableReference>
@@ -70,7 +70,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "02C70A4C1802A3E500007F50"
-            BuildableName = "Trains3Di.app"
+            BuildableName = "Raildale.app"
             BlueprintName = "Trains3Di"
             ReferencedContainer = "container:Trains3D.xcodeproj">
          </BuildableReference>

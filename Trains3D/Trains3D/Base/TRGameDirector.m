@@ -12,6 +12,8 @@
 #import "EGCameraIso.h"
 #import "EGDirector.h"
 #import "EGScene.h"
+#import "GL.h"
+#import "EGPlatform.h"
 #import "SDSoundDirector.h"
 #import "EGRate.h"
 #import "EGGameCenter.h"
@@ -32,6 +34,7 @@
     CNNotificationObserver* _zoomHelpObs;
     CNNotificationObserver* _crashObs;
     CNNotificationObserver* _knockDownObs;
+    NSString* _gameCenterPrefix;
     NSInteger __slowMotionsCount;
 }
 static TRGameDirector* _TRGameDirector_instance;
@@ -42,6 +45,7 @@ static ODClassType* _TRGameDirector_type;
 @synthesize local = _local;
 @synthesize resolveMaxLevel = _resolveMaxLevel;
 @synthesize cloud = _cloud;
+@synthesize gameCenterPrefix = _gameCenterPrefix;
 
 + (id)gameDirector {
     return [[TRGameDirector alloc] init];
@@ -69,7 +73,7 @@ static ODClassType* _TRGameDirector_type;
             NSUInteger n = ((TRLevel*)(level)).number;
             [_weakSelf.cloud keepMaxKey:@"maxLevel" i:((NSInteger)(n + 1))];
             [_weakSelf.local setKey:@"currentLevel" i:((NSInteger)(n + 1))];
-            NSString* leaderboard = [NSString stringWithFormat:@"grp.com.antonzherdev.Trains3D.Level%lu", (unsigned long)n];
+            NSString* leaderboard = [NSString stringWithFormat:@"%@.Level%lu", _weakSelf.gameCenterPrefix, (unsigned long)n];
             NSInteger s = [((TRLevel*)(level)).score score];
             [_weakSelf.cloud keepMaxKey:[NSString stringWithFormat:@"level%lu.score", (unsigned long)n] i:[((TRLevel*)(level)).score score]];
             [EGGameCenter.instance reportScoreLeaderboard:leaderboard value:((long)(s)) completed:^void(EGLocalPlayerScore* score) {
@@ -124,23 +128,12 @@ static ODClassType* _TRGameDirector_type;
         _knockDownObs = [TRLevel.knockDownNotification observeBy:^void(TRLevel* level, CNTuple* p) {
             [TRGameDirector.instance destroyTrainsTrains:(@[((CNTuple*)(p)).a])];
             if(unumi(((CNTuple*)(p)).b) == 2) {
-                [EGGameCenter.instance completeAchievementName:@"grp.KnockDown"];
+                [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.KnockDown", _weakSelf.gameCenterPrefix]];
             } else {
-                if(unumi(((CNTuple*)(p)).b) == 3) {
-                    [EGGameCenter.instance completeAchievementName:@"grp.TripleCrash"];
-                } else {
-                    if(unumi(((CNTuple*)(p)).b) == 4) {
-                        [EGGameCenter.instance completeAchievementName:@"grp.QuadrupleCrash"];
-                    } else {
-                        if(unumi(((CNTuple*)(p)).b) == 5) {
-                            [EGGameCenter.instance completeAchievementName:@"grp.QuinaryCrash"];
-                        } else {
-                            if(unumi(((CNTuple*)(p)).b) == 6) [EGGameCenter.instance completeAchievementName:@"grp.SenaryCrash"];
-                        }
-                    }
-                }
+                if(unumui(((CNTuple*)(p)).b) > 2) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.Crash%@", _weakSelf.gameCenterPrefix, ((CNTuple*)(p)).b]];
             }
         }];
+        _gameCenterPrefix = ((egInterfaceIdiom().isPhone) ? @"grp.com.antonzherdev.Trains3DPocket" : @"grp.com.antonzherdev.Trains3D");
         __slowMotionsCount = 0;
         [self _init];
     }
@@ -170,16 +163,16 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)destroyTrainsTrains:(id<CNSeq>)trains {
-    [EGGameCenter.instance completeAchievementName:@"grp.Crash"];
+    [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.Crash", _gameCenterPrefix]];
     if([trains existsWhere:^BOOL(TRTrain* _) {
     return ((TRTrain*)(_)).trainType == TRTrainType.fast;
-}]) [EGGameCenter.instance completeAchievementName:@"grp.ExpressCrash"];
+}]) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.ExpressCrash", _gameCenterPrefix]];
     if([trains existsWhere:^BOOL(TRTrain* _) {
     return ((TRTrain*)(_)).trainType == TRTrainType.repairer;
-}]) [EGGameCenter.instance completeAchievementName:@"grp.RepairCrash"];
+}]) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.RepairCrash", _gameCenterPrefix]];
     if([trains existsWhere:^BOOL(TRTrain* _) {
     return ((TRTrain*)(_)).trainType == TRTrainType.crazy;
-}]) [EGGameCenter.instance completeAchievementName:@"grp.CrazyCrash"];
+}]) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.CrazyCrash", _gameCenterPrefix]];
 }
 
 - (void)_init {
@@ -198,7 +191,7 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)localPlayerScoreLevel:(NSUInteger)level callback:(void(^)(id))callback {
-    NSString* leaderboard = [NSString stringWithFormat:@"grp.com.antonzherdev.Trains3D.Level%lu", (unsigned long)level];
+    NSString* leaderboard = [NSString stringWithFormat:@"%@.Level%lu", _gameCenterPrefix, (unsigned long)level];
     [EGGameCenter.instance localPlayerScoreLeaderboard:leaderboard callback:^void(id score) {
         NSInteger bs = [self bestScoreLevelNumber:level];
         if(([score isDefined] && ((EGLocalPlayerScore*)([score get])).value < bs) || (bs > 0 && [score isEmpty])) {
@@ -277,7 +270,7 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)showLeaderboardLevel:(TRLevel*)level {
-    [EGGameCenter.instance showLeaderboardName:[NSString stringWithFormat:@"grp.com.antonzherdev.Trains3D.Level%lu", (unsigned long)level.number]];
+    [EGGameCenter.instance showLeaderboardName:[NSString stringWithFormat:@"%@.Level%lu", _gameCenterPrefix, (unsigned long)level.number]];
 }
 
 - (void)synchronize {

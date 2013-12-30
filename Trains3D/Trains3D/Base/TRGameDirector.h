@@ -15,6 +15,7 @@
 @class EGDirector;
 @class EGScene;
 @protocol EGController;
+@class EGInterfaceIdiom;
 @class SDSoundDirector;
 @class EGRate;
 @class EGLocalPlayerScore;
@@ -28,6 +29,7 @@
 @property (nonatomic, readonly) DTLocalKeyValueStorage* local;
 @property (nonatomic, readonly) id(^resolveMaxLevel)(id, id);
 @property (nonatomic, readonly) DTCloudKeyValueStorage* cloud;
+@property (nonatomic, readonly) NSString* gameCenterPrefix;
 
 + (id)gameDirector;
 - (id)init;
