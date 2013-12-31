@@ -357,14 +357,14 @@ static ODClassType* _TRTrainGenerator_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRTrainGenerator* o = ((TRTrainGenerator*)(other));
-    return self.trainType == o.trainType && self.carsCount == o.carsCount && self.speed == o.speed && [self.carTypes isEqual:o.carTypes];
+    return self.trainType == o.trainType && [self.carsCount isEqual:o.carsCount] && [self.speed isEqual:o.speed] && [self.carTypes isEqual:o.carTypes];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.trainType ordinal];
-    hash = hash * 31 + 0;
-    hash = hash * 31 + 0;
+    hash = hash * 31 + [self.carsCount hash];
+    hash = hash * 31 + [self.speed hash];
     hash = hash * 31 + [self.carTypes hash];
     return hash;
 }
@@ -372,8 +372,8 @@ static ODClassType* _TRTrainGenerator_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"trainType=%@", self.trainType];
-    [description appendFormat:@", carsCount=[]"];
-    [description appendFormat:@", speed=[]"];
+    [description appendFormat:@", carsCount=%@", self.carsCount];
+    [description appendFormat:@", speed=%@", self.speed];
     [description appendFormat:@", carTypes=%@", self.carTypes];
     [description appendString:@">"];
     return description;

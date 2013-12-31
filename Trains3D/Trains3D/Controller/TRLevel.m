@@ -13,7 +13,6 @@
 #import "TRStrings.h"
 #import "TRTrain.h"
 #import "TRCar.h"
-#import "EGDirector.h"
 @implementation TRLevelRules{
     GEVec2i _mapSize;
     TRLevelTheme* _theme;
@@ -127,7 +126,7 @@ static ODClassType* _TRLevelRules_type;
     id __help;
     id __result;
     BOOL _rate;
-    EGCounter* __slowMotion;
+    EGCounter* _slowMotionCounter;
 }
 static NSInteger _TRLevel_trainComingPeriod = 10;
 static CNNotificationHandle* _TRLevel_buildCityNotification;
@@ -154,6 +153,7 @@ static ODClassType* _TRLevel_type;
 @synthesize schedule = _schedule;
 @synthesize collisionWorld = _collisionWorld;
 @synthesize rate = _rate;
+@synthesize slowMotionCounter = _slowMotionCounter;
 
 + (id)levelWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules {
     return [[TRLevel alloc] initWithNumber:number rules:rules];
@@ -201,7 +201,7 @@ static ODClassType* _TRLevel_type;
         __help = [CNOption none];
         __result = [CNOption none];
         _rate = NO;
-        __slowMotion = [EGEmptyCounter emptyCounter];
+        _slowMotionCounter = [EGEmptyCounter emptyCounter];
     }
     
     return self;
@@ -368,7 +368,7 @@ static ODClassType* _TRLevel_type;
     [_schedule updateWithDelta:delta];
     [_weather updateWithDelta:delta];
     [_forest updateWithDelta:delta];
-    [__slowMotion updateWithDelta:delta];
+    [_slowMotionCounter updateWithDelta:delta];
     [__cities forEach:^void(TRCity* city) {
         if([((TRCity*)(city)).expectedTrainCounter isRunning]) {
             if([__trains existsWhere:^BOOL(TRTrain* _) {
@@ -440,7 +440,7 @@ static ODClassType* _TRLevel_type;
         __weak TRLevel* ws = self;
         [_schedule scheduleAfter:5.0 event:^void() {
             [ws.railroad addDamageAtPoint:((TRCarsCollision*)(collision)).railPoint];
-            [_TRLevel_damageNotification postSender:tuple(ws, wrap(TRRailPoint, ((TRCarsCollision*)(collision)).railPoint))];
+            [_TRLevel_damageNotification postSender:ws data:wrap(TRRailPoint, ((TRCarsCollision*)(collision)).railPoint)];
         }];
     }];
 }
@@ -469,7 +469,7 @@ static ODClassType* _TRLevel_type;
 - (void)destroyTrain:(TRTrain*)train {
     if([__trains containsItem:train]) {
         __crashCounter = 1;
-        [_TRLevel_crashNotification postSender:(@[train])];
+        [_TRLevel_crashNotification postSender:self data:(@[train])];
         [self doDestroyTrain:train];
     }
 }
@@ -544,19 +544,6 @@ static ODClassType* _TRLevel_type;
 
 - (void)dealloc {
     [CNLog applyText:[NSString stringWithFormat:@"Dealloc level %lu", (unsigned long)_number]];
-}
-
-- (EGCounter*)slowMotionCounter {
-    return __slowMotion;
-}
-
-- (void)runSlowMotion {
-    if([__slowMotion isStopped]) {
-        [[EGDirector current] setTimeSpeed:0.1];
-        __slowMotion = [[EGLengthCounter lengthCounterWithLength:1.0] onEndEvent:^void() {
-            [[EGDirector current] setTimeSpeed:1.0];
-        }];
-    }
 }
 
 - (void)start {

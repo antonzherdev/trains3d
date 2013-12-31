@@ -1,7 +1,7 @@
 package core.chain
 
 class List<T> extends Seq<T> {
-    static def apply<T> : List<T> = EmptyList.instance
+    static def apply<T> : List<T> = EmptyList.instance.cast<List<T>>
     static def apply<T>(item : T) : List<T> = FilledList<T>(item, EmptyList.instance)
     static def apply<T>(item : T, tail : List<T>) : List<T>  = FilledList<T>(item, tail)
 
@@ -51,7 +51,7 @@ class EmptyList<T> extends List<T> {
     def tail : List<T> = self
     def isEmpty = true
 
-    static val instance = EmptyList<int>()
+    static val instance = EmptyList<any>()
     def filter(f : T -> bool) : List<T> = self
     def reverse : List<T> = self
     def for(each : T -> void) {

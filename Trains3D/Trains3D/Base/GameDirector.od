@@ -268,23 +268,28 @@ class GameDirector {
     def slowMotionsCount = _slowMotionsCount
 
     def runSlowMotion(level : Level) {
-        val dsm = daySlowMotions
-        if(dsm > 0) {
-            local.decrement("daySlowMotions")
-            if(local.appendToArray("lastSlowMotions", value = DateTime()).count == 1) {
-                checkLastSlowMotions
+        if(level.slowMotionCounter.isStopped) {
+            Director.current.timeSpeed = 0.1
+            level.slowMotionCounter = LengthCounter(1).onEnd {
+                Director.current.timeSpeed = 1.0
             }
-            _slowMotionsCount--
-        } else {
-            val bsm = boughtSlowMotions
-            if(bsm > 0) {
-                local.decrement("boughtSlowMotions")
+            val dsm = daySlowMotions
+            if(dsm > 0) {
+                local.decrement("daySlowMotions")
+                if(local.appendToArray("lastSlowMotions", value = DateTime()).count == 1) {
+                    checkLastSlowMotions
+                }
                 _slowMotionsCount--
             } else {
-                return nil
+                val bsm = boughtSlowMotions
+                if(bsm > 0) {
+                    local.decrement("boughtSlowMotions")
+                    _slowMotionsCount--
+                } else {
+                    return nil
+                }
             }
         }
-        level.runSlowMotion
     }
 
     def checkLastSlowMotions {

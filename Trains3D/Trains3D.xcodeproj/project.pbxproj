@@ -5278,6 +5278,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0214B1591773394500C03C71 /* Build configuration list for PBXNativeTarget "Trains3DTests" */;
 			buildPhases = (
+				027B40F31872F1F100741C2A /* ShellScript */,
 				0214B1401773394500C03C71 /* Sources */,
 				0214B1411773394500C03C71 /* Frameworks */,
 				0214B1421773394500C03C71 /* Resources */,
@@ -5990,6 +5991,19 @@
 			inputPaths = (
 			);
 			name = "Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "~/bin/ObjD";
+		};
+		027B40F31872F1F100741C2A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;

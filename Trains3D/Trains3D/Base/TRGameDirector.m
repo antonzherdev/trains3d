@@ -332,21 +332,26 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)runSlowMotionLevel:(TRLevel*)level {
-    NSInteger dsm = [self daySlowMotions];
-    if(dsm > 0) {
-        [_local decrementKey:@"daySlowMotions"];
-        if([[_local appendToArrayKey:@"lastSlowMotions" value:[NSDate date]] count] == 1) [self checkLastSlowMotions];
-        __slowMotionsCount--;
-    } else {
-        NSInteger bsm = [self boughtSlowMotions];
-        if(bsm > 0) {
-            [_local decrementKey:@"boughtSlowMotions"];
+    if([level.slowMotionCounter isStopped]) {
+        [[EGDirector current] setTimeSpeed:0.1];
+        level.slowMotionCounter = [[EGLengthCounter lengthCounterWithLength:1.0] onEndEvent:^void() {
+            [[EGDirector current] setTimeSpeed:1.0];
+        }];
+        NSInteger dsm = [self daySlowMotions];
+        if(dsm > 0) {
+            [_local decrementKey:@"daySlowMotions"];
+            if([[_local appendToArrayKey:@"lastSlowMotions" value:[NSDate date]] count] == 1) [self checkLastSlowMotions];
             __slowMotionsCount--;
         } else {
-            return ;
+            NSInteger bsm = [self boughtSlowMotions];
+            if(bsm > 0) {
+                [_local decrementKey:@"boughtSlowMotions"];
+                __slowMotionsCount--;
+            } else {
+                return ;
+            }
         }
     }
-    [level runSlowMotion];
 }
 
 - (void)checkLastSlowMotions {

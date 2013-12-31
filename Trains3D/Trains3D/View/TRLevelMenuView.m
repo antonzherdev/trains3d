@@ -146,9 +146,9 @@ static ODClassType* _TRLevelMenuView_type;
                 _notificationText.color = _notificationProgress(((float)(t)));
                 [_notificationText draw];
             }];
-            if([[_level slowMotionCounter] isRunning]) {
+            if([_level.slowMotionCounter isRunning]) {
                 [EGBlendFunction.standard applyDraw:^void() {
-                    [EGD2D drawCircleBackColor:GEVec4Make(0.6, 0.6, 0.6, 0.95) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.5) at:geVec3ApplyVec2(geVec2AddVec2([_slowSprite position], geVec2DivI([_slowSprite size], 2))) radius:22.0 relative:GEVec2Make(0.0, 0.0) segmentColor:geVec4ApplyF(0.95) start:M_PI_2 end:M_PI_2 - 2 * [[_level slowMotionCounter] time] * M_PI];
+                    [EGD2D drawCircleBackColor:GEVec4Make(0.6, 0.6, 0.6, 0.95) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.5) at:geVec3ApplyVec2(geVec2AddVec2([_slowSprite position], geVec2DivI([_slowSprite size], 2))) radius:22.0 relative:GEVec2Make(0.0, 0.0) segmentColor:geVec4ApplyF(0.95) start:M_PI_2 end:M_PI_2 - 2 * [_level.slowMotionCounter time] * M_PI];
                 }];
             } else {
                 [_slowMotionCountText setText:[NSString stringWithFormat:@"%ld", (long)[TRGameDirector.instance slowMotionsCount]]];
@@ -185,7 +185,7 @@ static ODClassType* _TRLevelMenuView_type;
             if([[EGDirector current] isPaused]) [[EGDirector current] resume];
             else [[EGDirector current] pause];
         } else {
-            if([_slowSprite containsVec2:p] && [[_level slowMotionCounter] isStopped]) {
+            if([_slowSprite containsVec2:p] && [_level.slowMotionCounter isStopped]) {
                 [TRGameDirector.instance runSlowMotionLevel:_level];
             } else {
                 if(_level.scale > 1.0 && [_hammerSprite containsVec2:p]) [_level.railroad.builder setBuildMode:!([_level.railroad.builder buildMode])];

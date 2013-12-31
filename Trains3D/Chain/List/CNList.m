@@ -23,7 +23,7 @@ static ODClassType* _CNList_type;
 }
 
 + (CNList*)apply {
-    return CNEmptyList.instance;
+    return ((CNList*)(CNEmptyList.instance));
 }
 
 + (CNList*)applyItem:(id)item {

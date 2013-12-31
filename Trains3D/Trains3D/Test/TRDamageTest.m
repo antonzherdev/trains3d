@@ -25,29 +25,29 @@ static ODClassType* _TRDamageTest_type;
     [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 1) form:TRRailForm.leftRight]];
     [railroad addDamageAtPoint:trRailPointApplyTileFormXBack(GEVec2iMake(1, 1), TRRailForm.leftRight, 0.3, NO)];
     [railroad addDamageAtPoint:trRailPointApplyTileFormXBack(GEVec2iMake(1, 1), TRRailForm.leftRight, 0.6, YES)];
-    __block id<CNSeq> damagesCount = [ arrf(0) {}];
+    __block id<CNSeq> damagesCount = (@[]);
     TRRailPoint p0 = trRailPointApplyTileFormXBack(GEVec2iMake(1, 1), TRRailForm.leftRight, 0.0, NO);
     TRRailPointCorrection p1 = [railroad moveWithObstacleProcessor:^BOOL(TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount addItem:numf(o.point.x)];
         return YES;
     } forLength:1.0 point:p0];
-    [self assertEqualsA:damagesCount b:[ arrf(2) {0.3, 0.35}]];
+    [self assertEqualsA:damagesCount b:(@[@0.3, @0.35])];
     [self assertEqualsA:numf(p1.error) b:@0.0];
     [self assertEqualsA:numf(p1.point.x) b:@1.0];
-    damagesCount = [ arrf(0) {}];
+    damagesCount = (@[]);
     TRRailPointCorrection p00 = [railroad moveWithObstacleProcessor:^BOOL(TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount addItem:numf(o.point.x)];
         return YES;
     } forLength:1.0 point:trRailPointInvert(p1.point)];
-    [self assertEqualsA:damagesCount b:[ arrf(2) {0.65, 0.7}]];
+    [self assertEqualsA:damagesCount b:(@[@0.65, @0.7])];
     [self assertEqualsA:numf(p00.error) b:@0.0];
     [self assertEqualsA:numf(p00.point.x) b:@1.0];
-    damagesCount = [ arrf(0) {}];
+    damagesCount = (@[]);
     TRRailPointCorrection p01 = [railroad moveWithObstacleProcessor:^BOOL(TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount addItem:numf(o.point.x)];
         return NO;
     } forLength:1.0 point:trRailPointInvert(p1.point)];
-    [self assertEqualsA:damagesCount b:[ arrf(1) {0.65}]];
+    [self assertEqualsA:damagesCount b:(@[@0.65])];
     [self assertEqualsA:numf(p01.error) b:@0.35];
     [self assertEqualsA:numf(p01.point.x) b:@0.65];
 }

@@ -13,3 +13,7 @@ stub class String extends Seq<char> {
     def encodeForURL : string
     def replace(occurrences : string, withString : string) : string
 }
+
+stub class Char {
+
+}

@@ -22,6 +22,8 @@
 @class TRSceneFactory;
 @class TRLevelChooseMenu;
 @class EGEMail;
+@class EGCounter;
+@class EGLengthCounter;
 
 @class TRGameDirector;
 

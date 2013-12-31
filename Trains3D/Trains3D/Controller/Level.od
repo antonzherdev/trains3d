@@ -155,7 +155,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         schedule.updateWith(delta)
         weather.updateWith(delta)
         forest.updateWith(delta)
-        _slowMotion.updateWith(delta)
+        slowMotionCounter.updateWith(delta)
         _cities.for{city ->
             if(city.expectedTrainCounter.isRunning) {
                 if(_trains.exists(_.isIn(city.tile))) city.waitToRunTrain
@@ -214,7 +214,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
             weak val ws = self
             schedule.schedule(5) {
                 ws.railroad.addDamageAt(collision.railPoint)
-                damageNotification.post((ws, collision.railPoint))
+                damageNotification.post(ws, collision.railPoint)
             }
         }
     }
@@ -245,7 +245,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     def destroy(train : Train) {
         if(_trains.contains(train)) {
             _crashCounter = 1
-            crashNotification.post([train])
+            crashNotification.post(self, [train])
             doDestroy(train)
         }
     }
@@ -319,16 +319,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
     var rate = false
 
-    private var _slowMotion : Counter = EmptyCounter()
-    def slowMotionCounter : Counter = _slowMotion
-    def runSlowMotion {
-        if(_slowMotion.isStopped) {
-            Director.current.timeSpeed = 0.1
-            _slowMotion = LengthCounter(1).onEnd {
-                Director.current.timeSpeed = 1.0
-            }
-        }
-    }
+    var slowMotionCounter : Counter = EmptyCounter()
 }
 
 class Help(text : string)

@@ -545,7 +545,7 @@ static ODClassType* _GESweepLine_type;
         if([pe isVertical]) {
             float minY = pe.segment.p0.y;
             float maxY = pe.segment.p1.y;
-            id<CNIterator> i = [_events iteratorHigherThanItem:event];
+            id<CNIterator> i = [_events iteratorHigherThanItem:pe];
             while([i hasNext]) {
                 GEBentleyOttmannPointEvent* e = [i next];
                 if(!([e isVertical])) {
@@ -555,16 +555,17 @@ static ODClassType* _GESweepLine_type;
                 }
             }
         } else {
-            [_events appendItem:event];
-            [self checkIntersectionA:[CNOption applyValue:event] b:[self aboveEvent:event]];
-            [self checkIntersectionA:[CNOption applyValue:event] b:[self belowEvent:event]];
+            [_events appendItem:pe];
+            [self checkIntersectionA:[CNOption applyValue:event] b:[self aboveEvent:pe]];
+            [self checkIntersectionA:[CNOption applyValue:event] b:[self belowEvent:pe]];
         }
     } else {
         if([event isEnd]) {
-            if(!([((GEBentleyOttmannPointEvent*)(event)) isVertical])) {
-                id a = [self aboveEvent:event];
-                id b = [self belowEvent:event];
-                [_events removeItem:event];
+            GEBentleyOttmannPointEvent* pe = ((GEBentleyOttmannPointEvent*)(event));
+            if(!([pe isVertical])) {
+                id a = [self aboveEvent:pe];
+                id b = [self belowEvent:pe];
+                [_events removeItem:pe];
                 [self sweepToEvent:event];
                 [self checkIntersectionA:a b:b];
             }
@@ -583,11 +584,11 @@ static ODClassType* _GESweepLine_type;
     }
 }
 
-- (id)aboveEvent:(GEBentleyOttmannEvent*)event {
+- (id)aboveEvent:(GEBentleyOttmannPointEvent*)event {
     return [_events higherThanItem:event];
 }
 
-- (id)belowEvent:(GEBentleyOttmannEvent*)event {
+- (id)belowEvent:(GEBentleyOttmannPointEvent*)event {
     return [_events lowerThanItem:event];
 }
 

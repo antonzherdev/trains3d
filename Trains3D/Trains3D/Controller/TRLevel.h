@@ -30,8 +30,6 @@
 @class TRCarsCollision;
 @class TRCar;
 @class TRCarType;
-@class EGDirector;
-@class EGLengthCounter;
 @class TRForestRules;
 @class TRForestType;
 
@@ -70,6 +68,7 @@
 @property (nonatomic, readonly) EGSchedule* schedule;
 @property (nonatomic, readonly) TRTrainsCollisionWorld* collisionWorld;
 @property (nonatomic) BOOL rate;
+@property (nonatomic, retain) EGCounter* slowMotionCounter;
 
 + (id)levelWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules;
 - (id)initWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules;
@@ -103,8 +102,6 @@
 - (void)win;
 - (void)lose;
 - (void)dealloc;
-- (EGCounter*)slowMotionCounter;
-- (void)runSlowMotion;
 + (NSInteger)trainComingPeriod;
 + (CNNotificationHandle*)buildCityNotification;
 + (CNNotificationHandle*)prepareToRunTrainNotification;
