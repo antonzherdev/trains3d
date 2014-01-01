@@ -23,7 +23,7 @@ class None<V> extends Option<V> {
     def count : uint = 0
     def get : V = throw "Get from empty"
     def getOrElse(f: () -> V) : V = f()
-    def getOr(value: any) : V = value
+    def getOr(value: V) : V = value
     def for(each : V -> void) {}
     def map<B>(f : V -> B) : B? = self
     def flatMap<B>(f : V -> B?) : B? = self

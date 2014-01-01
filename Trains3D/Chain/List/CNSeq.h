@@ -5,7 +5,6 @@
 @class CNHashSetBuilder;
 @class CNChain;
 @class ODClassType;
-@class NSArray;
 
 @class CNArrayBuilder;
 @class CNIndexFunSeq;

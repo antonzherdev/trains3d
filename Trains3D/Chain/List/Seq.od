@@ -93,7 +93,7 @@ class ArrayBuilder<T> extends Builder<T, Array<T>> {
         array.append(item)
     }
 
-    def build : NSArray<T> = array
+    def build : Array<T> = array
 }
 
 class IndexFunSeq<T>(count : uint, f : uint -> T) extends Seq<T> {

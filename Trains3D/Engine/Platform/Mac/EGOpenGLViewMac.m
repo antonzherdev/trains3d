@@ -55,11 +55,6 @@
                                                       object:nil queue:nil usingBlock:^(NSNotification *note) {
         [_director stop];
     }];
-
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowWillCloseNotification
-                                                      object:[self window] queue:nil usingBlock:^(NSNotification *note) {
-        [_director stop];
-    }];
     _director = [[EGDirectorMac alloc] initWithView:self];
     [_director start];
     [self setAcceptsTouchEvents:YES];
@@ -69,6 +64,11 @@
     [super viewWillMoveToWindow:newWindow];
     if(newWindow == nil) {
         [_director stop];
+    } else {
+        [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowWillCloseNotification
+                                                          object:newWindow queue:nil usingBlock:^(NSNotification *note) {
+            [_director stop];
+        }];
     }
 }
 

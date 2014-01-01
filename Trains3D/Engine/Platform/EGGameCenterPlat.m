@@ -53,7 +53,6 @@ static ODClassType* _EGGameCenter_type;
         } else {
             if (weakPlayer.isAuthenticated) {
                 [weakSelf authenticatedPlayer:weakPlayer];
-                _active = YES;
             }
             else {
                 [weakSelf disableGameCenter];
@@ -86,6 +85,7 @@ static ODClassType* _EGGameCenter_type;
             return;
         }
         if (achievements != nil) {
+            _active = YES;
             NSMutableDictionary * dic = [NSMutableDictionary dictionary];
             for(GKAchievement* a in achievements) {
                 a.showsCompletionBanner = YES;
@@ -241,7 +241,9 @@ static ODClassType* _EGGameCenter_type;
             presentViewController:gameCenterController animated:YES completion:nil];
 #else
         gameCenterController.leaderboardCategory = name;
-        [[GKDialogController sharedDialogController] presentViewController:gameCenterController];
+        GKDialogController *controller = [GKDialogController sharedDialogController];
+        controller.parentWindow = [[NSApplication sharedApplication] mainWindow];
+        [controller performSelectorOnMainThread:@selector(presentViewController:) withObject:gameCenterController waitUntilDone:NO];
 #endif
 
     }
@@ -252,7 +254,8 @@ static ODClassType* _EGGameCenter_type;
 #if TARGET_OS_IPHONE
     [[[[[UIApplication sharedApplication] delegate] window] rootViewController] dismissViewControllerAnimated:YES completion:nil];
 #else
-    [[GKDialogController sharedDialogController] dismiss:self];
+    GKDialogController *controller = [GKDialogController sharedDialogController];
+    [controller performSelectorOnMainThread:@selector(dismiss:) withObject:self waitUntilDone:NO];
 #endif
 }
 
