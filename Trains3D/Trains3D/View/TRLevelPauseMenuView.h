@@ -4,12 +4,12 @@
 #import "GEVec.h"
 #import "EGFont.h"
 @class TRLevel;
+@class EGGlobal;
+@class EGContext;
 @class EGCamera2D;
 @class TRLevelResult;
 @class EGDirector;
 @class EGBlendFunction;
-@class EGGlobal;
-@class EGContext;
 @class EGColorSource;
 @class EGD2D;
 @class EGEnablingState;

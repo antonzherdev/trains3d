@@ -13,7 +13,7 @@
 }
 
 + (void)passCheckpoint:(NSString *)checkpointName {
-    NSLog(@"TestFlight: Checkpoint Passed - %@", checkpointName);
+    NSLog(@"Stub TestFlight: Checkpoint Passed - %@", checkpointName);
 }
 
 + (void)submitFeedback:(NSString *)feedback {

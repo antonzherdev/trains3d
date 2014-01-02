@@ -7555,8 +7555,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/antonzherdev/Downloads/TestFlightSDK2,
-					/Users/antonzherdev/dev/trains3d/Trains3D/Lib/TestFlights,
+					./Lib/TestFlight,
 				);
 				PRODUCT_NAME = RaildalePocket;
 				PROVISIONING_PROFILE = "";
@@ -7597,8 +7596,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/antonzherdev/Downloads/TestFlightSDK2,
-					/Users/antonzherdev/dev/trains3d/Trains3D/Lib/TestFlights,
+					./Lib/TestFlight,
 				);
 				PRODUCT_NAME = RaildalePocket;
 				PROVISIONING_PROFILE = "";
@@ -7638,8 +7636,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/antonzherdev/Downloads/TestFlightSDK2,
-					/Users/antonzherdev/dev/trains3d/Trains3D/Lib/TestFlights,
+					./Lib/TestFlight,
 				);
 				PRODUCT_NAME = Raildale;
 				PROVISIONING_PROFILE = "";
@@ -7680,8 +7677,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/antonzherdev/Downloads/TestFlightSDK2,
-					/Users/antonzherdev/dev/trains3d/Trains3D/Lib/TestFlights,
+					./Lib/TestFlight,
 				);
 				PRODUCT_NAME = Raildale;
 				PROVISIONING_PROFILE = "";

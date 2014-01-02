@@ -25,6 +25,8 @@
     NSString* _gameCenterPrefix;
     NSString* _gameCenterAchievmentPrefix;
     NSString* _cloudPrefix;
+    NSInteger _maxDaySlowMotions;
+    NSInteger _slowMotionRestorePeriod;
     DTLocalKeyValueStorage* _local;
     id(^_resolveMaxLevel)(id, id);
     DTCloudKeyValueStorage* _cloud;
@@ -41,13 +43,13 @@
     NSInteger __slowMotionsCount;
 }
 static TRGameDirector* _TRGameDirector_instance;
-static NSInteger _TRGameDirector_maxDaySlowMotions = 5;
-static NSInteger _TRGameDirector_slowMotionRestorePeriod;
 static CNNotificationHandle* _TRGameDirector_playerScoreRetrieveNotification;
 static ODClassType* _TRGameDirector_type;
 @synthesize gameCenterPrefix = _gameCenterPrefix;
 @synthesize gameCenterAchievmentPrefix = _gameCenterAchievmentPrefix;
 @synthesize cloudPrefix = _cloudPrefix;
+@synthesize maxDaySlowMotions = _maxDaySlowMotions;
+@synthesize slowMotionRestorePeriod = _slowMotionRestorePeriod;
 @synthesize local = _local;
 @synthesize resolveMaxLevel = _resolveMaxLevel;
 @synthesize cloud = _cloud;
@@ -63,7 +65,9 @@ static ODClassType* _TRGameDirector_type;
         _gameCenterPrefix = ((egInterfaceIdiom().isPhone) ? @"grp.com.antonzherdev.Trains3DPocket" : @"grp.com.antonzherdev.Trains3D");
         _gameCenterAchievmentPrefix = ((egInterfaceIdiom().isPhone) ? @"grp.com.antonzherdev.Train3DPocket" : @"grp.com.antonzherdev.Train3D");
         _cloudPrefix = ((egInterfaceIdiom().isPhone) ? @"pocket." : @"");
-        _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1, @"lastSlowMotions" : (@[]), @"daySlowMotions" : numi(_TRGameDirector_maxDaySlowMotions), @"boughtSlowMotions" : @0})];
+        _maxDaySlowMotions = 5;
+        _slowMotionRestorePeriod = 60 * 60 * 4;
+        _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1, @"lastSlowMotions" : (@[]), @"daySlowMotions" : numi(_maxDaySlowMotions), @"boughtSlowMotions" : @5})];
         _resolveMaxLevel = ^id(id a, id b) {
             id v = DTConflict.resolveMax(a, b);
             [CNLog applyText:[NSString stringWithFormat:@"Max level from cloud %@ = max(%@, %@)", v, a, b]];
@@ -153,7 +157,6 @@ static ODClassType* _TRGameDirector_type;
     [super initialize];
     _TRGameDirector_type = [ODClassType classTypeWithCls:[TRGameDirector class]];
     _TRGameDirector_instance = [TRGameDirector gameDirector];
-    _TRGameDirector_slowMotionRestorePeriod = 60 * 60 * 4;
     _TRGameDirector_playerScoreRetrieveNotification = [CNNotificationHandle notificationHandleWithName:@"playerScoreRetrieveNotification"];
 }
 
@@ -188,12 +191,12 @@ static ODClassType* _TRGameDirector_type;
     [SDSoundDirector.instance setEnabled:[_local intForKey:@"soundEnabled"] == 1];
     [EGRate.instance setIdsIos:736579117 osx:736545415];
     [EGGameCenter.instance authenticate];
-    if([self daySlowMotions] > _TRGameDirector_maxDaySlowMotions) [_local setKey:@"daySlowMotions" i:_TRGameDirector_maxDaySlowMotions];
+    if([self daySlowMotions] > _maxDaySlowMotions) [_local setKey:@"daySlowMotions" i:_maxDaySlowMotions];
     NSUInteger fullDayCount = [[self lastSlowMotions] count] + [self daySlowMotions];
-    if(fullDayCount > _TRGameDirector_maxDaySlowMotions) {
-        [_local setKey:@"lastSlowMotions" array:[[[[self lastSlowMotions] chain] topNumbers:_TRGameDirector_maxDaySlowMotions - [self daySlowMotions]] toArray]];
+    if(fullDayCount > _maxDaySlowMotions) {
+        [_local setKey:@"lastSlowMotions" array:[[[[self lastSlowMotions] chain] topNumbers:_maxDaySlowMotions - [self daySlowMotions]] toArray]];
     } else {
-        if(fullDayCount < _TRGameDirector_maxDaySlowMotions) [_local setKey:@"daySlowMotions" i:_TRGameDirector_maxDaySlowMotions - [[self lastSlowMotions] count]];
+        if(fullDayCount < _maxDaySlowMotions) [_local setKey:@"daySlowMotions" i:_maxDaySlowMotions - [[self lastSlowMotions] count]];
     }
     [self checkLastSlowMotions];
     __slowMotionsCount = [self daySlowMotions] + [self boughtSlowMotions];
@@ -348,7 +351,7 @@ static ODClassType* _TRGameDirector_type;
 
 - (void)runSlowMotionLevel:(TRLevel*)level {
     if([level.slowMotionCounter isStopped]) {
-        [TestFlight passCheckpoint:@"slowMotion"];
+        [TestFlight passCheckpoint:[NSString stringWithFormat:@"slow motion : %ld", (long)__slowMotionsCount]];
         [[EGDirector current] setTimeSpeed:0.1];
         level.slowMotionCounter = [[EGLengthCounter lengthCounterWithLength:1.0] onEndEvent:^void() {
             [[EGDirector current] setTimeSpeed:1.0];
@@ -374,7 +377,7 @@ static ODClassType* _TRGameDirector_type;
     id<CNSeq> lsm = [self lastSlowMotions];
     if(!([lsm isEmpty])) {
         NSDate* first = [lsm head];
-        if([first beforeNow] > _TRGameDirector_slowMotionRestorePeriod) {
+        if([first beforeNow] > _slowMotionRestorePeriod) {
             [_local setKey:@"lastSlowMotions" array:[[self lastSlowMotions] tail]];
             [_local incrementKey:@"daySlowMotions"];
             __slowMotionsCount++;
@@ -394,14 +397,6 @@ static ODClassType* _TRGameDirector_type;
 
 + (TRGameDirector*)instance {
     return _TRGameDirector_instance;
-}
-
-+ (NSInteger)maxDaySlowMotions {
-    return _TRGameDirector_maxDaySlowMotions;
-}
-
-+ (NSInteger)slowMotionRestorePeriod {
-    return _TRGameDirector_slowMotionRestorePeriod;
 }
 
 + (CNNotificationHandle*)playerScoreRetrieveNotification {

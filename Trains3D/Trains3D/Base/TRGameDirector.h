@@ -32,6 +32,8 @@
 @property (nonatomic, readonly) NSString* gameCenterPrefix;
 @property (nonatomic, readonly) NSString* gameCenterAchievmentPrefix;
 @property (nonatomic, readonly) NSString* cloudPrefix;
+@property (nonatomic, readonly) NSInteger maxDaySlowMotions;
+@property (nonatomic, readonly) NSInteger slowMotionRestorePeriod;
 @property (nonatomic, readonly) DTLocalKeyValueStorage* local;
 @property (nonatomic, readonly) id(^resolveMaxLevel)(id, id);
 @property (nonatomic, readonly) DTCloudKeyValueStorage* cloud;
@@ -67,8 +69,6 @@
 - (void)runSlowMotionLevel:(TRLevel*)level;
 - (void)checkLastSlowMotions;
 + (TRGameDirector*)instance;
-+ (NSInteger)maxDaySlowMotions;
-+ (NSInteger)slowMotionRestorePeriod;
 + (CNNotificationHandle*)playerScoreRetrieveNotification;
 + (ODClassType*)type;
 @end

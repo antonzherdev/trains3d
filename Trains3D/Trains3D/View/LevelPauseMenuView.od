@@ -12,7 +12,7 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor {
     var camera : Camera
 
     def reshapeWith(viewport : Rect) {
-        camera = Camera2D(vec2(viewport.width, viewport.height))
+        camera = Camera2D(vec2(viewport.width, viewport.height)/context.scale)
         menuView.reshapeWith(viewport)
         helpView.reshapeWith(viewport)
         winView.reshapeWith(viewport)
@@ -69,13 +69,12 @@ class MenuView extends PauseView {
     def tap(event : Event) : bool = buttons.exists(_.tap(event))
 
     def draw {
-        val s = context.scale
-        val width = columnWidth*s
-        val delta = buttonHeight*s
+        val width = columnWidth
+        val delta = buttonHeight
         val height = delta*buttons.count
 
-        size = vec2(width, height + headerHeight*s)
-        position = Rect(0, 0, size).moveToCenterFor(context.viewport.size).p
+        size = vec2(width, height + headerHeight)
+        position = Rect(0, 0, size).moveToCenterFor(context.viewport.size/context.scale).p
         var p = position + vec2(0, height - delta)
 
         buttons.chain.for{button ->
@@ -84,7 +83,7 @@ class MenuView extends PauseView {
         }
 
         buttons.for(_.draw)
-        val hh = headerHeight * context.scale
+        val hh = headerHeight
         if(hh > 0) {
             drawHeader(Rect(
                 position + vec2(0, size.y - hh),
@@ -258,7 +257,7 @@ class HelpView(level : Level) extends PauseView {
         val help = level.help.get
         helpText.text = help.text
         val size = helpText.measureC*vec2(1.1, 1.4) + vec2(0, tapText.measureC.y)
-        val rect = size.rectInCenterWith(context.viewport.size)
+        val rect = size.rectInCenterWith(context.viewport.size/context.scale)
 
         helpBackSprite.set(rect = rect)
         helpBackSprite.draw

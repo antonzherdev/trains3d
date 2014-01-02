@@ -1,10 +1,10 @@
 #import "TRLevelPauseMenuView.h"
 
 #import "TRLevel.h"
+#import "EGContext.h"
 #import "EGCamera2D.h"
 #import "EGDirector.h"
 #import "EGMaterial.h"
-#import "EGContext.h"
 #import "EGSprite.h"
 #import "TRStrings.h"
 #import "TRGameDirector.h"
@@ -52,7 +52,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
-    _camera = [EGCamera2D camera2DWithSize:GEVec2Make(geRectWidth(viewport), geRectHeight(viewport))];
+    _camera = [EGCamera2D camera2DWithSize:geVec2DivF(GEVec2Make(geRectWidth(viewport), geRectHeight(viewport)), EGGlobal.context.scale)];
     [_menuView reshapeWithViewport:viewport];
     [_helpView reshapeWithViewport:viewport];
     [_winView reshapeWithViewport:viewport];
@@ -269,12 +269,11 @@ static ODClassType* _TRMenuView_type;
 }
 
 - (void)draw {
-    CGFloat s = EGGlobal.context.scale;
-    CGFloat width = [self columnWidth] * s;
-    CGFloat delta = [self buttonHeight] * s;
-    CGFloat height = delta * [[self buttons] count];
-    _size = GEVec2Make(((float)(width)), ((float)(height + [self headerHeight] * s)));
-    _position = geRectMoveToCenterForSize(geRectApplyXYSize(0.0, 0.0, _size), geVec2ApplyVec2i([EGGlobal.context viewport].size)).p;
+    NSInteger width = [self columnWidth];
+    NSInteger delta = [self buttonHeight];
+    NSInteger height = delta * [[self buttons] count];
+    _size = GEVec2Make(((float)(width)), ((float)(height + [self headerHeight])));
+    _position = geRectMoveToCenterForSize(geRectApplyXYSize(0.0, 0.0, _size), geVec2iDivF([EGGlobal.context viewport].size, EGGlobal.context.scale)).p;
     __block GEVec2 p = geVec2AddVec2(_position, GEVec2Make(0.0, ((float)(height - delta))));
     [[[self buttons] chain] forEach:^void(EGButton* button) {
         ((EGButton*)(button)).rect = GERectMake(p, GEVec2Make(((float)(width)), ((float)(delta - 0.2))));
@@ -283,7 +282,7 @@ static ODClassType* _TRMenuView_type;
     [[self buttons] forEach:^void(EGButton* _) {
         [((EGButton*)(_)) draw];
     }];
-    CGFloat hh = [self headerHeight] * EGGlobal.context.scale;
+    CGFloat hh = [self headerHeight];
     if(hh > 0) [self drawHeaderRect:GERectMake(geVec2AddVec2(_position, GEVec2Make(0.0, _size.y - hh)), GEVec2Make(_size.x, ((float)(hh))))];
 }
 
@@ -803,7 +802,7 @@ static ODClassType* _TRHelpView_type;
     TRHelp* help = [[_level help] get];
     [_helpText setText:help.text];
     GEVec2 size = geVec2AddVec2(geVec2MulVec2([_helpText measureC], GEVec2Make(1.1, 1.4)), GEVec2Make(0.0, [_tapText measureC].y));
-    GERect rect = geVec2RectInCenterWithSize(size, geVec2ApplyVec2i([EGGlobal.context viewport].size));
+    GERect rect = geVec2RectInCenterWithSize(size, geVec2iDivF([EGGlobal.context viewport].size, EGGlobal.context.scale));
     [_helpBackSprite setRect:rect];
     [_helpBackSprite draw];
     [_helpText setPosition:geVec3ApplyVec2(geVec2AddVec2(geRectCenter(rect), geVec2MulVec2(rect.size, GEVec2Make(-0.45, 0.45))))];
