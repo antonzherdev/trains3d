@@ -5,6 +5,7 @@
 #import "DTKeyValueStorage.h"
 #import "DTConflictResolve.h"
 #import "TRLevel.h"
+#import "TestFlight.h"
 #import "TRScore.h"
 #import "EGGameCenterPlat.h"
 #import "TRStrings.h"
@@ -41,7 +42,7 @@
 }
 static TRGameDirector* _TRGameDirector_instance;
 static NSInteger _TRGameDirector_maxDaySlowMotions = 5;
-static NSInteger _TRGameDirector_slowMotionRestorePeriod = 120;
+static NSInteger _TRGameDirector_slowMotionRestorePeriod;
 static CNNotificationHandle* _TRGameDirector_playerScoreRetrieveNotification;
 static ODClassType* _TRGameDirector_type;
 @synthesize gameCenterPrefix = _gameCenterPrefix;
@@ -78,6 +79,7 @@ static ODClassType* _TRGameDirector_type;
         }];
         _obs = [TRLevel.winNotification observeBy:^void(TRLevel* level, id _) {
             NSUInteger n = ((TRLevel*)(level)).number;
+            [TestFlight passCheckpoint:[NSString stringWithFormat:@"Win level %lu", (unsigned long)n]];
             [_weakSelf.cloud keepMaxKey:[NSString stringWithFormat:@"%@maxLevel", _weakSelf.cloudPrefix] i:((NSInteger)(n + 1))];
             [_weakSelf.local setKey:@"currentLevel" i:((NSInteger)(n + 1))];
             NSString* leaderboard = [NSString stringWithFormat:@"%@.Level%lu", _weakSelf.gameCenterPrefix, (unsigned long)n];
@@ -151,6 +153,7 @@ static ODClassType* _TRGameDirector_type;
     [super initialize];
     _TRGameDirector_type = [ODClassType classTypeWithCls:[TRGameDirector class]];
     _TRGameDirector_instance = [TRGameDirector gameDirector];
+    _TRGameDirector_slowMotionRestorePeriod = 60 * 60 * 4;
     _TRGameDirector_playerScoreRetrieveNotification = [CNNotificationHandle notificationHandleWithName:@"playerScoreRetrieveNotification"];
 }
 
@@ -220,6 +223,7 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)restoreLastScene {
+    [TestFlight passCheckpoint:[NSString stringWithFormat:@"Start with %ld", (long)[self currentLevel]]];
     [[EGDirector current] setScene:^EGScene*() {
         return [TRSceneFactory sceneForLevelWithNumber:((NSUInteger)([self currentLevel]))];
     }];
@@ -238,6 +242,7 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)chooseLevel {
+    [TestFlight passCheckpoint:@"Choose level menu"];
     [[EGDirector current] setScene:^EGScene*() {
         return [TRLevelChooseMenu scene];
     }];
@@ -247,6 +252,7 @@ static ODClassType* _TRGameDirector_type;
 - (void)nextLevel {
     [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
         if([self isNeedRate]) {
+            [TestFlight passCheckpoint:@"Show rate dialog"];
             ((TRLevel*)(level)).rate = YES;
             [[EGDirector current] redraw];
         } else {
@@ -268,6 +274,7 @@ static ODClassType* _TRGameDirector_type;
 
 - (void)setLevel:(NSInteger)level {
     if(level <= [self maxAvailableLevel]) {
+        [TestFlight passCheckpoint:[NSString stringWithFormat:@"Start level %ld", (long)level]];
         [_local setKey:@"currentLevel" i:level];
         [[EGDirector current] setTimeSpeed:1.0];
         [[EGDirector current] setScene:^EGScene*() {
@@ -277,6 +284,7 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)showLeaderboardLevel:(TRLevel*)level {
+    [TestFlight passCheckpoint:[NSString stringWithFormat:@"Show leaderboard for level %lu", (unsigned long)level.number]];
     [EGGameCenter.instance showLeaderboardName:[NSString stringWithFormat:@"%@.Level%lu", _gameCenterPrefix, (unsigned long)level.number]];
 }
 
@@ -286,6 +294,7 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)showSupportChangeLevel:(BOOL)changeLevel {
+    [TestFlight passCheckpoint:@"Show support"];
     NSString* text = [@"\n"
         "\n"
         "> " stringByAppendingString:[[TRStr.Loc supportEmailText] replaceOccurrences:@"\n" withString:@"\n"
@@ -302,6 +311,7 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)showRate {
+    [TestFlight passCheckpoint:@"Rate"];
     [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
         [EGRate.instance showRate];
         [self setLevel:((NSInteger)(((TRLevel*)(level)).number + 1))];
@@ -314,6 +324,7 @@ static ODClassType* _TRGameDirector_type;
 
 - (void)setSoundEnabled:(BOOL)soundEnabled {
     if([SDSoundDirector.instance enabled] != soundEnabled) {
+        [TestFlight passCheckpoint:[NSString stringWithFormat:@"SoundEnabled = %d", soundEnabled]];
         [_local setKey:@"soundEnabled" i:((soundEnabled) ? 1 : 0)];
         [SDSoundDirector.instance setEnabled:soundEnabled];
     }
@@ -337,6 +348,7 @@ static ODClassType* _TRGameDirector_type;
 
 - (void)runSlowMotionLevel:(TRLevel*)level {
     if([level.slowMotionCounter isStopped]) {
+        [TestFlight passCheckpoint:@"slowMotion"];
         [[EGDirector current] setTimeSpeed:0.1];
         level.slowMotionCounter = [[EGLengthCounter lengthCounterWithLength:1.0] onEndEvent:^void() {
             [[EGDirector current] setTimeSpeed:1.0];

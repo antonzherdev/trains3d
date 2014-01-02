@@ -4,6 +4,7 @@
 @class DTConflict;
 @class DTCloudKeyValueStorage;
 @class TRLevel;
+@class TestFlight;
 @class TRScore;
 @class EGGameCenter;
 @class TRStr;

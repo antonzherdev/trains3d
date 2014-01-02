@@ -8,11 +8,18 @@
 
 #import "TRAppDelegate.h"
 #import "TRGameDirector.h"
+#import "TestFlight.h"
+#import "GL.h"
 
 @implementation TRAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    if(egInterfaceIdiom().isPhone) {
+        [TestFlight takeOff:@"60decc60-d750-44e4-afa0-463b84803b34"];
+    } else {
+        [TestFlight takeOff:@"4c288980-f39e-4323-9f5c-7835e0d516a6"];
+    }
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
     // Override point for customization after application launch.
     return YES;

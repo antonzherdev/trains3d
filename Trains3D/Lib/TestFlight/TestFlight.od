@@ -1,0 +1,5 @@
+package com.testflightapp
+
+stub class TestFlight {
+    static def pass(checkpoint : string)
+}

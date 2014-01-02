@@ -1,6 +1,7 @@
 package com.antonzherdev.trains
 
 import com.antonzherdev.data._
+import com.testflightapp._
 
 class GameDirector {
     val gameCenterPrefix = if(egInterfaceIdiom.isPhone) "grp.com.antonzherdev.Trains3DPocket" else "grp.com.antonzherdev.Trains3D"
@@ -9,7 +10,7 @@ class GameDirector {
 
     static val instance : GameDirector = GameDirector()
     static val maxDaySlowMotions = 5
-    static val slowMotionRestorePeriod = 120
+    static val slowMotionRestorePeriod = 60*60*4
     val local = LocalKeyValueStorage([("currentLevel", 1), ("soundEnabled", 1),
         ("lastSlowMotions", []),
         ("daySlowMotions", maxDaySlowMotions),
@@ -31,6 +32,7 @@ class GameDirector {
     static val playerScoreRetrieveNotification = NotificationHandle<GameDirector, LocalPlayerScore>("playerScoreRetrieveNotification")
     private val obs = Level.winNotification.observe{ level, _ ->
         val n = level.number
+        TestFlight.pass("Win level $n")
         cloud.keepMax("$(cloudPrefix)maxLevel", n + 1)
         local.set("currentLevel", i = n + 1)
         val leaderboard = "$gameCenterPrefix.Level$n"
@@ -173,6 +175,7 @@ class GameDirector {
     def currentLevel = local.intFor("currentLevel")
     def maxAvailableLevel = cloud.intFor("$(cloudPrefix)maxLevel")
     def restoreLastScene {
+        TestFlight.pass("Start with $currentLevel")
         Director.current.set(scene = SceneFactory.sceneForLevelWith(number = currentLevel))
     }
 
@@ -189,6 +192,7 @@ class GameDirector {
     }
 
     def chooseLevel {
+        TestFlight.pass("Choose level menu")
         Director.current.scene = LevelChooseMenu.scene
         Director.current.pause
     }
@@ -196,6 +200,7 @@ class GameDirector {
     def nextLevel {
         Director.current.scene.get.controller.as<Level>.for{level ->
             if(isNeedRate) {
+                TestFlight.pass("Show rate dialog")
                 level.rate = true
                 Director.current.redraw
             } else {
@@ -217,6 +222,7 @@ class GameDirector {
 
     def set(level : int) {
         if(level <= maxAvailableLevel) {
+            TestFlight.pass("Start level $level")
             local.set("currentLevel", i = level)
             Director.current.timeSpeed = 1.0
             Director.current.scene = SceneFactory.sceneFor(LevelFactory.levelWith(number = level))
@@ -225,6 +231,7 @@ class GameDirector {
 
 
     def showLeaderboard(level : Level) {
+        TestFlight.pass("Show leaderboard for level $(level.number)")
         GameCenter.instance.showLeaderboard("$gameCenterPrefix.Level$(level.number)")
     }
 
@@ -234,6 +241,7 @@ class GameDirector {
     }
 
     def showSupport(changeLevel : bool) {
+        TestFlight.pass("Show support")
         val text = "\n\n> " + Loc.supportEmailText.replace("\n", "\n> ")
         val htmlText = text.replace(">", "&gt;").replace("\n", "<br/>\n")
         Director.current.scene.get.controller.as<Level>.for{level ->
@@ -248,6 +256,7 @@ class GameDirector {
 
     def isNeedRate : bool = maxAvailableLevel > 6 && Rate.instance.shouldShow(everyVersion = true)
     def showRate {
+        TestFlight.pass("Rate")
         Director.current.scene.get.controller.as<Level>.for{level ->
             Rate.instance.showRate
             set(level = level.number + 1)
@@ -257,6 +266,7 @@ class GameDirector {
     def soundEnabled = SoundDirector.instance.enabled
     def set(soundEnabled : bool) {
         if( SoundDirector.instance.enabled != soundEnabled) {
+            TestFlight.pass("SoundEnabled = $soundEnabled")
             local.set("soundEnabled", i = if(soundEnabled) 1 else 0)
             SoundDirector.instance.enabled = soundEnabled
         }
@@ -271,6 +281,7 @@ class GameDirector {
 
     def runSlowMotion(level : Level) {
         if(level.slowMotionCounter.isStopped) {
+            TestFlight.pass("slowMotion")
             Director.current.timeSpeed = 0.1
             level.slowMotionCounter = LengthCounter(1).onEnd {
                 Director.current.timeSpeed = 1.0

@@ -12,6 +12,10 @@
 		0214B1481773394500C03C71 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0214B1281773394400C03C71 /* Cocoa.framework */; };
 		0232DCE7182386F400139599 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0232DCE6182386F400139599 /* GameKit.framework */; };
 		027ABE5C182384D100A72CD0 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 027ABE5B182384D100A72CD0 /* GameKit.framework */; };
+		027B40FF1875A7AF00741C2A /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B40FB1875A7AF00741C2A /* libTestFlight.a */; };
+		027B41001875A7AF00741C2A /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B40FB1875A7AF00741C2A /* libTestFlight.a */; };
+		027B41021875AA5C00741C2A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B41011875AA5C00741C2A /* libz.dylib */; };
+		027B41031875AA6400741C2A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B41011875AA5C00741C2A /* libz.dylib */; };
 		0297EDF6187163CB004427A8 /* CNCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0666099530AA68BB6F1 /* CNCollection.m */; };
 		0297EDF7187163CB004427A8 /* CNSortBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF59F9DE9E545715CEE2F /* CNSortBuilder.m */; };
 		0297EDF8187163CB004427A8 /* CNChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA93D8D19D1214BDEC32 /* CNChain.m */; };
@@ -1335,6 +1339,7 @@
 		6F3DFC2BC48762F403D474A4 /* Seq.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF9AB1EFCD0C77A21525C /* Seq.od */; };
 		6F3DFC2BF68BC41785B4F816 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFDAFE47E6E730E97F158 /* Localizable.strings */; };
 		6F3DFC33CB5BAFC2861C4FF6 /* GEBentleyOttmann.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8B29A47877E8DA46B03 /* GEBentleyOttmann.m */; };
+		6F3DFC345E15381635CB1E04 /* TestFlight.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF57F24A78E5D6B78E997 /* TestFlight.m */; };
 		6F3DFC38419A6D62389C989F /* Vertex.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF0080BD8176CF8E1C8BC /* Vertex.od */; };
 		6F3DFC48C192D26EBD007F28 /* btGhostObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB5441E6F155F2A4CAF7 /* btGhostObject.cpp */; };
 		6F3DFC4B1AC4F964D6F56006 /* KWProbePoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0255D0634FEBC03437A /* KWProbePoller.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -1658,6 +1663,11 @@
 		0214B1461773394500C03C71 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		0232DCE6182386F400139599 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		027ABE5B182384D100A72CD0 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
+		027B40FB1875A7AF00741C2A /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
+		027B40FC1875A7AF00741C2A /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
+		027B40FD1875A7AF00741C2A /* TestFlight+AsyncLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+AsyncLogging.h"; sourceTree = "<group>"; };
+		027B40FE1875A7AF00741C2A /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
+		027B41011875AA5C00741C2A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		0297EF74187163CB004427A8 /* RaildalePocket.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RaildalePocket.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0297EF7818717046004427A8 /* iPhoneImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = iPhoneImages.xcassets; sourceTree = "<group>"; };
 		0297EF7B1871722E004427A8 /* OsXImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = OsXImages.xcassets; sourceTree = "<group>"; };
@@ -2023,6 +2033,7 @@
 		6F3DF449C19E90F030A14926 /* CNFlatMapLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNFlatMapLink.h; sourceTree = "<group>"; };
 		6F3DF44EBEC3CF5826723424 /* fast_trigonometry.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = fast_trigonometry.inl; sourceTree = "<group>"; };
 		6F3DF451368AD3B7589764AE /* btTriangleIndexVertexMaterialArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btTriangleIndexVertexMaterialArray.cpp; sourceTree = "<group>"; };
+		6F3DF455171B36327CD5BC5D /* TestFlight.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TestFlight.od; sourceTree = "<group>"; };
 		6F3DF45A74F37F0A148D53F0 /* func_packing.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = func_packing.hpp; sourceTree = "<group>"; };
 		6F3DF45AA03B035CFCD39E97 /* btConvexHullComputer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btConvexHullComputer.h; sourceTree = "<group>"; };
 		6F3DF45BBFED9CFEE86D4EAF /* btPolarDecomposition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btPolarDecomposition.h; sourceTree = "<group>"; };
@@ -2111,6 +2122,7 @@
 		6F3DF577DEF2507D7614ACDA /* lucida_grande_48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lucida_grande_48.png; sourceTree = "<group>"; };
 		6F3DF57B94290B605A4E57F7 /* component_wise.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = component_wise.inl; sourceTree = "<group>"; };
 		6F3DF57E003B547FCA493840 /* Font.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Font.od; sourceTree = "<group>"; };
+		6F3DF57F24A78E5D6B78E997 /* TestFlight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestFlight.m; sourceTree = "<group>"; };
 		6F3DF584BAE9F807A16C2F74 /* de-AT */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = "de-AT"; path = Localizable.strings; sourceTree = "<group>"; };
 		6F3DF593DC1412511D7E71DF /* orthonormalize.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = orthonormalize.hpp; sourceTree = "<group>"; };
 		6F3DF5975E2C0097829433D1 /* Grouse.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Grouse.mp3; sourceTree = "<group>"; };
@@ -2988,7 +3000,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				027B41031875AA6400741C2A /* libz.dylib in Frameworks */,
 				0297EEFB187163CB004427A8 /* OpenGLES.framework in Frameworks */,
+				027B41001875A7AF00741C2A /* libTestFlight.a in Frameworks */,
 				0297EEFC187163CB004427A8 /* CoreGraphics.framework in Frameworks */,
 				0297EEFD187163CB004427A8 /* UIKit.framework in Frameworks */,
 				0297EEFE187163CB004427A8 /* GameKit.framework in Frameworks */,
@@ -3001,7 +3015,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				027B41021875AA5C00741C2A /* libz.dylib in Frameworks */,
 				02C70A571802A3E500007F50 /* OpenGLES.framework in Frameworks */,
+				027B40FF1875A7AF00741C2A /* libTestFlight.a in Frameworks */,
 				02C70A511802A3E500007F50 /* CoreGraphics.framework in Frameworks */,
 				02C70A531802A3E500007F50 /* UIKit.framework in Frameworks */,
 				027ABE5C182384D100A72CD0 /* GameKit.framework in Frameworks */,
@@ -3043,6 +3059,7 @@
 		0214B1271773394400C03C71 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				027B41011875AA5C00741C2A /* libz.dylib */,
 				0232DCE6182386F400139599 /* GameKit.framework */,
 				027ABE5B182384D100A72CD0 /* GameKit.framework */,
 				0214B1281773394400C03C71 /* Cocoa.framework */,
@@ -3902,6 +3919,7 @@
 				6F3DF1F33D624D77F1276091 /* Bullet */,
 				6F3DFE9B5776FA7A140A43DF /* TBXML */,
 				6F3DFEFCDF1047BCBA6C4F14 /* iRate */,
+				6F3DFCEA29A420F3C36E14E4 /* TestFlight */,
 			);
 			path = Lib;
 			sourceTree = "<group>";
@@ -4616,6 +4634,19 @@
 				6F3DF932F1559D4C8623EFFD /* Trains3DTests-Info.plist */,
 			);
 			path = Test;
+			sourceTree = "<group>";
+		};
+		6F3DFCEA29A420F3C36E14E4 /* TestFlight */ = {
+			isa = PBXGroup;
+			children = (
+				027B40FB1875A7AF00741C2A /* libTestFlight.a */,
+				027B40FC1875A7AF00741C2A /* TestFlight.h */,
+				027B40FD1875A7AF00741C2A /* TestFlight+AsyncLogging.h */,
+				027B40FE1875A7AF00741C2A /* TestFlight+ManualSessions.h */,
+				6F3DF455171B36327CD5BC5D /* TestFlight.od */,
+				6F3DF57F24A78E5D6B78E997 /* TestFlight.m */,
+			);
+			path = TestFlight;
 			sourceTree = "<group>";
 		};
 		6F3DFCFFA3FF5F8218B9E6A8 /* da.lproj */ = {
@@ -6291,6 +6322,7 @@
 				6F3DFCBEE2EA7A9343D5E8C8 /* ODEnum.m in Sources */,
 				6F3DF34611718D0A9AC9C7A5 /* OSPlatform.m in Sources */,
 				6F3DF482BAB6F06CAFAD7AA2 /* ODType.m in Sources */,
+				6F3DFC345E15381635CB1E04 /* TestFlight.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7521,6 +7553,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Trains3D/Platform/iOS/iPhone/Trains3DPocket-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/antonzherdev/Downloads/TestFlightSDK2,
+					/Users/antonzherdev/dev/trains3d/Trains3D/Lib/TestFlights,
+				);
 				PRODUCT_NAME = RaildalePocket;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -7558,6 +7595,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Trains3D/Platform/iOS/iPhone/Trains3DPocket-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/antonzherdev/Downloads/TestFlightSDK2,
+					/Users/antonzherdev/dev/trains3d/Trains3D/Lib/TestFlights,
+				);
 				PRODUCT_NAME = RaildalePocket;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -7594,6 +7636,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Trains3D/Platform/iOS/iPad/Trains3Di-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/antonzherdev/Downloads/TestFlightSDK2,
+					/Users/antonzherdev/dev/trains3d/Trains3D/Lib/TestFlights,
+				);
 				PRODUCT_NAME = Raildale;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -7631,6 +7678,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Trains3D/Platform/iOS/iPad/Trains3Di-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/antonzherdev/Downloads/TestFlightSDK2,
+					/Users/antonzherdev/dev/trains3d/Trains3D/Lib/TestFlights,
+				);
 				PRODUCT_NAME = Raildale;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;

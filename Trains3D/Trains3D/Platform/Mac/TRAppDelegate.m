@@ -10,7 +10,7 @@
     _window.contentView = self.view;
 
     [[TRGameDirector instance] restoreLastScene];
-    [_view.director displayStats];
+//    [_view.director displayStats];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification {
