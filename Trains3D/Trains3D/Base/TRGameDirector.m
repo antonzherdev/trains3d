@@ -269,6 +269,7 @@ static ODClassType* _TRGameDirector_type;
 - (void)setLevel:(NSInteger)level {
     if(level <= [self maxAvailableLevel]) {
         [_local setKey:@"currentLevel" i:level];
+        [[EGDirector current] setTimeSpeed:1.0];
         [[EGDirector current] setScene:^EGScene*() {
             return [TRSceneFactory sceneForLevel:[TRLevelFactory levelWithNumber:((NSUInteger)(level))]];
         }];

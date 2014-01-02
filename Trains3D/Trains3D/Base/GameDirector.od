@@ -218,6 +218,7 @@ class GameDirector {
     def set(level : int) {
         if(level <= maxAvailableLevel) {
             local.set("currentLevel", i = level)
+            Director.current.timeSpeed = 1.0
             Director.current.scene = SceneFactory.sceneFor(LevelFactory.levelWith(number = level))
         }
     }
