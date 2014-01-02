@@ -22,6 +22,7 @@
 #import "EGEMail.h"
 @implementation TRGameDirector{
     NSString* _gameCenterPrefix;
+    NSString* _gameCenterAchievmentPrefix;
     NSString* _cloudPrefix;
     DTLocalKeyValueStorage* _local;
     id(^_resolveMaxLevel)(id, id);
@@ -44,6 +45,7 @@ static NSInteger _TRGameDirector_slowMotionRestorePeriod = 120;
 static CNNotificationHandle* _TRGameDirector_playerScoreRetrieveNotification;
 static ODClassType* _TRGameDirector_type;
 @synthesize gameCenterPrefix = _gameCenterPrefix;
+@synthesize gameCenterAchievmentPrefix = _gameCenterAchievmentPrefix;
 @synthesize cloudPrefix = _cloudPrefix;
 @synthesize local = _local;
 @synthesize resolveMaxLevel = _resolveMaxLevel;
@@ -58,6 +60,7 @@ static ODClassType* _TRGameDirector_type;
     __weak TRGameDirector* _weakSelf = self;
     if(self) {
         _gameCenterPrefix = ((egInterfaceIdiom().isPhone) ? @"grp.com.antonzherdev.Trains3DPocket" : @"grp.com.antonzherdev.Trains3D");
+        _gameCenterAchievmentPrefix = ((egInterfaceIdiom().isPhone) ? @"grp.com.antonzherdev.Train3DPocket" : @"grp.com.antonzherdev.Train3D");
         _cloudPrefix = ((egInterfaceIdiom().isPhone) ? @"pocket." : @"");
         _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1, @"lastSlowMotions" : (@[]), @"daySlowMotions" : numi(_TRGameDirector_maxDaySlowMotions), @"boughtSlowMotions" : @0})];
         _resolveMaxLevel = ^id(id a, id b) {
@@ -132,9 +135,9 @@ static ODClassType* _TRGameDirector_type;
         _knockDownObs = [TRLevel.knockDownNotification observeBy:^void(TRLevel* level, CNTuple* p) {
             [TRGameDirector.instance destroyTrainsTrains:(@[((CNTuple*)(p)).a])];
             if(unumi(((CNTuple*)(p)).b) == 2) {
-                [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.KnockDown", _weakSelf.gameCenterPrefix]];
+                [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.KnockDown", _weakSelf.gameCenterAchievmentPrefix]];
             } else {
-                if(unumui(((CNTuple*)(p)).b) > 2) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.Crash%@", _weakSelf.gameCenterPrefix, ((CNTuple*)(p)).b]];
+                if(unumui(((CNTuple*)(p)).b) > 2) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.Crash%@", _weakSelf.gameCenterAchievmentPrefix, ((CNTuple*)(p)).b]];
             }
         }];
         __slowMotionsCount = 0;
@@ -166,16 +169,16 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)destroyTrainsTrains:(id<CNSeq>)trains {
-    [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.Crash", _gameCenterPrefix]];
+    [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.Crash", _gameCenterAchievmentPrefix]];
     if([trains existsWhere:^BOOL(TRTrain* _) {
     return ((TRTrain*)(_)).trainType == TRTrainType.fast;
-}]) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.ExpressCrash", _gameCenterPrefix]];
+}]) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.ExpressCrash", _gameCenterAchievmentPrefix]];
     if([trains existsWhere:^BOOL(TRTrain* _) {
     return ((TRTrain*)(_)).trainType == TRTrainType.repairer;
-}]) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.RepairCrash", _gameCenterPrefix]];
+}]) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.RepairCrash", _gameCenterAchievmentPrefix]];
     if([trains existsWhere:^BOOL(TRTrain* _) {
     return ((TRTrain*)(_)).trainType == TRTrainType.crazy;
-}]) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.CrazyCrash", _gameCenterPrefix]];
+}]) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.CrazyCrash", _gameCenterAchievmentPrefix]];
 }
 
 - (void)_init {

@@ -29,6 +29,7 @@
 
 @interface TRGameDirector : NSObject
 @property (nonatomic, readonly) NSString* gameCenterPrefix;
+@property (nonatomic, readonly) NSString* gameCenterAchievmentPrefix;
 @property (nonatomic, readonly) NSString* cloudPrefix;
 @property (nonatomic, readonly) DTLocalKeyValueStorage* local;
 @property (nonatomic, readonly) id(^resolveMaxLevel)(id, id);

@@ -6,7 +6,7 @@
 @implementation EGGameCenter {
     BOOL _paused;
     BOOL _active;
-    NSMutableDictionary* _achievements;
+    NSDictionary* _achievements;
 }
 static EGGameCenter * _EGGameCenter_instance;
 static ODClassType* _EGGameCenter_type;
@@ -79,21 +79,43 @@ static ODClassType* _EGGameCenter_type;
 #endif
 
 -(void)authenticatedPlayer:(GKLocalPlayer *)player{
-    [GKAchievement loadAchievementsWithCompletionHandler:^(NSArray *achievements, NSError *error) {
+    [GKAchievementDescription loadAchievementDescriptionsWithCompletionHandler:^(NSArray *descriptions, NSError *error) {
         if (error != nil) {
-            NSLog(@"Error while loading achievements: %@", error);
+            NSLog(@"Error while loading achievements descriptions: %@", error);
             return;
         }
-        if (achievements != nil) {
-            _active = YES;
-            NSMutableDictionary * dic = [NSMutableDictionary dictionary];
-            for(GKAchievement* a in achievements) {
-                a.showsCompletionBanner = YES;
-                [dic setObject:[EGAchievement achievementWithAchievement:a] forKey:a.identifier];
+
+        [GKAchievement loadAchievementsWithCompletionHandler:^(NSArray *achievements, NSError *error) {
+            if (error != nil) {
+                NSLog(@"Error while loading achievements: %@", error);
+                return;
             }
+            NSMutableDictionary *dic = [NSMutableDictionary dictionary];
             _achievements = dic;
-        }
+            _active = YES;
+            if (achievements != nil) {
+                for(GKAchievementDescription* desc in descriptions) {
+                    GKAchievement* a = [[achievements findWhere:^BOOL(GKAchievement *x) {
+                                        return [x.identifier isEqual:desc.identifier];
+                                    }] getOrElseF:^GKAchievement* {
+                                        return [[GKAchievement alloc] initWithIdentifier:desc.identifier];
+                                    }];
+                    [dic setObject:[EGAchievement initWithAchievementDescription:desc achievementWithAchievement:a] forKey:desc.identifier];
+                }
+            }
+            [self clearAchievements];
+        }];
     }];
+
+}
+
+- (void)clearAchievements {
+    if(!_active) return;
+    NSEnumerator *enumerator = _achievements.objectEnumerator;
+    id no;
+    while((no = enumerator.nextObject) != nil) {
+        [no setProgress:0];
+    }
 }
 
 -(void)disableGameCenter {
@@ -103,11 +125,7 @@ static ODClassType* _EGGameCenter_type;
 - (id)achievementName:(NSString*)name {
     if(!_active) return [CNOption none];
 
-    return [CNOption someValue:[_achievements objectForKey:name orUpdateWith:^id {
-        GKAchievement *a = [[GKAchievement alloc] initWithIdentifier:name];
-        a.showsCompletionBanner = YES;
-        return [EGAchievement achievementWithAchievement:a];
-    }]];
+    return [_achievements optKey:name];
 }
 
 
@@ -264,21 +282,23 @@ static ODClassType* _EGGameCenter_type;
 
 
 @implementation EGAchievement{
+    GKAchievementDescription* _description;
     GKAchievement* _achievement;
 }
 static ODClassType* _EGAchievement_type;
 
-- (instancetype)initWithAchievement:(GKAchievement *)achievement {
+- (instancetype)initWithAchievementDescription:(GKAchievementDescription *)description chievement:(GKAchievement *)achievement {
     self = [super init];
     if (self) {
         _achievement = achievement;
+        _description=description;
     }
 
     return self;
 }
 
-+ (instancetype)achievementWithAchievement:(GKAchievement *)achievement {
-    return [[self alloc] initWithAchievement:achievement];
++ (instancetype)initWithAchievementDescription:(GKAchievementDescription *)description achievementWithAchievement:(GKAchievement *)achievement {
+    return [[self alloc] initWithAchievementDescription:description chievement:achievement];
 }
 
 
@@ -297,15 +317,27 @@ static ODClassType* _EGAchievement_type;
 - (void)setProgress:(CGFloat)progress {
     CGFloat d = progress*100.0;
     if(!eqf((CGFloat) _achievement.percentComplete, d)) {
+        _achievement.showsCompletionBanner = NO;
         _achievement.percentComplete = d;
         [GKAchievement reportAchievements:@[_achievement] withCompletionHandler:^(NSError *error) {
             if(error != nil) {
                 NSLog(@"Error in achievenment %@ reporting: %@", _achievement.identifier, error);
             } else {
                 NSLog(@"The achievenment %@ has been reported", _achievement.identifier);
+                if(eqf(d, 100.0)) {
+                    [GKNotificationBanner showBannerWithTitle:_description.title message:_description.achievedDescription
+                                            completionHandler:^{
+
+                                            }];
+                }
             }
         }];
+//        [self performSelectorOnMainThread:@selector(report) withObject:nil waitUntilDone:NO];
     }
+}
+
+- (void)report {
+
 }
 
 - (void)complete {

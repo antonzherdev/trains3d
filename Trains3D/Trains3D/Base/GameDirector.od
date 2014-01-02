@@ -4,6 +4,7 @@ import com.antonzherdev.data._
 
 class GameDirector {
     val gameCenterPrefix = if(egInterfaceIdiom.isPhone) "grp.com.antonzherdev.Trains3DPocket" else "grp.com.antonzherdev.Trains3D"
+    val gameCenterAchievmentPrefix = if(egInterfaceIdiom.isPhone) "grp.com.antonzherdev.Train3DPocket" else "grp.com.antonzherdev.Train3D"
     val cloudPrefix = if(egInterfaceIdiom.isPhone) "pocket." else ""
 
     static val instance : GameDirector = GameDirector()
@@ -114,22 +115,22 @@ class GameDirector {
     private val knockDownObs = Level.knockDownNotification.observe{level, p ->
         GameDirector.instance.destroyTrains([p.a])
         if(p.b == 2) {
-            GameCenter.instance.completeAchievement("$gameCenterPrefix.KnockDown")
+            GameCenter.instance.completeAchievement("$gameCenterAchievmentPrefix.KnockDown")
         } else if(p.b > 2) {
-            GameCenter.instance.completeAchievement("$gameCenterPrefix.Crash$(p.b)")
+            GameCenter.instance.completeAchievement("$gameCenterAchievmentPrefix.Crash$(p.b)")
         }
     }
 
     def destroyTrains(trains : [Train]) {
-        GameCenter.instance.completeAchievement("$gameCenterPrefix.Crash")
+        GameCenter.instance.completeAchievement("$gameCenterAchievmentPrefix.Crash")
         if(trains.exists(_.trainType == TrainType.fast)) {
-            GameCenter.instance.completeAchievement("$gameCenterPrefix.ExpressCrash")
+            GameCenter.instance.completeAchievement("$gameCenterAchievmentPrefix.ExpressCrash")
         }
         if(trains.exists(_.trainType == TrainType.repairer)) {
-            GameCenter.instance.completeAchievement("$gameCenterPrefix.RepairCrash")
+            GameCenter.instance.completeAchievement("$gameCenterAchievmentPrefix.RepairCrash")
         }
         if(trains.exists(_.trainType == TrainType.crazy)) {
-            GameCenter.instance.completeAchievement("$gameCenterPrefix.CrazyCrash")
+            GameCenter.instance.completeAchievement("$gameCenterAchievmentPrefix.CrazyCrash")
         }
     }
 

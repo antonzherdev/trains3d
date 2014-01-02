@@ -15,6 +15,7 @@
 + (EGGameCenter *)instance;
 
 - (void)completeAchievementName:(NSString *)name;
+- (void)clearAchievements;
 
 + (ODClassType*)type;
 
@@ -31,8 +32,9 @@
 @interface EGAchievement : NSObject
 @property (nonatomic, readonly) NSString* name;
 
-- (instancetype)initWithAchievement:(GKAchievement *)achievement;
-+ (instancetype)achievementWithAchievement:(GKAchievement *)achievement;
+- (instancetype)initWithAchievementDescription:(GKAchievementDescription *)description chievement:(GKAchievement *)achievement;
+
++ (instancetype)initWithAchievementDescription:(GKAchievementDescription *)description achievementWithAchievement:(GKAchievement *)achievement;
 
 - (void)complete;
 - (ODClassType*)type;
