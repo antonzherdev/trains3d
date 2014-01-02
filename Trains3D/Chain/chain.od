@@ -1,9 +1,0 @@
-package core
-
-stub object chain {
-    val prefix = "CN"
-}
-
-stub object lang {
-    val prefix = "OD"
-}
