@@ -25,7 +25,7 @@ class Font(name : string) {
             } else if(name == "common") {
                 height = map("lineHeight").toUInt
             } else if(name == "char") {
-                val code : char = map("id").toInt
+                val code : char = map("id").toInt.cast<char>
                 val width : float4 = map("xadvance").toFloat
                 val offset =  vec2i(map("xoffset").toInt, map("yoffset").toInt)
                 val r = Rect(map("x").toFloat, map("y").toFloat, map("width").toFloat, map("height").toFloat)

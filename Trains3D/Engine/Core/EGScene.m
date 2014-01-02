@@ -327,7 +327,7 @@ static ODClassType* _EGLayer_type;
         _recognizerState = [EGRecognizersState recognizersStateWithRecognizers:[[_inputProcessor mapF:^EGRecognizers*(id<EGInputProcessor> _) {
             return [((id<EGInputProcessor>)(_)) recognizers];
         }] getOrElseF:^EGRecognizers*() {
-            return [ODObject object];
+            return [EGRecognizers recognizersWithItems:(@[])];
         }]];
     }
     

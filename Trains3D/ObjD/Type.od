@@ -8,7 +8,7 @@ stub class Type<T> {
     def name : string
     def description = name + ".type"
 
-    def hash : uint = self
+    def hash : uint = self.cast<uint>
     def isEqualTo(other : Type<T>) = self == other
 }
 

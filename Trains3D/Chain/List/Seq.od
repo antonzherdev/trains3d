@@ -25,7 +25,7 @@ trait Seq<T> extends Iterable<T> {
         else apply(UInt.rnd(count - 1))
     }
 
-    def toSet : Set<T> = convertWith(HashSetBuilder<T>())
+    def toSet : Set<T> = convertWith<Set<T>>(HashSetBuilder<T>())
     def add(item : T) : Seq<T> = {
         val builder = ArrayBuilder<T>()
         builder.appendAll(self)

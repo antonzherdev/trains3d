@@ -95,7 +95,7 @@ static ODClassType* _EGImmutableIndexBuffer_type;
 
 - (void)draw {
     [EGGlobal.context draw];
-    glDrawElements([self mode], ((int)([self count])), GL_UNSIGNED_INT, 0);
+    glDrawElements([self mode], ((int)([self count])), GL_UNSIGNED_INT, voidRef(0));
     egCheckError();
 }
 
@@ -191,7 +191,7 @@ static ODClassType* _EGMutableIndexBuffer_type;
 
 - (void)draw {
     [EGGlobal.context draw];
-    glDrawElements([self mode], ((int)([self count])), GL_UNSIGNED_INT, 0);
+    glDrawElements([self mode], ((int)([self count])), GL_UNSIGNED_INT, voidRef(0));
     egCheckError();
 }
 

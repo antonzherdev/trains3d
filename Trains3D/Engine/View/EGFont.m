@@ -134,7 +134,7 @@ static ODClassType* _EGFont_type;
                 _height = [[map applyKey:@"lineHeight"] toUInt];
             } else {
                 if([name isEqual:@"char"]) {
-                    unichar code = [[map applyKey:@"id"] toInt];
+                    unichar code = ((unichar)([[map applyKey:@"id"] toInt]));
                     float width = ((float)([[map applyKey:@"xadvance"] toFloat]));
                     GEVec2i offset = GEVec2iMake([[map applyKey:@"xoffset"] toInt], [[map applyKey:@"yoffset"] toInt]);
                     GERect r = geRectApplyXYWidthHeight(((float)([[map applyKey:@"x"] toFloat])), ((float)([[map applyKey:@"y"] toFloat])), ((float)([[map applyKey:@"width"] toFloat])), ((float)([[map applyKey:@"height"] toFloat])));

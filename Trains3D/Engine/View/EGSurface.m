@@ -119,7 +119,7 @@ static ODClassType* _EGSimpleSurface_type;
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, ((int)(GL_CLAMP_TO_EDGE)));
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, ((int)(GL_NEAREST)));
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, ((int)(GL_NEAREST)));
-            glTexImage2D(GL_TEXTURE_2D, 0, ((int)(GL_RGBA)), ((int)(self.size.x)), ((int)(self.size.y)), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+            glTexImage2D(GL_TEXTURE_2D, 0, ((int)(GL_RGBA)), ((int)(self.size.x)), ((int)(self.size.y)), 0, GL_RGBA, GL_UNSIGNED_BYTE, voidRef(0));
             if(glGetError() != 0) {
                 NSString* e = [NSString stringWithFormat:@"Error in texture creation for surface with size %ldx%ld", (long)self.size.x, (long)self.size.y];
                 @throw e;

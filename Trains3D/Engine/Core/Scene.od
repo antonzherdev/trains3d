@@ -174,7 +174,7 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Updatabl
         egPopGroupMarker
     }
 
-    private val recognizerState = RecognizersState(inputProcessor.map(_.recognizers).getOrElse(Recognizers()))
+    private val recognizerState = RecognizersState(inputProcessor.map(_.recognizers).getOrElse(Recognizers([])))
     def process<P>(event : Event<P>, viewport : Rect) : bool = {
         if(inputProcessor.isDefined && inputProcessor.get.isProcessorActive) {
             val camera = view.camera
