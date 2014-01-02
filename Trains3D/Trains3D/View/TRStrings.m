@@ -246,8 +246,10 @@ static ODClassType* _TREnStrings_type;
 
 - (NSString*)helpSlowMotion {
     return @"Use the slow motion to help yourself in difficult moments.\n"
-        "Press the snail button at the right bottom corner of the screen.\n"
-        "The number of uses is restored every day.";
+        "Press the snail button at the right top corner of the screen.\n"
+        "A few number of uses is restored every day.\n"
+        "You can buy the additional slow motions, if you want to make the game easier.\n"
+        "But it is possible to manage without them.";
 }
 
 - (NSString*)result {

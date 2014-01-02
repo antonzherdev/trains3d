@@ -133,7 +133,7 @@ static ODClassType* _EGMutableBuffer_type;
 
 - (id)setData:(CNPArray*)data {
     [self bind];
-    glBufferData(self.bufferType, data.length, data.bytes, GL_DYNAMIC_DRAW);
+    glBufferData(self.bufferType, ((long)(data.length)), data.bytes, GL_DYNAMIC_DRAW);
     __length = data.length;
     __count = data.count;
     return self;
@@ -141,7 +141,7 @@ static ODClassType* _EGMutableBuffer_type;
 
 - (id)setArray:(CNVoidRefArray)array {
     [self bind];
-    glBufferData(self.bufferType, array.length, array.bytes, GL_DYNAMIC_DRAW);
+    glBufferData(self.bufferType, ((long)(array.length)), array.bytes, GL_DYNAMIC_DRAW);
     __length = array.length;
     __count = array.length / self.dataType.size;
     return self;
@@ -150,14 +150,14 @@ static ODClassType* _EGMutableBuffer_type;
 - (id)setArray:(CNVoidRefArray)array count:(unsigned int)count {
     [self bind];
     __length = ((NSUInteger)(count * self.dataType.size));
-    glBufferData(self.bufferType, __length, array.bytes, GL_DYNAMIC_DRAW);
+    glBufferData(self.bufferType, ((long)(__length)), array.bytes, GL_DYNAMIC_DRAW);
     __count = ((NSUInteger)(count));
     return self;
 }
 
 - (id)updateStart:(NSUInteger)start count:(NSUInteger)count array:(CNVoidRefArray)array {
     [self bind];
-    glBufferSubData(self.bufferType, start * self.dataType.size, count * self.dataType.size, array.bytes);
+    glBufferSubData(self.bufferType, ((long)(start * self.dataType.size)), ((long)(count * self.dataType.size)), array.bytes);
     return self;
 }
 

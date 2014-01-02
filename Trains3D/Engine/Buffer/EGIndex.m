@@ -13,14 +13,14 @@ static ODClassType* _EGIBO_type;
 + (EGImmutableIndexBuffer*)applyArray:(CNVoidRefArray)array {
     EGImmutableIndexBuffer* ib = [EGImmutableIndexBuffer immutableIndexBufferWithHandle:egGenBuffer() mode:GL_TRIANGLES length:array.length count:array.length / 4];
     [ib bind];
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, array.length, array.bytes, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, ((long)(array.length)), array.bytes, GL_STATIC_DRAW);
     return ib;
 }
 
 + (EGImmutableIndexBuffer*)applyData:(CNPArray*)data {
     EGImmutableIndexBuffer* ib = [EGImmutableIndexBuffer immutableIndexBufferWithHandle:egGenBuffer() mode:GL_TRIANGLES length:data.length count:data.count];
     [ib bind];
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.length, data.bytes, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, ((long)(data.length)), data.bytes, GL_STATIC_DRAW);
     return ib;
 }
 

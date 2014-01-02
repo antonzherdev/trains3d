@@ -8,7 +8,7 @@ typedef HashSet<T> = NSSet<T>
 typedef MutableHashSet<T> = NSMutableSet<T>
 
 stub class NSArray<T> extends Seq<T> {}
-stub class NSMutableArray<T> extends MutableSeq<T> {}
+stub class NSMutableArray<T> extends NSArray<T> with MutableSeq<T> {}
 
 typedef Array<T> = NSArray<T>
 typedef MutableArray<T> = NSMutableArray<T>
@@ -16,7 +16,7 @@ typedef MutableArray<T> = NSMutableArray<T>
 
 stub class NSDictionary <K, V> extends Map<K, V>
 
-stub class NSMutableDictionary<K, V> extends MutableMap<K, V>
+stub class NSMutableDictionary<K, V> extends NSDictionary<K, V> with MutableMap<K, V>
 
 typedef HashMap<K, V> = NSDictionary<K, V>
 typedef MutableHashMap<K, V> = NSMutableDictionary<K, V>

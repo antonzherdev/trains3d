@@ -3,17 +3,11 @@ package com.antonzherdev.gl
 import com.antonzherdev.geometry._
 import com.antonzherdev.eg._
 
-stub struct GLintptr
-stub struct GLubyte
-stub struct GLboolean
-stub struct GLsizeiptr
-stub struct GLbitfield
-
 stub object gl {
     def glClear(: uint4)
     def glClearColor(r : float4, g : float4, b : float4, a : float4)
     def glClearDepth( : float4)
-    def glDepthMask( : GLboolean)
+    def glDepthMask( : ubyte)
     def egCheckError
 
     def glFlush
@@ -45,7 +39,7 @@ stub object gl {
     def glLineWidth(width : float4)
     def egViewport(rect : RectI)
     def glViewport (x : int4, y : int4, width : int4, height : int4)
-    def glUniformMatrix4fv(location : uint4, count : int4, transpose : GLboolean, value : [float4])
+    def glUniformMatrix4fv(location : uint4, count : int4, transpose : ubyte, value : [float4])
     def glUniform1f(location : uint4, f : float4)
     def glUniform1i(location : uint4, f : int4)
     def egUniformVec4(location : uint4, color : vec4)
@@ -77,9 +71,9 @@ stub object gl {
     def egDeleteVertexArray(handle : uint4)
     def egBindVertexArray(handle : uint4)
     def glBindBuffer(target : uint4, handle : uint4) : uint4
-    def glBufferData(target : uint4, size : GLsizeiptr, data : VoidRef, usage : uint4)
-    def glBufferSubData(target : uint4, offset : GLintptr ,size : GLsizeiptr, data : VoidRef)
-    def egVertexAttribPointer(slot : uint4, size : uint4, tp : uint4, normalized : GLboolean, stride : uint4, shift : uint4)
+    def glBufferData(target : uint4, size : int8, data : VoidRef, usage : uint4)
+    def glBufferSubData(target : uint4, offset : int8 ,size : int8, data : VoidRef)
+    def egVertexAttribPointer(slot : uint4, size : uint4, tp : uint4, normalized : ubyte, stride : uint4, shift : uint4)
     def glDrawElements(mode : uint4, count : int4, tp : uint4, indices : VoidRef)
     def glDrawElementsEXT(mode : uint4, count : int4, tp : uint4, indices : VoidRef)
     def glDrawRangeElements(mode : uint4, start : uint4, end : uint4, count : int4, tp : uint4, indices : VoidRef)
@@ -103,8 +97,8 @@ stub object gl {
     val GL_INT : uint4
     val GL_UNSIGNED_INT : uint4
 
-    val GL_TRUE : GLboolean
-    val GL_FALSE : GLboolean
+    val GL_TRUE : ubyte
+    val GL_FALSE : ubyte
 
     def glBlendFunc(sfactor : uint4, dfactor : uint4)
     def glBlendFuncSeparate(srcRGB : uint4, dstRGB : uint4, stcAlpha : uint4, dstAlpha : uint4)
@@ -149,7 +143,7 @@ stub object gl {
     val GL_DEPTH_ATTACHMENT : uint4
 
     def glTexImage2D(target : uint4, level : int4, internalformat  : int4, width : int4, height : int4, border : int4, format : uint4, tp : uint4, pixels : VoidRef)
-    def glTexImage2DMultisample(target : uint4, samples : int4, internalformat  : int4, width : int4, height : int4, fixedsamplelocations : GLboolean)
+    def glTexImage2DMultisample(target : uint4, samples : int4, internalformat  : int4, width : int4, height : int4, fixedsamplelocations : ubyte)
     def glTexParameteri(target : uint4, pname : uint4, param : int4)
     def egInitShadowTexture(size : vec2i)
     val GL_TEXTURE_WRAP_S : uint4

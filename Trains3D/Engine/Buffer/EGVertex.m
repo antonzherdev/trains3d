@@ -117,14 +117,14 @@ static ODClassType* _EGVBO_type;
 + (id<EGVertexBuffer>)applyDesc:(EGVertexBufferDesc*)desc array:(CNVoidRefArray)array {
     EGImmutableVertexBuffer* vb = [EGImmutableVertexBuffer immutableVertexBufferWithDesc:desc handle:egGenBuffer() length:array.length count:array.length / desc.dataType.size];
     [vb bind];
-    glBufferData(GL_ARRAY_BUFFER, array.length, array.bytes, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, ((long)(array.length)), array.bytes, GL_STATIC_DRAW);
     return vb;
 }
 
 + (id<EGVertexBuffer>)applyDesc:(EGVertexBufferDesc*)desc data:(CNPArray*)data {
     EGImmutableVertexBuffer* vb = [EGImmutableVertexBuffer immutableVertexBufferWithDesc:desc handle:egGenBuffer() length:data.length count:data.count];
     [vb bind];
-    glBufferData(GL_ARRAY_BUFFER, data.length, data.bytes, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, ((long)(data.length)), data.bytes, GL_STATIC_DRAW);
     return vb;
 }
 

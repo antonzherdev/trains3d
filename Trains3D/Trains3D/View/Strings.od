@@ -176,8 +176,10 @@ class EnStrings extends Strings {
 
     def helpSlowMotion : string =
         "Use the slow motion to help yourself in difficult moments.
-         Press the snail button at the right bottom corner of the screen.
-         The number of uses is restored every day."
+         Press the snail button at the right top corner of the screen.
+         A few number of uses is restored every day.
+         You can buy the additional slow motions, if you want to make the game easier.
+         But it is possible to manage without them."
 
     def result : string = "Score"
     def best : string = "Your best"
