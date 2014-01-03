@@ -607,37 +607,7 @@ static ODClassType* _TRRuStrings_type;
 }
 
 - (NSString*)topScore:(EGLocalPlayerScore*)score {
-    if(score.rank == 1) {
-        return @"1-й!";
-    } else {
-        if(score.rank == 2) {
-            return @"2-й!";
-        } else {
-            if(score.rank == 3) {
-                return @"3-й!";
-            } else {
-                CGFloat p = ((CGFloat)(score.rank)) / score.maxRank;
-                if(p <= 5) {
-                    return @"Лучшие 5%";
-                } else {
-                    if(p <= 10) {
-                        return @"Лучшие 10%";
-                    } else {
-                        if(p <= 20) {
-                            return @"Лучшие 20%";
-                        } else {
-                            if(p <= 30) {
-                                return @"Лучшие 30%";
-                            } else {
-                                if(p <= 50) return @"Выше среднего";
-                                else return @"Ниже среднего";
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+    return @"Better than average";
 }
 
 - (NSString*)leaderboard {

@@ -87,20 +87,21 @@ static ODClassType* _TRLevelChooseMenu_type;
 }
 
 - (void(^)(GERect))drawButtonX:(NSInteger)x y:(NSInteger)y level:(NSInteger)level {
+    BOOL ph = egInterfaceIdiom().isPhone;
     return ^void(GERect rect) {
         BOOL dis = level > _maxLevel;
         id score = [__scores optKey:numui(((NSUInteger)(level)))];
         GEVec4 color = (([score isDefined]) ? [TRLevelChooseMenu rankColorScore:[score get]] : GEVec4Make(0.95, 0.95, 0.95, 1.0));
         [EGD2D drawSpriteMaterial:[EGColorSource applyColor:color] at:GEVec3Make(((float)(x)), ((float)(y + 0.8)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.2)];
-        if(!(dis)) [EGD2D drawSpriteMaterial:[EGColorSource applyColor:color] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.14)];
+        if(!(dis)) [EGD2D drawSpriteMaterial:[EGColorSource applyColor:color] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, ((ph) ? 0.34 : 0.14))];
         [EGBlendFunction.standard applyDraw:^void() {
             [_fontRes drawText:[TRStr.Loc levelNumber:((NSUInteger)(level))] at:GEVec3Make(((float)(x + 0.5)), ((float)(y + 0.91)), 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:_textColor];
             if(dis) {
                 [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.8)] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)];
             } else {
                 long ss = (([score isDefined]) ? ((EGLocalPlayerScore*)([score get])).value : ((long)([TRGameDirector.instance bestScoreLevelNumber:((NSUInteger)(level))])));
-                if(ss > 0 || [score isDefined]) [_fontBottom drawText:[TRStr.Loc formatCost:((NSInteger)(ss))] at:GEVec3Make(((float)(x + 0.02)), ((float)(y + 0.07)), 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:_textColor];
-                if([score isDefined]) [_fontBottom drawText:[TRStr.Loc topScore:[score get]] at:GEVec3Make(((float)(x + 0.98)), ((float)(y + 0.07)), 0.0) alignment:egTextAlignmentApplyXY(1.0, 0.0) color:_textColor];
+                if(ss > 0 || [score isDefined]) [_fontBottom drawText:[TRStr.Loc formatCost:((NSInteger)(ss))] at:GEVec3Make(((float)(x + 0.02)), ((float)(y + ((ph) ? 0.25 : 0.07))), 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:_textColor];
+                if([score isDefined]) [_fontBottom drawText:[TRStr.Loc topScore:[score get]] at:GEVec3Make(((float)(x + ((ph) ? 0.02 : 0.98))), ((float)(y + 0.11)), 0.0) alignment:egTextAlignmentApplyXY(((ph) ? -1.0 : 1.0), 0.0) color:_textColor];
             }
         }];
     };

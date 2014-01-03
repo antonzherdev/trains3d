@@ -314,19 +314,19 @@ class RuStrings extends Strings{
 
     def result : string = "Счет"
     def best : string = "Ваш лучший"
-    def top(score : LocalPlayerScore) : string =
-        if(score.rank == 1) "1-й!"
-        else if(score.rank == 2) "2-й!"
-        else if(score.rank == 3) "3-й!"
-        else {
-            val p = score.rank.cast<float> / score.maxRank
-            if(p <= 5) "Лучшие 5%"
-            else if(p <= 10) "Лучшие 10%"
-            else if(p <= 20) "Лучшие 20%"
-            else if(p <= 30) "Лучшие 30%"
-            else if(p <= 50) "Выше среднего"
-            else "Ниже среднего"
-        }
+    def top(score : LocalPlayerScore) : string = "Better than average"
+//        if(score.rank == 1) "1-й!"
+//        else if(score.rank == 2) "2-й!"
+//        else if(score.rank == 3) "3-й!"
+//        else {
+//            val p = score.rank.cast<float> / score.maxRank
+//            if(p <= 5) "Лучшие 5%"
+//            else if(p <= 10) "Лучшие 10%"
+//            else if(p <= 20) "Лучшие 20%"
+//            else if(p <= 30) "Лучшие 30%"
+//            else if(p <= 50) "Выше среднего"
+//            else "Ниже среднего"
+//        }
     def leaderboard : string = "Лучшие результаты"
 
 }
