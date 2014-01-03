@@ -191,6 +191,7 @@ static ODClassType* _TRGameDirector_type;
     [SDSoundDirector.instance setEnabled:[_local intForKey:@"soundEnabled"] == 1];
     [EGRate.instance setIdsIos:736579117 osx:736545415];
     [EGGameCenter.instance authenticate];
+    [_cloud keepMaxKey:[NSString stringWithFormat:@"%@maxLevel", _cloudPrefix] i:16];
     if([self daySlowMotions] > _maxDaySlowMotions) [_local setKey:@"daySlowMotions" i:_maxDaySlowMotions];
     NSUInteger fullDayCount = [[self lastSlowMotions] count] + [self daySlowMotions];
     if(fullDayCount > _maxDaySlowMotions) {

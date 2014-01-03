@@ -85,24 +85,24 @@ static ODClassType* _EGGameCenter_type;
             return;
         }
 
-        [GKAchievement loadAchievementsWithCompletionHandler:^(NSArray *achievements, NSError *error) {
+        [GKAchievement loadAchievementsWithCompletionHandler:^(NSArray *achievements, NSError *err) {
             if (error != nil) {
-                NSLog(@"Error while loading achievements: %@", error);
+                NSLog(@"Error while loading achievements: %@", err);
                 return;
             }
             NSMutableDictionary *dic = [NSMutableDictionary dictionary];
             _achievements = dic;
             _active = YES;
-            if (achievements != nil) {
-                for(GKAchievementDescription* desc in descriptions) {
-                    GKAchievement* a = [[achievements findWhere:^BOOL(GKAchievement *x) {
-                                        return [x.identifier isEqual:desc.identifier];
-                                    }] getOrElseF:^GKAchievement* {
-                                        return [[GKAchievement alloc] initWithIdentifier:desc.identifier];
-                                    }];
-                    [dic setObject:[EGAchievement initWithAchievementDescription:desc achievementWithAchievement:a] forKey:desc.identifier];
-                }
+            if(achievements == nil) achievements = [NSArray array];
+            for(GKAchievementDescription* desc in descriptions) {
+                GKAchievement* a = [[achievements findWhere:^BOOL(GKAchievement *x) {
+                                    return [x.identifier isEqual:desc.identifier];
+                                }] getOrElseF:^GKAchievement* {
+                                    return [[GKAchievement alloc] initWithIdentifier:desc.identifier];
+                                }];
+                [dic setObject:[EGAchievement initWithAchievementDescription:desc achievementWithAchievement:a] forKey:desc.identifier];
             }
+            [self clearAchievements];
         }];
     }];
 
@@ -173,7 +173,13 @@ static ODClassType* _EGGameCenter_type;
 - (void)reportScoreLeaderboard:(NSString *)leaderboard value:(long)value completed :(void (^)(EGLocalPlayerScore*))completed {
     if(!_active) return;
 #if TARGET_OS_IPHONE
-    GKScore *scoreReporter = [[GKScore alloc] initWithLeaderboardIdentifier:leaderboard];
+    GKScore *scoreReporter = [GKScore alloc];
+
+    if([scoreReporter respondsToSelector:@selector(initWithLeaderboardIdentifier:)]) {
+        scoreReporter = [scoreReporter initWithLeaderboardIdentifier:leaderboard];
+    } else {
+        scoreReporter = [scoreReporter initWithCategory:leaderboard];
+    }
     scoreReporter.value = value;
     scoreReporter.context = 0;
     NSArray *scores = @[scoreReporter];
@@ -211,7 +217,11 @@ static ODClassType* _EGGameCenter_type;
     leaderboardRequest.timeScope = GKLeaderboardTimeScopeAllTime;
     leaderboardRequest.playerScope = GKLeaderboardPlayerScopeGlobal;
 #if TARGET_OS_IPHONE
-    leaderboardRequest.identifier = leaderboard;
+    if([leaderboardRequest respondsToSelector:@selector(setIdentifier:)]) {
+        leaderboardRequest.identifier = leaderboard;
+    } else {
+        leaderboardRequest.category = leaderboard;
+    }
 #else
     leaderboardRequest.category = leaderboard;
 #endif
@@ -253,7 +263,11 @@ static ODClassType* _EGGameCenter_type;
         gameCenterController.gameCenterDelegate = self;
         gameCenterController.viewState = GKGameCenterViewControllerStateLeaderboards;
 #if TARGET_OS_IPHONE
-        gameCenterController.leaderboardIdentifier = name;
+        if([gameCenterController respondsToSelector:@selector(setLeaderboardIdentifier:)]) {
+            gameCenterController.leaderboardIdentifier = name;
+        } else {
+            gameCenterController.leaderboardCategory = name;
+        }
         [[[[[UIApplication sharedApplication] delegate] window] rootViewController]
             presentViewController:gameCenterController animated:YES completion:nil];
 #else
@@ -331,12 +345,7 @@ static ODClassType* _EGAchievement_type;
                 }
             }
         }];
-//        [self performSelectorOnMainThread:@selector(report) withObject:nil waitUntilDone:NO];
     }
-}
-
-- (void)report {
-
 }
 
 - (void)complete {
