@@ -21,6 +21,7 @@
 @class EGShareDialog;
 @class EGSprite;
 @class EGTexture;
+@class EGInterfaceIdiom;
 @class TRLevelChooseMenu;
 @class TRScore;
 @class EGLocalPlayerScore;
@@ -108,6 +109,7 @@
 - (ODClassType*)type;
 - (id<CNSeq>)buttons;
 - (CGFloat)headerHeight;
+- (NSInteger)buttonHeight;
 - (void)drawHeaderRect:(GERect)rect;
 - (void)reshape;
 + (ODClassType*)type;

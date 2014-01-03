@@ -10,6 +10,8 @@
 #import "TRGameDirector.h"
 #import "EGSharePlat.h"
 #import "EGTexture.h"
+#import "GL.h"
+#import "EGPlatform.h"
 #import "TRLevelChooseMenu.h"
 #import "TRScore.h"
 #import "EGGameCenter.h"
@@ -449,6 +451,7 @@ static ODClassType* _TRPauseMenuView_type;
     EGButton* _leaderboardButton;
     EGButton* _restartButton;
     EGButton* _chooseLevelButton;
+    EGButton* _shareButton;
     id __score;
     CNNotificationObserver* _obs;
     EGText* _headerText;
@@ -481,6 +484,9 @@ static ODClassType* _TRWinMenu_type;
         _chooseLevelButton = [self buttonText:[TRStr.Loc chooseLevel] onClick:^void() {
             [TRGameDirector.instance chooseLevel];
         }];
+        _shareButton = [self buttonText:[TRStr.Loc shareButton] onClick:^void() {
+            [TRGameDirector.instance share];
+        }];
         __score = [CNOption none];
         _obs = [TRGameDirector.playerScoreRetrieveNotification observeBy:^void(TRGameDirector* _, EGLocalPlayerScore* score) {
             _weakSelf._score = [CNOption applyValue:score];
@@ -501,11 +507,16 @@ static ODClassType* _TRWinMenu_type;
 }
 
 - (id<CNSeq>)buttons {
-    return [((_level.number < 16) ? (@[_nextButton]) : (@[])) addSeq:(@[_leaderboardButton, _restartButton, _chooseLevelButton])];
+    return [[((_level.number < 16) ? (@[_nextButton]) : (@[])) addSeq:(@[_leaderboardButton, _restartButton, _chooseLevelButton])] addSeq:(([EGShareDialog isSupported]) ? (@[_shareButton]) : (@[]))];
 }
 
 - (CGFloat)headerHeight {
     return 100.0;
+}
+
+- (NSInteger)buttonHeight {
+    if(egInterfaceIdiom().isPhone) return 40;
+    else return 50;
 }
 
 - (void)drawHeaderRect:(GERect)rect {
@@ -625,7 +636,8 @@ static ODClassType* _TRRateMenu_type;
 }
 
 - (NSInteger)buttonHeight {
-    return 40;
+    if(egInterfaceIdiom().isPhone) return 40;
+    else return 50;
 }
 
 - (void)drawHeaderRect:(GERect)rect {
