@@ -7575,8 +7575,8 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CODE_SIGN_ENTITLEMENTS = Trains3D/Platform/iOS/iPhone/Trains3DPocket.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Anton Zherdev (29S6DQ4WTL)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Anton Zherdev (29S6DQ4WTL)";
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7599,7 +7599,7 @@
 					./Lib/TestFlight,
 				);
 				PRODUCT_NAME = RaildalePocket;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "08D6E824-4841-4BDF-BF5A-C6A8A6DE2383";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
@@ -7656,8 +7656,8 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CODE_SIGN_ENTITLEMENTS = Trains3D/Platform/iOS/iPad/Trains3Di.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Anton Zherdev (29S6DQ4WTL)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Anton Zherdev (29S6DQ4WTL)";
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7680,7 +7680,7 @@
 					./Lib/TestFlight,
 				);
 				PRODUCT_NAME = Raildale;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "6ABEFFE0-0C3F-4F76-B7D0-E50631A839A0";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;
 				VALIDATE_PRODUCT = YES;
