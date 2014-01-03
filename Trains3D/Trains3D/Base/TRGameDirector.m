@@ -397,7 +397,7 @@ static ODClassType* _TRGameDirector_type;
     if(!([EGShareDialog isSupported])) return ;
     [TestFlight passCheckpoint:@"Share"];
     NSString* url = @"http://get.raildale.com/?x=a";
-    [[[[[EGShareContent applyText:[TRStr.Loc shareTextUrl:url] image:[CNOption none]] twitterText:[TRStr.Loc twitterTextUrl:url]] emailText:[TRStr.Loc shareTextUrl:url] subject:[TRStr.Loc shareSubject]] dialog] display];
+    [[[[[EGShareContent applyText:[TRStr.Loc shareTextUrl:url] image:[CNOption applyValue:@"Share.jpg"]] twitterText:[TRStr.Loc twitterTextUrl:url]] emailText:[TRStr.Loc shareTextUrl:url] subject:[TRStr.Loc shareSubject]] dialog] display];
 }
 
 - (ODClassType*)type {

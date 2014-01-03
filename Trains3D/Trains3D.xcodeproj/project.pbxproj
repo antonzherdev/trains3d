@@ -444,10 +444,12 @@
 		6F3DF09F8D55D3A6A463F1E0 /* lucida_grande_12.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF79F7384A2798C1A5954 /* lucida_grande_12.fnt */; };
 		6F3DF0A2F2A9A03D61F51E6D /* TRTrainSound.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF204632298A298CD37A3 /* TRTrainSound.m */; };
 		6F3DF0A43D19793483AB3877 /* func_matrix.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFC4637A9A62409EAEF35 /* func_matrix.inl */; };
+		6F3DF0A605394F399FE0F13F /* Share.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF3136B8B81AE94FE3D67 /* Share.jpg */; };
 		6F3DF0A6984B655B268BE68D /* LightGlowPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF8C7BDABC097F65B99CF /* LightGlowPhone.png */; };
 		6F3DF0AA6E2838E93A20F759 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFBA18831A0CC868D0042 /* CMakeLists.txt */; };
 		6F3DF0AC115E7D036EFD313A /* CrashBack.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF051957CCF356028DFA7 /* CrashBack.wav */; };
 		6F3DF0AE8A6741509CC9CB43 /* CNPrependLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4C696CBA550F82C3489 /* CNPrependLink.m */; };
+		6F3DF0B2E47E8AD77C396200 /* Share.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF3136B8B81AE94FE3D67 /* Share.jpg */; };
 		6F3DF0B4CEC1D3BF05DD6F6B /* btTriangleMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF79FE213C9FFE8FFC53F /* btTriangleMeshShape.cpp */; };
 		6F3DF0B664FD7713575F585D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFA6D1CCBC01E62E99AE0 /* Localizable.strings */; };
 		6F3DF0C20A875DEA9BBD7D1E /* btAxisSweep3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC2349E253F04434E70A /* btAxisSweep3.cpp */; };
@@ -1147,6 +1149,7 @@
 		6F3DF99AD378D2839E687745 /* btConeShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDD953BF078A02161E26 /* btConeShape.cpp */; };
 		6F3DF9A10482B6B3AB31AA78 /* TRLevelPauseMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9A49929839D076B62AC /* TRLevelPauseMenuView.m */; };
 		6F3DF9A6E601C929557B2B13 /* func_common.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF2BAD3963C81D8B5CC0A /* func_common.inl */; };
+		6F3DF9AAC4956A96A4E64E61 /* Share.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF3136B8B81AE94FE3D67 /* Share.jpg */; };
 		6F3DF9ABC1D7CA9DCC949218 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFEBEBF10D80DCB91A4DF /* Localizable.strings */; };
 		6F3DF9AE209E492C1F97766F /* GEMat4.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFAFFF39546E7F666542D /* GEMat4.mm */; };
 		6F3DF9AEA1B104FB437A85ED /* SnowPine.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF4D47A3D42A2A53EC106 /* SnowPine.png */; };
@@ -1950,6 +1953,7 @@
 		6F3DF3118A848E2296A0E2CC /* ExpressCar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ExpressCar.png; sourceTree = "<group>"; };
 		6F3DF3119E53C09ABD7F2044 /* btActivatingCollisionAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btActivatingCollisionAlgorithm.cpp; sourceTree = "<group>"; };
 		6F3DF311B4464E96DACF2021 /* KWCaptureSpy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWCaptureSpy.m; sourceTree = "<group>"; };
+		6F3DF3136B8B81AE94FE3D67 /* Share.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Share.jpg; sourceTree = "<group>"; };
 		6F3DF316F0EF5CABB081661E /* btGhostObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btGhostObject.h; sourceTree = "<group>"; };
 		6F3DF31DE3CB3DB50438682A /* compatibility.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = compatibility.inl; sourceTree = "<group>"; };
 		6F3DF325F3ACABFBC1A00042 /* matrix_transform.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = matrix_transform.hpp; sourceTree = "<group>"; };
@@ -4527,6 +4531,7 @@
 				6F3DF81DF7AE936C719685D0 /* Palm.png */,
 				6F3DFA78E97EC67C5C5CEC51 /* PalmGrass.png */,
 				6F3DF8C7BDABC097F65B99CF /* LightGlowPhone.png */,
+				6F3DF3136B8B81AE94FE3D67 /* Share.jpg */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -5723,6 +5728,7 @@
 				6F3DFC62EFEEF336AF0A8B67 /* Type.od in Resources */,
 				6F3DF60F3B5605C4A801797E /* Platform.od in Resources */,
 				6F3DF2BB11AD586CBF1AC018 /* math.od in Resources */,
+				6F3DF0A605394F399FE0F13F /* Share.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5898,6 +5904,7 @@
 				6F3DFCC8806FE11D2F42A3DC /* Trains3DPocket.entitlements in Resources */,
 				6F3DF84D29DE7C64004A82BB /* Trains3DPocket-Info.plist in Resources */,
 				6F3DF6EDDD802B23FF806A75 /* Action.od in Resources */,
+				6F3DF0B2E47E8AD77C396200 /* Share.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6017,6 +6024,7 @@
 				6F3DF08307A40E001E7824C2 /* Trains3Di.entitlements in Resources */,
 				6F3DF4D7E2BB0AF3BACA7E54 /* Trains3Di-Info.plist in Resources */,
 				6F3DF45CA448CCDC0F87CD7E /* Action.od in Resources */,
+				6F3DF9AAC4956A96A4E64E61 /* Share.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

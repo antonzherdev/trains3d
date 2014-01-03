@@ -330,7 +330,7 @@ class GameDirector {
 
         TestFlight.pass("Share")
         val url = "http:\/\/get.raildale.com/?x=a"
-        ShareContent(Loc.shareText(url), nil)
+        ShareContent(Loc.shareText(url), "Share.jpg")
             .twitter(Loc.twitterText(url))
             .email(Loc.shareText(url), Loc.shareSubject)
             .dialog

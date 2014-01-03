@@ -29,7 +29,9 @@ static ODClassType* _EGShareDialog_type;
 }
 
 - (void)display {
-    UIActivityViewController * vc = [[UIActivityViewController alloc] initWithActivityItems:@[self]
+    UIImage *image = nil;
+    if([_content.image isDefined]) image = [UIImage imageNamed:[_content.image get]];
+    UIActivityViewController * vc = [[UIActivityViewController alloc] initWithActivityItems:image == nil ? @[self] : @[self, image]
                                                                       applicationActivities:nil];
     vc.excludedActivityTypes = @[UIActivityTypePrint, UIActivityTypeCopyToPasteboard,
             UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll, UIActivityTypePostToWeibo,

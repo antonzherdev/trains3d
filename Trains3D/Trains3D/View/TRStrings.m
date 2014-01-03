@@ -317,7 +317,7 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)twitterTextUrl:(NSString*)url {
-    return [NSString stringWithFormat:@"@RaildaleGame is an exciting railway building  game for iOS and Mac OS X: %@", url];
+    return [NSString stringWithFormat:@"%@: @RaildaleGame is an exciting railway building game for iOS and Mac", url];
 }
 
 - (NSString*)formatCost:(NSInteger)cost {
@@ -675,7 +675,7 @@ static ODClassType* _TRRuStrings_type;
 }
 
 - (NSString*)twitterTextUrl:(NSString*)url {
-    return [NSString stringWithFormat:@"@RaildaleGame - великолепная игра о строительстве железной дороги для iOS и Mac OS X: %@", url];
+    return [NSString stringWithFormat:@"%@: @RaildaleGame - великолепная игра о железной дороге для iOS и Mac", url];
 }
 
 - (NSString*)formatCost:(NSInteger)cost {
