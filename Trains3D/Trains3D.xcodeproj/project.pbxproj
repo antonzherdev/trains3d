@@ -16,6 +16,10 @@
 		027B41001875A7AF00741C2A /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B40FB1875A7AF00741C2A /* libTestFlight.a */; };
 		027B41021875AA5C00741C2A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B41011875AA5C00741C2A /* libz.dylib */; };
 		027B41031875AA6400741C2A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B41011875AA5C00741C2A /* libz.dylib */; };
+		027B410618768CE600741C2A /* DistimoSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B410418768CE600741C2A /* DistimoSDK.framework */; };
+		027B410718768CE700741C2A /* DistimoSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B410418768CE600741C2A /* DistimoSDK.framework */; };
+		027B410B18768D1B00741C2A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B410A18768D1B00741C2A /* Security.framework */; };
+		027B410C18768D2600741C2A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B410A18768D1B00741C2A /* Security.framework */; };
 		0297EDF6187163CB004427A8 /* CNCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0666099530AA68BB6F1 /* CNCollection.m */; };
 		0297EDF7187163CB004427A8 /* CNSortBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF59F9DE9E545715CEE2F /* CNSortBuilder.m */; };
 		0297EDF8187163CB004427A8 /* CNChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA93D8D19D1214BDEC32 /* CNChain.m */; };
@@ -1668,6 +1672,9 @@
 		027B40FD1875A7AF00741C2A /* TestFlight+AsyncLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+AsyncLogging.h"; sourceTree = "<group>"; };
 		027B40FE1875A7AF00741C2A /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
 		027B41011875AA5C00741C2A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
+		027B410418768CE600741C2A /* DistimoSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DistimoSDK.framework; sourceTree = "<group>"; };
+		027B410818768D1300741C2A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		027B410A18768D1B00741C2A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
 		0297EF74187163CB004427A8 /* RaildalePocket.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RaildalePocket.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0297EF7818717046004427A8 /* iPhoneImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = iPhoneImages.xcassets; sourceTree = "<group>"; };
 		0297EF7B1871722E004427A8 /* OsXImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = OsXImages.xcassets; sourceTree = "<group>"; };
@@ -3000,10 +3007,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				027B410C18768D2600741C2A /* Security.framework in Frameworks */,
 				027B41031875AA6400741C2A /* libz.dylib in Frameworks */,
 				0297EEFB187163CB004427A8 /* OpenGLES.framework in Frameworks */,
 				027B41001875A7AF00741C2A /* libTestFlight.a in Frameworks */,
 				0297EEFC187163CB004427A8 /* CoreGraphics.framework in Frameworks */,
+				027B410718768CE700741C2A /* DistimoSDK.framework in Frameworks */,
 				0297EEFD187163CB004427A8 /* UIKit.framework in Frameworks */,
 				0297EEFE187163CB004427A8 /* GameKit.framework in Frameworks */,
 				0297EEFF187163CB004427A8 /* GLKit.framework in Frameworks */,
@@ -3015,10 +3024,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				027B410B18768D1B00741C2A /* Security.framework in Frameworks */,
 				027B41021875AA5C00741C2A /* libz.dylib in Frameworks */,
 				02C70A571802A3E500007F50 /* OpenGLES.framework in Frameworks */,
 				027B40FF1875A7AF00741C2A /* libTestFlight.a in Frameworks */,
 				02C70A511802A3E500007F50 /* CoreGraphics.framework in Frameworks */,
+				027B410618768CE600741C2A /* DistimoSDK.framework in Frameworks */,
 				02C70A531802A3E500007F50 /* UIKit.framework in Frameworks */,
 				027ABE5C182384D100A72CD0 /* GameKit.framework in Frameworks */,
 				02C70A551802A3E500007F50 /* GLKit.framework in Frameworks */,
@@ -3059,6 +3070,8 @@
 		0214B1271773394400C03C71 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				027B410A18768D1B00741C2A /* Security.framework */,
+				027B410818768D1300741C2A /* Security.framework */,
 				027B41011875AA5C00741C2A /* libz.dylib */,
 				0232DCE6182386F400139599 /* GameKit.framework */,
 				027ABE5B182384D100A72CD0 /* GameKit.framework */,
@@ -3914,6 +3927,7 @@
 		6F3DF7C67179C0EF5F06B7E9 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				027B410418768CE600741C2A /* DistimoSDK.framework */,
 				6F3DF30CA03F3D5A0BCB65F7 /* Kiwi */,
 				6F3DFD2211869A014BD4C461 /* glm */,
 				6F3DF1F33D624D77F1276091 /* Bullet */,
@@ -7454,6 +7468,10 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/antonzherdev/dev/trains3d/Trains3D/Lib,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Trains3D/Platform/Mac/Trains3D-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -7479,6 +7497,10 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/antonzherdev/dev/trains3d/Trains3D/Lib,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Trains3D/Platform/Mac/Trains3D-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -7541,6 +7563,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					/Users/antonzherdev/dev/trains3d/Trains3D/Lib,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Trains3D/Platform/iOS/Trains3Di-Prefix.pch";
@@ -7581,6 +7604,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					/Users/antonzherdev/dev/trains3d/Trains3D/Lib,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Trains3D/Platform/iOS/Trains3Di-Prefix.pch";
@@ -7622,6 +7646,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					/Users/antonzherdev/dev/trains3d/Trains3D/Lib,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Trains3D/Platform/iOS/Trains3Di-Prefix.pch";
@@ -7662,6 +7687,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					/Users/antonzherdev/dev/trains3d/Trains3D/Lib,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Trains3D/Platform/iOS/Trains3Di-Prefix.pch";

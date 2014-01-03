@@ -102,7 +102,6 @@ static ODClassType* _EGGameCenter_type;
                                 }];
                 [dic setObject:[EGAchievement initWithAchievementDescription:desc achievementWithAchievement:a] forKey:desc.identifier];
             }
-            [self clearAchievements];
         }];
     }];
 

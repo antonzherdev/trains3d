@@ -142,7 +142,7 @@ class GameDirector {
         Rate.instance.setIds(ios = 736579117, osx = 736545415)
 //        Rate.instance.setIds(ios = 343200656, osx = 403961173)
         GameCenter.instance.authenticate
-        cloud.keepMax("$(cloudPrefix)maxLevel", 16)
+//        cloud.keepMax("$(cloudPrefix)maxLevel", 16)
 //        clearTutorial
 
         if(daySlowMotions > maxDaySlowMotions) local.set("daySlowMotions", i = maxDaySlowMotions)
