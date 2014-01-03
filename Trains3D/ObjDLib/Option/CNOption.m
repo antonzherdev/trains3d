@@ -50,6 +50,10 @@ static ODClassType* _CNOption_type;
     @throw @"Method getOr is abstract";
 }
 
+- (id)getOrNil {
+    @throw @"Method getOrNil is abstract";
+}
+
 - (id)mapF:(id(^)(id))f {
     @throw @"Method map is abstract";
 }
@@ -307,6 +311,10 @@ static ODClassType* _CNNone_type;
     return value;
 }
 
+- (id)getOrNil {
+    return nil;
+}
+
 - (void)forEach:(void(^)(id))each {
 }
 
@@ -408,6 +416,10 @@ static ODClassType* _CNSome_type;
 }
 
 - (id)getOrElseF:(id(^)())f {
+    return _value;
+}
+
+- (id)getOrNil {
     return _value;
 }
 

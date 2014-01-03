@@ -18,6 +18,7 @@
 @class TRStr;
 @protocol TRStrings;
 @class TRGameDirector;
+@class EGShareDialog;
 @class EGSprite;
 @class EGTexture;
 @class TRLevelChooseMenu;

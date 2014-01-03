@@ -173,6 +173,13 @@ static ODClassType* _CNTreeMap_type;
     else return [value isEqual:[v get]];
 }
 
+- (id<CNMap>)addItem:(CNTuple*)item {
+    CNHashMapBuilder* builder = [CNHashMapBuilder hashMapBuilder];
+    [builder appendAllItems:self];
+    [builder appendItem:item];
+    return [builder build];
+}
+
 - (NSUInteger)count {
     id<CNIterator> i = [self iterator];
     NSUInteger n = 0;
@@ -763,6 +770,13 @@ static ODClassType* _CNMTreeMap_type;
     id v = [self optKey:key];
     if([v isEmpty]) return NO;
     else return [value isEqual:[v get]];
+}
+
+- (id<CNMap>)addItem:(CNTuple*)item {
+    CNHashMapBuilder* builder = [CNHashMapBuilder hashMapBuilder];
+    [builder appendAllItems:self];
+    [builder appendItem:item];
+    return [builder build];
 }
 
 - (id)head {

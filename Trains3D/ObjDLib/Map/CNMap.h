@@ -15,6 +15,7 @@
 - (id<CNIterable>)values;
 - (BOOL)containsKey:(id)key;
 - (BOOL)isValueEqualKey:(id)key value:(id)value;
+- (id<CNMap>)addItem:(CNTuple*)item;
 @end
 
 

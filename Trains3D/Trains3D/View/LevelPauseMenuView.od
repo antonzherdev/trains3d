@@ -113,7 +113,9 @@ class PauseMenuView(level : Level) extends MenuView  {
     private val chooseLevelButton = button(Loc.chooseLevel, GameDirector.instance.chooseLevel)
     private val leaderboardButton = button(Loc.leaderboard, GameDirector.instance.showLeaderboard(level))
     private val supportButton = button(Loc.supportButton, GameDirector.instance.showSupport(changeLevel = false))
+    private val shareButton = button(Loc.shareButton, GameDirector.instance.share)
     val buttons = [resumeButton, restartButton, chooseLevelButton, leaderboardButton, supportButton]
+        + if(ShareDialog.isSupported) [shareButton] else []
 
     val soundSprite = Sprite()
     def draw {

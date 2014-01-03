@@ -140,6 +140,10 @@ static ODClassType* _TREnStrings_type;
     return @"yellow";
 }
 
+- (NSString*)shareButton {
+    return @"Share with friends";
+}
+
 - (NSString*)supportButton {
     return @"Email the developer";
 }
@@ -248,8 +252,8 @@ static ODClassType* _TREnStrings_type;
     return @"Use the slow motion to help yourself in difficult moments.\n"
         "Press the snail button at the right top corner of the screen.\n"
         "A few number of uses is restored every day.\n"
-        "You can buy the additional slow motions, if you want to make the game easier.\n"
-        "But it is possible to manage without them.";
+        "You can buy the additional slow motions\n"
+        "or get them for free sharing the game on Facebook or Twitter.";
 }
 
 - (NSString*)result {
@@ -302,6 +306,18 @@ static ODClassType* _TREnStrings_type;
     return @"You can connect cities using more than one line.\n"
         "Thus two trains coming from the opposite direction\n"
         "would not collide with each other.";
+}
+
+- (NSString*)shareSubject {
+    return @"Raildale is a great game for iOS and Mac";
+}
+
+- (NSString*)shareTextUrl:(NSString*)url {
+    return [NSString stringWithFormat:@"Raildale is an exciting railway building game for iOS and Mac OS X: %@", url];
+}
+
+- (NSString*)twitterTextUrl:(NSString*)url {
+    return [NSString stringWithFormat:@"@RaildaleGame is an exciting railway building  game for iOS and Mac OS X: %@", url];
 }
 
 - (NSString*)formatCost:(NSInteger)cost {
@@ -558,7 +574,13 @@ static ODClassType* _TRRuStrings_type;
 - (NSString*)helpSlowMotion {
     return @"Используйте замедленное время, чтобы помочь себе в трудных ситуациях.\n"
         "Нажмите кнопку с изображением улитки в правом нижнем углу экрана.\n"
-        "Количество использование восстанавливается каждый день.";
+        "Количество использование восстанавливается каждый день.\n"
+        "Вы можете купить дополнительные использования\n"
+        "или получить их бесплатно поделившись с друзьями через Facebook или Twitter";
+}
+
+- (NSString*)shareButton {
+    return @"Поделиться с друзьями";
 }
 
 - (NSString*)supportButton {
@@ -607,11 +629,53 @@ static ODClassType* _TRRuStrings_type;
 }
 
 - (NSString*)topScore:(EGLocalPlayerScore*)score {
-    return @"Better than average";
+    if(score.rank == 1) {
+        return @"1-й!";
+    } else {
+        if(score.rank == 2) {
+            return @"2-й!";
+        } else {
+            if(score.rank == 3) {
+                return @"3-й!";
+            } else {
+                CGFloat p = ((CGFloat)(score.rank)) / score.maxRank;
+                if(p <= 5) {
+                    return @"Лучшие 5%";
+                } else {
+                    if(p <= 10) {
+                        return @"Лучшие 10%";
+                    } else {
+                        if(p <= 20) {
+                            return @"Лучшие 20%";
+                        } else {
+                            if(p <= 30) {
+                                return @"Лучшие 30%";
+                            } else {
+                                if(p <= 50) return @"Выше среднего";
+                                else return @"Ниже среднего";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 - (NSString*)leaderboard {
     return @"Лучшие результаты";
+}
+
+- (NSString*)shareSubject {
+    return @"Raildale - отличная игра для iOS и Mac";
+}
+
+- (NSString*)shareTextUrl:(NSString*)url {
+    return [NSString stringWithFormat:@"Raildale - великолепная игра о строительстве железной дороги для iOS и Mac OS X: %@", url];
+}
+
+- (NSString*)twitterTextUrl:(NSString*)url {
+    return [NSString stringWithFormat:@"@RaildaleGame - великолепная игра о строительстве железной дороги для iOS и Mac OS X: %@", url];
 }
 
 - (NSString*)formatCost:(NSInteger)cost {

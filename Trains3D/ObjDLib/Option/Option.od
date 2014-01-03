@@ -9,6 +9,7 @@ class Option<V> extends Seq<V> {
     def get : V
     def getOrElse(f: () -> V) : V
     def getOr(value: V) : V
+    def getOrNil : V
     def map<B>(f : V -> B) : B?
     def flatMap<B>(f:V -> B?) : B?
     def filter(f : V -> bool) : V?
@@ -24,6 +25,7 @@ class None<V> extends Option<V> {
     def get : V = throw "Get from empty"
     def getOrElse(f: () -> V) : V = f()
     def getOr(value: V) : V = value
+    def getOrNil : V = nil
     def for(each : V -> void) {}
     def map<B>(f : V -> B) : B? = self
     def flatMap<B>(f : V -> B?) : B? = self
@@ -41,6 +43,7 @@ class Some<V> (value : V) extends Option<V> {
     def count : uint = 1
     def get : V = value
     def getOrElse(f: () -> V) : V = value
+    def getOrNil : V = value
     def getOr(value: V) : V = self.value
     def map<B>(f : V -> B) : B? = Some<B>(f(value))
     def flatMap<B>(f : V -> B?) : B? = f(value)

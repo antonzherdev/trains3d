@@ -1,0 +1,32 @@
+package com.antonzherdev.eg
+
+enum ShareChannel {
+    facebook()
+    twitter()
+    email()
+    message()
+}
+
+
+class ShareItem(text : string, subject : string?) {
+    static def apply(text : string) = ShareItem(text, nil)
+}
+
+class ShareContent(text : string, image : string?, items : [ShareChannel : ShareItem]) {
+    static def apply(text : string, image : string?) = ShareContent(text, image, [])
+
+    def add(channel : ShareChannel, text : string) : ShareContent = add(channel, text, nil)
+    def add(channel : ShareChannel, text : string, subject : string?) : ShareContent = ShareContent(self.text, image, items + (channel, ShareItem(text, subject)))
+
+    def twitter(text : string) : ShareContent = add(ShareChannel.twitter, text)
+    def facebook(text : string) : ShareContent = add(ShareChannel.facebook, text)
+    def email(text : string, subject : string) : ShareContent = add(ShareChannel.email, text, subject)
+    def message(text : string) : ShareContent = add(ShareChannel.message, text)
+
+    def text(channel : ShareChannel) : string = items.opt(channel).map(_.text).getOr(text)
+    def subject(channel : ShareChannel) : string? = items.opt(channel).flatMap(_.subject)
+    def image(channel : ShareChannel) : string? = image
+
+    def dialog : ShareDialog = ShareDialog(self, completionHandler = _ -> {})
+    def dialog(completionHandler : ShareChannel -> void) : ShareDialog = ShareDialog(self, completionHandler)
+}

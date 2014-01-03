@@ -22,6 +22,7 @@
 - (id)get;
 - (id)getOrElseF:(id(^)())f;
 - (id)getOrValue:(id)value;
+- (id)getOrNil;
 - (id)mapF:(id(^)(id))f;
 - (id)flatMapF:(id(^)(id))f;
 - (id)filterF:(BOOL(^)(id))f;
@@ -42,6 +43,7 @@
 - (id)get;
 - (id)getOrElseF:(id(^)())f;
 - (id)getOrValue:(id)value;
+- (id)getOrNil;
 - (void)forEach:(void(^)(id))each;
 - (id)mapF:(id(^)(id))f;
 - (id)flatMapF:(id(^)(id))f;
@@ -65,6 +67,7 @@
 - (NSUInteger)count;
 - (id)get;
 - (id)getOrElseF:(id(^)())f;
+- (id)getOrNil;
 - (id)getOrValue:(id)value;
 - (id)mapF:(id(^)(id))f;
 - (id)flatMapF:(id(^)(id))f;

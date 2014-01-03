@@ -36,6 +36,7 @@ trait Strings {
     def best : string
 
     def supportButton : string
+    def shareButton : string
     def supportEmailText : string
     def rateText : string
     def rateNow : string
@@ -72,6 +73,10 @@ trait Strings {
     def helpToMakeZoom : string
     def linesAdvice : string
     def helpSlowMotion : string
+
+    def shareText(url : string) : string
+    def shareSubject : string
+    def twitterText(url : string) : string
 }
 
 class EnStrings extends Strings {
@@ -109,6 +114,7 @@ class EnStrings extends Strings {
     def colorBeige : string = "beige"
     def colorYellow : string = "yellow"
 
+    def shareButton : string = "Share with friends"
     def supportButton : string = "Email the developer"
     def supportEmailText : string =
         "Report a problem or tell me about your ideas.
@@ -178,8 +184,8 @@ class EnStrings extends Strings {
         "Use the slow motion to help yourself in difficult moments.
          Press the snail button at the right top corner of the screen.
          A few number of uses is restored every day.
-         You can buy the additional slow motions, if you want to make the game easier.
-         But it is possible to manage without them."
+         You can buy the additional slow motions
+         or get them for free sharing the game on Facebook or Twitter."
 
     def result : string = "Score"
     def best : string = "Your best"
@@ -201,6 +207,10 @@ class EnStrings extends Strings {
         "You can connect cities using more than one line.
          Thus two trains coming from the opposite direction
          would not collide with each other."
+
+    def shareSubject : string = "Raildale is a great game for iOS and Mac"
+    def shareText(url : string) : string = "Raildale is an exciting railway building game for iOS and Mac OS X: $url"
+    def twitterText(url : string) : string = "@RaildaleGame is an exciting railway building  game for iOS and Mac OS X: $url"
 }
 
 class RuStrings extends Strings{
@@ -291,8 +301,11 @@ class RuStrings extends Strings{
     def helpSlowMotion : string =
         "Используйте замедленное время, чтобы помочь себе в трудных ситуациях.
          Нажмите кнопку с изображением улитки в правом нижнем углу экрана.
-         Количество использование восстанавливается каждый день."
+         Количество использование восстанавливается каждый день.
+         Вы можете купить дополнительные использования
+         или получить их бесплатно поделившись с друзьями через Facebook или Twitter"
 
+    def shareButton : string = "Поделиться с друзьями"
     def supportButton : string = "Написать разработчику"
     def supportEmailText : string =
         "Сообщите о проблеме или напишите ваши идеи.
@@ -314,21 +327,24 @@ class RuStrings extends Strings{
 
     def result : string = "Счет"
     def best : string = "Ваш лучший"
-    def top(score : LocalPlayerScore) : string = "Better than average"
-//        if(score.rank == 1) "1-й!"
-//        else if(score.rank == 2) "2-й!"
-//        else if(score.rank == 3) "3-й!"
-//        else {
-//            val p = score.rank.cast<float> / score.maxRank
-//            if(p <= 5) "Лучшие 5%"
-//            else if(p <= 10) "Лучшие 10%"
-//            else if(p <= 20) "Лучшие 20%"
-//            else if(p <= 30) "Лучшие 30%"
-//            else if(p <= 50) "Выше среднего"
-//            else "Ниже среднего"
-//        }
+    def top(score : LocalPlayerScore) : string =
+        if(score.rank == 1) "1-й!"
+        else if(score.rank == 2) "2-й!"
+        else if(score.rank == 3) "3-й!"
+        else {
+            val p = score.rank.cast<float> / score.maxRank
+            if(p <= 5) "Лучшие 5%"
+            else if(p <= 10) "Лучшие 10%"
+            else if(p <= 20) "Лучшие 20%"
+            else if(p <= 30) "Лучшие 30%"
+            else if(p <= 50) "Выше среднего"
+            else "Ниже среднего"
+        }
     def leaderboard : string = "Лучшие результаты"
 
+    def shareSubject : string = "Raildale - отличная игра для iOS и Mac"
+    def shareText(url : string) : string = "Raildale - великолепная игра о строительстве железной дороги для iOS и Mac OS X: $url"
+    def twitterText(url : string) : string = "@RaildaleGame - великолепная игра о строительстве железной дороги для iOS и Mac OS X: $url"
 }
 
 object Str {

@@ -21,6 +21,8 @@
 #import "TRSceneFactory.h"
 #import "TRLevelChooseMenu.h"
 #import "EGEMail.h"
+#import "EGSharePlat.h"
+#import "EGShare.h"
 @implementation TRGameDirector{
     NSString* _gameCenterPrefix;
     NSString* _gameCenterAchievmentPrefix;
@@ -389,6 +391,13 @@ static ODClassType* _TRGameDirector_type;
             });
         }
     }
+}
+
+- (void)share {
+    if(!([EGShareDialog isSupported])) return ;
+    [TestFlight passCheckpoint:@"Share"];
+    NSString* url = @"http://get.raildale.com/?x=a";
+    [[[[[EGShareContent applyText:[TRStr.Loc shareTextUrl:url] image:[CNOption none]] twitterText:[TRStr.Loc twitterTextUrl:url]] emailText:[TRStr.Loc shareTextUrl:url] subject:[TRStr.Loc shareSubject]] dialog] display];
 }
 
 - (ODClassType*)type {

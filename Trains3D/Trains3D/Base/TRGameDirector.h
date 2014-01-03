@@ -25,6 +25,8 @@
 @class EGEMail;
 @class EGCounter;
 @class EGLengthCounter;
+@class EGShareDialog;
+@class EGShareContent;
 
 @class TRGameDirector;
 
@@ -68,6 +70,7 @@
 - (NSInteger)slowMotionsCount;
 - (void)runSlowMotionLevel:(TRLevel*)level;
 - (void)checkLastSlowMotions;
+- (void)share;
 + (TRGameDirector*)instance;
 + (CNNotificationHandle*)playerScoreRetrieveNotification;
 + (ODClassType*)type;

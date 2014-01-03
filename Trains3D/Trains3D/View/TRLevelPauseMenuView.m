@@ -8,6 +8,7 @@
 #import "EGSprite.h"
 #import "TRStrings.h"
 #import "TRGameDirector.h"
+#import "EGSharePlat.h"
 #import "EGTexture.h"
 #import "TRLevelChooseMenu.h"
 #import "TRScore.h"
@@ -337,6 +338,7 @@ static ODClassType* _TRMenuView_type;
     EGButton* _chooseLevelButton;
     EGButton* _leaderboardButton;
     EGButton* _supportButton;
+    EGButton* _shareButton;
     id<CNSeq> _buttons;
     EGSprite* _soundSprite;
 }
@@ -369,7 +371,10 @@ static ODClassType* _TRPauseMenuView_type;
         _supportButton = [self buttonText:[TRStr.Loc supportButton] onClick:^void() {
             [TRGameDirector.instance showSupportChangeLevel:NO];
         }];
-        _buttons = (@[_resumeButton, _restartButton, _chooseLevelButton, _leaderboardButton, _supportButton]);
+        _shareButton = [self buttonText:[TRStr.Loc shareButton] onClick:^void() {
+            [TRGameDirector.instance share];
+        }];
+        _buttons = [(@[_resumeButton, _restartButton, _chooseLevelButton, _leaderboardButton, _supportButton]) addSeq:(([EGShareDialog isSupported]) ? (@[_shareButton]) : (@[]))];
         _soundSprite = [EGSprite sprite];
     }
     

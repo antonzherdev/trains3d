@@ -35,6 +35,7 @@
 - (NSString*)result;
 - (NSString*)best;
 - (NSString*)supportButton;
+- (NSString*)shareButton;
 - (NSString*)supportEmailText;
 - (NSString*)rateText;
 - (NSString*)rateNow;
@@ -68,6 +69,9 @@
 - (NSString*)helpToMakeZoom;
 - (NSString*)linesAdvice;
 - (NSString*)helpSlowMotion;
+- (NSString*)shareTextUrl:(NSString*)url;
+- (NSString*)shareSubject;
+- (NSString*)twitterTextUrl:(NSString*)url;
 @end
 
 
@@ -103,6 +107,7 @@
 - (NSString*)colorRed;
 - (NSString*)colorBeige;
 - (NSString*)colorYellow;
+- (NSString*)shareButton;
 - (NSString*)supportButton;
 - (NSString*)supportEmailText;
 - (NSString*)rateText;
@@ -129,6 +134,9 @@
 - (NSString*)topScore:(EGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
 - (NSString*)linesAdvice;
+- (NSString*)shareSubject;
+- (NSString*)shareTextUrl:(NSString*)url;
+- (NSString*)twitterTextUrl:(NSString*)url;
 + (ODClassType*)type;
 @end
 
@@ -179,6 +187,7 @@
 - (NSString*)helpCrazy;
 - (NSString*)linesAdvice;
 - (NSString*)helpSlowMotion;
+- (NSString*)shareButton;
 - (NSString*)supportButton;
 - (NSString*)supportEmailText;
 - (NSString*)rateText;
@@ -190,6 +199,9 @@
 - (NSString*)best;
 - (NSString*)topScore:(EGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
+- (NSString*)shareSubject;
+- (NSString*)shareTextUrl:(NSString*)url;
+- (NSString*)twitterTextUrl:(NSString*)url;
 + (ODClassType*)type;
 @end
 

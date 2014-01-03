@@ -10,6 +10,12 @@ trait Map<K, V> extends Iterable<(K, V)> {
         val v = opt(key)
         if(v.isEmpty) false else value == v.get
     }
+    def add(item : (K, V)) : Map<K, V> = {
+        val builder = HashMapBuilder<K, V>()
+        builder.appendAll(self)
+        builder.append(item)
+        builder.build
+    }
 }
 
 trait MutableMap<K, V> extends Map<K, V> with MutableIterable<(K, V)> {

@@ -1,0 +1,7 @@
+package com.antonzherdev.eg
+
+stub class ShareDialog(content : ShareContent, completionHandler : ShareChannel -> void) {
+    static def isSupported : bool
+
+    def display
+}
