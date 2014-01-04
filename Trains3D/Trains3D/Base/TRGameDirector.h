@@ -1,5 +1,4 @@
 #import "objd.h"
-@class EGInterfaceIdiom;
 @class DTLocalKeyValueStorage;
 @class DTConflict;
 @class DTCloudKeyValueStorage;

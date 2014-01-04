@@ -1,7 +1,5 @@
 #import "TRGameDirector.h"
 
-#import "GL.h"
-#import "EGPlatform.h"
 #import "DTKeyValueStorage.h"
 #import "DTConflictResolve.h"
 #import "TRLevel.h"
@@ -64,9 +62,9 @@ static ODClassType* _TRGameDirector_type;
     self = [super init];
     __weak TRGameDirector* _weakSelf = self;
     if(self) {
-        _gameCenterPrefix = ((egInterfaceIdiom().isPhone) ? @"grp.com.antonzherdev.Trains3DPocket" : @"grp.com.antonzherdev.Trains3D");
-        _gameCenterAchievmentPrefix = ((egInterfaceIdiom().isPhone) ? @"grp.com.antonzherdev.Train3DPocket" : @"grp.com.antonzherdev.Train3D");
-        _cloudPrefix = ((egInterfaceIdiom().isPhone) ? @"pocket." : @"");
+        _gameCenterPrefix = @"grp.com.antonzherdev.Trains3D";
+        _gameCenterAchievmentPrefix = @"grp.com.antonzherdev.Train3D";
+        _cloudPrefix = @"";
         _maxDaySlowMotions = 5;
         _slowMotionRestorePeriod = 60 * 60 * 4;
         _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1, @"lastSlowMotions" : (@[]), @"daySlowMotions" : numi(_maxDaySlowMotions), @"boughtSlowMotions" : @5})];

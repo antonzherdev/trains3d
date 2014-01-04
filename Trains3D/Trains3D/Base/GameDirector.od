@@ -4,9 +4,9 @@ import com.antonzherdev.data._
 import com.testflightapp._
 
 class GameDirector {
-    val gameCenterPrefix = if(egInterfaceIdiom.isPhone) "grp.com.antonzherdev.Trains3DPocket" else "grp.com.antonzherdev.Trains3D"
-    val gameCenterAchievmentPrefix = if(egInterfaceIdiom.isPhone) "grp.com.antonzherdev.Train3DPocket" else "grp.com.antonzherdev.Train3D"
-    val cloudPrefix = if(egInterfaceIdiom.isPhone) "pocket." else ""
+    val gameCenterPrefix = "grp.com.antonzherdev.Trains3D"
+    val gameCenterAchievmentPrefix = "grp.com.antonzherdev.Train3D"
+    val cloudPrefix = ""
 
     val maxDaySlowMotions = 5
     val slowMotionRestorePeriod = 60*60*4

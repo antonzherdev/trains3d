@@ -101,7 +101,7 @@ static ODClassType* _TRLevelChooseMenu_type;
             } else {
                 long ss = (([score isDefined]) ? ((EGLocalPlayerScore*)([score get])).value : ((long)([TRGameDirector.instance bestScoreLevelNumber:((NSUInteger)(level))])));
                 if(ss > 0 || [score isDefined]) [_fontBottom drawText:[TRStr.Loc formatCost:((NSInteger)(ss))] at:GEVec3Make(((float)(x + 0.02)), ((float)(y + ((ph) ? 0.25 : 0.07))), 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:_textColor];
-                if([score isDefined]) [_fontBottom drawText:[TRStr.Loc topScore:[score get]] at:GEVec3Make(((float)(x + ((ph) ? 0.02 : 0.98))), ((float)(y + 0.11)), 0.0) alignment:egTextAlignmentApplyXY(((ph) ? -1.0 : 1.0), 0.0) color:_textColor];
+                if([score isDefined]) [_fontBottom drawText:[TRStr.Loc topScore:[score get]] at:GEVec3Make(((float)(x + ((ph) ? 0.02 : 0.98))), ((float)(y + ((ph) ? 0.11 : 0.07))), 0.0) alignment:egTextAlignmentApplyXY(((ph) ? -1.0 : 1.0), 0.0) color:_textColor];
             }
         }];
     };
