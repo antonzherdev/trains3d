@@ -67,16 +67,21 @@ class RailroadView(level : Level) extends InputProcessor {
 
     def prepare {
         railroadSurface.maybe(_changed) {
+//            log("railroadSurface")
             context.clearColor(vec4(0, 0, 0, 0))
             glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
             context.considerShadows = false
-            backgroundView.draw
-            railroad.rails.for(railView.draw(_))
-            railroad.builder.rail.for(railView.draw(_))
-            railroad.builder.buildingRails.for(railView.draw(_))
+            drawSurface
             context.considerShadows = true
             _changed = false
         }
+    }
+
+    def drawSurface {
+        backgroundView.draw
+        railroad.rails.for(railView.draw(_))
+        railroad.builder.rail.for(railView.draw(_))
+        railroad.builder.buildingRails.for(railView.draw(_))
     }
 
     def reshape {

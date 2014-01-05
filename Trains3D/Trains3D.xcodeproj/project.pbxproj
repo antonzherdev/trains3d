@@ -434,7 +434,6 @@
 		6F3DF589586AE8E4B7EF40EB /* TRCollisions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFCEE75688F74AE37F431 /* TRCollisions.m */; };
 		6F3DF591E7E8D7D34C3FE29E /* lucida_grande_28.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFA6FD93EC644D0530906 /* lucida_grande_28.png */; };
 		6F3DF5928B9B4445494A9BDF /* KWValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFACC20BF8698A6F56017 /* KWValue.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		6F3DF592BC7768018CB80323 /* Trains3Di-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF83A4032D189DF1C128C /* Trains3Di-Info.plist */; };
 		6F3DF5935E77D73D927A9824 /* Gravel.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFE13534F0E3322DA3E4D /* Gravel.png */; };
 		6F3DF59A3501F60F77F5F807 /* CNLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8F7AB38287C992B422E /* CNLog.m */; };
 		6F3DF59B137A03AF7828D858 /* EGSharePlat.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF441677A0508F224E73A /* EGSharePlat.m */; };
@@ -5458,7 +5457,6 @@
 				6F3DF45CA448CCDC0F87CD7E /* Action.od in Resources */,
 				6F3DF9AAC4956A96A4E64E61 /* Share.jpg in Resources */,
 				6F3DF5ED73A21D23FAC8DF10 /* Trains3Di.entitlements in Resources */,
-				6F3DF592BC7768018CB80323 /* Trains3Di-Info.plist in Resources */,
 				6F3DFF84D8DCE1A5C6951E57 /* InfoPlist.strings in Resources */,
 				6F3DFEA75F0291A5F594E75D /* iOSImages.xcassets in Resources */,
 				6F3DF0FCADF646225E32FE96 /* Main_iPad.storyboard in Resources */,

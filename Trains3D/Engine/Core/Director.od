@@ -43,31 +43,38 @@ class Director {
 
     private var _lastViewSize : vec2 = vec2(0, 0)
     def viewSize : vec2 = _lastViewSize
-    def drawWith(size : vec2) {
+
+    def reshapeWith(size : vec2) {
         if(_lastViewSize != size) {
+//            log("reshape($size) {")
             context.scale = scale
             _lastViewSize = size
             _scene.for(_.reshapeWith(size))
             reshapeNotification.post(sender = self, data = size)
+//            log("} reshape")
         }
+    }
 
+    def draw {
         if(_scene.isEmpty) return nil
-        if(size.x <= 0 || size.y <= 0) return nil
+        if(_lastViewSize.x <= 0 || _lastViewSize.y <= 0) return nil
+//        log("draw {")
         val sc = _scene.get
 
         _current = self
         context.clear
         context.depthTest.enable
 
-        sc.prepareWith(size)
+        sc.prepareWith(_lastViewSize)
         context.clearColor(_scene.get.backgroundColor)
         glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
-        sc.drawWith(size)
+        sc.drawWith(_lastViewSize)
 
         context.depthTest.disable
         matrix.clear
-        context.set(viewport = Rect(vec2(0, 0), size))
+        context.set(viewport = Rect(vec2(0, 0), _lastViewSize))
         _stat.for(_.draw)
+//        log("} draw")
     }
 
 
@@ -109,10 +116,12 @@ class Director {
     }
 
     def tick {
+//        log("tick {")
         _current = self
         time.tick
         _scene.for(_.updateWith(time.delta*_timeSpeed))
         _stat.for(_.tickWith(time.delta))
+//        log("} tick")
     }
 
     private var _stat : Stat? = nil

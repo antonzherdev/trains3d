@@ -125,18 +125,22 @@ static ODClassType* _TRRailroadView_type;
         [EGGlobal.context clearColorColor:GEVec4Make(0.0, 0.0, 0.0, 0.0)];
         glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
         EGGlobal.context.considerShadows = NO;
-        [_backgroundView draw];
-        [[_railroad rails] forEach:^void(TRRail* _) {
-            [_railView drawRail:_];
-        }];
-        [[_railroad.builder rail] forEach:^void(TRRail* _) {
-            [_railView drawRail:_];
-        }];
-        [[_railroad.builder buildingRails] forEach:^void(TRRailBuilding* _) {
-            [_railView drawRailBuilding:_];
-        }];
+        [self drawSurface];
         EGGlobal.context.considerShadows = YES;
         __changed = NO;
+    }];
+}
+
+- (void)drawSurface {
+    [_backgroundView draw];
+    [[_railroad rails] forEach:^void(TRRail* _) {
+        [_railView drawRail:_];
+    }];
+    [[_railroad.builder rail] forEach:^void(TRRail* _) {
+        [_railView drawRail:_];
+    }];
+    [[_railroad.builder buildingRails] forEach:^void(TRRailBuilding* _) {
+        [_railView drawRailBuilding:_];
     }];
 }
 

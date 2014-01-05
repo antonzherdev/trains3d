@@ -96,7 +96,7 @@
 - (void)redraw {
     [self lockOpenGLContext];
     @try {
-        [_director drawWithSize:_viewSize];
+        [_director draw];
         [self.openGLContext flushBuffer];
     } @finally {
         [self unlockOpenGLContext];
@@ -113,7 +113,8 @@
     @try {
         CGSize nsSize = self.bounds.size;
         _viewSize = GEVec2Make((float) nsSize.width, (float) nsSize.height);
-        [_director drawWithSize:_viewSize];
+        [_director reshapeWithSize:_viewSize];
+        [_director draw];
 
         [self.openGLContext flushBuffer];
     } @finally {

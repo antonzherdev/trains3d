@@ -40,10 +40,10 @@ class SimpleSurface(size : vec2i, depth : bool) extends Surface(size) {
         if(status != GL_FRAMEBUFFER_COMPLETE) throw "Error in frame buffer color attachment: $status"
         if(depth) {
             glBindRenderbuffer(GL_RENDERBUFFER, depthRenderBuffer)
-            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, size.x, size.y)
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, size.x, size.y)
             glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer)
-            val status = glCheckFramebufferStatus(GL_FRAMEBUFFER)
-            if(status != GL_FRAMEBUFFER_COMPLETE) throw "Error in frame buffer depth attachment: $status"
+            val status2 = glCheckFramebufferStatus(GL_FRAMEBUFFER)
+            if(status2 != GL_FRAMEBUFFER_COMPLETE) throw "Error in frame buffer depth attachment: $status"
         }
 
         glBindTexture(GL_TEXTURE_2D, 0)

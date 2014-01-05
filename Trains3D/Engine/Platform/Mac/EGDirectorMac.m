@@ -39,7 +39,7 @@
         [self.view lockOpenGLContext];
         @try {
             [self tick];
-            [self drawWithSize:_view.viewSize];
+            [self draw];
             [self.view.openGLContext flushBuffer];
         } @finally {
             [self.view unlockOpenGLContext];

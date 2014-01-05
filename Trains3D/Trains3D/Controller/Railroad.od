@@ -274,7 +274,9 @@ class RailroadBuilder(weak railroad : Railroad) extends Updatable {
 
 
     def tryBuild(rail : Rail) : bool = {
-        if(canAdd(rail)) {
+        if(_rail.contains(rail)) {
+            true
+        } if(canAdd(rail)) {
             _rail = rail
             changed
             true

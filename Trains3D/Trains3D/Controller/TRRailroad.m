@@ -981,6 +981,7 @@ static ODClassType* _TRRailroadBuilder_type;
 }
 
 - (BOOL)tryBuildRail:(TRRail*)rail {
+    if([__rail containsItem:rail]) YES;
     if([self canAddRail:rail]) {
         __rail = [CNOption applyValue:rail];
         [self changed];

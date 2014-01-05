@@ -129,10 +129,10 @@ static ODClassType* _EGSimpleSurface_type;
             if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer color attachment: %d", status];
             if(_depth) {
                 glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
-                glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, ((int)(self.size.x)), ((int)(self.size.y)));
+                glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, ((int)(self.size.x)), ((int)(self.size.y)));
                 glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
-                int status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-                if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %d", status];
+                int status2 = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+                if(status2 != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %d", status];
             }
             glBindTexture(GL_TEXTURE_2D, 0);
             [EGGlobal.context restoreDefaultFramebuffer];

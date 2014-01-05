@@ -65,6 +65,7 @@
 - (void)drawLightGlows;
 - (void)drawForeground;
 - (void)prepare;
+- (void)drawSurface;
 - (void)reshape;
 - (EGRecognizers*)recognizers;
 - (void)updateWithDelta:(CGFloat)delta;

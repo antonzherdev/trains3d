@@ -196,7 +196,7 @@ class MeshWriter(vbo : MutableVertexBuffer<MeshData>, ibo : MutableIndexBuffer,
             _vp = _vp.write(MeshData, r.cast<MeshData> * mat4)
         }
         index.forRef {r ->
-        _ip = _ip.write(uInt4 = r.cast<uint4> + _indexShift)
+            _ip = _ip.write(uInt4 = r.cast<uint4> + _indexShift)
         }
         _indexShift += vertex.count
     }
@@ -211,10 +211,10 @@ class MeshWriter(vbo : MutableVertexBuffer<MeshData>, ibo : MutableIndexBuffer,
 
     def write(vertex : PArray<MeshData>, index : PArray<uint4>, map : MeshData -> MeshData) {
         vertex.forRef{ r ->
-        _vp = _vp.write(MeshData, map(r.cast<MeshData>))
+            _vp = _vp.write(MeshData, map(r.cast<MeshData>))
         }
         index.forRef {r ->
-        _ip = _ip.write(uInt4 = r.cast<uint4> + _indexShift)
+            _ip = _ip.write(uInt4 = r.cast<uint4> + _indexShift)
         }
         _indexShift += vertex.count
     }

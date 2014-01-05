@@ -81,6 +81,7 @@
     CGSize size = view.bounds.size;
     CGFloat scale = [[UIScreen mainScreen] scale];
     _viewSize = GEVec2Make(size.width*scale, size.height*scale);
+    [_director reshapeWithSize:_viewSize];
 }
 
 
@@ -104,7 +105,7 @@
     GLint defaultFBO;
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBO);
     [[EGGlobal context] setDefaultFramebuffer:defaultFBO];
-    [_director drawWithSize:_viewSize];
+    [_director draw];
 }
 
 - (BOOL)prefersStatusBarHidden {

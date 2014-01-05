@@ -150,6 +150,7 @@ static ODClassType* _EGMultisamplingSurface_type;
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, _simple.frameBuffer);
     glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, _multisampling.frameBuffer);
     glResolveMultisampleFramebufferAPPLE();
+    glFlush();
     const GLenum discards[]  = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
     glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER_APPLE, 2, discards);
     const GLenum discards2[]  = {GL_COLOR_ATTACHMENT0};

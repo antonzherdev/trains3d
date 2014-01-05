@@ -105,7 +105,7 @@ static ODClassType* _EGDirector_type;
     return __lastViewSize;
 }
 
-- (void)drawWithSize:(GEVec2)size {
+- (void)reshapeWithSize:(GEVec2)size {
     if(!(GEVec2Eq(__lastViewSize, size))) {
         EGGlobal.context.scale = [self scale];
         __lastViewSize = size;
@@ -114,19 +114,22 @@ static ODClassType* _EGDirector_type;
         }];
         [_EGDirector_reshapeNotification postSender:self data:wrap(GEVec2, size)];
     }
+}
+
+- (void)draw {
     if([__scene isEmpty]) return ;
-    if(size.x <= 0 || size.y <= 0) return ;
+    if(__lastViewSize.x <= 0 || __lastViewSize.y <= 0) return ;
     EGScene* sc = [__scene get];
     _EGDirector__current = self;
     [EGGlobal.context clear];
     [EGGlobal.context.depthTest enable];
-    [sc prepareWithViewSize:size];
+    [sc prepareWithViewSize:__lastViewSize];
     [EGGlobal.context clearColorColor:((EGScene*)([__scene get])).backgroundColor];
     glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
-    [sc drawWithViewSize:size];
+    [sc drawWithViewSize:__lastViewSize];
     [EGGlobal.context.depthTest disable];
     [EGGlobal.matrix clear];
-    [EGGlobal.context setViewport:geRectIApplyRect(GERectMake(GEVec2Make(0.0, 0.0), size))];
+    [EGGlobal.context setViewport:geRectIApplyRect(GERectMake(GEVec2Make(0.0, 0.0), __lastViewSize))];
     [__stat forEach:^void(EGStat* _) {
         [((EGStat*)(_)) draw];
     }];

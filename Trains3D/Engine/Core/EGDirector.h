@@ -30,7 +30,8 @@
 - (void)redraw;
 - (void)_init;
 - (GEVec2)viewSize;
-- (void)drawWithSize:(GEVec2)size;
+- (void)reshapeWithSize:(GEVec2)size;
+- (void)draw;
 - (void)processEvent:(id<EGEvent>)event;
 - (BOOL)isStarted;
 - (void)start;
