@@ -151,7 +151,7 @@ static ODClassType* _TREnStrings_type;
 - (NSString*)supportEmailText {
     return @"Report a problem or tell me about your ideas.\n"
         "I will definetely reply to you and try to fix problems as soon as posible.\n"
-        "Thank you very much, Anton Zhedev, Developer";
+        "Thank you very much, Anton Zhedev, developer";
 }
 
 - (NSString*)rateText {
@@ -162,11 +162,11 @@ static ODClassType* _TREnStrings_type;
         "I will try to fix it as soon as possible.\n"
         "\n"
         "Thanks for your support!\n"
-        "Best Regards, Anton Zherdev, Developer";
+        "Best Regards, Anton Zherdev, developer";
 }
 
 - (NSString*)rateSignature {
-    return @"Anton Zherdev, Developer";
+    return @"Anton Zherdev, developer";
 }
 
 - (NSString*)rateNow {
@@ -591,7 +591,7 @@ static ODClassType* _TRRuStrings_type;
 - (NSString*)supportEmailText {
     return @"Сообщите о проблеме или напишите ваши идеи.\n"
         "Я обязательно вам отвечу и постараюсь исправить возникшие проблемы как можно скорее.\n"
-        "Спасибо большое, Антон Жердев, Разработчик";
+        "Спасибо большое, Антон Жердев, разработчик";
 }
 
 - (NSString*)rateText {
@@ -602,7 +602,7 @@ static ODClassType* _TRRuStrings_type;
         "Я постараюсь исправить ее как можно скорее.\n"
         "\n"
         "Спасибо вам за поддержку!\n"
-        "С наилучшими пожеланиями, Антон Жердев, Разработчик";
+        "С наилучшими пожеланиями, Антон Жердев, разработчик";
 }
 
 - (NSString*)rateNow {

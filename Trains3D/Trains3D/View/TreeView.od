@@ -145,13 +145,13 @@ class TreeView(forest : Forest) {
         val mQuad = Quad(quad3.p0.xy, quad3.p1.xy, quad3.p2.xy, quad3.p3.xy)
 
         val r = tree.rustle*0.1 * tp.rustleStrength
-        val rustleUv = mainUv + vec2(tp.uv.width + r, -r)
+        val rustleUv = mainUv + vec2(tp.uv.width, 0)
 
         val at = vec3(tree.position, 0)
-        var v = a.write(TreeData, TreeData(at, model = mQuad.p0, mainUv.p0, rustleUv.p0))
-        v = v.write(TreeData, TreeData(at, model = mQuad.p1, mainUv.p1, rustleUv.p1))
-        v = v.write(TreeData, TreeData(at, model = mQuad.p2, mainUv.p2, rustleUv.p2))
-        v = v.write(TreeData, TreeData(at, model = mQuad.p3, mainUv.p3, rustleUv.p3))
+        var v = a.write(TreeData, TreeData(at, model = mQuad.p0, mainUv.p0, rustleUv.p0 + vec2(r, -r)))
+        v = v.write(TreeData, TreeData(at, model = mQuad.p1, mainUv.p1, rustleUv.p1 + vec2(-r, r)))
+        v = v.write(TreeData, TreeData(at, model = mQuad.p2, mainUv.p2, rustleUv.p2 + vec2(r, -r)))
+        v = v.write(TreeData, TreeData(at, model = mQuad.p3, mainUv.p3, rustleUv.p3 + vec2(-r, r)))
         v
     }
 }

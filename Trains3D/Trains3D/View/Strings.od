@@ -119,7 +119,7 @@ class EnStrings extends Strings {
     def supportEmailText : string =
         "Report a problem or tell me about your ideas.
          I will definetely reply to you and try to fix problems as soon as posible.
-         Thank you very much, Anton Zhedev, Developer"
+         Thank you very much, Anton Zhedev, developer"
     def rateText : string =
         "If you enjoy playing Raildale, would you mind taking
          a moment to rate it? It won’t take more than a minute.
@@ -128,8 +128,8 @@ class EnStrings extends Strings {
          I will try to fix it as soon as possible.
 
          Thanks for your support!
-         Best Regards, Anton Zherdev, Developer"
-    def rateSignature : string = "Anton Zherdev, Developer"
+         Best Regards, Anton Zherdev, developer"
+    def rateSignature : string = "Anton Zherdev, developer"
     def rateNow : string = "Rate it now"
     def rateProblem : string = "Report a problem"
     def rateLater : string = "Remind me later"
@@ -311,7 +311,7 @@ class RuStrings extends Strings{
     def supportEmailText : string =
         "Сообщите о проблеме или напишите ваши идеи.
          Я обязательно вам отвечу и постараюсь исправить возникшие проблемы как можно скорее.
-         Спасибо большое, Антон Жердев, Разработчик"
+         Спасибо большое, Антон Жердев, разработчик"
     def rateText : string =
         "Если вам понравилась игра Raildale, не будете ли вы возражать
          против того, чтобы уделить время и оценить ее?
@@ -320,7 +320,7 @@ class RuStrings extends Strings{
          Я постараюсь исправить ее как можно скорее.
 
          Спасибо вам за поддержку!
-         С наилучшими пожеланиями, Антон Жердев, Разработчик"
+         С наилучшими пожеланиями, Антон Жердев, разработчик"
     def rateNow : string = "Оценить сейчас"
     def rateProblem : string = "Сообщить о проблеме"
     def rateLater : string = "Напомнить позже"

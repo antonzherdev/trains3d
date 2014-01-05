@@ -80,10 +80,10 @@ class Tree(treeType : TreeType, position : vec2, size : vec2) extends Comparable
         val mw = wind*0.3*rigidity
         val mws = mw.x.abs + mw.y.abs
         if(_rustleUp) {
-            rustle += delta*mws*mws*65
+            rustle += delta*mws*7
             if(rustle > mws) _rustleUp = false
         } else {
-            rustle -= delta*mws*mws*65
+            rustle -= delta*mws*7
             if(rustle < -mws) _rustleUp = true
         }
 
@@ -124,8 +124,8 @@ enum ForestType(treeTypes : [TreeType]) {
 enum TreeType(uv : Rect, scale : float, rustleStrength : float, collisions : bool) {
     Pine(Rect(0, 0, 184.0/512, 1), 1, 1, true)
     SnowPine(Rect(0, 0, 184.0/512, 1), 1, 1, true)
-    Leaf(Rect(0, 0, 197.0/512, 0.5), 1.6, 1, true)
-    WeakLeaf(Rect(0, 0.5, 115.0/512, 0.5), 0.6, 2, false)
+    Leaf(Rect(0, 0, 197.0/512, 0.5), 1.6, 0.8, true)
+    WeakLeaf(Rect(0, 0.5, 115.0/512, 0.5), 0.6, 1.5, false)
     Palm(Rect(0, 0, 2115.0/5500, 1), 1.5, 1, true)
 
     val uvQuad : Quad = uv.upsideDownStripQuad
