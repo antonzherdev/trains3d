@@ -218,7 +218,7 @@ static ODClassType* _EGVersion_type;
     id<CNIterator> j = [to.parts iterator];
     while([i hasNext] && [j hasNext]) {
         NSInteger vi = unumi([i next]);
-        NSInteger vj = unumi([i next]);
+        NSInteger vj = unumi([j next]);
         if(vi != vj) return intCompareTo(vi, vj);
     }
     return 0;

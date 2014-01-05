@@ -144,7 +144,10 @@ static ODClassType* _TRLevelView_type;
         if(r < 4.0 / 3 + 0.01) [_move setReserve:EGCameraReserveMake(0.0, 0.0, 0.5, 0.1)];
         else [_move setReserve:EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)];
     } else {
-        if(egPlatform().isPhone) [_move setReserve:EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)];
+        if(egPlatform().isPhone) {
+            if([egPlatform().version compareTo:[EGVersion applyStr:@"7"]] < 0) [_move setReserve:EGCameraReserveMake(0.0, 0.0, 0.4, 0.0)];
+            else [_move setReserve:EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)];
+        }
     }
     EGGlobal.matrix.value = [[self camera] matrixModel];
     [_callRepairerView reshape];

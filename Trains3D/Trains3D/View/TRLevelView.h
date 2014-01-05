@@ -24,6 +24,7 @@
 @class EGRenderTarget;
 @class TRRailroadBuilder;
 @class EGPlatform;
+@class EGVersion;
 @class EGMatrixStack;
 @class TRPrecipitation;
 @class TRPrecipitationType;

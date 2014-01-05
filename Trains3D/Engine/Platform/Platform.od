@@ -29,7 +29,7 @@ class Version(parts : [int]) extends Comparable<Version> {
         val j = to.parts.iterator
         while(i.hasNext && j.hasNext) {
             val vi = i.next
-            val vj = i.next
+            val vj = j.next
             if(vi != vj) {
                 return vi.compare(vj)
             }
