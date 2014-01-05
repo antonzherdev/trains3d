@@ -18,7 +18,7 @@
 @class TRCity;
 @class TRCityAngle;
 @class TRRailroadConnectorContent;
-@class EGInterfaceIdiom;
+@class EGPlatform;
 @class TRRail;
 @class TRStr;
 @protocol TRStrings;

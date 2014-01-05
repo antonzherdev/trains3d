@@ -79,3 +79,22 @@ GEVec2 egLoadTextureFromFile(GLuint target, NSString* file, GLenum magFilter, GL
     return GEVec2Make(width, height);
 
 }
+
+EGPlatform* egPlatform() {
+    static EGPlatform * platform = nil;
+    if(platform != nil) return platform;
+
+#if TARGET_OS_IPHONE
+    platform = [EGPlatform platformWithOs:[EGOSType iOS]
+                           interfaceIdiom:UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? [EGInterfaceIdiom phone] : [EGInterfaceIdiom pad]
+                                  version:[EGVersion applyStr:[UIDevice currentDevice].systemVersion]];
+
+#elif TARGET_OS_MAC
+    platform = [EGPlatform platformWithOs:[EGOSType MacOS]
+                           interfaceIdiom:[EGInterfaceIdiom computer]
+                                  version:[EGVersion applyStr:@"10"]];
+
+#endif
+
+    return platform;
+}

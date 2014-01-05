@@ -515,7 +515,7 @@ static ODClassType* _TRWinMenu_type;
 }
 
 - (NSInteger)buttonHeight {
-    if(egInterfaceIdiom().isPhone) return 40;
+    if(egPlatform().isPhone) return 40;
     else return 50;
 }
 
@@ -636,7 +636,7 @@ static ODClassType* _TRRateMenu_type;
 }
 
 - (NSInteger)buttonHeight {
-    if(egInterfaceIdiom().isPhone) return 40;
+    if(egPlatform().isPhone) return 40;
     else return 50;
 }
 
@@ -811,7 +811,7 @@ static ODClassType* _TRHelpView_type;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
-    [_helpText setFont:[EGGlobal fontWithName:@"lucida_grande" size:((egInterfaceIdiom().isPhone) ? 14 : 16)]];
+    [_helpText setFont:[EGGlobal fontWithName:@"lucida_grande" size:((egPlatform().isPhone) ? 14 : 16)]];
     [_tapText setFont:[EGGlobal fontWithName:@"lucida_grande" size:12]];
 }
 

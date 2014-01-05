@@ -153,7 +153,7 @@ class WinMenu(level : Level) extends MenuView {
 
 
     def headerHeight = 100.0
-    def buttonHeight : int = if(egInterfaceIdiom.isPhone) 40 else 50
+    def buttonHeight : int = if(egPlatform.isPhone) 40 else 50
     def drawHeader(rect : Rect) {
         D2D.drawSprite(if(_score.isDefined) LevelChooseMenu.rankColor(_score.get) else vec4(0.85, 0.9, 0.75, 1.0), at = vec3(0, 0, 0), rect)
         headerText.position = rect.p(0.5, 0.75)
@@ -209,7 +209,7 @@ class RateMenu extends MenuView {
 
     def headerHeight = 140.0
     def columnWidth : int = 520
-    def buttonHeight : int = if(egInterfaceIdiom.isPhone) 40 else 50
+    def buttonHeight : int = if(egPlatform.isPhone) 40 else 50
     private val headerText : Text = Text(nil, Loc.rateText, vec3(0, 0, 0), TextAlignment(-1, 0), vec4(0, 0, 0, 1))
     def drawHeader(rect : Rect) {
         D2D.drawSprite(vec4(0.85, 1.0, 0.75, 0.9), at = vec3(0, 0, 0), rect)
@@ -252,7 +252,7 @@ class HelpView(level : Level) extends PauseView {
     private val helpText : Text = Text(nil, "", vec3(0, 0, 0), TextAlignment(-1, 1), vec4(0, 0, 0, 1))
     private val tapText : Text = Text(nil, "($(Loc.tapToContinue))", vec3(0, 0, 0), TextAlignment(0, -1), vec4(0, 0, 0, 1))
     def reshapeWith(viewport : Rect) {
-        helpText.font = fontWith(name = "lucida_grande", size = if(egInterfaceIdiom.isPhone) 14 else 16)
+        helpText.font = fontWith(name = "lucida_grande", size = if(egPlatform.isPhone) 14 else 16)
         tapText.font = fontWith(name = "lucida_grande", size = 12)
     }
 

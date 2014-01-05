@@ -42,7 +42,7 @@ class LevelFactory {
             repairerSpeed = 20, sporadicDamagePeriod = 0, [
                 (0, create2Cities),
                 (1, showHelp(Loc.helpConnectTwoCities)),
-                (1, if(egInterfaceIdiom == InterfaceIdiom.phone) showHelp(Loc.helpToMakeZoom) else nil),
+                (1, if(egPlatform.isPhone) showHelp(Loc.helpToMakeZoom) else nil),
                 (30, train(cars = 2, speed = 30)),
                 (Level.trainComingPeriod + 7, showTrainHelp),
                 (36, createNewCity),
@@ -378,7 +378,7 @@ class LevelFactory {
         level13, level14, level15, level16
     ]
 
-    private static def bigSize = if(egInterfaceIdiom.isPhone) vec2i(5, 5) else vec2i(7, 5)
+    private static def bigSize = if(egPlatform.isPhone) vec2i(5, 5) else vec2i(7, 5)
 
     static def slowTrain = train(cars = 1.to(4), speed = 25.to(35))
     static def train = train(cars = 1.to(5), speed = 20.to(50))

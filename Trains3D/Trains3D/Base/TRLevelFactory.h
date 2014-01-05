@@ -8,7 +8,7 @@
 @class TRLevelTheme;
 @class TRStr;
 @protocol TRStrings;
-@class EGInterfaceIdiom;
+@class EGPlatform;
 @class TRLevel;
 @class TRTrain;
 @class TRTrainType;

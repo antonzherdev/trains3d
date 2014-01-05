@@ -23,7 +23,7 @@
 @class TRSwitchProcessor;
 @class EGRenderTarget;
 @class TRRailroadBuilder;
-@class EGInterfaceIdiom;
+@class EGPlatform;
 @class EGMatrixStack;
 @class TRPrecipitation;
 @class TRPrecipitationType;

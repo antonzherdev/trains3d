@@ -35,7 +35,6 @@
 @class EGBillboard;
 @class TRSwitch;
 @class TRRailLight;
-@class EGInterfaceIdiom;
 @class EGMutableCounterArray;
 @class EGLengthCounter;
 @class EGCounterData;

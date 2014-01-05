@@ -1,17 +1,17 @@
 #import "EGPlatform.h"
 
-@implementation EGPlatform{
+@implementation EGOSType{
     BOOL _shadows;
     BOOL _touch;
 }
-static EGPlatform* _EGPlatform_MacOS;
-static EGPlatform* _EGPlatform_iOS;
-static NSArray* _EGPlatform_values;
+static EGOSType* _EGOSType_MacOS;
+static EGOSType* _EGOSType_iOS;
+static NSArray* _EGOSType_values;
 @synthesize shadows = _shadows;
 @synthesize touch = _touch;
 
-+ (id)platformWithOrdinal:(NSUInteger)ordinal name:(NSString*)name shadows:(BOOL)shadows touch:(BOOL)touch {
-    return [[EGPlatform alloc] initWithOrdinal:ordinal name:name shadows:shadows touch:touch];
++ (id)typeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name shadows:(BOOL)shadows touch:(BOOL)touch {
+    return [[EGOSType alloc] initWithOrdinal:ordinal name:name shadows:shadows touch:touch];
 }
 
 - (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name shadows:(BOOL)shadows touch:(BOOL)touch {
@@ -26,21 +26,21 @@ static NSArray* _EGPlatform_values;
 
 + (void)initialize {
     [super initialize];
-    _EGPlatform_MacOS = [EGPlatform platformWithOrdinal:0 name:@"MacOS" shadows:YES touch:NO];
-    _EGPlatform_iOS = [EGPlatform platformWithOrdinal:1 name:@"iOS" shadows:YES touch:YES];
-    _EGPlatform_values = (@[_EGPlatform_MacOS, _EGPlatform_iOS]);
+    _EGOSType_MacOS = [EGOSType typeWithOrdinal:0 name:@"MacOS" shadows:YES touch:NO];
+    _EGOSType_iOS = [EGOSType typeWithOrdinal:1 name:@"iOS" shadows:YES touch:YES];
+    _EGOSType_values = (@[_EGOSType_MacOS, _EGOSType_iOS]);
 }
 
-+ (EGPlatform*)MacOS {
-    return _EGPlatform_MacOS;
++ (EGOSType*)MacOS {
+    return _EGOSType_MacOS;
 }
 
-+ (EGPlatform*)iOS {
-    return _EGPlatform_iOS;
++ (EGOSType*)iOS {
+    return _EGOSType_iOS;
 }
 
 + (NSArray*)values {
-    return _EGPlatform_values;
+    return _EGOSType_values;
 }
 
 @end
@@ -96,6 +96,164 @@ static NSArray* _EGInterfaceIdiom_values;
 
 + (NSArray*)values {
     return _EGInterfaceIdiom_values;
+}
+
+@end
+
+
+@implementation EGPlatform{
+    EGOSType* _os;
+    EGInterfaceIdiom* _interfaceIdiom;
+    EGVersion* _version;
+    BOOL _shadows;
+    BOOL _touch;
+    BOOL _isPhone;
+    BOOL _isPad;
+    BOOL _isComputer;
+}
+static ODClassType* _EGPlatform_type;
+@synthesize os = _os;
+@synthesize interfaceIdiom = _interfaceIdiom;
+@synthesize version = _version;
+@synthesize shadows = _shadows;
+@synthesize touch = _touch;
+@synthesize isPhone = _isPhone;
+@synthesize isPad = _isPad;
+@synthesize isComputer = _isComputer;
+
++ (id)platformWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version {
+    return [[EGPlatform alloc] initWithOs:os interfaceIdiom:interfaceIdiom version:version];
+}
+
+- (id)initWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version {
+    self = [super init];
+    if(self) {
+        _os = os;
+        _interfaceIdiom = interfaceIdiom;
+        _version = version;
+        _shadows = _os.shadows;
+        _touch = _os.touch;
+        _isPhone = _interfaceIdiom.isPhone;
+        _isPad = _interfaceIdiom.isPad;
+        _isComputer = _interfaceIdiom.isComputer;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGPlatform_type = [ODClassType classTypeWithCls:[EGPlatform class]];
+}
+
+- (ODClassType*)type {
+    return [EGPlatform type];
+}
+
++ (ODClassType*)type {
+    return _EGPlatform_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGPlatform* o = ((EGPlatform*)(other));
+    return self.os == o.os && self.interfaceIdiom == o.interfaceIdiom && [self.version isEqual:o.version];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.os ordinal];
+    hash = hash * 31 + [self.interfaceIdiom ordinal];
+    hash = hash * 31 + [self.version hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"os=%@", self.os];
+    [description appendFormat:@", interfaceIdiom=%@", self.interfaceIdiom];
+    [description appendFormat:@", version=%@", self.version];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGVersion{
+    id<CNSeq> _parts;
+}
+static ODClassType* _EGVersion_type;
+@synthesize parts = _parts;
+
++ (id)versionWithParts:(id<CNSeq>)parts {
+    return [[EGVersion alloc] initWithParts:parts];
+}
+
+- (id)initWithParts:(id<CNSeq>)parts {
+    self = [super init];
+    if(self) _parts = parts;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGVersion_type = [ODClassType classTypeWithCls:[EGVersion class]];
+}
+
++ (EGVersion*)applyStr:(NSString*)str {
+    return [EGVersion versionWithParts:[[[[str splitBy:@"."] chain] map:^id(NSString* _) {
+        return numi([_ toInt]);
+    }] toArray]];
+}
+
+- (NSInteger)compareTo:(EGVersion*)to {
+    id<CNIterator> i = [_parts iterator];
+    id<CNIterator> j = [to.parts iterator];
+    while([i hasNext] && [j hasNext]) {
+        NSInteger vi = unumi([i next]);
+        NSInteger vj = unumi([i next]);
+        if(vi != vj) return intCompareTo(vi, vj);
+    }
+    return 0;
+}
+
+- (ODClassType*)type {
+    return [EGVersion type];
+}
+
++ (ODClassType*)type {
+    return _EGVersion_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGVersion* o = ((EGVersion*)(other));
+    return [self.parts isEqual:o.parts];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.parts hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"parts=%@", self.parts];
+    [description appendString:@">"];
+    return description;
 }
 
 @end

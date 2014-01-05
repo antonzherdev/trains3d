@@ -67,8 +67,8 @@ static ODClassType* _TRLevelChooseMenu_type;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
-    _fontRes = [EGGlobal fontWithName:@"lucida_grande" size:((egInterfaceIdiom() == EGInterfaceIdiom.phone) ? 14 : 16)];
-    _fontBottom = [EGGlobal fontWithName:@"lucida_grande" size:((egInterfaceIdiom() == EGInterfaceIdiom.phone) ? 12 : 14)];
+    _fontRes = [EGGlobal fontWithName:@"lucida_grande" size:((egPlatform().isPhone) ? 14 : 16)];
+    _fontBottom = [EGGlobal fontWithName:@"lucida_grande" size:((egPlatform().isPhone) ? 12 : 14)];
 }
 
 - (void)start {
@@ -87,7 +87,7 @@ static ODClassType* _TRLevelChooseMenu_type;
 }
 
 - (void(^)(GERect))drawButtonX:(NSInteger)x y:(NSInteger)y level:(NSInteger)level {
-    BOOL ph = egInterfaceIdiom().isPhone;
+    BOOL ph = egPlatform().isPhone;
     return ^void(GERect rect) {
         BOOL dis = level > _maxLevel;
         id score = [__scores optKey:numui(((NSUInteger)(level)))];

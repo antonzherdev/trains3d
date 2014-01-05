@@ -6,7 +6,7 @@
 @class TRLevel;
 @class EGSprite;
 @class EGProgress;
-@class EGInterfaceIdiom;
+@class EGPlatform;
 @class EGCounter;
 @class EGFinisher;
 @class EGGlobal;

@@ -96,7 +96,7 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)tapToContinue {
-    if(egInterfaceIdiom() == EGInterfaceIdiom.computer) return @"Click to contiunue";
+    if(egPlatform().isComputer) return @"Click to contiunue";
     else return @"Tap to continue";
 }
 
@@ -456,7 +456,7 @@ static ODClassType* _TRRuStrings_type;
 }
 
 - (NSString*)tapToContinue {
-    if(egInterfaceIdiom() == EGInterfaceIdiom.computer) return @"Кликните для продолжения";
+    if(egPlatform().isComputer) return @"Кликните для продолжения";
     else return @"Нажмите для продолжения";
 }
 

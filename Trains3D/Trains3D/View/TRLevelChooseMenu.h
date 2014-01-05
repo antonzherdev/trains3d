@@ -7,7 +7,7 @@
 @class EGDirector;
 @class EGButton;
 @class EGCamera2D;
-@class EGInterfaceIdiom;
+@class EGPlatform;
 @class EGGlobal;
 @class EGLocalPlayerScore;
 @class EGColorSource;

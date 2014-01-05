@@ -573,7 +573,7 @@ static ODClassType* _TRLightView_type;
             return [_ vaoShadow];
         }];
         _glows = [EGMeshUnite meshUniteWithVertexSample:TRModels.lightGreenGlow indexSample:TRModels.lightGlowIndex createVao:^EGVertexArray*(EGMesh* _) {
-            return [_ vaoMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:((egInterfaceIdiom().isPhone) ? @"LightGlowPhone.png" : @"LightGlow.png")]] shadow:NO];
+            return [_ vaoMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:((egPlatform().isPhone) ? @"LightGlowPhone.png" : @"LightGlow.png")]] shadow:NO];
         }];
     }
     

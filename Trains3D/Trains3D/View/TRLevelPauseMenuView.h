@@ -21,7 +21,7 @@
 @class EGShareDialog;
 @class EGSprite;
 @class EGTexture;
-@class EGInterfaceIdiom;
+@class EGPlatform;
 @class TRLevelChooseMenu;
 @class TRScore;
 @class EGLocalPlayerScore;

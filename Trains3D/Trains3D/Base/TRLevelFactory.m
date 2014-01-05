@@ -56,7 +56,7 @@ static ODClassType* _TRLevelFactory_type;
     _TRLevelFactory_weatherRules = [TRWeatherRules weatherRulesWithSunny:1.0 windStrength:1.0 blastness:0.1 blastMinLength:5.0 blastMaxLength:10.0 blastStrength:10.0 precipitation:[CNOption none]];
     _TRLevelFactory_lineAdviceTimeNotification = [CNNotificationHandle notificationHandleWithName:@"lineAdviceTimeNotification"];
     _TRLevelFactory_slowMotionHelpNotification = [CNNotificationHandle notificationHandleWithName:@"slowMotionHelpNotification"];
-    _TRLevelFactory_level1 = [TRLevelRules levelRulesWithMapSize:GEVec2iMake(5, 3) theme:TRLevelTheme.forest scoreRules:[TRLevelFactory scoreRulesWithInitialScore:20000] weatherRules:[TRWeatherRules weatherRulesWithSunny:1.0 windStrength:0.2 blastness:0.05 blastMinLength:1.0 blastMaxLength:3.0 blastStrength:0.3 precipitation:[CNOption none]] repairerSpeed:20 sporadicDamagePeriod:0 events:(@[tuple(@0.0, [TRLevelFactory create2Cities]), tuple(@1.0, [TRLevelFactory showHelpText:[TRStr.Loc helpConnectTwoCities]]), tuple(@1.0, ((egInterfaceIdiom() == EGInterfaceIdiom.phone) ? [TRLevelFactory showHelpText:[TRStr.Loc helpToMakeZoom]] : ^void(TRLevel* _) {
+    _TRLevelFactory_level1 = [TRLevelRules levelRulesWithMapSize:GEVec2iMake(5, 3) theme:TRLevelTheme.forest scoreRules:[TRLevelFactory scoreRulesWithInitialScore:20000] weatherRules:[TRWeatherRules weatherRulesWithSunny:1.0 windStrength:0.2 blastness:0.05 blastMinLength:1.0 blastMaxLength:3.0 blastStrength:0.3 precipitation:[CNOption none]] repairerSpeed:20 sporadicDamagePeriod:0 events:(@[tuple(@0.0, [TRLevelFactory create2Cities]), tuple(@1.0, [TRLevelFactory showHelpText:[TRStr.Loc helpConnectTwoCities]]), tuple(@1.0, ((egPlatform().isPhone) ? [TRLevelFactory showHelpText:[TRStr.Loc helpToMakeZoom]] : ^void(TRLevel* _) {
     nil;
 })), tuple(@30.0, [TRLevelFactory trainCars:[CNRange applyI:2] speed:[CNRange applyI:30]]), tuple(numf(((CGFloat)(TRLevel.trainComingPeriod + 7))), [TRLevelFactory showTrainHelp]), tuple(@36.0, [TRLevelFactory createNewCity]), tuple(@1.0, [TRLevelFactory showHelpText:[TRStr.Loc helpNewCity]]), tuple(@20.0, [TRLevelFactory trainCars:[CNRange applyI:1] speed:[CNRange applyI:20]]), tuple(numf(((CGFloat)(TRLevel.trainComingPeriod + 3))), [TRLevelFactory showTrainHelpWithSwitches]), tuple(@50.0, [TRLevelFactory trainCars:[CNRange applyI:3] speed:[CNRange applyI:30]]), tuple(@1.0, [TRLevelFactory showHelpText:[TRStr.Loc helpRules]])])];
     _TRLevelFactory_level2 = [TRLevelRules levelRulesWithMapSize:GEVec2iMake(5, 3) theme:TRLevelTheme.forest scoreRules:[TRLevelFactory scoreRulesWithInitialScore:20000] weatherRules:[TRWeatherRules weatherRulesWithSunny:1.0 windStrength:0.2 blastness:0.1 blastMinLength:1.0 blastMaxLength:3.0 blastStrength:0.3 precipitation:[CNOption none]] repairerSpeed:20 sporadicDamagePeriod:0 events:(@[tuple(@0.0, [TRLevelFactory create2Cities]), tuple(@20.0, [TRLevelFactory slowTrain]), tuple(@30.0, [TRLevelFactory createNewCity]), tuple(@20.0, [TRLevelFactory slowTrain]), tuple(@30.0, [TRLevelFactory slowTrain]), tuple(@10.0, [TRLevelFactory createNewCity]), tuple(@20.0, [TRLevelFactory slowTrain]), tuple(@10.0, [TRLevelFactory slowTrain])])];
@@ -147,7 +147,7 @@ static ODClassType* _TRLevelFactory_type;
 }
 
 + (GEVec2i)bigSize {
-    if(egInterfaceIdiom().isPhone) return GEVec2iMake(5, 5);
+    if(egPlatform().isPhone) return GEVec2iMake(5, 5);
     else return GEVec2iMake(7, 5);
 }
 

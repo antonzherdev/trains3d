@@ -18,8 +18,8 @@ class LevelChooseMenu extends SceneView {
     private var fontRes : Font
     private var fontBottom : Font
     def reshapeWith(viewport : Rect) {
-        fontRes = fontWith(name = "lucida_grande", size = if(egInterfaceIdiom == InterfaceIdiom.phone) 14 else 16)
-        fontBottom = fontWith(name = "lucida_grande", size = if(egInterfaceIdiom == InterfaceIdiom.phone) 12 else 14)
+        fontRes = fontWith(name = "lucida_grande", size = if(egPlatform.isPhone) 14 else 16)
+        fontBottom = fontWith(name = "lucida_grande", size = if(egPlatform.isPhone) 12 else 14)
     }
 
     private var _scores = MutableHashMap<uint, LocalPlayerScore>()
@@ -40,7 +40,7 @@ class LevelChooseMenu extends SceneView {
 
     private val textColor = vec4(0.1, 0.1, 0.1, 1)
     private def drawButton(x : int, y : int, level : int) = {
-        val ph = egInterfaceIdiom.isPhone
+        val ph = egPlatform.isPhone
         rect : Rect -> {
             val dis = level > maxLevel
             val score : LocalPlayerScore? = _scores.opt(level)

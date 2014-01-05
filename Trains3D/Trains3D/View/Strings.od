@@ -101,7 +101,7 @@ class EnStrings extends Strings {
     def defeat : string = "Defeat!"
     def moneyOver : string = "Money is over"
     def cityBuilt : string = "The new city has been built"
-    def tapToContinue : string = if(egInterfaceIdiom == InterfaceIdiom.computer) "Click to contiunue" else "Tap to continue"
+    def tapToContinue : string = if(egPlatform.isComputer) "Click to contiunue" else "Tap to continue"
 
     def colorOrange : string = "orange"
     def colorGreen : string = "green"
@@ -235,7 +235,7 @@ class RuStrings extends Strings{
     def defeat : string = "Вы проиграли!"
     def moneyOver : string = "Закончились деньги"
     def cityBuilt : string = "Построен новый город"
-    def tapToContinue : string = if(egInterfaceIdiom == InterfaceIdiom.computer) "Кликните для продолжения" else "Нажмите для продолжения"
+    def tapToContinue : string = if(egPlatform.isComputer) "Кликните для продолжения" else "Нажмите для продолжения"
 
     def colorOrange : string = "оранжевый"
     def colorGreen : string = "зеленый"

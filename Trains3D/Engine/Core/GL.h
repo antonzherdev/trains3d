@@ -173,13 +173,7 @@ static inline void egFramebufferTexture(GLenum target, GLenum attachment, GLuint
 
 void egInitShadowTexture(GEVec2i size);
 
-static inline EGPlatform* egPlatform() {
-#if TARGET_OS_IPHONE
-    return [EGPlatform iOS];
-#elif TARGET_OS_MAC
-    return [EGPlatform MacOS];
-#endif
-}
+EGPlatform* egPlatform() ;
 
 static inline EGInterfaceIdiom* egInterfaceIdiom() {
 #if TARGET_OS_IPHONE

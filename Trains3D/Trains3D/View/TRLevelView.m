@@ -140,11 +140,11 @@ static ODClassType* _TRLevelView_type;
 - (void)reshapeWithViewport:(GERect)viewport {
     float r = viewport.size.x / viewport.size.y;
     [_move setViewportRatio:((CGFloat)(r))];
-    if(egInterfaceIdiom().isPad) {
+    if(egPlatform().isPad) {
         if(r < 4.0 / 3 + 0.01) [_move setReserve:EGCameraReserveMake(0.0, 0.0, 0.5, 0.1)];
         else [_move setReserve:EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)];
     } else {
-        if(egInterfaceIdiom().isPhone) [_move setReserve:EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)];
+        if(egPlatform().isPhone) [_move setReserve:EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)];
     }
     EGGlobal.matrix.value = [[self camera] matrixModel];
     [_callRepairerView reshape];

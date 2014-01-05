@@ -275,7 +275,7 @@ static ODClassType* _TRLevel_type;
 }]) {
                 return [self rndCityTimeAtt:att + 1];
             } else {
-                if(egInterfaceIdiom().isPhone && [_map isRightTile:tile] && ([_map isTopTile:tile] || [_map isBottomTile:tile])) return [self rndCityTimeAtt:att + 1];
+                if(egPlatform().isPhone && [_map isRightTile:tile] && ([_map isTopTile:tile] || [_map isBottomTile:tile])) return [self rndCityTimeAtt:att + 1];
                 else return tuple(wrap(GEVec2i, tile), dir);
             }
         }

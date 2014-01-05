@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-enum Platform(shadows : bool, touch : bool) {
+enum OSType(shadows : bool, touch : bool) {
     MacOS(true, false)
     iOS(true, true)
 }
@@ -9,4 +9,31 @@ enum InterfaceIdiom(isPhone : bool, isPad : bool, isComputer : bool) {
     phone(true, false, false)
     pad(false, true, false)
     computer(false, false, true)
+}
+
+class Platform(os : OSType, interfaceIdiom : InterfaceIdiom, version : Version) {
+    val shadows = os.shadows
+    val touch = os.touch
+
+    val isPhone = interfaceIdiom.isPhone
+    val isPad = interfaceIdiom.isPad
+    val isComputer = interfaceIdiom.isComputer
+}
+
+
+class Version(parts : [int]) extends Comparable<Version> {
+    static def apply(str : string) : Version = Version(str.split(".").chain.map(_.toInt).toArray)
+
+    def compare(to : Version) : int = {
+        val i = parts.iterator
+        val j = to.parts.iterator
+        while(i.hasNext && j.hasNext) {
+            val vi = i.next
+            val vj = i.next
+            if(vi != vj) {
+                return vi.compare(vj)
+            }
+        }
+        0
+    }
 }
