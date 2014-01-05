@@ -14,4 +14,7 @@ stub struct VoidRefArray(length : uint, bytes : VoidRef)
     def free {
         free(bytes)
     }
+
+    def add(bytes : uint) : VoidRefArray
+    def sub(bytes : uint) : VoidRefArray
 }

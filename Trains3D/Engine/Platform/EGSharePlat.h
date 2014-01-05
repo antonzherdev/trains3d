@@ -4,11 +4,7 @@
 @class EGShareDialog;
 @class EGShareChannel;
 
-#ifdef TARGET_OS_IPHONE
-@interface EGShareDialog : NSObject<UIActivityItemSource>
-#else
- @interface EGShareDialog : NSObject
-#endif
+@interface EGShareDialog : NSObject
 @property (nonatomic, readonly) EGShareContent* content;
 @property (nonatomic, readonly) void(^completionHandler)(EGShareChannel*);
 

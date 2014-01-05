@@ -1,32 +1,126 @@
 package com.antonzherdev.trains
 
 
+class TreeShaderBuilder(shadow : bool) extends ShaderTextBuilder
+{
+    def vertex =
+        "$vertexHeader
+
+         $ain highp vec3 position;
+         $ain lowp vec2 model;
+         $ain mediump vec2 vertexUV;
+         $ain mediump vec2 vertexUVShiver;
+
+         $out mediump vec2 UV;
+         $out mediump vec2 UVShiver;
+
+
+         uniform mat4 wc;
+         uniform mat4 p;
+
+         void main(void) {
+            highp vec4 pos = wc*vec4(position, 1);
+            pos.x += model.x;
+            pos.y += model.y;
+            gl_Position = p*pos;
+            UV = vertexUV;
+            UVShiver = vertexUVShiver;
+        }"
+    def fragment =
+        "$versionString
+
+         $in mediump vec2 UV;
+         $in mediump vec2 UVShiver;
+         uniform lowp sampler2D txt;
+        $if(shadow)
+         uniform lowp float alphaTestLevel;
+        $endif
+        $if(shadow && version > 100)
+         out float depth;
+        $else
+         $fragColorDeclaration
+        $endif
+
+        void main(void) {
+            lowp vec4 fragColor;$when(shadow && !isFragColorDeclared)
+            lowp vec4 t1 = $texture2D\(txt, UV);
+            lowp vec4 t2 = $texture2D\(txt, UVShiver);
+            $fragColor = vec4(t1.a) * t1 + vec4(1.0 - t1.a) * t2;
+           $if(shadow)
+            if($fragColor.a < 0.1) {
+                discard;
+            }
+           $endif
+            depth = gl_FragCoord.z;$when(shadow && version > 100)
+        }"
+
+    def program = ShaderProgram("Tree", vertex, fragment)
+}
+
+class TreeShader(program : ShaderProgram, shadow : bool) extends Shader<ColorSource>(program) {
+    static val instanceForShadow = TreeShader(TreeShaderBuilder(true).program, true)
+    static val instance = TreeShader(TreeShaderBuilder(false).program, false)
+
+    val positionSlot = attributeFor("position")
+    val modelSlot = attributeFor("model")
+    val uvSlot : ShaderAttribute = attributeFor("vertexUV")
+    val uvShiverSlot : ShaderAttribute = attributeFor("vertexUVShiver")
+
+    val wcUniform = uniformMat4("wc")
+    val pUniform = uniformMat4("p")
+
+    def loadAttributes(vbDesc : VertexBufferDesc<_>) {
+        positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, shift = vbDesc.position)
+        modelSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.model)
+        uvSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.uv)
+        uvShiverSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.uv + 2*4)
+    }
+    def loadUniforms(param : ColorSource) {
+
+        wcUniform(matrix = matrix.value.wc)
+        pUniform(matrix = matrix.value.p)
+        context.bindTexture(param.texture.get)
+    }
+
+    static val vbDesc = VertexBufferDesc<TreeData>(TreeData.type,
+        position = 0, uv = 5*4, normal = -1, color = -1, model = 3*4)
+}
+
+
+struct TreeData(position : vec3, model : vec2, uv : vec2, uvShiver : vec2)
+
 class TreeView(forest : Forest) {
 //    val textures = [textureFor("Pine.png"), textureFor("Tree1.png"), textureFor("Tree2.png"), textureFor("Tree3.png"), textureFor("YellowTree.png")]
     val texture = textureFor("$(forest.rules.forestType.name).png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
     val material = ColorSource(vec4(1, 1, 1, 1), texture)
 //    val materials = textures.chain.map(ColorSource(vec4(1, 1, 1, 1), _, 0.3)).toArray
 //    val rects = textures.chain.map(Rect(0, 0, _.size.x/(_.size.y*4), _.size.y/(_.size.y*2)).centerX).toArray
-    private val vb = VBO.mut(Billboard.vbDesc)
+    private val vb = VBO.mut(TreeShader.vbDesc)
     private val ib = IBO.mut
-    private val vao = Mesh(vertex = vb, ib).vao(BillboardShaderSystem.instance, ColorSource(vec4(1, 1, 1, 1), texture), shadow = false)
+    private val ibShadow = IBO.mut
+    private val vao = Mesh(vertex = vb, ib).vao(TreeShader.instance)
     private val shadowMaterial = ColorSource(vec4(1, 1, 1, 1), texture, 0.1)
-    private val shadowVao = Mesh(vertex = vb, ib).vao(BillboardShaderSystem.instance.shaderFor(shadowMaterial, ShadowRenderTarget.default))
+    private val shadowVao = Mesh(vertex = vb, ibShadow).vao(TreeShader.instanceForShadow)
 
     def prepare {
-        val ar = VoidRefArray(BillboardBufferData.type, 8 * forest.trees.count)
-        val iar = VoidRefArray(UInt4.type, 12 * forest.trees.count)
+        val ar = VoidRefArray(TreeData.type, 4 * forest.trees.count)
+        val iar = VoidRefArray(UInt4.type, 6 * forest.trees.count)
+        val ibr = VoidRefArray(UInt4.type, 6 * forest.trees.count)
         var a = ar
         var ia = iar
+        val one = 4*6
+        var ibp = ibr + one*(forest.trees.count - 1)
         var i : uint4 = 0
         forest.trees.for{tree ->
             a = write(a, tree)
             ia = D2D.writeQuadIndex(ia, i)
-            ia = D2D.writeQuadIndex(ia, i + 4)
-            i += 8
+            D2D.writeQuadIndex(ibp, i)
+            ibp -= one
+            i += 4
         }
         vb.set(ar)
         ib.set(iar)
+        ibShadow.set(ibr)
         ar.free
         iar.free
     }
@@ -35,7 +129,7 @@ class TreeView(forest : Forest) {
         BlendFunction.standard {
             context.cullFace.disabled {
                 if(context.renderTarget.isShadow) shadowVao.draw(shadowMaterial)
-                else vao.draw
+                else vao.draw(material)
             }
         }
     }
@@ -43,22 +137,21 @@ class TreeView(forest : Forest) {
     private def write(a :VoidRefArray, tree : Tree) : VoidRefArray = {
         val tp = tree.treeType
         val mainUv = tp.uvQuad
-        val rustleUv = mainUv + vec2(tp.uv.width, 0)
 
         val planeCoord = PlaneCoord(Plane(vec3(0, 0, 0), vec3(0, 0, 1)), vec3(1, 0, 0), vec3(0, 1, 0))
         val mPlaneCoord = planeCoord.set(y = (planeCoord.y + vec3(tree.incline.x, 0, tree.incline.y)).normalize)
         val quad = (Rect(0, 0, tp.size).centerX*tree.size).stripQuad
         val quad3 = Quad3(mPlaneCoord, quad)
         val mQuad = Quad(quad3.p0.xy, quad3.p1.xy, quad3.p2.xy, quad3.p3.xy)
-        var aa = a
-        aa = D2D.writeSprite(aa, material, at = vec3(tree.position, 0), mQuad, uv = mainUv)
 
         val r = tree.rustle*0.1 * tp.rustleStrength
-        val rPlaneCoord = mPlaneCoord.set(x = mPlaneCoord.x + vec3(0, r, 0)).set(y = mPlaneCoord.y - vec3(r, 0, 0))
-        val rQuad3 = Quad3(rPlaneCoord, quad)
-        aa = D2D.writeSprite(aa, material, at = vec3(tree.position + vec2(0.001, -0.001), 0),
-            Quad(rQuad3.p0.xy, rQuad3.p1.xy, rQuad3.p2.xy, rQuad3.p3.xy),
-            uv = rustleUv)
-        aa
+        val rustleUv = mainUv + vec2(tp.uv.width + r, -r)
+
+        val at = vec3(tree.position, 0)
+        var v = a.write(TreeData, TreeData(at, model = mQuad.p0, mainUv.p0, rustleUv.p0))
+        v = v.write(TreeData, TreeData(at, model = mQuad.p1, mainUv.p1, rustleUv.p1))
+        v = v.write(TreeData, TreeData(at, model = mQuad.p2, mainUv.p2, rustleUv.p2))
+        v = v.write(TreeData, TreeData(at, model = mQuad.p3, mainUv.p3, rustleUv.p3))
+        v
     }
 }

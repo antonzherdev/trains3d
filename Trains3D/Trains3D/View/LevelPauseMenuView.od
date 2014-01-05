@@ -252,7 +252,7 @@ class HelpView(level : Level) extends PauseView {
     private val helpText : Text = Text(nil, "", vec3(0, 0, 0), TextAlignment(-1, 1), vec4(0, 0, 0, 1))
     private val tapText : Text = Text(nil, "($(Loc.tapToContinue))", vec3(0, 0, 0), TextAlignment(0, -1), vec4(0, 0, 0, 1))
     def reshapeWith(viewport : Rect) {
-        helpText.font = fontWith(name = "lucida_grande", size = 16)
+        helpText.font = fontWith(name = "lucida_grande", size = if(egInterfaceIdiom.isPhone) 14 else 16)
         tapText.font = fontWith(name = "lucida_grande", size = 12)
     }
 

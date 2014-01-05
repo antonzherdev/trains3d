@@ -1,6 +1,5 @@
 #import "TRAppDelegate.h"
 #import "TRGameDirector.h"
-#import <DistimoSDK/DistimoSDK.h>
 
 @implementation TRAppDelegate
 

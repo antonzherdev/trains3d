@@ -1,6 +1,10 @@
 #import "EGSharePlat.h"
 
 #import "EGShare.h"
+
+@interface EGShareDialog(iOS)<UIActivityItemSource>
+@end
+
 @implementation EGShareDialog{
     EGShareContent* _content;
     void(^_completionHandler)(EGShareChannel*);

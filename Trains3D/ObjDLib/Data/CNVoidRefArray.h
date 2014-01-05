@@ -30,12 +30,21 @@ CNVoidRefArray cnVoidRefArrayApplyLength(NSUInteger length);
 CNVoidRefArray cnVoidRefArrayApplyTpCount(ODPType* tp, NSUInteger count);
 #define cnVoidRefArrayWriteTpItem(p_self, p_tp, p_item) ({\
     *(p_tp*)p_self.bytes = p_item;\
-    (CNVoidRefArray){p_self.length, p_self.bytes + sizeof(p_tp)};\
+    NSUInteger __s = sizeof(p_tp);\
+    (CNVoidRefArray){p_self.length - __s, ((char*)p_self.bytes) + __s};\
 })
 static inline CNVoidRefArray cnVoidRefArrayWriteUInt4(const CNVoidRefArray self, unsigned int uInt4) {
     *(unsigned int*)self.bytes = uInt4;
-    return (CNVoidRefArray){self.length, ((unsigned int*)self.bytes) + 1};
+    return (CNVoidRefArray){self.length - 4, ((unsigned int*)self.bytes) + 1};
 }
+static inline CNVoidRefArray cnVoidRefArrayAddBytes(const CNVoidRefArray self, NSUInteger bytes) {
+    return (CNVoidRefArray){self.length - bytes, ((char*)self.bytes) + bytes};
+}
+static inline CNVoidRefArray cnVoidRefArraySubBytes(const CNVoidRefArray self, NSUInteger bytes) {
+    return (CNVoidRefArray){self.length + bytes, ((char*)self.bytes) - bytes};
+}
+
+
 static inline void cnVoidRefArrayFree(CNVoidRefArray self) {
     free(self.bytes);
 }

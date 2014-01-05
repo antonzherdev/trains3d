@@ -811,7 +811,7 @@ static ODClassType* _TRHelpView_type;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
-    [_helpText setFont:[EGGlobal fontWithName:@"lucida_grande" size:16]];
+    [_helpText setFont:[EGGlobal fontWithName:@"lucida_grande" size:((egInterfaceIdiom().isPhone) ? 14 : 16)]];
     [_tapText setFont:[EGGlobal fontWithName:@"lucida_grande" size:12]];
 }
 
