@@ -254,5 +254,9 @@
 - (NSString *)replaceOccurrences:(NSString *)from withString:(NSString *)to {
     return [self stringByReplacingOccurrencesOfString:from withString:to];
 }
+
+- (NSInteger)compareTo:(id)to {
+    return [self compare:to];
+}
 @end
 

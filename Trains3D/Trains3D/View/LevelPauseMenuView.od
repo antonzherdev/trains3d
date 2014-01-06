@@ -292,15 +292,6 @@ class HelpView(level : Level) extends PauseView {
 class SlowMotionShopMenu extends PauseView {
     val shop = scaledTextureFor("Shop", "png")
     private val snail = shop.region(0, 0, 63, 64)
-    private val buttons : [(() -> bool, Button)] = [
-        (() -> GameDirector.instance.isShareToFacebookAvailable,
-            Button(drawShareButton(shop.region(64, 0,  32, 32), "Facebook", GameDirector.facebookShareRate, _), GameDirector.instance.shareToFacebook)),
-        (() -> GameDirector.instance.isShareToTwitterAvailable,
-            Button(drawShareButton(shop.region(64, 32, 32, 32), "Twitter",  GameDirector.twitterShareRate, _), GameDirector.instance.shareToTwitter))
-    ] + GameDirector.instance.slowMotionPrices.chain.map{item ->
-        (() -> true, Button(drawBuyButton(count = item.a, price = item.b, _), GameDirector.instance.buySlowMotions(item.a)) )
-    }.toArray +
-    [(() -> true, Button(drawCloseButton(_), GameDirector.instance.closeShop) )]
 
     val snailFont = fontWith(name = "lucida_grande", size = 36)
     val shareFont = fontWith(name = "lucida_grande", size = 18)
@@ -341,6 +332,16 @@ class SlowMotionShopMenu extends PauseView {
     private val buttonSize = vec2(150, 150)
     private var curButtons : [Button] = []
     def draw {
+        val buttons : [(() -> bool, Button)] = [
+            (() -> GameDirector.instance.isShareToFacebookAvailable,
+                Button(drawShareButton(shop.region(64, 0,  32, 32), "Facebook", GameDirector.facebookShareRate, _), GameDirector.instance.shareToFacebook)),
+            (() -> GameDirector.instance.isShareToTwitterAvailable,
+                Button(drawShareButton(shop.region(64, 32, 32, 32), "Twitter",  GameDirector.twitterShareRate, _), GameDirector.instance.shareToTwitter))
+            ] + GameDirector.instance.slowMotionPrices.chain.map{item ->
+                (() -> true, Button(drawBuyButton(count = item.a, price = item.b, _), GameDirector.instance.buySlowMotions(item.a)) )
+            }.toArray +
+            [(() -> true, Button(drawCloseButton(_), GameDirector.instance.closeShop) )]
+
         curButtons = buttons.chain.filter(_.a()).map(_.b).toArray
 
         val size = vec2(((curButtons.count + 1)/2).cast<uint>, 2) * buttonSize

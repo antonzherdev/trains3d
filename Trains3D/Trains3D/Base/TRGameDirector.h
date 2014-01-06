@@ -1,4 +1,5 @@
 #import "objd.h"
+@class EGPlatform;
 @class DTLocalKeyValueStorage;
 @class DTConflict;
 @class DTCloudKeyValueStorage;
@@ -23,6 +24,8 @@
 @class TRLevelChooseMenu;
 @class EGEMail;
 @class EGCounter;
+@class EGInAppProduct;
+@class EGInApp;
 @class EGLengthCounter;
 @class EGShareDialog;
 @class EGShareContent;
@@ -32,7 +35,8 @@
 
 @interface TRGameDirector : NSObject
 @property (nonatomic, readonly) NSString* gameCenterPrefix;
-@property (nonatomic, readonly) NSString* gameCenterAchievmentPrefix;
+@property (nonatomic, readonly) NSString* gameCenterAchievementPrefix;
+@property (nonatomic, readonly) NSString* inAppPrefix;
 @property (nonatomic, readonly) NSString* cloudPrefix;
 @property (nonatomic, readonly) NSInteger maxDaySlowMotions;
 @property (nonatomic, readonly) NSInteger slowMotionRestorePeriod;

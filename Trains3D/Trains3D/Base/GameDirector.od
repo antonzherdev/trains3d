@@ -5,11 +5,12 @@ import com.testflightapp._
 
 class GameDirector {
     val gameCenterPrefix = "grp.com.antonzherdev.Trains3D"
-    val gameCenterAchievmentPrefix = "grp.com.antonzherdev.Train3D"
+    val gameCenterAchievementPrefix = "grp.com.antonzherdev.Train3D"
+    val inAppPrefix = if(egPlatform.isComputer) "com.antonzherdev.Trains3D" else "com.antonzherdev.Trains3Di"
     val cloudPrefix = ""
 
     val maxDaySlowMotions = 5
-    val slowMotionRestorePeriod = 60*60*4
+    val slowMotionRestorePeriod = 60*60*12
     static val instance : GameDirector = GameDirector()
 
     val local = LocalKeyValueStorage([("currentLevel", 1), ("soundEnabled", 1),
@@ -118,22 +119,22 @@ class GameDirector {
     private val knockDownObs = Level.knockDownNotification.observe{level, p ->
         GameDirector.instance.destroyTrains([p.a])
         if(p.b == 2) {
-            GameCenter.instance.completeAchievement("$gameCenterAchievmentPrefix.KnockDown")
+            GameCenter.instance.completeAchievement("$gameCenterAchievementPrefix.KnockDown")
         } else if(p.b > 2) {
-            GameCenter.instance.completeAchievement("$gameCenterAchievmentPrefix.Crash$(p.b)")
+            GameCenter.instance.completeAchievement("$gameCenterAchievementPrefix.Crash$(p.b)")
         }
     }
 
     def destroyTrains(trains : [Train]) {
-        GameCenter.instance.completeAchievement("$gameCenterAchievmentPrefix.Crash")
+        GameCenter.instance.completeAchievement("$gameCenterAchievementPrefix.Crash")
         if(trains.exists(_.trainType == TrainType.fast)) {
-            GameCenter.instance.completeAchievement("$gameCenterAchievmentPrefix.ExpressCrash")
+            GameCenter.instance.completeAchievement("$gameCenterAchievementPrefix.ExpressCrash")
         }
         if(trains.exists(_.trainType == TrainType.repairer)) {
-            GameCenter.instance.completeAchievement("$gameCenterAchievmentPrefix.RepairCrash")
+            GameCenter.instance.completeAchievement("$gameCenterAchievementPrefix.RepairCrash")
         }
         if(trains.exists(_.trainType == TrainType.crazy)) {
-            GameCenter.instance.completeAchievement("$gameCenterAchievmentPrefix.CrazyCrash")
+            GameCenter.instance.completeAchievement("$gameCenterAchievementPrefix.CrazyCrash")
         }
     }
 
@@ -285,6 +286,16 @@ class GameDirector {
         if(level.slowMotionCounter.isStopped) {
             if(_slowMotionsCount <= 0) {
                 TestFlight.pass("Shop")
+                InApp.loadProducts(["$inAppPrefix.Slow1", "$inAppPrefix.Slow2", "$inAppPrefix.Slow3"]) {products ->
+                    _slowMotionPrices = products.chain
+                        .sortBy.asc(_.id).endSort
+                        .map{product ->
+                            (if(product.id == "$inAppPrefix.Slow1") 20
+                             else if(product.id == "$inAppPrefix.Slow2") 50
+                             else 200, product.price)
+                        }.toArray
+                    Director.current.redraw
+                }
                 level.slowMotionShop = true
                 Director.current.pause
                 return nil
@@ -385,7 +396,8 @@ class GameDirector {
         shareDialog.displayTwitter
     }
 
-    def slowMotionPrices : [(uint, string)] = [(20, "\$1.99"), (50, "\$3.99"), (200, "\$9.99")]
+    private var _slowMotionPrices :  [(uint, string)] = [(20, ""), (50, ""), (200, "")]
+    def slowMotionPrices = _slowMotionPrices
 
     def closeShop {
         Director.current.scene.get.controller.as<Level>.for{level ->

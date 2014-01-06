@@ -885,7 +885,6 @@ static ODClassType* _TRHelpView_type;
 @implementation TRSlowMotionShopMenu{
     EGTexture* _shop;
     EGTextureRegion* _snail;
-    id<CNSeq> _buttons;
     EGFont* _snailFont;
     EGFont* _shareFont;
     GEVec2 _buttonSize;
@@ -902,37 +901,9 @@ static ODClassType* _TRSlowMotionShopMenu_type;
 
 - (id)init {
     self = [super init];
-    __weak TRSlowMotionShopMenu* _weakSelf = self;
     if(self) {
         _shop = [EGGlobal scaledTextureForName:@"Shop" format:@"png"];
         _snail = [_shop regionX:0.0 y:0.0 width:63.0 height:64.0];
-        _buttons = [[(@[tuple(^BOOL() {
-    return [TRGameDirector.instance isShareToFacebookAvailable];
-}, [EGButton buttonWithOnDraw:^void(GERect _) {
-    [_weakSelf drawShareButtonTexture:[_weakSelf.shop regionX:64.0 y:0.0 width:32.0 height:32.0] name:@"Facebook" count:((NSUInteger)(TRGameDirector.facebookShareRate)) rect:_];
-} onClick:^void() {
-    [TRGameDirector.instance shareToFacebook];
-}]), tuple(^BOOL() {
-    return [TRGameDirector.instance isShareToTwitterAvailable];
-}, [EGButton buttonWithOnDraw:^void(GERect _) {
-    [_weakSelf drawShareButtonTexture:[_weakSelf.shop regionX:64.0 y:32.0 width:32.0 height:32.0] name:@"Twitter" count:((NSUInteger)(TRGameDirector.twitterShareRate)) rect:_];
-} onClick:^void() {
-    [TRGameDirector.instance shareToTwitter];
-}])]) addSeq:[[[[TRGameDirector.instance slowMotionPrices] chain] map:^CNTuple*(CNTuple* item) {
-            return tuple(^BOOL() {
-                return YES;
-            }, [EGButton buttonWithOnDraw:^void(GERect _) {
-                [_weakSelf drawBuyButtonCount:unumui(((CNTuple*)(item)).a) price:((CNTuple*)(item)).b rect:_];
-            } onClick:^void() {
-                [TRGameDirector.instance buySlowMotionsCount:unumui(((CNTuple*)(item)).a)];
-            }]);
-        }] toArray]] addSeq:(@[tuple(^BOOL() {
-    return YES;
-}, [EGButton buttonWithOnDraw:^void(GERect _) {
-    [_weakSelf drawCloseButtonRect:_];
-} onClick:^void() {
-    [TRGameDirector.instance closeShop];
-}])])];
         _snailFont = [EGGlobal fontWithName:@"lucida_grande" size:36];
         _shareFont = [EGGlobal fontWithName:@"lucida_grande" size:18];
         _buttonSize = GEVec2Make(150.0, 150.0);
@@ -981,7 +952,34 @@ static ODClassType* _TRSlowMotionShopMenu_type;
 }
 
 - (void)draw {
-    _curButtons = [[[[_buttons chain] filter:^BOOL(CNTuple* _) {
+    id<CNSeq> buttons = [[(@[tuple(^BOOL() {
+    return [TRGameDirector.instance isShareToFacebookAvailable];
+}, [EGButton buttonWithOnDraw:^void(GERect _) {
+    [self drawShareButtonTexture:[_shop regionX:64.0 y:0.0 width:32.0 height:32.0] name:@"Facebook" count:((NSUInteger)(TRGameDirector.facebookShareRate)) rect:_];
+} onClick:^void() {
+    [TRGameDirector.instance shareToFacebook];
+}]), tuple(^BOOL() {
+    return [TRGameDirector.instance isShareToTwitterAvailable];
+}, [EGButton buttonWithOnDraw:^void(GERect _) {
+    [self drawShareButtonTexture:[_shop regionX:64.0 y:32.0 width:32.0 height:32.0] name:@"Twitter" count:((NSUInteger)(TRGameDirector.twitterShareRate)) rect:_];
+} onClick:^void() {
+    [TRGameDirector.instance shareToTwitter];
+}])]) addSeq:[[[[TRGameDirector.instance slowMotionPrices] chain] map:^CNTuple*(CNTuple* item) {
+        return tuple(^BOOL() {
+            return YES;
+        }, [EGButton buttonWithOnDraw:^void(GERect _) {
+            [self drawBuyButtonCount:unumui(((CNTuple*)(item)).a) price:((CNTuple*)(item)).b rect:_];
+        } onClick:^void() {
+            [TRGameDirector.instance buySlowMotionsCount:unumui(((CNTuple*)(item)).a)];
+        }]);
+    }] toArray]] addSeq:(@[tuple(^BOOL() {
+    return YES;
+}, [EGButton buttonWithOnDraw:^void(GERect _) {
+    [self drawCloseButtonRect:_];
+} onClick:^void() {
+    [TRGameDirector.instance closeShop];
+}])])];
+    _curButtons = [[[[buttons chain] filter:^BOOL(CNTuple* _) {
         return ((BOOL(^)())(((CNTuple*)(_)).a))();
     }] map:^EGButton*(CNTuple* _) {
         return ((CNTuple*)(_)).b;

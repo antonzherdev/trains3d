@@ -1,0 +1,3 @@
+package com.antonzherdev.eg
+
+class InAppProduct(id : string, name : string, price : string)
