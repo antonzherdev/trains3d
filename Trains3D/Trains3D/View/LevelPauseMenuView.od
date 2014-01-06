@@ -8,6 +8,7 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor {
     private val winView = WinMenu(level)
     private val looseView = LooseMenu(level)
     private val rateView = RateMenu()
+    private val slowMotionShopView = SlowMotionShopMenu()
 
     var camera : Camera
 
@@ -18,10 +19,12 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor {
         winView.reshapeWith(viewport)
         looseView.reshapeWith(viewport)
         rateView.reshapeWith(viewport)
+        slowMotionShopView.reshapeWith(viewport)
     }
 
     def view : PauseView =
-        if(level.rate) rateView
+        if(level.slowMotionShop) slowMotionShopView
+        else if(level.rate) rateView
         else if(!level.help.isEmpty) helpView
         else if(level.result.isEmpty) menuView
         else if(level.result.get.win) winView
@@ -284,4 +287,58 @@ class HelpView(level : Level) extends PauseView {
         }
         true
     }
+}
+
+class SlowMotionShopMenu extends PauseView {
+    val shop = scaledTextureFor("Shop", "png")
+    private val snail = shop.region(0, 0, 63, 64)
+    private var buttons : [(() -> bool, Button)] = [
+        (GameDirector.instance.isShareToFacebookAvailable,
+            Button(drawShareButton(shop.region(64, 0,  32, 32), "Facebook", GameDirector.facebookShareRate, _), GameDirector.instance.shareToFacebook)),
+        (GameDirector.instance.isShareToTwitterAvailable,
+            Button(drawShareButton(shop.region(64, 32, 32, 32), "Twitter",  GameDirector.twitterShareRate, _), GameDirector.instance.shareToTwitter))
+    ]
+
+    val snailFont = fontWith(name = "lucida_grande", size = 36)
+    val shareFont = fontWith(name = "lucida_grande", size = 16)
+    def reshapeWith(viewport : Rect) {
+
+    }
+
+    def drawShareButton(texture : Texture, name : string, count : uint, rect : Rect) {
+        drawSnail(count, rect)
+
+        val pos = rect.p(0.1, 0.1)
+        D2D.drawSprite(texture, at = vec3(pos, 0), rect = Rect(0, 0, 32, 32))
+        shareFont.draw(name, at = pos + vec2(36, 18), TextAlignment(-1, 0), color = vec4(0.1, 0.1, 0.1, 1))
+    }
+
+    def drawSnail(count : uint, rect : Rect) {
+        D2D.drawSprite(vec4(1, 1, 1, 0.9), at = vec3(rect.p, 0), rect = Rect(0, 0, rect.size - vec2(2, 2)))
+        snailFont.draw("$count", at = rect.p(0.45, 0.7), TextAlignment(1, 0), color = vec4(0.1, 0.1, 0.1, 1))
+        D2D.drawSprite(snail, at = vec3(rect.p(0.45, 0.7), 0), rect = Rect(0, -32, 63, 64))
+    }
+
+    private val buttonSize = vec2(150, 150)
+    private var curButtons : [Button] = []
+    def draw {
+        curButtons = buttons.chain.filter(_.a()).map(_.b).toArray
+
+        val size = vec2(((curButtons.count + 1)/2).cast<uint>, 2) * buttonSize
+        var pos = ((context.viewport.size/context.scale) - size)/2 + vec2(0, buttonSize.y)
+        var row = 0
+        curButtons.for { btn ->
+            btn.rect = Rect(pos, buttonSize)
+            if(row == 0) {
+                row++
+                pos += vec2(0, -buttonSize.y)
+            } else {
+                row = 0
+                pos += vec2(buttonSize.x, buttonSize.y)
+            }
+            btn.draw
+        }
+    }
+
+    def tap(event : Event) : bool  = curButtons.find(_.tap(event)).isDefined
 }

@@ -1,27 +1,29 @@
 #import "EGSharePlat.h"
 
 #import "EGShare.h"
+#import <Social/Social.h>
 
 @interface EGShareDialog(iOS)<UIActivityItemSource>
 @end
 
 @implementation EGShareDialog{
     EGShareContent* _content;
-    void(^_completionHandler)(EGShareChannel*);
+    void(^_shareHandler)(EGShareChannel*);
+    void(^_cancelHandler)();
 }
 static ODClassType* _EGShareDialog_type;
-@synthesize content = _content;
-@synthesize completionHandler = _completionHandler;
 
-+ (id)shareDialogWithContent:(EGShareContent*)content completionHandler:(void(^)(EGShareChannel*))completionHandler {
-    return [[EGShareDialog alloc] initWithContent:content completionHandler:completionHandler];
+
++ (id)shareDialogWithContent:(EGShareContent *)content shareHandler:(void (^)(EGShareChannel *))shareHandler cancelHandler:(void (^)())cancelHandler {
+    return [[EGShareDialog alloc] initWithContent:content shareHandler:shareHandler cancelHandler:cancelHandler];
 }
 
-- (id)initWithContent:(EGShareContent*)content completionHandler:(void(^)(EGShareChannel*))completionHandler {
+- (id)initWithContent:(EGShareContent *)content shareHandler:(void (^)(EGShareChannel *))shareHandler cancelHandler:(void (^)())cancelHandler {
     self = [super init];
     if(self) {
         _content = content;
-        _completionHandler = completionHandler;
+        _shareHandler = shareHandler;
+        _cancelHandler = cancelHandler;
     }
     
     return self;
@@ -47,6 +49,13 @@ static ODClassType* _EGShareDialog_type;
             @"com.apple.UIKit.activity.PostToVimeo",
             @"com.apple.UIKit.activity.PostToTencentWeibo",
     ];
+    [vc setCompletionHandler:^(NSString *activityType, BOOL completed) {
+        if(completed) {
+            _shareHandler([self channelForActivityType:activityType]);
+        } else {
+            _cancelHandler();
+        }
+    }];
     [[[[[UIApplication sharedApplication] delegate] window] rootViewController] presentViewController:vc animated:YES completion:nil];
 }
 
@@ -116,6 +125,35 @@ static ODClassType* _EGShareDialog_type;
     return nil;
 }
 
+- (void)displayFacebook {
+    [self displayService:SLServiceTypeFacebook channel:[EGShareChannel facebook]];
+}
+
+- (void)displayService:(NSString *)type channel:(EGShareChannel *)channel {
+//    if([SLComposeViewController isAvailableForServiceType:type]) //check if Facebook Account is linked
+//    {
+        SLComposeViewController*controller = [[SLComposeViewController alloc] init]; //initiate the Social Controller
+        controller = [SLComposeViewController composeViewControllerForServiceType:type]; //Tell him with what social plattform to use it, e.g. facebook or twitter
+        [controller setInitialText:[_content textChannel:channel]]; //the message you want to post
+        id img = [_content imageChannel:channel];
+        if([img isDefined]) {
+            [controller addImage:[UIImage imageNamed:[img get]]];
+        }
+
+        [controller setCompletionHandler:^(SLComposeViewControllerResult result) {
+            if(result == SLComposeViewControllerResultDone) {
+                _shareHandler(channel);
+            } else {
+                _cancelHandler();
+            }
+        }];
+        [[[[[UIApplication sharedApplication] delegate] window] rootViewController] presentViewController:controller animated:YES completion:nil];
+//    }
+}
+
+- (void)displayTwitter {
+    [self displayService:SLServiceTypeTwitter channel:[EGShareChannel twitter]];
+}
 
 @end
 

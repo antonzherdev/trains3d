@@ -61,6 +61,7 @@ static ODClassType* _EGDirector_type;
         [((EGScene*)([__scene get])) stop];
         [self clearRecognizers];
     }
+    EGGlobal.context.scale = [self scale];
     EGScene* sc = ((EGScene*(^)())(scene))();
     __scene = [CNOption applyValue:sc];
     [EGGlobal.context clearCache];

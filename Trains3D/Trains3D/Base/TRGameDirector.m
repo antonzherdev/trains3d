@@ -44,6 +44,8 @@
 }
 static TRGameDirector* _TRGameDirector_instance;
 static CNNotificationHandle* _TRGameDirector_playerScoreRetrieveNotification;
+static NSInteger _TRGameDirector_facebookShareRate = 10;
+static NSInteger _TRGameDirector_twitterShareRate = 10;
 static ODClassType* _TRGameDirector_type;
 @synthesize gameCenterPrefix = _gameCenterPrefix;
 @synthesize gameCenterAchievmentPrefix = _gameCenterAchievmentPrefix;
@@ -67,7 +69,7 @@ static ODClassType* _TRGameDirector_type;
         _cloudPrefix = @"";
         _maxDaySlowMotions = 5;
         _slowMotionRestorePeriod = 60 * 60 * 4;
-        _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1, @"lastSlowMotions" : (@[]), @"daySlowMotions" : numi(_maxDaySlowMotions), @"boughtSlowMotions" : @5})];
+        _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1, @"lastSlowMotions" : (@[]), @"daySlowMotions" : numi(_maxDaySlowMotions), @"boughtSlowMotions" : @0})];
         _resolveMaxLevel = ^id(id a, id b) {
             id v = DTConflict.resolveMax(a, b);
             [CNLog applyText:[NSString stringWithFormat:@"Max level from cloud %@ = max(%@, %@)", v, a, b]];
@@ -188,6 +190,7 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)_init {
+    [_cloud setKey:@"share.twitter" i:0];
     [SDSoundDirector.instance setEnabled:[_local intForKey:@"soundEnabled"] == 1];
     [EGRate.instance setIdsIos:736579117 osx:736545415];
     [EGGameCenter.instance authenticate];
@@ -351,6 +354,12 @@ static ODClassType* _TRGameDirector_type;
 
 - (void)runSlowMotionLevel:(TRLevel*)level {
     if([level.slowMotionCounter isStopped]) {
+        if(__slowMotionsCount <= 0) {
+            [TestFlight passCheckpoint:@"Shop"];
+            level.slowMotionShop = YES;
+            [[EGDirector current] pause];
+            return ;
+        }
         [TestFlight passCheckpoint:[NSString stringWithFormat:@"slow motion : %ld", (long)__slowMotionsCount]];
         [[EGDirector current] setTimeSpeed:0.1];
         level.slowMotionCounter = [[EGLengthCounter lengthCounterWithLength:1.0] onEndEvent:^void() {
@@ -391,11 +400,55 @@ static ODClassType* _TRGameDirector_type;
     }
 }
 
+- (EGShareDialog*)shareDialog {
+    NSString* url = @"http://get.raildale.com/?x=a";
+    return [[[[EGShareContent applyText:[TRStr.Loc shareTextUrl:url] image:[CNOption applyValue:@"Share.jpg"]] twitterText:[TRStr.Loc twitterTextUrl:url]] emailText:[TRStr.Loc shareTextUrl:url] subject:[TRStr.Loc shareSubject]] dialogShareHandler:^void(EGShareChannel* shareChannel) {
+        if(shareChannel == EGShareChannel.facebook && [_cloud intForKey:@"share.facebook"] == 0) {
+            [_cloud setKey:@"share.facebook" i:1];
+            [self buySlowMotionsCount:((NSUInteger)(_TRGameDirector_facebookShareRate))];
+        } else {
+            if(shareChannel == EGShareChannel.twitter && [_cloud intForKey:@"share.twitter"] == 0) {
+                [_cloud setKey:@"share.twitter" i:1];
+                [self buySlowMotionsCount:((NSUInteger)(_TRGameDirector_twitterShareRate))];
+            }
+        }
+        [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
+            if(((TRLevel*)(level)).slowMotionShop) {
+                ((TRLevel*)(level)).slowMotionShop = NO;
+                [[EGDirector current] resume];
+                [self runSlowMotionLevel:level];
+            }
+        }];
+    } cancelHandler:^void() {
+    }];
+}
+
+- (void)buySlowMotionsCount:(NSUInteger)count {
+    [TestFlight passCheckpoint:[NSString stringWithFormat:@"buySlowMotions %lu", (unsigned long)count]];
+    [_local setKey:@"boughtSlowMotions" i:[_local intForKey:@"boughtSlowMotions"] + count];
+    __slowMotionsCount += ((NSInteger)(count));
+}
+
 - (void)share {
     if(!([EGShareDialog isSupported])) return ;
     [TestFlight passCheckpoint:@"Share"];
-    NSString* url = @"http://get.raildale.com/?x=a";
-    [[[[[EGShareContent applyText:[TRStr.Loc shareTextUrl:url] image:[CNOption applyValue:@"Share.jpg"]] twitterText:[TRStr.Loc twitterTextUrl:url]] emailText:[TRStr.Loc shareTextUrl:url] subject:[TRStr.Loc shareSubject]] dialog] display];
+    [[self shareDialog] display];
+}
+
+- (BOOL)isShareToFacebookAvailable {
+    return [EGShareDialog isSupported] && [_cloud intForKey:@"share.facebook"] == 0;
+}
+
+- (void)shareToFacebook {
+    [[self shareDialog] displayFacebook];
+}
+
+- (BOOL)isShareToTwitterAvailable {
+    return [EGShareDialog isSupported] && [_cloud intForKey:@"share.twitter"] == 0;
+}
+
+- (void)shareToTwitter {
+    [[self shareDialog] displayTwitter];
 }
 
 - (ODClassType*)type {
@@ -408,6 +461,14 @@ static ODClassType* _TRGameDirector_type;
 
 + (CNNotificationHandle*)playerScoreRetrieveNotification {
     return _TRGameDirector_playerScoreRetrieveNotification;
+}
+
++ (NSInteger)facebookShareRate {
+    return _TRGameDirector_facebookShareRate;
+}
+
++ (NSInteger)twitterShareRate {
+    return _TRGameDirector_twitterShareRate;
 }
 
 + (ODClassType*)type {

@@ -27,6 +27,7 @@ class ShareContent(text : string, image : string?, items : [ShareChannel : Share
     def subject(channel : ShareChannel) : string? = items.opt(channel).flatMap(_.subject)
     def image(channel : ShareChannel) : string? = image
 
-    def dialog : ShareDialog = ShareDialog(self, completionHandler = _ -> {})
-    def dialog(completionHandler : ShareChannel -> void) : ShareDialog = ShareDialog(self, completionHandler)
+    def dialog : ShareDialog = ShareDialog(self, shareHandler = _ -> {}, cancelHandler = {})
+    def dialog(shareHandler : ShareChannel -> void, cancelHandler : () -> void) : ShareDialog =
+        ShareDialog(self, shareHandler, cancelHandler)
 }

@@ -9,15 +9,16 @@ static ODClassType* _EGShareDialog_type;
 @synthesize content = _content;
 @synthesize completionHandler = _completionHandler;
 
-+ (id)shareDialogWithContent:(EGShareContent*)content completionHandler:(void(^)(EGShareChannel*))completionHandler {
-    return [[EGShareDialog alloc] initWithContent:content completionHandler:completionHandler];
++ (id)shareDialogWithContent:(EGShareContent *)content shareHandler:(void (^)(EGShareChannel *))shareHandler cancelHandler:(void (^)())cancelHandler {
+    return [[EGShareDialog alloc] initWithContent:content shareHandler:shareHandler cancelHandler:^{
+    }];
 }
 
-- (id)initWithContent:(EGShareContent*)content completionHandler:(void(^)(EGShareChannel*))completionHandler {
+- (id)initWithContent:(EGShareContent *)content shareHandler:(void (^)(EGShareChannel *))shareHandler cancelHandler:(void (^)())cancelHandler {
     self = [super init];
     if(self) {
         _content = content;
-        _completionHandler = completionHandler;
+        _completionHandler = shareHandler;
     }
     
     return self;
@@ -69,6 +70,13 @@ static ODClassType* _EGShareDialog_type;
     return description;
 }
 
+- (void)displayFacebook {
+
+}
+
+- (void)displayTwitter {
+
+}
 @end
 
 

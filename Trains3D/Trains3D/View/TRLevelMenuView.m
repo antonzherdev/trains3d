@@ -152,8 +152,11 @@ static ODClassType* _TRLevelMenuView_type;
                     [EGD2D drawCircleBackColor:GEVec4Make(0.6, 0.6, 0.6, 0.95) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.5) at:geVec3ApplyVec2(geVec2AddVec2([_slowSprite position], geVec2DivI([_slowSprite size], 2))) radius:22.0 relative:GEVec2Make(0.0, 0.0) segmentColor:geVec4ApplyF(0.95) start:M_PI_2 end:M_PI_2 - 2 * [_level.slowMotionCounter time] * M_PI];
                 }];
             } else {
-                [_slowMotionCountText setText:[NSString stringWithFormat:@"%ld", (long)[TRGameDirector.instance slowMotionsCount]]];
-                [_slowMotionCountText draw];
+                NSInteger slowMotionsCount = [TRGameDirector.instance slowMotionsCount];
+                if(slowMotionsCount > 0) {
+                    [_slowMotionCountText setText:[NSString stringWithFormat:@"%ld", (long)[TRGameDirector.instance slowMotionsCount]]];
+                    [_slowMotionCountText draw];
+                }
                 [_slowSprite draw];
             }
         }];

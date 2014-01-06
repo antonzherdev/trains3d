@@ -193,12 +193,13 @@ static ODClassType* _EGShareContent_type;
 }
 
 - (EGShareDialog*)dialog {
-    return [EGShareDialog shareDialogWithContent:self completionHandler:^void(EGShareChannel* _) {
+    return [EGShareDialog shareDialogWithContent:self shareHandler:^void(EGShareChannel* _) {
+    } cancelHandler:^void() {
     }];
 }
 
-- (EGShareDialog*)dialogCompletionHandler:(void(^)(EGShareChannel*))completionHandler {
-    return [EGShareDialog shareDialogWithContent:self completionHandler:completionHandler];
+- (EGShareDialog*)dialogShareHandler:(void(^)(EGShareChannel*))shareHandler cancelHandler:(void(^)())cancelHandler {
+    return [EGShareDialog shareDialogWithContent:self shareHandler:shareHandler cancelHandler:cancelHandler];
 }
 
 - (ODClassType*)type {

@@ -1,7 +1,9 @@
 package com.antonzherdev.eg
 
-stub class ShareDialog(content : ShareContent, completionHandler : ShareChannel -> void) {
+stub class ShareDialog(content : ShareContent, shareHandler : ShareChannel -> void, cancelHandler : void -> void) {
     static def isSupported : bool
 
     def display
+    def displayFacebook
+    def displayTwitter
 }

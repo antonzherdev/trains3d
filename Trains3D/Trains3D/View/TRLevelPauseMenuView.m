@@ -23,6 +23,7 @@
     TRWinMenu* _winView;
     TRLooseMenu* _looseView;
     TRRateMenu* _rateView;
+    TRSlowMotionShopMenu* _slowMotionShopView;
     id<EGCamera> _camera;
 }
 static ODClassType* _TRLevelPauseMenuView_type;
@@ -44,6 +45,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
         _winView = [TRWinMenu winMenuWithLevel:_level];
         _looseView = [TRLooseMenu looseMenuWithLevel:_level];
         _rateView = [TRRateMenu rateMenu];
+        _slowMotionShopView = [TRSlowMotionShopMenu slowMotionShopMenu];
     }
     
     return self;
@@ -61,20 +63,25 @@ static ODClassType* _TRLevelPauseMenuView_type;
     [_winView reshapeWithViewport:viewport];
     [_looseView reshapeWithViewport:viewport];
     [_rateView reshapeWithViewport:viewport];
+    [_slowMotionShopView reshapeWithViewport:viewport];
 }
 
 - (TRPauseView*)view {
-    if(_level.rate) {
-        return _rateView;
+    if(_level.slowMotionShop) {
+        return _slowMotionShopView;
     } else {
-        if(!([[_level help] isEmpty])) {
-            return _helpView;
+        if(_level.rate) {
+            return _rateView;
         } else {
-            if([[_level result] isEmpty]) {
-                return _menuView;
+            if(!([[_level help] isEmpty])) {
+                return _helpView;
             } else {
-                if(((TRLevelResult*)([[_level result] get])).win) return _winView;
-                else return _looseView;
+                if([[_level result] isEmpty]) {
+                    return _menuView;
+                } else {
+                    if(((TRLevelResult*)([[_level result] get])).win) return _winView;
+                    else return _looseView;
+                }
             }
         }
     }
@@ -868,6 +875,132 @@ static ODClassType* _TRHelpView_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"level=%@", self.level];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRSlowMotionShopMenu{
+    EGTexture* _shop;
+    EGTextureRegion* _snail;
+    id<CNSeq> _buttons;
+    EGFont* _snailFont;
+    EGFont* _shareFont;
+    GEVec2 _buttonSize;
+    id<CNSeq> _curButtons;
+}
+static ODClassType* _TRSlowMotionShopMenu_type;
+@synthesize shop = _shop;
+@synthesize snailFont = _snailFont;
+@synthesize shareFont = _shareFont;
+
++ (id)slowMotionShopMenu {
+    return [[TRSlowMotionShopMenu alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    __weak TRSlowMotionShopMenu* _weakSelf = self;
+    if(self) {
+        _shop = [EGGlobal scaledTextureForName:@"Shop" format:@"png"];
+        _snail = [_shop regionX:0.0 y:0.0 width:63.0 height:64.0];
+        _buttons = (@[tuple(^BOOL() {
+    return [TRGameDirector.instance isShareToFacebookAvailable];
+}, [EGButton buttonWithOnDraw:^void(GERect _) {
+    [_weakSelf drawShareButtonTexture:[_weakSelf.shop regionX:64.0 y:0.0 width:32.0 height:32.0] name:@"Facebook" count:((NSUInteger)(TRGameDirector.facebookShareRate)) rect:_];
+} onClick:^void() {
+    [TRGameDirector.instance shareToFacebook];
+}]), tuple(^BOOL() {
+    return [TRGameDirector.instance isShareToTwitterAvailable];
+}, [EGButton buttonWithOnDraw:^void(GERect _) {
+    [_weakSelf drawShareButtonTexture:[_weakSelf.shop regionX:64.0 y:32.0 width:32.0 height:32.0] name:@"Twitter" count:((NSUInteger)(TRGameDirector.twitterShareRate)) rect:_];
+} onClick:^void() {
+    [TRGameDirector.instance shareToTwitter];
+}])]);
+        _snailFont = [EGGlobal fontWithName:@"lucida_grande" size:36];
+        _shareFont = [EGGlobal fontWithName:@"lucida_grande" size:16];
+        _buttonSize = GEVec2Make(150.0, 150.0);
+        _curButtons = (@[]);
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRSlowMotionShopMenu_type = [ODClassType classTypeWithCls:[TRSlowMotionShopMenu class]];
+}
+
+- (void)reshapeWithViewport:(GERect)viewport {
+}
+
+- (void)drawShareButtonTexture:(EGTexture*)texture name:(NSString*)name count:(NSUInteger)count rect:(GERect)rect {
+    [self drawSnailCount:count rect:rect];
+    GEVec2 pos = geRectPXY(rect, 0.2, 0.1);
+    [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:texture] at:geVec3ApplyVec2Z(pos, 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 32.0, 32.0)];
+    [_shareFont drawText:name at:geVec3ApplyVec2(geVec2AddVec2(pos, GEVec2Make(36.0, 18.0))) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:GEVec4Make(0.1, 0.1, 0.1, 1.0)];
+}
+
+- (void)drawSnailCount:(NSUInteger)count rect:(GERect)rect {
+    [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)] at:geVec3ApplyVec2Z(rect.p, 0.0) rect:geRectApplyXYSize(0.0, 0.0, geVec2SubVec2(rect.size, GEVec2Make(2.0, 2.0)))];
+    [_snailFont drawText:[NSString stringWithFormat:@"%lu", (unsigned long)count] at:geVec3ApplyVec2(geRectPXY(rect, 0.45, 0.7)) alignment:egTextAlignmentApplyXY(1.0, 0.0) color:GEVec4Make(0.1, 0.1, 0.1, 1.0)];
+    [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:_snail] at:geVec3ApplyVec2Z(geRectPXY(rect, 0.45, 0.7), 0.0) rect:geRectApplyXYWidthHeight(0.0, -32.0, 63.0, 64.0)];
+}
+
+- (void)draw {
+    _curButtons = [[[[_buttons chain] filter:^BOOL(CNTuple* _) {
+        return ((BOOL(^)())(((CNTuple*)(_)).a))();
+    }] map:^EGButton*(CNTuple* _) {
+        return ((CNTuple*)(_)).b;
+    }] toArray];
+    GEVec2 size = geVec2MulVec2(GEVec2Make(((float)(((NSUInteger)(([_curButtons count] + 1) / 2)))), 2.0), _buttonSize);
+    __block GEVec2 pos = geVec2AddVec2(geVec2DivI(geVec2SubVec2(geVec2iDivF([EGGlobal.context viewport].size, EGGlobal.context.scale), size), 2), GEVec2Make(0.0, _buttonSize.y));
+    __block NSInteger row = 0;
+    [_curButtons forEach:^void(EGButton* btn) {
+        ((EGButton*)(btn)).rect = GERectMake(pos, _buttonSize);
+        if(row == 0) {
+            row++;
+            pos = geVec2AddVec2(pos, GEVec2Make(0.0, -_buttonSize.y));
+        } else {
+            row = 0;
+            pos = geVec2AddVec2(pos, GEVec2Make(_buttonSize.x, _buttonSize.y));
+        }
+        [((EGButton*)(btn)) draw];
+    }];
+}
+
+- (BOOL)tapEvent:(id<EGEvent>)event {
+    return [[_curButtons findWhere:^BOOL(EGButton* _) {
+        return [((EGButton*)(_)) tapEvent:event];
+    }] isDefined];
+}
+
+- (ODClassType*)type {
+    return [TRSlowMotionShopMenu type];
+}
+
++ (ODClassType*)type {
+    return _TRSlowMotionShopMenu_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
     return description;
 }

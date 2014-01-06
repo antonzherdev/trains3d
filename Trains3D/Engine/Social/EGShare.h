@@ -45,7 +45,7 @@
 - (id)subjectChannel:(EGShareChannel*)channel;
 - (id)imageChannel:(EGShareChannel*)channel;
 - (EGShareDialog*)dialog;
-- (EGShareDialog*)dialogCompletionHandler:(void(^)(EGShareChannel*))completionHandler;
+- (EGShareDialog*)dialogShareHandler:(void(^)(EGShareChannel*))shareHandler cancelHandler:(void(^)())cancelHandler;
 + (ODClassType*)type;
 @end
 

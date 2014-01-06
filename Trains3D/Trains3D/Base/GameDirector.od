@@ -15,7 +15,7 @@ class GameDirector {
     val local = LocalKeyValueStorage([("currentLevel", 1), ("soundEnabled", 1),
         ("lastSlowMotions", []),
         ("daySlowMotions", maxDaySlowMotions),
-        ("boughtSlowMotions", 5)])
+        ("boughtSlowMotions", 0)])
     val resolveMaxLevel : (any, any) -> any = (a : any, b : any) -> {
         val v = Conflict.resolveMax(a, b)
         log("Max level from cloud $v = max($a, $b)")
@@ -138,6 +138,7 @@ class GameDirector {
     }
 
     def init {
+//        cloud.set("share.twitter", i = 0)
         SoundDirector.instance.enabled = (local.intFor("soundEnabled") == 1)
         Rate.instance.setIds(ios = 736579117, osx = 736545415)
 //        Rate.instance.setIds(ios = 343200656, osx = 403961173)
@@ -282,6 +283,13 @@ class GameDirector {
 
     def runSlowMotion(level : Level) {
         if(level.slowMotionCounter.isStopped) {
+            if(_slowMotionsCount <= 0) {
+                TestFlight.pass("Shop")
+                level.slowMotionShop = true
+                Director.current.pause
+                return nil
+            }
+
             TestFlight.pass("slow motion : $_slowMotionsCount")
             Director.current.timeSpeed = 0.1
             level.slowMotionCounter = LengthCounter(1).onEnd {
@@ -324,16 +332,52 @@ class GameDirector {
         }
     }
 
+    static val facebookShareRate = 10
+    static val twitterShareRate = 10
 
-    def share {
-        if(!ShareDialog.isSupported) return nil
-
-        TestFlight.pass("Share")
+    def shareDialog : ShareDialog = {
         val url = "http:\/\/get.raildale.com/?x=a"
         ShareContent(Loc.shareText(url), "Share.jpg")
             .twitter(Loc.twitterText(url))
             .email(Loc.shareText(url), Loc.shareSubject)
-            .dialog
-            .display
+            .dialog(shareHandler = {shareChannel ->
+                if(shareChannel == ShareChannel.facebook && cloud.intFor("share.facebook") == 0) {
+                    cloud.set("share.facebook", i = 1)
+                    buySlowMotions(facebookShareRate)
+                } else if(shareChannel == ShareChannel.twitter && cloud.intFor("share.twitter") == 0) {
+                    cloud.set("share.twitter", i = 1)
+                    buySlowMotions(twitterShareRate)
+                }
+                Director.current.scene.get.controller.as<Level>.for{level ->
+                    if(level.slowMotionShop) {
+                        level.slowMotionShop = false
+                        Director.current.resume
+                        runSlowMotion(level)
+                    }
+                }
+
+            }, cancelHandler = {})
+    }
+
+    def buySlowMotions(count : uint) {
+        TestFlight.pass("buySlowMotions $count")
+        local.set("boughtSlowMotions", i = local.intFor("boughtSlowMotions") + count)
+        _slowMotionsCount += count
+    }
+    def share {
+        if(!ShareDialog.isSupported) return nil
+
+        TestFlight.pass("Share")
+        shareDialog.display
+    }
+
+    def isShareToFacebookAvailable : bool = ShareDialog.isSupported && cloud.intFor("share.facebook") == 0
+    def shareToFacebook {
+        shareDialog.displayFacebook
+    }
+
+    def isShareToTwitterAvailable : bool = ShareDialog.isSupported && cloud.intFor("share.twitter") == 0
+    def shareToTwitter {
+        shareDialog.displayTwitter
     }
 }

@@ -8,13 +8,18 @@
 @property (nonatomic, readonly) EGShareContent* content;
 @property (nonatomic, readonly) void(^completionHandler)(EGShareChannel*);
 
-+ (id)shareDialogWithContent:(EGShareContent*)content completionHandler:(void(^)(EGShareChannel*))completionHandler;
-- (id)initWithContent:(EGShareContent*)content completionHandler:(void(^)(EGShareChannel*))completionHandler;
++ (id)shareDialogWithContent:(EGShareContent *)content shareHandler:(void (^)(EGShareChannel *))shareHandler cancelHandler:(void (^)())cancelHandler;
+
+- (id)initWithContent:(EGShareContent *)content shareHandler:(void (^)(EGShareChannel *))shareHandler cancelHandler:(void (^)())cancelHandler;
 - (ODClassType*)type;
 - (void)display;
 + (ODClassType*)type;
 
+- (void)displayFacebook;
+
 + (BOOL)isSupported;
+
+- (void)displayTwitter;
 @end
 
 

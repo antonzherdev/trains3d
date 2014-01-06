@@ -26,6 +26,7 @@
 @class EGLengthCounter;
 @class EGShareDialog;
 @class EGShareContent;
+@class EGShareChannel;
 
 @class TRGameDirector;
 
@@ -69,9 +70,17 @@
 - (NSInteger)slowMotionsCount;
 - (void)runSlowMotionLevel:(TRLevel*)level;
 - (void)checkLastSlowMotions;
+- (EGShareDialog*)shareDialog;
+- (void)buySlowMotionsCount:(NSUInteger)count;
 - (void)share;
+- (BOOL)isShareToFacebookAvailable;
+- (void)shareToFacebook;
+- (BOOL)isShareToTwitterAvailable;
+- (void)shareToTwitter;
 + (TRGameDirector*)instance;
 + (CNNotificationHandle*)playerScoreRetrieveNotification;
++ (NSInteger)facebookShareRate;
++ (NSInteger)twitterShareRate;
 + (ODClassType*)type;
 @end
 

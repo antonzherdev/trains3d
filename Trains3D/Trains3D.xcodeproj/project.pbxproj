@@ -243,6 +243,7 @@
 		6F3DF316463BAC1E758129DA /* Type.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF3A639660C710E745D8F /* Type.od */; };
 		6F3DF3174A66FA247AA3E5BE /* TrainSound.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF2DF830C4C229670D594 /* TrainSound.od */; };
 		6F3DF317BB359E4BB10B4E6D /* KWMock.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9B58395D7F6CA5DE892 /* KWMock.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		6F3DF319F877EC303673B4D1 /* Shop_2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF907FDDA2847C655F703 /* Shop_2x.png */; };
 		6F3DF31B82EE1A6A532B447F /* btGImpactShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA7D9A4FED64293C19BD /* btGImpactShape.cpp */; };
 		6F3DF31DB55BB70048328E53 /* btSequentialImpulseConstraintSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBDD7536EEDFC854FC17 /* btSequentialImpulseConstraintSolver.cpp */; };
 		6F3DF32238E6B0CB88387799 /* btConvexPointCloudShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2C0E1DABF4C3773EBE3 /* btConvexPointCloudShape.cpp */; };
@@ -642,6 +643,7 @@
 		6F3DF840009B36EAA3D739D7 /* Index.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFB91CF8C66332682CB8F /* Index.od */; };
 		6F3DF841005650BDF2EE9112 /* btRaycastCallback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF7DCA8B4B873B375FA76 /* btRaycastCallback.cpp */; };
 		6F3DF844B1B29FA809B4EA43 /* MapIso.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFCCA0B3E842E18E2F103 /* MapIso.od */; };
+		6F3DF84593AB2DAE5472B9B6 /* Shop_1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF76B9CA309DCD353F7BC /* Shop_1x.png */; };
 		6F3DF84869B259711D8AF17C /* EGCollisionBody.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF12D06AD7BE4ECD1DF02 /* EGCollisionBody.mm */; };
 		6F3DF84E417DF58FD7C860BE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF6B267385BF6A5673B38 /* Localizable.strings */; };
 		6F3DF85005191331FCCBD166 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFEBEBF10D80DCB91A4DF /* Localizable.strings */; };
@@ -679,6 +681,7 @@
 		6F3DF8930804A84C2AC874F8 /* City.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFD410477E6DC3F8E31F6 /* City.od */; };
 		6F3DF894A6160799B42E9A1F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF713C9B9756BBFFEFC45 /* Localizable.strings */; };
 		6F3DF89C8872876229AD774A /* CNMapLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBF9CB73172393811F54 /* CNMapLink.m */; };
+		6F3DF89E1915D095EF187D41 /* Shop_1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF76B9CA309DCD353F7BC /* Shop_1x.png */; };
 		6F3DF8A02DBAB06DF9A4DB76 /* btConvexHullShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF51196AAD4425CF79EC1 /* btConvexHullShape.cpp */; };
 		6F3DF8A39A9FDC8D61B86388 /* btGeometryUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1261B9F474CD7B32A91 /* btGeometryUtil.cpp */; };
 		6F3DF8A483A87B4D7D35C087 /* CNLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8F7AB38287C992B422E /* CNLog.m */; };
@@ -741,6 +744,7 @@
 		6F3DF9509399BCCA3295B835 /* SnowPine.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF4D47A3D42A2A53EC106 /* SnowPine.png */; };
 		6F3DF955F969D0305CCF2357 /* CNMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD83C8390308493AEA05 /* CNMap.m */; };
 		6F3DF957FC7DA3C8BD55F78A /* CNNotificationPlatform.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF712C0A359F5788BCCE /* CNNotificationPlatform.m */; };
+		6F3DF95A988EF326066EEA46 /* Shop_2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF907FDDA2847C655F703 /* Shop_2x.png */; };
 		6F3DF95B5A94C6CED6D70079 /* btConcaveShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDA9CBBD0DBF0524A566 /* btConcaveShape.cpp */; };
 		6F3DF961AC286D6D3E2292D2 /* CNYield.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFDEE02FCC8D0DB72821 /* CNYield.m */; };
 		6F3DF9675B6763D19AFBF360 /* btConvex2dShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF49CFD5E3C33356E1C37 /* btConvex2dShape.cpp */; };
@@ -1906,6 +1910,7 @@
 		6F3DF757E46369432794AF7D /* CNRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNRange.m; sourceTree = "<group>"; };
 		6F3DF75CD850170EC75153BB /* func_vector_relational.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = func_vector_relational.inl; sourceTree = "<group>"; };
 		6F3DF7653E40C8886F83A6B6 /* EGEMail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGEMail.m; sourceTree = "<group>"; };
+		6F3DF76B9CA309DCD353F7BC /* Shop_1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Shop_1x.png; sourceTree = "<group>"; };
 		6F3DF76CB0992915372704D2 /* random.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = random.hpp; sourceTree = "<group>"; };
 		6F3DF773230713415C3BB893 /* CNPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNPair.m; sourceTree = "<group>"; };
 		6F3DF776CBFEBA54B9A1303F /* KWBeSubclassOfClassMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeSubclassOfClassMatcher.h; sourceTree = "<group>"; };
@@ -2039,6 +2044,7 @@
 		6F3DF8FF7A0430E6026A4AE9 /* KWReporting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWReporting.h; sourceTree = "<group>"; };
 		6F3DF902185D67D11257DD90 /* Switches.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Switches.png; sourceTree = "<group>"; };
 		6F3DF906737AA84029289ADC /* KWPendingNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWPendingNode.h; sourceTree = "<group>"; };
+		6F3DF907FDDA2847C655F703 /* Shop_2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Shop_2x.png; sourceTree = "<group>"; };
 		6F3DF90BA676F65547D965CE /* btBroadphaseInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btBroadphaseInterface.h; sourceTree = "<group>"; };
 		6F3DF913296DB24F7AAB230A /* EGSharePlat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGSharePlat.h; sourceTree = "<group>"; };
 		6F3DF91510BF26B77726510E /* lucida_grande_72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lucida_grande_72.png; sourceTree = "<group>"; };
@@ -4110,6 +4116,8 @@
 				6F3DFA78E97EC67C5C5CEC51 /* PalmGrass.png */,
 				6F3DF8C7BDABC097F65B99CF /* LightGlowPhone.png */,
 				6F3DF3136B8B81AE94FE3D67 /* Share.jpg */,
+				6F3DF907FDDA2847C655F703 /* Shop_2x.png */,
+				6F3DF76B9CA309DCD353F7BC /* Shop_1x.png */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -5285,6 +5293,8 @@
 				6F3DF60F3B5605C4A801797E /* Platform.od in Resources */,
 				6F3DF2BB11AD586CBF1AC018 /* math.od in Resources */,
 				6F3DF0A605394F399FE0F13F /* Share.jpg in Resources */,
+				6F3DF319F877EC303673B4D1 /* Shop_2x.png in Resources */,
+				6F3DF84593AB2DAE5472B9B6 /* Shop_1x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5461,6 +5471,8 @@
 				6F3DFEA75F0291A5F594E75D /* iOSImages.xcassets in Resources */,
 				6F3DF0FCADF646225E32FE96 /* Main_iPad.storyboard in Resources */,
 				6F3DF627D1FEB24E06A58225 /* Main_iPhone.storyboard in Resources */,
+				6F3DF95A988EF326066EEA46 /* Shop_2x.png in Resources */,
+				6F3DF89E1915D095EF187D41 /* Shop_1x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

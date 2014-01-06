@@ -98,8 +98,11 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
                 )
                 }
             } else {
-                slowMotionCountText.text = "$(GameDirector.instance.slowMotionsCount)"
-                slowMotionCountText.draw
+                val slowMotionsCount = GameDirector.instance.slowMotionsCount
+                if(slowMotionsCount > 0) {
+                    slowMotionCountText.text = "$(GameDirector.instance.slowMotionsCount)"
+                    slowMotionCountText.draw
+                }
                 slowSprite.draw
             }
         }}

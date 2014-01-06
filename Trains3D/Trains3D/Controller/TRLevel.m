@@ -126,6 +126,7 @@ static ODClassType* _TRLevelRules_type;
     id __help;
     id __result;
     BOOL _rate;
+    BOOL _slowMotionShop;
     EGCounter* _slowMotionCounter;
 }
 static NSInteger _TRLevel_trainComingPeriod = 10;
@@ -153,6 +154,7 @@ static ODClassType* _TRLevel_type;
 @synthesize schedule = _schedule;
 @synthesize collisionWorld = _collisionWorld;
 @synthesize rate = _rate;
+@synthesize slowMotionShop = _slowMotionShop;
 @synthesize slowMotionCounter = _slowMotionCounter;
 
 + (id)levelWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules {
@@ -201,6 +203,7 @@ static ODClassType* _TRLevel_type;
         __help = [CNOption none];
         __result = [CNOption none];
         _rate = NO;
+        _slowMotionShop = NO;
         _slowMotionCounter = [EGEmptyCounter emptyCounter];
     }
     
