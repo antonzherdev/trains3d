@@ -145,7 +145,7 @@ class EnStrings extends Strings {
        $endif"
     def helpRules : string =
         "Don't allow account balance to fall lower than zero.
-         Hang in the allotted time with a positive balance and win a level."
+         Stay in the allotted time with a positive balance to win a level."
     def helpNewCity : string =
         "Sometimes new cities appear.
          Connect them to your railway."
@@ -182,10 +182,12 @@ class EnStrings extends Strings {
 
     def helpSlowMotion : string =
         "Use the slow motion to help yourself in difficult moments.
-         Press the snail button at the right top corner of the screen.
-         A few number of uses is restored every day.
-         You can buy the additional slow motions
-         or get them for free sharing the game on Facebook or Twitter."
+         Press the snail button in the top right-hand corner of the screen.
+         A small number of uses are restored every day.
+         If you want to make the game easier,
+         you can buy additional slow motions
+         or get them for free sharing the game on Facebook or Twitter.
+         But it is possible to manage without."
 
     def result : string = "Score"
     def best : string = "Your best"
@@ -302,7 +304,8 @@ class RuStrings extends Strings{
         "Используйте замедленное время, чтобы помочь себе в трудных ситуациях.
          Нажмите кнопку с изображением улитки в правом нижнем углу экрана.
          Количество использование восстанавливается каждый день.
-         Вы можете купить дополнительные использования
+         Если вы хотите упростить игру,
+         вы можете купить дополнительные использования
          или получить их бесплатно поделившись с друзьями
          через Facebook или Twitter."
 

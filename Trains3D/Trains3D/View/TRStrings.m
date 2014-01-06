@@ -193,7 +193,7 @@ static ODClassType* _TREnStrings_type;
 
 - (NSString*)helpRules {
     return @"Don't allow account balance to fall lower than zero.\n"
-        "Hang in the allotted time with a positive balance and win a level.";
+        "Stay in the allotted time with a positive balance to win a level.";
 }
 
 - (NSString*)helpNewCity {
@@ -250,10 +250,12 @@ static ODClassType* _TREnStrings_type;
 
 - (NSString*)helpSlowMotion {
     return @"Use the slow motion to help yourself in difficult moments.\n"
-        "Press the snail button at the right top corner of the screen.\n"
-        "A few number of uses is restored every day.\n"
-        "You can buy the additional slow motions\n"
-        "or get them for free sharing the game on Facebook or Twitter.";
+        "Press the snail button in the top right-hand corner of the screen.\n"
+        "A small number of uses are restored every day.\n"
+        "If you want to make the game easier,\n"
+        "you can buy additional slow motions\n"
+        "or get them for free sharing the game on Facebook or Twitter.\n"
+        "But it is possible to manage without.";
 }
 
 - (NSString*)result {
@@ -575,7 +577,8 @@ static ODClassType* _TRRuStrings_type;
     return @"Используйте замедленное время, чтобы помочь себе в трудных ситуациях.\n"
         "Нажмите кнопку с изображением улитки в правом нижнем углу экрана.\n"
         "Количество использование восстанавливается каждый день.\n"
-        "Вы можете купить дополнительные использования\n"
+        "Если вы хотите упростить игру,\n"
+        "вы можете купить дополнительные использования\n"
         "или получить их бесплатно поделившись с друзьями\n"
         "через Facebook или Twitter.";
 }
