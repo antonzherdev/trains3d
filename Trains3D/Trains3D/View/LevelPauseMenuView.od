@@ -292,17 +292,23 @@ class HelpView(level : Level) extends PauseView {
 class SlowMotionShopMenu extends PauseView {
     val shop = scaledTextureFor("Shop", "png")
     private val snail = shop.region(0, 0, 63, 64)
-    private var buttons : [(() -> bool, Button)] = [
-        (GameDirector.instance.isShareToFacebookAvailable,
+    private val buttons : [(() -> bool, Button)] = [
+        (() -> GameDirector.instance.isShareToFacebookAvailable,
             Button(drawShareButton(shop.region(64, 0,  32, 32), "Facebook", GameDirector.facebookShareRate, _), GameDirector.instance.shareToFacebook)),
-        (GameDirector.instance.isShareToTwitterAvailable,
+        (() -> GameDirector.instance.isShareToTwitterAvailable,
             Button(drawShareButton(shop.region(64, 32, 32, 32), "Twitter",  GameDirector.twitterShareRate, _), GameDirector.instance.shareToTwitter))
-    ]
+    ] + GameDirector.instance.slowMotionPrices.chain.map{item ->
+        (() -> true, Button(drawBuyButton(count = item.a, price = item.b, _), GameDirector.instance.buySlowMotions(item.a)) )
+    }.toArray +
+    [(() -> true, Button(drawCloseButton(_), GameDirector.instance.closeShop) )]
 
     val snailFont = fontWith(name = "lucida_grande", size = 36)
-    val shareFont = fontWith(name = "lucida_grande", size = 16)
-    def reshapeWith(viewport : Rect) {
+    val shareFont = fontWith(name = "lucida_grande", size = 18)
+    def reshapeWith(viewport : Rect) {}
 
+    def drawBuyButton(count : uint, price : string, rect : Rect) {
+        drawSnail(count, rect)
+        shareFont.draw(price, at = rect.p(0.5, 0.1) + vec2(0, 16), TextAlignment(0, 0), color = vec4(0.1, 0.1, 0.1, 1))
     }
 
     def drawShareButton(texture : Texture, name : string, count : uint, rect : Rect) {
@@ -313,10 +319,23 @@ class SlowMotionShopMenu extends PauseView {
         shareFont.draw(name, at = pos + vec2(36, 18), TextAlignment(-1, 0), color = vec4(0.1, 0.1, 0.1, 1))
     }
 
-    def drawSnail(count : uint, rect : Rect) {
+    def drawButtonBackground(rect : Rect) {
         D2D.drawSprite(vec4(1, 1, 1, 0.9), at = vec3(rect.p, 0), rect = Rect(0, 0, rect.size - vec2(2, 2)))
-        snailFont.draw("$count", at = rect.p(0.45, 0.7), TextAlignment(1, 0), color = vec4(0.1, 0.1, 0.1, 1))
-        D2D.drawSprite(snail, at = vec3(rect.p(0.45, 0.7), 0), rect = Rect(0, -32, 63, 64))
+    }
+    def drawSnail(count : uint, rect : Rect) {
+        drawButtonBackground(rect)
+
+        val text = "$count"
+        val textSize = snailFont.measureC(text)
+        val pos = rect.p(0.5, 0.6) - vec2(34 + textSize.x/2, 0)
+
+        snailFont.draw(text, at = pos, TextAlignment(-1, 0), color = vec4(0.1, 0.1, 0.1, 1))
+        D2D.drawSprite(snail, at = vec3(pos + vec2(textSize.x + 4, 0) , 0), rect = Rect(0, -32, 63, 64))
+    }
+
+    def drawCloseButton(rect : Rect) {
+        drawButtonBackground(rect)
+        D2D.drawSprite(shop.region(0, 64, 64, 64), at = rect.p(0.5, 0.5), rect = Rect(-32, -32, 64, 64))
     }
 
     private val buttonSize = vec2(150, 150)

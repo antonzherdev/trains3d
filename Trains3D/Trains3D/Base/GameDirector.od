@@ -343,10 +343,10 @@ class GameDirector {
             .dialog(shareHandler = {shareChannel ->
                 if(shareChannel == ShareChannel.facebook && cloud.intFor("share.facebook") == 0) {
                     cloud.set("share.facebook", i = 1)
-                    buySlowMotions(facebookShareRate)
+                    boughtSlowMotions(facebookShareRate)
                 } else if(shareChannel == ShareChannel.twitter && cloud.intFor("share.twitter") == 0) {
                     cloud.set("share.twitter", i = 1)
-                    buySlowMotions(twitterShareRate)
+                    boughtSlowMotions(twitterShareRate)
                 }
                 Director.current.scene.get.controller.as<Level>.for{level ->
                     if(level.slowMotionShop) {
@@ -361,6 +361,10 @@ class GameDirector {
 
     def buySlowMotions(count : uint) {
         TestFlight.pass("buySlowMotions $count")
+    }
+
+    def boughtSlowMotions(count : uint) {
+        TestFlight.pass("boughtSlowMotions $count")
         local.set("boughtSlowMotions", i = local.intFor("boughtSlowMotions") + count)
         _slowMotionsCount += count
     }
@@ -379,5 +383,16 @@ class GameDirector {
     def isShareToTwitterAvailable : bool = ShareDialog.isSupported && cloud.intFor("share.twitter") == 0
     def shareToTwitter {
         shareDialog.displayTwitter
+    }
+
+    def slowMotionPrices : [(uint, string)] = [(20, "\$1.99"), (50, "\$3.99"), (200, "\$9.99")]
+
+    def closeShop {
+        Director.current.scene.get.controller.as<Level>.for{level ->
+            if(level.slowMotionShop) {
+                level.slowMotionShop = false
+                Director.current.resume
+            }
+        }
     }
 }

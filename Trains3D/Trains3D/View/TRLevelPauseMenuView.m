@@ -906,7 +906,7 @@ static ODClassType* _TRSlowMotionShopMenu_type;
     if(self) {
         _shop = [EGGlobal scaledTextureForName:@"Shop" format:@"png"];
         _snail = [_shop regionX:0.0 y:0.0 width:63.0 height:64.0];
-        _buttons = (@[tuple(^BOOL() {
+        _buttons = [[(@[tuple(^BOOL() {
     return [TRGameDirector.instance isShareToFacebookAvailable];
 }, [EGButton buttonWithOnDraw:^void(GERect _) {
     [_weakSelf drawShareButtonTexture:[_weakSelf.shop regionX:64.0 y:0.0 width:32.0 height:32.0] name:@"Facebook" count:((NSUInteger)(TRGameDirector.facebookShareRate)) rect:_];
@@ -918,9 +918,23 @@ static ODClassType* _TRSlowMotionShopMenu_type;
     [_weakSelf drawShareButtonTexture:[_weakSelf.shop regionX:64.0 y:32.0 width:32.0 height:32.0] name:@"Twitter" count:((NSUInteger)(TRGameDirector.twitterShareRate)) rect:_];
 } onClick:^void() {
     [TRGameDirector.instance shareToTwitter];
-}])]);
+}])]) addSeq:[[[[TRGameDirector.instance slowMotionPrices] chain] map:^CNTuple*(CNTuple* item) {
+            return tuple(^BOOL() {
+                return YES;
+            }, [EGButton buttonWithOnDraw:^void(GERect _) {
+                [_weakSelf drawBuyButtonCount:unumui(((CNTuple*)(item)).a) price:((CNTuple*)(item)).b rect:_];
+            } onClick:^void() {
+                [TRGameDirector.instance buySlowMotionsCount:unumui(((CNTuple*)(item)).a)];
+            }]);
+        }] toArray]] addSeq:(@[tuple(^BOOL() {
+    return YES;
+}, [EGButton buttonWithOnDraw:^void(GERect _) {
+    [_weakSelf drawCloseButtonRect:_];
+} onClick:^void() {
+    [TRGameDirector.instance closeShop];
+}])])];
         _snailFont = [EGGlobal fontWithName:@"lucida_grande" size:36];
-        _shareFont = [EGGlobal fontWithName:@"lucida_grande" size:16];
+        _shareFont = [EGGlobal fontWithName:@"lucida_grande" size:18];
         _buttonSize = GEVec2Make(150.0, 150.0);
         _curButtons = (@[]);
     }
@@ -936,17 +950,34 @@ static ODClassType* _TRSlowMotionShopMenu_type;
 - (void)reshapeWithViewport:(GERect)viewport {
 }
 
+- (void)drawBuyButtonCount:(NSUInteger)count price:(NSString*)price rect:(GERect)rect {
+    [self drawSnailCount:count rect:rect];
+    [_shareFont drawText:price at:geVec3ApplyVec2(geVec2AddVec2(geRectPXY(rect, 0.5, 0.1), GEVec2Make(0.0, 16.0))) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:GEVec4Make(0.1, 0.1, 0.1, 1.0)];
+}
+
 - (void)drawShareButtonTexture:(EGTexture*)texture name:(NSString*)name count:(NSUInteger)count rect:(GERect)rect {
     [self drawSnailCount:count rect:rect];
-    GEVec2 pos = geRectPXY(rect, 0.2, 0.1);
+    GEVec2 pos = geRectPXY(rect, 0.1, 0.1);
     [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:texture] at:geVec3ApplyVec2Z(pos, 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 32.0, 32.0)];
     [_shareFont drawText:name at:geVec3ApplyVec2(geVec2AddVec2(pos, GEVec2Make(36.0, 18.0))) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:GEVec4Make(0.1, 0.1, 0.1, 1.0)];
 }
 
-- (void)drawSnailCount:(NSUInteger)count rect:(GERect)rect {
+- (void)drawButtonBackgroundRect:(GERect)rect {
     [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)] at:geVec3ApplyVec2Z(rect.p, 0.0) rect:geRectApplyXYSize(0.0, 0.0, geVec2SubVec2(rect.size, GEVec2Make(2.0, 2.0)))];
-    [_snailFont drawText:[NSString stringWithFormat:@"%lu", (unsigned long)count] at:geVec3ApplyVec2(geRectPXY(rect, 0.45, 0.7)) alignment:egTextAlignmentApplyXY(1.0, 0.0) color:GEVec4Make(0.1, 0.1, 0.1, 1.0)];
-    [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:_snail] at:geVec3ApplyVec2Z(geRectPXY(rect, 0.45, 0.7), 0.0) rect:geRectApplyXYWidthHeight(0.0, -32.0, 63.0, 64.0)];
+}
+
+- (void)drawSnailCount:(NSUInteger)count rect:(GERect)rect {
+    [self drawButtonBackgroundRect:rect];
+    NSString* text = [NSString stringWithFormat:@"%lu", (unsigned long)count];
+    GEVec2 textSize = [_snailFont measureCText:text];
+    GEVec2 pos = geVec2SubVec2(geRectPXY(rect, 0.5, 0.6), GEVec2Make(34 + textSize.x / 2, 0.0));
+    [_snailFont drawText:text at:geVec3ApplyVec2(pos) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:GEVec4Make(0.1, 0.1, 0.1, 1.0)];
+    [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:_snail] at:geVec3ApplyVec2Z(geVec2AddVec2(pos, GEVec2Make(textSize.x + 4, 0.0)), 0.0) rect:geRectApplyXYWidthHeight(0.0, -32.0, 63.0, 64.0)];
+}
+
+- (void)drawCloseButtonRect:(GERect)rect {
+    [self drawButtonBackgroundRect:rect];
+    [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:[_shop regionX:0.0 y:64.0 width:64.0 height:64.0]] at:geVec3ApplyVec2(geRectPXY(rect, 0.5, 0.5)) rect:geRectApplyXYWidthHeight(-32.0, -32.0, 64.0, 64.0)];
 }
 
 - (void)draw {

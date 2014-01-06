@@ -190,7 +190,6 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)_init {
-    [_cloud setKey:@"share.twitter" i:0];
     [SDSoundDirector.instance setEnabled:[_local intForKey:@"soundEnabled"] == 1];
     [EGRate.instance setIdsIos:736579117 osx:736545415];
     [EGGameCenter.instance authenticate];
@@ -405,11 +404,11 @@ static ODClassType* _TRGameDirector_type;
     return [[[[EGShareContent applyText:[TRStr.Loc shareTextUrl:url] image:[CNOption applyValue:@"Share.jpg"]] twitterText:[TRStr.Loc twitterTextUrl:url]] emailText:[TRStr.Loc shareTextUrl:url] subject:[TRStr.Loc shareSubject]] dialogShareHandler:^void(EGShareChannel* shareChannel) {
         if(shareChannel == EGShareChannel.facebook && [_cloud intForKey:@"share.facebook"] == 0) {
             [_cloud setKey:@"share.facebook" i:1];
-            [self buySlowMotionsCount:((NSUInteger)(_TRGameDirector_facebookShareRate))];
+            [self boughtSlowMotionsCount:((NSUInteger)(_TRGameDirector_facebookShareRate))];
         } else {
             if(shareChannel == EGShareChannel.twitter && [_cloud intForKey:@"share.twitter"] == 0) {
                 [_cloud setKey:@"share.twitter" i:1];
-                [self buySlowMotionsCount:((NSUInteger)(_TRGameDirector_twitterShareRate))];
+                [self boughtSlowMotionsCount:((NSUInteger)(_TRGameDirector_twitterShareRate))];
             }
         }
         [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
@@ -425,6 +424,10 @@ static ODClassType* _TRGameDirector_type;
 
 - (void)buySlowMotionsCount:(NSUInteger)count {
     [TestFlight passCheckpoint:[NSString stringWithFormat:@"buySlowMotions %lu", (unsigned long)count]];
+}
+
+- (void)boughtSlowMotionsCount:(NSUInteger)count {
+    [TestFlight passCheckpoint:[NSString stringWithFormat:@"boughtSlowMotions %lu", (unsigned long)count]];
     [_local setKey:@"boughtSlowMotions" i:[_local intForKey:@"boughtSlowMotions"] + count];
     __slowMotionsCount += ((NSInteger)(count));
 }
@@ -449,6 +452,19 @@ static ODClassType* _TRGameDirector_type;
 
 - (void)shareToTwitter {
     [[self shareDialog] displayTwitter];
+}
+
+- (id<CNSeq>)slowMotionPrices {
+    return (@[tuple(@20, @"$1.99"), tuple(@50, @"$3.99"), tuple(@200, @"$9.99")]);
+}
+
+- (void)closeShop {
+    [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
+        if(((TRLevel*)(level)).slowMotionShop) {
+            ((TRLevel*)(level)).slowMotionShop = NO;
+            [[EGDirector current] resume];
+        }
+    }];
 }
 
 - (ODClassType*)type {

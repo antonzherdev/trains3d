@@ -169,8 +169,11 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)reshapeWithViewport:(GERect)viewport;
+- (void)drawBuyButtonCount:(NSUInteger)count price:(NSString*)price rect:(GERect)rect;
 - (void)drawShareButtonTexture:(EGTexture*)texture name:(NSString*)name count:(NSUInteger)count rect:(GERect)rect;
+- (void)drawButtonBackgroundRect:(GERect)rect;
 - (void)drawSnailCount:(NSUInteger)count rect:(GERect)rect;
+- (void)drawCloseButtonRect:(GERect)rect;
 - (void)draw;
 - (BOOL)tapEvent:(id<EGEvent>)event;
 + (ODClassType*)type;

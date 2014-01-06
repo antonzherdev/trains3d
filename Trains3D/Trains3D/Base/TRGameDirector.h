@@ -72,11 +72,14 @@
 - (void)checkLastSlowMotions;
 - (EGShareDialog*)shareDialog;
 - (void)buySlowMotionsCount:(NSUInteger)count;
+- (void)boughtSlowMotionsCount:(NSUInteger)count;
 - (void)share;
 - (BOOL)isShareToFacebookAvailable;
 - (void)shareToFacebook;
 - (BOOL)isShareToTwitterAvailable;
 - (void)shareToTwitter;
+- (id<CNSeq>)slowMotionPrices;
+- (void)closeShop;
 + (TRGameDirector*)instance;
 + (CNNotificationHandle*)playerScoreRetrieveNotification;
 + (NSInteger)facebookShareRate;
