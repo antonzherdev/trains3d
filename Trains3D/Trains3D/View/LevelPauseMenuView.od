@@ -294,42 +294,44 @@ class HelpView(level : Level) extends PauseView {
 
 class SlowMotionShopMenu extends PauseView {
     val shop = scaledTextureFor("Shop", "png")
-    private val snail = shop.region(0, 0, 63, 64)
 
-    val snailFont = fontWith(name = "lucida_grande", size = 36)
     val shareFont = fontWith(name = "lucida_grande", size = 18)
     def reshapeWith(viewport : Rect) {}
 
     def drawBuyButton(count : uint, price : string, rect : Rect) {
-        drawSnail(count, rect)
+        drawSnail(vec3(0.95, 1.0, 0.95), count, rect)
         shareFont.draw(price, at = rect.p(0.5, 0.1) + vec2(0, 16), TextAlignment(0, 0), color = vec4(0.1, 0.1, 0.1, 1))
     }
 
-    def drawShareButton(texture : Texture, name : string, count : uint, rect : Rect) {
-        drawSnail(count, rect)
+    def drawShareButton(color : vec3, texture : Texture, name : string, count : uint, rect : Rect) {
+        drawSnail(color, count, rect)
 
         val pos = rect.p(0.1, 0.1)
         D2D.drawSprite(texture, at = vec3(pos, 0), rect = Rect(0, 0, 32, 32))
         shareFont.draw(name, at = pos + vec2(36, 18), TextAlignment(-1, 0), color = vec4(0.1, 0.1, 0.1, 1))
     }
 
-    def drawButtonBackground(rect : Rect) {
-        D2D.drawSprite(vec4(1, 1, 1, 0.9), at = vec3(rect.p, 0), rect = Rect(0, 0, rect.size - vec2(2, 2)))
+    def drawButtonBackground(color : vec3, rect : Rect) {
+        D2D.drawSprite(vec4(color, 0.9), at = vec3(rect.p, 0), rect = Rect(0, 0, rect.size - vec2(2, 2)))
     }
-    def drawSnail(count : uint, rect : Rect) {
-        drawButtonBackground(rect)
+    def drawSnail(color : vec3, count : uint, rect : Rect) {
+        if(count != 10 && count != 20 && count != 50 && count != 200) return nil
 
-        val text = "$count"
-        val textSize = snailFont.measureC(text)
-        val pos = rect.p(0.5, 0.6) - vec2(34 + textSize.x/2, 0)
+        drawButtonBackground(color, rect)
 
-        snailFont.draw(text, at = pos, TextAlignment(-1, 0), color = vec4(0.1, 0.1, 0.1, 1))
-        D2D.drawSprite(snail, at = vec3(pos + vec2(textSize.x + 4, 0) , 0), rect = Rect(0, -32, 63, 64))
+        val pos = rect.p(0.5, 0.6)
+
+        val snailPos =
+            if(count == 10) vec2(0, 128)
+            else if(count == 20) vec2(128, 128)
+            else if(count == 50) vec2(128, 64)
+            else vec2(0, 64)
+        D2D.drawSprite(shop.region(snailPos.x, snailPos.y, 128, 64), at = vec3(pos , 0), rect = Rect(-64, -32, 128, 64))
     }
 
     def drawCloseButton(rect : Rect) {
-        drawButtonBackground(rect)
-        D2D.drawSprite(shop.region(0, 64, 64, 64), at = rect.p(0.5, 0.5), rect = Rect(-32, -32, 64, 64))
+        drawButtonBackground(vec3(0.95, 0.95, 0.95), rect)
+        D2D.drawSprite(shop.region(0, 0, 64, 64), at = rect.p(0.5, 0.5), rect = Rect(-32, -32, 64, 64))
     }
 
     private val buttonSize = vec2(150, 150)
@@ -337,9 +339,9 @@ class SlowMotionShopMenu extends PauseView {
     def draw {
         val buttons : [(() -> bool, Button)] = [
             (() -> GameDirector.instance.isShareToFacebookAvailable,
-                Button(drawShareButton(shop.region(64, 0,  32, 32), "Facebook", GameDirector.facebookShareRate, _), GameDirector.instance.shareToFacebook)),
+                Button(drawShareButton(vec3(0.92, 0.95, 1.0), shop.region(128, 0,  32, 32), "Facebook", GameDirector.facebookShareRate, _), GameDirector.instance.shareToFacebook)),
             (() -> GameDirector.instance.isShareToTwitterAvailable,
-                Button(drawShareButton(shop.region(64, 32, 32, 32), "Twitter",  GameDirector.twitterShareRate, _), GameDirector.instance.shareToTwitter))
+                Button(drawShareButton(vec3(0.92, 0.95, 1.0), shop.region(160, 0, 32, 32), "Twitter",  GameDirector.twitterShareRate, _), GameDirector.instance.shareToTwitter))
             ] + GameDirector.instance.slowMotionPrices.chain.map{item ->
                 (() -> true, Button(rect -> drawBuyButton(count = item.a, price = item.b.map(_.price).getOr(""), rect),
                     item.b.for(GameDirector.instance.buySlowMotions(_))) )

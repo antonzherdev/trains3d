@@ -26,7 +26,6 @@
 @class TRScore;
 @class EGLocalPlayerScore;
 @class TRHelp;
-@class EGTextureRegion;
 @class EGInAppProduct;
 
 @class TRLevelPauseMenuView;
@@ -164,7 +163,6 @@
 
 @interface TRSlowMotionShopMenu : TRPauseView
 @property (nonatomic, readonly) EGTexture* shop;
-@property (nonatomic, readonly) EGFont* snailFont;
 @property (nonatomic, readonly) EGFont* shareFont;
 
 + (id)slowMotionShopMenu;
@@ -172,9 +170,9 @@
 - (ODClassType*)type;
 - (void)reshapeWithViewport:(GERect)viewport;
 - (void)drawBuyButtonCount:(NSUInteger)count price:(NSString*)price rect:(GERect)rect;
-- (void)drawShareButtonTexture:(EGTexture*)texture name:(NSString*)name count:(NSUInteger)count rect:(GERect)rect;
-- (void)drawButtonBackgroundRect:(GERect)rect;
-- (void)drawSnailCount:(NSUInteger)count rect:(GERect)rect;
+- (void)drawShareButtonColor:(GEVec3)color texture:(EGTexture*)texture name:(NSString*)name count:(NSUInteger)count rect:(GERect)rect;
+- (void)drawButtonBackgroundColor:(GEVec3)color rect:(GERect)rect;
+- (void)drawSnailColor:(GEVec3)color count:(NSUInteger)count rect:(GERect)rect;
 - (void)drawCloseButtonRect:(GERect)rect;
 - (void)draw;
 - (BOOL)tapEvent:(id<EGEvent>)event;
