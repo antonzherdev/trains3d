@@ -173,7 +173,7 @@ class GameDirector {
         GameCenter.instance.authenticate
 //        cloud.keepMax("$(cloudPrefix)maxLevel", 16)
 //        clearTutorial
-        local.set("boughtSlowMotions", i = 0)
+//        local.set("boughtSlowMotions", i = 0)
 
         if(daySlowMotions > maxDaySlowMotions) local.set("daySlowMotions", i = maxDaySlowMotions)
         val fullDayCount = lastSlowMotions.count + daySlowMotions
