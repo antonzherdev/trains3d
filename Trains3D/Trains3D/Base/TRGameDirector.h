@@ -27,12 +27,12 @@
 @class TRLevelChooseMenu;
 @class EGEMail;
 @class EGCounter;
-@class EGInAppProduct;
-@class EGInApp;
 @class EGLengthCounter;
 @class EGShareDialog;
 @class EGShareContent;
 @class EGShareChannel;
+@class EGInAppProduct;
+@class EGInApp;
 
 @class TRGameDirector;
 
@@ -90,6 +90,7 @@
 - (id<CNSeq>)slowMotionPrices;
 - (void)forLevelF:(void(^)(TRLevel*))f;
 - (void)closeShop;
+- (void)loadProducts;
 - (void)openShop;
 + (TRGameDirector*)instance;
 + (CNNotificationHandle*)playerScoreRetrieveNotification;

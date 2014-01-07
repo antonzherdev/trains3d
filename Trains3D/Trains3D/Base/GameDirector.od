@@ -320,14 +320,7 @@ class GameDirector {
         if(level.slowMotionCounter.isStopped) {
             if(_slowMotionsCount <= 0) {
                 TestFlight.pass("Shop")
-                InApp.loadProducts(slowMotionsInApp.chain.map(_.a).toArray) {products ->
-                    _slowMotionPrices = products.chain
-                        .sortBy.asc(_.id).endSort
-                        .map{product ->
-                            (slowMotionsInApp.find(_.a == product.id).get.b, Option.some(product))
-                        }.toArray
-                    Director.current.redraw
-                }
+                loadProducts
                 level.slowMotionShop = 1
                 Director.current.pause
                 return nil
@@ -444,8 +437,21 @@ class GameDirector {
         }
     }
 
+    def loadProducts {
+        InApp.loadProducts(slowMotionsInApp.chain.map(_.a).toArray) {products ->
+            _slowMotionPrices = products.chain
+                .sortBy.asc(_.id).endSort
+                .map{product ->
+                    (slowMotionsInApp.find(_.a == product.id).get.b, Option.some(product))
+                }.toArray
+            Director.current.redraw
+        }
+    }
+
     def openShop {
         forLevel{level ->
+            TestFlight.pass("Shop from pause")
+            loadProducts
             level.slowMotionShop = 2
             Director.current.redraw
         }

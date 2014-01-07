@@ -23,9 +23,9 @@
 #import "TRSceneFactory.h"
 #import "TRLevelChooseMenu.h"
 #import "EGEMail.h"
-#import "EGInAppPlat.h"
 #import "EGSharePlat.h"
 #import "EGShare.h"
+#import "EGInAppPlat.h"
 @implementation TRGameDirector{
     NSString* _gameCenterPrefix;
     NSString* _gameCenterAchievementPrefix;
@@ -413,18 +413,7 @@ static ODClassType* _TRGameDirector_type;
     if([level.slowMotionCounter isStopped]) {
         if(__slowMotionsCount <= 0) {
             [TestFlight passCheckpoint:@"Shop"];
-            [EGInApp loadProductsIds:[[[_slowMotionsInApp chain] map:^NSString*(CNTuple* _) {
-                return ((CNTuple*)(_)).a;
-            }] toArray] callback:^void(id<CNSeq> products) {
-                __slowMotionPrices = [[[[[[products chain] sortBy] ascBy:^NSString*(EGInAppProduct* _) {
-                    return ((EGInAppProduct*)(_)).id;
-                }] endSort] map:^CNTuple*(EGInAppProduct* product) {
-                    return tuple(((CNTuple*)([[_slowMotionsInApp findWhere:^BOOL(CNTuple* _) {
-                        return [((CNTuple*)(_)).a isEqual:((EGInAppProduct*)(product)).id];
-                    }] get])).b, [CNOption someValue:product]);
-                }] toArray];
-                [[EGDirector current] redraw];
-            }];
+            [self loadProducts];
             level.slowMotionShop = 1;
             [[EGDirector current] pause];
             return ;
@@ -542,8 +531,26 @@ static ODClassType* _TRGameDirector_type;
     }];
 }
 
+- (void)loadProducts {
+    [EGInApp loadProductsIds:[[[_slowMotionsInApp chain] map:^NSString*(CNTuple* _) {
+        return ((CNTuple*)(_)).a;
+    }] toArray] callback:^void(id<CNSeq> products) {
+        __slowMotionPrices = [[[[[[products chain] sortBy] ascBy:^NSString*(EGInAppProduct* _) {
+            return ((EGInAppProduct*)(_)).id;
+        }] endSort] map:^CNTuple*(EGInAppProduct* product) {
+            return tuple(((CNTuple*)([[_slowMotionsInApp findWhere:^BOOL(CNTuple* _) {
+                return [((CNTuple*)(_)).a isEqual:((EGInAppProduct*)(product)).id];
+            }] get])).b, [CNOption someValue:product]);
+        }] toArray];
+        [[EGDirector current] redraw];
+    }];
+}
+
 - (void)openShop {
+    __weak TRGameDirector* _weakSelf = self;
     [self forLevelF:^void(TRLevel* level) {
+        [TestFlight passCheckpoint:@"Shop from pause"];
+        [_weakSelf loadProducts];
         level.slowMotionShop = 2;
         [[EGDirector current] redraw];
     }];
