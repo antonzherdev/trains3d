@@ -15,14 +15,15 @@
 #import "EGCameraIso.h"
 #import "EGDirector.h"
 #import "EGScene.h"
+#import "EGInAppPlat.h"
+#import "EGInApp.h"
+#import "EGAlert.h"
 #import "SDSoundDirector.h"
 #import "EGRate.h"
 #import "EGGameCenter.h"
 #import "TRSceneFactory.h"
 #import "TRLevelChooseMenu.h"
 #import "EGEMail.h"
-#import "EGInApp.h"
-#import "EGInAppPlat.h"
 #import "EGSharePlat.h"
 #import "EGShare.h"
 @implementation TRGameDirector{
@@ -30,6 +31,7 @@
     NSString* _gameCenterAchievementPrefix;
     NSString* _inAppPrefix;
     NSString* _cloudPrefix;
+    id<CNSeq> _slowMotionsInApp;
     NSInteger _maxDaySlowMotions;
     NSInteger _slowMotionRestorePeriod;
     DTLocalKeyValueStorage* _local;
@@ -43,6 +45,7 @@
     CNNotificationObserver* _lineAdviceObs;
     CNNotificationObserver* _slowMotionHelpObs;
     CNNotificationObserver* _zoomHelpObs;
+    CNNotificationObserver* _inAppObs;
     CNNotificationObserver* _crashObs;
     CNNotificationObserver* _knockDownObs;
     NSInteger __slowMotionsCount;
@@ -57,6 +60,7 @@ static ODClassType* _TRGameDirector_type;
 @synthesize gameCenterAchievementPrefix = _gameCenterAchievementPrefix;
 @synthesize inAppPrefix = _inAppPrefix;
 @synthesize cloudPrefix = _cloudPrefix;
+@synthesize slowMotionsInApp = _slowMotionsInApp;
 @synthesize maxDaySlowMotions = _maxDaySlowMotions;
 @synthesize slowMotionRestorePeriod = _slowMotionRestorePeriod;
 @synthesize local = _local;
@@ -75,8 +79,9 @@ static ODClassType* _TRGameDirector_type;
         _gameCenterAchievementPrefix = @"grp.com.antonzherdev.Train3D";
         _inAppPrefix = ((egPlatform().isComputer) ? @"com.antonzherdev.Trains3D" : @"com.antonzherdev.Trains3Di");
         _cloudPrefix = @"";
+        _slowMotionsInApp = (@[tuple([NSString stringWithFormat:@"%@.Slow1", _inAppPrefix], @20), tuple([NSString stringWithFormat:@"%@.Slow2", _inAppPrefix], @50), tuple([NSString stringWithFormat:@"%@.Slow3", _inAppPrefix], @200)]);
         _maxDaySlowMotions = 5;
-        _slowMotionRestorePeriod = 60 * 60 * 12;
+        _slowMotionRestorePeriod = 60 * 60 * 24;
         _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1, @"lastSlowMotions" : (@[]), @"daySlowMotions" : numi(_maxDaySlowMotions), @"boughtSlowMotions" : @0})];
         _resolveMaxLevel = ^id(id a, id b) {
             id v = DTConflict.resolveMax(a, b);
@@ -145,6 +150,32 @@ static ODClassType* _TRGameDirector_type;
                 [_weakSelf.cloud setKey:@"help.zoom" i:1];
             }
         }];
+        _inAppObs = [EGInApp.transactionNotification observeBy:^void(EGInAppTransaction* transaction, EGInAppTransactionState* state) {
+            if(state == EGInAppTransactionState.purchased) {
+                [[_weakSelf.slowMotionsInApp findWhere:^BOOL(CNTuple* _) {
+                    return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
+                }] forEach:^void(CNTuple* item) {
+                    [_weakSelf boughtSlowMotionsCount:unumui(((CNTuple*)(item)).b)];
+                    [((EGInAppTransaction*)(transaction)) finish];
+                    if([[EGDirector current] isPaused]) [_weakSelf forLevelF:^void(TRLevel* level) {
+                        if(level.slowMotionShop) {
+                            level.slowMotionShop = NO;
+                            [[EGDirector current] resume];
+                            [_weakSelf runSlowMotionLevel:level];
+                        }
+                    }];
+                }];
+            } else {
+                if(state == EGInAppTransactionState.failed) {
+                    BOOL paused = [[EGDirector current] isPaused];
+                    if(!(paused)) [[EGDirector current] pause];
+                    [EGAlert showErrorTitle:[TRStr.Loc error] message:[((EGInAppTransaction*)(transaction)).error get] callback:^void() {
+                        [((EGInAppTransaction*)(transaction)) finish];
+                        if(!(paused)) [[EGDirector current] resume];
+                    }];
+                }
+            }
+        }];
         _crashObs = [TRLevel.crashNotification observeBy:^void(TRLevel* level, id<CNSeq> trains) {
             [TRGameDirector.instance destroyTrainsTrains:trains];
         }];
@@ -157,7 +188,9 @@ static ODClassType* _TRGameDirector_type;
             }
         }];
         __slowMotionsCount = 0;
-        __slowMotionPrices = (@[tuple(@20, @""), tuple(@50, @""), tuple(@200, @"")]);
+        __slowMotionPrices = [[[_slowMotionsInApp chain] map:^CNTuple*(CNTuple* _) {
+            return tuple(((CNTuple*)(_)).b, [CNOption none]);
+        }] toArray];
         [self _init];
     }
     
@@ -244,12 +277,13 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)restartLevel {
-    [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
-        if(((TRLevel*)(level)).number == 16 && [self isNeedRate]) {
-            ((TRLevel*)(level)).rate = YES;
+    __weak TRGameDirector* _weakSelf = self;
+    [self forLevelF:^void(TRLevel* level) {
+        if(level.number == 16 && [_weakSelf isNeedRate]) {
+            level.rate = YES;
             [[EGDirector current] redraw];
         } else {
-            [self setLevel:((NSInteger)(((TRLevel*)(level)).number))];
+            [_weakSelf setLevel:((NSInteger)(level.number))];
             [[EGDirector current] resume];
         }
     }];
@@ -264,13 +298,14 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)nextLevel {
-    [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
-        if([self isNeedRate]) {
+    __weak TRGameDirector* _weakSelf = self;
+    [self forLevelF:^void(TRLevel* level) {
+        if([_weakSelf isNeedRate]) {
             [TestFlight passCheckpoint:@"Show rate dialog"];
-            ((TRLevel*)(level)).rate = YES;
+            level.rate = YES;
             [[EGDirector current] redraw];
         } else {
-            [self setLevel:((NSInteger)(((TRLevel*)(level)).number + 1))];
+            [_weakSelf setLevel:((NSInteger)(level.number + 1))];
             [[EGDirector current] resume];
         }
     }];
@@ -308,15 +343,16 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)showSupportChangeLevel:(BOOL)changeLevel {
+    __weak TRGameDirector* _weakSelf = self;
     [TestFlight passCheckpoint:@"Show support"];
     NSString* text = [@"\n"
         "\n"
         "> " stringByAppendingString:[[TRStr.Loc supportEmailText] replaceOccurrences:@"\n" withString:@"\n"
         "> "]];
     NSString* htmlText = [[text replaceOccurrences:@">" withString:@"&gt;"] replaceOccurrences:@"\n" withString:@"<br/>\n"];
-    [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
+    [self forLevelF:^void(TRLevel* level) {
         [EGEMail.instance showInterfaceTo:@"support@raildale.com" subject:[NSString stringWithFormat:@"Raildale - %lu", (unsigned long)oduIntRnd()] text:text htmlText:[NSString stringWithFormat:@"<small><i>%@</i></small>", htmlText]];
-        if(changeLevel) [self setLevel:((NSInteger)(((TRLevel*)(level)).number + 1))];
+        if(changeLevel) [_weakSelf setLevel:((NSInteger)(level.number + 1))];
     }];
 }
 
@@ -325,10 +361,11 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)showRate {
+    __weak TRGameDirector* _weakSelf = self;
     [TestFlight passCheckpoint:@"Rate"];
-    [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
+    [self forLevelF:^void(TRLevel* level) {
         [EGRate.instance showRate];
-        [self setLevel:((NSInteger)(((TRLevel*)(level)).number + 1))];
+        [_weakSelf setLevel:((NSInteger)(level.number + 1))];
     }];
 }
 
@@ -364,11 +401,15 @@ static ODClassType* _TRGameDirector_type;
     if([level.slowMotionCounter isStopped]) {
         if(__slowMotionsCount <= 0) {
             [TestFlight passCheckpoint:@"Shop"];
-            [EGInApp loadProductsIds:(@[[NSString stringWithFormat:@"%@.Slow1", _inAppPrefix], [NSString stringWithFormat:@"%@.Slow2", _inAppPrefix], [NSString stringWithFormat:@"%@.Slow3", _inAppPrefix]]) callback:^void(id<CNSeq> products) {
+            [EGInApp loadProductsIds:[[[_slowMotionsInApp chain] map:^NSString*(CNTuple* _) {
+                return ((CNTuple*)(_)).a;
+            }] toArray] callback:^void(id<CNSeq> products) {
                 __slowMotionPrices = [[[[[[products chain] sortBy] ascBy:^NSString*(EGInAppProduct* _) {
                     return ((EGInAppProduct*)(_)).id;
                 }] endSort] map:^CNTuple*(EGInAppProduct* product) {
-                    return tuple(numi((([((EGInAppProduct*)(product)).id isEqual:[NSString stringWithFormat:@"%@.Slow1", _inAppPrefix]]) ? 20 : (([((EGInAppProduct*)(product)).id isEqual:[NSString stringWithFormat:@"%@.Slow2", _inAppPrefix]]) ? 50 : 200))), ((EGInAppProduct*)(product)).price);
+                    return tuple(((CNTuple*)([[_slowMotionsInApp findWhere:^BOOL(CNTuple* _) {
+                        return [((CNTuple*)(_)).a isEqual:((EGInAppProduct*)(product)).id];
+                    }] get])).b, [CNOption someValue:product]);
                 }] toArray];
                 [[EGDirector current] redraw];
             }];
@@ -417,6 +458,7 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (EGShareDialog*)shareDialog {
+    __weak TRGameDirector* _weakSelf = self;
     NSString* url = @"http://get.raildale.com/?x=a";
     return [[[[EGShareContent applyText:[TRStr.Loc shareTextUrl:url] image:[CNOption applyValue:@"Share.jpg"]] twitterText:[TRStr.Loc twitterTextUrl:url]] emailText:[TRStr.Loc shareTextUrl:url] subject:[TRStr.Loc shareSubject]] dialogShareHandler:^void(EGShareChannel* shareChannel) {
         if(shareChannel == EGShareChannel.facebook && [_cloud intForKey:@"share.facebook"] == 0) {
@@ -428,19 +470,20 @@ static ODClassType* _TRGameDirector_type;
                 [self boughtSlowMotionsCount:((NSUInteger)(_TRGameDirector_twitterShareRate))];
             }
         }
-        [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
-            if(((TRLevel*)(level)).slowMotionShop) {
-                ((TRLevel*)(level)).slowMotionShop = NO;
+        [self forLevelF:^void(TRLevel* level) {
+            if(level.slowMotionShop) {
+                level.slowMotionShop = NO;
                 [[EGDirector current] resume];
-                [self runSlowMotionLevel:level];
+                [_weakSelf runSlowMotionLevel:level];
             }
         }];
     } cancelHandler:^void() {
     }];
 }
 
-- (void)buySlowMotionsCount:(NSUInteger)count {
-    [TestFlight passCheckpoint:[NSString stringWithFormat:@"buySlowMotions %lu", (unsigned long)count]];
+- (void)buySlowMotionsProduct:(EGInAppProduct*)product {
+    [TestFlight passCheckpoint:[NSString stringWithFormat:@"buySlowMotions %@", product.id]];
+    [product buy];
 }
 
 - (void)boughtSlowMotionsCount:(NSUInteger)count {
@@ -475,10 +518,14 @@ static ODClassType* _TRGameDirector_type;
     return __slowMotionPrices;
 }
 
+- (void)forLevelF:(void(^)(TRLevel*))f {
+    [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:f];
+}
+
 - (void)closeShop {
-    [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:^void(TRLevel* level) {
-        if(((TRLevel*)(level)).slowMotionShop) {
-            ((TRLevel*)(level)).slowMotionShop = NO;
+    [self forLevelF:^void(TRLevel* level) {
+        if(level.slowMotionShop) {
+            level.slowMotionShop = NO;
             [[EGDirector current] resume];
         }
     }];

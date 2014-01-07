@@ -100,6 +100,10 @@ static ODClassType* _TREnStrings_type;
     else return @"Tap to continue";
 }
 
+- (NSString*)error {
+    return @"Error";
+}
+
 - (NSString*)colorOrange {
     return @"orange";
 }
@@ -460,6 +464,10 @@ static ODClassType* _TRRuStrings_type;
 - (NSString*)tapToContinue {
     if(egPlatform().isComputer) return @"Кликните для продолжения";
     else return @"Нажмите для продолжения";
+}
+
+- (NSString*)error {
+    return @"Ошибка";
 }
 
 - (NSString*)colorOrange {

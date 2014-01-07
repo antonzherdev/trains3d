@@ -17,6 +17,10 @@
 @class EGDirector;
 @class EGScene;
 @protocol EGController;
+@class EGInApp;
+@class EGInAppTransactionState;
+@class EGInAppTransaction;
+@class EGAlert;
 @class SDSoundDirector;
 @class EGRate;
 @class EGLocalPlayerScore;
@@ -25,7 +29,6 @@
 @class EGEMail;
 @class EGCounter;
 @class EGInAppProduct;
-@class EGInApp;
 @class EGLengthCounter;
 @class EGShareDialog;
 @class EGShareContent;
@@ -38,6 +41,7 @@
 @property (nonatomic, readonly) NSString* gameCenterAchievementPrefix;
 @property (nonatomic, readonly) NSString* inAppPrefix;
 @property (nonatomic, readonly) NSString* cloudPrefix;
+@property (nonatomic, readonly) id<CNSeq> slowMotionsInApp;
 @property (nonatomic, readonly) NSInteger maxDaySlowMotions;
 @property (nonatomic, readonly) NSInteger slowMotionRestorePeriod;
 @property (nonatomic, readonly) DTLocalKeyValueStorage* local;
@@ -75,7 +79,7 @@
 - (void)runSlowMotionLevel:(TRLevel*)level;
 - (void)checkLastSlowMotions;
 - (EGShareDialog*)shareDialog;
-- (void)buySlowMotionsCount:(NSUInteger)count;
+- (void)buySlowMotionsProduct:(EGInAppProduct*)product;
 - (void)boughtSlowMotionsCount:(NSUInteger)count;
 - (void)share;
 - (BOOL)isShareToFacebookAvailable;
@@ -83,6 +87,7 @@
 - (BOOL)isShareToTwitterAvailable;
 - (void)shareToTwitter;
 - (id<CNSeq>)slowMotionPrices;
+- (void)forLevelF:(void(^)(TRLevel*))f;
 - (void)closeShop;
 + (TRGameDirector*)instance;
 + (CNNotificationHandle*)playerScoreRetrieveNotification;

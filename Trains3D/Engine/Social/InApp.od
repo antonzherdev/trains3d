@@ -1,3 +1,20 @@
 package com.antonzherdev.eg
 
-class InAppProduct(id : string, name : string, price : string)
+class InAppProduct(id : string, name : string, price : string) {
+    def buy {
+        buy(1)
+    }
+
+    def buy(quantity : uint)
+}
+
+class InAppTransaction(productId : string, quantity : uint, error : string?) {
+    def finish
+}
+
+enum InAppTransactionState {
+    purchasing()
+    purchased()
+    failed()
+    restored()
+}

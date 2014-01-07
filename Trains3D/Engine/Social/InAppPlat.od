@@ -1,5 +1,8 @@
 package com.antonzherdev.eg
 
 stub class InApp {
-    static def loadProducts(ids : [string], callback :  [InAppProduct] -> void)
+   static val transactionNotification = NotificationHandle<InAppTransaction, InAppTransactionState>("InApp.transactionNotification")
+
+   static def loadProducts(ids : [string], callback :  [InAppProduct] -> void)
 }
+

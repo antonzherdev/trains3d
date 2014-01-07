@@ -27,6 +27,7 @@
 @class EGLocalPlayerScore;
 @class TRHelp;
 @class EGTextureRegion;
+@class EGInAppProduct;
 
 @class TRLevelPauseMenuView;
 @class TRPauseView;

@@ -338,7 +338,8 @@ class SlowMotionShopMenu extends PauseView {
             (() -> GameDirector.instance.isShareToTwitterAvailable,
                 Button(drawShareButton(shop.region(64, 32, 32, 32), "Twitter",  GameDirector.twitterShareRate, _), GameDirector.instance.shareToTwitter))
             ] + GameDirector.instance.slowMotionPrices.chain.map{item ->
-                (() -> true, Button(drawBuyButton(count = item.a, price = item.b, _), GameDirector.instance.buySlowMotions(item.a)) )
+                (() -> true, Button(rect -> drawBuyButton(count = item.a, price = item.b.map(_.price).getOr(""), rect),
+                    item.b.for(GameDirector.instance.buySlowMotions(_))) )
             }.toArray +
             [(() -> true, Button(drawCloseButton(_), GameDirector.instance.closeShop) )]
 

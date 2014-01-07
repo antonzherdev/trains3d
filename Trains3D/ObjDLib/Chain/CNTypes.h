@@ -127,7 +127,13 @@ static inline void* copy(void * mem, NSUInteger len) {
 
 
 
-#define tuple(anA, aB) [CNTuple tupleWithA:anA b: aB]
-#define tuple3(anA, aB, aC) [CNTuple3 tuple3WithA:anA b: aB c:aC]
-#define tuple4(anA, aB, aC, aD) [CNTuple4 tuple4WithA:anA b: aB c:aC d:aD]
-#
+static inline CNTuple* tuple(id anA, id aB) {
+    return [CNTuple tupleWithA:anA b: aB];
+}
+static inline CNTuple3* tuple3(id anA, id aB, id aC) {
+    return [CNTuple3 tuple3WithA:anA b: aB c:aC];
+}
+static inline CNTuple4* tuple4(id anA, id aB, id aC, id aD) {
+    return [CNTuple4 tuple4WithA:anA b: aB c:aC d:aD];
+}
+

@@ -8,9 +8,11 @@ class GameDirector {
     val gameCenterAchievementPrefix = "grp.com.antonzherdev.Train3D"
     val inAppPrefix = if(egPlatform.isComputer) "com.antonzherdev.Trains3D" else "com.antonzherdev.Trains3Di"
     val cloudPrefix = ""
+    val slowMotionsInApp : [(string, uint)] = [("$inAppPrefix.Slow1", 20), ("$inAppPrefix.Slow2", 50), ("$inAppPrefix.Slow3", 200)]
+
 
     val maxDaySlowMotions = 5
-    val slowMotionRestorePeriod = 60*60*12
+    val slowMotionRestorePeriod = 60*60*24
     static val instance : GameDirector = GameDirector()
 
     val local = LocalKeyValueStorage([("currentLevel", 1), ("soundEnabled", 1),
@@ -101,6 +103,31 @@ class GameDirector {
         }
     }
 
+    private val inAppObs = InApp.transactionNotification.observe { transaction, state ->
+        if(state == InAppTransactionState.purchased) {
+            slowMotionsInApp.find(_.a == transaction.productId).for { item ->
+                boughtSlowMotions(item.b)
+                transaction.finish
+                if(Director.current.isPaused) {
+                    forLevel { level ->
+                        if(level.slowMotionShop) {
+                            level.slowMotionShop = false
+                            Director.current.resume
+                            runSlowMotion(level)
+                        }
+                    }
+                }
+            }
+        } else if(state == InAppTransactionState.failed) {
+            val paused = Director.current.isPaused
+            if(!paused) Director.current.pause
+            Alert.showError(title = Loc.error, message = transaction.error.get) {
+                transaction.finish
+                if(!paused) Director.current.resume
+            }
+        }
+    }
+
     def clearTutorial {
         cloud.set("help.sporadicDamage", 0)
         cloud.set("help.damage", 0)
@@ -183,7 +210,7 @@ class GameDirector {
     }
 
     def restartLevel {
-        Director.current.scene.get.controller.as<Level>.for{level ->
+        forLevel{level ->
             if(level.number == 16 && isNeedRate) {
                 level.rate = true
                 Director.current.redraw
@@ -201,7 +228,7 @@ class GameDirector {
     }
 
     def nextLevel {
-        Director.current.scene.get.controller.as<Level>.for{level ->
+        forLevel{level ->
             if(isNeedRate) {
                 TestFlight.pass("Show rate dialog")
                 level.rate = true
@@ -247,7 +274,7 @@ class GameDirector {
         TestFlight.pass("Show support")
         val text = "\n\n> " + Loc.supportEmailText.replace("\n", "\n> ")
         val htmlText = text.replace(">", "&gt;").replace("\n", "<br/>\n")
-        Director.current.scene.get.controller.as<Level>.for{level ->
+        forLevel{level ->
             EMail.instance.showInterface(to = "support@raildale.com",
                 subject = "Raildale - $(UInt.rnd)",
                 text = text,
@@ -260,7 +287,7 @@ class GameDirector {
     def isNeedRate : bool = maxAvailableLevel > 6 && Rate.instance.shouldShow(everyVersion = true)
     def showRate {
         TestFlight.pass("Rate")
-        Director.current.scene.get.controller.as<Level>.for{level ->
+        forLevel{level ->
             Rate.instance.showRate
             set(level = level.number + 1)
         }
@@ -286,13 +313,11 @@ class GameDirector {
         if(level.slowMotionCounter.isStopped) {
             if(_slowMotionsCount <= 0) {
                 TestFlight.pass("Shop")
-                InApp.loadProducts(["$inAppPrefix.Slow1", "$inAppPrefix.Slow2", "$inAppPrefix.Slow3"]) {products ->
+                InApp.loadProducts(slowMotionsInApp.chain.map(_.a).toArray) {products ->
                     _slowMotionPrices = products.chain
                         .sortBy.asc(_.id).endSort
                         .map{product ->
-                            (if(product.id == "$inAppPrefix.Slow1") 20
-                             else if(product.id == "$inAppPrefix.Slow2") 50
-                             else 200, product.price)
+                            (slowMotionsInApp.find(_.a == product.id).get.b, Option.some(product))
                         }.toArray
                     Director.current.redraw
                 }
@@ -359,7 +384,7 @@ class GameDirector {
                     cloud.set("share.twitter", i = 1)
                     boughtSlowMotions(twitterShareRate)
                 }
-                Director.current.scene.get.controller.as<Level>.for{level ->
+                forLevel{level ->
                     if(level.slowMotionShop) {
                         level.slowMotionShop = false
                         Director.current.resume
@@ -370,8 +395,9 @@ class GameDirector {
             }, cancelHandler = {})
     }
 
-    def buySlowMotions(count : uint) {
-        TestFlight.pass("buySlowMotions $count")
+    def buySlowMotions(product : InAppProduct) {
+        TestFlight.pass("buySlowMotions $(product.id)")
+        product.buy
     }
 
     def boughtSlowMotions(count : uint) {
@@ -396,11 +422,15 @@ class GameDirector {
         shareDialog.displayTwitter
     }
 
-    private var _slowMotionPrices :  [(uint, string)] = [(20, ""), (50, ""), (200, "")]
+    private var _slowMotionPrices :  [(uint, InAppProduct?)] = slowMotionsInApp.chain.map((_.b, Option.none<InAppProduct>)).toArray
     def slowMotionPrices = _slowMotionPrices
 
+    def forLevel(f : Level -> void) {
+        Director.current.scene.get.controller.as<Level>.for(f)
+    }
+
     def closeShop {
-        Director.current.scene.get.controller.as<Level>.for{level ->
+        forLevel{level ->
             if(level.slowMotionShop) {
                 level.slowMotionShop = false
                 Director.current.resume

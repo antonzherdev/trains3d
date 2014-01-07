@@ -15,6 +15,7 @@
 #import "TRLevelChooseMenu.h"
 #import "TRScore.h"
 #import "EGGameCenter.h"
+#import "EGInApp.h"
 @implementation TRLevelPauseMenuView{
     TRLevel* _level;
     NSString* _name;
@@ -967,10 +968,14 @@ static ODClassType* _TRSlowMotionShopMenu_type;
 }])]) addSeq:[[[[TRGameDirector.instance slowMotionPrices] chain] map:^CNTuple*(CNTuple* item) {
         return tuple(^BOOL() {
             return YES;
-        }, [EGButton buttonWithOnDraw:^void(GERect _) {
-            [self drawBuyButtonCount:unumui(((CNTuple*)(item)).a) price:((CNTuple*)(item)).b rect:_];
+        }, [EGButton buttonWithOnDraw:^void(GERect rect) {
+            [self drawBuyButtonCount:unumui(((CNTuple*)(item)).a) price:[[((CNTuple*)(item)).b mapF:^NSString*(EGInAppProduct* _) {
+                return ((EGInAppProduct*)(_)).price;
+            }] getOrValue:@""] rect:rect];
         } onClick:^void() {
-            [TRGameDirector.instance buySlowMotionsCount:unumui(((CNTuple*)(item)).a)];
+            [((CNTuple*)(item)).b forEach:^void(EGInAppProduct* _) {
+                [TRGameDirector.instance buySlowMotionsProduct:_];
+            }];
         }]);
     }] toArray]] addSeq:(@[tuple(^BOOL() {
     return YES;

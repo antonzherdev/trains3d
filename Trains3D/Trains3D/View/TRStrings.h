@@ -33,6 +33,7 @@
 - (NSString*)moneyOver;
 - (NSString*)result;
 - (NSString*)best;
+- (NSString*)error;
 - (NSString*)supportButton;
 - (NSString*)shareButton;
 - (NSString*)supportEmailText;
@@ -96,6 +97,7 @@
 - (NSString*)moneyOver;
 - (NSString*)cityBuilt;
 - (NSString*)tapToContinue;
+- (NSString*)error;
 - (NSString*)colorOrange;
 - (NSString*)colorGreen;
 - (NSString*)colorPink;
@@ -162,6 +164,7 @@
 - (NSString*)moneyOver;
 - (NSString*)cityBuilt;
 - (NSString*)tapToContinue;
+- (NSString*)error;
 - (NSString*)colorOrange;
 - (NSString*)colorGreen;
 - (NSString*)colorPink;
