@@ -51,6 +51,7 @@
 + (id)gameDirector;
 - (id)init;
 - (ODClassType*)type;
+- (void)closeSlowMotionShop;
 - (void)clearTutorial;
 - (NSInteger)bestScoreLevelNumber:(NSUInteger)levelNumber;
 - (void)destroyTrainsTrains:(id<CNSeq>)trains;
@@ -89,10 +90,12 @@
 - (id<CNSeq>)slowMotionPrices;
 - (void)forLevelF:(void(^)(TRLevel*))f;
 - (void)closeShop;
+- (void)openShop;
 + (TRGameDirector*)instance;
 + (CNNotificationHandle*)playerScoreRetrieveNotification;
 + (NSInteger)facebookShareRate;
 + (NSInteger)twitterShareRate;
++ (CNNotificationHandle*)shareNotification;
 + (ODClassType*)type;
 @end
 

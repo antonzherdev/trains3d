@@ -126,7 +126,7 @@ static ODClassType* _TRLevelRules_type;
     id __help;
     id __result;
     BOOL _rate;
-    BOOL _slowMotionShop;
+    NSInteger _slowMotionShop;
     EGCounter* _slowMotionCounter;
 }
 static NSInteger _TRLevel_trainComingPeriod = 10;
@@ -203,7 +203,7 @@ static ODClassType* _TRLevel_type;
         __help = [CNOption none];
         __result = [CNOption none];
         _rate = NO;
-        _slowMotionShop = NO;
+        _slowMotionShop = 0;
         _slowMotionCounter = [EGEmptyCounter emptyCounter];
     }
     

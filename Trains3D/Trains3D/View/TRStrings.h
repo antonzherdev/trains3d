@@ -34,6 +34,7 @@
 - (NSString*)result;
 - (NSString*)best;
 - (NSString*)error;
+- (NSString*)buyButton;
 - (NSString*)supportButton;
 - (NSString*)shareButton;
 - (NSString*)supportEmailText;
@@ -98,6 +99,7 @@
 - (NSString*)cityBuilt;
 - (NSString*)tapToContinue;
 - (NSString*)error;
+- (NSString*)buyButton;
 - (NSString*)colorOrange;
 - (NSString*)colorGreen;
 - (NSString*)colorPink;
@@ -165,6 +167,7 @@
 - (NSString*)cityBuilt;
 - (NSString*)tapToContinue;
 - (NSString*)error;
+- (NSString*)buyButton;
 - (NSString*)colorOrange;
 - (NSString*)colorGreen;
 - (NSString*)colorPink;

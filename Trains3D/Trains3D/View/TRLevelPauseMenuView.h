@@ -98,6 +98,7 @@
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)draw;
+- (NSInteger)buttonHeight;
 - (BOOL)tapEvent:(id<EGEvent>)event;
 + (ODClassType*)type;
 @end

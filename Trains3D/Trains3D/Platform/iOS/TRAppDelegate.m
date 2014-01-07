@@ -12,10 +12,12 @@
 #import "GL.h"
 #import "EGInApp.h"
 #import "EGInAppPlat.h"
+#import "EGShare.h"
 #import <DistimoSDK/DistimoSDK.h>
 
 @implementation TRAppDelegate {
     CNNotificationObserver *_observer;
+    CNNotificationObserver *_observer2;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -39,6 +41,12 @@
                                              quantity:transaction.quantity];
         }];
         
+    }];
+
+    _observer2 = [[TRGameDirector shareNotification] observeBy:^(id _, EGShareChannel *channel) {
+        NSString *publisher = [NSString stringWithFormat:@"Share %@", channel.name];
+        NSLog(@"Distimo: logBannerClickWithPublisher: %@", publisher);
+        [DistimoSDK logBannerClickWithPublisher:publisher];
     }];
 
     // Override point for customization after application launch.

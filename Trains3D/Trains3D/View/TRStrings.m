@@ -104,6 +104,10 @@ static ODClassType* _TREnStrings_type;
     return @"Error";
 }
 
+- (NSString*)buyButton {
+    return @"Buy slow motions";
+}
+
 - (NSString*)colorOrange {
     return @"orange";
 }
@@ -468,6 +472,10 @@ static ODClassType* _TRRuStrings_type;
 
 - (NSString*)error {
     return @"Ошибка";
+}
+
+- (NSString*)buyButton {
+    return @"Купить замедления";
 }
 
 - (NSString*)colorOrange {

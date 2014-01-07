@@ -348,6 +348,7 @@ static ODClassType* _TRMenuView_type;
     EGButton* _chooseLevelButton;
     EGButton* _leaderboardButton;
     EGButton* _supportButton;
+    EGButton* _buyButton;
     EGButton* _shareButton;
     id<CNSeq> _buttons;
     EGSprite* _soundSprite;
@@ -381,10 +382,13 @@ static ODClassType* _TRPauseMenuView_type;
         _supportButton = [self buttonText:[TRStr.Loc supportButton] onClick:^void() {
             [TRGameDirector.instance showSupportChangeLevel:NO];
         }];
+        _buyButton = [self buttonText:[TRStr.Loc buyButton] onClick:^void() {
+            [TRGameDirector.instance openShop];
+        }];
         _shareButton = [self buttonText:[TRStr.Loc shareButton] onClick:^void() {
             [TRGameDirector.instance share];
         }];
-        _buttons = [(@[_resumeButton, _restartButton, _chooseLevelButton, _leaderboardButton, _supportButton]) addSeq:(([EGShareDialog isSupported]) ? (@[_shareButton]) : (@[]))];
+        _buttons = [[(@[_resumeButton, _restartButton, _chooseLevelButton, _leaderboardButton, _supportButton]) addSeq:(([EGShareDialog isSupported]) ? (@[_shareButton]) : (@[]))] addSeq:(@[_buyButton])];
         _soundSprite = [EGSprite sprite];
     }
     
@@ -404,6 +408,11 @@ static ODClassType* _TRPauseMenuView_type;
     [EGBlendFunction.premultiplied applyDraw:^void() {
         [_soundSprite draw];
     }];
+}
+
+- (NSInteger)buttonHeight {
+    if(egPlatform().isPhone) return 45;
+    else return 50;
 }
 
 - (BOOL)tapEvent:(id<EGEvent>)event {

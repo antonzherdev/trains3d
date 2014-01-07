@@ -318,7 +318,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     }
 
     var rate = false
-    var slowMotionShop = false
+    var slowMotionShop = 0
 
     var slowMotionCounter : Counter = EmptyCounter()
 }

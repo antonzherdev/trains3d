@@ -55,6 +55,7 @@ static TRGameDirector* _TRGameDirector_instance;
 static CNNotificationHandle* _TRGameDirector_playerScoreRetrieveNotification;
 static NSInteger _TRGameDirector_facebookShareRate = 10;
 static NSInteger _TRGameDirector_twitterShareRate = 10;
+static CNNotificationHandle* _TRGameDirector_shareNotification;
 static ODClassType* _TRGameDirector_type;
 @synthesize gameCenterPrefix = _gameCenterPrefix;
 @synthesize gameCenterAchievementPrefix = _gameCenterAchievementPrefix;
@@ -157,13 +158,7 @@ static ODClassType* _TRGameDirector_type;
                 }] forEach:^void(CNTuple* item) {
                     [_weakSelf boughtSlowMotionsCount:unumui(((CNTuple*)(item)).b)];
                     [((EGInAppTransaction*)(transaction)) finish];
-                    if([[EGDirector current] isPaused]) [_weakSelf forLevelF:^void(TRLevel* level) {
-                        if(level.slowMotionShop) {
-                            level.slowMotionShop = NO;
-                            [[EGDirector current] resume];
-                            [_weakSelf runSlowMotionLevel:level];
-                        }
-                    }];
+                    [_weakSelf closeSlowMotionShop];
                 }];
             } else {
                 if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.failed) {
@@ -202,6 +197,23 @@ static ODClassType* _TRGameDirector_type;
     _TRGameDirector_type = [ODClassType classTypeWithCls:[TRGameDirector class]];
     _TRGameDirector_instance = [TRGameDirector gameDirector];
     _TRGameDirector_playerScoreRetrieveNotification = [CNNotificationHandle notificationHandleWithName:@"playerScoreRetrieveNotification"];
+    _TRGameDirector_shareNotification = [CNNotificationHandle notificationHandleWithName:@"GameDirector.shareNotification"];
+}
+
+- (void)closeSlowMotionShop {
+    __weak TRGameDirector* _weakSelf = self;
+    if([[EGDirector current] isPaused]) [self forLevelF:^void(TRLevel* level) {
+        if(level.slowMotionShop == 1) {
+            level.slowMotionShop = 0;
+            [[EGDirector current] resume];
+            [_weakSelf runSlowMotionLevel:level];
+        } else {
+            if(level.slowMotionShop == 2) {
+                level.slowMotionShop = 0;
+                [[EGDirector current] redraw];
+            }
+        }
+    }];
 }
 
 - (void)clearTutorial {
@@ -413,7 +425,7 @@ static ODClassType* _TRGameDirector_type;
                 }] toArray];
                 [[EGDirector current] redraw];
             }];
-            level.slowMotionShop = YES;
+            level.slowMotionShop = 1;
             [[EGDirector current] pause];
             return ;
         }
@@ -458,7 +470,6 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (EGShareDialog*)shareDialog {
-    __weak TRGameDirector* _weakSelf = self;
     NSString* url = @"http://get.raildale.com/?x=a";
     return [[[[EGShareContent applyText:[TRStr.Loc shareTextUrl:url] image:[CNOption applyValue:@"Share.jpg"]] twitterText:[TRStr.Loc twitterTextUrl:url]] emailText:[TRStr.Loc shareTextUrl:url] subject:[TRStr.Loc shareSubject]] dialogShareHandler:^void(EGShareChannel* shareChannel) {
         if(shareChannel == EGShareChannel.facebook && [_cloud intForKey:@"share.facebook"] == 0) {
@@ -470,13 +481,8 @@ static ODClassType* _TRGameDirector_type;
                 [self boughtSlowMotionsCount:((NSUInteger)(_TRGameDirector_twitterShareRate))];
             }
         }
-        [self forLevelF:^void(TRLevel* level) {
-            if(level.slowMotionShop) {
-                level.slowMotionShop = NO;
-                [[EGDirector current] resume];
-                [_weakSelf runSlowMotionLevel:level];
-            }
-        }];
+        [_TRGameDirector_shareNotification postSender:self data:shareChannel];
+        [self closeSlowMotionShop];
     } cancelHandler:^void() {
     }];
 }
@@ -524,10 +530,22 @@ static ODClassType* _TRGameDirector_type;
 
 - (void)closeShop {
     [self forLevelF:^void(TRLevel* level) {
-        if(level.slowMotionShop) {
-            level.slowMotionShop = NO;
+        if(level.slowMotionShop == 1) {
+            level.slowMotionShop = 0;
             [[EGDirector current] resume];
+        } else {
+            if(level.slowMotionShop == 2) {
+                level.slowMotionShop = 0;
+                [[EGDirector current] redraw];
+            }
         }
+    }];
+}
+
+- (void)openShop {
+    [self forLevelF:^void(TRLevel* level) {
+        level.slowMotionShop = 2;
+        [[EGDirector current] redraw];
     }];
 }
 
@@ -549,6 +567,10 @@ static ODClassType* _TRGameDirector_type;
 
 + (NSInteger)twitterShareRate {
     return _TRGameDirector_twitterShareRate;
+}
+
++ (CNNotificationHandle*)shareNotification {
+    return _TRGameDirector_shareNotification;
 }
 
 + (ODClassType*)type {

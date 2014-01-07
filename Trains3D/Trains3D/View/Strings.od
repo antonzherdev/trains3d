@@ -35,6 +35,7 @@ trait Strings {
     def result : string
     def best : string
     def error : string
+    def buyButton : string
 
     def supportButton : string
     def shareButton : string
@@ -104,6 +105,7 @@ class EnStrings extends Strings {
     def cityBuilt : string = "The new city has been built"
     def tapToContinue : string = if(egPlatform.isComputer) "Click to contiunue" else "Tap to continue"
     def error : string = "Error"
+    def buyButton : string = "Buy slow motions"
 
     def colorOrange : string = "orange"
     def colorGreen : string = "green"
@@ -241,6 +243,7 @@ class RuStrings extends Strings{
     def cityBuilt : string = "Построен новый город"
     def tapToContinue : string = if(egPlatform.isComputer) "Кликните для продолжения" else "Нажмите для продолжения"
     def error : string = "Ошибка"
+    def buyButton : string = "Купить замедления"
 
     def colorOrange : string = "оранжевый"
     def colorGreen : string = "зеленый"

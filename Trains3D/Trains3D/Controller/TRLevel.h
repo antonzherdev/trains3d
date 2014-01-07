@@ -68,7 +68,7 @@
 @property (nonatomic, readonly) EGSchedule* schedule;
 @property (nonatomic, readonly) TRTrainsCollisionWorld* collisionWorld;
 @property (nonatomic) BOOL rate;
-@property (nonatomic) BOOL slowMotionShop;
+@property (nonatomic) NSInteger slowMotionShop;
 @property (nonatomic, retain) EGCounter* slowMotionCounter;
 
 + (id)levelWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules;

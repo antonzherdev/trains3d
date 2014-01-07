@@ -108,15 +108,7 @@ class GameDirector {
             slowMotionsInApp.find(_.a == transaction.productId).for { item ->
                 boughtSlowMotions(item.b)
                 transaction.finish
-                if(Director.current.isPaused) {
-                    forLevel { level ->
-                        if(level.slowMotionShop) {
-                            level.slowMotionShop = false
-                            Director.current.resume
-                            runSlowMotion(level)
-                        }
-                    }
-                }
+                closeSlowMotionShop
             }
         } else if(transaction.state == InAppTransactionState.failed) {
             val paused = Director.current.isPaused
@@ -128,6 +120,20 @@ class GameDirector {
         }
     }
 
+    def closeSlowMotionShop {
+        if(Director.current.isPaused) {
+            forLevel { level ->
+                if(level.slowMotionShop == 1) {
+                    level.slowMotionShop = 0
+                    Director.current.resume
+                    runSlowMotion(level)
+                } else if(level.slowMotionShop == 2) {
+                    level.slowMotionShop = 0
+                    Director.current.redraw
+                }
+            }
+        }
+    }
     def clearTutorial {
         cloud.set("help.sporadicDamage", 0)
         cloud.set("help.damage", 0)
@@ -322,7 +328,7 @@ class GameDirector {
                         }.toArray
                     Director.current.redraw
                 }
-                level.slowMotionShop = true
+                level.slowMotionShop = 1
                 Director.current.pause
                 return nil
             }
@@ -372,12 +378,14 @@ class GameDirector {
     static val facebookShareRate = 10
     static val twitterShareRate = 10
 
+    static val shareNotification = NotificationHandle<GameDirector, ShareChannel>("GameDirector.shareNotification")
+
     def shareDialog : ShareDialog = {
         val url = "http:\/\/get.raildale.com/?x=a"
         ShareContent(Loc.shareText(url), "Share.jpg")
             .twitter(Loc.twitterText(url))
             .email(Loc.shareText(url), Loc.shareSubject)
-            .dialog(shareHandler = {shareChannel ->
+            .dialog(shareHandler = shareChannel -> {
                 if(shareChannel == ShareChannel.facebook && cloud.intFor("share.facebook") == 0) {
                     cloud.set("share.facebook", i = 1)
                     boughtSlowMotions(facebookShareRate)
@@ -385,14 +393,8 @@ class GameDirector {
                     cloud.set("share.twitter", i = 1)
                     boughtSlowMotions(twitterShareRate)
                 }
-                forLevel{level ->
-                    if(level.slowMotionShop) {
-                        level.slowMotionShop = false
-                        Director.current.resume
-                        runSlowMotion(level)
-                    }
-                }
-
+                shareNotification.post(self, shareChannel)
+                closeSlowMotionShop
             }, cancelHandler = {})
     }
 
@@ -432,10 +434,20 @@ class GameDirector {
 
     def closeShop {
         forLevel{level ->
-            if(level.slowMotionShop) {
-                level.slowMotionShop = false
+            if(level.slowMotionShop == 1) {
+                level.slowMotionShop = 0
                 Director.current.resume
+            } else if(level.slowMotionShop == 2) {
+                level.slowMotionShop = 0
+                Director.current.redraw
             }
+        }
+    }
+
+    def openShop {
+        forLevel{level ->
+            level.slowMotionShop = 2
+            Director.current.redraw
         }
     }
 }
