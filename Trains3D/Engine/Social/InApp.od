@@ -8,9 +8,15 @@ class InAppProduct(id : string, name : string, price : string) {
     def buy(quantity : uint)
 }
 
-class InAppTransaction(productId : string, quantity : uint, error : string?) {
-    def finish
+class InAppTransaction(productId : string, quantity : uint, state : InAppTransactionState,  error : string?) {
+    def finish {
+        finishNotification.post(self)
+    }
+
+    static val changeNotification = NotificationHandle<InAppTransaction, Void>("InAppTransaction.changeNotification")
+    static val finishNotification = NotificationHandle<InAppTransaction, Void>("InAppTransaction.finishNotification")
 }
+
 
 enum InAppTransactionState {
     purchasing()

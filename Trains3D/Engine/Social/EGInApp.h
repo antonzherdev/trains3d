@@ -21,12 +21,15 @@
 @interface EGInAppTransaction : NSObject
 @property (nonatomic, readonly) NSString* productId;
 @property (nonatomic, readonly) NSUInteger quantity;
+@property (nonatomic, readonly) EGInAppTransactionState* state;
 @property (nonatomic, readonly) id error;
 
-+ (id)inAppTransactionWithProductId:(NSString*)productId quantity:(NSUInteger)quantity error:(id)error;
-- (id)initWithProductId:(NSString*)productId quantity:(NSUInteger)quantity error:(id)error;
++ (id)inAppTransactionWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(id)error;
+- (id)initWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(id)error;
 - (ODClassType*)type;
 - (void)finish;
++ (CNNotificationHandle*)changeNotification;
++ (CNNotificationHandle*)finishNotification;
 + (ODClassType*)type;
 @end
 

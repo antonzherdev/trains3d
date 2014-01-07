@@ -7,13 +7,14 @@
 @interface EGInApp : NSObject
 - (ODClassType*)type;
 + (void)loadProductsIds:(id<CNSeq>)ids callback:(void(^)(id<CNSeq>))callback;
++ (void)getFromCacheOrLoadProduct:(NSString*)id callback:(void(^)(EGInAppProduct*))callback;
 + (ODClassType*)type;
-
-+ (CNNotificationHandle*)transactionNotification;
 @end
 
 
 @interface EGInAppProductPlat : EGInAppProduct
+@property(nonatomic, strong) SKProduct *product;
+
 - (instancetype)initWithProduct:(SKProduct *)product;
 
 + (instancetype)platWithProduct:(SKProduct *)product;

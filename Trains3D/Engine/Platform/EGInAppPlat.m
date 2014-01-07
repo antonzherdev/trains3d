@@ -2,7 +2,8 @@
 
 @class EGInAppProductRequestDelegate;
 
-static NSArray* _curDelegates; 
+static NSArray* _curDelegates;
+static NSMutableDictionary* _EGInApp_products;
 
 @interface EGInAppProductRequestDelegate : NSObject<SKProductsRequestDelegate>
 - (instancetype)initWithCallback:(void (^)(id <CNSeq>))callback;
@@ -30,6 +31,9 @@ static NSArray* _curDelegates;
     NSArray *products = [[[response.products chain] map:^EGInAppProduct *(SKProduct *x) {
         return [EGInAppProductPlat platWithProduct:x];
     }] toArray];
+    [products forEach:^(EGInAppProductPlat* x) {
+        [_EGInApp_products setObject:x forKey:x.id];
+    }];
     _callback(products);
     @synchronized (_curDelegates) {
         _curDelegates = [_curDelegates arrayByRemovingObject:self];
@@ -49,24 +53,7 @@ static NSArray* _curDelegates;
 @implementation EGInAppObserver
 - (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions {
     for(SKPaymentTransaction * transaction in transactions) {
-        EGInAppTransactionState *state;
-        if(transaction.transactionState == SKPaymentTransactionStateFailed) {
-            NSLog(@"In-App: %@: Error in transaction %@", transaction.payment.productIdentifier, transaction.error);
-            state = [EGInAppTransactionState failed];
-        } else if(transaction.transactionState == SKPaymentTransactionStatePurchasing) {
-            NSLog(@"In-App: %@: purchasing", transaction.payment.productIdentifier);
-            state = [EGInAppTransactionState purchasing];
-        } else if(transaction.transactionState == SKPaymentTransactionStatePurchased) {
-            NSLog(@"In-App: %@: purchased", transaction.payment.productIdentifier);
-            state = [EGInAppTransactionState purchased];
-        } else if(transaction.transactionState == SKPaymentTransactionStateRestored) {
-            NSLog(@"In-App: %@: restored", transaction.payment.productIdentifier);
-            state = [EGInAppTransactionState restored];
-        } else {
-            NSLog(@"In-App: %@: unknown state %i", transaction.payment.productIdentifier, transaction.transactionState);
-            continue;
-        }
-        [[EGInApp transactionNotification] postSender:[EGInAppTransactionPlat platWithTransaction:transaction] data:state];
+        [[EGInAppTransaction changeNotification] postSender:[EGInAppTransactionPlat platWithTransaction:transaction]];
     }
 }
 @end
@@ -74,16 +61,35 @@ static NSArray* _curDelegates;
 
 @implementation EGInApp
 static ODClassType* _EGInApp_type;
-static CNNotificationHandle* _EGInApp_transactionNotification;
 static EGInAppObserver* _EGInApp_observer;
+
+
++ (void)load {
+    [super load];
+    _EGInApp_observer = [[EGInAppObserver alloc] init];
+    [[SKPaymentQueue defaultQueue] addTransactionObserver:_EGInApp_observer];
+}
+
 
 + (void)initialize {
     [super initialize];
     _curDelegates = [NSArray array];
     _EGInApp_type = [ODClassType classTypeWithCls:[EGInApp class]];
-    _EGInApp_transactionNotification = [CNNotificationHandle notificationHandleWithName:@"InApp.transactionNotification"];
-    _EGInApp_observer = [[EGInAppObserver alloc] init];
-    [[SKPaymentQueue defaultQueue] addTransactionObserver:_EGInApp_observer];
+    _EGInApp_products = [NSMutableDictionary mutableDictionary];
+}
+
++ (void)getFromCacheOrLoadProduct:(NSString*)idd callback:(void(^)(EGInAppProduct*))callback {
+    EGInAppProduct* product = [_EGInApp_products objectForKey:idd];
+    if(product != nil) {
+        callback(product);
+    } else {
+        NSArray *ids = @[idd];
+        [EGInApp loadProductsIds:ids callback:^void(id<CNSeq> products) {
+            [[products headOpt] forEach:^(id o) {
+                callback(o);
+            }];
+        }];
+    }
 }
 
 + (void)loadProductsIds:(id<CNSeq>)ids callback:(void(^)(id<CNSeq>))callback {
@@ -95,11 +101,6 @@ static EGInAppObserver* _EGInApp_observer;
     productsRequest.delegate = del;
     [productsRequest start];
 }
-
-+ (CNNotificationHandle *)transactionNotification {
-    return _EGInApp_transactionNotification;
-}
-
 
 - (ODClassType*)type {
     return [EGInApp type];
@@ -164,7 +165,26 @@ static EGInAppObserver* _EGInApp_observer;
     SKPaymentTransaction * _transaction;
 }
 - (instancetype)initWithTransaction:(SKPaymentTransaction *)transaction {
-    self = [super initWithProductId:transaction.payment.productIdentifier quantity:(NSUInteger) transaction.payment.quantity error:
+    EGInAppTransactionState *state;
+    if(transaction.transactionState == SKPaymentTransactionStateFailed) {
+        NSLog(@"In-App: %@: Error in transaction %@", transaction.payment.productIdentifier, transaction.error);
+        state = [EGInAppTransactionState failed];
+    } else if(transaction.transactionState == SKPaymentTransactionStatePurchasing) {
+        NSLog(@"In-App: %@: purchasing", transaction.payment.productIdentifier);
+        state = [EGInAppTransactionState purchasing];
+    } else if(transaction.transactionState == SKPaymentTransactionStatePurchased) {
+        NSLog(@"In-App: %@: purchased", transaction.payment.productIdentifier);
+        state = [EGInAppTransactionState purchased];
+    } else if(transaction.transactionState == SKPaymentTransactionStateRestored) {
+        NSLog(@"In-App: %@: restored", transaction.payment.productIdentifier);
+        state = [EGInAppTransactionState restored];
+    } else {
+        NSLog(@"In-App: %@: unknown state %li", transaction.payment.productIdentifier, transaction.transactionState);
+    }
+    self = [super initWithProductId:transaction.payment.productIdentifier
+                           quantity:(NSUInteger)transaction.payment.quantity
+                              state:state
+                              error:
             transaction.error == nil ? [CNOption none] : [CNOption someValue:transaction.error.localizedDescription]
     ];
     if (self) {
@@ -181,6 +201,7 @@ static EGInAppObserver* _EGInApp_observer;
 
 - (void)finish {
     [[SKPaymentQueue defaultQueue] finishTransaction:_transaction];
+    [super finish];
 }
 
 @end

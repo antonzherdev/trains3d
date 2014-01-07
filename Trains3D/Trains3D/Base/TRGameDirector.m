@@ -15,7 +15,6 @@
 #import "EGCameraIso.h"
 #import "EGDirector.h"
 #import "EGScene.h"
-#import "EGInAppPlat.h"
 #import "EGInApp.h"
 #import "EGAlert.h"
 #import "SDSoundDirector.h"
@@ -24,6 +23,7 @@
 #import "TRSceneFactory.h"
 #import "TRLevelChooseMenu.h"
 #import "EGEMail.h"
+#import "EGInAppPlat.h"
 #import "EGSharePlat.h"
 #import "EGShare.h"
 @implementation TRGameDirector{
@@ -150,8 +150,8 @@ static ODClassType* _TRGameDirector_type;
                 [_weakSelf.cloud setKey:@"help.zoom" i:1];
             }
         }];
-        _inAppObs = [EGInApp.transactionNotification observeBy:^void(EGInAppTransaction* transaction, EGInAppTransactionState* state) {
-            if(state == EGInAppTransactionState.purchased) {
+        _inAppObs = [EGInAppTransaction.changeNotification observeBy:^void(EGInAppTransaction* transaction, id __) {
+            if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.purchased) {
                 [[_weakSelf.slowMotionsInApp findWhere:^BOOL(CNTuple* _) {
                     return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
                 }] forEach:^void(CNTuple* item) {
@@ -166,7 +166,7 @@ static ODClassType* _TRGameDirector_type;
                     }];
                 }];
             } else {
-                if(state == EGInAppTransactionState.failed) {
+                if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.failed) {
                     BOOL paused = [[EGDirector current] isPaused];
                     if(!(paused)) [[EGDirector current] pause];
                     [EGAlert showErrorTitle:[TRStr.Loc error] message:[((EGInAppTransaction*)(transaction)).error get] callback:^void() {
@@ -235,6 +235,7 @@ static ODClassType* _TRGameDirector_type;
     [SDSoundDirector.instance setEnabled:[_local intForKey:@"soundEnabled"] == 1];
     [EGRate.instance setIdsIos:736579117 osx:736545415];
     [EGGameCenter.instance authenticate];
+    [_local setKey:@"boughtSlowMotions" i:0];
     if([self daySlowMotions] > _maxDaySlowMotions) [_local setKey:@"daySlowMotions" i:_maxDaySlowMotions];
     NSUInteger fullDayCount = [[self lastSlowMotions] count] + [self daySlowMotions];
     if(fullDayCount > _maxDaySlowMotions) {

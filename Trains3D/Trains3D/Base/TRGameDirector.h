@@ -17,9 +17,8 @@
 @class EGDirector;
 @class EGScene;
 @protocol EGController;
-@class EGInApp;
-@class EGInAppTransactionState;
 @class EGInAppTransaction;
+@class EGInAppTransactionState;
 @class EGAlert;
 @class SDSoundDirector;
 @class EGRate;
@@ -29,6 +28,7 @@
 @class EGEMail;
 @class EGCounter;
 @class EGInAppProduct;
+@class EGInApp;
 @class EGLengthCounter;
 @class EGShareDialog;
 @class EGShareContent;

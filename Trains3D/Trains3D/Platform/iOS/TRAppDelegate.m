@@ -10,9 +10,13 @@
 #import "TRGameDirector.h"
 #import "TestFlight.h"
 #import "GL.h"
+#import "EGInApp.h"
+#import "EGInAppPlat.h"
 #import <DistimoSDK/DistimoSDK.h>
 
-@implementation TRAppDelegate
+@implementation TRAppDelegate {
+    CNNotificationObserver *_observer;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -23,6 +27,19 @@
         [TestFlight takeOff:@"4c288980-f39e-4323-9f5c-7835e0d516a6"];
     }
     [DistimoSDK handleLaunchWithOptions:launchOptions sdkKey:@"jSwgNgXbOhbA8YLi"];
+    NSLog(@"Distimo: launch: jSwgNgXbOhbA8YLi");
+
+    _observer = [[EGInAppTransaction finishNotification] observeBy:^(EGInAppTransaction * transaction, id o) {
+        [EGInApp getFromCacheOrLoadProduct:transaction.productId callback:^(EGInAppProduct *product) {
+            EGInAppProductPlat *plat = (EGInAppProductPlat *)product;
+            NSLog(@"Distimo: logInAppPurchaseWithProductID:%@ price:%@", transaction.productId, product.price);
+            [DistimoSDK logInAppPurchaseWithProductID:transaction.productId
+                                          priceLocale:plat.product.priceLocale
+                                                price:plat.product.price.doubleValue
+                                             quantity:transaction.quantity];
+        }];
+        
+    }];
 
     // Override point for customization after application launch.
     return YES;

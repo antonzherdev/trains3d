@@ -80,22 +80,27 @@ static ODClassType* _EGInAppProduct_type;
 @implementation EGInAppTransaction{
     NSString* _productId;
     NSUInteger _quantity;
+    EGInAppTransactionState* _state;
     id _error;
 }
+static CNNotificationHandle* _EGInAppTransaction_changeNotification;
+static CNNotificationHandle* _EGInAppTransaction_finishNotification;
 static ODClassType* _EGInAppTransaction_type;
 @synthesize productId = _productId;
 @synthesize quantity = _quantity;
+@synthesize state = _state;
 @synthesize error = _error;
 
-+ (id)inAppTransactionWithProductId:(NSString*)productId quantity:(NSUInteger)quantity error:(id)error {
-    return [[EGInAppTransaction alloc] initWithProductId:productId quantity:quantity error:error];
++ (id)inAppTransactionWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(id)error {
+    return [[EGInAppTransaction alloc] initWithProductId:productId quantity:quantity state:state error:error];
 }
 
-- (id)initWithProductId:(NSString*)productId quantity:(NSUInteger)quantity error:(id)error {
+- (id)initWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(id)error {
     self = [super init];
     if(self) {
         _productId = productId;
         _quantity = quantity;
+        _state = state;
         _error = error;
     }
     
@@ -105,14 +110,24 @@ static ODClassType* _EGInAppTransaction_type;
 + (void)initialize {
     [super initialize];
     _EGInAppTransaction_type = [ODClassType classTypeWithCls:[EGInAppTransaction class]];
+    _EGInAppTransaction_changeNotification = [CNNotificationHandle notificationHandleWithName:@"InAppTransaction.changeNotification"];
+    _EGInAppTransaction_finishNotification = [CNNotificationHandle notificationHandleWithName:@"InAppTransaction.finishNotification"];
 }
 
 - (void)finish {
-    @throw @"Method finish is abstract";
+    [_EGInAppTransaction_finishNotification postSender:self];
 }
 
 - (ODClassType*)type {
     return [EGInAppTransaction type];
+}
+
++ (CNNotificationHandle*)changeNotification {
+    return _EGInAppTransaction_changeNotification;
+}
+
++ (CNNotificationHandle*)finishNotification {
+    return _EGInAppTransaction_finishNotification;
 }
 
 + (ODClassType*)type {
@@ -127,13 +142,14 @@ static ODClassType* _EGInAppTransaction_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGInAppTransaction* o = ((EGInAppTransaction*)(other));
-    return [self.productId isEqual:o.productId] && self.quantity == o.quantity && [self.error isEqual:o.error];
+    return [self.productId isEqual:o.productId] && self.quantity == o.quantity && self.state == o.state && [self.error isEqual:o.error];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.productId hash];
     hash = hash * 31 + self.quantity;
+    hash = hash * 31 + [self.state ordinal];
     hash = hash * 31 + [self.error hash];
     return hash;
 }
@@ -142,6 +158,7 @@ static ODClassType* _EGInAppTransaction_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"productId=%@", self.productId];
     [description appendFormat:@", quantity=%lu", (unsigned long)self.quantity];
+    [description appendFormat:@", state=%@", self.state];
     [description appendFormat:@", error=%@", self.error];
     [description appendString:@">"];
     return description;

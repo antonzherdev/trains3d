@@ -103,8 +103,8 @@ class GameDirector {
         }
     }
 
-    private val inAppObs = InApp.transactionNotification.observe { transaction, state ->
-        if(state == InAppTransactionState.purchased) {
+    private val inAppObs = InAppTransaction.changeNotification.observe { transaction, __ ->
+        if(transaction.state == InAppTransactionState.purchased) {
             slowMotionsInApp.find(_.a == transaction.productId).for { item ->
                 boughtSlowMotions(item.b)
                 transaction.finish
@@ -118,7 +118,7 @@ class GameDirector {
                     }
                 }
             }
-        } else if(state == InAppTransactionState.failed) {
+        } else if(transaction.state == InAppTransactionState.failed) {
             val paused = Director.current.isPaused
             if(!paused) Director.current.pause
             Alert.showError(title = Loc.error, message = transaction.error.get) {
@@ -173,6 +173,7 @@ class GameDirector {
         GameCenter.instance.authenticate
 //        cloud.keepMax("$(cloudPrefix)maxLevel", 16)
 //        clearTutorial
+        local.set("boughtSlowMotions", i = 0)
 
         if(daySlowMotions > maxDaySlowMotions) local.set("daySlowMotions", i = maxDaySlowMotions)
         val fullDayCount = lastSlowMotions.count + daySlowMotions
