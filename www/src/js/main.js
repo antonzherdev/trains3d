@@ -13,8 +13,9 @@
                 '<div class="txt">Build your railway between cities</div><img src="/img/scr0.jpg?1" alt="Build your railway between cities"/>',
                 '<div class="txt">Send trains to corresponding cities using lightnings and switches</div><img src="/img/scr1.jpg?1" alt="Send trains to corresponding cities using lightnings and switches"/>',
                 '<div class="txt">Prevent train crashes and fix railway damages</div><img src="/img/scr2.jpg" alt="Prevent train crashes and fix railway damages"/>',
-                '<div class="txt">Different locations and weather</div><img src="/img/scr3.jpg" alt="Different locations and weather"/>',
-                '<div class="txt">Beware of very fast express trains</div><img src="/img/scr4.jpg" alt="Express trains are extremely fast"/>'
+                '<div class="txt">Beware of very fast express trains</div><img src="/img/scr4.jpg" alt="Express trains are extremely fast"/>',
+                '<div class="txt">Different locations</div><img src="/img/scr5.jpg" alt="Different locations"/>',
+                '<div class="txt">Different weather</div><img src="/img/scr3.jpg" alt="Different weather"/>'
             ]
         });
     });
