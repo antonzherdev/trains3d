@@ -179,7 +179,7 @@ static EGInAppObserver* _EGInApp_observer;
         NSLog(@"In-App: %@: restored", transaction.payment.productIdentifier);
         state = [EGInAppTransactionState restored];
     } else {
-        NSLog(@"In-App: %@: unknown state %li", transaction.payment.productIdentifier, transaction.transactionState);
+        NSLog(@"In-App: %@: unknown state %li", transaction.payment.productIdentifier, (long)transaction.transactionState);
     }
     self = [super initWithProductId:transaction.payment.productIdentifier
                            quantity:(NSUInteger)transaction.payment.quantity
