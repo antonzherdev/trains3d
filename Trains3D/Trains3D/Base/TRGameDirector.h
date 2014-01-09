@@ -8,7 +8,7 @@
 @class TRScore;
 @class EGGameCenter;
 @class TRStr;
-@protocol TRStrings;
+@class TRStrings;
 @class EGSchedule;
 @class TRTrain;
 @class TRTrainType;

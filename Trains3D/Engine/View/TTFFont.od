@@ -1,0 +1,22 @@
+package com.antonzherdev.eg
+
+
+stub class TTFFont(name : string, size : uint) extends Font {
+    private var symbols = MutableHashMap<char, FontSymbolDesc>()
+
+    def symbolOpt(smb : char) : FontSymbolDesc? = symbols.objectFor(smb, orUpdateWith = symbol(smb))
+
+    def symbol(smb : char) : FontSymbolDesc
+
+    private var textureOpt : Texture? = nil
+
+    def texture : Texture = textureOpt.getOrElse{updateTexture}
+
+    private def updateTexture : Texture = {
+        val txt = generateTexture
+        textureOpt = txt
+        txt
+    }
+
+    private def generateTexture : Texture
+}

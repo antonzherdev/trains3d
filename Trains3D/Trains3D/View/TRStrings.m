@@ -7,24 +7,29 @@
 #import "GL.h"
 #import "EGPlatform.h"
 @implementation TRStr
-static id<CNMap> _TRStr_locales;
-static id<TRStrings> _TRStr_Loc;
+static TRStrings* _TRStr_Loc;
 static ODClassType* _TRStr_type;
 
 + (void)initialize {
     [super initialize];
     _TRStr_type = [ODClassType classTypeWithCls:[TRStr class]];
-    _TRStr_locales = [[(@[tuple(@"en", [TREnStrings enStrings]), tuple(@"ru", [TRRuStrings ruStrings])]) chain] toMap];
-    _TRStr_Loc = [[_TRStr_locales optKey:[OSLocale currentLanguageId]] getOrElseF:^id<TRStrings>() {
-        return [TREnStrings enStrings];
-    }];
+    _TRStr_Loc = ^TRStrings*() {
+        id<CNMap> locales = [[[(@[[TREnStrings enStrings], [TRRuStrings ruStrings], [TRJpStrings jpStrings]]) chain] map:^CNTuple*(TREnStrings* strs) {
+            return tuple(((TREnStrings*)(strs)).language, strs);
+        }] toMap];
+        return [[[[[OSLocale preferredLanguages] chain] flatMap:^id(NSString* lng) {
+            return [locales optKey:lng];
+        }] headOpt] getOrElseF:^TRStrings*() {
+            return [TREnStrings enStrings];
+        }];
+    }();
 }
 
 - (ODClassType*)type {
     return [TRStr type];
 }
 
-+ (id<TRStrings>)Loc {
++ (TRStrings*)Loc {
     return _TRStr_Loc;
 }
 
@@ -55,6 +60,308 @@ static ODClassType* _TRStr_type;
 @end
 
 
+@implementation TRStrings{
+    NSString* _language;
+}
+static ODClassType* _TRStrings_type;
+@synthesize language = _language;
+
++ (id)stringsWithLanguage:(NSString*)language {
+    return [[TRStrings alloc] initWithLanguage:language];
+}
+
+- (id)initWithLanguage:(NSString*)language {
+    self = [super init];
+    if(self) _language = language;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRStrings_type = [ODClassType classTypeWithCls:[TRStrings class]];
+}
+
+- (NSString*)formatCost:(NSInteger)cost {
+    __block NSInteger i = 0;
+    unichar a = unums([@"'" head]);
+    NSString* str = [[[[[[NSString stringWithFormat:@"%ld", (long)cost] chain] reverse] flatMap:^CNList*(id s) {
+        i++;
+        if(i == 3) return [CNList applyItem:s tail:[CNList applyItem:nums(a)]];
+        else return [CNOption applyValue:s];
+    }] reverse] charsToString];
+    return [NSString stringWithFormat:@"$%@", str];
+}
+
+- (NSString*)levelNumber:(NSUInteger)number {
+    @throw @"Method level is abstract";
+}
+
+- (NSString*)startLevelNumber:(NSUInteger)number {
+    return [self levelNumber:number];
+}
+
+- (NSString*)railBuiltCost:(NSInteger)cost {
+    @throw @"Method railBuilt is abstract";
+}
+
+- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
+    @throw @"Method trainArrived is abstract";
+}
+
+- (NSString*)trainDestroyedCost:(NSInteger)cost {
+    @throw @"Method trainDestroyed is abstract";
+}
+
+- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
+    @throw @"Method trainDelayedFine is abstract";
+}
+
+- (NSString*)damageFixedPaymentCost:(NSInteger)cost {
+    @throw @"Method damageFixedPayment is abstract";
+}
+
+- (NSString*)cityBuilt {
+    @throw @"Method cityBuilt is abstract";
+}
+
+- (NSString*)resumeGame {
+    @throw @"Method resumeGame is abstract";
+}
+
+- (NSString*)restartLevel:(TRLevel*)level {
+    @throw @"Method restart is abstract";
+}
+
+- (NSString*)replayLevel:(TRLevel*)level {
+    @throw @"Method replay is abstract";
+}
+
+- (NSString*)goToNextLevel:(TRLevel*)level {
+    @throw @"Method goToNext is abstract";
+}
+
+- (NSString*)chooseLevel {
+    @throw @"Method chooseLevel is abstract";
+}
+
+- (NSString*)victory {
+    @throw @"Method victory is abstract";
+}
+
+- (NSString*)defeat {
+    @throw @"Method defeat is abstract";
+}
+
+- (NSString*)moneyOver {
+    @throw @"Method moneyOver is abstract";
+}
+
+- (NSString*)result {
+    @throw @"Method result is abstract";
+}
+
+- (NSString*)best {
+    @throw @"Method best is abstract";
+}
+
+- (NSString*)error {
+    @throw @"Method error is abstract";
+}
+
+- (NSString*)buyButton {
+    @throw @"Method buyButton is abstract";
+}
+
+- (NSString*)supportButton {
+    @throw @"Method supportButton is abstract";
+}
+
+- (NSString*)shareButton {
+    @throw @"Method shareButton is abstract";
+}
+
+- (NSString*)supportEmailText {
+    return @"Report a problem or tell me about your ideas.\n"
+        "I will definitely reply to you and try to fix problems as soon as possible.\n"
+        "Thank you very much, Anton Zherdev, developer";
+}
+
+- (NSString*)rateText {
+    @throw @"Method rateText is abstract";
+}
+
+- (NSString*)rateNow {
+    @throw @"Method rateNow is abstract";
+}
+
+- (NSString*)rateProblem {
+    @throw @"Method rateProblem is abstract";
+}
+
+- (NSString*)rateLater {
+    @throw @"Method rateLater is abstract";
+}
+
+- (NSString*)rateClose {
+    @throw @"Method rateClose is abstract";
+}
+
+- (NSString*)topScore:(EGLocalPlayerScore*)score {
+    @throw @"Method top is abstract";
+}
+
+- (NSString*)leaderboard {
+    @throw @"Method leaderboard is abstract";
+}
+
+- (NSString*)tapToContinue {
+    @throw @"Method tapToContinue is abstract";
+}
+
+- (NSString*)colorOrange {
+    return @"orange";
+}
+
+- (NSString*)colorGreen {
+    return @"green";
+}
+
+- (NSString*)colorPink {
+    return @"pink";
+}
+
+- (NSString*)colorPurple {
+    return @"purple";
+}
+
+- (NSString*)colorGrey {
+    return @"grey";
+}
+
+- (NSString*)colorBlue {
+    return @"blue";
+}
+
+- (NSString*)colorMint {
+    return @"mint";
+}
+
+- (NSString*)colorRed {
+    return @"red";
+}
+
+- (NSString*)colorBeige {
+    return @"beige";
+}
+
+- (NSString*)colorYellow {
+    return @"yellow";
+}
+
+- (NSString*)helpConnectTwoCities {
+    @throw @"Method helpConnectTwoCities is abstract";
+}
+
+- (NSString*)helpRules {
+    @throw @"Method helpRules is abstract";
+}
+
+- (NSString*)helpNewCity {
+    @throw @"Method helpNewCity is abstract";
+}
+
+- (NSString*)helpSporadicDamage {
+    @throw @"Method helpSporadicDamage is abstract";
+}
+
+- (NSString*)helpDamage {
+    @throw @"Method helpDamage is abstract";
+}
+
+- (NSString*)helpRepairer {
+    @throw @"Method helpRepairer is abstract";
+}
+
+- (NSString*)helpCrazy {
+    @throw @"Method helpCrazy is abstract";
+}
+
+- (NSString*)helpInZoom {
+    @throw @"Method helpInZoom is abstract";
+}
+
+- (NSString*)helpExpressTrain {
+    @throw @"Method helpExpressTrain is abstract";
+}
+
+- (NSString*)helpTrainTo:(NSString*)to {
+    @throw @"Method helpTrain is abstract";
+}
+
+- (NSString*)helpTrainWithSwitchesTo:(NSString*)to {
+    @throw @"Method helpTrainWithSwitches is abstract";
+}
+
+- (NSString*)helpToMakeZoom {
+    @throw @"Method helpToMakeZoom is abstract";
+}
+
+- (NSString*)linesAdvice {
+    @throw @"Method linesAdvice is abstract";
+}
+
+- (NSString*)helpSlowMotion {
+    @throw @"Method helpSlowMotion is abstract";
+}
+
+- (NSString*)shareTextUrl:(NSString*)url {
+    @throw @"Method shareText is abstract";
+}
+
+- (NSString*)shareSubject {
+    @throw @"Method shareSubject is abstract";
+}
+
+- (NSString*)twitterTextUrl:(NSString*)url {
+    @throw @"Method twitterText is abstract";
+}
+
+- (ODClassType*)type {
+    return [TRStrings type];
+}
+
++ (ODClassType*)type {
+    return _TRStrings_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRStrings* o = ((TRStrings*)(other));
+    return [self.language isEqual:o.language];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.language hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"language=%@", self.language];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation TREnStrings
 static ODClassType* _TREnStrings_type;
 
@@ -63,7 +370,7 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (id)init {
-    self = [super init];
+    self = [super initWithLanguage:@"en"];
     
     return self;
 }
@@ -320,67 +627,6 @@ static ODClassType* _TREnStrings_type;
     return [NSString stringWithFormat:@"%@: @RaildaleGame is an exciting railway building game for iOS and Mac", url];
 }
 
-- (NSString*)formatCost:(NSInteger)cost {
-    __block NSInteger i = 0;
-    unichar a = unums([@"'" head]);
-    NSString* str = [[[[[[NSString stringWithFormat:@"%ld", (long)cost] chain] reverse] flatMap:^CNList*(id s) {
-        i++;
-        if(i == 3) return [CNList applyItem:s tail:[CNList applyItem:nums(a)]];
-        else return [CNOption applyValue:s];
-    }] reverse] charsToString];
-    return [NSString stringWithFormat:@"$%@", str];
-}
-
-- (NSString*)startLevelNumber:(NSUInteger)number {
-    return [self levelNumber:number];
-}
-
-- (NSString*)supportEmailText {
-    return @"Report a problem or tell me about your ideas.\n"
-        "I will definitely reply to you and try to fix problems as soon as possible.\n"
-        "Thank you very much, Anton Zherdev, developer";
-}
-
-- (NSString*)colorOrange {
-    return @"orange";
-}
-
-- (NSString*)colorGreen {
-    return @"green";
-}
-
-- (NSString*)colorPink {
-    return @"pink";
-}
-
-- (NSString*)colorPurple {
-    return @"purple";
-}
-
-- (NSString*)colorGrey {
-    return @"grey";
-}
-
-- (NSString*)colorBlue {
-    return @"blue";
-}
-
-- (NSString*)colorMint {
-    return @"mint";
-}
-
-- (NSString*)colorRed {
-    return @"red";
-}
-
-- (NSString*)colorBeige {
-    return @"beige";
-}
-
-- (NSString*)colorYellow {
-    return @"yellow";
-}
-
 - (ODClassType*)type {
     return [TREnStrings type];
 }
@@ -420,7 +666,7 @@ static ODClassType* _TRRuStrings_type;
 }
 
 - (id)init {
-    self = [super init];
+    self = [super initWithLanguage:@"ru"];
     
     return self;
 }
@@ -725,21 +971,6 @@ static ODClassType* _TRRuStrings_type;
     return [NSString stringWithFormat:@"%@: @RaildaleGame - великолепная игра о железной дороге для iOS и Mac", url];
 }
 
-- (NSString*)formatCost:(NSInteger)cost {
-    __block NSInteger i = 0;
-    unichar a = unums([@"'" head]);
-    NSString* str = [[[[[[NSString stringWithFormat:@"%ld", (long)cost] chain] reverse] flatMap:^CNList*(id s) {
-        i++;
-        if(i == 3) return [CNList applyItem:s tail:[CNList applyItem:nums(a)]];
-        else return [CNOption applyValue:s];
-    }] reverse] charsToString];
-    return [NSString stringWithFormat:@"$%@", str];
-}
-
-- (NSString*)startLevelNumber:(NSUInteger)number {
-    return [self levelNumber:number];
-}
-
 - (ODClassType*)type {
     return [TRRuStrings type];
 }
@@ -779,7 +1010,7 @@ static ODClassType* _TRJpStrings_type;
 }
 
 - (id)init {
-    self = [super init];
+    self = [super initWithLanguage:@"ja"];
     
     return self;
 }
@@ -1028,67 +1259,6 @@ static ODClassType* _TRJpStrings_type;
 
 - (NSString*)twitterTextUrl:(NSString*)url {
     return [NSString stringWithFormat:@"%@: iOSやMac OS X用の @RaildaleGame は興奮の鉄道建築ゲームです", url];
-}
-
-- (NSString*)formatCost:(NSInteger)cost {
-    __block NSInteger i = 0;
-    unichar a = unums([@"'" head]);
-    NSString* str = [[[[[[NSString stringWithFormat:@"%ld", (long)cost] chain] reverse] flatMap:^CNList*(id s) {
-        i++;
-        if(i == 3) return [CNList applyItem:s tail:[CNList applyItem:nums(a)]];
-        else return [CNOption applyValue:s];
-    }] reverse] charsToString];
-    return [NSString stringWithFormat:@"$%@", str];
-}
-
-- (NSString*)startLevelNumber:(NSUInteger)number {
-    return [self levelNumber:number];
-}
-
-- (NSString*)supportEmailText {
-    return @"Report a problem or tell me about your ideas.\n"
-        "I will definitely reply to you and try to fix problems as soon as possible.\n"
-        "Thank you very much, Anton Zherdev, developer";
-}
-
-- (NSString*)colorOrange {
-    return @"orange";
-}
-
-- (NSString*)colorGreen {
-    return @"green";
-}
-
-- (NSString*)colorPink {
-    return @"pink";
-}
-
-- (NSString*)colorPurple {
-    return @"purple";
-}
-
-- (NSString*)colorGrey {
-    return @"grey";
-}
-
-- (NSString*)colorBlue {
-    return @"blue";
-}
-
-- (NSString*)colorMint {
-    return @"mint";
-}
-
-- (NSString*)colorRed {
-    return @"red";
-}
-
-- (NSString*)colorBeige {
-    return @"beige";
-}
-
-- (NSString*)colorYellow {
-    return @"yellow";
 }
 
 - (ODClassType*)type {

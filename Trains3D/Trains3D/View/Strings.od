@@ -2,12 +2,16 @@ package com.antonzherdev.trains
 
 
 object Str {
-    private val locales : [string : Strings] = [("en", EnStrings()), ("ru", RuStrings())].chain.toMap
-    val Loc : Strings = locales.opt(Locale.currentLanguageId).getOrElse(EnStrings())
+    val Loc : Strings = {
+        val locales : [string : Strings] = [EnStrings(), RuStrings(), JpStrings()].chain.map{strs ->
+            (strs.language, strs)
+        }.toMap
+        Locale.preferredLanguages.chain.flatMap<Strings>{lng -> locales.opt(lng)}.headOpt.getOrElse(EnStrings())
+    }
 }
 
 
-trait Strings {
+class Strings(language : string) {
     def format(cost : int) : string = {
         var i = 0
         val a = "'".head
@@ -89,7 +93,7 @@ trait Strings {
     def twitterText(url : string) : string
 }
 
-class EnStrings extends Strings {
+class EnStrings extends Strings("en") {
     def level(number : uint) : string = "Level $number"
     def railBuilt(cost : int) : string = "-$(format(cost)): Payment for the railroad building"
     def trainArrived(train : Train, cost : int) : string =
@@ -211,7 +215,7 @@ class EnStrings extends Strings {
     def twitterText(url : string) : string = "$url: @RaildaleGame is an exciting railway building game for iOS and Mac"
 }
 
-class RuStrings extends Strings{
+class RuStrings extends Strings("ru") {
     def level(number : uint) : string = "Уровень $number"
     def railBuilt(cost : int) : string = "-$(format(cost)): Плата за постройку железной дороги"
     def trainArrived(train : Train, cost : int) : string =
@@ -347,7 +351,7 @@ class RuStrings extends Strings{
     def twitterText(url : string) : string = "$url: @RaildaleGame - великолепная игра о железной дороге для iOS и Mac"
 }
 
-class JpStrings extends Strings {
+class JpStrings extends Strings("ja") {
     def level(number : uint) : string = "レベル$number"
     def railBuilt(cost : int) : string = "-$(format(cost)): 鉄道建設の支払い"
     def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): に対する到着列車報酬"

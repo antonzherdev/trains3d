@@ -2,7 +2,7 @@
 #import "EGScene.h"
 @class TRNotifications;
 @class TRStr;
-@protocol TRStrings;
+@class TRStrings;
 @class TRTrain;
 
 @class TRScoreRules;

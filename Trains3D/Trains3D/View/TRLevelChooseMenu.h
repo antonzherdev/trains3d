@@ -14,7 +14,7 @@
 @class EGD2D;
 @class EGBlendFunction;
 @class TRStr;
-@protocol TRStrings;
+@class TRStrings;
 @class EGContext;
 @class EGEnablingState;
 @class EGRecognizers;

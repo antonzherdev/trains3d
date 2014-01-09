@@ -3,7 +3,7 @@
 #import "EGScene.h"
 #import "TRRailPoint.h"
 @class TRStr;
-@protocol TRStrings;
+@class TRStrings;
 @class EGCollisionBox;
 @class EGCounter;
 @class TRTrain;

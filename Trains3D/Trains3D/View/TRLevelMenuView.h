@@ -19,7 +19,7 @@
 @class TRRailroadBuilder;
 @class TRScore;
 @class TRStr;
-@protocol TRStrings;
+@class TRStrings;
 @class EGD2D;
 @class TRGameDirector;
 @class EGEnablingState;

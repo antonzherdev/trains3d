@@ -21,7 +21,7 @@
 @class EGPlatform;
 @class TRRail;
 @class TRStr;
-@protocol TRStrings;
+@class TRStrings;
 @class TRTrain;
 @class TRTrainGenerator;
 @class TRTrainType;

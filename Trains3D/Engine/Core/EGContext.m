@@ -83,6 +83,7 @@ static ODClassType* _EGGlobal_type;
 
 
 @implementation EGContext{
+    BOOL _ttf;
     CGFloat _scale;
     int _defaultFramebuffer;
     NSMutableDictionary* _textureCache;
@@ -108,6 +109,7 @@ static ODClassType* _EGGlobal_type;
     GEVec4 __lastClearColor;
 }
 static ODClassType* _EGContext_type;
+@synthesize ttf = _ttf;
 @synthesize scale = _scale;
 @synthesize defaultFramebuffer = _defaultFramebuffer;
 @synthesize environment = _environment;
@@ -126,6 +128,7 @@ static ODClassType* _EGContext_type;
 - (id)init {
     self = [super init];
     if(self) {
+        _ttf = NO;
         _scale = 1.0;
         _defaultFramebuffer = 0;
         _textureCache = [NSMutableDictionary mutableDictionary];
@@ -166,7 +169,7 @@ static ODClassType* _EGContext_type;
 
 - (EGFont*)fontWithName:(NSString*)name {
     return [_fontCache objectForKey:name orUpdateWith:^EGFont*() {
-        return [EGFont fontWithName:name];
+        return [EGBMFont fontWithName:name];
     }];
 }
 

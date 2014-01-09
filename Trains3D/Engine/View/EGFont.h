@@ -2,7 +2,7 @@
 #import "GEVec.h"
 #import "EGShader.h"
 @class EGVertexBufferDesc;
-@class EGFileTexture;
+@class EGTexture;
 @class EGGlobal;
 @class EGContext;
 @class EGMatrixStack;
@@ -11,11 +11,12 @@
 @class EGVBO;
 @class EGIBO;
 @class EGEnablingState;
+@class EGFileTexture;
 @class EGDirector;
-@class EGTexture;
 @class EGBlendMode;
 
 @class EGFont;
+@class EGBMFont;
 @class EGText;
 @class EGTextShadow;
 @class EGFontShaderParam;
@@ -62,6 +63,25 @@ ODPType* egTextAlignmentType();
 
 
 @interface EGFont : NSObject
++ (id)font;
+- (id)init;
+- (ODClassType*)type;
+- (EGTexture*)texture;
+- (NSUInteger)height;
+- (NSUInteger)size;
+- (GEVec2)measureInPixelsText:(NSString*)text;
+- (id)symbolOptSmb:(unichar)smb;
+- (GEVec2)measurePText:(NSString*)text;
+- (GEVec2)measureCText:(NSString*)text;
+- (EGSimpleVertexArray*)vaoText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment;
+- (void)drawText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment color:(GEVec4)color;
++ (EGFontSymbolDesc*)newLineDesc;
++ (EGVertexBufferDesc*)vbDesc;
++ (ODClassType*)type;
+@end
+
+
+@interface EGBMFont : EGFont
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) EGFileTexture* texture;
 @property (nonatomic, readonly) NSUInteger height;
@@ -71,12 +91,7 @@ ODPType* egTextAlignmentType();
 - (id)initWithName:(NSString*)name;
 - (ODClassType*)type;
 - (void)_init;
-- (GEVec2)measureInPixelsText:(NSString*)text;
-- (GEVec2)measurePText:(NSString*)text;
-- (GEVec2)measureCText:(NSString*)text;
-- (EGSimpleVertexArray*)vaoText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment;
-- (void)drawText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment color:(GEVec4)color;
-+ (EGVertexBufferDesc*)vbDesc;
+- (id)symbolOptSmb:(unichar)smb;
 + (ODClassType*)type;
 @end
 

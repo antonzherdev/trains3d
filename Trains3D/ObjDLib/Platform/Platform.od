@@ -10,5 +10,5 @@ stub class Directory {
 }
 
 stub class Locale {
-    static def currentLanguageId : string
+    static def preferredLanguages : [string]
 }

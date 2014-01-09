@@ -20,5 +20,5 @@
 @end
 
 @interface OSLocale : NSObject
-+ (NSString*) currentLanguageId;
++ (NSArray*) preferredLanguages;
 @end

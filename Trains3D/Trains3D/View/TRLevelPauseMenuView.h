@@ -16,7 +16,7 @@
 @class EGEnvironment;
 @class EGButton;
 @class TRStr;
-@protocol TRStrings;
+@class TRStrings;
 @class TRGameDirector;
 @class EGShareDialog;
 @class EGSprite;

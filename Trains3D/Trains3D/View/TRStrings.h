@@ -7,19 +7,24 @@
 @class EGPlatform;
 
 @class TRStr;
+@class TRStrings;
 @class TREnStrings;
 @class TRRuStrings;
 @class TRJpStrings;
-@protocol TRStrings;
 
 @interface TRStr : NSObject
 - (ODClassType*)type;
-+ (id<TRStrings>)Loc;
++ (TRStrings*)Loc;
 + (ODClassType*)type;
 @end
 
 
-@protocol TRStrings<NSObject>
+@interface TRStrings : NSObject
+@property (nonatomic, readonly) NSString* language;
+
++ (id)stringsWithLanguage:(NSString*)language;
+- (id)initWithLanguage:(NSString*)language;
+- (ODClassType*)type;
 - (NSString*)formatCost:(NSInteger)cost;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)startLevelNumber:(NSUInteger)number;
@@ -79,10 +84,11 @@
 - (NSString*)shareTextUrl:(NSString*)url;
 - (NSString*)shareSubject;
 - (NSString*)twitterTextUrl:(NSString*)url;
++ (ODClassType*)type;
 @end
 
 
-@interface TREnStrings : NSObject<TRStrings>
+@interface TREnStrings : TRStrings
 + (id)enStrings;
 - (id)init;
 - (ODClassType*)type;
@@ -136,7 +142,7 @@
 @end
 
 
-@interface TRRuStrings : NSObject<TRStrings>
+@interface TRRuStrings : TRStrings
 + (id)ruStrings;
 - (id)init;
 - (ODClassType*)type;
@@ -201,7 +207,7 @@
 @end
 
 
-@interface TRJpStrings : NSObject<TRStrings>
+@interface TRJpStrings : TRStrings
 + (id)jpStrings;
 - (id)init;
 - (ODClassType*)type;
