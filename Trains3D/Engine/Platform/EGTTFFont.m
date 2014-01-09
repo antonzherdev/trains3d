@@ -29,7 +29,7 @@ static ODClassType* _EGTTFFont_type;
         _height = (NSUInteger) ceil(font.lineHeight);
         #else
         NSFont* font = [NSFont fontWithName:_name size:_size];
-        _height = (NSUInteger) ceil(font.leading);
+        _height = (NSUInteger) [[[NSLayoutManager alloc] init] defaultLineHeightForFont:font];
         #endif
 
         NSAssert(font, @"Not found font %@", _name);
@@ -95,7 +95,7 @@ static ODClassType* _EGTTFFont_type;
     while(textureSize > w) w *= 2;
     textureSize = w;
 
-    NSLog(@"Font: GenerateTexture: %@ %i %ix%i", _name, _size, textureSize, textureSize);
+    NSLog(@"Font: GenerateTexture: %@ %lu %lu%lui", _name, (unsigned long)_size, (unsigned long)textureSize, (unsigned long)textureSize);
 
     
     //Create Texture
@@ -128,7 +128,7 @@ static ODClassType* _EGTTFFont_type;
     __block NSUInteger i = 0;
     __block NSUInteger x = 0, y = 0;
     NSDictionary *attributes = @{NSFontAttributeName : font, NSForegroundColorAttributeName : color};
-    [_symbols enumerateKeysAndObjectsUsingBlock:^(id key, EGFontSymbolDesc* desc, BOOL *stop) {
+    [[_symbols copy] enumerateKeysAndObjectsUsingBlock:^(id key, EGFontSymbolDesc* desc, BOOL *stop) {
         unichar c = unums(key);
         NSAttributedString *str = [[NSAttributedString alloc] initWithString:[NSString stringWithCharacters:&c length:1] attributes:attributes];
         GEVec2 size;
