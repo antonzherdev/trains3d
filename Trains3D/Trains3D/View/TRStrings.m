@@ -6,6 +6,55 @@
 #import "TRCity.h"
 #import "GL.h"
 #import "EGPlatform.h"
+@implementation TRStr
+static id<CNMap> _TRStr_locales;
+static id<TRStrings> _TRStr_Loc;
+static ODClassType* _TRStr_type;
+
++ (void)initialize {
+    [super initialize];
+    _TRStr_type = [ODClassType classTypeWithCls:[TRStr class]];
+    _TRStr_locales = [[(@[tuple(@"en", [TREnStrings enStrings]), tuple(@"ru", [TRRuStrings ruStrings])]) chain] toMap];
+    _TRStr_Loc = [[_TRStr_locales optKey:[OSLocale currentLanguageId]] getOrElseF:^id<TRStrings>() {
+        return [TREnStrings enStrings];
+    }];
+}
+
+- (ODClassType*)type {
+    return [TRStr type];
+}
+
++ (id<TRStrings>)Loc {
+    return _TRStr_Loc;
+}
+
++ (ODClassType*)type {
+    return _TRStr_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation TREnStrings
 static ODClassType* _TREnStrings_type;
 
@@ -70,15 +119,6 @@ static ODClassType* _TREnStrings_type;
     return @"Choose the level";
 }
 
-- (NSString*)callRepairer {
-    return @"Call the\n"
-        "service train";
-}
-
-- (NSString*)undo {
-    return @"Undo";
-}
-
 - (NSString*)victory {
     return @"Victory!";
 }
@@ -96,7 +136,7 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)tapToContinue {
-    if(egPlatform().isComputer) return @"Click to contiunue";
+    if(egPlatform().isComputer) return @"Click to continue";
     else return @"Tap to continue";
 }
 
@@ -108,58 +148,12 @@ static ODClassType* _TREnStrings_type;
     return @"Buy slow motions";
 }
 
-- (NSString*)colorOrange {
-    return @"orange";
-}
-
-- (NSString*)colorGreen {
-    return @"green";
-}
-
-- (NSString*)colorPink {
-    return @"pink";
-}
-
-- (NSString*)colorPurple {
-    return @"purple";
-}
-
-- (NSString*)colorGrey {
-    return @"grey";
-}
-
-- (NSString*)colorBlue {
-    return @"blue";
-}
-
-- (NSString*)colorMint {
-    return @"mint";
-}
-
-- (NSString*)colorRed {
-    return @"red";
-}
-
-- (NSString*)colorBeige {
-    return @"beige";
-}
-
-- (NSString*)colorYellow {
-    return @"yellow";
-}
-
 - (NSString*)shareButton {
     return @"Share with friends";
 }
 
 - (NSString*)supportButton {
     return @"Email the developer";
-}
-
-- (NSString*)supportEmailText {
-    return @"Report a problem or tell me about your ideas.\n"
-        "I will definetely reply to you and try to fix problems as soon as posible.\n"
-        "Thank you very much, Anton Zhedev, developer";
 }
 
 - (NSString*)rateText {
@@ -171,10 +165,6 @@ static ODClassType* _TREnStrings_type;
         "\n"
         "Thanks for your support!\n"
         "Best Regards, Anton Zherdev, developer";
-}
-
-- (NSString*)rateSignature {
-    return @"Anton Zherdev, developer";
 }
 
 - (NSString*)rateNow {
@@ -266,6 +256,12 @@ static ODClassType* _TREnStrings_type;
         "But it is possible to manage without.";
 }
 
+- (NSString*)linesAdvice {
+    return @"You can connect cities using more than one line.\n"
+        "Thus two trains coming from the opposite direction\n"
+        "would not collide with each other.";
+}
+
 - (NSString*)result {
     return @"Score";
 }
@@ -312,12 +308,6 @@ static ODClassType* _TREnStrings_type;
     return @"Best results";
 }
 
-- (NSString*)linesAdvice {
-    return @"You can connect cities using more than one line.\n"
-        "Thus two trains coming from the opposite direction\n"
-        "would not collide with each other.";
-}
-
 - (NSString*)shareSubject {
     return @"Raildale is a great game for iOS and Mac";
 }
@@ -343,6 +333,52 @@ static ODClassType* _TREnStrings_type;
 
 - (NSString*)startLevelNumber:(NSUInteger)number {
     return [self levelNumber:number];
+}
+
+- (NSString*)supportEmailText {
+    return @"Report a problem or tell me about your ideas.\n"
+        "I will definitely reply to you and try to fix problems as soon as possible.\n"
+        "Thank you very much, Anton Zherdev, developer";
+}
+
+- (NSString*)colorOrange {
+    return @"orange";
+}
+
+- (NSString*)colorGreen {
+    return @"green";
+}
+
+- (NSString*)colorPink {
+    return @"pink";
+}
+
+- (NSString*)colorPurple {
+    return @"purple";
+}
+
+- (NSString*)colorGrey {
+    return @"grey";
+}
+
+- (NSString*)colorBlue {
+    return @"blue";
+}
+
+- (NSString*)colorMint {
+    return @"mint";
+}
+
+- (NSString*)colorRed {
+    return @"red";
+}
+
+- (NSString*)colorBeige {
+    return @"beige";
+}
+
+- (NSString*)colorYellow {
+    return @"yellow";
 }
 
 - (ODClassType*)type {
@@ -438,15 +474,6 @@ static ODClassType* _TRRuStrings_type;
 
 - (NSString*)chooseLevel {
     return @"Выбрать уровень";
-}
-
-- (NSString*)callRepairer {
-    return @"Вызвать\n"
-        "ремонтников";
-}
-
-- (NSString*)undo {
-    return @"Отменить";
 }
 
 - (NSString*)victory {
@@ -744,30 +771,332 @@ static ODClassType* _TRRuStrings_type;
 @end
 
 
-@implementation TRStr
-static id<CNMap> _TRStr_locales;
-static id<TRStrings> _TRStr_Loc;
-static ODClassType* _TRStr_type;
+@implementation TRJpStrings
+static ODClassType* _TRJpStrings_type;
+
++ (id)jpStrings {
+    return [[TRJpStrings alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    
+    return self;
+}
 
 + (void)initialize {
     [super initialize];
-    _TRStr_type = [ODClassType classTypeWithCls:[TRStr class]];
-    _TRStr_locales = [[(@[tuple(@"en", [TREnStrings enStrings]), tuple(@"ru", [TRRuStrings ruStrings])]) chain] toMap];
-    _TRStr_Loc = [[_TRStr_locales optKey:[OSLocale currentLanguageId]] getOrElseF:^id<TRStrings>() {
-        return [TREnStrings enStrings];
-    }];
+    _TRJpStrings_type = [ODClassType classTypeWithCls:[TRJpStrings class]];
+}
+
+- (NSString*)levelNumber:(NSUInteger)number {
+    return [NSString stringWithFormat:@"レベル%lu", (unsigned long)number];
+}
+
+- (NSString*)railBuiltCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: 鉄道建設の支払い", [self formatCost:cost]];
+}
+
+- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"+%@: に対する到着列車報酬", [self formatCost:cost]];
+}
+
+- (NSString*)trainDestroyedCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: 列車破壊に対する罰金", [self formatCost:cost]];
+}
+
+- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: 列車遅延に対する罰金", [self formatCost:cost]];
+}
+
+- (NSString*)damageFixedPaymentCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: 鉄道修理の支払い", [self formatCost:cost]];
+}
+
+- (NSString*)resumeGame {
+    return @"ゲームを続ける";
+}
+
+- (NSString*)restartLevel:(TRLevel*)level {
+    return [NSString stringWithFormat:@"レベル%luをやり直す", (unsigned long)level.number];
+}
+
+- (NSString*)replayLevel:(TRLevel*)level {
+    return [NSString stringWithFormat:@"レベル%luをもう一度プレイ", (unsigned long)level.number];
+}
+
+- (NSString*)goToNextLevel:(TRLevel*)level {
+    return @"次のレベルをプレイ";
+}
+
+- (NSString*)chooseLevel {
+    return @"レベルを選んでください";
+}
+
+- (NSString*)victory {
+    return @"勝利!";
+}
+
+- (NSString*)defeat {
+    return @"敗北!";
+}
+
+- (NSString*)moneyOver {
+    return @"資金切れです";
+}
+
+- (NSString*)cityBuilt {
+    return @"新しい都市ができました";
+}
+
+- (NSString*)tapToContinue {
+    if(egPlatform().isComputer) return @"クリックして続行";
+    else return @"タップして続行";
+}
+
+- (NSString*)error {
+    return @"エラー";
+}
+
+- (NSString*)buyButton {
+    return @"スローモーションを購入";
+}
+
+- (NSString*)shareButton {
+    return @"友達と共有";
+}
+
+- (NSString*)supportButton {
+    return @"開発者にメール";
+}
+
+- (NSString*)rateText {
+    return @"Raildaleをお楽しみいただけていれば、\n"
+        "評価を残していただけませんか？\n"
+        "1分以内に評価できます。\n"
+        "問題があれば、ご報告ください。\n"
+        "できるだけ早く修正できるよう努めます。\n"
+        "\n"
+        "\n"
+        "サポートをありがとうございます！\n"
+        "開発者Anton Zherdevより";
+}
+
+- (NSString*)rateNow {
+    return @"今すぐ評価";
+}
+
+- (NSString*)rateProblem {
+    return @"問題を報告";
+}
+
+- (NSString*)rateLater {
+    return @"後で表示";
+}
+
+- (NSString*)rateClose {
+    return @"後で表示";
+}
+
+- (NSString*)helpConnectTwoCities {
+    return [NSString stringWithFormat:@"2つの都市を線路で結びましょう。\n"
+        "%@", ((egPlatform().touch) ? @"指を使って簡単にレールを敷きます。" : @"マウスを使うかタッチパッドで2本の指を使います。")];
+}
+
+- (NSString*)helpRules {
+    return @"残額を赤字にしないようにしましょう。\n"
+        "規定時間黒字を保てればレベルクリアです。";
+}
+
+- (NSString*)helpNewCity {
+    return @"時々新しい都市が登場します。\n"
+        "自分の鉄道とつなげましょう。";
+}
+
+- (NSString*)helpTrainTo:(NSString*)to {
+    return @"列車の方向は色でわかります。";
+}
+
+- (NSString*)helpTrainWithSwitchesTo:(NSString*)to {
+    if(egPlatform().touch) return @"鉄道スイッチをタップで切り替えて、列車を目的地に到着させましょう。";
+    else return @"鉄道スイッチをクリック切り替えて、列車を目的地に到着させましょう。";
+}
+
+- (NSString*)helpExpressTrain {
+    return @"これはとても速い急行列車です。\n"
+        "スイッチの前で止まる時間がありません。\n"
+        "この場合列車は破壊されます。\n"
+        "でも信号機を使って列車を制御できます。";
+}
+
+- (NSString*)helpToMakeZoom {
+    return @"つまみジェスチャーで拡大・縮小できます。";
+}
+
+- (NSString*)helpInZoom {
+    return @"指でスクロールします。\n"
+        "画面上部のハンマーボタンでレールを敷きます。\n"
+        "もう一度押すとスクロールモードに戻ります。";
+}
+
+- (NSString*)helpSporadicDamage {
+    return @"時々線路が壊れてしまいます。";
+}
+
+- (NSString*)helpDamage {
+    return @"ボタンのひとつを使って整備列車を呼んで破損部分を修理しましょう。\n"
+        "最寄りの都市から列車を呼ぶほうが賢明です。";
+}
+
+- (NSString*)helpCrazy {
+    return @"列車の運転手がおかしいです。\n"
+        "信号や閉鎖スイッチを無視しています。\n"
+        "この列車をどこかの都市に送ってください。";
+}
+
+- (NSString*)helpRepairer {
+    return @"破損部分に整備列車を走らせ、どこかの都市に送ってください。";
+}
+
+- (NSString*)helpSlowMotion {
+    return @"スローモーションを使って難しい瞬間を切り抜けましょう。\n"
+        "画面右上角のカタツムリのボタンを押してください。\n"
+        "使用回数は毎日少しずつ回復します。\n"
+        "ゲームを簡単にしたい場合は追加スローモーションを購入するか、\n"
+        "このゲームをFacebookやTwitterで共有して手に入れられます。\n"
+        "でもそうしなくてもクリアはできます。";
+}
+
+- (NSString*)linesAdvice {
+    return @"複数路線で都市をつなげることもできます。\n"
+        "そうすれば反対方向の電車が衝突することがありません。";
+}
+
+- (NSString*)result {
+    return @"スコア";
+}
+
+- (NSString*)best {
+    return @"あなたの最高の";
+}
+
+- (NSString*)topScore:(EGLocalPlayerScore*)score {
+    if(score.rank == 1) {
+        return @"第1位！";
+    } else {
+        if(score.rank == 2) {
+            return @"第2位！";
+        } else {
+            if(score.rank == 3) {
+                return @"第3位！";
+            } else {
+                CGFloat p = ((CGFloat)(score.rank)) / score.maxRank;
+                if(p <= 5) {
+                    return @"トップ5%";
+                } else {
+                    if(p <= 10) {
+                        return @"トップ10%";
+                    } else {
+                        if(p <= 20) {
+                            return @"トップ20%";
+                        } else {
+                            if(p <= 30) {
+                                return @"トップ30%";
+                            } else {
+                                if(p <= 50) return @"平均以上";
+                                else return @"平均以下";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+- (NSString*)leaderboard {
+    return @"最高結果";
+}
+
+- (NSString*)shareSubject {
+    return @"RaildaleはiOSやMacに最適のゲームです";
+}
+
+- (NSString*)shareTextUrl:(NSString*)url {
+    return [NSString stringWithFormat:@"iOSやMac OS X用のRaildaleは興奮の鉄道建築ゲームです: %@", url];
+}
+
+- (NSString*)twitterTextUrl:(NSString*)url {
+    return [NSString stringWithFormat:@"%@: iOSやMac OS X用の @RaildaleGame は興奮の鉄道建築ゲームです", url];
+}
+
+- (NSString*)formatCost:(NSInteger)cost {
+    __block NSInteger i = 0;
+    unichar a = unums([@"'" head]);
+    NSString* str = [[[[[[NSString stringWithFormat:@"%ld", (long)cost] chain] reverse] flatMap:^CNList*(id s) {
+        i++;
+        if(i == 3) return [CNList applyItem:s tail:[CNList applyItem:nums(a)]];
+        else return [CNOption applyValue:s];
+    }] reverse] charsToString];
+    return [NSString stringWithFormat:@"$%@", str];
+}
+
+- (NSString*)startLevelNumber:(NSUInteger)number {
+    return [self levelNumber:number];
+}
+
+- (NSString*)supportEmailText {
+    return @"Report a problem or tell me about your ideas.\n"
+        "I will definitely reply to you and try to fix problems as soon as possible.\n"
+        "Thank you very much, Anton Zherdev, developer";
+}
+
+- (NSString*)colorOrange {
+    return @"orange";
+}
+
+- (NSString*)colorGreen {
+    return @"green";
+}
+
+- (NSString*)colorPink {
+    return @"pink";
+}
+
+- (NSString*)colorPurple {
+    return @"purple";
+}
+
+- (NSString*)colorGrey {
+    return @"grey";
+}
+
+- (NSString*)colorBlue {
+    return @"blue";
+}
+
+- (NSString*)colorMint {
+    return @"mint";
+}
+
+- (NSString*)colorRed {
+    return @"red";
+}
+
+- (NSString*)colorBeige {
+    return @"beige";
+}
+
+- (NSString*)colorYellow {
+    return @"yellow";
 }
 
 - (ODClassType*)type {
-    return [TRStr type];
-}
-
-+ (id<TRStrings>)Loc {
-    return _TRStr_Loc;
+    return [TRJpStrings type];
 }
 
 + (ODClassType*)type {
-    return _TRStr_type;
+    return _TRJpStrings_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

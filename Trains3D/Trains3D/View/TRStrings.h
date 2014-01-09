@@ -6,10 +6,18 @@
 @class TRCityColor;
 @class EGPlatform;
 
+@class TRStr;
 @class TREnStrings;
 @class TRRuStrings;
-@class TRStr;
+@class TRJpStrings;
 @protocol TRStrings;
+
+@interface TRStr : NSObject
+- (ODClassType*)type;
++ (id<TRStrings>)Loc;
++ (ODClassType*)type;
+@end
+
 
 @protocol TRStrings<NSObject>
 - (NSString*)formatCost:(NSInteger)cost;
@@ -26,8 +34,6 @@
 - (NSString*)replayLevel:(TRLevel*)level;
 - (NSString*)goToNextLevel:(TRLevel*)level;
 - (NSString*)chooseLevel;
-- (NSString*)callRepairer;
-- (NSString*)undo;
 - (NSString*)victory;
 - (NSString*)defeat;
 - (NSString*)moneyOver;
@@ -47,15 +53,15 @@
 - (NSString*)leaderboard;
 - (NSString*)tapToContinue;
 - (NSString*)colorOrange;
-- (NSString*)colorBlue;
-- (NSString*)colorMint;
-- (NSString*)colorYellow;
-- (NSString*)colorRed;
 - (NSString*)colorGreen;
 - (NSString*)colorPink;
-- (NSString*)colorBeige;
 - (NSString*)colorPurple;
 - (NSString*)colorGrey;
+- (NSString*)colorBlue;
+- (NSString*)colorMint;
+- (NSString*)colorRed;
+- (NSString*)colorBeige;
+- (NSString*)colorYellow;
 - (NSString*)helpConnectTwoCities;
 - (NSString*)helpRules;
 - (NSString*)helpNewCity;
@@ -91,8 +97,6 @@
 - (NSString*)replayLevel:(TRLevel*)level;
 - (NSString*)goToNextLevel:(TRLevel*)level;
 - (NSString*)chooseLevel;
-- (NSString*)callRepairer;
-- (NSString*)undo;
 - (NSString*)victory;
 - (NSString*)defeat;
 - (NSString*)moneyOver;
@@ -100,21 +104,9 @@
 - (NSString*)tapToContinue;
 - (NSString*)error;
 - (NSString*)buyButton;
-- (NSString*)colorOrange;
-- (NSString*)colorGreen;
-- (NSString*)colorPink;
-- (NSString*)colorPurple;
-- (NSString*)colorGrey;
-- (NSString*)colorBlue;
-- (NSString*)colorMint;
-- (NSString*)colorRed;
-- (NSString*)colorBeige;
-- (NSString*)colorYellow;
 - (NSString*)shareButton;
 - (NSString*)supportButton;
-- (NSString*)supportEmailText;
 - (NSString*)rateText;
-- (NSString*)rateSignature;
 - (NSString*)rateNow;
 - (NSString*)rateProblem;
 - (NSString*)rateLater;
@@ -132,11 +124,11 @@
 - (NSString*)helpCrazy;
 - (NSString*)helpRepairer;
 - (NSString*)helpSlowMotion;
+- (NSString*)linesAdvice;
 - (NSString*)result;
 - (NSString*)best;
 - (NSString*)topScore:(EGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
-- (NSString*)linesAdvice;
 - (NSString*)shareSubject;
 - (NSString*)shareTextUrl:(NSString*)url;
 - (NSString*)twitterTextUrl:(NSString*)url;
@@ -159,8 +151,6 @@
 - (NSString*)replayLevel:(TRLevel*)level;
 - (NSString*)goToNextLevel:(TRLevel*)level;
 - (NSString*)chooseLevel;
-- (NSString*)callRepairer;
-- (NSString*)undo;
 - (NSString*)victory;
 - (NSString*)defeat;
 - (NSString*)moneyOver;
@@ -211,9 +201,56 @@
 @end
 
 
-@interface TRStr : NSObject
+@interface TRJpStrings : NSObject<TRStrings>
++ (id)jpStrings;
+- (id)init;
 - (ODClassType*)type;
-+ (id<TRStrings>)Loc;
+- (NSString*)levelNumber:(NSUInteger)number;
+- (NSString*)railBuiltCost:(NSInteger)cost;
+- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainDestroyedCost:(NSInteger)cost;
+- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)damageFixedPaymentCost:(NSInteger)cost;
+- (NSString*)resumeGame;
+- (NSString*)restartLevel:(TRLevel*)level;
+- (NSString*)replayLevel:(TRLevel*)level;
+- (NSString*)goToNextLevel:(TRLevel*)level;
+- (NSString*)chooseLevel;
+- (NSString*)victory;
+- (NSString*)defeat;
+- (NSString*)moneyOver;
+- (NSString*)cityBuilt;
+- (NSString*)tapToContinue;
+- (NSString*)error;
+- (NSString*)buyButton;
+- (NSString*)shareButton;
+- (NSString*)supportButton;
+- (NSString*)rateText;
+- (NSString*)rateNow;
+- (NSString*)rateProblem;
+- (NSString*)rateLater;
+- (NSString*)rateClose;
+- (NSString*)helpConnectTwoCities;
+- (NSString*)helpRules;
+- (NSString*)helpNewCity;
+- (NSString*)helpTrainTo:(NSString*)to;
+- (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
+- (NSString*)helpExpressTrain;
+- (NSString*)helpToMakeZoom;
+- (NSString*)helpInZoom;
+- (NSString*)helpSporadicDamage;
+- (NSString*)helpDamage;
+- (NSString*)helpCrazy;
+- (NSString*)helpRepairer;
+- (NSString*)helpSlowMotion;
+- (NSString*)linesAdvice;
+- (NSString*)result;
+- (NSString*)best;
+- (NSString*)topScore:(EGLocalPlayerScore*)score;
+- (NSString*)leaderboard;
+- (NSString*)shareSubject;
+- (NSString*)shareTextUrl:(NSString*)url;
+- (NSString*)twitterTextUrl:(NSString*)url;
 + (ODClassType*)type;
 @end
 

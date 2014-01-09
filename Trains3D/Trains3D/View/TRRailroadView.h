@@ -2,7 +2,6 @@
 #import "EGInput.h"
 #import "GEVec.h"
 #import "EGMapIso.h"
-#import "EGFont.h"
 #import "EGMesh.h"
 #import "TRRailPoint.h"
 @class TRLevel;
@@ -30,8 +29,6 @@
 @class GEMat4;
 @class EGMatrixModel;
 @class EGMatrixStack;
-@class TRStr;
-@protocol TRStrings;
 @class EGBillboard;
 @class TRSwitch;
 @class TRRailLight;

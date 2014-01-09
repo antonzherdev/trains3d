@@ -1,6 +1,12 @@
 package com.antonzherdev.trains
 
 
+object Str {
+    private val locales : [string : Strings] = [("en", EnStrings()), ("ru", RuStrings())].chain.toMap
+    val Loc : Strings = locales.opt(Locale.currentLanguageId).getOrElse(EnStrings())
+}
+
+
 trait Strings {
     def format(cost : int) : string = {
         var i = 0
@@ -27,8 +33,6 @@ trait Strings {
     def replay(level : Level) : string
     def goToNext(level : Level) : string
     def chooseLevel : string
-    def callRepairer : string
-    def undo : string
     def victory : string
     def defeat : string
     def moneyOver : string
@@ -39,7 +43,10 @@ trait Strings {
 
     def supportButton : string
     def shareButton : string
-    def supportEmailText : string
+    def supportEmailText : string =
+        "Report a problem or tell me about your ideas.
+         I will definitely reply to you and try to fix problems as soon as possible.
+         Thank you very much, Anton Zherdev, developer"
     def rateText : string
     def rateNow : string
     def rateProblem : string
@@ -50,16 +57,17 @@ trait Strings {
     def leaderboard : string
     def tapToContinue : string
 
-    def colorOrange : string
-    def colorBlue : string
-    def colorMint : string
-    def colorYellow : string
-    def colorRed : string
-    def colorGreen : string
-    def colorPink : string
-    def colorBeige : string
-    def colorPurple : string
-    def colorGrey : string
+    def colorOrange : string = "orange"
+    def colorGreen : string = "green"
+    def colorPink : string = "pink"
+    def colorPurple : string = "purple"
+    def colorGrey : string = "grey"
+    def colorBlue : string = "blue"
+    def colorMint : string = "mint"
+    def colorRed : string = "red"
+    def colorBeige : string = "beige"
+    def colorYellow : string = "yellow"
+
 
     def helpConnectTwoCities : string
     def helpRules : string
@@ -97,33 +105,16 @@ class EnStrings extends Strings {
     def replay(level : Level) : string = "Play level $(level.number) again"
     def goToNext(level : Level) : string = "Play the next level"
     def chooseLevel : string = "Choose the level"
-    def callRepairer : string = "Call the\nservice train"
-    def undo : string = "Undo"
     def victory : string = "Victory!"
     def defeat : string = "Defeat!"
     def moneyOver : string = "Money is over"
     def cityBuilt : string = "The new city has been built"
-    def tapToContinue : string = if(egPlatform.isComputer) "Click to contiunue" else "Tap to continue"
+    def tapToContinue : string = if(egPlatform.isComputer) "Click to continue" else "Tap to continue"
     def error : string = "Error"
     def buyButton : string = "Buy slow motions"
 
-    def colorOrange : string = "orange"
-    def colorGreen : string = "green"
-    def colorPink : string = "pink"
-    def colorPurple : string = "purple"
-    def colorGrey : string = "grey"
-    def colorBlue : string = "blue"
-    def colorMint : string = "mint"
-    def colorRed : string = "red"
-    def colorBeige : string = "beige"
-    def colorYellow : string = "yellow"
-
     def shareButton : string = "Share with friends"
     def supportButton : string = "Email the developer"
-    def supportEmailText : string =
-        "Report a problem or tell me about your ideas.
-         I will definetely reply to you and try to fix problems as soon as posible.
-         Thank you very much, Anton Zhedev, developer"
     def rateText : string =
         "If you enjoy playing Raildale, would you mind taking
          a moment to rate it? It won’t take more than a minute.
@@ -133,7 +124,6 @@ class EnStrings extends Strings {
 
          Thanks for your support!
          Best Regards, Anton Zherdev, developer"
-    def rateSignature : string = "Anton Zherdev, developer"
     def rateNow : string = "Rate it now"
     def rateProblem : string = "Report a problem"
     def rateLater : string = "Remind me later"
@@ -193,6 +183,12 @@ class EnStrings extends Strings {
          or get them for free sharing the game on Facebook or Twitter.
          But it is possible to manage without."
 
+    def linesAdvice : string =
+        "You can connect cities using more than one line.
+         Thus two trains coming from the opposite direction
+         would not collide with each other."
+
+
     def result : string = "Score"
     def best : string = "Your best"
     def top(score : LocalPlayerScore) : string =
@@ -209,10 +205,6 @@ class EnStrings extends Strings {
             else "Worse than average"
         }
     def leaderboard : string = "Best results"
-    def linesAdvice : string =
-        "You can connect cities using more than one line.
-         Thus two trains coming from the opposite direction
-         would not collide with each other."
 
     def shareSubject : string = "Raildale is a great game for iOS and Mac"
     def shareText(url : string) : string = "Raildale is an exciting railway building game for iOS and Mac OS X: $url"
@@ -235,8 +227,6 @@ class RuStrings extends Strings{
     def replay(level : Level) : string = "Переиграть уровень $(level.number)"
     def goToNext(level : Level) : string = "Перейти к уровеню $(level.number + 1)"
     def chooseLevel : string = "Выбрать уровень"
-    def callRepairer : string = "Вызвать\nремонтников"
-    def undo : string = "Отменить"
     def victory : string = "Победа!"
     def defeat : string = "Вы проиграли!"
     def moneyOver : string = "Закончились деньги"
@@ -357,7 +347,117 @@ class RuStrings extends Strings{
     def twitterText(url : string) : string = "$url: @RaildaleGame - великолепная игра о железной дороге для iOS и Mac"
 }
 
-object Str {
-    private val locales : [string : Strings] = [("en", EnStrings()), ("ru", RuStrings())].chain.toMap
-    val Loc : Strings = locales.opt(Locale.currentLanguageId).getOrElse(EnStrings())
+class JpStrings extends Strings {
+    def level(number : uint) : string = "レベル$number"
+    def railBuilt(cost : int) : string = "-$(format(cost)): 鉄道建設の支払い"
+    def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): に対する到着列車報酬"
+    def trainDestroyed(cost : int) : string = "-$(format(cost)): 列車破壊に対する罰金"
+    def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): 列車遅延に対する罰金"
+    def damageFixedPayment(cost : int) : string = "-$(format(cost)): 鉄道修理の支払い"
+    def resumeGame : string = "ゲームを続ける"
+    def restart(level : Level) : string = "レベル$(level.number)をやり直す"
+    def replay(level : Level) : string = "レベル$(level.number)をもう一度プレイ"
+    def goToNext(level : Level) : string = "次のレベルをプレイ"
+    def chooseLevel : string = "レベルを選んでください"
+    def victory : string = "勝利!"
+    def defeat : string = "敗北!"
+    def moneyOver : string = "資金切れです"
+    def cityBuilt : string = "新しい都市ができました"
+    def tapToContinue : string = if(egPlatform.isComputer) "クリックして続行" else "タップして続行"
+    def error : string = "エラー"
+    def buyButton : string = "スローモーションを購入"
+
+    def shareButton : string = "友達と共有"
+    def supportButton : string = "開発者にメール"
+
+    def rateText : string =
+        "Raildaleをお楽しみいただけていれば、
+        評価を残していただけませんか？
+        1分以内に評価できます。
+        問題があれば、ご報告ください。
+        できるだけ早く修正できるよう努めます。
+
+
+        サポートをありがとうございます！
+        開発者Anton Zherdevより"
+    def rateNow : string = "今すぐ評価"
+    def rateProblem : string = "問題を報告"
+    def rateLater : string = "後で表示"
+    def rateClose : string = "後で表示"
+
+    def helpConnectTwoCities : string =
+       "2つの都市を線路で結びましょう。
+       $if(egPlatform.touch)
+        指を使って簡単にレールを敷きます。
+       $else
+        マウスを使うかタッチパッドで2本の指を使います。
+       $endif"
+    def helpRules : string =
+       "残額を赤字にしないようにしましょう。
+        規定時間黒字を保てればレベルクリアです。"
+    def helpNewCity : string =
+       "時々新しい都市が登場します。
+        自分の鉄道とつなげましょう。"
+    def helpTrain(to : string) : string =
+        "列車の方向は色でわかります。"
+    def helpTrainWithSwitches(to : string) : string =
+        if(egPlatform.touch) "鉄道スイッチをタップで切り替えて、列車を目的地に到着させましょう。"
+        else "鉄道スイッチをクリック切り替えて、列車を目的地に到着させましょう。"
+    def helpExpressTrain : string =
+       "これはとても速い急行列車です。
+        スイッチの前で止まる時間がありません。
+        この場合列車は破壊されます。
+        でも信号機を使って列車を制御できます。"
+    def helpToMakeZoom : string =
+        "つまみジェスチャーで拡大・縮小できます。"
+    def helpInZoom : string =
+         "指でスクロールします。
+          画面上部のハンマーボタンでレールを敷きます。
+          もう一度押すとスクロールモードに戻ります。"
+    def helpSporadicDamage : string =
+        "時々線路が壊れてしまいます。"
+    def helpDamage : string =
+        "ボタンのひとつを使って整備列車を呼んで破損部分を修理しましょう。
+         最寄りの都市から列車を呼ぶほうが賢明です。"
+    def helpCrazy : string =
+        "列車の運転手がおかしいです。
+         信号や閉鎖スイッチを無視しています。
+         この列車をどこかの都市に送ってください。"
+
+    def helpRepairer : string =
+        "破損部分に整備列車を走らせ、どこかの都市に送ってください。"
+
+    def helpSlowMotion : string =
+       "スローモーションを使って難しい瞬間を切り抜けましょう。
+        画面右上角のカタツムリのボタンを押してください。
+        使用回数は毎日少しずつ回復します。
+        ゲームを簡単にしたい場合は追加スローモーションを購入するか、
+        このゲームをFacebookやTwitterで共有して手に入れられます。
+        でもそうしなくてもクリアはできます。"
+
+    def linesAdvice : string =
+        "複数路線で都市をつなげることもできます。
+         そうすれば反対方向の電車が衝突することがありません。"
+
+
+    def result : string = "スコア"
+    def best : string = "あなたの最高の"
+    def top(score : LocalPlayerScore) : string =
+    if(score.rank == 1) "第1位！"
+    else if(score.rank == 2) "第2位！"
+    else if(score.rank == 3) "第3位！"
+    else {
+        val p = score.rank.cast<float> / score.maxRank
+        if(p <= 5) "トップ5%"
+        else if(p <= 10) "トップ10%"
+        else if(p <= 20) "トップ20%"
+        else if(p <= 30) "トップ30%"
+        else if(p <= 50) "平均以上"
+        else "平均以下"
+    }
+    def leaderboard : string = "最高結果"
+
+    def shareSubject : string = "RaildaleはiOSやMacに最適のゲームです"
+    def shareText(url : string) : string = "iOSやMac OS X用のRaildaleは興奮の鉄道建築ゲームです: $url"
+    def twitterText(url : string) : string = "$url: iOSやMac OS X用の @RaildaleGame は興奮の鉄道建築ゲームです"
 }

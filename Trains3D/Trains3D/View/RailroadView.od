@@ -149,7 +149,6 @@ class RailView(railroad : Railroad) {
 }
 
 class UndoView(builder : RailroadBuilder) extends InputProcessor {
-    private val text = Text(nil, Loc.undo, vec3(0, 0, 0), TextAlignment(0, 0), vec4(0.1, 0.1, 0.1, 1))
     def reshape {
         val buttonSize = matrix.p.divBySelf(vec4(vec2(64 * context.scale)/context.viewport.size, 0, 0)).xy
         button.material = scaledTextureFor("Pause", "png").region(32, 32, 32, 32)
@@ -167,9 +166,6 @@ class UndoView(builder : RailroadBuilder) extends InputProcessor {
             context.depthTest.disabled {
                 button.position = vec3(rail.get.tile, 0)
                 button.draw
-
-                text.position = button.position
-                text.draw
             }
         }
     }

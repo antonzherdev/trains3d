@@ -14,7 +14,6 @@
 #import "EGTexture.h"
 #import "TRModels.h"
 #import "GEMat4.h"
-#import "TRStrings.h"
 #import "EGBillboard.h"
 #import "EGSchedule.h"
 #import "EGSprite.h"
@@ -317,7 +316,6 @@ static ODClassType* _TRRailView_type;
 
 @implementation TRUndoView{
     TRRailroadBuilder* _builder;
-    EGText* _text;
     BOOL _empty;
     EGBillboard* _button;
 }
@@ -332,7 +330,6 @@ static ODClassType* _TRUndoView_type;
     self = [super init];
     if(self) {
         _builder = builder;
-        _text = [EGText applyFont:nil text:[TRStr.Loc undo] position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:GEVec4Make(0.1, 0.1, 0.1, 1.0)];
         _empty = YES;
         _button = [EGBillboard applyMaterial:[EGColorSource applyColor:GEVec4Make(0.85, 0.9, 0.75, 0.8)]];
     }
@@ -360,8 +357,6 @@ static ODClassType* _TRUndoView_type;
         [EGGlobal.context.depthTest disabledF:^void() {
             _button.position = geVec3ApplyVec2Z(geVec2ApplyVec2i(((TRRail*)([rail get])).tile), 0.0);
             [_button draw];
-            [_text setPosition:_button.position];
-            [_text draw];
         }];
     }
 }
