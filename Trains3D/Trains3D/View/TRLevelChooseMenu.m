@@ -67,8 +67,8 @@ static ODClassType* _TRLevelChooseMenu_type;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
-    _fontRes = [EGGlobal fontWithName:@"lucida_grande" size:((egPlatform().isPhone) ? 14 : 16)];
-    _fontBottom = [EGGlobal fontWithName:@"lucida_grande" size:((egPlatform().isPhone) ? 12 : 14)];
+    _fontRes = [EGGlobal fontWithName:@"Lucida grande" size:((egPlatform().isPhone) ? 14 : 16)];
+    _fontBottom = [EGGlobal fontWithName:@"Lucida grande" size:((egPlatform().isPhone) ? 12 : 14)];
 }
 
 - (void)start {

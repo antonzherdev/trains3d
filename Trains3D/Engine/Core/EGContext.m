@@ -128,7 +128,7 @@ static ODClassType* _EGContext_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _ttf = NO;
+        _ttf = YES;
         _scale = 1.0;
         _defaultFramebuffer = 0;
         _textureCache = [NSMutableDictionary mutableDictionary];
@@ -174,7 +174,7 @@ static ODClassType* _EGContext_type;
 }
 
 - (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size {
-    return [self fontWithName:[NSString stringWithFormat:@"%@_%lu", name, (unsigned long)((NSUInteger)(size * _scale))]];
+    return [self fontWithName:[NSString stringWithFormat:@"%@ %lu", name, (unsigned long)((NSUInteger)(size * _scale))]];
 }
 
 - (void)clear {

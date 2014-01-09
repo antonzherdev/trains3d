@@ -17,8 +17,8 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
     def reshapeWith(viewport : Rect) {
         val s = viewport.size/context.scale
         camera = Camera2D(s)
-        val font = fontWith(name = "lucida_grande", 24)
-        val notificationFont = fontWith(name = "lucida_grande", if(egPlatform.isPhone) 14 else 16)
+        val font = fontWith(name = "Lucida grande", 24)
+        val notificationFont = fontWith(name = "Lucida grande", if(egPlatform.isPhone) 14 else 16)
         notificationText.font = font
 
         val sh = TextShadow(color = vec4(0.05, 0.05, 0.05, 0.5), shift = vec2(1, -1))
@@ -44,7 +44,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         slowSprite.material = ColorSource(t.region(64, 32, 32, 32))
         slowSprite.adjustSize
 
-        slowMotionCountText.font = fontWith(name = "lucida_grande", 18)
+        slowMotionCountText.font = fontWith(name = "Lucida grande", 18)
         slowMotionCountText.position = slowSprite.position + vec2(1, 18)
         slowMotionCountText.shadow = sh
 

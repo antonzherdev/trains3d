@@ -306,7 +306,7 @@ static ODClassType* _TRMenuView_type;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
-    __font = [EGGlobal fontWithName:@"lucida_grande" size:24];
+    __font = [EGGlobal fontWithName:@"Lucida grande" size:24];
     [self reshape];
 }
 
@@ -559,8 +559,8 @@ static ODClassType* _TRWinMenu_type;
 }
 
 - (void)reshape {
-    [_headerText setFont:[EGGlobal fontWithName:@"lucida_grande" size:36]];
-    EGFont* f = [EGGlobal fontWithName:@"lucida_grande" size:18];
+    [_headerText setFont:[EGGlobal fontWithName:@"Lucida grande" size:36]];
+    EGFont* f = [EGGlobal fontWithName:@"Lucida grande" size:18];
     [_resultText setFont:f];
     [_bestScoreText setFont:f];
     [_topText setFont:f];
@@ -664,7 +664,7 @@ static ODClassType* _TRRateMenu_type;
 }
 
 - (void)reshape {
-    [_headerText setFont:[EGGlobal fontWithName:@"lucida_grande" size:14]];
+    [_headerText setFont:[EGGlobal fontWithName:@"Lucida grande" size:14]];
 }
 
 - (ODClassType*)type {
@@ -755,8 +755,8 @@ static ODClassType* _TRLooseMenu_type;
 }
 
 - (void)reshape {
-    [_headerText setFont:[EGGlobal fontWithName:@"lucida_grande" size:36]];
-    [_detailsText setFont:[EGGlobal fontWithName:@"lucida_grande" size:16]];
+    [_headerText setFont:[EGGlobal fontWithName:@"Lucida grande" size:36]];
+    [_detailsText setFont:[EGGlobal fontWithName:@"Lucida grande" size:16]];
 }
 
 - (ODClassType*)type {
@@ -828,8 +828,8 @@ static ODClassType* _TRHelpView_type;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
-    [_helpText setFont:[EGGlobal fontWithName:@"lucida_grande" size:((egPlatform().isPhone) ? 14 : 16)]];
-    [_tapText setFont:[EGGlobal fontWithName:@"lucida_grande" size:12]];
+    [_helpText setFont:[EGGlobal fontWithName:@"Lucida grande" size:((egPlatform().isPhone) ? 14 : 16)]];
+    [_tapText setFont:[EGGlobal fontWithName:@"Lucida grande" size:12]];
 }
 
 - (void)draw {
@@ -910,7 +910,7 @@ static ODClassType* _TRSlowMotionShopMenu_type;
     self = [super init];
     if(self) {
         _shop = [EGGlobal scaledTextureForName:@"Shop" format:@"png"];
-        _shareFont = [EGGlobal fontWithName:@"lucida_grande" size:18];
+        _shareFont = [EGGlobal fontWithName:@"Lucida grande" size:18];
         _buttonSize = GEVec2Make(150.0, 150.0);
         _curButtons = (@[]);
     }

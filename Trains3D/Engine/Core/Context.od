@@ -13,7 +13,7 @@ object Global {
 }
 
 class Context {
-    var ttf : bool = false
+    var ttf : bool = true
     var scale : float = 1.0
     var defaultFramebuffer : int4 = 0
     private val textureCache = MutableHashMap<(string, uint4, uint4), FileTexture>()
@@ -23,7 +23,7 @@ class Context {
         textureCache.objectFor(key = (file, magFilter.cast<uint4>, minFilter.cast<uint4>), orUpdateWith = FileTexture(file, scale, magFilter, minFilter))
 
     def fontWith(name : string) : Font = fontCache.objectFor(key = name, orUpdateWith = BMFont(name))
-    def fontWith(name : string, size : uint) : Font = fontWith("$name\_$((size*scale).cast<uint>)")
+    def fontWith(name : string, size : uint) : Font = fontWith("$name\ $((size*scale).cast<uint>)")
 
     var environment = Environment.default
     val matrixStack = MatrixStack()
