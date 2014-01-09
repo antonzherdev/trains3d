@@ -9,9 +9,12 @@ struct TextAlignment(x : float4, y : float4, baseline : bool, shift : vec3) {
 }
 
 class Font {
+    static val fontChangeNotification = NotificationHandle<Font, void>("fontChangeNotification")
+
     def texture : Texture
 
     static val newLineDesc = FontSymbolDesc(0, vec2(0, 0), vec2(0, 0), Rect(0, 0, 0, 0), true)
+    static val zeroDesc = FontSymbolDesc(0, vec2(0, 0), vec2(0, 0), Rect(0, 0, 0, 0), false)
 
     def height : uint
     def size : uint
@@ -28,12 +31,12 @@ class Font {
         var fullWidth = 0
         var lineWidth = 0
         symbolsArr.for{s ->
-        if(s.isNewLine) {
-            if(lineWidth > fullWidth) fullWidth = lineWidth
-            lineWidth = 0
-        } else {
-            lineWidth += s.width
-        }
+            if(s.isNewLine) {
+                if(lineWidth > fullWidth) fullWidth = lineWidth
+                lineWidth = 0
+            } else {
+                lineWidth += s.width
+            }
         }
         if(lineWidth > fullWidth) fullWidth = lineWidth
         vec2(fullWidth, height.cast<float4>*(newLines + 1))
@@ -48,17 +51,24 @@ class Font {
 
     static val vbDesc = VertexBufferDesc(FontPrintData.type, position = 0, uv = 2*4, normal = -1, color = -1, model = -1)
 
+    def resymbol : bool = false
+
     def vao(text : string, at : vec3, alignment : TextAlignment) : SimpleVertexArray<FontShaderParam> = {
         val pos =
             if(alignment.shift.isEmpty) matrix.wcp.mul(vec4(at, 1)).xy
             else matrix.p.mul(matrix.wc.mul(vec4(at, 1)) + alignment.shift).xy
         var newLines = 0
-        val symbolsArr = text.chain.flatMap<FontSymbolDesc>{s ->
+        var symbolsArr = text.chain.flatMap<FontSymbolDesc>{s ->
             if(s == 10) {
                 newLines++
                 Option.some(newLineDesc)
             } else symbolOpt(s)
         }.toArray
+        if(resymbol) {
+            symbolsArr = text.chain.flatMap<FontSymbolDesc>{s ->
+                if(s == 10) Option.some(newLineDesc) else symbolOpt(s)
+            }.toArray
+        }
         val symbolsCount = symbolsArr.count - newLines
         val vertexes = VoidRefArray(FontPrintData.type, symbolsCount * 4)
         val indexes = VoidRefArray(UInt4.type, symbolsCount * 6)
@@ -136,6 +146,12 @@ class Font {
             vao.draw(FontShaderParam(texture, color, shift = vec2(0, 0)))
         }
     }
+
+    def beReadyFor(text : string) {
+        text.chain.for{s ->
+            symbolOpt(s)
+        }
+    }
 }
 
 class BMFont(name : string) extends Font {
@@ -190,11 +206,13 @@ class Text {
     var _changed = true
 
     private var _font : Font
+    private var _obs2 : NotificationObserver
     def font = _font
     def set(font : Font) {
        if(font != _font) {
            _changed = true
            _font = font
+           _obs2 = Font.fontChangeNotification.observe(_font){_, __ -> _changed = true}
        }
     }
 

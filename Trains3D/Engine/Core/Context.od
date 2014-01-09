@@ -10,6 +10,7 @@ object Global {
         context.textureFor("$name\_$(context.scale.cast<uint4>)x.$format", context.scale, magFilter, minFilter)
     def fontWith(name : string) : Font = context.fontWith(name)
     def fontWith(name : string, size : uint) : Font = context.fontWith(name, size)
+    def mainFontWith(size : uint) : Font = context.mainFontWith(size)
 }
 
 class Context {
@@ -23,7 +24,12 @@ class Context {
         textureCache.objectFor(key = (file, magFilter.cast<uint4>, minFilter.cast<uint4>), orUpdateWith = FileTexture(file, scale, magFilter, minFilter))
 
     def fontWith(name : string) : Font = fontCache.objectFor(key = name, orUpdateWith = BMFont(name))
-    def fontWith(name : string, size : uint) : Font = fontWith("$name\ $((size*scale).cast<uint>)")
+    def mainFontWith(size : uint) : Font = fontWith("Helvetica", size)
+    def fontWith(name : string, size : uint) : Font = {
+        val nm = "$name\ $((size*scale).cast<uint>)"
+        if(ttf) fontCache.objectFor(key = nm, orUpdateWith = TTFFont(name, size*scale))
+        else fontWith(nm)
+    }
 
     var environment = Environment.default
     val matrixStack = MatrixStack()

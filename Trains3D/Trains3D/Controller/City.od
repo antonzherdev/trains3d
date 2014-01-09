@@ -2,7 +2,7 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-enum CityColor(color : vec4, localName : string) {
+enum CityColor(color : vec4, localNameFunc : () -> string) {
     orange(vec4(247, 156, 37, 255)/255, Loc.colorOrange)
     green(vec4(0.66, 0.9, 0.44, 1.0), Loc.colorGreen)
     pink(vec4(255, 153, 206, 255)/255, Loc.colorPink)
@@ -17,6 +17,7 @@ enum CityColor(color : vec4, localName : string) {
     grey(vec4(0.7, 0.7, 0.7 , 1.0), Loc.colorGrey)
 
     val trainColor = color //vec4(color.xyz*0.9, 1)
+    def localName : string = localNameFunc()
 }
 
 

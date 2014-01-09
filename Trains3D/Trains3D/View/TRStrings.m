@@ -1,9 +1,9 @@
 #import "TRStrings.h"
 
 #import "TRTrain.h"
+#import "TRCity.h"
 #import "TRLevel.h"
 #import "EGGameCenter.h"
-#import "TRCity.h"
 #import "GL.h"
 #import "EGPlatform.h"
 @implementation TRStr
@@ -63,6 +63,9 @@ static ODClassType* _TRStr_type;
 @implementation TRStrings{
     NSString* _language;
 }
+static TRTrain* _TRStrings_fakeTrain;
+static TRTrain* _TRStrings_fakeCrazyTrain;
+static TRLevel* _TRStrings_fakeLevel;
 static ODClassType* _TRStrings_type;
 @synthesize language = _language;
 
@@ -80,6 +83,13 @@ static ODClassType* _TRStrings_type;
 + (void)initialize {
     [super initialize];
     _TRStrings_type = [ODClassType classTypeWithCls:[TRStrings class]];
+    _TRStrings_fakeTrain = [TRTrain trainWithLevel:nil trainType:TRTrainType.simple color:TRCityColor.orange __cars:^id<CNSeq>(TRTrain* _) {
+        return (@[]);
+    } speed:10];
+    _TRStrings_fakeCrazyTrain = [TRTrain trainWithLevel:nil trainType:TRTrainType.crazy color:TRCityColor.grey __cars:^id<CNSeq>(TRTrain* _) {
+        return (@[]);
+    } speed:10];
+    _TRStrings_fakeLevel = [TRLevel levelWithNumber:1 rules:nil];
 }
 
 - (NSString*)formatCost:(NSInteger)cost {
@@ -91,6 +101,10 @@ static ODClassType* _TRStrings_type;
         else return [CNOption applyValue:s];
     }] reverse] charsToString];
     return [NSString stringWithFormat:@"$%@", str];
+}
+
+- (NSString*)notificationsCharSet {
+    return [[[[[[[[@"$0123456789'" stringByAppendingString:[self railBuiltCost:0]] stringByAppendingString:[self trainArrivedTrain:_TRStrings_fakeTrain cost:0]] stringByAppendingString:[self trainArrivedTrain:_TRStrings_fakeCrazyTrain cost:0]] stringByAppendingString:[self trainDelayedFineTrain:_TRStrings_fakeTrain cost:0]] stringByAppendingString:[self trainDelayedFineTrain:_TRStrings_fakeCrazyTrain cost:0]] stringByAppendingString:[self trainDestroyedCost:0]] stringByAppendingString:[self damageFixedPaymentCost:0]] stringByAppendingString:[self cityBuilt]];
 }
 
 - (NSString*)levelNumber:(NSUInteger)number {
@@ -125,6 +139,10 @@ static ODClassType* _TRStrings_type;
     @throw @"Method cityBuilt is abstract";
 }
 
+- (NSString*)menuButtonsCharacterSet {
+    return [[[[[[[[[@"0123456789" stringByAppendingString:[self resumeGame]] stringByAppendingString:[self restartLevel:_TRStrings_fakeLevel]] stringByAppendingString:[self replayLevel:_TRStrings_fakeLevel]] stringByAppendingString:[self goToNextLevel:_TRStrings_fakeLevel]] stringByAppendingString:[self chooseLevel]] stringByAppendingString:[self supportButton]] stringByAppendingString:[self shareButton]] stringByAppendingString:[self leaderboard]] stringByAppendingString:[self buyButton]];
+}
+
 - (NSString*)resumeGame {
     @throw @"Method resumeGame is abstract";
 }
@@ -143,6 +161,22 @@ static ODClassType* _TRStrings_type;
 
 - (NSString*)chooseLevel {
     @throw @"Method chooseLevel is abstract";
+}
+
+- (NSString*)supportButton {
+    @throw @"Method supportButton is abstract";
+}
+
+- (NSString*)shareButton {
+    @throw @"Method shareButton is abstract";
+}
+
+- (NSString*)leaderboard {
+    @throw @"Method leaderboard is abstract";
+}
+
+- (NSString*)buyButton {
+    @throw @"Method buyButton is abstract";
 }
 
 - (NSString*)victory {
@@ -167,18 +201,6 @@ static ODClassType* _TRStrings_type;
 
 - (NSString*)error {
     @throw @"Method error is abstract";
-}
-
-- (NSString*)buyButton {
-    @throw @"Method buyButton is abstract";
-}
-
-- (NSString*)supportButton {
-    @throw @"Method supportButton is abstract";
-}
-
-- (NSString*)shareButton {
-    @throw @"Method shareButton is abstract";
 }
 
 - (NSString*)supportEmailText {
@@ -209,10 +231,6 @@ static ODClassType* _TRStrings_type;
 
 - (NSString*)topScore:(EGLocalPlayerScore*)score {
     @throw @"Method top is abstract";
-}
-
-- (NSString*)leaderboard {
-    @throw @"Method leaderboard is abstract";
 }
 
 - (NSString*)tapToContinue {
@@ -390,7 +408,7 @@ static ODClassType* _TREnStrings_type;
 
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
     if(train.trainType == TRTrainType.crazy) return [NSString stringWithFormat:@"+%@: Reward for the arrived crazy train", [self formatCost:cost]];
-    else return [NSString stringWithFormat:@"+%@: Reward for the arrived %@ train", [self formatCost:cost], train.color.localName];
+    else return [NSString stringWithFormat:@"+%@: Reward for the arrived %@ train", [self formatCost:cost], [train.color localName]];
 }
 
 - (NSString*)trainDestroyedCost:(NSInteger)cost {
@@ -399,7 +417,7 @@ static ODClassType* _TREnStrings_type;
 
 - (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
     if(train.trainType == TRTrainType.crazy) return [NSString stringWithFormat:@"-%@: Fine for the delayed crazy train", [self formatCost:cost]];
-    else return [NSString stringWithFormat:@"-%@: Fine for the delayed %@ train", [self formatCost:cost], train.color.localName];
+    else return [NSString stringWithFormat:@"-%@: Fine for the delayed %@ train", [self formatCost:cost], [train.color localName]];
 }
 
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost {
@@ -686,7 +704,7 @@ static ODClassType* _TRRuStrings_type;
 
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
     if(train.trainType == TRTrainType.crazy) return [NSString stringWithFormat:@"+%@: Доход от прибытия сумасшедшего поезда", [self formatCost:cost]];
-    else return [NSString stringWithFormat:@"+%@: Доход от прибытия поезда в %@ город", [self formatCost:cost], train.color.localName];
+    else return [NSString stringWithFormat:@"+%@: Доход от прибытия поезда в %@ город", [self formatCost:cost], [train.color localName]];
 }
 
 - (NSString*)trainDestroyedCost:(NSInteger)cost {
@@ -695,7 +713,7 @@ static ODClassType* _TRRuStrings_type;
 
 - (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
     if(train.trainType == TRTrainType.crazy) return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся сумасшедший поезд", [self formatCost:cost]];
-    else return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся %@ поезд", [self formatCost:cost], train.color.localName];
+    else return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся %@ поезд", [self formatCost:cost], [train.color localName]];
 }
 
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost {
@@ -1103,11 +1121,10 @@ static ODClassType* _TRJpStrings_type;
 
 - (NSString*)rateText {
     return @"Raildaleをお楽しみいただけていれば、\n"
-        "評価を残していただけませんか？\n"
-        "1分以内に評価できます。\n"
+        "評価を残していただけませんか？1分以内に評価できます。\n"
+        "\n"
         "問題があれば、ご報告ください。\n"
         "できるだけ早く修正できるよう努めます。\n"
-        "\n"
         "\n"
         "サポートをありがとうございます！\n"
         "開発者Anton Zherdevより";

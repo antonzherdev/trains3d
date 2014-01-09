@@ -813,6 +813,12 @@ GERect geRectThickenHalfSize(GERect self, GEVec2 halfSize) {
 GERect geRectDivVec2(GERect self, GEVec2 vec2) {
     return GERectMake(geVec2DivVec2(self.p, vec2), geVec2DivVec2(self.size, vec2));
 }
+GERect geRectDivF(GERect self, CGFloat f) {
+    return GERectMake(geVec2DivF(self.p, f), geVec2DivF(self.size, f));
+}
+GERect geRectDivF4(GERect self, float f4) {
+    return GERectMake(geVec2DivF4(self.p, f4), geVec2DivF4(self.size, f4));
+}
 GEVec2 geRectPh(GERect self) {
     return GEVec2Make(self.p.x, self.p.y + self.size.y);
 }

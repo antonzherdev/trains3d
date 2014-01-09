@@ -3,6 +3,7 @@
 #import "EGTexture.h"
 #import "GL.h"
 #import "EGFont.h"
+#import "EGTTFFont.h"
 #import "EGShader.h"
 #import "EGVertex.h"
 #import "EGShadow.h"
@@ -41,6 +42,10 @@ static ODClassType* _EGGlobal_type;
 
 + (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size {
     return [_EGGlobal_context fontWithName:name size:size];
+}
+
++ (EGFont*)mainFontWithSize:(NSUInteger)size {
+    return [_EGGlobal_context mainFontWithSize:size];
 }
 
 - (ODClassType*)type {
@@ -173,8 +178,16 @@ static ODClassType* _EGContext_type;
     }];
 }
 
+- (EGFont*)mainFontWithSize:(NSUInteger)size {
+    return [self fontWithName:@"Helvetica" size:size];
+}
+
 - (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size {
-    return [self fontWithName:[NSString stringWithFormat:@"%@ %lu", name, (unsigned long)((NSUInteger)(size * _scale))]];
+    NSString* nm = [NSString stringWithFormat:@"%@ %lu", name, (unsigned long)((NSUInteger)(size * _scale))];
+    if(_ttf) return [_fontCache objectForKey:nm orUpdateWith:^EGFont*() {
+        return [EGTTFFont fontWithName:name size:((NSUInteger)(size * _scale))];
+    }];
+    else return [self fontWithName:nm];
 }
 
 - (void)clear {

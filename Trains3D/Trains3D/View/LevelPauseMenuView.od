@@ -100,7 +100,8 @@ class MenuView extends PauseView {
     private var position : vec2
     private var size : vec2
     def reshapeWith(viewport : Rect) {
-        _font = fontWith(name = "Lucida grande", size = 24)
+        _font = mainFontWith(size = 24)
+        _font.beReadyFor(Loc.menuButtonsCharacterSet)
 
         reshape
     }
@@ -198,8 +199,8 @@ class WinMenu(level : Level) extends MenuView {
     private val bestScoreText = Text(nil, "", vec3(0, 0, 0), TextAlignment(1, 0), vec4(0, 0, 0, 1))
     private val topText = Text(nil, "", vec3(0, 0, 0), TextAlignment(1, 0), vec4(0, 0, 0, 1))
     def reshape {
-        headerText.font = fontWith(name = "Lucida grande", size = 36)
-        val f = fontWith(name = "Lucida grande", size = 18)
+        headerText.font = mainFontWith(size = 36)
+        val f = mainFontWith(size = 18)
         resultText.font = f
         bestScoreText.font = f
         topText.font = f
@@ -224,7 +225,7 @@ class RateMenu extends MenuView {
     }
 
     def reshape {
-        headerText.font = fontWith(name = "Lucida grande", size = 14)
+        headerText.font = mainFontWith(size = 14)
     }
 }
 
@@ -248,8 +249,8 @@ class LooseMenu(level : Level) extends MenuView {
     private val headerText : Text = Text(nil, Loc.defeat, vec3(0, 0, 0), TextAlignment(-1, 0), vec4(0, 0, 0, 1))
     private val detailsText : Text = Text(nil, Loc.moneyOver, vec3(0, 0, 0), TextAlignment(0, 0), vec4(0, 0, 0, 1))
     def reshape {
-        headerText.font = fontWith(name = "Lucida grande", size = 36)
-        detailsText.font = fontWith(name = "Lucida grande", size = 16)
+        headerText.font = mainFontWith(size = 36)
+        detailsText.font = mainFontWith(size = 16)
     }
 }
 
@@ -258,8 +259,8 @@ class HelpView(level : Level) extends PauseView {
     private val helpText : Text = Text(nil, "", vec3(0, 0, 0), TextAlignment(-1, 1), vec4(0, 0, 0, 1))
     private val tapText : Text = Text(nil, "($(Loc.tapToContinue))", vec3(0, 0, 0), TextAlignment(0, -1), vec4(0, 0, 0, 1))
     def reshapeWith(viewport : Rect) {
-        helpText.font = fontWith(name = "Lucida grande", size = if(egPlatform.isPhone) 14 else 16)
-        tapText.font = fontWith(name = "Lucida grande", size = 12)
+        helpText.font = mainFontWith(size = if(egPlatform.isPhone) 14 else 16)
+        tapText.font = mainFontWith(size = 12)
     }
 
     private val helpBackSprite = Sprite(vec4(1, 1, 1, 0.8), Rect(0, 0, 0, 0))
@@ -295,8 +296,10 @@ class HelpView(level : Level) extends PauseView {
 class SlowMotionShopMenu extends PauseView {
     val shop = scaledTextureFor("Shop", "png")
 
-    val shareFont = fontWith(name = "Lucida grande", size = 18)
-    def reshapeWith(viewport : Rect) {}
+    val shareFont = mainFontWith(size = 18)
+    def reshapeWith(viewport : Rect) {
+        shareFont.beReadyFor("0123456789,.FacebookTwitter")
+    }
 
     def drawBuyButton(count : uint, price : string, rect : Rect) {
         drawSnail(vec3(0.95, 1.0, 0.95), count, rect)
@@ -308,7 +311,7 @@ class SlowMotionShopMenu extends PauseView {
 
         val pos = rect.p(0.1, 0.1)
         D2D.drawSprite(texture, at = vec3(pos, 0), rect = Rect(0, 0, 32, 32))
-        shareFont.draw(name, at = pos + vec2(36, 18), TextAlignment(-1, 0), color = vec4(0.1, 0.1, 0.1, 1))
+        shareFont.draw(name, at = pos + vec2(36, 16), TextAlignment(-1, 0), color = vec4(0.1, 0.1, 0.1, 1))
     }
 
     def drawButtonBackground(color : vec3, rect : Rect) {

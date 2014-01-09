@@ -1,9 +1,9 @@
 #import "objd.h"
 @class TRTrain;
-@class TRLevel;
-@class EGLocalPlayerScore;
 @class TRTrainType;
 @class TRCityColor;
+@class TRLevel;
+@class EGLocalPlayerScore;
 @class EGPlatform;
 
 @class TRStr;
@@ -26,6 +26,7 @@
 - (id)initWithLanguage:(NSString*)language;
 - (ODClassType*)type;
 - (NSString*)formatCost:(NSInteger)cost;
+- (NSString*)notificationsCharSet;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)startLevelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
@@ -34,20 +35,22 @@
 - (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost;
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost;
 - (NSString*)cityBuilt;
+- (NSString*)menuButtonsCharacterSet;
 - (NSString*)resumeGame;
 - (NSString*)restartLevel:(TRLevel*)level;
 - (NSString*)replayLevel:(TRLevel*)level;
 - (NSString*)goToNextLevel:(TRLevel*)level;
 - (NSString*)chooseLevel;
+- (NSString*)supportButton;
+- (NSString*)shareButton;
+- (NSString*)leaderboard;
+- (NSString*)buyButton;
 - (NSString*)victory;
 - (NSString*)defeat;
 - (NSString*)moneyOver;
 - (NSString*)result;
 - (NSString*)best;
 - (NSString*)error;
-- (NSString*)buyButton;
-- (NSString*)supportButton;
-- (NSString*)shareButton;
 - (NSString*)supportEmailText;
 - (NSString*)rateText;
 - (NSString*)rateNow;
@@ -55,7 +58,6 @@
 - (NSString*)rateLater;
 - (NSString*)rateClose;
 - (NSString*)topScore:(EGLocalPlayerScore*)score;
-- (NSString*)leaderboard;
 - (NSString*)tapToContinue;
 - (NSString*)colorOrange;
 - (NSString*)colorGreen;

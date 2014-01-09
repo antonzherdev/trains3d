@@ -12,14 +12,14 @@
 @class EGGlobal;
 @class EGContext;
 @class EGCamera2D;
+@class TRStr;
+@class TRStrings;
 @class EGTexture;
 @class EGColorSource;
 @class EGBlendFunction;
 @class TRRailroad;
 @class TRRailroadBuilder;
 @class TRScore;
-@class TRStr;
-@class TRStrings;
 @class EGD2D;
 @class TRGameDirector;
 @class EGEnablingState;

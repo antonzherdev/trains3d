@@ -8,9 +8,9 @@
 #import "GL.h"
 #import "EGPlatform.h"
 #import "EGContext.h"
+#import "TRStrings.h"
 #import "EGGameCenter.h"
 #import "EGMaterial.h"
-#import "TRStrings.h"
 #import "EGInput.h"
 @implementation TRLevelChooseMenu{
     NSString* _name;
@@ -67,8 +67,10 @@ static ODClassType* _TRLevelChooseMenu_type;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
-    _fontRes = [EGGlobal fontWithName:@"Lucida grande" size:((egPlatform().isPhone) ? 14 : 16)];
-    _fontBottom = [EGGlobal fontWithName:@"Lucida grande" size:((egPlatform().isPhone) ? 12 : 14)];
+    _fontRes = [EGGlobal mainFontWithSize:((egPlatform().isPhone) ? 14 : 16)];
+    [_fontRes beReadyForText:[[TRStr.Loc levelNumber:1] stringByAppendingString:@"0123456789"]];
+    _fontBottom = [EGGlobal mainFontWithSize:((egPlatform().isPhone) ? 12 : 14)];
+    [_fontBottom beReadyForText:@"$0123456789'%"];
 }
 
 - (void)start {

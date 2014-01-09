@@ -35,8 +35,7 @@
 
 
 @implementation OSLocale
-+ (NSString *)currentLanguageId {
-    return [[[NSLocale currentLocale] localeIdentifier] substringToIndex:2];
++ (NSArray *)preferredLanguages {
+    return [NSLocale preferredLanguages];
 }
-
 @end

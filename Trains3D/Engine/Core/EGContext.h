@@ -4,6 +4,7 @@
 @class EGFont;
 @class EGFileTexture;
 @class EGBMFont;
+@class EGTTFFont;
 @class EGShaderProgram;
 @protocol EGVertexBuffer;
 @class EGShadowMap;
@@ -29,6 +30,7 @@
 + (EGTexture*)scaledTextureForName:(NSString*)name format:(NSString*)format magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
 + (EGFont*)fontWithName:(NSString*)name;
 + (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size;
++ (EGFont*)mainFontWithSize:(NSUInteger)size;
 + (EGContext*)context;
 + (EGMatrixStack*)matrix;
 + (ODClassType*)type;
@@ -53,6 +55,7 @@
 - (ODClassType*)type;
 - (EGTexture*)textureForFile:(NSString*)file scale:(CGFloat)scale magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
 - (EGFont*)fontWithName:(NSString*)name;
+- (EGFont*)mainFontWithSize:(NSUInteger)size;
 - (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size;
 - (void)clear;
 - (void)clearCache;

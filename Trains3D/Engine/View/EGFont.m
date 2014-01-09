@@ -82,7 +82,9 @@ ODPType* egTextAlignmentType() {
 
 
 @implementation EGFont
+static CNNotificationHandle* _EGFont_fontChangeNotification;
 static EGFontSymbolDesc* _EGFont_newLineDesc;
+static EGFontSymbolDesc* _EGFont_zeroDesc;
 static EGVertexBufferDesc* _EGFont_vbDesc;
 static ODClassType* _EGFont_type;
 
@@ -99,7 +101,9 @@ static ODClassType* _EGFont_type;
 + (void)initialize {
     [super initialize];
     _EGFont_type = [ODClassType classTypeWithCls:[EGFont class]];
+    _EGFont_fontChangeNotification = [CNNotificationHandle notificationHandleWithName:@"fontChangeNotification"];
     _EGFont_newLineDesc = [EGFontSymbolDesc fontSymbolDescWithWidth:0.0 offset:GEVec2Make(0.0, 0.0) size:GEVec2Make(0.0, 0.0) textureRect:geRectApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0) isNewLine:YES];
+    _EGFont_zeroDesc = [EGFontSymbolDesc fontSymbolDescWithWidth:0.0 offset:GEVec2Make(0.0, 0.0) size:GEVec2Make(0.0, 0.0) textureRect:geRectApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0) isNewLine:NO];
     _EGFont_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:egFontPrintDataType() position:0 uv:((int)(2 * 4)) normal:-1 color:-1 model:-1];
 }
 
@@ -151,6 +155,10 @@ static ODClassType* _EGFont_type;
     return geVec4Xy([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW([self measurePText:text], 0.0, 0.0)]);
 }
 
+- (BOOL)resymbol {
+    return NO;
+}
+
 - (EGSimpleVertexArray*)vaoText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment {
     GEVec2 pos = ((geVec3IsEmpty(alignment.shift)) ? geVec4Xy([[EGGlobal.matrix wcp] mulVec4:geVec4ApplyVec3W(at, 1.0)]) : geVec4Xy([[EGGlobal.matrix p] mulVec4:geVec4AddVec3([[EGGlobal.matrix wc] mulVec4:geVec4ApplyVec3W(at, 1.0)], alignment.shift)]));
     __block NSInteger newLines = 0;
@@ -161,6 +169,10 @@ static ODClassType* _EGFont_type;
         } else {
             return [self symbolOptSmb:unums(s)];
         }
+    }] toArray];
+    if([self resymbol]) symbolsArr = [[[text chain] flatMap:^id(id s) {
+        if(unumi(s) == 10) return [CNOption someValue:_EGFont_newLineDesc];
+        else return [self symbolOptSmb:unums(s)];
     }] toArray];
     NSUInteger symbolsCount = [symbolsArr count] - newLines;
     CNVoidRefArray vertexes = cnVoidRefArrayApplyTpCount(egFontPrintDataType(), symbolsCount * 4);
@@ -228,12 +240,26 @@ static ODClassType* _EGFont_type;
     }];
 }
 
+- (void)beReadyForText:(NSString*)text {
+    [[text chain] forEach:^void(id s) {
+        [self symbolOptSmb:unums(s)];
+    }];
+}
+
 - (ODClassType*)type {
     return [EGFont type];
 }
 
++ (CNNotificationHandle*)fontChangeNotification {
+    return _EGFont_fontChangeNotification;
+}
+
 + (EGFontSymbolDesc*)newLineDesc {
     return _EGFont_newLineDesc;
+}
+
++ (EGFontSymbolDesc*)zeroDesc {
+    return _EGFont_zeroDesc;
 }
 
 + (EGVertexBufferDesc*)vbDesc {
@@ -378,6 +404,7 @@ static ODClassType* _EGBMFont_type;
     CNNotificationObserver* _obs;
     BOOL __changed;
     EGFont* __font;
+    CNNotificationObserver* __obs2;
     NSString* __text;
     GEVec3 __position;
     EGTextAlignment __alignment;
@@ -430,6 +457,9 @@ static ODClassType* _EGText_type;
     if(!([font isEqual:__font])) {
         __changed = YES;
         __font = font;
+        __obs2 = [EGFont.fontChangeNotification observeSender:__font by:^void(id _) {
+            __changed = YES;
+        }];
     }
 }
 

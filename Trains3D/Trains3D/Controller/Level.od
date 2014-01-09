@@ -25,7 +25,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
             time += t.a
             schedule.schedule(after = time, event = f(ws))
         }
-        log("Schedule for level $number is $time seconds")
+//        log("Schedule for level $number is $time seconds")
         schedule
     }
     def cities : [City] = _cities
@@ -313,9 +313,9 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         _result = LevelResult(false)
     }
 
-    def dealloc {
-        log("Dealloc level $number")
-    }
+//    def dealloc {
+//        log("Dealloc level $number")
+//    }
 
     var rate = false
     var slowMotionShop = 0

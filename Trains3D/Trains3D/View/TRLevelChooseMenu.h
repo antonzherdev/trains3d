@@ -9,12 +9,12 @@
 @class EGCamera2D;
 @class EGPlatform;
 @class EGGlobal;
+@class TRStr;
+@class TRStrings;
 @class EGLocalPlayerScore;
 @class EGColorSource;
 @class EGD2D;
 @class EGBlendFunction;
-@class TRStr;
-@class TRStrings;
 @class EGContext;
 @class EGEnablingState;
 @class EGRecognizers;

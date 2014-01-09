@@ -306,7 +306,8 @@ static ODClassType* _TRMenuView_type;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
-    __font = [EGGlobal fontWithName:@"Lucida grande" size:24];
+    __font = [EGGlobal mainFontWithSize:24];
+    [__font beReadyForText:[TRStr.Loc menuButtonsCharacterSet]];
     [self reshape];
 }
 
@@ -559,8 +560,8 @@ static ODClassType* _TRWinMenu_type;
 }
 
 - (void)reshape {
-    [_headerText setFont:[EGGlobal fontWithName:@"Lucida grande" size:36]];
-    EGFont* f = [EGGlobal fontWithName:@"Lucida grande" size:18];
+    [_headerText setFont:[EGGlobal mainFontWithSize:36]];
+    EGFont* f = [EGGlobal mainFontWithSize:18];
     [_resultText setFont:f];
     [_bestScoreText setFont:f];
     [_topText setFont:f];
@@ -664,7 +665,7 @@ static ODClassType* _TRRateMenu_type;
 }
 
 - (void)reshape {
-    [_headerText setFont:[EGGlobal fontWithName:@"Lucida grande" size:14]];
+    [_headerText setFont:[EGGlobal mainFontWithSize:14]];
 }
 
 - (ODClassType*)type {
@@ -755,8 +756,8 @@ static ODClassType* _TRLooseMenu_type;
 }
 
 - (void)reshape {
-    [_headerText setFont:[EGGlobal fontWithName:@"Lucida grande" size:36]];
-    [_detailsText setFont:[EGGlobal fontWithName:@"Lucida grande" size:16]];
+    [_headerText setFont:[EGGlobal mainFontWithSize:36]];
+    [_detailsText setFont:[EGGlobal mainFontWithSize:16]];
 }
 
 - (ODClassType*)type {
@@ -828,8 +829,8 @@ static ODClassType* _TRHelpView_type;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
-    [_helpText setFont:[EGGlobal fontWithName:@"Lucida grande" size:((egPlatform().isPhone) ? 14 : 16)]];
-    [_tapText setFont:[EGGlobal fontWithName:@"Lucida grande" size:12]];
+    [_helpText setFont:[EGGlobal mainFontWithSize:((egPlatform().isPhone) ? 14 : 16)]];
+    [_tapText setFont:[EGGlobal mainFontWithSize:12]];
 }
 
 - (void)draw {
@@ -910,7 +911,7 @@ static ODClassType* _TRSlowMotionShopMenu_type;
     self = [super init];
     if(self) {
         _shop = [EGGlobal scaledTextureForName:@"Shop" format:@"png"];
-        _shareFont = [EGGlobal fontWithName:@"Lucida grande" size:18];
+        _shareFont = [EGGlobal mainFontWithSize:18];
         _buttonSize = GEVec2Make(150.0, 150.0);
         _curButtons = (@[]);
     }
@@ -924,6 +925,7 @@ static ODClassType* _TRSlowMotionShopMenu_type;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
+    [_shareFont beReadyForText:@"0123456789,.FacebookTwitter"];
 }
 
 - (void)drawBuyButtonCount:(NSUInteger)count price:(NSString*)price rect:(GERect)rect {
@@ -935,7 +937,7 @@ static ODClassType* _TRSlowMotionShopMenu_type;
     [self drawSnailColor:color count:count rect:rect];
     GEVec2 pos = geRectPXY(rect, 0.1, 0.1);
     [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:texture] at:geVec3ApplyVec2Z(pos, 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 32.0, 32.0)];
-    [_shareFont drawText:name at:geVec3ApplyVec2(geVec2AddVec2(pos, GEVec2Make(36.0, 18.0))) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:GEVec4Make(0.1, 0.1, 0.1, 1.0)];
+    [_shareFont drawText:name at:geVec3ApplyVec2(geVec2AddVec2(pos, GEVec2Make(36.0, 16.0))) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:GEVec4Make(0.1, 0.1, 0.1, 1.0)];
 }
 
 - (void)drawButtonBackgroundColor:(GEVec3)color rect:(GERect)rect {

@@ -8,11 +8,11 @@
 #import "EGSchedule.h"
 #import "EGContext.h"
 #import "EGCamera2D.h"
+#import "TRStrings.h"
 #import "EGTexture.h"
 #import "EGMaterial.h"
 #import "TRRailroad.h"
 #import "TRScore.h"
-#import "TRStrings.h"
 #import "TRGameDirector.h"
 #import "TRNotification.h"
 #import "EGDirector.h"
@@ -86,8 +86,11 @@ static ODClassType* _TRLevelMenuView_type;
 - (void)reshapeWithViewport:(GERect)viewport {
     GEVec2 s = geVec2DivF(viewport.size, EGGlobal.context.scale);
     _camera = [EGCamera2D camera2DWithSize:s];
-    EGFont* font = [EGGlobal fontWithName:@"Lucida grande" size:24];
-    EGFont* notificationFont = [EGGlobal fontWithName:@"Lucida grande" size:((egPlatform().isPhone) ? 14 : 16)];
+    EGFont* font = [EGGlobal mainFontWithSize:24];
+    [font beReadyForText:@"$0123456789'"];
+    [font beReadyForText:[TRStr.Loc levelNumber:1]];
+    EGFont* notificationFont = [EGGlobal mainFontWithSize:((egPlatform().isPhone) ? 14 : 18)];
+    [notificationFont beReadyForText:[TRStr.Loc notificationsCharSet]];
     [_notificationText setFont:font];
     EGTextShadow* sh = [EGTextShadow textShadowWithColor:GEVec4Make(0.05, 0.05, 0.05, 0.5) shift:GEVec2Make(1.0, -1.0)];
     [_scoreText setFont:font];
@@ -99,7 +102,7 @@ static ODClassType* _TRLevelMenuView_type;
     [_levelText forEach:^void(EGText* _) {
         [((EGText*)(_)) setFont:font];
         ((EGText*)(_)).shadow = [CNOption applyValue:sh];
-        [((EGText*)(_)) setPosition:GEVec3Make(s.x / 2, s.y - 22, 0.0)];
+        [((EGText*)(_)) setPosition:GEVec3Make(s.x / 2, s.y - 24, 0.0)];
     }];
     BOOL ph = egPlatform().isPhone;
     [_pauseSprite setPosition:GEVec2Make(s.x - ((ph) ? 32 : 36), 4.0)];
@@ -109,7 +112,8 @@ static ODClassType* _TRLevelMenuView_type;
     [_slowSprite setPosition:GEVec2Make(s.x - ((ph) ? 36 : 40), s.y - 34)];
     [_slowSprite setMaterial:[EGColorSource applyTexture:[t regionX:64.0 y:32.0 width:32.0 height:32.0]]];
     [_slowSprite adjustSize];
-    [_slowMotionCountText setFont:[EGGlobal fontWithName:@"Lucida grande" size:18]];
+    [_slowMotionCountText setFont:[EGGlobal mainFontWithSize:24]];
+    [[_slowMotionCountText font] beReadyForText:@"0123456789"];
     [_slowMotionCountText setPosition:geVec3ApplyVec2(geVec2AddVec2([_slowSprite position], GEVec2Make(1.0, 18.0)))];
     _slowMotionCountText.shadow = [CNOption applyValue:sh];
     [_hammerSprite setPosition:GEVec2Make(0.0, s.y - 32)];

@@ -358,6 +358,8 @@ GERect geRectMulVec2(GERect self, GEVec2 vec2);
 BOOL geRectIntersectsRect(GERect self, GERect rect);
 GERect geRectThickenHalfSize(GERect self, GEVec2 halfSize);
 GERect geRectDivVec2(GERect self, GEVec2 vec2);
+GERect geRectDivF(GERect self, CGFloat f);
+GERect geRectDivF4(GERect self, float f4);
 GEVec2 geRectPh(GERect self);
 GEVec2 geRectPw(GERect self);
 GEVec2 geRectPhw(GERect self);

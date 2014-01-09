@@ -186,7 +186,6 @@ static ODClassType* _TRLevel_type;
                     f(ws);
                 }];
             }];
-            [CNLog applyText:[NSString stringWithFormat:@"Schedule for level %lu is %f seconds", (unsigned long)_number, time]];
             return schedule;
         }();
         __trains = (@[]);
@@ -543,10 +542,6 @@ static ODClassType* _TRLevel_type;
 
 - (void)lose {
     __result = [CNOption applyValue:[TRLevelResult levelResultWithWin:NO]];
-}
-
-- (void)dealloc {
-    [CNLog applyText:[NSString stringWithFormat:@"Dealloc level %lu", (unsigned long)_number]];
 }
 
 - (void)start {

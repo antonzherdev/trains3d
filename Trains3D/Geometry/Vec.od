@@ -237,6 +237,8 @@ struct Rect(p : vec2, size : vec2) {
 
     def thicken(halfSize : vec2) = Rect(p.sub(halfSize), size + halfSize*2)
     def div(vec2 : vec2) = Rect(p/vec2, size/vec2)
+    def div(f : float) = Rect(p/f, size/f)
+    def div(f4 : float4) = Rect(p/f4, size/f4)
 
     def ph = vec2(p.x, p.y + size.y)
     def pw = vec2(p.x + size.x, p.y)

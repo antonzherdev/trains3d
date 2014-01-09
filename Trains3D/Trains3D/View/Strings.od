@@ -6,6 +6,7 @@ object Str {
         val locales : [string : Strings] = [EnStrings(), RuStrings(), JpStrings()].chain.map{strs ->
             (strs.language, strs)
         }.toMap
+//        JpStrings()
         Locale.preferredLanguages.chain.flatMap<Strings>{lng -> locales.opt(lng)}.headOpt.getOrElse(EnStrings())
     }
 }
@@ -24,6 +25,14 @@ class Strings(language : string) {
         "\$$str"
     }
 
+    private static val fakeTrain = Train(nil, TrainType.simple, CityColor.orange, [], 10)
+    private static val fakeCrazyTrain = Train(nil, TrainType.crazy, CityColor.grey, [], 10)
+    def notificationsCharSet : string =
+        "\$0123456789'" + railBuilt(0)
+        + trainArrived(fakeTrain, 0) + trainArrived(fakeCrazyTrain, 0)
+        + trainDelayedFine(fakeTrain, 0) + trainDelayedFine(fakeCrazyTrain, 0)
+        + trainDestroyed(0) + damageFixedPayment(0) + cityBuilt
+
     def level(number : uint) : string
     def startLevel(number : uint) : string = level(number)
     def railBuilt(cost : int) : string
@@ -32,21 +41,32 @@ class Strings(language : string) {
     def trainDelayedFine(train : Train, cost : int) : string
     def damageFixedPayment(cost : int) : string
     def cityBuilt : string
+
+    private static val fakeLevel = Level(1, nil)
+    def menuButtonsCharacterSet : string =
+        "0123456789" + resumeGame + restart(fakeLevel) + replay(fakeLevel) + goToNext(fakeLevel)
+        + chooseLevel + supportButton + shareButton + leaderboard + buyButton
+
     def resumeGame : string
     def restart(level : Level) : string
     def replay(level : Level) : string
     def goToNext(level : Level) : string
     def chooseLevel : string
+    def supportButton : string
+    def shareButton : string
+    def leaderboard : string
+    def buyButton : string
+
+
     def victory : string
     def defeat : string
     def moneyOver : string
     def result : string
     def best : string
     def error : string
-    def buyButton : string
 
-    def supportButton : string
-    def shareButton : string
+
+
     def supportEmailText : string =
         "Report a problem or tell me about your ideas.
          I will definitely reply to you and try to fix problems as soon as possible.
@@ -58,7 +78,6 @@ class Strings(language : string) {
     def rateClose : string
 
     def top(score : LocalPlayerScore) : string
-    def leaderboard : string
     def tapToContinue : string
 
     def colorOrange : string = "orange"
@@ -376,14 +395,13 @@ class JpStrings extends Strings("ja") {
 
     def rateText : string =
         "Raildaleをお楽しみいただけていれば、
-        評価を残していただけませんか？
-        1分以内に評価できます。
-        問題があれば、ご報告ください。
-        できるだけ早く修正できるよう努めます。
+         評価を残していただけませんか？1分以内に評価できます。
 
+         問題があれば、ご報告ください。
+         できるだけ早く修正できるよう努めます。
 
-        サポートをありがとうございます！
-        開発者Anton Zherdevより"
+         サポートをありがとうございます！
+         開発者Anton Zherdevより"
     def rateNow : string = "今すぐ評価"
     def rateProblem : string = "問題を報告"
     def rateLater : string = "後で表示"

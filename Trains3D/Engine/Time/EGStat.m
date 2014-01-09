@@ -16,7 +16,7 @@ static ODClassType* _EGStat_type;
 
 - (id)init {
     self = [super init];
-    if(self) _text = [EGText applyFont:[EGGlobal fontWithName:@"Lucida grande" size:18] text:@"" position:GEVec3Make(-0.98, -0.99, 0.0) alignment:egTextAlignmentLeft() color:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
+    if(self) _text = [EGText applyFont:[EGGlobal mainFontWithSize:18] text:@"" position:GEVec3Make(-0.98, -0.99, 0.0) alignment:egTextAlignmentLeft() color:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
     
     return self;
 }

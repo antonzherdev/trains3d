@@ -102,7 +102,6 @@
 - (id)result;
 - (void)win;
 - (void)lose;
-- (void)dealloc;
 + (NSInteger)trainComingPeriod;
 + (CNNotificationHandle*)buildCityNotification;
 + (CNNotificationHandle*)prepareToRunTrainNotification;

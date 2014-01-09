@@ -1,6 +1,7 @@
 #import "GL.h"
 #import <ImageIO/ImageIO.h>
 
+
 id egGetProgramError(GLuint program) {
     GLint linkSuccess;
     glGetProgramiv(program, GL_LINK_STATUS, &linkSuccess);
@@ -57,18 +58,11 @@ GEVec2 egLoadTextureFromFile(GLuint target, NSString* file, GLenum magFilter, GL
             width*4, space,
             kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst);
 
+
+    GEVec2 size = GEVec2Make(width, height);
     CGContextSetBlendMode(myBitmapContext, kCGBlendModeCopy);
     CGContextDrawImage(myBitmapContext, rect, myImageRef);
-    glBindTexture(GL_TEXTURE_2D, target);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)width, (GLsizei)height, 0, GL_BGRA, GL_UNSIGNED_BYTE, myData);
-    if(minFilter == GL_LINEAR_MIPMAP_LINEAR || minFilter == GL_LINEAR_MIPMAP_NEAREST
-            || minFilter == GL_NEAREST_MIPMAP_LINEAR || minFilter == GL_NEAREST_MIPMAP_NEAREST)
-    {
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    glBindTexture(GL_TEXTURE_2D, 0);
+    egLoadTextureFromData(target, magFilter, minFilter, size, myData);
 
     CGContextRelease(myBitmapContext);
     CFRelease(myImageSourceRef);
@@ -76,8 +70,21 @@ GEVec2 egLoadTextureFromFile(GLuint target, NSString* file, GLenum magFilter, GL
     CFRelease(space);
     free(myData);
     egCheckError();
-    return GEVec2Make(width, height);
+    return size;
 
+}
+
+void egLoadTextureFromData(GLuint target, GLenum magFilter, GLenum minFilter, GEVec2 size, void *myData) {
+    glBindTexture(GL_TEXTURE_2D, target);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)size.x, (GLsizei)size.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, myData);
+    if(minFilter == GL_LINEAR_MIPMAP_LINEAR || minFilter == GL_LINEAR_MIPMAP_NEAREST
+            || minFilter == GL_NEAREST_MIPMAP_LINEAR || minFilter == GL_NEAREST_MIPMAP_NEAREST)
+    {
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 EGPlatform* egPlatform() {
