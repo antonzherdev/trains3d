@@ -2,8 +2,8 @@
 #import "EGScene.h"
 #import "GEVec.h"
 #import "EGFont.h"
-@class EGProgress;
 @class TRGameDirector;
+@class EGProgress;
 @class EGDirector;
 @class EGButton;
 @class EGCamera2D;
@@ -26,7 +26,9 @@
 
 @interface TRLevelChooseMenu : NSObject<EGSceneView>
 @property (nonatomic, readonly) NSString* name;
-@property (nonatomic, readonly) NSInteger maxLevel;
+@property (nonatomic, retain) EGFont* fontRes;
+@property (nonatomic, retain) EGFont* fontBottom;
+@property (nonatomic) NSMutableDictionary* _scores;
 
 + (id)levelChooseMenu;
 - (id)init;
@@ -40,6 +42,7 @@
 - (BOOL)isProcessorActive;
 - (EGRecognizers*)recognizers;
 - (GERect)viewportWithViewSize:(GEVec2)viewSize;
++ (NSInteger)maxLevel;
 + (ODClassType*)type;
 @end
 

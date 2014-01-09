@@ -457,8 +457,9 @@ static ODClassType* _EGText_type;
     if(!([font isEqual:__font])) {
         __changed = YES;
         __font = font;
+        __weak EGText* ws = self;
         __obs2 = [EGFont.fontChangeNotification observeSender:__font by:^void(id _) {
-            __changed = YES;
+            ws._changed = YES;
         }];
     }
 }

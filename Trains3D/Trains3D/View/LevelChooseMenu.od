@@ -4,7 +4,7 @@ package com.antonzherdev.trains
 class LevelChooseMenu extends SceneView {
     static def scene = Scene(LevelChooseMenu())
     val name = "Level Choose manu"
-    val maxLevel = GameDirector.instance.maxAvailableLevel
+    static val maxLevel = GameDirector.instance.maxAvailableLevel
     def camera = Camera2D(vec2(4, 4))
     private val buttons : [Button] = 0.to(3).chain.flatMap{ y ->
         0.to(3).chain.map{ x ->
@@ -15,8 +15,8 @@ class LevelChooseMenu extends SceneView {
             })}
     }.toArray
 
-    private var fontRes : Font
-    private var fontBottom : Font
+    var fontRes : Font
+    var fontBottom : Font
     def reshapeWith(viewport : Rect) {
         fontRes = mainFontWith(size = if(egPlatform.isPhone) 14 else 16)
         fontRes.beReadyFor(Loc.level(1) + "0123456789")
@@ -24,12 +24,13 @@ class LevelChooseMenu extends SceneView {
         fontBottom.beReadyFor("\$0123456789'%")
     }
 
-    private var _scores = MutableHashMap<uint, LocalPlayerScore>()
+    var _scores = MutableHashMap<uint, LocalPlayerScore>()
     def start {
+        weak val ws = self
         1.to(16).for { level ->
             GameDirector.instance.localPlayerScore(level) { score ->
                 if(score.isDefined) {
-                    _scores.set(level, score.get)
+                    ws._scores.set(level, score.get)
                     Director.current.redraw
                 }
             }
@@ -40,12 +41,13 @@ class LevelChooseMenu extends SceneView {
     private static val rankProgress = Progress.progress(vec4(232, 255, 208, 255)/255, vec4(255, 249, 217, 255)/255)
     static def rankColor(score : LocalPlayerScore) : vec4 = rankProgress(score.percent)
 
-    private val textColor = vec4(0.1, 0.1, 0.1, 1)
+    private static val textColor = vec4(0.1, 0.1, 0.1, 1)
     private def drawButton(x : int, y : int, level : int) = {
         val ph = egPlatform.isPhone
+        weak val ws = self
         rect : Rect -> {
             val dis = level > maxLevel
-            val score : LocalPlayerScore? = _scores.opt(level)
+            val score : LocalPlayerScore? = ws._scores.opt(level)
 
             val color = if(score.isDefined) rankColor(score.get) else vec4(0.95, 0.95, 0.95, 1.0)
             D2D.drawSprite(color, vec3(x, y + 0.8, 0), Rect(0, 0, 1, 0.2))
@@ -53,16 +55,16 @@ class LevelChooseMenu extends SceneView {
                 D2D.drawSprite(color, vec3(x, y, 0), Rect(0, 0, 1, if(ph) 0.34 else 0.14))
             }
             BlendFunction.standard {
-                fontRes.draw(Loc.level(level), vec3(x + 0.5, y + 0.91, 0), TextAlignment(0, 0), color = textColor)
+                ws.fontRes.draw(Loc.level(level), vec3(x + 0.5, y + 0.91, 0), TextAlignment(0, 0), color = textColor)
                 if(dis) {
                     D2D.drawSprite(vec4(1, 1, 1, 0.8), vec3(x, y, 0), Rect(0, 0, 1, 1))
                 } else {
                     val ss = if(score.isDefined) score.get.value else GameDirector.instance.bestScore(level)
                     if(ss > 0 || score.isDefined) {
-                        fontBottom.draw(Loc.format(ss), vec3(x + 0.02, y + if(ph) 0.25 else 0.07, 0), TextAlignment(-1, 0), color = textColor)
+                        ws.fontBottom.draw(Loc.format(ss), vec3(x + 0.02, y + if(ph) 0.25 else 0.07, 0), TextAlignment(-1, 0), color = textColor)
                     }
                     if(score.isDefined) {
-                        fontBottom.draw(Loc.top(score.get),
+                        ws.fontBottom.draw(Loc.top(score.get),
                             vec3(x + if(ph) 0.02 else 0.98, y + if(ph) 0.11 else 0.07, 0),
                             TextAlignment(if(ph) -1 else 1, 0), color = textColor)
                     }

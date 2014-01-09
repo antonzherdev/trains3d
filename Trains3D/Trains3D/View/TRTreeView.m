@@ -409,6 +409,7 @@ static ODClassType* _TRTreeView_type;
     [_ibShadow setArray:ibr];
     cnVoidRefArrayFree(ar);
     cnVoidRefArrayFree(iar);
+    cnVoidRefArrayFree(ibr);
 }
 
 - (void)draw {

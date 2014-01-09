@@ -123,6 +123,7 @@ class TreeView(forest : Forest) {
         ibShadow.set(ibr)
         ar.free
         iar.free
+        ibr.free
     }
 
     def draw {

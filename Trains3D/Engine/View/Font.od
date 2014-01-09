@@ -212,7 +212,8 @@ class Text {
        if(font != _font) {
            _changed = true
            _font = font
-           _obs2 = Font.fontChangeNotification.observe(_font){_, __ -> _changed = true}
+           weak val ws = self
+           _obs2 = Font.fontChangeNotification.observe(_font){_, __ -> ws._changed = true}
        }
     }
 
