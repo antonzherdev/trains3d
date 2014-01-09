@@ -89,7 +89,7 @@ static ODClassType* _TRLevelMenuView_type;
     EGFont* font = [EGGlobal mainFontWithSize:24];
     [font beReadyForText:@"$0123456789'"];
     [font beReadyForText:[TRStr.Loc levelNumber:1]];
-    EGFont* notificationFont = [EGGlobal mainFontWithSize:((egPlatform().isPhone) ? 14 : 18)];
+    EGFont* notificationFont = [EGGlobal mainFontWithSize:((egPlatform().isPhone) ? (([egPlatform() screenSizeRatio] > 4.0 / 3.0) ? 14 : 12) : 18)];
     [notificationFont beReadyForText:[TRStr.Loc notificationsCharSet]];
     [_notificationText setFont:font];
     EGTextShadow* sh = [EGTextShadow textShadowWithColor:GEVec4Make(0.05, 0.05, 0.05, 0.5) shift:GEVec2Make(1.0, -1.0)];

@@ -1,4 +1,5 @@
 #import "objd.h"
+#import "GEVec.h"
 
 @class EGPlatform;
 @class EGVersion;
@@ -31,15 +32,17 @@
 @property (nonatomic, readonly) EGOSType* os;
 @property (nonatomic, readonly) EGInterfaceIdiom* interfaceIdiom;
 @property (nonatomic, readonly) EGVersion* version;
+@property (nonatomic, readonly) GEVec2 screenSize;
 @property (nonatomic, readonly) BOOL shadows;
 @property (nonatomic, readonly) BOOL touch;
 @property (nonatomic, readonly) BOOL isPhone;
 @property (nonatomic, readonly) BOOL isPad;
 @property (nonatomic, readonly) BOOL isComputer;
 
-+ (id)platformWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version;
-- (id)initWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version;
++ (id)platformWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize;
+- (id)initWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize;
 - (ODClassType*)type;
+- (CGFloat)screenSizeRatio;
 + (ODClassType*)type;
 @end
 

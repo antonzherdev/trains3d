@@ -105,6 +105,7 @@ static NSArray* _EGInterfaceIdiom_values;
     EGOSType* _os;
     EGInterfaceIdiom* _interfaceIdiom;
     EGVersion* _version;
+    GEVec2 _screenSize;
     BOOL _shadows;
     BOOL _touch;
     BOOL _isPhone;
@@ -115,22 +116,24 @@ static ODClassType* _EGPlatform_type;
 @synthesize os = _os;
 @synthesize interfaceIdiom = _interfaceIdiom;
 @synthesize version = _version;
+@synthesize screenSize = _screenSize;
 @synthesize shadows = _shadows;
 @synthesize touch = _touch;
 @synthesize isPhone = _isPhone;
 @synthesize isPad = _isPad;
 @synthesize isComputer = _isComputer;
 
-+ (id)platformWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version {
-    return [[EGPlatform alloc] initWithOs:os interfaceIdiom:interfaceIdiom version:version];
++ (id)platformWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize {
+    return [[EGPlatform alloc] initWithOs:os interfaceIdiom:interfaceIdiom version:version screenSize:screenSize];
 }
 
-- (id)initWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version {
+- (id)initWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize {
     self = [super init];
     if(self) {
         _os = os;
         _interfaceIdiom = interfaceIdiom;
         _version = version;
+        _screenSize = screenSize;
         _shadows = _os.shadows;
         _touch = _os.touch;
         _isPhone = _interfaceIdiom.isPhone;
@@ -144,6 +147,10 @@ static ODClassType* _EGPlatform_type;
 + (void)initialize {
     [super initialize];
     _EGPlatform_type = [ODClassType classTypeWithCls:[EGPlatform class]];
+}
+
+- (CGFloat)screenSizeRatio {
+    return ((CGFloat)(_screenSize.x / _screenSize.y));
 }
 
 - (ODClassType*)type {
@@ -162,7 +169,7 @@ static ODClassType* _EGPlatform_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGPlatform* o = ((EGPlatform*)(other));
-    return self.os == o.os && self.interfaceIdiom == o.interfaceIdiom && [self.version isEqual:o.version];
+    return self.os == o.os && self.interfaceIdiom == o.interfaceIdiom && [self.version isEqual:o.version] && GEVec2Eq(self.screenSize, o.screenSize);
 }
 
 - (NSUInteger)hash {
@@ -170,6 +177,7 @@ static ODClassType* _EGPlatform_type;
     hash = hash * 31 + [self.os ordinal];
     hash = hash * 31 + [self.interfaceIdiom ordinal];
     hash = hash * 31 + [self.version hash];
+    hash = hash * 31 + GEVec2Hash(self.screenSize);
     return hash;
 }
 
@@ -178,6 +186,7 @@ static ODClassType* _EGPlatform_type;
     [description appendFormat:@"os=%@", self.os];
     [description appendFormat:@", interfaceIdiom=%@", self.interfaceIdiom];
     [description appendFormat:@", version=%@", self.version];
+    [description appendFormat:@", screenSize=%@", GEVec2Description(self.screenSize)];
     [description appendString:@">"];
     return description;
 }

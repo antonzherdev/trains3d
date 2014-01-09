@@ -11,13 +11,15 @@ enum InterfaceIdiom(isPhone : bool, isPad : bool, isComputer : bool) {
     computer(false, false, true)
 }
 
-class Platform(os : OSType, interfaceIdiom : InterfaceIdiom, version : Version) {
+class Platform(os : OSType, interfaceIdiom : InterfaceIdiom, version : Version, screenSize : vec2) {
     val shadows = os.shadows
     val touch = os.touch
 
     val isPhone = interfaceIdiom.isPhone
     val isPad = interfaceIdiom.isPad
     val isComputer = interfaceIdiom.isComputer
+
+    def screenSizeRatio : float = screenSize.x/screenSize.y
 }
 
 

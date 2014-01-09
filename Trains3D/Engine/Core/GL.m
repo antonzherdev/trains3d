@@ -92,14 +92,18 @@ EGPlatform* egPlatform() {
     if(platform != nil) return platform;
 
 #if TARGET_OS_IPHONE
+    CGRect rect = [[UIScreen mainScreen] bounds];
     platform = [EGPlatform platformWithOs:[EGOSType iOS]
                            interfaceIdiom:UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? [EGInterfaceIdiom phone] : [EGInterfaceIdiom pad]
-                                  version:[EGVersion applyStr:[UIDevice currentDevice].systemVersion]];
+                                  version:[EGVersion applyStr:[UIDevice currentDevice].systemVersion]
+                                  screenSize:GEVec2Make((float) rect.size.width, (float) rect.size.height)];
 
 #elif TARGET_OS_MAC
+    NSRect rect = [[NSScreen mainScreen] visibleFrame];
     platform = [EGPlatform platformWithOs:[EGOSType MacOS]
                            interfaceIdiom:[EGInterfaceIdiom computer]
-                                  version:[EGVersion applyStr:@"10"]];
+                                  version:[EGVersion applyStr:@"10"]
+                               screenSize:GEVec2Make((float) rect.size.width, (float) rect.size.height)];
 
 #endif
 

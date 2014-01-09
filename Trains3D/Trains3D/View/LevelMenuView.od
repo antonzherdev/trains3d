@@ -20,7 +20,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         val font = mainFontWith(24)
         font.beReadyFor("\$0123456789'")
         font.beReadyFor(Loc.level(1))
-        val notificationFont = mainFontWith(if(egPlatform.isPhone) 14 else 18)
+        val notificationFont = mainFontWith(if(egPlatform.isPhone) (if(egPlatform.screenSizeRatio > 4.0/3.0) 14 else 12) else 18)
         notificationFont.beReadyFor(Loc.notificationsCharSet)
         notificationText.font = font
 
