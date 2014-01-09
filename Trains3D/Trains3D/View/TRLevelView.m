@@ -60,7 +60,7 @@ static ODClassType* _TRLevelView_type;
         if(GEVec2iEq(_level.map.size, GEVec2iMake(5, 5))) {
             m = [GEMat4 orthoLeft:-2.4 right:7.3 bottom:-2.4 top:3.9 zNear:-2.0 zFar:5.5];
         } else {
-            if(GEVec2iEq(_level.map.size, GEVec2iMake(5, 3))) m = [GEMat4 orthoLeft:-2.0 right:5.7 bottom:-2.0 top:2.9 zNear:-2.0 zFar:4.0];
+            if(GEVec2iEq(_level.map.size, GEVec2iMake(5, 3))) m = [GEMat4 orthoLeft:-2.0 right:5.9 bottom:-2.0 top:2.7 zNear:-2.0 zFar:4.0];
             else @throw @"Define shadow matrix for this map size";
         }
     }

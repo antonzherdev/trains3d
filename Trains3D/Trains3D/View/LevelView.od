@@ -24,7 +24,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
                 var m : mat4
                 if(level.map.size == vec2i(7, 5)) m = mat4.ortho(-2.5, 8.8, -2.9, 4.6, -3.0, 5.5)
                 else if(level.map.size == vec2i(5, 5)) m = mat4.ortho(-2.4, 7.3, -2.4, 3.9, -2, 5.5)
-                else if(level.map.size == vec2i(5, 3)) m = mat4.ortho(-2, 5.7, -2, 2.9, -2, 4.0)
+                else if(level.map.size == vec2i(5, 3)) m = mat4.ortho(-2, 5.9, -2, 2.7, -2, 4.0)
                 else throw "Define shadow matrix for this map size"
                 m
             }
